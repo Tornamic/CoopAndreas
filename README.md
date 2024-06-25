@@ -1,6 +1,6 @@
 my second attempt to create a multiplayer mod in lua using moonloader and slnet network library
 
-contains players and nps syncs:
+contains players and npcs syncs:
 - on foot sync
 - in veh sync
 - aim sync
