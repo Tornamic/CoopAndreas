@@ -2,6 +2,8 @@ sagp - san andreas govnoplayer
 
 my first attempt to create a multiplayer mod in lua using moonloader and slnet network library
 
+server`s sources is missing
+
 contains players syncs:
 - on foot sync
 
