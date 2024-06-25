@@ -4,3 +4,6 @@ contains players syncs:
 - on foot sync
 
 non-playable mod
+
+screenshot:
+https://imgur.com/a/pOOc864
