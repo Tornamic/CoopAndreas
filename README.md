@@ -7,3 +7,6 @@ contains players and npcs syncs:
 - shot sync
 
 its actually pretty bad, but you can rewrite it and enjoy it :D
+
+video: 
+https://youtu.be/kz3MGB9RU3A
