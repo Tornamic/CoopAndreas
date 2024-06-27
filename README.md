@@ -1,12 +1,13 @@
-## **this repository has 3 attempts at writing mod, see branches**
+## **this repository has 3 attempts to write mod, see branches**
 
-*i`ll try to write a mod in C/C++ soon*
-
-my third attempt to write multiplayer mod, but in C# using GTASDKNET
-
-contains shitty onfoot sync
-
-i gave up development because i cant do some required things by C#, hooking, etc.
-
-video:
-https://youtu.be/PHHsOqLZeKM
+### CoopAndreas
+TODO list:
+[x] setup C/C++ project
+[ ] client — server connection
+[ ] on foot sync
+[ ] vehicle sync
+[ ] chat
+[ ] trailer sync
+[ ] npc sync
+[ ] other syncs (like fire, birds, etc.)
+[ ] mission adaptation
