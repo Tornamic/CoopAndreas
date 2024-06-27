@@ -1,6 +1,6 @@
 # CoopAndreas
 TODO list:
-- [ ] setup C/C++ project
+- [X] setup C/C++ project
 - [ ] client — server connection
 - [ ] on foot sync
 - [ ] vehicle sync
