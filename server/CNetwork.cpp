@@ -1,5 +1,5 @@
 #include "stdafx.h"
-
+#include <string>
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define ENET_IMPLEMENTATION
@@ -30,7 +30,7 @@ bool CNetwork::Init(unsigned short port)
     printf("Server stared on port %d\n", port);
 
     ENetEvent event;
-    while (1) // waiting for event, 1 ms
+    while (true) // waiting for event
     {
         enet_host_service(server, &event, 10);
         switch (event.type)
@@ -73,5 +73,6 @@ bool CNetwork::Init(unsigned short port)
 
     enet_host_destroy(server);
     enet_deinitialize();
+    std::cout << "Destroyed" << std::endl;
     return 0;
 }
