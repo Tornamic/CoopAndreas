@@ -1,5 +1,7 @@
 #pragma once
 
+#define MAX_PLAYERS 4
+
 #define _DEV
 
 // networking ------------------------------------------------------------------------------

@@ -1,25 +1,40 @@
 #include "stdafx.h"
 
-void CPatch::ApplyPatches()
+void PatchPlayers()
 {
-    CPatch::PatchPools();
-    CPatch::PatchPlayers();
-    CPatch::PatchStreaming();
+    // increase player count 
+    // we dont use first two players because
+    // 0 - you
+    // 1 - local-coop player
+    patch::SetUChar(0x84E98B, MAX_PLAYERS + 2); // _vector_constructor
+    patch::SetUChar(0x856506, MAX_PLAYERS + 2); // _vector_destructor
+
+    // increase pad count
+    // same situation
+    patch::SetUChar(0x84E1FB, MAX_PLAYERS + 2); // _vector_constructor
+    patch::SetUChar(0x856466, MAX_PLAYERS + 2); // _vector_destructor
 }
 
-void CPatch::PatchPlayers()
+#ifdef _DEV
+void PatchConsole()
 {
+    // no more console output for gta sa
+    patch::PutRetn1(0x821982);
 }
+#endif
 
-void CPatch::PatchStreaming()
+void PatchStreaming()
 {
     // increase available streaming memory (memory512.cs full analog) 
     patch::SetUInt(0x8A5A80, 536870912); // 512 megabytes
+    patch::SetUInt(0x5B8E6A, 536870912); // hardcoded value
 
     // increase max fps
     RsGlobal.maxFPS = 100;
+    patch::SetUChar(0x619626, 0x64); // hardcoded value
 }
-void CPatch::PatchPools()
+
+void PatchPools()
 {
     // you can find these addresses at 0x550F10 CPools::Initialise()
     
@@ -27,7 +42,7 @@ void CPatch::PatchPools()
     patch::SetUChar(0x550FF3, 0x01);
 
     // vehicles `140 -> 255`
-    patch::SetUChar(0x551030, 0xFF);
+    // patch::SetUChar(0x551030, 0xFF);
 
     // tasks `500 -> 1020`
     patch::SetUChar(0x551140, 0x03);
@@ -51,7 +66,7 @@ void CPatch::PatchPools()
     patch::SetUChar(0x54F3A2, 0x0A);
 }
 
-void CPatch::FixCrashes() // thx sa-syncer
+void FixCrashes() // thx sa-syncer
 {
     //Anim crash in CPlayerPed::ProcessControl
     patch::Nop(0x609C08, 39);
@@ -88,4 +103,14 @@ void CPatch::FixCrashes() // thx sa-syncer
 
     // Satchel charge crash fix
     patch::Nop(0x738F3A, 83);
+}
+
+void CPatch::ApplyPatches()
+{
+    PatchPools();
+    PatchPlayers();
+    PatchStreaming();
+#ifdef _DEV
+    PatchConsole();
+#endif
 }

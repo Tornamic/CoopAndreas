@@ -19,7 +19,7 @@ bool CNetwork::Init(unsigned short port)
     address.host = ENET_HOST_ANY; // bind server ip
     address.port = port; // bind server port
 
-    ENetHost* server = enet_host_create(&address, 32, 2, 0, 0); // create enet host
+    ENetHost* server = enet_host_create(&address, MAX_PLAYERS, 2, 0, 0); // create enet host
 
     if (server == NULL)
     {
