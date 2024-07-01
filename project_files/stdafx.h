@@ -1,6 +1,6 @@
 #pragma once
 
-#define MAX_PLAYERS 4
+#define MAX_SERVER_PLAYERS 4
 
 #define _DEV
 
@@ -12,9 +12,11 @@
 
 // plugin-sdk ------------------------------------------------------------------------------
 
-
 #include "plugin.h"
 #include "Patch.h"
+#include "CPlayerPed.h"
+#include "CStreaming.h"
+#include "CWorld.h"
 
 // classes ---------------------------------------------------------------------------------
 
@@ -24,6 +26,7 @@ using namespace plugin;
 #include "CNetwork.h"
 #include "CPatch.h"
 #include "CHook.h"
+#include "CNetworkPlayer.h"
 
 // -----------------------------------------------------------------------------------------
 

@@ -6,20 +6,25 @@ void PatchPlayers()
     // we dont use first two players because
     // 0 - you
     // 1 - local-coop player
-    patch::SetUChar(0x84E98B, MAX_PLAYERS + 2); // _vector_constructor
-    patch::SetUChar(0x856506, MAX_PLAYERS + 2); // _vector_destructor
+    patch::SetUChar(0x84E98B, MAX_SERVER_PLAYERS + 2); // _vector_constructor
+    patch::SetUChar(0x856506, MAX_SERVER_PLAYERS + 2); // _vector_destructor
 
     // increase pad count
     // same situation
-    patch::SetUChar(0x84E1FB, MAX_PLAYERS + 2); // _vector_constructor
-    patch::SetUChar(0x856466, MAX_PLAYERS + 2); // _vector_destructor
+    patch::SetUChar(0x84E1FB, MAX_SERVER_PLAYERS + 2); // _vector_constructor
+    patch::SetUChar(0x856466, MAX_SERVER_PLAYERS + 2); // _vector_destructor
 }
 
 #ifdef _DEV
 void PatchConsole()
 {
-    // no more console output for gta sa
-    patch::PutRetn1(0x821982);
+    // disable gta sa`s printfs
+    
+    // random floats
+    patch::Nop(0x745997, 5);
+
+    // soundmanager
+    patch::Nop(0x5B97C9, 5);
 }
 #endif
 
@@ -66,9 +71,9 @@ void PatchPools()
     patch::SetUChar(0x54F3A2, 0x0A);
 }
 
-void FixCrashes() // thx sa-syncer
+void FixCrashes()
 {
-    //Anim crash in CPlayerPed::ProcessControl
+    // Anim crash in CPlayerPed::ProcessControl
     patch::Nop(0x609C08, 39);
 
     // No DirectPlay dependency
@@ -103,6 +108,22 @@ void FixCrashes() // thx sa-syncer
 
     // Satchel charge crash fix
     patch::Nop(0x738F3A, 83);
+
+    // Removes the FindPlayerInfoForThisPlayerPed at these locations.
+
+    patch::Nop(0x5E63A6, 19);
+    patch::Nop(0x621AEA, 12);
+    patch::Nop(0x62D331, 11);
+    patch::Nop(0x741FFF, 27);
+
+    // fixes unknown crash from CWorld::ClearScanCodes(), test
+    patch::PutRetn(0x563470);
+
+    // CPlayerPed_CPlayerPed .. task system corrupts some shit
+    patch::GetUChar(0x60D64E, 0x84); // jnz to jz
+
+    // PlayerInfo checks in CPlayerPed::ProcessControl
+    patch::Nop(0x60F2C4, 25);
 }
 
 void CPatch::ApplyPatches()
@@ -110,6 +131,7 @@ void CPatch::ApplyPatches()
     PatchPools();
     PatchPlayers();
     PatchStreaming();
+    FixCrashes();
 #ifdef _DEV
     PatchConsole();
 #endif

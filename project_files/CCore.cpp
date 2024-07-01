@@ -2,11 +2,12 @@
 
 void CCore::Init()
 {
-	CPatch::ApplyPatches();
-	CNetwork::Init("127.0.0.1", 6767);
 #ifdef _DEV
 	CCore::AllocateConsole();
 #endif
+	CPatch::ApplyPatches();
+	CHook::Init();
+	CNetwork::Init("127.0.0.1", 6767);
 
 }
 
