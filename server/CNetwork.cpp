@@ -14,12 +14,12 @@ bool CNetwork::Init(unsigned short port)
         return false;
     }
 
-    ENetAddress address = { 0 };
+    ENetAddress address;
 
     address.host = ENET_HOST_ANY; // bind server ip
     address.port = port; // bind server port
 
-    ENetHost* server = enet_host_create(&address, MAX_PLAYERS, 2, 0, 0); // create enet host
+    ENetHost* server = enet_host_create(&address, 32, 2, 0, 0); // create enet host
 
     if (server == NULL)
     {

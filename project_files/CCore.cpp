@@ -2,5 +2,5 @@
 
 void CCore::Init()
 {
-	CNetwork::Init("0.0.0.0", 6767);
+	CNetwork::Init("127.0.0.1", 6767);
 }
