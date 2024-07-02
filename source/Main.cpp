@@ -1,6 +1,8 @@
 #include "../project_files/stdafx.h"
 
 bool created = false;
+
+CNetworkPlayer* player = nullptr;
 class CoopAndreas {
 public:
     CoopAndreas() {
@@ -11,7 +13,7 @@ public:
 				if (KeyPressed(VK_F8) && !created)
 				{
 					created = true;
-					CNetworkPlayer* player = new CNetworkPlayer(0, FindPlayerCoors(0));
+					player = new CNetworkPlayer(0, FindPlayerCoors(0));
 				}
 			};
 	};

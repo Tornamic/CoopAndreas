@@ -21,7 +21,7 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 	info->m_nPlayerState = ePlayerState::PLAYERSTATE_PLAYING;
 
 	// set ped type to PLAYER1, dont use any other !!!
-	player->m_nPedType = ePedType::PED_TYPE_PLAYER1;
+	player->m_nPedType = ePedType::PED_TYPE_PLAYER2;
 
 	CWorld::Add(player);
 	
