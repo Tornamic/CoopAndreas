@@ -17,6 +17,8 @@
 #include "CPlayerPed.h"
 #include "CStreaming.h"
 #include "CWorld.h"
+#include "RenderWare.h"
+#include "d3dx9.h"
 
 // classes ---------------------------------------------------------------------------------
 
@@ -27,6 +29,7 @@ using namespace plugin;
 #include "CPatch.h"
 #include "CHook.h"
 #include "CNetworkPlayer.h"
+#include "CDXFont.h"
 
 // -----------------------------------------------------------------------------------------
 
