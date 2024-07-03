@@ -1,7 +1,8 @@
 #include "stdafx.h"
 
 ENetHost* CNetwork::m_pClient;
-bool CNetwork::Init(const char* ip, int port)
+
+DWORD WINAPI CNetwork::InitAsync(LPVOID)
 {
 	if (enet_initialize() != 0) { // try to init enet
 		std::cout << "Fail to enet_initialize" << std::endl;
@@ -18,8 +19,8 @@ bool CNetwork::Init(const char* ip, int port)
 
 	ENetAddress address; // connection address
 
-	enet_address_set_host(&address, ip); // set address ip
-	address.port = port; // set address port
+	enet_address_set_host(&address, "127.0.0.1"); // set address ip
+	address.port = 6767; // set address port
 
 	ENetPeer* peer = enet_host_connect(m_pClient, &address, 2, 0); // connect to the server
 	if (peer == NULL) { // if not connected

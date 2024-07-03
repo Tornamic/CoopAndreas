@@ -56,12 +56,6 @@ bool CNetwork::Init(unsigned short port)
                 event.peer->data = NULL;
                 break;
             }
-            /*case ENET_EVENT_TYPE_DISCONNECT_TIMEOUT: //Doesn't exist in Legacy Enet
-            {
-                printf("%s disconnected due to timeout.\n", event.peer->data);
-                event.peer->data = NULL;
-                break;
-            }*/
             case ENET_EVENT_TYPE_NONE:
                 break;
         }

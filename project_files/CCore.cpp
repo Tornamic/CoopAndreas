@@ -7,7 +7,9 @@ void CCore::Init()
 #endif
 	CPatch::ApplyPatches();
 	CHook::Init();
-	CNetwork::Init("127.0.0.1", 6767);
+
+	// init CNetworking async
+	CreateThread(NULL, NULL, CNetwork::InitAsync, NULL, NULL, NULL);
 
 }
 
