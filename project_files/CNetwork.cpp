@@ -28,17 +28,29 @@ bool CNetwork::Init(const char* ip, int port)
 	}
 
 	ENetEvent event;
-	if (enet_host_service(m_pClient, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) 
+	if (enet_host_service(m_pClient, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
 	{
 		std::cout << "Connection succeeded." << std::endl;
-	} 
-	else 
+	}
+	else
 	{
-		/* Either the 5 seconds are up or a disconnect event was */
-		/* received. Reset the peer in the event the 5 seconds   */
-		/* had run out without any significant event.            */
 		enet_peer_reset(peer);
 		std::cout << "Connection failed." << std::endl;
+	}
+
+	while (true) //This is taking the main thread to itself. We need to run the client in a different thread. Remove this loop to keep developing without receiving packets from the server.
+	{
+		enet_host_service(m_pClient, &event, 5000);
+		switch (event.type)
+		{
+			case ENET_EVENT_TYPE_RECEIVE:
+				std::cout << "Packet Received!" << std::endl;
+				enet_packet_destroy(event.packet); //You should destroy after used it
+				break;
+			case ENET_EVENT_TYPE_NONE:
+				break;
+		}
+
 	}
 	
 	return true;
