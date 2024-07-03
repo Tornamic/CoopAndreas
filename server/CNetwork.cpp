@@ -1,6 +1,4 @@
-
 #include "stdafx.h"
-
 
 bool CNetwork::Init(unsigned short port)
 {
