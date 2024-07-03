@@ -10,4 +10,3 @@ private:
 	static void DestroyFont();
 	static void Draw();
 };
-

@@ -1,9 +1,6 @@
 #include "stdafx.h"
 #include <string>
-
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-#define ENET_IMPLEMENTATION
-#include "../enet/enet.h"
+#include "enet/enet.h"
 
 bool CNetwork::Init(unsigned short port)
 {
@@ -59,13 +56,12 @@ bool CNetwork::Init(unsigned short port)
                 event.peer->data = NULL;
                 break;
             }
-            case ENET_EVENT_TYPE_DISCONNECT_TIMEOUT:
+            /*case ENET_EVENT_TYPE_DISCONNECT_TIMEOUT: //Doesn't exist in Legacy Enet
             {
                 printf("%s disconnected due to timeout.\n", event.peer->data);
-                /* Reset the peer's client information. */
                 event.peer->data = NULL;
                 break;
-            }
+            }*/
             case ENET_EVENT_TYPE_NONE:
                 break;
         }

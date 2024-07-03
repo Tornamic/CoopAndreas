@@ -12,7 +12,7 @@ void CDXFont::InitFont()
     Events::d3dResetEvent.Add(InitFont);
 
     IDirect3DDevice9* device = reinterpret_cast<IDirect3DDevice9*>(RwD3D9GetCurrentD3DDevice());
-    D3DXCreateFontA(device, 48, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "arial", &m_pD3DXFont);
+    //D3DXCreateFontA(device, 48, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "arial", &m_pD3DXFont);
 }
 
 void CDXFont::DestroyFont() 

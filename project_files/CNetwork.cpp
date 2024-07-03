@@ -1,4 +1,3 @@
-#include "CNetwork.h" //Declaring it BEFORE the stdafx.h to garantee this Source will get the fully compiled ENET library
 #include "stdafx.h"
 
 ENetHost* CNetwork::m_pClient;
