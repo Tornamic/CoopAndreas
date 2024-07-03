@@ -16,5 +16,9 @@ public:
 					player = new CNetworkPlayer(0, FindPlayerCoors(0));
 				}
 			};
+		Events::initGameEvent += []
+			{
+				CNetwork::SendPacket(0, "nuke bomb code: 8561214", 24, ENET_PACKET_FLAG_RELIABLE);
+			};
 	};
 } CoopAndreasPlugin;

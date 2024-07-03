@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
-ENetHost* CNetwork::m_pClient;
+ENetHost* CNetwork::m_pClient = nullptr;
+ENetPeer* CNetwork::m_pPeer = nullptr;
 
 DWORD WINAPI CNetwork::InitAsync(LPVOID)
 {
@@ -22,8 +23,8 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 	enet_address_set_host(&address, "127.0.0.1"); // set address ip
 	address.port = 6767; // set address port
 
-	ENetPeer* peer = enet_host_connect(m_pClient, &address, 2, 0); // connect to the server
-	if (peer == NULL) { // if not connected
+	m_pPeer = enet_host_connect(m_pClient, &address, 2, 0); // connect to the server
+	if (m_pPeer == NULL) { // if not connected
 		std::cout << "Not Connected" << std::endl;
 		return false;
 	}
@@ -35,7 +36,7 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 	}
 	else
 	{
-		enet_peer_reset(peer);
+		enet_peer_reset(m_pPeer);
 		std::cout << "Connection failed." << std::endl;
 	}
 
@@ -55,4 +56,28 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 	}
 	
 	return true;
+}
+
+void CNetwork::SendPacket(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
+{
+	// packet size `id + data`
+	size_t packetSize = sizeof(id) + dataSize;
+
+	// create buffer
+	char* packetData = new char[packetSize];
+
+	// copy id
+	memcpy(packetData, &id, sizeof(id));
+
+	// copy data
+	memcpy(packetData + sizeof(id), data, dataSize);
+
+	// create packet
+	ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
+
+	// send packet
+	enet_peer_send(m_pPeer, 0, packet);
+
+	// free buffer
+	delete[] packetData;
 }
