@@ -1,6 +1,6 @@
+
 #include "stdafx.h"
-#include <string>
-#include "enet/enet.h"
+
 
 bool CNetwork::Init(unsigned short port)
 {
@@ -65,4 +65,27 @@ bool CNetwork::Init(unsigned short port)
     enet_deinitialize();
     std::cout << "Destroyed" << std::endl;
     return 0;
+}
+
+void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
+{
+    // 2 == sizeof(unsigned short)
+
+    // packet size `id + data`
+    size_t packetSize = 2 + dataSize;
+
+    // create buffer
+    char* packetData = new char[packetSize];
+
+    // copy id
+    memcpy(packetData, &id, 2);
+
+    // copy data
+    memcpy(packetData + 2, data, dataSize);
+
+    // create packet
+    ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
+
+    // send packet
+    enet_peer_send(peer, 0, packet);
 }

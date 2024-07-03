@@ -60,24 +60,23 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 
 void CNetwork::SendPacket(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
 {
+	// 2 == sizeof(unsigned short)
+	
 	// packet size `id + data`
-	size_t packetSize = sizeof(id) + dataSize;
+	size_t packetSize = 2 + dataSize;
 
 	// create buffer
 	char* packetData = new char[packetSize];
 
 	// copy id
-	memcpy(packetData, &id, sizeof(id));
+	memcpy(packetData, &id, 2);
 
 	// copy data
-	memcpy(packetData + sizeof(id), data, dataSize);
+	memcpy(packetData + 2, data, dataSize);
 
 	// create packet
 	ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
 
 	// send packet
 	enet_peer_send(m_pPeer, 0, packet);
-
-	// free buffer
-	delete[] packetData;
 }
