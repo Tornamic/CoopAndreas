@@ -33,6 +33,19 @@ bool CNetwork::Init(unsigned short port)
             case ENET_EVENT_TYPE_CONNECT:
             {
                 printf("A new client connected from %x:%u.\n", event.peer->address.host, event.peer->address.port);
+
+                // create new player and send to all players
+
+                // get free id
+                int freeId = CPlayerManager::GetFreeID();
+
+                // create new player instance
+                CPlayer* player = new CPlayer(event.peer, freeId);
+
+                // add player to list
+                CPlayerManager::Add(player);
+
+
                 break;
             }
 
@@ -50,7 +63,15 @@ bool CNetwork::Init(unsigned short port)
             case ENET_EVENT_TYPE_DISCONNECT:
             {
                 printf("%s disconnected.\n", event.peer->data);
-                /* Reset the peer's client information. */
+
+                // disconnect player
+
+                // find player instance by enetpeer
+                CPlayer* player = CPlayerManager::GetPlayer(event.peer);
+
+                // remove
+                CPlayerManager::Remove(player);
+
                 event.peer->data = NULL;
                 break;
             }

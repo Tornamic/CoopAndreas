@@ -8,7 +8,8 @@
 
 #include "iostream"
 #include "stdbool.h"
-#include <string>
+#include "string"
+#include "vector"
 
 // shared ----------------------------------------------------------------------------------
 
@@ -17,3 +18,5 @@
 // classes ---------------------------------------------------------------------------------
 
 #include "CNetwork.h"
+#include "CPlayer.h"
+#include "CPlayerManager.h"
