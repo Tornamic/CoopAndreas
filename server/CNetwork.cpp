@@ -45,6 +45,14 @@ bool CNetwork::Init(unsigned short port)
                 // add player to list
                 CPlayerManager::Add(player);
 
+                // create PlayerConnected packet struct
+                CPackets::PlayerConnected packet =
+                {
+                    freeId // id
+                };
+
+                // send to all
+                CNetwork::SendPacketToAll(CPacketsID::PLAYER_CONNECTED, &packet, sizeof CPackets::PlayerConnected, ENET_PACKET_FLAG_RELIABLE, event.peer);
 
                 break;
             }
@@ -71,6 +79,8 @@ bool CNetwork::Init(unsigned short port)
 
                 // remove
                 CPlayerManager::Remove(player);
+
+                
 
                 event.peer->data = NULL;
                 break;
@@ -107,4 +117,21 @@ void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t 
 
     // send packet
     enet_peer_send(peer, 0, packet);
+}
+
+void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith = nullptr)
+{
+    size_t packetSize = 2 + dataSize;
+    char* packetData = new char[packetSize];
+    memcpy(packetData, &id, 2);
+    memcpy(packetData + 2, data, dataSize);
+    ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
+
+    for (int i = 0; i != CPlayerManager::m_pPlayers.size(); i++)
+    {
+        if (CPlayerManager::m_pPlayers[i]->m_pPeer != dontShareWith)
+        {
+            enet_peer_send(CPlayerManager::m_pPlayers[i]->m_pPeer, 0, packet);
+        }
+    }
 }

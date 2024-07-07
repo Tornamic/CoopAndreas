@@ -11,9 +11,13 @@
 #include "string"
 #include "vector"
 
-// shared ----------------------------------------------------------------------------------
+// structures -------------------------------------------------------------------
 
-#include "../shared/Packet.h"
+#include "CVector.h"
+#include "CControllerState.h"
+
+#include "CPackets.h"
+
 
 // classes ---------------------------------------------------------------------------------
 
