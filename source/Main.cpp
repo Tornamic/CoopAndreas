@@ -1,24 +1,25 @@
 #include "../project_files/stdafx.h"
-
-bool created = false;
-
-CNetworkPlayer* player = nullptr;
+int i = 0;
 class CoopAndreas {
 public:
     CoopAndreas() {
 		CCore::Init();
 		Events::gameProcessEvent += []
 			{
-				// test
-				if (KeyPressed(VK_F8) && !created)
+				if (CNetwork::m_bConnected)
 				{
-					created = true;
-					player = new CNetworkPlayer(0, FindPlayerCoors(0));
+					CPackets::PlayerOnFoot* packet;
+
+					packet->position = CVector(2246.506f, -1259.552f, 23.9531f);
+					packet->velocity = CVector(0.0f, 0.0f, 0.0f);
+					packet->rotation = rand() % 360;
+
+					if (++i >= 100)
+					{
+						CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+						i = 0;
+					}
 				}
-			};
-		Events::initGameEvent += []
-			{
-				CNetwork::SendPacket(0, "nuke bomb code: 8561214", 24, ENET_PACKET_FLAG_RELIABLE);
 			};
 	};
 } CoopAndreasPlugin;

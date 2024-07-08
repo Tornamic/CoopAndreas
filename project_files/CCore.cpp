@@ -8,9 +8,11 @@ void CCore::Init()
 	CPatch::ApplyPatches();
 	CHook::Init();
 
-	// init CNetworking async
-	CreateThread(NULL, NULL, CNetwork::InitAsync, NULL, NULL, NULL);
-
+	Events::initGameEvent.after += []
+	{
+		// init CNetworking async
+		CreateThread(NULL, NULL, CNetwork::InitAsync, NULL, NULL, NULL);
+	};
 }
 
 void CCore::AllocateConsole()

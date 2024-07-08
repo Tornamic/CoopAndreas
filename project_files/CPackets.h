@@ -8,6 +8,7 @@ enum CPacketsID : unsigned short
 
 class CPackets
 {
+public:
 	struct PlayerConnected
 	{
 		int id;
@@ -23,7 +24,7 @@ class CPackets
 	{
 		int id;
 		CVector position;
-		CVector	velocity;
+		CVector velocity;
 		float rotation;
 		CControllerState controllerState;
 	};

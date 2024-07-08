@@ -37,6 +37,6 @@ using namespace plugin;
 #include "CHook.h"
 #include "CNetworkPlayer.h"
 #include "CDXFont.h"
-
+#include "CNetworkPlayerManager.h"
 // -----------------------------------------------------------------------------------------
 

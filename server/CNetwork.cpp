@@ -73,12 +73,25 @@ bool CNetwork::Init(unsigned short port)
 
             case ENET_EVENT_TYPE_RECEIVE:
             {
-                printf("A packet of length %lu containing %s was received from %s on channel %u.\n",
-                    event.packet->dataLength,
-                    event.packet->data,
-                    event.peer->data,
-                    event.channelID);
-                /* Clean up the packet now that we're done using it. */
+                unsigned short id;
+
+                // extract id
+                memcpy(&id, event.packet->data, 2);
+
+                // extract size
+                size_t dataSize = event.packet->dataLength - 2;
+
+                // allocate memory for data
+                char* data = new char[dataSize];
+
+                // extract data
+                memcpy(data, event.packet->data + 2, dataSize);
+
+                CPackets::PlayerOnFoot* packet = (CPackets::PlayerOnFoot*)data;
+
+                packet->id = CPlayerManager::GetPlayer(event.peer)->m_iPlayerId;
+                CNetwork::SendPacketToAll(CPacketsID::PLAYER_ONFOOT, packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE, event.peer);
+
                 enet_packet_destroy(event.packet);
                 break;
             }
@@ -140,6 +153,18 @@ void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, E
     memcpy(packetData, &id, 2);
     memcpy(packetData + 2, data, dataSize);
     ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
+
+    for (int i = 0; i != CPlayerManager::m_pPlayers.size(); i++)
+    {
+        if (CPlayerManager::m_pPlayers[i]->m_pPeer != dontShareWith)
+        {
+            enet_peer_send(CPlayerManager::m_pPlayers[i]->m_pPeer, 0, packet);
+        }
+    }
+}
+void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith = nullptr)
+{
+    ENetPacket* packet = enet_packet_create(data, dataSize, flag);
 
     for (int i = 0; i != CPlayerManager::m_pPlayers.size(); i++)
     {

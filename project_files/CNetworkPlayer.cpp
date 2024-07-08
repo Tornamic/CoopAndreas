@@ -1,12 +1,20 @@
 #include "stdafx.h"
 
 CPlayerPed* m_pPed = nullptr;
+int m_iPlayerId;
+
+// last sync data
+CPackets::PlayerOnFoot* m_lOnFoot = nullptr;
 
 CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 {
 	// load CJ (0) model
 	CStreaming::RequestModel(0, eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
 	CStreaming::LoadAllRequestedModels(false);
+
+	// wait until model loaded
+	while (CStreaming::ms_aInfoForModel[0].m_nLoadState != LOADSTATE_LOADED)
+		Sleep(5);
 
 	// get player info
 	CPlayerInfo* info = &CWorld::Players[id + 2];
@@ -21,7 +29,7 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 	info->m_nPlayerState = ePlayerState::PLAYERSTATE_PLAYING;
 
 	// set ped type to PLAYER1, dont use any other !!!
-	player->m_nPedType = ePedType::PED_TYPE_PLAYER2;
+	player->m_nPedType = ePedType::PED_TYPE_PLAYER1;
 
 	CWorld::Add(player);
 	
@@ -30,5 +38,6 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 	player->SetOrientation(0.0f, 0.0f, 0.0f);
 
 	m_pPed = player;
+	m_iPlayerId = id;
 }
 
