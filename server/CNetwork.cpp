@@ -54,6 +54,20 @@ bool CNetwork::Init(unsigned short port)
                 // send to all
                 CNetwork::SendPacketToAll(CPacketsID::PLAYER_CONNECTED, &packet, sizeof CPackets::PlayerConnected, ENET_PACKET_FLAG_RELIABLE, event.peer);
 
+                // send PlayerConnected packets for a new player
+                for (auto i : CPlayerManager::m_pPlayers)
+                {
+                    if (i->m_iPlayerId == freeId)
+                        continue;
+
+                    packet =
+                    {
+                        i->m_iPlayerId
+                    };
+
+                    CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_CONNECTED, &packet, sizeof CPackets::PlayerConnected, ENET_PACKET_FLAG_RELIABLE);
+                }
+
                 break;
             }
 
