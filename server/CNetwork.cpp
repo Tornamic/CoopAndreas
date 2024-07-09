@@ -107,7 +107,14 @@ bool CNetwork::Init(unsigned short port)
                 // remove
                 CPlayerManager::Remove(player);
 
-                
+                // create PlayerDisconnected packet struct
+                CPackets::PlayerDisconnected packet =
+                {
+                    player->m_iPlayerId // id
+                };
+
+                // send to all
+                CNetwork::SendPacketToAll(CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof CPackets::PlayerDisconnected, ENET_PACKET_FLAG_RELIABLE, event.peer);
 
                 event.peer->data = NULL;
                 break;

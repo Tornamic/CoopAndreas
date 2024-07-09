@@ -101,6 +101,20 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 
 
 				}
+				else if (id == CPacketsID::PLAYER_DISCONNECTED)
+				{
+					// get packet struct
+					CPackets::PlayerDisconnected* packet = (CPackets::PlayerDisconnected*)data;
+
+					CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->id);
+					
+					if (player == nullptr)
+						break;
+
+					CNetworkPlayerManager::Remove(player);
+					player->~CNetworkPlayer();
+
+				}
 				else if (id == CPacketsID::PLAYER_ONFOOT)
 				{
 					// get packet struct

@@ -7,7 +7,8 @@ public:
 
 	// last sync data
 	CPackets::PlayerOnFoot* m_lOnFoot = nullptr;
-
+	
+	CNetworkPlayer::~CNetworkPlayer();
 	CNetworkPlayer::CNetworkPlayer(int id, CVector position);
 };
 

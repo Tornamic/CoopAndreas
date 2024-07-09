@@ -6,6 +6,15 @@ int m_iPlayerId;
 // last sync data
 CPackets::PlayerOnFoot* m_lOnFoot = nullptr;
 
+CNetworkPlayer::~CNetworkPlayer()
+{
+	if (m_pPed == nullptr) return;
+
+	CWorld::Remove(m_pPed);
+	delete m_pPed;
+
+}
+
 CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 {
 	// load CJ (0) model
