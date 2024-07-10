@@ -10,9 +10,18 @@ CNetworkPlayer::~CNetworkPlayer()
 {
 	if (m_pPed == nullptr) return;
 
-	CWorld::Remove(m_pPed);
-	delete m_pPed;
+	DWORD dwPedPtr = (DWORD)m_pPed;
 
+	// fix destructor crash
+	_asm mov esi, dwPedPtr
+	_asm mov eax, [esi + 1152]
+	_asm mov dword ptr[eax + 76], 0
+
+	// call destroy method
+	_asm mov ecx, dwPedPtr
+	_asm mov ebx, [ecx]; vtable
+	_asm push 1
+	_asm call[ebx]; destroy
 }
 
 CNetworkPlayer::CNetworkPlayer(int id, CVector position)
