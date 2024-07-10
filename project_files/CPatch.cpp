@@ -124,6 +124,9 @@ void FixCrashes()
 
     // PlayerInfo checks in CPlayerPed::ProcessControl
     patch::Nop(0x60F2C4, 25);
+
+    // fix crash when closing game
+    patch::SetUChar(0x705B33, 0x75); // jz to jnz
 }
 
 void CPatch::ApplyPatches()

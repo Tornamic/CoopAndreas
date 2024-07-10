@@ -62,7 +62,7 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 		std::cout << "Connection failed." << std::endl;
 	}
 
-	while (true) //This is taking the main thread to itself. We need to run the client in a different thread. Remove this loop to keep developing without receiving packets from the server.
+	while (m_bConnected) //This is taking the main thread to itself. We need to run the client in a different thread. Remove this loop to keep developing without receiving packets from the server.
 	{
 		enet_host_service(m_pClient, &event, 5000);
 		switch (event.type)
@@ -141,7 +141,10 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 		}
 
 	}
-	
+
+	enet_host_destroy(m_pClient);
+	enet_deinitialize();
+	printf("disconnected from server");
 	return true;
 }
 
@@ -168,3 +171,7 @@ void CNetwork::SendPacket(unsigned short id, void* data, size_t dataSize, ENetPa
 	enet_peer_send(m_pPeer, 0, packet);
 }
 
+void CNetwork::Disconnect()
+{
+	m_bConnected = false;
+}

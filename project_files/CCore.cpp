@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+
+
 void CCore::Init()
 {
 #ifdef _DEV
@@ -12,6 +14,11 @@ void CCore::Init()
 	{
 		// init CNetworking async
 		CreateThread(NULL, NULL, CNetwork::InitAsync, NULL, NULL, NULL);
+	};
+	gameShutdownEvent.before += []
+	{
+		// disconnect from server
+		CNetwork::Disconnect();
 	};
 }
 
