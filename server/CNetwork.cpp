@@ -34,6 +34,7 @@ bool CNetwork::Init(unsigned short port)
             {
                 printf("A new client connected from %x:%u.\n", event.peer->address.host, event.peer->address.port);
 
+                enet_peer_timeout(event.peer, 1000, 300, 500); //timeoutLimit, timeoutMinimum, timeoutMaximum
                 // create new player and send to all players
 
                 // get free id
