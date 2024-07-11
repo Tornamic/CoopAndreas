@@ -5,8 +5,6 @@ std::vector<CPlayer*> CPlayerManager::m_pPlayers;
 void CPlayerManager::Add(CPlayer* player)
 {
 	m_pPlayers.push_back(player);
-
-
 }
 
 void CPlayerManager::Remove(CPlayer* player)

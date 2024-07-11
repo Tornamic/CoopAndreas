@@ -11,12 +11,6 @@
 #include "string"
 #include "vector"
 
-// structures -------------------------------------------------------------------
-
-#include "CVector.h"
-#include "CControllerState.h"
-
-#include "CPackets.h"
 
 
 // classes ---------------------------------------------------------------------------------
@@ -24,3 +18,9 @@
 #include "CNetwork.h"
 #include "CPlayer.h"
 #include "CPlayerManager.h"
+
+// structures -------------------------------------------------------------------
+
+#include "CVector.h"
+#include "CControllerState.h"
+#include "CPackets.h"

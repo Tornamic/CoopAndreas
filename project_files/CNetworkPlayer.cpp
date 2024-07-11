@@ -13,6 +13,7 @@ CNetworkPlayer::~CNetworkPlayer()
 	DWORD dwPedPtr = (DWORD)m_pPed;
 
 	// fix destructor crash
+
 	_asm mov esi, dwPedPtr
 	_asm mov eax, [esi + 1152]
 	_asm mov dword ptr[eax + 76], 0

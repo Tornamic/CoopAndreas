@@ -2,6 +2,8 @@
 
 void PatchPlayers()
 {
+    // i think this patches are useless
+    
     // increase player count 
     // we dont use first two players because
     // 0 - you

@@ -1,5 +1,5 @@
 #include "../project_files/stdafx.h"
-int i = 0;
+int lastTickCount = 0;
 class CoopAndreas {
 public:
     CoopAndreas() {
@@ -13,9 +13,18 @@ public:
 			};
 		Events::gameProcessEvent += []
 			{
-				if (GetAsyncKeyState(VK_F8))
+				if (CNetwork::m_bConnected)
 				{
-					CNetwork::Disconnect();
+
+					if (GetTickCount() > lastTickCount + 20)
+					{
+						lastTickCount = GetTickCount();
+						CPackets::PlayerOnFoot* packet = CNetwork::CollectOnFootSyncData();
+
+						CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED);
+
+						delete packet;
+					}
 				}
 			};
 		CCore::Init();
