@@ -39,6 +39,20 @@ void PatchStreaming()
     // increase max fps
     RsGlobal.maxFPS = 100;
     patch::SetUChar(0x619626, 0x64); // hardcoded value
+
+    // patch game freezeing if inactive
+    patch::Nop(0x561AF0, 7);
+    patch::Nop(0x745BC9, 2);
+    patch::SetUChar(7634870, 1);
+    patch::SetUChar(7635034, 1);
+    patch::Nop(7623723, 8);
+    patch::Nop(5499528, 6);
+
+    // fix cutscene crash
+    patch::Nop(0x40EC56, 5);
+
+    // fix crash after death
+    patch::Nop(0x441481, 6);
 }
 
 void PatchPools()

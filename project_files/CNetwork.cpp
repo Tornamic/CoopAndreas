@@ -4,23 +4,6 @@ ENetHost* CNetwork::m_pClient = nullptr;
 ENetPeer* CNetwork::m_pPeer = nullptr;
 bool CNetwork::m_bConnected = false;
 
-DWORD WINAPI temp_send_onfoot(LPVOID)
-{
-	Sleep(2000);
-	while (true)
-	{
-		CPackets::PlayerOnFoot* packet = {};
-
-		packet->position = FindPlayerPed(0)->m_matrix->pos;
-		packet->velocity = FindPlayerPed(0)->m_vecMoveSpeed;
-		/*packet->rotation = FindPlayerPed(0)->m_fCurrentRotation;*/
-
-		CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
-
-		Sleep(100);
-	}
-}
-
 DWORD WINAPI CNetwork::InitAsync(LPVOID)
 {
 	// wait some time

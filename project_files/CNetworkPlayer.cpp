@@ -27,6 +27,7 @@ CNetworkPlayer::~CNetworkPlayer()
 
 CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 {
+	
 	// load CJ (0) model
 	CStreaming::RequestModel(0, eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
 	CStreaming::LoadAllRequestedModels(false);
@@ -52,9 +53,11 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 
 	CWorld::Add(player);
 	
+	player->SetPosn(FindPlayerCoors(0));
 	player->SetModelIndex(0);
-	player->SetPosn(position);
 	player->SetOrientation(0.0f, 0.0f, 0.0f);
+
+	//m_pPed->m_bStreamingDontDelete = 1;
 
 	m_pPed = player;
 	m_iPlayerId = id;
