@@ -16,7 +16,7 @@ TODO Launcher:
 - [X] inject all dll in the game (don't need ASI Loader anymore)
 - [X] send params (nickname, ip/port) to client dll
 - [ ] start/control server directly from launcher
-- [ ] implement translation
+- [X] implement translation
 - [ ] save configs
 
 ## Notes for me
