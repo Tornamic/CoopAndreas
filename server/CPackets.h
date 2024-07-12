@@ -37,13 +37,14 @@ public:
 			packet->id = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
 
 			// log
-			printf("ONFOOT: playerid %d, coors %f %f %f, velocity %f %f %f, rotation %f\n",
+			printf("%iONFOOT: playerid %d, coors %f %f %f, velocity %f %f %f, rotation %f\n",
+				GetTickCount(),
 				packet->id,
 				packet->position.x, packet->position.y, packet->position.z,
 				packet->velocity.x, packet->velocity.y, packet->velocity.z,
 				packet->rotation);
 
-			CNetwork::SendPacketToAll(CPacketsID::PLAYER_ONFOOT, packet, sizeof *packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(CPacketsID::PLAYER_ONFOOT, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}
 	};
 };

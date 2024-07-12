@@ -1,5 +1,5 @@
 #include "../project_files/stdafx.h"
-int lastTickCount = 0;
+unsigned int lastTickCount = 0;
 class CoopAndreas {
 public:
     CoopAndreas() {
@@ -15,11 +15,11 @@ public:
 			{
 				if (CNetwork::m_bConnected)
 				{
-
-					if (GetTickCount() > lastTickCount + 20)
+					CPackets::PlayerOnFoot* packet = CPackets::PlayerOnFoot::Collect();
+					if (GetTickCount() > lastTickCount + 100 || (CPackets::PlayerOnFoot::m_last == nullptr || !CUtil::CompareControllerStates(CPackets::PlayerOnFoot::m_last->controllerState, packet->controllerState)))
 					{
 						lastTickCount = GetTickCount();
-						CPackets::PlayerOnFoot* packet = CNetwork::CollectOnFootSyncData();
+						CPackets::PlayerOnFoot::m_last = packet;
 						CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
 						delete packet;
 					}

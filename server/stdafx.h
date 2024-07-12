@@ -19,8 +19,6 @@
 #include "CPlayer.h"
 #include "CPlayerManager.h"
 
-// structures -------------------------------------------------------------------
-
 #include "CVector.h"
 #include "CControllerState.h"
 #include "CPackets.h"

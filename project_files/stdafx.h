@@ -39,6 +39,6 @@ using namespace plugin;
 #include "CDXFont.h"
 #include "CNetworkPlayerManager.h"
 #include "Events.h"
-
+#include "CUtil.h"
 // -----------------------------------------------------------------------------------------
 

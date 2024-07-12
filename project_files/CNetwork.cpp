@@ -111,15 +111,11 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 					player->m_pPed->m_matrix->pos = packet->position;
 					player->m_pPed->m_vecMoveSpeed = packet->velocity;
 
-					player->m_pPed->m_fAimingRotation = 
-					player->m_pPed->m_fCurrentRotation = packet->rotation;
+					/*player->m_pPed->m_fAimingRotation = 
+					player->m_pPed->m_fCurrentRotation = packet->rotation;*/
 
 					// save last onfoot sync
 					player->m_lOnFoot = packet;
-
-					CPad* pad = &CNetworkPlayerManager::m_pPads[packet->id];
-					pad->OldState = pad->NewState;
-					pad->NewState = packet->controllerState;
 
 					player->m_lOnFoot = packet;
 				}
@@ -167,30 +163,3 @@ void CNetwork::Disconnect()
 	m_bConnected = false;
 }
 
-
-CPackets::PlayerOnFoot* CNetwork::CollectOnFootSyncData()
-{
-	// find local player
-	CPlayerPed* player = FindPlayerPed(-1);
-
-	// if player not created
-	if (player == nullptr)
-		return nullptr;
-
-	// create PlayerOnFoot packet instance
-	CPackets::PlayerOnFoot* packet = new CPackets::PlayerOnFoot;
-
-	// get player position
-	packet->position = player->m_matrix->pos;
-
-	// get player move speed (velocity)
-	packet->velocity = player->m_vecMoveSpeed;
-
-	// get player facing angle
-	packet->rotation = player->m_fCurrentRotation;
-
-	// get player key state, not all keyboard, just controller keys
-	packet->controllerState = player->GetPadFromPlayer()->NewState;
-
-	return packet;
-}
