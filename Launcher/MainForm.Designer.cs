@@ -1,6 +1,6 @@
 ﻿namespace Launcher
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -223,7 +223,8 @@
             this.languageCombo.Items.AddRange(new object[] {
             "English",
             "Русский",
-            "Português"});
+            "Português",
+            "Українська"});
             this.languageCombo.Location = new System.Drawing.Point(70, 11);
             this.languageCombo.Name = "languageCombo";
             this.languageCombo.Size = new System.Drawing.Size(161, 21);
@@ -238,16 +239,16 @@
             this.languageText.TabIndex = 0;
             this.languageText.Text = "Language:";
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(270, 250);
             this.Controls.Add(this.tabControl1);
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "CoopAndreas Launcher";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.connectPage.ResumeLayout(false);
             this.connectPage.PerformLayout();

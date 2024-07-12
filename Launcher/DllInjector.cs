@@ -1,67 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using Launcher.Enums;
+using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
-using System.IO;
 
 namespace Launcher
 {
-    public partial class Form1 : Form
-    {
-        public Form1()
-        {
-            InitializeComponent();
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            languageCombo.SelectedIndex = 0;
-        }
-
-        private void connectButton_Click(object sender, EventArgs e)
-        {
-            string processName = "gta_sa";
-
-            //Both dlls need to be in Launcher folder
-            string enetPath = AppDomain.CurrentDomain.BaseDirectory + "enet.dll";
-            string coopandreasPath = AppDomain.CurrentDomain.BaseDirectory + "CoopAndreasSA.dll";
-
-            DllInjector injector = DllInjector.GetInstance;
-
-            DllInjectionResult result1 = injector.Inject(processName, enetPath);
-            if (result1 != DllInjectionResult.Success)
-            {
-                MessageBox.Show("Fail injection first DLL: " + result1.ToString());
-                return;
-            }
-
-            // Injetar segunda DLL
-            DllInjectionResult result2 = injector.Inject(processName, coopandreasPath);
-            if (result2 != DllInjectionResult.Success)
-            {
-                MessageBox.Show("Fail injecting second DLL: " + result2.ToString());
-                return;
-            }
-
-            MessageBox.Show("Both DLL injected successfully!");
-        }
-    }
-
-    public enum DllInjectionResult
-    {
-        DllNotFound,
-        GameProcessNotFound,
-        InjectionFailed,
-        Success
-    }
-
     public sealed class DllInjector
     {
         static readonly IntPtr INTPTR_ZERO = (IntPtr)0;
@@ -88,40 +33,21 @@ namespace Launcher
         static extern IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttribute, IntPtr dwStackSize, IntPtr lpStartAddress,
             IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
 
-        static DllInjector _instance;
+        public Process Process { get; private set; }
 
-        public static DllInjector GetInstance
+        public DllInjector(Process process)
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new DllInjector();
-                }
-                return _instance;
-            }
+            Process = process;
         }
 
-        DllInjector() { }
-        
-        public DllInjectionResult Inject(string sProcName, string sDllPath)
+        public DllInjectionResult Inject(string sDllPath)
         {
             if (!File.Exists(sDllPath))
             {
                 return DllInjectionResult.DllNotFound;
             }
 
-            uint _procId = 0;
-
-            Process[] _procs = Process.GetProcesses();
-            for (int i = 0; i < _procs.Length; i++)
-            {
-                if (_procs[i].ProcessName == sProcName)
-                {
-                    _procId = (uint)_procs[i].Id;
-                    break;
-                }
-            }
+            uint _procId = (uint)Process.Id;
 
             if (_procId == 0)
             {
@@ -136,7 +62,7 @@ namespace Launcher
             return DllInjectionResult.Success;
         }
 
-        bool bInject(uint pToBeInjected, string sDllPath)
+        private bool bInject(uint pToBeInjected, string sDllPath)
         {
             IntPtr hndProc = OpenProcess((0x2 | 0x8 | 0x10 | 0x20 | 0x400), 1, pToBeInjected);
 
@@ -176,5 +102,4 @@ namespace Launcher
             return true;
         }
     }
-
 }
