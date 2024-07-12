@@ -62,9 +62,9 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 		std::cout << "Connection failed." << std::endl;
 	}
 
-	while (m_bConnected) //This is taking the main thread to itself. We need to run the client in a different thread. Remove this loop to keep developing without receiving packets from the server.
+	while (m_bConnected)
 	{
-		enet_host_service(m_pClient, &event, 0);
+		enet_host_service(m_pClient, &event, 1);
 		switch (event.type)
 		{
 			case ENET_EVENT_TYPE_RECEIVE:

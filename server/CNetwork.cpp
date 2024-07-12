@@ -31,7 +31,7 @@ bool CNetwork::Init(unsigned short port)
     ENetEvent event;
     while (true) // waiting for event
     {
-        enet_host_service(server, &event, 0);
+        enet_host_service(server, &event, 1);
         switch (event.type)
         {
             case ENET_EVENT_TYPE_CONNECT:
