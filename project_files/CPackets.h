@@ -1,4 +1,7 @@
 #pragma once
+
+#include "CUtil.h"
+
 enum CPacketsID : unsigned short
 {
 	PLAYER_CONNECTED,
@@ -27,6 +30,7 @@ public:
 		CVector velocity;
 		float rotation;
 		CControllerState controllerState;
+		bool isDucked;
 
 		static inline PlayerOnFoot* m_last = nullptr;
 
@@ -53,6 +57,9 @@ public:
 
 			// get player key state, not all keyboard, just controller keys
 			packet->controllerState = player->GetPadFromPlayer()->NewState;
+
+			// does player ducked
+			packet->isDucked = CUtil::IsDucked(player);
 
 			return packet;
 		}

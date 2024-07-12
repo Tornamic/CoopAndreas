@@ -23,26 +23,6 @@ static bool AdjustBranchPointer(uintptr_t Address, uintptr_t src, injector::memo
 
 std::vector<bool(*)(unsigned int)> Patch_Funcs;
 
-static CPad* __fastcall CPlayerPed__GetPadFromPlayer_Hook(CPed* This)
-{
-
-	if (This == nullptr)
-		return nullptr;
-
-	// if ped is local player
-	if (This == FindPlayerPed(-1))
-	{
-	    return &CNetworkPlayerManager::m_pPads[0];
-	}
-
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(This);
-	
-	if (player == nullptr)
-		return nullptr;
-
-	return &CNetworkPlayerManager::m_pPads[player->m_iPlayerId + 2];
-}
-
 CPad* __cdecl CPad__GetPad_Hook(int number)
 {
 	return &CNetworkPlayerManager::m_pPads[0];
@@ -70,19 +50,28 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
             break;
         }
     }
+
     CWorld::PlayerInFocus = playerNumber;
 
     CPad* pad = This->GetPadFromPlayer();
 
-    CControllerState oldState = pad->NewState;
+    CControllerState newOldState = pad->NewState;
+    CControllerState oldOldState = pad->OldState;
 
-    pad->NewState = CControllerState();
 
-    if (player->m_lOnFoot != nullptr)
+    if (player->m_lOnFoot != nullptr && player->m_oOnFoot != nullptr)
     {
         pad->NewState = player->m_lOnFoot->controllerState;
-        player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
+        
+        pad->OldState = player->m_oOnFoot->controllerState;
+
+        // log
+        
+
+        player->m_pPed->m_fAimingRotation =
         player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
+        player->m_pPed->SetHeading(player->m_lOnFoot->rotation);
+        player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
         //player->m_pPed->ApplyMoveSpeed();
     }
     
@@ -90,8 +79,8 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     CWorld::PlayerInFocus = 0;
 
-    pad->NewState = oldState;
-    //printf("not me");
+    pad->NewState = newOldState;
+    pad->OldState = oldOldState;
 }
 
 void CHook::Init()
@@ -100,11 +89,6 @@ void CHook::Init()
     {
         return AdjustBranchPointer(Address, 0x53FB70, CPad__GetPad_Hook, true);
     });
-    
-    /*Patch_Funcs.push_back([](uint32_t Address) -> bool
-    {
-        return AdjustBranchPointer(Address, 0x609560, CPlayerPed__GetPadFromPlayer_Hook, true);
-    });*/
 
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
 }

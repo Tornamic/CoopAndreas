@@ -26,3 +26,16 @@ bool CUtil::CompareControllerStates(const CControllerState & state1, const CCont
         state1.m_bVehicleMouseLook == state2.m_bVehicleMouseLook &&
         state1.m_bRadioTrackSkip == state2.m_bRadioTrackSkip;
 }
+
+
+bool CUtil::IsDucked(CPed* ped)
+{
+    CTaskSimpleDuck* task = ped->m_pIntelligence->GetTaskDuck(true);
+
+    if (task == nullptr)
+        return false;
+    if (task->m_bIsFinished || task->m_bIsAborting)
+        return false;
+
+    return true;
+}

@@ -109,14 +109,16 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 						break;
 
 					player->m_pPed->m_matrix->pos = packet->position;
-					player->m_pPed->m_vecMoveSpeed = packet->velocity;
 
-					/*player->m_pPed->m_fAimingRotation = 
-					player->m_pPed->m_fCurrentRotation = packet->rotation;*/
+					// хуйня, исправить присед не через таски а через клавиши, я пошел спать
+					if (CUtil::IsDucked(player->m_pPed) != packet->isDucked)
+					{
+						CTaskSimpleDuckToggle task(packet->isDucked);
+						task.ProcessPed(player->m_pPed);
+					}
 
 					// save last onfoot sync
-					player->m_lOnFoot = packet;
-
+					player->m_oOnFoot = player->m_lOnFoot;
 					player->m_lOnFoot = packet;
 				}
 				break;

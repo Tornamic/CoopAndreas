@@ -1,4 +1,5 @@
 #pragma once
+
 enum CPacketsID : unsigned short
 {
 	PLAYER_CONNECTED,
@@ -27,6 +28,7 @@ public:
 		CVector	velocity;
 		float rotation;
 		CControllerState controllerState;
+		bool isDucked;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -36,13 +38,6 @@ public:
 			// set packet`s playerid, cuz incoming packet has id = 0
 			packet->id = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
 
-			// log
-			printf("%iONFOOT: playerid %d, coors %f %f %f, velocity %f %f %f, rotation %f\n",
-				GetTickCount(),
-				packet->id,
-				packet->position.x, packet->position.y, packet->position.z,
-				packet->velocity.x, packet->velocity.y, packet->velocity.z,
-				packet->rotation);
 
 			CNetwork::SendPacketToAll(CPacketsID::PLAYER_ONFOOT, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}

@@ -22,15 +22,14 @@
 #include "CWorld.h"
 #include "RenderWare.h"
 #include "d3dx9.h"
-
-// shared ----------------------------------------------------------------------------------
-
-#include "CPackets.h"
+#include "extensions/ScriptCommands.h"
+#include "CTaskSimpleDuckToggle.h"
 
 // classes ---------------------------------------------------------------------------------
 
 using namespace plugin;
 
+#include "CPackets.h"
 #include "CCore.h"
 #include "CNetwork.h"
 #include "CPatch.h"
@@ -41,4 +40,3 @@ using namespace plugin;
 #include "Events.h"
 #include "CUtil.h"
 // -----------------------------------------------------------------------------------------
-
