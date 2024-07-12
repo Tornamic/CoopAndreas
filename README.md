@@ -14,7 +14,7 @@ TODO list:
 TODO Launcher:
 - [X] setup project and create forms
 - [X] inject all dll in the game (don't need ASI Loader anymore)
-- [ ] send params (nickname, ip/port) to client dll
+- [X] send params (nickname, ip/port) to client dll
 - [ ] start/control server directly from launcher
 - [ ] implement translation
 - [ ] save configs
