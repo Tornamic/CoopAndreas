@@ -1,6 +1,5 @@
 #include "../project_files/stdafx.h"
 int lastTickCount = 0;
-CPackets::PlayerOnFoot* previousPacket = NULL;
 class CoopAndreas {
 public:
     CoopAndreas() {
@@ -21,11 +20,7 @@ public:
 					{
 						lastTickCount = GetTickCount();
 						CPackets::PlayerOnFoot* packet = CNetwork::CollectOnFootSyncData();
-						if (packet != previousPacket)
-						{
-							CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
-							previousPacket = packet;
-						}
+						CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
 						delete packet;
 					}
 				}
