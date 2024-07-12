@@ -9,7 +9,7 @@ namespace Launcher
     {
         public string[] LibrariesToInject =
         {
-            "enet.dll",
+            //"enet.dll",
             "CoopAndreasSA.dll"
         };
 
