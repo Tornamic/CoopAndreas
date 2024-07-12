@@ -39,17 +39,17 @@ namespace Launcher
             ru.Add(Program.MainForm.serverPage, "Сервер");
             ru.Add(Program.MainForm.configPage, "Конфиг");
 
-            pt.Add(Program.MainForm.b_connect, "Connect"); // todo for sr_milton
-            pt.Add(Program.MainForm.lb_connect, "Connect to a CoopAndreas server");
+            pt.Add(Program.MainForm.b_connect, "Conectar");
+            pt.Add(Program.MainForm.lb_connect, "Conectar a um servidor CoopAndreas"); 
             pt.Add(Program.MainForm.lb_nickname, "Nickname:");
-            pt.Add(Program.MainForm.lb_ipport, "IP:PORT:");
-            pt.Add(Program.MainForm.lb_port, "Port:");
-            pt.Add(Program.MainForm.lb_language, "Language:");
-            pt.Add(Program.MainForm.lb_maxplayers, "Max Players:");
-            pt.Add(Program.MainForm.lb_startserver, "Start a new CoopAndreas server");
-            pt.Add(Program.MainForm.b_startserver, "Start Server");
-            pt.Add(Program.MainForm.connectPage, "Connect");
-            pt.Add(Program.MainForm.serverPage, "Server");
+            pt.Add(Program.MainForm.lb_ipport, "IP:PORTA:");
+            pt.Add(Program.MainForm.lb_port, "Porta:");
+            pt.Add(Program.MainForm.lb_language, "Linguagem:");
+            pt.Add(Program.MainForm.lb_maxplayers, "Max Jogadores:");
+            pt.Add(Program.MainForm.lb_startserver, "Iniciar um novo servidor CoopAndreas");
+            pt.Add(Program.MainForm.b_startserver, "Iniciar Servidor");
+            pt.Add(Program.MainForm.connectPage, "Conectar");
+            pt.Add(Program.MainForm.serverPage, "Servidor");
             pt.Add(Program.MainForm.configPage, "Config");
 
             ua.Add(Program.MainForm.b_connect, "Підключитися");

@@ -94,9 +94,9 @@
             // 
             // b_connect
             // 
-            this.b_connect.Location = new System.Drawing.Point(32, 104);
+            this.b_connect.Location = new System.Drawing.Point(30, 100);
             this.b_connect.Name = "b_connect";
-            this.b_connect.Size = new System.Drawing.Size(249, 66);
+            this.b_connect.Size = new System.Drawing.Size(250, 70);
             this.b_connect.TabIndex = 4;
             this.b_connect.Text = "CONNECT";
             this.b_connect.UseVisualStyleBackColor = true;
@@ -152,9 +152,9 @@
             // 
             // b_startserver
             // 
-            this.b_startserver.Location = new System.Drawing.Point(31, 100);
+            this.b_startserver.Location = new System.Drawing.Point(30, 100);
             this.b_startserver.Name = "b_startserver";
-            this.b_startserver.Size = new System.Drawing.Size(250, 68);
+            this.b_startserver.Size = new System.Drawing.Size(250, 70);
             this.b_startserver.TabIndex = 7;
             this.b_startserver.Text = "START SERVER";
             this.b_startserver.UseVisualStyleBackColor = true;
@@ -172,7 +172,7 @@
             // 
             // maxplayersInput
             // 
-            this.maxplayersInput.Location = new System.Drawing.Point(214, 52);
+            this.maxplayersInput.Location = new System.Drawing.Point(218, 52);
             this.maxplayersInput.Name = "maxplayersInput";
             this.maxplayersInput.Size = new System.Drawing.Size(57, 20);
             this.maxplayersInput.TabIndex = 3;
@@ -193,7 +193,7 @@
             // lb_maxplayers
             // 
             this.lb_maxplayers.AutoSize = true;
-            this.lb_maxplayers.Location = new System.Drawing.Point(144, 55);
+            this.lb_maxplayers.Location = new System.Drawing.Point(140, 55);
             this.lb_maxplayers.Name = "lb_maxplayers";
             this.lb_maxplayers.Size = new System.Drawing.Size(67, 13);
             this.lb_maxplayers.TabIndex = 1;
