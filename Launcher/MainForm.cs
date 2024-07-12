@@ -11,11 +11,13 @@ using System.Windows.Forms;
 using System.IO;
 using Launcher.Enums;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace Launcher
 {
     public partial class MainForm : Form
     {
+        Localization localization;
         public MainForm()
         {
             InitializeComponent();
@@ -24,6 +26,9 @@ namespace Launcher
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            localization = new Localization();
+            localization.ChangeGlobalLanguage("en");
+
             languageCombo.SelectedIndex = 0;
         }
 
@@ -50,6 +55,16 @@ namespace Launcher
 
             if(result != LaunchResult.Success)
                 MessageBox.Show(result.ToString());
+        }
+
+        private void languageCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string[] list =
+            {
+                "en", "ru", "pt", "ua"
+            };
+
+            localization.ChangeGlobalLanguage(list[languageCombo.SelectedIndex]);
         }
     }
 }

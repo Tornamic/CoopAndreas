@@ -30,22 +30,22 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.connectPage = new System.Windows.Forms.TabPage();
-            this.connectlabelText = new System.Windows.Forms.Label();
-            this.connectButton = new System.Windows.Forms.Button();
+            this.lb_connect = new System.Windows.Forms.Label();
+            this.b_connect = new System.Windows.Forms.Button();
             this.ipportInput = new System.Windows.Forms.TextBox();
-            this.ipportText = new System.Windows.Forms.Label();
+            this.lb_ipport = new System.Windows.Forms.Label();
             this.nicknameInput = new System.Windows.Forms.TextBox();
-            this.nicknameText = new System.Windows.Forms.Label();
+            this.lb_nickname = new System.Windows.Forms.Label();
             this.serverPage = new System.Windows.Forms.TabPage();
-            this.startserverButton = new System.Windows.Forms.Button();
-            this.serverlabelText = new System.Windows.Forms.Label();
+            this.b_startserver = new System.Windows.Forms.Button();
+            this.lb_startserver = new System.Windows.Forms.Label();
             this.maxplayersInput = new System.Windows.Forms.NumericUpDown();
             this.portInput = new System.Windows.Forms.TextBox();
-            this.maxplayerText = new System.Windows.Forms.Label();
-            this.portText = new System.Windows.Forms.Label();
+            this.lb_maxplayers = new System.Windows.Forms.Label();
+            this.lb_port = new System.Windows.Forms.Label();
             this.configPage = new System.Windows.Forms.TabPage();
             this.languageCombo = new System.Windows.Forms.ComboBox();
-            this.languageText = new System.Windows.Forms.Label();
+            this.lb_language = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.connectPage.SuspendLayout();
             this.serverPage.SuspendLayout();
@@ -61,115 +61,118 @@
             this.tabControl1.Location = new System.Drawing.Point(13, 13);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(245, 225);
+            this.tabControl1.Size = new System.Drawing.Size(319, 225);
             this.tabControl1.TabIndex = 0;
             // 
             // connectPage
             // 
             this.connectPage.BackColor = System.Drawing.Color.White;
-            this.connectPage.Controls.Add(this.connectlabelText);
-            this.connectPage.Controls.Add(this.connectButton);
+            this.connectPage.Controls.Add(this.lb_connect);
+            this.connectPage.Controls.Add(this.b_connect);
             this.connectPage.Controls.Add(this.ipportInput);
-            this.connectPage.Controls.Add(this.ipportText);
+            this.connectPage.Controls.Add(this.lb_ipport);
             this.connectPage.Controls.Add(this.nicknameInput);
-            this.connectPage.Controls.Add(this.nicknameText);
+            this.connectPage.Controls.Add(this.lb_nickname);
             this.connectPage.Location = new System.Drawing.Point(4, 22);
             this.connectPage.Name = "connectPage";
             this.connectPage.Padding = new System.Windows.Forms.Padding(3);
-            this.connectPage.Size = new System.Drawing.Size(237, 199);
+            this.connectPage.Size = new System.Drawing.Size(311, 199);
             this.connectPage.TabIndex = 0;
             this.connectPage.Text = "Connect";
             // 
-            // connectlabelText
+            // lb_connect
             // 
-            this.connectlabelText.AutoSize = true;
-            this.connectlabelText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.connectlabelText.Location = new System.Drawing.Point(25, 3);
-            this.connectlabelText.Name = "connectlabelText";
-            this.connectlabelText.Size = new System.Drawing.Size(188, 15);
-            this.connectlabelText.TabIndex = 5;
-            this.connectlabelText.Text = "Connect to a CoopAndreas server";
+            this.lb_connect.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lb_connect.AutoSize = true;
+            this.lb_connect.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_connect.Location = new System.Drawing.Point(62, 3);
+            this.lb_connect.Name = "lb_connect";
+            this.lb_connect.Size = new System.Drawing.Size(188, 15);
+            this.lb_connect.TabIndex = 5;
+            this.lb_connect.Text = "Connect to a CoopAndreas server";
+            this.lb_connect.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // connectButton
+            // b_connect
             // 
-            this.connectButton.Location = new System.Drawing.Point(32, 104);
-            this.connectButton.Name = "connectButton";
-            this.connectButton.Size = new System.Drawing.Size(173, 66);
-            this.connectButton.TabIndex = 4;
-            this.connectButton.Text = "CONNECT";
-            this.connectButton.UseVisualStyleBackColor = true;
-            this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
+            this.b_connect.Location = new System.Drawing.Point(32, 104);
+            this.b_connect.Name = "b_connect";
+            this.b_connect.Size = new System.Drawing.Size(249, 66);
+            this.b_connect.TabIndex = 4;
+            this.b_connect.Text = "CONNECT";
+            this.b_connect.UseVisualStyleBackColor = true;
+            this.b_connect.Click += new System.EventHandler(this.connectButton_Click);
             // 
             // ipportInput
             // 
             this.ipportInput.Location = new System.Drawing.Point(70, 52);
             this.ipportInput.Name = "ipportInput";
-            this.ipportInput.Size = new System.Drawing.Size(161, 20);
+            this.ipportInput.Size = new System.Drawing.Size(180, 20);
             this.ipportInput.TabIndex = 3;
             // 
-            // ipportText
+            // lb_ipport
             // 
-            this.ipportText.AutoSize = true;
-            this.ipportText.Location = new System.Drawing.Point(6, 55);
-            this.ipportText.Name = "ipportText";
-            this.ipportText.Size = new System.Drawing.Size(53, 13);
-            this.ipportText.TabIndex = 2;
-            this.ipportText.Text = "IP:PORT:";
+            this.lb_ipport.AutoSize = true;
+            this.lb_ipport.Location = new System.Drawing.Point(6, 55);
+            this.lb_ipport.Name = "lb_ipport";
+            this.lb_ipport.Size = new System.Drawing.Size(53, 13);
+            this.lb_ipport.TabIndex = 2;
+            this.lb_ipport.Text = "IP:PORT:";
             // 
             // nicknameInput
             // 
             this.nicknameInput.Location = new System.Drawing.Point(70, 25);
             this.nicknameInput.Name = "nicknameInput";
-            this.nicknameInput.Size = new System.Drawing.Size(161, 20);
+            this.nicknameInput.Size = new System.Drawing.Size(180, 20);
             this.nicknameInput.TabIndex = 1;
             // 
-            // nicknameText
+            // lb_nickname
             // 
-            this.nicknameText.AutoSize = true;
-            this.nicknameText.Location = new System.Drawing.Point(6, 28);
-            this.nicknameText.Name = "nicknameText";
-            this.nicknameText.Size = new System.Drawing.Size(58, 13);
-            this.nicknameText.TabIndex = 0;
-            this.nicknameText.Text = "Nickname:";
+            this.lb_nickname.AutoSize = true;
+            this.lb_nickname.Location = new System.Drawing.Point(6, 28);
+            this.lb_nickname.Name = "lb_nickname";
+            this.lb_nickname.Size = new System.Drawing.Size(58, 13);
+            this.lb_nickname.TabIndex = 0;
+            this.lb_nickname.Text = "Nickname:";
             // 
             // serverPage
             // 
             this.serverPage.BackColor = System.Drawing.Color.White;
-            this.serverPage.Controls.Add(this.startserverButton);
-            this.serverPage.Controls.Add(this.serverlabelText);
+            this.serverPage.Controls.Add(this.b_startserver);
+            this.serverPage.Controls.Add(this.lb_startserver);
             this.serverPage.Controls.Add(this.maxplayersInput);
             this.serverPage.Controls.Add(this.portInput);
-            this.serverPage.Controls.Add(this.maxplayerText);
-            this.serverPage.Controls.Add(this.portText);
+            this.serverPage.Controls.Add(this.lb_maxplayers);
+            this.serverPage.Controls.Add(this.lb_port);
             this.serverPage.Location = new System.Drawing.Point(4, 22);
             this.serverPage.Name = "serverPage";
             this.serverPage.Padding = new System.Windows.Forms.Padding(3);
-            this.serverPage.Size = new System.Drawing.Size(237, 199);
+            this.serverPage.Size = new System.Drawing.Size(311, 199);
             this.serverPage.TabIndex = 1;
             this.serverPage.Text = "Server";
             // 
-            // startserverButton
+            // b_startserver
             // 
-            this.startserverButton.Location = new System.Drawing.Point(31, 100);
-            this.startserverButton.Name = "startserverButton";
-            this.startserverButton.Size = new System.Drawing.Size(178, 68);
-            this.startserverButton.TabIndex = 7;
-            this.startserverButton.Text = "START SERVER";
-            this.startserverButton.UseVisualStyleBackColor = true;
+            this.b_startserver.Location = new System.Drawing.Point(31, 100);
+            this.b_startserver.Name = "b_startserver";
+            this.b_startserver.Size = new System.Drawing.Size(250, 68);
+            this.b_startserver.TabIndex = 7;
+            this.b_startserver.Text = "START SERVER";
+            this.b_startserver.UseVisualStyleBackColor = true;
             // 
-            // serverlabelText
+            // lb_startserver
             // 
-            this.serverlabelText.AutoSize = true;
-            this.serverlabelText.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.serverlabelText.Location = new System.Drawing.Point(28, 3);
-            this.serverlabelText.Name = "serverlabelText";
-            this.serverlabelText.Size = new System.Drawing.Size(181, 15);
-            this.serverlabelText.TabIndex = 6;
-            this.serverlabelText.Text = "Start a new CoopAndreas server";
+            this.lb_startserver.AutoSize = true;
+            this.lb_startserver.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_startserver.Location = new System.Drawing.Point(67, 3);
+            this.lb_startserver.Name = "lb_startserver";
+            this.lb_startserver.Size = new System.Drawing.Size(181, 15);
+            this.lb_startserver.TabIndex = 6;
+            this.lb_startserver.Text = "Start a new CoopAndreas server";
+            this.lb_startserver.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // maxplayersInput
             // 
-            this.maxplayersInput.Location = new System.Drawing.Point(172, 33);
+            this.maxplayersInput.Location = new System.Drawing.Point(214, 52);
             this.maxplayersInput.Name = "maxplayersInput";
             this.maxplayersInput.Size = new System.Drawing.Size(57, 20);
             this.maxplayersInput.TabIndex = 3;
@@ -181,39 +184,39 @@
             // 
             // portInput
             // 
-            this.portInput.Location = new System.Drawing.Point(43, 33);
+            this.portInput.Location = new System.Drawing.Point(85, 52);
             this.portInput.Name = "portInput";
             this.portInput.Size = new System.Drawing.Size(53, 20);
             this.portInput.TabIndex = 2;
             this.portInput.Text = "6767";
             // 
-            // maxplayerText
+            // lb_maxplayers
             // 
-            this.maxplayerText.AutoSize = true;
-            this.maxplayerText.Location = new System.Drawing.Point(102, 36);
-            this.maxplayerText.Name = "maxplayerText";
-            this.maxplayerText.Size = new System.Drawing.Size(67, 13);
-            this.maxplayerText.TabIndex = 1;
-            this.maxplayerText.Text = "Max Players:";
+            this.lb_maxplayers.AutoSize = true;
+            this.lb_maxplayers.Location = new System.Drawing.Point(144, 55);
+            this.lb_maxplayers.Name = "lb_maxplayers";
+            this.lb_maxplayers.Size = new System.Drawing.Size(67, 13);
+            this.lb_maxplayers.TabIndex = 1;
+            this.lb_maxplayers.Text = "Max Players:";
             // 
-            // portText
+            // lb_port
             // 
-            this.portText.AutoSize = true;
-            this.portText.Location = new System.Drawing.Point(8, 36);
-            this.portText.Name = "portText";
-            this.portText.Size = new System.Drawing.Size(29, 13);
-            this.portText.TabIndex = 0;
-            this.portText.Text = "Port:";
+            this.lb_port.AutoSize = true;
+            this.lb_port.Location = new System.Drawing.Point(50, 55);
+            this.lb_port.Name = "lb_port";
+            this.lb_port.Size = new System.Drawing.Size(29, 13);
+            this.lb_port.TabIndex = 0;
+            this.lb_port.Text = "Port:";
             // 
             // configPage
             // 
             this.configPage.BackColor = System.Drawing.Color.White;
             this.configPage.Controls.Add(this.languageCombo);
-            this.configPage.Controls.Add(this.languageText);
+            this.configPage.Controls.Add(this.lb_language);
             this.configPage.Location = new System.Drawing.Point(4, 22);
             this.configPage.Name = "configPage";
             this.configPage.Padding = new System.Windows.Forms.Padding(3);
-            this.configPage.Size = new System.Drawing.Size(237, 199);
+            this.configPage.Size = new System.Drawing.Size(311, 199);
             this.configPage.TabIndex = 2;
             this.configPage.Text = "Config";
             // 
@@ -225,25 +228,26 @@
             "Русский",
             "Português",
             "Українська"});
-            this.languageCombo.Location = new System.Drawing.Point(70, 11);
+            this.languageCombo.Location = new System.Drawing.Point(101, 11);
             this.languageCombo.Name = "languageCombo";
             this.languageCombo.Size = new System.Drawing.Size(161, 21);
             this.languageCombo.TabIndex = 1;
+            this.languageCombo.SelectedIndexChanged += new System.EventHandler(this.languageCombo_SelectedIndexChanged);
             // 
-            // languageText
+            // lb_language
             // 
-            this.languageText.AutoSize = true;
-            this.languageText.Location = new System.Drawing.Point(6, 14);
-            this.languageText.Name = "languageText";
-            this.languageText.Size = new System.Drawing.Size(58, 13);
-            this.languageText.TabIndex = 0;
-            this.languageText.Text = "Language:";
+            this.lb_language.AutoSize = true;
+            this.lb_language.Location = new System.Drawing.Point(37, 14);
+            this.lb_language.Name = "lb_language";
+            this.lb_language.Size = new System.Drawing.Size(58, 13);
+            this.lb_language.TabIndex = 0;
+            this.lb_language.Text = "Language:";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(270, 250);
+            this.ClientSize = new System.Drawing.Size(344, 250);
             this.Controls.Add(this.tabControl1);
             this.MaximizeBox = false;
             this.Name = "MainForm";
@@ -263,24 +267,24 @@
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage connectPage;
-        private System.Windows.Forms.TabPage serverPage;
-        private System.Windows.Forms.TabPage configPage;
-        private System.Windows.Forms.Button connectButton;
-        private System.Windows.Forms.TextBox ipportInput;
-        private System.Windows.Forms.Label ipportText;
-        private System.Windows.Forms.TextBox nicknameInput;
-        private System.Windows.Forms.Label nicknameText;
-        private System.Windows.Forms.Label maxplayerText;
-        private System.Windows.Forms.Label portText;
-        private System.Windows.Forms.Label connectlabelText;
-        private System.Windows.Forms.NumericUpDown maxplayersInput;
-        private System.Windows.Forms.TextBox portInput;
-        private System.Windows.Forms.Label serverlabelText;
-        private System.Windows.Forms.Label languageText;
-        private System.Windows.Forms.Button startserverButton;
-        private System.Windows.Forms.ComboBox languageCombo;
+        public System.Windows.Forms.TabControl tabControl1;
+        public System.Windows.Forms.TabPage connectPage;
+        public System.Windows.Forms.TabPage serverPage;
+        public System.Windows.Forms.TabPage configPage;
+        public System.Windows.Forms.Button b_connect;
+        public System.Windows.Forms.TextBox ipportInput;
+        public System.Windows.Forms.Label lb_ipport;
+        public System.Windows.Forms.TextBox nicknameInput;
+        public System.Windows.Forms.Label lb_nickname;
+        public System.Windows.Forms.Label lb_maxplayers;
+        public System.Windows.Forms.Label lb_port;
+        public System.Windows.Forms.Label lb_connect;
+        public System.Windows.Forms.NumericUpDown maxplayersInput;
+        public System.Windows.Forms.TextBox portInput;
+        public System.Windows.Forms.Label lb_startserver;
+        public System.Windows.Forms.Label lb_language;
+        public System.Windows.Forms.Button b_startserver;
+        public System.Windows.Forms.ComboBox languageCombo;
     }
 }
 
