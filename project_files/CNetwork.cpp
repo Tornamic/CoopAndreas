@@ -110,14 +110,6 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 
 					player->m_pPed->m_matrix->pos = packet->position;
 
-					
-
-					// хуйня, исправить присед не через таски а через клавиши, я пошел спать
-					/*if (CUtil::IsDucked(player->m_pPed) != packet->isDucked)
-					{
-						CTaskSimpleDuckToggle task(packet->isDucked);
-						task.ProcessPed(player->m_pPed);
-					}*/
 
 					// save last onfoot sync
 					player->m_oOnFoot = player->m_lOnFoot;

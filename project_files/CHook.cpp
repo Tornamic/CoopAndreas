@@ -61,16 +61,17 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     if (player->m_lOnFoot != nullptr && player->m_oOnFoot != nullptr)
     {
+        pad->OldState = player->m_oOnFoot->controllerState;
         pad->NewState = player->m_lOnFoot->controllerState;
         
-        pad->OldState = player->m_oOnFoot->controllerState;
 
-        // log
-        
         player->m_pPed->m_fAimingRotation =
             player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
         
         player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
+
+        // log
+        
         //player->m_pPed->ApplyMoveSpeed();
     }
     
@@ -82,6 +83,47 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     pad->OldState = oldOldState;
 }
 
+//CPed* tempPed = nullptr;
+//void __declspec(naked) CTaskSimplePlayerOnFoot_MakeAbortable_Hook()
+//{
+//    _asm mov eax, [esp + 16]
+//    _asm pushad
+//    _asm mov tempPed, eax
+//
+//    if (tempPed != FindPlayerPed(0))
+//    {
+//        _asm popad
+//        _asm retn 12
+//    }
+//    else // it's the local player or keys have already been set.
+//    {
+//        _asm popad
+//        _asm mov edx, 0x6857E0
+//        _asm call edx
+//        _asm ret
+//    }
+//}
+//
+//void __declspec(naked) CTaskSimplePlayerOnFoot_ProcessPed_Hook()
+//{
+//    _asm mov eax, [esp + 12]
+//    _asm pushad
+//    _asm mov tempPed, eax
+//
+//    if (tempPed != FindPlayerPed(0))
+//    {
+//        _asm popad
+//        _asm retn 4
+//    }
+//    else // it's the local player or keys have already been set.
+//    {
+//        _asm popad
+//        _asm mov edx, 0x688810
+//        _asm call edx
+//        _asm ret
+//    }
+//}
+
 void CHook::Init()
 {
     Patch_Funcs.push_back([](uint32_t Address) -> bool
@@ -90,4 +132,7 @@ void CHook::Init()
     });
 
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
+
+    //patch::SetPointer(0x870904, CTaskSimplePlayerOnFoot_MakeAbortable_Hook);
+    //patch::SetPointer(0x870908, CTaskSimplePlayerOnFoot_ProcessPed_Hook);
 }

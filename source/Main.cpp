@@ -16,7 +16,13 @@ public:
 				if (CNetwork::m_bConnected)
 				{
 					CPackets::PlayerOnFoot* packet = CPackets::PlayerOnFoot::Collect();
-					if (GetTickCount() > lastTickCount + 100 || (CPackets::PlayerOnFoot::m_last == nullptr || !CUtil::CompareControllerStates(CPackets::PlayerOnFoot::m_last->controllerState, packet->controllerState)))
+					int syncRate = 40;
+
+					if (packet->velocity.x == 0 &&
+						packet->velocity.y == 0 &&
+						packet->velocity.z == 0)
+						syncRate = 100;
+					if (GetTickCount() > lastTickCount + 40)
 					{
 						lastTickCount = GetTickCount();
 						CPackets::PlayerOnFoot::m_last = packet;

@@ -24,6 +24,7 @@
 #include "d3dx9.h"
 #include "extensions/ScriptCommands.h"
 #include "CTaskSimpleDuckToggle.h"
+#include "CTaskSimplePlayerOnFoot.h"
 
 // classes ---------------------------------------------------------------------------------
 
