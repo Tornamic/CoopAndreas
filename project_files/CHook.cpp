@@ -67,10 +67,9 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
         // log
         
-
         player->m_pPed->m_fAimingRotation =
-        player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
-        player->m_pPed->SetHeading(player->m_lOnFoot->rotation);
+            player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
+        
         player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
         //player->m_pPed->ApplyMoveSpeed();
     }
