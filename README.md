@@ -18,7 +18,3 @@ TODO Launcher:
 - [ ] start/control server directly from launcher
 - [X] implement translation
 - [ ] save configs
-
-## Notes for me
-
-исправить ебучий баг с приседом, глянуть че по хукам в сампе, на примете TaskOnFoot(1/2)_Hook, в CHook есть закоменченая реализация, как не удивительно крашит, переписать под айди в сампе, если не заработает то гляну че там как МТА поживает, вроде бы у него присед работает через CTask хахаха
