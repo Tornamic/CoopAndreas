@@ -108,9 +108,13 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 					if (player == nullptr)
 						break;
 
-					player->m_pPed->m_matrix->pos = packet->position;
-
-
+					bool updateX = CUtil::isDifferenceGreaterThanPercent(player->m_pPed->m_matrix->pos.x, packet->position.x, 5);
+					bool updateY = CUtil::isDifferenceGreaterThanPercent(player->m_pPed->m_matrix->pos.y, packet->position.y, 5);
+					bool updateZ = CUtil::isDifferenceGreaterThanPercent(player->m_pPed->m_matrix->pos.z, packet->position.z, 5);
+					if (updateX || updateY || updateZ) {
+						player->m_pPed->m_matrix->pos = packet->position;
+					}
+					
 					// save last onfoot sync
 					player->m_oOnFoot = player->m_lOnFoot;
 					player->m_lOnFoot = packet;

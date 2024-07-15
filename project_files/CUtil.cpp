@@ -71,3 +71,9 @@ bool CUtil::IsDucked(CPed* ped)
 
     return true;
 }
+
+bool CUtil::isDifferenceGreaterThanPercent(float value1, float value2, int percent) {
+    float difference = std::abs(value1 - value2);
+    float average = (std::abs(value1) + std::abs(value2)) / 2;
+    return (difference / average) > (percent / 100);
+}
