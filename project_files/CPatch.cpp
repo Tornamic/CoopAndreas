@@ -132,8 +132,8 @@ void FixCrashes()
     patch::Nop(0x62D331, 11);
     patch::Nop(0x741FFF, 27);
 
-    // fixes unknown crash from CWorld::ClearScanCodes(), test
-    //patch::PutRetn(0x563470);
+    // fixes unknown crash from CWorld::ClearScanCodes(), testing
+    patch::PutRetn(0x563470);
 
     // CPlayerPed_CPlayerPed .. task system corrupts some shit
     patch::GetUChar(0x60D64E, 0x84); // jnz to jz

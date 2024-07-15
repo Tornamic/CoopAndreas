@@ -1,5 +1,4 @@
 #pragma once
-
 #define MAX_SERVER_PLAYERS 4
 
 #define _DEV
@@ -30,14 +29,13 @@
 
 using namespace plugin;
 
-#include "CPackets.h"
 #include "CCore.h"
 #include "CNetwork.h"
 #include "CPatch.h"
 #include "CHook.h"
-#include "CNetworkPlayer.h"
 #include "CDXFont.h"
-#include "CNetworkPlayerManager.h"
 #include "Events.h"
 #include "CUtil.h"
+#include "CPackets.h"
+
 // -----------------------------------------------------------------------------------------

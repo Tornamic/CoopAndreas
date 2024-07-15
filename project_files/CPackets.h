@@ -1,6 +1,7 @@
 #pragma once
 
-#include "CUtil.h"
+#include "stdafx.h"
+
 
 enum CPacketsID : unsigned short
 {
@@ -15,12 +16,41 @@ public:
 	struct PlayerConnected
 	{
 		int id;
+		static void Handle(void* data, int size)
+		{
+			// get packet struct
+			CPackets::PlayerConnected* packet = (CPackets::PlayerConnected*)data;
+
+			// create new player
+			CNetworkPlayer* player = new CNetworkPlayer(packet->id, CVector(2246.506f, -1259.552f, 23.9531f));
+
+			// add player to list
+			CNetworkPlayerManager::Add(player);
+		}
 	};
 
 	struct PlayerDisconnected
 	{
 		int id;
 		unsigned char reason;
+
+		static void Handle(void* data, int size)
+		{
+			// get packet struct
+			CPackets::PlayerDisconnected* packet = (CPackets::PlayerDisconnected*)data;
+
+			// get player instance
+			CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->id);
+
+			if (player == nullptr)
+				return;
+			
+			// remove from list
+			CNetworkPlayerManager::Remove(player);
+
+			// destroy player
+			delete player;
+		}
 	};
 
 	struct PlayerOnFoot
@@ -30,8 +60,8 @@ public:
 		CVector velocity;
 		float rotation;
 		CControllerState controllerState;
-		bool isDucked;
 
+		// last sent
 		static inline PlayerOnFoot* m_last = nullptr;
 
 		static PlayerOnFoot* Collect()
@@ -58,10 +88,29 @@ public:
 			// get player key state, not all keyboard, just controller keys
 			packet->controllerState = player->GetPadFromPlayer()->NewState;
 
-			// does player ducked
-			packet->isDucked = CUtil::IsDucked(player);
-
 			return packet;
+		}
+
+		static void Handle(void* data, int size)
+		{
+			// get packet struct
+			CPackets::PlayerOnFoot* packet = (CPackets::PlayerOnFoot*)data;
+
+			// get player instance 
+			CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->id);
+
+			// check if player not created
+			if (player == nullptr)
+				return;
+
+			if (CUtil::IsPositionUpdateNeeded(player->m_pPed->m_matrix->pos, packet->position))
+			{
+				player->m_pPed->m_matrix->pos = packet->position;
+			}
+
+			// save last onfoot sync
+			player->m_oOnFoot = player->m_lOnFoot;
+			player->m_lOnFoot = packet;
 		}
 	};
 };

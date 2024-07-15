@@ -28,7 +28,6 @@ public:
 		CVector	velocity;
 		float rotation;
 		CControllerState controllerState;
-		bool isDucked;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

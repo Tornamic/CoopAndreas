@@ -6,6 +6,9 @@ bool CNetwork::m_bConnected = false;
 
 DWORD WINAPI CNetwork::InitAsync(LPVOID)
 {
+	// init listeners
+	CNetwork::InitListeners();
+
 	// wait some time
 	Sleep(2000);
 
@@ -52,79 +55,11 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 		{
 			case ENET_EVENT_TYPE_RECEIVE:
 			{
-				unsigned short id;
-
-				// extract id
-				memcpy(&id, event.packet->data, 2);
-
-				// extract size
-				size_t dataSize = event.packet->dataLength - 2;
-
-				// allocate memory for data
-				char* data = new char[dataSize];
-
-				// extract data
-				memcpy(data, event.packet->data + 2, dataSize);
-				
+				CNetwork::HandlePacketReceive(event);
 				enet_packet_destroy(event.packet); //You should destroy after used it
-
-				// todo: create packet handler and separate it in different functions
-				if (id == CPacketsID::PLAYER_CONNECTED) 
-				{
-					// get packet struct
-					CPackets::PlayerConnected* packet = (CPackets::PlayerConnected*)data;
-
-					// create new player
-					CNetworkPlayer* player = new CNetworkPlayer(packet->id, CVector(2246.506f, -1259.552f, 23.9531f));
-
-					// add player to list
-					CNetworkPlayerManager::Add(player);
-
-
-				}
-				else if (id == CPacketsID::PLAYER_DISCONNECTED)
-				{
-					// get packet struct
-					CPackets::PlayerDisconnected* packet = (CPackets::PlayerDisconnected*)data;
-
-					CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->id);
-					
-					if (player == nullptr)
-						break;
-
-					CNetworkPlayerManager::Remove(player);
-					player->~CNetworkPlayer();
-				}
-				else if (id == CPacketsID::PLAYER_ONFOOT)
-				{
-					// get packet struct
-					CPackets::PlayerOnFoot* packet = (CPackets::PlayerOnFoot*)data;
-
-					// get player instance 
-					CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->id);
-
-					// check if player not created
-					if (player == nullptr)
-						break;
-
-					bool updateX = CUtil::isDifferenceGreaterThanPercent(player->m_pPed->m_matrix->pos.x, packet->position.x, 5);
-					bool updateY = CUtil::isDifferenceGreaterThanPercent(player->m_pPed->m_matrix->pos.y, packet->position.y, 5);
-					bool updateZ = CUtil::isDifferenceGreaterThanPercent(player->m_pPed->m_matrix->pos.z, packet->position.z, 5);
-					if (updateX || updateY || updateZ) {
-						player->m_pPed->m_matrix->pos = packet->position;
-					}
-					
-					// save last onfoot sync
-					player->m_oOnFoot = player->m_lOnFoot;
-					player->m_lOnFoot = packet;
-				}
 				break;
-
 			}
-			case ENET_EVENT_TYPE_NONE:
-				break;
 		}
-
 	}
 
 	// disconnect
@@ -160,5 +95,38 @@ void CNetwork::SendPacket(unsigned short id, void* data, size_t dataSize, ENetPa
 void CNetwork::Disconnect()
 {
 	m_bConnected = false;
+}
+
+void CNetwork::InitListeners()
+{
+	CNetwork::AddListener(CPacketsID::PLAYER_ONFOOT, CPackets::PlayerOnFoot::Handle);
+	CNetwork::AddListener(CPacketsID::PLAYER_CONNECTED, CPackets::PlayerConnected::Handle);
+	CNetwork::AddListener(CPacketsID::PLAYER_DISCONNECTED, CPackets::PlayerDisconnected::Handle);
+}
+
+void CNetwork::HandlePacketReceive(ENetEvent& event)
+{
+	// get packet id
+	unsigned short id;
+	memcpy(&id, event.packet->data, 2);
+
+	// get data
+	char* data = new char[event.packet->dataLength - 2];
+	memcpy(data, event.packet->data + 2, event.packet->dataLength - 2);
+
+	// call listener's callback by id
+	for (size_t i = 0; i < m_packetListeners.size(); i++)
+	{
+		if (m_packetListeners[i]->m_iPacketID == id)
+		{
+			m_packetListeners[i]->m_callback(data, event.packet->dataLength - 2);
+		}
+	}
+}
+
+void CNetwork::AddListener(unsigned short id, void(*callback)(void*, int))
+{
+	CPacketListener* listener = new CPacketListener(id, callback);
+	m_packetListeners.push_back(listener);
 }
 

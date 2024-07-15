@@ -77,3 +77,11 @@ bool CUtil::isDifferenceGreaterThanPercent(float value1, float value2, int perce
     float average = (std::abs(value1) + std::abs(value2)) / 2;
     return (difference / average) > (percent / 100);
 }
+
+bool CUtil::IsPositionUpdateNeeded(CVector pos, CVector update, int percent)
+{
+    return
+        CUtil::isDifferenceGreaterThanPercent(pos.x, update.x, percent) ||
+        CUtil::isDifferenceGreaterThanPercent(pos.y, update.y, percent) ||
+        CUtil::isDifferenceGreaterThanPercent(pos.z, update.z, percent);
+}
