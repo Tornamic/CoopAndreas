@@ -94,7 +94,6 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 
 					CNetworkPlayerManager::Remove(player);
 					player->~CNetworkPlayer();
-
 				}
 				else if (id == CPacketsID::PLAYER_ONFOOT)
 				{

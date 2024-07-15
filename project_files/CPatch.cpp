@@ -94,8 +94,8 @@ void FixCrashes()
 
     // No DirectPlay dependency
     // Increase compatibility for Windows 8+
-    patch::SetUChar(0x74754A, 0xB8);
-    patch::SetUInt(0x74754B, 0x900);
+    //patch::SetUChar(0x74754A, 0xB8);
+    //patch::SetUInt(0x74754B, 0x900);
 
     // Don't create a ped group on player creation (Fixes a crash)
     patch::Nop(0x60D64D, 1);
@@ -133,7 +133,7 @@ void FixCrashes()
     patch::Nop(0x741FFF, 27);
 
     // fixes unknown crash from CWorld::ClearScanCodes(), test
-    patch::PutRetn(0x563470);
+    //patch::PutRetn(0x563470);
 
     // CPlayerPed_CPlayerPed .. task system corrupts some shit
     patch::GetUChar(0x60D64E, 0x84); // jnz to jz
@@ -141,8 +141,10 @@ void FixCrashes()
     // PlayerInfo checks in CPlayerPed::ProcessControl
     patch::Nop(0x60F2C4, 25);
 
-    // fix crash when closing game
-    patch::SetUChar(0x705B33, 0x75); // jz to jnz
+    // fix crash when closing game caused by shadows
+    //patch::SetUChar(0x705B33, 0x75); // jz to jnz
+    //patch::Nop(0x706B29, 5);
+
 }
 
 void CPatch::ApplyPatches()
