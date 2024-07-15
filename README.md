@@ -2,10 +2,18 @@
 TODO list:
 - [X] setup C/C++ project
 - [X] client - server connection
-- [ ] on foot sync   —   in progress
+
+// current tasks:
+- [ ] on foot sync -- in progress
+- [ ] player map icons, arrows or squares
+- [ ] weapon sync, aim sync, shot sync
+- [ ] more info about player, hp, armour bars, current weapon, nickname....
+- [ ] chat
+- [ ] moving, rotation smooth interpolation
+
+// other:
 - [ ] define which player is the host
 - [ ] vehicle sync
-- [ ] chat
 - [ ] trailer sync
 - [ ] npc sync
 - [ ] other syncs (like fire, birds, etc.)
