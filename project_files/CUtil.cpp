@@ -27,6 +27,38 @@ bool CUtil::CompareControllerStates(const CControllerState & state1, const CCont
         state1.m_bRadioTrackSkip == state2.m_bRadioTrackSkip;
 }
 
+void CUtil::CopyExceptShockButtonL(CControllerState& destination, const CControllerState& source) {
+    destination.LeftStickX = source.LeftStickX;
+    destination.LeftStickY = source.LeftStickY;
+    destination.RightStickX = source.RightStickX;
+    destination.RightStickY = source.RightStickY;
+
+    destination.LeftShoulder1 = source.LeftShoulder1;
+    destination.LeftShoulder2 = source.LeftShoulder2;
+    destination.RightShoulder1 = source.RightShoulder1;
+    destination.RightShoulder2 = source.RightShoulder2;
+
+    destination.DPadUp = source.DPadUp;
+    destination.DPadDown = source.DPadDown;
+    destination.DPadLeft = source.DPadLeft;
+    destination.DPadRight = source.DPadRight;
+
+    destination.Start = source.Start;
+    destination.Select = source.Select;
+
+    destination.ButtonSquare = source.ButtonSquare;
+    destination.ButtonTriangle = source.ButtonTriangle;
+    destination.ButtonCross = source.ButtonCross;
+    destination.ButtonCircle = source.ButtonCircle;
+
+    destination.ShockButtonR = source.ShockButtonR;
+
+    destination.m_bChatIndicated = source.m_bChatIndicated;
+    destination.m_bPedWalk = source.m_bPedWalk;
+    destination.m_bVehicleMouseLook = source.m_bVehicleMouseLook;
+    destination.m_bRadioTrackSkip = source.m_bRadioTrackSkip;
+}
+
 
 bool CUtil::IsDucked(CPed* ped)
 {

@@ -28,6 +28,8 @@ CPad* __cdecl CPad__GetPad_Hook(int number)
 	return &CNetworkPlayerManager::m_pPads[0];
 }
 
+bool pPressingDuck[MAX_SERVER_PLAYERS + 2] = {false};
+
 void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 {
     if (This == FindPlayerPed(0))
@@ -61,9 +63,23 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     if (player->m_lOnFoot != nullptr && player->m_oOnFoot != nullptr)
     {
-        pad->OldState = player->m_oOnFoot->controllerState;
-        pad->NewState = player->m_lOnFoot->controllerState;
-        
+
+        if (player->m_lOnFoot->controllerState.ShockButtonL == 255 && pPressingDuck[CWorld::PlayerInFocus] == false && player->m_lOnFoot->isDucked)
+        {
+            pPressingDuck[CWorld::PlayerInFocus] = true;
+            //std::cout << "Ducking: " << player->m_lOnFoot->isDucked << std::endl;
+            pad->OldState = player->m_oOnFoot->controllerState;
+            pad->NewState = player->m_lOnFoot->controllerState;
+        }
+        else
+        {
+            if (player->m_lOnFoot->controllerState.ShockButtonL == 0) //Released the crouch button
+            {
+                pPressingDuck[CWorld::PlayerInFocus] = false;
+            }
+            CUtil::CopyExceptShockButtonL(pad->OldState, player->m_oOnFoot->controllerState);
+            CUtil::CopyExceptShockButtonL(pad->NewState, player->m_lOnFoot->controllerState);
+        }
 
         player->m_pPed->m_fAimingRotation =
             player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
