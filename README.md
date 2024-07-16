@@ -1,4 +1,6 @@
 # CoopAndreas
+
+*Discord Server* : https://discord.gg/TwQsR4qxVx
 TODO list:
 - [X] setup C/C++ project
 - [X] client - server connection
