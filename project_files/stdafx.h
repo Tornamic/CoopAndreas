@@ -30,12 +30,15 @@
 using namespace plugin;
 
 #include "CCore.h"
+#include "CPackets.h"
+#include "CPacketHandler.h"
 #include "CNetwork.h"
+#include "CNetworkPlayer.h"
+#include "CNetworkPlayerManager.h"
 #include "CPatch.h"
 #include "CHook.h"
 #include "CDXFont.h"
 #include "Events.h"
 #include "CUtil.h"
-#include "CPackets.h"
 
 // -----------------------------------------------------------------------------------------

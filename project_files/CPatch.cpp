@@ -8,13 +8,13 @@ void PatchPlayers()
     // we dont use first two players because
     // 0 - you
     // 1 - local-coop player
-    patch::SetUChar(0x84E98B, MAX_SERVER_PLAYERS + 2); // _vector_constructor
-    patch::SetUChar(0x856506, MAX_SERVER_PLAYERS + 2); // _vector_destructor
+    //patch::SetUChar(0x84E98B, MAX_SERVER_PLAYERS + 2); // _vector_constructor
+    //patch::SetUChar(0x856506, MAX_SERVER_PLAYERS + 2); // _vector_destructor
 
     // increase pad count
     // same situation
-    patch::SetUChar(0x84E1FB, MAX_SERVER_PLAYERS + 2); // _vector_constructor
-    patch::SetUChar(0x856466, MAX_SERVER_PLAYERS + 2); // _vector_destructor
+    //patch::SetUChar(0x84E1FB, MAX_SERVER_PLAYERS + 2); // _vector_constructor
+    //patch::SetUChar(0x856466, MAX_SERVER_PLAYERS + 2); // _vector_destructor
 }
 
 #ifdef _DEV

@@ -5,6 +5,7 @@ TODO list:
 
 // current tasks:
 - [ ] on foot sync -- in progress
+- [ ] fix crouch desync
 - [ ] player map icons, arrows or squares
 - [ ] weapon sync, aim sync, shot sync
 - [ ] more info about player, hp, armour bars, current weapon, nickname....

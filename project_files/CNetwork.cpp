@@ -4,6 +4,8 @@ ENetHost* CNetwork::m_pClient = nullptr;
 ENetPeer* CNetwork::m_pPeer = nullptr;
 bool CNetwork::m_bConnected = false;
 
+std::vector<CPacketListener*> CNetwork::m_packetListeners;
+
 DWORD WINAPI CNetwork::InitAsync(LPVOID)
 {
 	// init listeners
@@ -99,9 +101,9 @@ void CNetwork::Disconnect()
 
 void CNetwork::InitListeners()
 {
-	CNetwork::AddListener(CPacketsID::PLAYER_ONFOOT, CPackets::PlayerOnFoot::Handle);
-	CNetwork::AddListener(CPacketsID::PLAYER_CONNECTED, CPackets::PlayerConnected::Handle);
-	CNetwork::AddListener(CPacketsID::PLAYER_DISCONNECTED, CPackets::PlayerDisconnected::Handle);
+	CNetwork::AddListener(CPacketsID::PLAYER_ONFOOT, CPacketHandler::PlayerOnFoot__Handle);
+	CNetwork::AddListener(CPacketsID::PLAYER_CONNECTED, CPacketHandler::PlayerConnected__Handle);
+	CNetwork::AddListener(CPacketsID::PLAYER_DISCONNECTED, CPacketHandler::PlayerDisconnected__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)
