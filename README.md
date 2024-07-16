@@ -2,31 +2,48 @@
 
 *Discord Server* : https://discord.gg/TwQsR4qxVx
 
-TODO list:
+## TODO list:
+### Already Done ✓
 - [X] setup C/C++ project
 - [X] client - server connection
 
-// current tasks:
-- [ ] on foot sync -- in progress
-- [ ] fix crouch desync
-- [ ] player map icons, arrows or squares
-- [ ] weapon sync, aim sync, shot sync
-- [ ] more info about player, hp, armour bars, current weapon, nickname....
+### Current Tasks
+- [ ] On foot sync -- in progress
+  - [x] Walk/Run
+  - [x] Jump
+  - [x] Climb
+  - [ ] Crouch - (Fix Crouch Desync)
+  - [x] Hit/Fight
+  - [ ] Fix models loading (green polygon)
+- [ ] Players map sync
+  - [ ] Mission icons
+  - [ ] Player map pin
+  - [ ] Player mark
+- [ ] Weapon sync
+  - [ ] Hold weapon
+  - [ ] Aim sync
+  - [ ] Shot sync
+- [ ] Players info
+  - [ ] Health bar
+  - [ ] Armour bar
+  - [ ] Nickname
 - [ ] chat
 - [ ] moving, rotation smooth interpolation
 
-// other:
+### Others
 - [ ] define which player is the host
 - [ ] vehicle sync
-- [ ] trailer sync
+- [ ] cutscene sync
 - [ ] npc sync
 - [ ] other syncs (like fire, birds, etc.)
 - [ ] mission adaptation
 
-TODO Launcher:
+## TODO Launcher:
+### Already Done ✓
 - [X] setup project and create forms
 - [X] inject all dll in the game (don't need ASI Loader anymore)
 - [X] send params (nickname, ip/port) to client dll
-- [ ] start/control server directly from launcher
 - [X] implement translation
+### Current Tasks
+- [ ] start/control server directly from launcher
 - [ ] save configs
