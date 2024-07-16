@@ -1,6 +1,8 @@
 # CoopAndreas
 
-*Discord Server* : https://discord.gg/TwQsR4qxVx
+Videos, pictures, news, suggestions, and communication can be found here:
+
+[Discord Server](https://discord.gg/TwQsR4qxVx)
 
 TODO list:
 - [X] setup C/C++ project
