@@ -19,7 +19,7 @@ Videos, pictures, news, suggestions, and communication can be found here:
   - [ ] Fix models loading (green polygon)
 - [ ] Players map sync
   - [ ] Mission icons
-  - [ ] Player map pin
+  - [X] Player map pin
   - [ ] Player mark
 - [ ] Weapon sync
   - [ ] Hold weapon
