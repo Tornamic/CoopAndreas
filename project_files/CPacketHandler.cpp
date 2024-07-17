@@ -70,6 +70,8 @@ CPackets::PlayerOnFoot* CPacketHandler::PlayerOnFoot__Collect()
 	// get ammo in clip count
 	packet->ammo = player->m_aWeapons[player->m_nActiveWeaponSlot].m_nAmmoInClip;
 
+	packet->ducking = CUtil::IsDucked(player);
+
 	return packet;
 }
 

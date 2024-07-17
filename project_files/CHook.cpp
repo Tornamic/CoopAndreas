@@ -59,29 +59,23 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     CControllerState newOldState = pad->NewState;
     CControllerState oldOldState = pad->OldState;
 
-
     if (player->m_lOnFoot != nullptr && player->m_oOnFoot != nullptr)
     {
-        if (player->m_lOnFoot->controllerState.ShockButtonL == 255 && pPressingDuck[CWorld::PlayerInFocus] == false)
+
+        CUtil::CopyControllerState(pad->OldState, player->m_oOnFoot->controllerState);
+        CUtil::CopyControllerState(pad->NewState, player->m_lOnFoot->controllerState);
+
+        if (CUtil::IsDucked(player->m_pPed) != player->m_lOnFoot->ducking) //Forcing crouch sync
         {
             pPressingDuck[CWorld::PlayerInFocus] = true;
-            CUtil::CopyControllerState(pad->OldState, player->m_oOnFoot->controllerState);
-            CUtil::CopyControllerState(pad->NewState, player->m_lOnFoot->controllerState);
-
             pad->OldState.ShockButtonL = 0;
             pad->NewState.ShockButtonL = 255;
         }
-        else
+        else if(pPressingDuck[CWorld::PlayerInFocus] == true)
         {
-            CUtil::CopyControllerState(pad->OldState, player->m_oOnFoot->controllerState);
-            CUtil::CopyControllerState(pad->NewState, player->m_lOnFoot->controllerState);
-            
-            if (player->m_lOnFoot->controllerState.ShockButtonL == 0) //Released the crouch button
-            {
-                pPressingDuck[CWorld::PlayerInFocus] = false;
-                pad->OldState.ShockButtonL = 255;
-                pad->NewState.ShockButtonL = 0;
-            }
+            pPressingDuck[CWorld::PlayerInFocus] = false;
+            pad->OldState.ShockButtonL = 255;
+            pad->NewState.ShockButtonL = 0;
         }
 
         player->m_pPed->m_fHealth = player->m_lOnFoot->health;

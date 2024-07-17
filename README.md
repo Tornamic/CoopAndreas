@@ -14,7 +14,7 @@ Videos, pictures, news, suggestions, and communication can be found here:
   - [x] Walk/Run
   - [x] Jump
   - [x] Climb
-  - [ ] Crouch - (Fix Crouch Desync)
+  - [x] Crouch - (Fix Crouch Desync)
   - [x] Hit/Fight
   - [ ] Fix models loading (green polygon)
 - [ ] Players map sync

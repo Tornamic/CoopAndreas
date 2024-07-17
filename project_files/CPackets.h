@@ -36,6 +36,7 @@ public:
 		unsigned char armour;
 		unsigned char weapon;
 		unsigned short ammo;
+		bool ducking;
 
 		// last sent
 		static inline PlayerOnFoot* m_last = nullptr;

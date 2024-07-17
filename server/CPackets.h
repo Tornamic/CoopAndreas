@@ -32,6 +32,7 @@ public:
 		unsigned char armour;
 		unsigned char weapon;
 		unsigned short ammo;
+		bool ducking;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
