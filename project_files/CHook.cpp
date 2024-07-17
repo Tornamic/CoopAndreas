@@ -65,16 +65,16 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
         if (player->m_lOnFoot->controllerState.ShockButtonL == 255 && pPressingDuck[CWorld::PlayerInFocus] == false)
         {
             pPressingDuck[CWorld::PlayerInFocus] = true;
-            CUtil::CopyExceptShockButtonL(pad->OldState, player->m_oOnFoot->controllerState);
-            CUtil::CopyExceptShockButtonL(pad->NewState, player->m_lOnFoot->controllerState);
+            CUtil::CopyControllerState(pad->OldState, player->m_oOnFoot->controllerState);
+            CUtil::CopyControllerState(pad->NewState, player->m_lOnFoot->controllerState);
 
             pad->OldState.ShockButtonL = 0;
             pad->NewState.ShockButtonL = 255;
         }
         else
         {
-            CUtil::CopyExceptShockButtonL(pad->OldState, player->m_oOnFoot->controllerState);
-            CUtil::CopyExceptShockButtonL(pad->NewState, player->m_lOnFoot->controllerState);
+            CUtil::CopyControllerState(pad->OldState, player->m_oOnFoot->controllerState);
+            CUtil::CopyControllerState(pad->NewState, player->m_lOnFoot->controllerState);
             
             if (player->m_lOnFoot->controllerState.ShockButtonL == 0) //Released the crouch button
             {
@@ -83,6 +83,9 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
                 pad->NewState.ShockButtonL = 0;
             }
         }
+
+        player->m_pPed->m_fHealth = player->m_lOnFoot->health;
+        player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
 
         player->m_pPed->m_fAimingRotation =
             player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;

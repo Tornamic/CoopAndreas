@@ -28,6 +28,10 @@ public:
 		CVector	velocity;
 		float rotation;
 		CControllerState controllerState;
+		unsigned char health;
+		unsigned char armour;
+		unsigned char weapon;
+		unsigned short ammo;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

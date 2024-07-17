@@ -52,8 +52,9 @@ void PatchStreaming()
     patch::Nop(0x40EC56, 5);
 
     // fix crash after death
-    patch::Nop(0x441481, 6);
+    //patch::Nop(0x441481, 6);
 }
+
 
 void PatchPools()
 {
@@ -149,7 +150,9 @@ void FixCrashes()
 
 void CPatch::ApplyPatches()
 {
-    PatchPools();
+    /* this comment fixes a lot of crashes :D
+    //PatchPools(); 
+    */
     PatchPlayers();
     PatchStreaming();
     FixCrashes();

@@ -27,14 +27,14 @@ bool CUtil::CompareControllerStates(const CControllerState & state1, const CCont
         state1.m_bRadioTrackSkip == state2.m_bRadioTrackSkip;
 }
 
-void CUtil::CopyExceptShockButtonL(CControllerState& destination, const CControllerState& source) {
+void CUtil::CopyControllerState(CControllerState& destination, const CControllerState& source) {
     destination.LeftStickX = source.LeftStickX;
     destination.LeftStickY = source.LeftStickY;
     destination.RightStickX = source.RightStickX;
     destination.RightStickY = source.RightStickY;
 
-    destination.LeftShoulder1 = source.LeftShoulder1;
-    destination.LeftShoulder2 = source.LeftShoulder2;
+    //destination.LeftShoulder1 = source.LeftShoulder1;
+    //destination.LeftShoulder2 = source.LeftShoulder2;
     destination.RightShoulder1 = source.RightShoulder1;
     destination.RightShoulder2 = source.RightShoulder2;
 
@@ -58,7 +58,6 @@ void CUtil::CopyExceptShockButtonL(CControllerState& destination, const CControl
     destination.m_bVehicleMouseLook = source.m_bVehicleMouseLook;
     destination.m_bRadioTrackSkip = source.m_bRadioTrackSkip;
 }
-
 
 bool CUtil::IsDucked(CPed* ped)
 {
@@ -84,4 +83,10 @@ bool CUtil::IsPositionUpdateNeeded(CVector pos, CVector update, int percent)
         CUtil::isDifferenceGreaterThanPercent(pos.x, update.x, percent) ||
         CUtil::isDifferenceGreaterThanPercent(pos.y, update.y, percent) ||
         CUtil::isDifferenceGreaterThanPercent(pos.z, update.z, percent);
+}
+
+int CUtil::GetWeaponModelById(unsigned char id)
+{
+    const int models[] = { 0, 331,333,334,335,336,337,338,339,341,321,322,323,324,325,326,342,343,344,346,347,348,349,350,351,352,353,355,356,372,357,358,359,360,361,362,363,364,365,366,367,368,369,371 };
+    return models[id];
 }

@@ -32,6 +32,10 @@ public:
 		CVector velocity;
 		float rotation;
 		CControllerState controllerState;
+		unsigned char health;
+		unsigned char armour;
+		unsigned char weapon;
+		unsigned short ammo;
 
 		// last sent
 		static inline PlayerOnFoot* m_last = nullptr;
