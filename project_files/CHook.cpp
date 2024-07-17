@@ -98,6 +98,17 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     pad->OldState = oldOldState;
 }
 
+
+
+//void __fastcall CRadar__DrawLegend_Hook()
+//{
+//    int id = 0;
+//    _asm mov id, edx
+//
+//    if (id != RADAR_SPRITE_CENTRE)
+//        CRadar::DrawLegend(RsGlobal.maximumWidth * 0.25, RsGlobal.maximumHeight * 0.28348213, id);
+//}
+
 void CHook::Init()
 {
     Patch_Funcs.push_back([](uint32_t Address) -> bool
@@ -106,4 +117,7 @@ void CHook::Init()
     });
 
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
+
+    // fix crash when drawing legend, caused by map icon RADAR_SPRITE_CENTRE
+    //patch::RedirectCall(0x5761EB, CRadar__DrawLegend_Hook);
 }

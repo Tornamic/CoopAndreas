@@ -2,16 +2,21 @@
 
 CPlayerPed* m_pPed = nullptr;
 int m_iPlayerId;
+int m_iBlipId;
 
 // last sync data
 CPackets::PlayerOnFoot* m_lOnFoot = nullptr;
 CPackets::PlayerOnFoot* m_oOnFoot = nullptr;
+
+const unsigned int CNetworkPlayer::m_pColours[] = { 0x6495EDFF,0xf0e68cFF,0x778899FF,0xFF1493FF,0xF4A460FF,0xEE82EEFF,0xFFD720FF,0x8b4513FF,0x4949A0FF,0x148b8bFF };
 
 CNetworkPlayer::~CNetworkPlayer()
 {
 	if (m_pPed == nullptr) return;
 
 	DWORD dwPedPtr = (DWORD)m_pPed;
+
+	CRadar::ClearBlip(m_iBlipId);
 
 	// fix destructor crash
 
@@ -58,7 +63,10 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 	player->SetModelIndex(0);
 	player->SetOrientation(0.0f, 0.0f, 0.0f);
 
-	//m_pPed->m_bStreamingDontDelete = 1;
+	m_iBlipId = CRadar::SetEntityBlip(BLIP_CHAR, CPools::GetPedRef(player), 1, BLIP_DISPLAY_BLIP_ONLY);
+	CRadar::ChangeBlipColour(m_iBlipId, CNetworkPlayer::m_pColours[id % 10]);
+	CRadar::ChangeBlipScale(m_iBlipId, 3);
+	CRadar::SetBlipFriendly(m_iBlipId, 1);
 
 	m_pPed = player;
 	m_iPlayerId = id;

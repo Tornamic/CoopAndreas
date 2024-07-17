@@ -24,7 +24,8 @@
 #include "extensions/ScriptCommands.h"
 #include "CTaskSimpleDuckToggle.h"
 #include "CTaskSimplePlayerOnFoot.h"
-
+#include "CRadar.h"
+#include "CText.h"
 // classes ---------------------------------------------------------------------------------
 
 using namespace plugin;
