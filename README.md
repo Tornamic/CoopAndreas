@@ -30,8 +30,10 @@ Videos, pictures, news, suggestions, and communication can be found here:
   - [ ] Armour bar
   - [ ] Nickname
 - [ ] chat
-- [ ] moving, rotation smooth interpolation
-
+- [ ] smooth interpolation
+  - [ ] move
+  - [ ] rotation
+  
 ### Others
 - [ ] define which player is the host
 - [ ] vehicle sync
