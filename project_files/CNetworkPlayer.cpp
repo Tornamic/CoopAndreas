@@ -67,6 +67,9 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 	CRadar::ChangeBlipColour(m_iBlipId, CNetworkPlayer::m_pColours[id % 10]);
 	CRadar::ChangeBlipScale(m_iBlipId, 3);
 	CRadar::SetBlipFriendly(m_iBlipId, 1);
+	
+	// set player immunies, he now dont cares about pain
+	Command<Commands::SET_CHAR_PROOFS>(CPools::GetPedRef(player), 1, 1, 1, 1, 1);
 
 	m_pPed = player;
 	m_iPlayerId = id;
