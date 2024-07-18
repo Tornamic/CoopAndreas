@@ -58,15 +58,18 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
         if (CUtil::IsDucked(player->m_pPed) != player->m_lOnFoot->ducking) //Forcing crouch sync
         {
             pPressingDuck[CWorld::PlayerInFocus] = true;
-            pad->OldState.ShockButtonL = 0;
-            pad->NewState.ShockButtonL = 255;
+            player->m_oShockButtonL = 0;
+            player->m_lShockButtonL = 255;
         }
-        else if(pPressingDuck[CWorld::PlayerInFocus] == true)
+        else if (pPressingDuck[CWorld::PlayerInFocus] == true)
         {
             pPressingDuck[CWorld::PlayerInFocus] = false;
-            pad->OldState.ShockButtonL = 255;
-            pad->NewState.ShockButtonL = 0;
+            player->m_oShockButtonL = 255;
+            player->m_lShockButtonL = 0;
         }
+
+        pad->OldState.ShockButtonL = player->m_oShockButtonL;
+        pad->NewState.ShockButtonL = player->m_lShockButtonL;
 
         player->m_pPed->m_fHealth = player->m_lOnFoot->health;
         player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
@@ -87,15 +90,6 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
 
 
-//void __fastcall CRadar__DrawLegend_Hook()
-//{
-//    int id = 0;
-//    _asm mov id, edx
-//
-//    if (id != RADAR_SPRITE_CENTRE)
-//        CRadar::DrawLegend(RsGlobal.maximumWidth * 0.25, RsGlobal.maximumHeight * 0.28348213, id);
-//}
-
 void CHook::Init()
 {
     Patch_Funcs.push_back([](uint32_t Address) -> bool
@@ -104,7 +98,4 @@ void CHook::Init()
     });
 
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
-
-    // fix crash when drawing legend, caused by map icon RADAR_SPRITE_CENTRE
-    //patch::RedirectCall(0x5761EB, CRadar__DrawLegend_Hook);
 }

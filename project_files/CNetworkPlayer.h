@@ -10,6 +10,9 @@ public:
 	CPackets::PlayerOnFoot* m_lOnFoot = nullptr;
 	CPackets::PlayerOnFoot* m_oOnFoot = nullptr;
 	
+	signed short m_oShockButtonL;
+	signed short m_lShockButtonL;
+	
 	CNetworkPlayer::~CNetworkPlayer();
 	CNetworkPlayer::CNetworkPlayer(int id, CVector position);
 

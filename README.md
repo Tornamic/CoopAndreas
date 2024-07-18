@@ -22,9 +22,10 @@ Videos, pictures, news, suggestions, and communication can be found here:
   - [X] Player map pin
   - [ ] Player mark
 - [ ] Weapon sync
-  - [ ] Hold weapon
+  - [X] Hold weapon
   - [ ] Aim sync
-  - [ ] Shot sync
+  - [X] Lag shot sync - using keys, bad accuracy
+  - [ ] Shot sync - every bullet will be synced
 - [ ] Players info
   - [ ] Health bar
   - [ ] Armour bar
@@ -41,6 +42,10 @@ Videos, pictures, news, suggestions, and communication can be found here:
 - [ ] npc sync
 - [ ] other syncs (like fire, birds, etc.)
 - [ ] mission adaptation
+
+### Minor tasks and ideas
+- [ ] Sync laser sniper rifle red dot with all players
+- [ ] Sync moon sniper rifle shot changing size easter egg with all players
 
 ## TODO Launcher:
 ### Already Done ✓
