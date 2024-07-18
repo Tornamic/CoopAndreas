@@ -92,24 +92,32 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 		player->m_pPed->m_matrix->pos = packet->position;
 	}
 
-	CWorld::PlayerInFocus = player->GetInternalId();
 	// update weapon, ammo
-	if (packet->weapon != 0 && player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_eWeaponType != packet->weapon)
+	if (
+		(player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_eWeaponType != packet->weapon) ||
+		(player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_nAmmoInClip != packet->ammo)
+		)
 	{
-		// preload model
-		CStreaming::RequestModel(CUtil::GetWeaponModelById(packet->weapon), eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
-		CStreaming::LoadAllRequestedModels(false);
+		CWorld::PlayerInFocus = player->GetInternalId();
+		if (packet->weapon != 0)
+		{
+			// preload model
+			CStreaming::RequestModel(CUtil::GetWeaponModelById(packet->weapon), eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
+			CStreaming::LoadAllRequestedModels(false);
 
-		// give weapon
-		player->m_pPed->GiveWeapon((eWeaponType)packet->weapon, 99999, false); // fix
+			// give weapon
+			if(player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_nTotalAmmo <= 500)
+				player->m_pPed->GiveWeapon((eWeaponType)packet->weapon, 99999, false);
 
+			// set ammo in clip
+			player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_nAmmoInClip = packet->ammo;
+		}
+
+		player->m_pPed->SetCurrentWeapon((eWeaponType)packet->weapon);
+		//player->m_pPed->m_pPlayerData->m_nChosenWeapon = packet->weapon;
+		CWorld::PlayerInFocus = 0;
 	}
-	// set ammo in clip
-	player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_nAmmoInClip = packet->ammo;
 
-	player->m_pPed->SetCurrentWeapon((eWeaponType)packet->weapon);
-
-	CWorld::PlayerInFocus = 0;
 
 	// save last onfoot sync
 	player->m_oOnFoot = player->m_lOnFoot;

@@ -33,8 +33,8 @@ void CUtil::CopyControllerState(CControllerState& destination, const CController
     destination.RightStickX = source.RightStickX;
     destination.RightStickY = source.RightStickY;
 
-    //destination.LeftShoulder1 = source.LeftShoulder1;
-    //destination.LeftShoulder2 = source.LeftShoulder2;
+    destination.LeftShoulder1 = source.LeftShoulder1;
+    destination.LeftShoulder2 = source.LeftShoulder2;
     destination.RightShoulder1 = source.RightShoulder1;
     destination.RightShoulder2 = source.RightShoulder2;
 
