@@ -13,6 +13,8 @@ public:
 	CNetworkPlayer::~CNetworkPlayer();
 	CNetworkPlayer::CNetworkPlayer(int id, CVector position);
 
+	int GetInternalId();
+
 	static const unsigned int m_pColours[];
 };
 

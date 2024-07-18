@@ -92,6 +92,7 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 		player->m_pPed->m_matrix->pos = packet->position;
 	}
 
+	CWorld::PlayerInFocus = player->GetInternalId();
 	// update weapon, ammo
 	if (packet->weapon != 0 && player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_eWeaponType != packet->weapon)
 	{
@@ -107,6 +108,8 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 	player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_nAmmoInClip = packet->ammo;
 
 	player->m_pPed->SetCurrentWeapon((eWeaponType)packet->weapon);
+
+	CWorld::PlayerInFocus = 0;
 
 	// save last onfoot sync
 	player->m_oOnFoot = player->m_lOnFoot;

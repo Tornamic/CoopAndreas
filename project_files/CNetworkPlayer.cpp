@@ -71,3 +71,18 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 	m_pPed = player;
 	m_iPlayerId = id;
 }
+
+int CNetworkPlayer::GetInternalId() // most used for CWorld::PlayerInFocus
+{
+	byte playerNumber = 0;
+
+	for (; playerNumber < MAX_SERVER_PLAYERS + 2; playerNumber++)
+	{
+		if (m_pPed == CWorld::Players[playerNumber].m_pPed)
+		{
+			return playerNumber;
+		}
+	}
+
+	return -1;
+}

@@ -42,17 +42,7 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     if (player == nullptr)
         return;
 
-    byte playerNumber = 0;
-
-    for (; playerNumber < MAX_SERVER_PLAYERS + 2; playerNumber++)
-    {
-        if (This == CWorld::Players[playerNumber].m_pPed)
-        {
-            break;
-        }
-    }
-
-    CWorld::PlayerInFocus = playerNumber;
+    CWorld::PlayerInFocus = player->GetInternalId();
 
     CPad* pad = This->GetPadFromPlayer();
 
