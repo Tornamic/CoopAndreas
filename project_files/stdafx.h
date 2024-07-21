@@ -26,6 +26,8 @@
 #include "CTaskSimplePlayerOnFoot.h"
 #include "CRadar.h"
 #include "CText.h"
+#include "CCamera.h"
+
 // classes ---------------------------------------------------------------------------------
 
 using namespace plugin;

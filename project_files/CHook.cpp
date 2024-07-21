@@ -32,11 +32,14 @@ bool pPressingDuck[MAX_SERVER_PLAYERS + 2] = {false};
 
 void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 {
-    if (This == FindPlayerPed(0))
+    CPlayerPed* localPlayer = FindPlayerPed(0);
+
+    if (This == localPlayer)
     {
         plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
         return;
     }
+
     CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(This);
 
     if (player == nullptr)
@@ -76,7 +79,7 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
         player->m_pPed->m_fAimingRotation =
             player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
-        
+
         player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
     }
     
@@ -87,7 +90,6 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     pad->NewState = newOldState;
     pad->OldState = oldOldState;
 }
-
 
 
 void CHook::Init()
