@@ -34,6 +34,11 @@ public:
 		unsigned short ammo;
 		bool ducking;
 
+		CVector aimFront;
+		CVector aimSource;
+		CVector aimSourceBeforeLookBehind;
+		CVector aimUp;
+
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			// create packet

@@ -38,6 +38,13 @@ public:
 		unsigned short ammo;
 		bool ducking;
 
+		float cameraOrientation;
+
+		CVector aimFront;
+		CVector aimSource;
+		CVector aimSourceBeforeLookBehind;
+		CVector aimUp;
+
 		// last sent
 		static inline PlayerOnFoot* m_last = nullptr;
 	};

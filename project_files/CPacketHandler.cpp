@@ -73,6 +73,11 @@ CPackets::PlayerOnFoot* CPacketHandler::PlayerOnFoot__Collect()
 	// get crouch state
 	packet->ducking = CUtil::IsDucked(player);
 
+	packet->aimFront = TheCamera.m_aCams[0].m_vecFront;
+	packet->aimSource = TheCamera.m_aCams[0].m_vecSource;
+	packet->aimSourceBeforeLookBehind = TheCamera.m_aCams[0].m_vecSourceBeforeLookBehind;
+	packet->aimUp = TheCamera.m_aCams[0].m_vecUp;
+
 	return packet;
 }
 

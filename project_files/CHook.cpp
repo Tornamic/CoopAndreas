@@ -33,7 +33,7 @@ bool pPressingDuck[MAX_SERVER_PLAYERS + 2] = {false};
 void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 {
     CPlayerPed* localPlayer = FindPlayerPed(0);
-
+     
     if (This == localPlayer)
     {
         plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
@@ -52,8 +52,14 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     CControllerState newOldState = pad->NewState;
     CControllerState oldOldState = pad->OldState;
 
+    CCamera oldCameraState = TheCamera;
+
     if (player->m_lOnFoot != nullptr && player->m_oOnFoot != nullptr)
     {
+        TheCamera.m_aCams[0].m_vecFront = player->m_lOnFoot->aimFront;
+        TheCamera.m_aCams[0].m_vecSource = player->m_lOnFoot->aimSource;
+        TheCamera.m_aCams[0].m_vecSourceBeforeLookBehind = player->m_lOnFoot->aimSourceBeforeLookBehind;
+        TheCamera.m_aCams[0].m_vecUp = player->m_lOnFoot->aimUp;
 
         CUtil::CopyControllerState(pad->OldState, player->m_oOnFoot->controllerState);
         CUtil::CopyControllerState(pad->NewState, player->m_lOnFoot->controllerState);
@@ -89,6 +95,8 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     pad->NewState = newOldState;
     pad->OldState = oldOldState;
+
+    TheCamera = oldCameraState;
 }
 
 
