@@ -114,9 +114,12 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 
 		if (packet->weapon != 0)
 		{
-			// preload model
-			CStreaming::RequestModel(CUtil::GetWeaponModelById(packet->weapon), eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
-			CStreaming::LoadAllRequestedModels(false);
+			if (isWeaponTypeDifferent)
+			{
+				// preload model
+				CStreaming::RequestModel(CUtil::GetWeaponModelById(packet->weapon), eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
+				CStreaming::LoadAllRequestedModels(false);
+			}
 
 			// give weapon
 			bool isMeleeWeapon = CUtil::IsMeleeWeapon(packet->weapon);

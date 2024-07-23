@@ -10,6 +10,12 @@ Videos, pictures, news, suggestions, and communication can be found here:
 - [X] client - server connection
 
 ### Current Tasks
+- [ ] fixes
+  - [ ] mouse
+  - [ ] widescreen
+  - [ ] fast load
+    - [ ] disable logos
+    - [ ] disable intro
 - [ ] On foot sync -- in progress
   - [x] Walk/Run
   - [x] Jump
