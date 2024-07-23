@@ -119,10 +119,15 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 			CStreaming::LoadAllRequestedModels(false);
 
 			// give weapon
-			if (activeWeapon.m_nTotalAmmo <= 500)
+			if (activeWeapon.m_nTotalAmmo <= 500 && !CUtil::IsMeleeWeapon(packet->weapon))
 			{
 				player->m_pPed->GiveWeapon((eWeaponType)packet->weapon, 99999, false);
 			}
+			else if (CUtil::IsMeleeWeapon(packet->weapon) && activeWeapon.m_nTotalAmmo == 0)
+			{
+				player->m_pPed->GiveWeapon((eWeaponType)packet->weapon, 1, false);
+			}
+
 
 			// set ammo in clip
 			activeWeapon.m_nAmmoInClip = packet->ammo;
