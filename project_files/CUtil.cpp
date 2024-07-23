@@ -91,7 +91,7 @@ int CUtil::GetWeaponModelById(unsigned char id)
     return CWeaponInfo::GetWeaponInfo((eWeaponType)id, 1)->m_nModelId1;
 }
 
-int CUtil::IsMeleeWeapon(unsigned char id)
+bool CUtil::IsMeleeWeapon(unsigned char id)
 {
     return CWeaponInfo::GetWeaponInfo((eWeaponType)id, 1)->m_nWeaponFire == 0;
 }
