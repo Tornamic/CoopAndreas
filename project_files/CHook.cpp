@@ -1,28 +1,5 @@
 #include "stdafx.h"
 
-bool SetBranchPointer(uintptr_t currentAddress, uintptr_t src, injector::memory_pointer dest, bool vp)
-{
-    auto inst = patch::Get<uint8_t>(currentAddress, false);
-    if (inst == 0xE8 || inst == 0xE9)
-    {
-        uintptr_t funcptr = injector::ReadRelativeOffset(currentAddress + 1, 4, vp).as_int();
-
-        if (funcptr == src)
-        {
-            injector::MakeRelativeOffset(currentAddress + 1, dest, 4, vp);
-            return true;
-        }
-    }
-    return false;
-}
-
-static bool AdjustBranchPointer(uintptr_t Address, uintptr_t src, injector::memory_pointer dest, bool vp = true)
-{
-    return SetBranchPointer(GetGlobalAddress(Address), GetGlobalAddress(src), dest, vp);
-}
-
-std::vector<bool(*)(unsigned int)> Patch_Funcs;
-
 CPad* __cdecl CPad__GetPad_Hook(int number)
 {
 	return &CNetworkPlayerManager::m_pPads[0];
@@ -52,14 +29,12 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     CControllerState newOldState = pad->NewState;
     CControllerState oldOldState = pad->OldState;
 
-    CCamera oldCameraState = TheCamera;
+    CAMERA_AIM oldCameraState = *(CAMERA_AIM*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront;
+    eCamMode oldCameraMode = TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode;
 
     if (player->m_lOnFoot != nullptr && player->m_oOnFoot != nullptr)
     {
-        TheCamera.m_aCams[0].m_vecFront = player->m_lOnFoot->aimFront;
-        TheCamera.m_aCams[0].m_vecSource = player->m_lOnFoot->aimSource;
-        TheCamera.m_aCams[0].m_vecSourceBeforeLookBehind = player->m_lOnFoot->aimSourceBeforeLookBehind;
-        TheCamera.m_aCams[0].m_vecUp = player->m_lOnFoot->aimUp;
+        *(CAMERA_AIM*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront = player->m_lOnFoot->aim;
 
         CUtil::CopyControllerState(pad->OldState, player->m_oOnFoot->controllerState);
         CUtil::CopyControllerState(pad->NewState, player->m_lOnFoot->controllerState);
@@ -83,8 +58,9 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
         player->m_pPed->m_fHealth = player->m_lOnFoot->health;
         player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
 
-        player->m_pPed->m_fAimingRotation =
-            player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
+        
+
+        TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode = (eCamMode)player->m_lOnFoot->cameraMode;
 
         player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
     }
@@ -96,16 +72,42 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     pad->NewState = newOldState;
     pad->OldState = oldOldState;
 
-    TheCamera = oldCameraState;
+    *(CAMERA_AIM*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront = oldCameraState;
+    TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode = oldCameraMode;
 }
 
+static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding, CEntity* owner, CEntity* victim, CVector* startPoint, CVector* endPoint, CColPoint* colPoint, int incrementalHit)
+{
+    if (owner == FindPlayerPed(0))
+    {
+        CPackets::PlayerBulletShot* packet = new CPackets::PlayerBulletShot;
+
+        CNetworkPlayer* target = CNetworkPlayerManager::GetPlayer(victim);
+
+        if (target == nullptr)
+            packet->targetid = -1;
+        else
+            packet->targetid = target->m_iPlayerId;
+
+        packet->startPos = *startPoint;
+        packet->endPos = *endPoint;
+        packet->colPoint = *colPoint;
+        packet->incrementalHit = incrementalHit;
+        CNetwork::SendPacket(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+
+        weapon->DoBulletImpact(owner, victim, startPoint, endPoint, colPoint, incrementalHit);
+
+        return;
+    }
+}
 
 void CHook::Init()
-{
-    Patch_Funcs.push_back([](uint32_t Address) -> bool
-    {
-        return AdjustBranchPointer(Address, 0x53FB70, CPad__GetPad_Hook, true);
-    });
-
+{   
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
+    
+    patch::RedirectCall(0x73CD92, CWeapon__DoBulletImpact_Hook);
+    patch::RedirectCall(0x741199, CWeapon__DoBulletImpact_Hook);
+    patch::RedirectCall(0x7411DF, CWeapon__DoBulletImpact_Hook);
+    patch::RedirectCall(0x7412DF, CWeapon__DoBulletImpact_Hook);
+    patch::RedirectCall(0x741E30, CWeapon__DoBulletImpact_Hook);
 }

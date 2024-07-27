@@ -62,6 +62,7 @@ bool CNetwork::Init(unsigned short port)
 void CNetwork::InitListeners()
 {
     CNetwork::AddListener(CPacketsID::PLAYER_ONFOOT, CPackets::PlayerOnFoot::Handle);
+    CNetwork::AddListener(CPacketsID::PLAYER_BULLET_SHOT, CPackets::PlayerBulletShot::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -162,6 +163,8 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
 
         CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_CONNECTED, &packet, sizeof CPackets::PlayerConnected, ENET_PACKET_FLAG_RELIABLE);
     }
+    CPackets::PlayerHandshake handshakePacket = { freeId };
+    CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_HANDSHAKE, &handshakePacket, sizeof handshakePacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 void CNetwork::HandlePlayerDisconnected(ENetEvent& event)

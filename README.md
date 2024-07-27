@@ -31,7 +31,7 @@ Videos, pictures, news, suggestions, and communication can be found here:
   - [X] Hold weapon
   - [ ] Aim sync
   - [X] Lag shot sync - using keys, bad accuracy
-  - [ ] Shot sync - every bullet will be synced
+  - [X] Shot sync - every bullet will be synced
 - [ ] Players info
   - [ ] Health bar
   - [ ] Armour bar

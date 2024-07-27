@@ -27,12 +27,15 @@
 #include "CRadar.h"
 #include "CText.h"
 #include "CCamera.h"
+#include "CBulletTraces.h"
 
 // classes ---------------------------------------------------------------------------------
 
 using namespace plugin;
 
 #include "CCore.h"
+#include "structs.h"
+#include "CUtil.h"
 #include "CPackets.h"
 #include "CPacketHandler.h"
 #include "CNetwork.h"
@@ -42,6 +45,4 @@ using namespace plugin;
 #include "CHook.h"
 #include "CDXFont.h"
 #include "Events.h"
-#include "CUtil.h"
-
 // -----------------------------------------------------------------------------------------

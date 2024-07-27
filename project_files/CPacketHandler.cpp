@@ -73,10 +73,11 @@ CPackets::PlayerOnFoot* CPacketHandler::PlayerOnFoot__Collect()
 	// get crouch state
 	packet->ducking = CUtil::IsDucked(player);
 
-	packet->aimFront = TheCamera.m_aCams[0].m_vecFront;
-	packet->aimSource = TheCamera.m_aCams[0].m_vecSource;
-	packet->aimSourceBeforeLookBehind = TheCamera.m_aCams[0].m_vecSourceBeforeLookBehind;
-	packet->aimUp = TheCamera.m_aCams[0].m_vecUp;
+	// get player camera aim
+	packet->aim = *(CAMERA_AIM*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront;
+
+	// get player camera mode
+	packet->cameraMode = TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode;
 
 	return packet;
 }
@@ -142,8 +143,44 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 		CWorld::PlayerInFocus = 0;
 	}
 
+	player->m_pPed->m_fAimingRotation =
+		player->m_pPed->m_fCurrentRotation = packet->rotation;
 
 	// save last onfoot sync
 	player->m_oOnFoot = player->m_lOnFoot;
 	player->m_lOnFoot = packet;
+	
+}
+
+// PlayerBulletShot
+
+void CPacketHandler::PlayerBulletShot__Handle(void* data, int size)
+{
+	CPackets::PlayerBulletShot* packet = (CPackets::PlayerBulletShot*)data;
+
+	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
+
+	CEntity* victim = NULL;
+	
+	if (packet->targetid != -1)
+	{
+		CNetworkPlayer* damagedPlayer = CNetworkPlayerManager::GetPlayer(packet->targetid);
+
+		if(damagedPlayer != nullptr)
+			victim = damagedPlayer->m_pPed;
+
+		if (packet->targetid == CNetworkPlayerManager::m_nMyId)
+			victim = FindPlayerPed(0);
+	}
+
+	player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].DoBulletImpact(player->m_pPed, victim, &packet->startPos, &packet->endPos, &packet->colPoint, packet->incrementalHit);
+}
+
+// PlayerHandshake
+
+void CPacketHandler::PlayerHandshake__Handle(void* data, int size)
+{
+	CPackets::PlayerHandshake* packet = (CPackets::PlayerHandshake*)data;
+
+	CNetworkPlayerManager::m_nMyId = packet->yourid;
 }

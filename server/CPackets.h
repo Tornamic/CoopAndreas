@@ -4,7 +4,9 @@ enum CPacketsID : unsigned short
 {
 	PLAYER_CONNECTED,
 	PLAYER_DISCONNECTED,
-	PLAYER_ONFOOT
+	PLAYER_ONFOOT,
+	PLAYER_BULLET_SHOT,
+	PLAYER_HANDSHAKE
 };
 
 class CPackets
@@ -20,7 +22,7 @@ public:
 		int id;
 		unsigned char reason;
 	};
-
+	#pragma pack(1)
 	struct PlayerOnFoot
 	{
 		int id;
@@ -34,10 +36,8 @@ public:
 		unsigned short ammo;
 		bool ducking;
 
-		CVector aimFront;
-		CVector aimSource;
-		CVector aimSourceBeforeLookBehind;
-		CVector aimUp;
+		char CAMERA_AIM[48]; // padding for CAMERA_AIM struct
+		unsigned char cameraMode;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -50,5 +50,32 @@ public:
 
 			CNetwork::SendPacketToAll(CPacketsID::PLAYER_ONFOOT, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}
+	};
+
+	#pragma pack(1)
+	struct PlayerBulletShot
+	{
+		int playerid;
+		int targetid;
+		CVector startPos;
+		CVector endPos;
+		unsigned char colPoint[44]; // padding
+		int incrementalHit;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			// create packet
+			CPackets::PlayerBulletShot* packet = (CPackets::PlayerBulletShot*)data;
+			
+			// set packet`s playerid, cuz incoming packet has id = 0
+			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+
+			CNetwork::SendPacketToAll(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+		}
+	};
+
+	struct PlayerHandshake
+	{
+		int yourid;
 	};
 };

@@ -2,6 +2,7 @@
 
 std::vector<CNetworkPlayer*> CNetworkPlayerManager::m_pPlayers;
 CPad CNetworkPlayerManager::m_pPads[MAX_SERVER_PLAYERS + 2];
+int CNetworkPlayerManager::m_nMyId;
 
 void CNetworkPlayerManager::Add(CNetworkPlayer* player)
 {
@@ -46,6 +47,18 @@ CNetworkPlayer* CNetworkPlayerManager::GetPlayer(int playerid)
 	for (int i = 0; i != m_pPlayers.size(); i++)
 	{
 		if (m_pPlayers[i]->m_iPlayerId == playerid)
+		{
+			return m_pPlayers[i];
+		}
+	}
+	return nullptr;
+}
+
+CNetworkPlayer* CNetworkPlayerManager::GetPlayer(CEntity* entity)
+{
+	for (int i = 0; i != m_pPlayers.size(); i++)
+	{
+		if (m_pPlayers[i]->m_pPed == entity)
 		{
 			return m_pPlayers[i];
 		}
