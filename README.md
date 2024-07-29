@@ -8,6 +8,17 @@ Videos, pictures, news, suggestions, and communication can be found here:
 ### Already Done ✓
 - [X] setup C/C++ project
 - [X] client - server connection
+- [X] On foot sync -- in progress
+  - [x] Walk/Run
+  - [x] Jump
+  - [x] Climb
+  - [x] Crouch - (Fix Crouch Desync)
+  - [x] Hit/Fight
+- [X] Weapon sync
+  - [X] Hold weapon
+  - [X] Aim sync
+  - [X] Lag shot sync - using keys, bad accuracy
+  - [X] Shot sync - every bullet will be synced
 
 ### Current Tasks
 - [ ] fixes
@@ -16,22 +27,11 @@ Videos, pictures, news, suggestions, and communication can be found here:
   - [ ] fast load
     - [ ] disable logos
     - [ ] disable intro
-- [ ] On foot sync -- in progress
-  - [x] Walk/Run
-  - [x] Jump
-  - [x] Climb
-  - [x] Crouch - (Fix Crouch Desync)
-  - [x] Hit/Fight
-  - [ ] Fix models loading (green polygon)
+- [ ] Fix models loading (green polygon)
 - [ ] Players map sync
   - [ ] Mission icons
   - [X] Player map pin
   - [ ] Player mark
-- [ ] Weapon sync
-  - [X] Hold weapon
-  - [ ] Aim sync
-  - [X] Lag shot sync - using keys, bad accuracy
-  - [X] Shot sync - every bullet will be synced
 - [ ] Players info
   - [ ] Health bar
   - [ ] Armour bar
