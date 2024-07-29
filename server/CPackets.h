@@ -35,9 +35,8 @@ public:
 		unsigned char weapon;
 		unsigned short ammo;
 		bool ducking;
-
-		char CAMERA_AIM[48]; // padding for CAMERA_AIM struct
-		unsigned char cameraMode;
+		float aimX;
+		float aimY;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

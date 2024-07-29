@@ -45,4 +45,5 @@ using namespace plugin;
 #include "CHook.h"
 #include "CDXFont.h"
 #include "Events.h"
+#include "CLocalPlayer.h"
 // -----------------------------------------------------------------------------------------

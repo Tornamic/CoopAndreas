@@ -29,13 +29,8 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     CControllerState newOldState = pad->NewState;
     CControllerState oldOldState = pad->OldState;
 
-    CAMERA_AIM oldCameraState = *(CAMERA_AIM*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront;
-    eCamMode oldCameraMode = TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode;
-
     if (player->m_lOnFoot != nullptr && player->m_oOnFoot != nullptr)
     {
-        *(CAMERA_AIM*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront = player->m_lOnFoot->aim;
-
         CUtil::CopyControllerState(pad->OldState, player->m_oOnFoot->controllerState);
         CUtil::CopyControllerState(pad->NewState, player->m_lOnFoot->controllerState);
 
@@ -58,10 +53,10 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
         player->m_pPed->m_fHealth = player->m_lOnFoot->health;
         player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
 
-        *(unsigned short*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode = (eCamMode)player->m_lOnFoot->cameraMode;
-        if (TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode == 4) *(unsigned short*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode = (eCamMode)0;
-
         player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
+
+        player->m_pPed->m_fAimingRotation =
+            player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
     }
     
     plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
@@ -70,9 +65,6 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     pad->NewState = newOldState;
     pad->OldState = oldOldState;
-
-    *(CAMERA_AIM*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront = oldCameraState;
-    *(unsigned short*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode = oldCameraMode;
 }
 
 static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding, CEntity* owner, CEntity* victim, CVector* startPoint, CVector* endPoint, CColPoint* colPoint, int incrementalHit)
@@ -100,6 +92,35 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
     }
 }
 
+static void __fastcall CPedIK__PointGunInDirection_Hook(CPedIK* This, int padding, float dirX, float dirY, char flag, float float1)
+{
+    if (This->m_pPed == FindPlayerPed(0))
+    {
+        // save last aim data for syncing
+        CLocalPlayer::m_vecLastAimX = dirX;
+        CLocalPlayer::m_vecLastAimY = dirY;
+
+        This->PointGunInDirection(dirX, dirY, flag, float1);
+        return;
+    }
+
+    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(This->m_pPed);
+
+    if (player == nullptr)
+    {
+        This->PointGunInDirection(dirX, dirY, flag, float1);
+        return;
+    }
+
+    if (player->m_lOnFoot == nullptr)
+        return;
+
+    player->m_pPed->m_fAimingRotation =
+        player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
+
+    This->PointGunInDirection(player->m_lOnFoot->aimX, player->m_lOnFoot->aimY, flag, float1);
+}
+
 void CHook::Init()
 {   
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -109,4 +130,8 @@ void CHook::Init()
     patch::RedirectCall(0x7411DF, CWeapon__DoBulletImpact_Hook);
     patch::RedirectCall(0x7412DF, CWeapon__DoBulletImpact_Hook);
     patch::RedirectCall(0x741E30, CWeapon__DoBulletImpact_Hook);
+
+    patch::RedirectCall(0x5FDF7A, CPedIK__PointGunInDirection_Hook);
+    patch::RedirectCall(0x61F351, CPedIK__PointGunInDirection_Hook);
+    patch::RedirectCall(0x62876D, CPedIK__PointGunInDirection_Hook);
 }

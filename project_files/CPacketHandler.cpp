@@ -74,10 +74,8 @@ CPackets::PlayerOnFoot* CPacketHandler::PlayerOnFoot__Collect()
 	packet->ducking = CUtil::IsDucked(player);
 
 	// get player camera aim
-	packet->aim = *(CAMERA_AIM*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront;
-
-	// get player camera mode
-	packet->cameraMode = TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode;
+	packet->aimX = CLocalPlayer::m_vecLastAimX;
+	packet->aimY = CLocalPlayer::m_vecLastAimY;
 
 	return packet;
 }
