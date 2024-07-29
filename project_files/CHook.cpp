@@ -58,9 +58,8 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
         player->m_pPed->m_fHealth = player->m_lOnFoot->health;
         player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
 
-        
-
-        TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode = (eCamMode)player->m_lOnFoot->cameraMode;
+        *(unsigned short*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode = (eCamMode)player->m_lOnFoot->cameraMode;
+        if (TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode == 4) *(unsigned short*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode = (eCamMode)0;
 
         player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
     }
@@ -73,7 +72,7 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     pad->OldState = oldOldState;
 
     *(CAMERA_AIM*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront = oldCameraState;
-    TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode = oldCameraMode;
+    *(unsigned short*)&TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode = oldCameraMode;
 }
 
 static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding, CEntity* owner, CEntity* victim, CVector* startPoint, CVector* endPoint, CColPoint* colPoint, int incrementalHit)
