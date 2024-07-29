@@ -95,8 +95,8 @@ void FixCrashes()
 
     // No DirectPlay dependency
     // Increase compatibility for Windows 8+
-    //patch::SetUChar(0x74754A, 0xB8);
-    //patch::SetUInt(0x74754B, 0x900);
+    patch::SetUChar(0x74754A, 0xB8);
+    patch::SetUInt(0x74754B, 0x900);
 
     // Don't create a ped group on player creation (Fixes a crash)
     patch::Nop(0x60D64D, 1);
@@ -146,6 +146,19 @@ void FixCrashes()
     //patch::SetUChar(0x705B33, 0x75); // jz to jnz
     //patch::Nop(0x706B29, 5);
 
+    // implement mousefix
+    patch::SetUChar(0x576CCC, 0xEB);
+    patch::SetUChar(0x576EBA, 0xEB);
+    patch::SetUChar(0x576F8A, 0xEB);
+    patch::SetUInt(0x7469A0, 0x909000B0);
+    Events::gameProcessEvent += []
+    {
+        if (!(patch::GetUChar(0xBA6748 + 0x5C) || TheCamera.GetScreenFadeStatus() == 2))
+        {
+            // for some reason original internal code wont work with patch above
+            SetCursorPos(RsGlobal.maximumWidth / 2, RsGlobal.maximumHeight / 2);
+        }
+    };
 }
 
 void CPatch::ApplyPatches()
@@ -159,5 +172,5 @@ void CPatch::ApplyPatches()
 #ifdef _DEV
     PatchConsole();
 #endif
-
+    
 }

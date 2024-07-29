@@ -22,7 +22,7 @@ Videos, pictures, news, suggestions, and communication can be found here:
 
 ### Current Tasks
 - [ ] fixes
-  - [ ] mouse
+  - [X] mouse
   - [ ] widescreen
   - [ ] fast load
     - [ ] disable logos
