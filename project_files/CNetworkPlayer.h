@@ -4,7 +4,6 @@ class CNetworkPlayer
 public:
 	CPlayerPed* m_pPed = nullptr;
 	int m_iPlayerId;
-	int m_iBlipId;
 
 	// last sync data
 	CPackets::PlayerOnFoot* m_lOnFoot = nullptr;
