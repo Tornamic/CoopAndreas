@@ -2,9 +2,10 @@
 class CDXFont
 {
 public:
-	static void InitFont();
+	static void Init();
 
 private:
+	static void InitFont();
 	static ID3DXFont* m_pD3DXFont;
 
 	static void DestroyFont();

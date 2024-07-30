@@ -9,6 +9,7 @@ void CCore::Init()
 #endif
 	CPatch::ApplyPatches();
 	CHook::Init();
+	CDXFont::Init();
 
 	Events::initGameEvent.after += []
 	{
