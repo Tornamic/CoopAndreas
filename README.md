@@ -21,6 +21,11 @@ Videos, pictures, news, suggestions, and communication can be found here:
   - [X] Shot sync - every bullet will be synced
 
 ### Current Tasks
+- [ ] rendering
+  - [X] text rendering (dx)
+  - [ ] rectangle rendering (dx)
+  - [ ] imgui integration
+  - [ ] sprite/txd rendering
 - [ ] fixes
   - [X] mouse
   - [ ] widescreen
