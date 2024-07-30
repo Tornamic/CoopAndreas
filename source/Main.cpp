@@ -31,6 +31,10 @@ public:
 					}
 				}
 			};
+		Events::drawBlipsEvent += []
+			{
+				CNetworkPlayerMapPin::Process();
+			};
 		CCore::Init();
 	};
 } CoopAndreasPlugin;

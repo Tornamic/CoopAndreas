@@ -153,7 +153,7 @@ void FixCrashes()
     patch::SetUInt(0x7469A0, 0x909000B0);
     Events::gameProcessEvent += []
     {
-        if (!(patch::GetUChar(0xBA6748 + 0x5C) || TheCamera.GetScreenFadeStatus() == 2))
+        if (!(patch::GetUChar(0xBA6748 + 0x5C) || TheCamera.GetScreenFadeStatus() == 2) && *(HWND*)0xC97C1C == GetForegroundWindow())
         {
             // for some reason original internal code wont work with patch above
             SetCursorPos(RsGlobal.maximumWidth / 2, RsGlobal.maximumHeight / 2);

@@ -28,6 +28,8 @@
 #include "CText.h"
 #include "CCamera.h"
 #include "CBulletTraces.h"
+#include "CDraw.h"
+#include "CMenuManager.h"
 
 // classes ---------------------------------------------------------------------------------
 
@@ -46,4 +48,6 @@ using namespace plugin;
 #include "CDXFont.h"
 #include "Events.h"
 #include "CLocalPlayer.h"
+#include "CNetworkPlayerMapPin.h"
+
 // -----------------------------------------------------------------------------------------

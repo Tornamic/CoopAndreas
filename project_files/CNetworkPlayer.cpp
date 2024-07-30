@@ -19,7 +19,7 @@ CNetworkPlayer::~CNetworkPlayer()
 
 	DWORD dwPedPtr = (DWORD)m_pPed;
 
-	CRadar::ClearBlip(m_iBlipId);
+	//CRadar::ClearBlip(m_iBlipId);
 
 	// fix destructor crash
 
@@ -66,10 +66,10 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 	player->SetModelIndex(0);
 	player->SetOrientation(0.0f, 0.0f, 0.0f);
 
-	m_iBlipId = CRadar::SetEntityBlip(BLIP_CHAR, CPools::GetPedRef(player), 1, BLIP_DISPLAY_BLIP_ONLY);
+	/*m_iBlipId = CRadar::SetEntityBlip(BLIP_CHAR, CPools::GetPedRef(player), 1, BLIP_DISPLAY_BLIP_ONLY);
 	CRadar::ChangeBlipColour(m_iBlipId, CNetworkPlayer::m_pColours[id % 10]);
 	CRadar::ChangeBlipScale(m_iBlipId, 3);
-	CRadar::SetBlipFriendly(m_iBlipId, 1);
+	CRadar::SetBlipFriendly(m_iBlipId, 1);*/
 	
 	// set player immunies, he now dont cares about pain
 	Command<Commands::SET_CHAR_PROOFS>(CPools::GetPedRef(player), 1, 1, 1, 1, 1);
