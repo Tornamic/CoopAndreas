@@ -21,6 +21,7 @@ Videos, pictures, news, suggestions, and communication can be found here:
   - [X] Shot sync - every bullet will be synced
 
 ### Current Tasks
+- [ ] define which player is the host
 - [ ] rendering
   - [X] text rendering (dx)
   - [ ] rectangle rendering (dx)
@@ -34,6 +35,7 @@ Videos, pictures, news, suggestions, and communication can be found here:
     - [ ] disable intro
 - [ ] Fix models loading (green polygon)
 - [ ] Players map sync
+  - [ ] Areas aka GangZones
   - [ ] Mission icons
   - [X] Player map pin
   - [X] Player mark (waypoint)
@@ -45,14 +47,42 @@ Videos, pictures, news, suggestions, and communication can be found here:
 - [ ] smooth interpolation
   - [ ] move
   - [ ] rotation
-  
-### Others
-- [ ] define which player is the host
+- [ ] hud sync
+  - [ ] popup messages
+  - [ ] wanted level
+- [ ] stats sync
+  - [ ] fat
+  - [ ] muscle
+  - [ ] weapon skills
+  - [ ] fight styles
+- [ ] style
+  - [ ] tatoo
+  - [ ] clothes
+  - [ ] haircut
 - [ ] vehicle sync
-- [ ] cutscene sync
+  - [ ] pos, speed, quat
+  - [ ] health
+  - [ ] damage status
+  - [ ] trailer sync
+  - [ ] door, engine states
+- [ ] passenger sync
 - [ ] npc sync
-- [ ] other syncs (like fire, birds, etc.)
-- [ ] mission adaptation
+  - [ ] pos, rot, speed
+  - [ ] weapons
+  - [ ] aim
+  - [ ] shots
+  - [ ] path
+  - [ ] action
+  - [ ] radar icon?
+- [ ] fire sync
+- [ ] explosion sync
+- [ ] time
+- [ ] weather
+- [ ] cutscenes
+  - [ ] objects
+  - [ ] effects
+  - [ ] peds
+  - [ ] camera
 
 ### Minor tasks and ideas
 - [ ] Sync laser sniper rifle red dot with all players
