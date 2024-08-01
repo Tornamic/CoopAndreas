@@ -18,5 +18,8 @@ public:
 	int GetInternalId();
 
 	static const unsigned int m_pColours[];
+
+	CVector* m_vecWaypointPos = nullptr;
+	bool m_bWaypointPlaced = false;
 };
 

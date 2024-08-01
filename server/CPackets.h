@@ -6,7 +6,8 @@ enum CPacketsID : unsigned short
 	PLAYER_DISCONNECTED,
 	PLAYER_ONFOOT,
 	PLAYER_BULLET_SHOT,
-	PLAYER_HANDSHAKE
+	PLAYER_HANDSHAKE,
+	PLAYER_PLACE_WAYPOINT
 };
 
 class CPackets
@@ -76,5 +77,19 @@ public:
 	struct PlayerHandshake
 	{
 		int yourid;
+	};
+
+	struct PlayerPlaceWaypoint
+	{
+		int playerid;
+		bool place;
+		CVector position;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::PlayerPlaceWaypoint* packet = (CPackets::PlayerPlaceWaypoint*)data;
+			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+			CNetwork::SendPacketToAll(CPacketsID::PLAYER_PLACE_WAYPOINT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+		}
 	};
 };

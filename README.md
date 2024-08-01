@@ -36,7 +36,7 @@ Videos, pictures, news, suggestions, and communication can be found here:
 - [ ] Players map sync
   - [ ] Mission icons
   - [X] Player map pin
-  - [ ] Player mark
+  - [X] Player mark (waypoint)
 - [ ] Players info
   - [ ] Health bar
   - [ ] Armour bar

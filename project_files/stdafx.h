@@ -49,5 +49,5 @@ using namespace plugin;
 #include "Events.h"
 #include "CLocalPlayer.h"
 #include "CNetworkPlayerMapPin.h"
-
+#include "CNetworkPlayerWaypoint.h"
 // -----------------------------------------------------------------------------------------

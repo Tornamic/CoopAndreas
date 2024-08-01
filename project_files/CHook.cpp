@@ -121,6 +121,22 @@ static void __fastcall CPedIK__PointGunInDirection_Hook(CPedIK* This, int paddin
     This->PointGunInDirection(player->m_lOnFoot->aimX, player->m_lOnFoot->aimY, flag, float1);
 }
 
+// place waypoint
+static CdeclEvent	 <AddressList<0x5775D2, H_CALL>, PRIORITY_AFTER, ArgPick5N<eBlipType, 0, CVector, 1, eBlipColour, 2, eBlipDisplay, 3, char*, 4>, void(eBlipType, CVector, eBlipColour, eBlipDisplay, char*)> waypointPlaceEvent;
+static void PlaceWaypointHook(eBlipType type, CVector posn, eBlipColour color, eBlipDisplay blipDisplay, char* scriptName)
+{
+    CPackets::PlayerPlaceWaypoint packet = { 0, true, posn };
+    CNetwork::SendPacket(CPacketsID::PLAYER_PLACE_WAYPOINT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+}
+
+// hide waypoint
+static void __fastcall CRadar__ClearBlip_Hook(int blipIndex, int padding)
+{
+    CPackets::PlayerPlaceWaypoint packet = { 0, false, CVector(0, 0, 0)};
+    CNetwork::SendPacket(CPacketsID::PLAYER_PLACE_WAYPOINT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    CRadar::ClearBlip(blipIndex);
+}
+
 void CHook::Init()
 {   
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -134,4 +150,7 @@ void CHook::Init()
     patch::RedirectCall(0x5FDF7A, CPedIK__PointGunInDirection_Hook);
     patch::RedirectCall(0x61F351, CPedIK__PointGunInDirection_Hook);
     patch::RedirectCall(0x62876D, CPedIK__PointGunInDirection_Hook);
+
+    waypointPlaceEvent += PlaceWaypointHook;
+    patch::RedirectCall(0x577582, CRadar__ClearBlip_Hook);
 }

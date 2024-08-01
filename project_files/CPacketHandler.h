@@ -8,5 +8,6 @@ public:
 	static void PlayerOnFoot__Handle(void* data, int size);
 	static void PlayerBulletShot__Handle(void* data, int size);
 	static void PlayerHandshake__Handle(void* data, int size);
+	static void PlayerPlaceWaypoint__Handle(void* data, int size);
 };
 

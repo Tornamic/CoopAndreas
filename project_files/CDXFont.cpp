@@ -29,11 +29,11 @@ void CDXFont::Draw()
         rect.right = RsGlobal.maximumWidth;
 
         // draw here
-        for (unsigned char i = 0; i < 10; i++)
+        /*for (unsigned char i = 0; i < 10; i++)
         {
             rect.top += 14;
             m_pD3DXFont->DrawTextA(NULL, "дрочи мне €йца пЄс", -1, &rect, 0, D3DCOLOR_RGBA(255, 255, 0, 255));
-        }
+        }*/
     }
 }
 

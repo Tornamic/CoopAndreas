@@ -34,6 +34,7 @@ public:
 		Events::drawBlipsEvent += []
 			{
 				CNetworkPlayerMapPin::Process();
+				CNetworkPlayerWaypoint::Process();
 			};
 		CCore::Init();
 	};

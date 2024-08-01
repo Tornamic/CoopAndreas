@@ -182,3 +182,17 @@ void CPacketHandler::PlayerHandshake__Handle(void* data, int size)
 
 	CNetworkPlayerManager::m_nMyId = packet->yourid;
 }
+
+// PlayerPlaceWaypoint
+
+void CPacketHandler::PlayerPlaceWaypoint__Handle(void* data, int size)
+{
+	CPackets::PlayerPlaceWaypoint* packet = (CPackets::PlayerPlaceWaypoint*)data;
+
+	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
+
+	player->m_bWaypointPlaced = packet->place;
+	player->m_vecWaypointPos = &packet->position;
+
+	printf("%d %f %f\n", packet->place, packet->position.x, packet->position.y);
+}
