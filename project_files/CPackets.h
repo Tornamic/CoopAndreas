@@ -10,7 +10,8 @@ enum CPacketsID : unsigned short
 	PLAYER_ONFOOT,
 	PLAYER_BULLET_SHOT,
 	PLAYER_HANDSHAKE,
-	PLAYER_PLACE_WAYPOINT
+	PLAYER_PLACE_WAYPOINT,
+	PLAYER_GET_NAME
 };
 
 class CPackets
@@ -69,5 +70,11 @@ public:
 		int playerid;
 		bool place;
 		CVector position;
+	};
+
+	struct PlayerGetName
+	{
+		int playerid;
+		char name[32 + 1];
 	};
 };

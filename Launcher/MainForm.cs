@@ -51,7 +51,7 @@ namespace Launcher
 
             Launcher launcher = new Launcher();
             
-            LaunchResult result = launcher.LaunchAndInject("gta_sa.exe", nicknameInput.Text, ip, port, false, 0, launcher.LibrariesToInject);
+            LaunchResult result = launcher.LaunchAndInject("gta_sa.exe", nicknameInput.Text, ip, port, launcher.LibrariesToInject);
 
             if(result != LaunchResult.Success)
                 MessageBox.Show(result.ToString());

@@ -30,6 +30,12 @@
 #include "CBulletTraces.h"
 #include "CDraw.h"
 #include "CMenuManager.h"
+#include "CSprite.h"
+#include "CFont.h"
+#include "CHud.h"
+#include "CModelInfo.h"
+#include "CTxdStore.h"
+#include "CKeyGen.h"
 
 // classes ---------------------------------------------------------------------------------
 
@@ -50,4 +56,6 @@ using namespace plugin;
 #include "CLocalPlayer.h"
 #include "CNetworkPlayerMapPin.h"
 #include "CNetworkPlayerWaypoint.h"
+#include "CLaunchManager.h"
+#include "CNetworkPlayerNameTag.h"
 // -----------------------------------------------------------------------------------------

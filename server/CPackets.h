@@ -7,7 +7,8 @@ enum CPacketsID : unsigned short
 	PLAYER_ONFOOT,
 	PLAYER_BULLET_SHOT,
 	PLAYER_HANDSHAKE,
-	PLAYER_PLACE_WAYPOINT
+	PLAYER_PLACE_WAYPOINT,
+	PLAYER_GET_NAME
 };
 
 class CPackets
@@ -90,6 +91,22 @@ public:
 			CPackets::PlayerPlaceWaypoint* packet = (CPackets::PlayerPlaceWaypoint*)data;
 			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
 			CNetwork::SendPacketToAll(CPacketsID::PLAYER_PLACE_WAYPOINT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+		}
+	};
+
+	struct PlayerGetName
+	{
+		int playerid;
+		char name[32 + 1];
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::PlayerGetName* packet = (CPackets::PlayerGetName*)data;
+			CPlayer* player = CPlayerManager::GetPlayer(peer);
+			packet->playerid = player->m_iPlayerId;
+			strcpy_s(player->m_Name, packet->name);
+			printf("player %d now also know as %s\n", packet->playerid, packet->name);
+			CNetwork::SendPacketToAll(CPacketsID::PLAYER_GET_NAME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 };

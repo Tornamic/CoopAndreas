@@ -6,6 +6,9 @@ bool CNetwork::m_bConnected = false;
 
 std::vector<CPacketListener*> CNetwork::m_packetListeners;
 
+char CNetwork::m_IpAddress[128 + 1];
+unsigned short CNetwork::m_nPort;
+
 DWORD WINAPI CNetwork::InitAsync(LPVOID)
 {
 	// init listeners
@@ -29,8 +32,8 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 
 	ENetAddress address; // connection address
 
-	enet_address_set_host(&address, "127.0.0.1"); // set address ip
-	address.port = 6767; // set address port
+	enet_address_set_host(&address, m_IpAddress); // set address ip
+	address.port = m_nPort; // set address port
 
 	m_pPeer = enet_host_connect(m_pClient, &address, 2, 0); // connect to the server
 	if (m_pPeer == NULL) { // if not connected
@@ -107,6 +110,7 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::PLAYER_BULLET_SHOT, CPacketHandler::PlayerBulletShot__Handle);
 	CNetwork::AddListener(CPacketsID::PLAYER_HANDSHAKE, CPacketHandler::PlayerHandshake__Handle);
 	CNetwork::AddListener(CPacketsID::PLAYER_PLACE_WAYPOINT, CPacketHandler::PlayerPlaceWaypoint__Handle);
+	CNetwork::AddListener(CPacketsID::PLAYER_GET_NAME, CPacketHandler::PlayerGetName__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

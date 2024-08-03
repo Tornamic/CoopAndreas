@@ -10,6 +10,7 @@ void CCore::Init()
 	CPatch::ApplyPatches();
 	CHook::Init();
 	CDXFont::Init();
+	CLaunchManager::CollectCommandLineArgs();
 
 	Events::initGameEvent.after += []
 	{

@@ -181,6 +181,11 @@ void CPacketHandler::PlayerHandshake__Handle(void* data, int size)
 	CPackets::PlayerHandshake* packet = (CPackets::PlayerHandshake*)data;
 
 	CNetworkPlayerManager::m_nMyId = packet->yourid;
+
+	CPackets::PlayerGetName getNamePacket = {0};
+	strcpy(getNamePacket.name, CLocalPlayer::m_Name);
+
+	CNetwork::SendPacket(CPacketsID::PLAYER_GET_NAME, &getNamePacket, sizeof getNamePacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 // PlayerPlaceWaypoint
@@ -195,4 +200,17 @@ void CPacketHandler::PlayerPlaceWaypoint__Handle(void* data, int size)
 	player->m_vecWaypointPos = &packet->position;
 
 	printf("%d %f %f\n", packet->place, packet->position.x, packet->position.y);
+}
+
+// PlayerGetName
+
+void CPacketHandler::PlayerGetName__Handle(void* data, int size)
+{
+	CPackets::PlayerGetName* packet = (CPackets::PlayerGetName*)data;
+	
+	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
+
+	strcpy_s(player->m_Name, packet->name);
+
+	printf("got name %s\n", player->m_Name);
 }

@@ -15,6 +15,8 @@ const unsigned int CNetworkPlayer::m_pColours[] = { 0x6495EDFF,0xf0e68cFF,0x7788
 CVector* m_vecWaypointPos = nullptr;
 bool m_bWaypointPlaced = false;
 
+char m_Name[32 + 1] = { 0 };
+
 CNetworkPlayer::~CNetworkPlayer()
 {
 	if (m_pPed == nullptr) return;
@@ -67,7 +69,7 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 	player->SetOrientation(0.0f, 0.0f, 0.0f);
 	
 	// set player immunies, he now dont cares about pain
-	Command<Commands::SET_CHAR_PROOFS>(CPools::GetPedRef(player), 1, 1, 1, 1, 1);
+	Command<Commands::SET_CHAR_PROOFS>(CPools::GetPedRef(player), 0, 1, 1, 0, 0);
 
 	m_pPed = player;
 	m_iPlayerId = id;
@@ -86,4 +88,16 @@ int CNetworkPlayer::GetInternalId() // most used for CWorld::PlayerInFocus
 	}
 
 	return -1;
+}
+
+char* CNetworkPlayer::GetName()
+{
+	char* buffer = new char[32 + 1];
+
+	if (m_Name[0] == '\0')
+		sprintf(buffer, "player %d", m_iPlayerId);
+	else
+		strcpy(buffer, m_Name);
+
+	return buffer;
 }

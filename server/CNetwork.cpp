@@ -64,6 +64,7 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PLAYER_ONFOOT, CPackets::PlayerOnFoot::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_BULLET_SHOT, CPackets::PlayerBulletShot::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_PLACE_WAYPOINT, CPackets::PlayerPlaceWaypoint::Handle);
+    CNetwork::AddListener(CPacketsID::PLAYER_GET_NAME, CPackets::PlayerGetName::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -163,6 +164,11 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         };
 
         CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_CONNECTED, &packet, sizeof CPackets::PlayerConnected, ENET_PACKET_FLAG_RELIABLE);
+
+        CPackets::PlayerGetName getNamePacket{};
+        getNamePacket.playerid = i->m_iPlayerId;
+        strcpy_s(getNamePacket.name, i->m_Name);
+        CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_GET_NAME, &getNamePacket, sizeof CPackets::PlayerGetName, ENET_PACKET_FLAG_RELIABLE);
     }
     CPackets::PlayerHandshake handshakePacket = { freeId };
     CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_HANDSHAKE, &handshakePacket, sizeof handshakePacket, ENET_PACKET_FLAG_RELIABLE);

@@ -9,5 +9,7 @@ public:
 	static bool IsPositionUpdateNeeded(CVector pos, CVector update, int percent = 5);
 	static int GetWeaponModelById(unsigned char id);
 	static bool IsMeleeWeapon(unsigned char id);
+	static inline float SCREEN_STRETCH_X(float a) { return a * RsGlobal.maximumWidth / (float)640; }
+	static inline float SCREEN_STRETCH_Y(float a) { return a * RsGlobal.maximumHeight / (float)448; }
 };
 

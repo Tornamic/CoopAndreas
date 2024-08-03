@@ -13,6 +13,10 @@ public:
 			};
 		Events::gameProcessEvent += []
 			{
+				if (GetAsyncKeyState(VK_F8))
+				{
+					FindPlayerPed(0)->GiveDelayedWeapon(eWeaponType::WEAPON_CAMERA, 10);
+				}
 				if (CNetwork::m_bConnected)
 				{
 					CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
@@ -35,6 +39,10 @@ public:
 			{
 				CNetworkPlayerMapPin::Process();
 				CNetworkPlayerWaypoint::Process();
+			};
+		Events::drawingEvent += []
+			{
+				CNetworkPlayerNameTag::Process();
 			};
 		CCore::Init();
 	};

@@ -4,6 +4,8 @@ Videos, pictures, news, suggestions, and communication can be found here:
 
 [Discord Server](https://discord.gg/TwQsR4qxVx)
 
+used plugin-sdk commit https://github.com/DK22Pac/plugin-sdk/tree/380105ec5242cdb3a0cbc18505b151308dd85b53
+
 ## TODO list:
 ### Already Done ✓
 - [X] setup C/C++ project
@@ -19,7 +21,12 @@ Videos, pictures, news, suggestions, and communication can be found here:
   - [X] Aim sync
   - [X] Lag shot sync - using keys, bad accuracy
   - [X] Shot sync - every bullet will be synced
-
+- [X] Players info
+  - [X] Health bar
+  - [X] Armour bar
+  - [X] Nickname
+  - [X] weapon icon
+  
 ### Current Tasks
 - [ ] define which player is the host
 - [ ] rendering
@@ -39,10 +46,6 @@ Videos, pictures, news, suggestions, and communication can be found here:
   - [ ] Mission icons
   - [X] Player map pin
   - [X] Player mark (waypoint)
-- [ ] Players info
-  - [ ] Health bar
-  - [ ] Armour bar
-  - [ ] Nickname
 - [ ] chat
 - [ ] smooth interpolation
   - [ ] move

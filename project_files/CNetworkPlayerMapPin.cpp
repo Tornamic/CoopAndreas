@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-CVector2D GetPlayerMarkerPosition() 
+CVector2D GetPlayerMarkerPosition()
 {
 	CVector2D vec = FindPlayerCoors(-1) - CRadar::vec2DRadarOrigin;
 	CVector2D playerDirection = 
@@ -16,6 +16,8 @@ CVector2D GetPlayerMarkerPosition()
 	CRadar::LimitRadarPoint(rotatedPos);
 
 	CVector2D ret{};
+	
+
 	CRadar::TransformRadarPointToScreenSpace(ret, rotatedPos);
 
 	return ret;
@@ -49,6 +51,7 @@ void CNetworkPlayerMapPin::Process()
 		else
 		{
 			CVector2D pos = GetPlayerMarkerPosition();
+
 			float angle = player->m_lOnFoot->rotation + 3.141592f;
 
 			CRadar::DrawRotatingRadarSprite(
