@@ -31,9 +31,8 @@ used plugin-sdk commit https://github.com/DK22Pac/plugin-sdk/tree/380105ec5242cd
 - [ ] define which player is the host
 - [ ] rendering
   - [X] text rendering (dx)
-  - [ ] rectangle rendering (dx)
   - [ ] imgui integration
-  - [ ] sprite/txd rendering
+  - [X] sprite/txd rendering
 - [ ] fixes
   - [X] mouse
   - [ ] widescreen
