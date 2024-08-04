@@ -10,5 +10,6 @@ public:
 	static void PlayerHandshake__Handle(void* data, int size);
 	static void PlayerPlaceWaypoint__Handle(void* data, int size);
 	static void PlayerGetName__Handle(void* data, int size);
+	static void PlayerSetHost__Handle(void* data, int size);
 };
 

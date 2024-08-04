@@ -8,7 +8,9 @@ enum CPacketsID : unsigned short
 	PLAYER_BULLET_SHOT,
 	PLAYER_HANDSHAKE,
 	PLAYER_PLACE_WAYPOINT,
-	PLAYER_GET_NAME
+	PLAYER_GET_NAME,
+	VEHICLE_SPAWN,
+	PLAYER_SET_HOST
 };
 
 class CPackets
@@ -108,5 +110,13 @@ public:
 			printf("player %d now also know as %s\n", packet->playerid, packet->name);
 			CNetwork::SendPacketToAll(CPacketsID::PLAYER_GET_NAME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
+	};
+
+	struct VehicleSpawn
+	{
+		int vehicleid;
+		unsigned short modelid;
+		CVector pos;
+		float rot;
 	};
 };

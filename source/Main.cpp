@@ -13,10 +13,6 @@ public:
 			};
 		Events::gameProcessEvent += []
 			{
-				if (GetAsyncKeyState(VK_F8))
-				{
-					FindPlayerPed(0)->GiveDelayedWeapon(eWeaponType::WEAPON_CAMERA, 10);
-				}
 				if (CNetwork::m_bConnected)
 				{
 					CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
@@ -26,7 +22,7 @@ public:
 						packet->velocity.y == 0 &&
 						packet->velocity.z == 0)
 						syncRate = 100;
-					if (GetTickCount() > lastTickCount + 40)
+					if (GetTickCount() > syncRate + 40)
 					{
 						lastTickCount = GetTickCount();
 						CPackets::PlayerOnFoot::m_last = packet;
@@ -43,7 +39,9 @@ public:
 		Events::drawingEvent += []
 			{
 				CNetworkPlayerNameTag::Process();
+				CChat::Draw();
 			};
 		CCore::Init();
+		
 	};
 } CoopAndreasPlugin;

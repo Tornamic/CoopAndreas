@@ -111,6 +111,7 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::PLAYER_HANDSHAKE, CPacketHandler::PlayerHandshake__Handle);
 	CNetwork::AddListener(CPacketsID::PLAYER_PLACE_WAYPOINT, CPacketHandler::PlayerPlaceWaypoint__Handle);
 	CNetwork::AddListener(CPacketsID::PLAYER_GET_NAME, CPacketHandler::PlayerGetName__Handle);
+	CNetwork::AddListener(CPacketsID::PLAYER_SET_HOST, CPacketHandler::PlayerSetHost__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

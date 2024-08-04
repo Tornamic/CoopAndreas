@@ -58,4 +58,6 @@ using namespace plugin;
 #include "CNetworkPlayerWaypoint.h"
 #include "CLaunchManager.h"
 #include "CNetworkPlayerNameTag.h"
+#include "CNetworkVehicle.h"
+#include "CChat.h"
 // -----------------------------------------------------------------------------------------

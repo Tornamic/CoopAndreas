@@ -12,6 +12,8 @@ void CPacketHandler::PlayerConnected__Handle(void* data, int size)
 
 	// add player to list
 	CNetworkPlayerManager::Add(player);
+
+	CChat::AddMessage("[Player] " + std::string(player->GetName()) + " connected");
 }
 
 // PlayerDisconnected
@@ -26,6 +28,8 @@ void CPacketHandler::PlayerDisconnected__Handle(void* data, int size)
 
 	if (player == nullptr)
 		return;
+
+	CChat::AddMessage("[Player] " + std::string(player->GetName()) + " disconnected");
 
 	// remove from list
 	CNetworkPlayerManager::Remove(player);
@@ -212,5 +216,11 @@ void CPacketHandler::PlayerGetName__Handle(void* data, int size)
 
 	strcpy_s(player->m_Name, packet->name);
 
-	printf("got name %s\n", player->m_Name);
+	CChat::AddMessage("[Player] player " + std::to_string(player->m_iPlayerId) + " now aka " + player->m_Name);
+}
+
+// PlayerSetHost
+void CPacketHandler::PlayerSetHost__Handle(void* data, int size)
+{
+	CLocalPlayer::m_bIsHost = true;
 }

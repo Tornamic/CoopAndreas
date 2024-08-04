@@ -11,7 +11,6 @@ void CCore::Init()
 	CHook::Init();
 	CDXFont::Init();
 	CLaunchManager::CollectCommandLineArgs();
-
 	Events::initGameEvent.after += []
 	{
 		// init CNetworking async

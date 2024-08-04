@@ -8,5 +8,6 @@ public:
 	static CPlayer* GetPlayer(int playerid);
 	static CPlayer* GetPlayer(ENetPeer* peer);
 	static int GetFreeID();
+	static CPlayer* GetHost();
 };
 

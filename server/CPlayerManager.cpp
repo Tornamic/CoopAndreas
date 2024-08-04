@@ -51,3 +51,15 @@ int CPlayerManager::GetFreeID()
 	}
 	return -1; // server is full
 }
+
+CPlayer* CPlayerManager::GetHost()
+{
+	for (int i = 0; i != m_pPlayers.size(); i++)
+	{
+		if (m_pPlayers[i]->m_bIsHost)
+		{
+			return m_pPlayers[i];
+		}
+	}
+	return nullptr;
+}

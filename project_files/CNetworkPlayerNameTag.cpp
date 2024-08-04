@@ -9,13 +9,13 @@ unsigned char GetHudAlpha(float distance)
 	{
 		return 255;
 	}
-	else if (distance >= 30.0f) 
+	else if (distance >= 15.0f) 
 	{
 		return 0;
 	}
 	else 
 	{
-		float factor = (30.0f - distance) / 25.0f;
+		float factor = (5.0f - distance) / 10.0f;
 		return static_cast<unsigned char>(std::round(factor * 255.0f));
 	}
 }
