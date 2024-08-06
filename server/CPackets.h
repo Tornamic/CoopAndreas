@@ -10,7 +10,9 @@ enum CPacketsID : unsigned short
 	PLAYER_PLACE_WAYPOINT,
 	PLAYER_GET_NAME,
 	VEHICLE_SPAWN,
-	PLAYER_SET_HOST
+	PLAYER_SET_HOST,
+	ADD_EXPLOSION,
+	VEHICLE_REMOVE
 };
 
 class CPackets
@@ -112,11 +114,55 @@ public:
 		}
 	};
 
+	struct PlayerSetHost
+	{
+		int playerid;
+	};
+
+	struct AddExplosion
+	{
+		unsigned char type;
+		CVector pos;
+		int time;
+		char usesSound;
+		float cameraShake;
+		char isVisible;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::AddExplosion* packet = (CPackets::AddExplosion*)data;
+			CNetwork::SendPacketToAll(CPacketsID::ADD_EXPLOSION, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+		}
+	};
+
 	struct VehicleSpawn
 	{
 		int vehicleid;
 		unsigned short modelid;
 		CVector pos;
 		float rot;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (!CPlayerManager::GetPlayer(peer)->m_bIsHost)
+				return;
+
+			CPackets::VehicleSpawn* packet = (CPackets::VehicleSpawn*)data;
+			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+		}
+	};
+
+	struct VehicleRemove
+	{
+		int vehicleid;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (!CPlayerManager::GetPlayer(peer)->m_bIsHost)
+				return;
+
+			CPackets::VehicleRemove* packet = (CPackets::VehicleRemove*)data;
+			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+		}
 	};
 };

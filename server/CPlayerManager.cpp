@@ -63,3 +63,23 @@ CPlayer* CPlayerManager::GetHost()
 	}
 	return nullptr;
 }
+
+void CPlayerManager::AssignHostToFirstPlayer()
+{
+	if (CPlayerManager::m_pPlayers.size() <= 0)
+		return;
+
+	CPlayer* player = CPlayerManager::m_pPlayers.front();
+	CPlayer* host = CPlayerManager::GetHost();
+
+	if (player == host)
+		return;
+
+	if (host != nullptr)
+		host->m_bIsHost = false;
+
+	player->m_bIsHost = true;
+
+	CPackets::PlayerSetHost setHostPacket = { player->m_iPlayerId };
+	CNetwork::SendPacketToAll(CPacketsID::PLAYER_SET_HOST, &setHostPacket, sizeof setHostPacket, ENET_PACKET_FLAG_RELIABLE, nullptr);
+}

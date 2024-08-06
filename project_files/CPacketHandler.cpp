@@ -220,7 +220,73 @@ void CPacketHandler::PlayerGetName__Handle(void* data, int size)
 }
 
 // PlayerSetHost
+
 void CPacketHandler::PlayerSetHost__Handle(void* data, int size)
 {
-	CLocalPlayer::m_bIsHost = true;
+	CPackets::PlayerSetHost* packet = (CPackets::PlayerSetHost*)data;
+
+	if (packet->playerid == CNetworkPlayerManager::m_nMyId)
+	{
+		CLocalPlayer::m_bIsHost = true;
+		CChat::AddMessage("[Player] You are the host now");
+		return;
+	}
+	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
+
+	CChat::AddMessage("[Player] " + std::string(player->GetName()) + " is now the host");
+
+	CLocalPlayer::m_bIsHost = false;
+}
+
+// AddExplosion
+
+void CPacketHandler::AddExplosion__Handle(void* data, int size)
+{
+	CPackets::AddExplosion* packet = (CPackets::AddExplosion*)data;
+	plugin::Call<0x736A50, CEntity*, CPed*, int, CVector2D, float, int, char, float, char>(nullptr, nullptr, 
+		packet->type, 
+		CVector2D(packet->pos.x, packet->pos.y), 
+		packet->pos.z, 
+		packet->time, 
+		packet->usesSound, 
+		packet->cameraShake, 
+		packet->isVisible);
+}
+
+// VehicleSpawn
+
+void CPacketHandler::VehicleSpawn__Handle(void* data, int size)
+{
+	CPackets::VehicleSpawn* packet = (CPackets::VehicleSpawn*)data;
+	
+	char buffer[128];
+	sprintf(buffer, "cum spawn %d %d %f %f %f %f", packet->vehicleid, packet->modelid, packet->pos.x, packet->pos.y, packet->pos.z, packet->rot);
+	CChat::AddMessage(buffer);
+
+	CNetworkVehicle* vehicle = new CNetworkVehicle
+	(
+		packet->vehicleid,
+		packet->modelid,
+		packet->pos,
+		packet->rot
+	);
+
+	CNetworkVehicleManager::Add(vehicle);
+}
+
+// VehicleRemove
+
+void CPacketHandler::VehicleRemove__Handle(void* data, int size)
+{
+	CPackets::VehicleRemove* packet = (CPackets::VehicleRemove*)data;
+
+	char buffer[128];
+	sprintf(buffer, "cum remove %d", packet->vehicleid);
+	CChat::AddMessage(buffer);
+
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
+
+	CNetworkVehicleManager::Remove(vehicle);
+
+	delete vehicle;
 }

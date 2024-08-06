@@ -9,5 +9,6 @@ public:
 	static CPlayer* GetPlayer(ENetPeer* peer);
 	static int GetFreeID();
 	static CPlayer* GetHost();
+	static void AssignHostToFirstPlayer();
 };
 

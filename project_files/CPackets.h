@@ -13,7 +13,9 @@ enum CPacketsID : unsigned short
 	PLAYER_PLACE_WAYPOINT,
 	PLAYER_GET_NAME,
 	VEHICLE_SPAWN,
-	PLAYER_SET_HOST
+	PLAYER_SET_HOST,
+	ADD_EXPLOSION,
+	VEHICLE_REMOVE
 };
 
 class CPackets
@@ -80,11 +82,31 @@ public:
 		char name[32 + 1];
 	};
 
+	struct PlayerSetHost
+	{
+		int playerid;
+	};
+
+	struct AddExplosion
+	{
+		unsigned char type;
+		CVector pos;
+		int time;
+		char usesSound;
+		float cameraShake;
+		char isVisible;
+	};
+
 	struct VehicleSpawn
 	{
 		int vehicleid;
 		unsigned short modelid;
 		CVector pos;
 		float rot;
+	};
+
+	struct VehicleRemove
+	{
+		int vehicleid;
 	};
 };

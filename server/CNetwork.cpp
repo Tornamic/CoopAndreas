@@ -65,6 +65,9 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PLAYER_BULLET_SHOT, CPackets::PlayerBulletShot::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_PLACE_WAYPOINT, CPackets::PlayerPlaceWaypoint::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_GET_NAME, CPackets::PlayerGetName::Handle);
+    CNetwork::AddListener(CPacketsID::ADD_EXPLOSION, CPackets::AddExplosion::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_SPAWN, CPackets::VehicleSpawn::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_REMOVE, CPackets::VehicleRemove::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -172,6 +175,8 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
     }
     CPackets::PlayerHandshake handshakePacket = { freeId };
     CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_HANDSHAKE, &handshakePacket, sizeof handshakePacket, ENET_PACKET_FLAG_RELIABLE);
+
+    CPlayerManager::AssignHostToFirstPlayer();
 }
 
 void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
@@ -195,7 +200,7 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
 
     printf("%i disconnected.\n", player->m_iPlayerId);
 
-    event.peer->data = NULL;
+    CPlayerManager::AssignHostToFirstPlayer();
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

@@ -13,6 +13,23 @@ public:
 			};
 		Events::gameProcessEvent += []
 			{
+				if (GetAsyncKeyState(VK_F1))
+				{
+					CMessages::AddBigMessage("AddBigMessage", 1000, 0);
+				}
+				if (GetAsyncKeyState(VK_F2))
+				{
+					CMessages::AddBigMessageQ("AddBigMessage", 1000, 0);
+				}
+				if (GetAsyncKeyState(VK_F3))
+				{
+					CMessages::AddBigMessage("AddBigMessage", 1000, 0);
+				}
+				if (GetAsyncKeyState(VK_F4))
+				{
+					CMessages::AddBigMessage("AddBigMessage", 1000, 0);
+				}
+
 				if (CNetwork::m_bConnected)
 				{
 					CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();

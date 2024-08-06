@@ -11,5 +11,8 @@ public:
 	static void PlayerPlaceWaypoint__Handle(void* data, int size);
 	static void PlayerGetName__Handle(void* data, int size);
 	static void PlayerSetHost__Handle(void* data, int size);
+	static void AddExplosion__Handle(void* data, int size);
+	static void VehicleSpawn__Handle(void* data, int size);
+	static void VehicleRemove__Handle(void* data, int size);
 };
 

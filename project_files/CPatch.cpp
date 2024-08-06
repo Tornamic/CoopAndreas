@@ -58,34 +58,29 @@ void PatchStreaming()
 
 void PatchPools()
 {
-    // you can find these addresses at 0x550F10 CPools::Initialise()
-    
-    // peds `140 -> 396`
-    patch::SetUChar(0x550FF3, 0x01);
+    //Inc task pool
+    patch::SetUChar(0x551140, 0xFF);
 
-    // vehicles `140 -> 255`
-    // patch::SetUChar(0x551030, 0xFF);
+    //Inc ped pool pool
+    patch::SetUChar(0x550FF2, (unsigned char)1000);
 
-    // tasks `500 -> 1020`
-    patch::SetUChar(0x551140, 0x03);
+    //Inc intelligence pool
+    patch::SetUChar(0x551283, 210);
 
-    // events `200 -> 456`
+    //Inc event pool
     patch::SetUChar(0x551178, 0x01);
 
-    // ped intelligence `150 -> 396`
-    patch::SetUChar(0x551284, 0x01);
+    //Inc matrices pool
+    patch::SetUChar(0x54F3A2, 0x10);
 
-    // dummies `2500 -> 6084`
-    patch::SetUChar(0x5510D0, 0x17);
+    //Inc ccolmodel pool
+    patch::SetUChar(0x551108, 0x77);
 
-    // colmodels `10150 -> 18342`
-    patch::SetUChar(0x551108, 0x47);
+    //Inc dummies pool
+    patch::SetUChar(0x5510D0, 0x0F);
 
-    // objects `350 -> 862`
-    patch::SetUChar(0x551098, 0x03);
-    
-    // matrices `900 -> 2692`
-    patch::SetUChar(0x54F3A2, 0x0A);
+    //Inc objects pool
+    patch::SetUChar(0x551098, 0x02);
 }
 
 void FixCrashes()
@@ -145,27 +140,13 @@ void FixCrashes()
     // fix crash when closing game caused by shadows
     //patch::SetUChar(0x705B33, 0x75); // jz to jnz
     //patch::Nop(0x706B29, 5);
-
-    // implement mousefix
-    patch::SetUChar(0x576CCC, 0xEB);
-    patch::SetUChar(0x576EBA, 0xEB);
-    patch::SetUChar(0x576F8A, 0xEB);
-    patch::SetUInt(0x7469A0, 0x909000B0);
-    Events::gameProcessEvent += []
-    {
-        if (!(patch::GetUChar(0xBA6748 + 0x5C) || TheCamera.GetScreenFadeStatus() == 2) && *(HWND*)0xC97C1C == GetForegroundWindow())
-        {
-            // for some reason original internal code wont work with patch above
-            SetCursorPos(RsGlobal.maximumWidth / 2, RsGlobal.maximumHeight / 2);
-        }
-    };
 }
 
 void CPatch::ApplyPatches()
 {
-    /* this comment fixes a lot of crashes :D
+    // this comment fixes a lot of crashes :D
     //PatchPools(); 
-    */
+    
     PatchPlayers();
     PatchStreaming();
     FixCrashes();

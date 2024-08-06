@@ -1,6 +1,6 @@
 #pragma once
 #define MAX_SERVER_PLAYERS 4
-
+#define MAX_SERVER_VEHICLES 200
 #define _DEV
 
 
@@ -36,6 +36,16 @@
 #include "CModelInfo.h"
 #include "CTxdStore.h"
 #include "CKeyGen.h"
+#include "CAnimManager.h"
+#include "CMessages.h"
+#include "CExplosion.h"
+#include "CMonsterTruck.h"
+#include "CQuadBike.h"
+#include "CHeli.h"
+#include "CPlane.h"
+#include "CBmx.h"
+#include "CTrailer.h"
+#include "CBoat.h"
 
 // classes ---------------------------------------------------------------------------------
 
@@ -60,4 +70,6 @@ using namespace plugin;
 #include "CNetworkPlayerNameTag.h"
 #include "CNetworkVehicle.h"
 #include "CChat.h"
+#include "CNetworkVehicleManager.h"
+
 // -----------------------------------------------------------------------------------------

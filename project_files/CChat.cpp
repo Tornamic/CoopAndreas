@@ -34,7 +34,7 @@ void CChat::Draw()
             int j = 15 - 1;
             while (i >= 0 && j >= 0) 
             {
-                CDXFont::Draw(10, 10 + j * 15, CChat::m_aMessages[i].c_str(), D3DCOLOR_RGBA(255, 255, 0, 255));
+                CDXFont::Draw(10, RsGlobal.maximumHeight / 3  + j * 15, CChat::m_aMessages[i].c_str(), D3DCOLOR_RGBA(255, 255, 0, 255));
                 i--;
                 j--;
             }
