@@ -26,9 +26,23 @@ used plugin-sdk commit https://github.com/DK22Pac/plugin-sdk/tree/380105ec5242cd
   - [X] Armour bar
   - [X] Nickname
   - [X] weapon icon
+- [X] define which player is the host
   
 ### Current Tasks
-- [ ] define which player is the host
+- [ ] vehicle sync
+  - [X] spawn/delete
+  - [ ] enter/exit
+  - [ ] color(1/2) sync
+  - [ ] paintjob sync
+  - [ ] tuning sync
+  - [ ] hydraulics
+  - [ ] plane wheels
+  - [ ] turret aim/shot
+  - [ ] pos, speed, quat
+  - [ ] health
+  - [ ] damage status
+  - [ ] trailer sync
+  - [ ] door, engine states
 - [ ] rendering
   - [X] text rendering (dx)
   - [ ] imgui integration
@@ -61,12 +75,6 @@ used plugin-sdk commit https://github.com/DK22Pac/plugin-sdk/tree/380105ec5242cd
   - [ ] tatoo
   - [ ] clothes
   - [ ] haircut
-- [ ] vehicle sync
-  - [ ] pos, speed, quat
-  - [ ] health
-  - [ ] damage status
-  - [ ] trailer sync
-  - [ ] door, engine states
 - [ ] passenger sync
 - [ ] npc sync
   - [ ] pos, rot, speed

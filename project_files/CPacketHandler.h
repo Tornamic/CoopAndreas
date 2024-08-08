@@ -14,5 +14,9 @@ public:
 	static void AddExplosion__Handle(void* data, int size);
 	static void VehicleSpawn__Handle(void* data, int size);
 	static void VehicleRemove__Handle(void* data, int size);
+	static CPackets::VehicleIdleUpdate* VehicleIdleUpdate__Collect(CNetworkVehicle* vehicle);
+	static void VehicleIdleUpdate__Handle(void* data, int size);
+	static CPackets::VehicleDriverUpdate* VehicleDriverUpdate__Collect(CNetworkVehicle* vehicle);
+	static void VehicleDriverUpdate__Handle(void* data, int size);
 };
 

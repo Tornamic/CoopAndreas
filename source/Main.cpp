@@ -16,7 +16,7 @@ public:
 			{
 				if (CNetwork::m_bConnected)
 				{
-					
+					CNetworkVehicleManager::ProcessAll();
 
 					CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
 					int syncRate = 40;

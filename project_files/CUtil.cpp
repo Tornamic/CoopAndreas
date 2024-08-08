@@ -95,3 +95,50 @@ bool CUtil::IsMeleeWeapon(unsigned char id)
 {
     return CWeaponInfo::GetWeaponInfo((eWeaponType)id, 1)->m_nWeaponFire == 0;
 }
+
+void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, unsigned short ammo)
+{
+    // update weapon, ammo
+    auto& activeWeapon = player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot];
+    bool isWeaponTypeDifferent = (activeWeapon.m_eWeaponType != weapon);
+    bool isAmmoDifferent = (activeWeapon.m_nAmmoInClip != ammo);
+
+    if (isWeaponTypeDifferent || isAmmoDifferent)
+    {
+        CWorld::PlayerInFocus = player->GetInternalId();
+
+        if (isWeaponTypeDifferent)
+        {
+            player->m_pPed->ClearWeapons();
+        }
+
+        if (weapon != 0)
+        {
+            if (isWeaponTypeDifferent)
+            {
+                // preload model
+                CStreaming::RequestModel(CUtil::GetWeaponModelById(weapon), eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
+                CStreaming::LoadAllRequestedModels(false);
+            }
+
+            // give weapon
+            bool isMeleeWeapon = CUtil::IsMeleeWeapon(weapon);
+
+            if (activeWeapon.m_nTotalAmmo <= 0)
+            {
+                player->m_pPed->GiveWeapon((eWeaponType)weapon, isMeleeWeapon ? 1 : 99999, false);
+            }
+
+
+            // set ammo in clip
+            activeWeapon.m_nAmmoInClip = ammo;
+        }
+
+        if (isWeaponTypeDifferent)
+        {
+            player->m_pPed->SetCurrentWeapon((eWeaponType)weapon);
+        }
+
+        CWorld::PlayerInFocus = 0;
+    }
+}

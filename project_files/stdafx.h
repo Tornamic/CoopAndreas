@@ -53,12 +53,13 @@ using namespace plugin;
 
 #include "CCore.h"
 #include "structs.h"
-#include "CUtil.h"
+#include "CNetworkVehicle.h"
 #include "CPackets.h"
 #include "CPacketHandler.h"
 #include "CNetwork.h"
 #include "CNetworkPlayer.h"
 #include "CNetworkPlayerManager.h"
+#include "CUtil.h"
 #include "CPatch.h"
 #include "CHook.h"
 #include "CDXFont.h"
@@ -68,7 +69,6 @@ using namespace plugin;
 #include "CNetworkPlayerWaypoint.h"
 #include "CLaunchManager.h"
 #include "CNetworkPlayerNameTag.h"
-#include "CNetworkVehicle.h"
 #include "CChat.h"
 #include "CNetworkVehicleManager.h"
 

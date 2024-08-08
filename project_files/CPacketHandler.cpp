@@ -65,8 +65,8 @@ CPackets::PlayerOnFoot* CPacketHandler::PlayerOnFoot__Collect()
 	packet->controllerState = player->GetPadFromPlayer()->NewState;
 	
 	// get player health, armour
-	packet->health = player->m_fHealth;
-	packet->armour = player->m_fArmour;
+	packet->health = (unsigned char)player->m_fHealth;
+	packet->armour = (unsigned char)player->m_fArmour;
 
 	// get player weapon in hands
 	packet->weapon = player->m_aWeapons[player->m_nActiveWeaponSlot].m_eWeaponType;
@@ -101,49 +101,7 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 		player->m_pPed->m_matrix->pos = packet->position;
 	}
 
-	// update weapon, ammo
-	auto& activeWeapon = player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot];
-	bool isWeaponTypeDifferent = (activeWeapon.m_eWeaponType != packet->weapon);
-	bool isAmmoDifferent = (activeWeapon.m_nAmmoInClip != packet->ammo);
-
-	if (isWeaponTypeDifferent || isAmmoDifferent)
-	{
-		CWorld::PlayerInFocus = player->GetInternalId();
-
-		if (isWeaponTypeDifferent)
-		{
-			player->m_pPed->ClearWeapons();
-		}
-
-		if (packet->weapon != 0)
-		{
-			if (isWeaponTypeDifferent)
-			{
-				// preload model
-				CStreaming::RequestModel(CUtil::GetWeaponModelById(packet->weapon), eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
-				CStreaming::LoadAllRequestedModels(false);
-			}
-
-			// give weapon
-			bool isMeleeWeapon = CUtil::IsMeleeWeapon(packet->weapon);
-
-			if (activeWeapon.m_nTotalAmmo <= 0)
-			{
-				player->m_pPed->GiveWeapon((eWeaponType)packet->weapon, isMeleeWeapon ? 1 : 99999, false);
-			}
-
-
-			// set ammo in clip
-			activeWeapon.m_nAmmoInClip = packet->ammo;
-		}
-
-		if (isWeaponTypeDifferent)
-		{
-			player->m_pPed->SetCurrentWeapon((eWeaponType)packet->weapon);
-		}
-
-		CWorld::PlayerInFocus = 0;
-	}
+	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
 
 	player->m_pPed->m_fAimingRotation =
 		player->m_pPed->m_fCurrentRotation = packet->rotation;
@@ -290,3 +248,82 @@ void CPacketHandler::VehicleRemove__Handle(void* data, int size)
 
 	delete vehicle;
 }
+
+// VehicleIdleUpdate
+
+CPackets::VehicleIdleUpdate* CPacketHandler::VehicleIdleUpdate__Collect(CNetworkVehicle* vehicle)
+{
+	CPackets::VehicleIdleUpdate* packet = new CPackets::VehicleIdleUpdate;
+	packet->vehicleid = vehicle->m_nVehicleId;
+	packet->pos = vehicle->m_pVehicle->m_matrix->pos;
+	packet->roll = vehicle->m_pVehicle->m_matrix->right;
+	packet->rot = vehicle->m_pVehicle->m_matrix->up;
+	packet->velocity = vehicle->m_pVehicle->m_vecMoveSpeed;
+	return packet;
+}
+
+void CPacketHandler::VehicleIdleUpdate__Handle(void* data, int size)
+{
+	CPackets::VehicleIdleUpdate* packet = (CPackets::VehicleIdleUpdate*)data;
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
+
+	if (vehicle == nullptr)
+		return;
+
+	vehicle->m_pVehicle->m_matrix->pos = packet->pos;		   
+	vehicle->m_pVehicle->m_matrix->right = packet->roll;	   
+	vehicle->m_pVehicle->m_matrix->up = packet->rot;		   
+	vehicle->m_pVehicle->m_vecMoveSpeed = packet->velocity;
+}
+
+// VehicleDriverUpdate
+
+CPackets::VehicleDriverUpdate* CPacketHandler::VehicleDriverUpdate__Collect(CNetworkVehicle* vehicle)
+{
+	CPackets::VehicleDriverUpdate* packet = new CPackets::VehicleDriverUpdate;
+	CPlayerPed* player = FindPlayerPed(0);
+
+	// vehicle data
+	packet->vehicleid =			vehicle->m_nVehicleId;
+	packet->pos =				vehicle->m_pVehicle->m_matrix->pos;
+	packet->roll =				vehicle->m_pVehicle->m_matrix->right;
+	packet->rot =				vehicle->m_pVehicle->m_matrix->up;
+	packet->velocity =			vehicle->m_pVehicle->m_vecMoveSpeed;
+
+	// player data
+	packet->ammo =				player->m_aWeapons[player->m_nActiveWeaponSlot].m_nAmmoInClip;
+	packet->controllerState =	player->GetPadFromPlayer()->NewState;
+	packet->playerArmour =		(unsigned char)player->m_fArmour;
+	packet->playerHealth =		(unsigned char)player->m_fHealth;
+	packet->weapon =			player->m_aWeapons[player->m_nActiveWeaponSlot].m_eWeaponType;
+
+	return packet;
+}
+
+void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
+{
+	CPackets::VehicleDriverUpdate* packet = (CPackets::VehicleDriverUpdate*)data;
+
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
+	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
+
+	if (vehicle == nullptr)
+		return;
+
+	vehicle->m_pVehicle->m_matrix->pos = packet->pos;
+	vehicle->m_pVehicle->m_matrix->right = packet->roll;
+	vehicle->m_pVehicle->m_matrix->up = packet->rot;
+	vehicle->m_pVehicle->m_vecMoveSpeed = packet->velocity;
+	
+	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
+
+	player->m_oOnFoot = player->m_lOnFoot;
+	
+	player->m_lOnFoot->controllerState = packet->controllerState;
+	player->m_lOnFoot->armour = packet->playerArmour;
+	player->m_lOnFoot->health = packet->playerHealth;
+}
+
+// VehicleEnter
+
+// VehicleExit

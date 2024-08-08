@@ -57,11 +57,20 @@ void CNetworkVehicleManager::Remove(CNetworkVehicle* vehicle)
 
 void CNetworkVehicleManager::ProcessAll()
 {
-	for (int i = 0; i != CNetworkVehicleManager::m_pVehicles.size(); i++)
+	for (int i = 0; i != m_pVehicles.size(); i++)
 	{
-		if (CNetworkVehicleManager::m_pVehicles[i]->m_pVehicle == nullptr)
+		if (m_pVehicles[i]->m_pVehicle == nullptr)
 			return;
 
-
+		if (m_pVehicles[i]->m_pVehicle->m_pDriver == FindPlayerPed(0))
+		{
+			CPackets::VehicleDriverUpdate* packet = CPacketHandler::VehicleDriverUpdate__Collect(m_pVehicles[i]);
+			CNetwork::SendPacket(CPacketsID::VEHICLE_DRIVER_UPDATE, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED);
+		}
+		else if (CLocalPlayer::m_bIsHost && !m_pVehicles[i]->HasDriver())
+		{
+			CPackets::VehicleIdleUpdate* packet = CPacketHandler::VehicleIdleUpdate__Collect(m_pVehicles[i]);
+			CNetwork::SendPacket(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+		}
 	}
 }
