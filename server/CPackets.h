@@ -12,7 +12,11 @@ enum CPacketsID : unsigned short
 	VEHICLE_SPAWN,
 	PLAYER_SET_HOST,
 	ADD_EXPLOSION,
-	VEHICLE_REMOVE
+	VEHICLE_REMOVE,
+	VEHICLE_IDLE_UPDATE,
+	VEHICLE_DRIVER_UPDATE,
+	VEHICLE_ENTER,
+	VEHICLE_EXIT
 };
 
 class CPackets
@@ -164,5 +168,42 @@ public:
 			CPackets::VehicleRemove* packet = (CPackets::VehicleRemove*)data;
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
+	};
+
+	struct VehicleIdleUpdate
+	{
+		int vehicleid;
+		CVector pos;
+		CVector rot;
+		CVector roll;
+		CVector velocity;
+	};
+
+	struct VehicleDriverUpdate
+	{
+		int playerid;
+		int vehicleid;
+		CVector pos;
+		CVector rot;
+		CVector roll;
+		CVector velocity;
+		CControllerState controllerState;
+		unsigned char playerHealth;
+		unsigned char playerArmour;
+		unsigned char weapon;
+		unsigned short ammo;
+	};
+
+	struct VehicleEnter
+	{
+		int playerid;
+		int vehicleid;
+		unsigned char seatid;
+	};
+
+	struct VehicleExit
+	{
+		int playerid;
+		int vehicleid;
 	};
 };

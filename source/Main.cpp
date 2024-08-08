@@ -1,5 +1,6 @@
 #include "../project_files/stdafx.h"
-unsigned int lastTickCount = 0;
+unsigned int lastOnFootTickCount = 0;
+
 class CoopAndreas {
 public:
     CoopAndreas() {
@@ -13,25 +14,10 @@ public:
 			};
 		Events::gameProcessEvent += []
 			{
-				if (GetAsyncKeyState(VK_F1))
-				{
-					CMessages::AddBigMessage("AddBigMessage", 1000, 0);
-				}
-				if (GetAsyncKeyState(VK_F2))
-				{
-					CMessages::AddBigMessageQ("AddBigMessage", 1000, 0);
-				}
-				if (GetAsyncKeyState(VK_F3))
-				{
-					CMessages::AddBigMessage("AddBigMessage", 1000, 0);
-				}
-				if (GetAsyncKeyState(VK_F4))
-				{
-					CMessages::AddBigMessage("AddBigMessage", 1000, 0);
-				}
-
 				if (CNetwork::m_bConnected)
 				{
+					
+
 					CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
 					int syncRate = 40;
 
@@ -39,9 +25,9 @@ public:
 						packet->velocity.y == 0 &&
 						packet->velocity.z == 0)
 						syncRate = 100;
-					if (GetTickCount() > syncRate + 40)
+					if (GetTickCount() > lastOnFootTickCount + syncRate)
 					{
-						lastTickCount = GetTickCount();
+						lastOnFootTickCount = GetTickCount();
 						CPackets::PlayerOnFoot::m_last = packet;
 						CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
 						delete packet;

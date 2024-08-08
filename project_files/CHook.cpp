@@ -179,8 +179,8 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
         }
     }
 
-    if (!CLocalPlayer::m_bIsHost && entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
-        return;
+    /*if (!CLocalPlayer::m_bIsHost && entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
+        return;*/
 
     CWorld::Remove(entity);
 }

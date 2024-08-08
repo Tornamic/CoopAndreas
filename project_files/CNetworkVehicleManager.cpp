@@ -4,11 +4,26 @@ std::vector<CNetworkVehicle*> CNetworkVehicleManager::m_pVehicles;
 
 CNetworkVehicle* CNetworkVehicleManager::GetVehicle(int vehicleid)
 {
+	for (int i = 0; i != m_pVehicles.size(); i++)
+	{
+		if (m_pVehicles[i]->m_nVehicleId == vehicleid)
+		{
+			return m_pVehicles[i];
+		}
+	}
 	return nullptr;
 }
 
 CNetworkVehicle* CNetworkVehicleManager::GetVehicle(CVehicle* vehicle)
 {
+	for (int i = 0; i != m_pVehicles.size(); i++)
+	{
+		if (m_pVehicles[i]->m_pVehicle == vehicle)
+		{
+			return m_pVehicles[i];
+		}
+	}
+	
 	return nullptr;
 }
 
@@ -37,5 +52,16 @@ void CNetworkVehicleManager::Remove(CNetworkVehicle* vehicle)
 	if (it != m_pVehicles.end())
 	{
 		m_pVehicles.erase(it);
+	}
+}
+
+void CNetworkVehicleManager::ProcessAll()
+{
+	for (int i = 0; i != CNetworkVehicleManager::m_pVehicles.size(); i++)
+	{
+		if (CNetworkVehicleManager::m_pVehicles[i]->m_pVehicle == nullptr)
+			return;
+
+
 	}
 }

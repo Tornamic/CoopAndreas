@@ -7,5 +7,6 @@ public:
 	CNetworkVehicle(CVehicle* vehicle);
 	CNetworkVehicle(int vehicleid, int modelid, CVector pos, float rotation);
 	~CNetworkVehicle();
+	bool HasDriver();
 };
 

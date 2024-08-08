@@ -23,6 +23,19 @@ CNetworkVehicle::CNetworkVehicle(CVehicle* vehicle)
 
 CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float rotation)
 {
+    if (!CLocalPlayer::m_bIsHost)
+    {
+        for (int i = 0; i != CNetworkVehicleManager::m_pVehicles.size(); i++)
+        {
+            if (CNetworkVehicleManager::m_pVehicles[i]->m_nVehicleId == vehicleid)
+            {
+                CWorld::Remove(CNetworkVehicleManager::m_pVehicles[i]->m_pVehicle);
+                delete CNetworkVehicleManager::m_pVehicles[i]->m_pVehicle;
+                CNetworkVehicleManager::Remove(CNetworkVehicleManager::m_pVehicles[i]);
+            }
+        }
+    }
+
     unsigned char oldFlags = CStreaming::ms_aInfoForModel[modelid].m_nFlags;
     CStreaming::RequestModel(modelid, GAME_REQUIRED);
     CStreaming::LoadAllRequestedModels(false);
@@ -78,11 +91,6 @@ CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float 
 
     CWorld::Add(m_pVehicle);
 
-    if (m_pVehicle->m_nVehicleClass == VEHICLE_BIKE)
-        ((CBike*)m_pVehicle)->PlaceOnRoadProperly();
-    else if (m_pVehicle->m_nVehicleClass != VEHICLE_BOAT)
-        ((CAutomobile*)m_pVehicle)->PlaceOnRoadProperly();
-
     m_nVehicleId = vehicleid;
 }
 
@@ -95,6 +103,14 @@ CNetworkVehicle::~CNetworkVehicle()
         CNetwork::SendPacket(CPacketsID::VEHICLE_REMOVE, &vehicleRemovePacket, sizeof vehicleRemovePacket, ENET_PACKET_FLAG_RELIABLE);
     }
 
-    CWorld::Remove(m_pVehicle);
-    delete m_pVehicle;
+    //CWorld::Remove(m_pVehicle);
+    //delete m_pVehicle;
+}
+
+bool CNetworkVehicle::HasDriver()
+{
+    if (m_pVehicle == nullptr)
+        return false;
+
+    return m_pVehicle->m_pDriver != nullptr;
 }
