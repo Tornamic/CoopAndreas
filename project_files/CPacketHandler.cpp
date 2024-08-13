@@ -326,4 +326,45 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 
 // VehicleEnter
 
+void CPacketHandler::VehicleEnter__Handle(void* data, int size)
+{
+	CPackets::VehicleEnter* packet = (CPackets::VehicleEnter*)data;
+	
+	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
+
+	if (player == nullptr || vehicle == nullptr)
+	{
+		return;
+	}
+
+	if (packet->seatid == 0) // driver
+	{
+		plugin::Command<Commands::TASK_ENTER_CAR_AS_DRIVER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), 3000);
+	}
+	else // passenger (todo)
+	{
+
+	}
+}
+
 // VehicleExit
+
+void CPacketHandler::VehicleExit__Handle(void* data, int size)
+{
+	CPackets::VehicleExit* packet = (CPackets::VehicleExit*)data;
+
+	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
+
+	if (player == nullptr)
+	{
+		return;
+	}
+
+	if (player->m_pPed->m_pVehicle == nullptr)
+	{
+		return;
+	}
+
+	plugin::Command<Commands::TASK_LEAVE_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(player->m_pPed->m_pVehicle));
+}

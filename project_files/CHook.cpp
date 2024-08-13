@@ -185,6 +185,35 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
     CWorld::Remove(entity);
 }
 
+// when local player enters any vehicle
+static void __fastcall CTaskComplexEnterCarAsDriver__Ctor_Hook(CTaskComplexEnterCarAsDriver* This, int, CVehicle* vehicle)
+{
+    CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
+
+    if (networkVehicle == nullptr)
+    {
+        CChat::AddMessage("ERROR: this vehicle is not synced");
+        plugin::CallMethod<0x6402F0, CTaskComplexEnterCarAsDriver*, CVehicle*>(This, vehicle);
+        return;
+    }
+
+    CPackets::VehicleEnter packet{};
+
+    packet.seatid = 0;
+    packet.vehicleid = networkVehicle->m_nVehicleId;
+
+    CNetwork::SendPacket(CPacketsID::VEHICLE_ENTER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+
+    plugin::CallMethod<0x6402F0, CTaskComplexEnterCarAsDriver*, CVehicle*>(This, vehicle);
+}
+
+static void __fastcall CTaskComplexLeaveCar__Ctor_Hook(CTaskComplexLeaveCar* This, int, CVehicle* vehicle, int targetDoor, int delayTime, bool sensibleLeaveCar, bool forceGetOut)
+{
+    CPackets::VehicleExit packet{};
+    CNetwork::SendPacket(CPacketsID::VEHICLE_EXIT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    plugin::CallMethod<0x63B8C0, CTaskComplexLeaveCar*, CVehicle*, int, int, bool, bool>(This, vehicle, targetDoor, delayTime, sensibleLeaveCar, forceGetOut);
+}
+
 void CHook::Init()
 {   
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -248,4 +277,9 @@ void CHook::Init()
     patch::RedirectJump(0x609534, CWorld__Remove_Hook);
     patch::RedirectCall(std::vector<int>(CWorld__Remove_Addresses, CWorld__Remove_Addresses + sizeof(CWorld__Remove_Addresses) / 4), CWorld__Remove_Hook);
     
+    patch::RedirectCall(0x570A1B, CTaskComplexEnterCarAsDriver__Ctor_Hook);
+    patch::RedirectCall(0x570A94, CTaskComplexEnterCarAsDriver__Ctor_Hook);
+    
+    patch::RedirectCall(0x57049C, CTaskComplexLeaveCar__Ctor_Hook);
+    patch::RedirectCall(0x5703F7, CTaskComplexLeaveCar__Ctor_Hook);
 }

@@ -199,11 +199,24 @@ public:
 		int playerid;
 		int vehicleid;
 		unsigned char seatid;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::VehicleEnter* packet = (CPackets::VehicleEnter*)data;
+			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_ENTER, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+		}
 	};
 
 	struct VehicleExit
 	{
 		int playerid;
-		int vehicleid;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::VehicleExit* packet = (CPackets::VehicleExit*)data;
+			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_EXIT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+		}
 	};
 };

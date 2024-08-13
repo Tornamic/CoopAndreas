@@ -150,6 +150,5 @@ public:
 	struct VehicleExit
 	{
 		int playerid;
-		int vehicleid;
 	};
 };

@@ -18,5 +18,7 @@ public:
 	static void VehicleIdleUpdate__Handle(void* data, int size);
 	static CPackets::VehicleDriverUpdate* VehicleDriverUpdate__Collect(CNetworkVehicle* vehicle);
 	static void VehicleDriverUpdate__Handle(void* data, int size);
+	static void VehicleEnter__Handle(void* data, int size);
+	static void VehicleExit__Handle(void* data, int size);
 };
 

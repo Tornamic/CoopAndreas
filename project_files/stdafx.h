@@ -46,6 +46,8 @@
 #include "CBmx.h"
 #include "CTrailer.h"
 #include "CBoat.h"
+#include "CTaskComplexEnterCarAsDriver.h"
+#include "CTaskComplexLeaveCar.h"
 
 // classes ---------------------------------------------------------------------------------
 
