@@ -51,10 +51,6 @@ public:
 		bool ducking;
 		float aimX;
 		float aimY;
-
-
-		// last sent
-		static inline PlayerOnFoot* m_last = nullptr;
 	};
 
 	#pragma pack(1)

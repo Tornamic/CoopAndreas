@@ -16,7 +16,6 @@ public:
 			{
 				if (CNetwork::m_bConnected)
 				{
-					CNetworkVehicleManager::ProcessAll();
 
 					CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
 					int syncRate = 40;
@@ -27,10 +26,17 @@ public:
 						syncRate = 100;
 					if (GetTickCount() > lastOnFootTickCount + syncRate)
 					{
+						CPlayerPed* localPlayer = FindPlayerPed(0);
+						if (localPlayer->m_pVehicle && localPlayer->m_pVehicle->m_pDriver == localPlayer)
+						{
+							CNetworkVehicleManager::ProcessAll();
+						}
+						else
+						{
+							CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+							delete packet;
+						}
 						lastOnFootTickCount = GetTickCount();
-						CPackets::PlayerOnFoot::m_last = packet;
-						CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
-						delete packet;
 					}
 				}
 			};

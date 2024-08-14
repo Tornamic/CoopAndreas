@@ -177,6 +177,15 @@ public:
 		CVector rot;
 		CVector roll;
 		CVector velocity;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (!CPlayerManager::GetPlayer(peer)->m_bIsHost)
+				return;
+
+			CPackets::VehicleIdleUpdate* packet = (CPackets::VehicleIdleUpdate*)data;
+			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+		}
 	};
 
 	struct VehicleDriverUpdate
@@ -192,6 +201,13 @@ public:
 		unsigned char playerArmour;
 		unsigned char weapon;
 		unsigned short ammo;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::VehicleDriverUpdate* packet = (CPackets::VehicleDriverUpdate*)data;
+			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_DRIVER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+		}
 	};
 
 	struct VehicleEnter

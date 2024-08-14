@@ -24,6 +24,16 @@ void CChat::AddMessage(const std::string& message)
     m_aMessages.push_back(message);
 }
 
+void CChat::AddMessage(const char* format, ...)
+{
+    char buffer[1024];
+    va_list args;
+    va_start(args, format);
+    std::vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+    AddMessage(std::string(buffer));
+}
+
 void CChat::Draw()
 {
     if (CDXFont::m_pD3DXFont)

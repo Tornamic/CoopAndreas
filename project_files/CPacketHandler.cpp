@@ -307,6 +307,8 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
 	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
 
+	CChat::AddMessage("VehicleDriverUpdate__Handle");
+
 	if (vehicle == nullptr)
 		return;
 
@@ -338,6 +340,9 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 		return;
 	}
 
+
+	CChat::AddMessage("player %d entered vehicleid %d", packet->playerid, packet->vehicleid);
+
 	if (packet->seatid == 0) // driver
 	{
 		plugin::Command<Commands::TASK_ENTER_CAR_AS_DRIVER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), 3000);
@@ -366,5 +371,6 @@ void CPacketHandler::VehicleExit__Handle(void* data, int size)
 		return;
 	}
 
+	CChat::AddMessage("player %d exited from vehicle", packet->playerid);
 	plugin::Command<Commands::TASK_LEAVE_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(player->m_pPed->m_pVehicle));
 }

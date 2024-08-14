@@ -62,6 +62,72 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     pad->OldState = oldOldState;
 }
 
+
+void __fastcall CVehicle__ProcessControl_Hook()
+{
+    CVehicle* vehicle = nullptr;
+    DWORD vtbl = 0;
+    DWORD call_addr = 0;
+
+    _asm mov vehicle, ecx
+    _asm mov eax, [ecx]
+    _asm mov vtbl, eax
+
+    if (vtbl == 0x871120)      // CAutomobile
+        call_addr = 0x6B1880;
+    else if (vtbl == 0x8721A0) // CBoat
+        call_addr = 0x6F1770;
+    else if (vtbl == 0x871360) // CBike
+        call_addr = 0x6B9250;
+    else if (vtbl == 0x871948) // CPlane
+        call_addr = 0x6C9260;
+    else if (vtbl == 0x871680) // CHeli
+        call_addr = 0x6C7050;
+    else if (vtbl == 0x871528) // CBmx
+        call_addr = 0x6BFA30;
+    else if (vtbl == 0x8717d8) // CMonsterTruck
+        call_addr = 0x6C8250;
+    else if (vtbl == 0x871AE8) // CQuadBike
+        call_addr = 0x6CDCC0;
+    else if (vtbl == 0x872370) // CTrain
+        call_addr = 0x6F86A0;
+
+    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(vehicle->m_pDriver);
+
+    if (player == nullptr)
+    {
+        _asm mov ecx, vehicle
+        _asm mov eax, call_addr
+        _asm call eax
+        return;
+    }
+
+    CWorld::PlayerInFocus = player->GetInternalId();
+
+    CPad* pad = player->m_pPed->GetPadFromPlayer();
+
+    CControllerState newOldState = pad->NewState;
+    CControllerState oldOldState = pad->OldState;
+
+    if (player->m_lOnFoot != nullptr && player->m_oOnFoot != nullptr)
+    {
+        CUtil::CopyControllerState(pad->OldState, player->m_oOnFoot->controllerState);
+        CUtil::CopyControllerState(pad->NewState, player->m_lOnFoot->controllerState);
+
+        player->m_pPed->m_fHealth = player->m_lOnFoot->health;
+        player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
+    }
+
+    _asm mov ecx, vehicle
+    _asm mov eax, call_addr
+    _asm call eax
+
+    CWorld::PlayerInFocus = 0;
+
+    pad->NewState = newOldState;
+    pad->OldState = oldOldState;
+}
+
 static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding, CEntity* owner, CEntity* victim, CVector* startPoint, CVector* endPoint, CColPoint* colPoint, int incrementalHit)
 {
     if (owner == FindPlayerPed(0))
@@ -282,4 +348,14 @@ void CHook::Init()
     
     patch::RedirectCall(0x57049C, CTaskComplexLeaveCar__Ctor_Hook);
     patch::RedirectCall(0x5703F7, CTaskComplexLeaveCar__Ctor_Hook);
+
+    patch::SetPointer(0x871148, CVehicle__ProcessControl_Hook);
+    patch::SetPointer(0x8721C8, CVehicle__ProcessControl_Hook);
+    patch::SetPointer(0x871388, CVehicle__ProcessControl_Hook);
+    patch::SetPointer(0x871970, CVehicle__ProcessControl_Hook);
+    patch::SetPointer(0x8716A8, CVehicle__ProcessControl_Hook);
+    patch::SetPointer(0x871550, CVehicle__ProcessControl_Hook);
+    patch::SetPointer(0x871800, CVehicle__ProcessControl_Hook);
+    patch::SetPointer(0x871B10, CVehicle__ProcessControl_Hook);
+    patch::SetPointer(0x872398, CVehicle__ProcessControl_Hook);
 }
