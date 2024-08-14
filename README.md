@@ -31,14 +31,16 @@ used plugin-sdk commit https://github.com/DK22Pac/plugin-sdk/tree/380105ec5242cd
 ### Current Tasks
 - [ ] vehicle sync
   - [X] spawn/delete
-  - [ ] enter/exit
+  - [X] enter/exit
   - [ ] color(1/2) sync
   - [ ] paintjob sync
   - [ ] tuning sync
   - [ ] hydraulics
   - [ ] plane wheels
   - [ ] turret aim/shot
-  - [ ] pos, speed, quat
+  - [ ] horn
+  - [X] keys (provides steer angles, brake, etc.)
+  - [X] pos, speed, quat
   - [ ] health
   - [ ] damage status
   - [ ] trailer sync
