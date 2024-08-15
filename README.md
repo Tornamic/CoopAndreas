@@ -4,7 +4,30 @@ Videos, pictures, news, suggestions, and communication can be found here:
 
 [Discord Server](https://discord.gg/TwQsR4qxVx)
 
-used plugin-sdk commit https://github.com/DK22Pac/plugin-sdk/tree/380105ec5242cdb3a0cbc18505b151308dd85b53
+## Building
+
+1. Verify that you have the C++ and C# packages installed in Visual Studio 2022.
+
+2. Download [THIS version of the plugin-sdk](https://github.com/DK22Pac/plugin-sdk/tree/380105ec5242cdb3a0cbc18505b151308dd85b53) and install it using [THIS INSTRUCTION](https://github.com/DK22Pac/plugin-sdk/wiki/Set-up-plugin-sdk). Set up your GTA-SA and plugin-sdk folders.
+
+3. Install the enet library using the following instructions:
+
+```ps
+# Open PowerShell:
+
+# Install vcpkg if you don't have it
+git clone https://github.com/microsoft/vcpkg.git
+cd vcpkg
+./bootstrap-vcpkg.bat
+
+# Install enet
+./vcpkg install enet
+./vcpkg integrate install
+```
+
+4. Open project_files/CoopAndreas.sln in Visual Studio 2022 and build every project (Ctrl+Shift+B).
+
+
 
 ## TODO list:
 ### Already Done ✓
