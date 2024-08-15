@@ -23,6 +23,8 @@ cd vcpkg
 # Install enet
 ./vcpkg install enet
 ./vcpkg integrate install
+./vcpkg install enet:x86-windows
+./vcpkg integrate install
 ```
 
 4. Open project_files/CoopAndreas.sln in Visual Studio 2022 and build every project (Ctrl+Shift+B).
