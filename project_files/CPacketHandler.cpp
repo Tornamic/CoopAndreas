@@ -243,10 +243,14 @@ void CPacketHandler::VehicleRemove__Handle(void* data, int size)
 	CChat::AddMessage(buffer);
 
 	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
+	
+	if (vehicle->m_pVehicle)
+	{
+		plugin::Command<Commands::DELETE_CAR>(CPools::GetVehicleRef(vehicle->m_pVehicle));
+	}
 
 	CNetworkVehicleManager::Remove(vehicle);
-
-	delete vehicle;
+	
 }
 
 // VehicleIdleUpdate
@@ -307,8 +311,6 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
 	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
 
-	CChat::AddMessage("VehicleDriverUpdate__Handle");
-
 	if (vehicle == nullptr)
 		return;
 
@@ -345,7 +347,10 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 
 	if (packet->seatid == 0) // driver
 	{
-		plugin::Command<Commands::TASK_ENTER_CAR_AS_DRIVER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), 3000);
+		if(packet->force)
+			plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(player->m_pPed->m_pVehicle));
+		else
+			plugin::Command<Commands::TASK_ENTER_CAR_AS_DRIVER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), 3000);
 	}
 	else // passenger (todo)
 	{
@@ -372,5 +377,13 @@ void CPacketHandler::VehicleExit__Handle(void* data, int size)
 	}
 
 	CChat::AddMessage("player %d exited from vehicle", packet->playerid);
-	plugin::Command<Commands::TASK_LEAVE_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(player->m_pPed->m_pVehicle));
+
+	if (packet->force)
+	{
+		CVector doorPos{};
+		player->m_pPed->m_pVehicle->GetComponentWorldPosition(8, doorPos); // right front door (driver)
+		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(player->m_pPed), doorPos.x, doorPos.y, doorPos.z);
+	}
+	else
+		plugin::Command<Commands::TASK_LEAVE_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(player->m_pPed->m_pVehicle));
 }

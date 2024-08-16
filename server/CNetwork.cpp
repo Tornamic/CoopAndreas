@@ -177,6 +177,35 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         strcpy_s(getNamePacket.name, i->m_Name);
         CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_GET_NAME, &getNamePacket, sizeof CPackets::PlayerGetName, ENET_PACKET_FLAG_RELIABLE);
     }
+
+    for (auto i : CVehicleManager::m_pVehicles)
+    {
+        CPackets::VehicleSpawn vehicleSpawnPacket
+        { 
+            i->m_nVehicleId,
+            i->m_nModelId,
+            i->m_vecPosition,
+            i->m_vecRotation.z
+        };
+
+        CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
+
+        for (unsigned char j = 0; j < 8; j++)
+        {
+            if (i->m_pPlayers[j] == nullptr)
+                continue;
+
+            CPackets::VehicleEnter vehicleEnterPacket{};
+
+            vehicleEnterPacket.playerid = i->m_pPlayers[j]->m_iPlayerId;
+            vehicleEnterPacket.vehicleid = i->m_nVehicleId;
+            vehicleEnterPacket.force = true;
+            vehicleEnterPacket.seatid = j;
+
+            CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_ENTER, &vehicleEnterPacket, sizeof vehicleEnterPacket, ENET_PACKET_FLAG_RELIABLE);
+        }
+    }
+
     CPackets::PlayerHandshake handshakePacket = { freeId };
     CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_HANDSHAKE, &handshakePacket, sizeof handshakePacket, ENET_PACKET_FLAG_RELIABLE);
 

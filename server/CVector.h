@@ -6,6 +6,11 @@ public:
 	float y;
 	float z;
 
+	CVector()
+	{
+		x = y = z = 0.0f;
+	}
+
 	CVector(float x, float y, float z)
 	{
 		this->x = x;

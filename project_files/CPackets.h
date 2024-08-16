@@ -141,10 +141,12 @@ public:
 		int playerid;
 		int vehicleid;
 		unsigned char seatid;
+		bool force;
 	};
 
 	struct VehicleExit
 	{
 		int playerid;
+		bool force;
 	};
 };

@@ -16,10 +16,13 @@
 
 // classes ---------------------------------------------------------------------------------
 
-#include "CNetwork.h"
-#include "CPlayer.h"
-#include "CPlayerManager.h"
-
 #include "CVector.h"
 #include "CControllerState.h"
+
+#include "CNetwork.h"
+#include "CPlayer.h"
+#include "CVehicle.h"
+#include "CPlayerManager.h"
+#include "CVehicleManager.h"
+
 #include "CPackets.h"

@@ -1,5 +1,6 @@
 #include "../project_files/stdafx.h"
-unsigned int lastOnFootTickCount = 0;
+
+unsigned int lastSyncTickRate = 0;
 
 class CoopAndreas {
 public:
@@ -17,26 +18,29 @@ public:
 				if (CNetwork::m_bConnected)
 				{
 
-					CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
-					int syncRate = 40;
+					CPlayerPed* localPlayer = FindPlayerPed(0);
 
-					if (packet->velocity.x == 0 &&
-						packet->velocity.y == 0 &&
-						packet->velocity.z == 0)
+					int syncRate = 40;
+					CVector velocity{};
+
+					if (localPlayer->m_pVehicle)
+						velocity = localPlayer->m_pVehicle->m_vecMoveSpeed;
+					else
+						velocity =  localPlayer->m_vecMoveSpeed;
+
+					if (velocity.x == 0 &&
+						velocity.y == 0 &&
+						velocity.z == 0)
 						syncRate = 100;
-					if (GetTickCount() > lastOnFootTickCount + syncRate)
+
+					if (GetTickCount() > lastSyncTickRate + syncRate)
 					{
-						CPlayerPed* localPlayer = FindPlayerPed(0);
-						if (localPlayer->m_pVehicle && localPlayer->m_pVehicle->m_pDriver == localPlayer)
-						{
-							CNetworkVehicleManager::ProcessAll();
-						}
-						else
-						{
-							CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
-							delete packet;
-						}
-						lastOnFootTickCount = GetTickCount();
+						CNetworkVehicleManager::ProcessAll();
+
+						CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
+						CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+
+						lastSyncTickRate = GetTickCount();
 					}
 				}
 			};

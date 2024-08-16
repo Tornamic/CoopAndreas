@@ -151,8 +151,12 @@ public:
 			if (!CPlayerManager::GetPlayer(peer)->m_bIsHost)
 				return;
 
+
 			CPackets::VehicleSpawn* packet = (CPackets::VehicleSpawn*)data;
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			
+			CVehicle* vehicle = new CVehicle(packet->vehicleid, packet->modelid, packet->pos, packet->rot);
+			CVehicleManager::Add(vehicle);
 		}
 	};
 
@@ -167,6 +171,9 @@ public:
 
 			CPackets::VehicleRemove* packet = (CPackets::VehicleRemove*)data;
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+
+			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
+			CVehicleManager::Remove(vehicle);
 		}
 	};
 
@@ -185,6 +192,11 @@ public:
 
 			CPackets::VehicleIdleUpdate* packet = (CPackets::VehicleIdleUpdate*)data;
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+
+			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
+
+			vehicle->m_vecPosition = packet->pos;
+			vehicle->m_vecRotation = packet->rot;
 		}
 	};
 
@@ -207,6 +219,11 @@ public:
 			CPackets::VehicleDriverUpdate* packet = (CPackets::VehicleDriverUpdate*)data;
 			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_DRIVER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+
+			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
+
+			vehicle->m_vecPosition = packet->pos;
+			vehicle->m_vecRotation = packet->rot;
 		}
 	};
 
@@ -215,6 +232,7 @@ public:
 		int playerid;
 		int vehicleid;
 		unsigned char seatid;
+		bool force; // if true - put directly in vehicle (without any anim)
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -227,6 +245,7 @@ public:
 	struct VehicleExit
 	{
 		int playerid;
+		bool force;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
