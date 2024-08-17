@@ -39,18 +39,18 @@ public:
 
 	struct PlayerOnFoot
 	{
-		int id;
-		CVector position;
-		CVector velocity;
-		float rotation;
-		CControllerState controllerState;
-		unsigned char health;
-		unsigned char armour;
-		unsigned char weapon;
-		unsigned short ammo;
-		bool ducking;
-		float aimX;
-		float aimY;
+		int id = 0;
+		CVector position = CVector();
+		CVector velocity = CVector();
+		float rotation = 0.0f;
+		CControllerState controllerState = CControllerState();
+		unsigned char health = 100;
+		unsigned char armour = 0;
+		unsigned char weapon = 0;
+		unsigned short ammo = 0;
+		bool ducking = false;
+		float aimX = 0.0f;
+		float aimY = 0.0f;
 	};
 
 	#pragma pack(1)

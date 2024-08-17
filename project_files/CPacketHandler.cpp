@@ -243,14 +243,9 @@ void CPacketHandler::VehicleRemove__Handle(void* data, int size)
 	CChat::AddMessage(buffer);
 
 	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
-	
-	if (vehicle->m_pVehicle)
-	{
-		plugin::Command<Commands::DELETE_CAR>(CPools::GetVehicleRef(vehicle->m_pVehicle));
-	}
 
 	CNetworkVehicleManager::Remove(vehicle);
-	
+	delete vehicle;
 }
 
 // VehicleIdleUpdate
@@ -311,7 +306,7 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
 	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
 
-	if (vehicle == nullptr)
+	if (!player || !player->m_pPed || !vehicle || !vehicle->m_pVehicle)
 		return;
 
 	vehicle->m_pVehicle->m_matrix->pos = packet->pos;
@@ -347,8 +342,18 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 
 	if (packet->seatid == 0) // driver
 	{
-		if(packet->force)
-			plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(player->m_pPed->m_pVehicle));
+		if (packet->force)
+		{
+			for (unsigned char i = 0; i < 5; i++)
+			{
+				if (vehicle->m_pVehicle)
+					break;
+
+				Sleep(100);
+			}
+
+			plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle));
+		}
 		else
 			plugin::Command<Commands::TASK_ENTER_CAR_AS_DRIVER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), 3000);
 	}

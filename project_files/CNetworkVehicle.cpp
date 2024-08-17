@@ -92,6 +92,8 @@ CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float 
     CWorld::Add(m_pVehicle);
 
     m_nVehicleId = vehicleid;
+
+    
 }
 
 CNetworkVehicle::~CNetworkVehicle()
@@ -102,9 +104,10 @@ CNetworkVehicle::~CNetworkVehicle()
         vehicleRemovePacket.vehicleid = m_nVehicleId;
         CNetwork::SendPacket(CPacketsID::VEHICLE_REMOVE, &vehicleRemovePacket, sizeof vehicleRemovePacket, ENET_PACKET_FLAG_RELIABLE);
     }
-
-    //CWorld::Remove(m_pVehicle);
-    //delete m_pVehicle;
+    else
+    {
+        plugin::Command<Commands::DELETE_CAR>(CPools::GetVehicleRef(m_pVehicle));
+    }
 }
 
 bool CNetworkVehicle::HasDriver()

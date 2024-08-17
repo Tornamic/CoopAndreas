@@ -185,7 +185,7 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
             i->m_nVehicleId,
             i->m_nModelId,
             i->m_vecPosition,
-            i->m_vecRotation.z
+            i->m_vecRotation.y
         };
 
         CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);

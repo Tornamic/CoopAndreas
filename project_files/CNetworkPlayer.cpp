@@ -73,6 +73,9 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 
 	m_pPed = player;
 	m_iPlayerId = id;
+
+	m_lOnFoot = m_oOnFoot = new CPackets::PlayerOnFoot();
+
 }
 
 int CNetworkPlayer::GetInternalId() // most used for CWorld::PlayerInFocus

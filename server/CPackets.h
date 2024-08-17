@@ -237,8 +237,14 @@ public:
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::VehicleEnter* packet = (CPackets::VehicleEnter*)data;
-			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+			CPlayer* player = CPlayerManager::GetPlayer(peer);
+			player->m_nSeatId = packet->seatid;
+			player->m_nVehicleId = packet->vehicleid;
+			packet->playerid = player->m_iPlayerId;
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_ENTER, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+
+			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
+			vehicle->m_pPlayers[packet->seatid] = player;
 		}
 	};
 
@@ -250,8 +256,14 @@ public:
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::VehicleExit* packet = (CPackets::VehicleExit*)data;
-			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+			CPlayer* player = CPlayerManager::GetPlayer(peer);
+			packet->playerid = player->m_iPlayerId;
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_EXIT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+
+			CVehicle* vehicle = CVehicleManager::GetVehicle(player->m_nVehicleId);
+			vehicle->m_pPlayers[player->m_nSeatId] = nullptr;
+			player->m_nSeatId = -1;
+			player->m_nVehicleId = -1;
 		}
 	};
 };
