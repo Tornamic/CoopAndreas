@@ -9,6 +9,7 @@ public:
     static int GetFreeID();
     static void Add(CNetworkVehicle* vehicle);
     static void Remove(CNetworkVehicle* vehicle);
-    static void ProcessAll();
+    static void UpdateDriver(CVehicle* vehicle);
+    static void UpdateIdle();
 };
 

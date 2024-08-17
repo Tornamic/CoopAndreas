@@ -1,6 +1,8 @@
 #include "../project_files/stdafx.h"
 
-unsigned int lastSyncTickRate = 0;
+unsigned int lastOnFootSyncTickRate = 0;
+unsigned int lastDriverSyncTickRate = 0;
+unsigned int lastIdleVehicleSyncTickRate = 0;
 
 class CoopAndreas {
 public:
@@ -23,24 +25,33 @@ public:
 					int syncRate = 40;
 					CVector velocity{};
 
-					if (localPlayer->m_pVehicle)
-						velocity = localPlayer->m_pVehicle->m_vecMoveSpeed;
-					else
-						velocity =  localPlayer->m_vecMoveSpeed;
+					bool isInVehicle = localPlayer->m_pVehicle && localPlayer->m_pVehicle->m_pDriver == localPlayer;
+					velocity = isInVehicle ? localPlayer->m_pVehicle->m_vecMoveSpeed : localPlayer->m_vecMoveSpeed;
 
-					if (velocity.x == 0 &&
-						velocity.y == 0 &&
-						velocity.z == 0)
-						syncRate = 100;
-
-					if (GetTickCount() > lastSyncTickRate + syncRate)
+					if (velocity.x == 0 && velocity.y == 0 && velocity.z == 0)
 					{
-						CNetworkVehicleManager::ProcessAll();
+						syncRate = 100;
+					}
 
-						CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
-						CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+					if (GetTickCount() > (isInVehicle ? lastDriverSyncTickRate : lastOnFootSyncTickRate) + syncRate)
+					{
+						if (isInVehicle)
+						{
+							CNetworkVehicleManager::UpdateDriver(localPlayer->m_pVehicle);
+							lastDriverSyncTickRate = GetTickCount();
+						}
+						else
+						{
+							CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
+							CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+							lastOnFootSyncTickRate = GetTickCount();
+						}
+					}
 
-						lastSyncTickRate = GetTickCount();
+					if (GetTickCount() > lastIdleVehicleSyncTickRate + 250)
+					{
+						CNetworkVehicleManager::UpdateIdle();
+						lastIdleVehicleSyncTickRate = GetTickCount();
 					}
 				}
 			};
