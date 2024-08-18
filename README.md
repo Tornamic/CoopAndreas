@@ -98,6 +98,10 @@ cd vcpkg
   - [ ] muscle
   - [ ] weapon skills
   - [ ] fight styles
+  - [ ] sync money
+  - [ ] breath level bar
+  - [ ] stamina sync
+  - [ ] max hp sync
 - [ ] style
   - [ ] tatoo
   - [ ] clothes
@@ -120,6 +124,12 @@ cd vcpkg
   - [ ] effects
   - [ ] peds
   - [ ] camera
+- [ ] fix weapon desync
+  - [ ] fix grenade throw distance
+  - [ ] fix rpg aim state
+- [ ] fix interior enter exit crash (fix CPlayerPed dctor)
+- [ ] cheat code sync
+- [ ] pickup (collectables) sync
 
 ### Minor tasks and ideas
 - [ ] Sync laser sniper rifle red dot with all players
