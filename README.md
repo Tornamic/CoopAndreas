@@ -137,7 +137,7 @@ cd vcpkg
 ### Minor tasks and ideas
 - [ ] Sync laser sniper rifle red dot with all players
 - [ ] Sync moon sniper rifle shot changing size easter egg with all players
-
+- [ ] hot coffee implementation 😏
 ## TODO Launcher:
 ### Already Done ✓
 - [X] setup project and create forms
