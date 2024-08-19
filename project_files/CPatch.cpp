@@ -137,9 +137,16 @@ void FixCrashes()
     // PlayerInfo checks in CPlayerPed::ProcessControl
     patch::Nop(0x60F2C4, 25);
 
-    // fix crash when closing game caused by shadows
-    //patch::SetUChar(0x705B33, 0x75); // jz to jnz
-    //patch::Nop(0x706B29, 5);
+    // fix CPhysical dctor caused by realtime shadow
+    patch::Nop(0x705B3B, 10);
+
+    // fix CPlayerPed dctor
+    // xor ecx, ecx ; set meeleAnimReferencedExtra to 0
+    // nop ; fill empty byte
+    /*patch::SetUChar(0x60941A + 0, 0x31);
+    patch::SetUChar(0x60941A + 1, 0xC9);
+    patch::SetUChar(0x60941A + 2, 0x90);*/
+
 }
 
 void CPatch::ApplyPatches()

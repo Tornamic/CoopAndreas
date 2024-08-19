@@ -53,7 +53,10 @@ cd vcpkg
   - [X] weapon icon
 - [X] define which player is the host
 - [X] explosion sync
-  
+- [X] fix interior enter exit crash (fix CPlayerPed dctor)
+### HOT (highest priority) Tasks
+- [ ] create player/veh by on foot/veh sync if it not created
+
 ### Current Tasks
 - [ ] proper key sync
 - [ ] vehicle sync
@@ -128,7 +131,6 @@ cd vcpkg
 - [ ] fix weapon desync
   - [ ] fix grenade throw distance
   - [ ] fix rpg aim state
-- [ ] fix interior enter exit crash (fix CPlayerPed dctor)
 - [ ] cheat code sync
 - [ ] pickup (collectables) sync
 - [ ] jetpack sync

@@ -21,13 +21,18 @@ CNetworkPlayer::~CNetworkPlayer()
 {
 	if (m_pPed == nullptr) return;
 
+	if (m_pPed->m_pVehicle != nullptr)
+	{
+		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
+	}
+
 	DWORD dwPedPtr = (DWORD)m_pPed;
 
 	// fix destructor crash
 
-	_asm mov esi, dwPedPtr
+	/*_asm mov esi, dwPedPtr
 	_asm mov eax, [esi + 1152]
-	_asm mov dword ptr[eax + 76], 0
+	_asm mov dword ptr[eax + 76], 0*/
 
 	// call destroy method
 	_asm mov ecx, dwPedPtr

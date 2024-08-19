@@ -283,6 +283,12 @@ static void __fastcall CTaskComplexLeaveCar__Ctor_Hook(CTaskComplexLeaveCar* Thi
     plugin::CallMethod<0x63B8C0, CTaskComplexLeaveCar*, CVehicle*, int, int, bool, bool>(This, vehicle, targetDoor, delayTime, sensibleLeaveCar, forceGetOut);
 }
 
+static void __fastcall CPlayerPed__dctor_Hook(CPlayerPed* This, int)
+{
+    This->m_pPlayerData->m_nMeleeWeaponAnimReferencedExtra = 0;
+    plugin::CallMethod<0x6093B0, CPlayerPed*>(This);
+}
+
 void CHook::Init()
 {   
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -361,4 +367,7 @@ void CHook::Init()
     patch::SetPointer(0x871800, CVehicle__ProcessControl_Hook);
     patch::SetPointer(0x871B10, CVehicle__ProcessControl_Hook);
     patch::SetPointer(0x872398, CVehicle__ProcessControl_Hook);
+
+    // fix CPlayerPed dctor crash
+    patch::RedirectCall(0x60A9A3, CPlayerPed__dctor_Hook);
 }

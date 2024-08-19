@@ -218,6 +218,13 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
 
     // find player instance by enetpeer
     CPlayer* player = CPlayerManager::GetPlayer(event.peer);
+    
+    CVehicle* vehicle = CVehicleManager::GetVehicle(player->m_nVehicleId);
+
+    if (vehicle != nullptr)
+    {
+        vehicle->m_pPlayers[player->m_nSeatId] = nullptr;
+    }
 
     // remove
     CPlayerManager::Remove(player);
