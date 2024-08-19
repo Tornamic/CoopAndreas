@@ -227,6 +227,11 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
 }
 static void __cdecl CWorld__Remove_Hook(CEntity* entity)
 {
+    DWORD ret_adr;
+
+    _asm mov eax, [esp]
+    _asm mov ret_adr, eax
+
     CVehicle* vehicle = nullptr;
     CNetworkVehicle* networkVehicle = nullptr;
     bool isNetworkVehicle = false;
@@ -235,28 +240,15 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
     {
         vehicle = (CVehicle*)entity;
         networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
-        if (networkVehicle != nullptr && CLocalPlayer::m_bIsHost)
+        if (networkVehicle != nullptr)
         {
             isNetworkVehicle = true;
-            CNetworkVehicleManager::Remove(networkVehicle);
-            delete networkVehicle;
+            if (CLocalPlayer::m_bIsHost)
+            {
+                CNetworkVehicleManager::Remove(networkVehicle);
+                delete networkVehicle;
+            }
         }
-    }
-    
-    if(CLocalPlayer::m_bIsHost)
-        CWorld::Remove(entity);
-    else if(!isNetworkVehicle)
-        CWorld::Remove(entity);
-}
-
-static void __cdecl OPCODE_A6_CWorld__Remove_Hook(CEntity* entity)
-{
-    CVehicle* vehicle = (CVehicle*)entity;
-    CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
-    if (networkVehicle != nullptr && CLocalPlayer::m_bIsHost)
-    {
-        CNetworkVehicleManager::Remove(networkVehicle);
-        delete networkVehicle;
     }
 
     CWorld::Remove(entity);
@@ -369,6 +361,4 @@ void CHook::Init()
     patch::SetPointer(0x871800, CVehicle__ProcessControl_Hook);
     patch::SetPointer(0x871B10, CVehicle__ProcessControl_Hook);
     patch::SetPointer(0x872398, CVehicle__ProcessControl_Hook);
-
-    patch::RedirectCall(0x467B3C, OPCODE_A6_CWorld__Remove_Hook);
 }

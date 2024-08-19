@@ -17,11 +17,13 @@ CNetworkVehicle::CNetworkVehicle(CVehicle* vehicle)
     vehicleSpawnPacket.modelid = vehicle->m_nModelIndex;
     vehicleSpawnPacket.pos = vehicle->m_matrix->pos;
     vehicleSpawnPacket.rot = vehicle->GetHeading();
+    vehicleSpawnPacket.color1 = vehicle->m_nPrimaryColor;
+    vehicleSpawnPacket.color2 = vehicle->m_nSecondaryColor;
     CNetwork::SendPacket(CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
 
 }
 
-CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float rotation)
+CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2)
 {
     if (!CLocalPlayer::m_bIsHost)
     {
@@ -92,8 +94,6 @@ CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float 
     CWorld::Add(m_pVehicle);
 
     m_nVehicleId = vehicleid;
-
-    
 }
 
 CNetworkVehicle::~CNetworkVehicle()
@@ -106,7 +106,10 @@ CNetworkVehicle::~CNetworkVehicle()
     }
     else
     {
-        plugin::Command<Commands::DELETE_CAR>(CPools::GetVehicleRef(m_pVehicle));
+        if (m_pVehicle && CPools::GetVehicleRef(m_pVehicle))
+        {
+            plugin::Command<Commands::DELETE_CAR>(CPools::GetVehicleRef(m_pVehicle));
+        }
     }
 }
 

@@ -145,7 +145,9 @@ public:
 		unsigned short modelid;
 		CVector pos;
 		float rot;
-
+		unsigned char color1;
+		unsigned char color2;
+		
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			if (!CPlayerManager::GetPlayer(peer)->m_bIsHost)
@@ -184,6 +186,8 @@ public:
 		CVector rot;
 		CVector roll;
 		CVector velocity;
+		unsigned char color1;
+		unsigned char color2;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -213,6 +217,8 @@ public:
 		unsigned char playerArmour;
 		unsigned char weapon;
 		unsigned short ammo;
+		unsigned char color1;
+		unsigned char color2;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

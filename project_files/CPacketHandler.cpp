@@ -226,7 +226,9 @@ void CPacketHandler::VehicleSpawn__Handle(void* data, int size)
 		packet->vehicleid,
 		packet->modelid,
 		packet->pos,
-		packet->rot
+		packet->rot,
+		packet->color1,
+		packet->color2
 	);
 
 	CNetworkVehicleManager::Add(vehicle);
@@ -258,6 +260,8 @@ CPackets::VehicleIdleUpdate* CPacketHandler::VehicleIdleUpdate__Collect(CNetwork
 	packet->roll = vehicle->m_pVehicle->m_matrix->right;
 	packet->rot = vehicle->m_pVehicle->m_matrix->up;
 	packet->velocity = vehicle->m_pVehicle->m_vecMoveSpeed;
+	packet->color1 = vehicle->m_pVehicle->m_nPrimaryColor;
+	packet->color2 = vehicle->m_pVehicle->m_nSecondaryColor;
 	return packet;
 }
 
@@ -273,6 +277,9 @@ void CPacketHandler::VehicleIdleUpdate__Handle(void* data, int size)
 	vehicle->m_pVehicle->m_matrix->right = packet->roll;	   
 	vehicle->m_pVehicle->m_matrix->up = packet->rot;		   
 	vehicle->m_pVehicle->m_vecMoveSpeed = packet->velocity;
+
+	vehicle->m_pVehicle->m_nPrimaryColor = packet->color1;
+	vehicle->m_pVehicle->m_nSecondaryColor = packet->color2;
 }
 
 // VehicleDriverUpdate
@@ -295,6 +302,9 @@ CPackets::VehicleDriverUpdate* CPacketHandler::VehicleDriverUpdate__Collect(CNet
 	packet->playerArmour =		(unsigned char)player->m_fArmour;
 	packet->playerHealth =		(unsigned char)player->m_fHealth;
 	packet->weapon =			player->m_aWeapons[player->m_nActiveWeaponSlot].m_eWeaponType;
+
+	packet->color1 = vehicle->m_pVehicle->m_nPrimaryColor;
+	packet->color2 = vehicle->m_pVehicle->m_nSecondaryColor;
 
 	return packet;
 }
@@ -321,6 +331,9 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 	player->m_lOnFoot->controllerState = packet->controllerState;
 	player->m_lOnFoot->armour = packet->playerArmour;
 	player->m_lOnFoot->health = packet->playerHealth;
+
+	vehicle->m_pVehicle->m_nPrimaryColor = packet->color1;
+	vehicle->m_pVehicle->m_nSecondaryColor = packet->color2;
 }
 
 // VehicleEnter

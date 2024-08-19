@@ -52,12 +52,14 @@ cd vcpkg
   - [X] Nickname
   - [X] weapon icon
 - [X] define which player is the host
+- [X] explosion sync
   
 ### Current Tasks
+- [ ] proper key sync
 - [ ] vehicle sync
   - [X] spawn/delete
   - [X] enter/exit
-  - [ ] color(1/2) sync
+  - [X] color(1/2) sync
   - [ ] paintjob sync
   - [ ] tuning sync
   - [ ] hydraulics
@@ -116,7 +118,6 @@ cd vcpkg
   - [ ] action
   - [ ] radar icon?
 - [ ] fire sync
-- [ ] explosion sync
 - [ ] time
 - [ ] weather
 - [ ] cutscenes
@@ -130,6 +131,8 @@ cd vcpkg
 - [ ] fix interior enter exit crash (fix CPlayerPed dctor)
 - [ ] cheat code sync
 - [ ] pickup (collectables) sync
+- [ ] jetpack sync
+- [ ] idle anim sync
 
 ### Minor tasks and ideas
 - [ ] Sync laser sniper rifle red dot with all players

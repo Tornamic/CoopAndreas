@@ -119,6 +119,8 @@ public:
 		CVector rot;
 		CVector roll;
 		CVector velocity;
+		unsigned char color1;
+		unsigned char color2;
 	};
 
 	struct VehicleDriverUpdate
@@ -134,6 +136,8 @@ public:
 		unsigned char playerArmour;
 		unsigned char weapon;
 		unsigned short ammo;
+		unsigned char color1;
+		unsigned char color2;
 	};
 
 	struct VehicleEnter
