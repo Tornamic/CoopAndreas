@@ -28,12 +28,6 @@ CNetworkPlayer::~CNetworkPlayer()
 
 	DWORD dwPedPtr = (DWORD)m_pPed;
 
-	// fix destructor crash
-
-	/*_asm mov esi, dwPedPtr
-	_asm mov eax, [esi + 1152]
-	_asm mov dword ptr[eax + 76], 0*/
-
 	// call destroy method
 	_asm mov ecx, dwPedPtr
 	_asm mov ebx, [ecx]; vtable
@@ -43,7 +37,15 @@ CNetworkPlayer::~CNetworkPlayer()
 
 CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 {
-	
+	CreatePed(id, position);
+
+	m_iPlayerId = id;
+
+	m_lOnFoot = m_oOnFoot = new CPackets::PlayerOnFoot();
+}
+
+void CNetworkPlayer::CreatePed(int id, CVector position)
+{
 	// load CJ (0) model
 	CStreaming::RequestModel(0, eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
 	CStreaming::LoadAllRequestedModels(false);
@@ -68,19 +70,15 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 	player->m_nPedType = ePedType::PED_TYPE_PLAYER1;
 
 	CWorld::Add(player);
-	
-	player->SetPosn(FindPlayerCoors(0));
+
+	player->SetPosn(position);
 	player->SetModelIndex(0);
 	player->SetOrientation(0.0f, 0.0f, 0.0f);
-	
+
 	// set player immunies, he now dont cares about pain
 	Command<Commands::SET_CHAR_PROOFS>(CPools::GetPedRef(player), 0, 1, 1, 0, 0);
 
 	m_pPed = player;
-	m_iPlayerId = id;
-
-	m_lOnFoot = m_oOnFoot = new CPackets::PlayerOnFoot();
-
 }
 
 int CNetworkPlayer::GetInternalId() // most used for CWorld::PlayerInFocus

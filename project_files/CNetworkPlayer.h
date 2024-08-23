@@ -22,6 +22,8 @@ public:
 	CNetworkPlayer::~CNetworkPlayer();
 	CNetworkPlayer::CNetworkPlayer(int id, CVector position);
 
+	void CreatePed(int id, CVector position);
+
 	int GetInternalId();
 	char* GetName();
 };

@@ -140,12 +140,9 @@ void FixCrashes()
     // fix CPhysical dctor caused by realtime shadow
     patch::Nop(0x705B3B, 10);
 
-    // fix CPlayerPed dctor
-    // xor ecx, ecx ; set meeleAnimReferencedExtra to 0
-    // nop ; fill empty byte
-    /*patch::SetUChar(0x60941A + 0, 0x31);
-    patch::SetUChar(0x60941A + 1, 0xC9);
-    patch::SetUChar(0x60941A + 2, 0x90);*/
+    // nop ped destroying when player enters interior
+    patch::Nop(0x4407B7, 5);
+    patch::Nop(0x61648C, 5);
 
 }
 

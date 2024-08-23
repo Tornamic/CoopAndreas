@@ -38,14 +38,22 @@ CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float 
         }
     }
 
+    if (!CreateVehicle(vehicleid, modelid, pos, rotation, color1, color2))
+        return;
+
+    m_nVehicleId = vehicleid;
+}
+
+bool CNetworkVehicle::CreateVehicle(int vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2)
+{
     unsigned char oldFlags = CStreaming::ms_aInfoForModel[modelid].m_nFlags;
     CStreaming::RequestModel(modelid, GAME_REQUIRED);
     CStreaming::LoadAllRequestedModels(false);
 
     if (CStreaming::ms_aInfoForModel[modelid].m_nLoadState != LOADSTATE_LOADED)
-        return;
+        return false;
 
-    if (!(oldFlags & GAME_REQUIRED)) 
+    if (!(oldFlags & GAME_REQUIRED))
     {
         CStreaming::SetModelIsDeletable(modelid);
         CStreaming::SetModelTxdIsDeletable(modelid);
@@ -53,47 +61,48 @@ CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float 
 
     switch (((CVehicleModelInfo*)CModelInfo::ms_modelInfoPtrs[modelid])->m_nVehicleType)
     {
-        case VEHICLE_MTRUCK:
-            m_pVehicle = new CMonsterTruck(modelid, 1); break;
+    case VEHICLE_MTRUCK:
+        m_pVehicle = new CMonsterTruck(modelid, 1); break;
 
-        case VEHICLE_QUAD:
-            m_pVehicle = new CQuadBike(modelid, 1); break;
+    case VEHICLE_QUAD:
+        m_pVehicle = new CQuadBike(modelid, 1); break;
 
-        case VEHICLE_HELI:
-            m_pVehicle = new CHeli(modelid, 1); break;
+    case VEHICLE_HELI:
+        m_pVehicle = new CHeli(modelid, 1); break;
 
-        case VEHICLE_PLANE:
-            m_pVehicle = new CPlane(modelid, 1); break;
+    case VEHICLE_PLANE:
+        m_pVehicle = new CPlane(modelid, 1); break;
 
-        case VEHICLE_BIKE:
-            m_pVehicle = new CBike(modelid, 1);
-            ((CBike*)m_pVehicle)->m_nDamageFlags |= 0x10; break;
+    case VEHICLE_BIKE:
+        m_pVehicle = new CBike(modelid, 1);
+        ((CBike*)m_pVehicle)->m_nDamageFlags |= 0x10; break;
 
-        case VEHICLE_BMX:
-            m_pVehicle = new CBmx(modelid, 1);
-            ((CBmx*)m_pVehicle)->m_nDamageFlags |= 0x10; break;
+    case VEHICLE_BMX:
+        m_pVehicle = new CBmx(modelid, 1);
+        ((CBmx*)m_pVehicle)->m_nDamageFlags |= 0x10; break;
 
-        case VEHICLE_TRAILER:
-            m_pVehicle = new CTrailer(modelid, 1); break;
+    case VEHICLE_TRAILER:
+        m_pVehicle = new CTrailer(modelid, 1); break;
 
-        case VEHICLE_BOAT:
-            m_pVehicle = new CBoat(modelid, 1); break;
+    case VEHICLE_BOAT:
+        m_pVehicle = new CBoat(modelid, 1); break;
 
-        default:
-            m_pVehicle = new CAutomobile(modelid, 1, true); break;
+    default:
+        m_pVehicle = new CAutomobile(modelid, 1, true); break;
     }
 
     if (!m_pVehicle)
-        return;
+        return false;
 
     m_pVehicle->SetPosn(pos);
     m_pVehicle->SetOrientation(0.0f, 0.0f, rotation);
     m_pVehicle->m_nStatus = 4;
     m_pVehicle->m_eDoorLock = DOORLOCK_UNLOCKED;
-
+    m_pVehicle->m_nPrimaryColor = color1;
+    m_pVehicle->m_nSecondaryColor = color2;
     CWorld::Add(m_pVehicle);
 
-    m_nVehicleId = vehicleid;
+    return true;
 }
 
 CNetworkVehicle::~CNetworkVehicle()
@@ -106,9 +115,10 @@ CNetworkVehicle::~CNetworkVehicle()
     }
     else
     {
-        if (m_pVehicle && CPools::GetVehicleRef(m_pVehicle))
+        if (m_pVehicle)
         {
-            plugin::Command<Commands::DELETE_CAR>(CPools::GetVehicleRef(m_pVehicle));
+            CWorld::Remove(m_pVehicle);
+            m_pVehicle->~CVehicle();
         }
     }
 }

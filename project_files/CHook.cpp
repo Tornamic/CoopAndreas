@@ -99,6 +99,7 @@ void __fastcall CVehicle__ProcessControl_Hook()
         return;
     }
 
+
     CWorld::PlayerInFocus = player->GetInternalId();
 
     CPad* pad = player->m_pPed->GetPadFromPlayer();
@@ -227,10 +228,6 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
 }
 static void __cdecl CWorld__Remove_Hook(CEntity* entity)
 {
-    DWORD ret_adr;
-
-    _asm mov eax, [esp]
-    _asm mov ret_adr, eax
 
     CVehicle* vehicle = nullptr;
     CNetworkVehicle* networkVehicle = nullptr;
@@ -289,6 +286,12 @@ static void __fastcall CPlayerPed__dctor_Hook(CPlayerPed* This, int)
     plugin::CallMethod<0x6093B0, CPlayerPed*>(This);
 }
 
+static void __fastcall CCarCtrl__RemoveDistantCars_Hook()
+{
+    if (CLocalPlayer::m_bIsHost)
+        CCarCtrl::RemoveDistantCars();
+}
+
 void CHook::Init()
 {   
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -341,7 +344,7 @@ void CHook::Init()
     0x404B90, 0x404BED, 0x404C3E, 0x409E43, 0x4251E6, 0x425221, 0x42541E, 0x4323F9, 0x4413CA, 0x442319,
     0x449729, 0x4499F3, 0x449B43, 0x449CE0, 0x449E2A, 0x454CFB, 0x455488, 0x4556F1, 0x456C29, 0x456E1E,
     0x456EA0, 0x4571AD, 0x458E8A, 0x45BEFF, 0x45CCB5, 0x45D3C9, 0x45D3FE, 0x45ED11, 0x45ED69, 0x45FF78,
-    0x45FFCB, 0x4610CC, 0x4698E4, 0x470DC7, 0x47CD0B, 0x486D3E, 0x48A36E, 0x48DC77, 0x48DCEE,
+    0x45FFCB, 0x4610CC, 0x4698E4, 0x470DC7, 0x467B3C, 0x47CD0B, 0x486D3E, 0x48A36E, 0x48DC77, 0x48DCEE,
     0x48EC2F, 0x499D90, 0x49A45A, 0x53C98C, 0x54447C, 0x546E2C, 0x5500C5, 0x550127, 0x5567CE, 0x5667B0,
     0x59163E, 0x593794, 0x5A17B4, 0x5A1890, 0x5A18EA, 0x5A194E, 0x5A1A51, 0x5A32A2, 0x5A3FE2, 0x5A82FC,
     0x5AFE6E, 0x5D5112, 0x5E011C, 0x5E03DC, 0x5E4148, 0x5E86AF, 0x6094FC, 0x610F26, 0x612305,
@@ -370,4 +373,6 @@ void CHook::Init()
 
     // fix CPlayerPed dctor crash
     patch::RedirectCall(0x60A9A3, CPlayerPed__dctor_Hook);
+
+    patch::RedirectCall(0x53C1CB, CCarCtrl__RemoveDistantCars_Hook);
 }

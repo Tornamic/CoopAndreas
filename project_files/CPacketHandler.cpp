@@ -92,7 +92,7 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 	// get player instance 
 	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->id);
 
-	// check if player not created
+	// check if player not connected
 	if (player == nullptr)
 		return;
 
@@ -273,6 +273,9 @@ void CPacketHandler::VehicleIdleUpdate__Handle(void* data, int size)
 	if (vehicle == nullptr)
 		return;
 
+	if (vehicle->m_pVehicle == nullptr)
+		vehicle->CreateVehicle(vehicle->m_nVehicleId, vehicle->m_nModelId, packet->pos, 0.f, packet->color1, packet->color2);
+
 	vehicle->m_pVehicle->m_matrix->pos = packet->pos;		   
 	vehicle->m_pVehicle->m_matrix->right = packet->roll;	   
 	vehicle->m_pVehicle->m_matrix->up = packet->rot;		   
@@ -316,8 +319,23 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
 	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
 
-	if (!player || !player->m_pPed || !vehicle || !vehicle->m_pVehicle)
+	if (vehicle == nullptr || player == nullptr)
 		return;
+
+	if (vehicle->m_pVehicle == nullptr)
+	{
+		vehicle->CreateVehicle(vehicle->m_nVehicleId, vehicle->m_nModelId, packet->pos, 0.f, packet->color1, packet->color2);
+		return;
+	}
+
+	if (player->m_pPed == nullptr)
+	{
+		player->CreatePed(player->m_iPlayerId, packet->pos);
+		return;
+	}
+
+	if (player->m_pPed->m_pVehicle != vehicle->m_pVehicle)
+		plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle));
 
 	vehicle->m_pVehicle->m_matrix->pos = packet->pos;
 	vehicle->m_pVehicle->m_matrix->right = packet->roll;

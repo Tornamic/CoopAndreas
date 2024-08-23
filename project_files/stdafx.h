@@ -48,7 +48,7 @@
 #include "CBoat.h"
 #include "CTaskComplexEnterCarAsDriver.h"
 #include "CTaskComplexLeaveCar.h"
-
+#include "CCarCtrl.h"
 // classes ---------------------------------------------------------------------------------
 
 using namespace plugin;
