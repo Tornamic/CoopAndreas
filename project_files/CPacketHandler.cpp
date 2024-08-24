@@ -124,12 +124,17 @@ void CPacketHandler::PlayerBulletShot__Handle(void* data, int size)
 	
 	if (packet->targetid != -1)
 	{
-		CNetworkPlayer* damagedPlayer = CNetworkPlayerManager::GetPlayer(packet->targetid);
 
-		if(damagedPlayer != nullptr)
+		CNetworkPlayer* damagedPlayer = CNetworkPlayerManager::GetPlayer(packet->targetid);
+		CNetworkVehicle* damagedVehicle = CNetworkVehicleManager::GetVehicle(packet->targetid);
+
+		if (damagedPlayer != nullptr)
 			victim = damagedPlayer->m_pPed;
 
-		if (packet->targetid == CNetworkPlayerManager::m_nMyId)
+		if (damagedVehicle != nullptr)
+			victim = damagedVehicle->m_pVehicle;
+
+		if (packet->targetid == CNetworkPlayerManager::m_nMyId && packet->entityType == eEntityType::ENTITY_TYPE_PED)
 			victim = FindPlayerPed(0);
 	}
 
@@ -262,6 +267,7 @@ CPackets::VehicleIdleUpdate* CPacketHandler::VehicleIdleUpdate__Collect(CNetwork
 	packet->velocity = vehicle->m_pVehicle->m_vecMoveSpeed;
 	packet->color1 = vehicle->m_pVehicle->m_nPrimaryColor;
 	packet->color2 = vehicle->m_pVehicle->m_nSecondaryColor;
+	packet->health = vehicle->m_pVehicle->m_fHealth;
 	return packet;
 }
 
@@ -283,6 +289,7 @@ void CPacketHandler::VehicleIdleUpdate__Handle(void* data, int size)
 
 	vehicle->m_pVehicle->m_nPrimaryColor = packet->color1;
 	vehicle->m_pVehicle->m_nSecondaryColor = packet->color2;
+	vehicle->m_pVehicle->m_fHealth = packet->health;
 }
 
 // VehicleDriverUpdate
@@ -308,6 +315,8 @@ CPackets::VehicleDriverUpdate* CPacketHandler::VehicleDriverUpdate__Collect(CNet
 
 	packet->color1 = vehicle->m_pVehicle->m_nPrimaryColor;
 	packet->color2 = vehicle->m_pVehicle->m_nSecondaryColor;
+
+	packet->health = vehicle->m_pVehicle->m_fHealth;
 
 	return packet;
 }
@@ -352,6 +361,8 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 
 	vehicle->m_pVehicle->m_nPrimaryColor = packet->color1;
 	vehicle->m_pVehicle->m_nSecondaryColor = packet->color2;
+
+	vehicle->m_pVehicle->m_fHealth = packet->health;
 }
 
 // VehicleEnter

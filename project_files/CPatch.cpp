@@ -131,9 +131,6 @@ void FixCrashes()
     // fixes unknown crash from CWorld::ClearScanCodes(), testing
     patch::PutRetn(0x563470);
 
-    // CPlayerPed_CPlayerPed .. task system corrupts some shit
-    patch::GetUChar(0x60D64E, 0x84); // jnz to jz
-
     // PlayerInfo checks in CPlayerPed::ProcessControl
     patch::Nop(0x60F2C4, 25);
 

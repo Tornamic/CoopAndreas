@@ -66,12 +66,13 @@ cd vcpkg
   - [ ] paintjob sync
   - [ ] tuning sync
   - [ ] hydraulics
+  - [ ] hydra state
   - [ ] plane wheels
   - [ ] turret aim/shot
-  - [ ] horn
+  - [X] horn
   - [X] keys (provides steer angles, brake, etc.)
   - [X] pos, speed, quat
-  - [ ] health
+  - [X] health
   - [ ] damage status
   - [ ] trailer sync
   - [ ] door, engine states

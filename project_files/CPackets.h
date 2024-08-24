@@ -62,6 +62,7 @@ public:
 		CVector endPos;
 		CColPoint colPoint;
 		int incrementalHit;
+		unsigned char entityType;
 	};
 
 	struct PlayerHandshake
@@ -121,6 +122,7 @@ public:
 		CVector velocity;
 		unsigned char color1;
 		unsigned char color2;
+		float health;
 	};
 
 	struct VehicleDriverUpdate
@@ -138,6 +140,7 @@ public:
 		unsigned short ammo;
 		unsigned char color1;
 		unsigned char color2;
+		float health;
 	};
 
 	struct VehicleEnter

@@ -110,6 +110,9 @@ void __fastcall CVehicle__ProcessControl_Hook()
     CUtil::CopyControllerState(pad->OldState, player->m_oOnFoot->controllerState);
     CUtil::CopyControllerState(pad->NewState, player->m_lOnFoot->controllerState);
 
+    pad->OldState.ShockButtonL = player->m_oOnFoot->controllerState.ShockButtonL;
+    pad->NewState.ShockButtonL = player->m_lOnFoot->controllerState.ShockButtonL;
+
     player->m_pPed->m_fHealth = player->m_lOnFoot->health;
     player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
 
@@ -129,17 +132,30 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
     {
         CPackets::PlayerBulletShot* packet = new CPackets::PlayerBulletShot;
 
-        CNetworkPlayer* target = CNetworkPlayerManager::GetPlayer(victim);
+        packet->targetid = -1;
 
-        if (target == nullptr)
-            packet->targetid = -1;
-        else
-            packet->targetid = target->m_iPlayerId;
+        switch (victim->m_nType)
+        {
+            case eEntityType::ENTITY_TYPE_PED: // ped or player
+            {
+                if (auto playerTarget = CNetworkPlayerManager::GetPlayer(victim))
+                    packet->targetid = playerTarget->m_iPlayerId;
+                break;
+            }
+            case eEntityType::ENTITY_TYPE_VEHICLE:
+            {
+                if (auto vehicleTarget = CNetworkVehicleManager::GetVehicle(victim))
+                    packet->targetid = vehicleTarget->m_nVehicleId;
+                break;
+            }
+        }
 
         packet->startPos = *startPoint;
         packet->endPos = *endPoint;
         packet->colPoint = *colPoint;
         packet->incrementalHit = incrementalHit;
+        packet->entityType = victim->m_nType;
+
         CNetwork::SendPacket(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
 
         weapon->DoBulletImpact(owner, victim, startPoint, endPoint, colPoint, incrementalHit);

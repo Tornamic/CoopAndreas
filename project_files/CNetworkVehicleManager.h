@@ -6,6 +6,7 @@ public:
 
     static CNetworkVehicle* GetVehicle(int vehicleid);
     static CNetworkVehicle* GetVehicle(CVehicle* vehicle);
+    static CNetworkVehicle* GetVehicle(CEntity* vehicle);
     static int GetFreeID();
     static void Add(CNetworkVehicle* vehicle);
     static void Remove(CNetworkVehicle* vehicle);

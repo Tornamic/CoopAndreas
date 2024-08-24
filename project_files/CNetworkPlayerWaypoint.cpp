@@ -23,7 +23,7 @@ void CNetworkPlayerWaypoint::Process()
 			screen.y = CUtil::SCREEN_STRETCH_Y(screen.y) - CUtil::SCREEN_STRETCH_X(8.0f) / 2.f * 5; // 5 - font size / 2 - 1
 
 			CRadar::LimitToMap(&screen.x, &screen.y);
-			CDXFont::Draw(std::floor(screen.x), std::floor(screen.y), player->GetName(), D3DCOLOR_RGBA(181, 24, 24, 255));
+			CDXFont::Draw((int)screen.x, (int)screen.y, player->GetName(), D3DCOLOR_RGBA(181, 24, 24, 255));
 		}
 	}
 }

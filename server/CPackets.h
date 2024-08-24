@@ -70,6 +70,7 @@ public:
 		CVector endPos;
 		unsigned char colPoint[44]; // padding
 		int incrementalHit;
+		unsigned char entityType;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -158,6 +159,10 @@ public:
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 			
 			CVehicle* vehicle = new CVehicle(packet->vehicleid, packet->modelid, packet->pos, packet->rot);
+
+			vehicle->m_nPrimaryColor = packet->color1;
+			vehicle->m_nSecondaryColor = packet->color2;
+
 			CVehicleManager::Add(vehicle);
 		}
 	};
@@ -188,6 +193,7 @@ public:
 		CVector velocity;
 		unsigned char color1;
 		unsigned char color2;
+		float health;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -198,7 +204,7 @@ public:
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 
 			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
-
+			
 			vehicle->m_vecPosition = packet->pos;
 			vehicle->m_vecRotation = packet->rot;
 		}
@@ -219,6 +225,7 @@ public:
 		unsigned short ammo;
 		unsigned char color1;
 		unsigned char color2;
+		float health;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

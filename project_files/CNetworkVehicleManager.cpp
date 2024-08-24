@@ -27,6 +27,19 @@ CNetworkVehicle* CNetworkVehicleManager::GetVehicle(CVehicle* vehicle)
 	return nullptr;
 }
 
+CNetworkVehicle* CNetworkVehicleManager::GetVehicle(CEntity* vehicle)
+{
+	for (int i = 0; i != m_pVehicles.size(); i++)
+	{
+		if (m_pVehicles[i]->m_pVehicle == vehicle)
+		{
+			return m_pVehicles[i];
+		}
+	}
+
+	return nullptr;
+}
+
 int CNetworkVehicleManager::GetFreeID()
 {
 	if (!CLocalPlayer::m_bIsHost)
