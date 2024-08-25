@@ -19,7 +19,8 @@ enum CPacketsID : unsigned short
 	VEHICLE_IDLE_UPDATE,
 	VEHICLE_DRIVER_UPDATE,
 	VEHICLE_ENTER,
-	VEHICLE_EXIT
+	VEHICLE_EXIT,
+	VEHICLE_DAMAGE
 };
 
 class CPackets
@@ -155,5 +156,11 @@ public:
 	{
 		int playerid;
 		bool force;
+	};
+
+	struct VehicleDamage
+	{
+		int vehicleid;
+		CDamageManager damageManager;
 	};
 };

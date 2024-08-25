@@ -434,3 +434,20 @@ void CPacketHandler::VehicleExit__Handle(void* data, int size)
 	else
 		plugin::Command<Commands::TASK_LEAVE_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(player->m_pPed->m_pVehicle));
 }
+
+// VehicleDamage
+
+void CPacketHandler::VehicleDamage__Handle(void* data, int size)
+{
+	CChat::AddMessage("VehicleDamage__Handle");
+
+	CPackets::VehicleDamage* packet = (CPackets::VehicleDamage*)data;
+
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
+	*(CDamageManager*)((DWORD)vehicle->m_pVehicle + 0x5A0) = packet->damageManager;
+
+	DWORD dwVehiclePtr = (DWORD)vehicle->m_pVehicle;
+	_asm mov ecx, dwVehiclePtr
+	_asm mov edx, 0x6B3E90 // CAutomobile::UpdateDamageModel
+	_asm call edx
+}

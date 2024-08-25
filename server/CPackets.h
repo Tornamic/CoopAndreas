@@ -16,7 +16,8 @@ enum CPacketsID : unsigned short
 	VEHICLE_IDLE_UPDATE,
 	VEHICLE_DRIVER_UPDATE,
 	VEHICLE_ENTER,
-	VEHICLE_EXIT
+	VEHICLE_EXIT,
+	VEHICLE_DAMAGE
 };
 
 class CPackets
@@ -277,6 +278,19 @@ public:
 			vehicle->m_pPlayers[player->m_nSeatId] = nullptr;
 			player->m_nSeatId = -1;
 			player->m_nVehicleId = -1;
+		}
+	};
+
+	struct VehicleDamage
+	{
+		int vehicleid;
+		unsigned char damageManager_padding[23];
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::VehicleDamage* packet = (CPackets::VehicleDamage*)data;
+			memcpy(CVehicleManager::GetVehicle(packet->vehicleid)->m_damageManager_padding, packet->damageManager_padding, 23);
+			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_DAMAGE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 };

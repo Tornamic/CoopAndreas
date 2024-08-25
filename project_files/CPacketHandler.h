@@ -20,5 +20,6 @@ public:
 	static void VehicleDriverUpdate__Handle(void* data, int size);
 	static void VehicleEnter__Handle(void* data, int size);
 	static void VehicleExit__Handle(void* data, int size);
+	static void VehicleDamage__Handle(void* data, int size);
 };
 

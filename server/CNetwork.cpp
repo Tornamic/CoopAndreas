@@ -72,6 +72,7 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::VEHICLE_EXIT, CPackets::VehicleExit::Handle);
     CNetwork::AddListener(CPacketsID::VEHICLE_DRIVER_UPDATE, CPackets::VehicleDriverUpdate::Handle);
     CNetwork::AddListener(CPacketsID::VEHICLE_IDLE_UPDATE, CPackets::VehicleIdleUpdate::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_DAMAGE, CPackets::VehicleDamage::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -205,6 +206,25 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
             vehicleEnterPacket.seatid = j;
 
             CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_ENTER, &vehicleEnterPacket, sizeof vehicleEnterPacket, ENET_PACKET_FLAG_RELIABLE);
+        }
+        
+        bool modifiedDamageStatus = false;
+
+        for (unsigned char j = 0; j < 23; j++)
+        {
+            if (i->m_damageManager_padding[j])
+            {
+                modifiedDamageStatus = true; 
+                break;
+            }
+        }
+
+        if (modifiedDamageStatus)
+        {
+            CPackets::VehicleDamage vehicleDamagePacket{};
+            vehicleDamagePacket.vehicleid = i->m_nVehicleId;
+            memcpy(&vehicleDamagePacket.damageManager_padding, i->m_damageManager_padding, 23);
+            CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_DAMAGE, &vehicleDamagePacket, sizeof vehicleDamagePacket, ENET_PACKET_FLAG_RELIABLE);
         }
     }
 

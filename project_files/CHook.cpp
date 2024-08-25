@@ -214,7 +214,7 @@ static void __cdecl CExplosion__AddExplosion(CEntity* newVictim, CPed* newCreato
     if (!CLocalPlayer::m_bIsHost)
         return;
 
-    plugin::Call<0x736A50, CEntity*, CPed*, int, CVector2D, float, int, char, float, char>(nullptr, nullptr, type, pos, z, time, usesSound, cameraShake, isVisible);
+    plugin::Call<0x736A50, CEntity*, CPed*, int, CVector2D, float, int, char, float, char>(newVictim, newCreator, type, pos, z, time, usesSound, cameraShake, isVisible);
 
     CPackets::AddExplosion addExplosionPacket{};
 
@@ -308,6 +308,19 @@ static void __fastcall CCarCtrl__RemoveDistantCars_Hook()
         CCarCtrl::RemoveDistantCars();
 }
 
+static bool __fastcall CDamageManager__ApplyDamage_Hook(CDamageManager* This, int, CAutomobile* dm_comp, tComponent compId, float intensity, float a5)
+{
+    CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(dm_comp);
+    if (vehicle != nullptr && CLocalPlayer::m_bIsHost)
+    {
+        CPackets::VehicleDamage packet{};
+        packet.vehicleid = vehicle->m_nVehicleId;
+        packet.damageManager = dm_comp->m_damageManager;
+        CNetwork::SendPacket(CPacketsID::VEHICLE_DAMAGE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    }
+    return plugin::CallMethodAndReturn<bool, 0x6C24B0, CDamageManager*, CAutomobile*, tComponent, float, float>(This, dm_comp, compId, intensity, a5);
+}
+
 void CHook::Init()
 {   
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -391,4 +404,16 @@ void CHook::Init()
     patch::RedirectCall(0x60A9A3, CPlayerPed__dctor_Hook);
 
     patch::RedirectCall(0x53C1CB, CCarCtrl__RemoveDistantCars_Hook);
+    
+    
+    patch::RedirectCall(0x46DCE4, CDamageManager__ApplyDamage_Hook);
+    patch::RedirectCall(0x46DFFD, CDamageManager__ApplyDamage_Hook);
+    patch::RedirectCall(0x6A7C2A, CDamageManager__ApplyDamage_Hook);
+    patch::RedirectCall(0x6A7DD5, CDamageManager__ApplyDamage_Hook);
+    patch::RedirectCall(0x6A7E07, CDamageManager__ApplyDamage_Hook);
+    patch::RedirectCall(0x6A7E39, CDamageManager__ApplyDamage_Hook);
+    patch::RedirectCall(0x6A7E91, CDamageManager__ApplyDamage_Hook);
+    patch::RedirectCall(0x6A7F5B, CDamageManager__ApplyDamage_Hook);
+    patch::RedirectCall(0x6A7F8D, CDamageManager__ApplyDamage_Hook);
+    patch::RedirectCall(0x6A803F, CDamageManager__ApplyDamage_Hook);
 }
