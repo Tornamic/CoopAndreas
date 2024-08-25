@@ -73,7 +73,7 @@ cd vcpkg
   - [X] keys (provides steer angles, brake, etc.)
   - [X] pos, speed, quat
   - [X] health
-  - [ ] damage status
+  - [X] damage status
   - [ ] trailer sync
   - [ ] door, engine states
 - [ ] rendering
