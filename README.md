@@ -140,9 +140,8 @@ cd vcpkg
 ### ChatGPT Generated tasks n ideas:
 - [ ] Minigames sync
   - [ ] Pool
-  - [ ] Bowling
-  - [ ] Arm wrestling
-  - [ ] Cards (Poker, Blackjack)
+  - [ ] Bowling (chatgppt what????)
+  - [ ] Arm wrestling (wtf chatgpt???)
 
 - [ ] Casino sync
   - [ ] Slot machines
