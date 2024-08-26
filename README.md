@@ -54,8 +54,12 @@ cd vcpkg
 - [X] define which player is the host
 - [X] explosion sync
 - [X] fix interior enter exit crash (fix CPlayerPed dctor)
-### HOT (highest priority) Tasks
-- [ ] create player/veh by on foot/veh sync if it not created
+
+### known bugs (highest priority)
+- [ ] players AI is activated when you pause in a vehicle
+- [ ] vehicle add-remove packet spam
+- [ ] crashes when closing game caused by different things
+- [ ] sometimes closing pause menu game cant load nametag weapon icon
 
 ### Current Tasks
 - [ ] proper key sync
@@ -63,7 +67,7 @@ cd vcpkg
   - [X] spawn/delete
   - [X] enter/exit
   - [X] color(1/2) sync
-  - [ ] paintjob sync
+  - [X] paintjob sync
   - [ ] tuning sync
   - [ ] hydraulics
   - [ ] hydra state

@@ -17,6 +17,9 @@ public:
 			};
 		Events::gameProcessEvent += []
 			{
+				CDebugVehicleSpawner::Process();
+
+
 				if (CNetwork::m_bConnected)
 				{
 

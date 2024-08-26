@@ -49,6 +49,7 @@
 #include "CTaskComplexEnterCarAsDriver.h"
 #include "CTaskComplexLeaveCar.h"
 #include "CCarCtrl.h"
+#include "CCheat.h"
 // classes ---------------------------------------------------------------------------------
 
 using namespace plugin;
@@ -73,5 +74,5 @@ using namespace plugin;
 #include "CNetworkPlayerNameTag.h"
 #include "CChat.h"
 #include "CNetworkVehicleManager.h"
-
+#include "CDebugVehicleSpawner.h"
 // -----------------------------------------------------------------------------------------

@@ -195,6 +195,7 @@ public:
 		unsigned char color1;
 		unsigned char color2;
 		float health;
+		char paintjob;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -227,6 +228,7 @@ public:
 		unsigned char color1;
 		unsigned char color2;
 		float health;
+		char paintjob;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

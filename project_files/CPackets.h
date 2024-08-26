@@ -124,6 +124,7 @@ public:
 		unsigned char color1;
 		unsigned char color2;
 		float health;
+		char paintjob;
 	};
 
 	struct VehicleDriverUpdate
@@ -142,6 +143,7 @@ public:
 		unsigned char color1;
 		unsigned char color2;
 		float health;
+		char paintjob;
 	};
 
 	struct VehicleEnter

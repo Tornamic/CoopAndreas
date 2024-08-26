@@ -321,6 +321,14 @@ static bool __fastcall CDamageManager__ApplyDamage_Hook(CDamageManager* This, in
     return plugin::CallMethodAndReturn<bool, 0x6C24B0, CDamageManager*, CAutomobile*, tComponent, float, float>(This, dm_comp, compId, intensity, a5);
 }
 
+static void __fastcall CVehicle__SetRemap_Hook(CVehicle* This, int, int paintJobId)
+{
+    if(auto vehicle = CNetworkVehicleManager::GetVehicle(This))
+        vehicle->m_nPaintJob = paintJobId;
+
+    This->SetRemap(paintJobId);
+}
+
 void CHook::Init()
 {   
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -416,4 +424,8 @@ void CHook::Init()
     patch::RedirectCall(0x6A7F5B, CDamageManager__ApplyDamage_Hook);
     patch::RedirectCall(0x6A7F8D, CDamageManager__ApplyDamage_Hook);
     patch::RedirectCall(0x6A803F, CDamageManager__ApplyDamage_Hook);
+
+    patch::RedirectCall(0x44828D, CVehicle__SetRemap_Hook);
+    patch::RedirectCall(0x44B184, CVehicle__SetRemap_Hook);
+    patch::RedirectCall(0x49872F, CVehicle__SetRemap_Hook);
 }

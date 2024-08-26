@@ -318,6 +318,8 @@ CPackets::VehicleDriverUpdate* CPacketHandler::VehicleDriverUpdate__Collect(CNet
 
 	packet->health = vehicle->m_pVehicle->m_fHealth;
 
+	packet->paintjob = vehicle->m_nPaintJob;
+
 	return packet;
 }
 
@@ -363,6 +365,9 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 	vehicle->m_pVehicle->m_nSecondaryColor = packet->color2;
 
 	vehicle->m_pVehicle->m_fHealth = packet->health;
+
+	if(vehicle->m_nPaintJob != packet->paintjob)
+		vehicle->m_pVehicle->SetRemap(packet->paintjob);
 }
 
 // VehicleEnter
