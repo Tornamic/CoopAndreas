@@ -138,38 +138,31 @@ cd vcpkg
 - [ ] idle anim sync
 
 ### ChatGPT Generated tasks n ideas:
-- [ ] Minigames sync
-  - [ ] Pool
-  - [ ] Bowling (chatgppt what????)
-  - [ ] Arm wrestling (wtf chatgpt???)
-
-- [ ] Casino sync
-  - [ ] Slot machines
-  - [ ] Roulette
-  - [ ] Horse betting
-
-- [ ] Territory wars sync
-  - [ ] Exact status synchronization of captured territories for all players
-  - [ ] Common signals for starting and ending gang wars
-
-- [ ] Animation sync
-  - [ ] Gestures/Dances at parties
-  - [ ] Joint workouts at the gym (weightlifting, boxing)
-
-- [ ] Taxi sync
-  - [ ] Shared taxi ride with another player
-  - [ ] Proper fare splitting among all passengers
-
-- [ ] Shops sync
-  - [ ] Ammu-Nation purchases sync
-  - [ ] Fast food purchases sync (Cluckin' Bell, Burger Shot)
-  - [ ] Clothing stores sync (Binco, SubUrban, etc.)
-
-- [ ] Driving schools sync
-  - [ ] Joint completion of driving tests at driving schools
-
-- [ ] Parachute training sync
-  - [ ] Parachute jump sync from tall buildings or planes
+- [ ] minigames sync
+  - [ ] pool
+  - [ ] bowling (chatgppt what????)
+  - [ ] arm wrestling (wtf chatgpt???)
+- [ ] casino sync
+  - [ ] slot machines
+  - [ ] roulette
+  - [ ] horse betting
+- [ ] territory wars sync
+  - [ ] exact status synchronization of captured territories for all players
+  - [ ] common signals for starting and ending gang wars
+- [ ] animation sync
+  - [ ] gestures/dances at parties
+  - [ ] joint workouts at the gym (weightlifting, boxing)
+- [ ] taxi sync
+  - [ ] shared taxi ride with another player
+  - [ ] proper fare splitting among all passengers
+- [ ] shops sync
+  - [ ] ammu-nation purchases sync
+  - [ ] fast food purchases sync (Cluckin' Bell, Burger Shot)
+  - [ ] clothing stores sync (Binco, SubUrban, etc.)
+- [ ] driving schools sync
+  - [ ] joint completion of driving tests at driving schools
+- [ ] parachute training sync
+  - [ ] parachute jump sync from tall buildings or planes
   
 ### Minor tasks and ideas
 - [ ] Sync laser sniper rifle red dot with all players
