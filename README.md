@@ -1,7 +1,5 @@
 # CoopAndreas
 
-![GitHub repo views](https://komarev.com/ghpvc/?username=Tornamic&repo=CoopAndreas)
-
 Videos, pictures, news, suggestions, and communication can be found here:
 
 [Discord Server](https://discord.gg/TwQsR4qxVx)
