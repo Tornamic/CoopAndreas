@@ -329,6 +329,11 @@ static void __fastcall CVehicle__SetRemap_Hook(CVehicle* This, int, int paintJob
     This->SetRemap(paintJobId);
 }
 
+static bool __cdecl CGameLogin__IsCoopGameGoingOn_Hook()
+{
+    return false;
+}
+
 void CHook::Init()
 {   
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -428,4 +433,6 @@ void CHook::Init()
     patch::RedirectCall(0x44828D, CVehicle__SetRemap_Hook);
     patch::RedirectCall(0x44B184, CVehicle__SetRemap_Hook);
     patch::RedirectCall(0x49872F, CVehicle__SetRemap_Hook);
+
+    patch::RedirectJump(0x441390, CGameLogin__IsCoopGameGoingOn_Hook);
 }

@@ -141,6 +141,11 @@ void FixCrashes()
     patch::Nop(0x4407B7, 5);
     patch::Nop(0x61648C, 5);
 
+    // fix spawning with bottles and cigars
+    patch::Nop(0x4217F4, 21);
+    patch::Nop(0x4218D8, 17);
+    patch::Nop(0x5F80C0, 10);
+    patch::Nop(0x5FBA47, 10);
 }
 
 void CPatch::ApplyPatches()
