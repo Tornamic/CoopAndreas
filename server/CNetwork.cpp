@@ -73,6 +73,8 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::VEHICLE_DRIVER_UPDATE, CPackets::VehicleDriverUpdate::Handle);
     CNetwork::AddListener(CPacketsID::VEHICLE_IDLE_UPDATE, CPackets::VehicleIdleUpdate::Handle);
     CNetwork::AddListener(CPacketsID::VEHICLE_DAMAGE, CPackets::VehicleDamage::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_COMPONENT_ADD, CPackets::VehicleComponentAdd::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_COMPONENT_REMOVE, CPackets::VehicleComponentRemove::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -225,6 +227,14 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
             vehicleDamagePacket.vehicleid = i->m_nVehicleId;
             memcpy(&vehicleDamagePacket.damageManager_padding, i->m_damageManager_padding, 23);
             CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_DAMAGE, &vehicleDamagePacket, sizeof vehicleDamagePacket, ENET_PACKET_FLAG_RELIABLE);
+        }
+
+        for (int component : i->m_pComponents) 
+        {
+            CPackets::VehicleComponentAdd vehicleComponentAddPacket{};
+            vehicleComponentAddPacket.vehicleid = i->m_nVehicleId;
+            vehicleComponentAddPacket.componentid = component;
+            CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_COMPONENT_ADD, &vehicleComponentAddPacket, sizeof vehicleComponentAddPacket, ENET_PACKET_FLAG_RELIABLE);
         }
     }
 

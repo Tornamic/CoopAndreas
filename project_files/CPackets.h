@@ -20,7 +20,9 @@ enum CPacketsID : unsigned short
 	VEHICLE_DRIVER_UPDATE,
 	VEHICLE_ENTER,
 	VEHICLE_EXIT,
-	VEHICLE_DAMAGE
+	VEHICLE_DAMAGE,
+	VEHICLE_COMPONENT_ADD,
+	VEHICLE_COMPONENT_REMOVE
 };
 
 class CPackets
@@ -164,5 +166,17 @@ public:
 	{
 		int vehicleid;
 		CDamageManager damageManager;
+	};
+
+	struct VehicleComponentAdd
+	{
+		int vehicleid;
+		int componentid;
+	};
+
+	struct VehicleComponentRemove
+	{
+		int vehicleid;
+		int componentid;
 	};
 };

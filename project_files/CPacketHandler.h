@@ -21,5 +21,7 @@ public:
 	static void VehicleEnter__Handle(void* data, int size);
 	static void VehicleExit__Handle(void* data, int size);
 	static void VehicleDamage__Handle(void* data, int size);
+	static void VehicleComponentAdd__Handle(void* data, int size);
+	static void VehicleComponentRemove__Handle(void* data, int size);
 };
 

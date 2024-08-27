@@ -17,7 +17,9 @@ enum CPacketsID : unsigned short
 	VEHICLE_DRIVER_UPDATE,
 	VEHICLE_ENTER,
 	VEHICLE_EXIT,
-	VEHICLE_DAMAGE
+	VEHICLE_DAMAGE,
+	VEHICLE_COMPONENT_ADD,
+	VEHICLE_COMPONENT_REMOVE
 };
 
 class CPackets
@@ -293,6 +295,39 @@ public:
 			CPackets::VehicleDamage* packet = (CPackets::VehicleDamage*)data;
 			memcpy(CVehicleManager::GetVehicle(packet->vehicleid)->m_damageManager_padding, packet->damageManager_padding, 23);
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_DAMAGE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+		}
+	};
+
+	struct VehicleComponentAdd
+	{
+		int vehicleid;
+		int componentid;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::VehicleComponentAdd* packet = (CPackets::VehicleComponentAdd*)data;
+			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_COMPONENT_ADD, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+
+			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
+			vehicle->m_pComponents.push_back(packet->componentid);
+		}
+	};
+
+	struct VehicleComponentRemove
+	{
+		int vehicleid;
+		int componentid;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::VehicleComponentAdd* packet = (CPackets::VehicleComponentAdd*)data;
+			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_COMPONENT_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+
+			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
+
+			auto it = std::find(vehicle->m_pComponents.begin(), vehicle->m_pComponents.end(), packet->componentid);
+			if (it != vehicle->m_pComponents.end())
+				vehicle->m_pComponents.erase(it);
 		}
 	};
 };

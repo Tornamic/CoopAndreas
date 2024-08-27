@@ -334,6 +334,30 @@ static bool __cdecl CGameLogin__IsCoopGameGoingOn_Hook()
     return false;
 }
 
+static void __fastcall CVehicle__AddVehicleUpgrade_Hook(CVehicle* This, int, int modelid)
+{
+    if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
+    {
+        CPackets::VehicleComponentAdd packet{};
+        packet.vehicleid = vehicle->m_nVehicleId;
+        packet.componentid = modelid;
+        CNetwork::SendPacket(CPacketsID::VEHICLE_COMPONENT_ADD, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    }
+    This->AddVehicleUpgrade(modelid);
+}
+
+static void __fastcall CVehicle__RemoveVehicleUpgrade_Hook(CVehicle* This, int, int modelid)
+{
+    if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
+    {
+        CPackets::VehicleComponentRemove packet{};
+        packet.vehicleid = vehicle->m_nVehicleId;
+        packet.componentid = modelid;
+        CNetwork::SendPacket(CPacketsID::VEHICLE_COMPONENT_REMOVE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    }
+    This->RemoveVehicleUpgrade(modelid);
+}
+
 void CHook::Init()
 {   
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -435,4 +459,14 @@ void CHook::Init()
     patch::RedirectCall(0x49872F, CVehicle__SetRemap_Hook);
 
     patch::RedirectJump(0x441390, CGameLogin__IsCoopGameGoingOn_Hook);
+
+    patch::RedirectCall(0x431998, CVehicle__AddVehicleUpgrade_Hook);
+    patch::RedirectCall(0x4732DE, CVehicle__AddVehicleUpgrade_Hook);
+    patch::RedirectCall(0x4985DA, CVehicle__AddVehicleUpgrade_Hook);
+    patch::RedirectCall(0x49B106, CVehicle__AddVehicleUpgrade_Hook);
+    patch::RedirectCall(0x6B0BD7, CVehicle__AddVehicleUpgrade_Hook);
+    patch::RedirectCall(0x6E3424, CVehicle__AddVehicleUpgrade_Hook);
+
+    patch::RedirectCall(0x4732F2, CVehicle__RemoveVehicleUpgrade_Hook);
+    patch::RedirectCall(0x498618, CVehicle__RemoveVehicleUpgrade_Hook);
 }

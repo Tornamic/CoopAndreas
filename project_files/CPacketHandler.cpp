@@ -456,3 +456,45 @@ void CPacketHandler::VehicleDamage__Handle(void* data, int size)
 	_asm mov edx, 0x6B3E90 // CAutomobile::UpdateDamageModel
 	_asm call edx
 }
+
+// VehicleComponentAdd
+
+void CPacketHandler::VehicleComponentAdd__Handle(void* data, int size)
+{
+	CPackets::VehicleComponentAdd* packet = (CPackets::VehicleComponentAdd*)data;
+
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
+
+	if (vehicle == nullptr)
+		return;
+
+	CStreaming::RequestModel(packet->componentid, eStreamingFlags::GAME_REQUIRED);
+	CStreaming::LoadAllRequestedModels(false);
+	CStreaming::RequestVehicleUpgrade(packet->componentid, eStreamingFlags::GAME_REQUIRED);
+
+	char count = 10;
+	while (!CStreaming::HasVehicleUpgradeLoaded(packet->componentid) && count) 
+	{
+		Sleep(5);
+		count--;
+	}
+
+	if (!count)
+		return;
+
+	vehicle->m_pVehicle->AddVehicleUpgrade(packet->componentid);
+}
+
+// VehicleComponentRemove
+
+void CPacketHandler::VehicleComponentRemove__Handle(void* data, int size)
+{
+	CPackets::VehicleComponentAdd* packet = (CPackets::VehicleComponentAdd*)data;
+
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
+
+	if (vehicle == nullptr)
+		return;
+
+	vehicle->m_pVehicle->RemoveVehicleUpgrade(packet->componentid);
+}

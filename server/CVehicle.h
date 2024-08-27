@@ -11,6 +11,7 @@ public:
 	unsigned char m_nPrimaryColor;
 	unsigned char m_nSecondaryColor;
 	unsigned char m_damageManager_padding[23] = { 0 };
+	std::vector<int> m_pComponents;
 
 	CVehicle(int vehicleid, unsigned short model, CVector pos, float rot);
 };
