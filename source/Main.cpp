@@ -19,16 +19,6 @@ public:
 			{
 				CDebugVehicleSpawner::Process();
 
-				if (GetAsyncKeyState(VK_F8) && FindPlayerPed(0)->m_pVehicle != nullptr)
-				{
-					Sleep(500);
-					CStreaming::RequestModel(1050, eStreamingFlags::GAME_REQUIRED);
-					CStreaming::LoadAllRequestedModels(false);
-					CStreaming::RequestVehicleUpgrade(1050, eStreamingFlags::GAME_REQUIRED);
-
-					plugin::Command<Commands::ADD_VEHICLE_MOD>(CPools::GetVehicleRef(FindPlayerPed(0)->m_pVehicle), 1050);
-				}
-
 				if (CNetwork::m_bConnected)
 				{
 

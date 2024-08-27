@@ -68,7 +68,7 @@ cd vcpkg
   - [X] enter/exit
   - [X] color(1/2) sync
   - [X] paintjob sync
-  - [ ] tuning sync
+  - [X] tuning sync
   - [ ] hydraulics
   - [ ] hydra state
   - [ ] plane wheels
