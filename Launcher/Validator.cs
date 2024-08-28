@@ -12,7 +12,7 @@ namespace Launcher
     {
         public static bool IsValidNickName(string value)
         {
-            return Regex.IsMatch(value, @"[a-zA-Z0-9_\[\]]{3,24}");
+            return Regex.IsMatch(value, @"^([a-zA-Z0-9_\[\]]{3,24})$");
         }
 
         public static bool ParseIpPort(string value, ref string ip, ref ushort port)
