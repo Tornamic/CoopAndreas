@@ -54,6 +54,8 @@ void CDXFont::Draw(int x, int y, const char* text, D3DCOLOR color)
         rect.top += shadowSize;
 
         CDXFont::m_pD3DXFont->DrawTextW(NULL, text_wchar, -1, &rect, 0, color);
+
+        delete[] text_wchar;
     }
 }
 
