@@ -231,6 +231,8 @@ public:
 		unsigned char color2;
 		float health;
 		char paintjob;
+		float turretAimHorizontal;
+		float turretAimVertical;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

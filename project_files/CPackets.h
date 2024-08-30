@@ -146,6 +146,8 @@ public:
 		unsigned char color2;
 		float health;
 		char paintjob;
+		float turretAimHorizontal;
+		float turretAimVertical;
 	};
 
 	struct VehicleEnter

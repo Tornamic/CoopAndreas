@@ -320,6 +320,13 @@ CPackets::VehicleDriverUpdate* CPacketHandler::VehicleDriverUpdate__Collect(CNet
 
 	packet->paintjob = vehicle->m_nPaintJob;
 
+	if (CUtil::IsVehicleHasTurret(vehicle->m_pVehicle))
+	{
+		CAutomobile* automobile = (CAutomobile*)vehicle->m_pVehicle;
+		packet->turretAimHorizontal = automobile->m_fDoomHorizontalRotation;
+		packet->turretAimVertical = automobile->m_fDoomVerticalRotation;
+	}
+
 	return packet;
 }
 
@@ -368,6 +375,9 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 
 	if(vehicle->m_nPaintJob != packet->paintjob)
 		vehicle->m_pVehicle->SetRemap(packet->paintjob);
+
+	vehicle->m_fAimHorizontal = packet->turretAimHorizontal;
+	vehicle->m_fAimVertical = packet->turretAimVertical;
 }
 
 // VehicleEnter

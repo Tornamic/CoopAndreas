@@ -1,11 +1,11 @@
 #include "stdafx.h"
 
-bool pPressingDuck[MAX_SERVER_PLAYERS + 2] = {false};
+bool pPressingDuck[MAX_SERVER_PLAYERS + 2] = { false };
 
 void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 {
     CPlayerPed* localPlayer = FindPlayerPed(0);
-     
+
     if (This == localPlayer)
     {
         plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
@@ -50,7 +50,7 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     player->m_pPed->m_fAimingRotation =
         player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
-    
+
     plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
 
     CWorld::PlayerInFocus = 0;
@@ -68,7 +68,7 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
     _asm mov vehicle, ecx
     _asm mov eax, [ecx]
-    _asm mov vtbl, eax
+        _asm mov vtbl, eax
 
     if (vtbl == 0x871120)      // CAutomobile
         call_addr = 0x6B1880;
@@ -89,9 +89,10 @@ void __fastcall CVehicle__ProcessControl_Hook()
     else if (vtbl == 0x872370) // CTrain
         call_addr = 0x6F86A0;
 
+
     CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(vehicle->m_pDriver);
 
-    if (player == nullptr)
+    if (vehicle->m_pDriver == FindPlayerPed(0) || player == nullptr)
     {
         _asm mov ecx, vehicle
         _asm mov eax, call_addr
@@ -136,18 +137,18 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
 
         switch (victim->m_nType)
         {
-            case eEntityType::ENTITY_TYPE_PED: // ped or player
-            {
-                if (auto playerTarget = CNetworkPlayerManager::GetPlayer(victim))
-                    packet->targetid = playerTarget->m_iPlayerId;
-                break;
-            }
-            case eEntityType::ENTITY_TYPE_VEHICLE:
-            {
-                if (auto vehicleTarget = CNetworkVehicleManager::GetVehicle(victim))
-                    packet->targetid = vehicleTarget->m_nVehicleId;
-                break;
-            }
+        case eEntityType::ENTITY_TYPE_PED: // ped or player
+        {
+            if (auto playerTarget = CNetworkPlayerManager::GetPlayer(victim))
+                packet->targetid = playerTarget->m_iPlayerId;
+            break;
+        }
+        case eEntityType::ENTITY_TYPE_VEHICLE:
+        {
+            if (auto vehicleTarget = CNetworkVehicleManager::GetVehicle(victim))
+                packet->targetid = vehicleTarget->m_nVehicleId;
+            break;
+        }
         }
 
         packet->startPos = *startPoint;
@@ -204,15 +205,15 @@ static void PlaceWaypointHook(eBlipType type, CVector posn, eBlipColour color, e
 // hide waypoint
 static void __fastcall CRadar__ClearBlip_Hook(int blipIndex, int padding)
 {
-    CPackets::PlayerPlaceWaypoint packet = { 0, false, CVector(0, 0, 0)};
+    CPackets::PlayerPlaceWaypoint packet = { 0, false, CVector(0, 0, 0) };
     CNetwork::SendPacket(CPacketsID::PLAYER_PLACE_WAYPOINT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     CRadar::ClearBlip(blipIndex);
 }
 
 static void __cdecl CExplosion__AddExplosion(CEntity* newVictim, CPed* newCreator, eExplosionType type, CVector2D pos, float z, int time, char usesSound, float cameraShake, char isVisible)
 {
-    if (!CLocalPlayer::m_bIsHost)
-        return;
+    /*if (!CLocalPlayer::m_bIsHost)
+        return;*/
 
     plugin::Call<0x736A50, CEntity*, CPed*, int, CVector2D, float, int, char, float, char>(newVictim, newCreator, type, pos, z, time, usesSound, cameraShake, isVisible);
 
@@ -236,7 +237,7 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
         CNetworkVehicle* networkVehicle = new CNetworkVehicle(vehicle);
         CNetworkVehicleManager::Add(networkVehicle);
     }
-    
+
     if (!CLocalPlayer::m_bIsHost && entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
         return;
 
@@ -323,7 +324,7 @@ static bool __fastcall CDamageManager__ApplyDamage_Hook(CDamageManager* This, in
 
 static void __fastcall CVehicle__SetRemap_Hook(CVehicle* This, int, int paintJobId)
 {
-    if(auto vehicle = CNetworkVehicleManager::GetVehicle(This))
+    if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
         vehicle->m_nPaintJob = paintJobId;
 
     This->SetRemap(paintJobId);
@@ -357,11 +358,56 @@ static void __fastcall CVehicle__RemoveVehicleUpgrade_Hook(CVehicle* This, int, 
     }
     This->RemoveVehicleUpgrade(modelid);
 }
+CAutomobile* _automobile = nullptr;
+CNetworkVehicle* _vehicle = nullptr;
+static void __declspec(naked) CAutomobile__FireTruckControl_Hook()
+{
+    _asm mov _automobile, ecx
+    _asm mov eax, [ecx]
+
+        if (_automobile->m_pDriver == FindPlayerPed(0))
+        {
+            _automobile->FireTruckControl(0.0f);
+        }
+        else if (_vehicle = CNetworkVehicleManager::GetVehicle(_automobile))
+        {
+            _automobile->m_fDoomHorizontalRotation = _vehicle->m_fAimHorizontal;
+            _automobile->m_fDoomVerticalRotation = _vehicle->m_fAimVertical;
+            _automobile->FireTruckControl(0.0f);
+            _automobile->m_fDoomHorizontalRotation = _vehicle->m_fAimHorizontal;
+            _automobile->m_fDoomVerticalRotation = _vehicle->m_fAimVertical;
+        }
+
+    _asm retn 4
+}
+
+static void __fastcall CAutomobile__TankControl_Hook()
+{
+    CAutomobile* automobile = nullptr;
+    _asm mov automobile, ecx
+    _asm mov eax, [ecx]
+
+        if (automobile->m_pDriver == FindPlayerPed(0))
+        {
+            automobile->TankControl();
+            return;
+        }
+
+    CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(automobile);
+    if (vehicle != nullptr && automobile->m_pDriver != nullptr)
+    {
+        automobile->m_fDoomHorizontalRotation = vehicle->m_fAimHorizontal;
+        automobile->m_fDoomVerticalRotation = vehicle->m_fAimVertical;
+        automobile->TankControl();
+        automobile->m_fDoomHorizontalRotation = vehicle->m_fAimHorizontal;
+        automobile->m_fDoomVerticalRotation = vehicle->m_fAimVertical;
+    }
+}
 
 void CHook::Init()
-{   
+{
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
-    
+
     patch::RedirectCall(0x73CD92, CWeapon__DoBulletImpact_Hook);
     patch::RedirectCall(0x741199, CWeapon__DoBulletImpact_Hook);
     patch::RedirectCall(0x7411DF, CWeapon__DoBulletImpact_Hook);
@@ -392,16 +438,16 @@ void CHook::Init()
     patch::RedirectCall(0x738952, CExplosion__AddExplosion);
     patch::RedirectCall(0x738AAE, CExplosion__AddExplosion);
 
-    const int CWorld__Add_Addresses[] = { 
+    const int CWorld__Add_Addresses[] = {
     0x404BE4, 0x42BBC3, 0x42C5FC, 0x42CA98, 0x431BE6, 0x4320B1, 0x432239, 0x43A416, 0x43A631, 0x44231F,
     0x444E2C, 0x4456B4, 0x45733A, 0x4575C0, 0x45881B, 0x458E70, 0x45ACBE, 0x45BF05, 0x45CCBB, 0x45ED24,
     0x45ED7B, 0x45F5D5, 0x45F708, 0x45F846, 0x45F979, 0x45FAAC, 0x45FBF3, 0x461820, 0x4621B6, 0x46237F,
     0x462993, 0x467726, 0x469878, 0x469D6D, 0x470E06, 0x47CD5F, 0x47D9B7, 0x47F5EB, 0x4834D6, 0x484FF4,
     0x48A3BB, 0x48DC89, 0x48DD00, 0x48EC41, 0x491DFD, 0x49976D, 0x499A49, 0x544499, 0x546EB8, 0x550138,
     0x556169, 0x592FAE, 0x5936E6, 0x5A1817, 0x5A1833, 0x5A3775, 0x5B16AD, 0x5B5348, 0x5D2D10, 0x5D2E2E,
-    0x5D4B1D, 0x5D5125, 0x5E0157, 0x5E41B1, 0x5E4471, 0x60D814, 0x612A10, 0x6136B7, 0x6138DF, 0x6145C7, 
-    0x61470D, 0x615868, 0x61B059, 0x61B09B, 0x61B117, 0x61B174, 0x61B20E, 0x61B264, 0x66C3CB, 0x6A8BBE, 
-    0x6A9BE2, 0x6A9D63, 0x6BD080, 0x6C685D, 0x6CD40E, 0x6CD71D, 0x6E44E0, 0x6E4E94, 0x6EADF9, 0x6F2199, 
+    0x5D4B1D, 0x5D5125, 0x5E0157, 0x5E41B1, 0x5E4471, 0x60D814, 0x612A10, 0x6136B7, 0x6138DF, 0x6145C7,
+    0x61470D, 0x615868, 0x61B059, 0x61B09B, 0x61B117, 0x61B174, 0x61B20E, 0x61B264, 0x66C3CB, 0x6A8BBE,
+    0x6A9BE2, 0x6A9D63, 0x6BD080, 0x6C685D, 0x6CD40E, 0x6CD71D, 0x6E44E0, 0x6E4E94, 0x6EADF9, 0x6F2199,
     0x6F2503, 0x6F3C8C, 0x6F7249, 0x6F784B, 0x717E7F, 0x717F3E, 0x738639, 0x15614C6, 0x156D903, 0x156DA51 };
     patch::RedirectJump(0x609554, CWorld__Add_Hook);
     patch::RedirectCall(std::vector<int>(CWorld__Add_Addresses, CWorld__Add_Addresses + sizeof(CWorld__Add_Addresses) / 4), CWorld__Add_Hook);
@@ -420,10 +466,10 @@ void CHook::Init()
     0x739AD0, 0x156DA41 };
     patch::RedirectJump(0x609534, CWorld__Remove_Hook);
     patch::RedirectCall(std::vector<int>(CWorld__Remove_Addresses, CWorld__Remove_Addresses + sizeof(CWorld__Remove_Addresses) / 4), CWorld__Remove_Hook);
-    
+
     patch::RedirectCall(0x570A1B, CTaskComplexEnterCarAsDriver__Ctor_Hook);
     patch::RedirectCall(0x570A94, CTaskComplexEnterCarAsDriver__Ctor_Hook);
-    
+
     patch::RedirectCall(0x57049C, CTaskComplexLeaveCar__Ctor_Hook);
     patch::RedirectCall(0x5703F7, CTaskComplexLeaveCar__Ctor_Hook);
 
@@ -441,8 +487,8 @@ void CHook::Init()
     patch::RedirectCall(0x60A9A3, CPlayerPed__dctor_Hook);
 
     patch::RedirectCall(0x53C1CB, CCarCtrl__RemoveDistantCars_Hook);
-    
-    
+
+
     patch::RedirectCall(0x46DCE4, CDamageManager__ApplyDamage_Hook);
     patch::RedirectCall(0x46DFFD, CDamageManager__ApplyDamage_Hook);
     patch::RedirectCall(0x6A7C2A, CDamageManager__ApplyDamage_Hook);
@@ -469,4 +515,7 @@ void CHook::Init()
 
     patch::RedirectCall(0x4732F2, CVehicle__RemoveVehicleUpgrade_Hook);
     patch::RedirectCall(0x498618, CVehicle__RemoveVehicleUpgrade_Hook);
+
+    patch::RedirectCall(0x6B1F5E, CAutomobile__FireTruckControl_Hook);
+    patch::RedirectCall(0x6B2028, CAutomobile__TankControl_Hook);
 }

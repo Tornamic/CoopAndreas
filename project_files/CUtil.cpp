@@ -142,3 +142,17 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
         CWorld::PlayerInFocus = 0;
     }
 }
+
+bool CUtil::IsVehicleHasTurret(CVehicle* vehicle)
+{
+    switch (vehicle->m_nModelIndex)
+    {
+    case 432:
+    case 564:
+    case 407:
+    case 601:
+        return true;
+    default:
+        return false;
+    };
+}
