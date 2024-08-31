@@ -2,8 +2,11 @@
 
 Videos, pictures, news, suggestions, and communication can be found here:
 
-[Discord Server](https://discord.gg/TwQsR4qxVx)
-
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/TwQsR4qxVx)
+[![X](https://img.shields.io/badge/X-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/CoopAndreas)
+[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@CoopAndreas)
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/coopandreas)
+[![VK](https://img.shields.io/badge/VK-0077FF?style=for-the-badge&logo=vk&logoColor=white)](https://vk.com/coopandreas)
 ## Building
 
 1. Verify that you have the C++ and C# packages installed in Visual Studio 2022.
@@ -79,8 +82,8 @@ Contact information is current as of September 2024
   - [X] paintjob sync
   - [X] tuning sync
   - [ ] hydraulics
-  - [ ] hydra state
-  - [ ] plane wheels
+  - [X] hydra thrusters
+  - [X] plane wheels
   - [ ] turret aim/shot
   - [X] horn
   - [X] keys (provides steer angles, brake, etc.)
@@ -89,6 +92,9 @@ Contact information is current as of September 2024
   - [X] damage status
   - [ ] trailer sync
   - [ ] door, engine states
+  - [ ] passenger sync
+    - [ ] radio sync
+    - [ ] drive by shooting
 - [ ] rendering
   - [X] text rendering (dx)
   - [ ] imgui integration
@@ -125,7 +131,6 @@ Contact information is current as of September 2024
   - [ ] tatoo
   - [ ] clothes
   - [ ] haircut
-- [ ] passenger sync
 - [ ] npc sync
   - [ ] pos, rot, speed
   - [ ] weapons
