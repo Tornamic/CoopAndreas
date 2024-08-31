@@ -268,6 +268,13 @@ CPackets::VehicleIdleUpdate* CPacketHandler::VehicleIdleUpdate__Collect(CNetwork
 	packet->color1 = vehicle->m_pVehicle->m_nPrimaryColor;
 	packet->color2 = vehicle->m_pVehicle->m_nSecondaryColor;
 	packet->health = vehicle->m_pVehicle->m_fHealth;
+
+	if (CUtil::GetVehicleType(vehicle->m_pVehicle) == eVehicleType::VEHICLE_PLANE)
+	{
+		CPlane* plane = (CPlane*)vehicle->m_pVehicle;
+		packet->planeGearState = plane->m_fLandingGearStatus > 0.0f ? 1.0f : 0.0f;
+	}
+
 	return packet;
 }
 
@@ -290,6 +297,13 @@ void CPacketHandler::VehicleIdleUpdate__Handle(void* data, int size)
 	vehicle->m_pVehicle->m_nPrimaryColor = packet->color1;
 	vehicle->m_pVehicle->m_nSecondaryColor = packet->color2;
 	vehicle->m_pVehicle->m_fHealth = packet->health;
+
+	if (CUtil::GetVehicleType(vehicle->m_pVehicle) == eVehicleType::VEHICLE_PLANE)
+	{
+		CPlane* plane = (CPlane*)vehicle->m_pVehicle;
+
+		plane->m_fLandingGearStatus = packet->planeGearState;
+	}
 }
 
 // VehicleDriverUpdate
@@ -331,6 +345,12 @@ CPackets::VehicleDriverUpdate* CPacketHandler::VehicleDriverUpdate__Collect(CNet
 	{
 		CAutomobile* automobile = (CAutomobile*)vehicle->m_pVehicle;
 		packet->miscComponentAngle = automobile->m_wMiscComponentAngle;
+	}
+
+	if (CUtil::GetVehicleType(vehicle->m_pVehicle) == eVehicleType::VEHICLE_PLANE)
+	{
+		CPlane* plane = (CPlane*)vehicle->m_pVehicle;
+		packet->planeGearState = plane->m_fLandingGearStatus;
 	}
 
 	return packet;
@@ -389,6 +409,13 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 	{
 		CAutomobile* automobile = (CAutomobile*)vehicle->m_pVehicle;
 		automobile->m_wMiscComponentAngle = packet->miscComponentAngle;
+	}
+
+	if (CUtil::GetVehicleType(vehicle->m_pVehicle) == eVehicleType::VEHICLE_PLANE)
+	{
+		CPlane* plane = (CPlane*)vehicle->m_pVehicle;
+
+		plane->m_fLandingGearStatus = packet->planeGearState;
 	}
 }
 

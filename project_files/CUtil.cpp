@@ -156,3 +156,8 @@ bool CUtil::IsVehicleHasTurret(CVehicle* vehicle)
         return false;
     };
 }
+
+eVehicleType CUtil::GetVehicleType(CVehicle* vehicle)
+{
+    return (eVehicleType)reinterpret_cast<CVehicleModelInfo*>(CModelInfo::ms_modelInfoPtrs[vehicle->m_nModelIndex])->m_nVehicleType;
+}

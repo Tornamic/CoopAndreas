@@ -198,6 +198,7 @@ public:
 		unsigned char color2;
 		float health;
 		char paintjob;
+		float planeGearState;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -234,6 +235,7 @@ public:
 		float turretAimHorizontal;
 		float turretAimVertical;
 		unsigned short miscComponentAngle; // hydra thrusters
+		float planeGearState;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

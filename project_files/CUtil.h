@@ -11,6 +11,7 @@ public:
 	static bool IsMeleeWeapon(unsigned char id);
 	static void GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, unsigned short ammo);
 	static bool IsVehicleHasTurret(CVehicle* vehicle);
+	static eVehicleType GetVehicleType(CVehicle* vehicle);
 	static inline float SCREEN_STRETCH_X(float a) { return a * RsGlobal.maximumWidth / (float)640; }
 	static inline float SCREEN_STRETCH_Y(float a) { return a * RsGlobal.maximumHeight / (float)448; }
 };
