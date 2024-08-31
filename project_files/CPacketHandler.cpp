@@ -327,6 +327,12 @@ CPackets::VehicleDriverUpdate* CPacketHandler::VehicleDriverUpdate__Collect(CNet
 		packet->turretAimVertical = automobile->m_fDoomVerticalRotation;
 	}
 
+	if (vehicle->m_pVehicle->m_nModelIndex == 520)
+	{
+		CAutomobile* automobile = (CAutomobile*)vehicle->m_pVehicle;
+		packet->miscComponentAngle = automobile->m_wMiscComponentAngle;
+	}
+
 	return packet;
 }
 
@@ -378,6 +384,12 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 
 	vehicle->m_fAimHorizontal = packet->turretAimHorizontal;
 	vehicle->m_fAimVertical = packet->turretAimVertical;
+
+	if (vehicle->m_pVehicle->m_nModelIndex == 520)
+	{
+		CAutomobile* automobile = (CAutomobile*)vehicle->m_pVehicle;
+		automobile->m_wMiscComponentAngle = packet->miscComponentAngle;
+	}
 }
 
 // VehicleEnter

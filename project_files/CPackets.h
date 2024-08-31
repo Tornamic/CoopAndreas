@@ -148,6 +148,7 @@ public:
 		char paintjob;
 		float turretAimHorizontal;
 		float turretAimVertical;
+		unsigned short miscComponentAngle; // hydra thrusters
 	};
 
 	struct VehicleEnter

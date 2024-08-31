@@ -233,6 +233,7 @@ public:
 		char paintjob;
 		float turretAimHorizontal;
 		float turretAimVertical;
+		unsigned short miscComponentAngle; // hydra thrusters
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
