@@ -29,7 +29,16 @@ cd vcpkg
 
 4. Open project_files/CoopAndreas.sln in Visual Studio 2022 and build every project (Ctrl+Shift+B).
 
+## Donate
+USDT TRC20: `TDGUyPCVZTXCgViGXkr2pmYQtwAPScgWJb`
 
+TON: `UQAYxd6PNRBQ2O24vzTDp5NI6snN328y5YgiKIdHD2kHYyhq`
+
+BTC: `bc1q7srx00mcxevz8j77xczett4cgmld8pd6sv8rda`
+
+ETH: `0x9798744754f7c3b0a3370444026Db3DB96b7b459`
+
+Contact information is current as of September 2024
 
 ## TODO list:
 ### Already Done ✓
