@@ -194,21 +194,6 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         };
 
         CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
-
-        for (unsigned char j = 0; j < 8; j++)
-        {
-            if (i->m_pPlayers[j] == nullptr)
-                continue;
-
-            CPackets::VehicleEnter vehicleEnterPacket{};
-
-            vehicleEnterPacket.playerid = i->m_pPlayers[j]->m_iPlayerId;
-            vehicleEnterPacket.vehicleid = i->m_nVehicleId;
-            vehicleEnterPacket.force = true;
-            vehicleEnterPacket.seatid = j;
-
-            CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_ENTER, &vehicleEnterPacket, sizeof vehicleEnterPacket, ENET_PACKET_FLAG_RELIABLE);
-        }
         
         bool modifiedDamageStatus = false;
 
