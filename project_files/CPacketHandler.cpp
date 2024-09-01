@@ -109,7 +109,6 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 	// save last onfoot sync
 	player->m_oOnFoot = player->m_lOnFoot;
 	player->m_lOnFoot = packet;
-	
 }
 
 // PlayerBulletShot
@@ -120,7 +119,7 @@ void CPacketHandler::PlayerBulletShot__Handle(void* data, int size)
 
 	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
 
-	CEntity* victim = NULL;
+	CEntity* victim = nullptr;
 	
 	if (packet->targetid != -1)
 	{
@@ -275,6 +274,8 @@ CPackets::VehicleIdleUpdate* CPacketHandler::VehicleIdleUpdate__Collect(CNetwork
 		packet->planeGearState = plane->m_fLandingGearStatus > 0.0f ? 1.0f : 0.0f;
 	}
 
+	packet->locked = vehicle->m_pVehicle->m_eDoorLock;
+
 	return packet;
 }
 
@@ -304,6 +305,8 @@ void CPacketHandler::VehicleIdleUpdate__Handle(void* data, int size)
 
 		plane->m_fLandingGearStatus = packet->planeGearState;
 	}
+
+	vehicle->m_pVehicle->m_eDoorLock = (eDoorLock)packet->locked;
 }
 
 // VehicleDriverUpdate
@@ -352,6 +355,8 @@ CPackets::VehicleDriverUpdate* CPacketHandler::VehicleDriverUpdate__Collect(CNet
 		CPlane* plane = (CPlane*)vehicle->m_pVehicle;
 		packet->planeGearState = plane->m_fLandingGearStatus;
 	}
+
+	packet->locked = vehicle->m_pVehicle->m_eDoorLock;
 
 	return packet;
 }
@@ -417,6 +422,8 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 
 		plane->m_fLandingGearStatus = packet->planeGearState;
 	}
+
+	vehicle->m_pVehicle->m_eDoorLock = (eDoorLock)packet->locked;
 }
 
 // VehicleEnter

@@ -128,6 +128,7 @@ public:
 		float health;
 		char paintjob;
 		float planeGearState;
+		unsigned char locked;
 	};
 
 	struct VehicleDriverUpdate
@@ -151,6 +152,7 @@ public:
 		float turretAimVertical;
 		unsigned short miscComponentAngle; // hydra thrusters
 		float planeGearState;
+		unsigned char locked;
 	};
 
 	struct VehicleEnter

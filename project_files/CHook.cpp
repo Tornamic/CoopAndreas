@@ -135,27 +135,30 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
 
         packet->targetid = -1;
 
-        switch (victim->m_nType)
+        if (victim != nullptr)
         {
-        case eEntityType::ENTITY_TYPE_PED: // ped or player
-        {
-            if (auto playerTarget = CNetworkPlayerManager::GetPlayer(victim))
-                packet->targetid = playerTarget->m_iPlayerId;
-            break;
-        }
-        case eEntityType::ENTITY_TYPE_VEHICLE:
-        {
-            if (auto vehicleTarget = CNetworkVehicleManager::GetVehicle(victim))
-                packet->targetid = vehicleTarget->m_nVehicleId;
-            break;
-        }
+            switch (victim->m_nType)
+            {
+                case eEntityType::ENTITY_TYPE_PED: // ped or player
+                {
+                    if (auto playerTarget = CNetworkPlayerManager::GetPlayer(victim))
+                        packet->targetid = playerTarget->m_iPlayerId;
+                    break;
+                }
+                case eEntityType::ENTITY_TYPE_VEHICLE:
+                {
+                    if (auto vehicleTarget = CNetworkVehicleManager::GetVehicle(victim))
+                        packet->targetid = vehicleTarget->m_nVehicleId;
+                    break;
+                }
+            }
+            packet->entityType = victim->m_nType;
         }
 
         packet->startPos = *startPoint;
         packet->endPos = *endPoint;
         packet->colPoint = *colPoint;
         packet->incrementalHit = incrementalHit;
-        packet->entityType = victim->m_nType;
 
         CNetwork::SendPacket(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
 
