@@ -84,14 +84,17 @@ Contact information is current as of September 2024
   - [ ] hydraulics
   - [X] hydra thrusters
   - [X] plane wheels
-  - [ ] turret aim/shot
+  - [X] turret aim/shot
   - [X] horn
   - [X] keys (provides steer angles, brake, etc.)
   - [X] pos, speed, quat
   - [X] health
   - [X] damage status
   - [ ] trailer sync
-  - [ ] door, engine states
+  - [ ] doors 
+	- [X] locked state
+	- [ ] current angle (closed/opened)
+  - [ ] engine state
   - [ ] passenger sync
     - [ ] radio sync
     - [ ] drive by shooting
