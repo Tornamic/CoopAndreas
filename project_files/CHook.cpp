@@ -94,6 +94,7 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
     if (vehicle->m_pDriver == FindPlayerPed(0) || player == nullptr)
     {
+        plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
         _asm mov ecx, vehicle
         _asm mov eax, call_addr
         _asm call eax
@@ -116,6 +117,12 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
     player->m_pPed->m_fHealth = player->m_lOnFoot->health;
     player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
+
+    player->m_pPed->m_nPedType = PED_TYPE_CIVMALE;
+
+    plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
+
+    player->m_pPed->m_nPedType = PED_TYPE_PLAYER1;
 
     _asm mov ecx, vehicle
     _asm mov eax, call_addr

@@ -66,22 +66,13 @@ Contact information is current as of September 2024
 - [X] define which player is the host
 - [X] explosion sync
 - [X] fix interior enter exit crash (fix CPlayerPed dctor)
-
-### known bugs (highest priority)
-- [ ] players AI is activated when you pause in a vehicle
-- [ ] vehicle add-remove packet spam
-- [ ] crashes when closing game caused by different things
-- [ ] sometimes closing pause menu game cant load nametag weapon icon
-
-### Current Tasks
-- [ ] proper key sync
-- [ ] vehicle sync
+- [X] players AI is activated when you pause in a vehicle
+- [X] vehicle sync
   - [X] spawn/delete
   - [X] enter/exit
   - [X] color(1/2) sync
   - [X] paintjob sync
   - [X] tuning sync
-  - [ ] hydraulics
   - [X] hydra thrusters
   - [X] plane wheels
   - [X] turret aim/shot
@@ -90,14 +81,23 @@ Contact information is current as of September 2024
   - [X] pos, speed, quat
   - [X] health
   - [X] damage status
-  - [ ] trailer sync
-  - [ ] doors 
+  - [X] doors 
 	- [X] locked state
-	- [ ] current angle (closed/opened)
-  - [ ] engine state
-  - [ ] passenger sync
-    - [ ] radio sync
-    - [ ] drive by shooting
+  - [X] engine state
+  
+### known bugs (highest priority)
+- [ ] vehicle add-remove packet spam
+- [ ] crashes when closing game caused by different things
+- [ ] sometimes closing pause menu game cant load nametag weapon icon
+
+### Current Tasks
+- [ ] proper key sync
+- [ ] vehicle sync
+  - [ ] force hydraulics sync
+  - [ ] trailer sync
+- [ ] passenger sync
+  - [ ] radio sync
+  - [ ] drive by shooting
 - [ ] rendering
   - [X] text rendering (dx)
   - [ ] imgui integration

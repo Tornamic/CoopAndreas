@@ -19,11 +19,6 @@ public:
 			{
 				CDebugVehicleSpawner::Process();
 
-				if (GetAsyncKeyState(VK_F9) && FindPlayerPed(0)->m_pVehicle)
-				{
-					FindPlayerPed(0)->m_pVehicle->m_eDoorLock = eDoorLock::DOORLOCK_LOCKED;
-				}
-
 				if (GetAsyncKeyState(VK_F8) && FindPlayerPed(0)->m_pVehicle)
 				{
 					Sleep(300);

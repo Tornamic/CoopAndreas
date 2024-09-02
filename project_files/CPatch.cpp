@@ -41,12 +41,12 @@ void PatchStreaming()
     patch::SetUChar(0x619626, 0x64); // hardcoded value
 
     // patch game freezeing if inactive
-    patch::Nop(0x561AF0, 7);
-    patch::Nop(0x745BC9, 2);
-    patch::SetUChar(7634870, 1);
-    patch::SetUChar(7635034, 1);
-    patch::Nop(7623723, 8);
-    patch::Nop(5499528, 6);
+    //patch::Nop(0x561AF0, 7);
+    //patch::Nop(0x745BC9, 2);
+    patch::SetUChar(0x747FB6, 1);
+    patch::SetUChar(0x74805A, 1);
+    patch::Nop(0x74542B, 8);
+    patch::Nop(0x53EA88, 6);
 
     // fix cutscene crash
     patch::Nop(0x40EC56, 5);
@@ -146,6 +146,12 @@ void FixCrashes()
     patch::Nop(0x4218D8, 17);
     patch::Nop(0x5F80C0, 10);
     patch::Nop(0x5FBA47, 10);
+
+    // disable vehicle audio (controls manualy from hooks)
+    patch::Nop(0x6B18F1, 5);
+    patch::Nop(0x6B9298, 5);
+    patch::Nop(0x6F1793, 5);
+    patch::Nop(0x6F86B6, 5);
 }
 
 void CPatch::ApplyPatches()
