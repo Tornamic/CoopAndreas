@@ -269,7 +269,7 @@ public:
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_ENTER, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
 			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
-			vehicle->m_pPlayers[packet->seatid] = player;
+			//vehicle->m_pPlayers[packet->seatid] = player;
 		}
 	};
 

@@ -462,7 +462,7 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 	}
 	else // passenger (todo)
 	{
-
+		
 	}
 }
 

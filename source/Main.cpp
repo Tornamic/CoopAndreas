@@ -38,6 +38,7 @@ public:
 
 				if (CNetwork::m_bConnected)
 				{
+					CPassengerEnter::Process();
 
 					CPlayerPed* localPlayer = FindPlayerPed(0);
 

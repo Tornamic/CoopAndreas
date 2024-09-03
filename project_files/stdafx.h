@@ -75,4 +75,6 @@ using namespace plugin;
 #include "CChat.h"
 #include "CNetworkVehicleManager.h"
 #include "CDebugVehicleSpawner.h"
+#include "CPassengerEnter.h"
+
 // -----------------------------------------------------------------------------------------
