@@ -78,6 +78,8 @@ void CNetworkPlayer::CreatePed(int id, CVector position)
 	// set player immunies, he now dont cares about pain
 	Command<Commands::SET_CHAR_PROOFS>(CPools::GetPedRef(player), 0, 1, 1, 0, 0);
 
+	player->SetCharCreatedBy(2); // disable player ai
+
 	m_pPed = player;
 }
 

@@ -19,7 +19,8 @@ enum CPacketsID : unsigned short
 	VEHICLE_EXIT,
 	VEHICLE_DAMAGE,
 	VEHICLE_COMPONENT_ADD,
-	VEHICLE_COMPONENT_REMOVE
+	VEHICLE_COMPONENT_REMOVE,
+	VEHICLE_PASSENGER_UPDATE
 };
 
 class CPackets
@@ -335,6 +336,25 @@ public:
 			auto it = std::find(vehicle->m_pComponents.begin(), vehicle->m_pComponents.end(), packet->componentid);
 			if (it != vehicle->m_pComponents.end())
 				vehicle->m_pComponents.erase(it);
+		}
+	};
+
+	struct VehiclePassengerUpdate
+	{
+		int playerid;
+		int vehicleid;
+		CControllerState controllerState;
+		unsigned char playerHealth;
+		unsigned char playerArmour;
+		unsigned char weapon;
+		unsigned short ammo;
+		unsigned char driveby;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::VehiclePassengerUpdate* packet = (CPackets::VehiclePassengerUpdate*)data;
+			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}
 	};
 };

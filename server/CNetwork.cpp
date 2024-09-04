@@ -75,6 +75,7 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::VEHICLE_DAMAGE, CPackets::VehicleDamage::Handle);
     CNetwork::AddListener(CPacketsID::VEHICLE_COMPONENT_ADD, CPackets::VehicleComponentAdd::Handle);
     CNetwork::AddListener(CPacketsID::VEHICLE_COMPONENT_REMOVE, CPackets::VehicleComponentRemove::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_PASSENGER_UPDATE, CPackets::VehiclePassengerUpdate::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)

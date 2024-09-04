@@ -165,5 +165,4 @@ void CPatch::ApplyPatches()
 #ifdef _DEV
     PatchConsole();
 #endif
-    
 }

@@ -89,3 +89,10 @@ void CNetworkVehicleManager::UpdateIdle()
 		}
 	}
 }
+
+void CNetworkVehicleManager::UpdatePassenger(CVehicle* vehicle, CPlayerPed* localPlayer)
+{
+	CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
+	CPackets::VehiclePassengerUpdate* packet = CPacketHandler::VehiclePassengerUpdate__Collect(networkVehicle, localPlayer);
+	CNetwork::SendPacket(CPacketsID::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+}

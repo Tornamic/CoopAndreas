@@ -12,5 +12,6 @@ public:
     static void Remove(CNetworkVehicle* vehicle);
     static void UpdateDriver(CVehicle* vehicle);
     static void UpdateIdle();
+    static void UpdatePassenger(CVehicle* vehicle, CPlayerPed* localPlayer);
 };
 

@@ -441,7 +441,7 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 	}
 
 
-	CChat::AddMessage("player %d entered vehicleid %d", packet->playerid, packet->vehicleid);
+	CChat::AddMessage("player %d entered vehicleid %d %s", packet->playerid, packet->vehicleid, packet->seatid != 0 ? "as passenger" : "");
 
 	if (packet->seatid == 0) // driver
 	{
@@ -460,9 +460,10 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 		else
 			plugin::Command<Commands::TASK_ENTER_CAR_AS_DRIVER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), 3000);
 	}
-	else // passenger (todo)
+	else
 	{
-		
+		//plugin::Command<Commands::WARP_CHAR_INTO_CAR_AS_PASSENGER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), -1);
+		plugin::Command<0x5CA>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), 3000, -1);
 	}
 }
 
@@ -553,4 +554,52 @@ void CPacketHandler::VehicleComponentRemove__Handle(void* data, int size)
 		return;
 
 	vehicle->m_pVehicle->RemoveVehicleUpgrade(packet->componentid);
+}
+
+// VehiclePassengerUpdate
+
+CPackets::VehiclePassengerUpdate* CPacketHandler::VehiclePassengerUpdate__Collect(CNetworkVehicle* vehicle, CPlayerPed* localPlayer)
+{
+	CPackets::VehiclePassengerUpdate* packet = new CPackets::VehiclePassengerUpdate;
+
+	// player data
+	packet->ammo = localPlayer->m_aWeapons[localPlayer->m_nActiveWeaponSlot].m_nAmmoInClip;
+	packet->controllerState = localPlayer->GetPadFromPlayer()->NewState;
+	packet->playerArmour = (unsigned char)localPlayer->m_fArmour;
+	packet->playerHealth = (unsigned char)localPlayer->m_fHealth;
+	packet->weapon = localPlayer->m_aWeapons[localPlayer->m_nActiveWeaponSlot].m_eWeaponType;
+	packet->vehicleid = vehicle->m_nVehicleId;
+	
+	return packet;
+}
+
+void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
+{
+	CPackets::VehiclePassengerUpdate* packet = (CPackets::VehiclePassengerUpdate*)data;
+
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
+	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
+
+	if (vehicle == nullptr || player == nullptr)
+		return;
+
+	if (vehicle->m_pVehicle == nullptr)
+		return;
+
+	if (player->m_pPed == nullptr)
+		return;
+
+	if (!player->m_pPed->m_nPedFlags.bInVehicle || (player->m_pPed->m_nPedFlags.bInVehicle && vehicle->m_pVehicle->m_pDriver == player->m_pPed))
+	{
+		CChat::AddMessage("forcing enter passenger %d", player->m_iPlayerId);
+		plugin::Command<Commands::WARP_CHAR_INTO_CAR_AS_PASSENGER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), -1);
+	}
+
+	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
+
+	player->m_oOnFoot = player->m_lOnFoot;
+
+	player->m_lOnFoot->controllerState = packet->controllerState;
+	player->m_lOnFoot->armour = packet->playerArmour;
+	player->m_lOnFoot->health = packet->playerHealth;
 }

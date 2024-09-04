@@ -23,5 +23,7 @@ public:
 	static void VehicleDamage__Handle(void* data, int size);
 	static void VehicleComponentAdd__Handle(void* data, int size);
 	static void VehicleComponentRemove__Handle(void* data, int size);
+	static CPackets::VehiclePassengerUpdate* VehiclePassengerUpdate__Collect(CNetworkVehicle* vehicle, CPlayerPed* localPlayer);
+	static void VehiclePassengerUpdate__Handle(void* data, int size);
 };
 

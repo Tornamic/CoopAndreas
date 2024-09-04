@@ -37,7 +37,7 @@ void CPassengerEnter::Process()
 			packet.seatid = -1;
 			packet.vehicleid = vehicle->m_nVehicleId;
 			packet.force = false;
-			CNetwork::SendPacket(CPacketsID::VEHICLE_ENTER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE); // todo handle packet
+			CNetwork::SendPacket(CPacketsID::VEHICLE_ENTER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 		}
 	}
 }

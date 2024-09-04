@@ -22,7 +22,8 @@ enum CPacketsID : unsigned short
 	VEHICLE_EXIT,
 	VEHICLE_DAMAGE,
 	VEHICLE_COMPONENT_ADD,
-	VEHICLE_COMPONENT_REMOVE
+	VEHICLE_COMPONENT_REMOVE,
+	VEHICLE_PASSENGER_UPDATE
 };
 
 class CPackets
@@ -185,5 +186,17 @@ public:
 	{
 		int vehicleid;
 		int componentid;
+	};
+
+	struct VehiclePassengerUpdate
+	{
+		int playerid;
+		int vehicleid;
+		CControllerState controllerState;
+		unsigned char playerHealth;
+		unsigned char playerArmour;
+		unsigned char weapon;
+		unsigned short ammo;
+		unsigned char driveby;
 	};
 };
