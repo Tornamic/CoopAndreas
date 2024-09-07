@@ -97,6 +97,8 @@ void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t 
     // create packet
     ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
 
+    delete[] packetData;
+
     // send packet
     enet_peer_send(peer, 0, packet);
 }
@@ -108,6 +110,8 @@ void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, E
     memcpy(packetData, &id, 2);
     memcpy(packetData + 2, data, dataSize);
     ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
+
+    delete[] packetData;
 
     for (int i = 0; i != CPlayerManager::m_pPlayers.size(); i++)
     {
@@ -279,6 +283,8 @@ void CNetwork::HandlePacketReceive(ENetEvent& event)
             m_packetListeners[i]->m_callback(event.peer, data, event.packet->dataLength - 2);
         }
     }
+
+    delete[] data;
 }
 
 void CNetwork::AddListener(unsigned short id, void(*callback)(ENetPeer*, void*, int))

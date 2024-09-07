@@ -198,5 +198,6 @@ public:
 		unsigned char weapon;
 		unsigned short ammo;
 		unsigned char driveby;
+		CVector aim;
 	};
 };

@@ -569,7 +569,9 @@ CPackets::VehiclePassengerUpdate* CPacketHandler::VehiclePassengerUpdate__Collec
 	packet->playerHealth = (unsigned char)localPlayer->m_fHealth;
 	packet->weapon = localPlayer->m_aWeapons[localPlayer->m_nActiveWeaponSlot].m_eWeaponType;
 	packet->vehicleid = vehicle->m_nVehicleId;
-	
+	packet->driveby = CDriveBy::IsPedInDriveby(localPlayer);
+	packet->aim = *(CVector*)0xB6F32C;
+
 	return packet;
 }
 
@@ -600,6 +602,16 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 	player->m_oOnFoot = player->m_lOnFoot;
 
 	player->m_lOnFoot->controllerState = packet->controllerState;
-	player->m_lOnFoot->armour = packet->playerArmour;
-	player->m_lOnFoot->health = packet->playerHealth;
+	player->m_pPed->m_fArmour = player->m_lOnFoot->armour = packet->playerArmour;
+	player->m_pPed->m_fHealth = player->m_lOnFoot->health = packet->playerHealth;
+	player->m_aPassengerAim = packet->aim;
+
+	if (packet->driveby && !CDriveBy::IsPedInDriveby(player->m_pPed))
+	{
+		CDriveBy::StartDriveby(player->m_pPed);
+	}
+	else if (!packet->driveby && CDriveBy::IsPedInDriveby(player->m_pPed))
+	{
+		CDriveBy::StopDriveby(player->m_pPed);
+	}
 }

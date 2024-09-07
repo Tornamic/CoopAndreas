@@ -349,6 +349,7 @@ public:
 		unsigned char weapon;
 		unsigned short ammo;
 		unsigned char driveby;
+		CVector aim;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

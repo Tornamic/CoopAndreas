@@ -76,5 +76,7 @@ using namespace plugin;
 #include "CNetworkVehicleManager.h"
 #include "CDebugVehicleSpawner.h"
 #include "CPassengerEnter.h"
+#include "CDriveBy.h"
+#include "CTaskSimpleGangDriveBy.h"
 
 // -----------------------------------------------------------------------------------------

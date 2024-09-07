@@ -8,7 +8,9 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     if (This == localPlayer)
     {
+        patch::SetRaw(0x6884C4, "\xD9\x96\x5C\x05\x00\x00", 6);
         plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
+        patch::Nop(0x6884C4, 6);
         return;
     }
 
@@ -124,6 +126,12 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
     player->m_pPed->m_nPedType = PED_TYPE_PLAYER1;
 
+
+    bool savedLookingLeft = *(bool*)0xB6F1A4;
+    bool savedLookingRight = *(bool*)0xB6F1A5;
+    *(bool*)0xB6F1A4 = player->m_lOnFoot->controllerState.LeftShoulder2 > 0;
+    *(bool*)0xB6F1A5 = player->m_lOnFoot->controllerState.RightShoulder2 > 0;
+
     _asm mov ecx, vehicle
     _asm mov eax, call_addr
     _asm call eax
@@ -132,6 +140,9 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
     pad->NewState = newOldState;
     pad->OldState = oldOldState;
+
+    *(bool*)0xB6F1A4 = savedLookingLeft;
+    *(bool*)0xB6F1A5 = savedLookingRight;
 }
 
 static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding, CEntity* owner, CEntity* victim, CVector* startPoint, CVector* endPoint, CColPoint* colPoint, int incrementalHit)
@@ -414,6 +425,51 @@ static void __fastcall CAutomobile__TankControl_Hook()
     }
 }
 
+static void __fastcall CTaskSimpleGangDriveBy__SetupStaticAnimForPlayer_Hook(CTaskSimpleGangDriveBy* This, int, CPed* ped)
+{
+    if (ped == FindPlayerPed(0) || !ped->IsPlayer())
+    {
+        plugin::CallMethod<0x621960, CTaskSimpleGangDriveBy*, CPed*>(This, ped);
+        return;
+    }
+
+    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(ped);
+
+    CWorld::PlayerInFocus = player->GetInternalId();
+
+    CVector savedAim = *(CVector*)0xB6F32C;
+    eCamMode savedCameraMode = *(eCamMode*)0xB6F1A8;
+    float savedAspectRatio = *(float*)0xC3EFA4;
+    float savedExtZoom = *(float*)0xB6F250;
+
+    *(CVector*)0xB6F32C = player->m_aPassengerAim;
+    *(eCamMode*)0xB6F1A8 = eCamMode::MODE_AIMWEAPON_FROMCAR;
+    *(float*)0xC3EFA4 = 0.0f;
+    *(float*)0xB6F250 = 0.0f;
+
+    plugin::CallMethod<0x621960, CTaskSimpleGangDriveBy*, CPed*>(This, ped);
+
+    *(CVector*)0xB6F32C = savedAim;
+    *(eCamMode*)0xB6F1A8 = savedCameraMode;
+    *(float*)0xC3EFA4 = savedAspectRatio;
+    *(float*)0xB6F250 = savedExtZoom;
+
+    CWorld::PlayerInFocus = 0;
+}
+
+static void __fastcall CTaskSimpleGangDriveBy__ProcessAiming_Hook(CTaskSimpleGangDriveBy* This, int, CPed* ped)
+{
+    if (ped == FindPlayerPed(0) || !ped->IsPlayer())
+    {
+        plugin::CallMethod<0x628350, CTaskSimpleGangDriveBy*, CPed*>(This, ped);
+        return;
+    }
+
+    ped->m_nPedType = ePedType::PED_TYPE_CIVMALE;
+    plugin::CallMethod<0x628350, CTaskSimpleGangDriveBy*, CPed*>(This, ped);
+    ped->m_nPedType = ePedType::PED_TYPE_PLAYER1;
+}
+
 void CHook::Init()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -528,4 +584,8 @@ void CHook::Init()
 
     patch::RedirectCall(0x6B1F5E, CAutomobile__FireTruckControl_Hook);
     patch::RedirectCall(0x6B2028, CAutomobile__TankControl_Hook);
+
+    patch::RedirectCall(0x62D59B, CTaskSimpleGangDriveBy__SetupStaticAnimForPlayer_Hook);
+
+    patch::RedirectCall(0x62D813, CTaskSimpleGangDriveBy__ProcessAiming_Hook);
 }

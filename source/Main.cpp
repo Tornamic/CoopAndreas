@@ -20,28 +20,19 @@ public:
 			{
 				CDebugVehicleSpawner::Process();
 
-				if (GetAsyncKeyState(VK_F8) && FindPlayerPed(0)->m_pVehicle)
-				{
-					Sleep(300);
-					CStreaming::RequestModel(1010, eStreamingFlags::GAME_REQUIRED);
-					CStreaming::LoadAllRequestedModels(false);
-					CStreaming::RequestVehicleUpgrade(1010, eStreamingFlags::GAME_REQUIRED);
-
-					char count = 10;
-					while (!CStreaming::HasVehicleUpgradeLoaded(1010) && count)
-					{
-						Sleep(5);
-						count--;
-					}
-
-					plugin::Command<Commands::ADD_VEHICLE_MOD>(CPools::GetVehicleRef(FindPlayerPed(0)->m_pVehicle), 1010);
-				}
-
 				if (CNetwork::m_bConnected)
 				{
 					CPassengerEnter::Process();
 
 					CPlayerPed* localPlayer = FindPlayerPed(0);
+					
+					if (GetAsyncKeyState(VK_F8))
+					{
+						Sleep(250);
+						CDriveBy::StopDriveby(localPlayer);
+					}
+
+					CDriveBy::Process(localPlayer);
 
 					int syncRate = 30;
 					CVector velocity{};

@@ -19,6 +19,8 @@ public:
 
 	char m_Name[32 + 1] = { 0 };
 
+	CVector m_aPassengerAim{};
+
 	CNetworkPlayer::~CNetworkPlayer();
 	CNetworkPlayer::CNetworkPlayer(int id, CVector position);
 
