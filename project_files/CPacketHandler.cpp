@@ -615,3 +615,17 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 		CDriveBy::StopDriveby(player->m_pPed);
 	}
 }
+
+// PlayerChatMessage
+
+void CPacketHandler::PlayerChatMessage__Handle(void* data, int size)
+{
+	CPackets::PlayerChatMessage* packet = (CPackets::PlayerChatMessage*)data;
+	
+	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
+
+	if (player)
+	{
+		CChat::AddMessage("%s(%d): %s", player->GetName(), player->m_iPlayerId, packet->message);
+	}
+}

@@ -470,6 +470,14 @@ static void __fastcall CTaskSimpleGangDriveBy__ProcessAiming_Hook(CTaskSimpleGan
     ped->m_nPedType = ePedType::PED_TYPE_PLAYER1;
 }
 
+static void __cdecl CMenuManager__DrawFrontEnd_FixChat_Hook(float alpha)
+{
+    CFont::SetAlphaFade(alpha);
+
+    if (CChat::m_bInputActive)
+        CChat::ShowInput(false);
+}
+
 void CHook::Init()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -588,4 +596,6 @@ void CHook::Init()
     patch::RedirectCall(0x62D59B, CTaskSimpleGangDriveBy__SetupStaticAnimForPlayer_Hook);
 
     patch::RedirectCall(0x62D813, CTaskSimpleGangDriveBy__ProcessAiming_Hook);
+
+    patch::RedirectCall(0x57C2A3, CMenuManager__DrawFrontEnd_FixChat_Hook);
 }

@@ -23,7 +23,8 @@ enum CPacketsID : unsigned short
 	VEHICLE_DAMAGE,
 	VEHICLE_COMPONENT_ADD,
 	VEHICLE_COMPONENT_REMOVE,
-	VEHICLE_PASSENGER_UPDATE
+	VEHICLE_PASSENGER_UPDATE,
+	PLAYER_CHAT_MESSAGE
 };
 
 class CPackets
@@ -199,5 +200,11 @@ public:
 		unsigned short ammo;
 		unsigned char driveby;
 		CVector aim;
+	};
+
+	struct PlayerChatMessage
+	{
+		int playerid;
+		char message[128+1];
 	};
 };

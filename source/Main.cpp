@@ -85,6 +85,7 @@ public:
 			{
 				CNetworkPlayerNameTag::Process();
 				CChat::Draw();
+				CChat::DrawInput();
 			};
 		CCore::Init();
 		

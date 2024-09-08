@@ -20,7 +20,8 @@ enum CPacketsID : unsigned short
 	VEHICLE_DAMAGE,
 	VEHICLE_COMPONENT_ADD,
 	VEHICLE_COMPONENT_REMOVE,
-	VEHICLE_PASSENGER_UPDATE
+	VEHICLE_PASSENGER_UPDATE,
+	PLAYER_CHAT_MESSAGE
 };
 
 class CPackets
@@ -356,6 +357,19 @@ public:
 			CPackets::VehiclePassengerUpdate* packet = (CPackets::VehiclePassengerUpdate*)data;
 			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+		}
+	};
+
+	struct PlayerChatMessage
+	{
+		int playerid;
+		char message[128 + 1];
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::PlayerChatMessage* packet = (CPackets::PlayerChatMessage*)data;
+			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+			CNetwork::SendPacketToAll(CPacketsID::PLAYER_CHAT_MESSAGE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 };

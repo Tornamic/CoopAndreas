@@ -1,6 +1,26 @@
 #include "stdafx.h"
 
+WNDPROC prevWndProc;
 
+LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	CChat::WndProc(hWnd, message, wParam, lParam);
+	return CallWindowProc(prevWndProc, hWnd, message, wParam, lParam);
+}
+
+void InitWndProc()
+{
+	HWND hWnd = *(HWND*)0xC97C1C;
+
+	SetWindowText(hWnd, "CoopAndreas v0.0.0.0..00000000001111111indev");
+
+	if (hWnd) 
+	{
+		prevWndProc = (WNDPROC)GetWindowLong(hWnd, GWL_WNDPROC);
+		SetWindowLong(hWnd, GWL_WNDPROC, (LONG)WindowProc);
+		return;
+	}
+}
 
 void CCore::Init()
 {
@@ -15,6 +35,7 @@ void CCore::Init()
 	{
 		// init CNetworking async
 		CreateThread(NULL, NULL, CNetwork::InitAsync, NULL, NULL, NULL);
+		InitWndProc();
 	};
 	gameShutdownEvent.before += []
 	{
