@@ -37,12 +37,12 @@ void PatchStreaming()
     patch::SetUInt(0x5B8E6A, 536870912); // hardcoded value
 
     // increase max fps
-    RsGlobal.maxFPS = 100;
-    patch::SetUChar(0x619626, 0x64); // hardcoded value
+    //RsGlobal.maxFPS = 100;
+    //patch::SetUChar(0x619626, 0x64); // hardcoded value
 
     // patch game freezeing if inactive
-    //patch::Nop(0x561AF0, 7);
-    //patch::Nop(0x745BC9, 2);
+    patch::Nop(0x561AF0, 7);
+    patch::Nop(0x745BC9, 2);
     patch::SetUChar(0x747FB6, 1);
     patch::SetUChar(0x74805A, 1);
     patch::Nop(0x74542B, 8);
@@ -128,14 +128,11 @@ void FixCrashes()
     patch::Nop(0x62D331, 11);
     patch::Nop(0x741FFF, 27);
 
-    // fixes unknown crash from CWorld::ClearScanCodes(), testing
-    patch::PutRetn(0x563470);
-
     // PlayerInfo checks in CPlayerPed::ProcessControl
     patch::Nop(0x60F2C4, 25);
 
     // fix CPhysical dctor caused by realtime shadow
-    patch::Nop(0x705B3B, 10);
+    //patch::Nop(0x705B3B, 10);
 
     // nop ped destroying when player enters interior
     patch::Nop(0x4407B7, 5);
@@ -154,6 +151,79 @@ void FixCrashes()
     patch::Nop(0x6F86B6, 5);
 }
 
+#define SCANCODE_SIZE 8*20000
+
+unsigned char ScanCodeMemory[SCANCODE_SIZE];
+
+const unsigned int relocateScanCodesPatch1[14] = {
+0x5DC7AA,0x41A85D,0x41A864,0x408259,0x711B32,0x699CF8,
+0x4092EC,0x40914E,0x408702,0x564220,0x564172,0x563845,
+0x84E9C2,0x85652D };
+
+const unsigned int relocateScanCodesPatch2[56] = {
+0x0040D68C,0x005664D7,0x00566586,0x00408706,0x0056B3B1,0x0056AD91,0x0056A85F,0x005675FA,
+0x0056CD84,0x0056CC79,0x0056CB51,0x0056CA4A,0x0056C664,0x0056C569,0x0056C445,0x0056C341,
+0x0056BD46,0x0056BC53,0x0056BE56,0x0056A940,0x00567735,0x00546738,0x0054BB23,0x006E31AA,
+0x0040DC29,0x00534A09,0x00534D6B,0x00564B59,0x00564DA9,0x0067FF5D,0x00568CB9,0x00568EFB,
+0x00569F57,0x00569537,0x00569127,0x0056B4B5,0x0056B594,0x0056B2C3,0x0056AF74,0x0056AE95,
+0x0056BF4F,0x0056ACA3,0x0056A766,0x0056A685,0x0070B9BA,0x0056479D,0x0070ACB2,0x006063C7,
+0x00699CFE,0x0041A861,0x0040E061,0x0040DF5E,0x0040DDCE,0x0040DB0E,0x0040D98C,0x01566855 };
+
+unsigned int relocateScanCodesPatch3[11] = {
+0x004091C5,0x00409367,0x0040D9C5,0x0040DB47,0x0040DC61,0x0040DE07,0x0040DF97,
+0x0040E09A,0x00534A98,0x00534DFA,0x0071CDB0 };
+
+unsigned int relocateScanCodesPatch4[4] = { 0x005634A6, 0x005638DF, 0x0056420F, 0x00564283 };
+
+
+//-----------------------------------------------------------
+
+void RelocateScanCodes()
+{
+    DWORD oldProt;
+    memset(&ScanCodeMemory[0], 0, SCANCODE_SIZE);
+    unsigned char* aScanCodeMemory = &ScanCodeMemory[0];
+
+    int x = 0;
+    while (x != 14) 
+    {
+        VirtualProtect((PVOID)relocateScanCodesPatch1[x], 4, PAGE_EXECUTE_READWRITE, &oldProt);
+        *(PDWORD)relocateScanCodesPatch1[x] = (DWORD)aScanCodeMemory;
+        x++;
+    }
+
+    x = 0;
+    while (x != 56) 
+    {
+        VirtualProtect((PVOID)relocateScanCodesPatch2[x], 8, PAGE_EXECUTE_READWRITE, &oldProt);
+        *(PDWORD)(relocateScanCodesPatch2[x] + 3) = (DWORD)aScanCodeMemory;
+        x++;
+    }
+
+    // THIRD LIST THAT POINTS TO THE BASE SCANLIST MEMORY + 4
+    x = 0;
+    while (x != 11) {
+        VirtualProtect((PVOID)relocateScanCodesPatch3[x], 8, PAGE_EXECUTE_READWRITE, &oldProt);
+        *(PDWORD)(relocateScanCodesPatch3[x] + 3) = (DWORD)(aScanCodeMemory + 4);
+        x++;
+    }
+
+    // FOURTH LIST THAT POINTS TO THE END OF THE SCANLIST
+    x = 0;
+    while (x != 4) {
+        VirtualProtect((PVOID)relocateScanCodesPatch4[x], 4, PAGE_EXECUTE_READWRITE, &oldProt);
+        *(PDWORD)(relocateScanCodesPatch4[x]) = (DWORD)(aScanCodeMemory + sizeof(aScanCodeMemory));
+        x++;
+    }
+
+    // Others that didn't fit.
+    VirtualProtect((PVOID)0x40936A, 4, PAGE_EXECUTE_READWRITE, &oldProt);
+    *(PDWORD)0x40936A = (DWORD)(aScanCodeMemory + 4);
+
+    // Reset the exe scanlist mem for playerinfo's
+    memset((BYTE*)0xB7D0B8, 0, 8 * 14400);
+}
+
 void CPatch::ApplyPatches()
 {
     // this comment fixes a lot of crashes :D
@@ -165,4 +235,5 @@ void CPatch::ApplyPatches()
 #ifdef _DEV
     PatchConsole();
 #endif
+    RelocateScanCodes();
 }

@@ -46,41 +46,18 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 
 void CNetworkPlayer::CreatePed(int id, CVector position)
 {
-	// load CJ (0) model
-	CStreaming::RequestModel(0, eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
-	CStreaming::LoadAllRequestedModels(false);
+	unsigned int actorId = 0;
+	int playerId = id + 2;
 
-	// wait until model loaded
-	while (CStreaming::ms_aInfoForModel[0].m_nLoadState != LOADSTATE_LOADED)
-		Sleep(5);
+	plugin::Command<Commands::CREATE_PLAYER>(playerId, position.x, position.y, position.z, &actorId);
+	plugin::Command<Commands::GET_PLAYER_CHAR>(playerId, &actorId);
 
-	// get player info
-	CPlayerInfo* info = &CWorld::Players[id + 2];
+	m_pPed = (CPlayerPed*)CPools::GetPed(actorId);
 
-	// create new player ped
-	CPlayerPed* player = new CPlayerPed(id + 2, 0);
-
-	// copy player ped instance to info
-	info->m_pPed = player;
-
-	// set player state to PLAYING
-	info->m_nPlayerState = ePlayerState::PLAYERSTATE_PLAYING;
-
-	// set ped type to PLAYER1, dont use any other !!!
-	player->m_nPedType = ePedType::PED_TYPE_PLAYER1;
-
-	CWorld::Add(player);
-
-	player->SetPosn(position);
-	player->SetModelIndex(0);
-	player->SetOrientation(0.0f, 0.0f, 0.0f);
+	m_pPed->SetOrientation(0.0f, 0.0f, 0.0f);
 
 	// set player immunies, he now dont cares about pain
-	Command<Commands::SET_CHAR_PROOFS>(CPools::GetPedRef(player), 0, 1, 1, 0, 0);
-
-	player->SetCharCreatedBy(2); // disable player ai
-
-	m_pPed = player;
+	Command<Commands::SET_CHAR_PROOFS>(actorId, 0, 1, 1, 0, 0);
 }
 
 int CNetworkPlayer::GetInternalId() // most used for CWorld::PlayerInFocus
