@@ -143,6 +143,49 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
     }
 }
 
+void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned short ammo)
+{
+    // update weapon, ammo
+    auto& activeWeapon = ped->m_pPed->m_aWeapons[ped->m_pPed->m_nActiveWeaponSlot];
+    bool isWeaponTypeDifferent = (activeWeapon.m_eWeaponType != weapon);
+    bool isAmmoDifferent = (activeWeapon.m_nAmmoInClip != ammo);
+
+    if (isWeaponTypeDifferent || isAmmoDifferent)
+    {
+        if (isWeaponTypeDifferent)
+        {
+            ped->m_pPed->ClearWeapons();
+        }
+
+        if (weapon != 0)
+        {
+            if (isWeaponTypeDifferent)
+            {
+                // preload model
+                CStreaming::RequestModel(CUtil::GetWeaponModelById(weapon), eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
+                CStreaming::LoadAllRequestedModels(false);
+            }
+
+            // give weapon
+            bool isMeleeWeapon = CUtil::IsMeleeWeapon(weapon);
+
+            if (activeWeapon.m_nTotalAmmo <= 0)
+            {
+                ped->m_pPed->GiveWeapon((eWeaponType)weapon, isMeleeWeapon ? 1 : 99999, false);
+            }
+
+
+            // set ammo in clip
+            activeWeapon.m_nAmmoInClip = ammo;
+        }
+
+        if (isWeaponTypeDifferent)
+        {
+            ped->m_pPed->SetCurrentWeapon((eWeaponType)weapon);
+        }
+    }
+}
+
 bool CUtil::IsVehicleHasTurret(CVehicle* vehicle)
 {
     switch (vehicle->m_nModelIndex)

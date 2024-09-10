@@ -252,36 +252,72 @@ static void __cdecl CExplosion__AddExplosion(CEntity* newVictim, CPed* newCreato
 
 static void __cdecl CWorld__Add_Hook(CEntity* entity)
 {
+    bool dontCreateEntity = false;
+
     if (entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
     {
-        CVehicle* vehicle = (CVehicle*)entity;
-        CNetworkVehicle* networkVehicle = new CNetworkVehicle(vehicle);
-        CNetworkVehicleManager::Add(networkVehicle);
+        if (!CLocalPlayer::m_bIsHost)
+            dontCreateEntity = true;
+        else
+        {
+            CVehicle* vehicle = (CVehicle*)entity;
+            CNetworkVehicle* networkVehicle = new CNetworkVehicle(vehicle);
+            CNetworkVehicleManager::Add(networkVehicle);
+        }
+
+    }
+    else if (entity->m_nType == eEntityType::ENTITY_TYPE_PED)
+    {
+        CPed* ped = (CPed*)entity;
+
+        if (ped->m_nPedType > 1)
+        {
+            if (!CLocalPlayer::m_bIsHost)
+                dontCreateEntity = true;
+            else
+            {
+                CNetworkPed* networkPed = new CNetworkPed(ped);
+                CNetworkPedManager::Add(networkPed);
+            }
+        }
     }
 
-    if (!CLocalPlayer::m_bIsHost && entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
+    if (dontCreateEntity)
+    {
+        //delete entity;
         return;
+    }
 
     CWorld::Add(entity);
 }
 static void __cdecl CWorld__Remove_Hook(CEntity* entity)
 {
-
-    CVehicle* vehicle = nullptr;
-    CNetworkVehicle* networkVehicle = nullptr;
-    bool isNetworkVehicle = false;
-
     if (entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
     {
-        vehicle = (CVehicle*)entity;
-        networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
-        if (networkVehicle != nullptr)
+        CVehicle* vehicle = (CVehicle*)entity;
+        CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
+        if (networkVehicle)
         {
-            isNetworkVehicle = true;
             if (CLocalPlayer::m_bIsHost)
             {
                 CNetworkVehicleManager::Remove(networkVehicle);
                 delete networkVehicle;
+            }
+        }
+    }
+    else if (entity->m_nType == eEntityType::ENTITY_TYPE_PED)
+    {
+        CPed* ped = (CPed*)entity;
+        if (ped->m_nPedType > 1)
+        {
+            CNetworkPed* networkPed = CNetworkPedManager::GetPed(ped);
+            if (networkPed)
+            {
+                if (CLocalPlayer::m_bIsHost)
+                {
+                    CNetworkPedManager::Remove(networkPed);
+                    delete networkPed;
+                }
             }
         }
     }

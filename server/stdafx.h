@@ -22,7 +22,9 @@
 #include "CNetwork.h"
 #include "CPlayer.h"
 #include "CVehicle.h"
+#include "CPed.h"
 #include "CPlayerManager.h"
 #include "CVehicleManager.h"
+#include "CPedManager.h"
 
 #include "CPackets.h"

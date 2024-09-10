@@ -21,7 +21,10 @@ enum CPacketsID : unsigned short
 	VEHICLE_COMPONENT_ADD,
 	VEHICLE_COMPONENT_REMOVE,
 	VEHICLE_PASSENGER_UPDATE,
-	PLAYER_CHAT_MESSAGE
+	PLAYER_CHAT_MESSAGE,
+	PED_SPAWN,
+	PED_REMOVE,
+	PED_ONFOOT
 };
 
 class CPackets
@@ -213,6 +216,9 @@ public:
 
 			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
 			
+			if (!vehicle)
+				return;
+
 			vehicle->m_vecPosition = packet->pos;
 			vehicle->m_vecRotation = packet->rot;
 		}
@@ -370,6 +376,81 @@ public:
 			CPackets::PlayerChatMessage* packet = (CPackets::PlayerChatMessage*)data;
 			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
 			CNetwork::SendPacketToAll(CPacketsID::PLAYER_CHAT_MESSAGE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+		}
+	};
+
+	struct PedSpawn
+	{
+		int pedid;
+		short modelId;
+		unsigned char pedType;
+		CVector pos;
+		unsigned char createdBy;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (!CPlayerManager::GetPlayer(peer)->m_bIsHost)
+				return;
+
+			CPackets::PedSpawn* packet = (CPackets::PedSpawn*)data;
+			CNetwork::SendPacketToAll(CPacketsID::PED_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+
+			CPed* ped = new CPed(packet->pedid, packet->modelId, packet->pedType, packet->pos, packet->createdBy);
+
+			CPedManager::Add(ped);
+		}
+	};
+
+	struct PedRemove
+	{
+		int pedid;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (!CPlayerManager::GetPlayer(peer)->m_bIsHost)
+				return;
+
+			CPackets::PedRemove* packet = (CPackets::PedRemove*)data;
+
+			CPed* ped = CPedManager::GetPed(packet->pedid);
+
+			if (!ped)
+				return;
+
+			CNetwork::SendPacketToAll(CPacketsID::PED_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+
+			CPedManager::Remove(ped);
+		}
+	};
+
+	struct PedOnFoot
+	{
+		int pedid = 0;
+		CVector pos = CVector();
+		CVector velocity = CVector();
+		float rot = 0.f;
+		unsigned char health = 100;
+		unsigned char armour = 0;
+		unsigned char weapon = 0;
+		unsigned short ammo = 0;
+		// todo action sync
+		// todo path sync
+		// todo tasks sync (event-based)
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (!CPlayerManager::GetPlayer(peer)->m_bIsHost)
+				return;
+
+			CPackets::PedOnFoot* packet = (CPackets::PedOnFoot*)data;
+
+			CPed* ped = CPedManager::GetPed(packet->pedid);
+
+			if (ped)
+			{
+				ped->m_vecPos = packet->pos;
+				CNetwork::SendPacketToAll(CPacketsID::PED_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+			}
 		}
 	};
 };

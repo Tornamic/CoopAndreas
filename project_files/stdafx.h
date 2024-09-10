@@ -1,6 +1,7 @@
 #pragma once
 #define MAX_SERVER_PLAYERS 4
 #define MAX_SERVER_VEHICLES 200
+#define MAX_SERVER_PEDS 300
 #define _DEV
 
 
@@ -50,6 +51,10 @@
 #include "CTaskComplexLeaveCar.h"
 #include "CCarCtrl.h"
 #include "CCheat.h"
+#include "CEmergencyPed.h"
+#include "CCivilianPed.h"
+#include "CTaskComplexWanderStandard.h"
+#include "CTheScripts.h"
 // classes ---------------------------------------------------------------------------------
 
 using namespace plugin;
@@ -57,6 +62,7 @@ using namespace plugin;
 #include "CCore.h"
 #include "structs.h"
 #include "CNetworkVehicle.h"
+#include "CNetworkPed.h"
 #include "CPackets.h"
 #include "CPacketHandler.h"
 #include "CNetwork.h"
@@ -78,5 +84,6 @@ using namespace plugin;
 #include "CPassengerEnter.h"
 #include "CDriveBy.h"
 #include "CTaskSimpleGangDriveBy.h"
+#include "CNetworkPedManager.h"
 
 // -----------------------------------------------------------------------------------------

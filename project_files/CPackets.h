@@ -24,7 +24,10 @@ enum CPacketsID : unsigned short
 	VEHICLE_COMPONENT_ADD,
 	VEHICLE_COMPONENT_REMOVE,
 	VEHICLE_PASSENGER_UPDATE,
-	PLAYER_CHAT_MESSAGE
+	PLAYER_CHAT_MESSAGE,
+	PED_SPAWN,
+	PED_REMOVE,
+	PED_ONFOOT
 };
 
 class CPackets
@@ -206,5 +209,34 @@ public:
 	{
 		int playerid;
 		char message[128+1];
+	};
+
+	struct PedSpawn
+	{
+		int pedid;
+		short modelId;
+		unsigned char pedType;
+		CVector pos;
+		unsigned char createdBy;
+	};
+
+	struct PedRemove
+	{
+		int pedid;
+	};
+
+	struct PedOnFoot
+	{
+		int pedid = 0;
+		CVector pos = CVector();
+		CVector velocity = CVector();
+		float rot = 0.f;
+		unsigned char health = 100;
+		unsigned char armour = 0;
+		unsigned char weapon = 0;
+		unsigned short ammo = 0;
+		// todo action sync
+		// todo path sync
+		// todo tasks sync (event-based)
 	};
 };

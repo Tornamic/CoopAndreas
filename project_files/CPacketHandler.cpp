@@ -165,7 +165,9 @@ void CPacketHandler::PlayerPlaceWaypoint__Handle(void* data, int size)
 	player->m_bWaypointPlaced = packet->place;
 	player->m_vecWaypointPos = &packet->position;
 
-	printf("%d %f %f\n", packet->place, packet->position.x, packet->position.y);
+#ifdef _DEV
+	CChat::AddMessage("WAYPOINT PLACE %d %f %f\n", packet->place, packet->position.x, packet->position.y);
+#endif
 }
 
 // PlayerGetName
@@ -221,9 +223,9 @@ void CPacketHandler::VehicleSpawn__Handle(void* data, int size)
 {
 	CPackets::VehicleSpawn* packet = (CPackets::VehicleSpawn*)data;
 	
-	char buffer[128];
-	sprintf(buffer, "cum spawn %d %d %f %f %f %f", packet->vehicleid, packet->modelid, packet->pos.x, packet->pos.y, packet->pos.z, packet->rot);
-	CChat::AddMessage(buffer);
+#ifdef _DEV
+	CChat::AddMessage("VEHICLE SPAWN %d %d %f %f %f %f", packet->vehicleid, packet->modelid, packet->pos.x, packet->pos.y, packet->pos.z, packet->rot);
+#endif
 
 	CNetworkVehicle* vehicle = new CNetworkVehicle
 	(
@@ -244,10 +246,11 @@ void CPacketHandler::VehicleRemove__Handle(void* data, int size)
 {
 	CPackets::VehicleRemove* packet = (CPackets::VehicleRemove*)data;
 
+#ifdef _DEV
 	char buffer[128];
-	sprintf(buffer, "cum remove %d", packet->vehicleid);
+	sprintf(buffer, "VEHICLE REMOVE %d", packet->vehicleid);
 	CChat::AddMessage(buffer);
-
+#endif
 	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
 
 	CNetworkVehicleManager::Remove(vehicle);
@@ -440,8 +443,9 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 		return;
 	}
 
-
+#ifdef _DEV
 	CChat::AddMessage("player %d entered vehicleid %d %s", packet->playerid, packet->vehicleid, packet->seatid != 0 ? "as passenger" : "");
+#endif
 
 	if (packet->seatid == 0) // driver
 	{
@@ -484,9 +488,9 @@ void CPacketHandler::VehicleExit__Handle(void* data, int size)
 	{
 		return;
 	}
-
+#ifdef _DEV
 	CChat::AddMessage("player %d exited from vehicle", packet->playerid);
-
+#endif
 	if (packet->force)
 	{
 		CVector doorPos{};
@@ -501,8 +505,9 @@ void CPacketHandler::VehicleExit__Handle(void* data, int size)
 
 void CPacketHandler::VehicleDamage__Handle(void* data, int size)
 {
+#ifdef _DEV
 	CChat::AddMessage("VehicleDamage__Handle");
-
+#endif
 	CPackets::VehicleDamage* packet = (CPackets::VehicleDamage*)data;
 
 	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
@@ -593,7 +598,9 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 
 	if (!player->m_pPed->m_nPedFlags.bInVehicle || (player->m_pPed->m_nPedFlags.bInVehicle && vehicle->m_pVehicle->m_pDriver == player->m_pPed))
 	{
+#ifdef _DEV
 		CChat::AddMessage("forcing enter passenger %d", player->m_iPlayerId);
+#endif
 		plugin::Command<Commands::WARP_CHAR_INTO_CAR_AS_PASSENGER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), -1);
 	}
 
@@ -628,4 +635,78 @@ void CPacketHandler::PlayerChatMessage__Handle(void* data, int size)
 	{
 		CChat::AddMessage("%s(%d): %s", player->GetName(), player->m_iPlayerId, packet->message);
 	}
+}
+
+// PedSpawn
+
+void CPacketHandler::PedSpawn__Handle(void* data, int size)
+{
+	CPackets::PedSpawn* packet = (CPackets::PedSpawn*)data;
+
+#ifdef _DEV
+	CChat::AddMessage("PED SPAWN %d %d %f %f %f %d %d", packet->pedid, packet->modelId, packet->pos.x, packet->pos.y, packet->pos.z, packet->pedType, packet->createdBy);
+#endif
+
+	CNetworkPed* ped = new CNetworkPed(packet->pedid, (int)packet->modelId, (ePedType)packet->pedType, packet->pos, packet->createdBy);
+
+	CNetworkPedManager::Add(ped);
+}
+
+// PedRemove
+
+void CPacketHandler::PedRemove__Handle(void* data, int size)
+{
+	CPackets::PedRemove* packet = (CPackets::PedRemove*)data;
+
+#ifdef _DEV
+	CChat::AddMessage("PED REMOVE %d", packet->pedid);
+#endif
+
+	CNetworkPed* ped = CNetworkPedManager::GetPed(packet->pedid);
+
+	if (ped)
+	{
+		CNetworkPedManager::Remove(ped);
+		delete ped;
+	}
+}
+
+// PedOnFoot
+
+CPackets::PedOnFoot* CPacketHandler::PedOnFoot__Collect(CNetworkPed* networkPed)
+{
+	CPackets::PedOnFoot* packet = new CPackets::PedOnFoot;
+
+	packet->pedid = networkPed->m_nPedId;
+	packet->pos = networkPed->m_pPed->m_matrix->pos;
+	packet->rot = networkPed->m_pPed->m_fCurrentRotation;
+	packet->velocity = networkPed->m_pPed->m_vecMoveSpeed;
+	packet->health = (unsigned char)networkPed->m_pPed->m_fHealth;
+	packet->armour = (unsigned char)networkPed->m_pPed->m_fArmour;
+	packet->weapon = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
+	packet->ammo = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_nAmmoInClip;
+
+	return packet;
+}
+
+void CPacketHandler::PedOnFoot__Handle(void* data, int size)
+{
+	CPackets::PedOnFoot* packet = (CPackets::PedOnFoot*)data;
+
+	CNetworkPed* ped = CNetworkPedManager::GetPed(packet->pedid);
+
+	if (!ped)
+		return;
+
+	if (!ped->m_pPed)
+		return;
+
+	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);
+
+	ped->m_pPed->m_matrix->pos = packet->pos;
+	ped->m_pPed->m_fCurrentRotation = packet->rot;
+	ped->m_pPed->m_vecMoveSpeed = packet->velocity;
+	ped->m_pPed->ApplyMoveSpeed(); // make moving more smooth;
+	ped->m_pPed->m_fHealth = packet->health;
+	ped->m_pPed->m_fArmour = packet->armour;
 }

@@ -26,5 +26,9 @@ public:
 	static CPackets::VehiclePassengerUpdate* VehiclePassengerUpdate__Collect(CNetworkVehicle* vehicle, CPlayerPed* localPlayer);
 	static void VehiclePassengerUpdate__Handle(void* data, int size);
 	static void PlayerChatMessage__Handle(void* data, int size);
+	static void PedSpawn__Handle(void* data, int size);
+	static void PedRemove__Handle(void* data, int size);
+	static CPackets::PedOnFoot* PedOnFoot__Collect(CNetworkPed* networkPed);
+	static void PedOnFoot__Handle(void* data, int size);
 };
 

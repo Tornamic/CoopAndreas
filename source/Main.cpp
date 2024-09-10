@@ -4,6 +4,7 @@ unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
 unsigned int lastPassengerSyncTickRate = 0;
+unsigned int lastPedSyncTickRate = 0;
 
 class CoopAndreas {
 public:
@@ -73,6 +74,12 @@ public:
 					{
 						CNetworkVehicleManager::UpdateIdle();
 						lastIdleVehicleSyncTickRate = GetTickCount();
+					}
+
+					if (GetTickCount() > lastPedSyncTickRate + 150)
+					{
+						CNetworkPedManager::Update();
+						lastPedSyncTickRate = GetTickCount();
 					}
 				}
 			};

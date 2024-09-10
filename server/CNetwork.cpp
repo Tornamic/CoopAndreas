@@ -77,6 +77,9 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::VEHICLE_COMPONENT_REMOVE, CPackets::VehicleComponentRemove::Handle);
     CNetwork::AddListener(CPacketsID::VEHICLE_PASSENGER_UPDATE, CPackets::VehiclePassengerUpdate::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_CHAT_MESSAGE, CPackets::PlayerChatMessage::Handle);
+    CNetwork::AddListener(CPacketsID::PED_SPAWN, CPackets::PedSpawn::Handle);
+    CNetwork::AddListener(CPacketsID::PED_REMOVE, CPackets::PedRemove::Handle);
+    CNetwork::AddListener(CPacketsID::PED_ONFOOT, CPackets::PedOnFoot::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -227,6 +230,17 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
             vehicleComponentAddPacket.componentid = component;
             CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_COMPONENT_ADD, &vehicleComponentAddPacket, sizeof vehicleComponentAddPacket, ENET_PACKET_FLAG_RELIABLE);
         }
+    }
+
+    for (auto i : CPedManager::m_pPeds)
+    {
+        CPackets::PedSpawn packet{};
+        packet.pedid = i->m_nPedId;
+        packet.modelId = i->m_nModelId;
+        packet.pos = i->m_vecPos;
+        packet.pedType = i->m_nPedType;
+        packet.createdBy = i->m_nCreatedBy;
+        CNetwork::SendPacket(event.peer, CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
 
     CPackets::PlayerHandshake handshakePacket = { freeId };
