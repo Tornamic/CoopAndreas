@@ -135,12 +135,14 @@ Contact information is current as of September 2024
   - [ ] clothes
   - [ ] haircut
 - [ ] npc sync
-  - [ ] pos, rot, speed
-  - [ ] weapons
+  - [X] pos, rot, speed
+  - [X] weapons
   - [ ] aim
   - [ ] shots
   - [ ] path
   - [ ] action
+  - [ ] task sync
+  - [ ] objective sync
   - [ ] radar icon?
 - [ ] fire sync
 - [ ] time
