@@ -224,6 +224,29 @@ void RelocateScanCodes()
     memset((BYTE*)0xB7D0B8, 0, 8 * 14400);
 }
 
+void SimulateCopyrightScreen()
+{
+    CLoadingScreen::m_currDisplayedSplash = 0;
+    CLoadingScreen::m_timeSinceLastScreen -= 1000.f;
+    CLoadingScreen::m_bFadeInNextSplashFromBlack = 1;
+}
+
+void PatchLoadScreen()
+{
+    // Start the game at state 5
+    // Disable gGameState = 0 setting
+    patch::Nop(0x747483, 6);
+
+    // Put the game where the user wants (default's to the copyright screen)
+    // GS_INIT_ONCE:5
+    patch::Set(0xC8D4C0, 5);
+
+    // Disable Copyright screen
+    // Hook the copyright screen fading in/out and simulates that it has happened
+    patch::Nop(0x748C2B, 5);
+    patch::RedirectCall(0x748C9A, SimulateCopyrightScreen);
+}
+
 void CPatch::ApplyPatches()
 {
     // this comment fixes a lot of crashes :D
@@ -236,4 +259,5 @@ void CPatch::ApplyPatches()
     PatchConsole();
 #endif
     RelocateScanCodes();
+    PatchLoadScreen();
 }

@@ -55,6 +55,9 @@
 #include "CCivilianPed.h"
 #include "CTaskComplexWanderStandard.h"
 #include "CTheScripts.h"
+#include "CTaskSimpleGangDriveBy.h"
+#include "CLoadingScreen.h"
+
 // classes ---------------------------------------------------------------------------------
 
 using namespace plugin;
@@ -83,7 +86,6 @@ using namespace plugin;
 #include "CDebugVehicleSpawner.h"
 #include "CPassengerEnter.h"
 #include "CDriveBy.h"
-#include "CTaskSimpleGangDriveBy.h"
 #include "CNetworkPedManager.h"
 
 // -----------------------------------------------------------------------------------------

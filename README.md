@@ -105,9 +105,9 @@ Contact information is current as of September 2024
 - [ ] fixes
   - [X] mouse
   - [ ] widescreen
-  - [ ] fast load
-    - [ ] disable logos
-    - [ ] disable intro
+  - [X] fast load
+    - [X] disable logos
+    - [X] disable intro
 - [ ] Fix models loading (green polygon)
 - [ ] Players map sync
   - [ ] Areas aka GangZones

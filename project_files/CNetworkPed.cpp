@@ -83,7 +83,7 @@ CNetworkPed::~CNetworkPed()
     }
     else
     {
-        if (m_pPed && m_pPed->m_matrix->m_pOwner != nullptr)
+        if (m_pPed && m_pPed->m_matrix->m_pOwner)
         {
             CTheScripts::RemoveThisPed(m_pPed);
         }
