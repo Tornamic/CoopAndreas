@@ -5,7 +5,7 @@ ID3DXFont* CDXFont::m_pD3DXFont;
 void CDXFont::InitFont() 
 {
     IDirect3DDevice9* device = reinterpret_cast<IDirect3DDevice9*>(RwD3D9GetCurrentD3DDevice());
-    D3DXCreateFontA(device, 16, 0, 400, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "consolas", &m_pD3DXFont);
+    D3DXCreateFontA(device, RENDER_FONT_SIZE, 0, 400, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "consolas", &m_pD3DXFont);
 }
 
 void CDXFont::DestroyFont() 

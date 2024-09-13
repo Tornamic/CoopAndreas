@@ -50,7 +50,7 @@ void CChat::Draw()
             int j = 15 - 1;
             while (i >= 0 && j >= 0)
             {
-                CDXFont::Draw(10, RsGlobal.maximumHeight / 3 + j * 15, CChat::m_aMessages[i].c_str(), D3DCOLOR_RGBA(255, 255, 0, 255));
+                CDXFont::Draw(10, RsGlobal.maximumHeight / 3 + j * RENDER_FONT_SIZE, CChat::m_aMessages[i].c_str(), D3DCOLOR_RGBA(255, 255, 0, 255));
                 i--;
                 j--;
             }
@@ -91,7 +91,7 @@ void CChat::DrawInput()
         displayText.insert(m_nCaretPos, caretSymbol);
     }
 
-    CDXFont::Draw(10, RsGlobal.maximumHeight / 3 + 15 * 15, (": " + displayText).c_str(), D3DCOLOR_RGBA(255, 255, 255, 255));
+    CDXFont::Draw(10, RsGlobal.maximumHeight / 3 + 15 * RENDER_FONT_SIZE, (": " + displayText).c_str(), D3DCOLOR_RGBA(255, 255, 255, 255));
 }
 
 void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

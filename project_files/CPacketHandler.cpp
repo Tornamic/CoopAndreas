@@ -676,15 +676,16 @@ void CPacketHandler::PedRemove__Handle(void* data, int size)
 CPackets::PedOnFoot* CPacketHandler::PedOnFoot__Collect(CNetworkPed* networkPed)
 {
 	CPackets::PedOnFoot* packet = new CPackets::PedOnFoot;
+	CPed* ped = networkPed->m_pPed;
 
 	packet->pedid = networkPed->m_nPedId;
-	packet->pos = networkPed->m_pPed->m_matrix->pos;
-	packet->rot = networkPed->m_pPed->m_fCurrentRotation;
-	packet->velocity = networkPed->m_pPed->m_vecMoveSpeed;
-	packet->health = (unsigned char)networkPed->m_pPed->m_fHealth;
-	packet->armour = (unsigned char)networkPed->m_pPed->m_fArmour;
-	packet->weapon = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
-	packet->ammo = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_nAmmoInClip;
+	packet->pos = ped->m_matrix->pos;
+	packet->rot = ped->m_fCurrentRotation;
+	packet->velocity = ped->m_vecMoveSpeed;
+	packet->health = (unsigned char)ped->m_fHealth;
+	packet->armour = (unsigned char)ped->m_fArmour;
+	packet->weapon = ped->m_aWeapons[ped->m_nActiveWeaponSlot].m_eWeaponType;
+	packet->ammo = ped->m_aWeapons[ped->m_nActiveWeaponSlot].m_nAmmoInClip;
 
 	return packet;
 }

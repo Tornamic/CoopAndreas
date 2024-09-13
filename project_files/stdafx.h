@@ -2,6 +2,7 @@
 #define MAX_SERVER_PLAYERS 4
 #define MAX_SERVER_VEHICLES 200
 #define MAX_SERVER_PEDS 300
+#define RENDER_FONT_SIZE 12
 #define _DEV
 
 
@@ -57,6 +58,7 @@
 #include "CTheScripts.h"
 #include "CTaskSimpleGangDriveBy.h"
 #include "CLoadingScreen.h"
+#include "CPopulation.h"
 
 // classes ---------------------------------------------------------------------------------
 
@@ -87,5 +89,6 @@ using namespace plugin;
 #include "CPassengerEnter.h"
 #include "CDriveBy.h"
 #include "CNetworkPedManager.h"
+#include "CDebugPedTasks.h"
 
 // -----------------------------------------------------------------------------------------

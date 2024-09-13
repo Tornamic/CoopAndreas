@@ -514,6 +514,12 @@ static void __cdecl CMenuManager__DrawFrontEnd_FixChat_Hook(float alpha)
         CChat::ShowInput(false);
 }
 
+static void __cdecl CPopulation__Update_Hook(bool generate)
+{
+    if (CLocalPlayer::m_bIsHost)
+        CPopulation::Update(generate);
+}
+
 void CHook::Init()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -634,4 +640,8 @@ void CHook::Init()
     patch::RedirectCall(0x62D813, CTaskSimpleGangDriveBy__ProcessAiming_Hook);
 
     patch::RedirectCall(0x57C2A3, CMenuManager__DrawFrontEnd_FixChat_Hook);
+    
+    // ped hooks
+    patch::RedirectCall(0x53C030, CPopulation__Update_Hook);
+    patch::RedirectCall(0x53C054, CPopulation__Update_Hook);
 }

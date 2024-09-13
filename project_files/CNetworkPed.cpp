@@ -85,7 +85,10 @@ CNetworkPed::~CNetworkPed()
     {
         if (m_pPed && m_pPed->m_matrix->m_pOwner)
         {
-            CTheScripts::RemoveThisPed(m_pPed);
+            CWorld::Remove(m_pPed);
+            //CWorld::RemoveReferencesToDeletedObject(m_pPed);
+            m_pPed->Remove();
+            delete m_pPed;
         }
     }
 }
