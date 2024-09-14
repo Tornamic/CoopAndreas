@@ -72,10 +72,6 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
     m_pPed->SetOrientation(0.f, 0.f, 0.f);
     CWorld::Add(m_pPed);
 
-    m_pPed->m_pIntelligence->m_TaskMgr.SetTask(new CTaskComplexWanderStandard(4, 0, true), 4, false);
-    
-    printf("%d m_dwDecisionMakerType 0x%p\n", pedid, &m_pPed->m_pIntelligence->m_nDecisionMakerType);
-
     m_nPedId = pedid;
     m_nPedType = pedType;
 }

@@ -705,7 +705,7 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);
 
 	ped->m_pPed->m_matrix->pos = packet->pos;
-	ped->m_pPed->m_fCurrentRotation = packet->rot;
+	ped->m_pPed->m_fCurrentRotation = ped->m_pPed->m_fAimingRotation = packet->rot;
 	ped->m_pPed->m_vecMoveSpeed = packet->velocity;
 	ped->m_pPed->ApplyMoveSpeed(); // make moving more smooth;
 	ped->m_pPed->m_fHealth = packet->health;
