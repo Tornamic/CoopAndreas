@@ -908,9 +908,12 @@ const char TaskNames[][256] = //Credits to MTA
 
 void CDebugPedTasks::Draw()
 {
-	for (int i = 0; i < CPools::ms_pPedPool->m_nSize; i++)
+	for (auto networkPed : CNetworkPedManager::m_pPeds)
 	{
-		CPed* ped = CPools::ms_pPedPool->GetAt(i);
+		if (networkPed == nullptr)
+			continue;
+
+		CPed* ped = networkPed->m_pPed;
 		if (ped)
 		{
 			CVector posn = ped->GetPosition();
@@ -920,7 +923,7 @@ void CDebugPedTasks::Draw()
 				char text[600];
 				char level[60];
 
-				sprintf(text, "Ped: %d\nPRIMARY TASKS:\n", i);
+				sprintf(text, "Ped: %d\nPRIMARY TASKS:\n", networkPed->m_nPedId);
 
 				for (int i = 0; i < 5; i++)
 				{
@@ -930,7 +933,7 @@ void CDebugPedTasks::Draw()
 					while (task)
 					{
 						sprintf(text, "%s%s%s\n", text, level, TaskNames[task->GetId()]);
-						//sprintf(level, "%s--", level);
+						sprintf(level, "%s--", level);
 						task = task->GetSubTask();
 					}
 				}
@@ -945,7 +948,7 @@ void CDebugPedTasks::Draw()
 					while (task)
 					{
 						sprintf(text, "%s%s%s\n", text, level, TaskNames[task->GetId()]);
-						//sprintf(level, "%s--", level);
+						sprintf(level, "%s--", level);
 						task = task->GetSubTask();
 					}
 				}

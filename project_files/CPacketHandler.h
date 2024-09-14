@@ -30,5 +30,7 @@ public:
 	static void PedRemove__Handle(void* data, int size);
 	static CPackets::PedOnFoot* PedOnFoot__Collect(CNetworkPed* networkPed);
 	static void PedOnFoot__Handle(void* data, int size);
+	static CPackets::GameWeatherTime* GameWeatherTime__Collect();
+	static void GameWeatherTime__Handle(void* data, int size);
 };
 

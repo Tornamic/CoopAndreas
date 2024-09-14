@@ -711,3 +711,33 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 	ped->m_pPed->m_fHealth = packet->health;
 	ped->m_pPed->m_fArmour = packet->armour;
 }
+
+// GameWeatherTime
+
+CPackets::GameWeatherTime* CPacketHandler::GameWeatherTime__Collect()
+{
+	CPackets::GameWeatherTime* packet = new CPackets::GameWeatherTime;
+	packet->newWeather = CWeather::NewWeatherType;
+	packet->oldWeather = CWeather::OldWeatherType;
+	packet->forcedWeather = CWeather::ForcedWeatherType;
+	packet->currentMonth = CClock::ms_nGameClockMonth;
+	packet->currentDay = CClock::CurrentDay;
+	packet->currentHour = CClock::ms_nGameClockHours;
+	packet->currentMinute = CClock::ms_nGameClockMinutes;
+	packet->gameTickCount = CClock::ms_nMillisecondsPerGameMinute;
+	return packet;
+}
+
+void CPacketHandler::GameWeatherTime__Handle(void* data, int size)
+{
+	CPackets::GameWeatherTime* packet = (CPackets::GameWeatherTime*)data;
+
+	CWeather::NewWeatherType = packet->newWeather;
+	CWeather::OldWeatherType = packet->oldWeather;
+	CWeather::ForcedWeatherType = packet->forcedWeather;
+	CClock::ms_nGameClockMonth = packet->currentMonth;
+	CClock::CurrentDay = packet->currentDay;
+	CClock::ms_nGameClockHours = packet->currentHour;
+	CClock::ms_nGameClockMinutes = packet->currentMinute;
+	CClock::ms_nMillisecondsPerGameMinute = packet->gameTickCount;
+}

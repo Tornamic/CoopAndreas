@@ -27,7 +27,8 @@ enum CPacketsID : unsigned short
 	PLAYER_CHAT_MESSAGE,
 	PED_SPAWN,
 	PED_REMOVE,
-	PED_ONFOOT
+	PED_ONFOOT,
+	GAME_WEATHER_TIME
 };
 
 class CPackets
@@ -238,5 +239,17 @@ public:
 		// todo action sync
 		// todo path sync
 		// todo tasks sync (event-based)
+	};
+	
+	struct GameWeatherTime
+	{
+		unsigned char newWeather;
+		unsigned char oldWeather;
+		unsigned char forcedWeather;
+		unsigned char currentMonth;
+		unsigned char currentDay;
+		unsigned char currentHour;
+		unsigned char currentMinute;
+		unsigned int gameTickCount;
 	};
 };

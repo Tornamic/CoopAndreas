@@ -24,7 +24,8 @@ enum CPacketsID : unsigned short
 	PLAYER_CHAT_MESSAGE,
 	PED_SPAWN,
 	PED_REMOVE,
-	PED_ONFOOT
+	PED_ONFOOT,
+	GAME_WEATHER_TIME
 };
 
 class CPackets
@@ -451,6 +452,27 @@ public:
 				ped->m_vecPos = packet->pos;
 				CNetwork::SendPacketToAll(CPacketsID::PED_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 			}
+		}
+	};
+
+	struct GameWeatherTime
+	{
+		unsigned char newWeather;
+		unsigned char oldWeather;
+		unsigned char forcedWeather;
+		unsigned char currentMonth;
+		unsigned char currentDay;
+		unsigned char currentHour;
+		unsigned char currentMinute;
+		unsigned int gameTickCount;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (!CPlayerManager::GetPlayer(peer)->m_bIsHost)
+				return;
+
+			CPackets::GameWeatherTime* packet = (CPackets::GameWeatherTime*)data;
+			CNetwork::SendPacketToAll(CPacketsID::GAME_WEATHER_TIME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 };

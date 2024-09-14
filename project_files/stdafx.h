@@ -59,6 +59,8 @@
 #include "CTaskSimpleGangDriveBy.h"
 #include "CLoadingScreen.h"
 #include "CPopulation.h"
+#include "CWeather.h"
+#include "CClock.h"
 
 // classes ---------------------------------------------------------------------------------
 

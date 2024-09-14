@@ -61,13 +61,20 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
         m_pPed = new CCivilianPed(pedType, modelId);
     }
 
-    m_pPed->SetCharCreatedBy(createdBy);
+    m_pPed->m_nCreatedBy = 2;
+    m_pPed->m_pIntelligence->SetPedDecisionMakerType(-1);
+    m_pPed->m_pIntelligence->SetSeeingRange(30.0);
+    m_pPed->m_pIntelligence->SetHearingRange(30.0);
+    m_pPed->m_pIntelligence->m_fDmRadius = 0.0f;
+    m_pPed->m_pIntelligence->m_nDmNumPedsToScan = 0;
 
     m_pPed->SetPosn(pos);
     m_pPed->SetOrientation(0.f, 0.f, 0.f);
     CWorld::Add(m_pPed);
 
     m_pPed->m_pIntelligence->m_TaskMgr.SetTask(new CTaskComplexWanderStandard(4, 0, true), 4, false);
+    
+    printf("%d m_dwDecisionMakerType 0x%p\n", pedid, &m_pPed->m_pIntelligence->m_nDecisionMakerType);
 
     m_nPedId = pedid;
     m_nPedType = pedType;
