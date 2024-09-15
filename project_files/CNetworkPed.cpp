@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+
 // CREATE new ped!!! NOT GET!! 
 CNetworkPed::CNetworkPed(CPed* ped)
 {
@@ -8,6 +9,7 @@ CNetworkPed::CNetworkPed(CPed* ped)
 
     m_pPed = ped;
     m_nPedId = CNetworkPedManager::GetFreeID();
+    m_nCreatedBy = ped->m_nCreatedBy;
 
     CPackets::PedSpawn packet{};
     packet.pedid = m_nPedId;
@@ -74,6 +76,8 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
 
     m_nPedId = pedid;
     m_nPedType = pedType;
+
+    m_nCreatedBy = createdBy;
 }
 
 CNetworkPed::~CNetworkPed()

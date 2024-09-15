@@ -914,47 +914,47 @@ void CDebugPedTasks::Draw()
 			continue;
 
 		CPed* ped = networkPed->m_pPed;
-		if (ped)
+		if (ped == nullptr)
+			continue;
+
+		CVector posn = ped->GetPosition();
+		RwV3d screenCoors; float w, h;
+		if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
 		{
-			CVector posn = ped->GetPosition();
-			RwV3d screenCoors; float w, h;
-			if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
+			char text[600];
+			char level[60];
+
+			sprintf(text, "Ped: %d\nPRIMARY TASKS:\n", networkPed->m_nPedId);
+
+			for (int i = 0; i < 5; i++)
 			{
-				char text[600];
-				char level[60];
+				CTask* task = ped->m_pIntelligence->m_TaskMgr.m_aPrimaryTasks[i];
 
-				sprintf(text, "Ped: %d\nPRIMARY TASKS:\n", networkPed->m_nPedId);
-
-				for (int i = 0; i < 5; i++)
+				sprintf(level, "");
+				while (task)
 				{
-					CTask* task = ped->m_pIntelligence->m_TaskMgr.m_aPrimaryTasks[i];
-
-					sprintf(level, "");
-					while (task)
-					{
-						sprintf(text, "%s%s%s\n", text, level, TaskNames[task->GetId()]);
-						sprintf(level, "%s--", level);
-						task = task->GetSubTask();
-					}
+					sprintf(text, "%s%s%s\n", text, level, TaskNames[task->GetId()]);
+					sprintf(level, "%s--", level);
+					task = task->GetSubTask();
 				}
-
-				sprintf(text, "%s\nSECONDARY TASKS:\n", text);
-
-				for (int i = 0; i < 5; i++)
-				{
-					CTask* task = ped->m_pIntelligence->m_TaskMgr.m_aSecondaryTasks[i];
-
-					sprintf(level, "");
-					while (task)
-					{
-						sprintf(text, "%s%s%s\n", text, level, TaskNames[task->GetId()]);
-						sprintf(level, "%s--", level);
-						task = task->GetSubTask();
-					}
-				}
-
-				CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, text, D3DCOLOR_ARGB(255, 255, 255, 255));
 			}
+
+			sprintf(text, "%s\nSECONDARY TASKS:\n", text);
+
+			for (int i = 0; i < 5; i++)
+			{
+				CTask* task = ped->m_pIntelligence->m_TaskMgr.m_aSecondaryTasks[i];
+
+				sprintf(level, "");
+				while (task)
+				{
+					sprintf(text, "%s%s%s\n", text, level, TaskNames[task->GetId()]);
+					sprintf(level, "%s--", level);
+					task = task->GetSubTask();
+				}
+			}
+
+			CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, text, D3DCOLOR_ARGB(255, 255, 255, 255));
 		}
 	}
 }

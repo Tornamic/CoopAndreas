@@ -81,6 +81,9 @@ public:
 						CNetworkPedManager::Update();
 						lastPedSyncTickRate = GetTickCount();
 					}
+
+					if(!CLocalPlayer::m_bIsHost)
+						CNetworkPedManager::Process();
 				}
 			};
 		Events::drawBlipsEvent += []

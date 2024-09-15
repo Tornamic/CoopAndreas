@@ -1,4 +1,5 @@
 #pragma once
+#include "CNetworkPed.h"
 class CPacketHandler
 {
 public:
@@ -32,5 +33,6 @@ public:
 	static void PedOnFoot__Handle(void* data, int size);
 	static CPackets::GameWeatherTime* GameWeatherTime__Collect();
 	static void GameWeatherTime__Handle(void* data, int size);
+	static void GameWeatherTime__Trigger();
 };
 

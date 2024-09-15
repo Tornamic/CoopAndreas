@@ -181,6 +181,8 @@ void CPacketHandler::PlayerGetName__Handle(void* data, int size)
 	strcpy_s(player->m_Name, packet->name);
 
 	CChat::AddMessage("[Player] player " + std::to_string(player->m_iPlayerId) + " now aka " + player->m_Name);
+
+	CPacketHandler::GameWeatherTime__Trigger();
 }
 
 // PlayerSetHost
@@ -192,7 +194,10 @@ void CPacketHandler::PlayerSetHost__Handle(void* data, int size)
 	if (packet->playerid == CNetworkPlayerManager::m_nMyId)
 	{
 		CLocalPlayer::m_bIsHost = true;
+		CNetworkPedManager::AssignHost();
 		CChat::AddMessage("[Player] You are the host now");
+
+		CPacketHandler::GameWeatherTime__Trigger();
 		return;
 	}
 	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
@@ -706,10 +711,10 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 
 	ped->m_pPed->m_matrix->pos = packet->pos;
 	ped->m_pPed->m_fCurrentRotation = ped->m_pPed->m_fAimingRotation = packet->rot;
-	ped->m_pPed->m_vecMoveSpeed = packet->velocity;
-	ped->m_pPed->ApplyMoveSpeed(); // make moving more smooth;
 	ped->m_pPed->m_fHealth = packet->health;
 	ped->m_pPed->m_fArmour = packet->armour;
+
+	ped->m_vecVelocity = packet->velocity;
 }
 
 // GameWeatherTime
@@ -740,4 +745,13 @@ void CPacketHandler::GameWeatherTime__Handle(void* data, int size)
 	CClock::ms_nGameClockHours = packet->currentHour;
 	CClock::ms_nGameClockMinutes = packet->currentMinute;
 	CClock::ms_nMillisecondsPerGameMinute = packet->gameTickCount;
+}
+
+void CPacketHandler::GameWeatherTime__Trigger()
+{
+	if (!CLocalPlayer::m_bIsHost)
+		return;
+
+	CPackets::GameWeatherTime* packet = CPacketHandler::GameWeatherTime__Collect();
+	CNetwork::SendPacket(CPacketsID::GAME_WEATHER_TIME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE);
 }

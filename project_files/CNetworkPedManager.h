@@ -10,5 +10,7 @@ public:
 	static void Add(CNetworkPed* ped);
 	static void Remove(CNetworkPed* ped);
 	static void Update();
+	static void Process();
+	static void AssignHost();
 };
 

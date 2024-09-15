@@ -520,6 +520,65 @@ static void __cdecl CPopulation__Update_Hook(bool generate)
         CPopulation::Update(generate);
 }
 
+
+#pragma region WeatherTimeHooks
+
+static void __cdecl CClock__RestoreClock_Hook()
+{
+    CClock::RestoreClock();
+    CPacketHandler::GameWeatherTime__Trigger();
+}
+
+static void __cdecl CClock__SetGameClock_Hook(unsigned char h, unsigned char m, unsigned char d)
+{
+    CClock::SetGameClock(h, m, d);
+    CPacketHandler::GameWeatherTime__Trigger();
+}
+
+DWORD ProcessCheat_Hook_Ret = 0x438589;
+static void __declspec(naked) ProcessCheat_Hook()
+{
+    // finally figured out how to hook functions without masturbating RedirectCallRedirectCallRedirectCallRedirectCallRedirectCallRedirectCallRedirectCallRedirectCallRedirectCallRedirectCall
+    __asm
+    {
+        call eax ; call orig code
+        pop edi
+        pop esi
+        mov byte ptr ds:[0x969110], bl
+
+        pushad ; store registers
+    }
+
+    // sync time and weather after processing cheat code
+    CPacketHandler::GameWeatherTime__Trigger(); 
+
+    __asm
+    {
+        popad ; restore registers
+
+        jmp ProcessCheat_Hook_Ret ; jump to function continuation
+    }
+}
+
+static void __cdecl CWeather__ForceWeather_Hook(short id)
+{
+    CWeather::ForceWeather(id);
+    CPacketHandler::GameWeatherTime__Trigger();
+}
+
+static void __cdecl CWeather__ForceWeatherNow_Hook(short id)
+{
+    CWeather::ForceWeatherNow(id);
+    CPacketHandler::GameWeatherTime__Trigger();
+}
+
+static void __cdecl CWeather__SetWeatherToAppropriateTypeNow_Hook()
+{
+    CWeather::SetWeatherToAppropriateTypeNow();
+    CPacketHandler::GameWeatherTime__Trigger();
+}
+#pragma endregion
+
 void CHook::Init()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -644,4 +703,12 @@ void CHook::Init()
     // ped hooks
     patch::RedirectCall(0x53C030, CPopulation__Update_Hook);
     patch::RedirectCall(0x53C054, CPopulation__Update_Hook);
+
+    // time && weather hooks
+    patch::RedirectCall(0x47F1C7, CClock__RestoreClock_Hook);
+    patch::RedirectCall(0x441534, CClock__SetGameClock_Hook); 
+    patch::RedirectJump(0x43857F, ProcessCheat_Hook);
+    patch::RedirectJump(0x47D43E, CWeather__ForceWeather_Hook);
+    patch::RedirectJump(0x72A4F0, CWeather__ForceWeatherNow_Hook);
+    patch::RedirectCall(0x47679F, CWeather__SetWeatherToAppropriateTypeNow_Hook);
 }

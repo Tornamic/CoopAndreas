@@ -72,13 +72,46 @@ void CNetworkPedManager::Update()
 {
 	if (CLocalPlayer::m_bIsHost)
 	{
+		CPackets::PedOnFoot* packet = nullptr;
 		for (int i = 0; i != m_pPeds.size(); i++)
 		{
 			if (m_pPeds[i]->m_pPed == nullptr)
 				continue;
 
-			CPackets::PedOnFoot* packet = CPacketHandler::PedOnFoot__Collect(m_pPeds[i]);
+			packet = CPacketHandler::PedOnFoot__Collect(m_pPeds[i]);
 			CNetwork::SendPacket(CPacketsID::PED_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+		}
+	}
+}
+
+void CNetworkPedManager::Process()
+{
+	for (auto networkPed : m_pPeds)
+	{
+		CPed* ped = networkPed->m_pPed;
+
+		if (ped == nullptr)
+			continue;
+		/*if (ped->m_nPhysicalFlags.bOnSolidSurface)
+		{*/
+			ped->m_vecMoveSpeed = networkPed->m_vecVelocity;
+			ped->ApplyMoveSpeed();
+		//}
+	}
+}
+
+void CNetworkPedManager::AssignHost()
+{
+	for (auto networkPed : m_pPeds)
+	{
+		CPed* ped = networkPed->m_pPed;
+
+		if (ped)
+		{
+			ped->SetCharCreatedBy(networkPed->m_nCreatedBy);
+
+			CTaskComplexWander* task = plugin::CallAndReturn<CTaskComplexWander*, 0x673D00>(ped); // GetWanderTaskByPedType
+			ped->m_pIntelligence->m_TaskMgr.SetTask(task, 0, false);
 		}
 	}
 }
