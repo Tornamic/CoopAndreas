@@ -84,7 +84,10 @@ Contact information is current as of September 2024
   - [X] doors 
 	- [X] locked state
   - [X] engine state
-  
+- [X] chat
+- [X] time
+- [X] weather
+
 ### known bugs (highest priority)
 - [ ] vehicle add-remove packet spam
 - [ ] crashes when closing game caused by different things
@@ -114,7 +117,6 @@ Contact information is current as of September 2024
   - [ ] Mission icons
   - [X] Player map pin
   - [X] Player mark (waypoint)
-- [ ] chat
 - [ ] smooth interpolation
   - [ ] move
   - [ ] rotation
@@ -139,14 +141,9 @@ Contact information is current as of September 2024
   - [X] weapons
   - [ ] aim
   - [ ] shots
-  - [ ] path
-  - [ ] action
-  - [ ] task sync
-  - [ ] objective sync
+  - [ ] task sync (good luck, warrior!)
   - [ ] radar icon?
 - [ ] fire sync
-- [ ] time
-- [ ] weather
 - [ ] cutscenes
   - [ ] objects
   - [ ] effects
