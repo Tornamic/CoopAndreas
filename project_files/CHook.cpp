@@ -568,7 +568,7 @@ static void __cdecl CWeather__ForceWeather_Hook(short id)
 
 static void __cdecl CWeather__ForceWeatherNow_Hook(short id)
 {
-    CWeather::ForceWeatherNow(id);
+    plugin::Call<0x402157>(id);
     CPacketHandler::GameWeatherTime__Trigger();
 }
 
