@@ -579,6 +579,87 @@ static void __cdecl CWeather__SetWeatherToAppropriateTypeNow_Hook()
 }
 #pragma endregion
 
+CTaskManager* pTaskMgr = nullptr;
+CTask* pTask = nullptr;
+int nTasksId = 0;
+CNetworkPed* pNetworkPed = nullptr;
+DWORD CTaskManager__SetTask_Hook_Ret = 0x681AF5;
+static void __declspec(naked) CTaskManager__SetTask_Hook()
+{
+    __asm
+    {
+
+        // original code
+        push ebx
+        mov ebx, [esp+8]
+        // -------------
+
+        mov pTaskMgr, ecx // get *this
+
+        pushad
+
+        // get pTask
+        mov eax, [esp+10h]
+        mov pTask, eax
+    }
+
+    if (pTaskMgr && pTask)
+    {
+        pNetworkPed = CNetworkPedManager::GetPed(pTaskMgr->m_pPed);
+
+        if (pNetworkPed != nullptr)
+        {
+            CChat::AddMessage("SET PRIMARY %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
+        }
+    }
+
+    __asm
+    {
+        popad
+
+        jmp CTaskManager__SetTask_Hook_Ret
+    }
+}
+
+CTask* pTaskComplex = nullptr;
+DWORD CTaskManager__SetTaskSecondary_Hook_Ret = 0x681B65;
+static void __declspec(naked) CTaskManager__SetTaskSecondary_Hook()
+{
+    __asm
+    {
+
+        // original code
+        push ebx
+        mov ebx, [esp+8]
+        // -------------
+
+        mov pTaskMgr, ecx // get *this
+
+        pushad
+
+        // get pTask
+        mov eax, [esp+10h]
+        mov pTask, eax
+    }
+
+    if (pTaskMgr && pTask)
+    {
+        pNetworkPed = CNetworkPedManager::GetPed(pTaskMgr->m_pPed);
+
+        if (pNetworkPed)
+        {
+            CChat::AddMessage("SET SECONDARY %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
+        }
+    }
+
+    __asm
+    {
+        popad
+
+        jmp CTaskManager__SetTaskSecondary_Hook_Ret
+    }
+}
+
 void CHook::Init()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -704,6 +785,11 @@ void CHook::Init()
     patch::RedirectCall(0x53C030, CPopulation__Update_Hook);
     patch::RedirectCall(0x53C054, CPopulation__Update_Hook);
 
+    // ped tasks hooks (help me im going crazy)
+    patch::RedirectJump(0x681AF0, CTaskManager__SetTask_Hook);
+    patch::RedirectJump(0x681B60, CTaskManager__SetTaskSecondary_Hook);
+    // todo add/delete subtask, delete primary/secondary task hooks
+    
     // time && weather hooks
     patch::RedirectCall(0x47F1C7, CClock__RestoreClock_Hook);
     patch::RedirectCall(0x441534, CClock__SetGameClock_Hook); 

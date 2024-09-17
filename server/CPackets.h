@@ -25,7 +25,9 @@ enum CPacketsID : unsigned short
 	PED_SPAWN,
 	PED_REMOVE,
 	PED_ONFOOT,
-	GAME_WEATHER_TIME
+	GAME_WEATHER_TIME,
+	PED_ADD_TASK,
+	PED_REMOVE_TASK
 };
 
 class CPackets
@@ -474,5 +476,11 @@ public:
 			CPackets::GameWeatherTime* packet = (CPackets::GameWeatherTime*)data;
 			CNetwork::SendPacketToAll(CPacketsID::GAME_WEATHER_TIME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
+	};
+
+	struct PedRemoveTask
+	{
+		int pedid;
+		int taskid; // eTaskType
 	};
 };

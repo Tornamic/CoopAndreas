@@ -28,7 +28,9 @@ enum CPacketsID : unsigned short
 	PED_SPAWN,
 	PED_REMOVE,
 	PED_ONFOOT,
-	GAME_WEATHER_TIME
+	GAME_WEATHER_TIME,
+	PED_ADD_TASK,
+	PED_REMOVE_TASK
 };
 
 class CPackets
@@ -251,5 +253,11 @@ public:
 		unsigned char currentHour;
 		unsigned char currentMinute;
 		unsigned int gameTickCount;
+	};
+
+	struct PedRemoveTask
+	{
+		int pedid;
+		eTaskType taskid;
 	};
 };
