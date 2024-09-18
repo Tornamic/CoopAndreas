@@ -607,7 +607,7 @@ static void __declspec(naked) CTaskManager__SetTask_Hook()
     {
         pNetworkPed = CNetworkPedManager::GetPed(pTaskMgr->m_pPed);
 
-        if (pNetworkPed != nullptr)
+        if (pNetworkPed)
         {
             CChat::AddMessage("SET PRIMARY %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
         }
@@ -657,6 +657,68 @@ static void __declspec(naked) CTaskManager__SetTaskSecondary_Hook()
         popad
 
         jmp CTaskManager__SetTaskSecondary_Hook_Ret
+    }
+}
+
+
+DWORD CTaskComplex__SetSubTask_Hook_Ret = 0x61A44E;
+static void __declspec(naked) CTaskComplex__SetSubTask_Hook()
+{
+    __asm
+    {
+        // original code
+        test edi, edi
+        mov [esi + 8], edi
+        // --------------
+
+        pushad
+        pushfd
+
+        mov pTask, edi
+    }
+
+    if (pTask)
+    {
+        pNetworkPed = CNetworkPedManager::GetPed(pTaskMgr->m_pPed);
+
+        if (pNetworkPed)
+        {
+            CChat::AddMessage("SET SUB %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
+        }
+    }
+
+    __asm
+    {
+        popfd
+        popad
+
+        jmp CTaskComplex__SetSubTask_Hook_Ret
+    }
+}
+
+unsigned int nDeletingFlags = 0;
+DWORD CTask__dtor_Hook_Ret = 0x61A667;
+static void __declspec(naked) CTask__dtor_Hook()
+{
+    __asm
+    {
+        mov eax, ecx
+        test [esp + 4], 1
+
+        pushad
+        pushfd
+        
+        mov pTask, ecx
+    }
+
+    CChat::AddMessage("DESTROY TASK %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
+
+    __asm
+    {
+        popfd
+        popad
+
+        jmp CTask__dtor_Hook_Ret
     }
 }
 
@@ -788,7 +850,8 @@ void CHook::Init()
     // ped tasks hooks (help me im going crazy)
     patch::RedirectJump(0x681AF0, CTaskManager__SetTask_Hook);
     patch::RedirectJump(0x681B60, CTaskManager__SetTaskSecondary_Hook);
-    // todo add/delete subtask, delete primary/secondary task hooks
+    patch::RedirectJump(0x61A449, CTaskComplex__SetSubTask_Hook);
+    patch::RedirectJump(0x61A660, CTask__dtor_Hook); // todo: not working
     
     // time && weather hooks
     patch::RedirectCall(0x47F1C7, CClock__RestoreClock_Hook);

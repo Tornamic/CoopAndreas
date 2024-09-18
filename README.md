@@ -143,6 +143,7 @@ Contact information is current as of September 2024
   - [ ] shots
   - [ ] task sync (good luck, warrior!)
   - [ ] radar icon?
+  - [ ] speech sync (if not synced by tasks)
 - [ ] fire sync
 - [ ] cutscenes
   - [ ] objects
@@ -153,19 +154,40 @@ Contact information is current as of September 2024
   - [ ] fix grenade throw distance
   - [ ] fix rpg aim state
 - [ ] cheat code sync
-- [ ] pickup (collectables) sync
+- [ ] pickups
+  - [ ] graffities, horseshoes, snapshots, oysters
+  - [ ] static weapons, armours
+  - [ ] static bribes
+  - [ ] drop
+    - [ ] money
+    - [ ] weapons
 - [ ] jetpack sync
-- [ ] idle anim sync
+- [ ] anim sync
+  - [ ] sprunk drinking
+  - [ ] fast food eating
+  - [ ] idle anims
+  - [ ] funny TAB+NUM4 (or NUM6) anim sync (did you know about this?)
+- [ ] gang groups sync
+- [ ] player voice commands
+- [ ] chat reactions (see LD_CHAT.txd)
+- [ ] activities
+  - [ ] pool 
+  - [ ] basketball
+  - [ ] casino sync (betting between players)
+    - [ ] slot machines
+    - [ ] roulette
+    - [ ] horse betting
+  - [ ] gym
+    - [ ] exercises
+    - [ ] fighting between players
+  - [ ] dancing at parties
 
 ### ChatGPT Generated tasks n ideas:
 - [ ] minigames sync
   - [ ] pool
   - [ ] bowling (chatgppt what????)
   - [ ] arm wrestling (wtf chatgpt???)
-- [ ] casino sync
-  - [ ] slot machines
-  - [ ] roulette
-  - [ ] horse betting
+
 - [ ] territory wars sync
   - [ ] exact status synchronization of captured territories for all players
   - [ ] common signals for starting and ending gang wars

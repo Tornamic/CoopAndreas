@@ -910,18 +910,18 @@ void CDebugPedTasks::Draw()
 {
 	for (auto networkPed : CNetworkPedManager::m_pPeds)
 	{
-		if (networkPed == nullptr)
+		if (!networkPed || !networkPed->m_pPed)
 			continue;
 
 		CPed* ped = networkPed->m_pPed;
-		if (ped == nullptr)
+		if (!ped || !ped->m_matrix)
 			continue;
 
-		CVector posn = ped->GetPosition();
+		CVector posn = ped->m_matrix->pos;
 		RwV3d screenCoors; float w, h;
 		if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
 		{
-			char text[600];
+			char text[1000];
 			char level[60];
 
 			sprintf(text, "Ped: %d\nPRIMARY TASKS:\n", networkPed->m_nPedId);
