@@ -621,7 +621,6 @@ static void __declspec(naked) CTaskManager__SetTask_Hook()
     }
 }
 
-CTask* pTaskComplex = nullptr;
 DWORD CTaskManager__SetTaskSecondary_Hook_Ret = 0x681B65;
 static void __declspec(naked) CTaskManager__SetTaskSecondary_Hook()
 {
@@ -696,29 +695,24 @@ static void __declspec(naked) CTaskComplex__SetSubTask_Hook()
     }
 }
 
-unsigned int nDeletingFlags = 0;
-DWORD CTask__dtor_Hook_Ret = 0x61A667;
-static void __declspec(naked) CTask__dtor_Hook()
+CTaskSimple* pTaskSimple = nullptr;
+DWORD CTaskSimple__dtor_Hook_Ret = 0x61A3A6;
+DWORD CTask_vtable = 0x86D48C;
+static void __declspec(naked) CTaskSimple__dtor_Hook()
 {
     __asm
     {
-        mov eax, ecx
-        test [esp + 4], 1
-
         pushad
-        pushfd
-        
-        mov pTask, ecx
+        mov pTaskSimple, ecx
     }
 
-    CChat::AddMessage("DESTROY TASK %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
+    CChat::AddMessage("DESTROY TASK %s", CDebugPedTasks::TaskNames[pTaskSimple->GetId()]);
 
     __asm
     {
-        popfd
         popad
-
-        jmp CTask__dtor_Hook_Ret
+        mov dword ptr [ecx], offset CTask_vtable;
+        jmp CTaskSimple__dtor_Hook_Ret
     }
 }
 
@@ -851,7 +845,7 @@ void CHook::Init()
     patch::RedirectJump(0x681AF0, CTaskManager__SetTask_Hook);
     patch::RedirectJump(0x681B60, CTaskManager__SetTaskSecondary_Hook);
     patch::RedirectJump(0x61A449, CTaskComplex__SetSubTask_Hook);
-    patch::RedirectJump(0x61A660, CTask__dtor_Hook); // todo: not working
+    patch::RedirectJump(0x61A3A0, CTaskSimple__dtor_Hook);
     
     // time && weather hooks
     patch::RedirectCall(0x47F1C7, CClock__RestoreClock_Hook);

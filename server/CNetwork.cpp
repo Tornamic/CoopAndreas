@@ -106,6 +106,16 @@ void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t 
 
     // send packet
     enet_peer_send(peer, 0, packet);
+
+    bool host;
+    auto player = CPlayerManager::GetPlayer(peer);
+
+    if (player)
+    {
+        host = player->m_bIsHost;
+    }
+
+    printf("SEND %d TO %s\n", id, host ? "HOST" : "client");
 }
 
 void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith = nullptr)
@@ -299,7 +309,7 @@ void CNetwork::HandlePacketReceive(ENetEvent& event)
             m_packetListeners[i]->m_callback(event.peer, data, event.packet->dataLength - 2);
         }
     }
-
+    
     delete[] data;
 }
 

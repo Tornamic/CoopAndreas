@@ -96,7 +96,7 @@ public:
 				CNetworkPlayerNameTag::Process();
 				CChat::Draw();
 				CChat::DrawInput();
-				CDebugPedTasks::Draw();
+				//CDebugPedTasks::Draw();
 			};
 		CCore::Init();
 		
