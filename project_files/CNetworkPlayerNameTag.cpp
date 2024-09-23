@@ -27,7 +27,7 @@ void DrawNickName(float x, float y, unsigned char alpha, const char* name)
 	CFont::SetColor(CRGBA(255, 255, 0, alpha));
 	CFont::SetBackground(false, false);
 	CFont::SetDropColor(CRGBA(0, 0, 0, alpha));
-	CFont::SetDropShadowPosition(2);
+	CFont::SetDropShadowPosition(1);
 	CFont::SetScale(PROPORION_X(0.4f), PROPORION_Y(0.7f));
 	CFont::PrintString(x, y, name);
 }

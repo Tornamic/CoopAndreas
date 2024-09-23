@@ -716,6 +716,26 @@ static void __declspec(naked) CTaskSimple__dtor_Hook()
     }
 }
 
+DWORD CVisibilityPlugins__GetClumpAlpha_CrashFixHook_Break = 0x553B00;
+DWORD CVisibilityPlugins__GetClumpAlpha_CrashFixHook_Continue = 0x553B39;
+DWORD CVisibilityPlugins__GetClumpAlpha_CallAddr = 0x732B20;
+static void __declspec(naked) CVisibilityPlugins__GetClumpAlpha_CrashFixHook()
+{
+    __asm
+    {
+                                                                    // PSEUDOCODE xD
+        test eax, eax                                               // if(eax == nullptr)
+        jz skip                                                     //     goto skip;
+                                                                    // else
+                                                                    // {
+        call CVisibilityPlugins__GetClumpAlpha_CallAddr             //     CVisibilityPlugins__GetClumpAlpha();
+        jmp CVisibilityPlugins__GetClumpAlpha_CrashFixHook_Continue //     goto CONTINUE_HOOKED_FUNCTION;
+                                                                    // }
+    skip:
+        jmp CVisibilityPlugins__GetClumpAlpha_CrashFixHook_Break
+    }
+}
+
 void CHook::Init()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -842,10 +862,10 @@ void CHook::Init()
     patch::RedirectCall(0x53C054, CPopulation__Update_Hook);
 
     // ped tasks hooks (help me im going crazy)
-    patch::RedirectJump(0x681AF0, CTaskManager__SetTask_Hook);
+    /*patch::RedirectJump(0x681AF0, CTaskManager__SetTask_Hook);
     patch::RedirectJump(0x681B60, CTaskManager__SetTaskSecondary_Hook);
     patch::RedirectJump(0x61A449, CTaskComplex__SetSubTask_Hook);
-    patch::RedirectJump(0x61A3A0, CTaskSimple__dtor_Hook);
+    patch::RedirectJump(0x61A3A0, CTaskSimple__dtor_Hook);*/
     
     // time && weather hooks
     patch::RedirectCall(0x47F1C7, CClock__RestoreClock_Hook);
@@ -854,4 +874,7 @@ void CHook::Init()
     patch::RedirectJump(0x47D43E, CWeather__ForceWeather_Hook);
     patch::RedirectJump(0x72A4F0, CWeather__ForceWeatherNow_Hook);
     patch::RedirectCall(0x47679F, CWeather__SetWeatherToAppropriateTypeNow_Hook);
+
+    // CRenderer::RenderEverythingBarRoads => CVisibilityPlugins::GetClumpAlpha crash fix
+    patch::RedirectJump(0x553B34, CVisibilityPlugins__GetClumpAlpha_CrashFixHook);
 }

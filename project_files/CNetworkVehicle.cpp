@@ -50,9 +50,6 @@ bool CNetworkVehicle::CreateVehicle(int vehicleid, int modelid, CVector pos, flo
     CStreaming::RequestModel(modelid, GAME_REQUIRED);
     CStreaming::LoadAllRequestedModels(false);
 
-    if (CStreaming::ms_aInfoForModel[modelid].m_nLoadState != LOADSTATE_LOADED)
-        return false;
-
     if (!(oldFlags & GAME_REQUIRED))
     {
         CStreaming::SetModelIsDeletable(modelid);

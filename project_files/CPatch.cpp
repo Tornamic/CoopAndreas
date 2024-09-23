@@ -131,9 +131,6 @@ void FixCrashes()
     // PlayerInfo checks in CPlayerPed::ProcessControl
     patch::Nop(0x60F2C4, 25);
 
-    // fix CPhysical dctor caused by realtime shadow
-    //patch::Nop(0x705B3B, 10);
-
     // nop ped destroying when player enters interior
     patch::Nop(0x4407B7, 5);
     patch::Nop(0x61648C, 5);
@@ -149,6 +146,15 @@ void FixCrashes()
     patch::Nop(0x6B9298, 5);
     patch::Nop(0x6F1793, 5);
     patch::Nop(0x6F86B6, 5);
+
+    // fixes CPhysical dtor crash 
+    // (0x00705B3B _ZN22CRealTimeShadowManager20ReturnRealTimeShadowEP15CRealTimeShadow)
+    // Access violation writing location 0x00000134
+    // hook and check `ecx` for 0x0?.. nah, we can just NOP it!
+    patch::Nop(0x542485, 11);
+
+    // another one shadow crash... NOP IT AGAIN
+    patch::Nop(0x53EA08, 10);
 }
 
 #define SCANCODE_SIZE 8*20000

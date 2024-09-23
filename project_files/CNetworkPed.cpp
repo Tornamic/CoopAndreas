@@ -25,14 +25,6 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
     CStreaming::RequestModel(modelId, 0);
     CStreaming::LoadAllRequestedModels(false);
 
-    for (size_t i = 0; i < 10; i++)
-    {
-        if (CStreaming::ms_aInfoForModel[modelId].m_nLoadState == LOADSTATE_LOADED)
-            break;
-
-        Sleep(10);
-    }
-
     if (pedType == PED_TYPE_COP)
     {
         switch (modelId) 
