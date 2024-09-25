@@ -698,6 +698,9 @@ static void __declspec(naked) CTaskComplex__SetSubTask_Hook()
 CTaskSimple* pTaskSimple = nullptr;
 DWORD CTaskSimple__dtor_Hook_Ret = 0x61A3A6;
 DWORD CTask_vtable = 0x86D48C;
+void** vtable;
+DWORD dwGetIdAddr = 0;
+eTaskType nTaskType{};
 static void __declspec(naked) CTaskSimple__dtor_Hook()
 {
     __asm
@@ -706,8 +709,27 @@ static void __declspec(naked) CTaskSimple__dtor_Hook()
         mov pTaskSimple, ecx
     }
 
-    CChat::AddMessage("DESTROY TASK %s", CDebugPedTasks::TaskNames[pTaskSimple->GetId()]);
+    if (pTaskSimple)
+    {
+        vtable = *(void***)pTaskSimple; // get vtable 
 
+        dwGetIdAddr = patch::GetUInt((DWORD)vtable + 16); // get `GetId`
+
+        if (dwGetIdAddr == 0x82263A) // if virtual function is not implemented (purecall)
+        {
+            goto skip;
+        }
+
+        pNetworkPed = CUtil::GetNetworkPedByTask(pTaskSimple);
+
+        if (pNetworkPed)
+        {
+            nTaskType = plugin::CallMethodAndReturnDyn<eTaskType>(dwGetIdAddr, pTaskSimple);
+            CChat::AddMessage("DESTROY TASK %s", CDebugPedTasks::TaskNames[nTaskType]);
+        }
+    }
+
+    skip:
     __asm
     {
         popad
@@ -719,6 +741,8 @@ static void __declspec(naked) CTaskSimple__dtor_Hook()
 DWORD CVisibilityPlugins__GetClumpAlpha_CrashFixHook_Break = 0x553B00;
 DWORD CVisibilityPlugins__GetClumpAlpha_CrashFixHook_Continue = 0x553B39;
 DWORD CVisibilityPlugins__GetClumpAlpha_CallAddr = 0x732B20;
+const char* pMBoxTitle = "Title";
+const char* pMBoxMessage = "CVisibilityPlugins__GetClumpAlpha eax = 0!";
 static void __declspec(naked) CVisibilityPlugins__GetClumpAlpha_CrashFixHook()
 {
     __asm
@@ -729,9 +753,16 @@ static void __declspec(naked) CVisibilityPlugins__GetClumpAlpha_CrashFixHook()
                                                                     // else
                                                                     // {
         call CVisibilityPlugins__GetClumpAlpha_CallAddr             //     CVisibilityPlugins__GetClumpAlpha();
-        jmp CVisibilityPlugins__GetClumpAlpha_CrashFixHook_Continue //     goto CONTINUE_HOOKED_FUNCTION;
+        jmp CVisibilityPlugins__GetClumpAlpha_CrashFixHook_Continue //     MessageBoxA(0, "CVisibilityPlugins__GetClumpAlpha eax = 0!", "Title", 0);
+                                                                    //     goto CONTINUE_HOOKED_FUNCTION;
                                                                     // }
     skip:
+        push 0
+        push pMBoxTitle
+        push pMBoxMessage
+        push 0
+        call MessageBoxA
+        add esp, 16
         jmp CVisibilityPlugins__GetClumpAlpha_CrashFixHook_Break
     }
 }
@@ -862,10 +893,10 @@ void CHook::Init()
     patch::RedirectCall(0x53C054, CPopulation__Update_Hook);
 
     // ped tasks hooks (help me im going crazy)
-    /*patch::RedirectJump(0x681AF0, CTaskManager__SetTask_Hook);
+    patch::RedirectJump(0x681AF0, CTaskManager__SetTask_Hook);
     patch::RedirectJump(0x681B60, CTaskManager__SetTaskSecondary_Hook);
     patch::RedirectJump(0x61A449, CTaskComplex__SetSubTask_Hook);
-    patch::RedirectJump(0x61A3A0, CTaskSimple__dtor_Hook);*/
+    patch::RedirectJump(0x61A3A0, CTaskSimple__dtor_Hook);
     
     // time && weather hooks
     patch::RedirectCall(0x47F1C7, CClock__RestoreClock_Hook);

@@ -155,6 +155,9 @@ void FixCrashes()
 
     // another one shadow crash... NOP IT AGAIN
     patch::Nop(0x53EA08, 10);
+
+    // disable replays
+    patch::Nop(0x53C090, 5);
 }
 
 #define SCANCODE_SIZE 8*20000

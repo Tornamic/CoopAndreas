@@ -96,7 +96,7 @@ public:
 				CNetworkPlayerNameTag::Process();
 				CChat::Draw();
 				CChat::DrawInput();
-				//CDebugPedTasks::Draw();
+				CDXFont::Draw(100, 10, std::to_string(CPools::ms_pPedPool->GetNoOfUsedSpaces()).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
 			};
 		CCore::Init();
 		

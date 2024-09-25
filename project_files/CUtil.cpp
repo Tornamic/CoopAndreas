@@ -204,3 +204,34 @@ eVehicleType CUtil::GetVehicleType(CVehicle* vehicle)
 {
     return (eVehicleType)reinterpret_cast<CVehicleModelInfo*>(CModelInfo::ms_modelInfoPtrs[vehicle->m_nModelIndex])->m_nVehicleType;
 }
+
+CNetworkPed* CUtil::GetNetworkPedByTask(CTask* targetTask)
+{
+    for (auto networkPed : CNetworkPedManager::m_pPeds)
+    {
+        CPed* ped = networkPed->m_pPed;
+        if (!ped) continue;
+
+        auto findTaskInArray = [&](CTask* tasks[], int size) -> CNetworkPed* {
+            for (int i = 0; i < size; i++)
+            {
+                CTask* task = tasks[i];
+                while (task)
+                {
+                    if (task == targetTask)
+                        return networkPed;
+                    task = task->GetSubTask();
+                }
+            }
+            return nullptr;
+            };
+
+        if (auto foundPed = findTaskInArray(ped->m_pIntelligence->m_TaskMgr.m_aPrimaryTasks, 5))
+            return foundPed;
+
+        if (auto foundPed = findTaskInArray(ped->m_pIntelligence->m_TaskMgr.m_aSecondaryTasks, 5))
+            return foundPed;
+    }
+
+    return nullptr;
+}
