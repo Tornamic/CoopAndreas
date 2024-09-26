@@ -30,7 +30,8 @@ enum CPacketsID : unsigned short
 	PED_ONFOOT,
 	GAME_WEATHER_TIME,
 	PED_ADD_TASK,
-	PED_REMOVE_TASK
+	PED_REMOVE_TASK,
+	PLAYER_KEY_SYNC
 };
 
 class CPackets
@@ -54,7 +55,6 @@ public:
 		CVector position = CVector();
 		CVector velocity = CVector();
 		float rotation = 0.0f;
-		CControllerState controllerState = CControllerState();
 		unsigned char health = 100;
 		unsigned char armour = 0;
 		unsigned char weapon = 0;
@@ -147,7 +147,6 @@ public:
 		CVector rot;
 		CVector roll;
 		CVector velocity;
-		CControllerState controllerState;
 		unsigned char playerHealth;
 		unsigned char playerArmour;
 		unsigned char weapon;
@@ -199,7 +198,6 @@ public:
 	{
 		int playerid;
 		int vehicleid;
-		CControllerState controllerState;
 		unsigned char playerHealth;
 		unsigned char playerArmour;
 		unsigned char weapon;
@@ -238,8 +236,6 @@ public:
 		unsigned char armour = 0;
 		unsigned char weapon = 0;
 		unsigned short ammo = 0;
-		// todo action sync
-		// todo path sync
 		// todo tasks sync (event-based)
 	};
 	
@@ -259,5 +255,11 @@ public:
 	{
 		int pedid;
 		eTaskType taskid;
+	};
+
+	struct PlayerKeySync
+	{
+		int playerid;
+		ÑCompressedControllerState newState;
 	};
 };

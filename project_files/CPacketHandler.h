@@ -34,5 +34,6 @@ public:
 	static CPackets::GameWeatherTime* GameWeatherTime__Collect();
 	static void GameWeatherTime__Handle(void* data, int size);
 	static void GameWeatherTime__Trigger();
+	static void PlayerKeySync__Handle(void* data, int size);
 };
 

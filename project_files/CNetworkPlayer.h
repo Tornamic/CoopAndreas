@@ -24,6 +24,11 @@ public:
 	CNetworkPlayer::~CNetworkPlayer();
 	CNetworkPlayer::CNetworkPlayer(int id, CVector position);
 
+	CControllerState m_oldControllerState{};
+	CControllerState m_newControllerState{};
+
+	ÑCompressedControllerState m_compressedControllerState{};
+
 	void CreatePed(int id, CVector position);
 
 	int GetInternalId();

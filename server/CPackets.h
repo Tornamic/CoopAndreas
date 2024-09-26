@@ -27,7 +27,8 @@ enum CPacketsID : unsigned short
 	PED_ONFOOT,
 	GAME_WEATHER_TIME,
 	PED_ADD_TASK,
-	PED_REMOVE_TASK
+	PED_REMOVE_TASK,
+	PLAYER_KEY_SYNC
 };
 
 class CPackets
@@ -50,7 +51,6 @@ public:
 		CVector position;
 		CVector	velocity;
 		float rotation;
-		CControllerState controllerState;
 		unsigned char health;
 		unsigned char armour;
 		unsigned char weapon;
@@ -235,7 +235,6 @@ public:
 		CVector rot;
 		CVector roll;
 		CVector velocity;
-		CControllerState controllerState;
 		unsigned char playerHealth;
 		unsigned char playerArmour;
 		unsigned char weapon;
@@ -353,7 +352,6 @@ public:
 	{
 		int playerid;
 		int vehicleid;
-		CControllerState controllerState;
 		unsigned char playerHealth;
 		unsigned char playerArmour;
 		unsigned char weapon;
@@ -482,5 +480,18 @@ public:
 	{
 		int pedid;
 		int taskid; // eTaskType
+	};
+
+	struct PlayerKeySync
+	{
+		int playerid;
+		ÑCompressedControllerState newState;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::PlayerKeySync* packet = (CPackets::PlayerKeySync*)data;
+			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+			CNetwork::SendPacketToAll(CPacketsID::PLAYER_KEY_SYNC, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+		}
 	};
 };

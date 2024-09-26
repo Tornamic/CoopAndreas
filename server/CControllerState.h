@@ -32,3 +32,38 @@ public:
     signed short m_bVehicleMouseLook;
     signed short m_bRadioTrackSkip;
 };
+
+#pragma pack(1)
+struct ÑCompressedControllerState
+{
+    signed short LeftStickX; // move/steer left (-128?)/right (+128)
+    signed short LeftStickY; // move back(+128)/forwards(-128?)
+
+    union
+    {
+        struct
+        {
+            unsigned int LeftShoulder1 : 1;
+            unsigned int LeftShoulder2 : 1;
+            unsigned int RightShoulder1 : 1; // target / hand brake
+            unsigned int RightShoulder2 : 1;
+            unsigned int DPadUp : 1; // radio change up
+            unsigned int DPadDown : 1; // radio change down
+            unsigned int DPadLeft : 1; // Skip trip/Action / Negative talk reply
+            unsigned int DPadRight : 1; // Next user MP3 track / Positive talk reply
+            unsigned int Start : 1; // Pause
+            unsigned int Select : 1; // Camera modes
+            unsigned int ButtonSquare : 1; // jump / reverse
+            unsigned int ButtonTriangle : 1; // get in/out
+            unsigned int ButtonCross : 1; // sprint / accelerate
+            unsigned int ButtonCircle : 1; // fire
+            unsigned int ShockButtonL : 1;
+            unsigned int ShockButtonR : 1; // look behind
+            unsigned int m_bChatIndicated : 1;
+            unsigned int m_bPedWalk : 1;
+            unsigned int m_bVehicleMouseLook : 1;
+            unsigned int m_bRadioTrackSkip : 1;
+        };
+        unsigned int compressed; // To access all bits as a single value if needed
+    };
+};

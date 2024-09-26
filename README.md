@@ -87,6 +87,7 @@ Contact information is current as of September 2024
 - [X] chat
 - [X] time
 - [X] weather
+- [X] proper key sync
 
 ### known bugs (highest priority)
 - [ ] vehicle add-remove packet spam
@@ -94,7 +95,9 @@ Contact information is current as of September 2024
 - [ ] sometimes closing pause menu game cant load nametag weapon icon
 
 ### Current Tasks
-- [ ] proper key sync
+- [ ] fix weapon selection blinking
+- [ ] force crouch sync using CTask
+- [ ] refactor packet system (make abstract, more oop, etc.)
 - [ ] vehicle sync
   - [ ] force hydraulics sync
   - [ ] trailer sync
@@ -151,7 +154,7 @@ Contact information is current as of September 2024
   - [ ] peds
   - [ ] camera
 - [ ] fix weapon desync
-  - [ ] fix grenade throw distance
+  - [X] fix grenade throw distance
   - [ ] fix rpg aim state
 - [ ] cheat code sync
 - [ ] pickups

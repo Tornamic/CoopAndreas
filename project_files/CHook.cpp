@@ -21,29 +21,7 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     CWorld::PlayerInFocus = player->GetInternalId();
 
-    CPad* pad = This->GetPadFromPlayer();
-
-    CControllerState newOldState = pad->NewState;
-    CControllerState oldOldState = pad->OldState;
-
-    CUtil::CopyControllerState(pad->OldState, player->m_oOnFoot->controllerState);
-    CUtil::CopyControllerState(pad->NewState, player->m_lOnFoot->controllerState);
-
-    if (CUtil::IsDucked(player->m_pPed) != player->m_lOnFoot->ducking) //Forcing crouch sync
-    {
-        pPressingDuck[CWorld::PlayerInFocus] = true;
-        player->m_oShockButtonL = 0;
-        player->m_lShockButtonL = 255;
-    }
-    else if (pPressingDuck[CWorld::PlayerInFocus] == true)
-    {
-        pPressingDuck[CWorld::PlayerInFocus] = false;
-        player->m_oShockButtonL = 255;
-        player->m_lShockButtonL = 0;
-    }
-
-    pad->OldState.ShockButtonL = player->m_oShockButtonL;
-    pad->NewState.ShockButtonL = player->m_lShockButtonL;
+    CKeySync::ApplyNetworkPlayerContext(player);
 
     player->m_pPed->m_fHealth = player->m_lOnFoot->health;
     player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
@@ -57,8 +35,7 @@ void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     CWorld::PlayerInFocus = 0;
 
-    pad->NewState = newOldState;
-    pad->OldState = oldOldState;
+    CKeySync::ApplyLocalContext();
 }
 
 
@@ -106,16 +83,7 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
     CWorld::PlayerInFocus = player->GetInternalId();
 
-    CPad* pad = player->m_pPed->GetPadFromPlayer();
-
-    CControllerState newOldState = pad->NewState;
-    CControllerState oldOldState = pad->OldState;
-
-    CUtil::CopyControllerState(pad->OldState, player->m_oOnFoot->controllerState);
-    CUtil::CopyControllerState(pad->NewState, player->m_lOnFoot->controllerState);
-
-    pad->OldState.ShockButtonL = player->m_oOnFoot->controllerState.ShockButtonL;
-    pad->NewState.ShockButtonL = player->m_lOnFoot->controllerState.ShockButtonL;
+    CKeySync::ApplyNetworkPlayerContext(player);
 
     player->m_pPed->m_fHealth = player->m_lOnFoot->health;
     player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
@@ -127,10 +95,10 @@ void __fastcall CVehicle__ProcessControl_Hook()
     player->m_pPed->m_nPedType = PED_TYPE_PLAYER1;
 
 
-    bool savedLookingLeft = *(bool*)0xB6F1A4;
+    /*bool savedLookingLeft = *(bool*)0xB6F1A4;
     bool savedLookingRight = *(bool*)0xB6F1A5;
     *(bool*)0xB6F1A4 = player->m_lOnFoot->controllerState.LeftShoulder2 > 0;
-    *(bool*)0xB6F1A5 = player->m_lOnFoot->controllerState.RightShoulder2 > 0;
+    *(bool*)0xB6F1A5 = player->m_lOnFoot->controllerState.RightShoulder2 > 0;*/
 
     _asm mov ecx, vehicle
     _asm mov eax, call_addr
@@ -138,11 +106,10 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
     CWorld::PlayerInFocus = 0;
 
-    pad->NewState = newOldState;
-    pad->OldState = oldOldState;
+    CKeySync::ApplyLocalContext();
 
-    *(bool*)0xB6F1A4 = savedLookingLeft;
-    *(bool*)0xB6F1A5 = savedLookingRight;
+    /**(bool*)0xB6F1A4 = savedLookingLeft;
+    *(bool*)0xB6F1A5 = savedLookingRight;*/
 }
 
 static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding, CEntity* owner, CEntity* victim, CVector* startPoint, CVector* endPoint, CColPoint* colPoint, int incrementalHit)
@@ -798,6 +765,37 @@ static void __declspec(naked) CVisibilityPlugins__GetClumpAlpha_CrashFixHook()
     }
 }
 
+static void __cdecl CPad__UpdatePads_Hook()
+{
+    if (!CNetwork::m_bConnected)
+    {
+        CPad::UpdatePads();
+        return;
+    }
+    
+    // process network players keys
+    for (auto player : CNetworkPlayerManager::m_pPlayers)
+    {
+        CKeySync::ProcessPlayer(player);
+    }
+
+    CPad* pad = CPad::GetPad(0);
+
+    CControllerState oldState = pad->NewState;
+    CPad::UpdatePads();
+    CControllerState newState = pad->NewState;
+
+
+    if (CUtil::CompareControllerStates(oldState, newState))
+        return;
+
+
+    // send local player keys
+    CPackets::PlayerKeySync packet{};
+    packet.newState = ÑCompressedControllerState(newState);
+    CNetwork::SendPacket(CPacketsID::PLAYER_KEY_SYNC, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+}
+
 void CHook::Init()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -940,4 +938,6 @@ void CHook::Init()
 
     // CRenderer::RenderEverythingBarRoads => CVisibilityPlugins::GetClumpAlpha crash fix
     patch::RedirectJump(0x553B34, CVisibilityPlugins__GetClumpAlpha_CrashFixHook);
+
+    patch::RedirectCall(0x53BEE6, CPad__UpdatePads_Hook);
 }

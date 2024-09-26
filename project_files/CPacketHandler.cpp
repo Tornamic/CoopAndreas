@@ -60,9 +60,6 @@ CPackets::PlayerOnFoot* CPacketHandler::PlayerOnFoot__Collect()
 
 	// get player facing angle
 	packet->rotation = player->m_fCurrentRotation;
-
-	// get player key state, not all keyboard, just controller keys
-	packet->controllerState = player->GetPadFromPlayer()->NewState;
 	
 	// get player health, armour
 	packet->health = (unsigned char)player->m_fHealth;
@@ -333,7 +330,6 @@ CPackets::VehicleDriverUpdate* CPacketHandler::VehicleDriverUpdate__Collect(CNet
 
 	// player data
 	packet->ammo =				player->m_aWeapons[player->m_nActiveWeaponSlot].m_nAmmoInClip;
-	packet->controllerState =	player->GetPadFromPlayer()->NewState;
 	packet->playerArmour =		(unsigned char)player->m_fArmour;
 	packet->playerHealth =		(unsigned char)player->m_fHealth;
 	packet->weapon =			player->m_aWeapons[player->m_nActiveWeaponSlot].m_eWeaponType;
@@ -403,7 +399,6 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 
 	player->m_oOnFoot = player->m_lOnFoot;
 	
-	player->m_lOnFoot->controllerState = packet->controllerState;
 	player->m_lOnFoot->armour = packet->playerArmour;
 	player->m_lOnFoot->health = packet->playerHealth;
 
@@ -574,7 +569,6 @@ CPackets::VehiclePassengerUpdate* CPacketHandler::VehiclePassengerUpdate__Collec
 
 	// player data
 	packet->ammo = localPlayer->m_aWeapons[localPlayer->m_nActiveWeaponSlot].m_nAmmoInClip;
-	packet->controllerState = localPlayer->GetPadFromPlayer()->NewState;
 	packet->playerArmour = (unsigned char)localPlayer->m_fArmour;
 	packet->playerHealth = (unsigned char)localPlayer->m_fHealth;
 	packet->weapon = localPlayer->m_aWeapons[localPlayer->m_nActiveWeaponSlot].m_eWeaponType;
@@ -613,7 +607,6 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 
 	player->m_oOnFoot = player->m_lOnFoot;
 
-	player->m_lOnFoot->controllerState = packet->controllerState;
 	player->m_pPed->m_fArmour = player->m_lOnFoot->armour = packet->playerArmour;
 	player->m_pPed->m_fHealth = player->m_lOnFoot->health = packet->playerHealth;
 	player->m_aPassengerAim = packet->aim;
@@ -754,4 +747,14 @@ void CPacketHandler::GameWeatherTime__Trigger()
 
 	CPackets::GameWeatherTime* packet = CPacketHandler::GameWeatherTime__Collect();
 	CNetwork::SendPacket(CPacketsID::GAME_WEATHER_TIME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE);
+}
+
+// PlayerKeySync
+
+void CPacketHandler::PlayerKeySync__Handle(void* data, int size)
+{
+	CPackets::PlayerKeySync* packet = (CPackets::PlayerKeySync*)data;
+
+	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
+	player->m_compressedControllerState = packet->newState;
 }
