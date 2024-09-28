@@ -101,22 +101,12 @@ void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t 
     memcpy(packetData + 2, data, dataSize);
 
     // create packet
-    ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
+    ENetPacket* packet = enet_packet_create(packetData, packetSize, flag & ENET_PACKET_FLAG_NO_ALLOCATE);
 
     delete[] packetData;
 
     // send packet
     enet_peer_send(peer, 0, packet);
-
-    bool host;
-    auto player = CPlayerManager::GetPlayer(peer);
-
-    if (player)
-    {
-        host = player->m_bIsHost;
-    }
-
-    printf("SEND %d TO %s\n", id, host ? "HOST" : "client");
 }
 
 void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith = nullptr)
@@ -125,7 +115,7 @@ void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, E
     char* packetData = new char[packetSize];
     memcpy(packetData, &id, 2);
     memcpy(packetData + 2, data, dataSize);
-    ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
+    ENetPacket* packet = enet_packet_create(packetData, packetSize, flag & ENET_PACKET_FLAG_NO_ALLOCATE);
 
     delete[] packetData;
 
@@ -140,7 +130,7 @@ void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, E
 
 void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith = nullptr)
 {
-    ENetPacket* packet = enet_packet_create(data, dataSize, flag);
+    ENetPacket* packet = enet_packet_create(data, dataSize, flag & ENET_PACKET_FLAG_NO_ALLOCATE);
 
     for (int i = 0; i != CPlayerManager::m_pPlayers.size(); i++)
     {

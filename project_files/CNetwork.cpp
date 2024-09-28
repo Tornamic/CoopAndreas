@@ -91,7 +91,7 @@ void CNetwork::SendPacket(unsigned short id, void* data, size_t dataSize, ENetPa
 	memcpy(packetData + 2, data, dataSize);
 
 	// create packet
-	ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
+	ENetPacket* packet = enet_packet_create(packetData, packetSize, flag & ENET_PACKET_FLAG_NO_ALLOCATE);
 
 	// send packet
 	enet_peer_send(m_pPeer, 0, packet);
