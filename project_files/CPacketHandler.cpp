@@ -1,5 +1,5 @@
 #include "stdafx.h"
-
+#include "CTaskSync.h"
 // PlayerConnected
 
 void CPacketHandler::PlayerConnected__Handle(void* data, int size)
@@ -757,4 +757,11 @@ void CPacketHandler::PlayerKeySync__Handle(void* data, int size)
 
 	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
 	player->m_compressedControllerState = packet->newState;
+}
+
+// PedAddTask
+
+void CPacketHandler::PedAddTask__Handle(void* data, int size)
+{
+	CTaskSync::DeSerializeTask(data);
 }

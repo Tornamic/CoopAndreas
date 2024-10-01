@@ -1,5 +1,6 @@
 #include "../stdafx.h"
 #include "TaskHooks.h"
+#include "../CTaskSync.h"
 
 // when local player enters any vehicle
 static void __fastcall CTaskComplexEnterCarAsDriver__Ctor_Hook(CTaskComplexEnterCarAsDriver* This, int, CVehicle* vehicle)
@@ -80,6 +81,8 @@ CTask* pTask = nullptr;
 int nTasksId = 0;
 CNetworkPed* pNetworkPed = nullptr;
 DWORD CTaskManager__SetTask_Hook_Ret = 0x681AF5;
+size_t nTaskPacketSize = 0;
+void* pSerializedTask = nullptr;
 static void __declspec(naked) CTaskManager__SetTask_Hook()
 {
     __asm
@@ -99,13 +102,19 @@ static void __declspec(naked) CTaskManager__SetTask_Hook()
         mov pTask, eax
     }
 
-    if (pTaskMgr && pTask)
+    if (CLocalPlayer::m_bIsHost &&  pTaskMgr && pTask)
     {
         pNetworkPed = CNetworkPedManager::GetPed(pTaskMgr->m_pPed);
 
         if (pNetworkPed)
         {
             CChat::AddMessage("SET PRIMARY %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
+
+            nTaskPacketSize = 0;
+            pSerializedTask = CTaskSync::SerializeTask(pTask, pNetworkPed, true, &nTaskPacketSize);
+
+            if(nTaskPacketSize > 0)
+                CNetwork::SendPacket(CPacketsID::PED_ADD_TASK, pSerializedTask, nTaskPacketSize, ENET_PACKET_FLAG_RELIABLE);
         }
     }
 
@@ -144,6 +153,12 @@ static void __declspec(naked) CTaskManager__SetTaskSecondary_Hook()
         if (pNetworkPed)
         {
             CChat::AddMessage("SET SECONDARY %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
+
+            nTaskPacketSize = 0;
+            pSerializedTask = CTaskSync::SerializeTask(pTask, pNetworkPed, false, &nTaskPacketSize);
+
+            if (nTaskPacketSize > 0)
+                CNetwork::SendPacket(CPacketsID::PED_ADD_TASK, pSerializedTask, nTaskPacketSize, ENET_PACKET_FLAG_RELIABLE);
         }
     }
 
@@ -172,7 +187,7 @@ static void __declspec(naked) CTaskComplex__SetSubTask_Hook()
         mov pTask, edi
     }
 
-    if (pTask)
+    if (CLocalPlayer::m_bIsHost && pTask)
     {
         pNetworkPed = CUtil::GetNetworkPedByTask(pTask);
 
@@ -204,6 +219,9 @@ static void __declspec(naked) CTaskSimple__dtor_Hook()
         pushad
         mov pTaskSimple, ecx
     }
+    
+    if (!CLocalPlayer::m_bIsHost)
+        goto skip;
 
     if (pTaskSimple)
     {
@@ -243,6 +261,9 @@ static void __declspec(naked) CTaskComplex__dtor_Hook()
         pushad
         mov pTaskComplex, esi
     }
+
+    if (!CLocalPlayer::m_bIsHost)
+        goto skip;
 
     if (pTaskComplex)
     {

@@ -35,5 +35,6 @@ public:
 	static void GameWeatherTime__Handle(void* data, int size);
 	static void GameWeatherTime__Trigger();
 	static void PlayerKeySync__Handle(void* data, int size);
+	static void PedAddTask__Handle(void* data, int size);
 };
 

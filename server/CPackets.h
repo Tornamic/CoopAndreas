@@ -494,4 +494,12 @@ public:
 			CNetwork::SendPacketToAll(CPacketsID::PLAYER_KEY_SYNC, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
+
+	struct PedAddTask
+	{
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CNetwork::SendPacketToAll(CPacketsID::PED_ADD_TASK, data, size, ENET_PACKET_FLAG_RELIABLE, peer);
+		}
+	};
 };

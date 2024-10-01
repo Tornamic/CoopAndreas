@@ -82,6 +82,7 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PED_ONFOOT, CPackets::PedOnFoot::Handle);
     CNetwork::AddListener(CPacketsID::GAME_WEATHER_TIME, CPackets::GameWeatherTime::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_KEY_SYNC, CPackets::PlayerKeySync::Handle);
+    CNetwork::AddListener(CPacketsID::PED_ADD_TASK, CPackets::PedAddTask::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
