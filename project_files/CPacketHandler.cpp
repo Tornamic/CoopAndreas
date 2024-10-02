@@ -678,13 +678,14 @@ CPackets::PedOnFoot* CPacketHandler::PedOnFoot__Collect(CNetworkPed* networkPed)
 
 	packet->pedid = networkPed->m_nPedId;
 	packet->pos = ped->m_matrix->pos;
-	packet->rot = ped->m_fCurrentRotation;
 	packet->velocity = ped->m_vecMoveSpeed;
 	packet->health = (unsigned char)ped->m_fHealth;
 	packet->armour = (unsigned char)ped->m_fArmour;
 	packet->weapon = ped->m_aWeapons[ped->m_nActiveWeaponSlot].m_eWeaponType;
 	packet->ammo = ped->m_aWeapons[ped->m_nActiveWeaponSlot].m_nAmmoInClip;
-
+	packet->aimingRotation = ped->m_fAimingRotation;
+	packet->currentRotation = ped->m_fCurrentRotation;
+	packet->lookDirection = ped->field_73C; // look direction (rad)
 	return packet;
 }
 
@@ -703,7 +704,9 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);
 
 	ped->m_pPed->m_matrix->pos = packet->pos;
-	ped->m_pPed->m_fCurrentRotation = ped->m_pPed->m_fAimingRotation = packet->rot;
+	ped->m_fCurrentRotation = ped->m_pPed->m_fCurrentRotation = packet->currentRotation;
+	ped->m_fAimingRotation = ped->m_pPed->m_fAimingRotation = packet->aimingRotation;
+	ped->m_fLookDirection = ped->m_pPed->field_73C = packet->lookDirection;
 	ped->m_pPed->m_fHealth = packet->health;
 	ped->m_pPed->m_fArmour = packet->armour;
 

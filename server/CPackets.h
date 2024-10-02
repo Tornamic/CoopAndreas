@@ -429,14 +429,13 @@ public:
 		int pedid = 0;
 		CVector pos = CVector();
 		CVector velocity = CVector();
-		float rot = 0.f;
 		unsigned char health = 100;
 		unsigned char armour = 0;
 		unsigned char weapon = 0;
 		unsigned short ammo = 0;
-		// todo action sync
-		// todo path sync
-		// todo tasks sync (event-based)
+		float aimingRotation = 0.0f;
+		float currentRotation = 0.0f;
+		float lookDirection = 0.0f;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

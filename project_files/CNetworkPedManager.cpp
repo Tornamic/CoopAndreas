@@ -92,11 +92,10 @@ void CNetworkPedManager::Process()
 
 		if (ped == nullptr)
 			continue;
-		/*if (ped->m_nPhysicalFlags.bOnSolidSurface)
-		{*/
-			ped->m_vecMoveSpeed = networkPed->m_vecVelocity;
-			ped->ApplyMoveSpeed();
-		//}
+		
+		ped->m_fAimingRotation = networkPed->m_fAimingRotation;
+		ped->m_fCurrentRotation = networkPed->m_fCurrentRotation;
+		ped->field_73C = networkPed->m_fLookDirection;
 	}
 }
 

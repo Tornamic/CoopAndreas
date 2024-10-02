@@ -7,6 +7,10 @@ public:
 	ePedType m_nPedType;
 	unsigned char m_nCreatedBy;
 	CVector m_vecVelocity{0.0f, 0.0f, 0.0f};
+	float m_fAimingRotation = 0.0f;
+	float m_fCurrentRotation = 0.0f;
+	float m_fLookDirection = 0.0f;
+
 	CNetworkPed(CPed* ped);
 	CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy);
 	~CNetworkPed();
