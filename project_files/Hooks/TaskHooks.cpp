@@ -83,6 +83,7 @@ CNetworkPed* pNetworkPed = nullptr;
 DWORD CTaskManager__SetTask_Hook_Ret = 0x681AF5;
 size_t nTaskPacketSize = 0;
 void* pSerializedTask = nullptr;
+int nTaskSlot = 0;
 static void __declspec(naked) CTaskManager__SetTask_Hook()
 {
     __asm
@@ -100,6 +101,10 @@ static void __declspec(naked) CTaskManager__SetTask_Hook()
         // get pTask
         mov eax, [esp + 10h]
         mov pTask, eax
+        
+        // get task slot
+        mov eax, [esp + 14h]
+        mov nTaskSlot, eax
     }
 
     if (CLocalPlayer::m_bIsHost &&  pTaskMgr && pTask)
@@ -111,7 +116,7 @@ static void __declspec(naked) CTaskManager__SetTask_Hook()
             CChat::AddMessage("SET PRIMARY %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
 
             nTaskPacketSize = 0;
-            pSerializedTask = CTaskSync::SerializeTask(pTask, pNetworkPed, true, &nTaskPacketSize);
+            pSerializedTask = CTaskSync::SerializeTask(pTask, pNetworkPed, true, nTaskSlot, &nTaskPacketSize);
 
             if(nTaskPacketSize > 0)
                 CNetwork::SendPacket(CPacketsID::PED_ADD_TASK, pSerializedTask, nTaskPacketSize, ENET_PACKET_FLAG_RELIABLE);
@@ -144,6 +149,10 @@ static void __declspec(naked) CTaskManager__SetTaskSecondary_Hook()
         // get pTask
         mov eax, [esp + 10h]
         mov pTask, eax
+
+        // get task slot
+        mov eax, [esp + 14h]
+        mov nTaskSlot, eax
     }
 
     if (pTaskMgr && pTask)
@@ -155,7 +164,7 @@ static void __declspec(naked) CTaskManager__SetTaskSecondary_Hook()
             CChat::AddMessage("SET SECONDARY %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
 
             nTaskPacketSize = 0;
-            pSerializedTask = CTaskSync::SerializeTask(pTask, pNetworkPed, false, &nTaskPacketSize);
+            pSerializedTask = CTaskSync::SerializeTask(pTask, pNetworkPed, false, nTaskSlot, &nTaskPacketSize);
 
             if (nTaskPacketSize > 0)
                 CNetwork::SendPacket(CPacketsID::PED_ADD_TASK, pSerializedTask, nTaskPacketSize, ENET_PACKET_FLAG_RELIABLE);

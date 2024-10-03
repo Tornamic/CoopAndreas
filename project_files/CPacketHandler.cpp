@@ -709,7 +709,6 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 	ped->m_fLookDirection = ped->m_pPed->field_73C = packet->lookDirection;
 	ped->m_pPed->m_fHealth = packet->health;
 	ped->m_pPed->m_fArmour = packet->armour;
-
 	ped->m_vecVelocity = packet->velocity;
 }
 

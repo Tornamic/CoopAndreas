@@ -66,14 +66,13 @@ bool IsPurecall(void** vtable, unsigned int idx)
     return patch::GetUInt((unsigned int)vtable+idx, false) == PURECALL;
 }
 
-void* CTaskSync::SerializeTask(CTask* t, CNetworkPed* owner, bool bPrimary, size_t* dataSize)
+void* CTaskSync::SerializeTask(CTask* t, CNetworkPed* owner, bool bPrimary, unsigned char taskSlot, size_t* dataSize)
 {
     void* data = nullptr;
     char* currentPtr = nullptr;
 
     int pedId = owner->m_nPedId;
     int taskId = t->GetId();
-    unsigned char taskSlot = GetTaskSlot(t, owner->m_pPed, bPrimary);
 
     bool b = false; // temp bool var for casting 1b bool values
 
