@@ -158,6 +158,9 @@ void FixCrashes()
 
     // disable replays
     patch::Nop(0x53C090, 5);
+
+    // fix driver kill bug sprint pressed
+    patch::SetUChar(0x62F223, 0);
 }
 
 #define SCANCODE_SIZE 8*20000
