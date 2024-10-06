@@ -341,6 +341,8 @@ void CPatch::ApplyPatches()
     // this comment fixes a lot of crashes :D
     //PatchPools(); 
     
+    PatchMouseFix();
+
     PatchPlayers();
     PatchStreaming();
     FixCrashes();
