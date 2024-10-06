@@ -1,5 +1,70 @@
 #include "stdafx.h"
 
+struct Mouse
+{
+    unsigned int x, y;
+    unsigned int wheelDelta;
+    unsigned char buttons[8];
+};
+
+struct MouseInfo
+{
+    int x, y, wheelDelta;
+} mouseInfo;
+
+static BOOL __stdcall _SetCursorPos(int X, int Y)
+{
+    if (GetActiveWindow() != RsGlobal.ps->window)
+    {
+        return 1;
+    }
+
+    mouseInfo.x = X;
+    mouseInfo.y = Y;
+
+    return SetCursorPos(X, Y);
+}
+
+static LRESULT __stdcall _DispatchMessage(MSG* lpMsg)
+{
+    if (lpMsg->message == WM_MOUSEWHEEL)
+    {
+        mouseInfo.wheelDelta += GET_WHEEL_DELTA_WPARAM(lpMsg->wParam);
+    }
+
+    return DispatchMessageA(lpMsg);
+}
+
+static int _cdecl _GetMouseState(Mouse* pMouse)
+{
+    struct tagPOINT Point;
+
+    pMouse->x = 0;
+    pMouse->y = 0;
+    pMouse->wheelDelta = mouseInfo.wheelDelta;
+    GetCursorPos(&Point);
+
+    if (mouseInfo.x >= 0)
+    {
+        pMouse->x = int(1.6f * (Point.x - mouseInfo.x)); // i guess it just works
+    }
+
+    if (mouseInfo.y >= 0)
+    {
+        pMouse->y = int(Point.y - mouseInfo.y);
+    }
+
+    mouseInfo.wheelDelta = 0;
+
+    pMouse->buttons[0] = (GetAsyncKeyState(1) >> 8);
+    pMouse->buttons[1] = (GetAsyncKeyState(2) >> 8);
+    pMouse->buttons[2] = (GetAsyncKeyState(4) >> 8);
+    pMouse->buttons[3] = (GetAsyncKeyState(5) >> 8);
+    pMouse->buttons[4] = (GetAsyncKeyState(6) >> 8);
+    return 0;
+}
+
+
 void PatchPlayers()
 {
     // i think this patches are useless
@@ -30,6 +95,22 @@ void PatchConsole()
 }
 #endif
 
+// reversed from mousefix.asi
+void PatchMouseFix()
+{
+    patch::ReplaceFunctionCall(0x53F417, _GetMouseState);
+    patch::Nop(0x57C59B, 1);
+    patch::ReplaceFunctionCall(0x57C59C, _SetCursorPos);
+    patch::Nop(0x81E5D4, 1);
+    patch::ReplaceFunctionCall(0x81E5D5, _SetCursorPos);
+    patch::Nop(0x74542D, 1);
+    patch::ReplaceFunctionCall(0x74542E, _SetCursorPos);
+    patch::Nop(0x748A7C, 1);
+    patch::ReplaceFunctionCall(0x748A7D, _DispatchMessage);
+    patch::SetChar(0x746A08, 32);
+    patch::SetChar(0x746A58, 32);
+}
+
 void PatchStreaming()
 {
     // increase available streaming memory (memory512.cs full analog) 
@@ -44,7 +125,7 @@ void PatchStreaming()
     patch::Nop(0x561AF0, 7);
     patch::Nop(0x745BC9, 2);
     patch::SetUChar(0x747FB6, 1);
-    patch::SetUChar(0x74805A, 1);
+    //patch::SetUChar(0x74805A, 1); // this can pick up your input even when it's not foreground
     patch::Nop(0x74542B, 8);
     patch::Nop(0x53EA88, 6);
 
