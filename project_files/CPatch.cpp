@@ -36,17 +36,19 @@ void PatchStreaming()
     patch::SetUInt(0x8A5A80, 536870912); // 512 megabytes
     patch::SetUInt(0x5B8E6A, 536870912); // hardcoded value
 
+    // allow any screen ratios
+    patch::Nop(0x745BC9, 2);
+    
     // increase max fps
     //RsGlobal.maxFPS = 100;
     //patch::SetUChar(0x619626, 0x64); // hardcoded value
 
     // patch game freezeing if inactive
-    patch::Nop(0x561AF0, 7);
-    patch::Nop(0x745BC9, 2);
-    patch::SetUChar(0x747FB6, 1);
-    patch::SetUChar(0x74805A, 1);
-    patch::Nop(0x74542B, 8);
-    patch::Nop(0x53EA88, 6);
+    patch::Nop(0x748A8D, 6); // allow no pause alt-tab
+    patch::Nop(0x561AF0, 7); // anti pause
+    patch::SetUChar(0x747FB6, 1); // keep window active
+    patch::Nop(0x74542B, 8); // fix mouse stuck
+    patch::Nop(0x53EA88, 6); // keep sending packets while paused
 
     // fix cutscene crash
     patch::Nop(0x40EC56, 5);
