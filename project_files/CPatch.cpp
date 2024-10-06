@@ -47,7 +47,6 @@ void PatchStreaming()
     patch::Nop(0x748A8D, 6); // allow no pause alt-tab
     patch::Nop(0x561AF0, 7); // anti pause
     patch::SetUChar(0x747FB6, 1); // keep window active
-    patch::Nop(0x74542B, 8); // fix mouse stuck
     patch::Nop(0x53EA88, 6); // keep sending packets while paused
 
     // fix cutscene crash
