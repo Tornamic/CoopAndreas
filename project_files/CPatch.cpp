@@ -101,10 +101,6 @@ void PatchMouseFix()
     patch::ReplaceFunctionCall(0x53F417, _GetMouseState);
     patch::Nop(0x57C59B, 1);
     patch::ReplaceFunctionCall(0x57C59C, _SetCursorPos);
-    patch::Nop(0x81E5D4, 1);
-    patch::ReplaceFunctionCall(0x81E5D5, _SetCursorPos);
-    patch::Nop(0x74542D, 1);
-    patch::ReplaceFunctionCall(0x74542E, _SetCursorPos);
     patch::Nop(0x748A7C, 1);
     patch::ReplaceFunctionCall(0x748A7D, _DispatchMessage);
     patch::SetChar(0x746A08, 32);
@@ -125,7 +121,7 @@ void PatchStreaming()
     patch::Nop(0x561AF0, 7);
     patch::Nop(0x745BC9, 2);
     patch::SetUChar(0x747FB6, 1);
-    //patch::SetUChar(0x74805A, 1); // this can pick up your input even when it's not foreground
+    patch::SetUChar(0x74805A, 1);
     patch::Nop(0x74542B, 8);
     patch::Nop(0x53EA88, 6);
 
