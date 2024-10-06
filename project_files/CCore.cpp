@@ -1,4 +1,6 @@
 #include "stdafx.h"
+static HWND hWnd = nullptr;
+RwV2d* lastMousePos = nullptr;
 
 WNDPROC prevWndProc;
 
@@ -6,6 +8,18 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 {
 	CChat::WndProc(hWnd, message, wParam, lParam);
 	return CallWindowProc(prevWndProc, hWnd, message, wParam, lParam);
+}
+
+void psMouseSetPos(RwV2d* pos)
+{
+	bool isWindowFocused = GetForegroundWindow() == hWnd;
+	if (!isWindowFocused)
+		return;
+
+	POINT point = { LONG(pos->x), LONG(pos->y) };
+	::ClientToScreen(hWnd, &point);
+	::SetCursorPos(point.x, point.y);
+	lastMousePos = pos;
 }
 
 void InitWndProc()
@@ -19,6 +33,14 @@ void InitWndProc()
 		prevWndProc = (WNDPROC)GetWindowLong(hWnd, GWL_WNDPROC);
 		SetWindowLong(hWnd, GWL_WNDPROC, (LONG)WindowProc);
 		return;
+	}
+
+	patch::ReplaceFunction(0x7453F0, psMouseSetPos);
+	if (hWnd == GetForegroundWindow()) {
+		patch::Nop(0x74542B, 8);
+	}
+	else {
+		patch::Nop(0x745433, 8);
 	}
 }
 
