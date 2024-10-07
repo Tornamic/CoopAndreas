@@ -37,6 +37,10 @@ void CCore::Init()
 		CreateThread(NULL, NULL, CNetwork::InitAsync, NULL, NULL, NULL);
 		InitWndProc();
 	};
+	Events::initScriptsEvent.after += []
+	{
+		CPatch::TemporaryPatches();
+	};
 	gameShutdownEvent.before += []
 	{
 		// disconnect from server

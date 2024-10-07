@@ -47,6 +47,7 @@
 #include "CPlane.h"
 #include "CBmx.h"
 #include "CTrailer.h"
+#include "CTrain.h"
 #include "CBoat.h"
 #include "CTaskComplexEnterCarAsDriver.h"
 #include "CTaskComplexLeaveCar.h"
