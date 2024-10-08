@@ -14,6 +14,40 @@ void CPatch::TemporaryPatches()
     patch::SetUShort(0x8D477C, 0); // disable spawn 537 train
 }
 
+void CPatch::PatchFramerate()
+{
+    unsigned int fps = 60;
+
+    HWND hwnd = GetForegroundWindow();
+
+    // get current display from window
+    HMONITOR hMonitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+
+    if (hMonitor) 
+    {
+        MONITORINFOEX mi;
+        mi.cbSize = sizeof(MONITORINFOEX);
+
+        // get display info
+        if (GetMonitorInfo(hMonitor, &mi)) 
+        {
+            DEVMODE devMode;
+            devMode.dmSize = sizeof(DEVMODE);
+
+            if (EnumDisplaySettings(mi.szDevice, ENUM_CURRENT_SETTINGS, &devMode)) 
+            {
+                // get refresh rate (HZ)
+                fps = devMode.dmDisplayFrequency;
+            }
+        }
+    }
+
+    patch::SetUChar(0x53E94C, 0); // remove 14 ms frame delay
+    patch::SetUChar(0x619626, fps); // init value
+    patch::SetUChar(0xC1704C, fps, false); // current value
+    RwD3D9EngineSetRefreshRate(fps); // update refresh rate
+}
+
 void PatchPlayers()
 {
     // i think this patches are useless
@@ -49,10 +83,6 @@ void PatchStreaming()
     // increase available streaming memory (memory512.cs full analog) 
     patch::SetUInt(0x8A5A80, 536870912); // 512 megabytes
     patch::SetUInt(0x5B8E6A, 536870912); // hardcoded value
-
-    // increase max fps
-    //RsGlobal.maxFPS = 100;
-    //patch::SetUChar(0x619626, 0x64); // hardcoded value
 
     // patch game freezeing if inactive
     patch::Nop(0x561AF0, 7);
