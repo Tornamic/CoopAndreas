@@ -28,7 +28,8 @@ enum CPacketsID : unsigned short
 	GAME_WEATHER_TIME,
 	PED_ADD_TASK,
 	PED_REMOVE_TASK,
-	PLAYER_KEY_SYNC
+	PLAYER_KEY_SYNC,
+	PED_DRIVER_UPDATE
 };
 
 class CPackets
@@ -499,6 +500,37 @@ public:
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CNetwork::SendPacketToAll(CPacketsID::PED_ADD_TASK, data, size, ENET_PACKET_FLAG_RELIABLE, peer);
+		}
+	};
+
+	struct PedDriverUpdate
+	{
+		int pedid;
+		int vehicleid;
+		CVector pos;
+		CVector rot;
+		CVector roll;
+		CVector velocity;
+		unsigned char pedHealth;
+		unsigned char pedArmour;
+		unsigned char weapon;
+		unsigned short ammo;
+		unsigned char color1;
+		unsigned char color2;
+		float health;
+		char paintjob;
+		float planeGearState;
+		unsigned char locked;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::PedDriverUpdate* packet = (CPackets::PedDriverUpdate*)data;
+			CNetwork::SendPacketToAll(CPacketsID::PED_DRIVER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+
+			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
+
+			vehicle->m_vecPosition = packet->pos;
+			vehicle->m_vecRotation = packet->rot;
 		}
 	};
 };

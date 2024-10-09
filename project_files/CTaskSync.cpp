@@ -3,6 +3,7 @@
 #include <CTaskComplexJump.h>
 #include <CTaskComplexWander.h>
 #include <CTaskComplexClimb.h>
+#include <CTaskSimpleCarSetPedInAsDriver.h>
 
 #define PUSH(val) \
     memcpy(currentPtr, &val, sizeof(val)); \

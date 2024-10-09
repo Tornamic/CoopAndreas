@@ -83,6 +83,7 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::GAME_WEATHER_TIME, CPackets::GameWeatherTime::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_KEY_SYNC, CPackets::PlayerKeySync::Handle);
     CNetwork::AddListener(CPacketsID::PED_ADD_TASK, CPackets::PedAddTask::Handle);
+    CNetwork::AddListener(CPacketsID::PED_DRIVER_UPDATE, CPackets::PedDriverUpdate::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -200,7 +201,7 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
             i->m_nVehicleId,
             i->m_nModelId,
             i->m_vecPosition,
-            i->m_vecRotation.y,
+            i->m_vecRotation.z * (3.141592 / 180), // convert to radians
             i->m_nPrimaryColor,
             i->m_nSecondaryColor
         };

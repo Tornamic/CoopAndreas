@@ -55,6 +55,7 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 
 	while (m_bConnected)
 	{
+		
 		enet_host_service(m_pClient, &event, 1);
 		switch (event.type)
 		{
@@ -91,7 +92,7 @@ void CNetwork::SendPacket(unsigned short id, void* data, size_t dataSize, ENetPa
 	memcpy(packetData + 2, data, dataSize);
 
 	// create packet
-	ENetPacket* packet = enet_packet_create(packetData, packetSize, flag & ENET_PACKET_FLAG_NO_ALLOCATE);
+	ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
 
 	// send packet
 	enet_peer_send(m_pPeer, 0, packet);
@@ -130,6 +131,7 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::GAME_WEATHER_TIME, CPacketHandler::GameWeatherTime__Handle);
 	CNetwork::AddListener(CPacketsID::PLAYER_KEY_SYNC, CPacketHandler::PlayerKeySync__Handle);
 	CNetwork::AddListener(CPacketsID::PED_ADD_TASK, CPacketHandler::PedAddTask__Handle);
+	CNetwork::AddListener(CPacketsID::PED_DRIVER_UPDATE, CPacketHandler::PedDriverUpdate__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

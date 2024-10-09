@@ -31,7 +31,8 @@ enum CPacketsID : unsigned short
 	GAME_WEATHER_TIME,
 	PED_ADD_TASK,
 	PED_REMOVE_TASK,
-	PLAYER_KEY_SYNC
+	PLAYER_KEY_SYNC,
+	PED_DRIVER_UPDATE
 };
 
 class CPackets
@@ -262,5 +263,25 @@ public:
 	{
 		int playerid;
 		ÑCompressedControllerState newState;
+	};
+
+	struct PedDriverUpdate
+	{
+		int pedid;
+		int vehicleid;
+		CVector pos;
+		CVector rot;
+		CVector roll;
+		CVector velocity;
+		unsigned char pedHealth;
+		unsigned char pedArmour;
+		unsigned char weapon;
+		unsigned short ammo;
+		unsigned char color1;
+		unsigned char color2;
+		float health;
+		char paintjob;
+		float planeGearState;
+		unsigned char locked;
 	};
 };

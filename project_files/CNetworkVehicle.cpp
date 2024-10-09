@@ -84,6 +84,9 @@ bool CNetworkVehicle::CreateVehicle(int vehicleid, int modelid, CVector pos, flo
     case VEHICLE_BOAT:
         m_pVehicle = new CBoat(modelid, 1); break;
 
+    case VEHICLE_TRAIN:
+        return false;
+
     default:
         m_pVehicle = new CAutomobile(modelid, 1, true); break;
     }

@@ -92,6 +92,11 @@ CNetworkPed::~CNetworkPed()
     {
         if (m_pPed && m_pPed->m_matrix->m_pOwner)
         {
+            if (m_pPed->m_nPedFlags.bInVehicle)
+            {
+                plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
+            }
+
             CWorld::Remove(m_pPed);
             //CWorld::RemoveReferencesToDeletedObject(m_pPed);
             m_pPed->Remove();

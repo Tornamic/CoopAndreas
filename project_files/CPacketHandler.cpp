@@ -226,7 +226,7 @@ void CPacketHandler::VehicleSpawn__Handle(void* data, int size)
 	CPackets::VehicleSpawn* packet = (CPackets::VehicleSpawn*)data;
 	
 #ifdef _DEV
-	CChat::AddMessage("VEHICLE SPAWN %d %d %f %f %f %f", packet->vehicleid, packet->modelid, packet->pos.x, packet->pos.y, packet->pos.z, packet->rot);
+	CChat::AddMessage("VEHICLE SPAWN %d %d %f %f %f %f %p", packet->vehicleid, packet->modelid, packet->pos.x, packet->pos.y, packet->pos.z, packet->rot);
 #endif
 
 	CNetworkVehicle* vehicle = new CNetworkVehicle
@@ -238,7 +238,6 @@ void CPacketHandler::VehicleSpawn__Handle(void* data, int size)
 		packet->color1,
 		packet->color2
 	);
-
 	CNetworkVehicleManager::Add(vehicle);
 }
 
@@ -701,6 +700,11 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 	if (!ped->m_pPed)
 		return;
 
+	if (ped->m_pPed->m_nPedFlags.bInVehicle)
+	{
+		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(ped->m_pPed), packet->pos.x, packet->pos.y, packet->pos.z);
+	}
+
 	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);
 
 	ped->m_pPed->m_matrix->pos = packet->pos;
@@ -710,6 +714,7 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 	ped->m_pPed->m_fHealth = packet->health;
 	ped->m_pPed->m_fArmour = packet->armour;
 	ped->m_vecVelocity = packet->velocity;
+
 }
 
 // GameWeatherTime
@@ -766,4 +771,89 @@ void CPacketHandler::PlayerKeySync__Handle(void* data, int size)
 void CPacketHandler::PedAddTask__Handle(void* data, int size)
 {
 	CTaskSync::DeSerializeTask(data);
+}
+
+// PedDriverUpdate
+
+CPackets::PedDriverUpdate* CPacketHandler::PedDriverUpdate__Collect(CNetworkVehicle* vehicle, CNetworkPed* ped)
+{
+	CPackets::PedDriverUpdate* packet = new CPackets::PedDriverUpdate;
+	
+	// ped data
+	packet->pedid = ped->m_nPedId;
+	packet->ammo = ped->m_pPed->m_aWeapons[ped->m_pPed->m_nActiveWeaponSlot].m_nAmmoInClip;
+	packet->pedArmour = (unsigned char)ped->m_pPed->m_fArmour;
+	packet->pedHealth = (unsigned char)ped->m_pPed->m_fHealth;
+	packet->weapon = ped->m_pPed->m_aWeapons[ped->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
+
+	// vehicle data
+	packet->vehicleid = vehicle->m_nVehicleId;
+	packet->pos = vehicle->m_pVehicle->m_matrix->pos;
+	packet->roll = vehicle->m_pVehicle->m_matrix->right;
+	packet->rot = vehicle->m_pVehicle->m_matrix->up;
+	packet->velocity = vehicle->m_pVehicle->m_vecMoveSpeed;
+
+	packet->color1 = vehicle->m_pVehicle->m_nPrimaryColor;
+	packet->color2 = vehicle->m_pVehicle->m_nSecondaryColor;
+
+	packet->health = vehicle->m_pVehicle->m_fHealth;
+
+	packet->paintjob = vehicle->m_nPaintJob;
+
+	if (CUtil::GetVehicleType(vehicle->m_pVehicle) == eVehicleType::VEHICLE_PLANE)
+	{
+		CPlane* plane = (CPlane*)vehicle->m_pVehicle;
+		packet->planeGearState = plane->m_fLandingGearStatus;
+	}
+
+	packet->locked = vehicle->m_pVehicle->m_eDoorLock;
+
+	return packet;
+}
+
+void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
+{
+	CPackets::PedDriverUpdate* packet = (CPackets::PedDriverUpdate*)data;
+
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
+	CNetworkPed* ped = CNetworkPedManager::GetPed(packet->pedid);
+
+	if (vehicle == nullptr || ped == nullptr || ped->m_pPed == nullptr)
+		return;
+
+	if (vehicle->m_pVehicle == nullptr)
+	{
+		vehicle->CreateVehicle(vehicle->m_nVehicleId, vehicle->m_nModelId, packet->pos, 0.f, packet->color1, packet->color2);
+		return;
+	}
+
+	if (ped->m_pPed->m_pVehicle != vehicle->m_pVehicle)
+		plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(ped->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle));
+
+	vehicle->m_pVehicle->m_matrix->pos = packet->pos;
+	vehicle->m_pVehicle->m_matrix->right = packet->roll;
+	vehicle->m_pVehicle->m_matrix->up = packet->rot;
+	ped->m_vecVelocity = packet->velocity;
+
+	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);
+
+	ped->m_pPed->m_fArmour = packet->pedArmour;
+	ped->m_pPed->m_fHealth = packet->pedHealth;
+
+	vehicle->m_pVehicle->m_nPrimaryColor = packet->color1;
+	vehicle->m_pVehicle->m_nSecondaryColor = packet->color2;
+
+	vehicle->m_pVehicle->m_fHealth = packet->health;
+
+	if (vehicle->m_nPaintJob != packet->paintjob)
+		vehicle->m_pVehicle->SetRemap(packet->paintjob);
+
+	if (CUtil::GetVehicleType(vehicle->m_pVehicle) == eVehicleType::VEHICLE_PLANE)
+	{
+		CPlane* plane = (CPlane*)vehicle->m_pVehicle;
+
+		plane->m_fLandingGearStatus = packet->planeGearState;
+	}
+
+	vehicle->m_pVehicle->m_eDoorLock = (eDoorLock)packet->locked;
 }

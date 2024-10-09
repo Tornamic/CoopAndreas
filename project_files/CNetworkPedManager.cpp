@@ -70,16 +70,36 @@ void CNetworkPedManager::Remove(CNetworkPed* ped)
 
 void CNetworkPedManager::Update()
 {
-	if (CLocalPlayer::m_bIsHost)
-	{
-		CPackets::PedOnFoot* packet = nullptr;
-		for (int i = 0; i != m_pPeds.size(); i++)
-		{
-			if (m_pPeds[i]->m_pPed == nullptr)
-				continue;
+	if (!CLocalPlayer::m_bIsHost) return;
 
-			packet = CPacketHandler::PedOnFoot__Collect(m_pPeds[i]);
-			CNetwork::SendPacket(CPacketsID::PED_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+	for (CNetworkPed* networkPed : m_pPeds)
+	{
+		CPed* ped = networkPed->m_pPed;
+		if (!ped) continue;
+
+		CVehicle* vehicle = ped->m_pVehicle;
+		CNetworkVehicle* networkVehicle = vehicle ? CNetworkVehicleManager::GetVehicle(vehicle) : nullptr;
+
+		if (networkVehicle && ped->m_nPedFlags.bInVehicle)
+		{
+			bool isDriver = (vehicle->m_pDriver == ped);
+
+			if (isDriver)
+			{
+				auto pedDriverUpdatePacket = CPacketHandler::PedDriverUpdate__Collect(networkVehicle, networkPed);
+				CNetwork::SendPacket(CPacketsID::PED_DRIVER_UPDATE, pedDriverUpdatePacket, sizeof(*pedDriverUpdatePacket), ENET_PACKET_FLAG_UNSEQUENCED);
+				delete pedDriverUpdatePacket;
+			}
+			else
+			{
+				// todo: implement passenger update
+			}
+		}
+		else
+		{
+			auto pedOnFootPacket = CPacketHandler::PedOnFoot__Collect(networkPed);
+			CNetwork::SendPacket(CPacketsID::PED_ONFOOT, pedOnFootPacket, sizeof(*pedOnFootPacket), ENET_PACKET_FLAG_UNSEQUENCED);
+			delete pedOnFootPacket;
 		}
 	}
 }
