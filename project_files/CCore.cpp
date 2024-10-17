@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "CCrashLog.h"
 
 WNDPROC prevWndProc;
 
@@ -31,6 +32,7 @@ void CCore::Init()
 	CHook::Init();
 	CDXFont::Init();
 	CLaunchManager::CollectCommandLineArgs();
+	//SetUnhandledExceptionFilter(CCrashLog::ExceptionHandler);
 	Events::initGameEvent.after += []
 	{
 		// init CNetworking async

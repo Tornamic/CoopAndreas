@@ -43,6 +43,10 @@ bool CNetwork::Init(unsigned short port)
             {
                 CNetwork::HandlePacketReceive(event);
                 enet_packet_destroy(event.packet);
+
+                char buffer[100];
+                sprintf_s(buffer, "Recv %d Sent %d", server->totalReceivedPackets, server->totalSentPackets);
+                SetConsoleTitleA(buffer);
                 break;
             }
             case ENET_EVENT_TYPE_DISCONNECT:

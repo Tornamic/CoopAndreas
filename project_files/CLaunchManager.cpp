@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-void CLaunchManager::CollectCommandLineArgs() // (C) ChatGPT 4-o
+void CLaunchManager::CollectCommandLineArgs()
 {
     LPSTR commandLine = GetCommandLineA();
 
@@ -30,7 +30,16 @@ void CLaunchManager::CollectCommandLineArgs() // (C) ChatGPT 4-o
 
     CNetwork::m_nPort = (unsigned short)atoi(portStr);
 
+#ifdef _DEV
+    if (CLocalPlayer::m_Name[0] == '\0')
+    {
+        strcpy(CLocalPlayer::m_Name, "Tornamic");
+        strcpy(CNetwork::m_IpAddress, "127.0.0.1");
+        CNetwork::m_nPort = 6767;
+    }
+
     printf("Player Nickname: %s\n", CLocalPlayer::m_Name);
     printf("Server IP Address: %s\n", CNetwork::m_IpAddress);
     printf("Server Port: %u\n", CNetwork::m_nPort);
+#endif // _DEV
 }

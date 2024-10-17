@@ -529,6 +529,9 @@ public:
 
 			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
 
+			if (vehicle == nullptr) // TODO: create vehicle
+				return;
+
 			vehicle->m_vecPosition = packet->pos;
 			vehicle->m_vecRotation = packet->rot;
 		}

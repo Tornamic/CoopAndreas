@@ -107,18 +107,15 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
     {
         CWorld::PlayerInFocus = player->GetInternalId();
 
-        if (isWeaponTypeDifferent)
-        {
-            player->m_pPed->ClearWeapons();
-        }
-
         if (weapon != 0)
         {
-            if (isWeaponTypeDifferent)
+            int model = CUtil::GetWeaponModelById(weapon);
+
+            if(CStreaming::ms_aInfoForModel[model].m_nLoadState != LOADSTATE_LOADED)
             {
-                // preload model
-                CStreaming::RequestModel(CUtil::GetWeaponModelById(weapon), eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
-                CStreaming::LoadAllRequestedModels(false);
+                CStreaming::RequestModel(model, eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
+                CStreaming::LoadAllRequestedModels(true);
+                while (CStreaming::ms_aInfoForModel[model].m_nLoadState != LOADSTATE_LOADED) Sleep(1);
             }
 
             // give weapon
@@ -126,10 +123,8 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
 
             if (activeWeapon.m_nTotalAmmo <= 0)
             {
-                player->m_pPed->GiveWeapon((eWeaponType)weapon, isMeleeWeapon ? 1 : 99999, false);
+                player->m_pPed->GiveWeapon((eWeaponType)weapon, isMeleeWeapon ? 1 : 999, false);
             }
-
-
             // set ammo in clip
             activeWeapon.m_nAmmoInClip = ammo;
         }

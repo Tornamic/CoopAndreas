@@ -45,24 +45,35 @@ static void __declspec(naked) ProcessCheat_Hook()
         jmp ProcessCheat_Hook_Ret; jump to function continuation
     }
 }
-DWORD CVisibilityPlugins__GetClumpAlpha_CrashFixHook_Break = 0x553C5A;
-DWORD CVisibilityPlugins__GetClumpAlpha_CrashFixHook_Continue = 0x553B39;
-DWORD CVisibilityPlugins__GetClumpAlpha_CallAddr = 0x732B20;
-static void __declspec(naked) CVisibilityPlugins__GetClumpAlpha_CrashFixHook()
+
+CEntity* pEntity = nullptr;
+DWORD dwJmpAddress = 0x0;
+DWORD CRenderer__AddEntityToRenderList_Hook_Continue = 0x5534B5;
+DWORD CRenderer__AddEntityToRenderList_Hook_Return = 0x553533;
+static void __declspec(naked) CRenderer__AddEntityToRenderList_Hook()
 {
     __asm
     {
-        // PSEUDOCODE xD
-        test eax, eax                                               // if(eax == nullptr)
-        jz skip                                                     //     goto skip;
-        // else
-        // {
-        call CVisibilityPlugins__GetClumpAlpha_CallAddr             //     CVisibilityPlugins__GetClumpAlpha();
-        jmp CVisibilityPlugins__GetClumpAlpha_CrashFixHook_Continue //     goto CONTINUE_HOOKED_FUNCTION;
-        // }
-
-        skip :
-        jmp CVisibilityPlugins__GetClumpAlpha_CrashFixHook_Break
+        mov pEntity, ecx
+        pushad
+    }
+    if ((RwObject*)((DWORD)pEntity + 0x18) == nullptr)
+    {
+        __asm
+        {
+            popad
+            retn
+        }
+    }
+    else
+    {
+        __asm
+        {
+            popad
+            push esi
+            mov esi, [esp + 4 + 4]
+            jmp CRenderer__AddEntityToRenderList_Hook_Continue
+        }
     }
 }
 
@@ -106,7 +117,7 @@ void GameHooks::InjectHooks()
     patch::RedirectJump(0x43857F, ProcessCheat_Hook);
 
     // CRenderer::RenderEverythingBarRoads => CVisibilityPlugins::GetClumpAlpha crash fix
-    //patch::RedirectJump(0x553B34, CVisibilityPlugins__GetClumpAlpha_CrashFixHook);
+    patch::RedirectJump(0x5534B0, CRenderer__AddEntityToRenderList_Hook);
 
     patch::RedirectCall(0x53BEE6, CPad__UpdatePads_Hook);
 

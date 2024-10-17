@@ -830,7 +830,9 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 	if (ped->m_pPed->m_pVehicle != vehicle->m_pVehicle)
 		plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(ped->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle));
 
-	vehicle->m_pVehicle->m_matrix->pos = packet->pos;
+	if(CUtil::IsPositionUpdateNeeded(packet->pos, vehicle->m_pVehicle->m_matrix->pos))
+		vehicle->m_pVehicle->m_matrix->pos = packet->pos;
+
 	vehicle->m_pVehicle->m_matrix->right = packet->roll;
 	vehicle->m_pVehicle->m_matrix->up = packet->rot;
 	ped->m_vecVelocity = packet->velocity;

@@ -4,6 +4,7 @@
 #include <CTaskComplexWander.h>
 #include <CTaskComplexClimb.h>
 #include <CTaskSimpleCarSetPedInAsDriver.h>
+#include "Tasks/CTaskComplexCarDriveWander.h"
 
 #define PUSH(val) \
     memcpy(currentPtr, &val, sizeof(val)); \
@@ -23,11 +24,14 @@
     currentPtr += sizeof(val);
 
 #define APPLY_TASK() \
-    if (bPrimary) \
-        ped->m_pIntelligence->m_TaskMgr.SetTask(task, taskSlot, false); \
-    else \
-        ped->m_pIntelligence->m_TaskMgr.SetTaskSecondary(task, taskSlot);
-    
+    if(task) \
+    {   \
+        if (bPrimary) \
+            ped->m_pIntelligence->m_TaskMgr.SetTask(task, taskSlot, false); \
+        else \
+            ped->m_pIntelligence->m_TaskMgr.SetTaskSecondary(task, taskSlot); \
+    }
+
 unsigned char GetTaskSlot(CTask* t, CPed* owner, bool bPrimary)
 {
     if (bPrimary)
@@ -102,6 +106,24 @@ void* CTaskSync::SerializeTask(CTask* t, CNetworkPed* owner, bool bPrimary, unsi
         PUSH(task->m_fTargetRadius);
         break;
     }
+    /*case TASK_COMPLEX_CAR_DRIVE_WANDER:
+    {
+        CTaskComplexCarDriveWander* task = (CTaskComplexCarDriveWander*)t;
+
+        CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(owner->m_pPed->m_pVehicle);
+
+        if (networkVehicle == nullptr)
+        {
+            break;
+        }
+
+        TASK_SIZE(9);
+
+        PUSH(networkVehicle->m_nVehicleId);
+        PUSH(task->m_CarDrivingStyle);
+        PUSH(task->m_CruiseSpeed);
+        break;
+    }*/
     }
 
     if (dataSize) {
@@ -128,11 +150,11 @@ void CTaskSync::DeSerializeTask(void* data)
     READ(taskSlot);
     READ(bPrimary);
 
-    CChat::AddMessage("DeSerializeTask %d %d %d %s", pedId, taskId, taskSlot, bPrimary ? "True" : "False");
+    CChat::AddMessage("DeSerializeTask %d %d %s %d %s", pedId, taskId, CDebugPedTasks::TaskNames[taskId], taskSlot, bPrimary ? "True" : "False");
 
     CNetworkPed* networkPed = CNetworkPedManager::GetPed(pedId);
 
-    if (networkPed == nullptr)
+    if (networkPed == nullptr || networkPed->m_pPed == nullptr)
         return;
 
     CPed* ped = networkPed->m_pPed;
@@ -163,6 +185,26 @@ void CTaskSync::DeSerializeTask(void* data)
         task->m_bWanderSensibly = b;
         READ(task->m_fTargetRadius);
         
+        APPLY_TASK();
+        break;
+    }
+    case TASK_COMPLEX_CAR_DRIVE_WANDER:
+    {
+        int vehicleId = 0;
+        uint8_t carDrivingStyle = 0;
+        float cruiseSpeed = 0.0f;
+
+        READ(vehicleId);
+        READ(carDrivingStyle);
+        READ(cruiseSpeed);
+
+        CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicleId);
+
+        if (networkVehicle == nullptr || networkVehicle->m_pVehicle == nullptr)
+            return;
+
+        CTaskComplexCarDriveWander* task = new CTaskComplexCarDriveWander(networkVehicle->m_pVehicle, carDrivingStyle, cruiseSpeed);
+
         APPLY_TASK();
         break;
     }
