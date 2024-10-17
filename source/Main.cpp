@@ -5,7 +5,7 @@ unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
 unsigned int lastPassengerSyncTickRate = 0;
 unsigned int lastPedSyncTickRate = 0;
-
+bool bBeenConnected;
 class CoopAndreas {
 public:
     CoopAndreas() {
@@ -15,6 +15,33 @@ public:
 				{
 					enet_peer_disconnect(CNetwork::m_pPeer, 0);
 					enet_peer_reset(CNetwork::m_pPeer);
+				}
+			};
+		Events::gameProcessEvent.before += []
+			{
+				ENetEvent event;
+				if (CNetwork::m_bConnected)
+				{
+					bBeenConnected = true;
+					while (enet_host_service(CNetwork::m_pClient, &event, 1) != 0)
+					{
+						switch (event.type)
+						{
+						case ENET_EVENT_TYPE_RECEIVE:
+						{
+							CNetwork::HandlePacketReceive(event);
+							enet_packet_destroy(event.packet); //You should destroy after used it
+							break;
+						}
+						}
+					}
+				}
+				else if (bBeenConnected && !CNetwork::m_bConnected)
+				{
+					// disconnect
+					enet_host_destroy(CNetwork::m_pClient);
+					enet_deinitialize();
+					printf("disconnected from server");
 				}
 			};
 		Events::gameProcessEvent += []

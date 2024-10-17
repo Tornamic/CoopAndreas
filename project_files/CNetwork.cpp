@@ -53,25 +53,7 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 		std::cout << "Connection failed." << std::endl;
 	}
 
-	while (m_bConnected)
-	{
-		
-		enet_host_service(m_pClient, &event, 1);
-		switch (event.type)
-		{
-			case ENET_EVENT_TYPE_RECEIVE:
-			{
-				CNetwork::HandlePacketReceive(event);
-				enet_packet_destroy(event.packet); //You should destroy after used it
-				break;
-			}
-		}
-	}
-
-	// disconnect
-	enet_host_destroy(m_pClient);
-	enet_deinitialize();
-	printf("disconnected from server");
+	
 	return true;
 }
 
