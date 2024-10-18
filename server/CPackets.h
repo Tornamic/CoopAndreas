@@ -437,6 +437,7 @@ public:
 		float aimingRotation = 0.0f;
 		float currentRotation = 0.0f;
 		float lookDirection = 0.0f;
+		unsigned char moveState = 0;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

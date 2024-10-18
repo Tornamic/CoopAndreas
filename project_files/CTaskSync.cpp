@@ -94,7 +94,7 @@ void* CTaskSync::SerializeTask(CTask* t, CNetworkPed* owner, bool bPrimary, unsi
         PUSH(task->m_nType); // eComplexJumpType
         break;
     }
-    case TASK_COMPLEX_WANDER:
+    /*case TASK_COMPLEX_WANDER:
     {
         CTaskComplexWander* task = (CTaskComplexWander*)t;
         TASK_SIZE(14);
@@ -105,7 +105,7 @@ void* CTaskSync::SerializeTask(CTask* t, CNetworkPed* owner, bool bPrimary, unsi
         PUSH(b);
         PUSH(task->m_fTargetRadius);
         break;
-    }
+    }*/
     /*case TASK_COMPLEX_CAR_DRIVE_WANDER:
     {
         CTaskComplexCarDriveWander* task = (CTaskComplexCarDriveWander*)t;

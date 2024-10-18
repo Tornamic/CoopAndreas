@@ -685,6 +685,8 @@ CPackets::PedOnFoot* CPacketHandler::PedOnFoot__Collect(CNetworkPed* networkPed)
 	packet->aimingRotation = ped->m_fAimingRotation;
 	packet->currentRotation = ped->m_fCurrentRotation;
 	packet->lookDirection = ped->field_73C; // look direction (rad)
+	packet->moveState = (unsigned char)ped->m_nMoveState;
+
 	return packet;
 }
 
@@ -714,7 +716,7 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 	ped->m_pPed->m_fHealth = packet->health;
 	ped->m_pPed->m_fArmour = packet->armour;
 	ped->m_vecVelocity = packet->velocity;
-
+	ped->m_nMoveState = (eMoveState)packet->moveState;
 }
 
 // GameWeatherTime
