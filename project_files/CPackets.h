@@ -63,6 +63,7 @@ public:
 		bool ducking = false;
 		float aimX = 0.0f;
 		float aimY = 0.0f;
+		bool hasJetpack = false;
 	};
 
 	#pragma pack(1)

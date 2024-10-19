@@ -78,6 +78,7 @@ CPackets::PlayerOnFoot* CPacketHandler::PlayerOnFoot__Collect()
 	packet->aimX = CLocalPlayer::m_vecLastAimX;
 	packet->aimY = CLocalPlayer::m_vecLastAimY;
 
+	packet->hasJetpack = CUtil::IsPedHasJetpack(player);
 	return packet;
 }
 
@@ -102,6 +103,8 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 
 	player->m_pPed->m_fAimingRotation =
 		player->m_pPed->m_fCurrentRotation = packet->rotation;
+
+	CUtil::SetPlayerJetpack(player, packet->hasJetpack);
 
 	// save last onfoot sync
 	player->m_oOnFoot = player->m_lOnFoot;

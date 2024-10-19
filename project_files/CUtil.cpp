@@ -115,7 +115,8 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
             {
                 CStreaming::RequestModel(model, eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
                 CStreaming::LoadAllRequestedModels(true);
-                while (CStreaming::ms_aInfoForModel[model].m_nLoadState != LOADSTATE_LOADED) Sleep(1);
+                Sleep(10);
+                //while (CStreaming::ms_aInfoForModel[model].m_nLoadState != LOADSTATE_LOADED) Sleep(1);
             }
 
             // give weapon
@@ -229,4 +230,30 @@ CNetworkPed* CUtil::GetNetworkPedByTask(CTask* targetTask)
     }
 
     return nullptr;
+}
+
+bool CUtil::IsPedHasJetpack(CPed* ped)
+{
+    return plugin::CallMethodAndReturn<CTaskSimpleJetPack*, 0x601110, CPedIntelligence*>(ped->m_pIntelligence);
+}
+
+void CUtil::SetPlayerJetpack(CNetworkPlayer* player, bool set)
+{
+    if (set)
+    {
+        CWorld::PlayerInFocus = player->GetInternalId();
+        CCheat::JetpackCheat(); // its easier to call this instead of implementing jetpack giving
+        CWorld::PlayerInFocus = 0;
+    }
+    else
+    {
+        // CPedIntelligence::GetTaskJetPack
+        CTaskSimpleJetPack* task = plugin::CallMethodAndReturn<CTaskSimpleJetPack*, 0x601110, CPedIntelligence*>(player->m_pPed->m_pIntelligence);
+
+        if (task)
+        {
+            task->m_bIsFinished = true; // dont create a jetpack pickup, TODO when syncing pickups
+            plugin::CallMethod<0x67B660, CTaskSimpleJetPack*>(task, player->m_pPed); // CTaskSimpleJetPack::DropJetPack
+        }
+    }
 }

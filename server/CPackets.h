@@ -59,6 +59,7 @@ public:
 		bool ducking;
 		float aimX;
 		float aimY;
+		bool hasJetpack = false;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

@@ -165,6 +165,8 @@ Contact information is current as of October 2024
     - [ ] money
     - [ ] weapons
 - [ ] jetpack sync
+  - [X] flight 
+  - [ ] pickup (related to task above) 
 - [ ] anim sync
   - [ ] sprunk drinking
   - [ ] fast food eating
