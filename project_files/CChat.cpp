@@ -1,23 +1,6 @@
 #include "stdafx.h"
 
-std::vector<std::string> CChat::m_aMessages =
-{
-    "Welcome to CoopAndreas!",
-    "",
-    "---------      Authors      --------",
-    "",
-    "Mod",
-    "Tornamic, sr_milton",
-    "",
-    "Launcher",
-    "EOS, Tornamic",
-    "",
-    "Special thanks",
-    "Lone.Rider, The Empty Prod.",
-    "and CoopAndreas Discord Community <3",
-    "------------------------------------",
-    ""
-};
+std::vector<CChatMessage> CChat::m_aMessages = {};
 
 std::string CChat::m_sInputText = "";
 bool CChat::m_bInputActive = false;
@@ -27,7 +10,7 @@ unsigned char patch_disable_inputs[] = {0x00, 0x00, 0x00, 0x00, 0x00};
 
 void CChat::AddMessage(const std::string& message)
 {
-    m_aMessages.push_back(message);
+    m_aMessages.push_back(CChatMessage{message, GetTickCount()});
 }
 
 void CChat::AddMessage(const char* format, ...)
@@ -46,13 +29,38 @@ void CChat::Draw()
     {
         if (CChat::m_aMessages.size() > 0)
         {
+            int tickCount = GetTickCount();
             int i = CChat::m_aMessages.size() - 1;
-            int j = 15 - 1;
+            int j = 0;
+
+            if (!m_bInputActive)
+            {
+                for (int k = 0, l = i; k < 15 && l >= 0; k++, l--)
+                {
+                    if (tickCount - CChat::m_aMessages[l].m_nCreatedAt <= 11000)
+                        j++;
+                }
+            }
+            else j = 15 - 1;
+
+
             while (i >= 0 && j >= 0)
             {
-                CDXFont::Draw(10, RsGlobal.maximumHeight / 3 + j * RENDER_FONT_SIZE, CChat::m_aMessages[i].c_str(), D3DCOLOR_RGBA(255, 255, 0, 255));
+                DWORD messageAge = tickCount - CChat::m_aMessages[i].m_nCreatedAt;
+
+                if (messageAge <= 10000 || m_bInputActive)
+                {
+                    CDXFont::Draw(10, RsGlobal.maximumHeight / 3 + j * RENDER_FONT_SIZE, CChat::m_aMessages[i].m_message.c_str(), D3DCOLOR_RGBA(255, 255, 0, 255));
+                    j--;
+                }
+                else if (messageAge <= 11000)
+                {
+                    int alpha = 255 - (messageAge - 10000) * 255 / 1000;
+                    CDXFont::Draw(10, RsGlobal.maximumHeight / 3 + j * RENDER_FONT_SIZE, CChat::m_aMessages[i].m_message.c_str(), D3DCOLOR_RGBA(255, 255, 0, alpha));
+                    j--;
+                }
+
                 i--;
-                j--;
             }
         }
     }

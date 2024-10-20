@@ -30,22 +30,22 @@ void CDXFont::Draw(int x, int y, const char* text, D3DCOLOR color)
         const int shadowSize = 1;
         // right shadow 
         rect.left += shadowSize;
-        CDXFont::m_pD3DXFont->DrawTextA(NULL, text, -1, &rect, 0, D3DCOLOR_RGBA(0, 0, 0, 255)); 
+        CDXFont::m_pD3DXFont->DrawTextA(NULL, text, -1, &rect, 0, D3DCOLOR_RGBA(0, 0, 0, (color >> 24) & 0xFF));
         rect.left -= shadowSize;
 
         // left shadow 
         rect.left -= shadowSize;
-        CDXFont::m_pD3DXFont->DrawTextA(NULL, text, -1, &rect, 0, D3DCOLOR_RGBA(0, 0, 0, 255));
+        CDXFont::m_pD3DXFont->DrawTextA(NULL, text, -1, &rect, 0, D3DCOLOR_RGBA(0, 0, 0, (color >> 24) & 0xFF));
         rect.left += shadowSize;
 
         // bottom shadow
         rect.top += shadowSize;
-        CDXFont::m_pD3DXFont->DrawTextA(NULL, text, -1, &rect, 0, D3DCOLOR_RGBA(0, 0, 0, 255));
+        CDXFont::m_pD3DXFont->DrawTextA(NULL, text, -1, &rect, 0, D3DCOLOR_RGBA(0, 0, 0, (color >> 24) & 0xFF));
         rect.top -= shadowSize;
         
         // top shadow
         rect.top -= shadowSize;
-        CDXFont::m_pD3DXFont->DrawTextA(NULL, text, -1, &rect, 0, D3DCOLOR_RGBA(0, 0, 0, 255));
+        CDXFont::m_pD3DXFont->DrawTextA(NULL, text, -1, &rect, 0, D3DCOLOR_RGBA(0, 0, 0, (color >> 24) & 0xFF));
         rect.top += shadowSize;
 
         CDXFont::m_pD3DXFont->DrawTextA(NULL, text, -1, &rect, 0, color);
