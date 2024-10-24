@@ -37,9 +37,9 @@ cd vcpkg
 4. Open project_files/CoopAndreas.sln in Visual Studio 2022 and build every project (Ctrl+Shift+B).
 
 ## Donate
-USDT TRC20: `TDGUyPCVZTXCgViGXkr2pmYQtwAPScgWJb`
+TODO
 
-Contact information is current as of October 2024
+Contact information is current as of January 1970
 
 ## TODO list:
 ### Already Done ✓
