@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "CTaskSync.h"
+#include "CNetworkVehicle.h"
+#include "CNetworkPed.h"
+
 #include <CTaskComplexJump.h>
 #include <CTaskComplexWander.h>
 #include <CTaskComplexClimb.h>

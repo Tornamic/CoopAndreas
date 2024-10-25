@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "CDXFont.h"
 
 std::vector<CChatMessage> CChat::m_aMessages = {};
 

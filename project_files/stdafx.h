@@ -79,7 +79,6 @@ using namespace plugin;
 #include "CUtil.h"
 #include "CPatch.h"
 #include "Hooks/CHook.h"
-#include "CDXFont.h"
 #include "Events.h"
 #include "CLocalPlayer.h"
 #include "CNetworkPlayerMapPin.h"
@@ -93,5 +92,4 @@ using namespace plugin;
 #include "CDriveBy.h"
 #include "CNetworkPedManager.h"
 #include "CDebugPedTasks.h"
-#include "CKeySync.h"
 // -----------------------------------------------------------------------------------------

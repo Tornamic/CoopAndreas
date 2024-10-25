@@ -1,5 +1,8 @@
 #include "../stdafx.h"
 #include "VehicleHooks.h"
+#include "../CKeySync.h"
+#include "../CNetworkVehicle.h"
+#include "../CNetworkPed.h"
 
 void __fastcall CVehicle__ProcessControl_Hook()
 {
@@ -30,18 +33,35 @@ void __fastcall CVehicle__ProcessControl_Hook()
     else if (vtbl == 0x872370) // CTrain
         call_addr = 0x6F86A0;
 
-
-    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(vehicle->m_pDriver);
-
-    if (vehicle->m_pDriver == FindPlayerPed(0) || player == nullptr)
+    if (vehicle->m_pDriver == FindPlayerPed(0))
     {
         plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
-        _asm mov ecx, vehicle
-        _asm mov eax, call_addr
-        _asm call eax
+        plugin::CallMethodDyn<CVehicle*>(call_addr, vehicle);
         return;
     }
 
+    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(vehicle->m_pDriver);
+
+    if (player == nullptr)
+    {
+        if (!CLocalPlayer::m_bIsHost)
+        {
+            CNetworkPed* ped = CNetworkPedManager::GetPed(vehicle->m_pDriver);
+            if (ped == nullptr)
+            {
+                plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
+                plugin::CallMethodDyn<CVehicle*>(call_addr, vehicle);
+                return;
+            }
+            vehicle->m_autoPilot = ped->m_autoPilot;
+            vehicle->m_fGasPedal = ped->m_fGasPedal;
+            vehicle->m_fBreakPedal = ped->m_fBreakPedal;
+            vehicle->m_fSteerAngle = ped->m_fSteerAngle;
+        }
+        plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
+        plugin::CallMethodDyn<CVehicle*>(call_addr, vehicle);
+        return;
+    }
 
     CWorld::PlayerInFocus = player->GetInternalId();
 
@@ -62,9 +82,7 @@ void __fastcall CVehicle__ProcessControl_Hook()
     *(bool*)0xB6F1A4 = player->m_lOnFoot->controllerState.LeftShoulder2 > 0;
     *(bool*)0xB6F1A5 = player->m_lOnFoot->controllerState.RightShoulder2 > 0;*/
 
-    _asm mov ecx, vehicle
-    _asm mov eax, call_addr
-    _asm call eax
+    plugin::CallMethodDyn<CVehicle*>(call_addr, vehicle);
 
     CWorld::PlayerInFocus = 0;
 
@@ -175,6 +193,44 @@ static void __fastcall CVehicle__SetRemap_Hook(CVehicle* This, int, int paintJob
     This->SetRemap(paintJobId);
 }
 
+static bool __fastcall CAutomobile__ProcessAI_Hook(CAutomobile* This, int, int a1)
+{
+    DWORD vtbl = *(DWORD*)(This);
+    DWORD call_addr = 0x6B4800;
+
+    if (vtbl == 0x871360) // CBike
+        call_addr = 0x6BC930;
+    else if (vtbl == 0x871AE8) // CQuadBike
+        call_addr = 0x6CE460;
+    else if (vtbl == 0x871C28) // CTrailer
+        call_addr = 0x6CF590;
+
+    if (!CLocalPlayer::m_bIsHost)
+    {
+        CNetworkPed* networkPed = CNetworkPedManager::GetPed(This->m_pDriver);
+
+        if (networkPed == nullptr)
+        {
+            return plugin::CallMethodAndReturnDyn<bool, CAutomobile*>(call_addr, This, a1);
+        }
+        This->m_autoPilot = networkPed->m_autoPilot;
+        This->m_fGasPedal = networkPed->m_fGasPedal;
+        This->m_fBreakPedal = networkPed->m_fBreakPedal;
+        This->m_fSteerAngle = networkPed->m_fSteerAngle;
+
+        bool result = plugin::CallMethodAndReturnDyn<bool, CAutomobile*>(call_addr, This, a1);
+
+        This->m_autoPilot = networkPed->m_autoPilot;
+        This->m_fGasPedal = networkPed->m_fGasPedal;
+        This->m_fBreakPedal = networkPed->m_fBreakPedal;
+        This->m_fSteerAngle = networkPed->m_fSteerAngle;
+
+        return result;
+    }
+
+    return plugin::CallMethodAndReturnDyn<bool, CAutomobile*>(call_addr, This, a1);
+}
+
 void VehicleHooks::InjectHooks()
 {
     patch::RedirectCall(0x53C1CB, CCarCtrl__RemoveDistantCars_Hook);
@@ -218,4 +274,6 @@ void VehicleHooks::InjectHooks()
     patch::SetPointer(0x871800, CVehicle__ProcessControl_Hook);
     patch::SetPointer(0x871B10, CVehicle__ProcessControl_Hook);
     patch::SetPointer(0x872398, CVehicle__ProcessControl_Hook);
+
+    //patch::SetPointer(0x871228, CAutomobile__ProcessAI_Hook); // CAutomobile  
 }

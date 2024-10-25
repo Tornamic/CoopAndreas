@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "CDXFont.h"
 
 void CNetworkPlayerWaypoint::Process()
 {

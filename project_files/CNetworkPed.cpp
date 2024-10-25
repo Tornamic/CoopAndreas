@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "CNetworkPed.h"
 
 
 // CREATE new ped!!! NOT GET!! 

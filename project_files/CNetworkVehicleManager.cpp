@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "CNetworkVehicle.h"
 
 std::vector<CNetworkVehicle*> CNetworkVehicleManager::m_pVehicles;
 

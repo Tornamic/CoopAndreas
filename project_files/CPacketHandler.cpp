@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "CTaskSync.h"
+#include "CNetworkVehicle.h"
+#include "CNetworkPed.h"
 // PlayerConnected
 
 void CPacketHandler::PlayerConnected__Handle(void* data, int size)
@@ -194,6 +196,10 @@ void CPacketHandler::PlayerSetHost__Handle(void* data, int size)
 	if (packet->playerid == CNetworkPlayerManager::m_nMyId)
 	{
 		CLocalPlayer::m_bIsHost = true;
+
+		CPopulation::PedDensityMultiplier = 1.0f;
+		patch::SetFloat(0x8A5B20, 1.0f);
+
 		CNetworkPedManager::AssignHost();
 		CChat::AddMessage("[Player] You are the host now");
 
@@ -705,9 +711,12 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 	if (!ped->m_pPed)
 		return;
 
-	if (ped->m_pPed->m_nPedFlags.bInVehicle)
+	if (ped->m_pPed->m_pVehicle && ped->m_pPed->m_nPedFlags.bInVehicle)
 	{
+		//plugin::Command<Commands::TASK_LEAVE_CAR>(CPools::GetPedRef(ped->m_pPed), CPools::GetVehicleRef(ped->m_pPed->m_pVehicle));
 		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(ped->m_pPed), packet->pos.x, packet->pos.y, packet->pos.z);
+		auto pos = ped->m_pPed->GetPosition();
+		CChat::AddMessage("%d %f %f %f", ped->m_nPedId, pos.x, pos.y, pos.z);
 	}
 
 	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);
@@ -812,6 +821,12 @@ CPackets::PedDriverUpdate* CPacketHandler::PedDriverUpdate__Collect(CNetworkVehi
 	}
 
 	packet->locked = vehicle->m_pVehicle->m_eDoorLock;
+	
+	packet->autoPilot = CSyncAutoPilot(vehicle->m_pVehicle->m_autoPilot);
+
+	packet->gasPedal = vehicle->m_pVehicle->m_fGasPedal;
+	packet->breakPedal = vehicle->m_pVehicle->m_fBreakPedal;
+	packet->steerAngle = vehicle->m_pVehicle->m_fSteerAngle;
 
 	return packet;
 }
@@ -841,6 +856,7 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 	vehicle->m_pVehicle->m_matrix->right = packet->roll;
 	vehicle->m_pVehicle->m_matrix->up = packet->rot;
 	ped->m_vecVelocity = packet->velocity;
+	vehicle->m_pVehicle->m_vecMoveSpeed = packet->velocity;
 
 	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);
 
@@ -863,4 +879,10 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 	}
 
 	vehicle->m_pVehicle->m_eDoorLock = (eDoorLock)packet->locked;
+	packet->autoPilot.WriteTo(vehicle->m_pVehicle->m_autoPilot);
+	ped->m_autoPilot = vehicle->m_pVehicle->m_autoPilot;
+
+	ped->m_fGasPedal = packet->gasPedal;
+	ped->m_fBreakPedal = packet->breakPedal;
+	ped->m_fSteerAngle = packet->steerAngle;
 }

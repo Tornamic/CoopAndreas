@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "CKeySync.h"
 
 CControllerState storedOldState{};
 CControllerState storedNewState{};

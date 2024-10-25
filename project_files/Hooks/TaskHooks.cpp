@@ -1,6 +1,8 @@
 #include "../stdafx.h"
 #include "TaskHooks.h"
 #include "../CTaskSync.h"
+#include "../CNetworkVehicle.h"
+#include "../CNetworkPed.h"
 
 // when local player enters any vehicle
 static void __fastcall CTaskComplexEnterCarAsDriver__Ctor_Hook(CTaskComplexEnterCarAsDriver* This, int, CVehicle* vehicle)
@@ -113,8 +115,9 @@ static void __declspec(naked) CTaskManager__SetTask_Hook()
 
         if (pNetworkPed)
         {
+#ifdef TASK_LOG
             CChat::AddMessage("SET PRIMARY %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
-
+#endif
             nTaskPacketSize = 0;
             pSerializedTask = CTaskSync::SerializeTask(pTask, pNetworkPed, true, nTaskSlot, &nTaskPacketSize);
 
@@ -161,8 +164,9 @@ static void __declspec(naked) CTaskManager__SetTaskSecondary_Hook()
 
         if (pNetworkPed)
         {
+#ifdef TASK_LOG
             CChat::AddMessage("SET SECONDARY %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
-
+#endif
             nTaskPacketSize = 0;
             pSerializedTask = CTaskSync::SerializeTask(pTask, pNetworkPed, false, nTaskSlot, &nTaskPacketSize);
 
@@ -200,10 +204,12 @@ static void __declspec(naked) CTaskComplex__SetSubTask_Hook()
     {
         pNetworkPed = CUtil::GetNetworkPedByTask(pTask);
 
+#ifdef TASK_LOG
         if (pNetworkPed)
         {
             CChat::AddMessage("SET SUB %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
         }
+#endif
     }
 
     __asm
@@ -248,7 +254,10 @@ static void __declspec(naked) CTaskSimple__dtor_Hook()
         if (pNetworkPed)
         {
             nTaskType = plugin::CallMethodAndReturnDyn<eTaskType>(dwGetIdAddr, pTaskSimple);
+#ifdef TASK_LOG
             CChat::AddMessage("DESTROY TASK %s", CDebugPedTasks::TaskNames[nTaskType]);
+#endif // TASK_LOG
+
         }
     }
 
@@ -289,8 +298,10 @@ static void __declspec(naked) CTaskComplex__dtor_Hook()
 
         if (pNetworkPed)
         {
-            nTaskType = plugin::CallMethodAndReturnDyn<eTaskType>(dwGetIdAddr, pTaskComplex);
+            nTaskType = plugin::CallMethodAndReturnDyn<eTaskType>(dwGetIdAddr, pTaskComplex); 
+#ifdef TASK_LOG
             CChat::AddMessage("DESTROY TASK %s", CDebugPedTasks::TaskNames[nTaskType]);
+#endif
         }
     }
 

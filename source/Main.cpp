@@ -1,4 +1,5 @@
 #include "../project_files/stdafx.h"
+#include "../project_files/CDXFont.h"
 
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
@@ -134,9 +135,26 @@ public:
 #ifdef _DEV
 				if (CNetwork::m_bConnected)
 				{
-					char buffer[100];
+					char buffer[50];
 					sprintf(buffer, "Peds %d Recv %d Sent %d", CPools::ms_pPedPool->GetNoOfUsedSpaces(), CNetwork::m_pClient->totalReceivedPackets, CNetwork::m_pClient->totalSentPackets);
 					CDXFont::Draw(100, 10, buffer, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+					for (auto networkPed : CNetworkPedManager::m_pPeds)
+					{
+						if (!networkPed || !networkPed->m_pPed)
+							continue;
+
+						CPed* ped = networkPed->m_pPed;
+						if (!ped || !ped->m_matrix)
+							continue;
+
+						CVector posn = ped->m_matrix->pos;
+						RwV3d screenCoors; float w, h;
+						if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
+						{
+							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, std::to_string(networkPed->m_nPedId).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
+						}
+					}
 				}
 #endif // _DEV
 

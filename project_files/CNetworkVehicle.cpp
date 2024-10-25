@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "CNetworkVehicle.h"
 
 int m_nVehicleId = -1;
 CVehicle* m_pVehicle = nullptr;

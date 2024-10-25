@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "CNetworkPed.h"
 
 bool CUtil::CompareControllerStates(const CControllerState & state1, const CControllerState & state2) {
     return state1.LeftStickX == state2.LeftStickX &&

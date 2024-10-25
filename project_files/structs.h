@@ -111,3 +111,97 @@ public:
     }
 #undef DECOMPRESS
 };
+
+#pragma pack(1)
+struct CSyncAutoPilot
+{
+public:
+    CNodeAddress        m_currentAddress;
+    CNodeAddress        m_startingRouteNode;
+    CNodeAddress        m_endingRouteNode;
+    unsigned int        m_nSpeedScaleFactor;
+    CCarPathLinkAddress m_nCurrentPathNodeInfo;
+    CCarPathLinkAddress m_nNextPathNodeInfo;
+    CCarPathLinkAddress m_nPreviousPathNodeInfo;
+    unsigned char       m_nCurrentLane;
+    unsigned char       m_nNextLane;
+    eCarDrivingStyle    m_nCarDrivingStyle;
+    eCarMission         m_nCarMission;
+    char                m_nTempAction;
+    unsigned int        m_nTempActionTime;
+    unsigned char       m_ucTempActionMode;
+    unsigned char       m_ucCarMissionModeCounter;
+    float               m_speed;
+    float               m_fMaxTrafficSpeed;
+    unsigned char       m_nCruiseSpeed;
+    unsigned char       m_ucHeliSpeedMult;
+    unsigned char       m_nCarCtrlFlags;
+    unsigned char       m_nMovementFlags;
+    unsigned char       m_nStraightLineDistance;
+    CVector             m_vecDestinationCoors;
+    CNodeAddress        m_aPathFindNodesInfo[8];
+    unsigned short      m_nPathFindNodesCount;
+
+    CSyncAutoPilot()
+    {
+
+    }
+
+    CSyncAutoPilot(const CAutoPilot& autoPilot)
+    {
+        m_currentAddress =              autoPilot.m_currentAddress;
+        m_startingRouteNode =           autoPilot.m_startingRouteNode;
+        m_endingRouteNode =             autoPilot.field_8;
+        m_nSpeedScaleFactor =           autoPilot.m_nSpeedScaleFactor;
+        m_nCurrentPathNodeInfo =        autoPilot.m_nCurrentPathNodeInfo;
+        m_nNextPathNodeInfo =           autoPilot.m_nNextPathNodeInfo;
+        m_nPreviousPathNodeInfo =       autoPilot.m_nPreviousPathNodeInfo;
+        m_nCurrentLane =                autoPilot.m_nCurrentLane;
+        m_nNextLane =                   autoPilot.m_nNextLane;
+        m_nCarDrivingStyle =            autoPilot.m_nCarDrivingStyle;
+        m_nCarMission =                 autoPilot.m_nCarMission;
+        m_nTempAction =                 autoPilot.m_nTempAction;
+        m_nTempActionTime =             autoPilot.m_nTempActionTime - CTimer::m_snTimeInMilliseconds;
+        m_ucTempActionMode =            autoPilot.field_34;
+        m_ucCarMissionModeCounter =     autoPilot.field_35;
+        m_speed =                       autoPilot.field_38;
+        m_fMaxTrafficSpeed =            autoPilot.m_fMaxTrafficSpeed;
+        m_nCruiseSpeed =                autoPilot.m_nCruiseSpeed;
+        m_ucHeliSpeedMult =             autoPilot.field_48[0];
+        m_nCarCtrlFlags =               autoPilot.m_nCarCtrlFlags;
+        m_nMovementFlags =              autoPilot.field_4C;
+        m_nStraightLineDistance =       autoPilot.m_nStraightLineDistance;
+        m_vecDestinationCoors =         autoPilot.m_vecDestinationCoors;
+        memcpy(m_aPathFindNodesInfo, autoPilot.m_aPathFindNodesInfo, sizeof(m_aPathFindNodesInfo));
+        m_nPathFindNodesCount =         autoPilot.m_nPathFindNodesCount;
+    }
+
+    void WriteTo(CAutoPilot& autoPilot)
+    {
+        autoPilot.m_currentAddress =            m_currentAddress;
+        autoPilot.m_startingRouteNode =         m_startingRouteNode;
+        autoPilot.field_8 =                     m_endingRouteNode;
+        autoPilot.m_nSpeedScaleFactor =         m_nSpeedScaleFactor;
+        autoPilot.m_nCurrentPathNodeInfo =      m_nCurrentPathNodeInfo;
+        autoPilot.m_nNextPathNodeInfo =         m_nNextPathNodeInfo;
+        autoPilot.m_nPreviousPathNodeInfo =     m_nPreviousPathNodeInfo;
+        autoPilot.m_nCurrentLane =              m_nCurrentLane;
+        autoPilot.m_nNextLane =                 m_nNextLane;
+        autoPilot.m_nCarDrivingStyle =          m_nCarDrivingStyle;
+        autoPilot.m_nCarMission =               m_nCarMission;
+        autoPilot.m_nTempAction =               m_nTempAction;
+        autoPilot.m_nTempActionTime =           m_nTempActionTime + CTimer::m_snTimeInMilliseconds;
+        autoPilot.field_34 =                    m_ucTempActionMode;
+        autoPilot.field_35 =                    m_ucCarMissionModeCounter;
+        autoPilot.field_38 =                    m_speed;
+        autoPilot.m_fMaxTrafficSpeed =          m_fMaxTrafficSpeed;
+        autoPilot.m_nCruiseSpeed =              m_nCruiseSpeed;
+        autoPilot.field_48[0] =                 m_ucHeliSpeedMult;
+        autoPilot.m_nCarCtrlFlags =             m_nCarCtrlFlags;
+        autoPilot.field_4C =                    m_nMovementFlags;
+        autoPilot.m_nStraightLineDistance =     m_nStraightLineDistance;
+        autoPilot.m_vecDestinationCoors =       m_vecDestinationCoors;
+        memcpy(autoPilot.m_aPathFindNodesInfo,  m_aPathFindNodesInfo, sizeof(m_aPathFindNodesInfo));
+        autoPilot.m_nPathFindNodesCount =       m_nPathFindNodesCount;
+    }
+};

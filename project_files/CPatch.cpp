@@ -4,7 +4,7 @@
 void CPatch::TemporaryPatches()
 {
     // implementation of my patch.lua script
-    //patch::SetFloat(0x8A5B20, 0.0f); // disable traffic
+    patch::SetFloat(0x8A5B20, 0.0f); // disable traffic
     CTrain::DisableRandomTrains(0); // disable trains
     patch::SetUChar(0x8A5B28, false); // disable EMS
     //CPlane::SwitchAmbientPlanes(false); // disable ambient planes
@@ -12,7 +12,7 @@ void CPatch::TemporaryPatches()
     //patch::Nop(0x53C1C1, 5); // disable CCarCtrl::GenerateRandomCars
     //patch::Nop(0x434272, 5); // disable CPlane::DoPlaneGenerationAndRemoval
     patch::SetUShort(0x8D477C, 0); // disable spawn 537 train
-    //CPopulation::PedDensityMultiplier = 0.0f;
+    CPopulation::PedDensityMultiplier = 0.0f;
 }
 
 void CPatch::PatchFramerate()

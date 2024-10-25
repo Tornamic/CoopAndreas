@@ -1,5 +1,6 @@
 #include "../stdafx.h"
 #include "GameHooks.h"
+#include "../CKeySync.h"
 
 static void __cdecl CMenuManager__DrawFrontEnd_FixChat_Hook(float alpha)
 {

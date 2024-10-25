@@ -1,5 +1,7 @@
 #include "../stdafx.h"
 #include "WorldHooks.h"
+#include "../CNetworkVehicle.h"
+#include "../CNetworkPed.h"
 
 static void __cdecl CWeather__ForceWeather_Hook(short id)
 {
@@ -86,11 +88,11 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
         }
     }
 
-    if (dontCreateEntity)
-    {
-        //delete entity;
-        return;
-    }
+    //if (dontCreateEntity)
+    //{
+    //    //delete entity;
+    //    return;
+    //}
 
     CWorld::Add(entity);
 }

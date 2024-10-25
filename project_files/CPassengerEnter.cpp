@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "CNetworkVehicle.h"
 
 void CPassengerEnter::Process()
 {

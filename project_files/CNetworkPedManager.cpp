@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include "CNetworkVehicle.h"
+#include "CNetworkPed.h"
 
 std::vector<CNetworkPed*> CNetworkPedManager::m_pPeds;
 
@@ -16,6 +18,9 @@ CNetworkPed* CNetworkPedManager::GetPed(int pedid)
 
 CNetworkPed* CNetworkPedManager::GetPed(CPed* ped)
 {
+	if (ped == nullptr)
+		return nullptr;
+
 	for (int i = 0; i != m_pPeds.size(); i++)
 	{
 		if (m_pPeds[i]->m_pPed == ped)
@@ -29,6 +34,9 @@ CNetworkPed* CNetworkPedManager::GetPed(CPed* ped)
 
 CNetworkPed* CNetworkPedManager::GetPed(CEntity* entity)
 {
+	if (entity == nullptr)
+		return nullptr;
+
 	for (int i = 0; i != m_pPeds.size(); i++)
 	{
 		if (m_pPeds[i]->m_pPed == entity)
@@ -112,7 +120,7 @@ void CNetworkPedManager::Process()
 
 		if (ped == nullptr)
 			continue;
-		
+
 		ped->m_fAimingRotation = networkPed->m_fAimingRotation;
 		ped->m_fCurrentRotation = networkPed->m_fCurrentRotation;
 		ped->field_73C = networkPed->m_fLookDirection;

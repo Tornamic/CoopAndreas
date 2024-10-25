@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "CDXFont.h"
 
 // thx Vektor for his ped task debugger
 const char CDebugPedTasks::TaskNames[][256] = //Credits to MTA

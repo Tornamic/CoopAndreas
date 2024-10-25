@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CCrashLog.h"
+#include "CDXFont.h"
 
 WNDPROC prevWndProc;
 

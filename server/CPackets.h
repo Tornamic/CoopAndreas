@@ -523,6 +523,10 @@ public:
 		char paintjob;
 		float planeGearState;
 		unsigned char locked;
+		unsigned char autoPilot[92];
+		float gasPedal;
+		float breakPedal;
+		float steerAngle;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
