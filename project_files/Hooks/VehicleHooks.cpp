@@ -98,11 +98,6 @@ static void __fastcall CCarCtrl__RemoveDistantCars_Hook()
         CCarCtrl::RemoveDistantCars();
 }
 
-static bool __cdecl CGameLogin__IsCoopGameGoingOn_Hook()
-{
-    return false;
-}
-
 static void __fastcall CVehicle__AddVehicleUpgrade_Hook(CVehicle* This, int, int modelid)
 {
     if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
@@ -249,8 +244,6 @@ void VehicleHooks::InjectHooks()
     patch::RedirectCall(0x44828D, CVehicle__SetRemap_Hook);
     patch::RedirectCall(0x44B184, CVehicle__SetRemap_Hook);
     patch::RedirectCall(0x49872F, CVehicle__SetRemap_Hook);
-
-    patch::RedirectJump(0x441390, CGameLogin__IsCoopGameGoingOn_Hook);
 
     patch::RedirectCall(0x431998, CVehicle__AddVehicleUpgrade_Hook);
     patch::RedirectCall(0x4732DE, CVehicle__AddVehicleUpgrade_Hook);

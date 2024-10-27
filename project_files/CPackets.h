@@ -157,6 +157,7 @@ public:
 		unsigned char color2;
 		float health;
 		char paintjob;
+		float bikeLean;
 		float turretAimHorizontal;
 		float turretAimVertical;
 		unsigned short miscComponentAngle; // hydra thrusters
@@ -283,6 +284,7 @@ public:
 		unsigned char color2;
 		float health;
 		char paintjob;
+		float bikeLean;
 		float planeGearState;
 		unsigned char locked;
 		CSyncAutoPilot autoPilot;

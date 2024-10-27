@@ -86,44 +86,42 @@ Contact information is current as of January 1970
 - [X] time
 - [X] weather
 - [X] proper key sync
-
-### known bugs (highest priority)
-- [ ] vehicle add-remove packet spam
-- [ ] crashes when closing game caused by different things
-- [ ] sometimes closing pause menu game cant load nametag weapon icon
+- [X] rendering
+  - [X] text rendering (dx)
+  - [X] sprite/txd rendering
 
 ### Current Tasks
-- [ ] fix weapon selection blinking
+- [ ] separate ped sync
+- [ ] stream in/out players, peds, vehicles, etc.
+- [ ] use original main.scm
+- [ ] fix weapon selection
 - [ ] force crouch sync using CTask
 - [ ] refactor packet system (make abstract, more oop, etc.)
 - [ ] vehicle sync
   - [ ] force hydraulics sync
   - [ ] trailer sync
 - [ ] passenger sync
+  - [ ] gamepad support
+  - [ ] proper seat sync
   - [ ] radio sync
   - [ ] drive by shooting
-- [ ] rendering
-  - [X] text rendering (dx)
-  - [ ] imgui integration
-  - [X] sprite/txd rendering
 - [ ] fixes
   - [X] mouse
   - [ ] widescreen
   - [X] fast load
     - [X] disable logos
     - [X] disable intro
-- [ ] Fix models loading (green polygon)
+- [ ] Fix models loading (green polygon)  --- related to stream it/out
 - [ ] Players map sync
   - [ ] Areas aka GangZones
   - [ ] Mission icons
   - [X] Player map pin
+    - [ ] fix proportion
   - [X] Player mark (waypoint)
 - [ ] smooth interpolation
   - [ ] move
   - [ ] rotation
-- [ ] hud sync
-  - [ ] popup messages
-  - [ ] wanted level
+- [ ] wanted level
 - [ ] stats sync
   - [ ] fat
   - [ ] muscle
@@ -184,32 +182,11 @@ Contact information is current as of January 1970
     - [ ] exercises
     - [ ] fighting between players
   - [ ] dancing at parties
-
-### ChatGPT Generated tasks n ideas:
-- [ ] minigames sync
-  - [ ] pool
-  - [ ] bowling (chatgppt what????)
-  - [ ] arm wrestling (wtf chatgpt???)
-
-- [ ] territory wars sync
-  - [ ] exact status synchronization of captured territories for all players
-  - [ ] common signals for starting and ending gang wars
-- [ ] animation sync
-  - [ ] gestures/dances at parties
-  - [ ] joint workouts at the gym (weightlifting, boxing)
-- [ ] taxi sync
-  - [ ] shared taxi ride with another player
-  - [ ] proper fare splitting among all passengers
-- [ ] shops sync
-  - [ ] ammu-nation purchases sync
-  - [ ] fast food purchases sync (Cluckin' Bell, Burger Shot)
-  - [ ] clothing stores sync (Binco, SubUrban, etc.)
-- [ ] driving schools sync
-  - [ ] joint completion of driving tests at driving schools
-- [ ] parachute training sync
-  - [ ] parachute jump sync from tall buildings or planes
-  
+- [ ] gand wars sync
+- [ ] parachute jump sync
+- [ ] co-op vigilante sub-mission completing
 ### Minor tasks and ideas
+- [ ] chat gamepad support with on-screen keyboard
 - [ ] Sync laser sniper rifle red dot with all players
 - [ ] Sync moon sniper rifle shot changing size easter egg with all players
 - [ ] hot coffee implementation 😏

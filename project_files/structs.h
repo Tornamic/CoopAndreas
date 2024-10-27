@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "CChat.h"
 
 #pragma pack(1)
 typedef struct _CPassengerAim

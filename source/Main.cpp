@@ -135,8 +135,8 @@ public:
 #ifdef _DEV
 				if (CNetwork::m_bConnected)
 				{
-					char buffer[50];
-					sprintf(buffer, "Peds %d Recv %d Sent %d", CPools::ms_pPedPool->GetNoOfUsedSpaces(), CNetwork::m_pClient->totalReceivedPackets, CNetwork::m_pClient->totalSentPackets);
+					char buffer[70];
+					sprintf(buffer, "Peds %d Cars %d Recv %d Sent %d", CPools::ms_pPedPool->GetNoOfUsedSpaces(), CPools::ms_pVehiclePool->GetNoOfUsedSpaces(), CNetwork::m_pClient->totalReceivedPackets, CNetwork::m_pClient->totalSentPackets);
 					CDXFont::Draw(100, 10, buffer, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 					for (auto networkPed : CNetworkPedManager::m_pPeds)

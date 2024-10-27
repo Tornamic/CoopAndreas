@@ -62,7 +62,6 @@
 #include "CPopulation.h"
 #include "CWeather.h"
 #include "CClock.h"
-
 // classes ---------------------------------------------------------------------------------
 
 using namespace plugin;

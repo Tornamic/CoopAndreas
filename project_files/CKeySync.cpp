@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CKeySync.h"
+#include "CChat.h"
 
 CControllerState storedOldState{};
 CControllerState storedNewState{};
@@ -68,6 +69,7 @@ void CKeySync::ApplyLocalContext()
 void CKeySync::ProcessPlayer(CNetworkPlayer* player)
 {
     ÑCompressedControllerState cState = player->m_compressedControllerState;
+
     PROCESS_STICK(LeftStickX);
     PROCESS_STICK(LeftStickY);
 

@@ -362,7 +362,15 @@ CPackets::VehicleDriverUpdate* CPacketHandler::VehicleDriverUpdate__Collect(CNet
 		packet->miscComponentAngle = automobile->m_wMiscComponentAngle;
 	}
 
-	if (CUtil::GetVehicleType(vehicle->m_pVehicle) == eVehicleType::VEHICLE_PLANE)
+	eVehicleType vehicleType = CUtil::GetVehicleType(vehicle->m_pVehicle);
+	if (vehicleType == eVehicleType::VEHICLE_BIKE || vehicleType == eVehicleType::VEHICLE_BMX)
+	{
+		CBike* bike = (CBike*)vehicle->m_pVehicle;
+
+		packet->bikeLean = bike->m_rideAnimData.m_fAnimLean;
+	}
+
+	if (vehicleType == eVehicleType::VEHICLE_PLANE)
 	{
 		CPlane* plane = (CPlane*)vehicle->m_pVehicle;
 		packet->planeGearState = plane->m_fLandingGearStatus;
@@ -427,7 +435,15 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 		automobile->m_wMiscComponentAngle = packet->miscComponentAngle;
 	}
 
-	if (CUtil::GetVehicleType(vehicle->m_pVehicle) == eVehicleType::VEHICLE_PLANE)
+	eVehicleType vehicleType = CUtil::GetVehicleType(vehicle->m_pVehicle);
+	if (vehicleType == eVehicleType::VEHICLE_BIKE || vehicleType == eVehicleType::VEHICLE_BMX)
+	{
+		CBike* bike = (CBike*)vehicle->m_pVehicle;
+
+		*(float*)((DWORD)&*bike + 0x64C) = packet->bikeLean;
+	}
+
+	if (vehicleType == eVehicleType::VEHICLE_PLANE)
 	{
 		CPlane* plane = (CPlane*)vehicle->m_pVehicle;
 
@@ -715,8 +731,6 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 	{
 		//plugin::Command<Commands::TASK_LEAVE_CAR>(CPools::GetPedRef(ped->m_pPed), CPools::GetVehicleRef(ped->m_pPed->m_pVehicle));
 		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(ped->m_pPed), packet->pos.x, packet->pos.y, packet->pos.z);
-		auto pos = ped->m_pPed->GetPosition();
-		CChat::AddMessage("%d %f %f %f", ped->m_nPedId, pos.x, pos.y, pos.z);
 	}
 
 	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);
@@ -814,7 +828,15 @@ CPackets::PedDriverUpdate* CPacketHandler::PedDriverUpdate__Collect(CNetworkVehi
 
 	packet->paintjob = vehicle->m_nPaintJob;
 
-	if (CUtil::GetVehicleType(vehicle->m_pVehicle) == eVehicleType::VEHICLE_PLANE)
+	eVehicleType vehicleType = CUtil::GetVehicleType(vehicle->m_pVehicle);
+	if (vehicleType == eVehicleType::VEHICLE_BIKE || vehicleType == eVehicleType::VEHICLE_BMX)
+	{
+		CBike* bike = (CBike*)vehicle->m_pVehicle;
+
+		packet->bikeLean = bike->m_rideAnimData.m_fAnimLean;
+	}
+
+	if (vehicleType == eVehicleType::VEHICLE_PLANE)
 	{
 		CPlane* plane = (CPlane*)vehicle->m_pVehicle;
 		packet->planeGearState = plane->m_fLandingGearStatus;
@@ -870,6 +892,14 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 
 	if (vehicle->m_nPaintJob != packet->paintjob)
 		vehicle->m_pVehicle->SetRemap(packet->paintjob);
+
+	eVehicleType vehicleType = CUtil::GetVehicleType(vehicle->m_pVehicle);
+	if (vehicleType == eVehicleType::VEHICLE_BIKE || vehicleType == eVehicleType::VEHICLE_BMX)
+	{
+		CBike* bike = (CBike*)vehicle->m_pVehicle;
+
+		*(float*)((DWORD)&*bike + 0x64C) = packet->bikeLean;
+	}
 
 	if (CUtil::GetVehicleType(vehicle->m_pVehicle) == eVehicleType::VEHICLE_PLANE)
 	{
