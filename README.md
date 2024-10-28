@@ -37,9 +37,11 @@ cd vcpkg
 4. Open project_files/CoopAndreas.sln in Visual Studio 2022 and build every project (Ctrl+Shift+B).
 
 ## Donate
-TODO
+https://send.monobank.ua/jar/8wPrs73MBa
 
-Contact information is current as of January 1970
+*If you need another way to donate, please dm me on discord: `@tornamic`*
+
+Contact information is current as of November 2024
 
 ## TODO list:
 ### Already Done ✓
