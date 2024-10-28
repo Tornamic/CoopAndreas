@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include "eNetworkEntityType.h"
 
 
 enum CPacketsID : unsigned short
@@ -32,7 +33,8 @@ enum CPacketsID : unsigned short
 	PED_ADD_TASK,
 	PED_REMOVE_TASK,
 	PLAYER_KEY_SYNC,
-	PED_DRIVER_UPDATE
+	PED_DRIVER_UPDATE,
+	ENTITY_STREAM
 };
 
 class CPackets
@@ -291,5 +293,19 @@ public:
 		float gasPedal;
 		float breakPedal;
 		float steerAngle;
+	};
+
+	struct EntityStream
+	{
+		int entityid; // playerid/pedid/vehicleid
+		union
+		{
+			struct
+			{
+				eNetworkEntityType entityType : 3;
+				unsigned char in : 1; // in == true, out == false
+			};
+			unsigned char packed;
+		};
 	};
 };

@@ -19,5 +19,8 @@ public:
 	CNetworkPed(CPed* ped);
 	CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy);
 	~CNetworkPed();
+	bool IsStreamed();
+	void StreamIn();
+	void StreamOut();
 };
 

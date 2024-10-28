@@ -46,7 +46,7 @@ CNetworkPlayer* CNetworkPlayerManager::GetPlayer(int playerid)
 {
 	for (int i = 0; i != m_pPlayers.size(); i++)
 	{
-		if (m_pPlayers[i]->m_iPlayerId == playerid)
+		if (m_pPlayers[i]->m_nPlayerId == playerid)
 		{
 			return m_pPlayers[i];
 		}

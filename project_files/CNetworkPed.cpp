@@ -105,3 +105,16 @@ CNetworkPed::~CNetworkPed()
         }
     }
 }
+
+bool CNetworkPed::IsStreamed()
+{
+    return false;
+}
+
+void CNetworkPed::StreamIn()
+{
+}
+
+void CNetworkPed::StreamOut()
+{
+}

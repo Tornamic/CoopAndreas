@@ -131,3 +131,16 @@ bool CNetworkVehicle::HasDriver()
 
     return m_pVehicle->m_pDriver != nullptr;
 }
+
+bool CNetworkVehicle::IsStreamed()
+{
+    return false;
+}
+
+void CNetworkVehicle::StreamIn()
+{
+}
+
+void CNetworkVehicle::StreamOut()
+{
+}

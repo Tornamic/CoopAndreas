@@ -5,6 +5,7 @@
 #define RENDER_FONT_SIZE 12
 #define _DEV
 #define PURECALL (0x82263A)
+#define STREAM_DISTANCE (100.0f) // todo
 
 // networking ------------------------------------------------------------------------------
 

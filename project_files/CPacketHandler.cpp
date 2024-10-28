@@ -182,7 +182,7 @@ void CPacketHandler::PlayerGetName__Handle(void* data, int size)
 
 	strcpy_s(player->m_Name, packet->name);
 
-	CChat::AddMessage("[Player] player " + std::to_string(player->m_iPlayerId) + " now aka " + player->m_Name);
+	CChat::AddMessage("[Player] player " + std::to_string(player->m_nPlayerId) + " now aka " + player->m_Name);
 
 	CPacketHandler::GameWeatherTime__Trigger();
 }
@@ -399,7 +399,7 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 
 	if (player->m_pPed == nullptr)
 	{
-		player->CreatePed(player->m_iPlayerId, packet->pos);
+		player->CreatePed(player->m_nPlayerId, packet->pos);
 		return;
 	}
 
@@ -622,7 +622,7 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 	if (!player->m_pPed->m_nPedFlags.bInVehicle || (player->m_pPed->m_nPedFlags.bInVehicle && vehicle->m_pVehicle->m_pDriver == player->m_pPed))
 	{
 #ifdef _DEV
-		CChat::AddMessage("forcing enter passenger %d", player->m_iPlayerId);
+		CChat::AddMessage("forcing enter passenger %d", player->m_nPlayerId);
 #endif
 		plugin::Command<Commands::WARP_CHAR_INTO_CAR_AS_PASSENGER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), -1);
 	}
@@ -655,7 +655,7 @@ void CPacketHandler::PlayerChatMessage__Handle(void* data, int size)
 
 	if (player)
 	{
-		CChat::AddMessage("%s(%d): %s", player->GetName(), player->m_iPlayerId, packet->message);
+		CChat::AddMessage("%s(%d): %s", player->GetName(), player->m_nPlayerId, packet->message);
 	}
 }
 
@@ -915,4 +915,30 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 	ped->m_fGasPedal = packet->gasPedal;
 	ped->m_fBreakPedal = packet->breakPedal;
 	ped->m_fSteerAngle = packet->steerAngle;
+}
+
+// EntityStream
+
+void CPacketHandler::EntityStream__Handle(void* data, int size)
+{
+	CPackets::EntityStream* packet = (CPackets::EntityStream*)data;
+	
+	switch (packet->entityType)
+	{
+	case eNetworkEntityType::NETWORK_ENTITY_PLAYER:
+	{
+		if (auto player = CNetworkPlayerManager::GetPlayer(packet->entityid))
+		{
+			if (packet->in)
+				player->StreamIn(player->m_lOnFoot->position);
+			else
+				player->StreamOut();
+		}
+
+		break;
+	}
+	case eNetworkEntityType::NETWORK_ENTITY_VEHICLE:
+	case eNetworkEntityType::NETWORK_ENTITY_PED:
+		break;
+	}
 }

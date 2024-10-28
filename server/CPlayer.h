@@ -8,6 +8,8 @@ public:
 	bool m_bIsHost;
 	unsigned char m_nSeatId;
 	int m_nVehicleId;
+	std::vector<CPlayer*> m_streamedFor;
+
 	CPlayer(ENetPeer* peer, int playerid);
 
 };

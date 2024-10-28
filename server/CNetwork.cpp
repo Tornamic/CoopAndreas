@@ -134,6 +134,11 @@ void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, E
     }
 }
 
+void CNetwork::SendPacketStreamFor(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, CPlayer* player)
+{
+
+}
+
 void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith = nullptr)
 {
     ENetPacket* packet = enet_packet_create(data, dataSize, flag & ENET_PACKET_FLAG_NO_ALLOCATE);

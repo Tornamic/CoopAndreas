@@ -1,4 +1,5 @@
 #pragma once
+#include "eNetworkEntityType.h"
 
 enum CPacketsID : unsigned short
 {
@@ -29,7 +30,8 @@ enum CPacketsID : unsigned short
 	PED_ADD_TASK,
 	PED_REMOVE_TASK,
 	PLAYER_KEY_SYNC,
-	PED_DRIVER_UPDATE
+	PED_DRIVER_UPDATE,
+	ENTITY_STREAM
 };
 
 class CPackets
@@ -543,5 +545,19 @@ public:
 			vehicle->m_vecPosition = packet->pos;
 			vehicle->m_vecRotation = packet->rot;
 		}
+	};
+
+	struct EntityStream
+	{
+		int entityid; // playerid/pedid/vehicleid
+		union
+		{
+			struct
+			{
+				eNetworkEntityType entityType : 3;
+				unsigned char in : 1; // in == true, out == false
+			};
+			unsigned char packed;
+		};
 	};
 };

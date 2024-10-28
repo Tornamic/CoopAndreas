@@ -2,6 +2,6 @@
 class CPassengerEnter
 {
 public:
-	static void CPassengerEnter::Process();
+	static void Process();
 };
 

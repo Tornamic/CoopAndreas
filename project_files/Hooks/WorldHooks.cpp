@@ -153,7 +153,7 @@ void WorldHooks::InjectHooks()
     patch::RedirectCall(0x738952, CExplosion__AddExplosion);
     patch::RedirectCall(0x738AAE, CExplosion__AddExplosion);
 
-    const int CWorld__Add_Addresses[] = {
+    std::vector<uintptr_t> CWorld__Add_Addresses = {
     0x404BE4, 0x42BBC3, 0x42C5FC, 0x42CA98, 0x431BE6, 0x4320B1, 0x432239, 0x43A416, 0x43A631, 0x44231F,
     0x444E2C, 0x4456B4, 0x45733A, 0x4575C0, 0x45881B, 0x458E70, 0x45ACBE, 0x45BF05, 0x45CCBB, 0x45ED24,
     0x45ED7B, 0x45F5D5, 0x45F708, 0x45F846, 0x45F979, 0x45FAAC, 0x45FBF3, 0x461820, 0x4621B6, 0x46237F,
@@ -165,9 +165,9 @@ void WorldHooks::InjectHooks()
     0x6A9BE2, 0x6A9D63, 0x6BD080, 0x6C685D, 0x6CD40E, 0x6CD71D, 0x6E44E0, 0x6E4E94, 0x6EADF9, 0x6F2199,
     0x6F2503, 0x6F3C8C, 0x6F7249, 0x6F784B, 0x717E7F, 0x717F3E, 0x738639, 0x15614C6, 0x156D903, 0x156DA51 };
     patch::RedirectJump(0x609554, CWorld__Add_Hook);
-    patch::RedirectCall(std::vector<int>(CWorld__Add_Addresses, CWorld__Add_Addresses + sizeof(CWorld__Add_Addresses) / 4), CWorld__Add_Hook);
+    patch::RedirectCall(CWorld__Add_Addresses, CWorld__Add_Hook);
 
-    const int CWorld__Remove_Addresses[] = {
+    std::vector<uintptr_t> CWorld__Remove_Addresses = {
     0x404B90, 0x404BED, 0x404C3E, 0x409E43, 0x4251E6, 0x425221, 0x42541E, 0x4413CA, 0x442319,
     0x449729, 0x4499F3, 0x449B43, 0x449CE0, 0x449E2A, 0x454CFB, 0x455488, 0x4556F1, 0x456C29, 0x456E1E,
     0x456EA0, 0x4571AD, 0x458E8A, 0x45BEFF, 0x45CCB5, 0x45D3C9, 0x45D3FE, 0x45ED11, 0x45ED69, 0x45FF78,
@@ -180,7 +180,7 @@ void WorldHooks::InjectHooks()
     0x6F5DD7, 0x6F6A7B, 0x6F6B31, 0x6F7194, 0x6F7845, 0x6F7ACA, 0x717897, 0x738AFF, 0x73997A, 0x739A17,
     0x739AD0, 0x156DA41 };
     patch::RedirectJump(0x609534, CWorld__Remove_Hook);
-    patch::RedirectCall(std::vector<int>(CWorld__Remove_Addresses, CWorld__Remove_Addresses + sizeof(CWorld__Remove_Addresses) / 4), CWorld__Remove_Hook);
+    patch::RedirectCall(CWorld__Remove_Addresses, CWorld__Remove_Hook);
 
     patch::RedirectJump(0x47D43E, CWeather__ForceWeather_Hook);
     patch::RedirectJump(0x72A4F0, CWeather__ForceWeatherNow_Hook);

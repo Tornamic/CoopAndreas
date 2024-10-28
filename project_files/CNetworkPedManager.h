@@ -2,7 +2,7 @@
 class CNetworkPedManager
 {
 public:
-	static std::vector<CNetworkPed*> CNetworkPedManager::m_pPeds;
+	static std::vector<CNetworkPed*> m_pPeds;
 	static CNetworkPed* GetPed(int pedid);
 	static CNetworkPed* GetPed(CPed* ped);
 	static CNetworkPed* GetPed(CEntity* entity);

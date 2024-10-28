@@ -19,33 +19,20 @@ char m_Name[32 + 1] = { 0 };
 
 CNetworkPlayer::~CNetworkPlayer()
 {
-	if (m_pPed == nullptr) return;
-
-	if (m_pPed->m_pVehicle != nullptr)
-	{
-		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
-	}
-
-	DWORD dwPedPtr = (DWORD)m_pPed;
-
-	// call destroy method
-	_asm mov ecx, dwPedPtr
-	_asm mov ebx, [ecx]; vtable
-	_asm push 1
-	_asm call[ebx]; destroy
+	DestroyPed();
 }
 
 CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 {
-	CreatePed(id, position);
-
-	m_iPlayerId = id;
+	m_nPlayerId = id;
 
 	m_lOnFoot = m_oOnFoot = new CPackets::PlayerOnFoot();
 }
 
 void CNetworkPlayer::CreatePed(int id, CVector position)
 {
+	DestroyPed(); // destroy ped if present
+
 	unsigned int actorId = 0;
 	int playerId = id + 2;
 
@@ -58,6 +45,22 @@ void CNetworkPlayer::CreatePed(int id, CVector position)
 
 	// set player immunies, he now dont cares about pain
 	Command<Commands::SET_CHAR_PROOFS>(actorId, 0, 1, 1, 0, 0);
+}
+
+void CNetworkPlayer::DestroyPed()
+{
+	if (m_pPed == nullptr) return;
+
+	if (m_pPed->m_pVehicle != nullptr)
+	{
+		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
+	}
+
+	// call destroy method
+	_asm mov ecx, m_pPed
+	_asm mov ebx, [ecx] // vtable
+	_asm push 1
+	_asm call[ebx] // destroy
 }
 
 int CNetworkPlayer::GetInternalId() // most used for CWorld::PlayerInFocus
@@ -80,9 +83,26 @@ char* CNetworkPlayer::GetName()
 	char* buffer = new char[32 + 1];
 
 	if (m_Name[0] == '\0')
-		sprintf(buffer, "player %d", m_iPlayerId);
+		sprintf(buffer, "player %d", m_nPlayerId);
 	else
 		strcpy(buffer, m_Name);
 
 	return buffer;
+}
+
+bool CNetworkPlayer::IsStreamed()
+{
+	return m_bStreamed;
+}
+
+void CNetworkPlayer::StreamIn(const CVector& position)
+{
+	m_bStreamed = true;
+	CreatePed(m_nPlayerId, position);
+}
+
+void CNetworkPlayer::StreamOut()
+{
+	m_bStreamed = false;
+	DestroyPed();
 }

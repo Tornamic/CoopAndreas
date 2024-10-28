@@ -18,9 +18,9 @@ public:
 	static std::vector<CPacketListener*> m_packetListeners;
 	static ENetHost* m_pClient;
 	static ENetPeer* m_pPeer;
-	static bool CNetwork::m_bConnected;
-	static char CNetwork::m_IpAddress[128 + 1];
-	static unsigned short CNetwork::m_nPort;
+	static bool m_bConnected;
+	static char m_IpAddress[128 + 1];
+	static unsigned short m_nPort;
 
 	static DWORD WINAPI InitAsync(LPVOID);
 	static void Disconnect();

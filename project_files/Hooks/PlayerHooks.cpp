@@ -8,7 +8,7 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     if (This == localPlayer)
     {
-        patch::SetRaw(0x6884C4, "\xD9\x96\x5C\x05\x00\x00", 6);
+        patch::SetRaw(0x6884C4, (void*)"\xD9\x96\x5C\x05\x00\x00", 6);
         plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
         patch::Nop(0x6884C4, 6);
         return;
@@ -53,7 +53,7 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
             case eEntityType::ENTITY_TYPE_PED: // ped or player
             {
                 if (auto playerTarget = CNetworkPlayerManager::GetPlayer(victim))
-                    packet->targetid = playerTarget->m_iPlayerId;
+                    packet->targetid = playerTarget->m_nPlayerId;
                 break;
             }
             case eEntityType::ENTITY_TYPE_VEHICLE:
