@@ -105,7 +105,7 @@ static void __fastcall CVehicle__AddVehicleUpgrade_Hook(CVehicle* This, int, int
         CPackets::VehicleComponentAdd packet{};
         packet.vehicleid = vehicle->m_nVehicleId;
         packet.componentid = modelid;
-        CNetwork::SendPacket(CPacketsID::VEHICLE_COMPONENT_ADD, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        CNetwork::SendPacket(ePacketType::VEHICLE_COMPONENT_ADD, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
     This->AddVehicleUpgrade(modelid);
 }
@@ -117,7 +117,7 @@ static void __fastcall CVehicle__RemoveVehicleUpgrade_Hook(CVehicle* This, int, 
         CPackets::VehicleComponentRemove packet{};
         packet.vehicleid = vehicle->m_nVehicleId;
         packet.componentid = modelid;
-        CNetwork::SendPacket(CPacketsID::VEHICLE_COMPONENT_REMOVE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        CNetwork::SendPacket(ePacketType::VEHICLE_COMPONENT_REMOVE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
     This->RemoveVehicleUpgrade(modelid);
 }
@@ -175,7 +175,7 @@ static bool __fastcall CDamageManager__ApplyDamage_Hook(CDamageManager* This, in
         CPackets::VehicleDamage packet{};
         packet.vehicleid = vehicle->m_nVehicleId;
         packet.damageManager = dm_comp->m_damageManager;
-        CNetwork::SendPacket(CPacketsID::VEHICLE_DAMAGE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        CNetwork::SendPacket(ePacketType::VEHICLE_DAMAGE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
     return plugin::CallMethodAndReturn<bool, 0x6C24B0, CDamageManager*, CAutomobile*, tComponent, float, float>(This, dm_comp, compId, intensity, a5);
 }

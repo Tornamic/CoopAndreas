@@ -26,14 +26,14 @@ static CdeclEvent	 <AddressList<0x5775D2, H_CALL>, PRIORITY_AFTER, ArgPick5N<eBl
 static void PlaceWaypointHook(eBlipType type, CVector posn, eBlipColour color, eBlipDisplay blipDisplay, char* scriptName)
 {
     CPackets::PlayerPlaceWaypoint packet = { 0, true, posn };
-    CNetwork::SendPacket(CPacketsID::PLAYER_PLACE_WAYPOINT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    CNetwork::SendPacket(ePacketType::PLAYER_PLACE_WAYPOINT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 }
 
 // hide waypoint
 static void __fastcall CRadar__ClearBlip_Hook(int blipIndex, int padding)
 {
     CPackets::PlayerPlaceWaypoint packet = { 0, false, CVector(0, 0, 0) };
-    CNetwork::SendPacket(CPacketsID::PLAYER_PLACE_WAYPOINT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    CNetwork::SendPacket(ePacketType::PLAYER_PLACE_WAYPOINT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     CRadar::ClearBlip(blipIndex);
 }
 
@@ -53,7 +53,7 @@ static void __cdecl CExplosion__AddExplosion(CEntity* newVictim, CPed* newCreato
     addExplosionPacket.cameraShake = cameraShake;
     addExplosionPacket.isVisible = isVisible;
 
-    CNetwork::SendPacket(CPacketsID::ADD_EXPLOSION, &addExplosionPacket, sizeof addExplosionPacket, ENET_PACKET_FLAG_RELIABLE);
+    CNetwork::SendPacket(ePacketType::ADD_EXPLOSION, &addExplosionPacket, sizeof addExplosionPacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 static void __cdecl CWorld__Add_Hook(CEntity* entity)

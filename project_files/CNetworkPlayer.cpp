@@ -15,7 +15,7 @@ const unsigned int CNetworkPlayer::m_pColours[] = { 0x6495EDFF,0xf0e68cFF,0x7788
 CVector* m_vecWaypointPos = nullptr;
 bool m_bWaypointPlaced = false;
 
-char m_Name[32 + 1] = { 0 };
+char m_name[32 + 1] = { 0 };
 
 CNetworkPlayer::~CNetworkPlayer()
 {
@@ -82,10 +82,10 @@ char* CNetworkPlayer::GetName()
 {
 	char* buffer = new char[32 + 1];
 
-	if (m_Name[0] == '\0')
+	if (m_name[0] == '\0')
 		sprintf(buffer, "player %d", m_nPlayerId);
 	else
-		strcpy(buffer, m_Name);
+		strcpy(buffer, m_name);
 
 	return buffer;
 }

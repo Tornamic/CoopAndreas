@@ -1,7 +1,9 @@
 #pragma once
+#include "stdafx.h"
 #include "eNetworkEntityType.h"
+#include "IPacket.h"
 
-enum CPacketsID : unsigned short
+enum ePacketType : unsigned short
 {
 	PLAYER_CONNECTED,
 	PLAYER_DISCONNECTED,
@@ -37,20 +39,20 @@ enum CPacketsID : unsigned short
 class CPackets
 {
 public:
-	struct PlayerConnected
+	struct PlayerConnected : IPacket
 	{
-		int id;
+		uint16_t id;
 	};
 
-	struct PlayerDisconnected
+	struct PlayerDisconnected : IPacket
 	{
-		int id;
+		uint16_t id;
 		unsigned char reason;
 	};
 	#pragma pack(1)
-	struct PlayerOnFoot
+	struct PlayerOnFoot : IPacket
 	{
-		int id;
+		uint16_t id;
 		CVector position;
 		CVector	velocity;
 		float rotation;
@@ -72,15 +74,15 @@ public:
 			packet->id = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
 
 
-			CNetwork::SendPacketToAll(CPacketsID::PLAYER_ONFOOT, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+			CNetwork::SendPacketToAll(ePacketType::PLAYER_ONFOOT, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}
 	};
 
 	#pragma pack(1)
-	struct PlayerBulletShot
+	struct PlayerBulletShot : IPacket
 	{
-		int playerid;
-		int targetid;
+		uint16_t playerid;
+		uint16_t targetid;
 		CVector startPos;
 		CVector endPos;
 		unsigned char colPoint[44]; // padding
@@ -95,18 +97,18 @@ public:
 			// set packet`s playerid, cuz incoming packet has id = 0
 			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
 
-			CNetwork::SendPacketToAll(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+			CNetwork::SendPacketToAll(ePacketType::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}
 	};
 
-	struct PlayerHandshake
+	struct PlayerHandshake : IPacket
 	{
-		int yourid;
+		uint16_t yourid;
 	};
 
-	struct PlayerPlaceWaypoint
+	struct PlayerPlaceWaypoint : IPacket
 	{
-		int playerid;
+		uint16_t playerid;
 		bool place;
 		CVector position;
 
@@ -114,13 +116,13 @@ public:
 		{
 			CPackets::PlayerPlaceWaypoint* packet = (CPackets::PlayerPlaceWaypoint*)data;
 			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-			CNetwork::SendPacketToAll(CPacketsID::PLAYER_PLACE_WAYPOINT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::PLAYER_PLACE_WAYPOINT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 
-	struct PlayerGetName
+	struct PlayerGetName : IPacket
 	{
-		int playerid;
+		uint16_t playerid;
 		char name[32 + 1];
 
 		static void Handle(ENetPeer* peer, void* data, int size)
@@ -128,18 +130,18 @@ public:
 			CPackets::PlayerGetName* packet = (CPackets::PlayerGetName*)data;
 			CPlayer* player = CPlayerManager::GetPlayer(peer);
 			packet->playerid = player->m_iPlayerId;
-			strcpy_s(player->m_Name, packet->name);
+			strcpy_s(player->m_name, packet->name);
 			printf("player %d now also know as %s\n", packet->playerid, packet->name);
-			CNetwork::SendPacketToAll(CPacketsID::PLAYER_GET_NAME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::PLAYER_GET_NAME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 
-	struct PlayerSetHost
+	struct PlayerSetHost : IPacket
 	{
-		int playerid;
+		uint16_t playerid;
 	};
 
-	struct AddExplosion
+	struct AddExplosion : IPacket
 	{
 		unsigned char type;
 		CVector pos;
@@ -151,13 +153,13 @@ public:
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::AddExplosion* packet = (CPackets::AddExplosion*)data;
-			CNetwork::SendPacketToAll(CPacketsID::ADD_EXPLOSION, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::ADD_EXPLOSION, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 
-	struct VehicleSpawn
+	struct VehicleSpawn : IPacket
 	{
-		int vehicleid;
+		uint16_t vehicleid;
 		unsigned short modelid;
 		CVector pos;
 		float rot;
@@ -171,7 +173,7 @@ public:
 
 
 			CPackets::VehicleSpawn* packet = (CPackets::VehicleSpawn*)data;
-			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::VEHICLE_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 			
 			CVehicle* vehicle = new CVehicle(packet->vehicleid, packet->modelid, packet->pos, packet->rot);
 
@@ -182,9 +184,9 @@ public:
 		}
 	};
 
-	struct VehicleRemove
+	struct VehicleRemove : IPacket
 	{
-		int vehicleid;
+		uint16_t vehicleid;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -192,16 +194,16 @@ public:
 				return;
 
 			CPackets::VehicleRemove* packet = (CPackets::VehicleRemove*)data;
-			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::VEHICLE_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
 			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
 			CVehicleManager::Remove(vehicle);
 		}
 	};
 
-	struct VehicleIdleUpdate
+	struct VehicleIdleUpdate : IPacket
 	{
-		int vehicleid;
+		uint16_t vehicleid;
 		CVector pos;
 		CVector rot;
 		CVector roll;
@@ -219,7 +221,7 @@ public:
 				return;
 
 			CPackets::VehicleIdleUpdate* packet = (CPackets::VehicleIdleUpdate*)data;
-			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+			CNetwork::SendPacketToAll(ePacketType::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 
 			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
 			
@@ -231,10 +233,10 @@ public:
 		}
 	};
 
-	struct VehicleDriverUpdate
+	struct VehicleDriverUpdate : IPacket
 	{
-		int playerid;
-		int vehicleid;
+		uint16_t playerid;
+		uint16_t vehicleid;
 		CVector pos;
 		CVector rot;
 		CVector roll;
@@ -258,7 +260,7 @@ public:
 		{
 			CPackets::VehicleDriverUpdate* packet = (CPackets::VehicleDriverUpdate*)data;
 			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_DRIVER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+			CNetwork::SendPacketToAll(ePacketType::VEHICLE_DRIVER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 
 			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
 
@@ -267,10 +269,10 @@ public:
 		}
 	};
 
-	struct VehicleEnter
+	struct VehicleEnter : IPacket
 	{
-		int playerid;
-		int vehicleid;
+		uint16_t playerid;
+		uint16_t vehicleid;
 		unsigned char seatid;
 		bool force; // if true - put directly in vehicle (without any anim)
 
@@ -281,16 +283,16 @@ public:
 			player->m_nSeatId = packet->seatid;
 			player->m_nVehicleId = packet->vehicleid;
 			packet->playerid = player->m_iPlayerId;
-			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_ENTER, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::VEHICLE_ENTER, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
 			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
 			//vehicle->m_pPlayers[packet->seatid] = player;
 		}
 	};
 
-	struct VehicleExit
+	struct VehicleExit : IPacket
 	{
-		int playerid;
+		uint16_t playerid;
 		bool force;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
@@ -298,7 +300,7 @@ public:
 			CPackets::VehicleExit* packet = (CPackets::VehicleExit*)data;
 			CPlayer* player = CPlayerManager::GetPlayer(peer);
 			packet->playerid = player->m_iPlayerId;
-			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_EXIT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::VEHICLE_EXIT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
 			CVehicle* vehicle = CVehicleManager::GetVehicle(player->m_nVehicleId);
 			vehicle->m_pPlayers[player->m_nSeatId] = nullptr;
@@ -307,43 +309,43 @@ public:
 		}
 	};
 
-	struct VehicleDamage
+	struct VehicleDamage : IPacket
 	{
-		int vehicleid;
+		uint16_t vehicleid;
 		unsigned char damageManager_padding[23];
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::VehicleDamage* packet = (CPackets::VehicleDamage*)data;
 			memcpy(CVehicleManager::GetVehicle(packet->vehicleid)->m_damageManager_padding, packet->damageManager_padding, 23);
-			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_DAMAGE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::VEHICLE_DAMAGE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 
-	struct VehicleComponentAdd
+	struct VehicleComponentAdd : IPacket
 	{
-		int vehicleid;
+		uint16_t vehicleid;
 		int componentid;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::VehicleComponentAdd* packet = (CPackets::VehicleComponentAdd*)data;
-			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_COMPONENT_ADD, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::VEHICLE_COMPONENT_ADD, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
 			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
 			vehicle->m_pComponents.push_back(packet->componentid);
 		}
 	};
 
-	struct VehicleComponentRemove
+	struct VehicleComponentRemove : IPacket
 	{
-		int vehicleid;
+		uint16_t vehicleid;
 		int componentid;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::VehicleComponentAdd* packet = (CPackets::VehicleComponentAdd*)data;
-			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_COMPONENT_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::VEHICLE_COMPONENT_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
 			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
 
@@ -353,10 +355,10 @@ public:
 		}
 	};
 
-	struct VehiclePassengerUpdate
+	struct VehiclePassengerUpdate : IPacket
 	{
-		int playerid;
-		int vehicleid;
+		uint16_t playerid;
+		uint16_t vehicleid;
 		unsigned char playerHealth;
 		unsigned char playerArmour;
 		unsigned char weapon;
@@ -368,26 +370,26 @@ public:
 		{
 			CPackets::VehiclePassengerUpdate* packet = (CPackets::VehiclePassengerUpdate*)data;
 			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+			CNetwork::SendPacketToAll(ePacketType::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}
 	};
 
-	struct PlayerChatMessage
+	struct PlayerChatMessage : IPacket
 	{
-		int playerid;
+		uint16_t playerid;
 		char message[128 + 1];
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::PlayerChatMessage* packet = (CPackets::PlayerChatMessage*)data;
 			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-			CNetwork::SendPacketToAll(CPacketsID::PLAYER_CHAT_MESSAGE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::PLAYER_CHAT_MESSAGE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 
-	struct PedSpawn
+	struct PedSpawn : IPacket
 	{
-		int pedid;
+		uint16_t pedid;
 		short modelId;
 		unsigned char pedType;
 		CVector pos;
@@ -399,7 +401,7 @@ public:
 				return;
 
 			CPackets::PedSpawn* packet = (CPackets::PedSpawn*)data;
-			CNetwork::SendPacketToAll(CPacketsID::PED_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::PED_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
 			CPed* ped = new CPed(packet->pedid, packet->modelId, packet->pedType, packet->pos, packet->createdBy);
 
@@ -407,9 +409,9 @@ public:
 		}
 	};
 
-	struct PedRemove
+	struct PedRemove : IPacket
 	{
-		int pedid;
+		uint16_t pedid;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -423,15 +425,15 @@ public:
 			if (!ped)
 				return;
 
-			CNetwork::SendPacketToAll(CPacketsID::PED_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::PED_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
 			CPedManager::Remove(ped);
 		}
 	};
 
-	struct PedOnFoot
+	struct PedOnFoot : IPacket
 	{
-		int pedid = 0;
+		uint16_t pedid = 0;
 		CVector pos = CVector();
 		CVector velocity = CVector();
 		unsigned char health = 100;
@@ -455,12 +457,12 @@ public:
 			if (ped)
 			{
 				ped->m_vecPos = packet->pos;
-				CNetwork::SendPacketToAll(CPacketsID::PED_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+				CNetwork::SendPacketToAll(ePacketType::PED_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 			}
 		}
 	};
 
-	struct GameWeatherTime
+	struct GameWeatherTime : IPacket
 	{
 		unsigned char newWeather;
 		unsigned char oldWeather;
@@ -477,41 +479,41 @@ public:
 				return;
 
 			CPackets::GameWeatherTime* packet = (CPackets::GameWeatherTime*)data;
-			CNetwork::SendPacketToAll(CPacketsID::GAME_WEATHER_TIME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::GAME_WEATHER_TIME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 
-	struct PedRemoveTask
+	struct PedRemoveTask : IPacket
 	{
-		int pedid;
+		uint16_t pedid;
 		int taskid; // eTaskType
 	};
 
-	struct PlayerKeySync
+	struct PlayerKeySync : IPacket
 	{
-		int playerid;
+		uint16_t playerid;
 		ÑCompressedControllerState newState;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::PlayerKeySync* packet = (CPackets::PlayerKeySync*)data;
 			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-			CNetwork::SendPacketToAll(CPacketsID::PLAYER_KEY_SYNC, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::PLAYER_KEY_SYNC, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 
-	struct PedAddTask
+	struct PedAddTask : IPacket
 	{
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
-			CNetwork::SendPacketToAll(CPacketsID::PED_ADD_TASK, data, size, ENET_PACKET_FLAG_RELIABLE, peer);
+			CNetwork::SendPacketToAll(ePacketType::PED_ADD_TASK, data, size, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 
-	struct PedDriverUpdate
+	struct PedDriverUpdate : IPacket
 	{
-		int pedid;
-		int vehicleid;
+		uint16_t pedid;
+		uint16_t vehicleid;
 		CVector pos;
 		CVector rot;
 		CVector roll;
@@ -535,7 +537,7 @@ public:
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::PedDriverUpdate* packet = (CPackets::PedDriverUpdate*)data;
-			CNetwork::SendPacketToAll(CPacketsID::PED_DRIVER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+			CNetwork::SendPacketToAll(ePacketType::PED_DRIVER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 
 			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
 
@@ -547,17 +549,16 @@ public:
 		}
 	};
 
-	struct EntityStream
+	struct EntityStream : IPacket
 	{
-		int entityid; // playerid/pedid/vehicleid
+		uint16_t m_nNetworkId;
 		union
 		{
 			struct
 			{
-				eNetworkEntityType entityType : 3;
-				unsigned char in : 1; // in == true, out == false
+				eNetworkEntityType m_nEntityType : 3;
+				unsigned char m_bIn : 1; // in == true, out == false
 			};
-			unsigned char packed;
 		};
 	};
 };

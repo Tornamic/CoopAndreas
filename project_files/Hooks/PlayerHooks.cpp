@@ -71,7 +71,7 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
         packet->colPoint = *colPoint;
         packet->incrementalHit = incrementalHit;
 
-        CNetwork::SendPacket(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+        CNetwork::SendPacket(ePacketType::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
 
         weapon->DoBulletImpact(owner, victim, startPoint, endPoint, colPoint, incrementalHit);
 

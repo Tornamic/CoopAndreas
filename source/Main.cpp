@@ -93,7 +93,7 @@ public:
 						else
 						{
 							CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
-							CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+							CNetwork::SendPacket(ePacketType::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
 							delete packet;
 							lastOnFootSyncTickRate = GetTickCount();
 						}

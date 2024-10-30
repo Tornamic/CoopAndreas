@@ -17,7 +17,7 @@ public:
 	CVector* m_vecWaypointPos = nullptr;
 	bool m_bWaypointPlaced = false;
 
-	char m_Name[32 + 1] = { 0 };
+	char m_name[32 + 1] = { 0 };
 
 	CVector m_aPassengerAim{};
 

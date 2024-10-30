@@ -18,7 +18,7 @@ void CLaunchManager::CollectCommandLineArgs()
 
     for (int i = 0; i < argc; ++i) {
         if (strcmp(args[i], "-name") == 0 && (i + 1) < argc) {
-            strcpy(CLocalPlayer::m_Name, args[i + 1]);
+            strcpy(CLocalPlayer::m_name, args[i + 1]);
         }
         if (strcmp(args[i], "-ip") == 0 && (i + 1) < argc) {
             strcpy(CNetwork::m_IpAddress, args[i + 1]);
@@ -31,14 +31,14 @@ void CLaunchManager::CollectCommandLineArgs()
     CNetwork::m_nPort = (unsigned short)atoi(portStr);
 
 #ifdef _DEV
-    if (CLocalPlayer::m_Name[0] == '\0')
+    if (CLocalPlayer::m_name[0] == '\0')
     {
-        strcpy(CLocalPlayer::m_Name, "Tornamic");
+        strcpy(CLocalPlayer::m_name, "Tornamic");
         strcpy(CNetwork::m_IpAddress, "127.0.0.1");
         CNetwork::m_nPort = 6767;
     }
 
-    printf("Player Nickname: %s\n", CLocalPlayer::m_Name);
+    printf("Player Nickname: %s\n", CLocalPlayer::m_name);
     printf("Server IP Address: %s\n", CNetwork::m_IpAddress);
     printf("Server Port: %u\n", CNetwork::m_nPort);
 #endif // _DEV

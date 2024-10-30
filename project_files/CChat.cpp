@@ -166,9 +166,9 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             {
                 CPackets::PlayerChatMessage packet{};
                 strcpy_s(packet.message, m_sInputText.c_str());
-                CNetwork::SendPacket(CPacketsID::PLAYER_CHAT_MESSAGE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+                CNetwork::SendPacket(ePacketType::PLAYER_CHAT_MESSAGE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
                 
-                CChat::AddMessage("%s(%d): %s", CLocalPlayer::m_Name, CNetworkPlayerManager::m_nMyId, packet.message);
+                CChat::AddMessage("%s(%d): %s", CLocalPlayer::m_name, CNetworkPlayerManager::m_nMyId, packet.message);
                 
                 m_sInputText.clear();
                 m_nCaretPos = 0;

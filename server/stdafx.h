@@ -9,24 +9,11 @@
 
 // -----------------------------------------------------------------------------------------
 
-#include "iostream"
-#include "stdbool.h"
-#include "string"
-#include "vector"
-
-
-
-// classes ---------------------------------------------------------------------------------
+#include <iostream>
+#include <stdbool.h>
+#include <string>
+#include <vector>
+#include <cstdint>
+#include <array>
 
 #include "CVector.h"
-#include "CControllerState.h"
-
-#include "CNetwork.h"
-#include "CPlayer.h"
-#include "CVehicle.h"
-#include "CPed.h"
-#include "CPlayerManager.h"
-#include "CVehicleManager.h"
-#include "CPedManager.h"
-
-#include "CPackets.h"

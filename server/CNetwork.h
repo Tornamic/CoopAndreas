@@ -1,5 +1,5 @@
 #pragma once
-#include "CPlayer.h"
+#include "CNetworkPlayer.h"
 
 class CPacketListener
 {
@@ -23,7 +23,7 @@ public:
 	static void InitListeners();
 	static void SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag);
 	static void SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith);
-	static void SendPacketStreamFor(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, CPlayer* player);
+	static void SendPacketStreamFor(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, CNetworkPlayer* player);
 	static void SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith);
 private:
 	static void HandlePlayerConnected(ENetEvent& event);

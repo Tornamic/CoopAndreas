@@ -4,7 +4,7 @@
 #include "eNetworkEntityType.h"
 
 
-enum CPacketsID : unsigned short
+enum ePacketType : unsigned short
 {
 	PLAYER_CONNECTED,
 	PLAYER_DISCONNECTED,
@@ -43,18 +43,18 @@ public:
 
 	struct PlayerConnected
 	{
-		int id;
+		uint16_t id;
 	};
 
 	struct PlayerDisconnected
 	{
-		int id;
+		uint16_t id;
 		unsigned char reason;
 	};
 
 	struct PlayerOnFoot
 	{
-		int id = 0;
+		uint16_t id = 0;
 		CVector position = CVector();
 		CVector velocity = CVector();
 		float rotation = 0.0f;
@@ -71,8 +71,8 @@ public:
 	#pragma pack(1)
 	struct PlayerBulletShot
 	{
-		int playerid;
-		int targetid;
+		uint16_t playerid;
+		uint16_t targetid;
 		CVector startPos;
 		CVector endPos;
 		CColPoint colPoint;
@@ -82,25 +82,25 @@ public:
 
 	struct PlayerHandshake
 	{
-		int yourid;
+		uint16_t yourid;
 	};
 
 	struct PlayerPlaceWaypoint
 	{
-		int playerid;
+		uint16_t playerid;
 		bool place;
 		CVector position;
 	};
 
 	struct PlayerGetName
 	{
-		int playerid;
+		uint16_t playerid;
 		char name[32 + 1];
 	};
 
 	struct PlayerSetHost
 	{
-		int playerid;
+		uint16_t playerid;
 	};
 
 	struct AddExplosion
@@ -115,7 +115,7 @@ public:
 
 	struct VehicleSpawn
 	{
-		int vehicleid;
+		uint16_t vehicleid;
 		unsigned short modelid;
 		CVector pos;
 		float rot;
@@ -125,12 +125,12 @@ public:
 
 	struct VehicleRemove
 	{
-		int vehicleid;
+		uint16_t vehicleid;
 	};
 
 	struct VehicleIdleUpdate
 	{
-		int vehicleid;
+		uint16_t vehicleid;
 		CVector pos;
 		CVector rot;
 		CVector roll;
@@ -145,8 +145,8 @@ public:
 
 	struct VehicleDriverUpdate
 	{
-		int playerid;
-		int vehicleid;
+		uint16_t playerid;
+		uint16_t vehicleid;
 		CVector pos;
 		CVector rot;
 		CVector roll;
@@ -169,40 +169,40 @@ public:
 
 	struct VehicleEnter
 	{
-		int playerid;
-		int vehicleid;
+		uint16_t playerid;
+		uint16_t vehicleid;
 		unsigned char seatid;
 		bool force;
 	};
 
 	struct VehicleExit
 	{
-		int playerid;
+		uint16_t playerid;
 		bool force;
 	};
 
 	struct VehicleDamage
 	{
-		int vehicleid;
+		uint16_t vehicleid;
 		CDamageManager damageManager;
 	};
 
 	struct VehicleComponentAdd
 	{
-		int vehicleid;
+		uint16_t vehicleid;
 		int componentid;
 	};
 
 	struct VehicleComponentRemove
 	{
-		int vehicleid;
+		uint16_t vehicleid;
 		int componentid;
 	};
 
 	struct VehiclePassengerUpdate
 	{
-		int playerid;
-		int vehicleid;
+		uint16_t playerid;
+		uint16_t vehicleid;
 		unsigned char playerHealth;
 		unsigned char playerArmour;
 		unsigned char weapon;
@@ -213,13 +213,13 @@ public:
 
 	struct PlayerChatMessage
 	{
-		int playerid;
+		uint16_t playerid;
 		char message[128+1];
 	};
 
 	struct PedSpawn
 	{
-		int pedid;
+		uint16_t pedid;
 		short modelId;
 		unsigned char pedType;
 		CVector pos;
@@ -228,12 +228,12 @@ public:
 
 	struct PedRemove
 	{
-		int pedid;
+		uint16_t pedid;
 	};
 
 	struct PedOnFoot
 	{
-		int pedid = 0;
+		uint16_t pedid = 0;
 		CVector pos = CVector();
 		CVector velocity = CVector();
 		unsigned char health = 100;
@@ -260,20 +260,20 @@ public:
 
 	struct PedRemoveTask
 	{
-		int pedid;
+		uint16_t pedid;
 		eTaskType taskid;
 	};
 
 	struct PlayerKeySync
 	{
-		int playerid;
+		uint16_t playerid;
 		ÑCompressedControllerState newState;
 	};
 
 	struct PedDriverUpdate
 	{
-		int pedid;
-		int vehicleid;
+		uint16_t pedid;
+		uint16_t vehicleid;
 		CVector pos;
 		CVector rot;
 		CVector roll;
@@ -297,15 +297,14 @@ public:
 
 	struct EntityStream
 	{
-		int entityid; // playerid/pedid/vehicleid
+		uint16_t m_nNetworkId;
 		union
 		{
 			struct
 			{
-				eNetworkEntityType entityType : 3;
-				unsigned char in : 1; // in == true, out == false
+				eNetworkEntityType m_nEntityType : 3;
+				unsigned char m_bIn : 1; // in == true, out == false
 			};
-			unsigned char packed;
 		};
 	};
 };

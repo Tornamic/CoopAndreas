@@ -20,7 +20,7 @@ CNetworkVehicle::CNetworkVehicle(CVehicle* vehicle)
     vehicleSpawnPacket.rot = vehicle->GetHeading();
     vehicleSpawnPacket.color1 = vehicle->m_nPrimaryColor;
     vehicleSpawnPacket.color2 = vehicle->m_nSecondaryColor;
-    CNetwork::SendPacket(CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
+    CNetwork::SendPacket(ePacketType::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
 
 }
 
@@ -112,7 +112,7 @@ CNetworkVehicle::~CNetworkVehicle()
     {
         CPackets::VehicleRemove vehicleRemovePacket{};
         vehicleRemovePacket.vehicleid = m_nVehicleId;
-        CNetwork::SendPacket(CPacketsID::VEHICLE_REMOVE, &vehicleRemovePacket, sizeof vehicleRemovePacket, ENET_PACKET_FLAG_RELIABLE);
+        CNetwork::SendPacket(ePacketType::VEHICLE_REMOVE, &vehicleRemovePacket, sizeof vehicleRemovePacket, ENET_PACKET_FLAG_RELIABLE);
     }
     else
     {

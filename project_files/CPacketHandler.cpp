@@ -151,9 +151,9 @@ void CPacketHandler::PlayerHandshake__Handle(void* data, int size)
 	CNetworkPlayerManager::m_nMyId = packet->yourid;
 
 	CPackets::PlayerGetName getNamePacket = {0};
-	strcpy(getNamePacket.name, CLocalPlayer::m_Name);
+	strcpy(getNamePacket.name, CLocalPlayer::m_name);
 
-	CNetwork::SendPacket(CPacketsID::PLAYER_GET_NAME, &getNamePacket, sizeof getNamePacket, ENET_PACKET_FLAG_RELIABLE);
+	CNetwork::SendPacket(ePacketType::PLAYER_GET_NAME, &getNamePacket, sizeof getNamePacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 // PlayerPlaceWaypoint
@@ -180,9 +180,9 @@ void CPacketHandler::PlayerGetName__Handle(void* data, int size)
 	
 	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
 
-	strcpy_s(player->m_Name, packet->name);
+	strcpy_s(player->m_name, packet->name);
 
-	CChat::AddMessage("[Player] player " + std::to_string(player->m_nPlayerId) + " now aka " + player->m_Name);
+	CChat::AddMessage("[Player] player " + std::to_string(player->m_nPlayerId) + " now aka " + player->m_name);
 
 	CPacketHandler::GameWeatherTime__Trigger();
 }
@@ -781,7 +781,7 @@ void CPacketHandler::GameWeatherTime__Trigger()
 		return;
 
 	CPackets::GameWeatherTime* packet = CPacketHandler::GameWeatherTime__Collect();
-	CNetwork::SendPacket(CPacketsID::GAME_WEATHER_TIME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE);
+	CNetwork::SendPacket(ePacketType::GAME_WEATHER_TIME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE);
 }
 
 // PlayerKeySync

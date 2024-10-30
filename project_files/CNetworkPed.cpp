@@ -18,7 +18,7 @@ CNetworkPed::CNetworkPed(CPed* ped)
     packet.pos = ped->m_matrix->pos;
     packet.pedType = ped->m_nPedType;
     packet.createdBy = ped->m_nCreatedBy;
-    CNetwork::SendPacket(CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    CNetwork::SendPacket(ePacketType::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 }
 
 CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy)
@@ -87,7 +87,7 @@ CNetworkPed::~CNetworkPed()
     {
         CPackets::PedRemove packet{};
         packet.pedid = m_nPedId;
-        CNetwork::SendPacket(CPacketsID::PED_REMOVE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        CNetwork::SendPacket(ePacketType::PED_REMOVE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
     else
     {

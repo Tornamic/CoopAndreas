@@ -21,7 +21,7 @@ static void __fastcall CTaskComplexEnterCarAsDriver__Ctor_Hook(CTaskComplexEnter
     packet.seatid = 0;
     packet.vehicleid = networkVehicle->m_nVehicleId;
 
-    CNetwork::SendPacket(CPacketsID::VEHICLE_ENTER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    CNetwork::SendPacket(ePacketType::VEHICLE_ENTER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 
     plugin::CallMethod<0x6402F0, CTaskComplexEnterCarAsDriver*, CVehicle*>(This, vehicle);
 }
@@ -29,7 +29,7 @@ static void __fastcall CTaskComplexEnterCarAsDriver__Ctor_Hook(CTaskComplexEnter
 static void __fastcall CTaskComplexLeaveCar__Ctor_Hook(CTaskComplexLeaveCar* This, int, CVehicle* vehicle, int targetDoor, int delayTime, bool sensibleLeaveCar, bool forceGetOut)
 {
     CPackets::VehicleExit packet{};
-    CNetwork::SendPacket(CPacketsID::VEHICLE_EXIT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    CNetwork::SendPacket(ePacketType::VEHICLE_EXIT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     plugin::CallMethod<0x63B8C0, CTaskComplexLeaveCar*, CVehicle*, int, int, bool, bool>(This, vehicle, targetDoor, delayTime, sensibleLeaveCar, forceGetOut);
 }
 
@@ -122,7 +122,7 @@ static void __declspec(naked) CTaskManager__SetTask_Hook()
             pSerializedTask = CTaskSync::SerializeTask(pTask, pNetworkPed, true, nTaskSlot, &nTaskPacketSize);
 
             if(nTaskPacketSize > 0)
-                CNetwork::SendPacket(CPacketsID::PED_ADD_TASK, pSerializedTask, nTaskPacketSize, ENET_PACKET_FLAG_RELIABLE);
+                CNetwork::SendPacket(ePacketType::PED_ADD_TASK, pSerializedTask, nTaskPacketSize, ENET_PACKET_FLAG_RELIABLE);
         }
     }
 
@@ -171,7 +171,7 @@ static void __declspec(naked) CTaskManager__SetTaskSecondary_Hook()
             pSerializedTask = CTaskSync::SerializeTask(pTask, pNetworkPed, false, nTaskSlot, &nTaskPacketSize);
 
             if (nTaskPacketSize > 0)
-                CNetwork::SendPacket(CPacketsID::PED_ADD_TASK, pSerializedTask, nTaskPacketSize, ENET_PACKET_FLAG_RELIABLE);
+                CNetwork::SendPacket(ePacketType::PED_ADD_TASK, pSerializedTask, nTaskPacketSize, ENET_PACKET_FLAG_RELIABLE);
         }
     }
 

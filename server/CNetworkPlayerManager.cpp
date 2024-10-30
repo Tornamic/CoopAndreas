@@ -1,13 +1,13 @@
 #include "stdafx.h"
 
-std::vector<CPlayer*> CPlayerManager::m_pPlayers;
+std::vector<CNetworkPlayer*> CNetworkPlayerManager::m_pPlayers;
 
-void CPlayerManager::Add(CPlayer* player)
+void CNetworkPlayerManager::Add(CNetworkPlayer* player)
 {
 	m_pPlayers.push_back(player);
 }
 
-void CPlayerManager::Remove(CPlayer* player)
+void CNetworkPlayerManager::Remove(CNetworkPlayer* player)
 {
 	auto it = std::find(m_pPlayers.begin(), m_pPlayers.end(), player);
 	if (it != m_pPlayers.end())
@@ -17,7 +17,7 @@ void CPlayerManager::Remove(CPlayer* player)
 }
 
 // find player instance by id
-CPlayer* CPlayerManager::GetPlayer(int playerid)
+CNetworkPlayer* CNetworkPlayerManager::GetPlayer(int playerid)
 {
 	for (int i = 0; i != m_pPlayers.size(); i++)
 	{
@@ -30,7 +30,7 @@ CPlayer* CPlayerManager::GetPlayer(int playerid)
 }
 
 // find player instance by enetpeer
-CPlayer* CPlayerManager::GetPlayer(ENetPeer* peer)
+CNetworkPlayer* CNetworkPlayerManager::GetPlayer(ENetPeer* peer)
 {
 	for (int i = 0; i != m_pPlayers.size(); i++)
 	{
@@ -42,17 +42,17 @@ CPlayer* CPlayerManager::GetPlayer(ENetPeer* peer)
 	return nullptr;
 }
 
-int CPlayerManager::GetFreeID()
+int CNetworkPlayerManager::GetFreeID()
 {
 	for (int i = 0; i != MAX_SERVER_PLAYERS; i++)
 	{
-		if(CPlayerManager::GetPlayer(i) == nullptr)
+		if(CNetworkPlayerManager::GetPlayer(i) == nullptr)
 			return i; 
 	}
 	return -1; // server is full
 }
 
-CPlayer* CPlayerManager::GetHost()
+CNetworkPlayer* CNetworkPlayerManager::GetHost()
 {
 	for (int i = 0; i != m_pPlayers.size(); i++)
 	{
@@ -64,13 +64,13 @@ CPlayer* CPlayerManager::GetHost()
 	return nullptr;
 }
 
-void CPlayerManager::AssignHostToFirstPlayer()
+void CNetworkPlayerManager::AssignHostToFirstPlayer()
 {
-	if (CPlayerManager::m_pPlayers.size() <= 0)
+	if (CNetworkPlayerManager::m_pPlayers.size() <= 0)
 		return;
 
-	CPlayer* player = CPlayerManager::m_pPlayers.front();
-	CPlayer* host = CPlayerManager::GetHost();
+	CNetworkPlayer* player = CNetworkPlayerManager::m_pPlayers.front();
+	CNetworkPlayer* host = CNetworkPlayerManager::GetHost();
 
 	if (player == host)
 		return;
@@ -81,5 +81,5 @@ void CPlayerManager::AssignHostToFirstPlayer()
 	player->m_bIsHost = true;
 
 	CPackets::PlayerSetHost setHostPacket = { player->m_iPlayerId };
-	CNetwork::SendPacketToAll(CPacketsID::PLAYER_SET_HOST, &setHostPacket, sizeof setHostPacket, ENET_PACKET_FLAG_RELIABLE, nullptr);
+	CNetwork::SendPacketToAll(ePacketType::PLAYER_SET_HOST, &setHostPacket, sizeof setHostPacket, ENET_PACKET_FLAG_RELIABLE, nullptr);
 }

@@ -87,33 +87,33 @@ void CNetwork::Disconnect()
 
 void CNetwork::InitListeners()
 {
-	CNetwork::AddListener(CPacketsID::PLAYER_ONFOOT, CPacketHandler::PlayerOnFoot__Handle);
-	CNetwork::AddListener(CPacketsID::PLAYER_CONNECTED, CPacketHandler::PlayerConnected__Handle);
-	CNetwork::AddListener(CPacketsID::PLAYER_DISCONNECTED, CPacketHandler::PlayerDisconnected__Handle);
-	CNetwork::AddListener(CPacketsID::PLAYER_BULLET_SHOT, CPacketHandler::PlayerBulletShot__Handle);
-	CNetwork::AddListener(CPacketsID::PLAYER_HANDSHAKE, CPacketHandler::PlayerHandshake__Handle);
-	CNetwork::AddListener(CPacketsID::PLAYER_PLACE_WAYPOINT, CPacketHandler::PlayerPlaceWaypoint__Handle);
-	CNetwork::AddListener(CPacketsID::PLAYER_GET_NAME, CPacketHandler::PlayerGetName__Handle);
-	CNetwork::AddListener(CPacketsID::PLAYER_SET_HOST, CPacketHandler::PlayerSetHost__Handle);
-	CNetwork::AddListener(CPacketsID::ADD_EXPLOSION, CPacketHandler::AddExplosion__Handle);
-	CNetwork::AddListener(CPacketsID::VEHICLE_SPAWN, CPacketHandler::VehicleSpawn__Handle);
-	CNetwork::AddListener(CPacketsID::VEHICLE_REMOVE, CPacketHandler::VehicleRemove__Handle);
-	CNetwork::AddListener(CPacketsID::VEHICLE_ENTER, CPacketHandler::VehicleEnter__Handle);
-	CNetwork::AddListener(CPacketsID::VEHICLE_EXIT, CPacketHandler::VehicleExit__Handle);
-	CNetwork::AddListener(CPacketsID::VEHICLE_DRIVER_UPDATE, CPacketHandler::VehicleDriverUpdate__Handle);
-	CNetwork::AddListener(CPacketsID::VEHICLE_IDLE_UPDATE, CPacketHandler::VehicleIdleUpdate__Handle);
-	CNetwork::AddListener(CPacketsID::VEHICLE_DAMAGE, CPacketHandler::VehicleDamage__Handle);
-	CNetwork::AddListener(CPacketsID::VEHICLE_COMPONENT_ADD, CPacketHandler::VehicleComponentAdd__Handle);
-	CNetwork::AddListener(CPacketsID::VEHICLE_COMPONENT_REMOVE, CPacketHandler::VehicleComponentRemove__Handle);
-	CNetwork::AddListener(CPacketsID::VEHICLE_PASSENGER_UPDATE, CPacketHandler::VehiclePassengerUpdate__Handle);
-	CNetwork::AddListener(CPacketsID::PLAYER_CHAT_MESSAGE, CPacketHandler::PlayerChatMessage__Handle);
-	CNetwork::AddListener(CPacketsID::PED_SPAWN, CPacketHandler::PedSpawn__Handle);
-	CNetwork::AddListener(CPacketsID::PED_REMOVE, CPacketHandler::PedRemove__Handle);
-	CNetwork::AddListener(CPacketsID::PED_ONFOOT, CPacketHandler::PedOnFoot__Handle);
-	CNetwork::AddListener(CPacketsID::GAME_WEATHER_TIME, CPacketHandler::GameWeatherTime__Handle);
-	CNetwork::AddListener(CPacketsID::PLAYER_KEY_SYNC, CPacketHandler::PlayerKeySync__Handle);
-	CNetwork::AddListener(CPacketsID::PED_ADD_TASK, CPacketHandler::PedAddTask__Handle);
-	CNetwork::AddListener(CPacketsID::PED_DRIVER_UPDATE, CPacketHandler::PedDriverUpdate__Handle);
+	CNetwork::AddListener(ePacketType::PLAYER_ONFOOT, CPacketHandler::PlayerOnFoot__Handle);
+	CNetwork::AddListener(ePacketType::PLAYER_CONNECTED, CPacketHandler::PlayerConnected__Handle);
+	CNetwork::AddListener(ePacketType::PLAYER_DISCONNECTED, CPacketHandler::PlayerDisconnected__Handle);
+	CNetwork::AddListener(ePacketType::PLAYER_BULLET_SHOT, CPacketHandler::PlayerBulletShot__Handle);
+	CNetwork::AddListener(ePacketType::PLAYER_HANDSHAKE, CPacketHandler::PlayerHandshake__Handle);
+	CNetwork::AddListener(ePacketType::PLAYER_PLACE_WAYPOINT, CPacketHandler::PlayerPlaceWaypoint__Handle);
+	CNetwork::AddListener(ePacketType::PLAYER_GET_NAME, CPacketHandler::PlayerGetName__Handle);
+	CNetwork::AddListener(ePacketType::PLAYER_SET_HOST, CPacketHandler::PlayerSetHost__Handle);
+	CNetwork::AddListener(ePacketType::ADD_EXPLOSION, CPacketHandler::AddExplosion__Handle);
+	CNetwork::AddListener(ePacketType::VEHICLE_SPAWN, CPacketHandler::VehicleSpawn__Handle);
+	CNetwork::AddListener(ePacketType::VEHICLE_REMOVE, CPacketHandler::VehicleRemove__Handle);
+	CNetwork::AddListener(ePacketType::VEHICLE_ENTER, CPacketHandler::VehicleEnter__Handle);
+	CNetwork::AddListener(ePacketType::VEHICLE_EXIT, CPacketHandler::VehicleExit__Handle);
+	CNetwork::AddListener(ePacketType::VEHICLE_DRIVER_UPDATE, CPacketHandler::VehicleDriverUpdate__Handle);
+	CNetwork::AddListener(ePacketType::VEHICLE_IDLE_UPDATE, CPacketHandler::VehicleIdleUpdate__Handle);
+	CNetwork::AddListener(ePacketType::VEHICLE_DAMAGE, CPacketHandler::VehicleDamage__Handle);
+	CNetwork::AddListener(ePacketType::VEHICLE_COMPONENT_ADD, CPacketHandler::VehicleComponentAdd__Handle);
+	CNetwork::AddListener(ePacketType::VEHICLE_COMPONENT_REMOVE, CPacketHandler::VehicleComponentRemove__Handle);
+	CNetwork::AddListener(ePacketType::VEHICLE_PASSENGER_UPDATE, CPacketHandler::VehiclePassengerUpdate__Handle);
+	CNetwork::AddListener(ePacketType::PLAYER_CHAT_MESSAGE, CPacketHandler::PlayerChatMessage__Handle);
+	CNetwork::AddListener(ePacketType::PED_SPAWN, CPacketHandler::PedSpawn__Handle);
+	CNetwork::AddListener(ePacketType::PED_REMOVE, CPacketHandler::PedRemove__Handle);
+	CNetwork::AddListener(ePacketType::PED_ONFOOT, CPacketHandler::PedOnFoot__Handle);
+	CNetwork::AddListener(ePacketType::GAME_WEATHER_TIME, CPacketHandler::GameWeatherTime__Handle);
+	CNetwork::AddListener(ePacketType::PLAYER_KEY_SYNC, CPacketHandler::PlayerKeySync__Handle);
+	CNetwork::AddListener(ePacketType::PED_ADD_TASK, CPacketHandler::PedAddTask__Handle);
+	CNetwork::AddListener(ePacketType::PED_DRIVER_UPDATE, CPacketHandler::PedDriverUpdate__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

@@ -95,7 +95,7 @@ void CNetworkPedManager::Update()
 			if (isDriver)
 			{
 				auto pedDriverUpdatePacket = CPacketHandler::PedDriverUpdate__Collect(networkVehicle, networkPed);
-				CNetwork::SendPacket(CPacketsID::PED_DRIVER_UPDATE, pedDriverUpdatePacket, sizeof(*pedDriverUpdatePacket), ENET_PACKET_FLAG_UNSEQUENCED);
+				CNetwork::SendPacket(ePacketType::PED_DRIVER_UPDATE, pedDriverUpdatePacket, sizeof(*pedDriverUpdatePacket), ENET_PACKET_FLAG_UNSEQUENCED);
 				delete pedDriverUpdatePacket;
 			}
 			else
@@ -106,7 +106,7 @@ void CNetworkPedManager::Update()
 		else
 		{
 			auto pedOnFootPacket = CPacketHandler::PedOnFoot__Collect(networkPed);
-			CNetwork::SendPacket(CPacketsID::PED_ONFOOT, pedOnFootPacket, sizeof(*pedOnFootPacket), ENET_PACKET_FLAG_UNSEQUENCED);
+			CNetwork::SendPacket(ePacketType::PED_ONFOOT, pedOnFootPacket, sizeof(*pedOnFootPacket), ENET_PACKET_FLAG_UNSEQUENCED);
 			delete pedOnFootPacket;
 		}
 	}
