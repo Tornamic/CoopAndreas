@@ -1,4 +1,11 @@
 #include "stdafx.h"
+#include "CNetwork.h"
+#include "CPackets.h"
+#include "CNetworkPlayerManager.h"
+#include "CNetworkVehicleManager.h"
+#include "CNetworkVehicle.h"
+#include "CNetworkPedManager.h"
+#include "CNetworkPed.h"
 
 std::vector<CPacketListener*> CNetwork::m_packetListeners;
 
@@ -125,11 +132,13 @@ void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, E
 
     delete[] packetData;
 
-    for (int i = 0; i != CNetworkPlayerManager::m_pPlayers.size(); i++)
+    auto& players = CNetworkPlayerManager::Instance().GetEntities();
+
+    for (int i = 0; i != players.size(); i++)
     {
-        if (CNetworkPlayerManager::m_pPlayers[i]->m_pPeer != dontShareWith)
+        if (players[i]->m_pPeer != dontShareWith)
         {
-            enet_peer_send(CNetworkPlayerManager::m_pPlayers[i]->m_pPeer, 0, packet);
+            enet_peer_send(players[i]->m_pPeer, 0, packet);
         }
     }
 }
@@ -143,11 +152,13 @@ void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag fl
 {
     ENetPacket* packet = enet_packet_create(data, dataSize, flag & ENET_PACKET_FLAG_NO_ALLOCATE);
 
-    for (int i = 0; i != CNetworkPlayerManager::m_pPlayers.size(); i++)
+    auto& players = CNetworkPlayerManager::Instance().GetEntities();
+
+    for (int i = 0; i != players.size(); i++)
     {
-        if (CNetworkPlayerManager::m_pPlayers[i]->m_pPeer != dontShareWith)
+        if (players[i]->m_pPeer != dontShareWith)
         {
-            enet_peer_send(CNetworkPlayerManager::m_pPlayers[i]->m_pPeer, 0, packet);
+            enet_peer_send(players[i]->m_pPeer, 0, packet);
         }
     }
 }
@@ -166,14 +177,16 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
 
     // create new player and send to all players
 
+    auto& playerManager = CNetworkPlayerManager::Instance();
+
     // get free id
-    int freeId = CNetworkPlayerManager::GetFreeID();
+    uint16_t freeId = playerManager.GetFreeId();
 
     // create new player instance
-    CNetworkPlayer* player = new CNetworkPlayer(event.peer, freeId);
+    CNetworkPlayer* player = new CNetworkPlayer(freeId, event.peer);
 
     // add player to list
-    CNetworkPlayerManager::Add(player);
+    playerManager.Add(player);
 
     // create PlayerConnected packet struct
     CPackets::PlayerConnected packet =
@@ -185,34 +198,36 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
     CNetwork::SendPacketToAll(ePacketType::PLAYER_CONNECTED, &packet, sizeof CPackets::PlayerConnected, ENET_PACKET_FLAG_RELIABLE, event.peer);
 
     // send PlayerConnected packets for a new player
-    for (auto i : CNetworkPlayerManager::m_pPlayers)
+    for (auto i : playerManager.GetEntities())
     {
-        if (i->m_iPlayerId == freeId)
+        if (i->GetId() == freeId)
             continue;
 
         packet =
         {
-            i->m_iPlayerId
+            i->GetId()
         };
 
         CNetwork::SendPacket(event.peer, ePacketType::PLAYER_CONNECTED, &packet, sizeof CPackets::PlayerConnected, ENET_PACKET_FLAG_RELIABLE);
 
         CPackets::PlayerGetName getNamePacket{};
-        getNamePacket.playerid = i->m_iPlayerId;
-        strcpy_s(getNamePacket.name, i->m_name);
+        getNamePacket.playerid = i->GetId();
+        strcpy_s(getNamePacket.name, i->GetName());
         CNetwork::SendPacket(event.peer, ePacketType::PLAYER_GET_NAME, &getNamePacket, sizeof CPackets::PlayerGetName, ENET_PACKET_FLAG_RELIABLE);
     }
 
-    for (auto i : CVehicleManager::m_pVehicles)
+    for (auto i : CNetworkVehicleManager::Instance().GetEntities())
     {
+        auto syncData = i->GetSyncData();
+
         CPackets::VehicleSpawn vehicleSpawnPacket
         { 
-            i->m_nVehicleId,
-            i->m_nModelId,
-            i->m_vecPosition,
-            i->m_vecRotation.z * (3.141592 / 180), // convert to radians
-            i->m_nPrimaryColor,
-            i->m_nSecondaryColor
+            i->GetId(),
+            i->GetModelId(),
+            syncData.m_vecPosition,
+            syncData.m_vecRotation.z * (3.141592f / 180), // convert to radians
+            syncData.m_nPrimaryColor,
+            syncData.m_nSecondaryColor
         };
 
         CNetwork::SendPacket(event.peer, ePacketType::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
@@ -231,66 +246,62 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         if (modifiedDamageStatus)
         {
             CPackets::VehicleDamage vehicleDamagePacket{};
-            vehicleDamagePacket.vehicleid = i->m_nVehicleId;
+            vehicleDamagePacket.vehicleid = i->GetId();
             memcpy(&vehicleDamagePacket.damageManager_padding, i->m_damageManager_padding, 23);
             CNetwork::SendPacket(event.peer, ePacketType::VEHICLE_DAMAGE, &vehicleDamagePacket, sizeof vehicleDamagePacket, ENET_PACKET_FLAG_RELIABLE);
         }
 
-        for (int component : i->m_pComponents) 
+        for (int component : i->m_aComponents) 
         {
             CPackets::VehicleComponentAdd vehicleComponentAddPacket{};
-            vehicleComponentAddPacket.vehicleid = i->m_nVehicleId;
+            vehicleComponentAddPacket.vehicleid = i->GetId();
             vehicleComponentAddPacket.componentid = component;
             CNetwork::SendPacket(event.peer, ePacketType::VEHICLE_COMPONENT_ADD, &vehicleComponentAddPacket, sizeof vehicleComponentAddPacket, ENET_PACKET_FLAG_RELIABLE);
         }
     }
 
-    for (auto i : CPedManager::m_pPeds)
+    for (auto i : CNetworkPedManager::Instance().GetEntities())
     {
         CPackets::PedSpawn packet{};
-        packet.pedid = i->m_nPedId;
-        packet.modelId = i->m_nModelId;
-        packet.pos = i->m_vecPos;
-        packet.pedType = i->m_nPedType;
-        packet.createdBy = i->m_nCreatedBy;
+        packet.pedid = i->GetId();
+        packet.modelId = i->GetModelId();
+        packet.pos = i->GetSyncData().m_vecPosition;
+        packet.pedType = i->GetPedType();
+        packet.createdBy = i->GetCreatedBy();
         CNetwork::SendPacket(event.peer, ePacketType::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
 
     CPackets::PlayerHandshake handshakePacket = { freeId };
     CNetwork::SendPacket(event.peer, ePacketType::PLAYER_HANDSHAKE, &handshakePacket, sizeof handshakePacket, ENET_PACKET_FLAG_RELIABLE);
 
-    CNetworkPlayerManager::AssignHostToFirstPlayer();
+    playerManager.AssignHostToFirstPlayer();
 }
 
 void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
 {
-    // disconnect player
+    auto& playerManager = CNetworkPlayerManager::Instance();
 
-    // find player instance by enetpeer
-    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(event.peer);
+    CNetworkPlayer* player = playerManager.Get(event.peer);
     
-    CVehicle* vehicle = CVehicleManager::GetVehicle(player->m_nVehicleId);
+    CNetworkVehicle* vehicle = player->GetVehicle();
 
     if (vehicle != nullptr)
     {
-        vehicle->m_pPlayers[player->m_nSeatId] = nullptr;
+        vehicle->m_aOccupants[player->GetSeatId()] = nullptr;
     }
 
-    // remove
-    CNetworkPlayerManager::Remove(player);
+    playerManager.Remove(player);
 
-    // create PlayerDisconnected packet struct
     CPackets::PlayerDisconnected packet =
     {
-        player->m_iPlayerId // id
+        player->GetId()
     };
 
-    // send to all
     CNetwork::SendPacketToAll(ePacketType::PLAYER_DISCONNECTED, &packet, sizeof CPackets::PlayerDisconnected, ENET_PACKET_FLAG_UNSEQUENCED, event.peer);
 
-    printf("%i disconnected.\n", player->m_iPlayerId);
+    printf("%i disconnected.\n", player->GetId());
 
-    CNetworkPlayerManager::AssignHostToFirstPlayer();
+    playerManager.AssignHostToFirstPlayer();
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

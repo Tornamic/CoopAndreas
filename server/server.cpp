@@ -1,4 +1,5 @@
 ﻿#include "stdafx.h"
+#include "CNetwork.h"
 
 int main()
 {

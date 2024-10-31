@@ -1,5 +1,7 @@
 #pragma once
-#include "CNetworkPlayer.h"
+#include "stdafx.h"
+
+class CNetworkPlayer;
 
 class CPacketListener
 {

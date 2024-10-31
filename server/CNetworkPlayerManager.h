@@ -1,14 +1,28 @@
 #pragma once
-class CNetworkPlayerManager
+#include "stdafx.h"
+
+#include "CNetworkEntityManager.h"
+#include "CNetworkPlayer.h"
+
+class CNetworkPlayerManager final : public CNetworkEntityManager<CNetworkPlayer>
 {
+private:
+	CNetworkPlayerManager() {}
+
 public:
-	static std::vector<CNetworkPlayer*> m_pPlayers;
-	static void Add(CNetworkPlayer* player);
-	static void Remove(CNetworkPlayer* player);
-	static CNetworkPlayer* GetPlayer(int playerid);
-	static CNetworkPlayer* GetPlayer(ENetPeer* peer);
-	static int GetFreeID();
-	static CNetworkPlayer* GetHost();
-	static void AssignHostToFirstPlayer();
+	static CNetworkPlayerManager& Instance()
+	{
+		static CNetworkPlayerManager instance;
+		return instance;
+	}
+
+	CNetworkPlayer* Get(ENetPeer* peer);
+	CNetworkPlayer* GetHost();
+	void AssignHostToFirstPlayer();
+
+	uint16_t GetMaxCount() const override { return 100; }
+
+	CNetworkPlayerManager(const CNetworkPlayerManager&) = delete;
+	CNetworkPlayerManager& operator=(const CNetworkPlayerManager&) = delete;
 };
 

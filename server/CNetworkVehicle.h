@@ -3,20 +3,21 @@
 
 #include "CNetworkEntity.h"
 #include "Modelable.h"
-#include "Driveable.h"
+#include "VehicleSyncData.h"
 
-class CNetworkVehicle : public CNetworkEntity, Modelable
+class Driveable;
+
+class CNetworkVehicle : public CNetworkEntity<VehicleSyncData>, public Modelable
 {
 public:
-	std::array<Driveable*, 8> m_aOccupants = { nullptr };
+	std::array<Driveable*, 8> m_aOccupants;
 
-	uint8_t m_nPrimaryColor;
-	uint8_t m_nSecondaryColor;
-	
 	uint8_t m_damageManager_padding[23] = { 0 };
 
-	std::vector<int> m_pComponents;
+	std::vector<int32_t> m_aComponents;
 
+	eNetworkEntityType GetType() const override { return eNetworkEntityType::NETWORK_ENTITY_VEHICLE; }
+	
 	CNetworkVehicle(uint16_t networkId, int16_t modelId) :
 		CNetworkEntity(networkId), Modelable(modelId) {}
 };

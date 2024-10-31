@@ -2,23 +2,42 @@
 #include "stdafx.h"
 
 #include "eNetworkEntityType.h"
-#include "CNetworkPlayer.h"
+class CNetworkPlayer;
 
-class CNetworkEntity 
+template <typename SyncDataType>
+class CNetworkEntity
 {
 protected:
-	CNetworkEntity(uint16_t networkId) : m_nNetworkId(networkId) {}
+    CNetworkEntity(uint16_t networkId) : m_nNetworkId(networkId) {}
+
 private:
-	uint16_t m_nNetworkId = 0;
-	std::vector<CNetworkEntity*> m_streamedFor;
+    uint16_t m_nNetworkId = 0;
+    std::vector<CNetworkPlayer*> m_streamedFor;
+    SyncDataType m_syncData;
+
 public:
-	virtual eNetworkEntityType GetType() const = 0;
+    virtual eNetworkEntityType GetType() const = 0;
 
-	uint16_t GetId() const { return m_nNetworkId; }
+    uint16_t GetId() const { return this->m_nNetworkId; }
 
-	std::vector<CNetworkEntity*>& GetStreamedFor() { return this->m_streamedFor; }
-	bool IsStreamedFor(CNetworkPlayer* forPlayer);
-	void AddStreamedFor(CNetworkPlayer* forPlayer);
-	void RemoveStreamedFor(CNetworkPlayer* forPlayer);
+    SyncDataType& GetSyncData() { return this->m_syncData; }
+
+    std::vector<CNetworkPlayer*>& GetStreamedFor() { return this->m_streamedFor; }
+
+    bool IsStreamedFor(CNetworkPlayer* forPlayer)
+    {
+        auto& entities = this->GetStreamedFor();
+        return std::find(entities.begin(), entities.end(), forPlayer) != entities.end();
+    }
+
+    void AddStreamedFor(CNetworkPlayer* forPlayer)
+    {
+        this->GetStreamedFor().push_back(forPlayer);
+    }
+
+    void RemoveStreamedFor(CNetworkPlayer* forPlayer)
+    {
+        auto& entities = this->GetStreamedFor();
+        entities.erase(std::remove(entities.begin(), entities.end(), forPlayer), entities.end());
+    }
 };
-

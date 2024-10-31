@@ -1,6 +1,0 @@
-#pragma 
-
-class IPacket
-{
-};
-

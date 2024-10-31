@@ -19,5 +19,8 @@ public:
     virtual void SetSeatId(uint8_t seatId) { m_nSeatId = seatId; }
 
     virtual CNetworkVehicle* GetVehicle() { return m_pNetworkVehicle; }
+
+    uint16_t GetVehicleId() { if (m_pNetworkVehicle) return m_pNetworkVehicle->GetId(); return -1; }
+
     virtual void SetVehicle(CNetworkVehicle* networkVehicle) { m_pNetworkVehicle = networkVehicle; }
 };
