@@ -43,256 +43,211 @@ public:
 
 	struct PlayerConnected
 	{
-		uint16_t id;
+		uint16_t m_nPlayerId;
 	};
 
 	struct PlayerDisconnected
 	{
-		uint16_t id;
-		unsigned char reason;
+		uint16_t m_nPlayerId;
+		uint8_t m_nReason;
 	};
 
 	struct PlayerOnFoot
 	{
-		uint16_t id = 0;
-		CVector position = CVector();
-		CVector velocity = CVector();
-		float rotation = 0.0f;
-		unsigned char health = 100;
-		unsigned char armour = 0;
-		unsigned char weapon = 0;
-		unsigned short ammo = 0;
-		bool ducking = false;
-		float aimX = 0.0f;
-		float aimY = 0.0f;
-		bool hasJetpack = false;
+		uint16_t m_nPlayerId;
+		PlayerSyncData m_syncData;
 	};
 
 	#pragma pack(1)
 	struct PlayerBulletShot
 	{
-		uint16_t playerid;
-		uint16_t targetid;
-		CVector startPos;
-		CVector endPos;
-		CColPoint colPoint;
-		int incrementalHit;
-		unsigned char entityType;
+		uint16_t m_nPlayerId;
+		uint16_t m_nTargetId;
+		CVector m_vecStartPos;
+		CVector m_vecEndPos;
+		CColPoint m_colPoint;
+		int32_t m_nIncrementalHit;
+		uint8_t m_nTargetEntityType;
 	};
 
 	struct PlayerHandshake
 	{
-		uint16_t yourid;
+		uint16_t m_nPlayerId;
 	};
 
 	struct PlayerPlaceWaypoint
 	{
-		uint16_t playerid;
-		bool place;
-		CVector position;
+		uint16_t m_nPlayerId;
+		bool m_bPlace;
+		CVector m_vecPosition;
 	};
 
 	struct PlayerGetName
 	{
-		uint16_t playerid;
-		char name[32 + 1];
+		uint16_t m_nPlayerId;
+		char m_aName[32 + 1];
 	};
 
 	struct PlayerSetHost
 	{
-		uint16_t playerid;
+		uint16_t m_nPlayerId;
 	};
 
 	struct AddExplosion
 	{
-		unsigned char type;
-		CVector pos;
-		int time;
-		char usesSound;
-		float cameraShake;
-		char isVisible;
+		uint8_t m_nType;
+		CVector m_vecPosition;
+		int32_t m_nTime;
+		bool m_bUsesSound;
+		float m_fCameraShake;
+		bool m_bVisible;
 	};
 
 	struct VehicleSpawn
 	{
-		uint16_t vehicleid;
-		unsigned short modelid;
-		CVector pos;
-		float rot;
-		unsigned char color1;
-		unsigned char color2;
+		uint16_t m_nVehicleId;
+		int16_t m_nModelId;
+		CVector m_vecPosition;
+		float m_fRotation;
+		uint8_t m_nPrimaryColor;
+		uint8_t m_nSecondaryColor;
 	};
 
 	struct VehicleRemove
 	{
-		uint16_t vehicleid;
+		uint16_t m_nVehicleId;
 	};
 
 	struct VehicleIdleUpdate
 	{
-		uint16_t vehicleid;
-		CVector pos;
-		CVector rot;
-		CVector roll;
-		CVector velocity;
-		unsigned char color1;
-		unsigned char color2;
-		float health;
-		char paintjob;
-		float planeGearState;
-		unsigned char locked;
+		uint16_t m_nVehicleId;
+		CVector m_vecPosition;
+		CVector	m_vecVelocity;
+		CVector	m_vecRotation;
+		CVector m_vecRoll;
+		uint8_t m_nPrimaryColor;
+		uint8_t m_nSecondaryColor;
+		float m_nHealth;
+		int8_t m_nPaintjob;
+		float m_fPlaneGearState;
+		bool m_bLocked;
 	};
 
 	struct VehicleDriverUpdate
 	{
-		uint16_t playerid;
-		uint16_t vehicleid;
-		CVector pos;
-		CVector rot;
-		CVector roll;
-		CVector velocity;
-		unsigned char playerHealth;
-		unsigned char playerArmour;
-		unsigned char weapon;
-		unsigned short ammo;
-		unsigned char color1;
-		unsigned char color2;
-		float health;
-		char paintjob;
-		float bikeLean;
-		float turretAimHorizontal;
-		float turretAimVertical;
-		unsigned short miscComponentAngle; // hydra thrusters
-		float planeGearState;
-		unsigned char locked;
+		uint16_t m_nPlayerId;
+		uint16_t m_nVehicleId;
+		VehicleSyncData m_syncData;
 	};
 
 	struct VehicleEnter
 	{
-		uint16_t playerid;
-		uint16_t vehicleid;
-		unsigned char seatid;
-		bool force;
+		uint16_t m_nPlayerId;
+		uint16_t m_nVehicleId;
+		uint8_t m_nSeatId;
+		bool m_bForce; // if true - put directly in vehicle (without any anim)
 	};
 
 	struct VehicleExit
 	{
-		uint16_t playerid;
-		bool force;
+		uint16_t m_nPlayerId;
+		bool m_bForce;
 	};
 
 	struct VehicleDamage
 	{
-		uint16_t vehicleid;
-		CDamageManager damageManager;
+		uint16_t m_nVehicleId;
+		CDamageManager m_damageManager;
 	};
 
 	struct VehicleComponentAdd
 	{
-		uint16_t vehicleid;
-		int componentid;
+		uint16_t m_nVehicleId;
+		int m_nComponentId;
 	};
 
 	struct VehicleComponentRemove
 	{
-		uint16_t vehicleid;
-		int componentid;
+		uint16_t m_nVehicleId;
+		int m_nComponentId;
 	};
 
 	struct VehiclePassengerUpdate
 	{
-		uint16_t playerid;
-		uint16_t vehicleid;
-		unsigned char playerHealth;
-		unsigned char playerArmour;
-		unsigned char weapon;
-		unsigned short ammo;
-		unsigned char driveby;
-		CVector aim;
+		uint16_t m_nPlayerId;
+		uint16_t m_nVehicleId;
+		uint8_t m_nPlayerHealth;
+		uint8_t m_nPlayerArmour;
+		uint8_t m_nWeapon;
+		uint16_t m_nAmmoInClip;
+		bool m_bDriveby;
+		float m_fAimX;
+		float m_fAimY;
 	};
 
 	struct PlayerChatMessage
 	{
-		uint16_t playerid;
-		char message[128+1];
+		uint16_t m_nPlayerId;
+		char m_message[128 + 1];
 	};
 
 	struct PedSpawn
 	{
-		uint16_t pedid;
-		short modelId;
-		unsigned char pedType;
-		CVector pos;
-		unsigned char createdBy;
+		uint16_t m_nPedId;
+		int16_t m_nModelId;
+		uint8_t m_nPedType;
+		CVector m_vecPosition;
+		uint8_t m_nCreatedBy;
 	};
 
 	struct PedRemove
 	{
-		uint16_t pedid;
+		uint16_t m_nPedId;
 	};
 
 	struct PedOnFoot
 	{
-		uint16_t pedid = 0;
-		CVector pos = CVector();
-		CVector velocity = CVector();
-		unsigned char health = 100;
-		unsigned char armour = 0;
-		unsigned char weapon = 0;
-		unsigned short ammo = 0;
-		float aimingRotation = 0.0f;
-		float currentRotation = 0.0f;
-		float lookDirection = 0.0f;
-		unsigned char moveState = 0;
+		uint16_t m_nPedId;
+		PedSyncData m_syncData;
 	};
 	
 	struct GameWeatherTime
 	{
-		unsigned char newWeather;
-		unsigned char oldWeather;
-		unsigned char forcedWeather;
-		unsigned char currentMonth;
-		unsigned char currentDay;
-		unsigned char currentHour;
-		unsigned char currentMinute;
-		unsigned int gameTickCount;
+		uint8_t m_nNewWeather;
+		uint8_t m_nOldWeather;
+		uint8_t m_nForcedWeather;
+		uint8_t m_nCurrentMonth;
+		uint8_t m_nCurrentDay;
+		uint8_t m_nCurrentHour;
+		uint8_t m_nCurrentMinute;
+		uint32_t m_nGameTickCount;
 	};
 
 	struct PedRemoveTask
 	{
-		uint16_t pedid;
-		eTaskType taskid;
+		uint16_t m_nPedId;
+		eTaskType m_nTaskId;
 	};
 
 	struct PlayerKeySync
 	{
-		uint16_t playerid;
-		ÑCompressedControllerState newState;
+		uint16_t m_nPlayerId;
+		ÑCompressedControllerState m_controllerState;
 	};
 
 	struct PedDriverUpdate
 	{
-		uint16_t pedid;
-		uint16_t vehicleid;
-		CVector pos;
-		CVector rot;
-		CVector roll;
-		CVector velocity;
-		unsigned char pedHealth;
-		unsigned char pedArmour;
-		unsigned char weapon;
-		unsigned short ammo;
-		unsigned char color1;
-		unsigned char color2;
-		float health;
-		char paintjob;
-		float bikeLean;
-		float planeGearState;
-		unsigned char locked;
-		CSyncAutoPilot autoPilot;
-		float gasPedal;
-		float breakPedal;
-		float steerAngle;
+		uint16_t m_nPedId;
+		uint16_t m_nVehicleId;
+		uint8_t m_nPedHealth;
+		uint8_t m_nPedArmour;
+		uint8_t m_nWeapon;
+		uint16_t m_nAmmoInClip;
+		VehicleSyncData m_syncData;
+		uint8_t m_autoPilot[92];
+		float m_fGasPedal;
+		float m_fBreakPedal;
+		float m_fSteerAngle;
 	};
 
 	struct EntityStream

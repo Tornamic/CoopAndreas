@@ -47,38 +47,30 @@ class CPackets
 public:
 	struct PlayerConnected
 	{
-		uint16_t id;
+		uint16_t m_nPlayerId;
 	};
 
 	struct PlayerDisconnected
 	{
-		uint16_t id;
-		unsigned char reason;
+		uint16_t m_nPlayerId;
+		uint8_t m_nReason;
 	};
 	#pragma pack(1)
 	struct PlayerOnFoot
 	{
-		uint16_t id;
-		CVector position;
-		CVector	velocity;
-		float rotation;
-		unsigned char health;
-		unsigned char armour;
-		unsigned char weapon;
-		unsigned short ammo;
-		bool ducking;
-		float aimX;
-		float aimY;
-		bool hasJetpack = false;
+		uint16_t m_nPlayerId;
+		PlayerSyncData m_syncData;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			// create packet
 			CPackets::PlayerOnFoot* packet = (CPackets::PlayerOnFoot*)data;
 
-			// set packet`s playerid, cuz incoming packet has id = 0
-			packet->id = CNetworkPlayerManager::Instance().Get(peer)->GetId();
+			auto networkPlayer = CNetworkPlayerManager::Instance().Get(peer);
+			// set packet`s m_nPlayerId, cuz incoming packet has id = 0
+			packet->m_nPlayerId = networkPlayer->GetId();
 
+			networkPlayer->GetSyncData() = packet->m_syncData;
 
 			CNetwork::SendPacketToAll(ePacketType::PLAYER_ONFOOT, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}
@@ -87,21 +79,21 @@ public:
 	#pragma pack(1)
 	struct PlayerBulletShot
 	{
-		uint16_t playerid;
-		uint16_t targetid;
-		CVector startPos;
-		CVector endPos;
-		unsigned char colPoint[44]; // padding
-		int incrementalHit;
-		unsigned char entityType;
+		uint16_t m_nPlayerId;
+		uint16_t m_nTargetId;
+		CVector m_vecStartPos;
+		CVector m_vecEndPos;
+		uint8_t m_colPoint[44]; // padding
+		int32_t m_nIncrementalHit;
+		uint8_t m_nTargetEntityType;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			// create packet
 			CPackets::PlayerBulletShot* packet = (CPackets::PlayerBulletShot*)data;
 			
-			// set packet`s playerid, cuz incoming packet has id = 0
-			packet->playerid = CNetworkPlayerManager::Instance().Get(peer)->GetId();
+			// set packet`s m_nPlayerId, cuz incoming packet has id = 0
+			packet->m_nPlayerId = CNetworkPlayerManager::Instance().Get(peer)->GetId();
 
 			CNetwork::SendPacketToAll(ePacketType::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}
@@ -109,52 +101,52 @@ public:
 
 	struct PlayerHandshake
 	{
-		uint16_t yourid;
+		uint16_t m_nPlayerId;
 	};
 
 	struct PlayerPlaceWaypoint
 	{
-		uint16_t playerid;
-		bool place;
-		CVector position;
+		uint16_t m_nPlayerId;
+		bool m_bPlace;
+		CVector m_vecPosition;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::PlayerPlaceWaypoint* packet = (CPackets::PlayerPlaceWaypoint*)data;
-			packet->playerid = CNetworkPlayerManager::Instance().Get(peer)->GetId();
+			packet->m_nPlayerId = CNetworkPlayerManager::Instance().Get(peer)->GetId();
 			CNetwork::SendPacketToAll(ePacketType::PLAYER_PLACE_WAYPOINT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 
 	struct PlayerGetName
 	{
-		uint16_t playerid;
-		char name[32 + 1];
+		uint16_t m_nPlayerId;
+		char m_aName[32 + 1];
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::PlayerGetName* packet = (CPackets::PlayerGetName*)data;
 			CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(peer);
-			packet->playerid = player->GetId();
-			player->SetName(packet->name);
-			printf("player %d now also know as %s\n", packet->playerid, packet->name);
+			packet->m_nPlayerId = player->GetId();
+			player->SetName(packet->m_aName);
+			printf("player %d now also know as %s\n", packet->m_nPlayerId, packet->m_aName);
 			CNetwork::SendPacketToAll(ePacketType::PLAYER_GET_NAME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 
 	struct PlayerSetHost
 	{
-		uint16_t playerid;
+		uint16_t m_nPlayerId;
 	};
 
 	struct AddExplosion
 	{
-		unsigned char type;
-		CVector pos;
-		int time;
-		char usesSound;
-		float cameraShake;
-		char isVisible;
+		uint8_t m_nType;
+		CVector m_vecPosition;
+		int32_t m_nTime;
+		bool m_bUsesSound;
+		float m_fCameraShake;
+		bool m_bVisible;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -165,12 +157,12 @@ public:
 
 	struct VehicleSpawn
 	{
-		uint16_t vehicleid;
-		int16_t modelid;
-		CVector pos;
-		float rot;
-		unsigned char color1;
-		unsigned char color2;
+		uint16_t m_nVehicleId;
+		int16_t m_nModelId;
+		CVector m_vecPosition;
+		float m_fRotation;
+		uint8_t m_nPrimaryColor;
+		uint8_t m_nSecondaryColor;
 		
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -180,14 +172,14 @@ public:
 			CPackets::VehicleSpawn* packet = (CPackets::VehicleSpawn*)data;
 			CNetwork::SendPacketToAll(ePacketType::VEHICLE_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 			
-			CNetworkVehicle* vehicle = new CNetworkVehicle(packet->vehicleid, packet->modelid);
+			CNetworkVehicle* vehicle = new CNetworkVehicle(packet->m_nVehicleId, packet->m_nModelId);
 
 			auto& syncData = vehicle->GetSyncData();
 
-			syncData.m_vecPosition = packet->pos;
-			syncData.m_vecRotation.z = packet->rot;
-			syncData.m_nPrimaryColor = packet->color1;
-			syncData.m_nSecondaryColor = packet->color2;
+			syncData.m_vecPosition = packet->m_vecPosition;
+			syncData.m_vecRotation.z = packet->m_fRotation; // possibly need convert to degrees
+			syncData.m_nPrimaryColor = packet->m_nPrimaryColor;
+			syncData.m_nSecondaryColor = packet->m_nSecondaryColor;
 
 			CNetworkVehicleManager::Instance().Add(vehicle);
 		}
@@ -195,7 +187,7 @@ public:
 
 	struct VehicleRemove
 	{
-		uint16_t vehicleid;
+		uint16_t m_nVehicleId;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -205,24 +197,24 @@ public:
 			CPackets::VehicleRemove* packet = (CPackets::VehicleRemove*)data;
 			CNetwork::SendPacketToAll(ePacketType::VEHICLE_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
-			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->vehicleid);
+			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
 			CNetworkVehicleManager::Instance().Remove(vehicle);
 		}
 	};
 
 	struct VehicleIdleUpdate
 	{
-		uint16_t vehicleid;
-		CVector pos;
-		CVector rot;
-		CVector roll;
-		CVector velocity;
-		unsigned char color1;
-		unsigned char color2;
-		float health;
-		char paintjob;
-		float planeGearState;
-		unsigned char locked;
+		uint16_t m_nVehicleId;
+		CVector m_vecPosition;
+		CVector	m_vecVelocity;
+		CVector	m_vecRotation;
+		CVector m_vecRoll;
+		uint8_t m_nPrimaryColor;
+		uint8_t m_nSecondaryColor;
+		float m_nHealth;
+		int8_t m_nPaintjob;
+		float m_fPlaneGearState;
+		bool m_bLocked;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -232,90 +224,77 @@ public:
 			CPackets::VehicleIdleUpdate* packet = (CPackets::VehicleIdleUpdate*)data;
 			CNetwork::SendPacketToAll(ePacketType::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 
-			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->vehicleid);
+			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
 			
 			if (!vehicle)
 				return;
 
 			auto& syncData = vehicle->GetSyncData();
-
-			syncData.m_vecPosition = packet->pos;
-			syncData.m_vecRotation = packet->rot;
+			syncData.m_vecPosition	   = packet->m_vecPosition;
+			syncData.m_vecVelocity	   = packet->m_vecVelocity;
+			syncData.m_vecRotation	   = packet->m_vecRotation;
+			syncData.m_vecRoll		   = packet->m_vecRoll;
+			syncData.m_nPrimaryColor   = packet->m_nPrimaryColor;
+			syncData.m_nSecondaryColor = packet->m_nSecondaryColor;
+			syncData.m_nHealth		   = packet->m_nHealth;
+			syncData.m_nPaintjob	   = packet->m_nPaintjob;
+			syncData.m_fPlaneGearState = packet->m_fPlaneGearState;
+			syncData.m_bLocked		   = packet->m_bLocked;
 		}
 	};
 
 	struct VehicleDriverUpdate
 	{
-		uint16_t playerid;
-		uint16_t vehicleid;
-		CVector pos;
-		CVector rot;
-		CVector roll;
-		CVector velocity;
-		unsigned char playerHealth;
-		unsigned char playerArmour;
-		unsigned char weapon;
-		unsigned short ammo;
-		unsigned char color1;
-		unsigned char color2;
-		float health;
-		char paintjob;
-		float bikeLean;
-		float turretAimHorizontal;
-		float turretAimVertical;
-		unsigned short miscComponentAngle; // hydra thrusters
-		float planeGearState;
-		unsigned char locked;
+		uint16_t m_nPlayerId;
+		uint16_t m_nVehicleId;
+		VehicleSyncData m_syncData;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::VehicleDriverUpdate* packet = (CPackets::VehicleDriverUpdate*)data;
-			packet->playerid = CNetworkPlayerManager::Instance().Get(peer)->GetId();
+			packet->m_nPlayerId = CNetworkPlayerManager::Instance().Get(peer)->GetId();
 			CNetwork::SendPacketToAll(ePacketType::VEHICLE_DRIVER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 
-			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->vehicleid);
+			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
 
-			auto& syncData = vehicle->GetSyncData();
-
-			syncData.m_vecPosition = packet->pos;
-			syncData.m_vecRotation = packet->rot;
+			vehicle->GetSyncData() = packet->m_syncData;
 		}
 	};
 
 	struct VehicleEnter
 	{
-		uint16_t playerid;
-		uint16_t vehicleid;
-		unsigned char seatid;
-		bool force; // if true - put directly in vehicle (without any anim)
+		uint16_t m_nPlayerId;
+		uint16_t m_nVehicleId;
+		uint8_t m_nSeatId;
+		bool m_bForce; // if true - put directly in vehicle (without any anim)
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::VehicleEnter* packet = (CPackets::VehicleEnter*)data;
 			CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(peer);
 
-			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->vehicleid);
-			player->SetSeatId(packet->seatid);
+			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
+			player->SetSeatId(packet->m_nSeatId);
 			player->SetVehicle(vehicle);
 
-			packet->playerid = player->GetId();
+			packet->m_nPlayerId = player->GetId();
 
 			CNetwork::SendPacketToAll(ePacketType::VEHICLE_ENTER, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
-			vehicle->m_aOccupants[packet->seatid] = player;
+			vehicle->m_aOccupants[packet->m_nSeatId] = player;
 		}
 	};
 
 	struct VehicleExit
 	{
-		uint16_t playerid;
-		bool force;
+		uint16_t m_nPlayerId;
+		bool m_bForce;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::VehicleExit* packet = (CPackets::VehicleExit*)data;
 			CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(peer);
-			packet->playerid = player->GetId();
+			packet->m_nPlayerId = player->GetId();
 			CNetwork::SendPacketToAll(ePacketType::VEHICLE_EXIT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
 			CNetworkVehicle* vehicle = player->GetVehicle();
@@ -328,45 +307,45 @@ public:
 
 	struct VehicleDamage
 	{
-		uint16_t vehicleid;
+		uint16_t m_nVehicleId;
 		unsigned char damageManager_padding[23];
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::VehicleDamage* packet = (CPackets::VehicleDamage*)data;
-			memcpy(CNetworkVehicleManager::Instance().Get(packet->vehicleid)->m_damageManager_padding, packet->damageManager_padding, 23);
+			memcpy(CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId)->m_damageManager_padding, packet->damageManager_padding, 23);
 			CNetwork::SendPacketToAll(ePacketType::VEHICLE_DAMAGE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 
 	struct VehicleComponentAdd
 	{
-		uint16_t vehicleid;
-		int componentid;
+		uint16_t m_nVehicleId;
+		int m_nComponentId;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::VehicleComponentAdd* packet = (CPackets::VehicleComponentAdd*)data;
 			CNetwork::SendPacketToAll(ePacketType::VEHICLE_COMPONENT_ADD, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
-			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->vehicleid);
-			vehicle->m_aComponents.push_back(packet->componentid);
+			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
+			vehicle->m_aComponents.push_back(packet->m_nComponentId);
 		}
 	};
 
 	struct VehicleComponentRemove
 	{
-		uint16_t vehicleid;
-		int componentid;
+		uint16_t m_nVehicleId;
+		int m_nComponentId;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::VehicleComponentAdd* packet = (CPackets::VehicleComponentAdd*)data;
 			CNetwork::SendPacketToAll(ePacketType::VEHICLE_COMPONENT_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
-			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->vehicleid);
+			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
 
-			auto it = std::find(vehicle->m_aComponents.begin(), vehicle->m_aComponents.end(), packet->componentid);
+			auto it = std::find(vehicle->m_aComponents.begin(), vehicle->m_aComponents.end(), packet->m_nComponentId);
 			if (it != vehicle->m_aComponents.end())
 				vehicle->m_aComponents.erase(it);
 		}
@@ -374,43 +353,54 @@ public:
 
 	struct VehiclePassengerUpdate
 	{
-		uint16_t playerid;
-		uint16_t vehicleid;
-		unsigned char playerHealth;
-		unsigned char playerArmour;
-		unsigned char weapon;
-		unsigned short ammo;
-		unsigned char driveby;
-		CVector aim;
+		uint16_t m_nPlayerId;
+		uint16_t m_nVehicleId;
+		uint8_t m_nPlayerHealth;
+		uint8_t m_nPlayerArmour;
+		uint8_t m_nWeapon;
+		uint16_t m_nAmmoInClip;
+		bool m_bDriveby;
+		float m_fAimX;
+		float m_fAimY;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::VehiclePassengerUpdate* packet = (CPackets::VehiclePassengerUpdate*)data;
-			packet->playerid = CNetworkPlayerManager::Instance().Get(peer)->GetId();
+			auto networkPlayer = CNetworkPlayerManager::Instance().Get(peer);
+			packet->m_nPlayerId = networkPlayer->GetId();
+
+			auto& syncData = networkPlayer->GetSyncData();
+			syncData.m_nHealth = packet->m_nPlayerHealth;
+			syncData.m_nArmour = packet->m_nPlayerArmour;
+			syncData.m_nCurrentWeapon = packet->m_nWeapon;
+			syncData.m_nAmmoInClip = packet->m_nAmmoInClip;
+			syncData.m_fAimX = packet->m_fAimX;
+			syncData.m_fAimY = packet->m_fAimY;
+
 			CNetwork::SendPacketToAll(ePacketType::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}
 	};
 
 	struct PlayerChatMessage
 	{
-		uint16_t playerid;
-		char message[128 + 1];
+		uint16_t m_nPlayerId;
+		char m_message[128 + 1];
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::PlayerChatMessage* packet = (CPackets::PlayerChatMessage*)data;
-			packet->playerid = CNetworkPlayerManager::Instance().Get(peer)->GetId();
+			packet->m_nPlayerId = CNetworkPlayerManager::Instance().Get(peer)->GetId();
 			CNetwork::SendPacketToAll(ePacketType::PLAYER_CHAT_MESSAGE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 
 	struct PedSpawn
 	{
-		uint16_t pedid;
-		short modelId;
-		unsigned char pedType;
-		CVector pos;
-		unsigned char createdBy;
+		uint16_t m_nPedId;
+		int16_t m_nModelId;
+		uint8_t m_nPedType;
+		CVector m_vecPosition;
+		uint8_t m_nCreatedBy;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -420,7 +410,8 @@ public:
 			CPackets::PedSpawn* packet = (CPackets::PedSpawn*)data;
 			CNetwork::SendPacketToAll(ePacketType::PED_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
-			CNetworkPed* ped = new CNetworkPed(packet->pedid, packet->modelId, packet->pedType, packet->createdBy);
+			CNetworkPed* ped = new CNetworkPed(packet->m_nPedId, packet->m_nModelId, packet->m_nPedType, packet->m_nCreatedBy);
+			ped->GetSyncData().m_vecPosition = packet->m_vecPosition;
 
 			CNetworkPedManager::Instance().Add(ped);
 		}
@@ -428,7 +419,7 @@ public:
 
 	struct PedRemove
 	{
-		uint16_t pedid;
+		uint16_t m_nPedId;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -437,7 +428,7 @@ public:
 
 			CPackets::PedRemove* packet = (CPackets::PedRemove*)data;
 
-			CNetworkPed* ped = CNetworkPedManager::Instance().Get(packet->pedid);
+			CNetworkPed* ped = CNetworkPedManager::Instance().Get(packet->m_nPedId);
 
 			if (!ped)
 				return;
@@ -450,17 +441,8 @@ public:
 
 	struct PedOnFoot
 	{
-		uint16_t pedid = 0;
-		CVector pos = CVector();
-		CVector velocity = CVector();
-		unsigned char health = 100;
-		unsigned char armour = 0;
-		unsigned char weapon = 0;
-		unsigned short ammo = 0;
-		float aimingRotation = 0.0f;
-		float currentRotation = 0.0f;
-		float lookDirection = 0.0f;
-		unsigned char moveState = 0;
+		uint16_t m_nPedId;
+		PedSyncData m_syncData;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -469,11 +451,11 @@ public:
 
 			CPackets::PedOnFoot* packet = (CPackets::PedOnFoot*)data;
 
-			CNetworkPed* ped = CNetworkPedManager::Instance().Get(packet->pedid);
+			CNetworkPed* ped = CNetworkPedManager::Instance().Get(packet->m_nPedId);
 
 			if (ped)
 			{
-				ped->GetSyncData().m_vecPosition = packet->pos;
+				ped->GetSyncData() = packet->m_syncData;
 				CNetwork::SendPacketToAll(ePacketType::PED_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 			}
 		}
@@ -481,14 +463,14 @@ public:
 
 	struct GameWeatherTime
 	{
-		unsigned char newWeather;
-		unsigned char oldWeather;
-		unsigned char forcedWeather;
-		unsigned char currentMonth;
-		unsigned char currentDay;
-		unsigned char currentHour;
-		unsigned char currentMinute;
-		unsigned int gameTickCount;
+		uint8_t m_nNewWeather;
+		uint8_t m_nOldWeather;
+		uint8_t m_nForcedWeather;
+		uint8_t m_nCurrentMonth;
+		uint8_t m_nCurrentDay;
+		uint8_t m_nCurrentHour;
+		uint8_t m_nCurrentMinute;
+		uint32_t m_nGameTickCount;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -502,19 +484,19 @@ public:
 
 	struct PedRemoveTask
 	{
-		uint16_t pedid;
-		int taskid; // eTaskType
+		uint16_t m_nPedId;
+		int32_t m_nTaskId; // eTaskType
 	};
 
 	struct PlayerKeySync
 	{
-		uint16_t playerid;
-		ÑCompressedControllerState newState;
+		uint16_t m_nPlayerId;
+		ÑCompressedControllerState m_controllerState;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::PlayerKeySync* packet = (CPackets::PlayerKeySync*)data;
-			packet->playerid = CNetworkPlayerManager::Instance().Get(peer)->GetId();
+			packet->m_nPlayerId = CNetworkPlayerManager::Instance().Get(peer)->GetId();
 			CNetwork::SendPacketToAll(ePacketType::PLAYER_KEY_SYNC, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
@@ -529,42 +511,37 @@ public:
 
 	struct PedDriverUpdate
 	{
-		uint16_t pedid;
-		uint16_t vehicleid;
-		CVector pos;
-		CVector rot;
-		CVector roll;
-		CVector velocity;
-		unsigned char pedHealth;
-		unsigned char pedArmour;
-		unsigned char weapon;
-		unsigned short ammo;
-		unsigned char color1;
-		unsigned char color2;
-		float health;
-		char paintjob;
-		float bikeLean;
-		float planeGearState;
-		unsigned char locked;
-		unsigned char autoPilot[92];
-		float gasPedal;
-		float breakPedal;
-		float steerAngle;
+		uint16_t m_nPedId;
+		uint16_t m_nVehicleId;
+		uint8_t m_nPedHealth;
+		uint8_t m_nPedArmour;
+		uint8_t m_nWeapon;
+		uint16_t m_nAmmoInClip;
+		VehicleSyncData m_syncData;
+		uint8_t m_autoPilot[92];
+		float m_fGasPedal;
+		float m_fBreakPedal;
+		float m_fSteerAngle;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::PedDriverUpdate* packet = (CPackets::PedDriverUpdate*)data;
 			CNetwork::SendPacketToAll(ePacketType::PED_DRIVER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 
-			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->vehicleid);
+			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
 
 			if (vehicle == nullptr) // TODO: create vehicle
 				return;
 
-			auto& syncData = vehicle->GetSyncData();
+			vehicle->GetSyncData() = packet->m_syncData;
 
-			syncData.m_vecPosition = packet->pos;
-			syncData.m_vecRotation = packet->rot;
+			CNetworkPed* ped = CNetworkPedManager::Instance().Get(packet->m_nPedId);
+			auto& pedSyncData = ped->GetSyncData();
+			pedSyncData.m_nHealth = packet->m_nPedHealth;
+			pedSyncData.m_nArmour = packet->m_nPedArmour;
+			pedSyncData.m_nCurrentWeapon = packet->m_nWeapon;
+			pedSyncData.m_nAmmoInClip = packet->m_nAmmoInClip;
+			
 		}
 	};
 
