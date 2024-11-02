@@ -1,44 +1,38 @@
 #pragma once
-class CNetworkPlayer
+#include "../../structs.h"
+#include "../CNetworkEntity.h"
+#include "../Data/PlayerSyncData.h"
+#include <CPlayerPed.h>
+
+class CNetworkPlayer : public CNetworkEntity<PlayerSyncData, CPlayerPed>
 {
 public:
-	CPlayerPed* m_pPed = nullptr;
-	int m_nPlayerId;
+	CNetworkPlayer(uint16_t networkId) :
+		CNetworkEntity(networkId) {}
 
-	// last sync data
-	CPackets::PlayerOnFoot* m_lOnFoot = nullptr;
-	CPackets::PlayerOnFoot* m_oOnFoot = nullptr;
 	
-	signed short m_oShockButtonL;
-	signed short m_lShockButtonL;
+	eNetworkEntityType GetType() const override { return eNetworkEntityType::NETWORK_ENTITY_PLAYER; }
 	
-	static const unsigned int m_pColours[];
-
-	CVector* m_vecWaypointPos = nullptr;
-	bool m_bWaypointPlaced = false;
+	CVector m_vecWaypointPos;
+	bool m_bWaypointPlaced;
 
 	char m_name[32 + 1] = { 0 };
 
-	CVector m_aPassengerAim{};
+	CVector m_aPassengerAim;
 
-	~CNetworkPlayer();
-	CNetworkPlayer(int id, CVector position);
+	CControllerState m_oldControllerState;
+	CControllerState m_newControllerState;
 
-	CControllerState m_oldControllerState{};
-	CControllerState m_newControllerState{};
-
-	ÑCompressedControllerState m_compressedControllerState{};
-
-	bool m_bStreamed = false;
-
-	void CreatePed(int id, CVector position);
-
-	void DestroyPed();
+	ÑCompressedControllerState m_compressedControllerState;
 
 	int GetInternalId();
 	char* GetName();
-	bool IsStreamed();
-	void StreamIn(const CVector& position);
-	void StreamOut();
+
+	~CNetworkPlayer();
+
+	void StreamIn() override;
+	void StreamOut() override;
+	void Create() override;
+	void Destroy() override;
 };
 

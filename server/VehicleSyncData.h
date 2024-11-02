@@ -15,7 +15,7 @@ public:
 	float m_fBikeLean;
 	float m_fTurretAimHorizontal;
 	float m_fTurretAimVertical;
-	uint16_t m_nMiscComponentAngle; // hydra thrusters
+	int16_t m_nMiscComponentAngle; // hydra thrusters
 	float m_fPlaneGearState;
-	bool m_bLocked;
+	uint8_t m_nDoorLock;
 };

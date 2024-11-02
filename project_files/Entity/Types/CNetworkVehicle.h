@@ -1,21 +1,27 @@
 #pragma once
-class CNetworkVehicle
+#include "../Abstract/Hostable.h"
+#include "../Abstract/Modelable.h"
+#include "../CNetworkEntity.h"
+#include "../Data/VehicleSyncData.h"
+#include <CVehicle.h>
+
+class CNetworkVehicle : public CNetworkEntity<VehicleSyncData, CVehicle>, public Modelable, public Hostable
 {
 public:
-	int m_nVehicleId = -1;
-	CVehicle* m_pVehicle = nullptr;
-	int m_nModelId = 0;
+	CNetworkVehicle(uint16_t networkId, int16_t modelId) :
+		CNetworkEntity(networkId), Modelable(modelId) {}
+
 	char m_nPaintJob = -1;
 	float m_fAimHorizontal = 0.0f;
 	float m_fAimVertical = 0.0f;
 
-	CNetworkVehicle(CVehicle* vehicle);
-	CNetworkVehicle(int vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2);
-	bool CreateVehicle(int vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2);
 	~CNetworkVehicle();
 	bool HasDriver();
-	bool IsStreamed();
-	void StreamIn();
-	void StreamOut();
+
+	eNetworkEntityType GetType() const override { return eNetworkEntityType::NETWORK_ENTITY_VEHICLE; }
+	void StreamIn() override;
+	void StreamOut() override;
+	void Create() override;
+	void Destroy() override;
 };
 

@@ -84,8 +84,8 @@ static void __fastcall CPedIK__PointGunInDirection_Hook(CPedIK* This, int paddin
     if (This->m_pPed == FindPlayerPed(0))
     {
         // save last aim data for syncing
-        CLocalPlayer::m_vecLastAimX = dirX;
-        CLocalPlayer::m_vecLastAimY = dirY;
+        CLocalPlayer::m_fLastAimX = dirX;
+        CLocalPlayer::m_fLastAimY = dirY;
 
         This->PointGunInDirection(dirX, dirY, flag, float1);
         return;

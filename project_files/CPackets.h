@@ -1,7 +1,10 @@
 #pragma once
 
 #include "stdafx.h"
-#include "eNetworkEntityType.h"
+#include "Entity/eNetworkEntityType.h"
+#include "Entity/Data/PlayerSyncData.h"
+#include "Entity/Data/VehicleSyncData.h"
+#include "Entity/Data/PedSyncData.h"
 
 
 enum ePacketType : unsigned short
@@ -244,7 +247,7 @@ public:
 		uint8_t m_nWeapon;
 		uint16_t m_nAmmoInClip;
 		VehicleSyncData m_syncData;
-		uint8_t m_autoPilot[92];
+		CSyncAutoPilot m_autoPilot;
 		float m_fGasPedal;
 		float m_fBreakPedal;
 		float m_fSteerAngle;
