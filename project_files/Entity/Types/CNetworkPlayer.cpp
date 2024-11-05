@@ -1,4 +1,11 @@
+using namespace plugin;
+#include "../../CUtil.h"
+#include "../Manager/Types/CNetworkPlayerManager.h"
 #include "CNetworkPlayer.h"
+#include <CPools.h>
+#include <CWorld.h>
+#include <eScriptCommands.h>
+#include <extensions/ScriptCommands.h>
 
 CNetworkPlayer::~CNetworkPlayer()
 {
@@ -20,7 +27,7 @@ void CNetworkPlayer::Create()
 
 	this->m_pEntity->SetOrientation(0.0f, 0.0f, 0.0f);
 
-	Command<Commands::SET_CHAR_PROOFS>(actorId, 0, 1, 1, 0, 0);
+	plugin::Command<Commands::SET_CHAR_PROOFS>(actorId, 0, 1, 1, 0, 0);
 }
 
 void CNetworkPlayer::Destroy()
@@ -32,17 +39,15 @@ void CNetworkPlayer::Destroy()
 		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(this->m_pEntity), 0.f, 0.f, 0.f);
 	}
 
-	_asm mov ecx, m_pEntity
-	_asm mov ebx, [ecx]
-	_asm push 1
-	_asm call[ebx]
+	CWorld::Remove(m_pEntity);
+	delete m_pEntity; // possible crash (todo: test)
 }
 
 int CNetworkPlayer::GetInternalId()
 {
 	byte playerNumber = 0;
 
-	for (; playerNumber < MAX_SERVER_PLAYERS + 2; playerNumber++)
+	for (; playerNumber < CNetworkPlayerManager::Instance().GetMaxCount() + 2; playerNumber++)
 	{
 		if (this->m_pEntity == CWorld::Players[playerNumber].m_pPed)
 		{

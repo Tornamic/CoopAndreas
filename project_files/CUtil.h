@@ -1,4 +1,8 @@
 #pragma once
+
+class CNetworkPlayer;
+class CNetworkPed;
+
 class CUtil
 {
 public:

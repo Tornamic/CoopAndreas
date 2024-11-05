@@ -1,16 +1,25 @@
 #pragma once
-class CNetworkPlayerManager
-{
-public:
-	static std::vector<CNetworkPlayer*> m_pPlayers;
-	static CPad m_pPads[MAX_SERVER_PLAYERS + 2];
-	static int m_nMyId;
 
-	static void Add(CNetworkPlayer* player);
-	static void Remove(CNetworkPlayer* player);
-	static CNetworkPlayer* GetPlayer(CPlayerPed* playerPed);
-	static CNetworkPlayer* GetPlayer(int playerid);
-	static CNetworkPlayer* GetPlayer(CEntity* entity);
-	static CNetworkPlayer* GetPlayer(CPed* ped);
+#include "../../Types/CNetworkPlayer.h"
+#include "../CNetworkEntityManager.h"
+
+class CEntity;
+
+class CNetworkPlayerManager final : public CNetworkEntityManager<CNetworkPlayer>
+{
+private:
+	CNetworkPlayerManager() {}
+
+public:
+	static CNetworkPlayerManager& Instance()
+	{
+		static CNetworkPlayerManager instance;
+		return instance;
+	}
+
+	uint16_t GetMaxCount() const override { return 100; }
+
+	CNetworkPlayerManager(const CNetworkPlayerManager&) = delete;
+	CNetworkPlayerManager& operator=(const CNetworkPlayerManager&) = delete;
 };
 

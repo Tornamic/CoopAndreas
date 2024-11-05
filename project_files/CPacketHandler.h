@@ -1,5 +1,10 @@
 #pragma once
-#include "CNetworkPed.h"
+
+#include "CPackets.h"
+
+class CNetworkPed;
+class CNetworkVehicle;
+
 class CPacketHandler
 {
 public:

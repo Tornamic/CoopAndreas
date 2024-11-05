@@ -1,9 +1,17 @@
-#include "stdafx.h"
 #include "CNetworkPed.h"
+#include <CStreaming.h>
+#include <eModelID.h>
+#include <eCopType.h>
+#include <CCopPed.h>
+#include <CEmergencyPed.h>
+#include <CCivilianPed.h>
+#include "../../CLocalPlayer.h"
+#include "../../CPackets.h"
 
+class CNetworkPlayer;
 
 // CREATE new ped!!! NOT GET!! 
-CNetworkPed::CNetworkPed(CPed* ped)
+/*CNetworkPed::CNetworkPed(CPed* ped)
 {
     if (!CLocalPlayer::m_bIsHost)
         return;
@@ -19,16 +27,29 @@ CNetworkPed::CNetworkPed(CPed* ped)
     packet.pedType = ped->m_nPedType;
     packet.createdBy = ped->m_nCreatedBy;
     CNetwork::SendPacket(ePacketType::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+}*/
+
+CNetworkPed::~CNetworkPed()
+{
+    if (CLocalPlayer::m_bIsHost)
+    {
+        CPackets::PedRemove packet{};
+        packet.m_nPedId = this->GetId();
+        CNetwork::SendPacket(ePacketType::PED_REMOVE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    }
+    this->StreamOut();
 }
 
-CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy)
+void CNetworkPed::Create()
 {
+    int16_t modelId = this->GetModelId();
+
     CStreaming::RequestModel(modelId, 0);
     CStreaming::LoadAllRequestedModels(false);
 
-    if (pedType == PED_TYPE_COP)
+    if (this->m_nPedType == PED_TYPE_COP)
     {
-        switch (modelId) 
+        switch (modelId)
         {
         case MODEL_LAPD1:
         case MODEL_SFPD1:
@@ -51,70 +72,59 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
         }
     }
 
-    if (pedType == PED_TYPE_COP)
+    if (this->m_nPedType == PED_TYPE_COP)
     {
-        m_pPed = new CCopPed((eCopType)modelId);
+        this->m_pEntity = new CCopPed((eCopType)modelId);
     }
-    else if (pedType == PED_TYPE_MEDIC || pedType == PED_TYPE_FIREMAN)
+    else if (this->m_nPedType == PED_TYPE_MEDIC || this->m_nPedType == PED_TYPE_FIREMAN)
     {
-        m_pPed = new CEmergencyPed(pedType, modelId);
-    }
-    else
-    {
-        m_pPed = new CCivilianPed(pedType, modelId);
-    }
-
-    m_pPed->m_nCreatedBy = 2;
-    m_pPed->m_pIntelligence->SetPedDecisionMakerType(-1);
-    m_pPed->m_pIntelligence->SetSeeingRange(30.0);
-    m_pPed->m_pIntelligence->SetHearingRange(30.0);
-    m_pPed->m_pIntelligence->m_fDmRadius = 0.0f;
-    m_pPed->m_pIntelligence->m_nDmNumPedsToScan = 0;
-
-    m_pPed->SetPosn(pos);
-    m_pPed->SetOrientation(0.f, 0.f, 0.f);
-    CWorld::Add(m_pPed);
-
-    m_nPedId = pedid;
-    m_nPedType = pedType;
-
-    m_nCreatedBy = createdBy;
-}
-
-CNetworkPed::~CNetworkPed()
-{
-    if (CLocalPlayer::m_bIsHost)
-    {
-        CPackets::PedRemove packet{};
-        packet.pedid = m_nPedId;
-        CNetwork::SendPacket(ePacketType::PED_REMOVE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        this->m_pEntity = new CEmergencyPed(this->m_nPedType, modelId);
     }
     else
     {
-        if (m_pPed && m_pPed->m_matrix->m_pOwner)
-        {
-            if (m_pPed->m_nPedFlags.bInVehicle)
-            {
-                plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
-            }
-
-            CWorld::Remove(m_pPed);
-            //CWorld::RemoveReferencesToDeletedObject(m_pPed);
-            m_pPed->Remove();
-            delete m_pPed;
-        }
+        this->m_pEntity = new CCivilianPed(this->m_nPedType, modelId);
     }
+
+    m_pEntity->m_nCreatedBy = 2;
+    m_pEntity->m_pIntelligence->SetPedDecisionMakerType(-1);
+    m_pEntity->m_pIntelligence->SetSeeingRange(30.0);
+    m_pEntity->m_pIntelligence->SetHearingRange(30.0);
+    m_pEntity->m_pIntelligence->m_fDmRadius = 0.0f;
+    m_pEntity->m_pIntelligence->m_nDmNumPedsToScan = 0;
+
+    auto& syncData = this->GetSyncData();
+
+    m_pEntity->SetPosn(syncData.m_vecPosition);
+    m_pEntity->SetOrientation(0.f, 0.f, 0.f);
+    m_pEntity->m_vecMoveSpeed = syncData.m_vecVelocity;
+    m_pEntity->m_fHealth = syncData.m_nHealth;
+    m_pEntity->m_fArmour = syncData.m_nArmour;
+    CUtil::GiveWeaponByPacket(this, syncData.m_nCurrentWeapon, syncData.m_nAmmoInClip);
+    m_pEntity->m_fAimingRotation = syncData.m_fAimingRotation;
+    m_pEntity->m_fCurrentRotation = syncData.m_fCurrentRotation;
+    m_pEntity->field_73C = syncData.m_fLookDirection;
+    m_pEntity->m_nMoveState = syncData.m_nMoveState;
+
+    CWorld::Add(m_pEntity);
 }
 
-bool CNetworkPed::IsStreamed()
+void CNetworkPed::Destroy()
 {
-    return false;
+    CTheScripts::RemoveThisPed(this->m_pEntity);
 }
 
 void CNetworkPed::StreamIn()
 {
+    if (this->GetEntity() == nullptr)
+    {
+        this->Create();
+    }
 }
 
 void CNetworkPed::StreamOut()
 {
+    if (this->GetEntity())
+    {
+        this->Destroy();
+    }
 }

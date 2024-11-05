@@ -14,6 +14,9 @@ protected:
 	CNetworkEntity(uint16_t networkId) : m_nNetworkId(networkId) {}
 
 public:
+
+	virtual ~CNetworkEntity() = default;
+
 	EntityType* m_pEntity = nullptr;
 
 	virtual eNetworkEntityType GetType() const = 0;

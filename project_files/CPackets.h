@@ -1,11 +1,12 @@
 #pragma once
 
-#include "stdafx.h"
 #include "Entity/eNetworkEntityType.h"
 #include "Entity/Data/PlayerSyncData.h"
 #include "Entity/Data/VehicleSyncData.h"
 #include "Entity/Data/PedSyncData.h"
-
+#include "structs.h"
+#include <CDamageManager.h>
+#include <CColPoint.h>
 
 enum ePacketType : unsigned short
 {

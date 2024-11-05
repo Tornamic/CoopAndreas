@@ -1,17 +1,30 @@
 #pragma once
-class CNetworkVehicleManager
-{
-public:
-    static std::vector<CNetworkVehicle*> m_pVehicles;
 
-    static CNetworkVehicle* GetVehicle(int vehicleid);
-    static CNetworkVehicle* GetVehicle(CVehicle* vehicle);
-    static CNetworkVehicle* GetVehicle(CEntity* vehicle);
-    static int GetFreeID();
-    static void Add(CNetworkVehicle* vehicle);
-    static void Remove(CNetworkVehicle* vehicle);
-    static void UpdateDriver(CVehicle* vehicle);
-    static void UpdateIdle();
-    static void UpdatePassenger(CVehicle* vehicle, CPlayerPed* localPlayer);
+#include <CVehicle.h>
+
+#include "../../Types/CNetworkVehicle.h"
+#include "../CNetworkEntityManager.h"
+#include <CPlayerPed.h>
+
+class CNetworkVehicleManager final : public CNetworkEntityManager<CNetworkVehicle>
+{
+private:
+	CNetworkVehicleManager() {}
+
+public:
+	static CNetworkVehicleManager& Instance()
+	{
+		static CNetworkVehicleManager instance;
+		return instance;
+	}
+
+	uint16_t GetMaxCount() const override { return 200; }
+
+    void UpdateDriver(CVehicle* vehicle);
+    void UpdateIdle();
+    void UpdatePassenger(CVehicle* vehicle, CPlayerPed* localPlayer);
+
+	CNetworkVehicleManager(const CNetworkVehicleManager&) = delete;
+	CNetworkVehicleManager& operator=(const CNetworkVehicleManager&) = delete;
 };
 

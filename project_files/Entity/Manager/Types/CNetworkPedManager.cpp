@@ -1,92 +1,25 @@
-#include "stdafx.h"
-#include "CNetworkVehicle.h"
-#include "CNetworkPed.h"
-
-std::vector<CNetworkPed*> CNetworkPedManager::m_pPeds;
-
-CNetworkPed* CNetworkPedManager::GetPed(int pedid)
-{
-	for (int i = 0; i != m_pPeds.size(); i++)
-	{
-		if (m_pPeds[i]->m_nPedId == pedid)
-		{
-			return m_pPeds[i];
-		}
-	}
-	return nullptr;
-}
-
-CNetworkPed* CNetworkPedManager::GetPed(CPed* ped)
-{
-	if (ped == nullptr)
-		return nullptr;
-
-	for (int i = 0; i != m_pPeds.size(); i++)
-	{
-		if (m_pPeds[i]->m_pPed == ped)
-		{
-			return m_pPeds[i];
-		}
-	}
-
-	return nullptr;
-}
-
-CNetworkPed* CNetworkPedManager::GetPed(CEntity* entity)
-{
-	if (entity == nullptr)
-		return nullptr;
-
-	for (int i = 0; i != m_pPeds.size(); i++)
-	{
-		if (m_pPeds[i]->m_pPed == entity)
-		{
-			return m_pPeds[i];
-		}
-	}
-
-	return nullptr;
-}
-
-int CNetworkPedManager::GetFreeID()
-{
-	if (!CLocalPlayer::m_bIsHost)
-		return -1;
-
-	for (int i = 0; i != MAX_SERVER_PEDS; i++)
-	{
-		if (CNetworkPedManager::GetPed(i) == nullptr)
-			return i;
-	}
-
-	return -1;
-}
-
-void CNetworkPedManager::Add(CNetworkPed* ped)
-{
-	CNetworkPedManager::m_pPeds.push_back(ped);
-}
-
-void CNetworkPedManager::Remove(CNetworkPed* ped)
-{
-	auto it = std::find(m_pPeds.begin(), m_pPeds.end(), ped);
-	if (it != m_pPeds.end())
-	{
-		m_pPeds.erase(it);
-	}
-}
+#include "../../../CLocalPlayer.h"
+#include "../../../CNetwork.h"
+#include "../../../CPackets.h"
+#include "../../Types/CNetworkVehicle.h"
+#include "CNetworkPedManager.h"
+#include "CNetworkVehicleManager.h"
+#include <CTaskComplexWander.h>
+#include <CVehicle.h>
+#include "../../../CPacketHandler.h"
+#include "../../../CNetwork.h"
 
 void CNetworkPedManager::Update()
 {
 	if (!CLocalPlayer::m_bIsHost) return;
 
-	for (CNetworkPed* networkPed : m_pPeds)
+	for (CNetworkPed* networkPed : this->GetEntities())
 	{
-		CPed* ped = networkPed->m_pPed;
+		CPed* ped = networkPed->m_pEntity;
 		if (!ped) continue;
 
 		CVehicle* vehicle = ped->m_pVehicle;
-		CNetworkVehicle* networkVehicle = vehicle ? CNetworkVehicleManager::GetVehicle(vehicle) : nullptr;
+		CNetworkVehicle* networkVehicle = vehicle ? CNetworkVehicleManager::Instance().Get(vehicle) : nullptr;
 
 		if (networkVehicle && ped->m_nPedFlags.bInVehicle)
 		{
@@ -114,24 +47,24 @@ void CNetworkPedManager::Update()
 
 void CNetworkPedManager::Process()
 {
-	for (auto networkPed : m_pPeds)
+	for (auto networkPed : this->GetEntities())
 	{
-		CPed* ped = networkPed->m_pPed;
+		CPed* ped = networkPed->m_pEntity;
 
 		if (ped == nullptr)
 			continue;
-
-		ped->m_fAimingRotation = networkPed->m_fAimingRotation;
-		ped->m_fCurrentRotation = networkPed->m_fCurrentRotation;
-		ped->field_73C = networkPed->m_fLookDirection;
+		auto& syncData = networkPed->GetSyncData();
+		ped->m_fAimingRotation = syncData.m_fAimingRotation;
+		ped->m_fCurrentRotation = syncData.m_fCurrentRotation;
+		ped->field_73C = syncData.m_fLookDirection;
 	}
 }
 
 void CNetworkPedManager::AssignHost()
 {
-	for (auto networkPed : m_pPeds)
+	for (auto networkPed : this->GetEntities())
 	{
-		CPed* ped = networkPed->m_pPed;
+		CPed* ped = networkPed->m_pEntity;
 
 		if (ped)
 		{

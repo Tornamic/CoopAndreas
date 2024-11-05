@@ -1,16 +1,28 @@
 #pragma once
-class CNetworkPedManager
+
+#include "../../Types/CNetworkPed.h"
+#include "../CNetworkEntityManager.h"
+
+class CNetworkPedManager final : public CNetworkEntityManager<CNetworkPed>
 {
+private:
+	CNetworkPedManager() {}
+
 public:
-	static std::vector<CNetworkPed*> m_pPeds;
-	static CNetworkPed* GetPed(int pedid);
-	static CNetworkPed* GetPed(CPed* ped);
-	static CNetworkPed* GetPed(CEntity* entity);
-	static int GetFreeID();
-	static void Add(CNetworkPed* ped);
-	static void Remove(CNetworkPed* ped);
-	static void Update();
-	static void Process();
-	static void AssignHost();
+	static CNetworkPedManager& Instance()
+	{
+		static CNetworkPedManager instance;
+		return instance;
+	}
+
+public:
+	uint16_t GetMaxCount() const override { return 100; }
+
+	void Update();
+	void Process();
+	void AssignHost();
+
+	CNetworkPedManager(const CNetworkPedManager&) = delete;
+	CNetworkPedManager& operator=(const CNetworkPedManager&) = delete;
 };
 

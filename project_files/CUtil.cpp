@@ -1,5 +1,12 @@
-#include "stdafx.h"
-#include "CNetworkPed.h"
+#include "CUtil.h"
+#include "Entity/Types/CNetworkPed.h"
+#include "Entity/Manager/Types/CNetworkPedManager.h"
+#include "Entity/Types/CNetworkPlayer.h"
+#include "Entity/Types/CNetworkVehicle.h"
+#include <CWorld.h>
+#include <CStreaming.h>
+#include <CCheat.h>
+#include <CModelInfo.h>
 
 bool CUtil::CompareControllerStates(const CControllerState & state1, const CControllerState & state2) {
     return state1.LeftStickX == state2.LeftStickX &&
@@ -100,7 +107,7 @@ bool CUtil::IsMeleeWeapon(unsigned char id)
 void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, unsigned short ammo)
 {
     // update weapon, ammo
-    auto& activeWeapon = player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot];
+    auto& activeWeapon = player->m_pEntity->m_aWeapons[player->m_pEntity->m_nActiveWeaponSlot];
     bool isWeaponTypeDifferent = (activeWeapon.m_eWeaponType != weapon);
     bool isAmmoDifferent = (activeWeapon.m_nAmmoInClip != ammo);
 
@@ -125,7 +132,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
 
             if (activeWeapon.m_nTotalAmmo <= 0)
             {
-                player->m_pPed->GiveWeapon((eWeaponType)weapon, isMeleeWeapon ? 1 : 999, false);
+                player->m_pEntity->GiveWeapon((eWeaponType)weapon, isMeleeWeapon ? 1 : 999, false);
             }
             // set ammo in clip
             activeWeapon.m_nAmmoInClip = ammo;
@@ -133,7 +140,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
 
         if (isWeaponTypeDifferent)
         {
-            player->m_pPed->SetCurrentWeapon((eWeaponType)weapon);
+            player->m_pEntity->SetCurrentWeapon((eWeaponType)weapon);
         }
 
         CWorld::PlayerInFocus = 0;
@@ -143,7 +150,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
 void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned short ammo)
 {
     // update weapon, ammo
-    auto& activeWeapon = ped->m_pPed->m_aWeapons[ped->m_pPed->m_nActiveWeaponSlot];
+    auto& activeWeapon = ped->m_pEntity->m_aWeapons[ped->m_pEntity->m_nActiveWeaponSlot];
     bool isWeaponTypeDifferent = (activeWeapon.m_eWeaponType != weapon);
     bool isAmmoDifferent = (activeWeapon.m_nAmmoInClip != ammo);
 
@@ -151,7 +158,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned 
     {
         if (isWeaponTypeDifferent)
         {
-            ped->m_pPed->ClearWeapons();
+            ped->m_pEntity->ClearWeapons();
         }
 
         if (weapon != 0)
@@ -168,7 +175,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned 
 
             if (activeWeapon.m_nTotalAmmo <= 0)
             {
-                ped->m_pPed->GiveWeapon((eWeaponType)weapon, isMeleeWeapon ? 1 : 99999, false);
+                ped->m_pEntity->GiveWeapon((eWeaponType)weapon, isMeleeWeapon ? 1 : 99999, false);
             }
 
 
@@ -178,7 +185,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned 
 
         if (isWeaponTypeDifferent)
         {
-            ped->m_pPed->SetCurrentWeapon((eWeaponType)weapon);
+            ped->m_pEntity->SetCurrentWeapon((eWeaponType)weapon);
         }
     }
 }
@@ -204,9 +211,9 @@ eVehicleType CUtil::GetVehicleType(CVehicle* vehicle)
 
 CNetworkPed* CUtil::GetNetworkPedByTask(CTask* targetTask)
 {
-    for (auto networkPed : CNetworkPedManager::m_pPeds)
+    for (auto networkPed : CNetworkPedManager::Instance().GetEntities())
     {
-        CPed* ped = networkPed->m_pPed;
+        CPed* ped = networkPed->m_pEntity;
         if (!ped) continue;
 
         auto findTaskInArray = [&](CTask* tasks[], int size) -> CNetworkPed* {
@@ -249,12 +256,12 @@ void CUtil::SetPlayerJetpack(CNetworkPlayer* player, bool set)
     else
     {
         // CPedIntelligence::GetTaskJetPack
-        CTaskSimpleJetPack* task = plugin::CallMethodAndReturn<CTaskSimpleJetPack*, 0x601110, CPedIntelligence*>(player->m_pPed->m_pIntelligence);
+        CTaskSimpleJetPack* task = plugin::CallMethodAndReturn<CTaskSimpleJetPack*, 0x601110, CPedIntelligence*>(player->m_pEntity->m_pIntelligence);
 
         if (task)
         {
             task->m_bIsFinished = true; // dont create a jetpack pickup, TODO when syncing pickups
-            plugin::CallMethod<0x67B660, CTaskSimpleJetPack*>(task, player->m_pPed); // CTaskSimpleJetPack::DropJetPack
+            plugin::CallMethod<0x67B660, CTaskSimpleJetPack*>(task, player->m_pEntity); // CTaskSimpleJetPack::DropJetPack
         }
     }
 }

@@ -1,6 +1,7 @@
 #pragma once
-#include "stdafx.h"
-#include "CChat.h"
+#include <CPad.h>
+#include <CTimer.h>
+#include <CAutoPilot.h>
 
 #pragma pack(1)
 typedef struct _CPassengerAim
