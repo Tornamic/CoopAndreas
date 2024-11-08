@@ -1,6 +1,9 @@
 #include "../stdafx.h"
 #include "PedHooks.h"
-#include "../CNetworkPed.h"
+#include "../Entity/Types/CNetworkPed.h"
+#include "../CNetwork.h"
+#include "../CLocalPlayer.h"
+#include "../Entity/Manager/Types/CNetworkPedManager.h"
 
 static void __cdecl CPopulation__Update_Hook(bool generate)
 {
@@ -23,11 +26,11 @@ static void __declspec(naked) CPed__SetMoveState_Hook()
  
     if (CNetwork::m_bConnected && !CLocalPlayer::m_bIsHost && !pPed->IsPlayer())
     {
-        _pNetworkPed = CNetworkPedManager::GetPed(pPed);
+        _pNetworkPed = CNetworkPedManager::Instance().Get(pPed);
         if (_pNetworkPed)
         {
 
-            pPed->m_nMoveState = _pNetworkPed->m_nMoveState;
+            pPed->m_nMoveState = _pNetworkPed->GetSyncData().m_nMoveState;
             __asm
             {
                 popad

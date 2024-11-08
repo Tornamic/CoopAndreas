@@ -1,4 +1,7 @@
 #pragma once
+
+#include "stdafx.h"
+
 struct CChatMessage
 {
 	std::string m_message;

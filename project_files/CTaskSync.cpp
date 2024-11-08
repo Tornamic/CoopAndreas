@@ -1,13 +1,17 @@
 #include "stdafx.h"
 #include "CTaskSync.h"
-#include "CNetworkVehicle.h"
-#include "CNetworkPed.h"
+#include "Entity/Types/CNetworkVehicle.h"
+#include "Entity/Types/CNetworkPed.h"
+#include "Entity/Manager/Types/CNetworkPedManager.h"
+#include "Entity/Manager/Types/CNetworkVehicleManager.h"
 
 #include <CTaskComplexJump.h>
 #include <CTaskComplexWander.h>
 #include <CTaskComplexClimb.h>
 #include <CTaskSimpleCarSetPedInAsDriver.h>
 #include "Tasks/CTaskComplexCarDriveWander.h"
+#include "CChat.h"
+#include "CDebugPedTasks.h"
 
 #define PUSH(val) \
     memcpy(currentPtr, &val, sizeof(val)); \
@@ -79,7 +83,7 @@ void* CTaskSync::SerializeTask(CTask* t, CNetworkPed* owner, bool bPrimary, unsi
     void* data = nullptr;
     char* currentPtr = nullptr;
 
-    int pedId = owner->m_nPedId;
+    int pedId = owner->GetId();
     int taskId = t->GetId();
 
     bool b = false; // temp bool var for casting 1b bool values
@@ -113,7 +117,7 @@ void* CTaskSync::SerializeTask(CTask* t, CNetworkPed* owner, bool bPrimary, unsi
     {
         CTaskComplexCarDriveWander* task = (CTaskComplexCarDriveWander*)t;
 
-        CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(owner->m_pPed->m_pVehicle);
+        CNetworkVehicle* networkVehicle = CNetworkVehicleManager::Instance().Get(owner->m_pPed->m_pVehicle);
 
         if (networkVehicle == nullptr)
         {
@@ -155,12 +159,12 @@ void CTaskSync::DeSerializeTask(void* data)
 
     CChat::AddMessage("DeSerializeTask %d %d %s %d %s", pedId, taskId, CDebugPedTasks::TaskNames[taskId], taskSlot, bPrimary ? "True" : "False");
 
-    CNetworkPed* networkPed = CNetworkPedManager::GetPed(pedId);
+    CNetworkPed* networkPed = CNetworkPedManager::Instance().Get(pedId);
 
-    if (networkPed == nullptr || networkPed->m_pPed == nullptr)
+    if (networkPed == nullptr || networkPed->m_pEntity == nullptr)
         return;
 
-    CPed* ped = networkPed->m_pPed;
+    CPed* ped = networkPed->m_pEntity;
 
     switch (taskId)
     {
@@ -180,7 +184,7 @@ void CTaskSync::DeSerializeTask(void* data)
     }
     case TASK_COMPLEX_WANDER:
     {
-        CTaskComplexWander* task = plugin::CallAndReturn<CTaskComplexWander*, 0x673D00>(networkPed->m_pPed);
+        CTaskComplexWander* task = plugin::CallAndReturn<CTaskComplexWander*, 0x673D00>(networkPed->GetEntity());
 
         READ(task->m_nMoveState);
         READ(task->m_nDir);
@@ -201,12 +205,12 @@ void CTaskSync::DeSerializeTask(void* data)
         READ(carDrivingStyle);
         READ(cruiseSpeed);
 
-        CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicleId);
+        CNetworkVehicle* networkVehicle = CNetworkVehicleManager::Instance().Get(vehicleId);
 
-        if (networkVehicle == nullptr || networkVehicle->m_pVehicle == nullptr)
+        if (networkVehicle == nullptr || networkVehicle->m_pEntity == nullptr)
             return;
 
-        CTaskComplexCarDriveWander* task = new CTaskComplexCarDriveWander(networkVehicle->m_pVehicle, carDrivingStyle, cruiseSpeed);
+        CTaskComplexCarDriveWander* task = new CTaskComplexCarDriveWander(networkVehicle->m_pEntity, carDrivingStyle, cruiseSpeed);
 
         APPLY_TASK();
         break;

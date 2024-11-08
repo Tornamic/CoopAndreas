@@ -1,5 +1,19 @@
-#include "../project_files/stdafx.h"
+#include "../project_files/CChat.h"
+#include "../project_files/CCore.h"
+#include "../project_files/CDebugVehicleSpawner.h"
+#include "../project_files/CDriveBy.h"
 #include "../project_files/CDXFont.h"
+#include "../project_files/CLocalPlayer.h"
+#include "../project_files/CNetwork.h"
+#include "../project_files/CNetworkPlayerMapPin.h"
+#include "../project_files/CNetworkPlayerNameTag.h"
+#include "../project_files/CNetworkPlayerWaypoint.h"
+#include "../project_files/CPacketHandler.h"
+#include "../project_files/CPackets.h"
+#include "../project_files/CPassengerEnter.h"
+#include "../project_files/Entity/Manager/Types/CNetworkPedManager.h"
+#include "../project_files/Entity/Manager/Types/CNetworkVehicleManager.h"
+#include "../project_files/stdafx.h"
 
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
@@ -87,7 +101,7 @@ public:
 					{
 						if (isDriver)
 						{
-							CNetworkVehicleManager::UpdateDriver(localPlayer->m_pVehicle);
+							CNetworkVehicleManager::Instance().UpdateDriver(localPlayer->m_pVehicle);
 							lastDriverSyncTickRate = GetTickCount();
 						}
 						else
@@ -101,24 +115,24 @@ public:
 
 					if (isPassenger && GetTickCount() > lastPassengerSyncTickRate + 333)
 					{
-						CNetworkVehicleManager::UpdatePassenger(localPlayer->m_pVehicle, localPlayer);
+						CNetworkVehicleManager::Instance().UpdatePassenger(localPlayer->m_pVehicle, localPlayer);
 						lastPassengerSyncTickRate = GetTickCount();
 					}
 
 					if (GetTickCount() > lastIdleVehicleSyncTickRate + 100)
 					{
-						CNetworkVehicleManager::UpdateIdle();
+						CNetworkVehicleManager::Instance().UpdateIdle();
 						lastIdleVehicleSyncTickRate = GetTickCount();
 					}
 
 					if (GetTickCount() > lastPedSyncTickRate + 100)
 					{
-						CNetworkPedManager::Update();
+						CNetworkPedManager::Instance().Update();
 						lastPedSyncTickRate = GetTickCount();
 					}
 
 					if(!CLocalPlayer::m_bIsHost)
-						CNetworkPedManager::Process();
+						CNetworkPedManager::Instance().Process();
 				}
 			};
 		Events::drawBlipsEvent += []
@@ -139,20 +153,20 @@ public:
 					sprintf(buffer, "Peds %d Cars %d Recv %d Sent %d", CPools::ms_pPedPool->GetNoOfUsedSpaces(), CPools::ms_pVehiclePool->GetNoOfUsedSpaces(), CNetwork::m_pClient->totalReceivedPackets, CNetwork::m_pClient->totalSentPackets);
 					CDXFont::Draw(100, 10, buffer, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-					for (auto networkPed : CNetworkPedManager::m_pPeds)
+					for (auto networkPed : CNetworkPedManager::Instance().GetEntities())
 					{
-						if (!networkPed || !networkPed->m_pPed)
+						if (!networkPed || !networkPed->m_pEntity)
 							continue;
 
-						CPed* ped = networkPed->m_pPed;
-						if (!ped || !ped->m_matrix)
+						CPed* ped = networkPed->m_pEntity;
+						if (!ped->m_matrix)
 							continue;
 
 						CVector posn = ped->m_matrix->pos;
 						RwV3d screenCoors; float w, h;
 						if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
 						{
-							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, std::to_string(networkPed->m_nPedId).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
+							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, std::to_string(networkPed->GetId()).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
 						}
 					}
 				}

@@ -8,6 +8,7 @@
 #include <CVehicle.h>
 #include "../../../CPacketHandler.h"
 #include "../../../CNetwork.h"
+#include "../../../stdafx.h"
 
 void CNetworkPedManager::Update()
 {

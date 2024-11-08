@@ -1,6 +1,13 @@
-#include "stdafx.h"
+#include "CChat.h"
+#include "CCore.h"
 #include "CCrashLog.h"
 #include "CDXFont.h"
+#include "CLaunchManager.h"
+#include "CNetwork.h"
+#include "CPatch.h"
+#include "Events.h"
+#include "Hooks/CHook.h"
+#include "stdafx.h"
 
 WNDPROC prevWndProc;
 

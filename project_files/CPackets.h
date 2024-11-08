@@ -71,7 +71,7 @@ public:
 		CVector m_vecEndPos;
 		CColPoint m_colPoint;
 		int32_t m_nIncrementalHit;
-		uint8_t m_nTargetEntityType;
+		eNetworkEntityType m_nTargetEntityType;
 	};
 
 	struct PlayerHandshake
@@ -142,6 +142,10 @@ public:
 		uint16_t m_nPlayerId;
 		uint16_t m_nVehicleId;
 		VehicleSyncData m_syncData;
+		uint16_t m_nAmmoInClip;
+		uint8_t m_nPlayerArmour;
+		uint8_t m_nPlayerHealth;
+		uint8_t m_nCurrentWeapon;
 	};
 
 	struct VehicleEnter

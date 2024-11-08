@@ -1,14 +1,8 @@
 #include "CNetworkPed.h"
-#include <CStreaming.h>
-#include <eModelID.h>
-#include <eCopType.h>
-#include <CCopPed.h>
-#include <CEmergencyPed.h>
-#include <CCivilianPed.h>
 #include "../../CLocalPlayer.h"
 #include "../../CPackets.h"
-
-class CNetworkPlayer;
+#include "../../CNetwork.h"
+#include "../../CUtil.h"
 
 // CREATE new ped!!! NOT GET!! 
 /*CNetworkPed::CNetworkPed(CPed* ped)

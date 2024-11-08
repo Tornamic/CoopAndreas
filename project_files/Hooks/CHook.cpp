@@ -1,4 +1,5 @@
 #include "../stdafx.h"
+#include "CHook.h"
 #include "PlayerHooks.h"
 #include "VehicleHooks.h"
 #include "TaskHooks.h"

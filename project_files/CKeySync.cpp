@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CKeySync.h"
 #include "CChat.h"
+#include "Entity/Types/CNetworkPlayer.h"
 
 CControllerState storedOldState{};
 CControllerState storedNewState{};

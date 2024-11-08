@@ -1,8 +1,15 @@
 #include "../stdafx.h"
 #include "VehicleHooks.h"
 #include "../CKeySync.h"
-#include "../CNetworkVehicle.h"
-#include "../CNetworkPed.h"
+#include "../Entity/Types/CNetworkVehicle.h"
+#include "../Entity/Types/CNetworkPed.h"
+#include "../Entity/Manager/Types/CNetworkPlayerManager.h"
+#include "../Entity/Manager/Types/CNetworkPedManager.h"
+#include "../Entity/Manager/Types/CNetworkVehicleManager.h"
+
+#include "../CLocalPlayer.h"
+#include "../CPackets.h"
+#include "../CNetwork.h"
 
 void __fastcall CVehicle__ProcessControl_Hook()
 {
@@ -40,13 +47,13 @@ void __fastcall CVehicle__ProcessControl_Hook()
         return;
     }
 
-    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(vehicle->m_pDriver);
+    CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(vehicle->m_pDriver);
 
     if (player == nullptr)
     {
         if (!CLocalPlayer::m_bIsHost)
         {
-            CNetworkPed* ped = CNetworkPedManager::GetPed(vehicle->m_pDriver);
+            CNetworkPed* ped = CNetworkPedManager::Instance().Get(vehicle->m_pDriver);
             if (ped == nullptr)
             {
                 plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
@@ -67,14 +74,16 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
     CKeySync::ApplyNetworkPlayerContext(player);
 
-    player->m_pPed->m_fHealth = player->m_lOnFoot->health;
-    player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
+    auto& syncData = player->GetSyncData();
 
-    player->m_pPed->m_nPedType = PED_TYPE_CIVMALE;
+    player->m_pEntity->m_fHealth = syncData.m_nHealth;
+    player->m_pEntity->m_fArmour = syncData.m_nArmour;
+
+    player->m_pEntity->m_nPedType = PED_TYPE_CIVMALE;
 
     plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
 
-    player->m_pPed->m_nPedType = PED_TYPE_PLAYER1;
+    player->m_pEntity->m_nPedType = PED_TYPE_PLAYER1;
 
 
     /*bool savedLookingLeft = *(bool*)0xB6F1A4;
@@ -100,11 +109,11 @@ static void __fastcall CCarCtrl__RemoveDistantCars_Hook()
 
 static void __fastcall CVehicle__AddVehicleUpgrade_Hook(CVehicle* This, int, int modelid)
 {
-    if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
+    if (auto vehicle = CNetworkVehicleManager::Instance().Get(This))
     {
         CPackets::VehicleComponentAdd packet{};
-        packet.vehicleid = vehicle->m_nVehicleId;
-        packet.componentid = modelid;
+        packet.m_nVehicleId = vehicle->GetId();
+        packet.m_nComponentId = modelid;
         CNetwork::SendPacket(ePacketType::VEHICLE_COMPONENT_ADD, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
     This->AddVehicleUpgrade(modelid);
@@ -112,11 +121,11 @@ static void __fastcall CVehicle__AddVehicleUpgrade_Hook(CVehicle* This, int, int
 
 static void __fastcall CVehicle__RemoveVehicleUpgrade_Hook(CVehicle* This, int, int modelid)
 {
-    if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
+    if (auto vehicle = CNetworkVehicleManager::Instance().Get(This))
     {
         CPackets::VehicleComponentRemove packet{};
-        packet.vehicleid = vehicle->m_nVehicleId;
-        packet.componentid = modelid;
+        packet.m_nVehicleId = vehicle->GetId();
+        packet.m_nComponentId = modelid;
         CNetwork::SendPacket(ePacketType::VEHICLE_COMPONENT_REMOVE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
     This->RemoveVehicleUpgrade(modelid);
@@ -132,7 +141,7 @@ static void __declspec(naked) CAutomobile__FireTruckControl_Hook()
         {
             _automobile->FireTruckControl(0.0f);
         }
-        else if (_vehicle = CNetworkVehicleManager::GetVehicle(_automobile))
+        else if (_vehicle = CNetworkVehicleManager::Instance().Get(_automobile))
         {
             _automobile->m_fDoomHorizontalRotation = _vehicle->m_fAimHorizontal;
             _automobile->m_fDoomVerticalRotation = _vehicle->m_fAimVertical;
@@ -156,7 +165,7 @@ static void __fastcall CAutomobile__TankControl_Hook()
             return;
         }
 
-    CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(automobile);
+    CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(automobile);
     if (vehicle != nullptr && automobile->m_pDriver != nullptr)
     {
         automobile->m_fDoomHorizontalRotation = vehicle->m_fAimHorizontal;
@@ -169,12 +178,12 @@ static void __fastcall CAutomobile__TankControl_Hook()
 
 static bool __fastcall CDamageManager__ApplyDamage_Hook(CDamageManager* This, int, CAutomobile* dm_comp, tComponent compId, float intensity, float a5)
 {
-    CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(dm_comp);
+    CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(dm_comp);
     if (vehicle != nullptr && CLocalPlayer::m_bIsHost)
     {
         CPackets::VehicleDamage packet{};
-        packet.vehicleid = vehicle->m_nVehicleId;
-        packet.damageManager = dm_comp->m_damageManager;
+        packet.m_nVehicleId = vehicle->GetId();
+        packet.m_damageManager = dm_comp->m_damageManager;
         CNetwork::SendPacket(ePacketType::VEHICLE_DAMAGE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
     return plugin::CallMethodAndReturn<bool, 0x6C24B0, CDamageManager*, CAutomobile*, tComponent, float, float>(This, dm_comp, compId, intensity, a5);
@@ -182,7 +191,7 @@ static bool __fastcall CDamageManager__ApplyDamage_Hook(CDamageManager* This, in
 
 static void __fastcall CVehicle__SetRemap_Hook(CVehicle* This, int, int paintJobId)
 {
-    if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
+    if (auto vehicle = CNetworkVehicleManager::Instance().Get(This))
         vehicle->m_nPaintJob = paintJobId;
 
     This->SetRemap(paintJobId);
@@ -202,7 +211,7 @@ static bool __fastcall CAutomobile__ProcessAI_Hook(CAutomobile* This, int, int a
 
     if (!CLocalPlayer::m_bIsHost)
     {
-        CNetworkPed* networkPed = CNetworkPedManager::GetPed(This->m_pDriver);
+        CNetworkPed* networkPed = CNetworkPedManager::Instance().Get(This->m_pDriver);
 
         if (networkPed == nullptr)
         {

@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "CDXFont.h"
+#include "CDebugPedTasks.h"
+#include "Entity/Manager/Types/CNetworkPedManager.h"
 
 // thx Vektor for his ped task debugger
 const char CDebugPedTasks::TaskNames[][256] = //Credits to MTA
@@ -909,12 +911,12 @@ const char CDebugPedTasks::TaskNames[][256] = //Credits to MTA
 
 void CDebugPedTasks::Draw()
 {
-	for (auto networkPed : CNetworkPedManager::m_pPeds)
+	for (auto networkPed : CNetworkPedManager::Instance().GetEntities())
 	{
-		if (!networkPed || !networkPed->m_pPed)
+		if (!networkPed || !networkPed->m_pEntity)
 			continue;
 
-		CPed* ped = networkPed->m_pPed;
+		CPed* ped = networkPed->m_pEntity;
 		if (!ped || !ped->m_matrix)
 			continue;
 
@@ -925,7 +927,7 @@ void CDebugPedTasks::Draw()
 			char text[1000];
 			char level[60];
 
-			sprintf(text, "Ped: %d\nPRIMARY TASKS:\n", networkPed->m_nPedId);
+			sprintf(text, "Ped: %d\nPRIMARY TASKS:\n", networkPed->GetId());
 
 			for (int i = 0; i < 5; i++)
 			{

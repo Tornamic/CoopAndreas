@@ -1,13 +1,22 @@
 #include "../stdafx.h"
 #include "TaskHooks.h"
 #include "../CTaskSync.h"
-#include "../CNetworkVehicle.h"
-#include "../CNetworkPed.h"
+#include "../Entity/Types/CNetworkVehicle.h"
+#include "../Entity/Types/CNetworkPed.h"
+#include "../Entity/Manager/Types/CNetworkVehicleManager.h"
+#include "../CPackets.h"
+#include "../CPackets.h"
+#include "../CChat.h"
+#include "../CNetwork.h"
+#include "../Entity/Manager/Types/CNetworkPlayerManager.h"
+#include "../CLocalPlayer.h"
+#include "../Entity/Manager/Types/CNetworkPedManager.h"
+#include "../CUtil.h"
 
 // when local player enters any vehicle
 static void __fastcall CTaskComplexEnterCarAsDriver__Ctor_Hook(CTaskComplexEnterCarAsDriver* This, int, CVehicle* vehicle)
 {
-    CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
+    CNetworkVehicle* networkVehicle = CNetworkVehicleManager::Instance().Get(vehicle);
 
     if (networkVehicle == nullptr)
     {
@@ -18,8 +27,8 @@ static void __fastcall CTaskComplexEnterCarAsDriver__Ctor_Hook(CTaskComplexEnter
 
     CPackets::VehicleEnter packet{};
 
-    packet.seatid = 0;
-    packet.vehicleid = networkVehicle->m_nVehicleId;
+    packet.m_nSeatId = 0;
+    packet.m_nVehicleId = networkVehicle->GetId();
 
     CNetwork::SendPacket(ePacketType::VEHICLE_ENTER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 
@@ -41,7 +50,7 @@ static void __fastcall CTaskSimpleGangDriveBy__SetupStaticAnimForPlayer_Hook(CTa
         return;
     }
 
-    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(ped);
+    CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(ped);
 
     CWorld::PlayerInFocus = player->GetInternalId();
 
@@ -111,7 +120,7 @@ static void __declspec(naked) CTaskManager__SetTask_Hook()
 
     if (CLocalPlayer::m_bIsHost &&  pTaskMgr && pTask)
     {
-        pNetworkPed = CNetworkPedManager::GetPed(pTaskMgr->m_pPed);
+        pNetworkPed = CNetworkPedManager::Instance().Get(pTaskMgr->m_pPed);
 
         if (pNetworkPed)
         {
@@ -160,7 +169,7 @@ static void __declspec(naked) CTaskManager__SetTaskSecondary_Hook()
 
     if (pTaskMgr && pTask)
     {
-        pNetworkPed = CNetworkPedManager::GetPed(pTaskMgr->m_pPed);
+        pNetworkPed = CNetworkPedManager::Instance().Get(pTaskMgr->m_pPed);
 
         if (pNetworkPed)
         {

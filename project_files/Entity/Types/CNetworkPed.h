@@ -1,10 +1,10 @@
 #pragma once
 
+#include "../../stdafx.h"
 #include "../Abstract/Hostable.h"
 #include "../Abstract/Modelable.h"
 #include "../CNetworkEntity.h"
 #include "../Data/PedSyncData.h"
-#include <CPed.h>
 
 class CNetworkPed final : public CNetworkEntity<PedSyncData, CPed>, public Modelable, public Hostable
 {

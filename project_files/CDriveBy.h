@@ -1,4 +1,7 @@
 #pragma once
+class CPlayerPed;
+class CPed;
+
 class CDriveBy
 {
 public:

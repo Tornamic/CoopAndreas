@@ -1,7 +1,13 @@
 #include "../stdafx.h"
 #include "WorldHooks.h"
-#include "../CNetworkVehicle.h"
-#include "../CNetworkPed.h"
+#include "../Entity/Types/CNetworkVehicle.h"
+#include "../Entity/Types/CNetworkPed.h"
+#include "../Entity/Manager/Types/CNetworkVehicleManager.h"
+#include "../Entity/Manager/Types/CNetworkPedManager.h"
+#include "../CLocalPlayer.h"
+#include "../CNetwork.h"
+#include "../CPackets.h"
+#include "../CPacketHandler.h"
 
 static void __cdecl CWeather__ForceWeather_Hook(short id)
 {
@@ -46,12 +52,12 @@ static void __cdecl CExplosion__AddExplosion(CEntity* newVictim, CPed* newCreato
 
     CPackets::AddExplosion addExplosionPacket{};
 
-    addExplosionPacket.type = (unsigned char)type;
-    addExplosionPacket.pos = CVector(pos.x, pos.y, z);
-    addExplosionPacket.time = time;
-    addExplosionPacket.usesSound = usesSound;
-    addExplosionPacket.cameraShake = cameraShake;
-    addExplosionPacket.isVisible = isVisible;
+    addExplosionPacket.m_nType = (unsigned char)type;
+    addExplosionPacket.m_vecPosition = CVector(pos.x, pos.y, z);
+    addExplosionPacket.m_nTime = time;
+    addExplosionPacket.m_bUsesSound = usesSound;
+    addExplosionPacket.m_fCameraShake = cameraShake;
+    addExplosionPacket.m_bVisible = isVisible;
 
     CNetwork::SendPacket(ePacketType::ADD_EXPLOSION, &addExplosionPacket, sizeof addExplosionPacket, ENET_PACKET_FLAG_RELIABLE);
 }
@@ -68,7 +74,7 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
         {
             CVehicle* vehicle = (CVehicle*)entity;
             CNetworkVehicle* networkVehicle = new CNetworkVehicle(vehicle);
-            CNetworkVehicleManager::Add(networkVehicle);
+            CNetworkVehicleManager::Instance().Add(networkVehicle);
         }
 
     }
@@ -83,7 +89,7 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
             else
             {
                 CNetworkPed* networkPed = new CNetworkPed(ped);
-                CNetworkPedManager::Add(networkPed);
+                CNetworkPedManager::Instance().Add(networkPed);
             }
         }
     }
@@ -101,12 +107,12 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
     if (entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
     {
         CVehicle* vehicle = (CVehicle*)entity;
-        CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
+        CNetworkVehicle* networkVehicle = CNetworkVehicleManager::Instance().Get(vehicle);
         if (networkVehicle)
         {
             if (CLocalPlayer::m_bIsHost)
             {
-                CNetworkVehicleManager::Remove(networkVehicle);
+                CNetworkVehicleManager::Instance().Remove(networkVehicle);
                 delete networkVehicle;
             }
         }
@@ -116,12 +122,12 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
         CPed* ped = (CPed*)entity;
         if (ped->m_nPedType > 1)
         {
-            CNetworkPed* networkPed = CNetworkPedManager::GetPed(ped);
+            CNetworkPed* networkPed = CNetworkPedManager::Instance().Get(ped);
             if (networkPed)
             {
                 if (CLocalPlayer::m_bIsHost)
                 {
-                    CNetworkPedManager::Remove(networkPed);
+                    CNetworkPedManager::Instance().Remove(networkPed);
                     delete networkPed;
                 }
             }

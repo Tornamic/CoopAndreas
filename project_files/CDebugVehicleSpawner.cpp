@@ -1,3 +1,4 @@
+#include "CDebugVehicleSpawner.h"
 #include "stdafx.h"
 
 static const char* vehicleNames[] = {

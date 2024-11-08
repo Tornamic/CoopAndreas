@@ -1,6 +1,12 @@
 #include "../stdafx.h"
 #include "PlayerHooks.h"
 #include "../CKeySync.h"
+#include "../Entity/Manager/Types/CNetworkPlayerManager.h"
+#include "../Entity/Manager/Types/CNetworkVehicleManager.h"
+#include "../Entity/Manager/Types/CNetworkPedManager.h"
+#include "../CLocalPlayer.h"
+#include "../CNetwork.h"
+#include "../CPackets.h"
 
 static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 {
@@ -14,7 +20,7 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
         return;
     }
 
-    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(This);
+    CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(This);
 
     if (player == nullptr)
         return;
@@ -23,13 +29,15 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     CKeySync::ApplyNetworkPlayerContext(player);
 
-    player->m_pPed->m_fHealth = player->m_lOnFoot->health;
-    player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
+    auto& syncData = player->GetSyncData();
 
-    player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
+    player->m_pEntity->m_fHealth = syncData.m_nHealth;
+    player->m_pEntity->m_fArmour = syncData.m_nArmour;
 
-    player->m_pPed->m_fAimingRotation =
-        player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
+    player->m_pEntity->m_vecMoveSpeed = syncData.m_vecVelocity;
+
+    player->m_pEntity->m_fAimingRotation =
+        player->m_pEntity->m_fCurrentRotation = syncData.m_fRotation;
 
     plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
 
@@ -44,7 +52,7 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
     {
         CPackets::PlayerBulletShot* packet = new CPackets::PlayerBulletShot;
 
-        packet->targetid = -1;
+        packet->m_nTargetId = -1;
 
         if (victim != nullptr)
         {
@@ -52,24 +60,37 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
             {
             case eEntityType::ENTITY_TYPE_PED: // ped or player
             {
-                if (auto playerTarget = CNetworkPlayerManager::GetPlayer(victim))
-                    packet->targetid = playerTarget->m_nPlayerId;
+                if (auto playerTarget = CNetworkPlayerManager::Instance().Get(victim))
+                {
+                    packet->m_nTargetId = playerTarget->GetId();
+                    packet->m_nTargetEntityType = playerTarget->GetType();
+                }
+                
+                if (auto pedTarget = CNetworkPedManager::Instance().Get(victim))
+                {
+                    packet->m_nTargetId = pedTarget->GetId();
+                    packet->m_nTargetEntityType = pedTarget->GetType();
+                }
+
                 break;
             }
             case eEntityType::ENTITY_TYPE_VEHICLE:
             {
-                if (auto vehicleTarget = CNetworkVehicleManager::GetVehicle(victim))
-                    packet->targetid = vehicleTarget->m_nVehicleId;
+                if (auto vehicleTarget = CNetworkVehicleManager::Instance().Get(victim))
+                {
+                    packet->m_nTargetId = vehicleTarget->GetId();
+                    packet->m_nTargetEntityType = vehicleTarget->GetType();
+                }
                 break;
             }
             }
-            packet->entityType = victim->m_nType;
+            
         }
 
-        packet->startPos = *startPoint;
-        packet->endPos = *endPoint;
-        packet->colPoint = *colPoint;
-        packet->incrementalHit = incrementalHit;
+        packet->m_vecStartPos = *startPoint;
+        packet->m_vecEndPos = *endPoint;
+        packet->m_colPoint = *colPoint;
+        packet->m_nIncrementalHit = incrementalHit;
 
         CNetwork::SendPacket(ePacketType::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
 
@@ -91,21 +112,17 @@ static void __fastcall CPedIK__PointGunInDirection_Hook(CPedIK* This, int paddin
         return;
     }
 
-    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(This->m_pPed);
+    CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(This->m_pPed);
 
     if (player == nullptr)
     {
         This->PointGunInDirection(dirX, dirY, flag, float1);
         return;
     }
+    player->m_pEntity->m_fAimingRotation =
+        player->m_pEntity->m_fCurrentRotation = player->GetSyncData().m_fRotation;
 
-    if (player->m_lOnFoot == nullptr)
-        return;
-
-    player->m_pPed->m_fAimingRotation =
-        player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
-
-    This->PointGunInDirection(player->m_lOnFoot->aimX, player->m_lOnFoot->aimY, flag, float1);
+    This->PointGunInDirection(player->GetSyncData().m_fAimX, player->GetSyncData().m_fAimY, flag, float1);
 }
 
 static void __fastcall CPlayerPed__dctor_Hook(CPlayerPed* This, int)

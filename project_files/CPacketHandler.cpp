@@ -1,8 +1,17 @@
 #include "stdafx.h"
 #include "CTaskSync.h"
+#include "CPacketHandler.h"
 #include "Entity/Types/CNetworkPed.h"
 #include "Entity/Types/CNetworkVehicle.h"
 #include "Entity/Types/CNetworkPlayer.h"
+#include "Entity/Manager/Types/CNetworkPlayerManager.h"
+#include "Entity/Manager/Types/CNetworkPedManager.h"
+#include "Entity/Manager/Types/CNetworkVehicleManager.h"
+#include "CChat.h"
+#include "CUtil.h"
+#include "CLocalPlayer.h"
+#include "CNetwork.h"
+#include "CDriveBy.h"
 
 // PlayerConnected
 
@@ -14,7 +23,7 @@ void CPacketHandler::PlayerConnected__Handle(void* data, int size)
 	// create new player
 	CNetworkPlayer* player = new CNetworkPlayer(packet->m_nPlayerId);
 
-	CNetworkPlayerManager::Add(player);
+	CNetworkPlayerManager::Instance().Add(player);
 
 	CChat::AddMessage("[Player] " + std::string(player->GetName()) + " connected");
 }
@@ -27,7 +36,7 @@ void CPacketHandler::PlayerDisconnected__Handle(void* data, int size)
 	CPackets::PlayerDisconnected* packet = (CPackets::PlayerDisconnected*)data;
 
 	// get player instance
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->m_nPlayerId);
+	CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(packet->m_nPlayerId);
 
 	if (player == nullptr)
 		return;
@@ -35,7 +44,7 @@ void CPacketHandler::PlayerDisconnected__Handle(void* data, int size)
 	CChat::AddMessage("[Player] " + std::string(player->GetName()) + " disconnected");
 
 	// remove from list
-	CNetworkPlayerManager::Remove(player);
+	CNetworkPlayerManager::Instance().Remove(player);
 
 	// destroy player
 	delete player;
@@ -75,7 +84,7 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 	CPackets::PlayerOnFoot* packet = (CPackets::PlayerOnFoot*)data;
 
 	// get player instance 
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->m_nPlayerId);
+	CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(packet->m_nPlayerId);
 
 	// check if player not connected
 	if (player == nullptr)
@@ -104,27 +113,27 @@ void CPacketHandler::PlayerBulletShot__Handle(void* data, int size)
 {
 	CPackets::PlayerBulletShot* packet = (CPackets::PlayerBulletShot*)data;
 
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->m_nPlayerId);
+	CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(packet->m_nPlayerId);
 
 	CEntity* victim = nullptr;
 	
 	if (packet->m_nTargetId != -1)
 	{
 
-		CNetworkPlayer* damagedPlayer = CNetworkPlayerManager::GetPlayer(packet->m_nTargetId);
-		CNetworkVehicle* damagedVehicle = CNetworkVehicleManager::GetVehicle(packet->m_nTargetId);
+		CNetworkPlayer* damagedPlayer = CNetworkPlayerManager::Instance().Get(packet->m_nTargetId);
+		CNetworkVehicle* damagedVehicle = CNetworkVehicleManager::Instance().Get(packet->m_nTargetId);
 
 		if (damagedPlayer != nullptr)
-			victim = damagedPlayer->m_pPed;
+			victim = damagedPlayer->m_pEntity;
 
 		if (damagedVehicle != nullptr)
 			victim = damagedVehicle->m_pEntity;
 
-		if (packet->m_nTargetId == CNetworkPlayerManager::m_nMyId && packet->entityType == eEntityType::ENTITY_TYPE_PED)
+		if (packet->m_nTargetId == CLocalPlayer::m_nMyId && packet->m_nTargetEntityType == eNetworkEntityType::NETWORK_ENTITY_PED)
 			victim = FindPlayerPed(0);
 	}
 
-	player->m_pEntity->m_aWeapons[player->m_pEntity->m_nActiveWeaponSlot].DoBulletImpact(player->m_pEntity, victim, &packet->startPos, &packet->endPos, &packet->colPoint, packet->incrementalHit);
+	player->m_pEntity->m_aWeapons[player->m_pEntity->m_nActiveWeaponSlot].DoBulletImpact(player->m_pEntity, victim, &packet->m_vecStartPos, &packet->m_vecEndPos, &packet->m_colPoint, packet->m_nIncrementalHit);
 }
 
 // PlayerHandshake
@@ -133,10 +142,10 @@ void CPacketHandler::PlayerHandshake__Handle(void* data, int size)
 {
 	CPackets::PlayerHandshake* packet = (CPackets::PlayerHandshake*)data;
 
-	CNetworkPlayerManager::m_nMyId = packet->m_nPlayerId;
+	CLocalPlayer::m_nMyId = packet->m_nPlayerId;
 
 	CPackets::PlayerGetName getNamePacket = {0};
-	strcpy(getNamePacket.name, CLocalPlayer::m_name);
+	strcpy(getNamePacket.m_aName, CLocalPlayer::m_name);
 
 	CNetwork::SendPacket(ePacketType::PLAYER_GET_NAME, &getNamePacket, sizeof getNamePacket, ENET_PACKET_FLAG_RELIABLE);
 }
@@ -147,7 +156,7 @@ void CPacketHandler::PlayerPlaceWaypoint__Handle(void* data, int size)
 {
 	CPackets::PlayerPlaceWaypoint* packet = (CPackets::PlayerPlaceWaypoint*)data;
 
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->m_nPlayerId);
+	CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(packet->m_nPlayerId);
 
 	player->m_bWaypointPlaced = packet->m_bPlace;
 	player->m_vecWaypointPos = packet->m_vecPosition;
@@ -163,7 +172,7 @@ void CPacketHandler::PlayerGetName__Handle(void* data, int size)
 {
 	CPackets::PlayerGetName* packet = (CPackets::PlayerGetName*)data;
 	
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->m_nPlayerId);
+	CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(packet->m_nPlayerId);
 
 	strcpy_s(player->m_name, packet->m_aName);
 
@@ -178,20 +187,20 @@ void CPacketHandler::PlayerSetHost__Handle(void* data, int size)
 {
 	CPackets::PlayerSetHost* packet = (CPackets::PlayerSetHost*)data;
 
-	if (packet->m_nPlayerId == CNetworkPlayerManager::m_nMyId)
+	if (packet->m_nPlayerId == CLocalPlayer::m_nMyId)
 	{
 		CLocalPlayer::m_bIsHost = true;
 
 		CPopulation::PedDensityMultiplier = 1.0f;
 		patch::SetFloat(0x8A5B20, 1.0f);
 
-		CNetworkPedManager::AssignHost();
+		CNetworkPedManager::Instance().AssignHost();
 		CChat::AddMessage("[Player] You are the host now");
 
 		CPacketHandler::GameWeatherTime__Trigger();
 		return;
 	}
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->m_nPlayerId);
+	CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(packet->m_nPlayerId);
 
 	CChat::AddMessage("[Player] " + std::string(player->GetName()) + " is now the host");
 
@@ -229,7 +238,7 @@ void CPacketHandler::VehicleSpawn__Handle(void* data, int size)
 		packet->m_nModelId
 	);
 
-	CNetworkVehicleManager::Add(vehicle);
+	CNetworkVehicleManager::Instance().Add(vehicle);
 }
 
 // VehicleRemove
@@ -243,9 +252,9 @@ void CPacketHandler::VehicleRemove__Handle(void* data, int size)
 	sprintf(buffer, "VEHICLE REMOVE %d", packet->m_nVehicleId);
 	CChat::AddMessage(buffer);
 #endif
-	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->m_nVehicleId);
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
 
-	CNetworkVehicleManager::Remove(vehicle);
+	CNetworkVehicleManager::Instance().Remove(vehicle);
 	delete vehicle;
 }
 
@@ -277,7 +286,7 @@ CPackets::VehicleIdleUpdate* CPacketHandler::VehicleIdleUpdate__Collect(CNetwork
 void CPacketHandler::VehicleIdleUpdate__Handle(void* data, int size)
 {
 	CPackets::VehicleIdleUpdate* packet = (CPackets::VehicleIdleUpdate*)data;
-	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->m_nVehicleId);
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
 
 	if (vehicle == nullptr)
 		return;
@@ -319,29 +328,29 @@ CPackets::VehicleDriverUpdate* CPacketHandler::VehicleDriverUpdate__Collect(CNet
 	packet->m_syncData.m_vecVelocity =			vehicle->m_pEntity->m_vecMoveSpeed;
 
 	// player data
-	packet->ammo =				player->m_aWeapons[player->m_nActiveWeaponSlot].m_nAmmoInClip;
-	packet->playerArmour =		(unsigned char)player->m_fArmour;
-	packet->playerHealth =		(unsigned char)player->m_fHealth;
-	packet->weapon =			player->m_aWeapons[player->m_nActiveWeaponSlot].m_eWeaponType;
+	packet->m_nAmmoInClip =			player->m_aWeapons[player->m_nActiveWeaponSlot].m_nAmmoInClip;
+	packet->m_nPlayerArmour =		(unsigned char)player->m_fArmour;
+	packet->m_nPlayerHealth =		(unsigned char)player->m_fHealth;
+	packet->m_nCurrentWeapon =		player->m_aWeapons[player->m_nActiveWeaponSlot].m_eWeaponType;
 
-	packet->color1 = vehicle->m_pEntity->m_nPrimaryColor;
-	packet->color2 = vehicle->m_pEntity->m_nSecondaryColor;
+	packet->m_syncData.m_nPrimaryColor = vehicle->m_pEntity->m_nPrimaryColor;
+	packet->m_syncData.m_nSecondaryColor = vehicle->m_pEntity->m_nSecondaryColor;
 
-	packet->health = vehicle->m_pEntity->m_fHealth;
+	packet->m_syncData.m_nHealth = vehicle->m_pEntity->m_fHealth;
 
-	packet->paintjob = vehicle->m_nPaintJob;
+	packet->m_syncData.m_nPaintjob = vehicle->m_nPaintJob;
 
 	if (CUtil::IsVehicleHasTurret(vehicle->m_pEntity))
 	{
 		CAutomobile* automobile = (CAutomobile*)vehicle->m_pEntity;
-		packet->turretAimHorizontal = automobile->m_fDoomHorizontalRotation;
-		packet->turretAimVertical = automobile->m_fDoomVerticalRotation;
+		packet->m_syncData.m_fTurretAimHorizontal = automobile->m_fDoomHorizontalRotation;
+		packet->m_syncData.m_fTurretAimVertical = automobile->m_fDoomVerticalRotation;
 	}
 
 	if (vehicle->m_pEntity->m_nModelIndex == 520)
 	{
 		CAutomobile* automobile = (CAutomobile*)vehicle->m_pEntity;
-		packet->miscComponentAngle = automobile->m_wMiscComponentAngle;
+		packet->m_syncData.m_nMiscComponentAngle = automobile->m_wMiscComponentAngle;
 	}
 
 	eVehicleType vehicleType = CUtil::GetVehicleType(vehicle->m_pEntity);
@@ -349,16 +358,16 @@ CPackets::VehicleDriverUpdate* CPacketHandler::VehicleDriverUpdate__Collect(CNet
 	{
 		CBike* bike = (CBike*)vehicle->m_pEntity;
 
-		packet->bikeLean = bike->m_rideAnimData.m_fAnimLean;
+		packet->m_syncData.m_fBikeLean = bike->m_rideAnimData.m_fAnimLean;
 	}
 
 	if (vehicleType == eVehicleType::VEHICLE_PLANE)
 	{
 		CPlane* plane = (CPlane*)vehicle->m_pEntity;
-		packet->planeGearState = plane->m_fLandingGearStatus;
+		packet->m_syncData.m_fPlaneGearState = plane->m_fLandingGearStatus;
 	}
 
-	packet->locked = vehicle->m_pEntity->m_eDoorLock;
+	packet->m_syncData.m_nDoorLock = vehicle->m_pEntity->m_eDoorLock;
 
 	return packet;
 }
@@ -367,54 +376,55 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 {
 	CPackets::VehicleDriverUpdate* packet = (CPackets::VehicleDriverUpdate*)data;
 
-	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->m_nVehicleId);
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->m_nPlayerId);
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
+	CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(packet->m_nPlayerId);
 
 	if (vehicle == nullptr || player == nullptr)
 		return;
 
 	if (vehicle->m_pEntity == nullptr)
 	{
-		vehicle->CreateVehicle(vehicle->m_nVehicleId, vehicle->m_nModelId, packet->pos, 0.f, packet->color1, packet->color2);
+		//vehicle->Create(vehicle->m_nVehicleId, vehicle->m_nModelId, packet->pos, 0.f, packet->color1, packet->color2);
 		return;
 	}
 
 	if (player->m_pEntity == nullptr)
 	{
-		player->CreatePed(player->m_nPlayerId, packet->pos);
+		//player->CreatePed(player->m_nPlayerId, packet->pos);
 		return;
 	}
 
-	if (player->m_pEntity->m_pEntity != vehicle->m_pEntity)
+	if (player->m_pEntity->m_pVehicle != vehicle->m_pEntity)
 		plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(player->m_pEntity), CPools::GetVehicleRef(vehicle->m_pEntity));
 
-	vehicle->m_pEntity->m_matrix->pos = packet->pos;
-	vehicle->m_pEntity->m_matrix->right = packet->roll;
-	vehicle->m_pEntity->m_matrix->up = packet->rot;
-	vehicle->m_pEntity->m_vecMoveSpeed = packet->velocity;
+	vehicle->m_pEntity->m_matrix->pos = packet->m_syncData.m_vecPosition;
+	vehicle->m_pEntity->m_matrix->right = packet->m_syncData.m_vecRoll;
+	vehicle->m_pEntity->m_matrix->up = packet->m_syncData.m_vecRotation;
+	vehicle->m_pEntity->m_vecMoveSpeed = packet->m_syncData.m_vecVelocity;
 	
-	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
+	CUtil::GiveWeaponByPacket(player, packet->m_nCurrentWeapon, packet->m_nAmmoInClip);
 
-	player->m_oOnFoot = player->m_lOnFoot;
-	
-	player->m_lOnFoot->armour = packet->playerArmour;
-	player->m_lOnFoot->health = packet->playerHealth;
+	auto& syncData = player->GetSyncData();
+	syncData.m_nAmmoInClip = packet->m_nAmmoInClip;
+	syncData.m_nArmour = packet->m_nPlayerArmour;
+	syncData.m_nHealth = packet->m_nPlayerHealth;
+	syncData.m_nCurrentWeapon = packet->m_nCurrentWeapon;
 
-	vehicle->m_pEntity->m_nPrimaryColor = packet->color1;
-	vehicle->m_pEntity->m_nSecondaryColor = packet->color2;
+	vehicle->m_pEntity->m_nPrimaryColor = packet->m_syncData.m_nPrimaryColor;
+	vehicle->m_pEntity->m_nSecondaryColor = packet->m_syncData.m_nSecondaryColor;
 
-	vehicle->m_pEntity->m_fHealth = packet->health;
+	vehicle->m_pEntity->m_fHealth = packet->m_syncData.m_nHealth;
 
-	if(vehicle->m_nPaintJob != packet->paintjob)
-		vehicle->m_pEntity->SetRemap(packet->paintjob);
+	if(vehicle->m_nPaintJob != packet->m_syncData.m_nPaintjob)
+		vehicle->m_pEntity->SetRemap(packet->m_syncData.m_nPaintjob);
 
-	vehicle->m_fAimHorizontal = packet->turretAimHorizontal;
-	vehicle->m_fAimVertical = packet->turretAimVertical;
+	vehicle->m_fAimHorizontal = packet->m_syncData.m_fTurretAimHorizontal;
+	vehicle->m_fAimVertical = packet->m_syncData.m_fTurretAimVertical;
 
 	if (vehicle->m_pEntity->m_nModelIndex == 520)
 	{
 		CAutomobile* automobile = (CAutomobile*)vehicle->m_pEntity;
-		automobile->m_wMiscComponentAngle = packet->miscComponentAngle;
+		automobile->m_wMiscComponentAngle = packet->m_syncData.m_nMiscComponentAngle;
 	}
 
 	eVehicleType vehicleType = CUtil::GetVehicleType(vehicle->m_pEntity);
@@ -429,10 +439,10 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 	{
 		CPlane* plane = (CPlane*)vehicle->m_pEntity;
 
-		plane->m_fLandingGearStatus = packet->planeGearState;
+		plane->m_fLandingGearStatus = packet->m_syncData.m_fPlaneGearState;
 	}
 
-	vehicle->m_pEntity->m_eDoorLock = (eDoorLock)packet->locked;
+	vehicle->m_pEntity->m_eDoorLock = (eDoorLock)packet->m_syncData.m_nDoorLock;
 }
 
 // VehicleEnter
@@ -441,8 +451,8 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 {
 	CPackets::VehicleEnter* packet = (CPackets::VehicleEnter*)data;
 	
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->m_nPlayerId);
-	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->m_nVehicleId);
+	CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(packet->m_nPlayerId);
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
 
 	if (player == nullptr || vehicle == nullptr)
 	{
@@ -450,12 +460,12 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 	}
 
 #ifdef _DEV
-	CChat::AddMessage("player %d entered vehicleid %d %s", packet->m_nPlayerId, packet->m_nVehicleId, packet->seatid != 0 ? "as passenger" : "");
+	CChat::AddMessage("player %d entered vehicleid %d %s", packet->m_nPlayerId, packet->m_nVehicleId, packet->m_nSeatId != 0 ? "as passenger" : "");
 #endif
 
-	if (packet->seatid == 0) // driver
+	if (packet->m_nSeatId == 0) // driver
 	{
-		if (packet->force)
+		if (packet->m_bForce)
 		{
 			for (unsigned char i = 0; i < 5; i++)
 			{
@@ -483,28 +493,28 @@ void CPacketHandler::VehicleExit__Handle(void* data, int size)
 {
 	CPackets::VehicleExit* packet = (CPackets::VehicleExit*)data;
 
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->m_nPlayerId);
+	CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(packet->m_nPlayerId);
 
 	if (player == nullptr)
 	{
 		return;
 	}
 
-	if (player->m_pEntity->m_pEntity == nullptr)
+	if (player->m_pEntity->m_pVehicle == nullptr)
 	{
 		return;
 	}
 #ifdef _DEV
 	CChat::AddMessage("player %d exited from vehicle", packet->m_nPlayerId);
 #endif
-	if (packet->force)
+	if (packet->m_bForce)
 	{
 		CVector doorPos{};
-		player->m_pEntity->m_pEntity->GetComponentWorldPosition(8, doorPos); // right front door (driver)
+		player->m_pEntity->m_pVehicle->GetComponentWorldPosition(8, doorPos); // right front door (driver)
 		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(player->m_pEntity), doorPos.x, doorPos.y, doorPos.z);
 	}
 	else
-		plugin::Command<Commands::TASK_LEAVE_CAR>(CPools::GetPedRef(player->m_pEntity), CPools::GetVehicleRef(player->m_pEntity->m_pEntity));
+		plugin::Command<Commands::TASK_LEAVE_CAR>(CPools::GetPedRef(player->m_pEntity), CPools::GetVehicleRef(player->m_pEntity->m_pVehicle));
 }
 
 // VehicleDamage
@@ -516,8 +526,8 @@ void CPacketHandler::VehicleDamage__Handle(void* data, int size)
 #endif
 	CPackets::VehicleDamage* packet = (CPackets::VehicleDamage*)data;
 
-	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->m_nVehicleId);
-	*(CDamageManager*)((DWORD)vehicle->m_pEntity + 0x5A0) = packet->damageManager;
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
+	*(CDamageManager*)((DWORD)vehicle->m_pEntity + 0x5A0) = packet->m_damageManager;
 
 	DWORD dwVehiclePtr = (DWORD)vehicle->m_pEntity;
 	_asm mov ecx, dwVehiclePtr
@@ -531,17 +541,17 @@ void CPacketHandler::VehicleComponentAdd__Handle(void* data, int size)
 {
 	CPackets::VehicleComponentAdd* packet = (CPackets::VehicleComponentAdd*)data;
 
-	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->m_nVehicleId);
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
 
 	if (vehicle == nullptr)
 		return;
 
-	CStreaming::RequestModel(packet->componentid, eStreamingFlags::GAME_REQUIRED);
+	CStreaming::RequestModel(packet->m_nComponentId, eStreamingFlags::GAME_REQUIRED);
 	CStreaming::LoadAllRequestedModels(false);
-	CStreaming::RequestVehicleUpgrade(packet->componentid, eStreamingFlags::GAME_REQUIRED);
+	CStreaming::RequestVehicleUpgrade(packet->m_nComponentId, eStreamingFlags::GAME_REQUIRED);
 
 	char count = 10;
-	while (!CStreaming::HasVehicleUpgradeLoaded(packet->componentid) && count) 
+	while (!CStreaming::HasVehicleUpgradeLoaded(packet->m_nComponentId) && count) 
 	{
 		Sleep(5);
 		count--;
@@ -550,7 +560,7 @@ void CPacketHandler::VehicleComponentAdd__Handle(void* data, int size)
 	if (!count)
 		return;
 
-	vehicle->m_pEntity->AddVehicleUpgrade(packet->componentid);
+	vehicle->m_pEntity->AddVehicleUpgrade(packet->m_nComponentId);
 }
 
 // VehicleComponentRemove
@@ -559,12 +569,12 @@ void CPacketHandler::VehicleComponentRemove__Handle(void* data, int size)
 {
 	CPackets::VehicleComponentAdd* packet = (CPackets::VehicleComponentAdd*)data;
 
-	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->m_nVehicleId);
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
 
 	if (vehicle == nullptr)
 		return;
 
-	vehicle->m_pEntity->RemoveVehicleUpgrade(packet->componentid);
+	vehicle->m_pEntity->RemoveVehicleUpgrade(packet->m_nComponentId);
 }
 
 // VehiclePassengerUpdate
@@ -574,13 +584,14 @@ CPackets::VehiclePassengerUpdate* CPacketHandler::VehiclePassengerUpdate__Collec
 	CPackets::VehiclePassengerUpdate* packet = new CPackets::VehiclePassengerUpdate;
 
 	// player data
-	packet->ammo = localPlayer->m_aWeapons[localPlayer->m_nActiveWeaponSlot].m_nAmmoInClip;
-	packet->playerArmour = (unsigned char)localPlayer->m_fArmour;
-	packet->playerHealth = (unsigned char)localPlayer->m_fHealth;
-	packet->weapon = localPlayer->m_aWeapons[localPlayer->m_nActiveWeaponSlot].m_eWeaponType;
-	packet->m_nVehicleId = vehicle->m_nVehicleId;
-	packet->driveby = CDriveBy::IsPedInDriveby(localPlayer);
-	packet->aim = *(CVector*)0xB6F32C;
+	packet->m_nAmmoInClip = localPlayer->m_aWeapons[localPlayer->m_nActiveWeaponSlot].m_nAmmoInClip;
+	packet->m_nPlayerArmour = (unsigned char)localPlayer->m_fArmour;
+	packet->m_nPlayerHealth = (unsigned char)localPlayer->m_fHealth;
+	packet->m_nWeapon = localPlayer->m_aWeapons[localPlayer->m_nActiveWeaponSlot].m_eWeaponType;
+	packet->m_nVehicleId = vehicle->GetId();
+	packet->m_bDriveby = CDriveBy::IsPedInDriveby(localPlayer);
+	packet->m_fAimX = *(float*)0xB6F32C + 0x0;
+	packet->m_fAimY = *(float*)0xB6F32C + 0x4;
 
 	return packet;
 }
@@ -589,8 +600,8 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 {
 	CPackets::VehiclePassengerUpdate* packet = (CPackets::VehiclePassengerUpdate*)data;
 
-	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->m_nVehicleId);
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->m_nPlayerId);
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
+	CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(packet->m_nPlayerId);
 
 	if (vehicle == nullptr || player == nullptr)
 		return;
@@ -604,24 +615,22 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 	if (!player->m_pEntity->m_nPedFlags.bInVehicle || (player->m_pEntity->m_nPedFlags.bInVehicle && vehicle->m_pEntity->m_pDriver == player->m_pEntity))
 	{
 #ifdef _DEV
-		CChat::AddMessage("forcing enter passenger %d", player->m_nPlayerId);
+		CChat::AddMessage("forcing enter passenger %d", player->GetId());
 #endif
 		plugin::Command<Commands::WARP_CHAR_INTO_CAR_AS_PASSENGER>(CPools::GetPedRef(player->m_pEntity), CPools::GetVehicleRef(vehicle->m_pEntity), -1);
 	}
 
-	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
+	CUtil::GiveWeaponByPacket(player, packet->m_nWeapon, packet->m_nAmmoInClip);
 
-	player->m_oOnFoot = player->m_lOnFoot;
+	player->m_pEntity->m_fArmour = player->GetSyncData().m_nArmour = packet->m_nPlayerArmour;
+	player->m_pEntity->m_fHealth = player->GetSyncData().m_nHealth = packet->m_nPlayerHealth;
+	player->m_aPassengerAim = CVector(packet->m_fAimX, packet->m_fAimY, 0.0f);
 
-	player->m_pEntity->m_fArmour = player->m_lOnFoot->armour = packet->playerArmour;
-	player->m_pEntity->m_fHealth = player->m_lOnFoot->health = packet->playerHealth;
-	player->m_aPassengerAim = packet->aim;
-
-	if (packet->driveby && !CDriveBy::IsPedInDriveby(player->m_pEntity))
+	if (packet->m_bDriveby && !CDriveBy::IsPedInDriveby(player->m_pEntity))
 	{
 		CDriveBy::StartDriveby(player->m_pEntity);
 	}
-	else if (!packet->driveby && CDriveBy::IsPedInDriveby(player->m_pEntity))
+	else if (!packet->m_bDriveby && CDriveBy::IsPedInDriveby(player->m_pEntity))
 	{
 		CDriveBy::StopDriveby(player->m_pEntity);
 	}
@@ -633,11 +642,11 @@ void CPacketHandler::PlayerChatMessage__Handle(void* data, int size)
 {
 	CPackets::PlayerChatMessage* packet = (CPackets::PlayerChatMessage*)data;
 	
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->m_nPlayerId);
+	CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(packet->m_nPlayerId);
 
 	if (player)
 	{
-		CChat::AddMessage("%s(%d): %s", player->GetName(), player->m_nPlayerId, packet->message);
+		CChat::AddMessage("%s(%d): %s", player->GetName(), player->GetId(), packet->m_message);
 	}
 }
 
@@ -648,12 +657,12 @@ void CPacketHandler::PedSpawn__Handle(void* data, int size)
 	CPackets::PedSpawn* packet = (CPackets::PedSpawn*)data;
 
 #ifdef _DEV
-	CChat::AddMessage("PED SPAWN %d %d %f %f %f %d %d", packet->pedid, packet->modelId, packet->pos.x, packet->pos.y, packet->pos.z, packet->pedType, packet->createdBy);
+	CChat::AddMessage("PED SPAWN %d %d %f %f %f %d %d", packet->m_nPedId, packet->m_nModelId, packet->m_vecPosition.x, packet->m_vecPosition.y, packet->m_vecPosition.z, packet->m_nPedType, packet->m_nCreatedBy);
 #endif
 
-	CNetworkPed* ped = new CNetworkPed(packet->pedid, (int)packet->modelId, (ePedType)packet->pedType, packet->pos, packet->createdBy);
+	CNetworkPed* ped = new CNetworkPed(packet->m_nPedId, (int)packet->m_nModelId, (ePedType)packet->m_nPedType, packet->m_vecPosition, packet->m_nCreatedBy);
 
-	CNetworkPedManager::Add(ped);
+	CNetworkPedManager::Instance().Add(ped);
 }
 
 // PedRemove
@@ -663,14 +672,14 @@ void CPacketHandler::PedRemove__Handle(void* data, int size)
 	CPackets::PedRemove* packet = (CPackets::PedRemove*)data;
 
 #ifdef _DEV
-	CChat::AddMessage("PED REMOVE %d", packet->pedid);
+	CChat::AddMessage("PED REMOVE %d", packet->m_nPedId);
 #endif
 
-	CNetworkPed* ped = CNetworkPedManager::GetPed(packet->pedid);
+	CNetworkPed* ped = CNetworkPedManager::Instance().Get(packet->m_nPedId);
 
 	if (ped)
 	{
-		CNetworkPedManager::Remove(ped);
+		CNetworkPedManager::Instance().Remove(ped);
 		delete ped;
 	}
 }
@@ -680,19 +689,19 @@ void CPacketHandler::PedRemove__Handle(void* data, int size)
 CPackets::PedOnFoot* CPacketHandler::PedOnFoot__Collect(CNetworkPed* networkPed)
 {
 	CPackets::PedOnFoot* packet = new CPackets::PedOnFoot;
-	CPed* ped = networkPed->m_pPed;
+	CPed* ped = networkPed->m_pEntity;
 
-	packet->pedid = networkPed->m_nPedId;
-	packet->pos = ped->m_matrix->pos;
-	packet->velocity = ped->m_vecMoveSpeed;
-	packet->health = (unsigned char)ped->m_fHealth;
-	packet->armour = (unsigned char)ped->m_fArmour;
-	packet->weapon = ped->m_aWeapons[ped->m_nActiveWeaponSlot].m_eWeaponType;
-	packet->ammo = ped->m_aWeapons[ped->m_nActiveWeaponSlot].m_nAmmoInClip;
-	packet->aimingRotation = ped->m_fAimingRotation;
-	packet->currentRotation = ped->m_fCurrentRotation;
-	packet->lookDirection = ped->field_73C; // look direction (rad)
-	packet->moveState = (unsigned char)ped->m_nMoveState;
+	packet->m_nPedId = networkPed->GetId();
+	packet->m_syncData.m_vecPosition = ped->m_matrix->pos;
+	packet->m_syncData.m_vecVelocity = ped->m_vecMoveSpeed;
+	packet->m_syncData.m_nHealth = (unsigned char)ped->m_fHealth;
+	packet->m_syncData.m_nArmour = (unsigned char)ped->m_fArmour;
+	packet->m_syncData.m_nCurrentWeapon = ped->m_aWeapons[ped->m_nActiveWeaponSlot].m_eWeaponType;
+	packet->m_syncData.m_nAmmoInClip = ped->m_aWeapons[ped->m_nActiveWeaponSlot].m_nAmmoInClip;
+	packet->m_syncData.m_fAimingRotation = ped->m_fAimingRotation;
+	packet->m_syncData.m_fCurrentRotation = ped->m_fCurrentRotation;
+	packet->m_syncData.m_fLookDirection = (float)ped->field_73C; // look direction (rad)
+	packet->m_syncData.m_nMoveState = (unsigned char)ped->m_nMoveState;
 
 	return packet;
 }
@@ -701,30 +710,32 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 {
 	CPackets::PedOnFoot* packet = (CPackets::PedOnFoot*)data;
 
-	CNetworkPed* ped = CNetworkPedManager::GetPed(packet->pedid);
+	CNetworkPed* ped = CNetworkPedManager::Instance().Get(packet->m_nPedId);
 
 	if (!ped)
 		return;
 
-	if (!ped->m_pPed)
+	if (!ped->m_pEntity)
 		return;
 
-	if (ped->m_pPed->m_pEntity && ped->m_pPed->m_nPedFlags.bInVehicle)
+	if (ped->m_pEntity->m_pVehicle && ped->m_pEntity->m_nPedFlags.bInVehicle)
 	{
 		//plugin::Command<Commands::TASK_LEAVE_CAR>(CPools::GetPedRef(ped->m_pPed), CPools::GetVehicleRef(ped->m_pPed->m_pEntity));
-		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(ped->m_pPed), packet->pos.x, packet->pos.y, packet->pos.z);
+		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(ped->m_pEntity), packet->m_syncData.m_vecPosition.x, packet->m_syncData.m_vecPosition.y, packet->m_syncData.m_vecPosition.z);
 	}
 
-	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);
+	CUtil::GiveWeaponByPacket(ped, packet->m_syncData.m_nCurrentWeapon, packet->m_syncData.m_nAmmoInClip);
 
-	ped->m_pPed->m_matrix->pos = packet->pos;
-	ped->m_fCurrentRotation = ped->m_pPed->m_fCurrentRotation = packet->currentRotation;
-	ped->m_fAimingRotation = ped->m_pPed->m_fAimingRotation = packet->aimingRotation;
-	ped->m_fLookDirection = ped->m_pPed->field_73C = packet->lookDirection;
-	ped->m_pPed->m_fHealth = packet->health;
-	ped->m_pPed->m_fArmour = packet->armour;
-	ped->m_vecVelocity = packet->velocity;
-	ped->m_nMoveState = (eMoveState)packet->moveState;
+	auto& syncData = ped->GetSyncData();
+
+	ped->m_pEntity->m_matrix->pos = packet->m_syncData.m_vecPosition;
+	syncData.m_fCurrentRotation = ped->m_pEntity->m_fCurrentRotation = packet->m_syncData.m_fCurrentRotation;
+	syncData.m_fAimingRotation = ped->m_pEntity->m_fAimingRotation = packet->m_syncData.m_fAimingRotation;
+	syncData.m_fLookDirection = packet->m_syncData.m_fLookDirection;
+	ped->m_pEntity->m_fHealth = packet->m_syncData.m_nHealth;
+	ped->m_pEntity->m_fArmour = packet->m_syncData.m_nArmour;
+	syncData.m_vecVelocity = packet->m_syncData.m_vecVelocity;
+	syncData.m_nMoveState = (eMoveState)packet->m_syncData.m_nMoveState;
 }
 
 // GameWeatherTime
@@ -732,14 +743,14 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 CPackets::GameWeatherTime* CPacketHandler::GameWeatherTime__Collect()
 {
 	CPackets::GameWeatherTime* packet = new CPackets::GameWeatherTime;
-	packet->newWeather = CWeather::NewWeatherType;
-	packet->oldWeather = CWeather::OldWeatherType;
-	packet->forcedWeather = CWeather::ForcedWeatherType;
-	packet->currentMonth = CClock::ms_nGameClockMonth;
-	packet->currentDay = CClock::CurrentDay;
-	packet->currentHour = CClock::ms_nGameClockHours;
-	packet->currentMinute = CClock::ms_nGameClockMinutes;
-	packet->gameTickCount = CClock::ms_nMillisecondsPerGameMinute;
+	packet->m_nNewWeather = (uint8_t)CWeather::NewWeatherType;
+	packet->m_nOldWeather = (uint8_t)CWeather::OldWeatherType;
+	packet->m_nForcedWeather = (uint8_t)CWeather::ForcedWeatherType;
+	packet->m_nCurrentMonth = CClock::ms_nGameClockMonth;
+	packet->m_nCurrentDay = CClock::CurrentDay;
+	packet->m_nCurrentHour = CClock::ms_nGameClockHours;
+	packet->m_nCurrentMinute = CClock::ms_nGameClockMinutes;
+	packet->m_nGameTickCount = CClock::ms_nMillisecondsPerGameMinute;
 	return packet;
 }
 
@@ -747,14 +758,14 @@ void CPacketHandler::GameWeatherTime__Handle(void* data, int size)
 {
 	CPackets::GameWeatherTime* packet = (CPackets::GameWeatherTime*)data;
 
-	CWeather::NewWeatherType = packet->newWeather;
-	CWeather::OldWeatherType = packet->oldWeather;
-	CWeather::ForcedWeatherType = packet->forcedWeather;
-	CClock::ms_nGameClockMonth = packet->currentMonth;
-	CClock::CurrentDay = packet->currentDay;
-	CClock::ms_nGameClockHours = packet->currentHour;
-	CClock::ms_nGameClockMinutes = packet->currentMinute;
-	CClock::ms_nMillisecondsPerGameMinute = packet->gameTickCount;
+	CWeather::NewWeatherType = packet->m_nNewWeather;
+	CWeather::OldWeatherType = packet->m_nOldWeather;
+	CWeather::ForcedWeatherType = packet->m_nForcedWeather;
+	CClock::ms_nGameClockMonth = packet->m_nCurrentMonth;
+	CClock::CurrentDay = packet->m_nCurrentDay;
+	CClock::ms_nGameClockHours = packet->m_nCurrentHour;
+	CClock::ms_nGameClockMinutes = packet->m_nCurrentMinute;
+	CClock::ms_nMillisecondsPerGameMinute = packet->m_nGameTickCount;
 }
 
 void CPacketHandler::GameWeatherTime__Trigger()
@@ -772,8 +783,8 @@ void CPacketHandler::PlayerKeySync__Handle(void* data, int size)
 {
 	CPackets::PlayerKeySync* packet = (CPackets::PlayerKeySync*)data;
 
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->m_nPlayerId);
-	player->m_compressedControllerState = packet->newState;
+	CNetworkPlayer* player = CNetworkPlayerManager::Instance().Get(packet->m_nPlayerId);
+	player->m_compressedControllerState = packet->m_controllerState;
 }
 
 // PedAddTask
@@ -790,47 +801,47 @@ CPackets::PedDriverUpdate* CPacketHandler::PedDriverUpdate__Collect(CNetworkVehi
 	CPackets::PedDriverUpdate* packet = new CPackets::PedDriverUpdate;
 	
 	// ped data
-	packet->pedid = ped->m_nPedId;
-	packet->ammo = ped->m_pPed->m_aWeapons[ped->m_pPed->m_nActiveWeaponSlot].m_nAmmoInClip;
-	packet->pedArmour = (unsigned char)ped->m_pPed->m_fArmour;
-	packet->pedHealth = (unsigned char)ped->m_pPed->m_fHealth;
-	packet->weapon = ped->m_pPed->m_aWeapons[ped->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
+	packet->m_nPedId = ped->GetId();
+	packet->m_nAmmoInClip = ped->m_pEntity->m_aWeapons[ped->m_pEntity->m_nActiveWeaponSlot].m_nAmmoInClip;
+	packet->m_nPedArmour = (unsigned char)ped->m_pEntity->m_fArmour;
+	packet->m_nPedHealth = (unsigned char)ped->m_pEntity->m_fHealth;
+	packet->m_nWeapon = ped->m_pEntity->m_aWeapons[ped->m_pEntity->m_nActiveWeaponSlot].m_eWeaponType;
 
 	// vehicle data
-	packet->m_nVehicleId = vehicle->m_nVehicleId;
-	packet->pos = vehicle->m_pEntity->m_matrix->pos;
-	packet->roll = vehicle->m_pEntity->m_matrix->right;
-	packet->rot = vehicle->m_pEntity->m_matrix->up;
-	packet->velocity = vehicle->m_pEntity->m_vecMoveSpeed;
+	packet->m_nVehicleId = vehicle->GetId();
+	packet->m_syncData.m_vecPosition = vehicle->m_pEntity->m_matrix->pos;
+	packet->m_syncData.m_vecRoll = vehicle->m_pEntity->m_matrix->right;
+	packet->m_syncData.m_vecRotation = vehicle->m_pEntity->m_matrix->up;
+	packet->m_syncData.m_vecVelocity = vehicle->m_pEntity->m_vecMoveSpeed;
 
-	packet->color1 = vehicle->m_pEntity->m_nPrimaryColor;
-	packet->color2 = vehicle->m_pEntity->m_nSecondaryColor;
+	packet->m_syncData.m_nPrimaryColor = vehicle->m_pEntity->m_nPrimaryColor;
+	packet->m_syncData.m_nSecondaryColor = vehicle->m_pEntity->m_nSecondaryColor;
 
-	packet->health = vehicle->m_pEntity->m_fHealth;
+	packet->m_syncData.m_nHealth = vehicle->m_pEntity->m_fHealth;
 
-	packet->paintjob = vehicle->m_nPaintJob;
+	packet->m_syncData.m_nPaintjob = vehicle->m_nPaintJob;
 
 	eVehicleType vehicleType = CUtil::GetVehicleType(vehicle->m_pEntity);
 	if (vehicleType == eVehicleType::VEHICLE_BIKE || vehicleType == eVehicleType::VEHICLE_BMX)
 	{
 		CBike* bike = (CBike*)vehicle->m_pEntity;
 
-		packet->bikeLean = bike->m_rideAnimData.m_fAnimLean;
+		packet->m_syncData.m_fBikeLean = bike->m_rideAnimData.m_fAnimLean;
 	}
 
 	if (vehicleType == eVehicleType::VEHICLE_PLANE)
 	{
 		CPlane* plane = (CPlane*)vehicle->m_pEntity;
-		packet->planeGearState = plane->m_fLandingGearStatus;
+		packet->m_syncData.m_fPlaneGearState = plane->m_fLandingGearStatus;
 	}
 
-	packet->locked = vehicle->m_pEntity->m_eDoorLock;
+	packet->m_syncData.m_nDoorLock = vehicle->m_pEntity->m_eDoorLock;
 	
-	packet->autoPilot = CSyncAutoPilot(vehicle->m_pEntity->m_autoPilot);
+	packet->m_autoPilot = CSyncAutoPilot(vehicle->m_pEntity->m_autoPilot);
 
-	packet->gasPedal = vehicle->m_pEntity->m_fGasPedal;
-	packet->breakPedal = vehicle->m_pEntity->m_fBreakPedal;
-	packet->steerAngle = vehicle->m_pEntity->m_fSteerAngle;
+	packet->m_fGasPedal = vehicle->m_pEntity->m_fGasPedal;
+	packet->m_fBreakPedal = vehicle->m_pEntity->m_fBreakPedal;
+	packet->m_fSteerAngle = vehicle->m_pEntity->m_fSteerAngle;
 
 	return packet;
 }
@@ -839,88 +850,88 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 {
 	CPackets::PedDriverUpdate* packet = (CPackets::PedDriverUpdate*)data;
 
-	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->m_nVehicleId);
-	CNetworkPed* ped = CNetworkPedManager::GetPed(packet->pedid);
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(packet->m_nVehicleId);
+	CNetworkPed* ped = CNetworkPedManager::Instance().Get(packet->m_nPedId);
 
-	if (vehicle == nullptr || ped == nullptr || ped->m_pPed == nullptr)
+	if (vehicle == nullptr || ped == nullptr || ped->m_pEntity == nullptr)
 		return;
 
 	if (vehicle->m_pEntity == nullptr)
 	{
-		vehicle->CreateVehicle(vehicle->m_nVehicleId, vehicle->m_nModelId, packet->pos, 0.f, packet->color1, packet->color2);
+		//vehicle->CreateVehicle(vehicle->m_nVehicleId, vehicle->m_nModelId, packet->pos, 0.f, packet->color1, packet->color2);
 		return;
 	}
 
-	if (ped->m_pPed->m_pEntity != vehicle->m_pEntity)
-		plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(ped->m_pPed), CPools::GetVehicleRef(vehicle->m_pEntity));
+	if (ped->m_pEntity->m_pVehicle != vehicle->m_pEntity)
+		plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(ped->m_pEntity), CPools::GetVehicleRef(vehicle->m_pEntity));
 
-	if(CUtil::IsPositionUpdateNeeded(packet->pos, vehicle->m_pEntity->m_matrix->pos))
-		vehicle->m_pEntity->m_matrix->pos = packet->pos;
+	if(CUtil::IsPositionUpdateNeeded(packet->m_syncData.m_vecPosition, vehicle->m_pEntity->m_matrix->pos))
+		vehicle->m_pEntity->m_matrix->pos = packet->m_syncData.m_vecPosition;
 
-	vehicle->m_pEntity->m_matrix->right = packet->roll;
-	vehicle->m_pEntity->m_matrix->up = packet->rot;
-	ped->m_vecVelocity = packet->velocity;
-	vehicle->m_pEntity->m_vecMoveSpeed = packet->velocity;
+	vehicle->m_pEntity->m_matrix->right = packet->m_syncData.m_vecRoll;
+	vehicle->m_pEntity->m_matrix->up = packet->m_syncData.m_vecRotation;
+	ped->GetSyncData().m_vecVelocity = packet->m_syncData.m_vecVelocity;
+	vehicle->m_pEntity->m_vecMoveSpeed = packet->m_syncData.m_vecVelocity;
 
-	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);
+	CUtil::GiveWeaponByPacket(ped, packet->m_nWeapon, packet->m_nAmmoInClip);
 
-	ped->m_pPed->m_fArmour = packet->pedArmour;
-	ped->m_pPed->m_fHealth = packet->pedHealth;
+	ped->m_pEntity->m_fArmour = packet->m_nPedArmour;
+	ped->m_pEntity->m_fHealth = packet->m_nPedHealth;
 
-	vehicle->m_pEntity->m_nPrimaryColor = packet->color1;
-	vehicle->m_pEntity->m_nSecondaryColor = packet->color2;
+	vehicle->m_pEntity->m_nPrimaryColor = packet->m_syncData.m_nPrimaryColor;
+	vehicle->m_pEntity->m_nSecondaryColor = packet->m_syncData.m_nSecondaryColor;
 
-	vehicle->m_pEntity->m_fHealth = packet->health;
+	vehicle->m_pEntity->m_fHealth = packet->m_syncData.m_nHealth;
 
-	if (vehicle->m_nPaintJob != packet->paintjob)
-		vehicle->m_pEntity->SetRemap(packet->paintjob);
+	if (vehicle->m_nPaintJob != packet->m_syncData.m_nPaintjob)
+		vehicle->m_pEntity->SetRemap(packet->m_syncData.m_nPaintjob);
 
 	eVehicleType vehicleType = CUtil::GetVehicleType(vehicle->m_pEntity);
 	if (vehicleType == eVehicleType::VEHICLE_BIKE || vehicleType == eVehicleType::VEHICLE_BMX)
 	{
 		CBike* bike = (CBike*)vehicle->m_pEntity;
 
-		*(float*)((DWORD)&*bike + 0x64C) = packet->bikeLean;
+		*(float*)((DWORD)&*bike + 0x64C) = packet->m_syncData.m_fBikeLean;
 	}
 
 	if (CUtil::GetVehicleType(vehicle->m_pEntity) == eVehicleType::VEHICLE_PLANE)
 	{
 		CPlane* plane = (CPlane*)vehicle->m_pEntity;
 
-		plane->m_fLandingGearStatus = packet->planeGearState;
+		plane->m_fLandingGearStatus = packet->m_syncData.m_fPlaneGearState;
 	}
 
-	vehicle->m_pEntity->m_eDoorLock = (eDoorLock)packet->locked;
-	packet->autoPilot.WriteTo(vehicle->m_pEntity->m_autoPilot);
+	vehicle->m_pEntity->m_eDoorLock = (eDoorLock)packet->m_syncData.m_nDoorLock;
+	packet->m_autoPilot.WriteTo(vehicle->m_pEntity->m_autoPilot);
 	ped->m_autoPilot = vehicle->m_pEntity->m_autoPilot;
 
-	ped->m_fGasPedal = packet->gasPedal;
-	ped->m_fBreakPedal = packet->breakPedal;
-	ped->m_fSteerAngle = packet->steerAngle;
+	ped->m_fGasPedal = packet->m_fGasPedal;
+	ped->m_fBreakPedal = packet->m_fBreakPedal;
+	ped->m_fSteerAngle = packet->m_fSteerAngle;
 }
 
 // EntityStream
-
-void CPacketHandler::EntityStream__Handle(void* data, int size)
-{
-	CPackets::EntityStream* packet = (CPackets::EntityStream*)data;
-	
-	switch (packet->entityType)
-	{
-	case eNetworkEntityType::NETWORK_ENTITY_PLAYER:
-	{
-		if (auto player = CNetworkPlayerManager::GetPlayer(packet->entityid))
-		{
-			if (packet->in)
-				player->StreamIn(player->m_lOnFoot->position);
-			else
-				player->StreamOut();
-		}
-
-		break;
-	}
-	case eNetworkEntityType::NETWORK_ENTITY_VEHICLE:
-	case eNetworkEntityType::NETWORK_ENTITY_PED:
-		break;
-	}
-}
+// TODO:
+//void CPacketHandler::EntityStream__Handle(void* data, int size)
+//{
+//	CPackets::EntityStream* packet = (CPackets::EntityStream*)data;
+//	
+//	switch (packet->m_nEntityType)
+//	{
+//	case eNetworkEntityType::NETWORK_ENTITY_PLAYER:
+//	{
+//		if (auto player = CNetworkPlayerManager::Instance().Get(packet->m_nNetworkId))
+//		{
+//			if (packet->m_bIn)
+//				player->StreamIn(player->m_lOnFoot->position);
+//			else
+//				player->StreamOut();
+//		}
+//
+//		break;
+//	}
+//	case eNetworkEntityType::NETWORK_ENTITY_VEHICLE:
+//	case eNetworkEntityType::NETWORK_ENTITY_PED:
+//		break;
+//	}
+//}

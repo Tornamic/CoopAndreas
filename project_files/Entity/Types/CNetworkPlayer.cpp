@@ -1,11 +1,7 @@
-using namespace plugin;
 #include "../../CUtil.h"
 #include "../Manager/Types/CNetworkPlayerManager.h"
 #include "CNetworkPlayer.h"
-#include <CPools.h>
-#include <CWorld.h>
-#include <eScriptCommands.h>
-#include <extensions/ScriptCommands.h>
+#include "../../stdafx.h"
 
 CNetworkPlayer::~CNetworkPlayer()
 {

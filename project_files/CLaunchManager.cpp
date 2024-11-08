@@ -1,4 +1,7 @@
+#include "CLaunchManager.h"
 #include "stdafx.h"
+#include "CLocalPlayer.h"
+#include "CNetwork.h"
 
 void CLaunchManager::CollectCommandLineArgs()
 {

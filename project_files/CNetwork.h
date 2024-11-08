@@ -1,4 +1,7 @@
 #pragma once
+
+#include "stdafx.h"
+
 class CPacketListener
 {
 public:

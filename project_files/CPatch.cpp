@@ -1,3 +1,4 @@
+#include "CPatch.h"
 #include "stdafx.h"
 
 // temporary disable some game content

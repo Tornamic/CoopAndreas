@@ -1,5 +1,9 @@
+#include "../../../stdafx.h"
 #include "CNetworkVehicleManager.h"
 #include "../../../CPackets.h"
+#include "../../../CLocalPlayer.h"
+#include "../../../CNetwork.h"
+#include "../../../CPacketHandler.h"
 
 void CNetworkVehicleManager::UpdateDriver(CVehicle* vehicle)
 {

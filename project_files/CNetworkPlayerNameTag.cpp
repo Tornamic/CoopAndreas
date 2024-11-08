@@ -1,4 +1,7 @@
+#include "CNetworkPlayerNameTag.h"
 #include "stdafx.h"
+#include "CUtil.h"
+#include "Entity/Manager/Types/CNetworkPlayerManager.h"
 
 #define PROPORION_X(value) (value * RsGlobal.maximumWidth / 1920)
 #define PROPORION_Y(value) (value * RsGlobal.maximumHeight / 1080)
@@ -75,15 +78,15 @@ void DrawWeaponIcon(CPed* ped, int x, int y, unsigned char alpha)
 void CNetworkPlayerNameTag::Process()
 {
 
-	for (auto player : CNetworkPlayerManager::m_pPlayers)
+	for (auto player : CNetworkPlayerManager::Instance().GetEntities())
 	{
 		CVector localPlayerPos = FindPlayerCoors(0);
 		CVector networkPlayerPos{};
-		player->m_pPed->GetBonePosition(*(RwV3d*)&networkPlayerPos, 5, false);
+		player->m_pEntity->GetBonePosition(*(RwV3d*)&networkPlayerPos, 5, false);
 
 		unsigned char alpha = GetHudAlpha((localPlayerPos - networkPlayerPos).Magnitude());
 
-		if (alpha == 0 || !player->m_pPed->IsVisible() || player->m_lOnFoot == nullptr)
+		if (alpha == 0 || !player->m_pEntity->IsVisible())
 			continue;
 
 		networkPlayerPos.z += 0.3f;
@@ -98,7 +101,7 @@ void CNetworkPlayerNameTag::Process()
 			(float)out.y,
 			PROPORION_X(100),
 			PROPORION_Y(14),
-			player->m_lOnFoot->health,
+			player->GetSyncData().m_nHealth,
 			false,
 			false,
 			true,
@@ -112,7 +115,7 @@ void CNetworkPlayerNameTag::Process()
 			(float)out.y - PROPORION_X(12),
 			PROPORION_X(100),
 			PROPORION_Y(14),
-			player->m_lOnFoot->armour,
+			player->GetSyncData().m_nArmour,
 			false,
 			false,
 			true,
@@ -122,6 +125,6 @@ void CNetworkPlayerNameTag::Process()
 		 
 		DrawNickName((float)out.x + PROPORION_X(5), (float)out.y - PROPORION_Y(24), alpha, player->GetName());
 
-		DrawWeaponIcon(player->m_pPed, (int)out.x - PROPORION_X(70), (int)out.y - PROPORION_Y(50), alpha);
+		DrawWeaponIcon(player->m_pEntity, (int)out.x - PROPORION_X(70), (int)out.y - PROPORION_Y(50), alpha);
 	}
 }

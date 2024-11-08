@@ -1,4 +1,7 @@
 #include "stdafx.h"
+#include "CNetwork.h"
+#include "CPackets.h"
+#include "CPacketHandler.h"
 
 ENetHost* CNetwork::m_pClient = nullptr;
 ENetPeer* CNetwork::m_pPeer = nullptr;

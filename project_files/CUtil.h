@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 
 class CNetworkPlayer;
 class CNetworkPed;

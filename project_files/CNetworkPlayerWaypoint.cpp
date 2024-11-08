@@ -1,15 +1,18 @@
 #include "stdafx.h"
 #include "CDXFont.h"
+#include "CUtil.h"
+#include "CNetworkPlayerWaypoint.h"
+#include "Entity/Manager/Types/CNetworkPlayerManager.h"
 
 void CNetworkPlayerWaypoint::Process()
 {
-	for (auto player : CNetworkPlayerManager::m_pPlayers)
+	for (auto player : CNetworkPlayerManager::Instance().GetEntities())
 	{
-		if (!player->m_bWaypointPlaced || player->m_vecWaypointPos == nullptr)
+		if (!player->m_bWaypointPlaced)
 			continue;
 
 		CVector2D radar;
-		CRadar::TransformRealWorldPointToRadarSpace(radar, *player->m_vecWaypointPos);
+		CRadar::TransformRealWorldPointToRadarSpace(radar, player->m_vecWaypointPos);
 		
 		CRadar::LimitRadarPoint(radar);
 

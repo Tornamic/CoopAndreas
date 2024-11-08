@@ -1,17 +1,10 @@
+#include "../../stdafx.h"
 #include "CNetworkVehicle.h"
-#include <CBmx.h>
-#include <CBoat.h>
-#include <CHeli.h>
-#include <CModelInfo.h>
-#include <CMonsterTruck.h>
-#include <CPlane.h>
-#include <CQuadBike.h>
-#include <CStreaming.h>
-#include <CTrailer.h>
-#include <CWorld.h>
 #include "../../CLocalPlayer.h"
 #include "../Manager/Types/CNetworkVehicleManager.h"
 #include "../../CPackets.h"
+#include "../../CNetwork.h"
+#include "../../CUtil.h"
 
 // CREATE new vehicle!!! NOT GET!! 
 /*CNetworkVehicle::CNetworkVehicle(CVehicle* vehicle)

@@ -1,5 +1,10 @@
 #include "stdafx.h"
+#include "CChat.h"
 #include "CDXFont.h"
+#include "CPackets.h"
+#include "CNetwork.h"
+#include "CLocalPlayer.h"
+#include "Entity/Manager/Types/CNetworkPlayerManager.h"
 
 std::vector<CChatMessage> CChat::m_aMessages = {};
 
@@ -165,10 +170,10 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             if (!m_sInputText.empty())
             {
                 CPackets::PlayerChatMessage packet{};
-                strcpy_s(packet.message, m_sInputText.c_str());
+                strcpy_s(packet.m_message, m_sInputText.c_str());
                 CNetwork::SendPacket(ePacketType::PLAYER_CHAT_MESSAGE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
                 
-                CChat::AddMessage("%s(%d): %s", CLocalPlayer::m_name, CNetworkPlayerManager::m_nMyId, packet.message);
+                CChat::AddMessage("%s(%d): %s", CLocalPlayer::m_name, 0/*CLocalPlayer::*/, packet.m_message);
                 
                 m_sInputText.clear();
                 m_nCaretPos = 0;

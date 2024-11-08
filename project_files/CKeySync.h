@@ -1,4 +1,7 @@
 #pragma once
+
+class CNetworkPlayer;
+
 class CKeySync
 {
 public:

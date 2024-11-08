@@ -1,5 +1,8 @@
 #include "stdafx.h"
-#include "CNetworkVehicle.h"
+#include "CPassengerEnter.h"
+#include "CPackets.h"
+#include "CNetwork.h"
+#include "Entity/Manager/Types/CNetworkVehicleManager.h"
 
 void CPassengerEnter::Process()
 {
@@ -33,11 +36,11 @@ void CPassengerEnter::Process()
 		{
 			plugin::Command<0x5CA>(CPools::GetPedRef(localPlayer), CPools::GetVehicleRef(minVehicle), 3000, -1);
 
-			CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(minVehicle);
+			CNetworkVehicle* vehicle = CNetworkVehicleManager::Instance().Get(minVehicle);
 			CPackets::VehicleEnter packet{};
-			packet.seatid = -1;
-			packet.vehicleid = vehicle->m_nVehicleId;
-			packet.force = false;
+			packet.m_nSeatId = -1;
+			packet.m_nVehicleId = vehicle->GetId();
+			packet.m_bForce = false;
 			CNetwork::SendPacket(ePacketType::VEHICLE_ENTER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 		}
 	}

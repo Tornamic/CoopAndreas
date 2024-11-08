@@ -1,6 +1,11 @@
 #include "../stdafx.h"
 #include "GameHooks.h"
 #include "../CKeySync.h"
+#include "../CChat.h"
+#include "../CPacketHandler.h"
+#include "../CNetwork.h"
+#include "../CUtil.h"
+#include "../Entity/Manager/Types/CNetworkPlayerManager.h"
 
 static void __cdecl CMenuManager__DrawFrontEnd_FixChat_Hook(float alpha)
 {
@@ -87,7 +92,7 @@ static void __cdecl CPad__UpdatePads_Hook()
     }
 
     // process network players keys
-    for (auto player : CNetworkPlayerManager::m_pPlayers)
+    for (auto player : CNetworkPlayerManager::Instance().GetEntities())
     {
         CKeySync::ProcessPlayer(player);
     }
@@ -109,7 +114,7 @@ static void __cdecl CPad__UpdatePads_Hook()
 
     //CChat::AddMessage("ButtonSquare %d LeftStickX %d LeftStickY %d", newState.ButtonSquare, newState.LeftStickX, newState.LeftStickY);
 
-    packet.newState = ÑCompressedControllerState(newState);
+    packet.m_controllerState = ÑCompressedControllerState(newState);
     CNetwork::SendPacket(ePacketType::PLAYER_KEY_SYNC, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 }
 

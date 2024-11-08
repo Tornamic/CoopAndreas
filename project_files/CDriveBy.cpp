@@ -1,3 +1,4 @@
+#include "CDriveBy.h"
 #include "stdafx.h"
 
 void CDriveBy::Process(CPlayerPed* player)
