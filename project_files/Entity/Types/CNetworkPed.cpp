@@ -3,25 +3,7 @@
 #include "../../CPackets.h"
 #include "../../CNetwork.h"
 #include "../../CUtil.h"
-
-// CREATE new ped!!! NOT GET!! 
-/*CNetworkPed::CNetworkPed(CPed* ped)
-{
-    if (!CLocalPlayer::m_bIsHost)
-        return;
-
-    m_pPed = ped;
-    m_nPedId = CNetworkPedManager::GetFreeID();
-    m_nCreatedBy = ped->m_nCreatedBy;
-
-    CPackets::PedSpawn packet{};
-    packet.pedid = m_nPedId;
-    packet.modelId = ped->m_nModelIndex;
-    packet.pos = ped->m_matrix->pos;
-    packet.pedType = ped->m_nPedType;
-    packet.createdBy = ped->m_nCreatedBy;
-    CNetwork::SendPacket(ePacketType::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
-}*/
+#include "../Manager/Types/CNetworkPedManager.h"
 
 CNetworkPed::~CNetworkPed()
 {
@@ -32,6 +14,24 @@ CNetworkPed::~CNetworkPed()
         CNetwork::SendPacket(ePacketType::PED_REMOVE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
     this->StreamOut();
+}
+
+CNetworkPed* CNetworkPed::NotifyNew(CPed* ped)
+{
+    uint16_t freeId = CNetworkPedManager::Instance().GetFreeId();
+
+    if (freeId == -1)
+        return nullptr;
+
+    CPackets::PedSpawn packet{};
+    packet.m_nPedId = freeId;
+    packet.m_nModelId = ped->m_nModelIndex;
+    packet.m_vecPosition = ped->m_matrix->pos;
+    packet.m_nPedType = ped->m_nPedType;
+    packet.m_nCreatedBy = ped->m_nCreatedBy;
+    CNetwork::SendPacket(ePacketType::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+
+    return new CNetworkPed(freeId, ped->m_nModelIndex, ped->m_nPedType, ped->m_nCreatedBy);
 }
 
 void CNetworkPed::Create()

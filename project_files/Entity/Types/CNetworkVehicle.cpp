@@ -40,6 +40,25 @@ CNetworkVehicle::~CNetworkVehicle()
     }
 }
 
+CNetworkVehicle* CNetworkVehicle::NotifyNew(CVehicle* vehicle)
+{
+    uint16_t freeId = CNetworkVehicleManager::Instance().GetFreeId();
+
+    if (freeId == -1)
+        return nullptr;
+
+    CPackets::VehicleSpawn vehicleSpawnPacket{};
+    vehicleSpawnPacket.m_nVehicleId = freeId;
+    vehicleSpawnPacket.m_nModelId = vehicle->m_nModelIndex;
+    vehicleSpawnPacket.m_vecPosition = vehicle->m_matrix->pos;
+    vehicleSpawnPacket.m_fRotation = vehicle->GetHeading();
+    vehicleSpawnPacket.m_nPrimaryColor = vehicle->m_nPrimaryColor;
+    vehicleSpawnPacket.m_nSecondaryColor = vehicle->m_nSecondaryColor;
+    CNetwork::SendPacket(ePacketType::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
+
+    return new CNetworkVehicle(freeId, vehicle->m_nModelIndex);
+}
+
 void CNetworkVehicle::Create()
 {
     int16_t modelId = this->GetModelId();

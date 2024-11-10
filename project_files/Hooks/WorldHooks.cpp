@@ -73,7 +73,7 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
         else
         {
             CVehicle* vehicle = (CVehicle*)entity;
-            CNetworkVehicle* networkVehicle = new CNetworkVehicle(vehicle);
+            CNetworkVehicle* networkVehicle = CNetworkVehicle::NotifyNew(vehicle);
             CNetworkVehicleManager::Instance().Add(networkVehicle);
         }
 
@@ -88,7 +88,7 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
                 dontCreateEntity = true;
             else
             {
-                CNetworkPed* networkPed = new CNetworkPed(ped);
+                CNetworkPed* networkPed = CNetworkPed::NotifyNew(ped);
                 CNetworkPedManager::Instance().Add(networkPed);
             }
         }

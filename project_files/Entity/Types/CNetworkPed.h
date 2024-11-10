@@ -9,8 +9,10 @@
 class CNetworkPed final : public CNetworkEntity<PedSyncData, CPed>, public Modelable, public Hostable
 {
 public:
-	CNetworkPed(uint16_t networkId, int16_t modelId) :
-		CNetworkEntity(networkId), Modelable(modelId) {}
+	static CNetworkPed* NotifyNew(CPed* ped);
+
+	CNetworkPed(uint16_t networkId, int16_t modelId, uint8_t pedType, uint8_t createdBy) :
+		CNetworkEntity(networkId), Modelable(modelId), m_nPedType((ePedType)pedType), m_nCreatedBy(createdBy) {}
 
 	ePedType m_nPedType;
 	uint8_t m_nCreatedBy;
@@ -20,6 +22,7 @@ public:
 	float m_fSteerAngle = 0.0f;
 
 	~CNetworkPed();
+
 
 	eNetworkEntityType GetType() const override { return eNetworkEntityType::NETWORK_ENTITY_PED; }
 	void StreamIn() override;

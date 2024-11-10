@@ -188,6 +188,9 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
     // add player to list
     playerManager.Add(player);
 
+    std::cout << "Address stored in players[0]->m_pPeer: " << playerManager.GetEntities()[0]->GetPeer() << std::endl;
+    std::cout << "Address of event.peer: " << event.peer << std::endl;
+
     // create PlayerConnected packet struct
     CPackets::PlayerConnected packet =
     {
@@ -211,8 +214,8 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         CNetwork::SendPacket(event.peer, ePacketType::PLAYER_CONNECTED, &packet, sizeof CPackets::PlayerConnected, ENET_PACKET_FLAG_RELIABLE);
 
         CPackets::PlayerGetName getNamePacket{};
-        getNamePacket.playerid = i->GetId();
-        strcpy_s(getNamePacket.name, i->GetName());
+        getNamePacket.m_nPlayerId = i->GetId();
+        strcpy_s(getNamePacket.m_aName, i->GetName());
         CNetwork::SendPacket(event.peer, ePacketType::PLAYER_GET_NAME, &getNamePacket, sizeof CPackets::PlayerGetName, ENET_PACKET_FLAG_RELIABLE);
     }
 
@@ -246,7 +249,7 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         if (modifiedDamageStatus)
         {
             CPackets::VehicleDamage vehicleDamagePacket{};
-            vehicleDamagePacket.vehicleid = i->GetId();
+            vehicleDamagePacket.m_nVehicleId = i->GetId();
             memcpy(&vehicleDamagePacket.damageManager_padding, i->m_damageManager_padding, 23);
             CNetwork::SendPacket(event.peer, ePacketType::VEHICLE_DAMAGE, &vehicleDamagePacket, sizeof vehicleDamagePacket, ENET_PACKET_FLAG_RELIABLE);
         }
@@ -254,8 +257,8 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         for (int component : i->m_aComponents) 
         {
             CPackets::VehicleComponentAdd vehicleComponentAddPacket{};
-            vehicleComponentAddPacket.vehicleid = i->GetId();
-            vehicleComponentAddPacket.componentid = component;
+            vehicleComponentAddPacket.m_nVehicleId = i->GetId();
+            vehicleComponentAddPacket.m_nComponentId = component;
             CNetwork::SendPacket(event.peer, ePacketType::VEHICLE_COMPONENT_ADD, &vehicleComponentAddPacket, sizeof vehicleComponentAddPacket, ENET_PACKET_FLAG_RELIABLE);
         }
     }
@@ -263,11 +266,11 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
     for (auto i : CNetworkPedManager::Instance().GetEntities())
     {
         CPackets::PedSpawn packet{};
-        packet.pedid = i->GetId();
-        packet.modelId = i->GetModelId();
-        packet.pos = i->GetSyncData().m_vecPosition;
-        packet.pedType = i->GetPedType();
-        packet.createdBy = i->GetCreatedBy();
+        packet.m_nPedId = i->GetId();
+        packet.m_nModelId = i->GetModelId();
+        packet.m_vecPosition = i->GetSyncData().m_vecPosition;
+        packet.m_nPedType = i->GetPedType();
+        packet.m_nCreatedBy = i->GetCreatedBy();
         CNetwork::SendPacket(event.peer, ePacketType::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
 

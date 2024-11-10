@@ -66,7 +66,9 @@ public:
 			// create packet
 			CPackets::PlayerOnFoot* packet = (CPackets::PlayerOnFoot*)data;
 
-			auto networkPlayer = CNetworkPlayerManager::Instance().Get(peer);
+			auto& manager = CNetworkPlayerManager::Instance();
+			auto networkPlayer = manager.Get(peer);
+
 			// set packet`s m_nPlayerId, cuz incoming packet has id = 0
 			packet->m_nPlayerId = networkPlayer->GetId();
 
@@ -214,7 +216,7 @@ public:
 		float m_nHealth;
 		int8_t m_nPaintjob;
 		float m_fPlaneGearState;
-		bool m_bLocked;
+		uint8_t m_nDoorLock;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -239,7 +241,7 @@ public:
 			syncData.m_nHealth		   = packet->m_nHealth;
 			syncData.m_nPaintjob	   = packet->m_nPaintjob;
 			syncData.m_fPlaneGearState = packet->m_fPlaneGearState;
-			syncData.m_bLocked		   = packet->m_bLocked;
+			syncData.m_nDoorLock	   = packet->m_nDoorLock;
 		}
 	};
 

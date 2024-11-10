@@ -25,5 +25,8 @@ public:
 	eNetworkEntityType GetType() const override { return eNetworkEntityType::NETWORK_ENTITY_PLAYER; }
 
 	CNetworkPlayer(uint16_t networkId, ENetPeer* peer) : 
-		CNetworkEntity(networkId), Driveable(), m_pPeer(peer) {}
+		CNetworkEntity(networkId), Driveable(), m_pPeer(peer) 
+	{
+		std::cout << "CNetworkPlayer constructed: " << m_pPeer << std::endl;
+	}
 };

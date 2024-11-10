@@ -660,7 +660,8 @@ void CPacketHandler::PedSpawn__Handle(void* data, int size)
 	CChat::AddMessage("PED SPAWN %d %d %f %f %f %d %d", packet->m_nPedId, packet->m_nModelId, packet->m_vecPosition.x, packet->m_vecPosition.y, packet->m_vecPosition.z, packet->m_nPedType, packet->m_nCreatedBy);
 #endif
 
-	CNetworkPed* ped = new CNetworkPed(packet->m_nPedId, (int)packet->m_nModelId, (ePedType)packet->m_nPedType, packet->m_vecPosition, packet->m_nCreatedBy);
+	CNetworkPed* ped = new CNetworkPed(packet->m_nPedId, packet->m_nModelId, packet->m_nPedType, packet->m_nCreatedBy);
+	ped->GetSyncData().m_vecPosition = packet->m_vecPosition;
 
 	CNetworkPedManager::Instance().Add(ped);
 }

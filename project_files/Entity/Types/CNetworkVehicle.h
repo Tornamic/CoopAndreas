@@ -8,6 +8,8 @@
 class CNetworkVehicle : public CNetworkEntity<VehicleSyncData, CVehicle>, public Modelable, public Hostable
 {
 public:
+	static CNetworkVehicle* NotifyNew(CVehicle* vehicle);
+
 	CNetworkVehicle(uint16_t networkId, int16_t modelId) :
 		CNetworkEntity(networkId), Modelable(modelId) {}
 

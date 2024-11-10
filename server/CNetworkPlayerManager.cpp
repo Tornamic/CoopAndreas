@@ -10,6 +10,7 @@ CNetworkPlayer* CNetworkPlayerManager::Get(ENetPeer* peer)
 
 	for (int i = 0; i != players.size(); i++)
 	{
+		std::cout << "m_pPeer: " << players[0]->m_pPeer << ", peer: " << peer << std::endl;
 		if (players[i]->m_pPeer == peer)
 		{
 			return players[i];
