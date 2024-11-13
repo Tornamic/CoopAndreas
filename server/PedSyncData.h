@@ -14,4 +14,18 @@ public:
 	float m_fCurrentRotation;
 	float m_fLookDirection;
 	uint8_t m_nMoveState;
+
+    PedSyncData()
+        : m_vecPosition(0.0f, 0.0f, 0.0f),
+        m_vecVelocity(0.0f, 0.0f, 0.0f),
+        m_nHealth(100),
+        m_nArmour(0),
+        m_nCurrentWeapon(0),
+        m_nAmmoInClip(0),
+        m_fAimingRotation(0.0f),
+        m_fCurrentRotation(0.0f),
+        m_fLookDirection(0.0f),
+        m_nMoveState(0)
+    {
+    }
 };

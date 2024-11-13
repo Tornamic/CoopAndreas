@@ -185,11 +185,9 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
     // create new player instance
     CNetworkPlayer* player = new CNetworkPlayer(freeId, event.peer);
 
+    player->GetSyncData().m_vecPosition = CVector(1488.0f, 69.69f, 1337.0f);
     // add player to list
     playerManager.Add(player);
-
-    std::cout << "Address stored in players[0]->m_pPeer: " << playerManager.GetEntities()[0]->GetPeer() << std::endl;
-    std::cout << "Address of event.peer: " << event.peer << std::endl;
 
     // create PlayerConnected packet struct
     CPackets::PlayerConnected packet =

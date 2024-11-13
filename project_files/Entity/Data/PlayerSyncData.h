@@ -16,5 +16,7 @@ public:
 	float m_fAimX;
 	float m_fAimY;
 	bool m_bHasJetpack;
+
+
 };
 

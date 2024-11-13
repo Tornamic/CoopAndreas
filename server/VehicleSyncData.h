@@ -18,4 +18,22 @@ public:
 	int16_t m_nMiscComponentAngle; // hydra thrusters
 	float m_fPlaneGearState;
 	uint8_t m_nDoorLock;
+
+    VehicleSyncData()
+        : m_vecPosition(0.0f, 0.0f, 0.0f),
+        m_vecVelocity(0.0f, 0.0f, 0.0f),
+        m_vecRotation(0.0f, 0.0f, 0.0f),
+        m_vecRoll(0.0f, 0.0f, 0.0f),
+        m_nPrimaryColor(0),
+        m_nSecondaryColor(0),
+        m_nHealth(1000.0f),
+        m_nPaintjob(0), // possible crash
+        m_fBikeLean(0.0f),
+        m_fTurretAimHorizontal(0.0f),
+        m_fTurretAimVertical(0.0f),
+        m_nMiscComponentAngle(0),
+        m_fPlaneGearState(0.0f),
+        m_nDoorLock(0)
+    {
+    }
 };

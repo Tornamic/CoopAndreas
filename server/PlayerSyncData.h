@@ -15,5 +15,20 @@ public:
 	float m_fAimX;
 	float m_fAimY;
 	bool m_bHasJetpack;
+
+    PlayerSyncData()
+        : m_vecPosition(0.0f, 0.0f, 0.0f),
+        m_vecVelocity(0.0f, 0.0f, 0.0f),  
+        m_fRotation(0.0f),
+        m_nHealth(100),
+        m_nArmour(0),
+        m_nCurrentWeapon(0),
+        m_nAmmoInClip(0),
+        m_bDucking(false),
+        m_fAimX(0.0f),
+        m_fAimY(0.0f),
+        m_bHasJetpack(false)
+    {
+    }
 };
 
