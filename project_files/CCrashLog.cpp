@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CCrashLog.h"
 #include <windows.h>
 #include <dbghelp.h>

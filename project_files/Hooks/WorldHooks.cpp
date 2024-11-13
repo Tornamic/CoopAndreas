@@ -1,7 +1,7 @@
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "WorldHooks.h"
-#include "../CNetworkVehicle.h"
-#include "../CNetworkPed.h"
+#include "CNetworkVehicle.h"
+#include "CNetworkPed.h"
 
 static void __cdecl CWeather__ForceWeather_Hook(short id)
 {

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CTaskComplexCarDrive.h"
 
 // 0x63C9D0

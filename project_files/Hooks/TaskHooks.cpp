@@ -1,8 +1,8 @@
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "TaskHooks.h"
-#include "../CTaskSync.h"
-#include "../CNetworkVehicle.h"
-#include "../CNetworkPed.h"
+#include "CTaskSync.h"
+#include "CNetworkVehicle.h"
+#include "CNetworkPed.h"
 
 // when local player enters any vehicle
 static void __fastcall CTaskComplexEnterCarAsDriver__Ctor_Hook(CTaskComplexEnterCarAsDriver* This, int, CVehicle* vehicle)

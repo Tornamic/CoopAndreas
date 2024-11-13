@@ -1,6 +1,6 @@
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "PlayerHooks.h"
-#include "../CKeySync.h"
+#include "CKeySync.h"
 
 static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 {

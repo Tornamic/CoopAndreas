@@ -1,4 +1,4 @@
-#include "../project_files/stdafx.h"
+#include "stdafx.h"
 #include "../project_files/CDXFont.h"
 
 unsigned int lastOnFootSyncTickRate = 0;

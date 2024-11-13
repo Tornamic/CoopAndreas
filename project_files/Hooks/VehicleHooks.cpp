@@ -1,8 +1,8 @@
-#include "../stdafx.h"
+#include "stdafx.h"
 #include "VehicleHooks.h"
-#include "../CKeySync.h"
-#include "../CNetworkVehicle.h"
-#include "../CNetworkPed.h"
+#include "CKeySync.h"
+#include "CNetworkVehicle.h"
+#include "CNetworkPed.h"
 
 void __fastcall CVehicle__ProcessControl_Hook()
 {

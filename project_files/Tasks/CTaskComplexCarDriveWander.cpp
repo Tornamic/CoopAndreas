@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CTaskComplexCarDriveWander.h"
 
 // 0x63CB10
