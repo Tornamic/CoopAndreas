@@ -15,7 +15,7 @@ This mod is an unofficial modification for **Grand Theft Auto: San Andreas** and
 
 1. Verify that you have the C++ and C# packages installed in Visual Studio 2022.
 
-2. Download [THIS version of the plugin-sdk](https://github.com/DK22Pac/plugin-sdk/tree/380105ec5242cdb3a0cbc18505b151308dd85b53) and install it using [THIS INSTRUCTION](https://github.com/DK22Pac/plugin-sdk/wiki/Set-up-plugin-sdk). Set up your GTA-SA and plugin-sdk folders.
+2. Download [THIS version of the plugin-sdk](https://github.com/DK22Pac/plugin-sdk/tree/050d18b6e1770477deab81a40028a40277583d97) and install it using [THIS INSTRUCTION](https://github.com/DK22Pac/plugin-sdk/wiki/Set-up-plugin-sdk). Set up your GTA-SA and plugin-sdk folders.
 
 3. Install the enet library using the following instructions:
 

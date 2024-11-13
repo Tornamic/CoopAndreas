@@ -62,6 +62,12 @@
 #include "CPopulation.h"
 #include "CWeather.h"
 #include "CClock.h"
+#include <CTaskComplexWander.h>
+#include <CTaskComplexClimb.h>
+#include <CTaskSimpleCarSetPedInAsDriver.h>
+
+#include "Tasks/CTaskComplexCarDriveWander.h"
+
 // classes ---------------------------------------------------------------------------------
 
 using namespace plugin;

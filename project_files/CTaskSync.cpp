@@ -3,11 +3,7 @@
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
 
-#include <CTaskComplexJump.h>
-#include <CTaskComplexWander.h>
-#include <CTaskComplexClimb.h>
-#include <CTaskSimpleCarSetPedInAsDriver.h>
-#include "Tasks/CTaskComplexCarDriveWander.h"
+
 
 #define PUSH(val) \
     memcpy(currentPtr, &val, sizeof(val)); \
