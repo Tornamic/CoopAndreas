@@ -93,34 +93,43 @@ void CNetworkPlayerNameTag::Process()
 		CSprite::CalcScreenCoors(*(RwV3d*)&networkPlayerPos, &out, &width, &height, false, false);	
 		
 		// draw health bar
-		CSprite2d::DrawBarChart(
-			(float)out.x,
-			(float)out.y,
-			PROPORION_X(100),
-			PROPORION_Y(14),
-			player->m_lOnFoot->health,
-			false,
-			false,
-			true,
-			CRGBA(180, 25, 29, alpha),
-			CRGBA(0, 0, 0, 0)
-		);
+		
+		if (player->m_lOnFoot->health >= 10.0f || GetTickCount() % 500 > 150) // blinking, fps fixed
+		{
+			CSprite2d::DrawBarChart(
+				(float)out.x,
+				(float)out.y,
+				PROPORION_X(100),
+				PROPORION_Y(14),
+				player->m_lOnFoot->health,
+				false,
+				false,
+				true,
+				CRGBA(180, 25, 29, alpha),
+				CRGBA(0, 0, 0, 0)
+			);
+		}
 
 		// draw armour bar
-		CSprite2d::DrawBarChart(
-			(float)out.x,
-			(float)out.y - PROPORION_X(12),
-			PROPORION_X(100),
-			PROPORION_Y(14),
-			player->m_lOnFoot->armour,
-			false,
-			false,
-			true,
-			CRGBA(225, 225, 225, alpha),
-			CRGBA(0, 0, 0, 0)
-		);
-		 
-		DrawNickName((float)out.x + PROPORION_X(5), (float)out.y - PROPORION_Y(24), alpha, player->GetName());
+		if (player->m_lOnFoot->armour > 0.0f)
+		{
+			CSprite2d::DrawBarChart(
+				(float)out.x,
+				(float)out.y - PROPORION_X(12),
+				PROPORION_X(100),
+				PROPORION_Y(14),
+				player->m_lOnFoot->armour,
+				false,
+				false,
+				true,
+				CRGBA(225, 225, 225, alpha),
+				CRGBA(0, 0, 0, 0)
+			);
+		}
+		
+		int nicknameOffsetY = player->m_lOnFoot->armour > 0.0f ? 24 : 12;
+
+		DrawNickName((float)out.x + PROPORION_X(5), (float)out.y - PROPORION_Y(nicknameOffsetY), alpha, player->GetName());
 
 		DrawWeaponIcon(player->m_pPed, (int)out.x - PROPORION_X(70), (int)out.y - PROPORION_Y(50), alpha);
 	}
