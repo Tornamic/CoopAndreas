@@ -96,9 +96,7 @@ Contact information is current as of November 2024
 - [ ] separate ped sync
 - [ ] stream in/out players, peds, vehicles, etc.
 - [ ] use original main.scm
-- [ ] fix weapon selection
 - [ ] force crouch sync using CTask
-- [ ] refactor packet system (make abstract, more oop, etc.)
 - [ ] vehicle sync
   - [ ] force hydraulics sync
   - [ ] trailer sync
@@ -123,6 +121,7 @@ Contact information is current as of November 2024
 - [ ] smooth interpolation
   - [ ] move
   - [ ] rotation
+  - [ ] weapon aim interpolation
 - [ ] wanted level
 - [ ] stats sync
   - [ ] fat
@@ -140,6 +139,15 @@ Contact information is current as of November 2024
 - [ ] npc sync
   - [X] pos, rot, speed
   - [X] weapons
+  - [ ] in vehicle sync
+    - [ ] driver
+      - [X] position velocity rotation  
+      - [X] gas/break lights
+      - [ ] wheel movement
+      - [ ] horn
+      - [ ] siren
+      - [ ] current path, target entity, mission
+    - [ ] passenger
   - [ ] aim
   - [ ] shots
   - [ ] task sync (good luck, warrior!)
@@ -187,11 +195,13 @@ Contact information is current as of November 2024
 - [ ] gand wars sync
 - [ ] parachute jump sync
 - [ ] co-op vigilante sub-mission completing
-### Minor tasks and ideas
+- [ ] stunt
+  - [ ] collecting
+  - [ ] for-player slow motion
 - [ ] chat gamepad support with on-screen keyboard
+### Minor tasks and ideas
 - [ ] Sync laser sniper rifle red dot with all players
 - [ ] Sync moon sniper rifle shot changing size easter egg with all players
-- [ ] hot coffee implementation 😏
 ## TODO Launcher:
 ### Already Done ✓
 - [X] setup project and create forms
