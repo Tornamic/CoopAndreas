@@ -287,7 +287,6 @@ public:
 		float bikeLean;
 		float planeGearState;
 		unsigned char locked;
-		CSyncAutoPilot autoPilot;
 		float gasPedal;
 		float breakPedal;
 		float steerAngle;

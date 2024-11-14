@@ -111,7 +111,7 @@ public:
 						lastIdleVehicleSyncTickRate = GetTickCount();
 					}
 
-					if (GetTickCount() > lastPedSyncTickRate + 100)
+					if (GetTickCount() > lastPedSyncTickRate + 40)
 					{
 						CNetworkPedManager::Update();
 						lastPedSyncTickRate = GetTickCount();

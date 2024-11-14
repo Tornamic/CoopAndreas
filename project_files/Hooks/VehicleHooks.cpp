@@ -44,22 +44,20 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
     if (player == nullptr)
     {
+        plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
+        plugin::CallMethodDyn<CVehicle*>(call_addr, vehicle);
+
         if (!CLocalPlayer::m_bIsHost)
         {
             CNetworkPed* ped = CNetworkPedManager::GetPed(vehicle->m_pDriver);
-            if (ped == nullptr)
+            if (ped != nullptr)
             {
-                plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
-                plugin::CallMethodDyn<CVehicle*>(call_addr, vehicle);
-                return;
+                //memset(&vehicle->m_autoPilot, 0, sizeof CAutoPilot);
+                vehicle->m_fGasPedal = ped->m_fGasPedal;
+                vehicle->m_fBreakPedal = ped->m_fBreakPedal;
+                vehicle->m_fSteerAngle = ped->m_fSteerAngle;
             }
-            vehicle->m_autoPilot = ped->m_autoPilot;
-            vehicle->m_fGasPedal = ped->m_fGasPedal;
-            vehicle->m_fBreakPedal = ped->m_fBreakPedal;
-            vehicle->m_fSteerAngle = ped->m_fSteerAngle;
         }
-        plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
-        plugin::CallMethodDyn<CVehicle*>(call_addr, vehicle);
         return;
     }
 

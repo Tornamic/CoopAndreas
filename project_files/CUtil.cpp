@@ -114,18 +114,22 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
 
             if(CStreaming::ms_aInfoForModel[model].m_nLoadState != LOADSTATE_LOADED)
             {
-                CStreaming::RequestModel(model, eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
-                CStreaming::LoadAllRequestedModels(true);
-                Sleep(10);
-                //while (CStreaming::ms_aInfoForModel[model].m_nLoadState != LOADSTATE_LOADED) Sleep(1);
+                CStreaming::RequestModel(model, eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST | eStreamingFlags::KEEP_IN_MEMORY);
+                CStreaming::LoadAllRequestedModels(true); 
+                
+                int count = 0;
+                while (count++ < 10 && CStreaming::ms_aInfoForModel[model].m_nLoadState != LOADSTATE_LOADED)
+                {
+                    CStreaming::LoadAllRequestedModels(count < 3);
+                }
             }
 
             // give weapon
             bool isMeleeWeapon = CUtil::IsMeleeWeapon(weapon);
 
-            if (activeWeapon.m_nTotalAmmo <= 0)
+            if (activeWeapon.m_nTotalAmmo <= 0 || isWeaponTypeDifferent)
             {
-                player->m_pPed->GiveWeapon((eWeaponType)weapon, isMeleeWeapon ? 1 : 999, false);
+                player->m_pPed->GiveWeapon((eWeaponType)weapon, isMeleeWeapon ? 1 : 9999, false);
             }
             // set ammo in clip
             activeWeapon.m_nAmmoInClip = ammo;
@@ -156,11 +160,18 @@ void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned 
 
         if (weapon != 0)
         {
-            if (isWeaponTypeDifferent)
+            int model = CUtil::GetWeaponModelById(weapon);
+
+            if (CStreaming::ms_aInfoForModel[model].m_nLoadState != LOADSTATE_LOADED)
             {
-                // preload model
-                CStreaming::RequestModel(CUtil::GetWeaponModelById(weapon), eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
-                CStreaming::LoadAllRequestedModels(false);
+                CStreaming::RequestModel(model, eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
+                CStreaming::LoadAllRequestedModels(true);
+
+                int count = 0;
+                while (count++ < 10 && CStreaming::ms_aInfoForModel[model].m_nLoadState != LOADSTATE_LOADED)
+                {
+                    CStreaming::LoadAllRequestedModels(count < 3);
+                }
             }
 
             // give weapon

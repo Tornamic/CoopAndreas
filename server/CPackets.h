@@ -525,7 +525,6 @@ public:
 		float bikeLean;
 		float planeGearState;
 		unsigned char locked;
-		unsigned char autoPilot[92];
 		float gasPedal;
 		float breakPedal;
 		float steerAngle;

@@ -118,8 +118,7 @@ CNetworkVehicle::~CNetworkVehicle()
     {
         if (m_pVehicle)
         {
-            CWorld::Remove(m_pVehicle);
-            m_pVehicle->~CVehicle();
+            plugin::Command<Commands::DELETE_CAR>(CPools::GetVehicleRef(m_pVehicle));
         }
     }
 }

@@ -167,7 +167,7 @@ void CPacketHandler::PlayerPlaceWaypoint__Handle(void* data, int size)
 	player->m_bWaypointPlaced = packet->place;
 	player->m_vecWaypointPos = &packet->position;
 
-#ifdef _DEV
+#ifdef PACKET_DEBUG_MESSAGES
 	CChat::AddMessage("WAYPOINT PLACE %d %f %f\n", packet->place, packet->position.x, packet->position.y);
 #endif
 }
@@ -234,7 +234,7 @@ void CPacketHandler::VehicleSpawn__Handle(void* data, int size)
 {
 	CPackets::VehicleSpawn* packet = (CPackets::VehicleSpawn*)data;
 	
-#ifdef _DEV
+#ifdef PACKET_DEBUG_MESSAGES
 	CChat::AddMessage("VEHICLE SPAWN %d %d %f %f %f %f %p", packet->vehicleid, packet->modelid, packet->pos.x, packet->pos.y, packet->pos.z, packet->rot);
 #endif
 
@@ -256,7 +256,7 @@ void CPacketHandler::VehicleRemove__Handle(void* data, int size)
 {
 	CPackets::VehicleRemove* packet = (CPackets::VehicleRemove*)data;
 
-#ifdef _DEV
+#ifdef PACKET_DEBUG_MESSAGES
 	char buffer[128];
 	sprintf(buffer, "VEHICLE REMOVE %d", packet->vehicleid);
 	CChat::AddMessage(buffer);
@@ -467,7 +467,7 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 		return;
 	}
 
-#ifdef _DEV
+#ifdef PACKET_DEBUG_MESSAGES
 	CChat::AddMessage("player %d entered vehicleid %d %s", packet->playerid, packet->vehicleid, packet->seatid != 0 ? "as passenger" : "");
 #endif
 
@@ -512,7 +512,7 @@ void CPacketHandler::VehicleExit__Handle(void* data, int size)
 	{
 		return;
 	}
-#ifdef _DEV
+#ifdef PACKET_DEBUG_MESSAGES
 	CChat::AddMessage("player %d exited from vehicle", packet->playerid);
 #endif
 	if (packet->force)
@@ -529,7 +529,7 @@ void CPacketHandler::VehicleExit__Handle(void* data, int size)
 
 void CPacketHandler::VehicleDamage__Handle(void* data, int size)
 {
-#ifdef _DEV
+#ifdef PACKET_DEBUG_MESSAGES
 	CChat::AddMessage("VehicleDamage__Handle");
 #endif
 	CPackets::VehicleDamage* packet = (CPackets::VehicleDamage*)data;
@@ -621,7 +621,7 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 
 	if (!player->m_pPed->m_nPedFlags.bInVehicle || (player->m_pPed->m_nPedFlags.bInVehicle && vehicle->m_pVehicle->m_pDriver == player->m_pPed))
 	{
-#ifdef _DEV
+#ifdef PACKET_DEBUG_MESSAGES
 		CChat::AddMessage("forcing enter passenger %d", player->m_iPlayerId);
 #endif
 		plugin::Command<Commands::WARP_CHAR_INTO_CAR_AS_PASSENGER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), -1);
@@ -665,7 +665,7 @@ void CPacketHandler::PedSpawn__Handle(void* data, int size)
 {
 	CPackets::PedSpawn* packet = (CPackets::PedSpawn*)data;
 
-#ifdef _DEV
+#ifdef PACKET_DEBUG_MESSAGES
 	CChat::AddMessage("PED SPAWN %d %d %f %f %f %d %d", packet->pedid, packet->modelId, packet->pos.x, packet->pos.y, packet->pos.z, packet->pedType, packet->createdBy);
 #endif
 
@@ -680,7 +680,7 @@ void CPacketHandler::PedRemove__Handle(void* data, int size)
 {
 	CPackets::PedRemove* packet = (CPackets::PedRemove*)data;
 
-#ifdef _DEV
+#ifdef PACKET_DEBUG_MESSAGES
 	CChat::AddMessage("PED REMOVE %d", packet->pedid);
 #endif
 
@@ -843,8 +843,6 @@ CPackets::PedDriverUpdate* CPacketHandler::PedDriverUpdate__Collect(CNetworkVehi
 	}
 
 	packet->locked = vehicle->m_pVehicle->m_eDoorLock;
-	
-	packet->autoPilot = CSyncAutoPilot(vehicle->m_pVehicle->m_autoPilot);
 
 	packet->gasPedal = vehicle->m_pVehicle->m_fGasPedal;
 	packet->breakPedal = vehicle->m_pVehicle->m_fBreakPedal;
@@ -909,8 +907,6 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 	}
 
 	vehicle->m_pVehicle->m_eDoorLock = (eDoorLock)packet->locked;
-	packet->autoPilot.WriteTo(vehicle->m_pVehicle->m_autoPilot);
-	ped->m_autoPilot = vehicle->m_pVehicle->m_autoPilot;
 
 	ped->m_fGasPedal = packet->gasPedal;
 	ped->m_fBreakPedal = packet->breakPedal;
