@@ -49,23 +49,6 @@ void CPatch::PatchFramerate()
     RwD3D9EngineSetRefreshRate(fps); // update refresh rate
 }
 
-void PatchPlayers()
-{
-    // i think this patches are useless
-    
-    // increase player count 
-    // we dont use first two players because
-    // 0 - you
-    // 1 - local-coop player
-    //patch::SetUChar(0x84E98B, MAX_SERVER_PLAYERS + 2); // _vector_constructor
-    //patch::SetUChar(0x856506, MAX_SERVER_PLAYERS + 2); // _vector_destructor
-
-    // increase pad count
-    // same situation
-    //patch::SetUChar(0x84E1FB, MAX_SERVER_PLAYERS + 2); // _vector_constructor
-    //patch::SetUChar(0x856466, MAX_SERVER_PLAYERS + 2); // _vector_destructor
-}
-
 #ifdef _DEV
 void PatchConsole()
 {
@@ -93,7 +76,7 @@ void PatchStreaming()
     patch::Nop(0x74542B, 8);
     patch::Nop(0x53EA88, 6);
 
-    // fix cutscene crash
+    // fix cutscene crash (not needed now, TODO: make sure tomorrow)
     patch::Nop(0x40EC56, 5);
 
     // fix crash after death
@@ -103,29 +86,7 @@ void PatchStreaming()
 
 void PatchPools()
 {
-    //Inc task pool
-    patch::SetUChar(0x551140, 0xFF);
-
-    //Inc ped pool pool
-    patch::SetUChar(0x550FF2, (unsigned char)1000);
-
-    //Inc intelligence pool
-    patch::SetUChar(0x551283, 210);
-
-    //Inc event pool
-    patch::SetUChar(0x551178, 0x01);
-
-    //Inc matrices pool
-    patch::SetUChar(0x54F3A2, 0x10);
-
-    //Inc ccolmodel pool
-    patch::SetUChar(0x551108, 0x77);
-
-    //Inc dummies pool
-    patch::SetUChar(0x5510D0, 0x0F);
-
-    //Inc objects pool
-    patch::SetUChar(0x551098, 0x02);
+    // TODO: increase ped, intelligence, vehicle limits to 255
 }
 
 void FixCrashes()
@@ -166,17 +127,14 @@ void FixCrashes()
     // Satchel charge crash fix
     patch::Nop(0x738F3A, 83);
 
-    // Removes the FindPlayerInfoForThisPlayerPed at these locations.
-
+    // remove CPlayerData -> CanDoDriveBy checks
     patch::Nop(0x5E63A6, 19);
     patch::Nop(0x621AEA, 12);
     patch::Nop(0x62D331, 11);
     patch::Nop(0x741FFF, 27);
+    patch::Nop(0x60F2C4, 25); //CPlayerPed::ProcessControl
 
-    // PlayerInfo checks in CPlayerPed::ProcessControl
-    patch::Nop(0x60F2C4, 25);
-
-    // nop ped destroying when player enters interior
+    // nop ped destroying when player enters interior (remove after separating ped sync)
     patch::Nop(0x4407B7, 5);
     patch::Nop(0x61648C, 5);
 
@@ -204,80 +162,74 @@ void FixCrashes()
     // disable replays
     patch::Nop(0x53C090, 5);
 
-    // fix driver kill bug sprint pressed
+    // fix driver kill bug sprint pressed (possible issues with missions and scripts)
     patch::SetUChar(0x62F223, 0);
 }
 
-#define SCANCODE_SIZE 8*20000
+#define SCANCODE_BUFFER_SIZE (8 * 20000)
 
-unsigned char ScanCodeMemory[SCANCODE_SIZE];
+unsigned char ScanCodeBuffer[SCANCODE_BUFFER_SIZE];
 
-const unsigned int relocateScanCodesPatch1[14] = {
-0x5DC7AA,0x41A85D,0x41A864,0x408259,0x711B32,0x699CF8,
-0x4092EC,0x40914E,0x408702,0x564220,0x564172,0x563845,
-0x84E9C2,0x85652D };
+const unsigned int RelocateScanCodesPatch1[14] = {
+    0x5DC7AA, 0x41A85D, 0x41A864, 0x408259, 0x711B32, 0x699CF8,
+    0x4092EC, 0x40914E, 0x408702, 0x564220, 0x564172, 0x563845,
+    0x84E9C2, 0x85652D
+};
 
-const unsigned int relocateScanCodesPatch2[56] = {
-0x0040D68C,0x005664D7,0x00566586,0x00408706,0x0056B3B1,0x0056AD91,0x0056A85F,0x005675FA,
-0x0056CD84,0x0056CC79,0x0056CB51,0x0056CA4A,0x0056C664,0x0056C569,0x0056C445,0x0056C341,
-0x0056BD46,0x0056BC53,0x0056BE56,0x0056A940,0x00567735,0x00546738,0x0054BB23,0x006E31AA,
-0x0040DC29,0x00534A09,0x00534D6B,0x00564B59,0x00564DA9,0x0067FF5D,0x00568CB9,0x00568EFB,
-0x00569F57,0x00569537,0x00569127,0x0056B4B5,0x0056B594,0x0056B2C3,0x0056AF74,0x0056AE95,
-0x0056BF4F,0x0056ACA3,0x0056A766,0x0056A685,0x0070B9BA,0x0056479D,0x0070ACB2,0x006063C7,
-0x00699CFE,0x0041A861,0x0040E061,0x0040DF5E,0x0040DDCE,0x0040DB0E,0x0040D98C,0x01566855 };
+const unsigned int RelocateScanCodesPatch2[56] = {
+    0x0040D68C, 0x005664D7, 0x00566586, 0x00408706, 0x0056B3B1, 0x0056AD91,
+    0x0056A85F, 0x005675FA, 0x0056CD84, 0x0056CC79, 0x0056CB51, 0x0056CA4A,
+    0x0056C664, 0x0056C569, 0x0056C445, 0x0056C341, 0x0056BD46, 0x0056BC53,
+    0x0056BE56, 0x0056A940, 0x00567735, 0x00546738, 0x0054BB23, 0x006E31AA,
+    0x0040DC29, 0x00534A09, 0x00534D6B, 0x00564B59, 0x00564DA9, 0x0067FF5D,
+    0x00568CB9, 0x00568EFB, 0x00569F57, 0x00569537, 0x00569127, 0x0056B4B5,
+    0x0056B594, 0x0056B2C3, 0x0056AF74, 0x0056AE95, 0x0056BF4F, 0x0056ACA3,
+    0x0056A766, 0x0056A685, 0x0070B9BA, 0x0056479D, 0x0070ACB2, 0x006063C7,
+    0x00699CFE, 0x0041A861, 0x0040E061, 0x0040DF5E, 0x0040DDCE, 0x0040DB0E,
+    0x0040D98C, 0x01566855
+};
 
-unsigned int relocateScanCodesPatch3[11] = {
-0x004091C5,0x00409367,0x0040D9C5,0x0040DB47,0x0040DC61,0x0040DE07,0x0040DF97,
-0x0040E09A,0x00534A98,0x00534DFA,0x0071CDB0 };
+unsigned int RelocateScanCodesPatch3[11] = {
+    0x004091C5, 0x00409367, 0x0040D9C5, 0x0040DB47, 0x0040DC61, 0x0040DE07,
+    0x0040DF97, 0x0040E09A, 0x00534A98, 0x00534DFA, 0x0071CDB0
+};
 
-unsigned int relocateScanCodesPatch4[4] = { 0x005634A6, 0x005638DF, 0x0056420F, 0x00564283 };
-
-
-//-----------------------------------------------------------
+unsigned int RelocateScanCodesPatch4[4] = { 0x005634A6, 0x005638DF, 0x0056420F, 0x00564283 };
 
 void RelocateScanCodes()
 {
     DWORD oldProt;
-    memset(&ScanCodeMemory[0], 0, SCANCODE_SIZE);
-    unsigned char* aScanCodeMemory = &ScanCodeMemory[0];
+    memset(ScanCodeBuffer, 0, SCANCODE_BUFFER_SIZE);
+    unsigned char* scanCodeBufferBase = ScanCodeBuffer;
 
-    int x = 0;
-    while (x != 14) 
-    {
-        VirtualProtect((PVOID)relocateScanCodesPatch1[x], 4, PAGE_EXECUTE_READWRITE, &oldProt);
-        *(PDWORD)relocateScanCodesPatch1[x] = (DWORD)aScanCodeMemory;
-        x++;
+    for (int i = 0; i < 14; i++) {
+        VirtualProtect((PVOID)RelocateScanCodesPatch1[i], 4, PAGE_EXECUTE_READWRITE, &oldProt);
+        *(PDWORD)RelocateScanCodesPatch1[i] = (DWORD)scanCodeBufferBase;
+        VirtualProtect((PVOID)RelocateScanCodesPatch1[i], 4, oldProt, &oldProt);
     }
 
-    x = 0;
-    while (x != 56) 
-    {
-        VirtualProtect((PVOID)relocateScanCodesPatch2[x], 8, PAGE_EXECUTE_READWRITE, &oldProt);
-        *(PDWORD)(relocateScanCodesPatch2[x] + 3) = (DWORD)aScanCodeMemory;
-        x++;
+    for (int i = 0; i < 56; i++) {
+        VirtualProtect((PVOID)RelocateScanCodesPatch2[i], 8, PAGE_EXECUTE_READWRITE, &oldProt);
+        *(PDWORD)(RelocateScanCodesPatch2[i] + 3) = (DWORD)scanCodeBufferBase;
+        VirtualProtect((PVOID)RelocateScanCodesPatch2[i], 8, oldProt, &oldProt);
     }
 
-    // THIRD LIST THAT POINTS TO THE BASE SCANLIST MEMORY + 4
-    x = 0;
-    while (x != 11) {
-        VirtualProtect((PVOID)relocateScanCodesPatch3[x], 8, PAGE_EXECUTE_READWRITE, &oldProt);
-        *(PDWORD)(relocateScanCodesPatch3[x] + 3) = (DWORD)(aScanCodeMemory + 4);
-        x++;
+    for (int i = 0; i < 11; i++) {
+        VirtualProtect((PVOID)RelocateScanCodesPatch3[i], 8, PAGE_EXECUTE_READWRITE, &oldProt);
+        *(PDWORD)(RelocateScanCodesPatch3[i] + 3) = (DWORD)(scanCodeBufferBase + 4);
+        VirtualProtect((PVOID)RelocateScanCodesPatch3[i], 8, oldProt, &oldProt);
     }
 
-    // FOURTH LIST THAT POINTS TO THE END OF THE SCANLIST
-    x = 0;
-    while (x != 4) {
-        VirtualProtect((PVOID)relocateScanCodesPatch4[x], 4, PAGE_EXECUTE_READWRITE, &oldProt);
-        *(PDWORD)(relocateScanCodesPatch4[x]) = (DWORD)(aScanCodeMemory + sizeof(aScanCodeMemory));
-        x++;
+    for (int i = 0; i < 4; i++) {
+        VirtualProtect((PVOID)RelocateScanCodesPatch4[i], 4, PAGE_EXECUTE_READWRITE, &oldProt);
+        *(PDWORD)RelocateScanCodesPatch4[i] = (DWORD)(scanCodeBufferBase + SCANCODE_BUFFER_SIZE);
+        VirtualProtect((PVOID)RelocateScanCodesPatch4[i], 4, oldProt, &oldProt);
     }
 
-    // Others that didn't fit.
     VirtualProtect((PVOID)0x40936A, 4, PAGE_EXECUTE_READWRITE, &oldProt);
-    *(PDWORD)0x40936A = (DWORD)(aScanCodeMemory + 4);
+    *(PDWORD)0x40936A = (DWORD)(scanCodeBufferBase + 4);
+    VirtualProtect((PVOID)0x40936A, 4, oldProt, &oldProt);
 
-    // Reset the exe scanlist mem for playerinfo's
     memset((BYTE*)0xB7D0B8, 0, 8 * 14400);
 }
 
@@ -306,10 +258,7 @@ void PatchLoadScreen()
 
 void CPatch::ApplyPatches()
 {
-    // this comment fixes a lot of crashes :D
-    //PatchPools(); 
-    
-    PatchPlayers();
+    //PatchPools();
     PatchStreaming();
     FixCrashes();
 #ifdef _DEV
