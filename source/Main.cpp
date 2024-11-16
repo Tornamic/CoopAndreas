@@ -49,12 +49,6 @@ public:
 			{
 				CDebugVehicleSpawner::Process();
 
-				if (GetAsyncKeyState(VK_F5))
-				{
-					CPlayerPed* ped = FindPlayerPed(-1);
-					delete ped;
-    			}
-
 				if (CNetwork::m_bConnected)
 				{
 					CPassengerEnter::Process();

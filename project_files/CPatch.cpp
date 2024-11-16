@@ -80,7 +80,26 @@ void PatchStreaming()
 
 void PatchPools()
 {
-    // TODO: increase ped, intelligence, vehicle limits to 255
+    // WARNING
+    // if we add replay support, the limits of vehicles and peds should be `< 256`
+    // otherwise need to patch the major part of replays
+
+    // ped pool (255)
+    // push    8Ch -> push    FFh
+    patch::SetRaw(0x550FF1, "\x68\xFF\x00\x00\x00", 5); 
+
+    // intelligence pool (255), must be equal to the size of the ped pool
+    // push    8Ch -> push    FFh
+    patch::SetRaw(0x551282, "\x68\xFF\x00\x00\x00", 5); 
+    
+    // vehicle pool (400)
+    // push    offset aVehicles -> push    0h
+    // push    6Eh              -> push    190h
+    patch::SetRaw(0x551024, "\x6A\x00\x68\x90\x01\x00\x00", 7); 
+
+    // EntryInfoNode pool (1012)
+    // push    1F4h -> push    3F4h
+    patch::SetUChar(0x550FB9 + 0x2, 0x3);
 }
 
 void FixCrashes()
@@ -256,7 +275,7 @@ void PatchLoadScreen()
 
 void CPatch::ApplyPatches()
 {
-    //PatchPools();
+    PatchPools();
     PatchStreaming();
     FixCrashes();
 #ifdef _DEV
