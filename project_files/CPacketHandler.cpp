@@ -108,6 +108,12 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 
 	CUtil::SetPlayerJetpack(player, packet->hasJetpack);
 
+	if (CUtil::IsDucked(player->m_pPed) != packet->ducking)
+	{
+		CTaskSimpleDuckToggle task = CTaskSimpleDuckToggle(packet->ducking);
+		task.ProcessPed(player->m_pPed);
+	}
+
 	// save last onfoot sync
 	player->m_oOnFoot = player->m_lOnFoot;
 	player->m_lOnFoot = packet;
@@ -125,17 +131,38 @@ void CPacketHandler::PlayerBulletShot__Handle(void* data, int size)
 	
 	if (packet->targetid != -1)
 	{
+		switch ((eNetworkEntityType)packet->entityType)
+		{
+		case NETWORK_ENTITY_TYPE_PLAYER:
+		{
+			auto target = CNetworkPlayerManager::GetPlayer(packet->targetid);
+			if (target && target->m_pPed)
+			{
+				victim = target->m_pPed;
+			}
+			break;
+		}
+		case NETWORK_ENTITY_TYPE_VEHICLE:
+		{
+			auto target = CNetworkVehicleManager::GetVehicle(packet->targetid);
+			if (target && target->m_pVehicle)
+			{
+				victim = target->m_pVehicle;
+			}
+			break;
+		}
+		case NETWORK_ENTITY_TYPE_PED:
+		{
+			auto target = CNetworkPedManager::GetPed(packet->targetid);
+			if (target && target->m_pPed)
+			{
+				victim = target->m_pPed;
+			}
+			break;
+		}
+		}
 
-		CNetworkPlayer* damagedPlayer = CNetworkPlayerManager::GetPlayer(packet->targetid);
-		CNetworkVehicle* damagedVehicle = CNetworkVehicleManager::GetVehicle(packet->targetid);
-
-		if (damagedPlayer != nullptr)
-			victim = damagedPlayer->m_pPed;
-
-		if (damagedVehicle != nullptr)
-			victim = damagedVehicle->m_pVehicle;
-
-		if (packet->targetid == CNetworkPlayerManager::m_nMyId && packet->entityType == eEntityType::ENTITY_TYPE_PED)
+		if (packet->targetid == CNetworkPlayerManager::m_nMyId && packet->entityType == eNetworkEntityType::NETWORK_ENTITY_TYPE_PLAYER)
 			victim = FindPlayerPed(0);
 	}
 
@@ -711,6 +738,7 @@ CPackets::PedOnFoot* CPacketHandler::PedOnFoot__Collect(CNetworkPed* networkPed)
 	packet->currentRotation = ped->m_fCurrentRotation;
 	packet->lookDirection = ped->field_73C; // look direction (rad)
 	packet->moveState = (unsigned char)ped->m_nMoveState;
+	packet->ducked = CUtil::IsDucked(ped);
 
 	return packet;
 }
@@ -743,6 +771,12 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 	ped->m_pPed->m_fArmour = packet->armour;
 	ped->m_vecVelocity = packet->velocity;
 	ped->m_nMoveState = (eMoveState)packet->moveState;
+
+	if (CUtil::IsDucked(ped->m_pPed) != packet->ducked)
+	{
+		CTaskSimpleDuckToggle task = CTaskSimpleDuckToggle(packet->ducked);
+		task.ProcessPed(ped->m_pPed);
+	}
 }
 
 // GameWeatherTime

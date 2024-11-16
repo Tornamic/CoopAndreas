@@ -98,4 +98,5 @@ using namespace plugin;
 #include "CDriveBy.h"
 #include "CNetworkPedManager.h"
 #include "CDebugPedTasks.h"
+#include "eNetworkEntityType.h"
 // -----------------------------------------------------------------------------------------

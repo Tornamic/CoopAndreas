@@ -97,7 +97,7 @@ bool CUtil::IsMeleeWeapon(unsigned char id)
     return CWeaponInfo::GetWeaponInfo((eWeaponType)id, 1)->m_nWeaponFire == 0;
 }
 
-void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, unsigned short ammo)
+void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, unsigned short ammo, bool select)
 {
     // update weapon, ammo
     auto& activeWeapon = player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot];
@@ -110,6 +110,9 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
 
         if (weapon != 0)
         {
+            if (weapon == WEAPON_SATCHEL_CHARGE)
+                CUtil::GiveWeaponByPacket(player, WEAPON_DETONATOR, 1, false);
+
             int model = CUtil::GetWeaponModelById(weapon);
 
             if(CStreaming::ms_aInfoForModel[model].m_nLoadState != LOADSTATE_LOADED)
@@ -135,7 +138,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
             activeWeapon.m_nAmmoInClip = ammo;
         }
 
-        if (isWeaponTypeDifferent)
+        if (isWeaponTypeDifferent && select)
         {
             player->m_pPed->SetCurrentWeapon((eWeaponType)weapon);
         }
@@ -144,7 +147,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
     }
 }
 
-void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned short ammo)
+void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned short ammo, bool select)
 {
     // update weapon, ammo
     auto& activeWeapon = ped->m_pPed->m_aWeapons[ped->m_pPed->m_nActiveWeaponSlot];
@@ -160,6 +163,9 @@ void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned 
 
         if (weapon != 0)
         {
+            if (weapon == WEAPON_SATCHEL_CHARGE)
+                CUtil::GiveWeaponByPacket(ped, WEAPON_DETONATOR, 1, false);
+
             int model = CUtil::GetWeaponModelById(weapon);
 
             if (CStreaming::ms_aInfoForModel[model].m_nLoadState != LOADSTATE_LOADED)
@@ -187,7 +193,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned 
             activeWeapon.m_nAmmoInClip = ammo;
         }
 
-        if (isWeaponTypeDifferent)
+        if (isWeaponTypeDifferent && select)
         {
             ped->m_pPed->SetCurrentWeapon((eWeaponType)weapon);
         }

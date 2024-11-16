@@ -9,8 +9,8 @@ public:
 	static bool IsPositionUpdateNeeded(CVector pos, CVector update, int percent = 5);
 	static int GetWeaponModelById(unsigned char id);
 	static bool IsMeleeWeapon(unsigned char id);
-	static void GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, unsigned short ammo);
-	static void GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned short ammo);
+	static void GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, unsigned short ammo, bool select = true);
+	static void GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned short ammo, bool select = true);
 	static bool IsVehicleHasTurret(CVehicle* vehicle);
 	static eVehicleType GetVehicleType(CVehicle* vehicle);
 	static CNetworkPed* GetNetworkPedByTask(CTask* targetTask);

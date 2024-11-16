@@ -43,6 +43,7 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
     if (owner == FindPlayerPed(0))
     {
         CPackets::PlayerBulletShot* packet = new CPackets::PlayerBulletShot;
+        packet->entityType = victim->m_nType + 1;
 
         packet->targetid = -1;
 
@@ -53,7 +54,14 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
             case eEntityType::ENTITY_TYPE_PED: // ped or player
             {
                 if (auto playerTarget = CNetworkPlayerManager::GetPlayer(victim))
+                {
                     packet->targetid = playerTarget->m_iPlayerId;
+                    packet->entityType = eNetworkEntityType::NETWORK_ENTITY_TYPE_PLAYER;
+                }
+                else if (auto pedTarget = CNetworkPedManager::GetPed(victim))
+                {
+                    packet->targetid = pedTarget->m_nPedId;
+                }
                 break;
             }
             case eEntityType::ENTITY_TYPE_VEHICLE:
@@ -63,7 +71,6 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
                 break;
             }
             }
-            packet->entityType = victim->m_nType;
         }
 
         packet->startPos = *startPoint;
