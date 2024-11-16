@@ -75,12 +75,6 @@ void PatchStreaming()
     patch::SetUChar(0x74805A, 1);
     patch::Nop(0x74542B, 8);
     patch::Nop(0x53EA88, 6);
-
-    // fix cutscene crash (not needed now, TODO: make sure tomorrow)
-    patch::Nop(0x40EC56, 5);
-
-    // fix crash after death
-    //patch::Nop(0x441481, 6);
 }
 
 
@@ -170,10 +164,10 @@ void FixCrashes()
 
 unsigned char ScanCodeBuffer[SCANCODE_BUFFER_SIZE];
 
-const unsigned int RelocateScanCodesPatch1[14] = {
+const unsigned int RelocateScanCodesPatch1[13] = {
     0x5DC7AA, 0x41A85D, 0x41A864, 0x408259, 0x711B32, 0x699CF8,
-    0x4092EC, 0x40914E, 0x408702, 0x564220, 0x564172, 0x563845,
-    0x84E9C2, 0x85652D
+    0x4092EC, 0x408702, 0x564220, 0x564172, 0x563845, 0x84E9C2, 
+    0x85652D
 };
 
 const unsigned int RelocateScanCodesPatch2[56] = {
@@ -189,20 +183,20 @@ const unsigned int RelocateScanCodesPatch2[56] = {
     0x0040D98C, 0x01566855
 };
 
-unsigned int RelocateScanCodesPatch3[11] = {
+const unsigned int RelocateScanCodesPatch3[12] = {
     0x004091C5, 0x00409367, 0x0040D9C5, 0x0040DB47, 0x0040DC61, 0x0040DE07,
-    0x0040DF97, 0x0040E09A, 0x00534A98, 0x00534DFA, 0x0071CDB0
+    0x0040DF97, 0x0040E09A, 0x00534A98, 0x00534DFA, 0x0071CDB0, 0x40914E
 };
 
-unsigned int RelocateScanCodesPatch4[4] = { 0x005634A6, 0x005638DF, 0x0056420F, 0x00564283 };
+const unsigned int RelocateScanCodesPatch4[4] = { 0x005634A6, 0x005638DF, 0x0056420F, 0x00564283 };
 
 void RelocateScanCodes()
 {
     DWORD oldProt;
     memset(ScanCodeBuffer, 0, SCANCODE_BUFFER_SIZE);
-    unsigned char* scanCodeBufferBase = ScanCodeBuffer;
+    unsigned char* scanCodeBufferBase = &ScanCodeBuffer[0];
 
-    for (int i = 0; i < 14; i++) {
+    for (int i = 0; i < 13; i++) {
         VirtualProtect((PVOID)RelocateScanCodesPatch1[i], 4, PAGE_EXECUTE_READWRITE, &oldProt);
         *(PDWORD)RelocateScanCodesPatch1[i] = (DWORD)scanCodeBufferBase;
         VirtualProtect((PVOID)RelocateScanCodesPatch1[i], 4, oldProt, &oldProt);
@@ -214,21 +208,25 @@ void RelocateScanCodes()
         VirtualProtect((PVOID)RelocateScanCodesPatch2[i], 8, oldProt, &oldProt);
     }
 
-    for (int i = 0; i < 11; i++) {
+    for (int i = 0; i < 12; i++) {
         VirtualProtect((PVOID)RelocateScanCodesPatch3[i], 8, PAGE_EXECUTE_READWRITE, &oldProt);
         *(PDWORD)(RelocateScanCodesPatch3[i] + 3) = (DWORD)(scanCodeBufferBase + 4);
         VirtualProtect((PVOID)RelocateScanCodesPatch3[i], 8, oldProt, &oldProt);
     }
-
+    
     for (int i = 0; i < 4; i++) {
         VirtualProtect((PVOID)RelocateScanCodesPatch4[i], 4, PAGE_EXECUTE_READWRITE, &oldProt);
-        *(PDWORD)RelocateScanCodesPatch4[i] = (DWORD)(scanCodeBufferBase + SCANCODE_BUFFER_SIZE);
+        *(PDWORD)RelocateScanCodesPatch4[i] = (DWORD)(scanCodeBufferBase + sizeof(ScanCodeBuffer));
         VirtualProtect((PVOID)RelocateScanCodesPatch4[i], 4, oldProt, &oldProt);
     }
 
     VirtualProtect((PVOID)0x40936A, 4, PAGE_EXECUTE_READWRITE, &oldProt);
     *(PDWORD)0x40936A = (DWORD)(scanCodeBufferBase + 4);
     VirtualProtect((PVOID)0x40936A, 4, oldProt, &oldProt);
+
+    VirtualProtect((PVOID)0x564DC7, 4, PAGE_EXECUTE_READWRITE, &oldProt);
+    *(PDWORD)0x564DC7 = (DWORD)(scanCodeBufferBase + 115200);
+    VirtualProtect((PVOID)0x564DC7, 4, oldProt, &oldProt);
 
     memset((BYTE*)0xB7D0B8, 0, 8 * 14400);
 }
