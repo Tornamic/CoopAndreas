@@ -47,6 +47,36 @@ static void __declspec(naked) CPed__SetMoveState_Hook()
     }
 }
 
+bool __fastcall CWeapon__Fire_Hook(CWeapon* This, int, CPed* owner, CVector* vecOrigin, CVector* vecEffectPosn, CEntity* targetEntity, CVector* vecTarget, CVector* arg_14)
+{
+    CNetworkPed* ped = CNetworkPedManager::GetPed(owner);
+
+    if (ped)
+    {
+        if (CLocalPlayer::m_bIsHost)
+        {
+            CPackets::PedShotSync packet{};
+            packet.pedid = ped->m_nPedId;
+            packet.origin = *vecOrigin;
+            packet.effect = *vecEffectPosn;
+            if (vecTarget)
+                packet.target = *vecTarget;
+            else
+                packet.target = targetEntity->GetPosition();
+
+            CNetwork::SendPacket(CPacketsID::PED_SHOT_SYNC, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+
+            return This->Fire(owner, vecOrigin, vecEffectPosn, targetEntity, vecTarget, arg_14);
+        }
+    }
+    else
+    {
+        return This->Fire(owner, vecOrigin, vecEffectPosn, targetEntity, vecTarget, arg_14);
+    }
+
+    return false;
+}
+
 void PedHooks::InjectHooks()
 {
     // ped hooks
@@ -54,4 +84,9 @@ void PedHooks::InjectHooks()
     patch::RedirectCall(0x53C054, CPopulation__Update_Hook);
     
     patch::RedirectJump(0x5DEC00, CPed__SetMoveState_Hook);
+
+    patch::RedirectCall(0x61ECCD, CWeapon__Fire_Hook);
+    patch::RedirectCall(0x628328, CWeapon__Fire_Hook);
+    patch::RedirectCall(0x62B109, CWeapon__Fire_Hook);
+    patch::RedirectCall(0x62B12A, CWeapon__Fire_Hook);
 }

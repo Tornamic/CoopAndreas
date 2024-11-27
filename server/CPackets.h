@@ -2,6 +2,7 @@
 
 enum CPacketsID : unsigned short
 {
+	CHECK_VERSION = 0, // must be always 0!
 	PLAYER_CONNECTED,
 	PLAYER_DISCONNECTED,
 	PLAYER_ONFOOT,
@@ -29,7 +30,8 @@ enum CPacketsID : unsigned short
 	PED_ADD_TASK,
 	PED_REMOVE_TASK,
 	PLAYER_KEY_SYNC,
-	PED_DRIVER_UPDATE
+	PED_DRIVER_UPDATE,
+	PED_SHOT_SYNC
 };
 
 class CPackets
@@ -38,6 +40,7 @@ public:
 	struct PlayerConnected
 	{
 		int id;
+		char name[32 + 1];
 	};
 
 	struct PlayerDisconnected
@@ -443,7 +446,9 @@ public:
 		{
 			unsigned char moveState : 3;
 			unsigned char ducked : 1;
+			unsigned char aiming : 1;
 		};
+		CVector weaponAim;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -545,6 +550,20 @@ public:
 
 			vehicle->m_vecPosition = packet->pos;
 			vehicle->m_vecRotation = packet->rot;
+		}
+	};
+
+	struct PedShotSync
+	{
+		int pedid;
+		CVector origin;
+		CVector effect;
+		CVector target;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::PedShotSync* packet = (CPackets::PedShotSync*)data;
+			CNetwork::SendPacketToAll(CPacketsID::PED_SHOT_SYNC, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 };

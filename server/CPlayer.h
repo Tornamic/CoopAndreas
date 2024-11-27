@@ -8,6 +8,7 @@ public:
 	bool m_bIsHost;
 	unsigned char m_nSeatId;
 	int m_nVehicleId;
+	bool m_bCorrectVersion = false;
 	CPlayer(ENetPeer* peer, int playerid);
 
 };

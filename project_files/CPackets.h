@@ -5,6 +5,7 @@
 
 enum CPacketsID : unsigned short
 {
+	CHECK_VERSION = 0, // must be always 0! TODO
 	PLAYER_CONNECTED,
 	PLAYER_DISCONNECTED,
 	PLAYER_ONFOOT,
@@ -32,7 +33,8 @@ enum CPacketsID : unsigned short
 	PED_ADD_TASK,
 	PED_REMOVE_TASK,
 	PLAYER_KEY_SYNC,
-	PED_DRIVER_UPDATE
+	PED_DRIVER_UPDATE,
+	PED_SHOT_SYNC
 };
 
 class CPackets
@@ -245,7 +247,9 @@ public:
 		{
 			unsigned char moveState : 3;
 			unsigned char ducked : 1;
+			unsigned char aiming : 1;
 		};
+		CVector weaponAim;
 	};
 	
 	struct GameWeatherTime
@@ -294,5 +298,13 @@ public:
 		float gasPedal;
 		float breakPedal;
 		float steerAngle;
+	};
+
+	struct PedShotSync
+	{
+		int pedid;
+		CVector origin;
+		CVector effect;
+		CVector target;
 	};
 };

@@ -28,14 +28,14 @@ CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float 
 {
     if (!CLocalPlayer::m_bIsHost)
     {
-        for (int i = 0; i != CNetworkVehicleManager::m_pVehicles.size(); i++)
+        if (auto vehicle = CNetworkVehicleManager::GetVehicle(vehicleid))
         {
-            if (CNetworkVehicleManager::m_pVehicles[i]->m_nVehicleId == vehicleid)
+            if (vehicle->m_pVehicle)
             {
-                CWorld::Remove(CNetworkVehicleManager::m_pVehicles[i]->m_pVehicle);
-                delete CNetworkVehicleManager::m_pVehicles[i]->m_pVehicle;
-                CNetworkVehicleManager::Remove(CNetworkVehicleManager::m_pVehicles[i]);
+                CWorld::Remove(vehicle->m_pVehicle);
+                delete vehicle->m_pVehicle;
             }
+            CNetworkVehicleManager::Remove(vehicle);
         }
     }
 
@@ -118,7 +118,7 @@ CNetworkVehicle::~CNetworkVehicle()
     {
         if (m_pVehicle)
         {
-            plugin::Command<Commands::DELETE_CAR>(CPools::GetVehicleRef(m_pVehicle));
+            CWorld::Remove(m_pVehicle);
         }
     }
 }

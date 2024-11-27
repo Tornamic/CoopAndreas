@@ -40,7 +40,7 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
 static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding, CEntity* owner, CEntity* victim, CVector* startPoint, CVector* endPoint, CColPoint* colPoint, int incrementalHit)
 {
-    if (owner == FindPlayerPed(0))
+    if (owner == FindPlayerPed(0) && victim)
     {
         CPackets::PlayerBulletShot* packet = new CPackets::PlayerBulletShot;
         packet->entityType = victim->m_nType + 1;
@@ -83,6 +83,15 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
         weapon->DoBulletImpact(owner, victim, startPoint, endPoint, colPoint, incrementalHit);
 
         return;
+    }
+    else if (owner->m_nType == eEntityType::ENTITY_TYPE_PED)
+    {
+        CPed* ped = (CPed*)owner;
+
+        if (ped->m_nPedType > PED_TYPE_PLAYER1)
+        {
+            weapon->DoBulletImpact(owner, victim, startPoint, endPoint, colPoint, incrementalHit);
+        }
     }
 }
 

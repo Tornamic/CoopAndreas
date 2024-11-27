@@ -224,8 +224,7 @@ void CPacketHandler::PlayerSetHost__Handle(void* data, int size)
 	{
 		CLocalPlayer::m_bIsHost = true;
 
-		CPopulation::PedDensityMultiplier = 1.0f;
-		patch::SetFloat(0x8A5B20, 1.0f);
+		CPatch::RevertTemporaryPatches();
 
 		CNetworkPedManager::AssignHost();
 		CChat::AddMessage("[Player] You are the host now");
@@ -489,7 +488,7 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
 	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
 
-	if (player == nullptr || vehicle == nullptr)
+	if (player == nullptr || vehicle == nullptr || vehicle->m_pVehicle == nullptr)
 	{
 		return;
 	}
@@ -739,6 +738,14 @@ CPackets::PedOnFoot* CPacketHandler::PedOnFoot__Collect(CNetworkPed* networkPed)
 	packet->lookDirection = ped->field_73C; // look direction (rad)
 	packet->moveState = (unsigned char)ped->m_nMoveState;
 	packet->ducked = CUtil::IsDucked(ped);
+	
+	CTaskSimpleUseGun* useGun = ped->m_pIntelligence->GetTaskUseGun();
+
+	if (useGun)
+	{
+		packet->aiming = true;
+		packet->weaponAim = useGun->m_vecTarget.x == 0.f || useGun->m_vecTarget.y == 0.f ? useGun->m_pTarget->GetPosition() : useGun->m_vecTarget;
+	}
 
 	return packet;
 }
@@ -776,6 +783,18 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 	{
 		CTaskSimpleDuckToggle task = CTaskSimpleDuckToggle(packet->ducked);
 		task.ProcessPed(ped->m_pPed);
+	}
+
+	if (packet->aiming)
+	{
+		plugin::Command<COMMAND_TASK_AIM_GUN_AT_COORD>(CPools::GetPedRef(ped->m_pPed), packet->weaponAim.x, packet->weaponAim.y, packet->weaponAim.z, 200);
+	}
+	else
+	{
+		if (auto useGun = ped->m_pPed->m_pIntelligence->GetTaskUseGun())
+		{
+			useGun->m_bIsFinished = true;
+		}
 	}
 }
 
@@ -832,7 +851,7 @@ void CPacketHandler::PlayerKeySync__Handle(void* data, int size)
 
 void CPacketHandler::PedAddTask__Handle(void* data, int size)
 {
-	CTaskSync::DeSerializeTask(data);
+	//CTaskSync::DeSerializeTask(data);
 }
 
 // PedDriverUpdate
@@ -892,14 +911,8 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
 	CNetworkPed* ped = CNetworkPedManager::GetPed(packet->pedid);
 
-	if (vehicle == nullptr || ped == nullptr || ped->m_pPed == nullptr)
+	if (vehicle == nullptr || ped == nullptr || ped->m_pPed == nullptr || vehicle->m_pVehicle == nullptr)
 		return;
-
-	if (vehicle->m_pVehicle == nullptr)
-	{
-		vehicle->CreateVehicle(vehicle->m_nVehicleId, vehicle->m_nModelId, packet->pos, 0.f, packet->color1, packet->color2);
-		return;
-	}
 
 	if (ped->m_pPed->m_pVehicle != vehicle->m_pVehicle)
 		plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(ped->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle));
@@ -945,4 +958,18 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 	ped->m_fGasPedal = packet->gasPedal;
 	ped->m_fBreakPedal = packet->breakPedal;
 	ped->m_fSteerAngle = packet->steerAngle;
+}
+
+// PedShotSync
+
+void CPacketHandler::PedShotSync__Handle(void* data, int size)
+{
+	CPackets::PedShotSync* packet = (CPackets::PedShotSync*)data;
+	
+	CNetworkPed* ped = CNetworkPedManager::GetPed(packet->pedid);
+
+	if (ped && ped->m_pPed)
+	{
+		ped->m_pPed->m_aWeapons[ped->m_pPed->m_nActiveWeaponSlot].Fire(ped->m_pPed, &packet->origin, &packet->effect, nullptr, &packet->target, nullptr);
+	}
 }

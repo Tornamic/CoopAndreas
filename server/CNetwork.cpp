@@ -88,6 +88,7 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PLAYER_KEY_SYNC, CPackets::PlayerKeySync::Handle);
     CNetwork::AddListener(CPacketsID::PED_ADD_TASK, CPackets::PedAddTask::Handle);
     CNetwork::AddListener(CPacketsID::PED_DRIVER_UPDATE, CPackets::PedDriverUpdate::Handle);
+    CNetwork::AddListener(CPacketsID::PED_SHOT_SYNC, CPackets::PedShotSync::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -107,7 +108,7 @@ void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t 
     memcpy(packetData + 2, data, dataSize);
 
     // create packet
-    ENetPacket* packet = enet_packet_create(packetData, packetSize, flag & ENET_PACKET_FLAG_NO_ALLOCATE);
+    ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
 
     delete[] packetData;
 
@@ -121,7 +122,7 @@ void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, E
     char* packetData = new char[packetSize];
     memcpy(packetData, &id, 2);
     memcpy(packetData + 2, data, dataSize);
-    ENetPacket* packet = enet_packet_create(packetData, packetSize, flag & ENET_PACKET_FLAG_NO_ALLOCATE);
+    ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
 
     delete[] packetData;
 
@@ -136,7 +137,7 @@ void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, E
 
 void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith = nullptr)
 {
-    ENetPacket* packet = enet_packet_create(data, dataSize, flag & ENET_PACKET_FLAG_NO_ALLOCATE);
+    ENetPacket* packet = enet_packet_create(data, dataSize, flag);
 
     for (int i = 0; i != CPlayerManager::m_pPlayers.size(); i++)
     {

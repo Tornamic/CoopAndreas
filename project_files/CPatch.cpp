@@ -1,18 +1,43 @@
 #include "stdafx.h"
 
 // temporary disable some game content
+
+uintptr_t CCarCtrl__GenerateRandomCars_ptr = 0x0;
+uintptr_t CPlane__DoPlaneGenerationAndRemoval_ptr = 0x0;
+uintptr_t CTheCarGenerators__Process_ptr = 0x0;
+
 void CPatch::TemporaryPatches()
 {
-    // implementation of my patch.lua script
-    patch::SetFloat(0x8A5B20, 0.0f); // disable traffic
-    CTrain::DisableRandomTrains(0); // disable trains
-    patch::SetUChar(0x8A5B28, false); // disable EMS
-    //CPlane::SwitchAmbientPlanes(false); // disable ambient planes
-    //patch::SetUInt(0x9690A0, 0); // disable car generator CCarCtrl::NumParkedCars (count, not func)
-    //patch::Nop(0x53C1C1, 5); // disable CCarCtrl::GenerateRandomCars
-    //patch::Nop(0x434272, 5); // disable CPlane::DoPlaneGenerationAndRemoval
-    patch::SetUShort(0x8D477C, 0); // disable spawn 537 train
+    patch::SetFloat(0x8A5B20, 0.0f); // CCarCtrl::fCarDensityMultiplier
+    CTrain::DisableRandomTrains(true);
+    patch::SetUChar(0x8A5B28, false); // CCarCtrl::bAllowEmergencyServicesToBeCreated
+    CPlane::SwitchAmbientPlanes(false);
+
+    // disable CCarCtrl::GenerateRandomCars
+    CCarCtrl__GenerateRandomCars_ptr = injector::GetBranchDestination(0x53C1C1).as_int();
+    patch::Nop(0x53C1C1, 5);
+
+    // disable CPlane::DoPlaneGenerationAndRemoval
+    CPlane__DoPlaneGenerationAndRemoval_ptr = injector::GetBranchDestination(0x434272).as_int();
+    patch::Nop(0x434272, 5);
+
+    // disable CPlane::DoPlaneGenerationAndRemoval
+    CTheCarGenerators__Process_ptr = injector::GetBranchDestination(0x53C06A).as_int();
+    patch::Nop(0x53C06A, 5);
+
     CPopulation::PedDensityMultiplier = 0.0f;
+}
+
+void CPatch::RevertTemporaryPatches()
+{
+    patch::SetFloat(0x8A5B20, 1.0f); // CCarCtrl::fCarDensityMultiplier
+    CTrain::DisableRandomTrains(false);
+    patch::SetUChar(0x8A5B28, true); // CCarCtrl::bAllowEmergencyServicesToBeCreated
+    CPlane::SwitchAmbientPlanes(true);
+    patch::RedirectCall(0x53C1C1, (void*)CCarCtrl__GenerateRandomCars_ptr); 
+    patch::RedirectCall(0x434272, (void*)CPlane__DoPlaneGenerationAndRemoval_ptr);
+    patch::RedirectCall(0x53C06A, (void*)CTheCarGenerators__Process_ptr);
+    CPopulation::PedDensityMultiplier = 1.0f;
 }
 
 void CPatch::PatchFramerate()
@@ -273,8 +298,19 @@ void PatchLoadScreen()
     patch::RedirectCall(0x748C9A, SimulateCopyrightScreen);
 }
 
+const char aScriptDir[] = "CoopAndreas";
+const char aScriptPath[] = "CoopAndreas\\main.scm";
+
+void PatchSCM()
+{
+    // use our main.scm
+    patch::SetUInt(0x468EB5 + 1, (uintptr_t)aScriptDir);
+    patch::SetUInt(0x489A45 + 1, (uintptr_t)aScriptPath);
+}
+
 void CPatch::ApplyPatches()
 {
+    PatchSCM();
     PatchPools();
     PatchStreaming();
     FixCrashes();

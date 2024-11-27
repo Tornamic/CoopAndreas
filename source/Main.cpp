@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "../project_files/CDXFont.h"
-
+#include <Hooks/WorldHooks.h>
+#include "CCutsceneMgr.h"
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
@@ -54,6 +55,7 @@ public:
 					CPassengerEnter::Process();
 
 					CPlayerPed* localPlayer = FindPlayerPed(0);
+
 					
 					if (GetAsyncKeyState(VK_F8))
 					{
@@ -62,7 +64,7 @@ public:
 					}
 
 					CDriveBy::Process(localPlayer);
-
+					
 					int syncRate = 30;
 					CVector velocity{};
 
@@ -130,7 +132,7 @@ public:
 				if (CNetwork::m_bConnected)
 				{
 					char buffer[70];
-					sprintf(buffer, "Peds %d Cars %d Recv %d Sent %d", CPools::ms_pPedPool->GetNoOfUsedSpaces(), CPools::ms_pVehiclePool->GetNoOfUsedSpaces(), CNetwork::m_pClient->totalReceivedPackets, CNetwork::m_pClient->totalSentPackets);
+					sprintf(buffer, "Game/Network: Peds %d/%d Cars %d/%d Recv %d Sent %d", CPools::ms_pPedPool->GetNoOfUsedSpaces(), CNetworkPedManager::m_pPeds.size(), CPools::ms_pVehiclePool->GetNoOfUsedSpaces(), CNetworkVehicleManager::m_pVehicles.size(), CNetwork::m_pClient->totalReceivedPackets, CNetwork::m_pClient->totalSentPackets);
 					CDXFont::Draw(100, 10, buffer, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 					for (auto networkPed : CNetworkPedManager::m_pPeds)
