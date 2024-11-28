@@ -64,6 +64,7 @@ public:
 		float aimX;
 		float aimY;
 		bool hasJetpack = false;
+		unsigned char fightingStyle = 4;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -449,6 +450,7 @@ public:
 			unsigned char ducked : 1;
 			unsigned char aiming : 1;
 		};
+		unsigned char fightingStyle = 4;
 		CVector weaponAim;
 
 		static void Handle(ENetPeer* peer, void* data, int size)

@@ -7,6 +7,7 @@ unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
 unsigned int lastPassengerSyncTickRate = 0;
 unsigned int lastPedSyncTickRate = 0;
+unsigned int lastWeatherTimeSyncTickRate = 0;
 bool bBeenConnected;
 class CoopAndreas {
 public:
@@ -111,6 +112,12 @@ public:
 					{
 						CNetworkPedManager::Update();
 						lastPedSyncTickRate = GetTickCount();
+					}
+
+					if (CLocalPlayer::m_bIsHost && GetTickCount() > lastWeatherTimeSyncTickRate + 2000)
+					{
+						CPacketHandler::GameWeatherTime__Trigger();
+						lastWeatherTimeSyncTickRate = GetTickCount();
 					}
 
 					if(!CLocalPlayer::m_bIsHost)

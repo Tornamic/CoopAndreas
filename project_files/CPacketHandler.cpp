@@ -81,6 +81,9 @@ CPackets::PlayerOnFoot* CPacketHandler::PlayerOnFoot__Collect()
 	packet->aimY = CLocalPlayer::m_vecLastAimY;
 
 	packet->hasJetpack = CUtil::IsPedHasJetpack(player);
+
+	packet->fightingStyle = player->m_nFightingStyle;
+
 	return packet;
 }
 
@@ -113,6 +116,8 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 		CTaskSimpleDuckToggle task = CTaskSimpleDuckToggle(packet->ducking);
 		task.ProcessPed(player->m_pPed);
 	}
+
+	player->m_pPed->m_nFightingStyle = packet->fightingStyle;
 
 	// save last onfoot sync
 	player->m_oOnFoot = player->m_lOnFoot;
@@ -747,6 +752,8 @@ CPackets::PedOnFoot* CPacketHandler::PedOnFoot__Collect(CNetworkPed* networkPed)
 		packet->weaponAim = useGun->m_vecTarget.x == 0.f || useGun->m_vecTarget.y == 0.f ? useGun->m_pTarget->GetPosition() : useGun->m_vecTarget;
 	}
 
+	packet->fightingStyle = ped->m_nFightingStyle;
+
 	return packet;
 }
 
@@ -796,6 +803,8 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 			useGun->m_bIsFinished = true;
 		}
 	}
+
+	ped->m_pPed->m_nFightingStyle = packet->fightingStyle;
 }
 
 // GameWeatherTime
@@ -818,9 +827,9 @@ void CPacketHandler::GameWeatherTime__Handle(void* data, int size)
 {
 	CPackets::GameWeatherTime* packet = (CPackets::GameWeatherTime*)data;
 
+	CWeather::OldWeatherType = //packet->oldWeather;
 	CWeather::NewWeatherType = packet->newWeather;
-	CWeather::OldWeatherType = packet->oldWeather;
-	CWeather::ForcedWeatherType = packet->forcedWeather;
+	//CWeather::ForcedWeatherType = packet->forcedWeather;
 	CClock::ms_nGameClockMonth = packet->currentMonth;
 	CClock::CurrentDay = packet->currentDay;
 	CClock::ms_nGameClockHours = packet->currentHour;

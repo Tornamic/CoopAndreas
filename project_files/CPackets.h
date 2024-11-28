@@ -67,6 +67,7 @@ public:
 		float aimX = 0.0f;
 		float aimY = 0.0f;
 		bool hasJetpack = false;
+		unsigned char fightingStyle = 4;
 	};
 
 	#pragma pack(1)
@@ -250,6 +251,7 @@ public:
 			unsigned char ducked : 1;
 			unsigned char aiming : 1;
 		};
+		unsigned char fightingStyle = 4;
 		CVector weaponAim;
 	};
 	

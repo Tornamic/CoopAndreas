@@ -43,6 +43,8 @@ public:
             unsigned int m_bPedWalk : 1;
             unsigned int m_bVehicleMouseLook : 1;
             unsigned int m_bRadioTrackSkip : 1;
+            
+            unsigned int m_bDisableControls : 1;
         };
         unsigned int compressed; // To access all bits as a single value if needed
     };
@@ -53,7 +55,7 @@ public:
     }
 
 #define COMPRESS(field) field = (state.field > 0)
-    ÑCompressedControllerState(const CControllerState& state)
+    ÑCompressedControllerState(const CControllerState& state, bool disableControls)
     {
         LeftStickX = state.LeftStickX;
         LeftStickY = state.LeftStickY;
@@ -78,6 +80,7 @@ public:
         COMPRESS(m_bPedWalk);
         COMPRESS(m_bVehicleMouseLook);
         COMPRESS(m_bRadioTrackSkip);
+        m_bDisableControls = disableControls;
     }
 #undef COMPRESS
 
