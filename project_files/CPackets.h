@@ -34,7 +34,8 @@ enum CPacketsID : unsigned short
 	PED_REMOVE_TASK,
 	PLAYER_KEY_SYNC,
 	PED_DRIVER_UPDATE,
-	PED_SHOT_SYNC
+	PED_SHOT_SYNC,
+	PED_PASSENGER_UPDATE
 };
 
 class CPackets
@@ -306,5 +307,15 @@ public:
 		CVector origin;
 		CVector effect;
 		CVector target;
+	};
+
+	struct PedPassengerSync
+	{
+		int pedid;
+		int vehicleid;
+		unsigned char health;
+		unsigned char armour;
+		unsigned char weapon;
+		unsigned short ammo;
 	};
 };

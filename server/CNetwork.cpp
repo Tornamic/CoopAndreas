@@ -89,6 +89,7 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PED_ADD_TASK, CPackets::PedAddTask::Handle);
     CNetwork::AddListener(CPacketsID::PED_DRIVER_UPDATE, CPackets::PedDriverUpdate::Handle);
     CNetwork::AddListener(CPacketsID::PED_SHOT_SYNC, CPackets::PedShotSync::Handle);
+    CNetwork::AddListener(CPacketsID::PED_PASSENGER_UPDATE, CPackets::PedPassengerSync::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)

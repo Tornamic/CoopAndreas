@@ -39,5 +39,7 @@ public:
 	static CPackets::PedDriverUpdate* PedDriverUpdate__Collect(CNetworkVehicle* vehicle, CNetworkPed* ped);
 	static void PedDriverUpdate__Handle(void* data, int size);
 	static void PedShotSync__Handle(void* data, int size);
+	static void PedPassengerSync__Trigger(CNetworkPed* networkPed, int vehicleid);
+	static void PedPassengerSync__Handle(void* data, int size);
 };
 

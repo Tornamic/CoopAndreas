@@ -31,7 +31,8 @@ enum CPacketsID : unsigned short
 	PED_REMOVE_TASK,
 	PLAYER_KEY_SYNC,
 	PED_DRIVER_UPDATE,
-	PED_SHOT_SYNC
+	PED_SHOT_SYNC,
+	PED_PASSENGER_UPDATE
 };
 
 class CPackets
@@ -564,6 +565,22 @@ public:
 		{
 			CPackets::PedShotSync* packet = (CPackets::PedShotSync*)data;
 			CNetwork::SendPacketToAll(CPacketsID::PED_SHOT_SYNC, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+		}
+	};
+
+	struct PedPassengerSync
+	{
+		int pedid;
+		int vehicleid;
+		unsigned char health;
+		unsigned char armour;
+		unsigned char weapon;
+		unsigned short ammo;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::PedPassengerSync* packet = (CPackets::PedPassengerSync*)data;
+			CNetwork::SendPacketToAll(CPacketsID::PED_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}
 	};
 };

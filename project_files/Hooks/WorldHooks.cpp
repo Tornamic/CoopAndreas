@@ -3,7 +3,9 @@
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
 
-std::unordered_map<CPed*, std::vector<void*>> WorldHooks::m_aPedStackMap;
+#ifdef DEBUG_NOT_SYNCED_VEHICLES
+std::unordered_map<CVehicle*, std::vector<void*>> WorldHooks::m_aVehicleStackMap;
+#endif
 
 static void __cdecl CWeather__ForceWeather_Hook(short id)
 {
@@ -96,13 +98,16 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
     //    return;
     //}
 
-    if (entity->m_nType == ENTITY_TYPE_PED)
+#ifdef DEBUG_NOT_SYNCED_VEHICLES
+    if (entity->m_nType == ENTITY_TYPE_VEHICLE)
     {
         void* stack[10];
         unsigned short frames = CaptureStackBackTrace(0, 10, stack, nullptr);
 
-        WorldHooks::m_aPedStackMap[(CPed*)entity] = std::vector<void*>(stack, stack + frames);
+        WorldHooks::m_aVehicleStackMap[(CVehicle*)entity] = std::vector<void*>(stack, stack + frames);
     }
+#endif
+
 
     CWorld::Add(entity);
 }

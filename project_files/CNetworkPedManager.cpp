@@ -100,7 +100,7 @@ void CNetworkPedManager::Update()
 			}
 			else
 			{
-				// todo: implement passenger update
+				CPacketHandler::PedPassengerSync__Trigger(networkPed, networkVehicle->m_nVehicleId);
 			}
 		}
 		else
