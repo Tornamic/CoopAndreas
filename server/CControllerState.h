@@ -34,7 +34,7 @@ public:
 };
 
 #pragma pack(1)
-struct ÑCompressedControllerState
+struct CCompressedControllerState
 {
     signed short LeftStickX; // move/steer left (-128?)/right (+128)
     signed short LeftStickY; // move back(+128)/forwards(-128?)

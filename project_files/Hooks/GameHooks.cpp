@@ -109,7 +109,7 @@ static void __cdecl CPad__UpdatePads_Hook()
 
     //CChat::AddMessage("ButtonSquare %d LeftStickX %d LeftStickY %d", newState.ButtonSquare, newState.LeftStickX, newState.LeftStickY);
 
-    packet.newState = ÑCompressedControllerState(newState, pad->DisablePlayerControls);
+    packet.newState = CCompressedControllerState(newState, pad->DisablePlayerControls);
     
     CNetwork::SendPacket(CPacketsID::PLAYER_KEY_SYNC, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 }

@@ -500,7 +500,7 @@ public:
 	struct PlayerKeySync
 	{
 		int playerid;
-		ÑCompressedControllerState newState;
+		CCompressedControllerState newState;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

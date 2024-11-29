@@ -276,7 +276,7 @@ public:
 	struct PlayerKeySync
 	{
 		int playerid;
-		ÑCompressedControllerState newState;
+		CCompressedControllerState newState;
 	};
 
 	struct PedDriverUpdate
