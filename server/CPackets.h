@@ -345,7 +345,7 @@ public:
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
-			CPackets::VehicleComponentAdd* packet = (CPackets::VehicleComponentAdd*)data;
+			CPackets::VehicleComponentRemove* packet = (CPackets::VehicleComponentRemove*)data;
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_COMPONENT_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
 			CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
