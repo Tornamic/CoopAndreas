@@ -1,4 +1,9 @@
-#include "stdafx.h"
+
+#include <cstdio>
+#include <enet/enet.h>
+#include <cstring>
+#include <vector>
+#include "CNetwork.h"
 
 std::vector<CPacketListener*> CNetwork::m_packetListeners;
 
@@ -9,7 +14,7 @@ bool CNetwork::Init(unsigned short port)
 
     if (enet_initialize() != 0) // try to init enet
     {
-        printf("init failed\n");
+        printf("[ERROR] : ENET_INIT FAILED TO INITIALIZE\n");
         return false;
     }
 
@@ -22,11 +27,18 @@ bool CNetwork::Init(unsigned short port)
 
     if (server == NULL)
     {
-        printf("creating failed\n");
+        printf("[ERROR] : ENET_UDP_SERVER_SOCKET FAILED TO CREATE\n");
         return false;
     }
 
-    printf("Server stared on port %d\n", port);
+    printf("[!] : CoopAndreas Server \n\n");
+    printf("[!] : Version : X.X.X.X\n");
+    #if defined (_WIN32)
+        printf("[!] : Platform : Microsoft Windows \n");
+    #else
+        printf("[!] : Platform : GNU/Linux | BSD \n");
+    #endif
+    printf("[!] : Server stared on port %d\n", port);
 
     ENetEvent event;
     while (true) // waiting for event
@@ -45,8 +57,8 @@ bool CNetwork::Init(unsigned short port)
                 enet_packet_destroy(event.packet);
 
                 char buffer[100];
-                sprintf_s(buffer, "Recv %d Sent %d", server->totalReceivedPackets, server->totalSentPackets);
-                SetConsoleTitleA(buffer);
+                sprintf(buffer, "[!] : Data Received (%d)\tData Sended (%d)\n", server->totalReceivedPackets, server->totalSentPackets);
+                //SetConsoleTitleA(buffer);
                 break;
             }
             case ENET_EVENT_TYPE_DISCONNECT:
@@ -59,7 +71,7 @@ bool CNetwork::Init(unsigned short port)
 
     enet_host_destroy(server);
     enet_deinitialize();
-    printf("Destroyed\n");
+    printf("[!] : Server Shutdown (ENET_DEINITIALIZE)\n");
     return 0;
 }
 
@@ -89,7 +101,6 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PED_ADD_TASK, CPackets::PedAddTask::Handle);
     CNetwork::AddListener(CPacketsID::PED_DRIVER_UPDATE, CPackets::PedDriverUpdate::Handle);
     CNetwork::AddListener(CPacketsID::PED_SHOT_SYNC, CPackets::PedShotSync::Handle);
-    CNetwork::AddListener(CPacketsID::PED_PASSENGER_UPDATE, CPackets::PedPassengerSync::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -151,7 +162,7 @@ void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag fl
 
 void CNetwork::HandlePlayerConnected(ENetEvent& event)
 {
-    printf("A new client connected from %i.%i.%i.%i:%u.\n", 
+    printf("\n[Alert] : A new client connected from %i.%i.%i.%i:%u.\n", 
         event.peer->address.host & 0xFF, 
         (event.peer->address.host >> 8) & 0xFF, 
         (event.peer->address.host >> 16) & 0xFF, 
@@ -179,7 +190,7 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
     };
 
     // send to all
-    CNetwork::SendPacketToAll(CPacketsID::PLAYER_CONNECTED, &packet, sizeof CPackets::PlayerConnected, ENET_PACKET_FLAG_RELIABLE, event.peer);
+    CNetwork::SendPacketToAll(CPacketsID::PLAYER_CONNECTED, &packet, sizeof (CPackets::PlayerConnected), ENET_PACKET_FLAG_RELIABLE, event.peer);
 
     // send PlayerConnected packets for a new player
     for (auto i : CPlayerManager::m_pPlayers)
@@ -192,12 +203,12 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
             i->m_iPlayerId
         };
 
-        CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_CONNECTED, &packet, sizeof CPackets::PlayerConnected, ENET_PACKET_FLAG_RELIABLE);
+        CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_CONNECTED, &packet, sizeof (CPackets::PlayerConnected), ENET_PACKET_FLAG_RELIABLE);
 
         CPackets::PlayerGetName getNamePacket{};
         getNamePacket.playerid = i->m_iPlayerId;
-        strcpy_s(getNamePacket.name, i->m_Name);
-        CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_GET_NAME, &getNamePacket, sizeof CPackets::PlayerGetName, ENET_PACKET_FLAG_RELIABLE);
+        strcpy(getNamePacket.name, i->m_Name);
+        CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_GET_NAME, &getNamePacket, sizeof (CPackets::PlayerGetName), ENET_PACKET_FLAG_RELIABLE);
     }
 
     for (auto i : CVehicleManager::m_pVehicles)
@@ -283,9 +294,9 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
     };
 
     // send to all
-    CNetwork::SendPacketToAll(CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof CPackets::PlayerDisconnected, ENET_PACKET_FLAG_UNSEQUENCED, event.peer);
+    CNetwork::SendPacketToAll(CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof (CPackets::PlayerDisconnected), ENET_PACKET_FLAG_UNSEQUENCED, event.peer);
 
-    printf("%i disconnected.\n", player->m_iPlayerId);
+    printf("[Alert] : %i Disconnected.\n", player->m_iPlayerId);
 
     CPlayerManager::AssignHostToFirstPlayer();
 }

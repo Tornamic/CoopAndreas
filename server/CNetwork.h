@@ -1,3 +1,4 @@
+#include <enet/enet.h>
 #pragma once
 
 class CPacketListener

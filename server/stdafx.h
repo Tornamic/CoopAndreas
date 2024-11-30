@@ -19,12 +19,33 @@
 #include "CVector.h"
 #include "CControllerState.h"
 
+
 #include "CNetwork.h"
-#include "CPlayer.h"
-#include "CVehicle.h"
+
 #include "CPed.h"
-#include "CPlayerManager.h"
-#include "CVehicleManager.h"
+
 #include "CPedManager.h"
 
+#include "CPlayer.h"
+
+#include "CPlayerManager.h"
+
+#include "CVehicle.h"
+
+#include "CVehicleManager.h"
+
 #include "CPackets.h"
+
+#include "CPed.cpp"
+
+#include "CNetwork.cpp"
+
+#include "CPedManager.cpp"
+
+#include "CPlayerManager.cpp"
+
+#include "CPlayer.cpp"
+
+#include "CVehicle.cpp"
+
+#include "CVehicleManager.cpp"

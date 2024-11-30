@@ -1,4 +1,5 @@
-#include "stdafx.h"
+
+#include <enet/enet.h>
 
 CPackets::PlayerOnFoot* m_lOnFoot;
 char m_Name[32 + 1] = { 0 };

@@ -1,5 +1,9 @@
+#include <algorithm>
+#include <cstring>
+#include <string.h>
 #pragma once
 
+#include <enet/enet.h>
 enum CPacketsID : unsigned short
 {
 	CHECK_VERSION = 0, // must be always 0!
@@ -31,8 +35,7 @@ enum CPacketsID : unsigned short
 	PED_REMOVE_TASK,
 	PLAYER_KEY_SYNC,
 	PED_DRIVER_UPDATE,
-	PED_SHOT_SYNC,
-	PED_PASSENGER_UPDATE
+	PED_SHOT_SYNC
 };
 
 class CPackets
@@ -64,7 +67,6 @@ public:
 		float aimX;
 		float aimY;
 		bool hasJetpack = false;
-		unsigned char fightingStyle = 4;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -131,7 +133,7 @@ public:
 			CPackets::PlayerGetName* packet = (CPackets::PlayerGetName*)data;
 			CPlayer* player = CPlayerManager::GetPlayer(peer);
 			packet->playerid = player->m_iPlayerId;
-			strcpy_s(player->m_Name, packet->name);
+			strcpy(player->m_Name, packet->name);
 			printf("player %d now also know as %s\n", packet->playerid, packet->name);
 			CNetwork::SendPacketToAll(CPacketsID::PLAYER_GET_NAME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
@@ -450,7 +452,6 @@ public:
 			unsigned char ducked : 1;
 			unsigned char aiming : 1;
 		};
-		unsigned char fightingStyle = 4;
 		CVector weaponAim;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
@@ -567,22 +568,6 @@ public:
 		{
 			CPackets::PedShotSync* packet = (CPackets::PedShotSync*)data;
 			CNetwork::SendPacketToAll(CPacketsID::PED_SHOT_SYNC, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
-		}
-	};
-
-	struct PedPassengerSync
-	{
-		int pedid;
-		int vehicleid;
-		unsigned char health;
-		unsigned char armour;
-		unsigned char weapon;
-		unsigned short ammo;
-
-		static void Handle(ENetPeer* peer, void* data, int size)
-		{
-			CPackets::PedPassengerSync* packet = (CPackets::PedPassengerSync*)data;
-			CNetwork::SendPacketToAll(CPacketsID::PED_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}
 	};
 };
