@@ -81,5 +81,5 @@ void CPlayerManager::AssignHostToFirstPlayer()
 	player->m_bIsHost = true;
 
 	CPackets::PlayerSetHost setHostPacket = { player->m_iPlayerId };
-	CNetwork::SendPacketToAll(CPacketsID::PLAYER_SET_HOST, &setHostPacket, sizeof setHostPacket, ENET_PACKET_FLAG_RELIABLE, nullptr);
+	CNetwork::SendPacketToAll(CPacketsID::PLAYER_SET_HOST, &setHostPacket, sizeof(setHostPacket), ENET_PACKET_FLAG_RELIABLE, nullptr);
 }
