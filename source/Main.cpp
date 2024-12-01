@@ -7,7 +7,6 @@ unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
 unsigned int lastPassengerSyncTickRate = 0;
 unsigned int lastPedSyncTickRate = 0;
-unsigned int lastWeatherTimeSyncTickRate = 0;
 bool bBeenConnected;
 class CoopAndreas {
 public:
@@ -114,12 +113,6 @@ public:
 						lastPedSyncTickRate = GetTickCount();
 					}
 
-					if (CLocalPlayer::m_bIsHost && GetTickCount() > lastWeatherTimeSyncTickRate + 2000)
-					{
-						CPacketHandler::GameWeatherTime__Trigger();
-						lastWeatherTimeSyncTickRate = GetTickCount();
-					}
-
 					if(!CLocalPlayer::m_bIsHost)
 						CNetworkPedManager::Process();
 				}
@@ -158,30 +151,9 @@ public:
 							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, std::to_string(networkPed->m_nPedId).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
 						}
 					}
-#ifdef DEBUG_NOT_SYNCED_VEHICLES
-					int yOffset = 200;
-
-					for (auto vehicle : CPools::ms_pVehiclePool)
-					{
-						if (CNetworkVehicleManager::GetVehicle(vehicle) == nullptr)
-						{
-							char buffer[256];
-
-							sprintf(buffer, "Vehicle\n0x%x\n", &vehicle);
-
-							for (void* addr : WorldHooks::m_aVehicleStackMap[vehicle])
-							{
-								sprintf(buffer, "  0x%x\n", addr);
-							}
-
-							CDXFont::Draw(200, yOffset, buffer, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-							yOffset += 200;
-						}
-					}
-#endif // DEBUG_NOT_SYNCED_VEHICLES
 				}
 #endif // _DEV
+
 			};
 		CCore::Init();
 		

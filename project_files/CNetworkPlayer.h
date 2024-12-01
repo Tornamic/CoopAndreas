@@ -27,7 +27,7 @@ public:
 	CControllerState m_oldControllerState{};
 	CControllerState m_newControllerState{};
 
-	CCompressedControllerState m_compressedControllerState{};
+	ÑCompressedControllerState m_compressedControllerState{};
 
 	void CreatePed(int id, CVector position);
 

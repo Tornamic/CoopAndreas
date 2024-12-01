@@ -13,7 +13,7 @@ typedef struct _CPassengerAim
 } CPassengerAim;
 
 #pragma pack(1)
-struct CCompressedControllerState
+struct ÑCompressedControllerState
 {
 public:
     signed short LeftStickX; // move/steer left (-128?)/right (+128)
@@ -43,19 +43,17 @@ public:
             unsigned int m_bPedWalk : 1;
             unsigned int m_bVehicleMouseLook : 1;
             unsigned int m_bRadioTrackSkip : 1;
-            
-            unsigned int m_bDisableControls : 1;
         };
         unsigned int compressed; // To access all bits as a single value if needed
     };
 
-    CCompressedControllerState()
+    ÑCompressedControllerState()
     {
         LeftStickX = LeftStickY = compressed = 0;
     }
 
 #define COMPRESS(field) field = (state.field > 0)
-    CCompressedControllerState(const CControllerState& state, bool disableControls)
+    ÑCompressedControllerState(const CControllerState& state)
     {
         LeftStickX = state.LeftStickX;
         LeftStickY = state.LeftStickY;
@@ -80,7 +78,6 @@ public:
         COMPRESS(m_bPedWalk);
         COMPRESS(m_bVehicleMouseLook);
         COMPRESS(m_bRadioTrackSkip);
-        m_bDisableControls = disableControls;
     }
 #undef COMPRESS
 

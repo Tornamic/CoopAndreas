@@ -34,8 +34,7 @@ enum CPacketsID : unsigned short
 	PED_REMOVE_TASK,
 	PLAYER_KEY_SYNC,
 	PED_DRIVER_UPDATE,
-	PED_SHOT_SYNC,
-	PED_PASSENGER_UPDATE
+	PED_SHOT_SYNC
 };
 
 class CPackets
@@ -67,7 +66,6 @@ public:
 		float aimX = 0.0f;
 		float aimY = 0.0f;
 		bool hasJetpack = false;
-		unsigned char fightingStyle = 4;
 	};
 
 	#pragma pack(1)
@@ -251,7 +249,6 @@ public:
 			unsigned char ducked : 1;
 			unsigned char aiming : 1;
 		};
-		unsigned char fightingStyle = 4;
 		CVector weaponAim;
 	};
 	
@@ -276,7 +273,7 @@ public:
 	struct PlayerKeySync
 	{
 		int playerid;
-		CCompressedControllerState newState;
+		ÑCompressedControllerState newState;
 	};
 
 	struct PedDriverUpdate
@@ -309,15 +306,5 @@ public:
 		CVector origin;
 		CVector effect;
 		CVector target;
-	};
-
-	struct PedPassengerSync
-	{
-		int pedid;
-		int vehicleid;
-		unsigned char health;
-		unsigned char armour;
-		unsigned char weapon;
-		unsigned short ammo;
 	};
 };

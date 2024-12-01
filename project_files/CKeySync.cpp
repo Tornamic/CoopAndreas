@@ -4,7 +4,6 @@
 
 CControllerState storedOldState{};
 CControllerState storedNewState{};
-bool storedDisableControls = false;
 
 void CKeySync::ApplyNetworkPlayerContext(CNetworkPlayer* player)
 {
@@ -12,11 +11,9 @@ void CKeySync::ApplyNetworkPlayerContext(CNetworkPlayer* player)
 	CPad* pad = CPad::GetPad(0);
 	storedOldState = pad->OldState;
 	storedNewState = pad->NewState;
-    storedDisableControls = pad->DisablePlayerControls;
 
 	pad->OldState = player->m_oldControllerState;
 	pad->NewState = player->m_newControllerState;
-    pad->DisablePlayerControls = player->m_compressedControllerState.m_bDisableControls;
 }
 
 void CKeySync::ApplyLocalContext()
@@ -25,7 +22,6 @@ void CKeySync::ApplyLocalContext()
 	CPad* pad = CPad::GetPad(0);
 	pad->OldState = storedOldState;
 	pad->NewState = storedNewState;
-    pad->DisablePlayerControls = storedDisableControls;
 }
 
 #define PROCESS_STICK(stick);                                   \
@@ -72,7 +68,7 @@ void CKeySync::ApplyLocalContext()
     
 void CKeySync::ProcessPlayer(CNetworkPlayer* player)
 {
-    CCompressedControllerState cState = player->m_compressedControllerState;
+    ÑCompressedControllerState cState = player->m_compressedControllerState;
 
     PROCESS_STICK(LeftStickX);
     PROCESS_STICK(LeftStickY);

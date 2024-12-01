@@ -81,9 +81,6 @@ CPackets::PlayerOnFoot* CPacketHandler::PlayerOnFoot__Collect()
 	packet->aimY = CLocalPlayer::m_vecLastAimY;
 
 	packet->hasJetpack = CUtil::IsPedHasJetpack(player);
-
-	packet->fightingStyle = player->m_nFightingStyle;
-
 	return packet;
 }
 
@@ -116,8 +113,6 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 		CTaskSimpleDuckToggle task = CTaskSimpleDuckToggle(packet->ducking);
 		task.ProcessPed(player->m_pPed);
 	}
-
-	player->m_pPed->m_nFightingStyle = packet->fightingStyle;
 
 	// save last onfoot sync
 	player->m_oOnFoot = player->m_lOnFoot;
@@ -752,8 +747,6 @@ CPackets::PedOnFoot* CPacketHandler::PedOnFoot__Collect(CNetworkPed* networkPed)
 		packet->weaponAim = useGun->m_vecTarget.x == 0.f || useGun->m_vecTarget.y == 0.f ? useGun->m_pTarget->GetPosition() : useGun->m_vecTarget;
 	}
 
-	packet->fightingStyle = ped->m_nFightingStyle;
-
 	return packet;
 }
 
@@ -803,8 +796,6 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 			useGun->m_bIsFinished = true;
 		}
 	}
-
-	ped->m_pPed->m_nFightingStyle = packet->fightingStyle;
 }
 
 // GameWeatherTime
@@ -827,9 +818,9 @@ void CPacketHandler::GameWeatherTime__Handle(void* data, int size)
 {
 	CPackets::GameWeatherTime* packet = (CPackets::GameWeatherTime*)data;
 
-	CWeather::OldWeatherType = //packet->oldWeather;
 	CWeather::NewWeatherType = packet->newWeather;
-	//CWeather::ForcedWeatherType = packet->forcedWeather;
+	CWeather::OldWeatherType = packet->oldWeather;
+	CWeather::ForcedWeatherType = packet->forcedWeather;
 	CClock::ms_nGameClockMonth = packet->currentMonth;
 	CClock::CurrentDay = packet->currentDay;
 	CClock::ms_nGameClockHours = packet->currentHour;
@@ -981,47 +972,4 @@ void CPacketHandler::PedShotSync__Handle(void* data, int size)
 	{
 		ped->m_pPed->m_aWeapons[ped->m_pPed->m_nActiveWeaponSlot].Fire(ped->m_pPed, &packet->origin, &packet->effect, nullptr, &packet->target, nullptr);
 	}
-}
-
-// PedPassengerSync
-
-void CPacketHandler::PedPassengerSync__Trigger(CNetworkPed* networkPed, int vehicleid)
-{
-	CPackets::PedPassengerSync packet{};
-
-	packet.pedid = networkPed->m_nPedId;
-	packet.vehicleid = vehicleid;
-	packet.health = networkPed->m_pPed->m_fHealth;
-	packet.armour = networkPed->m_pPed->m_fArmour;
-	packet.weapon = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
-	packet.ammo = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_nAmmoInClip;
-	
-	CNetwork::SendPacket(CPacketsID::PED_PASSENGER_UPDATE, &packet, sizeof packet, ENET_PACKET_FLAG_UNSEQUENCED);
-}
-
-void CPacketHandler::PedPassengerSync__Handle(void* data, int size)
-{
-	CPackets::PedPassengerSync* packet = (CPackets::PedPassengerSync*)data;
-
-	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
-	CNetworkPed* ped = CNetworkPedManager::GetPed(packet->pedid);
-
-	if (vehicle == nullptr || ped == nullptr)
-		return;
-
-	if (vehicle->m_pVehicle == nullptr)
-		return;
-
-	if (ped->m_pPed == nullptr)
-		return;
-
-	if (!ped->m_pPed->m_nPedFlags.bInVehicle || (ped->m_pPed->m_nPedFlags.bInVehicle && vehicle->m_pVehicle->m_pDriver == ped->m_pPed))
-	{
-		plugin::Command<Commands::WARP_CHAR_INTO_CAR_AS_PASSENGER>(CPools::GetPedRef(ped->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), -1);
-	}
-
-	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);
-
-	ped->m_pPed->m_fArmour = packet->armour;
-	ped->m_pPed->m_fHealth = packet->health;
 }
