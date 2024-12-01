@@ -23,6 +23,6 @@
 
 int main(int argc, char *argv[])
 {
-	CNetwork::Init(3737);
+	CNetwork::Init(6767);
 	return 0;
 }
