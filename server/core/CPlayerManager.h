@@ -180,6 +180,27 @@ class CPlayerPackets
 			}
 		};
 
+		struct GameWeatherTime
+		{
+			unsigned char newWeather;
+			unsigned char oldWeather;
+			unsigned char forcedWeather;
+			unsigned char currentMonth;
+			unsigned char currentDay;
+			unsigned char currentHour;
+			unsigned char currentMinute;
+			unsigned int gameTickCount;
+
+			static void Handle(ENetPeer* peer, void* data, int size)
+			{
+				if (!CPlayerManager::GetPlayer(peer)->m_bIsHost)
+					return;
+
+				CPlayerPackets::GameWeatherTime* packet = (CPlayerPackets::GameWeatherTime*)data;
+				CNetwork::SendPacketToAll(CPacketsID::GAME_WEATHER_TIME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			}
+		};
+
 		~CPlayerPackets();
 };
 

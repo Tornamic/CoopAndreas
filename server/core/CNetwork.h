@@ -4,15 +4,20 @@
 	#define _CNETWORK_H_ 
 
 
+
 #include <cstddef>
 #include <enet/enet.h>
 
+#include "CPacketListener.h"
+
+#define MAX_SERVER_PLAYERS (4)
 
 class CNetwork
 {
 	public:
 		CNetwork();
 		
+		static std::vector<CPacketListener*> m_packetListeners;
 		static bool Init(unsigned short port);
 		static void InitListeners();
 		static void SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag);
