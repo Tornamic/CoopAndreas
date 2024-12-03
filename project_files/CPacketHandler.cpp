@@ -2,6 +2,10 @@
 #include "CTaskSync.h"
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
+#include <Tasks/CTaskComplexEnterCarAsPassengerTimed.h>
+#include <CCarEnterExit.h>
+#include <CTaskSimpleCarSetPedInAsPassenger.h>
+#include <CTaskComplexEnterCarAsPassenger.h>
 // PlayerConnected
 
 void CPacketHandler::PlayerConnected__Handle(void* data, int size)
@@ -502,7 +506,7 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 	CChat::AddMessage("player %d entered vehicleid %d %s", packet->playerid, packet->vehicleid, packet->seatid != 0 ? "as passenger" : "");
 #endif
 
-	if (packet->seatid == 0) // driver
+	if (packet->passenger == 0) // driver
 	{
 		if (packet->force)
 		{
@@ -521,8 +525,9 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 	}
 	else
 	{
-		//plugin::Command<Commands::WARP_CHAR_INTO_CAR_AS_PASSENGER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), -1);
-		plugin::Command<0x5CA>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), 3000, -1);
+		int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle->m_pVehicle, packet->seatid);
+		CTaskComplexEnterCarAsPassenger* task = new CTaskComplexEnterCarAsPassenger(vehicle->m_pVehicle, doorId, false);
+		player->m_pPed->m_pIntelligence->m_TaskMgr.SetTask(task, 3, false);
 	}
 }
 
@@ -650,12 +655,16 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 	if (player->m_pPed == nullptr)
 		return;
 
-	if (!player->m_pPed->m_nPedFlags.bInVehicle || (player->m_pPed->m_nPedFlags.bInVehicle && vehicle->m_pVehicle->m_pDriver == player->m_pPed))
+	if (!player->m_pPed->m_nPedFlags.bInVehicle || (player->m_pPed->m_pVehicle && vehicle->m_pVehicle->m_pDriver == player->m_pPed))
 	{
 #ifdef PACKET_DEBUG_MESSAGES
 		CChat::AddMessage("forcing enter passenger %d", player->m_iPlayerId);
 #endif
-		plugin::Command<Commands::WARP_CHAR_INTO_CAR_AS_PASSENGER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), -1);
+
+		int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle->m_pVehicle, packet->seatid);
+		CTaskSimpleCarSetPedInAsPassenger task = CTaskSimpleCarSetPedInAsPassenger(vehicle->m_pVehicle, doorId, 0);
+		task.m_bWarpingInToCar = true;
+		task.ProcessPed(player->m_pPed);
 	}
 
 	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
@@ -749,7 +758,7 @@ CPackets::PedOnFoot* CPacketHandler::PedOnFoot__Collect(CNetworkPed* networkPed)
 	if (useGun)
 	{
 		packet->aiming = true;
-		packet->weaponAim = useGun->m_vecTarget.x == 0.f || useGun->m_vecTarget.y == 0.f ? useGun->m_pTarget->GetPosition() : useGun->m_vecTarget;
+		packet->weaponAim = useGun->m_pTarget && useGun->m_vecTarget.x == 0.f || useGun->m_vecTarget.y == 0.f ? useGun->m_pTarget->GetPosition() : useGun->m_vecTarget;
 	}
 
 	packet->fightingStyle = ped->m_nFightingStyle;
@@ -985,17 +994,26 @@ void CPacketHandler::PedShotSync__Handle(void* data, int size)
 
 // PedPassengerSync
 
-void CPacketHandler::PedPassengerSync__Trigger(CNetworkPed* networkPed, int vehicleid)
+void CPacketHandler::PedPassengerSync__Trigger(CNetworkPed* networkPed, CNetworkVehicle* networkVehicle)
 {
 	CPackets::PedPassengerSync packet{};
 
 	packet.pedid = networkPed->m_nPedId;
-	packet.vehicleid = vehicleid;
+	packet.vehicleid = networkVehicle->m_nVehicleId;
 	packet.health = networkPed->m_pPed->m_fHealth;
 	packet.armour = networkPed->m_pPed->m_fArmour;
 	packet.weapon = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
 	packet.ammo = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_nAmmoInClip;
-	
+
+	for (int i = 0; i < networkVehicle->m_pVehicle->m_nMaxPassengers; i++)
+	{
+		if(networkVehicle->m_pVehicle->m_apPassengers[i] == networkPed->m_pPed)
+		{
+			packet.seatid = i;
+			break;
+		}
+	}
+
 	CNetwork::SendPacket(CPacketsID::PED_PASSENGER_UPDATE, &packet, sizeof packet, ENET_PACKET_FLAG_UNSEQUENCED);
 }
 
@@ -1017,7 +1035,10 @@ void CPacketHandler::PedPassengerSync__Handle(void* data, int size)
 
 	if (!ped->m_pPed->m_nPedFlags.bInVehicle || (ped->m_pPed->m_nPedFlags.bInVehicle && vehicle->m_pVehicle->m_pDriver == ped->m_pPed))
 	{
-		plugin::Command<Commands::WARP_CHAR_INTO_CAR_AS_PASSENGER>(CPools::GetPedRef(ped->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), -1);
+		int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle->m_pVehicle, packet->seatid);
+		CTaskSimpleCarSetPedInAsPassenger task = CTaskSimpleCarSetPedInAsPassenger(vehicle->m_pVehicle, doorId, 0);
+		task.m_bWarpingInToCar = true;
+		task.ProcessPed(ped->m_pPed);
 	}
 
 	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);

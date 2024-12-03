@@ -70,7 +70,7 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
     m_pPed->m_pIntelligence->SetHearingRange(30.0);
     m_pPed->m_pIntelligence->m_fDmRadius = 0.0f;
     m_pPed->m_pIntelligence->m_nDmNumPedsToScan = 0;
-
+    
     m_pPed->SetPosn(pos);
     m_pPed->SetOrientation(0.f, 0.f, 0.f);
     CWorld::Add(m_pPed);

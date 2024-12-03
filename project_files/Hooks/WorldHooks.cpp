@@ -143,7 +143,10 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
         }
     }
 
-    CWorld::Remove(entity);
+    if (entity && (unsigned int)*(void***)entity != 0x863C40)
+    {
+        CWorld::Remove(entity);
+    }
 }
 
 void WorldHooks::InjectHooks()

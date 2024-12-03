@@ -274,8 +274,9 @@ public:
 	{
 		int playerid;
 		int vehicleid;
-		unsigned char seatid;
-		bool force; // if true - put directly in vehicle (without any anim)
+		unsigned char seatid : 3;
+		unsigned char force : 1;
+		unsigned char passenger : 1;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -365,12 +366,17 @@ public:
 		unsigned char weapon;
 		unsigned short ammo;
 		unsigned char driveby;
+		unsigned char seatid;
 		CVector aim;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
 			CPackets::VehiclePassengerUpdate* packet = (CPackets::VehiclePassengerUpdate*)data;
-			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+
+			auto player = CPlayerManager::GetPlayer(peer);
+			packet->playerid = player->m_iPlayerId;
+			packet->seatid = player->m_nSeatId;
+
 			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}
 	};
@@ -578,6 +584,7 @@ public:
 		unsigned char armour;
 		unsigned char weapon;
 		unsigned short ammo;
+		unsigned char seatid;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

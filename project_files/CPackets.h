@@ -173,8 +173,9 @@ public:
 	{
 		int playerid;
 		int vehicleid;
-		unsigned char seatid;
-		bool force;
+		unsigned char seatid : 3;
+		unsigned char force : 1;
+		unsigned char passenger : 1;
 	};
 
 	struct VehicleExit
@@ -210,6 +211,7 @@ public:
 		unsigned char weapon;
 		unsigned short ammo;
 		unsigned char driveby;
+		unsigned char seatid;
 		CVector aim;
 	};
 
@@ -319,5 +321,6 @@ public:
 		unsigned char armour;
 		unsigned char weapon;
 		unsigned short ammo;
+		unsigned char seatid;
 	};
 };

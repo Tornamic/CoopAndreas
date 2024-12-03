@@ -117,7 +117,7 @@ void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t 
     enet_peer_send(peer, 0, packet);
 }
 
-void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith = nullptr)
+void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith)
 {
     size_t packetSize = 2 + dataSize;
     char* packetData = new char[packetSize];
@@ -136,7 +136,7 @@ void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, E
     }
 }
 
-void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith = nullptr)
+void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith)
 {
     ENetPacket* packet = enet_packet_create(data, dataSize, flag);
 
