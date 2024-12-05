@@ -32,7 +32,8 @@ enum CPacketsID : unsigned short
 	PLAYER_KEY_SYNC,
 	PED_DRIVER_UPDATE,
 	PED_SHOT_SYNC,
-	PED_PASSENGER_UPDATE
+	PED_PASSENGER_UPDATE,
+	PLAYER_AIM_SYNC
 };
 
 class CPackets
@@ -61,8 +62,6 @@ public:
 		unsigned char weapon;
 		unsigned short ammo;
 		bool ducking;
-		float aimX;
-		float aimY;
 		bool hasJetpack = false;
 		unsigned char fightingStyle = 4;
 
@@ -251,8 +250,6 @@ public:
 		float health;
 		char paintjob;
 		float bikeLean;
-		float turretAimHorizontal;
-		float turretAimVertical;
 		unsigned short miscComponentAngle; // hydra thrusters
 		float planeGearState;
 		unsigned char locked;
@@ -367,7 +364,6 @@ public:
 		unsigned short ammo;
 		unsigned char driveby;
 		unsigned char seatid;
-		CVector aim;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -590,6 +586,26 @@ public:
 		{
 			CPackets::PedPassengerSync* packet = (CPackets::PedPassengerSync*)data;
 			CNetwork::SendPacketToAll(CPacketsID::PED_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+		}
+	};
+
+	struct PlayerAimSync
+	{
+		int playerid;
+		unsigned char cameraMode;
+		float cameraFov;
+		CVector front;
+		CVector	source;
+		CVector	up;
+		float moveHeading;
+		float aimY;
+		float aimZ;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CPackets::PlayerAimSync* packet = (CPackets::PlayerAimSync*)data;
+			packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+			CNetwork::SendPacketToAll(CPacketsID::PLAYER_AIM_SYNC, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 		}
 	};
 };

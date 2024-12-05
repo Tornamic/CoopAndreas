@@ -80,10 +80,6 @@ CPackets::PlayerOnFoot* CPacketHandler::PlayerOnFoot__Collect()
 	// get crouch state
 	packet->ducking = CUtil::IsDucked(player);
 
-	// get player camera aim
-	packet->aimX = CLocalPlayer::m_vecLastAimX;
-	packet->aimY = CLocalPlayer::m_vecLastAimY;
-
 	packet->hasJetpack = CUtil::IsPedHasJetpack(player);
 
 	packet->fightingStyle = player->m_nFightingStyle;
@@ -111,7 +107,7 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
 
 	player->m_pPed->m_fAimingRotation =
-		player->m_pPed->m_fCurrentRotation = packet->rotation;
+		/*player->m_pPed->m_fCurrentRotation =*/ packet->rotation;
 
 	CUtil::SetPlayerJetpack(player, packet->hasJetpack);
 
@@ -384,13 +380,6 @@ CPackets::VehicleDriverUpdate* CPacketHandler::VehicleDriverUpdate__Collect(CNet
 
 	packet->paintjob = vehicle->m_nPaintJob;
 
-	if (CUtil::IsVehicleHasTurret(vehicle->m_pVehicle))
-	{
-		CAutomobile* automobile = (CAutomobile*)vehicle->m_pVehicle;
-		packet->turretAimHorizontal = automobile->m_fDoomHorizontalRotation;
-		packet->turretAimVertical = automobile->m_fDoomVerticalRotation;
-	}
-
 	if (vehicle->m_pVehicle->m_nModelIndex == 520)
 	{
 		CAutomobile* automobile = (CAutomobile*)vehicle->m_pVehicle;
@@ -460,9 +449,6 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 
 	if(vehicle->m_nPaintJob != packet->paintjob)
 		vehicle->m_pVehicle->SetRemap(packet->paintjob);
-
-	vehicle->m_fAimHorizontal = packet->turretAimHorizontal;
-	vehicle->m_fAimVertical = packet->turretAimVertical;
 
 	if (vehicle->m_pVehicle->m_nModelIndex == 520)
 	{
@@ -634,7 +620,6 @@ CPackets::VehiclePassengerUpdate* CPacketHandler::VehiclePassengerUpdate__Collec
 	packet->weapon = localPlayer->m_aWeapons[localPlayer->m_nActiveWeaponSlot].m_eWeaponType;
 	packet->vehicleid = vehicle->m_nVehicleId;
 	packet->driveby = CDriveBy::IsPedInDriveby(localPlayer);
-	packet->aim = *(CVector*)0xB6F32C;
 
 	return packet;
 }
@@ -673,7 +658,6 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 
 	player->m_pPed->m_fArmour = player->m_lOnFoot->armour = packet->playerArmour;
 	player->m_pPed->m_fHealth = player->m_lOnFoot->health = packet->playerHealth;
-	player->m_aPassengerAim = packet->aim;
 
 	if (packet->driveby && !CDriveBy::IsPedInDriveby(player->m_pPed))
 	{
@@ -1045,4 +1029,46 @@ void CPacketHandler::PedPassengerSync__Handle(void* data, int size)
 
 	ped->m_pPed->m_fArmour = packet->armour;
 	ped->m_pPed->m_fHealth = packet->health;
+}
+
+// PlayerAimSync
+
+void CPacketHandler::PlayerAimSync__Trigger()
+{
+	CPackets::PlayerAimSync packet = CPacketHandler::PlayerAimSync__Collect();
+	CNetwork::SendPacket(CPacketsID::PLAYER_AIM_SYNC, &packet, sizeof packet, ENET_PACKET_FLAG_UNSEQUENCED);
+}
+
+CPackets::PlayerAimSync CPacketHandler::PlayerAimSync__Collect()
+{
+	CPackets::PlayerAimSync packet{};
+
+	CCam camera = TheCamera.m_aCams[TheCamera.m_nActiveCam];
+
+	packet.cameraFov = camera.m_fFOV;
+	packet.cameraMode = camera.m_nMode;
+	packet.front = camera.m_vecFront;
+	packet.source = camera.m_vecSource;
+	packet.up = camera.m_vecUp;
+	packet.moveHeading = CWorld::Players[0].m_PlayerData.m_fFPSMoveHeading;
+	packet.aimY = CLocalPlayer::m_vecLastAimY;
+	packet.aimZ = FindPlayerPed(0)->m_fAimingRotation;
+
+	return packet;
+}
+
+void CPacketHandler::PlayerAimSync__Handle(void* data, int size)
+{
+	CPackets::PlayerAimSync* packet = (CPackets::PlayerAimSync*)data;
+
+	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
+
+	if (player)
+	{
+		player->m_aimSyncData = *packet;
+		if (player->m_lOnFoot)
+		{
+			player->m_lOnFoot->rotation = packet->aimZ;
+		}
+	}
 }

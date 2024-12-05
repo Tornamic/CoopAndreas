@@ -8,6 +8,7 @@ unsigned int lastIdleVehicleSyncTickRate = 0;
 unsigned int lastPassengerSyncTickRate = 0;
 unsigned int lastPedSyncTickRate = 0;
 unsigned int lastWeatherTimeSyncTickRate = 0;
+unsigned int lastPlayerAimSyncTickRate = 0;
 bool bBeenConnected;
 class CoopAndreas {
 public:
@@ -53,16 +54,11 @@ public:
 
 				if (CNetwork::m_bConnected)
 				{
+					unsigned int tickCount = GetTickCount();
+
 					CPassengerEnter::Process();
 
 					CPlayerPed* localPlayer = FindPlayerPed(0);
-
-					
-					if (GetAsyncKeyState(VK_F8))
-					{
-						Sleep(250);
-						CDriveBy::StopDriveby(localPlayer);
-					}
 
 					CDriveBy::Process(localPlayer);
 					
@@ -80,44 +76,67 @@ public:
 						syncRate = 100;
 					}
 
-					if (!isPassenger && GetTickCount() > (isDriver ? lastDriverSyncTickRate : lastOnFootSyncTickRate) + syncRate)
+					if (!isPassenger && tickCount > (isDriver ? lastDriverSyncTickRate : lastOnFootSyncTickRate) + syncRate)
 					{
 						if (isDriver)
 						{
 							CNetworkVehicleManager::UpdateDriver(localPlayer->m_pVehicle);
-							lastDriverSyncTickRate = GetTickCount();
+							lastDriverSyncTickRate = tickCount;
 						}
 						else
 						{
 							CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
 							CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
 							delete packet;
-							lastOnFootSyncTickRate = GetTickCount();
+							lastOnFootSyncTickRate = tickCount;
 						}
 					}
 
-					if (isPassenger && GetTickCount() > lastPassengerSyncTickRate + 333)
+					if (isPassenger && tickCount > lastPassengerSyncTickRate + 333)
 					{
 						CNetworkVehicleManager::UpdatePassenger(localPlayer->m_pVehicle, localPlayer);
-						lastPassengerSyncTickRate = GetTickCount();
+						lastPassengerSyncTickRate = tickCount;
 					}
 
-					if (GetTickCount() > lastIdleVehicleSyncTickRate + 100)
+					if (tickCount > lastIdleVehicleSyncTickRate + 100)
 					{
 						CNetworkVehicleManager::UpdateIdle();
-						lastIdleVehicleSyncTickRate = GetTickCount();
+						lastIdleVehicleSyncTickRate = tickCount;
 					}
 
-					if (GetTickCount() > lastPedSyncTickRate + 40)
+					if (tickCount > lastPedSyncTickRate + 40)
 					{
 						CNetworkPedManager::Update();
-						lastPedSyncTickRate = GetTickCount();
+						lastPedSyncTickRate = tickCount;
 					}
 
-					if (CLocalPlayer::m_bIsHost && GetTickCount() > lastWeatherTimeSyncTickRate + 2000)
+					if (CLocalPlayer::m_bIsHost && tickCount > lastWeatherTimeSyncTickRate + 2000)
 					{
 						CPacketHandler::GameWeatherTime__Trigger();
-						lastWeatherTimeSyncTickRate = GetTickCount();
+						lastWeatherTimeSyncTickRate = tickCount;
+					}
+					
+					// if holds a weapon and is not a driver
+					if (localPlayer->m_nActiveWeaponSlot > 0 && !isDriver)
+					{
+						CControllerState keys = CPad::GetPad(0)->NewState;
+						
+						// if is player aiming and is not a passenger or doing driveby
+						if ((keys.RightShoulder1 && !isPassenger) || CDriveBy::IsPedInDriveby(localPlayer))
+						{
+							// if is player shooting, update x2 often
+							if (tickCount > lastPlayerAimSyncTickRate + keys.ButtonCircle ? 50 : 100)
+							{
+								CPacketHandler::PlayerAimSync__Trigger();
+							}
+						}
+					}
+					else if (localPlayer->m_pVehicle && CUtil::IsVehicleHasTurret(localPlayer->m_pVehicle))
+					{
+						if (tickCount > lastPlayerAimSyncTickRate + 150)
+						{
+							CPacketHandler::PlayerAimSync__Trigger();
+						}
 					}
 
 					if(!CLocalPlayer::m_bIsHost)

@@ -3,6 +3,7 @@
 #include "CTaskSync.h"
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
+#include "CAimSync.h"
 
 // when local player enters any vehicle
 static void __fastcall CTaskComplexEnterCarAsDriver__Ctor_Hook(CTaskComplexEnterCarAsDriver* This, int, CVehicle* vehicle)
@@ -31,51 +32,6 @@ static void __fastcall CTaskComplexLeaveCar__Ctor_Hook(CTaskComplexLeaveCar* Thi
     CPackets::VehicleExit packet{};
     CNetwork::SendPacket(CPacketsID::VEHICLE_EXIT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     plugin::CallMethod<0x63B8C0, CTaskComplexLeaveCar*, CVehicle*, int, int, bool, bool>(This, vehicle, targetDoor, delayTime, sensibleLeaveCar, forceGetOut);
-}
-
-static void __fastcall CTaskSimpleGangDriveBy__SetupStaticAnimForPlayer_Hook(CTaskSimpleGangDriveBy* This, int, CPed* ped)
-{
-    if (ped == FindPlayerPed(0) || !ped->IsPlayer())
-    {
-        plugin::CallMethod<0x621960, CTaskSimpleGangDriveBy*, CPed*>(This, ped);
-        return;
-    }
-
-    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(ped);
-
-    CWorld::PlayerInFocus = player->GetInternalId();
-
-    CVector savedAim = *(CVector*)0xB6F32C;
-    eCamMode savedCameraMode = *(eCamMode*)0xB6F1A8;
-    float savedAspectRatio = *(float*)0xC3EFA4;
-    float savedExtZoom = *(float*)0xB6F250;
-
-    *(CVector*)0xB6F32C = player->m_aPassengerAim;
-    *(eCamMode*)0xB6F1A8 = eCamMode::MODE_AIMWEAPON_FROMCAR;
-    *(float*)0xC3EFA4 = 0.0f;
-    *(float*)0xB6F250 = 0.0f;
-
-    plugin::CallMethod<0x621960, CTaskSimpleGangDriveBy*, CPed*>(This, ped);
-
-    *(CVector*)0xB6F32C = savedAim;
-    *(eCamMode*)0xB6F1A8 = savedCameraMode;
-    *(float*)0xC3EFA4 = savedAspectRatio;
-    *(float*)0xB6F250 = savedExtZoom;
-
-    CWorld::PlayerInFocus = 0;
-}
-
-static void __fastcall CTaskSimpleGangDriveBy__ProcessAiming_Hook(CTaskSimpleGangDriveBy* This, int, CPed* ped)
-{
-    if (ped == FindPlayerPed(0) || !ped->IsPlayer())
-    {
-        plugin::CallMethod<0x628350, CTaskSimpleGangDriveBy*, CPed*>(This, ped);
-        return;
-    }
-
-    ped->m_nPedType = ePedType::PED_TYPE_CIVMALE;
-    plugin::CallMethod<0x628350, CTaskSimpleGangDriveBy*, CPed*>(This, ped);
-    ped->m_nPedType = ePedType::PED_TYPE_PLAYER1;
 }
 
 CTaskManager* pTaskMgr = nullptr;
@@ -314,6 +270,31 @@ skip:
     }
 }
 
+bool __fastcall CTaskSimpleUseGun__SetPedPosition_Hook(CTaskSimpleUseGun* This, int, CPed* ped)
+{
+    if (!ped->IsPlayer() || ped == FindPlayerPed(0))
+    {
+        return plugin::CallMethodAndReturn<bool, 0x624ED0, CTaskSimpleUseGun*>(This, ped);
+    }
+
+    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(ped);
+
+    if (player == nullptr)
+        return plugin::CallMethodAndReturn<bool, 0x624ED0, CTaskSimpleUseGun*>(This, ped);
+
+    CWorld::PlayerInFocus = player->GetInternalId();
+
+    CAimSync::ApplyNetworkPlayerContext(player);
+
+    bool result = plugin::CallMethodAndReturn<bool, 0x624ED0, CTaskSimpleUseGun*>(This, ped);
+
+    CWorld::PlayerInFocus = 0;
+
+    CAimSync::ApplyLocalContext();
+
+    return result;
+}
+
 void TaskHooks::InjectHooks()
 {
     patch::RedirectCall(0x570A1B, CTaskComplexEnterCarAsDriver__Ctor_Hook);
@@ -322,9 +303,9 @@ void TaskHooks::InjectHooks()
     patch::RedirectCall(0x57049C, CTaskComplexLeaveCar__Ctor_Hook);
     patch::RedirectCall(0x5703F7, CTaskComplexLeaveCar__Ctor_Hook);
 
-    patch::RedirectCall(0x62D59B, CTaskSimpleGangDriveBy__SetupStaticAnimForPlayer_Hook);
+    //patch::RedirectCall(0x62D59B, CTaskSimpleGangDriveBy__SetupStaticAnimForPlayer_Hook);
 
-    patch::RedirectCall(0x62D813, CTaskSimpleGangDriveBy__ProcessAiming_Hook);
+    //patch::RedirectCall(0x62D813, CTaskSimpleGangDriveBy__ProcessAiming_Hook);
 
     // ped tasks hooks (help me im going crazy)
     patch::RedirectJump(0x681AF0, CTaskManager__SetTask_Hook);
@@ -332,4 +313,6 @@ void TaskHooks::InjectHooks()
     patch::RedirectJump(0x61A449, CTaskComplex__SetSubTask_Hook);
     patch::RedirectJump(0x61A3A0, CTaskSimple__dtor_Hook);
     patch::RedirectJump(0x61A413, CTaskComplex__dtor_Hook);
+
+    patch::SetPointer(0x86D744, CTaskSimpleUseGun__SetPedPosition_Hook);
 }

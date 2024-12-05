@@ -73,7 +73,7 @@ void CNetworkVehicleManager::UpdateDriver(CVehicle* vehicle)
 {
 	CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
 	CPackets::VehicleDriverUpdate* packet = CPacketHandler::VehicleDriverUpdate__Collect(networkVehicle);
-	CNetwork::SendPacket(CPacketsID::VEHICLE_DRIVER_UPDATE, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED);
+	CNetwork::SendPacket(CPacketsID::VEHICLE_DRIVER_UPDATE, packet, sizeof *packet, (ENetPacketFlag)0);
 	delete packet;
 }
 

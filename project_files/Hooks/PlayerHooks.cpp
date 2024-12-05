@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlayerHooks.h"
 #include "CKeySync.h"
+#include "CAimSync.h"
 
 static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 {
@@ -22,20 +23,21 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     CWorld::PlayerInFocus = player->GetInternalId();
 
     CKeySync::ApplyNetworkPlayerContext(player);
+    CAimSync::ApplyNetworkPlayerContext(player);
 
     player->m_pPed->m_fHealth = player->m_lOnFoot->health;
     player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
 
     player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
 
-    player->m_pPed->m_fAimingRotation =
-        player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
+    player->m_pPed->m_fAimingRotation = player->m_lOnFoot->rotation;
 
     plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
 
     CWorld::PlayerInFocus = 0;
 
     CKeySync::ApplyLocalContext();
+    CAimSync::ApplyLocalContext();
 }
 
 static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding, CEntity* owner, CEntity* victim, CVector* startPoint, CVector* endPoint, CColPoint* colPoint, int incrementalHit)
@@ -118,10 +120,14 @@ static void __fastcall CPedIK__PointGunInDirection_Hook(CPedIK* This, int paddin
     if (player->m_lOnFoot == nullptr)
         return;
 
-    player->m_pPed->m_fAimingRotation =
-        player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
+    player->m_pPed->m_fAimingRotation = player->m_lOnFoot->rotation;
+    
+    eWeaponType weapon = player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
 
-    This->PointGunInDirection(player->m_lOnFoot->aimX, player->m_lOnFoot->aimY, flag, float1);
+    if (weapon != WEAPON_SNIPERRIFLE)
+        dirY = player->m_aimSyncData.aimY;
+
+    This->PointGunInDirection(dirX, dirY, flag, float1);
 }
 
 static void __fastcall CPlayerPed__dctor_Hook(CPlayerPed* This, int)

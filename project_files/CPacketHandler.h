@@ -41,5 +41,8 @@ public:
 	static void PedShotSync__Handle(void* data, int size);
 	static void PedPassengerSync__Trigger(CNetworkPed* networkPed, CNetworkVehicle* networkVehicle);
 	static void PedPassengerSync__Handle(void* data, int size);
+	static void PlayerAimSync__Trigger();
+	static CPackets::PlayerAimSync PlayerAimSync__Collect();
+	static void PlayerAimSync__Handle(void* data, int size);
 };
 

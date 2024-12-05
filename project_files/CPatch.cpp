@@ -202,6 +202,12 @@ void FixCrashes()
 
     // fix driver kill bug sprint pressed (possible issues with missions and scripts)
     patch::SetUChar(0x62F223, 0);
+
+    // disable stunt jump game speed changing
+    patch::Nop(0x49C892, 10);
+
+    // fix CBike controlling, wtf R* did
+    patch::Nop(0x6BC9EB, 2);
 }
 
 #define SCANCODE_BUFFER_SIZE (8 * 20000)

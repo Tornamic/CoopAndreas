@@ -35,7 +35,8 @@ enum CPacketsID : unsigned short
 	PLAYER_KEY_SYNC,
 	PED_DRIVER_UPDATE,
 	PED_SHOT_SYNC,
-	PED_PASSENGER_UPDATE
+	PED_PASSENGER_UPDATE,
+	PLAYER_AIM_SYNC
 };
 
 class CPackets
@@ -64,8 +65,6 @@ public:
 		unsigned char weapon = 0;
 		unsigned short ammo = 0;
 		bool ducking = false;
-		float aimX = 0.0f;
-		float aimY = 0.0f;
 		bool hasJetpack = false;
 		unsigned char fightingStyle = 4;
 	};
@@ -162,8 +161,6 @@ public:
 		float health;
 		char paintjob;
 		float bikeLean;
-		float turretAimHorizontal;
-		float turretAimVertical;
 		unsigned short miscComponentAngle; // hydra thrusters
 		float planeGearState;
 		unsigned char locked;
@@ -212,7 +209,6 @@ public:
 		unsigned short ammo;
 		unsigned char driveby;
 		unsigned char seatid;
-		CVector aim;
 	};
 
 	struct PlayerChatMessage
@@ -322,5 +318,18 @@ public:
 		unsigned char weapon;
 		unsigned short ammo;
 		unsigned char seatid;
+	};
+
+	struct PlayerAimSync
+	{
+		int playerid;
+		unsigned char cameraMode;
+		float cameraFov;
+		CVector front;
+		CVector	source;
+		CVector	up;
+		float moveHeading;
+		float aimY;
+		float aimZ;
 	};
 };

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "VehicleHooks.h"
 #include "CKeySync.h"
+#include "CAimSync.h"
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
 
@@ -64,6 +65,7 @@ void __fastcall CVehicle__ProcessControl_Hook()
     CWorld::PlayerInFocus = player->GetInternalId();
 
     CKeySync::ApplyNetworkPlayerContext(player);
+    CAimSync::ApplyNetworkPlayerContext(player);
 
     player->m_pPed->m_fHealth = player->m_lOnFoot->health;
     player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
@@ -85,6 +87,7 @@ void __fastcall CVehicle__ProcessControl_Hook()
     CWorld::PlayerInFocus = 0;
 
     CKeySync::ApplyLocalContext();
+    CAimSync::ApplyLocalContext();
 
     /**(bool*)0xB6F1A4 = savedLookingLeft;
     *(bool*)0xB6F1A5 = savedLookingRight;*/
@@ -118,51 +121,6 @@ static void __fastcall CVehicle__RemoveVehicleUpgrade_Hook(CVehicle* This, int, 
         CNetwork::SendPacket(CPacketsID::VEHICLE_COMPONENT_REMOVE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
     This->RemoveVehicleUpgrade(modelid);
-}
-CAutomobile* _automobile = nullptr;
-CNetworkVehicle* _vehicle = nullptr;
-static void __declspec(naked) CAutomobile__FireTruckControl_Hook()
-{
-    _asm mov _automobile, ecx
-    _asm mov eax, [ecx]
-
-        if (_automobile->m_pDriver == FindPlayerPed(0))
-        {
-            _automobile->FireTruckControl(0.0f);
-        }
-        else if (_vehicle = CNetworkVehicleManager::GetVehicle(_automobile))
-        {
-            _automobile->m_fDoomHorizontalRotation = _vehicle->m_fAimHorizontal;
-            _automobile->m_fDoomVerticalRotation = _vehicle->m_fAimVertical;
-            _automobile->FireTruckControl(0.0f);
-            _automobile->m_fDoomHorizontalRotation = _vehicle->m_fAimHorizontal;
-            _automobile->m_fDoomVerticalRotation = _vehicle->m_fAimVertical;
-        }
-
-    _asm retn 4
-}
-
-static void __fastcall CAutomobile__TankControl_Hook()
-{
-    CAutomobile* automobile = nullptr;
-    _asm mov automobile, ecx
-    _asm mov eax, [ecx]
-
-        if (automobile->m_pDriver == FindPlayerPed(0))
-        {
-            automobile->TankControl();
-            return;
-        }
-
-    CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(automobile);
-    if (vehicle != nullptr && automobile->m_pDriver != nullptr)
-    {
-        automobile->m_fDoomHorizontalRotation = vehicle->m_fAimHorizontal;
-        automobile->m_fDoomVerticalRotation = vehicle->m_fAimVertical;
-        automobile->TankControl();
-        automobile->m_fDoomHorizontalRotation = vehicle->m_fAimHorizontal;
-        automobile->m_fDoomVerticalRotation = vehicle->m_fAimVertical;
-    }
 }
 
 static bool __fastcall CDamageManager__ApplyDamage_Hook(CDamageManager* This, int, CAutomobile* dm_comp, tComponent compId, float intensity, float a5)
@@ -252,9 +210,6 @@ void VehicleHooks::InjectHooks()
 
     patch::RedirectCall(0x4732F2, CVehicle__RemoveVehicleUpgrade_Hook);
     patch::RedirectCall(0x498618, CVehicle__RemoveVehicleUpgrade_Hook);
-
-    patch::RedirectCall(0x6B1F5E, CAutomobile__FireTruckControl_Hook);
-    patch::RedirectCall(0x6B2028, CAutomobile__TankControl_Hook);
 
     patch::SetPointer(0x871148, CVehicle__ProcessControl_Hook);
     patch::SetPointer(0x8721C8, CVehicle__ProcessControl_Hook);

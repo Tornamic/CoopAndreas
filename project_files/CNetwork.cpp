@@ -116,6 +116,7 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::PED_DRIVER_UPDATE, CPacketHandler::PedDriverUpdate__Handle);
 	CNetwork::AddListener(CPacketsID::PED_SHOT_SYNC, CPacketHandler::PedShotSync__Handle);
 	CNetwork::AddListener(CPacketsID::PED_PASSENGER_UPDATE, CPacketHandler::PedPassengerSync__Handle);
+	CNetwork::AddListener(CPacketsID::PLAYER_AIM_SYNC, CPacketHandler::PlayerAimSync__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

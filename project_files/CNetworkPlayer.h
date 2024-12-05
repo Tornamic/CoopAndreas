@@ -29,6 +29,8 @@ public:
 
 	CCompressedControllerState m_compressedControllerState{};
 
+	CPackets::PlayerAimSync m_aimSyncData;
+
 	void CreatePed(int id, CVector position);
 
 	int GetInternalId();
