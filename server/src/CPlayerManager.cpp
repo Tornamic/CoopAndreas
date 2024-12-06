@@ -1,4 +1,6 @@
-#include "stdafx.h"
+
+#include "../core/CPlayer.h"
+#include "../core/CPlayerManager.h"
 
 std::vector<CPlayer*> CPlayerManager::m_pPlayers;
 
@@ -80,6 +82,6 @@ void CPlayerManager::AssignHostToFirstPlayer()
 
 	player->m_bIsHost = true;
 
-	CPackets::PlayerSetHost setHostPacket = { player->m_iPlayerId };
-	CNetwork::SendPacketToAll(CPacketsID::PLAYER_SET_HOST, &setHostPacket, sizeof setHostPacket, ENET_PACKET_FLAG_RELIABLE, nullptr);
+	CPlayerPackets::PlayerSetHost setHostPacket = { player->m_iPlayerId };
+	CNetwork::SendPacketToAll(CPacketsID::PLAYER_SET_HOST, &setHostPacket, sizeof(setHostPacket), ENET_PACKET_FLAG_RELIABLE, nullptr);
 }

@@ -1,5 +1,8 @@
 #pragma once
-#include "stdafx.h"
+
+#ifndef _NETWORKENTITYTYPE_H_
+	#define _NETWORKENTITYTYPE_H_
+#include <cstdint>
 
 enum eNetworkEntityType : uint8_t
 {
@@ -12,3 +15,5 @@ enum eNetworkEntityType : uint8_t
 	NETWORK_ENTITY_TYPE_DUMMY,
 	NETWORK_ENTITY_TYPE_NOTINPOOLS
 };
+
+#endif

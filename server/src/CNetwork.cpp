@@ -1,4 +1,19 @@
-#include "stdafx.h"
+#pragma once
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+#include "../core/CPacketListener.h"
+#include "../core/CPacket.h"
+#include "../core/CNetwork.h"
+
+#include "../core/CPlayerManager.h"
+#include "../core/CVehicleManager.h"
+#include "../core/CPedManager.h"
+
+
 
 std::vector<CPacketListener*> CNetwork::m_packetListeners;
 
@@ -9,7 +24,7 @@ bool CNetwork::Init(unsigned short port)
 
     if (enet_initialize() != 0) // try to init enet
     {
-        printf("init failed\n");
+        printf("[ERROR] : ENET_INIT FAILED TO INITIALIZE\n");
         return false;
     }
 
@@ -22,11 +37,18 @@ bool CNetwork::Init(unsigned short port)
 
     if (server == NULL)
     {
-        printf("creating failed\n");
+        printf("[ERROR] : ENET_UDP_SERVER_SOCKET FAILED TO CREATE\n");
         return false;
     }
 
-    printf("Server stared on port %d\n", port);
+    printf("[!] : CoopAndreas Server \n\n");
+    printf("[!] : Version : X.X.X.X\n");
+    #if defined (_WIN32)
+        printf("[!] : Platform : Microsoft Windows \n");
+    #else
+        printf("[!] : Platform : GNU/Linux | BSD \n");
+    #endif
+    printf("[!] : Server stared on port %d\n", port);
 
     ENetEvent event;
     while (true) // waiting for event
@@ -45,8 +67,8 @@ bool CNetwork::Init(unsigned short port)
                 enet_packet_destroy(event.packet);
 
                 char buffer[100];
-                sprintf_s(buffer, "Recv %d Sent %d", server->totalReceivedPackets, server->totalSentPackets);
-                SetConsoleTitleA(buffer);
+                sprintf(buffer, "[!] : Data Received (%d)\tData Sended (%d)\n", server->totalReceivedPackets, server->totalSentPackets);
+                //SetConsoleTitleA(buffer);
                 break;
             }
             case ENET_EVENT_TYPE_DISCONNECT:
@@ -59,38 +81,39 @@ bool CNetwork::Init(unsigned short port)
 
     enet_host_destroy(server);
     enet_deinitialize();
-    printf("Destroyed\n");
+    printf("[!] : Server Shutdown (ENET_DEINITIALIZE)\n");
     return 0;
 }
 
 void CNetwork::InitListeners()
 {
-    CNetwork::AddListener(CPacketsID::PLAYER_ONFOOT, CPackets::PlayerOnFoot::Handle);
-    CNetwork::AddListener(CPacketsID::PLAYER_BULLET_SHOT, CPackets::PlayerBulletShot::Handle);
-    CNetwork::AddListener(CPacketsID::PLAYER_PLACE_WAYPOINT, CPackets::PlayerPlaceWaypoint::Handle);
-    CNetwork::AddListener(CPacketsID::PLAYER_GET_NAME, CPackets::PlayerGetName::Handle);
-    CNetwork::AddListener(CPacketsID::ADD_EXPLOSION, CPackets::AddExplosion::Handle);
-    CNetwork::AddListener(CPacketsID::VEHICLE_SPAWN, CPackets::VehicleSpawn::Handle);
-    CNetwork::AddListener(CPacketsID::VEHICLE_REMOVE, CPackets::VehicleRemove::Handle);
-    CNetwork::AddListener(CPacketsID::VEHICLE_ENTER, CPackets::VehicleEnter::Handle);
-    CNetwork::AddListener(CPacketsID::VEHICLE_EXIT, CPackets::VehicleExit::Handle);
-    CNetwork::AddListener(CPacketsID::VEHICLE_DRIVER_UPDATE, CPackets::VehicleDriverUpdate::Handle);
-    CNetwork::AddListener(CPacketsID::VEHICLE_IDLE_UPDATE, CPackets::VehicleIdleUpdate::Handle);
-    CNetwork::AddListener(CPacketsID::VEHICLE_DAMAGE, CPackets::VehicleDamage::Handle);
-    CNetwork::AddListener(CPacketsID::VEHICLE_COMPONENT_ADD, CPackets::VehicleComponentAdd::Handle);
-    CNetwork::AddListener(CPacketsID::VEHICLE_COMPONENT_REMOVE, CPackets::VehicleComponentRemove::Handle);
-    CNetwork::AddListener(CPacketsID::VEHICLE_PASSENGER_UPDATE, CPackets::VehiclePassengerUpdate::Handle);
-    CNetwork::AddListener(CPacketsID::PLAYER_CHAT_MESSAGE, CPackets::PlayerChatMessage::Handle);
-    CNetwork::AddListener(CPacketsID::PED_SPAWN, CPackets::PedSpawn::Handle);
-    CNetwork::AddListener(CPacketsID::PED_REMOVE, CPackets::PedRemove::Handle);
-    CNetwork::AddListener(CPacketsID::PED_ONFOOT, CPackets::PedOnFoot::Handle);
-    CNetwork::AddListener(CPacketsID::GAME_WEATHER_TIME, CPackets::GameWeatherTime::Handle);
-    CNetwork::AddListener(CPacketsID::PLAYER_KEY_SYNC, CPackets::PlayerKeySync::Handle);
-    CNetwork::AddListener(CPacketsID::PED_ADD_TASK, CPackets::PedAddTask::Handle);
-    CNetwork::AddListener(CPacketsID::PED_DRIVER_UPDATE, CPackets::PedDriverUpdate::Handle);
-    CNetwork::AddListener(CPacketsID::PED_SHOT_SYNC, CPackets::PedShotSync::Handle);
-    CNetwork::AddListener(CPacketsID::PED_PASSENGER_UPDATE, CPackets::PedPassengerSync::Handle);
-    CNetwork::AddListener(CPacketsID::PLAYER_AIM_SYNC, CPackets::PlayerAimSync::Handle);
+    CNetwork::AddListener(CPacketsID::PLAYER_ONFOOT, CPlayerPackets::PlayerOnFoot::Handle);
+    CNetwork::AddListener(CPacketsID::PLAYER_BULLET_SHOT, CPlayerPackets::PlayerBulletShot::Handle);
+    CNetwork::AddListener(CPacketsID::PLAYER_PLACE_WAYPOINT, CPlayerPackets::PlayerPlaceWaypoint::Handle);
+    CNetwork::AddListener(CPacketsID::PLAYER_GET_NAME, CPlayerPackets::PlayerGetName::Handle);
+    CNetwork::AddListener(CPacketsID::ADD_EXPLOSION, CPlayerPackets::AddExplosion::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_SPAWN, CVehiclePackets::VehicleSpawn::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_REMOVE, CVehiclePackets::VehicleRemove::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_ENTER, CVehiclePackets::VehicleEnter::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_EXIT, CVehiclePackets::VehicleExit::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_DRIVER_UPDATE, CVehiclePackets::VehicleDriverUpdate::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_IDLE_UPDATE, CVehiclePackets::VehicleIdleUpdate::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_DAMAGE, CVehiclePackets::VehicleDamage::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_COMPONENT_ADD, CVehiclePackets::VehicleComponentAdd::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_COMPONENT_REMOVE, CVehiclePackets::VehicleComponentRemove::Handle);
+    CNetwork::AddListener(CPacketsID::VEHICLE_PASSENGER_UPDATE, CVehiclePackets::VehiclePassengerUpdate::Handle);
+    CNetwork::AddListener(CPacketsID::PLAYER_CHAT_MESSAGE, CPlayerPackets::PlayerChatMessage::Handle);
+    CNetwork::AddListener(CPacketsID::PED_SPAWN, CPedPackets::PedSpawn::Handle);
+    CNetwork::AddListener(CPacketsID::PED_REMOVE, CPedPackets::PedRemove::Handle);
+    CNetwork::AddListener(CPacketsID::PED_ONFOOT, CPedPackets::PedOnFoot::Handle);
+    
+    CNetwork::AddListener(CPacketsID::GAME_WEATHER_TIME, CPlayerPackets::GameWeatherTime::Handle); // CPlayerPacket
+    CNetwork::AddListener(CPacketsID::PLAYER_KEY_SYNC, CPlayerPackets::PlayerKeySync::Handle); 
+
+    CNetwork::AddListener(CPacketsID::PED_ADD_TASK, CPedPackets::PedAddTask::Handle);
+    CNetwork::AddListener(CPacketsID::PED_DRIVER_UPDATE, CPedPackets::PedDriverUpdate::Handle);
+    CNetwork::AddListener(CPacketsID::PED_SHOT_SYNC, CPedPackets::PedShotSync::Handle);
+    CNetwork::AddListener(CPacketsID::PLAYER_AIM_SYNC, CPlayerPackets::PlayerAimSync::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -118,7 +141,7 @@ void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t 
     enet_peer_send(peer, 0, packet);
 }
 
-void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith)
+void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith = nullptr)
 {
     size_t packetSize = 2 + dataSize;
     char* packetData = new char[packetSize];
@@ -137,7 +160,7 @@ void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, E
     }
 }
 
-void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith)
+void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith = nullptr)
 {
     ENetPacket* packet = enet_packet_create(data, dataSize, flag);
 
@@ -152,7 +175,7 @@ void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag fl
 
 void CNetwork::HandlePlayerConnected(ENetEvent& event)
 {
-    printf("A new client connected from %i.%i.%i.%i:%u.\n", 
+    printf("\n[Alert] : A new client connected from %i.%i.%i.%i:%u.\n", 
         event.peer->address.host & 0xFF, 
         (event.peer->address.host >> 8) & 0xFF, 
         (event.peer->address.host >> 16) & 0xFF, 
@@ -174,13 +197,13 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
     CPlayerManager::Add(player);
 
     // create PlayerConnected packet struct
-    CPackets::PlayerConnected packet =
+    CPlayerPackets::PlayerConnected packet =
     {
         freeId // id
     };
 
     // send to all
-    CNetwork::SendPacketToAll(CPacketsID::PLAYER_CONNECTED, &packet, sizeof CPackets::PlayerConnected, ENET_PACKET_FLAG_RELIABLE, event.peer);
+    CNetwork::SendPacketToAll(CPacketsID::PLAYER_CONNECTED, &packet, sizeof (CPlayerPackets::PlayerConnected), ENET_PACKET_FLAG_RELIABLE, event.peer);
 
     // send PlayerConnected packets for a new player
     for (auto i : CPlayerManager::m_pPlayers)
@@ -193,22 +216,22 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
             i->m_iPlayerId
         };
 
-        CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_CONNECTED, &packet, sizeof CPackets::PlayerConnected, ENET_PACKET_FLAG_RELIABLE);
+        CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_CONNECTED, &packet, sizeof (CPlayerPackets::PlayerConnected), ENET_PACKET_FLAG_RELIABLE);
 
-        CPackets::PlayerGetName getNamePacket{};
+        CPlayerPackets::PlayerGetName getNamePacket{};
         getNamePacket.playerid = i->m_iPlayerId;
-        strcpy_s(getNamePacket.name, i->m_Name);
-        CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_GET_NAME, &getNamePacket, sizeof CPackets::PlayerGetName, ENET_PACKET_FLAG_RELIABLE);
+        strcpy(getNamePacket.name, i->m_Name);
+        CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_GET_NAME, &getNamePacket, sizeof (CPlayerPackets::PlayerGetName), ENET_PACKET_FLAG_RELIABLE);
     }
 
     for (auto i : CVehicleManager::m_pVehicles)
     {
-        CPackets::VehicleSpawn vehicleSpawnPacket
+        CVehiclePackets::VehicleSpawn vehicleSpawnPacket
         { 
             i->m_nVehicleId,
             i->m_nModelId,
             i->m_vecPosition,
-            i->m_vecRotation.z * (3.141592 / 180), // convert to radians
+            static_cast<float>(i->m_vecRotation.z * (3.141592 / 180)), // convert to radians
             i->m_nPrimaryColor,
             i->m_nSecondaryColor
         };
@@ -228,7 +251,7 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
 
         if (modifiedDamageStatus)
         {
-            CPackets::VehicleDamage vehicleDamagePacket{};
+            CVehiclePackets::VehicleDamage vehicleDamagePacket{};
             vehicleDamagePacket.vehicleid = i->m_nVehicleId;
             memcpy(&vehicleDamagePacket.damageManager_padding, i->m_damageManager_padding, 23);
             CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_DAMAGE, &vehicleDamagePacket, sizeof vehicleDamagePacket, ENET_PACKET_FLAG_RELIABLE);
@@ -236,7 +259,7 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
 
         for (int component : i->m_pComponents) 
         {
-            CPackets::VehicleComponentAdd vehicleComponentAddPacket{};
+            CVehiclePackets::VehicleComponentAdd vehicleComponentAddPacket{};
             vehicleComponentAddPacket.vehicleid = i->m_nVehicleId;
             vehicleComponentAddPacket.componentid = component;
             CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_COMPONENT_ADD, &vehicleComponentAddPacket, sizeof vehicleComponentAddPacket, ENET_PACKET_FLAG_RELIABLE);
@@ -245,7 +268,7 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
 
     for (auto i : CPedManager::m_pPeds)
     {
-        CPackets::PedSpawn packet{};
+        CPedPackets::PedSpawn packet{};
         packet.pedid = i->m_nPedId;
         packet.modelId = i->m_nModelId;
         packet.pos = i->m_vecPos;
@@ -254,7 +277,7 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         CNetwork::SendPacket(event.peer, CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
 
-    CPackets::PlayerHandshake handshakePacket = { freeId };
+    CPlayerPackets::PlayerHandshake handshakePacket = { freeId };
     CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_HANDSHAKE, &handshakePacket, sizeof handshakePacket, ENET_PACKET_FLAG_RELIABLE);
 
     CPlayerManager::AssignHostToFirstPlayer();
@@ -278,15 +301,15 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
     CPlayerManager::Remove(player);
 
     // create PlayerDisconnected packet struct
-    CPackets::PlayerDisconnected packet =
+    CPlayerPackets::PlayerDisconnected packet =
     {
         player->m_iPlayerId // id
     };
 
     // send to all
-    CNetwork::SendPacketToAll(CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof CPackets::PlayerDisconnected, ENET_PACKET_FLAG_UNSEQUENCED, event.peer);
+    CNetwork::SendPacketToAll(CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof (CPlayerPackets::PlayerDisconnected), ENET_PACKET_FLAG_UNSEQUENCED, event.peer);
 
-    printf("%i disconnected.\n", player->m_iPlayerId);
+    printf("[Alert] : %i Disconnected.\n", player->m_iPlayerId);
 
     CPlayerManager::AssignHostToFirstPlayer();
 }

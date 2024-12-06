@@ -1,4 +1,5 @@
-#include "stdafx.h"
+
+#include "../core/CVehicle.h"
 
 CVehicle::CVehicle(int vehicleid, unsigned short model, CVector pos, float rot)
 {

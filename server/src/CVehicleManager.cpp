@@ -1,5 +1,6 @@
-#include "stdafx.h"
 
+#include "../core/CVehicle.h"
+#include "../core/CVehicleManager.h"
 
 std::vector<CVehicle*> CVehicleManager::m_pVehicles;
 

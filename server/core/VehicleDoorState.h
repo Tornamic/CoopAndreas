@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef _VEHICLEDOORSTATE_H_
+	#define _VEHICLEDOORSTATE_H_
+
 struct VehicleDoorState
 {
 	unsigned char bonnet = 0;
@@ -9,3 +12,4 @@ struct VehicleDoorState
 	unsigned char leftRear = 0;
 	unsigned char rightRear = 0;
 };
+#endif
