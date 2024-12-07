@@ -41,7 +41,7 @@ https://send.monobank.ua/jar/8wPrs73MBa
 
 *If you need another way to donate, please dm me on discord: `@tornamic`*
 
-Contact information is current as of November 2024
+Contact information is current as of December 2024
 
 ## TODO list:
 ### Already Done ✓
