@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.connectPage = new System.Windows.Forms.TabPage();
+            this.b_copy = new System.Windows.Forms.Button();
+            this.tb_command = new System.Windows.Forms.TextBox();
             this.link_discord = new System.Windows.Forms.LinkLabel();
             this.lb_important = new System.Windows.Forms.Label();
             this.tb_serialKey = new System.Windows.Forms.TextBox();
@@ -51,8 +53,6 @@
             this.configPage = new System.Windows.Forms.TabPage();
             this.languageCombo = new System.Windows.Forms.ComboBox();
             this.lb_language = new System.Windows.Forms.Label();
-            this.tb_command = new System.Windows.Forms.TextBox();
-            this.b_copy = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.connectPage.SuspendLayout();
             this.serverPage.SuspendLayout();
@@ -93,6 +93,25 @@
             this.connectPage.TabIndex = 0;
             this.connectPage.Text = "Connect";
             // 
+            // b_copy
+            // 
+            this.b_copy.Location = new System.Drawing.Point(135, 204);
+            this.b_copy.Name = "b_copy";
+            this.b_copy.Size = new System.Drawing.Size(43, 23);
+            this.b_copy.TabIndex = 11;
+            this.b_copy.Text = "Copy";
+            this.b_copy.UseVisualStyleBackColor = true;
+            this.b_copy.Click += new System.EventHandler(this.b_copy_Click);
+            // 
+            // tb_command
+            // 
+            this.tb_command.Location = new System.Drawing.Point(29, 204);
+            this.tb_command.Name = "tb_command";
+            this.tb_command.ReadOnly = true;
+            this.tb_command.Size = new System.Drawing.Size(99, 20);
+            this.tb_command.TabIndex = 10;
+            this.tb_command.Text = "Loading...";
+            // 
             // link_discord
             // 
             this.link_discord.AutoSize = true;
@@ -108,6 +127,7 @@
             // lb_important
             // 
             this.lb_important.AutoSize = true;
+            this.lb_important.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lb_important.Location = new System.Drawing.Point(6, 112);
             this.lb_important.Name = "lb_important";
             this.lb_important.Size = new System.Drawing.Size(305, 65);
@@ -295,24 +315,6 @@
             this.lb_language.Size = new System.Drawing.Size(58, 13);
             this.lb_language.TabIndex = 0;
             this.lb_language.Text = "Language:";
-            // 
-            // tb_command
-            // 
-            this.tb_command.Location = new System.Drawing.Point(29, 204);
-            this.tb_command.Name = "tb_command";
-            this.tb_command.ReadOnly = true;
-            this.tb_command.Size = new System.Drawing.Size(99, 20);
-            this.tb_command.TabIndex = 10;
-            this.tb_command.Text = "Loading...";
-            // 
-            // b_copy
-            // 
-            this.b_copy.Location = new System.Drawing.Point(135, 204);
-            this.b_copy.Name = "b_copy";
-            this.b_copy.Size = new System.Drawing.Size(43, 23);
-            this.b_copy.TabIndex = 11;
-            this.b_copy.Text = "Copy";
-            this.b_copy.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 

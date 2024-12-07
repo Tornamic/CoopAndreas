@@ -12,7 +12,7 @@ namespace Launcher
             "CoopAndreasSA.dll"
         };
 
-        public LaunchResult LaunchAndInject(string gamePath, string playerNickName, string serverIpAddress, ushort serverPort, string serial, params string[] librariesToInject)
+        public LaunchResult LaunchAndInject(string gamePath, string playerNickName, string serverIpAddress, ushort serverPort, string id, string serial, params string[] librariesToInject)
         {
             if(!File.Exists(gamePath)) 
                 return LaunchResult.GameNotFound;
@@ -22,7 +22,7 @@ namespace Launcher
             process.StartInfo = new ProcessStartInfo()
             {
                 FileName = gamePath,
-                Arguments = $"-name {playerNickName} -ip {serverIpAddress} -port {serverPort} -serial {serial}",
+                Arguments = $"-name {playerNickName} -ip {serverIpAddress} -port {serverPort} -id {id} -serial {serial}",
                 UseShellExecute = true
             };
 

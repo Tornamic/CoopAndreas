@@ -70,7 +70,7 @@ namespace Launcher
 
             Launcher launcher = new Launcher();
             
-            LaunchResult result = launcher.LaunchAndInject("gta_sa.exe", nicknameInput.Text, ip, port, tb_serialKey.Text, launcher.LibrariesToInject);
+            LaunchResult result = launcher.LaunchAndInject("gta_sa.exe", nicknameInput.Text, ip, port, tb_command.Text.Replace("/gen", "").Trim(), tb_serialKey.Text, launcher.LibrariesToInject);
 
             if(result != LaunchResult.Success)
                 MessageBox.Show(result.ToString());
@@ -104,6 +104,11 @@ namespace Launcher
         {
             config.SerialKey = tb_serialKey.Text;
             config.Save();
+        }
+
+        private void b_copy_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(tb_command.Text);
         }
     }
 }
