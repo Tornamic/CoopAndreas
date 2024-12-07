@@ -7,6 +7,7 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 endif()
 
+
 add_library(CNetwork OBJECT "src/CNetwork.cpp")
 add_library(CPed OBJECT "src/CPed.cpp")
 add_library(CPedManager OBJECT "src/CPedManager.cpp")
@@ -14,14 +15,16 @@ add_library(CPlayer OBJECT "src/CPlayer.cpp")
 add_library(CPlayerManager OBJECT "src/CPlayerManager.cpp")
 add_library(CVehicle OBJECT "src/CVehicle.cpp")
 add_library(CVehicleManager OBJECT "src/CVehicleManager.cpp")
-add_library(ConfigDatabase OBJECT "core_external/ConfigDatabase.cpp")
+add_library(ConfigDatabase OBJECT "core-external/ConfigDatabase.cpp")
 
 add_executable(${PROJECT_NAME} main.cpp)
 
 target_link_libraries(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/build/libenet.a")
-target_link_libraries(${PROJECT_NAME} ws2_32.a)
-target_link_libraries(${PROJECT_NAME} winmm.a)
-
+target_link_libraries(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/build/libinicpp.a")
+if(WIN32)
+	target_link_libraries(${PROJECT_NAME} ws2_32.a)
+	target_link_libraries(${PROJECT_NAME} winmm.a)
+endif()
 
 
 target_link_libraries(${PROJECT_NAME} CNetwork)

@@ -1,4 +1,4 @@
-#include <windows.h>
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -20,13 +20,15 @@
 #include "core/CVehicleManager.h"
 #include "core/VehicleDoorState.h"
 
-//#include "core_external/ConfigDatabase.hpp"
+//#include "core-external/ConfigDatabase.hpp"
 
 
 
 int main(int argc, char *argv[])
 {
-	//ConfigDatabase::Init("server-config.ini");
+	//unsigned int configport;
+	//ConfigDatabase::Init(configport, "server-config.ini");
+	//printf("* variable = %d", configport);
 	CNetwork::Init(6767);
 	return 0;
 }
