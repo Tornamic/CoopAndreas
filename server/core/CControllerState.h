@@ -40,7 +40,7 @@ class CControllerState
         ~CControllerState();
 };
 
-#pragma pack(1)
+//#pragma pack(1)
 struct CCompressedControllerState
 {
         signed short LeftStickX; // move/steer left (-128?)/right (+128)
@@ -74,5 +74,4 @@ struct CCompressedControllerState
         unsigned int compressed; // To access all bits as a single value if needed
     };
 };
-
 #endif
