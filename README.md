@@ -41,7 +41,7 @@ https://send.monobank.ua/jar/8wPrs73MBa
 
 *If you need another way to donate, please dm me on discord: `@tornamic`*
 
-Contact information is current as of November 2024
+Contact information is current as of December 2024
 
 ## TODO list:
 ### Already Done ✓
@@ -63,10 +63,7 @@ Contact information is current as of November 2024
   - [X] Armour bar
   - [X] Nickname
   - [X] weapon icon
-- [X] define which player is the host
 - [X] explosion sync
-- [X] fix interior enter exit crash (fix CPlayerPed dctor)
-- [X] players AI is activated when you pause in a vehicle
 - [X] vehicle sync
   - [X] spawn/delete
   - [X] enter/exit
@@ -95,22 +92,18 @@ Contact information is current as of November 2024
 ### Current Tasks
 - [ ] separate ped sync
 - [ ] stream in/out players, peds, vehicles, etc.
-- [ ] use original main.scm
-- [ ] force crouch sync using CTask
 - [ ] vehicle sync
   - [ ] force hydraulics sync
   - [ ] trailer sync
 - [ ] passenger sync
   - [ ] gamepad support
-  - [ ] proper seat sync
+  - [X] proper seat sync
   - [ ] radio sync
-  - [ ] drive by shooting
+  - [X] drive by shooting
 - [ ] fixes
   - [X] mouse
   - [ ] widescreen
   - [X] fast load
-    - [X] disable logos
-    - [X] disable intro
 - [ ] Fix models loading (green polygon)  --- related to stream it/out
 - [ ] Players map sync
   - [ ] Areas aka GangZones
@@ -120,14 +113,14 @@ Contact information is current as of November 2024
   - [X] Player mark (waypoint)
 - [ ] smooth interpolation
   - [ ] move
-  - [ ] rotation
-  - [ ] weapon aim interpolation
+  - [X] rotation
+  - [X] weapon aim interpolation
 - [ ] wanted level
 - [ ] stats sync
   - [ ] fat
   - [ ] muscle
   - [ ] weapon skills
-  - [ ] fight styles
+  - [X] fight styles
   - [ ] sync money
   - [ ] breath level bar
   - [ ] stamina sync
@@ -147,7 +140,7 @@ Contact information is current as of November 2024
       - [ ] horn
       - [ ] siren
       - [ ] current path, target entity, mission
-    - [ ] passenger
+    - [X] passenger
   - [ ] aim
   - [ ] shots
   - [ ] task sync (good luck, warrior!)
@@ -159,9 +152,6 @@ Contact information is current as of November 2024
   - [ ] effects
   - [ ] peds
   - [ ] camera
-- [ ] fix weapon desync
-  - [X] fix grenade throw distance
-  - [ ] fix rpg aim state
 - [ ] cheat code sync
 - [ ] pickups
   - [ ] graffities, horseshoes, snapshots, oysters
@@ -208,6 +198,6 @@ Contact information is current as of November 2024
 - [X] inject all dll in the game (don't need ASI Loader anymore)
 - [X] send params (nickname, ip/port) to client dll
 - [X] implement translation
+- [X] save configs
 ### Current Tasks
 - [ ] start/control server directly from launcher
-- [ ] save configs

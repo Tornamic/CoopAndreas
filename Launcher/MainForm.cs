@@ -12,11 +12,13 @@ using System.IO;
 using Launcher.Enums;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using System.Threading.Tasks;
 
 namespace Launcher
 {
     public partial class MainForm : Form
     {
+        ConfigProvider config;
         Localization localization;
         public MainForm()
         {
@@ -24,12 +26,29 @@ namespace Launcher
             FormBorderStyle = FormBorderStyle.FixedSingle;
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
-            localization = new Localization();
-            localization.ChangeGlobalLanguage("en");
+            string configDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CoopAndreas");
+            string configFilePath = Path.Combine(configDirectory, "launcher.ini");
 
-            languageCombo.SelectedIndex = 0;
+            config = new ConfigProvider(configFilePath);
+            config.Load();
+
+            localization = new Localization();
+            localization.ChangeGlobalLanguage(config.Language);
+
+            languageCombo.SelectedIndex = Array.IndexOf(localization.List, config.Language);
+            nicknameInput.Text = config.NickName;
+            ipportInput.Text = config.IpPort;
+            tb_serialKey.Text = config.SerialKey;
+
+            var computerId = new ComputerID();
+
+            await Task.Run(() =>
+            {
+                string id = computerId.GetUniqueSystemId();
+                tb_command.Text = $"/gen {id}";
+            });
         }
 
         private void connectButton_Click(object sender, EventArgs e)
@@ -51,7 +70,7 @@ namespace Launcher
 
             Launcher launcher = new Launcher();
             
-            LaunchResult result = launcher.LaunchAndInject("gta_sa.exe", nicknameInput.Text, ip, port, launcher.LibrariesToInject);
+            LaunchResult result = launcher.LaunchAndInject("gta_sa.exe", nicknameInput.Text, ip, port, tb_command.Text.Replace("/gen", "").Trim(), tb_serialKey.Text, launcher.LibrariesToInject);
 
             if(result != LaunchResult.Success)
                 MessageBox.Show(result.ToString());
@@ -59,12 +78,37 @@ namespace Launcher
 
         private void languageCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string[] list =
-            {
-                "en", "ru", "pt", "ua"
-            };
+            localization.ChangeGlobalLanguage(localization.List[languageCombo.SelectedIndex]);
+            config.Language = localization.List[languageCombo.SelectedIndex];
+            config.Save();
+        }
 
-            localization.ChangeGlobalLanguage(list[languageCombo.SelectedIndex]);
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://discord.gg/Z3ugSgFJMU");
+        }
+
+        private void nicknameInput_TextChanged(object sender, EventArgs e)
+        {
+            config.NickName = nicknameInput.Text;
+            config.Save();
+        }
+
+        private void ipportInput_TextChanged(object sender, EventArgs e)
+        {
+            config.IpPort = ipportInput.Text;
+            config.Save();
+        }
+
+        private void tb_serialKey_TextChanged(object sender, EventArgs e)
+        {
+            config.SerialKey = tb_serialKey.Text;
+            config.Save();
+        }
+
+        private void b_copy_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(tb_command.Text);
         }
     }
 }

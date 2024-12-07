@@ -28,8 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.connectPage = new System.Windows.Forms.TabPage();
+            this.b_copy = new System.Windows.Forms.Button();
+            this.tb_command = new System.Windows.Forms.TextBox();
+            this.link_discord = new System.Windows.Forms.LinkLabel();
+            this.lb_important = new System.Windows.Forms.Label();
+            this.tb_serialKey = new System.Windows.Forms.TextBox();
+            this.lb_serialkey = new System.Windows.Forms.Label();
             this.lb_connect = new System.Windows.Forms.Label();
             this.b_connect = new System.Windows.Forms.Button();
             this.ipportInput = new System.Windows.Forms.TextBox();
@@ -61,12 +68,18 @@
             this.tabControl1.Location = new System.Drawing.Point(13, 13);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(319, 225);
+            this.tabControl1.Size = new System.Drawing.Size(319, 337);
             this.tabControl1.TabIndex = 0;
             // 
             // connectPage
             // 
             this.connectPage.BackColor = System.Drawing.Color.White;
+            this.connectPage.Controls.Add(this.b_copy);
+            this.connectPage.Controls.Add(this.tb_command);
+            this.connectPage.Controls.Add(this.link_discord);
+            this.connectPage.Controls.Add(this.lb_important);
+            this.connectPage.Controls.Add(this.tb_serialKey);
+            this.connectPage.Controls.Add(this.lb_serialkey);
             this.connectPage.Controls.Add(this.lb_connect);
             this.connectPage.Controls.Add(this.b_connect);
             this.connectPage.Controls.Add(this.ipportInput);
@@ -76,16 +89,74 @@
             this.connectPage.Location = new System.Drawing.Point(4, 22);
             this.connectPage.Name = "connectPage";
             this.connectPage.Padding = new System.Windows.Forms.Padding(3);
-            this.connectPage.Size = new System.Drawing.Size(311, 199);
+            this.connectPage.Size = new System.Drawing.Size(311, 311);
             this.connectPage.TabIndex = 0;
             this.connectPage.Text = "Connect";
+            // 
+            // b_copy
+            // 
+            this.b_copy.Location = new System.Drawing.Point(135, 204);
+            this.b_copy.Name = "b_copy";
+            this.b_copy.Size = new System.Drawing.Size(43, 23);
+            this.b_copy.TabIndex = 11;
+            this.b_copy.Text = "Copy";
+            this.b_copy.UseVisualStyleBackColor = true;
+            this.b_copy.Click += new System.EventHandler(this.b_copy_Click);
+            // 
+            // tb_command
+            // 
+            this.tb_command.Location = new System.Drawing.Point(29, 204);
+            this.tb_command.Name = "tb_command";
+            this.tb_command.ReadOnly = true;
+            this.tb_command.Size = new System.Drawing.Size(99, 20);
+            this.tb_command.TabIndex = 10;
+            this.tb_command.Text = "Loading...";
+            // 
+            // link_discord
+            // 
+            this.link_discord.AutoSize = true;
+            this.link_discord.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.link_discord.Location = new System.Drawing.Point(184, 207);
+            this.link_discord.Name = "link_discord";
+            this.link_discord.Size = new System.Drawing.Size(97, 16);
+            this.link_discord.TabIndex = 9;
+            this.link_discord.TabStop = true;
+            this.link_discord.Text = "Discord Server";
+            this.link_discord.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // lb_important
+            // 
+            this.lb_important.AutoSize = true;
+            this.lb_important.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lb_important.Location = new System.Drawing.Point(6, 112);
+            this.lb_important.Name = "lb_important";
+            this.lb_important.Size = new System.Drawing.Size(305, 65);
+            this.lb_important.TabIndex = 8;
+            this.lb_important.Text = resources.GetString("lb_important.Text");
+            // 
+            // tb_serialKey
+            // 
+            this.tb_serialKey.Location = new System.Drawing.Point(70, 89);
+            this.tb_serialKey.Name = "tb_serialKey";
+            this.tb_serialKey.Size = new System.Drawing.Size(180, 20);
+            this.tb_serialKey.TabIndex = 7;
+            this.tb_serialKey.TextChanged += new System.EventHandler(this.tb_serialKey_TextChanged);
+            // 
+            // lb_serialkey
+            // 
+            this.lb_serialkey.AutoSize = true;
+            this.lb_serialkey.Location = new System.Drawing.Point(6, 92);
+            this.lb_serialkey.Name = "lb_serialkey";
+            this.lb_serialkey.Size = new System.Drawing.Size(56, 13);
+            this.lb_serialkey.TabIndex = 6;
+            this.lb_serialkey.Text = "Serial key:";
             // 
             // lb_connect
             // 
             this.lb_connect.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lb_connect.AutoSize = true;
             this.lb_connect.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb_connect.Location = new System.Drawing.Point(62, 3);
+            this.lb_connect.Location = new System.Drawing.Point(67, 3);
             this.lb_connect.Name = "lb_connect";
             this.lb_connect.Size = new System.Drawing.Size(188, 15);
             this.lb_connect.TabIndex = 5;
@@ -94,7 +165,7 @@
             // 
             // b_connect
             // 
-            this.b_connect.Location = new System.Drawing.Point(30, 100);
+            this.b_connect.Location = new System.Drawing.Point(29, 235);
             this.b_connect.Name = "b_connect";
             this.b_connect.Size = new System.Drawing.Size(250, 70);
             this.b_connect.TabIndex = 4;
@@ -104,15 +175,16 @@
             // 
             // ipportInput
             // 
-            this.ipportInput.Location = new System.Drawing.Point(70, 52);
+            this.ipportInput.Location = new System.Drawing.Point(70, 63);
             this.ipportInput.Name = "ipportInput";
             this.ipportInput.Size = new System.Drawing.Size(180, 20);
             this.ipportInput.TabIndex = 3;
+            this.ipportInput.TextChanged += new System.EventHandler(this.ipportInput_TextChanged);
             // 
             // lb_ipport
             // 
             this.lb_ipport.AutoSize = true;
-            this.lb_ipport.Location = new System.Drawing.Point(6, 55);
+            this.lb_ipport.Location = new System.Drawing.Point(6, 66);
             this.lb_ipport.Name = "lb_ipport";
             this.lb_ipport.Size = new System.Drawing.Size(53, 13);
             this.lb_ipport.TabIndex = 2;
@@ -120,15 +192,16 @@
             // 
             // nicknameInput
             // 
-            this.nicknameInput.Location = new System.Drawing.Point(70, 25);
+            this.nicknameInput.Location = new System.Drawing.Point(70, 36);
             this.nicknameInput.Name = "nicknameInput";
             this.nicknameInput.Size = new System.Drawing.Size(180, 20);
             this.nicknameInput.TabIndex = 1;
+            this.nicknameInput.TextChanged += new System.EventHandler(this.nicknameInput_TextChanged);
             // 
             // lb_nickname
             // 
             this.lb_nickname.AutoSize = true;
-            this.lb_nickname.Location = new System.Drawing.Point(6, 28);
+            this.lb_nickname.Location = new System.Drawing.Point(6, 39);
             this.lb_nickname.Name = "lb_nickname";
             this.lb_nickname.Size = new System.Drawing.Size(58, 13);
             this.lb_nickname.TabIndex = 0;
@@ -146,7 +219,7 @@
             this.serverPage.Location = new System.Drawing.Point(4, 22);
             this.serverPage.Name = "serverPage";
             this.serverPage.Padding = new System.Windows.Forms.Padding(3);
-            this.serverPage.Size = new System.Drawing.Size(311, 199);
+            this.serverPage.Size = new System.Drawing.Size(311, 311);
             this.serverPage.TabIndex = 1;
             this.serverPage.Text = "Server";
             // 
@@ -216,7 +289,7 @@
             this.configPage.Location = new System.Drawing.Point(4, 22);
             this.configPage.Name = "configPage";
             this.configPage.Padding = new System.Windows.Forms.Padding(3);
-            this.configPage.Size = new System.Drawing.Size(311, 199);
+            this.configPage.Size = new System.Drawing.Size(311, 311);
             this.configPage.TabIndex = 2;
             this.configPage.Text = "Config";
             // 
@@ -247,7 +320,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(344, 250);
+            this.ClientSize = new System.Drawing.Size(344, 362);
             this.Controls.Add(this.tabControl1);
             this.MaximizeBox = false;
             this.Name = "MainForm";
@@ -285,6 +358,12 @@
         public System.Windows.Forms.Label lb_language;
         public System.Windows.Forms.Button b_startserver;
         public System.Windows.Forms.ComboBox languageCombo;
+        public System.Windows.Forms.Label lb_important;
+        public System.Windows.Forms.TextBox tb_serialKey;
+        public System.Windows.Forms.Label lb_serialkey;
+        public System.Windows.Forms.LinkLabel link_discord;
+        public System.Windows.Forms.TextBox tb_command;
+        public System.Windows.Forms.Button b_copy;
     }
 }
 
