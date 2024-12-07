@@ -64,10 +64,6 @@ bool CNetwork::Init(unsigned short port)
             {
                 CNetwork::HandlePacketReceive(event);
                 enet_packet_destroy(event.packet);
-
-                char buffer[100];
-                sprintf(buffer, "[!] : Data Received (%d)\tData Sended (%d)\n", server->totalReceivedPackets, server->totalSentPackets);
-                //SetConsoleTitleA(buffer);
                 break;
             }
             case ENET_EVENT_TYPE_DISCONNECT:
@@ -182,7 +178,7 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         event.peer->address.port);
 
     // set player disconnection timeout
-    enet_peer_timeout(event.peer, 5000, 3000, 5000); //timeoutLimit, timeoutMinimum, timeoutMaximum
+    enet_peer_timeout(event.peer, 10000, 7000, 10000); //timeoutLimit, timeoutMinimum, timeoutMaximum
 
     // create new player and send to all players
 
@@ -324,11 +320,11 @@ void CNetwork::HandlePacketReceive(ENetEvent& event)
     memcpy(data, event.packet->data + 2, event.packet->dataLength - 2);
 
     // call listener's callback by id
-    for (size_t i = 0; i < m_packetListeners.size(); i++)
+    for (int i = 0; i < m_packetListeners.size(); i++)
     {
         if (m_packetListeners[i]->m_iPacketID == id)
         {
-            m_packetListeners[i]->m_callback(event.peer, data, event.packet->dataLength - 2);
+            m_packetListeners[i]->m_callback(event.peer, data, (int)event.packet->dataLength - 2);
         }
     }
     
