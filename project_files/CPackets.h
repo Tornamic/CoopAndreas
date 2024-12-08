@@ -66,7 +66,7 @@ public:
 		unsigned short ammo = 0;
 		bool ducking = false;
 		bool hasJetpack = false;
-		unsigned char fightingStyle = 4;
+		char fightingStyle = 4;
 	};
 
 	#pragma pack(1)

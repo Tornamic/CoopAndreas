@@ -208,6 +208,16 @@ void FixCrashes()
 
     // fix CBike controlling, wtf R* did
     patch::Nop(0x6BC9EB, 2);
+
+    DWORD temp;
+
+    // unprotect memory for the camera context switching patches, see CAimSync::ApplyNetworkPlayerContext and CAimSync::ApplyLocalContext
+    injector::UnprotectMemory(0x50AB10, 1, temp);
+    injector::UnprotectMemory(0x50BFB0, 3, temp);
+    injector::UnprotectMemory(0x50BFF0, 3, temp);
+    injector::UnprotectMemory(0x609C80, 1, temp);
+
+    injector::UnprotectMemory(0x6884C4, 6, temp); // see PlayerHooks.cpp
 }
 
 #define SCANCODE_BUFFER_SIZE (8 * 20000)

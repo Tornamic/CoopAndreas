@@ -14,9 +14,18 @@ void CKeySync::ApplyNetworkPlayerContext(CNetworkPlayer* player)
 	storedNewState = pad->NewState;
     storedDisableControls = pad->DisablePlayerControls;
 
-	pad->OldState = player->m_oldControllerState;
-	pad->NewState = player->m_newControllerState;
     pad->DisablePlayerControls = player->m_compressedControllerState.m_bDisableControls;
+
+    if (pad->DisablePlayerControls)
+    {
+        memset(&pad->OldState, 0, sizeof CControllerState);
+        memset(&pad->NewState, 0, sizeof CControllerState);
+    }
+    else
+    {
+	    pad->OldState = player->m_oldControllerState;
+	    pad->NewState = player->m_newControllerState;
+    }
 }
 
 void CKeySync::ApplyLocalContext()

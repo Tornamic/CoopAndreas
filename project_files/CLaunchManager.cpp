@@ -104,17 +104,15 @@ void CLaunchManager::CollectCommandLineArgs()
     printf("Server Port: %u\n", CNetwork::m_nPort);
 #endif // _DEV
 
-    if (serial[0] != '\0') {
-        char* encrypted = Encrypt(id);
+    char* encrypted = Encrypt(id);
 
-        if (strcmp(encrypted, serial) != 0)
-        {
-            MessageBox(0, "You have entered an incorrect serial key, please check that you have entered it correctly.", "Failed to verify CoopAndreas serial key", MB_OK | MB_ICONERROR);
+    if (!serial[0] || !id[0] || strcmp(encrypted, serial) != 0)
+    {
+        MessageBox(0, "You have entered an incorrect serial key, please check that you have entered it correctly.", "Failed to verify CoopAndreas serial key", MB_OK | MB_ICONERROR);
             
-            // crash the game
-            *(ushort*)0xDEAD = 0xDEAD;
-        }
-
-        delete[] encrypted;
+        // crash the game
+        *(ushort*)0xDEAD = 0xDEAD;
     }
+
+    delete[] encrypted;
 }

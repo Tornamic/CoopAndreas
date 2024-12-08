@@ -59,6 +59,7 @@ class CPlayerPackets
 			unsigned short ammo;
 			bool ducking;
 			bool hasJetpack = false;
+			char fightingStyle;
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{

@@ -1,29 +1,6 @@
 #include "stdafx.h"
 #include "CNetworkVehicle.h"
 
-int m_nVehicleId = -1;
-CVehicle* m_pVehicle = nullptr;
-
-// CREATE new vehicle!!! NOT GET!! 
-CNetworkVehicle::CNetworkVehicle(CVehicle* vehicle)
-{
-    if (!CLocalPlayer::m_bIsHost)
-        return;
-    
-    m_pVehicle = vehicle;
-    m_nVehicleId = CNetworkVehicleManager::GetFreeID();
-    
-    CPackets::VehicleSpawn vehicleSpawnPacket{};
-    vehicleSpawnPacket.vehicleid = m_nVehicleId;
-    vehicleSpawnPacket.modelid = vehicle->m_nModelIndex;
-    vehicleSpawnPacket.pos = vehicle->m_matrix->pos;
-    vehicleSpawnPacket.rot = vehicle->GetHeading();
-    vehicleSpawnPacket.color1 = vehicle->m_nPrimaryColor;
-    vehicleSpawnPacket.color2 = vehicle->m_nSecondaryColor;
-    CNetwork::SendPacket(CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
-
-}
-
 CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2)
 {
     if (!CLocalPlayer::m_bIsHost)
@@ -129,4 +106,26 @@ bool CNetworkVehicle::HasDriver()
         return false;
 
     return m_pVehicle->m_pDriver != nullptr;
+}
+
+CNetworkVehicle* CNetworkVehicle::CreateHosted(CVehicle* vehicle)
+{
+    CNetworkVehicle* networkVehicle = new CNetworkVehicle();
+
+    networkVehicle->m_pVehicle = vehicle;
+    networkVehicle->m_nVehicleId = CNetworkVehicleManager::GetFreeID();
+    networkVehicle->m_bSyncing = true;
+    networkVehicle->m_nModelId = vehicle->m_nModelIndex;
+    networkVehicle->m_nPaintJob = vehicle->m_nRemapTxd;
+
+    CPackets::VehicleSpawn vehicleSpawnPacket{};
+    vehicleSpawnPacket.vehicleid = networkVehicle->m_nVehicleId;
+    vehicleSpawnPacket.modelid = vehicle->m_nModelIndex;
+    vehicleSpawnPacket.pos = vehicle->m_matrix->pos;
+    vehicleSpawnPacket.rot = vehicle->GetHeading();
+    vehicleSpawnPacket.color1 = vehicle->m_nPrimaryColor;
+    vehicleSpawnPacket.color2 = vehicle->m_nSecondaryColor;
+    CNetwork::SendPacket(CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
+
+    return networkVehicle;
 }

@@ -107,7 +107,7 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
 
 	player->m_pPed->m_fAimingRotation =
-		/*player->m_pPed->m_fCurrentRotation =*/ packet->rotation;
+		player->m_pPed->m_fCurrentRotation = packet->rotation;
 
 	CUtil::SetPlayerJetpack(player, packet->hasJetpack);
 
@@ -118,6 +118,7 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 	}
 
 	player->m_pPed->m_nFightingStyle = packet->fightingStyle;
+	player->m_pPed->m_nAllowedAttackMoves |= 15u;
 
 	// save last onfoot sync
 	player->m_oOnFoot = player->m_lOnFoot;

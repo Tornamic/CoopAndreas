@@ -71,7 +71,7 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
         else
         {
             CVehicle* vehicle = (CVehicle*)entity;
-            CNetworkVehicle* networkVehicle = new CNetworkVehicle(vehicle);
+            CNetworkVehicle* networkVehicle = CNetworkVehicle::CreateHosted(vehicle);
             CNetworkVehicleManager::Add(networkVehicle);
         }
 
