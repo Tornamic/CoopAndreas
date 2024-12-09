@@ -9,9 +9,9 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     if (This == localPlayer)
     {
-        patch::SetRaw(0x6884C4, "\xD9\x96\x5C\x05\x00\x00", 6);
+        patch::SetRaw(0x6884C4, "\xD9\x96\x5C\x05\x00\x00", 6, false);
         plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
-        patch::Nop(0x6884C4, 6);
+        patch::Nop(0x6884C4, 6, false);
         return;
     }
 
@@ -30,7 +30,8 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
 
-    player->m_pPed->m_fAimingRotation = player->m_lOnFoot->rotation;
+    player->m_pPed->m_fAimingRotation = 
+        player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
 
     plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
 

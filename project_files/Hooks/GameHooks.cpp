@@ -78,11 +78,15 @@ static void __declspec(naked) CRenderer__AddEntityToRenderList_Hook()
     }
 }
 
-static void __cdecl CPad__UpdatePads_Hook()
+uintptr_t CTheZones__Update_Dest = 0x0;
+CControllerState oldControllerState;
+
+static void __cdecl CTheZones__Update_Hook()
 {
+    plugin::CallDyn(CTheZones__Update_Dest);
+
     if (!CNetwork::m_bConnected)
     {
-        CPad::UpdatePads();
         return;
     }
 
@@ -93,21 +97,15 @@ static void __cdecl CPad__UpdatePads_Hook()
     }
 
     CPad* pad = CPad::GetPad(0);
-
-    CControllerState oldState = pad->NewState;
-    CPad::UpdatePads();
     CControllerState newState = pad->NewState;
 
-
-    if (CUtil::CompareControllerStates(oldState, newState))
+    if (CUtil::CompareControllerStates(oldControllerState, newState))
         return;
-
+    
+    oldControllerState = newState;
 
     // send local player keys
     CPackets::PlayerKeySync packet{};
-
-
-    //CChat::AddMessage("ButtonSquare %d LeftStickX %d LeftStickY %d", newState.ButtonSquare, newState.LeftStickX, newState.LeftStickY);
 
     packet.newState = CCompressedControllerState(newState, pad->DisablePlayerControls);
     
@@ -125,6 +123,8 @@ void GameHooks::InjectHooks()
     // CRenderer::RenderEverythingBarRoads => CVisibilityPlugins::GetClumpAlpha crash fix
     patch::RedirectJump(0x5534B0, CRenderer__AddEntityToRenderList_Hook);
 
-    patch::RedirectCall(0x53BEE6, CPad__UpdatePads_Hook);
-
+    // no, here we will not do anything with zones, here we will get and send player keys
+    // it is necessary for the menu to be processed correctly
+    CTheZones__Update_Dest = injector::GetBranchDestination(0x53BF49).as_int();
+    patch::RedirectCall(0x53BF49, CTheZones__Update_Hook);
 }
