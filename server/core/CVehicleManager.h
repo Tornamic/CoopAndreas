@@ -6,26 +6,24 @@
 
 class CVehicleManager
 {
-	public:
-		CVehicleManager();
-		
-		static std::vector<CVehicle*> m_pVehicles;
-		static void Add(CVehicle* vehicle);
-		static void Remove(CVehicle* vehicle);
-		static CVehicle* GetVehicle(int vehicleid);
-		
-		~CVehicleManager();
-
+public:
+	static std::vector<CVehicle*> m_pVehicles;
+	static void Add(CVehicle* vehicle);
+	static void Remove(CVehicle* vehicle);
+	static CVehicle* GetVehicle(int vehicleid);
+	static int GetFreeID();
 };
 
 class CVehiclePackets
 {
 	public:
 		CVehiclePackets();
-
+		#pragma pack(1)
 		struct VehicleSpawn
 		{
+			int playerid;
 			int vehicleid;
+			unsigned char tempid;
 			unsigned short modelid;
 			CVector pos;
 			float rot;
@@ -34,13 +32,24 @@ class CVehiclePackets
 		
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
-				if (!CPlayerManager::GetPlayer(peer)->m_bIsHost)
+				auto player = CPlayerManager::GetPlayer(peer);
+
+				if (!player || !player->m_bIsHost)
 					return;
 
-
+				// send received packet
 				CVehiclePackets::VehicleSpawn* packet = (CVehiclePackets::VehicleSpawn*)data;
+				packet->playerid = player->m_iPlayerId;
+				packet->vehicleid = CVehicleManager::GetFreeID(); // find free vehicle id
 				CNetwork::SendPacketToAll(CPacketsID::VEHICLE_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 				
+				// send it back to the syncer of the vehicle so that he knows the id
+				CVehiclePackets::VehicleConfirm vehicleConfirmPacket{};
+				vehicleConfirmPacket.tempid = packet->tempid;
+				vehicleConfirmPacket.vehicleid = packet->vehicleid;
+				CNetwork::SendPacket(peer, CPacketsID::VEHICLE_CONFIRM, &vehicleConfirmPacket, sizeof vehicleConfirmPacket, ENET_PACKET_FLAG_RELIABLE);
+
+				// create the network vehicle instance and add to the pool
 				CVehicle* vehicle = new CVehicle(packet->vehicleid, packet->modelid, packet->pos, packet->rot);
 
 				vehicle->m_nPrimaryColor = packet->color1;
@@ -237,8 +246,11 @@ class CVehiclePackets
 			}
 		};
 
-
-
+		struct VehicleConfirm
+		{
+			unsigned char tempid;
+			int vehicleid;
+		};
 
 		~CVehiclePackets();
 };

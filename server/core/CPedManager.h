@@ -30,7 +30,7 @@ class CPedPackets
 {
 	public:
 		CPedPackets();
-
+#pragma pack(1)
 		struct PedSpawn
 		{
 			int pedid;
@@ -111,7 +111,6 @@ class CPedPackets
 				}
 			}
 		};
-
 
 
 		struct PedRemoveTask

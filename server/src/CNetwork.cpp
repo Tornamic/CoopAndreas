@@ -221,15 +221,14 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
 
     for (auto i : CVehicleManager::m_pVehicles)
     {
-        CVehiclePackets::VehicleSpawn vehicleSpawnPacket
-        { 
-            i->m_nVehicleId,
-            i->m_nModelId,
-            i->m_vecPosition,
-            static_cast<float>(i->m_vecRotation.z * (3.141592 / 180)), // convert to radians
-            i->m_nPrimaryColor,
-            i->m_nSecondaryColor
-        };
+        CVehiclePackets::VehicleSpawn vehicleSpawnPacket{};
+        vehicleSpawnPacket.playerid = -1;
+        vehicleSpawnPacket.vehicleid = i->m_nVehicleId;
+        vehicleSpawnPacket.modelid = i->m_nModelId;
+        vehicleSpawnPacket.pos = i->m_vecPosition;
+        vehicleSpawnPacket.rot = static_cast<float>(i->m_vecRotation.z * (3.141592 / 180)); // convert to radians
+        vehicleSpawnPacket.color1 = i->m_nPrimaryColor;
+        vehicleSpawnPacket.color2 = i->m_nSecondaryColor;
 
         CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
         

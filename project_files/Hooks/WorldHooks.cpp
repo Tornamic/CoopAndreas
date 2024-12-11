@@ -72,7 +72,6 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
         {
             CVehicle* vehicle = (CVehicle*)entity;
             CNetworkVehicle* networkVehicle = CNetworkVehicle::CreateHosted(vehicle);
-            CNetworkVehicleManager::Add(networkVehicle);
         }
 
     }
@@ -91,12 +90,6 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
             }
         }
     }
-
-    //if (dontCreateEntity)
-    //{
-    //    //delete entity;
-    //    return;
-    //}
 
 #ifdef DEBUG_NOT_SYNCED_VEHICLES
     if (entity->m_nType == ENTITY_TYPE_VEHICLE)

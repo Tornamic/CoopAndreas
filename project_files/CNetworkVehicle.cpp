@@ -93,7 +93,7 @@ CNetworkVehicle::~CNetworkVehicle()
     }
     else
     {
-        if (m_pVehicle)
+        if (m_pVehicle && (unsigned int)*(void***)m_pVehicle != 0x863C40)
         {
             plugin::Command<Commands::DELETE_CAR>(CPools::GetVehicleRef(m_pVehicle));
         }
@@ -113,13 +113,15 @@ CNetworkVehicle* CNetworkVehicle::CreateHosted(CVehicle* vehicle)
     CNetworkVehicle* networkVehicle = new CNetworkVehicle();
 
     networkVehicle->m_pVehicle = vehicle;
-    networkVehicle->m_nVehicleId = CNetworkVehicleManager::GetFreeID();
+    networkVehicle->m_nVehicleId = -1;
     networkVehicle->m_bSyncing = true;
     networkVehicle->m_nModelId = vehicle->m_nModelIndex;
     networkVehicle->m_nPaintJob = vehicle->m_nRemapTxd;
+    networkVehicle->m_nTempId = CNetworkVehicleManager::AddToTempList(networkVehicle);
 
     CPackets::VehicleSpawn vehicleSpawnPacket{};
-    vehicleSpawnPacket.vehicleid = networkVehicle->m_nVehicleId;
+    vehicleSpawnPacket.vehicleid = -1;
+    vehicleSpawnPacket.tempid = networkVehicle->m_nTempId;
     vehicleSpawnPacket.modelid = vehicle->m_nModelIndex;
     vehicleSpawnPacket.pos = vehicle->m_matrix->pos;
     vehicleSpawnPacket.rot = vehicle->GetHeading();

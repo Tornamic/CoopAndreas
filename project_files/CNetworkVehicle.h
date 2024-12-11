@@ -9,6 +9,7 @@ public:
 	int m_nModelId = 0;
 	char m_nPaintJob = -1;
 	bool m_bSyncing = false;
+	unsigned char m_nTempId = 255;
 
 	~CNetworkVehicle();
 	CNetworkVehicle(int vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2);

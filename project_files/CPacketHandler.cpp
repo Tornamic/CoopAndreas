@@ -201,7 +201,7 @@ void CPacketHandler::PlayerPlaceWaypoint__Handle(void* data, int size)
 	player->m_vecWaypointPos = &packet->position;
 
 #ifdef PACKET_DEBUG_MESSAGES
-	CChat::AddMessage("WAYPOINT PLACE %d %f %f\n", packet->place, packet->position.x, packet->position.y);
+	CChat::AddMessage("WAYPOINT PLACE %d %.0f %.0f\n", packet->place, packet->position.x, packet->position.y);
 #endif
 }
 
@@ -267,7 +267,7 @@ void CPacketHandler::VehicleSpawn__Handle(void* data, int size)
 	CPackets::VehicleSpawn* packet = (CPackets::VehicleSpawn*)data;
 	
 #ifdef PACKET_DEBUG_MESSAGES
-	CChat::AddMessage("VEHICLE SPAWN %d %d %f %f %f %f %p", packet->vehicleid, packet->modelid, packet->pos.x, packet->pos.y, packet->pos.z, packet->rot);
+	CChat::AddMessage("VEHICLE SPAWN %d %d %.1f %.1f %.1f %.1f", packet->vehicleid, packet->modelid, packet->pos.x, packet->pos.y, packet->pos.z, packet->rot);
 #endif
 
 	CNetworkVehicle* vehicle = new CNetworkVehicle
@@ -691,7 +691,7 @@ void CPacketHandler::PedSpawn__Handle(void* data, int size)
 	CPackets::PedSpawn* packet = (CPackets::PedSpawn*)data;
 
 #ifdef PACKET_DEBUG_MESSAGES
-	CChat::AddMessage("PED SPAWN %d %d %f %f %f %d %d", packet->pedid, packet->modelId, packet->pos.x, packet->pos.y, packet->pos.z, packet->pedType, packet->createdBy);
+	CChat::AddMessage("PED SPAWN %d %d %.1f %.1f %.1f %d %d", packet->pedid, packet->modelId, packet->pos.x, packet->pos.y, packet->pos.z, packet->pedType, packet->createdBy);
 #endif
 
 	CNetworkPed* ped = new CNetworkPed(packet->pedid, (int)packet->modelId, (ePedType)packet->pedType, packet->pos, packet->createdBy);
@@ -1070,6 +1070,31 @@ void CPacketHandler::PlayerAimSync__Handle(void* data, int size)
 		if (player->m_lOnFoot)
 		{
 			player->m_lOnFoot->rotation = packet->aimZ;
+		}
+	}
+}
+
+// VehicleConfirm
+
+void CPacketHandler::VehicleConfirm__Handle(void* data, int size)
+{
+	CPackets::VehicleConfirm* packet = (CPackets::VehicleConfirm*)data;
+
+#ifdef PACKET_DEBUG_MESSAGES
+	CChat::AddMessage("VEHICLE CONFIRM %d %d", packet->vehicleid, packet->tempid);
+#endif
+
+	unsigned char tempId = packet->tempid;
+	
+	if (tempId < 255)
+	{
+		auto tempVehicles = CNetworkVehicleManager::m_apTempVehicles;
+
+		if (tempVehicles[tempId])
+		{
+			tempVehicles[tempId]->m_nVehicleId = packet->vehicleid;
+			CNetworkVehicleManager::Add(tempVehicles[tempId]);
+			tempVehicles[tempId] = nullptr;
 		}
 	}
 }

@@ -33,7 +33,7 @@ class CPlayerPackets
 {
 	public:
 		CPlayerPackets();
-
+		#pragma pack(1)
 		struct PlayerConnected
 		{
 			int id;

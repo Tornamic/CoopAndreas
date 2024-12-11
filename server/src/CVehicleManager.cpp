@@ -29,3 +29,14 @@ CVehicle* CVehicleManager::GetVehicle(int vehicleid)
 	}
 	return nullptr;
 }
+
+int CVehicleManager::GetFreeID()
+{
+	for (int i = 0; i < 200; i++)
+	{
+		if (CVehicleManager::GetVehicle(i) == nullptr)
+			return i;
+	}
+
+	return -1;
+}
