@@ -34,7 +34,7 @@ class CVehiclePackets
 			{
 				auto player = CPlayerManager::GetPlayer(peer);
 
-				if (!player || !player->m_bIsHost)
+				if (!player)
 					return;
 
 				// send received packet
@@ -52,6 +52,7 @@ class CVehiclePackets
 				// create the network vehicle instance and add to the pool
 				CVehicle* vehicle = new CVehicle(packet->vehicleid, packet->modelid, packet->pos, packet->rot);
 
+				vehicle->m_pSyncer = player;
 				vehicle->m_nPrimaryColor = packet->color1;
 				vehicle->m_nSecondaryColor = packet->color2;
 
@@ -65,14 +66,22 @@ class CVehiclePackets
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
-				if (!CPlayerManager::GetPlayer(peer)->m_bIsHost)
-					return;
-
 				CVehiclePackets::VehicleRemove* packet = (CVehiclePackets::VehicleRemove*)data;
-				CNetwork::SendPacketToAll(CPacketsID::VEHICLE_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
-				CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
-				CVehicleManager::Remove(vehicle);
+				if (auto vehicle = CVehicleManager::GetVehicle(packet->vehicleid))
+				{
+					auto player = CPlayerManager::GetPlayer(peer);
+
+					if (vehicle->m_pSyncer == player)
+					{
+						CNetwork::SendPacketToAll(CPacketsID::VEHICLE_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+						CVehicleManager::Remove(vehicle);
+					}
+					else
+					{
+						std::cout << "[Alert] " + player->GetName() + " tries to delete someone else's vehicle, possible hack or bug (please let us know)\n";
+					}
+				}
 			}
 		};
 
@@ -92,19 +101,23 @@ class CVehiclePackets
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
-				if (!CPlayerManager::GetPlayer(peer)->m_bIsHost)
-					return;
-
 				CVehiclePackets::VehicleIdleUpdate* packet = (CVehiclePackets::VehicleIdleUpdate*)data;
-				CNetwork::SendPacketToAll(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+				
+				if (auto vehicle = CVehicleManager::GetVehicle(packet->vehicleid))
+				{
+					auto player = CPlayerManager::GetPlayer(peer);
 
-				CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
-			
-				if (!vehicle)
-					return;
-
-				vehicle->m_vecPosition = packet->pos;
-				vehicle->m_vecRotation = packet->rot;
+					if (vehicle->m_pSyncer == player)
+					{
+						vehicle->m_vecPosition = packet->pos;
+						vehicle->m_vecRotation = packet->rot;
+						CNetwork::SendPacketToAll(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+					}
+					else
+					{
+						std::cout << "[Alert] " + player->GetName() + " tries to sync someone else's vehicle, possible hack or bug (please let us know)\n";
+					}
+				}
 			}
 		};
 

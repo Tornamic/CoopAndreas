@@ -46,6 +46,7 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 	{
 		m_bConnected = true;
 		std::cout << "Connection succeeded." << std::endl;
+		CPatch::RevertTemporaryPatches();
 	}
 	else
 	{

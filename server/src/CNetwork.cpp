@@ -40,14 +40,8 @@ bool CNetwork::Init(unsigned short port)
         return false;
     }
 
-    printf("[!] : CoopAndreas Server \n\n");
-    printf("[!] : Version : X.X.X.X\n");
-    #if defined (_WIN32)
-        printf("[!] : Platform : Microsoft Windows \n");
-    #else
-        printf("[!] : Platform : GNU/Linux | BSD \n");
-    #endif
-    printf("[!] : Server stared on port %d\n", port);
+    printf("[!] : Server started on port %d\n", port);
+
 
     ENetEvent event;
     while (true) // waiting for event
@@ -170,7 +164,7 @@ void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag fl
 
 void CNetwork::HandlePlayerConnected(ENetEvent& event)
 {
-    printf("\n[Alert] : A new client connected from %i.%i.%i.%i:%u.\n", 
+    printf("[Game] : A new client connected from %i.%i.%i.%i:%u.\n", 
         event.peer->address.host & 0xFF, 
         (event.peer->address.host >> 8) & 0xFF, 
         (event.peer->address.host >> 16) & 0xFF, 
@@ -178,7 +172,7 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         event.peer->address.port);
 
     // set player disconnection timeout
-    enet_peer_timeout(event.peer, 10000, 7000, 10000); //timeoutLimit, timeoutMinimum, timeoutMaximum
+    enet_peer_timeout(event.peer, 5000, 3000, 5000); //timeoutLimit, timeoutMinimum, timeoutMaximum
 
     // create new player and send to all players
 
@@ -303,7 +297,7 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
     // send to all
     CNetwork::SendPacketToAll(CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof (CPlayerPackets::PlayerDisconnected), ENET_PACKET_FLAG_UNSEQUENCED, event.peer);
 
-    printf("[Alert] : %i Disconnected.\n", player->m_iPlayerId);
+    printf("[Game] : %i Disconnected.\n", player->m_iPlayerId);
 
     CPlayerManager::AssignHostToFirstPlayer();
 }
