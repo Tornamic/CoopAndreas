@@ -230,7 +230,7 @@ void CPacketHandler::PlayerSetHost__Handle(void* data, int size)
 	{
 		CLocalPlayer::m_bIsHost = true;
 
-		//CPatch::RevertTemporaryPatches();
+		CPatch::RevertTemporaryPatchesForHost();
 
 		CNetworkPedManager::AssignHost();
 		CChat::AddMessage("[Player] You are the host now");

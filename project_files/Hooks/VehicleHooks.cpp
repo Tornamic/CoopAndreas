@@ -4,6 +4,7 @@
 #include "CAimSync.h"
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
+#include <CCarGenerator.h>
 
 void __fastcall CVehicle__ProcessControl_Hook()
 {
@@ -95,7 +96,7 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
 static void __fastcall CCarCtrl__RemoveDistantCars_Hook()
 {
-    if (CLocalPlayer::m_bIsHost)
+    //if (CLocalPlayer::m_bIsHost)
         CCarCtrl::RemoveDistantCars();
 }
 
@@ -126,7 +127,7 @@ static void __fastcall CVehicle__RemoveVehicleUpgrade_Hook(CVehicle* This, int, 
 static bool __fastcall CDamageManager__ApplyDamage_Hook(CDamageManager* This, int, CAutomobile* dm_comp, tComponent compId, float intensity, float a5)
 {
     CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(dm_comp);
-    if (vehicle != nullptr && CLocalPlayer::m_bIsHost)
+    if (vehicle != nullptr && vehicle->m_bSyncing)
     {
         CPackets::VehicleDamage packet{};
         packet.vehicleid = vehicle->m_nVehicleId;
@@ -182,6 +183,27 @@ static bool __fastcall CAutomobile__ProcessAI_Hook(CAutomobile* This, int, int a
     return plugin::CallMethodAndReturnDyn<bool, CAutomobile*>(call_addr, This, a1);
 }
 
+// disallow creating a parked vehicle if it is created by another player (does not work perfectly)
+bool __fastcall CCarGenerator__CheckForBlockage_Hook(CCarGenerator* This, int, int modelId)
+{
+    bool originalResult = This->CheckForBlockage(modelId);
+
+    if (originalResult)
+        return true;
+
+    CVector position = This->m_vecPosn.Uncompressed();
+
+    for (auto vehicle : CPools::ms_pVehiclePool)
+    {
+        if ((vehicle->GetPosition() - position).Magnitude() <= 3.0f)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void VehicleHooks::InjectHooks()
 {
     patch::RedirectCall(0x53C1CB, CCarCtrl__RemoveDistantCars_Hook);
@@ -222,4 +244,7 @@ void VehicleHooks::InjectHooks()
     patch::SetPointer(0x872398, CVehicle__ProcessControl_Hook);
 
     //patch::SetPointer(0x871228, CAutomobile__ProcessAI_Hook); // CAutomobile  
+
+    patch::RedirectCall(0x6F35D6, CCarGenerator__CheckForBlockage_Hook);
+    patch::RedirectCall(0x6F35FF, CCarGenerator__CheckForBlockage_Hook);
 }

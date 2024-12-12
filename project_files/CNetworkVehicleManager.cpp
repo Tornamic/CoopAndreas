@@ -71,7 +71,7 @@ void CNetworkVehicleManager::UpdateIdle()
 		if (m_pVehicles[i]->m_pVehicle == nullptr)
 			continue;
 
-		if (CLocalPlayer::m_bIsHost && !m_pVehicles[i]->HasDriver())
+		if (m_pVehicles[i]->m_bSyncing && !m_pVehicles[i]->HasDriver())
 		{
 			CPackets::VehicleIdleUpdate* packet = CPacketHandler::VehicleIdleUpdate__Collect(m_pVehicles[i]);
 			CNetwork::SendPacket(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
