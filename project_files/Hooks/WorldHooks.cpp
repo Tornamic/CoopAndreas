@@ -66,15 +66,8 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
 
     if (entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
     {
-        if (!CLocalPlayer::m_bIsHost)
-            dontCreateEntity = true;
-        else
-        {
-            CVehicle* vehicle = (CVehicle*)entity;
-            CNetworkVehicle* networkVehicle = CNetworkVehicle::CreateHosted(vehicle);
-            CNetworkVehicleManager::Add(networkVehicle);
-        }
-
+        CVehicle* vehicle = (CVehicle*)entity;
+        CNetworkVehicle* networkVehicle = CNetworkVehicle::CreateHosted(vehicle);
     }
     else if (entity->m_nType == eEntityType::ENTITY_TYPE_PED)
     {
@@ -82,21 +75,10 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
 
         if (ped->m_nPedType > 1)
         {
-            if (!CLocalPlayer::m_bIsHost)
-                dontCreateEntity = true;
-            else
-            {
-                CNetworkPed* networkPed = new CNetworkPed(ped);
-                CNetworkPedManager::Add(networkPed);
-            }
+            CNetworkPed* networkPed = new CNetworkPed(ped);
+            CNetworkPedManager::Add(networkPed);
         }
     }
-
-    //if (dontCreateEntity)
-    //{
-    //    //delete entity;
-    //    return;
-    //}
 
 #ifdef DEBUG_NOT_SYNCED_VEHICLES
     if (entity->m_nType == ENTITY_TYPE_VEHICLE)
@@ -119,7 +101,7 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
         CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
         if (networkVehicle)
         {
-            if (CLocalPlayer::m_bIsHost)
+            if (networkVehicle->m_bSyncing)
             {
                 CNetworkVehicleManager::Remove(networkVehicle);
                 delete networkVehicle;

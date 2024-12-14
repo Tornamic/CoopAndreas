@@ -2,6 +2,7 @@
 #include "CNetworkVehicle.h"
 
 std::vector<CNetworkVehicle*> CNetworkVehicleManager::m_pVehicles;
+CNetworkVehicle* CNetworkVehicleManager::m_apTempVehicles[255];
 
 CNetworkVehicle* CNetworkVehicleManager::GetVehicle(int vehicleid)
 {
@@ -41,20 +42,6 @@ CNetworkVehicle* CNetworkVehicleManager::GetVehicle(CEntity* vehicle)
 	return nullptr;
 }
 
-int CNetworkVehicleManager::GetFreeID()
-{
-	if (!CLocalPlayer::m_bIsHost)
-		return -1;
-
-	for (int i = 0; i != MAX_SERVER_VEHICLES; i++)
-	{
-		if (CNetworkVehicleManager::GetVehicle(i) == nullptr)
-			return i;
-	}
-
-	return -1;
-}
-
 void CNetworkVehicleManager::Add(CNetworkVehicle* vehicle)
 {
 	CNetworkVehicleManager::m_pVehicles.push_back(vehicle);
@@ -84,7 +71,7 @@ void CNetworkVehicleManager::UpdateIdle()
 		if (m_pVehicles[i]->m_pVehicle == nullptr)
 			continue;
 
-		if (CLocalPlayer::m_bIsHost && !m_pVehicles[i]->HasDriver())
+		if (m_pVehicles[i]->m_bSyncing && !m_pVehicles[i]->HasDriver())
 		{
 			CPackets::VehicleIdleUpdate* packet = CPacketHandler::VehicleIdleUpdate__Collect(m_pVehicles[i]);
 			CNetwork::SendPacket(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
@@ -99,4 +86,18 @@ void CNetworkVehicleManager::UpdatePassenger(CVehicle* vehicle, CPlayerPed* loca
 	CPackets::VehiclePassengerUpdate* packet = CPacketHandler::VehiclePassengerUpdate__Collect(networkVehicle, localPlayer);
 	CNetwork::SendPacket(CPacketsID::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
 	delete packet;
+}
+
+unsigned char CNetworkVehicleManager::AddToTempList(CNetworkVehicle* networkVehicle)
+{
+	for (unsigned char i = 0; i < 255; i++)
+	{
+		if (m_apTempVehicles[i] == nullptr)
+		{
+			m_apTempVehicles[i] = networkVehicle;
+			return i;
+		}
+	}
+
+	return 255;
 }

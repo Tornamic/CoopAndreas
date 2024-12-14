@@ -36,7 +36,8 @@ enum CPacketsID : unsigned short
 	PED_DRIVER_UPDATE,
 	PED_SHOT_SYNC,
 	PED_PASSENGER_UPDATE,
-	PLAYER_AIM_SYNC
+	PLAYER_AIM_SYNC,
+	VEHICLE_CONFIRM
 };
 
 class CPackets
@@ -116,7 +117,9 @@ public:
 
 	struct VehicleSpawn
 	{
+		int playerid;
 		int vehicleid;
+		unsigned char tempid;
 		unsigned short modelid;
 		CVector pos;
 		float rot;
@@ -331,5 +334,11 @@ public:
 		float moveHeading;
 		float aimY;
 		float aimZ;
+	};
+
+	struct VehicleConfirm
+	{
+		unsigned char tempid = 255;
+		int vehicleid;
 	};
 };

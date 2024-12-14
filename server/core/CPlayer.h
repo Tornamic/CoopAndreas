@@ -7,11 +7,14 @@
 #include "CVector.h"
 #include "CNetwork.h"
 #include "CPacket.h"
+#include <string>
 
 class CPlayer
 {
 	public:
 		CPlayer(ENetPeer* peer, int playerid);
+
+		std::string GetName();
 
 		ENetPeer* m_pPeer;
 		int m_iPlayerId;
