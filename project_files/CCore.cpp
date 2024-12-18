@@ -14,7 +14,8 @@ void InitWndProc()
 {
 	HWND hWnd = *(HWND*)0xC97C1C;
 
-	SetWindowText(hWnd, "CoopAndreas v0.0.0.0..00000000001111111indev");
+	SetWindowText(hWnd, "CoopAndreas");
+	RsGlobal.appName = "CoopAndreas";
 
 	if (hWnd) 
 	{

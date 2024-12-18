@@ -30,14 +30,14 @@ void CPatch::TemporaryPatches()
 
 void CPatch::RevertTemporaryPatches()
 {
-    //patch::SetFloat(0x8A5B20, 1.0f); // CCarCtrl::fCarDensityMultiplier
-    //CTrain::DisableRandomTrains(false);
-    //patch::SetUChar(0x8A5B28, true); // CCarCtrl::bAllowEmergencyServicesToBeCreated
-   // CPlane::SwitchAmbientPlanes(true);
+    patch::SetFloat(0x8A5B20, 1.0f); // CCarCtrl::fCarDensityMultiplier
+    CTrain::DisableRandomTrains(false);
+    patch::SetUChar(0x8A5B28, true); // CCarCtrl::bAllowEmergencyServicesToBeCreated
+    CPlane::SwitchAmbientPlanes(true);
     patch::RedirectCall(0x53C1C1, (void*)CCarCtrl__GenerateRandomCars_ptr); 
-    //patch::RedirectCall(0x434272, (void*)CPlane__DoPlaneGenerationAndRemoval_ptr);
+    patch::RedirectCall(0x434272, (void*)CPlane__DoPlaneGenerationAndRemoval_ptr);
     patch::RedirectCall(0x53C06A, (void*)CTheCarGenerators__Process_ptr);
-    //CPopulation::PedDensityMultiplier = 1.0f;
+    CPopulation::PedDensityMultiplier = 1.0f;
 }
 
 void CPatch::RevertTemporaryPatchesForHost()

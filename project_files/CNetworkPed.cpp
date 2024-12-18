@@ -1,26 +1,6 @@
 #include "stdafx.h"
 #include "CNetworkPed.h"
 
-
-// CREATE new ped!!! NOT GET!! 
-CNetworkPed::CNetworkPed(CPed* ped)
-{
-    if (!CLocalPlayer::m_bIsHost)
-        return;
-
-    m_pPed = ped;
-    m_nPedId = CNetworkPedManager::GetFreeID();
-    m_nCreatedBy = ped->m_nCreatedBy;
-
-    CPackets::PedSpawn packet{};
-    packet.pedid = m_nPedId;
-    packet.modelId = ped->m_nModelIndex;
-    packet.pos = ped->m_matrix->pos;
-    packet.pedType = ped->m_nPedType;
-    packet.createdBy = ped->m_nCreatedBy;
-    CNetwork::SendPacket(CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
-}
-
 CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy)
 {
     CStreaming::RequestModel(modelId, 0);
@@ -77,13 +57,13 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
 
     m_nPedId = pedid;
     m_nPedType = pedType;
-
+    m_bSyncing = false;
     m_nCreatedBy = createdBy;
 }
 
 CNetworkPed::~CNetworkPed()
 {
-    if (CLocalPlayer::m_bIsHost)
+    if (m_bSyncing)
     {
         CPackets::PedRemove packet{};
         packet.pedid = m_nPedId;
@@ -104,4 +84,26 @@ CNetworkPed::~CNetworkPed()
             delete m_pPed;
         }
     }
+}
+
+CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
+{
+    CNetworkPed* networkPed = new CNetworkPed();
+
+    networkPed->m_pPed = ped;
+    networkPed->m_nPedId = -1;
+    networkPed->m_nCreatedBy = ped->m_nCreatedBy;
+    networkPed->m_bSyncing = true;
+    networkPed->m_nTempId = CNetworkPedManager::AddToTempList(networkPed);
+
+    CPackets::PedSpawn packet{};
+    packet.tempid = networkPed->m_nTempId;
+    packet.pedid = networkPed->m_nPedId;
+    packet.modelId = ped->m_nModelIndex;
+    packet.pos = ped->m_matrix->pos;
+    packet.pedType = ped->m_nPedType;
+    packet.createdBy = ped->m_nCreatedBy;
+    CNetwork::SendPacket(CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+
+    return networkPed;
 }

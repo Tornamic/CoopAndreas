@@ -139,8 +139,7 @@ public:
 						}
 					}
 
-					if(!CLocalPlayer::m_bIsHost)
-						CNetworkPedManager::Process();
+					CNetworkPedManager::Process();
 				}
 			};
 		Events::drawBlipsEvent += []
@@ -174,7 +173,7 @@ public:
 						RwV3d screenCoors; float w, h;
 						if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
 						{
-							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, ("v" + std::to_string(networkVehicle->m_nVehicleId) + "\nSyncing " + std::to_string(networkVehicle->m_bSyncing)).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
+							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, ("v " + std::to_string(networkVehicle->m_nVehicleId) + "\nS " + std::to_string(networkVehicle->m_bSyncing)).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
 						}
 					}
 
@@ -191,7 +190,7 @@ public:
 						RwV3d screenCoors; float w, h;
 						if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
 						{
-							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, std::to_string(networkPed->m_nPedId).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
+							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, ("p " + std::to_string(networkPed->m_nPedId) + "\nS " + std::to_string(networkPed->m_bSyncing)).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
 						}
 					}
 #ifdef DEBUG_NOT_SYNCED_VEHICLES

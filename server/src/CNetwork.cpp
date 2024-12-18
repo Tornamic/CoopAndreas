@@ -95,13 +95,12 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PED_SPAWN, CPedPackets::PedSpawn::Handle);
     CNetwork::AddListener(CPacketsID::PED_REMOVE, CPedPackets::PedRemove::Handle);
     CNetwork::AddListener(CPacketsID::PED_ONFOOT, CPedPackets::PedOnFoot::Handle);
-    
     CNetwork::AddListener(CPacketsID::GAME_WEATHER_TIME, CPlayerPackets::GameWeatherTime::Handle); // CPlayerPacket
     CNetwork::AddListener(CPacketsID::PLAYER_KEY_SYNC, CPlayerPackets::PlayerKeySync::Handle); 
-
     CNetwork::AddListener(CPacketsID::PED_ADD_TASK, CPedPackets::PedAddTask::Handle);
     CNetwork::AddListener(CPacketsID::PED_DRIVER_UPDATE, CPedPackets::PedDriverUpdate::Handle);
     CNetwork::AddListener(CPacketsID::PED_SHOT_SYNC, CPedPackets::PedShotSync::Handle);
+    CNetwork::AddListener(CPacketsID::PED_PASSENGER_UPDATE, CPedPackets::PedPassengerSync::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_AIM_SYNC, CPlayerPackets::PlayerAimSync::Handle);
 }
 
@@ -216,7 +215,6 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
     for (auto i : CVehicleManager::m_pVehicles)
     {
         CVehiclePackets::VehicleSpawn vehicleSpawnPacket{};
-        vehicleSpawnPacket.playerid = -1;
         vehicleSpawnPacket.vehicleid = i->m_nVehicleId;
         vehicleSpawnPacket.modelid = i->m_nModelId;
         vehicleSpawnPacket.pos = i->m_vecPosition;

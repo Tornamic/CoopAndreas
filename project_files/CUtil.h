@@ -16,6 +16,7 @@ public:
 	static CNetworkPed* GetNetworkPedByTask(CTask* targetTask);
 	static bool IsPedHasJetpack(CPed* ped);
 	static void SetPlayerJetpack(CNetworkPlayer* ped, bool set);
+	static bool IsValidEntityPtr(CEntity* ptr);
 	static inline float SCREEN_STRETCH_X(float a) { return a * RsGlobal.maximumWidth / (float)640; }
 	static inline float SCREEN_STRETCH_Y(float a) { return a * RsGlobal.maximumHeight / (float)448; }
 };

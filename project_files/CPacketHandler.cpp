@@ -335,6 +335,9 @@ void CPacketHandler::VehicleIdleUpdate__Handle(void* data, int size)
 	if (vehicle->m_pVehicle == nullptr)
 		vehicle->CreateVehicle(vehicle->m_nVehicleId, vehicle->m_nModelId, packet->pos, 0.f, packet->color1, packet->color2);
 
+	if (vehicle->m_pVehicle->m_matrix == nullptr)
+		return;
+
 	vehicle->m_pVehicle->m_matrix->pos = packet->pos;		   
 	vehicle->m_pVehicle->m_matrix->right = packet->roll;	   
 	vehicle->m_pVehicle->m_matrix->up = packet->rot;		   
@@ -914,7 +917,7 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
 	CNetworkPed* ped = CNetworkPedManager::GetPed(packet->pedid);
 
-	if (vehicle == nullptr || ped == nullptr || ped->m_pPed == nullptr || vehicle->m_pVehicle == nullptr)
+	if (vehicle == nullptr || ped == nullptr || ped->m_pPed == nullptr || vehicle->m_pVehicle == nullptr || !CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
 		return;
 
 	if (ped->m_pPed->m_pVehicle != vehicle->m_pVehicle)
@@ -1095,6 +1098,31 @@ void CPacketHandler::VehicleConfirm__Handle(void* data, int size)
 			tempVehicles[tempId]->m_nVehicleId = packet->vehicleid;
 			CNetworkVehicleManager::Add(tempVehicles[tempId]);
 			tempVehicles[tempId] = nullptr;
+		}
+	}
+}
+
+// PedConfirm
+
+void CPacketHandler::PedConfirm__Handle(void* data, int size)
+{
+	CPackets::PedConfirm* packet = (CPackets::PedConfirm*)data;
+
+#ifdef PACKET_DEBUG_MESSAGES
+	CChat::AddMessage("PED CONFIRM %d %d", packet->pedid, packet->tempid);
+#endif
+
+	unsigned char tempId = packet->tempid;
+
+	if (tempId < 255)
+	{
+		auto tempPeds = CNetworkPedManager::m_apTempPeds;
+
+		if (tempPeds[tempId])
+		{
+			tempPeds[tempId]->m_nPedId = packet->pedid;
+			CNetworkPedManager::Add(tempPeds[tempId]);
+			tempPeds[tempId] = nullptr;
 		}
 	}
 }
