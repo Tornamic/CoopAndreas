@@ -65,11 +65,11 @@ static void __declspec(naked) CTaskManager__SetTask_Hook()
         mov nTaskSlot, eax
     }
 
-    if (CLocalPlayer::m_bIsHost &&  pTaskMgr && pTask)
+    if (pTaskMgr && pTask)
     {
         pNetworkPed = CNetworkPedManager::GetPed(pTaskMgr->m_pPed);
 
-        if (pNetworkPed)
+        if (pNetworkPed && pNetworkPed->m_bSyncing)
         {
 #ifdef TASK_LOG
             CChat::AddMessage("SET PRIMARY %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
@@ -156,7 +156,7 @@ static void __declspec(naked) CTaskComplex__SetSubTask_Hook()
         mov pTask, edi
     }
 
-    if (CLocalPlayer::m_bIsHost && pTask)
+    if (pTask)
     {
         pNetworkPed = CUtil::GetNetworkPedByTask(pTask);
 
@@ -191,9 +191,6 @@ static void __declspec(naked) CTaskSimple__dtor_Hook()
         mov pTaskSimple, ecx
     }
     
-    if (!CLocalPlayer::m_bIsHost)
-        goto skip;
-
     if (pTaskSimple)
     {
         vtable = *(void***)pTaskSimple; // get vtable 
@@ -207,7 +204,7 @@ static void __declspec(naked) CTaskSimple__dtor_Hook()
 
         pNetworkPed = CUtil::GetNetworkPedByTask(pTaskSimple);
 
-        if (pNetworkPed)
+        if (pNetworkPed && pNetworkPed->m_bSyncing)
         {
             nTaskType = plugin::CallMethodAndReturnDyn<eTaskType>(dwGetIdAddr, pTaskSimple);
 #ifdef TASK_LOG
@@ -236,9 +233,6 @@ static void __declspec(naked) CTaskComplex__dtor_Hook()
         mov pTaskComplex, esi
     }
 
-    if (!CLocalPlayer::m_bIsHost)
-        goto skip;
-
     if (pTaskComplex)
     {
         vtable = *(void***)pTaskComplex; // get vtable 
@@ -252,7 +246,7 @@ static void __declspec(naked) CTaskComplex__dtor_Hook()
 
         pNetworkPed = CUtil::GetNetworkPedByTask(pTaskComplex);
 
-        if (pNetworkPed)
+        if (pNetworkPed && pNetworkPed->m_bSyncing)
         {
             nTaskType = plugin::CallMethodAndReturnDyn<eTaskType>(dwGetIdAddr, pTaskComplex); 
 #ifdef TASK_LOG

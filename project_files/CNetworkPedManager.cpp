@@ -3,6 +3,7 @@
 #include "CNetworkPed.h"
 
 std::vector<CNetworkPed*> CNetworkPedManager::m_pPeds;
+CNetworkPed* CNetworkPedManager::m_apTempPeds[255];
 
 CNetworkPed* CNetworkPedManager::GetPed(int pedid)
 {
@@ -48,20 +49,6 @@ CNetworkPed* CNetworkPedManager::GetPed(CEntity* entity)
 	return nullptr;
 }
 
-int CNetworkPedManager::GetFreeID()
-{
-	if (!CLocalPlayer::m_bIsHost)
-		return -1;
-
-	for (int i = 0; i != MAX_SERVER_PEDS; i++)
-	{
-		if (CNetworkPedManager::GetPed(i) == nullptr)
-			return i;
-	}
-
-	return -1;
-}
-
 void CNetworkPedManager::Add(CNetworkPed* ped)
 {
 	CNetworkPedManager::m_pPeds.push_back(ped);
@@ -78,10 +65,11 @@ void CNetworkPedManager::Remove(CNetworkPed* ped)
 
 void CNetworkPedManager::Update()
 {
-	if (!CLocalPlayer::m_bIsHost) return;
-
 	for (CNetworkPed* networkPed : m_pPeds)
 	{
+		if (!networkPed->m_bSyncing)
+			continue;
+
 		CPed* ped = networkPed->m_pPed;
 		if (!ped) continue;
 
@@ -116,6 +104,9 @@ void CNetworkPedManager::Process()
 {
 	for (auto networkPed : m_pPeds)
 	{
+		if (networkPed->m_bSyncing)
+			continue;
+
 		CPed* ped = networkPed->m_pPed;
 
 		if (ped == nullptr)
@@ -129,7 +120,7 @@ void CNetworkPedManager::Process()
 
 void CNetworkPedManager::AssignHost()
 {
-	for (auto networkPed : m_pPeds)
+	/*for (auto networkPed : m_pPeds)
 	{
 		CPed* ped = networkPed->m_pPed;
 
@@ -140,5 +131,19 @@ void CNetworkPedManager::AssignHost()
 			CTaskComplexWander* task = plugin::CallAndReturn<CTaskComplexWander*, 0x673D00>(ped); // GetWanderTaskByPedType
 			ped->m_pIntelligence->m_TaskMgr.SetTask(task, 0, false);
 		}
+	}*/
+}
+
+unsigned char CNetworkPedManager::AddToTempList(CNetworkPed* networkPed)
+{
+	for (unsigned char i = 0; i < 255; i++)
+	{
+		if (m_apTempPeds[i] == nullptr)
+		{
+			m_apTempPeds[i] = networkPed;
+			return i;
+		}
 	}
+
+	return 255;
 }

@@ -21,7 +21,6 @@ class CVehiclePackets
 		#pragma pack(1)
 		struct VehicleSpawn
 		{
-			int playerid;
 			int vehicleid;
 			unsigned char tempid;
 			unsigned short modelid;
@@ -39,7 +38,6 @@ class CVehiclePackets
 
 				// send received packet
 				CVehiclePackets::VehicleSpawn* packet = (CVehiclePackets::VehicleSpawn*)data;
-				packet->playerid = player->m_iPlayerId;
 				packet->vehicleid = CVehicleManager::GetFreeID(); // find free vehicle id
 				CNetwork::SendPacketToAll(CPacketsID::VEHICLE_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 				

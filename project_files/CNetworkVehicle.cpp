@@ -5,7 +5,7 @@ CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float 
 {
     if (auto vehicle = CNetworkVehicleManager::GetVehicle(vehicleid))
     {
-        if (vehicle->m_pVehicle)
+        if (vehicle->m_pVehicle && CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
         {
             CWorld::Remove(vehicle->m_pVehicle);
             delete vehicle->m_pVehicle;

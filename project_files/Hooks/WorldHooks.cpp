@@ -75,8 +75,7 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
 
         if (ped->m_nPedType > 1)
         {
-            CNetworkPed* networkPed = new CNetworkPed(ped);
-            CNetworkPedManager::Add(networkPed);
+            CNetworkPed* networkPed = CNetworkPed::CreateHosted(ped);
         }
     }
 
@@ -99,28 +98,22 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
     {
         CVehicle* vehicle = (CVehicle*)entity;
         CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
-        if (networkVehicle)
+        if (networkVehicle && networkVehicle->m_bSyncing)
         {
-            if (networkVehicle->m_bSyncing)
-            {
-                CNetworkVehicleManager::Remove(networkVehicle);
-                delete networkVehicle;
-            }
+            CNetworkVehicleManager::Remove(networkVehicle);
+            delete networkVehicle;
         }
     }
     else if (entity->m_nType == eEntityType::ENTITY_TYPE_PED)
     {
         CPed* ped = (CPed*)entity;
-        if (ped->m_nPedType > 1)
+        if (ped->m_nPedType > 3)
         {
             CNetworkPed* networkPed = CNetworkPedManager::GetPed(ped);
-            if (networkPed)
+            if (networkPed && networkPed->m_bSyncing)
             {
-                if (CLocalPlayer::m_bIsHost)
-                {
-                    CNetworkPedManager::Remove(networkPed);
-                    delete networkPed;
-                }
+                CNetworkPedManager::Remove(networkPed);
+                delete networkPed;
             }
         }
     }

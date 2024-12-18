@@ -275,3 +275,14 @@ void CUtil::SetPlayerJetpack(CNetworkPlayer* player, bool set)
         }
     }
 }
+
+bool CUtil::IsValidEntityPtr(CEntity* ptr)
+{
+    if (!ptr) 
+        return false;
+
+    if (*(DWORD*)ptr == 0x863C40) // CPlaceable vtable ptr
+        return false;
+
+    return true;
+}
