@@ -13,6 +13,7 @@ This mod is an unofficial modification for **Grand Theft Auto: San Andreas** and
 
 ## Building
 
+### Client, Server, Launcher (Windows)
 1. Verify that you have the C++ and C# packages installed in Visual Studio 2022.
 
 2. Download [THIS version of the plugin-sdk](https://github.com/DK22Pac/plugin-sdk/tree/050d18b6e1770477deab81a40028a40277583d97) and install it using [THIS INSTRUCTION](https://github.com/DK22Pac/plugin-sdk/wiki/Set-up-plugin-sdk). Set up your GTA-SA and plugin-sdk folders.
@@ -36,6 +37,18 @@ cd vcpkg
 
 4. Open project_files/CoopAndreas.sln in Visual Studio 2022 and build every project (Ctrl+Shift+B).
 
+
+### Server (Linux)
+// TODO
+
+### main.scm
+
+1. Download and install [Sanny Builder 3](https://libertycity.net/files/gta-san-andreas/140792-sanny-builder-v3.3.3.html) (**SB4** compatibility is uncertain)
+
+2. Move all files from the `sdk/Sanny Builder 3/` folder to the SB3 installation folder. This will add CoopAndreas's opcodes to the compiler
+
+3. Open `scm/main.txt` with **Sanny Builder 3**, compile it, and then move all output files to the `${GTA_SA_DIR}/CoopAndreas/`
+
 ## Donate
 https://send.monobank.ua/jar/8wPrs73MBa
 
@@ -47,7 +60,7 @@ Contact information is current as of December 2024
 ### Already Done ✓
 - [X] setup C/C++ project
 - [X] client - server connection
-- [X] On foot sync -- in progress
+- [X] On foot sync
   - [x] Walk/Run
   - [x] Jump
   - [x] Climb

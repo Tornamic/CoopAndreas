@@ -140,6 +140,11 @@ public:
 					}
 
 					CNetworkPedManager::Process();
+
+					if (GetAsyncKeyState(VK_F8))
+					{
+						Command<0xF00>("HI!");
+					}
 				}
 			};
 		Events::drawBlipsEvent += []

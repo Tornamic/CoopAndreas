@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CCrashLog.h"
 #include "CDXFont.h"
+#include "Commands/CCustomCommandRegistrar.h"
 
 WNDPROC prevWndProc;
 
@@ -32,6 +33,7 @@ void CCore::Init()
 #endif
 	CPatch::ApplyPatches();
 	CHook::Init();
+	CCustomCommandRegistrar::Register();
 	CDXFont::Init();
 	CLaunchManager::CollectCommandLineArgs();
 	//SetUnhandledExceptionFilter(CCrashLog::ExceptionHandler);
