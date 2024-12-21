@@ -38,8 +38,21 @@ cd vcpkg
 4. Open project_files/CoopAndreas.sln in Visual Studio 2022 and build every project (Ctrl+Shift+B).
 
 
-### Server (Linux)
-// TODO
+### Server (GNU/Linux)
+#### Requirements 
+* GCC or LLVM Compilers 
+* GNU Make or Ninja  
+* Enet library (no need because coopandreas uses latest custom enet library in repo , check ``build`` and ``thirdparty-libraries`` folder 
+
+#### Building using CMake 
+copy and paste the commands below in your terminal :  
+```bash
+mkdir build
+cd build
+cmake -S .. -B .
+make # or ninja if you use -G "Ninja" parameter in cmake
+./CoopAndreasServer
+``` 
 
 ### main.scm
 
