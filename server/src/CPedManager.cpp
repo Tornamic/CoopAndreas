@@ -29,3 +29,14 @@ CPed* CPedManager::GetPed(int pedid)
 	}
 	return nullptr;
 }
+
+int CPedManager::GetFreeId()
+{
+	for (int i = 0; i < 300; i++)
+	{
+		if (CPedManager::GetPed(i) == nullptr)
+			return i;
+	}
+
+	return -1;
+}

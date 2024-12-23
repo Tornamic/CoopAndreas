@@ -33,7 +33,7 @@ class CPlayerPackets
 {
 	public:
 		CPlayerPackets();
-
+		#pragma pack(1)
 		struct PlayerConnected
 		{
 			int id;
@@ -87,14 +87,14 @@ class CPlayerPackets
 	
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
-					// create packet
-					CPlayerPackets::PlayerBulletShot* packet = (CPlayerPackets::PlayerBulletShot*)data;
+				// create packet
+				CPlayerPackets::PlayerBulletShot* packet = (CPlayerPackets::PlayerBulletShot*)data;
 						
-							// set packet`s playerid, cuz incoming packet has id = 0
-						packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+				// set packet`s playerid, cuz incoming packet has id = 0
+				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
 			
-					CNetwork::SendPacketToAll(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
-				}
+				CNetwork::SendPacketToAll(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+			}
 		};
 
 		struct PlayerHandshake
@@ -127,7 +127,7 @@ class CPlayerPackets
 				CPlayer* player = CPlayerManager::GetPlayer(peer);
 				packet->playerid = player->m_iPlayerId;
 				strcpy(player->m_Name, packet->name);
-				printf("player %d now also know as %s\n", packet->playerid, packet->name);
+				printf("[Game] : Player %d now also know as '%s'\n", packet->playerid, packet->name);
 				CNetwork::SendPacketToAll(CPacketsID::PLAYER_GET_NAME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 			}
 		};

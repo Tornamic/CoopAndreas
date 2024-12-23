@@ -139,8 +139,12 @@ public:
 						}
 					}
 
-					if(!CLocalPlayer::m_bIsHost)
-						CNetworkPedManager::Process();
+					CNetworkPedManager::Process();
+
+					if (GetAsyncKeyState(VK_F8))
+					{
+						Command<0xF00>("HI!");
+					}
 				}
 			};
 		Events::drawBlipsEvent += []
@@ -161,6 +165,23 @@ public:
 					sprintf(buffer, "Game/Network: Peds %d/%d Cars %d/%d Recv %d Sent %d", CPools::ms_pPedPool->GetNoOfUsedSpaces(), CNetworkPedManager::m_pPeds.size(), CPools::ms_pVehiclePool->GetNoOfUsedSpaces(), CNetworkVehicleManager::m_pVehicles.size(), CNetwork::m_pClient->totalReceivedPackets, CNetwork::m_pClient->totalSentPackets);
 					CDXFont::Draw(100, 10, buffer, D3DCOLOR_ARGB(255, 255, 255, 255));
 
+					for (auto networkVehicle : CNetworkVehicleManager::m_pVehicles)
+					{
+						if (!networkVehicle || !networkVehicle->m_pVehicle)
+							continue;
+
+						CVehicle* vehicle = networkVehicle->m_pVehicle;
+						if (!vehicle || !vehicle->m_matrix)
+							continue;
+
+						CVector posn = vehicle->m_matrix->pos;
+						RwV3d screenCoors; float w, h;
+						if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
+						{
+							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, ("v " + std::to_string(networkVehicle->m_nVehicleId) + "\nS " + std::to_string(networkVehicle->m_bSyncing)).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
+						}
+					}
+
 					for (auto networkPed : CNetworkPedManager::m_pPeds)
 					{
 						if (!networkPed || !networkPed->m_pPed)
@@ -174,7 +195,7 @@ public:
 						RwV3d screenCoors; float w, h;
 						if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
 						{
-							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, std::to_string(networkPed->m_nPedId).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
+							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, ("p " + std::to_string(networkPed->m_nPedId) + "\nS " + std::to_string(networkPed->m_bSyncing)).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
 						}
 					}
 #ifdef DEBUG_NOT_SYNCED_VEHICLES

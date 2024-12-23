@@ -4,6 +4,7 @@
 #include "CAimSync.h"
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
+#include <CCarGenerator.h>
 
 void __fastcall CVehicle__ProcessControl_Hook()
 {
@@ -48,16 +49,13 @@ void __fastcall CVehicle__ProcessControl_Hook()
         plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
         plugin::CallMethodDyn<CVehicle*>(call_addr, vehicle);
 
-        if (!CLocalPlayer::m_bIsHost)
+        CNetworkPed* ped = CNetworkPedManager::GetPed(vehicle->m_pDriver);
+        if (ped && !ped->m_bSyncing)
         {
-            CNetworkPed* ped = CNetworkPedManager::GetPed(vehicle->m_pDriver);
-            if (ped != nullptr)
-            {
-                //memset(&vehicle->m_autoPilot, 0, sizeof CAutoPilot);
-                vehicle->m_fGasPedal = ped->m_fGasPedal;
-                vehicle->m_fBreakPedal = ped->m_fBreakPedal;
-                vehicle->m_fSteerAngle = ped->m_fSteerAngle;
-            }
+            //memset(&vehicle->m_autoPilot, 0, sizeof CAutoPilot);
+            vehicle->m_fGasPedal = ped->m_fGasPedal;
+            vehicle->m_fBreakPedal = ped->m_fBreakPedal;
+            vehicle->m_fSteerAngle = ped->m_fSteerAngle;
         }
         return;
     }
@@ -95,7 +93,7 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
 static void __fastcall CCarCtrl__RemoveDistantCars_Hook()
 {
-    if (CLocalPlayer::m_bIsHost)
+    //if (CLocalPlayer::m_bIsHost)
         CCarCtrl::RemoveDistantCars();
 }
 
@@ -126,7 +124,7 @@ static void __fastcall CVehicle__RemoveVehicleUpgrade_Hook(CVehicle* This, int, 
 static bool __fastcall CDamageManager__ApplyDamage_Hook(CDamageManager* This, int, CAutomobile* dm_comp, tComponent compId, float intensity, float a5)
 {
     CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(dm_comp);
-    if (vehicle != nullptr && CLocalPlayer::m_bIsHost)
+    if (vehicle != nullptr && vehicle->m_bSyncing)
     {
         CPackets::VehicleDamage packet{};
         packet.vehicleid = vehicle->m_nVehicleId;
@@ -156,14 +154,9 @@ static bool __fastcall CAutomobile__ProcessAI_Hook(CAutomobile* This, int, int a
     else if (vtbl == 0x871C28) // CTrailer
         call_addr = 0x6CF590;
 
-    if (!CLocalPlayer::m_bIsHost)
+    CNetworkPed* networkPed = CNetworkPedManager::GetPed(This->m_pDriver);
+    if (networkPed && !networkPed->m_bSyncing)
     {
-        CNetworkPed* networkPed = CNetworkPedManager::GetPed(This->m_pDriver);
-
-        if (networkPed == nullptr)
-        {
-            return plugin::CallMethodAndReturnDyn<bool, CAutomobile*>(call_addr, This, a1);
-        }
         This->m_autoPilot = networkPed->m_autoPilot;
         This->m_fGasPedal = networkPed->m_fGasPedal;
         This->m_fBreakPedal = networkPed->m_fBreakPedal;
@@ -180,6 +173,31 @@ static bool __fastcall CAutomobile__ProcessAI_Hook(CAutomobile* This, int, int a
     }
 
     return plugin::CallMethodAndReturnDyn<bool, CAutomobile*>(call_addr, This, a1);
+}
+
+// disallow creating a parked vehicle if it is created by another player (does not work perfectly)
+// also disallow creating a parked vehicle if the player is dead, fixes vehicle pool overf*ck
+bool __fastcall CCarGenerator__CheckForBlockage_Hook(CCarGenerator* This, int, int modelId)
+{
+    bool originalResult = This->CheckForBlockage(modelId);
+
+    if (originalResult)
+        return true;
+
+    if (FindPlayerPed(0)->m_fHealth <= 0.0f) // if is dead
+        return true;
+
+    CVector position = This->m_vecPosn.Uncompressed();
+
+    for (auto vehicle : CPools::ms_pVehiclePool)
+    {
+        if ((vehicle->GetPosition() - position).Magnitude() <= 3.0f)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void VehicleHooks::InjectHooks()
@@ -222,4 +240,7 @@ void VehicleHooks::InjectHooks()
     patch::SetPointer(0x872398, CVehicle__ProcessControl_Hook);
 
     //patch::SetPointer(0x871228, CAutomobile__ProcessAI_Hook); // CAutomobile  
+
+    patch::RedirectCall(0x6F35D6, CCarGenerator__CheckForBlockage_Hook);
+    patch::RedirectCall(0x6F35FF, CCarGenerator__CheckForBlockage_Hook);
 }

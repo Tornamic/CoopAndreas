@@ -4,7 +4,7 @@
 
 static void __cdecl CPopulation__Update_Hook(bool generate)
 {
-    if (CLocalPlayer::m_bIsHost)
+    //if (CLocalPlayer::m_bIsHost)
         CPopulation::Update(generate);
 }
 
@@ -21,10 +21,10 @@ static void __declspec(naked) CPed__SetMoveState_Hook()
         pushad
     }
  
-    if (CNetwork::m_bConnected && !CLocalPlayer::m_bIsHost && !pPed->IsPlayer())
+    if (CNetwork::m_bConnected && !pPed->IsPlayer())
     {
         _pNetworkPed = CNetworkPedManager::GetPed(pPed);
-        if (_pNetworkPed)
+        if (_pNetworkPed && !_pNetworkPed->m_bSyncing)
         {
 
             pPed->m_nMoveState = _pNetworkPed->m_nMoveState;
@@ -53,21 +53,18 @@ bool __fastcall CWeapon__Fire_Hook(CWeapon* This, int, CPed* owner, CVector* vec
 
     if (ped)
     {
-        if (CLocalPlayer::m_bIsHost)
-        {
-            CPackets::PedShotSync packet{};
-            packet.pedid = ped->m_nPedId;
-            packet.origin = *vecOrigin;
-            packet.effect = *vecEffectPosn;
-            if (vecTarget)
-                packet.target = *vecTarget;
-            else
-                packet.target = targetEntity->GetPosition();
+        CPackets::PedShotSync packet{};
+        packet.pedid = ped->m_nPedId;
+        packet.origin = *vecOrigin;
+        packet.effect = *vecEffectPosn;
+        if (vecTarget)
+            packet.target = *vecTarget;
+        else
+            packet.target = targetEntity->GetPosition();
 
-            CNetwork::SendPacket(CPacketsID::PED_SHOT_SYNC, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        CNetwork::SendPacket(CPacketsID::PED_SHOT_SYNC, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 
-            return This->Fire(owner, vecOrigin, vecEffectPosn, targetEntity, vecTarget, arg_14);
-        }
+        return This->Fire(owner, vecOrigin, vecEffectPosn, targetEntity, vecTarget, arg_14);
     }
     else
     {

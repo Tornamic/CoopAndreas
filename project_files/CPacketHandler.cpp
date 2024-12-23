@@ -201,7 +201,7 @@ void CPacketHandler::PlayerPlaceWaypoint__Handle(void* data, int size)
 	player->m_vecWaypointPos = &packet->position;
 
 #ifdef PACKET_DEBUG_MESSAGES
-	CChat::AddMessage("WAYPOINT PLACE %d %f %f\n", packet->place, packet->position.x, packet->position.y);
+	CChat::AddMessage("WAYPOINT PLACE %d %.0f %.0f\n", packet->place, packet->position.x, packet->position.y);
 #endif
 }
 
@@ -230,7 +230,7 @@ void CPacketHandler::PlayerSetHost__Handle(void* data, int size)
 	{
 		CLocalPlayer::m_bIsHost = true;
 
-		CPatch::RevertTemporaryPatches();
+		CPatch::RevertTemporaryPatchesForHost();
 
 		CNetworkPedManager::AssignHost();
 		CChat::AddMessage("[Player] You are the host now");
@@ -267,7 +267,7 @@ void CPacketHandler::VehicleSpawn__Handle(void* data, int size)
 	CPackets::VehicleSpawn* packet = (CPackets::VehicleSpawn*)data;
 	
 #ifdef PACKET_DEBUG_MESSAGES
-	CChat::AddMessage("VEHICLE SPAWN %d %d %f %f %f %f %p", packet->vehicleid, packet->modelid, packet->pos.x, packet->pos.y, packet->pos.z, packet->rot);
+	CChat::AddMessage("VEHICLE SPAWN %d %d %.1f %.1f %.1f %.1f", packet->vehicleid, packet->modelid, packet->pos.x, packet->pos.y, packet->pos.z, packet->rot);
 #endif
 
 	CNetworkVehicle* vehicle = new CNetworkVehicle
@@ -334,6 +334,9 @@ void CPacketHandler::VehicleIdleUpdate__Handle(void* data, int size)
 
 	if (vehicle->m_pVehicle == nullptr)
 		vehicle->CreateVehicle(vehicle->m_nVehicleId, vehicle->m_nModelId, packet->pos, 0.f, packet->color1, packet->color2);
+
+	if (vehicle->m_pVehicle->m_matrix == nullptr)
+		return;
 
 	vehicle->m_pVehicle->m_matrix->pos = packet->pos;		   
 	vehicle->m_pVehicle->m_matrix->right = packet->roll;	   
@@ -691,7 +694,7 @@ void CPacketHandler::PedSpawn__Handle(void* data, int size)
 	CPackets::PedSpawn* packet = (CPackets::PedSpawn*)data;
 
 #ifdef PACKET_DEBUG_MESSAGES
-	CChat::AddMessage("PED SPAWN %d %d %f %f %f %d %d", packet->pedid, packet->modelId, packet->pos.x, packet->pos.y, packet->pos.z, packet->pedType, packet->createdBy);
+	CChat::AddMessage("PED SPAWN %d %d %.1f %.1f %.1f %d %d", packet->pedid, packet->modelId, packet->pos.x, packet->pos.y, packet->pos.z, packet->pedType, packet->createdBy);
 #endif
 
 	CNetworkPed* ped = new CNetworkPed(packet->pedid, (int)packet->modelId, (ePedType)packet->pedType, packet->pos, packet->createdBy);
@@ -914,7 +917,7 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
 	CNetworkPed* ped = CNetworkPedManager::GetPed(packet->pedid);
 
-	if (vehicle == nullptr || ped == nullptr || ped->m_pPed == nullptr || vehicle->m_pVehicle == nullptr)
+	if (vehicle == nullptr || ped == nullptr || ped->m_pPed == nullptr || vehicle->m_pVehicle == nullptr || !CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
 		return;
 
 	if (ped->m_pPed->m_pVehicle != vehicle->m_pVehicle)
@@ -1070,6 +1073,56 @@ void CPacketHandler::PlayerAimSync__Handle(void* data, int size)
 		if (player->m_lOnFoot)
 		{
 			player->m_lOnFoot->rotation = packet->aimZ;
+		}
+	}
+}
+
+// VehicleConfirm
+
+void CPacketHandler::VehicleConfirm__Handle(void* data, int size)
+{
+	CPackets::VehicleConfirm* packet = (CPackets::VehicleConfirm*)data;
+
+#ifdef PACKET_DEBUG_MESSAGES
+	CChat::AddMessage("VEHICLE CONFIRM %d %d", packet->vehicleid, packet->tempid);
+#endif
+
+	unsigned char tempId = packet->tempid;
+	
+	if (tempId < 255)
+	{
+		auto tempVehicles = CNetworkVehicleManager::m_apTempVehicles;
+
+		if (tempVehicles[tempId])
+		{
+			tempVehicles[tempId]->m_nVehicleId = packet->vehicleid;
+			CNetworkVehicleManager::Add(tempVehicles[tempId]);
+			tempVehicles[tempId] = nullptr;
+		}
+	}
+}
+
+// PedConfirm
+
+void CPacketHandler::PedConfirm__Handle(void* data, int size)
+{
+	CPackets::PedConfirm* packet = (CPackets::PedConfirm*)data;
+
+#ifdef PACKET_DEBUG_MESSAGES
+	CChat::AddMessage("PED CONFIRM %d %d", packet->pedid, packet->tempid);
+#endif
+
+	unsigned char tempId = packet->tempid;
+
+	if (tempId < 255)
+	{
+		auto tempPeds = CNetworkPedManager::m_apTempPeds;
+
+		if (tempPeds[tempId])
+		{
+			tempPeds[tempId]->m_nPedId = packet->pedid;
+			CNetworkPedManager::Add(tempPeds[tempId]);
+			tempPeds[tempId] = nullptr;
 		}
 	}
 }

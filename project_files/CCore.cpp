@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CCrashLog.h"
 #include "CDXFont.h"
+#include "Commands/CCustomCommandRegistrar.h"
 
 WNDPROC prevWndProc;
 
@@ -14,7 +15,8 @@ void InitWndProc()
 {
 	HWND hWnd = *(HWND*)0xC97C1C;
 
-	SetWindowText(hWnd, "CoopAndreas v0.0.0.0..00000000001111111indev");
+	SetWindowText(hWnd, "CoopAndreas");
+	RsGlobal.appName = "CoopAndreas";
 
 	if (hWnd) 
 	{
@@ -31,6 +33,7 @@ void CCore::Init()
 #endif
 	CPatch::ApplyPatches();
 	CHook::Init();
+	CCustomCommandRegistrar::Register();
 	CDXFont::Init();
 	CLaunchManager::CollectCommandLineArgs();
 	//SetUnhandledExceptionFilter(CCrashLog::ExceptionHandler);

@@ -40,14 +40,8 @@ bool CNetwork::Init(unsigned short port)
         return false;
     }
 
-    printf("[!] : CoopAndreas Server \n\n");
-    printf("[!] : Version : X.X.X.X\n");
-    #if defined (_WIN32)
-        printf("[!] : Platform : Microsoft Windows \n");
-    #else
-        printf("[!] : Platform : GNU/Linux | BSD \n");
-    #endif
-    printf("[!] : Server stared on port %d\n", port);
+    printf("[!] : Server started on port %d\n", port);
+
 
     ENetEvent event;
     while (true) // waiting for event
@@ -101,13 +95,12 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PED_SPAWN, CPedPackets::PedSpawn::Handle);
     CNetwork::AddListener(CPacketsID::PED_REMOVE, CPedPackets::PedRemove::Handle);
     CNetwork::AddListener(CPacketsID::PED_ONFOOT, CPedPackets::PedOnFoot::Handle);
-    
     CNetwork::AddListener(CPacketsID::GAME_WEATHER_TIME, CPlayerPackets::GameWeatherTime::Handle); // CPlayerPacket
     CNetwork::AddListener(CPacketsID::PLAYER_KEY_SYNC, CPlayerPackets::PlayerKeySync::Handle); 
-
     CNetwork::AddListener(CPacketsID::PED_ADD_TASK, CPedPackets::PedAddTask::Handle);
     CNetwork::AddListener(CPacketsID::PED_DRIVER_UPDATE, CPedPackets::PedDriverUpdate::Handle);
     CNetwork::AddListener(CPacketsID::PED_SHOT_SYNC, CPedPackets::PedShotSync::Handle);
+    CNetwork::AddListener(CPacketsID::PED_PASSENGER_UPDATE, CPedPackets::PedPassengerSync::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_AIM_SYNC, CPlayerPackets::PlayerAimSync::Handle);
 }
 
@@ -170,7 +163,7 @@ void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag fl
 
 void CNetwork::HandlePlayerConnected(ENetEvent& event)
 {
-    printf("\n[Alert] : A new client connected from %i.%i.%i.%i:%u.\n", 
+    printf("[Game] : A new client connected from %i.%i.%i.%i:%u.\n", 
         event.peer->address.host & 0xFF, 
         (event.peer->address.host >> 8) & 0xFF, 
         (event.peer->address.host >> 16) & 0xFF, 
@@ -178,7 +171,7 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         event.peer->address.port);
 
     // set player disconnection timeout
-    enet_peer_timeout(event.peer, 10000, 7000, 10000); //timeoutLimit, timeoutMinimum, timeoutMaximum
+    enet_peer_timeout(event.peer, 5000, 3000, 5000); //timeoutLimit, timeoutMinimum, timeoutMaximum
 
     // create new player and send to all players
 
@@ -221,15 +214,13 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
 
     for (auto i : CVehicleManager::m_pVehicles)
     {
-        CVehiclePackets::VehicleSpawn vehicleSpawnPacket
-        { 
-            i->m_nVehicleId,
-            i->m_nModelId,
-            i->m_vecPosition,
-            static_cast<float>(i->m_vecRotation.z * (3.141592 / 180)), // convert to radians
-            i->m_nPrimaryColor,
-            i->m_nSecondaryColor
-        };
+        CVehiclePackets::VehicleSpawn vehicleSpawnPacket{};
+        vehicleSpawnPacket.vehicleid = i->m_nVehicleId;
+        vehicleSpawnPacket.modelid = i->m_nModelId;
+        vehicleSpawnPacket.pos = i->m_vecPosition;
+        vehicleSpawnPacket.rot = static_cast<float>(i->m_vecRotation.z * (3.141592 / 180)); // convert to radians
+        vehicleSpawnPacket.color1 = i->m_nPrimaryColor;
+        vehicleSpawnPacket.color2 = i->m_nSecondaryColor;
 
         CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
         
@@ -304,7 +295,7 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
     // send to all
     CNetwork::SendPacketToAll(CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof (CPlayerPackets::PlayerDisconnected), ENET_PACKET_FLAG_UNSEQUENCED, event.peer);
 
-    printf("[Alert] : %i Disconnected.\n", player->m_iPlayerId);
+    printf("[Game] : %i Disconnected.\n", player->m_iPlayerId);
 
     CPlayerManager::AssignHostToFirstPlayer();
 }

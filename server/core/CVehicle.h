@@ -15,6 +15,7 @@ class CVehicle
 		CVehicle(int vehicleid, unsigned short model, CVector pos, float rot);
 		
 		int m_nVehicleId;
+		CPlayer* m_pSyncer = nullptr;
 		unsigned short m_nModelId;
 		CVector m_vecPosition;
 		CVector m_vecRotation;

@@ -44,5 +44,7 @@ public:
 	static void PlayerAimSync__Trigger();
 	static CPackets::PlayerAimSync PlayerAimSync__Collect();
 	static void PlayerAimSync__Handle(void* data, int size);
+	static void VehicleConfirm__Handle(void* data, int size);
+	static void PedConfirm__Handle(void* data, int size);
 };
 

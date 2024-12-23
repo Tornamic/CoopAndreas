@@ -3,23 +3,24 @@
 
 CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2)
 {
-    if (!CLocalPlayer::m_bIsHost)
+    if (auto vehicle = CNetworkVehicleManager::GetVehicle(vehicleid))
     {
-        if (auto vehicle = CNetworkVehicleManager::GetVehicle(vehicleid))
+        if (vehicle->m_pVehicle && CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
         {
-            if (vehicle->m_pVehicle)
-            {
-                CWorld::Remove(vehicle->m_pVehicle);
-                delete vehicle->m_pVehicle;
-            }
-            CNetworkVehicleManager::Remove(vehicle);
+            CWorld::Remove(vehicle->m_pVehicle);
+            delete vehicle->m_pVehicle;
         }
+        CNetworkVehicleManager::Remove(vehicle);
     }
+
+    m_nVehicleId = vehicleid;
+    m_bSyncing = false;
+    m_nTempId = 255;
+    m_nModelId = modelid;
 
     if (!CreateVehicle(vehicleid, modelid, pos, rotation, color1, color2))
         return;
 
-    m_nVehicleId = vehicleid;
 }
 
 bool CNetworkVehicle::CreateVehicle(int vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2)
@@ -37,36 +38,36 @@ bool CNetworkVehicle::CreateVehicle(int vehicleid, int modelid, CVector pos, flo
     switch (((CVehicleModelInfo*)CModelInfo::ms_modelInfoPtrs[modelid])->m_nVehicleType)
     {
     case VEHICLE_MTRUCK:
-        m_pVehicle = new CMonsterTruck(modelid, 1); break;
+        m_pVehicle = new CMonsterTruck(modelid, MISSION_VEHICLE); break;
 
     case VEHICLE_QUAD:
-        m_pVehicle = new CQuadBike(modelid, 1); break;
+        m_pVehicle = new CQuadBike(modelid, MISSION_VEHICLE); break;
 
     case VEHICLE_HELI:
-        m_pVehicle = new CHeli(modelid, 1); break;
+        m_pVehicle = new CHeli(modelid, MISSION_VEHICLE); break;
 
     case VEHICLE_PLANE:
-        m_pVehicle = new CPlane(modelid, 1); break;
+        m_pVehicle = new CPlane(modelid, MISSION_VEHICLE); break;
 
     case VEHICLE_BIKE:
-        m_pVehicle = new CBike(modelid, 1);
+        m_pVehicle = new CBike(modelid, MISSION_VEHICLE);
         ((CBike*)m_pVehicle)->m_nDamageFlags |= 0x10; break;
 
     case VEHICLE_BMX:
-        m_pVehicle = new CBmx(modelid, 1);
+        m_pVehicle = new CBmx(modelid, MISSION_VEHICLE);
         ((CBmx*)m_pVehicle)->m_nDamageFlags |= 0x10; break;
 
     case VEHICLE_TRAILER:
-        m_pVehicle = new CTrailer(modelid, 1); break;
+        m_pVehicle = new CTrailer(modelid, MISSION_VEHICLE); break;
 
     case VEHICLE_BOAT:
-        m_pVehicle = new CBoat(modelid, 1); break;
+        m_pVehicle = new CBoat(modelid, MISSION_VEHICLE); break;
 
     case VEHICLE_TRAIN:
         return false;
 
     default:
-        m_pVehicle = new CAutomobile(modelid, 1, true); break;
+        m_pVehicle = new CAutomobile(modelid, MISSION_VEHICLE, true); break;
     }
 
     if (!m_pVehicle)
@@ -85,7 +86,7 @@ bool CNetworkVehicle::CreateVehicle(int vehicleid, int modelid, CVector pos, flo
 
 CNetworkVehicle::~CNetworkVehicle()
 {
-    if (CLocalPlayer::m_bIsHost)
+    if (m_bSyncing)
     {
         CPackets::VehicleRemove vehicleRemovePacket{};
         vehicleRemovePacket.vehicleid = m_nVehicleId;
@@ -93,7 +94,7 @@ CNetworkVehicle::~CNetworkVehicle()
     }
     else
     {
-        if (m_pVehicle)
+        if (m_pVehicle && (unsigned int)*(void***)m_pVehicle != 0x863C40)
         {
             plugin::Command<Commands::DELETE_CAR>(CPools::GetVehicleRef(m_pVehicle));
         }
@@ -113,13 +114,15 @@ CNetworkVehicle* CNetworkVehicle::CreateHosted(CVehicle* vehicle)
     CNetworkVehicle* networkVehicle = new CNetworkVehicle();
 
     networkVehicle->m_pVehicle = vehicle;
-    networkVehicle->m_nVehicleId = CNetworkVehicleManager::GetFreeID();
+    networkVehicle->m_nVehicleId = -1;
     networkVehicle->m_bSyncing = true;
     networkVehicle->m_nModelId = vehicle->m_nModelIndex;
     networkVehicle->m_nPaintJob = vehicle->m_nRemapTxd;
+    networkVehicle->m_nTempId = CNetworkVehicleManager::AddToTempList(networkVehicle);
 
     CPackets::VehicleSpawn vehicleSpawnPacket{};
-    vehicleSpawnPacket.vehicleid = networkVehicle->m_nVehicleId;
+    vehicleSpawnPacket.vehicleid = -1;
+    vehicleSpawnPacket.tempid = networkVehicle->m_nTempId;
     vehicleSpawnPacket.modelid = vehicle->m_nModelIndex;
     vehicleSpawnPacket.pos = vehicle->m_matrix->pos;
     vehicleSpawnPacket.rot = vehicle->GetHeading();

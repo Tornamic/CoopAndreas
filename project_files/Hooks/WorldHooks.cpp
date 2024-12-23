@@ -66,15 +66,8 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
 
     if (entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
     {
-        if (!CLocalPlayer::m_bIsHost)
-            dontCreateEntity = true;
-        else
-        {
-            CVehicle* vehicle = (CVehicle*)entity;
-            CNetworkVehicle* networkVehicle = CNetworkVehicle::CreateHosted(vehicle);
-            CNetworkVehicleManager::Add(networkVehicle);
-        }
-
+        CVehicle* vehicle = (CVehicle*)entity;
+        CNetworkVehicle* networkVehicle = CNetworkVehicle::CreateHosted(vehicle);
     }
     else if (entity->m_nType == eEntityType::ENTITY_TYPE_PED)
     {
@@ -82,21 +75,9 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
 
         if (ped->m_nPedType > 1)
         {
-            if (!CLocalPlayer::m_bIsHost)
-                dontCreateEntity = true;
-            else
-            {
-                CNetworkPed* networkPed = new CNetworkPed(ped);
-                CNetworkPedManager::Add(networkPed);
-            }
+            CNetworkPed* networkPed = CNetworkPed::CreateHosted(ped);
         }
     }
-
-    //if (dontCreateEntity)
-    //{
-    //    //delete entity;
-    //    return;
-    //}
 
 #ifdef DEBUG_NOT_SYNCED_VEHICLES
     if (entity->m_nType == ENTITY_TYPE_VEHICLE)
@@ -117,28 +98,22 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
     {
         CVehicle* vehicle = (CVehicle*)entity;
         CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
-        if (networkVehicle)
+        if (networkVehicle && networkVehicle->m_bSyncing)
         {
-            if (CLocalPlayer::m_bIsHost)
-            {
-                CNetworkVehicleManager::Remove(networkVehicle);
-                delete networkVehicle;
-            }
+            CNetworkVehicleManager::Remove(networkVehicle);
+            delete networkVehicle;
         }
     }
     else if (entity->m_nType == eEntityType::ENTITY_TYPE_PED)
     {
         CPed* ped = (CPed*)entity;
-        if (ped->m_nPedType > 1)
+        if (ped->m_nPedType > 3)
         {
             CNetworkPed* networkPed = CNetworkPedManager::GetPed(ped);
-            if (networkPed)
+            if (networkPed && networkPed->m_bSyncing)
             {
-                if (CLocalPlayer::m_bIsHost)
-                {
-                    CNetworkPedManager::Remove(networkPed);
-                    delete networkPed;
-                }
+                CNetworkPedManager::Remove(networkPed);
+                delete networkPed;
             }
         }
     }
