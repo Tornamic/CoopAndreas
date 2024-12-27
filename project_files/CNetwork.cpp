@@ -120,6 +120,8 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::PLAYER_AIM_SYNC, CPacketHandler::PlayerAimSync__Handle);
 	CNetwork::AddListener(CPacketsID::VEHICLE_CONFIRM, CPacketHandler::VehicleConfirm__Handle);
 	CNetwork::AddListener(CPacketsID::PED_CONFIRM, CPacketHandler::PedConfirm__Handle);
+	CNetwork::AddListener(CPacketsID::PLAYER_STATS, CPacketHandler::PlayerStats__Handle);
+	CNetwork::AddListener(CPacketsID::REBUILD_PLAYER, CPacketHandler::RebuildPlayer__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

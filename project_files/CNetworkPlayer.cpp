@@ -10,8 +10,6 @@ CPackets::PlayerOnFoot* m_oOnFoot = nullptr;
 signed short m_oShockButtonL = 0;
 signed short m_lShockButtonL = 0;
 
-const unsigned int CNetworkPlayer::m_pColours[] = { 0x6495EDFF,0xf0e68cFF,0x778899FF,0xFF1493FF,0xF4A460FF,0xEE82EEFF,0xFFD720FF,0x8b4513FF,0x4949A0FF,0x148b8bFF };
-
 CVector* m_vecWaypointPos = nullptr;
 bool m_bWaypointPlaced = false;
 
@@ -19,6 +17,8 @@ char m_Name[32 + 1] = { 0 };
 
 CNetworkPlayer::~CNetworkPlayer()
 {
+	delete m_lOnFoot;
+
 	if (m_pPed == nullptr) return;
 
 	if (m_pPed->m_pVehicle != nullptr)
@@ -41,7 +41,7 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 
 	m_iPlayerId = id;
 
-	m_lOnFoot = m_oOnFoot = new CPackets::PlayerOnFoot();
+	m_lOnFoot = new CPackets::PlayerOnFoot();
 }
 
 void CNetworkPlayer::CreatePed(int id, CVector position)
@@ -58,6 +58,11 @@ void CNetworkPlayer::CreatePed(int id, CVector position)
 
 	// set player immunies, he now dont cares about pain
 	Command<Commands::SET_CHAR_PROOFS>(actorId, 0, 1, 1, 0, 0);
+
+	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("VEST", "VEST", 0);
+	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("JEANSDENIM", "JEANS", 2);
+	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("SNEAKERBINCBLK", "SNEAKER", 3);
+	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("PLAYER_FACE", "HEAD", 1);
 }
 
 int CNetworkPlayer::GetInternalId() // most used for CWorld::PlayerInFocus
@@ -85,4 +90,19 @@ char* CNetworkPlayer::GetName()
 		strcpy(buffer, m_Name);
 
 	return buffer;
+}
+
+char CNetworkPlayer::GetWeaponSkill(eWeaponType weaponType)
+{
+	if (weaponType < WEAPON_PISTOL || weaponType > WEAPON_TEC9)
+		return 1;
+
+	eStats weaponStatId = plugin::CallAndReturn<eStats, 0x743CD0>(weaponType); // CWeaponInfo::GetSkillStatIndex
+	int statSyncId = CStatsSync::GetSyncIdByInternal(weaponStatId);
+	float weaponStat = m_stats[weaponStatId];
+
+	if (CWeaponInfo::GetWeaponInfo(weaponType, 2)->m_nReqStatLevel <= weaponStat)
+		return 2;
+
+	return CWeaponInfo::GetWeaponInfo(weaponType, 1)->m_nReqStatLevel <= weaponStat;
 }

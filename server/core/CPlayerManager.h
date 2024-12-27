@@ -220,6 +220,36 @@ class CPlayerPackets
 			}
 		};
 
+		struct PlayerStats
+		{
+			int playerid;
+			float stats[14];
+
+			static void Handle(ENetPeer* peer, void* data, int size)
+			{
+				CPlayerPackets::PlayerStats* packet = (CPlayerPackets::PlayerStats*)data;
+				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+				CNetwork::SendPacketToAll(CPacketsID::PLAYER_STATS, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			}
+		}; 
+		
+		struct RebuildPlayer
+		{
+			int playerid;
+			// CPedClothesDesc inlined
+			unsigned int m_anModelKeys[10];
+			unsigned int m_anTextureKeys[18];
+			float m_fFatStat;
+			float m_fMuscleStat;
+
+			static void Handle(ENetPeer* peer, void* data, int size)
+			{
+				CPlayerPackets::RebuildPlayer* packet = (CPlayerPackets::RebuildPlayer*)data;
+				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+				CNetwork::SendPacketToAll(CPacketsID::REBUILD_PLAYER, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+			}
+		};
+
 		~CPlayerPackets();
 };
 

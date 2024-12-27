@@ -46,5 +46,8 @@ public:
 	static void PlayerAimSync__Handle(void* data, int size);
 	static void VehicleConfirm__Handle(void* data, int size);
 	static void PedConfirm__Handle(void* data, int size);
+	static void PlayerStats__Handle(void* data, int size);
+	static void RebuildPlayer__Handle(void* data, int size);
+	static void RebuildPlayer__Trigger();
 };
 

@@ -114,7 +114,11 @@ Contact information is current as of December 2024
 - [X] rendering
   - [X] text rendering (dx)
   - [X] sprite/txd rendering
-
+- [X] style
+  - [X] tatoo
+  - [X] clothes
+  - [X] haircut
+  
 ### Current Tasks
 - [ ] separate ped sync
 - [ ] stream in/out players, peds, vehicles, etc.
@@ -143,18 +147,14 @@ Contact information is current as of December 2024
   - [X] weapon aim interpolation
 - [ ] wanted level
 - [ ] stats sync
-  - [ ] fat
-  - [ ] muscle
-  - [ ] weapon skills
+  - [X] fat
+  - [X] muscle
+  - [X] weapon skills
   - [X] fight styles
   - [ ] sync money
   - [ ] breath level bar
-  - [ ] stamina sync
+  - [X] stamina sync
   - [ ] max hp sync
-- [ ] style
-  - [ ] tatoo
-  - [ ] clothes
-  - [ ] haircut
 - [ ] npc sync
   - [X] pos, rot, speed
   - [X] weapons

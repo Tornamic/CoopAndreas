@@ -64,6 +64,7 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
     CKeySync::ApplyNetworkPlayerContext(player);
     CAimSync::ApplyNetworkPlayerContext(player);
+    CStatsSync::ApplyNetworkPlayerContext(player);
 
     player->m_pPed->m_fHealth = player->m_lOnFoot->health;
     player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
@@ -86,6 +87,7 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
     CKeySync::ApplyLocalContext();
     CAimSync::ApplyLocalContext();
+    CStatsSync::ApplyLocalContext();
 
     /**(bool*)0xB6F1A4 = savedLookingLeft;
     *(bool*)0xB6F1A5 = savedLookingRight;*/

@@ -2,7 +2,6 @@
 
 #include "stdafx.h"
 
-
 enum CPacketsID : unsigned short
 {
 	CHECK_VERSION = 0, // must be always 0! TODO
@@ -38,7 +37,9 @@ enum CPacketsID : unsigned short
 	PED_PASSENGER_UPDATE,
 	PLAYER_AIM_SYNC,
 	VEHICLE_CONFIRM,
-	PED_CONFIRM
+	PED_CONFIRM,
+	PLAYER_STATS,
+	REBUILD_PLAYER
 };
 
 class CPackets
@@ -347,5 +348,17 @@ public:
 	{
 		unsigned char tempid = 255;
 		int pedid;
+	};
+
+	struct PlayerStats
+	{
+		int playerid;
+		float stats[14];
+	};
+
+	struct RebuildPlayer
+	{
+		int playerid;
+		CPedClothesDesc clothesData;
 	};
 };

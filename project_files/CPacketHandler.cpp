@@ -121,7 +121,6 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 	player->m_pPed->m_nAllowedAttackMoves |= 15u;
 
 	// save last onfoot sync
-	player->m_oOnFoot = player->m_lOnFoot;
 	player->m_lOnFoot = packet;
 }
 
@@ -172,7 +171,10 @@ void CPacketHandler::PlayerBulletShot__Handle(void* data, int size)
 			victim = FindPlayerPed(0);
 	}
 
+	// change the ped type to prevent stats changing
+	player->m_pPed->m_nPedType = PED_TYPE_CIVMALE;
 	player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].DoBulletImpact(player->m_pPed, victim, &packet->startPos, &packet->endPos, &packet->colPoint, packet->incrementalHit);
+	player->m_pPed->m_nPedType = PED_TYPE_PLAYER1;
 }
 
 // PlayerHandshake
@@ -440,8 +442,6 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 	vehicle->m_pVehicle->m_vecMoveSpeed = packet->velocity;
 	
 	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
-
-	player->m_oOnFoot = player->m_lOnFoot;
 	
 	player->m_lOnFoot->armour = packet->playerArmour;
 	player->m_lOnFoot->health = packet->playerHealth;
@@ -657,8 +657,6 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 	}
 
 	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
-
-	player->m_oOnFoot = player->m_lOnFoot;
 
 	player->m_pPed->m_fArmour = player->m_lOnFoot->armour = packet->playerArmour;
 	player->m_pPed->m_fHealth = player->m_lOnFoot->health = packet->playerHealth;
@@ -1125,4 +1123,48 @@ void CPacketHandler::PedConfirm__Handle(void* data, int size)
 			tempPeds[tempId] = nullptr;
 		}
 	}
+}
+
+// PlayerStats
+
+void CPacketHandler::PlayerStats__Handle(void* data, int size)
+{
+	CPackets::PlayerStats* packet = (CPackets::PlayerStats*)data;
+	
+	if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(packet->playerid))
+	{
+		for (size_t i = 0; i < CStatsSync::SYNCED_STATS_COUNT; i++)
+		{
+			eStats statId = CStatsSync::m_aeSyncedStats[i];
+			networkPlayer->m_stats[statId] = packet->stats[i];
+		}
+	}
+}
+
+// RebuildPlayer
+
+void CPacketHandler::RebuildPlayer__Handle(void* data, int size)
+{
+	CPackets::RebuildPlayer* packet = (CPackets::RebuildPlayer*)data;
+
+	if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(packet->playerid))
+	{
+		networkPlayer->m_stats[STAT_FAT] = packet->clothesData.m_fFatStat;
+		networkPlayer->m_stats[STAT_MUSCLE] = packet->clothesData.m_fMuscleStat;
+
+		CStatsSync::ApplyNetworkPlayerContext(networkPlayer);
+
+		*networkPlayer->m_pPed->m_pPlayerData->m_pPedClothesDesc = packet->clothesData;
+
+		CClothes::RebuildPlayer(networkPlayer->m_pPed, false);
+		
+		CStatsSync::ApplyLocalContext();
+	}
+}
+
+void CPacketHandler::RebuildPlayer__Trigger()
+{
+	CPackets::RebuildPlayer packet{};
+	packet.clothesData = *(FindPlayerPed(0)->m_pPlayerData->m_pPedClothesDesc);
+	CNetwork::SendPacket(CPacketsID::REBUILD_PLAYER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 }
