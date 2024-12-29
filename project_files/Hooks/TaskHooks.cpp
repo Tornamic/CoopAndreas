@@ -266,27 +266,28 @@ skip:
 
 bool __fastcall CTaskSimpleUseGun__SetPedPosition_Hook(CTaskSimpleUseGun* This, int, CPed* ped)
 {
-    if (!ped->IsPlayer() || ped == FindPlayerPed(0))
+    auto orig = [&]() -> bool {
+        return plugin::CallMethodAndReturn<bool, 0x624ED0>(This, ped);
+    };
+
+    if (ped->m_nPedType > 3 || ped == FindPlayerPed(0)) // not a network player
     {
-        return plugin::CallMethodAndReturn<bool, 0x624ED0, CTaskSimpleUseGun*>(This, ped);
+        return orig();
     }
 
-    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(ped);
+    if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(ped))
+    {
+        CWorld::PlayerInFocus = networkPlayer->GetInternalId();
+        CStatsSync::ApplyNetworkPlayerContext(networkPlayer);
+        CAimSync::ApplyNetworkPlayerContext(networkPlayer);
+        bool result = orig();
+        CAimSync::ApplyLocalContext();
+        CStatsSync::ApplyLocalContext();
+        CWorld::PlayerInFocus = 0;
+        return result;
+    }
 
-    if (player == nullptr)
-        return plugin::CallMethodAndReturn<bool, 0x624ED0, CTaskSimpleUseGun*>(This, ped);
-
-    CWorld::PlayerInFocus = player->GetInternalId();
-
-    CAimSync::ApplyNetworkPlayerContext(player);
-
-    bool result = plugin::CallMethodAndReturn<bool, 0x624ED0, CTaskSimpleUseGun*>(This, ped);
-
-    CWorld::PlayerInFocus = 0;
-
-    CAimSync::ApplyLocalContext();
-
-    return result;
+    return orig();
 }
 
 void TaskHooks::InjectHooks()

@@ -67,6 +67,8 @@
 #include <CTaskComplexWander.h>
 #include <CTaskComplexClimb.h>
 #include <CTaskSimpleCarSetPedInAsDriver.h>
+#include <CStats.h>
+#include <CClothes.h>
 
 #include "Tasks/CTaskComplexCarDriveWander.h"
 
@@ -81,6 +83,7 @@ using namespace plugin;
 #include "CPackets.h"
 #include "CPacketHandler.h"
 #include "CNetwork.h"
+#include "CNetworkPlayerStats.h"
 #include "CNetworkPlayer.h"
 #include "CNetworkPlayerManager.h"
 #include "CUtil.h"
@@ -100,4 +103,5 @@ using namespace plugin;
 #include "CNetworkPedManager.h"
 #include "CDebugPedTasks.h"
 #include "eNetworkEntityType.h"
+#include "CStatsSync.h"
 // -----------------------------------------------------------------------------------------

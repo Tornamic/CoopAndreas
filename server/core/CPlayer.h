@@ -23,7 +23,8 @@ class CPlayer
 		unsigned char m_nSeatId;
 		int m_nVehicleId;
 		bool m_bCorrectVersion = false;
-		
+		float m_afStats[14];
+
 		~CPlayer();
 };
 

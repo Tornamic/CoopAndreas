@@ -24,6 +24,7 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     CKeySync::ApplyNetworkPlayerContext(player);
     CAimSync::ApplyNetworkPlayerContext(player);
+    CStatsSync::ApplyNetworkPlayerContext(player);
 
     player->m_pPed->m_fHealth = player->m_lOnFoot->health;
     player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
@@ -39,6 +40,7 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     CKeySync::ApplyLocalContext();
     CAimSync::ApplyLocalContext();
+    CStatsSync::ApplyLocalContext();
 }
 
 static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding, CEntity* owner, CEntity* victim, CVector* startPoint, CVector* endPoint, CColPoint* colPoint, int incrementalHit)

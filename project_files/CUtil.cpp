@@ -108,6 +108,8 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
     {
         CWorld::PlayerInFocus = player->GetInternalId();
 
+        CStatsSync::ApplyNetworkPlayerContext(player);
+
         if (weapon != 0)
         {
             if (weapon == WEAPON_SATCHEL_CHARGE)
@@ -143,6 +145,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
             player->m_pPed->SetCurrentWeapon((eWeaponType)weapon);
         }
 
+        CStatsSync::ApplyLocalContext();
         CWorld::PlayerInFocus = 0;
     }
 }

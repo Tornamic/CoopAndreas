@@ -102,6 +102,8 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PED_SHOT_SYNC, CPedPackets::PedShotSync::Handle);
     CNetwork::AddListener(CPacketsID::PED_PASSENGER_UPDATE, CPedPackets::PedPassengerSync::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_AIM_SYNC, CPlayerPackets::PlayerAimSync::Handle);
+    CNetwork::AddListener(CPacketsID::PLAYER_STATS, CPlayerPackets::PlayerStats::Handle);
+    CNetwork::AddListener(CPacketsID::REBUILD_PLAYER, CPlayerPackets::RebuildPlayer::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
