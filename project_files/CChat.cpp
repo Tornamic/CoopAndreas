@@ -5,7 +5,7 @@ std::vector<CChatMessage> CChat::m_aMessages = {};
 
 std::string CChat::m_sInputText = "";
 bool CChat::m_bInputActive = false;
-int CChat::m_nCaretPos = 0;
+size_t CChat::m_nCaretPos = 0;
 
 unsigned char patch_disable_inputs[] = {0x00, 0x00, 0x00, 0x00, 0x00};
 

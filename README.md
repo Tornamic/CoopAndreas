@@ -18,24 +18,7 @@ This mod is an unofficial modification for **Grand Theft Auto: San Andreas** and
 
 2. Download [THIS version of the plugin-sdk](https://github.com/DK22Pac/plugin-sdk/tree/050d18b6e1770477deab81a40028a40277583d97) and install it using [THIS INSTRUCTION](https://github.com/DK22Pac/plugin-sdk/wiki/Set-up-plugin-sdk). Set up your GTA-SA and plugin-sdk folders.
 
-3. Install the enet library using the following instructions:
-
-```ps
-# Open PowerShell:
-
-# Install vcpkg if you don't have it
-git clone https://github.com/microsoft/vcpkg.git
-cd vcpkg
-./bootstrap-vcpkg.bat
-
-# Install enet
-./vcpkg install enet
-./vcpkg integrate install
-./vcpkg install enet:x86-windows
-./vcpkg integrate install
-```
-
-4. Open project_files/CoopAndreas.sln in Visual Studio 2022 and build every project (Ctrl+Shift+B).
+3. Open project_files/CoopAndreas.sln in Visual Studio 2022 and build every project (Ctrl+Shift+B).
 
 
 ### Server (GNU/Linux)

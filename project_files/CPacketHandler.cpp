@@ -807,9 +807,9 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 CPackets::GameWeatherTime* CPacketHandler::GameWeatherTime__Collect()
 {
 	CPackets::GameWeatherTime* packet = new CPackets::GameWeatherTime;
-	packet->newWeather = CWeather::NewWeatherType;
-	packet->oldWeather = CWeather::OldWeatherType;
-	packet->forcedWeather = CWeather::ForcedWeatherType;
+	packet->newWeather = (unsigned char)CWeather::NewWeatherType;
+	packet->oldWeather = (unsigned char)CWeather::OldWeatherType;
+	packet->forcedWeather = (unsigned char)CWeather::ForcedWeatherType;
 	packet->currentMonth = CClock::ms_nGameClockMonth;
 	packet->currentDay = CClock::CurrentDay;
 	packet->currentHour = CClock::ms_nGameClockHours;
@@ -986,8 +986,8 @@ void CPacketHandler::PedPassengerSync__Trigger(CNetworkPed* networkPed, CNetwork
 
 	packet.pedid = networkPed->m_nPedId;
 	packet.vehicleid = networkVehicle->m_nVehicleId;
-	packet.health = networkPed->m_pPed->m_fHealth;
-	packet.armour = networkPed->m_pPed->m_fArmour;
+	packet.health = (unsigned char)networkPed->m_pPed->m_fHealth;
+	packet.armour = (unsigned char)networkPed->m_pPed->m_fArmour;
 	packet.weapon = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
 	packet.ammo = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_nAmmoInClip;
 

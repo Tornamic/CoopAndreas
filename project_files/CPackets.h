@@ -247,7 +247,7 @@ public:
 		unsigned short ammo = 0;
 		float aimingRotation = 0.0f;
 		float currentRotation = 0.0f;
-		float lookDirection = 0.0f;
+		int lookDirection = 0;
 		struct
 		{
 			unsigned char moveState : 3;
