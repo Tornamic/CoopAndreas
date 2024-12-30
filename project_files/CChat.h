@@ -11,7 +11,7 @@ public:
 	static std::vector<CChatMessage> CChat::m_aMessages;
 	static std::string m_sInputText;
 	static bool CChat::m_bInputActive;
-	static int CChat::m_nCaretPos;
+	static size_t CChat::m_nCaretPos;
 	static void CChat::AddMessage(const std::string& message);
 	static void AddMessage(const char* format, ...);
 	static void Draw();

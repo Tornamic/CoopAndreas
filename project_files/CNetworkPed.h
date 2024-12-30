@@ -13,7 +13,7 @@ public:
 	CVector m_vecVelocity{0.0f, 0.0f, 0.0f};
 	float m_fAimingRotation = 0.0f;
 	float m_fCurrentRotation = 0.0f;
-	float m_fLookDirection = 0.0f;
+	int m_fLookDirection;
 	eMoveState m_nMoveState = eMoveState::PEDMOVE_NONE;
 	CAutoPilot m_autoPilot;
 	float m_fGasPedal = 0.0f;

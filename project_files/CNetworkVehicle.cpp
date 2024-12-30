@@ -117,7 +117,7 @@ CNetworkVehicle* CNetworkVehicle::CreateHosted(CVehicle* vehicle)
     networkVehicle->m_nVehicleId = -1;
     networkVehicle->m_bSyncing = true;
     networkVehicle->m_nModelId = vehicle->m_nModelIndex;
-    networkVehicle->m_nPaintJob = vehicle->m_nRemapTxd;
+    networkVehicle->m_nPaintJob = (char)vehicle->m_nRemapTxd;
     networkVehicle->m_nTempId = CNetworkVehicleManager::AddToTempList(networkVehicle);
 
     CPackets::VehicleSpawn vehicleSpawnPacket{};
