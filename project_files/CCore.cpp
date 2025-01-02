@@ -2,6 +2,7 @@
 #include "CCrashLog.h"
 #include "CDXFont.h"
 #include "Commands/CCustomCommandRegistrar.h"
+#include "CDiscordRPC.h"
 
 WNDPROC prevWndProc;
 
@@ -36,6 +37,7 @@ void CCore::Init()
 	CCustomCommandRegistrar::Register();
 	CDXFont::Init();
 	CLaunchManager::CollectCommandLineArgs();
+	CDiscordRPC::Init();
 	//SetUnhandledExceptionFilter(CCrashLog::ExceptionHandler);
 	Events::initGameEvent.after += []
 	{
