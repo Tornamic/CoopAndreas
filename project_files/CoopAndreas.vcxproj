@@ -62,7 +62,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NON_CONFORMING_SWPRINTFS;_USE_MATH_DEFINES;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;NDEBUG;GTASA;PLUGIN_SGV_10US;RW;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\source;$(PLUGIN_SDK_DIR)\shared;$(PLUGIN_SDK_DIR)\shared\game;$(PLUGIN_SDK_DIR)\shared\dxsdk;$(PLUGIN_SDK_DIR)\plugin_SA;$(PLUGIN_SDK_DIR)\plugin_SA\game_SA;$(ProjectDir);../shared;../discord_rpc/;../discord_rpc/SDK/include;../discord_rpc/SDK/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\source;$(PLUGIN_SDK_DIR)\shared;$(PLUGIN_SDK_DIR)\shared\game;$(PLUGIN_SDK_DIR)\shared\dxsdk;$(PLUGIN_SDK_DIR)\plugin_SA;$(PLUGIN_SDK_DIR)\plugin_SA\game_SA;$(ProjectDir);../shared;DiscordRPC;DiscordRPC/SDK/include;DiscordRPC/SDK/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -120,16 +120,10 @@ echo "Output files can be found at $(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\discord_rpc\CDiscordRPC.cpp" />
-    <ClCompile Include="..\discord_rpc\SDK\src\connection_win.cpp" />
-    <ClCompile Include="..\discord_rpc\SDK\src\discord_register_win.cpp" />
-    <ClCompile Include="..\discord_rpc\SDK\src\discord_rpc.cpp" />
-    <ClCompile Include="..\discord_rpc\SDK\src\dllmain.cpp" />
-    <ClCompile Include="..\discord_rpc\SDK\src\rpc_connection.cpp" />
-    <ClCompile Include="..\discord_rpc\SDK\src\serialization.cpp" />
     <ClCompile Include="..\source\Main.cpp" />
     <ClCompile Include="CAimSync.cpp" />
     <ClCompile Include="CChat.cpp" />
+    <ClCompile Include="CDiscordRPC.cpp" />
     <ClCompile Include="CNetworkPlayerStats.cpp" />
     <ClCompile Include="Commands\Commands\CCommandAddChatMessage.cpp" />
     <ClCompile Include="CCore.cpp" />
@@ -141,6 +135,12 @@ echo "Output files can be found at $(TargetDir)"</Command>
     <ClCompile Include="CDebugVehicleSpawner.cpp" />
     <ClCompile Include="CDriveBy.cpp" />
     <ClCompile Include="CStatsSync.cpp" />
+    <ClCompile Include="DiscordRPC\SDK\src\connection_win.cpp" />
+    <ClCompile Include="DiscordRPC\SDK\src\discord_register_win.cpp" />
+    <ClCompile Include="DiscordRPC\SDK\src\discord_rpc.cpp" />
+    <ClCompile Include="DiscordRPC\SDK\src\dllmain.cpp" />
+    <ClCompile Include="DiscordRPC\SDK\src\rpc_connection.cpp" />
+    <ClCompile Include="DiscordRPC\SDK\src\serialization.cpp" />
     <ClCompile Include="Hooks\StatsHooks.cpp" />
     <ClCompile Include="Tasks\CTaskComplexEnterCarAsPassengerTimed.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -179,6 +179,7 @@ echo "Output files can be found at $(TargetDir)"</Command>
   <ItemGroup>
     <ClInclude Include="CAimSync.h" />
     <ClInclude Include="CChat.h" />
+    <ClInclude Include="CDiscordRPC.h" />
     <ClInclude Include="CNetworkPlayerStats.h" />
     <ClInclude Include="Commands\Commands\CCommandAddChatMessage.h" />
     <ClInclude Include="CCore.h" />
@@ -191,6 +192,48 @@ echo "Output files can be found at $(TargetDir)"</Command>
     <ClInclude Include="CDebugVehicleSpawner.h" />
     <ClInclude Include="CDriveBy.h" />
     <ClInclude Include="CStatsSync.h" />
+    <ClInclude Include="DiscordRPC\SDK\include\discord_register.h" />
+    <ClInclude Include="DiscordRPC\SDK\include\discord_rpc.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\backoff.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\connection.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\msg_queue.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\allocators.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\document.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\encodedstream.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\encodings.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\error\en.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\error\error.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\filereadstream.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\filewritestream.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\fwd.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\biginteger.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\diyfp.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\dtoa.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\ieee754.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\itoa.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\meta.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\pow10.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\regex.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\stack.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\strtod.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\swap.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\istreamwrapper.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\memorybuffer.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\memorystream.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\msinttypes\inttypes.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\msinttypes\stdint.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\pointer.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\prettywriter.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\rapidjson.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\reader.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\schema.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\stream.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\stringbuffer.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\writer.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rpc_connection.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\serialization.h" />
     <ClInclude Include="Hooks\StatsHooks.h" />
     <ClInclude Include="Tasks\CTaskComplexEnterCarAsPassengerTimed.h" />
     <ClInclude Include="eNetworkEntityType.h" />
