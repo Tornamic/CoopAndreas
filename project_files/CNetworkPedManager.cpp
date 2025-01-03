@@ -65,6 +65,8 @@ void CNetworkPedManager::Remove(CNetworkPed* ped)
 
 void CNetworkPedManager::Update()
 {
+	CNetworkPedManager::RemoveHostedUnused();
+
 	for (CNetworkPed* networkPed : m_pPeds)
 	{
 		if (!networkPed->m_bSyncing)
@@ -146,4 +148,22 @@ unsigned char CNetworkPedManager::AddToTempList(CNetworkPed* networkPed)
 	}
 
 	return 255;
+}
+
+void CNetworkPedManager::RemoveHostedUnused()
+{
+	for (auto it = CNetworkPedManager::m_pPeds.begin(); it != CNetworkPedManager::m_pPeds.end();)
+	{
+		if ((*it)->m_bSyncing)
+		{
+			CPed* ped = (*it)->m_pPed;
+			if (!IsPedPointerValid(ped))
+			{
+				delete* it;
+				it = m_pPeds.erase(it);
+				continue;
+			}
+		}
+		++it;
+	}
 }

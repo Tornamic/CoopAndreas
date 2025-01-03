@@ -88,6 +88,8 @@ CNetworkPed::~CNetworkPed()
 
 CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
 {
+    ped->field_54C += 5000; // m_nTimeTillWeNeedThisPed
+
     CNetworkPed* networkPed = new CNetworkPed();
 
     networkPed->m_pPed = ped;

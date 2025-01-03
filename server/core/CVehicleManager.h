@@ -12,6 +12,7 @@ public:
 	static void Remove(CVehicle* vehicle);
 	static CVehicle* GetVehicle(int vehicleid);
 	static int GetFreeID();
+	static void RemoveAllHostedAndNotify(CPlayer* player);
 };
 
 class CVehiclePackets
@@ -28,7 +29,8 @@ class CVehiclePackets
 			float rot;
 			unsigned char color1;
 			unsigned char color2;
-		
+			unsigned char createdBy;
+
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
 				auto player = CPlayerManager::GetPlayer(peer);
@@ -260,6 +262,11 @@ class CVehiclePackets
 		struct VehicleConfirm
 		{
 			unsigned char tempid;
+			int vehicleid;
+		};
+
+		struct AssignVehicleSyncer
+		{
 			int vehicleid;
 		};
 

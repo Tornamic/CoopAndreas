@@ -40,3 +40,23 @@ int CPedManager::GetFreeId()
 
 	return -1;
 }
+
+void CPedManager::RemoveAllHostedAndNotify(CPlayer* player)
+{
+	CPedPackets::PedRemove packet{};
+
+	for (auto it = CPedManager::m_pPeds.begin(); it != CPedManager::m_pPeds.end();)
+	{
+		if ((*it)->m_pSyncer == player)
+		{
+			packet.pedid = (*it)->m_nPedId;
+			CNetwork::SendPacketToAll(CPacketsID::PED_REMOVE, &packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE, player->m_pPeer);
+			delete* it;
+			it = CPedManager::m_pPeds.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+}

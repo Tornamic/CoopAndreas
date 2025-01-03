@@ -22,6 +22,7 @@ class CPedManager
 		static void Remove(CPed* ped);
 		static CPed* GetPed(int pedid);
 		static int GetFreeId();
+		static void RemoveAllHostedAndNotify(CPlayer* player);
 
 		~CPedManager();
 

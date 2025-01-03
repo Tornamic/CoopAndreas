@@ -3,9 +3,8 @@
 #define MAX_SERVER_VEHICLES 200
 #define MAX_SERVER_PEDS 300
 #define RENDER_FONT_SIZE 12
-#define _DEV
+//#define _DEV
 //#define PACKET_DEBUG_MESSAGES
-//#define DEBUG_NOT_SYNCED_VEHICLES
 #define PURECALL (0x82263A)
 
 // networking ------------------------------------------------------------------------------

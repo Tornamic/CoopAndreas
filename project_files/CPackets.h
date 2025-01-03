@@ -39,7 +39,8 @@ enum CPacketsID : unsigned short
 	VEHICLE_CONFIRM,
 	PED_CONFIRM,
 	PLAYER_STATS,
-	REBUILD_PLAYER
+	REBUILD_PLAYER,
+	RESPAWN_PLAYER
 };
 
 class CPackets
@@ -126,6 +127,7 @@ public:
 		float rot;
 		unsigned char color1;
 		unsigned char color2;
+		unsigned char createdBy;
 	};
 
 	struct VehicleRemove
@@ -360,5 +362,15 @@ public:
 	{
 		int playerid;
 		CPedClothesDesc clothesData;
+	};
+
+	struct AssignVehicleSyncer
+	{
+		int vehicleid;
+	};
+
+	struct RespawnPlayer
+	{
+		int playerid;
 	};
 };

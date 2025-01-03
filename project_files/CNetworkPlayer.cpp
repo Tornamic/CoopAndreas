@@ -21,18 +21,7 @@ CNetworkPlayer::~CNetworkPlayer()
 
 	if (m_pPed == nullptr) return;
 
-	if (m_pPed->m_pVehicle != nullptr)
-	{
-		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
-	}
-
-	DWORD dwPedPtr = (DWORD)m_pPed;
-
-	// call destroy method
-	_asm mov ecx, dwPedPtr
-	_asm mov ebx, [ecx]; vtable
-	_asm push 1
-	_asm call[ebx]; destroy
+	this->DestroyPed();
 }
 
 CNetworkPlayer::CNetworkPlayer(int id, CVector position)
@@ -63,6 +52,44 @@ void CNetworkPlayer::CreatePed(int id, CVector position)
 	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("JEANSDENIM", "JEANS", 2);
 	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("SNEAKERBINCBLK", "SNEAKER", 3);
 	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("PLAYER_FACE", "HEAD", 1);
+	CClothes::RebuildPlayer(m_pPed, false);
+}
+
+void CNetworkPlayer::DestroyPed()
+{
+	if (m_pPed->m_pVehicle)
+	{
+		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
+	}
+
+	CWorld::Remove(m_pPed);
+
+	// destroy the ped
+	uintptr_t pedPtr = (uintptr_t)m_pPed;
+	__asm
+	{
+		mov ecx, pedPtr
+		mov ebx, [ecx] // vtable addr
+		push 1 // unused arg
+		call[ebx] // call destructor
+	}
+}
+
+void CNetworkPlayer::Respawn()
+{
+	if (m_pPed)
+	{
+		this->DestroyPed();
+	}
+
+	CVector pos{};
+
+	if (m_lOnFoot)
+	{
+		pos = m_lOnFoot->position;
+	}
+
+	this->CreatePed(m_iPlayerId, pos);
 }
 
 int CNetworkPlayer::GetInternalId() // most used for CWorld::PlayerInFocus

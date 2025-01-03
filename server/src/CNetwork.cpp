@@ -104,6 +104,7 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PLAYER_AIM_SYNC, CPlayerPackets::PlayerAimSync::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_STATS, CPlayerPackets::PlayerStats::Handle);
     CNetwork::AddListener(CPacketsID::REBUILD_PLAYER, CPlayerPackets::RebuildPlayer::Handle);
+    CNetwork::AddListener(CPacketsID::RESPAWN_PLAYER, CPlayerPackets::RespawnPlayer::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -284,6 +285,9 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
     {
         vehicle->m_pPlayers[player->m_nSeatId] = nullptr;
     }
+
+    CPedManager::RemoveAllHostedAndNotify(player);
+    CVehicleManager::RemoveAllHostedAndNotify(player);
 
     // remove
     CPlayerManager::Remove(player);

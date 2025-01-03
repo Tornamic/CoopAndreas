@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CNetworkVehicle.h"
 
-CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2)
+CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2, unsigned char createdBy)
 {
     if (auto vehicle = CNetworkVehicleManager::GetVehicle(vehicleid))
     {
@@ -17,6 +17,7 @@ CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float 
     m_bSyncing = false;
     m_nTempId = 255;
     m_nModelId = modelid;
+    m_nCreatedBy = createdBy;
 
     if (!CreateVehicle(vehicleid, modelid, pos, rotation, color1, color2))
         return;
@@ -94,7 +95,7 @@ CNetworkVehicle::~CNetworkVehicle()
     }
     else
     {
-        if (m_pVehicle && (unsigned int)*(void***)m_pVehicle != 0x863C40)
+        if (m_pVehicle && CUtil::IsValidEntityPtr(m_pVehicle))
         {
             plugin::Command<Commands::DELETE_CAR>(CPools::GetVehicleRef(m_pVehicle));
         }
@@ -111,6 +112,8 @@ bool CNetworkVehicle::HasDriver()
 
 CNetworkVehicle* CNetworkVehicle::CreateHosted(CVehicle* vehicle)
 {
+    vehicle->m_nTimeTillWeNeedThisCar += 5000;
+
     CNetworkVehicle* networkVehicle = new CNetworkVehicle();
 
     networkVehicle->m_pVehicle = vehicle;
@@ -119,6 +122,7 @@ CNetworkVehicle* CNetworkVehicle::CreateHosted(CVehicle* vehicle)
     networkVehicle->m_nModelId = vehicle->m_nModelIndex;
     networkVehicle->m_nPaintJob = (char)vehicle->m_nRemapTxd;
     networkVehicle->m_nTempId = CNetworkVehicleManager::AddToTempList(networkVehicle);
+    networkVehicle->m_nCreatedBy = vehicle->m_nCreatedBy;
 
     CPackets::VehicleSpawn vehicleSpawnPacket{};
     vehicleSpawnPacket.vehicleid = -1;
@@ -128,6 +132,7 @@ CNetworkVehicle* CNetworkVehicle::CreateHosted(CVehicle* vehicle)
     vehicleSpawnPacket.rot = vehicle->GetHeading();
     vehicleSpawnPacket.color1 = vehicle->m_nPrimaryColor;
     vehicleSpawnPacket.color2 = vehicle->m_nSecondaryColor;
+    vehicleSpawnPacket.createdBy = vehicle->m_nCreatedBy;
     CNetwork::SendPacket(CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
 
     return networkVehicle;
