@@ -681,7 +681,7 @@ void CPacketHandler::PlayerChatMessage__Handle(void* data, int size)
 
 	if (player)
 	{
-		CChat::AddMessage("%s(%d): %s", player->GetName(), player->m_iPlayerId, packet->message);
+		CChat::SendPlayerMessage(player->GetName(), player->m_iPlayerId, packet->message);
 	}
 }
 
