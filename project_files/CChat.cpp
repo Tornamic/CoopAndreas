@@ -1,17 +1,19 @@
 #include "stdafx.h"
 #include "CDXFont.h"
 
-std::vector<CChatMessage> CChat::m_aMessages = {};
+std::vector<CChatMessage> CChat::m_aMessages{};
+std::vector<std::string> CChat::m_aPrevMessages{};
 
 std::string CChat::m_sInputText = "";
 bool CChat::m_bInputActive = false;
 size_t CChat::m_nCaretPos = 0;
+uint8_t CChat::m_iCurrentPrevMessageIndex = 0;
 
-unsigned char patch_disable_inputs[] = {0x00, 0x00, 0x00, 0x00, 0x00};
+uint8_t patch_disable_inputs[] = {0x00, 0x00, 0x00, 0x00, 0x00};
 
 void CChat::AddMessage(const std::string& message)
 {
-    m_aMessages.push_back(CChatMessage{message, GetTickCount()});
+    m_aMessages.push_back(CChatMessage{message, GetTickCount(), true});
 }
 
 void CChat::AddMessage(const char* format, ...)
@@ -24,54 +26,132 @@ void CChat::AddMessage(const char* format, ...)
     AddMessage(std::string(buffer));
 }
 
-void CChat::Draw()
+void CChat::AddPreviousMessage(const std::string& message)
 {
-    if (CDXFont::m_pD3DXFont)
+    if (std::find(m_aPrevMessages.begin(), m_aPrevMessages.end(), message) != m_aPrevMessages.end())
     {
-        if (CChat::m_aMessages.size() > 0)
+        return;
+    }
+
+    if ((uint8_t)m_aPrevMessages.size() >= CChat::MAX_PREV_MESSAGES)
+    {
+        m_aPrevMessages.erase(m_aPrevMessages.begin());
+
+        if (m_iCurrentPrevMessageIndex > 0)
         {
-            int tickCount = GetTickCount();
-            int i = CChat::m_aMessages.size() - 1;
-            int j = 0;
-
-            if (!m_bInputActive)
-            {
-                for (int k = 0, l = i; k < 15 && l >= 0; k++, l--)
-                {
-                    if (tickCount - CChat::m_aMessages[l].m_nCreatedAt <= 11000)
-                        j++;
-                }
-            }
-            else j = 15 - 1;
-
-
-            while (i >= 0 && j >= 0)
-            {
-                DWORD messageAge = tickCount - CChat::m_aMessages[i].m_nCreatedAt;
-
-                if (messageAge <= 10000 || m_bInputActive)
-                {
-                    CDXFont::Draw(10, RsGlobal.maximumHeight / 3 + j * RENDER_FONT_SIZE, CChat::m_aMessages[i].m_message.c_str(), D3DCOLOR_RGBA(255, 255, 0, 255));
-                    j--;
-                }
-                else if (messageAge <= 11000)
-                {
-                    int alpha = 255 - (messageAge - 10000) * 255 / 1000;
-                    CDXFont::Draw(10, RsGlobal.maximumHeight / 3 + j * RENDER_FONT_SIZE, CChat::m_aMessages[i].m_message.c_str(), D3DCOLOR_RGBA(255, 255, 0, alpha));
-                    j--;
-                }
-
-                i--;
-            }
+            m_iCurrentPrevMessageIndex--;
         }
+    }
+
+    m_aPrevMessages.push_back(message);
+
+    if ((uint8_t)m_aPrevMessages.size() < CChat::MAX_PREV_MESSAGES)
+    {
+        m_iCurrentPrevMessageIndex = (uint8_t)m_aPrevMessages.size();
     }
 }
 
-void CChat::ShowInput(bool show)
+std::vector<std::string> CChat::SeparateMessageToChunks(const std::string& message)
 {
-    m_bInputActive = show;
+    size_t start = 0;
+    uint8_t chunkCount = 0;
+    size_t length = message.length();
+    std::vector<std::string> chunks{};
 
-    if (show)
+    while (start < length)
+    {
+        size_t chunkSize = min(CChat::MESSAGE_CHUNK_SIZE, length - start);
+        if (chunkSize == CChat::MESSAGE_CHUNK_SIZE)
+        {
+            size_t lastSpace = message.rfind(' ', start + chunkSize);
+            if (lastSpace != std::string::npos && lastSpace > start)
+            {
+                chunkSize = lastSpace - start;
+            }
+        }
+
+        std::string messagePart = message.substr(start, chunkSize);
+        chunks.push_back(messagePart);
+
+        start += chunkSize;
+        while (start < length && message[start] == ' ')
+        {
+            start++;
+        }
+
+        chunkCount++;
+    }
+
+    return chunks;
+}
+
+void CChat::SendPlayerMessage(const char* name, int id, const char* message)
+{
+    std::vector<std::string> chunks = CChat::SeparateMessageToChunks(message);
+
+    for (size_t i = 0; i < chunks.size(); i++)
+    {
+        if (i == 0)
+        {
+            CChat::AddMessage("{FF2D2D}%s(%d): {FFFFFF}%s", name, id, chunks[i].c_str());
+            continue;
+        }
+
+        CChat::AddMessage("{FFFFFF}%s", chunks[i].c_str());
+    }
+}
+
+void CChat::Draw()
+{
+    if (!CDXFont::m_pD3DXFont || CChat::m_aMessages.empty())
+        return;
+
+    int tickCount = GetTickCount();
+    uint8_t drawnMessages = 0;
+
+    for (auto it = CChat::m_aMessages.rbegin(); it != CChat::m_aMessages.rend() && drawnMessages < CChat::MAX_MESSAGES; ++it)
+    {
+		if (!it->m_bVisible && !m_bInputActive)
+		{
+			continue;
+		}
+
+        size_t alpha = 255;
+
+        if (!m_bInputActive)
+        {
+            DWORD messageAge = tickCount - it->m_nCreatedAt;
+
+            if (messageAge > CChat::MAX_MESSAGE_AGE)
+            {
+                size_t fadeTime = messageAge - CChat::MAX_MESSAGE_AGE;
+                if (fadeTime <= CChat::MESSAGE_DISAPPEAR_TIME)
+                {
+                    alpha = 255 - ((fadeTime * 255) / CChat::MESSAGE_DISAPPEAR_TIME);
+                }
+                else
+                {
+                    it->m_bVisible = false;
+                    continue;
+                }
+            }
+        }
+
+        CDXFont::Draw(10, RsGlobal.maximumHeight / 5 + (CChat::MAX_MESSAGES - drawnMessages) * CDXFont::m_fFontSize, it->m_message.c_str(), DEFAULT_CHAT_COLOR(alpha));
+        drawnMessages++;
+    }
+
+    if (m_aMessages.size() > CChat::MAX_MESSAGES)
+    {
+        CChat::m_aMessages.erase(CChat::m_aMessages.begin());
+    }
+}
+
+void CChat::ToggleInput(bool toggle)
+{
+    m_bInputActive = toggle;
+
+    if (toggle)
     {
         patch::GetRaw(0x53BEE6, patch_disable_inputs, 5); // save bytes, we cant just nop it without remembering
         patch::Nop(0x53BEE6, 5);
@@ -91,16 +171,15 @@ void CChat::DrawInput()
     if (!m_bInputActive)
         return;
 
-    std::string caretSymbol = (GetTickCount() % 1000 > 500) ? "|" : " "; // caret blinking
-
+    const std::string caretSymbol = (GetTickCount() % 1000 > 500) ? "|" : " "; // caret blinking
     std::string displayText = m_sInputText;
 
     if (m_nCaretPos >= 0 && m_nCaretPos <= displayText.length())
     {
         displayText.insert(m_nCaretPos, caretSymbol);
     }
-
-    CDXFont::Draw(10, RsGlobal.maximumHeight / 3 + 15 * RENDER_FONT_SIZE, (": " + displayText).c_str(), D3DCOLOR_RGBA(255, 255, 255, 255));
+    
+    CDXFont::Draw(10, RsGlobal.maximumHeight / 5 + 16 * CDXFont::m_fFontSize, (": " + displayText).c_str(), D3DCOLOR_RGBA(255, 255, 255, 255));
 }
 
 void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -113,9 +192,9 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         if (wParam < 32)
             return;
 
-        if (m_sInputText.length() < 128)  // text typing
+        if (m_sInputText.length() < CChat::MAX_MESSAGE_SIZE)  // text typing
         {
-            m_sInputText.insert(m_nCaretPos, 1, static_cast<char>(wParam));
+            m_sInputText.insert(m_nCaretPos, 1, (char)(wParam));
             m_nCaretPos++;
         }
     }
@@ -132,7 +211,47 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             if (m_nCaretPos < m_sInputText.length())
                 m_nCaretPos++;
         }
+        else if (wParam == VK_UP)
+        {
+            if (!m_sInputText.empty())
+            {
+                CChat::AddPreviousMessage(m_sInputText);
+            }
 
+            if (!m_aPrevMessages.empty())
+            {
+                if (m_iCurrentPrevMessageIndex > 0)
+                {
+                    m_iCurrentPrevMessageIndex--;
+                }
+
+                m_sInputText = m_aPrevMessages[m_iCurrentPrevMessageIndex];
+                m_nCaretPos = m_sInputText.length();
+            }
+        }
+        else if (wParam == VK_DOWN)
+        {
+            if (!m_sInputText.empty())
+            {
+                CChat::AddPreviousMessage(m_sInputText);
+            }
+
+            if (!m_aPrevMessages.empty())
+            {
+                m_iCurrentPrevMessageIndex++;
+
+                if (m_iCurrentPrevMessageIndex >= (uint8_t)m_aPrevMessages.size())
+                {
+                    m_nCaretPos = 0;
+                    m_sInputText = "";
+                    m_iCurrentPrevMessageIndex = (uint8_t)m_aPrevMessages.size();
+                    return;
+                }
+               
+                m_sInputText = m_aPrevMessages[m_iCurrentPrevMessageIndex];
+                m_nCaretPos = m_sInputText.length();
+            }
+        }
         else if (wParam == VK_BACK)  // backspace
         {
             if (m_nCaretPos > 0)
@@ -141,38 +260,83 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 m_nCaretPos--;
             }
         }
-
         else if (wParam == VK_DELETE)  // delete
         {
-            if (m_nCaretPos < m_sInputText.length())
+            if (GetKeyState(VK_SHIFT) & 0x8000)
+            {
+                m_sInputText.clear();
+                m_nCaretPos = 0;
+            }
+            else if (m_nCaretPos < m_sInputText.length())
                 m_sInputText.erase(m_nCaretPos, 1);
+        }
+        else
+        {
+            if (message == WM_PASTE)
+            {
+                if (!OpenClipboard(nullptr))
+                    return;
+
+                HANDLE hData = GetClipboardData(CF_TEXT);
+                if (!hData)
+                {
+                    CloseClipboard();
+                    return;
+                }
+
+                char* pszText = (char*)(GlobalLock(hData));
+                if (!pszText)
+                {
+                    CloseClipboard();
+                    return;
+                }
+
+                std::string clipboardText(pszText);
+                GlobalUnlock(hData);
+
+                size_t remain = CChat::MAX_MESSAGE_SIZE - m_sInputText.length();
+                if (clipboardText.size() > remain)
+                {
+                    clipboardText.resize(remain);
+                }
+
+                m_sInputText.insert(m_nCaretPos, clipboardText);
+                m_nCaretPos += clipboardText.size();
+
+                CloseClipboard();
+            }
         }
     }
     else if (message == WM_KEYUP)
     {
         if (wParam == VK_F6)  // chat toggle
         {
-            CChat::ShowInput(!m_bInputActive);
+            if (!CNetwork::m_bConnected)
+                return;
+
+            CChat::ToggleInput(!m_bInputActive);
         }
         else if (wParam == VK_ESCAPE && m_bInputActive)
         {
-            CChat::ShowInput(false);
+            CChat::ToggleInput(false);
         }
         else if (wParam == VK_RETURN && m_bInputActive)
         {
-            CChat::ShowInput(false);
+            CChat::ToggleInput(false);
 
-            if (!m_sInputText.empty())
+            if (m_sInputText.empty())
             {
-                CPackets::PlayerChatMessage packet{};
-                strcpy_s(packet.message, m_sInputText.c_str());
-                CNetwork::SendPacket(CPacketsID::PLAYER_CHAT_MESSAGE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
-                
-                CChat::AddMessage("%s(%d): %s", CLocalPlayer::m_Name, CNetworkPlayerManager::m_nMyId, packet.message);
-                
-                m_sInputText.clear();
-                m_nCaretPos = 0;
+                return;
             }
+
+            CPackets::PlayerChatMessage packet{};
+            strcpy_s(packet.message, m_sInputText.c_str());
+            CChat::SendPlayerMessage(CLocalPlayer::m_Name, CNetworkPlayerManager::m_nMyId, packet.message);
+            CChat::AddPreviousMessage(m_sInputText);
+            CNetwork::SendPacket(CPacketsID::PLAYER_CHAT_MESSAGE, &packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE);
+
+            m_sInputText.clear();
+            m_nCaretPos = 0;
         }
     }
 }

@@ -7,7 +7,7 @@ static void __cdecl CMenuManager__DrawFrontEnd_FixChat_Hook(float alpha)
     CFont::SetAlphaFade(alpha);
 
     if (CChat::m_bInputActive)
-        CChat::ShowInput(false);
+        CChat::ToggleInput(false);
 }
 
 static void __cdecl CClock__RestoreClock_Hook()
