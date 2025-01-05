@@ -24,8 +24,18 @@ public:
 
 	static void ProcessCommand(uint16_t opcode, CRunningScript* script)
 	{
-		assert(opcode >= MIN_CUSTOM_COMMAND);
-		assert(opcode <= MAX_CUSTOM_COMMAND);
+		//assert(opcode >= MIN_CUSTOM_COMMAND);
+		//assert(opcode <= MAX_CUSTOM_COMMAND);
+
+		bool inRange = opcode >= MIN_CUSTOM_COMMAND && opcode <= MAX_CUSTOM_COMMAND;
+
+		if (!inRange)
+		{
+			char message[128];
+			sprintf_s(message, sizeof message, "Invalid custom opcode [%X] script name '%s', base ip '%d', cur ip '%d'", opcode, script->m_szName, script->m_pBaseIP, script->m_pCurrentIP);
+
+			MessageBox(0, message, "Invalid opcode processing", MB_ICONERROR);
+		}
 
 		size_t idx = opcode - MIN_CUSTOM_COMMAND;
 

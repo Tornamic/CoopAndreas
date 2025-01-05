@@ -49,5 +49,7 @@ public:
 	static void PlayerStats__Handle(void* data, int size);
 	static void RebuildPlayer__Handle(void* data, int size);
 	static void RebuildPlayer__Trigger();
+	static void AssignVehicleSyncer__Handle(void* data, int size);
+	static void RespawnPlayer__Handle(void* data, int size);
 };
 

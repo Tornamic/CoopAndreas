@@ -14,5 +14,6 @@ public:
     static void UpdateIdle();
     static void UpdatePassenger(CVehicle* vehicle, CPlayerPed* localPlayer);
     static unsigned char AddToTempList(CNetworkVehicle* networkVehicle);
+    static void RemoveHostedUnused();
 };
 

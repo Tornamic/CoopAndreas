@@ -279,7 +279,8 @@ void CPacketHandler::VehicleSpawn__Handle(void* data, int size)
 		packet->pos,
 		packet->rot,
 		packet->color1,
-		packet->color2
+		packet->color2,
+		packet->createdBy
 	);
 	CNetworkVehicleManager::Add(vehicle);
 }
@@ -334,8 +335,8 @@ void CPacketHandler::VehicleIdleUpdate__Handle(void* data, int size)
 	if (vehicle == nullptr)
 		return;
 
-	if (vehicle->m_pVehicle == nullptr)
-		vehicle->CreateVehicle(vehicle->m_nVehicleId, vehicle->m_nModelId, packet->pos, 0.f, packet->color1, packet->color2);
+	if (!vehicle->m_pVehicle)
+		return;
 
 	if (vehicle->m_pVehicle->m_matrix == nullptr)
 		return;
@@ -744,7 +745,7 @@ CPackets::PedOnFoot* CPacketHandler::PedOnFoot__Collect(CNetworkPed* networkPed)
 	if (useGun)
 	{
 		packet->aiming = true;
-		packet->weaponAim = useGun->m_pTarget && useGun->m_vecTarget.x == 0.f || useGun->m_vecTarget.y == 0.f ? useGun->m_pTarget->GetPosition() : useGun->m_vecTarget;
+		packet->weaponAim = useGun->m_pTarget && (useGun->m_vecTarget.x == 0.f || useGun->m_vecTarget.y == 0.f) ? useGun->m_pTarget->GetPosition() : useGun->m_vecTarget;
 	}
 
 	packet->fightingStyle = ped->m_nFightingStyle;
@@ -1167,4 +1168,37 @@ void CPacketHandler::RebuildPlayer__Trigger()
 	CPackets::RebuildPlayer packet{};
 	packet.clothesData = *(FindPlayerPed(0)->m_pPlayerData->m_pPedClothesDesc);
 	CNetwork::SendPacket(CPacketsID::REBUILD_PLAYER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+}
+
+// AssignVehicleSyncer
+
+void CPacketHandler::AssignVehicleSyncer__Handle(void* data, int size)
+{
+	CPackets::AssignVehicleSyncer* packet = (CPackets::AssignVehicleSyncer*)data;
+	
+	CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
+
+	if (!networkVehicle)
+		return;
+
+	if (networkVehicle->m_bSyncing)
+	{
+
+	}
+	else
+	{
+
+	}
+}
+
+// RespawnPlayer
+
+void CPacketHandler::RespawnPlayer__Handle(void* data, int size)
+{
+	CPackets::RespawnPlayer* packet = (CPackets::RespawnPlayer*)data;
+	
+	if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(packet->playerid))
+	{
+		networkPlayer->Respawn();
+	}
 }

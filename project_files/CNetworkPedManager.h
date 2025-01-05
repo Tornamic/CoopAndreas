@@ -14,5 +14,6 @@ public:
 	static void Process();
 	static void AssignHost();
 	static unsigned char AddToTempList(CNetworkPed* networkPed);
+	static void RemoveHostedUnused();
 };
 

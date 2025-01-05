@@ -198,28 +198,6 @@ public:
 							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, ("p " + std::to_string(networkPed->m_nPedId) + "\nS " + std::to_string(networkPed->m_bSyncing)).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
 						}
 					}
-#ifdef DEBUG_NOT_SYNCED_VEHICLES
-					int yOffset = 200;
-
-					for (auto vehicle : CPools::ms_pVehiclePool)
-					{
-						if (CNetworkVehicleManager::GetVehicle(vehicle) == nullptr)
-						{
-							char buffer[256];
-
-							sprintf(buffer, "Vehicle\n0x%x\n", &vehicle);
-
-							for (void* addr : WorldHooks::m_aVehicleStackMap[vehicle])
-							{
-								sprintf(buffer, "  0x%x\n", addr);
-							}
-
-							CDXFont::Draw(200, yOffset, buffer, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-							yOffset += 200;
-						}
-					}
-#endif // DEBUG_NOT_SYNCED_VEHICLES
 				}
 #endif // _DEV
 			};

@@ -8,9 +8,6 @@ constexpr int MAX_FLOAT_STATS = sizeof(m_afStoredFloatStats) / sizeof(float);
 
 std::array<eStats, CStatsSync::SYNCED_STATS_COUNT> CStatsSync::m_aeSyncedStats =
 {
-	STAT_FAT,
-	STAT_STAMINA,
-	STAT_MUSCLE,
     STAT_PISTOL_SKILL,
     STAT_SILENCED_PISTOL_SKILL,
     STAT_DESERT_EAGLE_SKILL,

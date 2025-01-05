@@ -38,18 +38,18 @@ int main(int argc, char *argv[])
 	printf("- coopandreasmod@gmail.com\n\n");
 
 	printf("[!] : CoopAndreas Server \n");
-	printf("[!] : Version : X.X.X.X\n");
+#ifdef DEBUG
+	char config[] = "Debug";
+#else
+	char config[] = "Release";
+#endif
+
+	printf("[!] : Version : X.X.X.X, %s %s\n", config, sizeof(void*) == 8 ? "x64" : "x86");
 #if defined (_WIN32)
 	printf("[!] : Platform : Microsoft Windows \n");
 #else
 	printf("[!] : Platform : GNU/Linux | BSD \n");
 #endif
-	/* Tornamic 11.12.2024 23:42
-		я подготовил сервер под разделенную синхронизацию, поправил текст и порядок в консоли,
-		завтра на свежую голову закончить до конца, начать с WorldHooks.cpp, там создание
-		сетевой тачки и получение айди от сервака, убрать из тачек CLocalPlayer::m_bIsHost
-		и перевести на CNetworkVehicle.m_bSyncing
-	*/
 	CNetwork::Init(6767);
 	return 0;
 }

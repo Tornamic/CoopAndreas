@@ -77,9 +77,19 @@ void CNetworkPlayerNameTag::Process()
 
 	for (auto player : CNetworkPlayerManager::m_pPlayers)
 	{
+		if (!player->m_pPed)
+			continue;
+
 		CVector localPlayerPos = FindPlayerCoors(0);
 		CVector networkPlayerPos{};
-		player->m_pPed->GetBonePosition(*(RwV3d*)&networkPlayerPos, 5, false);
+
+		if (player->m_pPed->m_pRwClump)
+			player->m_pPed->GetBonePosition(*(RwV3d*)&networkPlayerPos, 5, false);
+		else
+		{
+			networkPlayerPos = player->m_pPed->GetPosition();
+			networkPlayerPos.z += 0.5f;
+		}
 
 		unsigned char alpha = GetHudAlpha((localPlayerPos - networkPlayerPos).Magnitude());
 

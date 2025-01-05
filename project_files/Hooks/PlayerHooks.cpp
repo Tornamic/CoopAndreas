@@ -139,6 +139,14 @@ static void __fastcall CPlayerPed__dctor_Hook(CPlayerPed* This, int)
     plugin::CallMethod<0x6093B0, CPlayerPed*>(This);
 }
 
+void CReferences__RemoveReferencesToPlayer_Hook()
+{
+    plugin::Call<0x571AD0>(); // CReferences::RemoveReferencesToPlayer();
+    
+    CPackets::RespawnPlayer packet{};
+    CNetwork::SendPacket(CPacketsID::RESPAWN_PLAYER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+}
+
 void PlayerHooks::InjectHooks()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -155,4 +163,7 @@ void PlayerHooks::InjectHooks()
 
     // fix CPlayerPed dctor crash
     patch::RedirectCall(0x60A9A3, CPlayerPed__dctor_Hook);
+
+    // called when the player respawns after being busted or wasted
+    patch::RedirectCall(0x443082, CReferences__RemoveReferencesToPlayer_Hook);
 }

@@ -27,6 +27,8 @@ public:
 	CNetworkPlayer::CNetworkPlayer(int id, CVector position);
 
 	void CreatePed(int id, CVector position);
+	void DestroyPed();
+	void Respawn();
 	int GetInternalId();
 	char* GetName();
 	char GetWeaponSkill(eWeaponType weaponType);

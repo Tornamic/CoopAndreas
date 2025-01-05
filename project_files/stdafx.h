@@ -10,7 +10,6 @@
 #define MAX_RENDER_FONT_SIZE 23
 #define _DEV
 //#define PACKET_DEBUG_MESSAGES
-//#define DEBUG_NOT_SYNCED_VEHICLES
 #define PURECALL (0x82263A)
 
 // networking ------------------------------------------------------------------------------

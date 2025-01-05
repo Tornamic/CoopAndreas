@@ -66,6 +66,9 @@ void CNetworkVehicleManager::UpdateDriver(CVehicle* vehicle)
 
 void CNetworkVehicleManager::UpdateIdle()
 {
+
+	CNetworkVehicleManager::RemoveHostedUnused();
+
 	for (int i = 0; i != m_pVehicles.size(); i++)
 	{
 		if (m_pVehicles[i]->m_pVehicle == nullptr)
@@ -100,4 +103,22 @@ unsigned char CNetworkVehicleManager::AddToTempList(CNetworkVehicle* networkVehi
 	}
 
 	return 255;
+}
+
+void CNetworkVehicleManager::RemoveHostedUnused()
+{
+	for (auto it = CNetworkVehicleManager::m_pVehicles.begin(); it != CNetworkVehicleManager::m_pVehicles.end();)
+	{
+		if ((*it)->m_bSyncing)
+		{
+			CVehicle* vehicle = (*it)->m_pVehicle;
+			if (!IsVehiclePointerValid(vehicle))
+			{
+				delete* it;
+				it = m_pVehicles.erase(it);
+				continue;
+			}
+		}
+		++it;
+	}
 }
