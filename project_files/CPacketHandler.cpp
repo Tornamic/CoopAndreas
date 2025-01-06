@@ -1022,10 +1022,7 @@ void CPacketHandler::PedPassengerSync__Handle(void* data, int size)
 
 	if (!ped->m_pPed->m_nPedFlags.bInVehicle || (ped->m_pPed->m_nPedFlags.bInVehicle && vehicle->m_pVehicle->m_pDriver == ped->m_pPed))
 	{
-		int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle->m_pVehicle, packet->seatid);
-		CTaskSimpleCarSetPedInAsPassenger task = CTaskSimpleCarSetPedInAsPassenger(vehicle->m_pVehicle, doorId, 0);
-		task.m_bWarpingInToCar = true;
-		task.ProcessPed(ped->m_pPed);
+		ped->WarpIntoVehiclePassenger(vehicle->m_pVehicle, packet->seatid);
 	}
 
 	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);

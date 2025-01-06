@@ -21,6 +21,9 @@ public:
 	float m_fSteerAngle = 0.0f;
 
 	static CNetworkPed* CreateHosted(CPed* ped);
+	void WarpIntoVehicleDriver(CVehicle* vehicle);
+	void WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid);
+	void RemoveFromVehicle(CVehicle* vehicle);
 	CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy);
 	~CNetworkPed();
 };
