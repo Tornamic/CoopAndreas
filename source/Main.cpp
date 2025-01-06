@@ -2,6 +2,7 @@
 #include "../project_files/CDXFont.h"
 #include <Hooks/WorldHooks.h>
 #include "CCutsceneMgr.h"
+#include <CDiscordRPCMgr.h>
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
@@ -50,6 +51,7 @@ public:
 			};
 		Events::gameProcessEvent += []
 			{
+				CDiscordRPCMgr::Update();
 				CDebugVehicleSpawner::Process();
 
 				if (CNetwork::m_bConnected)

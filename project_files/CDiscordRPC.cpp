@@ -18,16 +18,11 @@ void CDiscordRPC::Init()
 	Discord_UpdatePresence(&presence);
 }
 
-void CDiscordRPC::SetState(std::string state)
-{
-	CDiscordRPC::state = state;
-	presence.state = state.c_str();
-	Discord_UpdatePresence(&presence);
-}
-
-void CDiscordRPC::SetDetails(std::string details)
+void CDiscordRPC::SetDetailsAndState(std::string details, std::string state)
 {
 	CDiscordRPC::details = details;
 	presence.details = details.c_str();
+	CDiscordRPC::state = state;
+	presence.state = state.c_str();
 	Discord_UpdatePresence(&presence);
 }
