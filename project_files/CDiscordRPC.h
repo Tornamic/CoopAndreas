@@ -13,6 +13,5 @@ public:
 	inline static DiscordRichPresence presence;
 
 	static void Init();
-	static void SetState(std::string state);
-	static void SetDetails(std::string details);
+	static void SetDetailsAndState(std::string details, std::string state);
 };
