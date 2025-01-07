@@ -30,9 +30,15 @@ CNetworkPlayer::~CNetworkPlayer()
 
 CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 {
+	m_iPlayerId = id;
+
+	m_pPedClothesDesc.SetTextureAndModel("VEST", "VEST", 0);
+	m_pPedClothesDesc.SetTextureAndModel("JEANSDENIM", "JEANS", 2);
+	m_pPedClothesDesc.SetTextureAndModel("SNEAKERBINCBLK", "SNEAKER", 3);
+	m_pPedClothesDesc.SetTextureAndModel("PLAYER_FACE", "HEAD", 1);
+
 	CreatePed(id, position);
 
-	m_iPlayerId = id;
 
 	m_lOnFoot = new CPackets::PlayerOnFoot();
 }
@@ -52,10 +58,8 @@ void CNetworkPlayer::CreatePed(int id, CVector position)
 	// set player immunies, he now dont cares about pain
 	Command<Commands::SET_CHAR_PROOFS>(actorId, 0, 1, 1, 0, 0);
 
-	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("VEST", "VEST", 0);
-	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("JEANSDENIM", "JEANS", 2);
-	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("SNEAKERBINCBLK", "SNEAKER", 3);
-	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("PLAYER_FACE", "HEAD", 1);
+	*m_pPed->m_pPlayerData->m_pPedClothesDesc = m_pPedClothesDesc;
+
 	CClothes::RebuildPlayer(m_pPed, false);
 }
 

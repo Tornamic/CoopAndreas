@@ -1172,6 +1172,7 @@ void CPacketHandler::RebuildPlayer__Handle(void* data, int size)
 		CStatsSync::ApplyNetworkPlayerContext(networkPlayer);
 
 		*networkPlayer->m_pPed->m_pPlayerData->m_pPedClothesDesc = packet->clothesData;
+		networkPlayer->m_pPedClothesDesc = packet->clothesData;
 
 		CClothes::RebuildPlayer(networkPlayer->m_pPed, false);
 		

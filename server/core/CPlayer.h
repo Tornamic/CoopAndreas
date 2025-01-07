@@ -24,6 +24,14 @@ class CPlayer
 		int m_nVehicleId;
 		bool m_bCorrectVersion = false;
 		float m_afStats[14];
+		unsigned int m_anModelKeys[10];
+		unsigned int m_anTextureKeys[18];
+		float m_fFatStat;
+		float m_fMuscleStat;
+		struct {
+			uint8_t bStatsModified : 1;
+			uint8_t bClothesModified : 1;
+		} m_ucSyncFlags;
 
 		~CPlayer();
 };

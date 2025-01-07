@@ -213,6 +213,25 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         getNamePacket.playerid = i->m_iPlayerId;
         strcpy(getNamePacket.name, i->m_Name);
         CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_GET_NAME, &getNamePacket, sizeof (CPlayerPackets::PlayerGetName), ENET_PACKET_FLAG_RELIABLE);
+
+        if (i->m_ucSyncFlags.bStatsModified)
+        {
+            CPlayerPackets::PlayerStats statsPacket{};
+            statsPacket.playerid = i->m_iPlayerId;
+            memcpy(statsPacket.stats, i->m_afStats, sizeof(i->m_afStats));
+            CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_STATS, &statsPacket, sizeof(statsPacket), ENET_PACKET_FLAG_RELIABLE);
+        }
+
+        if (i->m_ucSyncFlags.bClothesModified)
+        {
+            CPlayerPackets::RebuildPlayer rebuildPacket{};
+            rebuildPacket.playerid = i->m_iPlayerId;
+            memcpy(rebuildPacket.m_anModelKeys, i->m_anModelKeys, sizeof(i->m_anModelKeys));
+            memcpy(rebuildPacket.m_anTextureKeys, i->m_anTextureKeys, sizeof(i->m_anTextureKeys));
+            rebuildPacket.m_fFatStat = i->m_fFatStat;
+            rebuildPacket.m_fMuscleStat = i->m_fMuscleStat;
+            CNetwork::SendPacket(event.peer, CPacketsID::REBUILD_PLAYER, &rebuildPacket, sizeof(rebuildPacket), ENET_PACKET_FLAG_RELIABLE);
+        }
     }
 
     for (auto i : CVehicleManager::m_pVehicles)

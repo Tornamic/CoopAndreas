@@ -22,7 +22,8 @@ public:
 	CPackets::PlayerAimSync m_aimSyncData;
 
 	CNetworkPlayerStats m_stats{};
-	
+	CPedClothesDesc m_pPedClothesDesc{};
+
 	CNetworkPlayer::~CNetworkPlayer();
 	CNetworkPlayer::CNetworkPlayer(int id, CVector position);
 

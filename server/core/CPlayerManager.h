@@ -227,9 +227,15 @@ class CPlayerPackets
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
-				CPlayerPackets::PlayerStats* packet = (CPlayerPackets::PlayerStats*)data;
-				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-				CNetwork::SendPacketToAll(CPacketsID::PLAYER_STATS, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+				if (auto player = CPlayerManager::GetPlayer(peer))
+				{
+					CPlayerPackets::PlayerStats* packet = (CPlayerPackets::PlayerStats*)data;
+					packet->playerid = player->m_iPlayerId;
+					CNetwork::SendPacketToAll(CPacketsID::PLAYER_STATS, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+
+					memcpy(player->m_afStats, packet->stats, sizeof(packet->stats));
+					player->m_ucSyncFlags.bStatsModified = true;
+				}
 			}
 		}; 
 		
@@ -244,9 +250,18 @@ class CPlayerPackets
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
-				CPlayerPackets::RebuildPlayer* packet = (CPlayerPackets::RebuildPlayer*)data;
-				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-				CNetwork::SendPacketToAll(CPacketsID::REBUILD_PLAYER, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+				if (auto player = CPlayerManager::GetPlayer(peer))
+				{
+					CPlayerPackets::RebuildPlayer* packet = (CPlayerPackets::RebuildPlayer*)data;
+					packet->playerid = player->m_iPlayerId;
+					CNetwork::SendPacketToAll(CPacketsID::REBUILD_PLAYER, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+
+					memcpy(player->m_anModelKeys, packet->m_anModelKeys, sizeof(player->m_anModelKeys));
+					memcpy(player->m_anTextureKeys, packet->m_anTextureKeys, sizeof(player->m_anTextureKeys));
+					player->m_fFatStat = packet->m_fFatStat;
+					player->m_fMuscleStat = packet->m_fMuscleStat;
+					player->m_ucSyncFlags.bClothesModified = true;
+				}
 			}
 		};
 
