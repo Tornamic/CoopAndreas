@@ -119,14 +119,14 @@ void CNetworkPed::WarpIntoVehicleDriver(CVehicle* vehicle)
 
     m_pPed->m_pIntelligence->FlushImmediately(false);
 
-    auto task = CTaskSimpleCarSetPedInAsDriver(vehicle, nullptr);
-    task.m_bWarpingInToCar = true;
-    task.ProcessPed(m_pPed);
-
     if (!m_bSyncing)
     {
         m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
     }
+
+    auto task = CTaskSimpleCarSetPedInAsDriver(vehicle, nullptr);
+    task.m_bWarpingInToCar = true;
+    task.ProcessPed(m_pPed);
 }
 
 void CNetworkPed::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
@@ -135,15 +135,15 @@ void CNetworkPed::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 
     m_pPed->m_pIntelligence->FlushImmediately(false);
 
-    int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle, seatid);
-    auto task = CTaskSimpleCarSetPedInAsPassenger(vehicle, doorId, nullptr);
-    task.m_bWarpingInToCar = true;
-    task.ProcessPed(m_pPed);
-
     if (!m_bSyncing)
     {
         m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
     }
+
+    int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle, seatid);
+    auto task = CTaskSimpleCarSetPedInAsPassenger(vehicle, doorId, nullptr);
+    task.m_bWarpingInToCar = true;
+    task.ProcessPed(m_pPed);
 }
 
 void CNetworkPed::RemoveFromVehicle(CVehicle* vehicle)
@@ -152,12 +152,12 @@ void CNetworkPed::RemoveFromVehicle(CVehicle* vehicle)
 
     m_pPed->m_pIntelligence->m_TaskMgr.SetTask(nullptr, TASK_PRIMARY_PRIMARY, false);
 
+    if (!m_bSyncing)
+    {
+        m_pPed->m_nPedFlags.CantBeKnockedOffBike = 2; // 2 - normal
+    }
+
     auto task = CTaskSimpleCarSetPedOut(vehicle, 1, false);
     task.m_bWarpingOutOfCar = true;
     task.ProcessPed(m_pPed);
-
-    if (!m_bSyncing)
-    {
-        m_pPed->m_nPedFlags.CantBeKnockedOffBike = 0; // 0 - normal
-    }
 }

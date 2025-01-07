@@ -1,4 +1,8 @@
 #include "stdafx.h"
+#include <CTaskSimpleCarSetPedOut.h>
+#include <CCarEnterExit.h>
+#include <CTaskSimpleCarSetPedInAsPassenger.h>
+#include <CTaskComplexEnterCarAsPassenger.h>
 
 CPlayerPed* m_pPed = nullptr;
 int m_iPlayerId;
@@ -132,4 +136,44 @@ char CNetworkPlayer::GetWeaponSkill(eWeaponType weaponType)
 		return 2;
 
 	return CWeaponInfo::GetWeaponInfo(weaponType, 1)->m_nReqStatLevel <= weaponStat;
+}
+
+void CNetworkPlayer::RemoveFromVehicle(CVehicle* vehicle)
+{
+	assert(m_pPed != nullptr);
+
+	m_pPed->m_pIntelligence->m_TaskMgr.SetTask(nullptr, TASK_PRIMARY_PRIMARY, false);
+
+	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 2; // 2 - normal
+
+	auto task = CTaskSimpleCarSetPedOut(vehicle, 1, false);
+	task.m_bWarpingOutOfCar = true;
+	task.ProcessPed(m_pPed);
+}
+
+void CNetworkPlayer::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
+{
+	assert(m_pPed != nullptr);
+
+	m_pPed->m_pIntelligence->FlushImmediately(false);
+
+	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
+	
+	int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle, seatid);
+	auto task = CTaskSimpleCarSetPedInAsPassenger(vehicle, doorId, nullptr);
+	task.m_bWarpingInToCar = true;
+	task.ProcessPed(m_pPed);
+}
+
+void CNetworkPlayer::EnterVehiclePassenger(CVehicle* vehicle, int seatid)
+{
+	assert(m_pPed != nullptr);
+
+	m_pPed->m_pIntelligence->FlushImmediately(false);
+
+	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
+
+	int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle, seatid);
+	auto task = new CTaskComplexEnterCarAsPassenger(vehicle, doorId, false);
+	m_pPed->m_pIntelligence->m_TaskMgr.SetTask(task, 3, false);
 }

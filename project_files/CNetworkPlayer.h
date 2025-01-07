@@ -32,5 +32,8 @@ public:
 	int GetInternalId();
 	char* GetName();
 	char GetWeaponSkill(eWeaponType weaponType);
+	void RemoveFromVehicle(CVehicle* vehicle);
+	void WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid);
+	void EnterVehiclePassenger(CVehicle* vehicle, int seatid);
 };
 

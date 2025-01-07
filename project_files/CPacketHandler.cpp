@@ -93,35 +93,48 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 	CPackets::PlayerOnFoot* packet = (CPackets::PlayerOnFoot*)data;
 
 	// get player instance 
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->id);
+	CNetworkPlayer* networkPlayer = CNetworkPlayerManager::GetPlayer(packet->id);
 
 	// check if player not connected
-	if (player == nullptr)
+	if (networkPlayer == nullptr)
 		return;
 
-	if (CUtil::IsPositionUpdateNeeded(player->m_pPed->m_matrix->pos, packet->position))
+	CPlayerPed* player = networkPlayer->m_pPed;
+
+	if (!player)
 	{
-		player->m_pPed->m_matrix->pos = packet->position;
+		networkPlayer->CreatePed(networkPlayer->m_iPlayerId, packet->position);
+		player = networkPlayer->m_pPed;
 	}
 
-	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
-
-	player->m_pPed->m_fAimingRotation =
-		player->m_pPed->m_fCurrentRotation = packet->rotation;
-
-	CUtil::SetPlayerJetpack(player, packet->hasJetpack);
-
-	if (CUtil::IsDucked(player->m_pPed) != packet->ducking)
+	if (player->m_pVehicle && player->m_nPedFlags.bInVehicle)
 	{
-		CTaskSimpleDuckToggle task = CTaskSimpleDuckToggle(packet->ducking);
-		task.ProcessPed(player->m_pPed);
+		networkPlayer->RemoveFromVehicle(player->m_pVehicle);
 	}
 
-	player->m_pPed->m_nFightingStyle = packet->fightingStyle;
-	player->m_pPed->m_nAllowedAttackMoves |= 15u;
+	/*if (CUtil::IsPositionUpdateNeeded(networkPlayer->m_pPed->m_matrix->pos, packet->position))
+	{*/
+	networkPlayer->m_pPed->m_matrix->pos = packet->position;
+	//}
+
+	CUtil::GiveWeaponByPacket(networkPlayer, packet->weapon, packet->ammo);
+
+	networkPlayer->m_pPed->m_fAimingRotation =
+		networkPlayer->m_pPed->m_fCurrentRotation = packet->rotation;
+
+	CUtil::SetPlayerJetpack(networkPlayer, packet->hasJetpack);
+
+	if (CUtil::IsDucked(networkPlayer->m_pPed) != packet->ducking)
+	{
+		auto task = CTaskSimpleDuckToggle(packet->ducking);
+		task.ProcessPed(networkPlayer->m_pPed);
+	}
+
+	networkPlayer->m_pPed->m_nFightingStyle = packet->fightingStyle;
+	networkPlayer->m_pPed->m_nAllowedAttackMoves |= 15u;
 
 	// save last onfoot sync
-	player->m_lOnFoot = packet;
+	networkPlayer->m_lOnFoot = packet;
 }
 
 // PlayerBulletShot
@@ -434,8 +447,11 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 		return;
 	}
 
-	if (player->m_pPed->m_pVehicle != vehicle->m_pVehicle)
+	if (player->m_pPed->m_pVehicle != vehicle->m_pVehicle || !player->m_pPed->m_nPedFlags.bInVehicle)
+	{
+		player->m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
 		plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle));
+	}
 
 	vehicle->m_pVehicle->m_matrix->pos = packet->pos;
 	vehicle->m_pVehicle->m_matrix->right = packet->roll;
@@ -509,16 +525,18 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 				Sleep(100);
 			}
 
+			player->m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
 			plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle));
 		}
 		else
+		{
+			player->m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
 			plugin::Command<Commands::TASK_ENTER_CAR_AS_DRIVER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), 3000);
+		}
 	}
 	else
 	{
-		int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle->m_pVehicle, packet->seatid);
-		CTaskComplexEnterCarAsPassenger* task = new CTaskComplexEnterCarAsPassenger(vehicle->m_pVehicle, doorId, false);
-		player->m_pPed->m_pIntelligence->m_TaskMgr.SetTask(task, 3, false);
+		player->EnterVehiclePassenger(vehicle->m_pVehicle, packet->seatid);
 	}
 }
 
@@ -546,10 +564,14 @@ void CPacketHandler::VehicleExit__Handle(void* data, int size)
 	{
 		CVector doorPos{};
 		player->m_pPed->m_pVehicle->GetComponentWorldPosition(8, doorPos); // right front door (driver)
+		player->m_pPed->m_nPedFlags.CantBeKnockedOffBike = 2; // 2 - normal
 		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(player->m_pPed), doorPos.x, doorPos.y, doorPos.z);
 	}
 	else
+	{
+		player->m_pPed->m_nPedFlags.CantBeKnockedOffBike = 2; // 2 - normal
 		plugin::Command<Commands::TASK_LEAVE_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(player->m_pPed->m_pVehicle));
+	}
 }
 
 // VehicleDamage
@@ -651,10 +673,7 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 		CChat::AddMessage("forcing enter passenger %d", player->m_iPlayerId);
 #endif
 
-		int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle->m_pVehicle, packet->seatid);
-		CTaskSimpleCarSetPedInAsPassenger task = CTaskSimpleCarSetPedInAsPassenger(vehicle->m_pVehicle, doorId, 0);
-		task.m_bWarpingInToCar = true;
-		task.ProcessPed(player->m_pPed);
+		player->WarpIntoVehiclePassenger(vehicle->m_pVehicle, packet->seatid);
 	}
 
 	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
