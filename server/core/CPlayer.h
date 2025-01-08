@@ -28,9 +28,11 @@ class CPlayer
 		unsigned int m_anTextureKeys[18];
 		float m_fFatStat;
 		float m_fMuscleStat;
+		CVector m_vecWaypointPos{};
 		struct {
 			uint8_t bStatsModified : 1;
 			uint8_t bClothesModified : 1;
+			uint8_t bWaypointModified : 1;
 		} m_ucSyncFlags;
 
 		~CPlayer();

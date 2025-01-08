@@ -232,6 +232,15 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
             rebuildPacket.m_fMuscleStat = i->m_fMuscleStat;
             CNetwork::SendPacket(event.peer, CPacketsID::REBUILD_PLAYER, &rebuildPacket, sizeof(rebuildPacket), ENET_PACKET_FLAG_RELIABLE);
         }
+
+        if (i->m_ucSyncFlags.bWaypointModified)
+        {
+            CPlayerPackets::PlayerPlaceWaypoint waypointPacket{};
+            waypointPacket.playerid = i->m_iPlayerId;
+            waypointPacket.position = i->m_vecWaypointPos;
+            waypointPacket.place = true;
+            CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_PLACE_WAYPOINT, &waypointPacket, sizeof(waypointPacket), ENET_PACKET_FLAG_RELIABLE);
+        }
     }
 
     for (auto i : CVehicleManager::m_pVehicles)
@@ -336,7 +345,7 @@ void CNetwork::HandlePacketReceive(ENetEvent& event)
     memcpy(data, event.packet->data + 2, event.packet->dataLength - 2);
 
     // call listener's callback by id
-    for (int i = 0; i < m_packetListeners.size(); i++)
+    for (size_t i = 0; i < m_packetListeners.size(); i++)
     {
         if (m_packetListeners[i]->m_iPacketID == id)
         {

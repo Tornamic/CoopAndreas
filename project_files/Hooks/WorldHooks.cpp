@@ -109,6 +109,15 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
     }
 }
 
+CFire* __fastcall CFireManager__StartFire_Hook(DWORD This, int, CPed* entity, CEntity* playerPed, float a4, int a5, int time, char numGenerations)
+{
+    if (entity)
+    {
+        return plugin::CallMethodAndReturn<CFire*, 0x53A050>(This, entity, playerPed, a4, a5, time, numGenerations);
+    }
+    return nullptr;
+}
+
 void WorldHooks::InjectHooks()
 {
     waypointPlaceEvent += PlaceWaypointHook;
@@ -161,4 +170,17 @@ void WorldHooks::InjectHooks()
     patch::RedirectJump(0x47D43E, CWeather__ForceWeather_Hook);
     patch::RedirectJump(0x72A4F0, CWeather__ForceWeatherNow_Hook);
     patch::RedirectCall(0x47679F, CWeather__SetWeatherToAppropriateTypeNow_Hook);
+
+  
+    // fix bicycle on fire, instead of the player being set on fire, bicycle's driver is
+    // may be not compatibable with SilentPatch
+    //if (!GetModuleHandleA("SilentPatchSA.asi"))
+    //{
+    //    patch::Nop(0x53A984, 17); // nop FindPlayerPed and CPlayerPed::DoStuffToGoOnFire
+    //    patch::Nop(0x53A9A7, 10); // nop FindPlayerPed
+    //    // mov eax, [edi+0x460]
+    //    // push eax
+    //    patch::SetRaw(0x53A9A7, "\x8B\x87\x60\x04\x00\x00\x50", 7); 
+    //    patch::RedirectCall(0x53A9B7, CFireManager__StartFire_Hook);
+    //}
 }

@@ -142,11 +142,6 @@ public:
 					}
 
 					CNetworkPedManager::Process();
-
-					if (GetAsyncKeyState(VK_F8))
-					{
-						Command<0xF00>("HI!");
-					}
 				}
 			};
 		Events::drawBlipsEvent += []
@@ -160,8 +155,8 @@ public:
 				CNetworkPlayerNameTag::Process();
 				CChat::Draw();
 				CChat::DrawInput();
-#ifdef _DEV
-				if (CNetwork::m_bConnected)
+
+				if (CNetwork::m_bConnected && GetAsyncKeyState(VK_F9))
 				{
 					char buffer[70];
 					sprintf(buffer, "Game/Network: Peds %d/%d Cars %d/%d Recv %d Sent %d", CPools::ms_pPedPool->GetNoOfUsedSpaces(), CNetworkPedManager::m_pPeds.size(), CPools::ms_pVehiclePool->GetNoOfUsedSpaces(), CNetworkVehicleManager::m_pVehicles.size(), CNetwork::m_pClient->totalReceivedPackets, CNetwork::m_pClient->totalSentPackets);
@@ -201,7 +196,6 @@ public:
 						}
 					}
 				}
-#endif // _DEV
 			};
 		CCore::Init();
 		

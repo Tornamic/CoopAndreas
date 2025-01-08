@@ -50,6 +50,15 @@ class CPedPackets
 					return;
 
 				CPedPackets::PedSpawn* packet = (CPedPackets::PedSpawn*)data;
+
+				bool isSpecial = packet->modelId >= 290 && packet->modelId <= 299;
+				bool isOutOfRange = packet->modelId > 311 || packet->modelId < 1;
+
+				if (isOutOfRange)
+				{
+					return;
+				}
+
 				packet->pedid = CPedManager::GetFreeId();
 				CNetwork::SendPacketToAll(CPacketsID::PED_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		

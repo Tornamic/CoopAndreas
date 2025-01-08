@@ -40,6 +40,12 @@ class CVehiclePackets
 
 				// send received packet
 				CVehiclePackets::VehicleSpawn* packet = (CVehiclePackets::VehicleSpawn*)data;
+
+				if (packet->modelid > 611 || packet->modelid < 400)
+				{
+					return;
+				}
+
 				packet->vehicleid = CVehicleManager::GetFreeID(); // find free vehicle id
 				CNetwork::SendPacketToAll(CPacketsID::VEHICLE_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 				

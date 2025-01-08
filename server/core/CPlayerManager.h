@@ -69,6 +69,22 @@ class CPlayerPackets
 				// set packet`s playerid, cuz incoming packet has id = 0
 				packet->id = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
 
+				bool isValidWeapon = (packet->weapon >= 0 && packet->weapon <= 18) || (packet->weapon >= 22 && packet->weapon <= 46);
+				if (!isValidWeapon)
+				{
+					packet->weapon = 0;
+					packet->ammo = 0;
+				}
+
+				if (packet->fightingStyle < 4 || packet->fightingStyle > 16)
+				{
+					packet->fightingStyle = 4;
+				}
+
+				if (packet->velocity.x > 10.0f || packet->velocity.y > 10.0f || packet->velocity.z > 10.0f)
+				{
+					packet->velocity = CVector(0.0f, 0.0f, 0.0f);
+				}
 
 				CNetwork::SendPacketToAll(CPacketsID::PLAYER_ONFOOT, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 			}
@@ -110,9 +126,16 @@ class CPlayerPackets
 	
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
-				CPlayerPackets::PlayerPlaceWaypoint* packet = (CPlayerPackets::PlayerPlaceWaypoint*)data;
-				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-				CNetwork::SendPacketToAll(CPacketsID::PLAYER_PLACE_WAYPOINT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+				if (auto player = CPlayerManager::GetPlayer(peer))
+				{
+					CPlayerPackets::PlayerPlaceWaypoint* packet = (CPlayerPackets::PlayerPlaceWaypoint*)data;
+					packet->playerid = player->m_iPlayerId;
+					packet->position.x = std::clamp(packet->position.x, -3000.0f, 3000.0f);
+					packet->position.y = std::clamp(packet->position.y, -3000.0f, 3000.0f);
+					player->m_ucSyncFlags.bWaypointModified = packet->place != 0;
+					player->m_vecWaypointPos = packet->position;
+					CNetwork::SendPacketToAll(CPacketsID::PLAYER_PLACE_WAYPOINT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+				}
 			}
 		};
 
@@ -162,6 +185,7 @@ class CPlayerPackets
 			{
 				CPlayerPackets::PlayerChatMessage* packet = (CPlayerPackets::PlayerChatMessage*)data;
 				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+				packet->message[128] = 0;
 				CNetwork::SendPacketToAll(CPacketsID::PLAYER_CHAT_MESSAGE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 			}
 		};
