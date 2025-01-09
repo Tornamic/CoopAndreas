@@ -167,6 +167,7 @@ class CPedPackets
 			CVector rot;
 			CVector roll;
 			CVector velocity;
+			CVector turnSpeed;
 			unsigned char pedHealth;
 			unsigned char pedArmour;
 			unsigned char weapon;
@@ -178,9 +179,6 @@ class CPedPackets
 			float bikeLean;
 			float planeGearState;
 			unsigned char locked;
-			float gasPedal;
-			float breakPedal;
-			float steerAngle;
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{

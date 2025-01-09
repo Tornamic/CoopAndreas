@@ -265,14 +265,25 @@ void CPacketHandler::PlayerSetHost__Handle(void* data, int size)
 void CPacketHandler::AddExplosion__Handle(void* data, int size)
 {
 	CPackets::AddExplosion* packet = (CPackets::AddExplosion*)data;
-	plugin::Call<0x736A50, CEntity*, CPed*, int, CVector2D, float, int, char, float, char>(nullptr, nullptr, 
-		packet->type, 
-		CVector2D(packet->pos.x, packet->pos.y), 
-		packet->pos.z, 
-		packet->time, 
-		packet->usesSound, 
-		packet->cameraShake, 
-		packet->isVisible);
+
+	if (packet->entityType == NETWORK_ENTITY_TYPE_VEHICLE)
+	{
+		if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(packet->entityid))
+		{
+			if (auto vehicle = networkVehicle->m_pVehicle)
+			{
+				vehicle->BlowUpCar(networkVehicle->m_pVehicle, false);
+				eVehicleType vehicleType = CUtil::GetVehicleType(vehicle);
+
+				if(vehicleType != VEHICLE_BIKE && vehicleType != VEHICLE_BMX && vehicleType != VEHICLE_BOAT)
+					((CAutomobile*)vehicle)->m_damageManager.FuckCarCompletely(true);
+				return;
+			}
+			
+		}
+	}
+
+	CExplosion::AddExplosion(nullptr, nullptr, (eExplosionType)packet->type, packet->pos, packet->time, packet->usesSound, packet->cameraShake, packet->isVisible);
 }
 
 // VehicleSpawn
@@ -325,6 +336,7 @@ CPackets::VehicleIdleUpdate* CPacketHandler::VehicleIdleUpdate__Collect(CNetwork
 	packet->roll = vehicle->m_pVehicle->m_matrix->right;
 	packet->rot = vehicle->m_pVehicle->m_matrix->up;
 	packet->velocity = vehicle->m_pVehicle->m_vecMoveSpeed;
+	packet->turnSpeed = vehicle->m_pVehicle->m_vecTurnSpeed;
 	packet->color1 = vehicle->m_pVehicle->m_nPrimaryColor;
 	packet->color2 = vehicle->m_pVehicle->m_nSecondaryColor;
 	packet->health = vehicle->m_pVehicle->m_fHealth;
@@ -354,10 +366,16 @@ void CPacketHandler::VehicleIdleUpdate__Handle(void* data, int size)
 	if (vehicle->m_pVehicle->m_matrix == nullptr)
 		return;
 
-	vehicle->m_pVehicle->m_matrix->pos = packet->pos;		   
-	vehicle->m_pVehicle->m_matrix->right = packet->roll;	   
-	vehicle->m_pVehicle->m_matrix->up = packet->rot;		   
+	vehicle->m_pVehicle->m_matrix->pos = packet->pos;
+
+	if(CUtil::IsPositionUpdateNeeded(vehicle->m_pVehicle->m_matrix->right, packet->roll, 1))
+		vehicle->m_pVehicle->m_matrix->right = packet->roll;
+
+	if (CUtil::IsPositionUpdateNeeded(vehicle->m_pVehicle->m_matrix->up, packet->rot, 1))
+		vehicle->m_pVehicle->m_matrix->up = packet->rot;
+
 	vehicle->m_pVehicle->m_vecMoveSpeed = packet->velocity;
+	vehicle->m_pVehicle->m_vecTurnSpeed = packet->turnSpeed;
 
 	vehicle->m_pVehicle->m_nPrimaryColor = packet->color1;
 	vehicle->m_pVehicle->m_nSecondaryColor = packet->color2;
@@ -897,6 +915,7 @@ CPackets::PedDriverUpdate* CPacketHandler::PedDriverUpdate__Collect(CNetworkVehi
 	packet->roll = vehicle->m_pVehicle->m_matrix->right;
 	packet->rot = vehicle->m_pVehicle->m_matrix->up;
 	packet->velocity = vehicle->m_pVehicle->m_vecMoveSpeed;
+	packet->turnSpeed = vehicle->m_pVehicle->m_vecTurnSpeed;
 
 	packet->color1 = vehicle->m_pVehicle->m_nPrimaryColor;
 	packet->color2 = vehicle->m_pVehicle->m_nSecondaryColor;
@@ -921,10 +940,6 @@ CPackets::PedDriverUpdate* CPacketHandler::PedDriverUpdate__Collect(CNetworkVehi
 
 	packet->locked = vehicle->m_pVehicle->m_eDoorLock;
 
-	packet->gasPedal = vehicle->m_pVehicle->m_fGasPedal;
-	packet->breakPedal = vehicle->m_pVehicle->m_fBreakPedal;
-	packet->steerAngle = vehicle->m_pVehicle->m_fSteerAngle;
-
 	return packet;
 }
 
@@ -948,6 +963,7 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 	vehicle->m_pVehicle->m_matrix->up = packet->rot;
 	ped->m_vecVelocity = packet->velocity;
 	vehicle->m_pVehicle->m_vecMoveSpeed = packet->velocity;
+	vehicle->m_pVehicle->m_vecTurnSpeed = packet->turnSpeed;
 
 	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);
 
@@ -978,10 +994,6 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 	}
 
 	vehicle->m_pVehicle->m_eDoorLock = (eDoorLock)packet->locked;
-
-	ped->m_fGasPedal = packet->gasPedal;
-	ped->m_fBreakPedal = packet->breakPedal;
-	ped->m_fSteerAngle = packet->steerAngle;
 }
 
 // PedShotSync

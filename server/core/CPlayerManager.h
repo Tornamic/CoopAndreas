@@ -165,9 +165,11 @@ class CPlayerPackets
 			unsigned char type;
 			CVector pos;
 			int time;
-			char usesSound;
+			bool usesSound;
 			float cameraShake;
-			char isVisible;
+			bool isVisible;
+			int entityid;
+			unsigned char entityType;
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{

@@ -228,6 +228,9 @@ void FixCrashes()
     injector::UnprotectMemory(0x609C80, 1, temp);
 
     injector::UnprotectMemory(0x6884C4, 6, temp); // see PlayerHooks.cpp
+
+    // temporary solution to fix jerking of dead vehicles
+    patch::SetUChar(0x6C25DB, 0xEB);
 }
 
 #define SCANCODE_BUFFER_SIZE (8 * 20000)

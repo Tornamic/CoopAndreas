@@ -39,10 +39,20 @@ static void __fastcall CRadar__ClearBlip_Hook(int blipIndex, int padding)
 
 static void __cdecl CExplosion__AddExplosion(CEntity* newVictim, CPed* newCreator, eExplosionType type, CVector2D pos, float z, int time, char usesSound, float cameraShake, char isVisible)
 {
-    /*if (!CLocalPlayer::m_bIsHost)
-        return;*/
-
     plugin::Call<0x736A50, CEntity*, CPed*, int, CVector2D, float, int, char, float, char>(newVictim, newCreator, type, pos, z, time, usesSound, cameraShake, isVisible);
+
+    bool createdByMe = newCreator == nullptr || newCreator == FindPlayerPed(0);
+    eNetworkEntityType entityType = NETWORK_ENTITY_TYPE_NOTHING;
+    int entityid = -1;
+
+    if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(newVictim))
+    {
+        entityType = NETWORK_ENTITY_TYPE_VEHICLE;
+        entityid = networkVehicle->m_nVehicleId;
+    }
+
+    if (!createdByMe)
+        return;
 
     CPackets::AddExplosion addExplosionPacket{};
 
@@ -52,8 +62,12 @@ static void __cdecl CExplosion__AddExplosion(CEntity* newVictim, CPed* newCreato
     addExplosionPacket.usesSound = usesSound;
     addExplosionPacket.cameraShake = cameraShake;
     addExplosionPacket.isVisible = isVisible;
+    addExplosionPacket.entityType = entityType;
+    addExplosionPacket.entityid = entityid;
 
     CNetwork::SendPacket(CPacketsID::ADD_EXPLOSION, &addExplosionPacket, sizeof addExplosionPacket, ENET_PACKET_FLAG_RELIABLE);
+
+    return;
 }
 
 static void __cdecl CWorld__Add_Hook(CEntity* entity)
@@ -109,14 +123,14 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
     }
 }
 
-CFire* __fastcall CFireManager__StartFire_Hook(DWORD This, int, CPed* entity, CEntity* playerPed, float a4, int a5, int time, char numGenerations)
-{
-    if (entity)
-    {
-        return plugin::CallMethodAndReturn<CFire*, 0x53A050>(This, entity, playerPed, a4, a5, time, numGenerations);
-    }
-    return nullptr;
-}
+//CFire* __fastcall CFireManager__StartFire_Hook(DWORD This, int, CPed* entity, CEntity* playerPed, float a4, int a5, int time, char numGenerations)
+//{
+//    if (entity)
+//    {
+//        return plugin::CallMethodAndReturn<CFire*, 0x53A050>(This, entity, playerPed, a4, a5, time, numGenerations);
+//    }
+//    return nullptr;
+//}
 
 void WorldHooks::InjectHooks()
 {

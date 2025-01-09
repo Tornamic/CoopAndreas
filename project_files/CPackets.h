@@ -113,9 +113,11 @@ public:
 		unsigned char type;
 		CVector pos;
 		int time;
-		char usesSound;
+		bool usesSound;
 		float cameraShake;
-		char isVisible;
+		bool isVisible;
+		int entityid;
+		unsigned char entityType;
 	};
 
 	struct VehicleSpawn
@@ -142,6 +144,7 @@ public:
 		CVector rot;
 		CVector roll;
 		CVector velocity;
+		CVector turnSpeed;
 		unsigned char color1;
 		unsigned char color2;
 		float health;
@@ -292,6 +295,7 @@ public:
 		CVector rot;
 		CVector roll;
 		CVector velocity;
+		CVector turnSpeed;
 		unsigned char pedHealth;
 		unsigned char pedArmour;
 		unsigned char weapon;
@@ -303,9 +307,6 @@ public:
 		float bikeLean;
 		float planeGearState;
 		unsigned char locked;
-		float gasPedal;
-		float breakPedal;
-		float steerAngle;
 	};
 
 	struct PedShotSync

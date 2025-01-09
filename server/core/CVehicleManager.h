@@ -98,6 +98,7 @@ class CVehiclePackets
 			CVector rot;
 			CVector roll;
 			CVector velocity;
+			CVector turnSpeed;
 			unsigned char color1;
 			unsigned char color2;
 			float health;
