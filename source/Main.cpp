@@ -3,6 +3,9 @@
 #include <Hooks/WorldHooks.h>
 #include "CCutsceneMgr.h"
 #include <CDiscordRPCMgr.h>
+#include <CCarEnterExit.h>
+#include <CTaskSimpleCarSetPedInAsPassenger.h>
+#include <CTaskSimpleCarSetPedOut.h>
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;

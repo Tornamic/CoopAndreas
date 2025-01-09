@@ -3,9 +3,6 @@
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
 #include <Tasks/CTaskComplexEnterCarAsPassengerTimed.h>
-#include <CCarEnterExit.h>
-#include <CTaskSimpleCarSetPedInAsPassenger.h>
-#include <CTaskComplexEnterCarAsPassenger.h>
 // PlayerConnected
 
 void CPacketHandler::PlayerConnected__Handle(void* data, int size)
@@ -670,6 +667,15 @@ CPackets::VehiclePassengerUpdate* CPacketHandler::VehiclePassengerUpdate__Collec
 	packet->vehicleid = vehicle->m_nVehicleId;
 	packet->driveby = CDriveBy::IsPedInDriveby(localPlayer);
 
+	for (int i = 0; i < vehicle->m_pVehicle->m_nMaxPassengers; i++)
+	{
+		if (vehicle->m_pVehicle->m_apPassengers[i] == localPlayer)
+		{
+			packet->seatid = i;
+			break;
+		}
+	}
+
 	return packet;
 }
 
@@ -689,7 +695,7 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 	if (player->m_pPed == nullptr)
 		return;
 
-	if (!player->m_pPed->m_nPedFlags.bInVehicle || (player->m_pPed->m_pVehicle && vehicle->m_pVehicle->m_pDriver == player->m_pPed))
+	if (!player->m_pPed->m_nPedFlags.bInVehicle || player->m_pPed->m_pVehicle != vehicle->m_pVehicle || vehicle->m_pVehicle->m_apPassengers[packet->seatid] != player->m_pPed)
 	{
 #ifdef PACKET_DEBUG_MESSAGES
 		CChat::AddMessage("forcing enter passenger %d", player->m_iPlayerId);
@@ -957,8 +963,8 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 	if (vehicle == nullptr || ped == nullptr || ped->m_pPed == nullptr || vehicle->m_pVehicle == nullptr || !CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
 		return;
 
-	if (ped->m_pPed->m_pVehicle != vehicle->m_pVehicle)
-		plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(ped->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle));
+	if (ped->m_pPed->m_pVehicle != vehicle->m_pVehicle || !ped->m_pPed->m_nPedFlags.bInVehicle)
+		ped->WarpIntoVehicleDriver(vehicle->m_pVehicle);
 
 	if(CUtil::IsPositionUpdateNeeded(packet->pos, vehicle->m_pVehicle->m_matrix->pos))
 		vehicle->m_pVehicle->m_matrix->pos = packet->pos;
@@ -1055,7 +1061,7 @@ void CPacketHandler::PedPassengerSync__Handle(void* data, int size)
 	if (ped->m_pPed == nullptr)
 		return;
 
-	if (!ped->m_pPed->m_nPedFlags.bInVehicle || (ped->m_pPed->m_nPedFlags.bInVehicle && vehicle->m_pVehicle->m_pDriver == ped->m_pPed))
+	if (!ped->m_pPed->m_nPedFlags.bInVehicle || vehicle->m_pVehicle->m_pDriver == ped->m_pPed)
 	{
 		ped->WarpIntoVehiclePassenger(vehicle->m_pVehicle, packet->seatid);
 	}
@@ -1187,11 +1193,17 @@ void CPacketHandler::RebuildPlayer__Handle(void* data, int size)
 
 		CStatsSync::ApplyNetworkPlayerContext(networkPlayer);
 
-		*networkPlayer->m_pPed->m_pPlayerData->m_pPedClothesDesc = packet->clothesData;
 		networkPlayer->m_pPedClothesDesc = packet->clothesData;
 
-		CClothes::RebuildPlayer(networkPlayer->m_pPed, false);
-		
+		if (auto player = networkPlayer->m_pPed)
+		{
+			*player->m_pPlayerData->m_pPedClothesDesc = packet->clothesData;
+			if (player->m_pRwClump)
+			{
+				CClothes::RebuildPlayer(player, false);
+			}
+		}
+
 		CStatsSync::ApplyLocalContext();
 	}
 }

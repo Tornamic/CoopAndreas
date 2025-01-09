@@ -267,6 +267,7 @@ class CVehiclePackets
 			unsigned char weapon;
 			unsigned short ammo;
 			unsigned char driveby;
+			unsigned char seatid;
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
