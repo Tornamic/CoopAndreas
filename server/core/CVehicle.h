@@ -26,7 +26,7 @@ class CVehicle
 		unsigned char m_damageManager_padding[23] = { 0 };
 		std::vector<int> m_pComponents;
 		
-		~CVehicle();
+		~CVehicle() {}
 };
 
 

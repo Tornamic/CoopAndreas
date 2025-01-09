@@ -2,43 +2,15 @@
 #include "StatsHooks.h"
 #include "../CStatsSync.h"
 
-void __declspec(naked) CStats__DisplayScriptStatUpdateMessage_Hook()
-{
-	__asm
-	{
-		pushad
-	}
-
-	if (CNetwork::m_bConnected)
-	{
-		CStatsSync::NotifyChanged();
-	}
-
-	__asm
-	{
-		popad
-
-		// code cave
-		mov     cl, [eax + 117h]
-
-		push	0x55B98F
-		ret
-	}
-}
-
-void CStats__SetStatValue_Hook(eStats statID, float value)
+void CHud__SetHelpMessageStatUpdate_Hook(char bIncrease, short statId, float statUpdate, float statMax)
 {
 	if (CNetwork::m_bConnected)
 	{
-		switch (statID)
-		{
-		case STAT_FAT:
-		case STAT_STAMINA:
-		case STAT_MUSCLE:
+		if(CStatsSync::GetSyncIdByInternal((eStats)statId) != -1)
 			CStatsSync::NotifyChanged();
-		}
 	}
-	CStats::SetStatValue(statID, value);
+
+	CHud::SetHelpMessageStatUpdate(bIncrease, statId, statUpdate, statMax);
 }
 
 CPed* ped;
@@ -91,6 +63,16 @@ exit:
 	}
 }
 
+void CStats__SetStatValue_Hook(eStats statID, float value)
+{
+	if (CNetwork::m_bConnected)
+	{
+		if (CStatsSync::GetSyncIdByInternal(statID) != -1)
+			CStatsSync::NotifyChanged();
+	}
+	CStats::SetStatValue(statID, value);
+}
+
 void __fastcall CPed__Dress_Hook(CPed* This, int)
 {
 	This->Dress();
@@ -107,7 +89,9 @@ void __fastcall CPed__Dress_Hook(CPed* This, int)
 
 void StatsHooks::InjectHooks()
 {
-	patch::RedirectJump(0x55B989, CStats__DisplayScriptStatUpdateMessage_Hook);
+	patch::RedirectCall(0x55BA93, CHud__SetHelpMessageStatUpdate_Hook); // inside CStats::DisplayScriptStatUpdateMessage_Hook
+	patch::RedirectJump(0x5E3B60, CPed__GetWeaponSkill_Hook);
+	patch::RedirectCall(0x5A8357, CPed__Dress_Hook);
 
 	const std::vector<int> CStats__SetStatValue_Refs = {
 		0x00439117, 0x00439157, 0x00439194, 0x0043919D, 0x00439937, 0x00439947, 0x00439953, 0x0043995F, 0x0043996B, 0x00439977,
@@ -117,8 +101,4 @@ void StatsHooks::InjectHooks()
 	};
 
 	patch::RedirectCall(CStats__SetStatValue_Refs, CStats__SetStatValue_Hook);
-
-	patch::RedirectJump(0x5E3B60, CPed__GetWeaponSkill_Hook);
-
-	patch::RedirectCall(0x5A8357, CPed__Dress_Hook);
 }

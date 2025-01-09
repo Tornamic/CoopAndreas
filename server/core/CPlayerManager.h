@@ -69,6 +69,22 @@ class CPlayerPackets
 				// set packet`s playerid, cuz incoming packet has id = 0
 				packet->id = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
 
+				bool isValidWeapon = (packet->weapon >= 0 && packet->weapon <= 18) || (packet->weapon >= 22 && packet->weapon <= 46);
+				if (!isValidWeapon)
+				{
+					packet->weapon = 0;
+					packet->ammo = 0;
+				}
+
+				if (packet->fightingStyle < 4 || packet->fightingStyle > 16)
+				{
+					packet->fightingStyle = 4;
+				}
+
+				if (packet->velocity.x > 10.0f || packet->velocity.y > 10.0f || packet->velocity.z > 10.0f)
+				{
+					packet->velocity = CVector(0.0f, 0.0f, 0.0f);
+				}
 
 				CNetwork::SendPacketToAll(CPacketsID::PLAYER_ONFOOT, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
 			}
@@ -110,9 +126,16 @@ class CPlayerPackets
 	
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
-				CPlayerPackets::PlayerPlaceWaypoint* packet = (CPlayerPackets::PlayerPlaceWaypoint*)data;
-				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-				CNetwork::SendPacketToAll(CPacketsID::PLAYER_PLACE_WAYPOINT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+				if (auto player = CPlayerManager::GetPlayer(peer))
+				{
+					CPlayerPackets::PlayerPlaceWaypoint* packet = (CPlayerPackets::PlayerPlaceWaypoint*)data;
+					packet->playerid = player->m_iPlayerId;
+					packet->position.x = std::clamp(packet->position.x, -3000.0f, 3000.0f);
+					packet->position.y = std::clamp(packet->position.y, -3000.0f, 3000.0f);
+					player->m_ucSyncFlags.bWaypointModified = packet->place != 0;
+					player->m_vecWaypointPos = packet->position;
+					CNetwork::SendPacketToAll(CPacketsID::PLAYER_PLACE_WAYPOINT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+				}
 			}
 		};
 
@@ -142,9 +165,11 @@ class CPlayerPackets
 			unsigned char type;
 			CVector pos;
 			int time;
-			char usesSound;
+			bool usesSound;
 			float cameraShake;
-			char isVisible;
+			bool isVisible;
+			int entityid;
+			unsigned char entityType;
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
@@ -162,6 +187,7 @@ class CPlayerPackets
 			{
 				CPlayerPackets::PlayerChatMessage* packet = (CPlayerPackets::PlayerChatMessage*)data;
 				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
+				packet->message[128] = 0;
 				CNetwork::SendPacketToAll(CPacketsID::PLAYER_CHAT_MESSAGE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 			}
 		};
@@ -227,9 +253,15 @@ class CPlayerPackets
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
-				CPlayerPackets::PlayerStats* packet = (CPlayerPackets::PlayerStats*)data;
-				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-				CNetwork::SendPacketToAll(CPacketsID::PLAYER_STATS, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+				if (auto player = CPlayerManager::GetPlayer(peer))
+				{
+					CPlayerPackets::PlayerStats* packet = (CPlayerPackets::PlayerStats*)data;
+					packet->playerid = player->m_iPlayerId;
+					CNetwork::SendPacketToAll(CPacketsID::PLAYER_STATS, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+
+					memcpy(player->m_afStats, packet->stats, sizeof(packet->stats));
+					player->m_ucSyncFlags.bStatsModified = true;
+				}
 			}
 		}; 
 		
@@ -244,9 +276,30 @@ class CPlayerPackets
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
-				CPlayerPackets::RebuildPlayer* packet = (CPlayerPackets::RebuildPlayer*)data;
+				if (auto player = CPlayerManager::GetPlayer(peer))
+				{
+					CPlayerPackets::RebuildPlayer* packet = (CPlayerPackets::RebuildPlayer*)data;
+					packet->playerid = player->m_iPlayerId;
+					CNetwork::SendPacketToAll(CPacketsID::REBUILD_PLAYER, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+
+					memcpy(player->m_anModelKeys, packet->m_anModelKeys, sizeof(player->m_anModelKeys));
+					memcpy(player->m_anTextureKeys, packet->m_anTextureKeys, sizeof(player->m_anTextureKeys));
+					player->m_fFatStat = packet->m_fFatStat;
+					player->m_fMuscleStat = packet->m_fMuscleStat;
+					player->m_ucSyncFlags.bClothesModified = true;
+				}
+			}
+		};
+
+		struct RespawnPlayer
+		{
+			int playerid;
+
+			static void Handle(ENetPeer* peer, void* data, int size)
+			{
+				CPlayerPackets::RespawnPlayer* packet = (CPlayerPackets::RespawnPlayer*)data;
 				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-				CNetwork::SendPacketToAll(CPacketsID::REBUILD_PLAYER, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+				CNetwork::SendPacketToAll(CPacketsID::RESPAWN_PLAYER, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 			}
 		};
 

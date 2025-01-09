@@ -76,10 +76,10 @@ void __fastcall CVehicle__ProcessControl_Hook()
     player->m_pPed->m_nPedType = PED_TYPE_PLAYER1;
 
 
-    /*bool savedLookingLeft = *(bool*)0xB6F1A4;
+    bool savedLookingLeft = *(bool*)0xB6F1A4;
     bool savedLookingRight = *(bool*)0xB6F1A5;
-    *(bool*)0xB6F1A4 = player->m_lOnFoot->controllerState.LeftShoulder2 > 0;
-    *(bool*)0xB6F1A5 = player->m_lOnFoot->controllerState.RightShoulder2 > 0;*/
+    *(bool*)0xB6F1A4 = player->m_newControllerState.LeftShoulder2 > 0;
+    *(bool*)0xB6F1A5 = player->m_newControllerState.RightShoulder2 > 0;
 
     plugin::CallMethodDyn<CVehicle*>(call_addr, vehicle);
 
@@ -89,8 +89,8 @@ void __fastcall CVehicle__ProcessControl_Hook()
     CAimSync::ApplyLocalContext();
     CStatsSync::ApplyLocalContext();
 
-    /**(bool*)0xB6F1A4 = savedLookingLeft;
-    *(bool*)0xB6F1A5 = savedLookingRight;*/
+    *(bool*)0xB6F1A4 = savedLookingLeft;
+    *(bool*)0xB6F1A5 = savedLookingRight;
 }
 
 static void __fastcall CCarCtrl__RemoveDistantCars_Hook()

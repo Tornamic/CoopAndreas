@@ -1,4 +1,8 @@
 #include "stdafx.h"
+#include <CTaskSimpleCarSetPedOut.h>
+#include <CCarEnterExit.h>
+#include <CTaskSimpleCarSetPedInAsPassenger.h>
+#include <CTaskComplexEnterCarAsPassenger.h>
 
 CPlayerPed* m_pPed = nullptr;
 int m_iPlayerId;
@@ -21,25 +25,20 @@ CNetworkPlayer::~CNetworkPlayer()
 
 	if (m_pPed == nullptr) return;
 
-	if (m_pPed->m_pVehicle != nullptr)
-	{
-		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
-	}
-
-	DWORD dwPedPtr = (DWORD)m_pPed;
-
-	// call destroy method
-	_asm mov ecx, dwPedPtr
-	_asm mov ebx, [ecx]; vtable
-	_asm push 1
-	_asm call[ebx]; destroy
+	this->DestroyPed();
 }
 
 CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 {
+	m_iPlayerId = id;
+
+	m_pPedClothesDesc.SetTextureAndModel("VEST", "VEST", 0);
+	m_pPedClothesDesc.SetTextureAndModel("JEANSDENIM", "JEANS", 2);
+	m_pPedClothesDesc.SetTextureAndModel("SNEAKERBINCBLK", "SNEAKER", 3);
+	m_pPedClothesDesc.SetTextureAndModel("PLAYER_FACE", "HEAD", 1);
+
 	CreatePed(id, position);
 
-	m_iPlayerId = id;
 
 	m_lOnFoot = new CPackets::PlayerOnFoot();
 }
@@ -59,10 +58,59 @@ void CNetworkPlayer::CreatePed(int id, CVector position)
 	// set player immunies, he now dont cares about pain
 	Command<Commands::SET_CHAR_PROOFS>(actorId, 0, 1, 1, 0, 0);
 
-	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("VEST", "VEST", 0);
-	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("JEANSDENIM", "JEANS", 2);
-	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("SNEAKERBINCBLK", "SNEAKER", 3);
-	m_pPed->m_pPlayerData->m_pPedClothesDesc->SetTextureAndModel("PLAYER_FACE", "HEAD", 1);
+	*m_pPed->m_pPlayerData->m_pPedClothesDesc = m_pPedClothesDesc;
+
+	CClothes::RebuildPlayer(m_pPed, false);
+}
+
+void CNetworkPlayer::DestroyPed()
+{
+	if (m_pPed->m_pVehicle)
+	{
+		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
+	}
+
+	uintptr_t pedPtr = (uintptr_t)m_pPed;
+	if (CUtil::IsValidEntityPtr(m_pPed))
+	{
+		CWorld::Remove(m_pPed);
+
+		// destroy the ped
+		__asm
+		{
+			mov ecx, pedPtr
+			mov ebx, [ecx] // vtable addr
+			push 1 // unused arg
+			call[ebx] // call destructor
+		}
+	}
+	else
+	{
+		// destroy CPlaceable, if the entity is not valid (vtable points to CPlaceable vt)
+		__asm
+		{
+			mov ecx, pedPtr
+			mov ebx, [ecx] // vtable addr
+			call[ebx] // call destructor
+		}
+	}
+}
+
+void CNetworkPlayer::Respawn()
+{
+	if (m_pPed)
+	{
+		this->DestroyPed();
+	}
+
+	CVector pos{};
+
+	if (m_lOnFoot)
+	{
+		pos = m_lOnFoot->position;
+	}
+
+	this->CreatePed(m_iPlayerId, pos);
 }
 
 int CNetworkPlayer::GetInternalId() // most used for CWorld::PlayerInFocus
@@ -105,4 +153,44 @@ char CNetworkPlayer::GetWeaponSkill(eWeaponType weaponType)
 		return 2;
 
 	return CWeaponInfo::GetWeaponInfo(weaponType, 1)->m_nReqStatLevel <= weaponStat;
+}
+
+void CNetworkPlayer::RemoveFromVehicle(CVehicle* vehicle)
+{
+	assert(m_pPed != nullptr);
+
+	m_pPed->m_pIntelligence->m_TaskMgr.SetTask(nullptr, TASK_PRIMARY_PRIMARY, false);
+
+	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 2; // 2 - normal
+
+	auto task = CTaskSimpleCarSetPedOut(vehicle, 1, false);
+	task.m_bWarpingOutOfCar = true;
+	task.ProcessPed(m_pPed);
+}
+
+void CNetworkPlayer::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
+{
+	assert(m_pPed != nullptr);
+
+	m_pPed->m_pIntelligence->FlushImmediately(false);
+
+	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
+	
+	int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle, seatid);
+	auto task = CTaskSimpleCarSetPedInAsPassenger(vehicle, doorId, nullptr);
+	task.m_bWarpingInToCar = true;
+	task.ProcessPed(m_pPed);
+}
+
+void CNetworkPlayer::EnterVehiclePassenger(CVehicle* vehicle, int seatid)
+{
+	assert(m_pPed != nullptr);
+
+	m_pPed->m_pIntelligence->FlushImmediately(false);
+
+	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
+
+	int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle, seatid);
+	auto task = new CTaskComplexEnterCarAsPassenger(vehicle, doorId, false);
+	m_pPed->m_pIntelligence->m_TaskMgr.SetTask(task, 3, false);
 }

@@ -12,6 +12,7 @@ public:
 	static void Remove(CVehicle* vehicle);
 	static CVehicle* GetVehicle(int vehicleid);
 	static int GetFreeID();
+	static void RemoveAllHostedAndNotify(CPlayer* player);
 };
 
 class CVehiclePackets
@@ -28,7 +29,8 @@ class CVehiclePackets
 			float rot;
 			unsigned char color1;
 			unsigned char color2;
-		
+			unsigned char createdBy;
+
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
 				auto player = CPlayerManager::GetPlayer(peer);
@@ -38,6 +40,12 @@ class CVehiclePackets
 
 				// send received packet
 				CVehiclePackets::VehicleSpawn* packet = (CVehiclePackets::VehicleSpawn*)data;
+
+				if (packet->modelid > 611 || packet->modelid < 400)
+				{
+					return;
+				}
+
 				packet->vehicleid = CVehicleManager::GetFreeID(); // find free vehicle id
 				CNetwork::SendPacketToAll(CPacketsID::VEHICLE_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 				
@@ -90,6 +98,7 @@ class CVehiclePackets
 			CVector rot;
 			CVector roll;
 			CVector velocity;
+			CVector turnSpeed;
 			unsigned char color1;
 			unsigned char color2;
 			float health;
@@ -148,8 +157,11 @@ class CVehiclePackets
 
 				CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
 
-				vehicle->m_vecPosition = packet->pos;
-				vehicle->m_vecRotation = packet->rot;
+				if (vehicle)
+				{
+					vehicle->m_vecPosition = packet->pos;
+					vehicle->m_vecRotation = packet->rot;
+				}
 			}
 		};
 
@@ -183,13 +195,20 @@ class CVehiclePackets
 			{
 				CVehiclePackets::VehicleExit* packet = (CVehiclePackets::VehicleExit*)data;
 				CPlayer* player = CPlayerManager::GetPlayer(peer);
-				packet->playerid = player->m_iPlayerId;
-				CNetwork::SendPacketToAll(CPacketsID::VEHICLE_EXIT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
 				CVehicle* vehicle = CVehicleManager::GetVehicle(player->m_nVehicleId);
-				vehicle->m_pPlayers[player->m_nSeatId] = nullptr;
-				player->m_nSeatId = -1;
-				player->m_nVehicleId = -1;
+				if (vehicle)
+				{
+
+					packet->playerid = player->m_iPlayerId;
+					CNetwork::SendPacketToAll(CPacketsID::VEHICLE_EXIT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+					
+					vehicle->m_pPlayers[player->m_nSeatId] = nullptr;
+					player->m_nSeatId = -1;
+					player->m_nVehicleId = -1;
+
+				}
+
 			}
 		};
 
@@ -260,6 +279,11 @@ class CVehiclePackets
 		struct VehicleConfirm
 		{
 			unsigned char tempid;
+			int vehicleid;
+		};
+
+		struct AssignVehicleSyncer
+		{
 			int vehicleid;
 		};
 

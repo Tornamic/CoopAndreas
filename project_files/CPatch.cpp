@@ -228,6 +228,9 @@ void FixCrashes()
     injector::UnprotectMemory(0x609C80, 1, temp);
 
     injector::UnprotectMemory(0x6884C4, 6, temp); // see PlayerHooks.cpp
+
+    // temporary solution to fix jerking of dead vehicles
+    patch::SetUChar(0x6C25DB, 0xEB);
 }
 
 #define SCANCODE_BUFFER_SIZE (8 * 20000)
@@ -326,12 +329,28 @@ void PatchLoadScreen()
 
 const char aScriptDir[] = "CoopAndreas";
 const char aScriptPath[] = "CoopAndreas\\main.scm";
+const char aImgPath[] = "CoopAndreas\\script.img";
+
+uintptr_t CStreaming__AddImageToList_ptr = 0x0;
+uint32_t CStreaming__AddImageToList_Hook(const char* fileName, bool notPlayerFile)
+{
+    if (strncmp(fileName, "DATA\\SCRIPT\\SCRIPT.IMG", 22) == 0)
+    {
+        fileName = aImgPath;
+    }
+
+    return plugin::CallAndReturnDyn<uint32_t>(CStreaming__AddImageToList_ptr, fileName, notPlayerFile);
+}
 
 void PatchSCM()
 {
     // use our main.scm
-    patch::SetUInt(0x468EB5 + 1, (uintptr_t)aScriptDir);
-    patch::SetUInt(0x489A45 + 1, (uintptr_t)aScriptPath);
+    patch::SetPointer(0x468EB5 + 1, (void*)aScriptDir);
+    patch::SetPointer(0x489A45 + 1, (void*)aScriptPath);
+
+    // hook script.img loading
+    CStreaming__AddImageToList_ptr = injector::GetBranchDestination(0x5B915B).as_int();
+    patch::RedirectCall(0x5B915B, CStreaming__AddImageToList_Hook);
 }
 
 void CPatch::ApplyPatches()

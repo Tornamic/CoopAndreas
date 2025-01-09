@@ -104,6 +104,7 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PLAYER_AIM_SYNC, CPlayerPackets::PlayerAimSync::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_STATS, CPlayerPackets::PlayerStats::Handle);
     CNetwork::AddListener(CPacketsID::REBUILD_PLAYER, CPlayerPackets::RebuildPlayer::Handle);
+    CNetwork::AddListener(CPacketsID::RESPAWN_PLAYER, CPlayerPackets::RespawnPlayer::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -212,6 +213,34 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         getNamePacket.playerid = i->m_iPlayerId;
         strcpy(getNamePacket.name, i->m_Name);
         CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_GET_NAME, &getNamePacket, sizeof (CPlayerPackets::PlayerGetName), ENET_PACKET_FLAG_RELIABLE);
+
+        if (i->m_ucSyncFlags.bStatsModified)
+        {
+            CPlayerPackets::PlayerStats statsPacket{};
+            statsPacket.playerid = i->m_iPlayerId;
+            memcpy(statsPacket.stats, i->m_afStats, sizeof(i->m_afStats));
+            CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_STATS, &statsPacket, sizeof(statsPacket), ENET_PACKET_FLAG_RELIABLE);
+        }
+
+        if (i->m_ucSyncFlags.bClothesModified)
+        {
+            CPlayerPackets::RebuildPlayer rebuildPacket{};
+            rebuildPacket.playerid = i->m_iPlayerId;
+            memcpy(rebuildPacket.m_anModelKeys, i->m_anModelKeys, sizeof(i->m_anModelKeys));
+            memcpy(rebuildPacket.m_anTextureKeys, i->m_anTextureKeys, sizeof(i->m_anTextureKeys));
+            rebuildPacket.m_fFatStat = i->m_fFatStat;
+            rebuildPacket.m_fMuscleStat = i->m_fMuscleStat;
+            CNetwork::SendPacket(event.peer, CPacketsID::REBUILD_PLAYER, &rebuildPacket, sizeof(rebuildPacket), ENET_PACKET_FLAG_RELIABLE);
+        }
+
+        if (i->m_ucSyncFlags.bWaypointModified)
+        {
+            CPlayerPackets::PlayerPlaceWaypoint waypointPacket{};
+            waypointPacket.playerid = i->m_iPlayerId;
+            waypointPacket.position = i->m_vecWaypointPos;
+            waypointPacket.place = true;
+            CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_PLACE_WAYPOINT, &waypointPacket, sizeof(waypointPacket), ENET_PACKET_FLAG_RELIABLE);
+        }
     }
 
     for (auto i : CVehicleManager::m_pVehicles)
@@ -285,6 +314,9 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
         vehicle->m_pPlayers[player->m_nSeatId] = nullptr;
     }
 
+    CPedManager::RemoveAllHostedAndNotify(player);
+    CVehicleManager::RemoveAllHostedAndNotify(player);
+
     // remove
     CPlayerManager::Remove(player);
 
@@ -313,7 +345,7 @@ void CNetwork::HandlePacketReceive(ENetEvent& event)
     memcpy(data, event.packet->data + 2, event.packet->dataLength - 2);
 
     // call listener's callback by id
-    for (int i = 0; i < m_packetListeners.size(); i++)
+    for (size_t i = 0; i < m_packetListeners.size(); i++)
     {
         if (m_packetListeners[i]->m_iPacketID == id)
         {

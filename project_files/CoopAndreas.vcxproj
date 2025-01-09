@@ -42,14 +42,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\output\asi\</OutDir>
+    <OutDir>..\output\$(Configuration)\Client\</OutDir>
     <IntDir>..\output\obj\Release\</IntDir>
     <TargetName>CoopAndreasSA</TargetName>
-    <TargetExt>.asi</TargetExt>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\output\asi\</OutDir>
+    <OutDir>..\output\$(Configuration)\Client\</OutDir>
     <IntDir>..\output\obj\Debug\</IntDir>
     <TargetName>CoopAndreasSA</TargetName>
     <TargetExt>.dll</TargetExt>
@@ -59,10 +59,10 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NON_CONFORMING_SWPRINTFS;_USE_MATH_DEFINES;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;NDEBUG;GTASA;PLUGIN_SGV_10US;RW;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\source;$(PLUGIN_SDK_DIR)\shared\dxsdk;$(PLUGIN_SDK_DIR)\shared;$(PLUGIN_SDK_DIR)\shared\game;$(PLUGIN_SDK_DIR)\plugin_SA;$(PLUGIN_SDK_DIR)\plugin_SA\game_SA;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\source;$(PLUGIN_SDK_DIR)\shared;$(PLUGIN_SDK_DIR)\shared\game;$(PLUGIN_SDK_DIR)\shared\dxsdk;$(PLUGIN_SDK_DIR)\plugin_SA;$(PLUGIN_SDK_DIR)\plugin_SA\game_SA;$(ProjectDir);../shared;DiscordRPC;DiscordRPC/SDK/include;DiscordRPC/SDK/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -77,12 +77,16 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>plugin.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PLUGIN_SDK_DIR)\output\lib;$(DXSDK_DIR)\Lib\x86;$(PLUGIN_SDK_DIR)\shared\bass;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>..\output\asi\CoopAndreasSA.lib</ImportLibrary>
+      <AdditionalDependencies>plugin.lib;$(PLUGIN_SDK_DIR)\shared\dxsdk\d3dx9.lib;enet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(PLUGIN_SDK_DIR)\output\lib;$(DXSDK_DIR)\Lib\x86;$(PLUGIN_SDK_DIR)\shared\bass;$(PLUGIN_SDK_DIR)\shared\dxsdk;..\shared\enet\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>..\output\Client\CoopAndreasSA.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(TargetPath)" "$(GTA_SA_DIR)\CoopAndreasSA.asi"</Command>
+      <Command>if not exist "$(GTA_SA_DIR)\CoopAndreas\" mkdir "$(GTA_SA_DIR)\CoopAndreas\"
+copy /y "$(SolutionDir)..\shared\enet\x86\enet.dll" "$(TargetDir)"
+copy /y "$(SolutionDir)..\scm\*.*" "$(GTA_SA_DIR)\CoopAndreas\"
+copy /y "$(TargetDir)*.*" "$(GTA_SA_DIR)\"
+echo "Output files can be found at $(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -90,7 +94,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NON_CONFORMING_SWPRINTFS;_USE_MATH_DEFINES;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;DEBUG;GTASA;PLUGIN_SGV_10US;RW;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\source;$(PLUGIN_SDK_DIR)\shared;$(PLUGIN_SDK_DIR)\shared\game;$(PLUGIN_SDK_DIR)\shared\dxsdk;$(PLUGIN_SDK_DIR)\plugin_SA;$(PLUGIN_SDK_DIR)\plugin_SA\game_SA;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\source;$(PLUGIN_SDK_DIR)\shared;$(PLUGIN_SDK_DIR)\shared\game;$(PLUGIN_SDK_DIR)\shared\dxsdk;$(PLUGIN_SDK_DIR)\plugin_SA;$(PLUGIN_SDK_DIR)\plugin_SA\game_SA;$(ProjectDir);../shared;DiscordRPC;DiscordRPC/SDK/include;DiscordRPC/SDK/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -99,23 +103,28 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>plugin_d.lib;$(PLUGIN_SDK_DIR)\shared\dxsdk\d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PLUGIN_SDK_DIR)\output\lib;$(DXSDK_DIR)\Lib\x86;$(PLUGIN_SDK_DIR)\shared\bass;$(PLUGIN_SDK_DIR)\shared\dxsdk;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>..\output\asi\CoopAndreasSA.lib</ImportLibrary>
+      <AdditionalDependencies>plugin_d.lib;$(PLUGIN_SDK_DIR)\shared\dxsdk\d3dx9.lib;enet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(PLUGIN_SDK_DIR)\output\lib;$(DXSDK_DIR)\Lib\x86;$(PLUGIN_SDK_DIR)\shared\bass;$(PLUGIN_SDK_DIR)\shared\dxsdk;..\shared\enet\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>
+      </ImportLibrary>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
     <PostBuildEvent>
       <Command>if not exist "$(GTA_SA_DIR)\CoopAndreas\" mkdir "$(GTA_SA_DIR)\CoopAndreas\"
+copy /y "$(SolutionDir)..\shared\enet\x86\enet.dll" "$(TargetDir)"
+copy /y "$(SolutionDir)..\shared\enet\x86\enet.pdb" "$(TargetDir)"
 copy /y "$(SolutionDir)..\scm\*.*" "$(GTA_SA_DIR)\CoopAndreas\"
 copy /y "$(TargetDir)*.*" "$(GTA_SA_DIR)\"
-</Command>
+echo "Output files can be found at $(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\source\Main.cpp" />
     <ClCompile Include="CAimSync.cpp" />
     <ClCompile Include="CChat.cpp" />
+    <ClCompile Include="CDiscordRPC.cpp" />
+    <ClCompile Include="CDiscordRPCMgr.cpp" />
     <ClCompile Include="CNetworkPlayerStats.cpp" />
     <ClCompile Include="Commands\Commands\CCommandAddChatMessage.cpp" />
     <ClCompile Include="CCore.cpp" />
@@ -127,10 +136,17 @@ copy /y "$(TargetDir)*.*" "$(GTA_SA_DIR)\"
     <ClCompile Include="CDebugVehicleSpawner.cpp" />
     <ClCompile Include="CDriveBy.cpp" />
     <ClCompile Include="CStatsSync.cpp" />
+    <ClCompile Include="DiscordRPC\SDK\src\connection_win.cpp" />
+    <ClCompile Include="DiscordRPC\SDK\src\discord_register_win.cpp" />
+    <ClCompile Include="DiscordRPC\SDK\src\discord_rpc.cpp" />
+    <ClCompile Include="DiscordRPC\SDK\src\dllmain.cpp" />
+    <ClCompile Include="DiscordRPC\SDK\src\rpc_connection.cpp" />
+    <ClCompile Include="DiscordRPC\SDK\src\serialization.cpp" />
     <ClCompile Include="Hooks\StatsHooks.cpp" />
     <ClCompile Include="Tasks\CTaskComplexEnterCarAsPassengerTimed.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Tasks\CTaskComplexCarDrive.cpp" />
     <ClCompile Include="Tasks\CTaskComplexCarDriveWander.cpp" />
@@ -164,6 +180,8 @@ copy /y "$(TargetDir)*.*" "$(GTA_SA_DIR)\"
   <ItemGroup>
     <ClInclude Include="CAimSync.h" />
     <ClInclude Include="CChat.h" />
+    <ClInclude Include="CDiscordRPC.h" />
+    <ClInclude Include="CDiscordRPCMgr.h" />
     <ClInclude Include="CNetworkPlayerStats.h" />
     <ClInclude Include="Commands\Commands\CCommandAddChatMessage.h" />
     <ClInclude Include="CCore.h" />
@@ -176,6 +194,48 @@ copy /y "$(TargetDir)*.*" "$(GTA_SA_DIR)\"
     <ClInclude Include="CDebugVehicleSpawner.h" />
     <ClInclude Include="CDriveBy.h" />
     <ClInclude Include="CStatsSync.h" />
+    <ClInclude Include="DiscordRPC\SDK\include\discord_register.h" />
+    <ClInclude Include="DiscordRPC\SDK\include\discord_rpc.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\backoff.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\connection.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\msg_queue.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\allocators.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\document.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\encodedstream.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\encodings.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\error\en.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\error\error.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\filereadstream.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\filewritestream.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\fwd.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\biginteger.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\diyfp.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\dtoa.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\ieee754.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\itoa.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\meta.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\pow10.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\regex.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\stack.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\strtod.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\internal\swap.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\istreamwrapper.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\memorybuffer.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\memorystream.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\msinttypes\inttypes.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\msinttypes\stdint.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\pointer.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\prettywriter.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\rapidjson.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\reader.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\schema.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\stream.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\stringbuffer.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rapidjson\writer.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\rpc_connection.h" />
+    <ClInclude Include="DiscordRPC\SDK\src\serialization.h" />
     <ClInclude Include="Hooks\StatsHooks.h" />
     <ClInclude Include="Tasks\CTaskComplexEnterCarAsPassengerTimed.h" />
     <ClInclude Include="eNetworkEntityType.h" />

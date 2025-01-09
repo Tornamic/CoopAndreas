@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "CNetworkPed.h"
+#include <CTaskSimpleCarSetPedInAsPassenger.h>
+#include <CCarEnterExit.h>
+#include <CTaskSimpleCarSetPedOut.h>
 
 CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy)
 {
@@ -88,6 +91,8 @@ CNetworkPed::~CNetworkPed()
 
 CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
 {
+    ped->field_54C += 5000; // m_nTimeTillWeNeedThisPed
+
     CNetworkPed* networkPed = new CNetworkPed();
 
     networkPed->m_pPed = ped;
@@ -106,4 +111,53 @@ CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
     CNetwork::SendPacket(CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 
     return networkPed;
+}
+
+void CNetworkPed::WarpIntoVehicleDriver(CVehicle* vehicle)
+{
+    assert(m_pPed != nullptr);
+
+    m_pPed->m_pIntelligence->FlushImmediately(false);
+
+    if (!m_bSyncing)
+    {
+        m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
+    }
+
+    auto task = CTaskSimpleCarSetPedInAsDriver(vehicle, nullptr);
+    task.m_bWarpingInToCar = true;
+    task.ProcessPed(m_pPed);
+}
+
+void CNetworkPed::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
+{
+    assert(m_pPed != nullptr);
+
+    m_pPed->m_pIntelligence->FlushImmediately(false);
+
+    if (!m_bSyncing)
+    {
+        m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
+    }
+
+    int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle, seatid);
+    auto task = CTaskSimpleCarSetPedInAsPassenger(vehicle, doorId, nullptr);
+    task.m_bWarpingInToCar = true;
+    task.ProcessPed(m_pPed);
+}
+
+void CNetworkPed::RemoveFromVehicle(CVehicle* vehicle)
+{
+    assert(m_pPed != nullptr);
+
+    m_pPed->m_pIntelligence->m_TaskMgr.SetTask(nullptr, TASK_PRIMARY_PRIMARY, false);
+
+    if (!m_bSyncing)
+    {
+        m_pPed->m_nPedFlags.CantBeKnockedOffBike = 2; // 2 - normal
+    }
+
+    auto task = CTaskSimpleCarSetPedOut(vehicle, 1, false);
+    task.m_bWarpingOutOfCar = true;
+    task.ProcessPed(m_pPed);
 }

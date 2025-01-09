@@ -22,6 +22,7 @@ class CPedManager
 		static void Remove(CPed* ped);
 		static CPed* GetPed(int pedid);
 		static int GetFreeId();
+		static void RemoveAllHostedAndNotify(CPlayer* player);
 
 		~CPedManager();
 
@@ -49,6 +50,15 @@ class CPedPackets
 					return;
 
 				CPedPackets::PedSpawn* packet = (CPedPackets::PedSpawn*)data;
+
+				bool isSpecial = packet->modelId >= 290 && packet->modelId <= 299;
+				bool isOutOfRange = packet->modelId > 311 || packet->modelId < 1;
+
+				if (isOutOfRange)
+				{
+					return;
+				}
+
 				packet->pedid = CPedManager::GetFreeId();
 				CNetwork::SendPacketToAll(CPacketsID::PED_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		
@@ -157,6 +167,7 @@ class CPedPackets
 			CVector rot;
 			CVector roll;
 			CVector velocity;
+			CVector turnSpeed;
 			unsigned char pedHealth;
 			unsigned char pedArmour;
 			unsigned char weapon;
@@ -168,9 +179,6 @@ class CPedPackets
 			float bikeLean;
 			float planeGearState;
 			unsigned char locked;
-			float gasPedal;
-			float breakPedal;
-			float steerAngle;
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{

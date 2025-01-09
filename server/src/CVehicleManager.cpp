@@ -40,3 +40,23 @@ int CVehicleManager::GetFreeID()
 
 	return -1;
 }
+
+void CVehicleManager::RemoveAllHostedAndNotify(CPlayer* player)
+{
+	CVehiclePackets::VehicleRemove packet{};
+
+	for (auto it = CVehicleManager::m_pVehicles.begin(); it != CVehicleManager::m_pVehicles.end();)
+	{
+		if ((*it)->m_pSyncer == player)
+		{
+			packet.vehicleid = (*it)->m_nVehicleId;
+			CNetwork::SendPacketToAll(CPacketsID::VEHICLE_REMOVE, &packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE, player->m_pPeer);
+			delete *it;
+			it = CVehicleManager::m_pVehicles.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+}
