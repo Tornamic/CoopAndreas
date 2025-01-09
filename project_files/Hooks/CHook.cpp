@@ -6,6 +6,7 @@
 #include "PedHooks.h"
 #include "GameHooks.h"
 #include "StatsHooks.h"
+#include "CrashfixHooks.h"
 #include "Commands/CommandHooks.h"
 
 void CHook::Init()
@@ -18,4 +19,5 @@ void CHook::Init()
     GameHooks::InjectHooks();
     StatsHooks::InjectHooks();
     CommandHooks::InjectHooks();
+    CrashfixHooks::InjectHooks();
 }

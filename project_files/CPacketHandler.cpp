@@ -272,11 +272,15 @@ void CPacketHandler::AddExplosion__Handle(void* data, int size)
 		{
 			if (auto vehicle = networkVehicle->m_pVehicle)
 			{
-				vehicle->BlowUpCar(networkVehicle->m_pVehicle, false);
 				eVehicleType vehicleType = CUtil::GetVehicleType(vehicle);
+				
+				if (vehicleType != VEHICLE_BMX && vehicleType != VEHICLE_TRAIN)
+				{
+					vehicle->BlowUpCar(networkVehicle->m_pVehicle, false);
 
-				if(vehicleType != VEHICLE_BIKE && vehicleType != VEHICLE_BMX && vehicleType != VEHICLE_BOAT)
-					((CAutomobile*)vehicle)->m_damageManager.FuckCarCompletely(true);
+					if (vehicleType != VEHICLE_BIKE && vehicleType != VEHICLE_BOAT)
+						((CAutomobile*)vehicle)->m_damageManager.FuckCarCompletely(true);
+				}
 				return;
 			}
 			
