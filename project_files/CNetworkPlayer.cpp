@@ -70,16 +70,29 @@ void CNetworkPlayer::DestroyPed()
 		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
 	}
 
-	CWorld::Remove(m_pPed);
-
-	// destroy the ped
 	uintptr_t pedPtr = (uintptr_t)m_pPed;
-	__asm
+	if (CUtil::IsValidEntityPtr(m_pPed))
 	{
-		mov ecx, pedPtr
-		mov ebx, [ecx] // vtable addr
-		push 1 // unused arg
-		call[ebx] // call destructor
+		CWorld::Remove(m_pPed);
+
+		// destroy the ped
+		__asm
+		{
+			mov ecx, pedPtr
+			mov ebx, [ecx] // vtable addr
+			push 1 // unused arg
+			call[ebx] // call destructor
+		}
+	}
+	else
+	{
+		// destroy CPlaceable, if the entity is not valid (vtable points to CPlaceable vt)
+		__asm
+		{
+			mov ecx, pedPtr
+			mov ebx, [ecx] // vtable addr
+			call[ebx] // call destructor
+		}
 	}
 }
 

@@ -156,8 +156,11 @@ class CVehiclePackets
 
 				CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
 
-				vehicle->m_vecPosition = packet->pos;
-				vehicle->m_vecRotation = packet->rot;
+				if (vehicle)
+				{
+					vehicle->m_vecPosition = packet->pos;
+					vehicle->m_vecRotation = packet->rot;
+				}
 			}
 		};
 
@@ -191,13 +194,20 @@ class CVehiclePackets
 			{
 				CVehiclePackets::VehicleExit* packet = (CVehiclePackets::VehicleExit*)data;
 				CPlayer* player = CPlayerManager::GetPlayer(peer);
-				packet->playerid = player->m_iPlayerId;
-				CNetwork::SendPacketToAll(CPacketsID::VEHICLE_EXIT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
 				CVehicle* vehicle = CVehicleManager::GetVehicle(player->m_nVehicleId);
-				vehicle->m_pPlayers[player->m_nSeatId] = nullptr;
-				player->m_nSeatId = -1;
-				player->m_nVehicleId = -1;
+				if (vehicle)
+				{
+
+					packet->playerid = player->m_iPlayerId;
+					CNetwork::SendPacketToAll(CPacketsID::VEHICLE_EXIT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+					
+					vehicle->m_pPlayers[player->m_nSeatId] = nullptr;
+					player->m_nSeatId = -1;
+					player->m_nVehicleId = -1;
+
+				}
+
 			}
 		};
 

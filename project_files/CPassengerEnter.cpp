@@ -4,6 +4,18 @@
 #include <CCarEnterExit.h>
 #include <CTaskComplexEnterCarAsPassenger.h>
 
+bool IsPlayerEnteringVehicle(CPlayerPed* player)
+{
+	static const int taskTypes[] = { 701, 700, 713, 712, 718, 800 };
+	for (int taskType : taskTypes)
+	{
+		if (player->m_pIntelligence->m_TaskMgr.FindActiveTaskByType(taskType))
+			return true;
+	}
+
+	return false;
+}
+
 void CPassengerEnter::Process()
 {
 	CPlayerPed* localPlayer = FindPlayerPed(0);
@@ -14,30 +26,27 @@ void CPassengerEnter::Process()
 	if (localPlayer->m_nPedFlags.bInVehicle)
 		return;
 
-	// is player entering any vehicle
-	if (localPlayer->m_pIntelligence->m_TaskMgr.FindActiveTaskByType(701) ||
-		localPlayer->m_pIntelligence->m_TaskMgr.FindActiveTaskByType(700) ||
-		localPlayer->m_pIntelligence->m_TaskMgr.FindActiveTaskByType(713) ||
-		localPlayer->m_pIntelligence->m_TaskMgr.FindActiveTaskByType(712) ||
-		localPlayer->m_pIntelligence->m_TaskMgr.FindActiveTaskByType(718) ||
-		localPlayer->m_pIntelligence->m_TaskMgr.FindActiveTaskByType(800))
+	if (IsPlayerEnteringVehicle(localPlayer))
 		return;
 
 	CPad* pad = localPlayer->GetPadFromPlayer();
 
 	if (!pad->OldState.DPadUp && pad->NewState.DPadUp) // G key
 	{
-		CVehicle* minVehicle = nullptr;
+		CNetworkVehicle* minNetworkVehicle = nullptr;
 		float minDistance = 99999999.0f;
 
-		for (auto vehicle : CPools::ms_pVehiclePool)
+		for (auto networkVehicle : CNetworkVehicleManager::m_pVehicles)
 		{
-			float length = (vehicle->m_matrix->pos - localPlayer->m_matrix->pos).Magnitude();
-			
-			if (length < minDistance)
+			if (auto vehicle = networkVehicle->m_pVehicle)
 			{
-				minVehicle = vehicle;
-				minDistance = length;
+				float length = (vehicle->m_matrix->pos - localPlayer->m_matrix->pos).Magnitude();
+			
+				if (length < minDistance)
+				{
+					minNetworkVehicle = networkVehicle;
+					minDistance = length;
+				}
 			}
 		}
 
@@ -45,16 +54,15 @@ void CPassengerEnter::Process()
 		{
 			int doorId = 0;
 			CVector temp; // not checked by nullptr in the game, so we should use temporary var
-
+			CVehicle* minVehicle = minNetworkVehicle->m_pVehicle;
 			if (CCarEnterExit::GetNearestCarPassengerDoor(localPlayer, minVehicle, &temp, &doorId, true, true, true))
 			{
 				CTaskComplexEnterCarAsPassenger* task = new CTaskComplexEnterCarAsPassenger(minVehicle, doorId, false);
 				localPlayer->m_pIntelligence->m_TaskMgr.SetTask(task, 3, false);
 
-				CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(minVehicle);
 				CPackets::VehicleEnter packet{};
 
-				packet.vehicleid = vehicle->m_nVehicleId;
+				packet.vehicleid = minNetworkVehicle->m_nVehicleId;
 				packet.seatid = CCarEnterExit::ComputePassengerIndexFromCarDoor(minVehicle, doorId);
 				packet.force = false;
 				packet.passenger = true;
