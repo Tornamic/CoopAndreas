@@ -20,11 +20,42 @@ void CNetworkPlayerWaypoint::Process()
 
 		if (FrontEndMenuManager.m_bDrawRadarOrMap) 
 		{
-			screen.x = CUtil::SCREEN_STRETCH_X(screen.x) - CUtil::SCREEN_STRETCH_X(8.0f) / 2.f * 6; // 8.0f - size of the sprite, / 2 - half of the size sprite, * 6 - half of the font size
-			screen.y = CUtil::SCREEN_STRETCH_Y(screen.y) - CUtil::SCREEN_STRETCH_X(8.0f) / 2.f * 5; // 5 - font size / 2 - 1
+			const char* name = player->GetName();
+			D3DCOLOR shadowColor = D3DCOLOR_RGBA(0, 0, 0, 255);
+
+			// 8.0f - size of the sprite, / 2 - half of the size sprite
+			screen.x = CUtil::SCREEN_STRETCH_X(screen.x);
+			screen.y = CUtil::SCREEN_STRETCH_Y(screen.y) - CUtil::SCREEN_STRETCH_X(8.0f) / 2.f * offsetY;
 
 			CRadar::LimitToMap(&screen.x, &screen.y);
-			CDXFont::Draw((int)screen.x, (int)screen.y, player->GetName(), D3DCOLOR_RGBA(181, 24, 24, 255));
+			RECT rect{};
+			rect.left = screen.x;
+			rect.top = screen.y;
+			rect.right = RsGlobal.maximumWidth;
+			rect.bottom = RsGlobal.maximumHeight;
+
+			CDXFont::m_pD3DXFont->DrawTextA(nullptr, name, -1, &rect, DT_CALCRECT, D3DCOLOR_RGBA(0, 0, 0, 0));
+			int diff = (rect.right - rect.left) / 2;
+			rect.left -= diff;
+			rect.right += diff;
+
+			RECT rightRect = rect;
+			rightRect.left += CDXFont::m_iShadowSize;
+			CDXFont::m_pD3DXFont->DrawTextA(nullptr, name, -1, &rightRect, 0, shadowColor);
+
+			RECT leftRect = rect;
+			leftRect.left -= CDXFont::m_iShadowSize;
+			CDXFont::m_pD3DXFont->DrawTextA(nullptr, name, -1, &leftRect, 0, shadowColor);
+
+			RECT bottomRect = rect;
+			bottomRect.top += CDXFont::m_iShadowSize;
+			CDXFont::m_pD3DXFont->DrawTextA(nullptr, name, -1, &bottomRect, 0, shadowColor);
+
+			RECT topRect = rect;
+			CDXFont::m_pD3DXFont->DrawTextA(nullptr, name, -1, &topRect, 0, shadowColor);
+			topRect.top -= CDXFont::m_iShadowSize;
+
+			CDXFont::m_pD3DXFont->DrawTextA(nullptr, name, -1, &rect, 0, D3DCOLOR_RGBA(181, 24, 24, 255));
 		}
 	}
 }
