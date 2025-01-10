@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "CCamera.h"
 
 #define PROPORION_X(value) (value * RsGlobal.maximumWidth / 1920)
 #define PROPORION_Y(value) (value * RsGlobal.maximumHeight / 1080)
@@ -81,7 +80,7 @@ void CNetworkPlayerNameTag::Process()
 		if (!player->m_pPed)
 			continue;
 
-		CVector localPlayerPos = FindPlayerCoors(0);
+		CVector localPlayerCamPos = TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecSource;
 		CVector networkPlayerPos{};
 
 		if (player->m_pPed->m_pRwClump)
@@ -92,12 +91,12 @@ void CNetworkPlayerNameTag::Process()
 			networkPlayerPos.z += 0.5f;
 		}
 
-		unsigned char alpha = GetHudAlpha((localPlayerPos - networkPlayerPos).Magnitude());
+		unsigned char alpha = GetHudAlpha((localPlayerCamPos - networkPlayerPos).Magnitude());
 
 		if (alpha == 0 || !player->m_pPed->IsVisible() || player->m_lOnFoot == nullptr)
 			continue;
 
-		if (!CWorld::GetIsLineOfSightClear(*TheCamera.GetGameCamPosition(), networkPlayerPos, true, false, false, true, false, false, false))
+		if (!CWorld::GetIsLineOfSightClear(localPlayerCamPos, networkPlayerPos, true, false, false, true, false, false, false))
 			continue;
 
 		networkPlayerPos.z += 0.3f;
