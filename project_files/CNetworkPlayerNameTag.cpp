@@ -80,7 +80,7 @@ void CNetworkPlayerNameTag::Process()
 		if (!player->m_pPed)
 			continue;
 
-		CVector localPlayerPos = FindPlayerCoors(0);
+		CVector localPlayerCamPos = TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecSource;
 		CVector networkPlayerPos{};
 
 		if (player->m_pPed->m_pRwClump)
@@ -91,9 +91,12 @@ void CNetworkPlayerNameTag::Process()
 			networkPlayerPos.z += 0.5f;
 		}
 
-		unsigned char alpha = GetHudAlpha((localPlayerPos - networkPlayerPos).Magnitude());
+		unsigned char alpha = GetHudAlpha((localPlayerCamPos - networkPlayerPos).Magnitude());
 
 		if (alpha == 0 || !player->m_pPed->IsVisible() || player->m_lOnFoot == nullptr)
+			continue;
+
+		if (!CWorld::GetIsLineOfSightClear(localPlayerCamPos, networkPlayerPos, true, false, false, true, false, false, false))
 			continue;
 
 		networkPlayerPos.z += 0.3f;
