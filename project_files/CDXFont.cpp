@@ -39,7 +39,7 @@ void CDXFont::Draw(int x, int y, const char* text, D3DCOLOR defaultColor)
     {
         DrawSegmentWithShadow(currentX, y, seg.text.c_str(), seg.color);
 
-        int width = CDXFont::GetSegmentWidth(seg.text);
+        int width = CDXFont::GetTextWidth(seg.text);
         currentX += width;
     }
 }
@@ -49,7 +49,7 @@ void CDXFont::DrawSegmentWithShadow(int x, int y, const char* text, D3DCOLOR col
     if (!CDXFont::m_pD3DXFont)
         return;
 
-    uint8_t shadowSize = 1;
+    uint8_t shadowSize = m_iShadowSize;
 
     uint8_t red = (color >> 16) & 0xFF;
     uint8_t green = (color >> 8) & 0xFF;
@@ -87,13 +87,13 @@ void CDXFont::DrawSegmentWithShadow(int x, int y, const char* text, D3DCOLOR col
     CDXFont::m_pD3DXFont->DrawTextA(nullptr, text, -1, &rect, 0, color);
 }
 
-int CDXFont::GetSegmentWidth(const std::string& seg)
+int CDXFont::GetTextWidth(const std::string& text)
 {
     if (!m_pD3DXFont)
         return 0;
 
     RECT rc = { 0,0,0,0 };
-    CDXFont::m_pD3DXFont->DrawTextA(nullptr, seg.c_str(), -1, &rc, DT_CALCRECT, 0xFFFFFFFF);
+    CDXFont::m_pD3DXFont->DrawTextA(nullptr, text.c_str(), -1, &rc, DT_CALCRECT, 0xFFFFFFFF);
     return rc.right - rc.left;
 }
 
