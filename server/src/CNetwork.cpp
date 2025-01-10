@@ -202,10 +202,8 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         if (i->m_iPlayerId == freeId)
             continue;
 
-        packet =
-        {
-            i->m_iPlayerId
-        };
+        packet.id = i->m_iPlayerId;
+        packet.isAlreadyConnected = true;
 
         CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_CONNECTED, &packet, sizeof (CPlayerPackets::PlayerConnected), ENET_PACKET_FLAG_RELIABLE);
 

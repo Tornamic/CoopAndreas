@@ -160,6 +160,11 @@ void CNetworkPlayer::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 {
 	assert(m_pPed != nullptr);
 
+	if (!CUtil::IsValidEntityPtr(vehicle))
+	{
+		return;
+	}
+
 	if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
 	{
 		RemoveFromVehicle(m_pPed->m_pVehicle);
@@ -178,6 +183,11 @@ void CNetworkPlayer::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 void CNetworkPlayer::EnterVehiclePassenger(CVehicle* vehicle, int seatid)
 {
 	assert(m_pPed != nullptr);
+
+	if (!CUtil::IsValidEntityPtr(vehicle))
+	{
+		return;
+	}
 
 	if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
 	{

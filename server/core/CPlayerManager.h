@@ -37,7 +37,7 @@ class CPlayerPackets
 		struct PlayerConnected
 		{
 			int id;
-			char name[32 + 1];
+			bool isAlreadyConnected; // prevents spam in the chat when connecting by distinguishing already connected players from newly joined ones
 		};
 
 		struct PlayerDisconnected

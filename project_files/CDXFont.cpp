@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "CDXFont.h"
 
 ID3DXFont* CDXFont::m_pD3DXFont;
 uint8_t CDXFont::m_fFontSize;

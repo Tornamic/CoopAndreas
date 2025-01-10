@@ -23,6 +23,7 @@ public:
 
 	CNetworkPlayerStats m_stats{};
 	CPedClothesDesc m_pPedClothesDesc{};
+	bool m_bHasBeenConnectedBeforeMe = false;
 
 	CNetworkPlayer::~CNetworkPlayer();
 	CNetworkPlayer::CNetworkPlayer(int id, CVector position);

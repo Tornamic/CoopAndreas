@@ -6,6 +6,7 @@
 #include <CCarEnterExit.h>
 #include <CTaskSimpleCarSetPedInAsPassenger.h>
 #include <CTaskSimpleCarSetPedOut.h>
+#include <CNetworkPlayerList.h>
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
@@ -41,15 +42,20 @@ public:
 							enet_packet_destroy(event.packet); //You should destroy after used it
 							break;
 						}
+						case ENET_EVENT_TYPE_DISCONNECT:
+						{
+							CNetwork::Disconnect();
+						}
 						}
 					}
 				}
 				else if (bBeenConnected && !CNetwork::m_bConnected)
 				{
-					// disconnect
+					bBeenConnected = false;
 					enet_host_destroy(CNetwork::m_pClient);
 					enet_deinitialize();
-					printf("disconnected from server");
+					CChat::AddMessage("{cecedb}[Network] Disconnected from the server.");
+					printf("disconnected from server\n");
 				}
 			};
 		Events::gameProcessEvent += []
@@ -158,6 +164,9 @@ public:
 				CNetworkPlayerNameTag::Process();
 				CChat::Draw();
 				CChat::DrawInput();
+				
+				
+				CNetworkPlayerList::Draw();
 
 				if (CNetwork::m_bConnected && GetAsyncKeyState(VK_F9))
 				{

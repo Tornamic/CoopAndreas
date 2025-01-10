@@ -16,7 +16,12 @@ void CPacketHandler::PlayerConnected__Handle(void* data, int size)
 	// add player to list
 	CNetworkPlayerManager::Add(player);
 
-	CChat::AddMessage("[Player] " + std::string(player->GetName()) + " connected");
+	player->m_bHasBeenConnectedBeforeMe = packet->isAlreadyConnected;
+
+	if (!player->m_bHasBeenConnectedBeforeMe)
+	{
+		CChat::AddMessage("[Player] " + std::string(player->GetName()) + " connected");
+	}
 }
 
 // PlayerDisconnected
@@ -227,7 +232,10 @@ void CPacketHandler::PlayerGetName__Handle(void* data, int size)
 
 	strcpy_s(player->m_Name, packet->name);
 
-	CChat::AddMessage("[Player] player " + std::to_string(player->m_iPlayerId) + " now aka " + player->m_Name);
+	if (!player->m_bHasBeenConnectedBeforeMe)
+	{
+		CChat::AddMessage("[Player] player " + std::to_string(player->m_iPlayerId) + " now aka " + player->m_Name);
+	}
 
 	CPacketHandler::GameWeatherTime__Trigger();
 }
@@ -454,7 +462,10 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 	if (vehicle == nullptr || player == nullptr)
 		return;
 
-	if (vehicle->m_pVehicle == nullptr)
+	if (!CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
+		return;
+
+	/*if (vehicle->m_pVehicle == nullptr)
 	{
 		vehicle->CreateVehicle(vehicle->m_nVehicleId, vehicle->m_nModelId, packet->pos, 0.f, packet->color1, packet->color2);
 		return;
@@ -464,7 +475,7 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 	{
 		player->CreatePed(player->m_iPlayerId, packet->pos);
 		return;
-	}
+	}*/
 
 	if (player->m_pPed->m_pVehicle != vehicle->m_pVehicle || !player->m_pPed->m_nPedFlags.bInVehicle)
 	{
@@ -527,6 +538,9 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 	{
 		return;
 	}
+	
+	if (!CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
+		return;
 
 #ifdef PACKET_DEBUG_MESSAGES
 	CChat::AddMessage("player %d entered vehicleid %d %s", packet->playerid, packet->vehicleid, packet->seatid != 0 ? "as passenger" : "");
@@ -576,6 +590,10 @@ void CPacketHandler::VehicleExit__Handle(void* data, int size)
 	{
 		return;
 	}
+
+	if (!CUtil::IsValidEntityPtr(player->m_pPed->m_pVehicle))
+		return;
+
 #ifdef PACKET_DEBUG_MESSAGES
 	CChat::AddMessage("player %d exited from vehicle", packet->playerid);
 #endif
@@ -690,6 +708,9 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 		return;
 
 	if (vehicle->m_pVehicle == nullptr)
+		return;
+
+	if (!CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
 		return;
 
 	if (player->m_pPed == nullptr)
@@ -812,10 +833,11 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 	if (!ped->m_pPed)
 		return;
 
-	if (ped->m_pPed->m_pVehicle && ped->m_pPed->m_nPedFlags.bInVehicle)
+	if (ped->m_pPed->m_pVehicle && ped->m_pPed->m_nPedFlags.bInVehicle && CUtil::IsValidEntityPtr(ped->m_pPed->m_pVehicle))
 	{
 		//plugin::Command<Commands::TASK_LEAVE_CAR>(CPools::GetPedRef(ped->m_pPed), CPools::GetVehicleRef(ped->m_pPed->m_pVehicle));
-		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(ped->m_pPed), packet->pos.x, packet->pos.y, packet->pos.z);
+		//plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(ped->m_pPed), packet->pos.x, packet->pos.y, packet->pos.z);
+		ped->RemoveFromVehicle(ped->m_pPed->m_pVehicle);
 	}
 
 	CUtil::GiveWeaponByPacket(ped, packet->weapon, packet->ammo);
@@ -1059,6 +1081,9 @@ void CPacketHandler::PedPassengerSync__Handle(void* data, int size)
 		return;
 
 	if (ped->m_pPed == nullptr)
+		return;
+
+	if (!CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
 		return;
 
 	if (!ped->m_pPed->m_nPedFlags.bInVehicle || vehicle->m_pVehicle->m_pDriver == ped->m_pPed)

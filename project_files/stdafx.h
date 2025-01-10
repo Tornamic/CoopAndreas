@@ -81,6 +81,7 @@
 using namespace plugin;
 
 #include "CCore.h"
+#include "CDXFont.h"
 #include "structs.h"
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"

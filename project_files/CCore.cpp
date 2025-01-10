@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "CCrashLog.h"
-#include "CDXFont.h"
 #include "Commands/CCustomCommandRegistrar.h"
 #include "CDiscordRPC.h"
 

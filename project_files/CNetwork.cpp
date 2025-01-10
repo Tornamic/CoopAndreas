@@ -14,11 +14,8 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 	// init listeners
 	CNetwork::InitListeners();
 
-	// wait some time
-	Sleep(2000);
-
 	if (enet_initialize() != 0) { // try to init enet
-		std::cout << "Fail to enet_initialize" << std::endl;
+		CChat::AddMessage("{cecedb}[Network] {ff0000}Failed to enet_initialize.");
 		return false;
 	}
 	else
@@ -37,21 +34,26 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 
 	m_pPeer = enet_host_connect(m_pClient, &address, 2, 0); // connect to the server
 	if (m_pPeer == NULL) { // if not connected
-		std::cout << "Not Connected" << std::endl;
+		CChat::AddMessage("{cecedb}[Network] {ff0000}m_pPeer == NULL.");
+		//std::cout << "Not Connected" << std::endl;
 		return false;
 	}
 
+	CChat::AddMessage("{cecedb}[Network] Connecting to the server...");
 	ENetEvent event;
-	if (enet_host_service(m_pClient, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
+	while (!m_bConnected)
 	{
-		m_bConnected = true;
-		std::cout << "Connection succeeded." << std::endl;
-		CPatch::RevertTemporaryPatches();
-	}
-	else
-	{
-		enet_peer_reset(m_pPeer);
-		std::cout << "Connection failed." << std::endl;
+		if (enet_host_service(m_pClient, &event, 2000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
+		{
+			m_bConnected = true;
+			CChat::AddMessage("{cecedb}[Network] {00ff00}Succesfully {cecedb}connected to the server.");
+			CPatch::RevertTemporaryPatches();
+		}
+		else
+		{
+			//enet_peer_reset(m_pPeer);
+			CChat::AddMessage("{cecedb}[Network] Failed to connect. Retrying...");
+		}
 	}
 
 	

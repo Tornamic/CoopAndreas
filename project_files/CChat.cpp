@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "CDXFont.h"
 
 std::vector<CChatMessage> CChat::m_aMessages{};
 std::vector<std::string> CChat::m_aPrevMessages{};
@@ -311,9 +310,6 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         if (wParam == VK_F6)  // chat toggle
         {
-            if (!CNetwork::m_bConnected)
-                return;
-
             CChat::ToggleInput(!m_bInputActive);
         }
         else if (wParam == VK_ESCAPE && m_bInputActive)
@@ -322,6 +318,9 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         else if (wParam == VK_RETURN && m_bInputActive)
         {
+            if (!CNetwork::m_bConnected)
+                return;
+
             CChat::ToggleInput(false);
 
             if (m_sInputText.empty())
