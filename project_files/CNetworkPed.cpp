@@ -117,6 +117,11 @@ void CNetworkPed::WarpIntoVehicleDriver(CVehicle* vehicle)
 {
     assert(m_pPed != nullptr);
 
+    if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
+    {
+        RemoveFromVehicle(m_pPed->m_pVehicle);
+    }
+
     m_pPed->m_pIntelligence->FlushImmediately(false);
 
     if (!m_bSyncing)
@@ -132,6 +137,11 @@ void CNetworkPed::WarpIntoVehicleDriver(CVehicle* vehicle)
 void CNetworkPed::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 {
     assert(m_pPed != nullptr);
+
+    if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
+    {
+        RemoveFromVehicle(m_pPed->m_pVehicle);
+    }
 
     m_pPed->m_pIntelligence->FlushImmediately(false);
 
