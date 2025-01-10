@@ -3,19 +3,19 @@
 #define PROPORION_X(value) (value * RsGlobal.maximumWidth / 1920)
 #define PROPORION_Y(value) (value * RsGlobal.maximumHeight / 1080)
 
-unsigned char GetHudAlpha(float distance) 
+unsigned char GetHudAlpha(float distance)
 {
-	if (distance <= 5.0f) 
+	if (distance <= 45.0f)
 	{
 		return 255;
 	}
-	else if (distance >= 15.0f) 
+	else if (distance >= 50.0f)
 	{
 		return 0;
 	}
-	else 
+	else
 	{
-		float factor = (5.0f - distance) / 10.0f;
+		float factor = (10.0f - distance) / 5.0f;
 		return static_cast<unsigned char>(std::round(factor * 255.0f));
 	}
 }
@@ -90,6 +90,7 @@ void CNetworkPlayerNameTag::Process()
 			networkPlayerPos = player->m_pPed->GetPosition();
 			networkPlayerPos.z += 0.5f;
 		}
+		networkPlayerPos.z += 0.3f;
 
 		unsigned char alpha = GetHudAlpha((localPlayerCamPos - networkPlayerPos).Magnitude());
 
@@ -98,8 +99,6 @@ void CNetworkPlayerNameTag::Process()
 
 		if (!CWorld::GetIsLineOfSightClear(localPlayerCamPos, networkPlayerPos, true, false, false, true, false, false, false))
 			continue;
-
-		networkPlayerPos.z += 0.3f;
 
 		RwV3d out;
 		float width, height;

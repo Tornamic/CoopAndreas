@@ -164,8 +164,6 @@ public:
 				CNetworkPlayerNameTag::Process();
 				CChat::Draw();
 				CChat::DrawInput();
-				
-				
 				CNetworkPlayerList::Draw();
 
 				if (CNetwork::m_bConnected && GetAsyncKeyState(VK_F9))
