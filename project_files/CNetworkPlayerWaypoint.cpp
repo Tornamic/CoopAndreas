@@ -29,8 +29,8 @@ void CNetworkPlayerWaypoint::Process()
 
 			CRadar::LimitToMap(&screen.x, &screen.y);
 			RECT rect{};
-			rect.left = screen.x;
-			rect.top = screen.y;
+			rect.left = (LONG)screen.x;
+			rect.top = (LONG)screen.y;
 			rect.right = RsGlobal.maximumWidth;
 			rect.bottom = RsGlobal.maximumHeight;
 

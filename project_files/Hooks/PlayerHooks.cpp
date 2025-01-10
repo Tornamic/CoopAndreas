@@ -147,6 +147,16 @@ void CReferences__RemoveReferencesToPlayer_Hook()
     CNetwork::SendPacket(CPacketsID::RESPAWN_PLAYER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 }
 
+bool __fastcall CWeapon__TakePhotograph_Hook(CWeapon* This, int, CEntity* entity, CVector* point)
+{
+    if (entity == FindPlayerPed(0))
+    {
+        return This->TakePhotograph(entity, point);
+    }
+
+    return false;
+}
+
 void PlayerHooks::InjectHooks()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -166,4 +176,6 @@ void PlayerHooks::InjectHooks()
 
     // called when the player respawns after being busted or wasted
     patch::RedirectCall(0x443082, CReferences__RemoveReferencesToPlayer_Hook);
+
+    patch::RedirectCall(0x74278B, CWeapon__TakePhotograph_Hook);
 }

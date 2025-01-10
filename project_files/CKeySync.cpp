@@ -5,6 +5,8 @@
 CControllerState storedOldState{};
 CControllerState storedNewState{};
 bool storedDisableControls = false;
+bool bNightVision;
+bool bInfraredVision;
 
 void CKeySync::ApplyNetworkPlayerContext(CNetworkPlayer* player)
 {
@@ -26,6 +28,11 @@ void CKeySync::ApplyNetworkPlayerContext(CNetworkPlayer* player)
 	    pad->OldState = player->m_oldControllerState;
 	    pad->NewState = player->m_newControllerState;
     }
+
+    bNightVision = patch::GetUChar(0xC402B8, false);
+    patch::SetUChar(0xC402B8, false, false);
+    bInfraredVision = patch::GetUChar(0xC402B9, false);
+    patch::SetUChar(0xC402B9, false, false);
 }
 
 void CKeySync::ApplyLocalContext()
@@ -35,6 +42,9 @@ void CKeySync::ApplyLocalContext()
 	pad->OldState = storedOldState;
 	pad->NewState = storedNewState;
     pad->DisablePlayerControls = storedDisableControls;
+
+    patch::SetUChar(0xC402B8, bNightVision, false);
+    patch::SetUChar(0xC402B9, bInfraredVision, false);
 }
 
 #define PROCESS_STICK(stick);                                   \
