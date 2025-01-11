@@ -10,7 +10,7 @@ uint8_t CChat::m_nCurrentPrevMessageIndex = 0;
 
 uint8_t patch_disable_inputs[] = {0x00, 0x00, 0x00, 0x00, 0x00};
 
-bool IsStringEmpty(const std::string& str)
+bool IsInputTextEmpty(const std::string& str)
 {
     return str.find_first_not_of("\t\n ") == std::string::npos;
 }
@@ -383,7 +383,7 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             if (m_sInputText.empty())
                 return;
 
-            if (IsStringEmpty(m_sInputText))
+            if (IsInputTextEmpty(m_sInputText))
             {
                 m_sInputText.clear();
                 m_nCaretPos = 0;
