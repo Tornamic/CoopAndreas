@@ -6,13 +6,23 @@ std::vector<std::string> CChat::m_aPrevMessages{};
 std::string CChat::m_sInputText = "";
 bool CChat::m_bInputActive = false;
 size_t CChat::m_nCaretPos = 0;
-uint8_t CChat::m_iCurrentPrevMessageIndex = 0;
+uint8_t CChat::m_nCurrentPrevMessageIndex = 0;
 
 uint8_t patch_disable_inputs[] = {0x00, 0x00, 0x00, 0x00, 0x00};
 
-void CChat::AddMessage(const std::string& message)
+bool IsStringEmpty(const std::string& str)
 {
-    m_aMessages.push_back(CChatMessage{message, GetTickCount(), true});
+    return str.find_first_not_of("\t\n ") == std::string::npos;
+}
+
+void CChat::AddMessage(const std::vector<CTextSegment>& segs)
+{
+    m_aMessages.push_back(CChatMessage{segs, GetTickCount(), true});
+}
+
+void CChat::AddMessage(const std::string& str)
+{
+    AddMessageRich(str, false);
 }
 
 void CChat::AddMessage(const char* format, ...)
@@ -22,7 +32,46 @@ void CChat::AddMessage(const char* format, ...)
     va_start(args, format);
     std::vsnprintf(buffer, sizeof(buffer), format, args);
     va_end(args);
-    AddMessage(std::string(buffer));
+
+    AddMessageRich(std::string(buffer), false);
+}
+
+void CChat::AddMessageRich(const std::string& str, bool isSplit)
+{
+    std::vector<CTextSegment> segments = CDXFont::ParseColorSegments(str, DEFAULT_CHAT_COLOR(255));
+
+    if (segments.empty())
+        return;
+
+    if (isSplit)
+    {
+        std::vector<std::vector<CTextSegment>> lines = SplitSegmentsByLength(segments);
+        for (auto& line : lines)
+        {
+            if (!line.empty())
+                AddMessage(line);
+        }
+    }
+    else
+    {
+        AddMessage(segments);
+    }
+}
+
+void CChat::AddMessage(bool isSplit, const char* format, ...)
+{
+    char buffer[1024];
+    va_list args;
+    va_start(args, format);
+    std::vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+
+    AddMessageRich(std::string(buffer), isSplit);
+}
+
+void CChat::SendPlayerMessage(const char* name, int id, const char* message)
+{
+    CChat::AddMessage(true, "{FF2D2D}%s(%d): {FFFFFF}%s", name, id, message);
 }
 
 void CChat::AddPreviousMessage(const std::string& message)
@@ -36,9 +85,9 @@ void CChat::AddPreviousMessage(const std::string& message)
     {
         m_aPrevMessages.erase(m_aPrevMessages.begin());
 
-        if (m_iCurrentPrevMessageIndex > 0)
+        if (m_nCurrentPrevMessageIndex > 0)
         {
-            m_iCurrentPrevMessageIndex--;
+            m_nCurrentPrevMessageIndex--;
         }
     }
 
@@ -46,87 +95,79 @@ void CChat::AddPreviousMessage(const std::string& message)
 
     if ((uint8_t)m_aPrevMessages.size() < CChat::MAX_PREV_MESSAGES)
     {
-        m_iCurrentPrevMessageIndex = (uint8_t)m_aPrevMessages.size();
+        m_nCurrentPrevMessageIndex = (uint8_t)m_aPrevMessages.size();
     }
 }
 
-std::vector<std::string> CChat::SeparateMessageToChunks(const std::string& message)
+std::vector<std::vector<CTextSegment>> CChat::SplitSegmentsByLength(const std::vector<CTextSegment>& segments)
 {
-    size_t start = 0;
-    uint8_t chunkCount = 0;
-    size_t length = message.length();
-    std::vector<std::string> chunks{};
+    std::vector<std::vector<CTextSegment>> lines;
+   
+    size_t currentLineLen = 0;
+    size_t maxLen = MESSAGE_CHUNK_SIZE;
 
-    while (start < length)
+    lines.emplace_back();
+
+    for (auto& seg : segments)
     {
-        size_t chunkSize = min(CChat::MESSAGE_CHUNK_SIZE, length - start);
-        if (chunkSize == CChat::MESSAGE_CHUNK_SIZE)
+        size_t pos = 0;
+        const std::string& segText = seg.text;
+        D3DCOLOR segColor = seg.color;
+
+        while (pos < segText.size())
         {
-            size_t lastSpace = message.rfind(' ', start + chunkSize);
-            if (lastSpace != std::string::npos && lastSpace > start)
+            size_t canFit = (maxLen > currentLineLen) ? (maxLen - currentLineLen) : 0;
+
+            if (canFit == 0)
             {
-                chunkSize = lastSpace - start;
+                lines.emplace_back();
+                currentLineLen = 0;
+                canFit = maxLen;
             }
+
+            size_t remain = segText.size() - pos;
+            size_t take = min(canFit, remain);
+
+            if (take == 0)
+            {
+                break;
+            }
+
+            std::string part = segText.substr(pos, take);
+            pos += take;
+
+            lines.back().push_back({ part, segColor });
+
+            currentLineLen += take;
         }
-
-        std::string messagePart = message.substr(start, chunkSize);
-        chunks.push_back(messagePart);
-
-        start += chunkSize;
-        while (start < length && message[start] == ' ')
-        {
-            start++;
-        }
-
-        chunkCount++;
     }
 
-    return chunks;
-}
-
-void CChat::SendPlayerMessage(const char* name, int id, const char* message)
-{
-    std::vector<std::string> chunks = CChat::SeparateMessageToChunks(message);
-
-    for (size_t i = 0; i < chunks.size(); i++)
-    {
-        if (i == 0)
-        {
-            CChat::AddMessage("{FF2D2D}%s(%d): {FFFFFF}%s", name, id, chunks[i].c_str());
-            continue;
-        }
-
-        CChat::AddMessage("{FFFFFF}%s", chunks[i].c_str());
-    }
+    return lines;
 }
 
 void CChat::Draw()
 {
-    if (!CDXFont::m_pD3DXFont || CChat::m_aMessages.empty())
+    if (!CDXFont::m_pD3DXFont || m_aMessages.empty())
         return;
 
     int tickCount = GetTickCount();
     uint8_t drawnMessages = 0;
 
-    for (auto it = CChat::m_aMessages.rbegin(); it != CChat::m_aMessages.rend() && drawnMessages < CChat::MAX_MESSAGES; ++it)
+    for (auto it = m_aMessages.rbegin(); it != m_aMessages.rend() && drawnMessages < MAX_MESSAGES; ++it)
     {
-		if (!it->m_bVisible && !m_bInputActive)
-		{
-			continue;
-		}
+        if (!it->m_bVisible && !m_bInputActive)
+            continue;
 
-        size_t alpha = 255;
-
+        size_t fadeAlpha = 255;
         if (!m_bInputActive)
         {
             DWORD messageAge = tickCount - it->m_nCreatedAt;
-
-            if (messageAge > CChat::MAX_MESSAGE_AGE)
+            if (messageAge > MAX_MESSAGE_AGE)
             {
-                size_t fadeTime = messageAge - CChat::MAX_MESSAGE_AGE;
-                if (fadeTime <= CChat::MESSAGE_DISAPPEAR_TIME)
+                size_t fadeTime = messageAge - MAX_MESSAGE_AGE;
+                if (fadeTime <= MESSAGE_DISAPPEAR_TIME)
                 {
-                    alpha = 255 - ((fadeTime * 255) / CChat::MESSAGE_DISAPPEAR_TIME);
+                    fadeAlpha = 255 - ((fadeTime * 255) / MESSAGE_DISAPPEAR_TIME);
                 }
                 else
                 {
@@ -136,13 +177,29 @@ void CChat::Draw()
             }
         }
 
-        CDXFont::Draw(10, RsGlobal.maximumHeight / 5 + (CChat::MAX_MESSAGES - drawnMessages) * CDXFont::m_fFontSize, it->m_message.c_str(), DEFAULT_CHAT_COLOR(alpha));
+        int x = 10;
+        int y = RsGlobal.maximumHeight / 5 + (MAX_MESSAGES - drawnMessages) * CDXFont::m_fFontSize;
+
+        for (auto& seg : it->segments)
+        {
+            uint8_t r = (seg.color >> 16) & 0xFF;
+            uint8_t g = (seg.color >> 8) & 0xFF;
+            uint8_t b = seg.color & 0xFF;
+            uint8_t a = (seg.color >> 24) & 0xFF;
+
+            uint8_t blendedAlpha = (uint8_t)((a * fadeAlpha) / 255);
+            D3DCOLOR blendedColor = r << 16 | g << 8 | b & 0xFF | blendedAlpha << 24;
+
+            CDXFont::DrawSegmentWithShadow(x, y, seg.text.c_str(), blendedColor);
+            x += CDXFont::GetTextWidth(seg.text);
+        }
+
         drawnMessages++;
     }
 
     if (m_aMessages.size() > CChat::MAX_MESSAGES)
     {
-        CChat::m_aMessages.erase(CChat::m_aMessages.begin());
+        m_aMessages.erase(m_aMessages.begin());
     }
 }
 
@@ -170,12 +227,12 @@ void CChat::DrawInput()
     if (!m_bInputActive)
         return;
 
-    const std::string caretSymbol = (GetTickCount() % 1000 > 500) ? "|" : " "; // caret blinking
+    char caretSymbol = (GetTickCount() % 1000 > CARET_BLINKING_INTERVAL) ? '|' : ' '; // caret blinking
     std::string displayText = m_sInputText;
 
     if (m_nCaretPos >= 0 && m_nCaretPos <= displayText.length())
     {
-        displayText.insert(m_nCaretPos, caretSymbol);
+        displayText.insert(m_nCaretPos, 1, caretSymbol);
     }
     
     CDXFont::Draw(10, RsGlobal.maximumHeight / 5 + 16 * CDXFont::m_fFontSize, (": " + displayText).c_str(), D3DCOLOR_RGBA(255, 255, 255, 255));
@@ -214,17 +271,17 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             if (!m_sInputText.empty())
             {
-                CChat::AddPreviousMessage(m_sInputText);
+                AddPreviousMessage(m_sInputText);
             }
 
             if (!m_aPrevMessages.empty())
             {
-                if (m_iCurrentPrevMessageIndex > 0)
+                if (m_nCurrentPrevMessageIndex > 0)
                 {
-                    m_iCurrentPrevMessageIndex--;
+                    m_nCurrentPrevMessageIndex--;
                 }
 
-                m_sInputText = m_aPrevMessages[m_iCurrentPrevMessageIndex];
+                m_sInputText = m_aPrevMessages[m_nCurrentPrevMessageIndex];
                 m_nCaretPos = m_sInputText.length();
             }
         }
@@ -232,22 +289,22 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             if (!m_sInputText.empty())
             {
-                CChat::AddPreviousMessage(m_sInputText);
+                AddPreviousMessage(m_sInputText);
             }
 
             if (!m_aPrevMessages.empty())
             {
-                m_iCurrentPrevMessageIndex++;
+                m_nCurrentPrevMessageIndex++;
 
-                if (m_iCurrentPrevMessageIndex >= (uint8_t)m_aPrevMessages.size())
+                if (m_nCurrentPrevMessageIndex >= (uint8_t)m_aPrevMessages.size())
                 {
                     m_nCaretPos = 0;
-                    m_sInputText = "";
-                    m_iCurrentPrevMessageIndex = (uint8_t)m_aPrevMessages.size();
+                    m_sInputText.clear();
+                    m_nCurrentPrevMessageIndex = (uint8_t)m_aPrevMessages.size();
                     return;
                 }
                
-                m_sInputText = m_aPrevMessages[m_iCurrentPrevMessageIndex];
+                m_sInputText = m_aPrevMessages[m_nCurrentPrevMessageIndex];
                 m_nCaretPos = m_sInputText.length();
             }
         }
@@ -310,28 +367,33 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         if (wParam == VK_F6)  // chat toggle
         {
-            CChat::ToggleInput(!m_bInputActive);
+            ToggleInput(!m_bInputActive);
         }
         else if (wParam == VK_ESCAPE && m_bInputActive)
         {
-            CChat::ToggleInput(false);
+            ToggleInput(false);
         }
         else if (wParam == VK_RETURN && m_bInputActive)
         {
             if (!CNetwork::m_bConnected)
                 return;
 
-            CChat::ToggleInput(false);
+            ToggleInput(false);
 
             if (m_sInputText.empty())
+                return;
+
+            if (IsStringEmpty(m_sInputText))
             {
+                m_sInputText.clear();
+                m_nCaretPos = 0;
                 return;
             }
 
             CPackets::PlayerChatMessage packet{};
             strcpy_s(packet.message, m_sInputText.c_str());
-            CChat::SendPlayerMessage(CLocalPlayer::m_Name, CNetworkPlayerManager::m_nMyId, packet.message);
-            CChat::AddPreviousMessage(m_sInputText);
+            SendPlayerMessage(CLocalPlayer::m_Name, CNetworkPlayerManager::m_nMyId, packet.message);
+            AddPreviousMessage(m_sInputText);
             CNetwork::SendPacket(CPacketsID::PLAYER_CHAT_MESSAGE, &packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE);
 
             m_sInputText.clear();

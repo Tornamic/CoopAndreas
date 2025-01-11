@@ -15,10 +15,11 @@ public:
 	static uint8_t m_fFontSize;
 
 	static void Init();
-	static void Draw(int x, int y, const char* text, D3DCOLOR color);
+	static void Draw(int x, int y, const std::vector<CTextSegment>& segments);
+	static void Draw(int x, int y, const char* rawText, D3DCOLOR defaultColor);
 	static void DrawSegmentWithShadow(int x, int y, const char* text, D3DCOLOR color);
-	static int GetTextWidth(const std::string& text);
-	static std::vector<CTextSegment> GetSegments(const std::string& input, D3DCOLOR defaultColor);
+	static int GetTextWidth(const std::string& seg);
+	static std::vector<CTextSegment> ParseColorSegments(const std::string& input, D3DCOLOR defaultColor);
 
 private:
 	static void InitFont();
