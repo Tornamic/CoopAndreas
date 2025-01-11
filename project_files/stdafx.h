@@ -74,7 +74,7 @@
 #include <CStats.h>
 #include <CClothes.h>
 
-#include "Tasks/CTaskComplexCarDriveWander.h"
+#include "game_sa/CTaskComplexCarDriveWander.h"
 
 // classes ---------------------------------------------------------------------------------
 

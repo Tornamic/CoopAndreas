@@ -1,6 +1,7 @@
 
 #include "../core/CPlayer.h"
 #include "../core/CPlayerManager.h"
+#include "../core/CVehicleManager.h"
 
 CPlayer::CPlayer(ENetPeer* peer, int playerid)
 {
@@ -14,4 +15,21 @@ std::string CPlayer::GetName()
 		return std::string(m_Name);
 	else
 		return "player " + std::to_string(m_iPlayerId);
+}
+
+void CPlayer::RemoveFromVehicle()
+{
+	if (this->m_nSeatId < 0 || this->m_nSeatId > 7)
+		return;
+
+	if (auto vehicle = CVehicleManager::GetVehicle(this->m_nVehicleId))
+	{
+		if (vehicle->m_pPlayers[this->m_nSeatId] == this)
+		{
+			vehicle->SetOccupant(this->m_nSeatId, nullptr);
+		}
+	}
+
+	this->m_nVehicleId = -1;
+	this->m_nSeatId = -1;
 }

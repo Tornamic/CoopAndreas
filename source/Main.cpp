@@ -7,6 +7,7 @@
 #include <CTaskSimpleCarSetPedInAsPassenger.h>
 #include <CTaskSimpleCarSetPedOut.h>
 #include <CNetworkPlayerList.h>
+#include <CFireManager.h>
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
@@ -166,7 +167,7 @@ public:
 				CChat::DrawInput();
 				CNetworkPlayerList::Draw();
 
-				if (CNetwork::m_bConnected && GetAsyncKeyState(VK_F9))
+				if (CNetwork::m_bConnected && !GetAsyncKeyState(VK_F9))
 				{
 					char buffer[70];
 					sprintf(buffer, "Game/Network: Peds %d/%d Cars %d/%d Recv %d Sent %d", CPools::ms_pPedPool->GetNoOfUsedSpaces(), CNetworkPedManager::m_pPeds.size(), CPools::ms_pVehiclePool->GetNoOfUsedSpaces(), CNetworkVehicleManager::m_pVehicles.size(), CNetwork::m_pClient->totalReceivedPackets, CNetwork::m_pClient->totalSentPackets);

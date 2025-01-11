@@ -81,7 +81,6 @@ void __fastcall CPed__Dress_Hook(CPed* This, int)
 	{
 		if (This == FindPlayerPed(0))
 		{
-			CChat::AddMessage("CPacketHandler::RebuildPlayer__Trigger()");
 			CPacketHandler::RebuildPlayer__Trigger();
 		}
 	}

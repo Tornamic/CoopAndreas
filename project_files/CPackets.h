@@ -40,7 +40,8 @@ enum CPacketsID : unsigned short
 	PED_CONFIRM,
 	PLAYER_STATS,
 	REBUILD_PLAYER,
-	RESPAWN_PLAYER
+	RESPAWN_PLAYER,
+	ASSIGN_VEHICLE
 };
 
 class CPackets
