@@ -8,6 +8,7 @@
 #include <CTaskSimpleCarSetPedOut.h>
 #include <CNetworkPlayerList.h>
 #include <CFireManager.h>
+#include <semver.h>
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
@@ -45,6 +46,12 @@ public:
 						}
 						case ENET_EVENT_TYPE_DISCONNECT:
 						{
+							char buffer[23];
+							semver_t expected;
+							semver_unpack(event.data, &expected);
+							semver_to_string(&expected, buffer, sizeof buffer);
+							buffer[22] = '\0';
+							CChat::AddMessage("{cecedb}[Network] Version mismatch, server: %s client: %s", buffer, COOPANDREAS_VERSION);
 							CNetwork::Disconnect();
 						}
 						}
@@ -166,6 +173,13 @@ public:
 				CChat::Draw();
 				CChat::DrawInput();
 				CNetworkPlayerList::Draw();
+
+				if (CCore::Version.stage != SEMVER_STAGE_RELEASE)
+				{
+					CDXFont::Draw(0, RsGlobal.maximumHeight - CDXFont::m_fFontSize,
+						std::string("CoopAndreas " + std::string(COOPANDREAS_VERSION)).c_str(),
+						D3DCOLOR_ARGB(255, 160, 160, 160));
+				}
 
 				if (CNetwork::m_bConnected && !GetAsyncKeyState(VK_F9))
 				{

@@ -12,6 +12,7 @@
 #include "../core/CVehicleManager.h"
 #include "../core/CPedManager.h"
 
+#include "../shared/semver.h"
 
 
 std::vector<CPacketListener*> CNetwork::m_packetListeners;
@@ -166,12 +167,26 @@ void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag fl
 
 void CNetwork::HandlePlayerConnected(ENetEvent& event)
 {
-    printf("[Game] : A new client connected from %i.%i.%i.%i:%u.\n", 
+    uint32_t packedVersion = semver_parse(COOPANDREAS_VERSION, nullptr);
+    char buffer[23];
+    semver_t playerVersion;
+    semver_unpack(event.data, &playerVersion);
+    semver_to_string(&playerVersion, buffer, sizeof(buffer));
+    buffer[22] = '\0';
+
+    printf("[Game] : A new client connected from %i.%i.%i.%i:%u. Version: %s\n", 
         event.peer->address.host & 0xFF, 
         (event.peer->address.host >> 8) & 0xFF, 
         (event.peer->address.host >> 16) & 0xFF, 
         (event.peer->address.host >> 24) & 0xFF, 
-        event.peer->address.port);
+        event.peer->address.port, buffer);
+
+    if (packedVersion != event.data)
+    {
+        printf("Wrong version, disconnecting...\n");
+        enet_peer_disconnect_now(event.peer, packedVersion);
+        return;
+    }
 
     // set player disconnection timeout
     enet_peer_timeout(event.peer, 5000, 3000, 5000); //timeoutLimit, timeoutMinimum, timeoutMaximum

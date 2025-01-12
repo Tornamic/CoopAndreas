@@ -3,6 +3,8 @@
 #include "Commands/CCustomCommandRegistrar.h"
 #include "CDiscordRPC.h"
 
+semver_t CCore::Version;
+
 WNDPROC prevWndProc;
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -57,6 +59,7 @@ void CCore::Init()
 		// disconnect from server
 		CNetwork::Disconnect();
 	};
+	semver_parse(COOPANDREAS_VERSION, &CCore::Version);
 }
 
 void CCore::AllocateConsole()

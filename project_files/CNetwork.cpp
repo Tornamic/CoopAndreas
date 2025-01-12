@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "../shared/semver.h"
 
 ENetHost* CNetwork::m_pClient = nullptr;
 ENetPeer* CNetwork::m_pPeer = nullptr;
@@ -32,7 +33,8 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 	enet_address_set_host(&address, m_IpAddress); // set address ip
 	address.port = m_nPort; // set address port
 
-	m_pPeer = enet_host_connect(m_pClient, &address, 2, 0); // connect to the server
+	uint32_t packedVersion = semver_parse(COOPANDREAS_VERSION, nullptr);
+	m_pPeer = enet_host_connect(m_pClient, &address, 2, packedVersion); // connect to the server
 	if (m_pPeer == NULL) { // if not connected
 		CChat::AddMessage("{cecedb}[Network] {ff0000}m_pPeer == NULL.");
 		//std::cout << "Not Connected" << std::endl;
