@@ -1,18 +1,64 @@
 #include "stdafx.h"
+#include "CUnicode.h"
 
 std::vector<CChatMessage> CChat::m_aMessages{};
-std::vector<std::string> CChat::m_aPrevMessages{};
+std::vector<std::wstring> CChat::m_aPrevMessages{};
 
-std::string CChat::m_sInputText = "";
+std::wstring CChat::m_sInputText = L"";
 bool CChat::m_bInputActive = false;
 size_t CChat::m_nCaretPos = 0;
 uint8_t CChat::m_nCurrentPrevMessageIndex = 0;
 
 uint8_t patch_disable_inputs[] = {0x00, 0x00, 0x00, 0x00, 0x00};
 
-bool IsInputTextEmpty(const std::string& str)
+bool IsInputTextEmpty(const std::wstring& str)
 {
-    return str.find_first_not_of("\t\n ") == std::string::npos;
+    return std::all_of(str.begin(), str.end(), [](wchar_t ch) {
+        return std::iswspace(ch);
+        });
+}
+
+void CChat::EraseCharacter(std::wstring& wtext, size_t offCaretPos)
+{
+    if (m_nCaretPos < 0 || m_nCaretPos + offCaretPos > wtext.size())
+        return;
+
+    std::wstring::iterator it = wtext.begin() + m_nCaretPos;
+
+    if (offCaretPos == 0)
+    {
+        if (it != wtext.begin())
+        {
+            --it;
+            it = wtext.erase(it);
+            m_nCaretPos = std::distance(wtext.begin(), it);
+        }
+    }
+    else if (offCaretPos == 1)
+    {
+        if (it != wtext.end())
+        {
+            it = wtext.erase(it);
+        }
+    }
+}
+
+void CChat::MoveCaretDirection(bool isMoveRight)
+{
+    std::wstring::iterator it = m_sInputText.begin() + m_nCaretPos;
+
+    if (isMoveRight)
+    {
+        if (it != m_sInputText.end())
+            ++it;
+    }
+    else
+    {
+        if (it != m_sInputText.begin())
+            --it;
+    }
+
+    m_nCaretPos = std::distance(m_sInputText.begin(), it);
 }
 
 void CChat::AddMessage(const std::vector<CTextSegment>& segs)
@@ -22,7 +68,7 @@ void CChat::AddMessage(const std::vector<CTextSegment>& segs)
 
 void CChat::AddMessage(const std::string& str)
 {
-    AddMessageRich(str, false);
+    AddMessageRich(CUnicode::ConvertUtf8ToUtf16(str), false);
 }
 
 void CChat::AddMessage(const char* format, ...)
@@ -33,10 +79,10 @@ void CChat::AddMessage(const char* format, ...)
     std::vsnprintf(buffer, sizeof(buffer), format, args);
     va_end(args);
 
-    AddMessageRich(std::string(buffer), false);
+    AddMessageRich(CUnicode::ConvertUtf8ToUtf16(buffer), false);
 }
 
-void CChat::AddMessageRich(const std::string& str, bool isSplit)
+void CChat::AddMessageRich(const std::wstring& str, bool isSplit)
 {
     std::vector<CTextSegment> segments = CDXFont::ParseColorSegments(str, DEFAULT_CHAT_COLOR(255));
 
@@ -58,23 +104,23 @@ void CChat::AddMessageRich(const std::string& str, bool isSplit)
     }
 }
 
-void CChat::AddMessage(bool isSplit, const char* format, ...)
+void CChat::AddMessage(bool isSplit, const wchar_t* format, ...)
 {
-    char buffer[1024];
+    wchar_t buffer[1024];
     va_list args;
     va_start(args, format);
-    std::vsnprintf(buffer, sizeof(buffer), format, args);
+    std::vswprintf(buffer, sizeof(buffer) / sizeof(wchar_t), format, args);
     va_end(args);
 
-    AddMessageRich(std::string(buffer), isSplit);
+    AddMessageRich(std::wstring(buffer), isSplit);
 }
 
-void CChat::SendPlayerMessage(const char* name, int id, const char* message)
+void CChat::SendPlayerMessage(const char* name, int id, const wchar_t* message)
 {
-    CChat::AddMessage(true, "{FF2D2D}%s(%d): {FFFFFF}%s", name, id, message);
+    CChat::AddMessage(true, L"{FF2D2D}%s(%d): {FFFFFF}%s", CUnicode::ConvertUtf8ToUtf16(name).c_str(), id, message);
 }
 
-void CChat::AddPreviousMessage(const std::string& message)
+void CChat::AddPreviousMessage(const std::wstring& message)
 {
     if (std::find(m_aPrevMessages.begin(), m_aPrevMessages.end(), message) != m_aPrevMessages.end())
     {
@@ -111,7 +157,7 @@ std::vector<std::vector<CTextSegment>> CChat::SplitSegmentsByLength(const std::v
     for (auto& seg : segments)
     {
         size_t pos = 0;
-        const std::string& segText = seg.text;
+        const std::wstring& segText = seg.text;
         D3DCOLOR segColor = seg.color;
 
         while (pos < segText.size())
@@ -133,7 +179,7 @@ std::vector<std::vector<CTextSegment>> CChat::SplitSegmentsByLength(const std::v
                 break;
             }
 
-            std::string part = segText.substr(pos, take);
+            std::wstring part = segText.substr(pos, take);
             pos += take;
 
             lines.back().push_back({ part, segColor });
@@ -228,14 +274,14 @@ void CChat::DrawInput()
         return;
 
     char caretSymbol = (GetTickCount() % 1000 > CARET_BLINKING_INTERVAL) ? '|' : ' '; // caret blinking
-    std::string displayText = m_sInputText;
+    std::wstring displayText = m_sInputText;
 
-    if (m_nCaretPos >= 0 && m_nCaretPos <= displayText.length())
+    if (m_nCaretPos <= displayText.size())
     {
         displayText.insert(m_nCaretPos, 1, caretSymbol);
     }
     
-    CDXFont::Draw(10, RsGlobal.maximumHeight / 5 + 16 * CDXFont::m_fFontSize, (": " + displayText).c_str(), D3DCOLOR_RGBA(255, 255, 255, 255));
+    CDXFont::Draw(10, RsGlobal.maximumHeight / 5 + 16 * CDXFont::m_fFontSize, L": " + displayText, D3DCOLOR_RGBA(255, 255, 255, 255));
 }
 
 void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -245,13 +291,15 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     if (message == WM_CHAR && m_bInputActive)
     {
-        if (wParam < 32)
+        if (wParam < 32 || wParam == VK_BACK)
             return;
 
-        if (m_sInputText.length() < CChat::MAX_MESSAGE_SIZE)  // text typing
+        std::wstring chr = CUnicode::ConvertWideCharToUtf16Char((wchar_t)wParam);
+
+        if (m_sInputText.size() + chr.size() <= MAX_MESSAGE_SIZE)
         {
-            m_sInputText.insert(m_nCaretPos, 1, (char)(wParam));
-            m_nCaretPos++;
+            m_sInputText.insert(m_nCaretPos, chr);
+            m_nCaretPos += chr.size();
         }
     }
     else if (message == WM_KEYDOWN && m_bInputActive)
@@ -259,13 +307,16 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         if (wParam == VK_LEFT)  // arrow left
         {
             if (m_nCaretPos > 0)
-                m_nCaretPos--;
-
+            {
+                MoveCaretDirection(false);
+            }
         }
         else if (wParam == VK_RIGHT)  // arrow right
         {
-            if (m_nCaretPos < m_sInputText.length())
-                m_nCaretPos++;
+            if (m_nCaretPos < m_sInputText.size())
+            {
+                MoveCaretDirection(true);
+            }
         }
         else if (wParam == VK_UP)
         {
@@ -282,7 +333,7 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 }
 
                 m_sInputText = m_aPrevMessages[m_nCurrentPrevMessageIndex];
-                m_nCaretPos = m_sInputText.length();
+                m_nCaretPos = m_sInputText.size();
             }
         }
         else if (wParam == VK_DOWN)
@@ -305,16 +356,12 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 }
                
                 m_sInputText = m_aPrevMessages[m_nCurrentPrevMessageIndex];
-                m_nCaretPos = m_sInputText.length();
+                m_nCaretPos = m_sInputText.size();
             }
         }
         else if (wParam == VK_BACK)  // backspace
         {
-            if (m_nCaretPos > 0)
-            {
-                m_sInputText.erase(m_nCaretPos - 1, 1);
-                m_nCaretPos--;
-            }
+            EraseCharacter(m_sInputText, 0);
         }
         else if (wParam == VK_DELETE)  // delete
         {
@@ -322,35 +369,45 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             {
                 m_sInputText.clear();
                 m_nCaretPos = 0;
+                return;
             }
-            else if (m_nCaretPos < m_sInputText.length())
-                m_sInputText.erase(m_nCaretPos, 1);
+
+            EraseCharacter(m_sInputText, 1);
         }
         else
         {
-            if (message == WM_PASTE)
+            bool isControlV = (GetKeyState(VK_CONTROL) & 0x8000) && wParam == 'V';
+            bool isShiftInsert = (GetKeyState(VK_SHIFT) & 0x8000) && wParam == VK_INSERT;
+
+            if (isControlV || isShiftInsert)
             {
                 if (!OpenClipboard(nullptr))
                     return;
 
-                HANDLE hData = GetClipboardData(CF_TEXT);
+                HANDLE hData = GetClipboardData(CF_UNICODETEXT);
+
+                CloseClipboard();
+
                 if (!hData)
-                {
-                    CloseClipboard();
                     return;
-                }
 
-                char* pszText = (char*)(GlobalLock(hData));
-                if (!pszText)
-                {
-                    CloseClipboard();
-                    return;
-                }
-
-                std::string clipboardText(pszText);
+                wchar_t* wideText = (wchar_t*)(GlobalLock(hData));
+                
                 GlobalUnlock(hData);
 
-                size_t remain = CChat::MAX_MESSAGE_SIZE - m_sInputText.length();
+                if (!wideText)
+                    return;
+
+                std::wstring clipboardText(wideText);
+
+                clipboardText.erase(
+                    std::remove_if(clipboardText.begin(), clipboardText.end(), [](wchar_t c) {
+                        return (c == L'\r' || c == L'\n');
+                        }),
+                    clipboardText.end()
+                );
+
+                size_t remain = MAX_MESSAGE_SIZE - m_sInputText.size();
                 if (clipboardText.size() > remain)
                 {
                     clipboardText.resize(remain);
@@ -358,8 +415,6 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
                 m_sInputText.insert(m_nCaretPos, clipboardText);
                 m_nCaretPos += clipboardText.size();
-
-                CloseClipboard();
             }
         }
     }
@@ -391,13 +446,14 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
 
             CPackets::PlayerChatMessage packet{};
-            strcpy_s(packet.message, m_sInputText.c_str());
+            wcscpy_s(packet.message, m_sInputText.c_str());
             SendPlayerMessage(CLocalPlayer::m_Name, CNetworkPlayerManager::m_nMyId, packet.message);
             AddPreviousMessage(m_sInputText);
             CNetwork::SendPacket(CPacketsID::PLAYER_CHAT_MESSAGE, &packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE);
 
             m_sInputText.clear();
             m_nCaretPos = 0;
+            m_nCurrentPrevMessageIndex = (uint8_t)m_aPrevMessages.size() - 1;
         }
     }
 }

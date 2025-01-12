@@ -8,20 +8,20 @@ WNDPROC prevWndProc;
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	CChat::WndProc(hWnd, message, wParam, lParam);
-	return CallWindowProc(prevWndProc, hWnd, message, wParam, lParam);
+	return CallWindowProcW(prevWndProc, hWnd, message, wParam, lParam);
 }
 
 void InitWndProc()
 {
 	HWND hWnd = *(HWND*)0xC97C1C;
 
-	SetWindowText(hWnd, "CoopAndreas");
+	SetWindowTextW(hWnd, L"CoopAndreas");
 	RsGlobal.appName = "CoopAndreas";
 
 	if (hWnd) 
 	{
-		prevWndProc = (WNDPROC)GetWindowLong(hWnd, GWL_WNDPROC);
-		SetWindowLong(hWnd, GWL_WNDPROC, (LONG)WindowProc);
+		prevWndProc = (WNDPROC)GetWindowLongW(hWnd, GWL_WNDPROC);
+		SetWindowLongW(hWnd, GWL_WNDPROC, (LONG)WindowProc);
 		return;
 	}
 }

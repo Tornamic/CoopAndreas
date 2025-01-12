@@ -23,19 +23,21 @@ public:
 	static inline constexpr size_t CARET_BLINKING_INTERVAL = 500;
 
 	static std::vector<CChatMessage> m_aMessages;
-	static std::vector<std::string> m_aPrevMessages;
+	static std::vector<std::wstring> m_aPrevMessages;
 	static uint8_t m_nCurrentPrevMessageIndex;
-	static std::string m_sInputText;
+	static std::wstring m_sInputText;
 	static bool m_bInputActive;
 	static size_t m_nCaretPos;
+	static void EraseCharacter(std::wstring& text, size_t offCaretPos);
+	static void MoveCaretDirection(bool isMoveRight);
 	static void AddMessage(const std::vector<CTextSegment>& segs);
 	static void AddMessage(const std::string& str);
 	static void AddMessage(const char* format, ...);
-	static void AddMessageRich(const std::string& str, bool bSplit);
-	static void AddMessage(bool bSplit, const char* format, ...);
-	static void AddPreviousMessage(const std::string& message);
+	static void AddMessageRich(const std::wstring& str, bool isSplit);
+	static void AddMessage(bool isSplit, const wchar_t* format, ...);
+	static void AddPreviousMessage(const std::wstring& message);
 	static std::vector<std::vector<CTextSegment>> SplitSegmentsByLength(const std::vector<CTextSegment>& segments);
-	static void SendPlayerMessage(const char* name, int id, const char* message);
+	static void SendPlayerMessage(const char* name, int id, const wchar_t* message);
 	static void Draw();
 	static void ToggleInput(bool toggle);
 	static void DrawInput();
