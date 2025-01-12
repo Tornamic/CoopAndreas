@@ -2,7 +2,7 @@
 #include "CTaskSync.h"
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
-#include <Tasks/CTaskComplexEnterCarAsPassengerTimed.h>
+#include <game_sa/CTaskComplexEnterCarAsPassengerTimed.h>
 // PlayerConnected
 
 void CPacketHandler::PlayerConnected__Handle(void* data, int size)
@@ -539,7 +539,7 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 		return;
 	}
 	
-	if (!CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
+	if (!CUtil::IsValidEntityPtr(vehicle->m_pVehicle) || !CUtil::IsValidEntityPtr(player->m_pPed))
 		return;
 
 #ifdef PACKET_DEBUG_MESSAGES
@@ -591,7 +591,7 @@ void CPacketHandler::VehicleExit__Handle(void* data, int size)
 		return;
 	}
 
-	if (!CUtil::IsValidEntityPtr(player->m_pPed->m_pVehicle))
+	if (!CUtil::IsValidEntityPtr(player->m_pPed->m_pVehicle) || !CUtil::IsValidEntityPtr(player->m_pPed))
 		return;
 
 #ifdef PACKET_DEBUG_MESSAGES
@@ -710,7 +710,7 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 	if (vehicle->m_pVehicle == nullptr)
 		return;
 
-	if (!CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
+	if (!CUtil::IsValidEntityPtr(vehicle->m_pVehicle) || !CUtil::IsValidEntityPtr(player->m_pPed))
 		return;
 
 	if (player->m_pPed == nullptr)
@@ -847,6 +847,7 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 	ped->m_fAimingRotation = ped->m_pPed->m_fAimingRotation = packet->aimingRotation;
 	ped->m_fLookDirection = ped->m_pPed->field_73C = packet->lookDirection;
 	ped->m_pPed->m_fHealth = packet->health;
+	ped->m_fHealth = packet->health;
 	ped->m_pPed->m_fArmour = packet->armour;
 	ped->m_vecVelocity = packet->velocity;
 	ped->m_nMoveState = (eMoveState)packet->moveState;
@@ -982,7 +983,7 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
 	CNetworkPed* ped = CNetworkPedManager::GetPed(packet->pedid);
 
-	if (vehicle == nullptr || ped == nullptr || ped->m_pPed == nullptr || vehicle->m_pVehicle == nullptr || !CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
+	if (vehicle == nullptr || ped == nullptr || ped->m_pPed == nullptr || vehicle->m_pVehicle == nullptr || !CUtil::IsValidEntityPtr(vehicle->m_pVehicle) || !CUtil::IsValidEntityPtr(ped->m_pPed))
 		return;
 
 	if (ped->m_pPed->m_pVehicle != vehicle->m_pVehicle || !ped->m_pPed->m_nPedFlags.bInVehicle)
@@ -1001,6 +1002,7 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 
 	ped->m_pPed->m_fArmour = packet->pedArmour;
 	ped->m_pPed->m_fHealth = packet->pedHealth;
+	ped->m_fHealth = packet->pedHealth;
 
 	vehicle->m_pVehicle->m_nPrimaryColor = packet->color1;
 	vehicle->m_pVehicle->m_nSecondaryColor = packet->color2;
@@ -1083,7 +1085,7 @@ void CPacketHandler::PedPassengerSync__Handle(void* data, int size)
 	if (ped->m_pPed == nullptr)
 		return;
 
-	if (!CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
+	if (!CUtil::IsValidEntityPtr(vehicle->m_pVehicle) || !CUtil::IsValidEntityPtr(ped->m_pPed))
 		return;
 
 	if (!ped->m_pPed->m_nPedFlags.bInVehicle || vehicle->m_pVehicle->m_pDriver == ped->m_pPed)
@@ -1095,6 +1097,7 @@ void CPacketHandler::PedPassengerSync__Handle(void* data, int size)
 
 	ped->m_pPed->m_fArmour = packet->armour;
 	ped->m_pPed->m_fHealth = packet->health;
+	ped->m_fHealth = packet->health;
 }
 
 // PlayerAimSync
@@ -1253,11 +1256,17 @@ void CPacketHandler::AssignVehicleSyncer__Handle(void* data, int size)
 
 	if (networkVehicle->m_bSyncing)
 	{
-
+#ifdef PACKET_DEBUG_MESSAGES
+		CChat::AddMessage("NO MORE SYNCING THE VEHICLE %d", packet->vehicleid);
+#endif
+		networkVehicle->m_bSyncing = false;
 	}
 	else
 	{
-
+#ifdef PACKET_DEBUG_MESSAGES
+		CChat::AddMessage("THE SERVER SAID ME TO SYNC THE VEHICLE %d", packet->vehicleid);
+#endif
+		networkVehicle->m_bSyncing = true;
 	}
 }
 

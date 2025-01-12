@@ -1,4 +1,5 @@
 #pragma once
+#define COOPANDREAS_VERSION "0.1.0-alpha"
 #define MAX_SERVER_PLAYERS 16
 #define MAX_SERVER_VEHICLES 200
 #define MAX_SERVER_PEDS 300
@@ -79,7 +80,7 @@
 #include <CStats.h>
 #include <CClothes.h>
 
-#include "Tasks/CTaskComplexCarDriveWander.h"
+#include "game_sa/CTaskComplexCarDriveWander.h"
 
 // classes ---------------------------------------------------------------------------------
 

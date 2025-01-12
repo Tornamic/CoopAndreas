@@ -3,7 +3,7 @@
 #ifndef _CNETWORK_H_
 	#define _CNETWORK_H_ 
 
-
+#define COOPANDREAS_VERSION "0.1.0-alpha"
 
 #include <cstddef>
 #include "../thirdparty-libraries/enet/enet.h"

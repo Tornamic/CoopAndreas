@@ -63,30 +63,38 @@ class CPlayerPackets
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
-				// create packet
-				CPlayerPackets::PlayerOnFoot* packet = (CPlayerPackets::PlayerOnFoot*)data;
-
-				// set packet`s playerid, cuz incoming packet has id = 0
-				packet->id = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-
-				bool isValidWeapon = (packet->weapon >= 0 && packet->weapon <= 18) || (packet->weapon >= 22 && packet->weapon <= 46);
-				if (!isValidWeapon)
+				if (auto player = CPlayerManager::GetPlayer(peer))
 				{
-					packet->weapon = 0;
-					packet->ammo = 0;
-				}
+					// create packet
+					CPlayerPackets::PlayerOnFoot* packet = (CPlayerPackets::PlayerOnFoot*)data;
 
-				if (packet->fightingStyle < 4 || packet->fightingStyle > 16)
-				{
-					packet->fightingStyle = 4;
-				}
+					// set packet`s playerid, cuz incoming packet has id = 0
+					packet->id = player->m_iPlayerId;
 
-				if (packet->velocity.x > 10.0f || packet->velocity.y > 10.0f || packet->velocity.z > 10.0f)
-				{
-					packet->velocity = CVector(0.0f, 0.0f, 0.0f);
-				}
+					bool isValidWeapon = (packet->weapon >= 0 && packet->weapon <= 18) || (packet->weapon >= 22 && packet->weapon <= 46);
+					if (!isValidWeapon)
+					{
+						packet->weapon = 0;
+						packet->ammo = 0;
+					}
 
-				CNetwork::SendPacketToAll(CPacketsID::PLAYER_ONFOOT, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+					if (packet->fightingStyle < 4 || packet->fightingStyle > 16)
+					{
+						packet->fightingStyle = 4;
+					}
+
+					if (packet->velocity.x > 10.0f || packet->velocity.y > 10.0f || packet->velocity.z > 10.0f)
+					{
+						packet->velocity = CVector(0.0f, 0.0f, 0.0f);
+					}
+				
+					if (player->m_nVehicleId >= 0)
+					{
+						player->RemoveFromVehicle();
+					}
+
+					CNetwork::SendPacketToAll(CPacketsID::PLAYER_ONFOOT, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+				}
 			}
 		};
 

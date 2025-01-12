@@ -4,7 +4,7 @@
 
 enum CPacketsID : unsigned short
 {
-	CHECK_VERSION = 0, // must be always 0! TODO
+	CHECK_VERSION = 0, // reserved but not used, see enet_host_connect
 	PLAYER_CONNECTED,
 	PLAYER_DISCONNECTED,
 	PLAYER_ONFOOT,
@@ -40,7 +40,8 @@ enum CPacketsID : unsigned short
 	PED_CONFIRM,
 	PLAYER_STATS,
 	REBUILD_PLAYER,
-	RESPAWN_PLAYER
+	RESPAWN_PLAYER,
+	ASSIGN_VEHICLE
 };
 
 class CPackets
