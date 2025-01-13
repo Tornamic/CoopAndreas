@@ -181,7 +181,7 @@ class CPlayerPackets
 		struct PlayerChatMessage
 		{
 			int playerid;
-			char message[128 + 1];
+			wchar_t message[128 + 1];
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
