@@ -117,7 +117,7 @@ void CNetworkPed::WarpIntoVehicleDriver(CVehicle* vehicle)
 {
     assert(m_pPed != nullptr);
 
-    if (!CUtil::IsValidEntityPtr(vehicle))
+    if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
     {
         return;
     }
@@ -143,7 +143,7 @@ void CNetworkPed::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 {
     assert(m_pPed != nullptr);
 
-    if (!CUtil::IsValidEntityPtr(vehicle))
+    if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
     {
         return;
     }
@@ -169,6 +169,11 @@ void CNetworkPed::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 void CNetworkPed::RemoveFromVehicle(CVehicle* vehicle)
 {
     assert(m_pPed != nullptr);
+
+    if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
+    {
+        return;
+    }
 
     m_pPed->m_pIntelligence->m_TaskMgr.SetTask(nullptr, TASK_PRIMARY_PRIMARY, false);
 

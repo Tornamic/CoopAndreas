@@ -35,6 +35,8 @@ class CPlayer
 			uint8_t bWaypointModified : 1;
 		} m_ucSyncFlags;
 
+		void RemoveFromVehicle();
+
 		~CPlayer();
 };
 

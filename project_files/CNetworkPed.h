@@ -19,6 +19,7 @@ public:
 	float m_fGasPedal = 0.0f;
 	float m_fBreakPedal = 0.0f;
 	float m_fSteerAngle = 0.0f;
+	float m_fHealth = 100.0f;
 
 	static CNetworkPed* CreateHosted(CPed* ped);
 	void WarpIntoVehicleDriver(CVehicle* vehicle);

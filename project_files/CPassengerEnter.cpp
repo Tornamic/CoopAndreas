@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CNetworkVehicle.h"
-#include <Tasks/CTaskComplexEnterCarAsPassengerTimed.h>
+#include <game_sa/CTaskComplexEnterCarAsPassengerTimed.h>
 #include <CCarEnterExit.h>
 #include <CTaskComplexEnterCarAsPassenger.h>
 

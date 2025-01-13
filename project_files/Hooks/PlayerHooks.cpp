@@ -2,6 +2,7 @@
 #include "PlayerHooks.h"
 #include "CKeySync.h"
 #include "CAimSync.h"
+#include <game_sa/CPedDamageResponseInfo.h>
 
 static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 {
@@ -157,6 +158,60 @@ bool __fastcall CWeapon__TakePhotograph_Hook(CWeapon* This, int, CEntity* entity
     return false;
 }
 
+void __fastcall CTaskSimpleJetPack__DropJetPack_Hook(CTaskSimpleJetPack* This, int, CPed* ped)
+{
+    if (ped != FindPlayerPed(0) && ped->IsPlayer())
+    {
+        // dont create a pickup if the player is network
+        This->m_bIsFinished = true;
+    }
+
+    plugin::CallMethod<0x67B660, CTaskSimpleJetPack*>(This, ped); // CTaskSimpleJetPack::DropJetPack
+}
+
+void __fastcall CPedDamageResponseCalculator__ComputeWillKillPed_Hook(uintptr_t This, int, CPed* ped, CPedDamageResponseInfo* dmgResponse, bool speak)
+{
+    plugin::CallMethod<0x4B3210, uintptr_t>(This, ped, dmgResponse, speak);
+
+    if (ped == FindPlayerPed(0))
+    {
+        return;
+    }
+
+    if (ped->m_nPedType > 3) // peds
+    {
+        if (auto networkPed = CNetworkPedManager::GetPed(ped))
+        {
+            if (!networkPed->m_bSyncing)
+            {
+                if (networkPed->m_fHealth >= 1.0f)
+                {
+                    ped->m_fHealth = networkPed->m_fHealth;
+                    dmgResponse->m_bHealthZero = false;
+                    dmgResponse->m_bForceDeath = false;
+                    dmgResponse->m_fDamageHealth = 0.0f;
+                    dmgResponse->m_fDamageArmor = 0.0f;
+                }
+            }
+        }
+
+        return;
+    }
+
+    // players
+    if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(ped))
+    {
+        if (networkPlayer->m_lOnFoot->health >= 1.0f)
+        {
+            ped->m_fHealth = networkPlayer->m_lOnFoot->health;
+            dmgResponse->m_bHealthZero = false;
+            dmgResponse->m_bForceDeath = false;
+            dmgResponse->m_fDamageHealth = 0.0f;
+            dmgResponse->m_fDamageArmor = 0.0f;
+        }
+    }
+}
+
 void PlayerHooks::InjectHooks()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -178,4 +233,9 @@ void PlayerHooks::InjectHooks()
     patch::RedirectCall(0x443082, CReferences__RemoveReferencesToPlayer_Hook);
 
     patch::RedirectCall(0x74278B, CWeapon__TakePhotograph_Hook);
+
+    patch::RedirectCall(0x5707AE, CTaskSimpleJetPack__DropJetPack_Hook);
+    patch::RedirectCall(0x67E840, CTaskSimpleJetPack__DropJetPack_Hook);
+
+    patch::RedirectCall(0x4B5B27, CPedDamageResponseCalculator__ComputeWillKillPed_Hook);
 }

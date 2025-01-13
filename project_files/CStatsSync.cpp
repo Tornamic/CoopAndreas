@@ -48,8 +48,6 @@ void CStatsSync::ApplyLocalContext()
 
 void CStatsSync::NotifyChanged()
 {
-    CChat::AddMessage("CStatsSync::NotifyChanged()");
-
     CPackets::PlayerStats packet{};
     
     for (uint8_t i = 0; i < CStatsSync::SYNCED_STATS_COUNT; i++)

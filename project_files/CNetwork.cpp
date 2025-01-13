@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "../shared/semver.h"
 
 ENetHost* CNetwork::m_pClient = nullptr;
 ENetPeer* CNetwork::m_pPeer = nullptr;
@@ -32,7 +33,8 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 	enet_address_set_host(&address, m_IpAddress); // set address ip
 	address.port = m_nPort; // set address port
 
-	m_pPeer = enet_host_connect(m_pClient, &address, 2, 0); // connect to the server
+	uint32_t packedVersion = semver_parse(COOPANDREAS_VERSION, nullptr);
+	m_pPeer = enet_host_connect(m_pClient, &address, 2, packedVersion); // connect to the server
 	if (m_pPeer == NULL) { // if not connected
 		CChat::AddMessage("{cecedb}[Network] {ff0000}m_pPeer == NULL.");
 		//std::cout << "Not Connected" << std::endl;
@@ -46,7 +48,7 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 		if (enet_host_service(m_pClient, &event, 2000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
 		{
 			m_bConnected = true;
-			CChat::AddMessage("{cecedb}[Network] {00ff00}Succesfully {cecedb}connected to the server.");
+			CChat::AddMessage("{cecedb}[Network] {00ff00}Successfully {cecedb}connected to the server.");
 			CPatch::RevertTemporaryPatches();
 		}
 		else
@@ -125,6 +127,7 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::PLAYER_STATS, CPacketHandler::PlayerStats__Handle);
 	CNetwork::AddListener(CPacketsID::REBUILD_PLAYER, CPacketHandler::RebuildPlayer__Handle);
 	CNetwork::AddListener(CPacketsID::RESPAWN_PLAYER, CPacketHandler::RespawnPlayer__Handle);
+	CNetwork::AddListener(CPacketsID::ASSIGN_VEHICLE, CPacketHandler::AssignVehicleSyncer__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

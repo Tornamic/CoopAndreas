@@ -84,16 +84,6 @@ void CNetworkPlayer::DestroyPed()
 			call[ebx] // call destructor
 		}
 	}
-	else
-	{
-		// destroy CPlaceable, if the entity is not valid (vtable points to CPlaceable vt)
-		__asm
-		{
-			mov ecx, pedPtr
-			mov ebx, [ecx] // vtable addr
-			call[ebx] // call destructor
-		}
-	}
 }
 
 void CNetworkPlayer::Respawn()
@@ -160,7 +150,7 @@ void CNetworkPlayer::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 {
 	assert(m_pPed != nullptr);
 
-	if (!CUtil::IsValidEntityPtr(vehicle))
+	if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
 	{
 		return;
 	}
@@ -184,7 +174,7 @@ void CNetworkPlayer::EnterVehiclePassenger(CVehicle* vehicle, int seatid)
 {
 	assert(m_pPed != nullptr);
 
-	if (!CUtil::IsValidEntityPtr(vehicle))
+	if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
 	{
 		return;
 	}
@@ -206,6 +196,11 @@ void CNetworkPlayer::EnterVehiclePassenger(CVehicle* vehicle, int seatid)
 void CNetworkPlayer::RemoveFromVehicle(CVehicle* vehicle)
 {
 	assert(m_pPed != nullptr);
+
+	if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
+	{
+		return;
+	}
 
 	m_pPed->m_pIntelligence->m_TaskMgr.SetTask(nullptr, TASK_PRIMARY_PRIMARY, false);
 

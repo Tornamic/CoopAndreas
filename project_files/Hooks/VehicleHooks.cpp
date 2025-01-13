@@ -5,6 +5,7 @@
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
 #include <CCarGenerator.h>
+#include <CPopCycle.h>
 
 void __fastcall CVehicle__ProcessControl_Hook()
 {
@@ -202,6 +203,58 @@ bool __fastcall CCarGenerator__CheckForBlockage_Hook(CCarGenerator* This, int, i
     return false;
 }
 
+// the simplest method to allow other players 
+// to create traffic vehicles without conflicts 
+void CCarCtrl__GenerateOneRandomCar_Hook()
+{
+    int numCarsInRadius = 0;
+    CVector pos = FindPlayerCoors(0);
+    CPlayerPed* player = FindPlayerPed(0);
+
+    for (auto vehicle : CPools::ms_pVehiclePool)
+    {
+        if ((vehicle->GetPosition() - pos).Magnitude() <= 100.0f)
+        {
+            numCarsInRadius++;
+        }
+    }
+
+    int savedNumRandomCars =        patch::GetInt(0x969094, false);
+    int savedNumLawEnforcerCars =   patch::GetInt(0x969098, false);
+    int savedNumMissionCars =       patch::GetInt(0x96909C, false);
+    int savedNumAmbulancesOnDuty =  patch::GetInt(0x9690A8, false);
+    int savedNumFireTrucksOnDuty =  patch::GetInt(0x9690AC, false);
+    patch::SetInt(0x969094, numCarsInRadius, false);
+    patch::SetInt(0x969098, 0, false);
+    patch::SetInt(0x96909C, 0, false);
+    patch::SetInt(0x9690A8, 0, false);
+    patch::SetInt(0x9690AC, 0, false);
+
+    // also dont generate vehicles when the player is a passenger 
+    // and his vehicle is driven by another player
+
+    if (player->m_pVehicle && player->m_nPedFlags.bInVehicle) // if the local player in a vehicle
+    {
+        // generate cars only if the player is a ...
+        if (player->m_pVehicle->m_pDriver == player // driver
+            || player->m_pVehicle->m_pDriver == nullptr // passenger without driver 
+            || !player->m_pVehicle->m_pDriver->IsPlayer()) // passenger with NPC driver
+        {
+            CCarCtrl::GenerateOneRandomCar(); // call original function
+        }
+    }
+    else // on foot
+    {
+        CCarCtrl::GenerateOneRandomCar(); // call original function
+    }
+
+    patch::SetInt(0x969094, savedNumRandomCars, false);
+    patch::SetInt(0x969098, savedNumLawEnforcerCars, false);
+    patch::SetInt(0x96909C, savedNumMissionCars, false);
+    patch::SetInt(0x9690A8, savedNumAmbulancesOnDuty, false);
+    patch::SetInt(0x9690AC, savedNumFireTrucksOnDuty, false);
+}
+
 void VehicleHooks::InjectHooks()
 {
     patch::RedirectCall(0x53C1CB, CCarCtrl__RemoveDistantCars_Hook);
@@ -245,4 +298,7 @@ void VehicleHooks::InjectHooks()
 
     patch::RedirectCall(0x6F35D6, CCarGenerator__CheckForBlockage_Hook);
     patch::RedirectCall(0x6F35FF, CCarGenerator__CheckForBlockage_Hook);
+
+    patch::RedirectCall(0x434263, CCarCtrl__GenerateOneRandomCar_Hook);
+    patch::RedirectCall(0x434268, CCarCtrl__GenerateOneRandomCar_Hook);
 }
