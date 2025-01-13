@@ -148,13 +148,13 @@ void CChat::AddPreviousMessage(const std::wstring& message)
 std::vector<std::vector<CTextSegment>> CChat::SplitSegmentsByLength(const std::vector<CTextSegment>& segments)
 {
     std::vector<std::vector<CTextSegment>> lines;
-   
+
     size_t currentLineLen = 0;
     size_t maxLen = MESSAGE_CHUNK_SIZE;
 
     lines.emplace_back();
 
-    for (auto& seg : segments)
+    for (const auto& seg : segments)
     {
         size_t pos = 0;
         const std::wstring& segText = seg.text;
@@ -172,11 +172,25 @@ std::vector<std::vector<CTextSegment>> CChat::SplitSegmentsByLength(const std::v
             }
 
             size_t remain = segText.size() - pos;
-            size_t take = min(canFit, remain);
 
-            if (take == 0)
+            size_t take = 0;
+            size_t consumed = 0;
+
+            for (size_t i = 0; i < remain && consumed < canFit; ++i)
             {
-                break;
+                wchar_t ch = segText[pos + i];
+                take++;
+                consumed++;
+
+                if (ch >= 0xD800 && ch <= 0xDBFF && (pos + i + 1) < segText.size())
+                {
+                    wchar_t nextCh = segText[pos + i + 1];
+                    if (nextCh >= 0xDC00 && nextCh <= 0xDFFF)
+                    {
+                        take++;
+                        i++;
+                    }
+                }
             }
 
             std::wstring part = segText.substr(pos, take);
@@ -184,12 +198,13 @@ std::vector<std::vector<CTextSegment>> CChat::SplitSegmentsByLength(const std::v
 
             lines.back().push_back({ part, segColor });
 
-            currentLineLen += take;
+            currentLineLen += consumed;
         }
     }
 
     return lines;
 }
+
 
 void CChat::Draw()
 {
