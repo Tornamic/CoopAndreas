@@ -138,11 +138,6 @@ void CChat::AddPreviousMessage(const std::wstring& message)
     }
 
     m_aPrevMessages.push_back(message);
-
-    if ((uint8_t)m_aPrevMessages.size() < CChat::MAX_PREV_MESSAGES)
-    {
-        m_nCurrentPrevMessageIndex = (uint8_t)m_aPrevMessages.size();
-    }
 }
 
 std::vector<std::vector<CTextSegment>> CChat::SplitSegmentsByLength(const std::vector<CTextSegment>& segments)
@@ -466,9 +461,14 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             AddPreviousMessage(m_sInputText);
             CNetwork::SendPacket(CPacketsID::PLAYER_CHAT_MESSAGE, &packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE);
 
+            auto it = std::find(m_aPrevMessages.begin(), m_aPrevMessages.end(), m_sInputText);
+            if (it != m_aPrevMessages.end())
+            {
+                m_nCurrentPrevMessageIndex = (uint8_t)(std::distance(m_aPrevMessages.begin(), it)) + 1;
+            }
+
             m_sInputText.clear();
             m_nCaretPos = 0;
-            m_nCurrentPrevMessageIndex = (uint8_t)m_aPrevMessages.size() - 1;
         }
     }
 }
