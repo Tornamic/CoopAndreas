@@ -9,7 +9,7 @@
 #define MAX_SCREEN_HEIGHT 1600
 #define MIN_RENDER_FONT_SIZE 12
 #define MAX_RENDER_FONT_SIZE 23
-//#define _DEV
+#define _DEV
 //#define PACKET_DEBUG_MESSAGES
 #define PURECALL (0x82263A)
 
@@ -20,6 +20,11 @@
 // windows ---------------------------------------------------------------------------------
 
 #include <Windows.h>
+
+// utf8 ------------------------------------------------------------------------------------
+
+#include <cwctype>
+#include "utf8.h"
 
 // plugin-sdk ------------------------------------------------------------------------------
 
@@ -82,6 +87,7 @@
 using namespace plugin;
 
 #include "CCore.h"
+#include "CUnicode.h"
 #include "CDXFont.h"
 #include "structs.h"
 #include "CNetworkVehicle.h"

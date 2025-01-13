@@ -1,9 +1,10 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
+#include "CDXFont.h"
 
 ID3DXFont* CDXFont::m_pD3DXFont;
 uint8_t CDXFont::m_fFontSize;
 
-void CDXFont::InitFont() 
+void CDXFont::InitFont()
 {
     IDirect3DDevice9* device = reinterpret_cast<IDirect3DDevice9*>(RwD3D9GetCurrentD3DDevice());
 
@@ -14,7 +15,7 @@ void CDXFont::InitFont()
     const float fontSize = MIN_RENDER_FONT_SIZE + normalizedScale * (MAX_RENDER_FONT_SIZE - MIN_RENDER_FONT_SIZE);
     CDXFont::m_fFontSize = (uint8_t)fontSize;
 
-    D3DXCreateFontA(device, (INT)fontSize, 0, 400, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "consolas", &m_pD3DXFont);
+    D3DXCreateFontW(device, (INT)fontSize, 0, 400, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Consolas", &m_pD3DXFont);
 }
 
 void CDXFont::DestroyFont() 
@@ -26,39 +27,50 @@ void CDXFont::DestroyFont()
     m_pD3DXFont = NULL;
 }
 
-void CDXFont::Draw(int x, int y, const char* text, D3DCOLOR defaultColor)
+void CDXFont::Draw(int x, int y, const std::vector<CTextSegment>& segments)
 {
     if (!m_pD3DXFont)
         return;
 
-    std::vector<CTextSegment> segments = GetSegments(text, defaultColor);
     int currentX = x;
-
     for (auto& seg : segments)
     {
         DrawSegmentWithShadow(currentX, y, seg.text.c_str(), seg.color);
-
-        int width = CDXFont::GetTextWidth(seg.text);
-        currentX += width;
+        currentX += GetTextWidth(seg.text);
     }
 }
 
-void CDXFont::DrawSegmentWithShadow(int x, int y, const char* text, D3DCOLOR color)
+void CDXFont::Draw(int x, int y, const std::wstring& str, D3DCOLOR defaultColor)
 {
-    if (!CDXFont::m_pD3DXFont)
+    if (!m_pD3DXFont)
         return;
 
-    uint8_t shadowSize = m_iShadowSize;
+    std::vector<CTextSegment> segments = ParseColorSegments(str, defaultColor);
+    Draw(x, y, segments);
+}
 
-    uint8_t red = (color >> 16) & 0xFF;
-    uint8_t green = (color >> 8) & 0xFF;
-    uint8_t blue = color & 0xFF;
-    uint8_t alpha = (color >> 24) & 0xFF;
-    D3DCOLOR shadowColor = D3DCOLOR_RGBA(0, 0, 0, alpha);
+void CDXFont::Draw(int x, int y, const std::string& str, D3DCOLOR defaultColor)
+{
+    Draw(x, y, CUnicode::ConvertUtf8ToUtf16(str), defaultColor);
+}
 
-    if (red + green + blue < 204)
+void CDXFont::DrawSegmentWithShadow(int x, int y, const wchar_t* text, D3DCOLOR color)
+{
+    if (!m_pD3DXFont)
+        return;
+
+    uint8_t shadowThickness = m_iShadowSize;
+
+    uint8_t r = (color >> 16) & 0xFF;
+    uint8_t g = (color >> 8) & 0xFF;
+    uint8_t b = color & 0xFF;
+    uint8_t a = (color >> 24) & 0xFF;
+    
+    D3DCOLOR shadowColor = D3DCOLOR_RGBA(0, 0, 0, a);
+
+    if (r + g + b < 204)
     {
-        shadowSize = 0;
+        shadowThickness = 0;
     }
 
     RECT rect{};
@@ -67,70 +79,69 @@ void CDXFont::DrawSegmentWithShadow(int x, int y, const char* text, D3DCOLOR col
     rect.right = RsGlobal.maximumWidth;
     rect.bottom = RsGlobal.maximumHeight;
 
-    RECT rightRect = rect;
-    rightRect.left += shadowSize;
-    CDXFont::m_pD3DXFont->DrawTextA(nullptr, text, -1, &rightRect, 0, shadowColor);
+    if (shadowThickness > 0)
+    {
+        RECT rightRect = rect;
+        rightRect.left += shadowThickness;
+        m_pD3DXFont->DrawTextW(nullptr, text, -1, &rightRect, 0, shadowColor);
 
-    RECT leftRect = rect;
-    leftRect.left -= shadowSize;
-    CDXFont::m_pD3DXFont->DrawTextA(nullptr, text, -1, &leftRect, 0, shadowColor);
+        RECT leftRect = rect;
+        leftRect.left -= shadowThickness;
+        m_pD3DXFont->DrawTextW(nullptr, text, -1, &leftRect, 0, shadowColor);
 
-    RECT bottomRect = rect;
-    bottomRect.top += shadowSize;
-    CDXFont::m_pD3DXFont->DrawTextA(nullptr, text, -1, &bottomRect, 0, shadowColor);
+        RECT bottomRect = rect;
+        bottomRect.top += shadowThickness;
+        m_pD3DXFont->DrawTextW(nullptr, text, -1, &bottomRect, 0, shadowColor);
 
-    RECT topRect = rect;
-    topRect.top -= shadowSize;
-    CDXFont::m_pD3DXFont->DrawTextA(nullptr, text, -1, &topRect, 0, shadowColor);
+        RECT topRect = rect;
+        topRect.top -= shadowThickness;
+        m_pD3DXFont->DrawTextW(nullptr, text, -1, &topRect, 0, shadowColor);
+    }
 
-    CDXFont::m_pD3DXFont->DrawTextA(nullptr, text, -1, &rect, 0, color);
+    m_pD3DXFont->DrawTextW(nullptr, text, -1, &rect, 0, color);
 }
 
-int CDXFont::GetTextWidth(const std::string& text)
+int CDXFont::GetTextWidth(const std::wstring& text)
 {
     if (!m_pD3DXFont)
         return 0;
 
-    RECT rc = { 0,0,0,0 };
-    CDXFont::m_pD3DXFont->DrawTextA(nullptr, text.c_str(), -1, &rc, DT_CALCRECT, 0xFFFFFFFF);
+    RECT rc = {0, 0, 0, 0};
+    m_pD3DXFont->DrawTextW(nullptr, text.c_str(), -1, &rc, DT_CALCRECT, 0);
     return rc.right - rc.left;
 }
 
-std::vector<CTextSegment> CDXFont::GetSegments(const std::string& input, D3DCOLOR defaultColor)
+std::vector<CTextSegment> CDXFont::ParseColorSegments(const std::wstring& input, D3DCOLOR defaultColor)
 {
-    if (!m_pD3DXFont)
-        return {};
-
     std::vector<CTextSegment> segments;
+
     D3DCOLOR currentColor = defaultColor;
+    std::wstring buffer;
 
-    std::string buffer;
-
-    for (size_t i = 0; i < input.size(); )
+    size_t i = 0;
+    while (i < input.size())
     {
-        if (input[i] == '{')
+        if (input[i] == L'{')
         {
-            size_t remaining = input.size() - i - 1;
-            bool isSix = remaining >= 6 && input[i + 7] == '}';
-            bool isEight = remaining >= 8 && input[i + 9] == '}';
+            size_t remain = input.size() - i - 1;
 
-            size_t hexLength = 0;
+            bool isSix = (remain >= 6 && (i + 7) < input.size() && input[i + 7] == L'}');
+            bool isEight = (remain >= 8 && (i + 9) < input.size() && input[i + 9] == L'}');
 
-            if (isSix)
-            {
-                hexLength = 6;
-            }
-            else if (isEight)
-            {
-                hexLength = 8;
-            }
+            size_t hexLen = 0;
+            if (isSix) hexLen = 6;
+            if (isEight) hexLen = 8;
 
-            if (hexLength > 0)
+            if (hexLen > 0)
             {
                 bool allHex = true;
-                for (size_t k = i + 1; k < i + 1 + hexLength; k++)
+                for (size_t k = i + 1; k < i + 1 + hexLen; k++)
                 {
-                    if (!std::isxdigit((uint8_t)(input[k])))
+                    wchar_t wc = input[k];
+                    bool isDigit = (wc >= '0' && wc <= '9');
+                    bool isUpper = (wc >= 'A' && wc <= 'F');
+                    bool isLower = (wc >= 'a' && wc <= 'f');
+                    if (!isDigit && !isUpper && !isLower)
                     {
                         allHex = false;
                         break;
@@ -140,14 +151,14 @@ std::vector<CTextSegment> CDXFont::GetSegments(const std::string& input, D3DCOLO
                 if (allHex)
                 {
                     size_t spaceStart = buffer.size();
-                    while (spaceStart > 0 && buffer[spaceStart - 1] == ' ')
+                    while (spaceStart > 0 && buffer[spaceStart - 1] == u' ')
                     {
                         spaceStart--;
                     }
 
                     if (spaceStart < buffer.size())
                     {
-                        std::string trailingSpaces = buffer.substr(spaceStart, buffer.size() - spaceStart);
+                        std::wstring trailingSpaces = buffer.substr(spaceStart, buffer.size() - spaceStart);
                         buffer.erase(spaceStart, buffer.size() - spaceStart);
 
                         if (!buffer.empty())
@@ -167,29 +178,27 @@ std::vector<CTextSegment> CDXFont::GetSegments(const std::string& input, D3DCOLO
                         }
                     }
 
-                    std::string hexColor = input.substr(i + 1, hexLength);
-
+                    std::wstring hexColor = input.substr(i + 1, hexLen);
                     int colorValue = 0;
-                    std::stringstream ss;
-                    ss << std::hex << hexColor;
-                    ss >> colorValue;
+                    std::wstringstream ss(hexColor);
+                    ss >> std::hex >> colorValue;
 
-                    uint8_t red = (colorValue >> 16) & 0xFF;
-                    uint8_t green = (colorValue >> 8) & 0xFF;
-                    uint8_t blue = colorValue & 0xFF;
-                    uint8_t alpha = (defaultColor >> 24) & 0xFF;
+                    uint8_t r = (colorValue >> 16) & 0xFF;
+                    uint8_t g = (colorValue >> 8) & 0xFF;
+                    uint8_t b = colorValue & 0xFF;
+                    uint8_t a = (defaultColor >> 24) & 0xFF;
 
-                    if (hexLength == 8)
+                    if (hexLen == 8)
                     {
-                        alpha = colorValue & 0xFF;
-                        blue = (colorValue >> 8) & 0xFF;
-                        green = (colorValue >> 16) & 0xFF;
-                        red = (colorValue >> 24) & 0xFF;
+                        r = (colorValue >> 24) & 0xFF;
+                        g = (colorValue >> 16) & 0xFF;
+                        b = (colorValue >> 8) & 0xFF;
+                        a = colorValue & 0xFF;
                     }
-                    
-                    currentColor = D3DCOLOR_RGBA(red, green, blue, alpha);
 
-                    i += 1 + hexLength + 1;
+                    currentColor = D3DCOLOR_RGBA(r, g, b, a);
+
+                    i += (1 + hexLen + 1);
                     continue;
                 }
             }

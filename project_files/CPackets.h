@@ -225,7 +225,7 @@ public:
 	struct PlayerChatMessage
 	{
 		int playerid;
-		char message[CChat::MAX_MESSAGE_SIZE+1];
+		wchar_t message[CChat::MAX_MESSAGE_SIZE+1];
 	};
 
 	struct PedSpawn
