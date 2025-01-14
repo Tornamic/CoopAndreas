@@ -109,7 +109,7 @@ static void __cdecl CTheZones__Update_Hook()
 
     packet.newState = CCompressedControllerState(newState, pad->DisablePlayerControls);
     
-    CNetwork::SendPacket(CPacketsID::PLAYER_KEY_SYNC, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    CNetwork::SendPacket(CPacketsID::PLAYER_KEY_SYNC, &packet, sizeof packet);
 }
 
 void GameHooks::InjectHooks()

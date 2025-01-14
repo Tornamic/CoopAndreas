@@ -41,12 +41,65 @@ enum CPacketsID : unsigned short
 	PLAYER_STATS,
 	REBUILD_PLAYER,
 	RESPAWN_PLAYER,
-	ASSIGN_VEHICLE
+	ASSIGN_VEHICLE,
+	MASS_PACKET_SEQUENCE,
+
+	PACKET_ID_MAX
 };
 
 class CPackets
 {
 public:
+	static int GetPacketSize(CPacketsID id)
+	{
+		static std::array<int, PACKET_ID_MAX> m_nPacketSize =
+		{
+			0, // CHECK_VERSION
+			sizeof(PlayerConnected), // PLAYER_CONNECTED
+			sizeof(PlayerDisconnected), // PLAYER_DISCONNECTED
+			sizeof(PlayerOnFoot), // PLAYER_ONFOOT
+			sizeof(PlayerBulletShot), // PLAYER_BULLET_SHOT
+			sizeof(PlayerHandshake), // PLAYER_HANDSHAKE
+			sizeof(PlayerPlaceWaypoint), // PLAYER_PLACE_WAYPOINT
+			sizeof(PlayerGetName), // PLAYER_GET_NAME
+			sizeof(VehicleSpawn), // VEHICLE_SPAWN
+			sizeof(PlayerSetHost), // PLAYER_SET_HOST
+			sizeof(AddExplosion), // ADD_EXPLOSION
+			sizeof(VehicleRemove), // VEHICLE_REMOVE
+			sizeof(VehicleIdleUpdate), // VEHICLE_IDLE_UPDATE
+			sizeof(VehicleDriverUpdate), // VEHICLE_DRIVER_UPDATE
+			sizeof(VehicleEnter), // VEHICLE_ENTER
+			sizeof(VehicleExit), // VEHICLE_EXIT
+			sizeof(VehicleDamage), // VEHICLE_DAMAGE
+			sizeof(VehicleComponentAdd), // VEHICLE_COMPONENT_ADD
+			sizeof(VehicleComponentRemove), // VEHICLE_COMPONENT_REMOVE
+			sizeof(VehiclePassengerUpdate), // VEHICLE_PASSENGER_UPDATE
+			sizeof(PlayerChatMessage), // PLAYER_CHAT_MESSAGE
+			sizeof(PedSpawn), // PED_SPAWN
+			sizeof(PedRemove), // PED_REMOVE
+			sizeof(PedOnFoot), // PED_ONFOOT
+			sizeof(GameWeatherTime), // GAME_WEATHER_TIME
+			0, // PED_ADD_TASK
+			sizeof(PedRemoveTask), // PED_REMOVE_TASK
+			sizeof(PlayerKeySync), // PLAYER_KEY_SYNC
+			sizeof(PedDriverUpdate), // PED_DRIVER_UPDATE
+			sizeof(PedShotSync), // PED_SHOT_SYNC
+			sizeof(PedPassengerSync), // PED_PASSENGER_UPDATE
+			sizeof(PlayerAimSync), // PLAYER_AIM_SYNC
+			sizeof(VehicleConfirm), // VEHICLE_CONFIRM
+			sizeof(PedConfirm), // PED_CONFIRM
+			sizeof(PlayerStats), // PLAYER_STATS
+			sizeof(RebuildPlayer), // REBUILD_PLAYER
+			sizeof(RespawnPlayer), // RESPAWN_PLAYER
+			sizeof(AssignVehicleSyncer), // ASSIGN_VEHICLE
+			0 // MASS_PACKET_SEQUENCE
+		};
+
+		return m_nPacketSize[id];
+	}
+
+	
+
 
 	struct PlayerConnected
 	{
@@ -118,8 +171,6 @@ public:
 		bool usesSound;
 		float cameraShake;
 		bool isVisible;
-		int entityid;
-		unsigned char entityType;
 	};
 
 	struct VehicleSpawn

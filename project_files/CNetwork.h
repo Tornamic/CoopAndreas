@@ -15,7 +15,7 @@ public:
 class CNetwork
 {
 public:
-	static std::vector<CPacketListener*> m_packetListeners;
+	static std::unordered_map<unsigned short, CPacketListener*> m_packetListeners;
 	static ENetHost* m_pClient;
 	static ENetPeer* m_pPeer;
 	static bool CNetwork::m_bConnected;
@@ -24,7 +24,7 @@ public:
 
 	static DWORD WINAPI InitAsync(LPVOID);
 	static void Disconnect();
-	static void SendPacket(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag);
+	static void SendPacket(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag = (ENetPacketFlag)0);
 	static void InitListeners();
 	static void HandlePacketReceive(ENetEvent& event);
 	static void AddListener(unsigned short id, void(*callback)(void*, int));

@@ -81,7 +81,7 @@ public:
 
 					CDriveBy::Process(localPlayer);
 					
-					int syncRate = 30;
+					int syncRate = 40;
 					CVector velocity{};
 
 					bool isDriver = localPlayer->m_nPedFlags.bInVehicle && localPlayer->m_pVehicle && localPlayer->m_pVehicle->m_pDriver == localPlayer;
@@ -92,7 +92,7 @@ public:
 
 					if (velocity.x == 0 && velocity.y == 0 && velocity.z == 0)
 					{
-						syncRate = 100;
+						syncRate = 110;
 					}
 
 					if (!isPassenger && tickCount > (isDriver ? lastDriverSyncTickRate : lastOnFootSyncTickRate) + syncRate)
@@ -105,7 +105,7 @@ public:
 						else
 						{
 							CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
-							CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+							CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet);
 							delete packet;
 							lastOnFootSyncTickRate = tickCount;
 						}
@@ -117,13 +117,13 @@ public:
 						lastPassengerSyncTickRate = tickCount;
 					}
 
-					if (tickCount > lastIdleVehicleSyncTickRate + 100)
+					if (tickCount > lastIdleVehicleSyncTickRate + 150)
 					{
 						CNetworkVehicleManager::UpdateIdle();
 						lastIdleVehicleSyncTickRate = tickCount;
 					}
 
-					if (tickCount > lastPedSyncTickRate + 40)
+					if (tickCount > lastPedSyncTickRate + 50)
 					{
 						CNetworkPedManager::Update();
 						lastPedSyncTickRate = tickCount;
@@ -144,7 +144,7 @@ public:
 						if ((keys.RightShoulder1 && !isPassenger) || CDriveBy::IsPedInDriveby(localPlayer))
 						{
 							// if is player shooting, update x2 often
-							if (tickCount > lastPlayerAimSyncTickRate + keys.ButtonCircle ? 50 : 100)
+							if (tickCount > lastPlayerAimSyncTickRate + (keys.ButtonCircle ? 50 : 100))
 							{
 								CPacketHandler::PlayerAimSync__Trigger();
 							}
@@ -181,7 +181,7 @@ public:
 						D3DCOLOR_ARGB(255, 160, 160, 160));
 				}
 
-				if (CNetwork::m_bConnected && !GetAsyncKeyState(VK_F9))
+				if (CNetwork::m_bConnected && GetAsyncKeyState(VK_F9))
 				{
 					char buffer[70];
 					sprintf(buffer, "Game/Network: Peds %d/%d Cars %d/%d Recv %d Sent %d", CPools::ms_pPedPool->GetNoOfUsedSpaces(), CNetworkPedManager::m_pPeds.size(), CPools::ms_pVehiclePool->GetNoOfUsedSpaces(), CNetworkVehicleManager::m_pVehicles.size(), CNetwork::m_pClient->totalReceivedPackets, CNetwork::m_pClient->totalSentPackets);

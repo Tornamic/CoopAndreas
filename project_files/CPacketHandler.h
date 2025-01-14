@@ -39,7 +39,7 @@ public:
 	static CPackets::PedDriverUpdate* PedDriverUpdate__Collect(CNetworkVehicle* vehicle, CNetworkPed* ped);
 	static void PedDriverUpdate__Handle(void* data, int size);
 	static void PedShotSync__Handle(void* data, int size);
-	static void PedPassengerSync__Trigger(CNetworkPed* networkPed, CNetworkVehicle* networkVehicle);
+	static CPackets::PedPassengerSync* PedPassengerSync__Collect(CNetworkPed* networkPed, CNetworkVehicle* networkVehicle);
 	static void PedPassengerSync__Handle(void* data, int size);
 	static void PlayerAimSync__Trigger();
 	static CPackets::PlayerAimSync PlayerAimSync__Collect();
@@ -51,5 +51,6 @@ public:
 	static void RebuildPlayer__Trigger();
 	static void AssignVehicleSyncer__Handle(void* data, int size);
 	static void RespawnPlayer__Handle(void* data, int size);
+	static void MassPacketSequence__Handle(void* data, int size);
 };
 

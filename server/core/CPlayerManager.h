@@ -93,7 +93,7 @@ class CPlayerPackets
 						player->RemoveFromVehicle();
 					}
 
-					CNetwork::SendPacketToAll(CPacketsID::PLAYER_ONFOOT, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+					CNetwork::SendPacketToAll(CPacketsID::PLAYER_ONFOOT, packet, sizeof *packet, (ENetPacketFlag)0, peer);
 				}
 			}
 		};
@@ -117,7 +117,7 @@ class CPlayerPackets
 				// set packet`s playerid, cuz incoming packet has id = 0
 				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
 			
-				CNetwork::SendPacketToAll(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+				CNetwork::SendPacketToAll(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet, (ENetPacketFlag)0, peer);
 			}
 		};
 
@@ -176,8 +176,6 @@ class CPlayerPackets
 			bool usesSound;
 			float cameraShake;
 			bool isVisible;
-			int entityid;
-			unsigned char entityType;
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
@@ -209,7 +207,7 @@ class CPlayerPackets
 			{
 				CPlayerPackets::PlayerKeySync* packet = (CPlayerPackets::PlayerKeySync*)data;
 				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-				CNetwork::SendPacketToAll(CPacketsID::PLAYER_KEY_SYNC, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+				CNetwork::SendPacketToAll(CPacketsID::PLAYER_KEY_SYNC, packet, sizeof * packet, (ENetPacketFlag)0, peer);
 			}
 		};
 
@@ -250,7 +248,7 @@ class CPlayerPackets
 			{
 				CPlayerPackets::PlayerAimSync* packet = (CPlayerPackets::PlayerAimSync*)data;
 				packet->playerid = CPlayerManager::GetPlayer(peer)->m_iPlayerId;
-				CNetwork::SendPacketToAll(CPacketsID::PLAYER_AIM_SYNC, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+				CNetwork::SendPacketToAll(CPacketsID::PLAYER_AIM_SYNC, packet, sizeof * packet, (ENetPacketFlag)0, peer);
 			}
 		};
 

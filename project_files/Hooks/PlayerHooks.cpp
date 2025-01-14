@@ -21,7 +21,12 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     if (player == nullptr)
         return;
 
-    CWorld::PlayerInFocus = player->GetInternalId();
+    int playerNum = player->GetInternalId();
+
+    if (playerNum == -1)
+        return;
+
+    CWorld::PlayerInFocus = playerNum;
 
     CKeySync::ApplyNetworkPlayerContext(player);
     CAimSync::ApplyNetworkPlayerContext(player);
@@ -31,9 +36,6 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
 
     player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
-
-    player->m_pPed->m_fAimingRotation = 
-        player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
 
     plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
 
@@ -84,7 +86,7 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
         packet->colPoint = *colPoint;
         packet->incrementalHit = incrementalHit;
 
-        CNetwork::SendPacket(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+        CNetwork::SendPacket(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet);
 
         weapon->DoBulletImpact(owner, victim, startPoint, endPoint, colPoint, incrementalHit);
 

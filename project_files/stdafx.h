@@ -9,7 +9,7 @@
 #define MAX_SCREEN_HEIGHT 1600
 #define MIN_RENDER_FONT_SIZE 12
 #define MAX_RENDER_FONT_SIZE 23
-#define _DEV
+//#define _DEV
 //#define PACKET_DEBUG_MESSAGES
 #define PURECALL (0x82263A)
 
@@ -116,4 +116,5 @@ using namespace plugin;
 #include "CDebugPedTasks.h"
 #include "eNetworkEntityType.h"
 #include "CStatsSync.h"
+#include "CMassPacketBuilder.h"
 // -----------------------------------------------------------------------------------------

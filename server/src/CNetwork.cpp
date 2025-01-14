@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 
 #include "../core/CPacketListener.h"
 #include "../core/CPacket.h"
@@ -15,7 +16,7 @@
 #include "../shared/semver.h"
 
 
-std::vector<CPacketListener*> CNetwork::m_packetListeners;
+std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
 
 bool CNetwork::Init(unsigned short port)
 {
@@ -133,7 +134,7 @@ void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t 
     enet_peer_send(peer, 0, packet);
 }
 
-void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith = nullptr)
+void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith)
 {
     size_t packetSize = 2 + dataSize;
     char* packetData = new char[packetSize];
@@ -152,7 +153,7 @@ void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, E
     }
 }
 
-void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith = nullptr)
+void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith)
 {
     ENetPacket* packet = enet_packet_create(data, dataSize, flag);
 
@@ -340,7 +341,7 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
     };
 
     // send to all
-    CNetwork::SendPacketToAll(CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof (CPlayerPackets::PlayerDisconnected), ENET_PACKET_FLAG_UNSEQUENCED, event.peer);
+    CNetwork::SendPacketToAll(CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof (CPlayerPackets::PlayerDisconnected), (ENetPacketFlag)0, event.peer);
 
     printf("[Game] : %i Disconnected.\n", player->m_iPlayerId);
 
@@ -353,24 +354,28 @@ void CNetwork::HandlePacketReceive(ENetEvent& event)
     unsigned short id;
     memcpy(&id, event.packet->data, 2);
 
-    // get data
-    char* data = new char[event.packet->dataLength - 2];
-    memcpy(data, event.packet->data + 2, event.packet->dataLength - 2);
-
-    // call listener's callback by id
-    for (size_t i = 0; i < m_packetListeners.size(); i++)
+    if (id == CPacketsID::MASS_PACKET_SEQUENCE)
     {
-        if (m_packetListeners[i]->m_iPacketID == id)
-        {
-            m_packetListeners[i]->m_callback(event.peer, data, (int)event.packet->dataLength - 2);
-        }
+        CNetwork::SendPacketRawToAll(event.packet->data, event.packet->dataLength, (ENetPacketFlag)event.packet->flags, event.peer);
     }
-    
-    delete[] data;
+    else
+    {
+        // get data
+        char* data = new char[event.packet->dataLength - 2];
+        memcpy(data, event.packet->data + 2, event.packet->dataLength - 2);
+        // call listener's callback by id
+        auto it = m_packetListeners.find(id);
+        if (it != m_packetListeners.end())
+        {
+            it->second->m_callback(event.peer, data, (int)event.packet->dataLength - 2);
+        }
+
+        delete[] data;
+    }
 }
 
 void CNetwork::AddListener(unsigned short id, void(*callback)(ENetPeer*, void*, int))
 {
     CPacketListener* listener = new CPacketListener(id, callback);
-    m_packetListeners.push_back(listener);
+    m_packetListeners.insert({ id, listener });
 }

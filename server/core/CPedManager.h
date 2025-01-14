@@ -137,7 +137,7 @@ class CPedPackets
 					}
 
 					ped->m_vecPos = packet->pos;
-					CNetwork::SendPacketToAll(CPacketsID::PED_ONFOOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+					CNetwork::SendPacketToAll(CPacketsID::PED_ONFOOT, packet, sizeof * packet, (ENetPacketFlag)0, peer);
 				}
 			}
 		};
@@ -193,7 +193,7 @@ class CPedPackets
 					return;
 				}
 
-				CNetwork::SendPacketToAll(CPacketsID::PED_DRIVER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+				CNetwork::SendPacketToAll(CPacketsID::PED_DRIVER_UPDATE, packet, sizeof * packet, (ENetPacketFlag)0, peer);
 
 				CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
 
@@ -252,7 +252,7 @@ class CPedPackets
 					return;
 				}
 
-				CNetwork::SendPacketToAll(CPacketsID::PED_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+				CNetwork::SendPacketToAll(CPacketsID::PED_PASSENGER_UPDATE, packet, sizeof * packet, (ENetPacketFlag)0, peer);
 			}
 		};
 

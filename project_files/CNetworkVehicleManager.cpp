@@ -61,15 +61,16 @@ void CNetworkVehicleManager::UpdateDriver(CVehicle* vehicle)
 	if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle))
 	{
 		CPackets::VehicleDriverUpdate* packet = CPacketHandler::VehicleDriverUpdate__Collect(networkVehicle);
-		CNetwork::SendPacket(CPacketsID::VEHICLE_DRIVER_UPDATE, packet, sizeof *packet, ENET_PACKET_FLAG_UNSEQUENCED);
+		CNetwork::SendPacket(CPacketsID::VEHICLE_DRIVER_UPDATE, packet, sizeof *packet);
 		delete packet;
 	}
 }
 
 void CNetworkVehicleManager::UpdateIdle()
 {
-
 	CNetworkVehicleManager::RemoveHostedUnused();
+
+	CMassPacketBuilder builder;
 
 	for (int i = 0; i != m_pVehicles.size(); i++)
 	{
@@ -79,17 +80,19 @@ void CNetworkVehicleManager::UpdateIdle()
 		if (m_pVehicles[i]->m_bSyncing && !m_pVehicles[i]->HasDriver())
 		{
 			CPackets::VehicleIdleUpdate* packet = CPacketHandler::VehicleIdleUpdate__Collect(m_pVehicles[i]);
-			CNetwork::SendPacket(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+			builder.AddPacket(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof *packet);
 			delete packet;
 		}
 	}
+
+	builder.Send();
 }
 
 void CNetworkVehicleManager::UpdatePassenger(CVehicle* vehicle, CPlayerPed* localPlayer)
 {
 	CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
 	CPackets::VehiclePassengerUpdate* packet = CPacketHandler::VehiclePassengerUpdate__Collect(networkVehicle, localPlayer);
-	CNetwork::SendPacket(CPacketsID::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+	CNetwork::SendPacket(CPacketsID::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet);
 	delete packet;
 }
 

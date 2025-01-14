@@ -5,7 +5,7 @@ ENetHost* CNetwork::m_pClient = nullptr;
 ENetPeer* CNetwork::m_pPeer = nullptr;
 bool CNetwork::m_bConnected = false;
 
-std::vector<CPacketListener*> CNetwork::m_packetListeners;
+std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
 
 char CNetwork::m_IpAddress[128 + 1];
 unsigned short CNetwork::m_nPort;
@@ -128,6 +128,7 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::REBUILD_PLAYER, CPacketHandler::RebuildPlayer__Handle);
 	CNetwork::AddListener(CPacketsID::RESPAWN_PLAYER, CPacketHandler::RespawnPlayer__Handle);
 	CNetwork::AddListener(CPacketsID::ASSIGN_VEHICLE, CPacketHandler::AssignVehicleSyncer__Handle);
+	CNetwork::AddListener(CPacketsID::MASS_PACKET_SEQUENCE, CPacketHandler::MassPacketSequence__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)
@@ -141,18 +142,15 @@ void CNetwork::HandlePacketReceive(ENetEvent& event)
 	memcpy(data, event.packet->data + 2, event.packet->dataLength - 2);
 
 	// call listener's callback by id
-	for (size_t i = 0; i < m_packetListeners.size(); i++)
+	auto it = m_packetListeners.find(id);
+	if (it != m_packetListeners.end())
 	{
-		if (m_packetListeners[i]->m_iPacketID == id)
-		{
-			m_packetListeners[i]->m_callback(data, event.packet->dataLength - 2);
-		}
+		it->second->m_callback(data, (int)event.packet->dataLength - 2);
 	}
 }
 
 void CNetwork::AddListener(unsigned short id, void(*callback)(void*, int))
 {
 	CPacketListener* listener = new CPacketListener(id, callback);
-	m_packetListeners.push_back(listener);
+	m_packetListeners.insert({ id, listener });
 }
-

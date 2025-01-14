@@ -210,3 +210,13 @@ void CNetworkPlayer::RemoveFromVehicle(CVehicle* vehicle)
 	task.m_bWarpingOutOfCar = true;
 	task.ProcessPed(m_pPed);
 }
+
+void CNetworkPlayer::UpdateHeading(float heading)
+{
+	m_pPed->m_fAimingRotation = heading;
+
+	if (fabs(m_pPed->m_fCurrentRotation - heading) > M_PI_2)
+	{
+		m_pPed->m_fCurrentRotation = heading;
+	}
+}

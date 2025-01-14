@@ -41,19 +41,6 @@ static void __cdecl CExplosion__AddExplosion(CEntity* newVictim, CPed* newCreato
 {
     plugin::Call<0x736A50, CEntity*, CPed*, int, CVector2D, float, int, char, float, char>(newVictim, newCreator, type, pos, z, time, usesSound, cameraShake, isVisible);
 
-    bool createdByMe = newCreator == nullptr || newCreator == FindPlayerPed(0);
-    eNetworkEntityType entityType = NETWORK_ENTITY_TYPE_NOTHING;
-    int entityid = -1;
-
-    if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(newVictim))
-    {
-        entityType = NETWORK_ENTITY_TYPE_VEHICLE;
-        entityid = networkVehicle->m_nVehicleId;
-    }
-
-    if (!createdByMe)
-        return;
-
     CPackets::AddExplosion addExplosionPacket{};
 
     addExplosionPacket.type = (unsigned char)type;
@@ -62,9 +49,6 @@ static void __cdecl CExplosion__AddExplosion(CEntity* newVictim, CPed* newCreato
     addExplosionPacket.usesSound = usesSound;
     addExplosionPacket.cameraShake = cameraShake;
     addExplosionPacket.isVisible = isVisible;
-    addExplosionPacket.entityType = entityType;
-    addExplosionPacket.entityid = entityid;
-
     CNetwork::SendPacket(CPacketsID::ADD_EXPLOSION, &addExplosionPacket, sizeof addExplosionPacket, ENET_PACKET_FLAG_RELIABLE);
 
     return;

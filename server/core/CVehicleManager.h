@@ -118,7 +118,7 @@ class CVehiclePackets
 					{
 						vehicle->m_vecPosition = packet->pos;
 						vehicle->m_vecRotation = packet->rot;
-						CNetwork::SendPacketToAll(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+						CNetwork::SendPacketToAll(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof * packet, (ENetPacketFlag)0, peer);
 					}
 					else
 					{
@@ -155,7 +155,7 @@ class CVehiclePackets
 				{
 					CVehiclePackets::VehicleDriverUpdate* packet = (CVehiclePackets::VehicleDriverUpdate*)data;
 					packet->playerid = player->m_iPlayerId;
-					CNetwork::SendPacketToAll(CPacketsID::VEHICLE_DRIVER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+					CNetwork::SendPacketToAll(CPacketsID::VEHICLE_DRIVER_UPDATE, packet, sizeof * packet, (ENetPacketFlag)0, peer);
 
 					CVehicle* vehicle = CVehicleManager::GetVehicle(packet->vehicleid);
 
@@ -284,7 +284,7 @@ class CVehiclePackets
 				{
 					CVehiclePackets::VehiclePassengerUpdate* packet = (CVehiclePackets::VehiclePassengerUpdate*)data;
 					packet->playerid = player->m_iPlayerId;
-					CNetwork::SendPacketToAll(CPacketsID::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED, peer);
+					CNetwork::SendPacketToAll(CPacketsID::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet, (ENetPacketFlag)0, peer);
 
 					if (auto vehicle = CVehicleManager::GetVehicle(packet->vehicleid))
 					{

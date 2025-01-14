@@ -121,8 +121,7 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 
 	CUtil::GiveWeaponByPacket(networkPlayer, packet->weapon, packet->ammo);
 
-	networkPlayer->m_pPed->m_fAimingRotation =
-		networkPlayer->m_pPed->m_fCurrentRotation = packet->rotation;
+	networkPlayer->UpdateHeading(packet->rotation);
 
 	CUtil::SetPlayerJetpack(networkPlayer, packet->hasJetpack);
 
@@ -270,28 +269,6 @@ void CPacketHandler::PlayerSetHost__Handle(void* data, int size)
 void CPacketHandler::AddExplosion__Handle(void* data, int size)
 {
 	CPackets::AddExplosion* packet = (CPackets::AddExplosion*)data;
-
-	if (packet->entityType == NETWORK_ENTITY_TYPE_VEHICLE)
-	{
-		if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(packet->entityid))
-		{
-			if (auto vehicle = networkVehicle->m_pVehicle)
-			{
-				eVehicleType vehicleType = CUtil::GetVehicleType(vehicle);
-				
-				if (vehicleType != VEHICLE_BMX && vehicleType != VEHICLE_TRAIN)
-				{
-					vehicle->BlowUpCar(networkVehicle->m_pVehicle, false);
-
-					if (vehicleType != VEHICLE_BIKE && vehicleType != VEHICLE_BOAT)
-						((CAutomobile*)vehicle)->m_damageManager.FuckCarCompletely(true);
-				}
-				return;
-			}
-			
-		}
-	}
-
 	CExplosion::AddExplosion(nullptr, nullptr, (eExplosionType)packet->type, packet->pos, packet->time, packet->usesSound, packet->cameraShake, packet->isVisible);
 }
 
@@ -1046,27 +1023,27 @@ void CPacketHandler::PedShotSync__Handle(void* data, int size)
 
 // PedPassengerSync
 
-void CPacketHandler::PedPassengerSync__Trigger(CNetworkPed* networkPed, CNetworkVehicle* networkVehicle)
+CPackets::PedPassengerSync* CPacketHandler::PedPassengerSync__Collect(CNetworkPed* networkPed, CNetworkVehicle* networkVehicle)
 {
-	CPackets::PedPassengerSync packet{};
+	CPackets::PedPassengerSync* packet = new CPackets::PedPassengerSync;
 
-	packet.pedid = networkPed->m_nPedId;
-	packet.vehicleid = networkVehicle->m_nVehicleId;
-	packet.health = (unsigned char)networkPed->m_pPed->m_fHealth;
-	packet.armour = (unsigned char)networkPed->m_pPed->m_fArmour;
-	packet.weapon = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
-	packet.ammo = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_nAmmoInClip;
+	packet->pedid = networkPed->m_nPedId;
+	packet->vehicleid = networkVehicle->m_nVehicleId;
+	packet->health = (unsigned char)networkPed->m_pPed->m_fHealth;
+	packet->armour = (unsigned char)networkPed->m_pPed->m_fArmour;
+	packet->weapon = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
+	packet->ammo = networkPed->m_pPed->m_aWeapons[networkPed->m_pPed->m_nActiveWeaponSlot].m_nAmmoInClip;
 
 	for (int i = 0; i < networkVehicle->m_pVehicle->m_nMaxPassengers; i++)
 	{
 		if(networkVehicle->m_pVehicle->m_apPassengers[i] == networkPed->m_pPed)
 		{
-			packet.seatid = i;
+			packet->seatid = i;
 			break;
 		}
 	}
 
-	CNetwork::SendPacket(CPacketsID::PED_PASSENGER_UPDATE, &packet, sizeof packet, ENET_PACKET_FLAG_UNSEQUENCED);
+	return packet;
 }
 
 void CPacketHandler::PedPassengerSync__Handle(void* data, int size)
@@ -1105,7 +1082,7 @@ void CPacketHandler::PedPassengerSync__Handle(void* data, int size)
 void CPacketHandler::PlayerAimSync__Trigger()
 {
 	CPackets::PlayerAimSync packet = CPacketHandler::PlayerAimSync__Collect();
-	CNetwork::SendPacket(CPacketsID::PLAYER_AIM_SYNC, &packet, sizeof packet, ENET_PACKET_FLAG_UNSEQUENCED);
+	CNetwork::SendPacket(CPacketsID::PLAYER_AIM_SYNC, &packet, sizeof packet);
 }
 
 CPackets::PlayerAimSync CPacketHandler::PlayerAimSync__Collect()
@@ -1279,5 +1256,50 @@ void CPacketHandler::RespawnPlayer__Handle(void* data, int size)
 	if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(packet->playerid))
 	{
 		networkPlayer->Respawn();
+	}
+}
+
+// MassPacketSequence
+
+void CPacketHandler::MassPacketSequence__Handle(void* data, int size)
+{
+	if (size < 1)
+	{
+		CChat::AddMessage("Invalid mass packet data!");
+		return;
+	}
+
+	char* buffer = static_cast<char*>(data);
+
+	unsigned char packetCount = static_cast<unsigned char>(buffer[0]);
+	size_t offset = 1;
+
+	if (packetCount == 0 || offset >= size)
+	{
+		CChat::AddMessage("Invalid packet count or offset!");
+		return;
+	}
+
+	for (unsigned char i = 0; i < packetCount; ++i)
+	{
+		if (offset + 2 > size)
+		{
+			CChat::AddMessage("Invalid packet data in mass packet!");
+			return;
+		}
+
+		unsigned short packetId;
+		memcpy(&packetId, buffer + offset, 2);
+		offset += 2;
+
+		size_t remainingData = size - offset;
+
+		auto it = CNetwork::m_packetListeners.find(packetId);
+		if (it != CNetwork::m_packetListeners.end())
+		{
+			it->second->m_callback(buffer + offset, (int)remainingData);
+		}
+
+		offset += CPackets::GetPacketSize((CPacketsID)packetId);
 	}
 }

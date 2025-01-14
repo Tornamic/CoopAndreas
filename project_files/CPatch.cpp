@@ -183,8 +183,8 @@ void FixCrashes()
     patch::Nop(0x60F2C4, 25); //CPlayerPed::ProcessControl
 
     // nop ped destroying when player enters interior (remove after separating ped sync)
-    patch::Nop(0x4407B7, 5);
-    patch::Nop(0x61648C, 5);
+    //patch::Nop(0x4407B7, 5);
+    //patch::Nop(0x61648C, 5);
 
     // fix spawning with bottles and cigars
     patch::Nop(0x4217F4, 21);
