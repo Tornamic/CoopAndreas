@@ -73,7 +73,8 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
         }
     }
 
-    CWorld::Add(entity);
+    if(CUtil::IsValidEntityPtr(entity))
+        CWorld::Add(entity);
 }
 static void __cdecl CWorld__Remove_Hook(CEntity* entity)
 {

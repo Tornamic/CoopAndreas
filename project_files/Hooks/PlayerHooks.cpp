@@ -19,18 +19,30 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(This);
 
     if (player == nullptr)
+    {
+        plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
         return;
+    }
 
     int playerNum = player->GetInternalId();
 
     if (playerNum == -1)
+    {
+        plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
         return;
+    }
 
     CWorld::PlayerInFocus = playerNum;
 
     CKeySync::ApplyNetworkPlayerContext(player);
     CAimSync::ApplyNetworkPlayerContext(player);
     CStatsSync::ApplyNetworkPlayerContext(player);
+
+    if (CPad::GetPad(0)->NewState.RightShoulder1) // is aiming
+    {
+        player->m_pPed->m_fAimingRotation =
+            player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
+    }
 
     player->m_pPed->m_fHealth = player->m_lOnFoot->health;
     player->m_pPed->m_fArmour = player->m_lOnFoot->armour;

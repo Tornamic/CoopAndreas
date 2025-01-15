@@ -61,7 +61,16 @@ void __fastcall CVehicle__ProcessControl_Hook()
         return;
     }
 
-    CWorld::PlayerInFocus = player->GetInternalId();
+    int playerNum = player->GetInternalId();
+
+    if (playerNum == -1)
+    {
+        plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
+        plugin::CallMethodDyn<CVehicle*>(call_addr, vehicle);
+        return;
+    }
+
+    CWorld::PlayerInFocus = playerNum;
 
     CKeySync::ApplyNetworkPlayerContext(player);
     CAimSync::ApplyNetworkPlayerContext(player);

@@ -34,6 +34,7 @@ public:
 	int GetInternalId();
 	char* GetName();
 	char GetWeaponSkill(eWeaponType weaponType);
+	void WarpIntoVehicleDriver(CVehicle* vehicle);
 	void RemoveFromVehicle(CVehicle* vehicle);
 	void UpdateHeading(float heading);
 	void WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid);

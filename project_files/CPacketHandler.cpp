@@ -456,8 +456,7 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 
 	if (player->m_pPed->m_pVehicle != vehicle->m_pVehicle || !player->m_pPed->m_nPedFlags.bInVehicle)
 	{
-		player->m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
-		plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle));
+		player->WarpIntoVehicleDriver(vehicle->m_pVehicle);
 	}
 
 	vehicle->m_pVehicle->m_matrix->pos = packet->pos;
@@ -597,13 +596,26 @@ void CPacketHandler::VehicleDamage__Handle(void* data, int size)
 #endif
 	CPackets::VehicleDamage* packet = (CPackets::VehicleDamage*)data;
 
-	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid);
-	*(CDamageManager*)((DWORD)vehicle->m_pVehicle + 0x5A0) = packet->damageManager;
+	if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid))
+	{
+		if (auto vehicle = networkVehicle->m_pVehicle)
+		{
+			eVehicleType vehicleType = CUtil::GetVehicleType(vehicle);
+			switch (vehicleType)
+			{
+			case VEHICLE_AUTOMOBILE:
+			case VEHICLE_MTRUCK:
+			case VEHICLE_QUAD:
+			case VEHICLE_HELI:
+			case VEHICLE_PLANE:
+			case VEHICLE_TRAILER:
+			((CAutomobile*)vehicle)->m_damageManager = packet->damageManager;
+			vehicle->SetupDamageAfterLoad();
+				break;
+			}
+		}
+	}
 
-	DWORD dwVehiclePtr = (DWORD)vehicle->m_pVehicle;
-	_asm mov ecx, dwVehiclePtr
-	_asm mov edx, 0x6B3E90 // CAutomobile::UpdateDamageModel
-	_asm call edx
 }
 
 // VehicleComponentAdd
@@ -1272,7 +1284,7 @@ void CPacketHandler::MassPacketSequence__Handle(void* data, int size)
 	char* buffer = static_cast<char*>(data);
 
 	unsigned char packetCount = static_cast<unsigned char>(buffer[0]);
-	size_t offset = 1;
+	int offset = 1;
 
 	if (packetCount == 0 || offset >= size)
 	{

@@ -145,6 +145,28 @@ char CNetworkPlayer::GetWeaponSkill(eWeaponType weaponType)
 	return CWeaponInfo::GetWeaponInfo(weaponType, 1)->m_nReqStatLevel <= weaponStat;
 }
 
+void CNetworkPlayer::WarpIntoVehicleDriver(CVehicle* vehicle)
+{
+	assert(m_pPed != nullptr);
+
+	if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
+	{
+		return;
+	}
+
+	if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
+	{
+		RemoveFromVehicle(m_pPed->m_pVehicle);
+	}
+
+	m_pPed->m_pIntelligence->FlushImmediately(false);
+
+	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
+
+	auto task = CTaskSimpleCarSetPedInAsDriver(vehicle, nullptr);
+	task.m_bWarpingInToCar = true;
+	task.ProcessPed(m_pPed);
+}
 
 void CNetworkPlayer::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 {
