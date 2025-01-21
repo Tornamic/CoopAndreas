@@ -106,8 +106,6 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
 
     if (isWeaponTypeDifferent || isAmmoDifferent)
     {
-        CWorld::PlayerInFocus = player->GetInternalId();
-
         CStatsSync::ApplyNetworkPlayerContext(player);
 
         if (weapon != 0)
@@ -146,7 +144,6 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
         }
 
         CStatsSync::ApplyLocalContext();
-        CWorld::PlayerInFocus = 0;
     }
 }
 
@@ -262,7 +259,12 @@ void CUtil::SetPlayerJetpack(CNetworkPlayer* player, bool set)
 {
     if (set)
     {
-        CWorld::PlayerInFocus = player->GetInternalId();
+        int playerNum = player->GetInternalId();
+
+        if (playerNum == -1)
+            return;
+
+        CWorld::PlayerInFocus = playerNum;
         CCheat::JetpackCheat(); // its easier to call this instead of implementing jetpack giving
         CWorld::PlayerInFocus = 0;
     }

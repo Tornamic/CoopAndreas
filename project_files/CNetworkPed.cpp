@@ -3,10 +3,15 @@
 #include <CTaskSimpleCarSetPedInAsPassenger.h>
 #include <CCarEnterExit.h>
 #include <CTaskSimpleCarSetPedOut.h>
+#include <Hooks/PedHooks.h>
 
-CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy)
+CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy, char specialModelName[])
 {
-    CStreaming::RequestModel(modelId, 0);
+    if (modelId >= 290 && modelId <= 299)
+        CStreaming::RequestSpecialModel(modelId, specialModelName, 0);
+    else
+        CStreaming::RequestModel(modelId, 0);
+
     CStreaming::LoadAllRequestedModels(false);
 
     if (pedType == PED_TYPE_COP)
@@ -58,6 +63,8 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
     m_pPed->SetOrientation(0.f, 0.f, 0.f);
     CWorld::Add(m_pPed);
 
+    CStreaming::SetMissionDoesntRequireModel(modelId);
+
     m_nPedId = pedid;
     m_nPedType = pedType;
     m_bSyncing = false;
@@ -108,6 +115,13 @@ CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
     packet.pos = ped->m_matrix->pos;
     packet.pedType = ped->m_nPedType;
     packet.createdBy = ped->m_nCreatedBy;
+
+    if (packet.modelId >= 290 && packet.modelId <= 299)
+    {
+        strcpy_s(packet.specialModelName, PedHooks::ms_aszLoadedSpecialModels[packet.modelId - 290]);
+        packet.specialModelName[7] = '\0';
+    }
+
     CNetwork::SendPacket(CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 
     return networkPed;

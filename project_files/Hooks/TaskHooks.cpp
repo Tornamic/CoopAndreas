@@ -277,7 +277,13 @@ bool __fastcall CTaskSimpleUseGun__SetPedPosition_Hook(CTaskSimpleUseGun* This, 
 
     if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(ped))
     {
-        CWorld::PlayerInFocus = networkPlayer->GetInternalId();
+        int playerNum = networkPlayer->GetInternalId();
+
+        if (playerNum == -1)
+            return orig();
+
+        CWorld::PlayerInFocus = playerNum;
+
         CStatsSync::ApplyNetworkPlayerContext(networkPlayer);
         CAimSync::ApplyNetworkPlayerContext(networkPlayer);
         bool result = orig();

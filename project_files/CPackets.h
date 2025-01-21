@@ -287,6 +287,7 @@ public:
 		unsigned char pedType;
 		CVector pos;
 		unsigned char createdBy;
+		char specialModelName[8];
 	};
 
 	struct PedRemove

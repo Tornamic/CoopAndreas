@@ -305,6 +305,7 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         packet.pos = i->m_vecPos;
         packet.pedType = i->m_nPedType;
         packet.createdBy = i->m_nCreatedBy;
+        strncpy_s(packet.specialModelName, i->m_szSpecialModelName, strlen(i->m_szSpecialModelName));
         CNetwork::SendPacket(event.peer, CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
 
