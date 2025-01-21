@@ -11,11 +11,21 @@ uint8_t CChat::m_nCurrentPrevMessageIndex = 0;
 
 uint8_t patch_disable_inputs[] = {0x00, 0x00, 0x00, 0x00, 0x00};
 
-bool IsInputTextEmpty(const std::wstring& str)
+static bool IsInputTextEmpty(const std::wstring& str)
 {
     return std::all_of(str.begin(), str.end(), [](wchar_t ch) {
         return std::iswspace(ch);
         });
+}
+
+static bool IsHighSymbolSurrogate(wchar_t ch)
+{
+    return (ch >= 0xD800 && ch <= 0xDBFF);
+}
+
+static bool IsLowSymbolSurrogate(wchar_t ch)
+{
+    return (ch >= 0xDC00 && ch <= 0xDFFF);
 }
 
 void CChat::EraseCharacter(std::wstring& wtext, size_t offCaretPos)
@@ -29,15 +39,41 @@ void CChat::EraseCharacter(std::wstring& wtext, size_t offCaretPos)
     {
         if (it != wtext.begin())
         {
-            --it;
-            it = wtext.erase(it);
-            m_nCaretPos = std::distance(wtext.begin(), it);
+            std::wstring::iterator itLeft = it - 1;
+
+            if (itLeft != wtext.begin())
+            {
+                if (IsLowSymbolSurrogate(*itLeft))
+                {
+                    std::wstring::iterator itLeft2 = itLeft - 1;
+                    if (IsHighSymbolSurrogate(*itLeft2))
+                    {
+                        itLeft2 = wtext.erase(itLeft2, it);
+
+                        m_nCaretPos = std::distance(wtext.begin(), itLeft2);
+                        return;
+                    }
+                }
+            }
+
+            itLeft = wtext.erase(itLeft);
+            m_nCaretPos = std::distance(wtext.begin(), itLeft);
         }
     }
     else if (offCaretPos == 1)
     {
         if (it != wtext.end())
         {
+            if (IsHighSymbolSurrogate(*it))
+            {
+                auto itNext = it + 1;
+                if (itNext != wtext.end() && IsLowSymbolSurrogate(*itNext))
+                {
+                    it = wtext.erase(it, itNext + 1);
+                    return;
+                }
+            }
+
             it = wtext.erase(it);
         }
     }
@@ -50,12 +86,37 @@ void CChat::MoveCaretDirection(bool isMoveRight)
     if (isMoveRight)
     {
         if (it != m_sInputText.end())
+        {
             ++it;
+
+            if (it != m_sInputText.end())
+            {
+                auto prevIt = it - 1;
+                if (prevIt >= m_sInputText.begin())
+                {
+                    if (IsHighSymbolSurrogate(*prevIt) && IsLowSymbolSurrogate(*it))
+                    {
+                        ++it;
+                    }
+                }
+            }
+        }
     }
     else
     {
         if (it != m_sInputText.begin())
+        {
             --it;
+
+            if (it != m_sInputText.begin())
+            {
+                auto prevIt = it - 1;
+                if (IsHighSymbolSurrogate(*prevIt) && IsLowSymbolSurrogate(*it))
+                {
+                    --it;
+                }
+            }
+        }
     }
 
     m_nCaretPos = std::distance(m_sInputText.begin(), it);
