@@ -3,6 +3,9 @@
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
 #include <game_sa/CTaskComplexEnterCarAsPassengerTimed.h>
+#include <COpCodeSync.h>
+#include <CNetworkEntityBlip.h>
+#include <CNetworkCheckpoint.h>
 // PlayerConnected
 
 void CPacketHandler::PlayerConnected__Handle(void* data, int size)
@@ -959,8 +962,31 @@ CPackets::PedDriverUpdate* CPacketHandler::PedDriverUpdate__Collect(CNetworkVehi
 		CPlane* plane = (CPlane*)vehicle->m_pVehicle;
 		packet->planeGearState = plane->m_fLandingGearStatus;
 	}
+	else if (vehicleType == eVehicleType::VEHICLE_BMX)
+	{
+		CBmx* bmx = (CBmx*)vehicle->m_pVehicle;
+		packet->controlPedaling = bmx->field_818;
+	}
 
 	packet->locked = vehicle->m_pVehicle->m_eDoorLock;
+	packet->gasPedal = vehicle->m_pVehicle->m_fGasPedal;
+	packet->breakPedal = vehicle->m_pVehicle->m_fBreakPedal;
+	packet->drivingStyle = vehicle->m_pVehicle->m_autoPilot.m_nCarDrivingStyle;
+	packet->carMission = vehicle->m_pVehicle->m_autoPilot.m_nCarMission;
+	packet->cruiseSpeed = vehicle->m_pVehicle->m_autoPilot.m_nCruiseSpeed;
+	packet->ctrlFlags = vehicle->m_pVehicle->m_autoPilot.m_nCarCtrlFlags;
+	packet->movementFlags = vehicle->m_pVehicle->m_autoPilot.field_4C;
+	
+	packet->targetVehicleId = -1;
+	if (auto targetVehicle = vehicle->m_pVehicle->m_autoPilot.m_pTargetCar)
+	{
+		if(auto targetNetworkVehicle = CNetworkVehicleManager::GetVehicle(targetVehicle))
+		{ 
+			packet->targetVehicleId = targetNetworkVehicle->m_nVehicleId;
+		}
+	}
+
+	packet->destinationCoors = vehicle->m_pVehicle->m_autoPilot.m_vecDestinationCoors;
 
 	return packet;
 }
@@ -1009,14 +1035,63 @@ void CPacketHandler::PedDriverUpdate__Handle(void* data, int size)
 		*(float*)((DWORD)&*bike + 0x64C) = packet->bikeLean;
 	}
 
-	if (CUtil::GetVehicleType(vehicle->m_pVehicle) == eVehicleType::VEHICLE_PLANE)
+	if (vehicleType == eVehicleType::VEHICLE_PLANE)
 	{
 		CPlane* plane = (CPlane*)vehicle->m_pVehicle;
 
 		plane->m_fLandingGearStatus = packet->planeGearState;
 	}
+	else if (vehicleType == eVehicleType::VEHICLE_BMX)
+	{
+		CBmx* bmx = (CBmx*)vehicle->m_pVehicle;
+		bmx->field_818 = packet->controlPedaling;
+	}
 
 	vehicle->m_pVehicle->m_eDoorLock = (eDoorLock)packet->locked;
+
+	ped->m_fGasPedal = packet->gasPedal;
+	ped->m_fBreakPedal = packet->breakPedal;
+
+	vehicle->m_pVehicle->m_autoPilot.m_nCarDrivingStyle = (eCarDrivingStyle)packet->drivingStyle;
+
+	if (packet->targetVehicleId != -1)
+	{
+		if (auto targetNetworkVehicle = CNetworkVehicleManager::GetVehicle(packet->targetVehicleId))
+		{
+			if (auto targetVehicle = targetNetworkVehicle->m_pVehicle)
+			{
+				vehicle->m_pVehicle->m_autoPilot.m_pTargetCar = targetVehicle;
+			}
+		}
+	}
+
+	if (vehicle->m_pVehicle->m_autoPilot.m_nCarMission != packet->carMission)
+	{
+		if (packet->carMission != 57 && packet->carMission != 58)
+		{
+			if (!(packet->carMission == 0x44 && !vehicle->m_pVehicle->m_autoPilot.m_pTargetCar))
+			{
+				vehicle->m_pVehicle->m_autoPilot.m_nCarMission = (eCarMission)packet->carMission;
+				vehicle->m_pVehicle->m_autoPilot.m_nTimeToStartMission = CTimer::m_snTimeInMilliseconds;
+
+				if (vehicle->m_pVehicle->m_nVehicleFlags.bEngineBroken)
+				{
+					vehicle->m_pVehicle->m_nVehicleFlags.bEngineOn = false;
+				}
+				else
+				{
+					vehicle->m_pVehicle->m_nVehicleFlags.bEngineOn = true;
+				}
+			}
+		}
+	}
+
+	vehicle->m_pVehicle->m_autoPilot.m_nCruiseSpeed = packet->cruiseSpeed;
+	vehicle->m_pVehicle->m_autoPilot.m_nCarCtrlFlags = packet->ctrlFlags;
+	vehicle->m_pVehicle->m_autoPilot.field_4C = packet->movementFlags;
+
+	vehicle->m_pVehicle->m_autoPilot.m_vecDestinationCoors = packet->destinationCoors;
+
 }
 
 // PedShotSync
@@ -1314,4 +1389,196 @@ void CPacketHandler::MassPacketSequence__Handle(void* data, int size)
 
 		offset += CPackets::GetPacketSize((CPacketsID)packetId);
 	}
+}
+
+// StartCutscene
+
+void CPacketHandler::StartCutscene__Handle(void* data, int size)
+{
+	CPackets::StartCutscene* packet = (CPackets::StartCutscene*)data;
+
+	if (CCutsceneMgr::ms_cutsceneLoadStatus == 2)
+	{
+		CCutsceneMgr::FinishCutscene();
+		CCutsceneMgr::DeleteCutsceneData();
+	}
+	if (CCutsceneMgr::ms_cutsceneLoadStatus != 2)
+	{
+		CCutsceneMgr::LoadCutsceneData(packet->name);
+	}
+	CGame::currArea = packet->currArea;
+	CCutsceneMgr::StartCutscene();
+}
+
+// SkipCutscene
+
+void CPacketHandler::SkipCutscene__Handle(void* data, int size)
+{
+	CPackets::SkipCutscene* packet = (CPackets::SkipCutscene*)data;
+
+	CHud::m_BigMessage[1][0] = 0;
+	CCutsceneMgr::ms_wasCutsceneSkipped = 1;
+	CCutsceneMgr::FinishCutscene();
+}
+
+// OpCodeSync
+
+void CPacketHandler::OpCodeSync__Handle(void* data, int size)
+{
+	if (CLocalPlayer::m_bIsHost)
+		return;
+
+	COpCodeSync::HandlePacket((uint8_t*)data, size);
+}
+
+// OnMissionFlagSync
+
+void CPacketHandler::OnMissionFlagSync__Handle(void* data, int size)
+{
+	if (CLocalPlayer::m_bIsHost)
+		return;
+
+	CPackets::OnMissionFlagSync* packet = (CPackets::OnMissionFlagSync*)data;
+
+	if (CTheScripts::OnAMissionFlag)
+	{
+		CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag] = packet->bOnMission;
+	}
+}
+
+void CPacketHandler::OnMissionFlagSync__Trigger()
+{
+	if (!CLocalPlayer::m_bIsHost)
+		return;
+
+	if (CTheScripts::OnAMissionFlag)
+	{
+		CPackets::OnMissionFlagSync packet{};
+		packet.bOnMission = CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag];
+		CNetwork::SendPacket(CPacketsID::ON_MISSION_FLAG_SYNC, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+	}
+}
+
+// UpdateEntityBlip
+
+void CPacketHandler::UpdateEntityBlip__Handle(void* data, int size)
+{
+	if (CLocalPlayer::m_bIsHost)
+		return;
+
+	CPackets::UpdateEntityBlip* packet = (CPackets::UpdateEntityBlip*)data;
+	CNetworkEntityBlip::UpdateEntityBlip(packet);
+}
+
+// RemoveEntityBlip
+
+void CPacketHandler::RemoveEntityBlip__Handle(void* data, int size)
+{
+	if (CLocalPlayer::m_bIsHost)
+		return;
+
+	CPackets::RemoveEntityBlip* packet = (CPackets::RemoveEntityBlip*)data;
+	CNetworkEntityBlip::RemoveEntityBlip(packet);
+}
+
+// AddMessageGXT
+
+void CPacketHandler::AddMessageGXT__Handle(void* data, int size)
+{
+	if (CLocalPlayer::m_bIsHost)
+		return;
+
+	CPackets::AddMessageGXT* packet = (CPackets::AddMessageGXT*)data;
+	
+	char gxt[9];
+	strncpy_s(gxt, packet->gxt, 8);
+	gxt[8] = '\0';
+	
+	if (packet->type == 0) // COMMAND_PRINT
+	{
+		Command<Commands::PRINT>(gxt, packet->time, packet->flag);
+	}
+	else if (packet->type == 1) // COMMAND_PRINT_BIG
+	{
+		Command<Commands::PRINT_BIG>(gxt, packet->time, packet->flag);
+	}
+	else if (packet->type == 2) // COMMAND_PRINT_NOW
+	{
+		Command<Commands::PRINT_NOW>(gxt, packet->time, packet->flag);
+	}
+	else if (packet->type == 3) // COMMAND_PRINT_HELP
+	{
+		Command<Commands::PRINT_HELP>(gxt);
+	}
+	//CChat::AddMessage("%s %d %d %d", gxt, packet->type, packet->time, packet->flag);
+}
+
+void CPacketHandler::AddMessageGXT__Trigger(int playerid, char gxt[8], uint8_t type, uint32_t time, uint8_t flag)
+{
+	CPackets::AddMessageGXT packet{};
+	strncpy(packet.gxt, gxt, 8);
+	packet.playerid = playerid;
+	packet.type = type;
+	packet.time = time;
+	packet.flag = flag;
+	CNetwork::SendPacket(CPacketsID::ADD_MESSAGE_GXT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+}
+
+// RemoveMessageGXT
+
+void CPacketHandler::RemoveMessageGXT__Handle(void* data, int size)
+{
+	if (CLocalPlayer::m_bIsHost)
+		return;
+
+	CPackets::RemoveMessageGXT* packet = (CPackets::RemoveMessageGXT*)data;
+	char gxt[9];
+	strncpy_s(gxt, packet->gxt, 8);
+	gxt[8] = '\0';
+
+	Command<Commands::CLEAR_THIS_PRINT>(gxt);
+	Command<Commands::CLEAR_THIS_BIG_PRINT>(gxt);
+}
+
+// ClearEntityBlips
+
+void CPacketHandler::ClearEntityBlips__Handle(void* data, int size)
+{
+	if (CLocalPlayer::m_bIsHost)
+		return;
+
+	CNetworkEntityBlip::ClearEntityBlips();
+}
+
+// PlayMissionAudio
+
+void CPacketHandler::PlayMissionAudio__Handle(void* data, int size)
+{
+	if (CLocalPlayer::m_bIsHost)
+		return;
+	
+	CPackets::PlayMissionAudio* packet = (CPackets::PlayMissionAudio*)data;
+	plugin::CallMethod<0x507290>(&AudioEngine, packet->slotid, packet->audioid); // CAudioEngine__PreloadMissionAudio
+	COpCodeSync::ms_abLoadingMissionAudio[packet->slotid] = true;
+}
+
+// UpdateCheckpoint
+
+void CPacketHandler::UpdateCheckpoint__Handle(void* data, int size)
+{
+	if (CLocalPlayer::m_bIsHost)
+		return;
+	
+	CPackets::UpdateCheckpoint* packet = (CPackets::UpdateCheckpoint*)data;
+	CNetworkCheckpoint::Update(packet->position, packet->radius);
+}
+
+// RemoveCheckpoint
+
+void CPacketHandler::RemoveCheckpoint__Handle(void* data, int size)
+{
+	if (CLocalPlayer::m_bIsHost)
+		return;
+
+	CNetworkCheckpoint::Remove();
 }

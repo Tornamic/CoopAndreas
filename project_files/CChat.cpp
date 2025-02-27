@@ -129,18 +129,40 @@ void CChat::AddMessage(const std::vector<CTextSegment>& segs)
 
 void CChat::AddMessage(const std::string& str)
 {
+#ifdef _DEV
+    std::cout << str << std::endl;
+#endif
     AddMessageRich(CUnicode::ConvertUtf8ToUtf16(str), false);
 }
 
 void CChat::AddMessage(const char* format, ...)
 {
-    char buffer[1024];
+    char buffer[MAX_MESSAGE_SIZE + 1];
+    va_list args;
+    va_start(args, format);
+    std::vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+#ifdef _DEV
+    std::cout << buffer << std::endl;
+#endif
+    AddMessageRich(CUnicode::ConvertUtf8ToUtf16(buffer), false);
+}
+
+void CChat::AddMessageFast(const char* format, ...)
+{
+    char buffer[MAX_MESSAGE_SIZE + 1];
     va_list args;
     va_start(args, format);
     std::vsnprintf(buffer, sizeof(buffer), format, args);
     va_end(args);
 
-    AddMessageRich(CUnicode::ConvertUtf8ToUtf16(buffer), false);
+    std::vector<CTextSegment> segs;
+    CTextSegment seg;
+
+    seg.text.assign(CUnicode::ConvertUtf8ToUtf16(buffer));
+    seg.color = DEFAULT_CHAT_COLOR(255);
+    segs.push_back(seg);
+    m_aMessages.push_back(CChatMessage{ segs, GetTickCount(), true });
 }
 
 void CChat::AddMessageRich(const std::wstring& str, bool isSplit)

@@ -226,6 +226,11 @@ void __fastcall CPedDamageResponseCalculator__ComputeWillKillPed_Hook(uintptr_t 
     }
 }
 
+bool __fastcall CPlayerPed__CanPlayerStartMission_Hook(CPlayerPed* This, int)
+{
+    return This->CanPlayerStartMission() && CLocalPlayer::m_bIsHost;
+}
+
 void PlayerHooks::InjectHooks()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -252,4 +257,7 @@ void PlayerHooks::InjectHooks()
     patch::RedirectCall(0x67E840, CTaskSimpleJetPack__DropJetPack_Hook);
 
     patch::RedirectCall(0x4B5B27, CPedDamageResponseCalculator__ComputeWillKillPed_Hook);
+
+    patch::RedirectCall(0x4577E6, CPlayerPed__CanPlayerStartMission_Hook);
+    patch::RedirectCall(0x4895B0, CPlayerPed__CanPlayerStartMission_Hook);
 }

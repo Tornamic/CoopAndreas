@@ -81,8 +81,15 @@ CNetworkPed::~CNetworkPed()
     }
     else
     {
+
         if (m_pPed && m_pPed->m_matrix->m_pOwner)
         {
+            if (m_nBlipHandle != -1)
+            {
+                CRadar::ClearBlipForEntity(eBlipType::BLIP_CHAR, CPools::GetPedRef(m_pPed));
+                //CChat::AddMessage("REMOVE THE FUCKING BLIP");
+            }
+
             if (m_pPed->m_nPedFlags.bInVehicle)
             {
                 plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);

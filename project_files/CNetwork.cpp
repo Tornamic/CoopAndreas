@@ -64,22 +64,27 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 
 void CNetwork::SendPacket(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
 {
-	// 2 == sizeof(unsigned short)
-	
+	if (!CNetwork::m_bConnected)
+	{
+		static int notSentPacketCount;
+		std::cout << "Trying to send a packet while not connected " << std::to_string(notSentPacketCount++) << std::endl;
+		return;
+	}
+
 	// packet size `id + data`
 	size_t packetSize = 2 + dataSize;
 
-	// create buffer
-	char* packetData = new char[packetSize];
+	// create buffer using vector
+	std::vector<char> packetData(packetSize);
 
 	// copy id
-	memcpy(packetData, &id, 2);
+	memcpy(packetData.data(), &id, 2);
 
 	// copy data
-	memcpy(packetData + 2, data, dataSize);
+	memcpy(packetData.data() + 2, data, dataSize);
 
 	// create packet
-	ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
+	ENetPacket* packet = enet_packet_create(packetData.data(), packetSize, flag);
 
 	// send packet
 	enet_peer_send(m_pPeer, 0, packet);
@@ -129,6 +134,18 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::RESPAWN_PLAYER, CPacketHandler::RespawnPlayer__Handle);
 	CNetwork::AddListener(CPacketsID::ASSIGN_VEHICLE, CPacketHandler::AssignVehicleSyncer__Handle);
 	CNetwork::AddListener(CPacketsID::MASS_PACKET_SEQUENCE, CPacketHandler::MassPacketSequence__Handle);
+	//CNetwork::AddListener(CPacketsID::START_CUTSCENE, CPacketHandler::StartCutscene__Handle);
+	//CNetwork::AddListener(CPacketsID::SKIP_CUTSCENE, CPacketHandler::SkipCutscene__Handle);
+	CNetwork::AddListener(CPacketsID::OPCODE_SYNC, CPacketHandler::OpCodeSync__Handle);
+	CNetwork::AddListener(CPacketsID::ON_MISSION_FLAG_SYNC, CPacketHandler::OnMissionFlagSync__Handle);
+	CNetwork::AddListener(CPacketsID::UPDATE_ENTITY_BLIP, CPacketHandler::UpdateEntityBlip__Handle);
+	CNetwork::AddListener(CPacketsID::REMOVE_ENTITY_BLIP, CPacketHandler::RemoveEntityBlip__Handle);
+	CNetwork::AddListener(CPacketsID::ADD_MESSAGE_GXT, CPacketHandler::AddMessageGXT__Handle);
+	CNetwork::AddListener(CPacketsID::REMOVE_MESSAGE_GXT, CPacketHandler::RemoveMessageGXT__Handle);
+	CNetwork::AddListener(CPacketsID::CLEAR_ENTITY_BLIPS, CPacketHandler::ClearEntityBlips__Handle);
+	CNetwork::AddListener(CPacketsID::PLAY_MISSION_AUDIO, CPacketHandler::PlayMissionAudio__Handle);
+	CNetwork::AddListener(CPacketsID::UPDATE_CHECKPOINT, CPacketHandler::UpdateCheckpoint__Handle);
+	CNetwork::AddListener(CPacketsID::REMOVE_CHECKPOINT, CPacketHandler::RemoveCheckpoint__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

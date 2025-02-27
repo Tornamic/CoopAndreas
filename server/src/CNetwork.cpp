@@ -107,6 +107,18 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PLAYER_STATS, CPlayerPackets::PlayerStats::Handle);
     CNetwork::AddListener(CPacketsID::REBUILD_PLAYER, CPlayerPackets::RebuildPlayer::Handle);
     CNetwork::AddListener(CPacketsID::RESPAWN_PLAYER, CPlayerPackets::RespawnPlayer::Handle);
+    CNetwork::AddListener(CPacketsID::START_CUTSCENE, CPlayerPackets::StartCutscene::Handle);
+    CNetwork::AddListener(CPacketsID::SKIP_CUTSCENE, CPlayerPackets::SkipCutscene::Handle);
+    CNetwork::AddListener(CPacketsID::OPCODE_SYNC, CPlayerPackets::OpCodeSync::Handle);
+    CNetwork::AddListener(CPacketsID::ON_MISSION_FLAG_SYNC, CPlayerPackets::OnMissionFlagSync::Handle);
+    CNetwork::AddListener(CPacketsID::UPDATE_ENTITY_BLIP, CPlayerPackets::UpdateEntityBlip::Handle);
+    CNetwork::AddListener(CPacketsID::REMOVE_ENTITY_BLIP, CPlayerPackets::RemoveEntityBlip::Handle);
+    CNetwork::AddListener(CPacketsID::ADD_MESSAGE_GXT, CPlayerPackets::AddMessageGXT::Handle);
+    CNetwork::AddListener(CPacketsID::REMOVE_MESSAGE_GXT, CPlayerPackets::RemoveMessageGXT::Handle);
+    CNetwork::AddListener(CPacketsID::CLEAR_ENTITY_BLIPS, CPlayerPackets::ClearEntityBlips::Handle);
+    CNetwork::AddListener(CPacketsID::PLAY_MISSION_AUDIO, CPlayerPackets::PlayMissionAudio::Handle);
+    CNetwork::AddListener(CPacketsID::UPDATE_CHECKPOINT, CPlayerPackets::UpdateCheckpoint::Handle);
+    CNetwork::AddListener(CPacketsID::REMOVE_CHECKPOINT, CPlayerPackets::RemoveCheckpoint::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)

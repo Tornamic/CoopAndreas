@@ -11,7 +11,7 @@
 
 #include "CPacketListener.h"
 
-#define MAX_SERVER_PLAYERS (16)
+#define MAX_SERVER_PLAYERS (4)
 
 class CNetwork
 {

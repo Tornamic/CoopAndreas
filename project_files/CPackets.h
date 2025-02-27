@@ -2,6 +2,8 @@
 
 #include "stdafx.h"
 
+enum eNetworkEntityType : uint8_t;
+
 enum CPacketsID : unsigned short
 {
 	CHECK_VERSION = 0, // reserved but not used, see enet_host_connect
@@ -43,7 +45,18 @@ enum CPacketsID : unsigned short
 	RESPAWN_PLAYER,
 	ASSIGN_VEHICLE,
 	MASS_PACKET_SEQUENCE,
-
+	START_CUTSCENE,
+	SKIP_CUTSCENE,
+	OPCODE_SYNC,
+	ON_MISSION_FLAG_SYNC,
+	UPDATE_ENTITY_BLIP,
+	REMOVE_ENTITY_BLIP,
+	ADD_MESSAGE_GXT,
+	REMOVE_MESSAGE_GXT,
+	CLEAR_ENTITY_BLIPS,
+	PLAY_MISSION_AUDIO,
+	UPDATE_CHECKPOINT,
+	REMOVE_CHECKPOINT,
 	PACKET_ID_MAX
 };
 
@@ -359,8 +372,21 @@ public:
 		float health;
 		char paintjob;
 		float bikeLean;
-		float planeGearState;
+		union
+		{
+			float controlPedaling;
+			float planeGearState;
+		};
 		unsigned char locked;
+		float gasPedal;
+		float breakPedal;
+		uint8_t drivingStyle;
+		uint8_t carMission;
+		int8_t cruiseSpeed;
+		uint8_t ctrlFlags;
+		uint8_t movementFlags;
+		int targetVehicleId;
+		CVector destinationCoors;
 	};
 
 	struct PedShotSync
@@ -425,6 +451,83 @@ public:
 	};
 
 	struct RespawnPlayer
+	{
+		int playerid;
+	};
+
+	struct StartCutscene
+	{
+		char name[8];
+		uint8_t currArea; // AKA interior
+	};
+
+	struct SkipCutscene
+	{
+		int playerid;
+		int votes; // temporary unused
+	};
+
+	struct OnMissionFlagSync 
+	{
+		uint8_t bOnMission : 1;
+	};
+
+	struct UpdateEntityBlip
+	{
+		int playerid;
+		eNetworkEntityType entityType;
+		int entityId;
+		bool isFriendly;
+		uint8_t color;
+		uint8_t display;
+		uint8_t scale;
+	};
+
+	struct RemoveEntityBlip
+	{
+		int playerid;
+		eNetworkEntityType entityType;
+		int entityId;
+	};
+
+	struct AddMessageGXT
+	{
+		int playerid;
+		// 0 - COMMAND_PRINT
+		// 1 - COMMAND_PRINT_BIG
+		// 2 - COMMAND_PRINT_NOW
+		// 3 - COMMAND_PRINT_HELP
+		uint8_t type; 
+		uint32_t time;
+		uint8_t flag;
+		char gxt[8];
+	};
+
+	struct RemoveMessageGXT
+	{
+		int playerid;
+		char gxt[8];
+	};
+
+	struct ClearEntityBlips
+	{
+		int playerid;
+	};
+
+	struct PlayMissionAudio
+	{
+		uint8_t slotid;
+		int audioid;
+	};
+
+	struct UpdateCheckpoint
+	{
+		int playerid;
+		CVector position;
+		CVector radius;
+	};
+
+	struct RemoveCheckpoint
 	{
 		int playerid;
 	};

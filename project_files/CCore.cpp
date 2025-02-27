@@ -2,6 +2,7 @@
 #include "CCrashLog.h"
 #include "Commands/CCustomCommandRegistrar.h"
 #include "CDiscordRPC.h"
+#include <COpCodeSync.h>
 
 semver_t CCore::Version;
 
@@ -30,6 +31,7 @@ void InitWndProc()
 
 void CCore::Init()
 {
+	gvm.Detect();
 #ifdef _DEV
 	CCore::AllocateConsole();
 #endif
@@ -39,6 +41,7 @@ void CCore::Init()
 	CDXFont::Init();
 	CLaunchManager::CollectCommandLineArgs();
 	CDiscordRPC::Init();
+	COpCodeSync::Init();
 	//SetUnhandledExceptionFilter(CCrashLog::ExceptionHandler);
 	Events::initGameEvent.after += []
 	{

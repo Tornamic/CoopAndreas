@@ -106,7 +106,11 @@ std::string GetNextState()
 		{
 			return "Exploring Mount Chiliad";
 		}
-		return "Location: " + std::string(CHud::m_pLastZoneName);
+		if (CHud::m_pLastZoneName)
+		{
+			return "Location: " + std::string(CHud::m_pLastZoneName);
+		}
+		return GetNextState();
 	}
 	case 7:
 	{

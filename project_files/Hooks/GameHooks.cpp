@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameHooks.h"
 #include "CKeySync.h"
+#include <CCutsceneMgr.h>
 
 static void __cdecl CMenuManager__DrawFrontEnd_FixChat_Hook(float alpha)
 {
@@ -112,6 +113,31 @@ static void __cdecl CTheZones__Update_Hook()
     CNetwork::SendPacket(CPacketsID::PLAYER_KEY_SYNC, &packet, sizeof packet);
 }
 
+void CCutsceneMgr__StartCutscene_Hook()
+{
+    CCutsceneMgr::StartCutscene();
+    if (CLocalPlayer::m_bIsHost)
+    {
+        CPackets::StartCutscene packet{};
+        packet.currArea = CGame::currArea;
+        strncpy_s(packet.name, CCutsceneMgr::ms_cutsceneName, 8);
+        CNetwork::SendPacket(CPacketsID::START_CUTSCENE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    }
+}
+
+bool CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook()
+{
+    bool result = plugin::CallAndReturn<bool, 0x4D5D10>();
+
+    if (result)
+    {
+        CPackets::SkipCutscene packet{};
+        CNetwork::SendPacket(CPacketsID::SKIP_CUTSCENE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    }
+
+    return result;
+}
+
 void GameHooks::InjectHooks()
 {
     patch::RedirectCall(0x57C2A3, CMenuManager__DrawFrontEnd_FixChat_Hook);
@@ -127,4 +153,10 @@ void GameHooks::InjectHooks()
     // it is necessary for the menu to be processed correctly
     CTheZones__Update_Dest = injector::GetBranchDestination(0x53BF49).as_int();
     patch::RedirectCall(0x53BF49, CTheZones__Update_Hook);
+
+    //patch::RedirectCall(0x48072B, CCutsceneMgr__StartCutscene_Hook);
+    
+    //patch::RedirectCall(0x5B1947, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
+   // patch::RedirectCall(0x469F0E, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
+   // patch::RedirectCall(0x475459, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
 }

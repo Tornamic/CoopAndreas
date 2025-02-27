@@ -25,7 +25,29 @@ void __declspec(naked) CVehicleAnimGroup__ComputeAnimDoorOffsets_Hook()
     }
 }
 
+void __declspec(naked) CAnimManager__BlendAnimation_Hook()
+{
+    __asm
+    {
+        mov eax, [esp + 4] // get RpClump*
+        test eax, eax // check for nullptr
+
+        jnz cont // jump if ok
+
+        retn // exit if not ok
+
+        cont:
+        // code cave
+        sub esp, 0x14
+        mov ecx, [esp + 0x14 + 0x4]
+
+        push 0x4D4617
+        ret
+    }
+}
+
 void CrashfixHooks::InjectHooks()
 {
     patch::RedirectJump(0x6E3D10, CVehicleAnimGroup__ComputeAnimDoorOffsets_Hook);
+    patch::RedirectJump(0x4D4610, CAnimManager__BlendAnimation_Hook);
 }

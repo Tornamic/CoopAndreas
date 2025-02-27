@@ -129,16 +129,18 @@ class CPedPackets
 			unsigned char health = 100;
 			unsigned char armour = 0;
 			unsigned char weapon = 0;
+			unsigned char weaponState = 0;
 			unsigned short ammo = 0;
 			float aimingRotation = 0.0f;
 			float currentRotation = 0.0f;
-			float lookDirection = 0.0f;
+			int lookDirection = 0;
 			struct
 			{
 				unsigned char moveState : 3;
 				unsigned char ducked : 1;
 				unsigned char aiming : 1;
 			};
+			unsigned char fightingStyle = 4;
 			CVector weaponAim;
 
 			static void Handle(ENetPeer* peer, void* data, int size)
@@ -198,8 +200,21 @@ class CPedPackets
 			float health;
 			char paintjob;
 			float bikeLean;
-			float planeGearState;
+			union
+			{
+				float controlPedaling;
+				float planeGearState;
+			};
 			unsigned char locked;
+			float gasPedal;
+			float breakPedal;
+			uint8_t drivingStyle;
+			uint8_t carMission;
+			int8_t cruiseSpeed;
+			uint8_t ctrlFlags;
+			uint8_t movementFlags;
+			int targetVehicleId;
+			CVector destinationCoors;
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{
@@ -242,7 +257,7 @@ class CPedPackets
 
 				if (ped && ped->m_pSyncer != player)
 				{
-					std::cout << "[Alert] " + player->GetName() + " tries to sync (shots) someone else's pedestrian, possible hack or bug (please let us know)\n";
+					//std::cout << "[Alert] " + player->GetName() + " tries to sync (shots) someone else's pedestrian, possible hack or bug (please let us know)\n";
 					return;
 				}
 

@@ -74,6 +74,11 @@ void DrawWeaponIcon(CPed* ped, int x, int y, unsigned char alpha)
 
 void CNetworkPlayerNameTag::Process()
 {
+	if (CCutsceneMgr::ms_running
+		|| TheCamera.m_bWideScreenOn)
+	{
+		return;
+	}
 
 	for (auto player : CNetworkPlayerManager::m_pPlayers)
 	{

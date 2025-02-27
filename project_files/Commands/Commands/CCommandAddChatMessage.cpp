@@ -3,9 +3,9 @@
 
 void CCommandAddChatMessage::Process(CRunningScript* script)
 {
-	char text[8];
-	script->ReadTextLabelFromScript(text, 8);
-	text[7] = '\0';
+	char text[128];
+	script->ReadTextLabelFromScript(text, 128);
+	text[127] = '\0';
 
 	CChat::AddMessage(text);
 }

@@ -5,8 +5,8 @@
 class CCustomCommandMgr
 {
 public:
-	static constexpr uint16_t MIN_CUSTOM_COMMAND = 0xF00;
-	static constexpr uint16_t MAX_CUSTOM_COMMAND = 0xFFF;
+	static constexpr uint16_t MIN_CUSTOM_COMMAND = 0x1D00;
+	static constexpr uint16_t MAX_CUSTOM_COMMAND = 0x1DFF;
 	static constexpr uint16_t MAX_CUSTOM_COMMAND_COUNT = MAX_CUSTOM_COMMAND - MIN_CUSTOM_COMMAND;
 
 	static inline CCustomCommand* m_commands[MAX_CUSTOM_COMMAND_COUNT];

@@ -52,5 +52,18 @@ public:
 	static void AssignVehicleSyncer__Handle(void* data, int size);
 	static void RespawnPlayer__Handle(void* data, int size);
 	static void MassPacketSequence__Handle(void* data, int size);
+	static void StartCutscene__Handle(void* data, int size);
+	static void SkipCutscene__Handle(void* data, int size);
+	static void OpCodeSync__Handle(void* data, int size);
+	static void OnMissionFlagSync__Handle(void* data, int size);
+	static void OnMissionFlagSync__Trigger();
+	static void UpdateEntityBlip__Handle(void* data, int size);
+	static void RemoveEntityBlip__Handle(void* data, int size);
+	static void AddMessageGXT__Handle(void* data, int size);
+	static void AddMessageGXT__Trigger(int playerid, char gxt[8], uint8_t type, uint32_t time = 0, uint8_t flag = 0);
+	static void RemoveMessageGXT__Handle(void* data, int size);
+	static void ClearEntityBlips__Handle(void* data, int size);
+	static void PlayMissionAudio__Handle(void* data, int size);
+	static void UpdateCheckpoint__Handle(void* data, int size);
+	static void RemoveCheckpoint__Handle(void* data, int size);
 };
-

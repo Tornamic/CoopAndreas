@@ -7,6 +7,7 @@
 #include "GameHooks.h"
 #include "StatsHooks.h"
 #include "CrashfixHooks.h"
+#include "MissionAudioHooks.h"
 #include "Commands/CommandHooks.h"
 
 void CHook::Init()
@@ -20,4 +21,5 @@ void CHook::Init()
     StatsHooks::InjectHooks();
     CommandHooks::InjectHooks();
     CrashfixHooks::InjectHooks();
+    MissionAudioHooks::InjectHooks();
 }

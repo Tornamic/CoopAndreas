@@ -9,6 +9,8 @@
 #include <CNetworkPlayerList.h>
 #include <CFireManager.h>
 #include <semver.h>
+#include <COpCodeSync.h>
+#include <CNetworkCheckpoint.h>
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
@@ -17,6 +19,8 @@ unsigned int lastPedSyncTickRate = 0;
 unsigned int lastWeatherTimeSyncTickRate = 0;
 unsigned int lastPlayerAimSyncTickRate = 0;
 bool bBeenConnected;
+bool lastOnMissionFlag;
+
 class CoopAndreas {
 public:
     CoopAndreas() {
@@ -70,9 +74,40 @@ public:
 			{
 				CDiscordRPCMgr::Update();
 				CDebugVehicleSpawner::Process();
-
+				
 				if (CNetwork::m_bConnected)
 				{
+					// TODO: refactor
+					if (COpCodeSync::ms_bLoadingCutscene
+						&& !CLocalPlayer::m_bIsHost
+						&& CCutsceneMgr::ms_cutsceneName[0]
+						&& CCutsceneMgr::ms_cutsceneLoadStatus == 2)
+					{
+						COpCodeSync::ms_bLoadingCutscene = false;
+						Command<Commands::START_CUTSCENE>();
+					}
+
+					if (!CLocalPlayer::m_bIsHost)
+					{
+						for (uint8_t i = 0; i < 4; i++)
+						{
+							if (COpCodeSync::ms_abLoadingMissionAudio[i]
+								&& plugin::CallMethodAndReturn<int8_t, 0x5072A0>(&AudioEngine, i) == 1) // CAudioEngine__GetMissionAudioLoadingStatus
+							{
+								plugin::CallMethod<0x5072B0>(&AudioEngine, i); // CAudioEngine__PlayLoadedMissionAudio
+								COpCodeSync::ms_abLoadingMissionAudio[i] = false;
+							}
+						}
+					}
+
+					if (CLocalPlayer::m_bIsHost
+						&& CTheScripts::OnAMissionFlag
+						&& CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag] != lastOnMissionFlag)
+					{
+						lastOnMissionFlag = CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag];
+						CPacketHandler::OnMissionFlagSync__Trigger();
+					}
+
 					unsigned int tickCount = GetTickCount();
 
 					CPassengerEnter::Process();
@@ -168,6 +203,7 @@ public:
 			};
 		Events::drawingEvent += []
 			{
+				CNetworkCheckpoint::Process();
 				//CDebugPedTasks::Draw();
 				CNetworkPlayerNameTag::Process();
 				CChat::Draw();
@@ -200,7 +236,7 @@ public:
 						RwV3d screenCoors; float w, h;
 						if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
 						{
-							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, ("v " + std::to_string(networkVehicle->m_nVehicleId) + "\nS " + std::to_string(networkVehicle->m_bSyncing)).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
+							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, ("v " + std::to_string(networkVehicle->m_nVehicleId) + "\nS " + std::to_string(networkVehicle->m_bSyncing) + "\n" + std::to_string(networkVehicle->m_pVehicle->m_fGasPedal) + " " + std::to_string(networkVehicle->m_pVehicle->m_fBreakPedal)).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
 						}
 					}
 

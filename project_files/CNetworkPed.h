@@ -15,11 +15,13 @@ public:
 	float m_fCurrentRotation = 0.0f;
 	int m_fLookDirection{};
 	eMoveState m_nMoveState = eMoveState::PEDMOVE_NONE;
+	float m_fMoveBlendRatio = 0.0f;
 	CAutoPilot m_autoPilot;
 	float m_fGasPedal = 0.0f;
 	float m_fBreakPedal = 0.0f;
 	float m_fSteerAngle = 0.0f;
 	float m_fHealth = 100.0f;
+	int m_nBlipHandle = -1;
 
 	static CNetworkPed* CreateHosted(CPed* ped);
 	void WarpIntoVehicleDriver(CVehicle* vehicle);

@@ -97,8 +97,6 @@ void CStreaming__RequestSpecialModel_Hook(int modelid, const char* txdName, int 
         {
             specialModel[j] = '\0';
         }
-
-        CChat::AddMessage(specialModel);
     }
 }
 

@@ -25,11 +25,10 @@ void CAimSync::ApplyNetworkPlayerContext(CNetworkPlayer* player)
 	storedCamMode = TheCamera.m_PlayerWeaponMode.m_nMode;
 
 	ApplyPacketToGame(player->m_aimSyncData, player->GetInternalId());
-	if (TheCamera.m_PlayerWeaponMode.m_nMode == 4)
+	if (TheCamera.m_PlayerWeaponMode.m_nMode == MODE_FOLLOWPED || TheCamera.m_PlayerWeaponMode.m_nMode == MODE_SNIPER)
 	{
-		TheCamera.m_PlayerWeaponMode.m_nMode = (eCamMode)0;
+		TheCamera.m_PlayerWeaponMode.m_nMode = MODE_NONE;
 	}
-
 	// camera context switching patches, fix right click freeze
 
 	// disable CCamera::ClearPlayerWeaponMode

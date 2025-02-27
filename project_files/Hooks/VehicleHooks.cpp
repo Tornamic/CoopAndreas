@@ -50,14 +50,14 @@ void __fastcall CVehicle__ProcessControl_Hook()
         plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
         plugin::CallMethodDyn<CVehicle*>(call_addr, vehicle);
 
-        CNetworkPed* ped = CNetworkPedManager::GetPed(vehicle->m_pDriver);
-        if (ped && !ped->m_bSyncing)
-        {
-            //memset(&vehicle->m_autoPilot, 0, sizeof CAutoPilot);
-            vehicle->m_fGasPedal = ped->m_fGasPedal;
-            vehicle->m_fBreakPedal = ped->m_fBreakPedal;
-            vehicle->m_fSteerAngle = ped->m_fSteerAngle;
-        }
+        //CNetworkPed* ped = CNetworkPedManager::GetPed(vehicle->m_pDriver);
+        //if (ped && !ped->m_bSyncing)
+        //{
+        //    //memset(&vehicle->m_autoPilot, 0, sizeof CAutoPilot);
+        //    vehicle->m_fGasPedal = ped->m_fGasPedal;
+        //    vehicle->m_fBreakPedal = ped->m_fBreakPedal;
+        //    vehicle->m_fSteerAngle = ped->m_fSteerAngle;
+        //}
         return;
     }
 
@@ -264,6 +264,29 @@ void CCarCtrl__GenerateOneRandomCar_Hook()
     patch::SetInt(0x9690AC, savedNumFireTrucksOnDuty, false);
 }
 
+void CCarCtrl__UpdateCarAI_Hook(CVehicle* vehicle)
+{
+    if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle))
+    {
+        if (!networkVehicle->m_bSyncing)
+        {
+            if (auto ped = vehicle->m_pDriver)
+            {
+                if (auto networkPed = CNetworkPedManager::GetPed(ped))
+                {
+                    if (!networkPed->m_bSyncing)
+                    {
+                        vehicle->m_fGasPedal = networkPed->m_fGasPedal;
+                        vehicle->m_fBreakPedal = networkPed->m_fBreakPedal;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    plugin::Call<0x41DA30>(vehicle);
+}
+
 void VehicleHooks::InjectHooks()
 {
     patch::RedirectCall(0x53C1CB, CCarCtrl__RemoveDistantCars_Hook);
@@ -310,4 +333,13 @@ void VehicleHooks::InjectHooks()
 
     patch::RedirectCall(0x434263, CCarCtrl__GenerateOneRandomCar_Hook);
     patch::RedirectCall(0x434268, CCarCtrl__GenerateOneRandomCar_Hook);
+
+    patch::RedirectCall(0x6B51CD, CCarCtrl__UpdateCarAI_Hook);
+    patch::RedirectCall(0x6B52A2, CCarCtrl__UpdateCarAI_Hook);
+    patch::RedirectCall(0x6BCC64, CCarCtrl__UpdateCarAI_Hook);
+    patch::RedirectCall(0x6BCD7B, CCarCtrl__UpdateCarAI_Hook); 
+    patch::RedirectCall(0x6C1B72, CCarCtrl__UpdateCarAI_Hook);
+    patch::RedirectCall(0x6C1C5B, CCarCtrl__UpdateCarAI_Hook);
+    patch::RedirectCall(0x6F1925, CCarCtrl__UpdateCarAI_Hook);
+    patch::RedirectCall(0x6F1979, CCarCtrl__UpdateCarAI_Hook);
 }

@@ -2,7 +2,7 @@
 
 #include "CDXFont.h"
 
-#define DEFAULT_CHAT_COLOR(a) D3DCOLOR_RGBA(255, 255, 0, a)
+#define DEFAULT_CHAT_COLOR(a) D3DCOLOR_RGBA(255, 255, 255, a)
 
 struct CChatMessage
 {
@@ -33,6 +33,7 @@ public:
 	static void AddMessage(const std::vector<CTextSegment>& segs);
 	static void AddMessage(const std::string& str);
 	static void AddMessage(const char* format, ...);
+	static void AddMessageFast(const char* format, ...);
 	static void AddMessageRich(const std::wstring& str, bool isSplit);
 	static void AddMessage(bool isSplit, const wchar_t* format, ...);
 	static void AddPreviousMessage(const std::wstring& message);

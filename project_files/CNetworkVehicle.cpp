@@ -97,6 +97,10 @@ CNetworkVehicle::~CNetworkVehicle()
     {
         if (m_pVehicle && CUtil::IsValidEntityPtr(m_pVehicle))
         {
+            if (m_nBlipHandle != -1)
+            {
+                CRadar::ClearBlipForEntity(eBlipType::BLIP_CAR, CPools::GetVehicleRef(m_pVehicle));
+            }
             plugin::Command<Commands::DELETE_CAR>(CPools::GetVehicleRef(m_pVehicle));
         }
     }

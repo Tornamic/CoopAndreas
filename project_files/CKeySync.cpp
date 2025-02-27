@@ -14,9 +14,9 @@ void CKeySync::ApplyNetworkPlayerContext(CNetworkPlayer* player)
 	CPad* pad = CPad::GetPad(0);
 	storedOldState = pad->OldState;
 	storedNewState = pad->NewState;
-    storedDisableControls = pad->DisablePlayerControls;
+    //storedDisableControls = pad->DisablePlayerControls;
 
-    pad->DisablePlayerControls = player->m_compressedControllerState.m_bDisableControls;
+    //pad->DisablePlayerControls = player->m_compressedControllerState.m_bDisableControls;
 
     if (pad->DisablePlayerControls)
     {
@@ -41,7 +41,7 @@ void CKeySync::ApplyLocalContext()
 	CPad* pad = CPad::GetPad(0);
 	pad->OldState = storedOldState;
 	pad->NewState = storedNewState;
-    pad->DisablePlayerControls = storedDisableControls;
+    //pad->DisablePlayerControls = storedDisableControls;
 
     patch::SetUChar(0xC402B8, bNightVision, false);
     patch::SetUChar(0xC402B9, bInfraredVision, false);
