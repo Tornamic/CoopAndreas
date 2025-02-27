@@ -47,6 +47,12 @@ make # or ninja if you use -G "Ninja" parameter in cmake
 ## Donate
 https://send.monobank.ua/jar/8wPrs73MBa
 
+USDT TRC20: `TNdTwiy9JM2zUe8qgBoMJoAExKf4gs5vGA`
+
+BTC: `bc1qwsl8jv2gyvry75j727qkktr5vgcmqm5e69qt2t`
+
+ETH: `0xE7aE0448A147844208C9D51b0Ac673Bafbe2a35c`
+
 *If you need another way to donate, please dm me on discord: `@tornamic`*
 
 Contact information is current as of March 2025
