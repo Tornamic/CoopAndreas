@@ -67,7 +67,7 @@ void CNetwork::SendPacket(unsigned short id, void* data, size_t dataSize, ENetPa
 	if (!CNetwork::m_bConnected)
 	{
 		static int notSentPacketCount;
-		std::cout << "Trying to send a packet while not connected " << std::to_string(notSentPacketCount++) << std::endl;
+		std::cout << "Trying to send a packet " << std::to_string(id) << " while not connected " << std::to_string(notSentPacketCount++) << std::endl;
 		return;
 	}
 

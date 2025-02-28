@@ -4,7 +4,7 @@
 
 void CCommandEnableSyncingThisScript::Process(CRunningScript* script)
 {
-	CChat::AddMessage("CCommandEnableSyncingThisScript \"%s\"", script->m_szName);
+	//CChat::AddMessage("CCommandEnableSyncingThisScript \"%s\"", script->m_szName);
 
     if (std::find(COpCodeSync::ms_vSyncedScripts.begin(), COpCodeSync::ms_vSyncedScripts.end(), script) == COpCodeSync::ms_vSyncedScripts.end())
     {

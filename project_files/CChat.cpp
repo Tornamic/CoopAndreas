@@ -292,15 +292,17 @@ void CChat::Draw()
     int tickCount = GetTickCount();
     uint8_t drawnMessages = 0;
 
-    for (auto it = m_aMessages.rbegin(); it != m_aMessages.rend() && drawnMessages < MAX_MESSAGES; ++it)
+    for (int i = m_aMessages.size() - 1; i >= 0 && drawnMessages < MAX_MESSAGES; --i)
     {
-        if (!it->m_bVisible && !m_bInputActive)
+        auto& message = m_aMessages[i];
+
+        if (!message.m_bVisible && !m_bInputActive)
             continue;
 
         size_t fadeAlpha = 255;
         if (!m_bInputActive)
         {
-            DWORD messageAge = tickCount - it->m_nCreatedAt;
+            DWORD messageAge = tickCount - message.m_nCreatedAt;
             if (messageAge > MAX_MESSAGE_AGE)
             {
                 size_t fadeTime = messageAge - MAX_MESSAGE_AGE;
@@ -310,7 +312,7 @@ void CChat::Draw()
                 }
                 else
                 {
-                    it->m_bVisible = false;
+                    message.m_bVisible = false;
                     continue;
                 }
             }
@@ -319,7 +321,7 @@ void CChat::Draw()
         int x = 10;
         int y = RsGlobal.maximumHeight / 5 + (MAX_MESSAGES - drawnMessages) * CDXFont::m_fFontSize;
 
-        for (auto& seg : it->segments)
+        for (auto& seg : message.segments)
         {
             uint8_t r = (seg.color >> 16) & 0xFF;
             uint8_t g = (seg.color >> 8) & 0xFF;
@@ -341,6 +343,7 @@ void CChat::Draw()
         m_aMessages.erase(m_aMessages.begin());
     }
 }
+
 
 void CChat::ToggleInput(bool toggle)
 {

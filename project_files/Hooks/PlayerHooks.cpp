@@ -158,8 +158,11 @@ void CReferences__RemoveReferencesToPlayer_Hook()
 {
     plugin::Call<0x571AD0>(); // CReferences::RemoveReferencesToPlayer();
     
-    CPackets::RespawnPlayer packet{};
-    CNetwork::SendPacket(CPacketsID::RESPAWN_PLAYER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    if (CNetwork::m_bConnected)
+    {
+        CPackets::RespawnPlayer packet{};
+        CNetwork::SendPacket(CPacketsID::RESPAWN_PLAYER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    }
 }
 
 bool __fastcall CWeapon__TakePhotograph_Hook(CWeapon* This, int, CEntity* entity, CVector* point)

@@ -53,6 +53,7 @@
             this.configPage = new System.Windows.Forms.TabPage();
             this.languageCombo = new System.Windows.Forms.ComboBox();
             this.lb_language = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.connectPage.SuspendLayout();
             this.serverPage.SuspendLayout();
@@ -210,6 +211,7 @@
             // serverPage
             // 
             this.serverPage.BackColor = System.Drawing.Color.White;
+            this.serverPage.Controls.Add(this.label1);
             this.serverPage.Controls.Add(this.b_startserver);
             this.serverPage.Controls.Add(this.lb_startserver);
             this.serverPage.Controls.Add(this.maxplayersInput);
@@ -316,6 +318,17 @@
             this.lb_language.TabIndex = 0;
             this.lb_language.Text = "Language:";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(26, 41);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(265, 96);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "!!!\r\nTHIS TAB IS TEMPORARILY \r\nUNAVAILABLE, LAUNCH VIA \r\n`server.exe`";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -364,6 +377,7 @@
         public System.Windows.Forms.LinkLabel link_discord;
         public System.Windows.Forms.TextBox tb_command;
         public System.Windows.Forms.Button b_copy;
+        private System.Windows.Forms.Label label1;
     }
 }
 

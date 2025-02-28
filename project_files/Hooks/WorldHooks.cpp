@@ -57,20 +57,23 @@ static void __cdecl CExplosion__AddExplosion(CEntity* newVictim, CPed* newCreato
 
 static void __cdecl CWorld__Add_Hook(CEntity* entity)
 {
-    bool dontCreateEntity = false;
-
-    if (entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
+    if (CNetwork::m_bConnected)
     {
-        CVehicle* vehicle = (CVehicle*)entity;
-        CNetworkVehicle* networkVehicle = CNetworkVehicle::CreateHosted(vehicle);
-    }
-    else if (entity->m_nType == eEntityType::ENTITY_TYPE_PED)
-    {
-        CPed* ped = (CPed*)entity;
+        bool dontCreateEntity = false;
 
-        if (ped->m_nPedType > 1)
+        if (entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
         {
-            CNetworkPed* networkPed = CNetworkPed::CreateHosted(ped);
+            CVehicle* vehicle = (CVehicle*)entity;
+            CNetworkVehicle* networkVehicle = CNetworkVehicle::CreateHosted(vehicle);
+        }
+        else if (entity->m_nType == eEntityType::ENTITY_TYPE_PED)
+        {
+            CPed* ped = (CPed*)entity;
+
+            if (ped->m_nPedType > 1)
+            {
+                CNetworkPed* networkPed = CNetworkPed::CreateHosted(ped);
+            }
         }
     }
 

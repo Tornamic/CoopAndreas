@@ -45,6 +45,7 @@ void CCore::Init()
 	//SetUnhandledExceptionFilter(CCrashLog::ExceptionHandler);
 	Events::initGameEvent.after += []
 	{
+		CPatch::TemporaryPatches();
 		// init CNetworking async
 		CreateThread(NULL, NULL, CNetwork::InitAsync, NULL, NULL, NULL);
 		InitWndProc();
@@ -53,10 +54,10 @@ void CCore::Init()
 	{
 		CPatch::PatchFramerate();
 	};
-	Events::initScriptsEvent.after += []
+	/*Events::initScriptsEvent.after += []
 	{
 		CPatch::TemporaryPatches();
-	};
+	};*/
 	gameShutdownEvent.before += []
 	{
 		// disconnect from server

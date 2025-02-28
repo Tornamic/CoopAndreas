@@ -4,7 +4,7 @@
 
 static void __cdecl CPopulation__Update_Hook(bool generate)
 {
-    //if (CLocalPlayer::m_bIsHost)
+    if (CNetwork::m_bConnected)
         CPopulation::Update(generate);
 }
 
