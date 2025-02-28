@@ -129,7 +129,7 @@ public:
 					{
 						syncRate = 110;
 					}
-
+					
 					if (!isPassenger && tickCount > (isDriver ? lastDriverSyncTickRate : lastOnFootSyncTickRate) + syncRate)
 					{
 						if (isDriver)

@@ -852,7 +852,19 @@ void CPacketHandler::PedOnFoot__Handle(void* data, int size)
 
 	if (packet->aiming)
 	{
-		plugin::Command<COMMAND_TASK_AIM_GUN_AT_COORD>(CPools::GetPedRef(ped->m_pPed), packet->weaponAim.x, packet->weaponAim.y, packet->weaponAim.z, 200);
+		CTaskSimpleUseGun* useGun = ped->m_pPed->m_pIntelligence->GetTaskUseGun();
+		if (!useGun)
+		{
+			auto* taskUseGun = new CTaskSimpleUseGun(ped->m_pPed->m_pTargetedObject, CVector(0.0f, 0.0f, 0.f), 1, 1, false);
+			ped->m_pPed->m_pIntelligence->m_TaskMgr.SetTaskSecondary(taskUseGun, TASK_SECONDARY_ATTACK);
+		}
+
+		useGun = ped->m_pPed->m_pIntelligence->GetTaskUseGun();
+
+		if (useGun)
+		{
+			useGun->m_vecTarget = CVector(packet->weaponAim.x, packet->weaponAim.y, packet->weaponAim.z);
+		}
 	}
 	else
 	{
