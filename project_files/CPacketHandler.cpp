@@ -603,18 +603,21 @@ void CPacketHandler::VehicleDamage__Handle(void* data, int size)
 	{
 		if (auto vehicle = networkVehicle->m_pVehicle)
 		{
-			eVehicleType vehicleType = CUtil::GetVehicleType(vehicle);
-			switch (vehicleType)
+			if (CUtil::IsValidEntityPtr(vehicle))
 			{
-			case VEHICLE_AUTOMOBILE:
-			case VEHICLE_MTRUCK:
-			case VEHICLE_QUAD:
-			case VEHICLE_HELI:
-			case VEHICLE_PLANE:
-			case VEHICLE_TRAILER:
-			((CAutomobile*)vehicle)->m_damageManager = packet->damageManager;
-			vehicle->SetupDamageAfterLoad();
-				break;
+				eVehicleType vehicleType = CUtil::GetVehicleType(vehicle);
+				switch (vehicleType)
+				{
+				case VEHICLE_AUTOMOBILE:
+				case VEHICLE_MTRUCK:
+				case VEHICLE_QUAD:
+				case VEHICLE_HELI:
+				case VEHICLE_PLANE:
+				case VEHICLE_TRAILER:
+				((CAutomobile*)vehicle)->m_damageManager = packet->damageManager;
+				vehicle->SetupDamageAfterLoad();
+					break;
+				}
 			}
 		}
 	}

@@ -63,8 +63,6 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
     m_pPed->SetOrientation(0.f, 0.f, 0.f);
     CWorld::Add(m_pPed);
 
-    CStreaming::SetMissionDoesntRequireModel(modelId);
-
     m_nPedId = pedid;
     m_nPedType = pedType;
     m_bSyncing = false;
