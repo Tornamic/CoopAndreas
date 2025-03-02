@@ -111,6 +111,43 @@ Contact information is current as of March 2025
 ### Current Tasks
 - [ ] EnEx markers sync
 - [ ] mission markers sync
+- [ ] pickups
+  - [ ] graffities, horseshoes, snapshots, oysters
+  - [ ] static weapons, armours
+  - [ ] static bribes
+  - [ ] drop
+    - [ ] money
+    - [ ] weapons
+- [ ] jetpack sync
+  - [X] flight 
+  - [ ] pickup (related to task above) 
+- [ ] cutscenes
+  - [X] cutscenes
+  - [ ] vote to skip
+- [ ] Players map sync
+  - [ ] Areas aka GangZones
+  - [ ] Mission icons
+  - [X] Player map pin
+    - [ ] fix proportion
+  - [X] Player mark (waypoint)
+- [ ] wanted level
+- [ ] stats sync
+  - [X] fat
+  - [X] muscle
+  - [X] weapon skills
+  - [X] fight styles
+  - [ ] sync money
+  - [ ] breath level bar
+  - [X] stamina sync
+  - [ ] max hp sync
+- [ ] fire sync
+- [ ] cheat code sync
+- [ ] anim sync
+  - [ ] sprunk drinking
+  - [ ] fast food eating
+  - [ ] idle anims
+  - [ ] funny TAB+NUM4 (or NUM6) anim sync (did you know about this?)
+- [ ] gang groups sync
 - [ ] stream in/out players, peds, vehicles, etc.
 - [ ] vehicle sync
   - [ ] force hydraulics sync
@@ -125,26 +162,10 @@ Contact information is current as of March 2025
   - [ ] widescreen
   - [X] fast load
 - [ ] Fix models loading (green polygon)  --- related to stream it/out
-- [ ] Players map sync
-  - [ ] Areas aka GangZones
-  - [ ] Mission icons
-  - [X] Player map pin
-    - [ ] fix proportion
-  - [X] Player mark (waypoint)
 - [ ] smooth interpolation
   - [ ] move
   - [ ] rotation
   - [X] weapon aim interpolation
-- [ ] wanted level
-- [ ] stats sync
-  - [X] fat
-  - [X] muscle
-  - [X] weapon skills
-  - [X] fight styles
-  - [ ] sync money
-  - [ ] breath level bar
-  - [X] stamina sync
-  - [ ] max hp sync
 - [ ] npc sync
   - [X] pos, rot, speed
   - [X] weapons
@@ -160,47 +181,12 @@ Contact information is current as of March 2025
   - [ ] aim
   - [ ] shots
   - [ ] task sync (good luck, warrior!)
-  - [ ] radar icon?
-  - [ ] speech sync (if not synced by tasks)
-- [ ] fire sync
-- [ ] cutscenes
-  - [ ] objects
-  - [ ] effects
-  - [ ] peds
-  - [ ] camera
-- [ ] cheat code sync
-- [ ] pickups
-  - [ ] graffities, horseshoes, snapshots, oysters
-  - [ ] static weapons, armours
-  - [ ] static bribes
-  - [ ] drop
-    - [ ] money
-    - [ ] weapons
-- [ ] jetpack sync
-  - [X] flight 
-  - [ ] pickup (related to task above) 
-- [ ] anim sync
-  - [ ] sprunk drinking
-  - [ ] fast food eating
-  - [ ] idle anims
-  - [ ] funny TAB+NUM4 (or NUM6) anim sync (did you know about this?)
-- [ ] gang groups sync
+  - [X] radar icon?
+  - [ ] speech sync
 - [ ] player voice commands
 - [ ] chat reactions (see LD_CHAT.txd)
-- [ ] activities
-  - [ ] pool 
-  - [ ] basketball
-  - [ ] casino sync (betting between players)
-    - [ ] slot machines
-    - [ ] roulette
-    - [ ] horse betting
-  - [ ] gym
-    - [ ] exercises
-    - [ ] fighting between players
-  - [ ] dancing at parties
 - [ ] gand wars sync
 - [ ] parachute jump sync
-- [ ] co-op vigilante sub-mission completing
 - [ ] stunt
   - [ ] collecting
   - [ ] for-player slow motion
