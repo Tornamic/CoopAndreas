@@ -57,6 +57,7 @@ enum CPacketsID : unsigned short
 	PLAY_MISSION_AUDIO,
 	UPDATE_CHECKPOINT,
 	REMOVE_CHECKPOINT,
+	RADIO_CHANNEL_CHANGE,
 	PACKET_ID_MAX
 };
 
@@ -105,6 +106,7 @@ public:
 			sizeof(RebuildPlayer), // REBUILD_PLAYER
 			sizeof(RespawnPlayer), // RESPAWN_PLAYER
 			sizeof(AssignVehicleSyncer), // ASSIGN_VEHICLE
+			sizeof(RadioChannelChange), // RADIO_CHANNEL_CHANGE
 			0 // MASS_PACKET_SEQUENCE
 		};
 
@@ -530,5 +532,15 @@ public:
 	struct RemoveCheckpoint
 	{
 		int playerid;
+	};
+
+	struct RadioChannelChange
+	{
+		int playerid;
+		int vehicleid;
+		unsigned char channel;
+		float bass;
+		int unk1;
+		char unused;
 	};
 };

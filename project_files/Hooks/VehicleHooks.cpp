@@ -287,6 +287,51 @@ void CCarCtrl__UpdateCarAI_Hook(CVehicle* vehicle)
     plugin::Call<0x41DA30>(vehicle);
 }
 
+void __fastcall CAERadioTrackManager__StartRadio_Hook(CAERadioTrackManager* This, void*, int nStationId, float bass, char args, char a5)
+{
+
+    CChat::AddMessage("StartRadio Hook OK: ID %d\n", nStationId);
+    
+    // Check the current vehicle
+    CVehicle* vehicle = FindPlayerVehicle(0, 0);
+    if(vehicle == nullptr) return;
+
+    printf("StartRadio Hook: Vehicle %p\n", vehicle);
+    CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
+    if(networkVehicle == nullptr) return;
+    printf("StartRadio Hook: NetworkVehicle %p\n", networkVehicle);
+
+    if(networkVehicle->m_pVehicle->m_nMaxPassengers == 0) return;
+
+    if(networkVehicle->m_pVehicle->m_pDriver != FindPlayerPed(0)) {
+        CChat::AddMessage("StartRadio Hook: You Are Not the driver\n");
+        return;
+    }
+
+    for (int i = 0; i < networkVehicle->m_pVehicle->m_nMaxPassengers; i++)
+	{
+        auto targetPlayer = CNetworkPlayerManager::GetPlayer(networkVehicle->m_pVehicle->m_apPassengers[i]);
+
+        if(targetPlayer == nullptr) {
+            CChat::AddMessage("StartRadio Hook: Player %d is null\n", i);
+            continue; // No player in this seat
+        }
+
+        CPackets::RadioChannelChange packet{};
+        packet.vehicleid = networkVehicle->m_nVehicleId;
+        packet.playerid = targetPlayer->m_iPlayerId;
+        packet.channel = nStationId;
+        packet.bass = bass;
+        packet.unk1 = args;
+        packet.unused = a5;
+        CNetwork::SendPacket(CPacketsID::RADIO_CHANNEL_CHANGE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        CChat::AddMessage("StartRadio Hook: Send Radio Channel Change\n");
+	}
+
+    plugin::CallMethod<0x4EB3C0, CAERadioTrackManager*, int, float, int, char>(This, nStationId, bass, args, a5);
+}
+
+
 void VehicleHooks::InjectHooks()
 {
     patch::RedirectCall(0x53C1CB, CCarCtrl__RemoveDistantCars_Hook);
@@ -315,6 +360,11 @@ void VehicleHooks::InjectHooks()
 
     patch::RedirectCall(0x4732F2, CVehicle__RemoveVehicleUpgrade_Hook);
     patch::RedirectCall(0x498618, CVehicle__RemoveVehicleUpgrade_Hook);
+
+    patch::RedirectCall(0x4EB876, CAERadioTrackManager__StartRadio_Hook); // CAERadioTrackManager::CheckForStationRetune
+    patch::RedirectCall(0x4EBE89, CAERadioTrackManager__StartRadio_Hook); // CAERadioTrackManager::Service
+    patch::RedirectCall(0x4EB57C, CAERadioTrackManager__StartRadio_Hook); // CAERadioTrackManager::StartRadio (Using tSettings)
+    patch::RedirectCall(0x4EB64D, CAERadioTrackManager__StartRadio_Hook); // CAERadioTrackManager::StartRadio (Using tSettings)
 
     patch::SetPointer(0x871148, CVehicle__ProcessControl_Hook);
     patch::SetPointer(0x8721C8, CVehicle__ProcessControl_Hook);

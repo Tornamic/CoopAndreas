@@ -148,6 +148,7 @@ class CVehiclePackets
 			unsigned short miscComponentAngle; // hydra thrusters
 			float planeGearState;
 			unsigned char locked;
+			unsigned char radioStation;
 
 			static void Handle(ENetPeer* peer, void* data, int size)
 			{

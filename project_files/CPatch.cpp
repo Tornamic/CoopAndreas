@@ -222,6 +222,11 @@ void FixCrashes()
     // fix CBike controlling, wtf R* did
     patch::Nop(0x6BC9EB, 2);
 
+    // Disable PassTime when Wasted, Busted and SaveGame
+    patch::Nop(0x442FCF, 5);
+    patch::Nop(0x44337A, 5);
+    // patch::Nop(0x618F9B, 10);
+
     DWORD temp;
 
     // unprotect memory for the camera context switching patches, see CAimSync::ApplyNetworkPlayerContext and CAimSync::ApplyLocalContext

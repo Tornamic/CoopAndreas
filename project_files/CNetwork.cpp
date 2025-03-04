@@ -146,6 +146,7 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::PLAY_MISSION_AUDIO, CPacketHandler::PlayMissionAudio__Handle);
 	CNetwork::AddListener(CPacketsID::UPDATE_CHECKPOINT, CPacketHandler::UpdateCheckpoint__Handle);
 	CNetwork::AddListener(CPacketsID::REMOVE_CHECKPOINT, CPacketHandler::RemoveCheckpoint__Handle);
+	CNetwork::AddListener(CPacketsID::RADIO_CHANNEL_CHANGE, CPacketHandler::RadioChannelChange__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)
