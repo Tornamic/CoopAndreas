@@ -1597,3 +1597,26 @@ void CPacketHandler::RemoveCheckpoint__Handle(void* data, int size)
 
 	CNetworkCheckpoint::Remove();
 }
+
+void CPacketHandler::RadioChannelChange__Handle(void* data, int size)
+{		
+	CPackets::RadioChannelChange* packet = (CPackets::RadioChannelChange*)data;
+	
+	CChat::AddMessage("Radio channel change %d %d %d", packet->playerid, packet->vehicleid, packet->channel);
+
+	CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(FindPlayerVehicle(0, 0)); // IDK if this is correct
+
+	if(vehicle == nullptr) {
+		CChat::AddMessage("Vehicle not found");
+		return;
+	}
+
+	if (vehicle->m_nVehicleId == packet->vehicleid)
+	{
+		AERadioTrackManager.StartRadio(packet->channel, packet->bass, packet->unk1, packet->unused);
+		char* stationName = AERadioTrackManager.GetRadioStationName(packet->channel);
+		if (stationName) {
+			CChat::AddMessage("Player request radio station: %s", stationName);
+		}
+	}
+}

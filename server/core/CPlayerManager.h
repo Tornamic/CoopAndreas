@@ -555,5 +555,28 @@ public:
 			}
 		}
 	};
+
+	struct RadioChannelChange
+	{
+		int playerid;
+		int vehicleid;
+		unsigned char channel;
+		float bass;
+		int unk1;
+		char unused;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (auto player = CPlayerManager::GetPlayer(peer))
+			{
+				RadioChannelChange* packet = (RadioChannelChange*)data;
+
+				if (auto targetPlayer = CPlayerManager::GetPlayer(packet->playerid))
+				{
+					CNetwork::SendPacket(targetPlayer->m_pPeer, CPacketsID::RADIO_CHANNEL_CHANGE, data, sizeof(RadioChannelChange), ENET_PACKET_FLAG_RELIABLE);
+				}
+			}
+		}
+	};
 };
 #endif
