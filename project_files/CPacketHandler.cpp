@@ -6,6 +6,7 @@
 #include <COpCodeSync.h>
 #include <CNetworkEntityBlip.h>
 #include <CNetworkCheckpoint.h>
+#include <CEntryExitMarkerSync.h>
 // PlayerConnected
 
 void CPacketHandler::PlayerConnected__Handle(void* data, int size)
@@ -1596,4 +1597,14 @@ void CPacketHandler::RemoveCheckpoint__Handle(void* data, int size)
 		return;
 
 	CNetworkCheckpoint::Remove();
+}
+
+// EnExSync
+
+void CPacketHandler::EnExSync__Handle(void* data, int size)
+{
+	if (CLocalPlayer::m_bIsHost)
+		return;
+
+	CEntryExitMarkerSync::Receive(data, size);
 }

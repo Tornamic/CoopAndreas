@@ -2,6 +2,8 @@
 #include "WorldHooks.h"
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
+#include <CEntryExit.h>
+#include <CEntryExitMarkerSync.h>
 
 static void __cdecl CWeather__ForceWeather_Hook(short id)
 {
@@ -121,6 +123,27 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
 //    return nullptr;
 //}
 
+int __fastcall _CPool_CEntryExit__allocate_Hook(void* This)
+{
+    CChat::AddMessage("_CPool_CEntryExit__allocate_Hook");
+    return plugin::CallMethodAndReturn<int, 0x43F7D0>(This);
+}
+
+CEntryExit* CEntryExitManager__AddOne_Hook(float enter_x,float enter_y,float enter_z,float enter_rotation,float x_radius,float y_radius,int c8,float exit_x,float exit_y,float exit_z,float exit_rotation,char interiorId,WORD flags,char skyColor,char timeOn,char timeOff,char numPedsToSpawn,char* name)
+{
+    auto result = plugin::CallAndReturn<CEntryExit*, 0x43FA00>(enter_x, enter_y, enter_z, enter_rotation, x_radius, y_radius, c8, exit_x, exit_y, exit_z, exit_rotation, interiorId, flags, skyColor, timeOn, timeOff, numPedsToSpawn, name);
+    
+    if (CLocalPlayer::m_bIsHost)
+        return result;
+
+    if (CEntryExitMarkerSync::ms_vLastData.empty())
+        return result;
+
+    CEntryExitMarkerSync::Receive(CEntryExitMarkerSync::ms_vLastData.data(), CEntryExitMarkerSync::ms_vLastData.size());
+
+    return result;
+}
+
 void WorldHooks::InjectHooks()
 {
     waypointPlaceEvent += PlaceWaypointHook;
@@ -193,4 +216,7 @@ void WorldHooks::InjectHooks()
     //    patch::SetRaw(0x53A9A7, "\x8B\x87\x60\x04\x00\x00\x50", 7); 
     //    patch::RedirectCall(0x53A9B7, CFireManager__StartFire_Hook);
     //}
+
+    patch::RedirectCall(0x533A8D, CEntryExitManager__AddOne_Hook);
+    patch::RedirectCall(0x5B812D, CEntryExitManager__AddOne_Hook);
 }

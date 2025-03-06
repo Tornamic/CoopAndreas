@@ -88,6 +88,8 @@ void CNetwork::SendPacket(unsigned short id, void* data, size_t dataSize, ENetPa
 
 	// send packet
 	enet_peer_send(m_pPeer, 0, packet);
+
+	ms_nBytesSentThisSecondCounter += dataSize;
 }
 
 void CNetwork::Disconnect()
@@ -146,6 +148,7 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::PLAY_MISSION_AUDIO, CPacketHandler::PlayMissionAudio__Handle);
 	CNetwork::AddListener(CPacketsID::UPDATE_CHECKPOINT, CPacketHandler::UpdateCheckpoint__Handle);
 	CNetwork::AddListener(CPacketsID::REMOVE_CHECKPOINT, CPacketHandler::RemoveCheckpoint__Handle);
+	CNetwork::AddListener(CPacketsID::ENEX_SYNC, CPacketHandler::EnExSync__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

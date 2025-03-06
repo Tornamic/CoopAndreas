@@ -108,8 +108,24 @@ static void __cdecl CTheZones__Update_Hook()
     // send local player keys
     CPackets::PlayerKeySync packet{};
 
-    packet.newState = CCompressedControllerState(newState, pad->DisablePlayerControls);
-    
+    packet.newState = CCompressedControllerState(newState);
+    packet.newState.bCamera = pad->unk1;
+    packet.newState.unk2 = pad->unk2;
+    packet.newState.bPlayerAwaitsInGarage = pad->bPlayerAwaitsInGarage;
+    packet.newState.bPlayerOnInteriorTransition = pad->bPlayerOnInteriorTransition;
+    packet.newState.unk3 = pad->unk3;
+    packet.newState.bPlayerSafe = pad->bPlayerSafe;
+    packet.newState.bPlayerTalksOnPhone = pad->bPlayerTalksOnPhone;
+    packet.newState.bPlayerSafeForCutscene = pad->bPlayerSafeForCutscene;
+    packet.newState.bPlayerSkipsToDestination = pad->bPlayerSkipsToDestination;
+    packet.newState.bDisablePlayerEnterCar = pad->bDisablePlayerEnterCar;
+    packet.newState.bDisablePlayerDuck = pad->bDisablePlayerDuck;
+    packet.newState.bDisablePlayerFireWeapon = pad->bDisablePlayerFireWeapon;
+    packet.newState.bDisablePlayerFireWeaponWithL1 = pad->bDisablePlayerFireWeaponWithL1;
+    packet.newState.bDisablePlayerCycleWeapon = pad->bDisablePlayerCycleWeapon;
+    packet.newState.bDisablePlayerJump = pad->bDisablePlayerJump;
+    packet.newState.bDisablePlayerDisplayVitalStats = pad->bDisablePlayerDisplayVitalStats;
+
     CNetwork::SendPacket(CPacketsID::PLAYER_KEY_SYNC, &packet, sizeof packet);
 }
 

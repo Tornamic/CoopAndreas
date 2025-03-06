@@ -555,5 +555,25 @@ public:
 			}
 		}
 	};
+
+	struct EnExSync
+	{
+		static inline std::vector<uint8_t> ms_vLastData;
+		static inline CPlayer* ms_pLastPlayerOwner;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (auto player = CPlayerManager::GetPlayer(peer))
+			{
+				if (player->m_bIsHost)
+				{
+					ms_vLastData.assign((uint8_t*)data, (uint8_t*)data + size);
+					ms_pLastPlayerOwner = player;
+
+					CNetwork::SendPacketToAll(CPacketsID::ENEX_SYNC, data, size, ENET_PACKET_FLAG_RELIABLE, peer);
+				}
+			}
+		}
+	};
 };
 #endif

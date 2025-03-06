@@ -21,6 +21,10 @@ public:
 	static bool CNetwork::m_bConnected;
 	static char CNetwork::m_IpAddress[128 + 1];
 	static unsigned short CNetwork::m_nPort;
+	static inline uint32_t ms_nBytesReceivedThisSecond;
+	static inline uint32_t ms_nBytesReceivedThisSecondCounter;
+	static inline uint32_t ms_nBytesSentThisSecond;
+	static inline uint32_t ms_nBytesSentThisSecondCounter;
 
 	static DWORD WINAPI InitAsync(LPVOID);
 	static void Disconnect();

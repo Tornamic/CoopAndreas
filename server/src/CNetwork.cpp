@@ -119,6 +119,7 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PLAY_MISSION_AUDIO, CPlayerPackets::PlayMissionAudio::Handle);
     CNetwork::AddListener(CPacketsID::UPDATE_CHECKPOINT, CPlayerPackets::UpdateCheckpoint::Handle);
     CNetwork::AddListener(CPacketsID::REMOVE_CHECKPOINT, CPlayerPackets::RemoveCheckpoint::Handle);
+    CNetwork::AddListener(CPacketsID::ENEX_SYNC, CPlayerPackets::EnExSync::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -321,6 +322,15 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         CNetwork::SendPacket(event.peer, CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
 
+    if (CPlayerPackets::EnExSync::ms_pLastPlayerOwner)
+    {
+        if (std::find(CPlayerManager::m_pPlayers.begin(), CPlayerManager::m_pPlayers.end(), CPlayerPackets::EnExSync::ms_pLastPlayerOwner)
+            != CPlayerManager::m_pPlayers.end())
+        {
+            CNetwork::SendPacket(event.peer, CPacketsID::ENEX_SYNC, CPlayerPackets::EnExSync::ms_vLastData.data(), CPlayerPackets::EnExSync::ms_vLastData.size(), ENET_PACKET_FLAG_RELIABLE);
+        }
+    }
+
     CPlayerPackets::PlayerHandshake handshakePacket = { freeId };
     CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_HANDSHAKE, &handshakePacket, sizeof handshakePacket, ENET_PACKET_FLAG_RELIABLE);
 
@@ -339,6 +349,11 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
     if (vehicle != nullptr)
     {
         vehicle->m_pPlayers[player->m_nSeatId] = nullptr;
+    }
+    
+    if (CPlayerPackets::EnExSync::ms_pLastPlayerOwner == player)
+    {
+        CPlayerPackets::EnExSync::ms_pLastPlayerOwner = nullptr;
     }
 
     CPedManager::RemoveAllHostedAndNotify(player);

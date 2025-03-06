@@ -1,6 +1,41 @@
+///////////////////////////////////////////////////////////////////////////
+// Tornamic 02.03.25:                                                    //
+//                                                                       //
+//    READ BEFORE LEARNING THIS CODE:                                    //
+//                                                                       //
+//    DON'T SCROLL DOWN, RUN AWAY                                        //
+//    I'VE BEEN WRITING THIS FOR A MONTH NOW                             //
+//    DON'T ASK ME HOW IT WORKS I DON'T EVEN KNOW ANYMORE                //
+//    IF YOU FIND A BUG, IT'S A FEATURE                                  //
+//    IF IT WORKS, DON'T TOUCH IT                                        //
+//    IF IT DOESN'T WORK, PRETEND IT DOES                                //
+//    GOOD LUCK                                                          //
+//                                                                       //
+//    WARNING:                                                           //
+//    - ANY ATTEMPT TO UNDERSTAND THIS CODE MAY CAUSE HEADACHES          //
+//    - DEBUGGING THIS MAY LEAD TO EXISTENTIAL CRISIS                    //
+//    - REFACTORING IS CONSIDERED A HIGH-RISK OPERATION                  //
+//    - IF YOU FIX ONE BUG, THREE NEW ONES WILL APPEAR                   //
+//    - COMMENTS ARE FOR WEAKLINGS, REAL WARRIORS USE TRIAL AND ERROR    //
+//                                                                       //
+//    REMINDER:                                                          //
+//    - DON'T TRY TO UNDERSTAND THE LOGIC, JUST ACCEPT IT                //
+//    - IF THIS CODE COMPILES, WE ALL WIN                                //
+//    - IF YOU CAN'T FIX IT, JUST YELL AT IT AND RESTART                 //
+//                                                                       //
+//    P.S. IF YOU'RE STILL READING THIS, SEEK HELP                       //
+//    P.S.2 DON'T EVEN THINK ABOUT CHANGING A SINGLE LINE                //
+//    P.S.3 I WARNED YOU                                                 //
+//    P.S.4 YOU'VE ALREADY SPENT TOO MUCH TIME HERE                      //
+//    P.S.5 TIME TO ACCEPT THE MADNESS                                   //
+//                                                                       //
+///////////////////////////////////////////////////////////////////////////
+
+
 #include "stdafx.h"
 #include "COpCodeSync.h"
 #include <Commands/CCustomCommandMgr.h>
+#include "CEntryExitMarkerSync.h"
 
 enum class eSyncedParamType
 {
@@ -81,7 +116,7 @@ const SSyncedOpCode syncedOpcodes[] =
 
     // Interiors
     {0x04BB}, // set_area_visible {areaId} [Interior]
-    {0x07FB}, // switch_entry_exit {interiorName} [string] {state} [bool]
+    //{0x07FB}, // switch_entry_exit {interiorName} [string] {state} [bool]
 
     // Weapons
     {0x06AB, true, {eSyncedParamType::PED}}, // hide_char_weapon_for_scripted_cutscene [Char] {state} [bool]
@@ -123,6 +158,10 @@ const SSyncedOpCode syncedOpcodes[] =
     {0x04ED}, // request_animation {animationFile} [string]
     {0x04EF}, // remove_animation {animationFile} [string]
     {0x0605, true, {eSyncedParamType::PED}}, // task_play_anim {handle} [Char] {animationName} [string] {animationFile} [string] {frameDelta} [float] {loop} [bool] {lockX} [bool] {lockY} [bool] {lockF} [bool] {time} [int]
+    
+    // Controls
+    {0x01B4, true, {eSyncedParamType::PLAYER}}, // set_player_control[Player] {state}[bool]
+    
 };
 
 struct OpcodeSyncHeader
@@ -201,6 +240,19 @@ bool IsOpcodeSyncable(int* opcodeIdx = nullptr)
 
 void BuildAndSendOpcode()
 {
+    switch (lastOpCodeProcessed)
+    {
+    case 0xD8:
+    case 0x7FB:
+    case 0x864:
+    case 0x8E7:
+    case 0x98E:
+    case 0x9B4:
+    case 0x9E6:
+        CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingScripts = true;
+        break;
+    }
+
     int idx = 0;
     if (!IsOpcodeSyncable(&idx))
         return;
@@ -497,42 +549,42 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
                 }
                 case eSyncedParamType::PLAYER:
                 {
-                    if (scriptParamsBuffer[i].entityId == CNetworkPlayerManager::m_nMyId)
-                    {
+                    /*if (scriptParamsBuffer[i].entityId == CNetworkPlayerManager::m_nMyId)
+                    {*/
                         scriptParamsBuffer[i].value = 0;
                         /*if (header.opcode == 0x0605)
                             CChat::AddMessage("Parsed player id %d (me)...", CNetworkPlayerManager::m_nMyId);*/
-                        break;
-                    }
+                    /*    break;
+                    }*/
 
-                    if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(scriptParamsBuffer[i].entityId))
-                    {
-                        if (networkPlayer->m_pPed)
-                        {
-                            int playerNum = networkPlayer->GetInternalId();
-                            if (playerNum)
-                            {
-                                scriptParamsBuffer[i].value = playerNum;
-                                /*if (header.opcode == 0x0605)
-                                    CChat::AddMessage("Parsed player id %d...", networkPlayer->m_iPlayerId);*/
-                            }
-                            else if (!IsOpcodeRequiresStrictCheck(header.opcode))
-                            {
-                                scriptParamsBuffer[i].value = -1;
-                            }
-                            else return;
-                        }
-                        else if (!IsOpcodeRequiresStrictCheck(header.opcode))
-                        {
-                            scriptParamsBuffer[i].value = -1;
-                        }
-                        else return;
-                    }
-                    else if (!IsOpcodeRequiresStrictCheck(header.opcode))
-                    {
-                        scriptParamsBuffer[i].value = -1;
-                    }
-                    else return;
+                    //if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(scriptParamsBuffer[i].entityId))
+                    //{
+                    //    if (networkPlayer->m_pPed)
+                    //    {
+                    //        int playerNum = networkPlayer->GetInternalId();
+                    //        if (playerNum)
+                    //        {
+                    //            scriptParamsBuffer[i].value = playerNum;
+                    //            /*if (header.opcode == 0x0605)
+                    //                CChat::AddMessage("Parsed player id %d...", networkPlayer->m_iPlayerId);*/
+                    //        }
+                    //        else if (!IsOpcodeRequiresStrictCheck(header.opcode))
+                    //        {
+                    //            scriptParamsBuffer[i].value = -1;
+                    //        }
+                    //        else return;
+                    //    }
+                    //    else if (!IsOpcodeRequiresStrictCheck(header.opcode))
+                    //    {
+                    //        scriptParamsBuffer[i].value = -1;
+                    //    }
+                    //    else return;
+                    //}
+                    //else if (!IsOpcodeRequiresStrictCheck(header.opcode))
+                    //{
+                    //    scriptParamsBuffer[i].value = -1;
+                    //}
+                    //else return;
 
                     break;
                 }
@@ -740,7 +792,20 @@ void __declspec(naked) CRunningScript__ReadTextLabelFromScript_Hook_GetSyncingPa
     }
 }
 
-
+static uintptr_t FinishedProcessingScripts_ptr = 0x0;
+static void FinishedProcessingScripts()
+{
+    plugin::CallDyn(FinishedProcessingScripts_ptr);
+    
+    if (CLocalPlayer::m_bIsHost)
+    {
+        if (CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingScripts)
+        {
+            CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingScripts = false;
+            CEntryExitMarkerSync::Send();
+        }
+    }
+}
 
 void COpCodeSync::Init()
 {
@@ -753,4 +818,7 @@ void COpCodeSync::Init()
     std::vector<int> hookPositions = { 0x463D92, 0x463DBF, 0x463E1A, 0x463E6B, 0x463EAC, 0x463F2A, 0x463F7F, 0x463FA2, 0x463FDA, 0x463FFB, 0x464034 };
     patch::RedirectJump(hookPositions, CRunningScript__ReadTextLabelFromScript_Hook_GetSyncingParams);
     patch::RedirectJump(0x46421D, CRunningScript__CollectParameters_Hook_GetSyncingParams);
+
+    FinishedProcessingScripts_ptr = injector::GetBranchDestination(0x46A22E).as_int();
+    patch::RedirectCall(0x46A22E, FinishedProcessingScripts);
 }

@@ -151,13 +151,13 @@ void FixCrashes()
     patch::SetUInt(0x74754B, 0x900);
 
     // Don't create a ped group on player creation (Fixes a crash)
-    patch::Nop(0x60D64D, 1);
-    patch::SetUChar(0x60D64E, 0xE9);
+    /*patch::Nop(0x60D64D, 1);
+    patch::SetUChar(0x60D64E, 0xE9);*/
 
     // Disable the call to FxSystem_c::GetCompositeMatrix in CAEFireAudioEntity::UpdateParameters
     // Which was causing a crash. The crash happens if you create 40 or
     // so vehicles that catch fire (upside down) then delete them, repeating a few times.
-    patch::Nop(0x4DCF87, 6);
+    //patch::Nop(0x4DCF87, 6);
 
     // Fixed a crash (race condition triggered when jacking a vehicle)
     patch::Nop(0x6485AC, 6);

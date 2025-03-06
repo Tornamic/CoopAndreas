@@ -66,4 +66,5 @@ public:
 	static void PlayMissionAudio__Handle(void* data, int size);
 	static void UpdateCheckpoint__Handle(void* data, int size);
 	static void RemoveCheckpoint__Handle(void* data, int size);
+	static void EnExSync__Handle(void* data, int size);
 };
