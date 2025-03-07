@@ -285,7 +285,7 @@ public:
 									if (enex->m_nFlags.bDeleteEnex)
 										sprintf(buffer, "%sbDeleteEnex\n", buffer);
 								}
-								sprintf(gString, "name %s\nflags %x\n%s\nleft %f\nbottom %f", enex->m_szName, enex->m_nFlags, buffer, enex->m_recEntrance.left, enex->m_recEntrance.bottom);
+								sprintf(gString, "name %s\nflags %x\n%s\nleft %f\nbottom %f", enex->m_szName, *(uint16_t*)&enex->m_nFlags, buffer, enex->m_recEntrance.left, enex->m_recEntrance.bottom);
 								CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, gString, D3DCOLOR_ARGB(255, 255, 255, 255));
 							}
 						}
