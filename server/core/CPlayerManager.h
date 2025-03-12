@@ -575,5 +575,26 @@ public:
 			}
 		}
 	};
+
+	struct CreateStaticBlip
+	{
+		CVector position;
+		int8_t sprite;
+		uint8_t display : 2;
+		uint8_t type : 1; // 0 - BLIP_CONTACT_POINT, 1 - BLIP_COORD
+		uint8_t trackingBlip : 1;
+		uint8_t shortRange : 1;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (auto player = CPlayerManager::GetPlayer(peer))
+			{
+				if (player->m_bIsHost)
+				{
+					CNetwork::SendPacketToAll(CPacketsID::CREATE_STATIC_BLIP, data, sizeof(CreateStaticBlip), ENET_PACKET_FLAG_RELIABLE, peer);
+				}
+			}
+		}
+	};
 };
 #endif

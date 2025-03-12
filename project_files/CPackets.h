@@ -58,6 +58,7 @@ enum CPacketsID : unsigned short
 	UPDATE_CHECKPOINT,
 	REMOVE_CHECKPOINT,
 	ENEX_SYNC,
+	CREATE_STATIC_BLIP,
 	PACKET_ID_MAX
 };
 
@@ -106,14 +107,25 @@ public:
 			sizeof(RebuildPlayer), // REBUILD_PLAYER
 			sizeof(RespawnPlayer), // RESPAWN_PLAYER
 			sizeof(AssignVehicleSyncer), // ASSIGN_VEHICLE
-			0 // MASS_PACKET_SEQUENCE
+			0, // MASS_PACKET_SEQUENCE
+			sizeof(StartCutscene), // START_CUTSCENE,
+			sizeof(SkipCutscene), // SKIP_CUTSCENE,
+			0, // OPCODE_SYNC,
+			sizeof(OnMissionFlagSync), // ON_MISSION_FLAG_SYNC,
+			sizeof(UpdateEntityBlip), // UPDATE_ENTITY_BLIP,
+			sizeof(RemoveEntityBlip), // REMOVE_ENTITY_BLIP,
+			sizeof(AddMessageGXT), // ADD_MESSAGE_GXT,
+			sizeof(RemoveMessageGXT), // REMOVE_MESSAGE_GXT,
+			sizeof(ClearEntityBlips), // CLEAR_ENTITY_BLIPS,
+			sizeof(PlayMissionAudio), // PLAY_MISSION_AUDIO,
+			sizeof(UpdateCheckpoint), // UPDATE_CHECKPOINT,
+			sizeof(RemoveCheckpoint), // REMOVE_CHECKPOINT,
+			0, // ENEX_SYNC,
+			sizeof(CreateStaticBlip), // CREATE_STATIC_BLIP,
 		};
 
 		return m_nPacketSize[id];
 	}
-
-	
-
 
 	struct PlayerConnected
 	{
@@ -531,5 +543,15 @@ public:
 	struct RemoveCheckpoint
 	{
 		int playerid;
+	};
+
+	struct CreateStaticBlip
+	{
+		CVector position;
+		int8_t sprite;
+		uint8_t display : 2;
+		uint8_t type : 1; // 0 - BLIP_CONTACT_POINT, 1 - BLIP_COORD
+		uint8_t trackingBlip : 1;
+		uint8_t shortRange : 1;
 	};
 };

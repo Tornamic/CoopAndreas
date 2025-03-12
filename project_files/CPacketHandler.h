@@ -67,4 +67,5 @@ public:
 	static void UpdateCheckpoint__Handle(void* data, int size);
 	static void RemoveCheckpoint__Handle(void* data, int size);
 	static void EnExSync__Handle(void* data, int size);
+	static void CreateMissionMarker__Handle(void* data, int size);
 };

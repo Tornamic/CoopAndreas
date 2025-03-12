@@ -107,10 +107,10 @@ Contact information is current as of March 2025
   - [X] clothes
   - [X] haircut
 - [X] separate ped sync
+- [X] EnEx markers sync
+- [X] mission markers sync
   
 ### Current Tasks
-- [ ] EnEx markers sync
-- [ ] mission markers sync
 - [ ] pickups
   - [ ] graffities, horseshoes, snapshots, oysters
   - [ ] static weapons, armours
@@ -126,7 +126,7 @@ Contact information is current as of March 2025
   - [ ] vote to skip
 - [ ] Players map sync
   - [ ] Areas aka GangZones
-  - [ ] Mission icons
+  - [X] Mission icons
   - [X] Player map pin
     - [ ] fix proportion
   - [X] Player mark (waypoint)

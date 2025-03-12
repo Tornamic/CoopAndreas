@@ -7,6 +7,7 @@
 #include <CNetworkEntityBlip.h>
 #include <CNetworkCheckpoint.h>
 #include <CEntryExitMarkerSync.h>
+#include <CNetworkStaticBlip.h>
 // PlayerConnected
 
 void CPacketHandler::PlayerConnected__Handle(void* data, int size)
@@ -25,6 +26,12 @@ void CPacketHandler::PlayerConnected__Handle(void* data, int size)
 	if (!player->m_bHasBeenConnectedBeforeMe)
 	{
 		CChat::AddMessage("[Player] " + std::string(player->GetName()) + " connected");
+	}
+
+	if (CLocalPlayer::m_bIsHost)
+	{
+		CNetworkStaticBlip::ms_bNeedToSendAfterThisFrame = true;
+		CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingThisFrame = true;
 	}
 }
 
@@ -1395,6 +1402,16 @@ void CPacketHandler::MassPacketSequence__Handle(void* data, int size)
 		memcpy(&packetId, buffer + offset, 2);
 		offset += 2;
 
+		if (i == 0 && packetId == CPacketsID::CREATE_STATIC_BLIP)
+		{
+			CNetworkStaticBlip::ms_bMassUpdateJustReceived = true;
+		}
+		else
+		{
+			CNetworkStaticBlip::ms_bMassUpdateJustReceived = false;
+		}
+
+
 		size_t remainingData = size - offset;
 
 		auto it = CNetwork::m_packetListeners.find(packetId);
@@ -1607,4 +1624,15 @@ void CPacketHandler::EnExSync__Handle(void* data, int size)
 		return;
 
 	CEntryExitMarkerSync::Receive(data, size);
+}
+
+// CreateMissionMarker
+
+void CPacketHandler::CreateMissionMarker__Handle(void* data, int size)
+{
+	if (CLocalPlayer::m_bIsHost)
+		return;
+
+	CPackets::CreateStaticBlip* packet = (CPackets::CreateStaticBlip*)data;
+	CNetworkStaticBlip::Create(packet->position, static_cast<eRadarSprite>(packet->sprite), static_cast<eBlipDisplay>(packet->display), packet->type ? BLIP_COORD : BLIP_CONTACTPOINT, packet->trackingBlip, packet->shortRange);
 }

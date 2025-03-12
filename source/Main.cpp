@@ -13,6 +13,7 @@
 #include <CNetworkCheckpoint.h>
 #include <CEntryExitManager.h>
 #include <CEntryExitMarkerSync.h>
+#include <CNetworkStaticBlip.h>
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
@@ -115,7 +116,7 @@ public:
 
 					if (GetAsyncKeyState(VK_F10) && CLocalPlayer::m_bIsHost)
 					{
-						CEntryExitMarkerSync::Send();
+						CNetworkStaticBlip::Send();
 					}
 
 					if (CLocalPlayer::m_bIsHost
@@ -221,6 +222,22 @@ public:
 			};
 		Events::drawingEvent += []
 			{
+				if (CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingThisFrame 
+					&& CLocalPlayer::m_bIsHost
+					&& CEntryExitMarkerSync::ms_nLastUpdate + 2000 < GetTickCount())
+				{
+					CEntryExitMarkerSync::Send();
+					CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingThisFrame = false;
+					CEntryExitMarkerSync::ms_nLastUpdate = GetTickCount();
+				}
+
+				if (CNetworkStaticBlip::ms_bNeedToSendAfterThisFrame
+					&& CLocalPlayer::m_bIsHost)
+				{
+					CNetworkStaticBlip::Send();
+					CNetworkStaticBlip::ms_bNeedToSendAfterThisFrame = false;
+				}
+
 				CNetworkCheckpoint::Process();
 				//CDebugPedTasks::Draw();
 				CNetworkPlayerNameTag::Process();
@@ -241,7 +258,7 @@ public:
 					sprintf(buffer, "Game/Network: Peds %d/%d | Cars %d/%d | Recv %d %.2f KB/S | Sent %d %.2f KB/S | EnEx %d", CPools::ms_pPedPool->GetNoOfUsedSpaces(), CNetworkPedManager::m_pPeds.size(), CPools::ms_pVehiclePool->GetNoOfUsedSpaces(), CNetworkVehicleManager::m_pVehicles.size(), CNetwork::m_pClient->totalReceivedPackets, CNetwork::ms_nBytesReceivedThisSecond / 1024.0f, CNetwork::m_pClient->totalSentPackets, CNetwork::ms_nBytesSentThisSecond / 1024.0f, CEntryExitManager::mp_poolEntryExits->GetNoOfUsedSpaces());
 					CDXFont::Draw(100, 10, buffer, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-					for (auto enex : CEntryExitManager::mp_poolEntryExits)
+					/*for (auto enex : CEntryExitManager::mp_poolEntryExits)
 					{
 						CVector posn = CVector(enex->m_recEntrance.left, enex->m_recEntrance.bottom, enex->m_fEntranceZ);
 
@@ -289,7 +306,48 @@ public:
 								CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, gString, D3DCOLOR_ARGB(255, 255, 255, 255));
 							}
 						}
-					}
+					}*/
+					
+					/*for (int i = 0; i < MAX_RADAR_TRACES; i++)
+					{
+						auto& trace = CRadar::ms_RadarTrace[i];
+
+						if (trace.m_nBlipType != eBlipType::BLIP_CONTACTPOINT
+							&& trace.m_nBlipType != eBlipType::BLIP_COORD)
+						{
+							continue;
+						}
+
+						RwV3d screenCoors; float w, h;
+						if (CSprite::CalcScreenCoors({ trace.m_vecPos.x, trace.m_vecPos.y, trace.m_vecPos.z + 1.0f }, &screenCoors, &w, &h, false, true))
+						{
+							if (w >= 0.0f)
+							{
+							eBlipDisplay::BLIP_DISPLAY_NEITHER;
+							char* display = "BLIP_DISPLAY_NEITHER";
+
+							switch (trace.m_nBlipDisplay)
+							{
+							case eBlipDisplay::BLIP_DISPLAY_MARKER_ONLY:
+								display = "BLIP_DISPLAY_MARKER_ONLY";
+								break;
+							case eBlipDisplay::BLIP_DISPLAY_BOTH:
+								display = "BLIP_DISPLAY_BOTH";
+								break;
+							case eBlipDisplay::BLIP_DISPLAY_BLIP_ONLY:
+								display = "BLIP_DISPLAY_BLIP_ONLY";
+								break;
+							}
+
+							sprintf(gString, "pos %.1f %.1f %.1f\n%s\n%s", 
+								trace.m_vecPos.x, trace.m_vecPos.y, trace.m_vecPos.z, 
+								trace.m_nBlipType == eBlipType::BLIP_CONTACTPOINT ? "BLIP_CONTACTPOINT" : "BLIP_COORD",
+								display);
+
+							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, gString, D3DCOLOR_ARGB(255, 255, 255, 255));
+							//}
+						}
+					}*/
 
 					for (auto networkVehicle : CNetworkVehicleManager::m_pVehicles)
 					{

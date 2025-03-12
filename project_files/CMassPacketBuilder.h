@@ -29,13 +29,13 @@ public:
         if (m_packets.empty())
             return;
 
-        if (m_packets.size() == 1)
+        /*if (m_packets.size() == 1)
         {
             const auto& packet = m_packets[0];
             CNetwork::SendPacket(packet.id, packet.data, packet.dataSize, flags);
             ClearPackets();
             return;
-        }
+        }*/
 
         size_t totalSize = 1;
         for (const auto& packet : m_packets)
