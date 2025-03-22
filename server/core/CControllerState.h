@@ -43,35 +43,62 @@ class CControllerState
 //#pragma pack(1)
 struct CCompressedControllerState
 {
-        signed short LeftStickX; // move/steer left (-128?)/right (+128)
-        signed short LeftStickY; // move back(+128)/forwards(-128?)
-    
-        union
+    int16_t LeftStickX; // move/steer left (-128?)/right (+128)
+    int16_t LeftStickY; // move back(+128)/forwards(-128?)
+
+    union
+    {
+        struct
         {
-            struct
-            {
-                unsigned int LeftShoulder1 : 1;
-                unsigned int LeftShoulder2 : 1;
-                unsigned int RightShoulder1 : 1; // target / hand brake
-                unsigned int RightShoulder2 : 1;
-                unsigned int DPadUp : 1; // radio change up
-                unsigned int DPadDown : 1; // radio change down
-                unsigned int DPadLeft : 1; // Skip trip/Action / Negative talk reply
-                unsigned int DPadRight : 1; // Next user MP3 track / Positive talk reply
-                unsigned int Start : 1; // Pause
-                unsigned int Select : 1; // Camera modes
-                unsigned int ButtonSquare : 1; // jump / reverse
-                unsigned int ButtonTriangle : 1; // get in/out
-                unsigned int ButtonCross : 1; // sprint / accelerate
-                unsigned int ButtonCircle : 1; // fire
-                unsigned int ShockButtonL : 1;
-                unsigned int ShockButtonR : 1; // look behind
-                unsigned int m_bChatIndicated : 1;
-                unsigned int m_bPedWalk : 1;
-                unsigned int m_bVehicleMouseLook : 1;
-                unsigned int m_bRadioTrackSkip : 1;
-            };
-        unsigned int compressed; // To access all bits as a single value if needed
+            uint32_t LeftShoulder1 : 1;
+            uint32_t LeftShoulder2 : 1;
+            uint32_t RightShoulder1 : 1; // target / hand brake
+            uint32_t RightShoulder2 : 1;
+            uint32_t DPadUp : 1; // radio change up
+            uint32_t DPadDown : 1; // radio change down
+            uint32_t DPadLeft : 1; // Skip trip/Action / Negative talk reply
+            uint32_t DPadRight : 1; // Next user MP3 track / Positive talk reply
+
+            uint32_t Start : 1; // Pause
+            uint32_t Select : 1; // Camera modes
+            uint32_t ButtonSquare : 1; // jump / reverse
+            uint32_t ButtonTriangle : 1; // get in/out
+            uint32_t ButtonCross : 1; // sprint / accelerate
+            uint32_t ButtonCircle : 1; // fire
+            uint32_t ShockButtonL : 1;
+            uint32_t ShockButtonR : 1; // look behind
+
+            uint32_t m_bChatIndicated : 1;
+            uint32_t m_bPedWalk : 1;
+            uint32_t m_bVehicleMouseLook : 1;
+            uint32_t m_bRadioTrackSkip : 1;
+        };
+        uint32_t compressed; // To access all bits as a single value if needed
+    };
+
+    union
+    {
+        struct
+        {
+            uint16_t bCamera : 1;
+            uint16_t unk2 : 1;
+            uint16_t bPlayerAwaitsInGarage : 1;
+            uint16_t bPlayerOnInteriorTransition : 1;
+            uint16_t unk3 : 1;
+            uint16_t bPlayerSafe : 1;
+            uint16_t bPlayerTalksOnPhone : 1;
+            uint16_t bPlayerSafeForCutscene : 1;
+
+            uint16_t bPlayerSkipsToDestination : 1;
+            uint16_t bDisablePlayerEnterCar : 1;
+            uint16_t bDisablePlayerDuck : 1;
+            uint16_t bDisablePlayerFireWeapon : 1;
+            uint16_t bDisablePlayerFireWeaponWithL1 : 1;
+            uint16_t bDisablePlayerCycleWeapon : 1;
+            uint16_t bDisablePlayerJump : 1;
+            uint16_t bDisablePlayerDisplayVitalStats : 1;
+        };
+        uint16_t disableFlags;
     };
 };
 #endif

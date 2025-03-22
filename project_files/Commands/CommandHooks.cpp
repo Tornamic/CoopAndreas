@@ -3,96 +3,95 @@
 #include "CCustomCommandMgr.h"
 #include "Commands/CCommandAddChatMessage.h"
 
-bool ProcessCustomCommand(uint16_t command, CRunningScript* script)
+uint16_t nCommand = 0x0;
+CRunningScript* pScript = nullptr;
+
+bool ProcessCustomCommand()
 {
 	// if is in custom command range
-	if ((command & 0x7FFF) >= CCustomCommandMgr::MIN_CUSTOM_COMMAND)
+	uint16_t commandNormalised = (nCommand & 0x7FFF);
+	if (commandNormalised >= CCustomCommandMgr::MIN_CUSTOM_COMMAND && commandNormalised <= CCustomCommandMgr::MAX_CUSTOM_COMMAND)
 	{
-		script->m_pCurrentIP += 2;
-		script->m_bNotFlag = (command & 0x8000) != 0;
-		CCustomCommandMgr::ProcessCommand(command & 0x7FFF, script); // process it
+		pScript->m_pCurrentIP += 2;
+		pScript->m_bNotFlag = (nCommand & 0x8000) != 0;
+		CCustomCommandMgr::ProcessCommand(commandNormalised, pScript); // process it
 		return true;
 	}
 	return false;
 }
 
-uint16_t nCommand = 0x0;
-CRunningScript* pScript = nullptr;
 
-uintptr_t CRunningScript__Process_Ret = 0x469FBF;
-uintptr_t CRunningScript__Process_Exit = 0x469FF7;
 void __declspec(naked) CRunningScript__Process_Hook() 
 {
 	__asm
 	{
-		xor eax, eax
 		mov ax, [ecx]
 
 		mov nCommand, ax
 		mov pScript, esi
 
-		pushad
-		pushfd
-	}
+		push eax
+		push ecx
+		push esi
 
-	if (ProcessCustomCommand(nCommand, pScript))
-	{
-		__asm
-		{
-			popfd
-			popad
+		call ProcessCustomCommand
 
-			jmp CRunningScript__Process_Exit
-		}
-	}
-	
-	__asm
-	{
-		popfd
-		popad
+		test al, al
+		jz process_orig_opcode 
 
-		jmp CRunningScript__Process_Ret
-	}
-}
+		pop esi
+		pop ecx
+		pop eax
+		push 0x469FB0
+		ret
 
-uintptr_t CRunningScript__ProcessOneCommand_Ret = 0x469EBF;
-uintptr_t CRunningScript__ProcessOneCommand_Exit = 0x469EF8;
-void __declspec(naked) CRunningScript__ProcessOneCommand_Hook()
-{
-	__asm
-	{
-		xor eax, eax
-		mov ax, [edx]
-
-		mov nCommand, ax
-		mov pScript, ecx
-
-		pushad
-		pushfd
-	}
-
-	if (ProcessCustomCommand(nCommand, pScript))
-	{
-		__asm
-		{
-			popfd
-			popad
-
-			jmp CRunningScript__ProcessOneCommand_Exit
-		}
-	}
-
-	__asm
-	{
-		popfd
-		popad
-
-		jmp CRunningScript__ProcessOneCommand_Ret
+	process_orig_opcode:
+		pop esi
+		pop ecx
+		pop eax
+		push 0x469FBF
+		ret
 	}
 }
+
+//uintptr_t CRunningScript__ProcessOneCommand_Ret = 0x469EBF;
+//uintptr_t CRunningScript__ProcessOneCommand_Exit = 0x469EF8;
+//void __declspec(naked) CRunningScript__ProcessOneCommand_Hook()
+//{
+//	__asm
+//	{
+//		xor eax, eax
+//		mov ax, [edx]
+//
+//		mov nCommand, ax
+//		mov pScript, ecx
+//
+//		pushad
+//		pushfd
+//	}
+//
+//	if (ProcessCustomCommand(nCommand, pScript))
+//	{
+//		__asm
+//		{
+//			popfd
+//			popad
+//
+//			jmp CRunningScript__ProcessOneCommand_Exit
+//		}
+//	}
+//
+//	__asm
+//	{
+//		popfd
+//		popad
+//
+//		jmp CRunningScript__ProcessOneCommand_Ret
+//	}
+//}
 
 void CommandHooks::InjectHooks()
 {
 	patch::RedirectJump(0x469FBA, CRunningScript__Process_Hook);
-	patch::RedirectJump(0x469EBA, CRunningScript__ProcessOneCommand_Hook);
+	///patch::RedirectJump(0x469EBA, CRunningScript__ProcessOneCommand_Hook);
 }

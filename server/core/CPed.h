@@ -20,6 +20,7 @@ public:
 	unsigned char m_nPedType; 
 	CVector m_vecPos;
 	unsigned char m_nCreatedBy;
+	char m_szSpecialModelName[8];
 	CPed(int pedid, CPlayer* syncer, short modelId, unsigned char pedType, CVector pos, unsigned char createdBy);
 };
 

@@ -3,24 +3,23 @@
 #define PROPORION_X(value) (value * RsGlobal.maximumWidth / 1920)
 #define PROPORION_Y(value) (value * RsGlobal.maximumHeight / 1080)
 
-unsigned char GetHudAlpha(float distance) 
+uint8_t GetHudAlpha(float distance)
 {
-	if (distance <= 5.0f) 
+	if (distance < 45.0f)
 	{
 		return 255;
 	}
-	else if (distance >= 15.0f) 
+	else if (distance > CNetworkPlayerNameTag::MAX_DRAW_NICKNAME_DISTANCE)
 	{
 		return 0;
 	}
-	else 
+	else
 	{
-		float factor = (5.0f - distance) / 10.0f;
-		return static_cast<unsigned char>(std::round(factor * 255.0f));
+		return (uint8_t)((1.0f - (distance - 45.0f) / 5.0f) * 255.0f);
 	}
 }
 
-void DrawNickName(float x, float y, unsigned char alpha, const char* name)
+void DrawNickName(float x, float y, float scale, unsigned char alpha, const char* name)
 {
 	CFont::SetOrientation(eFontAlignment::ALIGN_LEFT);
 	CFont::SetFontStyle(3);
@@ -28,16 +27,14 @@ void DrawNickName(float x, float y, unsigned char alpha, const char* name)
 	CFont::SetBackground(false, false);
 	CFont::SetDropColor(CRGBA(0, 0, 0, alpha));
 	CFont::SetDropShadowPosition(1);
-	CFont::SetScale(PROPORION_X(0.4f), PROPORION_Y(0.7f));
+	CFont::SetScale(PROPORION_X(0.4f * scale), PROPORION_Y(0.7f * scale));
 	CFont::PrintString(x, y, name);
 }
 
-void DrawWeaponIcon(CPed* ped, int x, int y, unsigned char alpha) 
+void DrawWeaponIcon(CPed* ped, float x, float y, float scale, unsigned char alpha)
 {
-	const auto x0 = (float)x;
-	const auto y0 = (float)y;
-	const float width = CUtil::SCREEN_STRETCH_X(47.0f / 2.0f);
-	const float height = CUtil::SCREEN_STRETCH_Y(58.0f / 2.0f);
+	const float width = CUtil::SCREEN_STRETCH_X(47.0f / 2.0f) * scale;
+	const float height = CUtil::SCREEN_STRETCH_Y(58.0f / 2.0f) * scale;
 	const float halfWidth = width / 2.0f;
 	const float halfHeight = height / 2.0f;
 
@@ -46,7 +43,7 @@ void DrawWeaponIcon(CPed* ped, int x, int y, unsigned char alpha)
 	auto modelId = CUtil::GetWeaponModelById(ped->m_aWeapons[ped->m_nActiveWeaponSlot].m_eWeaponType);
 
 	if (modelId <= 0) {
-		CHud::Sprites[0].Draw({ x0, y0, width + x0, height + y0 }, CRGBA(255, 255, 255, alpha));
+		CHud::Sprites[0].Draw({ x, y, width + x, height + y }, CRGBA(255, 255, 255, alpha));
 		return;
 	}
 
@@ -62,7 +59,7 @@ void DrawWeaponIcon(CPed* ped, int x, int y, unsigned char alpha)
 	RwRenderStateSet(rwRENDERSTATEZTESTENABLE, RWRSTATE(NULL));
 	RwRenderStateSet(rwRENDERSTATETEXTURERASTER, RWRSTATE(RwTextureGetRaster(texture)));
 	CSprite::RenderOneXLUSprite(
-		x0 + halfWidth, y0 + halfHeight, 1.0f,
+		x + halfWidth, y + halfHeight, 1.0f,
 		halfWidth, halfHeight,
 		255u, 255u, 255u, alpha,
 		1.0f,
@@ -72,15 +69,53 @@ void DrawWeaponIcon(CPed* ped, int x, int y, unsigned char alpha)
 	RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, RWRSTATE(FALSE));
 }
 
+void DrawBarChartScale(float x, float y, uint16_t width, uint8_t height, float scale, float progress, CRGBA color)
+{
+	RwRenderStateSet(rwRENDERSTATETEXTURERASTER, RWRSTATE(NULL));
+	RwRenderStateSet(rwRENDERSTATESHADEMODE, RWRSTATE(rwSHADEMODEFLAT));
+
+	progress = std::clamp(progress, 0.0f, 100.0f);
+
+	const float endX = x + (float)width;
+	const float unclampedCurrX = x + (float)width * progress / 100.0f;
+	const float currX = min(unclampedCurrX, endX);
+	const auto fheight = (float)height;
+
+	// Progress rect
+	CSprite2d::DrawRect({ x, y, currX, y + fheight }, color);
+	// Background (from currX to endX)
+	CSprite2d::DrawRect({ currX, y, endX, y + fheight }, { uint8_t(color.r / 2.0f), uint8_t(color.g / 2.0f), uint8_t(color.b / 2.0f), color.a });
+
+	const float w = CUtil::SCREEN_STRETCH_X(2.0f) * scale, h = CUtil::SCREEN_SCALE_Y(2.0f) * scale;
+	const CRect rects[] = {
+		//left,     top,              right,    bottom
+		{ x,        y,                endX,     y + h       },       // Top
+		{ x,        y + fheight - h,  endX,     y + fheight },       // Bottom
+		{ x,        y,                x + w,    y + fheight },       // Left
+		{ endX - w, y,                endX,     y + fheight }        // Right
+	};
+
+	const auto black = CRGBA{ 0, 0, 0, color.a };
+	for (const CRect& rect : rects) {
+		CSprite2d::DrawRect(rect, black);
+	}
+}
+
+
 void CNetworkPlayerNameTag::Process()
 {
+	if (CCutsceneMgr::ms_running
+		|| TheCamera.m_bWideScreenOn)
+	{
+		return;
+	}
 
 	for (auto player : CNetworkPlayerManager::m_pPlayers)
 	{
 		if (!player->m_pPed)
 			continue;
 
-		CVector localPlayerPos = FindPlayerCoors(0);
+		CVector localPlayerCamPos = TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecSource;
 		CVector networkPlayerPos{};
 
 		if (player->m_pPed->m_pRwClump)
@@ -90,57 +125,69 @@ void CNetworkPlayerNameTag::Process()
 			networkPlayerPos = player->m_pPed->GetPosition();
 			networkPlayerPos.z += 0.5f;
 		}
+		networkPlayerPos.z += 0.3f;
 
-		unsigned char alpha = GetHudAlpha((localPlayerPos - networkPlayerPos).Magnitude());
+		float distance = (localPlayerCamPos - networkPlayerPos).Magnitude();
+		uint8_t alpha = GetHudAlpha(distance);
 
 		if (alpha == 0 || !player->m_pPed->IsVisible() || player->m_lOnFoot == nullptr)
 			continue;
 
-		networkPlayerPos.z += 0.3f;
+		if (!CWorld::GetIsLineOfSightClear(localPlayerCamPos, networkPlayerPos, true, false, false, true, false, false, false))
+			continue;
 
 		RwV3d out;
 		float width, height;
-		CSprite::CalcScreenCoors(*(RwV3d*)&networkPlayerPos, &out, &width, &height, false, false);	
+		float normalizedDistance = distance / MAX_DRAW_NICKNAME_DISTANCE;
+		CSprite::CalcScreenCoors(*(RwV3d*)&networkPlayerPos, &out, &width, &height, false, false);
+
+		float scaleNickName = std::clamp(1.5f - normalizedDistance, 0.65f, 1.0f);
+		float scaleWeaponIcon = std::clamp(1.2f - normalizedDistance, 0.5f, 1.0f);
+		float scaleHealthBar = std::clamp(1.2f - normalizedDistance, 0.7f, 1.0f);
+		float scaleArmourBar = std::clamp(1.2f - normalizedDistance, 0.7f, 1.0f);
 		
 		// draw health bar
-		
 		if (player->m_lOnFoot->health >= 10.0f || GetTickCount() % 500 > 150) // blinking, fps fixed
 		{
-			CSprite2d::DrawBarChart(
-				(float)out.x,
-				(float)out.y,
-				PROPORION_X(100),
-				PROPORION_Y(14),
+			DrawBarChartScale(
+				out.x,
+				out.y,
+				(uint16_t)(PROPORION_X(100.0f * scaleHealthBar)),
+				(uint8_t)(PROPORION_Y(14.0f * scaleHealthBar)),
+				scaleHealthBar,
 				player->m_lOnFoot->health,
-				false,
-				false,
-				true,
-				CRGBA(180, 25, 29, alpha),
-				CRGBA(0, 0, 0, 0)
+				CRGBA(180, 25, 29, alpha)
 			);
 		}
 
 		// draw armour bar
 		if (player->m_lOnFoot->armour > 0.0f)
 		{
-			CSprite2d::DrawBarChart(
-				(float)out.x,
-				(float)out.y - PROPORION_X(12),
-				PROPORION_X(100),
-				PROPORION_Y(14),
+			DrawBarChartScale(
+				out.x,
+				out.y - PROPORION_X(12) * scaleHealthBar,
+				(uint16_t)(PROPORION_X(100) * scaleArmourBar),
+				(uint8_t)(PROPORION_Y(14) * scaleArmourBar),
+				scaleArmourBar,
 				player->m_lOnFoot->armour,
-				false,
-				false,
-				true,
-				CRGBA(225, 225, 225, alpha),
-				CRGBA(0, 0, 0, 0)
+				CRGBA(225, 225, 225, alpha)
 			);
 		}
 		
-		int nicknameOffsetY = player->m_lOnFoot->armour > 0.0f ? 24 : 12;
-
-		DrawNickName((float)out.x + PROPORION_X(5), (float)out.y - PROPORION_Y(nicknameOffsetY), alpha, player->GetName());
-
-		DrawWeaponIcon(player->m_pPed, (int)out.x - PROPORION_X(70), (int)out.y - PROPORION_Y(50), alpha);
+		float nicknameOffsetY = (player->m_lOnFoot->armour > 0.0f ? 12.0f * scaleHealthBar + 12.0f * scaleArmourBar : 12.0f * scaleHealthBar);
+		DrawNickName(
+			out.x + PROPORION_X(5.0f),
+			out.y - PROPORION_Y(nicknameOffsetY),
+			scaleNickName,
+			alpha,
+			player->GetName()
+		);
+		DrawWeaponIcon(
+			player->m_pPed,
+			(int)out.x - PROPORION_X(70.0f) * scaleWeaponIcon,
+			(int)out.y - PROPORION_Y(44.0f) * scaleWeaponIcon,
+			scaleWeaponIcon,
+			alpha
+		);
 	}
 }

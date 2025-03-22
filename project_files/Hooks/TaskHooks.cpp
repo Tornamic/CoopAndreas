@@ -29,8 +29,12 @@ static void __fastcall CTaskComplexEnterCarAsDriver__Ctor_Hook(CTaskComplexEnter
 
 static void __fastcall CTaskComplexLeaveCar__Ctor_Hook(CTaskComplexLeaveCar* This, int, CVehicle* vehicle, int targetDoor, int delayTime, bool sensibleLeaveCar, bool forceGetOut)
 {
-    CPackets::VehicleExit packet{};
-    CNetwork::SendPacket(CPacketsID::VEHICLE_EXIT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    if (CNetwork::m_bConnected)
+    {
+        CPackets::VehicleExit packet{};
+        CNetwork::SendPacket(CPacketsID::VEHICLE_EXIT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    }
+
     plugin::CallMethod<0x63B8C0, CTaskComplexLeaveCar*, CVehicle*, int, int, bool, bool>(This, vehicle, targetDoor, delayTime, sensibleLeaveCar, forceGetOut);
 }
 
@@ -277,7 +281,13 @@ bool __fastcall CTaskSimpleUseGun__SetPedPosition_Hook(CTaskSimpleUseGun* This, 
 
     if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(ped))
     {
-        CWorld::PlayerInFocus = networkPlayer->GetInternalId();
+        int playerNum = networkPlayer->GetInternalId();
+
+        if (playerNum == -1)
+            return orig();
+
+        CWorld::PlayerInFocus = playerNum;
+
         CStatsSync::ApplyNetworkPlayerContext(networkPlayer);
         CAimSync::ApplyNetworkPlayerContext(networkPlayer);
         bool result = orig();

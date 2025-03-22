@@ -1,5 +1,6 @@
 #pragma once
-#define MAX_SERVER_PLAYERS 16
+#define COOPANDREAS_VERSION "0.1.1-alpha"
+#define MAX_SERVER_PLAYERS 4
 #define MAX_SERVER_VEHICLES 200
 #define MAX_SERVER_PEDS 300
 #define MIN_SCREEN_WIDTH 640
@@ -8,9 +9,11 @@
 #define MAX_SCREEN_HEIGHT 1600
 #define MIN_RENDER_FONT_SIZE 12
 #define MAX_RENDER_FONT_SIZE 23
-//#define _DEV
+#define _DEV
 //#define PACKET_DEBUG_MESSAGES
 #define PURECALL (0x82263A)
+
+#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 
 // networking ------------------------------------------------------------------------------
 
@@ -19,6 +22,11 @@
 // windows ---------------------------------------------------------------------------------
 
 #include <Windows.h>
+
+// utf8 ------------------------------------------------------------------------------------
+
+#include <cwctype>
+#include "utf8.h"
 
 // plugin-sdk ------------------------------------------------------------------------------
 
@@ -73,14 +81,18 @@
 #include <CTaskSimpleCarSetPedInAsDriver.h>
 #include <CStats.h>
 #include <CClothes.h>
-
-#include "Tasks/CTaskComplexCarDriveWander.h"
+#include <CCutsceneMgr.h>
+#include <CGame.h>
+#include <CAudioEngine.h>
+#include "game_sa/CTaskComplexCarDriveWander.h"
 
 // classes ---------------------------------------------------------------------------------
 
 using namespace plugin;
 
 #include "CCore.h"
+#include "CUnicode.h"
+#include "CDXFont.h"
 #include "structs.h"
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
@@ -108,4 +120,5 @@ using namespace plugin;
 #include "CDebugPedTasks.h"
 #include "eNetworkEntityType.h"
 #include "CStatsSync.h"
+#include "CMassPacketBuilder.h"
 // -----------------------------------------------------------------------------------------

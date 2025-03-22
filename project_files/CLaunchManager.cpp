@@ -108,7 +108,7 @@ void CLaunchManager::CollectCommandLineArgs()
 
     if (!serial[0] || !id[0] || strcmp(encrypted, serial) != 0)
     {
-        MessageBox(0, "You have entered an incorrect serial key, please check that you have entered it correctly.", "Failed to verify CoopAndreas serial key", MB_OK | MB_ICONERROR);
+        MessageBoxA(0, "You have entered an incorrect serial key, please check that you have entered it correctly.", "Failed to verify CoopAndreas serial key", MB_OK | MB_ICONERROR);
             
         // crash the game
         *(ushort*)0xDEAD = 0xDEAD;

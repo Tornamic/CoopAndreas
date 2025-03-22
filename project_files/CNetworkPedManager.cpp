@@ -67,6 +67,8 @@ void CNetworkPedManager::Update()
 {
 	CNetworkPedManager::RemoveHostedUnused();
 
+	CMassPacketBuilder builder;
+
 	for (CNetworkPed* networkPed : m_pPeds)
 	{
 		if (!networkPed->m_bSyncing)
@@ -85,21 +87,25 @@ void CNetworkPedManager::Update()
 			if (isDriver)
 			{
 				auto pedDriverUpdatePacket = CPacketHandler::PedDriverUpdate__Collect(networkVehicle, networkPed);
-				CNetwork::SendPacket(CPacketsID::PED_DRIVER_UPDATE, pedDriverUpdatePacket, sizeof(*pedDriverUpdatePacket), ENET_PACKET_FLAG_UNSEQUENCED);
+				builder.AddPacket(CPacketsID::PED_DRIVER_UPDATE, pedDriverUpdatePacket, sizeof(*pedDriverUpdatePacket));
 				delete pedDriverUpdatePacket;
 			}
 			else
 			{
-				CPacketHandler::PedPassengerSync__Trigger(networkPed, networkVehicle);
+				auto pedPassengerSyncPacket = CPacketHandler::PedPassengerSync__Collect(networkPed, networkVehicle);
+				builder.AddPacket(CPacketsID::PED_PASSENGER_UPDATE, pedPassengerSyncPacket, sizeof(*pedPassengerSyncPacket));
+				delete pedPassengerSyncPacket;
 			}
 		}
 		else
 		{
 			auto pedOnFootPacket = CPacketHandler::PedOnFoot__Collect(networkPed);
-			CNetwork::SendPacket(CPacketsID::PED_ONFOOT, pedOnFootPacket, sizeof(*pedOnFootPacket), ENET_PACKET_FLAG_UNSEQUENCED);
+			builder.AddPacket(CPacketsID::PED_ONFOOT, pedOnFootPacket, sizeof(*pedOnFootPacket));
 			delete pedOnFootPacket;
 		}
 	}
+
+	builder.Send();
 }
 
 void CNetworkPedManager::Process()

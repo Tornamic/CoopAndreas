@@ -25,7 +25,10 @@ class CVehicle
 		unsigned char m_nSecondaryColor;
 		unsigned char m_damageManager_padding[23] = { 0 };
 		std::vector<int> m_pComponents;
-		
+	
+		void ReassignSyncer(CPlayer* newSyncer);
+		void SetOccupant(uint8_t seatid, CPlayer* player);
+
 		~CVehicle() {}
 };
 

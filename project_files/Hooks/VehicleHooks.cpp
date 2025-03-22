@@ -5,6 +5,7 @@
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
 #include <CCarGenerator.h>
+#include <CPopCycle.h>
 
 void __fastcall CVehicle__ProcessControl_Hook()
 {
@@ -49,18 +50,27 @@ void __fastcall CVehicle__ProcessControl_Hook()
         plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
         plugin::CallMethodDyn<CVehicle*>(call_addr, vehicle);
 
-        CNetworkPed* ped = CNetworkPedManager::GetPed(vehicle->m_pDriver);
-        if (ped && !ped->m_bSyncing)
-        {
-            //memset(&vehicle->m_autoPilot, 0, sizeof CAutoPilot);
-            vehicle->m_fGasPedal = ped->m_fGasPedal;
-            vehicle->m_fBreakPedal = ped->m_fBreakPedal;
-            vehicle->m_fSteerAngle = ped->m_fSteerAngle;
-        }
+        //CNetworkPed* ped = CNetworkPedManager::GetPed(vehicle->m_pDriver);
+        //if (ped && !ped->m_bSyncing)
+        //{
+        //    //memset(&vehicle->m_autoPilot, 0, sizeof CAutoPilot);
+        //    vehicle->m_fGasPedal = ped->m_fGasPedal;
+        //    vehicle->m_fBreakPedal = ped->m_fBreakPedal;
+        //    vehicle->m_fSteerAngle = ped->m_fSteerAngle;
+        //}
         return;
     }
 
-    CWorld::PlayerInFocus = player->GetInternalId();
+    int playerNum = player->GetInternalId();
+
+    if (playerNum == -1)
+    {
+        plugin::CallMethod<0x502280, CAEVehicleAudioEntity*>(&vehicle->m_vehicleAudio);
+        plugin::CallMethodDyn<CVehicle*>(call_addr, vehicle);
+        return;
+    }
+
+    CWorld::PlayerInFocus = playerNum;
 
     CKeySync::ApplyNetworkPlayerContext(player);
     CAimSync::ApplyNetworkPlayerContext(player);
@@ -202,6 +212,81 @@ bool __fastcall CCarGenerator__CheckForBlockage_Hook(CCarGenerator* This, int, i
     return false;
 }
 
+// the simplest method to allow other players 
+// to create traffic vehicles without conflicts 
+void CCarCtrl__GenerateOneRandomCar_Hook()
+{
+    int numCarsInRadius = 0;
+    CVector pos = FindPlayerCoors(0);
+    CPlayerPed* player = FindPlayerPed(0);
+
+    for (auto vehicle : CPools::ms_pVehiclePool)
+    {
+        if ((vehicle->GetPosition() - pos).Magnitude() <= 100.0f)
+        {
+            numCarsInRadius++;
+        }
+    }
+
+    int savedNumRandomCars =        patch::GetInt(0x969094, false);
+    int savedNumLawEnforcerCars =   patch::GetInt(0x969098, false);
+    int savedNumMissionCars =       patch::GetInt(0x96909C, false);
+    int savedNumAmbulancesOnDuty =  patch::GetInt(0x9690A8, false);
+    int savedNumFireTrucksOnDuty =  patch::GetInt(0x9690AC, false);
+    patch::SetInt(0x969094, numCarsInRadius, false);
+    patch::SetInt(0x969098, 0, false);
+    patch::SetInt(0x96909C, 0, false);
+    patch::SetInt(0x9690A8, 0, false);
+    patch::SetInt(0x9690AC, 0, false);
+
+    // also dont generate vehicles when the player is a passenger 
+    // and his vehicle is driven by another player
+
+    if (player->m_pVehicle && player->m_nPedFlags.bInVehicle) // if the local player in a vehicle
+    {
+        // generate cars only if the player is a ...
+        if (player->m_pVehicle->m_pDriver == player // driver
+            || player->m_pVehicle->m_pDriver == nullptr // passenger without driver 
+            || !player->m_pVehicle->m_pDriver->IsPlayer()) // passenger with NPC driver
+        {
+            CCarCtrl::GenerateOneRandomCar(); // call original function
+        }
+    }
+    else // on foot
+    {
+        CCarCtrl::GenerateOneRandomCar(); // call original function
+    }
+
+    patch::SetInt(0x969094, savedNumRandomCars, false);
+    patch::SetInt(0x969098, savedNumLawEnforcerCars, false);
+    patch::SetInt(0x96909C, savedNumMissionCars, false);
+    patch::SetInt(0x9690A8, savedNumAmbulancesOnDuty, false);
+    patch::SetInt(0x9690AC, savedNumFireTrucksOnDuty, false);
+}
+
+void CCarCtrl__UpdateCarAI_Hook(CVehicle* vehicle)
+{
+    if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle))
+    {
+        if (!networkVehicle->m_bSyncing)
+        {
+            if (auto ped = vehicle->m_pDriver)
+            {
+                if (auto networkPed = CNetworkPedManager::GetPed(ped))
+                {
+                    if (!networkPed->m_bSyncing)
+                    {
+                        vehicle->m_fGasPedal = networkPed->m_fGasPedal;
+                        vehicle->m_fBreakPedal = networkPed->m_fBreakPedal;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    plugin::Call<0x41DA30>(vehicle);
+}
+
 void VehicleHooks::InjectHooks()
 {
     patch::RedirectCall(0x53C1CB, CCarCtrl__RemoveDistantCars_Hook);
@@ -245,4 +330,16 @@ void VehicleHooks::InjectHooks()
 
     patch::RedirectCall(0x6F35D6, CCarGenerator__CheckForBlockage_Hook);
     patch::RedirectCall(0x6F35FF, CCarGenerator__CheckForBlockage_Hook);
+
+    patch::RedirectCall(0x434263, CCarCtrl__GenerateOneRandomCar_Hook);
+    patch::RedirectCall(0x434268, CCarCtrl__GenerateOneRandomCar_Hook);
+
+    patch::RedirectCall(0x6B51CD, CCarCtrl__UpdateCarAI_Hook);
+    patch::RedirectCall(0x6B52A2, CCarCtrl__UpdateCarAI_Hook);
+    patch::RedirectCall(0x6BCC64, CCarCtrl__UpdateCarAI_Hook);
+    patch::RedirectCall(0x6BCD7B, CCarCtrl__UpdateCarAI_Hook); 
+    patch::RedirectCall(0x6C1B72, CCarCtrl__UpdateCarAI_Hook);
+    patch::RedirectCall(0x6C1C5B, CCarCtrl__UpdateCarAI_Hook);
+    patch::RedirectCall(0x6F1925, CCarCtrl__UpdateCarAI_Hook);
+    patch::RedirectCall(0x6F1979, CCarCtrl__UpdateCarAI_Hook);
 }

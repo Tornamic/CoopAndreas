@@ -4,7 +4,7 @@
 
 static void __cdecl CPopulation__Update_Hook(bool generate)
 {
-    //if (CLocalPlayer::m_bIsHost)
+    if (CNetwork::m_bConnected)
         CPopulation::Update(generate);
 }
 
@@ -62,7 +62,7 @@ bool __fastcall CWeapon__Fire_Hook(CWeapon* This, int, CPed* owner, CVector* vec
         else if(targetEntity)
             packet.target = targetEntity->GetPosition();
 
-        CNetwork::SendPacket(CPacketsID::PED_SHOT_SYNC, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        CNetwork::SendPacket(CPacketsID::PED_SHOT_SYNC, &packet, sizeof packet);
 
         return This->Fire(owner, vecOrigin, vecEffectPosn, targetEntity, vecTarget, arg_14);
     }
@@ -72,6 +72,32 @@ bool __fastcall CWeapon__Fire_Hook(CWeapon* This, int, CPed* owner, CVector* vec
     }
 
     return false;
+}
+
+void CStreaming__RequestSpecialModel_Hook(int modelid, const char* txdName, int flags)
+{
+    CStreaming::RequestSpecialModel(modelid, txdName, flags);
+
+    if (modelid >= 290 && modelid <= 299)
+    {
+        char* specialModel = PedHooks::ms_aszLoadedSpecialModels[modelid - 290];
+
+        // copy characters and convert to uppercase
+        int i = 0;
+        for (; txdName[i] != '\0' && i < 7; i++)
+        {
+            specialModel[i] = std::toupper(txdName[i]);
+        }
+
+        // null-terminate the string
+        specialModel[i] = '\0';
+
+        // fill remaining elements with null characters
+        for (int j = i + 1; j < 8; j++)
+        {
+            specialModel[j] = '\0';
+        }
+    }
 }
 
 void PedHooks::InjectHooks()
@@ -86,4 +112,6 @@ void PedHooks::InjectHooks()
     patch::RedirectCall(0x628328, CWeapon__Fire_Hook);
     patch::RedirectCall(0x62B109, CWeapon__Fire_Hook);
     patch::RedirectCall(0x62B12A, CWeapon__Fire_Hook);
+
+    patch::RedirectJump(0x40B45E, CStreaming__RequestSpecialModel_Hook);
 }

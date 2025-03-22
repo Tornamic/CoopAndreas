@@ -104,12 +104,15 @@ void PatchStreaming()
     patch::SetUInt(0x5B8E6A, 536870912); // hardcoded value
 
     // patch game freezeing if inactive
-    patch::Nop(0x561AF0, 7);
-    patch::Nop(0x745BC9, 2);
-    patch::SetUChar(0x747FB6, 1);
+    //patch::Nop(0x561AF0, 7);
+    //patch::Nop(0x745BC9, 2);
+    //patch::SetUChar(0x747FB6, 1);
     patch::SetUChar(0x74805A, 1);
     patch::Nop(0x74542B, 8);
     patch::Nop(0x53EA88, 6);
+
+    // do not hide the cursor on the control box of the game window
+    patch::Nop(0x747FE9, 8);
 }
 
 
@@ -148,13 +151,13 @@ void FixCrashes()
     patch::SetUInt(0x74754B, 0x900);
 
     // Don't create a ped group on player creation (Fixes a crash)
-    patch::Nop(0x60D64D, 1);
-    patch::SetUChar(0x60D64E, 0xE9);
+    /*patch::Nop(0x60D64D, 1);
+    patch::SetUChar(0x60D64E, 0xE9);*/
 
     // Disable the call to FxSystem_c::GetCompositeMatrix in CAEFireAudioEntity::UpdateParameters
     // Which was causing a crash. The crash happens if you create 40 or
     // so vehicles that catch fire (upside down) then delete them, repeating a few times.
-    patch::Nop(0x4DCF87, 6);
+    //patch::Nop(0x4DCF87, 6);
 
     // Fixed a crash (race condition triggered when jacking a vehicle)
     patch::Nop(0x6485AC, 6);
@@ -183,8 +186,8 @@ void FixCrashes()
     patch::Nop(0x60F2C4, 25); //CPlayerPed::ProcessControl
 
     // nop ped destroying when player enters interior (remove after separating ped sync)
-    patch::Nop(0x4407B7, 5);
-    patch::Nop(0x61648C, 5);
+    //patch::Nop(0x4407B7, 5);
+    //patch::Nop(0x61648C, 5);
 
     // fix spawning with bottles and cigars
     patch::Nop(0x4217F4, 21);
@@ -231,6 +234,9 @@ void FixCrashes()
 
     // temporary solution to fix jerking of dead vehicles
     patch::SetUChar(0x6C25DB, 0xEB);
+
+    patch::Nop(0x5B1930, 11);
+    patch::Nop(0x5B1942, 5);
 }
 
 #define SCANCODE_BUFFER_SIZE (8 * 20000)

@@ -38,18 +38,24 @@ make # or ninja if you use -G "Ninja" parameter in cmake
 
 ### main.scm
 
-1. Download and install [Sanny Builder 3](https://libertycity.net/files/gta-san-andreas/140792-sanny-builder-v3.3.3.html) (**SB4** compatibility is uncertain)
+1. Download and install [Sanny Builder 4](https://github.com/sannybuilder/dev/releases/tag/v4.0.0)
 
-2. Move all files from the `sdk/Sanny Builder 3/` folder to the SB3 installation folder. This will add CoopAndreas's opcodes to the compiler
+2. Move all files from the `sdk/Sanny Builder 4/` folder to the SB4 installation folder. This will add CoopAndreas's opcodes to the compiler
 
-3. Open `scm/main.txt` with **Sanny Builder 3**, compile it, and then move all output files to the `${GTA_SA_DIR}/CoopAndreas/`
+3. Open `scm/main.txt` with **Sanny Builder 4**, compile it, and then move all output files to the `${GTA_SA_DIR}/CoopAndreas/`
 
 ## Donate
 https://send.monobank.ua/jar/8wPrs73MBa
 
+USDT TRC20: `TNdTwiy9JM2zUe8qgBoMJoAExKf4gs5vGA`
+
+BTC: `bc1qwsl8jv2gyvry75j727qkktr5vgcmqm5e69qt2t`
+
+ETH: `0xE7aE0448A147844208C9D51b0Ac673Bafbe2a35c`
+
 *If you need another way to donate, please dm me on discord: `@tornamic`*
 
-Contact information is current as of December 2024
+Contact information is current as of March 2025
 
 ## TODO list:
 ### Already Done ✓
@@ -100,9 +106,48 @@ Contact information is current as of December 2024
   - [X] tatoo
   - [X] clothes
   - [X] haircut
+- [X] separate ped sync
+- [X] EnEx markers sync
+- [X] mission markers sync
   
 ### Current Tasks
-- [ ] separate ped sync
+- [ ] pickups
+  - [ ] graffities, horseshoes, snapshots, oysters
+  - [ ] static weapons, armours
+  - [ ] static bribes
+  - [ ] drop
+    - [ ] money
+    - [ ] weapons
+- [ ] jetpack sync
+  - [X] flight 
+  - [ ] pickup (related to task above) 
+- [ ] cutscenes
+  - [X] cutscenes
+  - [ ] vote to skip
+- [ ] Players map sync
+  - [ ] Areas aka GangZones
+  - [X] Mission icons
+  - [X] Player map pin
+    - [ ] fix proportion
+  - [X] Player mark (waypoint)
+- [ ] wanted level
+- [ ] stats sync
+  - [X] fat
+  - [X] muscle
+  - [X] weapon skills
+  - [X] fight styles
+  - [ ] sync money
+  - [ ] breath level bar
+  - [X] stamina sync
+  - [ ] max hp sync
+- [ ] fire sync
+- [ ] cheat code sync
+- [ ] anim sync
+  - [ ] sprunk drinking
+  - [ ] fast food eating
+  - [ ] idle anims
+  - [ ] funny TAB+NUM4 (or NUM6) anim sync (did you know about this?)
+- [ ] gang groups sync
 - [ ] stream in/out players, peds, vehicles, etc.
 - [ ] vehicle sync
   - [ ] force hydraulics sync
@@ -117,26 +162,10 @@ Contact information is current as of December 2024
   - [ ] widescreen
   - [X] fast load
 - [ ] Fix models loading (green polygon)  --- related to stream it/out
-- [ ] Players map sync
-  - [ ] Areas aka GangZones
-  - [ ] Mission icons
-  - [X] Player map pin
-    - [ ] fix proportion
-  - [X] Player mark (waypoint)
 - [ ] smooth interpolation
   - [ ] move
-  - [X] rotation
+  - [ ] rotation
   - [X] weapon aim interpolation
-- [ ] wanted level
-- [ ] stats sync
-  - [X] fat
-  - [X] muscle
-  - [X] weapon skills
-  - [X] fight styles
-  - [ ] sync money
-  - [ ] breath level bar
-  - [X] stamina sync
-  - [ ] max hp sync
 - [ ] npc sync
   - [X] pos, rot, speed
   - [X] weapons
@@ -144,55 +173,20 @@ Contact information is current as of December 2024
     - [ ] driver
       - [X] position velocity rotation  
       - [X] gas/break lights
-      - [ ] wheel movement
+      - [X] wheel movement
       - [ ] horn
       - [ ] siren
-      - [ ] current path, target entity, mission
+      - [X] current path, target entity, mission
     - [X] passenger
   - [ ] aim
   - [ ] shots
   - [ ] task sync (good luck, warrior!)
-  - [ ] radar icon?
-  - [ ] speech sync (if not synced by tasks)
-- [ ] fire sync
-- [ ] cutscenes
-  - [ ] objects
-  - [ ] effects
-  - [ ] peds
-  - [ ] camera
-- [ ] cheat code sync
-- [ ] pickups
-  - [ ] graffities, horseshoes, snapshots, oysters
-  - [ ] static weapons, armours
-  - [ ] static bribes
-  - [ ] drop
-    - [ ] money
-    - [ ] weapons
-- [ ] jetpack sync
-  - [X] flight 
-  - [ ] pickup (related to task above) 
-- [ ] anim sync
-  - [ ] sprunk drinking
-  - [ ] fast food eating
-  - [ ] idle anims
-  - [ ] funny TAB+NUM4 (or NUM6) anim sync (did you know about this?)
-- [ ] gang groups sync
+  - [X] radar icon?
+  - [ ] speech sync
 - [ ] player voice commands
 - [ ] chat reactions (see LD_CHAT.txd)
-- [ ] activities
-  - [ ] pool 
-  - [ ] basketball
-  - [ ] casino sync (betting between players)
-    - [ ] slot machines
-    - [ ] roulette
-    - [ ] horse betting
-  - [ ] gym
-    - [ ] exercises
-    - [ ] fighting between players
-  - [ ] dancing at parties
 - [ ] gand wars sync
 - [ ] parachute jump sync
-- [ ] co-op vigilante sub-mission completing
 - [ ] stunt
   - [ ] collecting
   - [ ] for-player slow motion
@@ -209,3 +203,161 @@ Contact information is current as of December 2024
 - [X] save configs
 ### Current Tasks
 - [ ] start/control server directly from launcher
+
+## TODO Missions
+### Already Done ✓
+### Current Tasks
+- [X] Big Smoke
+- [ ] Ryder
+- [ ] Tagging Up Turf
+- [ ] Cleaning The Hood
+- [ ] Drive-Thru
+- [ ] Nines And AK's
+- [ ] Drive-By
+- [ ] Sweet's Girl
+- [ ] Cesar Vialpando
+- [ ] OG Loc
+- [ ] Running Dog
+- [ ] Wrong Side Of The Tracks
+- [ ] Just Business
+- [ ] Home Invasion
+- [ ] Catalyst
+- [ ] Robbing Uncle Sam
+- [ ] Life's A Beach
+- [ ] Madd Dogg's Rhymes
+- [ ] Management Issues
+- [ ] House Party
+- [ ] High Stakes, Low Rider
+- [ ] Burning Desire
+- [ ] Gray Imports
+- [ ] Doberman
+- [ ] Los Sepulcros
+- [ ] Reuniting The Families
+- [ ] The Green Sabre
+- [ ] Badlands
+- [ ] Tanker Commander
+- [ ] Body Harvest
+- [ ] Local Liquor Store
+- [ ] Against All Odds
+- [ ] Small Town Bank
+- [ ] Wu Zi Mu
+- [ ] Farewell, My Love...
+- [ ] Are You Going To San Fierro?
+- [ ] Wear Flowers In Your Hair
+- [ ] 555 WE TIP
+- [ ] Deconstruction
+- [ ] Air Raid
+- [ ] Supply Lines...
+- [ ] New Model Army
+- [ ] Photo Opportunity
+- [ ] Jizzy
+- [ ] T-Bone Mendez
+- [ ] Mike Toreno
+- [ ] Outrider
+- [ ] Snail Trail
+- [ ] Ice Cold Killa
+- [ ] Pier 69
+- [ ] Toreno's Last Flight
+- [ ] Mountain Cloud Boys
+- [ ] Ran Fa Li
+- [ ] Lure
+- [ ] Amphibious Assault
+- [ ] The Da Nang Thang
+- [ ] Yay Ka-Boom-Boom
+- [ ] Zeroing In
+- [ ] Test Drive
+- [ ] Customs Fast Track
+- [ ] Puncture Wounds
+- [ ] Monster
+- [ ] Highjack
+- [ ] Interdiction
+- [ ] Verdant Meadows
+- [ ] N.O.E.
+- [ ] Stowaway
+- [ ] Black Project
+- [ ] Green Goo
+- [ ] Fender Ketchup
+- [ ] Explosive Situation
+- [ ] You've Had Your Chips
+- [ ] Don Peyote
+- [ ] Architectural Espionage
+- [ ] Key To Her Heart
+- [ ] Dam And Blast
+- [ ] Cop Wheels
+- [ ] Up, Up And Away!
+- [ ] Intensive Care
+- [ ] The Meat Business
+- [ ] Fish In A Barrel
+- [ ] Misappropriation
+- [ ] Madd Dogg
+- [ ] Freefall
+- [ ] High Noon
+- [ ] Saint Mark's Bistro
+- [ ] A Home In The Hills
+- [ ] Vertical Bird
+- [ ] Home Coming
+- [ ] Beat Down On B Dup
+- [ ] Grove 4 Life
+- [ ] Cut Throat Business
+- [ ] Riot
+- [ ] Los Desperados
+- [ ] End Of The Line
+
+## TODO Other Scripts
+### Already done ✓
+### Current Tasks
+- [ ] Property purchase sync
+- [ ] Submissions
+  - [ ] Taxi driver
+  - [ ] Firefighter
+  - [ ] Vigilante
+  - [ ] Paramedic
+  - [ ] Pimp
+  - [ ] Freight Train Missions
+- [ ] Hiden races
+  - [ ] BMX
+  - [ ] NRG-500
+  - [ ] The Chiliad Challenge 
+- [ ] Stadions
+  - [ ] 8-Track
+  - [ ] Blood Bowl
+  - [ ] Dirt Track
+  - [ ] Kick Start
+- [ ] Ammu-nation challenge
+- [ ] Schools
+  - [ ] Driving school
+  - [ ] Flight school
+  - [ ] Bike school
+  - [ ] Boat school
+- [ ] Asset Missions
+  - [ ] Trucker (8 missions)
+  - [ ] Valet (5 missions)
+  - [ ] Career (7 missions)
+- [ ] Courier
+  - [ ] Los Santos - Roboi's Food Mart
+  - [ ] San Fierro - Hippy Shopper
+  - [ ] Las Venturas - Burger Shot
+- [ ] Street Racing (22)
+  - [ ] Little Loop
+  - [ ] Backroad Wanderer
+  - [ ] City Circuit
+  - [ ] Vinewood
+  - [ ] Freeway
+  - [ ] Into The Country
+  - [ ] Dirtbike Danger
+  - [ ] Bandito Country
+  - [ ] Go-Go Karting
+  - [ ] San Fierro Fastlane
+  - [ ] San Fierro Hills
+  - [ ] Country Endurance
+  - [ ] SF To LV
+  - [ ] Dam Rider
+  - [ ] Desert Tricks
+  - [ ] LV Ringroad
+  - [ ] World War Ace
+  - [ ] Barnstorming
+  - [ ] Win Military Service
+  - [ ] Chopper Checkpoint
+  - [ ] Whirly Bird Waypoint
+  - [ ] Heli Hell
+- [ ] Import / Export

@@ -1,10 +1,11 @@
 #include "stdafx.h"
+#include "../shared/semver.h"
 
 ENetHost* CNetwork::m_pClient = nullptr;
 ENetPeer* CNetwork::m_pPeer = nullptr;
 bool CNetwork::m_bConnected = false;
 
-std::vector<CPacketListener*> CNetwork::m_packetListeners;
+std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
 
 char CNetwork::m_IpAddress[128 + 1];
 unsigned short CNetwork::m_nPort;
@@ -14,11 +15,8 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 	// init listeners
 	CNetwork::InitListeners();
 
-	// wait some time
-	Sleep(2000);
-
 	if (enet_initialize() != 0) { // try to init enet
-		std::cout << "Fail to enet_initialize" << std::endl;
+		CChat::AddMessage("{cecedb}[Network] {ff0000}Failed to enet_initialize.");
 		return false;
 	}
 	else
@@ -35,23 +33,29 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 	enet_address_set_host(&address, m_IpAddress); // set address ip
 	address.port = m_nPort; // set address port
 
-	m_pPeer = enet_host_connect(m_pClient, &address, 2, 0); // connect to the server
+	uint32_t packedVersion = semver_parse(COOPANDREAS_VERSION, nullptr);
+	m_pPeer = enet_host_connect(m_pClient, &address, 2, packedVersion); // connect to the server
 	if (m_pPeer == NULL) { // if not connected
-		std::cout << "Not Connected" << std::endl;
+		CChat::AddMessage("{cecedb}[Network] {ff0000}m_pPeer == NULL.");
+		//std::cout << "Not Connected" << std::endl;
 		return false;
 	}
 
+	CChat::AddMessage("{cecedb}[Network] Connecting to the server...");
 	ENetEvent event;
-	if (enet_host_service(m_pClient, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
+	while (!m_bConnected)
 	{
-		m_bConnected = true;
-		std::cout << "Connection succeeded." << std::endl;
-		CPatch::RevertTemporaryPatches();
-	}
-	else
-	{
-		enet_peer_reset(m_pPeer);
-		std::cout << "Connection failed." << std::endl;
+		if (enet_host_service(m_pClient, &event, 2000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
+		{
+			m_bConnected = true;
+			CChat::AddMessage("{cecedb}[Network] {00ff00}Successfully {cecedb}connected to the server.");
+			CPatch::RevertTemporaryPatches();
+		}
+		else
+		{
+			//enet_peer_reset(m_pPeer);
+			CChat::AddMessage("{cecedb}[Network] Failed to connect. Retrying...");
+		}
 	}
 
 	
@@ -60,25 +64,32 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 
 void CNetwork::SendPacket(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
 {
-	// 2 == sizeof(unsigned short)
-	
+	if (!CNetwork::m_bConnected)
+	{
+		static int notSentPacketCount;
+		std::cout << "Trying to send a packet " << std::to_string(id) << " while not connected " << std::to_string(notSentPacketCount++) << std::endl;
+		return;
+	}
+
 	// packet size `id + data`
 	size_t packetSize = 2 + dataSize;
 
-	// create buffer
-	char* packetData = new char[packetSize];
+	// create buffer using vector
+	std::vector<char> packetData(packetSize);
 
 	// copy id
-	memcpy(packetData, &id, 2);
+	memcpy(packetData.data(), &id, 2);
 
 	// copy data
-	memcpy(packetData + 2, data, dataSize);
+	memcpy(packetData.data() + 2, data, dataSize);
 
 	// create packet
-	ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
+	ENetPacket* packet = enet_packet_create(packetData.data(), packetSize, flag);
 
 	// send packet
 	enet_peer_send(m_pPeer, 0, packet);
+
+	ms_nBytesSentThisSecondCounter += dataSize;
 }
 
 void CNetwork::Disconnect()
@@ -123,6 +134,22 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::PLAYER_STATS, CPacketHandler::PlayerStats__Handle);
 	CNetwork::AddListener(CPacketsID::REBUILD_PLAYER, CPacketHandler::RebuildPlayer__Handle);
 	CNetwork::AddListener(CPacketsID::RESPAWN_PLAYER, CPacketHandler::RespawnPlayer__Handle);
+	CNetwork::AddListener(CPacketsID::ASSIGN_VEHICLE, CPacketHandler::AssignVehicleSyncer__Handle);
+	CNetwork::AddListener(CPacketsID::MASS_PACKET_SEQUENCE, CPacketHandler::MassPacketSequence__Handle);
+	//CNetwork::AddListener(CPacketsID::START_CUTSCENE, CPacketHandler::StartCutscene__Handle);
+	//CNetwork::AddListener(CPacketsID::SKIP_CUTSCENE, CPacketHandler::SkipCutscene__Handle);
+	CNetwork::AddListener(CPacketsID::OPCODE_SYNC, CPacketHandler::OpCodeSync__Handle);
+	CNetwork::AddListener(CPacketsID::ON_MISSION_FLAG_SYNC, CPacketHandler::OnMissionFlagSync__Handle);
+	CNetwork::AddListener(CPacketsID::UPDATE_ENTITY_BLIP, CPacketHandler::UpdateEntityBlip__Handle);
+	CNetwork::AddListener(CPacketsID::REMOVE_ENTITY_BLIP, CPacketHandler::RemoveEntityBlip__Handle);
+	CNetwork::AddListener(CPacketsID::ADD_MESSAGE_GXT, CPacketHandler::AddMessageGXT__Handle);
+	CNetwork::AddListener(CPacketsID::REMOVE_MESSAGE_GXT, CPacketHandler::RemoveMessageGXT__Handle);
+	CNetwork::AddListener(CPacketsID::CLEAR_ENTITY_BLIPS, CPacketHandler::ClearEntityBlips__Handle);
+	CNetwork::AddListener(CPacketsID::PLAY_MISSION_AUDIO, CPacketHandler::PlayMissionAudio__Handle);
+	CNetwork::AddListener(CPacketsID::UPDATE_CHECKPOINT, CPacketHandler::UpdateCheckpoint__Handle);
+	CNetwork::AddListener(CPacketsID::REMOVE_CHECKPOINT, CPacketHandler::RemoveCheckpoint__Handle);
+	CNetwork::AddListener(CPacketsID::ENEX_SYNC, CPacketHandler::EnExSync__Handle);
+	CNetwork::AddListener(CPacketsID::CREATE_STATIC_BLIP, CPacketHandler::CreateMissionMarker__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)
@@ -136,18 +163,15 @@ void CNetwork::HandlePacketReceive(ENetEvent& event)
 	memcpy(data, event.packet->data + 2, event.packet->dataLength - 2);
 
 	// call listener's callback by id
-	for (size_t i = 0; i < m_packetListeners.size(); i++)
+	auto it = m_packetListeners.find(id);
+	if (it != m_packetListeners.end())
 	{
-		if (m_packetListeners[i]->m_iPacketID == id)
-		{
-			m_packetListeners[i]->m_callback(data, event.packet->dataLength - 2);
-		}
+		it->second->m_callback(data, (int)event.packet->dataLength - 2);
 	}
 }
 
 void CNetwork::AddListener(unsigned short id, void(*callback)(void*, int))
 {
 	CPacketListener* listener = new CPacketListener(id, callback);
-	m_packetListeners.push_back(listener);
+	m_packetListeners.insert({ id, listener });
 }
-

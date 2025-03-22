@@ -84,16 +84,6 @@ void CNetworkPlayer::DestroyPed()
 			call[ebx] // call destructor
 		}
 	}
-	else
-	{
-		// destroy CPlaceable, if the entity is not valid (vtable points to CPlaceable vt)
-		__asm
-		{
-			mov ecx, pedPtr
-			mov ebx, [ecx] // vtable addr
-			call[ebx] // call destructor
-		}
-	}
 }
 
 void CNetworkPlayer::Respawn()
@@ -155,22 +145,42 @@ char CNetworkPlayer::GetWeaponSkill(eWeaponType weaponType)
 	return CWeaponInfo::GetWeaponInfo(weaponType, 1)->m_nReqStatLevel <= weaponStat;
 }
 
-void CNetworkPlayer::RemoveFromVehicle(CVehicle* vehicle)
+void CNetworkPlayer::WarpIntoVehicleDriver(CVehicle* vehicle)
 {
 	assert(m_pPed != nullptr);
 
-	m_pPed->m_pIntelligence->m_TaskMgr.SetTask(nullptr, TASK_PRIMARY_PRIMARY, false);
+	if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
+	{
+		return;
+	}
 
-	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 2; // 2 - normal
+	if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
+	{
+		RemoveFromVehicle(m_pPed->m_pVehicle);
+	}
 
-	auto task = CTaskSimpleCarSetPedOut(vehicle, 1, false);
-	task.m_bWarpingOutOfCar = true;
+	m_pPed->m_pIntelligence->FlushImmediately(false);
+
+	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
+
+	auto task = CTaskSimpleCarSetPedInAsDriver(vehicle, nullptr);
+	task.m_bWarpingInToCar = true;
 	task.ProcessPed(m_pPed);
 }
 
 void CNetworkPlayer::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 {
 	assert(m_pPed != nullptr);
+
+	if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
+	{
+		return;
+	}
+
+	if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
+	{
+		RemoveFromVehicle(m_pPed->m_pVehicle);
+	}
 
 	m_pPed->m_pIntelligence->FlushImmediately(false);
 
@@ -186,6 +196,16 @@ void CNetworkPlayer::EnterVehiclePassenger(CVehicle* vehicle, int seatid)
 {
 	assert(m_pPed != nullptr);
 
+	if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
+	{
+		return;
+	}
+
+	if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
+	{
+		RemoveFromVehicle(m_pPed->m_pVehicle);
+	}
+
 	m_pPed->m_pIntelligence->FlushImmediately(false);
 
 	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
@@ -193,4 +213,32 @@ void CNetworkPlayer::EnterVehiclePassenger(CVehicle* vehicle, int seatid)
 	int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle, seatid);
 	auto task = new CTaskComplexEnterCarAsPassenger(vehicle, doorId, false);
 	m_pPed->m_pIntelligence->m_TaskMgr.SetTask(task, 3, false);
+}
+
+void CNetworkPlayer::RemoveFromVehicle(CVehicle* vehicle)
+{
+	assert(m_pPed != nullptr);
+
+	if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
+	{
+		return;
+	}
+
+	m_pPed->m_pIntelligence->m_TaskMgr.SetTask(nullptr, TASK_PRIMARY_PRIMARY, false);
+
+	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 2; // 2 - normal
+
+	auto task = CTaskSimpleCarSetPedOut(vehicle, 1, false);
+	task.m_bWarpingOutOfCar = true;
+	task.ProcessPed(m_pPed);
+}
+
+void CNetworkPlayer::UpdateHeading(float heading)
+{
+	m_pPed->m_fAimingRotation = heading;
+
+	if (fabs(m_pPed->m_fCurrentRotation - heading) > M_PI_2)
+	{
+		m_pPed->m_fCurrentRotation = heading;
+	}
 }

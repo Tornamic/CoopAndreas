@@ -2,6 +2,7 @@
 #include "PlayerHooks.h"
 #include "CKeySync.h"
 #include "CAimSync.h"
+#include <game_sa/CPedDamageResponseInfo.h>
 
 static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 {
@@ -18,21 +19,35 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(This);
 
     if (player == nullptr)
+    {
+        plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
         return;
+    }
 
-    CWorld::PlayerInFocus = player->GetInternalId();
+    int playerNum = player->GetInternalId();
+
+    if (playerNum == -1)
+    {
+        plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
+        return;
+    }
+
+    CWorld::PlayerInFocus = playerNum;
 
     CKeySync::ApplyNetworkPlayerContext(player);
     CAimSync::ApplyNetworkPlayerContext(player);
     CStatsSync::ApplyNetworkPlayerContext(player);
 
+    if (CPad::GetPad(0)->NewState.RightShoulder1) // is aiming
+    {
+        player->m_pPed->m_fAimingRotation =
+            player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
+    }
+
     player->m_pPed->m_fHealth = player->m_lOnFoot->health;
     player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
 
     player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
-
-    player->m_pPed->m_fAimingRotation = 
-        player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
 
     plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
 
@@ -83,7 +98,7 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
         packet->colPoint = *colPoint;
         packet->incrementalHit = incrementalHit;
 
-        CNetwork::SendPacket(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet, ENET_PACKET_FLAG_UNSEQUENCED);
+        CNetwork::SendPacket(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet);
 
         weapon->DoBulletImpact(owner, victim, startPoint, endPoint, colPoint, incrementalHit);
 
@@ -143,8 +158,80 @@ void CReferences__RemoveReferencesToPlayer_Hook()
 {
     plugin::Call<0x571AD0>(); // CReferences::RemoveReferencesToPlayer();
     
-    CPackets::RespawnPlayer packet{};
-    CNetwork::SendPacket(CPacketsID::RESPAWN_PLAYER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    if (CNetwork::m_bConnected)
+    {
+        CPackets::RespawnPlayer packet{};
+        CNetwork::SendPacket(CPacketsID::RESPAWN_PLAYER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    }
+}
+
+bool __fastcall CWeapon__TakePhotograph_Hook(CWeapon* This, int, CEntity* entity, CVector* point)
+{
+    if (entity == FindPlayerPed(0))
+    {
+        return This->TakePhotograph(entity, point);
+    }
+
+    return false;
+}
+
+void __fastcall CTaskSimpleJetPack__DropJetPack_Hook(CTaskSimpleJetPack* This, int, CPed* ped)
+{
+    if (ped != FindPlayerPed(0) && ped->IsPlayer())
+    {
+        // dont create a pickup if the player is network
+        This->m_bIsFinished = true;
+    }
+
+    plugin::CallMethod<0x67B660, CTaskSimpleJetPack*>(This, ped); // CTaskSimpleJetPack::DropJetPack
+}
+
+void __fastcall CPedDamageResponseCalculator__ComputeWillKillPed_Hook(uintptr_t This, int, CPed* ped, CPedDamageResponseInfo* dmgResponse, bool speak)
+{
+    plugin::CallMethod<0x4B3210, uintptr_t>(This, ped, dmgResponse, speak);
+
+    if (ped == FindPlayerPed(0))
+    {
+        return;
+    }
+
+    if (ped->m_nPedType > 3) // peds
+    {
+        if (auto networkPed = CNetworkPedManager::GetPed(ped))
+        {
+            if (!networkPed->m_bSyncing)
+            {
+                if (networkPed->m_fHealth >= 1.0f)
+                {
+                    ped->m_fHealth = networkPed->m_fHealth;
+                    dmgResponse->m_bHealthZero = false;
+                    dmgResponse->m_bForceDeath = false;
+                    dmgResponse->m_fDamageHealth = 0.0f;
+                    dmgResponse->m_fDamageArmor = 0.0f;
+                }
+            }
+        }
+
+        return;
+    }
+
+    // players
+    if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(ped))
+    {
+        if (networkPlayer->m_lOnFoot->health >= 1.0f)
+        {
+            ped->m_fHealth = networkPlayer->m_lOnFoot->health;
+            dmgResponse->m_bHealthZero = false;
+            dmgResponse->m_bForceDeath = false;
+            dmgResponse->m_fDamageHealth = 0.0f;
+            dmgResponse->m_fDamageArmor = 0.0f;
+        }
+    }
+}
+
+bool __fastcall CPlayerPed__CanPlayerStartMission_Hook(CPlayerPed* This, int)
+{
+    return This->CanPlayerStartMission() && CLocalPlayer::m_bIsHost;
 }
 
 void PlayerHooks::InjectHooks()
@@ -166,4 +253,14 @@ void PlayerHooks::InjectHooks()
 
     // called when the player respawns after being busted or wasted
     patch::RedirectCall(0x443082, CReferences__RemoveReferencesToPlayer_Hook);
+
+    patch::RedirectCall(0x74278B, CWeapon__TakePhotograph_Hook);
+
+    patch::RedirectCall(0x5707AE, CTaskSimpleJetPack__DropJetPack_Hook);
+    patch::RedirectCall(0x67E840, CTaskSimpleJetPack__DropJetPack_Hook);
+
+    patch::RedirectCall(0x4B5B27, CPedDamageResponseCalculator__ComputeWillKillPed_Hook);
+
+    patch::RedirectCall(0x4577E6, CPlayerPed__CanPlayerStartMission_Hook);
+    patch::RedirectCall(0x4895B0, CPlayerPed__CanPlayerStartMission_Hook);
 }

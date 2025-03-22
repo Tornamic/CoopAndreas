@@ -3,10 +3,15 @@
 #include <CTaskSimpleCarSetPedInAsPassenger.h>
 #include <CCarEnterExit.h>
 #include <CTaskSimpleCarSetPedOut.h>
+#include <Hooks/PedHooks.h>
 
-CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy)
+CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy, char specialModelName[])
 {
-    CStreaming::RequestModel(modelId, 0);
+    if (modelId >= 290 && modelId <= 299)
+        CStreaming::RequestSpecialModel(modelId, specialModelName, 0);
+    else
+        CStreaming::RequestModel(modelId, 0);
+
     CStreaming::LoadAllRequestedModels(false);
 
     if (pedType == PED_TYPE_COP)
@@ -74,8 +79,15 @@ CNetworkPed::~CNetworkPed()
     }
     else
     {
+
         if (m_pPed && m_pPed->m_matrix->m_pOwner)
         {
+            if (m_nBlipHandle != -1)
+            {
+                CRadar::ClearBlipForEntity(eBlipType::BLIP_CHAR, CPools::GetPedRef(m_pPed));
+                //CChat::AddMessage("REMOVE THE FUCKING BLIP");
+            }
+
             if (m_pPed->m_nPedFlags.bInVehicle)
             {
                 plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
@@ -108,6 +120,13 @@ CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
     packet.pos = ped->m_matrix->pos;
     packet.pedType = ped->m_nPedType;
     packet.createdBy = ped->m_nCreatedBy;
+
+    if (packet.modelId >= 290 && packet.modelId <= 299)
+    {
+        strcpy_s(packet.specialModelName, PedHooks::ms_aszLoadedSpecialModels[packet.modelId - 290]);
+        packet.specialModelName[7] = '\0';
+    }
+
     CNetwork::SendPacket(CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 
     return networkPed;
@@ -116,6 +135,16 @@ CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
 void CNetworkPed::WarpIntoVehicleDriver(CVehicle* vehicle)
 {
     assert(m_pPed != nullptr);
+
+    if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
+    {
+        return;
+    }
+
+    if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
+    {
+        RemoveFromVehicle(m_pPed->m_pVehicle);
+    }
 
     m_pPed->m_pIntelligence->FlushImmediately(false);
 
@@ -133,6 +162,16 @@ void CNetworkPed::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 {
     assert(m_pPed != nullptr);
 
+    if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
+    {
+        return;
+    }
+
+    if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
+    {
+        RemoveFromVehicle(m_pPed->m_pVehicle);
+    }
+
     m_pPed->m_pIntelligence->FlushImmediately(false);
 
     if (!m_bSyncing)
@@ -149,6 +188,11 @@ void CNetworkPed::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 void CNetworkPed::RemoveFromVehicle(CVehicle* vehicle)
 {
     assert(m_pPed != nullptr);
+
+    if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
+    {
+        return;
+    }
 
     m_pPed->m_pIntelligence->m_TaskMgr.SetTask(nullptr, TASK_PRIMARY_PRIMARY, false);
 

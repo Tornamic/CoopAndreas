@@ -2,9 +2,11 @@
 
 #include "stdafx.h"
 
+enum eNetworkEntityType : uint8_t;
+
 enum CPacketsID : unsigned short
 {
-	CHECK_VERSION = 0, // must be always 0! TODO
+	CHECK_VERSION = 0, // reserved but not used, see enet_host_connect
 	PLAYER_CONNECTED,
 	PLAYER_DISCONNECTED,
 	PLAYER_ONFOOT,
@@ -40,16 +42,95 @@ enum CPacketsID : unsigned short
 	PED_CONFIRM,
 	PLAYER_STATS,
 	REBUILD_PLAYER,
-	RESPAWN_PLAYER
+	RESPAWN_PLAYER,
+	ASSIGN_VEHICLE,
+	MASS_PACKET_SEQUENCE,
+	START_CUTSCENE,
+	SKIP_CUTSCENE,
+	OPCODE_SYNC,
+	ON_MISSION_FLAG_SYNC,
+	UPDATE_ENTITY_BLIP,
+	REMOVE_ENTITY_BLIP,
+	ADD_MESSAGE_GXT,
+	REMOVE_MESSAGE_GXT,
+	CLEAR_ENTITY_BLIPS,
+	PLAY_MISSION_AUDIO,
+	UPDATE_CHECKPOINT,
+	REMOVE_CHECKPOINT,
+	ENEX_SYNC,
+	CREATE_STATIC_BLIP,
+	PACKET_ID_MAX
 };
 
 class CPackets
 {
 public:
+	static int GetPacketSize(CPacketsID id)
+	{
+		static std::array<int, PACKET_ID_MAX> m_nPacketSize =
+		{
+			0, // CHECK_VERSION
+			sizeof(PlayerConnected), // PLAYER_CONNECTED
+			sizeof(PlayerDisconnected), // PLAYER_DISCONNECTED
+			sizeof(PlayerOnFoot), // PLAYER_ONFOOT
+			sizeof(PlayerBulletShot), // PLAYER_BULLET_SHOT
+			sizeof(PlayerHandshake), // PLAYER_HANDSHAKE
+			sizeof(PlayerPlaceWaypoint), // PLAYER_PLACE_WAYPOINT
+			sizeof(PlayerGetName), // PLAYER_GET_NAME
+			sizeof(VehicleSpawn), // VEHICLE_SPAWN
+			sizeof(PlayerSetHost), // PLAYER_SET_HOST
+			sizeof(AddExplosion), // ADD_EXPLOSION
+			sizeof(VehicleRemove), // VEHICLE_REMOVE
+			sizeof(VehicleIdleUpdate), // VEHICLE_IDLE_UPDATE
+			sizeof(VehicleDriverUpdate), // VEHICLE_DRIVER_UPDATE
+			sizeof(VehicleEnter), // VEHICLE_ENTER
+			sizeof(VehicleExit), // VEHICLE_EXIT
+			sizeof(VehicleDamage), // VEHICLE_DAMAGE
+			sizeof(VehicleComponentAdd), // VEHICLE_COMPONENT_ADD
+			sizeof(VehicleComponentRemove), // VEHICLE_COMPONENT_REMOVE
+			sizeof(VehiclePassengerUpdate), // VEHICLE_PASSENGER_UPDATE
+			sizeof(PlayerChatMessage), // PLAYER_CHAT_MESSAGE
+			sizeof(PedSpawn), // PED_SPAWN
+			sizeof(PedRemove), // PED_REMOVE
+			sizeof(PedOnFoot), // PED_ONFOOT
+			sizeof(GameWeatherTime), // GAME_WEATHER_TIME
+			0, // PED_ADD_TASK
+			sizeof(PedRemoveTask), // PED_REMOVE_TASK
+			sizeof(PlayerKeySync), // PLAYER_KEY_SYNC
+			sizeof(PedDriverUpdate), // PED_DRIVER_UPDATE
+			sizeof(PedShotSync), // PED_SHOT_SYNC
+			sizeof(PedPassengerSync), // PED_PASSENGER_UPDATE
+			sizeof(PlayerAimSync), // PLAYER_AIM_SYNC
+			sizeof(VehicleConfirm), // VEHICLE_CONFIRM
+			sizeof(PedConfirm), // PED_CONFIRM
+			sizeof(PlayerStats), // PLAYER_STATS
+			sizeof(RebuildPlayer), // REBUILD_PLAYER
+			sizeof(RespawnPlayer), // RESPAWN_PLAYER
+			sizeof(AssignVehicleSyncer), // ASSIGN_VEHICLE
+			0, // MASS_PACKET_SEQUENCE
+			sizeof(StartCutscene), // START_CUTSCENE,
+			sizeof(SkipCutscene), // SKIP_CUTSCENE,
+			0, // OPCODE_SYNC,
+			sizeof(OnMissionFlagSync), // ON_MISSION_FLAG_SYNC,
+			sizeof(UpdateEntityBlip), // UPDATE_ENTITY_BLIP,
+			sizeof(RemoveEntityBlip), // REMOVE_ENTITY_BLIP,
+			sizeof(AddMessageGXT), // ADD_MESSAGE_GXT,
+			sizeof(RemoveMessageGXT), // REMOVE_MESSAGE_GXT,
+			sizeof(ClearEntityBlips), // CLEAR_ENTITY_BLIPS,
+			sizeof(PlayMissionAudio), // PLAY_MISSION_AUDIO,
+			sizeof(UpdateCheckpoint), // UPDATE_CHECKPOINT,
+			sizeof(RemoveCheckpoint), // REMOVE_CHECKPOINT,
+			0, // ENEX_SYNC,
+			sizeof(CreateStaticBlip), // CREATE_STATIC_BLIP,
+		};
+
+		return m_nPacketSize[id];
+	}
 
 	struct PlayerConnected
 	{
 		int id;
+		bool isAlreadyConnected; // prevents spam in the chat when connecting by distinguishing already connected players from newly joined ones
 	};
 
 	struct PlayerDisconnected
@@ -116,8 +197,6 @@ public:
 		bool usesSound;
 		float cameraShake;
 		bool isVisible;
-		int entityid;
-		unsigned char entityType;
 	};
 
 	struct VehicleSpawn
@@ -223,7 +302,7 @@ public:
 	struct PlayerChatMessage
 	{
 		int playerid;
-		char message[CChat::MAX_MESSAGE_SIZE+1];
+		wchar_t message[CChat::MAX_MESSAGE_SIZE+1];
 	};
 
 	struct PedSpawn
@@ -234,6 +313,7 @@ public:
 		unsigned char pedType;
 		CVector pos;
 		unsigned char createdBy;
+		char specialModelName[8];
 	};
 
 	struct PedRemove
@@ -305,8 +385,21 @@ public:
 		float health;
 		char paintjob;
 		float bikeLean;
-		float planeGearState;
+		union
+		{
+			float controlPedaling;
+			float planeGearState;
+		};
 		unsigned char locked;
+		float gasPedal;
+		float breakPedal;
+		uint8_t drivingStyle;
+		uint8_t carMission;
+		int8_t cruiseSpeed;
+		uint8_t ctrlFlags;
+		uint8_t movementFlags;
+		int targetVehicleId;
+		CVector destinationCoors;
 	};
 
 	struct PedShotSync
@@ -373,5 +466,92 @@ public:
 	struct RespawnPlayer
 	{
 		int playerid;
+	};
+
+	struct StartCutscene
+	{
+		char name[8];
+		uint8_t currArea; // AKA interior
+	};
+
+	struct SkipCutscene
+	{
+		int playerid;
+		int votes; // temporary unused
+	};
+
+	struct OnMissionFlagSync 
+	{
+		uint8_t bOnMission : 1;
+	};
+
+	struct UpdateEntityBlip
+	{
+		int playerid;
+		eNetworkEntityType entityType;
+		int entityId;
+		bool isFriendly;
+		uint8_t color;
+		uint8_t display;
+		uint8_t scale;
+	};
+
+	struct RemoveEntityBlip
+	{
+		int playerid;
+		eNetworkEntityType entityType;
+		int entityId;
+	};
+
+	struct AddMessageGXT
+	{
+		int playerid;
+		// 0 - COMMAND_PRINT
+		// 1 - COMMAND_PRINT_BIG
+		// 2 - COMMAND_PRINT_NOW
+		// 3 - COMMAND_PRINT_HELP
+		uint8_t type; 
+		uint32_t time;
+		uint8_t flag;
+		char gxt[8];
+	};
+
+	struct RemoveMessageGXT
+	{
+		int playerid;
+		char gxt[8];
+	};
+
+	struct ClearEntityBlips
+	{
+		int playerid;
+	};
+
+	struct PlayMissionAudio
+	{
+		uint8_t slotid;
+		int audioid;
+	};
+
+	struct UpdateCheckpoint
+	{
+		int playerid;
+		CVector position;
+		CVector radius;
+	};
+
+	struct RemoveCheckpoint
+	{
+		int playerid;
+	};
+
+	struct CreateStaticBlip
+	{
+		CVector position;
+		int8_t sprite;
+		uint8_t display : 2;
+		uint8_t type : 1; // 0 - BLIP_CONTACT_POINT, 1 - BLIP_COORD
+		uint8_t trackingBlip : 1;
+		uint8_t shortRange : 1;
 	};
 };
