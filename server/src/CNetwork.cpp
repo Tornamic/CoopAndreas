@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
+#include <cstring>
 
 #include "../core/CPacketListener.h"
 #include "../core/CPacket.h"
@@ -13,7 +14,7 @@
 #include "../core/CVehicleManager.h"
 #include "../core/CPedManager.h"
 
-#include "../shared/semver.h"
+#include "../../shared/semver.h"
 
 
 std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
@@ -319,8 +320,7 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
         packet.pos = i->m_vecPos;
         packet.pedType = i->m_nPedType;
         packet.createdBy = i->m_nCreatedBy;
-        strncpy_s(packet.specialModelName, i->m_szSpecialModelName, strlen(i->m_szSpecialModelName));
-        CNetwork::SendPacket(event.peer, CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        strncpy_linux(packet.specialModelName, sizeof(packet.specialModelName), i->m_szSpecialModelName, strlen(i->m_szSpecialModelName));        CNetwork::SendPacket(event.peer, CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
 
     if (CPlayerPackets::EnExSync::ms_pLastPlayerOwner)
@@ -407,4 +407,16 @@ void CNetwork::AddListener(unsigned short id, void(*callback)(ENetPeer*, void*, 
 {
     CPacketListener* listener = new CPacketListener(id, callback);
     m_packetListeners.insert({ id, listener });
+}
+
+char* strncpy_linux(char* dest, size_t destsz, const char* src, size_t count) {
+    if (dest == nullptr || src == nullptr || destsz == 0) {
+        // Handle error conditions as needed (e.g., return nullptr, throw exception)
+        return nullptr; // Or throw an exception.
+    }
+
+    size_t copy_len = std::min(count, destsz - 1); // Ensure we don't write past the buffer
+    std::memcpy(dest, src, copy_len);
+    dest[copy_len] = '\0'; // Null-terminate the destination string
+    return dest;
 }

@@ -33,4 +33,6 @@ class CNetwork
 	
 };
 
+char* strncpy_linux(char* dest, unsigned long destSize, const char* src, unsigned long srcSize);
+
 #endif
