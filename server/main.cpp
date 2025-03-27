@@ -20,15 +20,9 @@
 #include "core/CVehicleManager.h"
 #include "core/VehicleDoorState.h"
 
-//#include "core-external/ConfigDatabase.hpp"
-
-
 
 int main(int argc, char *argv[])
 {
-	//unsigned int configport;
-	//ConfigDatabase::Init(configport, "server-config.ini");
-	//printf("* variable = %d", configport);
 #if defined (_WIN32)
 	SetConsoleTitle(L"CoopAndreas Server");
 #endif
