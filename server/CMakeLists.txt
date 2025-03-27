@@ -15,7 +15,7 @@ add_library(CPlayer OBJECT "src/CPlayer.cpp")
 add_library(CPlayerManager OBJECT "src/CPlayerManager.cpp")
 add_library(CVehicle OBJECT "src/CVehicle.cpp")
 add_library(CVehicleManager OBJECT "src/CVehicleManager.cpp")
-add_library(ConfigDatabase OBJECT "core-external/ConfigDatabase.cpp")
+add_library(CServerCommandHandler OBJECT "src/CServerCommandHandler.cpp")
 
 add_executable(${PROJECT_NAME} main.cpp)
 
@@ -34,6 +34,6 @@ target_link_libraries(${PROJECT_NAME} CPlayer)
 target_link_libraries(${PROJECT_NAME} CPlayerManager)
 target_link_libraries(${PROJECT_NAME} CVehicle)
 target_link_libraries(${PROJECT_NAME} CVehicleManager)
-target_link_libraries(${PROJECT_NAME} ConfigDatabase)
+target_link_libraries(${PROJECT_NAME} CServerCommandHandler)
 
 
