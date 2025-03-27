@@ -1,8 +1,9 @@
-#if defined(_COOP_SERVER_CSERVERCOMMANDHANDLER_H_)
+#if !defined(_COOP_SERVER_CSERVERCOMMANDHANDLER_H_)
 #define _COOP_SERVER_CSERVERCOMMANDHANDLER_H_
 
 #include <iostream>
 #include <cstdio>
+#include <cstring>
 
 namespace ServerCommand
 {
