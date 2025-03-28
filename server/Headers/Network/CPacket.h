@@ -1,7 +1,6 @@
-#pragma once
-
-#ifndef _CPACKET_H_
-	#define _CPACKET_H_
+#if !defined(_COOPSERVER_NETWORK_PACKET_H_) || !defined(_COOPSERVER_PACKET_H_)
+#define _COOPSERVER_NETWORK_PACKET_H_
+#define _COOPSERVER_PACKET_H_
 
 enum CPacketsID : unsigned short
 {
@@ -60,6 +59,4 @@ enum CPacketsID : unsigned short
 	CREATE_STATIC_BLIP,
 	PACKET_ID_MAX
 };
-
-
 #endif

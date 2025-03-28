@@ -1,15 +1,11 @@
-#pragma once
-
-#ifndef _CNETWORK_H_
-	#define _CNETWORK_H_ 
-
-#define COOPANDREAS_VERSION "0.1.1-alpha"
+#if !defined(_COOPSERVER_NETWORK_CNETWORK_H_) || !defined(_COOPSERVER_NETWORK_H_)
+#define _COOPSERVER_NETWORK_CNETWORK_H_
+#define _COOPSERVER_NETWORK_H_  
 
 #include <cstddef>
 #include <unordered_map>
-#include "../thirdparty-libraries/enet/enet.h"
 
-#include "CServerCommandHandler.h"
+#include "../../include/enet/enet.h"
 #include "CPacketListener.h"
 
 
@@ -17,7 +13,6 @@ class CNetwork
 {
 	public:
 		CNetwork();
-		
 		static std::unordered_map<unsigned short, CPacketListener*> m_packetListeners;
 		static bool Init(unsigned short port);
 		static void InitListeners();
@@ -25,6 +20,7 @@ class CNetwork
 		static void SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag = (ENetPacketFlag)0, ENetPeer* dontShareWith = nullptr);
 		static void SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag flag = (ENetPacketFlag)0, ENetPeer* dontShareWith = nullptr);
 		~CNetwork();
+
 	private:
 		static void HandlePlayerConnected(ENetEvent& event);
 		static void HandlePlayerDisconnected(ENetEvent& event);
