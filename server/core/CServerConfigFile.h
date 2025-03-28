@@ -3,6 +3,10 @@
 
 #include <iostream>
 
+#include "../include/INIEngine-Modules/dini.h"
+
+using namespace INIEngine::Module::Dini;
+
 namespace ServerConfigFile
 {
 	void ConfigFile(char *file);

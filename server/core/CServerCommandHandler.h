@@ -1,15 +1,21 @@
-#if !defined(_COOP_SERVER_CSERVERCOMMANDHANDLER_H_)
-#define _COOP_SERVER_CSERVERCOMMANDHANDLER_H_
+#if !defined(_COOP_SERVER_CSERVERCOMMANDMANAGER_H_)
+#define _COOP_SERVER_CSERVERCOMMANDMANAGER_H_
 
 #include <iostream>
 #include <cstdio>
 #include <cstring>
 
-namespace ServerCommand
+static int MAX_SERVER_PLAYERS = 0;
+
+namespace CServerCommandManager
 {
 	void ServerCommandInput(char *array[]);
-	void ServerCommandHandler(char *array[]);
-	
+	void ServerCommandHandler(char *array[]);	
+}
+
+namespace CServerCommand
+{
+	void Help();
 }
 
 

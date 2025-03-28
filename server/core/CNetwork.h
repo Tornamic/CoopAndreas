@@ -9,9 +9,9 @@
 #include <unordered_map>
 #include "../thirdparty-libraries/enet/enet.h"
 
+#include "CServerCommandHandler.h"
 #include "CPacketListener.h"
 
-#define MAX_SERVER_PLAYERS (4)
 
 class CNetwork
 {

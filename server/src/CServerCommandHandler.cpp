@@ -1,7 +1,7 @@
 #include "../core/CServerCommandHandler.h"
 
-namespace ServerCommand  
-{
+namespace CServerCommandManager  
+{	
 	void ServerCommandInput(char *array[])
 	{
 		printf("\n[>>] Type a Command (cmd sub-cmd sub-cmd sub-cmd) :");
@@ -11,12 +11,20 @@ namespace ServerCommand
 
 	void ServerCommandHandler(char *array[])
 	{
-		if(strcmp(array[0], "--help") == 0 || strcmp(array[0], "-h") == 0)
+		if(strcmp(array[0], "help") == 0 || strcmp(array[0], "-h") == 0)
 		{
-			printf("Ping !");
+			CServerCommand::Help();
 		}
 		else
 			printf("Error No Valid Command");
 	}
 
+}
+
+namespace CServerCommand
+{
+	void Help()
+	{
+		printf("Ping !\n");
+	}
 }
