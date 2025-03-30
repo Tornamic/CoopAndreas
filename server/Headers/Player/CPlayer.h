@@ -1,20 +1,18 @@
-#pragma once
+#if !defined(_COOPSERVER_PLAYER_Player_H_) || !defined(_COOPSERVER_CPLAYER_H_)
+#define _COOPSERVER_CPLAYER_H_
+#define _COOPSERVER_PLAYER_Player_H_
 
-#ifndef _CPLAYER_H_
-	#define _CPLAYER_H_
-#include "../thirdparty-libraries/enet/enet.h"
-
-#include "CVector.h"
-#include "CNetwork.h"
-#include "CPacket.h"
 #include <string>
+#include "../../include/enet/enet.h"
+
+#include "../Vector/CVector.h"
+#include "../Network/CNetwork.h"
+#include "../Network/CPacket.h"
 
 class CPlayer
 {
 	public:
 		CPlayer(ENetPeer* peer, int playerid);
-
-		std::string GetName();
 
 		ENetPeer* m_pPeer;
 		int m_iPlayerId;
@@ -29,15 +27,17 @@ class CPlayer
 		float m_fFatStat;
 		float m_fMuscleStat;
 		CVector m_vecWaypointPos{};
+		
 		struct {
 			uint8_t bStatsModified : 1;
 			uint8_t bClothesModified : 1;
 			uint8_t bWaypointModified : 1;
 		} m_ucSyncFlags;
 
+		std::string GetName();
 		void RemoveFromVehicle();
 
-		~CPlayer();
+		~CPlayer() { }
 };
 
 #endif

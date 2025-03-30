@@ -4,10 +4,10 @@
 
 #include "../../include/enet/enet.h"
 
-#include "CVector.h"
-#include "CNetwork.h"
-#include "CPacket.h"
-#include "CPlayerManager.h"
+#include "../Vector/CVector.h"
+#include "../Network/CNetwork.h"
+#include "../Network/CPacket.h"
+#include "../Player/CPlayer.h"
 
 class CPed
 {
