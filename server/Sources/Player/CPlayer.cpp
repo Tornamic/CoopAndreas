@@ -1,7 +1,5 @@
-
-#include "../core/CPlayer.h"
-#include "../core/CPlayerManager.h"
-#include "../core/CVehicleManager.h"
+#include "../../Headers/Player/CPlayerManager.h"
+#include "../../Headers/Vehicle/CVehicleManager.h"
 
 CPlayer::CPlayer(ENetPeer* peer, int playerid)
 {

@@ -1,6 +1,6 @@
-#if !defined(_COOPSERVER_NETWORK_CNETWORK_H_) || !defined(_COOPSERVER_NETWORK_H_)
-#define _COOPSERVER_NETWORK_CNETWORK_H_
-#define _COOPSERVER_NETWORK_H_  
+#if !defined(_COOPSERVER_NETWORK_NETWORK_H_) || !defined(_COOPSERVER_CNETWORK_H_)
+#define _COOPSERVER_NETWORK_NETWORK_H_
+#define _COOPSERVER_CNETWORK_H_  
 
 #include <cstddef>
 #include <unordered_map>

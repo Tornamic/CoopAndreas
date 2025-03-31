@@ -1,6 +1,5 @@
-
-#include "../core/CPlayer.h"
-#include "../core/CPlayerManager.h"
+#define MAX_SERVER_PLAYERS (4) // next commit will be removed because Server CLI is not completed
+#include "../../Headers/Player/CPlayerManager.h"
 
 std::vector<CPlayer*> CPlayerManager::m_pPlayers;
 

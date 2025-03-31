@@ -1,5 +1,5 @@
-#if !defined(_COOPSERVER_PED_CPED_H_) || !defined(_COOPSERVER_CPED_H_)
-#define _COOPSERVER_PED_CPED_H_
+#if !defined(_COOPSERVER_PED_PED_H_) || !defined(_COOPSERVER_CPED_H_)
+#define _COOPSERVER_PED_PED_H_
 #define _COOPSERVER_CPED_H_ 
 
 #include "../../include/enet/enet.h"

@@ -1,9 +1,10 @@
-#if !defined(_COOP_SERVER_CSERVERCONFIGFILE_H_)
-#define _COOP_SERVER_CSERVERCONFIGFILE_H_
+#if !defined(_COOPSERVER_SERVER_FILE_SCONFIGFILE_H_) || !defined(_COOPSERVER_SCONFIGFILE_H_)
+#define _COOPSERVER_SERVER_FILE_SCONFIGFILE_H_
+#define _COOPSERVER_SCONFIGFILE_H_
 
 #include <iostream>
 
-#include "../include/INIEngine-Modules/dini.h"
+#include "../../../../include/INIEngine-Modules/dini.h"
 
 using namespace INIEngine::Module::Dini;
 

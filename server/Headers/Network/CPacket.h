@@ -1,6 +1,6 @@
-#if !defined(_COOPSERVER_NETWORK_PACKET_H_) || !defined(_COOPSERVER_PACKET_H_)
+#if !defined(_COOPSERVER_NETWORK_PACKET_H_) || !defined(_COOPSERVER_CPACKET_H_)
 #define _COOPSERVER_NETWORK_PACKET_H_
-#define _COOPSERVER_PACKET_H_
+#define _COOPSERVER_CPACKET_H_
 
 enum CPacketsID : unsigned short
 {

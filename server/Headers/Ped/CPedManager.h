@@ -1,8 +1,7 @@
-#pragma once
+#if !defined(_COOPSERVER_PED_PEDMANAGER_H_) || !defined(_COOPSERVER_CPEDMANAGER_H_)
+#define _COOPSERVER_PED_PEDMANAGER_H_
+#define _COOPSERVER_CPEDMANAGER_H_
 
-#ifndef _CPEDMANAGER_H_
-	#define _CPEDMANAGER_H_
-#include <iostream>
 #include <string>
 #include <cstring>
 #include <vector>

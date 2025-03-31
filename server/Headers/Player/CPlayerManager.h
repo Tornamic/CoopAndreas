@@ -1,4 +1,6 @@
 #if !defined(_COOPSERVER_PLAYER_PLAYERMANAGER_H_) || !defined(_COOPSERVER_CPLAYERMANAGER_H_)
+#define _COOPSERVER_PLAYER_PLAYERMANAGER_H_
+#define _COOPSERVER_CPLAYERMANAGER_H_
 
 #include "CPlayer.h"
 #include "../InputControllers/CControllerState.h"
@@ -7,9 +9,10 @@
 class CPlayerManager
 {
 	public:
-		CPlayerManager();
-		
 		static std::vector<CPlayer*> m_pPlayers;
+
+		CPlayerManager() { }
+		
 		static void Add(CPlayer* player);
 		static void Remove(CPlayer* player);
 		static CPlayer* GetPlayer(int playerid);
@@ -18,7 +21,7 @@ class CPlayerManager
 		static CPlayer* GetHost();
 		static void AssignHostToFirstPlayer();
 		
-		~CPlayerManager();
+		~CPlayerManager() { }
 };
 
 

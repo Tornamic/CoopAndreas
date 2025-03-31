@@ -1,6 +1,6 @@
-
-#include "../core/CVehicle.h"
-#include "../core/CVehicleManager.h"
+#include "../../Headers/Vehicle/CVehicle.h"
+#include "../../Headers/Vehicle/CVehicleManager.h"
+#include "../../Headers/Vehicle/CVehiclePackets.h"
 
 std::vector<CVehicle*> CVehicleManager::m_pVehicles;
 

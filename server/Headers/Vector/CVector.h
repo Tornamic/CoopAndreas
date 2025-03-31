@@ -1,7 +1,6 @@
-#pragma once
-
-#ifndef _CVECTOR_H_
-	#define _CVECTOR_H_
+#if !defined(_COOPSERVER_VECTOR_VECTOR_H_) || !defined(_COOPSERVER_CVECTOR_H_)
+#define _COOPSERVER_VECTOR_VECTOR_H_
+#define _COOPSERVER_CVECTOR_H_
 
 struct CVector
 {

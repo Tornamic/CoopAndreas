@@ -1,5 +1,4 @@
-
-#include "../core/CPed.h"
+#include "../../Headers/Ped/CPed.h"
 
 CPed::CPed(int pedid, CPlayer* syncer, short modelId, unsigned char pedType, CVector pos, unsigned char createdBy)
 {

@@ -1,19 +1,17 @@
+#define MAX_SERVER_PLAYERS (4) // next commit will be removed because Server CLI is not completed
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <unordered_map>
+#include "../../Headers/Network/CNetwork.h"
+#include "../../Headers/Network/CPacketListener.h"
+#include "../../Headers/Network/CPacket.h"
 
-#include "../core/CPacketListener.h"
-#include "../core/CPacket.h"
-#include "../core/CNetwork.h"
+#include "../../Headers/Player/CPlayerManager.h"
+#include "../../Headers/Player/CPlayerPackets.h"
+#include "../../Headers/Vehicle/CVehicleManager.h"
+#include "../../Headers/Vehicle/CVehiclePackets.h"
+#include "../../Headers/Ped/CPedManager.h"
+#include "../../Headers/Ped/CPedPackets.h"
 
-#include "../core/CPlayerManager.h"
-#include "../core/CVehicleManager.h"
-#include "../core/CPedManager.h"
-
-#include "../shared/semver.h"
+#include "../../../shared/semver.h"
 
 
 std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
