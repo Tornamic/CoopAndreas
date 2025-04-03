@@ -1,4 +1,5 @@
 #define MAX_SERVER_PLAYERS (4) // next commit will be removed because Server CLI is not completed
+#define COOPANDREAS_VERSION "garbage-0.11"
 
 #include "../../Headers/Network/CNetwork.h"
 #include "../../Headers/Network/CPacketListener.h"

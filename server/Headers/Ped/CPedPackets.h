@@ -2,10 +2,13 @@
 #define _COOPSERVER_CPEDPACKETS_H_
 #define _COOPSERVER_PED_PEDPACKETS_H_
 
+#include <iostream>
 #include "../../include/enet/enet.h"
 
 #include "../Vector/CVector.h"
 #include "../Player/CPlayerManager.h"
+#include "../Vehicle/CVehicle.h"
+#include "../Vehicle/CVehicleManager.h"
 #include "CPedManager.h"
 
 class CPedPackets

@@ -8,17 +8,14 @@
 
 static int MAX_SERVER_PLAYERS = 0;
 
-namespace CServerCommandManager
+class ServerCommandManager
 {
-	void ServerCommandInput(char *array[]);
-	void ServerCommandHandler(char *array[]);	
-}
-
-namespace CServerCommand
-{
-	void Help();
-}
-
+public:
+	static void CommandInput(char array[][32]);
+	static void CommandHandler(char array[][32]);	
+	static bool CommandCheck(char *command, char *short_command, char *value_string);
+	static int  CommandResponse(int returned_value);
+};
 
 
 #endif

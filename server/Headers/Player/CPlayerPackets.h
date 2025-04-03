@@ -2,11 +2,11 @@
 #define _COOPSERVER_PLAYER_CPLAYERPACKETS_H_
 #define _COOPSERVER_CPLAYERPACKETS_H_
 
+#include "../Vector/CVector.h"
+#include "../InputControllers/CControllerState.h"
+#include "../Network/NetworkEntityType.h"
 #include "CPlayer.h"
 #include "CPlayerManager.h"
-#include "../Vector/CVector.h"
-//#include "../InputControllers/CControllerState.h"
-#include "../Network/NetworkEntityType.h"
 
 class CPlayerPackets
 {
