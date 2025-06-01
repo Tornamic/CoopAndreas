@@ -42,7 +42,7 @@ void CCore::Init()
 	CLaunchManager::CollectCommandLineArgs();
 	CDiscordRPC::Init();
 	COpCodeSync::Init();
-	//SetUnhandledExceptionFilter(CCrashLog::ExceptionHandler);
+	CCrashLog::ms_lpPreviousFilter = SetUnhandledExceptionFilter(CCrashLog::ExceptionHandler);
 	Events::initGameEvent.after += []
 	{
 		CPatch::TemporaryPatches();

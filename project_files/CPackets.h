@@ -59,6 +59,9 @@ enum CPacketsID : unsigned short
 	REMOVE_CHECKPOINT,
 	ENEX_SYNC,
 	CREATE_STATIC_BLIP,
+	SET_VEHICLE_CREATED_BY,
+	SET_PLAYER_TASK,
+	PED_SAY,
 	PACKET_ID_MAX
 };
 
@@ -144,7 +147,8 @@ public:
 		int id = 0;
 		CVector position = CVector();
 		CVector velocity = CVector();
-		float rotation = 0.0f;
+		float currentRotation = 0.0f;
+		float aimingRotation = 0.0f;
 		unsigned char health = 100;
 		unsigned char armour = 0;
 		unsigned char weapon = 0;
@@ -553,5 +557,34 @@ public:
 		uint8_t type : 1; // 0 - BLIP_CONTACT_POINT, 1 - BLIP_COORD
 		uint8_t trackingBlip : 1;
 		uint8_t shortRange : 1;
+		uint8_t friendly : 1; // It is affected by BLIP_COLOUR_THREAT.   
+		uint8_t coordBlipAppearance : 2; // see eBlipAppearance
+		uint8_t size : 3;
+	};
+
+	struct SetVehicleCreatedBy
+	{
+		int vehicleid;
+		uint8_t createdBy;
+	};
+
+	struct SetPlayerTask
+	{
+		int playerid;
+		int taskType;
+		CVector position;
+		float rotation;
+		bool toggle;
+	};
+
+	struct PedSay
+	{
+		int entityid : 31;
+		int isPlayer : 1;
+		int16_t phraseId;
+		int startTimeDelay;
+		uint8_t overrideSilence : 1;
+		uint8_t isForceAudible : 1;
+		uint8_t isFrontEnd : 1;
 	};
 };

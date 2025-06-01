@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 
 namespace Launcher
 {
@@ -69,6 +70,24 @@ namespace Launcher
             if (hndProc == INTPTR_ZERO)
             {
                 return false;
+            }
+
+            Process targetProc = Process.GetProcessById((int)pToBeInjected);
+            bool vorbisLoaded = false;
+            while (!vorbisLoaded)
+            {
+                targetProc.Refresh();
+                foreach (ProcessModule module in targetProc.Modules)
+                {
+                    if (module.ModuleName.Equals("vorbisFile.dll", StringComparison.OrdinalIgnoreCase))
+                    {
+                        vorbisLoaded = true;
+                        break;
+                    }
+                }
+
+                if (!vorbisLoaded)
+                    Thread.Sleep(100);
             }
 
             IntPtr lpLLAddress = GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");

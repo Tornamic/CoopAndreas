@@ -68,4 +68,7 @@ public:
 	static void RemoveCheckpoint__Handle(void* data, int size);
 	static void EnExSync__Handle(void* data, int size);
 	static void CreateMissionMarker__Handle(void* data, int size);
+	static void SetVehicleCreatedBy__Handle(void* data, int size);
+	static void SetPlayerTask__Handle(void* data, int size);
+	static void PedSay__Handle(void* data, int size);
 };

@@ -50,17 +50,18 @@ public:
 #pragma pack(1)
 	struct PlayerOnFoot
 	{
-		int id;
-		CVector position;
-		CVector	velocity;
-		float rotation;
-		unsigned char health;
-		unsigned char armour;
-		unsigned char weapon;
-		unsigned short ammo;
-		bool ducking;
+		int id = 0;
+		CVector position = CVector();
+		CVector velocity = CVector();
+		float currentRotation = 0.0f;
+		float aimingRotation = 0.0f;
+		unsigned char health = 100;
+		unsigned char armour = 0;
+		unsigned char weapon = 0;
+		unsigned short ammo = 0;
+		bool ducking = false;
 		bool hasJetpack = false;
-		char fightingStyle;
+		char fightingStyle = 4;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -584,6 +585,9 @@ public:
 		uint8_t type : 1; // 0 - BLIP_CONTACT_POINT, 1 - BLIP_COORD
 		uint8_t trackingBlip : 1;
 		uint8_t shortRange : 1;
+		uint8_t friendly : 1; // It is affected by BLIP_COLOUR_THREAT.   
+		uint8_t coordBlipAppearance : 2; // see eBlipAppearance
+		uint8_t size : 3;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -593,6 +597,51 @@ public:
 				{
 					CNetwork::SendPacketToAll(CPacketsID::CREATE_STATIC_BLIP, data, sizeof(CreateStaticBlip), ENET_PACKET_FLAG_RELIABLE, peer);
 				}
+			}
+		}
+	};
+
+	struct SetPlayerTask
+	{
+		int playerid;
+		int taskType;
+		CVector position;
+		float rotation;
+		bool toggle;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (auto player = CPlayerManager::GetPlayer(peer))
+			{
+				SetPlayerTask* packet = (SetPlayerTask*)data;
+				packet->playerid = player->m_iPlayerId;
+				CNetwork::SendPacketToAll(CPacketsID::SET_PLAYER_TASK, packet, sizeof(SetPlayerTask), ENET_PACKET_FLAG_RELIABLE, peer);
+			}
+		}
+	};
+
+	struct PedSay
+	{
+		int entityid : 31;
+		int isPlayer : 1;
+		int16_t phraseId;
+		int startTimeDelay;
+		uint8_t overrideSilence : 1;
+		uint8_t isForceAudible : 1;
+		uint8_t isFrontEnd : 1;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (auto player = CPlayerManager::GetPlayer(peer))
+			{
+				PedSay* packet = (PedSay*)data;
+
+				if (packet->isPlayer)
+				{
+					packet->entityid = player->m_iPlayerId;
+				}
+
+				CNetwork::SendPacketToAll(CPacketsID::PED_SAY, packet, sizeof(PedSay), ENET_PACKET_FLAG_RELIABLE, peer);
 			}
 		}
 	};

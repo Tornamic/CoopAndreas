@@ -61,6 +61,7 @@ class CVehiclePackets
 				vehicle->m_pSyncer = player;
 				vehicle->m_nPrimaryColor = packet->color1;
 				vehicle->m_nSecondaryColor = packet->color2;
+				vehicle->m_nCreatedBy = packet->createdBy;
 
 				CVehicleManager::Add(vehicle);
 			}
@@ -315,6 +316,31 @@ class CVehiclePackets
 		struct AssignVehicleSyncer
 		{
 			int vehicleid;
+		};
+
+		struct SetVehicleCreatedBy
+		{
+			int vehicleid;
+			uint8_t createdBy;
+
+			static void Handle(ENetPeer* peer, void* data, int size)
+			{
+				if (auto player = CPlayerManager::GetPlayer(peer))
+				{
+					if (player->m_bIsHost)
+					{
+						SetVehicleCreatedBy* packet = (SetVehicleCreatedBy*)data;
+						if (auto networkVehicle = CVehicleManager::GetVehicle(packet->vehicleid))
+						{
+							if (packet->createdBy >= 1 && packet->createdBy <= 4)
+							{
+								networkVehicle->m_nCreatedBy = packet->createdBy;
+								CNetwork::SendPacketToAll(CPacketsID::SET_VEHICLE_CREATED_BY, data, sizeof(SetVehicleCreatedBy), ENET_PACKET_FLAG_RELIABLE, peer);
+							}
+						}
+					}
+				}
+			}
 		};
 
 		~CVehiclePackets();

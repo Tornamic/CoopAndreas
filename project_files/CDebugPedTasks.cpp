@@ -908,23 +908,24 @@ const char CDebugPedTasks::TaskNames[][256] = //Credits to MTA
 
 void CDebugPedTasks::Draw()
 {
-	for (auto networkPed : CNetworkPedManager::m_pPeds)
+	for (auto ped : CPools::ms_pPedPool)//(auto networkPed : CNetworkPedManager::m_pPeds)
 	{
-		if (!networkPed || !networkPed->m_pPed)
+		/*if (!networkPed)
 			continue;
 
-		CPed* ped = networkPed->m_pPed;
-		if (!ped || !ped->m_matrix)
+		CPed* ped = networkPed->m_pPed;*/
+		if (!ped)
 			continue;
 
-		CVector posn = ped->m_matrix->pos;
+		CVector& posn = ped->GetPosition();
 		RwV3d screenCoors; float w, h;
 		if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
 		{
 			char text[1000];
 			char level[60];
 
-			sprintf(text, "Ped: %d\nPRIMARY TASKS:\n", networkPed->m_nPedId);
+			//sprintf(text, "Ped: %d\nPRIMARY TASKS:\n", networkPed->m_nPedId);
+			sprintf(text, "PRIMARY TASKS:\n");
 
 			for (int i = 0; i < 5; i++)
 			{

@@ -55,7 +55,7 @@ ETH: `0xE7aE0448A147844208C9D51b0Ac673Bafbe2a35c`
 
 *If you need another way to donate, please dm me on discord: `@tornamic`*
 
-Contact information is current as of March 2025
+Contact information is current as of June 2025
 
 ## TODO list:
 ### Already Done ✓

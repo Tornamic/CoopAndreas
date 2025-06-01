@@ -121,6 +121,9 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::REMOVE_CHECKPOINT, CPlayerPackets::RemoveCheckpoint::Handle);
     CNetwork::AddListener(CPacketsID::ENEX_SYNC, CPlayerPackets::EnExSync::Handle);
     CNetwork::AddListener(CPacketsID::CREATE_STATIC_BLIP, CPlayerPackets::CreateStaticBlip::Handle);
+    CNetwork::AddListener(CPacketsID::SET_VEHICLE_CREATED_BY, CVehiclePackets::SetVehicleCreatedBy::Handle);
+    CNetwork::AddListener(CPacketsID::SET_PLAYER_TASK, CPlayerPackets::SetPlayerTask::Handle);
+    CNetwork::AddListener(CPacketsID::PED_SAY, CPlayerPackets::PedSay::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -198,9 +201,9 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
 
     if (packedVersion != event.data)
     {
-        printf("Wrong version, disconnecting...\n");
+        /*printf("Wrong version, disconnecting...\n");
         enet_peer_disconnect_now(event.peer, packedVersion);
-        return;
+        return;*/
     }
 
     // set player disconnection timeout

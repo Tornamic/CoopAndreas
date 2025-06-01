@@ -343,6 +343,12 @@ uint32_t CStreaming__AddImageToList_Hook(const char* fileName, bool notPlayerFil
     if (strncmp(fileName, "DATA\\SCRIPT\\SCRIPT.IMG", 22) == 0)
     {
         fileName = aImgPath;
+
+        if (!FileExists(aImgPath))
+        {
+            MessageBoxA(NULL, "'CoopAndreas\\script.img' is not found, try to reinstall the mod", "CoopAndreas Fatal Error", MB_ICONERROR);
+            exit(0);
+        }
     }
 
     return plugin::CallAndReturnDyn<uint32_t>(CStreaming__AddImageToList_ptr, fileName, notPlayerFile);
@@ -350,9 +356,16 @@ uint32_t CStreaming__AddImageToList_Hook(const char* fileName, bool notPlayerFil
 
 void PatchSCM()
 {
+    if (!FileExists(aScriptPath))
+    {
+        MessageBoxA(NULL, "'CoopAndreas\\main.scm' is not found, try to reinstall the mod", "CoopAndreas Fatal Error", MB_ICONERROR);
+        exit(0);
+    }
+
     // use our main.scm
     patch::SetPointer(0x468EB5 + 1, (void*)aScriptDir);
     patch::SetPointer(0x489A45 + 1, (void*)aScriptPath);
+
 
     // hook script.img loading
     CStreaming__AddImageToList_ptr = injector::GetBranchDestination(0x5B915B).as_int();

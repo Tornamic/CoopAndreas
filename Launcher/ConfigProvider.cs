@@ -36,7 +36,7 @@ namespace Launcher
             {
                 foreach (var prop in this.GetType().GetProperties())
                 {
-                    string value = prop.GetValue(this)?.ToString();
+                    string value = prop.GetValue(this, null)?.ToString();
                     writer.WriteLine($"{prop.Name}={value}");
                 }
             }
@@ -58,7 +58,7 @@ namespace Launcher
                     var prop = this.GetType().GetProperty(parts[0].Trim());
                     if (prop != null && prop.CanWrite)
                     {
-                        prop.SetValue(this, Convert.ChangeType(parts[1].Trim(), prop.PropertyType));
+                        prop.SetValue(this, Convert.ChangeType(parts[1].Trim(), prop.PropertyType), null);
                     }
                 }
             }

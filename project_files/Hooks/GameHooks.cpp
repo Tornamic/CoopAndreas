@@ -154,6 +154,20 @@ bool CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook()
     return result;
 }
 
+int __purecall_Hook()
+{
+    *(char**)0xDEAD  = "This hook is needed for a more detailed crash log when calling an unimplemented virtual function";
+    *(char**)0xDEAD2 = "we will get a full backtrace instead of a single msgbox";
+    __asm
+    {
+        mov eax, 0
+        push 0x0
+        ret
+    }
+
+    return 0;
+}
+
 void GameHooks::InjectHooks()
 {
     patch::RedirectCall(0x57C2A3, CMenuManager__DrawFrontEnd_FixChat_Hook);
@@ -175,4 +189,6 @@ void GameHooks::InjectHooks()
     //patch::RedirectCall(0x5B1947, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
    // patch::RedirectCall(0x469F0E, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
    // patch::RedirectCall(0x475459, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
+
+    patch::RedirectJump(PURECALL, __purecall_Hook);
 }

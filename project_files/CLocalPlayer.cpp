@@ -1,6 +1,11 @@
 #include "stdafx.h"
 
-float CLocalPlayer::m_vecLastAimX = 0;
-float CLocalPlayer::m_vecLastAimY = 0;
-char CLocalPlayer::m_Name[32 + 1];
-bool CLocalPlayer::m_bIsHost = false;
+void CLocalPlayer::BuildTaskPacket(eTaskType type, bool toggle)
+{
+	CPackets::SetPlayerTask packet{};
+	packet.taskType = type;
+	packet.position = FindPlayerCoors(0);
+	packet.rotation = FindPlayerPed(0)->m_fCurrentRotation;
+	packet.toggle = toggle;
+	CNetwork::SendPacket(CPacketsID::SET_PLAYER_TASK, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+}

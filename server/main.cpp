@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 	char config[] = "Release";
 #endif
 
-	printf("[!] : Version : %s, %s %s\n", COOPANDREAS_VERSION, config, sizeof(void*) == 8 ? "x64" : "x86");
+	printf("[!] : Version : %s, %s %s %s %s\n", COOPANDREAS_VERSION, config, sizeof(void*) == 8 ? "x64" : "x86", __DATE__, __TIME__);
 #if defined (_WIN32)
 	printf("[!] : Platform : Microsoft Windows \n");
 #else

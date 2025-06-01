@@ -20,6 +20,8 @@
 #include "Commands/CCommandUpdateCheckpointForNetworkPlayer.h"
 #include "Commands/CCommandRemoveCheckpointForNetworkPlayer.h"
 #include "Commands/CCommandEnableSyncingThisScript.h"
+#include "Commands/CCommandGetVehicleNetworkId.h"
+#include "Commands/CCommandGetPedNetworkId.h"
 
 class CCustomCommandRegistrar
 {
@@ -45,5 +47,7 @@ public:
 		CCustomCommandMgr::RegisterCommand(0x1D10, new CCommandUpdateCheckpointForNetworkPlayer());
 		CCustomCommandMgr::RegisterCommand(0x1D11, new CCommandRemoveCheckpointForNetworkPlayer());
 		CCustomCommandMgr::RegisterCommand(0x1D12, new CCommandEnableSyncingThisScript());
+		CCustomCommandMgr::RegisterCommand(0x1D13, new CCommandGetVehicleNetworkId());
+		CCustomCommandMgr::RegisterCommand(0x1D14, new CCommandGetPedNetworkId());
 	}
 };
