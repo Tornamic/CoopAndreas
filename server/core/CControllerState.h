@@ -1,3 +1,5 @@
+#include <cstdint>
+
 #pragma once
 
 #ifndef _CCONTROLLERSTATE_H_
