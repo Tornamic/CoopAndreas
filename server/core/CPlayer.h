@@ -8,7 +8,7 @@
 #include "CNetwork.h"
 #include "CPacket.h"
 #include <string>
-
+class CPed;
 class CPlayer
 {
 	public:
@@ -34,6 +34,7 @@ class CPlayer
 			uint8_t bClothesModified : 1;
 			uint8_t bWaypointModified : 1;
 		} m_ucSyncFlags;
+		std::vector<CPed*> m_vPedClaims;
 
 		void RemoveFromVehicle();
 

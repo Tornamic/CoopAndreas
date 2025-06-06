@@ -1370,6 +1370,44 @@ void CPacketHandler::AssignVehicleSyncer__Handle(void* data, int size)
 	}
 }
 
+// AssignPedSyncer
+
+void CPacketHandler::AssignPedSyncer__Handle(void* data, int size)
+{
+	CPackets::AssignPedSyncer* packet = (CPackets::AssignPedSyncer*)data;
+
+	CNetworkPed* networkPed = CNetworkPedManager::GetPed(packet->pedid);
+
+	if (!networkPed)
+		return;
+
+	if (networkPed->m_bSyncing)
+	{
+#ifdef PACKET_DEBUG_MESSAGES
+		CChat::AddMessage("NO MORE SYNCING THE PED %d", packet->pedid);
+#endif
+		networkPed->m_bSyncing = false;
+
+		if (auto ped = networkPed->m_pPed)
+		{
+			ped->SetCharCreatedBy(2);
+		}
+	}
+	else
+	{
+#ifdef PACKET_DEBUG_MESSAGES
+		CChat::AddMessage("THE SERVER SAID ME TO SYNC THE PED %d", packet->pedid);
+#endif
+		networkPed->m_bSyncing = true;
+		networkPed->m_bClaimOnRelease = false;
+
+		if (auto ped = networkPed->m_pPed)
+		{
+			ped->SetCharCreatedBy(networkPed->m_nCreatedBy);
+		}
+	}
+}
+
 // RespawnPlayer
 
 void CPacketHandler::RespawnPlayer__Handle(void* data, int size)

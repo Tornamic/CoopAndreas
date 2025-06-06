@@ -115,6 +115,52 @@ class CPedPackets
 					return;
 				}
 
+				for (auto p : CPlayerManager::m_pPlayers)
+				{
+					// check if this player has claimed the ped
+					if (std::find(p->m_vPedClaims.begin(), p->m_vPedClaims.end(), ped) != p->m_vPedClaims.end())
+					{
+						// assign ped's syncer to this player
+						ped->m_pSyncer = p;
+
+						// send ASSIGN_PED packet to the new host player to notify them they now own the ped
+						AssignPedSyncer assignPedPacket{};
+						assignPedPacket.pedid = ped->m_nPedId;
+						CNetwork::SendPacket(p->m_pPeer, CPacketsID::ASSIGN_PED, &assignPedPacket, sizeof(assignPedPacket), ENET_PACKET_FLAG_RELIABLE);
+
+						// send PED_SPAWN packet to the old syncer (peer) so it can respawn the ped locally
+						PedSpawn pedSpawnPacket{};
+						pedSpawnPacket.pedid = ped->m_nPedId;
+						pedSpawnPacket.modelId = ped->m_nModelId;
+						pedSpawnPacket.pedType = ped->m_nPedType;
+						pedSpawnPacket.pos = ped->m_vecPos;
+						strncpy_s(pedSpawnPacket.specialModelName, sizeof(pedSpawnPacket.specialModelName), ped->m_szSpecialModelName, _TRUNCATE);
+						pedSpawnPacket.tempid = 0xFF;
+						pedSpawnPacket.createdBy = ped->m_nCreatedBy;
+						CNetwork::SendPacket(peer, CPacketsID::PED_SPAWN, &pedSpawnPacket, sizeof(pedSpawnPacket), ENET_PACKET_FLAG_RELIABLE);
+
+						// remove the ped from this player's claim list to avoid duplicate claims
+						auto it = std::find(p->m_vPedClaims.begin(), p->m_vPedClaims.end(), ped);
+						if (it != p->m_vPedClaims.end())
+						{
+							p->m_vPedClaims.erase(it);
+						}
+
+						// exit after assigning new host and respawning ped
+						return;
+					}
+				}
+
+				// if nobody claimed the ped, remove it from all players' claim lists
+				for (auto p : CPlayerManager::m_pPlayers)
+				{
+					auto it = std::find(p->m_vPedClaims.begin(), p->m_vPedClaims.end(), ped);
+					if (it != p->m_vPedClaims.end())
+					{
+						p->m_vPedClaims.erase(it);
+					}
+				}
+
 				CNetwork::SendPacketToAll(CPacketsID::PED_REMOVE, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 
 				CPedManager::Remove(ped);
@@ -296,6 +342,54 @@ class CPedPackets
 		{
 			unsigned char tempid = 255;
 			int pedid;
+		};
+
+		struct AssignPedSyncer
+		{
+			int pedid;
+		};
+
+		struct PedClaimOnRelease
+		{
+			int pedid;
+
+			static void Handle(ENetPeer* peer, void* data, int size)
+			{
+				CPedPackets::PedClaimOnRelease* packet = (CPedPackets::PedClaimOnRelease*)data;
+
+				auto ped = CPedManager::GetPed(packet->pedid);
+				auto player = CPlayerManager::GetPlayer(peer);
+
+				if (ped && ped->m_pSyncer != player)
+				{
+					if (std::find(player->m_vPedClaims.begin(), player->m_vPedClaims.end(), ped) == player->m_vPedClaims.end())
+					{
+						player->m_vPedClaims.push_back(ped);
+					}
+				}
+			}
+		};
+
+		struct PedCancelClaim
+		{
+			int pedid;
+
+			static void Handle(ENetPeer* peer, void* data, int size)
+			{
+				CPedPackets::PedCancelClaim* packet = (CPedPackets::PedCancelClaim*)data;
+
+				auto ped = CPedManager::GetPed(packet->pedid);
+				auto player = CPlayerManager::GetPlayer(peer);
+
+				if (ped && ped->m_pSyncer != player)
+				{
+					auto it = std::find(player->m_vPedClaims.begin(), player->m_vPedClaims.end(), ped);
+					if (it != player->m_vPedClaims.end())
+					{
+						player->m_vPedClaims.erase(it);
+					}
+				}
+			}
 		};
 
 		~CPedPackets();

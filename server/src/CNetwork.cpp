@@ -124,6 +124,8 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::SET_VEHICLE_CREATED_BY, CVehiclePackets::SetVehicleCreatedBy::Handle);
     CNetwork::AddListener(CPacketsID::SET_PLAYER_TASK, CPlayerPackets::SetPlayerTask::Handle);
     CNetwork::AddListener(CPacketsID::PED_SAY, CPlayerPackets::PedSay::Handle);
+    CNetwork::AddListener(CPacketsID::PED_CLAIM_ON_RELEASE, CPedPackets::PedClaimOnRelease::Handle);
+    CNetwork::AddListener(CPacketsID::PED_CANCEL_CLAIM, CPedPackets::PedCancelClaim::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)

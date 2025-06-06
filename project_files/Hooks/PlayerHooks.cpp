@@ -238,7 +238,7 @@ void __fastcall CPedDamageResponseCalculator__ComputeWillKillPed_Hook(uintptr_t 
 
 bool __fastcall CPlayerPed__CanPlayerStartMission_Hook(CPlayerPed* This, int)
 {
-    return This->CanPlayerStartMission() && CLocalPlayer::m_bIsHost;
+    return This->CanPlayerStartMission()/* && CLocalPlayer::m_bIsHost*/;
 }
 
 void __fastcall CPlayerPed__ProcessWeaponSwitch_Hook(CPlayerPed* This, int, CPad* pad)

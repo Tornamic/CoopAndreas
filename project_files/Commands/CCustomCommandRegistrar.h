@@ -22,6 +22,10 @@
 #include "Commands/CCommandEnableSyncingThisScript.h"
 #include "Commands/CCommandGetVehicleNetworkId.h"
 #include "Commands/CCommandGetPedNetworkId.h"
+#include "Commands/CCommandGetPedInAreaWithModel.h"
+#include "Commands/CCommandClaimPedOnRelease.h"
+#include "Commands/CCommandCancelPedClaim.h"
+#include "Commands/CCommandIsSyncingThisPed.h"
 
 class CCustomCommandRegistrar
 {
@@ -49,5 +53,9 @@ public:
 		CCustomCommandMgr::RegisterCommand(0x1D12, new CCommandEnableSyncingThisScript());
 		CCustomCommandMgr::RegisterCommand(0x1D13, new CCommandGetVehicleNetworkId());
 		CCustomCommandMgr::RegisterCommand(0x1D14, new CCommandGetPedNetworkId());
+		CCustomCommandMgr::RegisterCommand(0x1D15, new CCommandGetPedInAreaWithModel());
+		CCustomCommandMgr::RegisterCommand(0x1D16, new CCommandClaimPedOnRelease());
+		CCustomCommandMgr::RegisterCommand(0x1D17, new CCommandCancelPedClaim());
+		CCustomCommandMgr::RegisterCommand(0x1D18, new CCommandIsSyncingThisPed());
 	}
 };
