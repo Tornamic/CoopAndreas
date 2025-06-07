@@ -237,6 +237,9 @@ void FixCrashes()
 
     patch::Nop(0x5B1930, 11);
     patch::Nop(0x5B1942, 5);
+
+    // looks like a solution to fix duplication of peds when creating at attractors (please)
+    patch::SetFloat(0x86D26C, 10.0f);
 }
 
 #define SCANCODE_BUFFER_SIZE (8 * 20000)
