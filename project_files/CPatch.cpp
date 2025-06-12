@@ -313,6 +313,7 @@ void RelocateScanCodes()
     memset((BYTE*)0xB7D0B8, 0, 8 * 14400);
 }
 
+
 void SimulateCopyrightScreen()
 {
     CLoadingScreen::m_currDisplayedSplash = 0;

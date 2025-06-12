@@ -1765,3 +1765,18 @@ void CPacketHandler::PedSay__Handle(void* data, int size)
 			packet->isFrontEnd);
 	}
 }
+
+// PedResetAllClaims
+
+void CPacketHandler::PedResetAllClaims__Handle(void* data, int size)
+{
+	CPackets::PedResetAllClaims* packet = (CPackets::PedResetAllClaims*)data;
+
+	if (auto networkPed = CNetworkPedManager::GetPed(packet->pedid))
+	{
+		if (!networkPed->m_bSyncing)
+		{
+			networkPed->m_bClaimOnRelease = false;
+		}
+	}
+}

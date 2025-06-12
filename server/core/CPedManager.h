@@ -392,6 +392,88 @@ class CPedPackets
 			}
 		};
 
+		struct PedResetAllClaims
+		{
+			int pedid;
+
+			static void Handle(ENetPeer* peer, void* data, int size)
+			{
+				CPedPackets::PedResetAllClaims* packet = (CPedPackets::PedResetAllClaims*)data;
+
+				auto ped = CPedManager::GetPed(packet->pedid);
+				auto player = CPlayerManager::GetPlayer(peer);
+
+				if (ped)
+				{
+					if (ped->m_pSyncer == player || player->m_bIsHost)
+					{
+						if (player->m_bIsHost && ped->m_pSyncer != nullptr)
+						{
+							AssignPedSyncer assignPedPacket{};
+							assignPedPacket.pedid = packet->pedid;
+
+							ped->m_pSyncer = player;
+
+							CNetwork::SendPacket(peer, CPacketsID::ASSIGN_PED, &assignPedPacket, sizeof(assignPedPacket), ENET_PACKET_FLAG_RELIABLE);
+
+							CNetwork::SendPacket(ped->m_pSyncer->m_pPeer, CPacketsID::ASSIGN_PED, &assignPedPacket, sizeof(assignPedPacket), ENET_PACKET_FLAG_RELIABLE); // unassign
+						}
+
+						for (auto p : CPlayerManager::m_pPlayers)
+						{
+							auto it = std::find(p->m_vPedClaims.begin(), p->m_vPedClaims.end(), ped);
+							if (it != p->m_vPedClaims.end())
+							{
+								CNetwork::SendPacket(p->m_pPeer, CPacketsID::PED_RESET_ALL_CLAIMS, packet, sizeof(*packet), ENET_PACKET_FLAG_RELIABLE);
+								p->m_vPedClaims.erase(it);
+							}
+						}
+					}
+				}
+			}
+		};
+
+		struct PedTakeHost
+		{
+			int pedid;
+			bool allowReturnToPreviousHost;
+
+			static void Handle(ENetPeer* peer, void* data, int size)
+			{
+				CPedPackets::PedTakeHost* packet = (CPedPackets::PedTakeHost*)data;
+
+				auto ped = CPedManager::GetPed(packet->pedid);
+				auto player = CPlayerManager::GetPlayer(peer);
+
+				if (ped)
+				{
+					if (ped->m_pSyncer != player && player->m_bIsHost)
+					{
+						AssignPedSyncer assignPedPacket{};
+						assignPedPacket.pedid = packet->pedid;
+
+						CNetwork::SendPacket(peer, CPacketsID::ASSIGN_PED, &assignPedPacket, sizeof(assignPedPacket), ENET_PACKET_FLAG_RELIABLE);
+						auto it = std::find(player->m_vPedClaims.begin(), player->m_vPedClaims.end(), ped);
+						if (it != player->m_vPedClaims.end())
+						{
+							player->m_vPedClaims.erase(it);
+						}
+						
+						CNetwork::SendPacket(ped->m_pSyncer->m_pPeer, CPacketsID::ASSIGN_PED, &assignPedPacket, sizeof(assignPedPacket), ENET_PACKET_FLAG_RELIABLE); // unassign	
+						if (packet->allowReturnToPreviousHost)
+						{
+							if (std::find(ped->m_pSyncer->m_vPedClaims.begin(), ped->m_pSyncer->m_vPedClaims.end(), ped) == ped->m_pSyncer->m_vPedClaims.end())
+							{
+								ped->m_pSyncer->m_vPedClaims.push_back(ped);
+							}
+						}
+
+						ped->m_pSyncer = player;
+					}
+				}
+			}
+		};
+
 		~CPedPackets();
 };
 #endif

@@ -65,6 +65,8 @@ enum CPacketsID : unsigned short
 	PED_SAY,
 	PED_CLAIM_ON_RELEASE,
 	PED_CANCEL_CLAIM,
+	PED_RESET_ALL_CLAIMS,
+	PED_TAKE_HOST,
 	PACKET_ID_MAX
 };
 
@@ -605,5 +607,16 @@ public:
 	struct PedCancelClaim
 	{
 		int pedid;
+	};
+
+	struct PedResetAllClaims
+	{
+		int pedid;
+	};
+
+	struct PedTakeHost
+	{
+		int pedid;
+		bool allowReturnToPreviousHost;
 	};
 };

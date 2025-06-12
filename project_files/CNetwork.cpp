@@ -154,6 +154,7 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::SET_VEHICLE_CREATED_BY, CPacketHandler::SetVehicleCreatedBy__Handle);
 	CNetwork::AddListener(CPacketsID::SET_PLAYER_TASK, CPacketHandler::SetPlayerTask__Handle);
 	CNetwork::AddListener(CPacketsID::PED_SAY, CPacketHandler::PedSay__Handle);
+	CNetwork::AddListener(CPacketsID::PED_RESET_ALL_CLAIMS, CPacketHandler::PedResetAllClaims__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

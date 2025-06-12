@@ -26,6 +26,8 @@
 #include "Commands/CCommandClaimPedOnRelease.h"
 #include "Commands/CCommandCancelPedClaim.h"
 #include "Commands/CCommandIsSyncingThisPed.h"
+#include "Commands/CCommandPedResetAllClaims.h"
+#include "Commands/CCommandPedTakeHost.h"
 
 class CCustomCommandRegistrar
 {
@@ -57,5 +59,7 @@ public:
 		CCustomCommandMgr::RegisterCommand(0x1D16, new CCommandClaimPedOnRelease());
 		CCustomCommandMgr::RegisterCommand(0x1D17, new CCommandCancelPedClaim());
 		CCustomCommandMgr::RegisterCommand(0x1D18, new CCommandIsSyncingThisPed());
+		CCustomCommandMgr::RegisterCommand(0x1D19, new CCommandPedResetAllClaims());
+		CCustomCommandMgr::RegisterCommand(0x1D1A, new CCommandPedTakeHost());
 	}
 };
