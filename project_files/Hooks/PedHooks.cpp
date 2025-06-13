@@ -100,6 +100,65 @@ void CStreaming__RequestSpecialModel_Hook(int modelid, const char* txdName, int 
     }
 }
 
+int16_t __fastcall CAEPedSpeechAudioEntity__AddSayEvent_Hook(CAEPedSpeechAudioEntity* This, int, eAudioEvents audioEvent, int16_t gCtx, uint32_t startTimeDelay, float probability, bool overideSilence, bool isForceAudible, bool isFrontEnd)
+{
+    CPed* ped = (CPed*)((uintptr_t)This - 0x294);
+
+    if (!ped->IsPlayer())
+    {
+        if (auto networkPed = CNetworkPedManager::GetPed(ped))
+        {
+            if (!networkPed->m_bSyncing)
+            {
+                return -1;
+            }
+        }
+    }
+
+    auto result = plugin::CallMethodAndReturn<int16_t, 0x4E6550>(This, audioEvent, gCtx, startTimeDelay, probability, overideSilence, isForceAudible, isFrontEnd);
+    
+    if (result == -1)
+    {
+        return result;
+    }
+
+
+    CPackets::PedSay packet{};
+    packet.phraseId = gCtx;
+    packet.startTimeDelay = startTimeDelay;
+    packet.overrideSilence = overideSilence;
+    packet.isForceAudible = isForceAudible;
+    packet.isFrontEnd = isFrontEnd;
+
+    if (ped == FindPlayerPed(0))
+    {
+        packet.isPlayer = true;
+    }
+    else
+    {
+        if (auto networkPed = CNetworkPedManager::GetPed(ped))
+        {
+            if (networkPed->m_bSyncing)
+            {
+                packet.isPlayer = false;
+                packet.entityid = networkPed->m_nPedId;
+            }
+            else
+            {
+                return result;
+            }
+        }
+        else
+        {
+            return result;
+        }
+    }
+
+    CNetwork::SendPacket(CPacketsID::PED_SAY, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+
+    return result;
+}
+
 void PedHooks::InjectHooks()
 {
     // ped hooks
@@ -114,4 +173,6 @@ void PedHooks::InjectHooks()
     patch::RedirectCall(0x62B12A, CWeapon__Fire_Hook);
 
     patch::RedirectJump(0x40B45E, CStreaming__RequestSpecialModel_Hook);
+
+    patch::RedirectCall(0x5F000B, CAEPedSpeechAudioEntity__AddSayEvent_Hook);
 }

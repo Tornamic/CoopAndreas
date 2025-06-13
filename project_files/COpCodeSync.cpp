@@ -83,14 +83,14 @@ const SSyncedOpCode syncedOpcodes[] =
     {0x03E5}, // print_help {key} [gxt_key]
     {0x054C}, // load_mission_text {tableName} [string]
     {0x0998}, // award_player_mission_respect {value} [int]
-
+    
     // Population managment
     {0x01EB}, // set_car_density_multiplier {multiplier} [float]
     {0x0395}, // clear_area {x} [float] {y} [float] {z} [float] {radius} [float] {clearParticles} [bool]
     {0x03DE}, // set_ped_density_multiplier {multiplier} [float]
     {0x09D2}, // enable_ambient_crime {state} [bool]
     {0x06D0}, // switch_emergency_services {state} [bool]
-
+    {0x014C}, // switch_car_generator[CarGenerator] {amount} [int]
 
     // Camera
     {0x015F}, // set_fixed_camera_position {x} [float] {y} [float] {z} [float] {xRotation} [float] {yRotation} [float] {zRotation} [float]
@@ -117,12 +117,13 @@ const SSyncedOpCode syncedOpcodes[] =
     // Interiors
     {0x04BB}, // set_area_visible {areaId} [Interior]
     //{0x07FB}, // switch_entry_exit {interiorName} [string] {state} [bool]
-
+    
     // Weapons
     {0x06AB, true, {eSyncedParamType::PED}}, // hide_char_weapon_for_scripted_cutscene [Char] {state} [bool]
     {0x07A7, true, {eSyncedParamType::PED}}, // task_jetpack {handle} [Char]
 
     // Tasks
+    {0x05BA, true, {eSyncedParamType::PED}}, // task_stand_still {handle} [Char] {time} [int]
     {0x05BF, true, {eSyncedParamType::PED, eSyncedParamType::PED}}, // task_look_at_char {observer} [Char] {target} [Char] {time} [int]
     {0x05C0, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}}, // task_look_at_vehicle {char} [Char] {vehicle} [Car] {time} [int]
     {0x05CA, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}}, // task_enter_car_as_passenger {char} [Char] {vehicle} [Car] {time} [int] {seatId} [int]
@@ -136,18 +137,19 @@ const SSyncedOpCode syncedOpcodes[] =
     {0x0792, true, {eSyncedParamType::PED}}, // clear_char_tasks_immediately [Char]
     {0x0967, true, {eSyncedParamType::PED}}, // start_char_facial_talk [Char] {duration} [int]
     {0x0968, true, {eSyncedParamType::PED}}, // stop_char_facial_talk [Char]
-
+    
     // Actors
     {0x00A1, true, {eSyncedParamType::PED}}, // set_char_coordinates [Char] {x} [float] {y} [float] {z} [float]
     {0x0173, true, {eSyncedParamType::PED}}, // set_char_heading [Char] {heading} [float]
     {0x0350, true, {eSyncedParamType::PED}}, // set_char_stay_in_same_place [Char] {state} [bool]
     {0x07A1}, // set_next_desired_move_state {moveState} [MoveState]
-
+    {0x0245, true, {eSyncedParamType::PED}}, // set_anim_group_for_char[Char] {animGroup} [AnimGroup]
+    {0x0860, true, {eSyncedParamType::PED}}, // {0860:} set_char_area_visible [Char] {interiorId} [int]
 
     // Vehicles
     {0x00AB, true, {eSyncedParamType::VEHICLE}}, // set_car_coordinates [Car] {x} [float] {y} [float] {z} [float]
     {0x0175, true, {eSyncedParamType::VEHICLE}}, // set_car_heading [Car] {heading} [float]
-
+    
     // Explosions
     {0x070C, true, {eSyncedParamType::VEHICLE}}, // explode_car_in_cutscene [Car]
 

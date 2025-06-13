@@ -237,6 +237,9 @@ void FixCrashes()
 
     patch::Nop(0x5B1930, 11);
     patch::Nop(0x5B1942, 5);
+
+    // looks like a solution to fix duplication of peds when creating at attractors (please)
+    patch::SetFloat(0x86D26C, 10.0f);
 }
 
 #define SCANCODE_BUFFER_SIZE (8 * 20000)
@@ -310,6 +313,7 @@ void RelocateScanCodes()
     memset((BYTE*)0xB7D0B8, 0, 8 * 14400);
 }
 
+
 void SimulateCopyrightScreen()
 {
     CLoadingScreen::m_currDisplayedSplash = 0;
@@ -343,6 +347,12 @@ uint32_t CStreaming__AddImageToList_Hook(const char* fileName, bool notPlayerFil
     if (strncmp(fileName, "DATA\\SCRIPT\\SCRIPT.IMG", 22) == 0)
     {
         fileName = aImgPath;
+
+        if (!FileExists(aImgPath))
+        {
+            MessageBoxA(NULL, "'CoopAndreas\\script.img' is not found, try to reinstall the mod", "CoopAndreas Fatal Error", MB_ICONERROR);
+            exit(0);
+        }
     }
 
     return plugin::CallAndReturnDyn<uint32_t>(CStreaming__AddImageToList_ptr, fileName, notPlayerFile);
@@ -350,9 +360,16 @@ uint32_t CStreaming__AddImageToList_Hook(const char* fileName, bool notPlayerFil
 
 void PatchSCM()
 {
+    if (!FileExists(aScriptPath))
+    {
+        MessageBoxA(NULL, "'CoopAndreas\\main.scm' is not found, try to reinstall the mod", "CoopAndreas Fatal Error", MB_ICONERROR);
+        exit(0);
+    }
+
     // use our main.scm
     patch::SetPointer(0x468EB5 + 1, (void*)aScriptDir);
     patch::SetPointer(0x489A45 + 1, (void*)aScriptPath);
+
 
     // hook script.img loading
     CStreaming__AddImageToList_ptr = injector::GetBranchDestination(0x5B915B).as_int();

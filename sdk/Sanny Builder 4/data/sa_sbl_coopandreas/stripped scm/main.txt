@@ -1,0 +1,63 @@
+DEFINE MISSIONS 0
+//DEFINE MISSION {ID} 0 AT {LABEL} @
+DEFINE EXTERNAL_SCRIPTS -1 // Use -1 to not build script.img, or 0 to build script.img with a dummy script
+//DEFINE SCRIPT {NAME}  AT {LABEL} @
+DEFINE UNKNOWN_EMPTY_SEGMENT 0
+DEFINE UNKNOWN_THREADS_MEMORY 0
+
+var
+    $player1: Player
+    $scplayer: Char
+    $Players_Group: Group
+end
+
+//-------------MAIN---------------
+script_name 'MAIN'
+Game.SetMaxWantedLevel(6)
+set_deatharrest_state 0
+Clock.SetTimeOfDay(8, 0)
+Streaming.RequestCollision(2488.56, -1666.84)
+Streaming.LoadScene(2488.56, -1666.84, 13.38)
+$player1 = Player.Create(0, 2488.56, -1666.84, 13.38)
+$scplayer = $player1.GetChar
+$Players_Group = $player1.GetGroup
+Camera.SetBehindPlayer
+Weather.ForceNow(WeatherType.ExtraSunnyLa)
+wait 0
+
+// set player model
+$player1.GiveClothesOutsideShop("PLAYER_FACE", "HEAD", BodyPart.Head)
+$player1.GiveClothesOutsideShop("JEANSDENIM", "JEANS", BodyPart.Legs)
+$player1.GiveClothesOutsideShop("SNEAKERBINCBLK", "SNEAKER", BodyPart.Shoes)
+$player1.GiveClothesOutsideShop("VEST", "VEST", BodyPart.Torso)
+$player1.BuildModel
+$player1.SetControl(True)
+
+Camera.DoFade(0, Fade.In)
+Streaming.SetAreaVisible(0)
+Stat.SetInt(181, 4)
+Restart.AddHospital(2027.77, -1420.52, 15.99, 137.0, Town.LS)
+Restart.AddPolice(1550.68, -1675.49, 14.51, 90.0, Town.LS)
+declare_mission_flag $ONMISSION
+$mission_trigger_wait_time = 250
+Text.ClearHelp
+
+// put your start_new_script commands here
+// start_new_script @
+
+while true
+    wait $mission_trigger_wait_time
+    $hours, $minutes = Clock.GetTimeOfDay()
+end
+
+// put your scripts here
+
+
+//-------------Mission 0---------------
+// put your missions here
+
+
+
+//-------------External script 0---------------
+// put your external scripts here
+

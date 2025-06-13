@@ -123,35 +123,17 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
 //    return nullptr;
 //}
 
-CEntryExit* CEntryExitManager__AddOne_Hook(float enter_x,float enter_y,float enter_z,float enter_rotation,float x_radius,float y_radius,int c8,float exit_x,float exit_y,float exit_z,float exit_rotation,char interiorId,WORD flags,char skyColor,char timeOn,char timeOff,char numPedsToSpawn,char* name)
-{
-    auto result = plugin::CallAndReturn<CEntryExit*, 0x43FA00>(enter_x, enter_y, enter_z, enter_rotation, x_radius, y_radius, c8, exit_x, exit_y, exit_z, exit_rotation, interiorId, flags, skyColor, timeOn, timeOff, numPedsToSpawn, name);
-    
-    if (CLocalPlayer::m_bIsHost)
-    {
-        CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingThisFrame = true;
-        return result;
-    }
-
-    if (CEntryExitMarkerSync::ms_vLastData.empty())
-        return result;
-
-    CEntryExitMarkerSync::Receive(CEntryExitMarkerSync::ms_vLastData.data(), CEntryExitMarkerSync::ms_vLastData.size());
-
-    return result;
-}
-
-bool __fastcall CEntryExit__TransitionFinished_Hook(CEntryExit* This, int, CPed* ped)
-{
-    bool result = This->TransitionFinished(ped);
-
-    if (CLocalPlayer::m_bIsHost)
-    {
-        CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingThisFrame = true;
-    }
-
-    return result;
-}
+//bool __fastcall CEntryExit__TransitionFinished_Hook(CEntryExit* This, int, CPed* ped)
+//{
+//    bool result = This->TransitionFinished(ped);
+//
+//    if (CLocalPlayer::m_bIsHost)
+//    {
+//        CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingThisFrame = true;
+//    }
+//
+//    return result;
+//}
 
 void WorldHooks::InjectHooks()
 {
@@ -226,8 +208,8 @@ void WorldHooks::InjectHooks()
     //    patch::RedirectCall(0x53A9B7, CFireManager__StartFire_Hook);
     //}
 
-    patch::RedirectCall(0x533A8D, CEntryExitManager__AddOne_Hook);
-    patch::RedirectCall(0x5B812D, CEntryExitManager__AddOne_Hook);
+    //patch::RedirectCall(0x533A8D, CEntryExitManager__AddOne_Hook);
+    //patch::RedirectCall(0x5B812D, CEntryExitManager__AddOne_Hook);
 
-    patch::RedirectCall(0x440F89, CEntryExit__TransitionFinished_Hook);
+    //patch::RedirectCall(0x440F89, CEntryExit__TransitionFinished_Hook);
 }

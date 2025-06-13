@@ -36,8 +36,8 @@ public:
 	char GetWeaponSkill(eWeaponType weaponType);
 	void WarpIntoVehicleDriver(CVehicle* vehicle);
 	void RemoveFromVehicle(CVehicle* vehicle);
-	void UpdateHeading(float heading);
 	void WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid);
 	void EnterVehiclePassenger(CVehicle* vehicle, int seatid);
+	void HandleTask(CPackets::SetPlayerTask& packet);
 };
 

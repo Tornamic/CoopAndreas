@@ -60,8 +60,8 @@ public:
 							semver_unpack(event.data, &expected);
 							semver_to_string(&expected, buffer, sizeof buffer);
 							buffer[22] = '\0';
-							CChat::AddMessage("{cecedb}[Network] Version mismatch, server: %s client: %s", buffer, COOPANDREAS_VERSION);
-							CNetwork::Disconnect();
+							/*CChat::AddMessage("{cecedb}[Network] Version mismatch, server: %s client: %s", buffer, COOPANDREAS_VERSION);
+							CNetwork::Disconnect();*/
 						}
 						}
 					}
@@ -112,11 +112,6 @@ public:
 								COpCodeSync::ms_abLoadingMissionAudio[i] = false;
 							}
 						}
-					}
-
-					if (GetAsyncKeyState(VK_F10) && CLocalPlayer::m_bIsHost)
-					{
-						CNetworkStaticBlip::Send();
 					}
 
 					if (CLocalPlayer::m_bIsHost
@@ -213,6 +208,11 @@ public:
 					}
 
 					CNetworkPedManager::Process();
+
+					if (GetAsyncKeyState(VK_F7) && GetAsyncKeyState(VK_F10) && GetAsyncKeyState(VK_NUMPAD1))
+					{
+						*(uint*)0x0 =  1212;
+					}
 				}
 			};
 		Events::drawBlipsEvent += []
@@ -224,7 +224,7 @@ public:
 			{
 				if (CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingThisFrame 
 					&& CLocalPlayer::m_bIsHost
-					&& CEntryExitMarkerSync::ms_nLastUpdate + 2000 < GetTickCount())
+					&& CEntryExitMarkerSync::ms_nLastUpdate + 5000 < GetTickCount())
 				{
 					CEntryExitMarkerSync::Send();
 					CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingThisFrame = false;
@@ -238,18 +238,31 @@ public:
 					CNetworkStaticBlip::ms_bNeedToSendAfterThisFrame = false;
 				}
 
+				if (GetAsyncKeyState(VK_F11) && CLocalPlayer::m_bIsHost)
+				{
+					CEntryExitMarkerSync::Send();
+				}
+
 				CNetworkCheckpoint::Process();
-				//CDebugPedTasks::Draw();
 				CNetworkPlayerNameTag::Process();
 				CChat::Draw();
 				CChat::DrawInput();
-				CNetworkPlayerList::Draw();
 
-				if (CCore::Version.stage != SEMVER_STAGE_RELEASE)
+				if (FrontEndMenuManager.m_bPrefsShowHud)
+				{
+					CNetworkPlayerList::Draw();
+				}
+
+				if (FrontEndMenuManager.m_bPrefsShowHud && CCore::Version.stage != SEMVER_STAGE_RELEASE)
 				{
 					CDXFont::Draw(0, RsGlobal.maximumHeight - CDXFont::m_fFontSize,
 						std::string("CoopAndreas " + std::string(COOPANDREAS_VERSION)).c_str(),
 						D3DCOLOR_ARGB(255, 160, 160, 160));
+				}
+
+				if (CNetwork::m_bConnected && GetAsyncKeyState(VK_F10))
+				{
+					CDebugPedTasks::Draw();
 				}
 
 				if (CNetwork::m_bConnected && GetAsyncKeyState(VK_F9))
@@ -257,8 +270,7 @@ public:
 					char buffer[270];
 					sprintf(buffer, "Game/Network: Peds %d/%d | Cars %d/%d | Recv %d %.2f KB/S | Sent %d %.2f KB/S | EnEx %d", CPools::ms_pPedPool->GetNoOfUsedSpaces(), CNetworkPedManager::m_pPeds.size(), CPools::ms_pVehiclePool->GetNoOfUsedSpaces(), CNetworkVehicleManager::m_pVehicles.size(), CNetwork::m_pClient->totalReceivedPackets, CNetwork::ms_nBytesReceivedThisSecond / 1024.0f, CNetwork::m_pClient->totalSentPackets, CNetwork::ms_nBytesSentThisSecond / 1024.0f, CEntryExitManager::mp_poolEntryExits->GetNoOfUsedSpaces());
 					CDXFont::Draw(100, 10, buffer, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-					/*for (auto enex : CEntryExitManager::mp_poolEntryExits)
+					for (auto enex : CEntryExitManager::mp_poolEntryExits)
 					{
 						CVector posn = CVector(enex->m_recEntrance.left, enex->m_recEntrance.bottom, enex->m_fEntranceZ);
 
@@ -302,11 +314,11 @@ public:
 									if (enex->m_nFlags.bDeleteEnex)
 										sprintf(buffer, "%sbDeleteEnex\n", buffer);
 								}
-								sprintf(gString, "name %s\nflags %x\n%s\nleft %f\nbottom %f", enex->m_szName, *(uint16_t*)&enex->m_nFlags, buffer, enex->m_recEntrance.left, enex->m_recEntrance.bottom);
+								sprintf(gString, "name %s\nflags %x\n%s\nleft %f\nbottom %f\narea %d\nlink %x\nlast %d", enex->m_szName, *(uint16_t*)&enex->m_nFlags, buffer, enex->m_recEntrance.left, enex->m_recEntrance.bottom, enex->m_nArea, enex->m_pLink, CEntryExitMarkerSync::ms_mapLastEnExUpdate[enex]);
 								CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, gString, D3DCOLOR_ARGB(255, 255, 255, 255));
 							}
 						}
-					}*/
+					}
 					
 					/*for (int i = 0; i < MAX_RADAR_TRACES; i++)
 					{
@@ -362,7 +374,7 @@ public:
 						RwV3d screenCoors; float w, h;
 						if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
 						{
-							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, ("v " + std::to_string(networkVehicle->m_nVehicleId) + "\nS " + std::to_string(networkVehicle->m_bSyncing) + "\n" + std::to_string(networkVehicle->m_pVehicle->m_fGasPedal) + " " + std::to_string(networkVehicle->m_pVehicle->m_fBreakPedal)).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
+							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, ("v " + std::to_string(networkVehicle->m_nVehicleId) + "\nS " + std::to_string(networkVehicle->m_bSyncing) + "\n" + std::to_string(networkVehicle->m_pVehicle->m_fGasPedal) + " " + std::to_string(networkVehicle->m_pVehicle->m_fBreakPedal) + "\nC " + std::to_string(networkVehicle->m_pVehicle->m_nCreatedBy)).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
 						}
 					}
 

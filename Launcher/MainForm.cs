@@ -26,7 +26,7 @@ namespace Launcher
             FormBorderStyle = FormBorderStyle.FixedSingle;
         }
 
-        private async void MainForm_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             string configDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CoopAndreas");
             string configFilePath = Path.Combine(configDirectory, "launcher.ini");
@@ -44,11 +44,15 @@ namespace Launcher
 
             var computerId = new ComputerID();
 
-            await Task.Run(() =>
+            Task.Factory.StartNew(() =>
             {
                 string id = computerId.GetUniqueSystemId();
-                tb_command.Text = $"/gen {id}";
+                this.Invoke((MethodInvoker)delegate
+                {
+                    tb_command.Text = $"/gen {id}";
+                });
             });
+
         }
 
         private void connectButton_Click(object sender, EventArgs e)

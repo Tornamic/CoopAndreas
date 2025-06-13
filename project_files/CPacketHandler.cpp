@@ -78,7 +78,8 @@ CPackets::PlayerOnFoot* CPacketHandler::PlayerOnFoot__Collect()
 	packet->velocity = player->m_vecMoveSpeed;
 
 	// get player facing angle
-	packet->rotation = player->m_fCurrentRotation;
+	packet->currentRotation = player->m_fCurrentRotation;
+	packet->aimingRotation = player->m_fAimingRotation;
 	
 	// get player health, armour
 	packet->health = (unsigned char)player->m_fHealth;
@@ -132,7 +133,8 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 
 	CUtil::GiveWeaponByPacket(networkPlayer, packet->weapon, packet->ammo);
 
-	networkPlayer->UpdateHeading(packet->rotation);
+	networkPlayer->m_pPed->m_fCurrentRotation = packet->currentRotation;
+	networkPlayer->m_pPed->m_fAimingRotation = packet->aimingRotation;
 
 	CUtil::SetPlayerJetpack(networkPlayer, packet->hasJetpack);
 
@@ -1224,7 +1226,8 @@ void CPacketHandler::PlayerAimSync__Handle(void* data, int size)
 		player->m_aimSyncData = *packet;
 		if (player->m_lOnFoot)
 		{
-			player->m_lOnFoot->rotation = packet->aimZ;
+			player->m_lOnFoot->currentRotation = packet->aimZ;
+			player->m_lOnFoot->aimingRotation = packet->aimZ;
 		}
 	}
 }
@@ -1347,6 +1350,11 @@ void CPacketHandler::AssignVehicleSyncer__Handle(void* data, int size)
 		CChat::AddMessage("NO MORE SYNCING THE VEHICLE %d", packet->vehicleid);
 #endif
 		networkVehicle->m_bSyncing = false;
+		
+		if (auto vehicle = networkVehicle->m_pVehicle)
+		{
+			vehicle->SetVehicleCreatedBy(eVehicleCreatedBy::MISSION_VEHICLE);
+		}
 	}
 	else
 	{
@@ -1354,6 +1362,49 @@ void CPacketHandler::AssignVehicleSyncer__Handle(void* data, int size)
 		CChat::AddMessage("THE SERVER SAID ME TO SYNC THE VEHICLE %d", packet->vehicleid);
 #endif
 		networkVehicle->m_bSyncing = true;
+
+		if (auto vehicle = networkVehicle->m_pVehicle)
+		{
+			vehicle->SetVehicleCreatedBy(networkVehicle->m_nCreatedBy);
+		}
+	}
+}
+
+// AssignPedSyncer
+
+void CPacketHandler::AssignPedSyncer__Handle(void* data, int size)
+{
+	CPackets::AssignPedSyncer* packet = (CPackets::AssignPedSyncer*)data;
+
+	CNetworkPed* networkPed = CNetworkPedManager::GetPed(packet->pedid);
+
+	if (!networkPed)
+		return;
+
+	if (networkPed->m_bSyncing)
+	{
+#ifdef PACKET_DEBUG_MESSAGES
+		CChat::AddMessage("NO MORE SYNCING THE PED %d", packet->pedid);
+#endif
+		networkPed->m_bSyncing = false;
+
+		if (auto ped = networkPed->m_pPed)
+		{
+			ped->SetCharCreatedBy(2);
+		}
+	}
+	else
+	{
+#ifdef PACKET_DEBUG_MESSAGES
+		CChat::AddMessage("THE SERVER SAID ME TO SYNC THE PED %d", packet->pedid);
+#endif
+		networkPed->m_bSyncing = true;
+		networkPed->m_bClaimOnRelease = false;
+
+		if (auto ped = networkPed->m_pPed)
+		{
+			ped->SetCharCreatedBy(networkPed->m_nCreatedBy);
+		}
 	}
 }
 
@@ -1634,5 +1685,98 @@ void CPacketHandler::CreateMissionMarker__Handle(void* data, int size)
 		return;
 
 	CPackets::CreateStaticBlip* packet = (CPackets::CreateStaticBlip*)data;
-	CNetworkStaticBlip::Create(packet->position, static_cast<eRadarSprite>(packet->sprite), static_cast<eBlipDisplay>(packet->display), packet->type ? BLIP_COORD : BLIP_CONTACTPOINT, packet->trackingBlip, packet->shortRange);
+	CNetworkStaticBlip::Create(*packet);
+}
+
+// SetVehicleCreatedBy
+
+void CPacketHandler::SetVehicleCreatedBy__Handle(void* data, int size)
+{
+	if (CLocalPlayer::m_bIsHost)
+		return;
+
+	CPackets::SetVehicleCreatedBy* packet = (CPackets::SetVehicleCreatedBy*)data;
+
+	if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(packet->vehicleid))
+	{
+		networkVehicle->m_nCreatedBy = packet->createdBy;
+
+		if (networkVehicle->m_bSyncing)
+		{
+			if (auto vehicle = networkVehicle->m_pVehicle)
+			{
+				vehicle->SetVehicleCreatedBy(packet->createdBy);
+			}
+		}
+	}
+}
+
+// SetPlayerTask
+
+void CPacketHandler::SetPlayerTask__Handle(void* data, int size)
+{
+	CPackets::SetPlayerTask* packet = (CPackets::SetPlayerTask*)data;
+
+	if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(packet->playerid))
+	{
+		networkPlayer->HandleTask(*packet);
+	}
+}
+
+// PedSay
+
+void CPacketHandler::PedSay__Handle(void* data, int size)
+{
+	CPackets::PedSay* packet = (CPackets::PedSay*)data;
+
+	//CChat::AddMessage("PedSay %d %d %d %d %d", packet->phraseId, packet->startTimeDelay, packet->overrideSilence, packet->isForceAudible, packet->isFrontEnd);
+
+	if (packet->phraseId >= 360)
+		return;
+
+	CPed* ped = nullptr;
+
+	if (packet->isPlayer)
+	{
+		if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(packet->entityid))
+		{
+			ped = networkPlayer->m_pPed;
+		}
+	}
+	else
+	{
+		if (auto networkPed = CNetworkPedManager::GetPed(packet->entityid))
+		{
+			ped = networkPed->m_pPed;
+		}
+	}
+
+	if (ped)
+	{
+		// CAEPedSpeechAudioEntity::AddSayEvent
+		plugin::CallMethodAndReturn<int16_t, 0x4E6550>(
+			&ped->m_pedSpeech, 
+			52, 
+			packet->phraseId, 
+			packet->startTimeDelay, 
+			1.0f,
+			packet->overrideSilence, 
+			packet->isForceAudible, 
+			packet->isFrontEnd);
+	}
+}
+
+// PedResetAllClaims
+
+void CPacketHandler::PedResetAllClaims__Handle(void* data, int size)
+{
+	CPackets::PedResetAllClaims* packet = (CPackets::PedResetAllClaims*)data;
+
+	if (auto networkPed = CNetworkPedManager::GetPed(packet->pedid))
+	{
+		if (!networkPed->m_bSyncing)
+		{
+			networkPed->m_bClaimOnRelease = false;
+		}
+	}
 }

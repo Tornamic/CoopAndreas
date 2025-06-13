@@ -3,17 +3,42 @@
 #include "CEntryExitManager.h"
 #include <unordered_set>
 
+struct SEntryExitFlags
+{
+    unsigned short bUnknownInterior : 1;
+    unsigned short bUnknownPairing : 1;
+    unsigned short bCreateLinkedPair : 1;
+    unsigned short bRewardInterior : 1;
+    unsigned short bUsedRewardEntrance : 1;
+    unsigned short bCarsAndAircraft : 1;
+    unsigned short bBikesAndMotorcycles : 1;
+    unsigned short bDisableOnFoot : 1;
+
+    unsigned short bAcceptNpcGroup : 1;
+    unsigned short bFoodDateFlag : 1;
+    unsigned short bUnknownBurglary : 1;
+    unsigned short bDisableExit : 1;
+    unsigned short bBurglaryAccess : 1;
+    unsigned short bEnteredWithoutExit : 1;
+    unsigned short bEnableAccess : 1;
+    unsigned short bDeleteEnex : 1;
+};
+
 void CEntryExitMarkerSync::Send()
 {
     std::vector<uint8_t> buffer;
     uint16_t count = 0;
-    size_t estimatedSize = sizeof(uint16_t);
+    //                          disabled       burglary          count
+    size_t estimatedSize = sizeof(bool) + sizeof(bool) + sizeof(uint16_t);
 
     for (auto entryExit : CEntryExitManager::mp_poolEntryExits)
     {
         count++;
-        estimatedSize += sizeof(float) + sizeof(float) + sizeof(uint16_t);
+        //                      areaId            rec.left         rec.bottom         flags
+        estimatedSize += sizeof(uint8_t) + sizeof(int16_t) + sizeof(int16_t) + sizeof(uint16_t);
     }
+
+    //CChat::AddMessage("count: %d", count);
 
     buffer.clear();
     buffer.reserve(estimatedSize);
@@ -30,23 +55,36 @@ void CEntryExitMarkerSync::Send()
 
     for (auto entryExit : CEntryExitManager::mp_poolEntryExits)
     {
-        buffer.insert(buffer.end(), (uint8_t*)&entryExit->m_recEntrance.left, (uint8_t*)&entryExit->m_recEntrance.left + sizeof(float));
-        buffer.insert(buffer.end(), (uint8_t*)&entryExit->m_recEntrance.bottom, (uint8_t*)&entryExit->m_recEntrance.bottom + sizeof(float));
-        buffer.insert(buffer.end(), (uint8_t*)&entryExit->m_nFlags, (uint8_t*)&entryExit->m_nFlags + sizeof(uint16_t));
+        int16_t left   = (int16_t)std::floor(entryExit->m_recEntrance.left);
+        int16_t bottom = (int16_t)std::floor(entryExit->m_recEntrance.bottom);
 
-        if (*(uint16_t*)&entryExit->m_nFlags == 0xFDFD)
-        {
-            CChat::AddMessage("flags == 0xFDFD");
-        }
+        buffer.push_back(entryExit->m_nArea);
+        buffer.insert(buffer.end(), (uint8_t*)&left, (uint8_t*)&left + sizeof(int16_t));
+        buffer.insert(buffer.end(), (uint8_t*)&bottom, (uint8_t*)&bottom + sizeof(int16_t));
+        buffer.insert(buffer.end(), (uint8_t*)&entryExit->m_nFlags, (uint8_t*)&entryExit->m_nFlags + sizeof(uint16_t));
     }
 
-    std::cout << "Final buffer size: " << estimatedSize << " bytes" << std::endl;
+    /*CChat::AddMessage("Final buffer size: es%d buf%d bytes", estimatedSize, buffer.size());
+
+    std::ofstream outFile("file_test_s.bin", std::ios::binary | std::ios::out);
+    if (outFile.is_open())
+    {
+        outFile.write(reinterpret_cast<const char*>(buffer.data()), buffer.size());
+        outFile.close();
+        CChat::AddMessage("Data successfully saved to file_test_s.bin");
+    }
+    else
+    {
+        CChat::AddMessage("Failed to open file for writing");
+    }*/
 
     CNetwork::SendPacket(CPacketsID::ENEX_SYNC, buffer.data(), estimatedSize, ENET_PACKET_FLAG_RELIABLE);
 }
 
 void CEntryExitMarkerSync::Receive(void* data, size_t size)
 {
+    //CChat::AddMessage("Final buffer size: %d bytes", size);
+
     ms_vLastData.assign((uint8_t*)data, (uint8_t*)data + size);
 
     uint8_t* buffer = static_cast<uint8_t*>(data);
@@ -66,33 +104,46 @@ void CEntryExitMarkerSync::Receive(void* data, size_t size)
     memcpy(&count, buffer + offset, sizeof(uint16_t));
     offset += sizeof(uint16_t);
 
+    //CChat::AddMessage("count: %d", count);
+
     int i = 0;
     for (size_t i = 0; i < count; ++i)
     {
-        float x, y;
+        uint8_t area;
+        int16_t left, bottom;
 
-        memcpy(&x, buffer + offset, sizeof(float));
-        offset += sizeof(float);
+        memcpy(&area, buffer + offset, sizeof(uint8_t));
+        offset += sizeof(uint8_t);
 
-        memcpy(&y, buffer + offset, sizeof(float));
-        offset += sizeof(float);
+        memcpy(&left, buffer + offset, sizeof(int16_t));
+        offset += sizeof(int16_t);
 
-        uint16_t flags;
-        memcpy(&flags, buffer + offset, sizeof(uint16_t));
-        offset += sizeof(uint16_t);
+        memcpy(&bottom, buffer + offset, sizeof(int16_t));
+        offset += sizeof(int16_t);
+
+        SEntryExitFlags flags;
+        memcpy(&flags, buffer + offset, sizeof(SEntryExitFlags));
+        offset += sizeof(SEntryExitFlags);
 
         for (auto entryExit : CEntryExitManager::mp_poolEntryExits)
         {
-            if(entryExit->m_recEntrance.left == x 
-                && entryExit->m_recEntrance.bottom == y)
+            if ((int16_t)std::floor(entryExit->m_recEntrance.left) == left && (int16_t)std::floor(entryExit->m_recEntrance.bottom) == bottom && entryExit->m_nArea == area)
             {
                 memcpy(&entryExit->m_nFlags, &flags, 2);
-                if (flags == 0xFDFD)
-                {
-                    CChat::AddMessage("flags == 0xFDFD #%d", i);
-                }
-                i++;
             }
         }
     }
+
+    /*std::ofstream outFile("file_test_c.bin", std::ios::binary | std::ios::out);
+    if (outFile.is_open())
+    {
+        outFile.write(reinterpret_cast<const char*>(data), size);
+        outFile.close();
+        CChat::AddMessage("Data successfully saved to file_test_c.bin");
+    }
+    else
+    {
+        CChat::AddMessage("Failed to open file for writing");
+    }*/
+
 }

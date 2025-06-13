@@ -20,6 +20,14 @@
 #include "Commands/CCommandUpdateCheckpointForNetworkPlayer.h"
 #include "Commands/CCommandRemoveCheckpointForNetworkPlayer.h"
 #include "Commands/CCommandEnableSyncingThisScript.h"
+#include "Commands/CCommandGetVehicleNetworkId.h"
+#include "Commands/CCommandGetPedNetworkId.h"
+#include "Commands/CCommandGetPedInAreaWithModel.h"
+#include "Commands/CCommandClaimPedOnRelease.h"
+#include "Commands/CCommandCancelPedClaim.h"
+#include "Commands/CCommandIsSyncingThisPed.h"
+#include "Commands/CCommandPedResetAllClaims.h"
+#include "Commands/CCommandPedTakeHost.h"
 
 class CCustomCommandRegistrar
 {
@@ -45,5 +53,13 @@ public:
 		CCustomCommandMgr::RegisterCommand(0x1D10, new CCommandUpdateCheckpointForNetworkPlayer());
 		CCustomCommandMgr::RegisterCommand(0x1D11, new CCommandRemoveCheckpointForNetworkPlayer());
 		CCustomCommandMgr::RegisterCommand(0x1D12, new CCommandEnableSyncingThisScript());
+		CCustomCommandMgr::RegisterCommand(0x1D13, new CCommandGetVehicleNetworkId());
+		CCustomCommandMgr::RegisterCommand(0x1D14, new CCommandGetPedNetworkId());
+		CCustomCommandMgr::RegisterCommand(0x1D15, new CCommandGetPedInAreaWithModel());
+		CCustomCommandMgr::RegisterCommand(0x1D16, new CCommandClaimPedOnRelease());
+		CCustomCommandMgr::RegisterCommand(0x1D17, new CCommandCancelPedClaim());
+		CCustomCommandMgr::RegisterCommand(0x1D18, new CCommandIsSyncingThisPed());
+		CCustomCommandMgr::RegisterCommand(0x1D19, new CCommandPedResetAllClaims());
+		CCustomCommandMgr::RegisterCommand(0x1D1A, new CCommandPedTakeHost());
 	}
 };

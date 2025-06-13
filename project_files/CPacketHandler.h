@@ -50,6 +50,7 @@ public:
 	static void RebuildPlayer__Handle(void* data, int size);
 	static void RebuildPlayer__Trigger();
 	static void AssignVehicleSyncer__Handle(void* data, int size);
+	static void AssignPedSyncer__Handle(void* data, int size);
 	static void RespawnPlayer__Handle(void* data, int size);
 	static void MassPacketSequence__Handle(void* data, int size);
 	static void StartCutscene__Handle(void* data, int size);
@@ -68,4 +69,8 @@ public:
 	static void RemoveCheckpoint__Handle(void* data, int size);
 	static void EnExSync__Handle(void* data, int size);
 	static void CreateMissionMarker__Handle(void* data, int size);
+	static void SetVehicleCreatedBy__Handle(void* data, int size);
+	static void SetPlayerTask__Handle(void* data, int size);
+	static void PedSay__Handle(void* data, int size);
+	static void PedResetAllClaims__Handle(void* data, int size);
 };

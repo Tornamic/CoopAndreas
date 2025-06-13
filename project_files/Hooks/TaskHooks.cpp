@@ -312,12 +312,12 @@ void TaskHooks::InjectHooks()
 
     //patch::RedirectCall(0x62D813, CTaskSimpleGangDriveBy__ProcessAiming_Hook);
 
-    // ped tasks hooks (help me im going crazy)
-    patch::RedirectJump(0x681AF0, CTaskManager__SetTask_Hook);
+    // ped tasks hooks (help me im going crazy) usused, maybe it will be useful in future?
+   /* patch::RedirectJump(0x681AF0, CTaskManager__SetTask_Hook);
     patch::RedirectJump(0x681B60, CTaskManager__SetTaskSecondary_Hook);
     patch::RedirectJump(0x61A449, CTaskComplex__SetSubTask_Hook);
     patch::RedirectJump(0x61A3A0, CTaskSimple__dtor_Hook);
-    patch::RedirectJump(0x61A413, CTaskComplex__dtor_Hook);
+    patch::RedirectJump(0x61A413, CTaskComplex__dtor_Hook);*/
 
     patch::SetPointer(0x86D744, CTaskSimpleUseGun__SetPedPosition_Hook);
 }

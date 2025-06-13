@@ -287,6 +287,38 @@ void CCarCtrl__UpdateCarAI_Hook(CVehicle* vehicle)
     plugin::Call<0x41DA30>(vehicle);
 }
 
+void __fastcall CVehicle__SetVehicleCreatedBy_Hook(CVehicle* This, int, int createdBy)
+{
+    This->SetVehicleCreatedBy(createdBy);
+
+    if (!CLocalPlayer::m_bIsHost)
+        return;
+
+    if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(This))
+    {
+        CPackets::SetVehicleCreatedBy packet{};
+        packet.vehicleid = networkVehicle->m_nVehicleId;
+        packet.createdBy = static_cast<uint8_t>(createdBy);
+        CNetwork::SendPacket(CPacketsID::SET_VEHICLE_CREATED_BY, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    }
+}
+
+void CTheScripts__CleanUpThisVehicle_Hook(CVehicle* vehicle)
+{
+    CTheScripts::CleanUpThisVehicle(vehicle);
+
+    if (!CLocalPlayer::m_bIsHost)
+        return;
+
+    if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle))
+    {
+        CPackets::SetVehicleCreatedBy packet{};
+        packet.vehicleid = networkVehicle->m_nVehicleId;
+        packet.createdBy = static_cast<uint8_t>(vehicle->m_nCreatedBy);
+        CNetwork::SendPacket(CPacketsID::SET_VEHICLE_CREATED_BY, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    }
+}
+
 void VehicleHooks::InjectHooks()
 {
     patch::RedirectCall(0x53C1CB, CCarCtrl__RemoveDistantCars_Hook);
@@ -342,4 +374,28 @@ void VehicleHooks::InjectHooks()
     patch::RedirectCall(0x6C1C5B, CCarCtrl__UpdateCarAI_Hook);
     patch::RedirectCall(0x6F1925, CCarCtrl__UpdateCarAI_Hook);
     patch::RedirectCall(0x6F1979, CCarCtrl__UpdateCarAI_Hook);
+
+    patch::RedirectCall(0x445A20, CVehicle__SetVehicleCreatedBy_Hook);
+    patch::RedirectCall(0x445E64, CVehicle__SetVehicleCreatedBy_Hook);
+    patch::RedirectCall(0x469506, CVehicle__SetVehicleCreatedBy_Hook);
+    patch::RedirectCall(0x469542, CVehicle__SetVehicleCreatedBy_Hook);
+    patch::RedirectCall(0x469567, CVehicle__SetVehicleCreatedBy_Hook);
+    patch::RedirectCall(0x46EC89, CVehicle__SetVehicleCreatedBy_Hook);
+    patch::RedirectCall(0x4815E1, CVehicle__SetVehicleCreatedBy_Hook);
+    patch::RedirectCall(0x6F3C33, CVehicle__SetVehicleCreatedBy_Hook);
+
+    if (CCore::gvm.IsHoodlum())
+    {
+        patch::RedirectCall(0x156217F, CVehicle__SetVehicleCreatedBy_Hook);
+        
+        patch::RedirectCall(0x468AEB, CTheScripts__CleanUpThisVehicle_Hook);
+        patch::RedirectCall(0x47D775, CTheScripts__CleanUpThisVehicle_Hook);
+        patch::RedirectCall(0x64CED4, CTheScripts__CleanUpThisVehicle_Hook);
+        patch::RedirectCall(0x64D186, CTheScripts__CleanUpThisVehicle_Hook);
+    }
+    else
+    {
+        patch::RedirectCall(0x45AE9F, CVehicle__SetVehicleCreatedBy_Hook);
+        patch::RedirectCall(0x4866AF, CVehicle__SetVehicleCreatedBy_Hook);
+    }
 }

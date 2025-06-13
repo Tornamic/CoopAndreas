@@ -205,3 +205,27 @@ void CNetworkPed::RemoveFromVehicle(CVehicle* vehicle)
     task.m_bWarpingOutOfCar = true;
     task.ProcessPed(m_pPed);
 }
+
+void CNetworkPed::ClaimOnRelease()
+{
+    if (m_bClaimOnRelease || m_bSyncing)
+        return;
+
+    CPackets::PedClaimOnRelease packet{};
+    packet.pedid = m_nPedId;
+    CNetwork::SendPacket(CPacketsID::PED_CLAIM_ON_RELEASE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+
+    m_bClaimOnRelease = true;
+}
+
+void CNetworkPed::CancelClaim()
+{
+    if (!m_bClaimOnRelease || m_bSyncing)
+        return;
+
+    CPackets::PedCancelClaim packet{};
+    packet.pedid = m_nPedId;
+    CNetwork::SendPacket(CPacketsID::PED_CANCEL_CLAIM, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+
+    m_bClaimOnRelease = false;
+}

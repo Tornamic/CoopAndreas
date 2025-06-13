@@ -25,7 +25,7 @@ void __declspec(naked) CVehicleAnimGroup__ComputeAnimDoorOffsets_Hook()
     }
 }
 
-void __declspec(naked) CAnimManager__BlendAnimation_Hook()
+static void __declspec(naked) CAnimManager__BlendAnimation_Hook()
 {
     __asm
     {

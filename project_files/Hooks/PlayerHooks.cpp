@@ -40,16 +40,23 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     if (CPad::GetPad(0)->NewState.RightShoulder1) // is aiming
     {
-        player->m_pPed->m_fAimingRotation =
-            player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->rotation;
+        player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->currentRotation;
     }
+    player->m_pPed->m_fAimingRotation = player->m_lOnFoot->aimingRotation;
 
     player->m_pPed->m_fHealth = player->m_lOnFoot->health;
     player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
 
-    player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
+    CTask* activeTask = player->m_pPed->m_pIntelligence->m_TaskMgr.GetActiveTask();
+
+    if (activeTask && activeTask->GetId() != eTaskType::TASK_COMPLEX_JUMP)
+    {
+        player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
+    }
 
     plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
+
+    player->m_pPed->m_fAimingRotation = player->m_lOnFoot->aimingRotation;
 
     CWorld::PlayerInFocus = 0;
 
@@ -138,7 +145,7 @@ static void __fastcall CPedIK__PointGunInDirection_Hook(CPedIK* This, int paddin
     if (player->m_lOnFoot == nullptr)
         return;
 
-    player->m_pPed->m_fAimingRotation = player->m_lOnFoot->rotation;
+    player->m_pPed->m_fAimingRotation = player->m_lOnFoot->aimingRotation;
     
     eWeaponType weapon = player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
 
@@ -231,7 +238,43 @@ void __fastcall CPedDamageResponseCalculator__ComputeWillKillPed_Hook(uintptr_t 
 
 bool __fastcall CPlayerPed__CanPlayerStartMission_Hook(CPlayerPed* This, int)
 {
-    return This->CanPlayerStartMission() && CLocalPlayer::m_bIsHost;
+    return This->CanPlayerStartMission()/* && CLocalPlayer::m_bIsHost*/;
+}
+
+void __fastcall CPlayerPed__ProcessWeaponSwitch_Hook(CPlayerPed* This, int, CPad* pad)
+{
+    if (CWorld::PlayerInFocus == 0)
+    {
+        This->ProcessWeaponSwitch(pad);
+    }
+}
+
+void __fastcall CTaskSimplePlayerOnFoot__PlayIdleAnimations_Hook(CTaskSimplePlayerOnFoot* This, int, CPlayerPed* playerPed)
+{
+    if (CWorld::PlayerInFocus == 0)
+    {
+        plugin::CallMethod<0x6872C0>(This, playerPed);
+    }
+}
+
+bool __fastcall CPad__JumpJustDown_Hook(CPad* This)
+{
+    if (CWorld::PlayerInFocus == 0)
+    {
+        return This->JumpJustDown();
+    }
+
+    return false;
+}
+
+void __fastcall CTaskComplexJump_CTaskManager__SetTask_Hook(CTaskManager* This, int, CTask* task, int tasksId, bool a4)
+{
+    This->SetTask(task, tasksId, a4);
+
+    if (CWorld::PlayerInFocus == 0)
+    {
+        CLocalPlayer::BuildTaskPacket(TASK_COMPLEX_JUMP);
+    }
 }
 
 void PlayerHooks::InjectHooks()
@@ -263,4 +306,11 @@ void PlayerHooks::InjectHooks()
 
     patch::RedirectCall(0x4577E6, CPlayerPed__CanPlayerStartMission_Hook);
     patch::RedirectCall(0x4895B0, CPlayerPed__CanPlayerStartMission_Hook);
+
+    patch::RedirectCall(0x60F2E0, CPlayerPed__ProcessWeaponSwitch_Hook); // disable switching weapon for network players
+
+    patch::RedirectCall(0x6887E2, CTaskSimplePlayerOnFoot__PlayIdleAnimations_Hook);
+
+    patch::RedirectCall(0x688700, CPad__JumpJustDown_Hook);
+    patch::RedirectCall(0x6887D8, CTaskComplexJump_CTaskManager__SetTask_Hook);
 }

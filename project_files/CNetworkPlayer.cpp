@@ -233,12 +233,38 @@ void CNetworkPlayer::RemoveFromVehicle(CVehicle* vehicle)
 	task.ProcessPed(m_pPed);
 }
 
-void CNetworkPlayer::UpdateHeading(float heading)
+void CNetworkPlayer::HandleTask(CPackets::SetPlayerTask& packet)
 {
-	m_pPed->m_fAimingRotation = heading;
-
-	if (fabs(m_pPed->m_fCurrentRotation - heading) > M_PI_2)
+	if (!m_pPed)
 	{
-		m_pPed->m_fCurrentRotation = heading;
+		return;
+	}
+
+#ifdef PACKET_DEBUG_MESSAGES
+	CChat::AddMessage("HandleTask %d toggle %d", packet.taskType, packet.toggle);
+#endif
+
+	m_pPed->m_matrix->pos = packet.position;
+	m_pPed->m_fCurrentRotation = packet.rotation;
+
+	CTask* activeTask = m_pPed->m_pIntelligence->m_TaskMgr.GetActiveTask();
+	eTaskType activeTaskType = activeTask ? activeTask->GetId() : TASK_NONE;
+	switch ((eTaskType)packet.taskType)
+	{
+	case eTaskType::TASK_COMPLEX_JUMP:
+		m_pPed->ClearWeaponTarget();
+		if (activeTask && activeTaskType == packet.taskType/* && activeTask->MakeAbortable(m_pPed, ABORT_PRIORITY_IMMEDIATE, nullptr)*/) // if the jump task is active
+		{
+			return;
+		}
+
+		if (m_pPed->m_pIntelligence->GetTaskDuck(false))
+		{
+			CTaskSimpleDuckToggle(0).ProcessPed(m_pPed);
+		}
+
+		m_pPed->m_pIntelligence->m_TaskMgr.SetTask(new CTaskComplexJump(0), 3, false);
+
+		break;
 	}
 }

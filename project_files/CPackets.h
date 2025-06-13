@@ -44,6 +44,7 @@ enum CPacketsID : unsigned short
 	REBUILD_PLAYER,
 	RESPAWN_PLAYER,
 	ASSIGN_VEHICLE,
+	ASSIGN_PED,
 	MASS_PACKET_SEQUENCE,
 	START_CUTSCENE,
 	SKIP_CUTSCENE,
@@ -59,6 +60,13 @@ enum CPacketsID : unsigned short
 	REMOVE_CHECKPOINT,
 	ENEX_SYNC,
 	CREATE_STATIC_BLIP,
+	SET_VEHICLE_CREATED_BY,
+	SET_PLAYER_TASK,
+	PED_SAY,
+	PED_CLAIM_ON_RELEASE,
+	PED_CANCEL_CLAIM,
+	PED_RESET_ALL_CLAIMS,
+	PED_TAKE_HOST,
 	PACKET_ID_MAX
 };
 
@@ -107,6 +115,7 @@ public:
 			sizeof(RebuildPlayer), // REBUILD_PLAYER
 			sizeof(RespawnPlayer), // RESPAWN_PLAYER
 			sizeof(AssignVehicleSyncer), // ASSIGN_VEHICLE
+			sizeof(AssignPedSyncer), // ASSIGN_PED
 			0, // MASS_PACKET_SEQUENCE
 			sizeof(StartCutscene), // START_CUTSCENE,
 			sizeof(SkipCutscene), // SKIP_CUTSCENE,
@@ -144,7 +153,8 @@ public:
 		int id = 0;
 		CVector position = CVector();
 		CVector velocity = CVector();
-		float rotation = 0.0f;
+		float currentRotation = 0.0f;
+		float aimingRotation = 0.0f;
 		unsigned char health = 100;
 		unsigned char armour = 0;
 		unsigned char weapon = 0;
@@ -463,6 +473,11 @@ public:
 		int vehicleid;
 	};
 
+	struct AssignPedSyncer
+	{
+		int pedid;
+	};
+
 	struct RespawnPlayer
 	{
 		int playerid;
@@ -553,5 +568,55 @@ public:
 		uint8_t type : 1; // 0 - BLIP_CONTACT_POINT, 1 - BLIP_COORD
 		uint8_t trackingBlip : 1;
 		uint8_t shortRange : 1;
+		uint8_t friendly : 1; // It is affected by BLIP_COLOUR_THREAT.   
+		uint8_t coordBlipAppearance : 2; // see eBlipAppearance
+		uint8_t size : 3;
+	};
+
+	struct SetVehicleCreatedBy
+	{
+		int vehicleid;
+		uint8_t createdBy;
+	};
+
+	struct SetPlayerTask
+	{
+		int playerid;
+		int taskType;
+		CVector position;
+		float rotation;
+		bool toggle;
+	};
+
+	struct PedSay
+	{
+		int entityid : 31;
+		int isPlayer : 1;
+		int16_t phraseId;
+		int startTimeDelay;
+		uint8_t overrideSilence : 1;
+		uint8_t isForceAudible : 1;
+		uint8_t isFrontEnd : 1;
+	};
+
+	struct PedClaimOnRelease
+	{
+		int pedid;
+	};
+
+	struct PedCancelClaim
+	{
+		int pedid;
+	};
+
+	struct PedResetAllClaims
+	{
+		int pedid;
+	};
+
+	struct PedTakeHost
+	{
+		int pedid;
+		bool allowReturnToPreviousHost;
 	};
 };
