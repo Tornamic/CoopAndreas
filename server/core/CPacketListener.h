@@ -1,11 +1,11 @@
-#pragma once
-
-#ifndef _CPACKERLISTENER_H_
-	#define _CPACKERLISTENER_H_
+#if !defined(_COOPSERVER_NETWORK_PACKETLISTENER_H_) || !defined(_COOPSERVER_CPACKETLISTENER_H_)
+#define _COOPSERVER_NETWORK_PACKETLISTENER_H_
+#define _COOPSERVER_CPACKETLISTENER_H_
 
 #include <vector>
 #include <algorithm>
-#include "../thirdparty-libraries/enet/enet.h"
+
+#include "../include/enet/enet.h"
 
 
 class CPacketListener
@@ -19,7 +19,7 @@ class CPacketListener
 			m_iPacketID = var_id;
 			m_callback = callback;
 		}
-		~CPacketListener();
+		~CPacketListener() { }
 	
 };
 

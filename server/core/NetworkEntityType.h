@@ -1,7 +1,7 @@
-#pragma once
+#if !defined(_COOPSERVER_NETWORK_NETWORKENTITYTYPE_H_) || !defined(_COOPSERVER_NETWORKENTITYTYPE_H_)
+#define _COOPSERVER_NETWORK_NETWORKENTITYTYPE_H_
+#define _COOPSERVER_NETWORKENTITYTYPE_H_
 
-#ifndef _NETWORKENTITYTYPE_H_
-	#define _NETWORKENTITYTYPE_H_
 #include <cstdint>
 
 enum eNetworkEntityType : uint8_t

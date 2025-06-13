@@ -1,5 +1,3 @@
-
-#include "../core/CPlayer.h"
 #include "../core/CPlayerManager.h"
 #include "../core/CVehicleManager.h"
 

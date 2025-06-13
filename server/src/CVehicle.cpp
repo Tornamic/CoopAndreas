@@ -1,6 +1,6 @@
-
 #include "../core/CVehicle.h"
 #include "../core/CVehicleManager.h"
+#include "../core/CVehiclePackets.h"
 
 CVehicle::CVehicle(int vehicleid, unsigned short model, CVector pos, float rot)
 {

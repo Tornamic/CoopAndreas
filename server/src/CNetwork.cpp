@@ -1,19 +1,16 @@
-
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <unordered_map>
-
+#include "../core/CNetwork.h"
 #include "../core/CPacketListener.h"
 #include "../core/CPacket.h"
-#include "../core/CNetwork.h"
 
 #include "../core/CPlayerManager.h"
+#include "../core/CPlayerPackets.h"
 #include "../core/CVehicleManager.h"
+#include "../core/CVehiclePackets.h"
 #include "../core/CPedManager.h"
+#include "../core/CPedPackets.h"
 
-#include "../shared/semver.h"
+#include "../../shared/semver.h"
+
 
 
 std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
@@ -46,6 +43,7 @@ bool CNetwork::Init(unsigned short port)
 
 
     ENetEvent event;
+     
     while (true) // waiting for event
     {
         enet_host_service(server, &event, 1);
@@ -124,8 +122,6 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::SET_VEHICLE_CREATED_BY, CVehiclePackets::SetVehicleCreatedBy::Handle);
     CNetwork::AddListener(CPacketsID::SET_PLAYER_TASK, CPlayerPackets::SetPlayerTask::Handle);
     CNetwork::AddListener(CPacketsID::PED_SAY, CPlayerPackets::PedSay::Handle);
-    CNetwork::AddListener(CPacketsID::PED_CLAIM_ON_RELEASE, CPedPackets::PedClaimOnRelease::Handle);
-    CNetwork::AddListener(CPacketsID::PED_CANCEL_CLAIM, CPedPackets::PedCancelClaim::Handle);
     CNetwork::AddListener(CPacketsID::PED_RESET_ALL_CLAIMS, CPedPackets::PedResetAllClaims::Handle);
     CNetwork::AddListener(CPacketsID::PED_TAKE_HOST, CPedPackets::PedTakeHost::Handle);
 }
@@ -205,9 +201,9 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
 
     if (packedVersion != event.data)
     {
-        /*printf("Wrong version, disconnecting...\n");
-        enet_peer_disconnect_now(event.peer, packedVersion);
-        return;*/
+        printf("Wrong version, disconnecting...\n");
+        //enet_peer_disconnect_now(event.peer, packedVersion);
+        return;
     }
 
     // set player disconnection timeout
