@@ -11,8 +11,10 @@
 #endif
 
 #include "include/enet/enet.h"
+#include "include/dini/iem-dracoblue-implementation.h"
 #include "core/CNetwork.h"
 
+#include "core/CConfigFile.h"
 #include "../shared/semver.h"
 
 int main(int argc, char *argv[])
@@ -39,12 +41,18 @@ int main(int argc, char *argv[])
 	printf("[!] : Platform : GNU/Linux | BSD \n");
 #endif
 
-	char c_port[6+2];
-	short port = 0;	
-	printf("\n[!] : Enter the port for the server (IP:PORT) : ");
-	std::cin >> c_port;
-	printf("\n[!] : Selected Port (PORT:%s)\n", c_port);
-	port = std::atoi(c_port);
+	int port = 0;	
+	CConfigFile serverconfig;
+	if(serverconfig.InitConfigFile() == false)
+	{
+		exit(EXIT_FAILURE);
+	}
+	if(serverconfig.GetConfigFileVariable_Port(port) == false)
+	{
+		exit(EXIT_FAILURE);
+	}
+	
+	
 	CNetwork::Init(port);
 	return 0;
 }
