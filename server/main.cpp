@@ -1,36 +1,26 @@
-
 #include <iostream>
+#include <cstdlib>
 #include <string>
 #include <vector>
 #include <algorithm>
 #include <thread>
 
-#include "thirdparty-libraries/enet/enet.h"
+#if defined (_WIN32)
+#include <winsock2.h>
+#include <windows.h>
+#endif
 
-#include "core/CControllerState.h"
-#include "core/NetworkEntityType.h"
-#include "core/CPacketListener.h"
-#include "core/CVector.h"
+#include "include/enet/enet.h"
+#include "include/dini/iem-dracoblue-implementation.h"
 #include "core/CNetwork.h"
-#include "core/CPed.h"
-#include "core/CPedManager.h"
-#include "core/CPlayer.h"
-#include "core/CPlayerManager.h"
-#include "core/CVehicle.h"
-#include "core/CVehicleManager.h"
-#include "core/VehicleDoorState.h"
 
-//#include "core-external/ConfigDatabase.hpp"
-
-
+#include "core/CConfigFile.h"
+#include "../shared/semver.h"
 
 int main(int argc, char *argv[])
 {
-	//unsigned int configport;
-	//ConfigDatabase::Init(configport, "server-config.ini");
-	//printf("* variable = %d", configport);
 #if defined (_WIN32)
-	SetConsoleTitle(L"CoopAndreas Server");
+	SetConsoleTitleA("CoopAndreas Server");
 #endif
 	printf("[!] : Support:\n");
 	printf("- https://github.com/Tornamic/CoopAndreas\n");
@@ -50,6 +40,19 @@ int main(int argc, char *argv[])
 #else
 	printf("[!] : Platform : GNU/Linux | BSD \n");
 #endif
-	CNetwork::Init(6767);
+
+	int port = 0;	
+	CConfigFile serverconfig;
+	if(serverconfig.InitConfigFile() == false)
+	{
+		exit(EXIT_FAILURE);
+	}
+	if(serverconfig.GetConfigFileVariable_Port(port) == false)
+	{
+		exit(EXIT_FAILURE);
+	}
+	
+	
+	CNetwork::Init(port);
 	return 0;
 }

@@ -1,44 +1,8 @@
-#pragma once
+#if !defined(_COOPSERVER_INPUTCONTROLLERS_CONTROLLERSTATE_H_) || !defined(_COOPSERVER_CCONTROLLERSTATE_H_)
+#define _COOPSERVER_INPUTCONTROLLERS_CONTROLLERSTATE_H_
+#define _COOPSERVER_CCONTROLLERSTATE_H_
 
-#ifndef _CCONTROLLERSTATE_H_
-    #define _CCONTROLLERSTATE_H_
-
-class CControllerState 
-{    
-    public:
-        CControllerState();
-        signed short LeftStickX; // move/steer left (-128?)/right (+128)
-        signed short LeftStickY; // move back(+128)/forwards(-128?)
-        signed short RightStickX; // numpad 6(+128)/numpad 4(-128?)
-        signed short RightStickY;
-    
-        signed short LeftShoulder1;
-        signed short LeftShoulder2;
-        signed short RightShoulder1; // target / hand brake
-        signed short RightShoulder2;
-    
-        signed short DPadUp; // radio change up           Next radio station / Call gang forward/Recruit gang member
-        signed short DPadDown; // radio change down       Previous radio station / Gang stay back/Release gang (hold)
-        signed short DPadLeft; //                         Skip trip/Action / Negative talk reply
-        signed short DPadRight; //                        Next user MP3 track / Positive talk reply
-    
-        signed short Start;                             //Pause
-        signed short Select;                            //Camera modes
-    
-        signed short ButtonSquare; // jump / reverse      Break/Reverse / Jump/Climb
-        signed short ButtonTriangle; // get in/out        Exit vehicle / Enter veihcle
-        signed short ButtonCross; // sprint / accelerate  Accelerate / Sprint/Swim
-        signed short ButtonCircle; // fire                Fire weapon
-    
-        signed short ShockButtonL;
-        signed short ShockButtonR; // look behind
-    
-        signed short m_bChatIndicated;
-        signed short m_bPedWalk;
-        signed short m_bVehicleMouseLook;
-        signed short m_bRadioTrackSkip;
-        ~CControllerState();
-};
+#include <cstdint>
 
 //#pragma pack(1)
 struct CCompressedControllerState
@@ -101,4 +65,43 @@ struct CCompressedControllerState
         uint16_t disableFlags;
     };
 };
+
+
+class CControllerState 
+{    
+    public:
+        CControllerState() { }
+        short LeftStickX; // move/steer left (-128?)/right (+128)
+        short LeftStickY; // move back(+128)/forwards(-128?)
+        short RightStickX; // numpad 6(+128)/numpad 4(-128?)
+        short RightStickY;
+    
+        short LeftShoulder1;
+        short LeftShoulder2;
+        short RightShoulder1; // target / hand brake
+        short RightShoulder2;
+    
+        short DPadUp; // radio change up           Next radio station / Call gang forward/Recruit gang member
+        short DPadDown; // radio change down       Previous radio station / Gang stay back/Release gang (hold)
+        short DPadLeft; //                         Skip trip/Action / Negative talk reply
+        short DPadRight; //                        Next user MP3 track / Positive talk reply
+    
+        short Start;                             //Pause
+        short Select;                            //Camera modes
+    
+        short ButtonSquare; // jump / reverse      Break/Reverse / Jump/Climb
+        short ButtonTriangle; // get in/out        Exit vehicle / Enter veihcle
+        short ButtonCross; // sprint / accelerate  Accelerate / Sprint/Swim
+        short ButtonCircle; // fire                Fire weapon
+    
+        short ShockButtonL;
+        short ShockButtonR; // look behind
+    
+        short m_bChatIndicated;
+        short m_bPedWalk;
+        short m_bVehicleMouseLook;
+        short m_bRadioTrackSkip;
+        ~CControllerState() { }
+};
+
 #endif
