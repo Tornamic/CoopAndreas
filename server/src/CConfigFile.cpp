@@ -15,6 +15,8 @@ bool CConfigFile::InitConfigFile()
 			config_content.CreateKey(CConfigFile::configfilename, "Server-Port");
 			config_content.CreateKey(CConfigFile::configfilename, "Server-Players");
 			config_content.CreateKey(CConfigFile::configfilename, "Server-IPAddress");
+			printf("[!] : Config file (%s) : Finished now edit values and start server again\n", CConfigFile::configfilename);
+			return false;
 		}
 	}
 	return true;
@@ -30,7 +32,7 @@ bool CConfigFile::GetConfigFileVariable_Port(int &value)
 		return false;
 	}
 	CConfigFile::config_reader.ReadInt(CConfigFile::configfilename, "Server-Port", &value);
-	printf("[!] : Config Port Key (Server-Port) : Server-Port value is %d \n", value);
+	printf("[!] : Config Port Key (Server-Port) : %d", value);
 	return true;
 }
 
@@ -44,13 +46,13 @@ bool CConfigFile::GetConfigFileVariable_Players(int &value)
 		return false;
 	}
 	CConfigFile::config_reader.ReadInt(CConfigFile::configfilename, "Server-Players", &value);
-	printf("\n[!] : Config Port Key (Server-Players) : Server-Players value is %d \n", value);
+	printf("\n[!] : Config Port Key (Server-Players) : %d", value);
 	return true;
 }
 
-bool CConfigFile::GetConfigFileVariable_IPAddress(char *value)
+bool CConfigFile::GetConfigFileVariable_IPAddress(char value[])
 {
-	char *string;
+	char string[DINI_MODULE_MAX_STRING_SIZE];
 	CConfigFile::config_reader.ReadString(CConfigFile::configfilename, "Server-IPAddress", string);
 	if(strcmp(string, "NULL") == 0)
 	{
@@ -58,7 +60,7 @@ bool CConfigFile::GetConfigFileVariable_IPAddress(char *value)
 		return false;
 	}
 	CConfigFile::config_reader.ReadString(CConfigFile::configfilename, "Server-IPAddress", value);
-	printf("\n[!] : Config Port Key (Server-IPAddress) : Server-IPAddress value is %d \n", value);
+	printf("\n[!] : Config Port Key (Server-IPAddress) : %s", value); // contains '\n' char bug from iem-dini library i will fixed later , go check CNetwork.cpp 
 	return true;
 }
 

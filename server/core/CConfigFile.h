@@ -23,11 +23,11 @@ class CConfigFile
 	bool InitConfigFile();
 	bool GetConfigFileVariable_Port(int &value);
 	bool GetConfigFileVariable_Players(int &value);
-	bool GetConfigFileVariable_IPAddress(char *value);
+	bool GetConfigFileVariable_IPAddress(char value[]);
 
 	void SetConfigFileVariable_Port(int &value);
 	void SetConfigFileVariable_Players(int &value);
-	void SetConfigFileVariable_IPAddress(char *value);
+	void SetConfigFileVariable_IPAddress(char value[]);
 
 	~CConfigFile() { }
 };

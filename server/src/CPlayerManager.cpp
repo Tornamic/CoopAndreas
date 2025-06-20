@@ -45,7 +45,7 @@ CPlayer* CPlayerManager::GetPlayer(ENetPeer* peer)
 
 int CPlayerManager::GetFreeID()
 {
-	for (int i = 0; i != MAX_SERVER_PLAYERS; i++)
+	for (int i = 0; i != max_server_slots; i++)
 	{
 		if(CPlayerManager::GetPlayer(i) == nullptr)
 			return i; 

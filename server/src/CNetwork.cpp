@@ -10,12 +10,13 @@
 #include "../core/CPedPackets.h"
 
 #include "../../shared/semver.h"
+#include <cstring>
 
 
 
 std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
 
-bool CNetwork::Init(unsigned short port)
+bool CNetwork::Init(char hostname[], unsigned short &port, int max_slots)
 {
     // init packet listeners
     CNetwork::InitListeners();
@@ -28,10 +29,12 @@ bool CNetwork::Init(unsigned short port)
 
     ENetAddress address;
 
-    address.host = ENET_HOST_ANY; // bind server ip
+    hostname[strcspn(hostname, "\n")] = 0; // fix to remove '\n' coming from iem-dini library , i will fix the bug later in the library
+    enet_address_set_host(&address, hostname);
     address.port = port; // bind server port
 
-    ENetHost* server = enet_host_create(&address, MAX_SERVER_PLAYERS, 2, 0, 0); // create enet host
+
+    ENetHost* server = enet_host_create(&address, max_slots, 2, 0, 0); // create enet host
 
     if (server == NULL)
     {
@@ -39,7 +42,7 @@ bool CNetwork::Init(unsigned short port)
         return false;
     }
 
-    printf("[!] : Server started on port %d\n", port);
+    printf("[!] : Server started on (IP : %s) and (Port : %d) (%s:%d)\n", hostname, port, hostname, port);
 
 
     ENetEvent event;

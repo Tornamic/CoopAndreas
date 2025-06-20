@@ -11,7 +11,7 @@
 #include "../include/enet/enet.h"
 #include "CPacketListener.h"
 
-#define MAX_SERVER_PLAYERS (4) 
+static int max_server_slots = 0;
 static char *COOPANDREAS_VERSION = "0.1.1-alpha";
 
 class CNetwork
@@ -19,7 +19,7 @@ class CNetwork
 	public:
 		CNetwork();
 		static std::unordered_map<unsigned short, CPacketListener*> m_packetListeners;
-		static bool Init(unsigned short port);
+		static bool Init(char hostname[], unsigned short &port, int max_slots = 4);
 		static void InitListeners();
 		static void SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag = (ENetPacketFlag)0);
 		static void SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag = (ENetPacketFlag)0, ENetPeer* dontShareWith = nullptr);

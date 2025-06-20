@@ -41,18 +41,34 @@ int main(int argc, char *argv[])
 	printf("[!] : Platform : GNU/Linux | BSD \n");
 #endif
 
-	int port = 0;	
+	// this code is just an expirement of server config files
+	int port = 0;
+	char ipaddress[DINI_MODULE_MAX_STRING_SIZE] = {0};	// 255 size or 256 i guess , i forget
 	CConfigFile serverconfig;
 	if(serverconfig.InitConfigFile() == false)
 	{
+		printf("1");
+		exit(EXIT_FAILURE);
+	}
+	if(serverconfig.GetConfigFileVariable_IPAddress(ipaddress) == false)
+	{
+		printf("2");
 		exit(EXIT_FAILURE);
 	}
 	if(serverconfig.GetConfigFileVariable_Port(port) == false)
 	{
+		printf("3");
+		exit(EXIT_FAILURE);
+	}
+	if(serverconfig.GetConfigFileVariable_Players(max_server_slots) == false)
+	{
+		printf("4");
 		exit(EXIT_FAILURE);
 	}
 	
+	printf("\n[!] : Max number of players in server is %d\n", max_server_slots);
 	
-	CNetwork::Init(port);
+	unsigned short us_port = port;
+	CNetwork::Init(ipaddress, us_port, max_server_slots);
 	return 0;
 }
