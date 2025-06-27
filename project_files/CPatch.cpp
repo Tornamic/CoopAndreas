@@ -360,6 +360,11 @@ uint32_t CStreaming__AddImageToList_Hook(const char* fileName, bool notPlayerFil
 
 void PatchSCM()
 {
+    // fix modloader compatibility
+    patch::RedirectCall(0x53BC95, (void*)0x5B9030);
+    patch::RedirectCall(0x53BC9B, (void*)0x5B9030);
+    patch::RedirectCall(0x748CFB, (void*)0x53E580);
+
     if (!FileExists(aScriptPath))
     {
         MessageBoxA(NULL, "'CoopAndreas\\main.scm' is not found, try to reinstall the mod", "CoopAndreas Fatal Error", MB_ICONERROR);

@@ -8,6 +8,7 @@
 #include <CNetworkCheckpoint.h>
 #include <CEntryExitMarkerSync.h>
 #include <CNetworkStaticBlip.h>
+#include <CTaskSequenceSync.h>
 // PlayerConnected
 
 void CPacketHandler::PlayerConnected__Handle(void* data, int size)
@@ -1509,8 +1510,8 @@ void CPacketHandler::SkipCutscene__Handle(void* data, int size)
 
 void CPacketHandler::OpCodeSync__Handle(void* data, int size)
 {
-	if (CLocalPlayer::m_bIsHost)
-		return;
+	/*if (CLocalPlayer::m_bIsHost)
+		return;*/
 
 	COpCodeSync::HandlePacket((uint8_t*)data, size);
 }
@@ -1779,4 +1780,11 @@ void CPacketHandler::PedResetAllClaims__Handle(void* data, int size)
 			networkPed->m_bClaimOnRelease = false;
 		}
 	}
+}
+
+// PerformTaskSequence
+
+void CPacketHandler::PerformTaskSequence__Handle(void* data, int size)
+{
+	CTaskSequenceSync::HandlePacket(data, size);
 }

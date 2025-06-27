@@ -335,10 +335,10 @@ public:
 		{
 			if (auto player = CPlayerManager::GetPlayer(peer))
 			{
-				if (player->m_bIsHost)
-				{
+				/*if (player->m_bIsHost)
+				{*/
 					CNetwork::SendPacketToAll(CPacketsID::OPCODE_SYNC, data, size, ENET_PACKET_FLAG_RELIABLE, peer);
-				}
+				//}
 			}
 		}
 	};

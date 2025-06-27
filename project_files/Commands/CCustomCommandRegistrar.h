@@ -28,6 +28,7 @@
 #include "Commands/CCommandIsSyncingThisPed.h"
 #include "Commands/CCommandPedResetAllClaims.h"
 #include "Commands/CCommandPedTakeHost.h"
+#include "Commands/CCommandGetNetworkPlayerInternalId.h"
 
 class CCustomCommandRegistrar
 {
@@ -61,5 +62,6 @@ public:
 		CCustomCommandMgr::RegisterCommand(0x1D18, new CCommandIsSyncingThisPed());
 		CCustomCommandMgr::RegisterCommand(0x1D19, new CCommandPedResetAllClaims());
 		CCustomCommandMgr::RegisterCommand(0x1D1A, new CCommandPedTakeHost());
+		CCustomCommandMgr::RegisterCommand(0x1D1B, new CCommandGetNetworkPlayerInternalId());
 	}
 };

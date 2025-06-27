@@ -31,6 +31,7 @@ void InitWndProc()
 
 void CCore::Init()
 {
+	CCrashLog::ms_lpPreviousFilter = SetUnhandledExceptionFilter(CCrashLog::ExceptionHandler);
 	gvm.Detect();
 #ifdef _DEV
 	CCore::AllocateConsole();
@@ -42,7 +43,6 @@ void CCore::Init()
 	CLaunchManager::CollectCommandLineArgs();
 	CDiscordRPC::Init();
 	COpCodeSync::Init();
-	CCrashLog::ms_lpPreviousFilter = SetUnhandledExceptionFilter(CCrashLog::ExceptionHandler);
 	Events::initGameEvent.after += []
 	{
 		CPatch::TemporaryPatches();
