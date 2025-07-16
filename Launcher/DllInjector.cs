@@ -34,6 +34,13 @@ namespace Launcher
         static extern IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttribute, IntPtr dwStackSize, IntPtr lpStartAddress,
             IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern UInt32 WaitForSingleObject(IntPtr hHandle, UInt32 dwMilliseconds);
+
+        private const UInt32 WAIT_OBJECT_0 = 0x00000000;
+        private const UInt32 WAIT_TIMEOUT = 0x00000102;
+
+
         public Process Process { get; private set; }
 
         public DllInjector(Process process)
@@ -65,60 +72,85 @@ namespace Launcher
 
         private bool bInject(uint pToBeInjected, string sDllPath)
         {
-            IntPtr hndProc = OpenProcess((0x2 | 0x8 | 0x10 | 0x20 | 0x400), 1, pToBeInjected);
+            // Убедимся, что путь абсолютный
+            sDllPath = Path.GetFullPath(sDllPath);
 
-            if (hndProc == INTPTR_ZERO)
-            {
+            // Открываем процесс
+            IntPtr hndProc = OpenProcess(0x2 | 0x8 | 0x10 | 0x20 | 0x400, 1, pToBeInjected);
+            if (hndProc == IntPtr.Zero)
                 return false;
-            }
 
+            // Ждём, пока загрузится vorbisFile.dll
             Process targetProc = Process.GetProcessById((int)pToBeInjected);
             bool vorbisLoaded = false;
             while (!vorbisLoaded)
             {
-                targetProc.Refresh();
-                foreach (ProcessModule module in targetProc.Modules)
+                try
                 {
-                    if (module.ModuleName.Equals("vorbisFile.dll", StringComparison.OrdinalIgnoreCase))
+                    targetProc.Refresh();
+                    foreach (ProcessModule module in targetProc.Modules)
                     {
-                        vorbisLoaded = true;
-                        break;
+                        if (module.ModuleName.Equals("vorbisFile.dll", StringComparison.OrdinalIgnoreCase))
+                        {
+                            vorbisLoaded = true;
+                            break;
+                        }
                     }
+                }
+                catch
+                {
+                    // В случае ошибки доступа — лучше выйти
+                    CloseHandle(hndProc);
+                    return false;
                 }
 
                 if (!vorbisLoaded)
                     Thread.Sleep(100);
             }
 
+            // Получаем адрес LoadLibraryA
             IntPtr lpLLAddress = GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
-
-            if (lpLLAddress == INTPTR_ZERO)
+            if (lpLLAddress == IntPtr.Zero)
             {
+                CloseHandle(hndProc);
                 return false;
             }
 
-            IntPtr lpAddress = VirtualAllocEx(hndProc, (IntPtr)null, (IntPtr)sDllPath.Length, (0x1000 | 0x2000), 0X40);
+            // Добавляем null-терминатор, чтобы LoadLibraryA корректно сработал
+            byte[] dllBytes = Encoding.ASCII.GetBytes(sDllPath + '\0');
 
-            if (lpAddress == INTPTR_ZERO)
+            // Выделяем память под строку с путём
+            IntPtr lpAddress = VirtualAllocEx(hndProc, IntPtr.Zero, (IntPtr)dllBytes.Length, 0x1000 | 0x2000, 0x40);
+            if (lpAddress == IntPtr.Zero)
             {
+                CloseHandle(hndProc);
                 return false;
             }
 
-            byte[] bytes = Encoding.ASCII.GetBytes(sDllPath);
-
-            if (WriteProcessMemory(hndProc, lpAddress, bytes, (uint)bytes.Length, 0) == 0)
+            // Пишем строку в память
+            if (WriteProcessMemory(hndProc, lpAddress, dllBytes, (uint)dllBytes.Length, 0) == 0)
             {
+                CloseHandle(hndProc);
                 return false;
             }
 
-            if (CreateRemoteThread(hndProc, (IntPtr)null, INTPTR_ZERO, lpLLAddress, lpAddress, 0, (IntPtr)null) == INTPTR_ZERO)
+            // Создаём удалённый поток
+            IntPtr hThread = CreateRemoteThread(hndProc, IntPtr.Zero, IntPtr.Zero, lpLLAddress, lpAddress, 0, IntPtr.Zero);
+            if (hThread == IntPtr.Zero)
             {
+                CloseHandle(hndProc);
                 return false;
             }
 
+            // Дожидаемся завершения потока (опционально, но полезно)
+            WaitForSingleObject(hThread, 5000);
+
+            // Закрываем хендлы
+            CloseHandle(hThread);
             CloseHandle(hndProc);
 
             return true;
         }
+
     }
 }

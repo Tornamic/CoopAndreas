@@ -10,6 +10,11 @@ SSyncedOpCode m_syncedTasks[] = // TODO
 	{COMMAND_TASK_ACHIEVE_HEADING, true, eSyncedParamType::PED},
 	{COMMAND_TASK_JUMP, true, eSyncedParamType::PED},
 	{COMMAND_TASK_TIRED, true, eSyncedParamType::PED},
+	{COMMAND_TASK_PLAY_ANIM_SECONDARY, true, eSyncedParamType::PED},
+	{COMMAND_TASK_CHAR_SLIDE_TO_COORD_AND_PLAY_ANIM, true, eSyncedParamType::PED},
+	{COMMAND_TASK_PLAY_ANIM, true, eSyncedParamType::PED},
+	{COMMAND_TASK_TURN_CHAR_TO_FACE_CHAR, true, eSyncedParamType::PED, eSyncedParamType::PED},
+	{COMMAND_TASK_SHOOT_AT_COORD, true, eSyncedParamType::PED},
 };
 
 std::vector<uint8_t> m_serializedSequences[CTaskSequences::NUM_SEQUENCES][CTaskSequences::NUM_TASKS];
@@ -79,7 +84,12 @@ void PerformSequence()
 
 	if (!ped->IsPlayer())
 	{
-		pedid = CNetworkPedManager::GetPed(ped)->m_nPedId;
+		if (auto networkPed = CNetworkPedManager::GetPed(ped))
+		{
+			pedid = networkPed->m_nPedId;
+		}
+
+		if (pedid == -1) return;
 	}
 
 	int sequenceId = CTheScripts::GetActualScriptThingIndex(COpCodeSync::scriptParamsBuffer[1].value, SCRIPT_THING_SEQUENCE_TASK);
@@ -130,8 +140,6 @@ void PerformSequence()
 	}
 
 	CNetwork::SendPacket(CPacketsID::PERFORM_TASK_SEQUENCE, packet.data(), packetSize, ENET_PACKET_FLAG_RELIABLE);
-
-	CChat::AddMessage("Created packet tcount %d, size %d", taskCount, packetSize);
 }
 
 void AddNewTask(eScriptCommands opcode)
@@ -144,7 +152,6 @@ void AddNewTask(eScriptCommands opcode)
 
 	int dataSize = 0;
 	m_serializedSequences[sequenceId][m_sequenceTaskCount] = COpCodeSync::SerializeOpcode(idx, dataSize);
-	CChat::AddMessage("opcode %d size %d", opcode, dataSize);
 
 	m_sequenceTaskCount++;
 }
@@ -154,28 +161,28 @@ bool CTaskSequenceSync::OnOpCodeExecuted(eScriptCommands opcode)
 {
 	if (opcode == COMMAND_OPEN_SEQUENCE_TASK)
 	{
-		//CChat::AddMessage("OpenSequence");
+		CChat::AddMessage("OpenSequence");
 		OpenSequence();
 		return false;
 	}
 
 	if (opcode == COMMAND_CLOSE_SEQUENCE_TASK)
 	{
-		//CChat::AddMessage("CloseSequence");
+		CChat::AddMessage("CloseSequence");
 		CloseSequence();
 		return false;
 	}
 
 	if (opcode == COMMAND_CLEAR_SEQUENCE_TASK)
 	{
-		//CChat::AddMessage("ClearSequence");
+		CChat::AddMessage("ClearSequence");
 		ClearSequence();
 		return false;
 	}
 
 	if (opcode == COMMAND_PERFORM_SEQUENCE_TASK)
 	{
-		//CChat::AddMessage("PerformSequence");
+		CChat::AddMessage("PerformSequence");
 		PerformSequence();
 		return false;
 	}
@@ -185,7 +192,7 @@ bool CTaskSequenceSync::OnOpCodeExecuted(eScriptCommands opcode)
 		&& IsOpCodeTaskSynced(opcode) 
 		&& COpCodeSync::scriptParamsBuffer[0].value == -1)
 	{
-		//CChat::AddMessage("AddNewTask");
+		CChat::AddMessage("AddNewTask");
 		AddNewTask(opcode);
 		return false;
 	}
@@ -195,28 +202,16 @@ bool CTaskSequenceSync::OnOpCodeExecuted(eScriptCommands opcode)
 
 void CTaskSequenceSync::HandlePacket(void* data, int size)
 {
-	std::ofstream outFile("packet_dump.bin", std::ios::binary);
-	if (outFile.is_open()) {
-		outFile.write(reinterpret_cast<char*>(data), size);
-		outFile.close();
-	}
-
-	CChat::AddMessage("CTaskSequenceSync::HandlePacket");
-
-    if (size < 9)
+	if (size < 9)
     {
         return;
     }
-
-	CChat::AddMessage("1. size %d", size);
 
 	int playerid = *(int*)data;
 	int pedid = *(int*)((int)data + 4);
 	uint8_t count = *(uint8_t*)((int)data + 8);
 
 	if (count == 0) return;
-
-	CChat::AddMessage("2");
 
 	int sequenceId = -1;
 	Command<Commands::OPEN_SEQUENCE_TASK>(&sequenceId);
@@ -226,18 +221,27 @@ void CTaskSequenceSync::HandlePacket(void* data, int size)
 		CChat::AddMessage("CTaskSequenceSync::HandlePacket: can't open a new sequence");
 		return;
 	}
-
-	CChat::AddMessage("3. seq %d", sequenceId);
-
+	
 	CPed* ped = nullptr;
 
 	if (pedid == -1)
 	{
-		ped = CNetworkPlayerManager::GetPlayer(playerid)->m_pPed;
+		if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(playerid))
+		{
+			ped = networkPlayer->m_pPed;
+		}
 	}
 	else
 	{
-		ped = CNetworkPedManager::GetPed(pedid)->m_pPed;
+		if (auto networkPed = CNetworkPedManager::GetPed(pedid))
+		{
+			ped = networkPed->m_pPed;
+		}
+	}
+
+	if (ped == nullptr)
+	{
+		return;
 	}
 
 	int ptr = 9;
@@ -247,16 +251,13 @@ void CTaskSequenceSync::HandlePacket(void* data, int size)
 		ptr++;
 
 		COpCodeSync::ms_bProcessingTaskSequence = true;
-		CChat::AddMessage("4. %d", i);
 		COpCodeSync::HandlePacket((uint8_t*)((int)data + ptr), len);
 		COpCodeSync::ms_bProcessingTaskSequence = false;
 
 		ptr += len;
 	}
 
-	CChat::AddMessage("11");
 	Command<Commands::CLOSE_SEQUENCE_TASK>(sequenceId);
 	Command<Commands::PERFORM_SEQUENCE_TASK>(CPools::GetPedRef(ped), sequenceId);
 	Command<Commands::CLEAR_SEQUENCE_TASK>(sequenceId);
-	CChat::AddMessage("12");
 }

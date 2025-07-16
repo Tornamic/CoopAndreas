@@ -277,6 +277,65 @@ void __fastcall CTaskComplexJump_CTaskManager__SetTask_Hook(CTaskManager* This, 
     }
 }
 
+void __fastcall CRunningScript__DoDeatharrestCheck_Hook(CRunningScript* This, int)
+{
+    if (!This->m_bWastedBustedCheck) 
+    {
+        return;
+    }
+
+    if (!CTheScripts::IsPlayerOnAMission()) 
+    {
+        return;
+    }
+
+    bool wastedOrBusted = false;
+    
+    auto* playerInfo = &CWorld::Players[CWorld::PlayerInFocus];
+
+    if (playerInfo->m_nPlayerState == ePlayerState::PLAYERSTATE_HASDIED ||
+        playerInfo->m_nPlayerState == ePlayerState::PLAYERSTATE_HASBEENARRESTED)
+    {
+        wastedOrBusted = true;
+    }
+
+    if (!wastedOrBusted)
+    {
+        for (auto networkPlayer : CNetworkPlayerManager::m_pPlayers)
+        {
+            if (auto ped = networkPlayer->m_pPed)
+            {
+                if (ped->m_ePedState == PEDSTATE_ARRESTED ||
+                    ped->m_ePedState == PEDSTATE_DEAD ||
+                    (ped->m_ePedState == PEDSTATE_DIE && ped->m_nPedFlags.bIsDyingStuck))
+                {
+                    wastedOrBusted = true;
+                }
+            }
+        }
+    }
+
+    if (wastedOrBusted)
+    {
+        CMessages::ClearSmallMessagesOnly();
+        memset(&CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag], 0, sizeof(uint32_t));
+        
+        if (This->m_nSP > 1u)
+        {
+            uint16_t nsp = This->m_nSP;
+            do
+            {
+                --nsp;
+            } while (nsp > 1u);
+            This->m_nSP = nsp;
+        }
+        This->m_pCurrentIP = This->m_apStack[--This->m_nSP];
+
+        This->m_bWastedOrBusted = true;
+        This->m_nWakeTime = 0;
+    }
+}
+
 void PlayerHooks::InjectHooks()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -313,4 +372,6 @@ void PlayerHooks::InjectHooks()
 
     patch::RedirectCall(0x688700, CPad__JumpJustDown_Hook);
     patch::RedirectCall(0x6887D8, CTaskComplexJump_CTaskManager__SetTask_Hook);
+
+    patch::ReplaceFunction(0x485A50, CRunningScript__DoDeatharrestCheck_Hook);
 }

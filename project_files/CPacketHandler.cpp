@@ -911,7 +911,7 @@ void CPacketHandler::GameWeatherTime__Handle(void* data, int size)
 {
 	CPackets::GameWeatherTime* packet = (CPackets::GameWeatherTime*)data;
 
-	CWeather::OldWeatherType = //packet->oldWeather;
+	CWeather::OldWeatherType = packet->oldWeather;
 	CWeather::NewWeatherType = packet->newWeather;
 	//CWeather::ForcedWeatherType = packet->forcedWeather;
 	CClock::ms_nGameClockMonth = packet->currentMonth;

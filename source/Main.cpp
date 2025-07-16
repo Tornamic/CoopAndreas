@@ -394,6 +394,21 @@ public:
 							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, ("p " + std::to_string(networkPed->m_nPedId) + "\nS " + std::to_string(networkPed->m_bSyncing)).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
 						}
 					}
+
+					std::string buf;
+					for (int i = 0; i < 180; i++)
+					{
+						CAnimBlock& block = CAnimManager::ms_aAnimBlocks[i];
+						if (!block.bLoaded)
+							continue;
+
+						buf += std::string(block.szName) + '\n';
+					}
+
+					if (buf.empty())
+						buf = "No loaded anim blocks\n";
+
+					CDXFont::Draw(10, 25, buf.c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
 				}
 			};
 		CCore::Init();

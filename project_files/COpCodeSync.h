@@ -1,5 +1,7 @@
 #pragma once
 
+#define NUM_SYNCED_PARAMS (15)
+
 enum class eSyncedParamType
 {
     NONE,
@@ -62,7 +64,7 @@ public:
 	static inline bool ms_bLoadingCutscene = true;
 	static inline bool ms_abLoadingMissionAudio[4];
 	static inline std::vector<CRunningScript*> ms_vSyncedScripts;
-    static inline OpcodeParameter scriptParamsBuffer[10];
+    static inline OpcodeParameter scriptParamsBuffer[NUM_SYNCED_PARAMS];
     static inline bool ms_bProcessingTaskSequence = false;
 
 	static void Init();

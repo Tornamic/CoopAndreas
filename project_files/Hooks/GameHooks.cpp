@@ -168,6 +168,19 @@ int __purecall_Hook()
     return 0;
 }
 
+
+#ifdef DEBUG
+bool __fastcall CPCKeyboard__GetKeyDown_Hook(int, int, uint16_t key_code, uint8_t use_mode, char* usage)
+{
+    return GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(key_code);
+}
+
+bool __fastcall CPCKeyboard__GetJustKeyDown_Hook(int, int, uint16_t key_code, uint8_t use_mode, char* usage)
+{
+    return GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(key_code) & 0x1;
+}
+#endif
+
 void GameHooks::InjectHooks()
 {
     patch::RedirectCall(0x57C2A3, CMenuManager__DrawFrontEnd_FixChat_Hook);
@@ -191,4 +204,9 @@ void GameHooks::InjectHooks()
    // patch::RedirectCall(0x475459, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
 
     patch::RedirectJump(PURECALL, __purecall_Hook);
+
+#ifdef DEBUG
+    patch::ReplaceFunction(0x571980, CPCKeyboard__GetKeyDown_Hook);
+    patch::ReplaceFunction(0x571970, CPCKeyboard__GetJustKeyDown_Hook);
+#endif
 }

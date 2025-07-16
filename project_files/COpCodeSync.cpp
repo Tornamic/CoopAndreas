@@ -108,7 +108,12 @@ const SSyncedOpCode syncedOpcodes[] =
     {COMMAND_TASK_ACHIEVE_HEADING, true, eSyncedParamType::PED},
     {COMMAND_TASK_JUMP, true, eSyncedParamType::PED},
     {COMMAND_TASK_TIRED, true, eSyncedParamType::PED},
-    
+    {COMMAND_TASK_PLAY_ANIM_SECONDARY, true, eSyncedParamType::PED},
+    {COMMAND_TASK_CHAR_SLIDE_TO_COORD_AND_PLAY_ANIM, true, eSyncedParamType::PED},
+    {COMMAND_TASK_PLAY_ANIM, true, eSyncedParamType::PED},
+    {COMMAND_TASK_TURN_CHAR_TO_FACE_CHAR, true, eSyncedParamType::PED, eSyncedParamType::PED},
+    {COMMAND_TASK_SHOOT_AT_COORD, true, eSyncedParamType::PED},
+
     // Actors
     {0x00A1, true, {eSyncedParamType::PED}}, // set_char_coordinates [Char] {x} [float] {y} [float] {z} [float]
     {0x0173, true, {eSyncedParamType::PED}}, // set_char_heading [Char] {heading} [float]
@@ -123,7 +128,7 @@ const SSyncedOpCode syncedOpcodes[] =
     
     // Explosions
     {0x070C, true, {eSyncedParamType::VEHICLE}}, // explode_car_in_cutscene [Car]
-
+    
     // Audio
     {0x097A}, // report_mission_audio_event_at_position {x} [float] {y} [float] {z} [float] {soundId} [int]
 
@@ -138,8 +143,8 @@ const SSyncedOpCode syncedOpcodes[] =
 };
 
 
-static uint8_t textLengthBuffer[10];
-static char textParamBuffer[10][256];
+static uint8_t textLengthBuffer[NUM_SYNCED_PARAMS];
+static char textParamBuffer[NUM_SYNCED_PARAMS][256];
 
 static uint16_t scriptParamCount = 0;
 static uint16_t textParamCount = 0;
@@ -390,7 +395,6 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
         return;
     }
 
-    CChat::AddMessage("5");
 
     const uint8_t* current = buffer;
 
@@ -398,7 +402,6 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
     memcpy(&header, current, sizeof(header));
     current += sizeof(header);
 
-    
 
     if (bufferSize < sizeof(header) + header.intParamCount * sizeof(int))
     {
@@ -410,8 +413,6 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
         return;
     }
 
-    CChat::AddMessage("6. opcode %x", header.opcode);
-
     memset(scriptParamsBuffer, 0, sizeof(scriptParamsBuffer));
     memset(textLengthBuffer, 0, sizeof(textLengthBuffer));
     memset(textParamBuffer, 0, sizeof(textParamBuffer));
@@ -420,10 +421,10 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
     currentStringIdx = 0;
 
     scriptParamCount = header.intParamCount;
-    if (scriptParamCount > 10) scriptParamCount = 10;
+    if (scriptParamCount > NUM_SYNCED_PARAMS) scriptParamCount = NUM_SYNCED_PARAMS;
 
     textParamCount = header.stringParamCount;
-    if (textParamCount > 10) textParamCount = 10;
+    if (textParamCount > NUM_SYNCED_PARAMS) textParamCount = NUM_SYNCED_PARAMS;
 
     if (scriptParamCount)
     {
@@ -443,8 +444,6 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
 
         if(!found)
             return;
-
-        CChat::AddMessage("7");
 
         if (syncedOpcodes[idx].m_bHasComplexParams)
         {
@@ -475,6 +474,9 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
                                 CChat::AddMessage("Network instance found...");*/
                             if (auto ped = networkPed->m_pPed)
                             {
+                                if (!CUtil::IsValidEntityPtr(ped))
+                                    return;
+
                                 scriptParamsBuffer[i].value = CPools::GetPedRef(ped);
                                 /*if (header.opcode == 0x0605)
                                     CChat::AddMessage("Parsed ped id %d...", networkPed->m_nPedId);*/
@@ -510,6 +512,9 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
                                     CChat::AddMessage("Network instance found...");*/
                                 if (auto ped = networkPlayer->m_pPed)
                                 {
+                                    if (!CUtil::IsValidEntityPtr(ped))
+                                        return;
+
                                     scriptParamsBuffer[i].value = CPools::GetPedRef(ped);
                                     /*if (header.opcode == 0x0605)
                                         CChat::AddMessage("Parsed player id as ped %d...", networkPlayer->m_iPlayerId);*/
@@ -577,6 +582,9 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
                     {
                         if (auto vehicle = networkVehicle->m_pVehicle)
                         {
+                            if (!CUtil::IsValidEntityPtr(vehicle))
+                                return;
+
                             scriptParamsBuffer[i].value = CPools::GetVehicleRef(vehicle);
                             /*if (header.opcode == 0x0605)
                                 CChat::AddMessage("Parsed vehicle id %d...", networkVehicle->m_nVehicleId);*/
@@ -604,8 +612,6 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
         }
     }
 
-    CChat::AddMessage("8");
-
     if (textParamCount)
     {
         for (int i = 0; i < textParamCount; i++)
@@ -628,8 +634,6 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
             current += textLengthBuffer[i];
         }
     }
-
-    CChat::AddMessage("9. 1st param: %d", scriptParamsBuffer[0].value);
 
     static CRunningScript script;
     memset(&script, 0, sizeof(CRunningScript));
@@ -664,6 +668,21 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
     patch::RedirectJump(0x464080, CRunningScript__CollectParameters_Hook_SwitchParametersContext, false);
     patch::RedirectJump(0x463D50, CRunningScript__ReadTextLabelFromScript_Hook_SwitchParametersContext, false);
 
+    // TODO
+    if (header.opcode == COMMAND_TASK_PLAY_ANIM)
+    {
+        char* animlib = textParamBuffer[1];
+        int id = CAnimManager::GetAnimationBlockIndex(animlib);
+        if (id != -1)
+        {
+            if (!CAnimManager::ms_aAnimBlocks[id].bLoaded)
+            {
+                CStreaming::RequestModel(25575 + id, eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
+                CStreaming::LoadAllRequestedModels(true);
+            }
+        }
+    }
+
     if ((header.opcode & 0x7FFF) < CCustomCommandMgr::MIN_CUSTOM_COMMAND)
     {
         CRunningScript::CommandHandlerTable[(header.opcode & 0x7FFF) / 100](&script, header.opcode & 0x7FFF);
@@ -675,8 +694,6 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
 
     patch::SetRaw(0x464080, "\x66\x8B\x44\x24\x04", 5, false);
     patch::SetRaw(0x463D50, "\x8B\x41\x14\x83\xEC\x08", 6, false);
-
-    CChat::AddMessage("10");
 }
 
 void __declspec(naked) OpcodeProcessingWellDone_Hook()
