@@ -42,39 +42,56 @@ bool CNetwork::Init(char hostname[], unsigned short &port, int max_slots)
         return false;
     }
 
-    printf("[!] : Server started on (IP : %s) and (Port : %d) (%s:%d)\n", hostname, port, hostname, port);
+    printf("[!] : Server Will Start  on (IP : %s) and (Port : %d) (%s:%d)\n", hostname, port, hostname, port);
 
 
     ENetEvent event;
-     
-    while (true) // waiting for event
+
+    CNetwork::shared_loop_value = true;
+    std::thread CNetwork_Thread(CNetwork::HandleServerPacketsThread, server, &event, nullptr, nullptr, nullptr);
+    CNetwork_Thread.detach();
+    return 0;
+}
+
+void* CNetwork::HandleServerPacketsThread(ENetHost* p_server, ENetEvent* p_event, void (*p_HandlePlayerConnected)(ENetEvent&), void (*p_HandlePlayerDisconneted)(ENetEvent&), void (*p_HandlePacketReceive)(ENetEvent&))
+{
+  printf("[!] : Server Thread Started \n");
+  p_HandlePlayerConnected = CNetwork::HandlePlayerConnected;
+  p_HandlePlayerDisconneted = CNetwork::HandlePlayerDisconnected;
+  p_HandlePacketReceive = CNetwork::HandlePacketReceive;
+  
+  while (CNetwork::shared_loop_value) // waiting for event
     {
-        enet_host_service(server, &event, 1);
-        switch (event.type)
+      enet_host_service(p_server, p_event, 1);
+        switch (p_event->type)
         {
             case ENET_EVENT_TYPE_CONNECT:
             {
-                CNetwork::HandlePlayerConnected(event);
-                break;
+              //CNetwork::HandlePlayerConnected(event);
+              p_HandlePlayerConnected(*p_event); // // i'm not sure here , *p_event to return value of pointer and make it as reference
+              break;
             }
             case ENET_EVENT_TYPE_RECEIVE:
             {
-                CNetwork::HandlePacketReceive(event);
-                enet_packet_destroy(event.packet);
-                break;
+              //CNetwork::HandlePacketReceive(event);
+              p_HandlePacketReceive(*p_event); // // i'm not sure here , *p_event to return value of pointer and make it as reference
+              enet_packet_destroy(p_event->packet);
+              break;
             }
             case ENET_EVENT_TYPE_DISCONNECT:
             {
-                CNetwork::HandlePlayerDisconnected(event);
-                break;
+              //CNetwork::HandlePlayerDisconnected(event);
+              p_HandlePlayerDisconneted(*p_event); // // i'm not sure here , *p_event to return value of pointer and make it as reference
+              break;
             }
         }
     }
 
-    enet_host_destroy(server);
-    enet_deinitialize();
-    printf("[!] : Server Shutdown (ENET_DEINITIALIZE)\n");
-    return 0;
+   enet_host_destroy(p_server);
+   enet_deinitialize();
+   printf("[!] : Server Shutdown (ENET_DEINITIALIZE)\n");
+  
+  return NULL;
 }
 
 void CNetwork::InitListeners()

@@ -1,3 +1,4 @@
+#include <chrono>
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -20,7 +21,7 @@
 int main(int argc, char *argv[])
 {
 #if defined (_WIN32)
-	SetConsoleTitleA("CoopAndreas Server");
+  SetConsoleTitleA("CoopAndreas Server");
 #endif
 	printf("[!] : Support:\n");
 	printf("- https://github.com/Tornamic/CoopAndreas\n");
@@ -65,10 +66,21 @@ int main(int argc, char *argv[])
 		printf("4");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	printf("\n[!] : Max number of players in server is %d\n", max_server_slots);
-	
+
+    char option = 0;
+    printf("\n[!] : Chose S To Start Server !!!\n");
+    std::cin >> option;
 	unsigned short us_port = port;
-	CNetwork::Init(ipaddress, us_port, max_server_slots);
-	return 0;
+    if(option == 'S')
+    {
+	 CNetwork::Init(ipaddress, us_port, max_server_slots);
+    }
+    printf("\n>> :");
+    std::cin >> option;
+    CNetwork::shared_loop_value = false; // This Atomic Variable Is The Most Important Variable In Entire Server , This is thing behind starting and stoping server's loop 
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000)); // Wait Other Threads To Finish (aka CNetwork::HandleServerPacketsThread)
+    exit(EXIT_SUCCESS); // This Function it will stop any detached threads still runinng
+    return 0;
 }
