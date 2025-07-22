@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 	printf("- https://discord.gg/TwQsR4qxVx\n");
 	printf("- coopandreasmod@gmail.com\n\n");
 
-	printf("[!] : CoopAndreas Server \n");
+	printf("[!] : CoopAndreas Server (V 0.1.1-0.2-B1) \n");
 #ifdef DEBUG
 	char config[] = "Debug";
 #else
