@@ -12,7 +12,7 @@
 #include "../../shared/semver.h"
 #include <cstring>
 
-
+//#define COOP_SERVER_HOSTING_MODE
 
 std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
 
@@ -44,12 +44,47 @@ bool CNetwork::Init(char hostname[], unsigned short &port, int max_slots)
 
     printf("[!] : Server Will Start  on (IP : %s) and (Port : %d) (%s:%d)\n", hostname, port, hostname, port);
 
-
-    ENetEvent event;
-
+#if not defined(COOP_SERVER_HOSTING_MODE)
+    ENetEvent *event = new ENetEvent;
+    memset(event, 0, sizeof(ENetEvent));
     CNetwork::shared_loop_value = true;
-    std::thread CNetwork_Thread(CNetwork::HandleServerPacketsThread, server, &event, nullptr, nullptr, nullptr);
+    std::thread CNetwork_Thread(CNetwork::HandleServerPacketsThread, server, event, nullptr, nullptr, nullptr);
     CNetwork_Thread.detach();
+#else
+    ENetEvent event_v;
+
+    while (true) // waiting for event
+    {
+      enet_host_service(server, &event_v, 1);
+        switch (event_v.type)
+        {
+            case ENET_EVENT_TYPE_CONNECT:
+            {
+              //CNetwork::HandlePlayerConnected(event);
+              HandlePlayerConnected(event_v); // // i'm not sure here , *p_event to return value of pointer and make it as reference
+              break;
+            }
+            case ENET_EVENT_TYPE_RECEIVE:
+            {
+              //CNetwork::HandlePacketReceive(event);
+              HandlePacketReceive(event_v); // // i'm not sure here , *p_event to return value of pointer and make it as reference
+              enet_packet_destroy(event_v.packet);
+              break;
+            }
+            case ENET_EVENT_TYPE_DISCONNECT:
+            {
+              //CNetwork::HandlePlayerDisconnected(event);
+              HandlePlayerDisconnected(event_v); // // i'm not sure here , *p_event to return value of pointer and make it as reference
+              break;
+            }
+        }
+    }
+
+   enet_host_destroy(server);
+   enet_deinitialize();
+   printf("[!] : Server Shutdown (ENET_DEINITIALIZE)\n");
+#endif
+    
     return 0;
 }
 

@@ -16,6 +16,7 @@ add_library(PlayerManager  	OBJECT  	"src/CPlayerManager.cpp")
 add_library(Vehicle        	OBJECT 	  	"src/CVehicle.cpp")
 add_library(VehicleManager 	OBJECT 		"src/CVehicleManager.cpp")
 add_library(ConfigFile	   	OBJECT 		"src/CConfigFile.cpp")
+add_library(CommandManager  OBJECT      "src/CCommandManager.cpp")
 add_executable(${PROJECT_NAME} main.cpp)
 
 target_link_libraries(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/lib/libenet.a")
@@ -34,5 +35,6 @@ target_link_libraries(${PROJECT_NAME} PlayerManager)
 target_link_libraries(${PROJECT_NAME} Vehicle)
 target_link_libraries(${PROJECT_NAME} VehicleManager)
 target_link_libraries(${PROJECT_NAME} ConfigFile)
+target_link_libraries(${PROJECT_NAME} CommandManager)
 
 

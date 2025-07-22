@@ -1,5 +1,27 @@
 #include "../core/CConfigFile.h"
 
+void CConfigFile::GeneralFunctionCall(char* ipaddress, int &port, int &maxconnections) {
+    if(CConfigFile::InitConfigFile() == false)
+	    {
+		    printf("1");
+		    exit(EXIT_FAILURE);
+	    }
+	if(CConfigFile::GetConfigFileVariable_IPAddress(ipaddress) == false)
+	    {
+		    printf("2");
+		    exit(EXIT_FAILURE);
+	    }
+	if(CConfigFile::GetConfigFileVariable_Port(port) == false)
+	    {
+		    printf("3");
+		    exit(EXIT_FAILURE);
+	    }
+	if(CConfigFile::GetConfigFileVariable_Players(maxconnections) == false)
+	    {
+		    printf("4");
+		    exit(EXIT_FAILURE);
+	    }
+}
 bool CConfigFile::InitConfigFile()
 {
 	if(CConfigFile::configfilehandle.FileExists(CConfigFile::configfilename) == false)
@@ -60,7 +82,7 @@ bool CConfigFile::GetConfigFileVariable_IPAddress(char value[])
 		return false;
 	}
 	CConfigFile::config_reader.ReadString(CConfigFile::configfilename, "Server-IPAddress", value);
-	printf("\n[!] : Config Port Key (Server-IPAddress) : %s", value); // contains '\n' char bug from iem-dini library i will fixed later , go check CNetwork.cpp 
+	printf("\n[!] : Config Port Key (Server-IPAddress) : %s", value); // contains '\n' char bug from iem-dini library i will fixed later , go check CNetwork.cpp
 	return true;
 }
 

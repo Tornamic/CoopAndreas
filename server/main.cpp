@@ -1,4 +1,6 @@
 #include <chrono>
+#include <cstdio>
+#include <cstring>
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -13,9 +15,10 @@
 
 #include "include/enet/enet.h"
 #include "include/dini/iem-dracoblue-implementation.h"
-#include "core/CNetwork.h"
 
+#include "core/CNetwork.h"
 #include "core/CConfigFile.h"
+#include "core/CCommandManager.h"
 #include "../shared/semver.h"
 
 int main(int argc, char *argv[])
@@ -42,45 +45,42 @@ int main(int argc, char *argv[])
 	printf("[!] : Platform : GNU/Linux | BSD \n");
 #endif
 
-	// this code is just an expirement of server config files
-	int port = 0;
-	char ipaddress[DINI_MODULE_MAX_STRING_SIZE] = {0};	// 255 size or 256 i guess , i forget
-	CConfigFile serverconfig;
-	if(serverconfig.InitConfigFile() == false)
-	{
-		printf("1");
-		exit(EXIT_FAILURE);
-	}
-	if(serverconfig.GetConfigFileVariable_IPAddress(ipaddress) == false)
-	{
-		printf("2");
-		exit(EXIT_FAILURE);
-	}
-	if(serverconfig.GetConfigFileVariable_Port(port) == false)
-	{
-		printf("3");
-		exit(EXIT_FAILURE);
-	}
-	if(serverconfig.GetConfigFileVariable_Players(max_server_slots) == false)
-	{
-		printf("4");
-		exit(EXIT_FAILURE);
-	}
+    // #define COOP_SERVER_HOSTING_MODE
+#if not defined(COOP_SERVER_HOSTING_MODE)
+    char input_line[64*4] = {0};
+    char first_input[64] = {0};
+    char second_input[64] = {0};
+    char third_input[64] = {0};
+    char fourth_input[64] = {0};
+    CCommandManager::loop_value = true;
+    while(CCommandManager::loop_value)
+      {
+        printf("\n* >> : ");
 
-	printf("\n[!] : Max number of players in server is %d\n", max_server_slots);
+        if(fgets(input_line, sizeof(input_line), stdin))
+          {
+             sscanf(input_line, "%s %s %s %s", first_input, second_input, third_input, fourth_input);
+             CCommandManager::Init(first_input, second_input, third_input, fourth_input);
+          }
 
-    char option = 0;
-    printf("\n[!] : Chose S To Start Server !!!\n");
-    std::cin >> option;
-	unsigned short us_port = port;
-    if(option == 'S')
-    {
-	 CNetwork::Init(ipaddress, us_port, max_server_slots);
-    }
-    printf("\n>> :");
-    std::cin >> option;
-    CNetwork::shared_loop_value = false; // This Atomic Variable Is The Most Important Variable In Entire Server , This is thing behind starting and stoping server's loop 
-    std::this_thread::sleep_for(std::chrono::milliseconds(3000)); // Wait Other Threads To Finish (aka CNetwork::HandleServerPacketsThread)
+        memset(first_input, 0, sizeof(first_input));
+        memset(second_input, 0, sizeof(second_input));
+        memset(third_input, 0, sizeof(third_input));
+        memset(fourth_input, 0, sizeof(fourth_input));
+        printf("\n* %s", first_input);
+      }
+      printf("yoo");
+#else 
+      printf("\n[!] CoopAndreas Server NO-CLI MODE (NO LAN / SERVER) ");
+      CConfigFile svrcfg;
+      char ipaddress[DINI_MODULE_MAX_STRING_SIZE];
+      int port = 0;
+      int maxconnections = 0;
+      svrcfg.GeneralFunctionCall(ipaddress, port, maxconnections);
+      unsigned short us_port = port;
+      CNetwork::Init(ipaddress, us_port, maxconnections);
+#endif
+        //#endif
     exit(EXIT_SUCCESS); // This Function it will stop any detached threads still runinng
     return 0;
 }
