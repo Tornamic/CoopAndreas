@@ -1,4 +1,3 @@
-
 #include "../core/CPed.h"
 
 CPed::CPed(int pedid, CPlayer* syncer, short modelId, unsigned char pedType, CVector pos, unsigned char createdBy)

@@ -1,24 +1,22 @@
-
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <unordered_map>
-
+#include "../core/CNetwork.h"
 #include "../core/CPacketListener.h"
 #include "../core/CPacket.h"
-#include "../core/CNetwork.h"
 
 #include "../core/CPlayerManager.h"
+#include "../core/CPlayerPackets.h"
 #include "../core/CVehicleManager.h"
+#include "../core/CVehiclePackets.h"
 #include "../core/CPedManager.h"
+#include "../core/CPedPackets.h"
 
-#include "../shared/semver.h"
+#include "../../shared/semver.h"
+#include <cstring>
 
+//#define COOP_SERVER_HOSTING_MODE
 
 std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
 
-bool CNetwork::Init(unsigned short port)
+bool CNetwork::Init(char hostname[], unsigned short &port, int max_slots)
 {
     // init packet listeners
     CNetwork::InitListeners();
@@ -31,10 +29,12 @@ bool CNetwork::Init(unsigned short port)
 
     ENetAddress address;
 
-    address.host = ENET_HOST_ANY; // bind server ip
+    hostname[strcspn(hostname, "\n")] = 0; // fix to remove '\n' coming from iem-dini library , i will fix the bug later in the library
+    enet_address_set_host(&address, hostname);
     address.port = port; // bind server port
 
-    ENetHost* server = enet_host_create(&address, MAX_SERVER_PLAYERS, 2, 0, 0); // create enet host
+
+    ENetHost* server = enet_host_create(&address, max_slots, 2, 0, 0); // create enet host
 
     if (server == NULL)
     {
@@ -42,38 +42,91 @@ bool CNetwork::Init(unsigned short port)
         return false;
     }
 
-    printf("[!] : Server started on port %d\n", port);
+    printf("[!] : Server Will Start  on (IP : %s) and (Port : %d) (%s:%d)\n", hostname, port, hostname, port);
 
+#if not defined(COOP_SERVER_HOSTING_MODE)
+    ENetEvent *event = new ENetEvent;
+    memset(event, 0, sizeof(ENetEvent));
+    CNetwork::shared_loop_value = true;
+    std::thread CNetwork_Thread(CNetwork::HandleServerPacketsThread, server, event, nullptr, nullptr, nullptr);
+    CNetwork_Thread.detach();
+#else
+    ENetEvent event_v;
 
-    ENetEvent event;
     while (true) // waiting for event
     {
-        enet_host_service(server, &event, 1);
-        switch (event.type)
+      enet_host_service(server, &event_v, 1);
+        switch (event_v.type)
         {
             case ENET_EVENT_TYPE_CONNECT:
             {
-                CNetwork::HandlePlayerConnected(event);
-                break;
+              //CNetwork::HandlePlayerConnected(event);
+              HandlePlayerConnected(event_v); // // i'm not sure here , *p_event to return value of pointer and make it as reference
+              break;
             }
             case ENET_EVENT_TYPE_RECEIVE:
             {
-                CNetwork::HandlePacketReceive(event);
-                enet_packet_destroy(event.packet);
-                break;
+              //CNetwork::HandlePacketReceive(event);
+              HandlePacketReceive(event_v); // // i'm not sure here , *p_event to return value of pointer and make it as reference
+              enet_packet_destroy(event_v.packet);
+              break;
             }
             case ENET_EVENT_TYPE_DISCONNECT:
             {
-                CNetwork::HandlePlayerDisconnected(event);
-                break;
+              //CNetwork::HandlePlayerDisconnected(event);
+              HandlePlayerDisconnected(event_v); // // i'm not sure here , *p_event to return value of pointer and make it as reference
+              break;
             }
         }
     }
 
-    enet_host_destroy(server);
-    enet_deinitialize();
-    printf("[!] : Server Shutdown (ENET_DEINITIALIZE)\n");
+   enet_host_destroy(server);
+   enet_deinitialize();
+   printf("[!] : Server Shutdown (ENET_DEINITIALIZE)\n");
+#endif
+    
     return 0;
+}
+
+void* CNetwork::HandleServerPacketsThread(ENetHost* p_server, ENetEvent* p_event, void (*p_HandlePlayerConnected)(ENetEvent&), void (*p_HandlePlayerDisconneted)(ENetEvent&), void (*p_HandlePacketReceive)(ENetEvent&))
+{
+  printf("[!] : Server Thread Started \n");
+  p_HandlePlayerConnected = CNetwork::HandlePlayerConnected;
+  p_HandlePlayerDisconneted = CNetwork::HandlePlayerDisconnected;
+  p_HandlePacketReceive = CNetwork::HandlePacketReceive;
+  
+  while (CNetwork::shared_loop_value) // waiting for event
+    {
+      enet_host_service(p_server, p_event, 1);
+        switch (p_event->type)
+        {
+            case ENET_EVENT_TYPE_CONNECT:
+            {
+              //CNetwork::HandlePlayerConnected(event);
+              p_HandlePlayerConnected(*p_event); // // i'm not sure here , *p_event to return value of pointer and make it as reference
+              break;
+            }
+            case ENET_EVENT_TYPE_RECEIVE:
+            {
+              //CNetwork::HandlePacketReceive(event);
+              p_HandlePacketReceive(*p_event); // // i'm not sure here , *p_event to return value of pointer and make it as reference
+              enet_packet_destroy(p_event->packet);
+              break;
+            }
+            case ENET_EVENT_TYPE_DISCONNECT:
+            {
+              //CNetwork::HandlePlayerDisconnected(event);
+              p_HandlePlayerDisconneted(*p_event); // // i'm not sure here , *p_event to return value of pointer and make it as reference
+              break;
+            }
+        }
+    }
+
+   enet_host_destroy(p_server);
+   enet_deinitialize();
+   printf("[!] : Server Shutdown (ENET_DEINITIALIZE)\n");
+  
+  return NULL;
 }
 
 void CNetwork::InitListeners()
@@ -124,8 +177,6 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::SET_VEHICLE_CREATED_BY, CVehiclePackets::SetVehicleCreatedBy::Handle);
     CNetwork::AddListener(CPacketsID::SET_PLAYER_TASK, CPlayerPackets::SetPlayerTask::Handle);
     CNetwork::AddListener(CPacketsID::PED_SAY, CPlayerPackets::PedSay::Handle);
-    CNetwork::AddListener(CPacketsID::PED_CLAIM_ON_RELEASE, CPedPackets::PedClaimOnRelease::Handle);
-    CNetwork::AddListener(CPacketsID::PED_CANCEL_CLAIM, CPedPackets::PedCancelClaim::Handle);
     CNetwork::AddListener(CPacketsID::PED_RESET_ALL_CLAIMS, CPedPackets::PedResetAllClaims::Handle);
     CNetwork::AddListener(CPacketsID::PED_TAKE_HOST, CPedPackets::PedTakeHost::Handle);
 }
@@ -205,9 +256,9 @@ void CNetwork::HandlePlayerConnected(ENetEvent& event)
 
     if (packedVersion != event.data)
     {
-        /*printf("Wrong version, disconnecting...\n");
-        enet_peer_disconnect_now(event.peer, packedVersion);
-        return;*/
+        printf("Wrong version, disconnecting...\n");
+        //enet_peer_disconnect_now(event.peer, packedVersion);
+        return;
     }
 
     // set player disconnection timeout
