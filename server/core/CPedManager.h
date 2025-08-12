@@ -68,7 +68,7 @@ class CPedPackets
 
 					for (int i = 0; i < 52; i++)
 					{
-						if (_strnicmp(packet->specialModelName, CPedManager::ms_aszAllowedSpecialActors[i], strlen(CPedManager::ms_aszAllowedSpecialActors[i])))
+						if (strncasecmp(packet->specialModelName, CPedManager::ms_aszAllowedSpecialActors[i], strlen(CPedManager::ms_aszAllowedSpecialActors[i])))
 						{
 							isSpecialModelValid = true;
 							break;
@@ -83,8 +83,7 @@ class CPedPackets
 				CNetwork::SendPacketToAll(CPacketsID::PED_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		
 				CPed* ped = new CPed(packet->pedid, player, packet->modelId, packet->pedType, packet->pos, packet->createdBy);
-				strncpy_s(ped->m_szSpecialModelName, packet->specialModelName, 7);
-				CPedManager::Add(ped);
+				strncpy_linux(ped->m_szSpecialModelName,  sizeof(ped->m_szSpecialModelName), packet->specialModelName, 7);				CPedManager::Add(ped);
 
 				// send it back to the syncer of the ped so that he knows the id
 				CPedPackets::PedConfirm pedConfirmPacket{};
