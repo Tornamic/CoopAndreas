@@ -33,7 +33,7 @@ namespace Launcher.Core
             // en.Add(new Controls() { Program.MainForm.lb_startserver, "Start a new CoopAndreas server\n(not implemented, start manually)");
             // en.Add(Program.MainForm.b_startserver, "Start Server");
             en.Add(new Controls() { lb = MainWindow.Instance.lbConnectToServer }, "Connect to Server");
-            en.Add(new Controls() { lb = MainWindow.Instance.lbServer }, "Server");
+            // en.Add(new Controls() { lb = MainWindow.Instance.lbServer }, "Server");
             en.Add(new Controls() { lb = MainWindow.Instance.lbConfig }, "Config");
             en.Add(new Controls() { lb = MainWindow.Instance.lbImportant },
 @"IMPORTANT: You are playing the alpha/beta version 
@@ -54,7 +54,7 @@ into any channel");
             // ru.Add(new Controls() { Program.MainForm.lb_startserver, "Запустить новый сервер CoopAndreas\n(не реализовано, запускайте вручную)");
             // ru.Add(Program.MainForm.b_startserver, "Запустить сервер");
             ru.Add(new Controls() { lb = MainWindow.Instance.lbConnectToServer }, "Подключиться к серверу");
-            ru.Add(new Controls() { lb = MainWindow.Instance.lbServer }, "Сервер");
+            // ru.Add(new Controls() { lb = MainWindow.Instance.lbServer }, "Сервер");
             ru.Add(new Controls() { lb = MainWindow.Instance.lbConfig }, "Конфигурация");
             ru.Add(new Controls() { lb = MainWindow.Instance.lbImportant },
             @"ВАЖНО: Вы играете в альфа/бета версию
@@ -77,7 +77,7 @@ CoopAndreas, эта версия требует бета-ключ.
             // ua.Add(new Controls() { Program.MainForm.lb_startserver, "Запустити новий сервер CoopAndreas\n(не реалізовано, запускайте вручну)");
             // ua.Add(Program.MainForm.b_startserver, "Запустити сервер");
             ua.Add(new Controls() { lb = MainWindow.Instance.lbConnectToServer }, "Підключитися до сервера");
-            ua.Add(new Controls() { lb = MainWindow.Instance.lbServer }, "Сервер");
+            // ua.Add(new Controls() { lb = MainWindow.Instance.lbServer }, "Сервер");
             ua.Add(new Controls() { lb = MainWindow.Instance.lbConfig }, "Конфігурація");
             ua.Add(new Controls() { lb = MainWindow.Instance.lbImportant },
             @"ВАЖЛИВО: Ви граєте в альфа/бета версію
@@ -100,7 +100,7 @@ CoopAndreas, ця версія потребує бета-ключ.
             // pr.Add(new Controls() { Program.MainForm.lb_startserver, "Iniciar um novo servidor CoopAndreas\n(não implementado, inicie manualmente)");
             // pr.Add(Program.MainForm.b_startserver, "Iniciar Servidor");
             pt.Add(new Controls() { lb = MainWindow.Instance.lbConnectToServer }, "Conectar ao Servidor");
-            pt.Add(new Controls() { lb = MainWindow.Instance.lbServer }, "Servidor");
+            // pt.Add(new Controls() { lb = MainWindow.Instance.lbServer }, "Servidor");
             pt.Add(new Controls() { lb = MainWindow.Instance.lbConfig }, "Configuração");
             pt.Add(new Controls() { lb = MainWindow.Instance.lbImportant },
             @"IMPORTANTE: Você está jogando a versão alpha/beta
