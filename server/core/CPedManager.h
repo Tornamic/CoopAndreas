@@ -474,6 +474,23 @@ class CPedPackets
 			}
 		};
 
+		struct PerformTaskSequence
+		{
+			static void Handle(ENetPeer* peer, void* data, int size)
+			{
+				if (size < 9) // int playerid, int pedid, uint8_t size
+				{
+					return;
+				}
+
+				auto player = CPlayerManager::GetPlayer(peer);
+				
+				*(int*)data = player->m_iPlayerId;
+
+				CNetwork::SendPacketToAll(CPacketsID::PERFORM_TASK_SEQUENCE, data, size, ENET_PACKET_FLAG_RELIABLE, peer);
+			}
+		};
+
 		~CPedPackets();
 };
 #endif

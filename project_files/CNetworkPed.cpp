@@ -204,6 +204,8 @@ void CNetworkPed::RemoveFromVehicle(CVehicle* vehicle)
     auto task = CTaskSimpleCarSetPedOut(vehicle, 1, false);
     task.m_bWarpingOutOfCar = true;
     task.ProcessPed(m_pPed);
+
+    m_pPed->m_pIntelligence->FlushImmediately(true); // create a default primary task (fix bug)
 }
 
 void CNetworkPed::ClaimOnRelease()

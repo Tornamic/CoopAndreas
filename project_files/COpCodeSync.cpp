@@ -36,41 +36,8 @@
 #include "COpCodeSync.h"
 #include <Commands/CCustomCommandMgr.h>
 #include "CEntryExitMarkerSync.h"
-
-enum class eSyncedParamType
-{
-    NONE,
-
-    // any `CPed` (aka actor, character), examples: `$ACTOR_SMOKE`
-    PED,
-
-    // `$PLAYER_CHAR` (internal playerId for the `CWorld::Players` array)
-    // also used as `CPed` in cases where it is necessary to handle 
-    // a player as a ped rather than a player (very often, e.g. `$PLAYER_ACTOR`)
-    PLAYER,
-
-    // any `CVehicle` (aka car)
-    VEHICLE,
-
-    // not in use yet
-    OBJECT,
-
-    MAX_PARAMS
-};
-
-struct SSyncedOpCode
-{
-    uint16_t m_wOpCode;
-
-    // means the opcode has parameters that are hard to sync, 
-    // like entities from the `eSyncedParamType`
-    bool m_bHasComplexParams = false; 
-
-    // yes, only the first 4 parameters contain entity handles, 
-    // i checked and did not find any opcode where a handle is in 
-    // the 5th or later parameters
-    eSyncedParamType m_aParamTypes[4] = { eSyncedParamType::NONE, eSyncedParamType::NONE, eSyncedParamType::NONE, eSyncedParamType::NONE };
-};
+#include <CTaskSequenceSync.h>
+#include <CNetworkAnimQueue.h>
 
 // Keep sorted!
 const SSyncedOpCode syncedOpcodes[] =
@@ -128,16 +95,32 @@ const SSyncedOpCode syncedOpcodes[] =
     {0x05C0, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}}, // task_look_at_vehicle {char} [Char] {vehicle} [Car] {time} [int]
     {0x05CA, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}}, // task_enter_car_as_passenger {char} [Char] {vehicle} [Car] {time} [int] {seatId} [int]
     {0x05CB, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}}, // task_enter_car_as_driver {char} [Char] {vehicle} [Car] {time} [int]
-    {0x05D3, true, {eSyncedParamType::PED}}, // task_go_straight_to_coord {handle} [Char] {x} [float] {y} [float] {z} [float] {moveState} [MoveState] {time} [int]
+    {0x0603, true, {eSyncedParamType::PED}}, // task_go_to_coord_any_means {char} [Char] {x} [float] {y} [float] {z} [float] {walkSpeed} [int] {vehicle} [Car] // OOPS, 6th parameter is an entity, but its not used anywhere 
     {0x0634, true, {eSyncedParamType::PED, eSyncedParamType::PED}}, // task_kill_char_on_foot_while_ducking {char} [Char] {target} [Char] {flags} [int] {actionDelay} [int] {actionChance} [int]
-    {0x0647, true, {eSyncedParamType::PED}}, // clear_look_at [Char]
     {0x0673, true, {eSyncedParamType::PED}}, // task_dive_and_get_up {handle} [Char] {directionX} [float] {directionY} [float] {timeOnGround} [int]
-    {0x0687, true, {eSyncedParamType::PED}}, // clear_char_tasks [Char]
     {0x0713, true, {eSyncedParamType::PED, eSyncedParamType::PED, eSyncedParamType::VEHICLE}}, // task_drive_by {handle} [Char] {targetChar} [Char] {targetVehicle} [Car] {x} [float] {y} [float] {z} [float] {radius} [float] {type} [DriveByType] {rightHandCarSeat} [bool] {fireRate} [int]
     {0x0792, true, {eSyncedParamType::PED}}, // clear_char_tasks_immediately [Char]
     {0x0967, true, {eSyncedParamType::PED}}, // start_char_facial_talk [Char] {duration} [int]
     {0x0968, true, {eSyncedParamType::PED}}, // stop_char_facial_talk [Char]
-    
+    {COMMAND_TASK_PLAY_ANIM_NON_INTERRUPTABLE, true, eSyncedParamType::PED},
+    {COMMAND_TASK_GO_STRAIGHT_TO_COORD, true, eSyncedParamType::PED},
+    {COMMAND_TASK_ACHIEVE_HEADING, true, eSyncedParamType::PED},
+    {COMMAND_TASK_JUMP, true, eSyncedParamType::PED},
+    {COMMAND_TASK_TIRED, true, eSyncedParamType::PED},
+    {COMMAND_TASK_PLAY_ANIM_SECONDARY, true, eSyncedParamType::PED},
+    {COMMAND_TASK_CHAR_SLIDE_TO_COORD_AND_PLAY_ANIM, true, eSyncedParamType::PED},
+    {COMMAND_TASK_PLAY_ANIM, true, eSyncedParamType::PED},
+    {COMMAND_TASK_TURN_CHAR_TO_FACE_CHAR, true, eSyncedParamType::PED, eSyncedParamType::PED},
+    {COMMAND_TASK_SHOOT_AT_COORD, true, eSyncedParamType::PED},
+    {COMMAND_TASK_LOOK_AT_CHAR, true, eSyncedParamType::PED, eSyncedParamType::PED},
+    {COMMAND_CLEAR_CHAR_TASKS, true, eSyncedParamType::PED},
+    {COMMAND_CLEAR_LOOK_AT, true, eSyncedParamType::PED},
+    {COMMAND_TASK_STAND_STILL, true, eSyncedParamType::PED},
+    {COMMAND_TASK_LOOK_AT_COORD, true, eSyncedParamType::PED},
+    {COMMAND_TASK_LEAVE_CAR, true, eSyncedParamType::PED, eSyncedParamType::VEHICLE},
+    {COMMAND_TASK_DIE_NAMED_ANIM, true, eSyncedParamType::PED},
+    {COMMAND_TASK_PLAY_ANIM_WITH_FLAGS, true, eSyncedParamType::PED},
+
     // Actors
     {0x00A1, true, {eSyncedParamType::PED}}, // set_char_coordinates [Char] {x} [float] {y} [float] {z} [float]
     {0x0173, true, {eSyncedParamType::PED}}, // set_char_heading [Char] {heading} [float]
@@ -152,7 +135,7 @@ const SSyncedOpCode syncedOpcodes[] =
     
     // Explosions
     {0x070C, true, {eSyncedParamType::VEHICLE}}, // explode_car_in_cutscene [Car]
-
+    
     // Audio
     {0x097A}, // report_mission_audio_event_at_position {x} [float] {y} [float] {z} [float] {soundId} [int]
 
@@ -166,30 +149,9 @@ const SSyncedOpCode syncedOpcodes[] =
     
 };
 
-struct OpcodeSyncHeader
-{
-    uint16_t opcode;
-    uint8_t intParamCount : 4;
-    uint8_t stringParamCount : 4;
-};
 
-struct OpcodeParameter
-{
-    union
-    {
-        struct
-        {
-            eSyncedParamType entityType : 4;
-            int entityId : 28;
-        };
-        int value;
-    };
-};
-
-
-static OpcodeParameter scriptParamsBuffer[10];
-static uint8_t textLengthBuffer[10];
-static char textParamBuffer[10][256];
+static uint8_t textLengthBuffer[NUM_SYNCED_PARAMS];
+static char textParamBuffer[NUM_SYNCED_PARAMS][256];
 
 static uint16_t scriptParamCount = 0;
 static uint16_t textParamCount = 0;
@@ -204,7 +166,7 @@ void __fastcall CRunningScript__CollectParameters_Hook_SwitchParametersContext(C
 {
     for (uint8_t i = argCount; i < count + argCount; i++)
     {
-        ScriptParams[i - argCount] = scriptParamsBuffer[i].value;
+        ScriptParams[i - argCount] = COpCodeSync::scriptParamsBuffer[i].value;
     }
 	argCount += count;
     /*memcpy(ScriptParams, scriptParamsBuffer, sizeof scriptParamsBuffer);*/
@@ -218,15 +180,15 @@ void __fastcall CRunningScript__ReadTextLabelFromScript_Hook_SwitchParametersCon
 }
 
 /// <param name="opcodeIdx">syncedOpcodes index</param>
-bool IsOpcodeSyncable(int* opcodeIdx = nullptr)
+bool COpCodeSync::IsOpcodeSyncable(int opcode, int* opcodeIdx, bool ignoreOpCodeSync)
 {
-    if (CLocalPlayer::m_bIsHost
-        && COpCodeSync::ms_bSyncingEnabled
+    if (((CLocalPlayer::m_bIsHost && COpCodeSync::ms_bSyncingEnabled)
         && std::find(COpCodeSync::ms_vSyncedScripts.begin(), COpCodeSync::ms_vSyncedScripts.end(), lastProcessedScript) != COpCodeSync::ms_vSyncedScripts.end())
+        || ignoreOpCodeSync || CTaskSequenceSync::IsOpCodeTaskSynced((eScriptCommands)opcode))
     {
         for (int i = 0; i < ARRAY_SIZE(syncedOpcodes); i++)
         {
-            if (syncedOpcodes[i].m_wOpCode == lastOpCodeProcessed)
+            if (syncedOpcodes[i].m_wOpCode == opcode)
             {
                 if (opcodeIdx)
                 {
@@ -240,28 +202,11 @@ bool IsOpcodeSyncable(int* opcodeIdx = nullptr)
     return false;
 }
 
-void BuildAndSendOpcode()
+std::vector<uint8_t> COpCodeSync::SerializeOpcode(int idx, int& outSize)
 {
-    switch (lastOpCodeProcessed)
-    {
-    case 0xD8:
-    case 0x7FB:
-    case 0x864:
-    case 0x8E7:
-    case 0x98E:
-    case 0x9B4:
-    case 0x9E6:
-        CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingScripts = true;
-        break;
-    }
-
-    int idx = 0;
-    if (!IsOpcodeSyncable(&idx))
-        return;
-
-    int dataSize = 
-        sizeof(OpcodeSyncHeader) 
-        + scriptParamCount * sizeof(int) 
+    int dataSize =
+        sizeof(OpcodeSyncHeader)
+        + scriptParamCount * sizeof(int)
         + textParamCount * sizeof(uint8_t);
 
     for (int i = 0; i < textParamCount; i++)
@@ -276,11 +221,6 @@ void BuildAndSendOpcode()
     header.opcode = lastOpCodeProcessed;
     header.intParamCount = scriptParamCount;
     header.stringParamCount = textParamCount;
-
-    /*if (header.opcode == 0x0605 || header.opcode == 0x04ed || header.opcode == 0x04ef)
-    {
-        CChat::AddMessage("0x%04x", header.opcode);
-    }*/
 
     memcpy(current, &header, sizeof(header));
     current += sizeof(header);
@@ -333,7 +273,7 @@ void BuildAndSendOpcode()
 
                     }
                     else scriptParamsBuffer[i].value = -1;
-                    
+
                     break;
                 }
                 case eSyncedParamType::PLAYER:
@@ -389,7 +329,7 @@ void BuildAndSendOpcode()
         }
     }
 
-    if(textParamCount)
+    if (textParamCount)
     {
         for (int i = 0; i < textParamCount; i++)
         {
@@ -401,6 +341,42 @@ void BuildAndSendOpcode()
         }
     }
 
+    outSize = dataSize;
+    return buffer;
+}
+
+
+void BuildAndSendOpcode()
+{
+    if (!CTaskSequenceSync::OnOpCodeExecuted((eScriptCommands)lastOpCodeProcessed))
+    {
+        memset(textParamBuffer, 0, sizeof textParamBuffer);
+        memset(textLengthBuffer, 0, sizeof textLengthBuffer);
+        scriptParamCount = 0;
+        textParamCount = 0;
+        return;
+    }
+
+    switch (lastOpCodeProcessed)
+    {
+    case 0xD8:
+    case 0x7FB:
+    case 0x864:
+    case 0x8E7:
+    case 0x98E:
+    case 0x9B4:
+    case 0x9E6:
+        CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingScripts = true;
+        break;
+    }
+
+    int idx = 0;
+    if (!COpCodeSync::IsOpcodeSyncable(lastOpCodeProcessed, &idx))
+        return;
+
+    int dataSize = 0;
+    std::vector<uint8_t> buffer = COpCodeSync::SerializeOpcode(idx, dataSize);
+
     CNetwork::SendPacket(CPacketsID::OPCODE_SYNC, buffer.data(), dataSize, ENET_PACKET_FLAG_RELIABLE);
 
     memset(textParamBuffer, 0, sizeof textParamBuffer);
@@ -409,9 +385,10 @@ void BuildAndSendOpcode()
     textParamCount = 0;
 }
 
+
 bool IsOpcodeRequiresStrictCheck(uint16_t opcode)
 {
-    if (opcode == 0x713) // task_drive_by
+    if (opcode == 0x713 || COpCodeSync::ms_bProcessingTaskSequence) // task_drive_by
     {
         return false;
     }
@@ -425,15 +402,20 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
         return;
     }
 
+
     const uint8_t* current = buffer;
 
     OpcodeSyncHeader header;
     memcpy(&header, current, sizeof(header));
     current += sizeof(header);
 
-    
 
     if (bufferSize < sizeof(header) + header.intParamCount * sizeof(int))
+    {
+        return;
+    }
+
+    if (CLocalPlayer::m_bIsHost && !CTaskSequenceSync::IsOpCodeTaskSynced((eScriptCommands)header.opcode))
     {
         return;
     }
@@ -446,10 +428,10 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
     currentStringIdx = 0;
 
     scriptParamCount = header.intParamCount;
-    if (scriptParamCount > 10) scriptParamCount = 10;
+    if (scriptParamCount > NUM_SYNCED_PARAMS) scriptParamCount = NUM_SYNCED_PARAMS;
 
     textParamCount = header.stringParamCount;
-    if (textParamCount > 10) textParamCount = 10;
+    if (textParamCount > NUM_SYNCED_PARAMS) textParamCount = NUM_SYNCED_PARAMS;
 
     if (scriptParamCount)
     {
@@ -484,6 +466,11 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
                 {
                     /*if (header.opcode == 0x0605)    
                         CChat::AddMessage("Parsing ped...");*/
+                    if (COpCodeSync::ms_bProcessingTaskSequence && scriptParamsBuffer[i].value == -1)
+                    {
+                        break;
+                    }
+
                     if (scriptParamsBuffer[i].entityType == eSyncedParamType::PED)
                     {
                         /*if (header.opcode == 0x0605)
@@ -494,6 +481,9 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
                                 CChat::AddMessage("Network instance found...");*/
                             if (auto ped = networkPed->m_pPed)
                             {
+                                if (!CUtil::IsValidEntityPtr(ped))
+                                    return;
+
                                 scriptParamsBuffer[i].value = CPools::GetPedRef(ped);
                                 /*if (header.opcode == 0x0605)
                                     CChat::AddMessage("Parsed ped id %d...", networkPed->m_nPedId);*/
@@ -529,6 +519,9 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
                                     CChat::AddMessage("Network instance found...");*/
                                 if (auto ped = networkPlayer->m_pPed)
                                 {
+                                    if (!CUtil::IsValidEntityPtr(ped))
+                                        return;
+
                                     scriptParamsBuffer[i].value = CPools::GetPedRef(ped);
                                     /*if (header.opcode == 0x0605)
                                         CChat::AddMessage("Parsed player id as ped %d...", networkPlayer->m_iPlayerId);*/
@@ -596,6 +589,9 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
                     {
                         if (auto vehicle = networkVehicle->m_pVehicle)
                         {
+                            if (!CUtil::IsValidEntityPtr(vehicle))
+                                return;
+
                             scriptParamsBuffer[i].value = CPools::GetVehicleRef(vehicle);
                             /*if (header.opcode == 0x0605)
                                 CChat::AddMessage("Parsed vehicle id %d...", networkVehicle->m_nVehicleId);*/
@@ -646,7 +642,6 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
         }
     }
 
-
     static CRunningScript script;
     memset(&script, 0, sizeof(CRunningScript));
     script.Init();
@@ -676,9 +671,47 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
         }
     }
 
+
+
+    switch (header.opcode)
+    {
+    case COMMAND_TASK_PLAY_ANIM:
+    case COMMAND_TASK_CHAR_SLIDE_TO_COORD_AND_PLAY_ANIM:
+    case COMMAND_TASK_PLAY_ANIM_NON_INTERRUPTABLE:
+    case COMMAND_TASK_DIE_NAMED_ANIM:
+    case COMMAND_TASK_PLAY_ANIM_WITH_FLAGS:
+    case COMMAND_TASK_PLAY_ANIM_SECONDARY:
+    {
+        char* animlib = textParamBuffer[1];
+        int id = CAnimManager::GetAnimationBlockIndex(animlib);
+        if (id != -1)
+        {
+            if (!CAnimManager::ms_aAnimBlocks[id].bLoaded)
+            {
+                CStreaming::RequestModel(25575 + id, eStreamingFlags::MISSION_REQUIRED | eStreamingFlags::GAME_REQUIRED);
+                CStreaming::LoadAllRequestedModels(false);
+
+                if (COpCodeSync::ms_bProcessingTaskSequence)
+                {
+                    CTaskSequenceSync::ms_bFailedToProcessSequence = true;
+                }
+                else
+                {
+                    CNetworkAnimQueue::AddOpCode(buffer, bufferSize);
+                }
+
+                return;
+            }
+        }
+        break;
+    }
+    }
+
 	argCount = 0;
+
     patch::RedirectJump(0x464080, CRunningScript__CollectParameters_Hook_SwitchParametersContext, false);
     patch::RedirectJump(0x463D50, CRunningScript__ReadTextLabelFromScript_Hook_SwitchParametersContext, false);
+
 
     if ((header.opcode & 0x7FFF) < CCustomCommandMgr::MIN_CUSTOM_COMMAND)
     {
@@ -719,7 +752,7 @@ static void CollectParamsProperly()
 {
     for (uint8_t i = scriptParamCount; i < scriptParamCount + argParamCount; i++)
     {
-        scriptParamsBuffer[i].value = ScriptParams[i - scriptParamCount];
+        COpCodeSync::scriptParamsBuffer[i].value = ScriptParams[i - scriptParamCount];
     }
 
     scriptParamCount += argParamCount;
@@ -740,7 +773,7 @@ void __declspec(naked) CRunningScript__CollectParameters_Hook_GetSyncingParams()
     }
 
     if (lastProcessedScript 
-        && IsOpcodeSyncable())
+        && (COpCodeSync::IsOpcodeSyncable(lastOpCodeProcessed) || CTaskSequenceSync::IsNeededToCollectParametes((eScriptCommands)lastOpCodeProcessed)))
     {
         CollectParamsProperly();
 
@@ -768,7 +801,7 @@ void CollectTextParameters()
 {
     if (textPointer
         && lastProcessedScript
-        && IsOpcodeSyncable())
+        && (COpCodeSync::IsOpcodeSyncable(lastOpCodeProcessed) || CTaskSequenceSync::IsNeededToCollectParametes((eScriptCommands)lastOpCodeProcessed)))
     {
         textLengthBuffer[textParamCount] = min(textLength, strlen(textPointer));
         strncpy_s(textParamBuffer[textParamCount], textPointer, textLengthBuffer[textParamCount]);

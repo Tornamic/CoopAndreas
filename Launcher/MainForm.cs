@@ -56,12 +56,23 @@ namespace Launcher
 
         }
 
+        static bool IsDXInstalled()
+        {
+            return File.Exists(Path.Combine(Environment.SystemDirectory, "d3dx9_43.dll"));
+        }
+
         private void connectButton_Click(object sender, EventArgs e)
         {
             if (!Validator.IsValidNickName(nicknameInput.Text))
             {
                 MessageBox.Show("Bad nickname");
                 return;
+            }
+
+            if (!IsDXInstalled())
+            {
+                MessageBox.Show("DirectX is not installed. Please install DirectX to run this application.");
+                Process.Start("https://www.microsoft.com/en-us/download/details.aspx?id=35");
             }
 
             string ip = "";

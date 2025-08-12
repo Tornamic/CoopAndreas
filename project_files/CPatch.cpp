@@ -335,6 +335,25 @@ void PatchLoadScreen()
     // Hook the copyright screen fading in/out and simulates that it has happened
     patch::Nop(0x748C2B, 5);
     patch::RedirectCall(0x748C9A, SimulateCopyrightScreen);
+
+}
+
+bool IsFileExistsInModuleDir(const char* relativePath)
+{
+    char exePath[MAX_PATH];
+    if (!GetModuleFileNameA(NULL, exePath, MAX_PATH))
+        return false;
+
+    char* lastSlash = strrchr(exePath, '\\');
+    if (!lastSlash)
+        return false;
+    *lastSlash = '\0';
+
+    char fullPath[MAX_PATH];
+    snprintf(fullPath, MAX_PATH, "%s\\%s", exePath, relativePath);
+
+    DWORD attrs = GetFileAttributesA(fullPath);
+    return (attrs != INVALID_FILE_ATTRIBUTES) && !(attrs & FILE_ATTRIBUTE_DIRECTORY);
 }
 
 const char aScriptDir[] = "CoopAndreas";
@@ -348,7 +367,7 @@ uint32_t CStreaming__AddImageToList_Hook(const char* fileName, bool notPlayerFil
     {
         fileName = aImgPath;
 
-        if (!FileExists(aImgPath))
+        if (!IsFileExistsInModuleDir(aImgPath))
         {
             MessageBoxA(NULL, "'CoopAndreas\\script.img' is not found, try to reinstall the mod", "CoopAndreas Fatal Error", MB_ICONERROR);
             exit(0);
@@ -360,7 +379,12 @@ uint32_t CStreaming__AddImageToList_Hook(const char* fileName, bool notPlayerFil
 
 void PatchSCM()
 {
-    if (!FileExists(aScriptPath))
+    // fix modloader compatibility
+    patch::RedirectCall(0x53BC95, (void*)0x5B9030);
+    patch::RedirectCall(0x53BC9B, (void*)0x5B9030);
+    patch::RedirectCall(0x748CFB, (void*)0x53E580);
+
+    if (!IsFileExistsInModuleDir(aScriptPath))
     {
         MessageBoxA(NULL, "'CoopAndreas\\main.scm' is not found, try to reinstall the mod", "CoopAndreas Fatal Error", MB_ICONERROR);
         exit(0);

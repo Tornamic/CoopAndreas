@@ -36,13 +36,13 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     CKeySync::ApplyNetworkPlayerContext(player);
     CAimSync::ApplyNetworkPlayerContext(player);
-    CStatsSync::ApplyNetworkPlayerContext(player);
+    //CStatsSync::ApplyNetworkPlayerContext(player);
 
-    if (CPad::GetPad(0)->NewState.RightShoulder1) // is aiming
-    {
-        player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->currentRotation;
-    }
-    player->m_pPed->m_fAimingRotation = player->m_lOnFoot->aimingRotation;
+    //if (CPad::GetPad(0)->NewState.RightShoulder1) // is aiming
+    //{
+    //    player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->currentRotation;
+    //}
+    //player->m_pPed->m_fAimingRotation = player->m_lOnFoot->aimingRotation;
 
     player->m_pPed->m_fHealth = player->m_lOnFoot->health;
     player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
@@ -56,13 +56,13 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
 
-    player->m_pPed->m_fAimingRotation = player->m_lOnFoot->aimingRotation;
+    //player->m_pPed->m_fAimingRotation = player->m_lOnFoot->aimingRotation;
 
     CWorld::PlayerInFocus = 0;
 
     CKeySync::ApplyLocalContext();
     CAimSync::ApplyLocalContext();
-    CStatsSync::ApplyLocalContext();
+    //CStatsSync::ApplyLocalContext();
 }
 
 static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding, CEntity* owner, CEntity* victim, CVector* startPoint, CVector* endPoint, CColPoint* colPoint, int incrementalHit)
@@ -124,33 +124,33 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
 
 static void __fastcall CPedIK__PointGunInDirection_Hook(CPedIK* This, int padding, float dirX, float dirY, char flag, float float1)
 {
-    if (This->m_pPed == FindPlayerPed(0))
-    {
-        // save last aim data for syncing
-        CLocalPlayer::m_vecLastAimX = dirX;
-        CLocalPlayer::m_vecLastAimY = dirY;
+    //if (This->m_pPed == FindPlayerPed(0))
+    //{
+    //    // save last aim data for syncing
+    //    CLocalPlayer::m_vecLastAimX = dirX;
+    //    CLocalPlayer::m_vecLastAimY = dirY;
 
-        This->PointGunInDirection(dirX, dirY, flag, float1);
-        return;
-    }
+    //    This->PointGunInDirection(dirX, dirY, flag, float1);
+    //    return;
+    //}
 
-    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(This->m_pPed);
+    //CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(This->m_pPed);
 
-    if (player == nullptr)
-    {
-        This->PointGunInDirection(dirX, dirY, flag, float1);
-        return;
-    }
+    //if (player == nullptr)
+    //{
+    //    This->PointGunInDirection(dirX, dirY, flag, float1);
+    //    return;
+    //}
 
-    if (player->m_lOnFoot == nullptr)
-        return;
+    //if (player->m_lOnFoot == nullptr)
+    //    return;
 
-    player->m_pPed->m_fAimingRotation = player->m_lOnFoot->aimingRotation;
-    
-    eWeaponType weapon = player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
+    //player->m_pPed->m_fAimingRotation = player->m_lOnFoot->aimingRotation;
+    //
+    //eWeaponType weapon = player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
 
-    if (weapon != WEAPON_SNIPERRIFLE)
-        dirY = player->m_aimSyncData.aimY;
+    ///*if (weapon != WEAPON_SNIPERRIFLE)
+    //    dirY = player->m_aimSyncData.aimY;*/
 
     This->PointGunInDirection(dirX, dirY, flag, float1);
 }
@@ -277,6 +277,65 @@ void __fastcall CTaskComplexJump_CTaskManager__SetTask_Hook(CTaskManager* This, 
     }
 }
 
+void __fastcall CRunningScript__DoDeatharrestCheck_Hook(CRunningScript* This, int)
+{
+    if (!This->m_bWastedBustedCheck) 
+    {
+        return;
+    }
+
+    if (!CTheScripts::IsPlayerOnAMission()) 
+    {
+        return;
+    }
+
+    bool wastedOrBusted = false;
+    
+    auto* playerInfo = &CWorld::Players[CWorld::PlayerInFocus];
+
+    if (playerInfo->m_nPlayerState == ePlayerState::PLAYERSTATE_HASDIED ||
+        playerInfo->m_nPlayerState == ePlayerState::PLAYERSTATE_HASBEENARRESTED)
+    {
+        wastedOrBusted = true;
+    }
+
+    if (!wastedOrBusted)
+    {
+        for (auto networkPlayer : CNetworkPlayerManager::m_pPlayers)
+        {
+            if (auto ped = networkPlayer->m_pPed)
+            {
+                if (ped->m_ePedState == PEDSTATE_ARRESTED ||
+                    ped->m_ePedState == PEDSTATE_DEAD ||
+                    (ped->m_ePedState == PEDSTATE_DIE && ped->m_nPedFlags.bIsDyingStuck))
+                {
+                    wastedOrBusted = true;
+                }
+            }
+        }
+    }
+
+    if (wastedOrBusted)
+    {
+        CMessages::ClearSmallMessagesOnly();
+        memset(&CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag], 0, sizeof(uint32_t));
+        
+        if (This->m_nSP > 1u)
+        {
+            uint16_t nsp = This->m_nSP;
+            do
+            {
+                --nsp;
+            } while (nsp > 1u);
+            This->m_nSP = nsp;
+        }
+        This->m_pCurrentIP = This->m_apStack[--This->m_nSP];
+
+        This->m_bWastedOrBusted = true;
+        This->m_nWakeTime = 0;
+    }
+}
+
 void PlayerHooks::InjectHooks()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -313,4 +372,6 @@ void PlayerHooks::InjectHooks()
 
     patch::RedirectCall(0x688700, CPad__JumpJustDown_Hook);
     patch::RedirectCall(0x6887D8, CTaskComplexJump_CTaskManager__SetTask_Hook);
+
+    patch::ReplaceFunction(0x485A50, CRunningScript__DoDeatharrestCheck_Hook);
 }

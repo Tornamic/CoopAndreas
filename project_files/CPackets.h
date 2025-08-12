@@ -67,6 +67,7 @@ enum CPacketsID : unsigned short
 	PED_CANCEL_CLAIM,
 	PED_RESET_ALL_CLAIMS,
 	PED_TAKE_HOST,
+	PERFORM_TASK_SEQUENCE,
 	PACKET_ID_MAX
 };
 
@@ -158,6 +159,7 @@ public:
 		unsigned char health = 100;
 		unsigned char armour = 0;
 		unsigned char weapon = 0;
+		unsigned char weaponState = 0;
 		unsigned short ammo = 0;
 		bool ducking = false;
 		bool hasJetpack = false;
@@ -435,13 +437,13 @@ public:
 	{
 		int playerid;
 		unsigned char cameraMode;
+		unsigned char weaponCameraMode;
 		float cameraFov;
 		CVector front;
 		CVector	source;
 		CVector	up;
-		float moveHeading;
-		float aimY;
-		float aimZ;
+		float lookPitch;
+		float orientation;
 	};
 
 	struct VehicleConfirm

@@ -58,6 +58,7 @@ public:
 		unsigned char health = 100;
 		unsigned char armour = 0;
 		unsigned char weapon = 0;
+		unsigned char weaponState = 0;
 		unsigned short ammo = 0;
 		bool ducking = false;
 		bool hasJetpack = false;
@@ -238,13 +239,13 @@ public:
 	{
 		int playerid;
 		unsigned char cameraMode;
+		unsigned char weaponCameraMode;
 		float cameraFov;
 		CVector front;
 		CVector	source;
 		CVector	up;
-		float moveHeading;
-		float aimY;
-		float aimZ;
+		float lookPitch;
+		float orientation;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -335,10 +336,10 @@ public:
 		{
 			if (auto player = CPlayerManager::GetPlayer(peer))
 			{
-				if (player->m_bIsHost)
-				{
+				/*if (player->m_bIsHost)
+				{*/
 					CNetwork::SendPacketToAll(CPacketsID::OPCODE_SYNC, data, size, ENET_PACKET_FLAG_RELIABLE, peer);
-				}
+				//}
 			}
 		}
 	};
