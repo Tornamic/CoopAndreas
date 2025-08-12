@@ -41,6 +41,7 @@ namespace Launcher
             nicknameInput.Text = config.NickName;
             ipportInput.Text = config.IpPort;
             tb_serialKey.Text = config.SerialKey;
+            gtaPathInput.Text = config.GamePath;
 
             var computerId = new ComputerID();
 
@@ -74,7 +75,7 @@ namespace Launcher
 
             Launcher launcher = new Launcher();
             
-            LaunchResult result = launcher.LaunchAndInject("gta_sa.exe", nicknameInput.Text, ip, port, tb_command.Text.Replace("/gen", "").Trim(), tb_serialKey.Text, launcher.LibrariesToInject);
+            LaunchResult result = launcher.LaunchAndInject(config.GamePath, nicknameInput.Text, ip, port, tb_command.Text.Replace("/gen", "").Trim(), tb_serialKey.Text, launcher.LibrariesToInject);
 
             if(result != LaunchResult.Success)
                 MessageBox.Show(result.ToString());
@@ -113,6 +114,26 @@ namespace Launcher
         private void b_copy_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(tb_command.Text);
+        }
+
+        private void gtaPathInput_TextChanged(object sender, EventArgs e)
+        {
+            config.GamePath = gtaPathInput.Text;
+            config.Save();
+        }
+
+        private void selectPathButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "GTA SA Executable|gta_sa.exe",
+                Title = "Select GTA SA Executable",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+            };
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                gtaPathInput.Text = openFileDialog.FileName;
+            }
         }
     }
 }

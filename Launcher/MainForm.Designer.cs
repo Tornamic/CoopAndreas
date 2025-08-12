@@ -44,6 +44,7 @@
             this.nicknameInput = new System.Windows.Forms.TextBox();
             this.lb_nickname = new System.Windows.Forms.Label();
             this.serverPage = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
             this.b_startserver = new System.Windows.Forms.Button();
             this.lb_startserver = new System.Windows.Forms.Label();
             this.maxplayersInput = new System.Windows.Forms.NumericUpDown();
@@ -51,9 +52,11 @@
             this.lb_maxplayers = new System.Windows.Forms.Label();
             this.lb_port = new System.Windows.Forms.Label();
             this.configPage = new System.Windows.Forms.TabPage();
+            this.selectPathButton = new System.Windows.Forms.Button();
+            this.gtaPathInput = new System.Windows.Forms.TextBox();
+            this.lb_gtapath = new System.Windows.Forms.Label();
             this.languageCombo = new System.Windows.Forms.ComboBox();
             this.lb_language = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.connectPage.SuspendLayout();
             this.serverPage.SuspendLayout();
@@ -96,9 +99,9 @@
             // 
             // b_copy
             // 
-            this.b_copy.Location = new System.Drawing.Point(135, 204);
+            this.b_copy.Location = new System.Drawing.Point(161, 190);
             this.b_copy.Name = "b_copy";
-            this.b_copy.Size = new System.Drawing.Size(43, 23);
+            this.b_copy.Size = new System.Drawing.Size(118, 23);
             this.b_copy.TabIndex = 11;
             this.b_copy.Text = "Copy";
             this.b_copy.UseVisualStyleBackColor = true;
@@ -106,10 +109,10 @@
             // 
             // tb_command
             // 
-            this.tb_command.Location = new System.Drawing.Point(29, 204);
+            this.tb_command.Location = new System.Drawing.Point(29, 190);
             this.tb_command.Name = "tb_command";
             this.tb_command.ReadOnly = true;
-            this.tb_command.Size = new System.Drawing.Size(99, 20);
+            this.tb_command.Size = new System.Drawing.Size(126, 20);
             this.tb_command.TabIndex = 10;
             this.tb_command.Text = "Loading...";
             // 
@@ -117,7 +120,7 @@
             // 
             this.link_discord.AutoSize = true;
             this.link_discord.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.link_discord.Location = new System.Drawing.Point(184, 207);
+            this.link_discord.Location = new System.Drawing.Point(106, 216);
             this.link_discord.Name = "link_discord";
             this.link_discord.Size = new System.Drawing.Size(97, 16);
             this.link_discord.TabIndex = 9;
@@ -137,7 +140,7 @@
             // 
             // tb_serialKey
             // 
-            this.tb_serialKey.Location = new System.Drawing.Point(70, 89);
+            this.tb_serialKey.Location = new System.Drawing.Point(99, 89);
             this.tb_serialKey.Name = "tb_serialKey";
             this.tb_serialKey.Size = new System.Drawing.Size(180, 20);
             this.tb_serialKey.TabIndex = 7;
@@ -176,7 +179,7 @@
             // 
             // ipportInput
             // 
-            this.ipportInput.Location = new System.Drawing.Point(70, 63);
+            this.ipportInput.Location = new System.Drawing.Point(99, 59);
             this.ipportInput.Name = "ipportInput";
             this.ipportInput.Size = new System.Drawing.Size(180, 20);
             this.ipportInput.TabIndex = 3;
@@ -193,7 +196,7 @@
             // 
             // nicknameInput
             // 
-            this.nicknameInput.Location = new System.Drawing.Point(70, 36);
+            this.nicknameInput.Location = new System.Drawing.Point(99, 33);
             this.nicknameInput.Name = "nicknameInput";
             this.nicknameInput.Size = new System.Drawing.Size(180, 20);
             this.nicknameInput.TabIndex = 1;
@@ -224,6 +227,17 @@
             this.serverPage.Size = new System.Drawing.Size(311, 311);
             this.serverPage.TabIndex = 1;
             this.serverPage.Text = "Server";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(26, 41);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(265, 96);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "!!!\r\nTHIS TAB IS TEMPORARILY \r\nUNAVAILABLE, LAUNCH VIA \r\n`server.exe`";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // b_startserver
             // 
@@ -286,6 +300,9 @@
             // configPage
             // 
             this.configPage.BackColor = System.Drawing.Color.White;
+            this.configPage.Controls.Add(this.selectPathButton);
+            this.configPage.Controls.Add(this.gtaPathInput);
+            this.configPage.Controls.Add(this.lb_gtapath);
             this.configPage.Controls.Add(this.languageCombo);
             this.configPage.Controls.Add(this.lb_language);
             this.configPage.Location = new System.Drawing.Point(4, 22);
@@ -294,6 +311,36 @@
             this.configPage.Size = new System.Drawing.Size(311, 311);
             this.configPage.TabIndex = 2;
             this.configPage.Text = "Config";
+            // 
+            // selectPathButton
+            // 
+            this.selectPathButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.selectPathButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.selectPathButton.Location = new System.Drawing.Point(234, 47);
+            this.selectPathButton.Name = "selectPathButton";
+            this.selectPathButton.Size = new System.Drawing.Size(27, 20);
+            this.selectPathButton.TabIndex = 4;
+            this.selectPathButton.Text = "...";
+            this.selectPathButton.UseVisualStyleBackColor = true;
+            this.selectPathButton.Click += new System.EventHandler(this.selectPathButton_Click);
+            // 
+            // gtaPathInput
+            // 
+            this.gtaPathInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.gtaPathInput.Location = new System.Drawing.Point(101, 47);
+            this.gtaPathInput.Name = "gtaPathInput";
+            this.gtaPathInput.Size = new System.Drawing.Size(127, 20);
+            this.gtaPathInput.TabIndex = 3;
+            this.gtaPathInput.TextChanged += new System.EventHandler(this.gtaPathInput_TextChanged);
+            // 
+            // lb_gtapath
+            // 
+            this.lb_gtapath.AutoSize = true;
+            this.lb_gtapath.Location = new System.Drawing.Point(6, 50);
+            this.lb_gtapath.Name = "lb_gtapath";
+            this.lb_gtapath.Size = new System.Drawing.Size(74, 13);
+            this.lb_gtapath.TabIndex = 2;
+            this.lb_gtapath.Text = "GTA SA Path:";
             // 
             // languageCombo
             // 
@@ -312,22 +359,11 @@
             // lb_language
             // 
             this.lb_language.AutoSize = true;
-            this.lb_language.Location = new System.Drawing.Point(37, 14);
+            this.lb_language.Location = new System.Drawing.Point(6, 14);
             this.lb_language.Name = "lb_language";
             this.lb_language.Size = new System.Drawing.Size(58, 13);
             this.lb_language.TabIndex = 0;
             this.lb_language.Text = "Language:";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(26, 41);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(265, 96);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "!!!\r\nTHIS TAB IS TEMPORARILY \r\nUNAVAILABLE, LAUNCH VIA \r\n`server.exe`";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
@@ -337,6 +373,7 @@
             this.Controls.Add(this.tabControl1);
             this.MaximizeBox = false;
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CoopAndreas Launcher";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControl1.ResumeLayout(false);
@@ -378,6 +415,9 @@
         public System.Windows.Forms.TextBox tb_command;
         public System.Windows.Forms.Button b_copy;
         private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Label lb_gtapath;
+        private System.Windows.Forms.TextBox gtaPathInput;
+        private System.Windows.Forms.Button selectPathButton;
     }
 }
 

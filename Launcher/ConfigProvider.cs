@@ -21,6 +21,7 @@ namespace Launcher
         public string IpPort { get; set; } = string.Empty;
         public string SerialKey { get; set; } = string.Empty;
         public string Language { get; set; } = "en";
+        public string GamePath { get; set; } = string.Empty;
 
         private string _filePath;
 

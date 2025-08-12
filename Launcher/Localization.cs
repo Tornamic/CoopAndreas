@@ -35,6 +35,7 @@ into any channel");
             en.Add(Program.MainForm.lb_serialkey, "Serial key:");
             en.Add(Program.MainForm.b_copy, "Copy");
             en.Add(Program.MainForm.link_discord, "Discord Server");
+            en.Add(Program.MainForm.lb_gtapath, "GTA SA Path:");
 
             ru.Add(Program.MainForm.b_connect, "Подключиться");
             ru.Add(Program.MainForm.lb_connect, "Подключиться к серверу CoopAndreas");
@@ -57,6 +58,7 @@ into any channel");
             ru.Add(Program.MainForm.lb_serialkey, "Серийный ключ:");
             ru.Add(Program.MainForm.b_copy, "Копировать");
             ru.Add(Program.MainForm.link_discord, "Discord Сервер");
+            ru.Add(Program.MainForm.lb_gtapath, "Путь к GTA SA:");
 
             pt.Add(Program.MainForm.b_connect, "Conectar");
             pt.Add(Program.MainForm.lb_connect, "Conectar a um servidor CoopAndreas"); 
@@ -80,6 +82,7 @@ qualquer canalе");
             pt.Add(Program.MainForm.lb_serialkey, "Chave serial:");
             pt.Add(Program.MainForm.b_copy, "Cópia");
             pt.Add(Program.MainForm.link_discord, "Discord Servidor");
+            pt.Add(Program.MainForm.lb_gtapath, "Caminho do GTA SA:");
 
             ua.Add(Program.MainForm.b_connect, "Підключитися");
             ua.Add(Program.MainForm.lb_connect, "Підключитися до сервера CoopAndreas");
@@ -102,6 +105,7 @@ qualquer canalе");
             ua.Add(Program.MainForm.lb_serialkey, "Серійний ключ");
             ua.Add(Program.MainForm.b_copy, "Копіювати");
             ua.Add(Program.MainForm.link_discord, "Discord Сервер");
+            ua.Add(Program.MainForm.lb_gtapath, "Шлях до GTA SA:");
 
             Dictionary.Add("en", en);
             Dictionary.Add("ru", ru);
