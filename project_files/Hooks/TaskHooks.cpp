@@ -268,37 +268,37 @@ skip:
     }
 }
 
-bool __fastcall CTaskSimpleUseGun__SetPedPosition_Hook(CTaskSimpleUseGun* This, int, CPed* ped)
-{
-    auto orig = [&]() -> bool {
-        return plugin::CallMethodAndReturn<bool, 0x624ED0>(This, ped);
-    };
-
-    if (ped->m_nPedType > 3 || ped == FindPlayerPed(0)) // not a network player
-    {
-        return orig();
-    }
-
-    if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(ped))
-    {
-        int playerNum = networkPlayer->GetInternalId();
-
-        if (playerNum == -1)
-            return orig();
-
-        CWorld::PlayerInFocus = playerNum;
-
-        CStatsSync::ApplyNetworkPlayerContext(networkPlayer);
-        CAimSync::ApplyNetworkPlayerContext(networkPlayer);
-        bool result = orig();
-        CAimSync::ApplyLocalContext();
-        CStatsSync::ApplyLocalContext();
-        CWorld::PlayerInFocus = 0;
-        return result;
-    }
-
-    return orig();
-}
+//bool __fastcall CTaskSimpleUseGun__SetPedPosition_Hook(CTaskSimpleUseGun* This, int, CPed* ped)
+//{
+//    auto orig = [&]() -> bool {
+//        return plugin::CallMethodAndReturn<bool, 0x624ED0>(This, ped);
+//    };
+//
+//    if (ped->m_nPedType > 3 || ped == FindPlayerPed(0)) // not a network player
+//    {
+//        return orig();
+//    }
+//
+//    if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(ped))
+//    {
+//        int playerNum = networkPlayer->GetInternalId();
+//
+//        if (playerNum == -1)
+//            return orig();
+//
+//        CWorld::PlayerInFocus = playerNum;
+//
+//        CStatsSync::ApplyNetworkPlayerContext(networkPlayer);
+//        CAimSync::ApplyNetworkPlayerContext(networkPlayer);
+//        bool result = orig();
+//        CAimSync::ApplyLocalContext();
+//        CStatsSync::ApplyLocalContext();
+//        CWorld::PlayerInFocus = 0;
+//        return result;
+//    }
+//
+//    return orig();
+//}
 
 void TaskHooks::InjectHooks()
 {
@@ -319,5 +319,5 @@ void TaskHooks::InjectHooks()
     patch::RedirectJump(0x61A3A0, CTaskSimple__dtor_Hook);
     patch::RedirectJump(0x61A413, CTaskComplex__dtor_Hook);*/
 
-    patch::SetPointer(0x86D744, CTaskSimpleUseGun__SetPedPosition_Hook);
+    //patch::SetPointer(0x86D744, CTaskSimpleUseGun__SetPedPosition_Hook);
 }

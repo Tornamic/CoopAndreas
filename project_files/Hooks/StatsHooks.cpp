@@ -13,53 +13,40 @@ void CHud__SetHelpMessageStatUpdate_Hook(char bIncrease, short statId, float sta
 	CHud::SetHelpMessageStatUpdate(bIncrease, statId, statUpdate, statMax);
 }
 
-CPed* ped;
-eWeaponType weaponType;
-CNetworkPlayer* networkPlayer;
-char weaponSkill;
-void __declspec(naked) CPed__GetWeaponSkill_Hook()
+
+int8_t __fastcall CPed__GetWeaponSkill_Hook(CPed* This, int, eWeaponType weaponType)
 {
-	__asm
-	{
-		pushad
+	eStats SkillStatIndex;
+	int reqStatLevel2;
+	int reqStatLevel1;
 
-		mov ped, ecx
-		
-		mov eax, [esp+4]
-		mov weaponType, eax
+	if (weaponType < WEAPON_PISTOL || weaponType > WEAPON_TEC9)
+	{
+		return 1;
 	}
-
-	// if is not a network player
-	if (ped->m_nPedType > 3 || ped == FindPlayerPed(0))
+	if (This->m_nPedType <= PED_TYPE_PLAYER2)
 	{
-		goto exit;
+		if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(This))
+		{
+			return networkPlayer->GetWeaponSkill(weaponType);
+		}
+
+		SkillStatIndex = plugin::CallAndReturn<eStats, 0x743CD0>(weaponType);//CWeaponInfo::GetSkillStatIndex(weaponType);
+		reqStatLevel2 = CWeaponInfo::GetWeaponInfo(weaponType, 2)->m_nReqStatLevel;
+		if (reqStatLevel2 <= CStats::GetStatValue(SkillStatIndex))
+		{
+			return 2;
+		}
+		reqStatLevel1 = CWeaponInfo::GetWeaponInfo(weaponType, 1)->m_nReqStatLevel;
+		return reqStatLevel1 <= CStats::GetStatValue(SkillStatIndex);
 	}
-
-	networkPlayer = CNetworkPlayerManager::GetPlayer(ped);
-	if (networkPlayer == nullptr)
+	if (weaponType == WEAPON_PISTOL && This->m_nPedType == PED_TYPE_COP)
 	{
-		goto exit;
+		return 3;
 	}
-
-	weaponSkill = networkPlayer->GetWeaponSkill(weaponType);
-
-	__asm
+	else
 	{
-		popad
-		mov al, weaponSkill
-		retn 4
-	}
-
-exit:
-	__asm
-	{
-		popad
-
-		push    esi
-		mov     esi, [esp + 8]
-		
-		push 0x5E3B65
-		ret
+		return This->m_nWeaponSkill;
 	}
 }
 

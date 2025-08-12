@@ -54,6 +54,7 @@ void CCore::Init()
 	{
 		CPatch::PatchFramerate();
 	};
+	
 	/*Events::initScriptsEvent.after += []
 	{
 		CPatch::TemporaryPatches();

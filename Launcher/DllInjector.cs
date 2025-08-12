@@ -72,15 +72,12 @@ namespace Launcher
 
         private bool bInject(uint pToBeInjected, string sDllPath)
         {
-            // Убедимся, что путь абсолютный
             sDllPath = Path.GetFullPath(sDllPath);
 
-            // Открываем процесс
             IntPtr hndProc = OpenProcess(0x2 | 0x8 | 0x10 | 0x20 | 0x400, 1, pToBeInjected);
             if (hndProc == IntPtr.Zero)
                 return false;
 
-            // Ждём, пока загрузится vorbisFile.dll
             Process targetProc = Process.GetProcessById((int)pToBeInjected);
             bool vorbisLoaded = false;
             while (!vorbisLoaded)
@@ -99,7 +96,6 @@ namespace Launcher
                 }
                 catch
                 {
-                    // В случае ошибки доступа — лучше выйти
                     CloseHandle(hndProc);
                     return false;
                 }
@@ -108,7 +104,6 @@ namespace Launcher
                     Thread.Sleep(100);
             }
 
-            // Получаем адрес LoadLibraryA
             IntPtr lpLLAddress = GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
             if (lpLLAddress == IntPtr.Zero)
             {
@@ -116,10 +111,8 @@ namespace Launcher
                 return false;
             }
 
-            // Добавляем null-терминатор, чтобы LoadLibraryA корректно сработал
             byte[] dllBytes = Encoding.ASCII.GetBytes(sDllPath + '\0');
 
-            // Выделяем память под строку с путём
             IntPtr lpAddress = VirtualAllocEx(hndProc, IntPtr.Zero, (IntPtr)dllBytes.Length, 0x1000 | 0x2000, 0x40);
             if (lpAddress == IntPtr.Zero)
             {
@@ -127,14 +120,12 @@ namespace Launcher
                 return false;
             }
 
-            // Пишем строку в память
             if (WriteProcessMemory(hndProc, lpAddress, dllBytes, (uint)dllBytes.Length, 0) == 0)
             {
                 CloseHandle(hndProc);
                 return false;
             }
 
-            // Создаём удалённый поток
             IntPtr hThread = CreateRemoteThread(hndProc, IntPtr.Zero, IntPtr.Zero, lpLLAddress, lpAddress, 0, IntPtr.Zero);
             if (hThread == IntPtr.Zero)
             {
@@ -142,10 +133,8 @@ namespace Launcher
                 return false;
             }
 
-            // Дожидаемся завершения потока (опционально, но полезно)
             WaitForSingleObject(hThread, 5000);
 
-            // Закрываем хендлы
             CloseHandle(hThread);
             CloseHandle(hndProc);
 

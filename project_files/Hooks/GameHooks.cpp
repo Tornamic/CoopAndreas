@@ -206,7 +206,7 @@ void GameHooks::InjectHooks()
     patch::RedirectJump(PURECALL, __purecall_Hook);
 
 #ifdef DEBUG
-    patch::ReplaceFunction(0x571980, CPCKeyboard__GetKeyDown_Hook);
-    patch::ReplaceFunction(0x571970, CPCKeyboard__GetJustKeyDown_Hook);
+    /*patch::ReplaceFunction(0x571980, CPCKeyboard__GetKeyDown_Hook);
+    patch::ReplaceFunction(0x571970, CPCKeyboard__GetJustKeyDown_Hook);*/
 #endif
 }

@@ -37,6 +37,7 @@
 #include <Commands/CCustomCommandMgr.h>
 #include "CEntryExitMarkerSync.h"
 #include <CTaskSequenceSync.h>
+#include <CNetworkAnimQueue.h>
 
 // Keep sorted!
 const SSyncedOpCode syncedOpcodes[] =
@@ -96,9 +97,7 @@ const SSyncedOpCode syncedOpcodes[] =
     {0x05CB, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}}, // task_enter_car_as_driver {char} [Char] {vehicle} [Car] {time} [int]
     {0x0603, true, {eSyncedParamType::PED}}, // task_go_to_coord_any_means {char} [Char] {x} [float] {y} [float] {z} [float] {walkSpeed} [int] {vehicle} [Car] // OOPS, 6th parameter is an entity, but its not used anywhere 
     {0x0634, true, {eSyncedParamType::PED, eSyncedParamType::PED}}, // task_kill_char_on_foot_while_ducking {char} [Char] {target} [Char] {flags} [int] {actionDelay} [int] {actionChance} [int]
-    {0x0647, true, {eSyncedParamType::PED}}, // clear_look_at [Char]
     {0x0673, true, {eSyncedParamType::PED}}, // task_dive_and_get_up {handle} [Char] {directionX} [float] {directionY} [float] {timeOnGround} [int]
-    {0x0687, true, {eSyncedParamType::PED}}, // clear_char_tasks [Char]
     {0x0713, true, {eSyncedParamType::PED, eSyncedParamType::PED, eSyncedParamType::VEHICLE}}, // task_drive_by {handle} [Char] {targetChar} [Char] {targetVehicle} [Car] {x} [float] {y} [float] {z} [float] {radius} [float] {type} [DriveByType] {rightHandCarSeat} [bool] {fireRate} [int]
     {0x0792, true, {eSyncedParamType::PED}}, // clear_char_tasks_immediately [Char]
     {0x0967, true, {eSyncedParamType::PED}}, // start_char_facial_talk [Char] {duration} [int]
@@ -113,6 +112,14 @@ const SSyncedOpCode syncedOpcodes[] =
     {COMMAND_TASK_PLAY_ANIM, true, eSyncedParamType::PED},
     {COMMAND_TASK_TURN_CHAR_TO_FACE_CHAR, true, eSyncedParamType::PED, eSyncedParamType::PED},
     {COMMAND_TASK_SHOOT_AT_COORD, true, eSyncedParamType::PED},
+    {COMMAND_TASK_LOOK_AT_CHAR, true, eSyncedParamType::PED, eSyncedParamType::PED},
+    {COMMAND_CLEAR_CHAR_TASKS, true, eSyncedParamType::PED},
+    {COMMAND_CLEAR_LOOK_AT, true, eSyncedParamType::PED},
+    {COMMAND_TASK_STAND_STILL, true, eSyncedParamType::PED},
+    {COMMAND_TASK_LOOK_AT_COORD, true, eSyncedParamType::PED},
+    {COMMAND_TASK_LEAVE_CAR, true, eSyncedParamType::PED, eSyncedParamType::VEHICLE},
+    {COMMAND_TASK_DIE_NAMED_ANIM, true, eSyncedParamType::PED},
+    {COMMAND_TASK_PLAY_ANIM_WITH_FLAGS, true, eSyncedParamType::PED},
 
     // Actors
     {0x00A1, true, {eSyncedParamType::PED}}, // set_char_coordinates [Char] {x} [float] {y} [float] {z} [float]
@@ -664,12 +671,16 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
         }
     }
 
-	argCount = 0;
-    patch::RedirectJump(0x464080, CRunningScript__CollectParameters_Hook_SwitchParametersContext, false);
-    patch::RedirectJump(0x463D50, CRunningScript__ReadTextLabelFromScript_Hook_SwitchParametersContext, false);
 
-    // TODO
-    if (header.opcode == COMMAND_TASK_PLAY_ANIM)
+
+    switch (header.opcode)
+    {
+    case COMMAND_TASK_PLAY_ANIM:
+    case COMMAND_TASK_CHAR_SLIDE_TO_COORD_AND_PLAY_ANIM:
+    case COMMAND_TASK_PLAY_ANIM_NON_INTERRUPTABLE:
+    case COMMAND_TASK_DIE_NAMED_ANIM:
+    case COMMAND_TASK_PLAY_ANIM_WITH_FLAGS:
+    case COMMAND_TASK_PLAY_ANIM_SECONDARY:
     {
         char* animlib = textParamBuffer[1];
         int id = CAnimManager::GetAnimationBlockIndex(animlib);
@@ -677,11 +688,30 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
         {
             if (!CAnimManager::ms_aAnimBlocks[id].bLoaded)
             {
-                CStreaming::RequestModel(25575 + id, eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
-                CStreaming::LoadAllRequestedModels(true);
+                CStreaming::RequestModel(25575 + id, eStreamingFlags::MISSION_REQUIRED | eStreamingFlags::GAME_REQUIRED);
+                CStreaming::LoadAllRequestedModels(false);
+
+                if (COpCodeSync::ms_bProcessingTaskSequence)
+                {
+                    CTaskSequenceSync::ms_bFailedToProcessSequence = true;
+                }
+                else
+                {
+                    CNetworkAnimQueue::AddOpCode(buffer, bufferSize);
+                }
+
+                return;
             }
         }
+        break;
     }
+    }
+
+	argCount = 0;
+
+    patch::RedirectJump(0x464080, CRunningScript__CollectParameters_Hook_SwitchParametersContext, false);
+    patch::RedirectJump(0x463D50, CRunningScript__ReadTextLabelFromScript_Hook_SwitchParametersContext, false);
+
 
     if ((header.opcode & 0x7FFF) < CCustomCommandMgr::MIN_CUSTOM_COMMAND)
     {

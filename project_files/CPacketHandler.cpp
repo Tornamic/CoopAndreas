@@ -9,6 +9,7 @@
 #include <CEntryExitMarkerSync.h>
 #include <CNetworkStaticBlip.h>
 #include <CTaskSequenceSync.h>
+#include <CWaterLevel.h>
 // PlayerConnected
 
 void CPacketHandler::PlayerConnected__Handle(void* data, int size)
@@ -89,6 +90,8 @@ CPackets::PlayerOnFoot* CPacketHandler::PlayerOnFoot__Collect()
 	// get player weapon in hands
 	packet->weapon = player->m_aWeapons[player->m_nActiveWeaponSlot].m_eWeaponType;
 
+	packet->weaponState =  (uint8_t)player->m_aWeapons[player->m_nActiveWeaponSlot].m_nState;
+
 	// get ammo in clip count
 	packet->ammo = player->m_aWeapons[player->m_nActiveWeaponSlot].m_nAmmoInClip;
 
@@ -133,6 +136,7 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 	//}
 
 	CUtil::GiveWeaponByPacket(networkPlayer, packet->weapon, packet->ammo);
+	networkPlayer->m_pPed->m_aWeapons[networkPlayer->m_pPed->m_nActiveWeaponSlot].m_nState = (eWeaponState)packet->weaponState;
 
 	networkPlayer->m_pPed->m_fCurrentRotation = packet->currentRotation;
 	networkPlayer->m_pPed->m_fAimingRotation = packet->aimingRotation;
@@ -479,7 +483,7 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 	vehicle->m_pVehicle->m_vecMoveSpeed = packet->velocity;
 	
 	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
-	
+
 	player->m_lOnFoot->armour = packet->playerArmour;
 	player->m_lOnFoot->health = packet->playerHealth;
 
@@ -1202,16 +1206,16 @@ CPackets::PlayerAimSync CPacketHandler::PlayerAimSync__Collect()
 {
 	CPackets::PlayerAimSync packet{};
 
-	CCam camera = TheCamera.m_aCams[TheCamera.m_nActiveCam];
+	CCam& camera = TheCamera.m_aCams[TheCamera.m_nActiveCam];
 
 	packet.cameraFov = camera.m_fFOV;
 	packet.cameraMode = camera.m_nMode;
+	packet.weaponCameraMode = TheCamera.m_PlayerWeaponMode.m_nMode;
 	packet.front = camera.m_vecFront;
 	packet.source = camera.m_vecSource;
 	packet.up = camera.m_vecUp;
-	packet.moveHeading = CWorld::Players[0].m_PlayerData.m_fFPSMoveHeading;
-	packet.aimY = CLocalPlayer::m_vecLastAimY;
-	packet.aimZ = FindPlayerPed(0)->m_fAimingRotation;
+	packet.lookPitch = FindPlayerPed(0)->m_pPlayerData->m_fLookPitch;
+	packet.orientation = TheCamera.m_fOrientation;
 
 	return packet;
 }
@@ -1225,10 +1229,13 @@ void CPacketHandler::PlayerAimSync__Handle(void* data, int size)
 	if (player)
 	{
 		player->m_aimSyncData = *packet;
-		if (player->m_lOnFoot)
+		
+		if (auto ped = player->m_pPed)
 		{
-			player->m_lOnFoot->currentRotation = packet->aimZ;
-			player->m_lOnFoot->aimingRotation = packet->aimZ;
+			if (ped->m_pPlayerData)
+			{
+				ped->m_pPlayerData->m_fLookPitch = packet->lookPitch;
+			}
 		}
 	}
 }
@@ -1310,7 +1317,7 @@ void CPacketHandler::RebuildPlayer__Handle(void* data, int size)
 		networkPlayer->m_stats[STAT_FAT] = packet->clothesData.m_fFatStat;
 		networkPlayer->m_stats[STAT_MUSCLE] = packet->clothesData.m_fMuscleStat;
 
-		CStatsSync::ApplyNetworkPlayerContext(networkPlayer);
+		//CStatsSync::ApplyNetworkPlayerContext(networkPlayer);
 
 		networkPlayer->m_pPedClothesDesc = packet->clothesData;
 
@@ -1323,7 +1330,7 @@ void CPacketHandler::RebuildPlayer__Handle(void* data, int size)
 			}
 		}
 
-		CStatsSync::ApplyLocalContext();
+		//CStatsSync::ApplyLocalContext();
 	}
 }
 

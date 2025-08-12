@@ -15,6 +15,14 @@ SSyncedOpCode m_syncedTasks[] = // TODO
 	{COMMAND_TASK_PLAY_ANIM, true, eSyncedParamType::PED},
 	{COMMAND_TASK_TURN_CHAR_TO_FACE_CHAR, true, eSyncedParamType::PED, eSyncedParamType::PED},
 	{COMMAND_TASK_SHOOT_AT_COORD, true, eSyncedParamType::PED},
+	{COMMAND_TASK_LOOK_AT_CHAR, true, eSyncedParamType::PED, eSyncedParamType::PED},
+	{COMMAND_CLEAR_CHAR_TASKS, true, eSyncedParamType::PED},
+	{COMMAND_CLEAR_LOOK_AT, true, eSyncedParamType::PED},
+	{COMMAND_TASK_STAND_STILL, true, eSyncedParamType::PED},
+	{COMMAND_TASK_LOOK_AT_COORD, true, eSyncedParamType::PED},
+	{COMMAND_TASK_LEAVE_CAR, true, eSyncedParamType::PED, eSyncedParamType::VEHICLE},
+	{COMMAND_TASK_DIE_NAMED_ANIM, true, eSyncedParamType::PED},
+	{COMMAND_TASK_PLAY_ANIM_WITH_FLAGS, true, eSyncedParamType::PED},
 };
 
 std::vector<uint8_t> m_serializedSequences[CTaskSequences::NUM_SEQUENCES][CTaskSequences::NUM_TASKS];
@@ -244,6 +252,8 @@ void CTaskSequenceSync::HandlePacket(void* data, int size)
 		return;
 	}
 
+	CTaskSequenceSync::ms_bFailedToProcessSequence = false;
+
 	int ptr = 9;
 	for (int i = 0; i < count; i++)
 	{
@@ -252,7 +262,20 @@ void CTaskSequenceSync::HandlePacket(void* data, int size)
 
 		COpCodeSync::ms_bProcessingTaskSequence = true;
 		COpCodeSync::HandlePacket((uint8_t*)((int)data + ptr), len);
+
+		if (CTaskSequenceSync::ms_bFailedToProcessSequence == true)
+		{
+			if (data && size > 0)
+			{
+				ms_vTaskSequences.emplace_back((uint8_t*)data, (uint8_t*)data + size);
+			}
+			Command<Commands::CLOSE_SEQUENCE_TASK>(sequenceId);
+			Command<Commands::CLEAR_SEQUENCE_TASK>(sequenceId);
+			return;
+		}
+
 		COpCodeSync::ms_bProcessingTaskSequence = false;
+
 
 		ptr += len;
 	}

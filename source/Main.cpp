@@ -14,6 +14,7 @@
 #include <CEntryExitManager.h>
 #include <CEntryExitMarkerSync.h>
 #include <CNetworkStaticBlip.h>
+#include <CNetworkAnimQueue.h>
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
@@ -86,6 +87,7 @@ public:
 			};
 		Events::gameProcessEvent += []
 			{
+				CNetworkAnimQueue::Process();
 				CDiscordRPCMgr::Update();
 				CDebugVehicleSpawner::Process();
 				
@@ -184,24 +186,23 @@ public:
 						lastWeatherTimeSyncTickRate = tickCount;
 					}
 					
-					// if holds a weapon and is not a driver
-					if (localPlayer->m_nActiveWeaponSlot > 0 && !isDriver)
+					if (localPlayer->m_pIntelligence->GetTaskUseGun())
 					{
-						CControllerState keys = CPad::GetPad(0)->NewState;
-						
-						// if is player aiming and is not a passenger or doing driveby
-						if ((keys.RightShoulder1 && !isPassenger) || CDriveBy::IsPedInDriveby(localPlayer))
+						if (tickCount > lastPlayerAimSyncTickRate + 50)
 						{
-							// if is player shooting, update x2 often
-							if (tickCount > lastPlayerAimSyncTickRate + (keys.ButtonCircle ? 50 : 100))
-							{
-								CPacketHandler::PlayerAimSync__Trigger();
-							}
+							CPacketHandler::PlayerAimSync__Trigger();
 						}
 					}
 					else if (localPlayer->m_pVehicle && CUtil::IsVehicleHasTurret(localPlayer->m_pVehicle))
 					{
 						if (tickCount > lastPlayerAimSyncTickRate + 150)
+						{
+							CPacketHandler::PlayerAimSync__Trigger();
+						}
+					}
+					else if (localPlayer->m_pIntelligence->GetTaskSwim() || localPlayer->m_pIntelligence->GetTaskJetPack() || localPlayer->m_pIntelligence->GetTaskFighting())
+					{
+						if (tickCount > lastPlayerAimSyncTickRate + 200)
 						{
 							CPacketHandler::PlayerAimSync__Trigger();
 						}
@@ -405,10 +406,14 @@ public:
 						buf += std::string(block.szName) + '\n';
 					}
 
-					if (buf.empty())
-						buf = "No loaded anim blocks\n";
-
 					CDXFont::Draw(10, 25, buf.c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
+
+					CVector posn = FindPlayerPed(0)->m_matrix->pos;
+					RwV3d screenCoors; float w, h;
+					if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
+					{
+						CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, std::to_string(TheCamera.m_fOrientation).c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
+					}
 				}
 			};
 		CCore::Init();

@@ -106,7 +106,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
 
     if (isWeaponTypeDifferent || isAmmoDifferent)
     {
-        CStatsSync::ApplyNetworkPlayerContext(player);
+        //CStatsSync::ApplyNetworkPlayerContext(player);
 
         if (weapon != 0)
         {
@@ -143,7 +143,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
             player->m_pPed->SetCurrentWeapon((eWeaponType)weapon);
         }
 
-        CStatsSync::ApplyLocalContext();
+        //CStatsSync::ApplyLocalContext();
     }
 }
 

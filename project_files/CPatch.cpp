@@ -335,6 +335,7 @@ void PatchLoadScreen()
     // Hook the copyright screen fading in/out and simulates that it has happened
     patch::Nop(0x748C2B, 5);
     patch::RedirectCall(0x748C9A, SimulateCopyrightScreen);
+
 }
 
 bool IsFileExistsInModuleDir(const char* relativePath)
