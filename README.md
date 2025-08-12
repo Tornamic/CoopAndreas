@@ -56,7 +56,7 @@ ETH: `0xE7aE0448A147844208C9D51b0Ac673Bafbe2a35c`
 
 *If you need another way to donate, please dm me on discord: `@tornamic`*
 
-Contact information is current as of June 2025
+Contact information is current as of August 2025
 
 ## TODO list:
 ### Already Done ✓
@@ -144,8 +144,8 @@ Contact information is current as of June 2025
 - [ ] fire sync
 - [ ] cheat code sync
 - [ ] anim sync
-  - [ ] sprunk drinking
-  - [ ] fast food eating
+  - [X] sprunk drinking
+  - [X] fast food eating
   - [ ] idle anims
   - [ ] funny TAB+NUM4 (or NUM6) anim sync (did you know about this?)
 - [ ] gang groups sync
@@ -183,7 +183,7 @@ Contact information is current as of June 2025
   - [ ] shots
   - [ ] task sync (good luck, warrior!)
   - [X] radar icon?
-  - [ ] speech sync
+  - [X] speech sync
 - [ ] player voice commands
 - [ ] chat reactions (see LD_CHAT.txd)
 - [ ] gand wars sync
@@ -209,7 +209,7 @@ Contact information is current as of June 2025
 ### Already Done ✓
 ### Current Tasks
 - [X] Big Smoke
-- [ ] Ryder
+- [X] Ryder
 - [ ] Tagging Up Turf
 - [ ] Cleaning The Hood
 - [ ] Drive-Thru
