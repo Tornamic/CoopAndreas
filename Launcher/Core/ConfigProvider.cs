@@ -1,14 +1,7 @@
-﻿using Launcher.Properties;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Launcher
+namespace Launcher.Core
 {
     public class ConfigProvider
     {
@@ -21,7 +14,7 @@ namespace Launcher
         public string IpPort { get; set; } = string.Empty;
         public string SerialKey { get; set; } = string.Empty;
         public string Language { get; set; } = "en";
-        public string GamePath { get; set; } = string.Empty;
+        public bool KillProcessesBeforeStart { get; set; } = false;
 
         private string _filePath;
 

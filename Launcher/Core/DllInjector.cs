@@ -1,4 +1,4 @@
-﻿using Launcher.Enums;
+﻿using Launcher.Core.Enums;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
-namespace Launcher
+namespace Launcher.Core
 {
     public sealed class DllInjector
     {

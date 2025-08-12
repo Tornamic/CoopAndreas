@@ -1,9 +1,9 @@
-﻿using Launcher.Enums;
+﻿using Launcher.Core.Enums;
 using System;
 using System.Diagnostics;
 using System.IO;
 
-namespace Launcher
+namespace Launcher.Core
 {
     public class Launcher
     {
@@ -12,15 +12,18 @@ namespace Launcher
             "CoopAndreasSA.dll"
         };
 
-        public LaunchResult LaunchAndInject(string gamePath, string playerNickName, string serverIpAddress, ushort serverPort, string id, string serial, params string[] librariesToInject)
+        public LaunchResult LaunchAndInject(string gamePath, string playerNickName, string serverIpAddress, ushort serverPort, string id, string serial, bool killProcesses, params string[] librariesToInject)
         {
             try
             {
                 // Sometimes when you wish to inject and have dead gta process it will write inject error when in reality the issue is dead gta process.
-                Process[] processes = Process.GetProcessesByName("gta_sa");
-                for (int i = 0; i < processes.Length; i++)
+                if (killProcesses)
                 {
-                    processes[i].Kill();
+                    Process[] processes = Process.GetProcessesByName("gta_sa");
+                    for (int i = 0; i < processes.Length; i++)
+                    {
+                        processes[i].Kill();
+                    }
                 }
 
                 if (!File.Exists(gamePath))
