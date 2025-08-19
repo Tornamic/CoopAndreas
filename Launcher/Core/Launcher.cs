@@ -1,7 +1,8 @@
-﻿using Launcher.Core.Enums;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
+using Launcher.Core.Enums;
 
 namespace Launcher.Core
 {
@@ -12,7 +13,7 @@ namespace Launcher.Core
             "CoopAndreasSA.dll"
         };
 
-        public LaunchResult LaunchAndInject(string gamePath, string playerNickName, string serverIpAddress, ushort serverPort, string id, string serial, bool killProcesses, params string[] librariesToInject)
+        public async Task<LaunchResult> LaunchAndInjectAsync(string gamePath, string playerNickName, string serverIpAddress, ushort serverPort, string id, string serial, bool killProcesses, params string[] librariesToInject)
         {
             try
             {
@@ -20,17 +21,30 @@ namespace Launcher.Core
                 if (killProcesses)
                 {
                     Process[] processes = Process.GetProcessesByName("gta_sa");
-                    for (int i = 0; i < processes.Length; i++)
+                    foreach (Process proc in processes)
                     {
-                        processes[i].Kill();
+                        try
+                        {
+                            proc.Kill();
+                            proc.WaitForExit(5000);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Warning: Could not kill process {proc.Id}: {ex.Message}");
+                        }
+                        finally
+                        {
+                            proc?.Dispose();
+                        }
                     }
+
+                    await Task.Delay(500);
                 }
 
                 if (!File.Exists(gamePath))
                     return LaunchResult.GameNotFound;
 
                 Process process = new Process();
-
                 process.StartInfo = new ProcessStartInfo()
                 {
                     FileName = gamePath,
@@ -45,8 +59,14 @@ namespace Launcher.Core
 
                 foreach (string library in librariesToInject)
                 {
-                    if (dllInjector.Inject(Path.Combine(Path.GetDirectoryName(gamePath), library)) != DllInjectionResult.Success)
+                    string libraryPath = Path.Combine(Path.GetDirectoryName(gamePath), library);
+                    DllInjectionResult result = await dllInjector.InjectAsync(libraryPath);
+
+                    if (result != DllInjectionResult.Success)
+                    {
+                        Console.WriteLine($"Failed to inject {library}: {result}");
                         return LaunchResult.InjectionFailed;
+                    }
                 }
 
                 return LaunchResult.Success;

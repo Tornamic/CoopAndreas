@@ -102,7 +102,7 @@ namespace Launcher
             }
         }
 
-        private void ConnectToServer_Click(object sender, RoutedEventArgs e)
+        private async void ConnectToServer_Click(object sender, RoutedEventArgs e)
         {
             if (!Validator.IsValidNickName(tbNickname.Text))
             {
@@ -127,7 +127,7 @@ namespace Launcher
 
             Core.Launcher launcher = new Core.Launcher();
 
-            LaunchResult result = launcher.LaunchAndInject("gta_sa.exe", tbNickname.Text, ip, port, tbGen.Text.Replace("/gen", "").Trim(), tbSerialKey.Text, config.KillProcessesBeforeStart, launcher.LibrariesToInject);
+            LaunchResult result = await launcher.LaunchAndInjectAsync("gta_sa.exe", tbNickname.Text, ip, port, tbGen.Text.Replace("/gen", "").Trim(), tbSerialKey.Text, config.KillProcessesBeforeStart, launcher.LibrariesToInject);
 
             if (result != LaunchResult.Success)
                 MessageBox.Show(result.ToString());
