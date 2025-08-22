@@ -11,6 +11,7 @@
 #include "Commands/CommandHooks.h"
 #include "SaveLoadHooks.h"
 #include "RadarHooks.h"
+#include "ProjectileHooks.h"
 
 void CHook::Init()
 {
@@ -26,4 +27,5 @@ void CHook::Init()
     MissionAudioHooks::InjectHooks();
     SaveLoadHooks::InjectHooks();
     RadarHooks::InjectHooks();
+    ProjectileHooks::InjectHooks();
 }

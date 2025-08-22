@@ -74,4 +74,5 @@ public:
 	static void PedSay__Handle(void* data, int size);
 	static void PedResetAllClaims__Handle(void* data, int size);
 	static void PerformTaskSequence__Handle(void* data, int size);
+	static void AddProjectile__Handle(void* data, int size);
 };

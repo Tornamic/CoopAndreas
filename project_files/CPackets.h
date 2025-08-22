@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include <CNetworkEntitySerializer.h>
 
 enum eNetworkEntityType : uint8_t;
 
@@ -68,6 +69,7 @@ enum CPacketsID : unsigned short
 	PED_RESET_ALL_CLAIMS,
 	PED_TAKE_HOST,
 	PERFORM_TASK_SEQUENCE,
+	ADD_PROJECTILE,
 	PACKET_ID_MAX
 };
 
@@ -620,5 +622,15 @@ public:
 	{
 		int pedid;
 		bool allowReturnToPreviousHost;
+	};
+
+	struct AddProjectile
+	{
+		CNetworkEntitySerializer creator;
+		uint8_t projectileType; // eWeaponType
+		CVector origin;
+		float force;
+		CVector dir;
+		CNetworkEntitySerializer target;
 	};
 };

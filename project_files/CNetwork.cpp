@@ -156,6 +156,7 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::PED_SAY, CPacketHandler::PedSay__Handle);
 	CNetwork::AddListener(CPacketsID::PED_RESET_ALL_CLAIMS, CPacketHandler::PedResetAllClaims__Handle);
 	CNetwork::AddListener(CPacketsID::PERFORM_TASK_SEQUENCE, CPacketHandler::PerformTaskSequence__Handle);
+	CNetwork::AddListener(CPacketsID::ADD_PROJECTILE, CPacketHandler::AddProjectile__Handle);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

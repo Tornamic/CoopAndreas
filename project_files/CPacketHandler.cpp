@@ -10,6 +10,11 @@
 #include <CNetworkStaticBlip.h>
 #include <CTaskSequenceSync.h>
 #include <CWaterLevel.h>
+#include <CTaskSimpleCarSetPedOut.h>
+#include <CCarEnterExit.h>
+#include <CProjectileInfo.h>
+#include <CAimSync.h>
+
 // PlayerConnected
 
 void CPacketHandler::PlayerConnected__Handle(void* data, int size)
@@ -540,6 +545,14 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 	CChat::AddMessage("player %d entered vehicleid %d %s", packet->playerid, packet->vehicleid, packet->seatid != 0 ? "as passenger" : "");
 #endif
 
+	if (auto* task = player->m_pPed->m_pIntelligence->GetTaskJetPack()) // drop the jetpack if present
+	{
+		task->MakeAbortable(player->m_pPed, ABORT_PRIORITY_URGENT, nullptr);
+		task->m_nThrustStop = 0;
+		task->m_nThrustFwd = 0;
+		task->m_fThrustStrafe = 0.0f;
+	}
+
 	if (packet->passenger == 0) // driver
 	{
 		if (packet->force)
@@ -552,13 +565,13 @@ void CPacketHandler::VehicleEnter__Handle(void* data, int size)
 				Sleep(100);
 			}
 
-			player->m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
-			plugin::Command<Commands::WARP_CHAR_INTO_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle));
+			player->WarpIntoVehicleDriver(vehicle->m_pVehicle);
 		}
 		else
 		{
 			player->m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
-			plugin::Command<Commands::TASK_ENTER_CAR_AS_DRIVER>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(vehicle->m_pVehicle), 3000);
+			auto* task = new CTaskComplexEnterCarAsDriver(vehicle->m_pVehicle);
+			player->m_pPed->m_pIntelligence->m_TaskMgr.SetTask(task, TASK_PRIMARY_PRIMARY, false);
 		}
 	}
 	else
@@ -593,15 +606,17 @@ void CPacketHandler::VehicleExit__Handle(void* data, int size)
 #endif
 	if (packet->force)
 	{
-		CVector doorPos{};
-		player->m_pPed->m_pVehicle->GetComponentWorldPosition(8, doorPos); // right front door (driver)
 		player->m_pPed->m_nPedFlags.CantBeKnockedOffBike = 2; // 2 - normal
-		plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(player->m_pPed), doorPos.x, doorPos.y, doorPos.z);
+		CVector doorPos{};
+		int door = CCarEnterExit::ComputeTargetDoorToExit(player->m_pPed->m_pVehicle, player->m_pPed);
+		auto task = CTaskSimpleCarSetPedOut(player->m_pPed->m_pVehicle, door, false);
+		task.ProcessPed(player->m_pPed);
 	}
 	else
 	{
 		player->m_pPed->m_nPedFlags.CantBeKnockedOffBike = 2; // 2 - normal
-		plugin::Command<Commands::TASK_LEAVE_CAR>(CPools::GetPedRef(player->m_pPed), CPools::GetVehicleRef(player->m_pPed->m_pVehicle));
+		auto* task = new CTaskComplexLeaveCar(player->m_pPed->m_pVehicle, 0, 0, true, false);
+		player->m_pPed->m_pIntelligence->m_TaskMgr.SetTask(task, TASK_PRIMARY_PRIMARY, false);
 	}
 }
 
@@ -1794,4 +1809,44 @@ void CPacketHandler::PedResetAllClaims__Handle(void* data, int size)
 void CPacketHandler::PerformTaskSequence__Handle(void* data, int size)
 {
 	CTaskSequenceSync::HandlePacket(data, size);
+}
+
+// AddProjectile
+
+void CPacketHandler::AddProjectile__Handle(void* data, int size)
+{
+	CPackets::AddProjectile* packet = (CPackets::AddProjectile*)data;
+	uint8_t raw = packet->projectileType;
+	eWeaponType type = static_cast<eWeaponType>(raw);
+	CChat::AddMessage("AddProjectile__Handle %p %d {%f %f %f} %f {%f %f %f} %p", packet->creator.GetEntity(), type, packet->origin.x, packet->origin.y, packet->origin.z, packet->force, packet->dir.x, packet->dir.y, packet->dir.z, packet->target.GetEntity());
+	
+	if (packet->creator.GetEntity() == nullptr)
+	{
+		return;
+	}
+
+	CVector origin = packet->origin;
+	CVector dir = packet->dir;
+
+	if (packet->creator.entityType == NETWORK_ENTITY_TYPE_PLAYER)
+	{
+		if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(packet->creator.GetEntity()))
+		{
+			CAimSync::ApplyNetworkPlayerContext(networkPlayer);
+		}
+	}
+
+	if (packet->dir.x == 0.0f && packet->dir.y == 0.0f && packet->dir.z == 0.0f)
+	{
+		CProjectileInfo::AddProjectile(packet->creator.GetEntity(), type, origin, packet->force, nullptr, packet->target.GetEntity());
+	}
+	else
+	{
+		CProjectileInfo::AddProjectile(packet->creator.GetEntity(), type, origin, packet->force, &packet->dir, packet->target.GetEntity());
+	}
+
+	if (packet->creator.entityType == NETWORK_ENTITY_TYPE_PLAYER)
+	{
+		CAimSync::ApplyLocalContext();
+	}
 }

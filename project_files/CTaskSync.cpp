@@ -149,7 +149,7 @@ void CTaskSync::DeSerializeTask(void* data)
     READ(taskSlot);
     READ(bPrimary);
 
-    CChat::AddMessage("DeSerializeTask %d %d %s %d %s", pedId, taskId, CDebugPedTasks::TaskNames[taskId], taskSlot, bPrimary ? "True" : "False");
+    //CChat::AddMessage("DeSerializeTask %d %d %s %d %s", pedId, taskId, CDebugPedTasks::TaskNames[taskId], taskSlot, bPrimary ? "True" : "False");
 
     CNetworkPed* networkPed = CNetworkPedManager::GetPed(pedId);
 

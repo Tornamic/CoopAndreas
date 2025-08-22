@@ -646,5 +646,22 @@ public:
 			}
 		}
 	};
+
+	struct AddProjectile
+	{
+		uint8_t creatorType;
+		int creatorId;
+		uint8_t projectileType; // eWeaponType
+		CVector origin;
+		float force;
+		CVector dir;
+		uint8_t targetType;
+		int targetId;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			CNetwork::SendPacketToAll(CPacketsID::ADD_PROJECTILE, data, sizeof(AddProjectile), ENET_PACKET_FLAG_RELIABLE, peer);
+		}
+	};
 };
 #endif

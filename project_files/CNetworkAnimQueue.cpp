@@ -5,7 +5,7 @@
 
 void CNetworkAnimQueue::AddOpCode(const uint8_t* buffer, int bufferSize)
 {
-	CChat::AddMessage("AddOpCode %x %d", buffer, bufferSize);
+	//CChat::AddMessage("AddOpCode %x %d", buffer, bufferSize);
 
 	if (buffer && bufferSize > 0)
 		ms_vQueue.emplace_back(buffer, buffer + bufferSize);
@@ -18,7 +18,7 @@ void CNetworkAnimQueue::Process()
 	{
 		processedAnim = true;
 		COpCodeSync::HandlePacket(v.data(), v.size());
-		CChat::AddMessage("Process %x %d", v.data(), v.size());
+		//CChat::AddMessage("Process %x %d", v.data(), v.size());
 	}
 	if (processedAnim)
 	{

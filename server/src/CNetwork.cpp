@@ -129,6 +129,7 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PED_RESET_ALL_CLAIMS, CPedPackets::PedResetAllClaims::Handle);
     CNetwork::AddListener(CPacketsID::PED_TAKE_HOST, CPedPackets::PedTakeHost::Handle);
     CNetwork::AddListener(CPacketsID::PERFORM_TASK_SEQUENCE, CPedPackets::PerformTaskSequence::Handle);
+    CNetwork::AddListener(CPacketsID::ADD_PROJECTILE, CPlayerPackets::AddProjectile::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)

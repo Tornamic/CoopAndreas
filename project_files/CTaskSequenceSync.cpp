@@ -169,28 +169,28 @@ bool CTaskSequenceSync::OnOpCodeExecuted(eScriptCommands opcode)
 {
 	if (opcode == COMMAND_OPEN_SEQUENCE_TASK)
 	{
-		CChat::AddMessage("OpenSequence");
+		//CChat::AddMessage("OpenSequence");
 		OpenSequence();
 		return false;
 	}
 
 	if (opcode == COMMAND_CLOSE_SEQUENCE_TASK)
 	{
-		CChat::AddMessage("CloseSequence");
+		//CChat::AddMessage("CloseSequence");
 		CloseSequence();
 		return false;
 	}
 
 	if (opcode == COMMAND_CLEAR_SEQUENCE_TASK)
 	{
-		CChat::AddMessage("ClearSequence");
+		//CChat::AddMessage("ClearSequence");
 		ClearSequence();
 		return false;
 	}
 
 	if (opcode == COMMAND_PERFORM_SEQUENCE_TASK)
 	{
-		CChat::AddMessage("PerformSequence");
+		//CChat::AddMessage("PerformSequence");
 		PerformSequence();
 		return false;
 	}
@@ -200,7 +200,7 @@ bool CTaskSequenceSync::OnOpCodeExecuted(eScriptCommands opcode)
 		&& IsOpCodeTaskSynced(opcode) 
 		&& COpCodeSync::scriptParamsBuffer[0].value == -1)
 	{
-		CChat::AddMessage("AddNewTask");
+		//CChat::AddMessage("AddNewTask");
 		AddNewTask(opcode);
 		return false;
 	}
@@ -226,7 +226,7 @@ void CTaskSequenceSync::HandlePacket(void* data, int size)
 
 	if (sequenceId == -1)
 	{
-		CChat::AddMessage("CTaskSequenceSync::HandlePacket: can't open a new sequence");
+		//CChat::AddMessage("CTaskSequenceSync::HandlePacket: can't open a new sequence");
 		return;
 	}
 	
