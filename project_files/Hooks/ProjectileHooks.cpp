@@ -33,6 +33,7 @@ bool __fastcall CWeapon__FireProjectile_Hook(CWeapon* This, int, CEntity* firing
 	return false;
 }
 
+// also used for CVehicle__FireHeatSeakingMissile
 bool __cdecl CWeapon__FireProjectile_AddProjectile_Hook(CEntity* creator, eWeaponType projectileType, CVector origin, float force, CVector* dir, CEntity* target)
 {
 	CPackets::AddProjectile packet{};
@@ -44,12 +45,12 @@ bool __cdecl CWeapon__FireProjectile_AddProjectile_Hook(CEntity* creator, eWeapo
 
 	if (dir)
 	{
-		CChat::AddMessage("AddProjectile__Handle %p %d {%f %f %f} %f {%f %f %f} %p", creator, projectileType, origin.x, origin.y, origin.z, force, dir->x, dir->y, dir->z, target);
+		//CChat::AddMessage("AddProjectile__Handle %p %d {%f %f %f} %f {%f %f %f} %p", creator, projectileType, origin.x, origin.y, origin.z, force, dir->x, dir->y, dir->z, target);
 		packet.dir = *dir;
 	}
 	else
 	{
-		CChat::AddMessage("AddProjectile__Handle %p %d {%f %f %f} %f {from packet %f %f %f} %p", creator, projectileType, origin.x, origin.y, origin.z, force, packet.dir.x, packet.dir.y, packet.dir.z, target);
+		//CChat::AddMessage("AddProjectile__Handle %p %d {%f %f %f} %f {from packet %f %f %f} %p", creator, projectileType, origin.x, origin.y, origin.z, force, packet.dir.x, packet.dir.y, packet.dir.z, target);
 	}
 	 
 	packet.target.SetEntity(target);
@@ -68,4 +69,6 @@ void ProjectileHooks::InjectHooks()
 	patch::RedirectCall(0x742739, CWeapon__FireProjectile_Hook);
 	patch::RedirectCall(0x74274E, CWeapon__FireProjectile_Hook);
 	patch::RedirectCall(0x741A53, CWeapon__FireProjectile_AddProjectile_Hook);
+
+	patch::RedirectCall(0x6E0749, CWeapon__FireProjectile_AddProjectile_Hook);
 }
