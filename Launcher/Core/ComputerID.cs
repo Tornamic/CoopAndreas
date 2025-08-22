@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Launcher
+namespace Launcher.Core
 {
     public class ComputerID
     {
