@@ -7,14 +7,12 @@ enum eNetworkEntityType : uint8_t;
 
 enum CPacketsID : unsigned short
 {
-	CHECK_VERSION = 0, // reserved but not used, see enet_host_connect
 	PLAYER_CONNECTED,
 	PLAYER_DISCONNECTED,
 	PLAYER_ONFOOT,
 	PLAYER_BULLET_SHOT,
 	PLAYER_HANDSHAKE,
 	PLAYER_PLACE_WAYPOINT,
-	PLAYER_GET_NAME,
 	VEHICLE_SPAWN,
 	PLAYER_SET_HOST,
 	ADD_EXPLOSION,
@@ -80,14 +78,12 @@ public:
 	{
 		static std::array<int, PACKET_ID_MAX> m_nPacketSize =
 		{
-			0, // CHECK_VERSION
 			sizeof(PlayerConnected), // PLAYER_CONNECTED
 			sizeof(PlayerDisconnected), // PLAYER_DISCONNECTED
 			sizeof(PlayerOnFoot), // PLAYER_ONFOOT
 			sizeof(PlayerBulletShot), // PLAYER_BULLET_SHOT
 			sizeof(PlayerHandshake), // PLAYER_HANDSHAKE
 			sizeof(PlayerPlaceWaypoint), // PLAYER_PLACE_WAYPOINT
-			sizeof(PlayerGetName), // PLAYER_GET_NAME
 			sizeof(VehicleSpawn), // VEHICLE_SPAWN
 			sizeof(PlayerSetHost), // PLAYER_SET_HOST
 			sizeof(AddExplosion), // ADD_EXPLOSION
@@ -143,12 +139,15 @@ public:
 	{
 		int id;
 		bool isAlreadyConnected; // prevents spam in the chat when connecting by distinguishing already connected players from newly joined ones
+		char name[32 + 1];
+		uint32_t version;
 	};
 
 	struct PlayerDisconnected
 	{
 		int id;
 		unsigned char reason;
+		uint32_t version;
 	};
 
 	struct PlayerOnFoot
@@ -190,12 +189,6 @@ public:
 		int playerid;
 		bool place;
 		CVector position;
-	};
-
-	struct PlayerGetName
-	{
-		int playerid;
-		char name[32 + 1];
 	};
 
 	struct PlayerSetHost

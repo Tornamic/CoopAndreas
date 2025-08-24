@@ -39,12 +39,25 @@ public:
 	{
 		int id;
 		bool isAlreadyConnected; // prevents spam in the chat when connecting by distinguishing already connected players from newly joined ones
+		char name[32 + 1];
+		uint32_t version;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (CPlayerManager::GetPlayer(peer))
+			{
+				return;
+			}
+
+			CNetwork::HandlePlayerConnected(peer, data, size);
+		}
 	};
 
 	struct PlayerDisconnected
 	{
 		int id;
 		unsigned char reason;
+		uint32_t version;
 	};
 
 #pragma pack(1)
@@ -147,22 +160,6 @@ public:
 				player->m_vecWaypointPos = packet->position;
 				CNetwork::SendPacketToAll(CPacketsID::PLAYER_PLACE_WAYPOINT, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 			}
-		}
-	};
-
-	struct PlayerGetName
-	{
-		int playerid;
-		char name[32 + 1];
-
-		static void Handle(ENetPeer* peer, void* data, int size)
-		{
-			CPlayerPackets::PlayerGetName* packet = (CPlayerPackets::PlayerGetName*)data;
-			CPlayer* player = CPlayerManager::GetPlayer(peer);
-			packet->playerid = player->m_iPlayerId;
-			strcpy(player->m_Name, packet->name);
-			printf("[Game] : Player %d now also know as '%s'\n", packet->playerid, packet->name);
-			CNetwork::SendPacketToAll(CPacketsID::PLAYER_GET_NAME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		}
 	};
 

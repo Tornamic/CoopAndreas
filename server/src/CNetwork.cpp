@@ -53,7 +53,7 @@ bool CNetwork::Init(unsigned short port)
         {
             case ENET_EVENT_TYPE_CONNECT:
             {
-                CNetwork::HandlePlayerConnected(event);
+                CNetwork::HandlePeerConnected(event);
                 break;
             }
             case ENET_EVENT_TYPE_RECEIVE:
@@ -78,10 +78,10 @@ bool CNetwork::Init(unsigned short port)
 
 void CNetwork::InitListeners()
 {
+    CNetwork::AddListener(CPacketsID::PLAYER_CONNECTED, CPlayerPackets::PlayerConnected::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_ONFOOT, CPlayerPackets::PlayerOnFoot::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_BULLET_SHOT, CPlayerPackets::PlayerBulletShot::Handle);
     CNetwork::AddListener(CPacketsID::PLAYER_PLACE_WAYPOINT, CPlayerPackets::PlayerPlaceWaypoint::Handle);
-    CNetwork::AddListener(CPacketsID::PLAYER_GET_NAME, CPlayerPackets::PlayerGetName::Handle);
     CNetwork::AddListener(CPacketsID::ADD_EXPLOSION, CPlayerPackets::AddExplosion::Handle);
     CNetwork::AddListener(CPacketsID::VEHICLE_SPAWN, CVehiclePackets::VehicleSpawn::Handle);
     CNetwork::AddListener(CPacketsID::VEHICLE_REMOVE, CVehiclePackets::VehicleRemove::Handle);
@@ -189,162 +189,17 @@ void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag fl
     }
 }
 
-void CNetwork::HandlePlayerConnected(ENetEvent& event)
+void CNetwork::HandlePeerConnected(ENetEvent& event)
 {
-    uint32_t packedVersion = semver_parse(COOPANDREAS_VERSION, nullptr);
-    char buffer[23];
-    semver_t playerVersion;
-    semver_unpack(event.data, &playerVersion);
-    semver_to_string(&playerVersion, buffer, sizeof(buffer));
-    buffer[22] = '\0';
-
-    printf("[Game] : A new client connected from %i.%i.%i.%i:%u. Version: %s\n", 
+    printf("[Game] : A new client connected from %i.%i.%i.%i:%u.\n", 
         event.peer->address.host & 0xFF, 
         (event.peer->address.host >> 8) & 0xFF, 
         (event.peer->address.host >> 16) & 0xFF, 
-        (event.peer->address.host >> 24) & 0xFF, 
-        event.peer->address.port, buffer);
-
-    if (packedVersion != event.data)
-    {
-        /*printf("Wrong version, disconnecting...\n");
-        enet_peer_disconnect_now(event.peer, packedVersion);
-        return;*/
-    }
+        (event.peer->address.host >> 24) & 0xFF,
+        event.peer->address.port);
 
     // set player disconnection timeout
-    enet_peer_timeout(event.peer, 5000, 3000, 5000); //timeoutLimit, timeoutMinimum, timeoutMaximum
-
-    // create new player and send to all players
-
-    // get free id
-    int freeId = CPlayerManager::GetFreeID();
-
-    // create new player instance
-    CPlayer* player = new CPlayer(event.peer, freeId);
-
-    // add player to list
-    CPlayerManager::Add(player);
-
-    // create PlayerConnected packet struct
-    CPlayerPackets::PlayerConnected packet =
-    {
-        freeId // id
-    };
-
-    // send to all
-    CNetwork::SendPacketToAll(CPacketsID::PLAYER_CONNECTED, &packet, sizeof (CPlayerPackets::PlayerConnected), ENET_PACKET_FLAG_RELIABLE, event.peer);
-
-    // send PlayerConnected packets for a new player
-    for (auto i : CPlayerManager::m_pPlayers)
-    {
-        if (i->m_iPlayerId == freeId)
-            continue;
-
-        packet.id = i->m_iPlayerId;
-        packet.isAlreadyConnected = true;
-
-        CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_CONNECTED, &packet, sizeof (CPlayerPackets::PlayerConnected), ENET_PACKET_FLAG_RELIABLE);
-
-        CPlayerPackets::PlayerGetName getNamePacket{};
-        getNamePacket.playerid = i->m_iPlayerId;
-        strcpy(getNamePacket.name, i->m_Name);
-        CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_GET_NAME, &getNamePacket, sizeof (CPlayerPackets::PlayerGetName), ENET_PACKET_FLAG_RELIABLE);
-
-        if (i->m_ucSyncFlags.bStatsModified)
-        {
-            CPlayerPackets::PlayerStats statsPacket{};
-            statsPacket.playerid = i->m_iPlayerId;
-            memcpy(statsPacket.stats, i->m_afStats, sizeof(i->m_afStats));
-            CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_STATS, &statsPacket, sizeof(statsPacket), ENET_PACKET_FLAG_RELIABLE);
-        }
-
-        if (i->m_ucSyncFlags.bClothesModified)
-        {
-            CPlayerPackets::RebuildPlayer rebuildPacket{};
-            rebuildPacket.playerid = i->m_iPlayerId;
-            memcpy(rebuildPacket.m_anModelKeys, i->m_anModelKeys, sizeof(i->m_anModelKeys));
-            memcpy(rebuildPacket.m_anTextureKeys, i->m_anTextureKeys, sizeof(i->m_anTextureKeys));
-            rebuildPacket.m_fFatStat = i->m_fFatStat;
-            rebuildPacket.m_fMuscleStat = i->m_fMuscleStat;
-            CNetwork::SendPacket(event.peer, CPacketsID::REBUILD_PLAYER, &rebuildPacket, sizeof(rebuildPacket), ENET_PACKET_FLAG_RELIABLE);
-        }
-
-        if (i->m_ucSyncFlags.bWaypointModified)
-        {
-            CPlayerPackets::PlayerPlaceWaypoint waypointPacket{};
-            waypointPacket.playerid = i->m_iPlayerId;
-            waypointPacket.position = i->m_vecWaypointPos;
-            waypointPacket.place = true;
-            CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_PLACE_WAYPOINT, &waypointPacket, sizeof(waypointPacket), ENET_PACKET_FLAG_RELIABLE);
-        }
-    }
-
-    for (auto i : CVehicleManager::m_pVehicles)
-    {
-        CVehiclePackets::VehicleSpawn vehicleSpawnPacket{};
-        vehicleSpawnPacket.vehicleid = i->m_nVehicleId;
-        vehicleSpawnPacket.modelid = i->m_nModelId;
-        vehicleSpawnPacket.pos = i->m_vecPosition;
-        vehicleSpawnPacket.rot = static_cast<float>(i->m_vecRotation.z * (3.141592 / 180)); // convert to radians
-        vehicleSpawnPacket.color1 = i->m_nPrimaryColor;
-        vehicleSpawnPacket.color2 = i->m_nSecondaryColor;
-
-        CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
-        
-        bool modifiedDamageStatus = false;
-
-        for (unsigned char j = 0; j < 23; j++)
-        {
-            if (i->m_damageManager_padding[j])
-            {
-                modifiedDamageStatus = true; 
-                break;
-            }
-        }
-
-        if (modifiedDamageStatus)
-        {
-            CVehiclePackets::VehicleDamage vehicleDamagePacket{};
-            vehicleDamagePacket.vehicleid = i->m_nVehicleId;
-            memcpy(&vehicleDamagePacket.damageManager_padding, i->m_damageManager_padding, 23);
-            CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_DAMAGE, &vehicleDamagePacket, sizeof vehicleDamagePacket, ENET_PACKET_FLAG_RELIABLE);
-        }
-
-        for (int component : i->m_pComponents) 
-        {
-            CVehiclePackets::VehicleComponentAdd vehicleComponentAddPacket{};
-            vehicleComponentAddPacket.vehicleid = i->m_nVehicleId;
-            vehicleComponentAddPacket.componentid = component;
-            CNetwork::SendPacket(event.peer, CPacketsID::VEHICLE_COMPONENT_ADD, &vehicleComponentAddPacket, sizeof vehicleComponentAddPacket, ENET_PACKET_FLAG_RELIABLE);
-        }
-    }
-
-    for (auto i : CPedManager::m_pPeds)
-    {
-        CPedPackets::PedSpawn packet{};
-        packet.pedid = i->m_nPedId;
-        packet.modelId = i->m_nModelId;
-        packet.pos = i->m_vecPos;
-        packet.pedType = i->m_nPedType;
-        packet.createdBy = i->m_nCreatedBy;
-        strncpy_s(packet.specialModelName, i->m_szSpecialModelName, strlen(i->m_szSpecialModelName));
-        CNetwork::SendPacket(event.peer, CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
-    }
-
-    if (CPlayerPackets::EnExSync::ms_pLastPlayerOwner)
-    {
-        if (std::find(CPlayerManager::m_pPlayers.begin(), CPlayerManager::m_pPlayers.end(), CPlayerPackets::EnExSync::ms_pLastPlayerOwner)
-            != CPlayerManager::m_pPlayers.end())
-        {
-            CNetwork::SendPacket(event.peer, CPacketsID::ENEX_SYNC, CPlayerPackets::EnExSync::ms_vLastData.data(), CPlayerPackets::EnExSync::ms_vLastData.size(), ENET_PACKET_FLAG_RELIABLE);
-        }
-    }
-
-    CPlayerPackets::PlayerHandshake handshakePacket = { freeId };
-    CNetwork::SendPacket(event.peer, CPacketsID::PLAYER_HANDSHAKE, &handshakePacket, sizeof handshakePacket, ENET_PACKET_FLAG_RELIABLE);
-
-    CPlayerManager::AssignHostToFirstPlayer();
+    enet_peer_timeout(event.peer, 10000, 6000, 10000); //timeoutLimit, timeoutMinimum, timeoutMaximum
 }
 
 void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
@@ -354,6 +209,11 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
     // find player instance by enetpeer
     CPlayer* player = CPlayerManager::GetPlayer(event.peer);
     
+    if (player == nullptr)
+    {
+        return;
+    }
+
     CVehicle* vehicle = CVehicleManager::GetVehicle(player->m_nVehicleId);
 
     if (vehicle != nullptr)
@@ -416,4 +276,146 @@ void CNetwork::AddListener(unsigned short id, void(*callback)(ENetPeer*, void*, 
 {
     CPacketListener* listener = new CPacketListener(id, callback);
     m_packetListeners.insert({ id, listener });
+}
+
+void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
+{
+    CPlayerPackets::PlayerConnected* packet = (CPlayerPackets::PlayerConnected*)data;
+
+    int freeId = CPlayerManager::GetFreeID();
+    CPlayer* player = new CPlayer(peer, freeId);
+    strcpy_s(player->m_Name, packet->name);
+    CPlayerManager::Add(player);
+
+    uint32_t packedVersion = semver_parse(COOPANDREAS_VERSION, nullptr);
+    char buffer[23];
+    semver_t playerVersion;
+    semver_unpack(packet->version, &playerVersion);
+    semver_to_string(&playerVersion, buffer, sizeof(buffer));
+    buffer[22] = '\0';
+
+    if (packedVersion != packet->version)
+    {
+        CPlayerPackets::PlayerDisconnected packet{};
+        packet.id = -1;
+        packet.reason = 1;
+        packet.version = packedVersion;
+        CNetwork::SendPacket(peer, CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE);
+
+        enet_peer_disconnect_later(peer, packedVersion);
+        return;
+    }
+
+    printf("freeId %d name %s version %s\n", freeId, packet->name, buffer);
+    
+    packet->id = freeId;
+
+    CNetwork::SendPacketToAll(CPacketsID::PLAYER_CONNECTED, packet, sizeof(*packet), ENET_PACKET_FLAG_RELIABLE, peer);
+
+    for (auto i : CPlayerManager::m_pPlayers)
+    {
+        if (i->m_iPlayerId == freeId)
+            continue;
+
+        CPlayerPackets::PlayerConnected newPlayerPacket{};
+        newPlayerPacket.id = i->m_iPlayerId;
+        newPlayerPacket.isAlreadyConnected = true;
+        strcpy_s(newPlayerPacket.name, i->m_Name);
+
+        CNetwork::SendPacket(peer, CPacketsID::PLAYER_CONNECTED, &newPlayerPacket, sizeof(CPlayerPackets::PlayerConnected), ENET_PACKET_FLAG_RELIABLE);
+
+        if (i->m_ucSyncFlags.bStatsModified)
+        {
+            CPlayerPackets::PlayerStats statsPacket{};
+            statsPacket.playerid = i->m_iPlayerId;
+            memcpy(statsPacket.stats, i->m_afStats, sizeof(i->m_afStats));
+            CNetwork::SendPacket(peer, CPacketsID::PLAYER_STATS, &statsPacket, sizeof(statsPacket), ENET_PACKET_FLAG_RELIABLE);
+        }
+
+        if (i->m_ucSyncFlags.bClothesModified)
+        {
+            CPlayerPackets::RebuildPlayer rebuildPacket{};
+            rebuildPacket.playerid = i->m_iPlayerId;
+            memcpy(rebuildPacket.m_anModelKeys, i->m_anModelKeys, sizeof(i->m_anModelKeys));
+            memcpy(rebuildPacket.m_anTextureKeys, i->m_anTextureKeys, sizeof(i->m_anTextureKeys));
+            rebuildPacket.m_fFatStat = i->m_fFatStat;
+            rebuildPacket.m_fMuscleStat = i->m_fMuscleStat;
+            CNetwork::SendPacket(peer, CPacketsID::REBUILD_PLAYER, &rebuildPacket, sizeof(rebuildPacket), ENET_PACKET_FLAG_RELIABLE);
+        }
+
+        if (i->m_ucSyncFlags.bWaypointModified)
+        {
+            CPlayerPackets::PlayerPlaceWaypoint waypointPacket{};
+            waypointPacket.playerid = i->m_iPlayerId;
+            waypointPacket.position = i->m_vecWaypointPos;
+            waypointPacket.place = true;
+            CNetwork::SendPacket(peer, CPacketsID::PLAYER_PLACE_WAYPOINT, &waypointPacket, sizeof(waypointPacket), ENET_PACKET_FLAG_RELIABLE);
+        }
+    }
+
+    for (auto i : CVehicleManager::m_pVehicles)
+    {
+        CVehiclePackets::VehicleSpawn vehicleSpawnPacket{};
+        vehicleSpawnPacket.vehicleid = i->m_nVehicleId;
+        vehicleSpawnPacket.modelid = i->m_nModelId;
+        vehicleSpawnPacket.pos = i->m_vecPosition;
+        vehicleSpawnPacket.rot = static_cast<float>(i->m_vecRotation.z * (3.141592 / 180)); // convert to radians
+        vehicleSpawnPacket.color1 = i->m_nPrimaryColor;
+        vehicleSpawnPacket.color2 = i->m_nSecondaryColor;
+
+        CNetwork::SendPacket(peer, CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
+
+        bool modifiedDamageStatus = false;
+
+        for (unsigned char j = 0; j < 23; j++)
+        {
+            if (i->m_damageManager_padding[j])
+            {
+                modifiedDamageStatus = true;
+                break;
+            }
+        }
+
+        if (modifiedDamageStatus)
+        {
+            CVehiclePackets::VehicleDamage vehicleDamagePacket{};
+            vehicleDamagePacket.vehicleid = i->m_nVehicleId;
+            memcpy(&vehicleDamagePacket.damageManager_padding, i->m_damageManager_padding, 23);
+            CNetwork::SendPacket(peer, CPacketsID::VEHICLE_DAMAGE, &vehicleDamagePacket, sizeof vehicleDamagePacket, ENET_PACKET_FLAG_RELIABLE);
+        }
+
+        for (int component : i->m_pComponents)
+        {
+            CVehiclePackets::VehicleComponentAdd vehicleComponentAddPacket{};
+            vehicleComponentAddPacket.vehicleid = i->m_nVehicleId;
+            vehicleComponentAddPacket.componentid = component;
+            CNetwork::SendPacket(peer, CPacketsID::VEHICLE_COMPONENT_ADD, &vehicleComponentAddPacket, sizeof vehicleComponentAddPacket, ENET_PACKET_FLAG_RELIABLE);
+        }
+    }
+
+    for (auto i : CPedManager::m_pPeds)
+    {
+        CPedPackets::PedSpawn packet{};
+        packet.pedid = i->m_nPedId;
+        packet.modelId = i->m_nModelId;
+        packet.pos = i->m_vecPos;
+        packet.pedType = i->m_nPedType;
+        packet.createdBy = i->m_nCreatedBy;
+        strncpy_s(packet.specialModelName, i->m_szSpecialModelName, strlen(i->m_szSpecialModelName));
+        CNetwork::SendPacket(peer, CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    }
+
+    if (CPlayerPackets::EnExSync::ms_pLastPlayerOwner)
+    {
+        if (std::find(CPlayerManager::m_pPlayers.begin(), CPlayerManager::m_pPlayers.end(), CPlayerPackets::EnExSync::ms_pLastPlayerOwner)
+            != CPlayerManager::m_pPlayers.end())
+        {
+            CNetwork::SendPacket(peer, CPacketsID::ENEX_SYNC, CPlayerPackets::EnExSync::ms_vLastData.data(), CPlayerPackets::EnExSync::ms_vLastData.size(), ENET_PACKET_FLAG_RELIABLE);
+        }
+    }
+
+    CPlayerPackets::PlayerHandshake handshakePacket = { freeId };
+    CNetwork::SendPacket(peer, CPacketsID::PLAYER_HANDSHAKE, &handshakePacket, sizeof handshakePacket, ENET_PACKET_FLAG_RELIABLE);
+
+    CPlayerManager::AssignHostToFirstPlayer();
 }

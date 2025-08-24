@@ -24,6 +24,7 @@ void CPacketHandler::PlayerConnected__Handle(void* data, int size)
 
 	// create new player
 	CNetworkPlayer* player = new CNetworkPlayer(packet->id, CVector(2246.506f, -1259.552f, 23.9531f));
+	strcpy_s(player->m_Name, packet->name);
 
 	// add player to list
 	CNetworkPlayerManager::Add(player);
@@ -48,6 +49,18 @@ void CPacketHandler::PlayerDisconnected__Handle(void* data, int size)
 {
 	// get packet struct
 	CPackets::PlayerDisconnected* packet = (CPackets::PlayerDisconnected*)data;
+
+	if (packet->id == -1)
+	{
+		char buffer[23];
+		semver_t expected;
+		semver_unpack(packet->version, &expected);
+		semver_to_string(&expected, buffer, sizeof buffer);
+		buffer[22] = '\0';
+		CChat::AddMessage("{cecedb}[Network] Version mismatch, server: %s client: %s", buffer, COOPANDREAS_VERSION);
+		CNetwork::Disconnect();
+		return;
+	}
 
 	// get player instance
 	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->id);
@@ -221,11 +234,6 @@ void CPacketHandler::PlayerHandshake__Handle(void* data, int size)
 	CPackets::PlayerHandshake* packet = (CPackets::PlayerHandshake*)data;
 
 	CNetworkPlayerManager::m_nMyId = packet->yourid;
-
-	CPackets::PlayerGetName getNamePacket = {0};
-	strcpy(getNamePacket.name, CLocalPlayer::m_Name);
-
-	CNetwork::SendPacket(CPacketsID::PLAYER_GET_NAME, &getNamePacket, sizeof getNamePacket, ENET_PACKET_FLAG_RELIABLE);
 }
 
 // PlayerPlaceWaypoint
@@ -242,24 +250,6 @@ void CPacketHandler::PlayerPlaceWaypoint__Handle(void* data, int size)
 #ifdef PACKET_DEBUG_MESSAGES
 	CChat::AddMessage("WAYPOINT PLACE %d %.0f %.0f\n", packet->place, packet->position.x, packet->position.y);
 #endif
-}
-
-// PlayerGetName
-
-void CPacketHandler::PlayerGetName__Handle(void* data, int size)
-{
-	CPackets::PlayerGetName* packet = (CPackets::PlayerGetName*)data;
-	
-	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
-
-	strcpy_s(player->m_Name, packet->name);
-
-	if (!player->m_bHasBeenConnectedBeforeMe)
-	{
-		CChat::AddMessage("[Player] player " + std::to_string(player->m_iPlayerId) + " now aka " + player->m_Name);
-	}
-
-	CPacketHandler::GameWeatherTime__Trigger();
 }
 
 // PlayerSetHost

@@ -56,13 +56,7 @@ public:
 						}
 						case ENET_EVENT_TYPE_DISCONNECT:
 						{
-							char buffer[23];
-							semver_t expected;
-							semver_unpack(event.data, &expected);
-							semver_to_string(&expected, buffer, sizeof buffer);
-							buffer[22] = '\0';
-							/*CChat::AddMessage("{cecedb}[Network] Version mismatch, server: %s client: %s", buffer, COOPANDREAS_VERSION);
-							CNetwork::Disconnect();*/
+							CNetwork::Disconnect();
 						}
 						}
 					}
@@ -82,7 +76,6 @@ public:
 					enet_host_destroy(CNetwork::m_pClient);
 					enet_deinitialize();
 					CChat::AddMessage("{cecedb}[Network] Disconnected from the server.");
-					printf("disconnected from server\n");
 				}
 			};
 		Events::gameProcessEvent += []

@@ -3,7 +3,7 @@
 #ifndef _CNETWORK_H_
 	#define _CNETWORK_H_ 
 
-#define COOPANDREAS_VERSION "0.1.1-alpha"
+#define COOPANDREAS_VERSION "0.2.0-alpha"
 
 #include <cstddef>
 #include <unordered_map>
@@ -24,12 +24,14 @@ class CNetwork
 		static void SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag = (ENetPacketFlag)0);
 		static void SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag = (ENetPacketFlag)0, ENetPeer* dontShareWith = nullptr);
 		static void SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag flag = (ENetPacketFlag)0, ENetPeer* dontShareWith = nullptr);
+		static void HandlePlayerConnected(ENetPeer* peer, void* data, int size);
 		~CNetwork();
 	private:
-		static void HandlePlayerConnected(ENetEvent& event);
+		static void HandlePeerConnected(ENetEvent& event);
 		static void HandlePlayerDisconnected(ENetEvent& event);
 		static void HandlePacketReceive(ENetEvent& event);
-		static void AddListener(unsigned short id, void(*callback)(ENetPeer*, void*, int));		
+		static void AddListener(unsigned short id, void(*callback)(ENetPeer*, void*, int));
+
 	
 };
 

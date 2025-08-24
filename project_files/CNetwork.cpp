@@ -50,6 +50,11 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
 			m_bConnected = true;
 			CChat::AddMessage("{cecedb}[Network] {00ff00}Successfully {cecedb}connected to the server.");
 			CPatch::RevertTemporaryPatches();
+
+			CPackets::PlayerConnected packet{};
+			strcpy_s(packet.name, CLocalPlayer::m_Name);
+			packet.version = packedVersion;
+			CNetwork::SendPacket(CPacketsID::PLAYER_CONNECTED, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 		}
 		else
 		{
@@ -105,7 +110,6 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::PLAYER_BULLET_SHOT, CPacketHandler::PlayerBulletShot__Handle);
 	CNetwork::AddListener(CPacketsID::PLAYER_HANDSHAKE, CPacketHandler::PlayerHandshake__Handle);
 	CNetwork::AddListener(CPacketsID::PLAYER_PLACE_WAYPOINT, CPacketHandler::PlayerPlaceWaypoint__Handle);
-	CNetwork::AddListener(CPacketsID::PLAYER_GET_NAME, CPacketHandler::PlayerGetName__Handle);
 	CNetwork::AddListener(CPacketsID::PLAYER_SET_HOST, CPacketHandler::PlayerSetHost__Handle);
 	CNetwork::AddListener(CPacketsID::ADD_EXPLOSION, CPacketHandler::AddExplosion__Handle);
 	CNetwork::AddListener(CPacketsID::VEHICLE_SPAWN, CPacketHandler::VehicleSpawn__Handle);
