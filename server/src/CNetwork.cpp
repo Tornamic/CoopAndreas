@@ -282,6 +282,20 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
 {
     CPlayerPackets::PlayerConnected* packet = (CPlayerPackets::PlayerConnected*)data;
 
+#ifndef _DEBUG
+    for (auto player : CPlayerManager::m_pPlayers)
+    {
+        if (strncmp(player->m_Name, packet->name, sizeof(player->m_Name)) == 0)
+        {
+            CPlayerPackets::PlayerDisconnected disconnectPacket{};
+            disconnectPacket.id = -1;
+            disconnectPacket.reason = 2;
+            CNetwork::SendPacket(peer, CPacketsID::PLAYER_DISCONNECTED, &disconnectPacket, sizeof(disconnectPacket), ENET_PACKET_FLAG_RELIABLE);
+            return;
+        }
+    }
+#endif
+
     int freeId = CPlayerManager::GetFreeID();
     CPlayer* player = new CPlayer(peer, freeId);
     strcpy_s(player->m_Name, packet->name);
@@ -296,11 +310,11 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
 
     if (packedVersion != packet->version)
     {
-        CPlayerPackets::PlayerDisconnected packet{};
-        packet.id = -1;
-        packet.reason = 1;
-        packet.version = packedVersion;
-        CNetwork::SendPacket(peer, CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE);
+        CPlayerPackets::PlayerDisconnected disconnectPacket{};
+        disconnectPacket.id = -1;
+        disconnectPacket.reason = 1;
+        disconnectPacket.version = packedVersion;
+        CNetwork::SendPacket(peer, CPacketsID::PLAYER_DISCONNECTED, &disconnectPacket, sizeof(disconnectPacket), ENET_PACKET_FLAG_RELIABLE);
 
         enet_peer_disconnect_later(peer, packedVersion);
         return;

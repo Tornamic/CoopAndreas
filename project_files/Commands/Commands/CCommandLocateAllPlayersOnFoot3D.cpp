@@ -5,10 +5,16 @@ void CCommandLocateAllPlayersOnFoot3D::Process(CRunningScript* script)
 {
 	script->CollectParameters(7);
 
+	if (!CLocalPlayer::m_bIsHost)
+	{
+		script->UpdateCompareFlag(false);
+		return;
+	}
+
 	bool showMarker = ScriptParams[0] != 0;
 	CVector* position = (CVector*)&ScriptParams[1];
 	CVector* radius = (CVector*)&ScriptParams[4];
-
+	
 	bool result = Command<Commands::LOCATE_CHAR_ON_FOOT_3D>(
 		CPools::GetPedRef(FindPlayerPed(0)), 
 		position->x, position->y, position->z, 

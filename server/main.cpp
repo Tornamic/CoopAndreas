@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 	printf("- coopandreasmod@gmail.com\n\n");
 
 	printf("[!] : CoopAndreas Server \n");
-#ifdef DEBUG
+#ifdef _DEBUG
 	char config[] = "Debug";
 #else
 	char config[] = "Release";

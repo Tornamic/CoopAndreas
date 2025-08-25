@@ -52,15 +52,25 @@ void CPacketHandler::PlayerDisconnected__Handle(void* data, int size)
 
 	if (packet->id == -1)
 	{
-		char buffer[23];
-		semver_t expected;
-		semver_unpack(packet->version, &expected);
-		semver_to_string(&expected, buffer, sizeof buffer);
-		buffer[22] = '\0';
-		CChat::AddMessage("{cecedb}[Network] Version mismatch, server: %s client: %s", buffer, COOPANDREAS_VERSION);
-		CNetwork::Disconnect();
-		return;
+		if (packet->reason == 1)
+		{
+			char buffer[23];
+			semver_t expected;
+			semver_unpack(packet->version, &expected);
+			semver_to_string(&expected, buffer, sizeof buffer);
+			buffer[22] = '\0';
+			CChat::AddMessage("{cecedb}[Network] Version mismatch, server: %s client: %s", buffer, COOPANDREAS_VERSION);
+			CNetwork::Disconnect();
+			return;
+		}
+		if (packet->reason == 2)
+		{
+			CChat::AddMessage("{cecedb}[Network] The nickname '%s' is already taken.", CLocalPlayer::m_Name);
+			CNetwork::Disconnect();
+			return;
+		}
 	}
+
 
 	// get player instance
 	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->id);

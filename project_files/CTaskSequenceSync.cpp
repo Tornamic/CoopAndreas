@@ -59,7 +59,6 @@ void OpenSequence()
 	for (int i = 0; i < CTaskSequences::NUM_TASKS; ++i) 
 	{
 		m_serializedSequences[sequenceId][i].clear();
-		m_serializedSequences[sequenceId][i].shrink_to_fit(); // i hate C++/STL
 	}
 }
 
@@ -76,7 +75,6 @@ void ClearSequence()
 	for (int i = 0; i < CTaskSequences::NUM_TASKS; ++i)
 	{
 		m_serializedSequences[sequenceId][i].clear();
-		m_serializedSequences[sequenceId][i].shrink_to_fit();
 	}
 }
 

@@ -23,7 +23,6 @@ void CNetworkAnimQueue::Process()
 	if (processedAnim)
 	{
 		ms_vQueue.clear();
-		ms_vQueue.shrink_to_fit();
 	}
 
 	//
@@ -37,6 +36,5 @@ void CNetworkAnimQueue::Process()
 	if (processedSequence)
 	{
 		CTaskSequenceSync::ms_vTaskSequences.clear();
-		CTaskSequenceSync::ms_vTaskSequences.shrink_to_fit();
 	}
 }
