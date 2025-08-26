@@ -62,6 +62,7 @@ void CCore::Init()
 	gameShutdownEvent.before += []
 	{
 		// disconnect from server
+		CDiscordRPC::Destroy();
 		CNetwork::Disconnect();
 	};
 	semver_parse(COOPANDREAS_VERSION, &CCore::Version);

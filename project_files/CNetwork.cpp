@@ -99,6 +99,10 @@ void CNetwork::SendPacket(unsigned short id, void* data, size_t dataSize, ENetPa
 
 void CNetwork::Disconnect()
 {
+	enet_peer_disconnect_now(CNetwork::m_pPeer, 0);
+	enet_host_flush(CNetwork::m_pClient);
+	enet_peer_reset(CNetwork::m_pPeer);
+
 	m_bConnected = false;
 }
 
