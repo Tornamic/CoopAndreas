@@ -52,7 +52,7 @@ void CPacketHandler::PlayerDisconnected__Handle(void* data, int size)
 
 	if (packet->id == -1)
 	{
-		if (packet->reason == 1)
+		if (packet->reason == PLAYER_DISCONNECT_REASON_VERSION_MISMATCH)
 		{
 			char buffer[23];
 			semver_t expected;
@@ -63,7 +63,7 @@ void CPacketHandler::PlayerDisconnected__Handle(void* data, int size)
 			CNetwork::Disconnect();
 			return;
 		}
-		if (packet->reason == 2)
+		if (packet->reason == PLAYER_DISCONNECT_REASON_NAME_TAKEN)
 		{
 			CChat::AddMessage("{cecedb}[Network] The nickname '%s' is already taken.", CLocalPlayer::m_Name);
 			CNetwork::Disconnect();

@@ -4,6 +4,7 @@
 #include <CNetworkEntitySerializer.h>
 
 enum eNetworkEntityType : uint8_t;
+enum ePlayerDisconnectReason : uint8_t;
 
 enum CPacketsID : unsigned short
 {
@@ -146,7 +147,7 @@ public:
 	struct PlayerDisconnected
 	{
 		int id;
-		unsigned char reason;
+		ePlayerDisconnectReason reason;
 		uint32_t version;
 	};
 

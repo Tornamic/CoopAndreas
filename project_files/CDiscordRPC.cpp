@@ -18,6 +18,11 @@ void CDiscordRPC::Init()
 	Discord_UpdatePresence(&presence);
 }
 
+void CDiscordRPC::Destroy()
+{
+	Discord_Shutdown();
+}
+
 void CDiscordRPC::SetDetailsAndState(std::string details, std::string state)
 {
 	CDiscordRPC::details = details;

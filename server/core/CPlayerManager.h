@@ -11,6 +11,7 @@
 #include "CControllerState.h"
 #include "CPlayer.h"
 #include "NetworkEntityType.h"
+#include "PlayerDisconnectReason.h"
 
 class CPlayerManager
 {
@@ -56,7 +57,7 @@ public:
 	struct PlayerDisconnected
 	{
 		int id;
-		unsigned char reason;
+		ePlayerDisconnectReason reason;
 		uint32_t version;
 	};
 

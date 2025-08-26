@@ -119,6 +119,7 @@ using namespace plugin;
 #include "CNetworkPedManager.h"
 #include "CDebugPedTasks.h"
 #include "eNetworkEntityType.h"
+#include "ePlayerDisconnectReason.h"
 #include "CStatsSync.h"
 #include "CMassPacketBuilder.h"
 // -----------------------------------------------------------------------------------------
