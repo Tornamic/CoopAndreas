@@ -240,6 +240,17 @@ void FixCrashes()
 
     // looks like a solution to fix duplication of peds when creating at attractors (please)
     patch::SetFloat(0x86D26C, 10.0f);
+
+    // patch isAlreadyRunning, so we can run more than one game instance
+    if (GetModuleHandleA("SilentPatchSA.asi"))
+    {
+        patch::SetRaw(0x74872D, "\xE8\xAE\xE1\xFF\xFF\x85\xC0\x75\x0F", 9);
+        patch::PutRetn0(0x7468E0);
+    }
+    else
+    {
+        patch::Nop(0x74872D, 9); 
+    }
 }
 
 #define SCANCODE_BUFFER_SIZE (8 * 20000)
