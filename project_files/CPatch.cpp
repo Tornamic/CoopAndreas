@@ -249,8 +249,11 @@ void FixCrashes()
     }
     else
     {
+        patch::SetUChar(0x406946, 0xDC);
+        patch::PutRetn0(0x7468E0);
         patch::Nop(0x74872D, 9); 
     }
+
 }
 
 #define SCANCODE_BUFFER_SIZE (8 * 20000)
