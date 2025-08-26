@@ -14,7 +14,7 @@
 #include "../core/CPedManager.h"
 
 #include "../shared/semver.h"
-
+#include "../core/PlayerDisconnectReason.h"
 
 std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
 
@@ -289,7 +289,7 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
         {
             CPlayerPackets::PlayerDisconnected disconnectPacket{};
             disconnectPacket.id = -1;
-            disconnectPacket.reason = 2;
+            disconnectPacket.reason = PLAYER_DISCONNECT_REASON_NAME_TAKEN;
             CNetwork::SendPacket(peer, CPacketsID::PLAYER_DISCONNECTED, &disconnectPacket, sizeof(disconnectPacket), ENET_PACKET_FLAG_RELIABLE);
             return;
         }
@@ -312,7 +312,7 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
     {
         CPlayerPackets::PlayerDisconnected disconnectPacket{};
         disconnectPacket.id = -1;
-        disconnectPacket.reason = 1;
+        disconnectPacket.reason = PLAYER_DISCONNECT_REASON_VERSION_MISMATCH;
         disconnectPacket.version = packedVersion;
         CNetwork::SendPacket(peer, CPacketsID::PLAYER_DISCONNECTED, &disconnectPacket, sizeof(disconnectPacket), ENET_PACKET_FLAG_RELIABLE);
 
