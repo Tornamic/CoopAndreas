@@ -842,6 +842,18 @@ static void FinishedProcessingScripts()
     }
 }
 
+void __fastcall CRunningScript__ShutdownThisScript_Hook(CRunningScript* This, int)
+{
+    auto it = std::find(COpCodeSync::ms_vSyncedScripts.begin(), COpCodeSync::ms_vSyncedScripts.end(), This);
+    if (it != COpCodeSync::ms_vSyncedScripts.end())
+    {
+        COpCodeSync::ms_vSyncedScripts.erase(it);
+    }
+
+    This->ShutdownThisScript();
+}
+
+
 void COpCodeSync::Init()
 {
     DWORD temp;
@@ -856,4 +868,8 @@ void COpCodeSync::Init()
 
     FinishedProcessingScripts_ptr = injector::GetBranchDestination(0x46A22E).as_int();
     patch::RedirectCall(0x46A22E, FinishedProcessingScripts);
+
+    patch::RedirectCall(0x466804, CRunningScript__ShutdownThisScript_Hook);
+    patch::RedirectCall(0x474D4B, CRunningScript__ShutdownThisScript_Hook);
+    patch::RedirectCall(0x48A59B, CRunningScript__ShutdownThisScript_Hook);
 }

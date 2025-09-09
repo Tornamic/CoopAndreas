@@ -14,6 +14,7 @@
 #include <CCarEnterExit.h>
 #include <CProjectileInfo.h>
 #include <CAimSync.h>
+#include <game_sa/CTagManager.h>
 
 // PlayerConnected
 
@@ -40,6 +41,7 @@ void CPacketHandler::PlayerConnected__Handle(void* data, int size)
 	{
 		CNetworkStaticBlip::ms_bNeedToSendAfterThisFrame = true;
 		CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingThisFrame = true;
+		CPacketHandler::UpdateAllTags__Trigger();
 	}
 }
 
@@ -278,6 +280,7 @@ void CPacketHandler::PlayerSetHost__Handle(void* data, int size)
 		CChat::AddMessage("[Player] You are the host now");
 
 		CPacketHandler::GameWeatherTime__Trigger();
+		CPacketHandler::UpdateAllTags__Trigger();
 		return;
 	}
 	CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(packet->playerid);
@@ -1849,4 +1852,70 @@ void CPacketHandler::AddProjectile__Handle(void* data, int size)
 	{
 		CAimSync::ApplyLocalContext();
 	}
+}
+
+// TagUpdate
+
+void CPacketHandler::TagUpdate__Handle(void* data, int size)
+{
+	CPackets::TagUpdate* packet = (CPackets::TagUpdate*)data;
+
+	for (auto tagDesc : CTagManager::ms_tagDesc)
+	{
+		if (!tagDesc.m_pEntity) continue;
+
+		auto& pos = tagDesc.m_pEntity->GetPosition();
+
+		if (static_cast<int16_t>(floor(pos.x)) == packet->pos_x &&
+			static_cast<int16_t>(floor(pos.y)) == packet->pos_y &&
+			static_cast<int16_t>(floor(pos.z)) == packet->pos_z)
+		{
+			CTagManager::SetAlpha(tagDesc.m_pEntity, packet->alpha);
+		}
+	}
+}
+
+// UpdateAllTags
+
+void CPacketHandler::UpdateAllTags__Handle(void* data, int size)
+{
+	CPackets::UpdateAllTags* packet = (CPackets::UpdateAllTags*)data;
+
+	// a hack to not draw "TAGS SPRAYED 1 of 100", look at 0x49CF4B
+	bool saved = TheCamera.m_bWideScreenOn;
+	TheCamera.m_bWideScreenOn = true;
+	for (auto tag : packet->tags)
+	{
+		CPacketHandler::TagUpdate__Handle(&tag, sizeof tag);
+	}
+	TheCamera.m_bWideScreenOn = saved;
+}
+
+void CPacketHandler::UpdateAllTags__Trigger()
+{
+	CPackets::UpdateAllTags packet{};
+
+	for (int i = 0; i < ARRAY_SIZE(packet.tags); i++)
+	{
+		auto& tagDesc = CTagManager::ms_tagDesc[i];
+		if (tagDesc.m_pEntity == nullptr)
+		{
+			continue;
+		}
+		auto& pos = tagDesc.m_pEntity->GetPosition();
+		packet.tags[i].pos_x = static_cast<int16_t>(floor(pos.x));
+		packet.tags[i].pos_y = static_cast<int16_t>(floor(pos.y));
+		packet.tags[i].pos_z = static_cast<int16_t>(floor(pos.z));
+		packet.tags[i].alpha = tagDesc.m_nAlpha;
+		if (packet.tags[i].alpha != 0)
+		{
+			CChat::AddMessage("%d %d %d %d", 
+				packet.tags[i].pos_x,
+				packet.tags[i].pos_y,
+				packet.tags[i].pos_z,
+				packet.tags[i].alpha);
+		}
+	}
+
+	CNetwork::SendPacket(CPacketsID::UPDATE_ALL_TAGS, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 }

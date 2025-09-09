@@ -15,6 +15,7 @@
 #include <CEntryExitMarkerSync.h>
 #include <CNetworkStaticBlip.h>
 #include <CNetworkAnimQueue.h>
+#include <game_sa/CTagManager.h>
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
@@ -253,6 +254,10 @@ public:
 				if (CNetwork::m_bConnected && GetAsyncKeyState(VK_F10))
 				{
 					CDebugPedTasks::Draw();
+					if (CLocalPlayer::m_bIsHost)
+					{
+						CPacketHandler::UpdateAllTags__Trigger();
+					}
 				}
 
 				if (/*CNetwork::m_bConnected && */GetAsyncKeyState(VK_F9))
@@ -308,7 +313,23 @@ public:
 								CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, gString, D3DCOLOR_ARGB(255, 255, 255, 255));
 							}
 						}
+
 					}
+
+					/*for (auto tag : CTagManager::ms_tagDesc)
+					{
+						if (!tag.m_pEntity) continue;
+
+						CVector& posn = tag.m_pEntity->GetPosition();
+
+						RwV3d screenCoors; float w, h;
+						if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
+						{
+							if(w < 10.0f) continue;
+							sprintf(gString, "alpha %d\n%f %f %f", tag.m_nAlpha, posn.x, posn.y, posn.z);
+							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, gString, D3DCOLOR_ARGB(255, 255, 255, 255));
+						}
+					}*/
 					
 					/*for (int i = 0; i < MAX_RADAR_TRACES; i++)
 					{

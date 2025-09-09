@@ -69,6 +69,8 @@ enum CPacketsID : unsigned short
 	PED_TAKE_HOST,
 	PERFORM_TASK_SEQUENCE,
 	ADD_PROJECTILE,
+	TAG_UPDATE,
+	UPDATE_ALL_TAGS,
 	PACKET_ID_MAX
 };
 
@@ -626,5 +628,18 @@ public:
 		float force;
 		CVector dir;
 		CNetworkEntitySerializer target;
+	};
+
+	struct TagUpdate
+	{
+		int16_t pos_x;
+		int16_t pos_y;
+		int16_t pos_z;
+		uint8_t alpha;
+	};
+
+	struct UpdateAllTags
+	{
+		TagUpdate tags[150];
 	};
 };

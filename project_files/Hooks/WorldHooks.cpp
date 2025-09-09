@@ -4,6 +4,8 @@
 #include "CNetworkPed.h"
 #include <CEntryExit.h>
 #include <CEntryExitMarkerSync.h>
+#include <CShotInfo.h>
+#include <game_sa/CTagManager.h>
 
 static void __cdecl CWeather__ForceWeather_Hook(short id)
 {
@@ -114,15 +116,6 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
     }
 }
 
-//CFire* __fastcall CFireManager__StartFire_Hook(DWORD This, int, CPed* entity, CEntity* playerPed, float a4, int a5, int time, char numGenerations)
-//{
-//    if (entity)
-//    {
-//        return plugin::CallMethodAndReturn<CFire*, 0x53A050>(This, entity, playerPed, a4, a5, time, numGenerations);
-//    }
-//    return nullptr;
-//}
-
 //bool __fastcall CEntryExit__TransitionFinished_Hook(CEntryExit* This, int, CPed* ped)
 //{
 //    bool result = This->TransitionFinished(ped);
@@ -134,6 +127,59 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
 //
 //    return result;
 //}
+
+static int calls = 0;
+static int SprayPaintWorld_LastCalled = 0;
+static uint8_t LastTagAlpha = 0;
+static CEntity* LastTagEntity = nullptr;
+int CWorld__SprayPaintWorld_Hook(CVector* posn, CVector* outDir, float radius, bool processTagAlphaState)
+{
+    CShotInfo* shotInfo = (CShotInfo*)((uintptr_t)posn - 0x4);
+
+    if (FindPlayerPed(0) != shotInfo->m_pCreator)
+    {
+        return 0;
+    }
+
+    int result = CWorld::SprayPaintWorld(*posn, *outDir, radius, processTagAlphaState);
+    if (result == 1 && LastTagAlpha != 255)
+    {
+        /*CChat::AddMessage("CWorld__SprayPaintWorld_Hook posn {%f %f %f} outDir {%f %f %f} radius %f processTagAlphaState %d", 
+            posn->x, posn->y, posn->y, outDir->x, outDir->y, outDir->y, radius, processTagAlphaState);*/
+        int tickCount = GetTickCount();
+        if (tickCount > SprayPaintWorld_LastCalled + 150)
+        {
+            CChat::AddMessage("1 %d %d", ++calls, LastTagAlpha);
+            SprayPaintWorld_LastCalled = tickCount;
+
+            CPackets::TagUpdate packet{};
+            packet.alpha = LastTagAlpha;
+            packet.pos_x = static_cast<int16_t>(floor(LastTagEntity->GetPosition().x));
+            packet.pos_y = static_cast<int16_t>(floor(LastTagEntity->GetPosition().y));
+            packet.pos_z = static_cast<int16_t>(floor(LastTagEntity->GetPosition().z));
+            CNetwork::SendPacket(CPacketsID::TAG_UPDATE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        }
+    }
+
+    if (result == 2)
+    {
+        CChat::AddMessage("2 %d %d", ++calls, LastTagAlpha);
+        CPackets::TagUpdate packet{};
+        packet.alpha = LastTagAlpha;
+        packet.pos_x = static_cast<int16_t>(floor(LastTagEntity->GetPosition().x));
+        packet.pos_y = static_cast<int16_t>(floor(LastTagEntity->GetPosition().y));
+        packet.pos_z = static_cast<int16_t>(floor(LastTagEntity->GetPosition().z));
+        CNetwork::SendPacket(CPacketsID::TAG_UPDATE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    }
+    return result;
+}
+
+void CTagManager__SetAlpha_Hook(CEntity* entity, uint8_t alpha)
+{
+    LastTagEntity = entity;
+    LastTagAlpha = alpha;
+    CTagManager::SetAlpha(entity, alpha);
+}
 
 void WorldHooks::InjectHooks()
 {
@@ -195,18 +241,9 @@ void WorldHooks::InjectHooks()
     patch::RedirectJump(0x72A4F0, CWeather__ForceWeatherNow_Hook);
     patch::RedirectCall(0x47679F, CWeather__SetWeatherToAppropriateTypeNow_Hook);
 
-  
-    // fix bicycle on fire, instead of the player being set on fire, bicycle's driver is
-    // may be not compatibable with SilentPatch
-    //if (!GetModuleHandleA("SilentPatchSA.asi"))
-    //{
-    //    patch::Nop(0x53A984, 17); // nop FindPlayerPed and CPlayerPed::DoStuffToGoOnFire
-    //    patch::Nop(0x53A9A7, 10); // nop FindPlayerPed
-    //    // mov eax, [edi+0x460]
-    //    // push eax
-    //    patch::SetRaw(0x53A9A7, "\x8B\x87\x60\x04\x00\x00\x50", 7); 
-    //    patch::RedirectCall(0x53A9B7, CFireManager__StartFire_Hook);
-    //}
+    patch::RedirectCall(0x73A0FF, CWorld__SprayPaintWorld_Hook);
+
+    patch::RedirectCall(0x565C5E, CTagManager__SetAlpha_Hook);
 
     //patch::RedirectCall(0x533A8D, CEntryExitManager__AddOne_Hook);
     //patch::RedirectCall(0x5B812D, CEntryExitManager__AddOne_Hook);

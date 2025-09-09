@@ -319,6 +319,27 @@ void CTheScripts__CleanUpThisVehicle_Hook(CVehicle* vehicle)
     }
 }
 
+CPed* BmxFix_FindPlayerPed_Hook(CVehicle* vehicle)
+{
+    return vehicle->m_pDriver;
+}
+
+void __fastcall CPlayerPed__DoStuffToGoOnFire_Hook(CPlayerPed* This, int)
+{
+    if (This != nullptr && This->IsPlayer())
+    {
+        This->DoStuffToGoOnFire();
+    }
+}
+
+void __fastcall CFireManager__StartFire_Hook(void* This, int, CPed* entity, CEntity* playerPed, float a4, int a5, int time, uint8_t numGenerations)
+{
+    if (entity != nullptr)
+    {
+        plugin::CallMethod<0x53A050>(This, entity, playerPed, a4, a5, time, numGenerations);
+    }
+}
+
 void VehicleHooks::InjectHooks()
 {
     patch::RedirectCall(0x53C1CB, CCarCtrl__RemoveDistantCars_Hook);
@@ -398,4 +419,13 @@ void VehicleHooks::InjectHooks()
         patch::RedirectCall(0x45AE9F, CVehicle__SetVehicleCreatedBy_Hook);
         patch::RedirectCall(0x4866AF, CVehicle__SetVehicleCreatedBy_Hook);
     }
+
+
+    // fix bmx on fire, now driver being set on fire instead of the local player, compatible with SilentPatch
+    patch::SetRaw(0x53A984, "\x90\x57", 2); // nop, push edi
+    patch::SetRaw(0x53A9A7, "\x90\x57", 2); // nop, push edi
+    patch::RedirectCall(0x53A984 + 2, BmxFix_FindPlayerPed_Hook);
+    patch::RedirectCall(0x53A9A7 + 2, BmxFix_FindPlayerPed_Hook);
+    patch::RedirectCall(0x53A990, CPlayerPed__DoStuffToGoOnFire_Hook);
+    patch::RedirectCall(0x53A9B7, CFireManager__StartFire_Hook);
 }

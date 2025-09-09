@@ -285,9 +285,12 @@ LONG __stdcall CCrashLog::ExceptionHandler(_EXCEPTION_POINTERS* exceptionInfo) {
     WriteDumpf("   ECX: 0x%p  ", (void*)exceptionInfo->ContextRecord->Ecx);
     WriteDumpf("   EDX: 0x%p  ", (void*)exceptionInfo->ContextRecord->Edx);
     WriteDumpf("\r\n");
+    WriteDumpf("   ESI: 0x%p  ", (void*)exceptionInfo->ContextRecord->Esi);
     WriteDumpf("   EDI: 0x%p  ", (void*)exceptionInfo->ContextRecord->Edi);
-    WriteDumpf("   EIP: 0x%p  ", (void*)exceptionInfo->ContextRecord->Eip);
+    WriteDumpf("   EBP: 0x%p  ", (void*)exceptionInfo->ContextRecord->Ebp);
     WriteDumpf("   ESP: 0x%p  ", (void*)exceptionInfo->ContextRecord->Esp);
+    WriteDumpf("\r\n");
+    WriteDumpf("   EIP: 0x%p  ", (void*)exceptionInfo->ContextRecord->Eip);
     WriteDumpf("   EFL: 0x%p  ", (void*)exceptionInfo->ContextRecord->EFlags);
     WriteDumpf("\r\n");
     WriteDumpf("   CS:  0x%p  ", (void*)exceptionInfo->ContextRecord->SegCs);
@@ -299,6 +302,7 @@ LONG __stdcall CCrashLog::ExceptionHandler(_EXCEPTION_POINTERS* exceptionInfo) {
     WriteDumpf("   ES:  0x%p  ", (void*)exceptionInfo->ContextRecord->SegEs);
     WriteDumpf("   DS:  0x%p  ", (void*)exceptionInfo->ContextRecord->SegDs);
     WriteDumpf("\r\n\r\n");
+
 
     WriteDumpf("Stack dump:\r\n");
 

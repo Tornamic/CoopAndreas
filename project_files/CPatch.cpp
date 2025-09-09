@@ -97,6 +97,22 @@ void PatchConsole()
 }
 #endif
 
+void __declspec(naked) RsMouseSetPos_Reimpl(RwV2d* pos)
+{
+    if (GetForegroundWindow() == RsGlobal.ps->window)
+    {
+        __asm
+        {
+            push 0x7453F0
+            ret
+        }
+    }
+    __asm
+    {
+        ret
+    }
+}
+
 void PatchStreaming()
 {
     // increase available streaming memory (memory512.cs full analog) 
@@ -104,15 +120,21 @@ void PatchStreaming()
     patch::SetUInt(0x5B8E6A, 536870912); // hardcoded value
 
     // patch game freezeing if inactive
-    //patch::Nop(0x561AF0, 7);
-    //patch::Nop(0x745BC9, 2);
+    patch::Nop(0x561AF0, 7); // dont pause the game loop if paused
+    patch::Nop(0x745BC9, 2); // unlock resolutions
     //patch::SetUChar(0x747FB6, 1);
-    patch::SetUChar(0x74805A, 1);
-    patch::Nop(0x74542B, 8);
+    patch::SetUChar(0x74805A, 1); // ForegroundApp always 1
     patch::Nop(0x53EA88, 6);
 
     // do not hide the cursor on the control box of the game window
     patch::Nop(0x747FE9, 8);
+
+    // PROPER MOUSE FIX
+    patch::SetUChar(0x576CCC, 0xEB);
+    patch::SetUChar(0x576EBA, 0xEB);
+    patch::SetUChar(0x576F8A, 0xEB);
+    patch::SetUInt(0x7469A0, 0x9090C030);
+    patch::RedirectJump(0x6194A0, RsMouseSetPos_Reimpl); // dont set cursor pos to center if im not focused
 }
 
 
@@ -253,7 +275,6 @@ void FixCrashes()
         patch::PutRetn0(0x7468E0);
         patch::Nop(0x74872D, 9); 
     }
-
 }
 
 #define SCANCODE_BUFFER_SIZE (8 * 20000)

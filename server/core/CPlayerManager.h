@@ -658,7 +658,42 @@ public:
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
-			CNetwork::SendPacketToAll(CPacketsID::ADD_PROJECTILE, data, sizeof(AddProjectile), ENET_PACKET_FLAG_RELIABLE, peer);
+			if (auto player = CPlayerManager::GetPlayer(peer))
+			{
+				CNetwork::SendPacketToAll(CPacketsID::ADD_PROJECTILE, data, sizeof(AddProjectile), ENET_PACKET_FLAG_RELIABLE, peer);
+			}
+		}
+	};
+
+	struct TagUpdate
+	{
+		int16_t pos_x;
+		int16_t pos_y;
+		int16_t pos_z;
+		uint8_t alpha;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (auto player = CPlayerManager::GetPlayer(peer))
+			{
+				CNetwork::SendPacketToAll(CPacketsID::TAG_UPDATE, data, sizeof(TagUpdate), ENET_PACKET_FLAG_RELIABLE, peer);
+			}
+		}
+	};
+
+	struct UpdateAllTags
+	{
+		TagUpdate tags[150];
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (auto player = CPlayerManager::GetPlayer(peer))
+			{
+				if (player->m_bIsHost)
+				{
+					CNetwork::SendPacketToAll(CPacketsID::UPDATE_ALL_TAGS, data, sizeof(UpdateAllTags), ENET_PACKET_FLAG_RELIABLE, peer);
+				}
+			}
 		}
 	};
 };
