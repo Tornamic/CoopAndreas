@@ -54,6 +54,8 @@ BTC: `bc1qwsl8jv2gyvry75j727qkktr5vgcmqm5e69qt2t`
 
 ETH: `0xE7aE0448A147844208C9D51b0Ac673Bafbe2a35c`
 
+PayPal `kirilltymoshchenko59@gmail.com`
+
 *If you need another way to donate, please dm me on discord: `@tornamic`*
 
 Contact information is current as of August 2025
