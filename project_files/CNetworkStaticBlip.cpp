@@ -39,6 +39,7 @@ void CNetworkStaticBlip::Create(CPackets::CreateStaticBlip& packet)
 		CRadar::ms_RadarTrace[index].m_bFriendly = packet.friendly;
 		CRadar::ms_RadarTrace[index].m_nCoordBlipAppearance = packet.coordBlipAppearance;
 		CRadar::ms_RadarTrace[index].m_nBlipSize = packet.size;
+		CRadar::ms_RadarTrace[index].m_nColour = packet.color;
 	}
 }
 
@@ -76,6 +77,7 @@ void CNetworkStaticBlip::Send()
 		packet.friendly = trace.m_bFriendly;
 		packet.coordBlipAppearance = trace.m_nCoordBlipAppearance;
 		packet.size = trace.m_nBlipSize;
+		packet.color = trace.m_nColour;
 		builder.AddPacket(CPacketsID::CREATE_STATIC_BLIP, &packet, sizeof packet);
 	}
 	builder.Send(ENET_PACKET_FLAG_RELIABLE);

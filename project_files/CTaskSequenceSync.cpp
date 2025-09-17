@@ -23,6 +23,7 @@ SSyncedOpCode m_syncedTasks[] = // TODO
 	{COMMAND_TASK_LEAVE_CAR, true, eSyncedParamType::PED, eSyncedParamType::VEHICLE},
 	{COMMAND_TASK_DIE_NAMED_ANIM, true, eSyncedParamType::PED},
 	{COMMAND_TASK_PLAY_ANIM_WITH_FLAGS, true, eSyncedParamType::PED},
+	{COMMAND_TASK_LEAVE_ANY_CAR, true, eSyncedParamType::PED},
 };
 
 std::vector<uint8_t> m_serializedSequences[CTaskSequences::NUM_SEQUENCES][CTaskSequences::NUM_TASKS];
@@ -43,10 +44,10 @@ bool CTaskSequenceSync::IsOpCodeTaskSynced(eScriptCommands opcode)
 
 bool CTaskSequenceSync::IsNeededToCollectParametes(eScriptCommands opcode)
 {
-	return 
+	return !COpCodeSync::bProcessingNetworkOpcode && (
 		opcode == COMMAND_PERFORM_SEQUENCE_TASK ||
 		opcode == COMMAND_CLEAR_SEQUENCE_TASK ||
-		(IsOpCodeTaskSynced(opcode) && m_bSequenceOpened);
+		(IsOpCodeTaskSynced(opcode) && m_bSequenceOpened));
 }
 
 void OpenSequence()
@@ -247,7 +248,11 @@ void CTaskSequenceSync::HandlePacket(void* data, int size)
 
 	if (ped == nullptr)
 	{
-		return;
+		if (playerid != CNetworkPlayerManager::m_nMyId)
+		{
+			return;
+		}
+		ped = FindPlayerPed(0);
 	}
 
 	CTaskSequenceSync::ms_bFailedToProcessSequence = false;

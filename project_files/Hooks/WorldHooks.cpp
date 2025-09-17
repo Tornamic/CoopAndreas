@@ -138,7 +138,11 @@ int CWorld__SprayPaintWorld_Hook(CVector* posn, CVector* outDir, float radius, b
 
     if (FindPlayerPed(0) != shotInfo->m_pCreator)
     {
-        return 0;
+        auto networkPed = CNetworkPedManager::GetPed(shotInfo->m_pCreator); // peds can respray tags too, for example Sweet on the 3rd mission "Tagging Up Turf"
+        if (!networkPed || !networkPed->m_bSyncing)
+        {
+            return 0;
+        }
     }
 
     int result = CWorld::SprayPaintWorld(*posn, *outDir, radius, processTagAlphaState);

@@ -212,7 +212,7 @@ Contact information is current as of August 2025
 ### Current Tasks
 - [X] Big Smoke
 - [X] Ryder
-- [ ] Tagging Up Turf
+- [X] Tagging Up Turf
 - [ ] Cleaning The Hood
 - [ ] Drive-Thru
 - [ ] Nines And AK's

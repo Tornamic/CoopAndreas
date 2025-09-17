@@ -71,6 +71,7 @@ enum CPacketsID : unsigned short
 	ADD_PROJECTILE,
 	TAG_UPDATE,
 	UPDATE_ALL_TAGS,
+	TELEPORT_PLAYER_SCRIPTED,
 	PACKET_ID_MAX
 };
 
@@ -571,6 +572,7 @@ public:
 		uint8_t friendly : 1; // It is affected by BLIP_COLOUR_THREAT.   
 		uint8_t coordBlipAppearance : 2; // see eBlipAppearance
 		uint8_t size : 3;
+		uint8_t color : 4;
 	};
 
 	struct SetVehicleCreatedBy
@@ -641,5 +643,12 @@ public:
 	struct UpdateAllTags
 	{
 		TagUpdate tags[150];
+	};
+
+	struct TeleportPlayerScripted
+	{
+		int playerid;
+		CVector pos;
+		float heading;
 	};
 };

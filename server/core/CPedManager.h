@@ -282,6 +282,7 @@ class CPedPackets
 				if (vehicle == nullptr) // TODO: create vehicle
 					return;
 
+				vehicle->m_bUsedByPed = true;
 				vehicle->m_vecPosition = packet->pos;
 				vehicle->m_vecRotation = packet->rot;
 			}

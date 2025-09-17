@@ -16,6 +16,8 @@
 #include <CNetworkStaticBlip.h>
 #include <CNetworkAnimQueue.h>
 #include <game_sa/CTagManager.h>
+#include <CPedPlacement.h>
+#include <CGeneral.h>
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
@@ -254,10 +256,6 @@ public:
 				if (CNetwork::m_bConnected && GetAsyncKeyState(VK_F10))
 				{
 					CDebugPedTasks::Draw();
-					if (CLocalPlayer::m_bIsHost)
-					{
-						CPacketHandler::UpdateAllTags__Trigger();
-					}
 				}
 
 				if (/*CNetwork::m_bConnected && */GetAsyncKeyState(VK_F9))
@@ -265,7 +263,7 @@ public:
 					char buffer[270];
 					sprintf(buffer, "IsHost=%d | Game/Network: Peds %d/%d | Cars %d/%d | Recv %d %.2f KB/S | Sent %d %.2f KB/S | EnEx %d", CLocalPlayer::m_bIsHost, CPools::ms_pPedPool->GetNoOfUsedSpaces(), CNetworkPedManager::m_pPeds.size(), CPools::ms_pVehiclePool->GetNoOfUsedSpaces(), CNetworkVehicleManager::m_pVehicles.size(), CNetwork::m_pClient->totalReceivedPackets, CNetwork::ms_nBytesReceivedThisSecond / 1024.0f, CNetwork::m_pClient->totalSentPackets, CNetwork::ms_nBytesSentThisSecond / 1024.0f, CEntryExitManager::mp_poolEntryExits->GetNoOfUsedSpaces());
 					CDXFont::Draw(100, 10, buffer, D3DCOLOR_ARGB(255, 255, 255, 255));
-					for (auto enex : CEntryExitManager::mp_poolEntryExits)
+					/*for (auto enex : CEntryExitManager::mp_poolEntryExits)
 					{
 						CVector posn = CVector(enex->m_recEntrance.left, enex->m_recEntrance.bottom, enex->m_fEntranceZ);
 
@@ -314,22 +312,22 @@ public:
 							}
 						}
 
-					}
+					}*/
 
-					/*for (auto tag : CTagManager::ms_tagDesc)
+					for (auto tag : CTagManager::ms_tagDesc)
 					{
 						if (!tag.m_pEntity) continue;
+						if (tag.m_nAlpha != 0) continue;
 
 						CVector& posn = tag.m_pEntity->GetPosition();
 
 						RwV3d screenCoors; float w, h;
 						if (CSprite::CalcScreenCoors({ posn.x, posn.y, posn.z + 1.0f }, &screenCoors, &w, &h, true, true))
 						{
-							if(w < 10.0f) continue;
 							sprintf(gString, "alpha %d\n%f %f %f", tag.m_nAlpha, posn.x, posn.y, posn.z);
 							CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y, gString, D3DCOLOR_ARGB(255, 255, 255, 255));
 						}
-					}*/
+					}
 					
 					/*for (int i = 0; i < MAX_RADAR_TRACES; i++)
 					{

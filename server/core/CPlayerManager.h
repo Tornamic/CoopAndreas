@@ -587,6 +587,7 @@ public:
 		uint8_t friendly : 1; // It is affected by BLIP_COLOUR_THREAT.   
 		uint8_t coordBlipAppearance : 2; // see eBlipAppearance
 		uint8_t size : 3;
+		uint8_t color : 4;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{
@@ -692,6 +693,28 @@ public:
 				if (player->m_bIsHost)
 				{
 					CNetwork::SendPacketToAll(CPacketsID::UPDATE_ALL_TAGS, data, sizeof(UpdateAllTags), ENET_PACKET_FLAG_RELIABLE, peer);
+				}
+			}
+		}
+	};
+
+	struct TeleportPlayerScripted
+	{
+		int playerid;
+		CVector pos;
+		float heading;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (auto player = CPlayerManager::GetPlayer(peer))
+			{
+				if (player->m_bIsHost)
+				{
+					TeleportPlayerScripted* packet = (TeleportPlayerScripted*)data;
+					if (auto targetPlayer = CPlayerManager::GetPlayer(packet->playerid))
+					{
+						CNetwork::SendPacket(targetPlayer->m_pPeer, TELEPORT_PLAYER_SCRIPTED, packet, sizeof(*packet), ENET_PACKET_FLAG_RELIABLE);
+					}
 				}
 			}
 		}

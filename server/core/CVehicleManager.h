@@ -114,7 +114,7 @@ class CVehiclePackets
 				if (auto vehicle = CVehicleManager::GetVehicle(packet->vehicleid))
 				{
 					auto player = CPlayerManager::GetPlayer(peer);
-
+					vehicle->m_bUsedByPed = false;
 					if (vehicle->m_pSyncer == player)
 					{
 						vehicle->m_vecPosition = packet->pos;
@@ -166,7 +166,7 @@ class CVehiclePackets
 
 						vehicle->m_vecPosition = packet->pos;
 						vehicle->m_vecRotation = packet->rot;
-
+						vehicle->m_bUsedByPed = false;
 						vehicle->ReassignSyncer(player);
 					}
 				}
@@ -290,7 +290,11 @@ class CVehiclePackets
 					if (auto vehicle = CVehicleManager::GetVehicle(packet->vehicleid))
 					{
 						vehicle->SetOccupant(packet->seatid + 1, player);
-						if (!vehicle->m_pPlayers[0]) // no driver
+						if (vehicle->m_nCreatedBy == 2) // MISSION_VEHICLE
+						{
+							return;
+						}
+						if (!vehicle->m_pPlayers[0] && !vehicle->m_bUsedByPed ) // no driver
 						{
 							for (uint8_t i = 1; i < 8; i++)
 							{

@@ -78,4 +78,5 @@ public:
 	static void TagUpdate__Handle(void* data, int size);
 	static void UpdateAllTags__Handle(void* data, int size);
 	static void UpdateAllTags__Trigger();
+	static void TeleportPlayerScripted__Handle(void* data, int size);
 };

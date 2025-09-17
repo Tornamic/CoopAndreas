@@ -66,6 +66,7 @@ public:
 	static inline std::vector<CRunningScript*> ms_vSyncedScripts;
     static inline OpcodeParameter scriptParamsBuffer[NUM_SYNCED_PARAMS];
     static inline bool ms_bProcessingTaskSequence = false;
+    static inline bool bProcessingNetworkOpcode = false;
 
 	static void Init();
 	static void HandlePacket(const uint8_t* buffer, int bufferSize);

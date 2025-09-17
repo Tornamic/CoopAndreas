@@ -1553,7 +1553,25 @@ void CPacketHandler::OnMissionFlagSync__Handle(void* data, int size)
 	if (CTheScripts::OnAMissionFlag)
 	{
 		CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag] = packet->bOnMission;
+		if (packet->bOnMission == false && CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag] == true)
+		{
+			// cleanup
+			CNetworkCheckpoint::Remove();
+			CNetworkEntityBlip::ClearEntityBlips();
+			TheCamera.SetWideScreenOff();
+			CPad::GetPad(0)->SetDrunkInputDelay(0);
+			CPad::GetPad(0)->bApplyBrakes = 0;
+			CPad::GetPad(0)->bDisablePlayerEnterCar = 0;
+			CPad::GetPad(0)->bDisablePlayerDuck = 0;
+			CPad::GetPad(0)->bDisablePlayerFireWeapon = 0;
+			CPad::GetPad(0)->bDisablePlayerFireWeaponWithL1 = 0;
+			CPad::GetPad(0)->bDisablePlayerCycleWeapon = 0;
+			CPad::GetPad(0)->bDisablePlayerJump = 0;
+			CPad::GetPad(0)->bDisablePlayerDisplayVitalStats = 0;
+			CDraw::FadeValue = 0;
+		}
 	}
+
 }
 
 void CPacketHandler::OnMissionFlagSync__Trigger()
@@ -1918,4 +1936,18 @@ void CPacketHandler::UpdateAllTags__Trigger()
 	}
 
 	CNetwork::SendPacket(CPacketsID::UPDATE_ALL_TAGS, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+}
+
+// TeleportPlayerScripted
+
+void CPacketHandler::TeleportPlayerScripted__Handle(void* data, int size)
+{
+	CPackets::TeleportPlayerScripted* packet = (CPackets::TeleportPlayerScripted*)data;
+
+	auto playerPed = FindPlayerPed(0);
+	playerPed->Teleport(packet->pos, false);
+	playerPed->m_fCurrentRotation = packet->heading;
+	playerPed->m_fAimingRotation = packet->heading;
+	playerPed->SetHeading(packet->heading);
+	playerPed->UpdateRwMatrix();
 }

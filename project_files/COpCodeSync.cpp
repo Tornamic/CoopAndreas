@@ -78,8 +78,9 @@ const SSyncedOpCode syncedOpcodes[] =
     {0x02E4}, // load_cutscene {name} [string]
     {0x02E7}, // start_cutscene
     {0x02EA}, // clear_cutscene
-
+    
     // World
+    {COMMAND_SET_TAG_STATUS_IN_AREA},
 
     // Interiors
     {0x04BB}, // set_area_visible {areaId} [Interior]
@@ -88,7 +89,10 @@ const SSyncedOpCode syncedOpcodes[] =
     // Weapons
     {0x06AB, true, {eSyncedParamType::PED}}, // hide_char_weapon_for_scripted_cutscene [Char] {state} [bool]
     {0x07A7, true, {eSyncedParamType::PED}}, // task_jetpack {handle} [Char]
-
+    {COMMAND_GIVE_WEAPON_TO_CHAR, true, {eSyncedParamType::PED}},
+    {COMMAND_SET_CURRENT_CHAR_WEAPON, true, {eSyncedParamType::PED}},
+    {COMMAND_REMOVE_WEAPON_FROM_CHAR, true, {eSyncedParamType::PED}},
+    
     // Tasks
     {0x05BA, true, {eSyncedParamType::PED}}, // task_stand_still {handle} [Char] {time} [int]
     {0x05BF, true, {eSyncedParamType::PED, eSyncedParamType::PED}}, // task_look_at_char {observer} [Char] {target} [Char] {time} [int]
@@ -120,6 +124,7 @@ const SSyncedOpCode syncedOpcodes[] =
     {COMMAND_TASK_LEAVE_CAR, true, eSyncedParamType::PED, eSyncedParamType::VEHICLE},
     {COMMAND_TASK_DIE_NAMED_ANIM, true, eSyncedParamType::PED},
     {COMMAND_TASK_PLAY_ANIM_WITH_FLAGS, true, eSyncedParamType::PED},
+    {COMMAND_TASK_LEAVE_ANY_CAR, true, eSyncedParamType::PED},
 
     // Actors
     {0x00A1, true, {eSyncedParamType::PED}}, // set_char_coordinates [Char] {x} [float] {y} [float] {z} [float]
@@ -146,7 +151,7 @@ const SSyncedOpCode syncedOpcodes[] =
     
     // Controls
     {0x01B4, true, {eSyncedParamType::PLAYER}}, // set_player_control[Player] {state}[bool]
-    
+    {COMMAND_ADD_SCORE, true, {eSyncedParamType::PLAYER}}
 };
 
 
@@ -709,6 +714,7 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
 
 	argCount = 0;
 
+    bProcessingNetworkOpcode = true;
     patch::RedirectJump(0x464080, CRunningScript__CollectParameters_Hook_SwitchParametersContext, false);
     patch::RedirectJump(0x463D50, CRunningScript__ReadTextLabelFromScript_Hook_SwitchParametersContext, false);
 
@@ -724,6 +730,7 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
 
     patch::SetRaw(0x464080, "\x66\x8B\x44\x24\x04", 5, false);
     patch::SetRaw(0x463D50, "\x8B\x41\x14\x83\xEC\x08", 6, false);
+    bProcessingNetworkOpcode = false;
 }
 
 void __declspec(naked) OpcodeProcessingWellDone_Hook()
