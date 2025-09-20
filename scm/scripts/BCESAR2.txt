@@ -1,0 +1,1017 @@
+//-------------External script 2 (BCESAR2)---------------
+
+:BCESAR2
+script_name 'BCESAR2'
+if or
+  $weekday == 1
+  $weekday == 3
+  $weekday == 5
+goto_if_false @BCESAR2_50
+goto @BCESAR2_6142
+
+:BCESAR2_50
+if 
+  $flag_synd_mission_counter >= 10
+goto_if_false @BCESAR2_75
+goto @BCESAR2_6142
+
+:BCESAR2_75
+ENTEXT_214()
+if 
+  $player_is_completely_safe_for_mobile == 0
+goto_if_false @BCESAR2_107
+goto @BCESAR2_6142
+
+:BCESAR2_107
+set_deatharrest_state 0
+if 
+  $flag_bce2_passed_1stime == 0
+goto_if_false @BCESAR2_131
+Stat.RegisterMissionGiven
+
+:BCESAR2_131
+$bcesar2_mission_flag = 1
+$flag_on_courier_mission = 1
+wait 0
+0@ = 0
+1@ = 5
+21@ = 0
+3@ = 0
+4@ = 0
+23@ = 0
+$bce2_audio_playing = 0
+$bce2_counter = 0
+$bce2_ahead_counter = 1
+$bce2_mobile = 0
+$bce2_audio_slot = 1
+$bce2_alt_slot = 2
+$bce2_response = 0
+$bce2_crate_status[0] = 0
+$bce2_crate_status[1] = 0
+$bce2_crate_status[2] = 0
+$bce2_crate_status[3] = 0
+$bce2_crate_status[4] = 0
+$bce2_crate_status[5] = 0
+$bce2_crate_blip[0] = 0
+$bce2_crate_blip[1] = 0
+$bce2_crate_blip[2] = 0
+$bce2_crate_blip[3] = 0
+$bce2_crate_blip[4] = 0
+$bce2_crate_blip[5] = 0
+10@ = 0
+11@ = 1
+19@ = 1000
+31@ = 40.0
+$bce2_random = Math.RandomIntInRange(0, 2)
+if 
+  $bce2_random == 0
+goto_if_false @BCESAR2_390
+9@ = 114
+
+:BCESAR2_390
+if 
+  $bce2_random == 1
+goto_if_false @BCESAR2_415
+9@ = 96
+
+:BCESAR2_415
+if 
+  $bce2_random == 2
+goto_if_false @BCESAR2_440
+9@ = 115
+
+:BCESAR2_440
+if 
+  $bce2_random == 0
+goto_if_false @BCESAR2_489
+set_var_float_to_var_float $bce2_track_x = $bce2_route1_x[0]
+set_var_float_to_var_float $bce2_track_y = $bce2_route1_y[0]
+set_var_float_to_var_float $bce2_track_z = $bce2_route1_z[0]
+goto @BCESAR2_562
+
+:BCESAR2_489
+if 
+  $bce2_random == 1
+goto_if_false @BCESAR2_538
+set_var_float_to_var_float $bce2_track_x = $bce2_route2_x[0]
+set_var_float_to_var_float $bce2_track_y = $bce2_route2_y[0]
+set_var_float_to_var_float $bce2_track_z = $bce2_route2_z[0]
+goto @BCESAR2_562
+
+:BCESAR2_538
+set_var_float_to_var_float $bce2_track_x = $bce2_route3_x[0]
+set_var_float_to_var_float $bce2_track_y = $bce2_route3_y[0]
+set_var_float_to_var_float $bce2_track_z = $bce2_route3_z[0]
+
+:BCESAR2_562
+Streaming.RequestModel(107)
+Streaming.RequestModel(470)
+Streaming.RequestModel(352)
+Streaming.RequestModel(330)
+
+:BCESAR2_581
+if or
+  not Streaming.HasModelLoaded(107)
+  not Streaming.HasModelLoaded(470)
+  not Streaming.HasModelLoaded(352)
+  not Streaming.HasModelLoaded(330)
+goto_if_false @BCESAR2_622
+wait 0
+goto @BCESAR2_581
+
+:BCESAR2_622
+Car.SetModelComponents(470, 2, 2)
+Car.CustomPlateForNextCar(470, "_ASSMAN_")
+26@ = Car.Create(470, $bce2_track_x, $bce2_track_y, $bce2_track_z)
+Car.SetLoadCollisionFlag(26@, False)
+25@ = Char.CreateInsideCar(PedType.CivMale, 107, 26@)
+Char.SetSuffersCriticalHits(25@, False)
+Char.SetProofs(25@, True, True, True, False, True)
+Car.SetProofs(26@, True, True, True, False, True)
+Car.SetCruiseSpeed(26@, 40.0)
+StuckCarCheck.AddWithWarp(26@, 2.0, 2000, True, True, True, 2)
+Car.LockDoors(26@, CarLock.LockoutPlayerOnly)
+Task.CarDriveToCoord(25@, 26@, $bce2_route1_x(10@,116f), $bce2_route1_y(10@,116f), $bce2_route1_z(10@,116f), 31@, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+27@ = Blip.AddForCar(26@)
+Car.SetOnlyDamagedByPlayer(26@, True)
+if 
+  $bce2_played > 0
+goto_if_false @BCESAR2_978
+28@ = Char.CreateAsPassenger(PedType.CivMale, 107, 26@, 0)
+Char.GiveWeapon(28@, WeaponType.MicroUzi, 16000)
+Char.SetCurrentWeapon(28@, WeaponType.MicroUzi)
+Char.SetAccuracy(28@, 90)
+if 
+  $bce2_played > 1
+goto_if_false @BCESAR2_978
+29@ = Char.CreateAsPassenger(PedType.CivMale, 107, 26@, 1)
+Char.GiveWeapon(29@, WeaponType.MicroUzi, 16000)
+Char.SetCurrentWeapon(29@, WeaponType.MicroUzi)
+Char.SetAccuracy(29@, 90)
+if 
+  $bce2_played > 2
+goto_if_false @BCESAR2_978
+30@ = Char.CreateAsPassenger(PedType.CivMale, 107, 26@, 2)
+Char.GiveWeapon(30@, WeaponType.MicroUzi, 16000)
+Char.SetCurrentWeapon(30@, WeaponType.MicroUzi)
+Char.SetAccuracy(30@, 90)
+
+:BCESAR2_978
+if 
+  10@ == 0
+goto_if_false @BCESAR2_1022
+Car.TurnToFaceCoord(26@, $bce2_route1_x(11@,116f), $bce2_route1_y(11@,116f))
+goto @BCESAR2_1041
+
+:BCESAR2_1022
+Car.TurnToFaceCoord(26@, $bce2_route1_x(10@,116f), $bce2_route1_y(10@,116f))
+
+:BCESAR2_1041
+$bce2_crate_x[0] = -0.65
+$bce2_crate_y[0] = -2.307
+$bce2_crate_z[0] = 0.26
+$bce2_crate_x[1] = -0.047
+$bce2_crate_y[1] = -2.307
+$bce2_crate_z[1] = 0.26
+$bce2_crate_x[2] = 0.554
+$bce2_crate_y[2] = -2.307
+$bce2_crate_z[2] = 0.26
+$bce2_crate_x[3] = 0.554
+$bce2_crate_y[3] = -1.808
+$bce2_crate_z[3] = 0.26
+$bce2_crate_x[4] = -0.65
+$bce2_crate_y[4] = -1.808
+$bce2_crate_z[4] = 0.26
+$bce2_crate_x[5] = -0.047
+$bce2_crate_y[5] = -1.808
+$bce2_crate_z[5] = 0.26
+
+:BCESAR2_1221
+if 
+  0@ <> 6
+goto_if_false @BCESAR2_1471
+wait 0
+if 
+  not Car.IsDead(26@)
+goto_if_false @BCESAR2_1464
+if 
+  $bce2_crate_status(0@,6i) == 0
+goto_if_false @BCESAR2_1457
+$bce2_random_rot = Math.RandomFloatInRange(0.0, 19.9)
+if and
+  20.0 > $bce2_random_rot
+  $bce2_random_rot > 10.0
+goto_if_false @BCESAR2_1337
+$bce2_random_rot += 340.0
+
+:BCESAR2_1337
+$bce2_crate(0@,6i) = Object.Create(#CM_BOX, $bce2_crate_x(0@,6f), $bce2_crate_y(0@,6f), $bce2_crate_z(0@,6f))
+Object.AttachToCar($bce2_crate(0@,6i), 26@, $bce2_crate_x(0@,6f), $bce2_crate_y(0@,6f), $bce2_crate_z(0@,6f), 0.0, 0.0, 0.0)
+  Object.Rotate($bce2_crate(0@,6i), $bce2_random_rot, $bce2_random_rot, True)
+Object.SetCollision($bce2_crate(0@,6i), False)
+Object.SetDynamic($bce2_crate(0@,6i), False)
+
+:BCESAR2_1457
+0@ += 1
+
+:BCESAR2_1464
+goto @BCESAR2_1221
+
+:BCESAR2_1471
+12@ = Clock.GetGameTimer()
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BCESAR2_1503
+Player.SetGroupRecruitment($player1, False)
+
+:BCESAR2_1503
+set_var_text_label s$bce2_text[1] = 'MCES07A'
+set_var_text_label s$bce2_text[2] = 'MCES07B'
+set_var_text_label s$bce2_text[3] = 'MCES07C'
+set_var_text_label s$bce2_text[4] = 'MCES06A'
+set_var_text_label s$bce2_text[5] = 'MCES06B'
+set_var_text_label s$bce2_text[6] = 'MCES06C'
+set_var_text_label s$bce2_text[7] = 'MCES06D'
+set_var_text_label s$bce2_text[8] = 'MCES06E'
+set_var_text_label s$bce2_text[9] = 'MCES06F'
+set_var_text_label s$bce2_text[10] = 'MCES06G'
+set_var_text_label s$bce2_text[11] = 'MCES07D'
+set_var_int_to_constant $bce2_audio[1] = 25280
+set_var_int_to_constant $bce2_audio[2] = 25281
+set_var_int_to_constant $bce2_audio[3] = 25282
+set_var_int_to_constant $bce2_audio[4] = 25273
+set_var_int_to_constant $bce2_audio[5] = 25274
+set_var_int_to_constant $bce2_audio[6] = 25275
+set_var_int_to_constant $bce2_audio[7] = 25276
+set_var_int_to_constant $bce2_audio[8] = 25277
+set_var_int_to_constant $bce2_audio[9] = 25278
+set_var_int_to_constant $bce2_audio[10] = 25279
+set_var_int_to_constant $bce2_audio[11] = 25283
+Streaming.RequestModel(330)
+Streaming.LoadAllModelsNow
+Audio.LoadMissionAudio(20804, 3)
+
+:BCESAR2_1759
+if or
+  not Streaming.HasModelLoaded(330)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @BCESAR2_1790
+wait 0
+goto @BCESAR2_1759
+
+:BCESAR2_1790
+ENTEXT_214()
+if 
+  $player_is_completely_safe_for_mobile == 0
+goto_if_false @BCESAR2_1822
+goto @BCESAR2_6142
+
+:BCESAR2_1822
+Task.UseMobilePhone($scplayer, True)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+wait 2000
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+
+:BCESAR2_1842
+wait 0
+if 
+  $bce2_counter <> 0
+goto_if_false @BCESAR2_2185
+if 
+  $bce2_audio_playing == 0
+goto_if_false @BCESAR2_1910
+if 
+  Audio.HasMissionAudioLoaded($bce2_alt_slot)
+goto_if_false @BCESAR2_1903
+Audio.ClearMissionAudio($bce2_alt_slot)
+
+:BCESAR2_1903
+$bce2_audio_playing = 1
+
+:BCESAR2_1910
+if 
+  $bce2_audio_playing == 1
+goto_if_false @BCESAR2_1947
+Audio.LoadMissionAudio($bce2_audio($bce2_counter,12i), $bce2_audio_slot)
+$bce2_audio_playing = 2
+
+:BCESAR2_1947
+if 
+  $bce2_audio_playing == 2
+goto_if_false @BCESAR2_2007
+if 
+  Audio.HasMissionAudioLoaded($bce2_audio_slot)
+goto_if_false @BCESAR2_2007
+Audio.PlayMissionAudio($bce2_audio_slot)
+Text.PrintNow($bce2_text($bce2_counter,12s), 10000, 1)
+$bce2_audio_playing = 3
+
+:BCESAR2_2007
+if 
+  $bce2_audio_playing == 3
+goto_if_false @BCESAR2_2185
+if 
+  Audio.HasMissionAudioFinished($bce2_audio_slot)
+goto_if_false @BCESAR2_2124
+Text.ClearThisPrint($bce2_text($bce2_counter,12s))
+if 
+  $bce2_audio_slot == 1
+goto_if_false @BCESAR2_2089
+$bce2_audio_slot = 2
+$bce2_alt_slot = 1
+goto @BCESAR2_2103
+
+:BCESAR2_2089
+$bce2_audio_slot = 1
+$bce2_alt_slot = 2
+
+:BCESAR2_2103
+$bce2_counter = 0
+$bce2_audio_playing = 0
+goto @BCESAR2_2185
+
+:BCESAR2_2124
+if 
+  not Audio.HasMissionAudioLoaded($bce2_alt_slot)
+goto_if_false @BCESAR2_2185
+if 
+  10 > $bce2_counter
+goto_if_false @BCESAR2_2185
+set_var_int_to_var_int $bce2_ahead_counter = $bce2_counter
+$bce2_ahead_counter += 1
+Audio.LoadMissionAudio($bce2_audio($bce2_ahead_counter,12i), $bce2_alt_slot)
+
+:BCESAR2_2185
+if 
+  $bce2_played > 0
+goto_if_false @BCESAR2_2676
+if 
+  $bce2_mobile == 0
+goto_if_false @BCESAR2_2258
+if 
+  $bce2_audio_playing == 0
+goto_if_false @BCESAR2_2258
+$bce2_counter = 1
+$bce2_mobile = 1
+$bce2_text_timer_start = Clock.GetGameTimer()
+
+:BCESAR2_2258
+if 
+  $bce2_mobile == 1
+goto_if_false @BCESAR2_2373
+$bce2_text_timer_end = Clock.GetGameTimer()
+set_var_int_to_var_int $bce2_text_timer_diff = $bce2_text_timer_end
+sub_int_var_from_int_var $bce2_text_timer_diff -= $bce2_text_timer_start
+if 
+  $bce2_text_timer_diff > 1000
+goto_if_false @BCESAR2_2373
+if 
+  $bce2_audio_playing == 0
+goto_if_false @BCESAR2_2373
+$bce2_counter = 2
+$bce2_mobile = 2
+$bce2_response = 0
+$bce2_text_timer_start = Clock.GetGameTimer()
+Text.ClearHelp
+Text.PrintHelpForever('TALK_1')
+
+:BCESAR2_2373
+if 
+  $bce2_mobile == 2
+goto_if_false @BCESAR2_2443
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @BCESAR2_2417
+Text.ClearHelp
+$bce2_response = 2
+
+:BCESAR2_2417
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @BCESAR2_2443
+Text.ClearHelp
+$bce2_response = 1
+
+:BCESAR2_2443
+if 
+  $bce2_response == 1
+goto_if_false @BCESAR2_2556
+if 
+  $bce2_mobile == 2
+goto_if_false @BCESAR2_2556
+$bce2_text_timer_end = Clock.GetGameTimer()
+set_var_int_to_var_int $bce2_text_timer_diff = $bce2_text_timer_end
+sub_int_var_from_int_var $bce2_text_timer_diff -= $bce2_text_timer_start
+if 
+  $bce2_text_timer_diff > 1000
+goto_if_false @BCESAR2_2556
+if 
+  $bce2_audio_playing == 0
+goto_if_false @BCESAR2_2556
+$bce2_counter = 3
+$bce2_mobile = 7
+$bce2_text_timer_start = Clock.GetGameTimer()
+
+:BCESAR2_2556
+if 
+  $bce2_response == 2
+goto_if_false @BCESAR2_2669
+if 
+  $bce2_mobile == 2
+goto_if_false @BCESAR2_2669
+$bce2_text_timer_end = Clock.GetGameTimer()
+set_var_int_to_var_int $bce2_text_timer_diff = $bce2_text_timer_end
+sub_int_var_from_int_var $bce2_text_timer_diff -= $bce2_text_timer_start
+if 
+  $bce2_text_timer_diff > 1000
+goto_if_false @BCESAR2_2669
+if 
+  $bce2_audio_playing == 0
+goto_if_false @BCESAR2_2669
+$bce2_counter = 11
+$bce2_mobile = 7
+$bce2_text_timer_start = Clock.GetGameTimer()
+
+:BCESAR2_2669
+goto @BCESAR2_3301
+
+:BCESAR2_2676
+if 
+  $bce2_mobile == 0
+goto_if_false @BCESAR2_2731
+if 
+  $bce2_audio_playing == 0
+goto_if_false @BCESAR2_2731
+$bce2_counter = 4
+$bce2_mobile = 1
+$bce2_text_timer_start = Clock.GetGameTimer()
+
+:BCESAR2_2731
+if 
+  $bce2_mobile == 1
+goto_if_false @BCESAR2_2826
+$bce2_text_timer_end = Clock.GetGameTimer()
+set_var_int_to_var_int $bce2_text_timer_diff = $bce2_text_timer_end
+sub_int_var_from_int_var $bce2_text_timer_diff -= $bce2_text_timer_start
+if 
+  $bce2_text_timer_diff > 1000
+goto_if_false @BCESAR2_2826
+if 
+  $bce2_audio_playing == 0
+goto_if_false @BCESAR2_2826
+$bce2_counter = 5
+$bce2_mobile = 2
+$bce2_text_timer_start = Clock.GetGameTimer()
+
+:BCESAR2_2826
+if 
+  $bce2_mobile == 2
+goto_if_false @BCESAR2_2921
+$bce2_text_timer_end = Clock.GetGameTimer()
+set_var_int_to_var_int $bce2_text_timer_diff = $bce2_text_timer_end
+sub_int_var_from_int_var $bce2_text_timer_diff -= $bce2_text_timer_start
+if 
+  $bce2_text_timer_diff > 1000
+goto_if_false @BCESAR2_2921
+if 
+  $bce2_audio_playing == 0
+goto_if_false @BCESAR2_2921
+$bce2_counter = 6
+$bce2_mobile = 3
+$bce2_text_timer_start = Clock.GetGameTimer()
+
+:BCESAR2_2921
+if 
+  $bce2_mobile == 3
+goto_if_false @BCESAR2_3016
+$bce2_text_timer_end = Clock.GetGameTimer()
+set_var_int_to_var_int $bce2_text_timer_diff = $bce2_text_timer_end
+sub_int_var_from_int_var $bce2_text_timer_diff -= $bce2_text_timer_start
+if 
+  $bce2_text_timer_diff > 1000
+goto_if_false @BCESAR2_3016
+if 
+  $bce2_audio_playing == 0
+goto_if_false @BCESAR2_3016
+$bce2_counter = 7
+$bce2_mobile = 4
+$bce2_text_timer_start = Clock.GetGameTimer()
+
+:BCESAR2_3016
+if 
+  $bce2_mobile == 4
+goto_if_false @BCESAR2_3111
+$bce2_text_timer_end = Clock.GetGameTimer()
+set_var_int_to_var_int $bce2_text_timer_diff = $bce2_text_timer_end
+sub_int_var_from_int_var $bce2_text_timer_diff -= $bce2_text_timer_start
+if 
+  $bce2_text_timer_diff > 1000
+goto_if_false @BCESAR2_3111
+if 
+  $bce2_audio_playing == 0
+goto_if_false @BCESAR2_3111
+$bce2_counter = 8
+$bce2_mobile = 5
+$bce2_text_timer_start = Clock.GetGameTimer()
+
+:BCESAR2_3111
+if 
+  $bce2_mobile == 5
+goto_if_false @BCESAR2_3206
+$bce2_text_timer_end = Clock.GetGameTimer()
+set_var_int_to_var_int $bce2_text_timer_diff = $bce2_text_timer_end
+sub_int_var_from_int_var $bce2_text_timer_diff -= $bce2_text_timer_start
+if 
+  $bce2_text_timer_diff > 1000
+goto_if_false @BCESAR2_3206
+if 
+  $bce2_audio_playing == 0
+goto_if_false @BCESAR2_3206
+$bce2_counter = 9
+$bce2_mobile = 6
+$bce2_text_timer_start = Clock.GetGameTimer()
+
+:BCESAR2_3206
+if 
+  $bce2_mobile == 6
+goto_if_false @BCESAR2_3301
+$bce2_text_timer_end = Clock.GetGameTimer()
+set_var_int_to_var_int $bce2_text_timer_diff = $bce2_text_timer_end
+sub_int_var_from_int_var $bce2_text_timer_diff -= $bce2_text_timer_start
+if 
+  $bce2_text_timer_diff > 1000
+goto_if_false @BCESAR2_3301
+if 
+  $bce2_audio_playing == 0
+goto_if_false @BCESAR2_3301
+$bce2_counter = 10
+$bce2_mobile = 7
+$bce2_text_timer_start = Clock.GetGameTimer()
+
+:BCESAR2_3301
+if or
+  $bce2_mobile == 7
+  $bce2_mobile == 8
+goto_if_false @BCESAR2_3475
+$bce2_text_timer_end = Clock.GetGameTimer()
+set_var_int_to_var_int $bce2_text_timer_diff = $bce2_text_timer_end
+sub_int_var_from_int_var $bce2_text_timer_diff -= $bce2_text_timer_start
+if 
+  $bce2_text_timer_diff > 1000
+goto_if_false @BCESAR2_3475
+if 
+  $bce2_audio_playing == 0
+goto_if_false @BCESAR2_3475
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @BCESAR2_3475
+24@ = Char.GetScriptTaskStatus($scplayer, 1833)
+if 
+  not is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BCESAR2_3436
+Task.UseMobilePhone($scplayer, False)
+
+:BCESAR2_3436
+if 
+  2 > $bce2_response
+goto_if_false @BCESAR2_3468
+goto @BCESAR2_3531
+goto @BCESAR2_3475
+
+:BCESAR2_3468
+goto @BCESAR2_6142
+
+:BCESAR2_3475
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BCESAR2_3524
+if 
+  $bce2_played > 0
+goto_if_false @BCESAR2_3517
+$bce2_response = 2
+
+:BCESAR2_3517
+$bce2_mobile = 8
+
+:BCESAR2_3524
+goto @BCESAR2_1842
+
+:BCESAR2_3531
+wait 0
+if 
+is_ps2_keyboard_key_just_pressed 98
+goto_if_false @BCESAR2_3564
+1@ = 0
+3@ = 6
+
+:BCESAR2_3564
+if 
+  $onmission == 1
+goto_if_false @BCESAR2_3596
+1@ = 0
+3@ = 6
+
+:BCESAR2_3596
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BCESAR2_3718
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @BCESAR2_3718
+if 
+  23@ == 0
+goto_if_false @BCESAR2_3677
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @BCESAR2_3677
+22@ = Char.StoreCarIsInNoSave($scplayer)
+23@ = 1
+
+:BCESAR2_3677
+if 
+  23@ == 1
+goto_if_false @BCESAR2_3718
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @BCESAR2_3718
+23@ = 0
+
+:BCESAR2_3718
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BCESAR2_5271
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @BCESAR2_5264
+if 
+  4@ == 0
+goto_if_false @BCESAR2_3833
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, $bce2_track_x, $bce2_track_y, $bce2_track_z, 100.0, 100.0, 50.0)
+goto_if_false @BCESAR2_3833
+Text.PrintNow('BCE2_02', 5000, 1)
+4@ = 1
+
+:BCESAR2_3833
+if 
+  Car.IsDead(26@)
+goto_if_false @BCESAR2_3856
+goto @BCESAR2_6142
+
+:BCESAR2_3856
+if 
+  $bce2_played > 0
+goto_if_false @BCESAR2_4174
+if 
+  not Char.IsDead(28@)
+goto_if_false @BCESAR2_3962
+5@ = Char.GetScriptTaskStatus(28@, 1811)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @BCESAR2_3962
+Task.DriveBy(28@, $scplayer, -1, 0.0, 0.0, 0.0, 50.0, DriveByType.Ai, True, 30)
+Char.SetCurrentWeapon(28@, WeaponType.MicroUzi)
+
+:BCESAR2_3962
+if 
+  $bce2_played > 1
+goto_if_false @BCESAR2_4174
+if 
+  not Char.IsDead(29@)
+goto_if_false @BCESAR2_4068
+6@ = Char.GetScriptTaskStatus(29@, 1811)
+if 
+  is_int_lvar_equal_to_constant 6@ == 7
+goto_if_false @BCESAR2_4068
+Task.DriveBy(29@, $scplayer, -1, 0.0, 0.0, 0.0, 50.0, DriveByType.Ai, True, 30)
+Char.SetCurrentWeapon(29@, WeaponType.MicroUzi)
+
+:BCESAR2_4068
+if 
+  $bce2_played > 2
+goto_if_false @BCESAR2_4174
+if 
+  not Char.IsDead(30@)
+goto_if_false @BCESAR2_4174
+7@ = Char.GetScriptTaskStatus(30@, 1811)
+if 
+  is_int_lvar_equal_to_constant 7@ == 7
+goto_if_false @BCESAR2_4174
+Task.DriveBy(30@, $scplayer, -1, 0.0, 0.0, 0.0, 50.0, DriveByType.Ai, True, 30)
+Char.SetCurrentWeapon(30@, WeaponType.MicroUzi)
+
+:BCESAR2_4174
+if and
+  not Char.IsDead(25@)
+  not Car.IsDead(26@)
+goto_if_false @BCESAR2_5264
+if 
+  not Char.LocateAnyMeansCar3D($scplayer, 26@, 15.0, 15.0, 15.0, False)
+goto_if_false @BCESAR2_4269
+if 
+  31@ > 30.0
+goto_if_false @BCESAR2_4262
+31@ -= 0.1
+
+:BCESAR2_4262
+goto @BCESAR2_4300
+
+:BCESAR2_4269
+if 
+  50.0 > 31@
+goto_if_false @BCESAR2_4300
+31@ += 0.1
+
+:BCESAR2_4300
+if 
+  4@ == 1
+goto_if_false @BCESAR2_4361
+if 
+  not Char.LocateAnyMeansCar3D($scplayer, 26@, 500.0, 500.0, 500.0, False)
+goto_if_false @BCESAR2_4361
+goto @BCESAR2_6142
+
+:BCESAR2_4361
+$bce2_track_x, $bce2_track_y, $bce2_track_z = Car.GetCoordinates(26@)
+if 
+  is_int_lvar_greater_than_int_lvar 9@ > 10@
+goto_if_false @BCESAR2_4772
+if 
+  $bce2_random == 0
+goto_if_false @BCESAR2_4526
+if 
+  Char.LocateInCar3D(25@, $bce2_route1_x(10@,116f), $bce2_route1_y(10@,116f), $bce2_route1_z(10@,116f), 20.0, 20.0, 20.0, False)
+goto_if_false @BCESAR2_4519
+Car.SetCruiseSpeed(26@, 31@)
+10@ += 1
+Task.CarDriveToCoord(25@, 26@, $bce2_route1_x(10@,116f), $bce2_route1_y(10@,116f), $bce2_route1_z(10@,116f), 31@, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+
+:BCESAR2_4519
+goto @BCESAR2_4765
+
+:BCESAR2_4526
+if 
+  $bce2_random == 1
+goto_if_false @BCESAR2_4658
+if 
+  Char.LocateInCar3D(25@, $bce2_route2_x(10@,98f), $bce2_route2_y(10@,98f), $bce2_route2_z(10@,98f), 20.0, 20.0, 20.0, False)
+goto_if_false @BCESAR2_4651
+Car.SetCruiseSpeed(26@, 31@)
+10@ += 1
+Task.CarDriveToCoord(25@, 26@, $bce2_route2_x(10@,98f), $bce2_route2_y(10@,98f), $bce2_route2_z(10@,98f), 31@, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+
+:BCESAR2_4651
+goto @BCESAR2_4765
+
+:BCESAR2_4658
+if 
+  Char.LocateInCar3D(25@, $bce2_route3_x(10@,117f), $bce2_route3_y(10@,117f), $bce2_route3_z(10@,117f), 20.0, 20.0, 20.0, False)
+goto_if_false @BCESAR2_4765
+Car.SetCruiseSpeed(26@, 31@)
+10@ += 1
+Task.CarDriveToCoord(25@, 26@, $bce2_route3_x(10@,117f), $bce2_route3_y(10@,117f), $bce2_route3_z(10@,117f), 31@, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+
+:BCESAR2_4765
+goto @BCESAR2_5071
+
+:BCESAR2_4772
+if 
+  $bce2_random == 0
+goto_if_false @BCESAR2_4866
+if 
+  Char.LocateInCar3D(25@, $bce2_route1_x(10@,116f), $bce2_route1_y(10@,116f), $bce2_route1_z(10@,116f), 8.0, 8.0, 8.0, False)
+goto_if_false @BCESAR2_4859
+Task.CarDriveWander(25@, 26@, 50.0, DrivingMode.AvoidCars)
+
+:BCESAR2_4859
+goto @BCESAR2_5029
+
+:BCESAR2_4866
+if 
+  $bce2_random == 1
+goto_if_false @BCESAR2_4960
+if 
+  Char.LocateInCar3D(25@, $bce2_route2_x(10@,98f), $bce2_route2_y(10@,98f), $bce2_route2_z(10@,98f), 8.0, 8.0, 8.0, False)
+goto_if_false @BCESAR2_4953
+Task.CarDriveWander(25@, 26@, 50.0, DrivingMode.AvoidCars)
+
+:BCESAR2_4953
+goto @BCESAR2_5029
+
+:BCESAR2_4960
+if 
+  Char.LocateInCar3D(25@, $bce2_route3_x(10@,117f), $bce2_route3_y(10@,117f), $bce2_route3_z(10@,117f), 8.0, 8.0, 8.0, False)
+goto_if_false @BCESAR2_5029
+Task.CarDriveWander(25@, 26@, 50.0, DrivingMode.AvoidCars)
+
+:BCESAR2_5029
+if 
+  is_int_lvar_equal_to_int_lvar 10@ == 9@
+goto_if_false @BCESAR2_5071
+if 
+  not Car.IsOnScreen(26@)
+goto_if_false @BCESAR2_5071
+goto @BCESAR2_6142
+
+:BCESAR2_5071
+8@ = Char.GetScriptTaskStatus(25@, 1489)
+if 
+  is_int_lvar_equal_to_constant 8@ == 7
+goto_if_false @BCESAR2_5264
+if 
+  $bce2_random == 0
+goto_if_false @BCESAR2_5163
+Task.CarDriveToCoord(25@, 26@, $bce2_route1_x(10@,116f), $bce2_route1_y(10@,116f), $bce2_route1_z(10@,116f), 31@, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+goto @BCESAR2_5264
+
+:BCESAR2_5163
+if 
+  $bce2_random == 1
+goto_if_false @BCESAR2_5226
+Task.CarDriveToCoord(25@, 26@, $bce2_route2_x(10@,98f), $bce2_route2_y(10@,98f), $bce2_route2_z(10@,98f), 31@, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+goto @BCESAR2_5264
+
+:BCESAR2_5226
+Task.CarDriveToCoord(25@, 26@, $bce2_route3_x(10@,117f), $bce2_route3_y(10@,117f), $bce2_route3_z(10@,117f), 31@, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+
+:BCESAR2_5264
+goto @BCESAR2_5278
+
+:BCESAR2_5271
+goto @BCESAR2_6142
+
+:BCESAR2_5278
+if 
+  not Car.IsDead(26@)
+goto_if_false @BCESAR2_5759
+13@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 14@ = 13@
+sub_int_lvar_from_int_lvar 14@ -= 12@
+20@ = Car.GetHealth(26@)
+if 
+  14@ > 1000
+goto_if_false @BCESAR2_5759
+if 
+  is_int_lvar_greater_than_int_lvar 19@ > 20@
+goto_if_false @BCESAR2_5759
+if 
+  $bce2_crate_status(1@,6i) == 0
+goto_if_false @BCESAR2_5751
+if 
+  Object.IsAttached($bce2_crate(1@,6i))
+goto_if_false @BCESAR2_5751
+if 
+  not Car.IsDead(26@)
+goto_if_false @BCESAR2_5751
+if or
+  not Car.IsUpsidedown(26@)
+  not Car.IsInWater(26@)
+goto_if_false @BCESAR2_5751
+$bce2_crate_x(1@,6f), $bce2_crate_y(1@,6f), $bce2_crate_z(1@,6f) = Object.GetCoordinates($bce2_crate(1@,6i))
+$bce2_crate_z(1@,6f) += 0.5
+Object.SetCoordinates($bce2_crate(1@,6i), $bce2_crate_x(1@,6f), $bce2_crate_y(1@,6f), $bce2_crate_z(1@,6f))
+Object.Detach($bce2_crate(1@,6i), 90.0, 180.0, 1.5, True)
+$bce2_crate_blip(1@,6i) = Blip.AddForObject($bce2_crate(1@,6i))
+Object.AddToVelocity($bce2_crate(1@,6i), 0.0, -5.0, 20.0)
+Object.SetCollision($bce2_crate(1@,6i), True)
+Object.SetDynamic($bce2_crate(1@,6i), True)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BCESAR2_5662
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @BCESAR2_5662
+if 
+  not Car.IsDead(22@)
+goto_if_false @BCESAR2_5662
+Object.SortOutCollisionWithCar($bce2_crate(1@,6i), 22@)
+
+:BCESAR2_5662
+12@ = Clock.GetGameTimer()
+Text.PrintNow('BCE2_03', 5000, 1)
+$bce2_crate_status(1@,6i) = 2
+if 
+  1@ > 0
+goto_if_false @BCESAR2_5726
+1@ -= 1
+goto @BCESAR2_5751
+
+:BCESAR2_5726
+if 
+  3@ == 6
+goto_if_false @BCESAR2_5751
+goto @BCESAR2_6142
+
+:BCESAR2_5751
+set_lvar_int_to_lvar_int 19@ = 20@
+
+:BCESAR2_5759
+if 
+  1@ == 0
+goto_if_false @BCESAR2_5802
+if 
+  3@ == 6
+goto_if_false @BCESAR2_5802
+goto @BCESAR2_6142
+
+:BCESAR2_5802
+2@ = 0
+
+:BCESAR2_5809
+if 
+  2@ <> 6
+goto_if_false @BCESAR2_6135
+wait 0
+if 
+  $bce2_crate_status(2@,6i) == 2
+goto_if_false @BCESAR2_6121
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BCESAR2_6121
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @BCESAR2_6121
+16@, 17@, 18@ = Char.GetCoordinates($scplayer)
+if 
+  Object.DoesExist($bce2_crate(2@,6i))
+goto_if_false @BCESAR2_6025
+if 
+  Char.LocateAnyMeansObject3D($scplayer, $bce2_crate(2@,6i), 3.0, 3.0, 3.0, False)
+goto_if_false @BCESAR2_6025
+Blip.Remove($bce2_crate_blip(2@,6i))
+Object.Delete($bce2_crate(2@,6i))
+Sound.AddOneOffSound(1058, 16@, 17@, 18@)
+Player.AddScore($player1, 300)
+21@ += 300
+$bce2_crate_status(2@,6i) = 3
+3@ += 1
+
+:BCESAR2_6025
+if 
+  Object.DoesExist($bce2_crate(2@,6i))
+goto_if_false @BCESAR2_6121
+if 
+  not Char.LocateAnyMeansObject3D($scplayer, $bce2_crate(2@,6i), 75.0, 75.0, 75.0, False)
+goto_if_false @BCESAR2_6121
+Blip.Remove($bce2_crate_blip(2@,6i))
+Object.Delete($bce2_crate(2@,6i))
+$bce2_crate_status(2@,6i) = 3
+3@ += 1
+
+:BCESAR2_6121
+2@ += 1
+goto @BCESAR2_5809
+
+:BCESAR2_6135
+goto @BCESAR2_3531
+
+:BCESAR2_6142
+if 
+  $flag_on_courier_mission == 1
+goto_if_false @BCESAR2_6202
+Text.PrintWithNumberBig('BCE2_04', 21@, 7500, TextStyle.MiddleSmallerHigher)
+Text.PrintNow('BCE2_05', 7500, 1)
+$bce2_played += 1
+
+:BCESAR2_6202
+Blip.Remove(27@)
+Blip.Remove($bce2_crate_blip[0])
+Blip.Remove($bce2_crate_blip[1])
+Blip.Remove($bce2_crate_blip[2])
+Blip.Remove($bce2_crate_blip[3])
+Blip.Remove($bce2_crate_blip[4])
+Blip.Remove($bce2_crate_blip[5])
+Car.MarkAsNoLongerNeeded(26@)
+Char.MarkAsNoLongerNeeded(25@)
+Char.MarkAsNoLongerNeeded(28@)
+Char.MarkAsNoLongerNeeded(29@)
+Char.MarkAsNoLongerNeeded(30@)
+Object.MarkAsNoLongerNeeded($bce2_crate[0])
+Object.MarkAsNoLongerNeeded($bce2_crate[1])
+Object.MarkAsNoLongerNeeded($bce2_crate[2])
+Object.MarkAsNoLongerNeeded($bce2_crate[3])
+Object.MarkAsNoLongerNeeded($bce2_crate[4])
+Object.MarkAsNoLongerNeeded($bce2_crate[5])
+Streaming.MarkModelAsNoLongerNeeded(107)
+Streaming.MarkModelAsNoLongerNeeded(470)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(330)
+$timer_mobile_start = Clock.GetGameTimer()
+Text.ClearHelp
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+$timer_mobile_start = Clock.GetGameTimer()
+if 
+  $flag_on_courier_mission == 1
+goto_if_false @BCESAR2_6372
+if 
+  $flag_bce2_passed_1stime == 0
+goto_if_false @BCESAR2_6372
+Stat.RegisterOddjobMissionPassed
+$flag_bce2_passed_1stime = 1
+
+:BCESAR2_6372
+$flag_on_courier_mission = 0
+terminate_this_script 
+terminate_this_script 
+

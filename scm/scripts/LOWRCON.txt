@@ -1,0 +1,314 @@
+//-------------External script 22 (LOWR_CONT)---------------
+
+:LOWRCON
+script_name 'LOWRCON'
+1@ = 0
+if 
+  1@ == -1
+goto_if_false @LOWRCON_83
+0@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+4@ = Car.Create(413, 0.0, 0.0, 0.0)
+
+:LOWRCON_83
+2@ = 0
+
+:LOWRCON_90
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @LOWRCON_1747
+if or
+  $onmission == 0
+  2@ == 1
+goto_if_false @LOWRCON_1733
+if 
+  Char.LocateAnyMeans2D($scplayer, 0, 1812.369, -1929.922, 100.0, 100.0)
+goto_if_false @LOWRCON_1719
+if 
+  Char.DoesExist(0@)
+goto_if_false @LOWRCON_212
+if 
+  Char.IsDead(0@)
+goto_if_false @LOWRCON_212
+goto @LOWRCON_1761
+
+:LOWRCON_212
+switch_start 1@ total_jumps 10 default_jump 0 @LOWRCON_1712 jumps 0 @LOWRCON_340 1 @LOWRCON_480 2 @LOWRCON_726 3 @LOWRCON_787 4 @LOWRCON_902 5 @LOWRCON_1123 6 @LOWRCON_1219
+switch_continued 7 @LOWRCON_1334 8 @LOWRCON_1500 9 @LOWRCON_1640 -1 @LOWRCON_1712 -1 @LOWRCON_1712 -1 @LOWRCON_1712 -1 @LOWRCON_1712 -1 @LOWRCON_1712 -1 @LOWRCON_1712
+
+:LOWRCON_340
+Streaming.RequestModel(50)
+
+:LOWRCON_344
+if 
+  not Streaming.HasModelLoaded(50)
+goto_if_false @LOWRCON_370
+wait 0
+goto @LOWRCON_344
+
+:LOWRCON_370
+3@ = DecisionMakerChar.Copy(65542)
+0@ = Char.Create(24, 50, 1812.369, -1929.922, 12.5486)
+Char.SetHeading(0@, 270.0)
+Char.SetOnlyDamagedByPlayer(0@, True)
+Char.SetDecisionMaker(0@, 3@)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @LOWRCON_455
+Task.LookAtChar(0@, $scplayer, -2)
+
+:LOWRCON_455
+Streaming.MarkModelAsNoLongerNeeded(50)
+Char.FreezePosition(0@, True)
+1@ += 1
+goto @LOWRCON_1712
+
+:LOWRCON_480
+if 
+  not Char.IsDead(0@)
+goto_if_false @LOWRCON_719
+if 
+  Char.LocateOnFoot3D(0@, 0, 1813.369, -1929.922, 12.5486, 1.2, 1.2, 2.0)
+goto_if_false @LOWRCON_719
+if 
+  not Char.IsDead(0@)
+goto_if_false @LOWRCON_589
+$x = Char.GetOffsetInWorldCoords($y, $z, 0@, 0.0, 1.0, 0.0)
+
+:LOWRCON_589
+if 
+  not Char.IsDead(0@)
+goto_if_false @LOWRCON_639
+if 
+  Char.HasBeenDamagedByChar(0@, $scplayer)
+goto_if_false @LOWRCON_639
+Task.KillCharOnFoot(0@, $scplayer)
+goto @LOWRCON_1761
+
+:LOWRCON_639
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, $x, $y, $z, 0.7, 0.7, 1.2, True)
+goto_if_false @LOWRCON_719
+Player.SetControl($player1, False)
+if 
+  not Char.IsDead(0@)
+goto_if_false @LOWRCON_712
+Task.TurnCharToFaceChar($scplayer, 0@)
+
+:LOWRCON_712
+1@ += 1
+
+:LOWRCON_719
+goto @LOWRCON_1712
+
+:LOWRCON_726
+if 
+  not Char.IsDead(0@)
+goto_if_false @LOWRCON_780
+if 
+  Player.IsPlaying($player1)
+goto_if_false @LOWRCON_768
+Task.LookAtChar(0@, $scplayer, -2)
+
+:LOWRCON_768
+Char.ClearTasks(0@)
+1@ += 1
+
+:LOWRCON_780
+goto @LOWRCON_1712
+
+:LOWRCON_787
+if 
+  not Char.IsDead(0@)
+goto_if_false @LOWRCON_840
+Task.PlayAnim(0@, "IDLE_CHAT", "PED", 4.0, False, False, False, False, 2000)
+
+:LOWRCON_840
+set_var_text_label s$audio_string = 'MEC_HI'
+set_var_int_to_constant $audio_sound_file = 26007
+start_new_script @AUDIOL 0@ 0 1 1 0 
+TIMERA = 0
+1@ += 1
+goto @LOWRCON_1712
+
+:LOWRCON_902
+if 
+  TIMERA > 1000
+goto_if_false @LOWRCON_1116
+if 
+  $audio_line_is_active == 0
+goto_if_false @LOWRCON_1116
+Text.PrintHelpForever('TALK_1')
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @LOWRCON_1040
+set_var_text_label s$audio_string = 'SYN2_LO'
+set_var_int_to_constant $audio_sound_file = 39072
+start_new_script @AUDIOL $scplayer 0 1 1 0 
+Text.ClearHelp
+TIMERA = 0
+2@ = 1
+1@ += 1
+goto @LOWRCON_1116
+
+:LOWRCON_1040
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @LOWRCON_1116
+set_var_text_label s$audio_string = 'VOFFE1N'
+set_var_int_to_constant $audio_sound_file = 21444
+start_new_script @AUDIOL $scplayer 0 1 1 0 
+Text.ClearHelp
+TIMERA = 0
+Camera.Restore
+1@ += 2
+
+:LOWRCON_1116
+goto @LOWRCON_1712
+
+:LOWRCON_1123
+if 
+  TIMERA > 1000
+goto_if_false @LOWRCON_1212
+if 
+  $audio_line_is_active == 0
+goto_if_false @LOWRCON_1212
+Camera.DoFade(0, 150)
+
+:LOWRCON_1167
+if 
+  Camera.GetFadingStatus
+goto_if_false @LOWRCON_1191
+wait 0
+goto @LOWRCON_1167
+
+:LOWRCON_1191
+$lowrider_meeting_is_loaded = 0
+$load_and_launch_mission_if_poss = 6
+1@ += 2
+
+:LOWRCON_1212
+goto @LOWRCON_1712
+
+:LOWRCON_1219
+if 
+  TIMERA > 1000
+goto_if_false @LOWRCON_1327
+if 
+  $audio_line_is_active == 0
+goto_if_false @LOWRCON_1327
+if 
+  Player.IsPlaying($player1)
+goto_if_false @LOWRCON_1279
+Player.SetControl($player1, True)
+
+:LOWRCON_1279
+set_var_text_label s$audio_string = 'MEC_N'
+set_var_int_to_constant $audio_sound_file = 26008
+start_new_script @AUDIOL 0@ 1 1 1 0 
+goto @LOWRCON_1761
+
+:LOWRCON_1327
+goto @LOWRCON_1712
+
+:LOWRCON_1334
+if 
+  $lowrider_meeting_is_loaded == 1
+goto_if_false @LOWRCON_1493
+Camera.SetFixedPosition(1815.894, -1932.708, 15.2576, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1815.094, -1932.212, 14.9195, SwitchType.JumpCut)
+Hud.SwitchWidescreen(True)
+Camera.DoFade(1, 150)
+
+:LOWRCON_1414
+if 
+  Camera.GetFadingStatus
+goto_if_false @LOWRCON_1438
+wait 0
+goto @LOWRCON_1414
+
+:LOWRCON_1438
+set_var_text_label s$audio_string = 'MEC_Y'
+set_var_int_to_constant $audio_sound_file = 26009
+start_new_script @AUDIOL 0@ 0 1 1 0 
+TIMERA = 0
+1@ += 1
+
+:LOWRCON_1493
+goto @LOWRCON_1712
+
+:LOWRCON_1500
+if 
+  TIMERA > 1000
+goto_if_false @LOWRCON_1633
+if 
+  Player.IsPlaying($player1)
+goto_if_false @LOWRCON_1633
+Camera.ResetNewScriptables
+Camera.SetVectorMove(1815.894, -1932.708, 15.2576, 1813.444, -1932.063, 18.552, 3000, True)
+Camera.SetVectorTrack(1815.094, -1932.212, 14.9195, 1812.689, -1931.438, 18.3523, 3000, True)
+Camera.PersistTrack(True)
+Camera.PersistPos(True)
+TIMERA = 0
+1@ += 1
+
+:LOWRCON_1633
+goto @LOWRCON_1712
+
+:LOWRCON_1640
+if or
+  TIMERA > 5000
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @LOWRCON_1705
+if 
+  Player.IsPlaying($player1)
+goto_if_false @LOWRCON_1705
+Camera.ResetNewScriptables
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+goto @LOWRCON_1761
+
+:LOWRCON_1705
+goto @LOWRCON_1712
+
+:LOWRCON_1712
+goto @LOWRCON_1726
+
+:LOWRCON_1719
+goto @LOWRCON_1761
+
+:LOWRCON_1726
+goto @LOWRCON_1740
+
+:LOWRCON_1733
+goto @LOWRCON_1761
+
+:LOWRCON_1740
+goto @LOWRCON_1754
+
+:LOWRCON_1747
+goto @LOWRCON_1761
+
+:LOWRCON_1754
+goto @LOWRCON_90
+
+:LOWRCON_1761
+if 
+  not Char.IsDead(0@)
+goto_if_false @LOWRCON_1794
+Char.FreezePosition(0@, False)
+Char.ClearLookAt(0@)
+Task.WanderStandard(0@)
+
+:LOWRCON_1794
+Char.MarkAsNoLongerNeeded(0@)
+Car.MarkAsNoLongerNeeded(4@)
+Streaming.RemoveAnimation("GANGS")
+Streaming.MarkModelAsNoLongerNeeded(50)
+2@ = 0
+DecisionMaker.Remove(3@)
+terminate_this_script 
+terminate_this_script 
+

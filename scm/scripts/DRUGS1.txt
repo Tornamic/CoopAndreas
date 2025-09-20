@@ -1,0 +1,8188 @@
+//-------------Mission 30---------------
+// Originally: Just Business
+
+:DRUGS1
+script_name 'DRUGS1'
+gosub @DRUGS1_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @DRUGS1_38
+gosub @DRUGS1_52025
+
+:DRUGS1_38
+gosub @DRUGS1_52103
+terminate_this_script 
+
+:DRUGS1_47
+Stat.RegisterMissionGiven
+$onmission = 1
+wait 0
+Text.LoadMissionText('SMOKE4')
+World.ClearArea(1, 2060.0, -1694.0, 50.0, 50.0)
+Weather.ForceNow(WeatherType.SunnyLa)
+Streaming.RequestModel(#LAE_SMOKECUTSCENE)
+
+:DRUGS1_104
+if 
+  not Streaming.HasModelLoaded(#LAE_SMOKECUTSCENE)
+goto_if_false @DRUGS1_131
+wait 0
+goto @DRUGS1_104
+
+:DRUGS1_131
+290@ = Object.CreateNoOffset(#LAE_SMOKECUTSCENE, 2055.0, -1695.0, 15.0)
+Cutscene.Load('SMOKE4A')
+
+:DRUGS1_165
+if 
+  not Cutscene.HasLoaded
+goto_if_false @DRUGS1_189
+wait 0
+goto @DRUGS1_165
+
+:DRUGS1_189
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:DRUGS1_198
+if 
+  not Cutscene.HasFinished
+goto_if_false @DRUGS1_222
+wait 0
+goto @DRUGS1_198
+
+:DRUGS1_222
+Camera.DoFade(0, Fade.Out)
+
+:DRUGS1_228
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRUGS1_252
+wait 0
+goto @DRUGS1_228
+
+:DRUGS1_252
+Cutscene.Clear
+Streaming.MarkModelAsNoLongerNeeded(#LAE_SMOKECUTSCENE)
+Object.Delete(290@)
+Camera.SetFadingColor(0, 0, 0)
+wait 500
+Streaming.RequestModel(466)
+Streaming.RequestModel(91)
+Streaming.RequestModel(93)
+Streaming.RequestModel(111)
+Streaming.RequestModel(112)
+Streaming.LoadSpecialCharacter('SMOKE', 1)
+Audio.LoadMissionAudio(35802, 2)
+Streaming.LoadAllModelsNow
+
+:DRUGS1_322
+if or
+  not Streaming.HasModelLoaded(466)
+  not Streaming.HasModelLoaded(111)
+  not Streaming.HasModelLoaded(111)
+  not Streaming.HasModelLoaded(91)
+  not Streaming.HasModelLoaded(93)
+goto_if_false @DRUGS1_365
+wait 0
+goto @DRUGS1_322
+
+:DRUGS1_365
+if or
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_395
+wait 0
+goto @DRUGS1_365
+
+:DRUGS1_395
+90@ = 0
+$smokeshoot_s4flag = 0
+91@ = 0
+92@ = 0
+93@ = 0
+94@ = 0
+95@ = 0
+96@ = 0
+97@ = 0
+98@ = 0
+99@ = 0
+100@ = 0
+101@ = 0
+102@ = 0
+103@ = 0
+104@ = 0
+105@ = 0
+106@ = 0
+107@ = 0
+108@ = 0
+109@ = 0
+110@ = 0
+111@ = 0
+112@ = 0
+113@ = 0
+114@ = 0
+115@ = 0
+116@ = 0
+117@ = 0
+118@ = 0
+119@ = 0
+120@ = 0
+121@ = 0
+122@ = 0
+123@ = 0
+124@ = 0
+125@ = 0
+126@ = 0
+282@ = 0
+283@ = 0
+127@ = 0
+128@ = 0
+129@ = 0
+242@ = 0
+243@ = 0
+244@ = 0
+245@ = 0
+246@ = 0
+247@ = 0
+248@ = 0
+249@ = 0
+250@ = 0
+251@ = 0
+252@ = 0
+253@ = 0
+254@ = 0
+255@ = 0
+256@ = 0
+257@ = 0
+258@ = 0
+259@ = 0
+260@ = 0
+261@ = 0
+262@ = 0
+263@ = 0
+264@ = 0
+265@ = 0
+266@ = 0
+267@ = 0
+268@ = 0
+269@ = 0
+270@ = 0
+271@ = 0
+272@ = 0
+273@ = 0
+274@ = 0
+275@ = 0
+276@ = 0
+277@ = 0
+278@ = 0
+279@ = 0
+280@ = 0
+281@ = 0
+284@ = 0
+285@ = 0
+286@ = 0
+287@ = 0
+35@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+36@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+DecisionMakerChar.AddEventResponse(36@, 49, 311, 0.0, 100.0, 100.0, 100.0, False, True)
+World.ClearArea(1, 2077.58, -1695.929, 150.0, 150.0)
+Car.CustomPlateForNextCar(466, "_A2TMFK_")
+34@ = Car.Create(466, 2058.86, -1694.612, 12.297)
+Audio.SetRadioChannel(RadioChannel.RadioLosSantos)
+Car.ChangeColor(34@, 98, 14)
+Car.SetHeading(34@, 271.822)
+Car.SetHealth(34@, 1000)
+$big_smoke = Char.CreateAsPassenger(PedType.Special, 290, 34@, 0)
+Char.SetGetOutUpsideDownCar($big_smoke, False)
+Char.SetSignalAfterKill($big_smoke, False)
+Char.SetHealth($big_smoke, 500)
+Char.SetSuffersCriticalHits($big_smoke, False)
+Char.SetNeverTargeted($big_smoke, True)
+Char.SetDecisionMaker($big_smoke, 35@)
+Char.SetCantBeDraggedOut($big_smoke, True)
+Char.SetStayInCarWhenJacked($big_smoke, True)
+Game.SetMaxFireGenerations(1)
+Char.WarpIntoCar($scplayer, 34@)
+Game.SetWantedMultiplier(0.0)
+Game.SwitchEmergencyServices(False)
+Camera.DoFade(1, 1500)
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Char.ShutUp($scplayer, True)
+Path.SwitchRoadsOff(1694.12, -1604.33, 5.0, 1805.94, -1593.12, 15.0)
+Text.PrintNow('DGS1_1', 6000, 1)
+TIMERB = 0
+Player.SetGroupRecruitment($player1, False)
+Game.SetScriptLimitToGangSize(0)
+Char.ShutUpForScriptedSpeech($big_smoke, True)
+Char.ShutUpForScriptedSpeech($scplayer, True)
+
+:DRUGS1_1348
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @DRUGS1_1374
+goto @DRUGS1_52043
+
+:DRUGS1_1374
+if 
+  280@ <= 7
+goto_if_false @DRUGS1_1431
+if 
+  Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_1431
+Text.PrintNow('DGS1_60', 7000, 1)
+goto @DRUGS1_52025
+
+:DRUGS1_1431
+if 
+  123@ == 0
+goto_if_false @DRUGS1_9251
+if 
+  90@ == 11
+goto_if_false @DRUGS1_1567
+if 
+  6 > $smokeshoot_s4flag
+goto_if_false @DRUGS1_1567
+if 
+  not Char.IsInArea2D($scplayer, 0, 1744.2, -1686.68, 1698.34, -1616.4)
+goto_if_false @DRUGS1_1567
+if 
+  not Char.IsOnScreen($big_smoke)
+goto_if_false @DRUGS1_1567
+Char.ExplodeHead($big_smoke)
+Text.PrintNow('DGS1_3', 7000, 1)
+goto @DRUGS1_52025
+
+:DRUGS1_1567
+if 
+  90@ == 0
+goto_if_false @DRUGS1_1698
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_1698
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRUGS1_1698
+if 
+  Char.IsSittingInCar($scplayer, 34@)
+goto_if_false @DRUGS1_1698
+if 
+  Char.IsSittingInCar($scplayer, 34@)
+goto_if_false @DRUGS1_1698
+88@ = Blip.AddForCoord(1722.568, -1597.92, 12.405)
+Text.PrintNow('DGS1_1', 10000, 1)
+90@ = 1
+
+:DRUGS1_1698
+if 
+  92@ == 0
+goto_if_false @DRUGS1_1986
+if or
+  90@ == 1
+  90@ == 100
+goto_if_false @DRUGS1_1986
+if 
+  91@ == 0
+goto_if_false @DRUGS1_1854
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRUGS1_1854
+if 
+  not Char.IsSittingInCar($scplayer, 34@)
+goto_if_false @DRUGS1_1854
+87@ = Blip.AddForCar(34@)
+Blip.SetAsFriendly(87@, True)
+Blip.Remove(88@)
+90@ = 100
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearPrints
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow('SMOX_AC', 2000, 1)
+91@ = 1
+
+:DRUGS1_1854
+if 
+  91@ == 1
+goto_if_false @DRUGS1_1986
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRUGS1_1986
+if 
+  Char.IsSittingInCar($scplayer, 34@)
+goto_if_false @DRUGS1_1986
+Blip.Remove(87@)
+88@ = Blip.AddForCoord(1722.568, -1597.92, 12.405)
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+if 
+  282@ > 12
+goto_if_false @DRUGS1_1972
+Text.PrintNow('DGS1_1', 5000, 1)
+
+:DRUGS1_1972
+90@ = 1
+91@ = 0
+
+:DRUGS1_1986
+if 
+  90@ == 1
+goto_if_false @DRUGS1_2968
+gosub @DRUGS1_51642
+if 
+  282@ == 0
+goto_if_false @DRUGS1_2097
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2097
+if 
+  TIMERB > 6500
+goto_if_false @DRUGS1_2097
+set_lvar_int_to_constant 239@ = 35600
+set_lvar_text_label 240@s = 'SMO4_AA'
+gosub @DRUGS1_51600
+
+:DRUGS1_2097
+if 
+  282@ == 1
+goto_if_false @DRUGS1_2164
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2164
+set_lvar_int_to_constant 239@ = 35601
+set_lvar_text_label 240@s = 'SMO4_AB'
+gosub @DRUGS1_51600
+
+:DRUGS1_2164
+if 
+  282@ == 2
+goto_if_false @DRUGS1_2231
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2231
+set_lvar_int_to_constant 239@ = 35602
+set_lvar_text_label 240@s = 'SMO4_AC'
+gosub @DRUGS1_51600
+
+:DRUGS1_2231
+if 
+  282@ == 3
+goto_if_false @DRUGS1_2298
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2298
+set_lvar_int_to_constant 239@ = 35603
+set_lvar_text_label 240@s = 'SMO4_AD'
+gosub @DRUGS1_51600
+
+:DRUGS1_2298
+if 
+  282@ == 4
+goto_if_false @DRUGS1_2365
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2365
+set_lvar_int_to_constant 239@ = 35604
+set_lvar_text_label 240@s = 'SMO4_AE'
+gosub @DRUGS1_51600
+
+:DRUGS1_2365
+if 
+  282@ == 5
+goto_if_false @DRUGS1_2432
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2432
+set_lvar_int_to_constant 239@ = 35605
+set_lvar_text_label 240@s = 'SMO4_AF'
+gosub @DRUGS1_51600
+
+:DRUGS1_2432
+if 
+  282@ == 6
+goto_if_false @DRUGS1_2499
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2499
+set_lvar_int_to_constant 239@ = 35606
+set_lvar_text_label 240@s = 'SMO4_AG'
+gosub @DRUGS1_51600
+
+:DRUGS1_2499
+if 
+  282@ == 7
+goto_if_false @DRUGS1_2566
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2566
+set_lvar_int_to_constant 239@ = 35607
+set_lvar_text_label 240@s = 'SMO4_AH'
+gosub @DRUGS1_51600
+
+:DRUGS1_2566
+if 
+  282@ == 7
+goto_if_false @DRUGS1_2633
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2633
+set_lvar_int_to_constant 239@ = 35608
+set_lvar_text_label 240@s = 'SMO4_AJ'
+gosub @DRUGS1_51600
+
+:DRUGS1_2633
+if 
+  282@ == 8
+goto_if_false @DRUGS1_2700
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2700
+set_lvar_int_to_constant 239@ = 35609
+set_lvar_text_label 240@s = 'SMO4_AK'
+gosub @DRUGS1_51600
+
+:DRUGS1_2700
+if 
+  282@ == 9
+goto_if_false @DRUGS1_2767
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2767
+set_lvar_int_to_constant 239@ = 35610
+set_lvar_text_label 240@s = 'SMO4_AL'
+gosub @DRUGS1_51600
+
+:DRUGS1_2767
+if 
+  282@ == 10
+goto_if_false @DRUGS1_2834
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2834
+set_lvar_int_to_constant 239@ = 35611
+set_lvar_text_label 240@s = 'SMO4_AM'
+gosub @DRUGS1_51600
+
+:DRUGS1_2834
+if 
+  282@ == 11
+goto_if_false @DRUGS1_2901
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2901
+set_lvar_int_to_constant 239@ = 35612
+set_lvar_text_label 240@s = 'SMO4_AN'
+gosub @DRUGS1_51600
+
+:DRUGS1_2901
+if 
+  282@ == 12
+goto_if_false @DRUGS1_2968
+if 
+  283@ == 0
+goto_if_false @DRUGS1_2968
+set_lvar_int_to_constant 239@ = 35613
+set_lvar_text_label 240@s = 'SMO4_AO'
+gosub @DRUGS1_51600
+
+:DRUGS1_2968
+if 
+  90@ == 1
+goto_if_false @DRUGS1_5137
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRUGS1_5137
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_5137
+if 
+  Char.IsSittingInCar($big_smoke, 34@)
+goto_if_false @DRUGS1_5137
+if 
+  Char.IsSittingInCar($scplayer, 34@)
+goto_if_false @DRUGS1_5137
+if 
+  Car.Locate3D(34@, 1, 1722.568, -1597.92, 12.45, 4.0, 4.0, 5.0)
+goto_if_false @DRUGS1_5137
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+World.DisableAllEntryExits(True)
+Game.SetMaxWantedLevel(0)
+122@ = 0
+World.ClearArea(1, 1722.568, -1597.92, 300.0, 300.0)
+World.SetCarDensityMultiplier(0.0)
+World.SetPedDensityMultiplier(0.0)
+Camera.SetFixedPosition(1711.449, -1576.924, 30.3531, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1711.628, -1577.821, 29.9486, SwitchType.JumpCut)
+Task.LeaveAnyCar($big_smoke)
+Task.LeaveAnyCar($scplayer)
+Camera.DoFade(0, 2000)
+
+:DRUGS1_3236
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRUGS1_3260
+wait 0
+goto @DRUGS1_3236
+
+:DRUGS1_3260
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Streaming.RequestModel(352)
+Streaming.RequestModel(346)
+Streaming.RequestModel(353)
+Streaming.RequestAnimation("JST_BUISNESS")
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(35614, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.LoadMissionAudio(35615, 2)
+Streaming.LoadAllModelsNow
+
+:DRUGS1_3326
+if or
+  not Streaming.HasModelLoaded(346)
+  not Streaming.HasModelLoaded(353)
+  not Streaming.HasAnimationLoaded("JST_BUISNESS")
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_3382
+wait 0
+goto @DRUGS1_3326
+
+:DRUGS1_3382
+if 
+  not Streaming.HasModelLoaded(353)
+goto_if_false @DRUGS1_3409
+wait 0
+goto @DRUGS1_3382
+
+:DRUGS1_3409
+37@ = Char.Create(24, 93, 1718.283, -1633.178, 19.2035)
+Char.ShutUp(37@, True)
+Char.SetHeading(37@, 59.5412)
+Task.PlayAnimNonInterruptable(37@, "SEAT_IDLE", "PED", 4.0, True, False, False, False, -1)
+Char.SetDecisionMaker(37@, 35@)
+Char.ShutUp(37@, True)
+38@ = Char.Create(24, 93, 1717.72, -1633.952, 19.2029)
+Char.SetHeading(38@, 313.3566)
+Char.ShutUp(38@, True)
+Task.PlayAnimNonInterruptable(38@, "SEAT_IDLE", "PED", 4.0, True, False, False, False, -1)
+Char.SetDecisionMaker(38@, 35@)
+Char.ShutUp(38@, True)
+39@ = Char.Create(24, 93, 1712.811, -1629.454, 19.201)
+Char.SetHeading(39@, 48.5227)
+Char.ShutUp(39@, True)
+Task.PlayAnimNonInterruptable(39@, "SEAT_IDLE", "PED", 4.0, True, False, False, False, -1)
+Char.SetDecisionMaker(39@, 35@)
+Char.ShutUp(39@, True)
+40@ = Char.Create(24, 93, 1712.146, -1630.165, 19.2003)
+Char.SetHeading(40@, 322.1413)
+Char.ShutUp(40@, True)
+Task.PlayAnimNonInterruptable(40@, "SEAT_IDLE", "PED", 4.0, True, False, False, False, -1)
+Char.SetDecisionMaker(40@, 35@)
+Char.ShutUp(40@, True)
+41@ = Char.Create(24, 93, 1732.528, -1627.45, 19.2044)
+Char.SetHeading(41@, 275.6598)
+Char.ShutUp(41@, True)
+Task.PlayAnimNonInterruptable(41@, "SEAT_IDLE", "PED", 4.0, True, False, False, False, -1)
+Char.SetDecisionMaker(41@, 35@)
+Char.ShutUp(41@, True)
+42@ = Char.Create(24, 111, 1729.973, -1649.115, 19.274)
+Char.SetHeading(42@, 11.051)
+Char.SetDecisionMaker(42@, 35@)
+Char.GiveWeapon(42@, WeaponType.Mp5, 9999)
+Char.SetAreaVisible(42@, 18)
+Char.SetHealth(42@, 35)
+214@ = Blip.AddForChar(42@)
+Blip.ChangeDisplay(214@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(214@, 2)
+Char.SetKeepTask(42@, True)
+43@ = Char.Create(24, 112, 1729.971, -1657.139, 19.278)
+Char.SetHeading(43@, 21.106)
+Char.SetHealth(43@, 10)
+Char.SetDecisionMaker(43@, 35@)
+Char.SetWeaponSkill(43@, 2)
+Char.GiveWeapon(43@, WeaponType.Pistol, 9999)
+Char.SetAccuracy(43@, 60)
+Char.SetAreaVisible(43@, 18)
+215@ = Blip.AddForChar(43@)
+Blip.ChangeDisplay(215@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(215@, 2)
+Char.SetKeepTask(43@, True)
+Char.SetShootRate(43@, 50)
+44@ = Char.Create(24, 112, 1722.311, -1658.636, 19.108)
+Char.SetHeading(44@, 352.526)
+Char.SetDecisionMaker(44@, 36@)
+Char.SetWeaponSkill(44@, 2)
+Char.GiveWeapon(44@, WeaponType.Pistol, 9999)
+Char.SetAreaVisible(44@, 18)
+216@ = Blip.AddForChar(44@)
+Blip.ChangeDisplay(216@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(216@, 2)
+Char.SetKeepTask(44@, True)
+45@ = Char.Create(24, 111, 1712.399, -1657.463, 19.26)
+Char.SetHealth(45@, 150)
+Char.SetHeading(45@, 323.108)
+Char.SetDecisionMaker(45@, 36@)
+Char.SetWeaponSkill(45@, 2)
+Char.GiveWeapon(45@, WeaponType.Pistol, 9999)
+Char.SetAreaVisible(45@, 18)
+Char.SetAccuracy(45@, 50)
+217@ = Blip.AddForChar(45@)
+Blip.ChangeDisplay(217@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(217@, 2)
+Char.SetKeepTask(45@, True)
+Char.SetMaxHealth(45@, 150)
+Char.SetHealth(45@, 150)
+Char.SetShootRate(45@, 50)
+46@ = Char.Create(24, 111, 1712.763, -1664.816, 19.273)
+Char.SetHeading(46@, 329.331)
+Char.SetDecisionMaker(46@, 36@)
+Char.GiveWeapon(46@, WeaponType.Mp5, 9999)
+Char.SetAccuracy(46@, 50)
+Char.SetMaxHealth(46@, 150)
+Char.SetHealth(46@, 150)
+Char.SetAreaVisible(46@, 18)
+218@ = Blip.AddForChar(46@)
+Blip.ChangeDisplay(218@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(218@, 2)
+Char.SetKeepTask(46@, True)
+47@ = Char.Create(24, 111, 1718.711, -1655.182, 19.108)
+Char.SetHeading(47@, 327.782)
+Char.SetDecisionMaker(47@, 35@)
+Char.SetWeaponSkill(47@, 2)
+Char.GiveWeapon(47@, WeaponType.Pistol, 9999)
+Char.SetAreaVisible(47@, 18)
+Char.SetAccuracy(47@, 60)
+219@ = Blip.AddForChar(47@)
+Blip.ChangeDisplay(219@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(219@, 2)
+Char.SetKeepTask(47@, True)
+48@ = Char.Create(24, 112, 1701.8, -1650.28, 19.26)
+Char.SetHeading(48@, 265.623)
+Char.SetDecisionMaker(48@, 35@)
+Char.SetWeaponSkill(48@, 2)
+Char.GiveWeapon(48@, WeaponType.Pistol, 9999)
+Char.SetMaxHealth(48@, 150)
+Char.SetHealth(48@, 150)
+Char.SetAreaVisible(48@, 18)
+220@ = Blip.AddForChar(48@)
+Blip.ChangeDisplay(220@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(220@, 2)
+Char.SetKeepTask(48@, True)
+Char.SetShootRate(48@, 50)
+51@ = Char.Create(24, 112, 1719.6, -1671.764, 22.741)
+Char.SetHealth(51@, 5)
+Char.SetHeading(51@, 11.45)
+Char.SetDecisionMaker(51@, 35@)
+Char.GiveWeapon(51@, WeaponType.Mp5, 9999)
+Char.SetAllowedToDuck(51@, False)
+Char.SetAreaVisible(51@, 18)
+223@ = Blip.AddForChar(51@)
+Blip.ChangeDisplay(223@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(223@, 2)
+Char.SetKeepTask(51@, True)
+52@ = Char.Create(24, 112, 1701.897, -1668.039, 19.23)
+Char.SetHeading(52@, 276.178)
+Char.SetDecisionMaker(52@, 35@)
+Char.SetWeaponSkill(52@, 2)
+Char.GiveWeapon(52@, WeaponType.Pistol, 9999)
+Char.SetAreaVisible(52@, 18)
+Char.SetAccuracy(52@, 60)
+224@ = Blip.AddForChar(52@)
+Blip.ChangeDisplay(224@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(224@, 2)
+Char.SetKeepTask(52@, True)
+Char.SetMaxHealth(52@, 150)
+Char.SetHealth(52@, 150)
+53@ = Char.Create(24, 111, 1725.037, -1672.69, 22.735)
+Char.SetHeading(53@, 127.283)
+Char.SetDecisionMaker(53@, 35@)
+Char.SetWeaponSkill(53@, 2)
+Char.GiveWeapon(53@, WeaponType.Pistol, 9999)
+Char.SetAccuracy(53@, 60)
+Char.SetAreaVisible(53@, 18)
+225@ = Blip.AddForChar(53@)
+Blip.ChangeDisplay(225@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(225@, 2)
+Char.SetKeepTask(53@, True)
+Char.SetShootRate(53@, 50)
+54@ = Char.Create(24, 111, 1733.358, -1664.599, 22.747)
+Char.SetHeading(54@, 141.981)
+Char.SetDecisionMaker(54@, 35@)
+Char.SetWeaponSkill(54@, 2)
+Char.GiveWeapon(54@, WeaponType.Pistol, 9999)
+Char.SetAccuracy(54@, 50)
+Char.SetAreaVisible(54@, 18)
+226@ = Blip.AddForChar(54@)
+Blip.ChangeDisplay(226@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(226@, 2)
+Char.SetKeepTask(54@, True)
+Char.SetMaxHealth(54@, 150)
+Char.SetHealth(54@, 150)
+Streaming.LoadSceneInDirection(1726.993, -1628.007, 20.2, 8.98)
+Streaming.LoadSceneInDirection(1726.993, -1628.007, 20.2, 169.7)
+90@ = 2
+
+:DRUGS1_5137
+if 
+  90@ == 2
+goto_if_false @DRUGS1_5401
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_5401
+if 
+  not Char.IsInAnyCar($big_smoke)
+goto_if_false @DRUGS1_5401
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @DRUGS1_5401
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately($big_smoke)
+Char.SetCoordinates($scplayer, 1726.04, -1632.521, 19.18)
+Char.SetHeading($scplayer, 180.0)
+Char.SetCoordinates($big_smoke, 1726.815, -1633.001, 19.18)
+Char.SetHeading($big_smoke, 180.0)
+63@ = Char.Create(24, 91, 1727.757, -1632.918, 19.18)
+Char.SetHeading(63@, 270.0)
+Char.SetDecisionMaker(63@, 35@)
+Char.ShutUp(63@, True)
+TIMERB = 0
+Camera.SetFixedPosition(1728.489, -1633.539, 20.16, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1726.404, -1632.053, 20.279, SwitchType.JumpCut)
+TIMERA = 0
+99@ = 1
+90@ = 8
+
+:DRUGS1_5401
+if 
+  90@ == 8
+goto_if_false @DRUGS1_6890
+if 
+  99@ == 1
+goto_if_false @DRUGS1_5472
+if 
+  TIMERA > 1000
+goto_if_false @DRUGS1_5472
+Text.ClearPrints
+Camera.DoFade(1, 500)
+99@ = 2
+
+:DRUGS1_5472
+if 
+  99@ == 2
+goto_if_false @DRUGS1_5710
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_5710
+if 
+  not Char.IsDead(63@)
+goto_if_false @DRUGS1_5710
+Char.SetCollision(63@, False)
+Char.SetCollision($big_smoke, False)
+Char.SetCollision($scplayer, False)
+Task.PlayAnimNonInterruptable($scplayer, "PLAYER_01", "JST_BUISNESS", 1000.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable($big_smoke, "SMOKE_01", "JST_BUISNESS", 1000.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(63@, "GIRL_01", "JST_BUISNESS", 1000.0, False, False, False, True, -1)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+TIMERB = 0
+93@ = 0
+skip_cutscene_start_internal @DRUGS1_6960
+99@ = 3
+
+:DRUGS1_5710
+if 
+  99@ == 3
+goto_if_false @DRUGS1_5849
+if 
+  TIMERB > 2066
+goto_if_false @DRUGS1_5849
+Camera.SetFixedPosition(1726.35, -1630.824, 20.7289, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1726.411, -1631.822, 20.7195, SwitchType.JumpCut)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_5826
+Char.StartFacialTalk($big_smoke, 10000)
+
+:DRUGS1_5826
+Text.PrintNow('SMO4_BA', 5000, 1)
+99@ = 4
+
+:DRUGS1_5849
+if 
+  99@ == 4
+goto_if_false @DRUGS1_6023
+if 
+  TIMERB > 4999
+goto_if_false @DRUGS1_6023
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_6023
+Camera.SetFixedPosition(1726.37, -1633.38, 20.6705, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1726.416, -1632.381, 20.6667, SwitchType.JumpCut)
+Text.ClearPrints
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_5979
+Char.StopFacialTalk($big_smoke)
+
+:DRUGS1_5979
+Text.PrintNow('SMO4_BB', 5000, 1)
+Char.StartFacialTalk($scplayer, 10000)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(35616, 1)
+99@ = 5
+
+:DRUGS1_6023
+if 
+  99@ == 5
+goto_if_false @DRUGS1_6140
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_6140
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_6140
+Char.StopFacialTalk($scplayer)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_6104
+Char.StartFacialTalk($big_smoke, 10000)
+
+:DRUGS1_6104
+Text.PrintNow('SMO4_BC', 5000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.LoadMissionAudio(35617, 2)
+99@ = 6
+
+:DRUGS1_6140
+if 
+  99@ == 6
+goto_if_false @DRUGS1_6224
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_6224
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_6224
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow('SMO4_BD', 5000, 1)
+Audio.LoadMissionAudio(35618, 1)
+99@ = 7
+
+:DRUGS1_6224
+if 
+  99@ == 7
+goto_if_false @DRUGS1_6468
+if 
+  TIMERB > 9999
+goto_if_false @DRUGS1_6468
+if 
+  not Char.IsDead(63@)
+goto_if_false @DRUGS1_6468
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_6468
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_6468
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_6328
+Char.StopFacialTalk($big_smoke)
+
+:DRUGS1_6328
+Char.ClearTasksImmediately(63@)
+Char.SetCoordinates(63@, 1732.785, -1633.043, 19.2)
+Char.SetHeading(63@, 0.0)
+Task.PlayAnimNonInterruptable(63@, "GIRL_02", "JST_BUISNESS", 1000.0, False, False, False, True, -1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('SMO4_BE', 3000, 1)
+Camera.SetNearClip(0.09)
+Char.StartFacialTalk($scplayer, 2000)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.LoadMissionAudio(35619, 2)
+129@ = 1
+99@ = 8
+
+:DRUGS1_6468
+if 
+  129@ == 1
+goto_if_false @DRUGS1_6513
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_6513
+Char.StopFacialTalk($scplayer)
+129@ = 2
+
+:DRUGS1_6513
+if 
+  99@ == 8
+goto_if_false @DRUGS1_6678
+if 
+  TIMERB > 18500
+goto_if_false @DRUGS1_6678
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_6678
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_6678
+Camera.SetFixedPosition(1725.094, -1632.446, 20.7074, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1726.091, -1632.391, 20.6711, SwitchType.JumpCut)
+Camera.SetNearClip(0.1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow('SMO4_BF', 3000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(35620, 1)
+99@ = 9
+
+:DRUGS1_6678
+if 
+  99@ == 9
+goto_if_false @DRUGS1_6758
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_6758
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_6758
+Char.StopFacialTalk($scplayer)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('SMO4_BG', 5000, 1)
+99@ = 10
+
+:DRUGS1_6758
+if 
+  99@ == 10
+goto_if_false @DRUGS1_6890
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_6890
+Text.ClearPrints
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_6890
+if 
+  Char.IsPlayingAnim($scplayer, "PLAYER_01")
+goto_if_false @DRUGS1_6890
+62@ = Char.GetAnimCurrentTime($scplayer, "PLAYER_01")
+if 
+  62@ == 1.0
+goto_if_false @DRUGS1_6890
+90@ = 10
+99@ = 11
+
+:DRUGS1_6890
+if 
+  90@ == 10
+goto_if_false @DRUGS1_9251
+if 
+  TIMERA > 2000
+goto_if_false @DRUGS1_9251
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_9251
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearPrints
+93@ = 1
+
+:DRUGS1_6960
+skip_cutscene_end 
+Camera.DoFade(0, 1000)
+
+:DRUGS1_6969
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRUGS1_6993
+wait 0
+goto @DRUGS1_6969
+
+:DRUGS1_6993
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearPrints
+Streaming.SetAreaVisible(18)
+Streaming.LoadScene(1722.81, -1658.54, 20.19)
+if 
+  93@ == 0
+goto_if_false @DRUGS1_8359
+Text.ClearPrints
+Char.Delete(37@)
+Char.Delete(38@)
+Char.Delete(39@)
+Char.Delete(40@)
+Char.Delete(41@)
+Char.Delete(42@)
+Char.Delete(43@)
+Char.Delete(44@)
+Char.Delete(45@)
+Char.Delete(46@)
+Char.Delete(47@)
+Char.Delete(48@)
+Char.Delete(51@)
+Char.Delete(52@)
+Char.Delete(53@)
+Char.Delete(54@)
+Streaming.MarkModelAsNoLongerNeeded(91)
+Streaming.MarkModelAsNoLongerNeeded(93)
+Car.Delete(34@)
+Streaming.MarkModelAsNoLongerNeeded(466)
+42@ = Char.Create(24, 111, 1729.973, -1649.115, 19.274)
+Char.SetHeading(42@, 11.051)
+Char.SetDecisionMaker(42@, 35@)
+Char.GiveWeapon(42@, WeaponType.Mp5, 9999)
+Char.SetAreaVisible(42@, 18)
+Char.SetHealth(42@, 35)
+214@ = Blip.AddForChar(42@)
+Blip.ChangeDisplay(214@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(214@, 2)
+Char.SetKeepTask(42@, True)
+43@ = Char.Create(24, 112, 1729.971, -1657.139, 19.278)
+Char.SetHealth(43@, 10)
+Char.SetHeading(43@, 21.106)
+Char.SetDecisionMaker(43@, 35@)
+Char.SetWeaponSkill(43@, 2)
+Char.GiveWeapon(43@, WeaponType.Pistol, 9999)
+Char.SetAccuracy(43@, 60)
+Char.SetAreaVisible(43@, 18)
+215@ = Blip.AddForChar(43@)
+Blip.ChangeDisplay(215@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(215@, 2)
+Char.SetShootRate(43@, 50)
+Char.SetKeepTask(43@, True)
+44@ = Char.Create(24, 112, 1722.311, -1658.636, 19.108)
+Char.SetHeading(44@, 352.526)
+Char.SetDecisionMaker(44@, 36@)
+Char.SetWeaponSkill(44@, 2)
+Char.GiveWeapon(44@, WeaponType.Pistol, 9999)
+Char.SetAreaVisible(44@, 18)
+216@ = Blip.AddForChar(44@)
+Blip.ChangeDisplay(216@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(216@, 2)
+Char.SetKeepTask(44@, True)
+45@ = Char.Create(24, 111, 1712.399, -1657.463, 19.26)
+Char.SetHealth(45@, 150)
+Char.SetHeading(45@, 323.108)
+Char.SetDecisionMaker(45@, 36@)
+Char.SetWeaponSkill(45@, 2)
+Char.GiveWeapon(45@, WeaponType.Pistol, 9999)
+Char.SetAreaVisible(45@, 18)
+217@ = Blip.AddForChar(45@)
+Blip.ChangeDisplay(217@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(217@, 2)
+Char.SetAccuracy(45@, 60)
+Char.SetKeepTask(45@, True)
+Char.SetMaxHealth(45@, 150)
+Char.SetHealth(45@, 150)
+Char.SetShootRate(45@, 50)
+46@ = Char.Create(24, 111, 1712.763, -1664.816, 19.273)
+Char.SetHeading(46@, 329.331)
+Char.SetDecisionMaker(46@, 36@)
+Char.GiveWeapon(46@, WeaponType.Mp5, 9999)
+Char.SetAccuracy(46@, 70)
+Char.SetMaxHealth(46@, 150)
+Char.SetHealth(46@, 150)
+Char.SetAreaVisible(46@, 18)
+218@ = Blip.AddForChar(46@)
+Blip.ChangeDisplay(218@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(218@, 2)
+Char.SetKeepTask(46@, True)
+47@ = Char.Create(24, 111, 1718.711, -1655.182, 19.108)
+Char.SetHeading(47@, 327.782)
+Char.SetDecisionMaker(47@, 35@)
+Char.SetWeaponSkill(47@, 2)
+Char.GiveWeapon(47@, WeaponType.Pistol, 9999)
+Char.SetAreaVisible(47@, 18)
+219@ = Blip.AddForChar(47@)
+Blip.ChangeDisplay(219@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(219@, 2)
+Char.SetAccuracy(47@, 60)
+Char.SetKeepTask(47@, True)
+48@ = Char.Create(24, 112, 1701.8, -1650.28, 19.26)
+Char.SetHeading(48@, 265.623)
+Char.SetDecisionMaker(48@, 35@)
+Char.SetWeaponSkill(48@, 2)
+Char.GiveWeapon(48@, WeaponType.Pistol, 9999)
+Char.SetMaxHealth(48@, 150)
+Char.SetHealth(48@, 150)
+Char.SetAreaVisible(48@, 18)
+220@ = Blip.AddForChar(48@)
+Blip.ChangeDisplay(220@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(220@, 2)
+Char.SetKeepTask(48@, True)
+Char.SetShootRate(48@, 60)
+51@ = Char.Create(24, 112, 1719.6, -1671.764, 22.741)
+Char.SetHealth(51@, 5)
+Char.SetHeading(51@, 11.45)
+Char.SetDecisionMaker(51@, 35@)
+Char.GiveWeapon(51@, WeaponType.Mp5, 9999)
+Char.SetAllowedToDuck(51@, False)
+Char.SetAreaVisible(51@, 18)
+223@ = Blip.AddForChar(51@)
+Blip.ChangeDisplay(223@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(223@, 2)
+Char.SetKeepTask(51@, True)
+52@ = Char.Create(24, 112, 1701.897, -1668.039, 19.23)
+Char.SetHeading(52@, 276.178)
+Char.SetDecisionMaker(52@, 35@)
+Char.SetWeaponSkill(52@, 2)
+Char.GiveWeapon(52@, WeaponType.Pistol, 9999)
+Char.SetAreaVisible(52@, 18)
+Char.SetAccuracy(52@, 60)
+224@ = Blip.AddForChar(52@)
+Blip.ChangeDisplay(224@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(224@, 2)
+Char.SetKeepTask(52@, True)
+Char.SetMaxHealth(52@, 150)
+Char.SetHealth(52@, 150)
+53@ = Char.Create(24, 111, 1725.037, -1672.69, 22.735)
+Char.SetHeading(53@, 127.283)
+Char.SetDecisionMaker(53@, 35@)
+Char.SetWeaponSkill(53@, 2)
+Char.GiveWeapon(53@, WeaponType.Pistol, 9999)
+Char.SetAccuracy(53@, 60)
+Char.SetAreaVisible(53@, 18)
+225@ = Blip.AddForChar(53@)
+Blip.ChangeDisplay(225@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(225@, 2)
+Char.SetKeepTask(53@, True)
+Char.SetShootRate(53@, 50)
+54@ = Char.Create(24, 111, 1733.358, -1664.599, 22.747)
+Char.SetHeading(54@, 141.981)
+Char.SetDecisionMaker(54@, 35@)
+Char.SetWeaponSkill(54@, 2)
+Char.GiveWeapon(54@, WeaponType.Pistol, 9999)
+Char.SetAccuracy(54@, 65)
+Char.SetAreaVisible(54@, 18)
+226@ = Blip.AddForChar(54@)
+Blip.ChangeDisplay(226@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(226@, 2)
+Char.SetKeepTask(54@, True)
+Char.SetMaxHealth(54@, 150)
+Char.SetHealth(54@, 150)
+
+:DRUGS1_8359
+if 
+  $smokeshoot_s4flag == 0
+goto_if_false @DRUGS1_8626
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_8626
+Char.ClearTasksImmediately($big_smoke)
+Char.SetCollision($big_smoke, True)
+Char.SetCollision($scplayer, True)
+Char.StopFacialTalk($big_smoke)
+Char.StopFacialTalk($scplayer)
+Char.SetCoordinates($big_smoke, 1727.884, -1641.127, 19.2323)
+Char.SetHeading($big_smoke, 182.5173)
+Char.SetHasUsedEntryExit($big_smoke, 1727.009, -1635.826, 1.0)
+89@ = Blip.AddForChar($big_smoke)
+Char.SetAccuracy($big_smoke, 100)
+Char.SetAreaVisible($big_smoke, 18)
+Blip.SetAsFriendly(89@, True)
+Char.SetHasUsedEntryExit($scplayer, 1727.009, -1635.826, 1.0)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Streaming.LoadScene(1727.884, -1641.127, 19.2323)
+Char.GiveWeapon($big_smoke, WeaponType.MicroUzi, 99999)
+Char.SetMaxHealth($big_smoke, 500)
+Char.SetHealth($big_smoke, 500)
+$smokehealth_s4 = Char.GetHealth($big_smoke)
+Char.SetShootRate($big_smoke, 55)
+$smokehealth_s4 /= 5
+Hud.DisplayCounterWithString($smokehealth_s4, CounterDisplay.Bar, 'DGS1_58')
+Task.ToggleDuck($big_smoke, True)
+$smokeshoot_s4flag = 1
+
+:DRUGS1_8626
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(35624, 1)
+Hud.SwitchWidescreen(True)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 1725.933, -1638.374, 19.2232)
+Char.SetHeading($scplayer, 174.7897)
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_8709
+Char.SetProofs($big_smoke, True, True, True, True, True)
+
+:DRUGS1_8709
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_8735
+wait 0
+goto @DRUGS1_8709
+
+:DRUGS1_8735
+Camera.DoFade(1, 250)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_8777
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('SMO4_BL', 2500, 1)
+
+:DRUGS1_8777
+if 
+  not Char.IsDead(42@)
+goto_if_false @DRUGS1_8832
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_8832
+set_lvar_int_to_lvar_int 79@ = 42@
+set_lvar_int_to_var_int 80@ = $big_smoke
+gosub @DRUGS1_51943
+
+:DRUGS1_8832
+if 
+  not Char.IsDead(44@)
+goto_if_false @DRUGS1_8887
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_8887
+set_lvar_int_to_lvar_int 79@ = 44@
+set_lvar_int_to_var_int 80@ = $big_smoke
+gosub @DRUGS1_51987
+
+:DRUGS1_8887
+Camera.SetFixedPosition(1726.528, -1637.829, 21.257, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1726.477, -1638.779, 20.9496, SwitchType.JumpCut)
+Task.ToggleDuck($scplayer, True)
+Task.GoStraightToCoord($scplayer, 1724.626, -1640.693, 20.2245, MoveState.Walk, -1)
+TIMERA = 0
+
+:DRUGS1_8976
+if or
+  not Char.LocateStoppedAnyMeans2D($scplayer, 0, 1724.626, -1640.693, 1.5, 1.5)
+  TIMERA <= 1500
+goto_if_false @DRUGS1_9033
+wait 0
+goto @DRUGS1_8976
+
+:DRUGS1_9033
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_9050
+Text.ClearPrints
+
+:DRUGS1_9050
+Char.GiveWeapon($scplayer, WeaponType.MicroUzi, 120)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Char.ClearTasksImmediately($scplayer)
+Char.SetHeading($scplayer, 180.0)
+Hud.SwitchWidescreen(False)
+Char.SetCollision($scplayer, True)
+Streaming.RemoveAnimation("JST_BUISNESS")
+Blip.Remove(88@)
+Char.Delete(37@)
+Char.Delete(38@)
+Char.Delete(39@)
+Char.Delete(40@)
+Streaming.MarkModelAsNoLongerNeeded(93)
+Streaming.MarkModelAsNoLongerNeeded(91)
+Char.Delete(63@)
+Car.Delete(34@)
+Streaming.MarkModelAsNoLongerNeeded(466)
+Player.SetControl($player1, True)
+Task.ToggleDuck($scplayer, True)
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_9198
+Char.SetProofs($big_smoke, False, False, False, False, False)
+
+:DRUGS1_9198
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+123@ = 1
+282@ = 0
+283@ = 0
+125@ = 1
+90@ = 11
+TIMERA = 0
+128@ = 2
+
+:DRUGS1_9251
+if 
+  90@ == 11
+goto_if_false @DRUGS1_15741
+if 
+  128@ == 2
+goto_if_false @DRUGS1_15741
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_9318
+$smokehealth_s4 = Char.GetHealth($big_smoke)
+$smokehealth_s4 /= 5
+
+:DRUGS1_9318
+if 
+  126@ == 0
+goto_if_false @DRUGS1_13730
+if 
+  $smokeshoot_s4flag == 1
+goto_if_false @DRUGS1_9811
+if 
+  not Char.IsDead(43@)
+goto_if_false @DRUGS1_9393
+set_lvar_int_to_lvar_int 79@ = 43@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51987
+
+:DRUGS1_9393
+if 
+  not Char.IsDead(45@)
+goto_if_false @DRUGS1_9432
+set_lvar_int_to_lvar_int 79@ = 45@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51943
+
+:DRUGS1_9432
+if 
+  not Char.IsDead(46@)
+goto_if_false @DRUGS1_9487
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_9487
+set_lvar_int_to_lvar_int 79@ = 46@
+set_lvar_int_to_var_int 80@ = $big_smoke
+gosub @DRUGS1_51987
+
+:DRUGS1_9487
+if 
+  not Char.IsDead(47@)
+goto_if_false @DRUGS1_9526
+set_lvar_int_to_lvar_int 79@ = 47@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51943
+
+:DRUGS1_9526
+if 
+  not Char.IsDead(51@)
+goto_if_false @DRUGS1_9565
+set_lvar_int_to_lvar_int 79@ = 51@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51987
+
+:DRUGS1_9565
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRUGS1_9664
+set_lvar_int_to_lvar_int 79@ = 53@
+set_lvar_int_to_var_int 80@ = $scplayer
+81@ = 1728.416
+82@ = -1669.709
+83@ = 22.84935
+84@ = 1721.637
+85@ = -1662.946
+86@ = 20.27
+gosub @DRUGS1_51806
+
+:DRUGS1_9664
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_9797
+122@ = 1
+69@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.StayInSamePlace(-1, True)
+if 
+  not Char.IsDead(42@)
+goto_if_false @DRUGS1_9727
+Task.KillCharOnFoot(-1, 42@)
+
+:DRUGS1_9727
+if 
+  not Char.IsDead(43@)
+goto_if_false @DRUGS1_9750
+Task.KillCharOnFoot(-1, 43@)
+
+:DRUGS1_9750
+Task.StayInSamePlace(-1, False)
+Task.GoStraightToCoord(-1, 1727.717, -1658.271, 20.277, MoveState.Run, -1)
+Sequence.Close(69@)
+Char.PerformSequence($big_smoke, 69@)
+Sequence.Clear(69@)
+
+:DRUGS1_9797
+TIMERA = 0
+$smokeshoot_s4flag = 2
+
+:DRUGS1_9811
+if 
+  $smokeshoot_s4flag == 2
+goto_if_false @DRUGS1_10022
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_10022
+77@ = Char.GetScriptTaskStatus($big_smoke, 1560)
+if 
+  is_int_lvar_equal_to_constant 77@ == 7
+goto_if_false @DRUGS1_10022
+Char.SetAccuracy($big_smoke, 50)
+70@ = Sequence.Open()
+122@ = 2
+Task.StayInSamePlace(-1, True)
+if 
+  not Char.IsDead(44@)
+goto_if_false @DRUGS1_9922
+Task.KillCharOnFoot(-1, 44@)
+
+:DRUGS1_9922
+if 
+  not Char.IsDead(52@)
+goto_if_false @DRUGS1_9945
+Task.KillCharOnFoot(-1, 52@)
+
+:DRUGS1_9945
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRUGS1_9968
+Task.KillCharOnFoot(-1, 53@)
+
+:DRUGS1_9968
+Task.StayInSamePlace(-1, False)
+Task.FollowPathNodesToCoord(-1, 1719.854, -1666.667, 20.271, 6, -1)
+Sequence.Close(70@)
+Char.PerformSequence($big_smoke, 70@)
+Sequence.Clear(70@)
+$smokeshoot_s4flag = 3
+
+:DRUGS1_10022
+if 
+  $smokeshoot_s4flag == 3
+goto_if_false @DRUGS1_10226
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_10226
+77@ = Char.GetScriptTaskStatus($big_smoke, 1560)
+if 
+  is_int_lvar_equal_to_constant 77@ == 7
+goto_if_false @DRUGS1_10226
+122@ = 3
+71@ = Sequence.Open()
+Task.StayInSamePlace(-1, True)
+if 
+  not Char.IsDead(46@)
+goto_if_false @DRUGS1_10126
+Task.KillCharOnFoot(-1, 46@)
+
+:DRUGS1_10126
+if 
+  not Char.IsDead(47@)
+goto_if_false @DRUGS1_10149
+Task.KillCharOnFoot(-1, 47@)
+
+:DRUGS1_10149
+if 
+  not Char.IsDead(48@)
+goto_if_false @DRUGS1_10172
+Task.KillCharOnFoot(-1, 48@)
+
+:DRUGS1_10172
+Task.StayInSamePlace(-1, False)
+Task.FollowPathNodesToCoord(-1, 1713.96, -1668.24, 19.27, 6, -1)
+Sequence.Close(71@)
+Char.PerformSequence($big_smoke, 71@)
+Sequence.Clear(71@)
+$smokeshoot_s4flag = 4
+
+:DRUGS1_10226
+if 
+  $smokeshoot_s4flag == 4
+goto_if_false @DRUGS1_10407
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_10407
+77@ = Char.GetScriptTaskStatus($big_smoke, 1560)
+if 
+  is_int_lvar_equal_to_constant 77@ == 7
+goto_if_false @DRUGS1_10407
+122@ = 4
+72@ = Sequence.Open()
+Task.StayInSamePlace(-1, True)
+Task.ToggleDuck(-1, True)
+if 
+  not Char.IsDead(45@)
+goto_if_false @DRUGS1_10336
+Task.KillCharOnFoot(-1, 45@)
+
+:DRUGS1_10336
+if 
+  not Char.IsDead(51@)
+goto_if_false @DRUGS1_10359
+Task.KillCharOnFoot(-1, 51@)
+
+:DRUGS1_10359
+if 
+  not Char.IsDead(54@)
+goto_if_false @DRUGS1_10382
+Task.KillCharOnFoot(-1, 54@)
+
+:DRUGS1_10382
+Sequence.Close(72@)
+Char.PerformSequence($big_smoke, 72@)
+Sequence.Clear(72@)
+$smokeshoot_s4flag = 5
+
+:DRUGS1_10407
+if 
+  $smokeshoot_s4flag == 5
+goto_if_false @DRUGS1_10542
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_10542
+77@ = Char.GetScriptTaskStatus($big_smoke, 1560)
+if 
+  is_int_lvar_equal_to_constant 77@ == 7
+goto_if_false @DRUGS1_10542
+122@ = 5
+73@ = Sequence.Open()
+Task.StayInSamePlace(-1, False)
+Task.FollowPathNodesToCoord(-1, 1704.45, -1667.71, 19.68, 6, -1)
+Task.StayInSamePlace(-1, True)
+Sequence.Close(73@)
+Char.PerformSequence($big_smoke, 73@)
+Sequence.Clear(73@)
+$smokeshoot_s4flag = 6
+
+:DRUGS1_10542
+if 
+  94@ == 0
+goto_if_false @DRUGS1_10617
+if 
+  not Char.IsDead(44@)
+goto_if_false @DRUGS1_10617
+if 
+  Char.HasBeenDamagedByChar(44@, $scplayer)
+goto_if_false @DRUGS1_10617
+Task.StayInSamePlace(44@, False)
+Task.KillCharOnFoot(44@, $scplayer)
+94@ = 1
+
+:DRUGS1_10617
+if 
+  95@ == 0
+goto_if_false @DRUGS1_10732
+if or
+  Char.LocateAnyMeans3D($scplayer, 0, 1727.0, -1637.0, 20.0, 3.0, 3.0, 5.0)
+  Char.LocateAnyMeans3D($scplayer, 0, 1700.19, -1667.58, 20.0, 6.5, 6.5, 5.0)
+goto_if_false @DRUGS1_10732
+Char.RemoveElegantly(41@)
+95@ = 1
+
+:DRUGS1_10732
+if 
+  96@ == 0
+goto_if_false @DRUGS1_11010
+if 
+  Char.DoesExist(48@)
+goto_if_false @DRUGS1_11010
+if or
+  Char.IsInArea3D($scplayer, 0, 1707.16, -1643.73, 17.0, 1735.9, -1653.46, 22.0)
+  Char.HasBeenDamagedByChar(48@, $scplayer)
+  Char.IsDead(44@)
+goto_if_false @DRUGS1_11010
+if 
+  not Char.IsDead(48@)
+goto_if_false @DRUGS1_10904
+set_lvar_int_to_lvar_int 79@ = 48@
+set_lvar_int_to_var_int 80@ = $scplayer
+81@ = 1725.069
+82@ = -1649.467
+83@ = 19.27
+Char.SetMoney(48@, 250)
+gosub @DRUGS1_51894
+
+:DRUGS1_10904
+if 
+  not Char.IsDead(52@)
+goto_if_false @DRUGS1_11003
+set_lvar_int_to_lvar_int 79@ = 52@
+set_lvar_int_to_var_int 80@ = $scplayer
+81@ = 1717.0
+82@ = -1667.75
+83@ = 20.27
+84@ = 1715.609
+85@ = -1657.258
+86@ = 20.271
+gosub @DRUGS1_51806
+
+:DRUGS1_11003
+96@ = 1
+
+:DRUGS1_11010
+if 
+  98@ == 0
+goto_if_false @DRUGS1_11211
+if 
+  Char.DoesExist(54@)
+goto_if_false @DRUGS1_11211
+if or
+  Char.IsInArea3D($scplayer, 0, 1738.42, -1651.07, 17.0, 1698.7, -1659.61, 22.0)
+  Char.HasBeenDamagedByChar(54@, $scplayer)
+  Char.IsDead(45@)
+goto_if_false @DRUGS1_11211
+if 
+  not Char.IsDead(54@)
+goto_if_false @DRUGS1_11204
+set_lvar_int_to_lvar_int 79@ = 54@
+set_lvar_int_to_var_int 80@ = $scplayer
+81@ = 1729.928
+82@ = -1667.75
+83@ = 22.85
+84@ = 1725.52
+85@ = -1663.737
+86@ = 20.5
+gosub @DRUGS1_51806
+
+:DRUGS1_11204
+98@ = 1
+
+:DRUGS1_11211
+if 
+  7 > $smokeshoot_s4flag
+goto_if_false @DRUGS1_11867
+if 
+  102@ == 0
+goto_if_false @DRUGS1_11287
+if 
+  Char.IsDead(42@)
+goto_if_false @DRUGS1_11287
+Char.MarkAsNoLongerNeeded(42@)
+Blip.Remove(214@)
+124@ += 1
+102@ = 1
+
+:DRUGS1_11287
+if 
+  103@ == 0
+goto_if_false @DRUGS1_11345
+if 
+  Char.IsDead(43@)
+goto_if_false @DRUGS1_11345
+Char.MarkAsNoLongerNeeded(43@)
+Blip.Remove(215@)
+124@ += 1
+103@ = 1
+
+:DRUGS1_11345
+if 
+  104@ == 0
+goto_if_false @DRUGS1_11403
+if 
+  Char.IsDead(44@)
+goto_if_false @DRUGS1_11403
+Char.MarkAsNoLongerNeeded(44@)
+Blip.Remove(216@)
+124@ += 1
+104@ = 1
+
+:DRUGS1_11403
+if 
+  105@ == 0
+goto_if_false @DRUGS1_11461
+if 
+  Char.IsDead(45@)
+goto_if_false @DRUGS1_11461
+Char.MarkAsNoLongerNeeded(45@)
+Blip.Remove(217@)
+124@ += 1
+105@ = 1
+
+:DRUGS1_11461
+if 
+  106@ == 0
+goto_if_false @DRUGS1_11519
+if 
+  Char.IsDead(46@)
+goto_if_false @DRUGS1_11519
+Char.MarkAsNoLongerNeeded(46@)
+Blip.Remove(218@)
+124@ += 1
+106@ = 1
+
+:DRUGS1_11519
+if 
+  107@ == 0
+goto_if_false @DRUGS1_11577
+if 
+  Char.IsDead(47@)
+goto_if_false @DRUGS1_11577
+Char.MarkAsNoLongerNeeded(47@)
+Blip.Remove(219@)
+124@ += 1
+107@ = 1
+
+:DRUGS1_11577
+if 
+  108@ == 0
+goto_if_false @DRUGS1_11635
+if 
+  Char.IsDead(48@)
+goto_if_false @DRUGS1_11635
+Char.MarkAsNoLongerNeeded(48@)
+Blip.Remove(220@)
+124@ += 1
+108@ = 1
+
+:DRUGS1_11635
+if 
+  111@ == 0
+goto_if_false @DRUGS1_11693
+if 
+  Char.IsDead(51@)
+goto_if_false @DRUGS1_11693
+Char.MarkAsNoLongerNeeded(51@)
+Blip.Remove(223@)
+124@ += 1
+111@ = 1
+
+:DRUGS1_11693
+if 
+  112@ == 0
+goto_if_false @DRUGS1_11751
+if 
+  Char.IsDead(52@)
+goto_if_false @DRUGS1_11751
+Char.MarkAsNoLongerNeeded(52@)
+Blip.Remove(224@)
+124@ += 1
+112@ = 1
+
+:DRUGS1_11751
+if 
+  113@ == 0
+goto_if_false @DRUGS1_11809
+if 
+  Char.IsDead(53@)
+goto_if_false @DRUGS1_11809
+Char.MarkAsNoLongerNeeded(53@)
+Blip.Remove(225@)
+124@ += 1
+113@ = 1
+
+:DRUGS1_11809
+if 
+  114@ == 0
+goto_if_false @DRUGS1_11867
+if 
+  Char.IsDead(54@)
+goto_if_false @DRUGS1_11867
+Char.MarkAsNoLongerNeeded(54@)
+Blip.Remove(226@)
+124@ += 1
+114@ = 1
+
+:DRUGS1_11867
+if 
+  90@ == 11
+goto_if_false @DRUGS1_12510
+if 
+  126@ == 0
+goto_if_false @DRUGS1_12510
+gosub @DRUGS1_51642
+if 
+  282@ == 0
+goto_if_false @DRUGS1_11977
+if 
+  283@ == 0
+goto_if_false @DRUGS1_11977
+set_lvar_int_to_constant 239@ = 35627
+set_lvar_text_label 240@s = 'SMO4_BO'
+gosub @DRUGS1_51600
+
+:DRUGS1_11977
+if 
+  282@ == 1
+goto_if_false @DRUGS1_12044
+if 
+  283@ == 0
+goto_if_false @DRUGS1_12044
+set_lvar_int_to_constant 239@ = 35654
+set_lvar_text_label 240@s = 'SMO4_EK'
+gosub @DRUGS1_51600
+
+:DRUGS1_12044
+if 
+  282@ == 2
+goto_if_false @DRUGS1_12111
+if 
+  283@ == 0
+goto_if_false @DRUGS1_12111
+set_lvar_int_to_constant 239@ = 35637
+set_lvar_text_label 240@s = 'SMO4_DA'
+gosub @DRUGS1_51600
+
+:DRUGS1_12111
+if 
+  282@ == 3
+goto_if_false @DRUGS1_12178
+if 
+  283@ == 0
+goto_if_false @DRUGS1_12178
+set_lvar_int_to_constant 239@ = 35626
+set_lvar_text_label 240@s = 'SMO4_BN'
+gosub @DRUGS1_51600
+
+:DRUGS1_12178
+if 
+  282@ == 4
+goto_if_false @DRUGS1_12245
+if 
+  283@ == 0
+goto_if_false @DRUGS1_12245
+set_lvar_int_to_constant 239@ = 35628
+set_lvar_text_label 240@s = 'SMO4_BP'
+gosub @DRUGS1_51600
+
+:DRUGS1_12245
+if 
+  282@ == 5
+goto_if_false @DRUGS1_12312
+if 
+  283@ == 0
+goto_if_false @DRUGS1_12312
+set_lvar_int_to_constant 239@ = 35651
+set_lvar_text_label 240@s = 'SMO4_EG'
+gosub @DRUGS1_51600
+
+:DRUGS1_12312
+if 
+  282@ == 6
+goto_if_false @DRUGS1_12379
+if 
+  283@ == 0
+goto_if_false @DRUGS1_12379
+set_lvar_int_to_constant 239@ = 35653
+set_lvar_text_label 240@s = 'SMO4_EJ'
+gosub @DRUGS1_51600
+
+:DRUGS1_12379
+if 
+  127@ == 0
+goto_if_false @DRUGS1_12443
+if or
+  $smokeshoot_s4flag == 6
+  124@ == 11
+goto_if_false @DRUGS1_12443
+283@ = 0
+282@ = 12
+127@ = 1
+
+:DRUGS1_12443
+if 
+  282@ == 12
+goto_if_false @DRUGS1_12510
+if 
+  283@ == 0
+goto_if_false @DRUGS1_12510
+set_lvar_int_to_constant 239@ = 35644
+set_lvar_text_label 240@s = 'SMO4_DJ'
+gosub @DRUGS1_51600
+
+:DRUGS1_12510
+if 
+  125@ == 1
+goto_if_false @DRUGS1_12553
+Text.PrintHelp('DGS1_63')
+TIMERB = 0
+125@ = 2
+
+:DRUGS1_12553
+if 
+  125@ == 2
+goto_if_false @DRUGS1_12615
+if 
+  TIMERB > 10000
+goto_if_false @DRUGS1_12615
+Text.PrintHelp('DGS1_2')
+TIMERB = 0
+125@ = 3
+
+:DRUGS1_12615
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_13730
+if 
+  Char.LocateOnFoot3D($big_smoke, 0, 1704.45, -1667.71, 19.68, 6.0, 6.0, 4.0)
+goto_if_false @DRUGS1_13730
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 1700.49, -1667.87, 19.46, 8.5, 8.5, 4.0)
+goto_if_false @DRUGS1_13730
+if or
+  $smokeshoot_s4flag == 6
+  124@ == 11
+goto_if_false @DRUGS1_13730
+Char.SetProofs($big_smoke, True, True, True, True, True)
+Camera.DoFade(0, 500)
+
+:DRUGS1_12774
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRUGS1_12798
+wait 0
+goto @DRUGS1_12774
+
+:DRUGS1_12798
+Player.SetControl($player1, False)
+Char.ClearTasksImmediately($scplayer)
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_12909
+Streaming.SetAreaVisible(0)
+Char.SetAreaVisible($big_smoke, 0)
+Char.ClearTasksImmediately($big_smoke)
+Char.SetAreaVisible($scplayer, 0)
+Char.SetCoordinates($big_smoke, 1696.229, -1669.133, 19.23)
+Char.SetHeading($big_smoke, 86.7366)
+Char.SetCoordinates($scplayer, 1696.339, -1666.897, 19.2)
+Char.SetHeading($scplayer, 85.4)
+
+:DRUGS1_12909
+49@ = Char.Create(24, 112, 1682.685, -1671.516, 19.24)
+Char.SetHeading(49@, 289.407)
+Char.SetDecisionMaker(49@, 35@)
+Char.SetWeaponSkill(49@, 2)
+Char.GiveWeapon(49@, WeaponType.Pistol, 9999)
+Char.SetAccuracy(49@, 50)
+Char.SetHealth(49@, 150)
+214@ = Blip.AddForChar(49@)
+Blip.ChangeDisplay(214@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(214@, 2)
+Char.SetKeepTask(49@, True)
+55@ = Char.Create(24, 111, 1676.529, -1676.516, 20.47)
+Char.SetHeading(55@, 299.59)
+Char.SetDecisionMaker(55@, 35@)
+Char.GiveWeapon(55@, WeaponType.Mp5, 9999)
+Char.SetAccuracy(55@, 30)
+Char.SetHealth(55@, 150)
+Char.SetAllowedToDuck(55@, False)
+215@ = Blip.AddForChar(55@)
+Blip.ChangeDisplay(215@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(215@, 2)
+Char.SetKeepTask(55@, True)
+56@ = Char.Create(24, 111, 1645.896, -1667.693, 20.472)
+Char.SetHeading(56@, 270.18)
+Char.SetDecisionMaker(56@, 35@)
+Char.SetWeaponSkill(56@, 2)
+Char.GiveWeapon(56@, WeaponType.Pistol, 9999)
+Char.SetAccuracy(56@, 60)
+Char.SetHealth(56@, 150)
+216@ = Blip.AddForChar(56@)
+Blip.ChangeDisplay(216@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(216@, 2)
+Char.SetKeepTask(56@, True)
+57@ = Char.Create(24, 111, 1663.022, -1685.541, 20.469)
+Char.SetHeading(57@, 301.304)
+Char.SetDecisionMaker(57@, 35@)
+Char.GiveWeapon(57@, WeaponType.Mp5, 9999)
+Char.SetAccuracy(57@, 50)
+Char.SetHealth(57@, 125)
+217@ = Blip.AddForChar(57@)
+Blip.ChangeDisplay(217@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(217@, 2)
+Char.SetKeepTask(57@, True)
+58@ = Char.Create(24, 111, 1663.079, -1676.61, 20.468)
+Char.SetHeading(58@, 268.5)
+Char.SetDecisionMaker(58@, 35@)
+Char.GiveWeapon(58@, WeaponType.Mp5, 9999)
+Char.SetAccuracy(58@, 60)
+Char.SetMaxHealth(58@, 125)
+Char.SetHealth(58@, 125)
+Char.SetAllowedToDuck(58@, False)
+218@ = Blip.AddForChar(58@)
+Blip.ChangeDisplay(218@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(218@, 2)
+Char.SetKeepTask(58@, True)
+59@ = Char.Create(24, 111, 1662.793, -1670.124, 20.463)
+Char.SetHeading(59@, 268.5)
+Char.SetDecisionMaker(59@, 35@)
+Char.GiveWeapon(59@, WeaponType.Mp5, 9999)
+Char.SetOnlyDamagedByPlayer(59@, True)
+Char.SetAccuracy(59@, 60)
+Char.SetMaxHealth(59@, 150)
+Char.SetHealth(59@, 150)
+219@ = Blip.AddForChar(59@)
+Blip.ChangeDisplay(219@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(219@, 2)
+Char.SetKeepTask(59@, True)
+50@ = Char.Create(24, 111, 1698.51, -1678.459, 19.233)
+Char.SetHeading(50@, 99.699)
+Char.SetDecisionMaker(50@, 35@)
+Char.SetWeaponSkill(50@, 2)
+Char.GiveWeapon(50@, WeaponType.Pistol, 9999)
+Char.SetAccuracy(50@, 30)
+Char.SetHealth(50@, 150)
+220@ = Blip.AddForChar(50@)
+Blip.ChangeDisplay(220@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(220@, 2)
+Char.SetKeepTask(50@, True)
+Task.ToggleDuck($scplayer, True)
+wait 500
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_13679
+Char.SetProofs($big_smoke, False, False, False, False, False)
+
+:DRUGS1_13679
+Camera.SetBehindPlayer
+Player.SetControl($player1, True)
+Camera.DoFade(1, 750)
+124@ = 0
+$smokeshoot_s4flag = 6
+282@ = 0
+283@ = 0
+126@ = 1
+
+:DRUGS1_13730
+if 
+  126@ == 1
+goto_if_false @DRUGS1_15741
+if 
+  $smokeshoot_s4flag == 6
+goto_if_false @DRUGS1_13923
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_13923
+Char.SetAccuracy($big_smoke, 80)
+74@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.GoStraightToCoord(-1, 1690.24, -1669.363, 21.46, MoveState.Run, -1)
+Task.StayInSamePlace(-1, True)
+if 
+  not Char.IsDead(49@)
+goto_if_false @DRUGS1_13852
+Task.KillCharOnFoot(-1, 49@)
+
+:DRUGS1_13852
+if 
+  not Char.IsDead(55@)
+goto_if_false @DRUGS1_13875
+Task.KillCharOnFoot(-1, 55@)
+
+:DRUGS1_13875
+if 
+  not Char.IsDead(56@)
+goto_if_false @DRUGS1_13898
+Task.KillCharOnFoot(-1, 56@)
+
+:DRUGS1_13898
+Sequence.Close(74@)
+Char.PerformSequence($big_smoke, 74@)
+Sequence.Clear(74@)
+$smokeshoot_s4flag = 7
+
+:DRUGS1_13923
+if 
+  $smokeshoot_s4flag == 7
+goto_if_false @DRUGS1_14121
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_14121
+77@ = Char.GetScriptTaskStatus($big_smoke, 1560)
+if 
+  is_int_lvar_equal_to_constant 77@ == 7
+goto_if_false @DRUGS1_14121
+Char.SetAccuracy($big_smoke, 60)
+75@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 1669.82, -1671.917, 21.43, 6, -1)
+Task.StayInSamePlace(-1, True)
+if 
+  not Char.IsDead(58@)
+goto_if_false @DRUGS1_14050
+Task.KillCharOnFoot(-1, 58@)
+
+:DRUGS1_14050
+if 
+  not Char.IsDead(56@)
+goto_if_false @DRUGS1_14073
+Task.KillCharOnFoot(-1, 56@)
+
+:DRUGS1_14073
+if 
+  not Char.IsDead(59@)
+goto_if_false @DRUGS1_14096
+Task.KillCharOnFoot(-1, 59@)
+
+:DRUGS1_14096
+Sequence.Close(75@)
+Char.PerformSequence($big_smoke, 75@)
+Sequence.Clear(75@)
+$smokeshoot_s4flag = 8
+
+:DRUGS1_14121
+if 
+  $smokeshoot_s4flag == 8
+goto_if_false @DRUGS1_14266
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_14266
+77@ = Char.GetScriptTaskStatus($big_smoke, 1560)
+if 
+  is_int_lvar_equal_to_constant 77@ == 7
+goto_if_false @DRUGS1_14266
+76@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+if 
+  not Char.IsDead(50@)
+goto_if_false @DRUGS1_14218
+Task.KillCharOnFoot(-1, 50@)
+
+:DRUGS1_14218
+if 
+  not Char.IsDead(57@)
+goto_if_false @DRUGS1_14241
+Task.KillCharOnFoot(-1, 57@)
+
+:DRUGS1_14241
+Sequence.Close(76@)
+Char.PerformSequence($big_smoke, 76@)
+Sequence.Clear(76@)
+$smokeshoot_s4flag = 9
+
+:DRUGS1_14266
+if 
+  $smokeshoot_s4flag == 9
+goto_if_false @DRUGS1_14357
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_14357
+77@ = Char.GetScriptTaskStatus($big_smoke, 1560)
+if or
+  is_int_lvar_equal_to_constant 77@ == 7
+  124@ == 7
+goto_if_false @DRUGS1_14357
+TIMERB = 0
+284@ = 1
+90@ = 12
+
+:DRUGS1_14357
+if 
+  124@ == 7
+goto_if_false @DRUGS1_14396
+TIMERB = 0
+284@ = 1
+90@ = 12
+
+:DRUGS1_14396
+if 
+  100@ == 0
+goto_if_false @DRUGS1_14680
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_14680
+if 
+  not Char.IsDead(49@)
+goto_if_false @DRUGS1_14485
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_14485
+set_lvar_int_to_lvar_int 79@ = 49@
+set_lvar_int_to_var_int 80@ = $big_smoke
+gosub @DRUGS1_51987
+
+:DRUGS1_14485
+if 
+  not Char.IsDead(55@)
+goto_if_false @DRUGS1_14524
+set_lvar_int_to_lvar_int 79@ = 55@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51987
+
+:DRUGS1_14524
+if 
+  not Char.IsDead(57@)
+goto_if_false @DRUGS1_14579
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_14579
+set_lvar_int_to_lvar_int 79@ = 57@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51943
+
+:DRUGS1_14579
+if 
+  not Char.IsDead(58@)
+goto_if_false @DRUGS1_14618
+set_lvar_int_to_lvar_int 79@ = 58@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51987
+
+:DRUGS1_14618
+if 
+  not Char.IsDead(59@)
+goto_if_false @DRUGS1_14673
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_14673
+set_lvar_int_to_lvar_int 79@ = 59@
+set_lvar_int_to_var_int 80@ = $big_smoke
+gosub @DRUGS1_51943
+
+:DRUGS1_14673
+100@ = 1
+
+:DRUGS1_14680
+if 
+  101@ == 0
+goto_if_false @DRUGS1_14859
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_14859
+if 
+  not Char.IsDead(50@)
+goto_if_false @DRUGS1_14783
+set_lvar_int_to_lvar_int 79@ = 50@
+set_lvar_int_to_var_int 80@ = $scplayer
+81@ = 1669.863
+82@ = -1679.125
+83@ = 20.47
+gosub @DRUGS1_51751
+
+:DRUGS1_14783
+if 
+  not Char.IsDead(56@)
+goto_if_false @DRUGS1_14852
+set_lvar_int_to_lvar_int 79@ = 56@
+set_lvar_int_to_var_int 80@ = $scplayer
+81@ = 1675.149
+82@ = -1667.818
+83@ = 20.47
+gosub @DRUGS1_51751
+
+:DRUGS1_14852
+101@ = 1
+
+:DRUGS1_14859
+if 
+  282@ == 0
+goto_if_false @DRUGS1_14926
+if 
+  283@ == 0
+goto_if_false @DRUGS1_14926
+set_lvar_int_to_constant 239@ = 35646
+set_lvar_text_label 240@s = 'SMO4_EB'
+gosub @DRUGS1_51600
+
+:DRUGS1_14926
+if 
+  282@ == 1
+goto_if_false @DRUGS1_14993
+if 
+  283@ == 0
+goto_if_false @DRUGS1_14993
+set_lvar_int_to_constant 239@ = 35625
+set_lvar_text_label 240@s = 'SMO4_BM'
+gosub @DRUGS1_51600
+
+:DRUGS1_14993
+if 
+  282@ == 2
+goto_if_false @DRUGS1_15060
+if 
+  283@ == 0
+goto_if_false @DRUGS1_15060
+set_lvar_int_to_constant 239@ = 35642
+set_lvar_text_label 240@s = 'SMO4_DG'
+gosub @DRUGS1_51600
+
+:DRUGS1_15060
+if 
+  282@ == 3
+goto_if_false @DRUGS1_15127
+if 
+  283@ == 0
+goto_if_false @DRUGS1_15127
+set_lvar_int_to_constant 239@ = 35620
+set_lvar_text_label 240@s = 'SMO4_BG'
+gosub @DRUGS1_51600
+
+:DRUGS1_15127
+if 
+  282@ == 4
+goto_if_false @DRUGS1_15194
+if 
+  283@ == 0
+goto_if_false @DRUGS1_15194
+set_lvar_int_to_constant 239@ = 35648
+set_lvar_text_label 240@s = 'SMO4_ED'
+gosub @DRUGS1_51600
+
+:DRUGS1_15194
+if 
+  282@ == 5
+goto_if_false @DRUGS1_15261
+if 
+  283@ == 0
+goto_if_false @DRUGS1_15261
+set_lvar_int_to_constant 239@ = 35650
+set_lvar_text_label 240@s = 'SMO4_EF'
+gosub @DRUGS1_51600
+
+:DRUGS1_15261
+if 
+  282@ == 6
+goto_if_false @DRUGS1_15328
+if 
+  283@ == 0
+goto_if_false @DRUGS1_15328
+set_lvar_int_to_constant 239@ = 35652
+set_lvar_text_label 240@s = 'SMO4_EH'
+gosub @DRUGS1_51600
+
+:DRUGS1_15328
+gosub @DRUGS1_51642
+if 
+  109@ == 0
+goto_if_false @DRUGS1_15393
+if 
+  Char.IsDead(49@)
+goto_if_false @DRUGS1_15393
+Char.MarkAsNoLongerNeeded(49@)
+Blip.Remove(214@)
+124@ += 1
+109@ = 1
+
+:DRUGS1_15393
+if 
+  115@ == 0
+goto_if_false @DRUGS1_15451
+if 
+  Char.IsDead(55@)
+goto_if_false @DRUGS1_15451
+Char.MarkAsNoLongerNeeded(55@)
+Blip.Remove(215@)
+124@ += 1
+115@ = 1
+
+:DRUGS1_15451
+if 
+  116@ == 0
+goto_if_false @DRUGS1_15509
+if 
+  Char.IsDead(56@)
+goto_if_false @DRUGS1_15509
+Char.MarkAsNoLongerNeeded(56@)
+Blip.Remove(216@)
+124@ += 1
+116@ = 1
+
+:DRUGS1_15509
+if 
+  117@ == 0
+goto_if_false @DRUGS1_15567
+if 
+  Char.IsDead(57@)
+goto_if_false @DRUGS1_15567
+Char.MarkAsNoLongerNeeded(57@)
+Blip.Remove(217@)
+124@ += 1
+117@ = 1
+
+:DRUGS1_15567
+if 
+  118@ == 0
+goto_if_false @DRUGS1_15625
+if 
+  Char.IsDead(58@)
+goto_if_false @DRUGS1_15625
+Char.MarkAsNoLongerNeeded(58@)
+Blip.Remove(218@)
+124@ += 1
+118@ = 1
+
+:DRUGS1_15625
+if 
+  119@ == 0
+goto_if_false @DRUGS1_15683
+if 
+  Char.IsDead(59@)
+goto_if_false @DRUGS1_15683
+Char.MarkAsNoLongerNeeded(59@)
+Blip.Remove(219@)
+124@ += 1
+119@ = 1
+
+:DRUGS1_15683
+if 
+  110@ == 0
+goto_if_false @DRUGS1_15741
+if 
+  Char.IsDead(50@)
+goto_if_false @DRUGS1_15741
+Char.MarkAsNoLongerNeeded(50@)
+Blip.Remove(220@)
+124@ += 1
+110@ = 1
+
+:DRUGS1_15741
+if 
+  284@ == 1
+goto_if_false @DRUGS1_15785
+if 
+  TIMERB > 2000
+goto_if_false @DRUGS1_15785
+284@ = 2
+
+:DRUGS1_15785
+if 
+  284@ == 2
+goto_if_false @DRUGS1_17081
+if 
+  90@ == 12
+goto_if_false @DRUGS1_16282
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_16282
+Text.ClearPrints
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Pad.SetPlayerEnterCarButton($player1, False)
+World.ClearArea(0, 1672.321, -1697.259, 200.0, 200.0)
+Camera.SetFixedPosition(1672.321, -1697.259, 20.6216, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1672.069, -1696.5, 21.2228, SwitchType.JumpCut)
+Hud.ClearCounter($smokehealth_s4)
+Blip.Remove(89@)
+Char.ClearTasksImmediately($big_smoke)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($big_smoke, 1668.756, -1689.291, 20.869)
+Char.SetHeading($big_smoke, 203.5)
+Char.SetCoordinates($scplayer, 1667.26, -1683.5, 20.869)
+Char.SetHeading($scplayer, 203.5)
+Streaming.MarkModelAsNoLongerNeeded(353)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(112)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.LoadMissionAudio(35658, 2)
+Streaming.RequestCarRecording(250)
+Streaming.RequestCarRecording(251)
+Streaming.RequestCarRecording(252)
+Streaming.RequestModel(581)
+wait 100
+Streaming.LoadAllModelsNow
+
+:DRUGS1_16065
+if or
+  not Streaming.HasCarRecordingBeenLoaded(250)
+  not Streaming.HasCarRecordingBeenLoaded(251)
+  not Streaming.HasCarRecordingBeenLoaded(252)
+  not Streaming.HasModelLoaded(581)
+goto_if_false @DRUGS1_16107
+wait 0
+goto @DRUGS1_16065
+
+:DRUGS1_16107
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_16133
+wait 0
+goto @DRUGS1_16107
+
+:DRUGS1_16133
+Char.Delete(63@)
+World.ClearArea(0, 1668.67, -1694.68, 19.97, 200.0)
+Car.CustomPlateForNextCar(581, "_IMY_AK")
+161@ = Car.Create(581, 1671.791, -1695.106, 19.48)
+Car.SetHeading(161@, 117.5347)
+Car.SetProofs(161@, False, True, True, True, True)
+Camera.SetInterpolationParameters(0.0, 3000)
+Car.SetCanBurstTires(161@, False)
+Char.GiveWeapon($scplayer, WeaponType.MicroUzi, 99999)
+Car.SetHealth(161@, 2000)
+Car.SetCanBurstTires(161@, False)
+TIMERA = 0
+90@ = 13
+
+:DRUGS1_16282
+if 
+  90@ == 13
+goto_if_false @DRUGS1_16397
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_16397
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_16397
+Camera.SetFixedPosition(1672.321, -1697.259, 20.6216, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1672.069, -1696.5, 20.6212, SwitchType.Interpolation)
+TIMERA = 0
+90@ = 14
+
+:DRUGS1_16397
+if 
+  90@ == 14
+goto_if_false @DRUGS1_16528
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_16528
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_16528
+if 
+  TIMERA > 900
+goto_if_false @DRUGS1_16528
+Task.EnterCarAsDriver($big_smoke, 161@, 5000)
+Task.EnterCarAsPassenger($scplayer, 161@, 0, 5000)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow('SMO4_EO', 5000, 1)
+127@ = 2
+90@ = 15
+
+:DRUGS1_16528
+if 
+  90@ == 15
+goto_if_false @DRUGS1_16737
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_16737
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_16737
+if 
+  Char.IsSittingInCar($big_smoke, 161@)
+goto_if_false @DRUGS1_16737
+Camera.SetFixedPosition(1672.983, -1692.091, 19.8891, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1672.57, -1692.999, 19.9589, SwitchType.JumpCut)
+Camera.PointAtCar(161@, CameraMode.Fixed, SwitchType.JumpCut)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 1674.371, -1695.097, 19.814)
+Char.SetHeading($scplayer, 90.0)
+Task.EnterCarAsPassenger($scplayer, 161@, 0, 5000)
+Task.LookAtChar($big_smoke, $scplayer, 2000)
+Char.SetCanBeKnockedOffBike($scplayer, True)
+Char.SetCanBeKnockedOffBike($big_smoke, True)
+90@ = 16
+
+:DRUGS1_16737
+if 
+  90@ == 16
+goto_if_false @DRUGS1_16837
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_16837
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_16837
+if 
+  Char.IsSittingInCar($scplayer, 161@)
+goto_if_false @DRUGS1_16837
+Audio.SetRadioChannel(RadioChannel.RadioX)
+Char.ClearLookAt($big_smoke)
+Car.StartPlayback(161@, 250)
+TIMERA = 0
+90@ = 17
+
+:DRUGS1_16837
+if 
+  90@ == 17
+goto_if_false @DRUGS1_17030
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_17030
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_17030
+if 
+  Char.IsSittingInCar($scplayer, 161@)
+goto_if_false @DRUGS1_17030
+if 
+  TIMERA > 1600
+goto_if_false @DRUGS1_17030
+Camera.SetFixedPosition(1623.331, -1705.448, 19.7991, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1624.331, -1705.475, 19.7991, SwitchType.JumpCut)
+Car.StopPlayback(161@)
+wait 0
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_17009
+Car.StartPlayback(161@, 251)
+
+:DRUGS1_17009
+TIMERA = 0
+284@ = 3
+90@ = 18
+
+:DRUGS1_17030
+if 
+  127@ == 2
+goto_if_false @DRUGS1_17081
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_17081
+Text.ClearThisPrint('SMO4_EO')
+127@ = 3
+
+:DRUGS1_17081
+if or
+  243@ == 0
+  243@ == 1
+  243@ == 2
+  243@ == 3
+goto_if_false @DRUGS1_17303
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_17303
+if 
+  280@ <= 3
+goto_if_false @DRUGS1_17303
+$bikehealth_s4 = Car.GetHealth(161@)
+$bikehealth_s4 -= 1000
+if 
+  0 >= $bikehealth_s4
+goto_if_false @DRUGS1_17296
+$bikehealth_s4 = 0
+Car.SetProofs(161@, False, False, False, False, False)
+Char.SetProofs($scplayer, False, False, False, False, False)
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_17261
+Char.SetProofs($big_smoke, False, False, False, False, False)
+Task.Die($big_smoke)
+
+:DRUGS1_17261
+Car.Explode(161@)
+Text.PrintNow('DGS1_60', 7000, 1)
+goto @DRUGS1_52025
+goto @DRUGS1_17303
+
+:DRUGS1_17296
+$bikehealth_s4 /= 10
+
+:DRUGS1_17303
+if 
+  243@ == 0
+goto_if_false @DRUGS1_23435
+if 
+  90@ == 18
+goto_if_false @DRUGS1_18642
+if 
+  TIMERA > 700
+goto_if_false @DRUGS1_18642
+$z = 19.7991
+Streaming.RequestCarRecording(253)
+Streaming.RequestCarRecording(254)
+Streaming.RequestCarRecording(255)
+Streaming.RequestCarRecording(256)
+Streaming.RequestCarRecording(257)
+Streaming.RequestModel(560)
+Streaming.RequestModel(#KMB_SKIP)
+Streaming.RequestModel(516)
+Streaming.RequestModel(437)
+Streaming.RequestModel(443)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(35663, 1)
+Streaming.LoadAllModelsNow
+
+:DRUGS1_17433
+if or
+  not Streaming.HasCarRecordingBeenLoaded(253)
+  not Streaming.HasCarRecordingBeenLoaded(254)
+  not Streaming.HasCarRecordingBeenLoaded(255)
+  not Streaming.HasCarRecordingBeenLoaded(256)
+  not Streaming.HasCarRecordingBeenLoaded(257)
+goto_if_false @DRUGS1_17480
+wait 0
+goto @DRUGS1_17433
+
+:DRUGS1_17480
+if or
+  not Streaming.HasModelLoaded(560)
+  not Streaming.HasModelLoaded(#KMB_SKIP)
+  not Streaming.HasModelLoaded(516)
+  not Streaming.HasModelLoaded(437)
+  not Streaming.HasModelLoaded(443)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_17531
+wait 0
+goto @DRUGS1_17480
+
+:DRUGS1_17531
+162@ = Object.Create(#KMB_SKIP, 1563.603, -1437.107, 12.347)
+Object.SetHeading(162@, 90.4568)
+Object.FreezePosition(162@, True)
+163@ = Car.Create(437, 1552.209, -1437.3, 12.3828)
+Car.SetHeading(163@, 90.2081)
+Car.FreezePosition(163@, True)
+164@ = Car.Create(437, 1539.759, -1437.34, 12.3906)
+Car.SetHeading(164@, 90.2081)
+Car.FreezePosition(164@, True)
+165@ = Car.Create(516, 1680.473, -1589.874, 13.23)
+Car.SetHeading(165@, 87.883)
+Car.ChangeColor(165@, 3, 3)
+177@ = Char.CreateInsideCar(PedType.Mission1, 7, 165@)
+Char.SetDecisionMaker(177@, 35@)
+166@ = Car.Create(516, 1594.553, -1595.039, 13.243)
+Car.SetHeading(166@, 271.189)
+Car.ChangeColor(166@, 8, 8)
+178@ = Char.CreateInsideCar(PedType.Mission1, 7, 166@)
+Char.SetDecisionMaker(178@, 35@)
+167@ = Car.Create(516, 1655.527, -1550.667, 13.226)
+Car.SetHeading(167@, 180.735)
+Car.ChangeColor(167@, 51, 51)
+179@ = Char.CreateInsideCar(PedType.Mission1, 7, 167@)
+Char.SetDecisionMaker(179@, 35@)
+168@ = Car.Create(516, 1655.391, -1463.511, 13.22)
+Car.SetHeading(168@, 180.735)
+Car.ChangeColor(168@, 4, 4)
+Car.SetHeavy(168@, True)
+180@ = Char.CreateInsideCar(PedType.Mission1, 7, 168@)
+Char.SetDecisionMaker(180@, 35@)
+169@ = Car.Create(516, 1660.788, -1563.222, 13.23)
+Car.SetHeading(169@, 358.832)
+Car.ChangeColor(169@, 73, 73)
+181@ = Char.CreateInsideCar(PedType.Mission1, 7, 169@)
+Char.SetDecisionMaker(181@, 35@)
+170@ = Car.Create(516, 1660.594, -1522.353, 13.225)
+Car.SetHeading(170@, 358.832)
+Car.ChangeColor(170@, 99, 99)
+182@ = Char.CreateInsideCar(PedType.Mission1, 7, 170@)
+Char.SetDecisionMaker(182@, 35@)
+171@ = Car.Create(516, 1693.236, -1589.973, 13.224)
+Car.SetHeading(171@, 91.298)
+Car.ChangeColor(171@, 2, 2)
+Car.SetHeavy(171@, True)
+183@ = Char.CreateInsideCar(PedType.Mission1, 7, 171@)
+Char.SetDecisionMaker(183@, 35@)
+188@ = Car.Create(443, 1590.891, -1590.689, 13.09)
+Car.SetPetrolTankWeakpoint(188@, False)
+Car.SetHeading(188@, 273.516)
+Car.SetHealth(188@, 3000)
+Car.SetOnlyDamagedByPlayer(188@, True)
+42@ = Char.CreateInsideCar(PedType.Mission1, 111, 188@)
+Char.SetDecisionMaker(42@, 35@)
+Char.SetCanBeShotInVehicle(42@, False)
+209@ = Blip.AddForCar(188@)
+Blip.ChangeDisplay(209@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(209@, 2)
+Car.SetProofs(188@, False, True, True, True, True)
+275@ = 1
+TIMERA = 0
+
+:DRUGS1_18232
+if 
+  $z > 13.8442
+goto_if_false @DRUGS1_18635
+wait 0
+sub_timed_val_from_float_var $z -= frame_delta_time * 0.02
+Camera.SetFixedPosition(1623.331, -1705.448, $z, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1624.331, -1705.475, $z, SwitchType.JumpCut)
+if 
+  271@ == 0
+goto_if_false @DRUGS1_18628
+if 
+  TIMERA > 1000
+goto_if_false @DRUGS1_18628
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_18628
+if 
+  not Car.IsPlaybackGoingOn(161@)
+goto_if_false @DRUGS1_18628
+189@ = Car.Create(581, 1665.25, -1716.98, 12.75)
+Car.SetPetrolTankWeakpoint(189@, False)
+Car.SetHeading(189@, 84.0)
+Car.SetHealth(189@, 800)
+43@ = Char.CreateInsideCar(PedType.Mission1, 111, 189@)
+Char.SetDecisionMaker(43@, 35@)
+Char.SetHealth(43@, 10)
+Char.SetOnlyDamagedByPlayer(43@, True)
+44@ = Char.CreateAsPassenger(PedType.Mission1, 111, 189@, 0)
+Char.GiveWeapon(44@, WeaponType.MicroUzi, 99999)
+Char.SetDecisionMaker(44@, 35@)
+Char.SetHealth(44@, 10)
+Char.SetOnlyDamagedByPlayer(44@, True)
+214@ = Blip.AddForCar(189@)
+Blip.ChangeDisplay(214@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(214@, 2)
+247@ = 1
+260@ = 1
+wait 0
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_18587
+Car.StartPlayback(161@, 252)
+Car.SetPlaybackSpeed(161@, 0.9)
+
+:DRUGS1_18587
+if 
+  not Car.IsDead(189@)
+goto_if_false @DRUGS1_18621
+Car.StartPlayback(189@, 256)
+Car.SetPlaybackSpeed(189@, 0.9)
+
+:DRUGS1_18621
+271@ = 1
+
+:DRUGS1_18628
+goto @DRUGS1_18232
+
+:DRUGS1_18635
+90@ = 19
+
+:DRUGS1_18642
+if 
+  90@ == 19
+goto_if_false @DRUGS1_19044
+if 
+  TIMERA > 8500
+goto_if_false @DRUGS1_19044
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_19044
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_19044
+Char.GiveWeapon($scplayer, WeaponType.MicroUzi, 99999)
+Task.DriveBy($scplayer, -1, -1, 0.0, 0.0, 0.0, 300.0, DriveByType.Ai, True, 100)
+Player.SetHeadingForAttached($player1, 95.5, 200.0)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Hud.DisplayCounterWithString($bikehealth_s4, CounterDisplay.Bar, 'DGS1_59')
+288@ += 1
+if 
+  288@ > 1
+goto_if_false @DRUGS1_18843
+289@ = 30
+goto @DRUGS1_18850
+
+:DRUGS1_18843
+289@ = 92
+
+:DRUGS1_18850
+if 
+  not Char.IsDead(43@)
+goto_if_false @DRUGS1_18915
+Char.GiveWeapon(43@, WeaponType.MicroUzi, 99999)
+Task.DriveBy(43@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 289@)
+
+:DRUGS1_18915
+if 
+  not Char.IsDead(44@)
+goto_if_false @DRUGS1_18967
+Task.DriveBy(44@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+
+:DRUGS1_18967
+Char.SetProofs($scplayer, True, True, True, True, True)
+Char.SetProofs($big_smoke, True, True, True, True, True)
+Text.PrintHelp('DGS1_64')
+282@ = 0
+283@ = 0
+TIMERB = 0
+122@ = 200
+90@ = 20
+
+:DRUGS1_19044
+if 
+  122@ == 200
+goto_if_false @DRUGS1_19084
+if 
+  Text.IsHelpMessageBeingDisplayed
+goto_if_false @DRUGS1_19084
+122@ = 201
+
+:DRUGS1_19084
+if 
+  122@ == 201
+goto_if_false @DRUGS1_19135
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @DRUGS1_19135
+Text.PrintHelp('DGS1_65')
+122@ = 202
+
+:DRUGS1_19135
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_23435
+if 
+  242@ == 0
+goto_if_false @DRUGS1_19427
+if 
+  Car.Locate2D(161@, 0, 1620.59, -1612.14, 7.0, 7.0)
+goto_if_false @DRUGS1_19427
+if 
+  not Car.IsDead(165@)
+goto_if_false @DRUGS1_19270
+Car.GotoCoordinates(165@, 1571.424, -1590.02, 13.23)
+Car.SetCruiseSpeed(165@, 13.5)
+Car.SetForwardSpeed(165@, 13.5)
+Car.SetDrivingStyle(165@, DrivingMode.StopForCarsIgnoreLights)
+
+:DRUGS1_19270
+if 
+  not Car.IsDead(166@)
+goto_if_false @DRUGS1_19333
+Car.GotoCoordinates(166@, 1681.473, -1595.059, 13.22)
+Car.SetCruiseSpeed(166@, 13.5)
+Car.SetForwardSpeed(166@, 4.5)
+Car.SetDrivingStyle(166@, DrivingMode.StopForCarsIgnoreLights)
+
+:DRUGS1_19333
+if 
+  not Car.IsDead(171@)
+goto_if_false @DRUGS1_19386
+Car.GotoCoordinates(171@, 1582.411, -1590.115, 13.228)
+Car.SetCruiseSpeed(171@, 9.0)
+Car.SetDrivingStyle(171@, DrivingMode.StopForCarsIgnoreLights)
+
+:DRUGS1_19386
+if 
+  not Car.IsDead(188@)
+goto_if_false @DRUGS1_19420
+Car.StartPlayback(188@, 255)
+Car.SetPlaybackSpeed(188@, 0.9)
+
+:DRUGS1_19420
+242@ = 1
+
+:DRUGS1_19427
+if 
+  242@ == 1
+goto_if_false @DRUGS1_19732
+if 
+  Car.Locate2D(161@, 0, 1654.1, -1589.48, 10.0, 10.0)
+goto_if_false @DRUGS1_19732
+if 
+  not Car.IsDead(167@)
+goto_if_false @DRUGS1_19536
+Car.GotoCoordinates(167@, 1655.839, -1576.842, 13.226)
+Car.SetCruiseSpeed(167@, 9.0)
+Car.SetDrivingStyle(167@, DrivingMode.StopForCarsIgnoreLights)
+
+:DRUGS1_19536
+if 
+  not Car.IsDead(168@)
+goto_if_false @DRUGS1_19599
+Car.GotoCoordinates(168@, 1655.593, -1559.511, 13.227)
+Car.SetCruiseSpeed(168@, 9.0)
+Car.SetForwardSpeed(168@, 9.0)
+Car.SetDrivingStyle(168@, DrivingMode.StopForCarsIgnoreLights)
+
+:DRUGS1_19599
+if 
+  not Car.IsDead(169@)
+goto_if_false @DRUGS1_19662
+Car.GotoCoordinates(169@, 1702.0, -1444.0, 13.0)
+Car.SetCruiseSpeed(169@, 9.0)
+Car.SetForwardSpeed(169@, 10.8)
+Car.SetDrivingStyle(169@, DrivingMode.StopForCarsIgnoreLights)
+
+:DRUGS1_19662
+if 
+  not Car.IsDead(170@)
+goto_if_false @DRUGS1_19725
+Car.GotoCoordinates(170@, 1702.0, -1444.0, 13.0)
+Car.SetCruiseSpeed(170@, 9.0)
+Car.SetForwardSpeed(170@, 9.0)
+Car.SetDrivingStyle(170@, DrivingMode.StopForCarsIgnoreLights)
+
+:DRUGS1_19725
+242@ = 2
+
+:DRUGS1_19732
+if 
+  242@ == 2
+goto_if_false @DRUGS1_20099
+if 
+  Car.Locate2D(161@, 0, 1657.56, -1537.29, 10.0, 10.0)
+goto_if_false @DRUGS1_20099
+194@ = Car.Create(581, 1702.127, -1496.87, 12.95)
+Car.SetPetrolTankWeakpoint(194@, False)
+Car.SetHeading(194@, 26.5)
+Car.SetHealth(194@, 800)
+49@ = Char.CreateInsideCar(PedType.Mission1, 111, 194@)
+Char.SetDecisionMaker(49@, 35@)
+Char.SetOnlyDamagedByPlayer(49@, True)
+Char.SetHealth(49@, 10)
+50@ = Char.CreateAsPassenger(PedType.Mission1, 111, 194@, 0)
+Char.GiveWeapon(50@, WeaponType.MicroUzi, 99999)
+Char.SetOnlyDamagedByPlayer(50@, True)
+Char.SetDecisionMaker(50@, 35@)
+Char.SetHealth(50@, 10)
+215@ = Blip.AddForCar(194@)
+Blip.ChangeDisplay(215@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(215@, 2)
+248@ = 1
+261@ = 1
+172@ = Car.Create(516, 1622.005, -1443.498, 13.229)
+Car.SetHeading(172@, 266.928)
+Car.ChangeColor(172@, 115, 115)
+Car.SetHeavy(172@, True)
+184@ = Char.CreateInsideCar(PedType.Mission1, 7, 172@)
+Char.SetDecisionMaker(184@, 35@)
+173@ = Car.Create(516, 1536.288, -1443.049, 13.224)
+Car.SetHeading(173@, 269.939)
+Car.ChangeColor(173@, 122, 122)
+Car.SetHeavy(173@, True)
+185@ = Char.CreateInsideCar(PedType.Mission1, 7, 173@)
+Char.SetDecisionMaker(185@, 35@)
+242@ = 3
+
+:DRUGS1_20099
+if 
+  242@ == 3
+goto_if_false @DRUGS1_20452
+if 
+  Car.Locate2D(161@, 0, 1657.94, -1468.93, 15.0, 15.0)
+goto_if_false @DRUGS1_20452
+if 
+  not Car.IsDead(194@)
+goto_if_false @DRUGS1_20179
+Car.StartPlayback(194@, 257)
+
+:DRUGS1_20179
+if 
+  not Char.IsDead(49@)
+goto_if_false @DRUGS1_20262
+if 
+  3 > 288@
+goto_if_false @DRUGS1_20262
+Char.GiveWeapon(49@, WeaponType.MicroUzi, 99999)
+Task.DriveBy(49@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 289@)
+
+:DRUGS1_20262
+if 
+  not Char.IsDead(50@)
+goto_if_false @DRUGS1_20314
+Task.DriveBy(50@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+
+:DRUGS1_20314
+Car.Delete(165@)
+Car.Delete(166@)
+Car.Delete(171@)
+if 
+  not Car.IsDead(172@)
+goto_if_false @DRUGS1_20382
+Car.GotoCoordinates(172@, 1720.037, -1444.137, 13.222)
+Car.SetCruiseSpeed(172@, 9.0)
+Car.SetDrivingStyle(172@, DrivingMode.StopForCarsIgnoreLights)
+
+:DRUGS1_20382
+if 
+  not Car.IsDead(173@)
+goto_if_false @DRUGS1_20445
+Car.GotoCoordinates(173@, 1654.817, -1492.993, 13.22)
+Car.SetCruiseSpeed(173@, 13.5)
+Car.SetForwardSpeed(173@, 20.0)
+Car.SetDrivingStyle(173@, DrivingMode.StopForCarsIgnoreLights)
+
+:DRUGS1_20445
+242@ = 4
+
+:DRUGS1_20452
+if 
+  242@ == 4
+goto_if_false @DRUGS1_20515
+if 
+  Car.Locate2D(161@, 0, 1631.77, -1441.31, 12.0, 12.0)
+goto_if_false @DRUGS1_20515
+242@ = 5
+
+:DRUGS1_20515
+if 
+  242@ == 5
+goto_if_false @DRUGS1_20677
+if 
+  Car.Locate2D(161@, 0, 1545.68, -1437.35, 10.0, 10.0)
+goto_if_false @DRUGS1_20677
+175@ = Car.Create(516, 1394.751, -1427.224, 13.24)
+Car.SetHeading(175@, 184.525)
+Car.ChangeColor(175@, 99, 99)
+Car.GotoCoordinates(175@, 1441.028, -1443.271, 13.234)
+Car.SetCruiseSpeed(175@, 13.5)
+Car.SetDrivingStyle(175@, DrivingMode.StopForCarsIgnoreLights)
+181@ = Char.CreateInsideCar(PedType.Mission1, 7, 175@)
+Char.SetDecisionMaker(181@, 35@)
+242@ = 6
+
+:DRUGS1_20677
+if 
+  242@ == 6
+goto_if_false @DRUGS1_21513
+if 
+  Car.Locate2D(161@, 0, 1508.7, -1440.86, 10.0, 10.0)
+goto_if_false @DRUGS1_21513
+Car.Delete(172@)
+Car.Delete(167@)
+Car.Delete(168@)
+176@ = Car.Create(437, 1457.689, -1371.728, 13.235)
+Car.SetHeading(176@, 177.712)
+Car.StartPlayback(176@, 253)
+Car.SetPlaybackSpeed(176@, 0.9)
+190@ = Car.Create(560, 1374.507, -1394.312, 13.272)
+Car.SetHealth(190@, 400)
+Car.SetHeading(190@, 193.922)
+52@ = Char.CreateAsPassenger(PedType.Mission1, 111, 190@, 0)
+Char.GiveWeapon(52@, WeaponType.MicroUzi, 99999)
+Char.SetDecisionMaker(52@, 35@)
+Task.DriveBy(52@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 70)
+230@ = Blip.AddForCar(190@)
+Blip.ChangeDisplay(230@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(230@, 2)
+191@ = Car.Create(560, 1374.577, -1401.141, 13.102)
+Car.SetHeading(191@, 349.825)
+Car.ChangeColor(191@, 0, 0)
+Car.SetHealth(191@, 500)
+192@ = Car.Create(560, 1374.362, -1407.883, 13.239)
+Car.SetHeading(192@, 194.852)
+Car.SetHealth(192@, 500)
+228@ = Blip.AddForCar(192@)
+Blip.ChangeDisplay(228@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(228@, 2)
+193@ = Car.Create(560, 1401.058, -1430.891, 12.3905)
+Car.SetHeading(193@, 10.385)
+Car.SetHealth(193@, 500)
+229@ = Blip.AddForCar(193@)
+Blip.ChangeDisplay(229@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(229@, 2)
+Car.OpenDoor(193@, CarDoor.LeftFrontDoor)
+Car.OpenDoor(193@, CarDoor.RightFrontDoor)
+53@ = Char.Create(24, 111, 1399.464, -1431.604, 12.3905)
+Char.SetDecisionMaker(53@, 35@)
+Char.GiveWeapon(53@, WeaponType.MicroUzi, 99999)
+Char.SetHealth(53@, 100)
+set_lvar_int_to_lvar_int 79@ = 53@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51987
+235@ = Blip.AddForChar(53@)
+Blip.ChangeDisplay(235@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(235@, 2)
+61@ = Char.Create(24, 111, 1401.466, -1427.389, 12.3905)
+Char.SetDecisionMaker(61@, 35@)
+Char.GiveWeapon(61@, WeaponType.MicroUzi, 99999)
+Char.SetHealth(61@, 100)
+set_lvar_int_to_lvar_int 79@ = 61@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51987
+236@ = Blip.AddForChar(61@)
+Blip.ChangeDisplay(236@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(236@, 2)
+54@ = Char.Create(24, 111, 1374.992, -1397.639, 12.438)
+Char.SetDecisionMaker(54@, 35@)
+Char.GiveWeapon(54@, WeaponType.MicroUzi, 99999)
+Char.SetHealth(54@, 100)
+set_lvar_int_to_lvar_int 79@ = 54@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51943
+226@ = Blip.AddForChar(54@)
+Blip.ChangeDisplay(226@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(226@, 2)
+55@ = Char.Create(24, 111, 1374.543, -1404.678, 12.425)
+Char.SetDecisionMaker(55@, 35@)
+Char.GiveWeapon(55@, WeaponType.MicroUzi, 99999)
+Char.SetHealth(55@, 100)
+set_lvar_int_to_lvar_int 79@ = 55@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51943
+227@ = Blip.AddForChar(55@)
+Blip.ChangeDisplay(227@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(227@, 2)
+242@ = 7
+
+:DRUGS1_21513
+if 
+  242@ == 7
+goto_if_false @DRUGS1_21811
+if 
+  not Car.IsPlaybackGoingOn(161@)
+goto_if_false @DRUGS1_21811
+if 
+  Car.Locate2D(161@, 0, 1395.844, -1408.105, 5.0, 5.0)
+goto_if_false @DRUGS1_21811
+Car.FreezePosition(161@, True)
+Blip.Remove(209@)
+Car.StopPlayback(189@)
+Blip.Remove(214@)
+Car.StopPlayback(194@)
+Blip.Remove(215@)
+Char.MarkAsNoLongerNeeded(177@)
+Char.MarkAsNoLongerNeeded(178@)
+Char.MarkAsNoLongerNeeded(179@)
+Char.MarkAsNoLongerNeeded(180@)
+Char.MarkAsNoLongerNeeded(181@)
+Char.MarkAsNoLongerNeeded(182@)
+Char.MarkAsNoLongerNeeded(183@)
+Char.MarkAsNoLongerNeeded(184@)
+Char.MarkAsNoLongerNeeded(185@)
+Car.MarkAsNoLongerNeeded(165@)
+Car.MarkAsNoLongerNeeded(166@)
+Car.MarkAsNoLongerNeeded(167@)
+Car.MarkAsNoLongerNeeded(168@)
+Car.MarkAsNoLongerNeeded(171@)
+Car.MarkAsNoLongerNeeded(172@)
+Car.MarkAsNoLongerNeeded(175@)
+Car.MarkAsNoLongerNeeded(176@)
+Car.Delete(169@)
+Car.Delete(170@)
+Car.Delete(173@)
+Streaming.MarkModelAsNoLongerNeeded(437)
+Streaming.MarkModelAsNoLongerNeeded(#KMB_SKIP)
+Streaming.MarkModelAsNoLongerNeeded(516)
+Object.Delete(162@)
+Car.Delete(163@)
+Car.Delete(164@)
+Car.MarkAsNoLongerNeeded(176@)
+Car.Delete(194@)
+Char.Delete(49@)
+Char.Delete(50@)
+Car.Delete(189@)
+Car.Delete(188@)
+Char.Delete(42@)
+Char.Delete(43@)
+Char.Delete(44@)
+Car.MarkAsNoLongerNeeded(175@)
+TIMERA = 0
+242@ = 8
+
+:DRUGS1_21811
+if 
+  242@ > 7
+goto_if_false @DRUGS1_21918
+if 
+  244@ == 0
+goto_if_false @DRUGS1_21918
+if 
+  not Camera.IsPointOnScreen(1400.41, -1447.12, 12.3, 10.0)
+goto_if_false @DRUGS1_21918
+World.ClearArea(0, 1400.41, -1447.12, 12.3, 50.0)
+244@ = 1
+  9 > 242@
+
+:DRUGS1_21918
+if 
+  242@ == 8
+goto_if_false @DRUGS1_21998
+Streaming.RequestCarRecording(258)
+Streaming.RequestCarRecording(259)
+Streaming.RequestCarRecording(260)
+Streaming.RequestCarRecording(261)
+Streaming.RequestCarRecording(262)
+Streaming.RequestCarRecording(263)
+Streaming.RequestCarRecording(264)
+Streaming.RequestCarRecording(265)
+Streaming.RequestCarRecording(266)
+Streaming.RequestCarRecording(267)
+Streaming.RequestCarRecording(268)
+242@ = 9
+
+:DRUGS1_21998
+if 
+  242@ == 9
+goto_if_false @DRUGS1_22225
+if 
+  TIMERA > 10000
+goto_if_false @DRUGS1_22225
+if 
+  Streaming.HasCarRecordingBeenLoaded(258)
+goto_if_false @DRUGS1_22225
+if 
+  Streaming.HasCarRecordingBeenLoaded(259)
+goto_if_false @DRUGS1_22225
+if 
+  Streaming.HasCarRecordingBeenLoaded(260)
+goto_if_false @DRUGS1_22225
+if 
+  Streaming.HasCarRecordingBeenLoaded(261)
+goto_if_false @DRUGS1_22225
+if 
+  Streaming.HasCarRecordingBeenLoaded(262)
+goto_if_false @DRUGS1_22225
+if 
+  Streaming.HasCarRecordingBeenLoaded(263)
+goto_if_false @DRUGS1_22225
+if 
+  Streaming.HasCarRecordingBeenLoaded(264)
+goto_if_false @DRUGS1_22225
+if 
+  Streaming.HasCarRecordingBeenLoaded(265)
+goto_if_false @DRUGS1_22225
+if 
+  Streaming.HasCarRecordingBeenLoaded(266)
+goto_if_false @DRUGS1_22225
+if 
+  Streaming.HasCarRecordingBeenLoaded(267)
+goto_if_false @DRUGS1_22225
+if 
+  Streaming.HasCarRecordingBeenLoaded(268)
+goto_if_false @DRUGS1_22225
+243@ = 1
+242@ = 10
+
+:DRUGS1_22225
+if 
+  275@ == 1
+goto_if_false @DRUGS1_22271
+if 
+  Car.IsDead(188@)
+goto_if_false @DRUGS1_22271
+Car.StopPlayback(188@)
+275@ = 2
+
+:DRUGS1_22271
+if 
+  247@ == 1
+goto_if_false @DRUGS1_22519
+if 
+  not Car.IsDead(189@)
+goto_if_false @DRUGS1_22519
+if 
+  not Char.IsDead(43@)
+goto_if_false @DRUGS1_22328
+goto @DRUGS1_22519
+
+:DRUGS1_22328
+if 
+  not Char.IsDead(44@)
+goto_if_false @DRUGS1_22477
+if 
+  Char.IsInCar(44@, 189@)
+goto_if_false @DRUGS1_22470
+205@ = Car.GetDriver(189@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_22470
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(44@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(44@, 189@)
+Task.DriveBy(44@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+247@ = 2
+
+:DRUGS1_22470
+goto @DRUGS1_22519
+
+:DRUGS1_22477
+Car.SetForwardSpeed(189@, 18.0)
+Car.StopPlayback(189@)
+Car.SetRotationVelocity(189@, 3.5, 7.3999, 8.1003)
+247@ = 2
+
+:DRUGS1_22519
+if 
+  247@ == 2
+goto_if_false @DRUGS1_22611
+if 
+  Char.IsDead(44@)
+goto_if_false @DRUGS1_22611
+Car.StopPlayback(189@)
+if 
+  not Car.IsDead(189@)
+goto_if_false @DRUGS1_22604
+Car.SetForwardSpeed(189@, 18.0)
+Car.SetRotationVelocity(189@, 3.5, 7.3999, 8.1003)
+
+:DRUGS1_22604
+247@ = 3
+
+:DRUGS1_22611
+if 
+  260@ == 1
+goto_if_false @DRUGS1_22698
+if 
+  Char.IsDead(43@)
+goto_if_false @DRUGS1_22698
+if or
+  Char.IsDead(44@)
+  Car.IsDead(189@)
+goto_if_false @DRUGS1_22698
+Car.StopPlayback(189@)
+Blip.Remove(214@)
+Car.MarkAsNoLongerNeeded(189@)
+Char.MarkAsNoLongerNeeded(43@)
+Char.MarkAsNoLongerNeeded(44@)
+260@ = 2
+
+:DRUGS1_22698
+if 
+  248@ == 1
+goto_if_false @DRUGS1_22946
+if 
+  not Car.IsDead(194@)
+goto_if_false @DRUGS1_22946
+if 
+  not Char.IsDead(49@)
+goto_if_false @DRUGS1_22755
+goto @DRUGS1_22946
+
+:DRUGS1_22755
+if 
+  not Char.IsDead(50@)
+goto_if_false @DRUGS1_22904
+if 
+  Char.IsInCar(50@, 194@)
+goto_if_false @DRUGS1_22897
+205@ = Car.GetDriver(194@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_22897
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(50@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(50@, 194@)
+Task.DriveBy(50@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+248@ = 2
+
+:DRUGS1_22897
+goto @DRUGS1_22946
+
+:DRUGS1_22904
+Car.SetForwardSpeed(194@, 15.0)
+Car.StopPlayback(194@)
+Car.SetRotationVelocity(194@, 3.5, 7.3999, 8.1003)
+248@ = 2
+
+:DRUGS1_22946
+if 
+  248@ == 2
+goto_if_false @DRUGS1_23038
+if 
+  Char.IsDead(50@)
+goto_if_false @DRUGS1_23038
+Car.StopPlayback(194@)
+if 
+  not Car.IsDead(194@)
+goto_if_false @DRUGS1_23031
+Car.SetForwardSpeed(194@, 15.0)
+Car.SetRotationVelocity(194@, 3.5, 7.3999, 8.1003)
+
+:DRUGS1_23031
+248@ = 3
+
+:DRUGS1_23038
+if 
+  261@ == 1
+goto_if_false @DRUGS1_23125
+if 
+  Char.IsDead(49@)
+goto_if_false @DRUGS1_23125
+if or
+  Char.IsDead(50@)
+  Car.IsDead(194@)
+goto_if_false @DRUGS1_23125
+Car.StopPlayback(194@)
+Blip.Remove(215@)
+Car.MarkAsNoLongerNeeded(194@)
+Char.MarkAsNoLongerNeeded(49@)
+Char.MarkAsNoLongerNeeded(50@)
+261@ = 2
+
+:DRUGS1_23125
+if 
+  Char.IsDead(54@)
+goto_if_false @DRUGS1_23162
+if 
+  Blip.DoesExist(226@)
+goto_if_false @DRUGS1_23162
+Blip.Remove(226@)
+
+:DRUGS1_23162
+if 
+  Char.IsDead(55@)
+goto_if_false @DRUGS1_23199
+if 
+  Blip.DoesExist(227@)
+goto_if_false @DRUGS1_23199
+Blip.Remove(227@)
+
+:DRUGS1_23199
+if 
+  Car.IsDead(190@)
+goto_if_false @DRUGS1_23236
+if 
+  Blip.DoesExist(230@)
+goto_if_false @DRUGS1_23236
+Blip.Remove(230@)
+
+:DRUGS1_23236
+if 
+  Car.IsDead(192@)
+goto_if_false @DRUGS1_23273
+if 
+  Blip.DoesExist(228@)
+goto_if_false @DRUGS1_23273
+Blip.Remove(228@)
+
+:DRUGS1_23273
+if 
+  286@ == 0
+goto_if_false @DRUGS1_23354
+if 
+  not Car.IsDead(169@)
+goto_if_false @DRUGS1_23354
+if 
+  not Car.IsDead(188@)
+goto_if_false @DRUGS1_23354
+if 
+  Car.HasBeenDamagedByCar(169@, 188@)
+goto_if_false @DRUGS1_23354
+Car.Explode(169@)
+286@ = 1
+
+:DRUGS1_23354
+if 
+  287@ == 0
+goto_if_false @DRUGS1_23435
+if 
+  not Car.IsDead(170@)
+goto_if_false @DRUGS1_23435
+if 
+  not Car.IsDead(188@)
+goto_if_false @DRUGS1_23435
+if 
+  Car.HasBeenDamagedByCar(170@, 188@)
+goto_if_false @DRUGS1_23435
+Car.Explode(170@)
+287@ = 1
+
+:DRUGS1_23435
+if or
+  90@ == 20
+  243@ == 1
+goto_if_false @DRUGS1_25482
+if 
+  3 > 245@
+goto_if_false @DRUGS1_25482
+if 
+  282@ == 0
+goto_if_false @DRUGS1_23545
+if 
+  283@ == 0
+goto_if_false @DRUGS1_23545
+set_lvar_int_to_constant 239@ = 35664
+set_lvar_text_label 240@s = 'SMO4_FB'
+gosub @DRUGS1_51600
+
+:DRUGS1_23545
+if 
+  282@ == 1
+goto_if_false @DRUGS1_23612
+if 
+  283@ == 0
+goto_if_false @DRUGS1_23612
+set_lvar_int_to_constant 239@ = 35662
+set_lvar_text_label 240@s = 'SMO4_ES'
+gosub @DRUGS1_51600
+
+:DRUGS1_23612
+if 
+  285@ == 0
+goto_if_false @DRUGS1_23675
+if 
+  Car.Locate2D(161@, 0, 1659.49, -1580.97, 50.0, 50.0)
+goto_if_false @DRUGS1_23675
+285@ = 1
+
+:DRUGS1_23675
+if 
+  282@ == 2
+goto_if_false @DRUGS1_23760
+if 
+  283@ == 0
+goto_if_false @DRUGS1_23760
+if 
+  285@ == 1
+goto_if_false @DRUGS1_23760
+set_lvar_int_to_constant 239@ = 35666
+set_lvar_text_label 240@s = 'SMO4_FD'
+gosub @DRUGS1_51600
+
+:DRUGS1_23760
+if 
+  282@ == 3
+goto_if_false @DRUGS1_23827
+if 
+  283@ == 0
+goto_if_false @DRUGS1_23827
+set_lvar_int_to_constant 239@ = 35667
+set_lvar_text_label 240@s = 'SMO4_FE'
+gosub @DRUGS1_51600
+
+:DRUGS1_23827
+if 
+  282@ == 4
+goto_if_false @DRUGS1_23894
+if 
+  283@ == 0
+goto_if_false @DRUGS1_23894
+set_lvar_int_to_constant 239@ = 35668
+set_lvar_text_label 240@s = 'SMO4_FF'
+gosub @DRUGS1_51600
+
+:DRUGS1_23894
+if 
+  282@ == 5
+goto_if_false @DRUGS1_23961
+if 
+  283@ == 0
+goto_if_false @DRUGS1_23961
+set_lvar_int_to_constant 239@ = 35669
+set_lvar_text_label 240@s = 'SMO4_FG'
+gosub @DRUGS1_51600
+
+:DRUGS1_23961
+if 
+  285@ == 1
+goto_if_false @DRUGS1_24024
+if 
+  Car.Locate2D(161@, 0, 1638.05, -1440.64, 60.0, 60.0)
+goto_if_false @DRUGS1_24024
+285@ = 2
+
+:DRUGS1_24024
+if 
+  282@ == 6
+goto_if_false @DRUGS1_24109
+if 
+  283@ == 0
+goto_if_false @DRUGS1_24109
+if 
+  285@ == 2
+goto_if_false @DRUGS1_24109
+set_lvar_int_to_constant 239@ = 35665
+set_lvar_text_label 240@s = 'SMO4_FC'
+gosub @DRUGS1_51600
+
+:DRUGS1_24109
+if 
+  285@ == 2
+goto_if_false @DRUGS1_24172
+if 
+  Car.Locate2D(161@, 0, 1579.33, -1438.05, 55.0, 55.0)
+goto_if_false @DRUGS1_24172
+285@ = 3
+
+:DRUGS1_24172
+if 
+  282@ == 7
+goto_if_false @DRUGS1_24257
+if 
+  283@ == 0
+goto_if_false @DRUGS1_24257
+if 
+  285@ == 3
+goto_if_false @DRUGS1_24257
+set_lvar_int_to_constant 239@ = 35671
+set_lvar_text_label 240@s = 'SMO4_FJ'
+gosub @DRUGS1_51600
+
+:DRUGS1_24257
+if 
+  282@ == 8
+goto_if_false @DRUGS1_24324
+if 
+  283@ == 0
+goto_if_false @DRUGS1_24324
+set_lvar_int_to_constant 239@ = 35672
+set_lvar_text_label 240@s = 'SMO4_FK'
+gosub @DRUGS1_51600
+
+:DRUGS1_24324
+if 
+  285@ == 3
+goto_if_false @DRUGS1_24424
+if 
+  not Car.IsDead(188@)
+goto_if_false @DRUGS1_24410
+if 
+  Car.Locate2D(161@, 0, 1432.61, -1438.66, 12.0, 12.0)
+goto_if_false @DRUGS1_24403
+285@ = 4
+
+:DRUGS1_24403
+goto @DRUGS1_24424
+
+:DRUGS1_24410
+285@ = 4
+282@ = 12
+
+:DRUGS1_24424
+if 
+  282@ == 9
+goto_if_false @DRUGS1_24509
+if 
+  283@ == 0
+goto_if_false @DRUGS1_24509
+if 
+  285@ == 4
+goto_if_false @DRUGS1_24509
+set_lvar_int_to_constant 239@ = 35673
+set_lvar_text_label 240@s = 'SMO4_FL'
+gosub @DRUGS1_51600
+
+:DRUGS1_24509
+if 
+  282@ == 10
+goto_if_false @DRUGS1_24576
+if 
+  283@ == 0
+goto_if_false @DRUGS1_24576
+set_lvar_int_to_constant 239@ = 35674
+set_lvar_text_label 240@s = 'SMO4_FM'
+gosub @DRUGS1_51600
+
+:DRUGS1_24576
+if 
+  285@ == 4
+goto_if_false @DRUGS1_24639
+if 
+  Car.Locate2D(161@, 0, 1406.73, -1393.15, 10.0, 10.0)
+goto_if_false @DRUGS1_24639
+285@ = 5
+
+:DRUGS1_24639
+if 
+  282@ == 11
+goto_if_false @DRUGS1_24724
+if 
+  283@ == 0
+goto_if_false @DRUGS1_24724
+if 
+  285@ == 5
+goto_if_false @DRUGS1_24724
+set_lvar_int_to_constant 239@ = 35675
+set_lvar_text_label 240@s = 'SMO4_GA'
+gosub @DRUGS1_51600
+
+:DRUGS1_24724
+if 
+  282@ == 12
+goto_if_false @DRUGS1_24791
+if 
+  283@ == 0
+goto_if_false @DRUGS1_24791
+set_lvar_int_to_constant 239@ = 35676
+set_lvar_text_label 240@s = 'SMO4_GB'
+gosub @DRUGS1_51600
+
+:DRUGS1_24791
+if 
+  282@ == 13
+goto_if_false @DRUGS1_24858
+if 
+  283@ == 0
+goto_if_false @DRUGS1_24858
+set_lvar_int_to_constant 239@ = 35677
+set_lvar_text_label 240@s = 'SMO4_GD'
+gosub @DRUGS1_51600
+
+:DRUGS1_24858
+if 
+  282@ == 14
+goto_if_false @DRUGS1_24925
+if 
+  283@ == 0
+goto_if_false @DRUGS1_24925
+set_lvar_int_to_constant 239@ = 35678
+set_lvar_text_label 240@s = 'SMO4_GE'
+gosub @DRUGS1_51600
+
+:DRUGS1_24925
+if 
+  282@ == 15
+goto_if_false @DRUGS1_24992
+if 
+  283@ == 0
+goto_if_false @DRUGS1_24992
+set_lvar_int_to_constant 239@ = 35679
+set_lvar_text_label 240@s = 'SMO4_GF'
+gosub @DRUGS1_51600
+
+:DRUGS1_24992
+if 
+  282@ == 16
+goto_if_false @DRUGS1_25059
+if 
+  283@ == 0
+goto_if_false @DRUGS1_25059
+set_lvar_int_to_constant 239@ = 35680
+set_lvar_text_label 240@s = 'SMO4_GG'
+gosub @DRUGS1_51600
+
+:DRUGS1_25059
+if 
+  282@ == 17
+goto_if_false @DRUGS1_25126
+if 
+  283@ == 0
+goto_if_false @DRUGS1_25126
+set_lvar_int_to_constant 239@ = 35681
+set_lvar_text_label 240@s = 'SMO4_GH'
+gosub @DRUGS1_51600
+
+:DRUGS1_25126
+if 
+  282@ == 18
+goto_if_false @DRUGS1_25193
+if 
+  283@ == 0
+goto_if_false @DRUGS1_25193
+set_lvar_int_to_constant 239@ = 35682
+set_lvar_text_label 240@s = 'SMO4_GJ'
+gosub @DRUGS1_51600
+
+:DRUGS1_25193
+if 
+  282@ == 19
+goto_if_false @DRUGS1_25260
+if 
+  283@ == 0
+goto_if_false @DRUGS1_25260
+set_lvar_int_to_constant 239@ = 35661
+set_lvar_text_label 240@s = 'SMO4_ER'
+gosub @DRUGS1_51600
+
+:DRUGS1_25260
+if 
+  285@ == 5
+goto_if_false @DRUGS1_25323
+if 
+  Car.Locate2D(161@, 0, 1362.39, -1590.12, 15.0, 15.0)
+goto_if_false @DRUGS1_25323
+285@ = 6
+
+:DRUGS1_25323
+if 
+  282@ == 20
+goto_if_false @DRUGS1_25408
+if 
+  283@ == 0
+goto_if_false @DRUGS1_25408
+if 
+  285@ == 6
+goto_if_false @DRUGS1_25408
+set_lvar_int_to_constant 239@ = 35683
+set_lvar_text_label 240@s = 'SMO4_GK'
+gosub @DRUGS1_51600
+
+:DRUGS1_25408
+if 
+  282@ == 21
+goto_if_false @DRUGS1_25475
+if 
+  283@ == 0
+goto_if_false @DRUGS1_25475
+set_lvar_int_to_constant 239@ = 35655
+set_lvar_text_label 240@s = 'SMO4_EL'
+gosub @DRUGS1_51600
+
+:DRUGS1_25475
+gosub @DRUGS1_51642
+
+:DRUGS1_25482
+if 
+  243@ == 1
+goto_if_false @DRUGS1_32582
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_32582
+if 
+  245@ == 0
+goto_if_false @DRUGS1_26818
+189@ = Car.Create(581, 1446.923, -1429.569, 12.1)
+Car.SetPetrolTankWeakpoint(189@, False)
+Car.SetHeading(189@, 174.719)
+42@ = Char.CreateInsideCar(PedType.Mission1, 111, 189@)
+Char.SetDecisionMaker(42@, 35@)
+Char.SetHealth(42@, 10)
+Char.SetOnlyDamagedByPlayer(42@, True)
+43@ = Char.CreateAsPassenger(PedType.Mission1, 111, 189@, 0)
+Char.GiveWeapon(43@, WeaponType.MicroUzi, 99999)
+Char.SetHealth(43@, 10)
+Char.SetOnlyDamagedByPlayer(43@, True)
+Char.SetDecisionMaker(43@, 35@)
+214@ = Blip.AddForCar(189@)
+Blip.ChangeDisplay(214@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(214@, 2)
+247@ = 1
+260@ = 1
+194@ = Car.Create(581, 1377.421, -1571.321, 12.1)
+Car.SetPetrolTankWeakpoint(194@, False)
+Car.SetHeading(194@, 166.577)
+44@ = Char.CreateInsideCar(PedType.Mission1, 111, 194@)
+Char.SetDecisionMaker(44@, 35@)
+Char.SetHealth(44@, 10)
+Char.SetOnlyDamagedByPlayer(44@, True)
+45@ = Char.CreateAsPassenger(PedType.Mission1, 111, 194@, 0)
+Char.GiveWeapon(45@, WeaponType.MicroUzi, 99999)
+Char.SetHealth(45@, 10)
+Char.SetOnlyDamagedByPlayer(45@, True)
+Char.SetDecisionMaker(45@, 35@)
+215@ = Blip.AddForCar(194@)
+Blip.ChangeDisplay(215@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(215@, 2)
+248@ = 1
+261@ = 1
+195@ = Car.Create(581, 1361.086, -1665.478, 12.62)
+Car.SetPetrolTankWeakpoint(195@, False)
+Car.SetHeading(195@, 187.657)
+46@ = Char.CreateInsideCar(PedType.Mission1, 111, 195@)
+Char.SetDecisionMaker(46@, 35@)
+Char.SetHealth(46@, 50)
+47@ = Char.CreateAsPassenger(PedType.Mission1, 111, 195@, 0)
+Char.GiveWeapon(47@, WeaponType.MicroUzi, 99999)
+Char.SetDecisionMaker(47@, 35@)
+Char.SetHealth(47@, 10)
+216@ = Blip.AddForCar(195@)
+Blip.ChangeDisplay(216@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(216@, 2)
+249@ = 1
+262@ = 1
+196@ = Car.Create(581, 1365.219, -1420.908, 12.104)
+Car.SetPetrolTankWeakpoint(196@, False)
+Car.SetHeading(196@, 353.946)
+56@ = Char.CreateInsideCar(PedType.Mission1, 111, 196@)
+Char.SetDecisionMaker(56@, 35@)
+Char.SetHealth(56@, 10)
+Char.SetOnlyDamagedByPlayer(56@, True)
+57@ = Char.CreateAsPassenger(PedType.Mission1, 111, 196@, 0)
+Char.GiveWeapon(57@, WeaponType.MicroUzi, 99999)
+Char.SetHealth(57@, 10)
+Char.SetOnlyDamagedByPlayer(57@, True)
+Char.SetDecisionMaker(57@, 35@)
+217@ = Blip.AddForCar(196@)
+Blip.ChangeDisplay(217@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(217@, 2)
+250@ = 1
+263@ = 1
+165@ = Car.Create(560, 1374.372, -1665.108, 12.91)
+Car.SetPetrolTankWeakpoint(165@, False)
+Car.SetHeading(165@, 176.22)
+48@ = Char.CreateInsideCar(PedType.Mission1, 111, 165@)
+Char.SetDecisionMaker(48@, 35@)
+49@ = Char.CreateAsPassenger(PedType.Mission1, 111, 165@, 0)
+Char.GiveWeapon(49@, WeaponType.MicroUzi, 99999)
+Char.SetHealth(49@, 10)
+Char.SetDecisionMaker(49@, 35@)
+210@ = Blip.AddForCar(165@)
+Blip.ChangeDisplay(210@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(210@, 2)
+265@ = 1
+255@ = 1
+166@ = Car.Create(560, 1373.704, -1633.619, 12.935)
+Car.SetPetrolTankWeakpoint(166@, False)
+Car.SetHeading(166@, 176.22)
+50@ = Char.CreateInsideCar(PedType.Mission1, 111, 166@)
+Char.SetDecisionMaker(50@, 35@)
+51@ = Char.CreateAsPassenger(PedType.Mission1, 111, 166@, 0)
+Char.GiveWeapon(51@, WeaponType.MicroUzi, 99999)
+Char.SetDecisionMaker(51@, 35@)
+Char.SetHealth(51@, 10)
+211@ = Blip.AddForCar(166@)
+Blip.ChangeDisplay(211@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(211@, 2)
+266@ = 1
+256@ = 1
+wait 0
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_26461
+Car.FreezePosition(161@, False)
+Car.StartPlayback(161@, 258)
+
+:DRUGS1_26461
+if 
+  not Car.IsDead(189@)
+goto_if_false @DRUGS1_26636
+if 
+  not Char.IsDead(42@)
+goto_if_false @DRUGS1_26636
+Car.StartPlayback(189@, 259)
+if 
+  not Char.IsDead(42@)
+goto_if_false @DRUGS1_26584
+if 
+  2 > 288@
+goto_if_false @DRUGS1_26584
+Char.GiveWeapon(42@, WeaponType.MicroUzi, 99999)
+Task.DriveBy(42@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 289@)
+
+:DRUGS1_26584
+if 
+  not Char.IsDead(43@)
+goto_if_false @DRUGS1_26636
+Task.DriveBy(43@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+
+:DRUGS1_26636
+if 
+  not Car.IsDead(196@)
+goto_if_false @DRUGS1_26811
+if 
+  not Char.IsDead(56@)
+goto_if_false @DRUGS1_26676
+Car.StartPlayback(196@, 264)
+
+:DRUGS1_26676
+if 
+  not Char.IsDead(56@)
+goto_if_false @DRUGS1_26759
+if 
+  3 > 288@
+goto_if_false @DRUGS1_26759
+Char.GiveWeapon(56@, WeaponType.MicroUzi, 99999)
+Task.DriveBy(56@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 289@)
+
+:DRUGS1_26759
+if 
+  not Char.IsDead(57@)
+goto_if_false @DRUGS1_26811
+Task.DriveBy(57@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 90)
+
+:DRUGS1_26811
+245@ = 1
+
+:DRUGS1_26818
+if 
+  245@ == 1
+goto_if_false @DRUGS1_27125
+if 
+  Car.Locate2D(161@, 0, 1374.62, -1549.64, 10.0, 10.0)
+goto_if_false @DRUGS1_27125
+if 
+  not Car.IsDead(194@)
+goto_if_false @DRUGS1_27033
+if 
+  not Char.IsDead(44@)
+goto_if_false @DRUGS1_26981
+Car.StartPlayback(194@, 260)
+if 
+  2 > 288@
+goto_if_false @DRUGS1_26981
+Char.GiveWeapon(44@, WeaponType.MicroUzi, 99999)
+Task.DriveBy(44@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 289@)
+
+:DRUGS1_26981
+if 
+  not Char.IsDead(45@)
+goto_if_false @DRUGS1_27033
+Task.DriveBy(45@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+
+:DRUGS1_27033
+Car.Delete(176@)
+Car.Delete(190@)
+Car.Delete(191@)
+Car.Delete(192@)
+Car.Delete(193@)
+Char.Delete(52@)
+Char.Delete(53@)
+Char.Delete(54@)
+Char.Delete(55@)
+Char.Delete(61@)
+Blip.Remove(235@)
+Blip.Remove(226@)
+Blip.Remove(227@)
+Blip.Remove(236@)
+Blip.Remove(230@)
+Blip.Remove(228@)
+Blip.Remove(229@)
+245@ = 2
+
+:DRUGS1_27125
+if 
+  245@ == 2
+goto_if_false @DRUGS1_27464
+if 
+  Car.Locate2D(161@, 0, 1361.086, -1665.478, 10.0, 10.0)
+goto_if_false @DRUGS1_27464
+if 
+  not Car.IsDead(195@)
+goto_if_false @DRUGS1_27221
+if 
+  not Char.IsDead(46@)
+goto_if_false @DRUGS1_27221
+Car.StartPlayback(195@, 261)
+
+:DRUGS1_27221
+if 
+  not Char.IsDead(47@)
+goto_if_false @DRUGS1_27273
+Task.DriveBy(47@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+
+:DRUGS1_27273
+if 
+  not Car.IsDead(165@)
+goto_if_false @DRUGS1_27313
+if 
+  not Char.IsDead(48@)
+goto_if_false @DRUGS1_27313
+Car.StartPlayback(165@, 262)
+
+:DRUGS1_27313
+if 
+  not Char.IsDead(49@)
+goto_if_false @DRUGS1_27365
+Task.DriveBy(49@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 10)
+
+:DRUGS1_27365
+if 
+  not Car.IsDead(166@)
+goto_if_false @DRUGS1_27405
+if 
+  not Char.IsDead(50@)
+goto_if_false @DRUGS1_27405
+Car.StartPlayback(166@, 263)
+
+:DRUGS1_27405
+if 
+  not Char.IsDead(51@)
+goto_if_false @DRUGS1_27457
+Task.DriveBy(51@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 10)
+
+:DRUGS1_27457
+245@ = 3
+
+:DRUGS1_27464
+if 
+  245@ == 3
+goto_if_false @DRUGS1_28454
+if 
+  Car.Locate2D(161@, 1, 1530.0, -1742.0, 10.0, 10.0)
+goto_if_false @DRUGS1_28454
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_27562
+Car.SetProofs(161@, True, True, True, True, True)
+
+:DRUGS1_27562
+$cam_offz = 0.2
+204@ = 0.0
+Camera.AttachToVehicle(161@, 0.0, -2.0, $cam_offz, 0.0, 0.0, 204@, 0.0, SwitchType.JumpCut)
+Char.ClearTasksImmediately($scplayer)
+Char.WarpIntoCarAsPassenger($scplayer, 161@, 0)
+Car.StopPlayback(189@)
+Car.Delete(189@)
+Blip.Remove(214@)
+Char.Delete(42@)
+Char.Delete(43@)
+Car.StopPlayback(194@)
+Car.Delete(194@)
+Blip.Remove(215@)
+Char.Delete(44@)
+Char.Delete(45@)
+Car.StopPlayback(195@)
+Car.Delete(195@)
+Blip.Remove(216@)
+Char.Delete(46@)
+Char.Delete(47@)
+Car.StopPlayback(196@)
+Car.Delete(196@)
+Blip.Remove(217@)
+Char.Delete(56@)
+Char.Delete(57@)
+Car.StopPlayback(165@)
+Car.Delete(165@)
+Blip.Remove(210@)
+Char.Delete(48@)
+Char.Delete(49@)
+Car.StopPlayback(166@)
+Car.Delete(166@)
+Blip.Remove(211@)
+Char.Delete(50@)
+Char.Delete(51@)
+189@ = Car.Create(581, 1505.103, -1733.09, 3.05)
+Car.SetPetrolTankWeakpoint(189@, False)
+Car.SetHeading(189@, 258.539)
+42@ = Char.CreateInsideCar(PedType.Mission1, 111, 189@)
+Char.SetDecisionMaker(42@, 35@)
+Char.SetHealth(42@, 10)
+43@ = Char.CreateAsPassenger(PedType.Mission1, 111, 189@, 0)
+Char.GiveWeapon(43@, WeaponType.MicroUzi, 99999)
+Char.SetHealth(43@, 10)
+Char.SetDecisionMaker(43@, 35@)
+194@ = Car.Create(581, 1487.213, -1734.792, 3.25)
+Car.SetPetrolTankWeakpoint(194@, False)
+Car.SetHeading(194@, 250.829)
+44@ = Char.CreateInsideCar(PedType.Mission1, 111, 194@)
+Char.SetDecisionMaker(44@, 35@)
+Char.SetHealth(44@, 10)
+45@ = Char.CreateAsPassenger(PedType.Mission1, 111, 194@, 0)
+Char.GiveWeapon(45@, WeaponType.MicroUzi, 99999)
+Char.SetHealth(45@, 20)
+Char.SetDecisionMaker(45@, 35@)
+165@ = Car.Create(560, 1496.864, -1731.303, 6.3)
+Car.SetPetrolTankWeakpoint(165@, False)
+Car.SetHeading(165@, 255.305)
+48@ = Char.CreateInsideCar(PedType.Mission1, 111, 165@)
+Char.SetDecisionMaker(48@, 35@)
+49@ = Char.CreateAsPassenger(PedType.Mission1, 111, 165@, 0)
+Char.GiveWeapon(49@, WeaponType.MicroUzi, 99999)
+Char.SetDecisionMaker(49@, 35@)
+Char.SetHealth(49@, 10)
+188@ = Car.Create(443, 1550.873, -1737.122, 14.1055)
+Car.SetPetrolTankWeakpoint(188@, False)
+Car.SetHeading(188@, 245.14)
+197@ = Char.CreateInsideCar(PedType.Mission1, 111, 188@)
+Char.SetCanBeShotInVehicle(197@, False)
+Car.SetProofs(188@, True, True, True, True, True)
+Char.SetProofs(197@, True, True, True, True, True)
+Char.SetDecisionMaker(197@, 35@)
+198@ = Char.CreateAsPassenger(PedType.Mission1, 111, 188@, 0)
+Char.GiveWeapon(198@, WeaponType.MicroUzi, 99999)
+Char.SetDecisionMaker(198@, 35@)
+208@ = Car.Create(560, 1550.873, -1737.122, -14.1055)
+Car.SetPetrolTankWeakpoint(208@, False)
+Car.SetHeading(208@, 256.415)
+Car.SetProofs(208@, True, True, True, True, True)
+Car.AttachToCar(208@, 188@, 0.0, -4.6, 0.65, 15.0, 0.0, 0.0)
+269@ = 0
+207@ = Car.Create(560, 1550.873, -1737.122, 14.1055)
+Car.SetPetrolTankWeakpoint(207@, False)
+Car.SetHeading(207@, 256.415)
+Car.SetProofs(207@, True, True, True, True, True)
+Car.AttachToCar(207@, 188@, 0.0, 1.15, 2.4, 15.0, 0.0, 0.0)
+270@ = 0
+TIMERA = 0
+246@ = 1
+245@ = 4
+
+:DRUGS1_28454
+if 
+  246@ == 1
+goto_if_false @DRUGS1_28613
+if 
+  Car.Locate2D(161@, 1, 1550.52, -1749.19, 10.0, 10.0)
+goto_if_false @DRUGS1_28613
+if 
+  not Car.IsDead(188@)
+goto_if_false @DRUGS1_28534
+Car.StartPlayback(188@, 265)
+
+:DRUGS1_28534
+if 
+  not Car.IsDead(189@)
+goto_if_false @DRUGS1_28558
+Car.StartPlayback(189@, 266)
+
+:DRUGS1_28558
+if 
+  not Car.IsDead(165@)
+goto_if_false @DRUGS1_28582
+Car.StartPlayback(165@, 267)
+
+:DRUGS1_28582
+if 
+  not Car.IsDead(194@)
+goto_if_false @DRUGS1_28606
+Car.StartPlayback(194@, 268)
+
+:DRUGS1_28606
+246@ = 2
+
+:DRUGS1_28613
+if 
+  245@ == 4
+goto_if_false @DRUGS1_28743
+if 
+  TIMERA > 250
+goto_if_false @DRUGS1_28743
+if 
+  0.8 > $cam_offz
+goto_if_false @DRUGS1_28736
+add_timed_val_to_float_var $cam_offz += frame_delta_time * 0.008
+add_timed_val_to_float_lvar 204@ += frame_delta_time * 0.008
+Camera.AttachToVehicle(161@, 0.0, -2.0, $cam_offz, 0.0, 0.0, 204@, 0.0, SwitchType.JumpCut)
+goto @DRUGS1_28743
+
+:DRUGS1_28736
+245@ = 5
+
+:DRUGS1_28743
+if 
+  245@ == 5
+goto_if_false @DRUGS1_28866
+if 
+  TIMERA > 2500
+goto_if_false @DRUGS1_28866
+Camera.SetFixedPosition(1605.591, -1766.793, 3.3342, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1604.774, -1766.255, 3.5404, SwitchType.JumpCut)
+Clock.SetTimeScale(0.9)
+TIMERA = 0
+TIMERB = 0
+276@ = 1
+245@ = 6
+
+:DRUGS1_28866
+if 
+  245@ == 6
+goto_if_false @DRUGS1_28920
+if 
+  TIMERA > 800
+goto_if_false @DRUGS1_28920
+$z = 0.3
+245@ = 7
+
+:DRUGS1_28920
+if 
+  245@ == 7
+goto_if_false @DRUGS1_29024
+if 
+  0.6 > $z
+goto_if_false @DRUGS1_28981
+$z += 0.001
+Clock.SetTimeScale($z)
+goto @DRUGS1_29024
+
+:DRUGS1_28981
+if or
+  TIMERA > 2500
+  $z > 0.6
+goto_if_false @DRUGS1_29024
+245@ = 7
+Clock.SetTimeScale(0.5)
+
+:DRUGS1_29024
+if 
+  245@ == 7
+goto_if_false @DRUGS1_29104
+if 
+  TIMERA > 2000
+goto_if_false @DRUGS1_29104
+Camera.PointAtPoint(1605.783, -1765.834, 3.5404, SwitchType.Interpolation)
+$z = 0.5
+TIMERA = 0
+245@ = 8
+
+:DRUGS1_29104
+if 
+  245@ == 8
+goto_if_false @DRUGS1_29215
+if 
+  1.0 > $z
+goto_if_false @DRUGS1_29165
+$z += 0.01
+Clock.SetTimeScale($z)
+goto @DRUGS1_29215
+
+:DRUGS1_29165
+if or
+  TIMERA > 1000
+  $z > 0.9
+goto_if_false @DRUGS1_29215
+245@ = 9
+TIMERA = 0
+Clock.SetTimeScale(1.0)
+
+:DRUGS1_29215
+if 
+  245@ == 9
+goto_if_false @DRUGS1_29266
+if 
+  TIMERA > 2800
+goto_if_false @DRUGS1_29266
+243@ = 2
+245@ = 10
+
+:DRUGS1_29266
+if 
+  276@ == 1
+goto_if_false @DRUGS1_29378
+if 
+  TIMERB > 1242
+goto_if_false @DRUGS1_29378
+Fx.AddSparks(1580.85, -1752.32, 12.91, 0.0, 0.0, 1.0, 60)
+Fx.AddSparks(1580.75, -1749.51, 12.92, 0.0, 0.0, 1.0, 100)
+276@ = 2
+
+:DRUGS1_29378
+if 
+  276@ == 2
+goto_if_false @DRUGS1_29490
+if 
+  TIMERB > 1400
+goto_if_false @DRUGS1_29490
+Fx.AddSparks(1580.74, -1752.68, 12.87, 0.0, 0.0, 1.0, 100)
+Fx.AddSparks(1580.85, -1749.75, 12.91, 0.0, 0.0, 1.0, 60)
+276@ = 3
+
+:DRUGS1_29490
+if 
+  276@ == 3
+goto_if_false @DRUGS1_29602
+if 
+  TIMERB > 1500
+goto_if_false @DRUGS1_29602
+Fx.AddSparks(1580.85, -1752.32, 12.91, 0.0, 0.0, 1.0, 100)
+Fx.AddSparks(1580.85, -1752.32, 12.91, 0.0, 0.0, 1.0, 80)
+276@ = 4
+
+:DRUGS1_29602
+if 
+  276@ == 4
+goto_if_false @DRUGS1_29714
+if 
+  TIMERB > 1600
+goto_if_false @DRUGS1_29714
+Fx.AddSparks(1580.85, -1752.32, 12.91, 0.0, 0.0, 1.0, 100)
+Fx.AddSparks(1580.75, -1749.51, 12.92, 0.0, 0.0, 1.0, 60)
+276@ = 5
+
+:DRUGS1_29714
+if 
+  276@ == 5
+goto_if_false @DRUGS1_29826
+if 
+  TIMERB > 1700
+goto_if_false @DRUGS1_29826
+Fx.AddSparks(1580.74, -1752.68, 12.87, 0.0, 0.0, 1.0, 80)
+Fx.AddSparks(1580.85, -1749.75, 12.91, 0.0, 0.0, 1.0, 100)
+276@ = 6
+
+:DRUGS1_29826
+if 
+  276@ == 6
+goto_if_false @DRUGS1_29938
+if 
+  TIMERB > 1800
+goto_if_false @DRUGS1_29938
+Fx.AddSparks(1580.85, -1752.32, 12.91, 0.0, 0.0, 1.0, 60)
+Fx.AddSparks(1580.85, -1752.32, 12.91, 0.0, 0.0, 1.0, 80)
+276@ = 7
+
+:DRUGS1_29938
+if 
+  276@ == 7
+goto_if_false @DRUGS1_30016
+if 
+  TIMERB > 2404
+goto_if_false @DRUGS1_30016
+Fx.AddSparks(1599.28, -1757.56, 3.11, 0.0, 0.0, 1.0, 60)
+276@ = 8
+
+:DRUGS1_30016
+if 
+  276@ == 8
+goto_if_false @DRUGS1_30128
+if 
+  TIMERB > 3418
+goto_if_false @DRUGS1_30128
+Fx.AddSparks(1599.76, 1757.96, 3.14, 0.0, 0.0, 1.0, 100)
+Fx.AddSparks(1601.69, -1758.73, 3.18, 0.0, 0.0, 1.0, 60)
+276@ = 9
+
+:DRUGS1_30128
+if 
+  276@ == 9
+goto_if_false @DRUGS1_30206
+if 
+  TIMERB > 3598
+goto_if_false @DRUGS1_30206
+Fx.AddSparks(1605.46, -1763.14, 3.18, 0.0, 0.0, 1.0, 100)
+276@ = 10
+
+:DRUGS1_30206
+if 
+  276@ == 10
+goto_if_false @DRUGS1_30284
+if 
+  TIMERB > 3600
+goto_if_false @DRUGS1_30284
+Fx.AddSparks(1605.46, -1763.14, 3.18, 0.0, 0.0, 1.0, 80)
+276@ = 11
+
+:DRUGS1_30284
+if 
+  4 > 245@
+goto_if_false @DRUGS1_32582
+if 
+  247@ == 1
+goto_if_false @DRUGS1_30550
+if 
+  not Car.IsDead(189@)
+goto_if_false @DRUGS1_30550
+if 
+  not Char.IsDead(42@)
+goto_if_false @DRUGS1_30359
+goto @DRUGS1_30550
+
+:DRUGS1_30359
+if 
+  not Char.IsDead(43@)
+goto_if_false @DRUGS1_30508
+if 
+  Char.IsInCar(43@, 189@)
+goto_if_false @DRUGS1_30501
+205@ = Car.GetDriver(189@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_30501
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(43@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(43@, 189@)
+Task.DriveBy(43@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+247@ = 2
+
+:DRUGS1_30501
+goto @DRUGS1_30550
+
+:DRUGS1_30508
+Car.SetForwardSpeed(189@, 18.0)
+Car.StopPlayback(189@)
+Car.SetRotationVelocity(189@, 1.5, 3.3999, 4.1003)
+247@ = 2
+
+:DRUGS1_30550
+if 
+  247@ == 2
+goto_if_false @DRUGS1_30642
+if 
+  Char.IsDead(43@)
+goto_if_false @DRUGS1_30642
+Car.StopPlayback(189@)
+if 
+  not Car.IsDead(189@)
+goto_if_false @DRUGS1_30635
+Car.SetForwardSpeed(189@, 18.0)
+Car.SetRotationVelocity(189@, 1.5, 3.3999, 4.1003)
+
+:DRUGS1_30635
+247@ = 3
+
+:DRUGS1_30642
+if 
+  260@ == 1
+goto_if_false @DRUGS1_30729
+if 
+  Char.IsDead(42@)
+goto_if_false @DRUGS1_30729
+if or
+  Char.IsDead(43@)
+  Car.IsDead(189@)
+goto_if_false @DRUGS1_30729
+Car.StopPlayback(189@)
+Blip.Remove(214@)
+Car.MarkAsNoLongerNeeded(189@)
+Char.MarkAsNoLongerNeeded(42@)
+Char.MarkAsNoLongerNeeded(43@)
+260@ = 2
+
+:DRUGS1_30729
+if 
+  248@ == 1
+goto_if_false @DRUGS1_30977
+if 
+  not Car.IsDead(194@)
+goto_if_false @DRUGS1_30977
+if 
+  not Char.IsDead(44@)
+goto_if_false @DRUGS1_30786
+goto @DRUGS1_30977
+
+:DRUGS1_30786
+if 
+  not Char.IsDead(45@)
+goto_if_false @DRUGS1_30935
+if 
+  Char.IsInCar(45@, 194@)
+goto_if_false @DRUGS1_30928
+205@ = Car.GetDriver(194@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_30928
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(45@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(45@, 194@)
+Task.DriveBy(45@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+248@ = 2
+
+:DRUGS1_30928
+goto @DRUGS1_30977
+
+:DRUGS1_30935
+Car.SetForwardSpeed(194@, 15.0)
+Car.StopPlayback(194@)
+Car.SetRotationVelocity(194@, 5.5, 3.3999, 5.1003)
+248@ = 2
+
+:DRUGS1_30977
+if 
+  248@ == 2
+goto_if_false @DRUGS1_31069
+if 
+  Char.IsDead(45@)
+goto_if_false @DRUGS1_31069
+Car.StopPlayback(194@)
+if 
+  not Car.IsDead(194@)
+goto_if_false @DRUGS1_31062
+Car.SetForwardSpeed(194@, 15.0)
+Car.SetRotationVelocity(194@, 5.5, 3.3999, 5.1003)
+
+:DRUGS1_31062
+248@ = 3
+
+:DRUGS1_31069
+if 
+  261@ == 1
+goto_if_false @DRUGS1_31156
+if 
+  Char.IsDead(44@)
+goto_if_false @DRUGS1_31156
+if or
+  Char.IsDead(45@)
+  Car.IsDead(194@)
+goto_if_false @DRUGS1_31156
+Car.StopPlayback(194@)
+Blip.Remove(215@)
+Car.MarkAsNoLongerNeeded(194@)
+Char.MarkAsNoLongerNeeded(44@)
+Char.MarkAsNoLongerNeeded(45@)
+261@ = 2
+
+:DRUGS1_31156
+if 
+  249@ == 1
+goto_if_false @DRUGS1_31405
+if 
+  not Car.IsDead(195@)
+goto_if_false @DRUGS1_31405
+if 
+  not Char.IsDead(46@)
+goto_if_false @DRUGS1_31213
+goto @DRUGS1_31405
+
+:DRUGS1_31213
+if 
+  not Char.IsDead(47@)
+goto_if_false @DRUGS1_31363
+if 
+  Char.IsInCar(47@, 195@)
+goto_if_false @DRUGS1_31356
+205@ = Car.GetDriver(195@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_31356
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(47@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(47@, 195@)
+Task.DriveBy(47@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 289@)
+249@ = 2
+
+:DRUGS1_31356
+goto @DRUGS1_31405
+
+:DRUGS1_31363
+Car.SetForwardSpeed(195@, 15.0)
+Car.StopPlayback(195@)
+Car.SetRotationVelocity(195@, 1.5, 4.3999, 5.1003)
+249@ = 2
+
+:DRUGS1_31405
+if 
+  249@ == 2
+goto_if_false @DRUGS1_31497
+if 
+  Char.IsDead(47@)
+goto_if_false @DRUGS1_31497
+Car.StopPlayback(195@)
+if 
+  not Car.IsDead(195@)
+goto_if_false @DRUGS1_31490
+Car.SetForwardSpeed(195@, 15.0)
+Car.SetRotationVelocity(195@, 1.5, 4.3999, 5.1003)
+
+:DRUGS1_31490
+249@ = 3
+
+:DRUGS1_31497
+if 
+  262@ == 1
+goto_if_false @DRUGS1_31584
+if 
+  Char.IsDead(46@)
+goto_if_false @DRUGS1_31584
+if or
+  Char.IsDead(47@)
+  Car.IsDead(195@)
+goto_if_false @DRUGS1_31584
+Car.StopPlayback(195@)
+Blip.Remove(216@)
+Car.MarkAsNoLongerNeeded(195@)
+Char.MarkAsNoLongerNeeded(46@)
+Char.MarkAsNoLongerNeeded(47@)
+262@ = 2
+
+:DRUGS1_31584
+if 
+  250@ == 1
+goto_if_false @DRUGS1_31833
+if 
+  not Car.IsDead(196@)
+goto_if_false @DRUGS1_31833
+if 
+  not Char.IsDead(56@)
+goto_if_false @DRUGS1_31641
+goto @DRUGS1_31833
+
+:DRUGS1_31641
+if 
+  not Char.IsDead(57@)
+goto_if_false @DRUGS1_31791
+if 
+  Char.IsInCar(57@, 196@)
+goto_if_false @DRUGS1_31784
+205@ = Car.GetDriver(196@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_31784
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(57@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(57@, 196@)
+Task.DriveBy(57@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 289@)
+250@ = 2
+
+:DRUGS1_31784
+goto @DRUGS1_31833
+
+:DRUGS1_31791
+Car.SetForwardSpeed(196@, 15.0)
+Car.StopPlayback(196@)
+Car.SetRotationVelocity(196@, 2.5, 3.3999, 3.1003)
+250@ = 2
+
+:DRUGS1_31833
+if 
+  250@ == 2
+goto_if_false @DRUGS1_31925
+if 
+  Char.IsDead(57@)
+goto_if_false @DRUGS1_31925
+Car.StopPlayback(196@)
+if 
+  not Car.IsDead(196@)
+goto_if_false @DRUGS1_31918
+Car.SetForwardSpeed(196@, 15.0)
+Car.SetRotationVelocity(196@, 2.5, 3.3999, 3.1003)
+
+:DRUGS1_31918
+250@ = 3
+
+:DRUGS1_31925
+if 
+  263@ == 1
+goto_if_false @DRUGS1_32012
+if 
+  Char.IsDead(56@)
+goto_if_false @DRUGS1_32012
+if or
+  Char.IsDead(57@)
+  Car.IsDead(196@)
+goto_if_false @DRUGS1_32012
+Car.StopPlayback(196@)
+Blip.Remove(217@)
+Car.MarkAsNoLongerNeeded(196@)
+Char.MarkAsNoLongerNeeded(56@)
+Char.MarkAsNoLongerNeeded(57@)
+263@ = 2
+
+:DRUGS1_32012
+if 
+  265@ == 1
+goto_if_false @DRUGS1_32164
+if 
+  not Car.IsDead(165@)
+goto_if_false @DRUGS1_32164
+if 
+  not Char.IsDead(48@)
+goto_if_false @DRUGS1_32069
+goto @DRUGS1_32164
+
+:DRUGS1_32069
+if 
+  not Char.IsDead(49@)
+goto_if_false @DRUGS1_32152
+if 
+  Char.IsInCar(49@, 165@)
+goto_if_false @DRUGS1_32145
+205@ = Car.GetDriver(165@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_32145
+Task.ShuffleToNextCarSeat(49@, 165@)
+265@ = 2
+
+:DRUGS1_32145
+goto @DRUGS1_32164
+
+:DRUGS1_32152
+Car.StopPlayback(165@)
+265@ = 2
+
+:DRUGS1_32164
+if 
+  265@ == 2
+goto_if_false @DRUGS1_32210
+if 
+  Char.IsDead(49@)
+goto_if_false @DRUGS1_32210
+Car.StopPlayback(165@)
+265@ = 3
+
+:DRUGS1_32210
+if 
+  255@ == 1
+goto_if_false @DRUGS1_32297
+if 
+  Char.IsDead(48@)
+goto_if_false @DRUGS1_32297
+if or
+  Char.IsDead(49@)
+  Car.IsDead(165@)
+goto_if_false @DRUGS1_32297
+Car.StopPlayback(165@)
+Blip.Remove(210@)
+Car.MarkAsNoLongerNeeded(165@)
+Char.MarkAsNoLongerNeeded(48@)
+Char.MarkAsNoLongerNeeded(49@)
+255@ = 2
+
+:DRUGS1_32297
+if 
+  266@ == 1
+goto_if_false @DRUGS1_32449
+if 
+  not Car.IsDead(166@)
+goto_if_false @DRUGS1_32449
+if 
+  not Char.IsDead(50@)
+goto_if_false @DRUGS1_32354
+goto @DRUGS1_32449
+
+:DRUGS1_32354
+if 
+  not Char.IsDead(51@)
+goto_if_false @DRUGS1_32437
+if 
+  Char.IsInCar(51@, 166@)
+goto_if_false @DRUGS1_32430
+205@ = Car.GetDriver(166@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_32430
+Task.ShuffleToNextCarSeat(51@, 166@)
+266@ = 2
+
+:DRUGS1_32430
+goto @DRUGS1_32449
+
+:DRUGS1_32437
+Car.StopPlayback(166@)
+266@ = 2
+
+:DRUGS1_32449
+if 
+  266@ == 2
+goto_if_false @DRUGS1_32495
+if 
+  Char.IsDead(51@)
+goto_if_false @DRUGS1_32495
+Car.StopPlayback(166@)
+266@ = 3
+
+:DRUGS1_32495
+if 
+  256@ == 1
+goto_if_false @DRUGS1_32582
+if 
+  Char.IsDead(50@)
+goto_if_false @DRUGS1_32582
+if or
+  Char.IsDead(51@)
+  Car.IsDead(166@)
+goto_if_false @DRUGS1_32582
+Car.StopPlayback(166@)
+Car.MarkAsNoLongerNeeded(166@)
+Char.MarkAsNoLongerNeeded(50@)
+Char.MarkAsNoLongerNeeded(51@)
+Blip.Remove(211@)
+256@ = 2
+
+:DRUGS1_32582
+if 
+  243@ == 2
+goto_if_false @DRUGS1_42323
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_42323
+if 
+  272@ == 0
+goto_if_false @DRUGS1_34556
+Camera.DoFade(0, Fade.Out)
+Car.StopPlayback(189@)
+Car.Delete(189@)
+Char.Delete(42@)
+Char.Delete(43@)
+Car.StopPlayback(194@)
+Car.Delete(194@)
+Char.Delete(44@)
+Char.Delete(45@)
+Car.StopPlayback(165@)
+Car.Delete(165@)
+Char.Delete(48@)
+Char.Delete(49@)
+Car.Delete(208@)
+Car.Delete(207@)
+Car.StopPlayback(188@)
+Car.Delete(188@)
+Char.Delete(197@)
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_32746
+Car.StopPlayback(161@)
+
+:DRUGS1_32746
+Streaming.RequestCarRecording(269)
+Streaming.RequestCarRecording(270)
+Streaming.RequestCarRecording(271)
+Streaming.RequestCarRecording(272)
+Streaming.RequestCarRecording(273)
+Streaming.RequestCarRecording(274)
+Streaming.RequestCarRecording(275)
+Streaming.RequestCarRecording(276)
+Streaming.RequestCarRecording(277)
+Streaming.RequestCarRecording(278)
+Streaming.RequestCarRecording(279)
+Streaming.RequestCarRecording(280)
+Streaming.RequestCarRecording(281)
+Streaming.LoadAllModelsNow
+
+:DRUGS1_32813
+if or
+  not Streaming.HasCarRecordingBeenLoaded(273)
+  not Streaming.HasCarRecordingBeenLoaded(274)
+  not Streaming.HasCarRecordingBeenLoaded(275)
+  not Streaming.HasCarRecordingBeenLoaded(276)
+  not Streaming.HasCarRecordingBeenLoaded(277)
+goto_if_false @DRUGS1_32860
+wait 0
+goto @DRUGS1_32813
+
+:DRUGS1_32860
+if or
+  not Streaming.HasCarRecordingBeenLoaded(278)
+  not Streaming.HasCarRecordingBeenLoaded(279)
+  not Streaming.HasCarRecordingBeenLoaded(280)
+  not Streaming.HasCarRecordingBeenLoaded(281)
+goto_if_false @DRUGS1_32902
+wait 0
+goto @DRUGS1_32860
+
+:DRUGS1_32902
+if or
+  not Streaming.HasCarRecordingBeenLoaded(269)
+  not Streaming.HasCarRecordingBeenLoaded(270)
+  not Streaming.HasCarRecordingBeenLoaded(271)
+  not Streaming.HasCarRecordingBeenLoaded(272)
+goto_if_false @DRUGS1_32944
+wait 0
+goto @DRUGS1_32902
+
+:DRUGS1_32944
+188@ = Car.Create(443, 1601.915, -1755.917, 4.6)
+Car.SetPetrolTankWeakpoint(188@, False)
+Car.SetHeading(188@, 256.415)
+197@ = Char.CreateInsideCar(PedType.Mission1, 111, 188@)
+Char.SetCanBeShotInVehicle(197@, False)
+Car.SetProofs(188@, True, True, True, True, True)
+Char.SetProofs(197@, True, True, True, True, True)
+Char.SetDecisionMaker(197@, 35@)
+Char.SetOnlyDamagedByPlayer(197@, True)
+209@ = Blip.AddForCar(188@)
+Blip.ChangeDisplay(209@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(209@, 2)
+208@ = Car.Create(560, 1550.873, -1737.122, -14.1055)
+Car.SetPetrolTankWeakpoint(208@, False)
+Car.SetHeading(208@, 256.415)
+Car.SetProofs(208@, True, True, True, True, True)
+Car.AttachToCar(208@, 188@, 0.0, -4.6, 0.65, 15.0, 0.0, 0.0)
+273@ = 1
+207@ = Car.Create(560, 1550.873, -1737.122, 14.1055)
+Car.SetPetrolTankWeakpoint(207@, False)
+Car.SetHeading(207@, 256.415)
+Car.SetProofs(207@, True, True, True, True, True)
+Car.AttachToCar(207@, 188@, 0.0, 1.15, 2.4, 15.0, 0.0, 0.0)
+274@ = 1
+189@ = Car.Create(581, 1505.103, -1733.09, 3.05)
+Car.SetPetrolTankWeakpoint(189@, False)
+Car.SetHeading(189@, 258.539)
+Car.SetProofs(189@, False, True, True, True, False)
+42@ = Char.CreateInsideCar(PedType.Mission1, 111, 189@)
+Char.SetHealth(42@, 10)
+Char.SetOnlyDamagedByPlayer(42@, 10)
+Char.SetDecisionMaker(42@, 35@)
+Char.SetOnlyDamagedByPlayer(42@, True)
+43@ = Char.CreateAsPassenger(PedType.Mission1, 111, 189@, 0)
+Char.GiveWeapon(43@, WeaponType.MicroUzi, 99999)
+Char.SetHealth(43@, 10)
+Char.SetOnlyDamagedByPlayer(43@, 10)
+Char.SetDecisionMaker(43@, 35@)
+Char.SetOnlyDamagedByPlayer(43@, True)
+247@ = 1
+260@ = 1
+214@ = Blip.AddForCar(189@)
+Blip.ChangeDisplay(214@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(214@, 2)
+194@ = Car.Create(581, 1487.213, -1734.792, 3.25)
+Car.SetPetrolTankWeakpoint(194@, False)
+Car.SetHeading(194@, 258.716)
+Car.SetProofs(194@, False, True, True, True, False)
+44@ = Char.CreateInsideCar(PedType.Mission1, 111, 194@)
+Char.SetDecisionMaker(44@, 35@)
+Char.SetOnlyDamagedByPlayer(44@, True)
+Char.SetHealth(44@, 20)
+45@ = Char.CreateAsPassenger(PedType.Mission1, 111, 194@, 0)
+Char.GiveWeapon(45@, WeaponType.MicroUzi, 99999)
+Char.SetDecisionMaker(45@, 35@)
+Char.SetOnlyDamagedByPlayer(45@, True)
+Char.SetHealth(45@, 30)
+248@ = 1
+261@ = 1
+215@ = Blip.AddForCar(194@)
+Blip.ChangeDisplay(215@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(215@, 2)
+165@ = Car.Create(560, 1496.864, -1731.303, 6.3)
+Car.SetPetrolTankWeakpoint(165@, False)
+Car.SetHeading(165@, 257.724)
+46@ = Char.CreateInsideCar(PedType.Mission1, 111, 165@)
+Char.SetDecisionMaker(46@, 35@)
+Char.SetCanBeShotInVehicle(46@, False)
+Char.SetOnlyDamagedByPlayer(46@, True)
+47@ = Char.CreateAsPassenger(PedType.Mission1, 111, 165@, 0)
+Char.GiveWeapon(47@, WeaponType.MicroUzi, 99999)
+Char.SetOnlyDamagedByPlayer(47@, True)
+Char.SetDecisionMaker(47@, 35@)
+Char.SetHealth(47@, 10)
+265@ = 1
+255@ = 1
+210@ = Blip.AddForCar(165@)
+Blip.ChangeDisplay(210@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(210@, 2)
+Car.SetHealth(165@, 1000)
+wait 0
+if 
+  not Car.IsDead(188@)
+goto_if_false @DRUGS1_33824
+Car.StartPlayback(188@, 269)
+
+:DRUGS1_33824
+if 
+  not Car.IsDead(208@)
+goto_if_false @DRUGS1_33848
+Car.StartPlayback(208@, 270)
+
+:DRUGS1_33848
+if 
+  not Car.IsDead(207@)
+goto_if_false @DRUGS1_33872
+Car.StartPlayback(207@, 271)
+
+:DRUGS1_33872
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_33896
+Car.StartPlayback(161@, 272)
+
+:DRUGS1_33896
+if 
+  not Car.IsDead(208@)
+goto_if_false @DRUGS1_33934
+Car.Detach(208@, 20.0, 180.0, 0.0, False)
+
+:DRUGS1_33934
+if 
+  not Car.IsDead(207@)
+goto_if_false @DRUGS1_33972
+Car.Detach(207@, 20.0, 180.0, 0.0, False)
+
+:DRUGS1_33972
+if 
+  not Car.IsDead(189@)
+goto_if_false @DRUGS1_33996
+Car.StartPlayback(189@, 273)
+
+:DRUGS1_33996
+if 
+  not Car.IsDead(194@)
+goto_if_false @DRUGS1_34020
+Car.StartPlayback(194@, 274)
+
+:DRUGS1_34020
+if 
+  not Car.IsDead(165@)
+goto_if_false @DRUGS1_34044
+Car.StartPlayback(165@, 275)
+
+:DRUGS1_34044
+Task.DriveBy($scplayer, -1, -1, 0.0, 0.0, 0.0, 300.0, DriveByType.Ai, True, 100)
+Player.SetHeadingForAttached($player1, 346.2, 359.0)
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_34138
+Car.SetProofs(161@, False, True, True, True, True)
+
+:DRUGS1_34138
+Camera.DoFade(1, 250)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+285@ = 0
+282@ = 0
+283@ = 0
+Char.SetProofs($scplayer, True, True, True, True, True)
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_34220
+Char.SetProofs($big_smoke, True, True, True, True, True)
+
+:DRUGS1_34220
+TIMERB = 0
+if 
+  not Char.IsDead(43@)
+goto_if_false @DRUGS1_34279
+Task.DriveBy(43@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 90)
+
+:DRUGS1_34279
+if 
+  not Char.IsDead(42@)
+goto_if_false @DRUGS1_34362
+if 
+  3 > 288@
+goto_if_false @DRUGS1_34362
+Char.GiveWeapon(42@, WeaponType.MicroUzi, 99999)
+Task.DriveBy(42@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 289@)
+
+:DRUGS1_34362
+if 
+  not Char.IsDead(44@)
+goto_if_false @DRUGS1_34445
+if 
+  2 > 288@
+goto_if_false @DRUGS1_34445
+Char.GiveWeapon(44@, WeaponType.MicroUzi, 99999)
+Task.DriveBy(44@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 289@)
+
+:DRUGS1_34445
+if 
+  not Char.IsDead(45@)
+goto_if_false @DRUGS1_34497
+Task.DriveBy(45@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 90)
+
+:DRUGS1_34497
+if 
+  not Char.IsDead(47@)
+goto_if_false @DRUGS1_34549
+Task.DriveBy(47@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 90)
+
+:DRUGS1_34549
+272@ = 1
+
+:DRUGS1_34556
+if 
+  272@ == 1
+goto_if_false @DRUGS1_35101
+if 
+  Car.Locate2D(161@, 0, 1905.28, -1831.57, 12.0, 12.0)
+goto_if_false @DRUGS1_35101
+166@ = Car.Create(560, 2002.102, -1890.368, 8.108)
+Car.SetPetrolTankWeakpoint(166@, False)
+Car.SetHeading(166@, 44.1)
+Car.StartPlayback(166@, 276)
+48@ = Char.CreateInsideCar(PedType.Mission1, 111, 166@)
+Char.SetDecisionMaker(48@, 35@)
+Char.SetCanBeShotInVehicle(48@, False)
+Char.SetOnlyDamagedByPlayer(48@, True)
+49@ = Char.CreateAsPassenger(PedType.Mission1, 111, 166@, 0)
+Char.GiveWeapon(49@, WeaponType.MicroUzi, 99999)
+Char.SetOnlyDamagedByPlayer(49@, True)
+Char.SetDecisionMaker(49@, 35@)
+Char.SetHealth(49@, 10)
+266@ = 1
+256@ = 1
+211@ = Blip.AddForCar(166@)
+Blip.ChangeDisplay(211@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(211@, 2)
+Car.SetHealth(166@, 1100)
+Car.SetProofs(166@, False, True, False, False, False)
+167@ = Car.Create(560, 2008.843, -1897.323, 8.1)
+Car.SetPetrolTankWeakpoint(167@, False)
+Car.SetHeading(167@, 44.1)
+Car.StartPlayback(167@, 277)
+Car.SetProofs(167@, False, True, True, True, False)
+Car.SetOnlyDamagedByPlayer(167@, True)
+50@ = Char.CreateInsideCar(PedType.Mission1, 111, 167@)
+Char.SetDecisionMaker(50@, 35@)
+Char.SetOnlyDamagedByPlayer(50@, True)
+51@ = Char.CreateAsPassenger(PedType.Mission1, 111, 167@, 0)
+Char.GiveWeapon(51@, WeaponType.MicroUzi, 99999)
+Char.SetOnlyDamagedByPlayer(51@, True)
+Char.SetDecisionMaker(51@, 35@)
+Char.SetHealth(51@, 10)
+267@ = 1
+257@ = 1
+212@ = Blip.AddForCar(167@)
+Blip.ChangeDisplay(212@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(212@, 2)
+Car.SetHealth(167@, 700)
+if 
+  not Char.IsDead(49@)
+goto_if_false @DRUGS1_35042
+Task.DriveBy(49@, -1, 161@, 0.0, 0.0, 0.0, 250.0, DriveByType.Ai, True, 10)
+
+:DRUGS1_35042
+if 
+  not Char.IsDead(51@)
+goto_if_false @DRUGS1_35094
+Task.DriveBy(51@, -1, 161@, 0.0, 0.0, 0.0, 250.0, DriveByType.Ai, True, 10)
+
+:DRUGS1_35094
+272@ = 2
+
+:DRUGS1_35101
+if 
+  272@ == 2
+goto_if_false @DRUGS1_35810
+if 
+  Car.Locate2D(161@, 0, 2101.55, -1850.81, 12.0, 12.0)
+goto_if_false @DRUGS1_35810
+196@ = Car.Create(581, 2093.446, -1836.207, 12.72)
+Car.SetPetrolTankWeakpoint(196@, False)
+Car.SetHeading(196@, 267.18)
+Car.SetProofs(196@, False, True, True, True, False)
+52@ = Char.CreateInsideCar(PedType.Mission1, 111, 196@)
+Char.SetHealth(52@, 50)
+Char.SetDecisionMaker(52@, 35@)
+Char.SetOnlyDamagedByPlayer(52@, True)
+53@ = Char.CreateAsPassenger(PedType.Mission1, 111, 196@, 0)
+Char.GiveWeapon(53@, WeaponType.MicroUzi, 99999)
+Char.SetDecisionMaker(53@, 35@)
+Char.SetOnlyDamagedByPlayer(53@, True)
+Char.SetHealth(53@, 10)
+250@ = 1
+263@ = 1
+217@ = Blip.AddForCar(196@)
+Blip.ChangeDisplay(217@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(217@, 2)
+Car.StartPlayback(196@, 279)
+195@ = Car.Create(581, 2018.735, -1900.925, 8.108)
+Car.SetPetrolTankWeakpoint(195@, False)
+Car.SetHeading(195@, 258.716)
+Car.SetProofs(195@, False, True, True, True, False)
+54@ = Char.CreateInsideCar(PedType.Mission1, 111, 195@)
+Char.SetDecisionMaker(54@, 35@)
+Char.SetOnlyDamagedByPlayer(54@, True)
+55@ = Char.CreateAsPassenger(PedType.Mission1, 111, 195@, 0)
+Char.GiveWeapon(55@, WeaponType.MicroUzi, 99999)
+Char.SetDecisionMaker(55@, 35@)
+Char.SetOnlyDamagedByPlayer(55@, True)
+Char.SetHealth(54@, 10)
+Char.SetOnlyDamagedByPlayer(54@, 10)
+Char.SetHealth(55@, 30)
+Char.SetOnlyDamagedByPlayer(55@, 10)
+249@ = 1
+262@ = 1
+216@ = Blip.AddForCar(195@)
+Blip.ChangeDisplay(216@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(216@, 2)
+Car.StartPlayback(195@, 278)
+if 
+  not Char.IsDead(52@)
+goto_if_false @DRUGS1_35616
+if 
+  4 > 288@
+goto_if_false @DRUGS1_35616
+Char.GiveWeapon(52@, WeaponType.MicroUzi, 99999)
+Task.DriveBy(52@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 289@)
+
+:DRUGS1_35616
+if 
+  not Char.IsDead(54@)
+goto_if_false @DRUGS1_35699
+if 
+  4 > 288@
+goto_if_false @DRUGS1_35699
+Char.GiveWeapon(54@, WeaponType.MicroUzi, 99999)
+Task.DriveBy(54@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 289@)
+
+:DRUGS1_35699
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRUGS1_35751
+Task.DriveBy(53@, -1, 161@, 0.0, 0.0, 0.0, 250.0, DriveByType.Ai, True, 100)
+
+:DRUGS1_35751
+if 
+  not Char.IsDead(55@)
+goto_if_false @DRUGS1_35803
+Task.DriveBy(55@, -1, 161@, 0.0, 0.0, 0.0, 250.0, DriveByType.Ai, True, 100)
+
+:DRUGS1_35803
+272@ = 3
+
+:DRUGS1_35810
+if 
+  272@ == 3
+goto_if_false @DRUGS1_36241
+if 
+  Car.Locate2D(161@, 0, 2425.93, -1874.76, 10.0, 10.0)
+goto_if_false @DRUGS1_36241
+Car.Delete(208@)
+Car.Delete(207@)
+Car.Delete(189@)
+Car.Delete(194@)
+Char.Delete(42@)
+Char.Delete(43@)
+Char.Delete(44@)
+Char.Delete(45@)
+Car.Delete(165@)
+Car.Delete(166@)
+Char.Delete(46@)
+Char.Delete(47@)
+Char.Delete(48@)
+Char.Delete(49@)
+206@ = Car.Create(581, 2417.1, -1876.578, 12.92)
+Car.SetPetrolTankWeakpoint(206@, False)
+Car.SetHeading(206@, 271.4)
+Car.StartPlayback(206@, 280)
+Car.SetProofs(206@, False, True, True, True, False)
+56@ = Char.CreateInsideCar(PedType.Mission1, 111, 206@)
+Char.SetDecisionMaker(56@, 35@)
+Char.SetOnlyDamagedByPlayer(56@, True)
+57@ = Char.CreateAsPassenger(PedType.Mission1, 111, 206@, 0)
+Char.GiveWeapon(57@, WeaponType.MicroUzi, 99999)
+Char.SetDecisionMaker(57@, 35@)
+Char.SetOnlyDamagedByPlayer(57@, True)
+Char.SetHealth(56@, 10)
+Char.SetHealth(57@, 10)
+251@ = 1
+264@ = 1
+218@ = Blip.AddForCar(206@)
+Blip.ChangeDisplay(218@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(218@, 2)
+if 
+  not Char.IsDead(57@)
+goto_if_false @DRUGS1_36169
+Task.DriveBy(57@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 90)
+
+:DRUGS1_36169
+if 
+  not Char.IsDead(56@)
+goto_if_false @DRUGS1_36234
+Char.GiveWeapon(56@, WeaponType.MicroUzi, 99999)
+Task.DriveBy(56@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 289@)
+
+:DRUGS1_36234
+272@ = 4
+
+:DRUGS1_36241
+if 
+  272@ == 4
+goto_if_false @DRUGS1_36524
+if 
+  Car.Locate2D(161@, 0, 2499.36, -1871.699, 10.0, 10.0)
+goto_if_false @DRUGS1_36524
+168@ = Car.Create(560, 2529.256, -1892.9, 13.24)
+Car.SetPetrolTankWeakpoint(168@, False)
+Car.SetHeading(168@, 269.177)
+Car.StartPlayback(168@, 281)
+Car.SetHealth(168@, 600)
+58@ = Char.CreateInsideCar(PedType.Mission1, 111, 168@)
+Char.SetDecisionMaker(58@, 35@)
+Char.SetOnlyDamagedByPlayer(58@, True)
+59@ = Char.CreateAsPassenger(PedType.Mission1, 111, 168@, 0)
+Char.GiveWeapon(59@, WeaponType.MicroUzi, 99999)
+Char.SetOnlyDamagedByPlayer(59@, True)
+Char.SetDecisionMaker(59@, 35@)
+268@ = 1
+258@ = 1
+213@ = Blip.AddForCar(168@)
+Blip.ChangeDisplay(213@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(213@, 2)
+Car.SetHealth(168@, 800)
+if 
+  not Char.IsDead(59@)
+goto_if_false @DRUGS1_36517
+Task.DriveBy(59@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 90)
+
+:DRUGS1_36517
+272@ = 5
+
+:DRUGS1_36524
+if 
+  272@ == 5
+goto_if_false @DRUGS1_36588
+if 
+  not Car.IsDead(188@)
+goto_if_false @DRUGS1_36588
+if 
+  not is_recording_going_on_for_car 188@
+goto_if_false @DRUGS1_36588
+Car.FreezePosition(188@, True)
+272@ = 6
+
+:DRUGS1_36588
+if 
+  272@ == 6
+goto_if_false @DRUGS1_36656
+if 
+  279@ == 0
+goto_if_false @DRUGS1_36656
+if 
+  243@ == 2
+goto_if_false @DRUGS1_36656
+279@ = 1
+277@ = 1
+
+:DRUGS1_36656
+if 
+  273@ == 1
+goto_if_false @DRUGS1_36810
+if 
+  not Car.IsDead(165@)
+goto_if_false @DRUGS1_36810
+if 
+  not Car.IsDead(208@)
+goto_if_false @DRUGS1_36810
+if 
+  TIMERB > 26250
+goto_if_false @DRUGS1_36810
+if or
+  265@ <> 3
+  255@ <> 2
+goto_if_false @DRUGS1_36810
+Car.SetProofs(208@, False, False, False, False, False)
+Car.StopPlayback(208@)
+Car.SetHealth(208@, 200)
+Car.SetRotationVelocity(208@, 1.5, -2.3999, 4.1003)
+Car.Explode(208@)
+273@ = 2
+
+:DRUGS1_36810
+if 
+  273@ == 2
+goto_if_false @DRUGS1_36875
+if 
+  not Car.IsDead(165@)
+goto_if_false @DRUGS1_36875
+if 
+  TIMERB > 26900
+goto_if_false @DRUGS1_36875
+Car.Explode(165@)
+273@ = 3
+
+:DRUGS1_36875
+if 
+  274@ == 1
+goto_if_false @DRUGS1_36976
+if 
+  not Car.IsDead(166@)
+goto_if_false @DRUGS1_36976
+if 
+  not Car.IsDead(207@)
+goto_if_false @DRUGS1_36976
+if 
+  TIMERB > 35647
+goto_if_false @DRUGS1_36976
+Car.SetProofs(207@, False, False, False, False, False)
+Car.SetHealth(207@, 500)
+274@ = 2
+
+:DRUGS1_36976
+if 
+  274@ == 2
+goto_if_false @DRUGS1_37043
+if 
+  TIMERB > 35800
+goto_if_false @DRUGS1_37043
+if 
+  not Car.IsDead(207@)
+goto_if_false @DRUGS1_37043
+Car.Explode(207@)
+274@ = 3
+
+:DRUGS1_37043
+if 
+  274@ == 3
+goto_if_false @DRUGS1_37110
+if 
+  TIMERB > 36500
+goto_if_false @DRUGS1_37110
+if 
+  not Car.IsDead(166@)
+goto_if_false @DRUGS1_37110
+Car.Explode(166@)
+274@ = 4
+
+:DRUGS1_37110
+if 
+  247@ == 1
+goto_if_false @DRUGS1_37358
+if 
+  not Car.IsDead(189@)
+goto_if_false @DRUGS1_37358
+if 
+  not Char.IsDead(42@)
+goto_if_false @DRUGS1_37167
+goto @DRUGS1_37358
+
+:DRUGS1_37167
+if 
+  not Char.IsDead(43@)
+goto_if_false @DRUGS1_37316
+if 
+  Char.IsInCar(43@, 189@)
+goto_if_false @DRUGS1_37309
+205@ = Car.GetDriver(189@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_37309
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(43@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(43@, 189@)
+Task.DriveBy(43@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+247@ = 2
+
+:DRUGS1_37309
+goto @DRUGS1_37358
+
+:DRUGS1_37316
+Car.SetForwardSpeed(189@, 18.0)
+Car.StopPlayback(189@)
+Car.SetRotationVelocity(189@, 3.5, 7.3999, 8.1003)
+247@ = 2
+
+:DRUGS1_37358
+if 
+  247@ == 2
+goto_if_false @DRUGS1_37450
+if 
+  Char.IsDead(43@)
+goto_if_false @DRUGS1_37450
+Car.StopPlayback(189@)
+if 
+  not Car.IsDead(189@)
+goto_if_false @DRUGS1_37443
+Car.SetForwardSpeed(189@, 18.0)
+Car.SetRotationVelocity(189@, 3.5, 7.3999, 8.1003)
+
+:DRUGS1_37443
+247@ = 3
+
+:DRUGS1_37450
+if 
+  260@ == 1
+goto_if_false @DRUGS1_37537
+if 
+  Char.IsDead(42@)
+goto_if_false @DRUGS1_37537
+if or
+  Char.IsDead(43@)
+  Car.IsDead(189@)
+goto_if_false @DRUGS1_37537
+Car.StopPlayback(189@)
+Blip.Remove(214@)
+Car.MarkAsNoLongerNeeded(189@)
+Char.MarkAsNoLongerNeeded(42@)
+Char.MarkAsNoLongerNeeded(43@)
+260@ = 2
+
+:DRUGS1_37537
+if 
+  248@ == 1
+goto_if_false @DRUGS1_37785
+if 
+  not Car.IsDead(194@)
+goto_if_false @DRUGS1_37785
+if 
+  not Char.IsDead(44@)
+goto_if_false @DRUGS1_37594
+goto @DRUGS1_37785
+
+:DRUGS1_37594
+if 
+  not Char.IsDead(45@)
+goto_if_false @DRUGS1_37743
+if 
+  Char.IsInCar(45@, 194@)
+goto_if_false @DRUGS1_37736
+205@ = Car.GetDriver(194@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_37736
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(45@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(45@, 194@)
+Task.DriveBy(45@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+248@ = 2
+
+:DRUGS1_37736
+goto @DRUGS1_37785
+
+:DRUGS1_37743
+Car.SetForwardSpeed(194@, 18.0)
+Car.StopPlayback(194@)
+Car.SetRotationVelocity(194@, 3.5, 7.3999, 8.1003)
+248@ = 2
+
+:DRUGS1_37785
+if 
+  248@ == 2
+goto_if_false @DRUGS1_37877
+if 
+  Char.IsDead(45@)
+goto_if_false @DRUGS1_37877
+Car.StopPlayback(194@)
+if 
+  not Car.IsDead(194@)
+goto_if_false @DRUGS1_37870
+Car.SetForwardSpeed(194@, 18.0)
+Car.SetRotationVelocity(194@, 3.5, 7.3999, 8.1003)
+
+:DRUGS1_37870
+248@ = 3
+
+:DRUGS1_37877
+if 
+  261@ == 1
+goto_if_false @DRUGS1_37964
+if 
+  Char.IsDead(44@)
+goto_if_false @DRUGS1_37964
+if or
+  Char.IsDead(45@)
+  Car.IsDead(194@)
+goto_if_false @DRUGS1_37964
+Car.StopPlayback(194@)
+Blip.Remove(215@)
+Car.MarkAsNoLongerNeeded(194@)
+Char.MarkAsNoLongerNeeded(44@)
+Char.MarkAsNoLongerNeeded(45@)
+261@ = 2
+
+:DRUGS1_37964
+if 
+  265@ == 1
+goto_if_false @DRUGS1_38116
+if 
+  not Car.IsDead(165@)
+goto_if_false @DRUGS1_38116
+if 
+  not Char.IsDead(46@)
+goto_if_false @DRUGS1_38021
+goto @DRUGS1_38116
+
+:DRUGS1_38021
+if 
+  not Char.IsDead(47@)
+goto_if_false @DRUGS1_38104
+if 
+  Char.IsInCar(47@, 165@)
+goto_if_false @DRUGS1_38097
+205@ = Car.GetDriver(165@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_38097
+Task.ShuffleToNextCarSeat(47@, 165@)
+265@ = 2
+
+:DRUGS1_38097
+goto @DRUGS1_38116
+
+:DRUGS1_38104
+Car.StopPlayback(165@)
+265@ = 2
+
+:DRUGS1_38116
+if 
+  265@ == 2
+goto_if_false @DRUGS1_38183
+if 
+  Char.IsDead(47@)
+goto_if_false @DRUGS1_38183
+Car.StopPlayback(165@)
+if 
+  not Car.IsDead(165@)
+goto_if_false @DRUGS1_38176
+Car.SetIdle(165@)
+
+:DRUGS1_38176
+265@ = 3
+
+:DRUGS1_38183
+if 
+  255@ == 1
+goto_if_false @DRUGS1_38291
+if 
+  Char.IsDead(46@)
+goto_if_false @DRUGS1_38291
+if or
+  Char.IsDead(47@)
+  Car.IsDead(165@)
+goto_if_false @DRUGS1_38291
+Car.StopPlayback(165@)
+if 
+  not Car.IsDead(165@)
+goto_if_false @DRUGS1_38264
+Car.SetIdle(165@)
+
+:DRUGS1_38264
+Blip.Remove(210@)
+Car.MarkAsNoLongerNeeded(165@)
+Char.MarkAsNoLongerNeeded(46@)
+Char.MarkAsNoLongerNeeded(47@)
+255@ = 2
+
+:DRUGS1_38291
+if 
+  266@ == 1
+goto_if_false @DRUGS1_38443
+if 
+  not Car.IsDead(166@)
+goto_if_false @DRUGS1_38443
+if 
+  not Char.IsDead(48@)
+goto_if_false @DRUGS1_38348
+goto @DRUGS1_38443
+
+:DRUGS1_38348
+if 
+  not Char.IsDead(49@)
+goto_if_false @DRUGS1_38431
+if 
+  Char.IsInCar(49@, 166@)
+goto_if_false @DRUGS1_38424
+205@ = Car.GetDriver(166@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_38424
+Task.ShuffleToNextCarSeat(49@, 166@)
+266@ = 2
+
+:DRUGS1_38424
+goto @DRUGS1_38443
+
+:DRUGS1_38431
+Car.StopPlayback(166@)
+266@ = 2
+
+:DRUGS1_38443
+if 
+  266@ == 2
+goto_if_false @DRUGS1_38510
+if 
+  Char.IsDead(49@)
+goto_if_false @DRUGS1_38510
+Car.StopPlayback(166@)
+if 
+  not Car.IsDead(166@)
+goto_if_false @DRUGS1_38503
+Car.SetIdle(166@)
+
+:DRUGS1_38503
+266@ = 3
+
+:DRUGS1_38510
+if 
+  256@ == 1
+goto_if_false @DRUGS1_38618
+if 
+  Char.IsDead(48@)
+goto_if_false @DRUGS1_38618
+if or
+  Char.IsDead(49@)
+  Car.IsDead(166@)
+goto_if_false @DRUGS1_38618
+Car.StopPlayback(166@)
+if 
+  not Car.IsDead(166@)
+goto_if_false @DRUGS1_38591
+Car.SetIdle(166@)
+
+:DRUGS1_38591
+Blip.Remove(211@)
+Car.MarkAsNoLongerNeeded(166@)
+Char.MarkAsNoLongerNeeded(48@)
+Char.MarkAsNoLongerNeeded(49@)
+256@ = 2
+
+:DRUGS1_38618
+if 
+  267@ == 1
+goto_if_false @DRUGS1_38770
+if 
+  not Car.IsDead(167@)
+goto_if_false @DRUGS1_38770
+if 
+  not Char.IsDead(50@)
+goto_if_false @DRUGS1_38675
+goto @DRUGS1_38770
+
+:DRUGS1_38675
+if 
+  not Char.IsDead(51@)
+goto_if_false @DRUGS1_38758
+if 
+  Char.IsInCar(51@, 167@)
+goto_if_false @DRUGS1_38751
+205@ = Car.GetDriver(167@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_38751
+Task.ShuffleToNextCarSeat(51@, 167@)
+267@ = 2
+
+:DRUGS1_38751
+goto @DRUGS1_38770
+
+:DRUGS1_38758
+Car.StopPlayback(167@)
+267@ = 2
+
+:DRUGS1_38770
+if 
+  267@ == 2
+goto_if_false @DRUGS1_38837
+if 
+  Char.IsDead(51@)
+goto_if_false @DRUGS1_38837
+Car.StopPlayback(167@)
+if 
+  not Car.IsDead(167@)
+goto_if_false @DRUGS1_38830
+Car.SetIdle(167@)
+
+:DRUGS1_38830
+267@ = 3
+
+:DRUGS1_38837
+if 
+  257@ == 1
+goto_if_false @DRUGS1_38945
+if 
+  Char.IsDead(50@)
+goto_if_false @DRUGS1_38945
+if or
+  Char.IsDead(51@)
+  Car.IsDead(167@)
+goto_if_false @DRUGS1_38945
+Car.StopPlayback(167@)
+Blip.Remove(212@)
+if 
+  not Car.IsDead(167@)
+goto_if_false @DRUGS1_38923
+Car.SetIdle(167@)
+
+:DRUGS1_38923
+Car.MarkAsNoLongerNeeded(167@)
+Char.MarkAsNoLongerNeeded(50@)
+Char.MarkAsNoLongerNeeded(51@)
+257@ = 2
+
+:DRUGS1_38945
+if 
+  250@ == 1
+goto_if_false @DRUGS1_39193
+if 
+  not Car.IsDead(196@)
+goto_if_false @DRUGS1_39193
+if 
+  not Char.IsDead(52@)
+goto_if_false @DRUGS1_39002
+goto @DRUGS1_39193
+
+:DRUGS1_39002
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRUGS1_39151
+if 
+  Char.IsInCar(53@, 196@)
+goto_if_false @DRUGS1_39144
+205@ = Car.GetDriver(196@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_39144
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(53@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(53@, 196@)
+Task.DriveBy(53@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+250@ = 2
+
+:DRUGS1_39144
+goto @DRUGS1_39193
+
+:DRUGS1_39151
+Car.SetForwardSpeed(196@, 18.0)
+Car.StopPlayback(196@)
+Car.SetRotationVelocity(196@, 3.5, 7.3999, 8.1003)
+250@ = 2
+
+:DRUGS1_39193
+if 
+  250@ == 2
+goto_if_false @DRUGS1_39285
+if 
+  Char.IsDead(53@)
+goto_if_false @DRUGS1_39285
+Car.StopPlayback(196@)
+if 
+  not Car.IsDead(196@)
+goto_if_false @DRUGS1_39278
+Car.SetForwardSpeed(196@, 18.0)
+Car.SetRotationVelocity(196@, 3.5, 7.3999, 8.1003)
+
+:DRUGS1_39278
+250@ = 3
+
+:DRUGS1_39285
+if 
+  263@ == 1
+goto_if_false @DRUGS1_39372
+if 
+  Char.IsDead(52@)
+goto_if_false @DRUGS1_39372
+if or
+  Char.IsDead(53@)
+  Car.IsDead(196@)
+goto_if_false @DRUGS1_39372
+Car.StopPlayback(196@)
+Blip.Remove(217@)
+Car.MarkAsNoLongerNeeded(196@)
+Char.MarkAsNoLongerNeeded(52@)
+Char.MarkAsNoLongerNeeded(53@)
+263@ = 2
+
+:DRUGS1_39372
+if 
+  249@ == 1
+goto_if_false @DRUGS1_39620
+if 
+  not Car.IsDead(195@)
+goto_if_false @DRUGS1_39620
+if 
+  not Char.IsDead(54@)
+goto_if_false @DRUGS1_39429
+goto @DRUGS1_39620
+
+:DRUGS1_39429
+if 
+  not Char.IsDead(55@)
+goto_if_false @DRUGS1_39578
+if 
+  Char.IsInCar(55@, 195@)
+goto_if_false @DRUGS1_39571
+205@ = Car.GetDriver(195@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_39571
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(55@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(55@, 195@)
+Task.DriveBy(55@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+249@ = 2
+
+:DRUGS1_39571
+goto @DRUGS1_39620
+
+:DRUGS1_39578
+Car.SetForwardSpeed(195@, 18.0)
+Car.StopPlayback(195@)
+Car.SetRotationVelocity(195@, 3.5, 7.3999, 8.1003)
+249@ = 2
+
+:DRUGS1_39620
+if 
+  249@ == 2
+goto_if_false @DRUGS1_39712
+if 
+  Char.IsDead(55@)
+goto_if_false @DRUGS1_39712
+Car.StopPlayback(195@)
+if 
+  not Car.IsDead(195@)
+goto_if_false @DRUGS1_39705
+Car.SetForwardSpeed(195@, 18.0)
+Car.SetRotationVelocity(195@, 3.5, 7.3999, 8.1003)
+
+:DRUGS1_39705
+249@ = 3
+
+:DRUGS1_39712
+if 
+  262@ == 1
+goto_if_false @DRUGS1_39799
+if 
+  Char.IsDead(54@)
+goto_if_false @DRUGS1_39799
+if or
+  Char.IsDead(55@)
+  Car.IsDead(195@)
+goto_if_false @DRUGS1_39799
+Car.StopPlayback(195@)
+Blip.Remove(216@)
+Car.MarkAsNoLongerNeeded(195@)
+Char.MarkAsNoLongerNeeded(54@)
+Char.MarkAsNoLongerNeeded(55@)
+262@ = 2
+
+:DRUGS1_39799
+if 
+  251@ == 1
+goto_if_false @DRUGS1_40047
+if 
+  not Car.IsDead(206@)
+goto_if_false @DRUGS1_40047
+if 
+  not Char.IsDead(56@)
+goto_if_false @DRUGS1_39856
+goto @DRUGS1_40047
+
+:DRUGS1_39856
+if 
+  not Char.IsDead(57@)
+goto_if_false @DRUGS1_40005
+if 
+  Char.IsInCar(57@, 206@)
+goto_if_false @DRUGS1_39998
+205@ = Car.GetDriver(206@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_39998
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(57@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(57@, 206@)
+Task.DriveBy(57@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+251@ = 2
+
+:DRUGS1_39998
+goto @DRUGS1_40047
+
+:DRUGS1_40005
+Car.SetForwardSpeed(206@, 18.0)
+Car.StopPlayback(206@)
+Car.SetRotationVelocity(206@, 3.5, 7.3999, 8.1003)
+251@ = 2
+
+:DRUGS1_40047
+if 
+  251@ == 2
+goto_if_false @DRUGS1_40139
+if 
+  Char.IsDead(57@)
+goto_if_false @DRUGS1_40139
+Car.StopPlayback(206@)
+if 
+  not Car.IsDead(206@)
+goto_if_false @DRUGS1_40132
+Car.SetForwardSpeed(206@, 18.0)
+Car.SetRotationVelocity(206@, 3.5, 7.3999, 8.1003)
+
+:DRUGS1_40132
+251@ = 3
+
+:DRUGS1_40139
+if 
+  264@ == 1
+goto_if_false @DRUGS1_40226
+if 
+  Char.IsDead(56@)
+goto_if_false @DRUGS1_40226
+if or
+  Char.IsDead(57@)
+  Car.IsDead(206@)
+goto_if_false @DRUGS1_40226
+Car.StopPlayback(206@)
+Blip.Remove(218@)
+Car.MarkAsNoLongerNeeded(206@)
+Char.MarkAsNoLongerNeeded(56@)
+Char.MarkAsNoLongerNeeded(57@)
+264@ = 2
+
+:DRUGS1_40226
+if 
+  268@ == 1
+goto_if_false @DRUGS1_40378
+if 
+  not Car.IsDead(168@)
+goto_if_false @DRUGS1_40378
+if 
+  not Char.IsDead(58@)
+goto_if_false @DRUGS1_40283
+goto @DRUGS1_40378
+
+:DRUGS1_40283
+if 
+  not Char.IsDead(59@)
+goto_if_false @DRUGS1_40366
+if 
+  Char.IsInCar(59@, 168@)
+goto_if_false @DRUGS1_40359
+205@ = Car.GetDriver(168@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_40359
+Task.ShuffleToNextCarSeat(59@, 168@)
+268@ = 2
+
+:DRUGS1_40359
+goto @DRUGS1_40378
+
+:DRUGS1_40366
+Car.StopPlayback(168@)
+268@ = 2
+
+:DRUGS1_40378
+if 
+  268@ == 2
+goto_if_false @DRUGS1_40445
+if 
+  Char.IsDead(59@)
+goto_if_false @DRUGS1_40445
+Car.StopPlayback(168@)
+if 
+  not Car.IsDead(168@)
+goto_if_false @DRUGS1_40438
+Car.SetIdle(168@)
+
+:DRUGS1_40438
+268@ = 3
+
+:DRUGS1_40445
+if 
+  258@ == 1
+goto_if_false @DRUGS1_40553
+if 
+  Char.IsDead(58@)
+goto_if_false @DRUGS1_40553
+if or
+  Char.IsDead(59@)
+  Car.IsDead(168@)
+goto_if_false @DRUGS1_40553
+Car.StopPlayback(168@)
+if 
+  not Car.IsDead(168@)
+goto_if_false @DRUGS1_40526
+Car.SetIdle(168@)
+
+:DRUGS1_40526
+Blip.Remove(213@)
+Car.MarkAsNoLongerNeeded(168@)
+Char.MarkAsNoLongerNeeded(58@)
+Char.MarkAsNoLongerNeeded(59@)
+258@ = 2
+
+:DRUGS1_40553
+if 
+  272@ > 0
+goto_if_false @DRUGS1_42323
+if 
+  282@ == 0
+goto_if_false @DRUGS1_40638
+if 
+  283@ == 0
+goto_if_false @DRUGS1_40638
+set_lvar_int_to_constant 239@ = 35689
+set_lvar_text_label 240@s = 'SMO4_HA'
+gosub @DRUGS1_51600
+
+:DRUGS1_40638
+if 
+  282@ == 1
+goto_if_false @DRUGS1_40705
+if 
+  283@ == 0
+goto_if_false @DRUGS1_40705
+set_lvar_int_to_constant 239@ = 35690
+set_lvar_text_label 240@s = 'SMO4_HB'
+gosub @DRUGS1_51600
+
+:DRUGS1_40705
+if 
+  282@ == 2
+goto_if_false @DRUGS1_40772
+if 
+  283@ == 0
+goto_if_false @DRUGS1_40772
+set_lvar_int_to_constant 239@ = 35691
+set_lvar_text_label 240@s = 'SMO4_HC'
+gosub @DRUGS1_51600
+
+:DRUGS1_40772
+if 
+  282@ == 3
+goto_if_false @DRUGS1_40839
+if 
+  283@ == 0
+goto_if_false @DRUGS1_40839
+set_lvar_int_to_constant 239@ = 35692
+set_lvar_text_label 240@s = 'SMO4_HD'
+gosub @DRUGS1_51600
+
+:DRUGS1_40839
+if 
+  282@ == 4
+goto_if_false @DRUGS1_40906
+if 
+  283@ == 0
+goto_if_false @DRUGS1_40906
+set_lvar_int_to_constant 239@ = 35693
+set_lvar_text_label 240@s = 'SMO4_HE'
+gosub @DRUGS1_51600
+
+:DRUGS1_40906
+if 
+  282@ == 5
+goto_if_false @DRUGS1_40973
+if 
+  283@ == 0
+goto_if_false @DRUGS1_40973
+set_lvar_int_to_constant 239@ = 35694
+set_lvar_text_label 240@s = 'SMO4_HF'
+gosub @DRUGS1_51600
+
+:DRUGS1_40973
+if 
+  282@ == 6
+goto_if_false @DRUGS1_41040
+if 
+  283@ == 0
+goto_if_false @DRUGS1_41040
+set_lvar_int_to_constant 239@ = 35695
+set_lvar_text_label 240@s = 'SMO4_HH'
+gosub @DRUGS1_51600
+
+:DRUGS1_41040
+if 
+  282@ == 7
+goto_if_false @DRUGS1_41107
+if 
+  283@ == 0
+goto_if_false @DRUGS1_41107
+set_lvar_int_to_constant 239@ = 35696
+set_lvar_text_label 240@s = 'SMO4_HJ'
+gosub @DRUGS1_51600
+
+:DRUGS1_41107
+if 
+  282@ == 8
+goto_if_false @DRUGS1_41174
+if 
+  283@ == 0
+goto_if_false @DRUGS1_41174
+set_lvar_int_to_constant 239@ = 35661
+set_lvar_text_label 240@s = 'SMO4_ER'
+gosub @DRUGS1_51600
+
+:DRUGS1_41174
+if 
+  285@ == 0
+goto_if_false @DRUGS1_41237
+if 
+  Car.Locate2D(161@, 0, 2047.59, -1850.32, 12.0, 12.0)
+goto_if_false @DRUGS1_41237
+285@ = 1
+
+:DRUGS1_41237
+if 
+  282@ == 9
+goto_if_false @DRUGS1_41322
+if 
+  283@ == 0
+goto_if_false @DRUGS1_41322
+if 
+  285@ == 1
+goto_if_false @DRUGS1_41322
+set_lvar_int_to_constant 239@ = 35700
+set_lvar_text_label 240@s = 'SMO4_HN'
+gosub @DRUGS1_51600
+
+:DRUGS1_41322
+if 
+  285@ == 1
+goto_if_false @DRUGS1_41385
+if 
+  Car.Locate2D(161@, 0, 2121.17, -1853.67, 12.0, 12.0)
+goto_if_false @DRUGS1_41385
+285@ = 2
+
+:DRUGS1_41385
+if 
+  282@ == 10
+goto_if_false @DRUGS1_41470
+if 
+  283@ == 0
+goto_if_false @DRUGS1_41470
+if 
+  285@ == 2
+goto_if_false @DRUGS1_41470
+set_lvar_int_to_constant 239@ = 35685
+set_lvar_text_label 240@s = 'SMO4_GM'
+gosub @DRUGS1_51600
+
+:DRUGS1_41470
+if 
+  282@ == 11
+goto_if_false @DRUGS1_41537
+if 
+  283@ == 0
+goto_if_false @DRUGS1_41537
+set_lvar_int_to_constant 239@ = 35688
+set_lvar_text_label 240@s = 'SMO4_GP'
+gosub @DRUGS1_51600
+
+:DRUGS1_41537
+if 
+  285@ == 2
+goto_if_false @DRUGS1_41600
+if 
+  Car.Locate2D(161@, 0, 2216.75, -1854.73, 12.0, 12.0)
+goto_if_false @DRUGS1_41600
+285@ = 3
+
+:DRUGS1_41600
+if 
+  282@ == 12
+goto_if_false @DRUGS1_41685
+if 
+  283@ == 0
+goto_if_false @DRUGS1_41685
+if 
+  285@ == 3
+goto_if_false @DRUGS1_41685
+set_lvar_int_to_constant 239@ = 35702
+set_lvar_text_label 240@s = 'SMO4_HP'
+gosub @DRUGS1_51600
+
+:DRUGS1_41685
+if 
+  282@ == 13
+goto_if_false @DRUGS1_41752
+if 
+  283@ == 0
+goto_if_false @DRUGS1_41752
+set_lvar_int_to_constant 239@ = 35705
+set_lvar_text_label 240@s = 'SMO4_HS'
+gosub @DRUGS1_51600
+
+:DRUGS1_41752
+if 
+  282@ == 14
+goto_if_false @DRUGS1_41819
+if 
+  283@ == 0
+goto_if_false @DRUGS1_41819
+set_lvar_int_to_constant 239@ = 35706
+set_lvar_text_label 240@s = 'SMO4_HT'
+gosub @DRUGS1_51600
+
+:DRUGS1_41819
+if 
+  285@ == 3
+goto_if_false @DRUGS1_41882
+if 
+  Car.Locate2D(161@, 0, 2435.94, -1874.57, 12.0, 12.0)
+goto_if_false @DRUGS1_41882
+285@ = 4
+
+:DRUGS1_41882
+if 
+  282@ == 15
+goto_if_false @DRUGS1_41967
+if 
+  283@ == 0
+goto_if_false @DRUGS1_41967
+if 
+  285@ == 4
+goto_if_false @DRUGS1_41967
+set_lvar_int_to_constant 239@ = 35684
+set_lvar_text_label 240@s = 'SMO4_GL'
+gosub @DRUGS1_51600
+
+:DRUGS1_41967
+if 
+  282@ == 16
+goto_if_false @DRUGS1_42034
+if 
+  283@ == 0
+goto_if_false @DRUGS1_42034
+set_lvar_int_to_constant 239@ = 35686
+set_lvar_text_label 240@s = 'SMO4_GN'
+gosub @DRUGS1_51600
+
+:DRUGS1_42034
+if 
+  285@ == 4
+goto_if_false @DRUGS1_42097
+if 
+  Car.Locate2D(161@, 0, 2539.11, -1865.31, 12.0, 12.0)
+goto_if_false @DRUGS1_42097
+285@ = 5
+
+:DRUGS1_42097
+if 
+  282@ == 17
+goto_if_false @DRUGS1_42182
+if 
+  283@ == 0
+goto_if_false @DRUGS1_42182
+if 
+  285@ == 4
+goto_if_false @DRUGS1_42182
+set_lvar_int_to_constant 239@ = 35709
+set_lvar_text_label 240@s = 'SMO4_JA'
+gosub @DRUGS1_51600
+
+:DRUGS1_42182
+if 
+  282@ == 18
+goto_if_false @DRUGS1_42249
+if 
+  283@ == 0
+goto_if_false @DRUGS1_42249
+set_lvar_int_to_constant 239@ = 35710
+set_lvar_text_label 240@s = 'SMO4_JB'
+gosub @DRUGS1_51600
+
+:DRUGS1_42249
+if 
+  282@ == 19
+goto_if_false @DRUGS1_42316
+if 
+  283@ == 0
+goto_if_false @DRUGS1_42316
+set_lvar_int_to_constant 239@ = 35711
+set_lvar_text_label 240@s = 'SMO4_JC'
+gosub @DRUGS1_51600
+
+:DRUGS1_42316
+gosub @DRUGS1_51642
+
+:DRUGS1_42323
+if 
+  279@ == 1
+goto_if_false @DRUGS1_44336
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_44336
+if 
+  277@ == 1
+goto_if_false @DRUGS1_43285
+if 
+  Car.Locate2D(161@, 0, 2565.98, -1747.12, 12.0, 12.0)
+goto_if_false @DRUGS1_43285
+Camera.DoFade(0, Fade.Out)
+Streaming.RequestCarRecording(282)
+Streaming.RequestCarRecording(283)
+Streaming.RequestCarRecording(284)
+Streaming.RequestCarRecording(285)
+Streaming.RequestCarRecording(286)
+Streaming.RequestModel(#STORM_DRAIN_COVER)
+Streaming.RequestModel(#BARREL4)
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Car.SetProofs(161@, True, True, True, True, True)
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_42511
+Char.SetProofs($big_smoke, True, True, True, True, True)
+
+:DRUGS1_42511
+Char.SetProofs($scplayer, True, True, True, True, True)
+if 
+  not Car.IsDead(188@)
+goto_if_false @DRUGS1_42549
+Car.OpenDoor(188@, CarDoor.LeftFrontDoor)
+
+:DRUGS1_42549
+130@ = 2569.144
+131@ = -1676.185
+132@ = 2.915
+133@ = 2569.512
+134@ = -1677.113
+135@ = 2.8487
+Camera.SetFixedPosition(2578.406, -1668.328, 1.3204, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2577.853, -1669.157, 1.4051, SwitchType.JumpCut)
+Car.StopPlayback(189@)
+Car.Delete(189@)
+Char.Delete(42@)
+Char.Delete(43@)
+Car.StopPlayback(194@)
+Car.Delete(194@)
+Char.Delete(44@)
+Char.Delete(45@)
+Car.StopPlayback(165@)
+Car.Delete(165@)
+Char.Delete(46@)
+Char.Delete(47@)
+Car.StopPlayback(166@)
+Car.Delete(166@)
+Char.Delete(48@)
+Char.Delete(49@)
+Car.StopPlayback(167@)
+Car.Delete(167@)
+Char.Delete(50@)
+Char.Delete(51@)
+Car.StopPlayback(196@)
+Car.Delete(196@)
+Char.Delete(52@)
+Char.Delete(53@)
+Car.StopPlayback(195@)
+Car.Delete(195@)
+Char.Delete(54@)
+Char.Delete(55@)
+Car.StopPlayback(206@)
+Car.Delete(206@)
+Char.Delete(56@)
+Char.Delete(57@)
+Car.StopPlayback(168@)
+Car.Delete(168@)
+Char.Delete(58@)
+Char.Delete(59@)
+165@ = Car.Create(560, 2575.871, -1676.557, 0.7246)
+Car.SetHeading(165@, 85.0235)
+Car.SetProofs(165@, True, False, False, False, False)
+166@ = Car.Create(560, 2567.348, -1675.912, 0.7398)
+Car.SetHeading(166@, 263.7667)
+Car.SetProofs(166@, True, False, False, False, False)
+37@ = Char.Create(24, 111, 2578.022, -1674.761, 0.7667)
+Char.SetHeading(37@, 162.2371)
+Char.SetDecisionMaker(37@, 35@)
+Char.GiveWeapon(37@, WeaponType.MicroUzi, 9999)
+Task.ShootAtCoord(37@, 2574.87, -1686.48, 2.02, 3000)
+38@ = Char.Create(24, 111, 2574.336, -1674.478, 0.7734)
+Char.SetHeading(38@, 162.2371)
+Char.SetDecisionMaker(38@, 35@)
+Char.GiveWeapon(38@, WeaponType.MicroUzi, 9999)
+Task.ShootAtCoord(38@, 2572.21, -1686.56, 3.13, 3000)
+Task.ToggleDuck(38@, True)
+39@ = Char.Create(24, 111, 2569.295, -1674.4, 0.7752)
+Char.SetHeading(39@, 170.9985)
+Char.SetDecisionMaker(39@, 35@)
+Char.GiveWeapon(39@, WeaponType.MicroUzi, 9999)
+Task.ShootAtCoord(39@, 2566.95, -1686.14, 2.5, 3000)
+40@ = Char.Create(24, 111, 2565.314, -1673.921, 0.7864)
+Char.SetHeading(40@, 170.9985)
+Char.SetDecisionMaker(40@, 35@)
+Char.GiveWeapon(40@, WeaponType.MicroUzi, 9999)
+Task.ToggleDuck(40@, True)
+Task.ShootAtCoord(40@, 2564.35, -1786.51, 2.18, 3000)
+if 
+  Car.IsPlaybackGoingOn(161@)
+goto_if_false @DRUGS1_43271
+Car.StopPlayback(161@)
+
+:DRUGS1_43271
+243@ = 3
+277@ = 2
+
+:DRUGS1_43285
+if 
+  277@ == 2
+goto_if_false @DRUGS1_43422
+if 
+  Streaming.HasCarRecordingBeenLoaded(282)
+goto_if_false @DRUGS1_43422
+if 
+  Streaming.HasCarRecordingBeenLoaded(283)
+goto_if_false @DRUGS1_43422
+if 
+  Streaming.HasCarRecordingBeenLoaded(284)
+goto_if_false @DRUGS1_43422
+if 
+  Streaming.HasCarRecordingBeenLoaded(285)
+goto_if_false @DRUGS1_43422
+if 
+  Streaming.HasCarRecordingBeenLoaded(286)
+goto_if_false @DRUGS1_43422
+if 
+  Streaming.HasModelLoaded(#STORM_DRAIN_COVER)
+goto_if_false @DRUGS1_43422
+if 
+  Streaming.HasModelLoaded(#BARREL4)
+goto_if_false @DRUGS1_43422
+277@ = 3
+
+:DRUGS1_43422
+switch_start 277@ total_jumps 3 default_jump 0 @DRUGS1_43747 jumps 3 @DRUGS1_43485 7 @DRUGS1_43580 8 @DRUGS1_43636 -1 @DRUGS1_43747 -1 @DRUGS1_43747 -1 @DRUGS1_43747 -1 @DRUGS1_43747
+
+:DRUGS1_43485
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_43573
+TIMERA = 0
+Car.StartPlayback(161@, 282)
+if 
+  not Car.IsDead(188@)
+goto_if_false @DRUGS1_43540
+Car.SetHealth(188@, 300)
+
+:DRUGS1_43540
+$z = 1.0
+277@ = 7
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_43573
+
+:DRUGS1_43573
+goto @DRUGS1_43747
+
+:DRUGS1_43580
+277@ = 8
+Camera.DoFade(1, 250)
+TIMERA = 0
+TIMERB = 0
+151@ = 0
+159@ = 0
+160@ = 0
+goto @DRUGS1_43747
+
+:DRUGS1_43636
+gosub @DRUGS1_50496
+gosub @DRUGS1_50750
+gosub @DRUGS1_51225
+if 
+  TIMERA > 1800
+goto_if_false @DRUGS1_43740
+if 
+  278@ == 0
+goto_if_false @DRUGS1_43701
+278@ = 1
+
+:DRUGS1_43701
+Camera.SetFixedPosition(130@, 131@, 132@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(133@, 134@, 135@, SwitchType.JumpCut)
+
+:DRUGS1_43740
+goto @DRUGS1_43747
+
+:DRUGS1_43747
+if 
+  278@ == 1
+goto_if_false @DRUGS1_43928
+if 
+  not Char.IsDead(37@)
+goto_if_false @DRUGS1_43804
+set_lvar_int_to_lvar_int 79@ = 37@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51943
+
+:DRUGS1_43804
+if 
+  not Char.IsDead(38@)
+goto_if_false @DRUGS1_43843
+set_lvar_int_to_lvar_int 79@ = 38@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51987
+
+:DRUGS1_43843
+if 
+  not Char.IsDead(39@)
+goto_if_false @DRUGS1_43882
+set_lvar_int_to_lvar_int 79@ = 39@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51943
+
+:DRUGS1_43882
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRUGS1_43921
+set_lvar_int_to_lvar_int 79@ = 40@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51987
+
+:DRUGS1_43921
+278@ = 2
+
+:DRUGS1_43928
+if 
+  278@ == 2
+goto_if_false @DRUGS1_43972
+if 
+  TIMERB > 3400
+goto_if_false @DRUGS1_43972
+278@ = 3
+
+:DRUGS1_43972
+if 
+  278@ == 3
+goto_if_false @DRUGS1_44082
+if 
+  TIMERB > 3480
+goto_if_false @DRUGS1_44082
+if 
+  not Car.IsDead(188@)
+goto_if_false @DRUGS1_44082
+Car.FreezePosition(188@, False)
+Car.Explode(188@)
+Fx.AddExplosion(0, 2570.228, -1684.949, 2.2595)
+Fx.AddExplosion(1, 2570.228, -1684.949, 2.2595)
+278@ = 4
+
+:DRUGS1_44082
+if 
+  278@ == 4
+goto_if_false @DRUGS1_44166
+if 
+  TIMERB > 3550
+goto_if_false @DRUGS1_44166
+if 
+  not Car.IsDead(165@)
+goto_if_false @DRUGS1_44159
+Car.Explode(165@)
+Fx.AddExplosion(1, 2575.269, -1677.076, 1.0414)
+
+:DRUGS1_44159
+278@ = 5
+
+:DRUGS1_44166
+if 
+  278@ == 5
+goto_if_false @DRUGS1_44250
+if 
+  not Car.IsDead(166@)
+goto_if_false @DRUGS1_44250
+if 
+  TIMERB > 3625
+goto_if_false @DRUGS1_44250
+Car.Explode(166@)
+Fx.AddExplosion(2, 2568.749, -1676.139, 1.209)
+278@ = 6
+
+:DRUGS1_44250
+if 
+  277@ > 7
+goto_if_false @DRUGS1_44336
+if 
+  TIMERB > 4599
+goto_if_false @DRUGS1_44336
+Task.DriveBy($scplayer, -1, -1, 0.0, 0.0, 0.0, 300.0, DriveByType.Ai, True, 100)
+279@ = 2
+277@ = 10
+
+:DRUGS1_44336
+if 
+  279@ == 2
+goto_if_false @DRUGS1_50489
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_50489
+if 
+  280@ == 0
+goto_if_false @DRUGS1_45931
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Player.SetHeadingForAttached($player1, 263.0, 350.0)
+Camera.RestoreJumpcut
+Car.SetProofs(161@, False, True, True, True, True)
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_44462
+Char.SetProofs($big_smoke, True, True, True, True, True)
+
+:DRUGS1_44462
+Char.SetProofs($scplayer, True, True, True, True, True)
+152@ = Object.CreateNoOffset(#STORM_DRAIN_COVER, 2631.852, -1482.75, 18.109)
+281@ = 1
+282@ = 0
+283@ = 0
+285@ = 0
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(35713, 1)
+Object.SetHealth(152@, 150)
+153@ = Object.Create(#BARREL4, 2786.521, -1416.051, 15.31)
+154@ = Object.Create(#BARREL4, 2787.548, -1418.323, 15.31)
+155@ = Object.Create(#BARREL4, 2824.324, -1418.704, 15.31)
+156@ = Object.Create(#BARREL4, 2822.16, -1419.988, 15.31)
+157@ = Object.Create(#BARREL4, 2823.05, -1418.747, 15.3)
+Streaming.MarkModelAsNoLongerNeeded(443)
+168@ = Car.Create(560, 2601.689, -1600.107, 3.1106)
+Car.SetHeading(168@, 61.4469)
+258@ = 1
+169@ = Car.Create(560, 2595.717, -1558.29, 8.4514)
+Car.SetHeading(169@, 287.8971)
+259@ = 1
+48@ = Char.Create(24, 111, 2601.441, -1597.461, 3.2207)
+Char.SetHeading(48@, 135.3988)
+Char.SetHealth(48@, 20)
+Char.SetDecisionMaker(48@, 35@)
+Char.GiveWeapon(48@, WeaponType.MicroUzi, 3000)
+231@ = Blip.AddForChar(48@)
+Blip.ChangeDisplay(231@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(231@, 2)
+49@ = Char.Create(24, 111, 2596.765, -1559.589, 8.277)
+Char.SetHeading(49@, 201.1592)
+Char.SetHealth(49@, 20)
+Char.SetDecisionMaker(49@, 35@)
+Char.GiveWeapon(49@, WeaponType.MicroUzi, 3000)
+232@ = Blip.AddForChar(49@)
+Blip.ChangeDisplay(232@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(232@, 2)
+50@ = Char.Create(24, 111, 2596.941, -1555.855, 8.9717)
+Char.SetHeading(50@, 201.1592)
+Char.SetHealth(50@, 20)
+Char.SetDecisionMaker(50@, 35@)
+Char.GiveWeapon(50@, WeaponType.MicroUzi, 3000)
+233@ = Blip.AddForChar(50@)
+Blip.ChangeDisplay(233@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(233@, 2)
+51@ = Char.Create(24, 111, 2624.819, -1494.002, 15.4086)
+Char.SetHeading(51@, 145.1087)
+Char.SetHealth(51@, 10)
+Char.SetDecisionMaker(51@, 35@)
+Char.GiveWeapon(51@, WeaponType.MicroUzi, 3000)
+234@ = Blip.AddForChar(51@)
+Blip.ChangeDisplay(234@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(234@, 2)
+53@ = Char.Create(24, 111, 2625.413, -1496.587, 15.3563)
+Char.SetHeading(53@, 153.8693)
+Char.SetHealth(53@, 10)
+Char.SetDecisionMaker(53@, 35@)
+Char.GiveWeapon(53@, WeaponType.MicroUzi, 3000)
+235@ = Blip.AddForChar(53@)
+Blip.ChangeDisplay(235@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(235@, 2)
+189@ = Car.Create(581, 2539.344, -1712.77, 12.4719)
+Car.SetHeading(189@, 287.1995)
+42@ = Char.CreateInsideCar(PedType.Mission1, 111, 189@)
+Char.SetDecisionMaker(42@, 35@)
+43@ = Char.CreateAsPassenger(PedType.Mission1, 111, 189@, 0)
+Char.GiveWeapon(43@, WeaponType.MicroUzi, 9999)
+Char.SetDecisionMaker(43@, 35@)
+214@ = Blip.AddForCar(189@)
+Blip.ChangeDisplay(214@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(214@, 2)
+Char.SetHealth(42@, 10)
+Char.SetOnlyDamagedByPlayer(42@, 10)
+Char.SetHealth(43@, 10)
+Char.SetOnlyDamagedByPlayer(43@, 10)
+247@ = 1
+260@ = 1
+194@ = Car.Create(581, 2533.568, -1714.569, 12.4874)
+Car.SetPetrolTankWeakpoint(194@, False)
+Car.SetHeading(194@, 287.5564)
+44@ = Char.CreateInsideCar(PedType.Mission1, 111, 194@)
+Char.SetDecisionMaker(44@, 35@)
+45@ = Char.CreateAsPassenger(PedType.Mission1, 111, 194@, 0)
+Char.GiveWeapon(45@, WeaponType.MicroUzi, 9999)
+Char.SetDecisionMaker(45@, 35@)
+215@ = Blip.AddForCar(194@)
+Blip.ChangeDisplay(215@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(215@, 2)
+Char.SetHealth(44@, 50)
+Char.SetHealth(45@, 50)
+248@ = 1
+261@ = 1
+195@ = Car.Create(581, 2529.683, -1715.803, 12.4991)
+Car.SetPetrolTankWeakpoint(195@, False)
+Car.SetHeading(195@, 287.7722)
+46@ = Char.CreateInsideCar(PedType.Mission1, 111, 195@)
+Char.SetDecisionMaker(46@, 35@)
+47@ = Char.CreateAsPassenger(PedType.Mission1, 111, 195@, 0)
+Char.GiveWeapon(47@, WeaponType.MicroUzi, 9999)
+Char.SetDecisionMaker(47@, 35@)
+216@ = Blip.AddForCar(195@)
+Blip.ChangeDisplay(216@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(216@, 2)
+Char.SetHealth(46@, 30)
+Char.SetOnlyDamagedByPlayer(46@, 10)
+Char.SetHealth(47@, 30)
+Char.SetOnlyDamagedByPlayer(47@, 10)
+249@ = 1
+262@ = 1
+196@ = Car.Create(581, 2524.542, -1717.461, 12.5175)
+Car.SetPetrolTankWeakpoint(196@, False)
+Car.SetHeading(196@, 287.8176)
+56@ = Char.CreateInsideCar(PedType.Mission1, 111, 196@)
+Char.SetDecisionMaker(56@, 35@)
+57@ = Char.CreateAsPassenger(PedType.Mission1, 111, 196@, 0)
+Char.GiveWeapon(57@, WeaponType.MicroUzi, 9999)
+Char.SetDecisionMaker(57@, 35@)
+217@ = Blip.AddForCar(196@)
+Blip.ChangeDisplay(217@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(217@, 2)
+250@ = 1
+263@ = 1
+if 
+  not Char.IsDead(48@)
+goto_if_false @DRUGS1_45768
+set_lvar_int_to_lvar_int 79@ = 48@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51943
+
+:DRUGS1_45768
+if 
+  not Char.IsDead(49@)
+goto_if_false @DRUGS1_45807
+set_lvar_int_to_lvar_int 79@ = 49@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51987
+
+:DRUGS1_45807
+if 
+  not Char.IsDead(50@)
+goto_if_false @DRUGS1_45846
+set_lvar_int_to_lvar_int 79@ = 50@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51943
+
+:DRUGS1_45846
+if 
+  not Char.IsDead(51@)
+goto_if_false @DRUGS1_45885
+set_lvar_int_to_lvar_int 79@ = 51@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51987
+
+:DRUGS1_45885
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRUGS1_45924
+set_lvar_int_to_lvar_int 79@ = 53@
+set_lvar_int_to_var_int 80@ = $scplayer
+gosub @DRUGS1_51987
+
+:DRUGS1_45924
+280@ = 1
+
+:DRUGS1_45931
+if 
+  280@ == 1
+goto_if_false @DRUGS1_46339
+if 
+  Car.Locate2D(161@, 0, 2580.74, -1621.47, 15.0, 15.0)
+goto_if_false @DRUGS1_46339
+if 
+  not Car.IsDead(189@)
+goto_if_false @DRUGS1_46011
+Car.StartPlayback(189@, 283)
+
+:DRUGS1_46011
+if 
+  not Car.IsDead(194@)
+goto_if_false @DRUGS1_46035
+Car.StartPlayback(194@, 284)
+
+:DRUGS1_46035
+if 
+  not Car.IsDead(195@)
+goto_if_false @DRUGS1_46059
+Car.StartPlayback(195@, 285)
+
+:DRUGS1_46059
+if 
+  not Car.IsDead(196@)
+goto_if_false @DRUGS1_46083
+Car.StartPlayback(196@, 286)
+
+:DRUGS1_46083
+if 
+  not Char.IsDead(43@)
+goto_if_false @DRUGS1_46135
+Task.DriveBy(43@, -1, 161@, 0.0, 0.0, 0.0, 200.0, DriveByType.Ai, True, 90)
+
+:DRUGS1_46135
+if 
+  not Char.IsDead(45@)
+goto_if_false @DRUGS1_46188
+Task.DriveBy(45@, -1, 161@, 0.0, 0.0, 0.0, 200.0, DriveByType.Ai, True, 289@)
+
+:DRUGS1_46188
+if 
+  not Char.IsDead(47@)
+goto_if_false @DRUGS1_46240
+Task.DriveBy(47@, -1, 161@, 0.0, 0.0, 0.0, 200.0, DriveByType.Ai, True, 90)
+
+:DRUGS1_46240
+if 
+  not Char.IsDead(57@)
+goto_if_false @DRUGS1_46292
+Task.DriveBy(57@, -1, 161@, 0.0, 0.0, 0.0, 200.0, DriveByType.Ai, True, 90)
+
+:DRUGS1_46292
+Car.MarkAsNoLongerNeeded(165@)
+Car.MarkAsNoLongerNeeded(188@)
+Char.MarkAsNoLongerNeeded(197@)
+Car.MarkAsNoLongerNeeded(166@)
+Char.MarkAsNoLongerNeeded(37@)
+Char.MarkAsNoLongerNeeded(38@)
+Char.MarkAsNoLongerNeeded(39@)
+Char.MarkAsNoLongerNeeded(40@)
+280@ = 2
+
+:DRUGS1_46339
+if 
+  280@ == 2
+goto_if_false @DRUGS1_46480
+if 
+  Car.Locate2D(161@, 0, 2676.96, -1432.1, 12.0, 12.0)
+goto_if_false @DRUGS1_46480
+Char.Delete(48@)
+Char.Delete(49@)
+Char.Delete(50@)
+Car.Delete(168@)
+Car.Delete(169@)
+Car.Delete(188@)
+Char.MarkAsNoLongerNeeded(51@)
+Char.MarkAsNoLongerNeeded(53@)
+Blip.Remove(231@)
+Blip.Remove(232@)
+Blip.Remove(233@)
+Blip.Remove(234@)
+Blip.Remove(235@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.LoadMissionAudio(35726, 2)
+280@ = 3
+
+:DRUGS1_46480
+if 
+  280@ == 3
+goto_if_false @DRUGS1_46682
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_46682
+if 
+  Car.Locate2D(161@, 0, 2825.37, -1538.43, 7.0, 7.0)
+goto_if_false @DRUGS1_46682
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Camera.SetFixedPosition(2823.755, -1537.138, 10.0736, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2823.25, -1537.966, 10.3176, SwitchType.JumpCut)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearPrints
+Audio.LoadMissionAudio(35727, 1)
+
+:DRUGS1_46629
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_46655
+wait 0
+goto @DRUGS1_46629
+
+:DRUGS1_46655
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow('SMO4_JS', 5000, 1)
+280@ = 4
+
+:DRUGS1_46682
+if 
+  280@ == 4
+goto_if_false @DRUGS1_46940
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_46940
+if 
+  Car.LocateStopped2D(161@, 0, 2825.37, -1538.43, 5.0, 5.0)
+goto_if_false @DRUGS1_46940
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_46940
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_46940
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_46940
+Text.ClearPrints
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('SMO4_KA', 5000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.LoadMissionAudio(35729, 2)
+Char.Delete(43@)
+Char.Delete(44@)
+Car.Delete(189@)
+Blip.Remove(214@)
+Char.Delete(45@)
+Char.Delete(46@)
+Car.Delete(194@)
+Blip.Remove(215@)
+Char.Delete(47@)
+Char.Delete(48@)
+Car.Delete(195@)
+Blip.Remove(216@)
+Char.Delete(56@)
+Char.Delete(57@)
+Car.Delete(196@)
+Blip.Remove(217@)
+Task.LookAtChar($big_smoke, $scplayer, 10000)
+TIMERA = 0
+280@ = 5
+
+:DRUGS1_46940
+if 
+  280@ == 5
+goto_if_false @DRUGS1_47149
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_47149
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_47149
+Camera.SetFixedPosition(2819.666, -1542.108, 10.2063, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2820.401, -1541.444, 10.3396, SwitchType.JumpCut)
+Text.ClearPrints
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_47065
+Char.StartFacialTalk($big_smoke, 10000)
+
+:DRUGS1_47065
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow('SMO4_KC', 5000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(35730, 1)
+Char.SetCanBeKnockedOffBike($scplayer, False)
+Char.RemoveWeapon(28, $scplayer)
+Char.GiveWeapon($scplayer, WeaponType.MicroUzi, 80)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DRUGS1_47142
+Task.LeaveAnyCar($scplayer)
+
+:DRUGS1_47142
+280@ = 6
+
+:DRUGS1_47149
+if 
+  280@ == 6
+goto_if_false @DRUGS1_47228
+if 
+  not Char.IsSittingInAnyCar($scplayer)
+goto_if_false @DRUGS1_47228
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_47228
+Task.LookAtChar($scplayer, $big_smoke, 15000)
+Task.LookAtChar($big_smoke, $scplayer, 15000)
+280@ = 7
+
+:DRUGS1_47228
+if 
+  280@ == 7
+goto_if_false @DRUGS1_47318
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_47318
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_47318
+Text.ClearPrints
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('SMO4_KD', 5000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.LoadMissionAudio(35731, 2)
+280@ = 8
+
+:DRUGS1_47318
+if 
+  280@ == 8
+goto_if_false @DRUGS1_47437
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_47437
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_47437
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_47387
+Char.StopFacialTalk($big_smoke)
+
+:DRUGS1_47387
+Text.ClearPrints
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow('SMO4_KE', 5000, 1)
+Char.StartFacialTalk($scplayer, 10000)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(35732, 1)
+280@ = 9
+
+:DRUGS1_47437
+if 
+  280@ == 9
+goto_if_false @DRUGS1_47534
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_47534
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_47534
+Text.ClearPrints
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('SMO4_KF', 5000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.LoadMissionAudio(35733, 2)
+TIMERA = 0
+280@ = 10
+
+:DRUGS1_47534
+if 
+  280@ == 10
+goto_if_false @DRUGS1_47738
+if 
+  not Car.IsDead(161@)
+goto_if_false @DRUGS1_47738
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_47738
+if 
+  TIMERA > 3000
+goto_if_false @DRUGS1_47738
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_47738
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_47738
+Char.StopFacialTalk($scplayer)
+Car.SetStraightLineDistance(161@, 200)
+Task.CarDriveToCoord($big_smoke, 161@, 2804.5, -1538.95, 10.38, 6.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow('SMO4_KG', 2500, 1)
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_47724
+Char.StartFacialTalk($big_smoke, 10000)
+
+:DRUGS1_47724
+TIMERA = 0
+280@ = 11
+
+:DRUGS1_47738
+if 
+  280@ == 11
+goto_if_false @DRUGS1_47857
+if 
+  TIMERA > 2000
+goto_if_false @DRUGS1_47857
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS1_47857
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_47811
+Char.StopFacialTalk($big_smoke)
+
+:DRUGS1_47811
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Car.Delete(161@)
+Char.Delete($big_smoke)
+Hud.ClearCounter($bikehealth_s4)
+Text.ClearPrints
+goto @DRUGS1_52043
+280@ = 12
+
+:DRUGS1_47857
+if 
+  281@ == 1
+goto_if_false @DRUGS1_47984
+if 
+  World.HasObjectOfTypeBeenSmashed(2631.852, -1482.75, 18.109, 10.0, #STORM_DRAIN_COVER)
+goto_if_false @DRUGS1_47984
+if 
+  Object.HasBeenDamagedByWeapon(152@, WeaponType.MicroUzi)
+goto_if_false @DRUGS1_47945
+Text.ClearPrints
+281@ = 2
+goto @DRUGS1_47984
+
+:DRUGS1_47945
+$bikehealth_s4 = Car.GetHealth(161@)
+$bikehealth_s4 -= 100
+Car.SetHealth(161@, $bikehealth_s4)
+$bikehealth_s4 /= 10
+Text.ClearPrints
+281@ = 3
+
+:DRUGS1_47984
+if 
+  280@ > 0
+goto_if_false @DRUGS1_48651
+if 
+  4 > 280@
+goto_if_false @DRUGS1_48651
+if 
+  282@ == 0
+goto_if_false @DRUGS1_48087
+if 
+  283@ == 0
+goto_if_false @DRUGS1_48087
+set_lvar_int_to_constant 239@ = 35713
+set_lvar_text_label 240@s = 'SMO4_JE'
+gosub @DRUGS1_51600
+
+:DRUGS1_48087
+if 
+  282@ == 1
+goto_if_false @DRUGS1_48154
+if 
+  283@ == 0
+goto_if_false @DRUGS1_48154
+set_lvar_int_to_constant 239@ = 35714
+set_lvar_text_label 240@s = 'SMO4_JF'
+gosub @DRUGS1_51600
+
+:DRUGS1_48154
+if 
+  282@ == 2
+goto_if_false @DRUGS1_48221
+if 
+  283@ == 0
+goto_if_false @DRUGS1_48221
+set_lvar_int_to_constant 239@ = 35715
+set_lvar_text_label 240@s = 'SMO4_JG'
+gosub @DRUGS1_51600
+
+:DRUGS1_48221
+if 
+  282@ == 3
+goto_if_false @DRUGS1_48362
+if 
+  283@ == 0
+goto_if_false @DRUGS1_48362
+if 
+  281@ == 2
+goto_if_false @DRUGS1_48313
+set_lvar_int_to_constant 239@ = 35716
+set_lvar_text_label 240@s = 'SMO4_JH'
+gosub @DRUGS1_51600
+goto @DRUGS1_48362
+
+:DRUGS1_48313
+if 
+  281@ == 3
+goto_if_false @DRUGS1_48362
+set_lvar_int_to_constant 239@ = 35717
+set_lvar_text_label 240@s = 'SMO4_JJ'
+gosub @DRUGS1_51600
+
+:DRUGS1_48362
+if 
+  285@ == 0
+goto_if_false @DRUGS1_48425
+if 
+  Car.Locate2D(161@, 0, 2647.31, -1457.67, 10.0, 10.0)
+goto_if_false @DRUGS1_48425
+285@ = 1
+
+:DRUGS1_48425
+if 
+  282@ == 4
+goto_if_false @DRUGS1_48510
+if 
+  283@ == 0
+goto_if_false @DRUGS1_48510
+if 
+  285@ == 1
+goto_if_false @DRUGS1_48510
+set_lvar_int_to_constant 239@ = 35718
+set_lvar_text_label 240@s = 'SMO4_JK'
+gosub @DRUGS1_51600
+
+:DRUGS1_48510
+if 
+  282@ == 5
+goto_if_false @DRUGS1_48577
+if 
+  283@ == 0
+goto_if_false @DRUGS1_48577
+set_lvar_int_to_constant 239@ = 35719
+set_lvar_text_label 240@s = 'SMO4_JL'
+gosub @DRUGS1_51600
+
+:DRUGS1_48577
+if 
+  282@ == 6
+goto_if_false @DRUGS1_48644
+if 
+  283@ == 0
+goto_if_false @DRUGS1_48644
+set_lvar_int_to_constant 239@ = 35723
+set_lvar_text_label 240@s = 'SMO4_JP'
+gosub @DRUGS1_51600
+
+:DRUGS1_48644
+gosub @DRUGS1_51642
+
+:DRUGS1_48651
+if 
+  258@ == 1
+goto_if_false @DRUGS1_48716
+if 
+  not Car.IsDead(168@)
+goto_if_false @DRUGS1_48716
+if 
+  Car.HasBeenDamagedByChar(168@, $scplayer)
+goto_if_false @DRUGS1_48716
+Car.Explode(168@)
+258@ = 2
+
+:DRUGS1_48716
+if 
+  259@ == 1
+goto_if_false @DRUGS1_48781
+if 
+  not Car.IsDead(169@)
+goto_if_false @DRUGS1_48781
+if 
+  Car.HasBeenDamagedByChar(169@, $scplayer)
+goto_if_false @DRUGS1_48781
+Car.Explode(169@)
+259@ = 2
+
+:DRUGS1_48781
+if 
+  247@ == 1
+goto_if_false @DRUGS1_49029
+if 
+  not Car.IsDead(189@)
+goto_if_false @DRUGS1_49029
+if 
+  not Char.IsDead(42@)
+goto_if_false @DRUGS1_48838
+goto @DRUGS1_49029
+
+:DRUGS1_48838
+if 
+  not Char.IsDead(43@)
+goto_if_false @DRUGS1_48987
+if 
+  Char.IsInCar(43@, 189@)
+goto_if_false @DRUGS1_48980
+205@ = Car.GetDriver(189@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_48980
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(43@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(43@, 189@)
+Task.DriveBy(43@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+247@ = 2
+
+:DRUGS1_48980
+goto @DRUGS1_49029
+
+:DRUGS1_48987
+Car.SetForwardSpeed(189@, 18.0)
+Car.StopPlayback(189@)
+Car.SetRotationVelocity(189@, 3.5, 7.3999, 8.1003)
+247@ = 2
+
+:DRUGS1_49029
+if 
+  247@ == 2
+goto_if_false @DRUGS1_49121
+if 
+  Char.IsDead(43@)
+goto_if_false @DRUGS1_49121
+Car.StopPlayback(189@)
+if 
+  not Car.IsDead(189@)
+goto_if_false @DRUGS1_49114
+Car.SetForwardSpeed(189@, 18.0)
+Car.SetRotationVelocity(189@, 3.5, 7.3999, 8.1003)
+
+:DRUGS1_49114
+247@ = 3
+
+:DRUGS1_49121
+if 
+  260@ == 1
+goto_if_false @DRUGS1_49208
+if 
+  Char.IsDead(42@)
+goto_if_false @DRUGS1_49208
+if or
+  Char.IsDead(43@)
+  Car.IsDead(189@)
+goto_if_false @DRUGS1_49208
+Car.StopPlayback(189@)
+Blip.Remove(214@)
+Car.MarkAsNoLongerNeeded(189@)
+Char.MarkAsNoLongerNeeded(42@)
+Char.MarkAsNoLongerNeeded(43@)
+260@ = 2
+
+:DRUGS1_49208
+if 
+  248@ == 1
+goto_if_false @DRUGS1_49456
+if 
+  not Car.IsDead(194@)
+goto_if_false @DRUGS1_49456
+if 
+  not Char.IsDead(44@)
+goto_if_false @DRUGS1_49265
+goto @DRUGS1_49456
+
+:DRUGS1_49265
+if 
+  not Char.IsDead(45@)
+goto_if_false @DRUGS1_49414
+if 
+  Char.IsInCar(45@, 194@)
+goto_if_false @DRUGS1_49407
+205@ = Car.GetDriver(194@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_49407
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(45@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(45@, 194@)
+Task.DriveBy(45@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+248@ = 2
+
+:DRUGS1_49407
+goto @DRUGS1_49456
+
+:DRUGS1_49414
+Car.SetForwardSpeed(194@, 18.0)
+Car.StopPlayback(194@)
+Car.SetRotationVelocity(194@, 3.5, 7.3999, 8.1003)
+248@ = 2
+
+:DRUGS1_49456
+if 
+  248@ == 2
+goto_if_false @DRUGS1_49548
+if 
+  Char.IsDead(45@)
+goto_if_false @DRUGS1_49548
+Car.StopPlayback(194@)
+if 
+  not Car.IsDead(194@)
+goto_if_false @DRUGS1_49541
+Car.SetForwardSpeed(194@, 18.0)
+Car.SetRotationVelocity(194@, 3.5, 7.3999, 8.1003)
+
+:DRUGS1_49541
+248@ = 3
+
+:DRUGS1_49548
+if 
+  261@ == 1
+goto_if_false @DRUGS1_49635
+if 
+  Char.IsDead(44@)
+goto_if_false @DRUGS1_49635
+if or
+  Char.IsDead(45@)
+  Car.IsDead(194@)
+goto_if_false @DRUGS1_49635
+Car.StopPlayback(194@)
+Blip.Remove(215@)
+Car.MarkAsNoLongerNeeded(194@)
+Char.MarkAsNoLongerNeeded(44@)
+Char.MarkAsNoLongerNeeded(45@)
+261@ = 2
+
+:DRUGS1_49635
+if 
+  249@ == 1
+goto_if_false @DRUGS1_49883
+if 
+  not Car.IsDead(195@)
+goto_if_false @DRUGS1_49883
+if 
+  not Char.IsDead(46@)
+goto_if_false @DRUGS1_49692
+goto @DRUGS1_49883
+
+:DRUGS1_49692
+if 
+  not Char.IsDead(47@)
+goto_if_false @DRUGS1_49841
+if 
+  Char.IsInCar(47@, 195@)
+goto_if_false @DRUGS1_49834
+205@ = Car.GetDriver(195@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_49834
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(47@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(47@, 195@)
+Task.DriveBy(47@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+249@ = 2
+
+:DRUGS1_49834
+goto @DRUGS1_49883
+
+:DRUGS1_49841
+Car.SetForwardSpeed(195@, 18.0)
+Car.StopPlayback(195@)
+Car.SetRotationVelocity(195@, 3.5, 7.3999, 8.1003)
+249@ = 2
+
+:DRUGS1_49883
+if 
+  249@ == 2
+goto_if_false @DRUGS1_49975
+if 
+  Char.IsDead(47@)
+goto_if_false @DRUGS1_49975
+Car.StopPlayback(195@)
+if 
+  not Car.IsDead(195@)
+goto_if_false @DRUGS1_49968
+Car.SetForwardSpeed(195@, 18.0)
+Car.SetRotationVelocity(195@, 3.5, 7.3999, 8.1003)
+
+:DRUGS1_49968
+249@ = 3
+
+:DRUGS1_49975
+if 
+  262@ == 1
+goto_if_false @DRUGS1_50062
+if 
+  Char.IsDead(46@)
+goto_if_false @DRUGS1_50062
+if or
+  Char.IsDead(47@)
+  Car.IsDead(195@)
+goto_if_false @DRUGS1_50062
+Car.StopPlayback(195@)
+Blip.Remove(216@)
+Car.MarkAsNoLongerNeeded(195@)
+Char.MarkAsNoLongerNeeded(46@)
+Char.MarkAsNoLongerNeeded(47@)
+262@ = 2
+
+:DRUGS1_50062
+if 
+  250@ == 1
+goto_if_false @DRUGS1_50310
+if 
+  not Car.IsDead(196@)
+goto_if_false @DRUGS1_50310
+if 
+  not Char.IsDead(56@)
+goto_if_false @DRUGS1_50119
+goto @DRUGS1_50310
+
+:DRUGS1_50119
+if 
+  not Char.IsDead(57@)
+goto_if_false @DRUGS1_50268
+if 
+  Char.IsInCar(57@, 196@)
+goto_if_false @DRUGS1_50261
+205@ = Car.GetDriver(196@)
+if 
+  205@ == -1
+goto_if_false @DRUGS1_50261
+$player_x, $player_y, $player_z = Car.GetCoordinates(161@)
+Char.WarpFromCarToCoord(57@, $player_x, $player_y, -10.0)
+Char.WarpIntoCar(57@, 196@)
+Task.DriveBy(57@, -1, 161@, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+250@ = 2
+
+:DRUGS1_50261
+goto @DRUGS1_50310
+
+:DRUGS1_50268
+Car.SetForwardSpeed(196@, 18.0)
+Car.StopPlayback(196@)
+Car.SetRotationVelocity(196@, 3.5, 7.3999, 8.1003)
+250@ = 2
+
+:DRUGS1_50310
+if 
+  250@ == 2
+goto_if_false @DRUGS1_50402
+if 
+  Char.IsDead(57@)
+goto_if_false @DRUGS1_50402
+Car.StopPlayback(196@)
+if 
+  not Car.IsDead(196@)
+goto_if_false @DRUGS1_50395
+Car.SetForwardSpeed(196@, 18.0)
+Car.SetRotationVelocity(196@, 3.5, 7.3999, 8.1003)
+
+:DRUGS1_50395
+250@ = 3
+
+:DRUGS1_50402
+if 
+  263@ == 1
+goto_if_false @DRUGS1_50489
+if 
+  Char.IsDead(56@)
+goto_if_false @DRUGS1_50489
+if or
+  Char.IsDead(57@)
+  Car.IsDead(196@)
+goto_if_false @DRUGS1_50489
+Car.StopPlayback(196@)
+Blip.Remove(217@)
+Car.MarkAsNoLongerNeeded(196@)
+Char.MarkAsNoLongerNeeded(56@)
+Char.MarkAsNoLongerNeeded(57@)
+263@ = 2
+
+:DRUGS1_50489
+goto @DRUGS1_1348
+
+:DRUGS1_50496
+switch_start 151@ total_jumps 3 default_jump 0 @DRUGS1_50748 jumps 0 @DRUGS1_50559 1 @DRUGS1_50590 2 @DRUGS1_50669 -1 @DRUGS1_50748 -1 @DRUGS1_50748 -1 @DRUGS1_50748 -1 @DRUGS1_50748
+
+:DRUGS1_50559
+Clock.SetTimeScale(0.8)
+158@ = 0.8
+151@ += 1
+goto @DRUGS1_50748
+
+:DRUGS1_50590
+if 
+  TIMERB > 3200
+goto_if_false @DRUGS1_50662
+sub_timed_val_from_float_lvar 158@ -= frame_delta_time * 0.05
+if 
+  0.3 > 158@
+goto_if_false @DRUGS1_50657
+158@ = 0.3
+151@ += 1
+
+:DRUGS1_50657
+Clock.SetTimeScale(158@)
+
+:DRUGS1_50662
+goto @DRUGS1_50748
+
+:DRUGS1_50669
+if 
+  TIMERB > 4000
+goto_if_false @DRUGS1_50741
+add_timed_val_to_float_lvar 158@ += frame_delta_time * 0.05
+if 
+  158@ > 1.0
+goto_if_false @DRUGS1_50736
+158@ = 1.0
+151@ += 1
+
+:DRUGS1_50736
+Clock.SetTimeScale(158@)
+
+:DRUGS1_50741
+goto @DRUGS1_50748
+
+:DRUGS1_50748
+return 
+
+:DRUGS1_50750
+switch_start 159@ total_jumps 3 default_jump 0 @DRUGS1_51223 jumps 0 @DRUGS1_50813 1 @DRUGS1_50983 2 @DRUGS1_51108 -1 @DRUGS1_51223 -1 @DRUGS1_51223 -1 @DRUGS1_51223 -1 @DRUGS1_51223
+
+:DRUGS1_50813
+133@, 134@, 135@ = Car.GetCoordinates(161@)
+130@ = Car.GetOffsetInWorldCoords(131@, 132@, 161@, 1.0, -2.5, 0.0)
+130@ = 2563.28
+131@ = -1737.328
+132@ = 1.1412
+133@ = 2562.65
+134@ = -1734.725
+135@ = 1.1991
+136@ = 0.001
+137@ = 3E-12
+139@ = 0.03
+140@ = 0.1
+148@ = 0.47
+141@ = 0.003
+159@ += 1
+
+:DRUGS1_50983
+if 
+  2900 > TIMERB
+goto_if_false @DRUGS1_51091
+add_timed_float_lvar_to_float_lvar 139@ += frame_delta_time * 136@
+add_timed_float_lvar_to_float_lvar 137@ += frame_delta_time * 137@
+add_timed_float_lvar_to_float_lvar 140@ += frame_delta_time * 137@
+if 
+  is_float_lvar_greater_than_float_lvar 140@ > 148@
+goto_if_false @DRUGS1_51053
+set_lvar_float_to_lvar_float 140@ = 148@
+
+:DRUGS1_51053
+add_timed_float_lvar_to_float_lvar 130@ += frame_delta_time * 139@
+add_timed_float_lvar_to_float_lvar 131@ += frame_delta_time * 140@
+add_timed_float_lvar_to_float_lvar 132@ += frame_delta_time * 141@
+goto @DRUGS1_51223
+goto @DRUGS1_51108
+
+:DRUGS1_51091
+136@ = -0.01
+159@ += 1
+
+:DRUGS1_51108
+if 
+  4000 > TIMERB
+goto_if_false @DRUGS1_51216
+add_timed_float_lvar_to_float_lvar 139@ += frame_delta_time * 136@
+add_timed_float_lvar_to_float_lvar 137@ += frame_delta_time * 137@
+add_timed_float_lvar_to_float_lvar 140@ += frame_delta_time * 137@
+if 
+  is_float_lvar_greater_than_float_lvar 140@ > 148@
+goto_if_false @DRUGS1_51178
+set_lvar_float_to_lvar_float 140@ = 148@
+
+:DRUGS1_51178
+add_timed_float_lvar_to_float_lvar 130@ += frame_delta_time * 139@
+add_timed_float_lvar_to_float_lvar 131@ += frame_delta_time * 140@
+add_timed_float_lvar_to_float_lvar 132@ += frame_delta_time * 141@
+goto @DRUGS1_51223
+goto @DRUGS1_51223
+
+:DRUGS1_51216
+159@ += 1
+
+:DRUGS1_51223
+return 
+
+:DRUGS1_51225
+switch_start 160@ total_jumps 3 default_jump 0 @DRUGS1_51598 jumps 0 @DRUGS1_51288 1 @DRUGS1_51365 2 @DRUGS1_51464 -1 @DRUGS1_51598 -1 @DRUGS1_51598 -1 @DRUGS1_51598 -1 @DRUGS1_51598
+
+:DRUGS1_51288
+143@ = 0.007
+144@ = 0.012
+145@ = 0.045
+146@ = 0.06
+149@ = 0.32
+147@ = 0.005
+150@ = 0.1
+160@ += 1
+
+:DRUGS1_51365
+if 
+  2800 > TIMERB
+goto_if_false @DRUGS1_51457
+add_timed_float_lvar_to_float_lvar 146@ += frame_delta_time * 143@
+if 
+  is_float_lvar_greater_than_float_lvar 146@ > 149@
+goto_if_false @DRUGS1_51419
+set_lvar_float_to_lvar_float 146@ = 149@
+
+:DRUGS1_51419
+add_timed_float_lvar_to_float_lvar 133@ += frame_delta_time * 145@
+add_timed_float_lvar_to_float_lvar 134@ += frame_delta_time * 146@
+add_timed_float_lvar_to_float_lvar 135@ += frame_delta_time * 147@
+goto @DRUGS1_51598
+goto @DRUGS1_51464
+
+:DRUGS1_51457
+160@ += 1
+
+:DRUGS1_51464
+if 
+  3600 > TIMERB
+goto_if_false @DRUGS1_51584
+add_timed_float_lvar_to_float_lvar 146@ += frame_delta_time * 143@
+if 
+  is_float_lvar_greater_than_float_lvar 146@ > 149@
+goto_if_false @DRUGS1_51518
+set_lvar_float_to_lvar_float 146@ = 149@
+
+:DRUGS1_51518
+add_timed_float_lvar_to_float_lvar 147@ += frame_delta_time * 144@
+if 
+  is_float_lvar_greater_than_float_lvar 147@ > 150@
+goto_if_false @DRUGS1_51553
+set_lvar_float_to_lvar_float 147@ = 150@
+
+:DRUGS1_51553
+add_timed_float_lvar_to_float_lvar 133@ += frame_delta_time * 145@
+add_timed_float_lvar_to_float_lvar 134@ += frame_delta_time * 146@
+add_timed_float_lvar_to_float_lvar 135@ += frame_delta_time * 147@
+goto @DRUGS1_51591
+
+:DRUGS1_51584
+160@ += 1
+
+:DRUGS1_51591
+goto @DRUGS1_51598
+
+:DRUGS1_51598
+return 
+
+:DRUGS1_51600
+if 
+  283@ == 0
+goto_if_false @DRUGS1_51640
+Audio.LoadMissionAudio(239@, 1)
+set_lvar_text_label 237@s = 240@s
+283@ = 1
+
+:DRUGS1_51640
+return 
+
+:DRUGS1_51642
+if 
+  283@ == 1
+goto_if_false @DRUGS1_51696
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_51696
+Text.PrintNow(237@s, 4000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+283@ = 2
+
+:DRUGS1_51696
+if 
+  283@ == 2
+goto_if_false @DRUGS1_51749
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS1_51749
+282@ += 1
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearPrints
+283@ = 0
+
+:DRUGS1_51749
+return 
+
+:DRUGS1_51751
+78@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 81@, 82@, 83@, MoveState.Run, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFoot(-1, 80@)
+Sequence.Close(78@)
+Char.PerformSequence(79@, 78@)
+Sequence.Clear(78@)
+return 
+
+:DRUGS1_51806
+65@ = Sequence.Open()
+Task.GoToCoordWhileShooting(-1, 81@, 82@, 83@, 6, 0.5, 1.0, $scplayer)
+Task.GoToCoordWhileShooting(-1, 84@, 85@, 86@, 6, 0.5, 1.0, $scplayer)
+Task.KillCharOnFoot(-1, 80@)
+Sequence.Close(65@)
+Char.PerformSequence(79@, 65@)
+Sequence.Clear(65@)
+return 
+
+:DRUGS1_51894
+66@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 81@, 82@, 83@, MoveState.Run, -1)
+Task.KillCharOnFoot(-1, 80@)
+Sequence.Close(66@)
+Char.PerformSequence(79@, 66@)
+Sequence.Clear(66@)
+return 
+
+:DRUGS1_51943
+67@ = Sequence.Open()
+Task.StayInSamePlace(-1, True)
+Task.ToggleDuck(-1, True)
+Task.KillCharOnFoot(-1, 80@)
+Sequence.Close(67@)
+Char.PerformSequence(79@, 67@)
+Sequence.Clear(67@)
+return 
+
+:DRUGS1_51987
+68@ = Sequence.Open()
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFoot(-1, 80@)
+Sequence.Close(68@)
+Char.PerformSequence(79@, 68@)
+Sequence.Clear(68@)
+return 
+
+:DRUGS1_52025
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:DRUGS1_52043
+$flag_smoke_mission_counter += 1
+Blip.Remove($smoke_contact_blip)
+Stat.RegisterMissionPassed('SMOKE_4')
+Stat.PlayerMadeProgress(1)
+Text.PrintWithNumberBig('M_PASSR', 10, 5000, TextStyle.Middle)
+Audio.PlayMissionPassedTune(1)
+Stat.AwardPlayerMissionRespect(10)
+Player.ClearWantedLevel($player1)
+return 
+
+:DRUGS1_52103
+$onmission = 0
+Path.SwitchRoadsOn(1694.12, -1604.33, 5.0, 1805.94, -1593.12, 15.0)
+Char.RemoveElegantly($big_smoke)
+Streaming.UnloadSpecialCharacter(1)
+World.DisableAllEntryExits(False)
+Blip.Remove(87@)
+Blip.Remove(88@)
+Blip.Remove(89@)
+Blip.Remove(209@)
+Blip.Remove(210@)
+Blip.Remove(211@)
+Blip.Remove(212@)
+Blip.Remove(213@)
+Blip.Remove(214@)
+Blip.Remove(215@)
+Blip.Remove(216@)
+Blip.Remove(217@)
+Blip.Remove(218@)
+Blip.Remove(219@)
+Blip.Remove(220@)
+Blip.Remove(229@)
+Blip.Remove(223@)
+Blip.Remove(224@)
+Blip.Remove(225@)
+Blip.Remove(226@)
+Blip.Remove(227@)
+Blip.Remove(228@)
+Blip.Remove(229@)
+Blip.Remove(230@)
+Blip.Remove(231@)
+Blip.Remove(232@)
+Blip.Remove(233@)
+Blip.Remove(234@)
+Blip.Remove(235@)
+Blip.Remove(226@)
+Blip.Remove(227@)
+Blip.Remove(236@)
+Player.SetGroupRecruitment($player1, True)
+Game.SetScriptLimitToGangSize(99)
+Streaming.MarkModelAsNoLongerNeeded(466)
+Streaming.MarkModelAsNoLongerNeeded(91)
+Streaming.MarkModelAsNoLongerNeeded(93)
+Streaming.MarkModelAsNoLongerNeeded(111)
+Streaming.MarkModelAsNoLongerNeeded(112)
+Streaming.MarkModelAsNoLongerNeeded(581)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(353)
+Streaming.RemoveAnimation("JST_BUISNESS")
+Streaming.MarkModelAsNoLongerNeeded(560)
+Streaming.MarkModelAsNoLongerNeeded(#KMB_SKIP)
+Streaming.MarkModelAsNoLongerNeeded(516)
+Streaming.MarkModelAsNoLongerNeeded(437)
+Streaming.MarkModelAsNoLongerNeeded(443)
+Streaming.MarkModelAsNoLongerNeeded(#STORM_DRAIN_COVER)
+Streaming.MarkModelAsNoLongerNeeded(#BARREL4)
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+Game.SetWantedMultiplier(1.0)
+Game.SetMaxWantedLevel(4)
+Hud.ClearCounter($smokehealth_s4)
+Hud.ClearCounter($bikehealth_s4)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DRUGS1_52497
+Char.ShutUp($scplayer, False)
+Pad.SetPlayerEnterCarButton($player1, True)
+Char.SetCanBeKnockedOffBike($scplayer, False)
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:DRUGS1_52497
+if 
+  not Char.IsDead($big_smoke)
+goto_if_false @DRUGS1_52520
+Char.SetCanBeKnockedOffBike($big_smoke, False)
+
+:DRUGS1_52520
+Weather.Release
+Char.DetachFromCar($scplayer)
+Char.SetProofs($scplayer, False, False, False, False, False)
+Game.SwitchEmergencyServices(True)
+$timer_mobile_start = Clock.GetGameTimer()
+Mission.Finish
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DRUGS1_52905
+if 
+  not Char.IsDead(42@)
+goto_if_false @DRUGS1_52593
+Task.KillCharOnFoot(42@, $scplayer)
+
+:DRUGS1_52593
+if 
+  not Char.IsDead(43@)
+goto_if_false @DRUGS1_52617
+Task.KillCharOnFoot(43@, $scplayer)
+
+:DRUGS1_52617
+if 
+  not Char.IsDead(44@)
+goto_if_false @DRUGS1_52641
+Task.KillCharOnFoot(44@, $scplayer)
+
+:DRUGS1_52641
+if 
+  not Char.IsDead(45@)
+goto_if_false @DRUGS1_52665
+Task.KillCharOnFoot(45@, $scplayer)
+
+:DRUGS1_52665
+if 
+  not Char.IsDead(46@)
+goto_if_false @DRUGS1_52689
+Task.KillCharOnFoot(46@, $scplayer)
+
+:DRUGS1_52689
+if 
+  not Char.IsDead(47@)
+goto_if_false @DRUGS1_52713
+Task.KillCharOnFoot(47@, $scplayer)
+
+:DRUGS1_52713
+if 
+  not Char.IsDead(48@)
+goto_if_false @DRUGS1_52737
+Task.KillCharOnFoot(48@, $scplayer)
+
+:DRUGS1_52737
+if 
+  not Char.IsDead(49@)
+goto_if_false @DRUGS1_52761
+Task.KillCharOnFoot(49@, $scplayer)
+
+:DRUGS1_52761
+if 
+  not Char.IsDead(50@)
+goto_if_false @DRUGS1_52785
+Task.KillCharOnFoot(50@, $scplayer)
+
+:DRUGS1_52785
+if 
+  not Char.IsDead(51@)
+goto_if_false @DRUGS1_52809
+Task.KillCharOnFoot(51@, $scplayer)
+
+:DRUGS1_52809
+if 
+  not Char.IsDead(52@)
+goto_if_false @DRUGS1_52833
+Task.KillCharOnFoot(52@, $scplayer)
+
+:DRUGS1_52833
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRUGS1_52857
+Task.KillCharOnFoot(53@, $scplayer)
+
+:DRUGS1_52857
+if 
+  not Char.IsDead(54@)
+goto_if_false @DRUGS1_52881
+Task.KillCharOnFoot(54@, $scplayer)
+
+:DRUGS1_52881
+if 
+  not Char.IsDead(55@)
+goto_if_false @DRUGS1_52905
+Task.KillCharOnFoot(55@, $scplayer)
+
+:DRUGS1_52905
+return 
+

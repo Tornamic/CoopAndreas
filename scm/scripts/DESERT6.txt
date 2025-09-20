@@ -1,0 +1,1854 @@
+//-------------Mission 79---------------
+// Originally: N.O.E.
+
+:DESERT6
+script_name 'DESERT6'
+gosub @DESERT6_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @DESERT6_38
+gosub @DESERT6_10307
+
+:DESERT6_38
+gosub @DESERT6_10519
+terminate_this_script 
+
+:DESERT6_47
+Stat.RegisterMissionGiven
+$onmission = 1
+75@ = 0
+76@ = 0
+77@ = 0
+34@ = 0
+35@ = 0
+36@ = 0
+37@ = 0
+38@ = 0
+39@ = 0
+40@ = 0
+45@ = 0
+46@ = 0
+47@ = 0
+TIMERA = 0
+TIMERB = 0
+78@ = 1
+79@ = 0
+80@ = 0
+81@ = 0
+82@ = -1
+83@ = 0
+84@ = 0
+86@ = 0
+85@ = 0
+48@ = 0
+
+:DESERT6_231
+87@(48@,3i) = 0
+48@ += 1
+  48@ >= 3
+goto_if_false @DESERT6_231
+48@ = 0
+
+:DESERT6_270
+184@(48@,2i) = 0
+48@ += 1
+  48@ >= 2
+goto_if_false @DESERT6_270
+167@ = 0
+168@ = 0
+169@ = 0
+170@ = 0
+171@ = 0
+179@ = 0
+180@ = 0
+181@ = 0
+182@ = 0
+183@ = 0
+if 
+  34@ == -99
+goto_if_false @DESERT6_694
+write_debug "SHOULD_NEVER_BE_IN_FAKE_ENTITY_CREATION"
+125@ = Car.Create(476, 0.0, 0.0, 0.0)
+48@ = 0
+
+:DESERT6_463
+126@(48@,2i) = Car.Create(520, 0.0, 0.0, 0.0)
+48@ += 1
+  48@ >= 2
+goto_if_false @DESERT6_463
+48@ = 0
+
+:DESERT6_518
+123@(48@,2i) = Char.Create(4, 43, 0.0, 0.0, 0.0)
+48@ += 1
+  48@ >= 2
+goto_if_false @DESERT6_518
+48@ = 0
+
+:DESERT6_574
+128@(48@,4i) = Object.Create(#AMMO_CAPSULE, 0.0, 0.0, 0.0)
+48@ += 1
+  48@ >= 4
+goto_if_false @DESERT6_574
+133@ = Blip.AddForCar(125@)
+132@ = Blip.AddForCoord(0.0, 0.0, 0.0)
+48@ = 0
+
+:DESERT6_657
+134@(48@,2i) = Blip.AddForCar(126@(48@,2i))
+48@ += 1
+  48@ >= 2
+goto_if_false @DESERT6_657
+
+:DESERT6_694
+Text.LoadMissionText('DSERT6')
+gosub @DESERT6_9725
+136@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+gosub @DESERT6_9939
+
+:DESERT6_726
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @DESERT6_759
+36@ = 1
+goto @DESERT6_1014
+
+:DESERT6_759
+gosub @DESERT6_9057
+gosub @DESERT6_9410
+if or
+  38@ == 1
+  39@ == 1
+goto_if_false @DESERT6_805
+goto @DESERT6_1014
+
+:DESERT6_805
+gosub @DESERT6_9622
+gosub @DESERT6_9656
+if 
+  Char.IsDead($scplayer)
+goto_if_false @DESERT6_849
+37@ = 1
+goto @DESERT6_1014
+
+:DESERT6_849
+if 
+  34@ == 0
+goto_if_false @DESERT6_907
+write_debug "STAGE_SHOULD_NEVER_BE_0_IN_MAIN_LOOP"
+
+:DESERT6_907
+if 
+  34@ == 1
+goto_if_false @DESERT6_932
+gosub @DESERT6_1162
+
+:DESERT6_932
+if 
+  34@ == 2
+goto_if_false @DESERT6_957
+gosub @DESERT6_1336
+
+:DESERT6_957
+if 
+  34@ == 3
+goto_if_false @DESERT6_982
+gosub @DESERT6_2968
+
+:DESERT6_982
+if 
+  34@ == 4
+goto_if_false @DESERT6_1007
+36@ = 1
+
+:DESERT6_1007
+gosub @DESERT6_6815
+
+:DESERT6_1014
+if 
+  38@ == 0
+goto_if_false @DESERT6_1114
+if 
+  37@ == 0
+goto_if_false @DESERT6_1098
+if 
+  36@ == 0
+goto_if_false @DESERT6_1082
+goto @DESERT6_726
+goto @DESERT6_1091
+
+:DESERT6_1082
+gosub @DESERT6_10459
+return 
+
+:DESERT6_1091
+goto @DESERT6_1107
+
+:DESERT6_1098
+gosub @DESERT6_10307
+return 
+
+:DESERT6_1107
+goto @DESERT6_1116
+
+:DESERT6_1114
+return 
+
+:DESERT6_1116
+write_debug "SHOULD_NEVER_BE_HERE_IN_END_OF_MAIN_LOOP"
+return 
+
+:DESERT6_1162
+if 
+  35@ == 0
+goto_if_false @DESERT6_1228
+Text.PrintNow('DES6_00', 7000, 1)
+gosub @DESERT6_6258
+81@ = 1
+gosub @DESERT6_7633
+Audio.SetRadioChannel(RadioChannel.UserTracks)
+35@ += 1
+
+:DESERT6_1228
+if 
+  Car.IsDead(125@)
+goto_if_false @DESERT6_1260
+37@ = 1
+45@ = 1
+return 
+
+:DESERT6_1260
+if 
+  35@ == 1
+goto_if_false @DESERT6_1309
+if 
+  Char.IsInCar($scplayer, 125@)
+goto_if_false @DESERT6_1309
+Blip.Remove(133@)
+35@ = 99
+
+:DESERT6_1309
+if 
+  35@ == 99
+goto_if_false @DESERT6_1334
+gosub @DESERT6_9695
+
+:DESERT6_1334
+return 
+
+:DESERT6_1336
+if 
+  35@ == 0
+goto_if_false @DESERT6_1620
+181@ = 0
+set_lvar_int_to_lvar_int 137@ = 46@
+137@ += 2000
+159@ = -2135.59
+160@ = -2488.454
+161@ = 55.895
+132@ = Blip.AddForCoord(159@, 160@, 161@)
+set_lvar_float_to_lvar_float 70@ = 160@
+70@ += 1.0
+152@ = Checkpoint.Create(159@, 160@, 161@, 159@, 70@, 161@, 3, 25.0)
+$g_Desert6_visibilityKM = 0
+138@ = 0
+163@ = 0
+165@ = 0
+166@ = 0
+172@ = 0
+$g_Desert6_timerKM = 10
+$g_Desert6_timerKM *= 60000
+Hud.DisplayTimerWithString($g_Desert6_timerKM, TimerDirection.Down, 'DES6_51')
+162@ = Char.GetHeightAboveGround($scplayer)
+48@ = 0
+
+:DESERT6_1559
+177@(48@,2i) = 0
+150@(48@,2i) = 0
+48@ += 1
+  48@ >= 2
+goto_if_false @DESERT6_1559
+Audio.LoadMissionAudio(30600, 3)
+Zone.SetDisableMilitaryZones(True)
+35@ += 1
+
+:DESERT6_1620
+if 
+  Car.IsDead(125@)
+goto_if_false @DESERT6_1709
+48@ = 0
+
+:DESERT6_1643
+if 
+  Object.DoesExist(128@(48@,4i))
+goto_if_false @DESERT6_1672
+Object.Delete(128@(48@,4i))
+
+:DESERT6_1672
+48@ += 1
+  48@ >= 4
+goto_if_false @DESERT6_1643
+37@ = 1
+45@ = 1
+return 
+
+:DESERT6_1709
+gosub @DESERT6_4831
+if 
+  37@ == 1
+goto_if_false @DESERT6_1736
+return 
+
+:DESERT6_1736
+if 
+  $g_Desert6_timerKM == 0
+goto_if_false @DESERT6_1770
+37@ = 1
+45@ = 3
+return 
+
+:DESERT6_1770
+if 
+  35@ == 1
+goto_if_false @DESERT6_1867
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 137@
+goto_if_false @DESERT6_1867
+70@ = Char.GetHeightAboveGround($scplayer)
+sub_float_lvar_from_float_lvar 70@ -= 162@
+if 
+  70@ > 2.0
+goto_if_false @DESERT6_1867
+Hud.DisplayCounterWithString($g_Desert6_visibilityKM, CounterDisplay.Bar, 'DES6_50')
+35@ += 1
+
+:DESERT6_1867
+if 
+  35@ == 2
+goto_if_false @DESERT6_2061
+set_lvar_float_to_lvar_float 57@ = 159@
+57@ -= 25.0
+set_lvar_float_to_lvar_float 58@ = 160@
+58@ -= 2.0
+set_lvar_float_to_lvar_float 59@ = 161@
+59@ -= 25.0
+set_lvar_float_to_lvar_float 60@ = 159@
+60@ += 25.0
+set_lvar_float_to_lvar_float 61@ = 160@
+61@ += 2.0
+set_lvar_float_to_lvar_float 62@ = 161@
+62@ += 25.0
+if and
+  Char.IsInArea3D($scplayer, 0, 57@, 58@, 59@, 60@, 61@, 62@)
+  Char.IsInCar($scplayer, 125@)
+goto_if_false @DESERT6_2061
+Blip.Remove(132@)
+Checkpoint.Delete(152@)
+gosub @DESERT6_6561
+35@ = 99
+
+:DESERT6_2061
+gosub @DESERT6_4188
+gosub @DESERT6_5173
+if 
+  165@ == 1
+goto_if_false @DESERT6_2119
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 140@
+goto_if_false @DESERT6_2119
+166@ = 1
+
+:DESERT6_2119
+if 
+  166@ == 1
+goto_if_false @DESERT6_2175
+gosub @DESERT6_5600
+50@ = 30
+50@ *= 1000
+set_lvar_int_to_lvar_int 140@ = 46@
+add_int_lvar_to_int_lvar 140@ += 50@
+
+:DESERT6_2175
+gosub @DESERT6_6031
+if 
+  168@ == 0
+goto_if_false @DESERT6_2331
+57@, 58@, 59@ = Char.GetCoordinates($scplayer)
+72@ = Math.GetDistanceBetweenCoords3D(57@, 58@, 59@, 159@, 160@, 161@)
+if 
+  500.0 > 72@
+goto_if_false @DESERT6_2331
+if 
+  Camera.IsPointOnScreen(159@, 160@, 161@, 5.0)
+goto_if_false @DESERT6_2331
+Text.PrintNow('DES6_09', 7000, 1)
+168@ = 1
+169@ = 1
+set_lvar_int_to_lvar_int 144@ = 46@
+144@ += 7000
+
+:DESERT6_2331
+if 
+  169@ == 1
+goto_if_false @DESERT6_2375
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 144@
+goto_if_false @DESERT6_2375
+169@ = 0
+
+:DESERT6_2375
+if 
+  not is_local_var_bit_set_const 85@ bit 2
+goto_if_false @DESERT6_2471
+if and
+  is_local_var_bit_set_const 85@ bit 1
+  80@ == 0
+goto_if_false @DESERT6_2439
+81@ = 2
+gosub @DESERT6_7633
+goto @DESERT6_2471
+
+:DESERT6_2439
+if and
+  80@ == 1
+  $g_Desert6_visibilityKM >= 40
+goto_if_false @DESERT6_2471
+gosub @DESERT6_7857
+
+:DESERT6_2471
+if and
+  163@ == 1
+  165@ == 0
+  169@ == 0
+goto_if_false @DESERT6_2549
+if and
+  not is_local_var_bit_set_const 85@ bit 2
+  80@ == 2
+  79@ == 1
+  $g_Desert6_visibilityKM >= 40
+goto_if_false @DESERT6_2549
+gosub @DESERT6_7788
+
+:DESERT6_2549
+if and
+  not is_local_var_bit_set_const 85@ bit 3
+  is_local_var_bit_set_const 85@ bit 2
+  80@ == 0
+goto_if_false @DESERT6_2595
+81@ = 3
+gosub @DESERT6_7633
+
+:DESERT6_2595
+if and
+  165@ == 1
+  not is_local_var_bit_set_const 85@ bit 3
+  80@ == 3
+  79@ == 1
+goto_if_false @DESERT6_2641
+gosub @DESERT6_7788
+
+:DESERT6_2641
+if 
+  167@ == 0
+goto_if_false @DESERT6_2707
+if and
+  is_local_var_bit_set_const 85@ bit 3
+  79@ <> 2
+goto_if_false @DESERT6_2707
+Text.PrintNow('DES6_06', 7000, 1)
+167@ = 1
+
+:DESERT6_2707
+if 
+  180@ == 0
+goto_if_false @DESERT6_2820
+if 
+  Char.IsInArea2D($scplayer, 0, -67.0004, 1646.886, 423.298, 2132.188)
+goto_if_false @DESERT6_2820
+if or
+  Char.IsInAnyPlane($scplayer)
+  Char.IsInAnyHeli($scplayer)
+goto_if_false @DESERT6_2820
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @DESERT6_2820
+Text.PrintNow('AREA51', 7000, 1)
+180@ = 1
+
+:DESERT6_2820
+if 
+  181@ == 0
+goto_if_false @DESERT6_2887
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 137@
+goto_if_false @DESERT6_2887
+gosub @DESERT6_7788
+set_lvar_int_to_lvar_int 137@ = 46@
+137@ += 5000
+181@ = 1
+
+:DESERT6_2887
+if 
+  183@ == 0
+goto_if_false @DESERT6_2941
+if 
+  is_local_var_bit_set_const 85@ bit 1
+goto_if_false @DESERT6_2941
+Text.PrintHelp('DES6_12')
+183@ = 1
+
+:DESERT6_2941
+if 
+  35@ == 99
+goto_if_false @DESERT6_2966
+gosub @DESERT6_9695
+
+:DESERT6_2966
+return 
+
+:DESERT6_2968
+if 
+  35@ == 0
+goto_if_false @DESERT6_3201
+Text.PrintNow('DES6_10', 5000, 1)
+set_lvar_int_to_lvar_int 137@ = 46@
+137@ += 5000
+153@ = -76.4228
+154@ = 2478.64
+155@ = 14.2844
+156@ = 433.6483
+157@ = 2525.658
+158@ = 18.6279
+set_lvar_float_to_lvar_float 159@ = 156@
+sub_float_lvar_from_float_lvar 159@ -= 153@
+159@ /= 2.0
+add_float_lvar_to_float_lvar 159@ += 153@
+set_lvar_float_to_lvar_float 160@ = 157@
+sub_float_lvar_from_float_lvar 160@ -= 154@
+160@ /= 2.0
+add_float_lvar_to_float_lvar 160@ += 154@
+set_lvar_float_to_lvar_float 161@ = 158@
+sub_float_lvar_from_float_lvar 161@ -= 155@
+161@ /= 2.0
+add_float_lvar_to_float_lvar 161@ += 155@
+132@ = Blip.AddForCoord(159@, 160@, 161@)
+35@ += 1
+
+:DESERT6_3201
+if 
+  Car.IsDead(125@)
+goto_if_false @DESERT6_3233
+37@ = 1
+45@ = 1
+return 
+
+:DESERT6_3233
+gosub @DESERT6_4831
+if 
+  37@ == 1
+goto_if_false @DESERT6_3260
+return 
+
+:DESERT6_3260
+if 
+  $g_Desert6_timerKM == 0
+goto_if_false @DESERT6_3294
+37@ = 1
+45@ = 3
+return 
+
+:DESERT6_3294
+if 
+  35@ == 1
+goto_if_false @DESERT6_3437
+  Char.LocateAnyMeans3D($scplayer, 1, 159@, 160@, 161@, 10.0, 10.0, 10.0)
+if and
+  Char.IsInArea3D($scplayer, 0, 153@, 154@, 155@, 156@, 157@, 158@)
+  Char.IsInCar($scplayer, 125@)
+  Car.IsStopped(125@)
+  not Car.IsInAirProper(125@)
+goto_if_false @DESERT6_3437
+Blip.Remove(132@)
+gosub @DESERT6_7788
+Player.SetControl($player1, False)
+165@ = 0
+141@ = 0
+35@ += 1
+
+:DESERT6_3437
+if 
+  35@ == 2
+goto_if_false @DESERT6_3487
+if 
+  is_local_var_bit_set_const 85@ bit 4
+goto_if_false @DESERT6_3487
+Player.SetControl($player1, True)
+35@ = 99
+
+:DESERT6_3487
+gosub @DESERT6_4188
+gosub @DESERT6_5173
+if 
+  165@ == 1
+goto_if_false @DESERT6_3545
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 140@
+goto_if_false @DESERT6_3545
+166@ = 1
+
+:DESERT6_3545
+if 
+  166@ == 1
+goto_if_false @DESERT6_3601
+gosub @DESERT6_5600
+50@ = 30
+50@ *= 1000
+set_lvar_int_to_lvar_int 140@ = 46@
+add_int_lvar_to_int_lvar 140@ += 50@
+
+:DESERT6_3601
+gosub @DESERT6_6031
+if 
+  170@ == 0
+goto_if_false @DESERT6_3730
+57@, 58@, 59@ = Char.GetCoordinates($scplayer)
+72@ = Math.GetDistanceBetweenCoords3D(57@, 58@, 59@, 159@, 160@, 161@)
+if 
+  500.0 > 72@
+goto_if_false @DESERT6_3730
+Text.PrintNow('DES6_11', 7000, 1)
+170@ = 1
+171@ = 1
+set_lvar_int_to_lvar_int 145@ = 46@
+145@ += 7000
+
+:DESERT6_3730
+if 
+  171@ == 1
+goto_if_false @DESERT6_3808
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 145@
+goto_if_false @DESERT6_3792
+171@ = 0
+Text.ClearThisPrint('DES6_11')
+goto @DESERT6_3808
+
+:DESERT6_3792
+Text.PrintNow('DES6_11', 7000, 1)
+
+:DESERT6_3808
+if 
+  172@ == 0
+goto_if_false @DESERT6_3833
+gosub @DESERT6_6621
+
+:DESERT6_3833
+if and
+  170@ == 1
+  80@ <> 4
+  not is_local_var_bit_set_const 85@ bit 4
+goto_if_false @DESERT6_3963
+switch_start 79@ total_jumps 2 default_jump 0 @DESERT6_3963 jumps 0 @DESERT6_3928 1 @DESERT6_3949 -1 @DESERT6_3963 -1 @DESERT6_3963 -1 @DESERT6_3963 -1 @DESERT6_3963 -1 @DESERT6_3963
+
+:DESERT6_3928
+81@ = 4
+gosub @DESERT6_7633
+goto @DESERT6_3963
+
+:DESERT6_3949
+gosub @DESERT6_7857
+goto @DESERT6_3963
+
+:DESERT6_3963
+if 
+  180@ == 0
+goto_if_false @DESERT6_4076
+if 
+  Char.IsInArea2D($scplayer, 0, -67.0004, 1646.886, 423.298, 2132.188)
+goto_if_false @DESERT6_4076
+if or
+  Char.IsInAnyPlane($scplayer)
+  Char.IsInAnyHeli($scplayer)
+goto_if_false @DESERT6_4076
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @DESERT6_4076
+Text.PrintNow('AREA51', 7000, 1)
+180@ = 1
+
+:DESERT6_4076
+if 
+  35@ == 99
+goto_if_false @DESERT6_4101
+gosub @DESERT6_9695
+
+:DESERT6_4101
+return 
+
+:DESERT6_4103
+57@ = 323.5454
+58@ = 2540.254
+59@ = 15.8085
+63@ = 180.0
+World.ClearArea(1, 57@, 58@, 59@, 15.0)
+125@ = Car.Create(476, 57@, 58@, 59@)
+Car.SetHeading(125@, 63@)
+return 
+
+:DESERT6_4188
+57@, 58@, 59@ = Car.GetCoordinates(125@)
+70@ = World.GetGroundZFor3DCoord(57@, 58@, 59@)
+71@ = World.GetWaterHeightAtCoords(57@, 58@, False)
+if 
+  is_float_lvar_greater_than_float_lvar 71@ > 70@
+goto_if_false @DESERT6_4256
+set_lvar_float_to_lvar_float 70@ = 71@
+
+:DESERT6_4256
+set_lvar_float_to_lvar_float 71@ = 59@
+sub_float_lvar_from_float_lvar 71@ -= 70@
+if 
+  71@ > 40.0
+goto_if_false @DESERT6_4581
+if 
+  163@ == 1
+goto_if_false @DESERT6_4527
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 138@
+goto_if_false @DESERT6_4454
+$g_Desert6_visibilityKM += 1
+if 
+  $g_Desert6_visibilityKM > 100
+goto_if_false @DESERT6_4362
+$g_Desert6_visibilityKM = 100
+
+:DESERT6_4362
+if and
+  $g_Desert6_visibilityKM == 100
+  165@ == 0
+goto_if_false @DESERT6_4439
+165@ = 1
+166@ = 0
+182@ = 0
+50@ = 3
+50@ *= 1000
+set_lvar_int_to_lvar_int 140@ = 46@
+add_int_lvar_to_int_lvar 140@ += 50@
+
+:DESERT6_4439
+set_lvar_int_to_lvar_int 138@ = 46@
+138@ += 80
+
+:DESERT6_4454
+if and
+  165@ == 0
+  169@ == 0
+  179@ == 0
+goto_if_false @DESERT6_4520
+if 
+  79@ <> 2
+goto_if_false @DESERT6_4520
+Text.PrintNow('DES6_07', 1000, 1)
+
+:DESERT6_4520
+goto @DESERT6_4574
+
+:DESERT6_4527
+if 
+  71@ > 41.0
+goto_if_false @DESERT6_4574
+163@ = 1
+set_lvar_int_to_lvar_int 138@ = 46@
+138@ += 80
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:DESERT6_4574
+goto @DESERT6_4829
+
+:DESERT6_4581
+if 
+  163@ == 1
+goto_if_false @DESERT6_4738
+163@ = 0
+if 
+  $g_Desert6_visibilityKM > 0
+goto_if_false @DESERT6_4646
+set_lvar_int_to_lvar_int 138@ = 46@
+138@ += 40
+goto @DESERT6_4653
+
+:DESERT6_4646
+138@ = 0
+
+:DESERT6_4653
+if 
+  165@ == 1
+goto_if_false @DESERT6_4702
+50@ = 10
+50@ *= 1000
+set_lvar_int_to_lvar_int 141@ = 46@
+add_int_lvar_to_int_lvar 141@ += 50@
+
+:DESERT6_4702
+165@ = 0
+140@ = 0
+Text.ClearThisPrint('DES6_07')
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+goto @DESERT6_4829
+
+:DESERT6_4738
+if 
+  $g_Desert6_visibilityKM > 0
+goto_if_false @DESERT6_4829
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 138@
+goto_if_false @DESERT6_4829
+$g_Desert6_visibilityKM -= 1
+if 
+  $g_Desert6_visibilityKM == 0
+goto_if_false @DESERT6_4814
+138@ = 0
+goto @DESERT6_4829
+
+:DESERT6_4814
+set_lvar_int_to_lvar_int 138@ = 46@
+138@ += 40
+
+:DESERT6_4829
+return 
+
+:DESERT6_4831
+if 
+  not Char.IsInCar($scplayer, 125@)
+goto_if_false @DESERT6_5111
+if 
+  164@ == 1
+goto_if_false @DESERT6_5027
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 139@
+goto_if_false @DESERT6_5020
+if 
+  $g_Desert6_failureKM == 0
+goto_if_false @DESERT6_4928
+37@ = 1
+45@ = 2
+return 
+goto @DESERT6_5020
+
+:DESERT6_4928
+$g_Desert6_failureKM -= 1
+set_lvar_int_to_lvar_int 139@ = 46@
+139@ += 1000
+Text.ClearSmallPrints
+Text.AddNextMessageToPreviousBriefs(False)
+if 
+  $g_Desert6_failureKM == 1
+goto_if_false @DESERT6_5001
+Text.PrintWithNumberNow('DES6_04', $g_Desert6_failureKM, 1500, 1)
+goto @DESERT6_5020
+
+:DESERT6_5001
+Text.PrintWithNumberNow('DES6_03', $g_Desert6_failureKM, 1500, 1)
+
+:DESERT6_5020
+goto @DESERT6_5104
+
+:DESERT6_5027
+$g_Desert6_failureKM = 30
+set_lvar_int_to_lvar_int 139@ = 46@
+139@ += 1000
+Text.AddNextMessageToPreviousBriefs(False)
+Text.PrintWithNumberNow('DES6_03', $g_Desert6_failureKM, 1500, 1)
+Blip.Remove(132@)
+133@ = Blip.AddForCar(125@)
+Blip.SetAsFriendly(133@, True)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+164@ = 1
+
+:DESERT6_5104
+goto @DESERT6_5171
+
+:DESERT6_5111
+if 
+  164@ == 1
+goto_if_false @DESERT6_5171
+164@ = 0
+Blip.Remove(133@)
+132@ = Blip.AddForCoord(159@, 160@, 161@)
+139@ = 0
+$g_Desert6_failureKM = 0
+Text.ClearSmallPrints
+
+:DESERT6_5171
+return 
+
+:DESERT6_5173
+179@ = 0
+48@ = 0
+
+:DESERT6_5187
+73@ = 0
+if 
+  184@(48@,2i) == 1
+goto_if_false @DESERT6_5577
+179@ = 1
+if or
+  Car.IsDead(126@(48@,2i))
+  Char.IsDead(123@(48@,2i))
+goto_if_false @DESERT6_5259
+73@ = 1
+
+:DESERT6_5259
+if 
+  73@ == 0
+goto_if_false @DESERT6_5304
+if 
+  Car.IsInWater(126@(48@,2i))
+goto_if_false @DESERT6_5304
+73@ = 1
+
+:DESERT6_5304
+if 
+  73@ == 0
+goto_if_false @DESERT6_5485
+if 
+  177@(48@,2i) == 1
+goto_if_false @DESERT6_5430
+if 
+  Car.IsInAirProper(126@(48@,2i))
+goto_if_false @DESERT6_5393
+177@(48@,2i) = 0
+150@(48@,2i) = 0
+goto @DESERT6_5423
+
+:DESERT6_5393
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 150@(48@,2i)
+goto_if_false @DESERT6_5423
+73@ = 1
+
+:DESERT6_5423
+goto @DESERT6_5485
+
+:DESERT6_5430
+if 
+  not Car.IsInAirProper(126@(48@,2i))
+goto_if_false @DESERT6_5485
+177@(48@,2i) = 1
+set_lvar_int_to_lvar_int 150@(48@,2i) = 46@
+150@(48@,2i) += 5000
+
+:DESERT6_5485
+if 
+  73@ == 1
+goto_if_false @DESERT6_5577
+Car.MarkAsNoLongerNeeded(126@(48@,2i))
+Char.MarkAsNoLongerNeeded(123@(48@,2i))
+Blip.Remove(134@(48@,2i))
+184@(48@,2i) = 0
+if 
+  165@ == 1
+goto_if_false @DESERT6_5575
+set_lvar_int_to_lvar_int 140@ = 46@
+140@ += 2000
+
+:DESERT6_5575
+return 
+
+:DESERT6_5577
+48@ += 1
+  48@ >= 2
+goto_if_false @DESERT6_5187
+return 
+
+:DESERT6_5600
+57@, 58@, 59@ = Char.GetCoordinates($scplayer)
+48@ = 0
+
+:DESERT6_5621
+if 
+  184@(48@,2i) == 0
+goto_if_false @DESERT6_6008
+50@ = Math.RandomIntInRange(150, 200)
+cset_lvar_float_to_lvar_int 70@ = integer 50@
+51@ = Math.RandomIntInRange(0, 2)
+if 
+  51@ == 0
+goto_if_false @DESERT6_5704
+add_float_lvar_to_float_lvar 57@ += 70@
+goto @DESERT6_5712
+
+:DESERT6_5704
+sub_float_lvar_from_float_lvar 57@ -= 70@
+
+:DESERT6_5712
+50@ = Math.RandomIntInRange(150, 200)
+cset_lvar_float_to_lvar_int 70@ = integer 50@
+51@ = Math.RandomIntInRange(0, 2)
+if 
+  51@ == 0
+goto_if_false @DESERT6_5773
+add_float_lvar_to_float_lvar 58@ += 70@
+goto @DESERT6_5781
+
+:DESERT6_5773
+sub_float_lvar_from_float_lvar 58@ -= 70@
+
+:DESERT6_5781
+70@ = World.GetGroundZFor3DCoord(57@, 58@, 59@)
+71@ = World.GetWaterHeightAtCoords(57@, 58@, False)
+if 
+  is_float_lvar_greater_than_float_lvar 71@ > 70@
+goto_if_false @DESERT6_5835
+set_lvar_float_to_lvar_float 70@ = 71@
+
+:DESERT6_5835
+set_lvar_float_to_lvar_float 59@ = 70@
+59@ += 200.0
+126@(48@,2i) = Car.Create(520, 57@, 58@, 59@)
+Plane.StartsInAir(126@(48@,2i))
+Plane.AttackPlayer(126@(48@,2i), $player1, 10.0)
+134@(48@,2i) = Blip.AddForCar(126@(48@,2i))
+Blip.ChangeDisplay(134@(48@,2i), BlipDisplay.BlipOnly)
+123@(48@,2i) = Char.CreateInsideCar(PedType.CivMale, 43, 126@(48@,2i))
+Char.SetDecisionMaker(123@(48@,2i), 136@)
+177@(48@,2i) = 0
+150@(48@,2i) = 0
+184@(48@,2i) = 1
+166@ = 0
+182@ = 1
+return 
+
+:DESERT6_6008
+48@ += 1
+  48@ >= 2
+goto_if_false @DESERT6_5621
+return 
+
+:DESERT6_6031
+if 
+  165@ == 1
+goto_if_false @DESERT6_6051
+return 
+
+:DESERT6_6051
+if 
+  is_int_lvar_greater_than_int_lvar 141@ > 46@
+goto_if_false @DESERT6_6072
+return 
+
+:DESERT6_6072
+if 
+  182@ == 0
+goto_if_false @DESERT6_6092
+return 
+
+:DESERT6_6092
+60@, 61@, 62@ = Char.GetCoordinates($scplayer)
+48@ = 0
+
+:DESERT6_6113
+if 
+  184@(48@,2i) == 1
+goto_if_false @DESERT6_6235
+57@, 58@, 59@ = Car.GetCoordinates(126@(48@,2i))
+70@ = Math.GetDistanceBetweenCoords3D(57@, 58@, 59@, 60@, 61@, 62@)
+if 
+  70@ > 250.0
+goto_if_false @DESERT6_6235
+Char.RemoveElegantly(123@(48@,2i))
+Car.Delete(126@(48@,2i))
+Blip.Remove(134@(48@,2i))
+184@(48@,2i) = 0
+
+:DESERT6_6235
+48@ += 1
+  48@ >= 2
+goto_if_false @DESERT6_6113
+return 
+
+:DESERT6_6258
+if 
+  Car.IsDead(125@)
+goto_if_false @DESERT6_6276
+return 
+
+:DESERT6_6276
+128@ = Object.Create(#AMMO_CAPSULE, 370.5, 2498.75, 25.5)
+129@ = Object.Create(#AMMO_CAPSULE, 371.25, 2498.35, 25.3)
+130@ = Object.Create(#AMMO_CAPSULE, 371.25, 2499.15, 25.7)
+131@ = Object.Create(#AMMO_CAPSULE, 372.0, 2498.35, 25.4)
+Object.AttachToCar(128@, 125@, -0.75, 0.3, -1.05, 88.0, 0.0, 0.0)
+Object.AttachToCar(129@, 125@, -0.25, 0.3, -1.1, 88.0, 0.0, 0.0)
+Object.AttachToCar(130@, 125@, 0.25, 0.3, -1.1, 88.0, 0.0, 0.0)
+Object.AttachToCar(131@, 125@, 0.75, 0.3, -1.05, 88.0, 0.0, 0.0)
+48@ = 0
+
+:DESERT6_6527
+Object.SetCollision(128@(48@,4i), False)
+48@ += 1
+  48@ >= 4
+goto_if_false @DESERT6_6527
+return 
+
+:DESERT6_6561
+172@ = 0
+48@ = 0
+
+:DESERT6_6575
+set_lvar_int_to_lvar_int 146@(48@,4i) = 46@
+173@(48@,4i) = 0
+48@ += 1
+  48@ >= 4
+goto_if_false @DESERT6_6575
+return 
+
+:DESERT6_6621
+48@ = 0
+
+:DESERT6_6628
+if 
+  173@(48@,4i) == 0
+goto_if_false @DESERT6_6733
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 146@(48@,4i)
+goto_if_false @DESERT6_6733
+Object.Detach(128@(48@,4i), 0.0, 0.0, 0.0, True)
+Object.SetDynamic(128@(48@,4i), True)
+Audio.ReportMissionAudioEventAtObject(128@(48@,4i), 1009)
+173@(48@,4i) = 1
+
+:DESERT6_6733
+48@ += 1
+  48@ >= 4
+goto_if_false @DESERT6_6628
+48@ = 0
+
+:DESERT6_6761
+if 
+  173@(48@,4i) == 0
+goto_if_false @DESERT6_6785
+return 
+
+:DESERT6_6785
+48@ += 1
+  48@ >= 4
+goto_if_false @DESERT6_6761
+172@ = 1
+return 
+
+:DESERT6_6815
+switch_start 79@ total_jumps 5 default_jump 1 @DESERT6_6899 jumps 0 @DESERT6_6878 1 @DESERT6_6878 2 @DESERT6_6885 3 @DESERT6_6878 4 @DESERT6_6878 -1 @DESERT6_6935 -1 @DESERT6_6935
+
+:DESERT6_6878
+goto @DESERT6_6935
+
+:DESERT6_6885
+gosub @DESERT6_7075
+goto @DESERT6_6935
+
+:DESERT6_6899
+write_debug "UNKNOWN_CONVERSATION_STATUS_ID"
+return 
+
+:DESERT6_6935
+return 
+
+:DESERT6_6937
+if 
+  is_int_lvar_equal_to_int_lvar 84@ == 83@
+goto_if_false @DESERT6_6958
+return 
+
+:DESERT6_6958
+50@ = 1
+87@(50@,3i) = 1
+Audio.LoadMissionAudio(90@(84@,11i), 50@)
+84@ += 1
+if 
+  is_int_lvar_equal_to_int_lvar 84@ == 83@
+goto_if_false @DESERT6_7016
+return 
+
+:DESERT6_7016
+50@ += 1
+if 
+  50@ > 2
+goto_if_false @DESERT6_7043
+return 
+
+:DESERT6_7043
+87@(50@,3i) = 1
+Audio.LoadMissionAudio(90@(84@,11i), 50@)
+84@ += 1
+return 
+
+:DESERT6_7075
+gosub @DESERT6_8047
+if 
+  79@ == 3
+goto_if_false @DESERT6_7109
+gosub @DESERT6_7325
+return 
+
+:DESERT6_7109
+switch_start 87@(78@,3i) total_jumps 4 default_jump 1 @DESERT6_7292 jumps 0 @DESERT6_7176 1 @DESERT6_7185 2 @DESERT6_7221 3 @DESERT6_7260 -1 @DESERT6_7323 -1 @DESERT6_7323 -1 @DESERT6_7323
+
+:DESERT6_7176
+return 
+goto @DESERT6_7323
+
+:DESERT6_7185
+if 
+  not Audio.HasMissionAudioLoaded(78@)
+goto_if_false @DESERT6_7203
+return 
+
+:DESERT6_7203
+87@(78@,3i) = 2
+goto @DESERT6_7323
+
+:DESERT6_7221
+Audio.PlayMissionAudio(78@)
+Text.PrintNow(101@(82@,11s), 10000, 1)
+87@(78@,3i) = 3
+return 
+goto @DESERT6_7323
+
+:DESERT6_7260
+if 
+  not Audio.HasMissionAudioFinished(78@)
+goto_if_false @DESERT6_7278
+return 
+
+:DESERT6_7278
+gosub @DESERT6_7378
+goto @DESERT6_7323
+
+:DESERT6_7292
+write_debug "UNKNOWN_AUDIO_SLOT_STATUS"
+return 
+
+:DESERT6_7323
+return 
+
+:DESERT6_7325
+50@ = 1
+
+:DESERT6_7332
+if 
+  2 >= 50@
+goto_if_false @DESERT6_7369
+Audio.ClearMissionAudio(50@)
+50@ += 1
+goto @DESERT6_7332
+
+:DESERT6_7369
+gosub @DESERT6_7507
+return 
+
+:DESERT6_7378
+87@(78@,3i) = 0
+82@ += 1
+if 
+  is_int_lvar_equal_to_int_lvar 82@ == 83@
+goto_if_false @DESERT6_7424
+gosub @DESERT6_7507
+return 
+
+:DESERT6_7424
+if 
+  is_int_lvar_greater_than_int_lvar 83@ > 84@
+goto_if_false @DESERT6_7473
+87@(78@,3i) = 1
+Audio.LoadMissionAudio(90@(84@,11i), 78@)
+84@ += 1
+
+:DESERT6_7473
+78@ += 1
+if 
+  78@ > 2
+goto_if_false @DESERT6_7505
+78@ = 1
+
+:DESERT6_7505
+return 
+
+:DESERT6_7507
+set_local_var_bit_lvar 85@ bit 80@
+80@ = 0
+79@ = 0
+81@ = 0
+78@ = 1
+82@ = 0
+83@ = 0
+84@ = 0
+50@ = 1
+
+:DESERT6_7571
+if 
+  2 > 50@
+goto_if_false @DESERT6_7614
+87@(50@,3i) = 0
+50@ += 1
+goto @DESERT6_7571
+
+:DESERT6_7614
+Text.ClearSmallPrints
+set_lvar_int_to_lvar_int 86@ = 46@
+86@ += 120
+return 
+
+:DESERT6_7633
+if 
+  79@ <> 0
+goto_if_false @DESERT6_7658
+gosub @DESERT6_7857
+
+:DESERT6_7658
+if 
+  is_int_lvar_greater_than_int_lvar 86@ > 46@
+goto_if_false @DESERT6_7679
+return 
+
+:DESERT6_7679
+86@ = 0
+set_lvar_int_to_lvar_int 80@ = 81@
+81@ = 0
+78@ = 1
+82@ = 0
+83@ = 0
+84@ = 0
+50@ = 1
+
+:DESERT6_7736
+if 
+  2 > 50@
+goto_if_false @DESERT6_7779
+87@(50@,3i) = 0
+50@ += 1
+goto @DESERT6_7736
+
+:DESERT6_7779
+gosub @DESERT6_7886
+return 
+
+:DESERT6_7788
+if 
+  79@ <> 1
+goto_if_false @DESERT6_7848
+write_debug "A_CONVERSATION_HAS_NOT_BEEN_PREPARED"
+return 
+
+:DESERT6_7848
+79@ = 2
+return 
+
+:DESERT6_7857
+if 
+  79@ == 0
+goto_if_false @DESERT6_7877
+return 
+
+:DESERT6_7877
+gosub @DESERT6_7325
+return 
+
+:DESERT6_7886
+switch_start 80@ total_jumps 4 default_jump 1 @DESERT6_8005 jumps 1 @DESERT6_7949 2 @DESERT6_7963 3 @DESERT6_7977 4 @DESERT6_7991 -1 @DESERT6_8031 -1 @DESERT6_8031 -1 @DESERT6_8031
+
+:DESERT6_7949
+gosub @DESERT6_8127
+goto @DESERT6_8031
+
+:DESERT6_7963
+gosub @DESERT6_8600
+goto @DESERT6_8031
+
+:DESERT6_7977
+gosub @DESERT6_8797
+goto @DESERT6_8031
+
+:DESERT6_7991
+gosub @DESERT6_9011
+goto @DESERT6_8031
+
+:DESERT6_8005
+write_debug "UNKNOWN_CONVERSATION"
+return 
+
+:DESERT6_8031
+gosub @DESERT6_6937
+79@ = 1
+return 
+
+:DESERT6_8047
+if 
+  Char.IsDead($scplayer)
+goto_if_false @DESERT6_8072
+79@ = 3
+return 
+
+:DESERT6_8072
+if 
+  Car.IsDead(125@)
+goto_if_false @DESERT6_8097
+79@ = 3
+return 
+
+:DESERT6_8097
+if 
+  not Char.IsInCar($scplayer, 125@)
+goto_if_false @DESERT6_8125
+79@ = 3
+return 
+
+:DESERT6_8125
+return 
+
+:DESERT6_8127
+50@ = 0
+set_lvar_int_to_constant 90@(50@,11i) = 13400
+set_lvar_text_label 101@(50@,11s) = 'DES6_AA'
+50@ += 1
+set_lvar_int_to_constant 90@(50@,11i) = 13401
+set_lvar_text_label 101@(50@,11s) = 'DES6_AB'
+50@ += 1
+set_lvar_int_to_constant 90@(50@,11i) = 13402
+set_lvar_text_label 101@(50@,11s) = 'DES6_AD'
+50@ += 1
+set_lvar_int_to_constant 90@(50@,11i) = 13403
+set_lvar_text_label 101@(50@,11s) = 'DES6_AE'
+50@ += 1
+set_lvar_int_to_constant 90@(50@,11i) = 13404
+set_lvar_text_label 101@(50@,11s) = 'DES6_AF'
+50@ += 1
+set_lvar_int_to_constant 90@(50@,11i) = 13405
+set_lvar_text_label 101@(50@,11s) = 'DES6_AG'
+50@ += 1
+set_lvar_int_to_constant 90@(50@,11i) = 13406
+set_lvar_text_label 101@(50@,11s) = 'DES6_AH'
+50@ += 1
+set_lvar_int_to_constant 90@(50@,11i) = 13407
+set_lvar_text_label 101@(50@,11s) = 'DES6_AJ'
+50@ += 1
+set_lvar_int_to_constant 90@(50@,11i) = 13408
+set_lvar_text_label 101@(50@,11s) = 'DES6_AK'
+50@ += 1
+set_lvar_int_to_constant 90@(50@,11i) = 13409
+set_lvar_text_label 101@(50@,11s) = 'DES6_AM'
+50@ += 1
+set_lvar_int_to_constant 90@(50@,11i) = 13410
+set_lvar_text_label 101@(50@,11s) = 'DES6_AN'
+50@ += 1
+if 
+  50@ > 11
+goto_if_false @DESERT6_8590
+write_debug "TOO_MANY_CONVERSATION_LINES"
+
+:DESERT6_8590
+set_lvar_int_to_lvar_int 83@ = 50@
+return 
+
+:DESERT6_8600
+50@ = Math.RandomIntInRange(0, 4)
+switch_start 50@ total_jumps 4 default_jump 0 @DESERT6_8788 jumps 0 @DESERT6_8672 1 @DESERT6_8701 2 @DESERT6_8730 3 @DESERT6_8759 -1 @DESERT6_8788 -1 @DESERT6_8788 -1 @DESERT6_8788
+
+:DESERT6_8672
+set_lvar_int_to_constant 90@ = 13411
+set_lvar_text_label 101@s = 'DES6_BA'
+goto @DESERT6_8788
+
+:DESERT6_8701
+set_lvar_int_to_constant 90@ = 13412
+set_lvar_text_label 101@s = 'DES6_BB'
+goto @DESERT6_8788
+
+:DESERT6_8730
+set_lvar_int_to_constant 90@ = 13413
+set_lvar_text_label 101@s = 'DES6_BC'
+goto @DESERT6_8788
+
+:DESERT6_8759
+set_lvar_int_to_constant 90@ = 13414
+set_lvar_text_label 101@s = 'DES6_BD'
+goto @DESERT6_8788
+
+:DESERT6_8788
+83@ = 1
+return 
+
+:DESERT6_8797
+50@ = 0
+set_lvar_int_to_constant 90@(50@,11i) = 13415
+set_lvar_text_label 101@(50@,11s) = 'DES6_CA'
+50@ += 1
+set_lvar_int_to_constant 90@(50@,11i) = 13416
+set_lvar_text_label 101@(50@,11s) = 'DES6_CB'
+50@ += 1
+set_lvar_int_to_constant 90@(50@,11i) = 13417
+set_lvar_text_label 101@(50@,11s) = 'DES6_CC'
+50@ += 1
+set_lvar_int_to_constant 90@(50@,11i) = 13418
+set_lvar_text_label 101@(50@,11s) = 'DES6_CD'
+50@ += 1
+if 
+  50@ > 11
+goto_if_false @DESERT6_9001
+write_debug "TOO_MANY_CONVERSATION_LINES"
+
+:DESERT6_9001
+set_lvar_int_to_lvar_int 83@ = 50@
+return 
+
+:DESERT6_9011
+50@ = 0
+set_lvar_int_to_constant 90@(50@,11i) = 13419
+set_lvar_text_label 101@(50@,11s) = 'DES6_DA'
+83@ = 1
+return 
+
+:DESERT6_9057
+if 
+is_ps2_keyboard_key_just_pressed 32
+goto_if_false @DESERT6_9106
+47@ += 1
+if 
+  47@ > 2
+goto_if_false @DESERT6_9104
+47@ = 0
+
+:DESERT6_9104
+clear_all_view_variables 
+
+:DESERT6_9106
+if 
+  47@ == 1
+goto_if_false @DESERT6_9280
+set_var_int_to_lvar_int $Desert6_view_debug = 34@
+set_var_int_to_lvar_int $7501 = 35@
+set_var_int_to_lvar_int $7502 = 46@
+set_var_int_to_lvar_int $7503 = 80@
+set_var_int_to_lvar_int $7504 = 85@
+$7505 = 0
+$7506 = 0
+$7507 = 0
+view_integer_variable $Desert6_view_debug "M_STAGE"
+view_integer_variable $7501 "M_GOALS"
+view_integer_variable $7502 "M_MISSION_TIMER"
+view_integer_variable $7503 "CONVERSATION"
+view_integer_variable $7504 "CONVERSATIONSPLAYED"
+
+:DESERT6_9280
+if 
+  47@ == 2
+goto_if_false @DESERT6_9298
+
+:DESERT6_9298
+if 
+is_ps2_keyboard_key_just_pressed 98
+goto_if_false @DESERT6_9320
+38@ = 1
+
+:DESERT6_9320
+if 
+is_ps2_keyboard_key_just_pressed 80
+goto_if_false @DESERT6_9408
+if 
+  39@ == 0
+goto_if_false @DESERT6_9383
+39@ = 1
+write_debug "LEVEL_PAUSED"
+goto @DESERT6_9408
+
+:DESERT6_9383
+39@ = 0
+write_debug "LEVEL_UNPAUSED"
+
+:DESERT6_9408
+return 
+
+:DESERT6_9410
+if 
+  not is_ps2_keyboard_key_just_pressed 74
+goto_if_false @DESERT6_9427
+return 
+
+:DESERT6_9427
+if 
+  34@ == 2
+goto_if_false @DESERT6_9548
+if 
+  2 > 35@
+goto_if_false @DESERT6_9531
+World.ClearArea(1, -2246.706, -2539.1, 30.7512, 25.0)
+Char.SetCoordinates($scplayer, -2246.706, -2539.1, 30.7512)
+Char.SetHeading($scplayer, 144.5365)
+35@ = 2
+goto @DESERT6_9548
+
+:DESERT6_9531
+Blip.Remove(132@)
+Checkpoint.Delete(152@)
+35@ = 99
+
+:DESERT6_9548
+if 
+  34@ == 3
+goto_if_false @DESERT6_9620
+World.ClearArea(1, 384.4035, 2449.35, 15.4921, 25.0)
+Char.SetCoordinates($scplayer, 384.4035, 2449.35, 15.4921)
+Char.SetHeading($scplayer, 7.1386)
+
+:DESERT6_9620
+return 
+
+:DESERT6_9622
+41@ += 1
+if 
+  41@ > 9
+goto_if_false @DESERT6_9654
+41@ = 0
+
+:DESERT6_9654
+return 
+
+:DESERT6_9656
+42@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 44@ = 42@
+sub_int_lvar_from_int_lvar 44@ -= 43@
+set_lvar_int_to_lvar_int 43@ = 42@
+add_int_lvar_to_int_lvar 46@ += 44@
+return 
+
+:DESERT6_9695
+34@ += 1
+35@ = 0
+TIMERA = 0
+TIMERB = 0
+return 
+
+:DESERT6_9725
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DESERT6_9748
+Player.SetControl($player1, False)
+
+:DESERT6_9748
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:DESERT6_9763
+if 
+  Camera.GetFadingStatus
+goto_if_false @DESERT6_9787
+wait 0
+goto @DESERT6_9763
+
+:DESERT6_9787
+World.ClearArea(1, 335.0, 2529.0, 16.0, 20.0)
+Cutscene.Load('DESERT6')
+
+:DESERT6_9822
+if 
+  not Cutscene.HasLoaded
+goto_if_false @DESERT6_9846
+wait 0
+goto @DESERT6_9822
+
+:DESERT6_9846
+Cutscene.Start
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+Weather.Force(WeatherType.ExtraSunnyDesert)
+
+:DESERT6_9867
+if 
+  not Cutscene.HasFinished
+goto_if_false @DESERT6_9891
+wait 0
+goto @DESERT6_9867
+
+:DESERT6_9891
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, Fade.Out)
+
+:DESERT6_9905
+if 
+  Camera.GetFadingStatus
+goto_if_false @DESERT6_9929
+wait 0
+goto @DESERT6_9905
+
+:DESERT6_9929
+Cutscene.Clear
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+return 
+
+:DESERT6_9939
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @DESERT6_9966
+wait 0
+goto @DESERT6_9939
+
+:DESERT6_9966
+CarGenerator.Switch($d5_bronze_generator, 0)
+CarGenerator.Switch($d5_silver_generator, 0)
+CarGenerator.Switch($d5_gold_generator, 0)
+World.ClearArea(0, 368.1973, 2519.421, 15.5961, 300.0)
+gosub @DESERT6_10197
+gosub @DESERT6_10305
+gosub @DESERT6_4103
+133@ = Blip.AddForCar(125@)
+Blip.SetAsFriendly(133@, True)
+World.ClearArea(0, 331.9908, 2533.767, 15.8044, 0.5)
+Streaming.LoadScene(331.9908, 2533.767, 15.8044)
+Char.SetCoordinates($scplayer, 331.9908, 2533.767, 15.8044)
+Char.SetHeading($scplayer, 48.4743)
+Camera.SetBehindPlayer
+Weather.ForceNow(WeatherType.ExtraSunnyDesert)
+Game.SwitchAmbientPlanes(False)
+wait 500
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DESERT6_10171
+Player.SetControl($player1, True)
+
+:DESERT6_10171
+Restart.SetRespawnPointForDurationOfMission(322.8019, 2530.124, 15.8089)
+gosub @DESERT6_9695
+return 
+
+:DESERT6_10197
+Streaming.RequestModel(476)
+Streaming.RequestModel(520)
+Streaming.RequestModel(43)
+Streaming.RequestModel(#AMMO_CAPSULE)
+Streaming.LoadAllModelsNow
+
+:DESERT6_10218
+if or
+  not Streaming.HasModelLoaded(476)
+  not Streaming.HasModelLoaded(520)
+goto_if_false @DESERT6_10250
+wait 0
+goto @DESERT6_10218
+
+:DESERT6_10250
+if 
+  not Streaming.HasModelLoaded(43)
+goto_if_false @DESERT6_10276
+wait 0
+goto @DESERT6_10250
+
+:DESERT6_10276
+if 
+  not Streaming.HasModelLoaded(#AMMO_CAPSULE)
+goto_if_false @DESERT6_10303
+wait 0
+goto @DESERT6_10276
+
+:DESERT6_10303
+return 
+
+:DESERT6_10305
+return 
+
+:DESERT6_10307
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+Text.ClearSmallPrints
+switch_start 45@ total_jumps 3 default_jump 0 @DESERT6_10457 jumps 1 @DESERT6_10388 2 @DESERT6_10411 3 @DESERT6_10434 -1 @DESERT6_10457 -1 @DESERT6_10457 -1 @DESERT6_10457 -1 @DESERT6_10457
+
+:DESERT6_10388
+Text.PrintNow('DES6_99', 5000, 1)
+goto @DESERT6_10457
+
+:DESERT6_10411
+Text.PrintNow('DES6_98', 5000, 1)
+goto @DESERT6_10457
+
+:DESERT6_10434
+Text.PrintNow('DES6_97', 5000, 1)
+goto @DESERT6_10457
+
+:DESERT6_10457
+return 
+
+:DESERT6_10459
+Text.PrintWithNumberBig('M_PASS', 15000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 15000)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+Stat.RegisterMissionPassed('DESERT6')
+Stat.PlayerMadeProgress(1)
+$flag_desert_mission_counter += 1
+return 
+
+:DESERT6_10519
+Car.MarkAsNoLongerNeeded(125@)
+48@ = 0
+
+:DESERT6_10531
+Car.MarkAsNoLongerNeeded(126@(48@,2i))
+Char.MarkAsNoLongerNeeded(123@(48@,2i))
+48@ += 1
+  48@ >= 2
+goto_if_false @DESERT6_10531
+48@ = 0
+
+:DESERT6_10577
+Object.Delete(128@(48@,4i))
+48@ += 1
+  48@ >= 4
+goto_if_false @DESERT6_10577
+Blip.Remove(133@)
+Blip.Remove(132@)
+48@ = 0
+
+:DESERT6_10624
+Blip.Remove(134@(48@,2i))
+48@ += 1
+  48@ >= 2
+goto_if_false @DESERT6_10624
+Hud.ClearCounter($g_Desert6_visibilityKM)
+Hud.ClearTimer($g_Desert6_timerKM)
+Checkpoint.Delete(152@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Streaming.MarkModelAsNoLongerNeeded(476)
+Streaming.MarkModelAsNoLongerNeeded(520)
+Streaming.MarkModelAsNoLongerNeeded(43)
+Streaming.MarkModelAsNoLongerNeeded(#AMMO_CAPSULE)
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+Game.SetWantedMultiplier(1.0)
+Game.SwitchAmbientPlanes(True)
+Weather.Release
+Zone.SetDisableMilitaryZones(False)
+$timer_mobile_start = Clock.GetGameTimer()
+if 
+  $d5_bronze_generator_unlocked == 1
+goto_if_false @DESERT6_10753
+CarGenerator.Switch($d5_bronze_generator, 101)
+
+:DESERT6_10753
+if 
+  $d5_silver_generator_unlocked == 1
+goto_if_false @DESERT6_10778
+CarGenerator.Switch($d5_silver_generator, 101)
+
+:DESERT6_10778
+if 
+  $d5_gold_generator_unlocked == 1
+goto_if_false @DESERT6_10803
+CarGenerator.Switch($d5_gold_generator, 101)
+
+:DESERT6_10803
+$onmission = 0
+Mission.Finish
+return 
+

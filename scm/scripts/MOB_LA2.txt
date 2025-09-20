@@ -1,0 +1,156 @@
+:MOB_LA2
+set_deatharrest_state 0
+script_name 'MOB_LA2'
+
+:MOB_LA2_15
+wait 250
+if and
+  $onmission == 0
+  $flag_mobile_timer == 0
+goto_if_false @MOB_LA2_57
+$timer_mobile_start = Clock.GetGameTimer()
+$flag_mobile_timer = 1
+
+:MOB_LA2_57
+if 
+  $1354 == 1
+goto_if_false @MOB_LA2_77
+terminate_this_script 
+
+:MOB_LA2_77
+ENTEXT_214()
+if 
+  Player.IsPlaying($player1)
+goto_if_false @MOB_LA2_763
+if 
+  $player_is_completely_safe_for_mobile == 1
+goto_if_false @MOB_LA2_756
+if 
+  is_int_var_greater_than_int_var $timer_mobile_diff > $call_delay
+goto_if_false @MOB_LA2_756
+if 
+  $flag_mansion_mission_counter > 0
+goto_if_false @MOB_LA2_280
+if 
+  $flag_mob_LA2 == 0
+goto_if_false @MOB_LA2_280
+$call_number = 50
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA2_219
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_LA2_219
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA2_266
+$flag_mob_LA2 = 1
+Blip.Remove($mansion_contact_blip)
+$mansion_contact_blip = Blip.AddSpriteForContactPoint($mansion_blip_icon, $mansionX, $mansionY, $mansionZ)
+
+:MOB_LA2_266
+MOB_GF_3168()
+goto @MOB_LA2_15
+
+:MOB_LA2_280
+if and
+  $flag_casino_mission_counter > 2
+  2 > $flag_mansion_mission_counter
+goto_if_false @MOB_LA2_408
+if 
+  $1353 == 0
+goto_if_false @MOB_LA2_408
+$call_number = 25
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA2_369
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_LA2_369
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA2_394
+$1353 = 1
+
+:MOB_LA2_394
+MOB_GF_3168()
+goto @MOB_LA2_15
+
+:MOB_LA2_408
+if 
+  $flag_riot_mission_counter > 1
+goto_if_false @MOB_LA2_590
+if 
+  $1355 == 0
+goto_if_false @MOB_LA2_590
+$call_number = 22
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA2_490
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_LA2_490
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA2_537
+Blip.Remove($sweet_contact_blip)
+$sweet_contact_blip = Blip.AddSpriteForContactPoint($sweet_blip_icon, $sweetX, $sweetY, $sweetZ)
+$1355 = 1
+
+:MOB_LA2_537
+MOB_GF_3168()
+$player_territory_owned = Stat.GetTerritoryUnderControlPercentage()
+if 
+  34 >= $player_territory_owned
+goto_if_false @MOB_LA2_583
+Text.PrintNow('MORTURF', 12000, 1)
+
+:MOB_LA2_583
+goto @MOB_LA2_15
+
+:MOB_LA2_590
+if 
+  $flag_riot_mission_counter > 1
+goto_if_false @MOB_LA2_756
+$player_territory_owned = Stat.GetTerritoryUnderControlPercentage()
+if 
+  $player_territory_owned > 34
+goto_if_false @MOB_LA2_756
+if 
+  $1354 == 0
+goto_if_false @MOB_LA2_756
+$call_number = 23
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA2_695
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_LA2_695
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA2_742
+Blip.Remove($sweet_contact_blip)
+$sweet_contact_blip = Blip.AddSpriteForContactPoint($sweet_blip_icon, $sweetX, $sweetY, $sweetZ)
+$1354 = 1
+
+:MOB_LA2_742
+MOB_GF_3168()
+goto @MOB_LA2_15
+
+:MOB_LA2_756
+goto @MOB_LA2_770
+
+:MOB_LA2_763
+$flag_cell_nation = 0
+
+:MOB_LA2_770
+goto @MOB_LA2_15
+

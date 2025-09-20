@@ -1,0 +1,1607 @@
+:LOWGAME
+script_name 'LOWGAME'
+12@ = 0.01
+$lowrider_level = 0
+13@ = 0
+16@ = 0
+$lowrider_pscore = 0
+$lowrider_oscore = 0
+18@ = 0
+23@ = 0
+24@ = 0
+25@ = -1
+27@ = 0
+19@ = 0
+if 
+  13@ == -1
+goto_if_false @LOWGAME_198
+0@ = Car.Create(413, 0.0, 0.0, 0.0)
+1@ = Car.Create(413, 0.0, 0.0, 0.0)
+2@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+wait 0
+wait 0
+wait 0
+
+:LOWGAME_198
+if 
+  Car.DoesExist(0@)
+goto_if_false @LOWGAME_244
+if 
+  Car.IsDead(0@)
+goto_if_false @LOWGAME_237
+goto @LOWGAME_8722
+
+:LOWGAME_237
+goto @LOWGAME_251
+
+:LOWGAME_244
+goto @LOWGAME_8722
+
+:LOWGAME_251
+if 
+  Car.DoesExist(1@)
+goto_if_false @LOWGAME_297
+if 
+  Car.IsDead(1@)
+goto_if_false @LOWGAME_290
+goto @LOWGAME_8722
+
+:LOWGAME_290
+goto @LOWGAME_304
+
+:LOWGAME_297
+goto @LOWGAME_8722
+
+:LOWGAME_304
+if 
+  1 > $lowrider_opposition_skill
+goto_if_false @LOWGAME_336
+$lowrider_opposition_skill = 1
+goto @LOWGAME_361
+
+:LOWGAME_336
+if 
+  $lowrider_opposition_skill > 5
+goto_if_false @LOWGAME_361
+$lowrider_opposition_skill = 5
+
+:LOWGAME_361
+if 
+  not Car.IsDead(0@)
+goto_if_false @LOWGAME_391
+3@, 4@, 5@ = Car.GetCoordinates(0@)
+
+:LOWGAME_391
+if 
+  not Car.IsDead(1@)
+goto_if_false @LOWGAME_421
+6@, 7@, 8@ = Car.GetCoordinates(1@)
+
+:LOWGAME_421
+$lowrider_game_is_active = 1
+
+:LOWGAME_428
+wait 0
+if 
+  5 > 13@
+goto_if_false @LOWGAME_480
+if 
+  not Car.DoesExist(0@)
+goto_if_false @LOWGAME_480
+$bd_terminate_script = 1
+13@ = 5
+
+:LOWGAME_480
+switch_start 13@ total_jumps 6 default_jump 0 @LOWGAME_7662 jumps 0 @LOWGAME_543 1 @LOWGAME_1319 2 @LOWGAME_1399 3 @LOWGAME_7512 4 @LOWGAME_7526 5 @LOWGAME_7601 -1 @LOWGAME_7662
+
+:LOWGAME_543
+World.SetCarDensityMultiplier(0.0)
+World.SetPedDensityMultiplier(0.0)
+World.ClearArea(1, 3@, 4@, 5@, 200.0)
+Streaming.RequestAnimation("LOWRIDER")
+
+:LOWGAME_587
+if 
+  not Streaming.HasAnimationLoaded("LOWRIDER")
+goto_if_false @LOWGAME_621
+wait 0
+goto @LOWGAME_587
+
+:LOWGAME_621
+if 
+  not Car.IsDead(0@)
+goto_if_false @LOWGAME_696
+Car.LockDoors(0@, CarLock.LockedPlayerInside)
+Player.ApplyBrakesToCar($player1, True)
+Car.SetProofs(0@, True, True, True, True, True)
+$x = 0.62
+$y = 0.31
+$z = -0.167
+
+:LOWGAME_696
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_IDLELOOP", "LOWRIDER", 4.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_IDLELOOP", "LOWRIDER", 4.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_IDLELOOP", "LOWRIDER", 4.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_IDLELOOP", "LOWRIDER", 4.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_HURRY", "LOWRIDER", 4.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_HAIR", "LOWRIDER", 4.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_IDLELOOP", "LOWRIDER", 4.0, False, False, False, False, -1)
+Sequence.SetToRepeat(15@, True)
+Sequence.Close(15@)
+if 
+  not Char.IsDead(2@)
+goto_if_false @LOWGAME_1068
+if 
+  Char.IsAttachedToAnyCar(2@)
+goto_if_false @LOWGAME_1068
+Char.PerformSequence(2@, 15@)
+
+:LOWGAME_1068
+16@ = 0
+if 
+  not Car.IsDead(0@)
+goto_if_false @LOWGAME_1224
+if or
+  Car.IsModel(0@, 534)
+  Car.IsModel(0@, 535)
+  Car.IsModel(0@, 576)
+goto_if_false @LOWGAME_1140
+16@ = 1
+goto @LOWGAME_1224
+
+:LOWGAME_1140
+if or
+  Car.IsModel(0@, 536)
+  Car.IsModel(0@, 575)
+  Car.IsModel(0@, 567)
+goto_if_false @LOWGAME_1217
+17@ = Car.GetCurrentMod(0@, ModSlot.Roof)
+if 
+  17@ <> -1
+goto_if_false @LOWGAME_1210
+16@ = 1
+
+:LOWGAME_1210
+goto @LOWGAME_1224
+
+:LOWGAME_1217
+16@ = 1
+
+:LOWGAME_1224
+if 
+  not Char.IsDead(2@)
+goto_if_false @LOWGAME_1263
+if 
+  not Char.IsAttachedToAnyCar(2@)
+goto_if_false @LOWGAME_1263
+16@ = 1
+
+:LOWGAME_1263
+$lowr_perfect_beat_counter = 0
+$lowr_good_beat_counter = 0
+$lowr_bad_beat_counter = 0
+$lowrider_pscore = 0
+$lowr_overall_state = 0
+$lowrider_oscore = 0
+13@ += 1
+goto @LOWGAME_7662
+
+:LOWGAME_1319
+17@ = Audio.GetBeatTrackStatus()
+if 
+  is_int_lvar_equal_to_constant 17@ == 3
+goto_if_false @LOWGAME_1392
+Hud.DisplayNthCounterWithString($lowrider_pscore, CounterDisplay.Number, 1, 'LOWR1')
+Hud.DisplayNthCounterWithString($lowrider_oscore, CounterDisplay.Number, 2, 'LOWR2')
+13@ += 1
+TIMERA = 0
+
+:LOWGAME_1392
+goto @LOWGAME_7662
+
+:LOWGAME_1399
+17@ = Audio.GetBeatTrackStatus()
+if 
+is_ps2_keyboard_key_just_pressed 32
+goto_if_false @LOWGAME_1429
+TIMERA = 90000
+
+:LOWGAME_1429
+20@, 21@, 22@ = Audio.GetBeatProximity(-1)
+if 
+  21@ <> 33
+goto_if_false @LOWGAME_7491
+Hud.ForceBigMessageAndCounter(True)
+LOWGAME_10566()
+20@, 21@, 22@ = Audio.GetBeatProximity(0)
+if 
+  not is_int_lvar_equal_to_int_lvar 22@ == 25@
+goto_if_false @LOWGAME_2071
+28@ = -1
+if 
+  18@ <> 0
+goto_if_false @LOWGAME_1984
+if and
+  20@ > -35
+  35 > 20@
+goto_if_false @LOWGAME_1607
+if 
+  is_int_lvar_equal_to_int_lvar 18@ == 21@
+goto_if_false @LOWGAME_1586
+28@ = 0
+goto @LOWGAME_1600
+
+:LOWGAME_1586
+23@ = 1
+28@ = 5
+
+:LOWGAME_1600
+goto @LOWGAME_1878
+
+:LOWGAME_1607
+if and
+  20@ > -50
+  50 > 20@
+goto_if_false @LOWGAME_1686
+if 
+  is_int_lvar_equal_to_int_lvar 18@ == 21@
+goto_if_false @LOWGAME_1665
+28@ = 1
+goto @LOWGAME_1679
+
+:LOWGAME_1665
+23@ = 1
+28@ = 5
+
+:LOWGAME_1679
+goto @LOWGAME_1878
+
+:LOWGAME_1686
+if and
+  20@ > -100
+  100 > 20@
+goto_if_false @LOWGAME_1765
+if 
+  is_int_lvar_equal_to_int_lvar 18@ == 21@
+goto_if_false @LOWGAME_1744
+28@ = 2
+goto @LOWGAME_1758
+
+:LOWGAME_1744
+23@ = 1
+28@ = 5
+
+:LOWGAME_1758
+goto @LOWGAME_1878
+
+:LOWGAME_1765
+if or
+  20@ > -200
+  200 > 20@
+goto_if_false @LOWGAME_1878
+if 
+  is_int_lvar_equal_to_int_lvar 18@ == 21@
+goto_if_false @LOWGAME_1864
+23@ = 1
+if 
+  0 > 20@
+goto_if_false @LOWGAME_1850
+28@ = 3
+goto @LOWGAME_1857
+
+:LOWGAME_1850
+28@ = 4
+
+:LOWGAME_1857
+goto @LOWGAME_1878
+
+:LOWGAME_1864
+23@ = 1
+28@ = 5
+
+:LOWGAME_1878
+$BD_RenderHit = 1
+if 
+  28@ == 0
+goto_if_false @LOWGAME_1924
+set_var_int_to_constant $BD_RenderHit = 3
+30@ += 1
+goto @LOWGAME_1977
+
+:LOWGAME_1924
+if 
+  28@ == 1
+goto_if_false @LOWGAME_1963
+set_var_int_to_constant $BD_RenderHit = 2
+30@ += 1
+goto @LOWGAME_1977
+
+:LOWGAME_1963
+set_var_int_to_constant $BD_RenderHit = 1
+31@ += 1
+
+:LOWGAME_1977
+goto @LOWGAME_2024
+
+:LOWGAME_1984
+if 
+  -200 > 20@
+goto_if_false @LOWGAME_2024
+23@ = 1
+28@ = 3
+31@ += 1
+
+:LOWGAME_2024
+if 
+  28@ <> -1
+goto_if_false @LOWGAME_2071
+LOWGAME_9681()
+LOWGAME_10047()
+LOWGAME_8731()
+set_lvar_int_to_lvar_int 25@ = 22@
+
+:LOWGAME_2071
+if 
+  0 > $lowrider_pscore
+goto_if_false @LOWGAME_2096
+$lowrider_pscore = 0
+
+:LOWGAME_2096
+if 
+  not Car.IsDead(0@)
+goto_if_false @LOWGAME_2239
+if 
+  not Car.Locate2D(0@, 0, 3@, 4@, 3.0, 3.0)
+goto_if_false @LOWGAME_2239
+$x, $y, $z = Car.GetCoordinates(0@)
+set_lvar_float_to_lvar_float 9@ = 3@
+sub_float_var_from_float_lvar 9@ -= $x
+set_lvar_float_to_lvar_float 10@ = 4@
+sub_float_var_from_float_lvar 10@ -= $y
+mult_float_lvar_by_float_lvar 9@ *= 12@
+mult_float_lvar_by_float_lvar 10@ *= 12@
+Car.ApplyForce(0@, 9@, 10@, 0.0, 0.0, 0.0, 0.0)
+
+:LOWGAME_2239
+if 
+  not Car.IsDead(1@)
+goto_if_false @LOWGAME_2382
+if 
+  not Car.Locate2D(1@, 0, 6@, 7@, 3.0, 3.0)
+goto_if_false @LOWGAME_2382
+$x, $y, $z = Car.GetCoordinates(1@)
+set_lvar_float_to_lvar_float 9@ = 6@
+sub_float_var_from_float_lvar 9@ -= $x
+set_lvar_float_to_lvar_float 10@ = 7@
+sub_float_var_from_float_lvar 10@ -= $y
+mult_float_lvar_by_float_lvar 9@ *= 12@
+mult_float_lvar_by_float_lvar 10@ *= 12@
+Car.ApplyForce(1@, 9@, 10@, 0.0, 0.0, 0.0, 0.0)
+
+:LOWGAME_2382
+if and
+  100 > 20@
+  20@ > -100
+goto_if_false @LOWGAME_2912
+if 
+  21@ == 9
+goto_if_false @LOWGAME_2465
+$wheel_fl = 1.0
+$wheel_bl = 1.0
+$wheel_fr = 0.0
+$wheel_br = 0.0
+
+:LOWGAME_2465
+if 
+  21@ == 10
+goto_if_false @LOWGAME_2523
+$wheel_fl = 0.0
+$wheel_bl = 0.0
+$wheel_fr = 1.0
+$wheel_br = 1.0
+
+:LOWGAME_2523
+if 
+  21@ == 11
+goto_if_false @LOWGAME_2581
+$wheel_fl = 0.0
+$wheel_bl = 0.0
+$wheel_fr = 1.0
+$wheel_br = 0.0
+
+:LOWGAME_2581
+if 
+  21@ == 12
+goto_if_false @LOWGAME_2639
+$wheel_fl = 0.0
+$wheel_bl = 1.0
+$wheel_fr = 0.0
+$wheel_br = 0.0
+
+:LOWGAME_2639
+if 
+  21@ == 13
+goto_if_false @LOWGAME_2697
+$wheel_fl = 1.0
+$wheel_bl = 0.0
+$wheel_fr = 1.0
+$wheel_br = 0.0
+
+:LOWGAME_2697
+if 
+  21@ == 14
+goto_if_false @LOWGAME_2755
+$wheel_fl = 0.0
+$wheel_bl = 1.0
+$wheel_fr = 0.0
+$wheel_br = 1.0
+
+:LOWGAME_2755
+if 
+  21@ == 15
+goto_if_false @LOWGAME_2813
+$wheel_fl = 1.0
+$wheel_bl = 0.0
+$wheel_fr = 0.0
+$wheel_br = 0.0
+
+:LOWGAME_2813
+if 
+  21@ == 16
+goto_if_false @LOWGAME_2871
+$wheel_fl = 0.0
+$wheel_bl = 0.0
+$wheel_fr = 0.0
+$wheel_br = 1.0
+
+:LOWGAME_2871
+if 
+  not is_int_lvar_equal_to_int_lvar 22@ == 27@
+goto_if_false @LOWGAME_2905
+LOWGAME_7669()
+set_lvar_int_to_lvar_int 27@ = 22@
+
+:LOWGAME_2905
+goto @LOWGAME_2952
+
+:LOWGAME_2912
+$wheel_fl = 0.0
+$wheel_bl = 0.0
+$wheel_fr = 0.0
+$wheel_br = 0.0
+
+:LOWGAME_2952
+if 
+  not Car.IsDead(1@)
+goto_if_false @LOWGAME_3001
+if 
+  Car.DoesHaveHydraulics(1@)
+goto_if_false @LOWGAME_3001
+Car.ControlHydraulics(1@, $wheel_fl, $wheel_bl, $wheel_fr, $wheel_br)
+
+:LOWGAME_3001
+if 
+  16@ == 0
+goto_if_false @LOWGAME_7453
+if 
+  $lowrider_level == -1
+goto_if_false @LOWGAME_3062
+if 
+  18@ <> 0
+goto_if_false @LOWGAME_3062
+$lowrider_level = 0
+
+:LOWGAME_3062
+if 
+  $lowrider_level == 0
+goto_if_false @LOWGAME_3112
+if 
+  30@ > 5
+goto_if_false @LOWGAME_3112
+$lowrider_level += 1
+30@ = 0
+
+:LOWGAME_3112
+if 
+  $lowrider_level == 1
+goto_if_false @LOWGAME_3169
+if 
+  30@ > 5
+goto_if_false @LOWGAME_3169
+$lowrider_level += 1
+30@ = 0
+31@ = 0
+
+:LOWGAME_3169
+if 
+  $lowrider_level == 2
+goto_if_false @LOWGAME_3258
+if 
+  30@ > 5
+goto_if_false @LOWGAME_3226
+$lowrider_level += 1
+30@ = 0
+31@ = 0
+
+:LOWGAME_3226
+if 
+  31@ > 1
+goto_if_false @LOWGAME_3258
+$lowrider_level -= 1
+31@ = 0
+
+:LOWGAME_3258
+if 
+  $lowrider_level == 3
+goto_if_false @LOWGAME_3347
+if 
+  30@ > 5
+goto_if_false @LOWGAME_3315
+$lowrider_level += 1
+30@ = 0
+31@ = 0
+
+:LOWGAME_3315
+if 
+  31@ > 1
+goto_if_false @LOWGAME_3347
+$lowrider_level -= 1
+31@ = 0
+
+:LOWGAME_3347
+if 
+  $lowrider_level == 4
+goto_if_false @LOWGAME_3436
+if 
+  30@ > 5
+goto_if_false @LOWGAME_3404
+$lowrider_level += 1
+30@ = 0
+31@ = 0
+
+:LOWGAME_3404
+if 
+  31@ > 1
+goto_if_false @LOWGAME_3436
+$lowrider_level -= 1
+31@ = 0
+
+:LOWGAME_3436
+if 
+  $lowrider_level == 5
+goto_if_false @LOWGAME_3493
+if 
+  31@ > 1
+goto_if_false @LOWGAME_3493
+$lowrider_level -= 1
+30@ = 0
+31@ = 0
+
+:LOWGAME_3493
+if 
+  not Char.IsDead(2@)
+goto_if_false @LOWGAME_7453
+if 
+  not is_int_var_equal_to_int_var $lowrider_last_level == $lowrider_level
+goto_if_false @LOWGAME_5115
+if 
+  $lowrider_level == -1
+goto_if_false @LOWGAME_3699
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_HAIR", "LOWRIDER", 4.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_HURRY", "LOWRIDER", 4.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_IDLELOOP", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.SetToRepeat(15@, True)
+Sequence.Close(15@)
+
+:LOWGAME_3699
+if and
+  $lowrider_last_level == -1
+  $lowrider_level == 0
+goto_if_false @LOWGAME_3855
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_IDLE_TO_L0", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(15@)
+Char.PerformSequence(2@, 15@)
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L0_LOOP", "LOWRIDER", 4.0, True, False, False, False, -1)
+Sequence.Close(15@)
+
+:LOWGAME_3855
+if and
+  $lowrider_last_level == 0
+  $lowrider_level == 1
+goto_if_false @LOWGAME_4009
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L0_TO_L1", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(15@)
+Char.PerformSequence(2@, 15@)
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L1_LOOP", "LOWRIDER", 4.0, True, False, False, False, -1)
+Sequence.Close(15@)
+
+:LOWGAME_4009
+if and
+  $lowrider_last_level == 1
+  $lowrider_level == 2
+goto_if_false @LOWGAME_4163
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L1_TO_L2", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(15@)
+Char.PerformSequence(2@, 15@)
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L2_LOOP", "LOWRIDER", 4.0, True, False, False, False, -1)
+Sequence.Close(15@)
+
+:LOWGAME_4163
+if and
+  $lowrider_last_level == 2
+  $lowrider_level == 3
+goto_if_false @LOWGAME_4317
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L2_TO_L3", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(15@)
+Char.PerformSequence(2@, 15@)
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L3_LOOP", "LOWRIDER", 4.0, True, False, False, False, -1)
+Sequence.Close(15@)
+
+:LOWGAME_4317
+if and
+  $lowrider_last_level == 3
+  $lowrider_level == 4
+goto_if_false @LOWGAME_4471
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L3_TO_L4", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(15@)
+Char.PerformSequence(2@, 15@)
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L4_LOOP", "LOWRIDER", 4.0, True, False, False, False, -1)
+Sequence.Close(15@)
+
+:LOWGAME_4471
+if and
+  $lowrider_last_level == 4
+  $lowrider_level == 5
+goto_if_false @LOWGAME_4625
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L4_TO_L5", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(15@)
+Char.PerformSequence(2@, 15@)
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L5_LOOP", "LOWRIDER", 4.0, True, False, False, False, -1)
+Sequence.Close(15@)
+
+:LOWGAME_4625
+if and
+  $lowrider_last_level > 1
+  $lowrider_level == 1
+goto_if_false @LOWGAME_4781
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L345_TO_L1", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(15@)
+Char.PerformSequence(2@, 15@)
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L1_LOOP", "LOWRIDER", 4.0, True, False, False, False, -1)
+Sequence.Close(15@)
+
+:LOWGAME_4781
+if and
+  $lowrider_last_level == 1
+  $lowrider_level == 0
+goto_if_false @LOWGAME_4936
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L12_TO_L0", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(15@)
+Char.PerformSequence(2@, 15@)
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L0_LOOP", "LOWRIDER", 4.0, True, False, False, False, -1)
+Sequence.Close(15@)
+
+:LOWGAME_4936
+if and
+  $lowrider_last_level == 0
+  $lowrider_level == -1
+goto_if_false @LOWGAME_5107
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_HAIR", "LOWRIDER", 4.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_HURRY", "LOWRIDER", 4.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_IDLELOOP", "LOWRIDER", 4.0, True, False, False, False, -1)
+Sequence.Close(15@)
+
+:LOWGAME_5107
+set_var_int_to_var_int $lowrider_last_level = $lowrider_level
+
+:LOWGAME_5115
+if and
+  not is_int_lvar_equal_to_int_lvar 19@ == 18@
+  18@ <> 0
+goto_if_false @LOWGAME_6256
+17@ = 0
+26@ = 1.0
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_IDLE_TO_L0")
+goto_if_false @LOWGAME_5220
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_IDLE_TO_L0")
+
+:LOWGAME_5220
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L12_TO_L0")
+goto_if_false @LOWGAME_5280
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L12_TO_L0")
+
+:LOWGAME_5280
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L345_TO_L1")
+goto_if_false @LOWGAME_5342
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L345_TO_L1")
+
+:LOWGAME_5342
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L0_TO_L1")
+goto_if_false @LOWGAME_5400
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L0_TO_L1")
+
+:LOWGAME_5400
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L1_TO_L2")
+goto_if_false @LOWGAME_5458
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L1_TO_L2")
+
+:LOWGAME_5458
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L2_TO_L3")
+goto_if_false @LOWGAME_5516
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L2_TO_L3")
+
+:LOWGAME_5516
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L3_TO_L4")
+goto_if_false @LOWGAME_5574
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L3_TO_L4")
+
+:LOWGAME_5574
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L4_TO_L5")
+goto_if_false @LOWGAME_5632
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L4_TO_L5")
+
+:LOWGAME_5632
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_BDBNCE")
+goto_if_false @LOWGAME_5686
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_BDBNCE")
+
+:LOWGAME_5686
+if 
+  0.9 > 26@
+goto_if_false @LOWGAME_5714
+17@ = 1
+
+:LOWGAME_5714
+if 
+  17@ == 0
+goto_if_false @LOWGAME_6248
+if 
+  $lowrider_level == 0
+goto_if_false @LOWGAME_5818
+14@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L0_BNCE", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(14@)
+Char.PerformSequence(2@, 14@)
+Sequence.Clear(14@)
+
+:LOWGAME_5818
+if 
+  $lowrider_level == 1
+goto_if_false @LOWGAME_5904
+14@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L1_BNCE", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(14@)
+Char.PerformSequence(2@, 14@)
+Sequence.Clear(14@)
+
+:LOWGAME_5904
+if 
+  $lowrider_level == 2
+goto_if_false @LOWGAME_5990
+14@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L2_BNCE", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(14@)
+Char.PerformSequence(2@, 14@)
+Sequence.Clear(14@)
+
+:LOWGAME_5990
+if 
+  $lowrider_level == 3
+goto_if_false @LOWGAME_6076
+14@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L3_BNCE", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(14@)
+Char.PerformSequence(2@, 14@)
+Sequence.Clear(14@)
+
+:LOWGAME_6076
+if 
+  $lowrider_level == 4
+goto_if_false @LOWGAME_6162
+14@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L4_BNCE", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(14@)
+Char.PerformSequence(2@, 14@)
+Sequence.Clear(14@)
+
+:LOWGAME_6162
+if 
+  $lowrider_level == 5
+goto_if_false @LOWGAME_6248
+14@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L5_BNCE", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(14@)
+Char.PerformSequence(2@, 14@)
+Sequence.Clear(14@)
+
+:LOWGAME_6248
+set_lvar_int_to_lvar_int 19@ = 18@
+
+:LOWGAME_6256
+if 
+  23@ == 1
+goto_if_false @LOWGAME_6489
+if 
+  18@ == 0
+goto_if_false @LOWGAME_6482
+if 
+  $lowrider_level > 0
+goto_if_false @LOWGAME_6482
+if 
+  not Char.IsPlayingAnim(2@, "LRGIRL_BDBNCE")
+goto_if_false @LOWGAME_6468
+14@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_BDBNCE", "LOWRIDER", 4.0, False, False, False, True, -1)
+Sequence.Close(14@)
+Char.PerformSequence(2@, 14@)
+Sequence.Clear(14@)
+Sequence.Clear(15@)
+15@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "LRGIRL_L1_LOOP", "LOWRIDER", 4.0, True, False, False, False, -1)
+Sequence.Close(15@)
+
+:LOWGAME_6468
+$lowrider_level = 1
+$lowrider_last_level = 1
+
+:LOWGAME_6482
+23@ = 0
+
+:LOWGAME_6489
+17@ = 0
+26@ = 1.0
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_BDBNCE")
+goto_if_false @LOWGAME_6560
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_BDBNCE")
+
+:LOWGAME_6560
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_IDLE_TO_L0")
+goto_if_false @LOWGAME_6622
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_IDLE_TO_L0")
+
+:LOWGAME_6622
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L12_TO_L0")
+goto_if_false @LOWGAME_6682
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L12_TO_L0")
+
+:LOWGAME_6682
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L345_TO_L1")
+goto_if_false @LOWGAME_6744
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L345_TO_L1")
+
+:LOWGAME_6744
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L0_BNCE")
+goto_if_false @LOWGAME_6800
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L0_BNCE")
+
+:LOWGAME_6800
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L0_TO_L1")
+goto_if_false @LOWGAME_6858
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L0_TO_L1")
+
+:LOWGAME_6858
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L1_TO_L2")
+goto_if_false @LOWGAME_6916
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L1_TO_L2")
+
+:LOWGAME_6916
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L2_TO_L3")
+goto_if_false @LOWGAME_6974
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L2_TO_L3")
+
+:LOWGAME_6974
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L3_TO_L4")
+goto_if_false @LOWGAME_7032
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L3_TO_L4")
+
+:LOWGAME_7032
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L4_TO_L5")
+goto_if_false @LOWGAME_7090
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L4_TO_L5")
+
+:LOWGAME_7090
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L1_BNCE")
+goto_if_false @LOWGAME_7146
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L1_BNCE")
+
+:LOWGAME_7146
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L2_BNCE")
+goto_if_false @LOWGAME_7202
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L2_BNCE")
+
+:LOWGAME_7202
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L3_BNCE")
+goto_if_false @LOWGAME_7258
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L3_BNCE")
+
+:LOWGAME_7258
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L4_BNCE")
+goto_if_false @LOWGAME_7314
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L4_BNCE")
+
+:LOWGAME_7314
+if 
+  Char.IsPlayingAnim(2@, "LRGIRL_L5_BNCE")
+goto_if_false @LOWGAME_7370
+26@ = Char.GetAnimCurrentTime(2@, "LRGIRL_L5_BNCE")
+
+:LOWGAME_7370
+if 
+  0.9 > 26@
+goto_if_false @LOWGAME_7398
+17@ = 1
+
+:LOWGAME_7398
+if 
+  17@ == 0
+goto_if_false @LOWGAME_7453
+17@ = Char.GetScriptTaskStatus(2@, 1560)
+if 
+  is_int_lvar_equal_to_constant 17@ == 7
+goto_if_false @LOWGAME_7453
+Char.PerformSequence(2@, 15@)
+
+:LOWGAME_7453
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @LOWGAME_7484
+$lowrider_pscore = 0
+13@ += 1
+
+:LOWGAME_7484
+goto @LOWGAME_7505
+
+:LOWGAME_7491
+13@ += 1
+TIMERA = 0
+
+:LOWGAME_7505
+goto @LOWGAME_7662
+
+:LOWGAME_7512
+13@ += 1
+goto @LOWGAME_7662
+
+:LOWGAME_7526
+if 
+  Player.IsPlaying($player1)
+goto_if_false @LOWGAME_7549
+Player.SetControl($player1, False)
+
+:LOWGAME_7549
+Camera.DoFade(0, 500)
+
+:LOWGAME_7556
+if 
+  Camera.GetFadingStatus
+goto_if_false @LOWGAME_7580
+wait 0
+goto @LOWGAME_7556
+
+:LOWGAME_7580
+$bd_terminate_script = 1
+13@ += 1
+goto @LOWGAME_7662
+
+:LOWGAME_7601
+17@ = Audio.GetBeatTrackStatus()
+if 
+  is_int_lvar_equal_to_constant 17@ == 3
+goto_if_false @LOWGAME_7626
+Audio.StopBeatTrack
+
+:LOWGAME_7626
+Hud.ClearCounter($lowrider_pscore)
+Hud.ClearCounter($lowrider_oscore)
+Streaming.RemoveAnimation("LOWRIDER")
+goto @LOWGAME_8722
+goto @LOWGAME_7662
+
+:LOWGAME_7662
+goto @LOWGAME_428
+
+:LOWGAME_7669
+17@ = Math.RandomIntInRange(0, 10)
+if or
+  $lowrider_opposition_skill == 0
+  $lowrider_opposition_skill == 1
+goto_if_false @LOWGAME_7894
+switch_start 17@ total_jumps 10 default_jump 0 @LOWGAME_7887 jumps 0 @LOWGAME_7831 1 @LOWGAME_7831 2 @LOWGAME_7845 3 @LOWGAME_7845 4 @LOWGAME_7845 5 @LOWGAME_7845 6 @LOWGAME_7859
+switch_continued 7 @LOWGAME_7859 8 @LOWGAME_7859 9 @LOWGAME_7873 -1 @LOWGAME_7887 -1 @LOWGAME_7887 -1 @LOWGAME_7887 -1 @LOWGAME_7887 -1 @LOWGAME_7887 -1 @LOWGAME_7887
+
+:LOWGAME_7831
+$lowrider_oscore += 0
+goto @LOWGAME_7887
+
+:LOWGAME_7845
+$lowrider_oscore += 10
+goto @LOWGAME_7887
+
+:LOWGAME_7859
+$lowrider_oscore += 20
+goto @LOWGAME_7887
+
+:LOWGAME_7873
+$lowrider_oscore += 50
+goto @LOWGAME_7887
+
+:LOWGAME_7887
+goto @LOWGAME_8695
+
+:LOWGAME_7894
+if 
+  $lowrider_opposition_skill == 2
+goto_if_false @LOWGAME_8103
+switch_start 17@ total_jumps 10 default_jump 0 @LOWGAME_8096 jumps 0 @LOWGAME_8040 1 @LOWGAME_8054 2 @LOWGAME_8054 3 @LOWGAME_8054 4 @LOWGAME_8054 5 @LOWGAME_8068 6 @LOWGAME_8068
+switch_continued 7 @LOWGAME_8068 8 @LOWGAME_8082 9 @LOWGAME_8082 -1 @LOWGAME_8096 -1 @LOWGAME_8096 -1 @LOWGAME_8096 -1 @LOWGAME_8096 -1 @LOWGAME_8096 -1 @LOWGAME_8096
+
+:LOWGAME_8040
+$lowrider_oscore += 0
+goto @LOWGAME_8096
+
+:LOWGAME_8054
+$lowrider_oscore += 10
+goto @LOWGAME_8096
+
+:LOWGAME_8068
+$lowrider_oscore += 20
+goto @LOWGAME_8096
+
+:LOWGAME_8082
+$lowrider_oscore += 50
+goto @LOWGAME_8096
+
+:LOWGAME_8096
+goto @LOWGAME_8695
+
+:LOWGAME_8103
+if 
+  $lowrider_opposition_skill == 3
+goto_if_false @LOWGAME_8312
+switch_start 17@ total_jumps 10 default_jump 0 @LOWGAME_8305 jumps 0 @LOWGAME_8249 1 @LOWGAME_8263 2 @LOWGAME_8263 3 @LOWGAME_8263 4 @LOWGAME_8277 5 @LOWGAME_8277 6 @LOWGAME_8277
+switch_continued 7 @LOWGAME_8291 8 @LOWGAME_8291 9 @LOWGAME_8291 -1 @LOWGAME_8305 -1 @LOWGAME_8305 -1 @LOWGAME_8305 -1 @LOWGAME_8305 -1 @LOWGAME_8305 -1 @LOWGAME_8305
+
+:LOWGAME_8249
+$lowrider_oscore += 0
+goto @LOWGAME_8305
+
+:LOWGAME_8263
+$lowrider_oscore += 10
+goto @LOWGAME_8305
+
+:LOWGAME_8277
+$lowrider_oscore += 20
+goto @LOWGAME_8305
+
+:LOWGAME_8291
+$lowrider_oscore += 50
+goto @LOWGAME_8305
+
+:LOWGAME_8305
+goto @LOWGAME_8695
+
+:LOWGAME_8312
+if 
+  $lowrider_opposition_skill == 4
+goto_if_false @LOWGAME_8507
+switch_start 17@ total_jumps 10 default_jump 0 @LOWGAME_8500 jumps 0 @LOWGAME_8458 1 @LOWGAME_8458 2 @LOWGAME_8458 3 @LOWGAME_8472 4 @LOWGAME_8472 5 @LOWGAME_8472 6 @LOWGAME_8472
+switch_continued 7 @LOWGAME_8486 8 @LOWGAME_8486 9 @LOWGAME_8486 -1 @LOWGAME_8500 -1 @LOWGAME_8500 -1 @LOWGAME_8500 -1 @LOWGAME_8500 -1 @LOWGAME_8500 -1 @LOWGAME_8500
+
+:LOWGAME_8458
+$lowrider_oscore += 10
+goto @LOWGAME_8500
+
+:LOWGAME_8472
+$lowrider_oscore += 20
+goto @LOWGAME_8500
+
+:LOWGAME_8486
+$lowrider_oscore += 50
+goto @LOWGAME_8500
+
+:LOWGAME_8500
+goto @LOWGAME_8695
+
+:LOWGAME_8507
+if 
+  $lowrider_opposition_skill == 5
+goto_if_false @LOWGAME_8695
+switch_start 17@ total_jumps 10 default_jump 0 @LOWGAME_8695 jumps 0 @LOWGAME_8653 1 @LOWGAME_8653 2 @LOWGAME_8667 3 @LOWGAME_8667 4 @LOWGAME_8667 5 @LOWGAME_8667 6 @LOWGAME_8681
+switch_continued 7 @LOWGAME_8681 8 @LOWGAME_8681 9 @LOWGAME_8681 -1 @LOWGAME_8695 -1 @LOWGAME_8695 -1 @LOWGAME_8695 -1 @LOWGAME_8695 -1 @LOWGAME_8695 -1 @LOWGAME_8695
+
+:LOWGAME_8653
+$lowrider_oscore += 10
+goto @LOWGAME_8695
+
+:LOWGAME_8667
+$lowrider_oscore += 20
+goto @LOWGAME_8695
+
+:LOWGAME_8681
+$lowrider_oscore += 50
+goto @LOWGAME_8695
+
+:LOWGAME_8695
+if 
+  0 > $lowrider_oscore
+goto_if_false @LOWGAME_8720
+$lowrider_oscore = 0
+
+:LOWGAME_8720
+return 
+
+:LOWGAME_8722
+$lowrider_game_is_active = 0
+terminate_this_script 
+
+:LOWGAME_8731
+switch_start 28@ total_jumps 3 default_jump 1 @LOWGAME_8844 jumps 0 @LOWGAME_8794 1 @LOWGAME_8811 2 @LOWGAME_8828 -1 @LOWGAME_8860 -1 @LOWGAME_8860 -1 @LOWGAME_8860 -1 @LOWGAME_8860
+
+:LOWGAME_8794
+Pad.Shake(PadId.Pad1, 200, 255)
+goto @LOWGAME_8860
+
+:LOWGAME_8811
+Pad.Shake(PadId.Pad1, 200, 200)
+goto @LOWGAME_8860
+
+:LOWGAME_8828
+Pad.Shake(PadId.Pad1, 200, 110)
+goto @LOWGAME_8860
+
+:LOWGAME_8844
+Pad.Shake(PadId.Pad1, 200, 50)
+goto @LOWGAME_8860
+
+:LOWGAME_8860
+switch_start 29@ total_jumps 2 default_jump 1 @LOWGAME_8923 jumps 2 @LOWGAME_9175 3 @LOWGAME_9427 -1 @LOWGAME_9679 -1 @LOWGAME_9679 -1 @LOWGAME_9679 -1 @LOWGAME_9679 -1 @LOWGAME_9679
+
+:LOWGAME_8923
+if 
+  28@ == 0
+goto_if_false @LOWGAME_8957
+Text.PrintBig('DNC_005', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_8957
+if 
+  28@ == 1
+goto_if_false @LOWGAME_8991
+Text.PrintBig('DNC_006', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_8991
+if 
+  28@ == 2
+goto_if_false @LOWGAME_9025
+Text.PrintBig('DNC_007', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9025
+if 
+  28@ == 3
+goto_if_false @LOWGAME_9059
+Text.PrintBig('DNC_008', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9059
+if 
+  28@ == 4
+goto_if_false @LOWGAME_9093
+Text.PrintBig('DNC_009', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9093
+if 
+  28@ == 5
+goto_if_false @LOWGAME_9127
+Text.PrintBig('DNC_010', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9127
+if 
+  28@ == 6
+goto_if_false @LOWGAME_9161
+Text.PrintBig('DNC_011', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9161
+29@ = 2
+goto @LOWGAME_9679
+
+:LOWGAME_9175
+if 
+  28@ == 0
+goto_if_false @LOWGAME_9209
+Text.PrintBig('DNC_012', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9209
+if 
+  28@ == 1
+goto_if_false @LOWGAME_9243
+Text.PrintBig('DNC_013', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9243
+if 
+  28@ == 2
+goto_if_false @LOWGAME_9277
+Text.PrintBig('DNC_014', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9277
+if 
+  28@ == 3
+goto_if_false @LOWGAME_9311
+Text.PrintBig('DNC_015', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9311
+if 
+  28@ == 4
+goto_if_false @LOWGAME_9345
+Text.PrintBig('DNC_016', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9345
+if 
+  28@ == 5
+goto_if_false @LOWGAME_9379
+Text.PrintBig('DNC_017', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9379
+if 
+  28@ == 6
+goto_if_false @LOWGAME_9413
+Text.PrintBig('DNC_018', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9413
+29@ += 1
+goto @LOWGAME_9679
+
+:LOWGAME_9427
+if 
+  28@ == 0
+goto_if_false @LOWGAME_9461
+Text.PrintBig('DNC_019', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9461
+if 
+  28@ == 1
+goto_if_false @LOWGAME_9495
+Text.PrintBig('DNC_020', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9495
+if 
+  28@ == 2
+goto_if_false @LOWGAME_9529
+Text.PrintBig('DNC_021', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9529
+if 
+  28@ == 3
+goto_if_false @LOWGAME_9563
+Text.PrintBig('DNC_022', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9563
+if 
+  28@ == 4
+goto_if_false @LOWGAME_9597
+Text.PrintBig('DNC_023', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9597
+if 
+  28@ == 5
+goto_if_false @LOWGAME_9631
+Text.PrintBig('DNC_024', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9631
+if 
+  28@ == 6
+goto_if_false @LOWGAME_9665
+Text.PrintBig('DNC_025', 1000, TextStyle.MiddleSmallerHigher)
+
+:LOWGAME_9665
+29@ += 1
+goto @LOWGAME_9679
+
+:LOWGAME_9679
+return 
+
+:LOWGAME_9681
+set_lvar_int_to_var_int 17@ = $lowr_good_beat_counter
+add_int_var_to_int_lvar 17@ += $lowr_bad_beat_counter
+add_int_var_to_int_lvar 17@ += $lowr_perfect_beat_counter
+if 
+  17@ > 0
+goto_if_false @LOWGAME_10045
+if 
+  17@ >= 4
+goto_if_false @LOWGAME_10045
+if 
+  $lowr_perfect_beat_counter == 4
+goto_if_false @LOWGAME_9848
+if or
+  $lowr_overall_state == 1
+  $lowr_overall_state == 2
+goto_if_false @LOWGAME_9816
+Text.PrintBig('DNC_002', 50000, TextStyle.LightBlueTop)
+$lowr_overall_state = 2
+goto @LOWGAME_9841
+
+:LOWGAME_9816
+Text.PrintBig('DNC_004', 50000, TextStyle.LightBlueTop)
+$lowr_overall_state = 1
+
+:LOWGAME_9841
+goto @LOWGAME_10024
+
+:LOWGAME_9848
+if 
+  is_int_var_greater_than_int_var $lowr_good_beat_counter > $lowr_bad_beat_counter
+goto_if_false @LOWGAME_9899
+Text.PrintBig('DNC_004', 50000, TextStyle.LightBlueTop)
+$lowr_overall_state = 1
+goto @LOWGAME_10024
+
+:LOWGAME_9899
+if 
+  $lowr_overall_state == 2
+goto_if_false @LOWGAME_9949
+Text.PrintBig('DNC_004', 50000, TextStyle.LightBlueTop)
+$lowr_overall_state = 1
+goto @LOWGAME_10024
+
+:LOWGAME_9949
+if 
+  $lowr_overall_state == 1
+goto_if_false @LOWGAME_9999
+Text.PrintBig('DNC_003', 50000, TextStyle.LightBlueTop)
+$lowr_overall_state = 0
+goto @LOWGAME_10024
+
+:LOWGAME_9999
+Text.PrintBig('DNC_003', 50000, TextStyle.LightBlueTop)
+$lowr_overall_state = 0
+
+:LOWGAME_10024
+$lowr_perfect_beat_counter = 0
+$lowr_good_beat_counter = 0
+$lowr_bad_beat_counter = 0
+
+:LOWGAME_10045
+return 
+
+:LOWGAME_10047
+switch_start 28@ total_jumps 7 default_jump 0 @LOWGAME_10533 jumps 0 @LOWGAME_10110 1 @LOWGAME_10199 2 @LOWGAME_10288 3 @LOWGAME_10377 4 @LOWGAME_10416 5 @LOWGAME_10455 6 @LOWGAME_10494
+
+:LOWGAME_10110
+if 
+  999999 > $lowrider_pscore
+goto_if_false @LOWGAME_10185
+if 
+  $lowr_overall_state == 2
+goto_if_false @LOWGAME_10178
+17@ = 50
+17@ *= 10
+add_int_lvar_to_int_var $lowrider_pscore += 17@
+goto @LOWGAME_10185
+
+:LOWGAME_10178
+$lowrider_pscore += 50
+
+:LOWGAME_10185
+$lowr_perfect_beat_counter += 1
+goto @LOWGAME_10533
+
+:LOWGAME_10199
+if 
+  999999 > $lowrider_pscore
+goto_if_false @LOWGAME_10274
+if 
+  $lowr_overall_state == 2
+goto_if_false @LOWGAME_10267
+17@ = 20
+17@ *= 10
+add_int_lvar_to_int_var $lowrider_pscore += 17@
+goto @LOWGAME_10274
+
+:LOWGAME_10267
+$lowrider_pscore += 20
+
+:LOWGAME_10274
+$lowr_good_beat_counter += 1
+goto @LOWGAME_10533
+
+:LOWGAME_10288
+if 
+  999999 > $lowrider_pscore
+goto_if_false @LOWGAME_10363
+if 
+  $lowr_overall_state == 2
+goto_if_false @LOWGAME_10356
+17@ = 10
+17@ *= 10
+add_int_lvar_to_int_var $lowrider_pscore += 17@
+goto @LOWGAME_10363
+
+:LOWGAME_10356
+$lowrider_pscore += 10
+
+:LOWGAME_10363
+$lowr_good_beat_counter += 1
+goto @LOWGAME_10533
+
+:LOWGAME_10377
+if 
+  $lowrider_pscore > 0
+goto_if_false @LOWGAME_10402
+$lowrider_pscore += 0
+
+:LOWGAME_10402
+$lowr_bad_beat_counter += 1
+goto @LOWGAME_10533
+
+:LOWGAME_10416
+if 
+  $lowrider_pscore > 0
+goto_if_false @LOWGAME_10441
+$lowrider_pscore += 0
+
+:LOWGAME_10441
+$lowr_bad_beat_counter += 1
+goto @LOWGAME_10533
+
+:LOWGAME_10455
+if 
+  $lowrider_pscore > 0
+goto_if_false @LOWGAME_10480
+$lowrider_pscore += 0
+
+:LOWGAME_10480
+$lowr_bad_beat_counter += 1
+goto @LOWGAME_10533
+
+:LOWGAME_10494
+if 
+  $lowrider_pscore > 0
+goto_if_false @LOWGAME_10519
+$lowrider_pscore += 0
+
+:LOWGAME_10519
+$lowr_bad_beat_counter += 1
+goto @LOWGAME_10533
+
+:LOWGAME_10533
+if 
+  $lowrider_pscore > 999999
+goto_if_false @LOWGAME_10564
+$lowrider_pscore = 999999
+
+:LOWGAME_10564
+return 
+
+:LOWGAME_10566
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+cset_lvar_float_to_var_int 26@ = integer $RStickX
+set_lvar_float_to_lvar_float 9@ = 26@
+cset_lvar_float_to_var_int 26@ = integer $RStickY
+set_lvar_float_to_lvar_float 10@ = 26@
+26@ = Math.GetDistanceBetweenCoords2D(0.0, 0.0, 9@, 10@)
+18@ = 0
+if 
+  26@ > 64.0
+goto_if_false @LOWGAME_10927
+26@ = Math.GetAngleBetween2DVectors(9@, 10@, 0.0, -1.0)
+if 
+  15.0 > 26@
+goto_if_false @LOWGAME_10719
+18@ = 13
+goto @LOWGAME_10927
+
+:LOWGAME_10719
+if 
+  75.0 > 26@
+goto_if_false @LOWGAME_10786
+if 
+  $RStickX > 0
+goto_if_false @LOWGAME_10772
+18@ = 11
+goto @LOWGAME_10779
+
+:LOWGAME_10772
+18@ = 15
+
+:LOWGAME_10779
+goto @LOWGAME_10927
+
+:LOWGAME_10786
+if 
+  105.0 > 26@
+goto_if_false @LOWGAME_10853
+if 
+  $RStickX > 0
+goto_if_false @LOWGAME_10839
+18@ = 10
+goto @LOWGAME_10846
+
+:LOWGAME_10839
+18@ = 9
+
+:LOWGAME_10846
+goto @LOWGAME_10927
+
+:LOWGAME_10853
+if 
+  165.0 > 26@
+goto_if_false @LOWGAME_10920
+if 
+  $RStickX > 0
+goto_if_false @LOWGAME_10906
+18@ = 16
+goto @LOWGAME_10913
+
+:LOWGAME_10906
+18@ = 12
+
+:LOWGAME_10913
+goto @LOWGAME_10927
+
+:LOWGAME_10920
+18@ = 14
+
+:LOWGAME_10927
+return 
+
+:Noname_4
+terminate_this_script 
+

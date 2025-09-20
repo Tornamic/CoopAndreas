@@ -1,0 +1,570 @@
+:PSAVE1
+script_name 'PSAVE1'
+$number_of_save_icons = 13
+
+:PSAVE1_18
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_824
+if 
+  $onmission == 0
+goto_if_false @PSAVE1_759
+if and
+  $flag_on_courier_mission == 0
+  not is_global_var_bit_set_const $iDateReport bit 20
+  not is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @PSAVE1_720
+if 
+  $created_save_blips == 0
+goto_if_false @PSAVE1_534
+PSAVE1_831()
+$grove_save_pickup[0] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[0], $save_pickupY[0], $save_pickupZ[0])
+$grove_save_pickup[1] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[1], $save_pickupY[1], $save_pickupZ[1])
+$grove_save_pickup[2] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[2], $save_pickupY[2], $save_pickupZ[2])
+$grove_save_pickup[3] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[3], $save_pickupY[3], $save_pickupZ[3])
+$grove_save_pickup[4] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[4], $save_pickupY[4], $save_pickupZ[4])
+$grove_save_pickup[5] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[5], $save_pickupY[5], $save_pickupZ[5])
+$grove_save_pickup[6] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[6], $save_pickupY[6], $save_pickupZ[6])
+$grove_save_pickup[7] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[7], $save_pickupY[7], $save_pickupZ[7])
+$grove_save_pickup[8] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[8], $save_pickupY[8], $save_pickupZ[8])
+$grove_save_pickup[9] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[9], $save_pickupY[9], $save_pickupZ[9])
+$grove_save_pickup[10] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[10], $save_pickupY[10], $save_pickupZ[10])
+$grove_save_pickup[11] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[11], $save_pickupY[11], $save_pickupZ[11])
+$grove_save_pickup[12] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[12], $save_pickupY[12], $save_pickupZ[12])
+if 
+  $number_of_save_icons >= 14
+goto_if_false @PSAVE1_383
+$grove_save_pickup[13] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[13], $save_pickupY[13], $save_pickupZ[13])
+
+:PSAVE1_383
+if 
+  $number_of_save_icons >= 15
+goto_if_false @PSAVE1_419
+$grove_save_pickup[14] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[14], $save_pickupY[14], $save_pickupZ[14])
+
+:PSAVE1_419
+if 
+  $number_of_save_icons >= 16
+goto_if_false @PSAVE1_455
+$grove_save_pickup[15] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[15], $save_pickupY[15], $save_pickupZ[15])
+
+:PSAVE1_455
+if 
+  $number_of_save_icons >= 17
+goto_if_false @PSAVE1_491
+$grove_save_pickup[16] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[16], $save_pickupY[16], $save_pickupZ[16])
+
+:PSAVE1_491
+if 
+  $number_of_save_icons >= 18
+goto_if_false @PSAVE1_527
+$grove_save_pickup[17] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[17], $save_pickupY[17], $save_pickupZ[17])
+
+:PSAVE1_527
+$created_save_blips = 1
+
+:PSAVE1_534
+if 
+  Pickup.HasBeenCollected($grove_save_pickup($save_index,18i))
+goto_if_false @PSAVE1_713
+PSAVE1_923()
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_699
+Pickup.Remove($grove_save_pickup($save_index,18i))
+$grove_save_pickup($save_index,18i) = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX($save_index,18f), $save_pickupY($save_index,18f), $save_pickupZ($save_index,18f))
+World.ClearArea(1, $save_playerX($save_index,18f), $save_playerY($save_index,18f), $save_playerZ($save_index,18f), 1.0)
+Char.SetCoordinates($scplayer, $save_playerX($save_index,18f), $save_playerY($save_index,18f), $save_playerZ($save_index,18f))
+Char.SetHeading($scplayer, $save_playerH($save_index,18f))
+wait 0
+Camera.DoFade(1, 1000)
+
+:PSAVE1_699
+PSAVE1_1003()
+$created_save_blips = 0
+
+:PSAVE1_713
+goto @PSAVE1_752
+
+:PSAVE1_720
+if 
+  $created_save_blips == 1
+goto_if_false @PSAVE1_752
+PSAVE1_831()
+$created_save_blips = 0
+
+:PSAVE1_752
+goto @PSAVE1_791
+
+:PSAVE1_759
+if 
+  $created_save_blips == 1
+goto_if_false @PSAVE1_791
+PSAVE1_831()
+$created_save_blips = 0
+
+:PSAVE1_791
+$save_index += 1
+if 
+  is_int_var_greater_or_equal_to_int_var $save_index >= $number_of_save_icons
+goto_if_false @PSAVE1_824
+$save_index = 0
+
+:PSAVE1_824
+goto @PSAVE1_18
+
+:PSAVE1_831
+Pickup.Remove($grove_save_pickup[0])
+Pickup.Remove($grove_save_pickup[1])
+Pickup.Remove($grove_save_pickup[2])
+Pickup.Remove($grove_save_pickup[3])
+Pickup.Remove($grove_save_pickup[4])
+Pickup.Remove($grove_save_pickup[5])
+Pickup.Remove($grove_save_pickup[6])
+Pickup.Remove($grove_save_pickup[7])
+Pickup.Remove($grove_save_pickup[8])
+Pickup.Remove($grove_save_pickup[9])
+Pickup.Remove($grove_save_pickup[10])
+Pickup.Remove($grove_save_pickup[11])
+Pickup.Remove($grove_save_pickup[12])
+Pickup.Remove($grove_save_pickup[13])
+Pickup.Remove($grove_save_pickup[14])
+Pickup.Remove($grove_save_pickup[15])
+Pickup.Remove($grove_save_pickup[16])
+Pickup.Remove($grove_save_pickup[17])
+return 
+
+:PSAVE1_923
+$onmission = 1
+Player.SetControl($player1, False)
+Game.ActivateSaveMenu
+
+:PSAVE1_939
+if 
+  not Game.HasSaveGameFinished
+goto_if_false @PSAVE1_963
+wait 0
+goto @PSAVE1_939
+
+:PSAVE1_963
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_1001
+Player.SetControl($player1, False)
+
+:PSAVE1_1001
+return 
+
+:PSAVE1_1003
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_1023
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+
+:PSAVE1_1023
+wait 500
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_1058
+Player.SetControl($player1, True)
+$onmission = 0
+
+:PSAVE1_1058
+return 
+
+:PSAVE1_1060
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 500)
+
+:PSAVE1_1075
+if 
+  Camera.GetFadingStatus
+goto_if_false @PSAVE1_1103
+wait 0
+Text.ClearPrints
+Text.ClearHelp
+goto @PSAVE1_1075
+
+:PSAVE1_1103
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_1138
+Camera.DoFade(0, Fade.Out)
+Camera.RestoreJumpcut
+Char.ClearTasks($scplayer)
+Camera.DoFade(0, Fade.Out)
+
+:PSAVE1_1138
+return 
+
+:PSAVE1_1140
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_1318
+Text.ClearHelp
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(2503.601, -1676.787, 13.9236, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2503.26, -1677.718, 14.0548, SwitchType.JumpCut)
+World.ClearArea(1, 2495.365, -1690.766, 13.7734, 1.0)
+World.ClearArea(1, 2503.26, -1677.718, 14.0548, 2.0)
+World.ClearArea(1, $introX, $introY, $introZ, 2.0)
+Task.GoStraightToCoord($scplayer, 2495.365, -1690.766, 13.7734, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_1318
+return 
+
+:PSAVE1_1320
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_1496
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(2512.233, -1673.532, 12.6635, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2513.139, -1673.825, 12.9696, SwitchType.JumpCut)
+World.ClearArea(1, 2513.139, -1673.825, 12.9696, 2.0)
+World.ClearArea(1, 2521.35, -1678.83, 14.32, 1.0)
+World.ClearArea(1, $sweetX, $sweetY, $sweetZ, 2.0)
+Task.GoStraightToCoord($scplayer, 2521.35, -1678.83, 14.32, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_1496
+return 
+
+:PSAVE1_1498
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_1674
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(2451.148, -1677.786, 16.3581, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2451.564, -1678.677, 16.1721, SwitchType.JumpCut)
+World.ClearArea(1, 2451.564, -1678.677, 16.1721, 2.0)
+World.ClearArea(1, 2459.44, -1691.58, 12.58, 1.0)
+World.ClearArea(1, $ryderX, $ryderY, $ryderZ, 2.0)
+Task.GoStraightToCoord($scplayer, 2459.44, -1691.58, 12.58, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_1674
+return 
+
+:PSAVE1_1676
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_1834
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(2075.7, -1687.878, 16.0883, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2074.984, -1688.556, 15.9215, SwitchType.JumpCut)
+World.ClearArea(1, 2065.4, -1703.4, 13.1, 1.0)
+World.ClearArea(1, 2074.984, -1688.556, 15.9215, 2.0)
+Task.GoStraightToCoord($scplayer, 2065.4, -1703.4, 13.1, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_1834
+return 
+
+:PSAVE1_1836
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_2012
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(1054.645, -1312.281, 14.9353, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1054.271, -1313.2, 15.0617, SwitchType.JumpCut)
+World.ClearArea(1, 1038.04, -1339.23, 12.55, 1.0)
+World.ClearArea(1, 1054.271, -1313.2, 15.0617, 2.0)
+World.ClearArea(1, $crashX, $crashY, $crashZ, 2.0)
+Task.GoStraightToCoord($scplayer, 1038.04, -1339.23, 12.55, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_2012
+return 
+
+:PSAVE1_2014
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_2172
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(825.1696, -1636.572, 23.1761, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(824.351, -1636.051, 22.9332, SwitchType.JumpCut)
+World.ClearArea(1, 793.59, -1625.07, 12.38, 1.0)
+World.ClearArea(1, 824.351, -1636.051, 22.9332, 2.0)
+Task.GoStraightToCoord($scplayer, 793.59, -1625.07, 12.38, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_2172
+return 
+
+:PSAVE1_2174
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_2332
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(2486.848, -1660.327, 12.5441, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2486.846, -1659.363, 12.8073, SwitchType.JumpCut)
+World.ClearArea(1, 2486.94, -1646.76, 13.07, 1.0)
+World.ClearArea(1, 2486.846, -1659.363, 12.8073, 2.0)
+Task.GoStraightToCoord($scplayer, 2486.94, -1646.76, 13.07, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_2332
+return 
+
+:PSAVE1_2334
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_2443
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(1792.877, -2105.368, 17.6519, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1793.152, -2106.301, 17.4194, SwitchType.JumpCut)
+World.ClearArea(1, 1793.152, -2106.301, 17.4194, 2.0)
+PSAVE1_1060()
+
+:PSAVE1_2443
+return 
+
+:PSAVE1_2445
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_2603
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-2187.87, -2269.808, 29.4158, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2188.376, -2269.021, 29.7703, SwitchType.JumpCut)
+World.ClearArea(1, -2194.371, -2256.498, 29.6841, 1.0)
+World.ClearArea(1, -2188.376, -2269.021, 29.7703, 2.0)
+Task.GoStraightToCoord($scplayer, -2194.371, -2256.498, 29.6841, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_2603
+return 
+
+:PSAVE1_2605
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_2763
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-919.0773, -1715.624, 78.4517, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-920.0563, -1715.824, 78.4112, SwitchType.JumpCut)
+World.ClearArea(1, -932.2975, -1718.891, 76.5703, 1.0)
+World.ClearArea(1, -920.0563, -1715.824, 78.4112, 2.0)
+Task.GoStraightToCoord($scplayer, -932.2975, -1718.891, 76.5703, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_2763
+return 
+
+:PSAVE1_2765
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_2923
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-2010.974, 154.9329, 33.4883, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2011.966, 154.9767, 33.3685, SwitchType.JumpCut)
+World.ClearArea(1, -2034.559, 148.8178, 27.8359, 1.0)
+World.ClearArea(1, -2011.966, 154.9767, 33.3685, 2.0)
+Task.GoStraightToCoord($scplayer, -2034.559, 148.8178, 27.8359, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_2923
+return 
+
+:PSAVE1_2925
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_3083
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-2031.359, 196.2776, 34.812, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2031.639, 195.3477, 34.5735, SwitchType.JumpCut)
+World.ClearArea(1, -2038.51, 178.4871, 27.8359, 1.0)
+World.ClearArea(1, -2031.639, 195.3477, 34.5735, 2.0)
+Task.GoStraightToCoord($scplayer, -2038.51, 178.4871, 27.8359, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_3083
+return 
+
+:PSAVE1_3085
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_3243
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-2129.186, 640.2543, 72.0002, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2130.102, 640.2417, 71.6005, SwitchType.JumpCut)
+World.ClearArea(1, -2156.56, 645.08, 51.35, 1.0)
+World.ClearArea(1, -2130.102, 640.2417, 71.6005, 2.0)
+Task.GoStraightToCoord($scplayer, -2156.56, 645.08, 51.35, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_3243
+return 
+
+:PSAVE1_3245
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_3403
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(1979.02, 1004.792, 995.4213, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1978.566, 1003.92, 995.238, SwitchType.JumpCut)
+World.ClearArea(1, 1963.4, 972.2, 993.4, 1.0)
+World.ClearArea(1, 1979.02, 1004.792, 995.4213, 2.0)
+Task.GoStraightToCoord($scplayer, 1963.4, 972.2, 993.4, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_3403
+return 
+
+:PSAVE1_3405
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_3563
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(1954.571, 1041.494, 993.1794, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1954.962, 1042.414, 993.1676, SwitchType.JumpCut)
+World.ClearArea(1, 1963.5, 1063.3, 993.4, 1.0)
+World.ClearArea(1, 1954.962, 1042.414, 993.1676, 2.0)
+Task.GoStraightToCoord($scplayer, 1963.5, 1063.3, 993.4, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_3563
+return 
+
+:PSAVE1_3565
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_3723
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(2073.947, 991.3126, 17.4461, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2072.953, 991.4046, 17.5078, SwitchType.JumpCut)
+World.ClearArea(1, 2020.0, 1008.83, 9.82, 1.0)
+World.ClearArea(1, 2072.953, 991.4046, 17.5078, 2.0)
+Task.GoStraightToCoord($scplayer, 2020.0, 1008.83, 9.82, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_3723
+return 
+
+:PSAVE1_3725
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_3883
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-2601.677, 1386.132, 6.8077, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2602.328, 1386.855, 7.0409, SwitchType.JumpCut)
+World.ClearArea(1, -2624.195, 1410.764, 6.1015, 1.0)
+World.ClearArea(1, -2602.328, 1386.855, 7.0409, 2.0)
+Task.GoStraightToCoord($scplayer, -2624.195, 1410.764, 6.1015, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_3883
+return 
+
+:PSAVE1_3885
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_4043
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-690.618, 906.0824, 13.0468, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-690.5204, 907.0766, 13.0919, SwitchType.JumpCut)
+World.ClearArea(1, -684.982, 927.3704, 12.6293, 1.0)
+World.ClearArea(1, -690.5204, 907.0766, 13.0919, 2.0)
+Task.GoStraightToCoord($scplayer, -684.982, 927.3704, 12.6293, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_4043
+return 
+
+:PSAVE1_4045
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_4154
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(427.1954, 2527.643, 19.4052, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(426.2472, 2527.956, 19.4635, SwitchType.JumpCut)
+World.ClearArea(1, 426.2472, 2527.956, 19.4635, 2.0)
+PSAVE1_1060()
+
+:PSAVE1_4154
+return 
+
+:PSAVE1_4156
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_4265
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(330.1037, 2587.75, 18.3215, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(330.0515, 2586.753, 18.362, SwitchType.JumpCut)
+World.ClearArea(1, 330.0515, 2586.753, 18.362, 2.0)
+PSAVE1_1060()
+
+:PSAVE1_4265
+return 
+
+:PSAVE1_4267
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_4425
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(2257.135, 1587.133, 1010.035, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2257.267, 1588.119, 1009.939, SwitchType.JumpCut)
+World.ClearArea(1, 2270.6, 1637.9, 1007.3, 1.0)
+World.ClearArea(1, 2257.267, 1588.119, 1009.939, 2.0)
+Task.GoStraightToCoord($scplayer, 2270.6, 1637.9, 1007.3, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_4425
+return 
+
+:PSAVE1_4427
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_4585
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(1278.091, -849.6337, 90.7593, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1278.038, -848.6531, 90.5709, SwitchType.JumpCut)
+World.ClearArea(1, 1258.158, -785.2752, 91.0302, 1.0)
+World.ClearArea(1, 1278.038, -848.6531, 90.5709, 2.0)
+Task.GoStraightToCoord($scplayer, 1258.158, -785.2752, 91.0302, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_4585
+return 
+
+:PSAVE1_4587
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSAVE1_4745
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-2278.004, 134.334, 39.606, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2277.008, 134.356, 39.6897, SwitchType.JumpCut)
+World.ClearArea(1, -2242.812, 128.7572, 34.3203, 1.0)
+World.ClearArea(1, -2277.008, 134.356, 39.6897, 2.0)
+Task.GoStraightToCoord($scplayer, -2242.812, 128.7572, 34.3203, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:PSAVE1_4745
+return 
+

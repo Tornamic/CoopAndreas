@@ -1,0 +1,344 @@
+//-------------External script 73 (PHOTO)---------------
+
+:PHOTO
+script_name 'PHOTO'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @PHOTO_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:PHOTO_60
+Streaming.RequestAnimation("CAMERA")
+Streaming.RequestModel(367)
+
+:PHOTO_75
+if 
+  not Streaming.HasModelLoaded(367)
+goto_if_false @PHOTO_117
+Streaming.RequestAnimation("CAMERA")
+Streaming.RequestModel(367)
+wait 0
+goto @PHOTO_75
+
+:PHOTO_117
+if 
+  not Streaming.HasAnimationLoaded("CAMERA")
+goto_if_false @PHOTO_164
+Streaming.RequestAnimation("CAMERA")
+Streaming.RequestModel(367)
+wait 0
+goto @PHOTO_117
+
+:PHOTO_164
+3@ = 1
+4@ = 0
+if 
+  not Char.IsDead(0@)
+goto_if_false @PHOTO_204
+Char.GiveWeapon(0@, WeaponType.Camera, 1000)
+
+:PHOTO_204
+wait 0
+if and
+  not Char.IsDead(0@)
+  Player.IsPlaying($player1)
+goto_if_false @PHOTO_306
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @PHOTO_292
+if 
+  Char.HasBeenDamagedByChar(0@, $scplayer)
+goto_if_false @PHOTO_278
+goto @PHOTO_2447
+goto @PHOTO_285
+
+:PHOTO_278
+gosub @PHOTO_320
+
+:PHOTO_285
+goto @PHOTO_299
+
+:PHOTO_292
+gosub @PHOTO_2405
+
+:PHOTO_299
+goto @PHOTO_313
+
+:PHOTO_306
+gosub @PHOTO_2405
+
+:PHOTO_313
+goto @PHOTO_204
+
+:PHOTO_320
+switch_start 3@ total_jumps 1 default_jump 0 @PHOTO_397 jumps 1 @PHOTO_383 -1 @PHOTO_397 -1 @PHOTO_397 -1 @PHOTO_397 -1 @PHOTO_397 -1 @PHOTO_397 -1 @PHOTO_397
+
+:PHOTO_383
+gosub @PHOTO_399
+goto @PHOTO_397
+
+:PHOTO_397
+return 
+
+:PHOTO_399
+switch_start 4@ total_jumps 13 default_jump 0 @PHOTO_2403 jumps 0 @PHOTO_527 1 @PHOTO_587 2 @PHOTO_744 3 @PHOTO_912 4 @PHOTO_1047 5 @PHOTO_1172 6 @PHOTO_1414
+switch_continued 7 @PHOTO_1540 8 @PHOTO_1704 9 @PHOTO_1777 10 @PHOTO_1902 11 @PHOTO_2144 12 @PHOTO_2277 -1 @PHOTO_2403 -1 @PHOTO_2403 -1 @PHOTO_2403
+
+:PHOTO_527
+Task.PlayAnim(0@, "CAMSTND_IDLELOOP", "CAMERA", 4.0, False, False, False, True, -1)
+4@ += 1
+goto @PHOTO_2403
+
+:PHOTO_587
+if 
+  Char.IsPlayingAnim(0@, "CAMSTND_IDLELOOP")
+goto_if_false @PHOTO_737
+7@ = Char.GetAnimCurrentTime(0@, "CAMSTND_IDLELOOP")
+if 
+  7@ >= 1.0
+goto_if_false @PHOTO_737
+2@ = Math.RandomIntInRange(5000, 8000)
+Task.PlayAnim(0@, "CAMSTND_LKABT", "CAMERA", 4.0, True, False, False, True, 2@)
+TIMERB = 0
+4@ += 1
+
+:PHOTO_737
+goto @PHOTO_2403
+
+:PHOTO_744
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar TIMERB >= 2@
+goto_if_false @PHOTO_905
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @PHOTO_852
+Task.PlayAnim(0@, "CAMSTND_TO_CAMCRCH", "CAMERA", 4.0, False, False, False, True, -1)
+4@ = 7
+goto @PHOTO_905
+
+:PHOTO_852
+Task.PlayAnim(0@, "CAMSTND_IDLELOOP", "CAMERA", 4.0, False, False, False, True, -1)
+4@ = 3
+
+:PHOTO_905
+goto @PHOTO_2403
+
+:PHOTO_912
+if 
+  Char.IsPlayingAnim(0@, "CAMSTND_IDLELOOP")
+goto_if_false @PHOTO_1040
+7@ = Char.GetAnimCurrentTime(0@, "CAMSTND_IDLELOOP")
+if 
+  7@ >= 1.0
+goto_if_false @PHOTO_1040
+Task.PlayAnim(0@, "PICSTND_IN", "CAMERA", 4.0, False, False, False, True, -1)
+4@ += 1
+
+:PHOTO_1040
+goto @PHOTO_2403
+
+:PHOTO_1047
+if 
+  Char.IsPlayingAnim(0@, "PICSTND_IN")
+goto_if_false @PHOTO_1165
+7@ = Char.GetAnimCurrentTime(0@, "PICSTND_IN")
+if 
+  7@ >= 1.0
+goto_if_false @PHOTO_1165
+Task.PlayAnim(0@, "PICSTND_TAKE", "CAMERA", 4.0, False, False, False, True, -1)
+4@ += 1
+
+:PHOTO_1165
+goto @PHOTO_2403
+
+:PHOTO_1172
+if 
+  Char.IsPlayingAnim(0@, "PICSTND_TAKE")
+goto_if_false @PHOTO_1407
+7@ = Char.GetAnimCurrentTime(0@, "PICSTND_TAKE")
+if and
+  7@ > 0.5
+  1.0 > 7@
+  6@ == 0
+goto_if_false @PHOTO_1331
+8@ = Char.GetOffsetInWorldCoords(9@, 10@, 0@, 0.0, 0.5, 0.0)
+Fx.DrawLightWithRange(8@, 9@, 10@, 255, 255, 255, 50.0)
+Audio.ReportMissionAudioEventAtChar(0@, 1132)
+6@ = 1
+
+:PHOTO_1331
+if 
+  7@ >= 1.0
+goto_if_false @PHOTO_1407
+Task.PlayAnim(0@, "PICSTND_OUT", "CAMERA", 4.0, False, False, False, True, -1)
+6@ = 0
+4@ += 1
+
+:PHOTO_1407
+goto @PHOTO_2403
+
+:PHOTO_1414
+if 
+  Char.IsPlayingAnim(0@, "PICSTND_OUT")
+goto_if_false @PHOTO_1533
+7@ = Char.GetAnimCurrentTime(0@, "PICSTND_OUT")
+if 
+  7@ >= 1.0
+goto_if_false @PHOTO_1533
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @PHOTO_1526
+4@ = 0
+goto @PHOTO_1533
+
+:PHOTO_1526
+gosub @PHOTO_2405
+
+:PHOTO_1533
+goto @PHOTO_2403
+
+:PHOTO_1540
+if 
+  Char.IsPlayingAnim(0@, "CAMSTND_TO_CAMCRCH")
+goto_if_false @PHOTO_1697
+7@ = Char.GetAnimCurrentTime(0@, "CAMSTND_TO_CAMCRCH")
+if 
+  7@ >= 1.0
+goto_if_false @PHOTO_1697
+2@ = Math.RandomIntInRange(5000, 8000)
+Task.PlayAnim(0@, "CAMCRCH_IDLELOOP", "CAMERA", 4.0, True, False, False, True, 2@)
+TIMERB = 0
+4@ += 1
+
+:PHOTO_1697
+goto @PHOTO_2403
+
+:PHOTO_1704
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar TIMERB >= 2@
+goto_if_false @PHOTO_1770
+Task.PlayAnim(0@, "PICCRCH_IN", "CAMERA", 4.0, False, False, False, True, -1)
+4@ += 1
+
+:PHOTO_1770
+goto @PHOTO_2403
+
+:PHOTO_1777
+if 
+  Char.IsPlayingAnim(0@, "PICCRCH_IN")
+goto_if_false @PHOTO_1895
+7@ = Char.GetAnimCurrentTime(0@, "PICCRCH_IN")
+if 
+  7@ >= 1.0
+goto_if_false @PHOTO_1895
+Task.PlayAnim(0@, "PICCRCH_TAKE", "CAMERA", 4.0, False, False, False, True, -1)
+4@ += 1
+
+:PHOTO_1895
+goto @PHOTO_2403
+
+:PHOTO_1902
+if 
+  Char.IsPlayingAnim(0@, "PICCRCH_TAKE")
+goto_if_false @PHOTO_2137
+7@ = Char.GetAnimCurrentTime(0@, "PICCRCH_TAKE")
+if and
+  7@ > 0.5
+  1.0 > 7@
+  6@ == 0
+goto_if_false @PHOTO_2061
+8@ = Char.GetOffsetInWorldCoords(9@, 10@, 0@, 0.0, 0.6, 0.0)
+Fx.DrawLightWithRange(8@, 9@, 10@, 255, 255, 255, 50.0)
+Audio.ReportMissionAudioEventAtChar(0@, 1132)
+6@ = 1
+
+:PHOTO_2061
+if 
+  7@ >= 1.0
+goto_if_false @PHOTO_2137
+Task.PlayAnim(0@, "PICCRCH_OUT", "CAMERA", 4.0, False, False, False, True, -1)
+6@ = 0
+4@ += 1
+
+:PHOTO_2137
+goto @PHOTO_2403
+
+:PHOTO_2144
+if 
+  Char.IsPlayingAnim(0@, "PICCRCH_OUT")
+goto_if_false @PHOTO_2270
+7@ = Char.GetAnimCurrentTime(0@, "PICCRCH_OUT")
+if 
+  7@ >= 1.0
+goto_if_false @PHOTO_2270
+Task.PlayAnim(0@, "CAMCRCH_TO_CAMSTND", "CAMERA", 4.0, False, False, False, False, -1)
+4@ += 1
+
+:PHOTO_2270
+goto @PHOTO_2403
+
+:PHOTO_2277
+if 
+  Char.IsPlayingAnim(0@, "PICCRCH_OUT")
+goto_if_false @PHOTO_2396
+7@ = Char.GetAnimCurrentTime(0@, "PICCRCH_OUT")
+if 
+  7@ >= 1.0
+goto_if_false @PHOTO_2396
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @PHOTO_2389
+4@ = 0
+goto @PHOTO_2396
+
+:PHOTO_2389
+gosub @PHOTO_2405
+
+:PHOTO_2396
+goto @PHOTO_2403
+
+:PHOTO_2403
+return 
+
+:PHOTO_2405
+Streaming.RemoveAnimation("CAMERA")
+if 
+  not Char.IsDead(0@)
+goto_if_false @PHOTO_2438
+Char.RemoveWeapon(43, 0@)
+
+:PHOTO_2438
+Streaming.MarkModelAsNoLongerNeeded(367)
+terminate_this_script 
+return 
+
+:PHOTO_2447
+wait 0
+if 
+  not Char.IsDead(0@)
+goto_if_false @PHOTO_2511
+5@ = Char.GetScriptTaskStatus(0@, 1506)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @PHOTO_2504
+Task.KillCharOnFoot(0@, $scplayer)
+
+:PHOTO_2504
+goto @PHOTO_2518
+
+:PHOTO_2511
+gosub @PHOTO_2405
+
+:PHOTO_2518
+goto @PHOTO_2447
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

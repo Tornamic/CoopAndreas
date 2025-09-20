@@ -1,0 +1,113 @@
+//-------------External script 77 (HOTDOG)---------------
+
+:HOTDOGV
+script_name 'HOTDOGV'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @HOTDOGV_77
+0@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+1@ = Car.Create(588, $x, $y, $z)
+
+:HOTDOGV_77
+wait 0
+$game_timer = Clock.GetGameTimer()
+if 
+  not Char.IsDead(0@)
+goto_if_false @HOTDOGV_698
+if 
+  Player.IsPlaying($player1)
+goto_if_false @HOTDOGV_673
+if 
+  Char.IsAttachedToAnyCar(0@)
+goto_if_false @HOTDOGV_648
+1@ = Char.StoreCarIsAttachedToNoSave(0@)
+if 
+  not Char.IsInCar($scplayer, 1@)
+goto_if_false @HOTDOGV_616
+if 
+  2@ == 0
+goto_if_false @HOTDOGV_434
+if 
+  Char.LocateOnFootCar2D($scplayer, 1@, 12.0, 12.0, False)
+goto_if_false @HOTDOGV_434
+Streaming.RequestAnimation("VENDING")
+if 
+  Streaming.HasAnimationLoaded("VENDING")
+goto_if_false @HOTDOGV_434
+if 
+  Player.IsScoreGreater($player1, 0)
+goto_if_false @HOTDOGV_434
+$x = Car.GetOffsetInWorldCoords($y, $z, 1@, 2.0, 0.0, 0.0)
+if 
+  Char.LocateOnFoot3D($scplayer, 1, $x, $y, $z, 0.6, 0.6, 1.0)
+goto_if_false @HOTDOGV_434
+$temp_integer_1 = Char.GetHealth($scplayer)
+$temp_integer_1 += 50
+Char.SetHealth($scplayer, $temp_integer_1)
+Task.PlayAnimSecondary($scplayer, "VEND_EAT1_P", "VENDING", 4.0, False, False, False, False, -1)
+Stat.IncrementInt(StatId.LongestWheelieDist, 245)
+set_lvar_int_to_var_int 3@ = $game_timer
+3@ += 3000
+Player.AddScore($player1, -1)
+2@ += 1
+
+:HOTDOGV_434
+if 
+  2@ == 1
+goto_if_false @HOTDOGV_494
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 3@
+goto_if_false @HOTDOGV_494
+set_lvar_int_to_var_int 3@ = $game_timer
+3@ += 27000
+2@ += 1
+
+:HOTDOGV_494
+if 
+  2@ == 2
+goto_if_false @HOTDOGV_609
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 3@
+goto_if_false @HOTDOGV_609
+$x = Car.GetOffsetInWorldCoords($y, $z, 1@, 1.0, 0.0, 0.0)
+if 
+  not Char.LocateOnFoot3D($scplayer, 0, $x, $y, $z, 0.6, 0.6, 1.0)
+goto_if_false @HOTDOGV_609
+2@ = 0
+
+:HOTDOGV_609
+goto @HOTDOGV_641
+
+:HOTDOGV_616
+Char.MarkAsNoLongerNeeded(0@)
+Task.Duck(0@, -2)
+Streaming.RemoveAnimation("VENDING")
+terminate_this_script 
+
+:HOTDOGV_641
+goto @HOTDOGV_666
+
+:HOTDOGV_648
+Char.MarkAsNoLongerNeeded(0@)
+Streaming.RemoveAnimation("VENDING")
+terminate_this_script 
+
+:HOTDOGV_666
+goto @HOTDOGV_691
+
+:HOTDOGV_673
+Char.MarkAsNoLongerNeeded(0@)
+Streaming.RemoveAnimation("VENDING")
+terminate_this_script 
+
+:HOTDOGV_691
+goto @HOTDOGV_716
+
+:HOTDOGV_698
+Char.MarkAsNoLongerNeeded(0@)
+Streaming.RemoveAnimation("VENDING")
+terminate_this_script 
+
+:HOTDOGV_716
+goto @HOTDOGV_77

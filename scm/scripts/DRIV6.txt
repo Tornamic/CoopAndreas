@@ -1,0 +1,1990 @@
+//-------------Mission 55---------------
+// Originally: Lure
+
+:DRIV6
+script_name 'DRIV6'
+gosub @DRIV6_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @DRIV6_38
+gosub @DRIV6_12763
+
+:DRIV6_38
+gosub @DRIV6_12845
+terminate_this_script 
+
+:DRIV6_47
+Stat.RegisterMissionGiven
+Text.LoadMissionText('FARLIE5')
+$onmission = 1
+wait 0
+35@ = -1957.67
+36@ = -2443.7
+37@ = 30.83
+38@ = -1571.4
+39@ = -2742.09
+40@ = 47.57
+49@ = 0
+50@ = 14
+104@ = 0
+
+:DRIV6_152
+if 
+  is_int_lvar_greater_than_int_lvar 50@ > 104@
+goto_if_false @DRIV6_273
+140@(104@,14i) = 0
+154@(104@,14i) = 0
+168@(104@,14i) = 0
+182@(104@,14i) = 0
+196@(104@,14i) = 0
+210@(104@,14i) = 0
+224@(104@,14i) = 0
+238@(104@,14i) = 0
+104@ += 1
+goto @DRIV6_152
+
+:DRIV6_273
+137@ = 0
+138@ = 0
+139@ = 0
+$d6_player_in_ravine = 0
+$d6_player_in_tunnel = 0
+253@ = 0
+$d6_player_reached_first_creation_pt = 0
+$d6_player_reached_second_creation_pt = 0
+254@ = 0
+255@ = 0
+$d6_player_reached_fifth_creation_pt = 0
+$d6_player_reached_sixth_creation_pt = 0
+98@ = 0
+252@ = 0
+256@ = 0
+257@ = 0
+260@ = 0
+261@ = 0
+131@ = 0
+132@ = 0
+134@ = 0
+136@ = 0
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:DRIV6_442
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRIV6_466
+wait 0
+goto @DRIV6_442
+
+:DRIV6_466
+Streaming.SetAreaVisible(1)
+Cutscene.Load('FARL_5A')
+
+:DRIV6_481
+if 
+  not Cutscene.HasLoaded
+goto_if_false @DRIV6_505
+wait 0
+goto @DRIV6_481
+
+:DRIV6_505
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:DRIV6_514
+if 
+  not Cutscene.HasFinished
+goto_if_false @DRIV6_538
+wait 0
+goto @DRIV6_514
+
+:DRIV6_538
+Camera.DoFade(0, Fade.Out)
+
+:DRIV6_544
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRIV6_568
+wait 0
+goto @DRIV6_544
+
+:DRIV6_568
+Cutscene.Clear
+Player.SetControl($player1, False)
+Streaming.SetAreaVisible(0)
+if 
+  136@ == 1
+goto_if_false @DRIV6_727
+34@ = Car.Create(489, 0.0, 0.0, -100.0)
+104@ = 0
+
+:DRIV6_629
+if 
+  is_int_lvar_greater_than_int_lvar 50@ > 104@
+goto_if_false @DRIV6_727
+52@(104@,14i) = Car.Create(468, 94@, 95@, -100.0)
+66@(104@,14i) = Char.CreateInsideCar(PedType.Mission1, 123, 52@(104@,14i))
+80@(104@,14i) = Char.CreateAsPassenger(PedType.Mission1, 122, 52@(104@,14i), 0)
+104@ += 1
+goto @DRIV6_629
+
+:DRIV6_727
+Streaming.RequestModel(468)
+Streaming.RequestModel(123)
+Streaming.RequestModel(122)
+Streaming.RequestModel(353)
+
+:DRIV6_745
+if or
+  not Streaming.HasModelLoaded(468)
+  not Streaming.HasModelLoaded(123)
+  not Streaming.HasModelLoaded(122)
+  not Streaming.HasModelLoaded(353)
+goto_if_false @DRIV6_785
+wait 0
+goto @DRIV6_745
+
+:DRIV6_785
+CarGenerator.Switch($5280, 0)
+CarGenerator.Switch($5281, 0)
+CarGenerator.Switch($5282, 0)
+Char.SetCoordinates($scplayer, -2154.2, 645.31, 51.39)
+Char.SetHeading($scplayer, 270.0)
+gosub @DRIV6_4442
+262@ = Blip.AddForCar(34@)
+Blip.SetAsFriendly(262@, True)
+Camera.SetFadingColor(0, 0, 0)
+wait 500
+Camera.DoFade(1, 1500)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Text.PrintNow('DRV6_8', 10000, 0)
+
+:DRIV6_905
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @DRIV6_931
+goto @DRIV6_12781
+
+:DRIV6_931
+if 
+  137@ <> 1
+goto_if_false @DRIV6_1088
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_1088
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @DRIV6_1088
+Blip.Remove(262@)
+137@ = 1
+263@ = Blip.AddForCoord(-1963.84, -2441.49, 30.78)
+Text.PrintNow('DRV6_19', 10000, 0)
+Text.Print('DRV6_17', 7000, 0)
+if 
+  $d6_trip_skips_available == 1
+goto_if_false @DRIV6_1088
+Skip.SetUp(-1990.65, -2428.65, 30.77, 225.0)
+
+:DRIV6_1088
+if and
+  137@ == 1
+  139@ <> 1
+goto_if_false @DRIV6_1498
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_1498
+if and
+  138@ <> 1
+  Char.LocateAnyMeans2D($scplayer, 0, -1990.65, -2428.65, 50.0, 50.0)
+goto_if_false @DRIV6_1192
+Text.ClearThisPrint('DRV6_19')
+138@ = 1
+
+:DRIV6_1192
+if and
+  $d6_trip_skips_available <> 1
+  Char.LocateAnyMeans2D($scplayer, 0, -1963.84, -2441.49, 25.0, 25.0)
+goto_if_false @DRIV6_1244
+$d6_trip_skips_available = 1
+
+:DRIV6_1244
+if 
+  Char.LocateInCar3D($scplayer, -1963.84, -2441.49, 30.78, 4.0, 4.0, 2.0, True)
+goto_if_false @DRIV6_1498
+Player.SetControl($player1, False)
+Skip.Clear
+Blip.Remove(263@)
+gosub @DRIV6_4788
+264@ = Blip.AddForCoord(-1867.14, -2442.39, 31.24)
+Blip.ChangeColor(264@, BlipColor.Red)
+41@ = Checkpoint.Create(-1867.14, -2442.39, 31.24, -1178.32, -2638.85, 10.8, 0, 4.0)
+Hud.DisplayCounterWithString($d6_door_health, CounterDisplay.Bar, 'DRV6_18')
+100@ = 0
+$d6_door_health = 100
+Car.SetHealth(34@, 9000)
+Text.PrintNow('DRV6_2', 10000, 0)
+Text.Print('DRV6_17', 7000, 0)
+Text.Print('DRV6_4', 10000, 0)
+Text.Print('DRV6_15', 10000, 0)
+139@ = 1
+TIMERB = 0
+
+:DRIV6_1498
+if 
+  139@ == 1
+goto_if_false @DRIV6_3767
+if 
+  Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @DRIV6_1539
+Player.ClearWantedLevel($player1)
+
+:DRIV6_1539
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_3767
+if and
+  261@ <> 1
+  TIMERB > 2000
+goto_if_false @DRIV6_1681
+if and
+  not Char.IsDead(80@)
+  not Char.IsDead(81@)
+goto_if_false @DRIV6_1681
+Task.DriveBy(80@, $scplayer, -1, 0.0, 0.0, 0.0, 999999.0, DriveByType.Ai, False, 60)
+Task.DriveBy(81@, $scplayer, -1, 0.0, 0.0, 0.0, 999999.0, DriveByType.Ai, False, 60)
+261@ = 1
+
+:DRIV6_1681
+if 
+  Car.IsUpsidedown(34@)
+goto_if_false @DRIV6_1744
+if 
+  252@ == 1
+goto_if_false @DRIV6_1737
+Car.SetProofs(34@, False, False, False, False, False)
+252@ = 0
+
+:DRIV6_1737
+goto @DRIV6_1784
+
+:DRIV6_1744
+if 
+  252@ <> 1
+goto_if_false @DRIV6_1784
+Car.SetProofs(34@, False, True, True, True, True)
+252@ = 1
+
+:DRIV6_1784
+gosub @DRIV6_7450
+if 
+  $d6_player_reached_second_creation_pt <> 1
+goto_if_false @DRIV6_1945
+if 
+  $d6_player_in_ravine <> 1
+goto_if_false @DRIV6_1886
+if 
+  Car.Locate2D(34@, 0, -1181.93, -2642.33, 300.0, 300.0)
+goto_if_false @DRIV6_1879
+gosub @DRIV6_8721
+$d6_player_in_ravine = 1
+
+:DRIV6_1879
+goto @DRIV6_1938
+
+:DRIV6_1886
+if 
+  not Car.Locate2D(34@, 0, -1181.93, -2642.33, 300.0, 300.0)
+goto_if_false @DRIV6_1938
+gosub @DRIV6_8888
+$d6_player_in_ravine = 0
+
+:DRIV6_1938
+goto @DRIV6_1970
+
+:DRIV6_1945
+if 
+  $d6_player_in_ravine == 1
+goto_if_false @DRIV6_1970
+$d6_player_in_ravine = 0
+
+:DRIV6_1970
+if 
+  $d6_player_reached_fifth_creation_pt == 1
+goto_if_false @DRIV6_2124
+if 
+  $d6_player_in_tunnel <> 1
+goto_if_false @DRIV6_2065
+if 
+  Car.Locate2D(34@, 0, -519.74, -2782.11, 214.0, 214.0)
+goto_if_false @DRIV6_2058
+gosub @DRIV6_8721
+$d6_player_in_tunnel = 1
+
+:DRIV6_2058
+goto @DRIV6_2117
+
+:DRIV6_2065
+if 
+  not Car.Locate2D(34@, 0, -519.74, -2782.11, 214.0, 214.0)
+goto_if_false @DRIV6_2117
+gosub @DRIV6_8888
+$d6_player_in_tunnel = 0
+
+:DRIV6_2117
+goto @DRIV6_2149
+
+:DRIV6_2124
+if 
+  $d6_player_in_tunnel == 1
+goto_if_false @DRIV6_2149
+$d6_player_in_tunnel = 0
+
+:DRIV6_2149
+if 
+  253@ <> 1
+goto_if_false @DRIV6_2301
+if 
+  Car.Locate3D(34@, 0, -1867.14, -2442.39, 31.24, 6.0, 6.0, 3.0)
+goto_if_false @DRIV6_2301
+Blip.Remove(264@)
+Checkpoint.Delete(41@)
+253@ = 1
+264@ = Blip.AddForCoord(-1178.32, -2638.85, 10.8)
+Blip.ChangeColor(264@, BlipColor.Red)
+41@ = Checkpoint.Create(-1178.32, -2638.85, 10.8, -654.95, -2469.35, 33.3, 0, 4.0)
+
+:DRIV6_2301
+if and
+  253@ == 1
+  $d6_player_reached_first_creation_pt <> 1
+goto_if_false @DRIV6_2467
+if 
+  Car.Locate3D(34@, 0, -1178.32, -2638.85, 10.8, 6.0, 6.0, 3.0)
+goto_if_false @DRIV6_2467
+Blip.Remove(264@)
+Checkpoint.Delete(41@)
+gosub @DRIV6_5926
+$d6_player_reached_first_creation_pt = 1
+264@ = Blip.AddForCoord(-654.95, -2469.35, 33.3)
+Blip.ChangeColor(264@, BlipColor.Red)
+41@ = Checkpoint.Create(-654.95, -2469.35, 33.3, -309.54, -2248.81, 29.59, 0, 4.0)
+
+:DRIV6_2467
+if and
+  $d6_player_reached_first_creation_pt == 1
+  $d6_player_reached_second_creation_pt <> 1
+goto_if_false @DRIV6_2633
+if 
+  Car.Locate3D(34@, 0, -654.95, -2469.35, 33.3, 6.0, 6.0, 3.0)
+goto_if_false @DRIV6_2633
+Blip.Remove(264@)
+Checkpoint.Delete(41@)
+gosub @DRIV6_5926
+$d6_player_reached_second_creation_pt = 1
+264@ = Blip.AddForCoord(-309.54, -2248.81, 29.59)
+Blip.ChangeColor(264@, BlipColor.Red)
+41@ = Checkpoint.Create(-309.54, -2248.81, 29.59, -165.7, -2421.71, 35.1, 0, 4.0)
+
+:DRIV6_2633
+if and
+  $d6_player_reached_second_creation_pt == 1
+  254@ <> 1
+goto_if_false @DRIV6_2799
+if 
+  Car.Locate3D(34@, 0, -309.54, -2248.81, 29.59, 6.0, 6.0, 3.0)
+goto_if_false @DRIV6_2799
+Blip.Remove(264@)
+Checkpoint.Delete(41@)
+gosub @DRIV6_5926
+254@ = 1
+264@ = Blip.AddForCoord(-165.7, -2421.71, 35.1)
+Blip.ChangeColor(264@, BlipColor.Red)
+41@ = Checkpoint.Create(-165.7, -2421.71, 35.1, -191.26, -2822.52, 42.09, 0, 4.0)
+
+:DRIV6_2799
+if and
+  254@ == 1
+  255@ <> 1
+goto_if_false @DRIV6_2965
+if 
+  Car.Locate3D(34@, 0, -165.7, -2421.71, 35.1, 6.0, 6.0, 3.0)
+goto_if_false @DRIV6_2965
+Blip.Remove(264@)
+Checkpoint.Delete(41@)
+gosub @DRIV6_5926
+255@ = 1
+264@ = Blip.AddForCoord(-191.26, -2822.52, 42.09)
+Blip.ChangeColor(264@, BlipColor.Red)
+41@ = Checkpoint.Create(-191.26, -2822.52, 42.09, -946.91, -2844.84, 67.36, 0, 4.0)
+
+:DRIV6_2965
+if and
+  255@ == 1
+  $d6_player_reached_fifth_creation_pt <> 1
+goto_if_false @DRIV6_3125
+if 
+  Car.Locate3D(34@, 0, -191.26, -2822.52, 42.09, 6.0, 6.0, 3.0)
+goto_if_false @DRIV6_3125
+Blip.Remove(264@)
+Checkpoint.Delete(41@)
+gosub @DRIV6_5926
+$d6_player_reached_fifth_creation_pt = 1
+264@ = Blip.AddForCoord(-946.91, -2844.84, 67.36)
+Blip.ChangeColor(264@, BlipColor.Red)
+41@ = Checkpoint.Create(-946.91, -2844.84, 67.36, 38@, 39@, 40@, 0, 4.0)
+
+:DRIV6_3125
+if and
+  $d6_player_reached_fifth_creation_pt == 1
+  $d6_player_reached_sixth_creation_pt <> 1
+goto_if_false @DRIV6_3279
+if 
+  Car.Locate3D(34@, 0, -946.91, -2844.84, 67.36, 6.0, 6.0, 3.0)
+goto_if_false @DRIV6_3279
+Blip.Remove(264@)
+Checkpoint.Delete(41@)
+gosub @DRIV6_5926
+$d6_player_reached_sixth_creation_pt = 1
+265@ = Blip.AddForCoord(38@, 39@, 40@)
+Blip.ChangeColor(265@, BlipColor.Red)
+41@ = Checkpoint.Create(38@, 39@, 40@, 0.0, 0.0, 0.0, 2, 4.0)
+
+:DRIV6_3279
+if 
+  100 > 100@
+goto_if_false @DRIV6_3350
+99@ = Car.GetHealth(34@)
+set_lvar_int_to_lvar_int 100@ = 99@
+100@ -= 3000
+100@ /= 60
+set_var_int_to_lvar_int $d6_door_health = 100@
+100@ *= -1
+100@ += 100
+
+:DRIV6_3350
+if 
+  45 >= 100@
+goto_if_false @DRIV6_3439
+if 
+  Char.IsSittingInCar($scplayer, 34@)
+goto_if_false @DRIV6_3411
+Car.OpenDoorABit(34@, CarDoor.LeftFrontDoor, 0.0)
+Car.OpenDoorABit(34@, CarDoor.RightFrontDoor, 0.0)
+
+:DRIV6_3411
+Car.ControlDoor(34@, CarDoor.LeftFrontDoor, 0, 0.0)
+Car.ControlDoor(34@, CarDoor.RightFrontDoor, 0, 0.0)
+
+:DRIV6_3439
+if and
+  100@ > 45
+  80 >= 100@
+goto_if_false @DRIV6_3535
+if 
+  Char.IsSittingInCar($scplayer, 34@)
+goto_if_false @DRIV6_3507
+Car.OpenDoorABit(34@, CarDoor.LeftFrontDoor, 0.0)
+Car.OpenDoorABit(34@, CarDoor.RightFrontDoor, 0.0)
+
+:DRIV6_3507
+Car.ControlDoor(34@, CarDoor.LeftFrontDoor, 2, 0.0)
+Car.ControlDoor(34@, CarDoor.RightFrontDoor, 2, 0.0)
+
+:DRIV6_3535
+if and
+  100@ > 80
+  100 > 100@
+goto_if_false @DRIV6_3588
+Car.ControlDoor(34@, CarDoor.LeftFrontDoor, 3, -1.0)
+Car.ControlDoor(34@, CarDoor.RightFrontDoor, 3, -1.0)
+
+:DRIV6_3588
+if 
+  100@ >= 100
+goto_if_false @DRIV6_3634
+Car.ControlDoor(34@, CarDoor.LeftFrontDoor, 4, -1.0)
+Car.ControlDoor(34@, CarDoor.RightFrontDoor, 4, -1.0)
+
+:DRIV6_3634
+if and
+  100@ > 80
+  256@ <> 1
+goto_if_false @DRIV6_3682
+Text.PrintNow('DRV6_6', 7000, 0)
+256@ = 1
+
+:DRIV6_3682
+if and
+  100@ >= 100
+  257@ <> 1
+goto_if_false @DRIV6_3742
+Hud.ClearCounter($d6_door_health)
+Text.PrintNow('DRV6_16', 5000, 0)
+TIMERA = 0
+257@ = 1
+
+:DRIV6_3742
+if 
+  257@ == 1
+goto_if_false @DRIV6_3767
+gosub @DRIV6_9159
+
+:DRIV6_3767
+if 
+  137@ <> 1
+goto_if_false @DRIV6_3826
+if 
+  Car.IsDead(34@)
+goto_if_false @DRIV6_3826
+Text.ClearPrints
+Text.PrintNow('DRV6_11', 5000, 0)
+goto @DRIV6_12763
+
+:DRIV6_3826
+if 
+  137@ == 1
+goto_if_false @DRIV6_4181
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @DRIV6_4181
+if 
+  139@ == 1
+goto_if_false @DRIV6_4156
+gosub @DRIV6_9768
+266@ = 0
+104@ = 0
+
+:DRIV6_3899
+if and
+  is_int_lvar_greater_than_int_lvar 49@ > 104@
+  266@ <> 1
+goto_if_false @DRIV6_4073
+if 
+  not Char.IsDead(66@(104@,14i))
+goto_if_false @DRIV6_3992
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 66@(104@,14i), 20.0, 20.0, 20.0, False)
+goto_if_false @DRIV6_3992
+266@ = 1
+
+:DRIV6_3992
+if 
+  not Char.IsDead(80@(104@,14i))
+goto_if_false @DRIV6_4059
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 80@(104@,14i), 20.0, 20.0, 20.0, False)
+goto_if_false @DRIV6_4059
+266@ = 1
+
+:DRIV6_4059
+104@ += 1
+goto @DRIV6_3899
+
+:DRIV6_4073
+if 
+  266@ == 1
+goto_if_false @DRIV6_4149
+135@ = 0
+gosub @DRIV6_12213
+132@ = 1
+
+:DRIV6_4112
+if 
+  is_int_lvar_greater_than_int_lvar 133@ > 132@
+goto_if_false @DRIV6_4149
+wait 0
+gosub @DRIV6_12532
+goto @DRIV6_4112
+
+:DRIV6_4149
+gosub @DRIV6_9452
+
+:DRIV6_4156
+Text.ClearPrints
+Text.PrintNow('DRV6_7', 5000, 0)
+goto @DRIV6_12763
+
+:DRIV6_4181
+if 
+  139@ == 1
+goto_if_false @DRIV6_4435
+if and
+  257@ == 1
+  TIMERA > 10000
+goto_if_false @DRIV6_4344
+135@ = 0
+gosub @DRIV6_12213
+
+:DRIV6_4239
+if 
+  1 > 132@
+goto_if_false @DRIV6_4275
+wait 0
+gosub @DRIV6_12532
+goto @DRIV6_4239
+
+:DRIV6_4275
+if 
+  is_int_lvar_greater_than_int_lvar 133@ > 132@
+goto_if_false @DRIV6_4312
+wait 0
+gosub @DRIV6_12532
+goto @DRIV6_4275
+
+:DRIV6_4312
+gosub @DRIV6_9452
+Text.ClearPrints
+Text.PrintNow('DRV6_7', 5000, 0)
+goto @DRIV6_12763
+
+:DRIV6_4344
+if 
+  $d6_player_reached_sixth_creation_pt == 1
+goto_if_false @DRIV6_4435
+if 
+  Char.LocateInCar3D($scplayer, 38@, 39@, 40@, 6.0, 6.0, 3.0, True)
+goto_if_false @DRIV6_4435
+Player.SetControl($player1, False)
+Blip.Remove(265@)
+Checkpoint.Delete(41@)
+gosub @DRIV6_10195
+goto @DRIV6_12781
+
+:DRIV6_4435
+goto @DRIV6_905
+
+:DRIV6_4442
+Streaming.RequestModel(489)
+
+:DRIV6_4447
+if 
+  not Streaming.HasModelLoaded(489)
+goto_if_false @DRIV6_4474
+wait 0
+goto @DRIV6_4447
+
+:DRIV6_4474
+World.ClearArea(0, -2149.95, 644.31, 52.35, 100.0)
+34@ = Car.Create(489, -2149.95, 644.31, 52.35)
+Car.SetHeading(34@, 180.0)
+Car.SetStrong(34@, True)
+Car.SetCanBurstTires(34@, False)
+Car.SetHealth(34@, 9000)
+Car.SetCanBeVisiblyDamaged(34@, False)
+return 
+
+:DRIV6_4562
+52@ = Car.Create(468, -2015.66, -2408.82, 30.28)
+Car.SetHeading(52@, 229.35)
+53@ = Car.Create(468, -2017.07, -2410.37, 30.3)
+Car.SetHeading(53@, 225.81)
+104@ = 0
+
+:DRIV6_4635
+if 
+  2 > 104@
+goto_if_false @DRIV6_4779
+66@(104@,14i) = Char.CreateInsideCar(PedType.Mission1, 123, 52@(104@,14i))
+80@(104@,14i) = Char.CreateAsPassenger(PedType.Mission1, 122, 52@(104@,14i), 0)
+Char.GiveWeapon(80@(104@,14i), WeaponType.Mp5, 99999)
+Car.SetOnlyDamagedByPlayer(52@(104@,14i), True)
+Car.SetTraction(52@(104@,14i), 2.0)
+Char.SetCanBeKnockedOffBike(66@(104@,14i), 2)
+Char.SetCanBeKnockedOffBike(80@(104@,14i), 2)
+49@ += 1
+104@ += 1
+goto @DRIV6_4635
+
+:DRIV6_4779
+98@ += 1
+return 
+
+:DRIV6_4788
+Camera.DoFade(0, 1000)
+
+:DRIV6_4795
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRIV6_4819
+wait 0
+goto @DRIV6_4795
+
+:DRIV6_4819
+World.ClearArea(0, 35@, 36@, 37@, 300.0)
+Text.ClearPrints
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_4890
+Car.SetCoordinates(34@, 35@, 36@, 37@)
+Car.SetHeading(34@, 241.85)
+
+:DRIV6_4890
+gosub @DRIV6_4562
+Camera.SetFixedPosition(-1955.92, -2447.69, 30.78, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1962.83, -2441.79, 30.44, SwitchType.JumpCut)
+Camera.DoFade(1, 1000)
+
+:DRIV6_4955
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRIV6_4979
+wait 0
+goto @DRIV6_4955
+
+:DRIV6_4979
+259@ = 1
+skip_cutscene_start_internal @DRIV6_5561
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_5119
+if and
+  not Char.IsDead(66@)
+  not Car.IsDead(52@)
+goto_if_false @DRIV6_5064
+Task.CarDriveToCoord(66@, 52@, -1977.97, -2435.05, 30.3, 30.0, DriveMode.Straightline, 0, DrivingMode.AvoidCars)
+
+:DRIV6_5064
+if and
+  not Char.IsDead(67@)
+  not Car.IsDead(53@)
+goto_if_false @DRIV6_5119
+Task.CarDriveToCoord(67@, 53@, -1979.45, -2437.47, 30.3, 30.0, DriveMode.Straightline, 0, DrivingMode.AvoidCars)
+
+:DRIV6_5119
+TIMERB = 0
+
+:DRIV6_5126
+if 
+  2500 > TIMERB
+goto_if_false @DRIV6_5156
+wait 0
+goto @DRIV6_5126
+
+:DRIV6_5156
+if 
+  not Car.IsDead(52@)
+goto_if_false @DRIV6_5223
+Camera.SetFixedPosition(-1989.91, -2435.33, 30.68, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1987.22, -2436.07, 30.82, SwitchType.JumpCut)
+
+:DRIV6_5223
+if 
+  not Car.IsDead(52@)
+goto_if_false @DRIV6_5269
+Car.SetCoordinates(52@, -1985.6, -2435.14, 30.3)
+Car.SetHeading(52@, 254.67)
+
+:DRIV6_5269
+if 
+  not Car.IsDead(53@)
+goto_if_false @DRIV6_5315
+Car.SetCoordinates(53@, -1986.37, -2437.8, 30.3)
+Car.SetHeading(53@, 250.82)
+
+:DRIV6_5315
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_5439
+if and
+  not Char.IsDead(66@)
+  not Char.IsDead(80@)
+  not Car.IsDead(52@)
+goto_if_false @DRIV6_5385
+Car.SetStraightLineDistance(52@, 250)
+Task.CarMission(66@, 52@, 34@, CarMission.EscortLeft, 10.0, DrivingMode.AvoidCars)
+
+:DRIV6_5385
+if and
+  not Char.IsDead(67@)
+  not Char.IsDead(81@)
+  not Car.IsDead(53@)
+goto_if_false @DRIV6_5439
+Car.SetStraightLineDistance(53@, 250)
+Task.CarMission(67@, 53@, 34@, CarMission.EscortRight, 10.0, DrivingMode.AvoidCars)
+
+:DRIV6_5439
+if and
+  260@ <> 1
+  not Char.IsDead(66@)
+  not Car.IsDead(52@)
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_5554
+if 
+  Char.IsInCar(66@, 52@)
+goto_if_false @DRIV6_5536
+if 
+  Char.LocateInCarCar2D(66@, 34@, 15.0, 15.0, False)
+goto_if_false @DRIV6_5529
+260@ = 1
+
+:DRIV6_5529
+goto @DRIV6_5543
+
+:DRIV6_5536
+260@ = 1
+
+:DRIV6_5543
+wait 0
+goto @DRIV6_5439
+
+:DRIV6_5554
+259@ = 0
+
+:DRIV6_5561
+skip_cutscene_end 
+if 
+  259@ == 1
+goto_if_false @DRIV6_5755
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_5755
+if and
+  not Char.IsDead(66@)
+  not Char.IsDead(80@)
+  not Car.IsDead(52@)
+goto_if_false @DRIV6_5676
+94@ = Char.GetOffsetInWorldCoords(95@, 96@, $scplayer, -1.0, -14.0, 0.0)
+96@ = -100.0
+Car.SetCoordinates(52@, 94@, 95@, 96@)
+
+:DRIV6_5676
+if and
+  not Char.IsDead(67@)
+  not Char.IsDead(81@)
+  not Car.IsDead(53@)
+goto_if_false @DRIV6_5755
+94@ = Char.GetOffsetInWorldCoords(95@, 96@, $scplayer, 1.0, -14.0, 0.0)
+96@ = -100.0
+Car.SetCoordinates(53@, 94@, 95@, 96@)
+
+:DRIV6_5755
+if 
+  not Car.IsDead(52@)
+goto_if_false @DRIV6_5778
+Car.SetStraightLineDistance(52@, 20)
+
+:DRIV6_5778
+if 
+  not Car.IsDead(53@)
+goto_if_false @DRIV6_5801
+Car.SetStraightLineDistance(53@, 20)
+
+:DRIV6_5801
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_5909
+if and
+  not Char.IsDead(66@)
+  not Char.IsDead(80@)
+  not Car.IsDead(52@)
+goto_if_false @DRIV6_5863
+Task.CarMission(66@, 52@, 34@, CarMission.EscortLeft, 30.0, DrivingMode.AvoidCars)
+
+:DRIV6_5863
+if and
+  not Char.IsDead(67@)
+  not Char.IsDead(81@)
+  not Car.IsDead(53@)
+goto_if_false @DRIV6_5909
+Task.CarMission(67@, 53@, 34@, CarMission.EscortRight, 30.0, DrivingMode.AvoidCars)
+
+:DRIV6_5909
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+return 
+
+:DRIV6_5926
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_7448
+51@ = 0
+104@ = 0
+
+:DRIV6_5956
+if 
+  is_int_lvar_greater_than_int_lvar 49@ > 104@
+goto_if_false @DRIV6_6085
+if 
+  not Car.IsDead(52@(104@,14i))
+goto_if_false @DRIV6_6071
+if 
+  Char.LocateAnyMeansCar2D($scplayer, 52@(104@,14i), 100.0, 100.0, False)
+goto_if_false @DRIV6_6044
+51@ += 1
+goto @DRIV6_6071
+
+:DRIV6_6044
+Car.Delete(52@(104@,14i))
+Char.Delete(66@(104@,14i))
+Char.Delete(80@(104@,14i))
+
+:DRIV6_6071
+104@ += 1
+goto @DRIV6_5956
+
+:DRIV6_6085
+if 
+  51@ <= 2
+goto_if_false @DRIV6_7448
+set_lvar_int_to_lvar_int 104@ = 98@
+104@ *= 2
+set_lvar_int_to_lvar_int 105@ = 104@
+105@ += 2
+106@ = 0
+
+:DRIV6_6140
+if 
+  is_int_lvar_greater_than_int_lvar 105@ > 104@
+goto_if_false @DRIV6_7441
+if and
+  253@ == 1
+  $d6_player_reached_first_creation_pt <> 1
+goto_if_false @DRIV6_6300
+if 
+  106@ == 0
+goto_if_false @DRIV6_6242
+94@ = -1342.94
+95@ = -2624.45
+96@ = 19.58
+97@ = 261.04
+
+:DRIV6_6242
+if 
+  106@ == 1
+goto_if_false @DRIV6_6300
+94@ = -1344.02
+95@ = -2628.07
+96@ = 19.82
+97@ = 260.5
+
+:DRIV6_6300
+if and
+  $d6_player_reached_first_creation_pt == 1
+  $d6_player_reached_second_creation_pt <> 1
+goto_if_false @DRIV6_6441
+if 
+  106@ == 0
+goto_if_false @DRIV6_6383
+94@ = -708.68
+95@ = -2601.46
+96@ = 69.83
+97@ = 338.56
+
+:DRIV6_6383
+if 
+  106@ == 1
+goto_if_false @DRIV6_6441
+94@ = -704.89
+95@ = -2602.92
+96@ = 69.9
+97@ = 340.64
+
+:DRIV6_6441
+if and
+  $d6_player_reached_second_creation_pt == 1
+  254@ <> 1
+goto_if_false @DRIV6_6582
+if 
+  106@ == 0
+goto_if_false @DRIV6_6524
+94@ = -420.89
+95@ = -2258.87
+96@ = 47.37
+97@ = 278.1
+
+:DRIV6_6524
+if 
+  106@ == 1
+goto_if_false @DRIV6_6582
+94@ = -420.64
+95@ = -2261.39
+96@ = 47.79
+97@ = 279.7
+
+:DRIV6_6582
+if and
+  254@ == 1
+  255@ <> 1
+goto_if_false @DRIV6_6723
+if 
+  106@ == 0
+goto_if_false @DRIV6_6665
+94@ = -260.22
+95@ = -2323.12
+96@ = 30.42
+97@ = 222.63
+
+:DRIV6_6665
+if 
+  106@ == 1
+goto_if_false @DRIV6_6723
+94@ = -262.81
+95@ = -2326.8
+96@ = 30.43
+97@ = 220.93
+
+:DRIV6_6723
+if and
+  255@ == 1
+  $d6_player_reached_fifth_creation_pt <> 1
+goto_if_false @DRIV6_6864
+if 
+  106@ == 0
+goto_if_false @DRIV6_6806
+94@ = -179.45
+95@ = -2708.91
+96@ = 35.82
+97@ = 177.36
+
+:DRIV6_6806
+if 
+  106@ == 1
+goto_if_false @DRIV6_6864
+94@ = -182.07
+95@ = -2709.06
+96@ = 35.77
+97@ = 176.56
+
+:DRIV6_6864
+if and
+  $d6_player_reached_fifth_creation_pt == 1
+  $d6_player_reached_sixth_creation_pt <> 1
+goto_if_false @DRIV6_7005
+if 
+  106@ == 0
+goto_if_false @DRIV6_6947
+94@ = -846.18
+95@ = -2809.6
+96@ = 70.32
+97@ = 112.41
+
+:DRIV6_6947
+if 
+  106@ == 1
+goto_if_false @DRIV6_7005
+94@ = -848.6
+95@ = -2806.3
+96@ = 70.29
+97@ = 111.76
+
+:DRIV6_7005
+World.ClearArea(1, 94@, 95@, 96@, 5.0)
+52@(104@,14i) = Car.Create(468, 94@, 95@, 96@)
+66@(104@,14i) = Char.CreateInsideCar(PedType.Mission1, 123, 52@(104@,14i))
+80@(104@,14i) = Char.CreateAsPassenger(PedType.Mission1, 122, 52@(104@,14i), 0)
+Car.SetHeading(52@(104@,14i), 97@)
+Car.SetOnlyDamagedByPlayer(52@(104@,14i), True)
+Car.SetTraction(52@(104@,14i), 2.0)
+Char.SetCanBeKnockedOffBike(66@(104@,14i), 2)
+Char.SetCanBeKnockedOffBike(80@(104@,14i), 2)
+if or
+  $d6_player_in_ravine == 1
+  $d6_player_in_tunnel == 1
+goto_if_false @DRIV6_7205
+Task.CarMission(66@(104@,14i), 52@(104@,14i), 34@, CarMission.EscortRear, 30.0, DrivingMode.AvoidCars)
+goto @DRIV6_7297
+
+:DRIV6_7205
+if 
+  106@ == 0
+goto_if_false @DRIV6_7251
+Task.CarMission(66@(104@,14i), 52@(104@,14i), 34@, CarMission.EscortLeft, 30.0, DrivingMode.AvoidCars)
+
+:DRIV6_7251
+if 
+  106@ == 1
+goto_if_false @DRIV6_7297
+Task.CarMission(66@(104@,14i), 52@(104@,14i), 34@, CarMission.EscortRight, 30.0, DrivingMode.AvoidCars)
+
+:DRIV6_7297
+Char.GiveWeapon(80@(104@,14i), WeaponType.Mp5, 99999)
+Task.DriveBy(80@(104@,14i), $scplayer, -1, 0.0, 0.0, 0.0, 999999.0, DriveByType.Ai, False, 60)
+if and
+  $d6_player_reached_second_creation_pt == 1
+  254@ <> 1
+goto_if_false @DRIV6_7399
+Car.SetForwardSpeed(52@(104@,14i), 30.0)
+goto @DRIV6_7413
+
+:DRIV6_7399
+Car.SetForwardSpeed(52@(104@,14i), 70.0)
+
+:DRIV6_7413
+49@ += 1
+104@ += 1
+106@ += 1
+goto @DRIV6_6140
+
+:DRIV6_7441
+98@ += 1
+
+:DRIV6_7448
+return 
+
+:DRIV6_7450
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_8719
+104@ = 0
+
+:DRIV6_7473
+if 
+  is_int_lvar_greater_than_int_lvar 49@ > 104@
+goto_if_false @DRIV6_8719
+if 
+  not Car.IsDead(52@(104@,14i))
+goto_if_false @DRIV6_8705
+if and
+  Char.IsDead(66@(104@,14i))
+  168@(104@,14i) <> 1
+goto_if_false @DRIV6_7554
+168@(104@,14i) = 1
+
+:DRIV6_7554
+if and
+  Char.IsDead(80@(104@,14i))
+  182@(104@,14i) <> 1
+goto_if_false @DRIV6_7596
+182@(104@,14i) = 1
+
+:DRIV6_7596
+if and
+  not Char.IsDead(66@(104@,14i))
+  182@(104@,14i) == 1
+  196@(104@,14i) <> 1
+goto_if_false @DRIV6_7688
+Task.CarMission(66@(104@,14i), 52@(104@,14i), 34@, CarMission.BlockCarFaraway, 30.0, DrivingMode.AvoidCars)
+224@(104@,14i) = 1
+196@(104@,14i) = 1
+
+:DRIV6_7688
+if and
+  not Char.IsDead(80@(104@,14i))
+  168@(104@,14i) == 1
+  210@(104@,14i) <> 1
+goto_if_false @DRIV6_7850
+if 
+  Char.IsInCar(80@(104@,14i), 52@(104@,14i))
+goto_if_false @DRIV6_7839
+94@, 95@, 96@ = Car.GetCoordinates(52@(104@,14i))
+Char.WarpFromCarToCoord(80@(104@,14i), 94@, 95@, -10.0)
+Char.WarpIntoCar(80@(104@,14i), 52@(104@,14i))
+Task.CarMission(80@(104@,14i), 52@(104@,14i), 34@, CarMission.BlockCarFaraway, 30.0, DrivingMode.AvoidCars)
+
+:DRIV6_7839
+210@(104@,14i) = 1
+
+:DRIV6_7850
+if and
+  not Char.IsDead(66@(104@,14i))
+  196@(104@,14i) == 1
+goto_if_false @DRIV6_8009
+if 
+  not Char.IsInCar(66@(104@,14i), 52@(104@,14i))
+goto_if_false @DRIV6_7976
+if 
+  224@(104@,14i) == 0
+goto_if_false @DRIV6_7969
+Task.CarMission(66@(104@,14i), 52@(104@,14i), 34@, CarMission.BlockCarFaraway, 30.0, DrivingMode.AvoidCars)
+224@(104@,14i) = 1
+
+:DRIV6_7969
+goto @DRIV6_8009
+
+:DRIV6_7976
+if 
+  224@(104@,14i) == 1
+goto_if_false @DRIV6_8009
+224@(104@,14i) = 0
+
+:DRIV6_8009
+if and
+  not Char.IsDead(80@(104@,14i))
+  210@(104@,14i) == 1
+goto_if_false @DRIV6_8168
+if 
+  not Char.IsInCar(80@(104@,14i), 52@(104@,14i))
+goto_if_false @DRIV6_8135
+if 
+  238@(104@,14i) == 0
+goto_if_false @DRIV6_8128
+Task.CarMission(80@(104@,14i), 52@(104@,14i), 34@, CarMission.BlockCarFaraway, 30.0, DrivingMode.AvoidCars)
+238@(104@,14i) = 1
+
+:DRIV6_8128
+goto @DRIV6_8168
+
+:DRIV6_8135
+if 
+  238@(104@,14i) == 1
+goto_if_false @DRIV6_8168
+238@(104@,14i) = 0
+
+:DRIV6_8168
+if and
+  not Char.IsDead(66@(104@,14i))
+  not Char.IsDead(80@(104@,14i))
+goto_if_false @DRIV6_8665
+if and
+  not Char.IsInCar(66@(104@,14i), 52@(104@,14i))
+  140@(104@,14i) == 0
+goto_if_false @DRIV6_8265
+Task.EnterCarAsDriver(66@(104@,14i), 52@(104@,14i), 10000)
+140@(104@,14i) = 1
+
+:DRIV6_8265
+if and
+  not Char.IsInCar(80@(104@,14i), 52@(104@,14i))
+  154@(104@,14i) == 0
+goto_if_false @DRIV6_8335
+Task.EnterCarAsPassenger(80@(104@,14i), 52@(104@,14i), 0, 10000)
+154@(104@,14i) = 1
+
+:DRIV6_8335
+if and
+  Char.IsInCar(66@(104@,14i), 52@(104@,14i))
+  Char.IsInCar(80@(104@,14i), 52@(104@,14i))
+goto_if_false @DRIV6_8665
+if or
+  140@(104@,14i) == 1
+  154@(104@,14i) == 1
+goto_if_false @DRIV6_8665
+if or
+  $d6_player_in_ravine == 1
+  $d6_player_in_tunnel == 1
+goto_if_false @DRIV6_8471
+Task.CarMission(66@(104@,14i), 52@(104@,14i), 34@, CarMission.EscortRear, 30.0, DrivingMode.AvoidCars)
+goto @DRIV6_8603
+
+:DRIV6_8471
+set_lvar_int_to_lvar_int 106@ = 104@
+
+:DRIV6_8479
+if 
+  106@ >= 2
+goto_if_false @DRIV6_8511
+106@ -= 2
+goto @DRIV6_8479
+
+:DRIV6_8511
+if 
+  106@ == 0
+goto_if_false @DRIV6_8557
+Task.CarMission(66@(104@,14i), 52@(104@,14i), 34@, CarMission.EscortLeft, 30.0, DrivingMode.AvoidCars)
+
+:DRIV6_8557
+if 
+  106@ == 1
+goto_if_false @DRIV6_8603
+Task.CarMission(66@(104@,14i), 52@(104@,14i), 34@, CarMission.EscortRight, 30.0, DrivingMode.AvoidCars)
+
+:DRIV6_8603
+Task.DriveBy(80@(104@,14i), $scplayer, -1, 0.0, 0.0, 0.0, 999999.0, DriveByType.Ai, False, 60)
+140@(104@,14i) = 0
+154@(104@,14i) = 0
+
+:DRIV6_8665
+if and
+  Char.IsDead(66@(104@,14i))
+  Char.IsDead(80@(104@,14i))
+goto_if_false @DRIV6_8705
+Car.SetMission(52@(104@,14i), CarMission.None)
+
+:DRIV6_8705
+104@ += 1
+goto @DRIV6_7473
+
+:DRIV6_8719
+return 
+
+:DRIV6_8721
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_8886
+104@ = 0
+
+:DRIV6_8744
+if 
+  is_int_lvar_greater_than_int_lvar 49@ > 104@
+goto_if_false @DRIV6_8886
+if and
+  not Car.IsDead(52@(104@,14i))
+  not Char.IsDead(66@(104@,14i))
+  not Char.IsDead(80@(104@,14i))
+goto_if_false @DRIV6_8872
+if and
+  Char.IsInCar(66@(104@,14i), 52@(104@,14i))
+  Char.IsInCar(80@(104@,14i), 52@(104@,14i))
+goto_if_false @DRIV6_8872
+Task.CarMission(66@(104@,14i), 52@(104@,14i), 34@, CarMission.EscortRear, 30.0, DrivingMode.AvoidCars)
+
+:DRIV6_8872
+104@ += 1
+goto @DRIV6_8744
+
+:DRIV6_8886
+return 
+
+:DRIV6_8888
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_9157
+104@ = 0
+
+:DRIV6_8911
+if 
+  is_int_lvar_greater_than_int_lvar 49@ > 104@
+goto_if_false @DRIV6_9157
+if and
+  not Car.IsDead(52@(104@,14i))
+  not Char.IsDead(66@(104@,14i))
+  not Char.IsDead(80@(104@,14i))
+goto_if_false @DRIV6_9143
+if and
+  Char.IsInCar(66@(104@,14i), 52@(104@,14i))
+  Char.IsInCar(80@(104@,14i), 52@(104@,14i))
+goto_if_false @DRIV6_9143
+set_lvar_int_to_lvar_int 106@ = 104@
+
+:DRIV6_9019
+if 
+  106@ >= 2
+goto_if_false @DRIV6_9051
+106@ -= 2
+goto @DRIV6_9019
+
+:DRIV6_9051
+if 
+  106@ == 0
+goto_if_false @DRIV6_9097
+Task.CarMission(66@(104@,14i), 52@(104@,14i), 34@, CarMission.EscortLeft, 30.0, DrivingMode.AvoidCars)
+
+:DRIV6_9097
+if 
+  106@ == 1
+goto_if_false @DRIV6_9143
+Task.CarMission(66@(104@,14i), 52@(104@,14i), 34@, CarMission.EscortRight, 30.0, DrivingMode.AvoidCars)
+
+:DRIV6_9143
+104@ += 1
+goto @DRIV6_8911
+
+:DRIV6_9157
+return 
+
+:DRIV6_9159
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_9450
+258@ = 1
+42@ = Car.GetOffsetInWorldCoords(43@, 44@, 34@, -1.0, 0.0, 0.0)
+45@ = Car.GetOffsetInWorldCoords(46@, 47@, 34@, 1.0, 0.0, 0.0)
+104@ = 0
+
+:DRIV6_9247
+if and
+  is_int_lvar_greater_than_int_lvar 49@ > 104@
+  258@ == 1
+goto_if_false @DRIV6_9425
+if 
+  not Car.IsDead(52@(104@,14i))
+goto_if_false @DRIV6_9411
+48@ = Car.GetDriver(52@(104@,14i))
+if 
+  48@ <> -1
+goto_if_false @DRIV6_9411
+if or
+  Car.Locate3D(52@(104@,14i), 0, 42@, 43@, 44@, 5.0, 5.0, 5.0)
+  Car.Locate3D(52@(104@,14i), 0, 45@, 46@, 47@, 5.0, 5.0, 5.0)
+goto_if_false @DRIV6_9411
+258@ = 0
+
+:DRIV6_9411
+104@ += 1
+goto @DRIV6_9247
+
+:DRIV6_9425
+if 
+  258@ == 1
+goto_if_false @DRIV6_9450
+TIMERA = 0
+
+:DRIV6_9450
+return 
+
+:DRIV6_9452
+104@ = 0
+
+:DRIV6_9459
+if 
+  is_int_lvar_greater_than_int_lvar 49@ > 104@
+goto_if_false @DRIV6_9766
+if 
+  not Car.IsDead(52@(104@,14i))
+goto_if_false @DRIV6_9752
+if 
+  not Char.IsDead(66@(104@,14i))
+goto_if_false @DRIV6_9578
+Task.CarDriveToCoord(66@(104@,14i), 52@(104@,14i), -2148.62, 1063.98, 79.73, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Char.SetKeepTask(66@(104@,14i), True)
+goto @DRIV6_9721
+
+:DRIV6_9578
+if 
+  not Char.IsDead(80@(104@,14i))
+goto_if_false @DRIV6_9721
+if 
+  Char.IsInCar(80@(104@,14i), 52@(104@,14i))
+goto_if_false @DRIV6_9679
+94@, 95@, 96@ = Car.GetCoordinates(52@(104@,14i))
+Char.WarpFromCarToCoord(80@(104@,14i), 94@, 95@, -10.0)
+Char.WarpIntoCar(80@(104@,14i), 52@(104@,14i))
+
+:DRIV6_9679
+Task.CarDriveToCoord(80@(104@,14i), 52@(104@,14i), -2148.62, 1063.98, 79.73, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+
+:DRIV6_9721
+if 
+  not Char.IsDead(80@(104@,14i))
+goto_if_false @DRIV6_9752
+Char.SetKeepTask(80@(104@,14i), True)
+
+:DRIV6_9752
+104@ += 1
+goto @DRIV6_9459
+
+:DRIV6_9766
+return 
+
+:DRIV6_9768
+104@ = 0
+
+:DRIV6_9775
+if 
+  is_int_lvar_greater_than_int_lvar 49@ > 104@
+goto_if_false @DRIV6_10124
+if 
+  not Car.IsDead(52@(104@,14i))
+goto_if_false @DRIV6_10110
+if 
+  not Char.IsDead(66@(104@,14i))
+goto_if_false @DRIV6_9924
+Task.LookAtChar(66@(104@,14i), $scplayer, 5000)
+if 
+  Char.IsInCar(66@(104@,14i), 52@(104@,14i))
+goto_if_false @DRIV6_9906
+Task.CarTempAction(66@(104@,14i), 52@(104@,14i), TempAction.HandbrakeStraight, 2000000)
+goto @DRIV6_9924
+
+:DRIV6_9906
+Task.EnterCarAsDriver(66@(104@,14i), 52@(104@,14i), -1)
+
+:DRIV6_9924
+if 
+  not Char.IsDead(80@(104@,14i))
+goto_if_false @DRIV6_10110
+Task.LookAtChar(80@(104@,14i), $scplayer, 5000)
+if 
+  210@(104@,14i) == 1
+goto_if_false @DRIV6_10063
+if 
+  Char.IsInCar(80@(104@,14i), 52@(104@,14i))
+goto_if_false @DRIV6_10038
+Task.CarTempAction(80@(104@,14i), 52@(104@,14i), TempAction.HandbrakeStraight, 2000000)
+goto @DRIV6_10056
+
+:DRIV6_10038
+Task.EnterCarAsDriver(80@(104@,14i), 52@(104@,14i), -1)
+
+:DRIV6_10056
+goto @DRIV6_10110
+
+:DRIV6_10063
+if 
+  not Char.IsInCar(80@(104@,14i), 52@(104@,14i))
+goto_if_false @DRIV6_10110
+Task.EnterCarAsPassenger(80@(104@,14i), 52@(104@,14i), 0, -1)
+
+:DRIV6_10110
+104@ += 1
+goto @DRIV6_9775
+
+:DRIV6_10124
+return 
+
+:DRIV6_10126
+104@ = 0
+
+:DRIV6_10133
+if 
+  is_int_lvar_greater_than_int_lvar 49@ > 104@
+goto_if_false @DRIV6_10193
+Char.Delete(66@(104@,14i))
+Char.Delete(80@(104@,14i))
+Car.Delete(52@(104@,14i))
+104@ += 1
+goto @DRIV6_10133
+
+:DRIV6_10193
+return 
+
+:DRIV6_10195
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_10218
+Car.LockDoors(34@, CarLock.Locked)
+
+:DRIV6_10218
+Camera.DoFade(0, 1000)
+
+:DRIV6_10225
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRIV6_10249
+wait 0
+goto @DRIV6_10225
+
+:DRIV6_10249
+World.ClearArea(0, 38@, 39@, 40@, 100.0)
+gosub @DRIV6_10126
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Streaming.RequestModel(330)
+
+:DRIV6_10297
+if 
+  not Streaming.HasModelLoaded(330)
+goto_if_false @DRIV6_10324
+wait 0
+goto @DRIV6_10297
+
+:DRIV6_10324
+267@ = Object.CreateNoOffset(330, -1561.4, -2721.1, 47.57)
+Object.SetVisible(267@, False)
+Task.PickUpObject($scplayer, 267@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 0)
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_10466
+Car.SetIdle(34@)
+Car.SetCoordinates(34@, 38@, 39@, -100.0)
+Car.SetHeading(34@, 55.5)
+Car.OpenDoorABit(34@, CarDoor.LeftFrontDoor, 0.0)
+Car.OpenDoorABit(34@, CarDoor.RightFrontDoor, 0.0)
+
+:DRIV6_10466
+Streaming.RequestAnimation("CAR_CHAT")
+Audio.LoadMissionAudio(23000, 3)
+
+:DRIV6_10485
+if or
+  not Streaming.HasAnimationLoaded("CAR_CHAT")
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @DRIV6_10523
+wait 0
+goto @DRIV6_10485
+
+:DRIV6_10523
+Camera.SetFixedPosition(-1573.6, -2743.74, 49.12, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1573.0, -2743.39, 49.05, SwitchType.JumpCut)
+Camera.DoFade(1, 1000)
+
+:DRIV6_10581
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRIV6_10628
+if 
+  Object.DoesExist(267@)
+goto_if_false @DRIV6_10617
+Object.SetVisible(267@, False)
+
+:DRIV6_10617
+wait 0
+goto @DRIV6_10581
+
+:DRIV6_10628
+259@ = 1
+skip_cutscene_start_internal @DRIV6_12111
+101@ = Sequence.Open()
+Task.PlayAnim(-1, "CARFONE_IN", "CAR_CHAT", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "CARFONE_LOOPA_TO_B", "CAR_CHAT", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "CARFONE_LOOPB", "CAR_CHAT", 4.0, True, False, False, False, -1)
+Sequence.Close(101@)
+Char.PerformSequence($scplayer, 101@)
+Sequence.Clear(101@)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+TIMERA = 0
+
+:DRIV6_10810
+if 
+  3000 > TIMERA
+goto_if_false @DRIV6_10863
+if 
+  Object.DoesExist(267@)
+goto_if_false @DRIV6_10852
+Object.SetVisible(267@, False)
+
+:DRIV6_10852
+wait 0
+goto @DRIV6_10810
+
+:DRIV6_10863
+Object.SetVisible(267@, True)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+135@ = 1
+gosub @DRIV6_12213
+TIMERA = 0
+102@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  not is_int_lvar_equal_to_constant 102@ == 7
+goto_if_false @DRIV6_10939
+103@ = Char.GetSequenceProgress($scplayer)
+goto @DRIV6_10946
+
+:DRIV6_10939
+103@ = 2
+
+:DRIV6_10946
+if or
+  2 > 103@
+  132@ == 0
+goto_if_false @DRIV6_11059
+wait 0
+if 
+  TIMERA > 1000
+goto_if_false @DRIV6_11001
+gosub @DRIV6_12532
+
+:DRIV6_11001
+102@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  not is_int_lvar_equal_to_constant 102@ == 7
+goto_if_false @DRIV6_11045
+103@ = Char.GetSequenceProgress($scplayer)
+goto @DRIV6_11052
+
+:DRIV6_11045
+103@ = 2
+
+:DRIV6_11052
+goto @DRIV6_10946
+
+:DRIV6_11059
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_11172
+107@ = Car.GetOffsetInWorldCoords(108@, 109@, 34@, 0.4, 0.51, 0.65)
+Camera.SetFixedPosition(107@, 108@, 109@, 0.0, 0.0, 0.0)
+107@ = Car.GetOffsetInWorldCoords(108@, 109@, 34@, -0.13, 0.22, 0.54)
+Camera.PointAtPoint(107@, 108@, 109@, SwitchType.JumpCut)
+
+:DRIV6_11172
+Task.PlayAnim($scplayer, "CARFONE_LOOPB", "CAR_CHAT", 4.0, True, False, False, False, -1)
+
+:DRIV6_11217
+if 
+  1 >= 132@
+goto_if_false @DRIV6_11253
+wait 0
+gosub @DRIV6_12532
+goto @DRIV6_11217
+
+:DRIV6_11253
+101@ = Sequence.Open()
+Task.PlayAnim(-1, "CARFONE_LOOPB_TO_A", "CAR_CHAT", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "CARFONE_LOOPA", "CAR_CHAT", 4.0, True, False, False, False, -1)
+Sequence.Close(101@)
+Char.PerformSequence($scplayer, 101@)
+Sequence.Clear(101@)
+
+:DRIV6_11369
+if 
+  4 >= 132@
+goto_if_false @DRIV6_11405
+wait 0
+gosub @DRIV6_12532
+goto @DRIV6_11369
+
+:DRIV6_11405
+101@ = Sequence.Open()
+Task.PlayAnim(-1, "CARFONE_LOOPA_TO_B", "CAR_CHAT", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "CARFONE_LOOPB", "CAR_CHAT", 4.0, True, False, False, False, -1)
+Sequence.Close(101@)
+Char.PerformSequence($scplayer, 101@)
+Sequence.Clear(101@)
+
+:DRIV6_11521
+if 
+  5 >= 132@
+goto_if_false @DRIV6_11597
+wait 0
+gosub @DRIV6_12532
+if and
+  131@ == 2
+  134@ <> 1
+goto_if_false @DRIV6_11590
+Char.StartFacialTalk($scplayer, 4000)
+134@ = 1
+
+:DRIV6_11590
+goto @DRIV6_11521
+
+:DRIV6_11597
+268@ = Car.Create(468, -1565.89, -2748.32, 48.21)
+Car.SetHeading(268@, 58.42)
+269@ = Char.CreateInsideCar(PedType.Mission1, 123, 268@)
+wait 1000
+if and
+  not Char.IsDead(269@)
+  not Car.IsDead(268@)
+goto_if_false @DRIV6_11702
+Task.CarDriveToCoord(269@, 268@, -1574.23, -2742.62, 48.2, 20.0, DriveMode.Accurate, 0, DrivingMode.PloughThrough)
+
+:DRIV6_11702
+Camera.SetFixedPosition(-1570.65, -2748.39, 48.35, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1571.99, -2745.26, 48.29, SwitchType.JumpCut)
+if 
+  not Char.IsDead(269@)
+goto_if_false @DRIV6_11850
+102@ = Char.GetScriptTaskStatus(269@, 1489)
+
+:DRIV6_11780
+if 
+  not is_int_lvar_equal_to_constant 102@ == 7
+goto_if_false @DRIV6_11850
+wait 0
+if 
+  not Char.IsDead(269@)
+goto_if_false @DRIV6_11836
+102@ = Char.GetScriptTaskStatus(269@, 1489)
+goto @DRIV6_11843
+
+:DRIV6_11836
+set_lvar_int_to_constant 102@ = 7
+
+:DRIV6_11843
+goto @DRIV6_11780
+
+:DRIV6_11850
+if 
+  not Char.IsDead(269@)
+goto_if_false @DRIV6_11882
+Task.LookAtChar(269@, $scplayer, 3000)
+wait 3000
+
+:DRIV6_11882
+if 
+  not Char.IsDead(269@)
+goto_if_false @DRIV6_11920
+Task.LookAtCoord(269@, -1572.73, -2747.12, 48.2, -2)
+
+:DRIV6_11920
+if 
+  is_int_lvar_greater_than_int_lvar 133@ > 132@
+goto_if_false @DRIV6_12034
+wait 0
+if 
+  not Char.IsDead(269@)
+goto_if_false @DRIV6_12013
+gosub @DRIV6_12532
+if and
+  131@ == 2
+  134@ <> 1
+goto_if_false @DRIV6_12006
+Char.StartFacialTalk(269@, 10000)
+134@ = 1
+
+:DRIV6_12006
+goto @DRIV6_12027
+
+:DRIV6_12013
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearPrints
+set_lvar_int_to_lvar_int 132@ = 133@
+
+:DRIV6_12027
+goto @DRIV6_11920
+
+:DRIV6_12034
+if and
+  not Char.IsDead(269@)
+  not Car.IsDead(268@)
+goto_if_false @DRIV6_12099
+Char.StopFacialTalk(269@)
+Char.ClearLookAt(269@)
+Task.CarDriveToCoord(269@, 268@, -1630.35, -2721.17, 48.62, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+
+:DRIV6_12099
+wait 3000
+259@ = 0
+
+:DRIV6_12111
+skip_cutscene_end 
+if 
+  259@ == 1
+goto_if_false @DRIV6_12131
+
+:DRIV6_12131
+Char.ClearTasks($scplayer)
+Char.StopFacialTalk($scplayer)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearPrints
+Char.Delete(269@)
+Car.Delete(268@)
+Object.Delete(267@)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_12196
+Car.LockDoors(34@, CarLock.Unlocked)
+
+:DRIV6_12196
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+return 
+
+:DRIV6_12213
+switch_start 135@ total_jumps 2 default_jump 1 @DRIV6_12502 jumps 0 @DRIV6_12276 1 @DRIV6_12334 -1 @DRIV6_12509 -1 @DRIV6_12509 -1 @DRIV6_12509 -1 @DRIV6_12509 -1 @DRIV6_12509
+
+:DRIV6_12276
+set_lvar_text_label 110@s = 'FAR5_AB'
+set_lvar_text_label 112@s = 'FAR5_AA'
+set_lvar_int_to_constant 124@ = 15601
+set_lvar_int_to_constant 125@ = 15600
+133@ = 2
+goto @DRIV6_12509
+
+:DRIV6_12334
+set_lvar_text_label 110@s = 'MTG02A'
+set_lvar_text_label 112@s = 'MTG02B'
+set_lvar_text_label 114@s = 'MTG02C'
+set_lvar_text_label 116@s = 'MTG02D'
+set_lvar_text_label 118@s = 'MTG02E'
+set_lvar_text_label 120@s = 'MTG02F'
+set_lvar_text_label 122@s = 'FAR5_AA'
+set_lvar_int_to_constant 124@ = 29408
+set_lvar_int_to_constant 125@ = 29409
+set_lvar_int_to_constant 126@ = 29410
+set_lvar_int_to_constant 127@ = 29411
+set_lvar_int_to_constant 128@ = 29412
+set_lvar_int_to_constant 129@ = 29413
+set_lvar_int_to_constant 130@ = 15600
+133@ = 7
+goto @DRIV6_12509
+
+:DRIV6_12502
+goto @DRIV6_12509
+
+:DRIV6_12509
+131@ = 0
+132@ = 0
+134@ = 0
+return 
+
+:DRIV6_12532
+if or
+  131@ == 0
+  131@ == 1
+goto_if_false @DRIV6_12602
+if 
+  is_int_lvar_greater_than_int_lvar 133@ > 132@
+goto_if_false @DRIV6_12602
+if 
+  TIMERB > 1000
+goto_if_false @DRIV6_12602
+gosub @DRIV6_12667
+
+:DRIV6_12602
+if 
+  131@ == 2
+goto_if_false @DRIV6_12665
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV6_12665
+131@ = 0
+132@ += 1
+134@ = 0
+Text.ClearPrints
+TIMERB = 0
+
+:DRIV6_12665
+return 
+
+:DRIV6_12667
+if 
+  131@ == 0
+goto_if_false @DRIV6_12703
+Audio.LoadMissionAudio(124@(132@,7i), 1)
+131@ = 1
+
+:DRIV6_12703
+if 
+  131@ == 1
+goto_if_false @DRIV6_12761
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV6_12761
+Text.PrintNow(110@(132@,7s), 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+131@ = 2
+
+:DRIV6_12761
+return 
+
+:DRIV6_12763
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:DRIV6_12781
+$flag_wuzi_mission_counter += 1
+Stat.RegisterMissionPassed('FAR_5')
+Stat.PlayerMadeProgress(1)
+Text.PrintWithNumberBig('M_PASSS', 8000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 8000)
+Stat.AwardPlayerMissionRespect(20)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+return 
+
+:DRIV6_12845
+if 
+  not Car.IsDead(34@)
+goto_if_false @DRIV6_12883
+Car.SetProofs(34@, False, False, False, False, False)
+Car.SetCanBeVisiblyDamaged(34@, True)
+
+:DRIV6_12883
+Streaming.MarkModelAsNoLongerNeeded(489)
+Streaming.MarkModelAsNoLongerNeeded(468)
+Streaming.MarkModelAsNoLongerNeeded(123)
+Streaming.MarkModelAsNoLongerNeeded(122)
+Streaming.MarkModelAsNoLongerNeeded(353)
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.RemoveAnimation("CAR_CHAT")
+Blip.Remove(262@)
+Blip.Remove(263@)
+Blip.Remove(264@)
+Blip.Remove(265@)
+gosub @DRIV6_9452
+Checkpoint.Delete(41@)
+Hud.ClearCounter($d6_door_health)
+Sequence.Clear(101@)
+CarGenerator.Switch($5280, 101)
+CarGenerator.Switch($5281, 101)
+CarGenerator.Switch($5282, 101)
+$timer_mobile_start = Clock.GetGameTimer()
+World.SetCarDensityMultiplier(1.0)
+$onmission = 0
+Mission.Finish
+return 
+

@@ -1,0 +1,284 @@
+//-------------External script 36 (SHOPKEEPER)---------------
+
+:SKBRAIN
+script_name 'SKBRAIN'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @SKBRAIN_114
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+1@ = Attractor.Add(0.0, 0.0, 0.0, 0.0, 0.0, -1)
+6@ = Object.Create(0, 0.0, 0.0, 0.0)
+
+:SKBRAIN_114
+if 
+  not Char.IsDead(0@)
+goto_if_false @SKBRAIN_138
+Char.SetDecisionMaker(0@, $iGlobalShopkeeperDM)
+
+:SKBRAIN_138
+Streaming.RequestAnimation("FOOD")
+
+:SKBRAIN_146
+if 
+  not Streaming.HasAnimationLoaded("FOOD")
+goto_if_false @SKBRAIN_176
+wait 0
+goto @SKBRAIN_146
+
+:SKBRAIN_176
+3@ = 1
+4@ = 0
+5@ = 0
+7@ = 0
+
+:SKBRAIN_204
+wait 0
+if and
+  not Char.IsDead(0@)
+  Player.IsPlaying($player1)
+  $iTerminateAllAmbience == 0
+goto_if_false @SKBRAIN_377
+$iAreaCode = Char.GetAreaVisible($scplayer)
+if or
+  $iAreaCode == 0
+  $iTerminateAllAmbience == 1
+goto_if_false @SKBRAIN_283
+gosub @SKBRAIN_1552
+goto @SKBRAIN_370
+
+:SKBRAIN_283
+if or
+  Player.IsTargetingChar($player1, 0@)
+  Char.HasBeenDamagedByChar(0@, $scplayer)
+goto_if_false @SKBRAIN_331
+if 
+  Object.DoesExist(6@)
+goto_if_false @SKBRAIN_331
+Object.Delete(6@)
+
+:SKBRAIN_331
+if 
+  $iSetPizzaPanic == 0
+goto_if_false @SKBRAIN_363
+gosub @SKBRAIN_391
+goto @SKBRAIN_370
+
+:SKBRAIN_363
+goto @SKBRAIN_1590
+
+:SKBRAIN_370
+goto @SKBRAIN_384
+
+:SKBRAIN_377
+gosub @SKBRAIN_1552
+
+:SKBRAIN_384
+goto @SKBRAIN_204
+
+:SKBRAIN_391
+switch_start 3@ total_jumps 3 default_jump 0 @SKBRAIN_496 jumps 1 @SKBRAIN_454 2 @SKBRAIN_468 3 @SKBRAIN_482 -1 @SKBRAIN_496 -1 @SKBRAIN_496 -1 @SKBRAIN_496 -1 @SKBRAIN_496
+
+:SKBRAIN_454
+gosub @SKBRAIN_498
+goto @SKBRAIN_496
+
+:SKBRAIN_468
+gosub @SKBRAIN_841
+goto @SKBRAIN_496
+
+:SKBRAIN_482
+gosub @SKBRAIN_1185
+goto @SKBRAIN_496
+
+:SKBRAIN_496
+return 
+
+:SKBRAIN_498
+switch_start 4@ total_jumps 2 default_jump 0 @SKBRAIN_839 jumps 0 @SKBRAIN_561 1 @SKBRAIN_737 -1 @SKBRAIN_839 -1 @SKBRAIN_839 -1 @SKBRAIN_839 -1 @SKBRAIN_839 -1 @SKBRAIN_839
+
+:SKBRAIN_561
+13@ = Char.GetOffsetInWorldCoords(14@, 15@, 0@, 0.0, 3.0, 3.0)
+2@ = World.GetUserOfClosestMapAttractor(13@, 14@, 15@, 20.0, #CJ_FF_TILL_QUE, "PCUSTOM")
+if 
+  2@ > -1
+goto_if_false @SKBRAIN_730
+10@ = Char.GetOffsetInWorldCoords(11@, 12@, 0@, -5.0, -5.0, -5.0)
+6@ = Object.Create(#PIZZAHIGH, 10@, 11@, 12@)
+Task.PlayAnim(0@, "SHP_TRAY_IN", "FOOD", 4.0, False, False, False, False, -1)
+4@ += 1
+
+:SKBRAIN_730
+goto @SKBRAIN_839
+
+:SKBRAIN_737
+9@ = 0.0
+if 
+  Char.IsPlayingAnim(0@, "SHP_TRAY_IN")
+goto_if_false @SKBRAIN_832
+9@ = Char.GetAnimCurrentTime(0@, "SHP_TRAY_IN")
+if 
+  9@ == 1.0
+goto_if_false @SKBRAIN_832
+4@ = 0
+3@ += 1
+
+:SKBRAIN_832
+goto @SKBRAIN_839
+
+:SKBRAIN_839
+return 
+
+:SKBRAIN_841
+switch_start 4@ total_jumps 3 default_jump 0 @SKBRAIN_1183 jumps 0 @SKBRAIN_904 1 @SKBRAIN_1044 2 @SKBRAIN_1143 -1 @SKBRAIN_1183 -1 @SKBRAIN_1183 -1 @SKBRAIN_1183 -1 @SKBRAIN_1183
+
+:SKBRAIN_904
+if 
+  Object.DoesExist(6@)
+goto_if_false @SKBRAIN_1023
+Task.PickUpObject(0@, 6@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 0)
+Task.PlayAnimNonInterruptable(0@, "SHP_TRAY_LIFT", "FOOD", 4.0, False, False, False, True, -1)
+TIMERB = 0
+4@ += 1
+goto @SKBRAIN_1037
+
+:SKBRAIN_1023
+4@ = 0
+3@ += 1
+
+:SKBRAIN_1037
+goto @SKBRAIN_1183
+
+:SKBRAIN_1044
+9@ = 0.0
+if 
+  Char.IsPlayingAnim(0@, "SHP_TRAY_LIFT")
+goto_if_false @SKBRAIN_1136
+9@ = Char.GetAnimCurrentTime(0@, "SHP_TRAY_LIFT")
+if 
+  9@ == 1.0
+goto_if_false @SKBRAIN_1136
+4@ += 1
+
+:SKBRAIN_1136
+goto @SKBRAIN_1183
+
+:SKBRAIN_1143
+if 
+  TIMERB > 2000
+goto_if_false @SKBRAIN_1176
+4@ = 0
+3@ += 1
+
+:SKBRAIN_1176
+goto @SKBRAIN_1183
+
+:SKBRAIN_1183
+return 
+
+:SKBRAIN_1185
+switch_start 4@ total_jumps 4 default_jump 0 @SKBRAIN_1550 jumps 0 @SKBRAIN_1248 1 @SKBRAIN_1340 2 @SKBRAIN_1397 3 @SKBRAIN_1529 -1 @SKBRAIN_1550 -1 @SKBRAIN_1550 -1 @SKBRAIN_1550
+
+:SKBRAIN_1248
+13@ = Char.GetOffsetInWorldCoords(14@, 15@, 0@, 0.0, 3.0, 3.0)
+2@ = World.GetUserOfClosestMapAttractor(13@, 14@, 15@, 20.0, #CJ_FF_TILL_QUE, "PCUSTOM")
+if 
+  2@ == -1
+goto_if_false @SKBRAIN_1333
+4@ += 1
+
+:SKBRAIN_1333
+goto @SKBRAIN_1550
+
+:SKBRAIN_1340
+Task.PlayAnimNonInterruptable(0@, "SHP_TRAY_RETURN", "FOOD", 4.0, False, False, False, False, -1)
+4@ += 1
+goto @SKBRAIN_1550
+
+:SKBRAIN_1397
+9@ = 0.0
+if 
+  Char.IsPlayingAnim(0@, "SHP_TRAY_RETURN")
+goto_if_false @SKBRAIN_1522
+9@ = Char.GetAnimCurrentTime(0@, "SHP_TRAY_RETURN")
+if 
+  9@ == 1.0
+goto_if_false @SKBRAIN_1522
+if 
+  Object.DoesExist(6@)
+goto_if_false @SKBRAIN_1507
+Object.Delete(6@)
+
+:SKBRAIN_1507
+Task.UseAttractor(0@, 1@)
+4@ += 1
+
+:SKBRAIN_1522
+goto @SKBRAIN_1550
+
+:SKBRAIN_1529
+4@ = 0
+3@ = 1
+goto @SKBRAIN_1550
+
+:SKBRAIN_1550
+return 
+
+:SKBRAIN_1552
+Streaming.RemoveAnimation("FOOD")
+Object.MarkAsNoLongerNeeded(6@)
+if 
+  not Char.IsDead(0@)
+goto_if_false @SKBRAIN_1586
+Char.ClearTasksImmediately(0@)
+
+:SKBRAIN_1586
+terminate_this_script 
+return 
+
+:SKBRAIN_1590
+wait 0
+if and
+  Player.IsPlaying($player1)
+  $iTerminateAllAmbience == 0
+goto_if_false @SKBRAIN_1762
+$iAreaCode = Char.GetAreaVisible($scplayer)
+if or
+  $iAreaCode == 0
+  $iTerminateAllAmbience == 1
+goto_if_false @SKBRAIN_1664
+gosub @SKBRAIN_1552
+goto @SKBRAIN_1755
+
+:SKBRAIN_1664
+if 
+  not Char.IsDead(0@)
+goto_if_false @SKBRAIN_1755
+7@ = Char.GetScriptTaskStatus(0@, 1476)
+if 
+  is_int_lvar_equal_to_constant 7@ == 7
+goto_if_false @SKBRAIN_1755
+Task.HandsUp(0@, -2)
+if 
+  Char.IsHoldingObject(0@, -1)
+goto_if_false @SKBRAIN_1755
+if 
+  Object.DoesExist(6@)
+goto_if_false @SKBRAIN_1755
+Object.Delete(6@)
+
+:SKBRAIN_1755
+goto @SKBRAIN_1769
+
+:SKBRAIN_1762
+gosub @SKBRAIN_1552
+
+:SKBRAIN_1769
+goto @SKBRAIN_1590
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

@@ -1,0 +1,214 @@
+//-------------External script 48 (BARGUY)---------------
+
+:BARGUY
+script_name 'BARGUY'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @BARGUY_60
+0@ = Char.Create(4, 0, 0.0, 0.0, 0.0)
+
+:BARGUY_60
+Streaming.RequestAnimation("BAR")
+
+:BARGUY_67
+if 
+  not Streaming.HasAnimationLoaded("BAR")
+goto_if_false @BARGUY_96
+wait 0
+goto @BARGUY_67
+
+:BARGUY_96
+3@ = 1
+4@ = 0
+5@ = 0
+11@ = 0
+
+:BARGUY_124
+wait 0
+if and
+  not Char.IsDead(0@)
+  Player.IsPlaying($player1)
+  $iTerminateAllAmbience == 0
+goto_if_false @BARGUY_272
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @BARGUY_258
+if 
+  $iSetCasinoPanic == 0
+goto_if_false @BARGUY_244
+if 
+  not Char.HasBeenDamagedByChar(0@, $scplayer)
+goto_if_false @BARGUY_223
+gosub @BARGUY_286
+goto @BARGUY_237
+
+:BARGUY_223
+$iSetCasinoPanic = 1
+goto @BARGUY_1067
+
+:BARGUY_237
+goto @BARGUY_251
+
+:BARGUY_244
+goto @BARGUY_1067
+
+:BARGUY_251
+goto @BARGUY_265
+
+:BARGUY_258
+gosub @BARGUY_1035
+
+:BARGUY_265
+goto @BARGUY_279
+
+:BARGUY_272
+gosub @BARGUY_1035
+
+:BARGUY_279
+goto @BARGUY_124
+
+:BARGUY_286
+switch_start 3@ total_jumps 1 default_jump 0 @BARGUY_363 jumps 1 @BARGUY_349 -1 @BARGUY_363 -1 @BARGUY_363 -1 @BARGUY_363 -1 @BARGUY_363 -1 @BARGUY_363 -1 @BARGUY_363
+
+:BARGUY_349
+gosub @BARGUY_365
+goto @BARGUY_363
+
+:BARGUY_363
+return 
+
+:BARGUY_365
+switch_start 4@ total_jumps 7 default_jump 0 @BARGUY_1033 jumps 0 @BARGUY_428 1 @BARGUY_488 2 @BARGUY_577 3 @BARGUY_674 4 @BARGUY_754 5 @BARGUY_826 6 @BARGUY_947
+
+:BARGUY_428
+10@ = Char.GetScriptTaskStatus(0@, 1481)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BARGUY_481
+Task.LookAbout(0@, -2)
+10@ = Char.SetSayContext(0@, 21)
+4@ += 1
+
+:BARGUY_481
+goto @BARGUY_1033
+
+:BARGUY_488
+10@ = Char.GetHealth(0@)
+if 
+  10@ == 99
+goto_if_false @BARGUY_570
+Char.SetHealth(0@, 100)
+Task.PlayAnim(0@, "BARCUSTOM_ORDER", "BAR", 4.0, False, False, False, False, 0)
+4@ += 1
+
+:BARGUY_570
+goto @BARGUY_1033
+
+:BARGUY_577
+10@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BARGUY_667
+Task.PlayAnim(0@, "BARCUSTOM_LOOP", "BAR", 4.0, True, False, False, False, 600000)
+10@ = Char.SetSayContext(0@, 21)
+4@ += 1
+
+:BARGUY_667
+goto @BARGUY_1033
+
+:BARGUY_674
+10@ = Char.GetHealth(0@)
+if 
+  10@ == 99
+goto_if_false @BARGUY_747
+Task.PlayAnim(0@, "BARCUSTOM_GET", "BAR", 4.0, False, False, False, False, 0)
+4@ += 1
+
+:BARGUY_747
+goto @BARGUY_1033
+
+:BARGUY_754
+10@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BARGUY_819
+7@ = Char.GetOffsetInWorldCoords(8@, 9@, 0@, 0.0, 0.1, 1.0)
+4@ += 1
+
+:BARGUY_819
+goto @BARGUY_1033
+
+:BARGUY_826
+if 
+  Char.IsMale(0@)
+goto_if_false @BARGUY_891
+Task.PlayAnim(0@, "DNK_STNDM_LOOP", "BAR", 4.0, True, False, False, False, 15000)
+goto @BARGUY_933
+
+:BARGUY_891
+Task.PlayAnim(0@, "DNK_STNDF_LOOP", "BAR", 4.0, True, False, False, False, 15000)
+
+:BARGUY_933
+4@ += 1
+goto @BARGUY_1033
+
+:BARGUY_947
+10@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BARGUY_1026
+Char.SetHealth(0@, 100)
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "BAR1"
+goto_if_false @BARGUY_1019
+4@ = 0
+goto @BARGUY_1026
+
+:BARGUY_1019
+gosub @BARGUY_1035
+
+:BARGUY_1026
+goto @BARGUY_1033
+
+:BARGUY_1033
+return 
+
+:BARGUY_1035
+Streaming.RemoveAnimation("BAR")
+if 
+  not Char.IsDead(0@)
+goto_if_false @BARGUY_1063
+Char.ClearTasksImmediately(0@)
+
+:BARGUY_1063
+terminate_this_script 
+return 
+
+:BARGUY_1067
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @BARGUY_1137
+11@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 11@ == 7
+goto_if_false @BARGUY_1130
+Task.Duck(0@, -2)
+
+:BARGUY_1130
+goto @BARGUY_1144
+
+:BARGUY_1137
+gosub @BARGUY_1035
+
+:BARGUY_1144
+goto @BARGUY_1067
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

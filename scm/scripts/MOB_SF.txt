@@ -1,0 +1,361 @@
+:MOB_SF
+set_deatharrest_state 0
+script_name 'MOB_SF'
+
+:MOB_SF_15
+wait 150
+if and
+  $onmission == 0
+  $flag_mobile_timer == 0
+goto_if_false @MOB_SF_57
+$timer_mobile_start = Clock.GetGameTimer()
+$flag_mobile_timer = 1
+
+:MOB_SF_57
+if 
+  $1403 == 1
+goto_if_false @MOB_SF_131
+if 
+  $1399 == 1
+goto_if_false @MOB_SF_131
+if 
+  $1398 == 1
+goto_if_false @MOB_SF_131
+if 
+  $1396 == 1
+goto_if_false @MOB_SF_131
+terminate_this_script 
+
+:MOB_SF_131
+ENTEXT_214()
+if 
+  Player.IsPlaying($player1)
+goto_if_false @MOB_SF_2048
+if 
+  $player_is_completely_safe_for_mobile == 1
+goto_if_false @MOB_SF_2041
+if 
+  is_int_var_greater_than_int_var $timer_mobile_diff > $call_delay
+goto_if_false @MOB_SF_2041
+if 
+  $flag_synd_mission_counter > 2
+goto_if_false @MOB_SF_342
+if 
+  $1401 == 0
+goto_if_false @MOB_SF_342
+$call_number = 34
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_273
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_SF_273
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_328
+$1401 = 1
+start_new_script @WUZI 
+Blip.Remove($wuzi_contact_blip)
+$wuzi_contact_blip = Blip.AddSpriteForContactPoint($wuzi_blip_icon, $wuziX, $wuziY, $wuziZ)
+
+:MOB_SF_328
+MOB_GF_3168()
+goto @MOB_SF_15
+
+:MOB_SF_342
+if 
+  $flag_garage_mission_counter > 0
+goto_if_false @MOB_SF_499
+if 
+  $flag_mob_sanfran == 0
+goto_if_false @MOB_SF_499
+$call_number = 29
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_424
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_SF_424
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_485
+$flag_mob_sanfran = 1
+start_new_script @BUY2 
+Blip.Remove($zero_contact_blip)
+$zero_contact_blip = Blip.AddSpriteForContactPoint(47, $propertyX[1], $propertyY[1], $propertyZ[1])
+Blip.ChangeDisplay($zero_contact_blip, BlipDisplay.BlipOnly)
+
+:MOB_SF_485
+MOB_GF_3168()
+goto @MOB_SF_15
+
+:MOB_SF_499
+if and
+  $flag_garage_mission_counter > 0
+  $zeros_property_bought == 1
+goto_if_false @MOB_SF_657
+if 
+  $1396 == 0
+goto_if_false @MOB_SF_657
+$call_number = 30
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_588
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_SF_588
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_643
+$1396 = 1
+start_new_script @ZERO 
+Blip.Remove($zero_contact_blip)
+$zero_contact_blip = Blip.AddSpriteForContactPoint($zero_blip_icon, $zeroX, $zeroY, $zeroZ)
+
+:MOB_SF_643
+MOB_GF_3168()
+goto @MOB_SF_15
+
+:MOB_SF_657
+if 
+  $flag_garage_mission_counter > 1
+goto_if_false @MOB_SF_881
+if 
+  $1397 == 0
+goto_if_false @MOB_SF_881
+$call_number = 31
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_739
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_SF_739
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_867
+$1397 = 1
+start_new_script @TRACE 
+$dschool_contact_blip = Blip.AddSpriteForContactPoint(36, $testsX, $testsY, $testsZ)
+Blip.ChangeDisplay($dschool_contact_blip, BlipDisplay.BlipOnly)
+start_new_script @BSCHOO 
+Blip.Remove($boat_school_blip)
+$boat_school_blip = Blip.AddShortRangeSpriteForContactPoint(36, $boatsX, $boatsY, $boatsZ)
+Blip.ChangeDisplay($boat_school_blip, BlipDisplay.BlipOnly)
+start_new_script @BIKES 
+Blip.Remove($bike_school_blip)
+$bike_school_blip = Blip.AddShortRangeSpriteForContactPoint(36, $bikesX, $bikesY, $bikesZ)
+Blip.ChangeDisplay($bike_school_blip, BlipDisplay.BlipOnly)
+
+:MOB_SF_867
+MOB_GF_3168()
+goto @MOB_SF_15
+
+:MOB_SF_881
+if and
+  $driving_test_passed == 1
+  $flag_desert_mission_counter > 3
+goto_if_false @MOB_SF_1093
+if 
+  $1398 == 0
+goto_if_false @MOB_SF_1093
+$call_number = 32
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_970
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_SF_970
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_1079
+$1398 = 1
+Blip.Remove($trace_contact_blip)
+Blip.Remove($529)
+Blip.Remove($530)
+Blip.Remove($531)
+$trace_contact_blip = Blip.AddShortRangeSpriteForContactPoint(53, $traceX[0], $traceY[0], $traceZ[0])
+$529 = Blip.AddShortRangeSpriteForContactPoint(53, $traceX[1], $traceY[1], $traceZ[1])
+$530 = Blip.AddShortRangeSpriteForContactPoint(53, $traceX[2], $traceY[2], $traceZ[2])
+$531 = Blip.AddShortRangeSpriteForContactPoint(53, $traceX[3], $traceY[3], $traceZ[3])
+
+:MOB_SF_1079
+MOB_GF_3168()
+goto @MOB_SF_15
+
+:MOB_SF_1093
+if and
+  $1404 == 1
+  $driving_test_passed == 1
+goto_if_false @MOB_SF_1257
+if 
+  $1399 == 0
+goto_if_false @MOB_SF_1257
+$call_number = 33
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_1182
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_SF_1182
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_1243
+$1399 = 1
+start_new_script @BUY1 
+Blip.Remove($showroom_contact_blip)
+$showroom_contact_blip = Blip.AddSpriteForContactPoint(13, $propertyX[0], $propertyY[0], $propertyZ[0])
+Blip.ChangeDisplay($showroom_contact_blip, BlipDisplay.BlipOnly)
+
+:MOB_SF_1243
+MOB_GF_3168()
+goto @MOB_SF_15
+
+:MOB_SF_1257
+if 
+  $flag_synd_mission_counter == 10
+goto_if_false @MOB_SF_1465
+if 
+  $1404 == 0
+goto_if_false @MOB_SF_1465
+$call_number = 41
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_1339
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_SF_1339
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_1451
+$1404 = 1
+start_new_script @DESERT 
+Blip.Remove($1733)
+Pickup.Remove($grove_save_pickup[16])
+$grove_save_pickup[16] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[16], $save_pickupY[16], $save_pickupZ[16])
+$number_of_save_icons = 17
+$1733 = Blip.AddShortRangeSpriteForContactPoint(35, $save_pickupX[16], $save_pickupY[16], $save_pickupZ[16])
+Blip.ChangeDisplay($1733, BlipDisplay.BlipOnly)
+Blip.Remove($desert_contact_blip)
+$desert_contact_blip = Blip.AddSpriteForContactPoint(37, $desertX, $desertY, $desertZ)
+
+:MOB_SF_1451
+MOB_GF_3168()
+goto @MOB_SF_15
+
+:MOB_SF_1465
+if 
+  $flag_desert_mission_counter > 0
+goto_if_false @MOB_SF_1607
+if 
+  $1400 == 0
+goto_if_false @MOB_SF_1607
+$call_number = 42
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_1547
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_SF_1547
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_1593
+$1400 = 1
+Blip.Remove($desert_contact_blip)
+$desert_contact_blip = Blip.AddSpriteForContactPoint(37, $desertX, $desertY, $desertZ)
+
+:MOB_SF_1593
+MOB_GF_3168()
+goto @MOB_SF_15
+
+:MOB_SF_1607
+if 
+  $flag_desert_mission_counter > 1
+goto_if_false @MOB_SF_1750
+if 
+  $1402 == 0
+goto_if_false @MOB_SF_1750
+$call_number = 43
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_1689
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_SF_1689
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_1736
+$1402 = 1
+Blip.Remove($desert_contact_blip)
+$desert_contact_blip = Blip.AddSpriteForContactPoint($desert_blip_icon, $desertX, $desertY, $desertZ)
+
+:MOB_SF_1736
+MOB_GF_3168()
+goto @MOB_SF_15
+
+:MOB_SF_1750
+if 
+  $pilot_test_passed > 0
+goto_if_false @MOB_SF_2041
+if 
+  $1403 == 0
+goto_if_false @MOB_SF_2041
+$call_number = 35
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_1832
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_SF_1832
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_SF_2027
+$1403 = 1
+terminate_all_scripts_with_this_name 'MOB_VEG'
+start_new_script @MOB_VEG 
+start_new_script @CASINO 
+Pickup.Remove($grove_save_pickup[17])
+$grove_save_pickup[17] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[17], $save_pickupY[17], $save_pickupZ[17])
+$number_of_save_icons = 18
+$1734 = Blip.AddShortRangeSpriteForContactPoint(35, $save_pickupX[17], $save_pickupY[17], $save_pickupZ[17])
+Blip.ChangeDisplay($1734, BlipDisplay.BlipOnly)
+Blip.Remove($casino_contact_blip)
+$casino_contact_blip = Blip.AddSpriteForContactPoint($casino_blip_icon, $casinoX, $casinoY, $casinoZ)
+Blip.SetEntryExit($casino_contact_blip, 2026.603, 1007.735, 20.0)
+Garage.Activate('VECMOD')
+$2590 = Blip.AddShortRangeSpriteForCoord(27, 2382.2, 1044.0, 9.8)
+Stat.SetInt(StatId.PassedCasino3, 1)
+start_new_script @LITCAS 
+
+:MOB_SF_2027
+MOB_GF_3168()
+goto @MOB_SF_15
+
+:MOB_SF_2041
+goto @MOB_SF_2055
+
+:MOB_SF_2048
+$flag_cell_nation = 0
+
+:MOB_SF_2055
+goto @MOB_SF_15
+

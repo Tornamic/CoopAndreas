@@ -1,0 +1,44 @@
+:SCRASH
+script_name 'SCRASH'
+
+:SCRASH_11
+wait $mission_trigger_wait_time
+if 
+  $flag_scrash_mission_counter == 2
+goto_if_false @SCRASH_36
+terminate_this_script 
+
+:SCRASH_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @SCRASH_239
+if 
+  $onmission == 0
+goto_if_false @SCRASH_239
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $scrashX, $scrashY, $scrashZ, 1.2, 1.2, 2.0)
+goto_if_false @SCRASH_239
+if 
+  Player.CanStartMission($player1)
+goto_if_false @SCRASH_239
+if 
+  $flag_scrash_mission_counter == 0
+goto_if_false @SCRASH_180
+$onmission = 1
+Text.PrintBig('SCRA_1', 1000, TextStyle.BottomRight)
+PSAVE1_2765()
+Mission.LoadAndLaunchInternal(51) // 555 WE TIP
+
+:SCRASH_180
+if and
+  $flag_scrash_mission_counter == 1
+  $flag_synd_mission_counter == 6
+goto_if_false @SCRASH_239
+$onmission = 1
+Text.PrintBig('SCRA_2', 1000, TextStyle.BottomRight)
+PSAVE1_2765()
+Mission.LoadAndLaunchInternal(52) // Snail Trail
+
+:SCRASH_239
+goto @SCRASH_11
+

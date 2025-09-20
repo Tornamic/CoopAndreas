@@ -1,0 +1,65 @@
+:IMPEXPC
+script_name 'IMPEXPC'
+
+:IMPEXPC_11
+wait 5000
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPC_306
+if 
+  $onmission == 0
+goto_if_false @IMPEXPC_306
+if 
+  $import_export_is_active == 1
+goto_if_false @IMPEXPC_306
+if and
+  not Text.IsHelpMessageBeingDisplayed
+  not Text.IsMessageBeingDisplayed
+goto_if_false @IMPEXPC_306
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @IMPEXPC_281
+if 
+  0@ == 0
+goto_if_false @IMPEXPC_274
+$car = Char.StoreCarIsInNoSave($scplayer)
+1@ = Car.GetModel($car)
+2@ = 0
+3@ = 0
+
+:IMPEXPC_147
+if 
+  10 > 2@
+goto_if_false @IMPEXPC_238
+if 
+  is_int_var_equal_to_int_lvar $current_wanted_car_list(2@,10i) == 1@
+goto_if_false @IMPEXPC_224
+if 
+  $current_wanted_car_status(2@,10i) == 0
+goto_if_false @IMPEXPC_224
+3@ = 1
+2@ = 10
+
+:IMPEXPC_224
+2@ += 1
+goto @IMPEXPC_147
+
+:IMPEXPC_238
+if 
+  3@ == 1
+goto_if_false @IMPEXPC_274
+Text.PrintHelp('IE22')
+0@ = 1
+
+:IMPEXPC_274
+goto @IMPEXPC_306
+
+:IMPEXPC_281
+if 
+  0@ == 1
+goto_if_false @IMPEXPC_306
+0@ = 0
+
+:IMPEXPC_306
+goto @IMPEXPC_11
+

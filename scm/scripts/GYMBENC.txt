@@ -1,0 +1,1319 @@
+//-------------External script 12 (GYMBENCH)---------------
+
+:GYMBENC
+script_name 'GYMBENC'
+$bpress_resistance = 0.0
+$temp_muscle_stat = 0.0
+$bench_playing = 2
+$play_bench_once = 0
+23@ = 0
+24@ = 0
+25@ = 0
+26@ = 0
+27@ = 0
+$bench_has_KD = 0
+$animframe_bppickup = 0.0
+$animframe_bpgetoff = 0.0
+$animframe_freepickup = 0.0
+$animframe_freegetoff = 0.0
+21@ = 1
+$reps_bpress = 0
+$bench_txt = 0
+22@ = 0
+29@ = 0
+TIMERA = 0
+TIMERB = 0
+if 
+  29@ == 1
+goto_if_false @GYMBENC_217
+0@ = Object.CreateNoOffset(#BEACHTOWEL01, 0.0, 0.0, 0.0)
+
+:GYMBENC_217
+if 
+  Object.DoesExist(0@)
+goto_if_false @GYMBENC_277
+5@, 6@, 7@ = Object.GetCoordinates(0@)
+8@, 9@, 10@ = Object.GetCoordinates(0@)
+11@ = Object.GetHeading(0@)
+3@ = Object.GetHeading(0@)
+
+:GYMBENC_277
+1@ = 0.0
+2@ = 0.0
+12@ = 0.0
+13@ = 0.0
+14@ = 0.0
+21@ = 1
+$reps_bpress = 0
+set_lvar_float_to_lvar_float 14@ = 7@
+14@ += 1.7
+3@ -= 180.0
+set_lvar_float_to_lvar_float 4@ = 3@
+4@ -= 270.0
+1@ = Math.Sin(4@)
+2@ = Math.Cos(4@)
+1@ *= 1.0
+2@ *= 1.0
+add_float_lvar_to_float_lvar 5@ += 2@
+add_float_lvar_to_float_lvar 6@ += 1@
+1@ *= 3.0
+2@ *= 3.0
+set_lvar_float_to_lvar_float 12@ = 5@
+add_float_lvar_to_float_lvar 12@ += 2@
+set_lvar_float_to_lvar_float 13@ = 6@
+add_float_lvar_to_float_lvar 13@ += 1@
+11@ += 90.0
+1@ = Math.Sin(11@)
+2@ = Math.Cos(11@)
+1@ *= 1.0
+2@ *= 1.0
+sub_float_lvar_from_float_lvar 8@ -= 2@
+sub_float_lvar_from_float_lvar 9@ -= 1@
+30@ = Object.Create(#KMB_BPRESS, 8@, 9@, 10@)
+Object.AttachToObject(30@, 0@, -0.45, 0.45, 0.9, 90.0, 180.0, 270.0)
+3@ -= 180.0
+$levelbar_bike = 1
+$are_anims_loaded = 0
+
+:GYMBENC_632
+wait 0
+if 
+  not Object.DoesExist(0@)
+goto_if_false @GYMBENC_659
+Object.Delete(30@)
+terminate_this_script 
+
+:GYMBENC_659
+if 
+  not Object.IsWithinBrainActivationRange(0@)
+goto_if_false @GYMBENC_682
+Object.Delete(30@)
+terminate_this_script 
+
+:GYMBENC_682
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GYMBENC_8093
+if and
+  $playerexercising_flag == 0
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_1102
+if and
+  23@ == 0
+  not Player.IsUsingJetpack($player1)
+goto_if_false @GYMBENC_1102
+if 
+  27@ == 0
+goto_if_false @GYMBENC_1061
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 5@, 6@, 7@, 1.2, 1.2, 4.0)
+goto_if_false @GYMBENC_1027
+if 
+  22@ == 0
+goto_if_false @GYMBENC_840
+Text.PrintHelpForever('GYM1_81')
+22@ = 1
+
+:GYMBENC_840
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @GYMBENC_1020
+if or
+  $onmission == 0
+  $gym_is_running == 1
+goto_if_false @GYMBENC_1004
+$gym_day, $gym_month = Clock.GetCurrentDate()
+if or
+  is_int_var_greater_than_int_var $gym_day > $gym_final_day
+  is_int_var_greater_than_int_var $gym_month > $gym_final_month
+goto_if_false @GYMBENC_981
+23@ = 1
+$playerexercising_flag = 1
+Player.SetControl($player1, False)
+Char.SetCoordinatesDontWarpGang($scplayer, 5@, 6@, 7@)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Char.SetHeading($scplayer, 3@)
+$gym_TIMERC = 0
+goto @GYMBENC_997
+
+:GYMBENC_981
+Text.PrintNow('GYM1_1A', 4000, 1)
+
+:GYMBENC_997
+goto @GYMBENC_1020
+
+:GYMBENC_1004
+Text.PrintNow('GYM1_90', 4000, 1)
+
+:GYMBENC_1020
+goto @GYMBENC_1054
+
+:GYMBENC_1027
+if 
+  22@ == 1
+goto_if_false @GYMBENC_1054
+Text.ClearHelp
+22@ = 0
+
+:GYMBENC_1054
+goto @GYMBENC_1102
+
+:GYMBENC_1061
+if 
+  not Char.LocateOnFoot2D($scplayer, 0, 5@, 6@, 2.0, 2.0)
+goto_if_false @GYMBENC_1102
+27@ = 0
+
+:GYMBENC_1102
+if and
+  23@ == 1
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_8093
+if 
+  $playerexercising_flag == 1
+goto_if_false @GYMBENC_1221
+Char.SetCollision($scplayer, False)
+Player.SetControl($player1, False)
+Char.SetCoordinatesDontWarpGang($scplayer, 5@, 6@, 7@)
+Camera.SetFixedPosition(12@, 13@, 14@, 0.0, 0.0, 0.0)
+Char.SetHeading($scplayer, 3@)
+Camera.PointAtChar($scplayer, CameraMode.Fixed, SwitchType.JumpCut)
+$playerexercising_flag = 2
+
+:GYMBENC_1221
+if 
+  $are_anims_loaded == 0
+goto_if_false @GYMBENC_1311
+Streaming.RequestAnimation("BENCHPRESS")
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Audio.LoadMissionAudio(1820, 4)
+
+:GYMBENC_1264
+if or
+  not Streaming.HasAnimationLoaded("BENCHPRESS")
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @GYMBENC_1304
+wait 0
+goto @GYMBENC_1264
+
+:GYMBENC_1304
+$are_anims_loaded = 1
+
+:GYMBENC_1311
+if and
+  $playerexercising_flag == 2
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_2547
+Text.PrintHelpForever('GYM1_71')
+if or
+  $current_Language == 4
+  $current_Language == 2
+goto_if_false @GYMBENC_1538
+$main_menu_bench = Menu.Create('GYM1_E', 31.0, 180.0, 184.0, True, True, 1, 0)
+Menu.SetColumn($main_menu_bench, 0, 'GYM1_72', 'GYM1_8', 'GYM1_9', 'GYM1_10', 'GYM1_11', 'GYM1_12', 'GYM1_13', 'GYM1_14', 'GYM1_15', 'GYM1_16', 'GYM1_17', 'DUMMY', 'DUMMY')
+goto @GYMBENC_1699
+
+:GYMBENC_1538
+$main_menu_bench = Menu.Create('GYM1_E', 31.0, 150.0, 184.0, True, True, 1, 0)
+Menu.SetColumn($main_menu_bench, 0, 'GYM1_72', 'GYM1_8', 'GYM1_9', 'GYM1_10', 'GYM1_11', 'GYM1_12', 'GYM1_13', 'GYM1_14', 'GYM1_15', 'GYM1_16', 'GYM1_17', 'DUMMY', 'DUMMY')
+
+:GYMBENC_1699
+Menu.SetActiveItem($main_menu_bench, 0)
+
+:GYMBENC_1706
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_1824
+wait 0
+$gym_TIMERC += 1
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+  $gym_TIMERC > 20
+goto_if_false @GYMBENC_1771
+Text.ClearHelp
+Menu.Delete($main_menu_bench)
+goto @GYMBENC_7348
+
+:GYMBENC_1771
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMBENC_1817
+Text.ClearHelp
+21@ = Menu.GetItemSelected($main_menu_bench)
+21@ += 1
+Menu.Delete($main_menu_bench)
+goto @GYMBENC_1824
+
+:GYMBENC_1817
+goto @GYMBENC_1706
+
+:GYMBENC_1824
+if 
+  21@ == 1
+goto_if_false @GYMBENC_1862
+$weightbp = 1.0
+20@ = 5.0
+
+:GYMBENC_1862
+if 
+  21@ == 2
+goto_if_false @GYMBENC_1900
+20@ = 5.2
+$weightbp = 2.0
+
+:GYMBENC_1900
+if 
+  21@ == 3
+goto_if_false @GYMBENC_1938
+20@ = 5.3
+$weightbp = 3.0
+
+:GYMBENC_1938
+if 
+  21@ == 4
+goto_if_false @GYMBENC_1976
+20@ = 5.5
+$weightbp = 4.0
+
+:GYMBENC_1976
+if 
+  21@ == 5
+goto_if_false @GYMBENC_2014
+20@ = 6.0
+$weightbp = 5.0
+
+:GYMBENC_2014
+if 
+  21@ == 6
+goto_if_false @GYMBENC_2052
+20@ = 6.5
+$weightbp = 6.0
+
+:GYMBENC_2052
+if 
+  21@ == 7
+goto_if_false @GYMBENC_2090
+20@ = 7.0
+$weightbp = 7.0
+
+:GYMBENC_2090
+if 
+  21@ == 8
+goto_if_false @GYMBENC_2128
+20@ = 7.5
+$weightbp = 8.0
+
+:GYMBENC_2128
+if 
+  21@ == 9
+goto_if_false @GYMBENC_2166
+20@ = 8.0
+$weightbp = 9.0
+
+:GYMBENC_2166
+if 
+  21@ == 10
+goto_if_false @GYMBENC_2204
+20@ = 8.5
+$weightbp = 10.0
+
+:GYMBENC_2204
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_2266
+Task.PlayAnim($scplayer, "GYM_BP_GETON", "BENCHPRESS", 4.0, False, False, False, True, -1)
+
+:GYMBENC_2266
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_2540
+if and
+  Char.IsPlayingAnim($scplayer, "GYM_BP_GETON")
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_2540
+$animframe_bppickup = Char.GetAnimCurrentTime($scplayer, "GYM_BP_GETON")
+
+:GYMBENC_2343
+if 
+  $animframe_bppickup <= 0.75
+goto_if_false @GYMBENC_2413
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_2406
+$animframe_bppickup = Char.GetAnimCurrentTime($scplayer, "GYM_BP_GETON")
+
+:GYMBENC_2406
+goto @GYMBENC_2343
+
+:GYMBENC_2413
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @GYMBENC_2436
+Audio.ReportMissionAudioEventAtObject(0@, 1117)
+
+:GYMBENC_2436
+Object.FreezePosition(30@, False)
+Object.Detach(30@, 0.0, 0.0, 0.0, False)
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_2526
+Task.PickUpObject($scplayer, 30@, 0.0, 0.0, -0.1, 6, 16, "NULL", "NULL", -1)
+
+:GYMBENC_2526
+$playerexercising_flag = 4
+TIMERA = 0
+
+:GYMBENC_2540
+$playerexercising_flag = 4
+
+:GYMBENC_2547
+if and
+  $playerexercising_flag == 4
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_3225
+if 
+  $bench_txt == 0
+goto_if_false @GYMBENC_2608
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_37')
+$bench_txt = 1
+
+:GYMBENC_2608
+if and
+  TIMERA > 6000
+  $bench_txt == 1
+goto_if_false @GYMBENC_2654
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_25')
+$bench_txt = 2
+
+:GYMBENC_2654
+if and
+  TIMERA > 9000
+  $bench_txt == 2
+goto_if_false @GYMBENC_2689
+Text.ClearHelp
+$bench_txt = 101
+
+:GYMBENC_2689
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_BP_GETON")
+goto_if_false @GYMBENC_2776
+$animframe = Char.GetAnimCurrentTime($scplayer, "GYM_BP_GETON")
+if 
+  $animframe == 1.0
+goto_if_false @GYMBENC_2769
+goto @GYMBENC_2830
+
+:GYMBENC_2769
+goto @GYMBENC_3225
+
+:GYMBENC_2776
+if and
+  $playernextset_flag == 1
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_3225
+$reps_bpress = 0
+$powerbar = 0
+Hud.ClearCounter($reps_bpress)
+Hud.ClearCounter($powerbar)
+goto @GYMBENC_2830
+
+:GYMBENC_2830
+$upperbodymusclestat_gym = Stat.GetFloat(23)
+$upperbodymusclestat_gym /= 30.0
+if 
+  0.0 > $upperbodymusclestat_gym
+goto_if_false @GYMBENC_2878
+$upperbodymusclestat_gym = 0.0
+
+:GYMBENC_2878
+set_var_float_to_var_float $bpress_resistance = $upperbodymusclestat_gym
+$bpress_resistance += 30.0
+if 
+  $bpress_resistance > 75.0
+goto_if_false @GYMBENC_2927
+$bpress_resistance = 75.0
+
+:GYMBENC_2927
+cset_lvar_float_to_var_int 19@ = integer $reps_bpress
+set_var_float_to_var_float $animationtobeplayed = $bpress_resistance
+sub_float_var_from_float_var $animationtobeplayed -= $weightbp
+if 
+  18.0 >= $animationtobeplayed
+goto_if_false @GYMBENC_3017
+Task.PlayAnim($scplayer, "GYM_BP_UP_B", "BENCHPRESS", 8.0, False, False, False, True, -1)
+
+:GYMBENC_3017
+if 
+  $animationtobeplayed > 18.0
+goto_if_false @GYMBENC_3104
+if 
+  24.0 >= $animationtobeplayed
+goto_if_false @GYMBENC_3104
+Task.PlayAnim($scplayer, "GYM_BP_UP_A", "BENCHPRESS", 8.0, False, False, False, True, -1)
+
+:GYMBENC_3104
+if 
+  $animationtobeplayed > 24.0
+goto_if_false @GYMBENC_3175
+Task.PlayAnim($scplayer, "GYM_BP_UP_SMOOTH", "BENCHPRESS", 8.0, False, False, False, True, -1)
+
+:GYMBENC_3175
+Hud.DisplayNthCounterWithString($powerbar, CounterDisplay.Bar, 1, 'GYM1_1')
+Hud.DisplayNthCounterWithString($reps_bpress, CounterDisplay.Number, 2, 'GYM1_2')
+$animstate_flag = 1
+$playerexercising_flag = 5
+
+:GYMBENC_3225
+if and
+  $playerexercising_flag == 5
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_6956
+$upperbodymusclestat_gym = Stat.GetFloat(23)
+$upperbodymusclestat_gym /= 30.0
+if 
+  0.0 > $upperbodymusclestat_gym
+goto_if_false @GYMBENC_3296
+$upperbodymusclestat_gym = 0.0
+
+:GYMBENC_3296
+set_var_float_to_var_float $bpress_resistance = $upperbodymusclestat_gym
+$bpress_resistance += 20.0
+if 
+  $bpress_resistance > 75.0
+goto_if_false @GYMBENC_3345
+$bpress_resistance = 75.0
+
+:GYMBENC_3345
+if 
+  $bench_txt == 0
+goto_if_false @GYMBENC_3383
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_37')
+$bench_txt = 1
+
+:GYMBENC_3383
+if and
+  TIMERA > 6000
+  $bench_txt == 1
+goto_if_false @GYMBENC_3429
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_25')
+$bench_txt = 2
+
+:GYMBENC_3429
+if and
+  TIMERA > 9000
+  $bench_txt == 2
+goto_if_false @GYMBENC_3464
+Text.ClearHelp
+$bench_txt = 101
+
+:GYMBENC_3464
+if or
+  $animstate_flag == 1
+  $animstate_flag == 3
+goto_if_false @GYMBENC_3517
+$weightdb /= 2.0
+sub_timed_float_var_from_float_lvar 18@ -= frame_delta_time * $weightbp
+$weightdb *= 2.0
+
+:GYMBENC_3517
+if 
+  $animstate_flag == 4
+goto_if_false @GYMBENC_3545
+sub_timed_val_from_float_lvar 18@ -= frame_delta_time * 2.0
+
+:GYMBENC_3545
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMBENC_3587
+if 
+  26@ == 1
+goto_if_false @GYMBENC_3587
+26@ = 2
+
+:GYMBENC_3587
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @GYMBENC_3629
+if 
+  26@ == 3
+goto_if_false @GYMBENC_3629
+26@ = 0
+
+:GYMBENC_3629
+if or
+  $animstate_flag == 1
+  $animstate_flag == 3
+goto_if_false @GYMBENC_3766
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @GYMBENC_3710
+if 
+  26@ == 0
+goto_if_false @GYMBENC_3710
+add_float_var_to_float_lvar 18@ += $bpress_resistance
+26@ = 1
+
+:GYMBENC_3710
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMBENC_3766
+if 
+  26@ == 2
+goto_if_false @GYMBENC_3766
+add_float_var_to_float_lvar 18@ += $bpress_resistance
+26@ = 3
+
+:GYMBENC_3766
+if 
+  0.0 > 18@
+goto_if_false @GYMBENC_3797
+18@ = 0.0
+
+:GYMBENC_3797
+if 
+  18@ > 25.0
+goto_if_false @GYMBENC_3829
+$bench_sfx = Char.SetSayContext($scplayer, 354)
+
+:GYMBENC_3829
+if 
+  18@ >= 100.0
+goto_if_false @GYMBENC_3885
+18@ = 100.0
+if 
+  $animstate_flag == 1
+goto_if_false @GYMBENC_3885
+$animstate_flag = 2
+
+:GYMBENC_3885
+if and
+  $animstate_flag == 2
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_3950
+if 
+  $animvalue == 1.0
+goto_if_false @GYMBENC_3950
+26@ = 0
+$animstate_flag = 3
+TIMERB = 0
+
+:GYMBENC_3950
+if and
+  $animstate_flag == 3
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_6050
+switch_start 21@ total_jumps 10 default_jump 0 @GYMBENC_4246 jumps 1 @GYMBENC_4101 2 @GYMBENC_4115 3 @GYMBENC_4129 4 @GYMBENC_4143 5 @GYMBENC_4157 6 @GYMBENC_4171 7 @GYMBENC_4186
+switch_continued 8 @GYMBENC_4201 9 @GYMBENC_4216 10 @GYMBENC_4231 -1 @GYMBENC_4246 -1 @GYMBENC_4246 -1 @GYMBENC_4246 -1 @GYMBENC_4246 -1 @GYMBENC_4246 -1 @GYMBENC_4246
+
+:GYMBENC_4101
+$bench_weight = 40
+goto @GYMBENC_4246
+
+:GYMBENC_4115
+$bench_weight = 60
+goto @GYMBENC_4246
+
+:GYMBENC_4129
+$bench_weight = 80
+goto @GYMBENC_4246
+
+:GYMBENC_4143
+$bench_weight = 100
+goto @GYMBENC_4246
+
+:GYMBENC_4157
+$bench_weight = 120
+goto @GYMBENC_4246
+
+:GYMBENC_4171
+$bench_weight = 160
+goto @GYMBENC_4246
+
+:GYMBENC_4186
+$bench_weight = 200
+goto @GYMBENC_4246
+
+:GYMBENC_4201
+$bench_weight = 240
+goto @GYMBENC_4246
+
+:GYMBENC_4216
+$bench_weight = 280
+goto @GYMBENC_4246
+
+:GYMBENC_4231
+$bench_weight = 320
+goto @GYMBENC_4246
+
+:GYMBENC_4246
+$temp_bench_weight = Stat.GetInt(46)
+if 
+  is_int_var_greater_than_int_var $bench_weight > $temp_bench_weight
+goto_if_false @GYMBENC_4279
+Stat.SetInt(StatId.HeaviestWeightBenchPress, $bench_weight)
+
+:GYMBENC_4279
+Pad.Shake(PadId.Pad1, 200, 200)
+if 
+  $reps_bpress < 999999
+goto_if_false @GYMBENC_4317
+$reps_bpress += 1
+
+:GYMBENC_4317
+$temp_muscle_stat = Stat.GetFloat(23)
+if 
+  1000.0 > $temp_muscle_stat
+goto_if_false @GYMBENC_4625
+if 
+  21@ == 1
+goto_if_false @GYMBENC_4373
+20@ = 1.0
+
+:GYMBENC_4373
+if 
+  21@ == 2
+goto_if_false @GYMBENC_4401
+20@ = 1.2
+
+:GYMBENC_4401
+if 
+  21@ == 3
+goto_if_false @GYMBENC_4429
+20@ = 1.3
+
+:GYMBENC_4429
+if 
+  21@ == 4
+goto_if_false @GYMBENC_4457
+20@ = 1.5
+
+:GYMBENC_4457
+if 
+  21@ == 5
+goto_if_false @GYMBENC_4485
+20@ = 2.0
+
+:GYMBENC_4485
+if 
+  21@ == 6
+goto_if_false @GYMBENC_4513
+20@ = 2.5
+
+:GYMBENC_4513
+if 
+  21@ == 7
+goto_if_false @GYMBENC_4541
+20@ = 3.0
+
+:GYMBENC_4541
+if 
+  21@ == 8
+goto_if_false @GYMBENC_4569
+20@ = 4.0
+
+:GYMBENC_4569
+if 
+  21@ == 9
+goto_if_false @GYMBENC_4597
+20@ = 5.0
+
+:GYMBENC_4597
+if 
+  21@ == 10
+goto_if_false @GYMBENC_4625
+20@ = 6.0
+
+:GYMBENC_4625
+if 
+  800.0 > $temp_muscle_stat
+goto_if_false @GYMBENC_4926
+if 
+  21@ == 1
+goto_if_false @GYMBENC_4674
+20@ = 2.0
+
+:GYMBENC_4674
+if 
+  21@ == 2
+goto_if_false @GYMBENC_4702
+20@ = 2.2
+
+:GYMBENC_4702
+if 
+  21@ == 3
+goto_if_false @GYMBENC_4730
+20@ = 2.3
+
+:GYMBENC_4730
+if 
+  21@ == 4
+goto_if_false @GYMBENC_4758
+20@ = 2.5
+
+:GYMBENC_4758
+if 
+  21@ == 5
+goto_if_false @GYMBENC_4786
+20@ = 3.0
+
+:GYMBENC_4786
+if 
+  21@ == 6
+goto_if_false @GYMBENC_4814
+20@ = 3.5
+
+:GYMBENC_4814
+if 
+  21@ == 7
+goto_if_false @GYMBENC_4842
+20@ = 4.0
+
+:GYMBENC_4842
+if 
+  21@ == 8
+goto_if_false @GYMBENC_4870
+20@ = 5.0
+
+:GYMBENC_4870
+if 
+  21@ == 9
+goto_if_false @GYMBENC_4898
+20@ = 6.0
+
+:GYMBENC_4898
+if 
+  21@ == 10
+goto_if_false @GYMBENC_4926
+20@ = 7.0
+
+:GYMBENC_4926
+if 
+  600.0 > $temp_muscle_stat
+goto_if_false @GYMBENC_5227
+if 
+  21@ == 1
+goto_if_false @GYMBENC_4975
+20@ = 3.0
+
+:GYMBENC_4975
+if 
+  21@ == 2
+goto_if_false @GYMBENC_5003
+20@ = 3.2
+
+:GYMBENC_5003
+if 
+  21@ == 3
+goto_if_false @GYMBENC_5031
+20@ = 3.3
+
+:GYMBENC_5031
+if 
+  21@ == 4
+goto_if_false @GYMBENC_5059
+20@ = 3.5
+
+:GYMBENC_5059
+if 
+  21@ == 5
+goto_if_false @GYMBENC_5087
+20@ = 4.0
+
+:GYMBENC_5087
+if 
+  21@ == 6
+goto_if_false @GYMBENC_5115
+20@ = 4.5
+
+:GYMBENC_5115
+if 
+  21@ == 7
+goto_if_false @GYMBENC_5143
+20@ = 5.0
+
+:GYMBENC_5143
+if 
+  21@ == 8
+goto_if_false @GYMBENC_5171
+20@ = 6.0
+
+:GYMBENC_5171
+if 
+  21@ == 9
+goto_if_false @GYMBENC_5199
+20@ = 7.0
+
+:GYMBENC_5199
+if 
+  21@ == 10
+goto_if_false @GYMBENC_5227
+20@ = 8.0
+
+:GYMBENC_5227
+if 
+  400.0 > $temp_muscle_stat
+goto_if_false @GYMBENC_5528
+if 
+  21@ == 1
+goto_if_false @GYMBENC_5276
+20@ = 4.0
+
+:GYMBENC_5276
+if 
+  21@ == 2
+goto_if_false @GYMBENC_5304
+20@ = 4.2
+
+:GYMBENC_5304
+if 
+  21@ == 3
+goto_if_false @GYMBENC_5332
+20@ = 4.3
+
+:GYMBENC_5332
+if 
+  21@ == 4
+goto_if_false @GYMBENC_5360
+20@ = 4.5
+
+:GYMBENC_5360
+if 
+  21@ == 5
+goto_if_false @GYMBENC_5388
+20@ = 5.0
+
+:GYMBENC_5388
+if 
+  21@ == 6
+goto_if_false @GYMBENC_5416
+20@ = 5.5
+
+:GYMBENC_5416
+if 
+  21@ == 7
+goto_if_false @GYMBENC_5444
+20@ = 6.0
+
+:GYMBENC_5444
+if 
+  21@ == 8
+goto_if_false @GYMBENC_5472
+20@ = 7.0
+
+:GYMBENC_5472
+if 
+  21@ == 9
+goto_if_false @GYMBENC_5500
+20@ = 8.0
+
+:GYMBENC_5500
+if 
+  21@ == 10
+goto_if_false @GYMBENC_5528
+20@ = 9.0
+
+:GYMBENC_5528
+if 
+  200.0 > $temp_muscle_stat
+goto_if_false @GYMBENC_5829
+if 
+  21@ == 1
+goto_if_false @GYMBENC_5577
+20@ = 5.0
+
+:GYMBENC_5577
+if 
+  21@ == 2
+goto_if_false @GYMBENC_5605
+20@ = 5.2
+
+:GYMBENC_5605
+if 
+  21@ == 3
+goto_if_false @GYMBENC_5633
+20@ = 5.3
+
+:GYMBENC_5633
+if 
+  21@ == 4
+goto_if_false @GYMBENC_5661
+20@ = 5.5
+
+:GYMBENC_5661
+if 
+  21@ == 5
+goto_if_false @GYMBENC_5689
+20@ = 6.0
+
+:GYMBENC_5689
+if 
+  21@ == 6
+goto_if_false @GYMBENC_5717
+20@ = 6.5
+
+:GYMBENC_5717
+if 
+  21@ == 7
+goto_if_false @GYMBENC_5745
+20@ = 7.0
+
+:GYMBENC_5745
+if 
+  21@ == 8
+goto_if_false @GYMBENC_5773
+20@ = 7.5
+
+:GYMBENC_5773
+if 
+  21@ == 9
+goto_if_false @GYMBENC_5801
+20@ = 8.0
+
+:GYMBENC_5801
+if 
+  21@ == 10
+goto_if_false @GYMBENC_5829
+20@ = 8.5
+
+:GYMBENC_5829
+if 
+  $bench_show_stat == 8
+goto_if_false @GYMBENC_5876
+$bench_show_stat = 0
+Stat.IncrementFloat(20@, 23)
+add_float_lvar_to_float_var $gym_day_fitness += 20@
+goto @GYMBENC_5898
+
+:GYMBENC_5876
+Stat.IncrementFloatNoMessage(StatId.BodyMuscle, 20@)
+$bench_show_stat += 1
+add_float_lvar_to_float_var $gym_day_fitness += 20@
+
+:GYMBENC_5898
+if 
+  $gym_day_fitness > 200.0
+goto_if_false @GYMBENC_5943
+$gym_final_day, $gym_final_month = Clock.GetCurrentDate()
+Text.PrintNow('GYM1_1B', 4000, 1)
+
+:GYMBENC_5943
+$fatstat_gym = Stat.GetFloat(21)
+if 
+  $fatstat_gym >= 1.0
+goto_if_false @GYMBENC_5980
+Stat.DecrementFloat(StatId.Fat, 1.0)
+
+:GYMBENC_5980
+$powerbar = 0
+$bench_sfx = Char.SetSayContext($scplayer, 355)
+Task.PlayAnim($scplayer, "GYM_BP_DOWN", "BENCHPRESS", 8.0, False, False, False, True, -1)
+$animstate_flag = 4
+
+:GYMBENC_6050
+if and
+  $animstate_flag == 4
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_6390
+if and
+  18@ == 0.0
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_6390
+if 
+  $animvalue == 0.0
+goto_if_false @GYMBENC_6390
+cset_lvar_float_to_var_int 19@ = integer $reps_bpress
+set_var_float_to_var_float $animationtobeplayed = $bpress_resistance
+sub_float_var_from_float_var $animationtobeplayed -= $weightbp
+if and
+  18.0 >= $animationtobeplayed
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_6215
+Task.PlayAnim($scplayer, "GYM_BP_UP_B", "BENCHPRESS", 8.0, False, False, False, True, -1)
+
+:GYMBENC_6215
+if and
+  $animationtobeplayed > 18.0
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_6307
+if 
+  24.0 >= $animationtobeplayed
+goto_if_false @GYMBENC_6307
+Task.PlayAnim($scplayer, "GYM_BP_UP_A", "BENCHPRESS", 8.0, False, False, False, True, -1)
+
+:GYMBENC_6307
+if and
+  $animationtobeplayed > 24.0
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_6383
+Task.PlayAnim($scplayer, "GYM_BP_UP_SMOOTH", "BENCHPRESS", 8.0, False, False, False, True, -1)
+
+:GYMBENC_6383
+$animstate_flag = 1
+
+:GYMBENC_6390
+set_var_float_to_lvar_float $bar_animvalue = 18@
+$bar_animvalue /= 100.0
+if and
+  $animstate_flag > 0
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_6769
+set_var_float_to_var_float $diffgym = $bar_animvalue
+sub_float_var_from_float_var $diffgym -= $animvalue
+$diffgym /= 2.0
+if and
+  0.05 > $diffgym
+  $diffgym > -0.05
+goto_if_false @GYMBENC_6503
+set_var_float_to_var_float $animvalue = $bar_animvalue
+goto @GYMBENC_6511
+
+:GYMBENC_6503
+add_float_var_to_float_var $animvalue += $diffgym
+
+:GYMBENC_6511
+if and
+  $animstate_flag == 4
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_6609
+$tempfloat_gym = 1.0
+sub_float_var_from_float_var $tempfloat_gym -= $animvalue
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_BP_DOWN")
+goto_if_false @GYMBENC_6602
+Char.SetAnimCurrentTime($scplayer, "GYM_BP_DOWN", $tempfloat_gym)
+
+:GYMBENC_6602
+goto @GYMBENC_6769
+
+:GYMBENC_6609
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_BP_UP_A")
+goto_if_false @GYMBENC_6659
+Char.SetAnimCurrentTime($scplayer, "GYM_BP_UP_A", $animvalue)
+
+:GYMBENC_6659
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_BP_UP_B")
+goto_if_false @GYMBENC_6709
+Char.SetAnimCurrentTime($scplayer, "GYM_BP_UP_B", $animvalue)
+
+:GYMBENC_6709
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_BP_UP_SMOOTH")
+goto_if_false @GYMBENC_6769
+Char.SetAnimCurrentTime($scplayer, "GYM_BP_UP_SMOOTH", $animvalue)
+
+:GYMBENC_6769
+cset_var_int_to_lvar_float $powerbar = float 18@
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+  $gym_day_fitness > 200.0
+goto_if_false @GYMBENC_6956
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_6956
+
+:GYMBENC_6820
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMBENC_6848
+wait 0
+goto @GYMBENC_6820
+
+:GYMBENC_6848
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_6911
+Task.PlayAnim($scplayer, "GYM_BP_GETOFF", "BENCHPRESS", 100.0, False, False, False, False, -1)
+
+:GYMBENC_6911
+$powerbar = 0
+if 
+  $gym_day_fitness > 200.0
+goto_if_false @GYMBENC_6949
+$gym_day_fitness = 0.0
+
+:GYMBENC_6949
+$playerexercising_flag = 6
+
+:GYMBENC_6956
+if and
+  $playerexercising_flag == 6
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_8093
+if 
+  $reps_bpress > 4
+goto_if_false @GYMBENC_7613
+if and
+  Char.IsPlayingAnim($scplayer, "GYM_BP_GETOFF")
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_7606
+$animframe_bpgetoff = Char.GetAnimCurrentTime($scplayer, "GYM_BP_GETOFF")
+
+:GYMBENC_7056
+if 
+  $animframe_bpgetoff <= 0.26
+goto_if_false @GYMBENC_7127
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_7120
+$animframe_bpgetoff = Char.GetAnimCurrentTime($scplayer, "GYM_BP_GETOFF")
+
+:GYMBENC_7120
+goto @GYMBENC_7056
+
+:GYMBENC_7127
+if and
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+  $play_bench_once == 0
+goto_if_false @GYMBENC_7164
+Audio.ReportMissionAudioEventAtObject(0@, 1117)
+$play_bench_once = 1
+
+:GYMBENC_7164
+Char.DropObject($scplayer, False)
+Object.FreezePosition(30@, True)
+Object.Delete(30@)
+30@ = Object.Create(#KMB_BPRESS, 8@, 9@, 10@)
+Object.AttachToObject(30@, 0@, -0.45, 0.45, 0.9, 90.0, 180.0, 270.0)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_7277
+$animframe = Char.GetAnimCurrentTime($scplayer, "GYM_BP_GETOFF")
+
+:GYMBENC_7277
+if 
+  $animframe == 1.0
+goto_if_false @GYMBENC_7606
+Task.PlayAnim($scplayer, "GYM_BP_CELEBRATE", "BENCHPRESS", 8.0, False, False, False, False, -1)
+
+:GYMBENC_7348
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_7606
+23@ = 0
+$animstate_flag = 0
+27@ = 1
+21@ = 1
+$reps_bpress = 0
+$powerbar = 0
+$animationtobeplayed = 0.0
+$playerexercising_flag = 0
+18@ = 0.0
+21@ = 1
+$reps_bpress = 0
+$upperbodymusclestat_gym = Stat.GetFloat(23)
+if 
+  $upperbodymusclestat_gym >= 1000.0
+goto_if_false @GYMBENC_7484
+Stat.SetFloat(StatId.BodyMuscle, 1000.0)
+
+:GYMBENC_7484
+$fatstat_gym = Stat.GetFloat(21)
+if 
+  0.0 >= $fatstat_gym
+goto_if_false @GYMBENC_7521
+Stat.SetFloat(StatId.Fat, 0.0)
+
+:GYMBENC_7521
+$animframe_bppickup = 0.0
+$animframe_bpgetoff = 0.0
+Hud.ClearCounter($reps_bpress)
+Hud.ClearCounter($powerbar)
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Char.SetCollision($scplayer, True)
+Streaming.RemoveAnimation("BENCHPRESS")
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Text.ClearHelp
+Menu.Delete($main_menu_bench)
+$bench_txt = 0
+$are_anims_loaded = 0
+
+:GYMBENC_7606
+goto @GYMBENC_8093
+
+:GYMBENC_7613
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_8093
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_BP_GETOFF")
+goto_if_false @GYMBENC_8093
+$animframe_bpgetoff = Char.GetAnimCurrentTime($scplayer, "GYM_BP_GETOFF")
+
+:GYMBENC_7683
+if 
+  $animframe_bpgetoff <= 0.26
+goto_if_false @GYMBENC_7754
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_7747
+$animframe_bpgetoff = Char.GetAnimCurrentTime($scplayer, "GYM_BP_GETOFF")
+
+:GYMBENC_7747
+goto @GYMBENC_7683
+
+:GYMBENC_7754
+if and
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+  $play_bench_once == 0
+goto_if_false @GYMBENC_7791
+Audio.ReportMissionAudioEventAtObject(0@, 1117)
+$play_bench_once = 1
+
+:GYMBENC_7791
+Char.DropObject($scplayer, False)
+Object.FreezePosition(30@, True)
+Object.Delete(30@)
+30@ = Object.Create(#KMB_BPRESS, 8@, 9@, 10@)
+Object.AttachToObject(30@, 0@, -0.45, 0.45, 0.9, 90.0, 180.0, 270.0)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBENC_7904
+$animframe = Char.GetAnimCurrentTime($scplayer, "GYM_BP_GETOFF")
+
+:GYMBENC_7904
+if 
+  $animframe == 1.0
+goto_if_false @GYMBENC_8093
+$animframe_bppickup = 0.0
+$animframe_bpgetoff = 0.0
+23@ = 0
+$animstate_flag = 0
+27@ = 1
+21@ = 1
+$reps_bpress = 0
+$powerbar = 0
+$animationtobeplayed = 0.0
+$playerexercising_flag = 0
+18@ = 0.0
+21@ = 1
+$reps_bpress = 0
+Hud.ClearCounter($reps_bpress)
+Hud.ClearCounter($powerbar)
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Char.SetCollision($scplayer, True)
+Streaming.RemoveAnimation("BENCHPRESS")
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Text.ClearHelp
+Menu.Delete($main_menu_bench)
+$bench_txt = 0
+$are_anims_loaded = 0
+
+:GYMBENC_8093
+goto @GYMBENC_632
+terminate_this_script 
+

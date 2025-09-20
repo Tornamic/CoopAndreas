@@ -1,0 +1,46 @@
+:GARAGE
+script_name 'GARAGE'
+
+:GARAGE_11
+wait $mission_trigger_wait_time
+if 
+  $flag_garage_mission_counter == 2
+goto_if_false @GARAGE_36
+terminate_this_script 
+
+:GARAGE_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GARAGE_250
+if 
+  $onmission == 0
+goto_if_false @GARAGE_250
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $garageX, $garageY, $garageZ, 1.2, 1.2, 2.0)
+goto_if_false @GARAGE_250
+if 
+  Player.CanStartMission($player1)
+goto_if_false @GARAGE_250
+if 
+  $flag_garage_mission_counter == 0
+goto_if_false @GARAGE_180
+$onmission = 1
+Text.PrintBig('GAR_1', 1000, TextStyle.BottomRight)
+PSAVE1_2765()
+Mission.LoadAndLaunchInternal(49) // Wear Flowers In Your Hair
+
+:GARAGE_180
+if 
+  $flag_scrash_mission_counter == 1
+goto_if_false @GARAGE_250
+if 
+  $flag_garage_mission_counter == 1
+goto_if_false @GARAGE_250
+$onmission = 1
+Text.PrintBig('GAR_2', 1000, TextStyle.BottomRight)
+PSAVE1_2765()
+Mission.LoadAndLaunchInternal(50) // Deconstruction
+
+:GARAGE_250
+goto @GARAGE_11
+

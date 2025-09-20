@@ -1,0 +1,76 @@
+:GYM
+script_name 'GYM'
+
+:GYM_11
+wait 70
+if 
+  $onmission == 0
+goto_if_false @GYM_388
+if 
+  $1348 == 1
+goto_if_false @GYM_115
+if 
+  $switch_the_gym_interiors_off == 0
+goto_if_false @GYM_115
+World.SwitchEntryExit('GYM1', True)
+World.SwitchEntryExit('GYM2', True)
+World.SwitchEntryExit('GYM3', True)
+$switch_the_gym_interiors_off = 1
+
+:GYM_115
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GYM_381
+if 
+  Player.CanStartMission($player1)
+goto_if_false @GYM_381
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 767.1537, 4.8323, 999.7185, 50.0, 50.0, 10.0)
+goto_if_false @GYM_225
+$main_visible_area_char = Char.GetAreaVisible($scplayer)
+if 
+  $main_visible_area_char == 5
+goto_if_false @GYM_225
+Mission.LoadAndLaunchInternal(114) // Los Santos Gym Fight School
+
+:GYM_225
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 768.4777, -37.1737, 999.6865, 50.0, 50.0, 10.0)
+goto_if_false @GYM_303
+$main_visible_area_char = Char.GetAreaVisible($scplayer)
+if 
+  $main_visible_area_char == 6
+goto_if_false @GYM_303
+Mission.LoadAndLaunchInternal(115) // San Fierro Gym Fight School
+
+:GYM_303
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 766.5975, -65.293, 999.6562, 50.0, 50.0, 10.0)
+goto_if_false @GYM_381
+$main_visible_area_char = Char.GetAreaVisible($scplayer)
+if 
+  $main_visible_area_char == 7
+goto_if_false @GYM_381
+Mission.LoadAndLaunchInternal(116) // Las Venturas Gym Fight School
+
+:GYM_381
+goto @GYM_488
+
+:GYM_388
+if 
+  $1348 == 1
+goto_if_false @GYM_488
+if 
+  $main_visible_area == 0
+goto_if_false @GYM_488
+if 
+  $switch_the_gym_interiors_off == 1
+goto_if_false @GYM_488
+World.SwitchEntryExit('GYM1', False)
+World.SwitchEntryExit('GYM2', False)
+World.SwitchEntryExit('GYM3', False)
+$switch_the_gym_interiors_off = 0
+
+:GYM_488
+goto @GYM_11
+

@@ -1,0 +1,2988 @@
+//-------------Mission 66---------------
+// Originally: Mike Toreno
+
+:DRIV3
+script_name 'DRIV3'
+gosub @DRIV3_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @DRIV3_38
+gosub @DRIV3_16007
+
+:DRIV3_38
+gosub @DRIV3_16025
+terminate_this_script 
+
+:DRIV3_47
+$onmission = 1
+Stat.RegisterMissionGiven
+wait 0
+Player.SetControl($player1, False)
+Camera.DoFade(0, 1000)
+Camera.SetFadingColor(0, 0, 0)
+
+:DRIV3_82
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRIV3_106
+wait 0
+goto @DRIV3_82
+
+:DRIV3_106
+Text.LoadMissionText('FARLIE3')
+Streaming.SetAreaVisible(3)
+Cutscene.Load('FARL_3A')
+
+:DRIV3_132
+if 
+  not Cutscene.HasLoaded
+goto_if_false @DRIV3_156
+wait 0
+goto @DRIV3_132
+
+:DRIV3_156
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:DRIV3_165
+if 
+  not Cutscene.HasFinished
+goto_if_false @DRIV3_189
+wait 0
+goto @DRIV3_165
+
+:DRIV3_189
+Cutscene.Clear
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:DRIV3_204
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRIV3_228
+wait 0
+goto @DRIV3_204
+
+:DRIV3_228
+Cutscene.Clear
+Streaming.SetAreaVisible(0)
+127@ = Blip.AddForCoord(-2071.0, 209.0, 35.0)
+Blip.Remove(127@)
+80@ = -1906.656
+81@ = 283.016
+82@ = 41.0
+104@ = 0
+105@ = 0
+106@ = 0
+132@ = 0
+107@ = 0
+112@ = 0
+108@ = 0
+59@ = -2615.0
+60@ = 1397.0
+61@ = 6.0
+101@ = 0
+$int_distance_player_girl = 0
+$flag_is_farlie3_running = 1
+103@ = 0
+71@ = -1550.416
+72@ = -436.4436
+73@ = 6.9871
+$timer_countdown_farlie3 = 0
+74@ = 0.0
+75@ = -20.0
+76@ = 0.0
+100@ = 0
+102@ = 0
+109@ = 0
+110@ = 0
+89@ = 1
+90@ = 0
+91@ = 0
+92@ = 0
+93@ = 0
+$flag_phone_dialog_driv3 = 0
+94@ = 0
+95@ = 0
+98@ = 0
+111@ = 0
+99@ = 0
+96@ = 0
+97@ = 0
+if 
+  Blip.DoesExist($2653)
+goto_if_false @DRIV3_603
+Blip.Remove($2653)
+
+:DRIV3_603
+55@ = Pickup.CreateWithAmmo(348, 15, 30, -1542.022, -437.7364, 5.9258)
+set_var_text_label s$farlie3_text[0] = 'FAR3_CA'
+set_var_text_label s$farlie3_text[1] = 'FAR3_CB'
+set_var_text_label s$farlie3_text[2] = 'FAR3_DA'
+set_var_text_label s$farlie3_text[3] = 'FAR3_CC'
+set_var_text_label s$farlie3_text[4] = 'FAR3_DB'
+set_var_text_label s$farlie3_text[5] = 'FAR3_EA'
+set_lvar_int_to_constant 133@ = 15200
+set_lvar_int_to_constant 134@ = 15201
+set_lvar_int_to_constant 135@ = 15210
+set_lvar_int_to_constant 136@ = 15202
+set_lvar_int_to_constant 137@ = 15211
+set_lvar_int_to_constant 138@ = 15215
+set_var_text_label s$farlie3_text[6] = 'FAR3_CF'
+set_var_text_label s$farlie3_text[7] = 'FAR3_CD'
+set_var_text_label s$farlie3_text[8] = 'FAR3_DC'
+set_var_text_label s$farlie3_text[9] = 'FAR3_EB'
+set_lvar_int_to_constant 139@ = 15205
+set_lvar_int_to_constant 140@ = 15203
+set_lvar_int_to_constant 141@ = 15212
+set_lvar_int_to_constant 142@ = 15216
+set_var_text_label s$farlie3_text[10] = 'FAR3_CJ'
+set_var_text_label s$farlie3_text[11] = 'FAR3_CK'
+set_var_text_label s$farlie3_text[12] = 'FAR3_DD'
+set_var_text_label s$farlie3_text[13] = 'FAR3_DE'
+set_var_text_label s$farlie3_text[14] = 'FAR3_EC'
+set_lvar_int_to_constant 143@ = 15208
+set_lvar_int_to_constant 144@ = 15209
+set_lvar_int_to_constant 145@ = 15213
+set_lvar_int_to_constant 146@ = 15214
+set_lvar_int_to_constant 147@ = 15217
+set_var_text_label s$farlie3_text[15] = 'FAR3_HA'
+set_var_text_label s$farlie3_text[16] = 'FAR3_HB'
+set_var_text_label s$farlie3_text[17] = 'FAR3_HC'
+set_lvar_int_to_constant 148@ = 15225
+set_lvar_int_to_constant 149@ = 15226
+set_lvar_int_to_constant 150@ = 15227
+set_var_text_label s$farlie3_text[18] = 'FAR3_JA'
+set_var_text_label s$farlie3_text[19] = 'FAR3_JB'
+set_var_text_label s$farlie3_text[20] = 'FAR3_JC'
+set_var_text_label s$farlie3_text[21] = 'FAR3_JD'
+set_var_text_label s$farlie3_text[22] = 'FAR3_JE'
+set_var_text_label s$farlie3_text[23] = 'FAR3_JF'
+set_var_text_label s$farlie3_text[24] = 'FAR3_JG'
+set_lvar_int_to_constant 151@ = 15228
+set_lvar_int_to_constant 152@ = 15229
+set_lvar_int_to_constant 153@ = 15230
+set_lvar_int_to_constant 154@ = 15231
+set_lvar_int_to_constant 155@ = 15232
+set_lvar_int_to_constant 156@ = 15233
+set_lvar_int_to_constant 157@ = 15234
+set_var_text_label s$farlie3_text[25] = 'FAR3_MA'
+set_var_text_label s$farlie3_text[26] = 'FAR3_MB'
+set_var_text_label s$farlie3_text[27] = 'FAR3_MC'
+set_var_text_label s$farlie3_text[28] = 'FAR3_MD'
+set_var_text_label s$farlie3_text[29] = 'FAR3_ME'
+set_var_text_label s$farlie3_text[30] = 'FAR3_MF'
+set_var_text_label s$farlie3_text[31] = 'FAR3_MG'
+set_var_text_label s$farlie3_text[32] = 'FAR3_MH'
+set_var_text_label s$farlie3_text[33] = 'FAR3_MJ'
+set_var_text_label s$farlie3_text[34] = 'FAR3_MK'
+set_var_text_label s$farlie3_text[35] = 'FAR3_ML'
+set_var_text_label s$farlie3_text[36] = 'FAR3_MM'
+set_var_text_label s$farlie3_text[37] = 'FAR3_MN'
+set_var_text_label s$farlie3_text[38] = 'FAR3_MO'
+set_lvar_int_to_constant 158@ = 15242
+set_lvar_int_to_constant 159@ = 15243
+set_lvar_int_to_constant 160@ = 15244
+set_lvar_int_to_constant 161@ = 15245
+set_lvar_int_to_constant 162@ = 15246
+set_lvar_int_to_constant 163@ = 15247
+set_lvar_int_to_constant 164@ = 15248
+set_lvar_int_to_constant 165@ = 15249
+set_lvar_int_to_constant 166@ = 15250
+set_lvar_int_to_constant 167@ = 15251
+set_lvar_int_to_constant 168@ = 15252
+set_lvar_int_to_constant 169@ = 15253
+set_lvar_int_to_constant 170@ = 15254
+set_lvar_int_to_constant 171@ = 15255
+86@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+87@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+Streaming.RequestModel(352)
+Streaming.RequestModel(482)
+Streaming.LoadSpecialCharacter('TBONE', 2)
+Streaming.LoadAllModelsNow
+
+:DRIV3_1527
+if or
+  not Streaming.HasSpecialCharacterLoaded(2)
+  not Streaming.HasModelLoaded(352)
+  not Streaming.HasModelLoaded(482)
+goto_if_false @DRIV3_1563
+wait 0
+goto @DRIV3_1527
+
+:DRIV3_1563
+Char.SetHeading($scplayer, 214.0)
+Camera.SetBehindPlayer
+
+:DRIV3_1575
+wait 0
+if 
+  89@ == 1
+goto_if_false @DRIV3_1604
+gosub @DRIV3_1736
+
+:DRIV3_1604
+if 
+  90@ == 1
+goto_if_false @DRIV3_1629
+gosub @DRIV3_6822
+
+:DRIV3_1629
+if 
+  94@ == 1
+goto_if_false @DRIV3_1654
+gosub @DRIV3_8253
+
+:DRIV3_1654
+if 
+  91@ == 1
+goto_if_false @DRIV3_1679
+gosub @DRIV3_11222
+
+:DRIV3_1679
+if 
+  92@ == 1
+goto_if_false @DRIV3_1704
+goto @DRIV3_15909
+
+:DRIV3_1704
+if 
+  93@ == 1
+goto_if_false @DRIV3_1729
+goto @DRIV3_16007
+
+:DRIV3_1729
+goto @DRIV3_1575
+
+:DRIV3_1736
+54@ = Math.RandomIntInRange(1, 4)
+if 
+  54@ == 1
+goto_if_false @DRIV3_1833
+56@ = -1303.76
+57@ = -615.4308
+58@ = 13.1485
+62@ = -1271.832
+63@ = -180.8179
+64@ = 13.1443
+84@ = 0.0
+
+:DRIV3_1833
+if 
+  54@ == 2
+goto_if_false @DRIV3_1921
+56@ = -1216.233
+57@ = 51.366
+58@ = 13.0
+62@ = -1288.832
+63@ = -159.8179
+64@ = 13.1443
+84@ = 120.0
+
+:DRIV3_1921
+if 
+  54@ == 3
+goto_if_false @DRIV3_2009
+56@ = -1125.319
+57@ = 368.3488
+58@ = 13.1329
+62@ = -1319.832
+63@ = -96.8179
+64@ = 13.8443
+84@ = 140.0
+
+:DRIV3_2009
+Streaming.RequestModel(426)
+
+:DRIV3_2014
+if 
+  not Streaming.HasModelLoaded(426)
+goto_if_false @DRIV3_2041
+wait 0
+goto @DRIV3_2014
+
+:DRIV3_2041
+38@ = Car.Create(426, -2620.0, 1398.0, 6.5)
+Car.SetHeading(38@, 204.0)
+114@ = Blip.AddForCar(38@)
+Blip.SetAsFriendly(114@, True)
+Car.SetHealth(38@, 2500)
+113@ = Game.FindMaxNumberOfGroupMembers()
+Game.SetScriptLimitToGangSize(113@)
+Game.MakeRoomInPlayerGangForMissionPeds(2)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DRIV3_2134
+Char.ShutUpForScriptedSpeech($scplayer, True)
+
+:DRIV3_2134
+53@ = Char.Create(25, 291, -2623.64, 1403.9, 6.2)
+Char.SetGetOutUpsideDownCar(53@, False)
+DecisionMakerChar.AddEventResponse(87@, 36, 1022, 0.0, 100.0, 0.0, 0.0, True, False)
+Char.SetAccuracy(53@, 95)
+Player.SetGroupToFollowAlways($player1, True)
+Char.ShutUpForScriptedSpeech(53@, True)
+Task.EnterCarAsPassenger(53@, 38@, 0, -1)
+Char.SetDrownsInWater(53@, True)
+Char.SetRelationship(53@, RelationshipType.Like, PedType.Player1)
+Char.SetRelationship(53@, RelationshipType.Hate, PedType.Mission1)
+Char.SetDecisionMaker(53@, 87@)
+Char.GiveWeapon(53@, WeaponType.MicroUzi, 1000)
+Char.SetNeverTargeted(53@, True)
+Char.SetOnlyDamagedByPlayer(53@, True)
+Streaming.LoadSceneInDirection(-2623.64, 1403.9, 6.2, 214.0)
+Camera.DoFade(1, 1000)
+
+:DRIV3_2319
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRIV3_2343
+wait 0
+goto @DRIV3_2319
+
+:DRIV3_2343
+Player.SetControl($player1, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+$timer_countdown_farlie3 += 330000
+Hud.DisplayTimerWithString($timer_countdown_farlie3, TimerDirection.Down, 'DRI2_9')
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15218, 1)
+
+:DRIV3_2391
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_2417
+wait 0
+goto @DRIV3_2391
+
+:DRIV3_2417
+Text.PrintNow('FAR3_FA', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_2437
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_2463
+wait 0
+goto @DRIV3_2437
+
+:DRIV3_2463
+Text.ClearThisPrint('FAR3_FA')
+Text.PrintNow('DRI2_1', 5000, 1)
+Streaming.RequestModel(121)
+Streaming.RequestModel(122)
+Streaming.RequestModel(123)
+
+:DRIV3_2502
+if or
+  not Streaming.HasModelLoaded(121)
+  not Streaming.HasModelLoaded(122)
+  not Streaming.HasModelLoaded(123)
+goto_if_false @DRIV3_2536
+wait 0
+goto @DRIV3_2502
+
+:DRIV3_2536
+if 
+  not Car.IsDead(38@)
+goto_if_false @DRIV3_2857
+
+:DRIV3_2552
+if 
+  not Char.IsInCar($scplayer, 38@)
+goto_if_false @DRIV3_2857
+wait 0
+if 
+  Char.IsDead(53@)
+goto_if_false @DRIV3_2651
+89@ = 0
+90@ = 0
+94@ = 0
+91@ = 0
+92@ = 0
+93@ = 1
+Text.PrintNow('DRI2_31', 5000, 1)
+return 
+
+:DRIV3_2651
+if 
+  Car.IsDead(38@)
+goto_if_false @DRIV3_2674
+goto @DRIV3_2857
+
+:DRIV3_2674
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @DRIV3_2733
+89@ = 0
+90@ = 0
+94@ = 0
+91@ = 0
+92@ = 1
+93@ = 0
+return 
+
+:DRIV3_2733
+if 
+  0 >= $timer_countdown_farlie3
+goto_if_false @DRIV3_2850
+89@ = 0
+93@ = 1
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15221, 1)
+
+:DRIV3_2776
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_2802
+wait 0
+goto @DRIV3_2776
+
+:DRIV3_2802
+Text.PrintNow('FAR3_FD', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_2822
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_2848
+wait 0
+goto @DRIV3_2822
+
+:DRIV3_2848
+return 
+
+:DRIV3_2850
+goto @DRIV3_2552
+
+:DRIV3_2857
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_2911
+Text.ClearThisPrint('DRI2_1')
+if 
+  not Char.IsGroupMember(53@, $Players_Group)
+goto_if_false @DRIV3_2911
+Group.SetMember(53@, $Players_Group)
+
+:DRIV3_2911
+Blip.Remove(114@)
+Streaming.MarkModelAsNoLongerNeeded(426)
+TIMERB = 0
+116@ = Blip.AddShortRangeSpriteForCoord(3, 71@, 72@, 73@)
+Blip.Remove(116@)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DRIV3_4398
+
+:DRIV3_2965
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 71@, 72@, 73@, 35.0, 35.0, 35.0)
+goto_if_false @DRIV3_4398
+wait 0
+gosub @DRIV3_14595
+if 
+  93@ == 1
+goto_if_false @DRIV3_3038
+return 
+
+:DRIV3_3038
+if 
+  109@ == 0
+goto_if_false @DRIV3_4391
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DRIV3_3080
+38@ = Char.StoreCarIsIn($scplayer)
+
+:DRIV3_3080
+if and
+  $flag_phone_dialog_driv3 >= 0
+  6 > $flag_phone_dialog_driv3
+goto_if_false @DRIV3_3112
+gosub @DRIV3_15530
+
+:DRIV3_3112
+if 
+  $flag_phone_dialog_driv3 == 6
+goto_if_false @DRIV3_3264
+if 
+  TIMERA > 15000
+goto_if_false @DRIV3_3264
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15224, 1)
+
+:DRIV3_3160
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_3186
+wait 0
+goto @DRIV3_3160
+
+:DRIV3_3186
+Text.PrintNow('FAR3_GC', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_3206
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_3232
+wait 0
+goto @DRIV3_3206
+
+:DRIV3_3232
+Text.ClearThisPrint('FAR3_GC')
+TIMERA = 0
+$flag_phone_dialog_driv3 = 7
+102@ = 0
+
+:DRIV3_3264
+if 
+  $flag_phone_dialog_driv3 == 7
+goto_if_false @DRIV3_3351
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_3351
+if and
+  Char.IsInZone($scplayer, 'DOH')
+  Char.IsInZone(53@, 'DOH')
+goto_if_false @DRIV3_3351
+$flag_phone_dialog_driv3 = 8
+132@ = 6
+
+:DRIV3_3351
+if and
+  $flag_phone_dialog_driv3 >= 8
+  12 > $flag_phone_dialog_driv3
+goto_if_false @DRIV3_3383
+gosub @DRIV3_15530
+
+:DRIV3_3383
+if 
+  $flag_phone_dialog_driv3 == 12
+goto_if_false @DRIV3_3535
+if 
+  TIMERA > 10000
+goto_if_false @DRIV3_3535
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15223, 1)
+
+:DRIV3_3431
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_3457
+wait 0
+goto @DRIV3_3431
+
+:DRIV3_3457
+Text.PrintNow('FAR3_GB', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_3477
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_3503
+wait 0
+goto @DRIV3_3477
+
+:DRIV3_3503
+Text.ClearThisPrint('FAR3_GB')
+TIMERA = 0
+$flag_phone_dialog_driv3 = 13
+102@ = 0
+
+:DRIV3_3535
+if 
+  $flag_phone_dialog_driv3 == 13
+goto_if_false @DRIV3_3629
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_3629
+if and
+  Char.IsInZone($scplayer, 'EASB')
+  Char.IsInZone(53@, 'EASB')
+goto_if_false @DRIV3_3629
+$flag_phone_dialog_driv3 = 14
+132@ = 10
+TIMERA = 0
+
+:DRIV3_3629
+if and
+  $flag_phone_dialog_driv3 >= 14
+  19 > $flag_phone_dialog_driv3
+goto_if_false @DRIV3_3661
+gosub @DRIV3_15530
+
+:DRIV3_3661
+if 
+  $flag_phone_dialog_driv3 == 19
+goto_if_false @DRIV3_3806
+if 
+  TIMERA > 8000
+goto_if_false @DRIV3_3806
+TIMERA = 0
+$flag_phone_dialog_driv3 = 20
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15207, 1)
+
+:DRIV3_3723
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_3749
+wait 0
+goto @DRIV3_3723
+
+:DRIV3_3749
+Text.PrintNow('FAR3_CH', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_3769
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_3795
+wait 0
+goto @DRIV3_3769
+
+:DRIV3_3795
+Text.ClearThisPrint('FAR3_CH')
+
+:DRIV3_3806
+if 
+  $flag_phone_dialog_driv3 == 20
+goto_if_false @DRIV3_3958
+if 
+  TIMERA > 8000
+goto_if_false @DRIV3_3958
+TIMERA = 0
+$flag_phone_dialog_driv3 = 21
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15222, 1)
+
+:DRIV3_3868
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_3894
+wait 0
+goto @DRIV3_3868
+
+:DRIV3_3894
+Text.PrintNow('FAR3_GA', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_3914
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_3940
+wait 0
+goto @DRIV3_3914
+
+:DRIV3_3940
+Text.ClearThisPrint('FAR3_GA')
+102@ = 0
+
+:DRIV3_3958
+if 
+  102@ == 0
+goto_if_false @DRIV3_4116
+if 
+  103@ == 0
+goto_if_false @DRIV3_4116
+if 
+  200000 >= $timer_countdown_farlie3
+goto_if_false @DRIV3_4116
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15219, 1)
+
+:DRIV3_4026
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_4052
+wait 0
+goto @DRIV3_4026
+
+:DRIV3_4052
+Text.PrintNow('FAR3_FB', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_4072
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_4098
+wait 0
+goto @DRIV3_4072
+
+:DRIV3_4098
+Text.ClearThisPrint('FAR3_FB')
+103@ = 1
+
+:DRIV3_4116
+if 
+  102@ == 0
+goto_if_false @DRIV3_4274
+if 
+  103@ == 1
+goto_if_false @DRIV3_4274
+if 
+  100000 >= $timer_countdown_farlie3
+goto_if_false @DRIV3_4274
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15220, 1)
+
+:DRIV3_4184
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_4210
+wait 0
+goto @DRIV3_4184
+
+:DRIV3_4210
+Text.PrintNow('FAR3_FC', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_4230
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_4256
+wait 0
+goto @DRIV3_4230
+
+:DRIV3_4256
+Text.ClearThisPrint('FAR3_FC')
+103@ = 2
+
+:DRIV3_4274
+if 
+  0 >= $timer_countdown_farlie3
+goto_if_false @DRIV3_4391
+89@ = 0
+93@ = 1
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15221, 1)
+
+:DRIV3_4317
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_4343
+wait 0
+goto @DRIV3_4317
+
+:DRIV3_4343
+Text.PrintNow('FAR3_FD', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_4363
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_4389
+wait 0
+goto @DRIV3_4363
+
+:DRIV3_4389
+return 
+
+:DRIV3_4391
+goto @DRIV3_2965
+
+:DRIV3_4398
+Text.ClearHelp
+Blip.Remove(116@)
+Blip.Remove(127@)
+Streaming.RequestModel(463)
+
+:DRIV3_4415
+if 
+  not Streaming.HasModelLoaded(463)
+goto_if_false @DRIV3_4442
+wait 0
+goto @DRIV3_4415
+
+:DRIV3_4442
+Hud.DisplayCounterWithString($int_distance_player_girl, CounterDisplay.Bar, 'DRI2_17')
+35@ = Car.Create(482, 56@, 57@, 58@)
+Car.ChangeColor(35@, 6, 0)
+115@ = Blip.AddForCar(35@)
+Blip.ChangeDisplay(115@, BlipDisplay.MarkerOnly)
+Car.SetHeading(35@, 84@)
+41@ = Char.CreateInsideCar(PedType.Mission1, 123, 35@)
+Char.SetProofs(41@, True, False, False, False, False)
+Char.SetSuffersCriticalHits(41@, False)
+Char.SetDecisionMaker(41@, 86@)
+Char.SetRelationship(41@, RelationshipType.Hate, PedType.Player1)
+Char.SetRelationship(41@, RelationshipType.Like, PedType.Mission1)
+DecisionMakerChar.AddEventResponse(86@, 36, 1022, 0.0, 100.0, 0.0, 0.0, True, False)
+Car.SetHealth(35@, 1000)
+Car.LockDoors(35@, CarLock.SkipShutDoors)
+Car.SetOnlyDamagedByPlayer(35@, True)
+131@ = 0
+
+:DRIV3_4630
+if 
+  3 > 131@
+goto_if_false @DRIV3_4812
+if or
+  131@ == 0
+  131@ == 2
+goto_if_false @DRIV3_4692
+42@(131@,9i) = Char.CreateAsPassenger(PedType.Mission1, 121, 35@, 131@)
+
+:DRIV3_4692
+if 
+  131@ == 1
+goto_if_false @DRIV3_4729
+42@(131@,9i) = Char.CreateAsPassenger(PedType.Mission1, 122, 35@, 131@)
+
+:DRIV3_4729
+Char.GiveWeapon(42@(131@,9i), WeaponType.MicroUzi, 1000)
+Char.SetCurrentWeapon(42@(131@,9i), WeaponType.MicroUzi)
+if 
+  131@ == 0
+goto_if_false @DRIV3_4798
+Char.SetDecisionMaker(42@, 86@)
+Char.SetRelationship(42@, RelationshipType.Hate, PedType.Player1)
+Char.SetRelationship(42@, RelationshipType.Like, PedType.Mission1)
+
+:DRIV3_4798
+131@ += 1
+goto @DRIV3_4630
+
+:DRIV3_4812
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_5062
+77@ = Car.GetOffsetInWorldCoords(78@, 79@, 35@, 2.0, -6.0, -0.3)
+36@ = Car.Create(463, 77@, 78@, 79@)
+Car.SetHeading(36@, 84@)
+51@ = Char.CreateInsideCar(PedType.Mission1, 122, 36@)
+Char.GiveWeapon(51@, WeaponType.MicroUzi, 1000)
+Char.SetCurrentWeapon(51@, WeaponType.MicroUzi)
+Char.SetDecisionMaker(51@, 86@)
+Char.SetRelationship(51@, RelationshipType.Hate, PedType.Player1)
+Char.SetRelationship(51@, RelationshipType.Like, PedType.Mission1)
+Car.SetStraightLineDistance(36@, 255)
+77@ = Car.GetOffsetInWorldCoords(78@, 79@, 35@, -2.0, -6.0, -0.3)
+37@ = Car.Create(463, 77@, 78@, 79@)
+Car.SetHeading(37@, 84@)
+52@ = Char.CreateInsideCar(PedType.Mission1, 121, 37@)
+Char.GiveWeapon(52@, WeaponType.MicroUzi, 1000)
+Char.SetCurrentWeapon(52@, WeaponType.MicroUzi)
+Char.SetDecisionMaker(52@, 86@)
+Char.SetRelationship(52@, RelationshipType.Hate, PedType.Player1)
+Char.SetRelationship(52@, RelationshipType.Like, PedType.Mission1)
+Car.SetStraightLineDistance(37@, 255)
+
+:DRIV3_5062
+if 
+  $flag_phone_dialog_driv3 <> 21
+goto_if_false @DRIV3_5094
+132@ = 18
+$flag_phone_dialog_driv3 = 24
+
+:DRIV3_5094
+if 
+  98@ <> 1
+goto_if_false @DRIV3_6806
+wait 0
+gosub @DRIV3_14595
+if 
+  93@ == 1
+goto_if_false @DRIV3_5143
+return 
+
+:DRIV3_5143
+if and
+  $flag_phone_dialog_driv3 >= 21
+  24 > $flag_phone_dialog_driv3
+goto_if_false @DRIV3_5182
+102@ = 1
+gosub @DRIV3_15530
+
+:DRIV3_5182
+if and
+  $flag_phone_dialog_driv3 >= 24
+  30 >= $flag_phone_dialog_driv3
+goto_if_false @DRIV3_5221
+gosub @DRIV3_15530
+102@ = 1
+
+:DRIV3_5221
+if 
+  95@ == 0
+goto_if_false @DRIV3_5294
+if 
+  $flag_phone_dialog_driv3 == 31
+goto_if_false @DRIV3_5287
+Text.PrintNow('DRI2_18', 5000, 1)
+$flag_phone_dialog_driv3 = 32
+TIMERA = 0
+
+:DRIV3_5287
+goto @DRIV3_5301
+
+:DRIV3_5294
+$flag_phone_dialog_driv3 = 32
+
+:DRIV3_5301
+if 
+  $flag_phone_dialog_driv3 == 32
+goto_if_false @DRIV3_5352
+if 
+  TIMERA > 7000
+goto_if_false @DRIV3_5352
+102@ = 0
+$flag_phone_dialog_driv3 = 33
+
+:DRIV3_5352
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_6767
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 65@, 66@, 67@, 30.0, 30.0, 30.0)
+  Car.Locate3D(35@, 0, 62@, 63@, 64@, 40.0, 40.0, 40.0)
+goto_if_false @DRIV3_5448
+98@ = 1
+
+:DRIV3_5448
+if 
+  95@ == 0
+goto_if_false @DRIV3_5747
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 65@, 66@, 67@, 100.0, 100.0, 100.0)
+  Car.IsOnScreen(35@)
+goto_if_false @DRIV3_5747
+if 
+  not Char.IsDead(41@)
+goto_if_false @DRIV3_5557
+Task.CarDriveToCoord(41@, 35@, 62@, 63@, 64@, 25.0, DriveMode.Accurate, 0, DrivingMode.PloughThrough)
+
+:DRIV3_5557
+if 
+  not Car.IsDead(36@)
+goto_if_false @DRIV3_5581
+Car.SetEscortCarRight(36@, 35@)
+
+:DRIV3_5581
+if 
+  not Car.IsDead(37@)
+goto_if_false @DRIV3_5605
+Car.SetEscortCarLeft(37@, 35@)
+
+:DRIV3_5605
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15238, 1)
+
+:DRIV3_5616
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_5642
+wait 0
+goto @DRIV3_5616
+
+:DRIV3_5642
+Text.PrintNow('FAR3_KD', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_5662
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_5688
+wait 0
+goto @DRIV3_5662
+
+:DRIV3_5688
+Text.ClearThisPrint('FAR3_KD')
+Blip.ChangeDisplay(115@, BlipDisplay.Both)
+Hud.ClearTimer($timer_countdown_farlie3)
+Hud.ClearCounter($int_distance_player_girl)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DRIV3_5740
+38@ = Char.StoreCarIsIn($scplayer)
+
+:DRIV3_5740
+95@ = 1
+
+:DRIV3_5747
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_6085
+if or
+  95@ == 1
+  95@ == 2
+goto_if_false @DRIV3_5854
+if 
+  Car.Locate3D(35@, 0, 62@, 63@, 64@, 20.0, 20.0, 20.0)
+goto_if_false @DRIV3_5854
+Car.SetCruiseSpeed(35@, 0.0)
+Car.SetMission(35@, CarMission.StopForever)
+95@ = 3
+
+:DRIV3_5854
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_5884
+65@, 66@, 67@ = Car.GetCoordinates(35@)
+
+:DRIV3_5884
+68@, 69@, 70@ = Char.GetCoordinates($scplayer)
+88@ = Math.GetDistanceBetweenCoords3D(68@, 69@, 70@, 65@, 66@, 67@)
+if or
+  54@ == 3
+  54@ == 2
+goto_if_false @DRIV3_6019
+if 
+  88@ > 1000.0
+goto_if_false @DRIV3_5984
+88@ = 1000.0
+goto @DRIV3_6012
+
+:DRIV3_5984
+129@ = 1000.0
+sub_float_lvar_from_float_lvar 129@ -= 88@
+129@ /= 10.0
+
+:DRIV3_6012
+goto @DRIV3_6085
+
+:DRIV3_6019
+if 
+  88@ > 500.0
+goto_if_false @DRIV3_6057
+88@ = 500.0
+goto @DRIV3_6085
+
+:DRIV3_6057
+129@ = 500.0
+sub_float_lvar_from_float_lvar 129@ -= 88@
+129@ /= 5.0
+
+:DRIV3_6085
+if 
+  129@ > 0.0
+goto_if_false @DRIV3_6114
+cset_var_int_to_lvar_float $int_distance_player_girl = float 129@
+
+:DRIV3_6114
+if 
+  95@ <> 1
+goto_if_false @DRIV3_6651
+if 
+  109@ == 0
+goto_if_false @DRIV3_6583
+if 
+  102@ == 0
+goto_if_false @DRIV3_6308
+if 
+  103@ == 0
+goto_if_false @DRIV3_6308
+if 
+  200000 >= $timer_countdown_farlie3
+goto_if_false @DRIV3_6308
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15219, 1)
+
+:DRIV3_6218
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_6244
+wait 0
+goto @DRIV3_6218
+
+:DRIV3_6244
+Text.PrintNow('FAR3_FB', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_6264
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_6290
+wait 0
+goto @DRIV3_6264
+
+:DRIV3_6290
+Text.ClearThisPrint('FAR3_FB')
+103@ = 1
+
+:DRIV3_6308
+if 
+  102@ == 0
+goto_if_false @DRIV3_6466
+if 
+  103@ == 1
+goto_if_false @DRIV3_6466
+if 
+  100000 >= $timer_countdown_farlie3
+goto_if_false @DRIV3_6466
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15220, 1)
+
+:DRIV3_6376
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_6402
+wait 0
+goto @DRIV3_6376
+
+:DRIV3_6402
+Text.PrintNow('FAR3_FC', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_6422
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_6448
+wait 0
+goto @DRIV3_6422
+
+:DRIV3_6448
+Text.ClearThisPrint('FAR3_FC')
+103@ = 2
+
+:DRIV3_6466
+if 
+  0 >= $timer_countdown_farlie3
+goto_if_false @DRIV3_6583
+89@ = 0
+93@ = 1
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15221, 1)
+
+:DRIV3_6509
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_6535
+wait 0
+goto @DRIV3_6509
+
+:DRIV3_6535
+Text.PrintNow('FAR3_FD', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_6555
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_6581
+wait 0
+goto @DRIV3_6555
+
+:DRIV3_6581
+return 
+
+:DRIV3_6583
+if 
+  95@ == 0
+goto_if_false @DRIV3_6651
+if 
+  0 >= $timer_countdown_farlie3
+goto_if_false @DRIV3_6651
+89@ = 0
+93@ = 1
+Text.PrintNow('DRI2_5', 5000, 1)
+return 
+
+:DRIV3_6651
+if 
+  95@ == 1
+goto_if_false @DRIV3_6760
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_6760
+if 
+  not Char.LocateAnyMeansCar3D($scplayer, 35@, 400.0, 400.0, 400.0, False)
+goto_if_false @DRIV3_6760
+90@ = 0
+89@ = 0
+93@ = 1
+Text.PrintNow('DRI2_26', 5000, 1)
+return 
+
+:DRIV3_6760
+goto @DRIV3_6799
+
+:DRIV3_6767
+89@ = 0
+93@ = 1
+Text.PrintNow('DRI2_5', 5000, 1)
+return 
+
+:DRIV3_6799
+goto @DRIV3_5094
+
+:DRIV3_6806
+89@ = 0
+90@ = 1
+return 
+
+:DRIV3_6822
+173@ = Sequence.Open()
+Task.LeaveCar(-1, 35@)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(173@)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DRIV3_6870
+38@ = Char.StoreCarIsIn($scplayer)
+
+:DRIV3_6870
+131@ = 0
+
+:DRIV3_6877
+if 
+  3 > 131@
+goto_if_false @DRIV3_7089
+if 
+  not Char.IsDead(42@(131@,9i))
+goto_if_false @DRIV3_7043
+124@(131@,3i) = Blip.AddForChar(42@(131@,9i))
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_7004
+Char.PerformSequence(42@(131@,9i), 173@)
+Char.SetDecisionMaker(42@(131@,9i), 86@)
+Char.SetRelationship(42@(131@,9i), RelationshipType.Hate, PedType.Player1)
+Char.SetRelationship(42@(131@,9i), RelationshipType.Like, PedType.Mission1)
+goto @DRIV3_7036
+
+:DRIV3_7004
+90@ = 0
+93@ = 1
+Text.PrintNow('DRI2_5', 5000, 1)
+return 
+
+:DRIV3_7036
+goto @DRIV3_7075
+
+:DRIV3_7043
+90@ = 0
+93@ = 1
+Text.PrintNow('DRI2_5', 5000, 1)
+return 
+
+:DRIV3_7075
+131@ += 1
+goto @DRIV3_6877
+
+:DRIV3_7089
+if 
+  Blip.DoesExist(115@)
+goto_if_false @DRIV3_7112
+Blip.ChangeDisplay(115@, BlipDisplay.BlipOnly)
+
+:DRIV3_7112
+if 
+  not Char.IsDead(41@)
+goto_if_false @DRIV3_7166
+Char.SetProofs(41@, False, False, False, False, False)
+Char.SetSuffersCriticalHits(41@, True)
+117@ = Blip.AddForChar(41@)
+Char.PerformSequence(41@, 173@)
+
+:DRIV3_7166
+Sequence.Clear(173@)
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_7539
+Car.FreezePosition(35@, True)
+Car.LockDoors(35@, CarLock.Locked)
+if 
+  not Char.IsDead(51@)
+goto_if_false @DRIV3_7370
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_7370
+if 
+  not Char.LocateAnyMeansCar3D(51@, 35@, 40.0, 40.0, 40.0, False)
+goto_if_false @DRIV3_7309
+Char.SetHealth(51@, 0)
+Char.MarkAsNoLongerNeeded(51@)
+if 
+  not Car.IsDead(36@)
+goto_if_false @DRIV3_7302
+Car.MarkAsNoLongerNeeded(36@)
+
+:DRIV3_7302
+goto @DRIV3_7370
+
+:DRIV3_7309
+if 
+  not Car.IsDead(36@)
+goto_if_false @DRIV3_7370
+173@ = Sequence.Open()
+Task.LeaveCar(-1, 36@)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(173@)
+Char.PerformSequence(51@, 173@)
+Sequence.Clear(173@)
+118@ = Blip.AddForChar(51@)
+
+:DRIV3_7370
+if 
+  not Char.IsDead(52@)
+goto_if_false @DRIV3_7539
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_7539
+if 
+  not Char.LocateAnyMeansCar3D(52@, 35@, 40.0, 40.0, 40.0, False)
+goto_if_false @DRIV3_7478
+Char.SetHealth(52@, 0)
+Char.MarkAsNoLongerNeeded(52@)
+if 
+  not Car.IsDead(37@)
+goto_if_false @DRIV3_7471
+Car.MarkAsNoLongerNeeded(37@)
+
+:DRIV3_7471
+goto @DRIV3_7539
+
+:DRIV3_7478
+if 
+  not Car.IsDead(37@)
+goto_if_false @DRIV3_7539
+173@ = Sequence.Open()
+Task.LeaveCar(-1, 37@)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(173@)
+Char.PerformSequence(52@, 173@)
+Sequence.Clear(173@)
+119@ = Blip.AddForChar(52@)
+
+:DRIV3_7539
+Text.PrintNow('DRI2_12', 5000, 1)
+
+:DRIV3_7555
+if 
+  $timer_countdown_farlie3 > 0
+goto_if_false @DRIV3_8216
+wait 0
+gosub @DRIV3_14595
+if 
+  93@ == 1
+goto_if_false @DRIV3_7604
+return 
+
+:DRIV3_7604
+if 
+  109@ == 0
+goto_if_false @DRIV3_7832
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 62@, 63@, 64@, 100.0, 100.0, 100.0)
+goto_if_false @DRIV3_7832
+if 
+  105@ == 0
+goto_if_false @DRIV3_7705
+Text.PrintNow('DRI2_47', 5000, 1)
+105@ = 1
+
+:DRIV3_7705
+if 
+  105@ == 1
+goto_if_false @DRIV3_7832
+if 
+  95@ == 1
+goto_if_false @DRIV3_7832
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_7832
+if 
+  not Char.LocateAnyMeansCar3D($scplayer, 35@, 400.0, 400.0, 400.0, False)
+goto_if_false @DRIV3_7832
+90@ = 0
+89@ = 0
+93@ = 1
+Text.PrintNow('DRI2_26', 5000, 1)
+return 
+
+:DRIV3_7832
+131@ = 0
+
+:DRIV3_7839
+if 
+  3 > 131@
+goto_if_false @DRIV3_7920
+if 
+  Char.IsDead(42@(131@,9i))
+goto_if_false @DRIV3_7906
+if 
+  Blip.DoesExist(124@(131@,3i))
+goto_if_false @DRIV3_7906
+Blip.Remove(124@(131@,3i))
+
+:DRIV3_7906
+131@ += 1
+goto @DRIV3_7839
+
+:DRIV3_7920
+131@ = 0
+
+:DRIV3_7927
+if 
+  2 > 131@
+goto_if_false @DRIV3_8008
+if 
+  Char.IsDead(51@(131@,2i))
+goto_if_false @DRIV3_7994
+if 
+  Blip.DoesExist(118@(131@,2i))
+goto_if_false @DRIV3_7994
+Blip.Remove(118@(131@,2i))
+
+:DRIV3_7994
+131@ += 1
+goto @DRIV3_7927
+
+:DRIV3_8008
+if 
+  Char.IsDead(41@)
+goto_if_false @DRIV3_8045
+if 
+  Blip.DoesExist(117@)
+goto_if_false @DRIV3_8045
+Blip.Remove(117@)
+
+:DRIV3_8045
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_8177
+if and
+  Char.IsDead(42@)
+  Char.IsDead(43@)
+  Char.IsDead(44@)
+  Char.IsDead(41@)
+goto_if_false @DRIV3_8170
+Blip.Remove(124@)
+Blip.Remove(125@)
+Blip.Remove(126@)
+Blip.Remove(117@)
+if 
+  Char.IsDead(51@)
+goto_if_false @DRIV3_8170
+Blip.Remove(118@)
+if 
+  Char.IsDead(52@)
+goto_if_false @DRIV3_8170
+Blip.Remove(119@)
+90@ = 0
+94@ = 1
+return 
+
+:DRIV3_8170
+goto @DRIV3_8209
+
+:DRIV3_8177
+90@ = 0
+93@ = 1
+Text.PrintNow('DRI2_5', 5000, 1)
+return 
+
+:DRIV3_8209
+goto @DRIV3_7555
+
+:DRIV3_8216
+90@ = 0
+93@ = 1
+Car.Explode(35@)
+Text.PrintNow('DRI2_5', 5000, 1)
+return 
+
+:DRIV3_8253
+if 
+  99@ == 0
+goto_if_false @DRIV3_9964
+178@ = 0
+wait 2000
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+wait 2000
+Camera.DoFade(0, 1000)
+
+:DRIV3_8306
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRIV3_8330
+wait 0
+goto @DRIV3_8306
+
+:DRIV3_8330
+Streaming.RequestModel(409)
+
+:DRIV3_8335
+if 
+  not Streaming.HasModelLoaded(409)
+goto_if_false @DRIV3_8362
+wait 0
+goto @DRIV3_8335
+
+:DRIV3_8362
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_8454
+Car.SetCoordinates(35@, -1321.8, -189.79, 13.46)
+Car.SetHeading(35@, 60.0)
+77@ = Car.GetOffsetInWorldCoords(78@, 79@, 35@, 6.0, 10.5, -0.2)
+34@ = Car.Create(409, 77@, 78@, 79@)
+
+:DRIV3_8454
+Streaming.MarkModelAsNoLongerNeeded(409)
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_9073
+if 
+  Blip.DoesExist(115@)
+goto_if_false @DRIV3_8498
+Blip.ChangeDisplay(115@, BlipDisplay.Both)
+
+:DRIV3_8498
+77@ = Car.GetOffsetInWorldCoords(78@, 79@, 35@, 6.0, -6.5, -0.5)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DRIV3_8564
+Char.WarpFromCarToCoord($scplayer, 77@, 78@, 79@)
+goto @DRIV3_8578
+
+:DRIV3_8564
+Char.SetCoordinates($scplayer, 77@, 78@, 79@)
+
+:DRIV3_8578
+77@ = Car.GetOffsetInWorldCoords(78@, 79@, 35@, -1.0, -3.5, -0.2)
+if 
+  not Car.IsDead(36@)
+goto_if_false @DRIV3_8666
+77@ = Car.GetOffsetInWorldCoords(78@, 79@, 35@, -8.0, -8.0, -0.9)
+Car.SetCoordinates(36@, 77@, 78@, 79@)
+
+:DRIV3_8666
+if 
+  not Car.IsDead(37@)
+goto_if_false @DRIV3_8725
+77@ = Car.GetOffsetInWorldCoords(78@, 79@, 35@, 8.0, -8.0, -0.9)
+Car.SetCoordinates(37@, 77@, 78@, 79@)
+
+:DRIV3_8725
+if 
+  not Car.IsDead(38@)
+goto_if_false @DRIV3_8784
+77@ = Car.GetOffsetInWorldCoords(78@, 79@, 35@, 15.0, -20.0, -0.9)
+Car.SetCoordinates(38@, 77@, 78@, 79@)
+
+:DRIV3_8784
+77@ = Car.GetOffsetInWorldCoords(78@, 79@, 35@, -2.0, -6.5, -0.5)
+Camera.SetFixedPosition(77@, 78@, 79@, 0.0, 0.0, 0.0)
+Camera.PointAtCar(35@, CameraMode.Fixed, SwitchType.JumpCut)
+Car.LockDoors(35@, CarLock.Unlocked)
+Streaming.LoadSpecialCharacter('TORINO', 1)
+
+:DRIV3_8868
+if 
+  not Streaming.HasSpecialCharacterLoaded(1)
+goto_if_false @DRIV3_8894
+wait 0
+goto @DRIV3_8868
+
+:DRIV3_8894
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_9066
+77@ = Car.GetOffsetInWorldCoords(78@, 79@, 35@, -6.0, -20.0, 0.0)
+40@ = Char.Create(25, 290, 77@, 78@, 79@)
+Char.SetDrownsInWater(40@, True)
+Char.ShutUpForScriptedSpeech(40@, True)
+Char.SetGetOutUpsideDownCar(40@, False)
+Char.SetStayInSamePlace(40@, True)
+85@ = Char.GetHeading(40@)
+Char.SetRelationship(40@, RelationshipType.Like, PedType.Player1)
+Char.SetDecisionMaker(40@, 87@)
+Char.GiveWeapon(40@, WeaponType.MicroUzi, 1000)
+Char.SetProofs(40@, False, False, True, False, False)
+Char.SetNeverTargeted(40@, True)
+Char.SetOnlyDamagedByPlayer(40@, True)
+Task.LeaveCar(40@, 35@)
+Car.SetHealth(35@, 1000)
+
+:DRIV3_9066
+goto @DRIV3_9105
+
+:DRIV3_9073
+94@ = 0
+93@ = 1
+Text.PrintNow('DRI2_22', 5000, 1)
+return 
+
+:DRIV3_9105
+Streaming.MarkModelAsNoLongerNeeded(121)
+Streaming.MarkModelAsNoLongerNeeded(122)
+Streaming.MarkModelAsNoLongerNeeded(123)
+Streaming.MarkModelAsNoLongerNeeded(352)
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_9191
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_9191
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DRIV3_9191
+Char.SetVisible($scplayer, False)
+Char.SetVisible(53@, False)
+Char.SetVisible(40@, False)
+
+:DRIV3_9191
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_9398
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_9391
+if 
+  Char.IsGroupMember(53@, $Players_Group)
+goto_if_false @DRIV3_9247
+Char.RemoveFromGroup(53@)
+
+:DRIV3_9247
+77@ = Car.GetOffsetInWorldCoords(78@, 79@, 35@, 6.0, -20.0, 0.0)
+if 
+  Char.IsInAnyCar(53@)
+goto_if_false @DRIV3_9313
+Char.WarpFromCarToCoord(53@, 77@, 78@, 79@)
+goto @DRIV3_9327
+
+:DRIV3_9313
+Char.SetCoordinates(53@, 77@, 78@, 79@)
+
+:DRIV3_9327
+Char.SetStayInSamePlace(53@, True)
+77@ = Car.GetOffsetInWorldCoords(78@, 79@, 35@, 3.0, -20.0, 0.0)
+Char.SetCoordinates($scplayer, 77@, 78@, 79@)
+Task.TurnCharToFaceCoord($scplayer, 56@, 57@, 58@)
+
+:DRIV3_9391
+goto @DRIV3_9430
+
+:DRIV3_9398
+94@ = 0
+93@ = 1
+Text.PrintNow('DRI2_22', 5000, 1)
+return 
+
+:DRIV3_9430
+Char.Delete(42@)
+Char.Delete(43@)
+Char.Delete(44@)
+Char.Delete(41@)
+Char.Delete(51@)
+Char.Delete(52@)
+Char.Delete(51@)
+Char.Delete(52@)
+Car.Delete(36@)
+Car.Delete(37@)
+World.ClearArea(1, 56@, 57@, 58@, 1500.0)
+Cutscene.Load('FARL_3B')
+
+:DRIV3_9509
+if 
+  not Cutscene.HasLoaded
+goto_if_false @DRIV3_9533
+wait 0
+goto @DRIV3_9509
+
+:DRIV3_9533
+Camera.DoFade(1, 1000)
+World.ClearArea(1, 56@, 57@, 58@, 1500.0)
+Cutscene.Start
+
+:DRIV3_9560
+if 
+  not Cutscene.HasFinished
+goto_if_false @DRIV3_9602
+wait 0
+World.ClearArea(1, 56@, 57@, 58@, 1500.0)
+goto @DRIV3_9560
+
+:DRIV3_9602
+Cutscene.Clear
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_9627
+Char.SetVisible(53@, True)
+
+:DRIV3_9627
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_9650
+Char.SetVisible(40@, True)
+
+:DRIV3_9650
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DRIV3_9673
+Char.SetVisible($scplayer, True)
+
+:DRIV3_9673
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_9775
+Car.FreezePosition(35@, False)
+Car.LockDoors(35@, CarLock.Locked)
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_9727
+Task.DestroyCar(40@, 35@)
+
+:DRIV3_9727
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_9775
+if 
+  Char.IsGroupMember(53@, $Players_Group)
+goto_if_false @DRIV3_9767
+Char.RemoveFromGroup(53@)
+
+:DRIV3_9767
+Task.DestroyCar(53@, 35@)
+
+:DRIV3_9775
+Camera.DoFade(0, Fade.Out)
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_9865
+77@ = Car.GetOffsetInWorldCoords(78@, 79@, 35@, 6.0, -6.5, -0.5)
+56@, 57@, 58@ = Car.GetCoordinates(35@)
+83@ = Math.GetHeadingFromVector2D(56@, 57@)
+Task.TurnCharToFaceCoord($scplayer, 56@, 57@, 58@)
+
+:DRIV3_9865
+World.ClearArea(1, 56@, 57@, 58@, 1000.0)
+wait 2000
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Camera.DoFade(1, 1000)
+
+:DRIV3_9899
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRIV3_9923
+wait 0
+goto @DRIV3_9899
+
+:DRIV3_9923
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Game.SetPoliceIgnorePlayer($player1, True)
+Text.PrintNow('DRI2_33', 10000, 1)
+99@ = 1
+
+:DRIV3_9964
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_9987
+goto @DRIV3_10019
+
+:DRIV3_9987
+94@ = 0
+93@ = 1
+Text.PrintNow('DRI2_22', 5000, 1)
+return 
+
+:DRIV3_10019
+if 
+  Char.IsDead(53@)
+goto_if_false @DRIV3_10095
+89@ = 0
+90@ = 0
+94@ = 0
+91@ = 0
+92@ = 0
+93@ = 1
+Text.PrintNow('DRI2_31', 5000, 1)
+return 
+
+:DRIV3_10095
+if 
+  96@ == 0
+goto_if_false @DRIV3_10578
+if 
+  Car.IsDead(35@)
+goto_if_false @DRIV3_10578
+96@ = 1
+Blip.Remove(115@)
+Player.AlterWantedLevelNoDrop($player1, 2)
+TIMERB = 0
+Group.SetSeparationRange($Players_Group, 30.0)
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_10237
+Char.SetStayInSamePlace(40@, False)
+if 
+  not Char.IsGroupMember(40@, $Players_Group)
+goto_if_false @DRIV3_10215
+Group.SetMember(40@, $Players_Group)
+
+:DRIV3_10215
+Char.SetProofs(40@, False, False, False, False, False)
+goto @DRIV3_10269
+
+:DRIV3_10237
+94@ = 0
+93@ = 1
+Text.PrintNow('DRI2_22', 5000, 1)
+return 
+
+:DRIV3_10269
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_10319
+Char.SetStayInSamePlace(53@, False)
+if 
+  not Char.IsGroupMember(53@, $Players_Group)
+goto_if_false @DRIV3_10319
+Group.SetMember(53@, $Players_Group)
+
+:DRIV3_10319
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_10578
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_10578
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 40@, 30.0, 30.0, 30.0, False)
+goto_if_false @DRIV3_10578
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 53@, 30.0, 30.0, 30.0, False)
+goto_if_false @DRIV3_10578
+Text.PrintNow('DRI2_4', 5000, 1)
+if 
+  Car.IsInWater(35@)
+goto_if_false @DRIV3_10478
+Text.Print('DRI2_34', 10000, 1)
+goto @DRIV3_10494
+
+:DRIV3_10478
+Text.Print('DRI2_24', 10000, 1)
+
+:DRIV3_10494
+if 
+  100@ == 0
+goto_if_false @DRIV3_10539
+123@ = Blip.AddForCoord(-1734.05, -579.94, 15.56)
+goto @DRIV3_10578
+
+:DRIV3_10539
+120@ = Blip.AddForCoord(59@, 60@, 61@)
+if 
+  108@ == 0
+goto_if_false @DRIV3_10578
+108@ = 1
+
+:DRIV3_10578
+if 
+  107@ == 0
+goto_if_false @DRIV3_10690
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_10690
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_10690
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DRIV3_10690
+if 
+  Char.IsInAnyCar(40@)
+goto_if_false @DRIV3_10690
+if 
+  Char.IsInAnyCar(53@)
+goto_if_false @DRIV3_10690
+Game.SetPoliceIgnorePlayer($player1, False)
+107@ = 1
+
+:DRIV3_10690
+if 
+  96@ == 1
+goto_if_false @DRIV3_10762
+gosub @DRIV3_14040
+if 
+  93@ == 1
+goto_if_false @DRIV3_10735
+return 
+
+:DRIV3_10735
+gosub @DRIV3_14595
+if 
+  93@ == 1
+goto_if_false @DRIV3_10762
+return 
+
+:DRIV3_10762
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 56@, 57@, 58@, 150.0, 150.0, 150.0)
+goto_if_false @DRIV3_10836
+if 
+  97@ == 0
+goto_if_false @DRIV3_10829
+97@ = 1
+
+:DRIV3_10829
+goto @DRIV3_10861
+
+:DRIV3_10836
+if 
+  97@ == 1
+goto_if_false @DRIV3_10861
+97@ = 0
+
+:DRIV3_10861
+if 
+  not Car.IsDead(35@)
+goto_if_false @DRIV3_10891
+56@, 57@, 58@ = Car.GetCoordinates(35@)
+
+:DRIV3_10891
+if 
+  96@ == 1
+goto_if_false @DRIV3_11220
+Blip.Remove(115@)
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 53@, 30.0, 30.0, 30.0, False)
+goto_if_false @DRIV3_11184
+if 
+  100@ == 0
+goto_if_false @DRIV3_11027
+if 
+  not Blip.DoesExist(123@)
+goto_if_false @DRIV3_11020
+123@ = Blip.AddForCoord(-1734.05, -579.94, 15.56)
+Text.PrintNow('DRI2_34', 5000, 1)
+
+:DRIV3_11020
+goto @DRIV3_11098
+
+:DRIV3_11027
+if 
+  not Blip.DoesExist(120@)
+goto_if_false @DRIV3_11098
+120@ = Blip.AddForCoord(59@, 60@, 61@)
+Text.PrintNow('DRI2_25', 5000, 1)
+if 
+  108@ == 0
+goto_if_false @DRIV3_11098
+108@ = 1
+
+:DRIV3_11098
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_11141
+if 
+  not Char.IsGroupMember(40@, $Players_Group)
+goto_if_false @DRIV3_11141
+Group.SetMember(40@, $Players_Group)
+
+:DRIV3_11141
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_11184
+if 
+  not Char.IsGroupMember(53@, $Players_Group)
+goto_if_false @DRIV3_11184
+Group.SetMember(53@, $Players_Group)
+
+:DRIV3_11184
+Car.MarkAsNoLongerNeeded(34@)
+Car.MarkAsNoLongerNeeded(38@)
+Streaming.MarkModelAsNoLongerNeeded(482)
+Streaming.MarkModelAsNoLongerNeeded(409)
+91@ = 1
+94@ = 0
+return 
+
+:DRIV3_11220
+return 
+
+:DRIV3_11222
+gosub @DRIV3_14040
+if 
+  93@ == 1
+goto_if_false @DRIV3_11249
+return 
+
+:DRIV3_11249
+gosub @DRIV3_14595
+if 
+  93@ == 1
+goto_if_false @DRIV3_11276
+return 
+
+:DRIV3_11276
+if 
+  100@ == 1
+goto_if_false @DRIV3_11301
+gosub @DRIV3_13426
+
+:DRIV3_11301
+if 
+  107@ == 0
+goto_if_false @DRIV3_11413
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_11413
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_11413
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DRIV3_11413
+if 
+  Char.IsInAnyCar(40@)
+goto_if_false @DRIV3_11413
+if 
+  Char.IsInAnyCar(53@)
+goto_if_false @DRIV3_11413
+Game.SetPoliceIgnorePlayer($player1, False)
+107@ = 1
+
+:DRIV3_11413
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_11896
+if 
+  110@ == 0
+goto_if_false @DRIV3_11896
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DRIV3_11889
+if 
+  112@ == 0
+goto_if_false @DRIV3_11882
+38@ = Char.StoreCarIsIn($scplayer)
+39@ = Car.GetMaximumNumberOfPassengers(38@)
+if 
+  2 > 39@
+goto_if_false @DRIV3_11875
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+if 
+  111@ == 0
+goto_if_false @DRIV3_11627
+Audio.LoadMissionAudio(15241, 1)
+
+:DRIV3_11544
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_11570
+wait 0
+goto @DRIV3_11544
+
+:DRIV3_11570
+Text.PrintNow('FAR3_LC', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_11590
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_11616
+wait 0
+goto @DRIV3_11590
+
+:DRIV3_11616
+Text.ClearThisPrint('FAR3_LC')
+
+:DRIV3_11627
+if 
+  111@ == 1
+goto_if_false @DRIV3_11735
+Audio.LoadMissionAudio(15239, 1)
+
+:DRIV3_11652
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_11678
+wait 0
+goto @DRIV3_11652
+
+:DRIV3_11678
+Text.PrintNow('FAR3_LA', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_11698
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_11724
+wait 0
+goto @DRIV3_11698
+
+:DRIV3_11724
+Text.ClearThisPrint('FAR3_LA')
+
+:DRIV3_11735
+if 
+  111@ == 2
+goto_if_false @DRIV3_11843
+Audio.LoadMissionAudio(15240, 1)
+
+:DRIV3_11760
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_11786
+wait 0
+goto @DRIV3_11760
+
+:DRIV3_11786
+Text.PrintNow('FAR3_LB', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_11806
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_11832
+wait 0
+goto @DRIV3_11806
+
+:DRIV3_11832
+Text.ClearThisPrint('FAR3_LB')
+
+:DRIV3_11843
+111@ += 1
+if 
+  111@ >= 3
+goto_if_false @DRIV3_11875
+111@ = 0
+
+:DRIV3_11875
+112@ = 1
+
+:DRIV3_11882
+goto @DRIV3_11896
+
+:DRIV3_11889
+112@ = 0
+
+:DRIV3_11896
+if 
+  100@ == 0
+goto_if_false @DRIV3_12039
+if or
+  Char.LocateAnyMeans3D($scplayer, 0, -1734.05, -579.94, 15.56, 20.0, 20.0, 20.0)
+  not Char.LocateAnyMeans3D($scplayer, 0, 62@, 63@, 64@, 600.0, 600.0, 600.0)
+goto_if_false @DRIV3_12039
+100@ = 1
+if 
+  not Player.IsWantedLevelGreater($player1, 3)
+goto_if_false @DRIV3_12025
+Player.AlterWantedLevelNoDrop($player1, 3)
+
+:DRIV3_12025
+Game.SetPoliceIgnorePlayer($player1, False)
+107@ = 1
+
+:DRIV3_12039
+if 
+  110@ == 0
+goto_if_false @DRIV3_13424
+if 
+  109@ == 0
+goto_if_false @DRIV3_13424
+if 
+  100@ == 0
+goto_if_false @DRIV3_12349
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -1734.05, -579.94, 15.56, 20.0, 20.0, 20.0)
+goto_if_false @DRIV3_12301
+if 
+  Blip.DoesExist(123@)
+goto_if_false @DRIV3_12301
+Blip.Remove(123@)
+if 
+  not Player.IsWantedLevelGreater($player1, 3)
+goto_if_false @DRIV3_12187
+Player.AlterWantedLevelNoDrop($player1, 3)
+
+:DRIV3_12187
+128@ = Blip.AddSpriteForCoord(63, 80@, 81@, 82@)
+Text.Print('DRI2_46', 5000, 1)
+104@ = 1
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_12260
+Char.ClearRelationship(40@, RelationshipType.Like, PedType.Cop)
+Char.SetRelationship(40@, RelationshipType.Hate, PedType.Cop)
+
+:DRIV3_12260
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_12294
+Char.ClearRelationship(53@, RelationshipType.Like, PedType.Cop)
+Char.SetRelationship(53@, RelationshipType.Hate, PedType.Cop)
+
+:DRIV3_12294
+100@ = 1
+
+:DRIV3_12301
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, -1734.05, -579.94, 15.56, 4.0, 4.0, 4.0)
+goto_if_false @DRIV3_12349
+
+:DRIV3_12349
+if 
+  108@ == 1
+goto_if_false @DRIV3_13424
+if 
+  100@ == 1
+goto_if_false @DRIV3_12555
+if and
+  $flag_phone_dialog_driv3 >= 33
+  47 > $flag_phone_dialog_driv3
+goto_if_false @DRIV3_12555
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DRIV3_12555
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_12555
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_12555
+if 
+  Char.IsInAnyCar(53@)
+goto_if_false @DRIV3_12555
+if 
+  Char.IsInAnyCar(40@)
+goto_if_false @DRIV3_12555
+if 
+  $flag_phone_dialog_driv3 == 33
+goto_if_false @DRIV3_12548
+132@ = 25
+if 
+  TIMERA > 10000
+goto_if_false @DRIV3_12541
+gosub @DRIV3_15530
+
+:DRIV3_12541
+goto @DRIV3_12555
+
+:DRIV3_12548
+gosub @DRIV3_15530
+
+:DRIV3_12555
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 59@, 60@, 61@, 4.0, 4.0, 4.0)
+goto_if_false @DRIV3_13424
+91@ = 0
+92@ = 1
+178@ = 0
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+TIMERA = 0
+TIMERB = 0
+
+:DRIV3_12643
+if 
+  8000 > TIMERA
+goto_if_false @DRIV3_13394
+wait 0
+if 
+  178@ == 0
+goto_if_false @DRIV3_12874
+77@ = Char.GetOffsetInWorldCoords(78@, 79@, $scplayer, 3.0, 8.0, 0.4)
+Camera.SetFixedPosition(77@, 78@, 79@, 0.0, 0.0, 0.0)
+Camera.PointAtChar($scplayer, CameraMode.Fixed, SwitchType.JumpCut)
+World.ClearArea(1, 59@, 60@, 61@, 100.0)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15257, 1)
+
+:DRIV3_12777
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_12803
+wait 0
+goto @DRIV3_12777
+
+:DRIV3_12803
+Text.PrintNow('FAR3_NA', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_12823
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_12849
+wait 0
+goto @DRIV3_12823
+
+:DRIV3_12849
+Text.ClearThisPrint('FAR3_NA')
+178@ = 1
+TIMERB = 0
+
+:DRIV3_12874
+if 
+  178@ == 1
+goto_if_false @DRIV3_13144
+if 
+  TIMERB > 500
+goto_if_false @DRIV3_13144
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_13144
+77@ = Char.GetOffsetInWorldCoords(78@, 79@, 40@, 3.0, -2.0, 0.5)
+Camera.SetFixedPosition(77@, 78@, 79@, 0.0, 0.0, 0.0)
+Camera.PointAtChar(40@, CameraMode.Fixed, SwitchType.JumpCut)
+if 
+  Char.IsGroupMember(40@, $Players_Group)
+goto_if_false @DRIV3_13015
+Char.RemoveFromGroup(40@)
+
+:DRIV3_13015
+if 
+  Char.IsInAnyCar(40@)
+goto_if_false @DRIV3_13036
+Task.LeaveAnyCar(40@)
+
+:DRIV3_13036
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(15258, 1)
+
+:DRIV3_13047
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_13073
+wait 0
+goto @DRIV3_13047
+
+:DRIV3_13073
+Text.PrintNow('FAR3_NB', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:DRIV3_13093
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_13119
+wait 0
+goto @DRIV3_13093
+
+:DRIV3_13119
+Text.ClearThisPrint('FAR3_NB')
+TIMERB = 0
+178@ = 2
+
+:DRIV3_13144
+if 
+  178@ == 2
+goto_if_false @DRIV3_13296
+if 
+  TIMERB > 500
+goto_if_false @DRIV3_13296
+178@ = 3
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_13228
+Task.GoStraightToCoord(40@, -2624.57, 1410.46, 6.5, MoveState.Walk, -1)
+
+:DRIV3_13228
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_13296
+if 
+  Char.IsGroupMember(53@, $Players_Group)
+goto_if_false @DRIV3_13268
+Char.RemoveFromGroup(53@)
+
+:DRIV3_13268
+if 
+  Char.IsInAnyCar(53@)
+goto_if_false @DRIV3_13296
+Task.LeaveAnyCar(53@)
+TIMERB = 0
+
+:DRIV3_13296
+if 
+  178@ == 3
+goto_if_false @DRIV3_13387
+if 
+  TIMERB > 200
+goto_if_false @DRIV3_13387
+178@ = 4
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_13380
+Task.GoStraightToCoord(53@, -2625.57, 1409.46, 6.5, MoveState.Walk, -1)
+
+:DRIV3_13380
+TIMERB = 0
+
+:DRIV3_13387
+goto @DRIV3_12643
+
+:DRIV3_13394
+Char.Delete(40@)
+Char.Delete(53@)
+Car.MarkAsNoLongerNeeded(38@)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+
+:DRIV3_13424
+return 
+
+:DRIV3_13426
+if 
+  100@ == 1
+goto_if_false @DRIV3_14038
+if 
+  104@ == 0
+goto_if_false @DRIV3_13704
+if and
+  110@ == 0
+  109@ == 0
+goto_if_false @DRIV3_13704
+if 
+  Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @DRIV3_13704
+104@ = 1
+if 
+  not Blip.DoesExist(128@)
+goto_if_false @DRIV3_13560
+128@ = Blip.AddSpriteForCoord(63, 80@, 81@, 82@)
+Text.Print('DRI2_46', 5000, 1)
+
+:DRIV3_13560
+if 
+  Blip.DoesExist(123@)
+goto_if_false @DRIV3_13581
+Blip.Remove(123@)
+
+:DRIV3_13581
+if 
+  Blip.DoesExist(120@)
+goto_if_false @DRIV3_13602
+Blip.Remove(120@)
+
+:DRIV3_13602
+DecisionMakerChar.AddEventResponse(87@, 36, 1022, 0.0, 100.0, 0.0, 0.0, True, False)
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_13670
+Char.SetRelationship(40@, RelationshipType.Hate, PedType.Cop)
+Char.ClearRelationship(40@, RelationshipType.Like, PedType.Cop)
+
+:DRIV3_13670
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_13704
+Char.SetRelationship(53@, RelationshipType.Hate, PedType.Cop)
+Char.ClearRelationship(53@, RelationshipType.Like, PedType.Cop)
+
+:DRIV3_13704
+if 
+  104@ == 1
+goto_if_false @DRIV3_14038
+if 
+  not Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @DRIV3_14038
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_13837
+Char.ClearRelationship(40@, RelationshipType.Hate, PedType.Cop)
+if 
+  Char.IsGroupMember(40@, $Players_Group)
+goto_if_false @DRIV3_13789
+Char.RemoveFromGroup(40@)
+
+:DRIV3_13789
+Char.ClearTasks(40@)
+if 
+  not Char.IsGroupMember(40@, $Players_Group)
+goto_if_false @DRIV3_13828
+Group.SetMember(40@, $Players_Group)
+Group.SetFollowStatus($Players_Group, True)
+
+:DRIV3_13828
+Char.SetRelationship(40@, RelationshipType.Like, PedType.Cop)
+
+:DRIV3_13837
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_13925
+Char.ClearRelationship(53@, RelationshipType.Hate, PedType.Cop)
+if 
+  Char.IsGroupMember(53@, $Players_Group)
+goto_if_false @DRIV3_13886
+Char.RemoveFromGroup(53@)
+
+:DRIV3_13886
+Char.ClearTasks(53@)
+if 
+  not Char.IsGroupMember(53@, $Players_Group)
+goto_if_false @DRIV3_13925
+Group.SetMember(53@, $Players_Group)
+Group.SetFollowStatus($Players_Group, True)
+
+:DRIV3_13925
+DecisionMakerChar.ClearEventResponse(87@, 36)
+104@ = 0
+TIMERA = 0
+if 
+  not Blip.DoesExist(120@)
+goto_if_false @DRIV3_14017
+120@ = Blip.AddForCoord(59@, 60@, 61@)
+Text.PrintNow('DRI2_25', 5000, 1)
+if 
+  108@ == 0
+goto_if_false @DRIV3_14017
+108@ = 1
+
+:DRIV3_14017
+if 
+  Blip.DoesExist(128@)
+goto_if_false @DRIV3_14038
+Blip.Remove(128@)
+
+:DRIV3_14038
+return 
+
+:DRIV3_14040
+if 
+  not Char.IsDead(40@)
+goto_if_false @DRIV3_14554
+if 
+  110@ == 0
+goto_if_false @DRIV3_14194
+if 
+  not Char.IsGroupMember(40@, $Players_Group)
+goto_if_false @DRIV3_14194
+Text.PrintNow('DRI2_3', 5000, 1)
+if 
+  Blip.DoesExist(120@)
+goto_if_false @DRIV3_14130
+Blip.Remove(120@)
+
+:DRIV3_14130
+if 
+  Blip.DoesExist(123@)
+goto_if_false @DRIV3_14151
+Blip.Remove(123@)
+
+:DRIV3_14151
+if 
+  Blip.DoesExist(127@)
+goto_if_false @DRIV3_14172
+Blip.Remove(127@)
+
+:DRIV3_14172
+121@ = Blip.AddForChar(40@)
+Blip.SetAsFriendly(121@, True)
+110@ = 1
+
+:DRIV3_14194
+if 
+  110@ == 1
+goto_if_false @DRIV3_14547
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 40@, 8.0, 8.0, 8.0, False)
+goto_if_false @DRIV3_14547
+if 
+  not Char.IsGroupMember(40@, $Players_Group)
+goto_if_false @DRIV3_14275
+Group.SetMember(40@, $Players_Group)
+
+:DRIV3_14275
+110@ = 0
+Blip.Remove(121@)
+if 
+  109@ == 0
+goto_if_false @DRIV3_14547
+if 
+  100@ == 1
+goto_if_false @DRIV3_14495
+if 
+  104@ == 0
+goto_if_false @DRIV3_14419
+if 
+  not Blip.DoesExist(120@)
+goto_if_false @DRIV3_14412
+120@ = Blip.AddForCoord(59@, 60@, 61@)
+Text.PrintNow('DRI2_25', 5000, 1)
+if 
+  108@ == 0
+goto_if_false @DRIV3_14412
+108@ = 1
+
+:DRIV3_14412
+goto @DRIV3_14488
+
+:DRIV3_14419
+if 
+  not Blip.DoesExist(128@)
+goto_if_false @DRIV3_14451
+128@ = Blip.AddSpriteForCoord(63, 80@, 81@, 82@)
+
+:DRIV3_14451
+Text.PrintNow('DRI2_46', 5000, 1)
+if 
+  Blip.DoesExist(123@)
+goto_if_false @DRIV3_14488
+Blip.Remove(123@)
+
+:DRIV3_14488
+goto @DRIV3_14547
+
+:DRIV3_14495
+if 
+  not Blip.DoesExist(123@)
+goto_if_false @DRIV3_14531
+123@ = Blip.AddForCoord(-1734.05, -579.94, 15.56)
+
+:DRIV3_14531
+Text.PrintNow('DRI2_34', 5000, 1)
+
+:DRIV3_14547
+goto @DRIV3_14593
+
+:DRIV3_14554
+94@ = 0
+94@ = 0
+93@ = 1
+Text.PrintNow('DRI2_22', 5000, 1)
+return 
+
+:DRIV3_14593
+return 
+
+:DRIV3_14595
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_15480
+if 
+  109@ == 0
+goto_if_false @DRIV3_14770
+if 
+  not Char.IsGroupMember(53@, $Players_Group)
+goto_if_false @DRIV3_14770
+Text.PrintNow('DRI2_32', 5000, 1)
+if 
+  Blip.DoesExist(120@)
+goto_if_false @DRIV3_14685
+Blip.Remove(120@)
+
+:DRIV3_14685
+if 
+  Blip.DoesExist(127@)
+goto_if_false @DRIV3_14706
+Blip.Remove(127@)
+
+:DRIV3_14706
+if 
+  Blip.DoesExist(123@)
+goto_if_false @DRIV3_14727
+Blip.Remove(123@)
+
+:DRIV3_14727
+if 
+  Blip.DoesExist(116@)
+goto_if_false @DRIV3_14748
+Blip.Remove(116@)
+
+:DRIV3_14748
+122@ = Blip.AddForChar(53@)
+Blip.SetAsFriendly(122@, True)
+109@ = 1
+
+:DRIV3_14770
+if 
+  109@ == 1
+goto_if_false @DRIV3_15473
+if 
+  not Char.IsDead(53@)
+goto_if_false @DRIV3_15427
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 53@, 8.0, 8.0, 8.0, False)
+goto_if_false @DRIV3_15420
+if 
+  not Char.IsGroupMember(53@, $Players_Group)
+goto_if_false @DRIV3_14867
+Group.SetMember(53@, $Players_Group)
+
+:DRIV3_14867
+109@ = 0
+Blip.Remove(122@)
+if 
+  110@ == 0
+goto_if_false @DRIV3_15157
+if 
+  91@ == 1
+goto_if_false @DRIV3_15157
+if 
+  100@ == 1
+goto_if_false @DRIV3_15105
+if 
+  104@ == 0
+goto_if_false @DRIV3_15029
+if 
+  not Blip.DoesExist(120@)
+goto_if_false @DRIV3_15022
+120@ = Blip.AddForCoord(59@, 60@, 61@)
+Text.PrintNow('DRI2_25', 5000, 1)
+if 
+  108@ == 0
+goto_if_false @DRIV3_15022
+108@ = 1
+
+:DRIV3_15022
+goto @DRIV3_15098
+
+:DRIV3_15029
+if 
+  not Blip.DoesExist(128@)
+goto_if_false @DRIV3_15061
+128@ = Blip.AddSpriteForCoord(63, 80@, 81@, 82@)
+
+:DRIV3_15061
+Text.PrintNow('DRI2_46', 5000, 1)
+if 
+  Blip.DoesExist(123@)
+goto_if_false @DRIV3_15098
+Blip.Remove(123@)
+
+:DRIV3_15098
+goto @DRIV3_15157
+
+:DRIV3_15105
+if 
+  not Blip.DoesExist(123@)
+goto_if_false @DRIV3_15141
+123@ = Blip.AddForCoord(-1734.05, -579.94, 15.56)
+
+:DRIV3_15141
+Text.PrintNow('DRI2_34', 5000, 1)
+
+:DRIV3_15157
+if 
+  89@ == 1
+goto_if_false @DRIV3_15420
+if and
+  $flag_phone_dialog_driv3 >= 5
+  8 > $flag_phone_dialog_driv3
+goto_if_false @DRIV3_15236
+if 
+  not Blip.DoesExist(127@)
+goto_if_false @DRIV3_15236
+127@ = Blip.AddForCoord(-2071.0, 209.0, 35.0)
+
+:DRIV3_15236
+if and
+  $flag_phone_dialog_driv3 >= 9
+  15 > $flag_phone_dialog_driv3
+goto_if_false @DRIV3_15297
+if 
+  not Blip.DoesExist(127@)
+goto_if_false @DRIV3_15297
+127@ = Blip.AddForCoord(-1772.0, 152.0, 152.0)
+
+:DRIV3_15297
+if and
+  $flag_phone_dialog_driv3 >= 15
+  24 > $flag_phone_dialog_driv3
+goto_if_false @DRIV3_15352
+if 
+  not Blip.DoesExist(127@)
+goto_if_false @DRIV3_15352
+116@ = Blip.AddForCoord(71@, 72@, 73@)
+
+:DRIV3_15352
+if 
+  89@ == 1
+goto_if_false @DRIV3_15420
+if 
+  0 >= $timer_countdown_farlie3
+goto_if_false @DRIV3_15420
+89@ = 0
+93@ = 1
+Text.PrintNow('FAR3_FD', 5000, 1)
+return 
+
+:DRIV3_15420
+goto @DRIV3_15473
+
+:DRIV3_15427
+90@ = 0
+89@ = 0
+94@ = 0
+93@ = 1
+Text.PrintNow('DRI2_31', 5000, 1)
+return 
+
+:DRIV3_15473
+goto @DRIV3_15528
+
+:DRIV3_15480
+90@ = 0
+89@ = 0
+94@ = 0
+93@ = 1
+Text.PrintNow('DRI2_31', 5000, 1)
+return 
+return 
+
+:DRIV3_15528
+return 
+
+:DRIV3_15530
+if 
+  106@ == 0
+goto_if_false @DRIV3_15570
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(133@(132@,40i), 1)
+106@ = 1
+
+:DRIV3_15570
+if 
+  106@ == 1
+goto_if_false @DRIV3_15837
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_15837
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow($farlie3_text(132@,40s), 10000, 1)
+if 
+  $flag_phone_dialog_driv3 == 0
+goto_if_false @DRIV3_15646
+102@ = 1
+
+:DRIV3_15646
+if 
+  $flag_phone_dialog_driv3 == 5
+goto_if_false @DRIV3_15700
+if 
+  not Blip.DoesExist(127@)
+goto_if_false @DRIV3_15700
+127@ = Blip.AddForCoord(-2071.0, 209.0, 35.0)
+
+:DRIV3_15700
+if 
+  $flag_phone_dialog_driv3 == 8
+goto_if_false @DRIV3_15730
+Blip.Remove(127@)
+102@ = 1
+
+:DRIV3_15730
+if 
+  $flag_phone_dialog_driv3 == 11
+goto_if_false @DRIV3_15768
+127@ = Blip.AddForCoord(-1772.0, 152.0, 152.0)
+
+:DRIV3_15768
+if 
+  $flag_phone_dialog_driv3 == 14
+goto_if_false @DRIV3_15798
+102@ = 1
+Blip.Remove(127@)
+
+:DRIV3_15798
+if 
+  $flag_phone_dialog_driv3 == 18
+goto_if_false @DRIV3_15830
+116@ = Blip.AddForCoord(71@, 72@, 73@)
+
+:DRIV3_15830
+106@ = 2
+
+:DRIV3_15837
+if 
+  106@ == 2
+goto_if_false @DRIV3_15907
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRIV3_15907
+TIMERA = 0
+106@ = 0
+Text.ClearThisPrint($farlie3_text(132@,40s))
+132@ += 1
+$flag_phone_dialog_driv3 += 1
+
+:DRIV3_15907
+return 
+
+:DRIV3_15909
+Audio.PlayMissionPassedTune(1)
+Player.ClearWantedLevel($player1)
+Blip.Remove($synd_contact_blip)
+Text.PrintWithNumberBig('M_PASSS', 7000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 7000)
+Stat.AwardPlayerMissionRespect(25)
+$flag_synd_mission_counter += 1
+Stat.RegisterMissionPassed('FAR_3')
+Stat.PlayerMadeProgress(1)
+Blip.Remove($synd_contact_blip)
+$synd_contact_blip = Blip.AddSpriteForContactPoint($synd_blip_icon, $garageX, $garageY, $garageZ)
+Stat.SetInt(StatId.PassedFarlie3, 1)
+return 
+
+:DRIV3_16007
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:DRIV3_16025
+$onmission = 0
+$flag_is_farlie3_running = 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DRIV3_16062
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:DRIV3_16062
+Game.SetPoliceIgnorePlayer($player1, False)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(482)
+Streaming.MarkModelAsNoLongerNeeded(121)
+Streaming.MarkModelAsNoLongerNeeded(122)
+Streaming.MarkModelAsNoLongerNeeded(123)
+Pickup.Remove(55@)
+Streaming.MarkModelAsNoLongerNeeded(409)
+131@ = 0
+
+:DRIV3_16108
+if 
+  3 > 131@
+goto_if_false @DRIV3_16149
+Char.MarkAsNoLongerNeeded(42@(131@,9i))
+131@ += 1
+goto @DRIV3_16108
+
+:DRIV3_16149
+Char.MarkAsNoLongerNeeded(51@)
+Char.MarkAsNoLongerNeeded(52@)
+Char.RemoveElegantly(40@)
+Char.RemoveElegantly(53@)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.UnloadSpecialCharacter(2)
+Car.MarkAsNoLongerNeeded(35@)
+Car.MarkAsNoLongerNeeded(36@)
+Car.MarkAsNoLongerNeeded(37@)
+Car.MarkAsNoLongerNeeded(34@)
+Streaming.MarkModelAsNoLongerNeeded(463)
+Car.MarkAsNoLongerNeeded(36@)
+Car.MarkAsNoLongerNeeded(37@)
+Car.MarkAsNoLongerNeeded(38@)
+Blip.Remove(124@)
+Blip.Remove(125@)
+Blip.Remove(126@)
+Blip.Remove(114@)
+Blip.Remove(115@)
+Blip.Remove(116@)
+Blip.Remove(117@)
+Blip.Remove(120@)
+Blip.Remove(121@)
+Blip.Remove(122@)
+Blip.Remove(123@)
+Blip.Remove(127@)
+Blip.Remove(118@)
+Blip.Remove(119@)
+Blip.Remove(128@)
+Car.MarkAsNoLongerNeeded(38@)
+Streaming.MarkModelAsNoLongerNeeded(426)
+Hud.ClearTimer($timer_countdown_farlie3)
+Hud.ClearCounter($int_distance_player_girl)
+$2653 = Blip.AddShortRangeSpriteForCoord(63, -1908.9, 292.3, 40.0)
+$timer_mobile_start = Clock.GetGameTimer()
+Mission.Finish
+return 
+

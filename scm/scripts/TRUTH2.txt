@@ -1,0 +1,2729 @@
+//-------------Mission 47---------------
+// Originally: Are you going to San Fierro?
+
+:TRUTH2
+script_name 'TRUTH2'
+gosub @TRUTH2_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @TRUTH2_38
+gosub @TRUTH2_11910
+
+:TRUTH2_38
+gosub @TRUTH2_12153
+terminate_this_script 
+
+:TRUTH2_47
+$onmission = 1
+Stat.RegisterMissionGiven
+Text.LoadMissionText('TRU2')
+if 
+  $onmission == 0
+goto_if_false @TRUTH2_159
+42@ = Blip.AddForCoord(-1111.7, -1622.7, 76.4)
+41@ = Pickup.CreateWithAmmo(359, 3, 10, -1100.3, -1640.4, 76.4)
+40@ = Pickup.CreateWithAmmo(359, 3, 10, -1100.3, -1640.4, 76.4)
+
+:TRUTH2_159
+Text.ClearPrints
+wait 0
+$t2_cop_timer = 331000
+87@ = 0
+88@ = 0
+89@ = 0
+90@ = 0
+91@ = 0
+92@ = 0
+93@ = 0
+94@ = 0
+95@ = 0
+96@ = 0
+97@ = 0
+98@ = 0
+99@ = 0
+100@ = 0
+101@ = 0
+102@ = 0
+103@ = 0
+104@ = 0
+105@ = 0
+106@ = 0
+107@ = 0
+108@ = 0
+109@ = 0
+110@ = 0
+111@ = 0
+112@ = 0
+113@ = 0
+114@ = 0
+115@ = 0
+116@ = 0
+117@ = 0
+118@ = 0
+119@ = 0
+120@ = 0
+121@ = 0
+122@ = 0
+123@ = 0
+124@ = 0
+125@ = 0
+126@ = 0
+127@ = 0
+128@ = 0
+129@ = 0
+130@ = 0
+131@ = 0
+132@ = 0
+133@ = 0
+134@ = 0
+$t2_total_weed_burnt = 44
+135@ = 0
+136@ = 0
+148@ = 0
+149@ = 0
+137@ = 0
+138@ = 0.0
+139@ = 0.0
+140@ = 0.0
+141@ = 0.0
+142@ = 0.0
+143@ = 0.0
+144@ = 0
+145@ = 0
+146@ = 0
+147@ = 44
+151@ = 0
+152@ = 0
+153@ = 0
+202@ = 0
+203@ = 0
+204@ = 0
+205@ = 0
+206@ = 0
+207@ = 0
+208@ = 0
+209@ = 0
+210@ = 0
+211@ = 0
+150@ = 0
+213@ = 0
+214@ = 0
+212@ = 0
+Player.MakeGangDisappear
+World.ClearArea(1, -1110.2, -1638.5, 76.0, 20.0)
+Cutscene.Load('TRUTH_2')
+
+:TRUTH2_797
+if 
+  not Cutscene.HasLoaded
+goto_if_false @TRUTH2_821
+wait 0
+goto @TRUTH2_797
+
+:TRUTH2_821
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:TRUTH2_830
+if 
+  not Cutscene.HasFinished
+goto_if_false @TRUTH2_854
+wait 0
+goto @TRUTH2_830
+
+:TRUTH2_854
+Camera.DoFade(0, Fade.Out)
+
+:TRUTH2_860
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRUTH2_884
+wait 0
+goto @TRUTH2_860
+
+:TRUTH2_884
+Cutscene.Clear
+Player.SetControl($player1, False)
+Player.MakeGangReappear
+Camera.SetFadingColor(0, 0, 0)
+wait 0
+Streaming.RequestModel(483)
+Streaming.RequestModel(543)
+Streaming.RequestModel(497)
+Streaming.RequestModel(283)
+Streaming.RequestModel(361)
+Streaming.RequestModel(346)
+Streaming.LoadSpecialCharacter('TRUTH', 1)
+Streaming.RemoveIpl("TRUTHSFARM")
+Streaming.RequestIpl("TRUTHSFARM")
+Streaming.LoadAllModelsNow
+Game.SetMaxFireGenerations(2)
+World.ClearArea(1, -913.3, -1720.5, 76.6, 300.0)
+216@ = DecisionMakerChar.Copy(65542)
+World.ClearArea(1, -913.3, -1720.5, 76.6, 1.0)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, -913.3, -1720.5, 76.6)
+Char.GiveWeapon($scplayer, WeaponType.Flamethrower, 3000)
+World.ClearArea(1, -1079.404, -1640.694, 75.375, 20.0)
+$truth = Char.Create(24, 290, -1079.404, -1640.694, 75.375)
+Char.SetDropsWeaponsWhenDead($truth, False)
+Char.SetGetOutUpsideDownCar($truth, False)
+Char.SetDecisionMaker($truth, 216@)
+Char.SetHeading($truth, 299.7411)
+Char.GiveWeapon($truth, WeaponType.Flamethrower, 3000)
+Char.SetNeverTargeted($truth, True)
+Char.SetCantBeDraggedOut($truth, True)
+215@ = Sequence.Open()
+Task.GoStraightToCoord(-1, -1070.1, -1636.5, 75.4, MoveState.Run, -1)
+Task.ShootAtCoord(-1, -1062.2, -1631.1, 75.3, -1)
+Sequence.Close(215@)
+Char.PerformSequence($truth, 215@)
+Sequence.Clear(215@)
+World.ClearArea(1, -1077.6, -1650.2, 75.3, 20.0)
+Car.CustomPlateForNextCar(483, "OUTTHERE")
+34@ = Car.Create(483, -1077.6, -1650.2, 75.3)
+Car.ChangeColor(34@, 1, 1)
+Car.GivePaintjob(34@, 0)
+Car.SetCanRespray(34@, False)
+Car.LockDoors(34@, CarLock.LockoutPlayerOnly)
+Car.SetTraction(34@, 2.0)
+Car.SetHeading(34@, 256.4)
+Car.FreezePosition(34@, True)
+Car.SetProofs(34@, False, False, True, False, False)
+World.ClearArea(1, -946.6, -1735.0, 76.9, 5.0)
+39@ = Car.Create(543, -946.6, -1735.0, 76.9)
+Car.SetHeading(39@, 1.4)
+Car.SetProofs(39@, False, False, True, False, False)
+World.ClearArea(1, -918.5, -1751.1, 97.3, 5.0)
+35@ = Car.Create(497, -918.5, -1751.1, 97.3)
+Heli.SetBladesFullSpeed(35@)
+36@ = Char.CreateInsideCar(PedType.Mission1, 283, 35@)
+38@ = Searchlight.CreateOnVehicle(35@, 0.0, 0.0, -1.0, 1.0, -936.6, -1723.2, 76.8, 6.0)
+Searchlight.PointAtChar(38@, $truth, 10.0)
+Heli.FollowEntity(35@, $truth, -1, 20.0)
+Car.LockDoors(35@, CarLock.Locked)
+Char.SetCanBeShotInVehicle(36@, False)
+Char.SetDecisionMaker(36@, 216@)
+43@ = Blip.AddForCoord(-1062.1, -1631.7, 75.3)
+Blip.ChangeScale(43@, 1)
+Blip.SetCoordAppearance(43@, 2)
+44@ = Blip.AddForCoord(-1052.3, -1631.7, 75.3)
+Blip.ChangeScale(44@, 1)
+Blip.SetCoordAppearance(44@, 2)
+45@ = Blip.AddForCoord(-1042.4, -1631.7, 75.3)
+Blip.ChangeScale(45@, 1)
+Blip.SetCoordAppearance(45@, 2)
+46@ = Blip.AddForCoord(-1032.6, -1631.7, 75.3)
+Blip.ChangeScale(46@, 1)
+Blip.SetCoordAppearance(46@, 2)
+47@ = Blip.AddForCoord(-1023.1, -1631.7, 75.3)
+Blip.ChangeScale(47@, 1)
+Blip.SetCoordAppearance(47@, 2)
+48@ = Blip.AddForCoord(-1062.1, -1622.2, 75.3)
+Blip.ChangeScale(48@, 1)
+Blip.SetCoordAppearance(48@, 2)
+49@ = Blip.AddForCoord(-1052.3, -1622.2, 75.3)
+Blip.ChangeScale(49@, 1)
+Blip.SetCoordAppearance(49@, 2)
+50@ = Blip.AddForCoord(-1042.4, -1622.2, 75.3)
+Blip.ChangeScale(50@, 1)
+Blip.SetCoordAppearance(50@, 2)
+51@ = Blip.AddForCoord(-1032.6, -1622.2, 75.3)
+Blip.ChangeScale(51@, 1)
+Blip.SetCoordAppearance(51@, 2)
+52@ = Blip.AddForCoord(-1023.1, -1622.2, 75.3)
+Blip.ChangeScale(52@, 1)
+Blip.SetCoordAppearance(52@, 2)
+53@ = Blip.AddForCoord(-991.92, -1703.1, 75.3)
+Blip.ChangeScale(53@, 1)
+Blip.SetCoordAppearance(53@, 2)
+54@ = Blip.AddForCoord(-982.38, -1703.1, 75.3)
+Blip.ChangeScale(54@, 1)
+Blip.SetCoordAppearance(54@, 2)
+55@ = Blip.AddForCoord(-991.92, -1693.6, 75.3)
+Blip.ChangeScale(55@, 1)
+Blip.SetCoordAppearance(55@, 2)
+56@ = Blip.AddForCoord(-982.38, -1693.6, 75.3)
+Blip.ChangeScale(56@, 1)
+Blip.SetCoordAppearance(56@, 2)
+57@ = Blip.AddForCoord(-991.92, -1684.1, 75.3)
+Blip.ChangeScale(57@, 1)
+Blip.SetCoordAppearance(57@, 2)
+58@ = Blip.AddForCoord(-982.38, -1684.1, 75.3)
+Blip.ChangeScale(58@, 1)
+Blip.SetCoordAppearance(58@, 2)
+59@ = Blip.AddForCoord(-1011.8, -1667.6, 75.3)
+Blip.ChangeScale(59@, 1)
+Blip.SetCoordAppearance(59@, 2)
+60@ = Blip.AddForCoord(-1011.8, -1658.1, 75.3)
+Blip.ChangeScale(60@, 1)
+Blip.SetCoordAppearance(60@, 2)
+61@ = Blip.AddForCoord(-1011.8, -1648.7, 75.3)
+Blip.ChangeScale(61@, 1)
+Blip.SetCoordAppearance(61@, 2)
+62@ = Blip.AddForCoord(-1000.7, -1667.6, 75.3)
+Blip.ChangeScale(62@, 1)
+Blip.SetCoordAppearance(62@, 2)
+63@ = Blip.AddForCoord(-1000.7, -1658.1, 75.3)
+Blip.ChangeScale(63@, 1)
+Blip.SetCoordAppearance(63@, 2)
+64@ = Blip.AddForCoord(-1000.7, -1648.7, 75.3)
+Blip.ChangeScale(64@, 1)
+Blip.SetCoordAppearance(64@, 2)
+65@ = Blip.AddForCoord(-1011.8, -1672.3, 75.3)
+Blip.ChangeScale(65@, 1)
+Blip.SetCoordAppearance(65@, 2)
+66@ = Blip.AddForCoord(-991.92, -1688.8, 75.3)
+Blip.ChangeScale(66@, 1)
+Blip.SetCoordAppearance(66@, 2)
+67@ = Blip.AddForCoord(-982.38, -1688.8, 75.3)
+Blip.ChangeScale(67@, 1)
+Blip.SetCoordAppearance(67@, 2)
+68@ = Blip.AddForCoord(-982.38, -1698.2, 75.3)
+Blip.ChangeScale(68@, 1)
+Blip.SetCoordAppearance(68@, 2)
+69@ = Blip.AddForCoord(-991.92, -1698.2, 75.3)
+Blip.ChangeScale(69@, 1)
+Blip.SetCoordAppearance(69@, 2)
+70@ = Blip.AddForCoord(-982.38, -1707.7, 75.3)
+Blip.ChangeScale(70@, 1)
+Blip.SetCoordAppearance(70@, 2)
+71@ = Blip.AddForCoord(-1011.8, -1662.8, 75.3)
+Blip.ChangeScale(71@, 1)
+Blip.SetCoordAppearance(71@, 2)
+72@ = Blip.AddForCoord(-1000.7, -1672.3, 75.3)
+Blip.ChangeScale(72@, 1)
+Blip.SetCoordAppearance(72@, 2)
+73@ = Blip.AddForCoord(-1011.8, -1653.4, 75.3)
+Blip.ChangeScale(73@, 1)
+Blip.SetCoordAppearance(73@, 2)
+74@ = Blip.AddForCoord(-1032.6, -1636.3, 75.3)
+Blip.ChangeScale(74@, 1)
+Blip.SetCoordAppearance(74@, 2)
+75@ = Blip.AddForCoord(-1052.3, -1636.3, 75.3)
+Blip.ChangeScale(75@, 1)
+Blip.SetCoordAppearance(75@, 2)
+76@ = Blip.AddForCoord(-1042.4, -1636.3, 75.3)
+Blip.ChangeScale(76@, 1)
+Blip.SetCoordAppearance(76@, 2)
+77@ = Blip.AddForCoord(-1062.1, -1626.8, 75.3)
+Blip.ChangeScale(77@, 1)
+Blip.SetCoordAppearance(77@, 2)
+78@ = Blip.AddForCoord(-991.92, -1707.7, 75.3)
+Blip.ChangeScale(78@, 1)
+Blip.SetCoordAppearance(78@, 2)
+79@ = Blip.AddForCoord(-1023.1, -1626.8, 75.3)
+Blip.ChangeScale(79@, 1)
+Blip.SetCoordAppearance(79@, 2)
+80@ = Blip.AddForCoord(-1000.7, -1662.8, 75.3)
+Blip.ChangeScale(80@, 1)
+Blip.SetCoordAppearance(80@, 2)
+81@ = Blip.AddForCoord(-1000.7, -1653.4, 75.3)
+Blip.ChangeScale(81@, 1)
+Blip.SetCoordAppearance(81@, 2)
+82@ = Blip.AddForCoord(-1032.6, -1626.8, 75.3)
+Blip.ChangeScale(82@, 1)
+Blip.SetCoordAppearance(82@, 2)
+83@ = Blip.AddForCoord(-1042.4, -1626.8, 75.3)
+Blip.ChangeScale(83@, 1)
+Blip.SetCoordAppearance(83@, 2)
+84@ = Blip.AddForCoord(-1052.3, -1626.8, 75.3)
+Blip.ChangeScale(84@, 1)
+Blip.SetCoordAppearance(84@, 2)
+85@ = Blip.AddForCoord(-1062.1, -1636.3, 75.3)
+Blip.ChangeScale(85@, 1)
+Blip.SetCoordAppearance(85@, 2)
+86@ = Blip.AddForCoord(-1023.1, -1636.3, 75.3)
+Blip.ChangeScale(86@, 1)
+Blip.SetCoordAppearance(86@, 2)
+Hud.DisplayTimerWithString($t2_cop_timer, TimerDirection.Down, 'TRU2_06')
+Char.SetCoordinates($scplayer, -1089.9, -1644.1, 75.4)
+Char.SetHeading($scplayer, 283.3)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Camera.DoFade(1, 500)
+Text.Print('TRU2_01', 7000, 1)
+Text.Print('TRU2_02', 7000, 1)
+TIMERA = 0
+TIMERB = 0
+
+:TRUTH2_3224
+wait 0
+gosub @TRUTH2_14570
+Player.ClearWantedLevel($player1)
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @TRUTH2_3262
+goto @TRUTH2_11942
+
+:TRUTH2_3262
+gosub @TRUTH2_12668
+if 
+  90@ == 1
+goto_if_false @TRUTH2_3294
+goto @TRUTH2_11910
+
+:TRUTH2_3294
+if 
+  87@ == 0
+goto_if_false @TRUTH2_7881
+if 
+is_ps2_keyboard_key_pressed 81
+goto_if_false @TRUTH2_3388
+151@ = 0
+if 
+  88@ == 0
+goto_if_false @TRUTH2_3361
+Text.ClearPrints
+88@ = 1
+
+:TRUTH2_3361
+Char.SetCoordinates($scplayer, -1104.7, -1648.0, 75.4)
+$t2_total_weed_burnt = 0
+
+:TRUTH2_3388
+if 
+  88@ == 0
+goto_if_false @TRUTH2_3461
+if 
+  20 > $t2_total_weed_burnt
+goto_if_false @TRUTH2_3461
+Text.ClearPrints
+151@ = 1
+152@ = 0
+gosub @TRUTH2_14975
+88@ = 1
+TIMERA = 0
+
+:TRUTH2_3461
+if 
+  88@ == 1
+goto_if_false @TRUTH2_3514
+if 
+  151@ == 0
+goto_if_false @TRUTH2_3514
+Task.EnterCarAsDriver($truth, 34@, -1)
+88@ = 2
+
+:TRUTH2_3514
+gosub @TRUTH2_12789
+if 
+  91@ == 0
+goto_if_false @TRUTH2_3618
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1062.1, -1631.7, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_3618
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(43@)
+$t2_total_weed_burnt -= 1
+91@ = 1
+
+:TRUTH2_3618
+if 
+  92@ == 0
+goto_if_false @TRUTH2_3715
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1052.3, -1631.7, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_3715
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(44@)
+$t2_total_weed_burnt -= 1
+92@ = 1
+
+:TRUTH2_3715
+if 
+  93@ == 0
+goto_if_false @TRUTH2_3812
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1042.4, -1631.7, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_3812
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(45@)
+$t2_total_weed_burnt -= 1
+93@ = 1
+
+:TRUTH2_3812
+if 
+  94@ == 0
+goto_if_false @TRUTH2_3909
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1032.6, -1631.7, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_3909
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(46@)
+$t2_total_weed_burnt -= 1
+94@ = 1
+
+:TRUTH2_3909
+if 
+  95@ == 0
+goto_if_false @TRUTH2_4006
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1023.1, -1631.7, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_4006
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(47@)
+$t2_total_weed_burnt -= 1
+95@ = 1
+
+:TRUTH2_4006
+if 
+  96@ == 0
+goto_if_false @TRUTH2_4103
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1062.1, -1622.2, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_4103
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(48@)
+$t2_total_weed_burnt -= 1
+96@ = 1
+
+:TRUTH2_4103
+if 
+  97@ == 0
+goto_if_false @TRUTH2_4200
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1052.3, -1622.2, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_4200
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(49@)
+$t2_total_weed_burnt -= 1
+97@ = 1
+
+:TRUTH2_4200
+if 
+  98@ == 0
+goto_if_false @TRUTH2_4297
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1042.4, -1622.2, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_4297
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(50@)
+$t2_total_weed_burnt -= 1
+98@ = 1
+
+:TRUTH2_4297
+if 
+  99@ == 0
+goto_if_false @TRUTH2_4394
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1032.6, -1622.2, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_4394
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(51@)
+$t2_total_weed_burnt -= 1
+99@ = 1
+
+:TRUTH2_4394
+if 
+  100@ == 0
+goto_if_false @TRUTH2_4491
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1023.1, -1622.2, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_4491
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(52@)
+$t2_total_weed_burnt -= 1
+100@ = 1
+
+:TRUTH2_4491
+if 
+  101@ == 0
+goto_if_false @TRUTH2_4588
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -991.92, -1703.1, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_4588
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(53@)
+$t2_total_weed_burnt -= 1
+101@ = 1
+
+:TRUTH2_4588
+if 
+  102@ == 0
+goto_if_false @TRUTH2_4685
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -982.38, -1703.1, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_4685
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(54@)
+$t2_total_weed_burnt -= 1
+102@ = 1
+
+:TRUTH2_4685
+if 
+  103@ == 0
+goto_if_false @TRUTH2_4782
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -991.92, -1693.6, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_4782
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(55@)
+$t2_total_weed_burnt -= 1
+103@ = 1
+
+:TRUTH2_4782
+if 
+  104@ == 0
+goto_if_false @TRUTH2_4879
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -982.38, -1693.6, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_4879
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(56@)
+$t2_total_weed_burnt -= 1
+104@ = 1
+
+:TRUTH2_4879
+if 
+  105@ == 0
+goto_if_false @TRUTH2_4976
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -991.92, -1684.1, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_4976
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(57@)
+$t2_total_weed_burnt -= 1
+105@ = 1
+
+:TRUTH2_4976
+if 
+  106@ == 0
+goto_if_false @TRUTH2_5073
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -982.38, -1684.1, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_5073
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(58@)
+$t2_total_weed_burnt -= 1
+106@ = 1
+
+:TRUTH2_5073
+if 
+  107@ == 0
+goto_if_false @TRUTH2_5170
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1011.8, -1667.6, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_5170
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(59@)
+$t2_total_weed_burnt -= 1
+107@ = 1
+
+:TRUTH2_5170
+if 
+  108@ == 0
+goto_if_false @TRUTH2_5267
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1011.8, -1658.1, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_5267
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(60@)
+$t2_total_weed_burnt -= 1
+108@ = 1
+
+:TRUTH2_5267
+if 
+  109@ == 0
+goto_if_false @TRUTH2_5364
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1011.8, -1648.7, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_5364
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(61@)
+$t2_total_weed_burnt -= 1
+109@ = 1
+
+:TRUTH2_5364
+if 
+  110@ == 0
+goto_if_false @TRUTH2_5461
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1000.7, -1667.6, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_5461
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(62@)
+$t2_total_weed_burnt -= 1
+110@ = 1
+
+:TRUTH2_5461
+if 
+  111@ == 0
+goto_if_false @TRUTH2_5558
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1000.7, -1658.1, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_5558
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(63@)
+$t2_total_weed_burnt -= 1
+111@ = 1
+
+:TRUTH2_5558
+if 
+  112@ == 0
+goto_if_false @TRUTH2_5655
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1000.7, -1648.7, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_5655
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(64@)
+$t2_total_weed_burnt -= 1
+112@ = 1
+
+:TRUTH2_5655
+if 
+  113@ == 0
+goto_if_false @TRUTH2_5752
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1011.8, -1672.3, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_5752
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(65@)
+$t2_total_weed_burnt -= 1
+113@ = 1
+
+:TRUTH2_5752
+if 
+  114@ == 0
+goto_if_false @TRUTH2_5849
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -991.92, -1688.8, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_5849
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(66@)
+$t2_total_weed_burnt -= 1
+114@ = 1
+
+:TRUTH2_5849
+if 
+  115@ == 0
+goto_if_false @TRUTH2_5946
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -982.38, -1688.8, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_5946
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(67@)
+$t2_total_weed_burnt -= 1
+115@ = 1
+
+:TRUTH2_5946
+if 
+  116@ == 0
+goto_if_false @TRUTH2_6043
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -982.38, -1698.2, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_6043
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(68@)
+$t2_total_weed_burnt -= 1
+116@ = 1
+
+:TRUTH2_6043
+if 
+  117@ == 0
+goto_if_false @TRUTH2_6140
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -991.92, -1698.2, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_6140
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(69@)
+$t2_total_weed_burnt -= 1
+117@ = 1
+
+:TRUTH2_6140
+if 
+  118@ == 0
+goto_if_false @TRUTH2_6237
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -982.38, -1707.7, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_6237
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(70@)
+$t2_total_weed_burnt -= 1
+118@ = 1
+
+:TRUTH2_6237
+if 
+  119@ == 0
+goto_if_false @TRUTH2_6334
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1011.8, -1662.8, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_6334
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(71@)
+$t2_total_weed_burnt -= 1
+119@ = 1
+
+:TRUTH2_6334
+if 
+  120@ == 0
+goto_if_false @TRUTH2_6431
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1000.7, -1672.3, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_6431
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(72@)
+$t2_total_weed_burnt -= 1
+120@ = 1
+
+:TRUTH2_6431
+if 
+  121@ == 0
+goto_if_false @TRUTH2_6528
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1011.8, -1653.4, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_6528
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(73@)
+$t2_total_weed_burnt -= 1
+121@ = 1
+
+:TRUTH2_6528
+if 
+  122@ == 0
+goto_if_false @TRUTH2_6625
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1032.6, -1636.3, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_6625
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(74@)
+$t2_total_weed_burnt -= 1
+122@ = 1
+
+:TRUTH2_6625
+if 
+  123@ == 0
+goto_if_false @TRUTH2_6722
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1052.3, -1636.3, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_6722
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(75@)
+$t2_total_weed_burnt -= 1
+123@ = 1
+
+:TRUTH2_6722
+if 
+  124@ == 0
+goto_if_false @TRUTH2_6819
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1042.4, -1636.3, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_6819
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(76@)
+$t2_total_weed_burnt -= 1
+124@ = 1
+
+:TRUTH2_6819
+if 
+  125@ == 0
+goto_if_false @TRUTH2_6916
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1062.1, -1626.8, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_6916
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(77@)
+$t2_total_weed_burnt -= 1
+125@ = 1
+
+:TRUTH2_6916
+if 
+  126@ == 0
+goto_if_false @TRUTH2_7013
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -991.92, -1707.7, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_7013
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(78@)
+$t2_total_weed_burnt -= 1
+126@ = 1
+
+:TRUTH2_7013
+if 
+  127@ == 0
+goto_if_false @TRUTH2_7110
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1023.1, -1626.8, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_7110
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(79@)
+$t2_total_weed_burnt -= 1
+127@ = 1
+
+:TRUTH2_7110
+if 
+  128@ == 0
+goto_if_false @TRUTH2_7207
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1000.7, -1662.8, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_7207
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(80@)
+$t2_total_weed_burnt -= 1
+128@ = 1
+
+:TRUTH2_7207
+if 
+  129@ == 0
+goto_if_false @TRUTH2_7304
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1000.7, -1653.4, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_7304
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(81@)
+$t2_total_weed_burnt -= 1
+129@ = 1
+
+:TRUTH2_7304
+if 
+  130@ == 0
+goto_if_false @TRUTH2_7401
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1032.6, -1626.8, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_7401
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(82@)
+$t2_total_weed_burnt -= 1
+130@ = 1
+
+:TRUTH2_7401
+if 
+  131@ == 0
+goto_if_false @TRUTH2_7498
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1042.4, -1626.8, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_7498
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(83@)
+$t2_total_weed_burnt -= 1
+131@ = 1
+
+:TRUTH2_7498
+if 
+  132@ == 0
+goto_if_false @TRUTH2_7595
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1052.3, -1626.8, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_7595
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(84@)
+$t2_total_weed_burnt -= 1
+132@ = 1
+
+:TRUTH2_7595
+if 
+  133@ == 0
+goto_if_false @TRUTH2_7692
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1062.1, -1636.3, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_7692
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(85@)
+$t2_total_weed_burnt -= 1
+133@ = 1
+
+:TRUTH2_7692
+if 
+  134@ == 0
+goto_if_false @TRUTH2_7789
+if 
+  World.IsClosestObjectOfTypeSmashedOrDamaged(#GRASSPLANT, -1023.1, -1636.3, 75.3, 1.0, False, True)
+goto_if_false @TRUTH2_7789
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+Blip.Remove(86@)
+$t2_total_weed_burnt -= 1
+134@ = 1
+
+:TRUTH2_7789
+if 
+  $t2_total_weed_burnt == 0
+goto_if_false @TRUTH2_7881
+Streaming.MarkModelAsNoLongerNeeded(361)
+Blip.Remove(42@)
+42@ = Blip.AddForCoord(-1075.5, -1648.5, 75.1)
+Blip.SetCoordAppearance(42@, 1)
+Text.Print('TRU2_14', 11000, 1)
+144@ = 0
+88@ = 0
+87@ = 1
+
+:TRUTH2_7881
+if 
+  87@ == 1
+goto_if_false @TRUTH2_9383
+if 
+  88@ == 0
+goto_if_false @TRUTH2_8279
+if 
+  not Car.IsDead(35@)
+goto_if_false @TRUTH2_8231
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, -1075.5, -1648.0, 75.1, 1.2, 1.2, 2.0, True)
+goto_if_false @TRUTH2_8224
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+151@ = 0
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+Game.ShutAllCharsUp(True)
+Player.SetDrunkenness($player1, 0)
+Pickup.Remove(40@)
+Hud.FreezeTimer(True)
+Streaming.RequestModel(359)
+Streaming.LoadAllModelsNow
+World.ClearArea(1, -1075.5, -1648.0, 75.1, 5.0)
+Char.SetCoordinates($scplayer, -1075.5, -1648.0, 75.1)
+Char.SetHeading($scplayer, 157.1)
+Task.PlayAnim($scplayer, "IDLE_CHAT", "PED", 6.0, True, False, False, False, 4000)
+Camera.SetFixedPosition(-1071.3, -1647.8, 75.4, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1078.8, -1648.8, 76.3, SwitchType.JumpCut)
+Text.ClearPrints
+89@ = 1
+skip_cutscene_start_internal @TRUTH2_8545
+151@ = 8
+152@ = 0
+gosub @TRUTH2_14975
+88@ = 1
+
+:TRUTH2_8224
+goto @TRUTH2_8279
+
+:TRUTH2_8231
+Car.FreezePosition(34@, False)
+Task.CarDriveToCoord($truth, 34@, -939.5, -1718.8, 76.7, 10.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+88@ = 5
+
+:TRUTH2_8279
+if 
+  88@ == 1
+goto_if_false @TRUTH2_8351
+if 
+  151@ == 0
+goto_if_false @TRUTH2_8351
+Char.ClearTasks($scplayer)
+Task.GoStraightToCoord($scplayer, -1081.4, -1650.3, 75.4, MoveState.Walk, -1)
+88@ = 2
+
+:TRUTH2_8351
+if 
+  88@ == 2
+goto_if_false @TRUTH2_8435
+$task_status = Char.GetScriptTaskStatus($scplayer, 1491)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @TRUTH2_8435
+Char.GiveWeapon($scplayer, WeaponType.RocketLauncher, 10)
+151@ = 9
+152@ = 0
+gosub @TRUTH2_14975
+88@ = 3
+
+:TRUTH2_8435
+if 
+  88@ == 3
+goto_if_false @TRUTH2_8502
+if 
+  152@ == 1
+goto_if_false @TRUTH2_8502
+Task.GoStraightToCoord($scplayer, -1075.5, -1648.0, 75.1, MoveState.Walk, -1)
+88@ = 4
+
+:TRUTH2_8502
+if 
+  88@ == 4
+goto_if_false @TRUTH2_8967
+if 
+  151@ == 0
+goto_if_false @TRUTH2_8967
+89@ = 0
+
+:TRUTH2_8545
+skip_cutscene_end 
+gosub @TRUTH2_12668
+if 
+  90@ == 1
+goto_if_false @TRUTH2_8579
+goto @TRUTH2_11910
+
+:TRUTH2_8579
+if 
+  89@ == 1
+goto_if_false @TRUTH2_8745
+Char.ClearTasksImmediately($scplayer)
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+151@ = 0
+Camera.DoFade(0, 500)
+
+:TRUTH2_8626
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRUTH2_8650
+wait 0
+goto @TRUTH2_8626
+
+:TRUTH2_8650
+gosub @TRUTH2_12668
+if 
+  90@ == 1
+goto_if_false @TRUTH2_8682
+goto @TRUTH2_11910
+
+:TRUTH2_8682
+Char.GiveWeapon($scplayer, WeaponType.RocketLauncher, 10)
+World.ClearArea(1, -1075.5, -1648.0, 75.1, 1.0)
+Char.SetCoordinates($scplayer, -1075.5, -1648.0, 75.1)
+Char.SetHeading($scplayer, 268.0)
+
+:TRUTH2_8745
+Game.ShutAllCharsUp(False)
+Hud.FreezeTimer(False)
+Car.FreezePosition(34@, False)
+Pad.SetDrunkInputDelay($player1, 145@)
+Player.SetDrunkenness($player1, 146@)
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Task.CarDriveToCoord($truth, 34@, -939.5, -1718.8, 76.7, 10.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Blip.Remove(42@)
+42@ = Blip.AddForCar(35@)
+if 
+  not Car.IsDead(35@)
+goto_if_false @TRUTH2_8872
+Text.PrintNow('TRU2_15', 7000, 1)
+
+:TRUTH2_8872
+if 
+  89@ == 1
+goto_if_false @TRUTH2_8953
+Camera.DoFade(1, 500)
+
+:TRUTH2_8897
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRUTH2_8921
+wait 0
+goto @TRUTH2_8897
+
+:TRUTH2_8921
+gosub @TRUTH2_12668
+if 
+  90@ == 1
+goto_if_false @TRUTH2_8953
+goto @TRUTH2_11910
+
+:TRUTH2_8953
+TIMERB = 0
+88@ = 5
+
+:TRUTH2_8967
+if 
+  88@ == 5
+goto_if_false @TRUTH2_9383
+if 
+is_ps2_keyboard_key_pressed 81
+goto_if_false @TRUTH2_9041
+if 
+  not Car.IsDead(35@)
+goto_if_false @TRUTH2_9021
+Car.Explode(35@)
+
+:TRUTH2_9021
+Char.SetCoordinates($scplayer, -946.8, -1733.5, 76.8)
+
+:TRUTH2_9041
+if 
+  153@ == 2
+goto_if_false @TRUTH2_9099
+if 
+  not Text.IsThisHelpMessageBeingDisplayed('SYN3_23')
+goto_if_false @TRUTH2_9099
+Text.PrintHelp('SYN3_24')
+153@ = 3
+
+:TRUTH2_9099
+if 
+  153@ == 1
+goto_if_false @TRUTH2_9157
+if 
+  not Text.IsThisHelpMessageBeingDisplayed('SYN3_22')
+goto_if_false @TRUTH2_9157
+Text.PrintHelp('SYN3_23')
+153@ = 2
+
+:TRUTH2_9157
+if 
+  153@ == 0
+goto_if_false @TRUTH2_9212
+if 
+  TIMERB > 7000
+goto_if_false @TRUTH2_9212
+Text.PrintHelp('SYN3_22')
+153@ = 1
+
+:TRUTH2_9212
+if 
+  Car.IsDead(35@)
+goto_if_false @TRUTH2_9376
+Hud.ClearTimer($t2_cop_timer)
+Text.ClearPrints
+Audio.SetRadioChannel(RadioChannel.KDST)
+Text.Print('TRU2_17', 11000, 1)
+Car.SetStatus(34@, EntityStatus.Physics)
+Car.SetCruiseSpeed(34@, 0.0)
+Car.SetTempAction(34@, TempAction.HandbrakeStraight, 1000)
+if 
+  Char.IsInAnyCar($truth)
+goto_if_false @TRUTH2_9318
+Char.WarpFromCarToCoord($truth, -1516.4, -1596.9, 41.0)
+
+:TRUTH2_9318
+Char.WarpIntoCarAsPassenger($truth, 34@, -1)
+Car.LockDoors(34@, CarLock.Unlocked)
+Blip.Remove(42@)
+42@ = Blip.AddForCar(34@)
+Blip.SetAsFriendly(42@, True)
+88@ = 0
+87@ = 2
+goto @TRUTH2_9383
+
+:TRUTH2_9376
+gosub @TRUTH2_14224
+
+:TRUTH2_9383
+if 
+  87@ == 2
+goto_if_false @TRUTH2_9591
+if 
+  88@ == 0
+goto_if_false @TRUTH2_9546
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @TRUTH2_9546
+Car.SetStatus(34@, EntityStatus.Player)
+Text.ClearThisPrint('TRU2_17')
+Text.PrintNow('TRU2_12', 7000, 1)
+Char.ShutUpForScriptedSpeech($scplayer, True)
+Char.ShutUpForScriptedSpeech($truth, True)
+Blip.Remove(42@)
+42@ = Blip.AddForCoord(-2031.3, 178.5, 27.9)
+Blip.SetAsFriendly(42@, False)
+TIMERB = 0
+136@ = 1
+88@ = 0
+87@ = 3
+
+:TRUTH2_9546
+if 
+  not Char.LocateAnyMeansCar2D($scplayer, 34@, 200.0, 200.0, False)
+goto_if_false @TRUTH2_9591
+88@ = 0
+87@ = 4
+
+:TRUTH2_9591
+if 
+  87@ == 3
+goto_if_false @TRUTH2_10299
+if 
+  151@ == 3
+goto_if_false @TRUTH2_9679
+if 
+  152@ == 6
+goto_if_false @TRUTH2_9679
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @TRUTH2_9679
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+151@ = 0
+
+:TRUTH2_9679
+if 
+  88@ == 0
+goto_if_false @TRUTH2_9769
+if 
+  TIMERB > 7000
+goto_if_false @TRUTH2_9769
+if 
+  151@ == 0
+goto_if_false @TRUTH2_9769
+151@ = 3
+152@ = 0
+gosub @TRUTH2_14975
+TIMERB = 0
+88@ = 1
+
+:TRUTH2_9769
+if 
+  88@ == 1
+goto_if_false @TRUTH2_10105
+if 
+  151@ == 0
+goto_if_false @TRUTH2_10105
+if 
+  TIMERB > 7000
+goto_if_false @TRUTH2_10105
+151@ = Math.RandomIntInRange(4, 8)
+if 
+  151@ == 4
+goto_if_false @TRUTH2_9883
+if 
+  202@ == 1
+goto_if_false @TRUTH2_9876
+151@ = 0
+
+:TRUTH2_9876
+202@ = 1
+
+:TRUTH2_9883
+if 
+  151@ == 5
+goto_if_false @TRUTH2_9933
+if 
+  203@ == 1
+goto_if_false @TRUTH2_9926
+151@ = 0
+
+:TRUTH2_9926
+203@ = 1
+
+:TRUTH2_9933
+if 
+  151@ == 6
+goto_if_false @TRUTH2_9983
+if 
+  204@ == 1
+goto_if_false @TRUTH2_9976
+151@ = 0
+
+:TRUTH2_9976
+204@ = 1
+
+:TRUTH2_9983
+if 
+  151@ == 7
+goto_if_false @TRUTH2_10033
+if 
+  205@ == 1
+goto_if_false @TRUTH2_10026
+151@ = 0
+
+:TRUTH2_10026
+205@ = 1
+
+:TRUTH2_10033
+if 
+  206@ == 0
+goto_if_false @TRUTH2_10091
+137@ = Player.GetCityIsIn($player1)
+if 
+  is_int_lvar_equal_to_constant 137@ == 2
+goto_if_false @TRUTH2_10091
+206@ = 1
+151@ = 10
+
+:TRUTH2_10091
+152@ = 0
+gosub @TRUTH2_14975
+
+:TRUTH2_10105
+if 
+  2 > 88@
+goto_if_false @TRUTH2_10292
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @TRUTH2_10292
+if 
+is_ps2_keyboard_key_pressed 81
+goto_if_false @TRUTH2_10187
+Car.SetCoordinates(34@, -2009.3, 145.2, 26.7)
+Car.SetHeading(34@, 359.8)
+
+:TRUTH2_10187
+if 
+  Char.LocateInCar3D($scplayer, -2031.3, 178.5, 27.9, 4.0, 4.0, 4.0, True)
+goto_if_false @TRUTH2_10292
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+151@ = 0
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.ShutUpForScriptedSpeech($truth, False)
+Player.SetControl($player1, False)
+Streaming.MarkModelAsNoLongerNeeded(283)
+88@ = 0
+87@ = 5
+
+:TRUTH2_10292
+gosub @TRUTH2_14428
+
+:TRUTH2_10299
+if 
+  87@ == 4
+goto_if_false @TRUTH2_10975
+ENTEXT_63()
+if 
+  $player_is_completely_safe == 1
+goto_if_false @TRUTH2_10780
+if 
+  88@ == 0
+goto_if_false @TRUTH2_10780
+Text.ClearPrints
+Camera.DoFade(0, 500)
+
+:TRUTH2_10369
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRUTH2_10393
+wait 0
+goto @TRUTH2_10369
+
+:TRUTH2_10393
+gosub @TRUTH2_12668
+if 
+  90@ == 1
+goto_if_false @TRUTH2_10425
+goto @TRUTH2_11910
+
+:TRUTH2_10425
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+151@ = 0
+Player.SetDrunkenness($player1, 0)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Char.SetOnlyDamagedByPlayer($truth, True)
+138@ = Char.GetOffsetInWorldCoords(139@, 140@, $truth, 0.0, -10.0, 5.0)
+Streaming.RequestModel(334)
+Streaming.LoadScene(138@, 139@, 140@)
+World.ClearArea(1, 138@, 139@, 140@, 30.0)
+Camera.SetFixedPosition(138@, 139@, 140@, 0.0, 0.0, 0.0)
+Camera.PointAtChar($truth, CameraMode.Fixed, SwitchType.JumpCut)
+Char.ClearTasks($truth)
+if 
+  Char.IsInCar($truth, 34@)
+goto_if_false @TRUTH2_10613
+Task.CarTempAction($truth, 34@, TempAction.HandbrakeStraight, 2000000)
+
+:TRUTH2_10613
+141@, 142@, 143@ = Path.GetNthClosestCarNode(138@, 139@, 140@, 1)
+37@ = Char.Create(24, 283, 141@, 142@, 143@)
+if 
+  Char.IsInAnyCar($truth)
+goto_if_false @TRUTH2_10679
+Char.GiveWeapon(37@, WeaponType.NightStick, 1)
+
+:TRUTH2_10679
+Task.CharArrestChar(37@, $truth)
+Text.PrintNow('TRU2_10', 7000, 1)
+Camera.DoFade(1, 500)
+
+:TRUTH2_10710
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRUTH2_10734
+wait 0
+goto @TRUTH2_10710
+
+:TRUTH2_10734
+gosub @TRUTH2_12668
+if 
+  90@ == 1
+goto_if_false @TRUTH2_10766
+goto @TRUTH2_11910
+
+:TRUTH2_10766
+TIMERA = 0
+88@ = 1
+
+:TRUTH2_10780
+if 
+  88@ == 1
+goto_if_false @TRUTH2_10975
+if 
+  TIMERA > 7000
+goto_if_false @TRUTH2_10975
+Camera.DoFade(0, 500)
+
+:TRUTH2_10824
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRUTH2_10848
+wait 0
+goto @TRUTH2_10824
+
+:TRUTH2_10848
+if 
+  Searchlight.DoesExist(38@)
+goto_if_false @TRUTH2_10869
+Searchlight.Delete(38@)
+
+:TRUTH2_10869
+Char.Delete($truth)
+Streaming.UnloadSpecialCharacter(1)
+Car.Delete(34@)
+Char.Delete(37@)
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+Text.PrintNow('TRU2_10', 5500, 1)
+Camera.DoFade(1, 500)
+
+:TRUTH2_10944
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRUTH2_10968
+wait 0
+goto @TRUTH2_10944
+
+:TRUTH2_10968
+goto @TRUTH2_11910
+
+:TRUTH2_10975
+if 
+  87@ == 5
+goto_if_false @TRUTH2_11839
+if 
+  88@ == 0
+goto_if_false @TRUTH2_11037
+if 
+  TIMERA > 1500
+goto_if_false @TRUTH2_11037
+88@ = 1
+
+:TRUTH2_11037
+if 
+  88@ == 1
+goto_if_false @TRUTH2_11617
+Camera.DoFade(0, 500)
+
+:TRUTH2_11062
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRUTH2_11086
+wait 0
+goto @TRUTH2_11062
+
+:TRUTH2_11086
+gosub @TRUTH2_12668
+if 
+  90@ == 1
+goto_if_false @TRUTH2_11118
+goto @TRUTH2_11910
+
+:TRUTH2_11118
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Player.SetDrunkenness($player1, 0)
+Camera.SetFixedPosition(-2025.0, 172.3, 28.0, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2032.9, 163.0, 30.88, SwitchType.JumpCut)
+Game.ShutAllCharsUp(True)
+World.ClearArea(1, -2028.9, 172.3, 27.8, 30.0)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, -2028.9, 172.3, 27.8)
+Char.SetHeading($scplayer, 167.6)
+215@ = Sequence.Open()
+Task.GoStraightToCoord(-1, -2029.9, 167.7, 27.8, MoveState.Walk, -1)
+Task.Pause(-1, 2000)
+Task.PlayAnim(-1, "IDLE_TIRED", "PED", 4.0, False, False, False, False, 4000)
+Task.GoStraightToCoord(-1, -2033.0, 161.4, 28.0, MoveState.Walk, -1)
+Sequence.Close(215@)
+Char.PerformSequence($scplayer, 215@)
+Sequence.Clear(215@)
+Player.SetDrunkenness($player1, 0)
+World.ClearArea(1, -2030.9, 172.3, 27.8, 30.0)
+Char.ClearTasksImmediately($truth)
+Char.SetCoordinates($truth, -2030.9, 172.3, 27.8)
+Char.SetHeading($truth, 167.6)
+215@ = Sequence.Open()
+Task.GoStraightToCoord(-1, -2030.9, 167.7, 27.8, MoveState.Walk, -1)
+Task.Pause(-1, 1000)
+Task.GoStraightToCoord(-1, -2033.0, 161.4, 28.0, MoveState.Walk, -1)
+Task.AchieveHeading(-1, 115.2)
+Sequence.Close(215@)
+Char.PerformSequence($truth, 215@)
+Sequence.Clear(215@)
+Camera.DoFade(1, 500)
+
+:TRUTH2_11523
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRUTH2_11547
+wait 0
+goto @TRUTH2_11523
+
+:TRUTH2_11547
+gosub @TRUTH2_12668
+if 
+  90@ == 1
+goto_if_false @TRUTH2_11579
+goto @TRUTH2_11910
+
+:TRUTH2_11579
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+151@ = 11
+152@ = 0
+gosub @TRUTH2_14975
+88@ = 2
+
+:TRUTH2_11617
+if 
+  88@ == 2
+goto_if_false @TRUTH2_11667
+if 
+  151@ == 0
+goto_if_false @TRUTH2_11667
+88@ = 3
+TIMERA = 0
+
+:TRUTH2_11667
+if 
+  88@ == 3
+goto_if_false @TRUTH2_11839
+if 
+  TIMERA > 1000
+goto_if_false @TRUTH2_11839
+Camera.DoFade(0, 500)
+
+:TRUTH2_11711
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRUTH2_11735
+wait 0
+goto @TRUTH2_11711
+
+:TRUTH2_11735
+if 
+  Searchlight.DoesExist(38@)
+goto_if_false @TRUTH2_11756
+Searchlight.Delete(38@)
+
+:TRUTH2_11756
+Char.Delete($truth)
+Streaming.UnloadSpecialCharacter(1)
+Car.Delete(34@)
+Char.Delete(37@)
+Char.ClearTasksImmediately($scplayer)
+Game.ShutAllCharsUp(False)
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Camera.DoFade(1, 500)
+
+:TRUTH2_11808
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRUTH2_11832
+wait 0
+goto @TRUTH2_11808
+
+:TRUTH2_11832
+goto @TRUTH2_11942
+
+:TRUTH2_11839
+if 
+  2 > 87@
+goto_if_false @TRUTH2_11896
+if 
+  $t2_cop_timer == 0
+goto_if_false @TRUTH2_11896
+87@ = 4
+88@ = 0
+Char.SetHealth($truth, 10)
+
+:TRUTH2_11896
+gosub @TRUTH2_17129
+goto @TRUTH2_3224
+
+:TRUTH2_11910
+Char.RemoveWeapon(37, $scplayer)
+Char.RemoveWeapon(35, $scplayer)
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:TRUTH2_11942
+Stat.SetInt(StatId.PassedTruth2, 1)
+Text.PrintWithNumberBig('M_PASSR', 15, 5000, TextStyle.Middle)
+Stat.AwardPlayerMissionRespect(15)
+Audio.PlayMissionPassedTune(1)
+Player.ClearWantedLevel($player1)
+Stat.RegisterMissionPassed('TRUTH_2')
+Stat.PlayerMadeProgress(1)
+$flag_truth_mission_counter += 1
+Blip.Remove($truth_contact_blip)
+terminate_all_scripts_with_this_name 'MOB_SF'
+start_new_script @MOB_SF 
+Blip.Remove($1732)
+$1732 = Blip.AddShortRangeSpriteForContactPoint(35, $save_pickupX[15], $save_pickupY[15], $save_pickupZ[15])
+Blip.ChangeDisplay($1732, BlipDisplay.BlipOnly)
+start_new_script @GARAGE 
+Blip.Remove($garage_contact_blip)
+$garage_contact_blip = Blip.AddSpriteForContactPoint(15, $garageX, $garageY, $garageZ)
+Pickup.Remove($grove_save_pickup[15])
+$grove_save_pickup[15] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[15], $save_pickupY[15], $save_pickupZ[15])
+$number_of_save_icons = 16
+Garage.Activate('MDSSFSE')
+Blip.Remove($2589)
+$2589 = Blip.AddShortRangeSpriteForCoord(27, -1941.0, 251.7, 33.4)
+return 
+
+:TRUTH2_12153
+if 
+  Player.IsPlaying($player1)
+goto_if_false @TRUTH2_12183
+Pad.SetDrunkInputDelay($player1, 0)
+Player.SetDrunkenness($player1, 0)
+
+:TRUTH2_12183
+if 
+  is_var_text_label_empty s$shop_name
+goto_if_false @TRUTH2_12201
+Camera.RestoreJumpcut
+
+:TRUTH2_12201
+Streaming.RemoveIplDiscreetly("TRUTHSFARM")
+Blip.Remove(42@)
+if 
+  not Car.IsDead(35@)
+goto_if_false @TRUTH2_12266
+Heli.GotoCoords(35@, 0.0, 0.0, 200.0, 0.0, 200.0)
+
+:TRUTH2_12266
+if 
+  not Char.IsDead($truth)
+goto_if_false @TRUTH2_12287
+Char.DetachFromCar($truth)
+
+:TRUTH2_12287
+if 
+  not Car.IsDead(39@)
+goto_if_false @TRUTH2_12318
+Car.SetProofs(39@, False, False, False, False, False)
+
+:TRUTH2_12318
+if 
+  not Car.IsDead(34@)
+goto_if_false @TRUTH2_12341
+Car.LockDoors(34@, CarLock.Unlocked)
+
+:TRUTH2_12341
+Pickup.Remove(40@)
+Pickup.Remove(41@)
+Streaming.MarkModelAsNoLongerNeeded(483)
+Streaming.MarkModelAsNoLongerNeeded(543)
+Streaming.MarkModelAsNoLongerNeeded(497)
+Streaming.MarkModelAsNoLongerNeeded(283)
+Streaming.MarkModelAsNoLongerNeeded(361)
+Streaming.MarkModelAsNoLongerNeeded(359)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(334)
+Char.RemoveElegantly($truth)
+Streaming.UnloadSpecialCharacter(1)
+Hud.ClearTimer($t2_cop_timer)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @TRUTH2_12428
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:TRUTH2_12428
+Game.ShutAllCharsUp(False)
+Blip.Remove(43@)
+Blip.Remove(44@)
+Blip.Remove(45@)
+Blip.Remove(46@)
+Blip.Remove(47@)
+Blip.Remove(48@)
+Blip.Remove(49@)
+Blip.Remove(50@)
+Blip.Remove(51@)
+Blip.Remove(52@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+Blip.Remove(55@)
+Blip.Remove(56@)
+Blip.Remove(57@)
+Blip.Remove(58@)
+Blip.Remove(59@)
+Blip.Remove(60@)
+Blip.Remove(61@)
+Blip.Remove(62@)
+Blip.Remove(63@)
+Blip.Remove(64@)
+Blip.Remove(65@)
+Blip.Remove(66@)
+Blip.Remove(67@)
+Blip.Remove(68@)
+Blip.Remove(69@)
+Blip.Remove(70@)
+Blip.Remove(71@)
+Blip.Remove(72@)
+Blip.Remove(73@)
+Blip.Remove(74@)
+Blip.Remove(75@)
+Blip.Remove(76@)
+Blip.Remove(77@)
+Blip.Remove(78@)
+Blip.Remove(79@)
+Blip.Remove(80@)
+Blip.Remove(81@)
+Blip.Remove(82@)
+Blip.Remove(83@)
+Blip.Remove(84@)
+Blip.Remove(85@)
+Blip.Remove(86@)
+$timer_mobile_start = Clock.GetGameTimer()
+$onmission = 0
+Mission.Finish
+return 
+
+:TRUTH2_12668
+if 
+  Char.IsDead($truth)
+goto_if_false @TRUTH2_12709
+Text.ClearPrints
+Text.PrintNow('TRU2_08', 7000, 1)
+90@ = 1
+
+:TRUTH2_12709
+if 
+  Car.IsDead(34@)
+goto_if_false @TRUTH2_12750
+Text.ClearPrints
+Text.PrintNow('TRU2_09', 7000, 1)
+90@ = 1
+
+:TRUTH2_12750
+if 
+  Car.IsDead(35@)
+goto_if_false @TRUTH2_12787
+if 
+  Searchlight.DoesExist(38@)
+goto_if_false @TRUTH2_12787
+Searchlight.Delete(38@)
+
+:TRUTH2_12787
+return 
+
+:TRUTH2_12789
+if 
+  148@ == 0
+goto_if_false @TRUTH2_13016
+149@ = Char.GetAmmoInWeapon($scplayer, 37)
+if 
+  149@ == 0
+goto_if_false @TRUTH2_13016
+Blip.Remove(43@)
+Blip.Remove(44@)
+Blip.Remove(45@)
+Blip.Remove(46@)
+Blip.Remove(47@)
+Blip.Remove(48@)
+Blip.Remove(49@)
+Blip.Remove(50@)
+Blip.Remove(51@)
+Blip.Remove(52@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+Blip.Remove(55@)
+Blip.Remove(56@)
+Blip.Remove(57@)
+Blip.Remove(58@)
+Blip.Remove(59@)
+Blip.Remove(60@)
+Blip.Remove(61@)
+Blip.Remove(62@)
+Blip.Remove(63@)
+Blip.Remove(64@)
+Blip.Remove(42@)
+40@ = Pickup.CreateWithAmmo(361, 3, 3000, -1100.3, -1640.4, 76.4)
+42@ = Blip.AddForPickup(40@)
+Blip.SetAsFriendly(42@, False)
+Text.PrintNow('TRU2_13', 7000, 1)
+148@ = 1
+
+:TRUTH2_13016
+if 
+  148@ == 1
+goto_if_false @TRUTH2_14222
+if 
+  Pickup.HasBeenCollected(40@)
+goto_if_false @TRUTH2_14222
+Blip.Remove(42@)
+if 
+  91@ == 0
+goto_if_false @TRUTH2_13107
+43@ = Blip.AddForCoord(-1061.9, -1630.7, 75.3)
+Blip.ChangeScale(43@, 1)
+Blip.SetCoordAppearance(43@, 2)
+
+:TRUTH2_13107
+if 
+  92@ == 0
+goto_if_false @TRUTH2_13159
+44@ = Blip.AddForCoord(-1062.3, -1621.4, 75.3)
+Blip.ChangeScale(44@, 1)
+Blip.SetCoordAppearance(44@, 2)
+
+:TRUTH2_13159
+if 
+  93@ == 0
+goto_if_false @TRUTH2_13211
+45@ = Blip.AddForCoord(-1052.8, -1630.8, 75.3)
+Blip.ChangeScale(45@, 1)
+Blip.SetCoordAppearance(45@, 2)
+
+:TRUTH2_13211
+if 
+  94@ == 0
+goto_if_false @TRUTH2_13263
+46@ = Blip.AddForCoord(-1052.8, -1621.4, 75.3)
+Blip.ChangeScale(46@, 1)
+Blip.SetCoordAppearance(46@, 2)
+
+:TRUTH2_13263
+if 
+  95@ == 0
+goto_if_false @TRUTH2_13315
+47@ = Blip.AddForCoord(-1042.8, -1630.8, 75.3)
+Blip.ChangeScale(47@, 1)
+Blip.SetCoordAppearance(47@, 2)
+
+:TRUTH2_13315
+if 
+  96@ == 0
+goto_if_false @TRUTH2_13367
+48@ = Blip.AddForCoord(-1042.8, -1621.4, 75.3)
+Blip.ChangeScale(48@, 1)
+Blip.SetCoordAppearance(48@, 2)
+
+:TRUTH2_13367
+if 
+  97@ == 0
+goto_if_false @TRUTH2_13419
+49@ = Blip.AddForCoord(-1032.8, -1630.8, 75.3)
+Blip.ChangeScale(49@, 1)
+Blip.SetCoordAppearance(49@, 2)
+
+:TRUTH2_13419
+if 
+  98@ == 0
+goto_if_false @TRUTH2_13471
+50@ = Blip.AddForCoord(-1032.8, -1621.4, 75.3)
+Blip.ChangeScale(50@, 1)
+Blip.SetCoordAppearance(50@, 2)
+
+:TRUTH2_13471
+if 
+  99@ == 0
+goto_if_false @TRUTH2_13523
+51@ = Blip.AddForCoord(-1022.8, -1630.8, 75.3)
+Blip.ChangeScale(51@, 1)
+Blip.SetCoordAppearance(51@, 2)
+
+:TRUTH2_13523
+if 
+  100@ == 0
+goto_if_false @TRUTH2_13575
+52@ = Blip.AddForCoord(-1022.8, -1621.4, 75.3)
+Blip.ChangeScale(52@, 1)
+Blip.SetCoordAppearance(52@, 2)
+
+:TRUTH2_13575
+if 
+  101@ == 0
+goto_if_false @TRUTH2_13627
+53@ = Blip.AddForCoord(-1012.1, -1666.8, 75.3)
+Blip.ChangeScale(53@, 1)
+Blip.SetCoordAppearance(53@, 2)
+
+:TRUTH2_13627
+if 
+  102@ == 0
+goto_if_false @TRUTH2_13679
+54@ = Blip.AddForCoord(-1012.8, -1657.4, 75.3)
+Blip.ChangeScale(54@, 1)
+Blip.SetCoordAppearance(54@, 2)
+
+:TRUTH2_13679
+if 
+  103@ == 0
+goto_if_false @TRUTH2_13731
+55@ = Blip.AddForCoord(-1012.8, -1648.4, 75.3)
+Blip.ChangeScale(55@, 1)
+Blip.SetCoordAppearance(55@, 2)
+
+:TRUTH2_13731
+if 
+  104@ == 0
+goto_if_false @TRUTH2_13783
+56@ = Blip.AddForCoord(-1000.1, -1666.8, 75.3)
+Blip.ChangeScale(56@, 1)
+Blip.SetCoordAppearance(56@, 2)
+
+:TRUTH2_13783
+if 
+  105@ == 0
+goto_if_false @TRUTH2_13835
+57@ = Blip.AddForCoord(-1000.8, -1657.4, 75.3)
+Blip.ChangeScale(57@, 1)
+Blip.SetCoordAppearance(57@, 2)
+
+:TRUTH2_13835
+if 
+  106@ == 0
+goto_if_false @TRUTH2_13887
+58@ = Blip.AddForCoord(-1000.8, -1648.4, 75.3)
+Blip.ChangeScale(58@, 1)
+Blip.SetCoordAppearance(58@, 2)
+
+:TRUTH2_13887
+if 
+  107@ == 0
+goto_if_false @TRUTH2_13939
+59@ = Blip.AddForCoord(-992.1, -1702.8, 75.3)
+Blip.ChangeScale(59@, 1)
+Blip.SetCoordAppearance(59@, 2)
+
+:TRUTH2_13939
+if 
+  108@ == 0
+goto_if_false @TRUTH2_13991
+60@ = Blip.AddForCoord(-992.8, -1693.4, 75.3)
+Blip.ChangeScale(60@, 1)
+Blip.SetCoordAppearance(60@, 2)
+
+:TRUTH2_13991
+if 
+  109@ == 0
+goto_if_false @TRUTH2_14043
+61@ = Blip.AddForCoord(-992.8, -1684.4, 75.3)
+Blip.ChangeScale(61@, 1)
+Blip.SetCoordAppearance(61@, 2)
+
+:TRUTH2_14043
+if 
+  110@ == 0
+goto_if_false @TRUTH2_14095
+62@ = Blip.AddForCoord(-982.1, -1702.8, 75.3)
+Blip.ChangeScale(62@, 1)
+Blip.SetCoordAppearance(62@, 2)
+
+:TRUTH2_14095
+if 
+  111@ == 0
+goto_if_false @TRUTH2_14147
+63@ = Blip.AddForCoord(-982.8, -1693.4, 75.3)
+Blip.ChangeScale(63@, 1)
+Blip.SetCoordAppearance(63@, 2)
+
+:TRUTH2_14147
+if 
+  112@ == 0
+goto_if_false @TRUTH2_14199
+64@ = Blip.AddForCoord(-982.8, -1684.4, 75.3)
+Blip.ChangeScale(64@, 1)
+Blip.SetCoordAppearance(64@, 2)
+
+:TRUTH2_14199
+Text.PrintNow('TRU2_01', 11000, 1)
+148@ = 0
+
+:TRUTH2_14222
+return 
+
+:TRUTH2_14224
+if 
+  150@ == 0
+goto_if_false @TRUTH2_14340
+149@ = Char.GetAmmoInWeapon($scplayer, 35)
+if 
+  149@ == 0
+goto_if_false @TRUTH2_14340
+Blip.Remove(42@)
+41@ = Pickup.CreateWithAmmo(359, 3, 10, -1100.3, -1640.4, 76.4)
+42@ = Blip.AddForPickup(41@)
+Blip.SetAsFriendly(42@, False)
+Text.PrintNow('TRU2_13', 7000, 1)
+150@ = 1
+
+:TRUTH2_14340
+if 
+  150@ == 1
+goto_if_false @TRUTH2_14426
+if 
+  Pickup.HasBeenCollected(41@)
+goto_if_false @TRUTH2_14426
+Blip.Remove(42@)
+if 
+  not Car.IsDead(35@)
+goto_if_false @TRUTH2_14419
+42@ = Blip.AddForCar(35@)
+Text.PrintNow('TRU2_15', 11000, 1)
+
+:TRUTH2_14419
+150@ = 0
+
+:TRUTH2_14426
+return 
+
+:TRUTH2_14428
+if 
+  136@ == 0
+goto_if_false @TRUTH2_14504
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @TRUTH2_14504
+Blip.Remove(42@)
+42@ = Blip.AddForCoord(-2031.3, 178.5, 27.9)
+Blip.SetAsFriendly(42@, False)
+136@ = 1
+
+:TRUTH2_14504
+if 
+  136@ == 1
+goto_if_false @TRUTH2_14568
+if 
+  not Char.IsInCar($scplayer, 34@)
+goto_if_false @TRUTH2_14568
+Blip.Remove(42@)
+42@ = Blip.AddForCar(34@)
+Blip.SetAsFriendly(42@, True)
+136@ = 0
+
+:TRUTH2_14568
+return 
+
+:TRUTH2_14570
+if 
+  87@ == 0
+goto_if_false @TRUTH2_14881
+if 
+  $t2_total_weed_burnt > 0
+goto_if_false @TRUTH2_14665
+if 
+  is_int_lvar_greater_than_int_var 147@ > $t2_total_weed_burnt
+goto_if_false @TRUTH2_14665
+if 
+  200 > 146@
+goto_if_false @TRUTH2_14658
+146@ += 1
+146@ += 1
+
+:TRUTH2_14658
+147@ -= 1
+
+:TRUTH2_14665
+if 
+  144@ == 0
+goto_if_false @TRUTH2_14715
+if 
+  40 > $t2_total_weed_burnt
+goto_if_false @TRUTH2_14715
+145@ += 1
+144@ = 1
+
+:TRUTH2_14715
+if 
+  144@ == 1
+goto_if_false @TRUTH2_14765
+if 
+  30 > $t2_total_weed_burnt
+goto_if_false @TRUTH2_14765
+145@ += 1
+144@ = 2
+
+:TRUTH2_14765
+if 
+  144@ == 2
+goto_if_false @TRUTH2_14815
+if 
+  20 > $t2_total_weed_burnt
+goto_if_false @TRUTH2_14815
+145@ += 1
+144@ = 3
+
+:TRUTH2_14815
+if 
+  144@ == 3
+goto_if_false @TRUTH2_14865
+if 
+  10 > $t2_total_weed_burnt
+goto_if_false @TRUTH2_14865
+145@ += 1
+144@ = 4
+
+:TRUTH2_14865
+Pad.SetDrunkInputDelay($player1, 145@)
+Player.SetDrunkenness($player1, 146@)
+
+:TRUTH2_14881
+if or
+  87@ == 2
+  87@ == 3
+goto_if_false @TRUTH2_14973
+if 
+  TIMERA > 660
+goto_if_false @TRUTH2_14973
+if 
+  146@ > 1
+goto_if_false @TRUTH2_14950
+146@ -= 1
+
+:TRUTH2_14950
+Pad.SetDrunkInputDelay($player1, 145@)
+Player.SetDrunkenness($player1, 146@)
+TIMERA = 0
+
+:TRUTH2_14973
+return 
+
+:TRUTH2_14975
+if 
+  151@ == 1
+goto_if_false @TRUTH2_15192
+set_lvar_text_label 154@s = 'TRU2_AA'
+set_lvar_text_label 156@s = 'TRU2_AB'
+set_lvar_text_label 158@s = 'TRU2_AC'
+set_lvar_text_label 160@s = 'TRU2_AD'
+set_lvar_text_label 162@s = 'TRU2_AE'
+set_lvar_text_label 164@s = 'TRU2_BA'
+set_lvar_text_label 166@s = 'TRU2_BB'
+set_lvar_text_label 168@s = 'TRU2_BC'
+set_lvar_int_to_constant 186@ = 41200
+set_lvar_int_to_constant 187@ = 41201
+set_lvar_int_to_constant 188@ = 41202
+set_lvar_int_to_constant 189@ = 41203
+set_lvar_int_to_constant 190@ = 41204
+set_lvar_int_to_constant 191@ = 41205
+set_lvar_int_to_constant 192@ = 41206
+set_lvar_int_to_constant 193@ = 41207
+207@ = 8
+
+:TRUTH2_15192
+if 
+  151@ == 2
+goto_if_false @TRUTH2_15265
+set_lvar_text_label 154@s = 'TRU2_CA'
+set_lvar_text_label 156@s = 'TRU2_CB'
+set_lvar_int_to_constant 186@ = 41208
+set_lvar_int_to_constant 187@ = 41209
+207@ = 2
+
+:TRUTH2_15265
+if 
+  151@ == 3
+goto_if_false @TRUTH2_15552
+set_lvar_text_label 154@s = 'TRU2_DA'
+set_lvar_text_label 156@s = 'TRU2_DB'
+set_lvar_text_label 158@s = 'TRU2_DC'
+set_lvar_text_label 160@s = 'TRU2_DD'
+set_lvar_text_label 162@s = 'TRU2_DE'
+set_lvar_text_label 164@s = 'TRU2_OA'
+set_lvar_text_label 166@s = 'TRU2_OB'
+set_lvar_text_label 168@s = 'TRU2_OC'
+set_lvar_text_label 170@s = 'TRU2_OD'
+set_lvar_text_label 172@s = 'TRU2_OE'
+set_lvar_text_label 174@s = 'TRU2_OF'
+set_lvar_int_to_constant 186@ = 41210
+set_lvar_int_to_constant 187@ = 41211
+set_lvar_int_to_constant 188@ = 41212
+set_lvar_int_to_constant 189@ = 41213
+set_lvar_int_to_constant 190@ = 41214
+set_lvar_int_to_constant 191@ = 41268
+set_lvar_int_to_constant 192@ = 3600
+set_lvar_int_to_constant 193@ = 41269
+set_lvar_int_to_constant 194@ = 41270
+set_lvar_int_to_constant 195@ = 41271
+set_lvar_int_to_constant 196@ = 41272
+207@ = 11
+
+:TRUTH2_15552
+if 
+  151@ == 4
+goto_if_false @TRUTH2_15721
+set_lvar_text_label 154@s = 'TRU2_EA'
+set_lvar_text_label 156@s = 'TRU2_EB'
+set_lvar_text_label 158@s = 'TRU2_EC'
+set_lvar_text_label 160@s = 'TRU2_ED'
+set_lvar_text_label 162@s = 'TRU2_EF'
+set_lvar_text_label 164@s = 'TRU2_EG'
+set_lvar_int_to_constant 186@ = 41216
+set_lvar_int_to_constant 187@ = 41217
+set_lvar_int_to_constant 188@ = 41218
+set_lvar_int_to_constant 189@ = 41219
+set_lvar_int_to_constant 190@ = 41220
+set_lvar_int_to_constant 191@ = 41221
+207@ = 6
+
+:TRUTH2_15721
+if 
+  151@ == 5
+goto_if_false @TRUTH2_15986
+set_lvar_text_label 154@s = 'TRU2_FA'
+set_lvar_text_label 156@s = 'TRU2_FB'
+set_lvar_text_label 158@s = 'TRU2_FC'
+set_lvar_text_label 160@s = 'TRU2_FD'
+set_lvar_text_label 162@s = 'TRU2_FE'
+set_lvar_text_label 164@s = 'TRU2_FF'
+set_lvar_text_label 166@s = 'TRU2_FG'
+set_lvar_text_label 168@s = 'TRU2_FH'
+set_lvar_text_label 170@s = 'TRU2_FJ'
+set_lvar_text_label 172@s = 'TRU2_FK'
+set_lvar_int_to_constant 186@ = 41222
+set_lvar_int_to_constant 187@ = 41223
+set_lvar_int_to_constant 188@ = 41224
+set_lvar_int_to_constant 189@ = 41225
+set_lvar_int_to_constant 190@ = 41226
+set_lvar_int_to_constant 191@ = 41227
+set_lvar_int_to_constant 192@ = 41228
+set_lvar_int_to_constant 193@ = 41229
+set_lvar_int_to_constant 194@ = 41230
+set_lvar_int_to_constant 195@ = 41231
+207@ = 10
+
+:TRUTH2_15986
+if 
+  151@ == 6
+goto_if_false @TRUTH2_16203
+set_lvar_text_label 154@s = 'TRU2_GA'
+set_lvar_text_label 156@s = 'TRU2_GB'
+set_lvar_text_label 158@s = 'TRU2_GC'
+set_lvar_text_label 160@s = 'TRU2_GE'
+set_lvar_text_label 162@s = 'TRU2_GF'
+set_lvar_text_label 164@s = 'TRU2_GG'
+set_lvar_text_label 166@s = 'TRU2_GH'
+set_lvar_text_label 168@s = 'TRU2_GJ'
+set_lvar_int_to_constant 186@ = 41232
+set_lvar_int_to_constant 187@ = 41233
+set_lvar_int_to_constant 188@ = 41234
+set_lvar_int_to_constant 189@ = 41235
+set_lvar_int_to_constant 190@ = 41236
+set_lvar_int_to_constant 191@ = 41237
+set_lvar_int_to_constant 192@ = 41238
+set_lvar_int_to_constant 193@ = 41239
+207@ = 8
+
+:TRUTH2_16203
+if 
+  151@ == 7
+goto_if_false @TRUTH2_16564
+set_lvar_text_label 154@s = 'TRU2_HA'
+set_lvar_text_label 156@s = 'TRU2_HB'
+set_lvar_text_label 158@s = 'TRU2_HC'
+set_lvar_text_label 160@s = 'TRU2_HD'
+set_lvar_text_label 162@s = 'TRU2_HE'
+set_lvar_text_label 164@s = 'TRU2_HF'
+set_lvar_text_label 166@s = 'TRU2_HG'
+set_lvar_text_label 168@s = 'TRU2_HH'
+set_lvar_text_label 170@s = 'TRU2_HJ'
+set_lvar_text_label 172@s = 'TRU2_HK'
+set_lvar_text_label 174@s = 'TRU2_HL'
+set_lvar_text_label 176@s = 'TRU2_HM'
+set_lvar_text_label 178@s = 'TRU2_HN'
+set_lvar_text_label 180@s = 'TRU2_HO'
+set_lvar_int_to_constant 186@ = 41240
+set_lvar_int_to_constant 187@ = 41241
+set_lvar_int_to_constant 188@ = 41242
+set_lvar_int_to_constant 189@ = 41243
+set_lvar_int_to_constant 190@ = 41244
+set_lvar_int_to_constant 191@ = 41245
+set_lvar_int_to_constant 192@ = 41246
+set_lvar_int_to_constant 193@ = 41247
+set_lvar_int_to_constant 194@ = 41248
+set_lvar_int_to_constant 195@ = 41249
+set_lvar_int_to_constant 196@ = 41250
+set_lvar_int_to_constant 197@ = 41251
+set_lvar_int_to_constant 198@ = 41252
+set_lvar_int_to_constant 199@ = 41253
+207@ = 14
+
+:TRUTH2_16564
+if 
+  151@ == 8
+goto_if_false @TRUTH2_16637
+set_lvar_text_label 154@s = 'TRU2_JA'
+set_lvar_text_label 156@s = 'TRU2_JB'
+set_lvar_int_to_constant 186@ = 41254
+set_lvar_int_to_constant 187@ = 41255
+207@ = 2
+
+:TRUTH2_16637
+if 
+  151@ == 9
+goto_if_false @TRUTH2_16758
+set_lvar_text_label 154@s = 'TRU2_KA'
+set_lvar_text_label 156@s = 'TRU2_KB'
+set_lvar_text_label 158@s = 'TRU2_KC'
+set_lvar_text_label 160@s = 'TRU2_KD'
+set_lvar_int_to_constant 186@ = 41256
+set_lvar_int_to_constant 187@ = 41257
+set_lvar_int_to_constant 188@ = 41258
+set_lvar_int_to_constant 189@ = 41259
+207@ = 4
+
+:TRUTH2_16758
+if 
+  151@ == 10
+goto_if_false @TRUTH2_16927
+set_lvar_text_label 154@s = 'TRU2_LA'
+set_lvar_text_label 156@s = 'TRU2_LB'
+set_lvar_text_label 158@s = 'TRU2_LC'
+set_lvar_text_label 160@s = 'TRU2_MA'
+set_lvar_text_label 162@s = 'TRU2_MB'
+set_lvar_text_label 164@s = 'TRU2_MC'
+set_lvar_int_to_constant 186@ = 41260
+set_lvar_int_to_constant 187@ = 41261
+set_lvar_int_to_constant 188@ = 41262
+set_lvar_int_to_constant 189@ = 41263
+set_lvar_int_to_constant 190@ = 41264
+set_lvar_int_to_constant 191@ = 41265
+207@ = 6
+
+:TRUTH2_16927
+if 
+  151@ == 11
+goto_if_false @TRUTH2_17000
+set_lvar_text_label 154@s = 'TRU2_NA'
+set_lvar_text_label 156@s = 'TRU2_NB'
+set_lvar_int_to_constant 186@ = 41266
+set_lvar_int_to_constant 187@ = 41267
+207@ = 2
+
+:TRUTH2_17000
+if 
+  151@ == 12
+goto_if_false @TRUTH2_17098
+set_lvar_text_label 154@s = 'TRUX_AA'
+set_lvar_text_label 156@s = 'TRUX_AB'
+set_lvar_text_label 158@s = 'TRUX_AC'
+set_lvar_int_to_constant 186@ = 41400
+set_lvar_int_to_constant 187@ = 41401
+set_lvar_int_to_constant 188@ = 41402
+set_lvar_int_to_lvar_int 207@ = 212@
+
+:TRUTH2_17098
+set_lvar_int_to_lvar_int 210@ = 152@
+208@ = 0
+209@ = 0
+211@ = 1
+return 
+
+:TRUTH2_17129
+if or
+  151@ == 1
+  151@ == 2
+  151@ == 8
+  151@ == 9
+  151@ == 11
+goto_if_false @TRUTH2_17283
+if 
+  is_int_lvar_greater_than_int_lvar 207@ > 152@
+goto_if_false @TRUTH2_17276
+gosub @TRUTH2_18243
+gosub @TRUTH2_18350
+if 
+  not Char.IsDead($truth)
+goto_if_false @TRUTH2_17238
+gosub @TRUTH2_18504
+goto @TRUTH2_17269
+
+:TRUTH2_17238
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(154@(152@,16s))
+208@ = 0
+209@ = 0
+
+:TRUTH2_17269
+goto @TRUTH2_17283
+
+:TRUTH2_17276
+151@ = 0
+
+:TRUTH2_17283
+if or
+  87@ == 3
+  87@ == 4
+goto_if_false @TRUTH2_17782
+if 
+  Char.IsSittingInCar($scplayer, 34@)
+goto_if_false @TRUTH2_17646
+if 
+  151@ == 3
+goto_if_false @TRUTH2_17460
+if 
+  is_int_lvar_greater_than_int_lvar 207@ > 152@
+goto_if_false @TRUTH2_17446
+gosub @TRUTH2_18243
+gosub @TRUTH2_18350
+if 
+  not Char.IsDead($truth)
+goto_if_false @TRUTH2_17408
+gosub @TRUTH2_18504
+goto @TRUTH2_17439
+
+:TRUTH2_17408
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(154@(152@,16s))
+208@ = 0
+209@ = 0
+
+:TRUTH2_17439
+goto @TRUTH2_17460
+
+:TRUTH2_17446
+TIMERB = 0
+151@ = 0
+
+:TRUTH2_17460
+if or
+  151@ == 4
+  151@ == 5
+  151@ == 6
+  151@ == 7
+  151@ == 10
+goto_if_false @TRUTH2_17646
+if 
+  is_int_lvar_greater_than_int_lvar 207@ > 152@
+goto_if_false @TRUTH2_17607
+gosub @TRUTH2_18243
+gosub @TRUTH2_18350
+if 
+  not Char.IsDead($truth)
+goto_if_false @TRUTH2_17569
+gosub @TRUTH2_18504
+goto @TRUTH2_17600
+
+:TRUTH2_17569
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(154@(152@,16s))
+208@ = 0
+209@ = 0
+
+:TRUTH2_17600
+goto @TRUTH2_17646
+
+:TRUTH2_17607
+if 
+  145@ > 0
+goto_if_false @TRUTH2_17632
+145@ -= 1
+
+:TRUTH2_17632
+TIMERB = 0
+151@ = 0
+
+:TRUTH2_17646
+if 
+  not Char.IsInCar($scplayer, 34@)
+goto_if_false @TRUTH2_17782
+if 
+  12 > 151@
+goto_if_false @TRUTH2_17782
+if 
+  is_int_lvar_greater_than_int_lvar 207@ > 152@
+goto_if_false @TRUTH2_17709
+152@ += 1
+
+:TRUTH2_17709
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(154@(152@,16s))
+Text.ClearPrints
+set_lvar_int_to_lvar_int 214@ = 151@
+set_lvar_int_to_lvar_int 213@ = 152@
+151@ = 12
+152@ = Math.RandomIntInRange(0, 3)
+set_lvar_int_to_lvar_int 212@ = 152@
+212@ += 1
+gosub @TRUTH2_14975
+
+:TRUTH2_17782
+if 
+  4 > 87@
+goto_if_false @TRUTH2_18241
+if 
+  151@ == 12
+goto_if_false @TRUTH2_18013
+if 
+  not Char.IsInCar($scplayer, 34@)
+goto_if_false @TRUTH2_17961
+if 
+  is_int_lvar_greater_than_int_lvar 207@ > 152@
+goto_if_false @TRUTH2_17938
+gosub @TRUTH2_18243
+gosub @TRUTH2_18350
+if 
+  not Char.IsDead($truth)
+goto_if_false @TRUTH2_17900
+gosub @TRUTH2_18504
+goto @TRUTH2_17931
+
+:TRUTH2_17900
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(154@(152@,16s))
+208@ = 0
+209@ = 0
+
+:TRUTH2_17931
+goto @TRUTH2_17961
+
+:TRUTH2_17938
+Text.Print('TRU2_17', 11000, 1)
+151@ = 13
+
+:TRUTH2_17961
+if 
+  Char.IsSittingInCar($scplayer, 34@)
+goto_if_false @TRUTH2_18013
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(154@(152@,16s))
+151@ = 14
+152@ = 0
+Text.ClearPrints
+
+:TRUTH2_18013
+if 
+  151@ == 13
+goto_if_false @TRUTH2_18066
+if 
+  Char.IsSittingInCar($scplayer, 34@)
+goto_if_false @TRUTH2_18066
+151@ = 14
+152@ = 0
+Text.ClearPrints
+
+:TRUTH2_18066
+if 
+  151@ == 14
+goto_if_false @TRUTH2_18241
+if 
+  Char.IsSittingInCar($scplayer, 34@)
+goto_if_false @TRUTH2_18167
+TIMERB = 0
+set_lvar_int_to_lvar_int 151@ = 214@
+set_lvar_int_to_lvar_int 152@ = 213@
+gosub @TRUTH2_14975
+if 
+  214@ == 0
+goto_if_false @TRUTH2_18167
+Text.Print('TRU2_12', 7000, 1)
+
+:TRUTH2_18167
+if 
+  not Char.IsInCar($scplayer, 34@)
+goto_if_false @TRUTH2_18241
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(154@(152@,16s))
+151@ = 12
+152@ = Math.RandomIntInRange(0, 3)
+set_lvar_int_to_lvar_int 212@ = 152@
+212@ += 1
+gosub @TRUTH2_14975
+
+:TRUTH2_18241
+return 
+
+:TRUTH2_18243
+if 
+  is_int_lvar_greater_than_int_lvar 207@ > 210@
+goto_if_false @TRUTH2_18348
+if 
+  208@ == 0
+goto_if_false @TRUTH2_18305
+Audio.LoadMissionAudio(186@(210@,16i), 1)
+210@ += 1
+208@ = 1
+
+:TRUTH2_18305
+if 
+  209@ == 0
+goto_if_false @TRUTH2_18348
+Audio.LoadMissionAudio(186@(210@,16i), 2)
+210@ += 1
+209@ = 1
+
+:TRUTH2_18348
+return 
+
+:TRUTH2_18350
+if 
+  211@ == 1
+goto_if_false @TRUTH2_18426
+if 
+  208@ == 1
+goto_if_false @TRUTH2_18426
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @TRUTH2_18426
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(154@(152@,16s), 4500, 1)
+208@ = 2
+
+:TRUTH2_18426
+if 
+  211@ == 2
+goto_if_false @TRUTH2_18502
+if 
+  209@ == 1
+goto_if_false @TRUTH2_18502
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @TRUTH2_18502
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow(154@(152@,16s), 4500, 1)
+209@ = 2
+
+:TRUTH2_18502
+return 
+
+:TRUTH2_18504
+if 
+  208@ == 2
+goto_if_false @TRUTH2_18567
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @TRUTH2_18567
+Text.ClearThisPrint(154@(152@,16s))
+152@ += 1
+211@ = 2
+208@ = 0
+
+:TRUTH2_18567
+if 
+  209@ == 2
+goto_if_false @TRUTH2_18630
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @TRUTH2_18630
+Text.ClearThisPrint(154@(152@,16s))
+152@ += 1
+211@ = 1
+209@ = 0
+
+:TRUTH2_18630
+return 
+

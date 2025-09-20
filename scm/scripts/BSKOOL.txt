@@ -1,0 +1,3929 @@
+//-------------Mission 120---------------
+// Originally: Bike School
+
+:BSKOOL
+script_name 'BSKOOL'
+gosub @BSKOOL_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @BSKOOL_38
+gosub @BSKOOL_11889
+
+:BSKOOL_38
+gosub @BSKOOL_11994
+terminate_this_script 
+
+:BSKOOL_47
+Text.ClearThisPrint('M_FAIL')
+if 
+  $flag_bikeschool_passed_1stime == 0
+goto_if_false @BSKOOL_78
+Stat.RegisterMissionGiven
+
+:BSKOOL_78
+$onmission = 1
+Text.LoadMissionText('BS')
+Camera.SetFadingColor(0, 0, 0)
+wait 0
+if 
+  $onmission == 0
+goto_if_false @BSKOOL_218
+38@ = Car.Create(581, $car_posx, $car_posy, $perfect_positionz)
+49@ = Char.CreateInsideCar(PedType.CivFemale, 50, 38@)
+$trafficcones[20] = Object.CreateNoOffset(#TRAFFICCONE, 0.0, 0.0, 100.0)
+$trafficcones[30] = Object.CreateNoOffset(#TRAFFICCONE, 0.0, 0.0, 100.0)
+56@ = Object.Create(#LANDJUMP2, $car_posx, $car_posy, $perfect_positionz)
+
+:BSKOOL_218
+34@ = 0
+61@ = 0
+62@ = 0
+57@ = 0
+63@ = 0
+64@ = 0
+65@ = 0
+66@ = 0
+67@ = 0
+51@ = 0
+if 
+  $bs_open_tests == 0
+goto_if_false @BSKOOL_313
+$bs_open_tests = 1
+
+:BSKOOL_313
+$mission_selection = 1
+$start_coordsx = 1130.44
+$start_coordsy = 1341.0
+$noticeboard_x = 1173.93
+$noticeboard_y = 1351.066
+$noticeboard_z = 9.9219
+Char.SetCoordinates($scplayer, 1171.521, 1351.183, 9.9219)
+Streaming.RequestModel(581)
+Streaming.RequestModel(521)
+Streaming.RequestModel(461)
+Streaming.RequestModel(#TRAFFICCONE)
+Streaming.RequestModel(#LANDJUMP2)
+Streaming.RequestModel(522)
+Streaming.RequestModel(468)
+Streaming.RequestModel(50)
+
+:BSKOOL_429
+if or
+  not Streaming.HasModelLoaded(581)
+  not Streaming.HasModelLoaded(521)
+  not Streaming.HasModelLoaded(461)
+  not Streaming.HasModelLoaded(#TRAFFICCONE)
+  not Streaming.HasModelLoaded(#LANDJUMP2)
+goto_if_false @BSKOOL_476
+wait 0
+goto @BSKOOL_429
+
+:BSKOOL_476
+if or
+  not Streaming.HasModelLoaded(468)
+  not Streaming.HasModelLoaded(50)
+  not Streaming.HasModelLoaded(522)
+goto_if_false @BSKOOL_512
+wait 0
+goto @BSKOOL_476
+
+:BSKOOL_512
+Txd.LoadDictionary('LD_DRV')
+Txd.LoadSprite("BRONZE", 1)
+Txd.LoadSprite("SILVER", 2)
+Txd.LoadSprite("GOLD", 3)
+Txd.LoadSprite("RIBB", 4)
+Txd.LoadSprite("TVCORN", 5)
+Txd.LoadSprite("NAWARD", 6)
+Txd.LoadSprite("RIBBW", 7)
+Txd.LoadSprite("BLKDOT", 8)
+Txd.LoadSprite("TVBASE", 9)
+Player.SetControl($player1, True)
+Hud.Display(False)
+goto @BSKOOL_644
+
+:BSKOOL_644
+Player.SetControl($player1, False)
+Text.ClearHelp
+Text.ClearPrints
+50@ = Player.StoreWantedLevel($player1)
+Player.ClearWantedLevel($player1)
+gosub @BSKOOL_16623
+34@ = 0
+57@ = 0
+Text.UseCommands(True)
+64@ = 255
+63@ = 2
+if 
+  7 > $bs_open_tests
+goto_if_false @BSKOOL_734
+set_var_int_to_lvar_int $mission_selection = 37@
+
+:BSKOOL_734
+Camera.DoFade(1, 500)
+
+:BSKOOL_741
+if 
+  Camera.GetFadingStatus
+goto_if_false @BSKOOL_774
+Text.ClearPrints
+gosub @BSKOOL_12674
+wait 0
+goto @BSKOOL_741
+
+:BSKOOL_774
+gosub @BSKOOL_12674
+Hud.DisplayRadar(False)
+
+:BSKOOL_785
+wait 0
+gosub @BSKOOL_12674
+if 
+  51@ == 0
+goto_if_false @BSKOOL_828
+Audio.LoadMissionAudio(3800, 3)
+51@ = 1
+
+:BSKOOL_828
+if 
+  51@ == 1
+goto_if_false @BSKOOL_868
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @BSKOOL_868
+51@ = 2
+
+:BSKOOL_868
+if 
+  51@ == 2
+goto_if_false @BSKOOL_897
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+51@ = 3
+
+:BSKOOL_897
+if 
+  57@ == 0
+goto_if_false @BSKOOL_1394
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+if or
+  -100 > $LStickX
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @BSKOOL_1012
+37@ -= 1
+$mission_selection -= 1
+if 
+  $bs_open_tests > 1
+goto_if_false @BSKOOL_1012
+if 
+  4 > 34@
+goto_if_false @BSKOOL_1012
+34@ = 3
+
+:BSKOOL_1012
+if or
+  $LStickX > 100
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @BSKOOL_1093
+37@ += 1
+$mission_selection += 1
+if 
+  $bs_open_tests > 1
+goto_if_false @BSKOOL_1093
+if 
+  4 > 34@
+goto_if_false @BSKOOL_1093
+34@ = 3
+
+:BSKOOL_1093
+if 
+  1 > $mission_selection
+goto_if_false @BSKOOL_1127
+set_var_int_to_var_int $mission_selection = $bs_open_tests
+set_lvar_int_to_var_int 37@ = $bs_open_tests
+
+:BSKOOL_1127
+if 
+  is_int_var_greater_than_int_var $mission_selection > $bs_open_tests
+goto_if_false @BSKOOL_1160
+37@ = 1
+$mission_selection = 1
+
+:BSKOOL_1160
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @BSKOOL_1195
+wait 0
+gosub @BSKOOL_12674
+goto @BSKOOL_1160
+
+:BSKOOL_1195
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @BSKOOL_1230
+wait 0
+gosub @BSKOOL_12674
+goto @BSKOOL_1195
+
+:BSKOOL_1230
+if 
+  -100 > $LStickX
+goto_if_false @BSKOOL_1282
+wait 0
+gosub @BSKOOL_12674
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+goto @BSKOOL_1230
+
+:BSKOOL_1282
+if 
+  $LStickX > 100
+goto_if_false @BSKOOL_1334
+wait 0
+gosub @BSKOOL_12674
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+goto @BSKOOL_1282
+
+:BSKOOL_1334
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BSKOOL_1394
+if 
+  4 > 34@
+goto_if_false @BSKOOL_1376
+34@ = 3
+
+:BSKOOL_1376
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+51@ = 0
+goto @BSKOOL_1639
+
+:BSKOOL_1394
+if 
+is_ps2_keyboard_key_pressed 81
+goto_if_false @BSKOOL_1416
+$bs_open_tests = 6
+
+:BSKOOL_1416
+if 
+is_ps2_keyboard_key_pressed 53
+goto_if_false @BSKOOL_1480
+$bs_open_tests = 6
+$bs_wheelie_best_score = 100
+$bs_stoppie_best_score = 100
+$bs_the360_best_score = 100
+$bs_the180_best_score = 100
+$bs_jumpstop_best_score = 100
+$bs_jumpstoppie_best_score = 100
+
+:BSKOOL_1480
+if and
+  $bs_wheelie_best_score > 69
+  $bs_stoppie_best_score > 69
+  $bs_the360_best_score > 69
+  $bs_the180_best_score > 69
+  $bs_jumpstop_best_score > 69
+  $bs_jumpstoppie_best_score > 69
+goto_if_false @BSKOOL_1540
+$bs_passed = 1
+
+:BSKOOL_1540
+if 
+  $flag_bikeschool_passed_1stime == 0
+goto_if_false @BSKOOL_1590
+if 
+  $bs_passed == 1
+goto_if_false @BSKOOL_1590
+gosub @BSKOOL_20613
+goto @BSKOOL_11917
+
+:BSKOOL_1590
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BSKOOL_1625
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+51@ = 0
+goto @BSKOOL_11889
+
+:BSKOOL_1625
+gosub @BSKOOL_15813
+goto @BSKOOL_785
+
+:BSKOOL_1639
+Camera.DoFade(0, 500)
+
+:BSKOOL_1646
+if 
+  Camera.GetFadingStatus
+goto_if_false @BSKOOL_1677
+gosub @BSKOOL_12674
+wait 0
+goto @BSKOOL_1646
+
+:BSKOOL_1677
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_1698
+Car.StopPlayback(38@)
+
+:BSKOOL_1698
+Car.Delete(38@)
+Char.Delete(49@)
+World.ClearArea(1, $noticeboard_x, $noticeboard_y, $noticeboard_z, 300.0)
+Hud.ClearTimer($car_timer)
+Hud.FreezeTimer(False)
+Car.Delete(38@)
+gosub @BSKOOL_20952
+34@ = 5
+Hud.DisplayRadar(True)
+if 
+  $mission_selection == 1
+goto_if_false @BSKOOL_3452
+
+:BSKOOL_1776
+gosub @BSKOOL_16586
+
+:BSKOOL_1783
+$perfect_heading = 180.0
+$car_timer = 16000
+35@ = 181
+gosub @BSKOOL_16623
+38@ = Car.Create(581, $perfect_positionx, $perfect_positiony, $perfect_positionz)
+Car.SetHeading(38@, 180.0)
+gosub @BSKOOL_21023
+if 
+  34@ == 0
+goto_if_false @BSKOOL_1939
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_1896
+49@ = Char.CreateInsideCar(PedType.CivFemale, 50, 38@)
+
+:BSKOOL_1896
+Camera.SetFixedPosition(1125.66, 1334.4, 22.5, 0.0, 0.0, 0.0)
+Camera.PointAtCar(38@, CameraMode.Fixed, SwitchType.JumpCut)
+return 
+
+:BSKOOL_1939
+$finish_rightx = Car.GetOffsetInWorldCoords($finish_righty, $perfect_positionz, 38@, 0.0, 0.0, 0.0)
+Text.ClearPrints
+Text.PrintNow('BS_A_1', 5000, 4)
+gosub @BSKOOL_17345
+
+:BSKOOL_1993
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BSKOOL_2028
+48@ = 2
+goto @BSKOOL_3392
+
+:BSKOOL_2028
+gosub @BSKOOL_17412
+if 
+  48@ == 1
+goto_if_false @BSKOOL_2060
+goto @BSKOOL_11889
+
+:BSKOOL_2060
+if 
+  $car_started == 0
+goto_if_false @BSKOOL_2108
+Text.PrintNow('BS_A_1', 5000, 4)
+gosub @BSKOOL_17488
+goto @BSKOOL_3445
+
+:BSKOOL_2108
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_3445
+gosub @BSKOOL_17646
+$perfect_heading = Car.GetHeading(38@)
+if 
+  $variablec == 0
+goto_if_false @BSKOOL_2213
+if 
+  $perfect_heading > 80.0
+goto_if_false @BSKOOL_2213
+if 
+  90.0 > $perfect_heading
+goto_if_false @BSKOOL_2213
+$variablec = 1
+58@ = 1
+
+:BSKOOL_2213
+if 
+  58@ == 1
+goto_if_false @BSKOOL_2432
+if 
+  $variablec == 1
+goto_if_false @BSKOOL_2298
+if 
+  $perfect_heading > 350.0
+goto_if_false @BSKOOL_2298
+if 
+  360.0 > $perfect_heading
+goto_if_false @BSKOOL_2298
+$variablec = 2
+
+:BSKOOL_2298
+if 
+  $variablec == 2
+goto_if_false @BSKOOL_2365
+if 
+  $perfect_heading > 270.0
+goto_if_false @BSKOOL_2365
+if 
+  280.0 > $perfect_heading
+goto_if_false @BSKOOL_2365
+$variablec = 3
+
+:BSKOOL_2365
+if 
+  $variablec == 3
+goto_if_false @BSKOOL_2432
+if 
+  $perfect_heading > 170.0
+goto_if_false @BSKOOL_2432
+if 
+  180.0 > $perfect_heading
+goto_if_false @BSKOOL_2432
+$variablec = 4
+
+:BSKOOL_2432
+if 
+  $variablec == 0
+goto_if_false @BSKOOL_2506
+if 
+  $perfect_heading > 270.0
+goto_if_false @BSKOOL_2506
+if 
+  280.0 > $perfect_heading
+goto_if_false @BSKOOL_2506
+58@ = 2
+$variablec = 1
+
+:BSKOOL_2506
+if 
+  58@ == 2
+goto_if_false @BSKOOL_2725
+if 
+  $variablec == 1
+goto_if_false @BSKOOL_2591
+if 
+  $perfect_heading > 350.0
+goto_if_false @BSKOOL_2591
+if 
+  360.0 > $perfect_heading
+goto_if_false @BSKOOL_2591
+$variablec = 2
+
+:BSKOOL_2591
+if 
+  $variablec == 2
+goto_if_false @BSKOOL_2658
+if 
+  $perfect_heading > 80.0
+goto_if_false @BSKOOL_2658
+if 
+  90.0 > $perfect_heading
+goto_if_false @BSKOOL_2658
+$variablec = 3
+
+:BSKOOL_2658
+if 
+  $variablec == 3
+goto_if_false @BSKOOL_2725
+if 
+  $perfect_heading > 170.0
+goto_if_false @BSKOOL_2725
+if 
+  180.0 > $perfect_heading
+goto_if_false @BSKOOL_2725
+$variablec = 4
+
+:BSKOOL_2725
+if or
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+  not Char.IsInCar($scplayer, 38@)
+  $car_timer == 0
+goto_if_false @BSKOOL_3445
+gosub @BSKOOL_17680
+gosub @BSKOOL_17693
+if 
+  $variablec == 4
+goto_if_false @BSKOOL_2802
+$heading_score = 100
+
+:BSKOOL_2802
+if 
+  $variablec == 3
+goto_if_false @BSKOOL_2827
+$heading_score = 75
+
+:BSKOOL_2827
+if 
+  $variablec == 2
+goto_if_false @BSKOOL_2852
+$heading_score = 50
+
+:BSKOOL_2852
+if 
+  $variablec == 1
+goto_if_false @BSKOOL_2877
+$heading_score = 25
+
+:BSKOOL_2877
+if 
+  $variablec == 0
+goto_if_false @BSKOOL_2902
+$heading_score = 0
+
+:BSKOOL_2902
+set_var_int_to_var_int $overall_score = $position_score
+add_int_var_to_int_var $overall_score += $heading_score
+$overall_score /= 2
+if 
+  $position_score == 0
+goto_if_false @BSKOOL_2950
+$overall_score = 0
+
+:BSKOOL_2950
+gosub @BSKOOL_17937
+gosub @BSKOOL_18315
+if 
+  is_int_var_greater_than_int_var $overall_score > $bs_the360_best_score
+goto_if_false @BSKOOL_3170
+set_lvar_int_to_var_int 67@ = $bs_the360_best_score
+set_var_int_to_var_int $bs_the360_best_score = $overall_score
+59@ = 1
+gosub @BSKOOL_18779
+if 
+  65@ == 4
+goto_if_false @BSKOOL_3070
+if 
+  $bs_the360_goldachieved == 0
+goto_if_false @BSKOOL_3070
+$bs_the360_goldachieved = 1
+$bs_the360_silverachieved = 1
+$bs_the360_bronzeachieved = 1
+
+:BSKOOL_3070
+if 
+  65@ == 3
+goto_if_false @BSKOOL_3120
+if 
+  $bs_the360_silverachieved == 0
+goto_if_false @BSKOOL_3120
+$bs_the360_silverachieved = 1
+$bs_the360_bronzeachieved = 1
+
+:BSKOOL_3120
+if 
+  65@ == 2
+goto_if_false @BSKOOL_3163
+if 
+  $bs_the360_bronzeachieved == 0
+goto_if_false @BSKOOL_3163
+$bs_the360_bronzeachieved = 1
+
+:BSKOOL_3163
+goto @BSKOOL_3177
+
+:BSKOOL_3170
+65@ = 0
+
+:BSKOOL_3177
+if 
+  $bs_open_tests == 1
+goto_if_false @BSKOOL_3261
+if 
+  $overall_score > 69
+goto_if_false @BSKOOL_3261
+59@ = 2
+$bs_open_tests = 2
+48@ = 2
+37@ += 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1185)
+
+:BSKOOL_3261
+TIMERA = 0
+
+:BSKOOL_3268
+if 
+  TIMERA > -1
+goto_if_false @BSKOOL_3392
+wait 0
+gosub @BSKOOL_18344
+if 
+  59@ <> 2
+goto_if_false @BSKOOL_3346
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BSKOOL_3346
+48@ = 2
+goto @BSKOOL_3392
+
+:BSKOOL_3346
+gosub @BSKOOL_19009
+gosub @BSKOOL_20530
+if 
+  $finished_watching_scores == 1
+goto_if_false @BSKOOL_3385
+goto @BSKOOL_3392
+
+:BSKOOL_3385
+goto @BSKOOL_3268
+
+:BSKOOL_3392
+gosub @BSKOOL_20613
+gosub @BSKOOL_20952
+if 
+  48@ == 2
+goto_if_false @BSKOOL_3438
+goto @BSKOOL_644
+goto @BSKOOL_3445
+
+:BSKOOL_3438
+goto @BSKOOL_1776
+
+:BSKOOL_3445
+goto @BSKOOL_1993
+
+:BSKOOL_3452
+if 
+  $mission_selection == 2
+goto_if_false @BSKOOL_4877
+
+:BSKOOL_3470
+gosub @BSKOOL_16586
+
+:BSKOOL_3477
+$perfect_heading = 0.0
+$car_timer = 11000
+35@ = 182
+gosub @BSKOOL_16623
+38@ = Car.Create(461, $perfect_positionx, $perfect_positiony, $perfect_positionz)
+Car.SetHeading(38@, 180.0)
+gosub @BSKOOL_21023
+if 
+  34@ == 0
+goto_if_false @BSKOOL_3633
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_3590
+49@ = Char.CreateInsideCar(PedType.CivFemale, 50, 38@)
+
+:BSKOOL_3590
+Camera.SetFixedPosition(1130.66, 1264.4, 14.5, 0.0, 0.0, 0.0)
+Camera.PointAtCar(38@, CameraMode.Fixed, SwitchType.JumpCut)
+return 
+
+:BSKOOL_3633
+$area_check1ax = Car.GetOffsetInWorldCoords($area_check1ay, $player_z, 38@, -2.0, 82.0, 0.0)
+$area_check1bx = Car.GetOffsetInWorldCoords($area_check1by, $player_z, 38@, 2.0, 88.0, 0.0)
+$finish_rightx = Car.GetOffsetInWorldCoords($finish_righty, $perfect_positionz, 38@, 0.0, 0.0, 0.0)
+Text.ClearPrints
+Text.PrintNow('BS_B_1', 5000, 4)
+gosub @BSKOOL_17345
+
+:BSKOOL_3745
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BSKOOL_3780
+48@ = 2
+goto @BSKOOL_4817
+
+:BSKOOL_3780
+if 
+  $car_started == 0
+goto_if_false @BSKOOL_3828
+Text.PrintNow('BS_B_1', 5000, 4)
+gosub @BSKOOL_17488
+goto @BSKOOL_4870
+
+:BSKOOL_3828
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_4870
+gosub @BSKOOL_17646
+if 
+  $variablec == 0
+goto_if_false @BSKOOL_3906
+if 
+  Car.IsInArea2D(38@, 0, $area_check1ax, $area_check1ay, $area_check1bx, $area_check1by)
+goto_if_false @BSKOOL_3906
+$variablec = 1
+
+:BSKOOL_3906
+if or
+  Car.IsStopped(38@)
+  not Char.IsInCar($scplayer, 38@)
+goto_if_false @BSKOOL_4870
+gosub @BSKOOL_17680
+gosub @BSKOOL_17693
+if 
+  $variablec == 0
+goto_if_false @BSKOOL_3969
+$position_score = 0
+
+:BSKOOL_3969
+42@ = Car.GetHeading(38@)
+cset_lvar_int_to_lvar_float 39@ = float 42@
+if 
+  39@ == 0
+goto_if_false @BSKOOL_4017
+$heading_score = 100
+goto @BSKOOL_4302
+
+:BSKOOL_4017
+if 
+  39@ == 360
+goto_if_false @BSKOOL_4050
+$heading_score = 100
+goto @BSKOOL_4302
+
+:BSKOOL_4050
+if 
+  39@ > 0
+goto_if_false @BSKOOL_4093
+if 
+  21 > 39@
+goto_if_false @BSKOOL_4093
+$heading_score = 100
+
+:BSKOOL_4093
+if 
+  39@ > 179
+goto_if_false @BSKOOL_4172
+if 
+  340 > 39@
+goto_if_false @BSKOOL_4172
+39@ -= 180
+cset_var_float_to_lvar_int $variableb = integer 39@
+$variableb *= 0.62
+cset_var_int_to_var_float $heading_score = float $variableb
+goto @BSKOOL_4302
+
+:BSKOOL_4172
+if 
+  39@ > 339
+goto_if_false @BSKOOL_4217
+if 
+  360 > 39@
+goto_if_false @BSKOOL_4217
+$heading_score = 100
+
+:BSKOOL_4217
+if 
+  39@ > 20
+goto_if_false @BSKOOL_4302
+if 
+  180 > 39@
+goto_if_false @BSKOOL_4302
+cset_var_float_to_lvar_int $variableb = integer 39@
+$variableb *= 0.62
+cset_var_int_to_var_float $variablea = float $variableb
+$heading_score = 100
+sub_int_var_from_int_var $heading_score -= $variablea
+goto @BSKOOL_4302
+
+:BSKOOL_4302
+if 
+  1 > $heading_score
+goto_if_false @BSKOOL_4327
+$heading_score = 0
+
+:BSKOOL_4327
+set_var_int_to_var_int $overall_score = $position_score
+add_int_var_to_int_var $overall_score += $heading_score
+$overall_score /= 2
+if 
+  $position_score == 0
+goto_if_false @BSKOOL_4375
+$overall_score = 0
+
+:BSKOOL_4375
+gosub @BSKOOL_17937
+gosub @BSKOOL_18315
+if 
+  is_int_var_greater_than_int_var $overall_score > $bs_the180_best_score
+goto_if_false @BSKOOL_4595
+set_lvar_int_to_var_int 67@ = $bs_the180_best_score
+set_var_int_to_var_int $bs_the180_best_score = $overall_score
+59@ = 1
+gosub @BSKOOL_18779
+if 
+  65@ == 4
+goto_if_false @BSKOOL_4495
+if 
+  $bs_the180_goldachieved == 0
+goto_if_false @BSKOOL_4495
+$bs_the180_goldachieved = 1
+$bs_the180_silverachieved = 1
+$bs_the180_bronzeachieved = 1
+
+:BSKOOL_4495
+if 
+  65@ == 3
+goto_if_false @BSKOOL_4545
+if 
+  $bs_the180_silverachieved == 0
+goto_if_false @BSKOOL_4545
+$bs_the180_silverachieved = 1
+$bs_the180_bronzeachieved = 1
+
+:BSKOOL_4545
+if 
+  65@ == 2
+goto_if_false @BSKOOL_4588
+if 
+  $bs_the180_bronzeachieved == 0
+goto_if_false @BSKOOL_4588
+$bs_the180_bronzeachieved = 1
+
+:BSKOOL_4588
+goto @BSKOOL_4602
+
+:BSKOOL_4595
+65@ = 0
+
+:BSKOOL_4602
+if 
+  $bs_open_tests == 2
+goto_if_false @BSKOOL_4686
+if 
+  $overall_score > 69
+goto_if_false @BSKOOL_4686
+59@ = 2
+$bs_open_tests = 3
+48@ = 2
+37@ += 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1185)
+
+:BSKOOL_4686
+TIMERA = 0
+
+:BSKOOL_4693
+if 
+  TIMERA > -1
+goto_if_false @BSKOOL_4817
+wait 0
+gosub @BSKOOL_18344
+if 
+  59@ <> 2
+goto_if_false @BSKOOL_4771
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BSKOOL_4771
+48@ = 2
+goto @BSKOOL_4817
+
+:BSKOOL_4771
+gosub @BSKOOL_19009
+gosub @BSKOOL_20530
+if 
+  $finished_watching_scores == 1
+goto_if_false @BSKOOL_4810
+goto @BSKOOL_4817
+
+:BSKOOL_4810
+goto @BSKOOL_4693
+
+:BSKOOL_4817
+gosub @BSKOOL_20613
+gosub @BSKOOL_20952
+if 
+  48@ == 2
+goto_if_false @BSKOOL_4863
+goto @BSKOOL_644
+goto @BSKOOL_4870
+
+:BSKOOL_4863
+goto @BSKOOL_3470
+
+:BSKOOL_4870
+goto @BSKOOL_3745
+
+:BSKOOL_4877
+if 
+  $mission_selection == 3
+goto_if_false @BSKOOL_6645
+
+:BSKOOL_4895
+gosub @BSKOOL_16586
+
+:BSKOOL_4902
+$perfect_heading = 180.0
+$car_timer = 9000
+35@ = 183
+gosub @BSKOOL_16623
+38@ = Car.Create(521, $perfect_positionx, $perfect_positiony, $perfect_positionz)
+Car.SetHeading(38@, 180.0)
+gosub @BSKOOL_21023
+if 
+  34@ == 0
+goto_if_false @BSKOOL_5058
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_5015
+49@ = Char.CreateInsideCar(PedType.CivFemale, 50, 38@)
+
+:BSKOOL_5015
+Camera.SetFixedPosition(1125.66, 1283.4, 10.5, 0.0, 0.0, 0.0)
+Camera.PointAtCar(38@, CameraMode.Fixed, SwitchType.JumpCut)
+return 
+
+:BSKOOL_5058
+$area_check1ax = Car.GetOffsetInWorldCoords($area_check1ay, $player_z, 38@, -3.5, 56.0, 0.0)
+$area_check1bx = Car.GetOffsetInWorldCoords($area_check1by, $player_z, 38@, 3.5, 84.0, 0.0)
+$finish_rightx = Car.GetOffsetInWorldCoords($finish_righty, $perfect_positionz, 38@, 0.0, 124.0, 0.0)
+Text.ClearPrints
+Text.PrintNow('BS_C_1', 5000, 4)
+gosub @BSKOOL_17345
+
+:BSKOOL_5170
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BSKOOL_5205
+48@ = 2
+goto @BSKOOL_6585
+
+:BSKOOL_5205
+if 
+  $car_started == 0
+goto_if_false @BSKOOL_5253
+Text.PrintNow('BS_C_1', 5000, 4)
+gosub @BSKOOL_17488
+goto @BSKOOL_6638
+
+:BSKOOL_5253
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_6638
+gosub @BSKOOL_17646
+if 
+  $variablec == 0
+goto_if_false @BSKOOL_5331
+if 
+  Car.IsInArea2D(38@, 0, $area_check1ax, $area_check1ay, $area_check1bx, $area_check1by)
+goto_if_false @BSKOOL_5331
+$variablec = 1
+
+:BSKOOL_5331
+if 
+  $variablec == 1
+goto_if_false @BSKOOL_5472
+if 
+  not Car.IsInArea2D(38@, 0, $area_check1ax, $area_check1ay, $area_check1bx, $area_check1by)
+goto_if_false @BSKOOL_5449
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+if or
+  is_float_var_greater_than_float_var $player_x > $area_check1ax
+  is_float_var_greater_than_float_var $area_check1bx > $player_x
+  is_float_var_greater_than_float_var $player_y > $area_check1ay
+goto_if_false @BSKOOL_5442
+gosub @BSKOOL_17680
+goto @BSKOOL_5449
+
+:BSKOOL_5442
+$variablec = 2
+
+:BSKOOL_5449
+if 
+  not Player.IsPerformingWheelie($player1)
+goto_if_false @BSKOOL_5472
+gosub @BSKOOL_17680
+
+:BSKOOL_5472
+42@ = Car.GetHeading(38@)
+set_lvar_float_to_lvar_float 44@ = 42@
+if 
+  44@ <> 0.0
+goto_if_false @BSKOOL_5622
+if and
+  360.0 > 44@
+  44@ > 180.0
+goto_if_false @BSKOOL_5550
+44@ += 0.1
+
+:BSKOOL_5550
+if 
+  44@ == 360.0
+goto_if_false @BSKOOL_5581
+  44@ > 0.0
+
+:BSKOOL_5581
+if and
+  180.0 >= 44@
+  44@ > 0.0
+goto_if_false @BSKOOL_5622
+44@ -= 0.1
+
+:BSKOOL_5622
+if or
+  Car.IsStopped(38@)
+  not Char.IsInCar($scplayer, 38@)
+goto_if_false @BSKOOL_6638
+gosub @BSKOOL_17680
+set_var_float_to_var_float $perfect_positionx = $finish_rightx
+set_var_float_to_var_float $perfect_positiony = $finish_righty
+if 
+  $variablec > 0
+goto_if_false @BSKOOL_5701
+gosub @BSKOOL_17693
+goto @BSKOOL_5708
+
+:BSKOOL_5701
+$position_score = 0
+
+:BSKOOL_5708
+42@ = Car.GetHeading(38@)
+cset_lvar_int_to_lvar_float 39@ = float 42@
+if 
+  $variablec > 0
+goto_if_false @BSKOOL_6056
+if 
+  39@ == 0
+goto_if_false @BSKOOL_5774
+$heading_score = 0
+goto @BSKOOL_6070
+
+:BSKOOL_5774
+if 
+  39@ == 180
+goto_if_false @BSKOOL_5807
+$heading_score = 100
+goto @BSKOOL_6070
+
+:BSKOOL_5807
+if 
+  39@ == 360
+goto_if_false @BSKOOL_5840
+$heading_score = 0
+goto @BSKOOL_6070
+
+:BSKOOL_5840
+if 
+  39@ > 0
+goto_if_false @BSKOOL_5910
+if 
+  175 > 39@
+goto_if_false @BSKOOL_5910
+cset_var_float_to_lvar_int $variableb = integer 39@
+$variableb *= 0.56
+cset_var_int_to_var_float $heading_score = float $variableb
+goto @BSKOOL_6070
+
+:BSKOOL_5910
+if 
+  39@ > 174
+goto_if_false @BSKOOL_5955
+if 
+  186 > 39@
+goto_if_false @BSKOOL_5955
+$heading_score = 100
+
+:BSKOOL_5955
+if 
+  39@ > 185
+goto_if_false @BSKOOL_6049
+if 
+  360 > 39@
+goto_if_false @BSKOOL_6049
+39@ -= 180
+cset_var_float_to_lvar_int $variableb = integer 39@
+$variableb *= 0.56
+cset_var_int_to_var_float $variablea = float $variableb
+$heading_score = 100
+sub_int_var_from_int_var $heading_score -= $variablea
+goto @BSKOOL_6070
+
+:BSKOOL_6049
+goto @BSKOOL_6070
+
+:BSKOOL_6056
+$heading_score = 0
+goto @BSKOOL_6070
+
+:BSKOOL_6070
+if 
+  1 > $heading_score
+goto_if_false @BSKOOL_6095
+$heading_score = 0
+
+:BSKOOL_6095
+set_var_int_to_var_int $overall_score = $position_score
+add_int_var_to_int_var $overall_score += $heading_score
+$overall_score /= 2
+if 
+  $position_score == 0
+goto_if_false @BSKOOL_6143
+$overall_score = 0
+
+:BSKOOL_6143
+gosub @BSKOOL_17937
+gosub @BSKOOL_18315
+if 
+  is_int_var_greater_than_int_var $overall_score > $bs_wheelie_best_score
+goto_if_false @BSKOOL_6363
+set_lvar_int_to_var_int 67@ = $bs_wheelie_best_score
+set_var_int_to_var_int $bs_wheelie_best_score = $overall_score
+59@ = 1
+gosub @BSKOOL_18779
+if 
+  65@ == 4
+goto_if_false @BSKOOL_6263
+if 
+  $bs_wheelie_goldachieved == 0
+goto_if_false @BSKOOL_6263
+$bs_wheelie_goldachieved = 1
+$bs_wheelie_silverachieved = 1
+$bs_wheelie_bronzeachieved = 1
+
+:BSKOOL_6263
+if 
+  65@ == 3
+goto_if_false @BSKOOL_6313
+if 
+  $bs_wheelie_silverachieved == 0
+goto_if_false @BSKOOL_6313
+$bs_wheelie_silverachieved = 1
+$bs_wheelie_bronzeachieved = 1
+
+:BSKOOL_6313
+if 
+  65@ == 2
+goto_if_false @BSKOOL_6356
+if 
+  $bs_wheelie_bronzeachieved == 0
+goto_if_false @BSKOOL_6356
+$bs_wheelie_bronzeachieved = 1
+
+:BSKOOL_6356
+goto @BSKOOL_6370
+
+:BSKOOL_6363
+65@ = 0
+
+:BSKOOL_6370
+if 
+  $bs_open_tests == 3
+goto_if_false @BSKOOL_6454
+if 
+  $overall_score > 69
+goto_if_false @BSKOOL_6454
+59@ = 2
+$bs_open_tests = 4
+48@ = 2
+37@ += 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1185)
+
+:BSKOOL_6454
+TIMERA = 0
+
+:BSKOOL_6461
+if 
+  TIMERA > -1
+goto_if_false @BSKOOL_6585
+wait 0
+gosub @BSKOOL_18344
+if 
+  59@ <> 2
+goto_if_false @BSKOOL_6539
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BSKOOL_6539
+48@ = 2
+goto @BSKOOL_6585
+
+:BSKOOL_6539
+gosub @BSKOOL_19009
+gosub @BSKOOL_20530
+if 
+  $finished_watching_scores == 1
+goto_if_false @BSKOOL_6578
+goto @BSKOOL_6585
+
+:BSKOOL_6578
+goto @BSKOOL_6461
+
+:BSKOOL_6585
+gosub @BSKOOL_20952
+gosub @BSKOOL_20613
+if 
+  48@ == 2
+goto_if_false @BSKOOL_6631
+goto @BSKOOL_644
+goto @BSKOOL_6638
+
+:BSKOOL_6631
+goto @BSKOOL_4895
+
+:BSKOOL_6638
+goto @BSKOOL_5170
+
+:BSKOOL_6645
+if 
+  $mission_selection == 5
+goto_if_false @BSKOOL_8421
+
+:BSKOOL_6663
+gosub @BSKOOL_16586
+
+:BSKOOL_6670
+$perfect_heading = 180.0
+$car_timer = 9000
+35@ = 184
+gosub @BSKOOL_16623
+38@ = Car.Create(521, $perfect_positionx, $perfect_positiony, $perfect_positionz)
+Car.SetHeading(38@, 180.0)
+gosub @BSKOOL_21023
+if 
+  34@ == 0
+goto_if_false @BSKOOL_6826
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_6783
+49@ = Char.CreateInsideCar(PedType.CivFemale, 50, 38@)
+
+:BSKOOL_6783
+Camera.SetFixedPosition(1125.66, 1283.4, 10.5, 0.0, 0.0, 0.0)
+Camera.PointAtCar(38@, CameraMode.Fixed, SwitchType.JumpCut)
+return 
+
+:BSKOOL_6826
+$area_check1ax = Car.GetOffsetInWorldCoords($area_check1ay, $player_z, 38@, -3.5, 56.0, 0.0)
+$area_check1bx = Car.GetOffsetInWorldCoords($area_check1by, $player_z, 38@, 3.5, 84.0, 0.0)
+$finish_rightx = Car.GetOffsetInWorldCoords($finish_righty, $perfect_positionz, 38@, 0.0, 124.0, 0.0)
+Text.ClearPrints
+Text.PrintNow('BS_D_1', 5000, 4)
+gosub @BSKOOL_17345
+
+:BSKOOL_6938
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BSKOOL_6973
+48@ = 2
+goto @BSKOOL_8361
+
+:BSKOOL_6973
+if 
+  $car_started == 0
+goto_if_false @BSKOOL_7021
+Text.PrintNow('BS_D_1', 5000, 4)
+gosub @BSKOOL_17488
+goto @BSKOOL_8414
+
+:BSKOOL_7021
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_8414
+gosub @BSKOOL_17646
+if 
+  $variablec == 0
+goto_if_false @BSKOOL_7099
+if 
+  Car.IsInArea2D(38@, 0, $area_check1ax, $area_check1ay, $area_check1bx, $area_check1by)
+goto_if_false @BSKOOL_7099
+$variablec = 1
+
+:BSKOOL_7099
+if 
+  $variablec == 1
+goto_if_false @BSKOOL_7240
+if 
+  not Car.IsInArea2D(38@, 0, $area_check1ax, $area_check1ay, $area_check1bx, $area_check1by)
+goto_if_false @BSKOOL_7217
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+if or
+  is_float_var_greater_than_float_var $player_x > $area_check1ax
+  is_float_var_greater_than_float_var $area_check1bx > $player_x
+  is_float_var_greater_than_float_var $player_y > $area_check1ay
+goto_if_false @BSKOOL_7210
+gosub @BSKOOL_17680
+goto @BSKOOL_7217
+
+:BSKOOL_7210
+$variablec = 2
+
+:BSKOOL_7217
+if 
+  not Player.IsPerformingStoppie($player1)
+goto_if_false @BSKOOL_7240
+gosub @BSKOOL_17680
+
+:BSKOOL_7240
+42@ = Car.GetHeading(38@)
+set_lvar_float_to_lvar_float 44@ = 42@
+if 
+  44@ <> 0.0
+goto_if_false @BSKOOL_7390
+if and
+  360.0 > 44@
+  44@ > 180.0
+goto_if_false @BSKOOL_7318
+44@ += 0.1
+
+:BSKOOL_7318
+if 
+  44@ == 360.0
+goto_if_false @BSKOOL_7349
+  44@ > 0.0
+
+:BSKOOL_7349
+if and
+  180.0 >= 44@
+  44@ > 0.0
+goto_if_false @BSKOOL_7390
+44@ -= 0.1
+
+:BSKOOL_7390
+43@ = Car.GetSpeed(38@)
+if or
+  Car.IsStopped(38@)
+  not Char.IsInCar($scplayer, 38@)
+goto_if_false @BSKOOL_8414
+gosub @BSKOOL_17680
+set_var_float_to_var_float $perfect_positionx = $finish_rightx
+set_var_float_to_var_float $perfect_positiony = $finish_righty
+if 
+  $variablec > 0
+goto_if_false @BSKOOL_7477
+gosub @BSKOOL_17693
+goto @BSKOOL_7484
+
+:BSKOOL_7477
+$position_score = 0
+
+:BSKOOL_7484
+42@ = Car.GetHeading(38@)
+cset_lvar_int_to_lvar_float 39@ = float 42@
+if 
+  $variablec > 0
+goto_if_false @BSKOOL_7832
+if 
+  39@ == 0
+goto_if_false @BSKOOL_7550
+$heading_score = 0
+goto @BSKOOL_7846
+
+:BSKOOL_7550
+if 
+  39@ == 180
+goto_if_false @BSKOOL_7583
+$heading_score = 100
+goto @BSKOOL_7846
+
+:BSKOOL_7583
+if 
+  39@ == 360
+goto_if_false @BSKOOL_7616
+$heading_score = 0
+goto @BSKOOL_7846
+
+:BSKOOL_7616
+if 
+  39@ > 0
+goto_if_false @BSKOOL_7686
+if 
+  175 > 39@
+goto_if_false @BSKOOL_7686
+cset_var_float_to_lvar_int $variableb = integer 39@
+$variableb *= 0.56
+cset_var_int_to_var_float $heading_score = float $variableb
+goto @BSKOOL_7846
+
+:BSKOOL_7686
+if 
+  39@ > 174
+goto_if_false @BSKOOL_7731
+if 
+  186 > 39@
+goto_if_false @BSKOOL_7731
+$heading_score = 100
+
+:BSKOOL_7731
+if 
+  39@ > 185
+goto_if_false @BSKOOL_7825
+if 
+  360 > 39@
+goto_if_false @BSKOOL_7825
+39@ -= 180
+cset_var_float_to_lvar_int $variableb = integer 39@
+$variableb *= 0.56
+cset_var_int_to_var_float $variablea = float $variableb
+$heading_score = 100
+sub_int_var_from_int_var $heading_score -= $variablea
+goto @BSKOOL_7846
+
+:BSKOOL_7825
+goto @BSKOOL_7846
+
+:BSKOOL_7832
+$heading_score = 0
+goto @BSKOOL_7846
+
+:BSKOOL_7846
+if 
+  1 > $heading_score
+goto_if_false @BSKOOL_7871
+$heading_score = 0
+
+:BSKOOL_7871
+set_var_int_to_var_int $overall_score = $position_score
+add_int_var_to_int_var $overall_score += $heading_score
+$overall_score /= 2
+if 
+  $position_score == 0
+goto_if_false @BSKOOL_7919
+$overall_score = 0
+
+:BSKOOL_7919
+gosub @BSKOOL_17937
+gosub @BSKOOL_18315
+if 
+  is_int_var_greater_than_int_var $overall_score > $bs_stoppie_best_score
+goto_if_false @BSKOOL_8139
+set_lvar_int_to_var_int 67@ = $bs_stoppie_best_score
+set_var_int_to_var_int $bs_stoppie_best_score = $overall_score
+59@ = 1
+gosub @BSKOOL_18779
+if 
+  65@ == 4
+goto_if_false @BSKOOL_8039
+if 
+  $bs_stoppie_goldachieved == 0
+goto_if_false @BSKOOL_8039
+$bs_stoppie_goldachieved = 1
+$bs_stoppie_silverachieved = 1
+$bs_stoppie_bronzeachieved = 1
+
+:BSKOOL_8039
+if 
+  65@ == 3
+goto_if_false @BSKOOL_8089
+if 
+  $bs_stoppie_silverachieved == 0
+goto_if_false @BSKOOL_8089
+$bs_stoppie_silverachieved = 1
+$bs_stoppie_bronzeachieved = 1
+
+:BSKOOL_8089
+if 
+  65@ == 2
+goto_if_false @BSKOOL_8132
+if 
+  $bs_stoppie_bronzeachieved == 0
+goto_if_false @BSKOOL_8132
+$bs_stoppie_bronzeachieved = 1
+
+:BSKOOL_8132
+goto @BSKOOL_8146
+
+:BSKOOL_8139
+65@ = 0
+
+:BSKOOL_8146
+if 
+  $bs_open_tests == 5
+goto_if_false @BSKOOL_8230
+if 
+  $overall_score > 69
+goto_if_false @BSKOOL_8230
+59@ = 2
+$bs_open_tests = 6
+48@ = 2
+37@ += 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1185)
+
+:BSKOOL_8230
+TIMERA = 0
+
+:BSKOOL_8237
+if 
+  TIMERA > -1
+goto_if_false @BSKOOL_8361
+wait 0
+gosub @BSKOOL_18344
+if 
+  59@ <> 2
+goto_if_false @BSKOOL_8315
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BSKOOL_8315
+48@ = 2
+goto @BSKOOL_8361
+
+:BSKOOL_8315
+gosub @BSKOOL_19009
+gosub @BSKOOL_20530
+if 
+  $finished_watching_scores == 1
+goto_if_false @BSKOOL_8354
+goto @BSKOOL_8361
+
+:BSKOOL_8354
+goto @BSKOOL_8237
+
+:BSKOOL_8361
+gosub @BSKOOL_20952
+gosub @BSKOOL_20613
+if 
+  48@ == 2
+goto_if_false @BSKOOL_8407
+goto @BSKOOL_644
+goto @BSKOOL_8414
+
+:BSKOOL_8407
+goto @BSKOOL_6663
+
+:BSKOOL_8414
+goto @BSKOOL_6938
+
+:BSKOOL_8421
+if 
+  $mission_selection == 4
+goto_if_false @BSKOOL_10014
+
+:BSKOOL_8439
+gosub @BSKOOL_16586
+
+:BSKOOL_8446
+$perfect_heading = 180.0
+$car_timer = 9000
+35@ = 185
+gosub @BSKOOL_16623
+38@ = Car.Create(468, $perfect_positionx, $perfect_positiony, $perfect_positionz)
+Car.SetHeading(38@, $perfect_heading)
+$area_check1ax = Car.GetOffsetInWorldCoords($area_check1ay, $player_z, 38@, -2.5, 46.0, 2.0)
+$area_check1bx = Car.GetOffsetInWorldCoords($area_check1by, $player_z, 38@, 2.5, 50.0, 2.0)
+gosub @BSKOOL_21023
+if 
+  34@ == 0
+goto_if_false @BSKOOL_8658
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_8615
+49@ = Char.CreateInsideCar(PedType.CivFemale, 50, 38@)
+
+:BSKOOL_8615
+Camera.SetFixedPosition(1127.66, 1288.4, 12.75, 0.0, 0.0, 0.0)
+Camera.PointAtCar(38@, CameraMode.Fixed, SwitchType.JumpCut)
+return 
+
+:BSKOOL_8658
+$finish_rightx = Car.GetOffsetInWorldCoords($finish_righty, $perfect_positionz, 38@, 0.0, 124.0, 0.0)
+Text.ClearPrints
+Text.PrintNow('BS_E_1', 5000, 4)
+gosub @BSKOOL_17345
+
+:BSKOOL_8712
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BSKOOL_8747
+48@ = 2
+goto @BSKOOL_9954
+
+:BSKOOL_8747
+if 
+  $car_started == 0
+goto_if_false @BSKOOL_8795
+Text.PrintNow('BS_E_1', 5000, 4)
+gosub @BSKOOL_17488
+goto @BSKOOL_10007
+
+:BSKOOL_8795
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_10007
+gosub @BSKOOL_17646
+if 
+  $variablec == 0
+goto_if_false @BSKOOL_8873
+if 
+  Car.IsInArea2D(38@, 0, $area_check1ax, $area_check1ay, $area_check1bx, $area_check1by)
+goto_if_false @BSKOOL_8873
+$variablec = 1
+
+:BSKOOL_8873
+if 
+  $variablec == 1
+goto_if_false @BSKOOL_8991
+if 
+  not Car.IsInArea2D(38@, 0, $area_check1ax, $area_check1ay, $area_check1bx, $area_check1by)
+goto_if_false @BSKOOL_8991
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+if or
+  is_float_var_greater_than_float_var $player_x > $area_check1ax
+  is_float_var_greater_than_float_var $area_check1bx > $player_x
+  is_float_var_greater_than_float_var $player_y > $area_check1ay
+goto_if_false @BSKOOL_8984
+gosub @BSKOOL_17680
+goto @BSKOOL_8991
+
+:BSKOOL_8984
+$variablec = 2
+
+:BSKOOL_8991
+if or
+  Car.IsStopped(38@)
+  not Char.IsInCar($scplayer, 38@)
+goto_if_false @BSKOOL_10007
+gosub @BSKOOL_17680
+set_var_float_to_var_float $perfect_positionx = $finish_rightx
+set_var_float_to_var_float $perfect_positiony = $finish_righty
+if 
+  $variablec > 0
+goto_if_false @BSKOOL_9070
+gosub @BSKOOL_17693
+goto @BSKOOL_9077
+
+:BSKOOL_9070
+$position_score = 0
+
+:BSKOOL_9077
+42@ = Car.GetHeading(38@)
+cset_lvar_int_to_lvar_float 39@ = float 42@
+if 
+  $variablec > 0
+goto_if_false @BSKOOL_9425
+if 
+  39@ == 0
+goto_if_false @BSKOOL_9143
+$heading_score = 0
+goto @BSKOOL_9439
+
+:BSKOOL_9143
+if 
+  39@ == 180
+goto_if_false @BSKOOL_9176
+$heading_score = 100
+goto @BSKOOL_9439
+
+:BSKOOL_9176
+if 
+  39@ == 360
+goto_if_false @BSKOOL_9209
+$heading_score = 0
+goto @BSKOOL_9439
+
+:BSKOOL_9209
+if 
+  39@ > 0
+goto_if_false @BSKOOL_9279
+if 
+  175 > 39@
+goto_if_false @BSKOOL_9279
+cset_var_float_to_lvar_int $variableb = integer 39@
+$variableb *= 0.56
+cset_var_int_to_var_float $heading_score = float $variableb
+goto @BSKOOL_9439
+
+:BSKOOL_9279
+if 
+  39@ > 174
+goto_if_false @BSKOOL_9324
+if 
+  186 > 39@
+goto_if_false @BSKOOL_9324
+$heading_score = 100
+
+:BSKOOL_9324
+if 
+  39@ > 185
+goto_if_false @BSKOOL_9418
+if 
+  360 > 39@
+goto_if_false @BSKOOL_9418
+39@ -= 180
+cset_var_float_to_lvar_int $variableb = integer 39@
+$variableb *= 0.56
+cset_var_int_to_var_float $variablea = float $variableb
+$heading_score = 100
+sub_int_var_from_int_var $heading_score -= $variablea
+goto @BSKOOL_9439
+
+:BSKOOL_9418
+goto @BSKOOL_9439
+
+:BSKOOL_9425
+$heading_score = 0
+goto @BSKOOL_9439
+
+:BSKOOL_9439
+if 
+  1 > $heading_score
+goto_if_false @BSKOOL_9464
+$heading_score = 0
+
+:BSKOOL_9464
+set_var_int_to_var_int $overall_score = $position_score
+add_int_var_to_int_var $overall_score += $heading_score
+$overall_score /= 2
+if 
+  $position_score == 0
+goto_if_false @BSKOOL_9512
+$overall_score = 0
+
+:BSKOOL_9512
+gosub @BSKOOL_17937
+gosub @BSKOOL_18315
+if 
+  is_int_var_greater_than_int_var $overall_score > $bs_jumpstop_best_score
+goto_if_false @BSKOOL_9732
+set_lvar_int_to_var_int 67@ = $bs_jumpstop_best_score
+set_var_int_to_var_int $bs_jumpstop_best_score = $overall_score
+59@ = 1
+gosub @BSKOOL_18779
+if 
+  65@ == 4
+goto_if_false @BSKOOL_9632
+if 
+  $bs_jumpstop_goldachieved == 0
+goto_if_false @BSKOOL_9632
+$bs_jumpstop_goldachieved = 1
+$bs_jumpstop_silverachieved = 1
+$bs_jumpstop_bronzeachieved = 1
+
+:BSKOOL_9632
+if 
+  65@ == 3
+goto_if_false @BSKOOL_9682
+if 
+  $bs_jumpstop_silverachieved == 0
+goto_if_false @BSKOOL_9682
+$bs_jumpstop_silverachieved = 1
+$bs_jumpstop_bronzeachieved = 1
+
+:BSKOOL_9682
+if 
+  65@ == 2
+goto_if_false @BSKOOL_9725
+if 
+  $bs_jumpstop_bronzeachieved == 0
+goto_if_false @BSKOOL_9725
+$bs_jumpstop_bronzeachieved = 1
+
+:BSKOOL_9725
+goto @BSKOOL_9739
+
+:BSKOOL_9732
+65@ = 0
+
+:BSKOOL_9739
+if 
+  $bs_open_tests == 4
+goto_if_false @BSKOOL_9823
+if 
+  $overall_score > 69
+goto_if_false @BSKOOL_9823
+59@ = 2
+$bs_open_tests = 5
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1185)
+48@ = 2
+37@ += 1
+
+:BSKOOL_9823
+TIMERA = 0
+
+:BSKOOL_9830
+if 
+  TIMERA > -1
+goto_if_false @BSKOOL_9954
+wait 0
+gosub @BSKOOL_18344
+if 
+  59@ <> 2
+goto_if_false @BSKOOL_9908
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BSKOOL_9908
+48@ = 2
+goto @BSKOOL_9954
+
+:BSKOOL_9908
+gosub @BSKOOL_19009
+gosub @BSKOOL_20530
+if 
+  $finished_watching_scores == 1
+goto_if_false @BSKOOL_9947
+goto @BSKOOL_9954
+
+:BSKOOL_9947
+goto @BSKOOL_9830
+
+:BSKOOL_9954
+gosub @BSKOOL_20613
+gosub @BSKOOL_20952
+if 
+  48@ == 2
+goto_if_false @BSKOOL_10000
+goto @BSKOOL_644
+goto @BSKOOL_10007
+
+:BSKOOL_10000
+goto @BSKOOL_8439
+
+:BSKOOL_10007
+goto @BSKOOL_8712
+
+:BSKOOL_10014
+if 
+  $mission_selection == 6
+goto_if_false @BSKOOL_11889
+
+:BSKOOL_10032
+gosub @BSKOOL_16586
+
+:BSKOOL_10039
+$perfect_heading = 180.0
+$car_timer = 9000
+35@ = 186
+gosub @BSKOOL_16623
+38@ = Car.Create(522, $perfect_positionx, $perfect_positiony, $perfect_positionz)
+Car.SetHeading(38@, $perfect_heading)
+$area_check1ax = Car.GetOffsetInWorldCoords($area_check1ay, $player_z, 38@, -2.5, 46.0, 2.0)
+$area_check1bx = Car.GetOffsetInWorldCoords($area_check1by, $player_z, 38@, 2.5, 52.0, 2.0)
+gosub @BSKOOL_21023
+if 
+  34@ == 0
+goto_if_false @BSKOOL_10251
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_10208
+49@ = Char.CreateInsideCar(PedType.CivFemale, 50, 38@)
+
+:BSKOOL_10208
+Camera.SetFixedPosition(1122.66, 1265.4, 15.75, 0.0, 0.0, 0.0)
+Camera.PointAtCar(38@, CameraMode.Fixed, SwitchType.JumpCut)
+return 
+
+:BSKOOL_10251
+$finish_rightx = Car.GetOffsetInWorldCoords($finish_righty, $perfect_positionz, 38@, 0.0, 114.0, 0.0)
+Text.ClearPrints
+Text.PrintNow('BS_F_1', 5000, 4)
+gosub @BSKOOL_17345
+
+:BSKOOL_10305
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BSKOOL_10340
+48@ = 2
+goto @BSKOOL_11690
+
+:BSKOOL_10340
+if 
+  $car_started == 0
+goto_if_false @BSKOOL_10388
+Text.PrintNow('BS_F_1', 5000, 4)
+gosub @BSKOOL_17488
+goto @BSKOOL_11882
+
+:BSKOOL_10388
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_11882
+gosub @BSKOOL_17646
+if 
+  $variablec == 0
+goto_if_false @BSKOOL_10466
+if 
+  Car.IsInArea2D(38@, 0, $area_check1ax, $area_check1ay, $area_check1bx, $area_check1by)
+goto_if_false @BSKOOL_10466
+$variablec = 1
+
+:BSKOOL_10466
+if 
+  $variablec == 1
+goto_if_false @BSKOOL_10584
+if 
+  not Car.IsInArea2D(38@, 0, $area_check1ax, $area_check1ay, $area_check1bx, $area_check1by)
+goto_if_false @BSKOOL_10584
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+if or
+  is_float_var_greater_than_float_var $player_x > $area_check1ax
+  is_float_var_greater_than_float_var $area_check1bx > $player_x
+  is_float_var_greater_than_float_var $player_y > $area_check1ay
+goto_if_false @BSKOOL_10577
+gosub @BSKOOL_17680
+goto @BSKOOL_10584
+
+:BSKOOL_10577
+$variablec = 2
+
+:BSKOOL_10584
+if 
+  $variablec == 2
+goto_if_false @BSKOOL_10630
+if 
+  not Car.IsInAirProper(38@)
+goto_if_false @BSKOOL_10630
+70@ = Clock.GetGameTimer()
+$variablec = 3
+
+:BSKOOL_10630
+if 
+  $variablec == 3
+goto_if_false @BSKOOL_10716
+69@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 68@ = 69@
+sub_int_lvar_from_int_lvar 68@ -= 70@
+if 
+  68@ > 250
+goto_if_false @BSKOOL_10716
+if or
+  not Player.IsPerformingStoppie($player1)
+  Player.IsPerformingWheelie($player1)
+goto_if_false @BSKOOL_10716
+gosub @BSKOOL_17680
+
+:BSKOOL_10716
+if or
+  Car.IsStopped(38@)
+  not Char.IsInCar($scplayer, 38@)
+goto_if_false @BSKOOL_11882
+gosub @BSKOOL_17680
+set_var_float_to_var_float $perfect_positionx = $finish_rightx
+set_var_float_to_var_float $perfect_positiony = $finish_righty
+if 
+  $variablec > 0
+goto_if_false @BSKOOL_10795
+gosub @BSKOOL_17693
+goto @BSKOOL_10802
+
+:BSKOOL_10795
+$position_score = 0
+
+:BSKOOL_10802
+42@ = Car.GetHeading(38@)
+cset_lvar_int_to_lvar_float 39@ = float 42@
+if 
+  $variablec > 0
+goto_if_false @BSKOOL_11150
+if 
+  39@ == 0
+goto_if_false @BSKOOL_10868
+$heading_score = 0
+goto @BSKOOL_11164
+
+:BSKOOL_10868
+if 
+  39@ == 180
+goto_if_false @BSKOOL_10901
+$heading_score = 100
+goto @BSKOOL_11164
+
+:BSKOOL_10901
+if 
+  39@ == 360
+goto_if_false @BSKOOL_10934
+$heading_score = 0
+goto @BSKOOL_11164
+
+:BSKOOL_10934
+if 
+  39@ > 0
+goto_if_false @BSKOOL_11004
+if 
+  175 > 39@
+goto_if_false @BSKOOL_11004
+cset_var_float_to_lvar_int $variableb = integer 39@
+$variableb *= 0.56
+cset_var_int_to_var_float $heading_score = float $variableb
+goto @BSKOOL_11164
+
+:BSKOOL_11004
+if 
+  39@ > 174
+goto_if_false @BSKOOL_11049
+if 
+  186 > 39@
+goto_if_false @BSKOOL_11049
+$heading_score = 100
+
+:BSKOOL_11049
+if 
+  39@ > 185
+goto_if_false @BSKOOL_11143
+if 
+  360 > 39@
+goto_if_false @BSKOOL_11143
+39@ -= 180
+cset_var_float_to_lvar_int $variableb = integer 39@
+$variableb *= 0.56
+cset_var_int_to_var_float $variablea = float $variableb
+$heading_score = 100
+sub_int_var_from_int_var $heading_score -= $variablea
+goto @BSKOOL_11164
+
+:BSKOOL_11143
+goto @BSKOOL_11164
+
+:BSKOOL_11150
+$heading_score = 0
+goto @BSKOOL_11164
+
+:BSKOOL_11164
+if 
+  1 > $heading_score
+goto_if_false @BSKOOL_11189
+$heading_score = 0
+
+:BSKOOL_11189
+set_var_int_to_var_int $overall_score = $position_score
+add_int_var_to_int_var $overall_score += $heading_score
+$overall_score /= 2
+if 
+  $position_score == 0
+goto_if_false @BSKOOL_11237
+$overall_score = 0
+
+:BSKOOL_11237
+gosub @BSKOOL_17937
+gosub @BSKOOL_18315
+if 
+  is_int_var_greater_than_int_var $overall_score > $bs_jumpstoppie_best_score
+goto_if_false @BSKOOL_11457
+set_lvar_int_to_var_int 67@ = $bs_jumpstoppie_best_score
+set_var_int_to_var_int $bs_jumpstoppie_best_score = $overall_score
+59@ = 1
+gosub @BSKOOL_18779
+if 
+  65@ == 4
+goto_if_false @BSKOOL_11357
+if 
+  $bs_jumpstoppie_goldachieved == 0
+goto_if_false @BSKOOL_11357
+$bs_jumpstoppie_goldachieved = 1
+$bs_jumpstoppie_silverachieved = 1
+$bs_jumpstoppie_bronzeachieved = 1
+
+:BSKOOL_11357
+if 
+  65@ == 3
+goto_if_false @BSKOOL_11407
+if 
+  $bs_jumpstoppie_silverachieved == 0
+goto_if_false @BSKOOL_11407
+$bs_jumpstoppie_silverachieved = 1
+$bs_jumpstoppie_bronzeachieved = 1
+
+:BSKOOL_11407
+if 
+  65@ == 2
+goto_if_false @BSKOOL_11450
+if 
+  $bs_jumpstoppie_bronzeachieved == 0
+goto_if_false @BSKOOL_11450
+$bs_jumpstoppie_bronzeachieved = 1
+
+:BSKOOL_11450
+goto @BSKOOL_11464
+
+:BSKOOL_11457
+65@ = 0
+
+:BSKOOL_11464
+if 
+  $bs_passed == 0
+goto_if_false @BSKOOL_11559
+if 
+  $bs_open_tests == 6
+goto_if_false @BSKOOL_11559
+if 
+  $overall_score > 69
+goto_if_false @BSKOOL_11559
+59@ = 2
+$bs_passed = 1
+48@ = 2
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1185)
+
+:BSKOOL_11559
+TIMERA = 0
+
+:BSKOOL_11566
+if 
+  TIMERA > -1
+goto_if_false @BSKOOL_11690
+wait 0
+gosub @BSKOOL_18344
+if 
+  59@ <> 2
+goto_if_false @BSKOOL_11644
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BSKOOL_11644
+48@ = 2
+goto @BSKOOL_11690
+
+:BSKOOL_11644
+gosub @BSKOOL_19009
+gosub @BSKOOL_20530
+if 
+  $finished_watching_scores == 1
+goto_if_false @BSKOOL_11683
+goto @BSKOOL_11690
+
+:BSKOOL_11683
+goto @BSKOOL_11566
+
+:BSKOOL_11690
+gosub @BSKOOL_20613
+gosub @BSKOOL_20952
+if 
+  48@ == 2
+goto_if_false @BSKOOL_11875
+if 
+  $bs_passed == 1
+goto_if_false @BSKOOL_11861
+if 
+  $flag_bikeschool_passed_1stime == 0
+goto_if_false @BSKOOL_11861
+Camera.DoFade(0, 1000)
+
+:BSKOOL_11765
+if 
+  Camera.GetFadingStatus
+goto_if_false @BSKOOL_11789
+wait 0
+goto @BSKOOL_11765
+
+:BSKOOL_11789
+Char.SetCoordinates($scplayer, 1171.521, 1351.183, 9.9219)
+Char.SetHeading($scplayer, 11.0)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Camera.DoFade(1, 2000)
+
+:BSKOOL_11830
+if 
+  Camera.GetFadingStatus
+goto_if_false @BSKOOL_11854
+wait 0
+goto @BSKOOL_11830
+
+:BSKOOL_11854
+goto @BSKOOL_11917
+
+:BSKOOL_11861
+goto @BSKOOL_644
+goto @BSKOOL_11882
+
+:BSKOOL_11875
+goto @BSKOOL_10032
+
+:BSKOOL_11882
+goto @BSKOOL_10305
+
+:BSKOOL_11889
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1186)
+Text.ClearPrints
+return 
+
+:BSKOOL_11917
+Camera.DoFade(1, 500)
+if 
+  $flag_bikeschool_passed_1stime == 0
+goto_if_false @BSKOOL_11965
+Stat.RegisterOddjobMissionPassed
+Stat.PlayerMadeProgress(1)
+$flag_bikeschool_passed_1stime = 1
+Stat.IncrementFloat(50.0, 229)
+
+:BSKOOL_11965
+Text.ClearPrints
+Text.PrintBig('BS_Z_7', 5000, TextStyle.MiddleSmallerHigher)
+Audio.PlayMissionPassedTune(2)
+Player.ClearWantedLevel($player1)
+return 
+
+:BSKOOL_11994
+Hud.ClearTimer($car_timer)
+Text.UseCommands(False)
+Hud.Display(True)
+Hud.DisplayRadar(True)
+Weather.Release
+Streaming.MarkModelAsNoLongerNeeded(#TRAFFICCONE)
+Streaming.MarkModelAsNoLongerNeeded(#LANDJUMP2)
+Streaming.MarkModelAsNoLongerNeeded(521)
+Streaming.MarkModelAsNoLongerNeeded(581)
+Streaming.MarkModelAsNoLongerNeeded(461)
+Streaming.MarkModelAsNoLongerNeeded(522)
+Streaming.MarkModelAsNoLongerNeeded(468)
+Streaming.MarkModelAsNoLongerNeeded(50)
+if 
+  $bs_gold_rewardgiven == 0
+goto_if_false @BSKOOL_12235
+if 
+  $bs_the360_goldachieved == 1
+goto_if_false @BSKOOL_12235
+if 
+  $bs_the180_goldachieved == 1
+goto_if_false @BSKOOL_12235
+if 
+  $bs_wheelie_goldachieved == 1
+goto_if_false @BSKOOL_12235
+if 
+  $bs_stoppie_goldachieved == 1
+goto_if_false @BSKOOL_12235
+if 
+  $bs_jumpstop_goldachieved == 1
+goto_if_false @BSKOOL_12235
+if 
+  $bs_jumpstoppie_goldachieved == 1
+goto_if_false @BSKOOL_12235
+$bs_gold_rewardgiven = 1
+if 
+  $bs_silver_rewardgiven == 0
+goto_if_false @BSKOOL_12210
+$bs_silver_rewardgiven = 1
+
+:BSKOOL_12210
+if 
+  $bs_bronze_rewardgiven == 0
+goto_if_false @BSKOOL_12235
+$bs_bronze_rewardgiven = 1
+
+:BSKOOL_12235
+if 
+  $bs_silver_rewardgiven == 0
+goto_if_false @BSKOOL_12393
+if 
+  $bs_the360_silverachieved == 1
+goto_if_false @BSKOOL_12393
+if 
+  $bs_the180_silverachieved == 1
+goto_if_false @BSKOOL_12393
+if 
+  $bs_wheelie_silverachieved == 1
+goto_if_false @BSKOOL_12393
+if 
+  $bs_stoppie_silverachieved == 1
+goto_if_false @BSKOOL_12393
+if 
+  $bs_jumpstop_silverachieved == 1
+goto_if_false @BSKOOL_12393
+if 
+  $bs_jumpstoppie_silverachieved == 1
+goto_if_false @BSKOOL_12393
+$bs_silver_rewardgiven = 1
+if 
+  $bs_bronze_rewardgiven == 0
+goto_if_false @BSKOOL_12393
+$bs_bronze_rewardgiven = 1
+
+:BSKOOL_12393
+if 
+  $bs_bronze_rewardgiven == 0
+goto_if_false @BSKOOL_12526
+if 
+  $bs_the360_bronzeachieved == 1
+goto_if_false @BSKOOL_12526
+if 
+  $bs_the180_bronzeachieved == 1
+goto_if_false @BSKOOL_12526
+if 
+  $bs_wheelie_bronzeachieved == 1
+goto_if_false @BSKOOL_12526
+if 
+  $bs_stoppie_bronzeachieved == 1
+goto_if_false @BSKOOL_12526
+if 
+  $bs_jumpstop_bronzeachieved == 1
+goto_if_false @BSKOOL_12526
+if 
+  $bs_jumpstoppie_bronzeachieved == 1
+goto_if_false @BSKOOL_12526
+$bs_bronze_rewardgiven = 1
+
+:BSKOOL_12526
+if 
+  $bs_gold_rewardgiven == 1
+goto_if_false @BSKOOL_12575
+CarGenerator.SetHasBeenOwned($bs_gold_generator, True)
+CarGenerator.Switch($bs_gold_generator, 101)
+Stat.IncrementFloat(200.0, 229)
+$bs_gold_rewardgiven = 2
+
+:BSKOOL_12575
+if 
+  $bs_silver_rewardgiven == 1
+goto_if_false @BSKOOL_12624
+CarGenerator.SetHasBeenOwned($bs_silver_generator, True)
+CarGenerator.Switch($bs_silver_generator, 101)
+Stat.IncrementFloat(100.0, 229)
+$bs_silver_rewardgiven = 2
+
+:BSKOOL_12624
+if 
+  $bs_bronze_rewardgiven == 1
+goto_if_false @BSKOOL_12663
+CarGenerator.SetHasBeenOwned($bs_bronze_generator, True)
+CarGenerator.Switch($bs_bronze_generator, 101)
+$bs_bronze_rewardgiven = 2
+
+:BSKOOL_12663
+$onmission = 0
+Mission.Finish
+return 
+
+:BSKOOL_12674
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(8, 320.0, 225.0, 612.0, 438.0, 0, 0, 0, 64@)
+if 
+  63@ == 1
+goto_if_false @BSKOOL_12796
+if 
+  255 > 64@
+goto_if_false @BSKOOL_12789
+64@ += 5
+if 
+  64@ > 255
+goto_if_false @BSKOOL_12782
+64@ = 255
+
+:BSKOOL_12782
+goto @BSKOOL_12796
+
+:BSKOOL_12789
+63@ = 2
+
+:BSKOOL_12796
+if 
+  63@ == 3
+goto_if_false @BSKOOL_12878
+if 
+  64@ > 0
+goto_if_false @BSKOOL_12871
+64@ -= 5
+if 
+  0 > 64@
+goto_if_false @BSKOOL_12864
+64@ = 0
+
+:BSKOOL_12864
+goto @BSKOOL_12878
+
+:BSKOOL_12871
+63@ = 0
+
+:BSKOOL_12878
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(8, 320.0, 0.0, 640.0, 197.0, 0, 0, 0, 255)
+gosub @BSKOOL_16466
+Text.SetColor(190, 190, 190, 255)
+if 
+  $mission_selection == 1
+goto_if_false @BSKOOL_13073
+Text.Display(322.0, 41.0, 'BS_A')
+if 
+  $bs_the360_best_score > 69
+goto_if_false @BSKOOL_13008
+set_lvar_int_to_var_int 66@ = $bs_the360_best_score
+goto @BSKOOL_13066
+
+:BSKOOL_13008
+set_lvar_int_to_var_int 66@ = $bs_the360_best_score
+gosub @BSKOOL_16288
+Text.SetRightJustify(False)
+Text.SetCenter(True)
+Text.SetColor(166, 202, 240, 255)
+Text.Display(320.0, 80.0, 'BS_Z_3')
+
+:BSKOOL_13066
+gosub @BSKOOL_14958
+
+:BSKOOL_13073
+if 
+  $mission_selection == 2
+goto_if_false @BSKOOL_13210
+Text.Display(322.0, 41.0, 'BS_B')
+if 
+  $bs_the180_best_score > 69
+goto_if_false @BSKOOL_13145
+set_lvar_int_to_var_int 66@ = $bs_the180_best_score
+goto @BSKOOL_13203
+
+:BSKOOL_13145
+set_lvar_int_to_var_int 66@ = $bs_the180_best_score
+gosub @BSKOOL_16288
+Text.SetRightJustify(False)
+Text.SetCenter(True)
+Text.SetColor(166, 202, 240, 255)
+Text.Display(320.0, 80.0, 'BS_Z_3')
+
+:BSKOOL_13203
+gosub @BSKOOL_14958
+
+:BSKOOL_13210
+if 
+  $mission_selection == 3
+goto_if_false @BSKOOL_13347
+Text.Display(322.0, 41.0, 'BS_C')
+if 
+  $bs_wheelie_best_score > 69
+goto_if_false @BSKOOL_13282
+set_lvar_int_to_var_int 66@ = $bs_wheelie_best_score
+goto @BSKOOL_13340
+
+:BSKOOL_13282
+set_lvar_int_to_var_int 66@ = $bs_wheelie_best_score
+gosub @BSKOOL_16288
+Text.SetRightJustify(False)
+Text.SetCenter(True)
+Text.SetColor(166, 202, 240, 255)
+Text.Display(320.0, 80.0, 'BS_Z_3')
+
+:BSKOOL_13340
+gosub @BSKOOL_14958
+
+:BSKOOL_13347
+if 
+  $mission_selection == 5
+goto_if_false @BSKOOL_13484
+Text.Display(322.0, 41.0, 'BS_D')
+if 
+  $bs_stoppie_best_score > 69
+goto_if_false @BSKOOL_13419
+set_lvar_int_to_var_int 66@ = $bs_stoppie_best_score
+goto @BSKOOL_13477
+
+:BSKOOL_13419
+set_lvar_int_to_var_int 66@ = $bs_stoppie_best_score
+gosub @BSKOOL_16288
+Text.SetRightJustify(False)
+Text.SetCenter(True)
+Text.SetColor(166, 202, 240, 255)
+Text.Display(320.0, 80.0, 'BS_Z_3')
+
+:BSKOOL_13477
+gosub @BSKOOL_14958
+
+:BSKOOL_13484
+if 
+  $mission_selection == 4
+goto_if_false @BSKOOL_13621
+Text.Display(322.0, 41.0, 'BS_E')
+if 
+  $bs_jumpstop_best_score > 69
+goto_if_false @BSKOOL_13556
+set_lvar_int_to_var_int 66@ = $bs_jumpstop_best_score
+goto @BSKOOL_13614
+
+:BSKOOL_13556
+set_lvar_int_to_var_int 66@ = $bs_jumpstop_best_score
+gosub @BSKOOL_16288
+Text.SetRightJustify(False)
+Text.SetCenter(True)
+Text.SetColor(166, 202, 240, 255)
+Text.Display(320.0, 80.0, 'BS_Z_3')
+
+:BSKOOL_13614
+gosub @BSKOOL_14958
+
+:BSKOOL_13621
+if 
+  $mission_selection == 6
+goto_if_false @BSKOOL_13758
+Text.Display(322.0, 41.0, 'BS_F')
+if 
+  $bs_jumpstoppie_best_score > 69
+goto_if_false @BSKOOL_13693
+set_lvar_int_to_var_int 66@ = $bs_jumpstoppie_best_score
+goto @BSKOOL_13751
+
+:BSKOOL_13693
+set_lvar_int_to_var_int 66@ = $bs_jumpstoppie_best_score
+gosub @BSKOOL_16288
+Text.SetRightJustify(False)
+Text.SetCenter(True)
+Text.SetColor(166, 202, 240, 255)
+Text.Display(320.0, 80.0, 'BS_Z_3')
+
+:BSKOOL_13751
+gosub @BSKOOL_14958
+
+:BSKOOL_13758
+gosub @BSKOOL_16288
+Text.SetColor(248, 211, 7, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @BSKOOL_13836
+Text.SetScale(0.32, 1.25)
+Text.Display(70.0, 360.0, 'BS_X_4')
+goto @BSKOOL_13869
+
+:BSKOOL_13836
+Text.SetScale(0.32, 1.25)
+Text.Display(70.0, 360.0, 'BS_X_4')
+
+:BSKOOL_13869
+if 
+  57@ <> 1
+goto_if_false @BSKOOL_14263
+gosub @BSKOOL_16288
+Text.SetColor(248, 211, 7, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @BSKOOL_13965
+Text.SetScale(0.32, 1.25)
+Text.Display(70.0, 340.0, 'BS_X_5')
+goto @BSKOOL_13998
+
+:BSKOOL_13965
+Text.SetScale(0.32, 1.25)
+Text.Display(70.0, 340.0, 'BS_X_5')
+
+:BSKOOL_13998
+if 
+  $bs_open_tests <> 1
+goto_if_false @BSKOOL_14127
+gosub @BSKOOL_16288
+Text.SetColor(248, 211, 7, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @BSKOOL_14094
+Text.SetScale(0.32, 1.25)
+Text.Display(437.0, 340.0, 'BS_X_3')
+goto @BSKOOL_14127
+
+:BSKOOL_14094
+Text.SetScale(0.32, 1.25)
+Text.Display(437.0, 340.0, 'BS_X_3')
+
+:BSKOOL_14127
+if 
+  $bs_open_tests == 1
+goto_if_false @BSKOOL_14256
+gosub @BSKOOL_16288
+Text.SetColor(173, 173, 173, 125)
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @BSKOOL_14223
+Text.SetScale(0.32, 1.25)
+Text.Display(437.0, 340.0, 'BS_X_3')
+goto @BSKOOL_14256
+
+:BSKOOL_14223
+Text.SetScale(0.32, 1.25)
+Text.Display(437.0, 340.0, 'BS_X_3')
+
+:BSKOOL_14256
+goto @BSKOOL_14374
+
+:BSKOOL_14263
+gosub @BSKOOL_16288
+Text.SetColor(248, 211, 7, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @BSKOOL_14341
+Text.SetScale(0.32, 1.25)
+Text.Display(437.0, 340.0, 'BS_X_3')
+goto @BSKOOL_14374
+
+:BSKOOL_14341
+Text.SetScale(0.32, 1.25)
+Text.Display(437.0, 340.0, 'BS_X_3')
+
+:BSKOOL_14374
+gosub @BSKOOL_16288
+Text.SetScale(0.32, 1.25)
+Text.SetColor(255, 255, 255, 255)
+Text.Display(150.0, 360.0, 'BS_X04')
+if 
+  57@ <> 1
+goto_if_false @BSKOOL_14650
+gosub @BSKOOL_16288
+Text.SetColor(255, 255, 255, 255)
+Text.SetScale(0.32, 1.25)
+Text.Display(150.0, 340.0, 'SCH_PRS')
+if 
+  $bs_open_tests <> 1
+goto_if_false @BSKOOL_14572
+gosub @BSKOOL_16288
+Text.SetColor(255, 255, 255, 255)
+Text.SetScale(0.32, 1.25)
+Text.Display(537.4, 340.0, 'BS_X03')
+
+:BSKOOL_14572
+if 
+  $bs_open_tests == 1
+goto_if_false @BSKOOL_14643
+gosub @BSKOOL_16288
+Text.SetColor(173, 173, 173, 125)
+Text.SetScale(0.32, 1.25)
+Text.Display(537.4, 340.0, 'BS_X03')
+
+:BSKOOL_14643
+goto @BSKOOL_14704
+
+:BSKOOL_14650
+gosub @BSKOOL_16288
+Text.SetColor(255, 255, 255, 255)
+Text.SetScale(0.32, 1.25)
+Text.Display(537.4, 340.0, 'BS_X03')
+
+:BSKOOL_14704
+Text.SetScale(0.52, 1.45)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(5, 160.0, 112.0, 320.0, 224.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(5, 160.0, 317.0, 320.0, -224.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(5, 480.0, 112.0, -320.0, 224.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(5, 480.0, 317.0, -320.0, -224.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(9, 160.0, 435.0, 320.0, 17.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(9, 480.0, 435.0, -320.0, 17.0, 150, 150, 150, 255)
+return 
+
+:BSKOOL_14958
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(8, 320.0, 430.0, 640.0, 250.0, 0, 0, 0, 255)
+gosub @BSKOOL_16288
+Text.SetRightJustify(False)
+Text.SetColor(166, 202, 240, 255)
+if 
+  66@ > 69
+goto_if_false @BSKOOL_15070
+Text.SetRightJustify(False)
+Text.SetCenter(True)
+Text.DisplayWithNumber(320.0, 80.0, 'BS_Y_6', 66@)
+
+:BSKOOL_15070
+if 
+  70 > 66@
+goto_if_false @BSKOOL_15095
+65@ = 1
+
+:BSKOOL_15095
+if 
+  66@ > 69
+goto_if_false @BSKOOL_15138
+if 
+  85 > 66@
+goto_if_false @BSKOOL_15138
+65@ = 2
+
+:BSKOOL_15138
+if 
+  66@ > 84
+goto_if_false @BSKOOL_15181
+if 
+  100 > 66@
+goto_if_false @BSKOOL_15181
+65@ = 3
+
+:BSKOOL_15181
+if 
+  66@ == 100
+goto_if_false @BSKOOL_15206
+65@ = 4
+
+:BSKOOL_15206
+if 
+  65@ > 1
+goto_if_false @BSKOOL_15311
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(4, 250.0, 306.0, -60.0, 60.0, 180, 180, 180, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(4, 395.0, 306.0, 60.0, 60.0, 180, 180, 180, 255)
+goto @BSKOOL_15391
+
+:BSKOOL_15311
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(7, 250.0, 306.0, -60.0, 60.0, 180, 180, 180, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(7, 395.0, 306.0, 60.0, 60.0, 180, 180, 180, 255)
+
+:BSKOOL_15391
+Hud.SetSpritesDrawBeforeFade(True)
+if 
+  65@ == 1
+goto_if_false @BSKOOL_15499
+Hud.DrawSprite(6, 320.0, 307.0, 110.0, 95.0, 160, 160, 160, 255)
+gosub @BSKOOL_16288
+Text.SetColor(166, 202, 240, 255)
+Text.SetRightJustify(False)
+Text.SetCenter(True)
+Text.Display(320.0, 375.0, 'BS_Z_4')
+
+:BSKOOL_15499
+if 
+  65@ == 2
+goto_if_false @BSKOOL_15603
+Hud.DrawSprite(1, 320.0, 307.0, 110.0, 95.0, 160, 160, 160, 255)
+gosub @BSKOOL_16288
+Text.SetColor(166, 202, 240, 255)
+Text.SetRightJustify(False)
+Text.SetCenter(True)
+Text.Display(320.0, 375.0, 'BS_Y_12')
+
+:BSKOOL_15603
+if 
+  65@ == 3
+goto_if_false @BSKOOL_15707
+Hud.DrawSprite(2, 320.0, 307.0, 110.0, 95.0, 160, 160, 160, 255)
+gosub @BSKOOL_16288
+Text.SetColor(166, 202, 240, 255)
+Text.SetRightJustify(False)
+Text.SetCenter(True)
+Text.Display(320.0, 375.0, 'BS_Y_11')
+
+:BSKOOL_15707
+if 
+  65@ == 4
+goto_if_false @BSKOOL_15811
+Hud.DrawSprite(3, 320.0, 307.0, 110.0, 95.0, 160, 160, 160, 255)
+gosub @BSKOOL_16288
+Text.SetColor(166, 202, 240, 255)
+Text.SetRightJustify(False)
+Text.SetCenter(True)
+Text.Display(320.0, 375.0, 'BS_Y_10')
+
+:BSKOOL_15811
+return 
+
+:BSKOOL_15813
+if 
+  34@ == 0
+goto_if_false @BSKOOL_15988
+if 
+  $mission_selection == 1
+goto_if_false @BSKOOL_15856
+gosub @BSKOOL_1783
+
+:BSKOOL_15856
+if 
+  $mission_selection == 2
+goto_if_false @BSKOOL_15881
+gosub @BSKOOL_3477
+
+:BSKOOL_15881
+if 
+  $mission_selection == 3
+goto_if_false @BSKOOL_15906
+gosub @BSKOOL_4902
+
+:BSKOOL_15906
+if 
+  $mission_selection == 5
+goto_if_false @BSKOOL_15931
+gosub @BSKOOL_6670
+
+:BSKOOL_15931
+if 
+  $mission_selection == 4
+goto_if_false @BSKOOL_15956
+gosub @BSKOOL_8446
+
+:BSKOOL_15956
+if 
+  $mission_selection == 6
+goto_if_false @BSKOOL_15981
+gosub @BSKOOL_10039
+
+:BSKOOL_15981
+34@ = 1
+
+:BSKOOL_15988
+if 
+  34@ == 1
+goto_if_false @BSKOOL_16072
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_16072
+if 
+  not Streaming.HasCarRecordingBeenLoaded(35@)
+goto_if_false @BSKOOL_16050
+Streaming.RequestCarRecording(35@)
+goto @BSKOOL_16072
+
+:BSKOOL_16050
+Car.StartPlayback(38@, 35@)
+63@ = 3
+34@ = 2
+
+:BSKOOL_16072
+if 
+  34@ == 2
+goto_if_false @BSKOOL_16157
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_16143
+if 
+  not Car.IsPlaybackGoingOn(38@)
+goto_if_false @BSKOOL_16136
+63@ = 1
+34@ = 4
+
+:BSKOOL_16136
+goto @BSKOOL_16157
+
+:BSKOOL_16143
+63@ = 1
+34@ = 4
+
+:BSKOOL_16157
+if 
+  34@ == 3
+goto_if_false @BSKOOL_16189
+63@ = 1
+34@ = 4
+
+:BSKOOL_16189
+if 
+  34@ == 4
+goto_if_false @BSKOOL_16286
+if 
+  63@ == 2
+goto_if_false @BSKOOL_16286
+Car.StopPlayback(38@)
+Car.Delete(38@)
+Char.Delete(49@)
+World.ClearArea(1, $noticeboard_x, $noticeboard_y, $noticeboard_z, 300.0)
+Hud.ClearTimer($car_timer)
+Hud.FreezeTimer(False)
+Car.Delete(38@)
+gosub @BSKOOL_20952
+34@ = 0
+
+:BSKOOL_16286
+return 
+
+:BSKOOL_16288
+Text.SetDrawBeforeFade(True)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(False)
+Text.SetBackground(False)
+Text.SetScale(0.52, 1.45)
+Text.SetDropshadow(2, 0, 0, 0, 255)
+Text.SetFont(Font.Menu)
+return 
+
+:BSKOOL_16350
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(False)
+Text.SetBackground(False)
+Text.SetScale(0.52, 1.45)
+Text.SetDropshadow(2, 0, 0, 0, 255)
+Text.SetFont(Font.Menu)
+return 
+Text.SetDrawBeforeFade(True)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+Text.SetScale(0.8, 2.6)
+Text.SetDropshadow(2, 0, 0, 0, 255)
+return 
+
+:BSKOOL_16466
+Text.SetDrawBeforeFade(True)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+Text.SetScale(1.2, 4.0)
+Text.SetDropshadow(3, 0, 0, 0, 255)
+Text.SetFont(Font.Pricedown)
+return 
+Text.SetDrawBeforeFade(True)
+Text.SetJustify(True)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+Text.SetScale(1.0, 3.8)
+Text.SetDropshadow(2, 0, 0, 0, 255)
+Text.SetFont(Font.Menu)
+return 
+
+:BSKOOL_16586
+Camera.DoFade(0, 500)
+
+:BSKOOL_16593
+if 
+  Camera.GetFadingStatus
+goto_if_false @BSKOOL_16617
+wait 0
+goto @BSKOOL_16593
+
+:BSKOOL_16617
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+return 
+
+:BSKOOL_16623
+$area_check1ax = 0.0
+$area_check1ay = 0.0
+$area_check1bx = 0.0
+$area_check1by = 0.0
+$area_check2ax = 0.0
+$area_check2ay = 0.0
+$area_check2bx = 0.0
+$area_check2by = 0.0
+$area_check3ax = 0.0
+$area_check3ay = 0.0
+$area_check3bx = 0.0
+$area_check3by = 0.0
+$area_check4ax = 0.0
+$area_check4ay = 0.0
+$area_check4bx = 0.0
+$area_check4by = 0.0
+$button_pressed = 0
+$car_posx = 0.0
+$car_posy = 0.0
+$cone_coords_x = 0.0
+$cone_coords_y = 0.0
+$cone_coords_z = 0.0
+$cone_circle_radius = 10.0
+$car_started = 0
+$circle_start_x = 0.0
+$circle_start_y = 0.0
+$camera_positionx = 0.0
+$camera_positiony = 0.0
+$camera_positionz = 0.0
+$camera_position_int = 0
+$dummy_car1_health = 0
+$dummy_car2_health = 0
+$finish_leftx = 0.0
+$finish_lefty = 0.0
+$finish_rightx = 0.0
+$finish_righty = 0.0
+$finished_watching_scores = 0
+$heading_score = 0
+43@ = 0.0
+42@ = 0.0
+44@ = 0.0
+39@ = 0
+40@ = 0
+48@ = 0
+$lap_counter = 0
+$lap1_secs = 0
+$lap1_millisecs = 0
+$lap2_secs = 0
+$lap2_millisecs = 0
+$lap3_secs = 0
+$lap3_millisecs = 0
+$lap4_secs = 0
+$lap4_millisecs = 0
+$lap5_secs = 0
+$lap5_millisecs = 0
+$overall_lap1 = 0
+$overall_lap2 = 0
+$overall_lap3 = 0
+$overall_lap4 = 0
+$overall_lap5 = 0
+$overall_secs = 0
+$overall_millisecs = 0
+$overall_score = 0
+$other_car_damage = 0
+set_var_float_to_var_float $perfect_positionx = $start_coordsx
+set_var_float_to_var_float $perfect_positiony = $start_coordsy
+$perfect_positionz = World.GetGroundZFor3DCoord($perfect_positionx, $perfect_positiony, 50.0)
+$player_car_damage = 0
+$players_distance_from_perfectpos = 0.0
+$position_score = 0
+$time_score = 0
+41@ = 0
+$total_dummy_car1_health = 0
+$total_dummy_car2_health = 0
+$total_car_damage = 0
+$variablea = 0
+$variableb = 0.0
+$variablec = 0
+$variabled = 0
+$where_to_place_cones = 0.0
+45@ = 0.0
+46@ = 0
+47@ = 0
+59@ = 0
+58@ = 0
+return 
+
+:BSKOOL_17345
+Char.WarpIntoCar($scplayer, 38@)
+Car.LockDoors(38@, CarLock.LockedPlayerInside)
+wait 0
+Hud.DisplayRadar(True)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Camera.DoFade(1, 500)
+
+:BSKOOL_17379
+if 
+  Camera.GetFadingStatus
+goto_if_false @BSKOOL_17403
+wait 0
+goto @BSKOOL_17379
+
+:BSKOOL_17403
+Player.SetControl($player1, True)
+return 
+
+:BSKOOL_17412
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_17479
+if 
+  $car_started == 1
+goto_if_false @BSKOOL_17472
+if 
+  not Char.IsInCar($scplayer, 38@)
+goto_if_false @BSKOOL_17472
+48@ = 1
+
+:BSKOOL_17472
+goto @BSKOOL_17486
+
+:BSKOOL_17479
+48@ = 1
+
+:BSKOOL_17486
+return 
+
+:BSKOOL_17488
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_17531
+if 
+  Char.IsInCar($scplayer, 38@)
+goto_if_false @BSKOOL_17531
+43@ = Car.GetSpeed(38@)
+
+:BSKOOL_17531
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @BSKOOL_17644
+if 
+  43@ > 0.1
+goto_if_false @BSKOOL_17644
+Text.ClearPrints
+if or
+  $mission_selection == 1
+  $mission_selection == 2
+  $mission_selection == 3
+  $mission_selection == 5
+  $mission_selection == 4
+  $mission_selection == 6
+goto_if_false @BSKOOL_17637
+Hud.DisplayTimer($car_timer, TimerDirection.Down)
+
+:BSKOOL_17637
+$car_started = 1
+
+:BSKOOL_17644
+return 
+
+:BSKOOL_17646
+if 
+  $car_timer == 0
+goto_if_false @BSKOOL_17678
+Player.SetControl($player1, False)
+Player.ApplyBrakesToCar($player1, True)
+
+:BSKOOL_17678
+return 
+
+:BSKOOL_17680
+Player.SetControl($player1, False)
+Hud.FreezeTimer(True)
+return 
+
+:BSKOOL_17693
+$player_x, $player_y, $player_z = Car.GetCoordinates(38@)
+$players_distance_from_perfectpos = Math.GetDistanceBetweenCoords2D($player_x, $player_y, $perfect_positionx, $perfect_positiony)
+if 
+  $players_distance_from_perfectpos > 0.5
+goto_if_false @BSKOOL_17830
+if 
+  10.0 > $players_distance_from_perfectpos
+goto_if_false @BSKOOL_17816
+$players_distance_from_perfectpos -= 0.5
+$players_distance_from_perfectpos *= 10.42
+cset_var_int_to_var_float $variablea = float $players_distance_from_perfectpos
+$position_score = 100
+sub_int_var_from_int_var $position_score -= $variablea
+goto @BSKOOL_17823
+
+:BSKOOL_17816
+$position_score = 0
+
+:BSKOOL_17823
+goto @BSKOOL_17837
+
+:BSKOOL_17830
+$position_score = 100
+
+:BSKOOL_17837
+add_int_var_to_int_var $overall_score += $position_score
+return 
+40@ = Car.GetHealth(38@)
+$player_car_damage = 1000
+sub_int_lvar_from_int_var $player_car_damage -= 40@
+if 
+  $mission_selection == 16
+goto_if_false @BSKOOL_17903
+$player_car_damage /= 10
+goto @BSKOOL_17910
+
+:BSKOOL_17903
+$player_car_damage /= 2
+
+:BSKOOL_17910
+if 
+  $player_car_damage > 100
+goto_if_false @BSKOOL_17935
+$player_car_damage = 100
+
+:BSKOOL_17935
+return 
+
+:BSKOOL_17937
+$total_car_damage = 0
+$trafficcone_counter = 0
+if 
+  $mission_selection == 1
+goto_if_false @BSKOOL_18028
+
+:BSKOOL_17969
+if 
+  15 > $trafficcone_counter
+goto_if_false @BSKOOL_18028
+if 
+  Object.HasBeenDamaged($trafficcones($trafficcone_counter,46i))
+goto_if_false @BSKOOL_18014
+$total_car_damage += 10
+
+:BSKOOL_18014
+$trafficcone_counter += 1
+goto @BSKOOL_17969
+
+:BSKOOL_18028
+if 
+  $mission_selection == 2
+goto_if_false @BSKOOL_18105
+
+:BSKOOL_18046
+if 
+  25 > $trafficcone_counter
+goto_if_false @BSKOOL_18105
+if 
+  Object.HasBeenDamaged($trafficcones($trafficcone_counter,46i))
+goto_if_false @BSKOOL_18091
+$total_car_damage += 10
+
+:BSKOOL_18091
+$trafficcone_counter += 1
+goto @BSKOOL_18046
+
+:BSKOOL_18105
+if or
+  $mission_selection == 3
+  $mission_selection == 5
+goto_if_false @BSKOOL_18189
+
+:BSKOOL_18130
+if 
+  30 > $trafficcone_counter
+goto_if_false @BSKOOL_18189
+if 
+  Object.HasBeenDamaged($trafficcones($trafficcone_counter,46i))
+goto_if_false @BSKOOL_18175
+$total_car_damage += 10
+
+:BSKOOL_18175
+$trafficcone_counter += 1
+goto @BSKOOL_18130
+
+:BSKOOL_18189
+if or
+  $mission_selection == 4
+  $mission_selection == 6
+goto_if_false @BSKOOL_18273
+
+:BSKOOL_18214
+if 
+  14 > $trafficcone_counter
+goto_if_false @BSKOOL_18273
+if 
+  Object.HasBeenDamaged($trafficcones($trafficcone_counter,46i))
+goto_if_false @BSKOOL_18259
+$total_car_damage += 10
+
+:BSKOOL_18259
+$trafficcone_counter += 1
+goto @BSKOOL_18214
+
+:BSKOOL_18273
+$total_car_damage *= 2
+if 
+  $total_car_damage > 90
+goto_if_false @BSKOOL_18305
+$total_car_damage = 100
+
+:BSKOOL_18305
+sub_int_var_from_int_var $overall_score -= $total_car_damage
+return 
+
+:BSKOOL_18315
+if 
+  1 > $overall_score
+goto_if_false @BSKOOL_18340
+$overall_score = 0
+
+:BSKOOL_18340
+Text.ClearPrints
+return 
+
+:BSKOOL_18344
+if 
+  not Car.IsDead(38@)
+goto_if_false @BSKOOL_18777
+if 
+  $camera_position_int == 0
+goto_if_false @BSKOOL_18469
+$camera_positionx = Car.GetOffsetInWorldCoords($camera_positiony, $camera_positionz, 38@, 10.0, 0.0, 5.0)
+$camera_positionz = 15.0
+Camera.SetFixedPosition($camera_positionx, $camera_positiony, $camera_positionz, 0.0, 0.0, 0.0)
+Camera.PointAtCar(38@, CameraMode.Fixed, SwitchType.Interpolation)
+Camera.SetInterpolationParameters(50.0, 2000)
+$camera_position_int = 1
+
+:BSKOOL_18469
+if 
+  TIMERA > 3000
+goto_if_false @BSKOOL_18616
+if 
+  6000 > TIMERA
+goto_if_false @BSKOOL_18616
+if 
+  $camera_position_int == 1
+goto_if_false @BSKOOL_18616
+$camera_positionx = Car.GetOffsetInWorldCoords($camera_positiony, $camera_positionz, 38@, 0.0, 10.0, 5.0)
+$camera_positionz = 15.0
+Camera.SetFixedPosition($camera_positionx, $camera_positiony, $camera_positionz, 0.0, 0.0, 0.0)
+Camera.PointAtCar(38@, CameraMode.Fixed, SwitchType.Interpolation)
+Camera.SetInterpolationParameters(50.0, 2000)
+$camera_position_int = 2
+
+:BSKOOL_18616
+if 
+  TIMERA > 6000
+goto_if_false @BSKOOL_18744
+if 
+  $camera_position_int == 2
+goto_if_false @BSKOOL_18744
+$camera_positionx = Car.GetOffsetInWorldCoords($camera_positiony, $camera_positionz, 38@, -10.0, 0.0, 5.0)
+$camera_positionz = 15.0
+Camera.SetFixedPosition($camera_positionx, $camera_positiony, $camera_positionz, 0.0, 0.0, 0.0)
+Camera.PointAtCar(38@, CameraMode.Fixed, SwitchType.Interpolation)
+Camera.SetInterpolationParameters(50.0, 2000)
+$camera_position_int = 3
+
+:BSKOOL_18744
+if 
+  TIMERA > 9000
+goto_if_false @BSKOOL_18777
+$camera_position_int = 1
+TIMERA = 0
+
+:BSKOOL_18777
+return 
+
+:BSKOOL_18779
+65@ = 0
+if 
+  $overall_score > 69
+goto_if_false @BSKOOL_18868
+if 
+  85 > $overall_score
+goto_if_false @BSKOOL_18868
+if and
+  67@ > 69
+  85 > 67@
+goto_if_false @BSKOOL_18861
+65@ = 0
+goto @BSKOOL_18868
+
+:BSKOOL_18861
+65@ = 2
+
+:BSKOOL_18868
+if 
+  $overall_score > 84
+goto_if_false @BSKOOL_18950
+if 
+  100 > $overall_score
+goto_if_false @BSKOOL_18950
+if and
+  67@ > 84
+  100 > 67@
+goto_if_false @BSKOOL_18943
+65@ = 0
+goto @BSKOOL_18950
+
+:BSKOOL_18943
+65@ = 3
+
+:BSKOOL_18950
+if 
+  $overall_score == 100
+goto_if_false @BSKOOL_19007
+if 
+  67@ == 100
+goto_if_false @BSKOOL_19000
+65@ = 0
+goto @BSKOOL_19007
+
+:BSKOOL_19000
+65@ = 4
+
+:BSKOOL_19007
+return 
+
+:BSKOOL_19009
+Hud.Display(False)
+Hud.DisplayRadar(False)
+Text.ClearPrints
+Hud.ClearTimer($car_timer)
+if 
+  2 > 65@
+goto_if_false @BSKOOL_19082
+Hud.DrawWindow(160.0, 220.0, 490.0, 400.0, 'BS_Z_8', 3)
+goto @BSKOOL_19115
+
+:BSKOOL_19082
+Hud.DrawWindow(160.0, 200.0, 490.0, 400.0, 'DUMMY', 3)
+
+:BSKOOL_19115
+gosub @BSKOOL_16350
+52@, 53@, 54@, 55@ = Hud.GetColor(HudObject.Armor)
+Text.SetColor(52@, 53@, 54@, 55@)
+Text.Display(170.0, 255.0, 'BS_Y_1')
+gosub @BSKOOL_16350
+Text.SetRightJustify(True)
+Text.SetColor(255, 255, 255, 255)
+Text.DisplayWithNumber(475.0, 255.0, 'BS_Y_6', $heading_score)
+gosub @BSKOOL_16350
+52@, 53@, 54@, 55@ = Hud.GetColor(HudObject.Armor)
+Text.SetColor(52@, 53@, 54@, 55@)
+Text.Display(170.0, 275.0, 'BS_Y_2')
+gosub @BSKOOL_16350
+Text.SetRightJustify(True)
+Text.SetColor(255, 255, 255, 255)
+Text.DisplayWithNumber(475.0, 275.0, 'BS_Y_6', $position_score)
+gosub @BSKOOL_16350
+52@, 53@, 54@, 55@ = Hud.GetColor(HudObject.Armor)
+Text.SetColor(52@, 53@, 54@, 55@)
+Text.Display(170.0, 295.0, 'BS_Y_3')
+gosub @BSKOOL_16350
+Text.SetRightJustify(True)
+52@, 53@, 54@, 55@ = Hud.GetColor(0)
+Text.SetColor(52@, 53@, 54@, 55@)
+Text.DisplayWithNumber(475.0, 295.0, 'BS_Y_6', $total_car_damage)
+gosub @BSKOOL_16350
+52@, 53@, 54@, 55@ = Hud.GetColor(HudObject.Armor)
+Text.SetColor(52@, 53@, 54@, 55@)
+Text.Display(170.0, 315.0, 'BS_Y_5')
+gosub @BSKOOL_16350
+Text.SetRightJustify(True)
+Text.SetColor(255, 255, 255, 255)
+Text.DisplayWithNumber(475.0, 315.0, 'BS_Y_6', $overall_score)
+if or
+  59@ == 1
+  59@ == 2
+goto_if_false @BSKOOL_19919
+if 
+  65@ > 0
+goto_if_false @BSKOOL_19919
+Hud.DrawSprite(4, 250.0, 200.0, -60.0, 60.0, 180, 180, 180, 255)
+Hud.DrawSprite(4, 392.0, 200.0, 60.0, 60.0, 180, 180, 180, 255)
+if 
+  65@ == 2
+goto_if_false @BSKOOL_19728
+Hud.DrawSprite(1, 320.0, 200.0, 110.0, 95.0, 160, 160, 160, 255)
+
+:BSKOOL_19728
+if 
+  65@ == 3
+goto_if_false @BSKOOL_19782
+Hud.DrawSprite(2, 320.0, 200.0, 110.0, 95.0, 160, 160, 160, 255)
+
+:BSKOOL_19782
+if 
+  65@ == 4
+goto_if_false @BSKOOL_19836
+Hud.DrawSprite(3, 320.0, 200.0, 110.0, 95.0, 160, 160, 160, 255)
+
+:BSKOOL_19836
+gosub @BSKOOL_16466
+Text.SetEdge(2, 0, 0, 0, 255)
+Text.SetScale(1.0, 3.4)
+52@, 53@, 54@, 55@ = Hud.GetColor(6)
+Text.SetColor(52@, 53@, 54@, 55@)
+Text.Display(323.0, 65.0, 'BS_Y_9')
+
+:BSKOOL_19919
+if or
+  59@ == 1
+  59@ == 2
+goto_if_false @BSKOOL_20011
+gosub @BSKOOL_16466
+Text.SetEdge(2, 0, 0, 0, 255)
+Text.SetScale(1.0, 3.4)
+Text.SetColor(255, 255, 255, 255)
+Text.Display(323.0, 110.0, 'BS_Y_8')
+
+:BSKOOL_20011
+if 
+  59@ <> 2
+goto_if_false @BSKOOL_20316
+gosub @BSKOOL_16350
+Text.SetScale(0.52, 1.45)
+52@, 53@, 54@, 55@ = Hud.GetColor(HudObject.Health)
+Text.SetColor(52@, 53@, 54@, 55@)
+Text.Display(330.0, 345.0, 'SCH_PRS')
+gosub @BSKOOL_16350
+Text.SetScale(0.52, 1.45)
+52@, 53@, 54@, 55@ = Hud.GetColor(6)
+Text.SetColor(52@, 53@, 54@, 55@)
+Text.Display(170.0, 345.0, 'BS_Z_5')
+gosub @BSKOOL_16350
+Text.SetScale(0.52, 1.45)
+52@, 53@, 54@, 55@ = Hud.GetColor(HudObject.Health)
+Text.SetColor(52@, 53@, 54@, 55@)
+Text.Display(330.0, 365.0, 'BS_X04')
+gosub @BSKOOL_16350
+Text.SetScale(0.52, 1.45)
+52@, 53@, 54@, 55@ = Hud.GetColor(6)
+Text.SetColor(52@, 53@, 54@, 55@)
+Text.Display(170.0, 365.0, 'BS_Z_6')
+goto @BSKOOL_20528
+
+:BSKOOL_20316
+if 
+  $bs_open_tests <> 6
+goto_if_false @BSKOOL_20388
+gosub @BSKOOL_16350
+Text.SetScale(0.52, 1.45)
+Text.SetColor(255, 255, 255, 255)
+Text.Display(170.0, 345.0, 'BS_Z_9')
+
+:BSKOOL_20388
+gosub @BSKOOL_16350
+Text.SetScale(0.52, 1.45)
+52@, 53@, 54@, 55@ = Hud.GetColor(HudObject.Health)
+Text.SetColor(52@, 53@, 54@, 55@)
+Text.Display(330.0, 365.0, 'SCH_PRS')
+gosub @BSKOOL_16350
+Text.SetScale(0.52, 1.45)
+52@, 53@, 54@, 55@ = Hud.GetColor(6)
+Text.SetColor(52@, 53@, 54@, 55@)
+Text.Display(170.0, 365.0, 'BS_Z_5')
+
+:BSKOOL_20528
+return 
+
+:BSKOOL_20530
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BSKOOL_20586
+if 
+  $button_pressed == 1
+goto_if_false @BSKOOL_20579
+$button_pressed = 0
+$finished_watching_scores = 1
+
+:BSKOOL_20579
+goto @BSKOOL_20611
+
+:BSKOOL_20586
+if 
+  $button_pressed == 0
+goto_if_false @BSKOOL_20611
+$button_pressed = 1
+
+:BSKOOL_20611
+return 
+
+:BSKOOL_20613
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1186)
+Camera.DoFade(0, 500)
+
+:BSKOOL_20640
+if 
+  Camera.GetFadingStatus
+goto_if_false @BSKOOL_20709
+if 
+  $flag_bikeschool_passed_1stime == 0
+goto_if_false @BSKOOL_20696
+if 
+  $bs_passed == 1
+goto_if_false @BSKOOL_20696
+gosub @BSKOOL_12674
+
+:BSKOOL_20696
+Text.ClearPrints
+wait 0
+goto @BSKOOL_20640
+
+:BSKOOL_20709
+Text.ClearPrints
+Text.ClearThisBigPrint('BS_Y_8')
+Text.ClearThisBigPrint('BS_Y_9')
+Player.ApplyBrakesToCar($player1, False)
+Char.ClearTasksImmediately($scplayer)
+if 
+  48@ == 2
+goto_if_false @BSKOOL_20835
+Text.ClearPrints
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @BSKOOL_20808
+Char.WarpFromCarToCoord($scplayer, 1171.521, 1351.183, 9.9219)
+goto @BSKOOL_20828
+
+:BSKOOL_20808
+Char.SetCoordinates($scplayer, 1171.521, 1351.183, 9.9219)
+
+:BSKOOL_20828
+goto @BSKOOL_20898
+
+:BSKOOL_20835
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @BSKOOL_20878
+Char.WarpFromCarToCoord($scplayer, 1171.521, 1351.183, 9.9219)
+goto @BSKOOL_20898
+
+:BSKOOL_20878
+Char.SetCoordinates($scplayer, 1171.521, 1351.183, 9.9219)
+
+:BSKOOL_20898
+Char.SetHeading($scplayer, 5.0)
+Car.Delete(38@)
+World.ClearArea(1, 1171.521, 1351.183, 9.9219, 2.0)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Hud.ClearTimer($car_timer)
+Hud.FreezeTimer(False)
+return 
+
+:BSKOOL_20952
+$trafficcone_counter = 0
+
+:BSKOOL_20959
+if 
+  46 > $trafficcone_counter
+goto_if_false @BSKOOL_21000
+Object.Delete($trafficcones($trafficcone_counter,46i))
+$trafficcone_counter += 1
+goto @BSKOOL_20959
+
+:BSKOOL_21000
+if 
+  Object.DoesExist(56@)
+goto_if_false @BSKOOL_21021
+Object.Delete(56@)
+
+:BSKOOL_21021
+return 
+
+:BSKOOL_21023
+$trafficcone_counter = 0
+if 
+  $mission_selection == 1
+goto_if_false @BSKOOL_21107
+
+:BSKOOL_21048
+if 
+  15 > $trafficcone_counter
+goto_if_false @BSKOOL_21107
+$trafficcones($trafficcone_counter,46i) = Object.CreateNoOffset(#TRAFFICCONE, 0.0, 0.0, 500.0)
+$trafficcone_counter += 1
+goto @BSKOOL_21048
+
+:BSKOOL_21107
+if 
+  $mission_selection == 2
+goto_if_false @BSKOOL_21184
+
+:BSKOOL_21125
+if 
+  25 > $trafficcone_counter
+goto_if_false @BSKOOL_21184
+$trafficcones($trafficcone_counter,46i) = Object.CreateNoOffset(#TRAFFICCONE, 0.0, 0.0, 500.0)
+$trafficcone_counter += 1
+goto @BSKOOL_21125
+
+:BSKOOL_21184
+if or
+  $mission_selection == 3
+  $mission_selection == 5
+goto_if_false @BSKOOL_21268
+
+:BSKOOL_21209
+if 
+  30 > $trafficcone_counter
+goto_if_false @BSKOOL_21268
+$trafficcones($trafficcone_counter,46i) = Object.CreateNoOffset(#TRAFFICCONE, 0.0, 0.0, 500.0)
+$trafficcone_counter += 1
+goto @BSKOOL_21209
+
+:BSKOOL_21268
+if or
+  $mission_selection == 4
+  $mission_selection == 6
+goto_if_false @BSKOOL_21382
+
+:BSKOOL_21293
+if 
+  14 > $trafficcone_counter
+goto_if_false @BSKOOL_21352
+$trafficcones($trafficcone_counter,46i) = Object.CreateNoOffset(#TRAFFICCONE, 0.0, 0.0, 500.0)
+$trafficcone_counter += 1
+goto @BSKOOL_21293
+
+:BSKOOL_21352
+56@ = Object.CreateNoOffset(#LANDJUMP2, 0.0, 0.0, 500.0)
+Object.SetCollision(56@, True)
+
+:BSKOOL_21382
+if 
+  $mission_selection == 1
+goto_if_false @BSKOOL_22060
+$cone_circle_radius = 6.0
+$where_to_place_cones = 0.0
+$circle_start_x = Car.GetOffsetInWorldCoords($circle_start_y, $cone_coords_z, 38@, 0.0, 1.0, -0.2)
+
+:BSKOOL_21449
+$cone_coords_x = Math.Sin($where_to_place_cones)
+mult_float_var_by_float_var $cone_coords_x *= $cone_circle_radius
+add_float_var_to_float_var $cone_coords_x += $circle_start_x
+$cone_coords_y = Math.Cos($where_to_place_cones)
+mult_float_var_by_float_var $cone_coords_y *= $cone_circle_radius
+add_float_var_to_float_var $cone_coords_y += $circle_start_y
+if 
+  $where_to_place_cones == 0.0
+goto_if_false @BSKOOL_21532
+Object.SetCoordinates($trafficcones[0], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21532
+if 
+  $where_to_place_cones == 24.0
+goto_if_false @BSKOOL_21567
+Object.SetCoordinates($trafficcones[1], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21567
+if 
+  $where_to_place_cones == 48.0
+goto_if_false @BSKOOL_21602
+Object.SetCoordinates($trafficcones[2], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21602
+if 
+  $where_to_place_cones == 72.0
+goto_if_false @BSKOOL_21637
+Object.SetCoordinates($trafficcones[3], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21637
+if 
+  $where_to_place_cones == 96.0
+goto_if_false @BSKOOL_21672
+Object.SetCoordinates($trafficcones[4], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21672
+if 
+  $where_to_place_cones == 120.0
+goto_if_false @BSKOOL_21707
+Object.SetCoordinates($trafficcones[5], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21707
+if 
+  $where_to_place_cones == 144.0
+goto_if_false @BSKOOL_21742
+Object.SetCoordinates($trafficcones[6], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21742
+if 
+  $where_to_place_cones == 168.0
+goto_if_false @BSKOOL_21777
+Object.SetCoordinates($trafficcones[7], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21777
+if 
+  $where_to_place_cones == 192.0
+goto_if_false @BSKOOL_21812
+Object.SetCoordinates($trafficcones[8], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21812
+if 
+  $where_to_place_cones == 216.0
+goto_if_false @BSKOOL_21847
+Object.SetCoordinates($trafficcones[9], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21847
+if 
+  $where_to_place_cones == 240.0
+goto_if_false @BSKOOL_21882
+Object.SetCoordinates($trafficcones[10], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21882
+if 
+  $where_to_place_cones == 264.0
+goto_if_false @BSKOOL_21917
+Object.SetCoordinates($trafficcones[11], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21917
+if 
+  $where_to_place_cones == 288.0
+goto_if_false @BSKOOL_21952
+Object.SetCoordinates($trafficcones[12], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21952
+if 
+  $where_to_place_cones == 312.0
+goto_if_false @BSKOOL_21987
+Object.SetCoordinates($trafficcones[13], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_21987
+if 
+  $where_to_place_cones == 336.0
+goto_if_false @BSKOOL_22022
+Object.SetCoordinates($trafficcones[14], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_22022
+$where_to_place_cones += 24.0
+if 
+  360.0 > $where_to_place_cones
+goto_if_false @BSKOOL_22060
+goto @BSKOOL_21449
+
+:BSKOOL_22060
+if 
+  $mission_selection == 2
+goto_if_false @BSKOOL_22802
+$cone_circle_radius = 6.0
+$where_to_place_cones = 90.0
+$circle_start_x = Car.GetOffsetInWorldCoords($circle_start_y, $cone_coords_z, 38@, 0.0, 86.0, -0.2)
+
+:BSKOOL_22127
+$cone_coords_x = Math.Sin($where_to_place_cones)
+mult_float_var_by_float_var $cone_coords_x *= $cone_circle_radius
+add_float_var_to_float_var $cone_coords_x += $circle_start_x
+$cone_coords_y = Math.Cos($where_to_place_cones)
+mult_float_var_by_float_var $cone_coords_y *= $cone_circle_radius
+add_float_var_to_float_var $cone_coords_y += $circle_start_y
+if 
+  $where_to_place_cones == 120.0
+goto_if_false @BSKOOL_22210
+Object.SetCoordinates($trafficcones[0], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_22210
+if 
+  $where_to_place_cones == 150.0
+goto_if_false @BSKOOL_22245
+Object.SetCoordinates($trafficcones[1], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_22245
+if 
+  $where_to_place_cones == 180.0
+goto_if_false @BSKOOL_22280
+Object.SetCoordinates($trafficcones[2], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_22280
+if 
+  $where_to_place_cones == 210.0
+goto_if_false @BSKOOL_22315
+Object.SetCoordinates($trafficcones[3], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_22315
+if 
+  $where_to_place_cones == 240.0
+goto_if_false @BSKOOL_22350
+Object.SetCoordinates($trafficcones[4], $cone_coords_x, $cone_coords_y, $cone_coords_z)
+
+:BSKOOL_22350
+$where_to_place_cones += 30.0
+if 
+  271.0 > $where_to_place_cones
+goto_if_false @BSKOOL_22388
+goto @BSKOOL_22127
+
+:BSKOOL_22388
+Object.PlaceRelativeToCar($trafficcones[7], 38@, -7.0, 74.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[8], 38@, 7.0, 74.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[9], 38@, -7.0, 78.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[10], 38@, 7.0, 78.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[11], 38@, -7.0, 82.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[12], 38@, 7.0, 82.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[13], 38@, -7.0, 86.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[14], 38@, 7.0, 86.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[15], 38@, 0.0, 82.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[16], 38@, -3.0, 4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[17], 38@, 3.0, 4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[18], 38@, -3.0, 0.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[19], 38@, 3.0, 0.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[20], 38@, -3.0, -4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[21], 38@, 3.0, -4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[22], 38@, 0.0, -4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[23], 38@, 0.0, 74.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[24], 38@, 0.0, 78.0, -0.2)
+
+:BSKOOL_22802
+if or
+  $mission_selection == 3
+  $mission_selection == 5
+goto_if_false @BSKOOL_23517
+Object.PlaceRelativeToCar($trafficcones[0], 38@, -3.0, 4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[1], 38@, 3.0, 4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[2], 38@, -3.0, 0.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[3], 38@, 3.0, 0.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[4], 38@, -3.0, -4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[5], 38@, 3.0, -4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[6], 38@, 0.0, -4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[7], 38@, -3.5, 56.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[8], 38@, 3.5, 56.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[9], 38@, -3.5, 60.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[10], 38@, 3.5, 60.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[11], 38@, -3.5, 64.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[12], 38@, 3.5, 64.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[13], 38@, -3.5, 68.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[14], 38@, 3.5, 68.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[15], 38@, -3.5, 72.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[16], 38@, 3.5, 72.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[17], 38@, -3.5, 76.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[18], 38@, 3.5, 76.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[19], 38@, -3.5, 80.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[20], 38@, 3.5, 80.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[21], 38@, -3.5, 84.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[22], 38@, 3.5, 84.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[23], 38@, -3.0, 120.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[24], 38@, 3.0, 120.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[25], 38@, -3.0, 124.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[26], 38@, 3.0, 124.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[27], 38@, -3.0, 128.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[28], 38@, 3.0, 128.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[29], 38@, 0.0, 128.0, -0.2)
+
+:BSKOOL_23517
+if or
+  $mission_selection == 4
+  $mission_selection == 6
+goto_if_false @BSKOOL_24084
+Object.PlaceRelativeToCar($trafficcones[0], 38@, -3.0, 4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[1], 38@, 3.0, 4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[2], 38@, -3.0, 0.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[3], 38@, 3.0, 0.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[4], 38@, -3.0, -4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[5], 38@, 3.0, -4.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[6], 38@, 0.0, -4.0, -0.2)
+Object.PlaceRelativeToCar(56@, 38@, 0.0, 48.0, -0.2)
+if 
+  $mission_selection == 4
+goto_if_false @BSKOOL_23905
+Object.PlaceRelativeToCar($trafficcones[7], 38@, -3.0, 120.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[8], 38@, 3.0, 120.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[9], 38@, -3.0, 124.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[10], 38@, 3.0, 124.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[11], 38@, -3.0, 128.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[12], 38@, 3.0, 128.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[13], 38@, 0.0, 128.0, -0.2)
+
+:BSKOOL_23905
+if 
+  $mission_selection == 6
+goto_if_false @BSKOOL_24084
+Object.PlaceRelativeToCar($trafficcones[7], 38@, -3.0, 110.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[8], 38@, 3.0, 110.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[9], 38@, -3.0, 114.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[10], 38@, 3.0, 114.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[11], 38@, -3.0, 118.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[12], 38@, 3.0, 118.0, -0.2)
+Object.PlaceRelativeToCar($trafficcones[13], 38@, 0.0, 118.0, -0.2)
+
+:BSKOOL_24084
+return 
+

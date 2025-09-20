@@ -1,0 +1,325 @@
+//-------------External script 28 (BAR_AMBIENCE)---------------
+
+:BAR
+script_name 'BAR'
+if and
+  $onmission == 0
+  not is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @BAR_50
+$iSetBarPanic = 0
+$iSwitchOffDanceMiniGame = 0
+
+:BAR_50
+0@ = 0
+if 
+  0@ > 0
+goto_if_false @BAR_99
+$iDanceGirlfriend = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:BAR_99
+1@ = 1
+2@ = 0
+0@ = Stat.GetInt(156)
+if 
+  0@ >= 7500
+goto_if_false @BAR_154
+15@ = 3
+goto @BAR_161
+
+:BAR_154
+15@ = 0
+
+:BAR_161
+gosub @BAR_2146
+4@ = Sequence.Open()
+Task.PlayAnim(-1, "BARSERVE_IN", "BAR", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "BARSERVE_LOOP", "BAR", 4.0, True, False, False, False, 10000)
+Sequence.Close(4@)
+5@ = Sequence.Open()
+Task.PlayAnim(-1, "BARSERVE_BOTTLE", "BAR", 4.0, False, False, False, False, -1)
+Sequence.Close(5@)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BAR_944
+v$txtEntryExit = Char.GetNameOfEntryExitUsed($scplayer)
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "BAR1"
+goto_if_false @BAR_534
+6@ = Attractor.Add(502.2242, -19.8799, 999.6797, 107.0, -107.0, 4@)
+7@ = Attractor.Add(502.0665, -24.1488, 999.6797, 94.0, -94.0, 4@)
+8@ = Attractor.Add(502.0757, -17.2798, 999.6719, 85.0, -85.0, 4@)
+9@ = Attractor.Add(502.3116, -19.8236, 999.6797, 278.6, -278.6, 5@)
+10@ = Char.CreateAtAttractor(PedType.CivFemale, 172, 6@, 1466)
+StreamedScript.StartNew(38, 10@, 6@, 7@, 8@, 9@, 2.5, 20.0)
+StreamedScript.Stream(38)
+
+:BAR_534
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "BAR2"
+goto_if_false @BAR_738
+6@ = Attractor.Add(497.9362, -78.0533, 997.7651, 1.0, -1.0, 4@)
+7@ = Attractor.Add(493.9349, -77.9233, 997.7651, 100.5, -100.5, 4@)
+8@ = Attractor.Add(501.2002, -77.739, 997.7651, 19.0, -19.0, 4@)
+9@ = Attractor.Add(496.5553, -78.7725, 997.7651, 194.5, -194.5, 5@)
+10@ = Char.CreateAtAttractor(PedType.CivFemale, 172, 6@, 1466)
+StreamedScript.StartNew(38, 10@, 6@, 7@, 8@, 9@, 2.5, 20.0)
+StreamedScript.Stream(38)
+
+:BAR_738
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "UFOBAR"
+goto_if_false @BAR_944
+6@ = Attractor.Add(-223.2594, 1405.634, 26.7656, 86.9, 262.0, 4@)
+7@ = Attractor.Add(-223.26, 1402.984, 26.7656, 145.4, 327.0, 4@)
+8@ = Attractor.Add(-223.2956, 1407.486, 26.7656, 26.0, 184.0, 4@)
+9@ = Attractor.Add(-222.6826, 1405.787, 26.7656, 275.7, 97.0, 5@)
+10@ = Char.CreateAtAttractor(PedType.CivFemale, 172, 6@, 1466)
+StreamedScript.StartNew(38, 10@, 6@, 7@, 8@, 9@, 2.5, 20.0)
+StreamedScript.Stream(38)
+
+:BAR_944
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BAR_2139
+$iAreaCode = Char.GetAreaVisible($scplayer)
+if or
+  $iAreaCode == 0
+  $iTerminateAllAmbience == 1
+goto_if_false @BAR_1004
+goto @BAR_2225
+
+:BAR_1004
+if and
+  $iSwitchOffDanceMiniGame == 0
+  $onmission == 0
+  2@ == 0
+goto_if_false @BAR_1462
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "BAR1"
+goto_if_false @BAR_1455
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, 488.0048, -14.0754, 999.6797, 1.5, 1.5, 1.5, True)
+goto_if_false @BAR_1455
+Text.ClearHelp
+Text.ClearPrints
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @BAR_1286
+0@ = Stat.GetInt(156)
+if 
+  0@ >= 3500
+goto_if_false @BAR_1169
+3@ = 3
+goto @BAR_1244
+
+:BAR_1169
+if 
+  0@ >= 6000
+goto_if_false @BAR_1202
+3@ = 4
+goto @BAR_1244
+
+:BAR_1202
+if 
+  0@ >= 7500
+goto_if_false @BAR_1237
+3@ = Math.RandomIntInRange(1, 5)
+goto @BAR_1244
+
+:BAR_1237
+3@ = 2
+
+:BAR_1244
+StreamedScript.StartNew(35, 488.0048, -14.0754, 999.6797, 180.0, 3@, $iDanceGirlfriend)
+StreamedScript.Stream(35)
+goto @BAR_1441
+
+:BAR_1286
+switch_start 15@ total_jumps 4 default_jump 0 @BAR_1407 jumps 0 @BAR_1349 1 @BAR_1363 2 @BAR_1377 3 @BAR_1391 -1 @BAR_1407 -1 @BAR_1407 -1 @BAR_1407
+
+:BAR_1349
+3@ = 2
+goto @BAR_1407
+
+:BAR_1363
+3@ = 3
+goto @BAR_1407
+
+:BAR_1377
+3@ = 4
+goto @BAR_1407
+
+:BAR_1391
+3@ = Math.RandomIntInRange(1, 5)
+goto @BAR_1407
+
+:BAR_1407
+StreamedScript.StartNew(35, 488.0048, -14.0754, 999.6797, 180.0, 3@, 0)
+StreamedScript.Stream(35)
+
+:BAR_1441
+2@ = 1
+16@ = 0
+
+:BAR_1455
+goto @BAR_1884
+
+:BAR_1462
+if and
+  $iSwitchOffDanceMiniGame == 0
+  $onmission == 0
+  2@ == 1
+goto_if_false @BAR_1884
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "BAR1"
+goto_if_false @BAR_1884
+if 
+  not Char.LocateOnFoot3D($scplayer, 0, 488.0048, -14.0754, 999.6797, 2.5, 2.5, 2.5)
+goto_if_false @BAR_1578
+2@ = 0
+goto @BAR_1884
+
+:BAR_1578
+if and
+  not Game.IsMinigameInProgress
+  not is_global_var_bit_set_const $iDateReport bit 1
+  16@ == 0
+goto_if_false @BAR_1884
+switch_start 15@ total_jumps 3 default_jump 0 @BAR_1884 jumps 0 @BAR_1668 1 @BAR_1740 2 @BAR_1812 -1 @BAR_1884 -1 @BAR_1884 -1 @BAR_1884 -1 @BAR_1884
+
+:BAR_1668
+if 
+  $iDanceScore >= 3500
+goto_if_false @BAR_1733
+Text.PrintBig('DNC_P1', 5000, TextStyle.MiddleSmaller)
+Text.PrintNow('DNC_P2', 10000, 1)
+16@ = 1
+15@ += 1
+
+:BAR_1733
+goto @BAR_1884
+
+:BAR_1740
+if 
+  $iDanceScore >= 6000
+goto_if_false @BAR_1805
+Text.PrintBig('DNC_P1', 5000, TextStyle.MiddleSmaller)
+Text.PrintNow('DNC_P2', 10000, 1)
+16@ = 1
+15@ += 1
+
+:BAR_1805
+goto @BAR_1884
+
+:BAR_1812
+if 
+  $iDanceScore >= 7500
+goto_if_false @BAR_1877
+Text.PrintBig('DNC_P1', 5000, TextStyle.MiddleSmaller)
+Text.PrintNow('DNC_P3', 10000, 1)
+16@ = 1
+15@ += 1
+
+:BAR_1877
+goto @BAR_1884
+
+:BAR_1884
+if 
+  Char.IsShooting($scplayer)
+goto_if_false @BAR_1907
+$iSetBarPanic = 1
+
+:BAR_1907
+if 
+  Player.IsWantedLevelGreater($player1, $iWantedOnEntry)
+goto_if_false @BAR_1933
+$iSetBarPanic = 1
+
+:BAR_1933
+0@ = 0
+
+:BAR_1940
+if 
+  not Char.IsDead(10@(0@,2i))
+goto_if_false @BAR_2034
+if and
+  Player.IsTargetingChar($player1, 10@(0@,2i))
+  not Char.IsCurrentWeapon($scplayer, WeaponType.AnyMelee)
+goto_if_false @BAR_2004
+$iSetBarPanic = 1
+goto @BAR_2034
+
+:BAR_2004
+if 
+  Char.HasBeenDamagedByChar(10@(0@,2i), $scplayer)
+goto_if_false @BAR_2034
+$iSetBarPanic = 1
+
+:BAR_2034
+0@ += 1
+  0@ >= 2
+goto_if_false @BAR_1940
+if 
+  $iSetBarPanic == 1
+goto_if_false @BAR_2139
+$iSwitchOffDanceMiniGame = 1
+0@ = World.GetRandomCharInSphereNoBrain(12@, 13@, 14@, 50.0)
+if 
+  0@ > -1
+goto_if_false @BAR_2139
+1@ += 1
+StreamedScript.StartNew(37, 0@, 1@)
+StreamedScript.Stream(37)
+
+:BAR_2139
+goto @BAR_944
+
+:BAR_2146
+Streaming.RequestModel(172)
+Streaming.RequestAnimation("BAR")
+Streaming.RequestAnimation("DANCING")
+if and
+  Streaming.HasModelLoaded(172)
+  Streaming.HasAnimationLoaded("BAR")
+  Streaming.HasAnimationLoaded("DANCING")
+goto_if_false @BAR_2212
+return 
+goto @BAR_2223
+
+:BAR_2212
+wait 0
+goto @BAR_2146
+
+:BAR_2223
+return 
+
+:BAR_2225
+0@ = 0
+
+:BAR_2232
+Char.MarkAsNoLongerNeeded(10@(0@,2i))
+Char.Delete(10@(0@,2i))
+0@ += 1
+  0@ >= 2
+goto_if_false @BAR_2232
+0@ = 0
+
+:BAR_2278
+if 
+  6@(0@,4i) <> -1
+goto_if_false @BAR_2309
+Attractor.Clear(6@(0@,4i))
+
+:BAR_2309
+0@ += 1
+  0@ >= 4
+goto_if_false @BAR_2278
+Streaming.MarkModelAsNoLongerNeeded(172)
+Sequence.Clear(4@)
+Sequence.Clear(5@)
+Streaming.RemoveAnimation("BAR")
+Streaming.RemoveAnimation("DANCING")
+terminate_this_script 
+terminate_this_script 
+

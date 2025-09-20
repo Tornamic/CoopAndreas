@@ -1,0 +1,198 @@
+//-------------External script 55 (BROWSE)---------------
+
+:BROWSE
+script_name 'BROWSE'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @BROWSE_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:BROWSE_60
+Streaming.RequestAnimation("COP_AMBIENT")
+
+:BROWSE_75
+if 
+  not Streaming.HasAnimationLoaded("COP_AMBIENT")
+goto_if_false @BROWSE_112
+wait 0
+goto @BROWSE_75
+
+:BROWSE_112
+3@ = 1
+4@ = 0
+
+:BROWSE_126
+wait 0
+if and
+  not Char.IsDead(0@)
+  Player.IsPlaying($player1)
+  $iTerminateAllAmbience == 0
+goto_if_false @BROWSE_235
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @BROWSE_221
+if 
+  Char.HasBeenDamagedByChar(0@, $scplayer)
+goto_if_false @BROWSE_207
+goto @BROWSE_1166
+goto @BROWSE_214
+
+:BROWSE_207
+gosub @BROWSE_249
+
+:BROWSE_214
+goto @BROWSE_228
+
+:BROWSE_221
+gosub @BROWSE_1147
+
+:BROWSE_228
+goto @BROWSE_242
+
+:BROWSE_235
+gosub @BROWSE_1147
+
+:BROWSE_242
+goto @BROWSE_126
+
+:BROWSE_249
+switch_start 3@ total_jumps 1 default_jump 0 @BROWSE_326 jumps 1 @BROWSE_312 -1 @BROWSE_326 -1 @BROWSE_326 -1 @BROWSE_326 -1 @BROWSE_326 -1 @BROWSE_326 -1 @BROWSE_326
+
+:BROWSE_312
+gosub @BROWSE_328
+goto @BROWSE_326
+
+:BROWSE_326
+return 
+
+:BROWSE_328
+switch_start 4@ total_jumps 7 default_jump 0 @BROWSE_1145 jumps 0 @BROWSE_391 1 @BROWSE_452 2 @BROWSE_556 3 @BROWSE_732 4 @BROWSE_836 5 @BROWSE_1011 6 @BROWSE_1102
+
+:BROWSE_391
+Task.PlayAnim(0@, "COPBROWSE_IN", "COP_AMBIENT", 4.0, False, False, False, False, -1)
+4@ += 1
+goto @BROWSE_1145
+
+:BROWSE_452
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @BROWSE_549
+2@ = Math.RandomIntInRange(4000, 8000)
+Task.PlayAnim(0@, "COPBROWSE_LOOP", "COP_AMBIENT", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:BROWSE_549
+goto @BROWSE_1145
+
+:BROWSE_556
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @BROWSE_725
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @BROWSE_667
+Task.PlayAnim(0@, "COPBROWSE_NOD", "COP_AMBIENT", 4.0, False, False, False, False, -1)
+goto @BROWSE_718
+
+:BROWSE_667
+Task.PlayAnim(0@, "COPBROWSE_SHAKE", "COP_AMBIENT", 4.0, True, False, False, False, 1000)
+
+:BROWSE_718
+4@ += 1
+
+:BROWSE_725
+goto @BROWSE_1145
+
+:BROWSE_732
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @BROWSE_829
+2@ = Math.RandomIntInRange(4000, 8000)
+Task.PlayAnim(0@, "COPBROWSE_LOOP", "COP_AMBIENT", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:BROWSE_829
+goto @BROWSE_1145
+
+:BROWSE_836
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @BROWSE_1004
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @BROWSE_947
+Task.PlayAnim(0@, "COPBROWSE_NOD", "COP_AMBIENT", 4.0, False, False, False, False, -1)
+goto @BROWSE_997
+
+:BROWSE_947
+Task.PlayAnim(0@, "COPBROWSE_SHAKE", "COP_AMBIENT", 4.0, False, False, False, False, -1)
+
+:BROWSE_997
+4@ += 1
+
+:BROWSE_1004
+goto @BROWSE_1145
+
+:BROWSE_1011
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @BROWSE_1095
+Task.PlayAnim(0@, "COPBROWSE_OUT", "COP_AMBIENT", 4.0, False, False, False, False, -1)
+4@ += 1
+
+:BROWSE_1095
+goto @BROWSE_1145
+
+:BROWSE_1102
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @BROWSE_1138
+gosub @BROWSE_1147
+
+:BROWSE_1138
+goto @BROWSE_1145
+
+:BROWSE_1145
+return 
+
+:BROWSE_1147
+Streaming.RemoveAnimation("COP_AMBIENT")
+terminate_this_script 
+return 
+
+:BROWSE_1166
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @BROWSE_1237
+5@ = Char.GetScriptTaskStatus(0@, 1506)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @BROWSE_1230
+Task.KillCharOnFoot(0@, $scplayer)
+
+:BROWSE_1230
+goto @BROWSE_1244
+
+:BROWSE_1237
+gosub @BROWSE_1147
+
+:BROWSE_1244
+goto @BROWSE_1166
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

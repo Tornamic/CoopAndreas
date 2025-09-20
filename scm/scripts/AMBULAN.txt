@@ -1,0 +1,2487 @@
+:AMBULAN_16
+$onmission = 1
+$flag_player_on_ambulance_mission = 1
+script_name 'AMBULAN'
+if 
+  $done_ambulance_progress == 0
+goto_if_false @AMBULAN_61
+Stat.RegisterMissionGiven
+
+:AMBULAN_61
+wait 0
+Game.SetScriptLimitToGangSize(0)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @AMBULAN_221
+213@ = Char.StoreCarIsIn($scplayer)
+if 
+  not Car.IsPassengerSeatFree(213@, SeatIndex.TandemRear)
+goto_if_false @AMBULAN_134
+81@ = Car.GetCharInPassengerSeat(213@, 0)
+Task.LeaveCarImmediately(81@, 213@)
+Char.MarkAsNoLongerNeeded(81@)
+
+:AMBULAN_134
+if 
+  not Car.IsPassengerSeatFree(213@, SeatIndex.RearLeft)
+goto_if_false @AMBULAN_175
+81@ = Car.GetCharInPassengerSeat(213@, 1)
+Task.LeaveCarImmediately(81@, 213@)
+Char.MarkAsNoLongerNeeded(81@)
+
+:AMBULAN_175
+if 
+  not Car.IsPassengerSeatFree(213@, SeatIndex.RearRight)
+goto_if_false @AMBULAN_216
+81@ = Car.GetCharInPassengerSeat(213@, 2)
+Task.LeaveCarImmediately(81@, 213@)
+Char.MarkAsNoLongerNeeded(81@)
+
+:AMBULAN_216
+Car.MarkAsNoLongerNeeded(213@)
+
+:AMBULAN_221
+235@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+Text.LoadMissionText('AMBULAE')
+Stat.ShowUpdateStats(False)
+$ped_time_limit = 20000
+34@ = 0
+39@ = 0
+40@ = 0
+41@ = 0
+42@ = 0
+43@ = 0
+37@ = 1
+36@ = 0
+83@ = 0
+86@ = 0
+89@ = 0
+92@ = 0
+95@ = 0
+58@ = 0
+61@ = 0
+64@ = 0
+67@ = 0
+70@ = 0
+73@ = 0
+76@ = 0
+46@ = 0
+189@ = 10.0
+$db_ambulance_level = 1
+48@ = 0
+49@ = 0
+44@ = 0
+45@ = 0
+51@ = 0
+52@ = 0
+53@ = 0
+50@ = 0
+55@ = 0
+79@ = 0
+176@ = 0.0
+177@ = 0.0
+178@ = 0.0
+99@ = 0
+
+:AMBULAN_522
+if 
+  13 > 99@
+goto_if_false @AMBULAN_658
+100@(99@,13i) = 0
+113@(99@,13f) = 0.0
+126@(99@,13f) = 0.0
+139@(99@,13f) = 0.0
+152@(99@,13i) = 0
+if 
+  10 > 99@
+goto_if_false @AMBULAN_644
+214@(99@,10i) = 0
+224@(99@,10i) = 0
+
+:AMBULAN_644
+99@ += 1
+goto @AMBULAN_522
+
+:AMBULAN_658
+99@ = 0
+96@ = 0
+97@ = 0
+234@ = 0
+$amb_free_seats = 0
+238@ = 0.0
+
+:AMBULAN_703
+if 
+  10 > 99@
+goto_if_false @AMBULAN_836
+if 
+  Game.IsRelationshipSet(RelationshipType.Hate, 99@, PedType.Player1)
+goto_if_false @AMBULAN_775
+224@(99@,10i) = 1
+234@ += 1
+Game.ClearRelationship(RelationshipType.Hate, 99@, PedType.Player1)
+goto @AMBULAN_822
+
+:AMBULAN_775
+if 
+  Game.IsRelationshipSet(RelationshipType.Dislike, 99@, PedType.Player1)
+goto_if_false @AMBULAN_822
+214@(99@,10i) = 1
+234@ += 1
+Game.ClearRelationship(RelationshipType.Dislike, 99@, PedType.Player1)
+
+:AMBULAN_822
+99@ += 1
+goto @AMBULAN_703
+
+:AMBULAN_836
+99@ = 0
+Text.PrintNow('ATUTOR2', 3000, 1)
+Game.SetWantedMultiplier(0.5)
+201@, 202@, 203@ = Char.GetCoordinates($scplayer)
+212@ = 9999999.0
+$Return_cities_passed = Stat.GetInt(181)
+if 
+  2 > $Return_cities_passed
+goto_if_false @AMBULAN_1470
+if 
+  $Return_cities_passed == 0
+goto_if_false @AMBULAN_1130
+204@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, 2004.96, -1442.96, 12.56)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 204@
+goto_if_false @AMBULAN_997
+set_lvar_float_to_lvar_float 212@ = 204@
+213@ = 1
+
+:AMBULAN_997
+205@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, 1180.85, -1325.57, 12.58)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 205@
+goto_if_false @AMBULAN_1060
+set_lvar_float_to_lvar_float 212@ = 205@
+213@ = 2
+
+:AMBULAN_1060
+208@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, 1244.437, 331.2261, 18.5547)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 208@
+goto_if_false @AMBULAN_1123
+set_lvar_float_to_lvar_float 212@ = 208@
+213@ = 5
+
+:AMBULAN_1123
+goto @AMBULAN_1463
+
+:AMBULAN_1130
+if 
+  $Return_cities_passed == 1
+goto_if_false @AMBULAN_1463
+204@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, 2004.96, -1442.96, 12.56)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 204@
+goto_if_false @AMBULAN_1211
+set_lvar_float_to_lvar_float 212@ = 204@
+213@ = 1
+
+:AMBULAN_1211
+205@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, 1180.85, -1325.57, 12.58)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 205@
+goto_if_false @AMBULAN_1274
+set_lvar_float_to_lvar_float 212@ = 205@
+213@ = 2
+
+:AMBULAN_1274
+208@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, 1244.437, 331.2261, 18.5547)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 208@
+goto_if_false @AMBULAN_1337
+set_lvar_float_to_lvar_float 212@ = 208@
+213@ = 5
+
+:AMBULAN_1337
+209@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, -2198.693, -2290.105, 29.625)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 209@
+goto_if_false @AMBULAN_1400
+set_lvar_float_to_lvar_float 212@ = 209@
+213@ = 6
+
+:AMBULAN_1400
+210@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, -2670.285, 616.4364, 13.4531)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 210@
+goto_if_false @AMBULAN_1463
+set_lvar_float_to_lvar_float 212@ = 210@
+213@ = 7
+
+:AMBULAN_1463
+goto @AMBULAN_1974
+
+:AMBULAN_1470
+204@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, 2004.96, -1442.96, 12.56)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 204@
+goto_if_false @AMBULAN_1533
+set_lvar_float_to_lvar_float 212@ = 204@
+213@ = 1
+
+:AMBULAN_1533
+205@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, 1180.85, -1325.57, 12.58)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 205@
+goto_if_false @AMBULAN_1596
+set_lvar_float_to_lvar_float 212@ = 205@
+213@ = 2
+
+:AMBULAN_1596
+206@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, -316.3832, 1056.045, 18.7344)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 206@
+goto_if_false @AMBULAN_1659
+set_lvar_float_to_lvar_float 212@ = 206@
+213@ = 3
+
+:AMBULAN_1659
+207@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, -1514.823, 2527.119, 54.7443)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 207@
+goto_if_false @AMBULAN_1722
+set_lvar_float_to_lvar_float 212@ = 207@
+213@ = 4
+
+:AMBULAN_1722
+208@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, 1244.437, 331.2261, 18.5547)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 208@
+goto_if_false @AMBULAN_1785
+set_lvar_float_to_lvar_float 212@ = 208@
+213@ = 5
+
+:AMBULAN_1785
+209@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, -2198.693, -2290.105, 29.625)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 209@
+goto_if_false @AMBULAN_1848
+set_lvar_float_to_lvar_float 212@ = 209@
+213@ = 6
+
+:AMBULAN_1848
+210@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, -2670.285, 616.4364, 13.4531)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 210@
+goto_if_false @AMBULAN_1911
+set_lvar_float_to_lvar_float 212@ = 210@
+213@ = 7
+
+:AMBULAN_1911
+211@ = Math.GetDistanceBetweenCoords3D(201@, 202@, 203@, 1578.446, 1770.682, 9.8358)
+if 
+  is_float_lvar_greater_than_float_lvar 212@ > 211@
+goto_if_false @AMBULAN_1974
+set_lvar_float_to_lvar_float 212@ = 211@
+213@ = 8
+
+:AMBULAN_1974
+switch_start 213@ total_jumps 8 default_jump 1 @AMBULAN_2958 jumps 1 @AMBULAN_2102 2 @AMBULAN_2209 3 @AMBULAN_2316 4 @AMBULAN_2423 5 @AMBULAN_2530 6 @AMBULAN_2637 7 @AMBULAN_2744
+switch_continued 8 @AMBULAN_2851 -1 @AMBULAN_3065 -1 @AMBULAN_3065 -1 @AMBULAN_3065 -1 @AMBULAN_3065 -1 @AMBULAN_3065 -1 @AMBULAN_3065 -1 @AMBULAN_3065 -1 @AMBULAN_3065
+
+:AMBULAN_2102
+167@ = 2004.96
+168@ = -1442.96
+169@ = 12.56
+173@ = 2026.0
+174@ = -1423.0
+175@ = 17.0
+197@ = 1200.0
+198@ = 2930.0
+199@ = -2213.0
+200@ = -1012.0
+goto @AMBULAN_3065
+
+:AMBULAN_2209
+167@ = 1180.85
+168@ = -1325.57
+169@ = 12.58
+173@ = 1172.0
+174@ = -1324.0
+175@ = 15.0
+197@ = 450.0
+198@ = 1800.0
+199@ = -1900.0
+200@ = -870.0
+goto @AMBULAN_3065
+
+:AMBULAN_2316
+167@ = -316.3832
+168@ = 1056.045
+169@ = 18.7344
+173@ = -316.0
+174@ = 1050.0
+175@ = 20.0
+197@ = -860.0
+198@ = 185.0
+199@ = 749.0
+200@ = 1616.0
+goto @AMBULAN_3065
+
+:AMBULAN_2423
+167@ = -1514.006
+168@ = 2532.013
+169@ = 54.7443
+173@ = -1515.0
+174@ = 2520.0
+175@ = 56.0
+197@ = -1684.0
+198@ = -702.0
+199@ = 1465.0
+200@ = 2749.9
+goto @AMBULAN_3065
+
+:AMBULAN_2530
+167@ = 1225.0
+168@ = 302.0
+169@ = 20.0
+173@ = 1227.0
+174@ = 289.5
+175@ = 22.64
+197@ = 100.0
+198@ = 2604.0
+199@ = -720.0
+200@ = 465.0
+goto @AMBULAN_3065
+
+:AMBULAN_2637
+167@ = -2198.693
+168@ = -2290.105
+169@ = 29.625
+173@ = -2204.728
+174@ = -2296.302
+175@ = 29.6181
+197@ = -2598.0
+198@ = -1500.0
+199@ = -2700.0
+200@ = -1700.0
+goto @AMBULAN_3065
+
+:AMBULAN_2744
+167@ = -2670.285
+168@ = 616.4364
+169@ = 13.4531
+173@ = -2677.0
+174@ = 632.0
+175@ = 14.0
+197@ = -2820.0
+198@ = -1784.0
+199@ = 29.0
+200@ = 1180.0
+goto @AMBULAN_3065
+
+:AMBULAN_2851
+167@ = 1578.446
+168@ = 1770.682
+169@ = 9.8358
+173@ = 1582.0
+174@ = 1765.0
+175@ = 11.0
+197@ = 1000.0
+198@ = 2600.0
+199@ = 772.0
+200@ = 2400.0
+goto @AMBULAN_3065
+
+:AMBULAN_2958
+167@ = 2004.96
+168@ = -1442.96
+169@ = 12.56
+173@ = 2026.0
+174@ = -1423.0
+175@ = 17.0
+197@ = 1200.0
+198@ = 2930.0
+199@ = -2213.0
+200@ = -1012.0
+goto @AMBULAN_3065
+
+:AMBULAN_3065
+Hud.DisplayTimerWithString($ped_time_limit, TimerDirection.Down, 'AMBTIME')
+Hud.DisplayNthCounterWithString($amb_free_seats, CounterDisplay.Number, 2, 'AMBSEAT')
+Hud.DisplayNthCounterWithString($db_ambulance_level, CounterDisplay.Number, 1, 'ALEV')
+if 
+  $onmission == 0
+goto_if_false @AMBULAN_3149
+47@ = Blip.AddForCoord(167@, 168@, 169@)
+
+:AMBULAN_3149
+Hud.ClearTimer($ped_time_limit)
+
+:AMBULAN_3154
+if 
+  is_int_lvar_greater_than_int_lvar 37@ > 36@
+goto_if_false @AMBULAN_3355
+gosub @AMBULAN_7829
+set_lvar_float_to_lvar_float 113@(36@,13f) = 176@
+set_lvar_float_to_lvar_float 126@(36@,13f) = 177@
+set_lvar_float_to_lvar_float 139@(36@,13f) = 178@
+if 
+  79@ == 1
+goto_if_false @AMBULAN_3241
+goto @AMBULAN_13159
+
+:AMBULAN_3241
+gosub @AMBULAN_10937
+set_lvar_int_to_lvar_int 152@(36@,13i) = 35@
+if 
+  152@(36@,13i) > 45000
+goto_if_false @AMBULAN_3306
+152@(36@,13i) = 45000
+goto @AMBULAN_3341
+
+:AMBULAN_3306
+if 
+  15000 > 152@(36@,13i)
+goto_if_false @AMBULAN_3341
+152@(36@,13i) = 15000
+
+:AMBULAN_3341
+36@ += 1
+goto @AMBULAN_3154
+
+:AMBULAN_3355
+gosub @AMBULAN_3747
+if 
+  37@ > 3
+goto_if_false @AMBULAN_3394
+45@ = 1
+goto @AMBULAN_3401
+
+:AMBULAN_3394
+45@ = 0
+
+:AMBULAN_3401
+51@ = 0
+if 
+  2 > 37@
+goto_if_false @AMBULAN_3537
+set_lvar_int_to_lvar_int 48@ = 35@
+div_int_lvar_by_int_lvar 48@ /= 37@
+48@ /= 2
+set_lvar_int_to_lvar_int 38@ = 37@
+38@ += 1
+mult_int_lvar_by_int_lvar 48@ *= 38@
+add_int_lvar_to_int_var $ped_time_limit += 48@
+div_int_var_by_int_lvar $ped_time_limit /= 37@
+set_lvar_int_to_lvar_int 48@ = 35@
+48@ /= 3
+if 
+  48@ > 15000
+goto_if_false @AMBULAN_3530
+48@ = 15000
+
+:AMBULAN_3530
+goto @AMBULAN_3614
+
+:AMBULAN_3537
+set_lvar_int_to_var_int 48@ = $ped_time_limit
+div_int_lvar_by_int_lvar 48@ /= 37@
+48@ /= 2
+set_lvar_int_to_lvar_int 38@ = 37@
+38@ += 1
+mult_int_lvar_by_int_lvar 48@ *= 38@
+add_int_lvar_to_int_var $ped_time_limit += 48@
+div_int_var_by_int_lvar $ped_time_limit /= 37@
+set_lvar_int_to_var_int 48@ = $ped_time_limit
+48@ /= 3
+
+:AMBULAN_3614
+if 
+  60000 > $ped_time_limit
+goto_if_false @AMBULAN_3645
+$ped_time_limit = 60000
+
+:AMBULAN_3645
+if 
+  25000 > 48@
+goto_if_false @AMBULAN_3679
+48@ = 25000
+goto @AMBULAN_3710
+
+:AMBULAN_3679
+if 
+  48@ > 60000
+goto_if_false @AMBULAN_3710
+48@ = 60000
+
+:AMBULAN_3710
+Hud.DisplayTimerWithString($ped_time_limit, TimerDirection.Down, 'AMBTIME')
+239@ = 0
+240@ = 0
+goto @AMBULAN_11090
+
+:AMBULAN_3747
+if 
+  37@ > 0
+goto_if_false @AMBULAN_3874
+81@ = Char.CreateRandom(113@, 126@, 139@)
+Char.FreezePositionAndDontLoadCollision(81@, True)
+Char.SetLoadCollisionFlag(81@, False)
+83@ = 1
+Char.SetDecisionMaker(81@, 235@)
+Char.SetBleeding(81@, True)
+Char.SetOnlyDamagedByPlayer(81@, True)
+188@ = Math.RandomFloatInRange(0.0, 359.9)
+Char.SetHeading(81@, 188@)
+82@ = Blip.AddForChar(81@)
+Blip.SetAsFriendly(82@, True)
+Blip.ChangeScale(82@, 2)
+100@ = 1
+
+:AMBULAN_3874
+if 
+  37@ > 1
+goto_if_false @AMBULAN_4001
+84@ = Char.CreateRandom(114@, 127@, 140@)
+86@ = 1
+Char.SetDecisionMaker(84@, 235@)
+Char.SetBleeding(84@, True)
+Char.SetOnlyDamagedByPlayer(84@, True)
+188@ = Math.RandomFloatInRange(0.0, 359.9)
+Char.SetHeading(84@, 188@)
+85@ = Blip.AddForChar(84@)
+Blip.SetAsFriendly(85@, True)
+Blip.ChangeScale(85@, 2)
+Char.FreezePositionAndDontLoadCollision(84@, True)
+Char.SetLoadCollisionFlag(84@, False)
+101@ = 1
+
+:AMBULAN_4001
+if 
+  37@ > 2
+goto_if_false @AMBULAN_4128
+87@ = Char.CreateRandom(115@, 128@, 141@)
+89@ = 1
+Char.SetDecisionMaker(87@, 235@)
+Char.SetBleeding(87@, True)
+Char.SetOnlyDamagedByPlayer(87@, True)
+188@ = Math.RandomFloatInRange(0.0, 359.9)
+Char.SetHeading(87@, 188@)
+88@ = Blip.AddForChar(87@)
+Blip.SetAsFriendly(88@, True)
+Blip.ChangeScale(88@, 2)
+Char.FreezePositionAndDontLoadCollision(87@, True)
+Char.SetLoadCollisionFlag(87@, False)
+102@ = 1
+
+:AMBULAN_4128
+if 
+  37@ > 3
+goto_if_false @AMBULAN_4255
+90@ = Char.CreateRandom(116@, 129@, 142@)
+92@ = 1
+Char.SetDecisionMaker(90@, 235@)
+Char.SetBleeding(90@, True)
+Char.SetOnlyDamagedByPlayer(90@, True)
+188@ = Math.RandomFloatInRange(0.0, 359.9)
+Char.SetHeading(90@, 188@)
+91@ = Blip.AddForChar(90@)
+Blip.SetAsFriendly(91@, True)
+Blip.ChangeScale(91@, 2)
+Char.FreezePositionAndDontLoadCollision(90@, True)
+Char.SetLoadCollisionFlag(90@, False)
+103@ = 1
+
+:AMBULAN_4255
+if 
+  37@ > 4
+goto_if_false @AMBULAN_4382
+93@ = Char.CreateRandom(117@, 130@, 143@)
+95@ = 1
+Char.SetDecisionMaker(93@, 235@)
+Char.SetBleeding(93@, True)
+Char.SetOnlyDamagedByPlayer(93@, True)
+188@ = Math.RandomFloatInRange(0.0, 359.9)
+Char.SetHeading(93@, 188@)
+94@ = Blip.AddForChar(93@)
+Blip.SetAsFriendly(94@, True)
+Blip.ChangeScale(94@, 2)
+Char.FreezePositionAndDontLoadCollision(93@, True)
+Char.SetLoadCollisionFlag(93@, False)
+104@ = 1
+
+:AMBULAN_4382
+if 
+  37@ > 5
+goto_if_false @AMBULAN_4509
+56@ = Char.CreateRandom(118@, 131@, 144@)
+58@ = 1
+Char.SetDecisionMaker(56@, 235@)
+Char.SetBleeding(56@, True)
+Char.SetOnlyDamagedByPlayer(56@, True)
+188@ = Math.RandomFloatInRange(0.0, 359.9)
+Char.SetHeading(56@, 188@)
+57@ = Blip.AddForChar(56@)
+Blip.SetAsFriendly(57@, True)
+Blip.ChangeScale(57@, 2)
+Char.FreezePositionAndDontLoadCollision(56@, True)
+Char.SetLoadCollisionFlag(56@, False)
+105@ = 1
+
+:AMBULAN_4509
+if 
+  37@ > 6
+goto_if_false @AMBULAN_4636
+59@ = Char.CreateRandom(119@, 132@, 145@)
+61@ = 1
+Char.SetDecisionMaker(59@, 235@)
+Char.SetBleeding(59@, True)
+Char.SetOnlyDamagedByPlayer(59@, True)
+188@ = Math.RandomFloatInRange(0.0, 359.9)
+Char.SetHeading(59@, 188@)
+60@ = Blip.AddForChar(59@)
+Blip.SetAsFriendly(60@, True)
+Blip.ChangeScale(60@, 2)
+Char.FreezePositionAndDontLoadCollision(59@, True)
+Char.SetLoadCollisionFlag(59@, False)
+106@ = 1
+
+:AMBULAN_4636
+if 
+  37@ > 7
+goto_if_false @AMBULAN_4763
+62@ = Char.CreateRandom(120@, 133@, 146@)
+64@ = 1
+Char.SetDecisionMaker(62@, 235@)
+Char.SetBleeding(62@, True)
+Char.SetOnlyDamagedByPlayer(62@, True)
+188@ = Math.RandomFloatInRange(0.0, 359.9)
+Char.SetHeading(62@, 188@)
+63@ = Blip.AddForChar(62@)
+Blip.SetAsFriendly(63@, True)
+Blip.ChangeScale(63@, 2)
+Char.FreezePositionAndDontLoadCollision(62@, True)
+Char.SetLoadCollisionFlag(62@, False)
+107@ = 1
+
+:AMBULAN_4763
+if 
+  37@ > 8
+goto_if_false @AMBULAN_4890
+65@ = Char.CreateRandom(121@, 134@, 147@)
+67@ = 1
+Char.SetDecisionMaker(65@, 235@)
+Char.SetBleeding(65@, True)
+Char.SetOnlyDamagedByPlayer(65@, True)
+188@ = Math.RandomFloatInRange(0.0, 359.9)
+Char.SetHeading(65@, 188@)
+66@ = Blip.AddForChar(65@)
+Blip.SetAsFriendly(66@, True)
+Blip.ChangeScale(66@, 2)
+Char.FreezePositionAndDontLoadCollision(65@, True)
+Char.SetLoadCollisionFlag(65@, False)
+108@ = 1
+
+:AMBULAN_4890
+if 
+  37@ > 9
+goto_if_false @AMBULAN_5017
+68@ = Char.CreateRandom(122@, 135@, 148@)
+70@ = 1
+Char.SetDecisionMaker(68@, 235@)
+Char.SetBleeding(68@, True)
+Char.SetOnlyDamagedByPlayer(68@, True)
+188@ = Math.RandomFloatInRange(0.0, 359.9)
+Char.SetHeading(68@, 188@)
+69@ = Blip.AddForChar(68@)
+Blip.SetAsFriendly(69@, True)
+Blip.ChangeScale(69@, 2)
+Char.FreezePositionAndDontLoadCollision(68@, True)
+Char.SetLoadCollisionFlag(68@, False)
+109@ = 1
+
+:AMBULAN_5017
+if 
+  37@ > 10
+goto_if_false @AMBULAN_5144
+71@ = Char.CreateRandom(123@, 136@, 149@)
+73@ = 1
+Char.SetDecisionMaker(71@, 235@)
+Char.SetBleeding(71@, True)
+Char.SetOnlyDamagedByPlayer(71@, True)
+188@ = Math.RandomFloatInRange(0.0, 359.9)
+Char.SetHeading(71@, 188@)
+72@ = Blip.AddForChar(71@)
+Blip.SetAsFriendly(72@, True)
+Blip.ChangeScale(72@, 2)
+Char.FreezePositionAndDontLoadCollision(71@, True)
+Char.SetLoadCollisionFlag(71@, False)
+110@ = 1
+
+:AMBULAN_5144
+if 
+  37@ > 11
+goto_if_false @AMBULAN_5271
+74@ = Char.CreateRandom(124@, 137@, 150@)
+76@ = 1
+Char.SetDecisionMaker(74@, 235@)
+Char.SetBleeding(74@, True)
+Char.SetOnlyDamagedByPlayer(74@, True)
+188@ = Math.RandomFloatInRange(0.0, 359.9)
+Char.SetHeading(74@, 188@)
+75@ = Blip.AddForChar(74@)
+Blip.SetAsFriendly(75@, True)
+Blip.ChangeScale(75@, 2)
+Char.FreezePositionAndDontLoadCollision(74@, True)
+Char.SetLoadCollisionFlag(74@, False)
+111@ = 1
+
+:AMBULAN_5271
+return 
+
+:AMBULAN_5273
+switch_start 239@ total_jumps 12 default_jump 1 @AMBULAN_7813 jumps 0 @AMBULAN_5401 1 @AMBULAN_5602 2 @AMBULAN_5803 3 @AMBULAN_6004 4 @AMBULAN_6205 5 @AMBULAN_6406 6 @AMBULAN_6607
+switch_continued 7 @AMBULAN_6808 8 @AMBULAN_7009 9 @AMBULAN_7210 10 @AMBULAN_7411 11 @AMBULAN_7612 -1 @AMBULAN_7827 -1 @AMBULAN_7827 -1 @AMBULAN_7827 -1 @AMBULAN_7827
+
+:AMBULAN_5401
+if 
+  37@ > 0
+goto_if_false @AMBULAN_5588
+if 
+  3 > 83@
+goto_if_false @AMBULAN_5588
+if 
+  not Char.IsDead(81@)
+goto_if_false @AMBULAN_5588
+if 
+  Char.LocateInCarChar3D($scplayer, 81@, 50.0, 50.0, 20.0, False)
+goto_if_false @AMBULAN_5549
+if 
+  100@ == 1
+goto_if_false @AMBULAN_5542
+Char.FreezePositionAndDontLoadCollision(81@, False)
+Char.SetLoadCollisionFlag(81@, True)
+Char.SetCoordinates(81@, 113@, 126@, 139@)
+100@ = 0
+
+:AMBULAN_5542
+goto @AMBULAN_5588
+
+:AMBULAN_5549
+if 
+  100@ == 0
+goto_if_false @AMBULAN_5588
+Char.FreezePositionAndDontLoadCollision(81@, True)
+Char.SetLoadCollisionFlag(81@, False)
+100@ = 1
+
+:AMBULAN_5588
+239@ += 1
+goto @AMBULAN_7827
+
+:AMBULAN_5602
+if 
+  37@ > 1
+goto_if_false @AMBULAN_5789
+if 
+  3 > 86@
+goto_if_false @AMBULAN_5789
+if 
+  not Char.IsDead(84@)
+goto_if_false @AMBULAN_5789
+if 
+  Char.LocateInCarChar3D($scplayer, 84@, 50.0, 50.0, 20.0, False)
+goto_if_false @AMBULAN_5750
+if 
+  101@ == 1
+goto_if_false @AMBULAN_5743
+Char.FreezePositionAndDontLoadCollision(84@, False)
+Char.SetLoadCollisionFlag(84@, True)
+Char.SetCoordinates(84@, 114@, 127@, 140@)
+101@ = 0
+
+:AMBULAN_5743
+goto @AMBULAN_5789
+
+:AMBULAN_5750
+if 
+  101@ == 0
+goto_if_false @AMBULAN_5789
+Char.FreezePositionAndDontLoadCollision(84@, True)
+Char.SetLoadCollisionFlag(84@, False)
+101@ = 1
+
+:AMBULAN_5789
+239@ += 1
+goto @AMBULAN_7827
+
+:AMBULAN_5803
+if 
+  37@ > 2
+goto_if_false @AMBULAN_5990
+if 
+  3 > 89@
+goto_if_false @AMBULAN_5990
+if 
+  not Char.IsDead(87@)
+goto_if_false @AMBULAN_5990
+if 
+  Char.LocateInCarChar3D($scplayer, 87@, 50.0, 50.0, 20.0, False)
+goto_if_false @AMBULAN_5951
+if 
+  102@ == 1
+goto_if_false @AMBULAN_5944
+Char.FreezePositionAndDontLoadCollision(87@, False)
+Char.SetLoadCollisionFlag(87@, True)
+Char.SetCoordinates(87@, 115@, 128@, 141@)
+102@ = 0
+
+:AMBULAN_5944
+goto @AMBULAN_5990
+
+:AMBULAN_5951
+if 
+  102@ == 0
+goto_if_false @AMBULAN_5990
+Char.FreezePositionAndDontLoadCollision(87@, True)
+Char.SetLoadCollisionFlag(87@, False)
+102@ = 1
+
+:AMBULAN_5990
+239@ += 1
+goto @AMBULAN_7827
+
+:AMBULAN_6004
+if 
+  37@ > 3
+goto_if_false @AMBULAN_6191
+if 
+  3 > 92@
+goto_if_false @AMBULAN_6191
+if 
+  not Char.IsDead(90@)
+goto_if_false @AMBULAN_6191
+if 
+  Char.LocateInCarChar3D($scplayer, 90@, 50.0, 50.0, 20.0, False)
+goto_if_false @AMBULAN_6152
+if 
+  103@ == 1
+goto_if_false @AMBULAN_6145
+Char.FreezePositionAndDontLoadCollision(90@, False)
+Char.SetLoadCollisionFlag(90@, True)
+Char.SetCoordinates(90@, 116@, 129@, 142@)
+103@ = 0
+
+:AMBULAN_6145
+goto @AMBULAN_6191
+
+:AMBULAN_6152
+if 
+  103@ == 0
+goto_if_false @AMBULAN_6191
+Char.FreezePositionAndDontLoadCollision(90@, True)
+Char.SetLoadCollisionFlag(90@, False)
+103@ = 1
+
+:AMBULAN_6191
+239@ += 1
+goto @AMBULAN_7827
+
+:AMBULAN_6205
+if 
+  37@ > 4
+goto_if_false @AMBULAN_6392
+if 
+  3 > 95@
+goto_if_false @AMBULAN_6392
+if 
+  not Char.IsDead(93@)
+goto_if_false @AMBULAN_6392
+if 
+  Char.LocateInCarChar3D($scplayer, 93@, 50.0, 50.0, 20.0, False)
+goto_if_false @AMBULAN_6353
+if 
+  104@ == 1
+goto_if_false @AMBULAN_6346
+Char.FreezePositionAndDontLoadCollision(93@, False)
+Char.SetLoadCollisionFlag(93@, True)
+Char.SetCoordinates(93@, 117@, 130@, 143@)
+104@ = 0
+
+:AMBULAN_6346
+goto @AMBULAN_6392
+
+:AMBULAN_6353
+if 
+  104@ == 0
+goto_if_false @AMBULAN_6392
+Char.FreezePositionAndDontLoadCollision(93@, True)
+Char.SetLoadCollisionFlag(93@, False)
+104@ = 1
+
+:AMBULAN_6392
+239@ += 1
+goto @AMBULAN_7827
+
+:AMBULAN_6406
+if 
+  37@ > 5
+goto_if_false @AMBULAN_6593
+if 
+  3 > 58@
+goto_if_false @AMBULAN_6593
+if 
+  not Char.IsDead(56@)
+goto_if_false @AMBULAN_6593
+if 
+  Char.LocateInCarChar3D($scplayer, 56@, 50.0, 50.0, 20.0, False)
+goto_if_false @AMBULAN_6554
+if 
+  105@ == 1
+goto_if_false @AMBULAN_6547
+Char.FreezePositionAndDontLoadCollision(56@, False)
+Char.SetLoadCollisionFlag(56@, True)
+Char.SetCoordinates(56@, 118@, 131@, 144@)
+105@ = 0
+
+:AMBULAN_6547
+goto @AMBULAN_6593
+
+:AMBULAN_6554
+if 
+  105@ == 0
+goto_if_false @AMBULAN_6593
+Char.FreezePositionAndDontLoadCollision(56@, True)
+Char.SetLoadCollisionFlag(56@, False)
+105@ = 1
+
+:AMBULAN_6593
+239@ += 1
+goto @AMBULAN_7827
+
+:AMBULAN_6607
+if 
+  37@ > 6
+goto_if_false @AMBULAN_6794
+if 
+  3 > 61@
+goto_if_false @AMBULAN_6794
+if 
+  not Char.IsDead(59@)
+goto_if_false @AMBULAN_6794
+if 
+  Char.LocateInCarChar3D($scplayer, 59@, 50.0, 50.0, 20.0, False)
+goto_if_false @AMBULAN_6755
+if 
+  106@ == 1
+goto_if_false @AMBULAN_6748
+Char.FreezePositionAndDontLoadCollision(59@, False)
+Char.SetLoadCollisionFlag(59@, True)
+Char.SetCoordinates(59@, 119@, 132@, 145@)
+106@ = 0
+
+:AMBULAN_6748
+goto @AMBULAN_6794
+
+:AMBULAN_6755
+if 
+  106@ == 0
+goto_if_false @AMBULAN_6794
+Char.FreezePositionAndDontLoadCollision(59@, True)
+Char.SetLoadCollisionFlag(59@, False)
+106@ = 1
+
+:AMBULAN_6794
+239@ += 1
+goto @AMBULAN_7827
+
+:AMBULAN_6808
+if 
+  37@ > 7
+goto_if_false @AMBULAN_6995
+if 
+  3 > 64@
+goto_if_false @AMBULAN_6995
+if 
+  not Char.IsDead(62@)
+goto_if_false @AMBULAN_6995
+if 
+  Char.LocateInCarChar3D($scplayer, 62@, 50.0, 50.0, 20.0, False)
+goto_if_false @AMBULAN_6956
+if 
+  107@ == 1
+goto_if_false @AMBULAN_6949
+Char.FreezePositionAndDontLoadCollision(62@, False)
+Char.SetLoadCollisionFlag(62@, True)
+Char.SetCoordinates(62@, 120@, 133@, 146@)
+107@ = 0
+
+:AMBULAN_6949
+goto @AMBULAN_6995
+
+:AMBULAN_6956
+if 
+  107@ == 0
+goto_if_false @AMBULAN_6995
+Char.FreezePositionAndDontLoadCollision(62@, True)
+Char.SetLoadCollisionFlag(62@, False)
+107@ = 1
+
+:AMBULAN_6995
+239@ += 1
+goto @AMBULAN_7827
+
+:AMBULAN_7009
+if 
+  37@ > 8
+goto_if_false @AMBULAN_7196
+if 
+  3 > 67@
+goto_if_false @AMBULAN_7196
+if 
+  not Char.IsDead(65@)
+goto_if_false @AMBULAN_7196
+if 
+  Char.LocateInCarChar3D($scplayer, 65@, 50.0, 50.0, 20.0, False)
+goto_if_false @AMBULAN_7157
+if 
+  108@ == 1
+goto_if_false @AMBULAN_7150
+Char.FreezePositionAndDontLoadCollision(65@, False)
+Char.SetLoadCollisionFlag(65@, True)
+Char.SetCoordinates(65@, 121@, 134@, 147@)
+108@ = 0
+
+:AMBULAN_7150
+goto @AMBULAN_7196
+
+:AMBULAN_7157
+if 
+  108@ == 0
+goto_if_false @AMBULAN_7196
+Char.FreezePositionAndDontLoadCollision(65@, True)
+Char.SetLoadCollisionFlag(65@, False)
+108@ = 1
+
+:AMBULAN_7196
+239@ += 1
+goto @AMBULAN_7827
+
+:AMBULAN_7210
+if 
+  37@ > 9
+goto_if_false @AMBULAN_7397
+if 
+  3 > 70@
+goto_if_false @AMBULAN_7397
+if 
+  not Char.IsDead(68@)
+goto_if_false @AMBULAN_7397
+if 
+  Char.LocateInCarChar3D($scplayer, 68@, 50.0, 50.0, 20.0, False)
+goto_if_false @AMBULAN_7358
+if 
+  109@ == 1
+goto_if_false @AMBULAN_7351
+Char.FreezePositionAndDontLoadCollision(68@, False)
+Char.SetLoadCollisionFlag(68@, True)
+Char.SetCoordinates(68@, 122@, 135@, 148@)
+109@ = 0
+
+:AMBULAN_7351
+goto @AMBULAN_7397
+
+:AMBULAN_7358
+if 
+  109@ == 0
+goto_if_false @AMBULAN_7397
+Char.FreezePositionAndDontLoadCollision(68@, True)
+Char.SetLoadCollisionFlag(68@, False)
+109@ = 1
+
+:AMBULAN_7397
+239@ += 1
+goto @AMBULAN_7827
+
+:AMBULAN_7411
+if 
+  37@ > 10
+goto_if_false @AMBULAN_7598
+if 
+  3 > 73@
+goto_if_false @AMBULAN_7598
+if 
+  not Char.IsDead(71@)
+goto_if_false @AMBULAN_7598
+if 
+  Char.LocateInCarChar3D($scplayer, 71@, 50.0, 50.0, 20.0, False)
+goto_if_false @AMBULAN_7559
+if 
+  110@ == 1
+goto_if_false @AMBULAN_7552
+Char.FreezePositionAndDontLoadCollision(71@, False)
+Char.SetLoadCollisionFlag(71@, True)
+Char.SetCoordinates(71@, 123@, 136@, 149@)
+110@ = 0
+
+:AMBULAN_7552
+goto @AMBULAN_7598
+
+:AMBULAN_7559
+if 
+  110@ == 0
+goto_if_false @AMBULAN_7598
+Char.FreezePositionAndDontLoadCollision(71@, True)
+Char.SetLoadCollisionFlag(71@, False)
+110@ = 1
+
+:AMBULAN_7598
+239@ += 1
+goto @AMBULAN_7827
+
+:AMBULAN_7612
+if 
+  37@ > 11
+goto_if_false @AMBULAN_7799
+if 
+  3 > 76@
+goto_if_false @AMBULAN_7799
+if 
+  not Char.IsDead(74@)
+goto_if_false @AMBULAN_7799
+if 
+  Char.LocateInCarChar3D($scplayer, 74@, 50.0, 50.0, 20.0, False)
+goto_if_false @AMBULAN_7760
+if 
+  111@ == 1
+goto_if_false @AMBULAN_7753
+Char.FreezePositionAndDontLoadCollision(74@, False)
+Char.SetLoadCollisionFlag(74@, True)
+Char.SetCoordinates(74@, 124@, 137@, 150@)
+111@ = 0
+
+:AMBULAN_7753
+goto @AMBULAN_7799
+
+:AMBULAN_7760
+if 
+  111@ == 0
+goto_if_false @AMBULAN_7799
+Char.FreezePositionAndDontLoadCollision(74@, True)
+Char.SetLoadCollisionFlag(74@, False)
+111@ = 1
+
+:AMBULAN_7799
+239@ += 1
+goto @AMBULAN_7827
+
+:AMBULAN_7813
+239@ = 0
+goto @AMBULAN_7827
+
+:AMBULAN_7827
+return 
+
+:AMBULAN_7829
+wait 0
+170@, 171@, 172@ = Char.GetCoordinates($scplayer)
+set_lvar_float_to_lvar_float 190@ = 167@
+set_lvar_float_to_lvar_float 193@ = 167@
+set_lvar_float_to_lvar_float 191@ = 168@
+set_lvar_float_to_lvar_float 194@ = 168@
+set_lvar_float_to_lvar_float 192@ = 169@
+set_lvar_float_to_lvar_float 195@ = 169@
+96@ = World.GetCityFromCoords(170@, 171@, 172@)
+cset_lvar_float_to_var_int 237@ = integer $db_ambulance_level
+237@ *= 60.0
+add_float_lvar_to_float_lvar 237@ += 238@
+if 
+  96@ == 0
+goto_if_false @AMBULAN_7970
+238@ += 15.0
+goto @AMBULAN_7980
+
+:AMBULAN_7970
+238@ += 1.0
+
+:AMBULAN_7980
+if 
+  100.0 > 237@
+goto_if_false @AMBULAN_8011
+237@ = 100.0
+
+:AMBULAN_8011
+if 
+  238@ > 10000.0
+goto_if_false @AMBULAN_8077
+if 
+  $db_ambulance_level == 1
+goto_if_false @AMBULAN_8077
+Text.ClearThisPrint('ALEVEL')
+Text.PrintNow('A_CANC', 3000, 1)
+
+:AMBULAN_8077
+sub_float_lvar_from_float_lvar 190@ -= 237@
+add_float_lvar_to_float_lvar 193@ += 237@
+sub_float_lvar_from_float_lvar 191@ -= 237@
+add_float_lvar_to_float_lvar 194@ += 237@
+if 
+  8 > $db_ambulance_level
+goto_if_false @AMBULAN_8242
+if 
+  is_float_lvar_greater_than_float_lvar 197@ > 190@
+goto_if_false @AMBULAN_8154
+set_lvar_float_to_lvar_float 190@ = 197@
+
+:AMBULAN_8154
+if 
+  is_float_lvar_greater_than_float_lvar 193@ > 198@
+goto_if_false @AMBULAN_8181
+set_lvar_float_to_lvar_float 193@ = 198@
+
+:AMBULAN_8181
+if 
+  is_float_lvar_greater_than_float_lvar 199@ > 191@
+goto_if_false @AMBULAN_8208
+set_lvar_float_to_lvar_float 191@ = 199@
+
+:AMBULAN_8208
+if 
+  is_float_lvar_greater_than_float_lvar 166@ > 200@
+goto_if_false @AMBULAN_8235
+set_lvar_float_to_lvar_float 194@ = 200@
+
+:AMBULAN_8235
+goto @AMBULAN_8274
+
+:AMBULAN_8242
+set_lvar_float_to_lvar_float 190@ = 197@
+set_lvar_float_to_lvar_float 193@ = 198@
+set_lvar_float_to_lvar_float 191@ = 199@
+set_lvar_float_to_lvar_float 194@ = 200@
+
+:AMBULAN_8274
+165@ = Math.RandomFloatInRange(190@, 193@)
+166@ = Math.RandomFloatInRange(191@, 194@)
+$controlmode = Pad.GetControllerMode()
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @AMBULAN_8325
+53@ = 1
+
+:AMBULAN_8325
+if 
+  53@ == 1
+goto_if_false @AMBULAN_8426
+if 
+  $controlmode <> 3
+goto_if_false @AMBULAN_8421
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @AMBULAN_8414
+Text.ClearThisPrint('ALEVEL')
+Text.PrintNow('A_CANC', 3000, 1)
+79@ = 1
+return 
+
+:AMBULAN_8414
+goto @AMBULAN_8426
+
+:AMBULAN_8421
+$controlmode = Pad.GetControllerMode()
+
+:AMBULAN_8426
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @AMBULAN_8497
+if 
+  not Char.IsInModel($scplayer, 416)
+goto_if_false @AMBULAN_8497
+Text.ClearThisPrint('ALEVEL')
+Text.PrintNow('A_CANC', 3000, 1)
+79@ = 1
+return 
+
+:AMBULAN_8497
+176@ = Path.GetClosestCharNode(177@, 178@, 165@, 166@, 169@)
+if 
+  is_float_lvar_greater_than_float_lvar 197@ > 176@
+goto_if_false @AMBULAN_8550
+goto @AMBULAN_7829
+goto @AMBULAN_8642
+
+:AMBULAN_8550
+if 
+  is_float_lvar_greater_than_float_lvar 176@ > 198@
+goto_if_false @AMBULAN_8583
+goto @AMBULAN_7829
+goto @AMBULAN_8642
+
+:AMBULAN_8583
+if 
+  is_float_lvar_greater_than_float_lvar 199@ > 177@
+goto_if_false @AMBULAN_8616
+goto @AMBULAN_7829
+goto @AMBULAN_8642
+
+:AMBULAN_8616
+if 
+  is_float_lvar_greater_than_float_lvar 177@ > 200@
+goto_if_false @AMBULAN_8642
+goto @AMBULAN_7829
+
+:AMBULAN_8642
+if 
+  6.0 > 178@
+goto_if_false @AMBULAN_8670
+goto @AMBULAN_7829
+
+:AMBULAN_8670
+185@ = Math.GetDistanceBetweenCoords3D(170@, 171@, 172@, 176@, 177@, 178@)
+if 
+  50.0 > 185@
+goto_if_false @AMBULAN_8721
+goto @AMBULAN_7829
+
+:AMBULAN_8721
+186@ = Math.GetDistanceBetweenCoords3D(167@, 168@, 169@, 176@, 177@, 178@)
+if 
+  30.0 > 186@
+goto_if_false @AMBULAN_8772
+goto @AMBULAN_7829
+
+:AMBULAN_8772
+$Return_cities_passed = Stat.GetInt(181)
+if 
+  2 > $Return_cities_passed
+goto_if_false @AMBULAN_9234
+if 
+  $Return_cities_passed == 0
+goto_if_false @AMBULAN_9048
+if and
+  78.4427 > 176@
+  -699.519 > 177@
+goto_if_false @AMBULAN_8858
+wait 0
+goto @AMBULAN_7829
+
+:AMBULAN_8858
+if and
+  -252.6557 > 176@
+  -285.766 > 177@
+goto_if_false @AMBULAN_8900
+wait 0
+goto @AMBULAN_7829
+
+:AMBULAN_8900
+if 
+  -948.3447 > 176@
+goto_if_false @AMBULAN_8932
+wait 0
+goto @AMBULAN_7829
+
+:AMBULAN_8932
+if and
+  176@ > 1473.448
+  177@ > 403.7353
+goto_if_false @AMBULAN_8974
+wait 0
+goto @AMBULAN_7829
+
+:AMBULAN_8974
+if 
+  177@ > 578.6325
+goto_if_false @AMBULAN_9006
+wait 0
+goto @AMBULAN_7829
+
+:AMBULAN_9006
+if and
+  837.5551 > 176@
+  177@ > 347.4097
+goto_if_false @AMBULAN_9048
+wait 0
+goto @AMBULAN_7829
+
+:AMBULAN_9048
+if 
+  $Return_cities_passed == 1
+goto_if_false @AMBULAN_9234
+if and
+  176@ > 1473.448
+  177@ > 403.7353
+goto_if_false @AMBULAN_9108
+wait 0
+goto @AMBULAN_7829
+
+:AMBULAN_9108
+if and
+  177@ > 578.6325
+  176@ > -1528.498
+goto_if_false @AMBULAN_9150
+wait 0
+goto @AMBULAN_7829
+
+:AMBULAN_9150
+if and
+  837.5551 > 176@
+  176@ > -1528.498
+  177@ > 347.4097
+goto_if_false @AMBULAN_9202
+wait 0
+goto @AMBULAN_7829
+
+:AMBULAN_9202
+if 
+  177@ > 1380.0
+goto_if_false @AMBULAN_9234
+wait 0
+goto @AMBULAN_7829
+
+:AMBULAN_9234
+if 
+  37@ > 0
+goto_if_false @AMBULAN_9303
+212@ = Math.GetDistanceBetweenCoords3D(113@, 126@, 139@, 176@, 177@, 178@)
+if 
+  25.0 > 212@
+goto_if_false @AMBULAN_9303
+goto @AMBULAN_7829
+
+:AMBULAN_9303
+if 
+  37@ > 1
+goto_if_false @AMBULAN_9372
+212@ = Math.GetDistanceBetweenCoords3D(113@, 126@, 139@, 176@, 177@, 178@)
+if 
+  25.0 > 212@
+goto_if_false @AMBULAN_9372
+goto @AMBULAN_7829
+
+:AMBULAN_9372
+if 
+  37@ > 2
+goto_if_false @AMBULAN_9441
+212@ = Math.GetDistanceBetweenCoords3D(114@, 127@, 140@, 176@, 177@, 178@)
+if 
+  25.0 > 212@
+goto_if_false @AMBULAN_9441
+goto @AMBULAN_7829
+
+:AMBULAN_9441
+if 
+  37@ > 3
+goto_if_false @AMBULAN_9510
+212@ = Math.GetDistanceBetweenCoords3D(115@, 128@, 141@, 176@, 177@, 178@)
+if 
+  25.0 > 212@
+goto_if_false @AMBULAN_9510
+goto @AMBULAN_7829
+
+:AMBULAN_9510
+if 
+  37@ > 4
+goto_if_false @AMBULAN_9579
+212@ = Math.GetDistanceBetweenCoords3D(116@, 129@, 142@, 176@, 177@, 178@)
+if 
+  25.0 > 212@
+goto_if_false @AMBULAN_9579
+goto @AMBULAN_7829
+
+:AMBULAN_9579
+if 
+  37@ > 5
+goto_if_false @AMBULAN_9648
+212@ = Math.GetDistanceBetweenCoords3D(117@, 130@, 143@, 176@, 177@, 178@)
+if 
+  25.0 > 212@
+goto_if_false @AMBULAN_9648
+goto @AMBULAN_7829
+
+:AMBULAN_9648
+if 
+  37@ > 6
+goto_if_false @AMBULAN_9717
+212@ = Math.GetDistanceBetweenCoords3D(118@, 131@, 144@, 176@, 177@, 178@)
+if 
+  25.0 > 212@
+goto_if_false @AMBULAN_9717
+goto @AMBULAN_7829
+
+:AMBULAN_9717
+if 
+  37@ > 7
+goto_if_false @AMBULAN_9786
+212@ = Math.GetDistanceBetweenCoords3D(119@, 132@, 145@, 176@, 177@, 178@)
+if 
+  25.0 > 212@
+goto_if_false @AMBULAN_9786
+goto @AMBULAN_7829
+
+:AMBULAN_9786
+if 
+  37@ > 8
+goto_if_false @AMBULAN_9855
+212@ = Math.GetDistanceBetweenCoords3D(120@, 133@, 146@, 176@, 177@, 178@)
+if 
+  25.0 > 212@
+goto_if_false @AMBULAN_9855
+goto @AMBULAN_7829
+
+:AMBULAN_9855
+if 
+  37@ > 9
+goto_if_false @AMBULAN_9924
+212@ = Math.GetDistanceBetweenCoords3D(121@, 134@, 147@, 176@, 177@, 178@)
+if 
+  25.0 > 212@
+goto_if_false @AMBULAN_9924
+goto @AMBULAN_7829
+
+:AMBULAN_9924
+if 
+  37@ > 10
+goto_if_false @AMBULAN_9993
+212@ = Math.GetDistanceBetweenCoords3D(122@, 135@, 148@, 176@, 177@, 178@)
+if 
+  25.0 > 212@
+goto_if_false @AMBULAN_9993
+goto @AMBULAN_7829
+
+:AMBULAN_9993
+if 
+  37@ > 11
+goto_if_false @AMBULAN_10062
+212@ = Math.GetDistanceBetweenCoords3D(123@, 136@, 149@, 176@, 177@, 178@)
+if 
+  25.0 > 212@
+goto_if_false @AMBULAN_10062
+goto @AMBULAN_7829
+
+:AMBULAN_10062
+if 
+  World.IsPointObscuredByAMissionEntity(176@, 177@, 177@, 25.0, 25.0, 10.0)
+goto_if_false @AMBULAN_10106
+goto @AMBULAN_7829
+
+:AMBULAN_10106
+if 
+  1186.0 > 176@
+goto_if_false @AMBULAN_10197
+if 
+  176@ > 1047.0
+goto_if_false @AMBULAN_10197
+if 
+  -1406.0 > 177@
+goto_if_false @AMBULAN_10197
+if 
+  177@ > -1567.0
+goto_if_false @AMBULAN_10197
+goto @AMBULAN_7829
+
+:AMBULAN_10197
+if 
+  1444.0 > 176@
+goto_if_false @AMBULAN_10288
+if 
+  176@ > 1339.0
+goto_if_false @AMBULAN_10288
+if 
+  -1450.0 > 177@
+goto_if_false @AMBULAN_10288
+if 
+  177@ > -1504.0
+goto_if_false @AMBULAN_10288
+goto @AMBULAN_7829
+
+:AMBULAN_10288
+if 
+  2041.979 > 176@
+goto_if_false @AMBULAN_10379
+if 
+  176@ > 1999.387
+goto_if_false @AMBULAN_10379
+if 
+  -1408.708 > 177@
+goto_if_false @AMBULAN_10379
+if 
+  177@ > -1445.462
+goto_if_false @AMBULAN_10379
+goto @AMBULAN_7829
+
+:AMBULAN_10379
+if 
+  1202.0 > 176@
+goto_if_false @AMBULAN_10470
+if 
+  176@ > 1162.0
+goto_if_false @AMBULAN_10470
+if 
+  -1238.0 > 177@
+goto_if_false @AMBULAN_10470
+if 
+  177@ > -1250.0
+goto_if_false @AMBULAN_10470
+goto @AMBULAN_7829
+
+:AMBULAN_10470
+if 
+  1176.0 > 176@
+goto_if_false @AMBULAN_10561
+if 
+  176@ > 1158.0
+goto_if_false @AMBULAN_10561
+if 
+  1364.0 > 177@
+goto_if_false @AMBULAN_10561
+if 
+  177@ > 1345.0
+goto_if_false @AMBULAN_10561
+goto @AMBULAN_7829
+
+:AMBULAN_10561
+if 
+  -2307.0 > 176@
+goto_if_false @AMBULAN_10652
+if 
+  176@ > -2333.0
+goto_if_false @AMBULAN_10652
+if 
+  1100.0 > 177@
+goto_if_false @AMBULAN_10652
+if 
+  177@ > 1036.0
+goto_if_false @AMBULAN_10652
+goto @AMBULAN_7829
+
+:AMBULAN_10652
+if 
+  2009.0 > 176@
+goto_if_false @AMBULAN_10743
+if 
+  176@ > 1989.0
+goto_if_false @AMBULAN_10743
+if 
+  1571.0 > 177@
+goto_if_false @AMBULAN_10743
+if 
+  177@ > 1513.0
+goto_if_false @AMBULAN_10743
+goto @AMBULAN_7829
+
+:AMBULAN_10743
+if 
+  2632.818 > 176@
+goto_if_false @AMBULAN_10834
+if 
+  176@ > 2546.463
+goto_if_false @AMBULAN_10834
+if 
+  -1129.673 > 177@
+goto_if_false @AMBULAN_10834
+if 
+  177@ > -1144.012
+goto_if_false @AMBULAN_10834
+goto @AMBULAN_7829
+
+:AMBULAN_10834
+if 
+  -222.5044 > 176@
+goto_if_false @AMBULAN_10925
+if 
+  176@ > -229.096
+goto_if_false @AMBULAN_10925
+if 
+  1412.086 > 177@
+goto_if_false @AMBULAN_10925
+if 
+  177@ > 1393.817
+goto_if_false @AMBULAN_10925
+goto @AMBULAN_7829
+
+:AMBULAN_10925
+238@ = 0.0
+return 
+
+:AMBULAN_10937
+if 
+  2 > 37@
+goto_if_false @AMBULAN_11046
+if 
+  is_float_lvar_greater_than_float_lvar 185@ > 186@
+goto_if_false @AMBULAN_10997
+set_lvar_float_to_lvar_float 187@ = 185@
+div_float_lvar_by_float_lvar 187@ /= 189@
+goto @AMBULAN_11013
+
+:AMBULAN_10997
+set_lvar_float_to_lvar_float 187@ = 186@
+div_float_lvar_by_float_lvar 187@ /= 189@
+
+:AMBULAN_11013
+187@ *= 1000.0
+cset_lvar_int_to_lvar_float 35@ = float 187@
+add_int_lvar_to_int_var $ped_time_limit += 35@
+goto @AMBULAN_11088
+
+:AMBULAN_11046
+set_lvar_float_to_lvar_float 187@ = 186@
+div_float_lvar_by_float_lvar 187@ /= 189@
+187@ *= 1000.0
+cset_lvar_int_to_lvar_float 35@ = float 187@
+add_int_lvar_to_int_var $ped_time_limit += 35@
+
+:AMBULAN_11088
+return 
+
+:AMBULAN_11090
+wait 0
+if 
+  $ped_time_limit == 0
+goto_if_false @AMBULAN_11142
+Text.PrintNow('A_FAIL2', 3000, 1)
+79@ = 1
+goto @AMBULAN_13159
+
+:AMBULAN_11142
+$controlmode = Pad.GetControllerMode()
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @AMBULAN_11171
+53@ = 1
+
+:AMBULAN_11171
+if 
+  53@ == 1
+goto_if_false @AMBULAN_11229
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @AMBULAN_11229
+Text.PrintNow('A_CANC', 3000, 1)
+goto @AMBULAN_13159
+
+:AMBULAN_11229
+if 
+  not Char.IsInModel($scplayer, 416)
+goto_if_false @AMBULAN_11278
+Text.PrintNow('A_CANC', 3000, 1)
+goto @AMBULAN_13159
+goto @AMBULAN_11334
+
+:AMBULAN_11278
+34@ = Char.StoreCarIsInNoSave($scplayer)
+if 
+  not Car.IsDead(34@)
+goto_if_false @AMBULAN_11334
+43@ = Car.GetNumberOfPassengers(34@)
+42@ = Car.GetMaximumNumberOfPassengers(34@)
+set_var_int_to_lvar_int $amb_free_seats = 42@
+sub_int_lvar_from_int_var $amb_free_seats -= 43@
+
+:AMBULAN_11334
+if and
+  37@ > 6
+  45@ == 2
+  51@ == 0
+goto_if_false @AMBULAN_11380
+45@ = 1
+51@ += 1
+
+:AMBULAN_11380
+if and
+  37@ > 9
+  45@ == 2
+  51@ == 1
+goto_if_false @AMBULAN_11426
+45@ = 1
+51@ += 1
+
+:AMBULAN_11426
+if and
+  37@ > 12
+  45@ == 2
+  51@ == 2
+goto_if_false @AMBULAN_11472
+45@ = 1
+51@ += 1
+
+:AMBULAN_11472
+gosub @AMBULAN_5273
+if 
+  52@ == 1
+goto_if_false @AMBULAN_11528
+  Char.LocateStoppedInCar3D($scplayer, 167@, 168@, 169@, 6.0, 6.0, 2.0, True)
+
+:AMBULAN_11528
+switch_start 240@ total_jumps 12 default_jump 1 @AMBULAN_12808 jumps 0 @AMBULAN_11656 1 @AMBULAN_11752 2 @AMBULAN_11848 3 @AMBULAN_11944 4 @AMBULAN_12040 5 @AMBULAN_12136 6 @AMBULAN_12232
+switch_continued 7 @AMBULAN_12328 8 @AMBULAN_12424 9 @AMBULAN_12520 10 @AMBULAN_12616 11 @AMBULAN_12712 -1 @AMBULAN_12822 -1 @AMBULAN_12822 -1 @AMBULAN_12822 -1 @AMBULAN_12822
+
+:AMBULAN_11656
+if 
+  83@ > 0
+goto_if_false @AMBULAN_11738
+set_lvar_int_to_lvar_int 77@ = 81@
+set_lvar_int_to_lvar_int 80@ = 83@
+set_lvar_int_to_lvar_int 78@ = 82@
+gosub @AMBULAN_13993
+if 
+  79@ == 1
+goto_if_false @AMBULAN_11730
+goto @AMBULAN_13159
+
+:AMBULAN_11730
+set_lvar_int_to_lvar_int 83@ = 80@
+
+:AMBULAN_11738
+240@ += 1
+goto @AMBULAN_12822
+
+:AMBULAN_11752
+if 
+  86@ > 0
+goto_if_false @AMBULAN_11834
+set_lvar_int_to_lvar_int 77@ = 84@
+set_lvar_int_to_lvar_int 80@ = 86@
+set_lvar_int_to_lvar_int 78@ = 85@
+gosub @AMBULAN_13993
+if 
+  79@ == 1
+goto_if_false @AMBULAN_11826
+goto @AMBULAN_13159
+
+:AMBULAN_11826
+set_lvar_int_to_lvar_int 86@ = 80@
+
+:AMBULAN_11834
+240@ += 1
+goto @AMBULAN_12822
+
+:AMBULAN_11848
+if 
+  89@ > 0
+goto_if_false @AMBULAN_11930
+set_lvar_int_to_lvar_int 77@ = 87@
+set_lvar_int_to_lvar_int 80@ = 89@
+set_lvar_int_to_lvar_int 78@ = 88@
+gosub @AMBULAN_13993
+if 
+  79@ == 1
+goto_if_false @AMBULAN_11922
+goto @AMBULAN_13159
+
+:AMBULAN_11922
+set_lvar_int_to_lvar_int 89@ = 80@
+
+:AMBULAN_11930
+240@ += 1
+goto @AMBULAN_12822
+
+:AMBULAN_11944
+if 
+  92@ > 0
+goto_if_false @AMBULAN_12026
+set_lvar_int_to_lvar_int 77@ = 90@
+set_lvar_int_to_lvar_int 80@ = 92@
+set_lvar_int_to_lvar_int 78@ = 91@
+gosub @AMBULAN_13993
+if 
+  79@ == 1
+goto_if_false @AMBULAN_12018
+goto @AMBULAN_13159
+
+:AMBULAN_12018
+set_lvar_int_to_lvar_int 92@ = 80@
+
+:AMBULAN_12026
+240@ += 1
+goto @AMBULAN_12822
+
+:AMBULAN_12040
+if 
+  95@ > 0
+goto_if_false @AMBULAN_12122
+set_lvar_int_to_lvar_int 77@ = 93@
+set_lvar_int_to_lvar_int 80@ = 95@
+set_lvar_int_to_lvar_int 78@ = 94@
+gosub @AMBULAN_13993
+if 
+  79@ == 1
+goto_if_false @AMBULAN_12114
+goto @AMBULAN_13159
+
+:AMBULAN_12114
+set_lvar_int_to_lvar_int 95@ = 80@
+
+:AMBULAN_12122
+240@ += 1
+goto @AMBULAN_12822
+
+:AMBULAN_12136
+if 
+  58@ > 0
+goto_if_false @AMBULAN_12218
+set_lvar_int_to_lvar_int 77@ = 56@
+set_lvar_int_to_lvar_int 80@ = 58@
+set_lvar_int_to_lvar_int 78@ = 57@
+gosub @AMBULAN_13993
+if 
+  79@ == 1
+goto_if_false @AMBULAN_12210
+goto @AMBULAN_13159
+
+:AMBULAN_12210
+set_lvar_int_to_lvar_int 58@ = 80@
+
+:AMBULAN_12218
+240@ += 1
+goto @AMBULAN_12822
+
+:AMBULAN_12232
+if 
+  61@ > 0
+goto_if_false @AMBULAN_12314
+set_lvar_int_to_lvar_int 77@ = 59@
+set_lvar_int_to_lvar_int 80@ = 61@
+set_lvar_int_to_lvar_int 78@ = 60@
+gosub @AMBULAN_13993
+if 
+  79@ == 1
+goto_if_false @AMBULAN_12306
+goto @AMBULAN_13159
+
+:AMBULAN_12306
+set_lvar_int_to_lvar_int 61@ = 80@
+
+:AMBULAN_12314
+240@ += 1
+goto @AMBULAN_12822
+
+:AMBULAN_12328
+if 
+  64@ > 0
+goto_if_false @AMBULAN_12410
+set_lvar_int_to_lvar_int 77@ = 62@
+set_lvar_int_to_lvar_int 80@ = 64@
+set_lvar_int_to_lvar_int 78@ = 63@
+gosub @AMBULAN_13993
+if 
+  79@ == 1
+goto_if_false @AMBULAN_12402
+goto @AMBULAN_13159
+
+:AMBULAN_12402
+set_lvar_int_to_lvar_int 64@ = 80@
+
+:AMBULAN_12410
+240@ += 1
+goto @AMBULAN_12822
+
+:AMBULAN_12424
+if 
+  67@ > 0
+goto_if_false @AMBULAN_12506
+set_lvar_int_to_lvar_int 77@ = 65@
+set_lvar_int_to_lvar_int 80@ = 67@
+set_lvar_int_to_lvar_int 78@ = 66@
+gosub @AMBULAN_13993
+if 
+  79@ == 1
+goto_if_false @AMBULAN_12498
+goto @AMBULAN_13159
+
+:AMBULAN_12498
+set_lvar_int_to_lvar_int 67@ = 80@
+
+:AMBULAN_12506
+240@ += 1
+goto @AMBULAN_12822
+
+:AMBULAN_12520
+if 
+  70@ > 0
+goto_if_false @AMBULAN_12602
+set_lvar_int_to_lvar_int 77@ = 68@
+set_lvar_int_to_lvar_int 80@ = 70@
+set_lvar_int_to_lvar_int 78@ = 69@
+gosub @AMBULAN_13993
+if 
+  79@ == 1
+goto_if_false @AMBULAN_12594
+goto @AMBULAN_13159
+
+:AMBULAN_12594
+set_lvar_int_to_lvar_int 70@ = 80@
+
+:AMBULAN_12602
+240@ += 1
+goto @AMBULAN_12822
+
+:AMBULAN_12616
+if 
+  73@ > 0
+goto_if_false @AMBULAN_12698
+set_lvar_int_to_lvar_int 77@ = 71@
+set_lvar_int_to_lvar_int 80@ = 73@
+set_lvar_int_to_lvar_int 78@ = 72@
+gosub @AMBULAN_13993
+if 
+  79@ == 1
+goto_if_false @AMBULAN_12690
+goto @AMBULAN_13159
+
+:AMBULAN_12690
+set_lvar_int_to_lvar_int 73@ = 80@
+
+:AMBULAN_12698
+240@ += 1
+goto @AMBULAN_12822
+
+:AMBULAN_12712
+if 
+  76@ > 0
+goto_if_false @AMBULAN_12794
+set_lvar_int_to_lvar_int 77@ = 74@
+set_lvar_int_to_lvar_int 80@ = 76@
+set_lvar_int_to_lvar_int 78@ = 75@
+gosub @AMBULAN_13993
+if 
+  79@ == 1
+goto_if_false @AMBULAN_12786
+goto @AMBULAN_13159
+
+:AMBULAN_12786
+set_lvar_int_to_lvar_int 76@ = 80@
+
+:AMBULAN_12794
+240@ += 1
+goto @AMBULAN_12822
+
+:AMBULAN_12808
+240@ = 0
+goto @AMBULAN_12822
+
+:AMBULAN_12822
+if 
+  is_int_lvar_equal_to_int_lvar 46@ == 37@
+goto_if_false @AMBULAN_13152
+set_lvar_int_to_var_int 44@ = $db_ambulance_level
+mult_int_lvar_by_int_var 44@ *= $db_ambulance_level
+44@ *= 50
+Hud.ForceBigMessageAndCounter(True)
+Text.PrintWithNumberBig('REWARD', 44@, 6000, TextStyle.WhiteMiddleSmaller)
+add_int_lvar_to_int_var $total_saved_peds += 46@
+add_int_lvar_to_int_lvar 55@ += 46@
+37@ += 1
+46@ = 0
+36@ = 0
+Player.AddScore($player1, 44@)
+52@ = 0
+Blip.Remove(47@)
+Blip.Remove(82@)
+Blip.Remove(85@)
+Blip.Remove(88@)
+Blip.Remove(91@)
+Blip.Remove(94@)
+Blip.Remove(57@)
+Blip.Remove(60@)
+Blip.Remove(63@)
+Blip.Remove(66@)
+Blip.Remove(69@)
+Blip.Remove(72@)
+Blip.Remove(75@)
+Stat.RegisterInt(StatId.AmbulanceLevel, $db_ambulance_level)
+$db_ambulance_level += 1
+if 
+  $db_ambulance_level == 13
+goto_if_false @AMBULAN_13145
+Hud.ForceBigMessageAndCounter(True)
+Text.PrintWithNumberBig('A_COMP1', 5000, 5000, TextStyle.MiddleSmallerHigher)
+Player.AddScore($player1, 5000)
+Audio.PlayMissionPassedTune(2)
+if 
+  $done_ambulance_progress == 0
+goto_if_false @AMBULAN_13143
+Stat.PlayerMadeProgress(1)
+Text.Print('A_COMP3', 5000, 1)
+196@ = Stat.GetFloat(24)
+196@ *= 1.5
+Stat.IncrementFloatNoMessage(StatId.MaxHealth, 196@)
+Stat.RegisterOddjobMissionPassed
+$done_ambulance_progress = 1
+
+:AMBULAN_13143
+return 
+
+:AMBULAN_13145
+goto @AMBULAN_3149
+
+:AMBULAN_13152
+goto @AMBULAN_11090
+
+:AMBULAN_13159
+Hud.ClearTimer($ped_time_limit)
+Hud.ClearCounter($db_ambulance_level)
+Hud.ClearCounter($amb_free_seats)
+Text.ClearThisPrint('ALEVEL')
+if 
+  $db_ambulance_level <> 13
+goto_if_false @AMBULAN_13238
+Text.PrintBig('A_FAIL1', 5000, TextStyle.MiddleSmallerHigher)
+Text.PrintWithNumberBig('A_SAVES', 55@, 6000, TextStyle.WhiteMiddleSmaller)
+
+:AMBULAN_13238
+if 
+  $db_ambulance_level <> 13
+goto_if_false @AMBULAN_13652
+if 
+  not Char.IsDead(81@)
+goto_if_false @AMBULAN_13289
+Char.SetOnlyDamagedByPlayer(81@, False)
+Char.ExplodeHead(81@)
+Char.RemoveElegantly(81@)
+
+:AMBULAN_13289
+if 
+  not Char.IsDead(84@)
+goto_if_false @AMBULAN_13322
+Char.SetOnlyDamagedByPlayer(84@, False)
+Char.ExplodeHead(84@)
+Char.RemoveElegantly(84@)
+
+:AMBULAN_13322
+if 
+  not Char.IsDead(87@)
+goto_if_false @AMBULAN_13355
+Char.SetOnlyDamagedByPlayer(87@, False)
+Char.ExplodeHead(87@)
+Char.RemoveElegantly(87@)
+
+:AMBULAN_13355
+if 
+  not Char.IsDead(90@)
+goto_if_false @AMBULAN_13388
+Char.SetOnlyDamagedByPlayer(90@, False)
+Char.ExplodeHead(90@)
+Char.RemoveElegantly(90@)
+
+:AMBULAN_13388
+if 
+  not Char.IsDead(93@)
+goto_if_false @AMBULAN_13421
+Char.SetOnlyDamagedByPlayer(93@, False)
+Char.ExplodeHead(93@)
+Char.RemoveElegantly(93@)
+
+:AMBULAN_13421
+if 
+  not Char.IsDead(56@)
+goto_if_false @AMBULAN_13454
+Char.SetOnlyDamagedByPlayer(56@, False)
+Char.ExplodeHead(56@)
+Char.RemoveElegantly(56@)
+
+:AMBULAN_13454
+if 
+  not Char.IsDead(59@)
+goto_if_false @AMBULAN_13487
+Char.SetOnlyDamagedByPlayer(59@, False)
+Char.ExplodeHead(59@)
+Char.RemoveElegantly(59@)
+
+:AMBULAN_13487
+if 
+  not Char.IsDead(62@)
+goto_if_false @AMBULAN_13520
+Char.SetOnlyDamagedByPlayer(62@, False)
+Char.ExplodeHead(62@)
+Char.RemoveElegantly(62@)
+
+:AMBULAN_13520
+if 
+  not Char.IsDead(65@)
+goto_if_false @AMBULAN_13553
+Char.SetOnlyDamagedByPlayer(65@, False)
+Char.ExplodeHead(65@)
+Char.RemoveElegantly(65@)
+
+:AMBULAN_13553
+if 
+  not Char.IsDead(68@)
+goto_if_false @AMBULAN_13586
+Char.SetOnlyDamagedByPlayer(68@, False)
+Char.ExplodeHead(68@)
+Char.RemoveElegantly(68@)
+
+:AMBULAN_13586
+if 
+  not Char.IsDead(71@)
+goto_if_false @AMBULAN_13619
+Char.SetOnlyDamagedByPlayer(71@, False)
+Char.ExplodeHead(71@)
+Char.RemoveElegantly(71@)
+
+:AMBULAN_13619
+if 
+  not Char.IsDead(74@)
+goto_if_false @AMBULAN_13652
+Char.SetOnlyDamagedByPlayer(74@, False)
+Char.ExplodeHead(74@)
+Char.RemoveElegantly(74@)
+
+:AMBULAN_13652
+Char.MarkAsNoLongerNeeded(81@)
+Char.MarkAsNoLongerNeeded(84@)
+Char.MarkAsNoLongerNeeded(87@)
+Char.MarkAsNoLongerNeeded(90@)
+Char.MarkAsNoLongerNeeded(93@)
+Char.MarkAsNoLongerNeeded(56@)
+Char.MarkAsNoLongerNeeded(59@)
+Char.MarkAsNoLongerNeeded(62@)
+Char.MarkAsNoLongerNeeded(65@)
+Char.MarkAsNoLongerNeeded(68@)
+Char.MarkAsNoLongerNeeded(71@)
+Char.MarkAsNoLongerNeeded(74@)
+52@ = 0
+Blip.Remove(47@)
+Blip.Remove(82@)
+Blip.Remove(85@)
+Blip.Remove(88@)
+Blip.Remove(91@)
+Blip.Remove(94@)
+Blip.Remove(57@)
+Blip.Remove(60@)
+Blip.Remove(63@)
+Blip.Remove(66@)
+Blip.Remove(69@)
+Blip.Remove(72@)
+Blip.Remove(75@)
+DecisionMaker.Remove(235@)
+Game.SetWantedMultiplier(1.0)
+$timer_mobile_start = Clock.GetGameTimer()
+99@ = 0
+
+:AMBULAN_13808
+if 
+  10 > 99@
+goto_if_false @AMBULAN_13938
+if 
+  224@(99@,10i) == 1
+goto_if_false @AMBULAN_13875
+Game.SetRelationship(RelationshipType.Hate, 99@, PedType.Player1)
+234@ -= 1
+224@(99@,10i) = 0
+
+:AMBULAN_13875
+if 
+  214@(99@,10i) == 1
+goto_if_false @AMBULAN_13924
+Game.SetRelationship(RelationshipType.Dislike, 99@, PedType.Player1)
+234@ -= 1
+214@(99@,10i) = 0
+
+:AMBULAN_13924
+99@ += 1
+goto @AMBULAN_13808
+
+:AMBULAN_13938
+$onmission = 0
+$flag_player_on_ambulance_mission = 0
+Mission.Finish
+if 
+  $done_ambulance_progress == 1
+goto_if_false @AMBULAN_13991
+$done_ambulance_progress = 2
+Stat.ShowUpdateStats(False)
+start_new_script @BACKON 
+
+:AMBULAN_13991
+return 
+
+:AMBULAN_13993
+if 
+  Char.IsDead(77@)
+goto_if_false @AMBULAN_14034
+Text.PrintNow('A_FAIL3', 3000, 1)
+79@ = 1
+return 
+
+:AMBULAN_14034
+if 
+  $ped_time_limit == 0
+goto_if_false @AMBULAN_14087
+Char.ExplodeHead(77@)
+Char.RemoveElegantly(77@)
+Text.PrintNow('A_FAIL2', 3000, 1)
+79@ = 1
+return 
+
+:AMBULAN_14087
+if 
+  80@ == 3
+goto_if_false @AMBULAN_14255
+179@, 180@, 181@ = Char.GetCoordinates(77@)
+40@ = Car.GetHealth(34@)
+if 
+  is_int_lvar_greater_than_int_lvar 39@ > 40@
+goto_if_false @AMBULAN_14255
+set_lvar_int_to_lvar_int 41@ = 39@
+sub_int_lvar_from_int_lvar 41@ -= 40@
+41@ *= 50
+set_lvar_int_to_var_int 35@ = $ped_time_limit
+sub_int_lvar_from_int_lvar 35@ -= 41@
+if 
+  35@ > 10
+goto_if_false @AMBULAN_14211
+sub_int_lvar_from_int_var $ped_time_limit -= 41@
+
+:AMBULAN_14211
+236@ = Char.SetSayContext(77@, 344)
+if 
+  0 > $ped_time_limit
+goto_if_false @AMBULAN_14247
+$ped_time_limit = 0
+
+:AMBULAN_14247
+set_lvar_int_to_lvar_int 39@ = 40@
+
+:AMBULAN_14255
+if 
+  80@ == 1
+goto_if_false @AMBULAN_14540
+if 
+  Char.LocateInCarChar3D($scplayer, 77@, 10.0, 10.0, 2.0, False)
+goto_if_false @AMBULAN_14540
+43@ = Car.GetNumberOfPassengers(34@)
+42@ = Car.GetMaximumNumberOfPassengers(34@)
+if 
+  is_int_lvar_equal_to_int_lvar 43@ == 42@
+goto_if_false @AMBULAN_14392
+if 
+  50@ == 0
+goto_if_false @AMBULAN_14378
+Text.PrintNow('A_FULL', 5000, 1)
+
+:AMBULAN_14378
+50@ = 1
+goto @AMBULAN_14399
+
+:AMBULAN_14392
+50@ = 0
+
+:AMBULAN_14399
+39@ = Car.GetHealth(34@)
+if 
+  50@ == 0
+goto_if_false @AMBULAN_14517
+if 
+  97@ == 0
+goto_if_false @AMBULAN_14469
+Task.EnterCarAsPassenger(77@, 34@, -1, -2)
+97@ = 1
+goto @AMBULAN_14510
+
+:AMBULAN_14469
+98@ = Char.GetScriptTaskStatus(77@, 1482)
+if 
+  is_int_lvar_equal_to_constant 98@ == 7
+goto_if_false @AMBULAN_14510
+Task.EnterCarAsPassenger(77@, 34@, -1, -2)
+
+:AMBULAN_14510
+goto @AMBULAN_14533
+
+:AMBULAN_14517
+Text.PrintNow('A_FULL', 5000, 1)
+
+:AMBULAN_14533
+80@ = 2
+
+:AMBULAN_14540
+if 
+  80@ == 2
+goto_if_false @AMBULAN_14619
+if 
+  not Char.LocateInCarChar2D($scplayer, 77@, 20.0, 20.0, False)
+goto_if_false @AMBULAN_14596
+80@ = 1
+
+:AMBULAN_14596
+if 
+  not Char.IsSittingInAnyCar(77@)
+goto_if_false @AMBULAN_14619
+80@ = 1
+
+:AMBULAN_14619
+if 
+  80@ == 2
+goto_if_false @AMBULAN_14762
+if 
+  Char.IsSittingInAnyCar(77@)
+goto_if_false @AMBULAN_14762
+97@ = 0
+Blip.Remove(78@)
+if 
+  52@ == 0
+goto_if_false @AMBULAN_14704
+47@ = Blip.AddForCoord(167@, 168@, 169@)
+52@ = 1
+
+:AMBULAN_14704
+set_lvar_int_to_lvar_int 49@ = 152@(240@,13i)
+49@ /= 1000
+Text.PrintWithNumberBig('A_TIME', 49@, 6000, TextStyle.WhiteMiddleSmaller)
+add_int_lvar_to_int_var $ped_time_limit += 152@(240@,13i)
+80@ = 3
+
+:AMBULAN_14762
+if 
+  80@ == 3
+goto_if_false @AMBULAN_14847
+if 
+  Char.LocateStoppedInCar3D($scplayer, 167@, 168@, 169@, 6.0, 6.0, 2.0, False)
+goto_if_false @AMBULAN_14847
+Task.GoStraightToCoord(77@, 173@, 174@, 175@, MoveState.Run, -1)
+80@ = 4
+
+:AMBULAN_14847
+if 
+  80@ == 4
+goto_if_false @AMBULAN_15078
+if 
+  not Char.IsSittingInAnyCar(77@)
+goto_if_false @AMBULAN_15078
+Task.GoStraightToCoord(77@, 173@, 174@, 175@, MoveState.Run, -1)
+Hud.ForceBigMessageAndCounter(True)
+Text.PrintBig('A_PASS', 3000, TextStyle.MiddleSmallerHigher)
+if 
+  45@ == 1
+goto_if_false @AMBULAN_15018
+set_lvar_int_to_lvar_int 49@ = 48@
+49@ /= 1000
+Text.PrintWithNumberBig('A_TIME', 49@, 6000, TextStyle.WhiteMiddleSmaller)
+34@ = Char.StoreCarIsInNoSave($scplayer)
+54@ = Car.GetHealth(34@)
+54@ += 110
+Car.SetHealth(34@, 54@)
+add_int_lvar_to_int_var $ped_time_limit += 48@
+45@ += 1
+
+:AMBULAN_15018
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1058)
+46@ += 1
+Stat.IncrementInt(StatId.TotalProgress, 151)
+80@ = 0
+Char.SetBleeding(77@, False)
+Char.SetKeepTask(77@, True)
+Char.MarkAsNoLongerNeeded(77@)
+
+:AMBULAN_15078
+return 
+
+//-------------Mission 123---------------
+// Originally: Firefighter Sub-Mission
+
+:FIRETRU
+gosub @FIRETRU_16
+gosub @FIRETRU_10464
+terminate_this_script 
+

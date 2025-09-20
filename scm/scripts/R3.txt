@@ -1,0 +1,932 @@
+:R3
+script_name 'R3'
+
+:R3_11
+wait 70
+if 
+  $onmission == 0
+goto_if_false @R3_4103
+if 
+  Player.IsPlaying($player1)
+goto_if_false @R3_4103
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @R3_4001
+if 
+  not Game.IsMinigameInProgress
+goto_if_false @R3_3994
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_110
+goto @R3_4110
+goto @R3_3994
+
+:R3_110
+if or
+  Char.IsInTaxi($scplayer)
+  Char.IsInModel($scplayer, 416)
+  Char.IsInModel($scplayer, 407)
+  Char.IsInModel($scplayer, 425)
+  Char.IsInModel($scplayer, 609)
+  Char.IsInAnyPoliceVehicle($scplayer)
+goto_if_false @R3_2901
+$R3_player_car = Char.StoreCarIsInNoSave($scplayer)
+if 
+  not Car.IsInWater($R3_player_car)
+goto_if_false @R3_2901
+if 
+  Char.IsInTaxi($scplayer)
+goto_if_false @R3_673
+if 
+  not is_player_in_shortcut_taxi $player1
+goto_if_false @R3_673
+if 
+  $flag_taxiodd_mission_launched == 0
+goto_if_false @R3_673
+if 
+  $R3_mission_help == 0
+goto_if_false @R3_286
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @R3_286
+Text.PrintHelp('TTUTOR')
+$R3_mission_help = 1
+
+:R3_286
+if 
+  $controlmode <> 3
+goto_if_false @R3_492
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_485
+
+:R3_321
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_447
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_367
+goto @R3_11
+
+:R3_367
+if or
+  not Player.IsPlaying($player1)
+  not Char.IsInTaxi($scplayer)
+goto_if_false @R3_395
+goto @R3_11
+
+:R3_395
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_415
+goto @R3_11
+
+:R3_415
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_440
+goto @R3_11
+
+:R3_440
+goto @R3_321
+
+:R3_447
+Text.PrintBig('TAXI_M', 6000, TextStyle.MiddleSmallerHigher)
+wait 0
+Mission.LoadAndLaunchInternal(121) // Taxi-Driver Sub-Mission
+$flag_taxiodd_mission_launched = 1
+goto @R3_11
+
+:R3_485
+goto @R3_673
+
+:R3_492
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_673
+
+:R3_509
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_635
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_555
+goto @R3_11
+
+:R3_555
+if or
+  not Player.IsPlaying($player1)
+  not Char.IsInTaxi($scplayer)
+goto_if_false @R3_583
+goto @R3_11
+
+:R3_583
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_603
+goto @R3_11
+
+:R3_603
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_628
+goto @R3_11
+
+:R3_628
+goto @R3_509
+
+:R3_635
+Text.PrintBig('TAXI_M', 6000, TextStyle.MiddleSmallerHigher)
+wait 0
+Mission.LoadAndLaunchInternal(121) // Taxi-Driver Sub-Mission
+$flag_taxiodd_mission_launched = 1
+goto @R3_11
+
+:R3_673
+if 
+  Char.IsInModel($scplayer, 416)
+goto_if_false @R3_1138
+if 
+  $flag_player_on_ambulance_mission == 0
+goto_if_false @R3_1138
+if 
+  $R3_mission_help == 0
+goto_if_false @R3_759
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @R3_759
+Text.PrintHelp('ATUTOR')
+$R3_mission_help = 1
+
+:R3_759
+if 
+  $controlmode <> 3
+goto_if_false @R3_961
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_954
+
+:R3_794
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_923
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_840
+goto @R3_11
+
+:R3_840
+if or
+  not Player.IsPlaying($player1)
+  not Char.IsInModel($scplayer, 416)
+goto_if_false @R3_871
+goto @R3_11
+
+:R3_871
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_891
+goto @R3_11
+
+:R3_891
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_916
+goto @R3_11
+
+:R3_916
+goto @R3_794
+
+:R3_923
+Text.PrintBig('AMBUL_M', 6000, TextStyle.MiddleSmallerHigher)
+wait 0
+Mission.LoadAndLaunchInternal(122) // Paramedic Sub-Mission
+goto @R3_11
+
+:R3_954
+goto @R3_1138
+
+:R3_961
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_1138
+
+:R3_978
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_1107
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_1024
+goto @R3_11
+
+:R3_1024
+if or
+  not Player.IsPlaying($player1)
+  not Char.IsInModel($scplayer, 416)
+goto_if_false @R3_1055
+goto @R3_11
+
+:R3_1055
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_1075
+goto @R3_11
+
+:R3_1075
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_1100
+goto @R3_11
+
+:R3_1100
+goto @R3_978
+
+:R3_1107
+Text.PrintBig('AMBUL_M', 6000, TextStyle.MiddleSmallerHigher)
+wait 0
+Mission.LoadAndLaunchInternal(122) // Paramedic Sub-Mission
+goto @R3_11
+
+:R3_1138
+if 
+  Char.IsInModel($scplayer, 407)
+goto_if_false @R3_1603
+if 
+  $flag_player_on_fire_mission == 0
+goto_if_false @R3_1603
+if 
+  $R3_mission_help == 0
+goto_if_false @R3_1224
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @R3_1224
+Text.PrintHelp('FTUTOR')
+$R3_mission_help = 1
+
+:R3_1224
+if 
+  $controlmode <> 3
+goto_if_false @R3_1426
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_1419
+
+:R3_1259
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_1388
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_1305
+goto @R3_11
+
+:R3_1305
+if or
+  not Player.IsPlaying($player1)
+  not Char.IsInModel($scplayer, 407)
+goto_if_false @R3_1336
+goto @R3_11
+
+:R3_1336
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_1356
+goto @R3_11
+
+:R3_1356
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_1381
+goto @R3_11
+
+:R3_1381
+goto @R3_1259
+
+:R3_1388
+Text.PrintBig('FIRE_M', 6000, TextStyle.MiddleSmallerHigher)
+wait 0
+Mission.LoadAndLaunchInternal(123) // Firefighter Sub-Mission
+goto @R3_11
+
+:R3_1419
+goto @R3_1603
+
+:R3_1426
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_1603
+
+:R3_1443
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_1572
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_1489
+goto @R3_11
+
+:R3_1489
+if or
+  not Player.IsPlaying($player1)
+  not Char.IsInModel($scplayer, 407)
+goto_if_false @R3_1520
+goto @R3_11
+
+:R3_1520
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_1540
+goto @R3_11
+
+:R3_1540
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_1565
+goto @R3_11
+
+:R3_1565
+goto @R3_1443
+
+:R3_1572
+Text.PrintBig('FIRE_M', 6000, TextStyle.MiddleSmallerHigher)
+wait 0
+Mission.LoadAndLaunchInternal(123) // Firefighter Sub-Mission
+goto @R3_11
+
+:R3_1603
+if or
+  Char.IsInAnyPoliceVehicle($scplayer)
+  Char.IsInModel($scplayer, 425)
+goto_if_false @R3_2269
+if 
+  $R3_mission_help == 0
+goto_if_false @R3_1676
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @R3_1676
+Text.PrintHelp('CTUTOR')
+$R3_mission_help = 1
+
+:R3_1676
+if 
+  $controlmode <> 3
+goto_if_false @R3_1985
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_1978
+
+:R3_1711
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_1863
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_1757
+goto @R3_11
+
+:R3_1757
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @R3_1780
+goto @R3_11
+
+:R3_1780
+if and
+  not Char.IsInAnyPoliceVehicle($scplayer)
+  not Char.IsInModel($scplayer, 425)
+goto_if_false @R3_1811
+goto @R3_11
+
+:R3_1811
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_1831
+goto @R3_11
+
+:R3_1831
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_1856
+goto @R3_11
+
+:R3_1856
+goto @R3_1711
+
+:R3_1863
+if 
+  Char.IsInModel($scplayer, 425)
+goto_if_false @R3_1905
+Text.PrintBig('COP_M3', 6000, TextStyle.MiddleSmallerHigher)
+goto @R3_1963
+
+:R3_1905
+if 
+  Char.IsInModel($scplayer, 415)
+goto_if_false @R3_1947
+Text.PrintBig('COP_M2', 6000, TextStyle.MiddleSmallerHigher)
+goto @R3_1963
+
+:R3_1947
+Text.PrintBig('COP_M', 6000, TextStyle.MiddleSmallerHigher)
+
+:R3_1963
+wait 0
+Mission.LoadAndLaunchInternal(124) // Vigilante Sub-Mission
+goto @R3_11
+
+:R3_1978
+goto @R3_2269
+
+:R3_1985
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_2269
+
+:R3_2002
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_2154
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_2048
+goto @R3_11
+
+:R3_2048
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @R3_2071
+goto @R3_11
+
+:R3_2071
+if and
+  not Char.IsInAnyPoliceVehicle($scplayer)
+  not Char.IsInModel($scplayer, 425)
+goto_if_false @R3_2102
+goto @R3_11
+
+:R3_2102
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_2122
+goto @R3_11
+
+:R3_2122
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_2147
+goto @R3_11
+
+:R3_2147
+goto @R3_2002
+
+:R3_2154
+if 
+  Char.IsInModel($scplayer, 425)
+goto_if_false @R3_2196
+Text.PrintBig('COP_M3', 6000, TextStyle.MiddleSmallerHigher)
+goto @R3_2254
+
+:R3_2196
+if 
+  Char.IsInModel($scplayer, 415)
+goto_if_false @R3_2238
+Text.PrintBig('COP_M2', 6000, TextStyle.MiddleSmallerHigher)
+goto @R3_2254
+
+:R3_2238
+Text.PrintBig('COP_M', 6000, TextStyle.MiddleSmallerHigher)
+
+:R3_2254
+wait 0
+Mission.LoadAndLaunchInternal(124) // Vigilante Sub-Mission
+goto @R3_11
+
+:R3_2269
+if 
+  Char.IsInModel($scplayer, 609)
+goto_if_false @R3_2901
+if 
+  $flag_player_on_burglary_mission == 0
+goto_if_false @R3_2901
+$hours, $minutes = Clock.GetTimeOfDay()
+if or
+  $hours >= 20
+  6 > $hours
+goto_if_false @R3_2388
+if 
+  $R3_mission_help == 0
+goto_if_false @R3_2388
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @R3_2388
+Text.PrintHelp('BTUTOR2')
+$R3_mission_help = 1
+
+:R3_2388
+if 
+  $controlmode <> 3
+goto_if_false @R3_2657
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_2650
+$hours, $minutes = Clock.GetTimeOfDay()
+if or
+  $hours >= 20
+  6 > $hours
+goto_if_false @R3_2634
+
+:R3_2456
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_2585
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_2502
+goto @R3_11
+
+:R3_2502
+if or
+  not Player.IsPlaying($player1)
+  not Char.IsInModel($scplayer, 609)
+goto_if_false @R3_2533
+goto @R3_11
+
+:R3_2533
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_2553
+goto @R3_11
+
+:R3_2553
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_2578
+goto @R3_11
+
+:R3_2578
+goto @R3_2456
+
+:R3_2585
+Text.DrawOddjobTitleBeforeFade(False)
+Text.PrintBig('BURGLAR', 6000, TextStyle.MiddleSmallerHigher)
+wait 0
+Mission.LoadAndLaunchInternal(125) // Burglary Sub-Mission
+$flag_player_on_burglary_mission = 1
+goto @R3_11
+goto @R3_2650
+
+:R3_2634
+Text.PrintNow('BURGHEL', 1000, 1)
+
+:R3_2650
+goto @R3_2901
+
+:R3_2657
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_2901
+$hours, $minutes = Clock.GetTimeOfDay()
+if or
+  $hours >= 20
+  6 > $hours
+goto_if_false @R3_2885
+
+:R3_2707
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_2836
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_2753
+goto @R3_11
+
+:R3_2753
+if or
+  not Player.IsPlaying($player1)
+  not Char.IsInModel($scplayer, 609)
+goto_if_false @R3_2784
+goto @R3_11
+
+:R3_2784
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_2804
+goto @R3_11
+
+:R3_2804
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_2829
+goto @R3_11
+
+:R3_2829
+goto @R3_2707
+
+:R3_2836
+Text.DrawOddjobTitleBeforeFade(False)
+Text.PrintBig('BURGLAR', 6000, TextStyle.MiddleSmallerHigher)
+wait 0
+Mission.LoadAndLaunchInternal(125) // Burglary Sub-Mission
+$flag_player_on_burglary_mission = 1
+goto @R3_11
+goto @R3_2901
+
+:R3_2885
+Text.PrintNow('BURGHEL', 1000, 1)
+
+:R3_2901
+if 
+  $Return_cities_passed > 1
+goto_if_false @R3_3455
+if or
+  Char.IsInModel($scplayer, 537)
+  Char.IsInModel($scplayer, 538)
+goto_if_false @R3_3455
+$R3_player_car = Char.StoreCarIsInNoSave($scplayer)
+if and
+  not Car.IsInWater($R3_player_car)
+  not Train.HasDerailed($R3_player_car)
+goto_if_false @R3_3455
+if 
+  $flag_player_on_freight_mission == 0
+goto_if_false @R3_3455
+if 
+  $R3_mission_help == 0
+goto_if_false @R3_3042
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @R3_3042
+Text.PrintHelp('FTUTORA')
+$R3_mission_help = 1
+
+:R3_3042
+if 
+  $controlmode <> 3
+goto_if_false @R3_3261
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_3254
+
+:R3_3077
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_3232
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_3123
+goto @R3_11
+
+:R3_3123
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @R3_3146
+goto @R3_11
+
+:R3_3146
+if and
+  not Char.IsInModel($scplayer, 537)
+  not Char.IsInModel($scplayer, 538)
+goto_if_false @R3_3180
+goto @R3_11
+
+:R3_3180
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_3200
+goto @R3_11
+
+:R3_3200
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_3225
+goto @R3_11
+
+:R3_3225
+goto @R3_3077
+
+:R3_3232
+wait 0
+Mission.LoadAndLaunchInternal(126) // Freight Train Sub-Mission
+$been_in_freight_before = 1
+goto @R3_11
+
+:R3_3254
+goto @R3_3455
+
+:R3_3261
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_3455
+
+:R3_3278
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_3433
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_3324
+goto @R3_11
+
+:R3_3324
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @R3_3347
+goto @R3_11
+
+:R3_3347
+if and
+  not Char.IsInModel($scplayer, 537)
+  not Char.IsInModel($scplayer, 538)
+goto_if_false @R3_3381
+goto @R3_11
+
+:R3_3381
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_3401
+goto @R3_11
+
+:R3_3401
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_3426
+goto @R3_11
+
+:R3_3426
+goto @R3_3278
+
+:R3_3433
+wait 0
+Mission.LoadAndLaunchInternal(126) // Freight Train Sub-Mission
+$been_in_freight_before = 1
+goto @R3_11
+
+:R3_3455
+if 
+  Char.IsInModel($scplayer, 575)
+goto_if_false @R3_3994
+$R3_player_car = Char.StoreCarIsInNoSave($scplayer)
+if 
+  not Car.IsInWater($R3_player_car)
+goto_if_false @R3_3994
+if 
+  $flag_player_on_pimp_mission == 0
+goto_if_false @R3_3994
+if 
+  $R3_mission_help == 0
+goto_if_false @R3_3565
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @R3_3565
+Text.PrintHelp('PTUTORA')
+$R3_mission_help = 1
+
+:R3_3565
+if 
+  $controlmode <> 3
+goto_if_false @R3_3792
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_3785
+
+:R3_3600
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @R3_3747
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_3646
+goto @R3_11
+
+:R3_3646
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @R3_3669
+goto @R3_11
+
+:R3_3669
+if 
+  not Char.IsInModel($scplayer, 575)
+goto_if_false @R3_3695
+goto @R3_11
+
+:R3_3695
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_3715
+goto @R3_11
+
+:R3_3715
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_3740
+goto @R3_11
+
+:R3_3740
+goto @R3_3600
+
+:R3_3747
+Text.PrintBig('PIMP', 6000, TextStyle.MiddleSmallerHigher)
+wait 0
+Mission.LoadAndLaunchInternal(127) // Pimping Sub-Mission
+$flag_pimping_trigger = 1
+goto @R3_11
+
+:R3_3785
+goto @R3_3994
+
+:R3_3792
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_3994
+
+:R3_3809
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @R3_3956
+wait 0
+if 
+  $onmission == 1
+goto_if_false @R3_3855
+goto @R3_11
+
+:R3_3855
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @R3_3878
+goto @R3_11
+
+:R3_3878
+if 
+  not Char.IsInModel($scplayer, 575)
+goto_if_false @R3_3904
+goto @R3_11
+
+:R3_3904
+if 
+  Game.IsMinigameInProgress
+goto_if_false @R3_3924
+goto @R3_11
+
+:R3_3924
+if 
+  is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_3949
+goto @R3_11
+
+:R3_3949
+goto @R3_3809
+
+:R3_3956
+Text.PrintBig('PIMP', 6000, TextStyle.MiddleSmallerHigher)
+wait 0
+Mission.LoadAndLaunchInternal(127) // Pimping Sub-Mission
+$flag_pimping_trigger = 1
+goto @R3_11
+
+:R3_3994
+goto @R3_4103
+
+:R3_4001
+if 
+  $R3_mission_help == 1
+goto_if_false @R3_4103
+Text.ClearThisPrint('TTUTOR')
+Text.ClearThisPrint('ATUTOR')
+Text.ClearThisPrint('FTUTOR')
+Text.ClearThisPrint('CTUTOR')
+Text.ClearThisPrint('BTUTOR2')
+Text.ClearThisPrint('FTUTORA')
+Text.ClearThisPrint('PTUTORA')
+$R3_mission_help = 0
+
+:R3_4103
+goto @R3_11
+
+:R3_4110
+wait 70
+if 
+  not is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @R3_4144
+wait 5000
+goto @R3_11
+
+:R3_4144
+goto @R3_4110
+

@@ -1,0 +1,184 @@
+//-------------External script 39 (BOUNCER)---------------
+
+:BOUNCER
+script_name 'BOUNCER'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @BOUNCER_60
+0@ = Char.Create(4, 0, 0.0, 0.0, 0.0)
+
+:BOUNCER_60
+if 
+  not Streaming.HasModelLoaded(346)
+goto_if_false @BOUNCER_88
+Streaming.RequestModel(346)
+goto @BOUNCER_60
+
+:BOUNCER_88
+if 
+  not Char.IsDead(0@)
+goto_if_false @BOUNCER_187
+Char.GiveWeapon(0@, WeaponType.Pistol, 99999999)
+Char.SetCurrentWeapon(0@, WeaponType.Unarmed)
+if 
+  Char.HasGotWeapon(0@, WeaponType.NightStick)
+goto_if_false @BOUNCER_148
+Char.RemoveWeapon(3, 0@)
+
+:BOUNCER_148
+Char.SetAccuracy(0@, 80)
+$iBouncerDM = DecisionMakerChar.CopyShared(65537)
+DecisionMakerChar.ClearEventResponse($iBouncerDM, 27)
+DecisionMakerChar.ClearEventResponse($iBouncerDM, 48)
+Char.SetDecisionMaker(0@, $iBouncerDM)
+
+:BOUNCER_187
+3@ = 0
+4@ = 0
+
+:BOUNCER_201
+wait 0
+if and
+  not Char.IsDead(0@)
+  Player.IsPlaying($player1)
+  $iTerminateAllAmbience == 0
+goto_if_false @BOUNCER_279
+if 
+  $iBouncerAction == 0
+goto_if_false @BOUNCER_265
+gosub @BOUNCER_293
+goto @BOUNCER_272
+
+:BOUNCER_265
+goto @BOUNCER_693
+
+:BOUNCER_272
+goto @BOUNCER_286
+
+:BOUNCER_279
+gosub @BOUNCER_864
+
+:BOUNCER_286
+goto @BOUNCER_201
+
+:BOUNCER_293
+switch_start 3@ total_jumps 1 default_jump 0 @BOUNCER_370 jumps 0 @BOUNCER_356 -1 @BOUNCER_370 -1 @BOUNCER_370 -1 @BOUNCER_370 -1 @BOUNCER_370 -1 @BOUNCER_370 -1 @BOUNCER_370
+
+:BOUNCER_356
+gosub @BOUNCER_372
+goto @BOUNCER_370
+
+:BOUNCER_370
+return 
+
+:BOUNCER_372
+switch_start 4@ total_jumps 3 default_jump 0 @BOUNCER_691 jumps 0 @BOUNCER_435 1 @BOUNCER_498 2 @BOUNCER_658 -1 @BOUNCER_691 -1 @BOUNCER_691 -1 @BOUNCER_691 -1 @BOUNCER_691
+
+:BOUNCER_435
+2@ = Char.GetScriptTaskStatus(0@, 1502)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @BOUNCER_491
+Task.WanderStandard(0@)
+TIMERB = 0
+6@ = 5000
+4@ += 1
+
+:BOUNCER_491
+goto @BOUNCER_691
+
+:BOUNCER_498
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar TIMERB >= 6@
+goto_if_false @BOUNCER_651
+2@ = Math.RandomIntInRange(1, 10)
+if 
+  2@ > 5
+goto_if_false @BOUNCER_595
+2@ = Char.GetScriptTaskStatus(0@, 1481)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @BOUNCER_588
+Task.LookAbout(0@, -1)
+6@ = 5000
+
+:BOUNCER_588
+goto @BOUNCER_637
+
+:BOUNCER_595
+2@ = Char.GetScriptTaskStatus(0@, 1502)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @BOUNCER_637
+Task.WanderStandard(0@)
+6@ = 5000
+
+:BOUNCER_637
+TIMERB = 0
+4@ += 1
+
+:BOUNCER_651
+goto @BOUNCER_691
+
+:BOUNCER_658
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar TIMERB >= 6@
+goto_if_false @BOUNCER_684
+4@ = 1
+
+:BOUNCER_684
+goto @BOUNCER_691
+
+:BOUNCER_691
+return 
+
+:BOUNCER_693
+wait 0
+if and
+  not Char.IsDead(0@)
+  Player.IsPlaying($player1)
+  $iTerminateAllAmbience == 0
+goto_if_false @BOUNCER_850
+if 
+  Char.IsShooting($scplayer)
+goto_if_false @BOUNCER_799
+Char.SetCurrentWeapon(0@, WeaponType.Pistol)
+5@ = Char.GetScriptTaskStatus(0@, 1588)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @BOUNCER_792
+Task.KillCharOnFootWhileDucking(0@, $scplayer, 1, 4000, 60)
+
+:BOUNCER_792
+goto @BOUNCER_843
+
+:BOUNCER_799
+Char.SetCurrentWeapon(0@, WeaponType.Pistol)
+5@ = Char.GetScriptTaskStatus(0@, 1506)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @BOUNCER_843
+Task.KillCharOnFoot(0@, $scplayer)
+
+:BOUNCER_843
+goto @BOUNCER_857
+
+:BOUNCER_850
+gosub @BOUNCER_864
+
+:BOUNCER_857
+goto @BOUNCER_693
+
+:BOUNCER_864
+DecisionMaker.Remove($iBouncerDM)
+Char.MarkAsNoLongerNeeded(0@)
+terminate_this_script 
+return 
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

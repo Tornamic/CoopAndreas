@@ -1,0 +1,681 @@
+//-------------Mission 126---------------
+// Originally: Freight Train Sub-Mission
+
+:FREIGHT
+script_name 'FREIGHT'
+gosub @FREIGHT_80
+if 
+  has_deatharrest_been_executed 
+goto_if_false @FREIGHT_38
+gosub @FREIGHT_2819
+
+:FREIGHT_38
+gosub @FREIGHT_3178
+if 
+  $flag_freight_passed_1stime == 1
+goto_if_false @FREIGHT_78
+start_new_script @FRTEXT 
+$flag_freight_passed_1stime = 2
+
+:FREIGHT_78
+terminate_this_script 
+
+:FREIGHT_80
+Player.ClearWantedLevel($player1)
+Game.SetWantedMultiplier(0.0)
+135@ = 999999.0
+$onmission = 1
+$flag_player_on_freight_mission = 1
+130@ = 0
+126@ = 0
+125@ = 0
+if 
+  $ft_train_level == 0
+goto_if_false @FREIGHT_162
+$ft_train_level = 1
+
+:FREIGHT_162
+45@ = 1698.826
+65@ = -1953.75
+85@ = 12.5469
+34@ = 150000
+39@ = 60000
+46@ = 789.4952
+66@ = -1343.796
+86@ = -2.5794
+35@ = 60000
+40@ = 140000
+47@ = -1943.241
+67@ = 159.585
+87@ = 24.7186
+36@ = 140000
+41@ = 150000
+48@ = 1463.359
+68@ = 2632.25
+88@ = 9.8203
+37@ = 150000
+42@ = 105000
+49@ = 2864.623
+69@ = 1248.266
+89@ = 9.8203
+38@ = 105000
+43@ = 150000
+if 
+  $ft_train_level == 1
+goto_if_false @FREIGHT_438
+127@ = 15000
+
+:FREIGHT_438
+if 
+  $ft_train_level == 2
+goto_if_false @FREIGHT_464
+127@ = 10000
+
+:FREIGHT_464
+if 
+  $ft_train_level == 3
+goto_if_false @FREIGHT_489
+127@ = 0
+
+:FREIGHT_489
+129@ = 0
+
+:FREIGHT_496
+add_int_lvar_to_int_lvar 34@(129@,5i) += 127@
+add_int_lvar_to_int_lvar 39@(129@,5i) += 127@
+129@ += 1
+  129@ >= 5
+goto_if_false @FREIGHT_496
+Camera.SetFadingColor(0, 0, 0)
+$onmission = 1
+if 
+  $flag_freight_passed_1stime == 0
+goto_if_false @FREIGHT_576
+Stat.RegisterMissionGiven
+
+:FREIGHT_576
+Text.LoadMissionText('FTRAIN')
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FREIGHT_627
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @FREIGHT_627
+$car = Char.StoreCarIsIn($scplayer)
+
+:FREIGHT_627
+if 
+  $flag_freight_passed_1stime == 0
+goto_if_false @FREIGHT_671
+Text.PrintWithNumberBig('FREI_04', $ft_train_level, 5000, TextStyle.MiddleSmaller)
+goto @FREIGHT_687
+
+:FREIGHT_671
+Text.PrintBig('FREI_X', 5000, TextStyle.MiddleSmaller)
+
+:FREIGHT_687
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FREIGHT_721
+$x, $y, $z = Char.GetCoordinates($scplayer)
+
+:FREIGHT_721
+134@ = Math.GetDistanceBetweenCoords2D($x, $y, 1698.826, -1953.75)
+if 
+  is_float_lvar_greater_than_float_lvar 135@ > 134@
+goto_if_false @FREIGHT_776
+set_lvar_float_to_lvar_float 135@ = 134@
+125@ = 0
+
+:FREIGHT_776
+134@ = Math.GetDistanceBetweenCoords2D($x, $y, 789.4952, -1343.796)
+if 
+  is_float_lvar_greater_than_float_lvar 135@ > 134@
+goto_if_false @FREIGHT_831
+set_lvar_float_to_lvar_float 135@ = 134@
+125@ = 1
+
+:FREIGHT_831
+134@ = Math.GetDistanceBetweenCoords2D($x, $y, -1943.241, 159.585)
+if 
+  is_float_lvar_greater_than_float_lvar 135@ > 134@
+goto_if_false @FREIGHT_886
+set_lvar_float_to_lvar_float 135@ = 134@
+125@ = 2
+
+:FREIGHT_886
+134@ = Math.GetDistanceBetweenCoords2D($x, $y, 1463.359, 2632.25)
+if 
+  is_float_lvar_greater_than_float_lvar 135@ > 134@
+goto_if_false @FREIGHT_941
+set_lvar_float_to_lvar_float 135@ = 134@
+125@ = 3
+
+:FREIGHT_941
+134@ = Math.GetDistanceBetweenCoords2D($x, $y, 2864.623, 1248.266)
+if 
+  is_float_lvar_greater_than_float_lvar 135@ > 134@
+goto_if_false @FREIGHT_996
+set_lvar_float_to_lvar_float 135@ = 134@
+125@ = 4
+
+:FREIGHT_996
+Streaming.RequestModel(590)
+Streaming.RequestModel(570)
+Streaming.RequestModel(569)
+Streaming.RequestModel(538)
+Streaming.RequestModel(537)
+
+:FREIGHT_1021
+if or
+  not Streaming.HasModelLoaded(590)
+  not Streaming.HasModelLoaded(570)
+  not Streaming.HasModelLoaded(569)
+  not Streaming.HasModelLoaded(538)
+  not Streaming.HasModelLoaded(537)
+goto_if_false @FREIGHT_1068
+wait 0
+goto @FREIGHT_1021
+
+:FREIGHT_1068
+TIMERA = 0
+TIMERB = 0
+World.DeleteAllTrains
+Game.SwitchRandomTrains(False)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FREIGHT_1128
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @FREIGHT_1128
+$car = Char.StoreCarIsInNoSave($scplayer)
+
+:FREIGHT_1128
+if 
+  not Car.IsDead($car)
+goto_if_false @FREIGHT_1195
+if 
+  Train.FindDirection($car)
+goto_if_false @FREIGHT_1181
+125@ += 1
+133@ = 0
+goto @FREIGHT_1195
+
+:FREIGHT_1181
+125@ -= 1
+133@ = 1
+
+:FREIGHT_1195
+if 
+  125@ == 5
+goto_if_false @FREIGHT_1220
+125@ = 0
+
+:FREIGHT_1220
+if 
+  125@ == -1
+goto_if_false @FREIGHT_1245
+125@ = 4
+
+:FREIGHT_1245
+gosub @FREIGHT_3353
+105@(125@,20i) = Blip.AddForCoord(45@(125@,20f), 65@(125@,20f), 85@(125@,20f))
+if 
+  133@ == 0
+goto_if_false @FREIGHT_1319
+set_var_int_to_lvar_int $freight_remaining = 34@(125@,5i)
+goto @FREIGHT_1331
+
+:FREIGHT_1319
+set_var_int_to_lvar_int $freight_remaining = 39@(125@,5i)
+
+:FREIGHT_1331
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FREIGHT_2766
+wait 0
+if 
+is_ps2_keyboard_key_just_pressed 65
+goto_if_false @FREIGHT_1373
+goto @FREIGHT_2258
+
+:FREIGHT_1373
+if or
+  Char.IsInModel($scplayer, 538)
+  Char.IsInModel($scplayer, 537)
+goto_if_false @FREIGHT_1442
+$car = Char.StoreCarIsInNoSave($scplayer)
+if 
+  not Car.IsUpright($car)
+goto_if_false @FREIGHT_1435
+Text.ClearPrints
+Text.ClearHelp
+goto @FREIGHT_2773
+
+:FREIGHT_1435
+goto @FREIGHT_1453
+
+:FREIGHT_1442
+Text.ClearPrints
+Text.ClearHelp
+goto @FREIGHT_2773
+
+:FREIGHT_1453
+137@ = Car.GetSpeed($car)
+cset_var_int_to_lvar_float $ft_speed = float 137@
+if and
+  TIMERB > 3000
+  126@ == 0
+goto_if_false @FREIGHT_1515
+126@ = 1
+Text.ClearPrints
+Text.PrintHelp('FREI_03')
+
+:FREIGHT_1515
+if and
+  TIMERB > 8000
+  126@ == 1
+goto_if_false @FREIGHT_1603
+126@ = 2
+Text.ClearPrints
+Text.ClearHelp
+if 
+  $ft_help_been_displayed == 0
+goto_if_false @FREIGHT_1588
+Text.PrintHelp('FREI_12')
+goto @FREIGHT_1603
+
+:FREIGHT_1588
+TIMERB = 18000
+126@ = 3
+
+:FREIGHT_1603
+if and
+  TIMERB > 12000
+  126@ == 2
+goto_if_false @FREIGHT_1691
+126@ = 3
+Text.ClearPrints
+Text.ClearHelp
+if 
+  $ft_help_been_displayed == 0
+goto_if_false @FREIGHT_1676
+Text.PrintHelp('FREI_13')
+goto @FREIGHT_1691
+
+:FREIGHT_1676
+TIMERB = 18000
+126@ = 3
+
+:FREIGHT_1691
+if and
+  TIMERB > 16000
+  126@ == 3
+goto_if_false @FREIGHT_2038
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FREIGHT_1747
+$x, $y, $z = Char.GetCoordinates($scplayer)
+
+:FREIGHT_1747
+136@ = 0.0
+$freight_remaining = 0
+136@ = Math.GetDistanceBetweenCoords2D($x, $y, 45@(125@,20f), 65@(125@,20f))
+cset_var_int_to_lvar_float $ft_distance = float 136@
+if 
+  136@ > 3000.0
+goto_if_false @FREIGHT_1835
+136@ /= 0.021
+goto @FREIGHT_1845
+
+:FREIGHT_1835
+136@ /= 0.019
+
+:FREIGHT_1845
+if 
+  10000.0 > 136@
+goto_if_false @FREIGHT_1876
+136@ = 10000.0
+
+:FREIGHT_1876
+cset_var_int_to_lvar_float $freight_remaining = float 136@
+if 
+  $ft_train_level == 1
+goto_if_false @FREIGHT_1910
+127@ = 15000
+
+:FREIGHT_1910
+if 
+  $ft_train_level == 2
+goto_if_false @FREIGHT_1935
+127@ = 0
+
+:FREIGHT_1935
+if 
+  $ft_train_level == 3
+goto_if_false @FREIGHT_1960
+127@ = 0
+
+:FREIGHT_1960
+add_int_lvar_to_int_var $freight_remaining += 127@
+126@ = 4
+$ft_help_been_displayed = 1
+Hud.DisplayTimerWithString($freight_remaining, TimerDirection.Down, 'FREI_14')
+Hud.DisplayNthCounterWithString($ft_distance, CounterDisplay.Number, 1, 'FREI_10')
+Hud.DisplayNthCounterWithString($ft_speed, CounterDisplay.Number, 2, 'FREI_11')
+Text.ClearPrints
+Text.ClearHelp
+
+:FREIGHT_2038
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FREIGHT_2068
+$x, $y, $z = Char.GetCoordinates($scplayer)
+
+:FREIGHT_2068
+136@ = Math.GetDistanceBetweenCoords2D($x, $y, 45@(125@,20f), 65@(125@,20f))
+cset_var_int_to_lvar_float $ft_distance = float 136@
+if 
+  Train.HasDerailed($car)
+goto_if_false @FREIGHT_2124
+goto @FREIGHT_2819
+
+:FREIGHT_2124
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @FREIGHT_2152
+Text.ClearPrints
+Text.ClearHelp
+goto @FREIGHT_2773
+
+:FREIGHT_2152
+if 
+  0 >= $freight_remaining
+goto_if_false @FREIGHT_2177
+goto @FREIGHT_2819
+
+:FREIGHT_2177
+if 
+  Char.LocateStoppedAnyMeans3D($scplayer, 45@(125@,20f), 65@(125@,20f), 85@(125@,20f), 10.0, 10.0, 10.0, True)
+goto_if_false @FREIGHT_2522
+if or
+  Char.IsInModel($scplayer, 538)
+  Char.IsInModel($scplayer, 537)
+goto_if_false @FREIGHT_2522
+
+:FREIGHT_2258
+if 
+  Blip.DoesExist(105@(125@,20i))
+goto_if_false @FREIGHT_2287
+Blip.Remove(105@(125@,20i))
+
+:FREIGHT_2287
+130@ += 1
+set_lvar_int_to_var_int 127@ = $freight_remaining
+Hud.ClearTimer($freight_remaining)
+Hud.ClearCounter($ft_distance)
+Hud.ClearCounter($ft_speed)
+if 
+  130@ == 5
+goto_if_false @FREIGHT_2342
+goto @FREIGHT_2905
+
+:FREIGHT_2342
+if 
+  133@ == 0
+goto_if_false @FREIGHT_2374
+125@ += 1
+goto @FREIGHT_2381
+
+:FREIGHT_2374
+125@ -= 1
+
+:FREIGHT_2381
+if 
+  125@ == 5
+goto_if_false @FREIGHT_2406
+125@ = 0
+
+:FREIGHT_2406
+if 
+  125@ == -1
+goto_if_false @FREIGHT_2431
+125@ = 4
+
+:FREIGHT_2431
+if 
+  127@ > 15000
+goto_if_false @FREIGHT_2458
+127@ = 15000
+
+:FREIGHT_2458
+set_lvar_int_to_lvar_int 128@ = 127@
+128@ /= 100
+mult_int_lvar_by_int_var 128@ *= $ft_train_level
+Text.PrintWithNumberBig('FREI_07', 128@, 3000, TextStyle.Middle)
+Player.AddScore($player1, 128@)
+TIMERA = 0
+132@ = 1
+
+:FREIGHT_2522
+if and
+  132@ == 1
+  TIMERA > 6000
+goto_if_false @FREIGHT_2759
+set_lvar_int_to_lvar_int 128@ = 127@
+128@ /= 1000
+Text.PrintWithNumberBig('FREI_05', 128@, 4000, TextStyle.WhiteMiddleSmaller)
+$freight_remaining = 0
+if 
+  133@ == 0
+goto_if_false @FREIGHT_2635
+set_var_int_to_lvar_int $freight_remaining = 34@(125@,5i)
+add_int_lvar_to_int_var $freight_remaining += 127@
+goto @FREIGHT_2655
+
+:FREIGHT_2635
+set_var_int_to_lvar_int $freight_remaining = 39@(125@,5i)
+add_int_lvar_to_int_var $freight_remaining += 127@
+
+:FREIGHT_2655
+Hud.ClearTimer($freight_remaining)
+Hud.ClearCounter($ft_distance)
+Hud.ClearCounter($ft_speed)
+Hud.DisplayTimerWithString($freight_remaining, TimerDirection.Down, 'FREI_14')
+Hud.DisplayNthCounterWithString($ft_distance, CounterDisplay.Number, 1, 'FREI_10')
+Hud.DisplayNthCounterWithString($ft_speed, CounterDisplay.Number, 2, 'FREI_11')
+105@(125@,20i) = Blip.AddForCoord(45@(125@,20f), 65@(125@,20f), 85@(125@,20f))
+132@ = 0
+
+:FREIGHT_2759
+goto @FREIGHT_1331
+
+:FREIGHT_2766
+goto @FREIGHT_2819
+
+:FREIGHT_2773
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Text.ClearPrints
+Text.ClearHelp
+Text.PrintBig('FREI_02', 5000, TextStyle.Middle)
+Hud.ClearTimer($freight_remaining)
+Hud.ClearCounter($ft_distance)
+Hud.ClearCounter($ft_speed)
+wait 2000
+return 
+
+:FREIGHT_2819
+if 
+  Blip.DoesExist(105@(125@,20i))
+goto_if_false @FREIGHT_2848
+Blip.Remove(105@(125@,20i))
+
+:FREIGHT_2848
+Hud.ClearTimer($freight_remaining)
+Hud.ClearCounter($ft_distance)
+Hud.ClearCounter($ft_speed)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Text.ClearHelp
+Text.ClearPrints
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+Text.PrintNow('FREI_06', 4000, 1)
+return 
+
+:FREIGHT_2905
+if 
+  $ft_train_level == 2
+goto_if_false @FREIGHT_3032
+if 
+  $flag_freight_passed_1stime == 0
+goto_if_false @FREIGHT_2976
+Text.PrintWithNumberBig('M_PASS', 50000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 50000)
+Audio.PlayMissionPassedTune(2)
+
+:FREIGHT_2976
+if 
+  $flag_freight_passed_1stime == 2
+goto_if_false @FREIGHT_3025
+Text.PrintWithNumberBig('M_PASS', 10000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 10000)
+Audio.PlayMissionPassedTune(2)
+
+:FREIGHT_3025
+goto @FREIGHT_3051
+
+:FREIGHT_3032
+Text.PrintWithNumberBig('FREI_15', $ft_train_level, 5000, TextStyle.Middle)
+
+:FREIGHT_3051
+if and
+  $flag_freight_passed_0stime == 0
+  $ft_train_level == 1
+goto_if_false @FREIGHT_3085
+Stat.RegisterOddjobMissionPassed
+$flag_freight_passed_0stime = 1
+
+:FREIGHT_3085
+if and
+  $flag_freight_passed_1stime == 0
+  $ft_train_level == 2
+goto_if_false @FREIGHT_3123
+Stat.RegisterOddjobMissionPassed
+Stat.PlayerMadeProgress(1)
+$flag_freight_passed_1stime = 1
+
+:FREIGHT_3123
+Hud.ClearTimer($freight_remaining)
+Hud.ClearCounter($ft_distance)
+Hud.ClearCounter($ft_speed)
+Player.ClearWantedLevel($player1)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Audio.PlayMissionPassedTune(1)
+if 
+  $ft_train_level <> 2
+goto_if_false @FREIGHT_3176
+$ft_train_level += 1
+
+:FREIGHT_3176
+return 
+
+:FREIGHT_3178
+if 
+  Blip.DoesExist(105@(125@,20i))
+goto_if_false @FREIGHT_3207
+Blip.Remove(105@(125@,20i))
+
+:FREIGHT_3207
+Streaming.MarkModelAsNoLongerNeeded(590)
+Streaming.MarkModelAsNoLongerNeeded(570)
+Streaming.MarkModelAsNoLongerNeeded(569)
+Streaming.MarkModelAsNoLongerNeeded(538)
+Streaming.MarkModelAsNoLongerNeeded(537)
+$onmission = 0
+$flag_player_on_freight_mission = 0
+Player.ClearWantedLevel($player1)
+Hud.ClearCounter($ft_distance)
+Hud.ClearCounter($ft_speed)
+Hud.ClearTimer($freight_remaining)
+Player.ClearWantedLevel($player1)
+Game.SetWantedMultiplier(1.0)
+Mission.Finish
+return 
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+return 
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+return 
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 2000)
+
+:FREIGHT_3327
+if 
+  Camera.GetFadingStatus
+goto_if_false @FREIGHT_3351
+wait 0
+goto @FREIGHT_3327
+
+:FREIGHT_3351
+return 
+
+:FREIGHT_3353
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 2000)
+
+:FREIGHT_3368
+if 
+  Camera.GetFadingStatus
+goto_if_false @FREIGHT_3392
+wait 0
+goto @FREIGHT_3368
+
+:FREIGHT_3392
+return 
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @FREIGHT_3409
+
+:FREIGHT_3409
+if 
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @FREIGHT_3424
+
+:FREIGHT_3424
+if 
+is_ps2_keyboard_key_just_pressed 70
+goto_if_false @FREIGHT_3439
+
+:FREIGHT_3439
+if 
+is_ps2_keyboard_key_just_pressed 66
+goto_if_false @FREIGHT_3454
+
+:FREIGHT_3454
+if 
+is_ps2_keyboard_key_just_pressed 75
+goto_if_false @FREIGHT_3490
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FREIGHT_3490
+Task.Die($scplayer)
+
+:FREIGHT_3490
+if 
+is_ps2_keyboard_key_just_pressed 72
+goto_if_false @FREIGHT_3535
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FREIGHT_3535
+Char.AddArmor($scplayer, 100)
+Player.IncreaseMaxHealth($player1, 100)
+
+:FREIGHT_3535
+return 
+

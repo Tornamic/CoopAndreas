@@ -1,0 +1,2087 @@
+:JFUD_563
+script_name 'JFUD'
+
+:JFUD_574
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @JFUD_9696
+if 
+  not is_var_text_label_empty s$shop_name
+goto_if_false @JFUD_9682
+if 
+  $flag_food > 0
+goto_if_false @JFUD_672
+if 
+  Game.HasLanguageChanged
+goto_if_false @JFUD_672
+Text.ClearHelp
+Menu.Delete($cost_menu_shops)
+Menu.Delete($bought_menu_shops)
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$current_Language = Game.GetCurrentLanguage()
+
+:JFUD_672
+if 
+  $flag_food == 0
+goto_if_false @JFUD_1005
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'FDPIZA'
+goto_if_false @JFUD_795
+$num_of_food_stuffs = Shopping.GetNumberOfItems()
+$junkfud_offsetX = 0.0
+$junkfud_offsetY = 0.0
+$junkfud_offsetZ = 0.0
+$junkfud_heading_offset = 0.0
+$keep_off_dirX = 0.0
+$keep_off_dirY = 2.5
+set_var_text_label s$stored_shop = s$shop_name
+$flag_food = 1
+
+:JFUD_795
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'FDCHICK'
+goto_if_false @JFUD_900
+$num_of_food_stuffs = Shopping.GetNumberOfItems()
+$junkfud_offsetX = -5.211
+$junkfud_offsetY = 112.784
+$junkfud_offsetZ = 0.3
+$junkfud_heading_offset = 0.0
+$keep_off_dirX = 0.0
+$keep_off_dirY = 2.5
+set_var_text_label s$stored_shop = s$shop_name
+$flag_food = 1
+
+:JFUD_900
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'FDBURG'
+goto_if_false @JFUD_1005
+$num_of_food_stuffs = Shopping.GetNumberOfItems()
+$keep_off_dirX = 0.0
+$keep_off_dirY = 2.5
+$junkfud_offsetX = 1.566
+$junkfud_offsetY = 51.419
+$junkfud_offsetZ = 0.01
+$junkfud_heading_offset = 0.0
+set_var_text_label s$stored_shop = s$shop_name
+$flag_food = 1
+
+:JFUD_1005
+if 
+  $flag_food == 1
+goto_if_false @JFUD_1427
+Text.UseCommands(True)
+Stat.ShowUpdateStats(False)
+$junkfudX = 374.0
+add_float_var_to_float_var $junkfudX += $junkfud_offsetX
+$junkfudY = -117.141
+add_float_var_to_float_var $junkfudY += $junkfud_offsetY
+$junkfudZ = 1000.539
+add_float_var_to_float_var $junkfudZ += $junkfud_offsetZ
+$junkfud_heading = 180.0
+add_float_var_to_float_var $junkfud_heading += $junkfud_heading_offset
+$junkfud_cam_offX = 374.0
+add_float_var_to_float_var $junkfud_cam_offX += $junkfud_offsetX
+$junkfud_cam_offY = -119.1869
+add_float_var_to_float_var $junkfud_cam_offY += $junkfud_offsetY
+$junkfud_cam_offZ = 1002.019
+add_float_var_to_float_var $junkfud_cam_offZ += $junkfud_offsetZ
+$cam_point_junkfudX = 373.9532
+add_float_var_to_float_var $cam_point_junkfudX += $junkfud_offsetX
+$cam_point_junkfudY = -118.189
+add_float_var_to_float_var $cam_point_junkfudY += $junkfud_offsetY
+$cam_point_junnkfudZ = 1001.975
+add_float_var_to_float_var $cam_point_junnkfudZ += $junkfud_offsetZ
+$vomit_camX = 374.717
+add_float_var_to_float_var $vomit_camX += $junkfud_offsetX
+$vomit_camY = -122.55
+add_float_var_to_float_var $vomit_camY += $junkfud_offsetY
+$vomit_camZ = 1002.572
+add_float_var_to_float_var $vomit_camZ += $junkfud_offsetZ
+$vomit_cam_point_junkfudX = 374.599
+add_float_var_to_float_var $vomit_cam_point_junkfudX += $junkfud_offsetX
+$vomit_cam_point_junkfudY = -121.608
+add_float_var_to_float_var $vomit_cam_point_junkfudY += $junkfud_offsetY
+$vomit_cam_point_junnkfudZ = 1002.256
+add_float_var_to_float_var $vomit_cam_point_junnkfudZ += $junkfud_offsetZ
+if 
+  $jfud_keep_created == 0
+goto_if_false @JFUD_1420
+
+$shop_keep_junkfud = Coop.GetPedInAreaWithModel($junkfudX, $junkfudY, $junkfudZ, 1.5, 1.5, 40.0, $shopkeeper_model_shops, -1, -1)
+if $shop_keep_junkfud == -1
+then
+    $shop_keep_junkfud = Char.Create(4, $shopkeeper_model_shops, $junkfudX, $junkfudY, $junkfudZ)
+else
+    Coop.ClaimPedOnRelease($shop_keep_junkfud)
+    
+    if Coop.IsHost()
+    then
+        Coop.PedTakeHost($shop_keep_junkfud, True)
+    end
+end
+
+Char.SetHeading($shop_keep_junkfud, $junkfud_heading)
+Char.SetOnlyDamagedByPlayer($shop_keep_junkfud, True)
+Char.SetDecisionMaker($shop_keep_junkfud, 65542)
+$keep_offX = Char.GetOffsetInWorldCoords($keep_offY, $keep_offZ, $shop_keep_junkfud, $keep_off_dirX, $keep_off_dirY, 0.0)
+$flag_attacked_keeper_food = 0
+$jfud_keep_created = 1
+
+:JFUD_1420
+$flag_food = 2
+
+:JFUD_1427
+if 
+  $flag_food == 2
+goto_if_false @JFUD_2034
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_1476
+gosub @JFUD_9887
+
+:JFUD_1476
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_1989
+if 
+  $flag_attacked_keeper_food == 0
+goto_if_false @JFUD_1937
+if or
+  Char.IsShooting($scplayer)
+  Player.IsTargetingChar($player1, $shop_keep_junkfud)
+  Char.HasBeenDamagedByWeapon($shop_keep_junkfud, WeaponType.AnyWeapon)
+  $iSetPizzaPanic == 1
+goto_if_false @JFUD_1587
+$sample_name_shop = Char.SetSayContext($shop_keep_junkfud, 327)
+Task.HandsUp($shop_keep_junkfud, -2)
+$iSetPizzaPanic = 1
+$flag_attacked_keeper_food = 1
+goto @JFUD_1930
+
+:JFUD_1587
+if 
+  11 > $total_food_bought_per_day_shops
+goto_if_false @JFUD_1765
+$blob_flag_shop = 1
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, $keep_offX, $keep_offY, $keep_offZ, 1.0, 1.0, 4.0, $blob_flag_shop)
+goto_if_false @JFUD_1758
+if 
+  Player.CanStartMission($player1)
+goto_if_false @JFUD_1758
+$sample_name_shop = Char.SetSayContext($shop_keep_junkfud, 333)
+$players_money = Player.StoreScore($player1)
+if 
+  2 > $flag_menace_buyfood
+goto_if_false @JFUD_1751
+if 
+  $flag_player_on_menace_mission == 1
+goto_if_false @JFUD_1751
+if 
+  2 > $players_money
+goto_if_false @JFUD_1751
+Player.AddScore($player1, 2)
+
+:JFUD_1751
+$flag_food = 3
+
+:JFUD_1758
+goto @JFUD_1930
+
+:JFUD_1765
+if 
+  $flag_ate_too_much_food == 0
+goto_if_false @JFUD_1899
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_1847
+$sample_name_shop = Char.SetSayContext($shop_keep_junkfud, 322)
+Text.PrintNow('FOOD1', 5000, 1)
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1055)
+goto @JFUD_1892
+
+:JFUD_1847
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_1885
+gosub @JFUD_9887
+
+:JFUD_1885
+goto @JFUD_574
+
+:JFUD_1892
+$flag_ate_too_much_food = 1
+
+:JFUD_1899
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_1930
+gosub @JFUD_9887
+
+:JFUD_1930
+goto @JFUD_1982
+
+:JFUD_1937
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_1975
+gosub @JFUD_9887
+
+:JFUD_1975
+goto @JFUD_574
+
+:JFUD_1982
+goto @JFUD_2034
+
+:JFUD_1989
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_2027
+gosub @JFUD_9887
+
+:JFUD_2027
+goto @JFUD_574
+
+:JFUD_2034
+if 
+  $flag_food == 3
+goto_if_false @JFUD_4339
+Player.SetControl($player1, False)
+Game.SetMinigameInProgress(True)
+Char.SetCoordinatesDontWarpGangNoOffset($scplayer, $keep_offX, $keep_offY, $keep_offZ)
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+Char.SetHeading($scplayer, $food_heading)
+$players_health = Char.GetHealth($scplayer)
+$players_fat = Stat.GetFloat(21)
+Char.ClearTasksImmediately($scplayer)
+World.ClearArea(1, $player_x, $player_y, $player_z, 1.0)
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_2401
+$temp_shopX, $temp_shopY, $temp_shopZ = Char.GetCoordinates($shop_keep_junkfud)
+if or
+  not is_float_var_equal_to_float_var $temp_shopX == $junkfudX
+  not is_float_var_equal_to_float_var $temp_shopY == $junkfudY
+  not is_float_var_equal_to_float_var $temp_shopZ == $junkfudZ
+goto_if_false @JFUD_2224
+Char.SetCoordinates($shop_keep_junkfud, $junkfudX, $junkfudY, $junkfudZ)
+Char.SetHeading($shop_keep_junkfud, $junkfud_heading)
+
+:JFUD_2224
+$tray_offX = Char.GetOffsetInWorldCoords($tray_offY, $tray_offZ, $shop_keep_junkfud, 0.0, 0.8, 0.1)
+if 
+  not Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_POSE")
+goto_if_false @JFUD_2333
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_IN", "FOOD", 4.0, False, False, False, True, -1)
+$return_animation_time_food = 0.0
+
+:JFUD_2333
+$sample_name_shops = Char.SetSayContext($shop_keep_junkfud, 333)
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_IN")
+goto_if_false @JFUD_2394
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_IN")
+
+:JFUD_2394
+goto @JFUD_2446
+
+:JFUD_2401
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_2439
+gosub @JFUD_9887
+
+:JFUD_2439
+goto @JFUD_574
+
+:JFUD_2446
+TIMERA = 0
+
+:JFUD_2453
+if 
+  TIMERA >= 600
+goto_if_false @JFUD_2631
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_2506
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_2506
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_2574
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_2560
+gosub @JFUD_9887
+
+:JFUD_2560
+goto @JFUD_574
+goto @JFUD_2624
+
+:JFUD_2574
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_IN")
+goto_if_false @JFUD_2624
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_IN")
+
+:JFUD_2624
+goto @JFUD_2453
+
+:JFUD_2631
+if 
+  Player.IsPlaying($player1)
+goto_if_false @JFUD_2700
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Camera.SetFixedPosition($junkfud_cam_offX, $junkfud_cam_offY, $junkfud_cam_offZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($cam_point_junkfudX, $cam_point_junkfudY, $cam_point_junnkfudZ, SwitchType.JumpCut)
+goto @JFUD_2714
+
+:JFUD_2700
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_2714
+if 
+  not Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_POSE")
+goto_if_false @JFUD_2925
+
+:JFUD_2745
+if 
+  $return_animation_time_food <> 1.0
+goto_if_false @JFUD_2925
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_2800
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_2800
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_2868
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_2854
+gosub @JFUD_9887
+
+:JFUD_2854
+goto @JFUD_574
+goto @JFUD_2918
+
+:JFUD_2868
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_IN")
+goto_if_false @JFUD_2918
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_IN")
+
+:JFUD_2918
+goto @JFUD_2745
+
+:JFUD_2925
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_3053
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_POSE", "FOOD", 4.0, False, False, False, True, -1)
+$return_animation_time_food = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_POSE")
+goto_if_false @JFUD_3046
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_POSE")
+
+:JFUD_3046
+goto @JFUD_3098
+
+:JFUD_3053
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_3091
+gosub @JFUD_9887
+
+:JFUD_3091
+goto @JFUD_574
+
+:JFUD_3098
+if 
+  $return_animation_time_food <> 1.0
+goto_if_false @JFUD_3282
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_3153
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_3153
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_3221
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_3207
+gosub @JFUD_9887
+
+:JFUD_3207
+goto @JFUD_574
+goto @JFUD_3275
+
+:JFUD_3221
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_POSE")
+goto_if_false @JFUD_3275
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_POSE")
+
+:JFUD_3275
+goto @JFUD_3098
+
+:JFUD_3282
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_3419
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_LIFT_IN", "FOOD", 4.0, False, False, False, True, -1)
+$return_animation_time_food = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_LIFT_IN")
+goto_if_false @JFUD_3412
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_LIFT_IN")
+
+:JFUD_3412
+goto @JFUD_3464
+
+:JFUD_3419
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_3457
+gosub @JFUD_9887
+
+:JFUD_3457
+goto @JFUD_574
+
+:JFUD_3464
+if 
+  $return_animation_time_food <> 1.0
+goto_if_false @JFUD_3654
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_3519
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_3519
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_3587
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_3573
+gosub @JFUD_9887
+
+:JFUD_3573
+goto @JFUD_574
+goto @JFUD_3647
+
+:JFUD_3587
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_LIFT_IN")
+goto_if_false @JFUD_3647
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_LIFT_IN")
+
+:JFUD_3647
+goto @JFUD_3464
+
+:JFUD_3654
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1145)
+$current_food_item = 0
+$created_this_food = 0
+$model_index = Shopping.GetItem($current_food_item)
+$ffood_obj = Object.Create($model_index, $tray_offX, $tray_offY, $tray_offZ)
+$food_price = Shopping.GetPriceOfItem($model_index)
+s$food_name = Shopping.GetNameOfItem($model_index)
+set_var_int_to_var_int $shop_item_price = $food_price
+set_var_text_label s$shop_item_label = s$food_name
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_3915
+Task.PickUpObject($shop_keep_junkfud, $ffood_obj, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 0)
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_LIFT", "FOOD", 1000.0, False, False, False, True, -1)
+$return_animation_time_food = 0.0
+$created_this_food = 1
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_LIFT")
+goto_if_false @JFUD_3908
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_LIFT")
+
+:JFUD_3908
+goto @JFUD_3960
+
+:JFUD_3915
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_3953
+gosub @JFUD_9887
+
+:JFUD_3953
+goto @JFUD_574
+
+:JFUD_3960
+if 
+  $return_animation_time_food <> 1.0
+goto_if_false @JFUD_4144
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_4015
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_4015
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_4083
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_4069
+gosub @JFUD_9887
+
+:JFUD_4069
+goto @JFUD_574
+goto @JFUD_4137
+
+:JFUD_4083
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_LIFT")
+goto_if_false @JFUD_4137
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_LIFT")
+
+:JFUD_4137
+goto @JFUD_3960
+
+:JFUD_4144
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_4287
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_LIFT_LOOP", "FOOD", 1000.0, True, False, False, False, -1)
+$return_animation_time_food = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_LIFT_LOOP")
+goto_if_false @JFUD_4280
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_LIFT_LOOP")
+
+:JFUD_4280
+goto @JFUD_4332
+
+:JFUD_4287
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_4325
+gosub @JFUD_9887
+
+:JFUD_4325
+goto @JFUD_574
+
+:JFUD_4332
+$flag_food = 4
+
+:JFUD_4339
+if 
+  $flag_food == 4
+goto_if_false @JFUD_9675
+if 
+  $flag_ate_too_much_food == 0
+goto_if_false @JFUD_9668
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+if or
+  -100 > $LStickX
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @JFUD_4603
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @JFUD_4447
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:JFUD_4447
+$flag_no_money_shops = 0
+$current_food_item -= 1
+TIMERA = 0
+
+:JFUD_4468
+if 
+  150 > TIMERA
+goto_if_false @JFUD_4589
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_4521
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_4521
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_4582
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_4575
+gosub @JFUD_9887
+
+:JFUD_4575
+goto @JFUD_574
+
+:JFUD_4582
+goto @JFUD_4468
+
+:JFUD_4589
+$flag_bought_some_food = 0
+$created_this_food = 0
+
+:JFUD_4603
+if or
+  $LStickX > 100
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @JFUD_4815
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @JFUD_4659
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:JFUD_4659
+$flag_no_money_shops = 0
+$current_food_item += 1
+TIMERA = 0
+
+:JFUD_4680
+if 
+  150 > TIMERA
+goto_if_false @JFUD_4801
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_4733
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_4733
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_4794
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_4787
+gosub @JFUD_9887
+
+:JFUD_4787
+goto @JFUD_574
+
+:JFUD_4794
+goto @JFUD_4680
+
+:JFUD_4801
+$created_this_food = 0
+$flag_bought_some_food = 0
+
+:JFUD_4815
+if 
+  0 > $current_food_item
+goto_if_false @JFUD_4848
+set_var_int_to_var_int $current_food_item = $num_of_food_stuffs
+$current_food_item -= 1
+
+:JFUD_4848
+if 
+  is_int_var_equal_to_int_var $current_food_item == $num_of_food_stuffs
+goto_if_false @JFUD_4874
+$current_food_item = 0
+
+:JFUD_4874
+if 
+  $created_this_food == 0
+goto_if_false @JFUD_5930
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_5026
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_RETURN", "FOOD", 4.0, False, False, False, True, -1)
+$return_animation_time_food = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_RETURN")
+goto_if_false @JFUD_5019
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_RETURN")
+
+:JFUD_5019
+goto @JFUD_5071
+
+:JFUD_5026
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_5064
+gosub @JFUD_9887
+
+:JFUD_5064
+goto @JFUD_574
+
+:JFUD_5071
+if 
+  $return_animation_time_food <> 1.0
+goto_if_false @JFUD_5259
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_5126
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_5126
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_5194
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_5180
+gosub @JFUD_9887
+
+:JFUD_5180
+goto @JFUD_574
+goto @JFUD_5252
+
+:JFUD_5194
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_RETURN")
+goto_if_false @JFUD_5252
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_RETURN")
+
+:JFUD_5252
+goto @JFUD_5071
+
+:JFUD_5259
+gosub @JFUD_12993
+$model_index = Shopping.GetItem($current_food_item)
+$ffood_obj = Object.Create($model_index, $tray_offX, $tray_offY, $tray_offZ)
+$food_price = Shopping.GetPriceOfItem($model_index)
+s$food_name = Shopping.GetNameOfItem($model_index)
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1145)
+set_var_int_to_var_int $shop_item_price = $food_price
+set_var_text_label s$shop_item_label = s$food_name
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_5506
+Task.PickUpObject($shop_keep_junkfud, $ffood_obj, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 0)
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_LIFT", "FOOD", 1000.0, False, False, False, True, -1)
+$return_animation_time_food = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_LIFT")
+goto_if_false @JFUD_5499
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_LIFT")
+
+:JFUD_5499
+goto @JFUD_5551
+
+:JFUD_5506
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_5544
+gosub @JFUD_9887
+
+:JFUD_5544
+goto @JFUD_574
+
+:JFUD_5551
+if 
+  $return_animation_time_food <> 1.0
+goto_if_false @JFUD_5735
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_5606
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_5606
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_5674
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_5660
+gosub @JFUD_9887
+
+:JFUD_5660
+goto @JFUD_574
+goto @JFUD_5728
+
+:JFUD_5674
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_LIFT")
+goto_if_false @JFUD_5728
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_LIFT")
+
+:JFUD_5728
+goto @JFUD_5551
+
+:JFUD_5735
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_5878
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_LIFT_LOOP", "FOOD", 1000.0, True, False, False, False, -1)
+$return_animation_time_food = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_LIFT_LOOP")
+goto_if_false @JFUD_5871
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_LIFT_LOOP")
+
+:JFUD_5871
+goto @JFUD_5923
+
+:JFUD_5878
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_5916
+gosub @JFUD_9887
+
+:JFUD_5916
+goto @JFUD_574
+
+:JFUD_5923
+$created_this_food = 1
+
+:JFUD_5930
+if 
+  $flag_ate_too_much_food == 0
+goto_if_false @JFUD_5955
+gosub @JFUD_12352
+
+:JFUD_5955
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @JFUD_9668
+
+:JFUD_5972
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @JFUD_6091
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_6023
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_6023
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_6084
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_6077
+gosub @JFUD_9887
+
+:JFUD_6077
+goto @JFUD_574
+
+:JFUD_6084
+goto @JFUD_5972
+
+:JFUD_6091
+$flag_no_money_shops = 0
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('FOOD1')
+if 
+  Player.IsPlaying($player1)
+goto_if_false @JFUD_6151
+$players_money = Player.StoreScore($player1)
+goto @JFUD_6165
+
+:JFUD_6151
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_6165
+if 
+  is_int_var_greater_or_equal_to_int_var $players_money >= $food_price
+goto_if_false @JFUD_9534
+if 
+  11 > $total_food_bought_per_day_shops
+goto_if_false @JFUD_6997
+Shopping.BuyItem($model_index)
+$flag_bought_some_food = 1
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @JFUD_6252
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot4)
+goto_if_false @JFUD_6252
+Audio.ReportMissionAudioEventAtChar($scplayer, 1168)
+
+:JFUD_6252
+if 
+  $flag_store_day_food == 0
+goto_if_false @JFUD_6282
+$stored_shop_time = Clock.GetGameTimer()
+$flag_store_day_food = 1
+
+:JFUD_6282
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1054)
+$total_food_bought_per_day_shops += 1
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_6337
+$sample_name_shop = Char.SetSayContext($shop_keep_junkfud, 323)
+goto @JFUD_6382
+
+:JFUD_6337
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_6375
+gosub @JFUD_9887
+
+:JFUD_6375
+goto @JFUD_574
+
+:JFUD_6382
+TIMERA = 0
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @JFUD_6421
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:JFUD_6421
+if 
+  $bought_menu_drawn_shops == 0
+goto_if_false @JFUD_6789
+$bought_menu_shops = Menu.Create('FOODCHO', 29.0, 25.0, 93.0, 2, False, 1, 1)
+Menu.SetColumnOrientation($bought_menu_shops, 0, 1)
+Menu.SetColumn($bought_menu_shops, 0, 'MEAL', 'BOUGHT', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetColumnOrientation($bought_menu_shops, 1, 2)
+Menu.SetColumn($bought_menu_shops, 1, 'COST', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetItemWithNumber($bought_menu_shops, 1, 0, 'DOLLAR', $food_price)
+Menu.SetColumnWidth($bought_menu_shops, 0, 140)
+Menu.SetColumnWidth($bought_menu_shops, 1, 46)
+$bought_menu_drawn_shops = 1
+
+:JFUD_6789
+if 
+  1000 >= TIMERA
+goto_if_false @JFUD_6910
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_6842
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_6842
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_6903
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_6896
+gosub @JFUD_9887
+
+:JFUD_6896
+goto @JFUD_574
+
+:JFUD_6903
+goto @JFUD_6789
+
+:JFUD_6910
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @JFUD_6940
+Menu.Delete($bought_menu_shops)
+$bought_menu_drawn_shops = 0
+
+:JFUD_6940
+if 
+  $cost_menu_drawn_shops == 0
+goto_if_false @JFUD_6965
+gosub @JFUD_12352
+
+:JFUD_6965
+if 
+  $flag_menace_buyfood == 1
+goto_if_false @JFUD_6990
+$flag_menace_buyfood = 2
+
+:JFUD_6990
+goto @JFUD_9527
+
+:JFUD_6997
+if 
+  $flag_ate_too_much_food == 0
+goto_if_false @JFUD_9527
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_7079
+$sample_name_shop = Char.SetSayContext($shop_keep_junkfud, 322)
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1055)
+Text.PrintNow('FOOD1', 5000, 1)
+goto @JFUD_7124
+
+:JFUD_7079
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_7117
+gosub @JFUD_9887
+
+:JFUD_7117
+goto @JFUD_574
+
+:JFUD_7124
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @JFUD_7156
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:JFUD_7156
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @JFUD_7188
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:JFUD_7188
+if 
+  $flag_menace_buyfood == 2
+goto_if_false @JFUD_7314
+Camera.SetFadingColor(0, 0, 0)
+Audio.SetMusicDoesFade(False)
+Camera.DoFade(0, Fade.Out)
+gosub @JFUD_12993
+
+Coop.PedResetAllClaims($shop_keep_junkfud)
+Char.Delete($shop_keep_junkfud)
+
+$flag_menace_buyfood = 3
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_no_money_shops = 0
+$created_this_food = 0
+$current_food_item = 0
+$flag_food = 2
+Char.SetHealth($scplayer, $players_health)
+Stat.SetFloat(StatId.Fat, $players_fat)
+$cj_vomits_for_menace = 1
+goto @JFUD_574
+
+:JFUD_7314
+if 
+  $total_food_bought_per_day_shops >= 11
+goto_if_false @JFUD_8116
+gosub @JFUD_9710
+gosub @JFUD_12993
+if 
+  10 > $players_health
+goto_if_false @JFUD_7379
+set_var_int_to_var_int $players_health = $players_health
+goto @JFUD_7411
+
+:JFUD_7379
+$players_health -= 10
+if 
+  10 > $players_health
+goto_if_false @JFUD_7411
+$players_health = 10
+
+:JFUD_7411
+Char.SetHealth($scplayer, $players_health)
+Stat.SetFloat(StatId.Fat, $players_fat)
+Camera.SetFixedPosition($vomit_camX, $vomit_camY, $vomit_camZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($vomit_cam_point_junkfudX, $vomit_cam_point_junkfudY, $vomit_cam_point_junnkfudZ, SwitchType.JumpCut)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @JFUD_7638
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+set_var_float_to_var_float $vomitX = $player_x
+$vomitX += 0.355
+set_var_float_to_var_float $vomitY = $player_y
+$vomitY -= 0.116
+set_var_float_to_var_float $vomitZ = $player_z
+$vomitZ -= 0.048
+$vomit_foodshop = Particle.Create("PUKE", $vomitX, $vomitY, $vomitZ, 1)
+Task.PlayAnimNonInterruptable($scplayer, "EAT_VOMIT_P", "FOOD", 4.0, False, False, False, False, -1)
+$return_animation_time_food = 0.0
+$sample_name_shop = Char.SetSayContext($scplayer, 353)
+goto @JFUD_7652
+
+:JFUD_7638
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_7652
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_7726
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "EAT_VOMIT_SK", "FOOD", 1000.0, False, False, False, False, -1)
+$sample_name_shop = Char.SetSayContext($shop_keep_junkfud, 325)
+goto @JFUD_7771
+
+:JFUD_7726
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_7764
+gosub @JFUD_9887
+
+:JFUD_7764
+goto @JFUD_574
+
+:JFUD_7771
+if 
+  Char.IsPlayingAnim($scplayer, "EAT_VOMIT_P")
+goto_if_false @JFUD_7821
+$return_animation_time_food = Char.GetAnimCurrentTime($scplayer, "EAT_VOMIT_P")
+
+:JFUD_7821
+if 
+  $return_animation_time_food <> 1.0
+goto_if_false @JFUD_8099
+wait 0
+if 
+  $flag_vomit_playing_food == 0
+goto_if_false @JFUD_7915
+if 
+  $return_animation_time_food >= 0.463
+goto_if_false @JFUD_7915
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @JFUD_7908
+Audio.ReportMissionAudioEventAtChar($scplayer, 1169)
+
+:JFUD_7908
+$flag_vomit_playing_food = 1
+
+:JFUD_7915
+if 
+  $flag_vomit_playing_food == 1
+goto_if_false @JFUD_7966
+if 
+  $return_animation_time_food >= 0.52
+goto_if_false @JFUD_7966
+Particle.Play($vomit_foodshop)
+$flag_vomit_playing_food = 2
+
+:JFUD_7966
+if 
+  Player.IsPlaying($player1)
+goto_if_false @JFUD_8010
+$return_animation_time_food = Char.GetAnimCurrentTime($scplayer, "EAT_VOMIT_P")
+goto @JFUD_8024
+
+:JFUD_8010
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_8024
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_8047
+goto @JFUD_8092
+
+:JFUD_8047
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_8085
+gosub @JFUD_9887
+
+:JFUD_8085
+goto @JFUD_574
+
+:JFUD_8092
+goto @JFUD_7821
+
+:JFUD_8099
+Particle.Stop($vomit_foodshop)
+Particle.Kill($vomit_foodshop)
+goto @JFUD_8867
+
+:JFUD_8116
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_8250
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_RETURN", "FOOD", 4.0, False, False, False, True, -1)
+$return_animation_time_food = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_RETURN")
+goto_if_false @JFUD_8243
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_RETURN")
+
+:JFUD_8243
+goto @JFUD_8295
+
+:JFUD_8250
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_8288
+gosub @JFUD_9887
+
+:JFUD_8288
+goto @JFUD_574
+
+:JFUD_8295
+if 
+  $return_animation_time_food <> 1.0
+goto_if_false @JFUD_8483
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_8350
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_8350
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_8418
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_8404
+gosub @JFUD_9887
+
+:JFUD_8404
+goto @JFUD_574
+goto @JFUD_8476
+
+:JFUD_8418
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_RETURN")
+goto_if_false @JFUD_8476
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_RETURN")
+
+:JFUD_8476
+goto @JFUD_8295
+
+:JFUD_8483
+gosub @JFUD_12993
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_8630
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_LIFT_OUT", "FOOD", 1000.0, False, False, False, True, -1)
+$return_animation_time_food = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_LIFT_OUT")
+goto_if_false @JFUD_8623
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_LIFT_OUT")
+
+:JFUD_8623
+goto @JFUD_8675
+
+:JFUD_8630
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_8668
+gosub @JFUD_9887
+
+:JFUD_8668
+goto @JFUD_574
+
+:JFUD_8675
+if 
+  $return_animation_time_food <> 1.0
+goto_if_false @JFUD_8867
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_8730
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_8730
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_8798
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_8784
+gosub @JFUD_9887
+
+:JFUD_8784
+goto @JFUD_574
+goto @JFUD_8860
+
+:JFUD_8798
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_LIFT_OUT")
+goto_if_false @JFUD_8860
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_LIFT_OUT")
+
+:JFUD_8860
+goto @JFUD_8675
+
+:JFUD_8867
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_8995
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_POSE", "FOOD", 1000.0, False, False, False, True, -1)
+$return_animation_time_food = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_POSE")
+goto_if_false @JFUD_8988
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_POSE")
+
+:JFUD_8988
+goto @JFUD_9040
+
+:JFUD_8995
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_9033
+gosub @JFUD_9887
+
+:JFUD_9033
+goto @JFUD_574
+
+:JFUD_9040
+if 
+  $return_animation_time_food <> 1.0
+goto_if_false @JFUD_9231
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @JFUD_9088
+goto @JFUD_9102
+
+:JFUD_9088
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_9102
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_9179
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_POSE")
+goto_if_false @JFUD_9172
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_POSE")
+
+:JFUD_9172
+goto @JFUD_9224
+
+:JFUD_9179
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_9217
+gosub @JFUD_9887
+
+:JFUD_9217
+goto @JFUD_574
+
+:JFUD_9224
+goto @JFUD_9040
+
+:JFUD_9231
+Player.SetControl($player1, True)
+Game.SetMinigameInProgress(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+
+:JFUD_9246
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $keep_offX, $keep_offY, $keep_offZ, 1.0, 1.0, 4.0)
+goto_if_false @JFUD_9485
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_9322
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_9322
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_9390
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_9376
+gosub @JFUD_9887
+
+:JFUD_9376
+goto @JFUD_574
+goto @JFUD_9478
+
+:JFUD_9390
+if 
+  $flag_attacked_keeper_food == 0
+goto_if_false @JFUD_9478
+if or
+  Char.IsShooting($scplayer)
+  Player.IsTargetingChar($player1, $shop_keep_junkfud)
+  Char.HasBeenDamagedByWeapon($shop_keep_junkfud, WeaponType.AnyWeapon)
+  $iSetPizzaPanic == 1
+goto_if_false @JFUD_9478
+$sample_name_shop = Char.SetSayContext($shop_keep_junkfud, 327)
+Task.HandsUp($shop_keep_junkfud, -2)
+$iSetPizzaPanic = 1
+$flag_attacked_keeper_food = 1
+
+:JFUD_9478
+goto @JFUD_9246
+
+:JFUD_9485
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$created_this_food = 0
+$current_food_item = 0
+$flag_food = 2
+$flag_ate_too_much_food = 1
+
+:JFUD_9527
+goto @JFUD_9668
+
+:JFUD_9534
+if 
+  $flag_no_money_shops == 0
+goto_if_false @JFUD_9668
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_9616
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1055)
+$sample_name_shops = Char.SetSayContext($shop_keep_junkfud, 324)
+Text.PrintNow('SHOPNO', 5000, 1)
+goto @JFUD_9661
+
+:JFUD_9616
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_9654
+gosub @JFUD_9887
+
+:JFUD_9654
+goto @JFUD_574
+
+:JFUD_9661
+$flag_no_money_shops = 1
+
+:JFUD_9668
+gosub @JFUD_10132
+
+:JFUD_9675
+goto @JFUD_9689
+
+:JFUD_9682
+gosub @JFUD_9887
+
+:JFUD_9689
+goto @JFUD_9703
+
+:JFUD_9696
+gosub @JFUD_9887
+
+:JFUD_9703
+goto @JFUD_574
+
+:JFUD_9710
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('FOOD1')
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @JFUD_9764
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:JFUD_9764
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @JFUD_9796
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:JFUD_9796
+$created_this_food = 0
+$current_food_item = 0
+$flag_bought_some_food = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_food = 2
+$flag_no_money_shops = 0
+Streaming.MarkModelAsNoLongerNeeded($foodsmall_junkfud)
+Streaming.MarkModelAsNoLongerNeeded($foodmed_junkfud)
+Streaming.MarkModelAsNoLongerNeeded($foodlarge_junkfud)
+Streaming.MarkModelAsNoLongerNeeded($foodhealthy_junkfud)
+if 
+  $jfud_keep_created == 1
+goto_if_false @JFUD_9885
+Text.ClearHelp
+
+:JFUD_9885
+return 
+
+:JFUD_9887
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('FOOD1')
+if 
+  $jfud_keep_created == 1
+goto_if_false @JFUD_9929
+Text.ClearHelp
+
+:JFUD_9929
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @JFUD_9961
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:JFUD_9961
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @JFUD_9993
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:JFUD_9993
+$jfud_keep_created = 0
+$found_a_food_shop = 0
+$current_food_item = 0
+$created_this_food = 0
+$flag_ate_too_much_food = 0
+$flag_bought_some_food = 0
+$flag_attacked_keeper_food = 0
+$flag_vomit_playing_food = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_food = 0
+$flag_no_money_shops = 0
+Particle.Kill($vomit_foodshop)
+
+if Coop.IsSyncingThisPed($shop_keep_junkfud)
+then
+    Char.Delete($shop_keep_junkfud)
+else
+    Coop.CancelPedClaim($shop_keep_junkfud)
+end
+
+Streaming.MarkModelAsNoLongerNeeded($shopkeeper_model_shops)
+Streaming.MarkModelAsNoLongerNeeded($foodsmall_junkfud)
+Streaming.MarkModelAsNoLongerNeeded($foodmed_junkfud)
+Streaming.MarkModelAsNoLongerNeeded($foodlarge_junkfud)
+Streaming.MarkModelAsNoLongerNeeded($foodhealthy_junkfud)
+Text.UseCommands(False)
+Stat.ShowUpdateStats(True)
+Game.SetMinigameInProgress(False)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+terminate_this_script 
+return 
+
+:JFUD_10132
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @JFUD_12350
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @JFUD_10181
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:JFUD_10181
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @JFUD_10213
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:JFUD_10213
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @JFUD_10332
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_10264
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_10264
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_10325
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_10318
+gosub @JFUD_9887
+
+:JFUD_10318
+goto @JFUD_574
+
+:JFUD_10325
+goto @JFUD_10213
+
+:JFUD_10332
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('FOOD1')
+if 
+  $flag_menace_buyfood == 2
+goto_if_false @JFUD_10454
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, Fade.Out)
+gosub @JFUD_12993
+
+Coop.PedResetAllClaims($shop_keep_junkfud)
+Char.Delete($shop_keep_junkfud)
+
+$flag_menace_buyfood = 3
+$created_this_food = 0
+$current_food_item = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_food = 2
+$flag_no_money_shops = 0
+goto @JFUD_12350
+
+:JFUD_10454
+$blob_flag_shop = 0
+s$shop_name = Shopping.GetLoaded()
+if 
+  $flag_bought_some_food == 1
+goto_if_false @JFUD_10687
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'FDBURG'
+goto_if_false @JFUD_10554
+Task.PlayAnim($scplayer, "EAT_BURGER", "FOOD", 4.0, False, False, False, False, -1)
+goto @JFUD_10687
+
+:JFUD_10554
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'FDPIZA'
+goto_if_false @JFUD_10623
+Task.PlayAnim($scplayer, "EAT_PIZZA", "FOOD", 4.0, False, False, False, False, -1)
+goto @JFUD_10687
+
+:JFUD_10623
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'FDCHICK'
+goto_if_false @JFUD_10687
+Task.PlayAnim($scplayer, "EAT_CHICKEN", "FOOD", 4.0, False, False, False, False, -1)
+
+:JFUD_10687
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_10832
+$sample_name_shops = Char.SetSayContext($shop_keep_junkfud, 331)
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_RETURN", "FOOD", 1000.0, False, False, False, True, -1)
+$return_animation_time_food = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_RETURN")
+goto_if_false @JFUD_10825
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_RETURN")
+
+:JFUD_10825
+goto @JFUD_10877
+
+:JFUD_10832
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_10870
+gosub @JFUD_9887
+
+:JFUD_10870
+goto @JFUD_574
+
+:JFUD_10877
+if 
+  $return_animation_time_food <> 1.0
+goto_if_false @JFUD_11065
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_10932
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_10932
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_11000
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_10986
+gosub @JFUD_9887
+
+:JFUD_10986
+goto @JFUD_574
+goto @JFUD_11058
+
+:JFUD_11000
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_RETURN")
+goto_if_false @JFUD_11058
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_RETURN")
+
+:JFUD_11058
+goto @JFUD_10877
+
+:JFUD_11065
+gosub @JFUD_12993
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_11212
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_LIFT_OUT", "FOOD", 1000.0, False, False, False, True, -1)
+$return_animation_time_food = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_LIFT_OUT")
+goto_if_false @JFUD_11205
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_LIFT_OUT")
+
+:JFUD_11205
+goto @JFUD_11257
+
+:JFUD_11212
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_11250
+gosub @JFUD_9887
+
+:JFUD_11250
+goto @JFUD_574
+
+:JFUD_11257
+if 
+  $return_animation_time_food <> 1.0
+goto_if_false @JFUD_11449
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_11312
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_11312
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_11380
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_11366
+gosub @JFUD_9887
+
+:JFUD_11366
+goto @JFUD_574
+goto @JFUD_11442
+
+:JFUD_11380
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_LIFT_OUT")
+goto_if_false @JFUD_11442
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_LIFT_OUT")
+
+:JFUD_11442
+goto @JFUD_11257
+
+:JFUD_11449
+if 
+  $flag_bought_some_food == 1
+goto_if_false @JFUD_11505
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @JFUD_11505
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot4)
+goto_if_false @JFUD_11505
+Audio.ReportMissionAudioEventAtChar($scplayer, 1168)
+
+:JFUD_11505
+$created_this_food = 0
+$current_food_item = 0
+$flag_food = 2
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_bought_some_food = 0
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+if 
+  $jfud_keep_created == 1
+goto_if_false @JFUD_11576
+Text.ClearHelp
+
+:JFUD_11576
+gosub @JFUD_12993
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_11710
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_THANK", "FOOD", 1000.0, False, False, False, True, -1)
+$return_animation_time_food = 0.0
+$sample_name_shops = Char.SetSayContext($shop_keep_junkfud, 331)
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_THANK")
+goto_if_false @JFUD_11703
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_THANK")
+
+:JFUD_11703
+goto @JFUD_11755
+
+:JFUD_11710
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_11748
+gosub @JFUD_9887
+
+:JFUD_11748
+goto @JFUD_574
+
+:JFUD_11755
+if 
+  $return_animation_time_food <> 1.0
+goto_if_false @JFUD_11931
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_11810
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_11810
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_11878
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_11864
+gosub @JFUD_9887
+
+:JFUD_11864
+goto @JFUD_574
+goto @JFUD_11924
+
+:JFUD_11878
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_THANK")
+goto_if_false @JFUD_11924
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_THANK")
+
+:JFUD_11924
+goto @JFUD_11755
+
+:JFUD_11931
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_12059
+Task.PlayAnimNonInterruptable($shop_keep_junkfud, "SHP_TRAY_POSE", "FOOD", 1000.0, False, False, False, True, -1)
+$return_animation_time_food = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_junkfud, "SHP_TRAY_POSE")
+goto_if_false @JFUD_12052
+$return_animation_time_food = Char.GetAnimCurrentTime($shop_keep_junkfud, "SHP_TRAY_POSE")
+
+:JFUD_12052
+goto @JFUD_12104
+
+:JFUD_12059
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_12097
+gosub @JFUD_9887
+
+:JFUD_12097
+goto @JFUD_574
+
+:JFUD_12104
+if 
+  Char.LocateOnFoot3D($scplayer, 1, $keep_offX, $keep_offY, $keep_offZ, 1.0, 1.0, 4.0)
+goto_if_false @JFUD_12343
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @JFUD_12180
+gosub @JFUD_9887
+goto @JFUD_574
+
+:JFUD_12180
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @JFUD_12248
+gosub @JFUD_9710
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_shop
+goto_if_false @JFUD_12234
+gosub @JFUD_9887
+
+:JFUD_12234
+goto @JFUD_574
+goto @JFUD_12336
+
+:JFUD_12248
+if 
+  $flag_attacked_keeper_food == 0
+goto_if_false @JFUD_12336
+if or
+  Char.IsShooting($scplayer)
+  Player.IsTargetingChar($player1, $shop_keep_junkfud)
+  Char.HasBeenDamagedByWeapon($shop_keep_junkfud, WeaponType.AnyWeapon)
+  $iSetPizzaPanic == 1
+goto_if_false @JFUD_12336
+$sample_name_shop = Char.SetSayContext($shop_keep_junkfud, 327)
+Task.HandsUp($shop_keep_junkfud, -2)
+$iSetPizzaPanic = 1
+$flag_attacked_keeper_food = 1
+
+:JFUD_12336
+goto @JFUD_12104
+
+:JFUD_12343
+$blob_flag_shop = 1
+
+:JFUD_12350
+return 
+
+:JFUD_12352
+if 
+  $cost_menu_drawn_shops == 0
+goto_if_false @JFUD_12991
+Text.PrintHelpForever('FOOD_H')
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @JFUD_12443
+$cost_menu_shops = Menu.Create('FOODCHO', 29.0, 145.0, 93.0, 2, False, 1, 1)
+goto @JFUD_12684
+
+:JFUD_12443
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @JFUD_12505
+$cost_menu_shops = Menu.Create('FOODCHO', 29.0, 145.0, 93.0, 2, False, 1, 1)
+goto @JFUD_12684
+
+:JFUD_12505
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @JFUD_12567
+$cost_menu_shops = Menu.Create('FOODCHO', 29.0, 165.0, 93.0, 2, False, 1, 1)
+goto @JFUD_12684
+
+:JFUD_12567
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @JFUD_12629
+$cost_menu_shops = Menu.Create('FOODCHO', 29.0, 145.0, 93.0, 2, False, 1, 1)
+goto @JFUD_12684
+
+:JFUD_12629
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @JFUD_12684
+$cost_menu_shops = Menu.Create('FOODCHO', 29.0, 145.0, 93.0, 2, False, 1, 1)
+
+:JFUD_12684
+Menu.SetColumnOrientation($cost_menu_shops, 0, 1)
+Menu.SetColumn($cost_menu_shops, 0, 'MEAL', s$shop_item_label, 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetColumnOrientation($cost_menu_shops, 1, 2)
+Menu.SetColumn($cost_menu_shops, 1, 'COST', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetItemWithNumber($cost_menu_shops, 1, 0, 'DOLLAR', $shop_item_price)
+Menu.SetColumnWidth($cost_menu_shops, 0, 140)
+Menu.SetColumnWidth($cost_menu_shops, 1, 46)
+$cost_menu_drawn_shops = 1
+
+:JFUD_12991
+return 
+
+:JFUD_12993
+Object.Delete($ffood_obj)
+return 
+terminate_this_script 
+
+//-------------External script 66 (CARMOD1)---------------
+

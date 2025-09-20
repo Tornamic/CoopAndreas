@@ -1,0 +1,25 @@
+:BUY2
+script_name 'BUY2'
+$1654 = 30000
+Pickup.Remove($save_housepickup[1])
+$save_housepickup[1] = Pickup.CreateForSaleProperty('PROP_3', $propertyX[1], $propertyY[1], $propertyZ[1], $1654)
+
+:BUY2_50
+wait $mission_trigger_wait_time
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BUY2_133
+if 
+  $onmission == 0
+goto_if_false @BUY2_133
+if 
+  Pickup.HasBeenCollected($save_housepickup[1])
+goto_if_false @BUY2_133
+set_var_int_to_constant $buying_property_switch = 1
+Audio.ReportMissionAudioEventAtPosition($propertyX[1], $propertyY[1], $propertyZ[1], 1149)
+Mission.LoadAndLaunchInternal(134) // Buy Properties Mission
+terminate_this_script 
+
+:BUY2_133
+goto @BUY2_50
+

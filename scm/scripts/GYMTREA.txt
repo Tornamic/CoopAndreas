@@ -1,0 +1,912 @@
+//-------------External script 13 (GYMTREAD)---------------
+
+:GYMTREA
+script_name 'GYMTREA'
+$tread_shake_speed = 0
+$tread_start_sound = 0
+$tread_TIMERC = 0
+$levelbar_tread = 0
+$speed_treadbar = 0
+$incline_tread = 0
+$distanceon_tread = 0
+$tread_has_KD = 0
+$starttreadmill_flag = 0
+$incline_tread_flag = 0
+$inclinebutton_flag = 0
+$reptread_flag = 0
+$buttonpressgymtread_flag = 0
+$playerstarttread_flag = 0
+$playwalkanim_flag = 0
+$playjoganim_flag = 0
+$playsprintanim_flag = 0
+$finishedtread_flag = 0
+19@ = 1.0
+$levelbar_tread = 1
+$incline_tread = 1
+$playerexercising_flag = 0
+$distanceon_tread = 0
+22@ = 0.0
+21@ = 0.0
+$are_anims_loaded = 0
+$finishedtread_flag = 1
+27@ = 0
+TIMERA = 0
+TIMERB = 0
+28@ = 0
+if 
+  28@ == 1
+goto_if_false @GYMTREA_278
+0@ = Object.CreateNoOffset(#BEACHTOWEL03, 0.0, 0.0, 0.0)
+
+:GYMTREA_278
+if 
+  Object.DoesExist(0@)
+goto_if_false @GYMTREA_330
+1@, 2@, 3@ = Object.GetCoordinates(0@)
+7@, 8@, 9@ = Object.GetCoordinates(0@)
+10@ = Object.GetHeading(0@)
+
+:GYMTREA_330
+19@ = 1.0
+$levelbar_tread = 1
+$incline_tread = 1
+26@ = 1.0
+set_lvar_float_to_lvar_float 6@ = 3@
+6@ += 1.5
+set_lvar_float_to_lvar_float 9@ = 3@
+9@ += 0.75
+set_lvar_float_to_lvar_float 11@ = 10@
+11@ -= 60.0
+12@ = Math.Sin(11@)
+13@ = Math.Cos(11@)
+12@ *= 3.0
+13@ *= 3.0
+set_lvar_float_to_lvar_float 4@ = 1@
+sub_float_lvar_from_float_lvar 4@ -= 13@
+set_lvar_float_to_lvar_float 5@ = 2@
+sub_float_lvar_from_float_lvar 5@ -= 12@
+set_lvar_float_to_lvar_float 11@ = 10@
+11@ += 90.0
+12@ = Math.Sin(11@)
+13@ = Math.Cos(11@)
+12@ *= 1.5
+13@ *= 1.5
+sub_float_lvar_from_float_lvar 1@ -= 13@
+sub_float_lvar_from_float_lvar 2@ -= 12@
+3@ += 0.1
+$are_anims_loaded = 0
+
+:GYMTREA_573
+wait 0
+if 
+  not Object.DoesExist(0@)
+goto_if_false @GYMTREA_595
+terminate_this_script 
+
+:GYMTREA_595
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GYMTREA_5900
+if and
+  $playerexercising_flag == 0
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_979
+if and
+  $starttreadmill_flag == 0
+  not Player.IsUsingJetpack($player1)
+goto_if_false @GYMTREA_979
+if 
+  $finishedtread_flag == 0
+goto_if_false @GYMTREA_938
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 1@, 2@, 3@, 1.2, 1.2, 4.0)
+goto_if_false @GYMTREA_904
+if 
+  27@ == 0
+goto_if_false @GYMTREA_753
+Text.PrintHelpForever('GYM1_81')
+27@ = 1
+
+:GYMTREA_753
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @GYMTREA_897
+if or
+  $onmission == 0
+  $gym_is_running == 1
+goto_if_false @GYMTREA_881
+$gym_day, $gym_month = Clock.GetCurrentDate()
+if or
+  is_int_var_greater_than_int_var $gym_day > $gym_final_day
+  is_int_var_greater_than_int_var $gym_month > $gym_final_month
+goto_if_false @GYMTREA_858
+$starttreadmill_flag = 1
+$playerexercising_flag = 1
+$gym_TIMERC = 0
+goto @GYMTREA_874
+
+:GYMTREA_858
+Text.PrintNow('GYM1_1A', 4000, 1)
+
+:GYMTREA_874
+goto @GYMTREA_897
+
+:GYMTREA_881
+Text.PrintNow('GYM1_90', 4000, 1)
+
+:GYMTREA_897
+goto @GYMTREA_931
+
+:GYMTREA_904
+if 
+  27@ == 1
+goto_if_false @GYMTREA_931
+Text.ClearHelp
+27@ = 0
+
+:GYMTREA_931
+goto @GYMTREA_979
+
+:GYMTREA_938
+if 
+  not Char.LocateOnFoot2D($scplayer, 0, 1@, 2@, 2.0, 2.0)
+goto_if_false @GYMTREA_979
+$finishedtread_flag = 0
+
+:GYMTREA_979
+if and
+  $starttreadmill_flag == 1
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_5900
+if and
+  $playerexercising_flag == 1
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_1114
+Char.SetCollision($scplayer, False)
+Player.SetControl($player1, False)
+Char.SetCoordinatesDontWarpGang($scplayer, 1@, 2@, 3@)
+Char.SetHeading($scplayer, 10@)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Camera.SetFixedPosition(4@, 5@, 6@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(7@, 8@, 9@, SwitchType.JumpCut)
+$playerexercising_flag = 2
+
+:GYMTREA_1114
+if 
+  $are_anims_loaded == 0
+goto_if_false @GYMTREA_1224
+Streaming.RequestAnimation("GYMNASIUM")
+
+:GYMTREA_1145
+if 
+  not Streaming.HasAnimationLoaded("GYMNASIUM")
+goto_if_false @GYMTREA_1180
+wait 0
+goto @GYMTREA_1145
+
+:GYMTREA_1180
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Audio.LoadMissionAudio(1820, 4)
+
+:GYMTREA_1191
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @GYMTREA_1217
+wait 0
+goto @GYMTREA_1191
+
+:GYMTREA_1217
+$are_anims_loaded = 1
+
+:GYMTREA_1224
+if 
+  $playerexercising_flag == 2
+goto_if_false @GYMTREA_1944
+Text.PrintHelpForever('GYM1_60')
+if or
+  $current_Language == 4
+  $current_Language == 2
+goto_if_false @GYMTREA_1446
+$main_menu_tread = Menu.Create('GYM1_F', 31.0, 180.0, 184.0, True, True, 1, 0)
+Menu.SetColumn($main_menu_tread, 0, 'GYM1_89', 'GYM1_61', 'GYM1_62', 'GYM1_63', 'GYM1_64', 'GYM1_65', 'GYM1_66', 'GYM1_67', 'GYM1_68', 'GYM1_69', 'GYM1_70', 'DUMMY', 'DUMMY')
+goto @GYMTREA_1607
+
+:GYMTREA_1446
+$main_menu_tread = Menu.Create('GYM1_F', 31.0, 150.0, 184.0, True, True, 1, 0)
+Menu.SetColumn($main_menu_tread, 0, 'GYM1_89', 'GYM1_61', 'GYM1_62', 'GYM1_63', 'GYM1_64', 'GYM1_65', 'GYM1_66', 'GYM1_67', 'GYM1_68', 'GYM1_69', 'GYM1_70', 'DUMMY', 'DUMMY')
+
+:GYMTREA_1607
+Menu.SetActiveItem($main_menu_tread, 0)
+
+:GYMTREA_1614
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_1739
+wait 0
+$gym_TIMERC += 1
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+  $gym_TIMERC > 20
+goto_if_false @GYMTREA_1679
+Text.ClearHelp
+Menu.Delete($main_menu_tread)
+goto @GYMTREA_5443
+
+:GYMTREA_1679
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMTREA_1732
+Text.ClearHelp
+$levelbar_tread = Menu.GetItemSelected($main_menu_tread)
+$levelbar_tread += 1
+Menu.Delete($main_menu_tread)
+TIMERA = 0
+goto @GYMTREA_1739
+
+:GYMTREA_1732
+goto @GYMTREA_1614
+
+:GYMTREA_1739
+if 
+  $tread_helpflag == 0
+goto_if_false @GYMTREA_1780
+Text.PrintHelp('GYM1_42')
+wait 4000
+$tread_helpflag = 1
+
+:GYMTREA_1780
+if 
+  $tread_helpflag == 1
+goto_if_false @GYMTREA_1821
+Text.PrintHelp('GYM1_43')
+wait 5000
+$tread_helpflag = 2
+
+:GYMTREA_1821
+if 
+  $tread_helpflag == 2
+goto_if_false @GYMTREA_1869
+Text.PrintHelp('GYM1_45')
+wait 4000
+$tread_helpflag = 4
+TIMERA = 0
+
+:GYMTREA_1869
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_1933
+Task.PlayAnim($scplayer, "GYM_TREAD_GETON", "GYMNASIUM", 4.0, False, False, False, True, -1)
+
+:GYMTREA_1933
+wait 0
+$playerexercising_flag = 3
+
+:GYMTREA_1944
+if and
+  $playerexercising_flag == 3
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_2164
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_TREAD_GETON")
+goto_if_false @GYMTREA_2164
+14@ = Char.GetAnimCurrentTime($scplayer, "GYM_TREAD_GETON")
+if 
+  14@ == 1.0
+goto_if_false @GYMTREA_2164
+Task.PlayAnim($scplayer, "GYM_TREAD_WALK", "GYMNASIUM", 8.0, True, False, False, True, -1)
+Hud.DisplayNthCounterWithString($speed_treadbar, CounterDisplay.Bar, 1, 'GYM1_1')
+Hud.DisplayNthCounterWithString($levelbar_tread, CounterDisplay.Number, 2, 'GYM1_4')
+Hud.DisplayNthCounterWithString($distanceon_tread, CounterDisplay.Number, 3, 'GYM1_3')
+17@ = 30.0
+$playerexercising_flag = 4
+
+:GYMTREA_2164
+if and
+  $playerexercising_flag == 4
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_5900
+23@ /= 500.0
+$lowerbodymusclestat_gym /= 750.0
+add_float_var_to_float_lvar 23@ += $lowerbodymusclestat_gym
+set_lvar_float_to_lvar_float 18@ = 20@
+add_float_lvar_to_float_lvar 18@ += 23@
+19@ /= 2.0
+sub_timed_float_lvar_from_float_lvar 17@ -= frame_delta_time * 19@
+19@ *= 2.0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMTREA_2309
+if 
+  $reptread_flag == 0
+goto_if_false @GYMTREA_2309
+add_float_lvar_to_float_lvar 17@ += 18@
+$reptread_flag = 1
+
+:GYMTREA_2309
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMTREA_2351
+if 
+  $reptread_flag == 1
+goto_if_false @GYMTREA_2351
+$reptread_flag = 0
+
+:GYMTREA_2351
+if 
+  0.0 > 17@
+goto_if_false @GYMTREA_2382
+17@ = 0.0
+
+:GYMTREA_2382
+if 
+  17@ > 100.0
+goto_if_false @GYMTREA_2413
+17@ = 100.0
+
+:GYMTREA_2413
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+goto_if_false @GYMTREA_2430
+
+:GYMTREA_2430
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+goto_if_false @GYMTREA_2447
+
+:GYMTREA_2447
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+goto_if_false @GYMTREA_2489
+if 
+  $inclinebutton_flag == 1
+goto_if_false @GYMTREA_2489
+$inclinebutton_flag = 0
+
+:GYMTREA_2489
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+goto_if_false @GYMTREA_2531
+if 
+  $inclinebutton_flag == 2
+goto_if_false @GYMTREA_2531
+$inclinebutton_flag = 0
+
+:GYMTREA_2531
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @GYMTREA_2669
+if 
+  $buttonpressgymtread_flag == 0
+goto_if_false @GYMTREA_2669
+if and
+  $levelbar_tread > 0
+  10 > $levelbar_tread
+goto_if_false @GYMTREA_2669
+$levelbar_tread += 1
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @GYMTREA_2621
+Audio.ReportMissionAudioEventAtObject(0@, 1116)
+
+:GYMTREA_2621
+17@ -= 10.0
+if 
+  0.0 > 17@
+goto_if_false @GYMTREA_2662
+17@ = 0.0
+
+:GYMTREA_2662
+$buttonpressgymtread_flag = 1
+
+:GYMTREA_2669
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @GYMTREA_2766
+if 
+  $buttonpressgymtread_flag == 0
+goto_if_false @GYMTREA_2766
+if and
+  $levelbar_tread > 1
+  11 > $levelbar_tread
+goto_if_false @GYMTREA_2766
+$levelbar_tread -= 1
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @GYMTREA_2759
+Audio.ReportMissionAudioEventAtObject(0@, 1116)
+
+:GYMTREA_2759
+$buttonpressgymtread_flag = 2
+
+:GYMTREA_2766
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @GYMTREA_2808
+if 
+  $buttonpressgymtread_flag == 1
+goto_if_false @GYMTREA_2808
+$buttonpressgymtread_flag = 0
+
+:GYMTREA_2808
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @GYMTREA_2850
+if 
+  $buttonpressgymtread_flag == 2
+goto_if_false @GYMTREA_2850
+$buttonpressgymtread_flag = 0
+
+:GYMTREA_2850
+if 
+  $levelbar_tread == 1
+goto_if_false @GYMTREA_2888
+26@ = 1.0
+20@ = 9.5
+
+:GYMTREA_2888
+if 
+  $levelbar_tread == 2
+goto_if_false @GYMTREA_2926
+26@ = 2.0
+20@ = 8.5
+
+:GYMTREA_2926
+if 
+  $levelbar_tread == 3
+goto_if_false @GYMTREA_2964
+26@ = 3.0
+20@ = 7.5
+
+:GYMTREA_2964
+if 
+  $levelbar_tread == 4
+goto_if_false @GYMTREA_3002
+26@ = 4.0
+20@ = 6.5
+
+:GYMTREA_3002
+if 
+  $levelbar_tread == 5
+goto_if_false @GYMTREA_3040
+26@ = 5.0
+20@ = 5.5
+
+:GYMTREA_3040
+if 
+  $levelbar_tread == 6
+goto_if_false @GYMTREA_3078
+26@ = 6.0
+20@ = 4.5
+
+:GYMTREA_3078
+if 
+  $levelbar_tread == 7
+goto_if_false @GYMTREA_3116
+26@ = 7.0
+20@ = 3.5
+
+:GYMTREA_3116
+if 
+  $levelbar_tread == 8
+goto_if_false @GYMTREA_3154
+26@ = 8.0
+20@ = 2.5
+
+:GYMTREA_3154
+if 
+  $levelbar_tread == 9
+goto_if_false @GYMTREA_3192
+26@ = 9.0
+20@ = 1.5
+
+:GYMTREA_3192
+if 
+  $levelbar_tread == 10
+goto_if_false @GYMTREA_3230
+26@ = 10.0
+20@ = 0.5
+
+:GYMTREA_3230
+if 
+  $playerstarttread_flag == 0
+goto_if_false @GYMTREA_3299
+if 
+  17@ > 0.0
+goto_if_false @GYMTREA_3299
+Sound.AddOneOffSound(65535, 1@, 2@, 3@)
+TIMERB = 0
+$playerstarttread_flag = 1
+
+:GYMTREA_3299
+if and
+  0.0 >= 17@
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_3803
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_TREAD_WALK")
+goto_if_false @GYMTREA_3406
+Task.PlayAnim($scplayer, "GYM_WALK_FALLOFF", "GYMNASIUM", 100.0, False, False, False, False, -1)
+
+:GYMTREA_3406
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_TREAD_JOG")
+goto_if_false @GYMTREA_3485
+Task.PlayAnim($scplayer, "GYM_JOG_FALLOFF", "GYMNASIUM", 100.0, False, False, False, False, -1)
+
+:GYMTREA_3485
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_TREAD_SPRINT")
+goto_if_false @GYMTREA_3569
+Task.PlayAnim($scplayer, "GYM_TREAD_FALLOFF", "GYMNASIUM", 100.0, False, False, False, False, -1)
+
+:GYMTREA_3569
+$fatstat_gym = Stat.GetFloat(21)
+if 
+  0.0 >= $fatstat_gym
+goto_if_false @GYMTREA_3606
+Stat.SetFloat(StatId.Fat, 0.0)
+
+:GYMTREA_3606
+$starttreadmill_flag = 0
+$incline_tread_flag = 0
+$inclinebutton_flag = 0
+$reptread_flag = 0
+$buttonpressgymtread_flag = 0
+$playerstarttread_flag = 0
+$playwalkanim_flag = 0
+$playjoganim_flag = 0
+$playsprintanim_flag = 0
+$finishedtread_flag = 0
+19@ = 1.0
+$levelbar_tread = 0
+$incline_tread = 1
+$playerexercising_flag = 0
+$distanceon_tread = 0
+22@ = 0.0
+21@ = 0.0
+$are_anims_loaded = 0
+Hud.ClearCounter($speed_treadbar)
+Hud.ClearCounter($levelbar_tread)
+Hud.ClearCounter($distanceon_tread)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+$finishedtread_flag = 1
+Char.SetCollision($scplayer, True)
+Streaming.RemoveAnimation("GYMNASIUM")
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Menu.Delete($main_menu_tread)
+Text.ClearHelp
+
+:GYMTREA_3803
+if 
+  $starttreadmill_flag == 1
+goto_if_false @GYMTREA_4170
+if and
+  $playwalkanim_flag == 0
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_3937
+if and
+  $levelbar_tread > 0
+  3 > $levelbar_tread
+goto_if_false @GYMTREA_3937
+Task.PlayAnim($scplayer, "GYM_TREAD_WALK", "GYMNASIUM", 100.0, True, False, False, True, -1)
+$playwalkanim_flag = 1
+$playjoganim_flag = 0
+$playsprintanim_flag = 0
+
+:GYMTREA_3937
+if and
+  $playjoganim_flag == 0
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_4052
+if and
+  $levelbar_tread > 2
+  7 > $levelbar_tread
+goto_if_false @GYMTREA_4052
+Task.PlayAnim($scplayer, "GYM_TREAD_JOG", "GYMNASIUM", 100.0, True, False, False, True, -1)
+$playwalkanim_flag = 0
+$playsprintanim_flag = 0
+$playjoganim_flag = 1
+
+:GYMTREA_4052
+if and
+  $playsprintanim_flag == 0
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_4170
+if and
+  $levelbar_tread > 6
+  11 > $levelbar_tread
+goto_if_false @GYMTREA_4170
+Task.PlayAnim($scplayer, "GYM_TREAD_SPRINT", "GYMNASIUM", 100.0, True, False, False, True, -1)
+$playwalkanim_flag = 0
+$playjoganim_flag = 0
+$playsprintanim_flag = 1
+
+:GYMTREA_4170
+if 
+  17@ >= 0.0
+goto_if_false @GYMTREA_4222
+if 
+  10.0 >= 17@
+goto_if_false @GYMTREA_4222
+15@ = 0.9
+
+:GYMTREA_4222
+if 
+  17@ >= 11.0
+goto_if_false @GYMTREA_4274
+if 
+  20.0 >= 17@
+goto_if_false @GYMTREA_4274
+15@ = 0.97
+
+:GYMTREA_4274
+if 
+  17@ >= 21.0
+goto_if_false @GYMTREA_4326
+if 
+  30.0 >= 17@
+goto_if_false @GYMTREA_4326
+15@ = 1.04
+
+:GYMTREA_4326
+if 
+  17@ >= 31.0
+goto_if_false @GYMTREA_4378
+if 
+  40.0 >= 17@
+goto_if_false @GYMTREA_4378
+15@ = 1.11
+
+:GYMTREA_4378
+if 
+  17@ >= 41.0
+goto_if_false @GYMTREA_4430
+if 
+  50.0 >= 17@
+goto_if_false @GYMTREA_4430
+15@ = 1.18
+
+:GYMTREA_4430
+if 
+  17@ >= 51.0
+goto_if_false @GYMTREA_4482
+if 
+  60.0 >= 17@
+goto_if_false @GYMTREA_4482
+15@ = 1.25
+
+:GYMTREA_4482
+if 
+  17@ >= 61.0
+goto_if_false @GYMTREA_4534
+if 
+  70.0 >= 17@
+goto_if_false @GYMTREA_4534
+15@ = 1.32
+
+:GYMTREA_4534
+if 
+  17@ >= 71.0
+goto_if_false @GYMTREA_4586
+if 
+  80.0 >= 17@
+goto_if_false @GYMTREA_4586
+15@ = 1.39
+
+:GYMTREA_4586
+if 
+  17@ >= 81.0
+goto_if_false @GYMTREA_4638
+if 
+  90.0 >= 17@
+goto_if_false @GYMTREA_4638
+15@ = 1.46
+
+:GYMTREA_4638
+if 
+  17@ >= 91.0
+goto_if_false @GYMTREA_4690
+if 
+  100.0 >= 17@
+goto_if_false @GYMTREA_4690
+15@ = 1.53
+
+:GYMTREA_4690
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_4876
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_TREAD_WALK")
+goto_if_false @GYMTREA_4762
+Char.SetAnimSpeed($scplayer, "GYM_TREAD_WALK", 15@)
+
+:GYMTREA_4762
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_TREAD_JOG")
+goto_if_false @GYMTREA_4816
+Char.SetAnimSpeed($scplayer, "GYM_TREAD_JOG", 15@)
+
+:GYMTREA_4816
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_TREAD_SPRINT")
+goto_if_false @GYMTREA_4876
+Char.SetAnimSpeed($scplayer, "GYM_TREAD_SPRINT", 15@)
+
+:GYMTREA_4876
+if 
+  Object.DoesExist(0@)
+goto_if_false @GYMTREA_5001
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @GYMTREA_5001
+if 
+  17@ > 10.0
+goto_if_false @GYMTREA_4968
+if 
+  $tread_start_sound == 0
+goto_if_false @GYMTREA_4961
+Audio.ReportMissionAudioEventAtObject(0@, 1118)
+$tread_start_sound = 1
+
+:GYMTREA_4961
+goto @GYMTREA_5001
+
+:GYMTREA_4968
+if 
+  $tread_start_sound == 1
+goto_if_false @GYMTREA_5001
+Audio.ReportMissionAudioEventAtObject(0@, 1119)
+$tread_start_sound = 0
+
+:GYMTREA_5001
+if 
+  TIMERB > 250
+goto_if_false @GYMTREA_5320
+TIMERB -= 250
+set_lvar_float_to_lvar_float 21@ = 17@
+mult_float_lvar_by_float_lvar 21@ *= 26@
+21@ /= 80.0
+cset_var_float_to_var_int $stattread_temp = integer $levelbar_tread
+$stattread_temp /= 10.0
+$stattread_temp += 1.0
+mult_float_var_by_float_lvar $stattread_temp *= 21@
+add_float_var_to_float_var $stattreadstamina_ctr += $stattread_temp
+if 
+  $stattreadstamina_ctr >= 170.0
+goto_if_false @GYMTREA_5243
+$stattreadstamina_ctr -= 170.0
+$fatstat_gym = Stat.GetFloat(21)
+if 
+  $fatstat_gym >= 1.0
+goto_if_false @GYMTREA_5166
+Stat.DecrementFloat(StatId.Fat, 8.0)
+
+:GYMTREA_5166
+if 
+  $tread_show_stat == 3
+goto_if_false @GYMTREA_5217
+$tread_show_stat = 0
+Stat.IncrementFloat(4.0, 22)
+$gym_day_fitness += 4.0
+goto @GYMTREA_5243
+
+:GYMTREA_5217
+Stat.IncrementFloatNoMessage(StatId.Stamina, 4.0)
+$gym_day_fitness += 4.0
+$tread_show_stat += 1
+
+:GYMTREA_5243
+if 
+  $gym_day_fitness > 200.0
+goto_if_false @GYMTREA_5288
+$gym_final_day, $gym_final_month = Clock.GetCurrentDate()
+Text.PrintNow('GYM1_1B', 4000, 1)
+
+:GYMTREA_5288
+cset_lvar_float_to_var_int 25@ = integer $incline_tread
+mult_float_var_by_float_lvar $stattread_temp *= 25@
+add_float_lvar_to_float_lvar 22@ += 21@
+cset_var_int_to_lvar_float $distanceon_tread = float 22@
+
+:GYMTREA_5320
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+  $gym_day_fitness > 200.0
+goto_if_false @GYMTREA_5796
+if 
+  $gym_day_fitness > 200.0
+goto_if_false @GYMTREA_5378
+$gym_day_fitness = 0.0
+
+:GYMTREA_5378
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_5796
+Task.PlayAnim($scplayer, "GYM_TREAD_GETOFF", "GYMNASIUM", 100.0, False, False, False, False, -1)
+
+:GYMTREA_5443
+Pad.Shake(PadId.Pad1, 1, 1)
+Stat.IncrementInt($distanceon_tread, 28)
+set_lvar_int_to_lvar_int 29@ = TIMERA
+29@ /= 1000
+Stat.IncrementInt(29@, 44)
+Text.ClearHelp
+Menu.Delete($main_menu_tread)
+$starttreadmill_flag = 0
+$incline_tread_flag = 0
+$inclinebutton_flag = 0
+$reptread_flag = 0
+$buttonpressgymtread_flag = 0
+$playerstarttread_flag = 0
+$playwalkanim_flag = 0
+$playjoganim_flag = 0
+$playsprintanim_flag = 0
+$finishedtread_flag = 0
+19@ = 1.0
+$levelbar_tread = 1
+$incline_tread = 1
+$playerexercising_flag = 0
+$distanceon_tread = 0
+22@ = 0.0
+21@ = 0.0
+$are_anims_loaded = 0
+Hud.ClearCounter($speed_treadbar)
+Hud.ClearCounter($levelbar_tread)
+Hud.ClearCounter($distanceon_tread)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMTREA_5668
+Player.SetControl($player1, True)
+Char.SetCollision($scplayer, True)
+
+:GYMTREA_5668
+Streaming.RemoveAnimation("GYMNASIUM")
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Camera.RestoreJumpcut
+$finishedtread_flag = 1
+$upperbodymusclestat_gym = Stat.GetFloat(23)
+if 
+  $upperbodymusclestat_gym >= 1000.0
+goto_if_false @GYMTREA_5731
+Stat.SetFloat(StatId.BodyMuscle, 1000.0)
+
+:GYMTREA_5731
+$fatstat_gym = Stat.GetFloat(21)
+if 
+  0.0 >= $fatstat_gym
+goto_if_false @GYMTREA_5768
+Stat.SetFloat(StatId.Fat, 0.0)
+
+:GYMTREA_5768
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @GYMTREA_5796
+wait 0
+goto @GYMTREA_5768
+
+:GYMTREA_5796
+$tread_TIMERC += 1
+set_var_int_to_var_int $tread_shake_speed = $speed_treadbar
+$tread_shake_speed -= 100
+if 
+  $tread_shake_speed > -40
+goto_if_false @GYMTREA_5843
+$tread_shake_speed = -40
+
+:GYMTREA_5843
+if 
+  is_int_var_greater_or_equal_to_int_var $tread_TIMERC >= $tread_shake_speed
+goto_if_false @GYMTREA_5892
+$tread_TIMERC = 0
+$speed_treadbar *= 12
+$speed_treadbar /= 10
+Pad.Shake(PadId.Pad1, 100, $speed_treadbar)
+
+:GYMTREA_5892
+cset_var_int_to_lvar_float $speed_treadbar = float 17@
+
+:GYMTREA_5900
+goto @GYMTREA_573
+terminate_this_script 
+

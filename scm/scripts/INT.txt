@@ -1,0 +1,53 @@
+:INT
+script_name 'INT'
+Coop.EnableSyncingThisScript()
+
+:INT_11
+wait $mission_trigger_wait_time
+if 
+  $flag_intro_mission_counter == 2
+goto_if_false @INT_36
+terminate_this_script 
+
+:INT_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @INT_292
+if 
+  $onmission == 0
+goto_if_false @INT_292
+if 
+  Coop.LocateAllPlayersOnFoot3D(0, $introX, $introY, $introZ, 1.0, 1.0, 2.0)
+goto_if_false @INT_182
+if 
+  Player.CanStartMission($player1)
+goto_if_false @INT_182
+
+
+if 
+  $flag_intro_mission_counter == 0
+goto_if_false @INT_182
+$onmission = 1
+Text.PrintBig('INTRO_1', 1000, TextStyle.BottomRight)
+PSAVE1_1140()
+Text.ClearHelp
+Mission.LoadAndLaunchInternal(11) // Big Smoke
+
+:INT_182
+if 
+  Coop.LocateAllPlayersOnFoot3D(0, $ryderX, $ryderY, $ryderZ, 1.2, 1.2, 2.0)
+goto_if_false @INT_292
+if 
+  Player.CanStartMission($player1)
+goto_if_false @INT_292
+if 
+  $flag_intro_mission_counter == 1
+goto_if_false @INT_292
+$onmission = 1
+Text.PrintBig('INTRO_2', 1000, TextStyle.BottomRight)
+PSAVE1_1498()
+Mission.LoadAndLaunchInternal(12) // Ryder
+
+:INT_292
+goto @INT_11
+

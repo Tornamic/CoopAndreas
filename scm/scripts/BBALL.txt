@@ -1,0 +1,2937 @@
+//-------------External script 15 (BASKETB)---------------
+
+:BBALL
+script_name 'BBALL'
+if 
+  $bball_active <> 0
+goto_if_false @BBALL_31
+terminate_this_script 
+
+:BBALL_31
+16@ = 0
+17@ = 0
+18@ = 0
+20@ = 0
+22@ = 0
+$bball_camera_type = 0
+19@ = 0
+21@ = 0
+$bball_help = 0
+if 
+  16@ == -1
+goto_if_false @BBALL_178
+0@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+1@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+$char_obj = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+
+:BBALL_178
+24@ = 0
+if 
+  $bball_unlocked <> 0
+goto_if_false @BBALL_451
+if 
+  Object.DoesExist(0@)
+goto_if_false @BBALL_451
+if and
+  Player.IsPlaying($player1)
+  $onmission == 0
+goto_if_false @BBALL_451
+if 
+  Object.DoesHaveThisModel(0@, #BSKBALL_LAX)
+goto_if_false @BBALL_296
+if 
+  Streaming.HasModelLoaded(#BSKBALL_LAX)
+goto_if_false @BBALL_289
+23@ = -30
+24@ = 1
+
+:BBALL_289
+goto @BBALL_451
+
+:BBALL_296
+if 
+  Object.DoesHaveThisModel(0@, #BSKBALLHUB_LAX01)
+goto_if_false @BBALL_350
+if 
+  Streaming.HasModelLoaded(#BSKBALLHUB_LAX01)
+goto_if_false @BBALL_343
+23@ = -31
+24@ = 1
+
+:BBALL_343
+goto @BBALL_451
+
+:BBALL_350
+if 
+  Object.DoesHaveThisModel(0@, #VGSXREFBBALLNET)
+goto_if_false @BBALL_404
+if 
+  Streaming.HasModelLoaded(#VGSXREFBBALLNET)
+goto_if_false @BBALL_397
+23@ = -32
+24@ = 1
+
+:BBALL_397
+goto @BBALL_451
+
+:BBALL_404
+if 
+  Object.DoesHaveThisModel(0@, #VGSXREFBBALLNET2)
+goto_if_false @BBALL_451
+if 
+  Streaming.HasModelLoaded(#VGSXREFBBALLNET2)
+goto_if_false @BBALL_451
+23@ = -33
+24@ = 1
+
+:BBALL_451
+if 
+  24@ == 1
+goto_if_false @BBALL_2377
+switch_start 16@ total_jumps 4 default_jump 0 @BBALL_2370 jumps 0 @BBALL_532 1 @BBALL_777 2 @BBALL_1293 3 @BBALL_1866 -1 @BBALL_2370 -1 @BBALL_2370 -1 @BBALL_2370
+
+:BBALL_532
+if 
+  $bball_active == 0
+goto_if_false @BBALL_763
+if 
+  Char.LocateAnyMeansObject2D($scplayer, 0@, 50.0, 50.0, False)
+goto_if_false @BBALL_756
+if 
+  not Object.DoesExist(1@)
+goto_if_false @BBALL_756
+if 
+  Streaming.HasModelLoaded(23@)
+goto_if_false @BBALL_756
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 1)
+if 
+  not Camera.IsPointOnScreen($x, $y, $z, 2.0)
+goto_if_false @BBALL_756
+$z += 1.0
+World.ClearArea(0, $x, $y, $z, 0.5)
+1@ = Object.CreateNoOffset(#BBALL_COL, $x, $y, $z)
+19@ = 1
+Object.SetDynamic(1@, True)
+Object.SetCollision(1@, True)
+Object.SetVelocity(1@, 0.0, 0.0, -0.1)
+$bball_active = 1
+16@ += 1
+
+:BBALL_756
+goto @BBALL_770
+
+:BBALL_763
+gosub @BBALL_2402
+
+:BBALL_770
+goto @BBALL_2370
+
+:BBALL_777
+if 
+  Char.LocateAnyMeansObject2D($scplayer, 0@, 50.0, 50.0, False)
+goto_if_false @BBALL_1267
+if 
+  Object.DoesExist(1@)
+goto_if_false @BBALL_1260
+if 
+  Char.LocateOnFootObject3D($scplayer, 1@, 1.0, 1.0, 2.0, False)
+goto_if_false @BBALL_1260
+if 
+  Streaming.HasModelLoaded(23@)
+goto_if_false @BBALL_1260
+2@, 3@, 4@ = Object.GetLevelDesignCoords(0@, 2)
+5@, 6@, 7@ = Object.GetLevelDesignCoords(0@, 3)
+if 
+  Object.IsInArea3D(1@, 2@, 3@, 4@, 5@, 6@, 7@, False)
+goto_if_false @BBALL_1220
+if 
+  Char.LocateOnFootObject3D($scplayer, 1@, 0.7, 0.7, 2.0, False)
+goto_if_false @BBALL_1213
+$x, $y, $z = Object.GetCoordinates(1@)
+set_lvar_float_to_var_float 2@ = $x
+2@ -= 0.71
+set_lvar_float_to_var_float 3@ = $y
+3@ -= 0.71
+set_lvar_float_to_var_float 4@ = $z
+4@ -= 0.71
+set_lvar_float_to_var_float 5@ = $x
+5@ += 0.71
+set_lvar_float_to_var_float 6@ = $y
+6@ += 0.71
+set_lvar_float_to_var_float 7@ = $z
+7@ += 2.0
+if 
+  not World.IsAreaOccupied(2@, 3@, 4@, 5@, 6@, 7@, False, True, False, False, False)
+goto_if_false @BBALL_1213
+if 
+  not Player.IsUsingJetpack($player1)
+goto_if_false @BBALL_1213
+24@ = Char.GetScriptTaskStatus($scplayer, 1833)
+if 
+  is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BBALL_1213
+Pad.SetPlayerEnterCarButton($player1, False)
+Text.PrintHelpForever('BB_01')
+16@ += 1
+
+:BBALL_1213
+goto @BBALL_1260
+
+:BBALL_1220
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 1)
+$z += 1.0
+Object.SetCoordinates(1@, $x, $y, $z)
+
+:BBALL_1260
+goto @BBALL_1286
+
+:BBALL_1267
+Object.MarkAsNoLongerNeeded(1@)
+16@ = 0
+$bball_active = 0
+
+:BBALL_1286
+goto @BBALL_2370
+
+:BBALL_1293
+if 
+  Char.LocateAnyMeansObject2D($scplayer, 0@, 50.0, 50.0, False)
+goto_if_false @BBALL_1833
+if 
+  Object.DoesExist(1@)
+goto_if_false @BBALL_1826
+if 
+  not Player.IsUsingJetpack($player1)
+goto_if_false @BBALL_1826
+24@ = Char.GetScriptTaskStatus($scplayer, 1833)
+if 
+  is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BBALL_1826
+if 
+  Streaming.HasModelLoaded(23@)
+goto_if_false @BBALL_1826
+2@, 3@, 4@ = Object.GetLevelDesignCoords(0@, 2)
+5@, 6@, 7@ = Object.GetLevelDesignCoords(0@, 3)
+if 
+  Object.IsInArea3D(1@, 2@, 3@, 4@, 5@, 6@, 7@, False)
+goto_if_false @BBALL_1810
+if 
+  Char.LocateOnFootObject3D($scplayer, 1@, 0.7, 0.7, 2.0, False)
+goto_if_false @BBALL_1787
+$x, $y, $z = Object.GetCoordinates(1@)
+set_lvar_float_to_var_float 2@ = $x
+2@ -= 0.71
+set_lvar_float_to_var_float 3@ = $y
+3@ -= 0.71
+set_lvar_float_to_var_float 4@ = $z
+4@ -= 0.71
+set_lvar_float_to_var_float 5@ = $x
+5@ += 0.71
+set_lvar_float_to_var_float 6@ = $y
+6@ += 0.71
+set_lvar_float_to_var_float 7@ = $z
+7@ += 2.0
+if 
+  not World.IsAreaOccupied(2@, 3@, 4@, 5@, 6@, 7@, False, True, False, False, False)
+goto_if_false @BBALL_1764
+if 
+  20@ == 0
+goto_if_false @BBALL_1733
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BBALL_1726
+20@ = 1
+Text.ClearHelp
+gosub @BBALL_3690
+16@ += 1
+
+:BBALL_1726
+goto @BBALL_1757
+
+:BBALL_1733
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BBALL_1757
+20@ = 0
+
+:BBALL_1757
+goto @BBALL_1780
+
+:BBALL_1764
+Pad.SetPlayerEnterCarButton($player1, True)
+Text.ClearHelp
+16@ += -1
+
+:BBALL_1780
+goto @BBALL_1803
+
+:BBALL_1787
+Pad.SetPlayerEnterCarButton($player1, True)
+Text.ClearHelp
+16@ += -1
+
+:BBALL_1803
+goto @BBALL_1826
+
+:BBALL_1810
+Pad.SetPlayerEnterCarButton($player1, True)
+Text.ClearHelp
+16@ += -1
+
+:BBALL_1826
+goto @BBALL_1859
+
+:BBALL_1833
+Pad.SetPlayerEnterCarButton($player1, True)
+Object.MarkAsNoLongerNeeded(1@)
+$bball_active = 0
+16@ = 0
+
+:BBALL_1859
+goto @BBALL_2370
+
+:BBALL_1866
+if 
+  Streaming.HasModelLoaded(23@)
+goto_if_false @BBALL_2363
+2@, 3@, 4@ = Object.GetLevelDesignCoords(0@, 2)
+5@, 6@, 7@ = Object.GetLevelDesignCoords(0@, 3)
+if 
+  not Char.IsInArea3D($scplayer, 0, 2@, 3@, 4@, 5@, 6@, 7@)
+goto_if_false @BBALL_2049
+if 
+  6000 > TIMERB
+goto_if_false @BBALL_2028
+if and
+  TIMERB > 0
+  1000 > TIMERB
+goto_if_false @BBALL_2014
+Text.PrintHelpForever('BB_03')
+TIMERB = 1000
+
+:BBALL_2014
+gosub @BBALL_4421
+goto @BBALL_2042
+
+:BBALL_2028
+gosub @BBALL_5022
+16@ = 1
+
+:BBALL_2042
+goto @BBALL_2084
+
+:BBALL_2049
+if 
+  TIMERB > 1000
+goto_if_false @BBALL_2070
+Text.ClearHelp
+
+:BBALL_2070
+gosub @BBALL_4421
+TIMERB = 0
+
+:BBALL_2084
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BBALL_2132
+if 
+  Char.HasBeenDamagedByWeapon($scplayer, WeaponType.AnyWeapon)
+goto_if_false @BBALL_2132
+gosub @BBALL_5022
+16@ = 1
+
+:BBALL_2132
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BBALL_2178
+if 
+  Player.IsUsingJetpack($player1)
+goto_if_false @BBALL_2178
+gosub @BBALL_5022
+16@ = 1
+
+:BBALL_2178
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BBALL_2237
+24@ = Char.GetScriptTaskStatus($scplayer, 1833)
+if 
+  not is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BBALL_2237
+gosub @BBALL_5022
+16@ = 1
+
+:BBALL_2237
+if and
+  17@ <> 10
+  17@ <> 16
+  17@ <> 17
+  17@ <> 4
+goto_if_false @BBALL_2363
+if 
+  20@ == 0
+goto_if_false @BBALL_2339
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BBALL_2332
+20@ = 1
+gosub @BBALL_5022
+16@ = 1
+
+:BBALL_2332
+goto @BBALL_2363
+
+:BBALL_2339
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BBALL_2363
+20@ = 0
+
+:BBALL_2363
+goto @BBALL_2370
+
+:BBALL_2370
+goto @BBALL_2391
+
+:BBALL_2377
+$bball_active = 0
+gosub @BBALL_2402
+
+:BBALL_2391
+wait 0
+goto @BBALL_178
+
+:BBALL_2402
+Object.MarkAsNoLongerNeeded(1@)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BBALL_2448
+if 
+  $onmission == 0
+goto_if_false @BBALL_2448
+Pad.SetPlayerEnterCarButton($player1, True)
+
+:BBALL_2448
+terminate_this_script 
+return 
+if 
+is_ps2_keyboard_key_just_pressed 131
+goto_if_false @BBALL_2478
+$anim_release_time += 0.01
+
+:BBALL_2478
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @BBALL_2504
+$anim_release_time += -0.01
+
+:BBALL_2504
+return 
+
+:BBALL_2506
+if 
+  Object.DoesExist(1@)
+goto_if_false @BBALL_2860
+if 
+  Object.IsAttached(1@)
+goto_if_false @BBALL_2729
+if 
+  19@ == 1
+goto_if_false @BBALL_2722
+Object.Detach(1@, 0.0, 0.0, 0.0, False)
+$x, $y, $z = Object.GetCoordinates(1@)
+2@, 3@, 4@ = Object.GetVelocity(1@)
+5@, 6@, 7@ = Object.GetRotationVelocity(1@)
+Object.Delete(1@)
+1@ = Object.CreateNoOffset(#BBALL_INGAME, $x, $y, $z)
+Object.AttachToChar(1@, $scplayer, 0.0, 0.5, -1.0, 0.0, 0.0, 0.0)
+Object.SetVelocity(1@, 2@, 3@, 4@)
+5@, 6@, 7@ = Object.GetRotationVelocity(1@)
+Object.SetCollision(1@, True)
+19@ = 0
+
+:BBALL_2722
+goto @BBALL_2860
+
+:BBALL_2729
+if 
+  19@ == 0
+goto_if_false @BBALL_2860
+$x, $y, $z = Object.GetCoordinates(1@)
+2@, 3@, 4@ = Object.GetVelocity(1@)
+5@, 6@, 7@ = Object.GetRotationVelocity(1@)
+Object.Delete(1@)
+1@ = Object.CreateNoOffset(#BBALL_COL, $x, $y, $z)
+Object.SetDynamic(1@, True)
+Object.SetCollision(1@, True)
+Object.SetVelocity(1@, 2@, 3@, 4@)
+5@, 6@, 7@ = Object.GetRotationVelocity(1@)
+19@ = 1
+
+:BBALL_2860
+return 
+
+:BBALL_2862
+if 
+  Object.DoesExist(1@)
+goto_if_false @BBALL_3688
+if 
+  Object.IsAttached(1@)
+goto_if_false @BBALL_3085
+if 
+  19@ == 1
+goto_if_false @BBALL_3078
+Object.Detach(1@, 0.0, 0.0, 0.0, False)
+$x, $y, $z = Object.GetCoordinates(1@)
+2@, 3@, 4@ = Object.GetVelocity(1@)
+5@, 6@, 7@ = Object.GetRotationVelocity(1@)
+Object.Delete(1@)
+1@ = Object.CreateNoOffset(#BBALL_INGAME, $x, $y, $z)
+Object.AttachToChar(1@, $scplayer, 0.0, 0.5, -1.0, 0.0, 0.0, 0.0)
+Object.SetVelocity(1@, 2@, 3@, 4@)
+5@, 6@, 7@ = Object.GetRotationVelocity(1@)
+Object.SetCollision(1@, True)
+19@ = 0
+
+:BBALL_3078
+goto @BBALL_3688
+
+:BBALL_3085
+if 
+  19@ == 0
+goto_if_false @BBALL_3688
+$x = Char.GetOffsetInWorldCoords($y, $z, $scplayer, 0.0, 0.5, 0.0)
+set_lvar_float_to_var_float 2@ = $x
+2@ -= 0.1
+set_lvar_float_to_var_float 5@ = $x
+5@ += 0.1
+set_lvar_float_to_var_float 3@ = $y
+3@ -= 0.1
+set_lvar_float_to_var_float 6@ = $y
+6@ += 0.1
+set_lvar_float_to_var_float 4@ = $z
+4@ -= 0.5
+set_lvar_float_to_var_float 7@ = $z
+7@ += 1.0
+if 
+  not World.IsAreaOccupied(2@, 3@, 4@, 5@, 6@, 7@, False, True, False, False, False)
+goto_if_false @BBALL_3393
+2@, 3@, 4@ = Object.GetVelocity(1@)
+5@, 6@, 7@ = Object.GetRotationVelocity(1@)
+Object.Delete(1@)
+1@ = Object.CreateNoOffset(#BBALL_COL, $x, $y, $z)
+Object.SetDynamic(1@, True)
+Object.SetCollision(1@, True)
+Object.SetVelocity(1@, 0.0, 0.0, -0.1)
+5@, 6@, 7@ = Object.GetRotationVelocity(1@)
+19@ = 1
+goto @BBALL_3688
+
+:BBALL_3393
+$x = Char.GetOffsetInWorldCoords($y, $z, $scplayer, 0.0, -2.0, -0.3)
+set_lvar_float_to_var_float 2@ = $x
+2@ -= 0.1
+set_lvar_float_to_var_float 5@ = $x
+5@ += 0.1
+set_lvar_float_to_var_float 3@ = $y
+3@ -= 0.1
+set_lvar_float_to_var_float 6@ = $y
+6@ += 0.1
+set_lvar_float_to_var_float 4@ = $z
+4@ -= 0.5
+set_lvar_float_to_var_float 7@ = $z
+7@ += 1.0
+if 
+  not World.IsAreaOccupied(2@, 3@, 4@, 5@, 6@, 7@, False, True, False, False, False)
+goto_if_false @BBALL_3683
+2@, 3@, 4@ = Object.GetVelocity(1@)
+5@, 6@, 7@ = Object.GetRotationVelocity(1@)
+Object.Delete(1@)
+1@ = Object.CreateNoOffset(#BBALL_COL, $x, $y, $z)
+Object.SetDynamic(1@, True)
+Object.SetCollision(1@, True)
+Object.SetVelocity(1@, 0.0, 0.0, -0.1)
+5@, 6@, 7@ = Object.GetRotationVelocity(1@)
+19@ = 1
+goto @BBALL_3688
+
+:BBALL_3683
+Object.Delete(1@)
+
+:BBALL_3688
+return 
+
+:BBALL_3690
+Game.SetMinigameInProgress(True)
+Text.DisplayNonMinigameHelpMessages(True)
+$anim_release_time = 0.4
+Pad.SetPlayerEnterCarButton($player1, False)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BBALL_3863
+Player.SetControl($player1, False)
+Char.ClearTasks($scplayer)
+Char.SetProofs($scplayer, False, False, False, False, False)
+Char.ClearLastWeaponDamage($scplayer)
+$bball_stored_weapon = Char.GetCurrentWeapon($scplayer)
+if 
+  Char.HasGotWeapon($scplayer, WeaponType.BrassKnuckles)
+goto_if_false @BBALL_3842
+Char.RemoveWeapon(1, $scplayer)
+$bball_player_has_brassknuckle = 1
+Streaming.RequestModel(331)
+
+:BBALL_3808
+if 
+  not Streaming.HasModelLoaded(331)
+goto_if_false @BBALL_3835
+wait 0
+goto @BBALL_3808
+
+:BBALL_3835
+goto @BBALL_3849
+
+:BBALL_3842
+$bball_player_has_brassknuckle = 0
+
+:BBALL_3849
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Pad.SetPlayerCycleWeaponButton($player1, False)
+
+:BBALL_3863
+if 
+  Object.DoesExist(1@)
+goto_if_false @BBALL_3886
+Object.FreezePosition(1@, True)
+
+:BBALL_3886
+Streaming.RequestAnimation("BSKTBALL")
+Streaming.RequestModel(#BBALL_INGAME)
+Streaming.RequestModel(#BBALL_COL)
+Audio.LoadMissionAudio(1811, 4)
+
+:BBALL_3915
+if or
+  not Streaming.HasAnimationLoaded("BSKTBALL")
+  not Streaming.HasModelLoaded(#BBALL_INGAME)
+  not Streaming.HasModelLoaded(#BBALL_COL)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @BBALL_3963
+wait 0
+goto @BBALL_3915
+
+:BBALL_3963
+10@, 11@, 12@ = Camera.GetActiveCoordinates()
+13@, 14@, 15@ = Camera.GetActivePointAt()
+set_var_float_to_lvar_float $x = 13@
+sub_float_lvar_from_float_var $x -= 10@
+set_var_float_to_lvar_float $y = 14@
+sub_float_lvar_from_float_var $y -= 11@
+set_var_float_to_lvar_float $z = 15@
+sub_float_lvar_from_float_var $z -= 12@
+$distance = Math.GetDistanceBetweenCoords3D(13@, 14@, 15@, 10@, 11@, 12@)
+div_float_var_by_float_var $x /= $distance
+div_float_var_by_float_var $y /= $distance
+div_float_var_by_float_var $z /= $distance
+$x *= 10.0
+$y *= 10.0
+$z *= 10.0
+set_lvar_float_to_lvar_float 13@ = 10@
+add_float_var_to_float_lvar 13@ += $x
+set_lvar_float_to_lvar_float 14@ = 11@
+add_float_var_to_float_lvar 14@ += $y
+set_lvar_float_to_lvar_float 15@ = 12@
+add_float_var_to_float_lvar 15@ += $z
+TIMERA = 0
+$bball_help = 0
+17@ = 10
+$bball_camera_type = 1
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BBALL_4238
+$x, $y, $z = Char.GetCoordinates($scplayer)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+set_var_float_to_var_float $bball_court_z = $z
+
+:BBALL_4238
+8@ = Object.GetHeading(0@)
+if or
+  10.0 > 8@
+  8@ > 350.0
+goto_if_false @BBALL_4284
+$hoop_direction = 1
+
+:BBALL_4284
+if and
+  8@ > 80.0
+  100.0 > 8@
+goto_if_false @BBALL_4322
+$hoop_direction = 2
+
+:BBALL_4322
+if and
+  8@ > 170.0
+  190.0 > 8@
+goto_if_false @BBALL_4360
+$hoop_direction = 3
+
+:BBALL_4360
+if and
+  8@ > 260.0
+  280.0 > 8@
+goto_if_false @BBALL_4398
+$hoop_direction = 4
+
+:BBALL_4398
+World.SetPedDensityMultiplier(0.2)
+World.SetCarDensityMultiplier(0.2)
+$bball_is_active = 1
+return 
+
+:BBALL_4421
+$bball_frame_count += 1
+if 
+  $bball_frame_count >= 30
+goto_if_false @BBALL_4453
+$bball_frame_count = 0
+
+:BBALL_4453
+gosub @BBALL_16392
+gosub @BBALL_17991
+gosub @BBALL_5427
+gosub @BBALL_12253
+if 
+is_ps2_keyboard_key_just_pressed 67
+goto_if_false @BBALL_4503
+gosub @BBALL_20949
+
+:BBALL_4503
+if 
+  3 > $bball_help
+goto_if_false @BBALL_4746
+if 
+  $bball_help == 0
+goto_if_false @BBALL_4582
+if 
+  $bball_challenge_active == 0
+goto_if_false @BBALL_4568
+Text.PrintHelp('BB_02')
+
+:BBALL_4568
+$bball_help += 1
+TIMERA = 0
+
+:BBALL_4582
+if and
+  $bball_help == 1
+  TIMERA > 10000
+goto_if_false @BBALL_4651
+if 
+  $bball_challenge_active == 0
+goto_if_false @BBALL_4637
+Text.PrintHelp('BB_07')
+
+:BBALL_4637
+TIMERA = 0
+$bball_help += 1
+
+:BBALL_4651
+if and
+  $bball_help == 2
+  TIMERA > 5000
+goto_if_false @BBALL_4746
+if or
+  Object.DoesHaveThisModel(0@, #BSKBALL_LAX)
+  Object.DoesHaveThisModel(0@, #VGSXREFBBALLNET)
+goto_if_false @BBALL_4731
+if 
+  $bball_challenge_active == 0
+goto_if_false @BBALL_4731
+Text.PrintHelp('BB_09')
+
+:BBALL_4731
+TIMERA = 12000
+$bball_help += 1
+
+:BBALL_4746
+if or
+  Object.DoesHaveThisModel(0@, #BSKBALL_LAX)
+  Object.DoesHaveThisModel(0@, #VGSXREFBBALLNET)
+goto_if_false @BBALL_4873
+if 
+  $bball_challenge_active == 0
+goto_if_false @BBALL_4873
+if 
+  $bball_r3_is_pressed == 0
+goto_if_false @BBALL_4849
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @BBALL_4842
+$bball_r3_is_pressed = 1
+start_new_script @BBCHAL 0@ 
+
+:BBALL_4842
+goto @BBALL_4873
+
+:BBALL_4849
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @BBALL_4873
+$bball_r3_is_pressed = 0
+
+:BBALL_4873
+if 
+  $bball_frame_count == 0
+goto_if_false @BBALL_5020
+if 
+  Object.DoesExist(1@)
+goto_if_false @BBALL_5020
+if 
+  not Object.IsAttached(1@)
+goto_if_false @BBALL_5020
+if 
+  Streaming.HasModelLoaded(23@)
+goto_if_false @BBALL_5020
+2@, 3@, 4@ = Object.GetLevelDesignCoords(0@, 1)
+$x, $y, $z = Object.GetCoordinates(1@)
+set_lvar_float_to_lvar_float 8@ = 4@
+8@ -= 0.7
+if 
+  is_float_lvar_greater_than_float_var 8@ > $z
+goto_if_false @BBALL_5020
+Object.SetCoordinates(1@, 2@, 3@, 4@)
+
+:BBALL_5020
+return 
+
+:BBALL_5022
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BBALL_5425
+if 
+  $bball_player_has_brassknuckle == 1
+goto_if_false @BBALL_5077
+Char.GiveWeapon($scplayer, WeaponType.BrassKnuckles, 1)
+$bball_player_has_brassknuckle = 0
+Streaming.MarkModelAsNoLongerNeeded(331)
+
+:BBALL_5077
+Char.SetCurrentWeapon($scplayer, $bball_stored_weapon)
+Pad.SetPlayerCycleWeaponButton($player1, True)
+Char.ClearTasks($scplayer)
+Player.SetControl($player1, True)
+Pad.SetPlayerEnterCarButton($player1, True)
+if 
+  Object.DoesExist(1@)
+goto_if_false @BBALL_5172
+if 
+  Object.IsAttached(1@)
+goto_if_false @BBALL_5172
+Object.Detach(1@, 0.0, 0.0, 0.0, True)
+gosub @BBALL_2862
+
+:BBALL_5172
+if 
+  Object.DoesExist(1@)
+goto_if_false @BBALL_5312
+if 
+  Streaming.HasModelLoaded(23@)
+goto_if_false @BBALL_5252
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 1)
+2@, 3@, 4@ = Object.GetLevelDesignCoords(0@, 2)
+5@, 6@, 7@ = Object.GetLevelDesignCoords(0@, 3)
+
+:BBALL_5252
+if 
+  not Object.IsInArea3D(1@, 2@, 3@, 4@, 5@, 6@, 7@, False)
+goto_if_false @BBALL_5312
+$z += 1.0
+Object.SetCoordinates(1@, $x, $y, $z)
+
+:BBALL_5312
+if 
+  Object.DoesExist($char_obj)
+goto_if_false @BBALL_5363
+if 
+  22@ == 1
+goto_if_false @BBALL_5358
+Char.DetachFromCar($scplayer)
+22@ = 0
+
+:BBALL_5358
+Object.Delete($char_obj)
+
+:BBALL_5363
+Camera.Restore
+$bball_camera_type = 0
+Streaming.RemoveAnimation("BSKTBALL")
+Streaming.MarkModelAsNoLongerNeeded(#BBALL_INGAME)
+Streaming.MarkModelAsNoLongerNeeded(#BBALL_COL)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Text.ClearHelp
+$bball_is_active = 0
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+Game.SetMinigameInProgress(False)
+
+:BBALL_5425
+return 
+
+:BBALL_5427
+if and
+  Player.IsPlaying($player1)
+  Streaming.HasModelLoaded(23@)
+goto_if_false @BBALL_12243
+switch_start 17@ total_jumps 17 default_jump 1 @BBALL_12243 jumps 1 @BBALL_6511 2 @BBALL_7044 3 @BBALL_7454 4 @BBALL_8450 5 @BBALL_8941 6 @BBALL_9115 7 @BBALL_11357
+switch_continued 8 @BBALL_11547 9 @BBALL_11747 10 @BBALL_11761 11 @BBALL_8260 12 @BBALL_11754 13 @BBALL_9065 14 @BBALL_5641 15 @BBALL_6075 16 @BBALL_9667
+switch_continued 17 @BBALL_10656 -1 @BBALL_12243 -1 @BBALL_12243 -1 @BBALL_12243 -1 @BBALL_12243 -1 @BBALL_12243 -1 @BBALL_12243 -1 @BBALL_12243 -1 @BBALL_12243
+
+:BBALL_5641
+if 
+  18@ <> 14
+goto_if_false @BBALL_5905
+24@ = 0
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_IDLELOOP")
+goto_if_false @BBALL_5757
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_IDLELOOP")
+if 
+  8@ > 0.9
+goto_if_false @BBALL_5757
+24@ = 1
+$roll_along_back_flag = 0
+
+:BBALL_5757
+if 
+  24@ == 1
+goto_if_false @BBALL_5891
+26@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "BBALL_IDLE", "BSKTBALL", 10000.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "BBALL_IDLELOOP", "BSKTBALL", 10000.0, False, False, False, True, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+goto @BBALL_5898
+
+:BBALL_5891
+goto @BBALL_12251
+
+:BBALL_5898
+goto @BBALL_6068
+
+:BBALL_5905
+24@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BBALL_5955
+17@ = 11
+goto @BBALL_5427
+goto @BBALL_6068
+
+:BBALL_5955
+if 
+  $roll_along_back_flag == 0
+goto_if_false @BBALL_6015
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_IDLE")
+goto_if_false @BBALL_6008
+$roll_along_back_flag += 1
+
+:BBALL_6008
+goto @BBALL_6068
+
+:BBALL_6015
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_IDLELOOP")
+goto_if_false @BBALL_6068
+17@ = 11
+$roll_along_back_flag = 0
+goto @BBALL_5427
+
+:BBALL_6068
+goto @BBALL_12243
+
+:BBALL_6075
+if 
+  18@ <> 15
+goto_if_false @BBALL_6340
+24@ = 0
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_IDLELOOP")
+goto_if_false @BBALL_6191
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_IDLELOOP")
+if 
+  8@ > 0.9
+goto_if_false @BBALL_6191
+$spin_on_finger_flag = 0
+24@ = 1
+
+:BBALL_6191
+if 
+  24@ == 1
+goto_if_false @BBALL_6326
+26@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "BBALL_IDLE2", "BSKTBALL", 10000.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "BBALL_IDLELOOP", "BSKTBALL", 10000.0, False, False, False, True, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+goto @BBALL_6333
+
+:BBALL_6326
+goto @BBALL_12251
+
+:BBALL_6333
+goto @BBALL_6504
+
+:BBALL_6340
+24@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BBALL_6390
+17@ = 11
+goto @BBALL_5427
+goto @BBALL_6504
+
+:BBALL_6390
+if 
+  $spin_on_finger_flag == 0
+goto_if_false @BBALL_6451
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_IDLE2")
+goto_if_false @BBALL_6444
+$spin_on_finger_flag += 1
+
+:BBALL_6444
+goto @BBALL_6504
+
+:BBALL_6451
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_IDLELOOP")
+goto_if_false @BBALL_6504
+17@ = 11
+$spin_on_finger_flag = 0
+goto @BBALL_5427
+
+:BBALL_6504
+goto @BBALL_12243
+
+:BBALL_6511
+if or
+  18@ == 11
+  18@ == 2
+  18@ == 3
+  18@ == 10
+goto_if_false @BBALL_6944
+if and
+  not Char.IsPlayingAnim($scplayer, "BBALL_PICKUP")
+  not Char.IsPlayingAnim($scplayer, "BBALL_SKIDSTOP_L")
+  not Char.IsPlayingAnim($scplayer, "BBALL_SKIDSTOP_R")
+  not Char.IsPlayingAnim($scplayer, "BBALL_WALKSTOP_L")
+  not Char.IsPlayingAnim($scplayer, "BBALL_WALKSTOP_R")
+goto_if_false @BBALL_6930
+$walk_with_ball_flag = 0
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_RUN")
+goto_if_false @BBALL_6725
+$walk_with_ball_start_position = Char.GetAnimCurrentTime($scplayer, "BBALL_RUN")
+
+:BBALL_6725
+26@ = Sequence.Open()
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_IDLELOOP")
+goto_if_false @BBALL_6864
+Task.PlayAnimNonInterruptable(-1, "BBALL_WALK_START", "BSKTBALL", 8.0, False, True, True, True, -1)
+Task.PlayAnimNonInterruptable(-1, "BBALL_WALK", "BSKTBALL", 10000.0, True, True, True, False, -1)
+$walk_with_ball_flag = 1
+goto @BBALL_6905
+
+:BBALL_6864
+Task.PlayAnimNonInterruptable(-1, "BBALL_WALK", "BSKTBALL", 8.0, True, True, True, False, -1)
+
+:BBALL_6905
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+goto @BBALL_6937
+
+:BBALL_6930
+goto @BBALL_12251
+
+:BBALL_6937
+goto @BBALL_7037
+
+:BBALL_6944
+if 
+  $walk_with_ball_flag == 0
+goto_if_false @BBALL_7037
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_WALK")
+goto_if_false @BBALL_7037
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_WALK")
+Char.SetAnimCurrentTime($scplayer, "BBALL_WALK", $walk_with_ball_start_position)
+$walk_with_ball_flag += 1
+
+:BBALL_7037
+goto @BBALL_12243
+
+:BBALL_7044
+if or
+  18@ == 11
+  18@ == 1
+  18@ == 3
+  18@ == 10
+goto_if_false @BBALL_7376
+if 
+  18@ == 11
+goto_if_false @BBALL_7115
+17@ = 1
+goto @BBALL_5427
+
+:BBALL_7115
+if and
+  not Char.IsPlayingAnim($scplayer, "BBALL_PICKUP")
+  not Char.IsPlayingAnim($scplayer, "BBALL_SKIDSTOP_L")
+  not Char.IsPlayingAnim($scplayer, "BBALL_SKIDSTOP_R")
+  not Char.IsPlayingAnim($scplayer, "BBALL_WALKSTOP_L")
+  not Char.IsPlayingAnim($scplayer, "BBALL_WALKSTOP_R")
+goto_if_false @BBALL_7362
+$run_with_ball_flag = 0
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_WALK")
+goto_if_false @BBALL_7292
+$run_with_ball_start_position = Char.GetAnimCurrentTime($scplayer, "BBALL_WALK")
+
+:BBALL_7292
+26@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "BBALL_RUN", "BSKTBALL", 8.0, True, True, True, False, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+goto @BBALL_7369
+
+:BBALL_7362
+goto @BBALL_12251
+
+:BBALL_7369
+goto @BBALL_7447
+
+:BBALL_7376
+if 
+  $run_with_ball_flag == 0
+goto_if_false @BBALL_7447
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_RUN")
+goto_if_false @BBALL_7447
+Char.SetAnimCurrentTime($scplayer, "BBALL_RUN", $run_with_ball_start_position)
+$run_with_ball_flag += 1
+
+:BBALL_7447
+goto @BBALL_12243
+
+:BBALL_7454
+if 
+  18@ <> 3
+goto_if_false @BBALL_8157
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_RUN")
+goto_if_false @BBALL_7735
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_RUN")
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_RUN")
+goto_if_false @BBALL_7735
+26@ = Sequence.Open()
+if 
+  0.5 > 8@
+goto_if_false @BBALL_7625
+Task.PlayAnimNonInterruptable(-1, "BBALL_SKIDSTOP_R", "BSKTBALL", 6.0, False, True, True, True, -1)
+goto @BBALL_7672
+
+:BBALL_7625
+Task.PlayAnimNonInterruptable(-1, "BBALL_SKIDSTOP_L", "BSKTBALL", 6.0, False, True, True, True, -1)
+
+:BBALL_7672
+Task.PlayAnimNonInterruptable(-1, "BBALL_IDLELOOP", "BSKTBALL", 10000.0, False, False, False, True, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+
+:BBALL_7735
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_WALK")
+goto_if_false @BBALL_8001
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_WALK")
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_WALK")
+goto_if_false @BBALL_8001
+26@ = Sequence.Open()
+if 
+  0.5 > 8@
+goto_if_false @BBALL_7891
+Task.PlayAnimNonInterruptable(-1, "BBALL_WALKSTOP_R", "BSKTBALL", 6.0, False, True, True, True, -1)
+goto @BBALL_7938
+
+:BBALL_7891
+Task.PlayAnimNonInterruptable(-1, "BBALL_WALKSTOP_L", "BSKTBALL", 6.0, False, True, True, True, -1)
+
+:BBALL_7938
+Task.PlayAnimNonInterruptable(-1, "BBALL_IDLELOOP", "BSKTBALL", 10000.0, False, False, False, True, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+
+:BBALL_8001
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_WALK_START")
+goto_if_false @BBALL_8150
+26@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "BBALL_WALKSTOP_L", "BSKTBALL", 6.0, False, True, True, True, -1)
+Task.PlayAnimNonInterruptable(-1, "BBALL_IDLELOOP", "BSKTBALL", 10000.0, False, False, False, True, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+
+:BBALL_8150
+goto @BBALL_8253
+
+:BBALL_8157
+24@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BBALL_8207
+17@ = 11
+goto @BBALL_12251
+goto @BBALL_8253
+
+:BBALL_8207
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_IDLELOOP")
+goto_if_false @BBALL_8253
+17@ = 11
+goto @BBALL_12251
+
+:BBALL_8253
+goto @BBALL_12243
+
+:BBALL_8260
+if 
+  18@ <> 11
+goto_if_false @BBALL_8346
+26@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "BBALL_IDLELOOP", "BSKTBALL", 10000.0, True, False, False, False, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+
+:BBALL_8346
+24@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BBALL_8443
+26@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "BBALL_IDLELOOP", "BSKTBALL", 10000.0, True, False, False, False, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+
+:BBALL_8443
+goto @BBALL_12243
+
+:BBALL_8450
+if 
+  18@ <> 4
+goto_if_false @BBALL_8843
+$x, $y, $z = Char.GetCoordinates($scplayer)
+2@, 3@, 4@ = Object.GetLevelDesignCoords(0@, 0)
+set_lvar_float_to_lvar_float 5@ = 2@
+sub_float_var_from_float_lvar 5@ -= $x
+set_lvar_float_to_lvar_float 6@ = 3@
+sub_float_var_from_float_lvar 6@ -= $y
+$heading = Math.GetHeadingFromVector2D(5@, 6@)
+set_var_float_to_var_float $p_desired_heading = $heading
+26@ = Sequence.Open()
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 0)
+Task.LookAtCoord(-1, $x, $y, $z, 2000)
+if 
+  18@ == 2
+goto_if_false @BBALL_8772
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_RUN")
+goto_if_false @BBALL_8650
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_RUN")
+
+:BBALL_8650
+if 
+  0.5 > 8@
+goto_if_false @BBALL_8725
+Task.PlayAnimNonInterruptable(-1, "BBALL_SKIDSTOP_L", "BSKTBALL", 6.0, False, True, True, True, -1)
+goto @BBALL_8772
+
+:BBALL_8725
+Task.PlayAnimNonInterruptable(-1, "BBALL_SKIDSTOP_R", "BSKTBALL", 6.0, False, True, True, True, -1)
+
+:BBALL_8772
+Task.PlayAnimNonInterruptable(-1, "BBALL_JUMP_SHOT", "BSKTBALL", 10000.0, False, False, False, False, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+goto @BBALL_8934
+
+:BBALL_8843
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_JUMP_SHOT")
+goto_if_false @BBALL_8934
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_JUMP_SHOT")
+if 
+  is_float_lvar_greater_than_float_var 8@ > $anim_release_time
+goto_if_false @BBALL_8934
+17@ = 6
+goto @BBALL_12251
+
+:BBALL_8934
+goto @BBALL_12243
+
+:BBALL_8941
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_JUMP_END")
+goto_if_false @BBALL_9058
+26@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "BBALL_JUMP_CANCEL", "BSKTBALL", 10000.0, False, False, False, True, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+17@ = 13
+goto @BBALL_12251
+
+:BBALL_9058
+goto @BBALL_12243
+
+:BBALL_9065
+24@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BBALL_9108
+17@ = 11
+goto @BBALL_12251
+
+:BBALL_9108
+goto @BBALL_12243
+
+:BBALL_9115
+if 
+  18@ <> 6
+goto_if_false @BBALL_9577
+if 
+  Object.IsAttached(1@)
+goto_if_false @BBALL_9570
+Object.Detach(1@, 0.0, 0.0, 0.0, False)
+gosub @BBALL_2506
+$x = Char.GetOffsetInWorldCoords($y, $z, $scplayer, 0.04, 0.694, 1.75)
+Object.SetCoordinates(1@, $x, $y, $z)
+2@, 3@, 4@ = Object.GetLevelDesignCoords(0@, 0)
+8@ = Math.GetDistanceBetweenCoords2D($x, $y, 2@, 3@)
+cset_var_int_to_lvar_float $bball_shot_dist = float 8@
+set_lvar_float_to_var_float 7@ = $z
+cset_lvar_float_to_var_int 7@ = integer $bball_shot_dist
+set_lvar_float_to_lvar_float 9@ = 8@
+sub_float_lvar_from_float_lvar 9@ -= 7@
+9@ *= 10.0
+cset_var_int_to_lvar_float $bball_shot_dist_decimal = float 9@
+if 
+  8@ > 20.0
+goto_if_false @BBALL_9343
+8@ = 20.0
+
+:BBALL_9343
+8@ /= 20.0
+8@ *= 5.0
+9@ = Math.GetDistanceBetweenCoords2D($x, $y, 2@, 3@)
+if 
+  9@ > 15.0
+goto_if_false @BBALL_9411
+9@ = 15.0
+
+:BBALL_9411
+mult_float_var_by_float_lvar $release_time *= 9@
+$x, $y, $z = Object.GetCoordinates(1@)
+9@ = Stat.GetFloat(23)
+9@ /= 1000.0
+9@ += 1.0
+9@ *= 0.15
+if 
+  is_float_lvar_greater_than_float_var 9@ > $release_time
+goto_if_false @BBALL_9533
+start_new_script @PROJECT 1@ $x $y $z 2@ 3@ 4@ 8@ 0 0@ 
+goto @BBALL_9570
+
+:BBALL_9533
+start_new_script @PROJECT 1@ $x $y $z 2@ 3@ 4@ 8@ 1 0@ 
+
+:BBALL_9570
+goto @BBALL_9660
+
+:BBALL_9577
+if 
+  not Char.IsPlayingAnim($scplayer, "BBALL_JUMP_SHOT")
+goto_if_false @BBALL_9660
+24@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BBALL_9660
+Player.SetControl($player1, True)
+17@ = 12
+goto @BBALL_12251
+
+:BBALL_9660
+goto @BBALL_12243
+
+:BBALL_9667
+if 
+  18@ <> 16
+goto_if_false @BBALL_10147
+$x, $y, $z = Char.GetCoordinates($scplayer)
+2@, 3@, 4@ = Object.GetLevelDesignCoords(0@, 0)
+set_lvar_float_to_var_float 5@ = $x
+sub_float_lvar_from_float_lvar 5@ -= 2@
+set_lvar_float_to_var_float 6@ = $y
+sub_float_lvar_from_float_lvar 6@ -= 3@
+8@ = Math.GetDistanceBetweenCoords2D($x, $y, 2@, 3@)
+if 
+  8@ > 0.01
+goto_if_false @BBALL_9801
+div_float_lvar_by_float_lvar 5@ /= 8@
+div_float_lvar_by_float_lvar 6@ /= 8@
+
+:BBALL_9801
+5@ *= 0.01
+6@ *= 0.01
+set_var_float_to_lvar_float $x = 2@
+add_float_lvar_to_float_var $x += 5@
+set_var_float_to_lvar_float $y = 3@
+add_float_lvar_to_float_var $y += 6@
+set_var_float_to_lvar_float $z = 4@
+$z -= 1.9
+set_var_float_to_var_float $bb_desired_x = $x
+set_var_float_to_var_float $bb_desired_y = $y
+set_var_float_to_var_float $bb_desired_z = $z
+5@ *= -1.0
+6@ *= -1.0
+$heading = Math.GetHeadingFromVector2D(5@, 6@)
+set_var_float_to_var_float $p_desired_heading = $heading
+26@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "BBALL_DNK_LNCH", "BSKTBALL", 4.0, False, True, True, True, -1)
+Task.PlayAnimNonInterruptable(-1, "BBALL_DNK_GLI", "BSKTBALL", 1000.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "BBALL_DNK", "BSKTBALL", 1000.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "BBALL_DNK_LND", "BSKTBALL", 1000.0, False, False, False, False, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+$dunc_glide_percent = 0.0
+goto @BBALL_10649
+
+:BBALL_10147
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_DNK_GLI")
+goto_if_false @BBALL_10344
+if 
+  not Object.DoesExist($char_obj)
+goto_if_false @BBALL_10344
+$x, $y, $z = Char.GetCoordinates($scplayer)
+2@, 3@, 4@ = Object.GetLevelDesignCoords(0@, 0)
+$dunk_slide_distance = Math.GetDistanceBetweenCoords2D($x, $y, 2@, 3@)
+$dunc_glide_percent = 0.0
+$heading = Char.GetHeading($scplayer)
+$char_obj = Object.CreateNoOffset(#BBALL_INGAME, $x, $y, $z)
+Object.SetHeading($char_obj, $heading)
+Object.SetCollision($char_obj, False)
+Object.SetVisible($char_obj, False)
+Object.FreezePosition($char_obj, True)
+Char.AttachToObject($scplayer, $char_obj, 0.0, 0.0, 0.0, 0, 360.0, WeaponType.Unarmed)
+22@ = 1
+
+:BBALL_10344
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_DNK")
+goto_if_false @BBALL_10392
+17@ = 17
+goto @BBALL_12251
+goto @BBALL_10469
+
+:BBALL_10392
+if 
+  not Char.IsPlayingAnim($scplayer, "BBALL_DNK_GLI")
+goto_if_false @BBALL_10469
+if 
+  not Char.IsPlayingAnim($scplayer, "BBALL_DNK_LNCH")
+goto_if_false @BBALL_10469
+17@ = 17
+goto @BBALL_12251
+
+:BBALL_10469
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_DNK_GLI")
+goto_if_false @BBALL_10649
+if 
+  Object.DoesExist($char_obj)
+goto_if_false @BBALL_10649
+if 
+  $dunc_glide_percent > 1.0
+goto_if_false @BBALL_10649
+Char.ClearTasksImmediately($scplayer)
+26@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "BBALL_DNK", "BSKTBALL", 1000.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "BBALL_DNK_LND", "BSKTBALL", 1000.0, False, False, False, False, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+
+:BBALL_10649
+goto @BBALL_12243
+
+:BBALL_10656
+if 
+  18@ <> 17
+goto_if_false @BBALL_11064
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_DNK")
+goto_if_false @BBALL_11043
+if 
+  Object.IsAttached(1@)
+goto_if_false @BBALL_11036
+if 
+  Object.IsPlayingAnim(1@, "BBALL_DNK_O")
+goto_if_false @BBALL_10926
+8@ = Object.GetAnimCurrentTime(1@, "BBALL_DNK_O")
+if 
+  8@ > 0.9
+goto_if_false @BBALL_10905
+Object.Detach(1@, 0.0, 0.0, 0.0, False)
+gosub @BBALL_2506
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 0)
+$z += -0.5
+Object.SetCoordinates(1@, $x, $y, $z)
+Object.FreezePosition(1@, False)
+Object.SetCollision(1@, True)
+Object.SetDynamic(1@, True)
+Object.SetVelocity(1@, 0.0, 0.0, -0.1)
+goto @BBALL_10919
+
+:BBALL_10905
+18@ = 0
+goto @BBALL_12251
+
+:BBALL_10919
+goto @BBALL_11036
+
+:BBALL_10926
+Object.Detach(1@, 0.0, 0.0, 0.0, False)
+gosub @BBALL_2506
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 0)
+$z += -0.5
+Object.SetCoordinates(1@, $x, $y, $z)
+Object.FreezePosition(1@, False)
+Object.SetCollision(1@, True)
+Object.SetDynamic(1@, True)
+Object.SetVelocity(1@, 0.0, 0.0, -0.1)
+
+:BBALL_11036
+goto @BBALL_11057
+
+:BBALL_11043
+$bb_desired_z = World.GetGroundZFor3DCoord($bb_desired_x, $bb_desired_y, $bb_desired_z)
+
+:BBALL_11057
+goto @BBALL_11350
+
+:BBALL_11064
+if and
+  not Char.IsPlayingAnim($scplayer, "BBALL_DNK_LNCH")
+  not Char.IsPlayingAnim($scplayer, "BBALL_DNK_GLI")
+  not Char.IsPlayingAnim($scplayer, "BBALL_DNK")
+  not Char.IsPlayingAnim($scplayer, "BBALL_DNK_LND")
+goto_if_false @BBALL_11242
+24@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BBALL_11235
+if 
+  Object.DoesExist($char_obj)
+goto_if_false @BBALL_11214
+Char.DetachFromCar($scplayer)
+Object.Delete($char_obj)
+22@ = 0
+
+:BBALL_11214
+Player.SetControl($player1, True)
+17@ = 12
+goto @BBALL_12251
+
+:BBALL_11235
+goto @BBALL_11350
+
+:BBALL_11242
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_DNK_LND")
+goto_if_false @BBALL_11350
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0, 1.0, 0.0)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+$z += 1.0
+set_var_float_to_var_float $bb_desired_x = $x
+set_var_float_to_var_float $bb_desired_y = $y
+set_var_float_to_var_float $bb_desired_z = $z
+
+:BBALL_11350
+goto @BBALL_12243
+
+:BBALL_11357
+if 
+  18@ <> 7
+goto_if_false @BBALL_11443
+26@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "BBALL_DEF_LOOP", "BSKTBALL", 4.0, True, False, False, False, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+
+:BBALL_11443
+24@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BBALL_11540
+26@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "BBALL_DEF_LOOP", "BSKTBALL", 4.0, True, False, False, False, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+
+:BBALL_11540
+goto @BBALL_12243
+
+:BBALL_11547
+if 
+  18@ <> 8
+goto_if_false @BBALL_11638
+26@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "BBALL_DEF_JUMP_SHOT", "BSKTBALL", 4.0, False, False, False, True, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+
+:BBALL_11638
+24@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BBALL_11740
+26@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "BBALL_DEF_JUMP_SHOT", "BSKTBALL", 4.0, False, False, False, True, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+
+:BBALL_11740
+goto @BBALL_12243
+
+:BBALL_11747
+goto @BBALL_12243
+
+:BBALL_11754
+goto @BBALL_12243
+
+:BBALL_11761
+if 
+  18@ <> 10
+goto_if_false @BBALL_12140
+Player.SetControl($player1, False)
+Char.SetProofs($scplayer, False, False, False, False, False)
+$x, $y, $z = Char.GetCoordinates($scplayer)
+if 
+  Object.DoesExist(1@)
+goto_if_false @BBALL_11845
+2@, 3@, 4@ = Object.GetCoordinates(1@)
+
+:BBALL_11845
+set_lvar_float_to_var_float 5@ = $x
+sub_float_lvar_from_float_lvar 5@ -= 2@
+set_lvar_float_to_var_float 6@ = $y
+sub_float_lvar_from_float_lvar 6@ -= 3@
+8@ = Math.GetDistanceBetweenCoords2D($x, $y, 2@, 3@)
+div_float_lvar_by_float_lvar 5@ /= 8@
+div_float_lvar_by_float_lvar 6@ /= 8@
+5@ *= 0.5
+6@ *= 0.5
+set_var_float_to_lvar_float $x = 2@
+add_float_lvar_to_float_var $x += 5@
+set_var_float_to_lvar_float $y = 3@
+add_float_lvar_to_float_var $y += 6@
+set_lvar_float_to_lvar_float 5@ = 2@
+sub_float_var_from_float_lvar 5@ -= $x
+set_lvar_float_to_lvar_float 6@ = 3@
+sub_float_var_from_float_lvar 6@ -= $y
+$heading = Math.GetHeadingFromVector2D(5@, 6@)
+26@ = Sequence.Open()
+Task.CharSlideToCoordAndPlayAnim(-1, $x, $y, $z, $heading, -1.0, "BBALL_PICKUP", "BSKTBALL", 4.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "BBALL_IDLELOOP", "BSKTBALL", 10000.0, False, False, False, True, -1)
+Sequence.Close(26@)
+Char.PerformSequence($scplayer, 26@)
+Sequence.Clear(26@)
+goto @BBALL_12236
+
+:BBALL_12140
+24@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_lvar_equal_to_constant 24@ == 7
+goto_if_false @BBALL_12190
+17@ = 11
+goto @BBALL_12251
+goto @BBALL_12236
+
+:BBALL_12190
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_IDLELOOP")
+goto_if_false @BBALL_12236
+17@ = 11
+goto @BBALL_12251
+
+:BBALL_12236
+goto @BBALL_12243
+
+:BBALL_12243
+set_lvar_int_to_lvar_int 18@ = 17@
+
+:BBALL_12251
+return 
+
+:BBALL_12253
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BBALL_16390
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_IDLELOOP")
+goto_if_false @BBALL_12603
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_IDLELOOP")
+if 
+  not Char.IsPlayingAnim($scplayer, "BBALL_RUN")
+goto_if_false @BBALL_12438
+if 
+  8@ > 0.45
+goto_if_false @BBALL_12413
+if 
+  27@ <> 1
+goto_if_false @BBALL_12406
+Audio.ReportMissionAudioEventAtObject(1@, 1010)
+27@ = 1
+
+:BBALL_12406
+goto @BBALL_12438
+
+:BBALL_12413
+if 
+  27@ == 1
+goto_if_false @BBALL_12438
+27@ = 0
+
+:BBALL_12438
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_12603
+if 
+  Object.IsPlayingAnim(1@, "BBALL_IDLELOOP_O")
+goto_if_false @BBALL_12524
+Object.SetAnimCurrentTime(1@, "BBALL_IDLELOOP_O", 8@)
+goto @BBALL_12603
+
+:BBALL_12524
+if 
+Object.PlayAnim(1@, "BBALL_IDLELOOP_O", "BSKTBALL", 1000.0, True, False)
+goto_if_false @BBALL_12603
+Object.SetAnimCurrentTime(1@, "BBALL_IDLELOOP_O", 8@)
+
+:BBALL_12603
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_IDLE")
+goto_if_false @BBALL_12886
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_IDLE")
+if 
+  8@ > 0.87671
+goto_if_false @BBALL_12712
+if 
+  27@ <> 2
+goto_if_false @BBALL_12705
+Audio.ReportMissionAudioEventAtObject(1@, 1010)
+27@ = 2
+
+:BBALL_12705
+goto @BBALL_12737
+
+:BBALL_12712
+if 
+  27@ == 2
+goto_if_false @BBALL_12737
+27@ = 0
+
+:BBALL_12737
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_12886
+if 
+  Object.IsPlayingAnim(1@, "BBALL_IDLE_O")
+goto_if_false @BBALL_12815
+Object.SetAnimCurrentTime(1@, "BBALL_IDLE_O", 8@)
+goto @BBALL_12886
+
+:BBALL_12815
+if 
+Object.PlayAnim(1@, "BBALL_IDLE_O", "BSKTBALL", 1000.0, False, True)
+goto_if_false @BBALL_12886
+Object.SetAnimCurrentTime(1@, "BBALL_IDLE_O", 8@)
+
+:BBALL_12886
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_IDLE2")
+goto_if_false @BBALL_13089
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_IDLE2")
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_13089
+if 
+  Object.IsPlayingAnim(1@, "BBALL_IDLE2_O")
+goto_if_false @BBALL_13016
+Object.SetAnimCurrentTime(1@, "BBALL_IDLE2_O", 8@)
+goto @BBALL_13089
+
+:BBALL_13016
+if 
+Object.PlayAnim(1@, "BBALL_IDLE2_O", "BSKTBALL", 1000.0, False, True)
+goto_if_false @BBALL_13089
+Object.SetAnimCurrentTime(1@, "BBALL_IDLE2_O", 8@)
+
+:BBALL_13089
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_JUMP_SHOT")
+goto_if_false @BBALL_13278
+if 
+  Object.IsAttached(1@)
+goto_if_false @BBALL_13278
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_JUMP_SHOT")
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_13278
+if 
+  Object.IsPlayingAnim(1@, "BBALL_JUMP_SHOT_O")
+goto_if_false @BBALL_13224
+goto @BBALL_13278
+
+:BBALL_13224
+if 
+Object.PlayAnim(1@, "BBALL_JUMP_SHOT_O", "BSKTBALL", 1000.0, False, True)
+goto_if_false @BBALL_13278
+
+:BBALL_13278
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_JUMP_CANCEL")
+goto_if_false @BBALL_13517
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_JUMP_CANCEL")
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_13517
+if 
+  Object.IsPlayingAnim(1@, "BBALL_JUMP_CANCEL_O")
+goto_if_false @BBALL_13432
+Object.SetAnimCurrentTime(1@, "BBALL_JUMP_CANCEL_O", 8@)
+goto @BBALL_13517
+
+:BBALL_13432
+if 
+Object.PlayAnim(1@, "BBALL_JUMP_CANCEL_O", "BSKTBALL", 1000.0, False, True)
+goto_if_false @BBALL_13517
+Object.SetAnimCurrentTime(1@, "BBALL_JUMP_CANCEL_O", 8@)
+
+:BBALL_13517
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_PICKUP")
+goto_if_false @BBALL_13880
+if 
+  not Object.IsAttached(1@)
+goto_if_false @BBALL_13615
+Object.AttachToChar(1@, $scplayer, 0.0, 0.5, -1.0, 0.0, 0.0, 0.0)
+gosub @BBALL_2506
+goto @BBALL_13880
+
+:BBALL_13615
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_PICKUP")
+if 
+  8@ > 0.836
+goto_if_false @BBALL_13698
+if 
+  27@ <> 3
+goto_if_false @BBALL_13691
+Audio.ReportMissionAudioEventAtObject(1@, 1010)
+27@ = 3
+
+:BBALL_13691
+goto @BBALL_13723
+
+:BBALL_13698
+if 
+  27@ == 3
+goto_if_false @BBALL_13723
+27@ = 0
+
+:BBALL_13723
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_13880
+if 
+  Object.IsPlayingAnim(1@, "BBALL_PICKUP_O")
+goto_if_false @BBALL_13805
+Object.SetAnimCurrentTime(1@, "BBALL_PICKUP_O", 8@)
+goto @BBALL_13880
+
+:BBALL_13805
+if 
+Object.PlayAnim(1@, "BBALL_PICKUP_O", "BSKTBALL", 1000.0, False, True)
+goto_if_false @BBALL_13880
+Object.SetAnimCurrentTime(1@, "BBALL_PICKUP_O", 8@)
+
+:BBALL_13880
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_RUN")
+goto_if_false @BBALL_14225
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_RUN")
+if 
+  8@ > 0.222
+goto_if_false @BBALL_14048
+if 
+  0.74 > 8@
+goto_if_false @BBALL_14008
+if 
+  27@ <> 4
+goto_if_false @BBALL_14001
+Audio.ReportMissionAudioEventAtObject(1@, 1010)
+27@ = 4
+
+:BBALL_14001
+goto @BBALL_14041
+
+:BBALL_14008
+if 
+  27@ <> 5
+goto_if_false @BBALL_14041
+Audio.ReportMissionAudioEventAtObject(1@, 1010)
+27@ = 5
+
+:BBALL_14041
+goto @BBALL_14080
+
+:BBALL_14048
+if or
+  27@ == 4
+  27@ == 5
+goto_if_false @BBALL_14080
+27@ = 0
+
+:BBALL_14080
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_14225
+if 
+  Object.IsPlayingAnim(1@, "BBALL_RUN_O")
+goto_if_false @BBALL_14156
+Object.SetAnimCurrentTime(1@, "BBALL_RUN_O", 8@)
+goto @BBALL_14225
+
+:BBALL_14156
+if 
+Object.PlayAnim(1@, "BBALL_RUN_O", "BSKTBALL", 8.0, True, False)
+goto_if_false @BBALL_14225
+Object.SetAnimCurrentTime(1@, "BBALL_RUN_O", 8@)
+
+:BBALL_14225
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_SKIDSTOP_L")
+goto_if_false @BBALL_14458
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_SKIDSTOP_L")
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_14458
+if 
+  Object.IsPlayingAnim(1@, "BBALL_SKIDSTOP_L_O")
+goto_if_false @BBALL_14375
+Object.SetAnimCurrentTime(1@, "BBALL_SKIDSTOP_L_O", 8@)
+goto @BBALL_14458
+
+:BBALL_14375
+if 
+Object.PlayAnim(1@, "BBALL_SKIDSTOP_L_O", "BSKTBALL", 6.0, False, True)
+goto_if_false @BBALL_14458
+Object.SetAnimCurrentTime(1@, "BBALL_SKIDSTOP_L_O", 8@)
+
+:BBALL_14458
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_SKIDSTOP_R")
+goto_if_false @BBALL_14691
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_SKIDSTOP_R")
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_14691
+if 
+  Object.IsPlayingAnim(1@, "BBALL_SKIDSTOP_R_O")
+goto_if_false @BBALL_14608
+Object.SetAnimCurrentTime(1@, "BBALL_SKIDSTOP_R_O", 8@)
+goto @BBALL_14691
+
+:BBALL_14608
+if 
+Object.PlayAnim(1@, "BBALL_SKIDSTOP_R_O", "BSKTBALL", 6.0, False, True)
+goto_if_false @BBALL_14691
+Object.SetAnimCurrentTime(1@, "BBALL_SKIDSTOP_R_O", 8@)
+
+:BBALL_14691
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_WALKSTOP_L")
+goto_if_false @BBALL_14924
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_WALKSTOP_L")
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_14924
+if 
+  Object.IsPlayingAnim(1@, "BBALL_WALKSTOP_L_O")
+goto_if_false @BBALL_14841
+Object.SetAnimCurrentTime(1@, "BBALL_WALKSTOP_L_O", 8@)
+goto @BBALL_14924
+
+:BBALL_14841
+if 
+Object.PlayAnim(1@, "BBALL_WALKSTOP_L_O", "BSKTBALL", 6.0, False, True)
+goto_if_false @BBALL_14924
+Object.SetAnimCurrentTime(1@, "BBALL_WALKSTOP_L_O", 8@)
+
+:BBALL_14924
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_WALKSTOP_R")
+goto_if_false @BBALL_15157
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_WALKSTOP_R")
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_15157
+if 
+  Object.IsPlayingAnim(1@, "BBALL_WALKSTOP_R_O")
+goto_if_false @BBALL_15074
+Object.SetAnimCurrentTime(1@, "BBALL_WALKSTOP_R_O", 8@)
+goto @BBALL_15157
+
+:BBALL_15074
+if 
+Object.PlayAnim(1@, "BBALL_WALKSTOP_R_O", "BSKTBALL", 6.0, False, True)
+goto_if_false @BBALL_15157
+Object.SetAnimCurrentTime(1@, "BBALL_WALKSTOP_R_O", 8@)
+
+:BBALL_15157
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_WALK")
+goto_if_false @BBALL_15535
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_WALK")
+if 
+  not Char.IsPlayingAnim($scplayer, "BBALL_RUN")
+goto_if_false @BBALL_15386
+if 
+  8@ > 0.218
+goto_if_false @BBALL_15354
+if 
+  0.718 > 8@
+goto_if_false @BBALL_15314
+if 
+  27@ <> 6
+goto_if_false @BBALL_15307
+Audio.ReportMissionAudioEventAtObject(1@, 1010)
+27@ = 6
+
+:BBALL_15307
+goto @BBALL_15347
+
+:BBALL_15314
+if 
+  27@ <> 7
+goto_if_false @BBALL_15347
+Audio.ReportMissionAudioEventAtObject(1@, 1010)
+27@ = 7
+
+:BBALL_15347
+goto @BBALL_15386
+
+:BBALL_15354
+if or
+  27@ == 6
+  27@ == 7
+goto_if_false @BBALL_15386
+27@ = 0
+
+:BBALL_15386
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_15535
+if 
+  Object.IsPlayingAnim(1@, "BBALL_WALK_O")
+goto_if_false @BBALL_15464
+Object.SetAnimCurrentTime(1@, "BBALL_WALK_O", 8@)
+goto @BBALL_15535
+
+:BBALL_15464
+if 
+Object.PlayAnim(1@, "BBALL_WALK_O", "BSKTBALL", 1000.0, True, False)
+goto_if_false @BBALL_15535
+Object.SetAnimCurrentTime(1@, "BBALL_WALK_O", 8@)
+
+:BBALL_15535
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_WALK_START")
+goto_if_false @BBALL_15768
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_WALK_START")
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_15768
+if 
+  Object.IsPlayingAnim(1@, "BBALL_WALK_START_O")
+goto_if_false @BBALL_15685
+Object.SetAnimCurrentTime(1@, "BBALL_WALK_START_O", 8@)
+goto @BBALL_15768
+
+:BBALL_15685
+if 
+Object.PlayAnim(1@, "BBALL_WALK_START_O", "BSKTBALL", 8.0, False, True)
+goto_if_false @BBALL_15768
+Object.SetAnimCurrentTime(1@, "BBALL_WALK_START_O", 8@)
+
+:BBALL_15768
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_DNK_LNCH")
+goto_if_false @BBALL_15989
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_DNK_LNCH")
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_15989
+if 
+  Object.IsPlayingAnim(1@, "BBALL_DNK_LNCH_O")
+goto_if_false @BBALL_15910
+Object.SetAnimCurrentTime(1@, "BBALL_DNK_LNCH_O", 8@)
+goto @BBALL_15989
+
+:BBALL_15910
+if 
+Object.PlayAnim(1@, "BBALL_DNK_LNCH_O", "BSKTBALL", 4.0, False, True)
+goto_if_false @BBALL_15989
+Object.SetAnimCurrentTime(1@, "BBALL_DNK_LNCH_O", 8@)
+
+:BBALL_15989
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_DNK_GLI")
+goto_if_false @BBALL_16204
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_DNK_GLI")
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_16204
+if 
+  Object.IsPlayingAnim(1@, "BBALL_DNK_GLI_O")
+goto_if_false @BBALL_16127
+Object.SetAnimCurrentTime(1@, "BBALL_DNK_GLI_O", 8@)
+goto @BBALL_16204
+
+:BBALL_16127
+if 
+Object.PlayAnim(1@, "BBALL_DNK_GLI_O", "BSKTBALL", 1000.0, False, True)
+goto_if_false @BBALL_16204
+Object.SetAnimCurrentTime(1@, "BBALL_DNK_GLI_O", 8@)
+
+:BBALL_16204
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_DNK")
+goto_if_false @BBALL_16390
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_DNK")
+if 
+  0.2 > 8@
+goto_if_false @BBALL_16390
+if 
+  Object.DoesHaveThisModel(1@, #BBALL_INGAME)
+goto_if_false @BBALL_16390
+if 
+  Object.IsAttached(1@)
+goto_if_false @BBALL_16390
+if 
+  Object.IsPlayingAnim(1@, "BBALL_DNK_O")
+goto_if_false @BBALL_16342
+goto @BBALL_16390
+
+:BBALL_16342
+if 
+Object.PlayAnim(1@, "BBALL_DNK_O", "BSKTBALL", 1000.0, False, True)
+goto_if_false @BBALL_16390
+
+:BBALL_16390
+return 
+
+:BBALL_16392
+if and
+  Player.IsPlaying($player1)
+  Streaming.HasModelLoaded(23@)
+goto_if_false @BBALL_17989
+$x, $y, $z = Char.GetCoordinates($scplayer)
+2@, 3@, 4@ = Object.GetCoordinates(0@)
+5@, 6@, 7@ = Object.GetLevelDesignCoords(0@, 3)
+8@, 8@, $bb_new_camera_z = Object.GetLevelDesignCoords(0@, 0)
+$bb_new_camera_z += -1.0
+switch_start $hoop_direction total_jumps 4 default_jump 0 @BBALL_17326 jumps 1 @BBALL_16546 2 @BBALL_16741 3 @BBALL_16936 4 @BBALL_17131 -1 @BBALL_17326 -1 @BBALL_17326 -1 @BBALL_17326
+
+:BBALL_16546
+set_var_float_to_lvar_float $bb_new_camera_x = 2@
+$bb_new_camera_x += 0.2
+set_var_float_to_var_float $bb_new_camera_y = $y
+$bb_new_camera_y += 5.0
+6@ += 5.0
+if 
+  is_float_var_greater_than_float_lvar $bb_new_camera_y > 6@
+goto_if_false @BBALL_16619
+set_var_float_to_lvar_float $bb_new_camera_y = 6@
+
+:BBALL_16619
+set_lvar_float_to_lvar_float 8@ = 3@
+8@ += 5.0
+if 
+  is_float_lvar_greater_than_float_var 8@ > $bb_new_camera_y
+goto_if_false @BBALL_16664
+set_var_float_to_lvar_float $bb_new_camera_y = 8@
+
+:BBALL_16664
+set_lvar_float_to_lvar_float 8@ = 6@
+sub_float_lvar_from_float_lvar 8@ -= 3@
+8@ += -5.0
+set_lvar_float_to_lvar_float 9@ = 6@
+sub_float_var_from_float_lvar 9@ -= $bb_new_camera_y
+div_float_lvar_by_float_lvar 9@ /= 8@
+9@ *= 0.29
+9@ += 0.34
+goto @BBALL_17326
+
+:BBALL_16741
+set_var_float_to_var_float $bb_new_camera_x = $x
+$bb_new_camera_x -= 5.0
+set_var_float_to_lvar_float $bb_new_camera_y = 3@
+$bb_new_camera_y += 0.2
+5@ += -5.0
+if 
+  is_float_lvar_greater_than_float_var 5@ > $bb_new_camera_x
+goto_if_false @BBALL_16814
+set_var_float_to_lvar_float $bb_new_camera_x = 5@
+
+:BBALL_16814
+set_lvar_float_to_lvar_float 8@ = 2@
+8@ -= 5.0
+if 
+  is_float_var_greater_than_float_lvar $bb_new_camera_x > 8@
+goto_if_false @BBALL_16859
+set_var_float_to_lvar_float $bb_new_camera_x = 8@
+
+:BBALL_16859
+set_lvar_float_to_lvar_float 8@ = 2@
+sub_float_lvar_from_float_lvar 8@ -= 5@
+8@ += -5.0
+set_lvar_float_to_var_float 9@ = $bb_new_camera_x
+sub_float_lvar_from_float_lvar 9@ -= 5@
+div_float_lvar_by_float_lvar 9@ /= 8@
+9@ *= 0.29
+9@ += 0.34
+goto @BBALL_17326
+
+:BBALL_16936
+set_var_float_to_lvar_float $bb_new_camera_x = 2@
+$bb_new_camera_x -= 0.2
+set_var_float_to_var_float $bb_new_camera_y = $y
+$bb_new_camera_y -= 5.0
+6@ += -5.0
+if 
+  is_float_lvar_greater_than_float_var 6@ > $bb_new_camera_y
+goto_if_false @BBALL_17009
+set_var_float_to_lvar_float $bb_new_camera_y = 6@
+
+:BBALL_17009
+set_lvar_float_to_lvar_float 8@ = 3@
+8@ -= 5.0
+if 
+  is_float_var_greater_than_float_lvar $bb_new_camera_y > 8@
+goto_if_false @BBALL_17054
+set_var_float_to_lvar_float $bb_new_camera_y = 8@
+
+:BBALL_17054
+set_lvar_float_to_lvar_float 8@ = 3@
+sub_float_lvar_from_float_lvar 8@ -= 6@
+8@ += -5.0
+set_lvar_float_to_var_float 9@ = $bb_new_camera_y
+sub_float_lvar_from_float_lvar 9@ -= 6@
+div_float_lvar_by_float_lvar 9@ /= 8@
+9@ *= 0.29
+9@ += 0.34
+goto @BBALL_17326
+
+:BBALL_17131
+set_var_float_to_var_float $bb_new_camera_x = $x
+$bb_new_camera_x += 5.0
+set_var_float_to_lvar_float $bb_new_camera_y = 3@
+$bb_new_camera_y -= 0.2
+5@ += 5.0
+if 
+  is_float_var_greater_than_float_lvar $bb_new_camera_x > 5@
+goto_if_false @BBALL_17204
+set_var_float_to_lvar_float $bb_new_camera_x = 5@
+
+:BBALL_17204
+set_lvar_float_to_lvar_float 8@ = 2@
+8@ += 5.0
+if 
+  is_float_lvar_greater_than_float_var 8@ > $bb_new_camera_x
+goto_if_false @BBALL_17249
+set_var_float_to_lvar_float $bb_new_camera_x = 8@
+
+:BBALL_17249
+set_lvar_float_to_lvar_float 8@ = 5@
+sub_float_lvar_from_float_lvar 8@ -= 2@
+8@ += -5.0
+set_lvar_float_to_lvar_float 9@ = 5@
+sub_float_var_from_float_lvar 9@ -= $bb_new_camera_x
+div_float_lvar_by_float_lvar 9@ /= 8@
+9@ *= 0.29
+9@ += 0.34
+goto @BBALL_17326
+
+:BBALL_17326
+set_var_float_to_lvar_float $bb_cam_vec_x = 2@
+sub_float_var_from_float_var $bb_cam_vec_x -= $x
+set_var_float_to_lvar_float $bb_cam_vec_y = 3@
+sub_float_var_from_float_var $bb_cam_vec_y -= $y
+set_var_float_to_lvar_float $bb_cam_vec_z = 4@
+sub_float_var_from_float_var $bb_cam_vec_z -= $z
+mult_float_var_by_float_lvar $bb_cam_vec_x *= 9@
+mult_float_var_by_float_lvar $bb_cam_vec_y *= 9@
+mult_float_var_by_float_lvar $bb_cam_vec_z *= 9@
+set_var_float_to_var_float $bb_new_look_x = $x
+add_float_var_to_float_var $bb_new_look_x += $bb_cam_vec_x
+set_var_float_to_var_float $bb_new_look_y = $y
+add_float_var_to_float_var $bb_new_look_y += $bb_cam_vec_y
+set_var_float_to_var_float $bb_new_look_z = $z
+add_float_var_to_float_var $bb_new_look_z += $bb_cam_vec_z
+2@, 3@, 4@ = Object.GetLevelDesignCoords(0@, 2)
+5@, 6@, 7@ = Object.GetLevelDesignCoords(0@, 3)
+if 
+  is_float_lvar_greater_than_float_lvar 2@ > 5@
+goto_if_false @BBALL_17558
+if 
+  is_float_var_greater_than_float_lvar $bb_new_look_x > 2@
+goto_if_false @BBALL_17524
+set_var_float_to_lvar_float $bb_new_look_x = 2@
+
+:BBALL_17524
+if 
+  is_float_lvar_greater_than_float_var 5@ > $bb_new_look_x
+goto_if_false @BBALL_17551
+set_var_float_to_lvar_float $bb_new_look_x = 5@
+
+:BBALL_17551
+goto @BBALL_17612
+
+:BBALL_17558
+if 
+  is_float_var_greater_than_float_lvar $bb_new_look_x > 5@
+goto_if_false @BBALL_17585
+set_var_float_to_lvar_float $bb_new_look_x = 5@
+
+:BBALL_17585
+if 
+  is_float_lvar_greater_than_float_var 2@ > $bb_new_look_x
+goto_if_false @BBALL_17612
+set_var_float_to_lvar_float $bb_new_look_x = 2@
+
+:BBALL_17612
+if 
+  is_float_lvar_greater_than_float_lvar 3@ > 6@
+goto_if_false @BBALL_17692
+if 
+  is_float_var_greater_than_float_lvar $bb_new_look_y > 3@
+goto_if_false @BBALL_17658
+set_var_float_to_lvar_float $bb_new_look_y = 3@
+
+:BBALL_17658
+if 
+  is_float_lvar_greater_than_float_var 6@ > $bb_new_look_y
+goto_if_false @BBALL_17685
+set_var_float_to_lvar_float $bb_new_look_y = 6@
+
+:BBALL_17685
+goto @BBALL_17746
+
+:BBALL_17692
+if 
+  is_float_var_greater_than_float_lvar $bb_new_look_y > 6@
+goto_if_false @BBALL_17719
+set_var_float_to_lvar_float $bb_new_look_y = 6@
+
+:BBALL_17719
+if 
+  is_float_lvar_greater_than_float_var 3@ > $bb_new_look_y
+goto_if_false @BBALL_17746
+set_var_float_to_lvar_float $bb_new_look_y = 3@
+
+:BBALL_17746
+set_var_float_to_var_float $bb_cam_vec_x = $bb_new_camera_x
+sub_float_lvar_from_float_var $bb_cam_vec_x -= 10@
+set_var_float_to_var_float $bb_cam_vec_y = $bb_new_camera_y
+sub_float_lvar_from_float_var $bb_cam_vec_y -= 11@
+set_var_float_to_var_float $bb_cam_vec_z = $bb_new_camera_z
+sub_float_lvar_from_float_var $bb_cam_vec_z -= 12@
+$bb_cam_vec_x *= 0.25
+$bb_cam_vec_y *= 0.25
+$bb_cam_vec_z *= 0.25
+add_float_var_to_float_lvar 10@ += $bb_cam_vec_x
+add_float_var_to_float_lvar 11@ += $bb_cam_vec_y
+add_float_var_to_float_lvar 12@ += $bb_cam_vec_z
+set_var_float_to_var_float $bb_cam_vec_x = $bb_new_look_x
+sub_float_lvar_from_float_var $bb_cam_vec_x -= 13@
+set_var_float_to_var_float $bb_cam_vec_y = $bb_new_look_y
+sub_float_lvar_from_float_var $bb_cam_vec_y -= 14@
+set_var_float_to_var_float $bb_cam_vec_z = $bb_new_look_z
+sub_float_lvar_from_float_var $bb_cam_vec_z -= 15@
+$bb_cam_vec_x *= 0.1
+$bb_cam_vec_y *= 0.1
+$bb_cam_vec_z *= 0.1
+add_float_var_to_float_lvar 13@ += $bb_cam_vec_x
+add_float_var_to_float_lvar 14@ += $bb_cam_vec_y
+add_float_var_to_float_lvar 15@ += $bb_cam_vec_z
+Camera.SetFixedPosition(10@, 11@, 12@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(13@, 14@, 15@, SwitchType.JumpCut)
+
+:BBALL_17989
+return 
+
+:BBALL_17991
+if and
+  Object.IsAttached(1@)
+  Streaming.HasModelLoaded(23@)
+goto_if_false @BBALL_19704
+24@ = 1
+if or
+  17@ == 10
+  17@ == 4
+  17@ == 6
+  17@ == 16
+  17@ == 17
+goto_if_false @BBALL_18072
+24@ = 0
+
+:BBALL_18072
+if or
+  17@ == 14
+  17@ == 15
+goto_if_false @BBALL_18104
+24@ = 0
+
+:BBALL_18104
+if 
+  24@ == 1
+goto_if_false @BBALL_19330
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.LeftStickX)
+  Pad.IsButtonPressed(PadId.Pad1, Button.LeftStickY)
+goto_if_false @BBALL_18532
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+cset_var_float_to_var_int $x = integer $LStickX
+cset_var_float_to_var_int $y = integer $LStickY
+$x /= 128.0
+$y /= -128.0
+set_lvar_float_to_var_float 8@ = $x
+mult_float_lvar_by_float_var 8@ *= $x
+set_lvar_float_to_var_float 9@ = $y
+mult_float_lvar_by_float_var 9@ *= $y
+add_float_lvar_to_float_lvar 8@ += 9@
+8@ = Math.Sqrt(8@)
+$p_desired_heading = Math.GetHeadingFromVector2D($x, $y)
+if 
+  $bball_camera_type == 1
+goto_if_false @BBALL_18313
+set_var_float_to_lvar_float $x = 13@
+sub_float_lvar_from_float_var $x -= 10@
+set_var_float_to_lvar_float $y = 14@
+sub_float_lvar_from_float_var $y -= 11@
+goto @BBALL_18383
+
+:BBALL_18313
+2@, 3@, 4@ = Camera.GetActiveCoordinates()
+5@, 6@, 7@ = Camera.GetActivePointAt()
+set_var_float_to_lvar_float $x = 5@
+sub_float_lvar_from_float_var $x -= 2@
+set_var_float_to_lvar_float $y = 6@
+sub_float_lvar_from_float_var $y -= 3@
+set_var_float_to_lvar_float $z = 7@
+sub_float_lvar_from_float_var $z -= 4@
+
+:BBALL_18383
+9@ = Math.GetHeadingFromVector2D($x, $y)
+add_float_lvar_to_float_var $p_desired_heading += 9@
+if 
+  8@ > 0.3
+goto_if_false @BBALL_18472
+if 
+  0.8 > 8@
+goto_if_false @BBALL_18458
+17@ = 1
+goto @BBALL_18465
+
+:BBALL_18458
+17@ = 2
+
+:BBALL_18465
+goto @BBALL_18525
+
+:BBALL_18472
+if or
+  18@ == 2
+  18@ == 1
+  17@ == 2
+  17@ == 1
+goto_if_false @BBALL_18525
+17@ = 3
+18@ = 0
+
+:BBALL_18525
+goto @BBALL_18585
+
+:BBALL_18532
+if or
+  18@ == 2
+  18@ == 1
+  17@ == 2
+  17@ == 1
+goto_if_false @BBALL_18585
+17@ = 3
+18@ = 0
+
+:BBALL_18585
+if 
+  21@ == 0
+goto_if_false @BBALL_19225
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BBALL_19186
+if 
+  18@ <> 6
+goto_if_false @BBALL_19179
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 0)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BBALL_18684
+2@, 3@, 4@ = Char.GetCoordinates($scplayer)
+
+:BBALL_18684
+set_lvar_float_to_var_float 5@ = $x
+sub_float_lvar_from_float_lvar 5@ -= 2@
+set_lvar_float_to_var_float 6@ = $y
+sub_float_lvar_from_float_lvar 6@ -= 3@
+$x, $y, $z = Object.GetCoordinates(0@)
+2@ = Object.GetOffsetInWorldCoords(3@, 4@, 0@, 0.0, -1.0, 0.0)
+set_lvar_float_to_lvar_float 8@ = 2@
+sub_float_var_from_float_lvar 8@ -= $x
+set_lvar_float_to_lvar_float 9@ = 3@
+sub_float_var_from_float_lvar 9@ -= $y
+set_lvar_float_to_lvar_float 2@ = 8@
+set_lvar_float_to_lvar_float 3@ = 9@
+8@ = Math.GetAngleBetween2DVectors(5@, 6@, 2@, 3@)
+24@ = 0
+if 
+  90.0 > 8@
+goto_if_false @BBALL_19179
+24@ = 0
+if 
+  18@ == 2
+goto_if_false @BBALL_19133
+8@ = Stat.GetFloat(21)
+if 
+  400.0 > 8@
+goto_if_false @BBALL_19133
+$x, $y, $z = Char.GetCoordinates($scplayer)
+2@, 3@, 4@ = Object.GetCoordinates(0@)
+5@ = Char.GetOffsetInWorldCoords(6@, 7@, $scplayer, 0.0, 1.0, 0.0)
+8@ = Math.GetDistanceBetweenCoords2D($x, $y, 2@, 3@)
+if and
+  8@ > 2.4
+  3.5 > 8@
+goto_if_false @BBALL_19133
+set_var_float_to_lvar_float $bb_cam_vec_x = 5@
+sub_float_var_from_float_var $bb_cam_vec_x -= $x
+set_var_float_to_lvar_float $bb_cam_vec_y = 6@
+sub_float_var_from_float_var $bb_cam_vec_y -= $y
+set_lvar_float_to_lvar_float 8@ = 2@
+sub_float_var_from_float_lvar 8@ -= $x
+set_lvar_float_to_lvar_float 9@ = 3@
+sub_float_var_from_float_lvar 9@ -= $y
+$z = Math.GetAngleBetween2DVectors($bb_cam_vec_x, $bb_cam_vec_y, 8@, 9@)
+if 
+  90.0 > $z
+goto_if_false @BBALL_19126
+24@ = 1
+goto @BBALL_19133
+
+:BBALL_19126
+24@ = 0
+
+:BBALL_19133
+if 
+  24@ == 1
+goto_if_false @BBALL_19165
+17@ = 16
+goto @BBALL_19172
+
+:BBALL_19165
+17@ = 4
+
+:BBALL_19172
+21@ = 1
+
+:BBALL_19179
+goto @BBALL_19218
+
+:BBALL_19186
+if and
+  18@ == 4
+  17@ <> 6
+goto_if_false @BBALL_19218
+21@ = 1
+
+:BBALL_19218
+goto @BBALL_19225
+
+:BBALL_19225
+if and
+  17@ == 11
+  18@ == 11
+goto_if_false @BBALL_19274
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @BBALL_19274
+17@ = 14
+
+:BBALL_19274
+if and
+  17@ == 11
+  18@ == 11
+goto_if_false @BBALL_19323
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @BBALL_19323
+17@ = 15
+
+:BBALL_19323
+goto @BBALL_19697
+
+:BBALL_19330
+if 
+  21@ == 1
+goto_if_false @BBALL_19697
+if or
+  17@ == 4
+  17@ == 6
+goto_if_false @BBALL_19673
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BBALL_19537
+21@ = 0
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_JUMP_SHOT")
+goto_if_false @BBALL_19520
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_JUMP_SHOT")
+if 
+  is_float_lvar_greater_than_float_var 8@ > $anim_release_time
+goto_if_false @BBALL_19497
+set_var_float_to_lvar_float $release_time = 8@
+sub_float_var_from_float_var $release_time -= $anim_release_time
+goto @BBALL_19513
+
+:BBALL_19497
+set_var_float_to_var_float $release_time = $anim_release_time
+sub_float_lvar_from_float_var $release_time -= 8@
+
+:BBALL_19513
+goto @BBALL_19530
+
+:BBALL_19520
+$release_time = 1.0
+
+:BBALL_19530
+goto @BBALL_19666
+
+:BBALL_19537
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_JUMP_SHOT")
+goto_if_false @BBALL_19656
+8@ = Char.GetAnimCurrentTime($scplayer, "BBALL_JUMP_SHOT")
+set_lvar_float_to_var_float 9@ = $anim_release_time
+9@ += 0.1
+if 
+  is_float_lvar_greater_than_float_lvar 8@ > 9@
+goto_if_false @BBALL_19649
+$release_time = 1.0
+21@ = 0
+
+:BBALL_19649
+goto @BBALL_19666
+
+:BBALL_19656
+$release_time = 1.0
+
+:BBALL_19666
+goto @BBALL_19697
+
+:BBALL_19673
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BBALL_19697
+21@ = 0
+
+:BBALL_19697
+goto @BBALL_19844
+
+:BBALL_19704
+if 
+  18@ == 12
+goto_if_false @BBALL_19844
+if 
+  21@ == 0
+goto_if_false @BBALL_19820
+if 
+  Object.DoesExist(1@)
+goto_if_false @BBALL_19813
+$x, $y, $z = Object.GetCoordinates(1@)
+if 
+  Char.LocateOnFootObject3D($scplayer, 1@, 0.7, 0.7, 2.0, False)
+goto_if_false @BBALL_19813
+17@ = 10
+
+:BBALL_19813
+goto @BBALL_19844
+
+:BBALL_19820
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BBALL_19844
+21@ = 0
+
+:BBALL_19844
+24@ = 0
+if or
+  17@ == 1
+  17@ == 2
+  17@ == 8
+  17@ == 4
+  17@ == 6
+goto_if_false @BBALL_19904
+24@ = 1
+
+:BBALL_19904
+if or
+  17@ == 16
+  17@ == 17
+goto_if_false @BBALL_19936
+24@ = 1
+
+:BBALL_19936
+if 
+  24@ == 1
+goto_if_false @BBALL_20231
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @BBALL_19978
+29@ = Char.GetHeading($scplayer)
+
+:BBALL_19978
+if 
+  $p_desired_heading > 360.0
+goto_if_false @BBALL_20016
+$p_desired_heading += -360.0
+goto @BBALL_19978
+
+:BBALL_20016
+if 
+  -360.0 > $p_desired_heading
+goto_if_false @BBALL_20054
+$p_desired_heading += 360.0
+goto @BBALL_20016
+
+:BBALL_20054
+set_lvar_float_to_var_float 30@ = $p_desired_heading
+sub_float_lvar_from_float_lvar 30@ -= 29@
+if 
+  30@ > 180.0
+goto_if_false @BBALL_20101
+30@ += -360.0
+
+:BBALL_20101
+if 
+  -180.0 > 30@
+goto_if_false @BBALL_20132
+30@ += 360.0
+
+:BBALL_20132
+30@ /= 10.0
+add_timed_float_lvar_to_float_lvar 29@ += frame_delta_time * 30@
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @BBALL_20231
+if and
+  not Char.IsPlayingAnim($scplayer, "BBALL_SKIDSTOP_L")
+  not Char.IsPlayingAnim($scplayer, "BBALL_SKIDSTOP_R")
+goto_if_false @BBALL_20231
+Char.SetHeading($scplayer, 29@)
+
+:BBALL_20231
+if or
+  Char.IsPlayingAnim($scplayer, "BBALL_DNK_GLI")
+  Char.IsPlayingAnim($scplayer, "BBALL_DNK")
+  Char.IsPlayingAnim($scplayer, "BBALL_DNK_LND")
+goto_if_false @BBALL_20849
+if 
+  Object.DoesExist($char_obj)
+goto_if_false @BBALL_20849
+$x, $y, $z = Object.GetCoordinates($char_obj)
+8@ = Math.GetDistanceBetweenCoords3D($x, $y, $z, $bb_desired_x, $bb_desired_y, $bb_desired_z)
+if 
+  1.0 >= $dunc_glide_percent
+goto_if_false @BBALL_20818
+if 
+  8@ > 0.07
+goto_if_false @BBALL_20651
+set_lvar_float_to_var_float 2@ = $bb_desired_x
+sub_float_var_from_float_lvar 2@ -= $x
+set_lvar_float_to_var_float 3@ = $bb_desired_y
+sub_float_var_from_float_lvar 3@ -= $y
+set_lvar_float_to_var_float 4@ = $bb_desired_z
+sub_float_var_from_float_lvar 4@ -= $z
+div_float_lvar_by_float_lvar 2@ /= 8@
+div_float_lvar_by_float_lvar 3@ /= 8@
+div_float_lvar_by_float_lvar 4@ /= 8@
+if 
+  8@ > 0.065
+goto_if_false @BBALL_20620
+2@ *= 0.065
+3@ *= 0.065
+4@ *= 0.065
+add_timed_float_lvar_to_float_var $x += frame_delta_time * 2@
+add_timed_float_lvar_to_float_var $y += frame_delta_time * 3@
+add_timed_float_lvar_to_float_var $z += frame_delta_time * 4@
+Object.SetCoordinates($char_obj, $x, $y, $z)
+8@ = Math.GetDistanceBetweenCoords3D($x, $y, $z, $bb_desired_x, $bb_desired_y, $bb_desired_z)
+set_var_float_to_lvar_float $dunc_glide_percent = 8@
+div_float_var_by_float_var $dunc_glide_percent /= $dunk_slide_distance
+$dunc_glide_percent += -1.0
+$dunc_glide_percent *= -1.0
+goto @BBALL_20644
+
+:BBALL_20620
+Object.SetCoordinates($char_obj, $bb_desired_x, $bb_desired_y, $bb_desired_z)
+$dunc_glide_percent = 1.0
+
+:BBALL_20644
+goto @BBALL_20675
+
+:BBALL_20651
+Object.SetCoordinates($char_obj, $bb_desired_x, $bb_desired_y, $bb_desired_z)
+$dunc_glide_percent = 1.0
+
+:BBALL_20675
+if 
+  Char.IsPlayingAnim($scplayer, "BBALL_DNK_GLI")
+goto_if_false @BBALL_20818
+if and
+  $dunc_glide_percent >= 0.0
+  1.0 >= $dunc_glide_percent
+goto_if_false @BBALL_20818
+Char.SetAnimCurrentTime($scplayer, "BBALL_DNK_GLI", $dunc_glide_percent)
+if 
+  Object.IsPlayingAnim(1@, "BBALL_DNK_GLI_O")
+goto_if_false @BBALL_20818
+Object.SetAnimCurrentTime(1@, "BBALL_DNK_GLI_O", $dunc_glide_percent)
+
+:BBALL_20818
+if 
+  $dunc_glide_percent == 1.0
+goto_if_false @BBALL_20849
+$dunc_glide_percent = 1.01
+
+:BBALL_20849
+return 
+set_var_float_to_var_float $x = $intrp_dest_x
+sub_float_var_from_float_var $x -= $intrp_start_x
+set_var_float_to_var_float $y = $intrp_dest_y
+sub_float_var_from_float_var $y -= $intrp_start_y
+set_var_float_to_var_float $z = $intrp_dest_z
+sub_float_var_from_float_var $z -= $intrp_start_z
+mult_float_var_by_float_var $x *= $intrp_speed
+mult_float_var_by_float_var $y *= $intrp_speed
+mult_float_var_by_float_var $z *= $intrp_speed
+add_float_var_to_float_var $intrp_start_x += $x
+add_float_var_to_float_var $intrp_start_y += $y
+add_float_var_to_float_var $intrp_start_z += $z
+return 
+
+:BBALL_20949
+$x, $y, $z = Camera.GetDebugCoordinates()
+if 
+  Object.DoesExist(0@)
+goto_if_false @BBALL_20998
+2@, 3@, 4@ = Object.GetCoordinates(0@)
+$heading = Object.GetHeading(0@)
+
+:BBALL_20998
+$heading *= -1.0
+8@ = Math.Cos($heading)
+9@ = Math.Sin($heading)
+set_var_float_to_var_float $bb_vec_x = $x
+sub_float_lvar_from_float_var $bb_vec_x -= 2@
+set_var_float_to_var_float $bb_vec_y = $y
+sub_float_lvar_from_float_var $bb_vec_y -= 3@
+set_var_float_to_var_float $bb_vec_z = $z
+sub_float_lvar_from_float_var $bb_vec_z -= 4@
+set_var_float_to_var_float $bb_vec2_x = $bb_vec_x
+mult_float_var_by_float_lvar $bb_vec2_x *= 8@
+set_var_float_to_var_float $bb_temp_float3 = $bb_vec_y
+mult_float_var_by_float_lvar $bb_temp_float3 *= 9@
+sub_float_var_from_float_var $bb_vec2_x -= $bb_temp_float3
+set_var_float_to_var_float $bb_vec2_y = $bb_vec_x
+mult_float_var_by_float_lvar $bb_vec2_y *= 9@
+set_var_float_to_var_float $bb_temp_float3 = $bb_vec_y
+mult_float_var_by_float_lvar $bb_temp_float3 *= 8@
+add_float_var_to_float_var $bb_vec2_y += $bb_temp_float3
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("FIXED_CAMERA_POSITION - OFFSET FROM BBHOOP = ESTINATION) = ")
+save_float_to_debug_file $bb_vec2_x
+save_float_to_debug_file $bb_vec2_y
+save_float_to_debug_file $bb_vec_z
+$x, $y, $z = Camera.GetDebugPointAt()
+set_var_float_to_var_float $bb_vec_x = $x
+sub_float_lvar_from_float_var $bb_vec_x -= 2@
+set_var_float_to_var_float $bb_vec_y = $y
+sub_float_lvar_from_float_var $bb_vec_y -= 3@
+set_var_float_to_var_float $bb_vec_z = $z
+sub_float_lvar_from_float_var $bb_vec_z -= 4@
+set_var_float_to_var_float $bb_vec2_x = $bb_vec_x
+mult_float_var_by_float_lvar $bb_vec2_x *= 8@
+set_var_float_to_var_float $bb_temp_float3 = $bb_vec_y
+mult_float_var_by_float_lvar $bb_temp_float3 *= 9@
+sub_float_var_from_float_var $bb_vec2_x -= $bb_temp_float3
+set_var_float_to_var_float $bb_vec2_y = $bb_vec_x
+mult_float_var_by_float_lvar $bb_vec2_y *= 9@
+set_var_float_to_var_float $bb_temp_float3 = $bb_vec_y
+mult_float_var_by_float_lvar $bb_temp_float3 *= 8@
+add_float_var_to_float_var $bb_vec2_y += $bb_temp_float3
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CAMERA_POINT_AT - OFFSET FROM BBHOOP = OOP = ESTINATION) = ")
+save_float_to_debug_file $bb_vec2_x
+save_float_to_debug_file $bb_vec2_y
+save_float_to_debug_file $bb_vec_z
+return 
+terminate_this_script 
+

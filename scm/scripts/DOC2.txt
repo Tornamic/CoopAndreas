@@ -1,0 +1,2280 @@
+//-------------Mission 95---------------
+// Originally: Madd Dogg
+
+:DOC2
+script_name 'DOC2'
+gosub @DOC2_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @DOC2_38
+gosub @DOC2_13046
+
+:DOC2_38
+gosub @DOC2_13757
+terminate_this_script 
+
+:DOC2_47
+131@ = 0
+$d2_instance_health = 40
+$d2_anim_rnd = 0
+$doc2_heal = 0
+$doc2_rnd = 0
+$d2_rnd = 0
+99@ = DecisionMakerChar.Load(DecisionMakerType.Weak)
+Camera.SetFadingColor(0, 0, 0)
+Stat.RegisterMissionGiven
+$onmission = 1
+Text.LoadMissionText('DOC2')
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:DOC2_137
+if 
+  Camera.GetFadingStatus
+goto_if_false @DOC2_161
+wait 0
+goto @DOC2_137
+
+:DOC2_161
+Cutscene.Load('DOC_2')
+
+:DOC2_172
+if 
+  not Cutscene.HasLoaded
+goto_if_false @DOC2_196
+wait 0
+goto @DOC2_172
+
+:DOC2_196
+World.ClearArea(1, 2159.899, 1443.042, 9.8203, 40.0)
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:DOC2_229
+if 
+  not Cutscene.HasFinished
+goto_if_false @DOC2_253
+wait 0
+goto @DOC2_229
+
+:DOC2_253
+Player.SetControl($player1, False)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, Fade.Out)
+
+:DOC2_274
+if 
+  Camera.GetFadingStatus
+goto_if_false @DOC2_298
+wait 0
+goto @DOC2_274
+
+:DOC2_298
+Cutscene.Clear
+Streaming.RequestModel(83)
+Streaming.RequestModel(85)
+Streaming.RequestModel(78)
+Streaming.RequestModel(68)
+Streaming.RequestModel(330)
+Streaming.RequestModel(258)
+Streaming.RequestModel(259)
+Streaming.RequestAnimation("ON_LOOKERS")
+Streaming.LoadSpecialCharacter('MADDOGG', 1)
+
+:DOC2_358
+if or
+  not Streaming.HasModelLoaded(83)
+  not Streaming.HasModelLoaded(85)
+  not Streaming.HasModelLoaded(78)
+goto_if_false @DOC2_392
+wait 0
+goto @DOC2_358
+
+:DOC2_392
+if or
+  not Streaming.HasModelLoaded(68)
+  not Streaming.HasModelLoaded(330)
+  not Streaming.HasModelLoaded(258)
+goto_if_false @DOC2_428
+wait 0
+goto @DOC2_392
+
+:DOC2_428
+if or
+  not Streaming.HasModelLoaded(259)
+  not Streaming.HasAnimationLoaded("ON_LOOKERS")
+  not Streaming.HasSpecialCharacterLoaded(1)
+goto_if_false @DOC2_473
+wait 0
+goto @DOC2_428
+
+:DOC2_473
+Path.SwitchRoadsOff(2090.981, 1388.51, 8.8203, 2234.686, 1517.077, 10.8203)
+Path.SwitchPedRoadsOff(2090.981, 1388.51, 8.8203, 2234.686, 1517.077, 10.8203)
+105@ = 2163.638
+106@ = 1443.663
+107@ = 9.8203
+World.SetCarDensityMultiplier(0.0)
+World.ClearArea(1, 2161.34, 1442.504, 9.8203, 20.0)
+World.ClearArea(1, 2107.19, 1409.153, 9.8203, 10.0)
+95@ = Char.Create(4, 290, 2162.62, 1451.475, 23.1719)
+Char.SetAnimGroup(95@, "DRUNKMAN")
+Char.SetHeading(95@, 180.0)
+Char.SetHealth(95@, 1)
+73@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2154.192, 1437.948, 9.8203, MoveState.Walk, 8000)
+Task.TurnCharToFaceChar(-1, 95@)
+Task.PlayAnim(-1, "LKAROUND_IN", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "LKAROUND_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "LKAROUND_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "LKAROUND_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "LKAROUND_OUT", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Sequence.SetToRepeat(73@, True)
+Sequence.Close(73@)
+74@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2164.596, 1435.169, 9.8203, MoveState.Walk, 8000)
+Task.TurnCharToFaceChar(-1, 95@)
+Task.PlayAnim(-1, "POINTUP_IN", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "POINTUP_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "POINTUP_SHOUT", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "POINTUP_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "POINTUP_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Sequence.SetToRepeat(74@, True)
+Sequence.Close(74@)
+75@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2160.696, 1435.38, 9.8203, MoveState.Walk, 8000)
+Task.TurnCharToFaceChar(-1, 95@)
+Task.Pause(-1, 100)
+Task.PlayAnim(-1, "POINTUP_IN", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "POINTUP_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "POINTUP_SHOUT", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "POINTUP_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "POINTUP_OUT", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Sequence.SetToRepeat(75@, True)
+Sequence.Close(75@)
+76@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2169.263, 1435.927, 9.8203, MoveState.Walk, 8000)
+Task.TurnCharToFaceChar(-1, 95@)
+Task.PlayAnim(-1, "SHOUT_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "SHOUT_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "SHOUT_02", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "SHOUT_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "SHOUT_01", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Sequence.SetToRepeat(76@, True)
+Sequence.Close(76@)
+77@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2155.42, 1436.42, 9.8203, MoveState.Walk, 8000)
+Task.TurnCharToFaceChar(-1, 95@)
+Task.Pause(-1, 500)
+Task.PlayAnim(-1, "SHOUT_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "SHOUT_01", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "SHOUT_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "SHOUT_01", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "SHOUT_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Sequence.SetToRepeat(77@, True)
+Sequence.Close(77@)
+78@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2168.29, 1436.191, 9.8203, MoveState.Walk, 8000)
+Task.TurnCharToFaceChar(-1, 95@)
+Task.PlayAnim(-1, "SHOUT_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "SHOUT_02", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "SHOUT_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "SHOUT_01", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "SHOUT_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Sequence.SetToRepeat(78@, True)
+Sequence.Close(78@)
+79@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2159.253, 1435.312, 9.8203, MoveState.Walk, 8000)
+Task.TurnCharToFaceChar(-1, 95@)
+Task.Pause(-1, 500)
+Task.PlayAnim(-1, "LKUP_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "LKUP_POINT", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "LKUP_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "LKUP_POINT", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "LKUP_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Sequence.SetToRepeat(79@, True)
+Sequence.Close(79@)
+96@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2165.651, 1452.0, 23.1721, MoveState.Walk, 8000)
+Task.GoStraightToCoord(-1, 2160.56, 1452.0, 23.1719, MoveState.Walk, 8000)
+Sequence.SetToRepeat(96@, True)
+Sequence.Close(96@)
+97@ = Sequence.Open()
+Task.Jump(-1, False)
+Sequence.Close(97@)
+98@ = Sequence.Open()
+Task.Duck(-1, -1)
+Sequence.SetToRepeat(98@, True)
+Sequence.Close(98@)
+116@ = Sequence.Open()
+Task.PlayAnim(-1, "LKAROUND_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Sequence.SetToRepeat(116@, True)
+Sequence.Close(116@)
+110@ = Sequence.Open()
+Task.PlayAnim(-1, "WAVE_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.WanderStandard(-1)
+Sequence.Close(110@)
+111@ = Sequence.Open()
+Task.PlayAnim(-1, "SHOUT_LOOP", "ON_LOOKERS", 1.0, False, False, False, False, -1)
+Task.WanderStandard(-1)
+Sequence.Close(111@)
+100@ = Object.CreateNoOffset(#SMASH_BOX_STAY, 2156.719, 1482.352, 19.1794)
+101@ = Object.CreateNoOffset(#SMASH_BOX_BRK, 2156.719, 1482.352, 19.1794)
+$doc2_heal = 100
+Char.SetNeverTargeted(95@, True)
+92@ = Blip.AddForCoord(105@, 106@, 107@)
+93@ = Blip.AddForCoord(1878.546, 2240.82, 9.813)
+Blip.ChangeDisplay(92@, BlipDisplay.Neither)
+Blip.ChangeDisplay(93@, BlipDisplay.Neither)
+$doc2_rnd = Math.RandomIntInRange(0, 5)
+switch_start $doc2_rnd total_jumps 5 default_jump 0 @DOC2_3089 jumps 0 @DOC2_3014 1 @DOC2_3029 2 @DOC2_3044 3 @DOC2_3059 4 @DOC2_3074 -1 @DOC2_3089 -1 @DOC2_3089
+
+:DOC2_3014
+$doc2_rnd = 16000
+goto @DOC2_3089
+
+:DOC2_3029
+$doc2_rnd = 18000
+goto @DOC2_3089
+
+:DOC2_3044
+$doc2_rnd = 20000
+goto @DOC2_3089
+
+:DOC2_3059
+$doc2_rnd = 22000
+goto @DOC2_3089
+
+:DOC2_3074
+$doc2_rnd = 24000
+goto @DOC2_3089
+
+:DOC2_3089
+88@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, 95@)
+Task.ScratchHead(-1)
+Task.LookAbout(-1, 4000)
+Task.Pause(-1, 1000)
+Sequence.SetToRepeat(88@, True)
+Sequence.Close(88@)
+39@ = 0
+$d2_rnd = 0
+43@ = Char.Create(4, 78, 2154.192, 1437.948, 9.8203)
+Char.SetHeading(43@, 341.9008)
+Char.SetDecisionMaker(43@, 99@)
+Char.PerformSequence(43@, 73@)
+44@ = Char.Create(4, 83, 2164.596, 1435.169, 9.8203)
+Char.SetHeading(44@, 8.2163)
+Char.SetDecisionMaker(44@, 99@)
+Char.PerformSequence(44@, 74@)
+45@ = Char.Create(4, 259, 2160.696, 1435.38, 9.8203)
+Char.SetHeading(45@, 8.2163)
+Char.SetDecisionMaker(45@, 99@)
+Char.PerformSequence(45@, 75@)
+46@ = Char.Create(4, 78, 2169.263, 1435.927, 9.8203)
+Char.SetHeading(46@, 8.2163)
+Char.SetDecisionMaker(46@, 99@)
+Char.PerformSequence(46@, 76@)
+47@ = Char.Create(4, 85, 2155.42, 1436.42, 9.8203)
+Char.SetHeading(47@, 8.2163)
+Char.SetDecisionMaker(47@, 99@)
+Char.PerformSequence(47@, 77@)
+48@ = Char.Create(4, 68, 2168.29, 1436.191, 9.8203)
+Char.SetHeading(48@, 8.2163)
+Char.SetDecisionMaker(48@, 99@)
+Char.PerformSequence(48@, 78@)
+49@ = Char.Create(4, 258, 2159.253, 1435.312, 9.8203)
+Char.SetHeading(49@, 2.018)
+Char.SetDecisionMaker(49@, 99@)
+Char.PerformSequence(49@, 79@)
+Streaming.RequestModel(478)
+Streaming.RequestModel(50)
+Streaming.RequestModel(#SMASHBOXPILE)
+
+:DOC2_3511
+if or
+  not Streaming.HasModelLoaded(478)
+  not Streaming.HasModelLoaded(50)
+  not Streaming.HasModelLoaded(#SMASHBOXPILE)
+goto_if_false @DOC2_3547
+wait 0
+goto @DOC2_3511
+
+:DOC2_3547
+102@ = Object.Create(#SMASHBOXPILE, 2112.753, 1403.973, 10.1484)
+Object.SetHeading(102@, 86.7997)
+Streaming.MarkModelAsNoLongerNeeded(#SMASHBOXPILE)
+Car.SetModelComponents(478, 4, 4)
+34@ = Car.Create(478, 2107.19, 1409.153, 9.8203)
+Streaming.MarkModelAsNoLongerNeeded(478)
+Car.SetHeading(34@, 180.0)
+Car.ChangeColor(34@, 1, 1)
+35@ = Blip.AddForCar(34@)
+Blip.SetAsFriendly(35@, True)
+Blip.ChangeDisplay(35@, BlipDisplay.Both)
+109@ = 0.0
+if 
+  not Car.IsDead(34@)
+goto_if_false @DOC2_3761
+Object.AttachToCar(100@, 34@, -0.3, -1.0, 109@, 0.0, 0.0, 0.0)
+Object.AttachToCar(101@, 34@, -0.3, -1.0, 109@, 0.0, 0.0, 0.0)
+
+:DOC2_3761
+114@ = Char.Create(4, 50, 2109.793, 1407.857, 9.8203)
+Streaming.MarkModelAsNoLongerNeeded(50)
+Char.SetHeading(114@, 180.0)
+Task.UseMobilePhone(114@, True)
+gosub @DOC2_14005
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DOC2_3864
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 2162.498, 1434.396, 9.8203)
+Char.SetHeading($scplayer, 358.0)
+
+:DOC2_3864
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_3893
+Char.ClearTasksImmediately(95@)
+Char.PerformSequence(95@, 116@)
+
+:DOC2_3893
+World.ClearArea(1, 2162.705, 1430.309, 9.8203, 10.0)
+Camera.SetFixedPosition(2162.541, 1423.84, 9.9728, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2162.558, 1424.803, 10.2424, SwitchType.JumpCut)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, Fade.Out)
+130@ = 2
+135@ = 2
+wait 1000
+Text.PrintNow('DOC2_X', 5000, 1)
+TIMERB = 0
+
+:DOC2_4024
+if 
+  2000 > TIMERB
+goto_if_false @DOC2_4078
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_4071
+goto @DOC2_4170
+
+:DOC2_4071
+goto @DOC2_4024
+
+:DOC2_4078
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DOC2_4109
+Char.ClearTasksImmediately($scplayer)
+Task.AchieveHeading($scplayer, 172.0)
+
+:DOC2_4109
+TIMERB = 0
+
+:DOC2_4116
+if 
+  2000 > TIMERB
+goto_if_false @DOC2_4170
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_4163
+goto @DOC2_4170
+
+:DOC2_4163
+goto @DOC2_4116
+
+:DOC2_4170
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DOC2_4201
+Char.ClearTasksImmediately($scplayer)
+Char.SetHeading($scplayer, 172.0)
+
+:DOC2_4201
+Text.ClearPrints
+gosub @DOC2_14020
+Camera.SetBehindPlayer
+Text.PrintNow('DOC2_01', 7000, 1)
+
+:DOC2_4228
+if and
+  not Char.IsDead($scplayer)
+  not Car.IsDead(34@)
+  not Char.IsDead(95@)
+goto_if_false @DOC2_13032
+wait 0
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @DOC2_4280
+goto @DOC2_13233
+
+:DOC2_4280
+131@ += 1
+gosub @DOC2_14105
+gosub @DOC2_14907
+if 
+  4 > 91@
+goto_if_false @DOC2_5044
+if and
+  131@ > 200
+  Char.LocateAnyMeans3D($scplayer, 0, 2154.192, 1437.948, 9.8203, 20.0, 20.0, 20.0)
+  not Text.IsMessageBeingDisplayed
+goto_if_false @DOC2_5044
+
+:DOC2_4377
+$d2_rnd = Math.RandomIntInRange(0, 9)
+if and
+  is_int_var_equal_to_int_lvar $d2_rnd == 132@
+  3 > 133@
+goto_if_false @DOC2_4426
+goto @DOC2_4377
+133@ += 1
+
+:DOC2_4426
+set_lvar_int_to_var_int 132@ = $d2_rnd
+133@ = 0
+if 
+  not Char.IsDead(43@)
+goto_if_false @DOC2_4685
+if and
+  Char.LocateAnyMeans3D(43@, 0, 2154.192, 1437.948, 9.8203, 2.0, 2.0, 2.0)
+  not Text.IsMessageBeingDisplayed
+  126@ == 0
+goto_if_false @DOC2_4685
+switch_start $d2_rnd total_jumps 3 default_jump 0 @DOC2_4685 jumps 0 @DOC2_4577 1 @DOC2_4613 2 @DOC2_4649 -1 @DOC2_4685 -1 @DOC2_4685 -1 @DOC2_4685 -1 @DOC2_4685
+
+:DOC2_4577
+set_lvar_text_label 127@s = 'DC2_AA'
+set_lvar_int_to_constant 129@ = 12400
+gosub @DOC2_14887
+goto @DOC2_4685
+
+:DOC2_4613
+set_lvar_text_label 127@s = 'DC2_AB'
+set_lvar_int_to_constant 129@ = 12401
+gosub @DOC2_14887
+goto @DOC2_4685
+
+:DOC2_4649
+set_lvar_text_label 127@s = 'DC2_AC'
+set_lvar_int_to_constant 129@ = 12402
+gosub @DOC2_14887
+goto @DOC2_4685
+
+:DOC2_4685
+if 
+  not Char.IsDead(44@)
+goto_if_false @DOC2_5037
+if and
+  Char.LocateAnyMeans3D(44@, 0, 2164.596, 1435.169, 9.8203, 2.0, 2.0, 2.0)
+  not Text.IsMessageBeingDisplayed
+  126@ == 0
+goto_if_false @DOC2_5037
+switch_start $d2_rnd total_jumps 6 default_jump 0 @DOC2_5037 jumps 3 @DOC2_4821 4 @DOC2_4857 5 @DOC2_4893 6 @DOC2_4929 7 @DOC2_4965 8 @DOC2_5001 -1 @DOC2_5037
+
+:DOC2_4821
+set_lvar_text_label 127@s = 'DC2_AD'
+set_lvar_int_to_constant 129@ = 12403
+gosub @DOC2_14887
+goto @DOC2_5037
+
+:DOC2_4857
+set_lvar_text_label 127@s = 'DC2_AE'
+set_lvar_int_to_constant 129@ = 12404
+gosub @DOC2_14887
+goto @DOC2_5037
+
+:DOC2_4893
+set_lvar_text_label 127@s = 'DC2_AF'
+set_lvar_int_to_constant 129@ = 12405
+gosub @DOC2_14887
+goto @DOC2_5037
+
+:DOC2_4929
+set_lvar_text_label 127@s = 'DC2_AJ'
+set_lvar_int_to_constant 129@ = 12409
+gosub @DOC2_14887
+goto @DOC2_5037
+
+:DOC2_4965
+set_lvar_text_label 127@s = 'DC2_AK'
+set_lvar_int_to_constant 129@ = 12410
+gosub @DOC2_14887
+goto @DOC2_5037
+
+:DOC2_5001
+set_lvar_text_label 127@s = 'DC2_AL'
+set_lvar_int_to_constant 129@ = 12411
+gosub @DOC2_14887
+goto @DOC2_5037
+
+:DOC2_5037
+131@ = 0
+
+:DOC2_5044
+if and
+  not Car.IsDead(34@)
+  not Char.IsDead($scplayer)
+  not Char.IsDead(95@)
+goto_if_false @DOC2_6975
+39@ = 0
+
+:DOC2_5077
+if 
+  not Char.IsDead(43@(39@,15i))
+goto_if_false @DOC2_5272
+if and
+  Char.HasBeenDamagedByChar(43@(39@,15i), $scplayer)
+  58@(39@,15i) == 0
+goto_if_false @DOC2_5180
+Char.ClearTasks(43@(39@,15i))
+Task.GoStraightToCoord(43@(39@,15i), 2082.005, 1415.909, 9.8047, MoveState.Sprint, 20000)
+58@(39@,15i) = 1
+
+:DOC2_5180
+if and
+  Char.LocateAnyMeans3D(43@(39@,15i), 0, 2082.381, 1416.636, 9.8047, 10.0, 10.0, 10.0)
+  58@(39@,15i) <> 3
+goto_if_false @DOC2_5272
+Char.ClearTasks(43@(39@,15i))
+Task.WanderStandard(43@(39@,15i))
+58@(39@,15i) = 3
+
+:DOC2_5272
+39@ += 1
+  39@ >= 7
+goto_if_false @DOC2_5077
+if or
+  91@ == 1
+  91@ == 0
+goto_if_false @DOC2_5748
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @DOC2_5588
+if and
+  not Char.IsDead(114@)
+  113@ == 0
+goto_if_false @DOC2_5560
+Char.ClearTasksImmediately(114@)
+Task.KillCharOnFoot(114@, $scplayer)
+$d2_rnd = Math.RandomIntInRange(0, 2)
+switch_start $d2_rnd total_jumps 3 default_jump 0 @DOC2_5553 jumps 0 @DOC2_5445 1 @DOC2_5481 2 @DOC2_5517 -1 @DOC2_5553 -1 @DOC2_5553 -1 @DOC2_5553 -1 @DOC2_5553
+
+:DOC2_5445
+set_lvar_text_label 127@s = 'DOGG_GA'
+set_lvar_int_to_constant 129@ = 14039
+gosub @DOC2_14887
+goto @DOC2_5553
+
+:DOC2_5481
+set_lvar_text_label 127@s = 'DOGG_GB'
+set_lvar_int_to_constant 129@ = 14040
+gosub @DOC2_14887
+goto @DOC2_5553
+
+:DOC2_5517
+set_lvar_text_label 127@s = 'DOGG_GC'
+set_lvar_int_to_constant 129@ = 14041
+gosub @DOC2_14887
+goto @DOC2_5553
+
+:DOC2_5553
+113@ = 1
+
+:DOC2_5560
+Blip.ChangeDisplay(35@, BlipDisplay.Neither)
+Blip.ChangeDisplay(92@, BlipDisplay.Both)
+91@ = 1
+goto @DOC2_5609
+
+:DOC2_5588
+Blip.ChangeDisplay(35@, BlipDisplay.Both)
+Blip.ChangeDisplay(92@, BlipDisplay.Neither)
+91@ = 0
+
+:DOC2_5609
+if 
+  91@ == 1
+goto_if_false @DOC2_5748
+if and
+  Char.LocateAnyMeans3D($scplayer, 1, 105@, 106@, 107@, 4.0, 4.0, 4.0)
+  not Char.IsDead($scplayer)
+goto_if_false @DOC2_5748
+Player.SetControl($player1, False)
+91@ = 2
+108@ = Char.GetHeading($scplayer)
+if and
+  108@ > 45.0
+  145.0 > 108@
+goto_if_false @DOC2_5741
+125@ = 0
+goto @DOC2_5748
+
+:DOC2_5741
+125@ = 1
+
+:DOC2_5748
+if 
+  91@ == 2
+goto_if_false @DOC2_6975
+gosub @DOC2_14005
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_5830
+Char.ClearTasksImmediately(95@)
+Task.PlayAnim(95@, "IDLE_CHAT", "PED", 1.0, False, False, False, False, -1)
+
+:DOC2_5830
+Camera.SetFixedPosition(2162.62, 1450.208, 25.1198, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2162.62, 1451.192, 24.9414, SwitchType.JumpCut)
+$d2_rnd = Math.RandomIntInRange(0, 3)
+switch_start $d2_rnd total_jumps 3 default_jump 0 @DOC2_6217 jumps 0 @DOC2_5953 1 @DOC2_6041 2 @DOC2_6129 -1 @DOC2_6217 -1 @DOC2_6217 -1 @DOC2_6217 -1 @DOC2_6217
+
+:DOC2_5953
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(14000, 1)
+
+:DOC2_5964
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_5990
+wait 0
+goto @DOC2_5964
+
+:DOC2_5990
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_6014
+Char.StartFacialTalk(95@, 2000)
+
+:DOC2_6014
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('DOGG_AA', 3000, 1)
+goto @DOC2_6217
+
+:DOC2_6041
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(14002, 1)
+
+:DOC2_6052
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_6078
+wait 0
+goto @DOC2_6052
+
+:DOC2_6078
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_6102
+Char.StartFacialTalk(95@, 2000)
+
+:DOC2_6102
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('DOGG_AC', 3000, 1)
+goto @DOC2_6217
+
+:DOC2_6129
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(14006, 1)
+
+:DOC2_6140
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_6166
+wait 0
+goto @DOC2_6140
+
+:DOC2_6166
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_6190
+Char.StartFacialTalk(95@, 2000)
+
+:DOC2_6190
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('DOGG_AG', 3000, 1)
+goto @DOC2_6217
+
+:DOC2_6217
+if 
+  not Char.IsDead(114@)
+goto_if_false @DOC2_6238
+Char.RemoveElegantly(114@)
+
+:DOC2_6238
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.MarkModelAsNoLongerNeeded(50)
+wait 1000
+TIMERB = 0
+
+:DOC2_6259
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_6316
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_6309
+134@ = 1
+goto @DOC2_6747
+
+:DOC2_6309
+goto @DOC2_6259
+
+:DOC2_6316
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_6337
+Char.StopFacialTalk(95@)
+
+:DOC2_6337
+TIMERB = 0
+
+:DOC2_6344
+if 
+  2000 > TIMERB
+goto_if_false @DOC2_6405
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_6398
+134@ = 1
+goto @DOC2_6747
+
+:DOC2_6398
+goto @DOC2_6344
+
+:DOC2_6405
+Camera.SetInterpolationParameters(0.0, 2000)
+Camera.SetFixedPosition(2162.62, 1450.208, 25.1198, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2162.62, 1450.499, 24.1631, SwitchType.Interpolation)
+TIMERB = 0
+
+:DOC2_6473
+if 
+  2000 > TIMERB
+goto_if_false @DOC2_6534
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_6527
+134@ = 1
+goto @DOC2_6747
+
+:DOC2_6527
+goto @DOC2_6473
+
+:DOC2_6534
+Camera.SetInterpolationParameters(0.0, 2000)
+Camera.SetFixedPosition(2162.62, 1445.077, 13.6736, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2162.62, 1445.815, 14.7476, SwitchType.Interpolation)
+TIMERB = 0
+
+:DOC2_6602
+if 
+  1000 > TIMERB
+goto_if_false @DOC2_6663
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_6656
+134@ = 1
+goto @DOC2_6747
+
+:DOC2_6656
+goto @DOC2_6602
+
+:DOC2_6663
+Text.PrintNow('DOC2_05', 3000, 1)
+TIMERB = 0
+
+:DOC2_6686
+if 
+  3000 > TIMERB
+goto_if_false @DOC2_6747
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_6740
+134@ = 1
+goto @DOC2_6747
+
+:DOC2_6740
+goto @DOC2_6686
+
+:DOC2_6747
+if 
+  134@ == 1
+goto_if_false @DOC2_6781
+Text.PrintNow('DOC2_05', 3000, 1)
+
+:DOC2_6781
+Text.ClearPrints
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_6807
+Char.PerformSequence(95@, 96@)
+
+:DOC2_6807
+if 
+  125@ == 0
+goto_if_false @DOC2_6878
+if 
+  not Car.IsDead(34@)
+goto_if_false @DOC2_6871
+Car.SetCoordinates(34@, 2163.888, 1444.0, 9.8203)
+Car.SetHeading(34@, 90.0)
+
+:DOC2_6871
+goto @DOC2_6924
+
+:DOC2_6878
+if 
+  not Car.IsDead(34@)
+goto_if_false @DOC2_6924
+Car.SetCoordinates(34@, 2163.888, 1444.0, 9.8203)
+Car.SetHeading(34@, 270.0)
+
+:DOC2_6924
+Player.ApplyBrakesToCar($player1, False)
+if 
+  Blip.DoesExist(92@)
+goto_if_false @DOC2_6954
+Blip.SetCoordAppearance(92@, 1)
+
+:DOC2_6954
+gosub @DOC2_14020
+91@ = 3
+TIMERA = 0
+
+:DOC2_6975
+if and
+  not Car.IsDead(34@)
+  not Char.IsDead($scplayer)
+  not Char.IsDead(95@)
+goto_if_false @DOC2_12980
+if 
+  91@ == 3
+goto_if_false @DOC2_9058
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 2149.407, 1431.497, 9.8203, 100.0, 100.0, 100.0)
+goto_if_false @DOC2_7090
+Text.PrintNow('DOC2_10', 4000, 1)
+goto @DOC2_13046
+
+:DOC2_7090
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @DOC2_7155
+if 
+  89@ == 0
+goto_if_false @DOC2_7148
+Blip.ChangeDisplay(35@, BlipDisplay.Neither)
+Blip.ChangeDisplay(92@, BlipDisplay.Both)
+89@ = 1
+
+:DOC2_7148
+goto @DOC2_7210
+
+:DOC2_7155
+if 
+  89@ == 1
+goto_if_false @DOC2_7210
+Text.PrintNow('DOC2_19', 4000, 1)
+Blip.ChangeDisplay(35@, BlipDisplay.Both)
+Blip.ChangeDisplay(92@, BlipDisplay.Neither)
+89@ = 0
+
+:DOC2_7210
+if and
+  not Char.LocateAnyMeans3D($scplayer, 0, 105@, 106@, 107@, 12.0, 12.0, 12.0)
+  112@ == 1
+goto_if_false @DOC2_7275
+TIMERB = 0
+Camera.RestoreJumpcut
+112@ = 2
+
+:DOC2_7275
+if and
+  TIMERB > 1000
+  112@ == 2
+goto_if_false @DOC2_7324
+Text.PrintNow('DOC2_11', 4000, 1)
+112@ = 0
+
+:DOC2_7324
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 105@, 106@, 107@, 12.0, 12.0, 12.0)
+goto_if_false @DOC2_9058
+112@ = 1
+if 
+  40000 > TIMERA
+goto_if_false @DOC2_7445
+Camera.SetFixedPosition(2163.702, 1435.87, 37.0031, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2163.699, 1436.447, 36.1861, SwitchType.JumpCut)
+
+:DOC2_7445
+if and
+  TIMERA > 10000
+  11000 > TIMERA
+goto_if_false @DOC2_7761
+if 
+  126@ == 0
+goto_if_false @DOC2_7761
+$d2_rnd = Math.RandomIntInRange(0, 3)
+switch_start $d2_rnd total_jumps 3 default_jump 0 @DOC2_7754 jumps 0 @DOC2_7562 1 @DOC2_7626 2 @DOC2_7690 -1 @DOC2_7754 -1 @DOC2_7754 -1 @DOC2_7754 -1 @DOC2_7754
+
+:DOC2_7562
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(14010, 1)
+
+:DOC2_7573
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_7599
+wait 0
+goto @DOC2_7573
+
+:DOC2_7599
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('DOGG_BA', 4000, 1)
+goto @DOC2_7754
+
+:DOC2_7626
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(14011, 1)
+
+:DOC2_7637
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_7663
+wait 0
+goto @DOC2_7637
+
+:DOC2_7663
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('DOGG_BB', 4000, 1)
+goto @DOC2_7754
+
+:DOC2_7690
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(14012, 1)
+
+:DOC2_7701
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_7727
+wait 0
+goto @DOC2_7701
+
+:DOC2_7727
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('DOGG_BC', 4000, 1)
+goto @DOC2_7754
+
+:DOC2_7754
+126@ = 1
+
+:DOC2_7761
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $doc2_rnd
+goto_if_false @DOC2_9058
+Player.SetControl($player1, True)
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_7818
+Char.ClearTasksImmediately(95@)
+Char.SetHeading(95@, 177.7059)
+
+:DOC2_7818
+Clock.SetTimeScale(0.4)
+Camera.SetFixedPosition(2163.22, 1454.533, 35.0248, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2163.227, 1454.063, 34.1425, SwitchType.JumpCut)
+wait 500
+Object.SetCollision(100@, False)
+Object.SetCollision(101@, False)
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_7919
+Char.PerformSequence(95@, 97@)
+
+:DOC2_7919
+TIMERB = 0
+91@ = 4
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Audio.LoadMissionAudio(23400, 3)
+
+:DOC2_7944
+if 
+  TIMERB <= 2000
+goto_if_false @DOC2_8558
+wait 0
+if and
+  TIMERB > 500
+  103@ == 0
+goto_if_false @DOC2_8021
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_8014
+Char.ClearTasks(95@)
+
+:DOC2_8014
+103@ = 1
+
+:DOC2_8021
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_8117
+$x, $y, $z = Char.GetCoordinates(95@)
+if and
+  12.0 > $z
+  TIMERA > 10
+goto_if_false @DOC2_8117
+TIMERA = 0
+Fx.AddBlood($x, $y, $z, 0.0, 0.0, 2.0, 40, 95@)
+
+:DOC2_8117
+if 
+  TIMERB > 1000
+goto_if_false @DOC2_8201
+gosub @DOC2_14005
+Camera.SetFixedPosition(2172.002, 1441.702, 10.2111, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2171.076, 1442.003, 10.4368, SwitchType.JumpCut)
+Player.SetControl($player1, False)
+
+:DOC2_8201
+if 
+  not Car.IsDead(34@)
+goto_if_false @DOC2_8551
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_8551
+if 
+  91@ <> 5
+goto_if_false @DOC2_8551
+40@ = Car.GetOffsetInWorldCoords(41@, 42@, 34@, 0.0, -1.5, 0.5)
+if 
+  Char.LocateAnyMeans3D(95@, 0, 40@, 41@, 42@, 1.3, 1.3, 1.0)
+goto_if_false @DOC2_8551
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @DOC2_8341
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:DOC2_8341
+109@ = -0.1
+Object.Break(101@, 1)
+Char.SetCollision(95@, False)
+Char.SetHealth(95@, 100)
+Char.ClearTasksImmediately(95@)
+Task.PlayAnimNonInterruptable(95@, "KO_SHOT_FRONT", "PED", 2.0, False, False, False, True, -1)
+Char.AttachToCar(95@, 34@, 0.0, -2.0, 1.0, 0, 0.0, WeaponType.Unarmed)
+91@ = 5
+if and
+  not Char.IsDead(95@)
+  not Car.IsDead(34@)
+goto_if_false @DOC2_8551
+90@ = Particle.Create("EXPLOSION_BARREL", 40@, 41@, 42@, 1)
+Particle.PlayAndKill(90@)
+Pad.Shake(PadId.Pad1, 500, 200)
+World.SetCarDensityMultiplier(2.0)
+Char.SetHealth(95@, 100)
+Hud.Display(True)
+gosub @DOC2_13316
+
+:DOC2_8551
+goto @DOC2_7944
+
+:DOC2_8558
+TIMERA = 0
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot3)
+goto_if_false @DOC2_8584
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+
+:DOC2_8584
+Clock.SetTimeScale(1.0)
+gosub @DOC2_14020
+if and
+  not Char.IsDead(95@)
+  not Car.IsDead(34@)
+goto_if_false @DOC2_8656
+Char.DetachFromCar(95@)
+Char.AttachToCar(95@, 34@, 0.0, -2.5, 1.0, 0, 0.0, WeaponType.Unarmed)
+
+:DOC2_8656
+if 
+  91@ == 4
+goto_if_false @DOC2_8747
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_8740
+$x, $y, $z = Char.GetCoordinates(95@)
+Fx.AddBlood($x, $y, $z, 0.0, 0.0, 10.0, 100, 95@)
+Task.Die(95@)
+
+:DOC2_8740
+goto @DOC2_9058
+
+:DOC2_8747
+if 
+  not Car.IsDead(34@)
+goto_if_false @DOC2_8793
+World.SetCarDensityMultiplier(2.0)
+36@ = Car.GetHealth(34@)
+Car.SetProofs(34@, True, False, False, False, True)
+
+:DOC2_8793
+set_lvar_int_to_lvar_int 37@ = 36@
+Hud.DisplayCounterWithString($d2_instance_health, CounterDisplay.Bar, 'DOC2_07')
+Blip.ChangeDisplay(93@, BlipDisplay.Both)
+Blip.ChangeDisplay(92@, BlipDisplay.Neither)
+39@ = 0
+
+:DOC2_8838
+if 
+  not Char.IsDead(43@(39@,15i))
+goto_if_false @DOC2_8995
+Char.ClearTasksImmediately(43@(39@,15i))
+$d2_rnd = Math.RandomIntInRange(0, 2)
+if 
+  $d2_rnd == 0
+goto_if_false @DOC2_8948
+$d2_rnd = Math.RandomIntInRange(10, 200)
+wait $d2_rnd
+if 
+  not Char.IsDead(43@(39@,15i))
+goto_if_false @DOC2_8941
+Char.PerformSequence(43@(39@,15i), 110@)
+
+:DOC2_8941
+goto @DOC2_8995
+
+:DOC2_8948
+$d2_rnd = Math.RandomIntInRange(10, 200)
+wait $d2_rnd
+if 
+  not Char.IsDead(43@(39@,15i))
+goto_if_false @DOC2_8995
+Char.PerformSequence(43@(39@,15i), 111@)
+
+:DOC2_8995
+39@ += 1
+  39@ >= 7
+goto_if_false @DOC2_8838
+Streaming.RemoveAnimation("ON_LOOKERS")
+wait 1000
+Text.PrintNow('DOC2_06', 5000, 1)
+TIMERA = 0
+
+:DOC2_9058
+if and
+  not Car.IsDead(34@)
+  not Char.IsDead(95@)
+goto_if_false @DOC2_12980
+if 
+  91@ == 5
+goto_if_false @DOC2_12980
+if 
+  TIMERA > 5000
+goto_if_false @DOC2_9482
+if and
+  130@ == 2
+  124@ == 0
+goto_if_false @DOC2_9177
+set_lvar_text_label 127@s = 'DOGG_CA'
+set_lvar_int_to_constant 129@ = 14013
+gosub @DOC2_14887
+124@ = 1
+
+:DOC2_9177
+if and
+  130@ == 2
+  124@ == 1
+goto_if_false @DOC2_9238
+set_lvar_text_label 127@s = 'DOGG_CB'
+set_lvar_int_to_constant 129@ = 14014
+gosub @DOC2_14887
+124@ = 2
+
+:DOC2_9238
+if and
+  130@ == 2
+  124@ == 2
+goto_if_false @DOC2_9299
+set_lvar_text_label 127@s = 'DOGG_CC'
+set_lvar_int_to_constant 129@ = 14015
+gosub @DOC2_14887
+124@ = 3
+
+:DOC2_9299
+if and
+  130@ == 2
+  124@ == 3
+goto_if_false @DOC2_9360
+set_lvar_text_label 127@s = 'DOGG_CD'
+set_lvar_int_to_constant 129@ = 14016
+gosub @DOC2_14887
+124@ = 4
+
+:DOC2_9360
+if and
+  130@ == 2
+  124@ == 4
+goto_if_false @DOC2_9421
+set_lvar_text_label 127@s = 'DOGG_CE'
+set_lvar_int_to_constant 129@ = 14017
+gosub @DOC2_14887
+124@ = 5
+
+:DOC2_9421
+if and
+  130@ == 2
+  124@ == 5
+goto_if_false @DOC2_9482
+set_lvar_text_label 127@s = 'DOGG_CF'
+set_lvar_int_to_constant 129@ = 14018
+gosub @DOC2_14887
+124@ = 6
+
+:DOC2_9482
+if and
+  not Char.IsDead($scplayer)
+  not Car.IsDead(34@)
+goto_if_false @DOC2_9618
+if 
+  not Char.IsInCar($scplayer, 34@)
+goto_if_false @DOC2_9577
+if 
+  117@ == 0
+goto_if_false @DOC2_9570
+124@ = 6
+Text.PrintNow('DOC2_19', 4000, 1)
+117@ = 1
+
+:DOC2_9570
+goto @DOC2_9618
+
+:DOC2_9577
+if 
+  117@ == 1
+goto_if_false @DOC2_9618
+Text.PrintNow('DOC2_20', 4000, 1)
+117@ = 0
+
+:DOC2_9618
+set_lvar_int_to_lvar_int 37@ = 36@
+36@ = Car.GetHealth(34@)
+if and
+  not Char.IsDead(95@)
+  not Char.IsDead($scplayer)
+goto_if_false @DOC2_9700
+if 
+  Char.HasBeenDamagedByChar(95@, $scplayer)
+goto_if_false @DOC2_9700
+if 
+  is_int_lvar_equal_to_int_lvar 36@ == 37@
+goto_if_false @DOC2_9700
+36@ -= 50
+
+:DOC2_9700
+if 
+  is_int_lvar_greater_than_int_lvar 37@ > 36@
+goto_if_false @DOC2_10835
+set_lvar_int_to_lvar_int 38@ = 37@
+sub_int_lvar_from_int_lvar 38@ -= 36@
+sub_int_lvar_from_int_var $d2_instance_health -= 38@
+if 
+  0 > $d2_instance_health
+goto_if_false @DOC2_10022
+$d2_instance_health = 0
+Text.ClearPrints
+$d2_rnd = Math.RandomIntInRange(0, 3)
+switch_start $d2_rnd total_jumps 3 default_jump 0 @DOC2_9950 jumps 0 @DOC2_9842 1 @DOC2_9878 2 @DOC2_9914 -1 @DOC2_9950 -1 @DOC2_9950 -1 @DOC2_9950 -1 @DOC2_9950
+
+:DOC2_9842
+set_lvar_text_label 127@s = 'DOGG_EA'
+set_lvar_int_to_constant 129@ = 14029
+gosub @DOC2_14887
+goto @DOC2_9950
+
+:DOC2_9878
+set_lvar_text_label 127@s = 'DOGG_EB'
+set_lvar_int_to_constant 129@ = 14030
+gosub @DOC2_14887
+goto @DOC2_9950
+
+:DOC2_9914
+set_lvar_text_label 127@s = 'DOGG_EC'
+set_lvar_int_to_constant 129@ = 14031
+gosub @DOC2_14887
+goto @DOC2_9950
+
+:DOC2_9950
+if 
+  not Car.IsDead(34@)
+goto_if_false @DOC2_9980
+91@ = 6
+goto @DOC2_9992
+
+:DOC2_9980
+Char.RemoveElegantly(95@)
+goto @DOC2_13046
+
+:DOC2_9992
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_10015
+Char.SetBleeding(95@, False)
+
+:DOC2_10015
+TIMERB = 0
+
+:DOC2_10022
+if and
+  94@ == 0
+  91@ <> 6
+goto_if_false @DOC2_10835
+Text.ClearPrints
+124@ = 4
+94@ = 1
+TIMERB = 0
+Char.SetBleeding(95@, True)
+if or
+  137@ == 0
+  137@ == 1
+goto_if_false @DOC2_10118
+$d2_rnd = Math.RandomIntInRange(0, 3)
+goto @DOC2_10127
+
+:DOC2_10118
+$d2_rnd = Math.RandomIntInRange(0, 2)
+
+:DOC2_10127
+switch_start 137@ total_jumps 4 default_jump 0 @DOC2_10796 jumps 0 @DOC2_10190 1 @DOC2_10338 2 @DOC2_10486 3 @DOC2_10641 -1 @DOC2_10796 -1 @DOC2_10796 -1 @DOC2_10796
+
+:DOC2_10190
+if 
+  $d2_rnd == 0
+goto_if_false @DOC2_10237
+set_lvar_text_label 127@s = 'DOGG_DC'
+set_lvar_int_to_constant 129@ = 14021
+gosub @DOC2_14887
+
+:DOC2_10237
+if 
+  $d2_rnd == 1
+goto_if_false @DOC2_10284
+set_lvar_text_label 127@s = 'DOGG_DD'
+set_lvar_int_to_constant 129@ = 14022
+gosub @DOC2_14887
+
+:DOC2_10284
+if 
+  $d2_rnd == 2
+goto_if_false @DOC2_10331
+set_lvar_text_label 127@s = 'DOGG_DI'
+set_lvar_int_to_constant 129@ = 14027
+gosub @DOC2_14887
+
+:DOC2_10331
+goto @DOC2_10796
+
+:DOC2_10338
+if 
+  $d2_rnd == 0
+goto_if_false @DOC2_10385
+set_lvar_text_label 127@s = 'DOGG_DJ'
+set_lvar_int_to_constant 129@ = 14028
+gosub @DOC2_14887
+
+:DOC2_10385
+if 
+  $d2_rnd == 1
+goto_if_false @DOC2_10432
+set_lvar_text_label 127@s = 'DOGG_DE'
+set_lvar_int_to_constant 129@ = 14023
+gosub @DOC2_14887
+
+:DOC2_10432
+if 
+  $d2_rnd == 2
+goto_if_false @DOC2_10479
+set_lvar_text_label 127@s = 'DOGG_DF'
+set_lvar_int_to_constant 129@ = 14024
+gosub @DOC2_14887
+
+:DOC2_10479
+goto @DOC2_10796
+
+:DOC2_10486
+if 
+  $d2_rnd == 0
+goto_if_false @DOC2_10533
+set_lvar_text_label 127@s = 'DOGG_DG'
+set_lvar_int_to_constant 129@ = 14025
+gosub @DOC2_14887
+
+:DOC2_10533
+if 
+  $d2_rnd == 1
+goto_if_false @DOC2_10634
+if 
+  124@ == 6
+goto_if_false @DOC2_10605
+set_lvar_text_label 127@s = 'DOGG_DH'
+set_lvar_int_to_constant 129@ = 14026
+gosub @DOC2_14887
+goto @DOC2_10634
+
+:DOC2_10605
+set_lvar_text_label 127@s = 'DOGG_DG'
+set_lvar_int_to_constant 129@ = 14025
+gosub @DOC2_14887
+
+:DOC2_10634
+goto @DOC2_10796
+
+:DOC2_10641
+if 
+  $d2_rnd == 0
+goto_if_false @DOC2_10688
+set_lvar_text_label 127@s = 'DOGG_DA'
+set_lvar_int_to_constant 129@ = 14019
+gosub @DOC2_14887
+
+:DOC2_10688
+if 
+  $d2_rnd == 1
+goto_if_false @DOC2_10789
+if 
+  124@ == 6
+goto_if_false @DOC2_10760
+set_lvar_text_label 127@s = 'DOGG_DB'
+set_lvar_int_to_constant 129@ = 14020
+gosub @DOC2_14887
+goto @DOC2_10789
+
+:DOC2_10760
+set_lvar_text_label 127@s = 'DOGG_DA'
+set_lvar_int_to_constant 129@ = 14019
+gosub @DOC2_14887
+
+:DOC2_10789
+goto @DOC2_10796
+
+:DOC2_10796
+137@ += 1
+if 
+  137@ == 4
+goto_if_false @DOC2_10828
+137@ = 0
+
+:DOC2_10828
+124@ = 6
+
+:DOC2_10835
+if and
+  94@ == 1
+  TIMERB > 4000
+goto_if_false @DOC2_10875
+Char.SetBleeding(95@, False)
+94@ = 0
+
+:DOC2_10875
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @DOC2_10915
+Blip.ChangeDisplay(35@, BlipDisplay.Neither)
+Blip.ChangeDisplay(93@, BlipDisplay.Both)
+goto @DOC2_10929
+
+:DOC2_10915
+Blip.ChangeDisplay(35@, BlipDisplay.Both)
+Blip.ChangeDisplay(93@, BlipDisplay.Neither)
+
+:DOC2_10929
+if 
+  not Car.IsDead(34@)
+goto_if_false @DOC2_12980
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @DOC2_12980
+if and
+  Char.LocateAnyMeans3D($scplayer, 1, 1878.546, 2240.82, 9.813, 4.0, 4.0, 4.0)
+  not Car.IsDead(34@)
+goto_if_false @DOC2_12980
+Player.SetControl($player1, False)
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_12947
+Player.ApplyBrakesToCar($player1, True)
+gosub @DOC2_14005
+108@ = Char.GetHeading($scplayer)
+if and
+  108@ > 0.0
+  180.0 > 108@
+goto_if_false @DOC2_11107
+115@ = 0
+goto @DOC2_11114
+
+:DOC2_11107
+115@ = 1
+
+:DOC2_11114
+World.ClearArea(1, 1878.546, 2240.82, 9.813, 10.0)
+Char.DetachFromCar(95@)
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_11189
+Char.SetCoordinates(95@, 1876.335, 2236.9, 10.125)
+Char.SetHeading(95@, 242.5344)
+
+:DOC2_11189
+if 
+  not Car.IsDead(34@)
+goto_if_false @DOC2_11270
+Car.SetCoordinates(34@, 1878.546, 2240.82, 9.813)
+if 
+  115@ == 0
+goto_if_false @DOC2_11260
+Car.SetHeading(34@, 90.0)
+goto @DOC2_11270
+
+:DOC2_11260
+Car.SetHeading(34@, 270.0)
+
+:DOC2_11270
+Camera.SetFixedPosition(1854.521, 2272.75, 11.9889, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1854.83, 2271.8, 11.9363, SwitchType.JumpCut)
+wait 1000
+TIMERB = 0
+
+:DOC2_11333
+if 
+  2000 > TIMERB
+goto_if_false @DOC2_11387
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_11380
+goto @DOC2_12813
+
+:DOC2_11380
+goto @DOC2_11333
+
+:DOC2_11387
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_11456
+139@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 1878.493, 2235.108, 10.125, 6, -1)
+Task.TurnCharToFaceChar(-1, 95@)
+Task.Pause(-1, 2000)
+Task.ToggleDuck(-1, True)
+Sequence.Close(139@)
+
+:DOC2_11456
+120@ = Char.Create(4, 274, 1875.337, 2235.227, 10.125)
+Char.SetHeading(120@, 329.5542)
+Task.ToggleDuck(120@, True)
+121@ = Char.Create(4, 274, 1886.007, 2235.067, 10.125)
+Char.SetHeading(121@, 84.1029)
+Char.PerformSequence(121@, 139@)
+Camera.SetFixedPosition(1872.495, 2243.844, 14.0672, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1873.321, 2243.282, 14.1094, SwitchType.JumpCut)
+wait 100
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(14032, 1)
+
+:DOC2_11607
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_11633
+wait 0
+goto @DOC2_11607
+
+:DOC2_11633
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('DOGG_FA', 3000, 1)
+Camera.SetInterpolationParameters(0.0, 6000)
+Camera.SetFixedPosition(1872.495, 2243.844, 14.0672, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1872.971, 2243.143, 13.5352, SwitchType.Interpolation)
+TIMERB = 0
+
+:DOC2_11721
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_11771
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_11764
+goto @DOC2_12813
+
+:DOC2_11764
+goto @DOC2_11721
+
+:DOC2_11771
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(14033, 1)
+
+:DOC2_11782
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_11808
+wait 0
+goto @DOC2_11782
+
+:DOC2_11808
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('DOGG_FB', 3000, 1)
+TIMERB = 0
+
+:DOC2_11835
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_11885
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_11878
+goto @DOC2_12813
+
+:DOC2_11878
+goto @DOC2_11835
+
+:DOC2_11885
+TIMERB = 0
+
+:DOC2_11892
+if 
+  1000 > TIMERB
+goto_if_false @DOC2_11946
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_11939
+goto @DOC2_12813
+
+:DOC2_11939
+goto @DOC2_11892
+
+:DOC2_11946
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(14034, 1)
+
+:DOC2_11957
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_11983
+wait 0
+goto @DOC2_11957
+
+:DOC2_11983
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('DOGG_FC', 3000, 1)
+TIMERB = 0
+
+:DOC2_12010
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_12060
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_12053
+goto @DOC2_12813
+
+:DOC2_12053
+goto @DOC2_12010
+
+:DOC2_12060
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(14035, 1)
+
+:DOC2_12071
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_12097
+wait 0
+goto @DOC2_12071
+
+:DOC2_12097
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('DOGG_FD', 3000, 1)
+TIMERB = 0
+
+:DOC2_12124
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_12174
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_12167
+goto @DOC2_12813
+
+:DOC2_12167
+goto @DOC2_12124
+
+:DOC2_12174
+TIMERB = 0
+
+:DOC2_12181
+if 
+  1000 > TIMERB
+goto_if_false @DOC2_12235
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_12228
+goto @DOC2_12813
+
+:DOC2_12228
+goto @DOC2_12181
+
+:DOC2_12235
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(14036, 1)
+
+:DOC2_12246
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_12272
+wait 0
+goto @DOC2_12246
+
+:DOC2_12272
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('DOGG_FE', 3000, 1)
+TIMERB = 0
+
+:DOC2_12299
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_12349
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_12342
+goto @DOC2_12813
+
+:DOC2_12342
+goto @DOC2_12299
+
+:DOC2_12349
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(14037, 1)
+
+:DOC2_12360
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_12386
+wait 0
+goto @DOC2_12360
+
+:DOC2_12386
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('DOGG_FF', 2000, 1)
+TIMERB = 0
+
+:DOC2_12413
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_12463
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_12456
+goto @DOC2_12813
+
+:DOC2_12456
+goto @DOC2_12413
+
+:DOC2_12463
+TIMERB = 0
+
+:DOC2_12470
+if 
+  1000 > TIMERB
+goto_if_false @DOC2_12524
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_12517
+goto @DOC2_12813
+
+:DOC2_12517
+goto @DOC2_12470
+
+:DOC2_12524
+if and
+  not Car.IsDead(34@)
+  not Char.IsDead($scplayer)
+goto_if_false @DOC2_12638
+if 
+  115@ == 0
+goto_if_false @DOC2_12604
+Task.CarDriveToCoord($scplayer, 34@, 1853.302, 2239.55, 9.8203, 10.0, DriveMode.Straightline, 0, DrivingMode.AvoidCars)
+goto @DOC2_12638
+
+:DOC2_12604
+Task.CarDriveToCoord($scplayer, 34@, 1902.168, 2238.136, 9.8203, 10.0, DriveMode.Straightline, 0, DrivingMode.AvoidCars)
+
+:DOC2_12638
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(14038, 1)
+
+:DOC2_12649
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_12675
+wait 0
+goto @DOC2_12649
+
+:DOC2_12675
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('DOGG_FG', 3000, 1)
+TIMERB = 0
+
+:DOC2_12702
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DOC2_12752
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_12745
+goto @DOC2_12813
+
+:DOC2_12745
+goto @DOC2_12702
+
+:DOC2_12752
+TIMERB = 0
+
+:DOC2_12759
+if 
+  1000 > TIMERB
+goto_if_false @DOC2_12813
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DOC2_12806
+goto @DOC2_12813
+
+:DOC2_12806
+goto @DOC2_12759
+
+:DOC2_12813
+gosub @DOC2_13671
+if 
+  not Car.IsDead(34@)
+goto_if_false @DOC2_12928
+Car.SetStatus(34@, EntityStatus.Player)
+if 
+  115@ == 1
+goto_if_false @DOC2_12898
+Car.SetCoordinates(34@, 1913.238, 2240.401, 9.8203)
+Car.SetHeading(34@, 270.0)
+goto @DOC2_12928
+
+:DOC2_12898
+Car.SetCoordinates(34@, 1867.3, 2260.574, 9.8203)
+Car.SetHeading(34@, 0.0)
+
+:DOC2_12928
+Hud.ClearCounter($doc2_heal)
+gosub @DOC2_14020
+Player.ApplyBrakesToCar($player1, False)
+
+:DOC2_12947
+Char.Delete(95@)
+if 
+  Blip.DoesExist(93@)
+goto_if_false @DOC2_12973
+Blip.Remove(93@)
+
+:DOC2_12973
+goto @DOC2_13233
+
+:DOC2_12980
+if and
+  91@ == 6
+  TIMERB > 3000
+goto_if_false @DOC2_13025
+Char.SetBleeding(95@, False)
+Char.RemoveElegantly(95@)
+goto @DOC2_13046
+
+:DOC2_13025
+goto @DOC2_4228
+
+:DOC2_13032
+gosub @DOC2_14020
+goto @DOC2_13046
+
+:DOC2_13046
+if 
+  104@ == 0
+goto_if_false @DOC2_13231
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+if 
+  91@ == 5
+goto_if_false @DOC2_13103
+Hud.ClearCounter($d2_instance_health)
+
+:DOC2_13103
+if 
+  Car.IsDead(34@)
+goto_if_false @DOC2_13192
+if 
+  5 > 91@
+goto_if_false @DOC2_13160
+Text.PrintNow('DOC2_09', 4000, 1)
+goto @DOC2_13176
+
+:DOC2_13160
+Text.PrintNow('DOC2_10', 4000, 1)
+
+:DOC2_13176
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_13192
+
+:DOC2_13192
+if or
+  Char.IsDead(95@)
+  $d2_instance_health == 0
+goto_if_false @DOC2_13231
+Text.PrintNow('DOC2_10', 4000, 1)
+
+:DOC2_13231
+return 
+
+:DOC2_13233
+104@ = 1
+if 
+  Blip.DoesExist($doc_contact_blip)
+goto_if_false @DOC2_13261
+Blip.Remove($doc_contact_blip)
+
+:DOC2_13261
+$flag_doc_mission_counter += 1
+Stat.RegisterMissionPassed('DOC_2')
+Stat.PlayerMadeProgress(1)
+Audio.PlayMissionPassedTune(1)
+Text.PrintWithNumberBig('M_PASSR', 10, 5000, TextStyle.Middle)
+Stat.AwardPlayerMissionRespect(10)
+Player.ClearWantedLevel($player1)
+return 
+
+:DOC2_13316
+Streaming.RequestModel(274)
+Streaming.RequestModel(416)
+
+:DOC2_13326
+if or
+  not Streaming.HasModelLoaded(274)
+  not Streaming.HasModelLoaded(416)
+goto_if_false @DOC2_13358
+wait 0
+goto @DOC2_13326
+
+:DOC2_13358
+118@ = Char.Create(4, 274, 1853.996, 2264.554, 9.9245)
+Char.SetHeading(118@, 261.1915)
+119@ = Char.Create(4, 274, 1855.156, 2264.286, 9.8885)
+Char.SetHeading(119@, 62.9217)
+122@ = Car.Create(416, 1889.046, 2256.128, 9.8203)
+Car.SetHeading(122@, 359.5048)
+123@ = Car.Create(416, 1896.493, 2256.069, 9.8203)
+Car.SetHeading(123@, 2.7445)
+142@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 1853.996, 2264.554, 9.9245, 4, -1)
+Task.AchieveHeading(-1, 242.922)
+if 
+  not Char.IsDead(119@)
+goto_if_false @DOC2_13582
+Task.PlayAnim(-1, "IDLE_CHAT", "PED", 1.0, True, False, False, False, -1)
+
+:DOC2_13582
+Sequence.SetToRepeat(142@, True)
+Sequence.Close(142@)
+Char.PerformSequence(118@, 142@)
+Sequence.Clear(142@)
+142@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 1855.156, 2264.286, 9.8885, 4, -1)
+Task.AchieveHeading(-1, 62.9217)
+Sequence.SetToRepeat(142@, True)
+Sequence.Close(142@)
+Char.PerformSequence(119@, 142@)
+Streaming.MarkModelAsNoLongerNeeded(416)
+return 
+
+:DOC2_13671
+if 
+  not Char.IsDead(118@)
+goto_if_false @DOC2_13692
+Char.RemoveElegantly(118@)
+
+:DOC2_13692
+if 
+  not Char.IsDead(119@)
+goto_if_false @DOC2_13713
+Char.RemoveElegantly(119@)
+
+:DOC2_13713
+if 
+  not Char.IsDead(120@)
+goto_if_false @DOC2_13734
+Char.RemoveElegantly(120@)
+
+:DOC2_13734
+if 
+  not Char.IsDead(121@)
+goto_if_false @DOC2_13755
+Char.RemoveElegantly(121@)
+
+:DOC2_13755
+return 
+
+:DOC2_13757
+$onmission = 0
+if 
+  not Char.IsDead(95@)
+goto_if_false @DOC2_13785
+Char.RemoveElegantly(95@)
+
+:DOC2_13785
+if 
+  Blip.DoesExist(92@)
+goto_if_false @DOC2_13806
+Blip.Remove(92@)
+
+:DOC2_13806
+if 
+  Blip.DoesExist(93@)
+goto_if_false @DOC2_13827
+Blip.Remove(93@)
+
+:DOC2_13827
+if 
+  Blip.DoesExist(35@)
+goto_if_false @DOC2_13848
+Blip.Remove(35@)
+
+:DOC2_13848
+Hud.ClearCounter($d2_instance_health)
+Particle.Kill(90@)
+Path.SwitchRoadsBackToOriginal(2090.981, 1388.51, 8.8203, 2234.686, 1517.077, 10.8203)
+Path.SwitchPedRoadsBackToOriginal(2090.981, 1388.51, 8.8203, 2234.686, 1517.077, 10.8203)
+Streaming.MarkModelAsNoLongerNeeded(478)
+Streaming.MarkModelAsNoLongerNeeded(27)
+Streaming.MarkModelAsNoLongerNeeded(83)
+Streaming.MarkModelAsNoLongerNeeded(85)
+Streaming.MarkModelAsNoLongerNeeded(78)
+Streaming.MarkModelAsNoLongerNeeded(274)
+Streaming.MarkModelAsNoLongerNeeded(416)
+Streaming.MarkModelAsNoLongerNeeded(258)
+Streaming.MarkModelAsNoLongerNeeded(259)
+Streaming.MarkModelAsNoLongerNeeded(68)
+Streaming.MarkModelAsNoLongerNeeded(50)
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.RemoveAnimation("ON_LOOKERS")
+Weather.Release
+$timer_mobile_start = Clock.GetGameTimer()
+Mission.Finish
+return 
+
+:DOC2_14005
+Text.ClearPrints
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+return 
+
+:DOC2_14020
+Text.ClearPrints
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+return 
+Camera.DoFade(0, 500)
+
+:DOC2_14046
+if 
+  Camera.GetFadingStatus
+goto_if_false @DOC2_14070
+wait 0
+goto @DOC2_14046
+
+:DOC2_14070
+return 
+Camera.DoFade(1, 500)
+
+:DOC2_14079
+if 
+  Camera.GetFadingStatus
+goto_if_false @DOC2_14103
+wait 0
+goto @DOC2_14079
+
+:DOC2_14103
+return 
+
+:DOC2_14105
+if 
+is_ps2_keyboard_key_just_pressed 87
+goto_if_false @DOC2_14175
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DOC2_14175
+Task.PlayAnim($scplayer, "KO_SHOT_FACE", "PED", 2.0, False, False, False, True, -1)
+
+:DOC2_14175
+if 
+is_ps2_keyboard_key_just_pressed 67
+goto_if_false @DOC2_14246
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DOC2_14246
+Task.PlayAnim($scplayer, "KO_SHOT_FRONT", "PED", 2.0, False, False, False, True, -1)
+
+:DOC2_14246
+if 
+is_ps2_keyboard_key_just_pressed 69
+goto_if_false @DOC2_14316
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DOC2_14316
+Task.PlayAnim($scplayer, "KO_SHOT_STOM", "PED", 2.0, False, False, False, True, -1)
+
+:DOC2_14316
+if 
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @DOC2_14401
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DOC2_14401
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DOC2_14401
+143@ = Char.StoreCarIsIn($scplayer)
+Car.SetCoordinates(143@, 1893.958, 2240.108, 9.8203)
+Car.SetHeading(143@, 77.6686)
+
+:DOC2_14401
+if 
+is_ps2_keyboard_key_just_pressed 70
+goto_if_false @DOC2_14431
+view_integer_variable $doc2_rnd "DOC2_RND"
+
+:DOC2_14431
+if 
+is_ps2_keyboard_key_just_pressed 66
+goto_if_false @DOC2_14530
+if 
+  not Car.IsDead(34@)
+goto_if_false @DOC2_14491
+40@ = Car.GetOffsetInWorldCoords(41@, 42@, 34@, 0.0, -1.5, 0.5)
+
+:DOC2_14491
+90@ = Particle.Create("EXPLOSION_BARREL", 40@, 41@, 42@, 1)
+Particle.Play(90@)
+
+:DOC2_14530
+if 
+is_ps2_keyboard_key_just_pressed 75
+goto_if_false @DOC2_14566
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DOC2_14566
+Task.Die($scplayer)
+
+:DOC2_14566
+if 
+is_ps2_keyboard_key_just_pressed 81
+goto_if_false @DOC2_14642
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DOC2_14642
+$x, $y, $z = Char.GetCoordinates($scplayer)
+Fx.AddBlood($x, $y, $z, 0.0, 0.0, 2.0, 40, $scplayer)
+
+:DOC2_14642
+if 
+is_ps2_keyboard_key_just_pressed 72
+goto_if_false @DOC2_14687
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DOC2_14687
+Char.AddArmor($scplayer, 100)
+Player.IncreaseMaxHealth($player1, 100)
+
+:DOC2_14687
+if 
+is_ps2_keyboard_key_just_pressed 80
+goto_if_false @DOC2_14851
+if and
+  not Char.IsDead(95@)
+  not Car.IsDead(34@)
+  91@ <> 5
+goto_if_false @DOC2_14851
+Object.Break(101@, 1)
+Char.ClearTasksImmediately(95@)
+Task.PlayAnimNonInterruptable(95@, "KO_SHOT_FRONT", "PED", 2.0, False, False, False, True, -1)
+Char.AttachToCar(95@, 34@, 0.0, -2.5, 1.0, 0, 0.0, WeaponType.Unarmed)
+91@ = 5
+Hud.DisplayCounterWithString($doc2_heal, CounterDisplay.Bar, 'DOC2_07')
+Blip.ChangeDisplay(93@, BlipDisplay.Both)
+Blip.ChangeDisplay(92@, BlipDisplay.Neither)
+
+:DOC2_14851
+if 
+is_ps2_keyboard_key_just_pressed 90
+goto_if_false @DOC2_14870
+Weather.ForceNow(WeatherType.RainyCountryside)
+
+:DOC2_14870
+if 
+is_ps2_keyboard_key_just_pressed 85
+goto_if_false @DOC2_14885
+
+:DOC2_14885
+return 
+
+:DOC2_14887
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(129@, 1)
+130@ = 0
+return 
+
+:DOC2_14907
+if and
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+  130@ == 0
+goto_if_false @DOC2_14950
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(127@s, 10000, 1)
+130@ = 1
+
+:DOC2_14950
+if and
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+  130@ == 1
+goto_if_false @DOC2_14988
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearThisPrint(127@s)
+130@ = 2
+
+:DOC2_14988
+return 
+

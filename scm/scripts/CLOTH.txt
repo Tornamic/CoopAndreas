@@ -1,0 +1,1560 @@
+:CLOTH_782
+Streaming.RequestModel($shop_door_model_clothes)
+Streaming.RequestModel($shopkeeper_model_shops)
+Audio.LoadMissionAudio(20802, 4)
+Streaming.LoadAllModelsNow
+set_deatharrest_state 0
+script_name 'CLOTH'
+
+:CLOTH_816
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CLOTH_6946
+if 
+  not is_var_text_label_empty s$shop_name
+goto_if_false @CLOTH_6932
+if 
+  $flag_clothes > 0
+goto_if_false @CLOTH_945
+Char.ShutUp($scplayer, True)
+if 
+  Game.HasLanguageChanged
+goto_if_false @CLOTH_945
+Text.ClearHelp
+Menu.Delete($main_menu_shops)
+Menu.Delete($sub_menu_shops)
+Menu.Delete($bought_menu_shops)
+Menu.Delete($cost_menu_shops)
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$cost_menu_drawn_shops = 0
+$current_Language = Game.GetCurrentLanguage()
+
+:CLOTH_945
+if 
+  $flag_clothes == 0
+goto_if_false @CLOTH_1900
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'LACS1'
+goto_if_false @CLOTH_1098
+$clothes_offX = 0.0
+$clothes_offY = 0.0
+$clothes_offZ = 0.0
+$shop_keep_clothX = 203.528
+$shop_keep_clothY = -41.644
+$shop_keep_clothZ = 1000.852
+$shop_keep_heading_clothes = 180.0
+$clothes_heading = 90.0
+$change_room_door_heading = 0.0
+set_var_text_label s$stored_clothes_shop = s$shop_name
+$number_of_clothes_in_shop = Shopping.GetNumberOfItems()
+$flag_clothes = 1
+
+:CLOTH_1098
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CSCHP'
+goto_if_false @CLOTH_1233
+$clothes_offX = 2.85
+$clothes_offY = -57.534
+$clothes_offZ = 3.26
+$shop_keep_clothX = 208.806
+$shop_keep_clothY = -98.713
+$shop_keep_clothZ = 1004.297
+$shop_keep_heading_clothes = 180.0
+$clothes_heading = 90.0
+$change_room_door_heading = 0.0
+set_var_text_label s$stored_clothes_shop = s$shop_name
+$number_of_clothes_in_shop = Shopping.GetNumberOfItems()
+$flag_clothes = 1
+
+:CLOTH_1233
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CSSPRT'
+goto_if_false @CLOTH_1368
+$clothes_offX = -12.653
+$clothes_offY = -90.758
+$clothes_offZ = 1.477
+$shop_keep_clothX = 207.018
+$shop_keep_clothY = -127.782
+$shop_keep_clothZ = 1002.555
+$shop_keep_heading_clothes = 180.0
+$clothes_heading = 90.0
+$change_room_door_heading = 0.0
+set_var_text_label s$stored_clothes_shop = s$shop_name
+$number_of_clothes_in_shop = Shopping.GetNumberOfItems()
+$flag_clothes = 1
+
+:CLOTH_1368
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CLOTHGP'
+goto_if_false @CLOTH_1503
+$clothes_offX = -33.204
+$clothes_offY = -46.245
+$clothes_offZ = 0.0
+$shop_keep_clothX = 161.56
+$shop_keep_clothY = -81.369
+$shop_keep_clothZ = 1000.859
+$shop_keep_heading_clothes = 180.0
+$clothes_heading = 90.0
+$change_room_door_heading = 0.0
+set_var_text_label s$stored_clothes_shop = s$shop_name
+$number_of_clothes_in_shop = Shopping.GetNumberOfItems()
+$flag_clothes = 1
+
+:CLOTH_1503
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CSDESGN'
+goto_if_false @CLOTH_1765
+if 
+  $flag_mansion_mission_counter > 3
+goto_if_false @CLOTH_1655
+$hash_key_clothes = Text.GetHashKey("TSHIRTLOCGREY")
+Shopping.AddPriceModifier($hash_key_clothes, 15)
+$hash_key_clothes = Text.GetHashKey("BASKBALLLOC")
+Shopping.AddPriceModifier($hash_key_clothes, 20)
+$hash_key_clothes = Text.GetHashKey("TSHIRTMADDGREY")
+Shopping.AddPriceModifier($hash_key_clothes, 300)
+$hash_key_clothes = Text.GetHashKey("TSHIRTMADDGRN")
+Shopping.AddPriceModifier($hash_key_clothes, 300)
+
+:CLOTH_1655
+$clothes_offX = -5.806
+$clothes_offY = 36.733
+$clothes_offZ = -0.815
+$shop_keep_clothX = 204.836
+$shop_keep_clothY = -7.328
+$shop_keep_clothZ = 1000.258
+$shop_keep_heading_clothes = 270.0
+$clothes_heading = 90.0
+$change_room_door_heading = 0.0
+set_var_text_label s$stored_clothes_shop = s$shop_name
+$number_of_clothes_in_shop = Shopping.GetNumberOfItems()
+$flag_clothes = 1
+
+:CLOTH_1765
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CSEXL'
+goto_if_false @CLOTH_1900
+$clothes_offX = 1.2
+$clothes_offY = -114.524
+$clothes_offZ = -1.51
+$shop_keep_clothX = 204.366
+$shop_keep_clothY = -157.789
+$shop_keep_clothZ = 999.563
+$shop_keep_heading_clothes = 180.0
+$clothes_heading = 90.0
+$change_room_door_heading = 0.0
+set_var_text_label s$stored_clothes_shop = s$shop_name
+$number_of_clothes_in_shop = Shopping.GetNumberOfItems()
+$flag_clothes = 1
+
+:CLOTH_1900
+if 
+  $flag_clothes == 1
+goto_if_false @CLOTH_2351
+Text.UseCommands(True)
+Stat.ShowUpdateStats(False)
+$clothes_camX = 212.8715
+add_float_var_to_float_var $clothes_camX += $clothes_offX
+$clothes_camY = -42.8156
+add_float_var_to_float_var $clothes_camY += $clothes_offY
+$clothes_camZ = 1002.116
+add_float_var_to_float_var $clothes_camZ += $clothes_offZ
+$clothes_cam_pointX = 213.4791
+add_float_var_to_float_var $clothes_cam_pointX += $clothes_offX
+$clothes_cam_pointY = -42.0238
+add_float_var_to_float_var $clothes_cam_pointY += $clothes_offY
+$clothes_cam_pointZ = 1002.053
+add_float_var_to_float_var $clothes_cam_pointZ += $clothes_offZ
+$clothes_hat_camX = 214.5148
+add_float_var_to_float_var $clothes_hat_camX += $clothes_offX
+$clothes_hat_camY = -41.6106
+add_float_var_to_float_var $clothes_hat_camY += $clothes_offY
+$clothes_hat_camZ = 1002.494
+add_float_var_to_float_var $clothes_hat_camZ += $clothes_offZ
+$clothes_hat_cam_pointX = 214.5367
+add_float_var_to_float_var $clothes_hat_cam_pointX += $clothes_offX
+$clothes_hat_cam_pointY = -40.6175
+add_float_var_to_float_var $clothes_hat_cam_pointY += $clothes_offY
+$clothes_hat_cam_pointZ = 1002.609
+add_float_var_to_float_var $clothes_hat_cam_pointZ += $clothes_offZ
+$clothes_locateX = 214.622
+add_float_var_to_float_var $clothes_locateX += $clothes_offX
+$clothes_locateY = -40.652
+add_float_var_to_float_var $clothes_locateY += $clothes_offY
+$clothes_locateZ = 1001.033
+add_float_var_to_float_var $clothes_locateZ += $clothes_offZ
+$change_doorX = 213.874
+add_float_var_to_float_var $change_doorX += $clothes_offX
+$change_doorY = -39.811
+add_float_var_to_float_var $change_doorY += $clothes_offY
+$change_doorZ = 1002.2
+add_float_var_to_float_var $change_doorZ += $clothes_offZ
+$shop_keep_clothes = Char.Create(4, $shopkeeper_model_shops, $shop_keep_clothX, $shop_keep_clothY, $shop_keep_clothZ)
+Char.SetOnlyDamagedByPlayer($shop_keep_clothes, True)
+Char.SetDecisionMaker($shop_keep_clothes, 65542)
+Char.SetHeading($shop_keep_clothes, $shop_keep_heading_clothes)
+$shopkeeper_attacked_clothes = 0
+$changing_room_door = Object.CreateNoOffset($shop_door_model_clothes, $change_doorX, $change_doorY, $change_doorZ)
+Object.SetHeading($changing_room_door, $change_room_door_heading)
+$sample_name_shops = Char.SetSayContext($shop_keep_clothes, 332)
+$blob_flag_shop = 1
+$flag_clothes = 2
+
+:CLOTH_2351
+if 
+  $flag_clothes == 2
+goto_if_false @CLOTH_2767
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_clothes_shop
+goto_if_false @CLOTH_2400
+gosub @CLOTH_7234
+
+:CLOTH_2400
+if 
+  not Char.IsDead($shop_keep_clothes)
+goto_if_false @CLOTH_2722
+if 
+  $shopkeeper_attacked_clothes == 0
+goto_if_false @CLOTH_2670
+if or
+  Char.IsShooting($scplayer)
+  Player.IsTargetingChar($player1, $shop_keep_clothes)
+  Char.HasBeenDamagedByWeapon($shop_keep_clothes, WeaponType.AnyWeapon)
+  $iSetClothesPanic == 1
+goto_if_false @CLOTH_2504
+$sample_name_shops = Char.SetSayContext($shop_keep_clothes, 327)
+Task.HandsUp($shop_keep_clothes, -2)
+$shopkeeper_attacked_clothes = 1
+goto @CLOTH_2577
+
+:CLOTH_2504
+$blob_flag_shop = 1
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, $clothes_locateX, $clothes_locateY, $clothes_locateZ, 1.0, 1.0, 4.0, $blob_flag_shop)
+goto_if_false @CLOTH_2577
+if 
+  Player.CanStartMission($player1)
+goto_if_false @CLOTH_2577
+$flag_clothes = 3
+
+:CLOTH_2577
+if 
+  $flag_player_use_changing_room == 0
+goto_if_false @CLOTH_2663
+if 
+  Char.LocateOnFootChar3D($scplayer, $shop_keep_clothes, 8.0, 8.0, 3.0, False)
+goto_if_false @CLOTH_2656
+$sample_name_shops = Char.SetSayContext($shop_keep_clothes, 328)
+$flag_player_use_changing_room = 1
+goto @CLOTH_2663
+
+:CLOTH_2656
+$flag_player_use_changing_room = 0
+
+:CLOTH_2663
+goto @CLOTH_2715
+
+:CLOTH_2670
+gosub @CLOTH_6960
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_clothes_shop
+goto_if_false @CLOTH_2708
+gosub @CLOTH_7234
+
+:CLOTH_2708
+goto @CLOTH_816
+
+:CLOTH_2715
+goto @CLOTH_2767
+
+:CLOTH_2722
+gosub @CLOTH_6960
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_clothes_shop
+goto_if_false @CLOTH_2760
+gosub @CLOTH_7234
+
+:CLOTH_2760
+goto @CLOTH_816
+
+:CLOTH_2767
+if 
+  $flag_clothes == 3
+goto_if_false @CLOTH_2902
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CLOTH_2888
+Player.SetControl($player1, False)
+Game.SetMinigameInProgress(True)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+Char.ClearTasksImmediately($scplayer)
+World.ClearArea(1, $player_x, $player_y, $player_z, 1.0)
+Hud.DisplayRadar(False)
+TIMERA = 0
+$shop_progress_clothes = 0
+$flag_clothes = 4
+goto @CLOTH_2902
+
+:CLOTH_2888
+gosub @CLOTH_7234
+goto @CLOTH_816
+
+:CLOTH_2902
+if 
+  $flag_clothes == 4
+goto_if_false @CLOTH_3415
+if 
+  Char.IsDead($shop_keep_clothes)
+goto_if_false @CLOTH_2981
+gosub @CLOTH_6960
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_clothes_shop
+goto_if_false @CLOTH_2974
+gosub @CLOTH_7234
+
+:CLOTH_2974
+goto @CLOTH_816
+
+:CLOTH_2981
+if 
+  $shop_progress_clothes == 0
+goto_if_false @CLOTH_3322
+if 
+  TIMERA >= 300
+goto_if_false @CLOTH_3322
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Char.SetCoordinatesDontWarpGang($scplayer, $clothes_locateX, $clothes_locateY, $clothes_locateZ)
+Char.SetHeading($scplayer, $clothes_heading)
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+$temp_shopX, $temp_shopY, $temp_shopZ = Char.GetCoordinates($shop_keep_clothes)
+if or
+  not is_float_var_equal_to_float_var $temp_shopX == $shop_keep_clothX
+  not is_float_var_equal_to_float_var $temp_shopY == $shop_keep_clothY
+  not is_float_var_equal_to_float_var $temp_shopZ == $shop_keep_clothZ
+goto_if_false @CLOTH_3132
+Char.SetCoordinates($shop_keep_clothes, $shop_keep_clothX, $shop_keep_clothY, $shop_keep_clothZ)
+Char.SetHeading($shop_keep_clothes, $shop_keep_heading_clothes)
+
+:CLOTH_3132
+Camera.SetFixedPosition($clothes_camX, $clothes_camY, $clothes_camZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($clothes_cam_pointX, $clothes_cam_pointY, $clothes_cam_pointZ, SwitchType.JumpCut)
+Player.StoreClothesState
+Task.PlayAnimNonInterruptable($scplayer, "CLO_IN", "CLOTHES", 4.0, False, False, False, True, -1)
+$return_animation_time_clothes = 0.0
+if 
+  Char.IsPlayingAnim($scplayer, "CLO_IN")
+goto_if_false @CLOTH_3260
+$return_animation_time_clothes = Char.GetAnimCurrentTime($scplayer, "CLO_IN")
+
+:CLOTH_3260
+if 
+  Object.DoesExist($changing_room_door)
+goto_if_false @CLOTH_3315
+Object.PlayAnim($changing_room_door, "CLO_POSE_OUT_O", "CLOTHES", 4.0, False, True)
+
+:CLOTH_3315
+$shop_progress_clothes = 1
+
+:CLOTH_3322
+if 
+  $shop_progress_clothes == 1
+goto_if_false @CLOTH_3415
+if 
+  Char.IsPlayingAnim($scplayer, "CLO_IN")
+goto_if_false @CLOTH_3380
+$return_animation_time_clothes = Char.GetAnimCurrentTime($scplayer, "CLO_IN")
+
+:CLOTH_3380
+if 
+  $return_animation_time_clothes == 1.0
+goto_if_false @CLOTH_3415
+$shop_progress_clothes = 0
+$flag_clothes = 5
+
+:CLOTH_3415
+if 
+  $flag_clothes == 5
+goto_if_false @CLOTH_4103
+if 
+  Char.IsDead($shop_keep_clothes)
+goto_if_false @CLOTH_3494
+gosub @CLOTH_6960
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_clothes_shop
+goto_if_false @CLOTH_3487
+gosub @CLOTH_7234
+
+:CLOTH_3487
+goto @CLOTH_816
+
+:CLOTH_3494
+if 
+  $main_menu_drawn_shops == 0
+goto_if_false @CLOTH_3537
+if 
+  1 > $shop_progress_clothes
+goto_if_false @CLOTH_3537
+gosub @CLOTH_8450
+
+:CLOTH_3537
+$blob_flag_shop = 0
+if 
+  $shop_progress_clothes == 0
+goto_if_false @CLOTH_3610
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @CLOTH_3586
+$shop_progress_clothes = 1
+
+:CLOTH_3586
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @CLOTH_3610
+$shop_progress_clothes = 2
+
+:CLOTH_3610
+if 
+  $shop_progress_clothes == 1
+goto_if_false @CLOTH_3731
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @CLOTH_3731
+$shop_main_item_picked_shops = Menu.GetItemAccepted($main_menu_shops)
+if 
+  0 > $shop_main_item_picked_shops
+goto_if_false @CLOTH_3678
+$shop_main_item_picked_shops = 0
+
+:CLOTH_3678
+gosub @CLOTH_7594
+$flag_clothes = 6
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @CLOTH_3724
+Menu.Delete($main_menu_shops)
+Text.ClearHelp
+$main_menu_drawn_shops = 0
+
+:CLOTH_3724
+$shop_progress_clothes = 0
+
+:CLOTH_3731
+if 
+  $shop_progress_clothes == 2
+goto_if_false @CLOTH_3939
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @CLOTH_3939
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @CLOTH_3798
+Menu.Delete($main_menu_shops)
+Text.ClearHelp
+$main_menu_drawn_shops = 0
+
+:CLOTH_3798
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @CLOTH_3830
+Menu.Delete($sub_menu_shops)
+Text.ClearHelp
+$sub_menu_drawn_shops = 0
+
+:CLOTH_3830
+Task.PlayAnimNonInterruptable($scplayer, "CLO_OUT", "CLOTHES", 1000.0, False, False, False, False, -1)
+$return_animation_time_clothes = 0.0
+if 
+  Object.DoesExist($changing_room_door)
+goto_if_false @CLOTH_3932
+Object.PlayAnim($changing_room_door, "CLO_POSE_IN_O", "CLOTHES", 1000.0, False, True)
+
+:CLOTH_3932
+$shop_progress_clothes = 5
+
+:CLOTH_3939
+if 
+  $shop_progress_clothes == 5
+goto_if_false @CLOTH_4027
+if 
+  Char.IsPlayingAnim($scplayer, "CLO_OUT")
+goto_if_false @CLOTH_3999
+$return_animation_time_clothes = Char.GetAnimCurrentTime($scplayer, "CLO_OUT")
+
+:CLOTH_3999
+if 
+  $return_animation_time_clothes == 1.0
+goto_if_false @CLOTH_4027
+$shop_progress_clothes = 6
+
+:CLOTH_4027
+if 
+  $shop_progress_clothes == 6
+goto_if_false @CLOTH_4103
+Player.SetControl($player1, True)
+Game.SetMinigameInProgress(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Hud.DisplayRadar(True)
+$sample_name_shops = Char.SetSayContext($shop_keep_clothes, 331)
+$player_in_changeroom_clothes = 0
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$flag_clothes = 8
+
+:CLOTH_4103
+if 
+  $flag_clothes == 6
+goto_if_false @CLOTH_5223
+if 
+  Char.IsDead($shop_keep_clothes)
+goto_if_false @CLOTH_4182
+gosub @CLOTH_6960
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_clothes_shop
+goto_if_false @CLOTH_4175
+gosub @CLOTH_7234
+
+:CLOTH_4175
+goto @CLOTH_816
+
+:CLOTH_4182
+if 
+  $sub_menu_drawn_shops == 0
+goto_if_false @CLOTH_4225
+if 
+  2 > $shop_progress_clothes
+goto_if_false @CLOTH_4225
+gosub @CLOTH_9020
+
+:CLOTH_4225
+$blob_flag_shop = 0
+if 
+  $shop_progress_clothes == 0
+goto_if_false @CLOTH_4583
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @CLOTH_4274
+$shop_progress_clothes = 1
+
+:CLOTH_4274
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @CLOTH_4583
+$player_in_changeroom_clothes = 0
+$shop_sub_item_picked_shops = Menu.GetItemSelected($sub_menu_shops)
+if 
+  0 > $shop_sub_item_picked_shops
+goto_if_false @CLOTH_4331
+$shop_sub_item_picked_shops = 0
+
+:CLOTH_4331
+set_var_int_to_var_int $model_index = $item_model_index($shop_sub_item_picked_shops,12i)
+set_var_int_to_var_int $clothes_price = $item_price($shop_sub_item_picked_shops,12i)
+set_var_int_to_var_int $modelid_shops = $item_modelid($shop_sub_item_picked_shops,12i)
+set_var_int_to_var_int $component_shops = $item_component($shop_sub_item_picked_shops,12i)
+set_var_text_label s$clothes_name = $item_text_label($shop_sub_item_picked_shops,12s)
+if or
+  is_int_var_equal_to_constant $component_shops == 13
+  is_int_var_equal_to_constant $component_shops == 14
+  is_int_var_equal_to_constant $component_shops == 15
+  is_int_var_equal_to_constant $component_shops == 16
+goto_if_false @CLOTH_4476
+Camera.SetFixedPosition($clothes_hat_camX, $clothes_hat_camY, $clothes_hat_camZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($clothes_hat_cam_pointX, $clothes_hat_cam_pointY, $clothes_hat_cam_pointZ, SwitchType.JumpCut)
+goto @CLOTH_4544
+
+:CLOTH_4476
+if or
+  is_int_var_equal_to_constant $area_to_look_at_shops == 0
+  is_int_var_equal_to_constant $area_to_look_at_shops == 2
+goto_if_false @CLOTH_4505
+Audio.PlayMissionAudio(MissionAudioSlot.Slot4)
+
+:CLOTH_4505
+Camera.SetFixedPosition($clothes_camX, $clothes_camY, $clothes_camZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($clothes_cam_pointX, $clothes_cam_pointY, $clothes_cam_pointZ, SwitchType.JumpCut)
+
+:CLOTH_4544
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @CLOTH_4576
+Menu.Delete($sub_menu_shops)
+Text.ClearHelp
+$sub_menu_drawn_shops = 0
+
+:CLOTH_4576
+$shop_progress_clothes = 2
+
+:CLOTH_4583
+if 
+  $shop_progress_clothes == 1
+goto_if_false @CLOTH_4689
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @CLOTH_4689
+$shop_progress_clothes = 0
+$flag_clothes = 5
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @CLOTH_4664
+Text.ClearHelp
+Menu.Delete($sub_menu_shops)
+$sub_menu_drawn_shops = 0
+
+:CLOTH_4664
+if 
+  $main_menu_drawn_shops == 0
+goto_if_false @CLOTH_4689
+gosub @CLOTH_8450
+
+:CLOTH_4689
+if 
+  $shop_progress_clothes == 2
+goto_if_false @CLOTH_4746
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot4)
+goto_if_false @CLOTH_4746
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @CLOTH_4746
+$shop_progress_clothes = 3
+
+:CLOTH_4746
+if 
+  $shop_progress_clothes == 3
+goto_if_false @CLOTH_4941
+if or
+  is_int_var_equal_to_constant $area_to_look_at_shops == 0
+  is_int_var_equal_to_constant $area_to_look_at_shops == 2
+  is_int_var_equal_to_constant $area_to_look_at_shops == 3
+goto_if_false @CLOTH_4809
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.StoreClothesState
+
+:CLOTH_4809
+Player.GiveClothes($player1, $model_index, $modelid_shops, $component_shops)
+Player.BuildModel($player1)
+Task.PlayAnimNonInterruptable($scplayer, "CLO_POSE_IN", "CLOTHES", 1000.0, False, False, False, True, -1)
+$return_animation_time_clothes = 0.0
+if 
+  Object.DoesExist($changing_room_door)
+goto_if_false @CLOTH_4934
+Object.PlayAnim($changing_room_door, "CLO_POSE_IN_O", "CLOTHES", 1000.0, False, True)
+
+:CLOTH_4934
+$shop_progress_clothes = 4
+
+:CLOTH_4941
+if 
+  $shop_progress_clothes == 4
+goto_if_false @CLOTH_5079
+if 
+  Char.IsPlayingAnim($scplayer, "CLO_POSE_IN")
+goto_if_false @CLOTH_5009
+$return_animation_time_clothes = Char.GetAnimCurrentTime($scplayer, "CLO_POSE_IN")
+
+:CLOTH_5009
+if 
+  $return_animation_time_clothes == 1.0
+goto_if_false @CLOTH_5079
+Task.PlayAnimNonInterruptable($scplayer, v$name_of_anim_clothes, "CLOTHES", 1000.0, False, False, False, True, -1)
+$return_animation_time_clothes = 0.0
+$shop_progress_clothes = 5
+
+:CLOTH_5079
+if 
+  $shop_progress_clothes == 5
+goto_if_false @CLOTH_5223
+if 
+  Char.IsPlayingAnim($scplayer, v$name_of_anim_clothes)
+goto_if_false @CLOTH_5127
+$return_animation_time_clothes = Char.GetAnimCurrentTime($scplayer, v$name_of_anim_clothes)
+
+:CLOTH_5127
+if 
+  $return_animation_time_clothes == 1.0
+goto_if_false @CLOTH_5223
+gosub @CLOTH_9570
+Task.PlayAnimNonInterruptable($scplayer, "CLO_POSE_LOOP", "CLOTHES", 1000.0, True, False, False, False, -1)
+$return_animation_time_clothes = 0.0
+$flag_clothes = 7
+$shop_progress_clothes = 0
+
+:CLOTH_5223
+if 
+  $flag_clothes == 7
+goto_if_false @CLOTH_6638
+if 
+  Char.IsDead($shop_keep_clothes)
+goto_if_false @CLOTH_5302
+gosub @CLOTH_6960
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_clothes_shop
+goto_if_false @CLOTH_5295
+gosub @CLOTH_7234
+
+:CLOTH_5295
+goto @CLOTH_816
+
+:CLOTH_5302
+$blob_flag_shop = 0
+if 
+  $shop_progress_clothes == 0
+goto_if_false @CLOTH_5607
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @CLOTH_5412
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('CLTHNO2')
+Text.ClearThisPrint('CLTHNO1')
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$flag_player_owned_item_shops = 0
+$flag_bought_something_clothes = 0
+$shop_progress_clothes = 1
+
+:CLOTH_5412
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @CLOTH_5607
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('CLTHNO2')
+Text.ClearThisPrint('CLTHNO1')
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$flag_player_owned_item_shops = 0
+$flag_bought_something_clothes = 0
+gosub @CLOTH_8109
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @CLOTH_5529
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:CLOTH_5529
+if 
+  $player_in_changeroom_clothes == 0
+goto_if_false @CLOTH_5561
+$shop_progress_clothes = 3
+goto @CLOTH_5607
+
+:CLOTH_5561
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @CLOTH_5593
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:CLOTH_5593
+$shop_progress_clothes = 0
+$flag_clothes = 6
+
+:CLOTH_5607
+if 
+  2 > $shop_progress_clothes
+goto_if_false @CLOTH_5632
+gosub @CLOTH_9570
+
+:CLOTH_5632
+if 
+  $shop_progress_clothes == 1
+goto_if_false @CLOTH_6032
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @CLOTH_6032
+$players_money = Player.StoreScore($player1)
+if 
+  is_int_var_greater_or_equal_to_int_var $players_money >= $clothes_price
+goto_if_false @CLOTH_5959
+if 
+  not is_int_var_equal_to_int_var $player_item_texture_shops == $model_index
+goto_if_false @CLOTH_5879
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @CLOTH_5745
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:CLOTH_5745
+Shopping.BuyItem($model_index)
+$flag_bought_something_clothes = 1
+$sample_name_shops = Char.SetSayContext($shop_keep_clothes, 323)
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1054)
+gosub @CLOTH_9945
+gosub @CLOTH_10315
+Player.StoreClothesState
+Player.BuildModel($player1)
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+Task.PlayAnimNonInterruptable($scplayer, "CLO_BUY", "CLOTHES", 4.0, False, False, False, True, -1)
+$return_animation_time_clothes = 0.0
+$shop_progress_clothes = 2
+goto @CLOTH_5952
+
+:CLOTH_5879
+if 
+  $flag_bought_item_already_shops == 0
+goto_if_false @CLOTH_5952
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1055)
+$sample_name_shops = Char.SetSayContext($shop_keep_clothes, 322)
+Text.PrintNow('CLTHNO2', 5000, 1)
+$shop_progress_clothes = 0
+$flag_bought_item_already_shops = 1
+
+:CLOTH_5952
+goto @CLOTH_6032
+
+:CLOTH_5959
+if 
+  $flag_no_money_shops == 0
+goto_if_false @CLOTH_6032
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1055)
+$sample_name_shops = Char.SetSayContext($shop_keep_clothes, 324)
+Text.PrintNow('SHOPNO', 5000, 1)
+$shop_progress_clothes = 0
+$flag_no_money_shops = 1
+
+:CLOTH_6032
+if 
+  $shop_progress_clothes == 2
+goto_if_false @CLOTH_6174
+if 
+  Char.IsPlayingAnim($scplayer, "CLO_BUY")
+goto_if_false @CLOTH_6092
+$return_animation_time_clothes = Char.GetAnimCurrentTime($scplayer, "CLO_BUY")
+
+:CLOTH_6092
+if 
+  $return_animation_time_clothes == 1.0
+goto_if_false @CLOTH_6174
+Task.PlayAnimNonInterruptable($scplayer, "CLO_POSE_LOOP", "CLOTHES", 1000.0, True, False, False, False, -1)
+$return_animation_time_clothes = 0.0
+$shop_progress_clothes = 3
+
+:CLOTH_6174
+if 
+  $shop_progress_clothes == 3
+goto_if_false @CLOTH_6307
+Task.PlayAnimNonInterruptable($scplayer, "CLO_POSE_OUT", "CLOTHES", 4.0, False, False, False, True, -1)
+$return_animation_time_clothes = 0.0
+if 
+  Object.DoesExist($changing_room_door)
+goto_if_false @CLOTH_6300
+Object.PlayAnim($changing_room_door, "CLO_POSE_OUT_O", "CLOTHES", 1000.0, False, True)
+
+:CLOTH_6300
+$shop_progress_clothes = 4
+
+:CLOTH_6307
+if 
+  $shop_progress_clothes == 4
+goto_if_false @CLOTH_6638
+if 
+  Char.IsPlayingAnim($scplayer, "CLO_POSE_OUT")
+goto_if_false @CLOTH_6377
+$return_animation_time_clothes = Char.GetAnimCurrentTime($scplayer, "CLO_POSE_OUT")
+
+:CLOTH_6377
+if 
+  $return_animation_time_clothes == 1.0
+goto_if_false @CLOTH_6638
+Player.RestoreClothesState
+Player.BuildModel($player1)
+Player.StoreClothesState
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @CLOTH_6439
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:CLOTH_6439
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @CLOTH_6471
+Menu.Delete($sub_menu_shops)
+Text.ClearHelp
+$sub_menu_drawn_shops = 0
+
+:CLOTH_6471
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @CLOTH_6503
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:CLOTH_6503
+$player_in_changeroom_clothes = 1
+if 
+  $flag_bought_something_clothes == 1
+goto_if_false @CLOTH_6592
+$shop_progress_clothes = 0
+$flag_clothes = 5
+if 
+  $main_menu_drawn_shops == 0
+goto_if_false @CLOTH_6585
+if 
+  1 > $shop_progress_clothes
+goto_if_false @CLOTH_6585
+gosub @CLOTH_8450
+
+:CLOTH_6585
+goto @CLOTH_6638
+
+:CLOTH_6592
+$shop_progress_clothes = 0
+$flag_clothes = 6
+if 
+  $sub_menu_drawn_shops == 0
+goto_if_false @CLOTH_6638
+gosub @CLOTH_8109
+gosub @CLOTH_9020
+
+:CLOTH_6638
+if 
+  $flag_clothes == 8
+goto_if_false @CLOTH_6925
+if 
+  Char.IsDead($shop_keep_clothes)
+goto_if_false @CLOTH_6717
+gosub @CLOTH_6960
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_clothes_shop
+goto_if_false @CLOTH_6710
+gosub @CLOTH_7234
+
+:CLOTH_6710
+goto @CLOTH_816
+
+:CLOTH_6717
+if 
+  $shopkeeper_attacked_clothes == 0
+goto_if_false @CLOTH_6798
+if or
+  Char.IsShooting($scplayer)
+  Player.IsTargetingChar($player1, $shop_keep_clothes)
+  Char.HasBeenDamagedByWeapon($shop_keep_clothes, WeaponType.AnyWeapon)
+  $iSetClothesPanic == 1
+goto_if_false @CLOTH_6798
+$sample_name_shops = Char.SetSayContext($shop_keep_clothes, 327)
+Task.HandsUp($shop_keep_clothes, -2)
+$shopkeeper_attacked_clothes = 1
+
+:CLOTH_6798
+if 
+  not Char.LocateOnFoot3D($scplayer, $blob_flag_shop, $clothes_locateX, $clothes_locateY, $clothes_locateZ, 1.0, 1.0, 4.0)
+goto_if_false @CLOTH_6925
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$shop_main_item_picked_shops = 0
+$shop_sub_item_picked_shops = 0
+$flag_clothes = 2
+$shop_progress_clothes = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$flag_bought_something_clothes = 0
+$blob_flag_shop = 1
+
+:CLOTH_6925
+goto @CLOTH_6939
+
+:CLOTH_6932
+gosub @CLOTH_7234
+
+:CLOTH_6939
+goto @CLOTH_6953
+
+:CLOTH_6946
+gosub @CLOTH_7234
+
+:CLOTH_6953
+goto @CLOTH_816
+
+:CLOTH_6960
+if 
+  $flag_clothes >= 1
+goto_if_false @CLOTH_6980
+Text.ClearHelp
+
+:CLOTH_6980
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @CLOTH_7012
+Menu.Delete($main_menu_shops)
+Text.ClearHelp
+$main_menu_drawn_shops = 0
+
+:CLOTH_7012
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @CLOTH_7044
+Menu.Delete($sub_menu_shops)
+Text.ClearHelp
+$sub_menu_drawn_shops = 0
+
+:CLOTH_7044
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @CLOTH_7076
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:CLOTH_7076
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @CLOTH_7108
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:CLOTH_7108
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('CLTHNO2')
+Text.ClearThisPrint('CLTHNO1')
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$shop_main_item_picked_shops = 0
+$shop_sub_item_picked_shops = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$flag_player_owned_item_shops = 0
+$shop_progress_clothes = 0
+$player_in_changeroom_clothes = 0
+$flag_bought_something_clothes = 0
+$flag_clothes = 2
+return 
+
+:CLOTH_7234
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @CLOTH_7266
+Menu.Delete($main_menu_shops)
+Text.ClearHelp
+$main_menu_drawn_shops = 0
+
+:CLOTH_7266
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @CLOTH_7298
+Menu.Delete($sub_menu_shops)
+Text.ClearHelp
+$sub_menu_drawn_shops = 0
+
+:CLOTH_7298
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @CLOTH_7330
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:CLOTH_7330
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @CLOTH_7362
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:CLOTH_7362
+if 
+  $flag_clothes >= 1
+goto_if_false @CLOTH_7382
+Text.ClearHelp
+
+:CLOTH_7382
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('CLTHNO2')
+Text.ClearThisPrint('CLTHNO1')
+$player_in_changeroom_clothes = 0
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$shop_main_item_picked_shops = 0
+$shop_sub_item_picked_shops = 0
+$blob_flag_shop = 1
+$flag_player_use_changing_room = 0
+$shopkeeper_attacked_clothes = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$flag_player_owned_item_shops = 0
+$flag_bought_something_clothes = 0
+$shop_progress_clothes = 0
+$flag_clothes = 0
+Object.Delete($changing_room_door)
+Streaming.MarkModelAsNoLongerNeeded($shop_door_model_clothes)
+Char.Delete($shop_keep_clothes)
+Streaming.MarkModelAsNoLongerNeeded($shopkeeper_model_shops)
+Text.UseCommands(False)
+Hud.DisplayRadar(True)
+Stat.ShowUpdateStats(True)
+Game.SetMinigameInProgress(False)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CLOTH_7590
+Char.ShutUp($scplayer, False)
+
+:CLOTH_7590
+terminate_this_script 
+return 
+
+:CLOTH_7594
+if 
+  $shop_main_item_picked_shops == 0
+goto_if_false @CLOTH_7668
+$area_looked_for_shops = 0
+set_var_int_to_constant $area_to_look_at_shops = 0
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @CLOTH_8109
+set_var_text_label16 v$name_of_anim_clothes = "CLO_POSE_TORSO"
+
+:CLOTH_7668
+if 
+  $shop_main_item_picked_shops == 1
+goto_if_false @CLOTH_7741
+$area_looked_for_shops = 2
+set_var_int_to_constant $area_to_look_at_shops = 2
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @CLOTH_8109
+set_var_text_label16 v$name_of_anim_clothes = "CLO_POSE_LEGS"
+
+:CLOTH_7741
+if 
+  $shop_main_item_picked_shops == 2
+goto_if_false @CLOTH_7815
+$area_looked_for_shops = 3
+set_var_int_to_constant $area_to_look_at_shops = 3
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @CLOTH_8109
+set_var_text_label16 v$name_of_anim_clothes = "CLO_POSE_SHOES"
+
+:CLOTH_7815
+if 
+  $shop_main_item_picked_shops == 3
+goto_if_false @CLOTH_7889
+$area_looked_for_shops = 13
+set_var_int_to_constant $area_to_look_at_shops = 13
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @CLOTH_8109
+set_var_text_label16 v$name_of_anim_clothes = "CLO_POSE_TORSO"
+
+:CLOTH_7889
+if 
+  $shop_main_item_picked_shops == 4
+goto_if_false @CLOTH_7963
+$area_looked_for_shops = 14
+set_var_int_to_constant $area_to_look_at_shops = 14
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @CLOTH_8109
+set_var_text_label16 v$name_of_anim_clothes = "CLO_POSE_WATCH"
+
+:CLOTH_7963
+if 
+  $shop_main_item_picked_shops == 5
+goto_if_false @CLOTH_8035
+$area_looked_for_shops = 15
+set_var_int_to_constant $area_to_look_at_shops = 15
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @CLOTH_8109
+set_var_text_label16 v$name_of_anim_clothes = "CLO_POSE_HAT"
+
+:CLOTH_8035
+if 
+  $shop_main_item_picked_shops == 6
+goto_if_false @CLOTH_8107
+$area_looked_for_shops = 16
+set_var_int_to_constant $area_to_look_at_shops = 16
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @CLOTH_8109
+set_var_text_label16 v$name_of_anim_clothes = "CLO_POSE_HAT"
+
+:CLOTH_8107
+return 
+
+:CLOTH_8109
+$item_no_shops = 0
+$number_of_clothes_in_area = 0
+
+:CLOTH_8123
+if 
+  is_int_var_greater_than_int_var $number_of_clothes_in_shop > $item_no_shops
+goto_if_false @CLOTH_8368
+$model_index = Shopping.GetItem($item_no_shops)
+$modelid_shops = Shopping.GetExtraInfo($model_index, 0)
+$component_shops = Shopping.GetExtraInfo($model_index, 1)
+if 
+  is_int_var_equal_to_int_var $component_shops == $area_looked_for_shops
+goto_if_false @CLOTH_8354
+set_var_int_to_var_int $item_model_index($number_of_clothes_in_area,12i) = $model_index
+s$clothes_name = Shopping.GetNameOfItem($model_index)
+$clothes_price = Shopping.GetPriceOfItem($model_index)
+set_var_int_to_var_int $item_price($number_of_clothes_in_area,12i) = $clothes_price
+set_var_text_label $item_text_label($number_of_clothes_in_area,12s) = s$clothes_name
+set_var_int_to_var_int $item_modelid($number_of_clothes_in_area,12i) = $modelid_shops
+set_var_int_to_var_int $item_component($number_of_clothes_in_area,12i) = $component_shops
+if 
+  is_int_var_equal_to_int_var $player_item_texture_shops == $model_index
+goto_if_false @CLOTH_8302
+$item_hilight_shops($number_of_clothes_in_area,12i) = 0
+goto @CLOTH_8347
+
+:CLOTH_8302
+if 
+  Shopping.HasPlayerBoughtItem($model_index)
+goto_if_false @CLOTH_8336
+$item_hilight_shops($number_of_clothes_in_area,12i) = 1
+goto @CLOTH_8347
+
+:CLOTH_8336
+$item_hilight_shops($number_of_clothes_in_area,12i) = 2
+
+:CLOTH_8347
+$number_of_clothes_in_area += 1
+
+:CLOTH_8354
+$item_no_shops += 1
+goto @CLOTH_8123
+
+:CLOTH_8368
+set_var_int_to_var_int $temp_var_shops = $number_of_clothes_in_area
+
+:CLOTH_8376
+if 
+  12 > $temp_var_shops
+goto_if_false @CLOTH_8448
+$item_model_index($temp_var_shops,12i) = -1
+$item_price($temp_var_shops,12i) = 0
+set_var_text_label $item_text_label($temp_var_shops,12s) = 'DUMMY'
+$temp_var_shops += 1
+goto @CLOTH_8376
+
+:CLOTH_8448
+return 
+
+:CLOTH_8450
+if 
+  $main_menu_drawn_shops == 0
+goto_if_false @CLOTH_9018
+Text.PrintHelpForever('CLOTHA')
+set_var_text_label s$ITEM1 = 'TORSO'
+set_var_text_label s$ITEM2 = 'LEGS'
+set_var_text_label s$ITEM3 = 'FEET'
+set_var_text_label s$ITEM4 = 'CHAINS'
+set_var_text_label s$ITEM5 = 'WATCHES'
+set_var_text_label s$ITEM6 = 'SHADES'
+set_var_text_label s$ITEM7 = 'HATS'
+set_var_text_label s$ITEM8 = 'DUMMY'
+set_var_text_label s$ITEM9 = 'DUMMY'
+set_var_text_label s$ITEM10 = 'DUMMY'
+set_var_text_label s$ITEM11 = 'DUMMY'
+set_var_text_label s$ITEM12 = 'DUMMY'
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @CLOTH_8709
+$main_menu_shops = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @CLOTH_8950
+
+:CLOTH_8709
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @CLOTH_8771
+$main_menu_shops = Menu.Create('CLOTCHO', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @CLOTH_8950
+
+:CLOTH_8771
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @CLOTH_8833
+$main_menu_shops = Menu.Create('CLOTCHO', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @CLOTH_8950
+
+:CLOTH_8833
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @CLOTH_8895
+$main_menu_shops = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @CLOTH_8950
+
+:CLOTH_8895
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @CLOTH_8950
+$main_menu_shops = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+
+:CLOTH_8950
+Menu.SetColumnOrientation($main_menu_shops, 0, 1)
+Menu.SetColumn($main_menu_shops, 0, 'DUMMY', s$ITEM1, s$ITEM2, s$ITEM3, s$ITEM4, s$ITEM5, s$ITEM6, s$ITEM7, s$ITEM8, s$ITEM9, s$ITEM10, s$ITEM11, s$ITEM12)
+$main_menu_drawn_shops = 1
+
+:CLOTH_9018
+return 
+
+:CLOTH_9020
+if 
+  $sub_menu_drawn_shops == 0
+goto_if_false @CLOTH_9568
+Text.PrintHelpForever('CLOTHB')
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @CLOTH_9111
+$sub_menu_shops = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @CLOTH_9352
+
+:CLOTH_9111
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @CLOTH_9173
+$sub_menu_shops = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @CLOTH_9352
+
+:CLOTH_9173
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @CLOTH_9235
+$sub_menu_shops = Menu.Create('CLOTCHO', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @CLOTH_9352
+
+:CLOTH_9235
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @CLOTH_9297
+$sub_menu_shops = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @CLOTH_9352
+
+:CLOTH_9297
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @CLOTH_9352
+$sub_menu_shops = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+
+:CLOTH_9352
+Menu.SetColumnOrientation($sub_menu_shops, 0, 1)
+Menu.SetColumn($sub_menu_shops, 0, 'DUMMY', s$item_text_label[0], s$item_text_label[1], s$item_text_label[2], s$item_text_label[3], s$item_text_label[4], s$item_text_label[5], s$item_text_label[6], s$item_text_label[7], s$item_text_label[8], s$item_text_label[9], s$item_text_label[10], s$item_text_label[11])
+$temp_var_shops = 0
+
+:CLOTH_9420
+if 
+  is_int_var_greater_than_int_var $number_of_clothes_in_area > $temp_var_shops
+goto_if_false @CLOTH_9561
+if 
+  $item_hilight_shops($temp_var_shops,12i) == 0
+goto_if_false @CLOTH_9488
+Menu.HighlightItem($sub_menu_shops, $temp_var_shops, False)
+Menu.ActivateItem($sub_menu_shops, $temp_var_shops, False)
+goto @CLOTH_9547
+
+:CLOTH_9488
+if 
+  $item_hilight_shops($temp_var_shops,12i) == 1
+goto_if_false @CLOTH_9527
+Menu.HighlightItem($sub_menu_shops, $temp_var_shops, True)
+goto @CLOTH_9547
+
+:CLOTH_9527
+Menu.HighlightItem($sub_menu_shops, $temp_var_shops, False)
+Menu.ActivateItem($sub_menu_shops, $temp_var_shops, True)
+
+:CLOTH_9547
+$temp_var_shops += 1
+goto @CLOTH_9420
+
+:CLOTH_9561
+$sub_menu_drawn_shops = 1
+
+:CLOTH_9568
+return 
+
+:CLOTH_9570
+if 
+  $cost_menu_drawn_shops == 0
+goto_if_false @CLOTH_9943
+Text.PrintHelpForever('CLOTHC')
+$cost_menu_shops = Menu.Create('CLOTCHO', 29.0, 95.0, 93.0, 2, False, 1, 1)
+Menu.SetColumnOrientation($cost_menu_shops, 0, 1)
+Menu.SetColumn($cost_menu_shops, 0, 'CLOTCHO', s$clothes_name, 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetColumnOrientation($cost_menu_shops, 1, 2)
+Menu.SetColumn($cost_menu_shops, 1, 'COST', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetItemWithNumber($cost_menu_shops, 1, 0, 'DOLLAR', $clothes_price)
+Menu.SetColumnWidth($cost_menu_shops, 0, 140)
+Menu.SetColumnWidth($cost_menu_shops, 1, 46)
+$cost_menu_drawn_shops = 1
+
+:CLOTH_9943
+return 
+
+:CLOTH_9945
+if 
+  $bought_menu_drawn_shops == 0
+goto_if_false @CLOTH_10313
+$bought_menu_shops = Menu.Create('CLOTCHO', 29.0, 25.0, 93.0, 2, False, 1, 1)
+Menu.SetColumnOrientation($bought_menu_shops, 0, 1)
+Menu.SetColumn($bought_menu_shops, 0, 'CLOTCHO', 'BOUGHT', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetColumnOrientation($bought_menu_shops, 1, 2)
+Menu.SetColumn($bought_menu_shops, 1, 'COST', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetItemWithNumber($bought_menu_shops, 1, 0, 'DOLLAR', $clothes_price)
+Menu.SetColumnWidth($bought_menu_shops, 0, 140)
+Menu.SetColumnWidth($bought_menu_shops, 1, 46)
+$bought_menu_drawn_shops = 1
+
+:CLOTH_10313
+return 
+
+:CLOTH_10315
+if 
+  $flag_bought_from_binco == 0
+goto_if_false @CLOTH_10365
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CSCHP'
+goto_if_false @CLOTH_10365
+$flag_bought_from_binco = 1
+
+:CLOTH_10365
+if 
+  $flag_bought_from_prolapse == 0
+goto_if_false @CLOTH_10415
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CSSPRT'
+goto_if_false @CLOTH_10415
+$flag_bought_from_prolapse = 1
+
+:CLOTH_10415
+if 
+  $flag_bought_from_suburban == 0
+goto_if_false @CLOTH_10465
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'LACS1'
+goto_if_false @CLOTH_10465
+$flag_bought_from_suburban = 1
+
+:CLOTH_10465
+if 
+  $flag_bought_from_zip == 0
+goto_if_false @CLOTH_10515
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CLOTHGP'
+goto_if_false @CLOTH_10515
+$flag_bought_from_zip = 1
+
+:CLOTH_10515
+if 
+  $flag_bought_from_victim == 0
+goto_if_false @CLOTH_10565
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CSDESGN'
+goto_if_false @CLOTH_10565
+$flag_bought_from_victim = 1
+
+:CLOTH_10565
+if 
+  $flag_bought_from_didiessachs == 0
+goto_if_false @CLOTH_10615
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CSEXL'
+goto_if_false @CLOTH_10615
+$flag_bought_from_didiessachs = 1
+
+:CLOTH_10615
+return 
+terminate_this_script 
+
+//-------------External script 65 (JUNKFUD)---------------
+
+:JFUD
+$junkfud_offsetX = 0.0
+$junkfud_offsetY = 0.0
+$junkfud_offsetZ = 0.0
+$junkfud_heading_offset = 0.0
+$junkfud_cam_offX = 0.0
+$junkfud_cam_offY = 0.0
+$junkfud_cam_offZ = 0.0
+$cam_point_junkfudX = 0.0
+$cam_point_junkfudY = 0.0
+$cam_point_junnkfudZ = 0.0
+$vomit_camX = 0.0
+$vomit_camY = 0.0
+$vomit_camZ = 0.0
+$vomit_cam_point_junkfudX = 0.0
+$vomit_cam_point_junkfudY = 0.0
+$vomit_cam_point_junnkfudZ = 0.0
+$flag_vomit_playing_food = 0
+$food_heading = 0.0
+$shop_item_price = 0
+$vomitX = 0.0
+$vomitY = 0.0
+$vomitZ = 0.0
+$pish_flag = 0
+$skip_shopping_wait = 0
+$found_a_food_shop = 0
+$flag_ate_too_much_food = 0
+$flag_bought_some_food = 0
+$flag_attacked_keeper_food = 0
+$return_animation_time_food = 0.0
+$blob_flag_shop = 1
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_no_money_shops = 0
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'FDPIZA'
+goto_if_false @JFUD_358
+set_var_int_to_constant $shopkeeper_model_shops = 155
+$foodsmall_junkfud = -376
+$foodmed_junkfud = -377
+$foodlarge_junkfud = -57
+$foodhealthy_junkfud = -378
+
+:JFUD_358
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'FDCHICK'
+goto_if_false @JFUD_423
+set_var_int_to_constant $shopkeeper_model_shops = 167
+$foodsmall_junkfud = -379
+$foodmed_junkfud = -380
+$foodlarge_junkfud = -381
+$foodhealthy_junkfud = -382
+
+:JFUD_423
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'FDBURG'
+goto_if_false @JFUD_487
+set_var_int_to_constant $shopkeeper_model_shops = 205
+$foodsmall_junkfud = -383
+$foodmed_junkfud = -384
+$foodlarge_junkfud = -60
+$foodhealthy_junkfud = -385
+
+:JFUD_487
+Streaming.RequestModel($foodsmall_junkfud)
+Streaming.RequestModel($foodmed_junkfud)
+Streaming.RequestModel($foodlarge_junkfud)
+Streaming.RequestModel($foodhealthy_junkfud)
+Audio.LoadMissionAudio(1828, 4)
+Streaming.RequestModel($shopkeeper_model_shops)
+Streaming.LoadAllModelsNow
+set_deatharrest_state 0
+if 
+  $pish_flag == 1000000
+goto_if_false @JFUD_563
+$ffood_obj = Object.Create($model_index, $tray_offX, $tray_offY, $tray_offZ)
+

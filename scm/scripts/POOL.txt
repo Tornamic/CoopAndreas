@@ -1,0 +1,443 @@
+//-------------External script 21 (POOL_SCRIPT)---------------
+
+:POOL
+script_name 'POOL'
+if 
+  $active_pool_script == 0
+goto_if_false @POOL_84
+if 
+  $onmission == 0
+goto_if_false @POOL_75
+$active_pool_script = 1
+$active_pool_table = 0
+$active_pool_opponent = 0
+goto @POOL_77
+
+:POOL_75
+terminate_this_script 
+
+:POOL_77
+goto @POOL_86
+
+:POOL_84
+terminate_this_script 
+
+:POOL_86
+3@ = 0
+
+:POOL_93
+wait 0
+if 
+  3@ == -1
+goto_if_false @POOL_251
+0@ = Object.Create(#K_POOLTABLESM, 0.0, 0.0, 0.0)
+1@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+2@ = Object.Create(#K_POOLTABLESM, 0.0, 0.0, 0.0)
+$active_pool_opponent = Char.Create(4, 7, 0.0, 0.0, 0.0)
+$active_pool_table = Object.Create(#K_POOLTABLESM, 0.0, 0.0, 0.0)
+$active_initial_cue = Object.Create(#K_POOLTABLESM, 0.0, 0.0, 0.0)
+
+:POOL_251
+if 
+  3@ == 0
+goto_if_false @POOL_474
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL_467
+if 
+  Player.CanStartMission($player1)
+goto_if_false @POOL_453
+if 
+  not is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @POOL_439
+5@ = Math.RandomIntInRange(0, 2)
+if 
+  5@ == 0
+goto_if_false @POOL_360
+set_lvar_int_to_constant 7@ = 66
+goto @POOL_367
+
+:POOL_360
+set_lvar_int_to_constant 7@ = 67
+
+:POOL_367
+Streaming.RequestModel(7@)
+Streaming.RequestAnimation("POOL")
+Streaming.RequestModel(338)
+
+:POOL_385
+if or
+  not Streaming.HasModelLoaded(7@)
+  not Streaming.HasAnimationLoaded("POOL")
+  not Streaming.HasModelLoaded(338)
+goto_if_false @POOL_425
+wait 0
+goto @POOL_385
+
+:POOL_425
+3@ += 1
+goto @POOL_446
+
+:POOL_439
+gosub @POOL_2110
+
+:POOL_446
+goto @POOL_460
+
+:POOL_453
+gosub @POOL_2110
+
+:POOL_460
+goto @POOL_474
+
+:POOL_467
+gosub @POOL_2110
+
+:POOL_474
+if 
+  3@ == 1
+goto_if_false @POOL_1183
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL_1176
+if 
+  Player.CanStartMission($player1)
+goto_if_false @POOL_1162
+if 
+  not is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @POOL_1148
+if 
+  Object.DoesExist(0@)
+goto_if_false @POOL_1134
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0219, -1.1236, 0.5363)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+if 
+  not Char.DoesExist(1@)
+goto_if_false @POOL_804
+if 
+  not Char.DoesExist($active_pool_opponent)
+goto_if_false @POOL_688
+1@ = Char.Create(4, 7@, $x, $y, $z)
+Char.SetDecisionMaker(1@, $iGlobalPedPanicDM)
+Streaming.MarkModelAsNoLongerNeeded(7@)
+$heading = Object.GetHeading(0@)
+Char.SetHeading(1@, $heading)
+goto @POOL_797
+
+:POOL_688
+if 
+  not Char.IsDead($active_pool_opponent)
+goto_if_false @POOL_749
+set_lvar_int_to_var_int 1@ = $active_pool_opponent
+Char.SetCoordinates(1@, $x, $y, $z)
+$heading = Object.GetHeading(0@)
+Char.SetHeading(1@, $heading)
+goto @POOL_797
+
+:POOL_749
+1@ = Char.Create(4, 7@, $x, $y, $z)
+Char.SetDecisionMaker(1@, $iGlobalPedPanicDM)
+Streaming.MarkModelAsNoLongerNeeded(7@)
+$heading = Object.GetHeading(0@)
+Char.SetHeading(1@, $heading)
+
+:POOL_797
+goto @POOL_850
+
+:POOL_804
+if 
+  not Char.IsDead(1@)
+goto_if_false @POOL_850
+Char.SetCoordinates(1@, $x, $y, $z)
+$heading = Object.GetHeading(0@)
+Char.SetHeading(1@, $heading)
+
+:POOL_850
+if 
+  not Object.DoesExist(2@)
+goto_if_false @POOL_888
+2@ = Object.Create(#K_POOLQ, 0.0, 0.0, 0.0)
+
+:POOL_888
+if 
+  not Char.IsDead(1@)
+goto_if_false @POOL_964
+if 
+  not Char.IsHoldingObject(1@, 2@)
+goto_if_false @POOL_964
+Task.PickUpObject(1@, 2@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+
+:POOL_964
+6@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "POOL_CHALKCUE", "POOL", 4.0, False, False, False, True, -1)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL_1035
+Task.LookAtChar(-1, $scplayer, 9000)
+
+:POOL_1035
+Task.PlayAnimNonInterruptable(-1, "POOL_IDLE_STANCE", "POOL", 4.0, False, True, True, False, 10000)
+Sequence.SetToRepeat(6@, True)
+Sequence.Close(6@)
+if 
+  not Char.IsDead(1@)
+goto_if_false @POOL_1115
+Char.PerformSequence(1@, 6@)
+
+:POOL_1115
+Sequence.Clear(6@)
+3@ += 1
+goto @POOL_1141
+
+:POOL_1134
+gosub @POOL_2110
+
+:POOL_1141
+goto @POOL_1155
+
+:POOL_1148
+gosub @POOL_2110
+
+:POOL_1155
+goto @POOL_1169
+
+:POOL_1162
+gosub @POOL_2110
+
+:POOL_1169
+goto @POOL_1183
+
+:POOL_1176
+gosub @POOL_2110
+
+:POOL_1183
+if 
+  3@ == 2
+goto_if_false @POOL_1721
+if 
+  $onmission == 0
+goto_if_false @POOL_1693
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL_1679
+if 
+  $iSetCasinoPanic == 0
+goto_if_false @POOL_1644
+if 
+  Object.DoesExist(0@)
+goto_if_false @POOL_1630
+if 
+  not Char.IsDead(1@)
+goto_if_false @POOL_1616
+if 
+  Char.HasBeenDamagedByChar(1@, $scplayer)
+goto_if_false @POOL_1364
+Char.ClearTasks(1@)
+Char.DropObject(1@, False)
+Object.Delete(2@)
+Char.GiveWeapon(1@, WeaponType.PoolCue, 99999)
+Task.KillCharOnFoot(1@, $scplayer)
+Text.ClearHelp
+4@ = 0
+goto @POOL_2001
+goto @POOL_1609
+
+:POOL_1364
+if 
+  Char.LocateOnFootChar3D(1@, $scplayer, 1.5, 1.5, 1.5, False)
+goto_if_false @POOL_1582
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @POOL_1539
+5@ = Player.StoreScore($player1)
+if 
+  50 > 5@
+goto_if_false @POOL_1466
+Text.PrintNow('NOCASH', 3000, 1)
+goto @POOL_1532
+
+:POOL_1466
+if 
+  4@ == 1
+goto_if_false @POOL_1494
+Text.ClearHelp
+set_lvar_int_to_var_int 4@ = $onmission
+
+:POOL_1494
+set_var_int_to_lvar_int $active_pool_table = 0@
+set_var_int_to_lvar_int $active_pool_opponent = 1@
+set_var_int_to_lvar_int $active_initial_cue = 2@
+$load_and_launch_mission_if_poss = 5
+3@ += 1
+
+:POOL_1532
+goto @POOL_1575
+
+:POOL_1539
+if 
+  4@ == 0
+goto_if_false @POOL_1575
+Text.PrintHelpForever('POOL_A')
+4@ = 1
+
+:POOL_1575
+goto @POOL_1609
+
+:POOL_1582
+if 
+  4@ == 1
+goto_if_false @POOL_1609
+Text.ClearHelp
+4@ = 0
+
+:POOL_1609
+goto @POOL_1623
+
+:POOL_1616
+goto @POOL_2001
+
+:POOL_1623
+goto @POOL_1637
+
+:POOL_1630
+goto @POOL_2001
+
+:POOL_1637
+goto @POOL_1672
+
+:POOL_1644
+if 
+  not Char.IsDead(1@)
+goto_if_false @POOL_1665
+Char.ClearTasks(1@)
+
+:POOL_1665
+goto @POOL_2001
+
+:POOL_1672
+goto @POOL_1686
+
+:POOL_1679
+goto @POOL_2001
+
+:POOL_1686
+goto @POOL_1721
+
+:POOL_1693
+if 
+  not Char.IsDead(1@)
+goto_if_false @POOL_1714
+Char.ClearTasks(1@)
+
+:POOL_1714
+goto @POOL_2001
+
+:POOL_1721
+if 
+  3@ == 3
+goto_if_false @POOL_1764
+if 
+  $onmission == 1
+goto_if_false @POOL_1764
+3@ += 1
+
+:POOL_1764
+if 
+  3@ == 4
+goto_if_false @POOL_1896
+if 
+  $onmission == 0
+goto_if_false @POOL_1896
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL_1896
+if 
+  Player.CanStartMission($player1)
+goto_if_false @POOL_1896
+if 
+  not is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @POOL_1896
+if 
+  Object.DoesExist(0@)
+goto_if_false @POOL_1896
+if 
+  not Char.IsDead(1@)
+goto_if_false @POOL_1896
+3@ = 1
+goto @POOL_474
+
+:POOL_1896
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL_1987
+if 
+  Object.DoesExist(0@)
+goto_if_false @POOL_1973
+if 
+  not Char.LocateAnyMeansObject2D($scplayer, 0@, 80.0, 80.0, False)
+goto_if_false @POOL_1966
+goto @POOL_2001
+
+:POOL_1966
+goto @POOL_1980
+
+:POOL_1973
+goto @POOL_2001
+
+:POOL_1980
+goto @POOL_1994
+
+:POOL_1987
+goto @POOL_2001
+
+:POOL_1994
+goto @POOL_93
+
+:POOL_2001
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL_2092
+if 
+  Object.DoesExist(0@)
+goto_if_false @POOL_2078
+if 
+  not Char.LocateAnyMeansObject2D($scplayer, 0@, 80.0, 80.0, False)
+goto_if_false @POOL_2071
+gosub @POOL_2110
+
+:POOL_2071
+goto @POOL_2085
+
+:POOL_2078
+gosub @POOL_2110
+
+:POOL_2085
+goto @POOL_2099
+
+:POOL_2092
+gosub @POOL_2110
+
+:POOL_2099
+wait 0
+goto @POOL_2001
+
+:POOL_2110
+if 
+  4@ == 1
+goto_if_false @POOL_2130
+Text.ClearHelp
+
+:POOL_2130
+Text.ClearThisPrint('NOCASH')
+Char.MarkAsNoLongerNeeded(1@)
+Object.Delete(2@)
+Streaming.MarkModelAsNoLongerNeeded(7@)
+Streaming.RemoveAnimation("POOL")
+Streaming.MarkModelAsNoLongerNeeded(338)
+$active_pool_script = 0
+$active_pool_table = 0
+$active_pool_opponent = 0
+terminate_this_script 
+return 
+terminate_this_script 
+

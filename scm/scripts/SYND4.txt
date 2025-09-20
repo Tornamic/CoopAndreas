@@ -1,0 +1,2280 @@
+//-------------Mission 61---------------
+// Originally: Ice Cold Killa
+
+:SYND4
+script_name 'SYND4'
+gosub @SYND4_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @SYND4_38
+gosub @SYND4_12004
+
+:SYND4_38
+gosub @SYND4_12381
+terminate_this_script 
+
+:SYND4_47
+$off1_X = 0.0
+$off_X = 0.0
+$off1_Y = 0.0
+$off_Y = 0.0
+$syn4_offsetX = 0.0
+$syn4_offsetY = 0.0
+$syn4_rnd = 0
+$s4_has_phone = 0
+$s4_j_health = 0
+$s4_limo_hlth = 0
+117@ = 0
+97@ = 2
+Text.LoadMissionText('SYN4')
+World.SwitchEntryExit('PDOMES', True)
+World.SwitchEntryExit('PDOMES2', False)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:SYND4_201
+if 
+  Camera.GetFadingStatus
+goto_if_false @SYND4_225
+wait 0
+goto @SYND4_201
+
+:SYND4_225
+Streaming.SetAreaVisible(1)
+Char.SetAreaVisible($scplayer, 1)
+Streaming.LoadScene(-2031.0, 149.0, 29.0)
+Cutscene.Load('SYND_4A')
+
+:SYND4_264
+if 
+  not Cutscene.HasLoaded
+goto_if_false @SYND4_288
+wait 0
+goto @SYND4_264
+
+:SYND4_288
+Cutscene.Start
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+
+:SYND4_305
+if 
+  not Cutscene.HasFinished
+goto_if_false @SYND4_329
+wait 0
+goto @SYND4_305
+
+:SYND4_329
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, Fade.Out)
+
+:SYND4_343
+if 
+  Camera.GetFadingStatus
+goto_if_false @SYND4_367
+wait 0
+goto @SYND4_343
+
+:SYND4_367
+Cutscene.Clear
+Char.SetAreaVisible($scplayer, 0)
+Streaming.SetAreaVisible(0)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_428
+Char.SetCoordinatesDontWarpGang($scplayer, -2031.197, 161.1839, 27.8516)
+Char.SetHeading($scplayer, 268.0468)
+Camera.SetBehindPlayer
+
+:SYND4_428
+Camera.SetFadingColor(0, 0, 0)
+Streaming.RequestModel(347)
+Streaming.RequestModel(163)
+Streaming.RequestModel(164)
+Streaming.RequestModel(409)
+Streaming.RequestModel(352)
+Streaming.RequestModel(575)
+Streaming.RequestModel(409)
+Streaming.RequestModel(71)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Player1)
+Game.SetRelationship(RelationshipType.Dislike, PedType.Mission2, PedType.Player1)
+Game.SetRelationship(RelationshipType.Like, PedType.Mission2, PedType.Mission2)
+55@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+47@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+88@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+
+:SYND4_520
+if or
+  not Streaming.HasModelLoaded(347)
+  not Streaming.HasModelLoaded(163)
+  not Streaming.HasModelLoaded(164)
+  not Streaming.HasModelLoaded(409)
+  not Streaming.HasModelLoaded(352)
+goto_if_false @SYND4_567
+wait 0
+goto @SYND4_520
+
+:SYND4_567
+if or
+  not Streaming.HasModelLoaded(409)
+  not Streaming.HasModelLoaded(575)
+  not Streaming.HasModelLoaded(71)
+goto_if_false @SYND4_603
+wait 0
+goto @SYND4_567
+
+:SYND4_603
+Streaming.LoadSceneInDirection(-2031.197, 161.1839, 27.8359, 268.0468)
+World.ClearArea(1, -2624.549, 1412.131, 6.1094, 10.0)
+52@ = Group.Create(2)
+53@ = DecisionMakerGroup.Load(0)
+Group.SetDecisionMaker(52@, 53@)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_739
+58@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(-2643.993, 1405.895, 905.2734)
+Task.FollowPointRoute(-1, 4, RouteMode.Once)
+Task.KillCharOnFoot(-1, $scplayer)
+Task.StayInSamePlace(-1, True)
+Path.FlushRoute
+Sequence.Close(58@)
+
+:SYND4_739
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_915
+120@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, -2664.286, 1420.904, 905.2812, 4, -1)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(120@)
+121@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, -2662.241, 1418.222, 905.277, 4, -1)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(121@)
+122@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, -2671.858, 1420.603, 905.2812, 4, -1)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(122@)
+123@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, -2667.221, 1421.774, 905.2812, 4, -1)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(123@)
+
+:SYND4_915
+72@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, -2674.171, 1394.553, 917.3582, 4, -1)
+Task.AchieveHeading(-1, 94.4524)
+Sequence.SetToRepeat(72@, True)
+Sequence.Close(72@)
+81@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(-2666.142, 1420.576, 905.277)
+Path.ExtendRoute(-2654.33, 1420.092, 905.2812)
+Task.FollowPointRoute(-1, 7, RouteMode.Once)
+Path.FlushRoute
+Sequence.Close(81@)
+73@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(-2663.897, 1420.509, 905.2812)
+Path.ExtendRoute(-2655.542, 1418.905, 905.2812)
+Path.ExtendRoute(-2648.745, 1416.988, 905.2812)
+Path.ExtendRoute(-2645.276, 1410.547, 905.2812)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Sequence.Close(73@)
+67@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(-2627.831, 1404.959, 905.4609)
+Path.ExtendRoute(-2627.514, 1406.607, 905.4609)
+Path.ExtendRoute(-2635.924, 1408.306, 905.4609)
+Task.FollowPointRoute(-1, 4, RouteMode.Once)
+Path.FlushRoute
+Task.Pause(-1, 4000)
+Path.FlushRoute
+Path.ExtendRoute(-2629.451, 1406.773, 905.4609)
+Path.ExtendRoute(-2626.715, 1403.41, 905.4609)
+Path.ExtendRoute(-2629.224, 1402.585, 905.4598)
+Path.ExtendRoute(-2639.513, 1399.569, 911.4133)
+Task.FollowPointRoute(-1, 4, RouteMode.Once)
+Path.FlushRoute
+Sequence.Close(67@)
+57@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(-2663.024, 1430.271, 911.3984)
+Path.ExtendRoute(-2677.841, 1429.663, 911.3921)
+Path.ExtendRoute(-2688.757, 1426.88, 905.4531)
+Path.ExtendRoute(-2686.493, 1422.207, 905.4531)
+Path.ExtendRoute(-2677.769, 1421.948, 905.4531)
+Path.ExtendRoute(-2664.318, 1423.618, 905.2734)
+Path.ExtendRoute(-2651.408, 1423.601, 905.2734)
+Path.ExtendRoute(-2642.101, 1416.098, 905.2812)
+Task.FollowPointRoute(-1, 7, RouteMode.Once)
+Path.FlushRoute
+Path.ExtendRoute(-2633.106, 1415.721, 905.4531)
+Task.FollowPointRoute(-1, 7, RouteMode.Once)
+Path.FlushRoute
+Sequence.Close(57@)
+42@ = Sequence.Open()
+Task.LookAbout(-1, 4000)
+Task.Pause(-1, 1000)
+Task.ScratchHead(-1)
+Sequence.SetToRepeat(42@, True)
+Sequence.Close(42@)
+68@ = Sequence.Open()
+Task.StayInSamePlace(-1, True)
+Task.ShootAtChar(-1, $scplayer, -1)
+Sequence.SetToRepeat(68@, True)
+Sequence.Close(68@)
+62@ = Car.Create(409, -2634.061, 1395.498, 6.1186)
+Car.SetHeading(62@, 3.5285)
+Car.ChangeColor(62@, 0, 0)
+Car.SetCanBurstTires(62@, False)
+Car.SetHealth(62@, 2000)
+63@ = Car.Create(409, -2613.48, 1416.568, 6.1432)
+Car.SetHeading(63@, 272.3133)
+Car.ChangeColor(63@, 0, 0)
+Car.SetCanBurstTires(63@, False)
+Car.SetHealth(63@, 2000)
+Car.CustomPlateForNextCar(575, "HO_2_HO_")
+64@ = Car.Create(575, -2611.471, 1409.036, 6.1335)
+Car.SetHeading(64@, 274.4727)
+Car.ChangeColor(64@, 4, 4)
+Car.SetHealth(64@, 1000)
+124@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, -2622.981, 1413.107, 6.1137, 4, -1)
+Task.AchieveHeading(-1, 196.019)
+Sequence.SetToRepeat(124@, True)
+Sequence.Close(124@)
+125@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, -2626.409, 1411.96, 6.1094, 4, -1)
+Task.AchieveHeading(-1, 190.6977)
+Sequence.SetToRepeat(125@, True)
+Sequence.Close(125@)
+49@ = Char.Create(25, 163, -2622.981, 1413.107, 6.1137)
+Char.SetHeading(49@, 196.019)
+50@ = Char.Create(25, 164, -2626.409, 1411.96, 6.1094)
+Char.SetHeading(50@, 190.6977)
+Char.GiveWeapon(49@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(49@, WeaponType.MicroUzi)
+Char.SetAccuracy(49@, 90)
+Char.GiveWeapon(50@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(50@, WeaponType.MicroUzi)
+Char.SetAccuracy(50@, 90)
+Char.SetDecisionMaker(49@, 47@)
+Char.SetDecisionMaker(50@, 47@)
+Char.PerformSequence(49@, 124@)
+Char.PerformSequence(50@, 125@)
+59@ = Blip.AddForCoord(-2623.937, 1410.79, 6.1152)
+60@ = Blip.AddForCoord(-2636.385, 1402.485, 905.4609)
+Blip.SetEntryExit(60@, -2661.74, 1423.483, 100.0)
+Blip.ChangeDisplay(60@, BlipDisplay.Neither)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_2049
+Char.GiveWeapon($scplayer, WeaponType.PistolSilenced, 200)
+Char.SetCurrentWeapon($scplayer, WeaponType.PistolSilenced)
+
+:SYND4_2049
+TIMERA = 0
+Camera.SetFadingColor(0, 0, 0)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+Text.PrintNow('SYN4_20', 9000, 1)
+
+:SYND4_2095
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_3486
+wait 0
+gosub @SYND4_12887
+gosub @SYND4_13701
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @SYND4_2151
+goto @SYND4_12219
+
+:SYND4_2151
+if 
+  117@ == 0
+goto_if_false @SYND4_2369
+if 
+  not Char.IsDead(49@)
+goto_if_false @SYND4_2269
+if 
+  Player.IsTargetingChar($player1, 49@)
+goto_if_false @SYND4_2269
+if 
+  not Char.IsDead(49@)
+goto_if_false @SYND4_2233
+Char.ClearTasksImmediately($scplayer)
+Task.KillCharOnFoot(49@, $scplayer)
+
+:SYND4_2233
+if 
+  not Char.IsDead(50@)
+goto_if_false @SYND4_2262
+Char.ClearTasksImmediately($scplayer)
+Task.KillCharOnFoot(50@, $scplayer)
+
+:SYND4_2262
+117@ = 1
+
+:SYND4_2269
+if 
+  not Char.IsDead(50@)
+goto_if_false @SYND4_2369
+if 
+  Player.IsTargetingChar($player1, 50@)
+goto_if_false @SYND4_2369
+if 
+  not Char.IsDead(49@)
+goto_if_false @SYND4_2333
+Char.ClearTasksImmediately($scplayer)
+Task.KillCharOnFoot(49@, $scplayer)
+
+:SYND4_2333
+if 
+  not Char.IsDead(50@)
+goto_if_false @SYND4_2362
+Char.ClearTasksImmediately($scplayer)
+Task.KillCharOnFoot(50@, $scplayer)
+
+:SYND4_2362
+117@ = 1
+
+:SYND4_2369
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_3424
+if 
+  Char.LocateOnFoot3D($scplayer, 1, -2623.937, 1410.79, 6.1152, 1.2, 1.2, 1.2)
+goto_if_false @SYND4_3424
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_2456
+Player.SetControl($player1, False)
+
+:SYND4_2456
+Player.ApplyBrakesToCar($player1, True)
+Char.SetHeading($scplayer, 0.0)
+Blip.Remove(59@)
+gosub @SYND4_12755
+if and
+  not Char.IsDead(49@)
+  not Char.IsDead(50@)
+goto_if_false @SYND4_3185
+if and
+  not Char.HasBeenDamagedByChar(49@, $scplayer)
+  not Char.HasBeenDamagedByChar(50@, $scplayer)
+goto_if_false @SYND4_3185
+Task.LookAtChar(50@, $scplayer, 6000)
+gosub @SYND4_12755
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_2597
+Char.SetCoordinatesDontWarpGang($scplayer, -2624.112, 1410.473, 6.1149)
+Char.SetHeading($scplayer, 13.4662)
+
+:SYND4_2597
+Task.LookAtChar(49@, $scplayer, 6000)
+Camera.SetFixedPosition(-2623.715, 1409.642, 7.7873, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2623.871, 1410.628, 7.7269, SwitchType.JumpCut)
+wait 1000
+$syn4_rnd = Math.RandomIntInRange(0, 3)
+switch_start $syn4_rnd total_jumps 3 default_jump 0 @SYND4_3117 jumps 0 @SYND4_2736 1 @SYND4_2863 2 @SYND4_2990 -1 @SYND4_3117 -1 @SYND4_3117 -1 @SYND4_3117 -1 @SYND4_3117
+
+:SYND4_2736
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(39411, 1)
+
+:SYND4_2749
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @SYND4_2775
+wait 0
+goto @SYND4_2749
+
+:SYND4_2775
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('SYN4_BA', 4000, 1)
+TIMERB = 0
+
+:SYND4_2802
+if 
+  4000 > TIMERB
+goto_if_false @SYND4_2856
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SYND4_2849
+goto @SYND4_3349
+
+:SYND4_2849
+goto @SYND4_2802
+
+:SYND4_2856
+goto @SYND4_3117
+
+:SYND4_2863
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(39412, 1)
+
+:SYND4_2876
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @SYND4_2902
+wait 0
+goto @SYND4_2876
+
+:SYND4_2902
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('SYN4_BB', 4000, 1)
+TIMERB = 0
+
+:SYND4_2929
+if 
+  4000 > TIMERB
+goto_if_false @SYND4_2983
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SYND4_2976
+goto @SYND4_3349
+
+:SYND4_2976
+goto @SYND4_2929
+
+:SYND4_2983
+goto @SYND4_3117
+
+:SYND4_2990
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(39413, 1)
+
+:SYND4_3003
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @SYND4_3029
+wait 0
+goto @SYND4_3003
+
+:SYND4_3029
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('SYN4_BC', 4000, 1)
+TIMERB = 0
+
+:SYND4_3056
+if 
+  4000 > TIMERB
+goto_if_false @SYND4_3110
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SYND4_3103
+goto @SYND4_3349
+
+:SYND4_3103
+goto @SYND4_3056
+
+:SYND4_3110
+goto @SYND4_3117
+
+:SYND4_3117
+TIMERB = 0
+
+:SYND4_3124
+if 
+  1000 > TIMERB
+goto_if_false @SYND4_3185
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SYND4_3178
+70@ = 1
+goto @SYND4_3349
+
+:SYND4_3178
+goto @SYND4_3124
+
+:SYND4_3185
+Camera.SetFixedPosition(-2671.127, 1432.594, 25.4663, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2670.43, 1431.881, 25.3871, SwitchType.JumpCut)
+Text.PrintNow('SYN4_12', 5000, 1)
+World.CreateBirds(2682.42, 1420.237, 28.0, -2630.365, 1411.699, 28.0, 3, 0)
+TIMERB = 0
+
+:SYND4_3295
+if 
+  5000 > TIMERB
+goto_if_false @SYND4_3349
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SYND4_3342
+goto @SYND4_3349
+
+:SYND4_3342
+goto @SYND4_3295
+
+:SYND4_3349
+gosub @SYND4_12786
+61@ = Blip.AddForCoord(-2661.924, 1424.278, 22.8906)
+if 
+  70@ == 1
+goto_if_false @SYND4_3410
+Text.PrintNow('SYN4_12', 5000, 1)
+
+:SYND4_3410
+Player.ApplyBrakesToCar($player1, False)
+goto @SYND4_3493
+
+:SYND4_3424
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -2660.145, 1419.211, 22.8906, 5.0, 5.0, 5.0)
+goto_if_false @SYND4_3479
+goto @SYND4_3493
+
+:SYND4_3479
+goto @SYND4_2095
+
+:SYND4_3486
+goto @SYND4_12004
+
+:SYND4_3493
+Streaming.RequestModel(28)
+Streaming.RequestModel(30)
+Streaming.RequestModel(40)
+Streaming.RequestModel(63)
+Streaming.RequestModel(19)
+Streaming.RequestModel(352)
+Streaming.RequestModel(214)
+Streaming.RequestModel(346)
+Streaming.LoadSpecialCharacter('JIZZY', 1)
+Streaming.RequestModel(246)
+Streaming.RequestAnimation("SWAT")
+
+:SYND4_3554
+if or
+  not Streaming.HasModelLoaded(28)
+  not Streaming.HasModelLoaded(30)
+  not Streaming.HasModelLoaded(40)
+  not Streaming.HasModelLoaded(63)
+  not Streaming.HasModelLoaded(19)
+goto_if_false @SYND4_3596
+wait 0
+goto @SYND4_3554
+
+:SYND4_3596
+if or
+  not Streaming.HasModelLoaded(352)
+  not Streaming.HasModelLoaded(214)
+  not Streaming.HasModelLoaded(346)
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasAnimationLoaded("SWAT")
+  not Streaming.HasModelLoaded(246)
+goto_if_false @SYND4_3650
+wait 0
+goto @SYND4_3596
+
+:SYND4_3650
+39@ = Char.Create(23, 290, -2669.127, 1426.919, 905.4609)
+Char.SetAreaVisible(39@, 3)
+Char.SetAnimGroup(39@, "GANG1")
+Game.SetRelationship(RelationshipType.Hate, PedType.Special, PedType.Player1)
+Char.SetHeading(39@, 238.0256)
+Char.SetSenseRange(39@, 5.0)
+Char.SetDecisionMaker(39@, 55@)
+44@ = Char.Create(5, 63, -2667.656, 1425.854, 905.4609)
+Char.SetAreaVisible(44@, 3)
+Char.SetHeading(44@, 76.4221)
+Char.SetNeverTargeted(44@, True)
+Task.ChatWithChar(39@, 44@, True, 1)
+Task.ChatWithChar(44@, 39@, False, 1)
+43@ = Blip.AddForChar(39@)
+Blip.ChangeDisplay(43@, BlipDisplay.Neither)
+79@ = Sequence.Open()
+Task.SitDown(-1, 200000)
+Task.LookAbout(-1, 2000)
+Sequence.SetToRepeat(79@, True)
+Sequence.Close(79@)
+80@ = Sequence.Open()
+Task.Pause(-1, 1000)
+Char.PerformSequence(-1, 79@)
+Sequence.Close(80@)
+34@ = Char.Create(24, 28, -2665.236, 1429.884, 905.4609)
+Char.SetHeading(34@, 133.1702)
+Char.PerformSequence(34@, 80@)
+35@ = Char.Create(24, 30, -2667.102, 1430.024, 905.4609)
+Char.SetHeading(35@, 180.876)
+Char.PerformSequence(35@, 79@)
+36@ = Char.Create(24, 28, -2665.064, 1428.402, 905.4609)
+Char.SetHeading(36@, 106.0457)
+Char.PerformSequence(36@, 79@)
+37@ = Char.Create(24, 63, -2668.117, 1429.933, 905.4609)
+Char.SetHeading(37@, 180.876)
+Char.PerformSequence(37@, 80@)
+112@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, -2655.508, 1410.566, 905.2734, 4, -1)
+Task.AchieveHeading(-1, 263.3926)
+Task.Pause(-1, 2000)
+Task.GoToCoordAnyMeans(-1, -2655.892, 1406.675, 905.2734, 4, -1)
+Task.AchieveHeading(-1, 181.7338)
+Task.Pause(-1, 2000)
+Sequence.SetToRepeat(112@, True)
+Sequence.Close(112@)
+113@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, -2660.268, 1413.959, 905.2734, 4, -1)
+Task.AchieveHeading(-1, 348.451)
+Task.Pause(-1, 2000)
+Task.GoToCoordAnyMeans(-1, -2662.841, 1413.732, 905.2808, 4, -1)
+Task.AchieveHeading(-1, 96.5734)
+Task.Pause(-1, 2000)
+Sequence.SetToRepeat(113@, True)
+Sequence.Close(113@)
+102@ = Char.Create(26, 214, -2655.508, 1410.566, 905.2734)
+Char.SetHeading(102@, 263.3926)
+103@ = Char.Create(26, 214, -2660.268, 1413.959, 905.2734)
+Char.SetHeading(103@, 348.451)
+Char.PerformSequence(102@, 112@)
+Char.PerformSequence(103@, 113@)
+104@ = Char.Create(26, 28, -2657.269, 1403.575, 905.2812)
+Char.SetHeading(104@, 271.0479)
+105@ = Char.Create(26, 63, -2654.617, 1404.656, 905.2812)
+Char.SetHeading(105@, 87.3589)
+Task.ChatWithChar(104@, 105@, True, 1)
+Task.ChatWithChar(105@, 104@, True, 1)
+40@ = 0
+
+:SYND4_4417
+if 
+  not Char.IsDead(34@(40@,5i))
+goto_if_false @SYND4_4507
+Char.SetAreaVisible(34@(40@,5i), 3)
+Char.SetIsTargetPriority(34@(40@,5i), True)
+Char.GiveWeapon(34@(40@,5i), WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(34@(40@,5i), WeaponType.MicroUzi)
+Char.SetAccuracy(34@(40@,5i), 70)
+Char.SetDecisionMaker(34@(40@,5i), 55@)
+
+:SYND4_4507
+if 
+  not Char.IsDead(102@(40@,10i))
+goto_if_false @SYND4_4538
+Char.SetAreaVisible(102@(40@,10i), 3)
+
+:SYND4_4538
+40@ += 1
+  40@ >= 4
+goto_if_false @SYND4_4417
+$onmission = 1
+Stat.RegisterMissionGiven
+54@ = Blip.AddForCoord(-2655.075, 1431.789, 912.4016)
+Blip.SetEntryExit(54@, -2661.74, 1423.483, 100.0)
+Blip.ChangeDisplay(54@, BlipDisplay.Neither)
+Camera.SetBehindPlayer
+Path.FlushRoute
+Path.ExtendRoute(-2653.217, 1424.867, 906.7266)
+TIMERA = 0
+
+:SYND4_4643
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_5214
+wait 0
+if 
+  117@ == 0
+goto_if_false @SYND4_4881
+if 
+  not Char.IsDead(49@)
+goto_if_false @SYND4_4781
+if 
+  Player.IsTargetingChar($player1, 49@)
+goto_if_false @SYND4_4781
+if 
+  not Char.IsDead(49@)
+goto_if_false @SYND4_4745
+Char.ClearTasksImmediately($scplayer)
+Task.KillCharOnFoot(49@, $scplayer)
+
+:SYND4_4745
+if 
+  not Char.IsDead(50@)
+goto_if_false @SYND4_4774
+Char.ClearTasksImmediately($scplayer)
+Task.KillCharOnFoot(50@, $scplayer)
+
+:SYND4_4774
+117@ = 1
+
+:SYND4_4781
+if 
+  not Char.IsDead(50@)
+goto_if_false @SYND4_4881
+if 
+  Player.IsTargetingChar($player1, 50@)
+goto_if_false @SYND4_4881
+if 
+  not Char.IsDead(49@)
+goto_if_false @SYND4_4845
+Char.ClearTasksImmediately($scplayer)
+Task.KillCharOnFoot(49@, $scplayer)
+
+:SYND4_4845
+if 
+  not Char.IsDead(50@)
+goto_if_false @SYND4_4874
+Char.ClearTasksImmediately($scplayer)
+Task.KillCharOnFoot(50@, $scplayer)
+
+:SYND4_4874
+117@ = 1
+
+:SYND4_4881
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @SYND4_4903
+goto @SYND4_12219
+
+:SYND4_4903
+gosub @SYND4_12887
+gosub @SYND4_13701
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -2661.01, 1415.384, 921.1953, 20.0, 20.0, 20.0)
+  48@ == 0
+goto_if_false @SYND4_5207
+World.SwitchEntryExit('PDOMES', False)
+if 
+  Blip.DoesExist(59@)
+goto_if_false @SYND4_5006
+Blip.Remove(59@)
+
+:SYND4_5006
+Blip.Remove(61@)
+45@ = Blip.AddForCoord(-2667.368, 1427.435, 905.4609)
+Blip.SetEntryExit(45@, -2661.74, 1423.483, 100.0)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_5102
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinatesDontWarpGang($scplayer, -2661.055, 1416.019, 921.1953)
+Char.SetHeading($scplayer, 180.0)
+
+:SYND4_5102
+48@ = 1
+if 
+  not Char.IsDead(49@)
+goto_if_false @SYND4_5130
+Char.Delete(49@)
+
+:SYND4_5130
+if 
+  not Char.IsDead(50@)
+goto_if_false @SYND4_5151
+Char.Delete(50@)
+
+:SYND4_5151
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_5177
+Char.SetHeading($scplayer, 197.6688)
+
+:SYND4_5177
+Text.PrintNow('SYN4_99', 4000, 1)
+Game.SetWantedMultiplier(0.0)
+goto @SYND4_5221
+
+:SYND4_5207
+goto @SYND4_4643
+
+:SYND4_5214
+goto @SYND4_12004
+
+:SYND4_5221
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_11997
+wait 0
+gosub @SYND4_12887
+gosub @SYND4_13701
+if 
+  46@ == 0
+goto_if_false @SYND4_7611
+if 
+  83@ == 1
+goto_if_false @SYND4_5305
+115@ = 1
+goto @SYND4_12004
+
+:SYND4_5305
+40@ = 0
+
+:SYND4_5312
+if 
+  Char.HasBeenDamagedByChar(34@(40@,5i), $scplayer)
+goto_if_false @SYND4_5365
+Text.PrintNow('SYN4_08', 4000, 1)
+83@ = 1
+TIMERA = 0
+
+:SYND4_5365
+40@ += 1
+  40@ >= 4
+goto_if_false @SYND4_5312
+if 
+  Char.HasBeenDamagedByChar(39@, $scplayer)
+goto_if_false @SYND4_5435
+Text.PrintNow('SYN4_06', 4000, 1)
+83@ = 1
+TIMERA = 0
+
+:SYND4_5435
+if 
+  Char.HasBeenDamagedByChar(44@, $scplayer)
+goto_if_false @SYND4_5484
+Text.PrintNow('SYN4_08', 4000, 1)
+83@ = 1
+TIMERA = 0
+
+:SYND4_5484
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -2668.716, 1421.846, 905.277, 15.0, 15.0, 15.0)
+goto_if_false @SYND4_7611
+World.SwitchEntryExit('PDOMES2', True)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 500)
+
+:SYND4_5560
+if 
+  Camera.GetFadingStatus
+goto_if_false @SYND4_5584
+wait 0
+goto @SYND4_5560
+
+:SYND4_5584
+40@ = 0
+
+:SYND4_5591
+Char.Delete(34@(40@,5i))
+40@ += 1
+  40@ >= 4
+goto_if_false @SYND4_5591
+if 
+  not Char.IsDead(44@)
+goto_if_false @SYND4_5642
+Char.Delete(44@)
+
+:SYND4_5642
+if 
+  Blip.DoesExist(43@)
+goto_if_false @SYND4_5663
+Blip.Remove(43@)
+
+:SYND4_5663
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_5684
+Char.Delete(39@)
+
+:SYND4_5684
+Cutscene.Load('SYND_4B')
+
+:SYND4_5695
+if 
+  not Cutscene.HasLoaded
+goto_if_false @SYND4_5719
+wait 0
+goto @SYND4_5695
+
+:SYND4_5719
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:SYND4_5728
+if 
+  not Cutscene.HasFinished
+goto_if_false @SYND4_5752
+wait 0
+goto @SYND4_5728
+
+:SYND4_5752
+Cutscene.Clear
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:SYND4_5767
+if 
+  Camera.GetFadingStatus
+goto_if_false @SYND4_5791
+wait 0
+goto @SYND4_5767
+
+:SYND4_5791
+gosub @SYND4_12755
+39@ = Char.Create(23, 290, -2669.127, 1426.919, 905.4609)
+Char.SetAreaVisible(39@, 3)
+Char.SetAnimGroup(39@, "GANG1")
+Game.SetRelationship(RelationshipType.Hate, PedType.Special, PedType.Player1)
+Char.SetHeading(39@, 238.0256)
+Char.SetSenseRange(39@, 5.0)
+Char.SetDecisionMaker(39@, 55@)
+34@ = Char.Create(24, 28, -2665.236, 1429.884, 905.4609)
+Char.SetHeading(34@, 133.1702)
+Char.PerformSequence(34@, 80@)
+35@ = Char.Create(24, 30, -2667.102, 1430.024, 905.4609)
+Char.SetHeading(35@, 180.876)
+Char.PerformSequence(35@, 79@)
+36@ = Char.Create(24, 28, -2665.064, 1428.402, 905.4609)
+Char.SetHeading(36@, 106.0457)
+Char.PerformSequence(36@, 79@)
+37@ = Char.Create(24, 63, -2668.117, 1429.933, 905.4609)
+Char.SetHeading(37@, 180.876)
+Char.PerformSequence(37@, 80@)
+43@ = Blip.AddForChar(39@)
+Blip.ChangeDisplay(43@, BlipDisplay.Neither)
+Streaming.UnloadSpecialCharacter(1)
+40@ = 0
+
+:SYND4_6072
+Char.SetAreaVisible(34@(40@,5i), 3)
+Char.GiveWeapon(34@(40@,5i), WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(34@(40@,5i), WeaponType.MicroUzi)
+40@ += 1
+  40@ >= 4
+goto_if_false @SYND4_6072
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_6186
+Camera.SetFixedPosition(-2669.571, 1410.871, 907.8965, 0.0, 0.0, 0.0)
+Camera.PointAtChar(39@, CameraMode.Fixed, SwitchType.JumpCut)
+
+:SYND4_6186
+87@ = Char.Create(24, 163, -2667.152, 1421.553, 905.2812)
+Char.SetHeading(87@, 275.4244)
+Task.TogglePedThreatScanner(87@, False, False, False)
+Char.SetAreaVisible(87@, 3)
+wait 100
+Camera.DoFade(1, Fade.Out)
+
+:SYND4_6249
+if 
+  Camera.GetFadingStatus
+goto_if_false @SYND4_6273
+wait 0
+goto @SYND4_6249
+
+:SYND4_6273
+Text.PrintNow('SYN4_05', 4000, 1)
+if 
+  not Char.IsDead(87@)
+goto_if_false @SYND4_6313
+Char.PerformSequence(87@, 73@)
+
+:SYND4_6313
+40@ = 0
+
+:SYND4_6320
+if 
+  not Char.IsDead(102@(40@,10i))
+goto_if_false @SYND4_6360
+Char.ClearTasksImmediately(102@(40@,10i))
+Task.Duck(102@(40@,10i), -2)
+
+:SYND4_6360
+40@ += 1
+  40@ >= 4
+goto_if_false @SYND4_6320
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_6471
+Char.ClearTasks(39@)
+Char.SetCoordinatesDontWarpGang(39@, -2664.462, 1421.766, 905.277)
+Char.SetHeading(39@, 249.6271)
+Char.PerformSequence(39@, 73@)
+Char.AddArmor(39@, 150)
+Char.SetHealth(39@, 300)
+Char.SetMaxHealth(39@, 300)
+Char.SetSuffersCriticalHits(39@, False)
+
+:SYND4_6471
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_6524
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinatesDontWarpGang($scplayer, -2666.638, 1410.305, 905.2812)
+Char.SetHeading($scplayer, 0.0)
+Camera.SetBehindPlayer
+
+:SYND4_6524
+wait 1000
+TIMERB = 0
+
+:SYND4_6536
+if 
+  3000 > TIMERB
+goto_if_false @SYND4_6590
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SYND4_6583
+goto @SYND4_6590
+
+:SYND4_6583
+goto @SYND4_6536
+
+:SYND4_6590
+gosub @SYND4_12786
+128@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, -2639.277, 1409.022, 905.4646, 4, -1)
+Task.AchieveHeading(-1, 63.4408)
+Sequence.Close(128@)
+126@ = Sequence.Open()
+Char.PerformSequence(-1, 128@)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R", "SWAT", 8.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_IN_R", "SWAT", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFootTimed(-1, $scplayer, 2000)
+Task.StayInSamePlace(-1, False)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_OUT_R", "SWAT", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R_BACK", "SWAT", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(126@, True)
+Sequence.Close(126@)
+127@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, -2639.352, 1402.766, 905.4646, 4, -1)
+Task.AchieveHeading(-1, 73.286)
+Sequence.Close(127@)
+129@ = Sequence.Open()
+Char.PerformSequence(-1, 127@)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_L", "SWAT", 8.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_IN_L", "SWAT", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFootTimed(-1, $scplayer, 2000)
+Task.StayInSamePlace(-1, False)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_OUT_L", "SWAT", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_L_BACK", "SWAT", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(129@, True)
+Sequence.Close(129@)
+130@ = Char.Create(24, 163, -2639.277, 1409.022, 905.4646)
+Char.SetAreaVisible(130@, 1)
+Char.SetHeading(130@, 63.4408)
+Char.SetDecisionMaker(130@, 55@)
+Char.PerformSequence(130@, 126@)
+131@ = Char.Create(24, 164, -2639.352, 1402.766, 905.4646)
+Char.SetAreaVisible(131@, 1)
+Char.SetHeading(131@, 73.286)
+Char.SetDecisionMaker(131@, 55@)
+Char.PerformSequence(131@, 129@)
+Char.GiveWeapon(130@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(130@, WeaponType.MicroUzi)
+Char.GiveWeapon(131@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(131@, WeaponType.MicroUzi)
+if 
+  not Char.IsDead(34@)
+goto_if_false @SYND4_7309
+Char.SetCoordinatesDontWarpGang(34@, -2671.761, 1420.303, 905.2812)
+Char.SetHeading(34@, 214.6866)
+
+:SYND4_7309
+if 
+  not Char.IsDead(35@)
+goto_if_false @SYND4_7355
+Char.SetCoordinatesDontWarpGang(35@, -2665.095, 1421.339, 905.2812)
+Char.SetHeading(35@, 167.6077)
+
+:SYND4_7355
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_7434
+Char.ClearTasksImmediately(39@)
+Blip.ChangeDisplay(43@, BlipDisplay.Neither)
+Char.SetCoordinatesDontWarpGang(39@, -2621.465, 1411.338, 905.4609)
+Char.FreezePosition(39@, True)
+Char.SetHeading(39@, 277.734)
+Char.SetAreaVisible(39@, 0)
+74@ = 1
+
+:SYND4_7434
+if 
+  not Char.IsDead(87@)
+goto_if_false @SYND4_7492
+Char.ClearTasksImmediately(87@)
+Char.SetCoordinatesDontWarpGang(87@, -2625.836, 1404.75, 6.0938)
+Char.SetHeading(87@, 279.9147)
+Char.SetAreaVisible(87@, 0)
+
+:SYND4_7492
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Player1)
+40@ = 0
+
+:SYND4_7507
+if 
+  not Char.IsDead(34@(40@,5i))
+goto_if_false @SYND4_7560
+Char.ClearTasksImmediately(34@(40@,5i))
+Task.KillCharOnFoot(34@(40@,5i), $scplayer)
+Char.SetDecisionMaker(34@(40@,5i), 47@)
+
+:SYND4_7560
+40@ += 1
+  40@ >= 4
+goto_if_false @SYND4_7507
+Blip.ChangeDisplay(60@, BlipDisplay.Both)
+Blip.ChangeDisplay(45@, BlipDisplay.Neither)
+Camera.SetBehindPlayer
+41@ = 1
+46@ = 1
+
+:SYND4_7611
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -2640.998, 1406.275, 905.4609, 8.0, 8.0, 8.0)
+goto_if_false @SYND4_7745
+if and
+  not Char.IsDead(130@)
+  98@ == 0
+goto_if_false @SYND4_7702
+Char.ClearTasksImmediately(130@)
+Task.KillCharOnFoot(130@, $scplayer)
+98@ = 1
+
+:SYND4_7702
+if and
+  not Char.IsDead(131@)
+  99@ == 0
+goto_if_false @SYND4_7745
+Char.ClearTasksImmediately(131@)
+Task.KillCharOnFoot(131@, $scplayer)
+99@ = 1
+
+:SYND4_7745
+if 
+  46@ == 1
+goto_if_false @SYND4_11378
+if 
+  41@ == 1
+goto_if_false @SYND4_9196
+if and
+  Char.IsDead(39@)
+  85@ == 0
+goto_if_false @SYND4_7832
+if 
+  Blip.DoesExist(60@)
+goto_if_false @SYND4_7825
+Blip.Remove(60@)
+
+:SYND4_7825
+goto @SYND4_12219
+
+:SYND4_7832
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_7975
+if and
+  Char.LocateAnyMeans3D(39@, 0, -2636.385, 1402.485, 905.4609, 2.0, 2.0, 2.0)
+  74@ == 0
+goto_if_false @SYND4_7975
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_7975
+Char.ClearTasks(39@)
+Blip.ChangeDisplay(43@, BlipDisplay.Neither)
+Char.SetCoordinatesDontWarpGang(39@, -2621.465, 1411.338, 6.1094)
+Char.SetHeading(39@, 277.734)
+Char.SetAreaVisible(39@, 0)
+74@ = 1
+
+:SYND4_7975
+if or
+  Char.LocateAnyMeans3D($scplayer, 0, -2624.8, 1411.54, 6.1015, 4.0, 4.0, 4.0)
+  Char.LocateAnyMeans3D($scplayer, 0, -2661.85, 1426.39, 22.8985, 4.0, 4.0, 4.0)
+goto_if_false @SYND4_9196
+gosub @SYND4_12821
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_8110
+Char.SetCoordinatesDontWarpGang(39@, -2621.465, 1411.338, 6.1094)
+Char.FreezePosition(39@, False)
+
+:SYND4_8110
+World.SwitchEntryExit('PDOMES', False)
+World.SwitchEntryExit('PDOMES2', False)
+Path.MarkRoadNodeAsDontWander(-2686.415, 1235.572, 54.4297)
+Path.MarkRoadNodeAsDontWander(-2671.298, 1236.492, 54.4297)
+if 
+  Car.IsDead(64@)
+goto_if_false @SYND4_8331
+Car.Delete(64@)
+World.ClearArea(1, -2611.471, 1409.036, 6.1335, 20.0)
+Streaming.RequestModel(448)
+Streaming.RequestModel(155)
+
+:SYND4_8225
+if or
+  not Streaming.HasModelLoaded(448)
+  not Streaming.HasModelLoaded(155)
+goto_if_false @SYND4_8257
+wait 0
+goto @SYND4_8225
+
+:SYND4_8257
+64@ = Car.Create(448, -2611.471, 1409.036, 6.1335)
+Car.SetHeading(64@, 274.4727)
+132@ = Char.CreateInsideCar(PedType.CivMale, 155, 64@)
+Char.Delete(87@)
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_8331
+Char.SetCanBeKnockedOffBike(39@, 3)
+
+:SYND4_8331
+75@ = Sequence.Open()
+Task.EnterCarAsDriver(-1, 64@, 5000)
+Task.Pause(-1, 1000)
+Task.CarDriveWander(-1, 64@, 20.0, DrivingMode.AvoidCars)
+Sequence.Close(75@)
+76@ = Sequence.Open()
+Task.LeaveCar(-1, 64@)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(76@)
+Car.ChangeColor(64@, 4, 4)
+World.ClearArea(1, -2621.81, 1398.744, 6.086, 20.0)
+Blip.Remove(60@)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_9196
+Char.SetAreaVisible($scplayer, 0)
+Weather.ForceNow(WeatherType.FoggySf)
+Streaming.SetAreaVisible(0)
+Camera.SetBehindPlayer
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_8513
+Char.SetCoordinatesDontWarpGang(39@, -2624.485, 1411.353, 6.1015)
+Char.SetHeading(39@, 267.9166)
+
+:SYND4_8513
+if 
+  not Char.IsDead(87@)
+goto_if_false @SYND4_8603
+Char.ClearTasksImmediately(87@)
+Char.SetCoordinatesDontWarpGang(87@, -2620.604, 1406.97, 6.1016)
+Char.SetHeading(87@, 277.7697)
+Char.GiveWeapon(87@, WeaponType.Pistol, 30000)
+Char.SetCurrentWeapon(87@, WeaponType.Pistol)
+Char.SetDecisionMaker(87@, 88@)
+Char.SetAccuracy(87@, 30)
+Char.SetShootRate(87@, 30)
+
+:SYND4_8603
+Char.Delete(44@)
+40@ = 0
+
+:SYND4_8615
+Char.Delete(34@(40@,5i))
+40@ += 1
+  40@ >= 4
+goto_if_false @SYND4_8615
+gosub @SYND4_12755
+if and
+  not Char.IsDead(39@)
+  not Car.IsDead(64@)
+goto_if_false @SYND4_8737
+Camera.SetFixedPosition(-2626.019, 1411.502, 9.1763, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2625.059, 1411.35, 8.9421, SwitchType.JumpCut)
+Char.ClearTasksImmediately(39@)
+Char.PerformSequence(39@, 75@)
+
+:SYND4_8737
+if 
+  not Char.IsDead(87@)
+goto_if_false @SYND4_8771
+Char.ClearTasksImmediately(87@)
+Task.EnterCarAsPassenger(87@, 64@, 0, 5000)
+
+:SYND4_8771
+gosub @SYND4_12854
+TIMERB = 0
+
+:SYND4_8785
+if 
+  4000 > TIMERB
+goto_if_false @SYND4_8837
+wait 0
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+  Char.IsDead(132@)
+goto_if_false @SYND4_8830
+
+:SYND4_8830
+goto @SYND4_8785
+
+:SYND4_8837
+85@ = 1
+gosub @SYND4_12786
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_8897
+Char.SetCoordinatesDontWarpGang($scplayer, -2627.1, 1410.399, 6.1015)
+Char.SetHeading($scplayer, 279.1925)
+
+:SYND4_8897
+133@ = Sequence.Open()
+Task.Pause(-1, 4000)
+Task.DriveBy(-1, $scplayer, -1, 0.0, 0.0, 0.0, 10.0, DriveByType.Ai, False, 30)
+Sequence.SetToRepeat(133@, True)
+Sequence.Close(133@)
+if 
+  not Car.IsDead(64@)
+goto_if_false @SYND4_9150
+if and
+  not Char.IsDead(87@)
+  not Char.IsDead(39@)
+goto_if_false @SYND4_9041
+if 
+  not Char.IsInCar(87@, 64@)
+goto_if_false @SYND4_9022
+Char.WarpIntoCarAsPassenger(87@, 64@, 0)
+
+:SYND4_9022
+Task.TogglePedThreatScanner(87@, True, True, True)
+Char.PerformSequence(87@, 133@)
+
+:SYND4_9041
+if and
+  not Char.IsDead(39@)
+  not Car.IsDead(64@)
+goto_if_false @SYND4_9150
+Char.GiveWeapon(39@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(39@, WeaponType.MicroUzi)
+Char.SetAccuracy(39@, 90)
+if 
+  not Char.IsInCar(39@, 64@)
+goto_if_false @SYND4_9150
+if 
+  not Char.IsDead(132@)
+goto_if_false @SYND4_9142
+if 
+  Char.IsInAnyCar(132@)
+goto_if_false @SYND4_9142
+Char.Delete(132@)
+
+:SYND4_9142
+Char.WarpIntoCar(39@, 64@)
+
+:SYND4_9150
+Text.ClearPrints
+Blip.ChangeDisplay(43@, BlipDisplay.Both)
+Text.PrintNow('SYN4_02', 10000, 1)
+TIMERA = 0
+Game.SetWantedMultiplier(1.0)
+41@ = 2
+
+:SYND4_9196
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_9366
+$off_X, $off_Y, $off1_X = Char.GetCoordinates(39@)
+if 
+  Char.IsInAnyCar(39@)
+goto_if_false @SYND4_9250
+$car = Char.StoreCarIsInNoSave(39@)
+
+:SYND4_9250
+$s4_event = Char.GetHighestPriorityEvent(39@)
+if 
+  is_int_var_equal_to_constant $s4_event == 7
+goto_if_false @SYND4_9312
+Char.ClearTasks(39@)
+Task.FleeCharAnyMeans(39@, $scplayer, 200.0, 9999999, True, 3000, 1000, 10.0)
+
+:SYND4_9312
+if 
+  is_int_var_equal_to_constant $s4_event == 17
+goto_if_false @SYND4_9366
+Char.ClearTasks(39@)
+Task.FleeCharAnyMeans(39@, $scplayer, 200.0, 9999999, True, 3000, 1000, 10.0)
+
+:SYND4_9366
+if 
+  not Char.IsDead(87@)
+goto_if_false @SYND4_9452
+$s4_event = Char.GetHighestPriorityEvent(87@)
+if 
+  is_int_var_equal_to_constant $s4_event == 17
+goto_if_false @SYND4_9421
+Char.ClearTasks(87@)
+Task.KillCharOnFoot(87@, $scplayer)
+
+:SYND4_9421
+if 
+  is_int_var_equal_to_constant $s4_event == 7
+goto_if_false @SYND4_9452
+Char.ClearTasks(87@)
+Task.KillCharOnFoot(87@, $scplayer)
+
+:SYND4_9452
+if 
+  not Car.IsDead($car)
+goto_if_false @SYND4_9687
+90@ = Car.GetHealth($car)
+if 
+  200 > 90@
+goto_if_false @SYND4_9568
+89@ = 1
+if and
+  not Char.IsDead(87@)
+  93@ == 0
+goto_if_false @SYND4_9561
+134@ = Sequence.Open()
+Task.LeaveCarImmediately(-1, $car)
+Task.Die(-1)
+Sequence.Close(134@)
+Char.PerformSequence(87@, 134@)
+93@ = 1
+
+:SYND4_9561
+goto @SYND4_9575
+
+:SYND4_9568
+89@ = 0
+
+:SYND4_9575
+if and
+  Car.IsOnFire($car)
+  94@ == 0
+  not Char.IsDead(39@)
+goto_if_false @SYND4_9687
+135@ = Sequence.Open()
+Task.LeaveCarImmediately(-1, $car)
+Task.FleeCharAnyMeans(-1, $scplayer, 200.0, 9999999, True, 3000, 1000, 10.0)
+Sequence.SetToRepeat(135@, True)
+Sequence.Close(135@)
+Char.SetDecisionMaker(39@, 55@)
+TIMERB = 0
+Char.PerformSequence(39@, 135@)
+94@ = 1
+
+:SYND4_9687
+if 
+  41@ == 2
+goto_if_false @SYND4_10206
+if and
+  Car.IsDead(64@)
+  77@ == 0
+goto_if_false @SYND4_9751
+Text.PrintNow('SYN4_32', 5000, 1)
+goto @SYND4_12004
+
+:SYND4_9751
+if and
+  not Car.IsDead(64@)
+  not Char.IsDead(39@)
+goto_if_false @SYND4_9812
+if 
+  Char.IsInCar(39@, 64@)
+goto_if_false @SYND4_9805
+77@ = 0
+goto @SYND4_9812
+
+:SYND4_9805
+77@ = 1
+
+:SYND4_9812
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_10095
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, $off_X, $off_Y, $off1_X, 20.0, 20.0, 20.0)
+goto_if_false @SYND4_9986
+if and
+  not Car.IsDead(64@)
+  86@ == 0
+goto_if_false @SYND4_9979
+if 
+  not Car.IsOnFire(64@)
+goto_if_false @SYND4_9979
+if 
+  89@ == 0
+goto_if_false @SYND4_9953
+Task.CarMission(39@, 64@, -1, CarMission.Cruise, 25.0, DrivingMode.AvoidCars)
+goto @SYND4_9972
+
+:SYND4_9953
+Task.CarMission(39@, 64@, -1, CarMission.Cruise, 32.0, DrivingMode.AvoidCars)
+
+:SYND4_9972
+86@ = 1
+
+:SYND4_9979
+goto @SYND4_10095
+
+:SYND4_9986
+if and
+  not Car.IsDead(64@)
+  86@ == 1
+goto_if_false @SYND4_10095
+if 
+  not Car.IsOnFire(64@)
+goto_if_false @SYND4_10095
+if 
+  89@ == 0
+goto_if_false @SYND4_10069
+Task.CarMission(39@, 64@, -1, CarMission.Cruise, 23.0, DrivingMode.AvoidCars)
+goto @SYND4_10088
+
+:SYND4_10069
+Task.CarMission(39@, 64@, -1, CarMission.Cruise, 28.0, DrivingMode.AvoidCars)
+
+:SYND4_10088
+86@ = 0
+
+:SYND4_10095
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_10206
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, $off_X, $off_Y, $off1_X, 150.0, 150.0, 150.0)
+goto_if_false @SYND4_10176
+Text.PrintNow('SYN4_29', 4000, 1)
+goto @SYND4_12004
+
+:SYND4_10176
+if and
+  not Char.IsInAnyCar(39@)
+  91@ == 0
+goto_if_false @SYND4_10206
+91@ = 1
+
+:SYND4_10206
+if and
+  not Char.IsDead(39@)
+  not Car.IsDead(64@)
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_10921
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @SYND4_10921
+84@ = Char.StoreCarIsIn($scplayer)
+92@ += 1
+if 
+  92@ > 100
+goto_if_false @SYND4_10293
+Car.ClearLastDamageEntity(64@)
+92@ = 0
+
+:SYND4_10293
+if and
+  not Car.IsDead(84@)
+  TIMERA > 12000
+goto_if_false @SYND4_10921
+if 
+  Car.HasBeenDamagedByCar(64@, 84@)
+goto_if_false @SYND4_10921
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @SYND4_10921
+100@ += 1
+if 
+  100@ == 1
+goto_if_false @SYND4_10405
+set_lvar_text_label 118@s = 'SYN4_AA'
+set_lvar_int_to_constant 96@ = 39400
+gosub @SYND4_13681
+
+:SYND4_10405
+if 
+  100@ == 2
+goto_if_false @SYND4_10454
+set_lvar_text_label 118@s = 'SYN4_AB'
+set_lvar_int_to_constant 96@ = 39401
+gosub @SYND4_13681
+
+:SYND4_10454
+if 
+  100@ == 3
+goto_if_false @SYND4_10503
+set_lvar_text_label 118@s = 'SYN4_AC'
+set_lvar_int_to_constant 96@ = 39402
+gosub @SYND4_13681
+
+:SYND4_10503
+if 
+  100@ == 4
+goto_if_false @SYND4_10552
+set_lvar_text_label 118@s = 'SYN4_AD'
+set_lvar_int_to_constant 96@ = 39403
+gosub @SYND4_13681
+
+:SYND4_10552
+if 
+  100@ == 5
+goto_if_false @SYND4_10601
+set_lvar_text_label 118@s = 'SYN4_AE'
+set_lvar_int_to_constant 96@ = 39404
+gosub @SYND4_13681
+
+:SYND4_10601
+if 
+  100@ == 6
+goto_if_false @SYND4_10650
+set_lvar_text_label 118@s = 'SYN4_AF'
+set_lvar_int_to_constant 96@ = 39405
+gosub @SYND4_13681
+
+:SYND4_10650
+if 
+  100@ == 7
+goto_if_false @SYND4_10699
+set_lvar_text_label 118@s = 'SYN4_AG'
+set_lvar_int_to_constant 96@ = 39406
+gosub @SYND4_13681
+
+:SYND4_10699
+if 
+  100@ == 8
+goto_if_false @SYND4_10748
+set_lvar_text_label 118@s = 'SYN4_AH'
+set_lvar_int_to_constant 96@ = 39407
+gosub @SYND4_13681
+
+:SYND4_10748
+if 
+  100@ == 9
+goto_if_false @SYND4_10797
+set_lvar_text_label 118@s = 'SYN4_AJ'
+set_lvar_int_to_constant 96@ = 39408
+gosub @SYND4_13681
+
+:SYND4_10797
+if 
+  100@ == 10
+goto_if_false @SYND4_10846
+set_lvar_text_label 118@s = 'SYN4_AK'
+set_lvar_int_to_constant 96@ = 39409
+gosub @SYND4_13681
+
+:SYND4_10846
+if 
+  100@ == 11
+goto_if_false @SYND4_10902
+set_lvar_text_label 118@s = 'SYN4_AL'
+set_lvar_int_to_constant 96@ = 39410
+gosub @SYND4_13681
+100@ = 0
+
+:SYND4_10902
+TIMERA = 0
+92@ = 0
+Car.ClearLastDamageEntity(64@)
+
+:SYND4_10921
+if and
+  Char.IsDead(39@)
+  56@ == 0
+goto_if_false @SYND4_11069
+if 
+  Blip.DoesExist(43@)
+goto_if_false @SYND4_10965
+Blip.Remove(43@)
+
+:SYND4_10965
+Streaming.RequestModel(#MOBILE1993B)
+
+:SYND4_10970
+if 
+  not Streaming.HasModelLoaded(#MOBILE1993B)
+goto_if_false @SYND4_10997
+wait 0
+goto @SYND4_10970
+
+:SYND4_10997
+136@ = World.GetGroundZFor3DCoord($off_X, $off_Y, $off1_X)
+136@ += 0.5
+78@ = Object.CreateNoOffset(#MOBILE1993B, $off_X, $off_Y, 136@)
+69@ = Blip.AddForObject(78@)
+Text.PrintNow('SYN4_33', 4000, 1)
+56@ = 1
+
+:SYND4_11069
+if 
+  56@ == 1
+goto_if_false @SYND4_11116
+Fx.DrawCorona(0.2, 9, 0, 200, 200, 200, $off_X, $off_Y, 136@)
+
+:SYND4_11116
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, $off_X, $off_Y, $off1_X, 1.2, 1.2, 2.0)
+  56@ == 1
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @SYND4_11249
+Text.ClearPrints
+Object.Delete(78@)
+if 
+  Blip.DoesExist(69@)
+goto_if_false @SYND4_11198
+Blip.Remove(69@)
+
+:SYND4_11198
+if 
+  Blip.DoesExist(43@)
+goto_if_false @SYND4_11219
+Blip.Remove(43@)
+
+:SYND4_11219
+Text.PrintNow('SYN4_11', 2000, 1)
+TIMERB = 0
+56@ = 2
+
+:SYND4_11249
+if and
+  56@ == 2
+  TIMERB > 2000
+  not Char.IsStuckUnderCar($scplayer)
+goto_if_false @SYND4_11378
+gosub @SYND4_12755
+
+:SYND4_11287
+Streaming.RequestModel(330)
+
+:SYND4_11292
+if 
+  not Streaming.HasModelLoaded(330)
+goto_if_false @SYND4_11319
+wait 0
+goto @SYND4_11292
+
+:SYND4_11319
+Player.ClearWantedLevel($player1)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_11352
+Char.ClearTasks($scplayer)
+Task.UseMobilePhone($scplayer, True)
+
+:SYND4_11352
+wait 2000
+gosub @SYND4_12786
+46@ = 2
+TIMERB = 0
+
+:SYND4_11378
+if 
+  46@ == 2
+goto_if_false @SYND4_11990
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @SYND4_11427
+95@ = 6
+95@ = 6
+
+:SYND4_11427
+if and
+  97@ == 2
+  95@ == 0
+goto_if_false @SYND4_11512
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_11476
+Char.StartFacialTalk($scplayer, 10000)
+
+:SYND4_11476
+set_lvar_text_label 118@s = 'MCES11A'
+set_lvar_int_to_constant 96@ = 25314
+gosub @SYND4_13681
+95@ = 1
+
+:SYND4_11512
+if and
+  97@ == 2
+  95@ == 1
+goto_if_false @SYND4_11594
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_11558
+Char.StopFacialTalk($scplayer)
+
+:SYND4_11558
+set_lvar_text_label 118@s = 'MCES11B'
+set_lvar_int_to_constant 96@ = 25315
+gosub @SYND4_13681
+95@ = 2
+
+:SYND4_11594
+if and
+  97@ == 2
+  95@ == 2
+goto_if_false @SYND4_11679
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_11643
+Char.StartFacialTalk($scplayer, 10000)
+
+:SYND4_11643
+set_lvar_text_label 118@s = 'MCES11C'
+set_lvar_int_to_constant 96@ = 25316
+gosub @SYND4_13681
+95@ = 3
+
+:SYND4_11679
+if and
+  97@ == 2
+  95@ == 3
+goto_if_false @SYND4_11761
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_11725
+Char.StopFacialTalk($scplayer)
+
+:SYND4_11725
+set_lvar_text_label 118@s = 'MCES11D'
+set_lvar_int_to_constant 96@ = 25317
+gosub @SYND4_13681
+95@ = 4
+
+:SYND4_11761
+if and
+  97@ == 2
+  95@ == 4
+goto_if_false @SYND4_11822
+set_lvar_text_label 118@s = 'MCES11E'
+set_lvar_int_to_constant 96@ = 25318
+gosub @SYND4_13681
+95@ = 5
+
+:SYND4_11822
+if and
+  97@ == 2
+  95@ == 5
+goto_if_false @SYND4_11907
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_11871
+Char.StartFacialTalk($scplayer, 10000)
+
+:SYND4_11871
+set_lvar_text_label 118@s = 'MCES11F'
+set_lvar_int_to_constant 96@ = 25319
+gosub @SYND4_13681
+95@ = 6
+
+:SYND4_11907
+if and
+  97@ == 2
+  95@ == 6
+goto_if_false @SYND4_11990
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_11953
+Char.StopFacialTalk($scplayer)
+
+:SYND4_11953
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_11976
+Task.UseMobilePhone($scplayer, False)
+
+:SYND4_11976
+gosub @SYND4_12786
+goto @SYND4_12219
+
+:SYND4_11990
+goto @SYND4_5221
+
+:SYND4_11997
+goto @SYND4_12004
+
+:SYND4_12004
+if 
+  Blip.DoesExist(43@)
+goto_if_false @SYND4_12025
+Blip.Remove(43@)
+
+:SYND4_12025
+if 
+  Blip.DoesExist(45@)
+goto_if_false @SYND4_12046
+Blip.Remove(45@)
+
+:SYND4_12046
+if 
+  Blip.DoesExist(54@)
+goto_if_false @SYND4_12067
+Blip.Remove(54@)
+
+:SYND4_12067
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+if or
+  41@ == 1
+  115@ == 1
+goto_if_false @SYND4_12215
+gosub @SYND4_12821
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_12208
+41@ = 1
+Streaming.SetAreaVisible(0)
+Streaming.RequestCollision(-2623.805, 1409.816)
+Char.SetAreaVisible($scplayer, 0)
+Char.SetCoordinatesDontWarpGang($scplayer, -2624.461, 1410.706, 6.1015)
+Char.SetHeading($scplayer, 176.884)
+Streaming.LoadScene(-2624.461, 1410.706, 6.1015)
+
+:SYND4_12208
+gosub @SYND4_12854
+
+:SYND4_12215
+Camera.SetBehindPlayer
+return 
+
+:SYND4_12219
+Text.ClearPrints
+if 
+  Blip.DoesExist(43@)
+goto_if_false @SYND4_12242
+Blip.Remove(43@)
+
+:SYND4_12242
+if 
+  Blip.DoesExist(45@)
+goto_if_false @SYND4_12263
+Blip.Remove(45@)
+
+:SYND4_12263
+if 
+  Blip.DoesExist(54@)
+goto_if_false @SYND4_12284
+Blip.Remove(54@)
+
+:SYND4_12284
+$flag_synd_mission_counter += 1
+Text.PrintWithNumberBig('M_PASSS', 12000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 12000)
+Blip.Remove($synd_contact_blip)
+Stat.AwardPlayerMissionRespect(30)
+Audio.PlayMissionPassedTune(1)
+Player.ClearWantedLevel($player1)
+Stat.RegisterMissionPassed('SYND_4')
+Stat.PlayerMadeProgress(1)
+Blip.Remove($garage_contact_blip)
+$garage_contact_blip = Blip.AddSpriteForContactPoint($garage_blip_icon, -1717.05, 1280.91, 6.23)
+return 
+
+:SYND4_12381
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_12402
+Char.StopFacialTalk($scplayer)
+
+:SYND4_12402
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_12423
+Char.RemoveElegantly(39@)
+
+:SYND4_12423
+World.SwitchEntryExit('PDOMES', False)
+World.SwitchEntryExit('PDOMES2', False)
+Game.SetWantedMultiplier(1.0)
+Path.UnmarkAllRoadNodesAsDontWander
+if 
+  Blip.DoesExist(69@)
+goto_if_false @SYND4_12479
+Blip.Remove(69@)
+
+:SYND4_12479
+if 
+  Blip.DoesExist(59@)
+goto_if_false @SYND4_12500
+Blip.Remove(59@)
+
+:SYND4_12500
+if 
+  Blip.DoesExist(43@)
+goto_if_false @SYND4_12521
+Blip.Remove(43@)
+
+:SYND4_12521
+if 
+  Blip.DoesExist(45@)
+goto_if_false @SYND4_12542
+Blip.Remove(45@)
+
+:SYND4_12542
+if 
+  Blip.DoesExist(54@)
+goto_if_false @SYND4_12563
+Blip.Remove(54@)
+
+:SYND4_12563
+if 
+  Blip.DoesExist(60@)
+goto_if_false @SYND4_12584
+Blip.Remove(60@)
+
+:SYND4_12584
+if 
+  Blip.DoesExist(61@)
+goto_if_false @SYND4_12605
+Blip.Remove(61@)
+
+:SYND4_12605
+$timer_mobile_start = Clock.GetGameTimer()
+Streaming.MarkModelAsNoLongerNeeded(347)
+Streaming.MarkModelAsNoLongerNeeded(28)
+Streaming.MarkModelAsNoLongerNeeded(30)
+Streaming.MarkModelAsNoLongerNeeded(63)
+Streaming.MarkModelAsNoLongerNeeded(40)
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(#MOBILE1993B)
+Streaming.MarkModelAsNoLongerNeeded(#WAREHOUSE_DOOR2B)
+Streaming.MarkModelAsNoLongerNeeded(409)
+Streaming.MarkModelAsNoLongerNeeded(19)
+Streaming.MarkModelAsNoLongerNeeded(409)
+Streaming.MarkModelAsNoLongerNeeded(575)
+Streaming.MarkModelAsNoLongerNeeded(163)
+Streaming.MarkModelAsNoLongerNeeded(164)
+Streaming.MarkModelAsNoLongerNeeded(71)
+Streaming.MarkModelAsNoLongerNeeded(214)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(448)
+Streaming.MarkModelAsNoLongerNeeded(155)
+Streaming.MarkModelAsNoLongerNeeded(246)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_12730
+Player.ClearWantedLevel($player1)
+
+:SYND4_12730
+Streaming.RemoveAnimation("SWAT")
+Streaming.UnloadSpecialCharacter(1)
+$onmission = 0
+Weather.Release
+Mission.Finish
+return 
+
+:SYND4_12755
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_12784
+Text.ClearPrints
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+
+:SYND4_12784
+return 
+
+:SYND4_12786
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_12819
+Text.ClearPrints
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+
+:SYND4_12819
+return 
+
+:SYND4_12821
+Camera.DoFade(0, 500)
+
+:SYND4_12828
+if 
+  Camera.GetFadingStatus
+goto_if_false @SYND4_12852
+wait 0
+goto @SYND4_12828
+
+:SYND4_12852
+return 
+
+:SYND4_12854
+Camera.DoFade(1, 500)
+
+:SYND4_12861
+if 
+  Camera.GetFadingStatus
+goto_if_false @SYND4_12885
+wait 0
+goto @SYND4_12861
+
+:SYND4_12885
+return 
+
+:SYND4_12887
+if 
+is_ps2_keyboard_key_just_pressed 65
+goto_if_false @SYND4_12948
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_12948
+Char.SetCoordinatesDontWarpGang($scplayer, -2623.977, 1404.812, 6.111)
+Char.SetHeading($scplayer, 352.628)
+
+:SYND4_12948
+if 
+is_ps2_keyboard_key_just_pressed 81
+goto_if_false @SYND4_12986
+if 
+  not Car.IsDead(64@)
+goto_if_false @SYND4_12986
+Car.FreezePosition(64@, True)
+
+:SYND4_12986
+if 
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @SYND4_13022
+$the_area_name = Streaming.GetAreaVisible()
+view_integer_variable $the_area_name "AREA_NAME"
+
+:SYND4_13022
+if 
+is_ps2_keyboard_key_just_pressed 70
+goto_if_false @SYND4_13073
+World.CreateBirds(-2616.109, 1408.629, 6.5, -2618.498, 1415.866, 6.5, 3, 0)
+
+:SYND4_13073
+if 
+is_ps2_keyboard_key_just_pressed 71
+goto_if_false @SYND4_13136
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_13136
+Char.SetCoordinatesDontWarpGang($scplayer, -2661.192, 1426.128, 22.8906)
+Char.SetHeading($scplayer, 188.7666)
+Camera.SetBehindPlayer
+
+:SYND4_13136
+if 
+is_ps2_keyboard_key_just_pressed 69
+goto_if_false @SYND4_13199
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_13199
+Char.SetCoordinatesDontWarpGang($scplayer, -2661.493, 1403.067, 905.277)
+Char.SetHeading($scplayer, 85.1708)
+Camera.SetBehindPlayer
+
+:SYND4_13199
+if 
+is_ps2_keyboard_key_just_pressed 75
+goto_if_false @SYND4_13243
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SYND4_13243
+view_integer_variable $s4_j_health "HEALTH"
+
+:SYND4_13243
+if 
+is_ps2_keyboard_key_just_pressed 90
+goto_if_false @SYND4_13265
+goto @SYND4_11287
+
+:SYND4_13265
+if 
+is_ps2_keyboard_key_just_pressed 87
+goto_if_false @SYND4_13304
+if 
+  not Car.IsDead(64@)
+goto_if_false @SYND4_13304
+Car.SetHealth(64@, 200)
+
+:SYND4_13304
+if 
+is_ps2_keyboard_key_just_pressed 66
+goto_if_false @SYND4_13679
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_13342
+Char.SetHealth(39@, 1)
+
+:SYND4_13342
+gosub @SYND4_12755
+Char.SetCoordinatesDontWarpGang(39@, -2659.382, 1530.248, 53.9453)
+Char.SetHeading(39@, 0.0)
+Camera.SetFixedPosition(-2655.093, 1543.846, 55.7815, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2655.445, 1542.918, 55.652, SwitchType.JumpCut)
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_13458
+Char.ClearTasksImmediately(39@)
+Task.Jump(39@, False)
+
+:SYND4_13458
+wait 1000
+Clock.SetTimeScale(0.4)
+if 
+  not Char.IsDead(39@)
+goto_if_false @SYND4_13527
+Camera.SetFixedPosition(-2630.056, 1557.202, 18.3729, 0.0, 0.0, 0.0)
+Camera.PointAtChar(39@, CameraMode.Fixed, SwitchType.JumpCut)
+
+:SYND4_13527
+TIMERB = 0
+
+:SYND4_13534
+if 
+  750 > TIMERB
+goto_if_false @SYND4_13588
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SYND4_13581
+goto @SYND4_13656
+
+:SYND4_13581
+goto @SYND4_13534
+
+:SYND4_13588
+Clock.SetTimeScale(1.0)
+TIMERB = 0
+
+:SYND4_13602
+if 
+  1500 > TIMERB
+goto_if_false @SYND4_13656
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SYND4_13649
+goto @SYND4_13656
+
+:SYND4_13649
+goto @SYND4_13602
+
+:SYND4_13656
+gosub @SYND4_12786
+Text.PrintNow('SYN4_29', 4000, 1)
+
+:SYND4_13679
+return 
+
+:SYND4_13681
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(96@, 1)
+97@ = 0
+return 
+
+:SYND4_13701
+if and
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+  97@ == 0
+goto_if_false @SYND4_13744
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(118@s, 10000, 1)
+97@ = 1
+
+:SYND4_13744
+if and
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+  97@ == 1
+goto_if_false @SYND4_13782
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearThisPrint(118@s)
+97@ = 2
+
+:SYND4_13782
+return 
+

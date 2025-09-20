@@ -1,0 +1,669 @@
+:INTMAN
+script_name 'INTMAN'
+$iGlobalPedPanicDM = -1
+if 
+  $iGlobalPedPanicDM == 9999
+goto_if_false @INTMAN_57
+$iGlobalPedPanicDM = DecisionMakerChar.Copy(65543)
+$iGlobalShopkeeperDM = DecisionMakerChar.Copy(65543)
+
+:INTMAN_57
+if 
+  Player.IsPlaying($player1)
+goto_if_false @INTMAN_80
+INTMAN_91()
+
+:INTMAN_80
+wait 0
+goto @INTMAN_57
+
+:INTMAN_91
+switch_start 0@ total_jumps 2 default_jump 0 @INTMAN_182 jumps 0 @INTMAN_154 1 @INTMAN_168 -1 @INTMAN_182 -1 @INTMAN_182 -1 @INTMAN_182 -1 @INTMAN_182 -1 @INTMAN_182
+
+:INTMAN_154
+INTMAN_184()
+goto @INTMAN_182
+
+:INTMAN_168
+INTMAN_2976()
+goto @INTMAN_182
+
+:INTMAN_182
+return 
+
+:INTMAN_184
+$iAreaCode = Char.GetAreaVisible($scplayer)
+if 
+  $iAreaCode <> 0
+goto_if_false @INTMAN_2974
+v$txtEntryExit = Char.GetNameOfEntryExitUsed($scplayer)
+if 
+  not is_var_text_label16_empty v$txtEntryExit
+goto_if_false @INTMAN_2974
+set_var_int_to_var_int $iStoredAreaCode = $iAreaCode
+if 
+  Player.IsPlaying($player1)
+goto_if_false @INTMAN_266
+$iWantedOnEntry = Player.StoreWantedLevel($player1)
+
+:INTMAN_266
+s$shop_name = Shopping.GetLoaded()
+$iCreateDecisionMakers = 0
+$iTerminateAllAmbience = 0
+2@ = 0
+if 
+  $onmission == 0
+goto_if_false @INTMAN_359
+$iSetBarPanic = 0
+$iSetCasinoPanic = 0
+$iBouncerAction = 0
+$iSetPizzaPanic = 0
+$iSetOTBPanic = 0
+$iSetSTRIPPanic = 0
+$iSetRCPanic = 0
+
+:INTMAN_359
+if and
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "CHANGER"
+  $iAreaCode == 14
+goto_if_false @INTMAN_451
+1@ = StreamedScript.GetNumberOfInstances(63)
+if 
+  1@ == 0
+goto_if_false @INTMAN_451
+StreamedScript.Stream(63)
+Streaming.LoadAllModelsNow
+if 
+  StreamedScript.HasLoaded(63)
+goto_if_false @INTMAN_451
+StreamedScript.StartNew(63)
+0@ += 1
+return 
+
+:INTMAN_451
+if or
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "TRICAS"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "MAFCAS"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "CASINO2"
+goto_if_false @INTMAN_818
+1@ = StreamedScript.GetNumberOfInstances(38)
+if 
+  1@ == 0
+goto_if_false @INTMAN_531
+StreamedScript.Stream(38)
+
+:INTMAN_531
+1@ = StreamedScript.GetNumberOfInstances(39)
+if 
+  1@ == 0
+goto_if_false @INTMAN_560
+StreamedScript.Stream(39)
+
+:INTMAN_560
+1@ = StreamedScript.GetNumberOfInstances(37)
+if 
+  1@ == 0
+goto_if_false @INTMAN_589
+StreamedScript.Stream(37)
+
+:INTMAN_589
+1@ = StreamedScript.GetNumberOfInstances(27)
+if 
+  1@ == 0
+goto_if_false @INTMAN_618
+StreamedScript.Stream(27)
+
+:INTMAN_618
+Streaming.RequestAnimation("BAR")
+Streaming.RequestAnimation("CASINO")
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "MAFCAS"
+goto_if_false @INTMAN_676
+Streaming.RequestModel(124)
+Streaming.RequestModel(126)
+Streaming.RequestModel(125)
+Streaming.RequestModel(214)
+
+:INTMAN_676
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "TRICAS"
+goto_if_false @INTMAN_715
+Streaming.RequestModel(163)
+Streaming.RequestModel(164)
+Streaming.RequestModel(263)
+
+:INTMAN_715
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "CASINO2"
+goto_if_false @INTMAN_755
+Streaming.RequestModel(163)
+Streaming.RequestModel(164)
+Streaming.RequestModel(172)
+
+:INTMAN_755
+Streaming.LoadAllModelsNow
+if 
+  StreamedScript.HasLoaded(27)
+goto_if_false @INTMAN_777
+StreamedScript.StartNew(27)
+
+:INTMAN_777
+if and
+  StreamedScript.HasLoaded(38)
+  StreamedScript.HasLoaded(39)
+  StreamedScript.HasLoaded(37)
+  StreamedScript.HasLoaded(27)
+goto_if_false @INTMAN_818
+$iCreateDecisionMakers = 1
+0@ += 1
+
+:INTMAN_818
+if or
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "BAR1"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "BAR2"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "UFOBAR"
+goto_if_false @INTMAN_1088
+1@ = StreamedScript.GetNumberOfInstances(38)
+if 
+  1@ == 0
+goto_if_false @INTMAN_893
+StreamedScript.Stream(38)
+
+:INTMAN_893
+1@ = StreamedScript.GetNumberOfInstances(37)
+if 
+  1@ == 0
+goto_if_false @INTMAN_922
+StreamedScript.Stream(37)
+
+:INTMAN_922
+1@ = StreamedScript.GetNumberOfInstances(28)
+if 
+  1@ == 0
+goto_if_false @INTMAN_951
+StreamedScript.Stream(28)
+
+:INTMAN_951
+1@ = StreamedScript.GetNumberOfInstances(35)
+if 
+  1@ == 0
+goto_if_false @INTMAN_980
+StreamedScript.Stream(35)
+
+:INTMAN_980
+Streaming.RequestAnimation("BAR")
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "BAR1"
+goto_if_false @INTMAN_1020
+Streaming.RequestAnimation("DANCING")
+
+:INTMAN_1020
+Streaming.RequestModel(172)
+Streaming.LoadAllModelsNow
+if 
+  StreamedScript.HasLoaded(28)
+goto_if_false @INTMAN_1047
+StreamedScript.StartNew(28)
+
+:INTMAN_1047
+if and
+  StreamedScript.HasLoaded(38)
+  StreamedScript.HasLoaded(37)
+  StreamedScript.HasLoaded(28)
+  StreamedScript.HasLoaded(35)
+goto_if_false @INTMAN_1088
+$iCreateDecisionMakers = 1
+0@ += 1
+
+:INTMAN_1088
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "GENOTB"
+goto_if_false @INTMAN_1286
+1@ = StreamedScript.GetNumberOfInstances(40)
+if 
+  1@ == 0
+goto_if_false @INTMAN_1141
+StreamedScript.Stream(40)
+
+:INTMAN_1141
+1@ = StreamedScript.GetNumberOfInstances(37)
+if 
+  1@ == 0
+goto_if_false @INTMAN_1170
+StreamedScript.Stream(37)
+
+:INTMAN_1170
+1@ = StreamedScript.GetNumberOfInstances(30)
+if 
+  1@ == 0
+goto_if_false @INTMAN_1199
+StreamedScript.Stream(30)
+
+:INTMAN_1199
+Streaming.RequestAnimation("OTB")
+Streaming.RequestAnimation("INT_SHOP")
+Streaming.RequestModel(11)
+Streaming.RequestModel(172)
+Streaming.LoadAllModelsNow
+if 
+  StreamedScript.HasLoaded(30)
+goto_if_false @INTMAN_1249
+StreamedScript.StartNew(30)
+
+:INTMAN_1249
+if and
+  StreamedScript.HasLoaded(40)
+  StreamedScript.HasLoaded(37)
+  StreamedScript.HasLoaded(30)
+goto_if_false @INTMAN_1286
+$iCreateDecisionMakers = 1
+0@ += 1
+
+:INTMAN_1286
+if or
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "LASTRIP"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "STRIP2"
+goto_if_false @INTMAN_1534
+1@ = StreamedScript.GetNumberOfInstances(38)
+if 
+  1@ == 0
+goto_if_false @INTMAN_1353
+StreamedScript.Stream(38)
+
+:INTMAN_1353
+1@ = StreamedScript.GetNumberOfInstances(39)
+if 
+  1@ == 0
+goto_if_false @INTMAN_1382
+StreamedScript.Stream(39)
+
+:INTMAN_1382
+1@ = StreamedScript.GetNumberOfInstances(37)
+if 
+  1@ == 0
+goto_if_false @INTMAN_1411
+StreamedScript.Stream(37)
+
+:INTMAN_1411
+1@ = StreamedScript.GetNumberOfInstances(31)
+if 
+  1@ == 0
+goto_if_false @INTMAN_1440
+StreamedScript.Stream(31)
+
+:INTMAN_1440
+Streaming.RequestAnimation("BAR")
+Streaming.RequestAnimation("STRIP")
+Streaming.RequestModel(163)
+Streaming.RequestModel(164)
+Streaming.RequestModel(172)
+Streaming.LoadAllModelsNow
+if 
+  StreamedScript.HasLoaded(31)
+goto_if_false @INTMAN_1493
+StreamedScript.StartNew(31)
+
+:INTMAN_1493
+if and
+  StreamedScript.HasLoaded(38)
+  StreamedScript.HasLoaded(39)
+  StreamedScript.HasLoaded(37)
+  StreamedScript.HasLoaded(31)
+goto_if_false @INTMAN_1534
+$iCreateDecisionMakers = 1
+0@ += 1
+
+:INTMAN_1534
+if 
+  $player_using_wardrobe == 0
+goto_if_false @INTMAN_1724
+if or
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "CSCHP"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "CSSPRT"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "LACS1"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "CLOTHGP"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "CSDESGN"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "CSEXL"
+goto_if_false @INTMAN_1724
+1@ = StreamedScript.GetNumberOfInstances(64)
+if 
+  1@ == 0
+goto_if_false @INTMAN_1669
+StreamedScript.Stream(64)
+
+:INTMAN_1669
+Streaming.RequestAnimation("INT_SHOP")
+Streaming.LoadAllModelsNow
+if 
+  StreamedScript.HasLoaded(64)
+goto_if_false @INTMAN_1724
+$iSetClothesPanic = 0
+StreamedScript.StartNew(64)
+$iCreateDecisionMakers = 1
+0@ += 1
+
+:INTMAN_1724
+if or
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "FDPIZA"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "FDCHICK"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "FDBURG"
+goto_if_false @INTMAN_2221
+1@ = StreamedScript.GetNumberOfInstances(65)
+if 
+  1@ == 0
+goto_if_false @INTMAN_1804
+StreamedScript.Stream(65)
+
+:INTMAN_1804
+1@ = StreamedScript.GetNumberOfInstances(29)
+if 
+  1@ == 0
+goto_if_false @INTMAN_1833
+StreamedScript.Stream(29)
+
+:INTMAN_1833
+1@ = StreamedScript.GetNumberOfInstances(36)
+if 
+  1@ == 0
+goto_if_false @INTMAN_1862
+StreamedScript.Stream(36)
+
+:INTMAN_1862
+1@ = StreamedScript.GetNumberOfInstances(37)
+if 
+  1@ == 0
+goto_if_false @INTMAN_1891
+StreamedScript.Stream(37)
+
+:INTMAN_1891
+Streaming.RequestAnimation("FOOD")
+Streaming.RequestAnimation("INT_SHOP")
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "FDPIZA"
+goto_if_false @INTMAN_1952
+Streaming.RequestModel(155)
+Streaming.RequestModel(#PIZZAHIGH)
+Streaming.RequestModel(#CJ_PIZZA_1)
+Streaming.RequestModel(#CJ_PIZZA_2)
+
+:INTMAN_1952
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "FDCHICK"
+goto_if_false @INTMAN_1994
+Streaming.RequestModel(167)
+Streaming.RequestModel(#BURGERHIGH)
+Streaming.RequestModel(#CJ_BURG_1)
+Streaming.RequestModel(#CJ_BURG_2)
+
+:INTMAN_1994
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "FDBURG"
+goto_if_false @INTMAN_2035
+Streaming.RequestModel(205)
+Streaming.RequestModel(#BURGERHIGH)
+Streaming.RequestModel(#CJ_BURG_1)
+Streaming.RequestModel(#CJ_BURG_2)
+
+:INTMAN_2035
+Streaming.LoadAllModelsNow
+if 
+  StreamedScript.HasLoaded(65)
+goto_if_false @INTMAN_2057
+StreamedScript.StartNew(65)
+
+:INTMAN_2057
+if 
+  StreamedScript.HasLoaded(29)
+goto_if_false @INTMAN_2180
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "FDPIZA"
+goto_if_false @INTMAN_2110
+StreamedScript.StartNew(29, 0)
+goto @INTMAN_2180
+
+:INTMAN_2110
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "FDCHICK"
+goto_if_false @INTMAN_2149
+StreamedScript.StartNew(29, 1)
+goto @INTMAN_2180
+
+:INTMAN_2149
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "FDBURG"
+goto_if_false @INTMAN_2180
+StreamedScript.StartNew(29, 2)
+
+:INTMAN_2180
+if and
+  StreamedScript.HasLoaded(65)
+  StreamedScript.HasLoaded(29)
+  StreamedScript.HasLoaded(36)
+  StreamedScript.HasLoaded(37)
+goto_if_false @INTMAN_2221
+$iCreateDecisionMakers = 1
+0@ += 1
+
+:INTMAN_2221
+if or
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "BARBERS"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "BARBER2"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "BARBER3"
+goto_if_false @INTMAN_2339
+1@ = StreamedScript.GetNumberOfInstances(62)
+if 
+  1@ == 0
+goto_if_false @INTMAN_2339
+StreamedScript.Stream(62)
+Streaming.LoadAllModelsNow
+if 
+  StreamedScript.HasLoaded(62)
+goto_if_false @INTMAN_2339
+StreamedScript.StartNew(62)
+$iCreateDecisionMakers = 1
+0@ += 1
+
+:INTMAN_2339
+if or
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "TATTOO"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "TATTO2"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "TATTO3"
+goto_if_false @INTMAN_2454
+1@ = StreamedScript.GetNumberOfInstances(61)
+if 
+  1@ == 0
+goto_if_false @INTMAN_2454
+StreamedScript.Stream(61)
+Streaming.LoadAllModelsNow
+if 
+  StreamedScript.HasLoaded(61)
+goto_if_false @INTMAN_2454
+StreamedScript.StartNew(61)
+$iCreateDecisionMakers = 1
+0@ += 1
+
+:INTMAN_2454
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "RCPLAY"
+goto_if_false @INTMAN_2596
+1@ = StreamedScript.GetNumberOfInstances(34)
+if 
+  1@ == 0
+goto_if_false @INTMAN_2507
+StreamedScript.Stream(34)
+
+:INTMAN_2507
+1@ = StreamedScript.GetNumberOfInstances(37)
+if 
+  1@ == 0
+goto_if_false @INTMAN_2536
+StreamedScript.Stream(37)
+
+:INTMAN_2536
+Streaming.RequestModel(217)
+Streaming.LoadAllModelsNow
+if 
+  StreamedScript.HasLoaded(34)
+goto_if_false @INTMAN_2563
+StreamedScript.StartNew(34)
+
+:INTMAN_2563
+if and
+  StreamedScript.HasLoaded(34)
+  StreamedScript.HasLoaded(37)
+goto_if_false @INTMAN_2596
+$iCreateDecisionMakers = 1
+0@ += 1
+
+:INTMAN_2596
+if or
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "POLICE1"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "POLICE2"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "POLICE3"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "POLICE4"
+goto_if_false @INTMAN_2728
+$iCheckForWeapons = 1
+$iCreateDecisionMakers = 1
+Streaming.RequestAnimation("COP_AMBIENT")
+Streaming.RequestAnimation("INT_OFFICE")
+Streaming.RequestAnimation("GANGS")
+Streaming.RequestModel(#CIGAR)
+Streaming.LoadAllModelsNow
+0@ += 1
+
+:INTMAN_2728
+if or
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "AMMUN1"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "AMMUN2"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "AMMUN3"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "AMMUN4"
+  is_var_text_label16_equal_to_text_label v$txtEntryExit == "AMMUN5"
+goto_if_false @INTMAN_2869
+1@ = StreamedScript.GetNumberOfInstances(60)
+if 
+  1@ == 0
+goto_if_false @INTMAN_2869
+StreamedScript.Stream(60)
+Streaming.LoadAllModelsNow
+if 
+  StreamedScript.HasLoaded(60)
+goto_if_false @INTMAN_2869
+StreamedScript.StartNew(60)
+$iCreateDecisionMakers = 1
+0@ += 1
+
+:INTMAN_2869
+if 
+  $iCreateDecisionMakers == 1
+goto_if_false @INTMAN_2974
+if 
+  not DecisionMaker.DoesExist($iGlobalPedPanicDM)
+goto_if_false @INTMAN_2927
+$iGlobalPedPanicDM = DecisionMakerChar.Copy(65543)
+DecisionMakerChar.ClearEventResponse($iGlobalPedPanicDM, 27)
+DecisionMakerChar.ClearEventResponse($iGlobalPedPanicDM, 48)
+
+:INTMAN_2927
+if 
+  not DecisionMaker.DoesExist($iGlobalShopkeeperDM)
+goto_if_false @INTMAN_2974
+$iGlobalShopkeeperDM = DecisionMakerChar.Copy(65543)
+DecisionMakerChar.ClearEventResponse($iGlobalShopkeeperDM, 27)
+DecisionMakerChar.ClearEventResponse($iGlobalShopkeeperDM, 48)
+DecisionMakerChar.ClearEventResponse($iGlobalShopkeeperDM, 9)
+
+:INTMAN_2974
+return 
+
+:INTMAN_2976
+$iAreaCode = Char.GetAreaVisible($scplayer)
+if 
+  not is_int_var_equal_to_int_var $iAreaCode == $iStoredAreaCode
+goto_if_false @INTMAN_3052
+INTMAN_3136()
+$iTerminateAllAmbience = 0
+2@ = 0
+$iCheckForWeapons = 0
+s$shop_name = Shopping.GetLoaded()
+0@ -= 1
+return 
+goto @INTMAN_3134
+
+:INTMAN_3052
+if 
+  $iCheckForWeapons == 1
+goto_if_false @INTMAN_3095
+if 
+  not Char.IsCurrentWeapon($scplayer, WeaponType.AnyMelee)
+goto_if_false @INTMAN_3095
+Player.AlterWantedLevelNoDrop($player1, 2)
+
+:INTMAN_3095
+if and
+  $iTerminateAllAmbience == 1
+  2@ == 0
+goto_if_false @INTMAN_3134
+INTMAN_3136()
+2@ = 1
+
+:INTMAN_3134
+return 
+
+:INTMAN_3136
+Streaming.RemoveAnimation("BAR")
+Streaming.RemoveAnimation("CASINO")
+Streaming.RemoveAnimation("DANCING")
+Streaming.RemoveAnimation("OTB")
+Streaming.RemoveAnimation("INT_SHOP")
+Streaming.RemoveAnimation("STRIP")
+Streaming.RemoveAnimation("FOOD")
+Streaming.RemoveAnimation("COP_AMBIENT")
+Streaming.RemoveAnimation("INT_OFFICE")
+Streaming.RemoveAnimation("GANGS")
+Streaming.MarkModelAsNoLongerNeeded(#CIGAR)
+Streaming.MarkModelAsNoLongerNeeded(124)
+Streaming.MarkModelAsNoLongerNeeded(126)
+Streaming.MarkModelAsNoLongerNeeded(125)
+Streaming.MarkModelAsNoLongerNeeded(214)
+Streaming.MarkModelAsNoLongerNeeded(263)
+Streaming.MarkModelAsNoLongerNeeded(163)
+Streaming.MarkModelAsNoLongerNeeded(164)
+Streaming.MarkModelAsNoLongerNeeded(172)
+Streaming.MarkModelAsNoLongerNeeded(11)
+Streaming.MarkModelAsNoLongerNeeded(155)
+Streaming.MarkModelAsNoLongerNeeded(#PIZZAHIGH)
+Streaming.MarkModelAsNoLongerNeeded(#CJ_PIZZA_1)
+Streaming.MarkModelAsNoLongerNeeded(#CJ_PIZZA_2)
+Streaming.MarkModelAsNoLongerNeeded(167)
+Streaming.MarkModelAsNoLongerNeeded(#BURGERHIGH)
+Streaming.MarkModelAsNoLongerNeeded(#CJ_BURG_1)
+Streaming.MarkModelAsNoLongerNeeded(#CJ_BURG_2)
+Streaming.MarkModelAsNoLongerNeeded(205)
+Streaming.MarkModelAsNoLongerNeeded(217)
+StreamedScript.MarkAsNoLongerNeeded(63)
+StreamedScript.MarkAsNoLongerNeeded(64)
+StreamedScript.MarkAsNoLongerNeeded(65)
+StreamedScript.MarkAsNoLongerNeeded(62)
+StreamedScript.MarkAsNoLongerNeeded(61)
+StreamedScript.MarkAsNoLongerNeeded(60)
+StreamedScript.MarkAsNoLongerNeeded(27)
+StreamedScript.MarkAsNoLongerNeeded(28)
+StreamedScript.MarkAsNoLongerNeeded(30)
+StreamedScript.MarkAsNoLongerNeeded(31)
+StreamedScript.MarkAsNoLongerNeeded(29)
+StreamedScript.MarkAsNoLongerNeeded(34)
+StreamedScript.MarkAsNoLongerNeeded(35)
+StreamedScript.MarkAsNoLongerNeeded(36)
+StreamedScript.MarkAsNoLongerNeeded(37)
+StreamedScript.MarkAsNoLongerNeeded(38)
+StreamedScript.MarkAsNoLongerNeeded(39)
+StreamedScript.MarkAsNoLongerNeeded(40)
+DecisionMaker.Remove($iGlobalPedPanicDM)
+DecisionMaker.Remove($iGlobalShopkeeperDM)
+$iGlobalPedPanicDM = -1
+$iGlobalShopkeeperDM = -1
+return 
+
+:Noname_8
+terminate_this_script 
+

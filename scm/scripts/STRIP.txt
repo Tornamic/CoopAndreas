@@ -1,0 +1,862 @@
+//-------------External script 31 (STRIP_AMBIENCE)---------------
+
+:STRIP
+script_name 'STRIP'
+if 
+  $onmission == 0
+goto_if_false @STRIP_43
+$iSetSTRIPPanic = 0
+$iBouncerAction = 0
+
+:STRIP_43
+0@ = 0
+if 
+  0@ == 1
+goto_if_false @STRIP_114
+$iStripperPed = Char.Create(5, 0, 0.0, 0.0, 0.0)
+$iPlayerMoney = Object.Create(0, 0.0, 0.0, 0.0)
+
+:STRIP_114
+1@ = 1
+$iThrowMoneyState = 0
+$iPrintStripperHelp = 0
+gosub @STRIP_2509
+7@ = Sequence.Open()
+Task.PlayAnim(-1, "BARSERVE_IN", "BAR", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "BARSERVE_LOOP", "BAR", 4.0, True, False, False, False, 10000)
+Sequence.Close(7@)
+8@ = Sequence.Open()
+Task.PlayAnim(-1, "BARSERVE_BOTTLE", "BAR", 4.0, False, False, False, False, -1)
+Sequence.Close(8@)
+9@ = Sequence.Open()
+Task.WanderStandard(-1)
+Sequence.Close(9@)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @STRIP_881
+Player.ResetNumOfModelsKilled($player1)
+v$txtString = Char.GetNameOfEntryExitUsed($scplayer)
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "LASTRIP"
+goto_if_false @STRIP_650
+10@ = Attractor.Add(1214.859, -15.4637, 999.9219, 0.0, 180.0, 7@)
+11@ = Attractor.Add(1217.084, -15.4657, 999.9219, 0.0, 180.0, 7@)
+12@ = Attractor.Add(1213.234, -15.4087, 999.9219, 0.0, 180.0, 7@)
+13@ = Attractor.Add(1214.085, -15.4395, 999.9219, 0.0, 180.0, 8@)
+16@ = Char.CreateAtAttractor(PedType.CivFemale, 172, 10@, 1466)
+StreamedScript.StartNew(38, 16@, 10@, 11@, 12@, 13@, 2.5, 15.0, 1)
+StreamedScript.Stream(38)
+14@ = Attractor.Add(1220.042, -15.3365, 999.9219, 341.7, -341.7, 9@)
+15@ = Attractor.Add(1222.008, 4.4324, 999.9219, 93.3, -93.3, 9@)
+17@ = Char.CreateAtAttractor(PedType.CivMale, 163, 14@, 1502)
+18@ = Char.CreateAtAttractor(PedType.CivMale, 164, 15@, 1502)
+StreamedScript.StartNew(39, 17@)
+StreamedScript.StartNew(39, 18@)
+StreamedScript.Stream(39)
+
+:STRIP_650
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "STRIP2"
+goto_if_false @STRIP_881
+10@ = -1
+11@ = Attractor.Add(1206.2, -30.6012, 999.9531, 180.0, 0.0, 7@)
+12@ = -1
+13@ = Attractor.Add(1206.2, -29.1414, 999.9531, 270.0, 0.0, 8@)
+16@ = Char.CreateAtAttractor(PedType.CivFemale, 172, 11@, 1466)
+StreamedScript.StartNew(38, 16@, 11@, 11@, 11@, 13@, 1.5, 15.0, 1)
+StreamedScript.Stream(38)
+14@ = Attractor.Add(1216.871, -24.1246, 999.9531, 146.8, -146.8, 9@)
+15@ = -1
+17@ = Char.CreateAtAttractor(PedType.CivMale, 163, 14@, 1502)
+18@ = -1
+StreamedScript.StartNew(39, 17@)
+StreamedScript.Stream(39)
+
+:STRIP_881
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @STRIP_2502
+$iAreaCode = Char.GetAreaVisible($scplayer)
+if or
+  $iAreaCode == 0
+  $iTerminateAllAmbience == 1
+goto_if_false @STRIP_941
+goto @STRIP_2586
+
+:STRIP_941
+if 
+  4@ > 0
+goto_if_false @STRIP_973
+gosub @STRIP_2766
+goto @STRIP_881
+
+:STRIP_973
+if 
+  $iThrowMoneyState <> 0
+goto_if_false @STRIP_1042
+if 
+  not Char.IsDead($iStripperPed)
+goto_if_false @STRIP_1021
+gosub @STRIP_5426
+goto @STRIP_1042
+
+:STRIP_1021
+Player.SetControl($player1, True)
+$iThrowMoneyState = 0
+$iStripperPed = -1
+
+:STRIP_1042
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "LASTRIP"
+goto_if_false @STRIP_1326
+if and
+  $iSetSTRIPPanic == 0
+  $iBouncerAction == 0
+goto_if_false @STRIP_1326
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, 1204.85, 11.8, 999.9219, 1.0, 1.0, 1.0, True)
+goto_if_false @STRIP_1312
+if 
+  Player.IsScoreGreater($player1, 99)
+goto_if_false @STRIP_1298
+if 
+  2@ == 0
+goto_if_false @STRIP_1291
+3@ = 1
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @STRIP_1291
+Player.AddScore($player1, -100)
+Stat.IncrementFloat(100.0, 54)
+2@ = 1
+3@ = 0
+19@ = 1204.326
+20@ = 17.709
+21@ = 998.925
+22@ = 0.0
+Camera.DoFade(0, 500)
+4@ = 1
+gosub @STRIP_2766
+
+:STRIP_1291
+goto @STRIP_1305
+
+:STRIP_1298
+3@ = 2
+
+:STRIP_1305
+goto @STRIP_1326
+
+:STRIP_1312
+3@ = 0
+2@ = 0
+
+:STRIP_1326
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "STRIP2"
+goto_if_false @STRIP_1624
+if and
+  $iSetSTRIPPanic == 0
+  $iBouncerAction == 0
+goto_if_false @STRIP_1624
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, 1207.59, -40.646, 999.9531, 1.0, 1.0, 1.0, True)
+goto_if_false @STRIP_1610
+if 
+  Player.IsScoreGreater($player1, 99)
+goto_if_false @STRIP_1596
+if 
+  2@ == 0
+goto_if_false @STRIP_1589
+3@ = 1
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @STRIP_1589
+Player.AddScore($player1, -100)
+22@ = Stat.GetFloat(54)
+22@ += 100.0
+22@ = Stat.GetFloat(54)
+2@ = 1
+3@ = 0
+19@ = 1207.366
+20@ = -43.595
+21@ = 998.925
+22@ = 0.0
+Camera.DoFade(0, 500)
+4@ = 1
+gosub @STRIP_2766
+
+:STRIP_1589
+goto @STRIP_1603
+
+:STRIP_1596
+3@ = 2
+
+:STRIP_1603
+goto @STRIP_1624
+
+:STRIP_1610
+3@ = 0
+2@ = 0
+
+:STRIP_1624
+if and
+  $iSetSTRIPPanic == 0
+  $iBouncerAction == 0
+goto_if_false @STRIP_1784
+if 
+  3@ == 1
+goto_if_false @STRIP_1685
+Text.PrintHelpForever('STR_01')
+goto @STRIP_1777
+
+:STRIP_1685
+if 
+  3@ == 2
+goto_if_false @STRIP_1721
+Text.PrintHelpForever('STR_03')
+goto @STRIP_1777
+
+:STRIP_1721
+if 
+  $iPrintStripperHelp > 0
+goto_if_false @STRIP_1757
+Text.PrintHelpForever('STR_00')
+goto @STRIP_1777
+
+:STRIP_1757
+if 
+  4@ == 0
+goto_if_false @STRIP_1777
+Text.ClearHelp
+
+:STRIP_1777
+goto @STRIP_1786
+
+:STRIP_1784
+Text.ClearHelp
+
+:STRIP_1786
+if 
+  Char.IsShooting($scplayer)
+goto_if_false @STRIP_1816
+$iSetSTRIPPanic = 1
+$iBouncerAction = 1
+
+:STRIP_1816
+if 
+  Player.IsWantedLevelGreater($player1, $iWantedOnEntry)
+goto_if_false @STRIP_1849
+$iSetSTRIPPanic = 1
+$iBouncerAction = 1
+
+:STRIP_1849
+0@ = Player.GetTotalNumberOfPedsKilled($player1)
+if 
+  0@ > 0
+goto_if_false @STRIP_1882
+$iBouncerAction = 1
+
+:STRIP_1882
+0@ = 0
+
+:STRIP_1889
+if 
+  not Char.IsDead(16@(0@,3i))
+goto_if_false @STRIP_1997
+if and
+  Player.IsTargetingChar($player1, 16@(0@,3i))
+  not Char.IsCurrentWeapon($scplayer, WeaponType.AnyMelee)
+goto_if_false @STRIP_1960
+$iSetSTRIPPanic = 1
+$iBouncerAction = 1
+goto @STRIP_1997
+
+:STRIP_1960
+if 
+  Char.HasBeenDamagedByChar(16@(0@,3i), $scplayer)
+goto_if_false @STRIP_1997
+$iSetSTRIPPanic = 1
+$iBouncerAction = 1
+
+:STRIP_1997
+0@ += 1
+  0@ >= 3
+goto_if_false @STRIP_1889
+if 
+  $iSetSTRIPPanic == 1
+goto_if_false @STRIP_2102
+$iBouncerAction = 1
+0@ = World.GetRandomCharInSphereNoBrain(19@, 20@, 21@, 50.0)
+if 
+  0@ > -1
+goto_if_false @STRIP_2102
+1@ += 1
+StreamedScript.StartNew(37, 0@, 1@)
+StreamedScript.Stream(37)
+
+:STRIP_2102
+if 
+  $iBouncerAction == 1
+goto_if_false @STRIP_2502
+if and
+  Char.IsDead(17@)
+  14@ <> -1
+goto_if_false @STRIP_2338
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "LASTRIP"
+goto_if_false @STRIP_2198
+19@ = 1220.042
+20@ = -15.3365
+21@ = 999.9219
+
+:STRIP_2198
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "STRIP2"
+goto_if_false @STRIP_2252
+19@ = 1216.871
+20@ = -24.1246
+21@ = 999.9531
+
+:STRIP_2252
+if and
+  not Char.LocateAnyMeans3D($scplayer, 0, 19@, 20@, 21@, 8.0, 8.0, 8.0)
+  not Camera.IsPointOnScreen(19@, 20@, 21@, 3.0)
+goto_if_false @STRIP_2338
+17@ = Char.CreateAtAttractor(PedType.CivMale, 163, 14@, 1502)
+StreamedScript.StartNew(39, 17@)
+StreamedScript.Stream(39)
+
+:STRIP_2338
+if and
+  Char.IsDead(18@)
+  15@ <> -1
+goto_if_false @STRIP_2502
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "LASTRIP"
+goto_if_false @STRIP_2416
+19@ = 1222.008
+20@ = 4.4324
+21@ = 999.9219
+
+:STRIP_2416
+if and
+  not Char.LocateAnyMeans3D($scplayer, 0, 19@, 20@, 21@, 8.0, 8.0, 8.0)
+  not Camera.IsPointOnScreen(19@, 20@, 21@, 3.0)
+goto_if_false @STRIP_2502
+18@ = Char.CreateAtAttractor(PedType.CivMale, 164, 15@, 1502)
+StreamedScript.StartNew(39, 18@)
+StreamedScript.Stream(39)
+
+:STRIP_2502
+goto @STRIP_881
+
+:STRIP_2509
+Streaming.RequestModel(163)
+Streaming.RequestModel(164)
+Streaming.RequestModel(172)
+Streaming.RequestAnimation("BAR")
+if and
+  Streaming.HasModelLoaded(163)
+  Streaming.HasModelLoaded(164)
+  Streaming.HasModelLoaded(172)
+  Streaming.HasAnimationLoaded("BAR")
+goto_if_false @STRIP_2573
+return 
+goto @STRIP_2584
+
+:STRIP_2573
+wait 0
+goto @STRIP_2509
+
+:STRIP_2584
+return 
+
+:STRIP_2586
+0@ = 0
+
+:STRIP_2593
+Char.MarkAsNoLongerNeeded(16@(0@,3i))
+Char.Delete(16@(0@,3i))
+0@ += 1
+  0@ >= 3
+goto_if_false @STRIP_2593
+0@ = 0
+
+:STRIP_2639
+if 
+  10@(0@,6i) <> -1
+goto_if_false @STRIP_2670
+Attractor.Clear(10@(0@,6i))
+
+:STRIP_2670
+0@ += 1
+  0@ >= 6
+goto_if_false @STRIP_2639
+Streaming.MarkModelAsNoLongerNeeded(172)
+Streaming.MarkModelAsNoLongerNeeded(163)
+Streaming.MarkModelAsNoLongerNeeded(164)
+Sequence.Clear(7@)
+Sequence.Clear(8@)
+Streaming.RemoveAnimation("STRIP")
+Streaming.RemoveAnimation("BAR")
+$iBouncerAction = 0
+Text.ClearHelp
+if 
+  Player.IsPlaying($player1)
+goto_if_false @STRIP_2764
+Player.SetControl($player1, True)
+
+:STRIP_2764
+terminate_this_script 
+
+:STRIP_2766
+switch_start 4@ total_jumps 6 default_jump 0 @STRIP_3923 jumps 1 @STRIP_2829 2 @STRIP_3053 3 @STRIP_3194 4 @STRIP_3320 5 @STRIP_3653 6 @STRIP_3887 -1 @STRIP_3923
+
+:STRIP_2829
+if 
+  not Camera.GetFadingStatus
+goto_if_false @STRIP_3046
+Text.ClearHelp
+Player.SetControl($player1, False)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Hud.Display(False)
+Hud.DisplayRadar(False)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCollision($scplayer, False)
+Char.SetCoordinates($scplayer, 19@, 20@, 21@)
+Char.SetHeading($scplayer, 22@)
+Camera.SetInFrontOfPlayer
+if 
+  $iLapDancesWatched == 0
+goto_if_false @STRIP_2956
+set_lvar_int_to_constant 5@ = 256
+set_lvar_text_label16 28@v = "LAPDAN1"
+$iLapDancesWatched += 1
+goto @STRIP_3039
+
+:STRIP_2956
+if 
+  $iLapDancesWatched == 1
+goto_if_false @STRIP_3010
+set_lvar_int_to_constant 5@ = 257
+set_lvar_text_label16 28@v = "LAPDAN2"
+$iLapDancesWatched += 1
+goto @STRIP_3039
+
+:STRIP_3010
+set_lvar_int_to_constant 5@ = 246
+set_lvar_text_label16 28@v = "LAPDAN3"
+$iLapDancesWatched = 0
+
+:STRIP_3039
+4@ += 1
+
+:STRIP_3046
+goto @STRIP_3923
+
+:STRIP_3053
+if 
+  not Streaming.HasAnimationLoaded(28@v)
+goto_if_false @STRIP_3081
+Streaming.RequestAnimation(28@v)
+goto @STRIP_3187
+
+:STRIP_3081
+if 
+  not Streaming.HasModelLoaded(5@)
+goto_if_false @STRIP_3109
+Streaming.RequestModel(5@)
+goto @STRIP_3187
+
+:STRIP_3109
+19@ = Char.GetOffsetInWorldCoords(20@, 21@, $scplayer, 0.0, -1.0, -1.0)
+22@ = Char.GetHeading($scplayer)
+5@ = Char.Create(5, 5@, 19@, 20@, 21@)
+Char.SetCollision(5@, False)
+Char.SetHeading(5@, 22@)
+4@ += 1
+
+:STRIP_3187
+goto @STRIP_3923
+
+:STRIP_3194
+Task.PlayAnimNonInterruptable($scplayer, "LAPDAN_P", 28@v, 1000.0, False, False, False, True, -1)
+if 
+  not Char.IsDead(5@)
+goto_if_false @STRIP_3290
+Task.PlayAnimNonInterruptable(5@, "LAPDAN_D", 28@v, 1000.0, False, False, False, True, -1)
+6@ = -1
+gosub @STRIP_3925
+
+:STRIP_3290
+Camera.DoFade(1, 1500)
+TIMERB = 0
+Text.ClearHelp
+4@ += 1
+goto @STRIP_3923
+
+:STRIP_3320
+if 
+  not Camera.GetFadingStatus
+goto_if_false @STRIP_3646
+if 
+  not Char.IsDead(5@)
+goto_if_false @STRIP_3639
+if 
+  Char.IsPlayingAnim($scplayer, "LAPDAN_P")
+goto_if_false @STRIP_3432
+23@ = Char.GetAnimTotalTime($scplayer, "LAPDAN_P")
+cset_lvar_int_to_lvar_float 25@ = float 23@
+25@ -= 800
+set_lvar_int_to_lvar_int 26@ = 25@
+26@ -= 2200
+goto @STRIP_3439
+
+:STRIP_3432
+25@ = 0
+
+:STRIP_3439
+if and
+  TIMERB > 2500
+  2600 > TIMERB
+goto_if_false @STRIP_3499
+if 
+  not Text.IsThisHelpMessageBeingDisplayed('STR_02')
+goto_if_false @STRIP_3499
+Text.PrintHelp('STR_02')
+
+:STRIP_3499
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar TIMERB >= 25@
+goto_if_false @STRIP_3539
+Camera.DoFade(0, 500)
+4@ += 1
+goto @STRIP_3923
+
+:STRIP_3539
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+  TIMERA >= 500
+  TIMERB > 2500
+  is_int_lvar_greater_than_int_lvar 26@ > TIMERB
+goto_if_false @STRIP_3594
+gosub @STRIP_3925
+TIMERA = 0
+
+:STRIP_3594
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @STRIP_3632
+Camera.DoFade(0, 500)
+4@ += 1
+goto @STRIP_3923
+
+:STRIP_3632
+goto @STRIP_3646
+
+:STRIP_3639
+4@ += 1
+
+:STRIP_3646
+goto @STRIP_3923
+
+:STRIP_3653
+if 
+  not Camera.GetFadingStatus
+goto_if_false @STRIP_3880
+if 
+  not Char.IsDead(5@)
+goto_if_false @STRIP_3873
+Text.ClearHelp
+0@ = Char.GetModel(5@)
+Streaming.MarkModelAsNoLongerNeeded(0@)
+Streaming.RemoveAnimation(28@v)
+Char.Delete(5@)
+Char.ClearTasksImmediately($scplayer)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Hud.Display(True)
+Hud.DisplayRadar(True)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCollision($scplayer, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "LASTRIP"
+goto_if_false @STRIP_3798
+Char.SetCoordinates($scplayer, 1204.991, 12.6603, 999.9219)
+Char.SetHeading($scplayer, 180.0)
+
+:STRIP_3798
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "STRIP2"
+goto_if_false @STRIP_3852
+Char.SetCoordinates($scplayer, 1207.59, -40.646, 999.9531)
+Char.SetHeading($scplayer, 360.0)
+
+:STRIP_3852
+Camera.DoFade(1, 500)
+4@ += 1
+goto @STRIP_3880
+
+:STRIP_3873
+4@ += 1
+
+:STRIP_3880
+goto @STRIP_3923
+
+:STRIP_3887
+if 
+  not Camera.GetFadingStatus
+goto_if_false @STRIP_3916
+Player.SetControl($player1, True)
+4@ = 0
+return 
+
+:STRIP_3916
+goto @STRIP_3923
+
+:STRIP_3923
+return 
+
+:STRIP_3925
+switch_start 6@ total_jumps 5 default_jump 1 @STRIP_5173 jumps -1 @STRIP_3988 0 @STRIP_4225 1 @STRIP_4462 2 @STRIP_4699 3 @STRIP_4936 -1 @STRIP_5417 -1 @STRIP_5417
+
+:STRIP_3988
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "LASTRIP"
+goto_if_false @STRIP_4119
+19@ = 1204.562
+20@ = 15.6486
+21@ = 1001.333
+Camera.SetFixedPosition(19@, 20@, 21@, 0.0, 0.0, 0.0)
+19@ = 1204.437
+20@ = 16.5805
+21@ = 1000.992
+Camera.PointAtPoint(19@, 20@, 21@, SwitchType.JumpCut)
+goto @STRIP_4218
+
+:STRIP_4119
+19@ = 1208.32
+20@ = -45.8672
+21@ = 1001.066
+Camera.SetFixedPosition(19@, 20@, 21@, 0.0, 0.0, 0.0)
+19@ = 1207.847
+20@ = -44.9985
+21@ = 1000.919
+Camera.PointAtPoint(19@, 20@, 21@, SwitchType.JumpCut)
+
+:STRIP_4218
+goto @STRIP_5417
+
+:STRIP_4225
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "LASTRIP"
+goto_if_false @STRIP_4356
+19@ = 1202.654
+20@ = 16.7123
+21@ = 1001.302
+Camera.SetFixedPosition(19@, 20@, 21@, 0.0, 0.0, 0.0)
+19@ = 1203.589
+20@ = 16.9879
+21@ = 1001.08
+Camera.PointAtPoint(19@, 20@, 21@, SwitchType.Interpolation)
+goto @STRIP_4455
+
+:STRIP_4356
+19@ = 1205.649
+20@ = -44.5486
+21@ = 1001.344
+Camera.SetFixedPosition(19@, 20@, 21@, 0.0, 0.0, 0.0)
+19@ = 1206.541
+20@ = -44.2188
+21@ = 1001.035
+Camera.PointAtPoint(19@, 20@, 21@, SwitchType.Interpolation)
+
+:STRIP_4455
+goto @STRIP_5417
+
+:STRIP_4462
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "LASTRIP"
+goto_if_false @STRIP_4593
+19@ = 1203.529
+20@ = 18.3118
+21@ = 1001.391
+Camera.SetFixedPosition(19@, 20@, 21@, 0.0, 0.0, 0.0)
+19@ = 1204.11
+20@ = 17.5609
+21@ = 1001.078
+Camera.PointAtPoint(19@, 20@, 21@, SwitchType.Interpolation)
+goto @STRIP_4692
+
+:STRIP_4593
+19@ = 1206.434
+20@ = -43.1812
+21@ = 1001.705
+Camera.SetFixedPosition(19@, 20@, 21@, 0.0, 0.0, 0.0)
+19@ = 1207.044
+20@ = -43.796
+21@ = 1001.204
+Camera.PointAtPoint(19@, 20@, 21@, SwitchType.Interpolation)
+
+:STRIP_4692
+goto @STRIP_5417
+
+:STRIP_4699
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "LASTRIP"
+goto_if_false @STRIP_4830
+19@ = 1204.712
+20@ = 18.3221
+21@ = 1000.941
+Camera.SetFixedPosition(19@, 20@, 21@, 0.0, 0.0, 0.0)
+19@ = 1204.409
+20@ = 17.369
+21@ = 1000.95
+Camera.PointAtPoint(19@, 20@, 21@, SwitchType.Interpolation)
+goto @STRIP_4929
+
+:STRIP_4830
+19@ = 1207.472
+20@ = -43.1042
+21@ = 1001.054
+Camera.SetFixedPosition(19@, 20@, 21@, 0.0, 0.0, 0.0)
+19@ = 1207.325
+20@ = -44.0841
+21@ = 1000.919
+Camera.PointAtPoint(19@, 20@, 21@, SwitchType.Interpolation)
+
+:STRIP_4929
+goto @STRIP_5417
+
+:STRIP_4936
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "LASTRIP"
+goto_if_false @STRIP_5067
+19@ = 1205.856
+20@ = 17.3141
+21@ = 1002.26
+Camera.SetFixedPosition(19@, 20@, 21@, 0.0, 0.0, 0.0)
+19@ = 1205.096
+20@ = 17.1228
+21@ = 1001.64
+Camera.PointAtPoint(19@, 20@, 21@, SwitchType.Interpolation)
+goto @STRIP_5166
+
+:STRIP_5067
+19@ = 1207.846
+20@ = -43.4954
+21@ = 1001.964
+Camera.SetFixedPosition(19@, 20@, 21@, 0.0, 0.0, 0.0)
+19@ = 1207.427
+20@ = -43.9585
+21@ = 1001.184
+Camera.PointAtPoint(19@, 20@, 21@, SwitchType.Interpolation)
+
+:STRIP_5166
+goto @STRIP_5417
+
+:STRIP_5173
+6@ = -1
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "LASTRIP"
+goto_if_false @STRIP_5311
+19@ = 1204.562
+20@ = 15.6486
+21@ = 1001.333
+Camera.SetFixedPosition(19@, 20@, 21@, 0.0, 0.0, 0.0)
+19@ = 1204.437
+20@ = 16.5805
+21@ = 1000.992
+Camera.PointAtPoint(19@, 20@, 21@, SwitchType.Interpolation)
+goto @STRIP_5410
+
+:STRIP_5311
+19@ = 1207.978
+20@ = -46.1248
+21@ = 1001.215
+Camera.SetFixedPosition(19@, 20@, 21@, 0.0, 0.0, 0.0)
+19@ = 1207.757
+20@ = -45.1702
+21@ = 1001.016
+Camera.PointAtPoint(19@, 20@, 21@, SwitchType.Interpolation)
+
+:STRIP_5410
+goto @STRIP_5417
+
+:STRIP_5417
+6@ += 1
+return 
+
+:STRIP_5426
+switch_start $iThrowMoneyState total_jumps 4 default_jump 0 @STRIP_5877 jumps 1 @STRIP_5489 2 @STRIP_5518 3 @STRIP_5598 4 @STRIP_5770 -1 @STRIP_5877 -1 @STRIP_5877 -1 @STRIP_5877
+
+:STRIP_5489
+Player.SetControl($player1, False)
+Task.TurnCharToFaceChar($scplayer, $iStripperPed)
+$iThrowMoneyState = 2
+goto @STRIP_5877
+
+:STRIP_5518
+27@ = Char.GetScriptTaskStatus($scplayer, 1593)
+if 
+  is_int_lvar_equal_to_constant 27@ == 7
+goto_if_false @STRIP_5591
+Task.PlayAnimNonInterruptable($scplayer, "PLY_CASH", "STRIP", 4.0, False, False, False, False, 0)
+$iThrowMoneyState = 3
+
+:STRIP_5591
+goto @STRIP_5877
+
+:STRIP_5598
+if 
+  Char.IsPlayingAnim($scplayer, "PLY_CASH")
+goto_if_false @STRIP_5756
+24@ = Char.GetAnimCurrentTime($scplayer, "PLY_CASH")
+if and
+  24@ >= 0.35
+  1.0 > 24@
+goto_if_false @STRIP_5749
+19@ = Char.GetOffsetInWorldCoords(20@, 21@, $iStripperPed, 0.0, 0.5, -0.5)
+$iPlayerMoney = Object.CreateNoOffset(#MONEY, 19@, 20@, 21@)
+Object.SetCollision($iPlayerMoney, False)
+Player.AddScore($player1, -20)
+Stat.IncrementFloat(20.0, 54)
+$iThrowMoneyState = 4
+
+:STRIP_5749
+goto @STRIP_5763
+
+:STRIP_5756
+$iThrowMoneyState = 4
+
+:STRIP_5763
+goto @STRIP_5877
+
+:STRIP_5770
+if 
+  Char.IsPlayingAnim($scplayer, "PLY_CASH")
+goto_if_false @STRIP_5856
+24@ = Char.GetAnimCurrentTime($scplayer, "PLY_CASH")
+if 
+  24@ >= 1.0
+goto_if_false @STRIP_5849
+Player.SetControl($player1, True)
+$iThrowMoneyState = 0
+
+:STRIP_5849
+goto @STRIP_5870
+
+:STRIP_5856
+Player.SetControl($player1, True)
+$iThrowMoneyState = 0
+
+:STRIP_5870
+goto @STRIP_5877
+
+:STRIP_5877
+return 
+terminate_this_script 
+

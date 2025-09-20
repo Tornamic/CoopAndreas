@@ -1,0 +1,998 @@
+//-------------Mission 107---------------
+// Originally: Grove 4 Life
+
+:GROVE2
+script_name 'GROVE2'
+gosub @GROVE2_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @GROVE2_38
+gosub @GROVE2_3141
+
+:GROVE2_38
+gosub @GROVE2_3228
+terminate_this_script 
+
+:GROVE2_47
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Text.LoadMissionText('GROVE2')
+Camera.SetFadingColor(0, 0, 0)
+Stat.RegisterMissionGiven
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:GROVE2_87
+if 
+  Camera.GetFadingStatus
+goto_if_false @GROVE2_111
+wait 0
+goto @GROVE2_87
+
+:GROVE2_111
+Weather.ForceNow(WeatherType.SunnyLa)
+Streaming.SetAreaVisible(1)
+Cutscene.Load('GROVE2')
+
+:GROVE2_130
+if 
+  not Cutscene.HasLoaded
+goto_if_false @GROVE2_154
+wait 0
+goto @GROVE2_130
+
+:GROVE2_154
+Cutscene.Start
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+
+:GROVE2_171
+if 
+  not Cutscene.HasFinished
+goto_if_false @GROVE2_195
+wait 0
+goto @GROVE2_171
+
+:GROVE2_195
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, Fade.Out)
+
+:GROVE2_209
+if 
+  Camera.GetFadingStatus
+goto_if_false @GROVE2_233
+wait 0
+goto @GROVE2_209
+
+:GROVE2_233
+Cutscene.Clear
+Weather.Release
+Streaming.LoadSpecialCharacter('SWEET', 1)
+Streaming.RequestModel(355)
+Streaming.RequestModel(492)
+Streaming.LoadAllModelsNow
+
+:GROVE2_262
+if or
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasModelLoaded(355)
+  not Streaming.HasModelLoaded(492)
+goto_if_false @GROVE2_298
+wait 0
+goto @GROVE2_262
+
+:GROVE2_298
+Streaming.SetAreaVisible(0)
+Hud.SwitchWidescreen(False)
+$g2_sweet_hlth = 0
+$g2_idlewood_off = 0
+47@ = 2
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GROVE2_352
+Player.ClearWantedLevel($player1)
+
+:GROVE2_352
+Player.SetGroupToFollowAlways($player1, True)
+Game.SetGangWarsActive(True)
+Game.CanTriggerGangWarWhenOnAMission(True)
+Streaming.LoadScene(2497.324, -1684.744, 12.44)
+Char.SetCoordinates($scplayer, 2497.324, -1684.744, 12.44)
+Char.SetHeading($scplayer, 0.0)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+$sweet = Char.Create(24, 290, 2496.633, -1684.573, 12.435)
+Car.CustomPlateForNextCar(492, "GROVE4L_")
+39@ = Car.Create(492, 2507.699, -1671.716, 12.3823)
+Car.ChangeColor(39@, 59, 34)
+Car.SetHeading(39@, 355.4549)
+Char.SetHeading($sweet, 0.0)
+Char.SetAnimGroup($sweet, "GANG2")
+Char.GiveWeapon($sweet, WeaponType.Ak47, 30000)
+Char.SetNeverTargeted($sweet, True)
+Char.SetSuffersCriticalHits($sweet, False)
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Group.SetMember($sweet, $Players_Group)
+Char.SetAccuracy($sweet, 90)
+Char.SetHealth($sweet, 1000)
+Char.SetMaxHealth($sweet, 1000)
+Char.SetRelationship($sweet, RelationshipType.Hate, PedType.Mission2)
+$g2_sweet_hlth = Char.GetHealth($sweet)
+$g2_sweet_hlth /= 10
+Hud.DisplayCounterWithString($g2_sweet_hlth, CounterDisplay.Bar, 'GR2_01')
+34@ = Blip.AddForChar($sweet)
+Blip.SetAsFriendly(34@, True)
+36@ = Blip.AddForCoord(2002.815, -1613.084, 12.3828)
+55@ = Blip.AddForCoord(2507.184, -1672.906, 12.3824)
+Blip.ChangeDisplay(34@, BlipDisplay.Neither)
+Blip.ChangeDisplay(55@, BlipDisplay.Neither)
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(2.0)
+TIMERA = 0
+Zone.SetGangStrength('IWD3A', GangType.Grove, 0)
+Zone.SetGangStrength('IWD3A', GangType.Ballas, 100)
+Zone.SetGangStrength('IWD3B', GangType.Grove, 0)
+Zone.SetGangStrength('IWD3B', GangType.Ballas, 100)
+Zone.SetGangStrength('IWD1', GangType.Grove, 0)
+Zone.SetGangStrength('IWD1', GangType.Ballas, 100)
+Zone.SetGangStrength('IWD4', GangType.Grove, 0)
+Zone.SetGangStrength('IWD4', GangType.Ballas, 100)
+Zone.SetTriggerGangWar('IWD3A')
+Zone.SetTriggerGangWar('IWD3B')
+Zone.SetTriggerGangWar('IWD1')
+Zone.SetTriggerGangWar('IWD4')
+Zone.SetNoCops('IWD3A', True)
+Zone.SetNoCops('IWD3B', True)
+Zone.SetNoCops('IWD1', True)
+Zone.SetNoCops('IWD4', True)
+
+:GROVE2_942
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GROVE2_2932
+wait 0
+gosub @GROVE2_3596
+gosub @GROVE2_5403
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @GROVE2_998
+goto @GROVE2_3159
+
+:GROVE2_998
+if and
+  not Car.IsDead(39@)
+  not Char.IsDead($scplayer)
+goto_if_false @GROVE2_1067
+if 
+  Char.IsInCar($scplayer, 39@)
+goto_if_false @GROVE2_1067
+if 
+  57@ == 0
+goto_if_false @GROVE2_1067
+Audio.SetRadioChannel(RadioChannel.BounceFM)
+57@ = 1
+
+:GROVE2_1067
+if and
+  TIMERA > 4000
+  58@ == 1
+goto_if_false @GROVE2_1316
+$g2_rnd = Math.RandomIntInRange(0, 4)
+switch_start $g2_rnd total_jumps 4 default_jump 0 @GROVE2_1309 jumps 0 @GROVE2_1165 1 @GROVE2_1201 2 @GROVE2_1237 3 @GROVE2_1273 -1 @GROVE2_1309 -1 @GROVE2_1309 -1 @GROVE2_1309
+
+:GROVE2_1165
+set_lvar_text_label 59@s = 'GRO2_DA'
+set_lvar_int_to_constant 46@ = 17611
+gosub @GROVE2_5383
+goto @GROVE2_1309
+
+:GROVE2_1201
+set_lvar_text_label 59@s = 'GRO2_DB'
+set_lvar_int_to_constant 46@ = 17612
+gosub @GROVE2_5383
+goto @GROVE2_1309
+
+:GROVE2_1237
+set_lvar_text_label 59@s = 'GRO2_DC'
+set_lvar_int_to_constant 46@ = 17613
+gosub @GROVE2_5383
+goto @GROVE2_1309
+
+:GROVE2_1273
+set_lvar_text_label 59@s = 'GRO2_DD'
+set_lvar_int_to_constant 46@ = 17614
+gosub @GROVE2_5383
+goto @GROVE2_1309
+
+:GROVE2_1309
+58@ = 2
+
+:GROVE2_1316
+if and
+  47@ == 2
+  58@ == 2
+goto_if_false @GROVE2_1492
+$g2_rnd = Math.RandomIntInRange(0, 2)
+switch_start $g2_rnd total_jumps 2 default_jump 0 @GROVE2_1485 jumps 0 @GROVE2_1413 1 @GROVE2_1449 -1 @GROVE2_1485 -1 @GROVE2_1485 -1 @GROVE2_1485 -1 @GROVE2_1485 -1 @GROVE2_1485
+
+:GROVE2_1413
+set_lvar_text_label 59@s = 'GRO2_EA'
+set_lvar_int_to_constant 46@ = 17615
+gosub @GROVE2_5383
+goto @GROVE2_1485
+
+:GROVE2_1449
+set_lvar_text_label 59@s = 'GRO2_EB'
+set_lvar_int_to_constant 46@ = 17616
+gosub @GROVE2_5383
+goto @GROVE2_1485
+
+:GROVE2_1485
+58@ = 3
+
+:GROVE2_1492
+if and
+  47@ == 2
+  58@ == 3
+goto_if_false @GROVE2_1540
+Text.PrintNow('GR2_10', 7000, 1)
+58@ = 4
+
+:GROVE2_1540
+if 
+  54@ == 0
+goto_if_false @GROVE2_2508
+40@ = Zone.GetGangStrength('IWD3A', GangType.Ballas)
+41@ = Zone.GetGangStrength('IWD3B', GangType.Ballas)
+43@ = Zone.GetGangStrength('IWD1', GangType.Ballas)
+44@ = Zone.GetGangStrength('IWD4', GangType.Ballas)
+if 
+  38@ == 0
+goto_if_false @GROVE2_1676
+set_lvar_text_label 59@s = 'GRO2_AA'
+set_lvar_int_to_constant 46@ = 17600
+gosub @GROVE2_5383
+38@ = 1
+
+:GROVE2_1676
+if and
+  47@ == 2
+  38@ == 1
+goto_if_false @GROVE2_1737
+set_lvar_text_label 59@s = 'GRO2_AB'
+set_lvar_int_to_constant 46@ = 17601
+gosub @GROVE2_5383
+38@ = 2
+
+:GROVE2_1737
+if and
+  47@ == 2
+  38@ == 2
+goto_if_false @GROVE2_1798
+set_lvar_text_label 59@s = 'GRO2_AC'
+set_lvar_int_to_constant 46@ = 17602
+gosub @GROVE2_5383
+38@ = 3
+
+:GROVE2_1798
+if and
+  47@ == 2
+  38@ == 3
+goto_if_false @GROVE2_1859
+set_lvar_text_label 59@s = 'GRO2_AD'
+set_lvar_int_to_constant 46@ = 17603
+gosub @GROVE2_5383
+38@ = 4
+
+:GROVE2_1859
+if and
+  47@ == 2
+  38@ == 4
+goto_if_false @GROVE2_1907
+Text.PrintNow('GR2_09', 7000, 1)
+38@ = 5
+
+:GROVE2_1907
+if 
+  56@ == 1
+goto_if_false @GROVE2_2148
+$g2_rnd = Math.RandomIntInRange(0, 4)
+switch_start $g2_rnd total_jumps 4 default_jump 0 @GROVE2_2141 jumps 0 @GROVE2_1997 1 @GROVE2_2033 2 @GROVE2_2069 3 @GROVE2_2105 -1 @GROVE2_2141 -1 @GROVE2_2141 -1 @GROVE2_2141
+
+:GROVE2_1997
+set_lvar_text_label 59@s = 'GRO2_CA'
+set_lvar_int_to_constant 46@ = 17607
+gosub @GROVE2_5383
+goto @GROVE2_2141
+
+:GROVE2_2033
+set_lvar_text_label 59@s = 'GRO2_CB'
+set_lvar_int_to_constant 46@ = 17608
+gosub @GROVE2_5383
+goto @GROVE2_2141
+
+:GROVE2_2069
+set_lvar_text_label 59@s = 'GRO2_CC'
+set_lvar_int_to_constant 46@ = 17609
+gosub @GROVE2_5383
+goto @GROVE2_2141
+
+:GROVE2_2105
+set_lvar_text_label 59@s = 'GRO2_CE'
+set_lvar_int_to_constant 46@ = 17610
+gosub @GROVE2_5383
+goto @GROVE2_2141
+
+:GROVE2_2141
+56@ = 2
+
+:GROVE2_2148
+if and
+  47@ == 2
+  56@ == 2
+goto_if_false @GROVE2_2196
+Text.PrintNow('GR2_05', 4000, 1)
+56@ = 3
+
+:GROVE2_2196
+if or
+  Player.IsInInfoZone($player1, 'IWD3A')
+  Player.IsInInfoZone($player1, 'IWD3B')
+  Player.IsInInfoZone($player1, 'IWD1')
+  Player.IsInInfoZone($player1, 'IWD4')
+goto_if_false @GROVE2_2327
+if 
+  37@ == 0
+goto_if_false @GROVE2_2313
+37@ = 1
+if 
+  56@ == 0
+goto_if_false @GROVE2_2313
+56@ = 1
+
+:GROVE2_2313
+Blip.ChangeDisplay(36@, BlipDisplay.Neither)
+goto @GROVE2_2352
+
+:GROVE2_2327
+if 
+  35@ == 1
+goto_if_false @GROVE2_2352
+Blip.ChangeDisplay(36@, BlipDisplay.Both)
+
+:GROVE2_2352
+if and
+  40@ == 0
+  48@ == 0
+goto_if_false @GROVE2_2391
+gosub @GROVE2_2939
+48@ = 1
+
+:GROVE2_2391
+if and
+  41@ == 0
+  49@ == 0
+goto_if_false @GROVE2_2430
+gosub @GROVE2_2939
+49@ = 1
+
+:GROVE2_2430
+if and
+  43@ == 0
+  50@ == 0
+goto_if_false @GROVE2_2469
+gosub @GROVE2_2939
+50@ = 1
+
+:GROVE2_2469
+if and
+  44@ == 0
+  51@ == 0
+goto_if_false @GROVE2_2508
+gosub @GROVE2_2939
+51@ = 1
+
+:GROVE2_2508
+if 
+  not Char.IsDead($sweet)
+goto_if_false @GROVE2_2781
+$g2_sweet_hlth = Char.GetHealth($sweet)
+$g2_sweet_hlth /= 10
+if 
+  Char.LocateAnyMeansChar2D($scplayer, $sweet, 30.0, 30.0, False)
+goto_if_false @GROVE2_2683
+if 
+  35@ == 0
+goto_if_false @GROVE2_2676
+if 
+  not Char.IsGroupMember($sweet, $Players_Group)
+goto_if_false @GROVE2_2619
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Group.SetMember($sweet, $Players_Group)
+
+:GROVE2_2619
+Blip.ChangeDisplay(34@, BlipDisplay.Neither)
+if 
+  54@ == 0
+goto_if_false @GROVE2_2644
+
+:GROVE2_2644
+if 
+  54@ == 1
+goto_if_false @GROVE2_2662
+
+:GROVE2_2662
+$g2_idlewood_off = 0
+35@ = 1
+
+:GROVE2_2676
+goto @GROVE2_2774
+
+:GROVE2_2683
+if 
+  35@ == 1
+goto_if_false @GROVE2_2774
+Text.PrintNow('GR2_02', 4000, 1)
+Blip.ChangeDisplay(34@, BlipDisplay.Both)
+if 
+  54@ == 0
+goto_if_false @GROVE2_2742
+
+:GROVE2_2742
+if 
+  54@ == 1
+goto_if_false @GROVE2_2760
+
+:GROVE2_2760
+$g2_idlewood_off = 1
+35@ = 0
+
+:GROVE2_2774
+goto @GROVE2_2804
+
+:GROVE2_2781
+Text.PrintNow('GR2_03', 4000, 1)
+goto @GROVE2_3141
+
+:GROVE2_2804
+if 
+  54@ == 1
+goto_if_false @GROVE2_2925
+if and
+  53@ == 1
+  47@ == 2
+goto_if_false @GROVE2_2870
+Text.PrintNow('GR2_11', 7000, 1)
+53@ = 2
+
+:GROVE2_2870
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 2507.184, -1672.906, 12.3824, 4.0, 4.0, 4.0)
+goto_if_false @GROVE2_2925
+goto @GROVE2_3791
+
+:GROVE2_2925
+goto @GROVE2_942
+
+:GROVE2_2932
+goto @GROVE2_3141
+
+:GROVE2_2939
+52@ += 1
+if 
+  58@ == 0
+goto_if_false @GROVE2_2978
+TIMERA = 0
+58@ = 1
+
+:GROVE2_2978
+if 
+  52@ == 2
+goto_if_false @GROVE2_3139
+set_lvar_text_label 59@s = 'GRO2_FA'
+set_lvar_int_to_constant 46@ = 17617
+gosub @GROVE2_5383
+54@ = 1
+Blip.ChangeDisplay(55@, BlipDisplay.Both)
+Blip.ChangeDisplay(36@, BlipDisplay.Neither)
+World.ClearArea(1, 2507.184, -1672.906, 12.3824, 10.0)
+if 
+  not Car.IsDead(39@)
+goto_if_false @GROVE2_3139
+if 
+  Car.Locate3D(39@, 0, 2507.184, -1672.906, 12.3824, 4.0, 4.0, 4.0)
+goto_if_false @GROVE2_3139
+Car.Delete(39@)
+
+:GROVE2_3139
+return 
+
+:GROVE2_3141
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:GROVE2_3159
+Blip.Remove($grove_contact_blip)
+$flag_grove_mission_counter += 1
+Stat.PlayerMadeProgress(1)
+Stat.RegisterMissionPassed('GROVE_2')
+Text.PrintWithNumberBig('M_PASSS', 10000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 10000)
+Stat.AwardPlayerMissionRespect(40)
+Audio.PlayMissionPassedTune(1)
+Player.ClearWantedLevel($player1)
+return 
+
+:GROVE2_3228
+Zone.SetNoCops('IWD3A', False)
+Zone.SetNoCops('IWD3B', False)
+Zone.SetNoCops('IWD1', False)
+Zone.SetNoCops('IWD4', False)
+Game.ClearSpecificZonesToTriggerGangWar
+Game.CanTriggerGangWarWhenOnAMission(False)
+Game.SetGangWarsActive(True)
+$onmission = 0
+if 
+  not Char.IsDead($sweet)
+goto_if_false @GROVE2_3318
+Char.RemoveElegantly($sweet)
+
+:GROVE2_3318
+if 
+  Blip.DoesExist(34@)
+goto_if_false @GROVE2_3339
+Blip.Remove(34@)
+
+:GROVE2_3339
+if 
+  Blip.DoesExist(36@)
+goto_if_false @GROVE2_3360
+Blip.Remove(36@)
+
+:GROVE2_3360
+if 
+  Blip.DoesExist(55@)
+goto_if_false @GROVE2_3381
+Blip.Remove(55@)
+
+:GROVE2_3381
+Hud.ClearCounter($g2_sweet_hlth)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.MarkModelAsNoLongerNeeded(355)
+Streaming.MarkModelAsNoLongerNeeded(492)
+Streaming.RemoveAnimation("GANGS")
+$timer_mobile_start = Clock.GetGameTimer()
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+Mission.Finish
+return 
+
+:GROVE2_3432
+Text.ClearPrints
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+return 
+
+:GROVE2_3447
+Text.ClearPrints
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+return 
+
+:GROVE2_3466
+Camera.DoFade(0, 500)
+
+:GROVE2_3473
+if 
+  Camera.GetFadingStatus
+goto_if_false @GROVE2_3497
+wait 0
+goto @GROVE2_3473
+
+:GROVE2_3497
+return 
+
+:GROVE2_3499
+Camera.DoFade(1, 500)
+
+:GROVE2_3506
+if 
+  Camera.GetFadingStatus
+goto_if_false @GROVE2_3530
+wait 0
+goto @GROVE2_3506
+
+:GROVE2_3530
+return 
+Camera.DoFade(0, 500)
+
+:GROVE2_3539
+if 
+  Camera.GetFadingStatus
+goto_if_false @GROVE2_3563
+wait 0
+goto @GROVE2_3539
+
+:GROVE2_3563
+Camera.DoFade(1, 500)
+
+:GROVE2_3570
+if 
+  Camera.GetFadingStatus
+goto_if_false @GROVE2_3594
+wait 0
+goto @GROVE2_3570
+
+:GROVE2_3594
+return 
+
+:GROVE2_3596
+if 
+is_ps2_keyboard_key_just_pressed 65
+goto_if_false @GROVE2_3618
+41@ = 0
+
+:GROVE2_3618
+if 
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @GROVE2_3640
+40@ = 0
+
+:GROVE2_3640
+if 
+is_ps2_keyboard_key_just_pressed 70
+goto_if_false @GROVE2_3662
+goto @GROVE2_3791
+
+:GROVE2_3662
+if 
+is_ps2_keyboard_key_just_pressed 71
+goto_if_false @GROVE2_3752
+Char.SetCoordinates($scplayer, 2487.645, -1668.204, 12.3438)
+Char.SetHeading($scplayer, 265.0722)
+52@ = 2
+54@ = 1
+Blip.ChangeDisplay(55@, BlipDisplay.Both)
+World.ClearArea(1, 2507.184, -1672.906, 12.3824, 10.0)
+
+:GROVE2_3752
+if 
+is_ps2_keyboard_key_just_pressed 75
+goto_if_false @GROVE2_3774
+gosub @GROVE2_2939
+
+:GROVE2_3774
+if 
+is_ps2_keyboard_key_just_pressed 72
+goto_if_false @GROVE2_3789
+
+:GROVE2_3789
+return 
+
+:GROVE2_3791
+gosub @GROVE2_3466
+gosub @GROVE2_3432
+Text.ClearPrints
+Streaming.RequestAnimation("GANGS")
+
+:GROVE2_3816
+if 
+  not Streaming.HasAnimationLoaded("GANGS")
+goto_if_false @GROVE2_3847
+wait 0
+goto @GROVE2_3816
+
+:GROVE2_3847
+if and
+  not Char.IsDead($scplayer)
+  not Char.IsDead($sweet)
+goto_if_false @GROVE2_4145
+Char.RemoveFromGroup($sweet)
+World.ClearArea(1, 2512.761, -1672.52, 12.5034, 50.0)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @GROVE2_3970
+Char.SetCoordinates($scplayer, 2496.552, -1682.439, 12.3542)
+Char.SetHeading($scplayer, 270.6489)
+Char.WarpFromCarToCoord($scplayer, 2512.761, -1672.52, 12.5034)
+goto @GROVE2_3990
+
+:GROVE2_3970
+Char.SetCoordinates($scplayer, 2512.761, -1672.52, 12.5034)
+
+:GROVE2_3990
+if 
+  not Car.IsDead(39@)
+goto_if_false @GROVE2_4011
+Car.Delete(39@)
+
+:GROVE2_4011
+Char.SetHeading($scplayer, 240.2609)
+Task.TurnCharToFaceChar($scplayer, $sweet)
+if 
+  Char.IsInAnyCar($sweet)
+goto_if_false @GROVE2_4072
+Char.WarpFromCarToCoord($sweet, 2514.788, -1673.938, 12.6861)
+goto @GROVE2_4092
+
+:GROVE2_4072
+Char.SetCoordinates($sweet, 2514.788, -1673.938, 12.6861)
+
+:GROVE2_4092
+Char.SetHeading($sweet, 73.5014)
+Task.TurnCharToFaceChar($sweet, $scplayer)
+Task.TogglePedThreatScanner($sweet, False, False, False)
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately($sweet)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Char.SetCurrentWeapon($sweet, WeaponType.Unarmed)
+
+:GROVE2_4145
+World.SetPedDensityMultiplier(0.0)
+Camera.SetFixedPosition(2509.798, -1672.175, 13.4192, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2510.752, -1672.457, 13.5178, SwitchType.JumpCut)
+Text.ClearPrints
+gosub @GROVE2_3499
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GROVE2_4278
+Task.PlayAnim($scplayer, "PRTIAL_HNDSHK_01", "GANGS", 4.0, False, False, False, False, -1)
+wait 500
+
+:GROVE2_4278
+if 
+  not Char.IsDead($sweet)
+goto_if_false @GROVE2_4344
+Task.PlayAnim($sweet, "PRTIAL_HNDSHK_01", "GANGS", 4.0, False, False, False, False, -1)
+wait 500
+
+:GROVE2_4344
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(17618, 1)
+
+:GROVE2_4355
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GROVE2_4381
+wait 0
+goto @GROVE2_4355
+
+:GROVE2_4381
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('GRO2_GA', 4000, 1)
+TIMERB = 0
+
+:GROVE2_4408
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @GROVE2_4458
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GROVE2_4451
+goto @GROVE2_5293
+
+:GROVE2_4451
+goto @GROVE2_4408
+
+:GROVE2_4458
+if 
+  not Char.IsDead($sweet)
+goto_if_false @GROVE2_4517
+Task.PlayAnim($sweet, "PRTIAL_GNGTLKC", "GANGS", 4.0, False, False, False, False, -1)
+
+:GROVE2_4517
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(17619, 1)
+
+:GROVE2_4528
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GROVE2_4554
+wait 0
+goto @GROVE2_4528
+
+:GROVE2_4554
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('GRO2_GB', 4000, 1)
+TIMERB = 0
+
+:GROVE2_4581
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @GROVE2_4631
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GROVE2_4624
+goto @GROVE2_5293
+
+:GROVE2_4624
+goto @GROVE2_4581
+
+:GROVE2_4631
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(17620, 1)
+
+:GROVE2_4642
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GROVE2_4668
+wait 0
+goto @GROVE2_4642
+
+:GROVE2_4668
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('GRO2_GC', 4000, 1)
+TIMERB = 0
+
+:GROVE2_4695
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @GROVE2_4745
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GROVE2_4738
+goto @GROVE2_5293
+
+:GROVE2_4738
+goto @GROVE2_4695
+
+:GROVE2_4745
+if 
+  not Char.IsDead($sweet)
+goto_if_false @GROVE2_4790
+Char.ClearTasksImmediately($sweet)
+Task.GoToCoordAnyMeans($sweet, 2513.683, -1672.876, 12.5412, 4, -1)
+
+:GROVE2_4790
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GROVE2_4822
+Char.ClearTasksImmediately($scplayer)
+Task.LookAtChar($scplayer, $sweet, 10000)
+
+:GROVE2_4822
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(17621, 1)
+
+:GROVE2_4833
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GROVE2_4859
+wait 0
+goto @GROVE2_4833
+
+:GROVE2_4859
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('GRO2_GD', 4000, 1)
+TIMERB = 0
+
+:GROVE2_4886
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @GROVE2_4936
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GROVE2_4929
+goto @GROVE2_5293
+
+:GROVE2_4929
+goto @GROVE2_4886
+
+:GROVE2_4936
+if 
+  not Char.IsDead($sweet)
+goto_if_false @GROVE2_5001
+Task.PlayAnim($sweet, "PRTIAL_HNDSHK_BIZ_01", "GANGS", 4.0, False, False, False, False, -1)
+
+:GROVE2_5001
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GROVE2_5066
+Task.PlayAnim($scplayer, "PRTIAL_HNDSHK_BIZ_01", "GANGS", 4.0, False, False, False, False, -1)
+
+:GROVE2_5066
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(17622, 1)
+
+:GROVE2_5077
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GROVE2_5103
+wait 0
+goto @GROVE2_5077
+
+:GROVE2_5103
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('GRO2_GE', 4000, 1)
+TIMERB = 0
+
+:GROVE2_5130
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @GROVE2_5180
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GROVE2_5173
+goto @GROVE2_5293
+
+:GROVE2_5173
+goto @GROVE2_5130
+
+:GROVE2_5180
+if 
+  not Char.IsDead($sweet)
+goto_if_false @GROVE2_5225
+Char.ClearTasksImmediately($sweet)
+Task.GoToCoordAnyMeans($sweet, 2516.264, -1675.254, 12.9287, 4, -1)
+
+:GROVE2_5225
+TIMERB = 0
+
+:GROVE2_5232
+if 
+  2000 > TIMERB
+goto_if_false @GROVE2_5286
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GROVE2_5279
+goto @GROVE2_5293
+
+:GROVE2_5279
+goto @GROVE2_5232
+
+:GROVE2_5286
+gosub @GROVE2_3466
+
+:GROVE2_5293
+Streaming.RemoveAnimation("GANGS")
+Char.Delete($sweet)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GROVE2_5353
+Char.SetCoordinates($scplayer, 2512.407, -1672.111, 12.4895)
+Char.SetHeading($scplayer, 78.5658)
+
+:GROVE2_5353
+gosub @GROVE2_3447
+World.SetPedDensityMultiplier(1.0)
+Camera.SetBehindPlayer
+gosub @GROVE2_3499
+goto @GROVE2_3159
+
+:GROVE2_5383
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(46@, 1)
+47@ = 0
+return 
+
+:GROVE2_5403
+if and
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+  47@ == 0
+goto_if_false @GROVE2_5446
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(59@s, 10000, 1)
+47@ = 1
+
+:GROVE2_5446
+if and
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+  47@ == 1
+goto_if_false @GROVE2_5484
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearThisPrint(59@s)
+47@ = 2
+
+:GROVE2_5484
+return 
+

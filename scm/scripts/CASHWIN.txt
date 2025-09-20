@@ -1,0 +1,99 @@
+:CASHWIN
+script_name 'CASHWIN'
+$game_timer = Clock.GetGameTimer()
+if 
+  1@ == 0
+goto_if_false @CASHWIN_57
+set_lvar_int_to_var_int 3@ = $game_timer
+3@ += 3000
+goto @CASHWIN_73
+
+:CASHWIN_57
+set_lvar_int_to_var_int 3@ = $game_timer
+add_int_lvar_to_int_lvar 3@ += 1@
+
+:CASHWIN_73
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @CASHWIN_95
+terminate_this_script 
+
+:CASHWIN_95
+$game_timer = Clock.GetGameTimer()
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 3@
+goto_if_false @CASHWIN_121
+terminate_this_script 
+
+:CASHWIN_121
+if 
+  0@ == 0
+goto_if_false @CASHWIN_234
+CASHWIN_576()
+Text.SetColor(180, 180, 180, 255)
+if 
+  2@ == 69
+goto_if_false @CASHWIN_206
+Text.Display(320.0, 180.333, 'BJ_PUSH')
+goto @CASHWIN_227
+
+:CASHWIN_206
+Text.Display(320.0, 180.333, 'NOWIN')
+
+:CASHWIN_227
+goto @CASHWIN_569
+
+:CASHWIN_234
+if 
+  0@ > 0
+goto_if_false @CASHWIN_422
+CASHWIN_576()
+switch_start 2@ total_jumps 2 default_jump 1 @CASHWIN_384 jumps 45 @CASHWIN_322 80 @CASHWIN_353 -1 @CASHWIN_415 -1 @CASHWIN_415 -1 @CASHWIN_415 -1 @CASHWIN_415 -1 @CASHWIN_415
+
+:CASHWIN_322
+Text.DisplayWithNumber(320.0, 155.333, 'ALLRACE', 0@)
+goto @CASHWIN_415
+
+:CASHWIN_353
+Text.DisplayWithNumber(320.0, 155.333, 'PL_07', 0@)
+goto @CASHWIN_415
+
+:CASHWIN_384
+Text.DisplayWithNumber(320.0, 155.333, 'WINNER', 0@)
+goto @CASHWIN_415
+
+:CASHWIN_415
+goto @CASHWIN_569
+
+:CASHWIN_422
+set_var_int_to_lvar_int $temp_integer_1 = 0@
+$temp_integer_1 *= -1
+CASHWIN_576()
+switch_start 2@ total_jumps 1 default_jump 1 @CASHWIN_538 jumps 80 @CASHWIN_507 -1 @CASHWIN_569 -1 @CASHWIN_569 -1 @CASHWIN_569 -1 @CASHWIN_569 -1 @CASHWIN_569 -1 @CASHWIN_569
+
+:CASHWIN_507
+Text.DisplayWithNumber(320.0, 155.333, 'PL_10', $temp_integer_1)
+goto @CASHWIN_569
+
+:CASHWIN_538
+Text.DisplayWithNumber(320.0, 155.333, 'LOSER', $temp_integer_1)
+goto @CASHWIN_569
+
+:CASHWIN_569
+goto @CASHWIN_73
+
+:CASHWIN_576
+Text.SetRightJustify(False)
+Text.SetJustify(False)
+Text.SetWrapX(640.0)
+Text.SetProportional(True)
+Text.SetBackground(False)
+Text.SetScale(1.3, 3.36)
+Text.SetCenter(True)
+Text.SetEdge(2, 0, 0, 0, 255)
+Text.SetFont(Font.Pricedown)
+$temp_integer_2, $temp_integer_3, $temp_integer_4, $an = Hud.GetColor(6)
+Text.SetColor($temp_integer_2, $temp_integer_3, $temp_integer_4, 255)
+return 
+

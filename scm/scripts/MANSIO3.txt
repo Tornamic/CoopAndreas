@@ -1,0 +1,1394 @@
+//-------------Mission 104---------------
+// Originally: Home Coming
+
+:MANSIO3
+script_name 'MANSIO3'
+gosub @MANSIO3_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @MANSIO3_38
+gosub @MANSIO3_6722
+
+:MANSIO3_38
+gosub @MANSIO3_6948
+terminate_this_script 
+
+:MANSIO3_47
+Text.LoadMissionText('MAN_3')
+Player.SetGroupToFollowAlways($player1, True)
+Game.CanTriggerGangWarWhenOnAMission(True)
+Camera.SetFadingColor(0, 0, 0)
+Stat.RegisterMissionGiven
+$onmission = 1
+82@ = 2
+wait 0
+Streaming.LoadSpecialCharacter('SWEET', 1)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:MANSIO3_125
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO3_149
+wait 0
+goto @MANSIO3_125
+
+:MANSIO3_149
+Weather.ForceNow(WeatherType.SunnyLa)
+Streaming.SetAreaVisible(5)
+Cutscene.Load('BHILL3A')
+
+:MANSIO3_168
+if 
+  not Cutscene.HasLoaded
+goto_if_false @MANSIO3_192
+wait 0
+goto @MANSIO3_168
+
+:MANSIO3_192
+Cutscene.Start
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+
+:MANSIO3_209
+if 
+  not Cutscene.HasFinished
+goto_if_false @MANSIO3_233
+wait 0
+goto @MANSIO3_209
+
+:MANSIO3_233
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, Fade.Out)
+
+:MANSIO3_247
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO3_271
+wait 0
+goto @MANSIO3_247
+
+:MANSIO3_271
+Cutscene.Clear
+Streaming.SetAreaVisible(0)
+Weather.Release
+Streaming.RequestModel(540)
+Streaming.RequestModel(28)
+Streaming.RequestModel(106)
+Streaming.RequestModel(355)
+Streaming.RequestModel(29)
+Streaming.RequestAnimation("GANGS")
+Streaming.RequestAnimation("CRACK")
+Streaming.RequestCarRecording(488)
+StreamedScript.Stream(19)
+Streaming.LoadAllModelsNow
+
+:MANSIO3_330
+if or
+  not Streaming.HasModelLoaded(540)
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasModelLoaded(106)
+goto_if_false @MANSIO3_365
+wait 0
+goto @MANSIO3_330
+
+:MANSIO3_365
+if or
+  not Streaming.HasAnimationLoaded("GANGS")
+  not Streaming.HasAnimationLoaded("CRACK")
+  not Streaming.HasModelLoaded(28)
+goto_if_false @MANSIO3_409
+wait 0
+goto @MANSIO3_365
+
+:MANSIO3_409
+if or
+  not StreamedScript.HasLoaded(19)
+  not Streaming.HasCarRecordingBeenLoaded(488)
+  not Streaming.HasModelLoaded(355)
+  not Streaming.HasModelLoaded(29)
+goto_if_false @MANSIO3_449
+wait 0
+goto @MANSIO3_409
+
+:MANSIO3_449
+Streaming.RequestCollision(1251.541, -808.7633)
+Zone.SetGangStrength('GAN1', GangType.Grove, 0)
+Zone.SetGangStrength('GAN1', GangType.Ballas, 40)
+Game.CanTriggerGangWarWhenOnAMission(False)
+52@ = Char.Create(4, 28, 2488.617, -1671.536, -10.0)
+StreamedScript.StartNew(19, 52@)
+56@ = Blip.AddForCoord(2514.461, -1674.104, 12.6425)
+57@ = Blip.AddForCoord(1521.252, -1673.336, 12.5607)
+Blip.ChangeDisplay(56@, BlipDisplay.Neither)
+Blip.ChangeDisplay(57@, BlipDisplay.Both)
+World.ClearArea(1, 1245.049, -811.1318, 83.1477, 10.0)
+60@ = Car.Create(540, 1245.049, -811.1318, 83.1477)
+Car.ChangeColor(60@, 0, 0)
+Car.SetHeading(60@, 181.4888)
+Car.SetTraction(60@, 2.0)
+Char.SetCoordinates($scplayer, 1251.541, -808.7633, 83.1484)
+Char.SetHeading($scplayer, 109.0044)
+79@ = Blip.AddForCoord(2485.527, -1668.528, 12.3438)
+Blip.ChangeDisplay(79@, BlipDisplay.Neither)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Streaming.LoadSceneInDirection(1251.541, -808.7633, 83.1484, 109.0044)
+gosub @MANSIO3_7345
+Text.PrintNow('MAN3_01', 7000, 1)
+
+:MANSIO3_763
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @MANSIO3_5468
+wait 0
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @MANSIO3_805
+goto @MANSIO3_6740
+
+:MANSIO3_805
+gosub @MANSIO3_7378
+gosub @MANSIO3_7833
+if 
+  64@ == 0
+goto_if_false @MANSIO3_1823
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @MANSIO3_877
+61@ = Char.StoreCarIsIn($scplayer)
+62@ = Car.GetMaximumNumberOfPassengers(61@)
+84@ = Car.GetNumberOfPassengers(61@)
+
+:MANSIO3_877
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 1521.194, -1671.913, 12.5625, 3.0, 3.0, 3.0)
+goto_if_false @MANSIO3_1823
+if 
+  62@ == 0
+goto_if_false @MANSIO3_959
+Text.PrintNow('MAN3_19', 3000, 1)
+
+:MANSIO3_959
+if 
+  is_int_lvar_equal_to_int_lvar 84@ == 62@
+goto_if_false @MANSIO3_1043
+if or
+  Char.IsInAnyHeli($scplayer)
+  Char.IsInAnyPlane($scplayer)
+  Char.IsInFlyingVehicle($scplayer)
+goto_if_false @MANSIO3_1027
+Text.PrintNow('MAN3_69', 3000, 1)
+goto @MANSIO3_1043
+
+:MANSIO3_1027
+Text.PrintNow('MAN3_34', 3000, 1)
+
+:MANSIO3_1043
+if and
+  62@ > 0
+  not is_int_lvar_equal_to_int_lvar 84@ == 62@
+goto_if_false @MANSIO3_1823
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @MANSIO3_1807
+Player.SetControl($player1, False)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @MANSIO3_1131
+$car = Char.StoreCarIsIn($scplayer)
+Task.CarTempAction($scplayer, $car, TempAction.HandbrakeStraight, 2000000)
+
+:MANSIO3_1131
+Player.SetControl($player1, False)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:MANSIO3_1153
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO3_1177
+wait 0
+goto @MANSIO3_1153
+
+:MANSIO3_1177
+Player.MakeSafeForCutscene($player1)
+if 
+  not Car.IsDead(60@)
+goto_if_false @MANSIO3_1251
+if 
+  Car.Locate3D(60@, 0, 1542.73, -1675.697, 12.5551, 15.0, 15.0, 15.0)
+goto_if_false @MANSIO3_1251
+Car.Delete(60@)
+
+:MANSIO3_1251
+World.ClearArea(1, 1542.73, -1675.697, 12.5551, 60.0)
+Cutscene.Load('BHILL3B')
+
+:MANSIO3_1286
+if 
+  not Cutscene.HasLoaded
+goto_if_false @MANSIO3_1310
+wait 0
+goto @MANSIO3_1286
+
+:MANSIO3_1310
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:MANSIO3_1319
+if 
+  not Cutscene.HasFinished
+goto_if_false @MANSIO3_1343
+wait 0
+goto @MANSIO3_1319
+
+:MANSIO3_1343
+Cutscene.Clear
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:MANSIO3_1358
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO3_1382
+wait 0
+goto @MANSIO3_1358
+
+:MANSIO3_1382
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @MANSIO3_1434
+if 
+  not Car.IsDead($car)
+goto_if_false @MANSIO3_1434
+Car.SetCoordinates($car, 1521.194, -1671.913, 12.5625)
+
+:MANSIO3_1434
+if 
+  not Car.IsDead($car)
+goto_if_false @MANSIO3_1518
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+$sweet = Char.CreateAsPassenger(PedType.Mission2, 290, $car, 0)
+Char.SetHealth($sweet, 700)
+Char.SetMaxHealth($sweet, 700)
+Char.SetAnimGroup($sweet, "GANG2")
+Char.SetNeverTargeted($sweet, True)
+Char.SetSuffersCriticalHits($sweet, False)
+Char.SetAccuracy($sweet, 90)
+
+:MANSIO3_1518
+if and
+  not Char.IsDead($sweet)
+  not Car.IsDead($car)
+  not Char.IsDead($scplayer)
+goto_if_false @MANSIO3_1593
+if 
+  not Char.IsInCar($scplayer, $car)
+goto_if_false @MANSIO3_1571
+Char.WarpIntoCar($scplayer, $car)
+
+:MANSIO3_1571
+58@ = Blip.AddForChar($sweet)
+Blip.SetAsFriendly(58@, True)
+Blip.ChangeDisplay(58@, BlipDisplay.Neither)
+
+:MANSIO3_1593
+TIMERB = 0
+Blip.ChangeDisplay(56@, BlipDisplay.Both)
+Blip.ChangeDisplay(57@, BlipDisplay.Neither)
+if 
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_1642
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Group.SetMember($sweet, $Players_Group)
+
+:MANSIO3_1642
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+72@ = Char.GetHeading($scplayer)
+if 
+  not Car.IsDead($car)
+goto_if_false @MANSIO3_1779
+if and
+  72@ > 90.0
+  270.0 > 72@
+goto_if_false @MANSIO3_1747
+Streaming.LoadSceneInDirection(1521.194, -1671.913, 12.5625, 180.0)
+Car.SetHeading($car, 180.0)
+goto @MANSIO3_1779
+
+:MANSIO3_1747
+Streaming.LoadSceneInDirection(1521.194, -1671.913, 12.5625, 0.0)
+Car.SetHeading($car, 0.0)
+
+:MANSIO3_1779
+gosub @MANSIO3_7345
+59@ = 1
+64@ = 1
+goto @MANSIO3_1823
+
+:MANSIO3_1807
+Text.PrintNow('MAN3_08', 4000, 1)
+
+:MANSIO3_1823
+if 
+  59@ <> 0
+goto_if_false @MANSIO3_2226
+if and
+  TIMERB > 1000
+  59@ == 1
+goto_if_false @MANSIO3_1949
+if 
+  not Char.IsDead($ryder)
+goto_if_false @MANSIO3_1890
+Char.ShutUpForScriptedSpeech($ryder, True)
+
+:MANSIO3_1890
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @MANSIO3_1913
+Char.ShutUpForScriptedSpeech($scplayer, True)
+
+:MANSIO3_1913
+set_lvar_text_label 86@s = 'MAN3_AA'
+set_lvar_int_to_constant 83@ = 24200
+gosub @MANSIO3_7813
+59@ = 2
+
+:MANSIO3_1949
+if and
+  82@ == 2
+  59@ == 2
+goto_if_false @MANSIO3_2010
+set_lvar_text_label 86@s = 'MAN3_AB'
+set_lvar_int_to_constant 83@ = 24201
+gosub @MANSIO3_7813
+59@ = 3
+
+:MANSIO3_2010
+if and
+  82@ == 2
+  59@ == 3
+goto_if_false @MANSIO3_2071
+set_lvar_text_label 86@s = 'MAN3_AC'
+set_lvar_int_to_constant 83@ = 24202
+gosub @MANSIO3_7813
+59@ = 4
+
+:MANSIO3_2071
+if and
+  82@ == 2
+  59@ == 4
+goto_if_false @MANSIO3_2132
+set_lvar_text_label 86@s = 'MAN3_AD'
+set_lvar_int_to_constant 83@ = 24203
+gosub @MANSIO3_7813
+59@ = 5
+
+:MANSIO3_2132
+if and
+  82@ == 2
+  59@ == 5
+goto_if_false @MANSIO3_2226
+Text.PrintNow('MAN3_05', 7000, 1)
+59@ = 0
+if 
+  not Char.IsDead($ryder)
+goto_if_false @MANSIO3_2203
+Char.ShutUpForScriptedSpeech($ryder, False)
+
+:MANSIO3_2203
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @MANSIO3_2226
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:MANSIO3_2226
+if or
+  64@ == 1
+  64@ == 2
+goto_if_false @MANSIO3_3847
+if 
+  Char.IsDead($sweet)
+goto_if_false @MANSIO3_2290
+Text.PrintNow('MAN3_11', 4000, 1)
+goto @MANSIO3_6722
+
+:MANSIO3_2290
+if 
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_2320
+53@, 54@, 55@ = Char.GetCoordinates($sweet)
+
+:MANSIO3_2320
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 53@, 54@, 55@, 30.0, 30.0, 30.0)
+goto_if_false @MANSIO3_2421
+Blip.ChangeDisplay(58@, BlipDisplay.Neither)
+Blip.ChangeDisplay(56@, BlipDisplay.Both)
+if 
+  not Char.IsGroupMember($sweet, $Players_Group)
+goto_if_false @MANSIO3_2407
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Group.SetMember($sweet, $Players_Group)
+
+:MANSIO3_2407
+64@ = 1
+goto @MANSIO3_2482
+
+:MANSIO3_2421
+Text.PrintNow('MAN3_03', 4000, 1)
+Blip.ChangeDisplay(58@, BlipDisplay.Both)
+Blip.ChangeDisplay(56@, BlipDisplay.Neither)
+if 
+  Char.IsGroupMember($sweet, $Players_Group)
+goto_if_false @MANSIO3_2475
+Char.RemoveFromGroup($sweet)
+
+:MANSIO3_2475
+64@ = 2
+
+:MANSIO3_2482
+if 
+  64@ == 1
+goto_if_false @MANSIO3_3847
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 2514.461, -1674.104, 12.6425, 4.0, 4.0, 4.0)
+goto_if_false @MANSIO3_3847
+Player.SetControl($player1, False)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @MANSIO3_2594
+$car = Char.StoreCarIsInNoSave($scplayer)
+Task.CarTempAction($scplayer, $car, TempAction.HandbrakeStraight, 2000000)
+
+:MANSIO3_2594
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:MANSIO3_2609
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO3_2633
+wait 0
+goto @MANSIO3_2609
+
+:MANSIO3_2633
+Player.MakeSafeForCutscene($player1)
+if 
+  not Car.IsDead(60@)
+goto_if_false @MANSIO3_2756
+if 
+  Car.Locate3D(60@, 0, 2492.889, -1666.564, 12.3438, 15.0, 15.0, 15.0)
+goto_if_false @MANSIO3_2756
+World.ClearArea(1, 2482.994, -1653.609, 12.461, 10.0)
+Car.SetCoordinates(60@, 2482.994, -1653.609, 12.461)
+Car.SetHeading(60@, 273.1021)
+
+:MANSIO3_2756
+World.ClearArea(1, 2492.889, -1666.564, 12.3438, 60.0)
+Cutscene.Load('BHILL3C')
+
+:MANSIO3_2791
+if 
+  not Cutscene.HasLoaded
+goto_if_false @MANSIO3_2815
+wait 0
+goto @MANSIO3_2791
+
+:MANSIO3_2815
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:MANSIO3_2824
+if 
+  not Cutscene.HasFinished
+goto_if_false @MANSIO3_2848
+wait 0
+goto @MANSIO3_2824
+
+:MANSIO3_2848
+Cutscene.Clear
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:MANSIO3_2863
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO3_2887
+wait 0
+goto @MANSIO3_2863
+
+:MANSIO3_2887
+88@ = Sequence.Open()
+Task.PlayAnim(-1, "IDLE_CHAT", "PED", 1.0, True, False, False, False, -1)
+Sequence.SetToRepeat(88@, True)
+Sequence.Close(88@)
+89@ = Sequence.Open()
+Task.Pause(-1, 1000)
+Sequence.SetToRepeat(89@, True)
+Sequence.Close(89@)
+Blip.ChangeDisplay(56@, BlipDisplay.Neither)
+64@ = 3
+40@ = Char.Create(4, 28, 2429.19, -1677.537, 12.7231)
+Char.SetHeading(40@, 306.1672)
+Char.PerformSequence(40@, 88@)
+34@ = Blip.AddForChar(40@)
+47@ = Char.Create(4, 106, 2430.586, -1677.075, 12.7135)
+Char.SetHeading(47@, 80.528)
+Char.PerformSequence(47@, 89@)
+48@ = Char.Create(4, 106, 2513.364, -1649.865, 13.5588)
+Char.SetHeading(48@, 140.4164)
+Task.PlayAnim(48@, "CRCKIDLE1", "CRACK", 1.0, True, False, False, False, -1)
+Player.ApplyBrakesToCar($player1, False)
+gosub @MANSIO3_7280
+Streaming.LoadSceneInDirection(2424.184, -1679.58, 12.7653, 322.7617)
+Camera.SetFixedPosition(2427.227, -1681.12, 13.891, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2427.808, -1680.306, 13.8707, SwitchType.JumpCut)
+Text.PrintNow('MAN3_20', 5000, 1)
+gosub @MANSIO3_7345
+wait 1000
+TIMERB = 0
+
+:MANSIO3_3263
+if 
+  4000 > TIMERB
+goto_if_false @MANSIO3_3324
+wait 0
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+  $has_seen_this_cutscene == 1
+goto_if_false @MANSIO3_3317
+goto @MANSIO3_3459
+
+:MANSIO3_3317
+goto @MANSIO3_3263
+
+:MANSIO3_3324
+Camera.SetFixedPosition(2507.984, -1652.199, 15.6974, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2508.892, -1651.913, 15.3924, SwitchType.JumpCut)
+Text.PrintNow('MAN3_21', 5000, 1)
+TIMERB = 0
+
+:MANSIO3_3398
+if 
+  5000 > TIMERB
+goto_if_false @MANSIO3_3459
+wait 0
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+  $has_seen_this_cutscene == 1
+goto_if_false @MANSIO3_3452
+goto @MANSIO3_3459
+
+:MANSIO3_3452
+goto @MANSIO3_3398
+
+:MANSIO3_3459
+$has_seen_this_cutscene = 1
+85@ = 1
+Game.CanTriggerGangWarWhenOnAMission(True)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @MANSIO3_3568
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @MANSIO3_3536
+Char.WarpFromCarToCoord($scplayer, 2506.059, -1671.968, 12.379)
+goto @MANSIO3_3556
+
+:MANSIO3_3536
+Char.SetCoordinates($scplayer, 2506.059, -1671.968, 12.379)
+
+:MANSIO3_3556
+Camera.SetBehindPlayer
+Char.SetHeading($scplayer, 62.4295)
+
+:MANSIO3_3568
+if 
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_3674
+if 
+  Char.IsInAnyCar($sweet)
+goto_if_false @MANSIO3_3627
+Char.WarpFromCarToCoord($sweet, 2506.567, -1670.212, 12.3822)
+goto @MANSIO3_3647
+
+:MANSIO3_3627
+Char.SetCoordinates($sweet, 2506.567, -1670.212, 12.3822)
+
+:MANSIO3_3647
+Char.GiveWeapon($sweet, WeaponType.Ak47, 300)
+Char.SetCurrentWeapon($sweet, WeaponType.Ak47)
+Char.SetHeading($sweet, 113.0677)
+
+:MANSIO3_3674
+if 
+  not Char.IsGroupMember($sweet, $Players_Group)
+goto_if_false @MANSIO3_3705
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Group.SetMember($sweet, $Players_Group)
+
+:MANSIO3_3705
+Zone.SetGangStrength('GAN1', GangType.Grove, 0)
+Zone.SetGangStrength('GAN1', GangType.Ballas, 40)
+Zone.SetGangStrength('GAN2', GangType.Grove, 0)
+Zone.SetGangStrength('GAN2', GangType.Ballas, 40)
+Char.Delete(47@)
+59@ = 0
+gosub @MANSIO3_7293
+if 
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_3824
+Char.SetHealth($sweet, 700)
+Char.SetMaxHealth($sweet, 700)
+$m3_sweets_health = Char.GetHealth($sweet)
+
+:MANSIO3_3824
+$m3_sweets_health /= 7
+Hud.DisplayCounterWithString($m3_sweets_health, CounterDisplay.Bar, 'MAN3_32')
+
+:MANSIO3_3847
+if 
+  64@ == 3
+goto_if_false @MANSIO3_4151
+Text.PrintNow('MAN3_22', 7000, 1)
+41@ = Char.Create(17, 29, 2482.087, -1696.119, 12.5267)
+Char.SetHeading(41@, 0.095)
+35@ = Blip.AddForChar(41@)
+42@ = Char.Create(17, 28, 2451.681, -1644.083, 12.457)
+Char.SetHeading(42@, 186.2393)
+36@ = Blip.AddForChar(42@)
+43@ = Char.Create(17, 29, 2415.79, -1631.143, 12.5114)
+Char.SetHeading(43@, 287.5167)
+37@ = Blip.AddForChar(43@)
+44@ = Char.Create(17, 28, 2364.361, -1666.775, 12.5469)
+Char.SetHeading(44@, 343.1245)
+38@ = Blip.AddForChar(44@)
+45@ = Char.Create(17, 28, 2370.333, -1637.42, 12.477)
+Char.SetHeading(45@, 140.6299)
+39@ = Blip.AddForChar(45@)
+StreamedScript.StartNew(19, 40@)
+StreamedScript.StartNew(19, 41@)
+StreamedScript.StartNew(19, 42@)
+StreamedScript.StartNew(19, 43@)
+StreamedScript.StartNew(19, 44@)
+StreamedScript.StartNew(19, 45@)
+Char.Delete(52@)
+64@ = 4
+
+:MANSIO3_4151
+if 
+  64@ == 4
+goto_if_false @MANSIO3_5461
+if 
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_4200
+$m3_sweets_health = Char.GetHealth($sweet)
+$m3_sweets_health /= 7
+
+:MANSIO3_4200
+75@ = Zone.GetGangStrength('GAN1', GangType.Ballas)
+if 
+  75@ == 0
+goto_if_false @MANSIO3_4511
+if 
+  74@ == 0
+goto_if_false @MANSIO3_4511
+74@ = 1
+if 
+  73@ == 0
+goto_if_false @MANSIO3_4504
+gosub @MANSIO3_7280
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @MANSIO3_4350
+Char.ClearTasksImmediately($scplayer)
+Task.PlayAnimNonInterruptable($scplayer, "PRTIAL_HNDSHK_01", "GANGS", 4.0, False, False, False, False, -1)
+
+:MANSIO3_4350
+if 
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_4416
+Char.ClearTasksImmediately($sweet)
+Task.PlayAnimNonInterruptable($sweet, "PRTIAL_HNDSHK_01", "GANGS", 4.0, False, False, False, False, -1)
+
+:MANSIO3_4416
+Text.PrintNow('MAN3_33', 4000, 1)
+wait 4000
+Zone.SetGangStrength('GAN1', GangType.Grove, 40)
+Zone.SetGangStrength('GAN1', GangType.Ballas, 0)
+Game.SetRelationship(RelationshipType.Like, PedType.Gang2, PedType.Player1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Gang2, PedType.Gang1)
+gosub @MANSIO3_7293
+TIMERB = 0
+goto @MANSIO3_4511
+
+:MANSIO3_4504
+goto @MANSIO3_5475
+
+:MANSIO3_4511
+if and
+  74@ == 1
+  TIMERB > 4000
+  81@ == 0
+goto_if_false @MANSIO3_4567
+Text.PrintNow('MAN3_29', 10000, 1)
+81@ = 1
+
+:MANSIO3_4567
+if and
+  Player.IsInInfoZone($player1, 'GAN1')
+  74@ == 0
+  85@ == 1
+goto_if_false @MANSIO3_4669
+if and
+  78@ == 0
+  not Game.IsGangWarGoingOn
+goto_if_false @MANSIO3_4662
+Game.CanTriggerGangWarWhenOnAMission(True)
+Game.SetGangWarsActive(True)
+if 
+  Blip.DoesExist(79@)
+goto_if_false @MANSIO3_4655
+Blip.Remove(79@)
+
+:MANSIO3_4655
+78@ = 1
+
+:MANSIO3_4662
+$m3_in_the_zone = 1
+
+:MANSIO3_4669
+if and
+  not Player.IsInInfoZone($player1, 'GAN1')
+  74@ == 0
+  85@ == 1
+goto_if_false @MANSIO3_4802
+if and
+  78@ == 1
+  not Game.IsGangWarGoingOn
+goto_if_false @MANSIO3_4795
+Game.CanTriggerGangWarWhenOnAMission(False)
+Game.SetGangWarsActive(False)
+Text.PrintNow('MAN3_31', 6000, 1)
+if 
+  not Blip.DoesExist(79@)
+goto_if_false @MANSIO3_4788
+79@ = Blip.AddForCoord(2485.527, -1668.528, 12.3438)
+
+:MANSIO3_4788
+78@ = 0
+
+:MANSIO3_4795
+$m3_in_the_zone = 0
+
+:MANSIO3_4802
+if 
+  Char.IsDead($sweet)
+goto_if_false @MANSIO3_4841
+Text.PrintNow('MAN3_11', 4000, 1)
+goto @MANSIO3_6722
+
+:MANSIO3_4841
+if 
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_4871
+53@, 54@, 55@ = Char.GetCoordinates($sweet)
+
+:MANSIO3_4871
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 53@, 54@, 55@, 35.0, 35.0, 35.0)
+goto_if_false @MANSIO3_5022
+if 
+  70@ == 1
+goto_if_false @MANSIO3_5015
+Blip.ChangeDisplay(58@, BlipDisplay.Neither)
+Blip.ChangeDisplay(34@, BlipDisplay.Both)
+Blip.ChangeDisplay(35@, BlipDisplay.Both)
+Blip.ChangeDisplay(36@, BlipDisplay.Both)
+Blip.ChangeDisplay(37@, BlipDisplay.Both)
+Blip.ChangeDisplay(38@, BlipDisplay.Both)
+Blip.ChangeDisplay(39@, BlipDisplay.Both)
+if 
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_5008
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Group.SetMember($sweet, $Players_Group)
+
+:MANSIO3_5008
+70@ = 0
+
+:MANSIO3_5015
+goto @MANSIO3_5133
+
+:MANSIO3_5022
+if 
+  70@ == 0
+goto_if_false @MANSIO3_5133
+Text.PrintNow('MAN3_03', 10000, 1)
+Blip.ChangeDisplay(58@, BlipDisplay.Both)
+Blip.ChangeDisplay(34@, BlipDisplay.Neither)
+Blip.ChangeDisplay(35@, BlipDisplay.Neither)
+Blip.ChangeDisplay(36@, BlipDisplay.Neither)
+Blip.ChangeDisplay(37@, BlipDisplay.Neither)
+Blip.ChangeDisplay(38@, BlipDisplay.Neither)
+Blip.ChangeDisplay(39@, BlipDisplay.Neither)
+if 
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_5126
+Char.RemoveFromGroup($sweet)
+
+:MANSIO3_5126
+70@ = 1
+
+:MANSIO3_5133
+if and
+  Char.IsDead(40@)
+  Blip.DoesExist(34@)
+goto_if_false @MANSIO3_5159
+Blip.Remove(34@)
+
+:MANSIO3_5159
+if and
+  Char.IsDead(41@)
+  Blip.DoesExist(35@)
+goto_if_false @MANSIO3_5185
+Blip.Remove(35@)
+
+:MANSIO3_5185
+if and
+  Char.IsDead(42@)
+  Blip.DoesExist(36@)
+goto_if_false @MANSIO3_5211
+Blip.Remove(36@)
+
+:MANSIO3_5211
+if and
+  Char.IsDead(43@)
+  Blip.DoesExist(37@)
+goto_if_false @MANSIO3_5237
+Blip.Remove(37@)
+
+:MANSIO3_5237
+if and
+  Char.IsDead(44@)
+  Blip.DoesExist(38@)
+goto_if_false @MANSIO3_5263
+Blip.Remove(38@)
+
+:MANSIO3_5263
+if and
+  Char.IsDead(45@)
+  Blip.DoesExist(39@)
+goto_if_false @MANSIO3_5289
+Blip.Remove(39@)
+
+:MANSIO3_5289
+if and
+  77@ == 1
+  TIMERA > 4000
+goto_if_false @MANSIO3_5333
+Text.PrintHelp('MAN3_30')
+77@ = 2
+
+:MANSIO3_5333
+if and
+  Char.IsDead(40@)
+  Char.IsDead(41@)
+  Char.IsDead(42@)
+  Char.IsDead(43@)
+  Char.IsDead(44@)
+  Char.IsDead(45@)
+goto_if_false @MANSIO3_5461
+if 
+  73@ == 0
+goto_if_false @MANSIO3_5461
+73@ = 1
+if 
+  74@ == 0
+goto_if_false @MANSIO3_5454
+Text.PrintNow('MAN3_28', 10000, 1)
+TIMERA = 0
+77@ = 1
+goto @MANSIO3_5461
+
+:MANSIO3_5454
+goto @MANSIO3_5475
+
+:MANSIO3_5461
+goto @MANSIO3_763
+
+:MANSIO3_5468
+goto @MANSIO3_6722
+
+:MANSIO3_5475
+gosub @MANSIO3_7312
+gosub @MANSIO3_7280
+if and
+  not Char.IsDead($scplayer)
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_5723
+Char.RemoveFromGroup($sweet)
+World.ClearArea(1, 2512.761, -1672.52, 12.5034, 20.0)
+Car.Delete(60@)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @MANSIO3_5607
+Char.WarpFromCarToCoord($scplayer, 2512.761, -1672.52, 12.5034)
+Char.WarpFromCarToCoord($sweet, 2514.788, -1673.938, 12.6861)
+goto @MANSIO3_5647
+
+:MANSIO3_5607
+Char.SetCoordinates($scplayer, 2512.761, -1672.52, 12.5034)
+Char.SetCoordinates($sweet, 2514.788, -1673.938, 12.6861)
+
+:MANSIO3_5647
+Car.Delete(60@)
+Char.SetHeading($scplayer, 240.2609)
+Task.TurnCharToFaceChar($scplayer, $sweet)
+Char.SetHeading($sweet, 73.5014)
+Task.TurnCharToFaceChar($sweet, $scplayer)
+Task.TogglePedThreatScanner($sweet, False, False, False)
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately($sweet)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Char.SetCurrentWeapon($sweet, WeaponType.Unarmed)
+
+:MANSIO3_5723
+Streaming.LoadScene(2512.761, -1672.52, 12.5034)
+Streaming.LoadSceneInDirection(2512.761, -1672.52, 12.5034, 240.2609)
+Camera.SetFixedPosition(2509.798, -1672.175, 13.4192, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2510.752, -1672.457, 13.5178, SwitchType.JumpCut)
+gosub @MANSIO3_7345
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @MANSIO3_5886
+Task.PlayAnim($scplayer, "PRTIAL_HNDSHK_01", "GANGS", 4.0, False, False, False, False, -1)
+wait 500
+
+:MANSIO3_5886
+if 
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_5952
+Task.PlayAnim($sweet, "PRTIAL_HNDSHK_01", "GANGS", 4.0, False, False, False, False, -1)
+wait 500
+
+:MANSIO3_5952
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(24204, 1)
+
+:MANSIO3_5963
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @MANSIO3_5989
+wait 0
+goto @MANSIO3_5963
+
+:MANSIO3_5989
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('MAN3_BA', 4000, 1)
+TIMERB = 0
+
+:MANSIO3_6016
+if 
+  4000 > TIMERB
+goto_if_false @MANSIO3_6070
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @MANSIO3_6063
+goto @MANSIO3_6701
+
+:MANSIO3_6063
+goto @MANSIO3_6016
+
+:MANSIO3_6070
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(24205, 1)
+
+:MANSIO3_6081
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @MANSIO3_6107
+wait 0
+goto @MANSIO3_6081
+
+:MANSIO3_6107
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('MAN3_BB', 3000, 1)
+if 
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_6184
+Char.ClearTasksImmediately($sweet)
+Task.PlayAnim($sweet, "IDLE_CHAT", "PED", 4.0, False, False, False, False, -1)
+
+:MANSIO3_6184
+TIMERB = 0
+
+:MANSIO3_6191
+if 
+  3000 > TIMERB
+goto_if_false @MANSIO3_6245
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @MANSIO3_6238
+goto @MANSIO3_6701
+
+:MANSIO3_6238
+goto @MANSIO3_6191
+
+:MANSIO3_6245
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(24206, 1)
+
+:MANSIO3_6256
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @MANSIO3_6282
+wait 0
+goto @MANSIO3_6256
+
+:MANSIO3_6282
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('MAN3_BC', 3000, 1)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @MANSIO3_6359
+Char.ClearTasksImmediately($scplayer)
+Task.PlayAnim($scplayer, "IDLE_CHAT", "PED", 4.0, False, False, False, False, -1)
+
+:MANSIO3_6359
+TIMERB = 0
+
+:MANSIO3_6366
+if 
+  3000 > TIMERB
+goto_if_false @MANSIO3_6420
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @MANSIO3_6413
+goto @MANSIO3_6701
+
+:MANSIO3_6413
+goto @MANSIO3_6366
+
+:MANSIO3_6420
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(24207, 1)
+
+:MANSIO3_6431
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @MANSIO3_6457
+wait 0
+goto @MANSIO3_6431
+
+:MANSIO3_6457
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('MAN3_BD', 3000, 1)
+TIMERB = 0
+
+:MANSIO3_6484
+if 
+  3000 > TIMERB
+goto_if_false @MANSIO3_6538
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @MANSIO3_6531
+goto @MANSIO3_6701
+
+:MANSIO3_6531
+goto @MANSIO3_6484
+
+:MANSIO3_6538
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @MANSIO3_6583
+Char.ClearTasksImmediately($scplayer)
+Task.GoToCoordAnyMeans($scplayer, 2507.793, -1668.927, 12.3879, 4, -1)
+
+:MANSIO3_6583
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(24208, 1)
+
+:MANSIO3_6594
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @MANSIO3_6620
+wait 0
+goto @MANSIO3_6594
+
+:MANSIO3_6620
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('MAN3_BE', 2000, 1)
+TIMERB = 0
+
+:MANSIO3_6647
+if 
+  2000 > TIMERB
+goto_if_false @MANSIO3_6701
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @MANSIO3_6694
+goto @MANSIO3_6701
+
+:MANSIO3_6694
+goto @MANSIO3_6647
+
+:MANSIO3_6701
+gosub @MANSIO3_7293
+Camera.SetBehindPlayer
+Char.Delete($sweet)
+goto @MANSIO3_6740
+
+:MANSIO3_6722
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:MANSIO3_6740
+Game.CanTriggerGangWarWhenOnAMission(True)
+Game.SetGangWarsActive(True)
+Zone.SetGangStrength('GAN1', GangType.Grove, 40)
+Zone.SetGangStrength('GAN2', GangType.Grove, 40)
+Zone.SetGangStrength('GAN1', GangType.Ballas, 0)
+Zone.SetGangStrength('GAN2', GangType.Ballas, 0)
+start_new_script @GROVE 
+Blip.Remove($grove_contact_blip)
+$grove_contact_blip = Blip.AddSpriteForContactPoint($grove_blip_icon, $introX, $introY, $introZ)
+$flag_mansion_mission_counter += 1
+Stat.PlayerMadeProgress(1)
+Stat.RegisterMissionPassed('MAN_3')
+Text.PrintWithNumberBig('M_PASSR', 40, 5000, TextStyle.Middle)
+Stat.AwardPlayerMissionRespect(40)
+$territory_pickup = Pickup.CreateProtection(2502.1, -1686.38, 13.0, 10000, $territory_cash)
+start_new_script @TCASH 
+$terminted_territory_pickup = 0
+Audio.PlayMissionPassedTune(1)
+Player.ClearWantedLevel($player1)
+Stat.SetInt(StatId.PassedMansion3, 1)
+65@ = 1
+return 
+
+:MANSIO3_6948
+if 
+  65@ == 0
+goto_if_false @MANSIO3_7034
+Game.CanTriggerGangWarWhenOnAMission(False)
+Game.SetGangWarsActive(False)
+Zone.SetGangStrength('GAN1', GangType.Grove, 0)
+Zone.SetGangStrength('GAN2', GangType.Grove, 0)
+Zone.SetGangStrength('GAN1', GangType.Ballas, 40)
+Zone.SetGangStrength('GAN2', GangType.Ballas, 40)
+
+:MANSIO3_7034
+Hud.ClearCounter($m3_sweets_health)
+Game.SetRelationship(RelationshipType.Like, PedType.Gang2, PedType.Player1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Gang2, PedType.Gang1)
+$onmission = 0
+$timer_mobile_start = Clock.GetGameTimer()
+$gf_game_timer = Clock.GetGameTimer()
+Streaming.MarkModelAsNoLongerNeeded(540)
+Streaming.MarkModelAsNoLongerNeeded(437)
+Streaming.MarkModelAsNoLongerNeeded(28)
+Streaming.MarkModelAsNoLongerNeeded(106)
+Streaming.MarkModelAsNoLongerNeeded(355)
+Streaming.MarkModelAsNoLongerNeeded(29)
+StreamedScript.MarkAsNoLongerNeeded(19)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.RemoveAnimation("GANGS")
+Streaming.RemoveAnimation("CRACK")
+if 
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_7146
+Char.RemoveElegantly($sweet)
+
+:MANSIO3_7146
+if 
+  Blip.DoesExist(79@)
+goto_if_false @MANSIO3_7167
+Blip.Remove(79@)
+
+:MANSIO3_7167
+if 
+  Blip.DoesExist(34@)
+goto_if_false @MANSIO3_7188
+Blip.Remove(34@)
+
+:MANSIO3_7188
+if 
+  Blip.DoesExist(35@)
+goto_if_false @MANSIO3_7209
+Blip.Remove(35@)
+
+:MANSIO3_7209
+if 
+  Blip.DoesExist(57@)
+goto_if_false @MANSIO3_7230
+Blip.Remove(57@)
+
+:MANSIO3_7230
+if 
+  Blip.DoesExist(56@)
+goto_if_false @MANSIO3_7251
+Blip.Remove(56@)
+
+:MANSIO3_7251
+if 
+  Blip.DoesExist(58@)
+goto_if_false @MANSIO3_7272
+Blip.Remove(58@)
+
+:MANSIO3_7272
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Mission.Finish
+return 
+
+:MANSIO3_7280
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+return 
+
+:MANSIO3_7293
+Text.ClearPrints
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+return 
+
+:MANSIO3_7312
+Camera.DoFade(0, 500)
+
+:MANSIO3_7319
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO3_7343
+wait 0
+goto @MANSIO3_7319
+
+:MANSIO3_7343
+return 
+
+:MANSIO3_7345
+Camera.DoFade(1, 500)
+
+:MANSIO3_7352
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO3_7376
+wait 0
+goto @MANSIO3_7352
+
+:MANSIO3_7376
+return 
+
+:MANSIO3_7378
+if 
+is_ps2_keyboard_key_just_pressed 87
+goto_if_false @MANSIO3_7441
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @MANSIO3_7441
+Char.SetCoordinates($scplayer, 1522.09, -1662.082, 12.5469)
+Char.SetHeading($scplayer, 175.5419)
+Camera.SetBehindPlayer
+
+:MANSIO3_7441
+if 
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @MANSIO3_7456
+
+:MANSIO3_7456
+if 
+is_ps2_keyboard_key_just_pressed 70
+goto_if_false @MANSIO3_7519
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @MANSIO3_7519
+Char.SetCoordinates($scplayer, 2503.688, -1671.453, 12.3707)
+Char.SetHeading($scplayer, 255.1807)
+Camera.SetBehindPlayer
+
+:MANSIO3_7519
+if 
+is_ps2_keyboard_key_just_pressed 75
+goto_if_false @MANSIO3_7701
+gosub @MANSIO3_7280
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @MANSIO3_7607
+Char.ClearTasksImmediately($scplayer)
+Task.PlayAnimNonInterruptable($scplayer, "PRTIAL_HNDSHK_01", "GANGS", 4.0, False, False, False, False, -1)
+
+:MANSIO3_7607
+if 
+  not Char.IsDead($sweet)
+goto_if_false @MANSIO3_7673
+Char.ClearTasksImmediately($sweet)
+Task.PlayAnimNonInterruptable($sweet, "PRTIAL_HNDSHK_01", "GANGS", 4.0, False, False, False, False, -1)
+
+:MANSIO3_7673
+Text.PrintNow('MAN3_33', 4000, 1)
+wait 4000
+gosub @MANSIO3_7293
+
+:MANSIO3_7701
+if 
+is_ps2_keyboard_key_just_pressed 72
+goto_if_false @MANSIO3_7723
+goto @MANSIO3_5475
+
+:MANSIO3_7723
+if 
+is_ps2_keyboard_key_just_pressed 90
+goto_if_false @MANSIO3_7796
+if 
+  not Car.IsDead(61@)
+goto_if_false @MANSIO3_7796
+46@ = Char.CreateAsPassenger(PedType.CivMale, 106, 61@, 0)
+47@ = Char.CreateAsPassenger(PedType.CivMale, 106, 61@, 1)
+48@ = Char.CreateAsPassenger(PedType.CivMale, 106, 61@, 2)
+
+:MANSIO3_7796
+if 
+is_ps2_keyboard_key_just_pressed 77
+goto_if_false @MANSIO3_7811
+
+:MANSIO3_7811
+return 
+
+:MANSIO3_7813
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(83@, 1)
+82@ = 0
+return 
+
+:MANSIO3_7833
+if and
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+  82@ == 0
+goto_if_false @MANSIO3_7876
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(86@s, 10000, 1)
+82@ = 1
+
+:MANSIO3_7876
+if and
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+  82@ == 1
+goto_if_false @MANSIO3_7914
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearThisPrint(86@s)
+82@ = 2
+
+:MANSIO3_7914
+return 
+

@@ -1,0 +1,2202 @@
+//-------------External script 26 (GF_SEX)---------------
+
+:GFSEX
+script_name 'GFSEX'
+Game.SetMinigameInProgress(True)
+7@ = 0
+8@ = 0
+if 
+  1@ > 0
+goto_if_false @GFSEX_61
+$excitement = 40
+goto @GFSEX_68
+
+:GFSEX_61
+$excitement = 50
+
+:GFSEX_68
+$power = 1
+9@ = 0
+if 
+  9@ > 0
+goto_if_false @GFSEX_124
+24@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:GFSEX_124
+gosub @GFSEX_7565
+if 
+  $iCensoredVersion == 0
+goto_if_false @GFSEX_156
+gosub @GFSEX_8036
+
+:GFSEX_156
+wait 0
+if and
+  not Char.IsDead($scplayer)
+  not Char.IsDead(24@)
+  $iGFLikesPlayer(0@,6i) <> -999
+  $iGFLikesPlayer(0@,6i) <> -100
+  $iGFLikesPlayer(0@,6i) <> -99
+goto_if_false @GFSEX_243
+gosub @GFSEX_257
+gosub @GFSEX_514
+gosub @GFSEX_12553
+goto @GFSEX_250
+
+:GFSEX_243
+gosub @GFSEX_13715
+
+:GFSEX_250
+goto @GFSEX_156
+
+:GFSEX_257
+if 
+  not is_local_var_bit_set_const 9@ bit 1
+goto_if_false @GFSEX_512
+if 
+  $iCensoredVersion == 1
+goto_if_false @GFSEX_316
+set_local_var_bit_const 9@ bit 1
+7@ = 9
+8@ = 0
+return 
+
+:GFSEX_316
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @GFSEX_372
+if 
+  not is_local_var_bit_set_const 9@ bit 2
+goto_if_false @GFSEX_365
+gosub @GFSEX_9199
+set_local_var_bit_const 9@ bit 2
+
+:GFSEX_365
+goto @GFSEX_379
+
+:GFSEX_372
+clear_local_var_bit_const 9@ bit 2
+
+:GFSEX_379
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @GFSEX_435
+if 
+  not is_local_var_bit_set_const 9@ bit 3
+goto_if_false @GFSEX_428
+gosub @GFSEX_9977
+set_local_var_bit_const 9@ bit 3
+
+:GFSEX_428
+goto @GFSEX_442
+
+:GFSEX_435
+clear_local_var_bit_const 9@ bit 3
+
+:GFSEX_442
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @GFSEX_505
+if 
+  not is_local_var_bit_set_const 9@ bit 4
+goto_if_false @GFSEX_498
+7@ = 2
+8@ = 0
+set_local_var_bit_const 9@ bit 4
+
+:GFSEX_498
+goto @GFSEX_512
+
+:GFSEX_505
+clear_local_var_bit_const 9@ bit 4
+
+:GFSEX_512
+return 
+
+:GFSEX_514
+switch_start 7@ total_jumps 10 default_jump 0 @GFSEX_782 jumps 0 @GFSEX_642 1 @GFSEX_656 2 @GFSEX_670 3 @GFSEX_684 4 @GFSEX_698 5 @GFSEX_712 6 @GFSEX_726
+switch_continued 7 @GFSEX_740 8 @GFSEX_754 9 @GFSEX_768 -1 @GFSEX_782 -1 @GFSEX_782 -1 @GFSEX_782 -1 @GFSEX_782 -1 @GFSEX_782 -1 @GFSEX_782
+
+:GFSEX_642
+gosub @GFSEX_784
+goto @GFSEX_782
+
+:GFSEX_656
+gosub @GFSEX_958
+goto @GFSEX_782
+
+:GFSEX_670
+gosub @GFSEX_1707
+goto @GFSEX_782
+
+:GFSEX_684
+gosub @GFSEX_2013
+goto @GFSEX_782
+
+:GFSEX_698
+gosub @GFSEX_3126
+goto @GFSEX_782
+
+:GFSEX_712
+gosub @GFSEX_3555
+goto @GFSEX_782
+
+:GFSEX_726
+gosub @GFSEX_4116
+goto @GFSEX_782
+
+:GFSEX_740
+gosub @GFSEX_5343
+goto @GFSEX_782
+
+:GFSEX_754
+gosub @GFSEX_6084
+goto @GFSEX_782
+
+:GFSEX_768
+gosub @GFSEX_6686
+goto @GFSEX_782
+
+:GFSEX_782
+return 
+
+:GFSEX_784
+switch_start 8@ total_jumps 2 default_jump 0 @GFSEX_956 jumps 0 @GFSEX_847 1 @GFSEX_874 -1 @GFSEX_956 -1 @GFSEX_956 -1 @GFSEX_956 -1 @GFSEX_956 -1 @GFSEX_956
+
+:GFSEX_847
+set_local_var_bit_const 9@ bit 1
+Camera.DoFade(0, Fade.Out)
+8@ += 1
+goto @GFSEX_956
+
+:GFSEX_874
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_949
+Player.SetControl($player1, False)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Char.HideWeaponForScriptedCutscene(24@, True)
+Hud.DisplayRadar(False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Hud.SwitchWidescreen(True)
+Game.SetAllCarsCanBeDamaged(False)
+gosub @GFSEX_8178
+set_lvar_int_to_lvar_int 7@ = 21@
+8@ = 0
+
+:GFSEX_949
+goto @GFSEX_956
+
+:GFSEX_956
+return 
+
+:GFSEX_958
+switch_start 8@ total_jumps 6 default_jump 0 @GFSEX_1705 jumps 0 @GFSEX_1021 1 @GFSEX_1063 2 @GFSEX_1186 3 @GFSEX_1423 4 @GFSEX_1582 5 @GFSEX_1632 -1 @GFSEX_1705
+
+:GFSEX_1021
+set_local_var_bit_const 9@ bit 1
+23@ = -1
+gosub @GFSEX_9199
+Camera.DoFade(1, 1500)
+8@ += 1
+goto @GFSEX_1705
+
+:GFSEX_1063
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_1179
+Task.PlayAnimNonInterruptable($scplayer, "BJ_COUCH_START_P", "BLOWJOBZ", 4.0, False, False, False, True, 0)
+Task.PlayAnimNonInterruptable(24@, "BJ_COUCH_START_W", "BLOWJOBZ", 4.0, False, False, False, True, 0)
+8@ += 1
+
+:GFSEX_1179
+goto @GFSEX_1705
+
+:GFSEX_1186
+16@ = Char.GetAnimCurrentTime($scplayer, "BJ_COUCH_START_P")
+if and
+  16@ > 0.5
+  1.0 > 16@
+goto_if_false @GFSEX_1277
+if 
+  Pad.IsSkipCutsceneButtonPressed
+goto_if_false @GFSEX_1277
+Camera.DoFade(0, 500)
+8@ = 5
+goto @GFSEX_1705
+
+:GFSEX_1277
+if 
+  16@ == 1.0
+goto_if_false @GFSEX_1416
+Task.PlayAnimNonInterruptable($scplayer, "BJ_COUCH_LOOP_P", "BLOWJOBZ", 4.0, True, False, False, True, 6000)
+Task.PlayAnimNonInterruptable(24@, "BJ_COUCH_LOOP_W", "BLOWJOBZ", 4.0, True, False, False, True, 6000)
+set_var_int_to_constant $iGFSayContext = 285
+TIMERB = 0
+8@ += 1
+
+:GFSEX_1416
+goto @GFSEX_1705
+
+:GFSEX_1423
+if 
+  Pad.IsSkipCutsceneButtonPressed
+goto_if_false @GFSEX_1457
+Camera.DoFade(0, 500)
+8@ = 5
+goto @GFSEX_1575
+
+:GFSEX_1457
+if 
+  TIMERB > 6000
+goto_if_false @GFSEX_1575
+Task.PlayAnimNonInterruptable($scplayer, "BJ_COUCH_END_P", "BLOWJOBZ", 4.0, False, False, False, False, 0)
+Task.PlayAnimNonInterruptable(24@, "BJ_COUCH_END_W", "BLOWJOBZ", 4.0, False, False, False, False, 0)
+8@ += 1
+
+:GFSEX_1575
+goto @GFSEX_1705
+
+:GFSEX_1582
+20@ = Char.GetScriptTaskStatus(24@, 2066)
+if 
+  is_int_lvar_equal_to_constant 20@ == 7
+goto_if_false @GFSEX_1625
+Camera.DoFade(0, 500)
+8@ += 1
+
+:GFSEX_1625
+goto @GFSEX_1705
+
+:GFSEX_1632
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_1698
+if 
+  1@ > 0
+goto_if_false @GFSEX_1684
+7@ = 3
+8@ = 0
+goto @GFSEX_1698
+
+:GFSEX_1684
+7@ = 6
+8@ = 0
+
+:GFSEX_1698
+goto @GFSEX_1705
+
+:GFSEX_1705
+return 
+
+:GFSEX_1707
+switch_start 8@ total_jumps 3 default_jump 0 @GFSEX_2011 jumps 0 @GFSEX_1770 1 @GFSEX_1791 2 @GFSEX_1984 -1 @GFSEX_2011 -1 @GFSEX_2011 -1 @GFSEX_2011 -1 @GFSEX_2011
+
+:GFSEX_1770
+Camera.DoFade(0, 1000)
+8@ += 1
+goto @GFSEX_2011
+
+:GFSEX_1791
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_1977
+gosub @GFSEX_8764
+if 
+  is_local_var_bit_set_const 9@ bit 13
+goto_if_false @GFSEX_1841
+Hud.ClearCounter($excitement)
+clear_local_var_bit_const 9@ bit 13
+
+:GFSEX_1841
+if 
+  is_local_var_bit_set_const 9@ bit 9
+goto_if_false @GFSEX_1871
+Hud.ClearCounter($power)
+clear_local_var_bit_const 9@ bit 9
+
+:GFSEX_1871
+Text.ClearHelp
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+if 
+  Player.IsWearing($player1, "GIMPLEG", BodyPart.SpecialCostume)
+goto_if_false @GFSEX_1938
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+
+:GFSEX_1938
+if 
+  $iCensoredVersion == 0
+goto_if_false @GFSEX_1963
+Char.SetCollision($scplayer, True)
+
+:GFSEX_1963
+Camera.DoFade(1, 1000)
+8@ += 1
+
+:GFSEX_1977
+goto @GFSEX_2011
+
+:GFSEX_1984
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_2004
+gosub @GFSEX_13715
+
+:GFSEX_2004
+goto @GFSEX_2011
+
+:GFSEX_2011
+return 
+
+:GFSEX_2013
+switch_start 8@ total_jumps 6 default_jump 0 @GFSEX_3124 jumps 0 @GFSEX_2076 1 @GFSEX_2294 2 @GFSEX_2489 3 @GFSEX_2706 4 @GFSEX_2948 5 @GFSEX_3055 -1 @GFSEX_3124
+
+:GFSEX_2076
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_2287
+Hud.SwitchWidescreen(False)
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately(24@)
+gosub @GFSEX_8852
+Char.SetCoordinates($scplayer, 10@, 12@, 14@)
+Char.SetHeading($scplayer, 16@)
+10@ = Char.GetOffsetInWorldCoords(12@, 14@, $scplayer, 0.0, 0.5, -1.0)
+16@ = Char.GetHeading($scplayer)
+Char.SetCoordinates(24@, 10@, 12@, 14@)
+Char.SetHeading(24@, 16@)
+Text.PrintHelpForever('GF_0043')
+Hud.DisplayNthCounterWithString($excitement, CounterDisplay.Bar, 1, 'GF_0017')
+Hud.DisplayNthCounterWithString($power, CounterDisplay.Bar, 3, 'GF_0040')
+set_local_var_bit_const 9@ bit 9
+set_local_var_bit_const 9@ bit 13
+23@ = 1
+gosub @GFSEX_9199
+Camera.DoFade(1, 1000)
+clear_local_var_bit_const 9@ bit 1
+8@ += 1
+
+:GFSEX_2287
+goto @GFSEX_3124
+
+:GFSEX_2294
+Task.PlayAnimNonInterruptable(24@, "SPANKING_IDLEW", "SNM", 4.0, True, False, False, False, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SPANKING_IDLEP", "SNM", 4.0, True, False, False, False, 0)
+clear_local_var_bit_const 9@ bit 8
+gosub @GFSEX_12387
+if 
+  0 >= $excitement
+goto_if_false @GFSEX_2436
+7@ = 4
+8@ = 0
+goto @GFSEX_3124
+goto @GFSEX_2475
+
+:GFSEX_2436
+if 
+  $excitement >= 100
+goto_if_false @GFSEX_2475
+7@ = 5
+8@ = 0
+goto @GFSEX_3124
+
+:GFSEX_2475
+8@ += 1
+goto @GFSEX_3124
+
+:GFSEX_2489
+gosub @GFSEX_12387
+if 
+  $power >= 100
+goto_if_false @GFSEX_2521
+8@ += 1
+
+:GFSEX_2521
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GFSEX_2607
+if and
+  not is_local_var_bit_set_const 9@ bit 8
+  not Char.IsPlayingAnim($scplayer, "SPANKINGP")
+goto_if_false @GFSEX_2600
+set_local_var_bit_const 9@ bit 8
+gosub @GFSEX_11966
+8@ = 4
+goto @GFSEX_3124
+
+:GFSEX_2600
+goto @GFSEX_2614
+
+:GFSEX_2607
+clear_local_var_bit_const 9@ bit 8
+
+:GFSEX_2614
+if 
+  0 >= $excitement
+goto_if_false @GFSEX_2660
+7@ = 4
+8@ = 0
+goto @GFSEX_3124
+goto @GFSEX_2699
+
+:GFSEX_2660
+if 
+  $excitement == 100
+goto_if_false @GFSEX_2699
+7@ = 5
+8@ = 0
+goto @GFSEX_3124
+
+:GFSEX_2699
+goto @GFSEX_3124
+
+:GFSEX_2706
+gosub @GFSEX_12387
+if 
+  $power >= 97
+goto_if_false @GFSEX_2824
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GFSEX_2817
+if and
+  not is_local_var_bit_set_const 9@ bit 8
+  not Char.IsPlayingAnim($scplayer, "SPANKINGP")
+goto_if_false @GFSEX_2810
+set_local_var_bit_const 9@ bit 8
+gosub @GFSEX_11966
+8@ = 4
+goto @GFSEX_3124
+
+:GFSEX_2810
+goto @GFSEX_2824
+
+:GFSEX_2817
+clear_local_var_bit_const 9@ bit 8
+
+:GFSEX_2824
+if 
+  0 >= $power
+goto_if_false @GFSEX_2856
+gosub @GFSEX_11667
+8@ -= 1
+
+:GFSEX_2856
+if 
+  0 >= $excitement
+goto_if_false @GFSEX_2902
+7@ = 4
+8@ = 0
+goto @GFSEX_3124
+goto @GFSEX_2941
+
+:GFSEX_2902
+if 
+  $excitement == 100
+goto_if_false @GFSEX_2941
+7@ = 5
+8@ = 0
+goto @GFSEX_3124
+
+:GFSEX_2941
+goto @GFSEX_3124
+
+:GFSEX_2948
+gosub @GFSEX_12387
+gosub @GFSEX_12007
+Task.PlayAnimNonInterruptable(24@, "SPANKINGW", "SNM", 99.0, False, False, False, True, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SPANKINGP", "SNM", 99.0, False, False, False, True, 0)
+clear_local_var_bit_const 9@ bit 5
+8@ += 1
+goto @GFSEX_3124
+
+:GFSEX_3055
+gosub @GFSEX_12387
+gosub @GFSEX_12057
+if 
+  is_local_var_bit_set_const 9@ bit 5
+goto_if_false @GFSEX_3117
+set_var_int_to_constant $iCJSayContext = 238
+Audio.ReportMissionAudioEventAtChar($scplayer, 1190)
+gosub @GFSEX_12253
+8@ = 1
+
+:GFSEX_3117
+goto @GFSEX_3124
+
+:GFSEX_3124
+return 
+
+:GFSEX_3126
+switch_start 8@ total_jumps 3 default_jump 0 @GFSEX_3553 jumps 0 @GFSEX_3189 1 @GFSEX_3272 2 @GFSEX_3477 -1 @GFSEX_3553 -1 @GFSEX_3553 -1 @GFSEX_3553 -1 @GFSEX_3553
+
+:GFSEX_3189
+if 
+  is_local_var_bit_set_const 9@ bit 13
+goto_if_false @GFSEX_3219
+Hud.ClearCounter($excitement)
+clear_local_var_bit_const 9@ bit 13
+
+:GFSEX_3219
+if 
+  is_local_var_bit_set_const 9@ bit 9
+goto_if_false @GFSEX_3249
+Hud.ClearCounter($power)
+clear_local_var_bit_const 9@ bit 9
+
+:GFSEX_3249
+Text.ClearHelp
+Camera.DoFade(0, 1000)
+8@ += 1
+goto @GFSEX_3553
+
+:GFSEX_3272
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_3470
+gosub @GFSEX_8852
+Char.SetCoordinates($scplayer, 10@, 12@, 14@)
+Char.SetHeading($scplayer, 16@)
+10@ = Char.GetOffsetInWorldCoords(12@, 14@, $scplayer, 0.0, 0.5, -1.0)
+16@ = Char.GetHeading($scplayer)
+Char.SetCoordinates(24@, 10@, 12@, 14@)
+Char.SetHeading(24@, 16@)
+Task.PlayAnimNonInterruptable(24@, "SPANKEDW", "SNM", 4.0, True, False, False, True, 600000)
+Task.PlayAnimNonInterruptable($scplayer, "SPANKEDP", "SNM", 4.0, True, False, False, True, 600000)
+Camera.DoFade(1, 1000)
+TIMERB = 0
+8@ += 1
+
+:GFSEX_3470
+goto @GFSEX_3553
+
+:GFSEX_3477
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_3546
+set_var_int_to_constant $iGFSayContext = 291
+set_var_int_to_constant $iCJSayContext = 237
+if 
+  TIMERB > 7000
+goto_if_false @GFSEX_3546
+clear_global_var_bit_const $iDateReport bit 4
+7@ = 2
+8@ = 0
+
+:GFSEX_3546
+goto @GFSEX_3553
+
+:GFSEX_3553
+return 
+
+:GFSEX_3555
+switch_start 8@ total_jumps 4 default_jump 0 @GFSEX_4114 jumps 0 @GFSEX_3618 1 @GFSEX_3701 2 @GFSEX_4000 3 @GFSEX_4042 -1 @GFSEX_4114 -1 @GFSEX_4114 -1 @GFSEX_4114
+
+:GFSEX_3618
+if 
+  is_local_var_bit_set_const 9@ bit 13
+goto_if_false @GFSEX_3648
+Hud.ClearCounter($excitement)
+clear_local_var_bit_const 9@ bit 13
+
+:GFSEX_3648
+if 
+  is_local_var_bit_set_const 9@ bit 9
+goto_if_false @GFSEX_3678
+Hud.ClearCounter($power)
+clear_local_var_bit_const 9@ bit 9
+
+:GFSEX_3678
+Text.ClearHelp
+Camera.DoFade(0, 1000)
+8@ += 1
+goto @GFSEX_4114
+
+:GFSEX_3701
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_3993
+gosub @GFSEX_8852
+Char.SetCoordinates($scplayer, 10@, 12@, 14@)
+Char.SetHeading($scplayer, 16@)
+10@ = Char.GetOffsetInWorldCoords(12@, 14@, $scplayer, 0.0, 0.5, -1.0)
+16@ = Char.GetHeading($scplayer)
+Char.SetCoordinates(24@, 10@, 12@, 14@)
+Char.SetHeading(24@, 16@)
+10@ = Char.GetOffsetInWorldCoords(12@, 14@, $scplayer, 0.707, 3.136, -0.163)
+11@ = Char.GetOffsetInWorldCoords(13@, 15@, $scplayer, 0.427, 0.634, -0.5)
+Camera.SetFixedPosition(10@, 12@, 14@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(11@, 13@, 15@, SwitchType.JumpCut)
+Task.PlayAnimNonInterruptable(24@, "SPANKING_ENDW", "SNM", 4.0, False, False, False, True, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SPANKING_ENDP", "SNM", 4.0, False, False, False, True, 0)
+Camera.DoFade(1, 1000)
+8@ += 1
+
+:GFSEX_3993
+goto @GFSEX_4114
+
+:GFSEX_4000
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_4035
+set_var_int_to_constant $iGFSayContext = 289
+TIMERB = 0
+8@ += 1
+
+:GFSEX_4035
+goto @GFSEX_4114
+
+:GFSEX_4042
+16@ = Char.GetAnimCurrentTime($scplayer, "SPANKING_ENDP")
+if 
+  16@ == 1.0
+goto_if_false @GFSEX_4107
+set_global_var_bit_const $iDateReport bit 4
+7@ = 2
+8@ = 0
+
+:GFSEX_4107
+goto @GFSEX_4114
+
+:GFSEX_4114
+return 
+
+:GFSEX_4116
+switch_start 8@ total_jumps 6 default_jump 0 @GFSEX_5341 jumps 0 @GFSEX_4179 1 @GFSEX_4373 2 @GFSEX_4954 3 @GFSEX_5070 4 @GFSEX_5180 5 @GFSEX_5278 -1 @GFSEX_5341
+
+:GFSEX_4179
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_4366
+Hud.SwitchWidescreen(False)
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately(24@)
+gosub @GFSEX_8852
+Char.SetCoordinates($scplayer, 10@, 12@, 14@)
+Char.SetHeading($scplayer, 16@)
+10@ = Char.GetOffsetInWorldCoords(12@, 14@, $scplayer, 0.0, 1.0, -1.0)
+16@ = Char.GetHeading($scplayer)
+16@ += 180.0
+Char.SetCoordinates(24@, 10@, 12@, 14@)
+Char.SetHeading(24@, 16@)
+Hud.DisplayCounterWithString($excitement, CounterDisplay.Bar, 'GF_0017')
+set_local_var_bit_const 9@ bit 13
+gosub @GFSEX_9199
+Text.PrintHelpForever('GF_0020')
+Camera.DoFade(1, 500)
+clear_local_var_bit_const 9@ bit 1
+8@ += 1
+
+:GFSEX_4366
+goto @GFSEX_5341
+
+:GFSEX_4373
+TIMERB = 0
+if 
+  22@ == 0
+goto_if_false @GFSEX_4473
+Task.PlayAnimNonInterruptable(24@, "SEX_1_W", "SEX", 4.0, True, False, False, False, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SEX_1_P", "SEX", 4.0, True, False, False, False, 0)
+8@ += 1
+
+:GFSEX_4473
+if 
+  22@ == 1
+goto_if_false @GFSEX_4710
+if 
+  Char.IsPlayingAnim($scplayer, "SEX_1TO2_P")
+goto_if_false @GFSEX_4635
+16@ = Char.GetAnimCurrentTime($scplayer, "SEX_1TO2_P")
+if 
+  16@ >= 1.0
+goto_if_false @GFSEX_4628
+Task.PlayAnimNonInterruptable(24@, "SEX_2_W", "SEX", 4.0, True, False, False, False, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SEX_2_P", "SEX", 4.0, True, False, False, False, 0)
+
+:GFSEX_4628
+goto @GFSEX_4703
+
+:GFSEX_4635
+Task.PlayAnimNonInterruptable(24@, "SEX_2_W", "SEX", 4.0, True, False, False, False, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SEX_2_P", "SEX", 4.0, True, False, False, False, 0)
+
+:GFSEX_4703
+8@ += 1
+
+:GFSEX_4710
+if 
+  22@ == 2
+goto_if_false @GFSEX_4947
+if 
+  Char.IsPlayingAnim($scplayer, "SEX_2TO3_P")
+goto_if_false @GFSEX_4872
+16@ = Char.GetAnimCurrentTime($scplayer, "SEX_2TO3_P")
+if 
+  16@ >= 1.0
+goto_if_false @GFSEX_4865
+Task.PlayAnimNonInterruptable(24@, "SEX_3_W", "SEX", 4.0, True, False, False, False, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SEX_3_P", "SEX", 4.0, True, False, False, False, 0)
+
+:GFSEX_4865
+goto @GFSEX_4940
+
+:GFSEX_4872
+Task.PlayAnimNonInterruptable(24@, "SEX_3_W", "SEX", 4.0, True, False, False, False, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SEX_3_P", "SEX", 4.0, True, False, False, False, 0)
+
+:GFSEX_4940
+8@ += 1
+
+:GFSEX_4947
+goto @GFSEX_5341
+
+:GFSEX_4954
+gosub @GFSEX_10324
+gosub @GFSEX_10735
+if 
+  $excitement == 100
+goto_if_false @GFSEX_5022
+set_var_int_to_constant $iGFSayContext = 286
+Player.SetControl($player1, False)
+set_local_var_bit_const 9@ bit 1
+set_global_var_bit_const $iDateReport bit 4
+8@ += 1
+
+:GFSEX_5022
+if 
+  $excitement == 0
+goto_if_false @GFSEX_5063
+clear_global_var_bit_const $iDateReport bit 4
+Text.ClearHelp
+7@ = 8
+8@ = 0
+
+:GFSEX_5063
+goto @GFSEX_5341
+
+:GFSEX_5070
+if 
+  22@ == 0
+goto_if_false @GFSEX_5095
+8@ += 1
+
+:GFSEX_5095
+if 
+  22@ == 1
+goto_if_false @GFSEX_5134
+gosub @GFSEX_9199
+22@ = 0
+8@ += 1
+
+:GFSEX_5134
+if 
+  22@ == 2
+goto_if_false @GFSEX_5173
+gosub @GFSEX_9199
+22@ = 0
+8@ += 1
+
+:GFSEX_5173
+goto @GFSEX_5341
+
+:GFSEX_5180
+Task.PlayAnimNonInterruptable(24@, "SEX_1_CUM_W", "SEX", 4.0, False, False, False, True, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SEX_1_CUM_P", "SEX", 4.0, False, False, False, True, 0)
+set_var_int_to_constant $iGFSayContext = 289
+8@ += 1
+goto @GFSEX_5341
+
+:GFSEX_5278
+16@ = Char.GetAnimCurrentTime($scplayer, "SEX_1_CUM_P")
+if 
+  16@ == 1.0
+goto_if_false @GFSEX_5334
+7@ = 2
+8@ = 0
+
+:GFSEX_5334
+goto @GFSEX_5341
+
+:GFSEX_5341
+return 
+
+:GFSEX_5343
+switch_start 8@ total_jumps 6 default_jump 0 @GFSEX_6082 jumps 0 @GFSEX_5406 1 @GFSEX_5448 2 @GFSEX_5571 3 @GFSEX_5800 4 @GFSEX_5959 5 @GFSEX_6009 -1 @GFSEX_6082
+
+:GFSEX_5406
+set_local_var_bit_const 9@ bit 1
+23@ = -1
+gosub @GFSEX_9199
+Camera.DoFade(1, 1500)
+8@ += 1
+goto @GFSEX_6082
+
+:GFSEX_5448
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_5564
+Task.PlayAnimNonInterruptable($scplayer, "BJ_STAND_START_P", "BLOWJOBZ", 4.0, False, False, False, True, 0)
+Task.PlayAnimNonInterruptable(24@, "BJ_STAND_START_W", "BLOWJOBZ", 4.0, False, False, False, True, 0)
+8@ += 1
+
+:GFSEX_5564
+goto @GFSEX_6082
+
+:GFSEX_5571
+16@ = Char.GetAnimCurrentTime($scplayer, "BJ_STAND_START_P")
+if and
+  16@ > 0.5
+  1.0 > 16@
+goto_if_false @GFSEX_5662
+if 
+  Pad.IsSkipCutsceneButtonPressed
+goto_if_false @GFSEX_5662
+Camera.DoFade(0, 500)
+8@ = 5
+goto @GFSEX_6082
+
+:GFSEX_5662
+if 
+  16@ == 1.0
+goto_if_false @GFSEX_5793
+Task.PlayAnimNonInterruptable($scplayer, "BJ_STAND_LOOP_P", "BLOWJOBZ", 4.0, True, False, False, True, 6000)
+Task.PlayAnimNonInterruptable(24@, "BJ_STAND_LOOP_W", "BLOWJOBZ", 4.0, True, False, False, True, 6000)
+TIMERB = 0
+8@ += 1
+
+:GFSEX_5793
+goto @GFSEX_6082
+
+:GFSEX_5800
+if 
+  Pad.IsSkipCutsceneButtonPressed
+goto_if_false @GFSEX_5834
+Camera.DoFade(0, 500)
+8@ = 5
+goto @GFSEX_5952
+
+:GFSEX_5834
+if 
+  TIMERB > 6000
+goto_if_false @GFSEX_5952
+Task.PlayAnimNonInterruptable($scplayer, "BJ_STAND_END_P", "BLOWJOBZ", 4.0, False, False, False, False, 0)
+Task.PlayAnimNonInterruptable(24@, "BJ_STAND_END_W", "BLOWJOBZ", 4.0, False, False, False, False, 0)
+8@ += 1
+
+:GFSEX_5952
+goto @GFSEX_6082
+
+:GFSEX_5959
+20@ = Char.GetScriptTaskStatus(24@, 2066)
+if 
+  is_int_lvar_equal_to_constant 20@ == 7
+goto_if_false @GFSEX_6002
+Camera.DoFade(0, 500)
+8@ += 1
+
+:GFSEX_6002
+goto @GFSEX_6082
+
+:GFSEX_6009
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_6075
+if 
+  1@ > 0
+goto_if_false @GFSEX_6061
+7@ = 3
+8@ = 0
+goto @GFSEX_6075
+
+:GFSEX_6061
+7@ = 6
+8@ = 0
+
+:GFSEX_6075
+goto @GFSEX_6082
+
+:GFSEX_6082
+return 
+
+:GFSEX_6084
+switch_start 8@ total_jumps 2 default_jump 0 @GFSEX_6684 jumps 0 @GFSEX_6147 1 @GFSEX_6508 -1 @GFSEX_6684 -1 @GFSEX_6684 -1 @GFSEX_6684 -1 @GFSEX_6684 -1 @GFSEX_6684
+
+:GFSEX_6147
+if 
+  22@ == 0
+goto_if_false @GFSEX_6265
+Task.PlayAnimNonInterruptable(24@, "SEX_1_FAIL_W", "SEX", 4.0, False, False, False, True, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SEX_1_FAIL_P", "SEX", 4.0, False, False, False, True, 0)
+set_var_int_to_constant $iGFSayContext = 288
+8@ += 1
+goto @GFSEX_6684
+
+:GFSEX_6265
+if 
+  22@ == 1
+goto_if_false @GFSEX_6383
+Task.PlayAnimNonInterruptable(24@, "SEX_2_FAIL_W", "SEX", 4.0, False, False, False, True, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SEX_2_FAIL_P", "SEX", 4.0, False, False, False, True, 0)
+set_var_int_to_constant $iGFSayContext = 288
+8@ += 1
+goto @GFSEX_6684
+
+:GFSEX_6383
+if 
+  22@ == 2
+goto_if_false @GFSEX_6501
+Task.PlayAnimNonInterruptable(24@, "SEX_3_FAIL_W", "SEX", 4.0, False, False, False, True, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SEX_3_FAIL_P", "SEX", 4.0, False, False, False, True, 0)
+set_var_int_to_constant $iGFSayContext = 288
+8@ += 1
+goto @GFSEX_6684
+
+:GFSEX_6501
+goto @GFSEX_6684
+
+:GFSEX_6508
+if 
+  22@ == 0
+goto_if_false @GFSEX_6555
+16@ = Char.GetAnimCurrentTime($scplayer, "SEX_1_FAIL_P")
+goto @GFSEX_6642
+
+:GFSEX_6555
+if 
+  22@ == 1
+goto_if_false @GFSEX_6602
+16@ = Char.GetAnimCurrentTime($scplayer, "SEX_2_FAIL_P")
+goto @GFSEX_6642
+
+:GFSEX_6602
+if 
+  22@ == 2
+goto_if_false @GFSEX_6642
+16@ = Char.GetAnimCurrentTime($scplayer, "SEX_3_FAIL_P")
+
+:GFSEX_6642
+if 
+  16@ == 1.0
+goto_if_false @GFSEX_6677
+7@ = 2
+8@ = 0
+
+:GFSEX_6677
+goto @GFSEX_6684
+
+:GFSEX_6684
+return 
+
+:GFSEX_6686
+switch_start 8@ total_jumps 8 default_jump 0 @GFSEX_7563 jumps 0 @GFSEX_6814 1 @GFSEX_6895 2 @GFSEX_7180 3 @GFSEX_7222 4 @GFSEX_7284 5 @GFSEX_7385 6 @GFSEX_7447
+switch_continued 7 @GFSEX_7509 -1 @GFSEX_7563 -1 @GFSEX_7563 -1 @GFSEX_7563 -1 @GFSEX_7563 -1 @GFSEX_7563 -1 @GFSEX_7563 -1 @GFSEX_7563 -1 @GFSEX_7563
+
+:GFSEX_6814
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @GFSEX_6860
+25@ = Char.StoreCarIsInNoSave($scplayer)
+Car.SetProofs(25@, True, True, True, True, True)
+goto @GFSEX_6875
+
+:GFSEX_6860
+Char.SetProofs($scplayer, True, True, True, True, True)
+
+:GFSEX_6875
+Camera.DoFade(0, Fade.Out)
+8@ += 1
+goto @GFSEX_7563
+
+:GFSEX_6895
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_7173
+Streaming.SetAreaVisible(0)
+Char.SetAreaVisible(24@, 0)
+Char.SetAreaVisible($scplayer, 0)
+if 
+  Char.IsOnFoot($scplayer)
+goto_if_false @GFSEX_6964
+Char.SetCoordinates($scplayer, 3@, 4@, 5@)
+Char.SetHeading($scplayer, 6@)
+
+:GFSEX_6964
+Streaming.LoadScene(3@, 4@, 5@)
+Streaming.RequestCollision(3@, 4@)
+Char.SetVisible($scplayer, False)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Hud.DisplayRadar(False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Game.SetAllCarsCanBeDamaged(False)
+gosub @GFSEX_13248
+Char.SetCoordinates(24@, 10@, 12@, 14@)
+Char.SetCollision(24@, False)
+Char.SetVisible(24@, False)
+Camera.SetFixedPosition(10@, 12@, 14@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(11@, 13@, 15@, SwitchType.JumpCut)
+Camera.SetShakeSimulationSimple(5, 5000.0, 10.0)
+20@, 21@ = Clock.GetTimeOfDay()
+21@ += 30
+if 
+  21@ > 60
+goto_if_false @GFSEX_7151
+21@ -= 60
+20@ += 1
+
+:GFSEX_7151
+Clock.SetTimeOfDay(20@, 21@)
+Camera.DoFade(1, 1000)
+8@ += 1
+
+:GFSEX_7173
+goto @GFSEX_7563
+
+:GFSEX_7180
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFSEX_7215
+set_var_int_to_constant $iGFSayContext = 284
+TIMERB = 0
+8@ += 1
+
+:GFSEX_7215
+goto @GFSEX_7563
+
+:GFSEX_7222
+if 
+  TIMERB > 3000
+goto_if_false @GFSEX_7277
+set_var_int_to_constant $iGFSayContext = 284
+TIMERB = 0
+Camera.SetShakeSimulationSimple(5, 3000.0, 15.0)
+8@ += 1
+
+:GFSEX_7277
+goto @GFSEX_7563
+
+:GFSEX_7284
+if 
+  TIMERB > 3000
+goto_if_false @GFSEX_7378
+$iGFSayContext = -2
+if 
+  1@ > 0
+goto_if_false @GFSEX_7343
+set_var_int_to_constant $iCJSayContext = 239
+goto @GFSEX_7350
+
+:GFSEX_7343
+set_var_int_to_constant $iCJSayContext = 117
+
+:GFSEX_7350
+Camera.SetShakeSimulationSimple(5, 3000.0, 20.0)
+TIMERB = 0
+8@ += 1
+
+:GFSEX_7378
+goto @GFSEX_7563
+
+:GFSEX_7385
+if 
+  TIMERB > 3000
+goto_if_false @GFSEX_7440
+set_var_int_to_constant $iGFSayContext = 287
+Camera.SetShakeSimulationSimple(5, 4000.0, 30.0)
+TIMERB = 0
+8@ += 1
+
+:GFSEX_7440
+goto @GFSEX_7563
+
+:GFSEX_7447
+if 
+  TIMERB > 4000
+goto_if_false @GFSEX_7502
+set_var_int_to_constant $iGFSayContext = 290
+Camera.SetShakeSimulationSimple(5, 3000.0, 5.0)
+TIMERB = 0
+8@ += 1
+
+:GFSEX_7502
+goto @GFSEX_7563
+
+:GFSEX_7509
+if 
+  TIMERB > 3000
+goto_if_false @GFSEX_7556
+set_global_var_bit_const $iDateReport bit 2
+set_global_var_bit_const $iDateReport bit 4
+7@ = 2
+8@ = 0
+
+:GFSEX_7556
+goto @GFSEX_7563
+
+:GFSEX_7563
+return 
+
+:GFSEX_7565
+switch_start 0@ total_jumps 6 default_jump 0 @GFSEX_7982 jumps 0 @GFSEX_7628 1 @GFSEX_7687 2 @GFSEX_7746 3 @GFSEX_7805 4 @GFSEX_7864 5 @GFSEX_7923 -1 @GFSEX_7982
+
+:GFSEX_7628
+Streaming.LoadSpecialCharacter('GANGRL2', 1)
+
+:GFSEX_7641
+if 
+  not Streaming.HasSpecialCharacterLoaded(1)
+goto_if_false @GFSEX_7680
+wait 0
+Streaming.LoadSpecialCharacter('GANGRL2', 1)
+goto @GFSEX_7641
+
+:GFSEX_7680
+goto @GFSEX_7982
+
+:GFSEX_7687
+Streaming.LoadSpecialCharacter('MECGRL2', 1)
+
+:GFSEX_7700
+if 
+  not Streaming.HasSpecialCharacterLoaded(1)
+goto_if_false @GFSEX_7739
+wait 0
+Streaming.LoadSpecialCharacter('MECGRL2', 1)
+goto @GFSEX_7700
+
+:GFSEX_7739
+goto @GFSEX_7982
+
+:GFSEX_7746
+Streaming.LoadSpecialCharacter('GUNGRL2', 1)
+
+:GFSEX_7759
+if 
+  not Streaming.HasSpecialCharacterLoaded(1)
+goto_if_false @GFSEX_7798
+wait 0
+Streaming.LoadSpecialCharacter('GUNGRL2', 1)
+goto @GFSEX_7759
+
+:GFSEX_7798
+goto @GFSEX_7982
+
+:GFSEX_7805
+Streaming.LoadSpecialCharacter('COPGRL2', 1)
+
+:GFSEX_7818
+if 
+  not Streaming.HasSpecialCharacterLoaded(1)
+goto_if_false @GFSEX_7857
+wait 0
+Streaming.LoadSpecialCharacter('COPGRL2', 1)
+goto @GFSEX_7818
+
+:GFSEX_7857
+goto @GFSEX_7982
+
+:GFSEX_7864
+Streaming.LoadSpecialCharacter('NURGRL2', 1)
+
+:GFSEX_7877
+if 
+  not Streaming.HasSpecialCharacterLoaded(1)
+goto_if_false @GFSEX_7916
+wait 0
+Streaming.LoadSpecialCharacter('NURGRL2', 1)
+goto @GFSEX_7877
+
+:GFSEX_7916
+goto @GFSEX_7982
+
+:GFSEX_7923
+Streaming.LoadSpecialCharacter('CROGRL2', 1)
+
+:GFSEX_7936
+if 
+  not Streaming.HasSpecialCharacterLoaded(1)
+goto_if_false @GFSEX_7975
+wait 0
+Streaming.LoadSpecialCharacter('CROGRL2', 1)
+goto @GFSEX_7936
+
+:GFSEX_7975
+goto @GFSEX_7982
+
+:GFSEX_7982
+24@ = Char.Create(5, 290, 0.0, 0.0, 0.0)
+Char.SetProofs(24@, True, True, True, True, True)
+Char.SetCollision(24@, False)
+Char.DontRemove(24@)
+return 
+
+:GFSEX_8036
+Streaming.RequestAnimation("BLOWJOBZ")
+Streaming.RequestAnimation("KISSING")
+Streaming.RequestAnimation("SEX")
+Streaming.RequestAnimation("SNM")
+
+:GFSEX_8073
+wait 0
+if and
+  Streaming.HasAnimationLoaded("BLOWJOBZ")
+  Streaming.HasAnimationLoaded("SEX")
+  Streaming.HasAnimationLoaded("KISSING")
+  Streaming.HasAnimationLoaded("SNM")
+goto_if_false @GFSEX_8134
+return 
+goto @GFSEX_8178
+
+:GFSEX_8134
+Streaming.RequestAnimation("BLOWJOBZ")
+Streaming.RequestAnimation("KISSING")
+Streaming.RequestAnimation("SEX")
+Streaming.RequestAnimation("SNM")
+goto @GFSEX_8073
+
+:GFSEX_8178
+switch_start 0@ total_jumps 6 default_jump 0 @GFSEX_8607 jumps 0 @GFSEX_8241 1 @GFSEX_8302 2 @GFSEX_8363 3 @GFSEX_8424 4 @GFSEX_8485 5 @GFSEX_8546 -1 @GFSEX_8607
+
+:GFSEX_8241
+10@ = 245.6252
+12@ = 304.1411
+14@ = 998.32
+16@ = 0.0
+20@ = 1
+21@ = 1
+goto @GFSEX_8607
+
+:GFSEX_8302
+10@ = 306.1999
+12@ = 305.1225
+14@ = 1002.297
+16@ = 90.0
+20@ = 4
+21@ = 1
+goto @GFSEX_8607
+
+:GFSEX_8363
+10@ = 288.7753
+12@ = 308.4772
+14@ = 998.1641
+16@ = 213.8029
+20@ = 3
+21@ = 7
+goto @GFSEX_8607
+
+:GFSEX_8424
+10@ = 324.6405
+12@ = 307.4622
+14@ = 998.1558
+16@ = 175.0
+20@ = 5
+21@ = 7
+goto @GFSEX_8607
+
+:GFSEX_8485
+10@ = 271.4699
+12@ = 307.2668
+14@ = 998.32
+16@ = 265.0
+20@ = 2
+21@ = 1
+goto @GFSEX_8607
+
+:GFSEX_8546
+10@ = 345.6252
+12@ = 304.1411
+14@ = 998.25
+16@ = 0.0
+20@ = 6
+21@ = 1
+goto @GFSEX_8607
+
+:GFSEX_8607
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately(24@)
+Char.SetCollision(24@, False)
+Char.SetCollision($scplayer, False)
+Char.SetCoordinates($scplayer, 10@, 12@, 14@)
+Char.SetHeading($scplayer, 16@)
+10@ = Char.GetOffsetInWorldCoords(12@, 14@, $scplayer, 0.0, 1.0, -1.0)
+16@ = Char.GetHeading($scplayer)
+16@ += 180.0
+Char.SetCoordinates(24@, 10@, 12@, 14@)
+Char.SetHeading(24@, 16@)
+Streaming.SetAreaVisible(20@)
+Char.SetAreaVisible(24@, 20@)
+Char.SetAreaVisible($scplayer, 20@)
+Streaming.LoadScene(10@, 12@, 14@)
+Streaming.RequestCollision(10@, 12@)
+return 
+
+:GFSEX_8764
+Streaming.SetAreaVisible(0)
+Char.SetAreaVisible($scplayer, 0)
+World.ClearArea(1, 3@, 4@, 5@, 3.0)
+if 
+  Char.IsOnFoot($scplayer)
+goto_if_false @GFSEX_8831
+Char.SetCoordinates($scplayer, 3@, 4@, 5@)
+Char.SetHeading($scplayer, 6@)
+
+:GFSEX_8831
+Streaming.RequestCollision(3@, 4@)
+Streaming.LoadScene(3@, 4@, 5@)
+return 
+
+:GFSEX_8852
+switch_start 0@ total_jumps 6 default_jump 0 @GFSEX_9197 jumps 0 @GFSEX_8915 1 @GFSEX_9009 2 @GFSEX_9056 3 @GFSEX_8962 4 @GFSEX_9103 5 @GFSEX_9150 -1 @GFSEX_9197
+
+:GFSEX_8915
+10@ = 245.617
+12@ = 301.507
+14@ = 999.046
+16@ = 0.0
+goto @GFSEX_9197
+
+:GFSEX_8962
+10@ = 318.4
+12@ = 311.85
+14@ = 998.8
+16@ = 110.0
+goto @GFSEX_9197
+
+:GFSEX_9009
+10@ = 308.8862
+12@ = 301.9657
+14@ = 1003.0
+16@ = 0.0
+goto @GFSEX_9197
+
+:GFSEX_9056
+10@ = 282.5775
+12@ = 307.7573
+14@ = 1002.391
+16@ = 0.0
+goto @GFSEX_9197
+
+:GFSEX_9103
+10@ = 270.12
+12@ = 307.737
+14@ = 999.0204
+16@ = 180.0
+goto @GFSEX_9197
+
+:GFSEX_9150
+10@ = 345.617
+12@ = 301.507
+14@ = 998.8
+16@ = 0.0
+goto @GFSEX_9197
+
+:GFSEX_9197
+return 
+
+:GFSEX_9199
+switch_start 23@ total_jumps 5 default_jump 1 @GFSEX_9803 jumps -1 @GFSEX_9262 0 @GFSEX_9327 1 @GFSEX_9446 2 @GFSEX_9565 3 @GFSEX_9684 -1 @GFSEX_9929 -1 @GFSEX_9929
+
+:GFSEX_9262
+10@ = Char.GetOffsetInWorldCoords(12@, 14@, $scplayer, 1.8, 2.9, 0.353)
+11@ = Char.GetOffsetInWorldCoords(13@, 15@, $scplayer, 1.0, 0.8701, 0.1828)
+goto @GFSEX_9929
+
+:GFSEX_9327
+10@ = Char.GetOffsetInWorldCoords(12@, 14@, $scplayer, -0.6375, 2.3043, 0.1065)
+if 
+  7@ == 3
+goto_if_false @GFSEX_9410
+11@ = Char.GetOffsetInWorldCoords(13@, 15@, $scplayer, -0.3435, 1.4278, -0.1)
+goto @GFSEX_9439
+
+:GFSEX_9410
+11@ = Char.GetOffsetInWorldCoords(13@, 15@, $scplayer, -0.3435, 1.4278, -0.2746)
+
+:GFSEX_9439
+goto @GFSEX_9929
+
+:GFSEX_9446
+10@ = Char.GetOffsetInWorldCoords(12@, 14@, $scplayer, 1.5989, 0.7828, -0.2044)
+if 
+  7@ == 3
+goto_if_false @GFSEX_9529
+11@ = Char.GetOffsetInWorldCoords(13@, 15@, $scplayer, 0.6223, 0.6748, -0.2)
+goto @GFSEX_9558
+
+:GFSEX_9529
+11@ = Char.GetOffsetInWorldCoords(13@, 15@, $scplayer, 0.6223, 0.6748, -0.3904)
+
+:GFSEX_9558
+goto @GFSEX_9929
+
+:GFSEX_9565
+10@ = Char.GetOffsetInWorldCoords(12@, 14@, $scplayer, 0.9748, -0.1026, 0.7511)
+if 
+  7@ == 3
+goto_if_false @GFSEX_9648
+11@ = Char.GetOffsetInWorldCoords(13@, 15@, $scplayer, 0.4155, 0.3026, 0.01)
+goto @GFSEX_9677
+
+:GFSEX_9648
+11@ = Char.GetOffsetInWorldCoords(13@, 15@, $scplayer, 0.4155, 0.3026, 0.0279)
+
+:GFSEX_9677
+goto @GFSEX_9929
+
+:GFSEX_9684
+10@ = Char.GetOffsetInWorldCoords(12@, 14@, $scplayer, -1.3103, 1.6396, -0.6208)
+if 
+  7@ == 3
+goto_if_false @GFSEX_9767
+11@ = Char.GetOffsetInWorldCoords(13@, 15@, $scplayer, -0.49, 1.0874, -0.2)
+goto @GFSEX_9796
+
+:GFSEX_9767
+11@ = Char.GetOffsetInWorldCoords(13@, 15@, $scplayer, -0.49, 1.0874, -0.4726)
+
+:GFSEX_9796
+goto @GFSEX_9929
+
+:GFSEX_9803
+23@ = 0
+10@ = Char.GetOffsetInWorldCoords(12@, 14@, $scplayer, -0.6375, 2.3043, 0.1065)
+if 
+  7@ == 3
+goto_if_false @GFSEX_9893
+11@ = Char.GetOffsetInWorldCoords(13@, 15@, $scplayer, -0.3435, 1.4278, 0.0)
+goto @GFSEX_9922
+
+:GFSEX_9893
+11@ = Char.GetOffsetInWorldCoords(13@, 15@, $scplayer, -0.3435, 1.4278, -0.2746)
+
+:GFSEX_9922
+goto @GFSEX_9929
+
+:GFSEX_9929
+Camera.SetFixedPosition(10@, 12@, 14@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(11@, 13@, 15@, SwitchType.JumpCut)
+23@ += 1
+return 
+
+:GFSEX_9977
+if 
+  7@ == 6
+goto_if_false @GFSEX_10322
+22@ += 1
+switch_start 22@ total_jumps 3 default_jump 0 @GFSEX_10315 jumps 1 @GFSEX_10065 2 @GFSEX_10146 3 @GFSEX_10227 -1 @GFSEX_10315 -1 @GFSEX_10315 -1 @GFSEX_10315 -1 @GFSEX_10315
+
+:GFSEX_10065
+Task.PlayAnimNonInterruptable(24@, "SEX_1TO2_W", "SEX", 4.0, False, False, False, False, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SEX_1TO2_P", "SEX", 4.0, False, False, False, False, 0)
+goto @GFSEX_10315
+
+:GFSEX_10146
+Task.PlayAnimNonInterruptable(24@, "SEX_2TO3_W", "SEX", 4.0, False, False, False, False, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SEX_2TO3_P", "SEX", 4.0, False, False, False, False, 0)
+goto @GFSEX_10315
+
+:GFSEX_10227
+22@ = 0
+Task.PlayAnimNonInterruptable(24@, "SEX_3TO1_W", "SEX", 4.0, False, False, False, False, 0)
+Task.PlayAnimNonInterruptable($scplayer, "SEX_3TO1_P", "SEX", 4.0, False, False, False, False, 0)
+goto @GFSEX_10315
+
+:GFSEX_10315
+8@ = 1
+
+:GFSEX_10322
+return 
+
+:GFSEX_10324
+set_lvar_int_to_var_int 20@ = $excitement
+20@ /= 10
+if 
+  3 > 20@
+goto_if_false @GFSEX_10364
+20@ = 0
+
+:GFSEX_10364
+switch_start 20@ total_jumps 8 default_jump 0 @GFSEX_10733 jumps 0 @GFSEX_10492 3 @GFSEX_10523 4 @GFSEX_10554 5 @GFSEX_10585 6 @GFSEX_10616 7 @GFSEX_10647 8 @GFSEX_10678
+switch_continued 9 @GFSEX_10709 -1 @GFSEX_10733 -1 @GFSEX_10733 -1 @GFSEX_10733 -1 @GFSEX_10733 -1 @GFSEX_10733 -1 @GFSEX_10733 -1 @GFSEX_10733 -1 @GFSEX_10733
+
+:GFSEX_10492
+16@ = 0.035
+clear_local_var_bit_const 9@ bit 6
+clear_local_var_bit_const 9@ bit 7
+goto @GFSEX_10733
+
+:GFSEX_10523
+16@ = 0.045
+clear_local_var_bit_const 9@ bit 6
+clear_local_var_bit_const 9@ bit 7
+goto @GFSEX_10733
+
+:GFSEX_10554
+16@ = 0.05
+clear_local_var_bit_const 9@ bit 6
+clear_local_var_bit_const 9@ bit 7
+goto @GFSEX_10733
+
+:GFSEX_10585
+16@ = 0.055
+clear_local_var_bit_const 9@ bit 6
+clear_local_var_bit_const 9@ bit 7
+goto @GFSEX_10733
+
+:GFSEX_10616
+16@ = 0.055
+clear_local_var_bit_const 9@ bit 6
+clear_local_var_bit_const 9@ bit 7
+goto @GFSEX_10733
+
+:GFSEX_10647
+16@ = 0.08
+set_local_var_bit_const 9@ bit 6
+clear_local_var_bit_const 9@ bit 7
+goto @GFSEX_10733
+
+:GFSEX_10678
+16@ = 0.08
+set_local_var_bit_const 9@ bit 6
+clear_local_var_bit_const 9@ bit 7
+goto @GFSEX_10733
+
+:GFSEX_10709
+16@ = 0.09
+set_local_var_bit_const 9@ bit 7
+goto @GFSEX_10733
+
+:GFSEX_10733
+return 
+
+:GFSEX_10735
+switch_start 22@ total_jumps 3 default_jump 0 @GFSEX_11167 jumps 0 @GFSEX_10798 1 @GFSEX_10921 2 @GFSEX_11044 -1 @GFSEX_11167 -1 @GFSEX_11167 -1 @GFSEX_11167 -1 @GFSEX_11167
+
+:GFSEX_10798
+if 
+  Char.IsPlayingAnim($scplayer, "SEX_1_P")
+goto_if_false @GFSEX_10856
+Char.SetAnimPlayingFlag($scplayer, "SEX_1_P", False)
+Char.SetAnimCurrentTime($scplayer, "SEX_1_P", $GF_anim_time)
+
+:GFSEX_10856
+if 
+  Char.IsPlayingAnim(24@, "SEX_1_W")
+goto_if_false @GFSEX_10914
+Char.SetAnimPlayingFlag(24@, "SEX_1_W", False)
+Char.SetAnimCurrentTime(24@, "SEX_1_W", $GF_anim_time)
+
+:GFSEX_10914
+goto @GFSEX_11167
+
+:GFSEX_10921
+if 
+  Char.IsPlayingAnim($scplayer, "SEX_2_P")
+goto_if_false @GFSEX_10979
+Char.SetAnimPlayingFlag($scplayer, "SEX_2_P", False)
+Char.SetAnimCurrentTime($scplayer, "SEX_2_P", $GF_anim_time)
+
+:GFSEX_10979
+if 
+  Char.IsPlayingAnim(24@, "SEX_2_W")
+goto_if_false @GFSEX_11037
+Char.SetAnimPlayingFlag(24@, "SEX_2_W", False)
+Char.SetAnimCurrentTime(24@, "SEX_2_W", $GF_anim_time)
+
+:GFSEX_11037
+goto @GFSEX_11167
+
+:GFSEX_11044
+if 
+  Char.IsPlayingAnim($scplayer, "SEX_3_P")
+goto_if_false @GFSEX_11102
+Char.SetAnimPlayingFlag($scplayer, "SEX_3_P", False)
+Char.SetAnimCurrentTime($scplayer, "SEX_3_P", $GF_anim_time)
+
+:GFSEX_11102
+if 
+  Char.IsPlayingAnim(24@, "SEX_3_W")
+goto_if_false @GFSEX_11160
+Char.SetAnimPlayingFlag(24@, "SEX_3_W", False)
+Char.SetAnimCurrentTime(24@, "SEX_3_W", $GF_anim_time)
+
+:GFSEX_11160
+goto @GFSEX_11167
+
+:GFSEX_11167
+if 
+  is_local_var_bit_set_const 9@ bit 5
+goto_if_false @GFSEX_11200
+sub_float_lvar_from_float_var $GF_anim_time -= 16@
+goto @GFSEX_11208
+
+:GFSEX_11200
+add_float_lvar_to_float_var $GF_anim_time += 16@
+
+:GFSEX_11208
+if 
+  0.0 >= $GF_anim_time
+goto_if_false @GFSEX_11253
+$GF_anim_time = 0.01
+clear_local_var_bit_const 9@ bit 5
+gosub @GFSEX_11328
+
+:GFSEX_11253
+if 
+  $GF_anim_time >= 1.0
+goto_if_false @GFSEX_11298
+$GF_anim_time = 0.99
+set_local_var_bit_const 9@ bit 5
+gosub @GFSEX_11328
+
+:GFSEX_11298
+if 
+  $GF_anim_time == 0.5
+goto_if_false @GFSEX_11326
+gosub @GFSEX_11328
+
+:GFSEX_11326
+return 
+
+:GFSEX_11328
+$GF_left_stick_x, $GF_left_stick_y, $GF_right_stick_x, $GF_right_stick_y = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+cset_lvar_float_to_var_int 17@ = integer $GF_left_stick_y
+17@ /= 128.0
+if 
+  $GF_anim_time == 0.5
+goto_if_false @GFSEX_11427
+if 
+  0.0 > 17@
+goto_if_false @GFSEX_11418
+gosub @GFSEX_11562
+goto @GFSEX_11427
+
+:GFSEX_11418
+gosub @GFSEX_11667
+return 
+
+:GFSEX_11427
+if 
+  is_local_var_bit_set_const 9@ bit 5
+goto_if_false @GFSEX_11518
+Pad.Shake(PadId.Pad1, 200, 100)
+set_var_int_to_constant $iGFSayContext = 283
+set_var_int_to_constant $iCJSayContext = 116
+if 
+  -0.8 > 17@
+goto_if_false @GFSEX_11504
+gosub @GFSEX_11562
+goto @GFSEX_11511
+
+:GFSEX_11504
+gosub @GFSEX_11667
+
+:GFSEX_11511
+goto @GFSEX_11560
+
+:GFSEX_11518
+if 
+  17@ > 0.8
+goto_if_false @GFSEX_11553
+gosub @GFSEX_11562
+goto @GFSEX_11560
+
+:GFSEX_11553
+gosub @GFSEX_11667
+
+:GFSEX_11560
+return 
+
+:GFSEX_11562
+if 
+  100 > $excitement
+goto_if_false @GFSEX_11658
+if 
+  is_local_var_bit_set_const 9@ bit 6
+goto_if_false @GFSEX_11612
+$excitement += 5
+goto @GFSEX_11651
+
+:GFSEX_11612
+if 
+  is_local_var_bit_set_const 9@ bit 7
+goto_if_false @GFSEX_11644
+$excitement += 10
+goto @GFSEX_11651
+
+:GFSEX_11644
+$excitement += 1
+
+:GFSEX_11651
+goto @GFSEX_11665
+
+:GFSEX_11658
+$excitement = 100
+
+:GFSEX_11665
+return 
+
+:GFSEX_11667
+if 
+  TIMERB > 5000
+goto_if_false @GFSEX_11764
+if 
+  $excitement > 0
+goto_if_false @GFSEX_11757
+if and
+  $excitement > 10
+  not is_local_var_bit_set_const 9@ bit 6
+goto_if_false @GFSEX_11743
+$excitement -= 5
+goto @GFSEX_11750
+
+:GFSEX_11743
+$excitement -= 1
+
+:GFSEX_11750
+goto @GFSEX_11764
+
+:GFSEX_11757
+$excitement = 0
+
+:GFSEX_11764
+return 
+
+:GFSEX_11766
+if 
+  18@ > 90.0
+goto_if_false @GFSEX_11797
+18@ = 0.0
+
+:GFSEX_11797
+19@ = Math.Sin(18@)
+19@ *= 13.5
+cset_lvar_int_to_lvar_float 20@ = float 19@
+add_int_var_to_int_lvar 20@ += $power
+if 
+  20@ >= 100
+goto_if_false @GFSEX_11863
+$power = 100
+goto @GFSEX_11871
+
+:GFSEX_11863
+set_var_int_to_lvar_int $power = 20@
+
+:GFSEX_11871
+18@ += 1.0
+return 
+
+:GFSEX_11883
+18@ = 0.0
+if 
+  $power >= 97
+goto_if_false @GFSEX_11925
+$power -= 3
+goto @GFSEX_11964
+
+:GFSEX_11925
+if 
+  7 >= $power
+goto_if_false @GFSEX_11957
+$power = 0
+goto @GFSEX_11964
+
+:GFSEX_11957
+$power -= 7
+
+:GFSEX_11964
+return 
+
+:GFSEX_11966
+if 
+  $power >= 97
+goto_if_false @GFSEX_11998
+set_local_var_bit_const 9@ bit 10
+goto @GFSEX_12005
+
+:GFSEX_11998
+clear_local_var_bit_const 9@ bit 10
+
+:GFSEX_12005
+return 
+
+:GFSEX_12007
+16@ = 0.025
+if 
+  is_local_var_bit_set_const 9@ bit 10
+goto_if_false @GFSEX_12045
+16@ += 0.015
+
+:GFSEX_12045
+$GF_anim_time = 0.01
+return 
+
+:GFSEX_12057
+if 
+  Char.IsPlayingAnim($scplayer, "SPANKINGP")
+goto_if_false @GFSEX_12121
+Char.SetAnimPlayingFlag($scplayer, "SPANKINGP", False)
+Char.SetAnimCurrentTime($scplayer, "SPANKINGP", $GF_anim_time)
+
+:GFSEX_12121
+if 
+  Char.IsPlayingAnim(24@, "SPANKINGW")
+goto_if_false @GFSEX_12185
+Char.SetAnimPlayingFlag(24@, "SPANKINGW", False)
+Char.SetAnimCurrentTime(24@, "SPANKINGW", $GF_anim_time)
+
+:GFSEX_12185
+if 
+  not is_local_var_bit_set_const 9@ bit 5
+goto_if_false @GFSEX_12211
+add_float_lvar_to_float_var $GF_anim_time += 16@
+
+:GFSEX_12211
+if 
+  $GF_anim_time >= 1.0
+goto_if_false @GFSEX_12251
+$GF_anim_time = 0.99
+set_local_var_bit_const 9@ bit 5
+return 
+
+:GFSEX_12251
+return 
+
+:GFSEX_12253
+if 
+  is_local_var_bit_set_const 9@ bit 10
+goto_if_false @GFSEX_12325
+set_var_int_to_constant $iGFSayContext = 286
+if 
+  100 >= $excitement
+goto_if_false @GFSEX_12311
+$excitement += 10
+goto @GFSEX_12318
+
+:GFSEX_12311
+$excitement = 100
+
+:GFSEX_12318
+goto @GFSEX_12364
+
+:GFSEX_12325
+if 
+  $excitement >= 10
+goto_if_false @GFSEX_12357
+$excitement -= 10
+goto @GFSEX_12364
+
+:GFSEX_12357
+$excitement = 0
+
+:GFSEX_12364
+clear_local_var_bit_const 9@ bit 10
+clear_local_var_bit_const 9@ bit 11
+clear_local_var_bit_const 9@ bit 12
+return 
+
+:GFSEX_12387
+if and
+  100 > $power
+  $power > 0
+  is_local_var_bit_set_const 9@ bit 14
+goto_if_false @GFSEX_12428
+gosub @GFSEX_11883
+return 
+
+:GFSEX_12428
+if and
+  100 > $power
+  $power > 0
+  not is_local_var_bit_set_const 9@ bit 14
+goto_if_false @GFSEX_12469
+gosub @GFSEX_11766
+return 
+
+:GFSEX_12469
+if 
+  $power >= 100
+goto_if_false @GFSEX_12510
+$power = 100
+set_local_var_bit_const 9@ bit 14
+gosub @GFSEX_11883
+return 
+
+:GFSEX_12510
+if 
+  0 >= $power
+goto_if_false @GFSEX_12551
+$power = 0
+clear_local_var_bit_const 9@ bit 14
+gosub @GFSEX_11766
+return 
+
+:GFSEX_12551
+return 
+
+:GFSEX_12553
+switch_start $iGFSpeechStatus total_jumps 7 default_jump 0 @GFSEX_13085 jumps 0 @GFSEX_12616 1 @GFSEX_12648 2 @GFSEX_12660 3 @GFSEX_12674 4 @GFSEX_12943 5 @GFSEX_13043 6 @GFSEX_12852
+
+:GFSEX_12616
+if 
+  $iGFSayContext > 0
+goto_if_false @GFSEX_12641
+$iGFSpeechStatus = 3
+
+:GFSEX_12641
+goto @GFSEX_13085
+
+:GFSEX_12648
+Char.EnableSpeech(24@)
+goto @GFSEX_13085
+
+:GFSEX_12660
+Char.DisableSpeech(24@, False)
+goto @GFSEX_13085
+
+:GFSEX_12674
+if 
+  not Char.IsTalking(24@)
+goto_if_false @GFSEX_12845
+if 
+  $iGFSayContext > 0
+goto_if_false @GFSEX_12785
+$iGFContextVariation = Char.SetSayContextImportant(24@, $iGFSayContext, True, True, True)
+gosub @GFSEX_13087
+$iGFSayContext = -1
+if 
+  $iCJSayContext > 0
+goto_if_false @GFSEX_12771
+$iGFSpeechStatus = 6
+goto @GFSEX_12778
+
+:GFSEX_12771
+$iGFSpeechStatus = 0
+
+:GFSEX_12778
+goto @GFSEX_12845
+
+:GFSEX_12785
+if 
+  $iGFSayContext == -2
+goto_if_false @GFSEX_12824
+$iGFSayContext = -1
+$iGFSpeechStatus = 6
+goto @GFSEX_12845
+
+:GFSEX_12824
+$iGFSayContext = -1
+$iCJSayContext = -1
+$iGFSpeechStatus = 0
+
+:GFSEX_12845
+goto @GFSEX_13085
+
+:GFSEX_12852
+if and
+  not Char.IsTalking($scplayer)
+  not Char.IsTalking(24@)
+goto_if_false @GFSEX_12936
+if 
+  $iCJSayContext > 0
+goto_if_false @GFSEX_12929
+$iGFContextVariation = Char.SetSayContextImportant($scplayer, $iCJSayContext, True, True, True)
+$iCJSayContext = -1
+$iGFSpeechStatus = 0
+goto @GFSEX_12936
+
+:GFSEX_12929
+$iGFSpeechStatus = 0
+
+:GFSEX_12936
+goto @GFSEX_13085
+
+:GFSEX_12943
+Char.DisableSpeech(24@, False)
+if 
+  not Char.IsTalking(24@)
+goto_if_false @GFSEX_13036
+if 
+  $iGFSayContext > 0
+goto_if_false @GFSEX_13029
+$iGFContextVariation = Char.SetSayContextImportant(24@, $iGFSayContext, True, True, True)
+gosub @GFSEX_13087
+$iGFSayContext = -1
+$iGFSpeechStatus = 5
+goto @GFSEX_13036
+
+:GFSEX_13029
+$iGFSpeechStatus = 0
+
+:GFSEX_13036
+goto @GFSEX_13085
+
+:GFSEX_13043
+if 
+  not Char.IsTalking(24@)
+goto_if_false @GFSEX_13078
+Char.EnableSpeech(24@)
+$iGFSayContext = -1
+$iGFSpeechStatus = 0
+
+:GFSEX_13078
+goto @GFSEX_13085
+
+:GFSEX_13085
+return 
+
+:GFSEX_13087
+switch_start $iGFSayContext total_jumps 4 default_jump 0 @GFSEX_13246 jumps 286 @GFSEX_13154 288 @GFSEX_13177 289 @GFSEX_13200 291 @GFSEX_13223 -1 @GFSEX_13246 -1 @GFSEX_13246 -1 @GFSEX_13246
+
+:GFSEX_13154
+Text.PrintNow('GF_0019', 5000, 1)
+goto @GFSEX_13246
+
+:GFSEX_13177
+Text.PrintNow('GF_0067', 5000, 1)
+goto @GFSEX_13246
+
+:GFSEX_13200
+Text.PrintNow('GF_0042', 5000, 1)
+goto @GFSEX_13246
+
+:GFSEX_13223
+Text.PrintNow('GF_0067', 5000, 1)
+goto @GFSEX_13246
+
+:GFSEX_13246
+return 
+
+:GFSEX_13248
+switch_start 0@ total_jumps 6 default_jump 0 @GFSEX_13713 jumps 0 @GFSEX_13311 1 @GFSEX_13445 2 @GFSEX_13512 3 @GFSEX_13378 4 @GFSEX_13579 5 @GFSEX_13646 -1 @GFSEX_13713
+
+:GFSEX_13311
+10@ = 2394.408
+12@ = -1728.215
+14@ = 14.2715
+11@ = 2395.066
+13@ = -1727.465
+15@ = 14.2063
+goto @GFSEX_13713
+
+:GFSEX_13378
+10@ = -1401.494
+12@ = 2640.099
+14@ = 59.3883
+11@ = -1400.704
+13@ = 2639.641
+15@ = 58.9806
+goto @GFSEX_13713
+
+:GFSEX_13445
+10@ = -1799.737
+12@ = 1192.863
+14@ = 29.6868
+11@ = -1799.472
+13@ = 1193.683
+15@ = 29.1813
+goto @GFSEX_13713
+
+:GFSEX_13512
+10@ = -383.3153
+12@ = -1435.266
+14@ = 26.695
+11@ = -382.5756
+13@ = -1435.887
+15@ = 26.4366
+goto @GFSEX_13713
+
+:GFSEX_13579
+10@ = -2582.293
+12@ = 1147.762
+14@ = 59.6235
+11@ = -2581.406
+13@ = 1147.768
+15@ = 59.1605
+goto @GFSEX_13713
+
+:GFSEX_13646
+10@ = 2032.235
+12@ = 2734.541
+14@ = 13.3226
+11@ = 2032.744
+13@ = 2733.714
+15@ = 13.0817
+goto @GFSEX_13713
+
+:GFSEX_13713
+return 
+
+:GFSEX_13715
+Streaming.RemoveAnimation("SNM")
+Streaming.RemoveAnimation("SEX")
+Streaming.RemoveAnimation("BLOWJOBZ")
+Streaming.RemoveAnimation("KISSING")
+Streaming.UnloadSpecialCharacter(1)
+Char.Delete(24@)
+if 
+  not Car.IsDead(25@)
+goto_if_false @GFSEX_13797
+Car.SetProofs(25@, False, False, False, False, False)
+Car.MarkAsNoLongerNeeded(25@)
+
+:GFSEX_13797
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFSEX_13851
+Char.SetVisible($scplayer, True)
+Char.SetProofs($scplayer, False, False, False, False, False)
+Char.ClearTasks($scplayer)
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+
+:GFSEX_13851
+Hud.DisplayRadar(True)
+set_global_var_bit_const $iDateReport bit 21
+clear_global_var_bit_const $iDateReport bit 5
+Game.SetMinigameInProgress(False)
+terminate_this_script 
+return 
+write_debug "I__________________________I"
+write_debug "H"
+write_debug "G"
+write_debug_with_float "STICK_POSITION" 17@
+write_debug_with_int "SHAGGIN_POSITION" 22@
+write_debug_with_int "I_EXCITEMENT" $excitement
+write_debug_with_float "ANIM_TIME" $GF_anim_time
+write_debug_with_int "SUBSTATESTATUS" 8@
+switch_start 7@ total_jumps 5 default_jump 1 @GFSEX_14177 jumps 0 @GFSEX_14082 1 @GFSEX_14101 2 @GFSEX_14120 3 @GFSEX_14139 4 @GFSEX_14158 -1 @GFSEX_14206 -1 @GFSEX_14206
+
+:GFSEX_14082
+write_debug "STATE0__"
+goto @GFSEX_14206
+
+:GFSEX_14101
+write_debug "STATE1__"
+goto @GFSEX_14206
+
+:GFSEX_14120
+write_debug "STATE2__"
+goto @GFSEX_14206
+
+:GFSEX_14139
+write_debug "STATE3__"
+goto @GFSEX_14206
+
+:GFSEX_14158
+write_debug "STATE4__"
+goto @GFSEX_14206
+
+:GFSEX_14177
+write_debug "UNTRAPPED_STATE___"
+goto @GFSEX_14206
+
+:GFSEX_14206
+write_debug "I__________________________I"
+return 
+terminate_this_script 
+

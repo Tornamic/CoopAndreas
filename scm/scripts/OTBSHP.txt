@@ -1,0 +1,120 @@
+//-------------External script 30 (OTB_AMBIENCE)---------------
+
+:OTBSHP
+script_name 'OTBSHP'
+if 
+  $onmission == 0
+goto_if_false @OTBSHP_36
+$iSetOTBPanic = 0
+
+:OTBSHP_36
+1@ = 1
+Streaming.RequestModel(11)
+Streaming.RequestModel(172)
+
+:OTBSHP_52
+if 
+  not Streaming.HasModelLoaded(172)
+goto_if_false @OTBSHP_79
+wait 0
+goto @OTBSHP_52
+
+:OTBSHP_79
+if 
+  not Streaming.HasModelLoaded(11)
+goto_if_false @OTBSHP_105
+wait 0
+goto @OTBSHP_79
+
+:OTBSHP_105
+2@ = Sequence.Open()
+Task.StayInSamePlace(-1, True)
+Task.StandStill(-1, -2)
+Sequence.Close(2@)
+3@ = Attractor.Add(820.3698, -0.3935, 1003.18, 270.0, 90.0, 2@)
+4@ = Attractor.Add(820.133, 4.2015, 1003.18, 270.0, 90.0, 2@)
+5@ = Attractor.Add(820.3185, 6.4021, 1003.18, 270.0, 90.0, 2@)
+6@ = Attractor.Add(820.0, 2.0, 1003.0, 270.0, 90.0, 2@)
+7@ = Char.CreateAtAttractor(PedType.CivFemale, 172, 3@, 1466)
+8@ = Char.CreateAtAttractor(PedType.CivFemale, 11, 4@, 1466)
+9@ = Char.CreateAtAttractor(PedType.CivFemale, 172, 5@, 1466)
+10@ = Char.CreateAtAttractor(PedType.CivFemale, 11, 6@, 1466)
+StreamedScript.StartNew(40, 7@, 3@)
+StreamedScript.StartNew(40, 8@, 4@)
+StreamedScript.StartNew(40, 9@, 5@)
+StreamedScript.StartNew(40, 10@, 6@)
+StreamedScript.Stream(40)
+
+:OTBSHP_369
+if 
+  Player.IsPlaying($player1)
+goto_if_false @OTBSHP_655
+$iAreaCode = Char.GetAreaVisible($scplayer)
+if or
+  $iAreaCode == 0
+  $iTerminateAllAmbience == 1
+goto_if_false @OTBSHP_425
+goto @OTBSHP_666
+
+:OTBSHP_425
+if or
+  Char.IsShooting($scplayer)
+  Player.IsWantedLevelGreater($player1, $iWantedOnEntry)
+goto_if_false @OTBSHP_456
+$iSetOTBPanic = 1
+
+:OTBSHP_456
+0@ = 0
+
+:OTBSHP_463
+if 
+  not Char.IsDead(7@(0@,4i))
+goto_if_false @OTBSHP_557
+if and
+  Player.IsTargetingChar($player1, 7@(0@,4i))
+  not Char.IsCurrentWeapon($scplayer, WeaponType.AnyMelee)
+goto_if_false @OTBSHP_527
+$iSetOTBPanic = 1
+goto @OTBSHP_557
+
+:OTBSHP_527
+if 
+  Char.HasBeenDamagedByChar(7@(0@,4i), $scplayer)
+goto_if_false @OTBSHP_557
+$iSetOTBPanic = 1
+
+:OTBSHP_557
+0@ += 1
+  0@ >= 4
+goto_if_false @OTBSHP_463
+if 
+  $iSetOTBPanic == 1
+goto_if_false @OTBSHP_655
+0@ = World.GetRandomCharInSphereNoBrain(11@, 12@, 13@, 20.0)
+if 
+  0@ > -1
+goto_if_false @OTBSHP_655
+1@ += 1
+StreamedScript.StartNew(37, 0@, 1@)
+StreamedScript.Stream(37)
+
+:OTBSHP_655
+wait 0
+goto @OTBSHP_369
+
+:OTBSHP_666
+0@ = 0
+
+:OTBSHP_673
+Char.MarkAsNoLongerNeeded(7@(0@,4i))
+Char.Delete(7@(0@,4i))
+Attractor.Clear(3@(0@,4i))
+0@ += 1
+  0@ >= 4
+goto_if_false @OTBSHP_673
+Streaming.MarkModelAsNoLongerNeeded(172)
+Streaming.MarkModelAsNoLongerNeeded(11)
+Sequence.Clear(2@)
+terminate_this_script 
+terminate_this_script 
+

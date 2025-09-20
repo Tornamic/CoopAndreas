@@ -1,0 +1,919 @@
+//-------------External script 68 (CRANE2)---------------
+
+:CRANE2
+script_name 'CRANE2'
+0@ = 0
+if 
+  0@ == 1
+goto_if_false @CRANE2_102
+$magno_base = Object.CreateNoOffset(#WOODENBOX, 0.0, 0.0, 0.0)
+$magno_cabin = Object.CreateNoOffset(#WOODENBOX, 0.0, 0.0, 0.0)
+$magno_arm = Object.CreateNoOffset(#WOODENBOX, 0.0, 0.0, 0.0)
+
+:CRANE2_102
+$crane_help2 = 0
+$crane_arm_length = 33.7
+$magno_arm_rotate_y = 15.0
+28@ = 0
+27@ = 1
+$magno_camera_type = 0
+
+:CRANE2_150
+wait 0
+if 
+  Object.DoesExist($magno_base)
+goto_if_false @CRANE2_4700
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CRANE2_4693
+if 
+  $disable_all_cranes == 0
+goto_if_false @CRANE2_4693
+if 
+  Char.LocateAnyMeansObject2D($scplayer, $magno_base, 100.0, 100.0, False)
+goto_if_false @CRANE2_4691
+if 
+  $reset_crane_camera == 1
+goto_if_false @CRANE2_260
+gosub @CRANE2_4716
+
+:CRANE2_260
+if and
+  Player.IsPlaying($player1)
+  $disable_crane == 0
+goto_if_false @CRANE2_4684
+if 
+  Char.LocateAnyMeansObject2D($scplayer, $magno_base, 100.0, 100.0, False)
+goto_if_false @CRANE2_4659
+if 
+  $player_is_in_crane == 2
+goto_if_false @CRANE2_339
+gosub @CRANE2_4716
+
+:CRANE2_339
+if 
+  0@ == 0
+goto_if_false @CRANE2_393
+1@ = Object.GetOffsetInWorldCoords(2@, 3@, $magno_base, -1.7837, 2.4699, -24.1519)
+0@ += 1
+
+:CRANE2_393
+if 
+  0@ == 1
+goto_if_false @CRANE2_691
+if 
+  Char.LocateOnFoot3D($scplayer, 1, 1@, 2@, 3@, 1.2, 1.2, 1.5)
+goto_if_false @CRANE2_538
+if 
+  Char.IsOnFoot($scplayer)
+goto_if_false @CRANE2_531
+if 
+  $crane_help2 == 0
+goto_if_false @CRANE2_505
+Text.PrintHelpForever('CR_2')
+$crane_help2 = 1
+
+:CRANE2_505
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @CRANE2_531
+Text.ClearHelp
+0@ += 1
+
+:CRANE2_531
+goto @CRANE2_565
+
+:CRANE2_538
+if 
+  $crane_help2 <> 0
+goto_if_false @CRANE2_565
+Text.ClearHelp
+$crane_help2 = 0
+
+:CRANE2_565
+if 
+  15.0 > $magno_arm_rotate_y
+goto_if_false @CRANE2_628
+$magno_arm_rotate_y = 15.0
+if 
+  Object.DoesExist($magno_arm)
+goto_if_false @CRANE2_628
+Object.SetRotation($magno_arm, $magno_arm_rotate_y, 0.0, $magno_arm_h)
+
+:CRANE2_628
+if 
+  $magno_arm_rotate_y > 30.0
+goto_if_false @CRANE2_691
+$magno_arm_rotate_y = 30.0
+if 
+  Object.DoesExist($magno_arm)
+goto_if_false @CRANE2_691
+Object.SetRotation($magno_arm, $magno_arm_rotate_y, 0.0, $magno_arm_h)
+
+:CRANE2_691
+if 
+  0@ == 2
+goto_if_false @CRANE2_1309
+if 
+  Object.DoesExist($magno_cabin)
+goto_if_false @CRANE2_733
+Audio.ReportMissionAudioEventAtObject($magno_cabin, 1019)
+
+:CRANE2_733
+Player.SetControl($player1, False)
+Game.SetMinigameInProgress(True)
+$player_is_in_crane = 2
+Camera.DoFade(0, 500)
+
+:CRANE2_758
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRANE2_782
+wait 0
+goto @CRANE2_758
+
+:CRANE2_782
+Crane.PlayerEnteredDockCrane
+Text.DisplayNonMinigameHelpMessages(True)
+$magno_cabin_h = Object.GetHeading($magno_cabin)
+$magno_arm_h = Object.GetHeading($magno_arm)
+if 
+  Object.DoesExist($magno_base)
+goto_if_false @CRANE2_882
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CRANE2_882
+$magno_base_x, $magno_base_y, $magno_base_z = Object.GetCoordinates($magno_base)
+Char.AttachToObject($scplayer, $magno_base, 0.0, 0.0, 2.0, 0, 360.0, WeaponType.Unarmed)
+
+:CRANE2_882
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CRANE2_948
+Char.FreezePosition($scplayer, True)
+Char.SetVisible($scplayer, False)
+Player.SetControl($player1, True)
+Char.SetCollision($scplayer, False)
+Char.SetProofs($scplayer, True, True, True, True, True)
+$crane2_sound_flag = 0
+
+:CRANE2_948
+if 
+  Object.DoesExist($magno_base)
+goto_if_false @CRANE2_978
+21@, 22@, $z = Object.GetCoordinates($magno_base)
+
+:CRANE2_978
+if 
+  Object.DoesExist($magno_arm)
+goto_if_false @CRANE2_1002
+25@ = Object.GetHeading($magno_arm)
+
+:CRANE2_1002
+if 
+  Object.DoesExist($magno_arm)
+goto_if_false @CRANE2_1204
+$cam_look_x = Object.GetOffsetInWorldCoords($cam_look_y, $cam_look_z, $magno_arm, 0.0, $crane_arm_length, -3.0)
+4@ = Object.GetRopeHeight($magno_arm)
+4@ += -1.0
+4@ *= -1.0
+4@ *= 50.0
+sub_float_lvar_from_float_var $cam_look_z -= 4@
+set_var_float_to_var_float $x = $cam_look_x
+sub_float_var_from_float_var $x -= $magno_base_x
+set_var_float_to_var_float $y = $cam_look_y
+sub_float_var_from_float_var $y -= $magno_base_y
+4@ = Math.GetDistanceBetweenCoords2D($cam_look_x, $cam_look_y, $magno_base_x, $magno_base_y)
+div_float_var_by_float_lvar $x /= 4@
+div_float_var_by_float_lvar $y /= 4@
+mult_float_var_by_float_var $x *= $crane_arm_length
+mult_float_var_by_float_var $y *= $crane_arm_length
+set_var_float_to_var_float $cam_look_x = $magno_base_x
+add_float_var_to_float_var $cam_look_x += $x
+set_var_float_to_var_float $cam_look_y = $magno_base_y
+add_float_var_to_float_var $cam_look_y += $y
+
+:CRANE2_1204
+set_lvar_float_to_var_float 10@ = $cam_look_x
+set_lvar_float_to_var_float 11@ = $cam_look_y
+$dock_crane_speed = 0.0
+$dock_crane_accel = 0.0
+$dock_crane_max_speed = 0.3
+Game.SetEveryoneIgnorePlayer($player1, False)
+gosub @CRANE2_4716
+Camera.DoFade(1, 500)
+
+:CRANE2_1271
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRANE2_1302
+wait 0
+gosub @CRANE2_4716
+goto @CRANE2_1271
+
+:CRANE2_1302
+0@ += 1
+
+:CRANE2_1309
+if 
+  0@ == 3
+goto_if_false @CRANE2_4430
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CRANE2_4430
+if 
+is_ps2_keyboard_key_pressed 131
+goto_if_false @CRANE2_1369
+$crane_arm_length += 0.1
+
+:CRANE2_1369
+if 
+is_ps2_keyboard_key_pressed 130
+goto_if_false @CRANE2_1395
+$crane_arm_length += -0.1
+
+:CRANE2_1395
+if 
+  $player_is_in_crane == 2
+goto_if_false @CRANE2_3930
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.LeftStickX)
+  Pad.IsButtonPressed(PadId.Pad1, Button.LeftStickY)
+goto_if_false @CRANE2_2947
+if 
+  $crane2_sound_flag <> 1
+goto_if_false @CRANE2_1485
+if 
+  Object.DoesExist($magno_cabin)
+goto_if_false @CRANE2_1478
+Audio.ReportMissionAudioEventAtObject($magno_cabin, 1020)
+
+:CRANE2_1478
+$crane2_sound_flag = 1
+
+:CRANE2_1485
+if 
+  $disable_manual_control == 0
+goto_if_false @CRANE2_2940
+28@ = 1
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+cset_lvar_float_to_var_int 6@ = integer $LStickX
+cset_lvar_float_to_var_int 7@ = integer $LStickY
+6@ /= 128.0
+7@ /= 128.0
+6@ *= 0.15
+7@ *= 0.15
+set_lvar_float_to_var_float 12@ = $cam_vec_x
+set_lvar_float_to_var_float 13@ = $cam_vec_y
+set_lvar_float_to_lvar_float 15@ = 13@
+set_lvar_float_to_lvar_float 16@ = 12@
+16@ *= -1.0
+mult_float_lvar_by_float_lvar 12@ *= 7@
+mult_float_lvar_by_float_lvar 13@ *= 7@
+12@ *= -1.0
+13@ *= -1.0
+add_timed_float_lvar_to_float_lvar 10@ += frame_delta_time * 12@
+add_timed_float_lvar_to_float_lvar 11@ += frame_delta_time * 13@
+mult_float_lvar_by_float_lvar 15@ *= 6@
+mult_float_lvar_by_float_lvar 16@ *= 6@
+add_timed_float_lvar_to_float_lvar 10@ += frame_delta_time * 15@
+add_timed_float_lvar_to_float_lvar 11@ += frame_delta_time * 16@
+4@ = Math.GetDistanceBetweenCoords2D(10@, 11@, $new_cam_look_x, $new_cam_look_y)
+if 
+  4@ > 0.3
+goto_if_false @CRANE2_1846
+set_var_float_to_lvar_float $x = 10@
+sub_float_var_from_float_var $x -= $new_cam_look_x
+set_var_float_to_lvar_float $y = 11@
+sub_float_var_from_float_var $y -= $new_cam_look_y
+div_float_var_by_float_lvar $x /= 4@
+div_float_var_by_float_lvar $y /= 4@
+$x *= 0.3
+$y *= 0.3
+set_lvar_float_to_var_float 10@ = $new_cam_look_x
+add_float_var_to_float_lvar 10@ += $x
+set_lvar_float_to_var_float 11@ = $new_cam_look_y
+add_float_var_to_float_lvar 11@ += $y
+
+:CRANE2_1846
+$z = 0.0
+set_var_float_to_lvar_float $y = 11@
+set_var_float_to_var_float $x = $y
+$x -= 1671.5
+set_lvar_float_to_lvar_float 8@ = 10@
+set_lvar_float_to_lvar_float 9@ = 8@
+9@ += 1671.5
+add_float_lvar_to_float_var $x += 8@
+add_float_lvar_to_float_var $y += 9@
+$x /= 2.0
+$y /= 2.0
+if 
+  -1648.057 > $x
+goto_if_false @CRANE2_2116
+4@ = Math.GetDistanceBetweenCoords2D(-1648.057, 23.852, 10@, 11@)
+if 
+  is_float_lvar_greater_than_float_var 4@ > $crane_arm_length
+goto_if_false @CRANE2_2109
+set_lvar_float_to_lvar_float 12@ = 10@
+12@ += 1648.057
+set_lvar_float_to_lvar_float 13@ = 11@
+13@ -= 23.852
+div_float_lvar_by_float_lvar 12@ /= 4@
+div_float_lvar_by_float_lvar 13@ /= 4@
+mult_float_lvar_by_float_var 12@ *= $crane_arm_length
+mult_float_lvar_by_float_var 13@ *= $crane_arm_length
+10@ = -1648.057
+add_float_lvar_to_float_lvar 10@ += 12@
+11@ = 23.852
+add_float_lvar_to_float_lvar 11@ += 13@
+
+:CRANE2_2109
+goto @CRANE2_2420
+
+:CRANE2_2116
+if 
+  $x > -1532.742
+goto_if_false @CRANE2_2288
+4@ = Math.GetDistanceBetweenCoords2D(-1532.742, 138.719, 10@, 11@)
+if 
+  is_float_lvar_greater_than_float_var 4@ > $crane_arm_length
+goto_if_false @CRANE2_2281
+set_lvar_float_to_lvar_float 12@ = 10@
+12@ += 1532.742
+set_lvar_float_to_lvar_float 13@ = 11@
+13@ -= 138.719
+div_float_lvar_by_float_lvar 12@ /= 4@
+div_float_lvar_by_float_lvar 13@ /= 4@
+mult_float_lvar_by_float_var 12@ *= $crane_arm_length
+mult_float_lvar_by_float_var 13@ *= $crane_arm_length
+10@ = -1532.742
+add_float_lvar_to_float_lvar 10@ += 12@
+11@ = 138.719
+add_float_lvar_to_float_lvar 11@ += 13@
+
+:CRANE2_2281
+goto @CRANE2_2420
+
+:CRANE2_2288
+4@ = Math.GetDistanceBetweenCoords2D($x, $y, 10@, 11@)
+if 
+  is_float_lvar_greater_than_float_var 4@ > $crane_arm_length
+goto_if_false @CRANE2_2420
+set_lvar_float_to_lvar_float 12@ = 10@
+sub_float_var_from_float_lvar 12@ -= $x
+set_lvar_float_to_lvar_float 13@ = 11@
+sub_float_var_from_float_lvar 13@ -= $y
+div_float_lvar_by_float_lvar 12@ /= 4@
+div_float_lvar_by_float_lvar 13@ /= 4@
+mult_float_lvar_by_float_var 12@ *= $crane_arm_length
+mult_float_lvar_by_float_var 13@ *= $crane_arm_length
+set_lvar_float_to_var_float 10@ = $x
+add_float_lvar_to_float_lvar 10@ += 12@
+set_lvar_float_to_var_float 11@ = $y
+add_float_lvar_to_float_lvar 11@ += 13@
+
+:CRANE2_2420
+18@ = Math.GetDistanceBetweenCoords2D($x, $y, 10@, 11@)
+set_lvar_float_to_var_float 4@ = $crane_arm_length
+mult_float_lvar_by_float_var 4@ *= $crane_arm_length
+set_lvar_float_to_lvar_float 5@ = 18@
+mult_float_lvar_by_float_lvar 5@ *= 18@
+set_lvar_float_to_lvar_float 19@ = 4@
+sub_float_lvar_from_float_lvar 19@ -= 5@
+set_lvar_float_to_lvar_float 20@ = 19@
+20@ /= 2.0
+20@ = Math.Sqrt(20@)
+set_lvar_float_to_var_float 21@ = $x
+sub_float_lvar_from_float_lvar 21@ -= 20@
+set_lvar_float_to_var_float 22@ = $y
+sub_float_lvar_from_float_lvar 22@ -= 20@
+set_lvar_float_to_var_float 23@ = $x
+add_float_lvar_to_float_lvar 23@ += 20@
+set_lvar_float_to_var_float 24@ = $y
+add_float_lvar_to_float_lvar 24@ += 20@
+26@ = 0
+if and
+  -1532.742 > 21@
+  21@ > -1648.057
+goto_if_false @CRANE2_2620
+26@ += 1
+
+:CRANE2_2620
+if and
+  -1532.742 > 23@
+  23@ > -1648.057
+goto_if_false @CRANE2_2658
+26@ += 2
+
+:CRANE2_2658
+if 
+  26@ <> 0
+goto_if_false @CRANE2_2881
+if 
+  26@ == 1
+goto_if_false @CRANE2_2694
+
+:CRANE2_2694
+if 
+  26@ == 2
+goto_if_false @CRANE2_2728
+set_lvar_float_to_lvar_float 21@ = 23@
+set_lvar_float_to_lvar_float 22@ = 24@
+
+:CRANE2_2728
+if 
+  26@ == 3
+goto_if_false @CRANE2_2831
+if 
+  Object.DoesExist($magno_base)
+goto_if_false @CRANE2_2831
+4@ = Math.GetDistanceBetweenCoords2D($magno_base_x, $magno_base_y, 21@, 22@)
+5@ = Math.GetDistanceBetweenCoords2D($magno_base_x, $magno_base_y, 23@, 24@)
+if 
+  is_float_lvar_greater_than_float_lvar 4@ > 5@
+goto_if_false @CRANE2_2831
+set_lvar_float_to_lvar_float 21@ = 23@
+set_lvar_float_to_lvar_float 22@ = 24@
+
+:CRANE2_2831
+set_lvar_float_to_lvar_float 12@ = 10@
+sub_float_lvar_from_float_lvar 12@ -= 21@
+set_lvar_float_to_lvar_float 13@ = 11@
+sub_float_lvar_from_float_lvar 13@ -= 22@
+25@ = Math.GetHeadingFromVector2D(12@, 13@)
+goto @CRANE2_2940
+
+:CRANE2_2881
+set_lvar_float_to_var_float 21@ = $magno_base_x
+set_lvar_float_to_var_float 22@ = $magno_base_y
+set_lvar_float_to_lvar_float 12@ = 10@
+sub_float_var_from_float_lvar 12@ -= $magno_base_x
+set_lvar_float_to_lvar_float 13@ = 11@
+sub_float_var_from_float_lvar 13@ -= $magno_base_y
+25@ = Math.GetHeadingFromVector2D(12@, 13@)
+
+:CRANE2_2940
+goto @CRANE2_3246
+
+:CRANE2_2947
+if 
+  $crane2_sound_flag <> 0
+goto_if_false @CRANE2_2996
+if 
+  Object.DoesExist($magno_cabin)
+goto_if_false @CRANE2_2989
+Audio.ReportMissionAudioEventAtObject($magno_cabin, 1021)
+
+:CRANE2_2989
+$crane2_sound_flag = 0
+
+:CRANE2_2996
+if 
+  28@ <> 0
+goto_if_false @CRANE2_3246
+if 
+  28@ == 1
+goto_if_false @CRANE2_3107
+set_var_float_to_var_float $x = $cam_look_x
+set_var_float_to_var_float $y = $cam_look_y
+set_lvar_float_to_var_float 12@ = $x
+sub_float_var_from_float_lvar 12@ -= $magno_base_x
+set_lvar_float_to_var_float 13@ = $y
+sub_float_var_from_float_lvar 13@ -= $magno_base_y
+25@ = Math.GetHeadingFromVector2D(12@, 13@)
+set_lvar_float_to_var_float 12@ = $dock_crane_travel_vec_x
+set_lvar_float_to_var_float 13@ = $dock_crane_travel_vec_y
+
+:CRANE2_3107
+if 
+  $dock_crane_speed > 0.0
+goto_if_false @CRANE2_3246
+$dock_crane_accel = -0.007
+add_timed_float_var_to_float_var $dock_crane_speed += frame_delta_time * $dock_crane_accel
+if 
+  0.0 > $dock_crane_speed
+goto_if_false @CRANE2_3191
+$dock_crane_speed = 0.0
+28@ = 0
+goto @CRANE2_3198
+
+:CRANE2_3191
+28@ = 2
+
+:CRANE2_3198
+set_var_float_to_var_float $x = $dock_crane_speed
+mult_float_var_by_float_lvar $x *= 12@
+set_var_float_to_var_float $y = $dock_crane_speed
+mult_float_var_by_float_lvar $y *= 13@
+add_float_var_to_float_var $magno_base_x += $x
+add_float_var_to_float_var $magno_base_y += $y
+
+:CRANE2_3246
+if 
+  28@ == 1
+goto_if_false @CRANE2_3530
+if 
+  Object.DoesExist($magno_base)
+goto_if_false @CRANE2_3530
+4@ = Math.GetDistanceBetweenCoords2D($magno_base_x, $magno_base_y, 21@, 22@)
+if 
+  4@ > 0.01
+goto_if_false @CRANE2_3366
+set_var_float_to_lvar_float $dock_crane_travel_vec_x = 21@
+sub_float_var_from_float_var $dock_crane_travel_vec_x -= $magno_base_x
+set_var_float_to_lvar_float $dock_crane_travel_vec_y = 22@
+sub_float_var_from_float_var $dock_crane_travel_vec_y -= $magno_base_y
+div_float_var_by_float_lvar $dock_crane_travel_vec_x /= 4@
+div_float_var_by_float_lvar $dock_crane_travel_vec_y /= 4@
+
+:CRANE2_3366
+if 
+  4@ > 0.01
+goto_if_false @CRANE2_3530
+$dock_crane_accel = 0.003
+add_timed_float_var_to_float_var $dock_crane_speed += frame_delta_time * $dock_crane_accel
+if 
+  is_float_var_greater_than_float_var $dock_crane_speed > $dock_crane_max_speed
+goto_if_false @CRANE2_3432
+set_var_float_to_var_float $dock_crane_speed = $dock_crane_max_speed
+
+:CRANE2_3432
+set_lvar_float_to_var_float 12@ = $dock_crane_travel_vec_x
+set_lvar_float_to_var_float 13@ = $dock_crane_travel_vec_y
+if 
+  is_float_lvar_greater_than_float_var 4@ > $dock_crane_speed
+goto_if_false @CRANE2_3490
+mult_float_lvar_by_float_var 12@ *= $dock_crane_speed
+mult_float_lvar_by_float_var 13@ *= $dock_crane_speed
+goto @CRANE2_3514
+
+:CRANE2_3490
+mult_float_lvar_by_float_lvar 12@ *= 4@
+mult_float_lvar_by_float_lvar 13@ *= 4@
+set_var_float_to_lvar_float $dock_crane_speed = 4@
+
+:CRANE2_3514
+add_float_lvar_to_float_var $magno_base_x += 12@
+add_float_lvar_to_float_var $magno_base_y += 13@
+
+:CRANE2_3530
+if 
+  28@ == 1
+goto_if_false @CRANE2_3888
+if 
+  Object.DoesExist($magno_arm)
+goto_if_false @CRANE2_3888
+if 
+  25@ > 180.0
+goto_if_false @CRANE2_3595
+25@ += -360.0
+
+:CRANE2_3595
+if 
+  -180.0 > 25@
+goto_if_false @CRANE2_3626
+25@ += 360.0
+
+:CRANE2_3626
+set_var_float_to_var_float $heading = $magno_arm_h
+if 
+  $heading > 180.0
+goto_if_false @CRANE2_3665
+$heading += -360.0
+
+:CRANE2_3665
+if 
+  -180.0 > $heading
+goto_if_false @CRANE2_3696
+$heading += 360.0
+
+:CRANE2_3696
+set_lvar_float_to_lvar_float 4@ = 25@
+sub_float_var_from_float_lvar 4@ -= $heading
+if 
+  4@ > 180.0
+goto_if_false @CRANE2_3743
+4@ += -360.0
+
+:CRANE2_3743
+if 
+  -180.0 > 4@
+goto_if_false @CRANE2_3774
+4@ += 360.0
+
+:CRANE2_3774
+if 
+  4@ >= 0.0
+goto_if_false @CRANE2_3833
+if 
+  4@ > 0.2
+goto_if_false @CRANE2_3826
+4@ = 0.2
+
+:CRANE2_3826
+goto @CRANE2_3864
+
+:CRANE2_3833
+if 
+  -0.2 > 4@
+goto_if_false @CRANE2_3864
+4@ = -0.2
+
+:CRANE2_3864
+add_timed_float_lvar_to_float_var $heading += frame_delta_time * 4@
+set_var_float_to_var_float $magno_cabin_h = $heading
+set_var_float_to_var_float $magno_arm_h = $heading
+
+:CRANE2_3888
+if 
+  $disable_crane_exit == 0
+goto_if_false @CRANE2_3930
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @CRANE2_3930
+0@ += 1
+
+:CRANE2_3930
+if and
+  -1532.742 > $magno_base_x
+  $magno_base_x > -1648.057
+goto_if_false @CRANE2_3998
+if 
+  Object.DoesExist($magno_base)
+goto_if_false @CRANE2_3991
+Object.SetCoordinatesAndVelocity($magno_base, $magno_base_x, $magno_base_y, $magno_base_z)
+
+:CRANE2_3991
+goto @CRANE2_4028
+
+:CRANE2_3998
+if 
+  Object.DoesExist($magno_base)
+goto_if_false @CRANE2_4028
+$magno_base_x, $magno_base_y, $magno_base_z = Object.GetCoordinates($magno_base)
+
+:CRANE2_4028
+if 
+  Object.DoesExist($magno_base)
+goto_if_false @CRANE2_4104
+if 
+  Object.DoesExist($magno_base_LOD)
+goto_if_false @CRANE2_4104
+$x, $y, $z = Object.GetCoordinates($magno_base)
+$heading = Object.GetHeading($magno_base)
+Object.SetCoordinates($magno_base_LOD, $x, $y, $z)
+Object.SetHeading($magno_base_LOD, $heading)
+
+:CRANE2_4104
+if 
+  Object.DoesExist($magno_base)
+goto_if_false @CRANE2_4255
+if 
+  Object.DoesExist($magno_cabin)
+goto_if_false @CRANE2_4195
+$x = Object.GetOffsetInWorldCoords($y, $z, $magno_base, 0.0, 0.0, 0.0)
+Object.SetHeading($magno_cabin, $magno_cabin_h)
+Object.SetCoordinatesAndVelocity($magno_cabin, $x, $y, $z)
+Char.SetHeading($scplayer, $magno_cabin_h)
+
+:CRANE2_4195
+if 
+  Object.DoesExist($magno_cabin_LOD)
+goto_if_false @CRANE2_4255
+$x, $y, $z = Object.GetCoordinates($magno_cabin)
+$heading = Object.GetHeading($magno_cabin)
+Object.SetCoordinates($magno_cabin_LOD, $x, $y, $z)
+Object.SetHeading($magno_cabin_LOD, $heading)
+
+:CRANE2_4255
+if 
+  Object.DoesExist($magno_arm)
+goto_if_false @CRANE2_4430
+if 
+  Object.DoesExist($magno_cabin)
+goto_if_false @CRANE2_4354
+$x = Object.GetOffsetInWorldCoords($y, $z, $magno_cabin, 0.0, -2.185, 8.51)
+$magno_arm_h = Object.GetHeading($magno_cabin)
+Object.SetCoordinatesAndVelocity($magno_arm, $x, $y, $z)
+Object.SetRotation($magno_arm, $magno_arm_rotate_y, 0.0, $magno_arm_h)
+
+:CRANE2_4354
+if 
+  Object.DoesExist($magno_arm_LOD)
+goto_if_false @CRANE2_4430
+$x, $y, $z = Object.GetCoordinates($magno_arm)
+$heading = Object.GetHeading($magno_arm)
+Object.SetCoordinates($magno_arm_LOD, $x, $y, $z)
+Object.SetHeading($magno_arm_LOD, $heading)
+Object.SetRotation($magno_arm_LOD, $magno_arm_rotate_y, 0.0, $magno_arm_h)
+
+:CRANE2_4430
+if or
+  0@ == 4
+  $remove_player_from_crane == 1
+goto_if_false @CRANE2_4652
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CRANE2_4652
+$x, $y, $z = Char.GetCoordinates($scplayer)
+if 
+  Object.DoesExist($magno_cabin)
+goto_if_false @CRANE2_4509
+Audio.ReportMissionAudioEventAtObject($magno_cabin, 1022)
+
+:CRANE2_4509
+Text.ClearHelp
+Crane.PlayerLeftCrane
+Game.SetMinigameInProgress(False)
+$x = Object.GetOffsetInWorldCoords($y, $z, $magno_base, 2.0, -4.0, 0.0)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+Char.SetCoordinates($scplayer, $x, $y, $z)
+Char.DetachFromCar($scplayer)
+Char.FreezePosition($scplayer, False)
+Char.SetVisible($scplayer, True)
+Char.SetCollision($scplayer, True)
+Char.SetProofs($scplayer, False, False, False, False, False)
+Player.SetControl($player1, True)
+Char.ClearTasksImmediately($scplayer)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+$player_is_in_crane = 0
+$remove_player_from_crane = 0
+0@ = 0
+
+:CRANE2_4652
+goto @CRANE2_4684
+
+:CRANE2_4659
+if 
+  0@ <> 0
+goto_if_false @CRANE2_4684
+0@ = 0
+
+:CRANE2_4684
+goto @CRANE2_4693
+
+:CRANE2_4691
+terminate_this_script 
+
+:CRANE2_4693
+goto @CRANE2_4709
+
+:CRANE2_4700
+0@ = 0
+terminate_this_script 
+
+:CRANE2_4709
+goto @CRANE2_150
+
+:CRANE2_4716
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Select)
+goto_if_false @CRANE2_4805
+if 
+  29@ == 0
+goto_if_false @CRANE2_4798
+27@ += 1
+if 
+  27@ > 2
+goto_if_false @CRANE2_4783
+27@ = 0
+
+:CRANE2_4783
+set_var_int_to_lvar_int $magno_camera_type = 27@
+29@ += 1
+
+:CRANE2_4798
+goto @CRANE2_4830
+
+:CRANE2_4805
+if 
+  29@ <> 0
+goto_if_false @CRANE2_4830
+29@ = 0
+
+:CRANE2_4830
+if 
+  $player_is_in_crane == 2
+goto_if_false @CRANE2_4881
+if 
+  $reset_crane_camera == 1
+goto_if_false @CRANE2_4881
+set_lvar_int_to_var_int 27@ = $magno_camera_type
+$reset_crane_camera = 0
+
+:CRANE2_4881
+if 
+  not is_int_var_equal_to_int_lvar $magno_camera_type == 27@
+goto_if_false @CRANE2_4908
+set_var_int_to_lvar_int $magno_camera_type = 27@
+
+:CRANE2_4908
+if 
+  27@ == 0
+goto_if_false @CRANE2_4978
+if 
+  Object.DoesExist($magno_cabin)
+goto_if_false @CRANE2_4971
+$cam_pos_x = Object.GetOffsetInWorldCoords($cam_pos_y, $cam_pos_z, $magno_cabin, 6.1, 15.0, 5.1)
+
+:CRANE2_4971
+goto @CRANE2_5093
+
+:CRANE2_4978
+if 
+  27@ == 1
+goto_if_false @CRANE2_5048
+if 
+  Object.DoesExist($magno_base)
+goto_if_false @CRANE2_5041
+$cam_pos_x = Object.GetOffsetInWorldCoords($cam_pos_y, $cam_pos_z, $magno_base, -4.0, 17.3, 35.0)
+
+:CRANE2_5041
+goto @CRANE2_5093
+
+:CRANE2_5048
+if 
+  Object.DoesExist($magno_cabin)
+goto_if_false @CRANE2_5093
+$cam_pos_x = Object.GetOffsetInWorldCoords($cam_pos_y, $cam_pos_z, $magno_cabin, 3.0, 45.0, 0.0)
+
+:CRANE2_5093
+if 
+  Object.DoesExist($magno_arm)
+goto_if_false @CRANE2_5730
+$new_cam_look_x = Object.GetOffsetInWorldCoords($new_cam_look_y, $new_cam_look_z, $magno_arm, 0.0, $crane_arm_length, -3.0)
+4@ = Object.GetRopeHeight($magno_arm)
+4@ += -1.0
+4@ *= -1.0
+4@ *= 50.0
+sub_float_lvar_from_float_var $new_cam_look_z -= 4@
+set_var_float_to_var_float $x = $new_cam_look_x
+sub_float_var_from_float_var $x -= $magno_base_x
+set_var_float_to_var_float $y = $new_cam_look_y
+sub_float_var_from_float_var $y -= $magno_base_y
+4@ = Math.GetDistanceBetweenCoords2D($new_cam_look_x, $new_cam_look_y, $magno_base_x, $magno_base_y)
+div_float_var_by_float_lvar $x /= 4@
+div_float_var_by_float_lvar $y /= 4@
+mult_float_var_by_float_var $x *= $crane_arm_length
+mult_float_var_by_float_var $y *= $crane_arm_length
+set_var_float_to_var_float $new_cam_look_x = $magno_base_x
+add_float_var_to_float_var $new_cam_look_x += $x
+set_var_float_to_var_float $new_cam_look_y = $magno_base_y
+add_float_var_to_float_var $new_cam_look_y += $y
+4@ = Math.GetDistanceBetweenCoords3D($new_cam_look_x, $new_cam_look_y, $new_cam_look_z, $cam_look_x, $cam_look_y, $cam_look_z)
+if 
+  4@ > 0.3
+goto_if_false @CRANE2_5441
+set_var_float_to_var_float $cam_vec_x = $new_cam_look_x
+sub_float_var_from_float_var $cam_vec_x -= $cam_look_x
+set_var_float_to_var_float $cam_vec_y = $new_cam_look_y
+sub_float_var_from_float_var $cam_vec_y -= $cam_look_y
+set_var_float_to_var_float $cam_vec_z = $new_cam_look_z
+sub_float_var_from_float_var $cam_vec_z -= $cam_look_z
+$cam_vec_x *= 0.05
+$cam_vec_y *= 0.05
+$cam_vec_z *= 0.05
+add_float_var_to_float_var $cam_look_x += $cam_vec_x
+add_float_var_to_float_var $cam_look_y += $cam_vec_y
+add_float_var_to_float_var $cam_look_z += $cam_vec_z
+
+:CRANE2_5441
+$x, $y, $z = Camera.GetActiveCoordinates()
+if 
+  $disable_crane == 0
+goto_if_false @CRANE2_5596
+set_lvar_float_to_var_float 12@ = $cam_pos_x
+sub_float_var_from_float_lvar 12@ -= $x
+set_lvar_float_to_var_float 13@ = $cam_pos_y
+sub_float_var_from_float_lvar 13@ -= $y
+set_lvar_float_to_var_float 14@ = $cam_pos_z
+sub_float_var_from_float_lvar 14@ -= $z
+12@ *= 0.2
+13@ *= 0.2
+14@ *= 0.2
+set_var_float_to_var_float $cam_pos_x = $x
+add_float_lvar_to_float_var $cam_pos_x += 12@
+set_var_float_to_var_float $cam_pos_y = $y
+add_float_lvar_to_float_var $cam_pos_y += 13@
+set_var_float_to_var_float $cam_pos_z = $z
+add_float_lvar_to_float_var $cam_pos_z += 14@
+
+:CRANE2_5596
+Camera.SetFixedPosition($cam_pos_x, $cam_pos_y, $cam_pos_z, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($cam_look_x, $cam_look_y, $cam_look_z, SwitchType.JumpCut)
+set_var_float_to_var_float $cam_vec_x = $cam_look_x
+sub_float_var_from_float_var $cam_vec_x -= $cam_pos_x
+set_var_float_to_var_float $cam_vec_y = $cam_look_y
+sub_float_var_from_float_var $cam_vec_y -= $cam_pos_y
+set_var_float_to_var_float $cam_vec_z = $cam_look_z
+sub_float_var_from_float_var $cam_vec_z -= $cam_pos_z
+4@ = Math.GetDistanceBetweenCoords3D($cam_pos_x, $cam_pos_y, $cam_pos_z, $cam_look_x, $cam_look_y, $cam_look_z)
+div_float_var_by_float_lvar $cam_vec_x /= 4@
+div_float_var_by_float_lvar $cam_vec_y /= 4@
+div_float_var_by_float_lvar $cam_vec_z /= 4@
+
+:CRANE2_5730
+return 
+terminate_this_script 
+

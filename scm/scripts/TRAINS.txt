@@ -1,0 +1,191 @@
+//-------------External script 33 (TRAINS)---------------
+
+:TRAINS
+script_name 'TRAINS'
+$train_speed = 0.0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @TRAINS_44
+goto @TRAINS_768
+
+:TRAINS_44
+set_deatharrest_state 0
+
+:TRAINS_48
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @TRAINS_754
+if 
+  Char.IsSittingInAnyCar($scplayer)
+goto_if_false @TRAINS_740
+if 
+  Char.IsInModel($scplayer, 570)
+goto_if_false @TRAINS_726
+$train_car = Char.StoreCarIsInNoSave($scplayer)
+if 
+  $train_control_flag == 0
+goto_if_false @TRAINS_181
+$train_speed = Car.GetSpeed($train_car)
+if 
+  $train_speed > 0.0
+goto_if_false @TRAINS_181
+Text.PrintNow('TRAINS', 20000, 1)
+$train_control_flag = 1
+
+:TRAINS_181
+if 
+  $train_control_flag == 1
+goto_if_false @TRAINS_619
+if 
+  Train.IsNextStationAllowed($train_car)
+goto_if_false @TRAINS_429
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @TRAINS_422
+Camera.DoFade(0, 1000)
+
+:TRAINS_239
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRAINS_286
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @TRAINS_279
+goto @TRAINS_768
+
+:TRAINS_279
+goto @TRAINS_239
+
+:TRAINS_286
+if 
+  Player.IsPlaying($player1)
+goto_if_false @TRAINS_361
+if 
+  Char.IsSittingInAnyCar($scplayer)
+goto_if_false @TRAINS_361
+if 
+  Char.IsInModel($scplayer, 570)
+goto_if_false @TRAINS_361
+$train_car = Char.StoreCarIsInNoSave($scplayer)
+Train.SkipToNextAllowedStation($train_car)
+Text.ClearThisPrint('TRAINS')
+
+:TRAINS_361
+Camera.DoFade(1, 1000)
+
+:TRAINS_368
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRAINS_415
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @TRAINS_408
+goto @TRAINS_768
+
+:TRAINS_408
+goto @TRAINS_368
+
+:TRAINS_415
+$train_control_flag = 2
+
+:TRAINS_422
+goto @TRAINS_619
+
+:TRAINS_429
+Camera.DoFade(0, 1000)
+
+:TRAINS_436
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRAINS_483
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @TRAINS_476
+goto @TRAINS_768
+
+:TRAINS_476
+goto @TRAINS_436
+
+:TRAINS_483
+if 
+  Player.IsPlaying($player1)
+goto_if_false @TRAINS_558
+if 
+  Char.IsSittingInAnyCar($scplayer)
+goto_if_false @TRAINS_558
+if 
+  Char.IsInModel($scplayer, 570)
+goto_if_false @TRAINS_558
+$train_car = Char.StoreCarIsInNoSave($scplayer)
+Train.SkipToNextAllowedStation($train_car)
+Text.ClearThisPrint('TRAINS')
+
+:TRAINS_558
+Camera.DoFade(1, 1000)
+
+:TRAINS_565
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRAINS_612
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @TRAINS_605
+goto @TRAINS_768
+
+:TRAINS_605
+goto @TRAINS_565
+
+:TRAINS_612
+$train_control_flag = 2
+
+:TRAINS_619
+if 
+  $train_control_flag == 2
+goto_if_false @TRAINS_719
+if 
+  Player.IsPlaying($player1)
+goto_if_false @TRAINS_719
+if 
+  Char.IsSittingInAnyCar($scplayer)
+goto_if_false @TRAINS_719
+if 
+  Char.IsInModel($scplayer, 570)
+goto_if_false @TRAINS_719
+$train_car = Char.StoreCarIsInNoSave($scplayer)
+if 
+  Car.IsStopped($train_car)
+goto_if_false @TRAINS_719
+$train_control_flag = 0
+
+:TRAINS_719
+goto @TRAINS_733
+
+:TRAINS_726
+goto @TRAINS_768
+
+:TRAINS_733
+goto @TRAINS_747
+
+:TRAINS_740
+goto @TRAINS_768
+
+:TRAINS_747
+goto @TRAINS_761
+
+:TRAINS_754
+goto @TRAINS_768
+
+:TRAINS_761
+goto @TRAINS_48
+
+:TRAINS_768
+$train_control_flag = 0
+Text.ClearThisPrint('TRAINS')
+terminate_this_script 
+terminate_this_script 
+

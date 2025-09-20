@@ -1,0 +1,2902 @@
+//-------------External script 5 (ROULETTE)---------------
+
+:ROULETE
+script_name 'ROULETE'
+1@ = 0
+if 
+  1@ == 1
+goto_if_false @ROULETE_90
+0@ = Object.CreateNoOffset(#ROULETTE_TBL, 0.0, 0.0, 0.0)
+$placed_chips($i,151i) = Object.CreateNoOffset(#CHIP_STACK07, $x, $y, $z)
+write_debug "AAAAAAA"
+
+:ROULETE_90
+4@ = 0
+5@ = 0
+8@ = 0
+9@ = 0
+7@ = 0
+10@ = 500
+11@ = 500
+12@ = 0
+13@ = 0
+14@ = 0
+15@ = 0
+16@ = Stat.GetFloat(81)
+18@ = Math.RandomIntInRange(0, 19)
+$total_roulette_tables += 1
+if 
+  1.0 > 16@
+goto_if_false @ROULETE_252
+if or
+  $total_roulette_tables == 1
+  $total_roulette_tables == 5
+goto_if_false @ROULETE_245
+18@ = 0
+
+:ROULETE_245
+goto @ROULETE_464
+
+:ROULETE_252
+if 
+  10.0 > 16@
+goto_if_false @ROULETE_312
+if or
+  $total_roulette_tables == 1
+  $total_roulette_tables == 5
+goto_if_false @ROULETE_305
+18@ = 5
+
+:ROULETE_305
+goto @ROULETE_464
+
+:ROULETE_312
+if 
+  100.0 > 16@
+goto_if_false @ROULETE_372
+if or
+  $total_roulette_tables == 1
+  $total_roulette_tables == 5
+goto_if_false @ROULETE_365
+18@ = 10
+
+:ROULETE_365
+goto @ROULETE_464
+
+:ROULETE_372
+if 
+  1000.0 > 16@
+goto_if_false @ROULETE_432
+if or
+  $total_roulette_tables == 1
+  $total_roulette_tables == 5
+goto_if_false @ROULETE_425
+18@ = 14
+
+:ROULETE_425
+goto @ROULETE_464
+
+:ROULETE_432
+if or
+  $total_roulette_tables == 1
+  $total_roulette_tables == 5
+goto_if_false @ROULETE_464
+18@ = 17
+
+:ROULETE_464
+if or
+  18@ == 0
+  18@ == 1
+  18@ == 2
+  18@ == 3
+  18@ == 4
+goto_if_false @ROULETE_525
+17@ = 2
+19@ = -340
+
+:ROULETE_525
+if or
+  18@ == 5
+  18@ == 6
+  18@ == 7
+  18@ == 8
+  18@ == 9
+goto_if_false @ROULETE_586
+17@ = 20
+19@ = -341
+
+:ROULETE_586
+if or
+  18@ == 10
+  18@ == 11
+  18@ == 12
+  18@ == 13
+goto_if_false @ROULETE_641
+17@ = 200
+19@ = -342
+
+:ROULETE_641
+if or
+  18@ == 14
+  18@ == 15
+  18@ == 16
+goto_if_false @ROULETE_689
+17@ = 2000
+19@ = -343
+
+:ROULETE_689
+if or
+  18@ == 17
+  18@ == 18
+goto_if_false @ROULETE_730
+17@ = 20000
+19@ = -344
+
+:ROULETE_730
+18@ = 0
+20@ = 0
+set_lvar_int_to_lvar_int 21@ = 17@
+21@ *= 50
+22@ = 0
+$temp_integer_1 = Math.RandomIntInRange(0, 2)
+if 
+  $temp_integer_1 == 0
+goto_if_false @ROULETE_807
+set_lvar_int_to_constant 23@ = 11
+goto @ROULETE_815
+
+:ROULETE_807
+set_lvar_int_to_constant 23@ = 172
+
+:ROULETE_815
+$i = 0
+
+:ROULETE_822
+if 
+  151 > $i
+goto_if_false @ROULETE_866
+$spot_bets($i,151i) = 0
+$i += 1
+goto @ROULETE_822
+
+:ROULETE_866
+$winnings_this_round = 0
+$total_stake_this_round = 0
+if 
+  22@ == 1
+goto_if_false @ROULETE_907
+22@ = 0
+return 
+
+:ROULETE_907
+24@ = 0.0
+25@ = 0.0
+
+:ROULETE_927
+wait 0
+$game_timer = Clock.GetGameTimer()
+if 
+  Object.DoesExist(0@)
+goto_if_false @ROULETE_7879
+if 
+  Object.IsWithinBrainActivationRange(0@)
+goto_if_false @ROULETE_7735
+if 
+  $iTerminateAllAmbience == 0
+goto_if_false @ROULETE_7591
+if 
+  Player.IsPlaying($player1)
+goto_if_false @ROULETE_7456
+if 
+  1@ == 0
+goto_if_false @ROULETE_1032
+Streaming.RequestModel(23@)
+1@ += 1
+
+:ROULETE_1032
+if 
+  1@ == 1
+goto_if_false @ROULETE_1167
+Streaming.RequestModel(23@)
+if 
+  Streaming.HasModelLoaded(23@)
+goto_if_false @ROULETE_1167
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 1.208, 0.571, -1.144)
+26@ = Char.Create(5, 23@, $x, $y, $z)
+$heading = Object.GetHeading(0@)
+$heading += 90.0
+Char.SetHeading(26@, $heading)
+Char.SetDecisionMaker(26@, $iGlobalPedPanicDM)
+Object.EnableDisabledAttractors(0@, True)
+1@ += 1
+
+:ROULETE_1167
+if 
+  1@ == 2
+goto_if_false @ROULETE_1269
+if 
+  Char.LocateOnFootObject2D($scplayer, 0@, 5.0, 5.0, False)
+goto_if_false @ROULETE_1269
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, -0.215, 1.34, -0.086)
+27@ = Object.CreateNoOffset(#WHEEL_WEE, $x, $y, $z)
+1@ += 1
+
+:ROULETE_1269
+if 
+  1@ == 3
+goto_if_false @ROULETE_1592
+if 
+  Char.LocateOnFootObject2D($scplayer, 0@, 5.0, 5.0, False)
+goto_if_false @ROULETE_1592
+if 
+  $iSetCasinoPanic == 0
+goto_if_false @ROULETE_1592
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, -1.839, -2.4444, -0.6)
+$x_temp = Object.GetOffsetInWorldCoords($y_temp, $z_temp, 0@, 0.761, 0.9556, 0.6)
+if 
+  Char.IsInAreaOnFoot3D($scplayer, 0, $x, $y, $z, $x_temp, $y_temp, $z_temp)
+goto_if_false @ROULETE_1592
+if 
+  17@ == 2
+goto_if_false @ROULETE_1459
+Text.PrintHelpForever('SLOT_06')
+
+:ROULETE_1459
+if 
+  17@ == 20
+goto_if_false @ROULETE_1488
+Text.PrintHelpForever('SLOT_07')
+
+:ROULETE_1488
+if 
+  17@ == 200
+goto_if_false @ROULETE_1518
+Text.PrintHelpForever('SLOT_08')
+
+:ROULETE_1518
+if 
+  17@ == 2000
+goto_if_false @ROULETE_1548
+Text.PrintHelpForever('SLOT_09')
+
+:ROULETE_1548
+if 
+  17@ == 20000
+goto_if_false @ROULETE_1578
+Text.PrintHelpForever('SLOT_10')
+
+:ROULETE_1578
+Audio.LoadMissionAudio(1813, 4)
+1@ += 1
+
+:ROULETE_1592
+if 
+  1@ == 4
+goto_if_false @ROULETE_2950
+if 
+  $roulette_triggered == 0
+goto_if_false @ROULETE_2950
+if 
+  Char.LocateOnFootObject2D($scplayer, 0@, 5.0, 5.0, False)
+goto_if_false @ROULETE_2950
+if 
+  $iSetCasinoPanic == 0
+goto_if_false @ROULETE_2941
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, -1.839, -2.4444, -0.6)
+$x_temp = Object.GetOffsetInWorldCoords($y_temp, $z_temp, 0@, 0.761, 0.9556, 0.6)
+if 
+  Char.IsInAreaOnFoot3D($scplayer, 0, $x, $y, $z, $x_temp, $y_temp, $z_temp)
+goto_if_false @ROULETE_2925
+if 
+  Player.CanStartMission($player1)
+goto_if_false @ROULETE_2918
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @ROULETE_2911
+if 
+  9@ == 0
+goto_if_false @ROULETE_2904
+$gambling_stat = Stat.GetInt(81)
+if 
+  17@ == 20
+goto_if_false @ROULETE_1974
+if 
+  $gambling_stat < 1
+goto_if_false @ROULETE_1974
+Text.PrintNow('GAMBSTA', 4000, 1)
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_1967
+$an = Math.RandomIntInRange(0, 2)
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_1949
+Char.SetSayScript(26@, $gambling_stat_too_low_b($an,3i), True, True, False)
+goto @ROULETE_1967
+
+:ROULETE_1949
+Char.SetSayScript(26@, $gambling_stat_too_low_w($an,3i), True, True, False)
+
+:ROULETE_1967
+goto @ROULETE_927
+
+:ROULETE_1974
+if 
+  17@ == 200
+goto_if_false @ROULETE_2120
+if 
+  $gambling_stat < 10
+goto_if_false @ROULETE_2120
+Text.PrintNow('GAMBSTA', 4000, 1)
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_2113
+$an = Math.RandomIntInRange(0, 2)
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_2095
+Char.SetSayScript(26@, $gambling_stat_too_low_b($an,3i), True, True, False)
+goto @ROULETE_2113
+
+:ROULETE_2095
+Char.SetSayScript(26@, $gambling_stat_too_low_w($an,3i), True, True, False)
+
+:ROULETE_2113
+goto @ROULETE_927
+
+:ROULETE_2120
+if 
+  17@ == 2000
+goto_if_false @ROULETE_2266
+if 
+  $gambling_stat < 100
+goto_if_false @ROULETE_2266
+Text.PrintNow('GAMBSTA', 4000, 1)
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_2259
+$an = Math.RandomIntInRange(0, 2)
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_2241
+Char.SetSayScript(26@, $gambling_stat_too_low_b($an,3i), True, True, False)
+goto @ROULETE_2259
+
+:ROULETE_2241
+Char.SetSayScript(26@, $gambling_stat_too_low_w($an,3i), True, True, False)
+
+:ROULETE_2259
+goto @ROULETE_927
+
+:ROULETE_2266
+if 
+  17@ == 20000
+goto_if_false @ROULETE_2413
+if 
+  $gambling_stat <= 999
+goto_if_false @ROULETE_2413
+Text.PrintNow('GAMBSTA', 4000, 1)
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_2406
+$an = Math.RandomIntInRange(0, 2)
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_2388
+Char.SetSayScript(26@, $gambling_stat_too_low_b($an,3i), True, True, False)
+goto @ROULETE_2406
+
+:ROULETE_2388
+Char.SetSayScript(26@, $gambling_stat_too_low_w($an,3i), True, True, False)
+
+:ROULETE_2406
+goto @ROULETE_927
+
+:ROULETE_2413
+Text.ClearHelp
+Player.SetControl($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Game.SetAllCarsCanBeDamaged(False)
+$x, $y, $z = Object.GetCoordinates(0@)
+Task.TurnCharToFaceCoord($scplayer, $x, $y, $z)
+if 
+  Game.IsWidescreenOnInOptions
+goto_if_false @ROULETE_2578
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, -0.632, -1.9669, 1.9144)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, -0.5003, -1.3914, 1.1073)
+Camera.PointAtPoint($x, $y, $z, SwitchType.Interpolation)
+goto @ROULETE_2675
+
+:ROULETE_2578
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, -0.5689, -1.5476, 1.8759)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, -0.4106, -1.0626, 1.0159)
+Camera.PointAtPoint($x, $y, $z, SwitchType.Interpolation)
+
+:ROULETE_2675
+Camera.SetNearClip(0.1)
+Text.UseCommands(True)
+Txd.LoadDictionary('LD_ROUL')
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_2783
+$an = Math.RandomIntInRange(0, 2)
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_2765
+Char.SetSayScript(26@, $place_bets_b($an,2i), True, True, False)
+goto @ROULETE_2783
+
+:ROULETE_2765
+Char.SetSayScript(26@, $place_bets_w($an,2i), True, True, False)
+
+:ROULETE_2783
+Txd.LoadSprite("ROULBLA", 1)
+Txd.LoadSprite("ROULRED", 2)
+Txd.LoadSprite("ROULGRE", 3)
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, $spot1_x, $spot1_y, $spot1_z)
+$z += 0.01
+$chips_stack = Object.CreateNoOffset(#ROULETTE_MARKER, $x, $y, $z)
+Game.SetMinigameInProgress(True)
+$roulette_triggered = 1
+28@ = 0
+1@ += 1
+9@ = 1
+
+:ROULETE_2904
+goto @ROULETE_2918
+
+:ROULETE_2911
+9@ = 0
+
+:ROULETE_2918
+goto @ROULETE_2934
+
+:ROULETE_2925
+Text.ClearHelp
+1@ = 3
+
+:ROULETE_2934
+goto @ROULETE_2950
+
+:ROULETE_2941
+Text.ClearHelp
+1@ = 3
+
+:ROULETE_2950
+if 
+  1@ == 5
+goto_if_false @ROULETE_7449
+Hud.DisplayRadar(False)
+if 
+  $roulette_flag > 0
+goto_if_false @ROULETE_3503
+$sprite_x += 2.0
+$sprite_y += 2.0
+Hud.DrawSprite(1, $sprite_x, $sprite_y, 64.0, 64.0, 0, 0, 0, 255)
+$sprite_x -= 2.0
+$sprite_y -= 2.0
+if 
+  18@ == 0
+goto_if_false @ROULETE_3116
+Hud.DrawSprite(3, $sprite_x, $sprite_y, 64.0, 64.0, 180, 180, 180, 255)
+goto @ROULETE_3424
+
+:ROULETE_3116
+if or
+  18@ == 1
+  18@ == 3
+  18@ == 5
+  18@ == 7
+  18@ == 9
+  18@ == 12
+goto_if_false @ROULETE_3208
+Hud.DrawSprite(2, $sprite_x, $sprite_y, 64.0, 64.0, 180, 180, 180, 255)
+goto @ROULETE_3424
+
+:ROULETE_3208
+if or
+  18@ == 14
+  18@ == 16
+  18@ == 18
+  18@ == 19
+  18@ == 21
+  18@ == 23
+goto_if_false @ROULETE_3300
+Hud.DrawSprite(2, $sprite_x, $sprite_y, 64.0, 64.0, 180, 180, 180, 255)
+goto @ROULETE_3424
+
+:ROULETE_3300
+if or
+  18@ == 25
+  18@ == 27
+  18@ == 30
+  18@ == 32
+  18@ == 34
+  18@ == 36
+goto_if_false @ROULETE_3392
+Hud.DrawSprite(2, $sprite_x, $sprite_y, 64.0, 64.0, 180, 180, 180, 255)
+goto @ROULETE_3424
+
+:ROULETE_3392
+Hud.DrawSprite(1, $sprite_x, $sprite_y, 64.0, 64.0, 180, 180, 180, 255)
+
+:ROULETE_3424
+set_var_float_to_var_float $text_positionn_x = $sprite_x
+$text_positionn_x += -1.6679
+set_var_float_to_var_float $text_positionn_y = $sprite_y
+$text_positionn_y += -30.0255
+gosub @ROULETE_18193
+Text.SetScale(0.9423, 4.2306)
+Text.SetCenter(True)
+Text.DisplayWithNumber($text_positionn_x, $text_positionn_y, 'NUMBER', 18@)
+
+:ROULETE_3503
+Hud.DrawWindow($3479, $3483, $3480, $3484, 'ROUWAGE', 2)
+gosub @ROULETE_18193
+Text.SetColor(134, 155, 184, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @ROULETE_3579
+Text.SetScale(0.42, 2.5077)
+
+:ROULETE_3579
+Text.Display($rou_text_x, $rou_text_y, 'ROU_MAX')
+set_var_float_to_var_float $text_positionn_y = $rou_text_y
+add_float_var_to_float_var $text_positionn_y += $3482
+gosub @ROULETE_18193
+Text.SetScale($3486, $3488)
+Text.DisplayWithNumber($rou_text_x, $text_positionn_y, 'DOLLAR', 21@)
+add_float_var_to_float_var $text_positionn_y += $3478
+gosub @ROULETE_18193
+Text.SetColor(134, 155, 184, 255)
+Text.Display($rou_text_x, $text_positionn_y, 'ROUYOUR')
+add_float_var_to_float_var $text_positionn_y += $3482
+gosub @ROULETE_18193
+Text.SetScale($3486, $3488)
+Text.DisplayWithNumber($rou_text_x, $text_positionn_y, 'DOLLAR', $total_stake_this_round)
+add_float_var_to_float_var $text_positionn_y += $3478
+gosub @ROULETE_18193
+if 
+  $roulette_flag > 0
+goto_if_false @ROULETE_3850
+Text.SetColor(134, 155, 184, 255)
+Text.Display($rou_text_x, $text_positionn_y, 'ROU_WON')
+add_float_var_to_float_var $text_positionn_y += $3482
+gosub @ROULETE_18193
+Text.SetScale($3486, $3488)
+Text.DisplayWithNumber($rou_text_x, $text_positionn_y, 'DOLLAR', $winnings_this_round)
+goto @ROULETE_3924
+
+:ROULETE_3850
+Text.SetColor(134, 155, 184, 255)
+Text.Display($rou_text_x, $text_positionn_y, 'ROUTHIS')
+add_float_var_to_float_var $text_positionn_y += $3482
+gosub @ROULETE_18193
+Text.SetScale($3486, $3488)
+Text.DisplayWithNumber($rou_text_x, $text_positionn_y, 'DOLLAR', 20@)
+
+:ROULETE_3924
+if 
+  $roulette_flag == 0
+goto_if_false @ROULETE_4536
+Text.PrintHelpForever('ROUHELP')
+Object.SetVisible($chips_stack, True)
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @ROULETE_4238
+if 
+  7@ == 0
+goto_if_false @ROULETE_4231
+if 
+  $total_stake_this_round > 0
+goto_if_false @ROULETE_4189
+Audio.LoadMissionAudio(1813, 4)
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_4106
+$an = Math.RandomIntInRange(0, 3)
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_4088
+Char.SetSayScript(26@, $no_more_bets_b($an,3i), True, True, False)
+goto @ROULETE_4106
+
+:ROULETE_4088
+Char.SetSayScript(26@, $no_more_bets_w($an,3i), True, True, False)
+
+:ROULETE_4106
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @ROULETE_4141
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1086)
+
+:ROULETE_4141
+Stat.IncrementInt($total_stake_this_round, 35)
+cset_var_float_to_var_int $temp_float_1 = integer $total_stake_this_round
+$temp_float_1 *= 0.001
+Text.ClearHelp
+Stat.IncrementFloat($temp_float_1, 81)
+$roulette_flag += 1
+goto @ROULETE_4224
+
+:ROULETE_4189
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @ROULETE_4224
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1085)
+
+:ROULETE_4224
+7@ += 1
+
+:ROULETE_4231
+goto @ROULETE_4245
+
+:ROULETE_4238
+7@ = 0
+
+:ROULETE_4245
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @ROULETE_4522
+if 
+  9@ == 0
+goto_if_false @ROULETE_4515
+9@ += 1
+$roulette_flag = 0
+1@ = 3
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_4387
+$an = Math.RandomIntInRange(0, 2)
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_4369
+Char.SetSayScript(26@, $player_leaves_b($an,2i), True, True, False)
+goto @ROULETE_4387
+
+:ROULETE_4369
+Char.SetSayScript(26@, $player_leaves_w($an,2i), True, True, False)
+
+:ROULETE_4387
+Hud.DisplayRadar(True)
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Game.SetAllCarsCanBeDamaged(True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Text.UseCommands(False)
+Txd.Remove
+Text.ClearHelp
+Object.Delete($chips_stack)
+Player.AddScore($player1, $total_stake_this_round)
+22@ = 1
+gosub @ROULETE_815
+$i = 0
+
+:ROULETE_4455
+if 
+  151 > $i
+goto_if_false @ROULETE_4497
+Object.Delete($placed_chips($i,151i))
+$i += 1
+goto @ROULETE_4455
+
+:ROULETE_4497
+Game.SetMinigameInProgress(False)
+$roulette_triggered = 0
+goto @ROULETE_927
+
+:ROULETE_4515
+goto @ROULETE_4529
+
+:ROULETE_4522
+9@ = 0
+
+:ROULETE_4529
+gosub @ROULETE_8023
+
+:ROULETE_4536
+if 
+  $roulette_flag == 1
+goto_if_false @ROULETE_4625
+Object.SetVisible($chips_stack, False)
+add_timed_val_to_float_lvar 24@ += frame_delta_time * 0.5
+if or
+  24@ > 20.0
+  24@ == 20.0
+goto_if_false @ROULETE_4625
+set_var_int_to_var_int $wheel_rotation_timer = $game_timer
+$wheel_rotation_timer += 1500
+$roulette_flag += 1
+
+:ROULETE_4625
+if 
+  $roulette_flag == 2
+goto_if_false @ROULETE_4803
+if 
+  is_int_var_greater_than_int_var $game_timer > $wheel_rotation_timer
+goto_if_false @ROULETE_4803
+sub_timed_val_from_float_lvar 24@ -= frame_delta_time * 0.08
+if or
+  0.0 > 24@
+  24@ == 0.0
+goto_if_false @ROULETE_4803
+18@ = Math.RandomIntInRange(0, 37)
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_4789
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_4771
+Char.SetSayScript(26@, $roulette_result_b(18@,37i), True, True, False)
+goto @ROULETE_4789
+
+:ROULETE_4771
+Char.SetSayScript(26@, $roulette_result_w(18@,37i), True, True, False)
+
+:ROULETE_4789
+gosub @ROULETE_9703
+$roulette_flag += 1
+
+:ROULETE_4803
+if 
+  $roulette_flag == 3
+goto_if_false @ROULETE_5553
+Text.PrintHelpForever('X_CONT')
+set_var_int_to_var_int $temp_integer_1 = $winnings_this_round
+sub_int_var_from_int_var $temp_integer_1 -= $total_stake_this_round
+if 
+  $temp_integer_1 == 0
+goto_if_false @ROULETE_4934
+gosub @ROULETE_18193
+Text.SetScale(1.3, 3.36)
+Text.SetCenter(True)
+Text.SetEdge(2, 0, 0, 0, 255)
+Text.SetFont(Font.Pricedown)
+Text.Display(320.0, 180.333, 'NOWIN')
+goto @ROULETE_5138
+
+:ROULETE_4934
+if 
+  $temp_integer_1 > 0
+goto_if_false @ROULETE_5060
+gosub @ROULETE_18193
+Text.SetScale(1.3, 3.36)
+Text.SetCenter(True)
+Text.SetEdge(2, 0, 0, 0, 255)
+Text.SetFont(Font.Pricedown)
+$temp_integer_2, $temp_integer_3, $temp_integer_4, $an = Hud.GetColor(6)
+Text.SetColor($temp_integer_2, $temp_integer_3, $temp_integer_4, 255)
+Text.DisplayWithNumber(320.0, 155.333, 'WINNER', $temp_integer_1)
+Stat.RegisterInt(StatId.BiggestGamblingWin, $temp_integer_1)
+goto @ROULETE_5138
+
+:ROULETE_5060
+$temp_integer_1 *= -1
+gosub @ROULETE_18193
+Text.SetScale(1.3, 3.36)
+Text.SetCenter(True)
+Text.SetEdge(2, 0, 0, 0, 255)
+Text.SetFont(Font.Pricedown)
+Text.DisplayWithNumber(320.0, 155.333, 'LOSER', $temp_integer_1)
+Stat.RegisterInt(StatId.BiggestGamblingLoss, $temp_integer_1)
+
+:ROULETE_5138
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @ROULETE_5546
+if 
+  7@ == 0
+goto_if_false @ROULETE_5539
+set_lvar_int_to_var_int 7@ = $game_timer
+7@ += 999999
+Player.AddScore($player1, $winnings_this_round)
+Stat.IncrementInt($winnings_this_round, 37)
+set_var_int_to_var_int $temp_integer_1 = $winnings_this_round
+sub_int_var_from_int_var $temp_integer_1 -= $total_stake_this_round
+$winning_streak += 1
+if 
+  $temp_integer_1 > 0
+goto_if_false @ROULETE_5425
+$an = Math.RandomIntInRange(0, 3)
+if or
+  $an == 0
+  $an == 1
+goto_if_false @ROULETE_5408
+if 
+  $winning_streak > 1
+goto_if_false @ROULETE_5315
+$an = Math.RandomIntInRange(3, 6)
+goto @ROULETE_5324
+
+:ROULETE_5315
+$an = Math.RandomIntInRange(0, 3)
+
+:ROULETE_5324
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_5401
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_5383
+Char.SetSayScript(26@, $player_wins_b($an,6i), True, True, False)
+goto @ROULETE_5401
+
+:ROULETE_5383
+Char.SetSayScript(26@, $player_wins_w($an,6i), True, True, False)
+
+:ROULETE_5401
+goto @ROULETE_5418
+
+:ROULETE_5408
+$temp_integer_4 = Char.SetSayContext($scplayer, 100)
+
+:ROULETE_5418
+goto @ROULETE_5469
+
+:ROULETE_5425
+$temp_integer_2 = Math.RandomIntInRange(0, 2)
+if 
+  $temp_integer_2 == 0
+goto_if_false @ROULETE_5462
+$temp_integer_4 = Char.SetSayContext($scplayer, 101)
+
+:ROULETE_5462
+$winning_streak = 0
+
+:ROULETE_5469
+22@ = 1
+gosub @ROULETE_815
+$i = 0
+
+:ROULETE_5490
+if 
+  151 > $i
+goto_if_false @ROULETE_5532
+Object.Delete($placed_chips($i,151i))
+$i += 1
+goto @ROULETE_5490
+
+:ROULETE_5532
+$roulette_flag = 0
+
+:ROULETE_5539
+goto @ROULETE_5553
+
+:ROULETE_5546
+7@ = 0
+
+:ROULETE_5553
+if and
+  $roulette_flag > 0
+  3 > $roulette_flag
+goto_if_false @ROULETE_5613
+add_timed_float_lvar_to_float_lvar 25@ += frame_delta_time * 24@
+Object.SetRotation(27@, 0.0, 0.0, 25@)
+18@ = Math.RandomIntInRange(0, 37)
+
+:ROULETE_5613
+$pad1_left_stick_x, $pad1_left_stick_y, $pad1_right_stick_x, $pad1_right_stick_y = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+  -80 > $pad1_left_stick_x
+goto_if_false @ROULETE_6087
+if 
+  2@ == 0
+goto_if_false @ROULETE_6054
+set_lvar_int_to_var_int 12@ = $game_timer
+12@ += 80
+if 
+  0.0 > $spot_selection_x
+goto_if_false @ROULETE_5804
+if 
+  $spot_selection_y <> 2.0
+goto_if_false @ROULETE_5797
+if 
+  $spot_selection_x <> 0.0
+goto_if_false @ROULETE_5797
+if 
+  $spot_selection_y == -24.0
+goto_if_false @ROULETE_5787
+$spot_selection_x += 2.0
+goto @ROULETE_5797
+
+:ROULETE_5787
+$spot_selection_x += 1.0
+
+:ROULETE_5797
+goto @ROULETE_6040
+
+:ROULETE_5804
+if 
+  $spot_selection_x == 0.0
+goto_if_false @ROULETE_5999
+if and
+  2.0 > $spot_selection_y
+  $spot_selection_y > -7.0
+goto_if_false @ROULETE_5883
+$spot_selection_x += 2.0
+$spot_selection_y = -3.0
+goto @ROULETE_5992
+
+:ROULETE_5883
+if and
+  -6.0 > $spot_selection_y
+  $spot_selection_y > -15.0
+goto_if_false @ROULETE_5941
+$spot_selection_x += 2.0
+$spot_selection_y = -11.0
+goto @ROULETE_5992
+
+:ROULETE_5941
+if and
+  -14.0 > $spot_selection_y
+  $spot_selection_y > -24.0
+goto_if_false @ROULETE_5992
+$spot_selection_x += 2.0
+$spot_selection_y = -19.0
+
+:ROULETE_5992
+goto @ROULETE_6040
+
+:ROULETE_5999
+if 
+  $spot_selection_x == 2.0
+goto_if_false @ROULETE_6040
+$spot_selection_x += 2.0
+$spot_selection_y += 2.0
+
+:ROULETE_6040
+2@ += 1
+goto @ROULETE_6080
+
+:ROULETE_6054
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 12@
+goto_if_false @ROULETE_6080
+2@ = 0
+
+:ROULETE_6080
+goto @ROULETE_6094
+
+:ROULETE_6087
+2@ = 0
+
+:ROULETE_6094
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+  $pad1_left_stick_x > 80
+goto_if_false @ROULETE_6521
+if 
+  3@ == 0
+goto_if_false @ROULETE_6488
+set_lvar_int_to_var_int 13@ = $game_timer
+13@ += 80
+if 
+  $spot_selection_x > -4.0
+goto_if_false @ROULETE_6412
+if 
+  $spot_selection_y <> 2.0
+goto_if_false @ROULETE_6405
+if 
+  $spot_selection_x <> -4.0
+goto_if_false @ROULETE_6405
+if or
+  $spot_selection_y == -24.0
+  $spot_selection_x == 2.0
+  $spot_selection_x == 4.0
+goto_if_false @ROULETE_6395
+if or
+  $spot_selection_y == -1.0
+  $spot_selection_y == -5.0
+goto_if_false @ROULETE_6296
+$spot_selection_y = -3.0
+
+:ROULETE_6296
+if or
+  $spot_selection_y == -9.0
+  $spot_selection_y == -13.0
+goto_if_false @ROULETE_6337
+$spot_selection_y = -11.0
+
+:ROULETE_6337
+if or
+  $spot_selection_y == -17.0
+  $spot_selection_y == -21.0
+goto_if_false @ROULETE_6378
+$spot_selection_y = -19.0
+
+:ROULETE_6378
+$spot_selection_x += -2.0
+goto @ROULETE_6405
+
+:ROULETE_6395
+$spot_selection_x += -1.0
+
+:ROULETE_6405
+goto @ROULETE_6474
+
+:ROULETE_6412
+if 
+  $spot_selection_x == -4.0
+goto_if_false @ROULETE_6474
+if and
+  $spot_selection_y > -23.0
+  1.0 > $spot_selection_y
+goto_if_false @ROULETE_6474
+$spot_selection_x += -1.0
+
+:ROULETE_6474
+3@ += 1
+goto @ROULETE_6514
+
+:ROULETE_6488
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 13@
+goto_if_false @ROULETE_6514
+3@ = 0
+
+:ROULETE_6514
+goto @ROULETE_6528
+
+:ROULETE_6521
+3@ = 0
+
+:ROULETE_6528
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+  -80 > $pad1_left_stick_y
+goto_if_false @ROULETE_6867
+if 
+  4@ == 0
+goto_if_false @ROULETE_6834
+set_lvar_int_to_var_int 14@ = $game_timer
+14@ += 80
+if 
+  0.0 > $spot_selection_y
+goto_if_false @ROULETE_6779
+if 
+  $spot_selection_y == -24.0
+goto_if_false @ROULETE_6644
+$spot_selection_y += 2.0
+goto @ROULETE_6772
+
+:ROULETE_6644
+if 
+  $spot_selection_x == 2.0
+goto_if_false @ROULETE_6703
+if 
+  $spot_selection_y <> -3.0
+goto_if_false @ROULETE_6696
+$spot_selection_y += 8.0
+
+:ROULETE_6696
+goto @ROULETE_6772
+
+:ROULETE_6703
+if 
+  $spot_selection_x == 4.0
+goto_if_false @ROULETE_6762
+if 
+  $spot_selection_y <> -1.0
+goto_if_false @ROULETE_6755
+$spot_selection_y += 4.0
+
+:ROULETE_6755
+goto @ROULETE_6772
+
+:ROULETE_6762
+$spot_selection_y += 1.0
+
+:ROULETE_6772
+goto @ROULETE_6820
+
+:ROULETE_6779
+if 
+  $spot_selection_y == 0.0
+goto_if_false @ROULETE_6820
+$spot_selection_y += 2.0
+$spot_selection_x = -2.0
+
+:ROULETE_6820
+4@ += 1
+goto @ROULETE_6860
+
+:ROULETE_6834
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 14@
+goto_if_false @ROULETE_6860
+4@ = 0
+
+:ROULETE_6860
+goto @ROULETE_6874
+
+:ROULETE_6867
+4@ = 0
+
+:ROULETE_6874
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+  $pad1_left_stick_y > 80
+goto_if_false @ROULETE_7331
+if 
+  5@ == 0
+goto_if_false @ROULETE_7298
+set_lvar_int_to_var_int 15@ = $game_timer
+15@ += 80
+if 
+  $spot_selection_y > -22.0
+goto_if_false @ROULETE_7125
+if 
+  $spot_selection_y == 2.0
+goto_if_false @ROULETE_6990
+$spot_selection_y += -2.0
+goto @ROULETE_7118
+
+:ROULETE_6990
+if 
+  $spot_selection_x == 2.0
+goto_if_false @ROULETE_7049
+if 
+  $spot_selection_y <> -19.0
+goto_if_false @ROULETE_7042
+$spot_selection_y += -8.0
+
+:ROULETE_7042
+goto @ROULETE_7118
+
+:ROULETE_7049
+if 
+  $spot_selection_x == 4.0
+goto_if_false @ROULETE_7108
+if 
+  $spot_selection_y <> -21.0
+goto_if_false @ROULETE_7101
+$spot_selection_y += -4.0
+
+:ROULETE_7101
+goto @ROULETE_7118
+
+:ROULETE_7108
+$spot_selection_y += -1.0
+
+:ROULETE_7118
+goto @ROULETE_7284
+
+:ROULETE_7125
+if 
+  $spot_selection_x == -4.0
+goto_if_false @ROULETE_7184
+if 
+  $spot_selection_y <> -24.0
+goto_if_false @ROULETE_7177
+$spot_selection_y += -2.0
+
+:ROULETE_7177
+goto @ROULETE_7284
+
+:ROULETE_7184
+if 
+  $spot_selection_x == 0.0
+goto_if_false @ROULETE_7243
+if 
+  $spot_selection_y <> -24.0
+goto_if_false @ROULETE_7236
+$spot_selection_y += -2.0
+
+:ROULETE_7236
+goto @ROULETE_7284
+
+:ROULETE_7243
+if 
+  $spot_selection_y <> -24.0
+goto_if_false @ROULETE_7284
+$spot_selection_x = -2.0
+$spot_selection_y += -2.0
+
+:ROULETE_7284
+5@ += 1
+goto @ROULETE_7324
+
+:ROULETE_7298
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 15@
+goto_if_false @ROULETE_7324
+5@ = 0
+
+:ROULETE_7324
+goto @ROULETE_7338
+
+:ROULETE_7331
+5@ = 0
+
+:ROULETE_7338
+set_var_float_to_var_float $spot_increment_x = $spot_selection_x
+mult_float_var_by_float_var $spot_increment_x *= $spot_size_x
+set_var_float_to_var_float $spot_increment_y = $spot_selection_y
+mult_float_var_by_float_var $spot_increment_y *= $spot_size_y
+set_var_float_to_var_float $chip_position_x = $spot1_x
+add_float_var_to_float_var $chip_position_x += $spot_increment_x
+set_var_float_to_var_float $chip_position_y = $spot1_y
+add_float_var_to_float_var $chip_position_y += $spot_increment_y
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, $chip_position_x, $chip_position_y, $spot1_z)
+$z += 0.01
+Object.SetCoordinates($chips_stack, $x, $y, $z)
+
+:ROULETE_7449
+goto @ROULETE_7584
+
+:ROULETE_7456
+if 
+  1@ > 0
+goto_if_false @ROULETE_7584
+if 
+  1@ > 3
+goto_if_false @ROULETE_7494
+Text.ClearHelp
+
+:ROULETE_7494
+Char.Delete(26@)
+Streaming.MarkModelAsNoLongerNeeded(23@)
+22@ = 1
+gosub @ROULETE_815
+$i = 0
+
+:ROULETE_7525
+if 
+  151 > $i
+goto_if_false @ROULETE_7567
+Object.Delete($placed_chips($i,151i))
+$i += 1
+goto @ROULETE_7525
+
+:ROULETE_7567
+Object.Delete($chips_stack)
+Object.Delete(27@)
+1@ = 0
+
+:ROULETE_7584
+goto @ROULETE_7728
+
+:ROULETE_7591
+if 
+  1@ > 0
+goto_if_false @ROULETE_7719
+if 
+  1@ > 3
+goto_if_false @ROULETE_7629
+Text.ClearHelp
+
+:ROULETE_7629
+Char.Delete(26@)
+Streaming.MarkModelAsNoLongerNeeded(23@)
+22@ = 1
+gosub @ROULETE_815
+$i = 0
+
+:ROULETE_7660
+if 
+  151 > $i
+goto_if_false @ROULETE_7702
+Object.Delete($placed_chips($i,151i))
+$i += 1
+goto @ROULETE_7660
+
+:ROULETE_7702
+Object.Delete($chips_stack)
+Object.Delete(27@)
+1@ = 0
+
+:ROULETE_7719
+$total_roulette_tables -= 1
+terminate_this_script 
+
+:ROULETE_7728
+goto @ROULETE_7872
+
+:ROULETE_7735
+if 
+  1@ > 0
+goto_if_false @ROULETE_7863
+if 
+  1@ > 3
+goto_if_false @ROULETE_7773
+Text.ClearHelp
+
+:ROULETE_7773
+Char.Delete(26@)
+Streaming.MarkModelAsNoLongerNeeded(23@)
+22@ = 1
+gosub @ROULETE_815
+$i = 0
+
+:ROULETE_7804
+if 
+  151 > $i
+goto_if_false @ROULETE_7846
+Object.Delete($placed_chips($i,151i))
+$i += 1
+goto @ROULETE_7804
+
+:ROULETE_7846
+Object.Delete($chips_stack)
+Object.Delete(27@)
+1@ = 0
+
+:ROULETE_7863
+$total_roulette_tables -= 1
+terminate_this_script 
+
+:ROULETE_7872
+goto @ROULETE_8016
+
+:ROULETE_7879
+if 
+  1@ > 0
+goto_if_false @ROULETE_8007
+if 
+  1@ > 3
+goto_if_false @ROULETE_7917
+Text.ClearHelp
+
+:ROULETE_7917
+Char.Delete(26@)
+Streaming.MarkModelAsNoLongerNeeded(23@)
+22@ = 1
+gosub @ROULETE_815
+$i = 0
+
+:ROULETE_7948
+if 
+  151 > $i
+goto_if_false @ROULETE_7990
+Object.Delete($placed_chips($i,151i))
+$i += 1
+goto @ROULETE_7948
+
+:ROULETE_7990
+Object.Delete($chips_stack)
+Object.Delete(27@)
+1@ = 0
+
+:ROULETE_8007
+$total_roulette_tables -= 1
+terminate_this_script 
+
+:ROULETE_8016
+goto @ROULETE_927
+
+:ROULETE_8023
+$i = 0
+
+:ROULETE_8030
+if 
+  151 > $i
+goto_if_false @ROULETE_9701
+if 
+  is_float_var_equal_to_float_var $spot_selection_x == $selected_spot_x($i,151f)
+goto_if_false @ROULETE_9687
+if 
+  is_float_var_equal_to_float_var $spot_selection_y == $selected_spot_y($i,151f)
+goto_if_false @ROULETE_9687
+set_lvar_int_to_var_int 20@ = $spot_bets($i,151i)
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @ROULETE_9317
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 8@
+goto_if_false @ROULETE_9310
+$temp_int_roulette = Player.StoreScore($player1)
+$temp_int_roulette += 1
+$gambling_stat = Stat.GetInt(81)
+if 
+  $gambling_stat > 999
+goto_if_false @ROULETE_8338
+set_var_int_to_lvar_int $temp_integer_4 = 17@
+$temp_integer_4 -= 1000000
+if 
+  1 > $temp_int_roulette
+goto_if_false @ROULETE_8331
+if 
+  28@ == 0
+goto_if_false @ROULETE_8331
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_8324
+$an = Math.RandomIntInRange(0, 3)
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_8306
+Char.SetSayScript(26@, $player_gets_credit_b($an,3i), True, True, False)
+goto @ROULETE_8324
+
+:ROULETE_8306
+Char.SetSayScript(26@, $player_gets_credit_w($an,3i), True, True, False)
+
+:ROULETE_8324
+28@ = 1
+
+:ROULETE_8331
+goto @ROULETE_8858
+
+:ROULETE_8338
+if 
+  $gambling_stat > 100
+goto_if_false @ROULETE_8510
+set_var_int_to_lvar_int $temp_integer_4 = 17@
+$temp_integer_4 -= 100000
+if 
+  1 > $temp_int_roulette
+goto_if_false @ROULETE_8503
+if 
+  28@ == 0
+goto_if_false @ROULETE_8503
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_8496
+$an = Math.RandomIntInRange(0, 3)
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_8478
+Char.SetSayScript(26@, $player_gets_credit_b($an,3i), True, True, False)
+goto @ROULETE_8496
+
+:ROULETE_8478
+Char.SetSayScript(26@, $player_gets_credit_w($an,3i), True, True, False)
+
+:ROULETE_8496
+28@ = 1
+
+:ROULETE_8503
+goto @ROULETE_8858
+
+:ROULETE_8510
+if 
+  $gambling_stat > 10
+goto_if_false @ROULETE_8680
+set_var_int_to_lvar_int $temp_integer_4 = 17@
+$temp_integer_4 -= 10000
+if 
+  1 > $temp_int_roulette
+goto_if_false @ROULETE_8673
+if 
+  28@ == 0
+goto_if_false @ROULETE_8673
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_8666
+$an = Math.RandomIntInRange(0, 3)
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_8648
+Char.SetSayScript(26@, $player_gets_credit_b($an,3i), True, True, False)
+goto @ROULETE_8666
+
+:ROULETE_8648
+Char.SetSayScript(26@, $player_gets_credit_w($an,3i), True, True, False)
+
+:ROULETE_8666
+28@ = 1
+
+:ROULETE_8673
+goto @ROULETE_8858
+
+:ROULETE_8680
+if 
+  $gambling_stat > 1
+goto_if_false @ROULETE_8850
+set_var_int_to_lvar_int $temp_integer_4 = 17@
+$temp_integer_4 -= 1000
+if 
+  1 > $temp_int_roulette
+goto_if_false @ROULETE_8843
+if 
+  28@ == 0
+goto_if_false @ROULETE_8843
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_8836
+$an = Math.RandomIntInRange(0, 3)
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_8818
+Char.SetSayScript(26@, $player_gets_credit_b($an,3i), True, True, False)
+goto @ROULETE_8836
+
+:ROULETE_8818
+Char.SetSayScript(26@, $player_gets_credit_w($an,3i), True, True, False)
+
+:ROULETE_8836
+28@ = 1
+
+:ROULETE_8843
+goto @ROULETE_8858
+
+:ROULETE_8850
+set_var_int_to_lvar_int $temp_integer_4 = 17@
+
+:ROULETE_8858
+if and
+  is_int_lvar_greater_than_int_var 21@ > $total_stake_this_round
+  is_int_var_greater_than_int_var $temp_int_roulette > $temp_integer_4
+goto_if_false @ROULETE_9145
+Audio.LoadMissionAudio(1813, 4)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @ROULETE_8927
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1083)
+
+:ROULETE_8927
+add_int_lvar_to_int_lvar 20@ += 17@
+set_var_int_to_lvar_int $temp_int_roulette = 17@
+$temp_int_roulette *= -1
+Player.AddScore($player1, $temp_int_roulette)
+add_int_lvar_to_int_var $total_stake_this_round += 17@
+set_var_int_to_lvar_int $temp_int_roulette = 17@
+$temp_int_roulette *= 26
+if 
+  is_int_var_greater_than_int_lvar $temp_int_roulette > 20@
+goto_if_false @ROULETE_9096
+$x, $y, $z = Object.GetCoordinates($chips_stack)
+$z += -0.14
+set_var_int_to_lvar_int $temp_int_roulette = 20@
+div_int_var_by_int_lvar $temp_int_roulette /= 17@
+cset_var_float_to_var_int $temp_float_1 = integer $temp_int_roulette
+$temp_float_1 *= 0.005
+add_float_var_to_float_var $z += $temp_float_1
+Object.Delete($placed_chips($i,151i))
+$placed_chips($i,151i) = Object.CreateNoOffset(19@, $x, $y, $z)
+
+:ROULETE_9096
+set_lvar_int_to_var_int 8@ = $game_timer
+add_int_lvar_to_int_lvar 8@ += 10@
+if 
+  10@ == 500
+goto_if_false @ROULETE_9138
+10@ = 80
+
+:ROULETE_9138
+goto @ROULETE_9310
+
+:ROULETE_9145
+if 
+  is_int_var_greater_or_equal_to_int_var $temp_integer_4 >= $temp_int_roulette
+goto_if_false @ROULETE_9250
+if 
+  not Char.IsDead(26@)
+goto_if_false @ROULETE_9250
+$an = Math.RandomIntInRange(0, 3)
+if 
+  is_int_lvar_equal_to_constant 23@ == 11
+goto_if_false @ROULETE_9232
+Char.SetSayScript(26@, $no_money_b($an,3i), True, True, False)
+goto @ROULETE_9250
+
+:ROULETE_9232
+Char.SetSayScript(26@, $no_money_w($an,3i), True, True, False)
+
+:ROULETE_9250
+Audio.LoadMissionAudio(1813, 4)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @ROULETE_9292
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1085)
+
+:ROULETE_9292
+set_lvar_int_to_var_int 8@ = $game_timer
+8@ += 6000000
+
+:ROULETE_9310
+goto @ROULETE_9675
+
+:ROULETE_9317
+set_lvar_int_to_var_int 8@ = $game_timer
+10@ = 500
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @ROULETE_9659
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 6@
+goto_if_false @ROULETE_9652
+if or
+  is_int_lvar_greater_than_int_lvar 20@ > 17@
+  is_int_lvar_equal_to_int_lvar 20@ == 17@
+goto_if_false @ROULETE_9610
+Audio.LoadMissionAudio(1813, 4)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @ROULETE_9438
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1084)
+
+:ROULETE_9438
+sub_int_lvar_from_int_lvar 20@ -= 17@
+sub_int_lvar_from_int_var $total_stake_this_round -= 17@
+Player.AddScore($player1, 17@)
+set_var_int_to_lvar_int $temp_int_roulette = 17@
+$temp_int_roulette *= 26
+if 
+  is_int_var_greater_than_int_lvar $temp_int_roulette > 20@
+goto_if_false @ROULETE_9610
+$x, $y, $z = Object.GetCoordinates($chips_stack)
+$z += -0.14
+set_var_int_to_lvar_int $temp_int_roulette = 20@
+div_int_var_by_int_lvar $temp_int_roulette /= 17@
+cset_var_float_to_var_int $temp_float_1 = integer $temp_int_roulette
+$temp_float_1 *= 0.005
+add_float_var_to_float_var $z += $temp_float_1
+Object.Delete($placed_chips($i,151i))
+if 
+  20@ > 0
+goto_if_false @ROULETE_9610
+$placed_chips($i,151i) = Object.CreateNoOffset(19@, $x, $y, $z)
+
+:ROULETE_9610
+set_lvar_int_to_var_int 6@ = $game_timer
+add_int_lvar_to_int_lvar 6@ += 11@
+if 
+  11@ == 500
+goto_if_false @ROULETE_9652
+11@ = 80
+
+:ROULETE_9652
+goto @ROULETE_9675
+
+:ROULETE_9659
+set_lvar_int_to_var_int 6@ = $game_timer
+11@ = 500
+
+:ROULETE_9675
+set_var_int_to_lvar_int $spot_bets($i,151i) = 20@
+
+:ROULETE_9687
+$i += 1
+goto @ROULETE_8030
+
+:ROULETE_9701
+return 
+
+:ROULETE_9703
+if 
+  18@ == 0
+goto_if_false @ROULETE_9743
+$spot_bets[0] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[0]
+$spot_bets[0] = 0
+
+:ROULETE_9743
+if 
+  18@ == 1
+goto_if_false @ROULETE_9926
+$spot_bets[1] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[1]
+$spot_bets[37] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[37]
+$spot_bets[61] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[61]
+$spot_bets[94] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[94]
+$spot_bets[106] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[106]
+$spot_bets[128] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[128]
+$spot_bets[131] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[131]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[140] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[140]
+
+:ROULETE_9926
+if 
+  18@ == 2
+goto_if_false @ROULETE_10139
+$spot_bets[2] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[2]
+$spot_bets[37] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[37]
+$spot_bets[38] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[38]
+$spot_bets[62] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[62]
+$spot_bets[94] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[94]
+$spot_bets[106] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[106]
+$spot_bets[107] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[106]
+$spot_bets[129] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[129]
+$spot_bets[131] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[131]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[140] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[140]
+
+:ROULETE_10139
+if 
+  18@ == 3
+goto_if_false @ROULETE_10322
+$spot_bets[3] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[3]
+$spot_bets[38] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[38]
+$spot_bets[63] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[63]
+$spot_bets[94] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[94]
+$spot_bets[107] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[106]
+$spot_bets[130] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[130]
+$spot_bets[131] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[131]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[140] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[140]
+
+:ROULETE_10322
+if 
+  18@ == 4
+goto_if_false @ROULETE_10550
+$spot_bets[4] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[4]
+$spot_bets[61] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[61]
+$spot_bets[39] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[39]
+$spot_bets[64] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[64]
+$spot_bets[95] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[95]
+$spot_bets[106] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[106]
+$spot_bets[108] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[108]
+$spot_bets[128] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[128]
+$spot_bets[131] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[131]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[140] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[140]
+$spot_bets[141] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[141]
+
+:ROULETE_10550
+if 
+  18@ == 5
+goto_if_false @ROULETE_10823
+$spot_bets[5] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[5]
+$spot_bets[62] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[62]
+$spot_bets[39] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[39]
+$spot_bets[40] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[40]
+$spot_bets[65] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[65]
+$spot_bets[95] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[95]
+$spot_bets[106] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[106]
+$spot_bets[107] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[107]
+$spot_bets[108] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[108]
+$spot_bets[109] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[109]
+$spot_bets[129] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[129]
+$spot_bets[131] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[131]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[140] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[140]
+$spot_bets[141] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[141]
+
+:ROULETE_10823
+if 
+  18@ == 6
+goto_if_false @ROULETE_11051
+$spot_bets[6] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[6]
+$spot_bets[63] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[63]
+$spot_bets[40] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[40]
+$spot_bets[66] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[66]
+$spot_bets[95] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[95]
+$spot_bets[107] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[107]
+$spot_bets[109] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[109]
+$spot_bets[130] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[130]
+$spot_bets[131] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[131]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[140] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[140]
+$spot_bets[141] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[141]
+
+:ROULETE_11051
+if 
+  18@ == 7
+goto_if_false @ROULETE_11279
+$spot_bets[7] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[7]
+$spot_bets[64] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[64]
+$spot_bets[41] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[41]
+$spot_bets[67] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[67]
+$spot_bets[96] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[96]
+$spot_bets[108] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[108]
+$spot_bets[110] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[110]
+$spot_bets[128] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[128]
+$spot_bets[131] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[131]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[141] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[141]
+$spot_bets[142] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[142]
+
+:ROULETE_11279
+if 
+  18@ == 8
+goto_if_false @ROULETE_11552
+$spot_bets[8] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[8]
+$spot_bets[65] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[65]
+$spot_bets[41] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[41]
+$spot_bets[42] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[42]
+$spot_bets[68] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[68]
+$spot_bets[96] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[96]
+$spot_bets[108] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[108]
+$spot_bets[109] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[109]
+$spot_bets[110] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[110]
+$spot_bets[111] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[111]
+$spot_bets[129] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[129]
+$spot_bets[131] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[131]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[141] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[141]
+$spot_bets[142] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[142]
+
+:ROULETE_11552
+if 
+  18@ == 9
+goto_if_false @ROULETE_11780
+$spot_bets[9] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[9]
+$spot_bets[66] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[66]
+$spot_bets[42] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[42]
+$spot_bets[69] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[69]
+$spot_bets[96] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[96]
+$spot_bets[109] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[109]
+$spot_bets[111] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[111]
+$spot_bets[130] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[130]
+$spot_bets[131] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[131]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[141] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[141]
+$spot_bets[142] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[142]
+
+:ROULETE_11780
+if 
+  18@ == 10
+goto_if_false @ROULETE_12008
+$spot_bets[10] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[10]
+$spot_bets[67] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[67]
+$spot_bets[43] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[43]
+$spot_bets[70] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[70]
+$spot_bets[97] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[97]
+$spot_bets[110] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[110]
+$spot_bets[112] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[112]
+$spot_bets[128] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[128]
+$spot_bets[131] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[131]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[142] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[142]
+$spot_bets[143] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[143]
+
+:ROULETE_12008
+if 
+  18@ == 11
+goto_if_false @ROULETE_12281
+$spot_bets[11] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[11]
+$spot_bets[68] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[68]
+$spot_bets[43] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[43]
+$spot_bets[44] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[44]
+$spot_bets[71] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[71]
+$spot_bets[97] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[97]
+$spot_bets[110] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[110]
+$spot_bets[111] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[111]
+$spot_bets[112] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[112]
+$spot_bets[113] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[113]
+$spot_bets[129] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[129]
+$spot_bets[131] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[131]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[142] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[142]
+$spot_bets[143] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[143]
+
+:ROULETE_12281
+if 
+  18@ == 12
+goto_if_false @ROULETE_12509
+$spot_bets[12] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[12]
+$spot_bets[69] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[69]
+$spot_bets[44] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[44]
+$spot_bets[72] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[72]
+$spot_bets[97] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[97]
+$spot_bets[111] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[111]
+$spot_bets[113] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[113]
+$spot_bets[130] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[130]
+$spot_bets[131] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[131]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[142] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[142]
+$spot_bets[143] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[143]
+
+:ROULETE_12509
+if 
+  18@ == 13
+goto_if_false @ROULETE_12737
+$spot_bets[13] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[13]
+$spot_bets[70] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[70]
+$spot_bets[45] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[45]
+$spot_bets[73] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[73]
+$spot_bets[98] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[98]
+$spot_bets[112] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[112]
+$spot_bets[114] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[114]
+$spot_bets[128] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[128]
+$spot_bets[132] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[132]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[143] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[143]
+$spot_bets[144] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[144]
+
+:ROULETE_12737
+if 
+  18@ == 14
+goto_if_false @ROULETE_13010
+$spot_bets[14] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[14]
+$spot_bets[71] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[71]
+$spot_bets[45] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[45]
+$spot_bets[46] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[46]
+$spot_bets[74] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[74]
+$spot_bets[98] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[98]
+$spot_bets[112] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[112]
+$spot_bets[113] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[113]
+$spot_bets[114] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[114]
+$spot_bets[115] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[115]
+$spot_bets[129] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[129]
+$spot_bets[132] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[132]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[143] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[143]
+$spot_bets[144] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[144]
+
+:ROULETE_13010
+if 
+  18@ == 15
+goto_if_false @ROULETE_13238
+$spot_bets[15] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[15]
+$spot_bets[72] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[72]
+$spot_bets[46] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[46]
+$spot_bets[75] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[75]
+$spot_bets[98] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[98]
+$spot_bets[113] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[113]
+$spot_bets[115] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[115]
+$spot_bets[130] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[130]
+$spot_bets[132] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[132]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[143] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[143]
+$spot_bets[144] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[144]
+
+:ROULETE_13238
+if 
+  18@ == 16
+goto_if_false @ROULETE_13466
+$spot_bets[16] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[16]
+$spot_bets[73] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[73]
+$spot_bets[47] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[47]
+$spot_bets[76] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[76]
+$spot_bets[99] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[99]
+$spot_bets[114] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[114]
+$spot_bets[116] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[116]
+$spot_bets[128] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[128]
+$spot_bets[132] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[132]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[144] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[144]
+$spot_bets[145] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[145]
+
+:ROULETE_13466
+if 
+  18@ == 17
+goto_if_false @ROULETE_13739
+$spot_bets[17] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[17]
+$spot_bets[74] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[74]
+$spot_bets[47] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[47]
+$spot_bets[48] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[48]
+$spot_bets[77] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[77]
+$spot_bets[99] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[99]
+$spot_bets[114] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[114]
+$spot_bets[115] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[115]
+$spot_bets[116] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[116]
+$spot_bets[117] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[117]
+$spot_bets[129] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[129]
+$spot_bets[132] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[132]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[144] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[144]
+$spot_bets[145] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[145]
+
+:ROULETE_13739
+if 
+  18@ == 18
+goto_if_false @ROULETE_13967
+$spot_bets[18] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[18]
+$spot_bets[75] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[75]
+$spot_bets[48] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[48]
+$spot_bets[78] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[78]
+$spot_bets[99] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[99]
+$spot_bets[115] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[115]
+$spot_bets[117] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[117]
+$spot_bets[130] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[130]
+$spot_bets[132] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[132]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[134] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[134]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[144] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[144]
+$spot_bets[145] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[145]
+
+:ROULETE_13967
+if 
+  18@ == 19
+goto_if_false @ROULETE_14195
+$spot_bets[19] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[19]
+$spot_bets[76] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[76]
+$spot_bets[49] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[49]
+$spot_bets[79] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[79]
+$spot_bets[100] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[100]
+$spot_bets[116] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[116]
+$spot_bets[118] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[118]
+$spot_bets[128] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[128]
+$spot_bets[132] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[132]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[145] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[145]
+$spot_bets[146] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[146]
+
+:ROULETE_14195
+if 
+  18@ == 20
+goto_if_false @ROULETE_14468
+$spot_bets[20] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[20]
+$spot_bets[77] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[77]
+$spot_bets[49] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[49]
+$spot_bets[50] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[50]
+$spot_bets[80] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[80]
+$spot_bets[100] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[100]
+$spot_bets[116] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[116]
+$spot_bets[117] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[117]
+$spot_bets[118] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[118]
+$spot_bets[119] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[119]
+$spot_bets[129] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[129]
+$spot_bets[132] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[132]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[145] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[145]
+$spot_bets[146] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[146]
+
+:ROULETE_14468
+if 
+  18@ == 21
+goto_if_false @ROULETE_14696
+$spot_bets[21] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[21]
+$spot_bets[78] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[78]
+$spot_bets[50] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[50]
+$spot_bets[81] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[81]
+$spot_bets[100] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[100]
+$spot_bets[117] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[117]
+$spot_bets[119] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[119]
+$spot_bets[130] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[130]
+$spot_bets[132] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[132]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[145] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[145]
+$spot_bets[146] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[146]
+
+:ROULETE_14696
+if 
+  18@ == 22
+goto_if_false @ROULETE_14924
+$spot_bets[22] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[22]
+$spot_bets[79] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[79]
+$spot_bets[51] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[51]
+$spot_bets[82] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[82]
+$spot_bets[101] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[101]
+$spot_bets[118] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[118]
+$spot_bets[120] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[120]
+$spot_bets[128] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[128]
+$spot_bets[132] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[132]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[146] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[146]
+$spot_bets[147] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[147]
+
+:ROULETE_14924
+if 
+  18@ == 23
+goto_if_false @ROULETE_15197
+$spot_bets[23] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[23]
+$spot_bets[80] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[80]
+$spot_bets[51] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[51]
+$spot_bets[52] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[52]
+$spot_bets[83] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[83]
+$spot_bets[101] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[101]
+$spot_bets[118] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[118]
+$spot_bets[119] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[119]
+$spot_bets[120] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[120]
+$spot_bets[121] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[121]
+$spot_bets[129] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[129]
+$spot_bets[132] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[132]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[146] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[146]
+$spot_bets[147] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[147]
+
+:ROULETE_15197
+if 
+  18@ == 24
+goto_if_false @ROULETE_15425
+$spot_bets[24] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[24]
+$spot_bets[81] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[81]
+$spot_bets[52] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[52]
+$spot_bets[84] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[84]
+$spot_bets[101] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[101]
+$spot_bets[119] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[119]
+$spot_bets[121] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[121]
+$spot_bets[130] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[130]
+$spot_bets[132] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[132]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[146] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[146]
+$spot_bets[147] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[147]
+
+:ROULETE_15425
+if 
+  18@ == 25
+goto_if_false @ROULETE_15653
+$spot_bets[25] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[25]
+$spot_bets[82] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[82]
+$spot_bets[53] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[53]
+$spot_bets[85] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[85]
+$spot_bets[102] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[102]
+$spot_bets[120] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[120]
+$spot_bets[122] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[122]
+$spot_bets[128] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[128]
+$spot_bets[133] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[133]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[147] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[147]
+$spot_bets[148] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[148]
+
+:ROULETE_15653
+if 
+  18@ == 26
+goto_if_false @ROULETE_15926
+$spot_bets[26] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[26]
+$spot_bets[83] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[83]
+$spot_bets[53] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[53]
+$spot_bets[54] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[54]
+$spot_bets[86] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[86]
+$spot_bets[102] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[102]
+$spot_bets[120] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[120]
+$spot_bets[121] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[121]
+$spot_bets[122] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[122]
+$spot_bets[123] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[123]
+$spot_bets[129] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[129]
+$spot_bets[133] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[133]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[147] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[147]
+$spot_bets[148] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[148]
+
+:ROULETE_15926
+if 
+  18@ == 27
+goto_if_false @ROULETE_16154
+$spot_bets[27] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[27]
+$spot_bets[84] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[84]
+$spot_bets[54] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[54]
+$spot_bets[87] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[87]
+$spot_bets[102] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[102]
+$spot_bets[121] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[121]
+$spot_bets[123] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[123]
+$spot_bets[130] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[130]
+$spot_bets[133] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[133]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[147] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[147]
+$spot_bets[148] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[148]
+
+:ROULETE_16154
+if 
+  18@ == 28
+goto_if_false @ROULETE_16382
+$spot_bets[28] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[28]
+$spot_bets[85] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[85]
+$spot_bets[55] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[55]
+$spot_bets[88] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[88]
+$spot_bets[103] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[103]
+$spot_bets[122] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[122]
+$spot_bets[124] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[124]
+$spot_bets[128] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[128]
+$spot_bets[133] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[133]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[148] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[148]
+$spot_bets[149] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[149]
+
+:ROULETE_16382
+if 
+  18@ == 29
+goto_if_false @ROULETE_16655
+$spot_bets[29] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[29]
+$spot_bets[86] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[86]
+$spot_bets[55] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[55]
+$spot_bets[56] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[56]
+$spot_bets[89] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[89]
+$spot_bets[103] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[103]
+$spot_bets[122] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[122]
+$spot_bets[123] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[123]
+$spot_bets[124] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[124]
+$spot_bets[125] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[125]
+$spot_bets[129] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[129]
+$spot_bets[133] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[133]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[148] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[148]
+$spot_bets[149] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[149]
+
+:ROULETE_16655
+if 
+  18@ == 30
+goto_if_false @ROULETE_16883
+$spot_bets[30] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[30]
+$spot_bets[87] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[87]
+$spot_bets[56] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[56]
+$spot_bets[90] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[90]
+$spot_bets[103] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[103]
+$spot_bets[123] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[123]
+$spot_bets[125] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[125]
+$spot_bets[130] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[130]
+$spot_bets[133] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[133]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[148] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[148]
+$spot_bets[149] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[149]
+
+:ROULETE_16883
+if 
+  18@ == 31
+goto_if_false @ROULETE_17111
+$spot_bets[31] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[31]
+$spot_bets[88] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[88]
+$spot_bets[57] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[57]
+$spot_bets[91] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[91]
+$spot_bets[104] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[104]
+$spot_bets[124] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[124]
+$spot_bets[126] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[126]
+$spot_bets[128] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[128]
+$spot_bets[133] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[133]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[149] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[149]
+$spot_bets[150] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[150]
+
+:ROULETE_17111
+if 
+  18@ == 32
+goto_if_false @ROULETE_17384
+$spot_bets[32] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[32]
+$spot_bets[89] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[89]
+$spot_bets[57] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[57]
+$spot_bets[58] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[58]
+$spot_bets[92] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[92]
+$spot_bets[104] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[104]
+$spot_bets[124] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[124]
+$spot_bets[125] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[125]
+$spot_bets[126] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[126]
+$spot_bets[127] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[127]
+$spot_bets[129] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[129]
+$spot_bets[133] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[133]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[149] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[149]
+$spot_bets[150] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[150]
+
+:ROULETE_17384
+if 
+  18@ == 33
+goto_if_false @ROULETE_17612
+$spot_bets[33] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[33]
+$spot_bets[90] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[90]
+$spot_bets[58] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[58]
+$spot_bets[93] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[93]
+$spot_bets[104] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[104]
+$spot_bets[125] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[125]
+$spot_bets[127] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[127]
+$spot_bets[130] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[130]
+$spot_bets[133] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[133]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[149] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[149]
+$spot_bets[150] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[150]
+
+:ROULETE_17612
+if 
+  18@ == 34
+goto_if_false @ROULETE_17795
+$spot_bets[34] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[34]
+$spot_bets[91] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[91]
+$spot_bets[59] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[59]
+$spot_bets[105] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[105]
+$spot_bets[126] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[126]
+$spot_bets[128] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[128]
+$spot_bets[133] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[133]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[150] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[150]
+
+:ROULETE_17795
+if 
+  18@ == 35
+goto_if_false @ROULETE_18008
+$spot_bets[35] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[35]
+$spot_bets[92] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[92]
+$spot_bets[59] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[59]
+$spot_bets[60] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[60]
+$spot_bets[105] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[105]
+$spot_bets[126] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[126]
+$spot_bets[127] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[127]
+$spot_bets[129] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[129]
+$spot_bets[133] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[133]
+$spot_bets[137] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[137]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[139] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[139]
+$spot_bets[150] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[150]
+
+:ROULETE_18008
+if 
+  18@ == 36
+goto_if_false @ROULETE_18191
+$spot_bets[36] *= 36
+add_int_var_to_int_var $winnings_this_round += $spot_bets[36]
+$spot_bets[93] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[93]
+$spot_bets[60] *= 18
+add_int_var_to_int_var $winnings_this_round += $spot_bets[60]
+$spot_bets[105] *= 12
+add_int_var_to_int_var $winnings_this_round += $spot_bets[105]
+$spot_bets[127] *= 9
+add_int_var_to_int_var $winnings_this_round += $spot_bets[127]
+$spot_bets[130] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[130]
+$spot_bets[133] *= 3
+add_int_var_to_int_var $winnings_this_round += $spot_bets[133]
+$spot_bets[136] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[136]
+$spot_bets[135] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[135]
+$spot_bets[138] *= 2
+add_int_var_to_int_var $winnings_this_round += $spot_bets[138]
+$spot_bets[150] *= 6
+add_int_var_to_int_var $winnings_this_round += $spot_bets[150]
+
+:ROULETE_18191
+return 
+
+:ROULETE_18193
+Text.SetColor(180, 180, 180, 255)
+Text.SetScale($rou_x_scale, $rou_y_scale)
+Text.SetRightJustify(False)
+Text.SetJustify(False)
+Text.SetCenter(False)
+Text.SetWrapX(640.0)
+Text.SetProportional(True)
+Text.SetBackground(False)
+return 
+terminate_this_script 
+

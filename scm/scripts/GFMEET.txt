@@ -1,0 +1,1090 @@
+//-------------External script 24 (GF_MEETING)---------------
+
+:GFMEET
+script_name 'GFMEET'
+5@ = 0
+6@ = 0
+7@ = 0
+if 
+  7@ > 0
+goto_if_false @GFMEET_106
+15@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+17@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+18@ = Blip.AddForChar(15@)
+
+:GFMEET_106
+gosub @GFMEET_3912
+gosub @GFMEET_2883
+
+:GFMEET_120
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFMEET_325
+if and
+  not Char.IsDead(15@)
+  Char.LocateAnyMeans3D($scplayer, 0, 1@, 2@, 3@, 100.0, 100.0, 20.0)
+goto_if_false @GFMEET_311
+if 
+  Char.HasBeenDamagedByChar(15@, $scplayer)
+goto_if_false @GFMEET_227
+set_local_var_bit_const 7@ bit 2
+5@ = 6
+6@ = 0
+
+:GFMEET_227
+if 
+  8@ == 1
+goto_if_false @GFMEET_290
+if or
+  Char.IsDead(17@)
+  Char.HasBeenDamagedByChar(17@, $scplayer)
+goto_if_false @GFMEET_290
+set_local_var_bit_const 7@ bit 2
+5@ = 6
+6@ = 0
+
+:GFMEET_290
+gosub @GFMEET_339
+gosub @GFMEET_4873
+goto @GFMEET_318
+
+:GFMEET_311
+gosub @GFMEET_5627
+
+:GFMEET_318
+goto @GFMEET_332
+
+:GFMEET_325
+gosub @GFMEET_5627
+
+:GFMEET_332
+goto @GFMEET_120
+
+:GFMEET_339
+switch_start 5@ total_jumps 6 default_jump 0 @GFMEET_486 jumps 1 @GFMEET_402 2 @GFMEET_416 3 @GFMEET_430 4 @GFMEET_444 5 @GFMEET_458 6 @GFMEET_472 -1 @GFMEET_486
+
+:GFMEET_402
+gosub @GFMEET_488
+goto @GFMEET_486
+
+:GFMEET_416
+gosub @GFMEET_822
+goto @GFMEET_486
+
+:GFMEET_430
+gosub @GFMEET_1353
+goto @GFMEET_486
+
+:GFMEET_444
+gosub @GFMEET_1710
+goto @GFMEET_486
+
+:GFMEET_458
+gosub @GFMEET_1989
+goto @GFMEET_486
+
+:GFMEET_472
+gosub @GFMEET_2399
+goto @GFMEET_486
+
+:GFMEET_486
+return 
+
+:GFMEET_488
+switch_start 6@ total_jumps 1 default_jump 0 @GFMEET_820 jumps 0 @GFMEET_551 -1 @GFMEET_820 -1 @GFMEET_820 -1 @GFMEET_820 -1 @GFMEET_820 -1 @GFMEET_820 -1 @GFMEET_820
+
+:GFMEET_551
+if 
+  Conversation.IsPlayerInPosition(15@)
+goto_if_false @GFMEET_813
+if 
+  not is_global_var_bit_set_lvar $iActiveGF bit 0@
+goto_if_false @GFMEET_742
+if 
+  Char.LocateOnFootChar2D($scplayer, 15@, 2.0, 2.0, False)
+goto_if_false @GFMEET_742
+gosub @GFMEET_3967
+if 
+  13@ == 1
+goto_if_false @GFMEET_703
+Conversation.Enable(15@, True)
+if 
+  Conversation.IsAtNode(15@, 19@s)
+goto_if_false @GFMEET_689
+5@ = 2
+6@ = 0
+goto @GFMEET_696
+
+:GFMEET_689
+Conversation.Enable(15@, False)
+
+:GFMEET_696
+goto @GFMEET_742
+
+:GFMEET_703
+if 
+  not is_local_var_bit_set_const 7@ bit 1
+goto_if_false @GFMEET_742
+5@ = 3
+6@ = 0
+Conversation.Enable(15@, False)
+
+:GFMEET_742
+13@ = Char.GetScriptTaskStatus(15@, 1655)
+14@ = Char.GetScriptTaskStatus(17@, 1655)
+if and
+  is_int_lvar_equal_to_constant 13@ == 7
+  is_int_lvar_equal_to_constant 14@ == 7
+goto_if_false @GFMEET_813
+Task.ChatWithChar(15@, 17@, True, 1)
+Task.ChatWithChar(17@, 15@, False, 1)
+
+:GFMEET_813
+goto @GFMEET_820
+
+:GFMEET_820
+return 
+
+:GFMEET_822
+switch_start 6@ total_jumps 4 default_jump 0 @GFMEET_1351 jumps 0 @GFMEET_885 1 @GFMEET_973 2 @GFMEET_1073 3 @GFMEET_1304 -1 @GFMEET_1351 -1 @GFMEET_1351 -1 @GFMEET_1351
+
+:GFMEET_885
+TIMERB = 0
+Task.TurnCharToFaceChar(15@, $scplayer)
+if and
+  8@ == 1
+  not Char.IsDead(17@)
+goto_if_false @GFMEET_959
+13@ = Char.GetScriptTaskStatus(17@, 1466)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @GFMEET_959
+Task.StandStill(17@, -2)
+
+:GFMEET_959
+6@ += 1
+goto @GFMEET_1351
+
+:GFMEET_973
+13@ = Char.GetScriptTaskStatus(15@, 1593)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @GFMEET_1066
+Task.LookAtChar(15@, $scplayer, -1)
+13@ = Char.GetScriptTaskStatus(15@, 1466)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @GFMEET_1048
+Task.StandStill(15@, -2)
+
+:GFMEET_1048
+Text.PrintHelpForever('TALK_1')
+6@ += 1
+
+:GFMEET_1066
+goto @GFMEET_1351
+
+:GFMEET_1073
+if 
+  Conversation.IsAtNode(15@, 23@s)
+goto_if_false @GFMEET_1175
+Text.ClearHelp
+if 
+  TIMERB > 9000
+goto_if_false @GFMEET_1175
+$iGFLikesPlayer(0@,6i) = 0
+clear_global_var_bit_lvar $iActiveGF bit 0@
+if 
+  Blip.DoesExist(18@)
+goto_if_false @GFMEET_1153
+Blip.Remove(18@)
+
+:GFMEET_1153
+Text.ClearHelp
+Char.ClearLookAt(15@)
+6@ = 0
+set_lvar_int_to_lvar_int 5@ = 8@
+
+:GFMEET_1175
+if 
+  Conversation.IsAtNode(15@, 21@s)
+goto_if_false @GFMEET_1251
+Text.ClearHelp
+if 
+  not is_global_var_bit_set_lvar $iActiveGF bit 0@
+goto_if_false @GFMEET_1223
+set_global_var_bit_lvar $iActiveGF bit 0@
+
+:GFMEET_1223
+if 
+  Blip.DoesExist(18@)
+goto_if_false @GFMEET_1244
+Blip.Remove(18@)
+
+:GFMEET_1244
+6@ += 1
+
+:GFMEET_1251
+if and
+  not Conversation.IsPlayerInPosition(15@)
+  TIMERB > 9000
+goto_if_false @GFMEET_1297
+Text.ClearHelp
+Char.ClearLookAt(15@)
+6@ = 0
+set_lvar_int_to_lvar_int 5@ = 8@
+
+:GFMEET_1297
+goto @GFMEET_1351
+
+:GFMEET_1304
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @GFMEET_1344
+gosub @GFMEET_3773
+Char.ClearLookAt(15@)
+6@ = 0
+set_lvar_int_to_lvar_int 5@ = 8@
+
+:GFMEET_1344
+goto @GFMEET_1351
+
+:GFMEET_1351
+return 
+
+:GFMEET_1353
+switch_start 6@ total_jumps 4 default_jump 0 @GFMEET_1708 jumps 0 @GFMEET_1416 1 @GFMEET_1504 2 @GFMEET_1593 3 @GFMEET_1655 -1 @GFMEET_1708 -1 @GFMEET_1708 -1 @GFMEET_1708
+
+:GFMEET_1416
+TIMERB = 0
+Task.TurnCharToFaceChar(15@, $scplayer)
+if and
+  8@ == 1
+  not Char.IsDead(17@)
+goto_if_false @GFMEET_1490
+13@ = Char.GetScriptTaskStatus(17@, 1466)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @GFMEET_1490
+Task.StandStill(17@, -2)
+
+:GFMEET_1490
+6@ += 1
+goto @GFMEET_1708
+
+:GFMEET_1504
+13@ = Char.GetScriptTaskStatus(15@, 1593)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @GFMEET_1586
+Task.LookAtChar(15@, $scplayer, -1)
+13@ = Char.GetScriptTaskStatus(15@, 1466)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @GFMEET_1579
+Task.StandStill(15@, -2)
+
+:GFMEET_1579
+6@ += 1
+
+:GFMEET_1586
+goto @GFMEET_1708
+
+:GFMEET_1593
+if 
+  is_local_var_bit_set_const 7@ bit 3
+goto_if_false @GFMEET_1633
+set_var_int_to_constant $iGFSayContext = 317
+clear_local_var_bit_const 7@ bit 3
+goto @GFMEET_1641
+
+:GFMEET_1633
+set_var_int_to_constant $iGFSayContext = 316
+
+:GFMEET_1641
+6@ += 1
+goto @GFMEET_1708
+
+:GFMEET_1655
+if 
+  TIMERB > 6000
+goto_if_false @GFMEET_1701
+Char.ClearLookAt(15@)
+set_local_var_bit_const 7@ bit 1
+6@ = 0
+set_lvar_int_to_lvar_int 5@ = 8@
+
+:GFMEET_1701
+goto @GFMEET_1708
+
+:GFMEET_1708
+return 
+
+:GFMEET_1710
+switch_start 6@ total_jumps 1 default_jump 0 @GFMEET_1987 jumps 0 @GFMEET_1773 -1 @GFMEET_1987 -1 @GFMEET_1987 -1 @GFMEET_1987 -1 @GFMEET_1987 -1 @GFMEET_1987 -1 @GFMEET_1987
+
+:GFMEET_1773
+if 
+  Char.LocateAnyMeansChar2D($scplayer, 15@, 3.0, 3.0, False)
+goto_if_false @GFMEET_1929
+gosub @GFMEET_3967
+if 
+  13@ == 1
+goto_if_false @GFMEET_1890
+Conversation.Enable(15@, True)
+if 
+  Conversation.IsAtNode(15@, 19@s)
+goto_if_false @GFMEET_1876
+5@ = 2
+6@ = 0
+goto @GFMEET_1883
+
+:GFMEET_1876
+Conversation.Enable(15@, False)
+
+:GFMEET_1883
+goto @GFMEET_1929
+
+:GFMEET_1890
+if 
+  not is_local_var_bit_set_const 7@ bit 1
+goto_if_false @GFMEET_1929
+5@ = 3
+6@ = 0
+Conversation.Enable(15@, False)
+
+:GFMEET_1929
+13@ = Char.GetScriptTaskStatus(15@, 1640)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @GFMEET_1980
+Task.ShootAtCoord(15@, 264.0, -155.0, 5.0, -1)
+
+:GFMEET_1980
+goto @GFMEET_1987
+
+:GFMEET_1987
+return 
+
+:GFMEET_1989
+switch_start 6@ total_jumps 3 default_jump 0 @GFMEET_2397 jumps 0 @GFMEET_2052 1 @GFMEET_2133 2 @GFMEET_2323 -1 @GFMEET_2397 -1 @GFMEET_2397 -1 @GFMEET_2397 -1 @GFMEET_2397
+
+:GFMEET_2052
+13@ = Char.GetScriptTaskStatus(15@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @GFMEET_2126
+Task.PlayAnim(15@, "TAI_CHI_IN", "PARK", 4.0, False, False, False, False, -1)
+6@ += 1
+
+:GFMEET_2126
+goto @GFMEET_2397
+
+:GFMEET_2133
+13@ = Char.GetScriptTaskStatus(15@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @GFMEET_2205
+Task.PlayAnim(15@, "TAI_CHI_LOOP", "PARK", 4.0, False, False, False, False, 1215752191)
+
+:GFMEET_2205
+if and
+  Conversation.IsPlayerInPosition(15@)
+  Char.LocateAnyMeansChar2D($scplayer, 15@, 2.0, 2.0, False)
+  Conversation.IsAtNode(15@, 19@s)
+  not is_local_var_bit_set_const 7@ bit 1
+goto_if_false @GFMEET_2309
+Task.PlayAnim(15@, "TAI_CHI_OUT", "PARK", 4.0, False, False, False, False, -1)
+6@ += 1
+goto @GFMEET_2316
+
+:GFMEET_2309
+Conversation.Enable(15@, False)
+
+:GFMEET_2316
+goto @GFMEET_2397
+
+:GFMEET_2323
+gosub @GFMEET_3967
+if 
+  13@ == 1
+goto_if_false @GFMEET_2376
+Conversation.Enable(15@, True)
+5@ = 2
+6@ = 0
+goto @GFMEET_2390
+
+:GFMEET_2376
+5@ = 3
+6@ = 0
+
+:GFMEET_2390
+goto @GFMEET_2397
+
+:GFMEET_2397
+return 
+
+:GFMEET_2399
+switch_start 6@ total_jumps 2 default_jump 0 @GFMEET_2881 jumps 0 @GFMEET_2462 1 @GFMEET_2769 -1 @GFMEET_2881 -1 @GFMEET_2881 -1 @GFMEET_2881 -1 @GFMEET_2881 -1 @GFMEET_2881
+
+:GFMEET_2462
+if 
+  is_local_var_bit_set_const 7@ bit 2
+goto_if_false @GFMEET_2762
+$iGFLikesPlayer(0@,6i) = 0
+if 
+  0@ == 1
+goto_if_false @GFMEET_2526
+Char.SetDecisionMaker(15@, 65543)
+goto @GFMEET_2536
+
+:GFMEET_2526
+Char.SetDecisionMaker(15@, 65539)
+
+:GFMEET_2536
+if 
+  not Char.IsDead(17@)
+goto_if_false @GFMEET_2562
+Char.SetDecisionMaker(17@, 65543)
+
+:GFMEET_2562
+if 
+  Char.HasGotWeapon(15@, WeaponType.Pistol)
+goto_if_false @GFMEET_2631
+Char.SetCurrentWeapon(15@, WeaponType.Pistol)
+13@ = Char.GetScriptTaskStatus(15@, 1506)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @GFMEET_2624
+Task.KillCharOnFoot(15@, $scplayer)
+
+:GFMEET_2624
+goto @GFMEET_2667
+
+:GFMEET_2631
+13@ = Char.GetScriptTaskStatus(15@, 1477)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @GFMEET_2667
+Task.Duck(15@, -2)
+
+:GFMEET_2667
+if 
+  Blip.DoesExist(18@)
+goto_if_false @GFMEET_2688
+Blip.Remove(18@)
+
+:GFMEET_2688
+13@ = Clock.GetCurrentDayOfWeek()
+13@ += 1
+if 
+  13@ > 7
+goto_if_false @GFMEET_2725
+13@ = 1
+
+:GFMEET_2725
+13@ += 22
+set_global_var_bit_lvar $iGFDiaryOfBusyHours(0@,6i) bit 13@
+set_global_var_bit_const $iGFDiaryOfBusyHours(0@,6i) bit 31
+6@ += 1
+
+:GFMEET_2762
+goto @GFMEET_2881
+
+:GFMEET_2769
+if 
+  Char.HasGotWeapon(15@, WeaponType.Pistol)
+goto_if_false @GFMEET_2838
+Char.SetCurrentWeapon(15@, WeaponType.Pistol)
+13@ = Char.GetScriptTaskStatus(15@, 1506)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @GFMEET_2831
+Task.KillCharOnFoot(15@, $scplayer)
+
+:GFMEET_2831
+goto @GFMEET_2874
+
+:GFMEET_2838
+13@ = Char.GetScriptTaskStatus(15@, 1477)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @GFMEET_2874
+Task.Duck(15@, -2)
+
+:GFMEET_2874
+goto @GFMEET_2881
+
+:GFMEET_2881
+return 
+
+:GFMEET_2883
+switch_start 0@ total_jumps 4 default_jump 0 @GFMEET_3401 jumps 1 @GFMEET_2946 2 @GFMEET_3042 3 @GFMEET_3170 4 @GFMEET_3298 -1 @GFMEET_3401 -1 @GFMEET_3401 -1 @GFMEET_3401
+
+:GFMEET_2946
+if 
+  not Streaming.HasModelLoaded(192)
+goto_if_false @GFMEET_2978
+Streaming.RequestModel(192)
+wait 0
+goto @GFMEET_2946
+
+:GFMEET_2978
+set_lvar_int_to_constant 13@ = 192
+set_lvar_text_label 19@s = 'GF_1A'
+set_lvar_text_label 21@s = 'GF_1C'
+set_lvar_text_label 23@s = 'GF_1B'
+8@ = 1
+goto @GFMEET_3401
+
+:GFMEET_3042
+if 
+  not Streaming.HasModelLoaded(191)
+goto_if_false @GFMEET_3074
+Streaming.RequestModel(191)
+wait 0
+goto @GFMEET_3042
+
+:GFMEET_3074
+if 
+  not Streaming.HasModelLoaded(346)
+goto_if_false @GFMEET_3106
+Streaming.RequestModel(346)
+wait 0
+goto @GFMEET_3074
+
+:GFMEET_3106
+set_lvar_int_to_constant 13@ = 191
+set_lvar_text_label 19@s = 'GF_2A'
+set_lvar_text_label 21@s = 'GF_2C'
+set_lvar_text_label 23@s = 'GF_2B'
+8@ = 4
+goto @GFMEET_3401
+
+:GFMEET_3170
+if 
+  not Streaming.HasModelLoaded(190)
+goto_if_false @GFMEET_3202
+Streaming.RequestModel(190)
+wait 0
+goto @GFMEET_3170
+
+:GFMEET_3202
+if 
+  not Streaming.HasModelLoaded(346)
+goto_if_false @GFMEET_3234
+Streaming.RequestModel(346)
+wait 0
+goto @GFMEET_3202
+
+:GFMEET_3234
+set_lvar_int_to_constant 13@ = 190
+set_lvar_text_label 19@s = 'GF_3A'
+set_lvar_text_label 21@s = 'GF_3C'
+set_lvar_text_label 23@s = 'GF_3B'
+8@ = 1
+goto @GFMEET_3401
+
+:GFMEET_3298
+if 
+  not Streaming.HasModelLoaded(193)
+goto_if_false @GFMEET_3330
+Streaming.RequestModel(193)
+wait 0
+goto @GFMEET_3298
+
+:GFMEET_3330
+set_lvar_int_to_constant 13@ = 193
+set_lvar_text_label 19@s = 'GF_4A'
+set_lvar_text_label 21@s = 'GF_4C'
+set_lvar_text_label 23@s = 'GF_4B'
+8@ = 5
+6@ = 0
+goto @GFMEET_3401
+
+:GFMEET_3401
+15@ = Char.Create(5, 13@, 1@, 2@, 3@)
+Char.SetHeading(15@, 4@)
+if 
+  0@ == 2
+goto_if_false @GFMEET_3465
+Char.GiveWeapon(15@, WeaponType.Pistol, 999999999)
+Char.SetAccuracy(15@, 100)
+
+:GFMEET_3465
+if 
+  0@ == 3
+goto_if_false @GFMEET_3509
+Char.GiveWeapon(15@, WeaponType.Pistol, 999999999)
+Char.SetCurrentWeapon(15@, WeaponType.Unarmed)
+Char.SetAccuracy(15@, 100)
+
+:GFMEET_3509
+Char.SetStayInSamePlace(15@, True)
+Char.SetSuffersCriticalHits(15@, False)
+Char.SetNeverTargeted(15@, True)
+Char.SetProofs(15@, False, False, True, True, False)
+Char.SetHealth(15@, 200)
+Task.StandStill(15@, -1)
+Char.SetKeepTask(15@, True)
+Conversation.StartSettingUp(15@)
+Conversation.SetUpNodeWithSpeech(19@s, 21@s, 23@s, 318, 249, 250)
+Conversation.SetUpEndNodeWithSpeech(21@s, 320)
+Conversation.SetUpEndNodeWithSpeech(23@s, 319)
+Conversation.FinishSettingUp
+Conversation.Enable(15@, False)
+18@ = Blip.AddForChar(15@)
+Blip.SetAsFriendly(18@, True)
+Blip.ChangeDisplay(18@, BlipDisplay.MarkerOnly)
+if 
+  8@ == 1
+goto_if_false @GFMEET_3756
+9@ = Char.GetOffsetInWorldCoords(10@, 11@, 15@, 0.5, 1.0, 0.0)
+11@ = World.GetGroundZFor3DCoord(9@, 10@, 11@)
+17@ = Char.CreateRandom(9@, 10@, 11@)
+4@ += 180.0
+Char.SetHeading(17@, 4@)
+Task.ChatWithChar(15@, 17@, True, 1)
+Task.ChatWithChar(17@, 15@, False, 1)
+
+:GFMEET_3756
+set_lvar_int_to_lvar_int 5@ = 8@
+6@ = 0
+return 
+
+:GFMEET_3773
+Text.ClearHelp
+switch_start 0@ total_jumps 4 default_jump 0 @GFMEET_3910 jumps 1 @GFMEET_3838 2 @GFMEET_3856 3 @GFMEET_3874 4 @GFMEET_3892 -1 @GFMEET_3910 -1 @GFMEET_3910 -1 @GFMEET_3910
+
+:GFMEET_3838
+Text.PrintHelp('GF_H001')
+goto @GFMEET_3910
+
+:GFMEET_3856
+Text.PrintHelp('GF_H002')
+goto @GFMEET_3910
+
+:GFMEET_3874
+Text.PrintHelp('GF_H003')
+goto @GFMEET_3910
+
+:GFMEET_3892
+Text.PrintHelp('GF_H004')
+goto @GFMEET_3910
+
+:GFMEET_3910
+return 
+
+:GFMEET_3912
+Streaming.RequestAnimation("PARK")
+
+:GFMEET_3920
+wait 0
+if 
+  Streaming.HasAnimationLoaded("PARK")
+goto_if_false @GFMEET_3952
+return 
+goto @GFMEET_3967
+
+:GFMEET_3952
+Streaming.RequestAnimation("PARK")
+goto @GFMEET_3920
+
+:GFMEET_3967
+13@ = 0
+13@ = Stat.GetInt(25)
+13@ /= 10
+14@ = Stat.GetInt(21)
+14@ /= 10
+14@ /= 2
+if 
+  14@ >= 25
+goto_if_false @GFMEET_4093
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits(0@,6i) bit 2
+goto_if_false @GFMEET_4064
+add_int_lvar_to_int_lvar 13@ += 14@
+goto @GFMEET_4086
+
+:GFMEET_4064
+sub_int_lvar_from_int_lvar 13@ -= 14@
+set_local_var_bit_const 7@ bit 3
+set_local_var_bit_const 7@ bit 11
+
+:GFMEET_4086
+goto @GFMEET_4199
+
+:GFMEET_4093
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits(0@,6i) bit 2
+goto_if_false @GFMEET_4144
+sub_int_lvar_from_int_lvar 13@ -= 14@
+set_local_var_bit_const 7@ bit 3
+set_local_var_bit_const 7@ bit 10
+goto @GFMEET_4199
+
+:GFMEET_4144
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits(0@,6i) bit 3
+goto_if_false @GFMEET_4199
+if 
+  14@ == 0
+goto_if_false @GFMEET_4191
+14@ = 5
+
+:GFMEET_4191
+add_int_lvar_to_int_lvar 13@ += 14@
+
+:GFMEET_4199
+14@ = Stat.GetInt(23)
+14@ /= 10
+14@ /= 2
+if 
+  14@ >= 20
+goto_if_false @GFMEET_4326
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits(0@,6i) bit 1
+goto_if_false @GFMEET_4275
+add_int_lvar_to_int_lvar 13@ += 14@
+goto @GFMEET_4319
+
+:GFMEET_4275
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits(0@,6i) bit 3
+goto_if_false @GFMEET_4319
+sub_int_lvar_from_int_lvar 13@ -= 14@
+set_local_var_bit_const 7@ bit 3
+set_local_var_bit_const 7@ bit 12
+
+:GFMEET_4319
+goto @GFMEET_4432
+
+:GFMEET_4326
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits(0@,6i) bit 1
+goto_if_false @GFMEET_4377
+sub_int_lvar_from_int_lvar 13@ -= 14@
+set_local_var_bit_const 7@ bit 3
+set_local_var_bit_const 7@ bit 11
+goto @GFMEET_4432
+
+:GFMEET_4377
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits(0@,6i) bit 3
+goto_if_false @GFMEET_4432
+if 
+  14@ == 0
+goto_if_false @GFMEET_4424
+14@ = 5
+
+:GFMEET_4424
+add_int_lvar_to_int_lvar 13@ += 14@
+
+:GFMEET_4432
+if 
+  is_int_lvar_greater_or_equal_to_int_var 13@ >= $iGFDesiredSexAppeal(0@,6i)
+goto_if_false @GFMEET_4487
+$iGFLikesPlayer(0@,6i) = 15
+gosub @GFMEET_4496
+13@ = 1
+goto @GFMEET_4494
+
+:GFMEET_4487
+13@ = -1
+
+:GFMEET_4494
+return 
+
+:GFMEET_4496
+switch_start 0@ total_jumps 6 default_jump 0 @GFMEET_4871 jumps 0 @GFMEET_4559 1 @GFMEET_4611 2 @GFMEET_4663 3 @GFMEET_4715 4 @GFMEET_4767 5 @GFMEET_4819 -1 @GFMEET_4871
+
+:GFMEET_4559
+if 
+  $iGFLikesPlayer(0@,6i) > 100
+goto_if_false @GFMEET_4592
+$iGFLikesPlayer(0@,6i) = 100
+
+:GFMEET_4592
+Stat.SetInt(StatId.GirlfriendDenise, $iGFLikesPlayer(0@,6i))
+goto @GFMEET_4871
+
+:GFMEET_4611
+if 
+  $iGFLikesPlayer(0@,6i) > 100
+goto_if_false @GFMEET_4644
+$iGFLikesPlayer(0@,6i) = 100
+
+:GFMEET_4644
+Stat.SetInt(StatId.GirlfriendMichelle, $iGFLikesPlayer(0@,6i))
+goto @GFMEET_4871
+
+:GFMEET_4663
+if 
+  $iGFLikesPlayer(0@,6i) > 100
+goto_if_false @GFMEET_4696
+$iGFLikesPlayer(0@,6i) = 100
+
+:GFMEET_4696
+Stat.SetInt(StatId.GirlfriendHelena, $iGFLikesPlayer(0@,6i))
+goto @GFMEET_4871
+
+:GFMEET_4715
+if 
+  $iGFLikesPlayer(0@,6i) > 100
+goto_if_false @GFMEET_4748
+$iGFLikesPlayer(0@,6i) = 100
+
+:GFMEET_4748
+Stat.SetInt(StatId.GirlfriendBarbara, $iGFLikesPlayer(0@,6i))
+goto @GFMEET_4871
+
+:GFMEET_4767
+if 
+  $iGFLikesPlayer(0@,6i) > 100
+goto_if_false @GFMEET_4800
+$iGFLikesPlayer(0@,6i) = 100
+
+:GFMEET_4800
+Stat.SetInt(StatId.GirlfriendKatie, $iGFLikesPlayer(0@,6i))
+goto @GFMEET_4871
+
+:GFMEET_4819
+if 
+  $iGFLikesPlayer(0@,6i) > 100
+goto_if_false @GFMEET_4852
+$iGFLikesPlayer(0@,6i) = 100
+
+:GFMEET_4852
+Stat.SetInt(StatId.GirlfriendMillie, $iGFLikesPlayer(0@,6i))
+goto @GFMEET_4871
+
+:GFMEET_4871
+return 
+
+:GFMEET_4873
+switch_start $iGFSpeechStatus total_jumps 7 default_jump 0 @GFMEET_5405 jumps 0 @GFMEET_4936 1 @GFMEET_4968 2 @GFMEET_4980 3 @GFMEET_4994 4 @GFMEET_5263 5 @GFMEET_5363 6 @GFMEET_5172
+
+:GFMEET_4936
+if 
+  $iGFSayContext > 0
+goto_if_false @GFMEET_4961
+$iGFSpeechStatus = 3
+
+:GFMEET_4961
+goto @GFMEET_5405
+
+:GFMEET_4968
+Char.EnableSpeech(15@)
+goto @GFMEET_5405
+
+:GFMEET_4980
+Char.DisableSpeech(15@, False)
+goto @GFMEET_5405
+
+:GFMEET_4994
+if 
+  not Char.IsTalking(15@)
+goto_if_false @GFMEET_5165
+if 
+  $iGFSayContext > 0
+goto_if_false @GFMEET_5105
+$iGFContextVariation = Char.SetSayContextImportant(15@, $iGFSayContext, False, True, False)
+gosub @GFMEET_5407
+$iGFSayContext = -1
+if 
+  $iCJSayContext > 0
+goto_if_false @GFMEET_5091
+$iGFSpeechStatus = 6
+goto @GFMEET_5098
+
+:GFMEET_5091
+$iGFSpeechStatus = 0
+
+:GFMEET_5098
+goto @GFMEET_5165
+
+:GFMEET_5105
+if 
+  $iGFSayContext == -2
+goto_if_false @GFMEET_5144
+$iGFSayContext = -1
+$iGFSpeechStatus = 6
+goto @GFMEET_5165
+
+:GFMEET_5144
+$iGFSayContext = -1
+$iCJSayContext = -1
+$iGFSpeechStatus = 0
+
+:GFMEET_5165
+goto @GFMEET_5405
+
+:GFMEET_5172
+if and
+  not Char.IsTalking($scplayer)
+  not Char.IsTalking(15@)
+goto_if_false @GFMEET_5256
+if 
+  $iCJSayContext > 0
+goto_if_false @GFMEET_5249
+$iGFContextVariation = Char.SetSayContextImportant($scplayer, $iCJSayContext, False, True, False)
+$iCJSayContext = -1
+$iGFSpeechStatus = 0
+goto @GFMEET_5256
+
+:GFMEET_5249
+$iGFSpeechStatus = 0
+
+:GFMEET_5256
+goto @GFMEET_5405
+
+:GFMEET_5263
+Char.DisableSpeech(15@, False)
+if 
+  not Char.IsTalking(15@)
+goto_if_false @GFMEET_5356
+if 
+  $iGFSayContext > 0
+goto_if_false @GFMEET_5349
+$iGFContextVariation = Char.SetSayContextImportant(15@, $iGFSayContext, False, True, False)
+gosub @GFMEET_5407
+$iGFSayContext = -1
+$iGFSpeechStatus = 5
+goto @GFMEET_5356
+
+:GFMEET_5349
+$iGFSpeechStatus = 0
+
+:GFMEET_5356
+goto @GFMEET_5405
+
+:GFMEET_5363
+if 
+  not Char.IsTalking(15@)
+goto_if_false @GFMEET_5398
+Char.EnableSpeech(15@)
+$iGFSayContext = -1
+$iGFSpeechStatus = 0
+
+:GFMEET_5398
+goto @GFMEET_5405
+
+:GFMEET_5405
+return 
+
+:GFMEET_5407
+switch_start $iGFSayContext total_jumps 2 default_jump 0 @GFMEET_5625 jumps 316 @GFMEET_5602 317 @GFMEET_5472 -1 @GFMEET_5625 -1 @GFMEET_5625 -1 @GFMEET_5625 -1 @GFMEET_5625 -1 @GFMEET_5625
+
+:GFMEET_5472
+if 
+  is_local_var_bit_set_const 7@ bit 10
+goto_if_false @GFMEET_5513
+Text.PrintNow('GF_0074', 5000, 1)
+goto @GFMEET_5625
+
+:GFMEET_5513
+if 
+  is_local_var_bit_set_const 7@ bit 11
+goto_if_false @GFMEET_5554
+Text.PrintNow('GF_0053', 5000, 1)
+goto @GFMEET_5625
+
+:GFMEET_5554
+if 
+  is_local_var_bit_set_const 7@ bit 12
+goto_if_false @GFMEET_5595
+Text.PrintNow('GF_0075', 5000, 1)
+goto @GFMEET_5625
+
+:GFMEET_5595
+goto @GFMEET_5625
+
+:GFMEET_5602
+Text.PrintNow('GF_0052', 5000, 1)
+goto @GFMEET_5625
+
+:GFMEET_5625
+return 
+
+:GFMEET_5627
+Char.MarkAsNoLongerNeeded(15@)
+Char.MarkAsNoLongerNeeded(17@)
+Streaming.RemoveAnimation("PARK")
+Text.ClearHelp
+switch_start 0@ total_jumps 6 default_jump 0 @GFMEET_5782 jumps 0 @GFMEET_5710 1 @GFMEET_5722 2 @GFMEET_5734 3 @GFMEET_5746 4 @GFMEET_5758 5 @GFMEET_5770 -1 @GFMEET_5782
+
+:GFMEET_5710
+Streaming.MarkModelAsNoLongerNeeded(195)
+goto @GFMEET_5782
+
+:GFMEET_5722
+Streaming.MarkModelAsNoLongerNeeded(192)
+goto @GFMEET_5782
+
+:GFMEET_5734
+Streaming.MarkModelAsNoLongerNeeded(191)
+goto @GFMEET_5782
+
+:GFMEET_5746
+Streaming.MarkModelAsNoLongerNeeded(190)
+goto @GFMEET_5782
+
+:GFMEET_5758
+Streaming.MarkModelAsNoLongerNeeded(193)
+goto @GFMEET_5782
+
+:GFMEET_5770
+Streaming.MarkModelAsNoLongerNeeded(194)
+goto @GFMEET_5782
+
+:GFMEET_5782
+Conversation.ClearForChar(15@)
+if 
+  Blip.DoesExist(18@)
+goto_if_false @GFMEET_5808
+Blip.Remove(18@)
+
+:GFMEET_5808
+clear_global_var_bit_const $iDateReport bit 20
+terminate_this_script 
+return 
+write_debug "I__________________________I"
+write_debug "H"
+write_debug "G"
+write_debug "F"
+write_debug "E"
+write_debug_with_int "GF_LIKES_PLAYER" $iGFLikesPlayer(0@,6i)
+write_debug_with_int "DESIRED_SEX_APPEAL" $iGFDesiredSexAppeal(0@,6i)
+write_debug_with_int "ISUBSTATESTATUS" 6@
+switch_start 5@ total_jumps 5 default_jump 1 @GFMEET_6106 jumps 0 @GFMEET_6011 1 @GFMEET_6030 2 @GFMEET_6049 3 @GFMEET_6068 4 @GFMEET_6087 -1 @GFMEET_6135 -1 @GFMEET_6135
+
+:GFMEET_6011
+write_debug "STATE0__"
+goto @GFMEET_6135
+
+:GFMEET_6030
+write_debug "STATE1__"
+goto @GFMEET_6135
+
+:GFMEET_6049
+write_debug "STATE2__"
+goto @GFMEET_6135
+
+:GFMEET_6068
+write_debug "STATE3__"
+goto @GFMEET_6135
+
+:GFMEET_6087
+write_debug "STATE4__"
+goto @GFMEET_6135
+
+:GFMEET_6106
+write_debug "UNTRAPPED_STATE___"
+goto @GFMEET_6135
+
+:GFMEET_6135
+write_debug "I__________________________I"
+return 
+terminate_this_script 
+

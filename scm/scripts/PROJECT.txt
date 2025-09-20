@@ -1,0 +1,289 @@
+:PROJECT
+script_name 'PROJECT'
+10@ = 0
+$points_scored = 0
+$bball_throw_active = 1
+if 
+  10@ == -1
+goto_if_false @PROJECT_94
+0@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+9@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+
+:PROJECT_94
+wait 0
+if 
+  10@ == 0
+goto_if_false @PROJECT_637
+if 
+  8@ == 1
+goto_if_false @PROJECT_180
+17@ = Math.RandomFloatInRange(-0.2, 0.2)
+add_float_lvar_to_float_lvar 4@ += 17@
+17@ = Math.RandomFloatInRange(-0.2, 0.2)
+add_float_lvar_to_float_lvar 5@ += 17@
+
+:PROJECT_180
+6@ += 0.1
+if 
+  is_float_lvar_greater_than_float_lvar 3@ > 6@
+goto_if_false @PROJECT_247
+if 
+  0.0 > 7@
+goto_if_false @PROJECT_240
+7@ = 0.0
+
+:PROJECT_240
+goto @PROJECT_334
+
+:PROJECT_247
+set_lvar_float_to_lvar_float 17@ = 3@
+add_float_lvar_to_float_lvar 17@ += 7@
+set_lvar_float_to_lvar_float 18@ = 17@
+sub_float_lvar_from_float_lvar 18@ -= 6@
+if 
+  0.5 > 18@
+goto_if_false @PROJECT_334
+set_lvar_float_to_lvar_float 17@ = 6@
+17@ += 0.5
+set_lvar_float_to_lvar_float 7@ = 17@
+sub_float_lvar_from_float_lvar 7@ -= 3@
+
+:PROJECT_334
+17@ = 0.5
+17@ *= 9.8
+set_lvar_float_to_lvar_float 18@ = 7@
+div_float_lvar_by_float_lvar 18@ /= 17@
+28@ = Math.Sqrt(18@)
+set_lvar_float_to_lvar_float 17@ = 3@
+add_float_lvar_to_float_lvar 17@ += 7@
+sub_float_lvar_from_float_lvar 17@ -= 6@
+18@ = 0.5
+18@ *= 9.8
+set_lvar_float_to_lvar_float 19@ = 17@
+div_float_lvar_by_float_lvar 19@ /= 18@
+17@ = Math.Sqrt(19@)
+set_lvar_float_to_lvar_float 16@ = 28@
+add_float_lvar_to_float_lvar 16@ += 17@
+17@ = 0.0
+sub_float_lvar_from_float_lvar 17@ -= 7@
+set_lvar_float_to_lvar_float 18@ = 28@
+mult_float_lvar_by_float_lvar 18@ *= 28@
+set_lvar_float_to_lvar_float 29@ = 17@
+div_float_lvar_by_float_lvar 29@ /= 18@
+set_lvar_float_to_lvar_float 17@ = 28@
+mult_float_lvar_by_float_lvar 17@ *= 29@
+set_lvar_float_to_lvar_float 30@ = 17@
+30@ *= -2.0
+31@ = 0.0
+set_lvar_float_to_lvar_float 26@ = 4@
+sub_float_lvar_from_float_lvar 26@ -= 1@
+set_lvar_float_to_lvar_float 27@ = 5@
+sub_float_lvar_from_float_lvar 27@ -= 2@
+11@ = Clock.GetGameTimer()
+if 
+  Object.DoesExist(0@)
+goto_if_false @PROJECT_630
+Object.SetRecordsCollisions(0@, True)
+Object.SetCollision(0@, True)
+Object.FreezePosition(0@, True)
+
+:PROJECT_630
+10@ += 1
+
+:PROJECT_637
+if 
+  10@ == 1
+goto_if_false @PROJECT_1032
+if 
+  Object.DoesExist(0@)
+goto_if_false @PROJECT_1032
+if 
+  not Object.HasCollidedWithAnything(0@)
+goto_if_false @PROJECT_954
+12@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 13@ = 12@
+sub_int_lvar_from_int_lvar 13@ -= 11@
+cset_lvar_float_to_lvar_int 14@ = integer 13@
+14@ /= 1000.0
+if 
+  is_float_lvar_greater_than_float_lvar 16@ > 14@
+goto_if_false @PROJECT_926
+set_lvar_float_to_lvar_float 17@ = 14@
+mult_float_lvar_by_float_lvar 17@ *= 14@
+mult_float_lvar_by_float_lvar 17@ *= 29@
+set_lvar_float_to_lvar_float 18@ = 30@
+mult_float_lvar_by_float_lvar 18@ *= 14@
+set_var_float_to_lvar_float $z = 17@
+add_float_lvar_to_float_var $z += 18@
+add_float_lvar_to_float_var $z += 31@
+set_lvar_float_to_lvar_float 17@ = 14@
+div_float_lvar_by_float_lvar 17@ /= 16@
+set_var_float_to_lvar_float $x = 26@
+mult_float_var_by_float_lvar $x *= 17@
+set_var_float_to_lvar_float $y = 27@
+mult_float_var_by_float_lvar $y *= 17@
+set_lvar_float_to_lvar_float 20@ = 1@
+add_float_var_to_float_lvar 20@ += $x
+set_lvar_float_to_lvar_float 21@ = 2@
+add_float_var_to_float_lvar 21@ += $y
+set_lvar_float_to_lvar_float 22@ = 3@
+add_float_var_to_float_lvar 22@ += $z
+Object.SetCoordinatesAndVelocity(0@, 20@, 21@, 22@)
+goto @PROJECT_947
+
+:PROJECT_926
+Object.SetCoordinatesAndVelocity(0@, 4@, 5@, 6@)
+10@ += 1
+
+:PROJECT_947
+goto @PROJECT_1032
+
+:PROJECT_954
+PROJECT_1685()
+Object.FreezePosition(0@, False)
+Object.SetDynamic(0@, True)
+Object.SetCollision(0@, True)
+Object.SetVelocity(0@, 23@, 24@, 25@)
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @PROJECT_1025
+Text.PrintNow('BB_06', 4000, 1)
+
+:PROJECT_1025
+10@ = 99
+
+:PROJECT_1032
+if 
+  10@ == 2
+goto_if_false @PROJECT_1396
+if 
+  8@ == 1
+goto_if_false @PROJECT_1208
+if 
+  Object.DoesExist(9@)
+goto_if_false @PROJECT_1179
+15@ = Object.GetModel(9@)
+if 
+  Streaming.HasModelLoaded(15@)
+goto_if_false @PROJECT_1179
+PROJECT_1685()
+Object.FreezePosition(0@, False)
+Object.SetDynamic(0@, True)
+Object.SetCollision(0@, True)
+Object.SetVelocity(0@, 23@, 24@, 25@)
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @PROJECT_1179
+Text.PrintNow('BB_06', 4000, 1)
+
+:PROJECT_1179
+Audio.ReportMissionAudioEventAtObject(0@, 1011)
+$points_scored = -1
+10@ = 99
+goto @PROJECT_1396
+
+:PROJECT_1208
+6@ += -0.5
+if 
+  6 > $bball_shot_dist
+goto_if_false @PROJECT_1285
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @PROJECT_1271
+Text.PrintWith2NumbersNow('BB_05', $bball_shot_dist, $bball_shot_dist_decimal, 5000, TextStyle.Middle)
+
+:PROJECT_1271
+$points_scored = 1
+goto @PROJECT_1327
+
+:PROJECT_1285
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @PROJECT_1320
+Text.PrintWith2NumbersNow('BB_04', $bball_shot_dist, $bball_shot_dist_decimal, 5000, TextStyle.Middle)
+
+:PROJECT_1320
+$points_scored = 2
+
+:PROJECT_1327
+cset_lvar_float_to_var_int 17@ = integer $bball_shot_dist
+cset_lvar_float_to_var_int 18@ = integer $bball_shot_dist_decimal
+18@ *= 0.1
+add_float_lvar_to_float_lvar 17@ += 18@
+if 
+  not Game.AreMeasurementsInMeters
+goto_if_false @PROJECT_1382
+convert_metres_to_feet 17@ = meters 17@
+
+:PROJECT_1382
+Stat.RegisterFloat(17@, 2)
+10@ += 1
+
+:PROJECT_1396
+if 
+  10@ == 3
+goto_if_false @PROJECT_1651
+$x, $y, $z = Object.GetCoordinates(0@)
+17@ = Math.GetDistanceBetweenCoords3D($x, $y, $z, 4@, 5@, 6@)
+Audio.ReportMissionAudioEventAtObject(0@, 1012)
+if 
+  0.1 > 17@
+goto_if_false @PROJECT_1535
+Object.FreezePosition(0@, False)
+Object.SetCollision(0@, True)
+Object.SetDynamic(0@, True)
+Object.SetVelocity(0@, 0.0, 0.0, -0.1)
+10@ = 99
+goto @PROJECT_1651
+
+:PROJECT_1535
+set_lvar_float_to_lvar_float 20@ = 4@
+sub_float_var_from_float_lvar 20@ -= $x
+set_lvar_float_to_lvar_float 21@ = 5@
+sub_float_var_from_float_lvar 21@ -= $y
+set_lvar_float_to_lvar_float 22@ = 6@
+sub_float_var_from_float_lvar 22@ -= $z
+20@ *= 0.3
+21@ *= 0.3
+22@ *= 0.3
+add_float_lvar_to_float_var $x += 20@
+add_float_lvar_to_float_var $y += 21@
+add_float_lvar_to_float_var $z += 22@
+Object.SetCoordinates(0@, $x, $y, $z)
+
+:PROJECT_1651
+if 
+  10@ == 99
+goto_if_false @PROJECT_1678
+$bball_throw_active = 0
+terminate_this_script 
+
+:PROJECT_1678
+goto @PROJECT_94
+
+:PROJECT_1685
+$x, $y, $z = Object.GetCoordinates(9@)
+17@ = Math.RandomFloatInRange(-1.0, 1.0)
+18@ = Math.RandomFloatInRange(0.2, 1.0)
+19@ = Math.RandomFloatInRange(1.2, 2.2)
+20@ = Object.GetOffsetInWorldCoords(21@, 22@, 9@, 17@, 18@, 19@)
+set_lvar_float_to_lvar_float 23@ = 20@
+sub_float_var_from_float_lvar 23@ -= $x
+set_lvar_float_to_lvar_float 24@ = 21@
+sub_float_var_from_float_lvar 24@ -= $y
+set_lvar_float_to_lvar_float 25@ = 22@
+sub_float_var_from_float_lvar 25@ -= $z
+17@ = Math.GetDistanceBetweenCoords3D($x, $y, $z, 20@, 21@, 22@)
+div_float_lvar_by_float_lvar 23@ /= 17@
+div_float_lvar_by_float_lvar 24@ /= 17@
+div_float_lvar_by_float_lvar 25@ /= 17@
+set_lvar_float_to_lvar_float 17@ = 16@
+17@ *= 5.0
+mult_float_lvar_by_float_lvar 23@ *= 17@
+mult_float_lvar_by_float_lvar 24@ *= 17@
+mult_float_lvar_by_float_lvar 25@ *= 17@
+return 
+
+:Noname_2
+terminate_this_script 
+

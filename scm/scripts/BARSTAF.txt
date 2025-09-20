@@ -1,0 +1,386 @@
+//-------------External script 38 (BAR_STAFF)---------------
+
+:BARSTAF
+script_name 'BARSTAF'
+8@ = 0
+if 
+  8@ == 1
+goto_if_false @BARSTAF_212
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+8@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+1@ = Attractor.Add(0.0, 0.0, 0.0, 0.0, 0.0, -1)
+2@ = Attractor.Add(0.0, 0.0, 0.0, 0.0, 0.0, -1)
+3@ = Attractor.Add(0.0, 0.0, 0.0, 0.0, 0.0, -1)
+4@ = Attractor.Add(0.0, 0.0, 0.0, 0.0, 0.0, -1)
+
+:BARSTAF_212
+if 
+  not Char.IsDead(0@)
+goto_if_false @BARSTAF_236
+Char.SetDecisionMaker(0@, $iGlobalShopkeeperDM)
+
+:BARSTAF_236
+Streaming.RequestAnimation("BAR")
+
+:BARSTAF_243
+if 
+  not Streaming.HasAnimationLoaded("BAR")
+goto_if_false @BARSTAF_279
+Streaming.RequestAnimation("BAR")
+wait 0
+goto @BARSTAF_243
+
+:BARSTAF_279
+9@ = 1
+10@ = 0
+12@ = 0
+if 
+  0.0 >= 6@
+goto_if_false @BARSTAF_331
+6@ = 6.0
+
+:BARSTAF_331
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @BARSTAF_540
+if 
+  9@ == 2
+goto_if_false @BARSTAF_480
+if 
+  not Char.IsDead(8@)
+goto_if_false @BARSTAF_452
+if or
+  $iSetCasinoPanic == 1
+  $iSetBarPanic == 1
+  $iSetSTRIPPanic == 1
+goto_if_false @BARSTAF_438
+goto @BARSTAF_2200
+goto @BARSTAF_445
+
+:BARSTAF_438
+gosub @BARSTAF_554
+
+:BARSTAF_445
+goto @BARSTAF_473
+
+:BARSTAF_452
+9@ = 1
+10@ = 0
+gosub @BARSTAF_554
+
+:BARSTAF_473
+goto @BARSTAF_533
+
+:BARSTAF_480
+if or
+  $iSetCasinoPanic == 1
+  $iSetBarPanic == 1
+  $iSetSTRIPPanic == 1
+goto_if_false @BARSTAF_526
+goto @BARSTAF_2200
+goto @BARSTAF_533
+
+:BARSTAF_526
+gosub @BARSTAF_554
+
+:BARSTAF_533
+goto @BARSTAF_547
+
+:BARSTAF_540
+gosub @BARSTAF_2287
+
+:BARSTAF_547
+goto @BARSTAF_331
+
+:BARSTAF_554
+switch_start 9@ total_jumps 3 default_jump 0 @BARSTAF_659 jumps 1 @BARSTAF_617 2 @BARSTAF_631 3 @BARSTAF_645 -1 @BARSTAF_659 -1 @BARSTAF_659 -1 @BARSTAF_659 -1 @BARSTAF_659
+
+:BARSTAF_617
+gosub @BARSTAF_661
+goto @BARSTAF_659
+
+:BARSTAF_631
+gosub @BARSTAF_1390
+goto @BARSTAF_659
+
+:BARSTAF_645
+gosub @BARSTAF_2085
+goto @BARSTAF_659
+
+:BARSTAF_659
+return 
+
+:BARSTAF_661
+switch_start 10@ total_jumps 4 default_jump 0 @BARSTAF_1388 jumps 0 @BARSTAF_724 1 @BARSTAF_767 2 @BARSTAF_974 3 @BARSTAF_1181 -1 @BARSTAF_1388 -1 @BARSTAF_1388 -1 @BARSTAF_1388
+
+:BARSTAF_724
+13@ = Char.GetScriptTaskStatus(0@, 1868)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_760
+10@ += 1
+
+:BARSTAF_760
+goto @BARSTAF_1388
+
+:BARSTAF_767
+14@, 15@, 16@ = Char.GetCoordinates(0@)
+8@ = World.GetUserOfClosestMapAttractor(14@, 15@, 16@, 6@, 0, "BARGUY")
+if 
+  8@ > -1
+goto_if_false @BARSTAF_923
+13@ = Char.GetHealth(8@)
+if 
+  13@ == 99
+goto_if_false @BARSTAF_866
+8@ = -1
+goto @BARSTAF_923
+
+:BARSTAF_866
+13@ = Char.GetScriptTaskStatus(8@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_916
+9@ += 1
+10@ = 0
+goto @BARSTAF_923
+
+:BARSTAF_916
+8@ = -1
+
+:BARSTAF_923
+13@ = Char.GetScriptTaskStatus(0@, 1868)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_967
+Task.UseAttractor(0@, 2@)
+10@ += 1
+
+:BARSTAF_967
+goto @BARSTAF_1388
+
+:BARSTAF_974
+14@, 15@, 16@ = Char.GetCoordinates(0@)
+8@ = World.GetUserOfClosestMapAttractor(14@, 15@, 16@, 6@, 0, "BARGUY")
+if 
+  8@ > -1
+goto_if_false @BARSTAF_1130
+13@ = Char.GetHealth(8@)
+if 
+  13@ == 99
+goto_if_false @BARSTAF_1073
+8@ = -1
+goto @BARSTAF_1130
+
+:BARSTAF_1073
+13@ = Char.GetScriptTaskStatus(8@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_1123
+9@ += 1
+10@ = 0
+goto @BARSTAF_1130
+
+:BARSTAF_1123
+8@ = -1
+
+:BARSTAF_1130
+13@ = Char.GetScriptTaskStatus(0@, 1868)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_1174
+Task.UseAttractor(0@, 3@)
+10@ += 1
+
+:BARSTAF_1174
+goto @BARSTAF_1388
+
+:BARSTAF_1181
+14@, 15@, 16@ = Char.GetCoordinates(0@)
+8@ = World.GetUserOfClosestMapAttractor(14@, 15@, 16@, 6@, 0, "BARGUY")
+if 
+  8@ > -1
+goto_if_false @BARSTAF_1337
+13@ = Char.GetHealth(8@)
+if 
+  13@ == 99
+goto_if_false @BARSTAF_1280
+8@ = -1
+goto @BARSTAF_1337
+
+:BARSTAF_1280
+13@ = Char.GetScriptTaskStatus(8@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_1330
+9@ += 1
+10@ = 0
+goto @BARSTAF_1337
+
+:BARSTAF_1330
+8@ = -1
+
+:BARSTAF_1337
+13@ = Char.GetScriptTaskStatus(0@, 1868)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_1381
+Task.UseAttractor(0@, 1@)
+10@ = 0
+
+:BARSTAF_1381
+goto @BARSTAF_1388
+
+:BARSTAF_1388
+return 
+
+:BARSTAF_1390
+switch_start 10@ total_jumps 8 default_jump 0 @BARSTAF_2083 jumps 0 @BARSTAF_1518 1 @BARSTAF_1577 2 @BARSTAF_1628 3 @BARSTAF_1720 4 @BARSTAF_1771 5 @BARSTAF_1873 6 @BARSTAF_1934
+switch_continued 7 @BARSTAF_1985 -1 @BARSTAF_2083 -1 @BARSTAF_2083 -1 @BARSTAF_2083 -1 @BARSTAF_2083 -1 @BARSTAF_2083 -1 @BARSTAF_2083 -1 @BARSTAF_2083 -1 @BARSTAF_2083
+
+:BARSTAF_1518
+14@ = Char.GetOffsetInWorldCoords(15@, 16@, 8@, 0.0, 5@, 0.0)
+Task.GoStraightToCoord(0@, 14@, 15@, 16@, MoveState.Walk, -2)
+10@ += 1
+goto @BARSTAF_2083
+
+:BARSTAF_1577
+13@ = Char.GetScriptTaskStatus(0@, 1491)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_1621
+Task.TurnCharToFaceChar(0@, 8@)
+10@ += 1
+
+:BARSTAF_1621
+goto @BARSTAF_2083
+
+:BARSTAF_1628
+13@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_1713
+Char.SetHealth(8@, 99)
+Task.PlayAnim(0@, "BARSERVE_ORDER", "BAR", 4.0, True, False, False, False, 3000)
+10@ += 1
+
+:BARSTAF_1713
+goto @BARSTAF_2083
+
+:BARSTAF_1720
+13@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_1764
+Task.UseAttractor(0@, 4@)
+10@ += 1
+
+:BARSTAF_1764
+goto @BARSTAF_2083
+
+:BARSTAF_1771
+13@ = Char.GetScriptTaskStatus(0@, 1868)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_1866
+if 
+  7@ == 0
+goto_if_false @BARSTAF_1859
+Task.PlayAnim(0@, "BARSERVE_GLASS", "BAR", 4.0, False, False, False, False, 0)
+
+:BARSTAF_1859
+10@ += 1
+
+:BARSTAF_1866
+goto @BARSTAF_2083
+
+:BARSTAF_1873
+13@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_1927
+Task.GoStraightToCoord(0@, 14@, 15@, 16@, MoveState.Walk, -2)
+10@ += 1
+
+:BARSTAF_1927
+goto @BARSTAF_2083
+
+:BARSTAF_1934
+13@ = Char.GetScriptTaskStatus(0@, 1491)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_1978
+Task.TurnCharToFaceChar(0@, 8@)
+10@ += 1
+
+:BARSTAF_1978
+goto @BARSTAF_2083
+
+:BARSTAF_1985
+13@ = Char.GetScriptTaskStatus(0@, 1593)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_2076
+Char.SetHealth(8@, 99)
+Task.PlayAnim(0@, "BARSERVE_GIVE", "BAR", 4.0, True, False, False, False, 3000)
+9@ += 1
+10@ = 0
+
+:BARSTAF_2076
+goto @BARSTAF_2083
+
+:BARSTAF_2083
+return 
+
+:BARSTAF_2085
+switch_start 10@ total_jumps 1 default_jump 0 @BARSTAF_2198 jumps 0 @BARSTAF_2148 -1 @BARSTAF_2198 -1 @BARSTAF_2198 -1 @BARSTAF_2198 -1 @BARSTAF_2198 -1 @BARSTAF_2198 -1 @BARSTAF_2198
+
+:BARSTAF_2148
+13@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @BARSTAF_2191
+9@ = 1
+10@ = 0
+
+:BARSTAF_2191
+goto @BARSTAF_2198
+
+:BARSTAF_2198
+return 
+
+:BARSTAF_2200
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @BARSTAF_2273
+12@ = Char.GetScriptTaskStatus(0@, 1476)
+if 
+  is_int_lvar_equal_to_constant 12@ == 7
+goto_if_false @BARSTAF_2266
+Task.HandsUp(0@, 60000)
+
+:BARSTAF_2266
+goto @BARSTAF_2280
+
+:BARSTAF_2273
+gosub @BARSTAF_2287
+
+:BARSTAF_2280
+goto @BARSTAF_2200
+
+:BARSTAF_2287
+Streaming.RemoveAnimation("BAR")
+Char.MarkAsNoLongerNeeded(0@)
+terminate_this_script 
+return 
+write_debug_with_int "PEDSTATE" 9@
+write_debug_with_int "SUBSTATESTATUS" 10@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

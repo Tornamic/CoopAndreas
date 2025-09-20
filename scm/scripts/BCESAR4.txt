@@ -1,0 +1,536 @@
+//-------------Mission 48---------------
+// Originally: Wu Zi Mu / Farewell, My Love...
+
+:BCESAR4
+script_name 'BCESAR4'
+gosub @BCESAR4_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @BCESAR4_38
+gosub @BCESAR4_2683
+
+:BCESAR4_38
+gosub @BCESAR4_2736
+terminate_this_script 
+
+:BCESAR4_47
+$onmission = 1
+
+:BCESAR4_54
+wait 0
+if 
+  $flag_bcesar_mission_counter == 0
+goto_if_false @BCESAR4_401
+Text.LoadMissionText('BCESAR4')
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @BCESAR4_168
+34@ = Char.GetCarIsUsing($scplayer)
+Car.SetAsMissionCar(34@)
+$x, $y, $z = Car.GetCoordinates(34@)
+$z += 1000.0
+Car.SetCoordinates(34@, $x, $y, $z)
+Car.FreezePosition(34@, True)
+goto @BCESAR4_175
+
+:BCESAR4_168
+34@ = -1
+
+:BCESAR4_175
+World.ClearArea(1, 1557.162, 24.305, 22.7313, 100.0)
+Player.MakeSafeForCutscene($player1)
+Streaming.Switch(False)
+Cutscene.Load('BCESAR4')
+
+:BCESAR4_219
+if 
+  not Cutscene.HasLoaded
+goto_if_false @BCESAR4_243
+wait 0
+goto @BCESAR4_219
+
+:BCESAR4_243
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:BCESAR4_252
+if 
+  not Cutscene.HasFinished
+goto_if_false @BCESAR4_276
+wait 0
+goto @BCESAR4_252
+
+:BCESAR4_276
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:BCESAR4_289
+if 
+  Camera.GetFadingStatus
+goto_if_false @BCESAR4_313
+wait 0
+goto @BCESAR4_289
+
+:BCESAR4_313
+Cutscene.Clear
+$flag_stage_of_bcesar_race = 1
+$start_the_bcesar_race = 1
+if 
+  34@ <> -1
+goto_if_false @BCESAR4_394
+if 
+  not Car.IsDead(34@)
+goto_if_false @BCESAR4_394
+Car.FreezePosition(34@, False)
+$z -= 1000.0
+Car.SetCoordinates(34@, $x, $y, $z)
+
+:BCESAR4_394
+goto @BCESAR4_2685
+
+:BCESAR4_401
+if 
+  $flag_bcesar_mission_counter == 2
+goto_if_false @BCESAR4_1629
+if 
+  Char.IsInArea3D($scplayer, 0, -782.3699, -147.948, 19.5518, -405.0757, -237.5195, 91.1306)
+goto_if_false @BCESAR4_1601
+$onmission = 1
+Camera.DoFade(0, 1000)
+
+:BCESAR4_481
+if 
+  Camera.GetFadingStatus
+goto_if_false @BCESAR4_505
+wait 0
+goto @BCESAR4_481
+
+:BCESAR4_505
+Streaming.RequestModel(439)
+Streaming.RequestModel(475)
+Streaming.RequestModel(526)
+Streaming.RequestModel(101)
+Streaming.RequestModel(23)
+Streaming.RequestModel(290)
+Streaming.RequestAnimation("KISSING")
+World.ClearArea(0, -518.049, -189.3775, 79.3468, 100.0)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-535.8186, -198.0116, 80.8647, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-535.5711, -197.1029, 80.5285, SwitchType.JumpCut)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @BCESAR4_732
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @BCESAR4_732
+$car = Char.GetCarIsUsing($scplayer)
+if 
+  $car > 0
+goto_if_false @BCESAR4_732
+if 
+  not Car.IsDead($car)
+goto_if_false @BCESAR4_732
+Car.SetVisible($car, False)
+Car.FreezePosition($car, True)
+Car.SetCollision($car, False)
+Char.SetVisible($scplayer, False)
+
+:BCESAR4_732
+wait 1000
+
+:BCESAR4_737
+if and
+  not Streaming.HasModelLoaded(439)
+  not Streaming.HasModelLoaded(475)
+  not Streaming.HasModelLoaded(526)
+  not Streaming.HasModelLoaded(101)
+  not Streaming.HasModelLoaded(23)
+  not Streaming.HasModelLoaded(290)
+goto_if_false @BCESAR4_787
+wait 0
+goto @BCESAR4_737
+
+:BCESAR4_787
+if 
+  not Streaming.HasAnimationLoaded("KISSING")
+goto_if_false @BCESAR4_820
+wait 0
+goto @BCESAR4_787
+
+:BCESAR4_820
+35@ = Car.Create(439, -536.7188, -192.5453, 77.404)
+38@ = Char.Create(24, 101, -530.4067, -188.8082, 77.3986)
+Car.SetHeading(35@, 287.0)
+41@ = Sequence.Open()
+Task.PlayAnim(-1, "GIFT_GIVE", "KISSING", 1000.0, False, False, False, False, -2)
+Task.EnterCarAsDriver(-1, 35@, -2)
+Task.CarDriveToCoord(-1, 35@, -507.5502, -99.2875, 61.825, 10.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+Sequence.Close(41@)
+Char.PerformSequence(38@, 41@)
+Sequence.Clear(41@)
+36@ = Car.Create(475, -536.158, -185.2865, 77.398)
+39@ = Char.Create(24, 23, -530.4067, -187.8082, 77.3986)
+Char.SetHeading(39@, 180.0)
+Car.SetHeading(36@, 243.0)
+41@ = Sequence.Open()
+Task.PlayAnim(-1, "GIFT_GET", "KISSING", 1000.0, False, False, False, False, -2)
+Task.EnterCarAsDriver(-1, 36@, -2)
+Task.CarDriveToCoord(-1, 36@, -507.5502, -99.2875, 61.825, 10.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+Sequence.Close(41@)
+Char.PerformSequence(39@, 41@)
+Sequence.Clear(41@)
+37@ = Car.Create(526, -524.9425, -184.208, 77.2766)
+40@ = Char.CreateInsideCar(PedType.Mission1, 290, 37@)
+Car.SetHeading(37@, 239.0)
+41@ = Sequence.Open()
+Task.Pause(-1, 7000)
+Task.CarDriveToCoord(-1, 37@, -507.5502, -99.2875, 61.825, 10.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+Sequence.Close(41@)
+Char.PerformSequence(40@, 41@)
+Sequence.Clear(41@)
+Camera.DoFade(1, 800)
+skip_cutscene_start_internal @BCESAR4_1310
+wait 10000
+Camera.DoFade(0, 1000)
+
+:BCESAR4_1286
+if 
+  Camera.GetFadingStatus
+goto_if_false @BCESAR4_1310
+wait 0
+goto @BCESAR4_1286
+
+:BCESAR4_1310
+skip_cutscene_end 
+if 
+  not Car.IsDead(35@)
+goto_if_false @BCESAR4_1333
+Car.Delete(35@)
+
+:BCESAR4_1333
+if 
+  not Car.IsDead(36@)
+goto_if_false @BCESAR4_1354
+Car.Delete(36@)
+
+:BCESAR4_1354
+if 
+  not Car.IsDead(37@)
+goto_if_false @BCESAR4_1375
+Car.Delete(37@)
+
+:BCESAR4_1375
+if 
+  not Char.IsDead(38@)
+goto_if_false @BCESAR4_1396
+Char.Delete(38@)
+
+:BCESAR4_1396
+if 
+  not Char.IsDead(39@)
+goto_if_false @BCESAR4_1417
+Char.Delete(39@)
+
+:BCESAR4_1417
+if 
+  not Char.IsDead(40@)
+goto_if_false @BCESAR4_1438
+Char.Delete(40@)
+
+:BCESAR4_1438
+Streaming.MarkModelAsNoLongerNeeded(439)
+Streaming.MarkModelAsNoLongerNeeded(475)
+Streaming.MarkModelAsNoLongerNeeded(526)
+Streaming.MarkModelAsNoLongerNeeded(101)
+Streaming.MarkModelAsNoLongerNeeded(23)
+Streaming.MarkModelAsNoLongerNeeded(290)
+Streaming.RemoveAnimation("KISSING")
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @BCESAR4_1579
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @BCESAR4_1579
+$car = Char.GetCarIsUsing($scplayer)
+if 
+  $car > 0
+goto_if_false @BCESAR4_1579
+if 
+  not Car.IsDead($car)
+goto_if_false @BCESAR4_1579
+Car.SetVisible($car, True)
+Car.FreezePosition($car, False)
+Car.SetCollision($car, True)
+Char.SetVisible($scplayer, True)
+
+:BCESAR4_1579
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Camera.DoFade(1, 800)
+
+:BCESAR4_1601
+$flag_bcesar_mission_counter = -1
+$onmission = 0
+34@ = 0
+goto @BCESAR4_2685
+
+:BCESAR4_1629
+if 
+  $flag_bcesar_mission_counter == 4
+goto_if_false @BCESAR4_2019
+Text.LoadMissionText('BCESAR4')
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @BCESAR4_1710
+34@ = Char.GetCarIsUsing($scplayer)
+Car.FreezePosition(34@, True)
+Car.SetVisible(34@, False)
+Car.SetCollision(34@, False)
+goto @BCESAR4_1717
+
+:BCESAR4_1710
+34@ = -1
+
+:BCESAR4_1717
+World.ClearArea(1, -526.7778, -189.0571, 76.9917, 100.0)
+Player.MakeSafeForCutscene($player1)
+Streaming.Switch(False)
+Cutscene.Load('BCESA4W')
+
+:BCESAR4_1761
+if 
+  not Cutscene.HasLoaded
+goto_if_false @BCESAR4_1785
+wait 0
+goto @BCESAR4_1761
+
+:BCESAR4_1785
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:BCESAR4_1794
+if 
+  not Cutscene.HasFinished
+goto_if_false @BCESAR4_1818
+wait 0
+goto @BCESAR4_1794
+
+:BCESAR4_1818
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:BCESAR4_1831
+if 
+  Camera.GetFadingStatus
+goto_if_false @BCESAR4_1855
+wait 0
+goto @BCESAR4_1831
+
+:BCESAR4_1855
+Cutscene.Clear
+if 
+  34@ <> -1
+goto_if_false @BCESAR4_1923
+if 
+  not Car.IsDead(34@)
+goto_if_false @BCESAR4_1916
+Car.FreezePosition(34@, False)
+Car.SetVisible(34@, True)
+Car.SetCollision(34@, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+
+:BCESAR4_1916
+goto @BCESAR4_1957
+
+:BCESAR4_1923
+Char.SetCoordinates($scplayer, -503.3945, -186.0599, 76.6103)
+Char.SetHeading($scplayer, 53.0)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+
+:BCESAR4_1957
+Camera.DoFade(1, 1000)
+Blip.Remove($bcesar_contact_blip)
+Stat.RegisterMissionPassed('BCESAR4')
+Text.PrintWithNumberBig('M_PASSD', 3, 5000, TextStyle.Middle)
+$flag_stage_of_bcesar_race = 0
+$start_the_bcesar_race = 0
+goto @BCESAR4_2685
+
+:BCESAR4_2019
+if 
+  $flag_bcesar_mission_counter == 5
+goto_if_false @BCESAR4_2222
+Text.LoadMissionText('BCESAR4')
+World.ClearArea(1, -526.7778, -189.0571, 76.9917, 100.0)
+Char.SetCoordinates($scplayer, -495.9034, -196.2218, 77.3986)
+Player.MakeSafeForCutscene($player1)
+Streaming.Switch(False)
+Cutscene.Load('BCESAR5')
+
+:BCESAR4_2112
+if 
+  not Cutscene.HasLoaded
+goto_if_false @BCESAR4_2136
+wait 0
+goto @BCESAR4_2112
+
+:BCESAR4_2136
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:BCESAR4_2145
+if 
+  not Cutscene.HasFinished
+goto_if_false @BCESAR4_2169
+wait 0
+goto @BCESAR4_2145
+
+:BCESAR4_2169
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:BCESAR4_2182
+if 
+  Camera.GetFadingStatus
+goto_if_false @BCESAR4_2206
+wait 0
+goto @BCESAR4_2182
+
+:BCESAR4_2206
+Cutscene.Clear
+$start_the_bcesar_race = 1
+goto @BCESAR4_2685
+
+:BCESAR4_2222
+if 
+  $flag_bcesar_mission_counter == 9
+goto_if_false @BCESAR4_2676
+Text.LoadMissionText('BCESAR4')
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @BCESAR4_2332
+34@ = Char.GetCarIsUsing($scplayer)
+Car.SetAsMissionCar(34@)
+$x, $y, $z = Car.GetCoordinates(34@)
+$z += 1000.0
+Car.SetCoordinates(34@, $x, $y, $z)
+Car.FreezePosition(34@, True)
+goto @BCESAR4_2339
+
+:BCESAR4_2332
+34@ = -1
+
+:BCESAR4_2339
+World.ClearArea(1, 1557.162, 24.305, 22.7313, 100.0)
+Player.MakeSafeForCutscene($player1)
+Streaming.Switch(False)
+Cutscene.Load('BCESA5W')
+
+:BCESAR4_2383
+if 
+  not Cutscene.HasLoaded
+goto_if_false @BCESAR4_2407
+wait 0
+goto @BCESAR4_2383
+
+:BCESAR4_2407
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:BCESAR4_2416
+if 
+  not Cutscene.HasFinished
+goto_if_false @BCESAR4_2440
+wait 0
+goto @BCESAR4_2416
+
+:BCESAR4_2440
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:BCESAR4_2453
+if 
+  Camera.GetFadingStatus
+goto_if_false @BCESAR4_2477
+wait 0
+goto @BCESAR4_2453
+
+:BCESAR4_2477
+Cutscene.Clear
+if 
+  34@ <> -1
+goto_if_false @BCESAR4_2583
+if 
+  not Car.IsDead(34@)
+goto_if_false @BCESAR4_2576
+Car.FreezePosition(34@, False)
+Car.SetVisible(34@, True)
+Car.SetCollision(34@, True)
+Car.SetCoordinates(34@, 1557.694, 17.4472, 23.1641)
+Car.SetHeading(34@, 9.0)
+Char.WarpIntoCar($scplayer, 34@)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+
+:BCESAR4_2576
+goto @BCESAR4_2617
+
+:BCESAR4_2583
+Char.SetCoordinates($scplayer, 1559.768, 14.4176, 23.1641)
+Char.SetHeading($scplayer, 10.0)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+
+:BCESAR4_2617
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Camera.DoFade(1, 1000)
+Blip.Remove($bcesar_contact_blip)
+Stat.RegisterMissionPassed('BCES4_2')
+Text.PrintWithNumberBig('M_PASSD', 3, 5000, TextStyle.Middle)
+$start_the_bcesar_race = 0
+goto @BCESAR4_2685
+
+:BCESAR4_2676
+goto @BCESAR4_54
+
+:BCESAR4_2683
+return 
+
+:BCESAR4_2685
+if 
+  5 > $flag_bcesar_mission_counter
+goto_if_false @BCESAR4_2734
+if 
+  not Car.IsDead(34@)
+goto_if_false @BCESAR4_2734
+Char.WarpIntoCar($scplayer, 34@)
+Car.FreezePosition(34@, False)
+
+:BCESAR4_2734
+return 
+
+:BCESAR4_2736
+$flag_bcesar_mission_counter += 1
+$timer_mobile_start = Clock.GetGameTimer()
+$onmission = 0
+Mission.Finish
+if 
+  $flag_bcesar_mission_counter == 1
+goto_if_false @BCESAR4_2781
+Camera.DoFade(0, Fade.Out)
+
+:BCESAR4_2781
+if 
+  $flag_bcesar_mission_counter == 6
+goto_if_false @BCESAR4_2805
+Camera.DoFade(0, Fade.Out)
+
+:BCESAR4_2805
+return 
+

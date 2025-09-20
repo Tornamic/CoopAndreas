@@ -1,0 +1,36 @@
+:TCASH
+script_name 'TCASH'
+
+:TCASH_11
+wait 20000
+if 
+  $terminted_territory_pickup == 1
+goto_if_false @TCASH_48
+Pickup.Remove($territory_pickup)
+$terminted_territory_pickup = 0
+terminate_this_script 
+
+:TCASH_48
+$player_territory_owned = Stat.GetTerritoryUnderControlPercentage()
+if 
+  $Return_cities_passed > 1
+goto_if_false @TCASH_93
+set_var_int_to_var_int $territory_cash = $player_territory_owned
+$territory_cash *= 100
+goto @TCASH_108
+
+:TCASH_93
+set_var_int_to_var_int $territory_cash = $player_territory_owned
+$territory_cash *= 50
+
+:TCASH_108
+Pickup.UpdateMoneyPerDay($territory_pickup, $territory_cash)
+goto @TCASH_11
+
+:KEYCARD
+$millies_like_stat = Stat.GetInt(257)
+if 
+  $millies_like_stat >= 35
+goto_if_false @KEYCARD_51
+$millies_double_ender = Pickup.Create(321, 3, 345.2063, 308.9788, 998.6484)
+

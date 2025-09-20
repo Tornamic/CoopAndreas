@@ -1,0 +1,1097 @@
+//-------------Mission 21---------------
+// Originally: Doberman
+
+:CRASH4
+script_name 'CRASH4'
+gosub @CRASH4_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @CRASH4_38
+gosub @CRASH4_6181
+
+:CRASH4_38
+gosub @CRASH4_6780
+terminate_this_script 
+
+:CRASH4_47
+$onmission = 1
+$flag_on_doberman_mission = 1
+49@ = 0
+50@ = 0
+46@ = 0
+36@ = 0
+37@ = 0
+38@ = 0
+42@ = 0
+42@ = 0
+44@ = 0
+56@ = 0.0
+57@ = 0.0
+59@ = 0
+58@ = 0
+61@ = 0
+62@ = 0
+63@ = 0
+64@ = 0
+65@ = 0
+66@ = 0
+67@ = 0
+68@ = 0
+70@ = 0
+$flag_bought_gun_for_doberman = 0
+71@ = 0
+72@ = 0
+73@ = 0
+74@ = 0
+Stat.RegisterMissionGiven
+wait 0
+Text.ClearThisPrintBigNow(TextStyle.Middle)
+wait 1000
+Text.LoadMissionText('CRASH2')
+Zone.SetGangStrength('GLN1', GangType.Ballas, 40)
+Zone.SetGangStrength('GLN1', GangType.Grove, 0)
+71@ = Zone.GetGangStrength('GLN1', GangType.Vagos)
+72@ = Zone.GetGangStrength('GLN1', GangType.Aztecas)
+Zone.SetGangStrength('GLN1', GangType.Vagos, 0)
+Zone.SetGangStrength('GLN1', GangType.Aztecas, 0)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Game.SetPoliceIgnorePlayer($player1, True)
+43@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+Streaming.RequestModel(102)
+Streaming.RequestModel(103)
+Streaming.RequestModel(372)
+Streaming.RequestAnimation("GANGS")
+Streaming.RequestAnimation("SMOKING")
+Streaming.RequestModel(#CIGAR)
+Streaming.RequestModel(106)
+Streaming.RequestModel(107)
+Streaming.LoadAllModelsNow
+
+:CRASH4_442
+if or
+  not Streaming.HasModelLoaded(103)
+  not Streaming.HasModelLoaded(372)
+  not Streaming.HasModelLoaded(102)
+  not Streaming.HasAnimationLoaded("GANGS")
+goto_if_false @CRASH4_486
+wait 0
+goto @CRASH4_442
+
+:CRASH4_486
+if or
+  not Streaming.HasAnimationLoaded("SMOKING")
+  not Streaming.HasModelLoaded(#CIGAR)
+  not Streaming.HasModelLoaded(106)
+  not Streaming.HasModelLoaded(107)
+goto_if_false @CRASH4_531
+wait 0
+goto @CRASH4_486
+
+:CRASH4_531
+World.SetPedDensityMultiplier(0.0)
+World.ClearArea(1, 1363.689, -1280.441, 12.5469, 1.0)
+Char.SetCoordinates($scplayer, 1363.689, -1280.441, 12.5469)
+Streaming.LoadScene(1363.689, -1280.441, 12.5469)
+Char.SetHeading($scplayer, 90.0)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.MakeGangDisappear
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Game.SetPoliceIgnorePlayer($player1, True)
+World.ClearArea(1, 1350.177, -1264.921, 14.7166, 1.0)
+Camera.SetFixedPosition(1350.177, -1264.921, 14.7166, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1350.987, -1265.499, 14.8167, SwitchType.JumpCut)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1500)
+
+:CRASH4_730
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_754
+wait 0
+goto @CRASH4_730
+
+:CRASH4_754
+Text.PrintNow('AMUHLP', 10000, 1)
+skip_cutscene_start_internal @CRASH4_814
+TIMERA = 0
+
+:CRASH4_784
+if 
+  5000 > TIMERA
+goto_if_false @CRASH4_814
+wait 0
+goto @CRASH4_784
+
+:CRASH4_814
+skip_cutscene_end 
+Text.ClearThisPrint('AMUHLP')
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:CRASH4_842
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_866
+wait 0
+goto @CRASH4_842
+
+:CRASH4_866
+Streaming.RequestModel(#LAEJEFFERSALPHA)
+Streaming.RequestModel(#LAELODPARK02)
+Streaming.RequestModel(#LAEMACPARK02)
+
+:CRASH4_879
+if or
+  not Streaming.HasModelLoaded(#LAEJEFFERSALPHA)
+  not Streaming.HasModelLoaded(#LAELODPARK02)
+  not Streaming.HasModelLoaded(#LAEMACPARK02)
+goto_if_false @CRASH4_914
+wait 0
+goto @CRASH4_879
+
+:CRASH4_914
+Streaming.LoadAllModelsNow
+Hud.SwitchWidescreen(True)
+if 
+  $played_cut1_before_crash4 == 1
+goto_if_false @CRASH4_945
+skip_cutscene_start_internal @CRASH4_2100
+
+:CRASH4_945
+Char.SetCoordinates($scplayer, 1859.931, -1137.139, 22.946)
+Streaming.LoadSceneInDirection(1859.931, -1137.139, 22.946, 89.9)
+if 
+  62@ == 0
+goto_if_false @CRASH4_1339
+World.ClearArea(1, 1924.632, -1126.623, 24.135, 30.0)
+53@ = Char.Create(24, 103, 1924.632, -1126.623, 24.135)
+Char.SetOnlyDamagedByPlayer(53@, True)
+Char.SetHeading(53@, 180.0)
+60@ = Object.Create(#CIGAR, 1924.632, -1126.623, 24.135)
+Task.PickUpObject(53@, 60@, 0.04, 0.1, -0.02, 5, 16, "NULL", "NULL", -1)
+Task.PlayAnimNonInterruptable(53@, "M_SMKLEAN_LOOP", "SMOKING", 4.0, True, False, False, False, -1)
+54@ = Char.Create(24, 102, 1921.157, -1127.438, 24.048)
+Char.SetOnlyDamagedByPlayer(54@, True)
+Char.SetHeading(54@, 270.0)
+Task.PlayAnimNonInterruptable(54@, "IDLE_CHAT", "PED", 4.0, True, False, False, False, -1)
+55@ = Char.Create(24, 103, 1922.157, -1127.438, 24.048)
+Char.SetOnlyDamagedByPlayer(55@, True)
+Char.SetHeading(55@, 90.0)
+Task.PlayAnimNonInterruptable(55@, "IDLE_CHAT", "PED", 4.0, True, False, False, False, -1)
+62@ = 1
+
+:CRASH4_1339
+Camera.SetFixedPosition(1858.909, -1136.102, 26.7903, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1859.867, -1136.38, 26.725, SwitchType.JumpCut)
+World.SetPedDensityMultiplier(0.0)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 2000)
+
+:CRASH4_1412
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_1436
+wait 0
+goto @CRASH4_1412
+
+:CRASH4_1436
+Text.PrintNow('CM2_10', 20000, 1)
+TIMERA = 0
+
+:CRASH4_1459
+if 
+  10000 > TIMERA
+goto_if_false @CRASH4_1489
+wait 0
+goto @CRASH4_1459
+
+:CRASH4_1489
+Text.ClearThisPrint('CM2_10')
+Camera.SetFixedPosition(1916.77, -1130.479, 26.9978, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1917.738, -1130.27, 26.8593, SwitchType.JumpCut)
+Text.PrintNow('CM2_11', 20000, 1)
+TIMERA = 0
+
+:CRASH4_1574
+if 
+  10000 > TIMERA
+goto_if_false @CRASH4_1774
+wait 0
+if 
+  49@ == 0
+goto_if_false @CRASH4_1767
+if 
+  TIMERA > 7000
+goto_if_false @CRASH4_1767
+if 
+  not Char.IsDead(54@)
+goto_if_false @CRASH4_1767
+if 
+  not Char.IsDead(55@)
+goto_if_false @CRASH4_1767
+Task.PlayAnimNonInterruptable(54@, "HNDSHKFA", "GANGS", 4.0, False, False, False, False, -1)
+56@ = 0.0
+Task.PlayAnimNonInterruptable(55@, "HNDSHKFA", "GANGS", 4.0, False, False, False, False, -1)
+57@ = 0.0
+49@ = 1
+
+:CRASH4_1767
+goto @CRASH4_1574
+
+:CRASH4_1774
+Text.ClearThisPrint('CM2_11')
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:CRASH4_1800
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_1824
+wait 0
+goto @CRASH4_1800
+
+:CRASH4_1824
+Streaming.MarkModelAsNoLongerNeeded(#LAEJEFFERSALPHA)
+Streaming.MarkModelAsNoLongerNeeded(#LAELODPARK02)
+Streaming.MarkModelAsNoLongerNeeded(#LAEMACPARK02)
+Text.ClearThisPrint('CM2_2')
+Streaming.RequestCollision(1363.689, -1280.441)
+World.ClearArea(1, 1363.689, -1280.441, 12.5469, 1.0)
+Char.SetCoordinates($scplayer, 1363.689, -1280.441, 12.5469)
+Char.SetHeading($scplayer, 90.0)
+Streaming.LoadSceneInDirection(1363.689, -1280.441, 12.5469, 90.0)
+Streaming.RemoveAnimation("GANGS")
+Streaming.RemoveAnimation("SMOKING")
+if 
+  62@ == 1
+goto_if_false @CRASH4_1994
+Char.Delete(53@)
+Char.Delete(54@)
+Char.Delete(55@)
+Object.Delete(60@)
+
+:CRASH4_1994
+Streaming.MarkModelAsNoLongerNeeded(#CIGAR)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+World.SetPedDensityMultiplier(1.0)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1500)
+
+:CRASH4_2030
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_2054
+wait 0
+goto @CRASH4_2030
+
+:CRASH4_2054
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Game.SetPoliceIgnorePlayer($player1, False)
+if 
+  $played_cut1_before_crash4 == 1
+goto_if_false @CRASH4_2401
+44@ = 1
+
+:CRASH4_2100
+skip_cutscene_end 
+if 
+  44@ == 0
+goto_if_false @CRASH4_2401
+Text.ClearPrints
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:CRASH4_2137
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_2161
+wait 0
+goto @CRASH4_2137
+
+:CRASH4_2161
+World.SetPedDensityMultiplier(1.0)
+Streaming.RequestCollision(1363.689, -1280.441)
+World.ClearArea(1, 1363.689, -1280.441, 12.5469, 1.0)
+Char.SetCoordinates($scplayer, 1363.689, -1280.441, 12.5469)
+Char.SetHeading($scplayer, 90.0)
+Streaming.LoadSceneInDirection(1363.689, -1280.441, 12.5469, 90.0)
+Streaming.RemoveAnimation("GANGS")
+Streaming.RemoveAnimation("SMOKING")
+Streaming.MarkModelAsNoLongerNeeded(#LAEJEFFERSALPHA)
+Streaming.MarkModelAsNoLongerNeeded(#LAELODPARK02)
+Streaming.MarkModelAsNoLongerNeeded(#LAEMACPARK02)
+if 
+  62@ == 1
+goto_if_false @CRASH4_2327
+Char.Delete(53@)
+Char.Delete(54@)
+Char.Delete(55@)
+Object.Delete(60@)
+
+:CRASH4_2327
+Streaming.MarkModelAsNoLongerNeeded(#CIGAR)
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1500)
+
+:CRASH4_2361
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_2385
+wait 0
+goto @CRASH4_2361
+
+:CRASH4_2385
+Camera.SetBehindPlayer
+Game.SetEveryoneIgnorePlayer($player1, False)
+Game.SetPoliceIgnorePlayer($player1, False)
+
+:CRASH4_2401
+$played_cut1_before_crash4 = 1
+52@ = Blip.AddSpriteForCoord(6, 1362.895, -1281.008, 12.586)
+World.SwitchEntryExit('AMMUN1', True)
+Zone.SetGangStrength('GLN1', GangType.Ballas, 40)
+Zone.SetGangStrength('GLN1', GangType.Grove, 0)
+Game.SetOnlyCreateGangMembers(True)
+Game.SetGangWarsTrainingMission(True)
+Zone.SetForGangWarsTraining('GLN1')
+Game.SetWantedMultiplier(0.5)
+Game.CanTriggerGangWarWhenOnAMission(True)
+Game.SetGangWarsActive(True)
+$flag_gang_war_active = 1
+Text.PrintNow('CM2_3', 8000, 1)
+45@ = Blip.AddSpriteForCoord(62, 1932.351, -1189.647, 19.063)
+
+:CRASH4_2552
+if 
+  not Player.IsInInfoZone($player1, 'GLN1')
+goto_if_false @CRASH4_2804
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @CRASH4_2603
+goto @CRASH4_6337
+
+:CRASH4_2603
+if 
+  67@ == 0
+goto_if_false @CRASH4_2710
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2444.895, -1981.524, 13.933, 880.0, 880.0, 100.0)
+goto_if_false @CRASH4_2710
+if 
+  is_var_text_label_empty s$shop_name
+goto_if_false @CRASH4_2710
+Text.PrintHelp('CM2_18')
+TIMERB = 0
+67@ = 1
+
+:CRASH4_2710
+if 
+  67@ == 1
+goto_if_false @CRASH4_2781
+if 
+  is_var_text_label_empty s$shop_name
+goto_if_false @CRASH4_2781
+if 
+  TIMERB > 5000
+goto_if_false @CRASH4_2781
+Text.PrintHelp('CM2_19')
+67@ = 2
+
+:CRASH4_2781
+47@ = Zone.GetGangStrength('GLN1', GangType.Ballas)
+goto @CRASH4_2552
+
+:CRASH4_2804
+Blip.Remove(52@)
+Text.PrintNow('CM2_5', 8000, 1)
+TIMERA = 0
+
+:CRASH4_2832
+if 
+  not Game.IsGangWarGoingOn
+goto_if_false @CRASH4_3096
+wait 0
+if 
+  not Player.IsInInfoZone($player1, 'GLN1')
+goto_if_false @CRASH4_2922
+if 
+  46@ == 0
+goto_if_false @CRASH4_2915
+Text.PrintNow('CM2_6', 8000, 1)
+46@ = 1
+
+:CRASH4_2915
+goto @CRASH4_2974
+
+:CRASH4_2922
+if 
+  46@ == 1
+goto_if_false @CRASH4_2974
+Text.ClearThisPrint('CM2_6')
+Text.PrintNow('CM2_5', 8000, 1)
+46@ = 0
+
+:CRASH4_2974
+if 
+  73@ == 0
+goto_if_false @CRASH4_3036
+if 
+  TIMERA >= 60000
+goto_if_false @CRASH4_3036
+Text.PrintNow('CM2_5', 8000, 1)
+73@ = 1
+
+:CRASH4_3036
+if 
+  73@ == 1
+goto_if_false @CRASH4_3089
+if 
+  TIMERA >= 70000
+goto_if_false @CRASH4_3089
+TIMERA = 0
+73@ = 0
+
+:CRASH4_3089
+goto @CRASH4_2832
+
+:CRASH4_3096
+Text.ClearThisPrint('CM2_5')
+TIMERA = 0
+
+:CRASH4_3114
+if 
+  47@ <> 0
+goto_if_false @CRASH4_3456
+wait 0
+47@ = Zone.GetGangStrength('GLN1', GangType.Ballas)
+74@ = Zone.GetGangStrength('GLN1', GangType.Grove)
+if 
+  not Player.IsInInfoZone($player1, 'GLN1')
+goto_if_false @CRASH4_3327
+if 
+  46@ == 0
+goto_if_false @CRASH4_3234
+Text.PrintNow('CM2_6', 8000, 1)
+46@ = 1
+
+:CRASH4_3234
+if 
+  not Game.IsGangWarGoingOn
+goto_if_false @CRASH4_3313
+if 
+  74@ == 0
+goto_if_false @CRASH4_3306
+if 
+  66@ == 0
+goto_if_false @CRASH4_3306
+Text.PrintNow('CM2_17', 8000, 1)
+66@ = 1
+
+:CRASH4_3306
+goto @CRASH4_3320
+
+:CRASH4_3313
+66@ = 0
+
+:CRASH4_3320
+goto @CRASH4_3449
+
+:CRASH4_3327
+if 
+  46@ == 1
+goto_if_false @CRASH4_3363
+Text.ClearThisPrint('CM2_6')
+46@ = 0
+
+:CRASH4_3363
+if 
+  not Game.IsGangWarGoingOn
+goto_if_false @CRASH4_3442
+if 
+  74@ == 0
+goto_if_false @CRASH4_3435
+if 
+  65@ == 0
+goto_if_false @CRASH4_3435
+Text.PrintNow('CM2_16', 8000, 1)
+65@ = 1
+
+:CRASH4_3435
+goto @CRASH4_3449
+
+:CRASH4_3442
+65@ = 0
+
+:CRASH4_3449
+goto @CRASH4_3114
+
+:CRASH4_3456
+Blip.Remove(45@)
+Text.ClearThisPrint('CM2_16')
+Text.ClearThisPrint('CM2_17')
+Text.ClearThisPrint('CM2_6')
+Text.ClearThisPrint('CM2_5')
+Zone.SetGangStrength('GLN1', GangType.Ballas, 0)
+Game.CanTriggerGangWarWhenOnAMission(False)
+wait 5000
+Game.SetOnlyCreateGangMembers(False)
+ENTEXT_63()
+
+:CRASH4_3540
+if 
+  $player_is_completely_safe <> 1
+goto_if_false @CRASH4_3576
+wait 0
+ENTEXT_63()
+goto @CRASH4_3540
+
+:CRASH4_3576
+Text.ClearPrints
+Player.SetControl($player1, False)
+Game.SetPoliceIgnorePlayer($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:CRASH4_3614
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_3638
+wait 0
+goto @CRASH4_3614
+
+:CRASH4_3638
+World.SetPedDensityMultiplier(0.0)
+Player.MakeGangDisappear
+Hud.SwitchWidescreen(True)
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @CRASH4_3745
+World.ClearArea(1, 1859.931, -1137.139, 22.946, 2.0)
+Char.SetCoordinates($scplayer, 1859.931, -1137.139, 22.946)
+Char.SetHeading($scplayer, 284.0)
+Streaming.LoadScene(1859.931, -1137.139, 22.946)
+goto @CRASH4_3851
+
+:CRASH4_3745
+75@ = Char.StoreCarIsIn($scplayer)
+World.ClearArea(1, 1859.931, -1137.139, 22.946, 2.0)
+Char.WarpFromCarToCoord($scplayer, 1859.931, -1137.139, 22.946)
+
+:CRASH4_3797
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CRASH4_3824
+wait 0
+goto @CRASH4_3797
+
+:CRASH4_3824
+Char.SetHeading($scplayer, 284.0)
+Streaming.LoadScene(1859.931, -1137.139, 22.946)
+
+:CRASH4_3851
+Camera.SetFixedPosition(1859.828, -1136.18, 33.7679, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1860.751, -1136.463, 33.508, SwitchType.JumpCut)
+if 
+  63@ == 0
+goto_if_false @CRASH4_4081
+53@ = Char.Create(24, 106, 1910.336, -1154.475, 22.699)
+Char.SetHeading(53@, 131.345)
+Char.SetOnlyDamagedByPlayer(53@, True)
+Task.PlayAnimNonInterruptable(53@, "IDLE_CHAT", "PED", 4.0, True, False, False, False, -1)
+54@ = Char.Create(24, 107, 1907.99, -1157.554, 22.932)
+Char.SetHeading(54@, 318.746)
+Char.SetOnlyDamagedByPlayer(54@, True)
+Task.PlayAnimNonInterruptable(54@, "IDLE_CHAT", "PED", 4.0, True, False, False, False, -1)
+63@ = 1
+
+:CRASH4_4081
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+
+:CRASH4_4096
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_4120
+wait 0
+goto @CRASH4_4096
+
+:CRASH4_4120
+if 
+  $played_cut2_before_crash4 == 1
+goto_if_false @CRASH4_4145
+skip_cutscene_start_internal @CRASH4_4675
+
+:CRASH4_4145
+Text.PrintNow('CM2_12', 20000, 1)
+TIMERA = 0
+
+:CRASH4_4168
+if 
+  10000 > TIMERA
+goto_if_false @CRASH4_4198
+wait 0
+goto @CRASH4_4168
+
+:CRASH4_4198
+Text.ClearThisPrint('CM2_12')
+Camera.SetFixedPosition(1891.889, -1163.394, 25.5792, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1892.865, -1163.187, 25.5167, SwitchType.JumpCut)
+Text.PrintNow('CM2_13', 20000, 1)
+TIMERA = 0
+
+:CRASH4_4283
+if 
+  10000 > TIMERA
+goto_if_false @CRASH4_4313
+wait 0
+goto @CRASH4_4283
+
+:CRASH4_4313
+Text.ClearThisPrint('CM2_13')
+Text.PrintNow('CM2_14', 20000, 1)
+TIMERA = 0
+
+:CRASH4_4347
+if 
+  10000 > TIMERA
+goto_if_false @CRASH4_4377
+wait 0
+goto @CRASH4_4347
+
+:CRASH4_4377
+Text.ClearThisPrint('CM2_14')
+Camera.SetFixedPosition(1859.828, -1136.18, 33.7679, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1860.751, -1136.463, 33.508, SwitchType.JumpCut)
+Text.PrintNow('CM2_15', 20000, 1)
+TIMERA = 0
+
+:CRASH4_4462
+if 
+  10000 > TIMERA
+goto_if_false @CRASH4_4492
+wait 0
+goto @CRASH4_4462
+
+:CRASH4_4492
+Text.ClearThisPrint('CM2_15')
+Text.PrintNow('CM2_20', 20000, 1)
+TIMERA = 0
+
+:CRASH4_4526
+if 
+  10000 > TIMERA
+goto_if_false @CRASH4_4556
+wait 0
+goto @CRASH4_4526
+
+:CRASH4_4556
+Text.ClearThisPrint('CM2_20')
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:CRASH4_4582
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_4606
+wait 0
+goto @CRASH4_4582
+
+:CRASH4_4606
+Text.ClearPrints
+if 
+  63@ == 1
+goto_if_false @CRASH4_4636
+Char.Delete(53@)
+Char.Delete(54@)
+
+:CRASH4_4636
+World.SetPedDensityMultiplier(1.0)
+if 
+  $played_cut2_before_crash4 == 1
+goto_if_false @CRASH4_4771
+61@ = 1
+$played_cut2_before_crash4 = 1
+
+:CRASH4_4675
+skip_cutscene_end 
+if 
+  61@ == 0
+goto_if_false @CRASH4_4771
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:CRASH4_4710
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_4734
+wait 0
+goto @CRASH4_4710
+
+:CRASH4_4734
+Text.ClearPrints
+World.SetPedDensityMultiplier(1.0)
+if 
+  63@ == 1
+goto_if_false @CRASH4_4771
+Char.Delete(53@)
+Char.Delete(54@)
+
+:CRASH4_4771
+$played_cut2_before_crash4 = 1
+Camera.SetFixedPosition(1914.107, -1130.994, 27.8685, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1914.841, -1130.332, 27.7162, SwitchType.JumpCut)
+if 
+  $flag_end_guy_audio_crash4 == 0
+goto_if_false @CRASH4_4861
+Audio.LoadMissionAudio(10830, 1)
+goto @CRASH4_4918
+
+:CRASH4_4861
+if 
+  $flag_end_guy_audio_crash4 == 1
+goto_if_false @CRASH4_4893
+Audio.LoadMissionAudio(10831, 1)
+goto @CRASH4_4918
+
+:CRASH4_4893
+if 
+  $flag_end_guy_audio_crash4 == 2
+goto_if_false @CRASH4_4918
+Audio.LoadMissionAudio(10832, 1)
+
+:CRASH4_4918
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CRASH4_4944
+wait 0
+goto @CRASH4_4918
+
+:CRASH4_4944
+World.ClearArea(0, 1922.439, -1118.043, 25.125, 10.0)
+34@ = Char.Create(25, 103, 1922.439, -1118.043, 25.125)
+Char.SetHeading(34@, 180.0)
+Char.SetOnlyDamagedByPlayer(34@, True)
+Char.GiveWeapon(34@, WeaponType.Tec9, 30000)
+Char.SetProofs(34@, True, True, True, True, True)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+if 
+  not Char.IsDead(34@)
+goto_if_false @CRASH4_5096
+Task.GoStraightToCoord(34@, 1922.328, -1127.938, 24.078, MoveState.Run, -1)
+goto @CRASH4_5103
+
+:CRASH4_5096
+38@ = 1
+
+:CRASH4_5103
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_5127
+wait 0
+goto @CRASH4_5103
+
+:CRASH4_5127
+if 
+  not Char.IsDead(34@)
+goto_if_false @CRASH4_5315
+Char.ShutUpForScriptedSpeech(34@, True)
+if 
+  $flag_end_guy_audio_crash4 == 0
+goto_if_false @CRASH4_5205
+Text.PrintNow('CRA2_ZA', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Char.StartFacialTalk(34@, 999999)
+goto @CRASH4_5308
+
+:CRASH4_5205
+if 
+  $flag_end_guy_audio_crash4 == 1
+goto_if_false @CRASH4_5260
+Text.PrintNow('CRA2_ZB', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Char.StartFacialTalk(34@, 999999)
+goto @CRASH4_5308
+
+:CRASH4_5260
+if 
+  $flag_end_guy_audio_crash4 == 2
+goto_if_false @CRASH4_5308
+Text.PrintNow('CRA2_ZC', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Char.StartFacialTalk(34@, 999999)
+
+:CRASH4_5308
+goto @CRASH4_5355
+
+:CRASH4_5315
+Text.ClearThisPrint('CRA2_ZA')
+Text.ClearThisPrint('CRA2_ZB')
+Text.ClearThisPrint('CRA2_ZC')
+38@ = 1
+
+:CRASH4_5355
+skip_cutscene_start_internal @CRASH4_5749
+TIMERA = 0
+
+:CRASH4_5369
+if 
+  2000 > TIMERA
+goto_if_false @CRASH4_5547
+wait 0
+if 
+  38@ == 0
+goto_if_false @CRASH4_5540
+if 
+  Char.IsDead(34@)
+goto_if_false @CRASH4_5492
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CRASH4_5445
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+
+:CRASH4_5445
+Text.ClearThisPrint('CRA2_ZA')
+Text.ClearThisPrint('CRA2_ZB')
+Text.ClearThisPrint('CRA2_ZC')
+38@ = 1
+goto @CRASH4_5540
+
+:CRASH4_5492
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CRASH4_5540
+Text.ClearThisPrint('CRA2_ZA')
+Text.ClearThisPrint('CRA2_ZB')
+Text.ClearThisPrint('CRA2_ZC')
+
+:CRASH4_5540
+goto @CRASH4_5369
+
+:CRASH4_5547
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CRASH4_5595
+Text.ClearThisPrint('CRA2_ZA')
+Text.ClearThisPrint('CRA2_ZB')
+Text.ClearThisPrint('CRA2_ZC')
+
+:CRASH4_5595
+if 
+  not Char.IsDead(34@)
+goto_if_false @CRASH4_5630
+Char.StopFacialTalk(34@)
+Char.ShutUpForScriptedSpeech(34@, False)
+goto @CRASH4_5637
+
+:CRASH4_5630
+38@ = 1
+
+:CRASH4_5637
+Player.MakeGangReappear
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Game.SetPoliceIgnorePlayer($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, False)
+if 
+  not Char.IsDead(34@)
+goto_if_false @CRASH4_5730
+Char.SetDecisionMaker(34@, 43@)
+35@ = Blip.AddForChar(34@)
+Task.KillCharOnFoot(34@, $scplayer)
+Char.SetProofs(34@, False, False, False, False, False)
+goto @CRASH4_5742
+
+:CRASH4_5730
+Blip.Remove(35@)
+38@ = 1
+
+:CRASH4_5742
+64@ = 1
+
+:CRASH4_5749
+skip_cutscene_end 
+if 
+  64@ == 0
+goto_if_false @CRASH4_6040
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:CRASH4_5784
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_5808
+wait 0
+goto @CRASH4_5784
+
+:CRASH4_5808
+Player.MakeGangReappear
+if 
+  not Char.IsDead(34@)
+goto_if_false @CRASH4_5899
+World.ClearArea(0, 1922.903, -1128.477, 24.092, 2.0)
+Char.SetCoordinates(34@, 1922.903, -1128.477, 24.092)
+Char.SetHeading(34@, 180.0)
+Char.StopFacialTalk(34@)
+Char.ShutUpForScriptedSpeech(34@, False)
+goto @CRASH4_5906
+
+:CRASH4_5899
+38@ = 1
+
+:CRASH4_5906
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+
+:CRASH4_5929
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRASH4_5953
+wait 0
+goto @CRASH4_5929
+
+:CRASH4_5953
+Player.SetControl($player1, True)
+Game.SetPoliceIgnorePlayer($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, False)
+if 
+  not Char.IsDead(34@)
+goto_if_false @CRASH4_6028
+35@ = Blip.AddForChar(34@)
+Task.KillCharOnFoot(34@, $scplayer)
+Char.SetProofs(34@, False, False, False, False, False)
+goto @CRASH4_6040
+
+:CRASH4_6028
+Blip.Remove(35@)
+38@ = 1
+
+:CRASH4_6040
+$flag_end_guy_audio_crash4 += 1
+if 
+  $flag_end_guy_audio_crash4 > 2
+goto_if_false @CRASH4_6072
+$flag_end_guy_audio_crash4 = 0
+
+:CRASH4_6072
+Text.PrintNow('CM2_8', 8000, 1)
+
+:CRASH4_6088
+if 
+  38@ <> 1
+goto_if_false @CRASH4_6174
+wait 0
+if 
+  38@ == 0
+goto_if_false @CRASH4_6167
+if 
+  Char.IsDead(34@)
+goto_if_false @CRASH4_6167
+Text.ClearThisPrint('CM2_7')
+Blip.Remove(35@)
+38@ = 1
+
+:CRASH4_6167
+goto @CRASH4_6088
+
+:CRASH4_6174
+goto @CRASH4_6337
+
+:CRASH4_6181
+Zone.SetGangStrength('GLN1', GangType.Ballas, 40)
+Zone.SetGangStrength('GLN1', GangType.Grove, 0)
+Zone.SetGangStrength('GLN1', GangType.Vagos, 71@)
+Zone.SetGangStrength('GLN1', GangType.Aztecas, 72@)
+World.SwitchEntryExit('AMMUN1', False)
+World.SwitchEntryExit('AMMUN2', False)
+World.SwitchEntryExit('AMMUN3', False)
+World.SwitchEntryExit('AMMUN4', False)
+World.SwitchEntryExit('AMMUN5', False)
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+Game.SetGangWarsActive(False)
+$flag_gang_war_active = 0
+return 
+
+:CRASH4_6337
+$flag_sweet_mission_counter += 1
+Stat.RegisterMissionPassed('CRASH_2')
+Stat.PlayerMadeProgress(1)
+Text.PrintWithNumberBig('M_PASSR', 40, 5000, TextStyle.Middle)
+Stat.AwardPlayerMissionRespect(40)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+Blip.Remove($sweet_contact_blip)
+$sweet_contact_blip = Blip.AddSpriteForContactPoint($sweet_blip_icon, $sweetX, $sweetY, $sweetZ)
+$territory_pickup = Pickup.CreateProtection(2502.1, -1686.38, 13.0, 10000, $territory_cash)
+start_new_script @TCASH 
+World.SwitchEntryExit('AMMUN1', True)
+World.SwitchEntryExit('AMMUN2', True)
+World.SwitchEntryExit('AMMUN3', True)
+World.SwitchEntryExit('AMMUN4', True)
+World.SwitchEntryExit('AMMUN5', True)
+if 
+  $add_all_ammu_blips == 0
+goto_if_false @CRASH4_6778
+$weapon_shop1_blip = Blip.AddShortRangeSpriteForCoord(6, 1372.9, -1278.8, 12.5)
+$ammu_shop_blip = Blip.AddShortRangeSpriteForCoord(6, 2400.5, -1978.4, 13.5)
+$2579 = Blip.AddShortRangeSpriteForCoord(6, -2626.6, 209.4, 4.9)
+$2580 = Blip.AddShortRangeSpriteForCoord(6, 2535.9, 2083.5, 10.8)
+$2581 = Blip.AddShortRangeSpriteForCoord(6, 2156.5, 943.2, 10.8)
+$2582 = Blip.AddShortRangeSpriteForCoord(6, 779.7, 1874.3, 4.9)
+$2583 = Blip.AddShortRangeSpriteForCoord(6, -2092.7, -2463.8, 30.6)
+$2584 = Blip.AddShortRangeSpriteForCoord(6, 240.0, -178.2, 2.0)
+$2585 = Blip.AddShortRangeSpriteForCoord(6, -1509.4, 2611.8, 58.5)
+$2586 = Blip.AddShortRangeSpriteForCoord(6, -315.67, 829.87, 13.43)
+$2587 = Blip.AddShortRangeSpriteForCoord(6, 2332.9, 63.6, 31.0)
+$add_all_ammu_blips = 1
+
+:CRASH4_6778
+return 
+
+:CRASH4_6780
+Streaming.MarkModelAsNoLongerNeeded(#LAEJEFFERSALPHA)
+Streaming.MarkModelAsNoLongerNeeded(#LAELODPARK02)
+Streaming.MarkModelAsNoLongerNeeded(#LAEMACPARK02)
+World.SetPedDensityMultiplier(1.0)
+Game.SetOnlyCreateGangMembers(False)
+$onmission = 0
+$flag_on_doberman_mission = 0
+Blip.Remove(45@)
+Blip.Remove(35@)
+Blip.Remove(52@)
+Game.CanTriggerGangWarWhenOnAMission(False)
+$timer_mobile_start = Clock.GetGameTimer()
+Streaming.MarkModelAsNoLongerNeeded(102)
+Streaming.MarkModelAsNoLongerNeeded(103)
+Streaming.MarkModelAsNoLongerNeeded(372)
+Streaming.MarkModelAsNoLongerNeeded(106)
+Streaming.MarkModelAsNoLongerNeeded(107)
+Streaming.RemoveAnimation("GANGS")
+Streaming.RemoveAnimation("SMOKING")
+Object.Delete(60@)
+Streaming.MarkModelAsNoLongerNeeded(#CIGAR)
+Char.Delete(53@)
+Char.Delete(54@)
+Char.Delete(55@)
+DecisionMaker.Remove(43@)
+Mission.Finish
+return 
+

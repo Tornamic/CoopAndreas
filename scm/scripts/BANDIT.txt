@@ -1,0 +1,573 @@
+//-------------External script 4 (SLOT_MACHINE)---------------
+
+:BANDIT
+script_name 'BANDIT'
+4@ = 0
+6@ = 0
+10@ = 0.0
+11@ = 0.0
+12@ = 0.0
+13@ = 0
+14@ = Math.RandomIntInRange(0, 5)
+if 
+  14@ == 1
+goto_if_false @BANDIT_96
+14@ = 5
+
+:BANDIT_96
+if 
+  14@ == 0
+goto_if_false @BANDIT_121
+14@ = 1
+
+:BANDIT_121
+if 
+  14@ == 2
+goto_if_false @BANDIT_146
+14@ = 10
+
+:BANDIT_146
+if 
+  14@ == 3
+goto_if_false @BANDIT_171
+14@ = 20
+
+:BANDIT_171
+if 
+  14@ == 4
+goto_if_false @BANDIT_196
+14@ = 50
+
+:BANDIT_196
+if 
+  4@ == 1
+goto_if_false @BANDIT_253
+0@ = Object.CreateNoOffset(#KB_BANDIT_U, 0.0, 0.0, 0.0)
+1@ = Object.CreateNoOffset(#CJ_WHEEL_1, $x, $y, $z)
+
+:BANDIT_253
+wait 0
+$game_timer = Clock.GetGameTimer()
+if 
+  Object.DoesExist(0@)
+goto_if_false @BANDIT_2859
+if 
+  Object.IsWithinBrainActivationRange(0@)
+goto_if_false @BANDIT_2845
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BANDIT_2831
+switch_start 4@ total_jumps 7 default_jump 0 @BANDIT_2824 jumps 0 @BANDIT_373 1 @BANDIT_590 2 @BANDIT_792 3 @BANDIT_1356 4 @BANDIT_1595 5 @BANDIT_1943 6 @BANDIT_2549
+
+:BANDIT_373
+15@ = Object.GetModel(0@)
+if 
+  Streaming.HasModelLoaded(15@)
+goto_if_false @BANDIT_583
+$heading = Object.GetHeading(0@)
+if 
+  not Object.DoesExist(1@)
+goto_if_false @BANDIT_462
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 1)
+1@ = Object.CreateNoOffset(#CJ_WHEEL_1, $x, $y, $z)
+Object.SetHeading(1@, $heading)
+
+:BANDIT_462
+if 
+  not Object.DoesExist(2@)
+goto_if_false @BANDIT_519
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 2)
+2@ = Object.CreateNoOffset(#CJ_WHEEL_02, $x, $y, $z)
+Object.SetHeading(2@, $heading)
+
+:BANDIT_519
+if 
+  not Object.DoesExist(3@)
+goto_if_false @BANDIT_576
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 3)
+3@ = Object.CreateNoOffset(#CJ_WHEEL_03, $x, $y, $z)
+Object.SetHeading(3@, $heading)
+
+:BANDIT_576
+4@ += 1
+
+:BANDIT_583
+goto @BANDIT_2824
+
+:BANDIT_590
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0, -1.0, -0.5)
+16@ = World.GetUserOfClosestMapAttractor($x, $y, $z, 1.5, #KB_BANDIT_U, "PEDSLOT")
+if 
+  16@ == -1
+goto_if_false @BANDIT_785
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $x, $y, $z, 0.6, 0.6, 1.0)
+goto_if_false @BANDIT_758
+Text.PrintHelpForeverWithNumber('SLOT_02', 14@)
+Pad.SetPlayerEnterCarButton($player1, False)
+Audio.LoadMissionAudio(1814, 4)
+gosub @BANDIT_2873
+4@ += 1
+goto @BANDIT_785
+
+:BANDIT_758
+if 
+  13@ == 1
+goto_if_false @BANDIT_785
+Txd.Remove
+13@ = 0
+
+:BANDIT_785
+goto @BANDIT_2824
+
+:BANDIT_792
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0, -1.0, -0.5)
+16@ = World.GetUserOfClosestMapAttractor($x, $y, $z, 1.5, #KB_BANDIT_U, "PEDSLOT")
+if 
+  16@ == -1
+goto_if_false @BANDIT_1306
+Streaming.RequestAnimation("CASINO")
+if 
+  Streaming.HasAnimationLoaded("CASINO")
+goto_if_false @BANDIT_1299
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $x, $y, $z, 0.6, 0.6, 1.0)
+goto_if_false @BANDIT_1256
+17@ = World.GetRandomCharInAreaOffsetNoSave($x, $y, $z, 0.6, 0.6, 1.0)
+if 
+  17@ == -1
+goto_if_false @BANDIT_1249
+if 
+  not Game.IsMinigameInProgress
+goto_if_false @BANDIT_1249
+gosub @BANDIT_2873
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BANDIT_1249
+set_var_int_to_lvar_int $temp_integer_1 = 14@
+$temp_integer_1 -= 1
+if 
+  Player.IsScoreGreater($player1, $temp_integer_1)
+goto_if_false @BANDIT_1229
+Player.SetControl($player1, False)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+$heading = Object.GetHeading(0@)
+Task.CharSlideToCoordAndPlayAnim($scplayer, $x, $y, $z, $heading, 0.4, "SLOT_PLYR", "CASINO", 4.0, False, False, False, False, 0)
+set_var_int_to_lvar_int $temp_integer_1 = 14@
+$temp_integer_1 *= -1
+Player.AddScore($player1, $temp_integer_1)
+Stat.IncrementInt(14@, 35)
+cset_var_float_to_lvar_int $temp_float_1 = integer 14@
+$temp_float_1 *= 0.001
+Stat.IncrementFloat($temp_float_1, 81)
+Text.ClearHelp
+Game.SetMinigameInProgress(True)
+set_lvar_int_to_var_int 5@ = $game_timer
+5@ += 750
+4@ += 1
+goto @BANDIT_1249
+
+:BANDIT_1229
+Sound.AddOneOffSound(1053, 0.0, 0.0, 0.0)
+
+:BANDIT_1249
+goto @BANDIT_1299
+
+:BANDIT_1256
+if 
+  13@ == 1
+goto_if_false @BANDIT_1283
+Txd.Remove
+13@ = 0
+
+:BANDIT_1283
+Text.ClearHelp
+Pad.SetPlayerEnterCarButton($player1, True)
+4@ = 1
+
+:BANDIT_1299
+goto @BANDIT_1349
+
+:BANDIT_1306
+if 
+  13@ == 1
+goto_if_false @BANDIT_1333
+Txd.Remove
+13@ = 0
+
+:BANDIT_1333
+Text.ClearHelp
+Pad.SetPlayerEnterCarButton($player1, True)
+4@ = 1
+
+:BANDIT_1349
+goto @BANDIT_2824
+
+:BANDIT_1356
+gosub @BANDIT_2873
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 5@
+goto_if_false @BANDIT_1588
+Audio.LoadMissionAudio(1814, 4)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @BANDIT_1424
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1087)
+
+:BANDIT_1424
+Pad.SetPlayerEnterCarButton($player1, True)
+Text.UseCommands(True)
+if 
+  13@ == 0
+goto_if_false @BANDIT_1539
+Txd.LoadDictionary('LD_SLOT')
+Txd.LoadSprite("CHERRY", 1)
+Txd.LoadSprite("GRAPES", 2)
+Txd.LoadSprite("R_69", 3)
+Txd.LoadSprite("BELL", 4)
+Txd.LoadSprite("BAR1_O", 5)
+Txd.LoadSprite("BAR2_O", 6)
+13@ = 1
+
+:BANDIT_1539
+Audio.LoadMissionAudio(1814, 4)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @BANDIT_1581
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1089)
+
+:BANDIT_1581
+4@ += 1
+
+:BANDIT_1588
+goto @BANDIT_2824
+
+:BANDIT_1595
+add_timed_val_to_float_lvar 10@ += frame_delta_time * 1.0
+if 
+  10@ > 10.0
+goto_if_false @BANDIT_1682
+10@ = 10.0
+$temp_integer_1 = Math.RandomIntInRange(2000, 3000)
+6@ = 0
+set_lvar_int_to_var_int 5@ = $game_timer
+add_int_var_to_int_lvar 5@ += $temp_integer_1
+Char.ClearTasks($scplayer)
+4@ += 1
+
+:BANDIT_1682
+add_timed_val_to_float_lvar 11@ += frame_delta_time * 1.1
+if 
+  11@ > 10.0
+goto_if_false @BANDIT_1723
+11@ = 10.0
+
+:BANDIT_1723
+add_timed_val_to_float_lvar 12@ += frame_delta_time * 1.05
+if 
+  12@ > 10.0
+goto_if_false @BANDIT_1764
+12@ = 10.0
+
+:BANDIT_1764
+$heading = Object.GetHeading(0@)
+$an = 0
+
+:BANDIT_1779
+if 
+  3 > $an
+goto_if_false @BANDIT_1929
+if 
+  10@($an,3f) > 0.0
+goto_if_false @BANDIT_1915
+add_timed_float_lvar_to_float_lvar 7@($an,3f) += frame_delta_time * 10@($an,3f)
+if or
+  7@($an,3f) > 360.0
+  7@($an,3f) == 360.0
+goto_if_false @BANDIT_1891
+7@($an,3f) -= 360.0
+
+:BANDIT_1891
+Object.SetRotation(1@($an,3i), 7@($an,3f), 0.0, $heading)
+
+:BANDIT_1915
+$an += 1
+goto @BANDIT_1779
+
+:BANDIT_1929
+gosub @BANDIT_2873
+goto @BANDIT_2824
+
+:BANDIT_1943
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 5@
+goto_if_false @BANDIT_2370
+sub_timed_val_from_float_lvar 10@(6@,3f) -= frame_delta_time * 0.3
+if 
+  0.6 > 10@(6@,3f)
+goto_if_false @BANDIT_2370
+set_var_float_to_lvar_float $temp_float_1 = 7@(6@,3f)
+$temp_float_1 /= 20.0
+cset_var_int_to_var_float $temp_integer_1 = float $temp_float_1
+$temp_integer_1 *= 20
+cset_var_float_to_var_int $temp_float_1 = integer $temp_integer_1
+set_var_float_to_lvar_float $temp_float_2 = 7@(6@,3f)
+sub_float_var_from_float_var $temp_float_2 -= $temp_float_1
+if 
+  10.0 > $temp_float_2
+goto_if_false @BANDIT_2356
+10@(6@,3f) = 0.0
+set_var_float_to_lvar_float $temp_float_1 = 7@(6@,3f)
+$temp_float_1 /= 20.0
+cset_var_int_to_var_float $temp_integer_1 = float $temp_float_1
+cset_lvar_float_to_var_int 7@(6@,3f) = integer $temp_integer_1
+7@(6@,3f) *= 20.0
+$temp_integer_1 = Math.RandomIntInRange(750, 1000)
+set_lvar_int_to_var_int 5@ = $game_timer
+add_int_var_to_int_lvar 5@ += $temp_integer_1
+if 
+  2 > 6@
+goto_if_false @BANDIT_2300
+Audio.LoadMissionAudio(1814, 4)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @BANDIT_2244
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1088)
+
+:BANDIT_2244
+Audio.LoadMissionAudio(1814, 4)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @BANDIT_2286
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1089)
+
+:BANDIT_2286
+6@ += 1
+goto @BANDIT_2349
+
+:BANDIT_2300
+Audio.LoadMissionAudio(1814, 4)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @BANDIT_2342
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1088)
+
+:BANDIT_2342
+4@ += 1
+
+:BANDIT_2349
+goto @BANDIT_2370
+
+:BANDIT_2356
+10@(6@,3f) = 0.6
+
+:BANDIT_2370
+$heading = Object.GetHeading(0@)
+$an = 0
+
+:BANDIT_2385
+if 
+  3 > $an
+goto_if_false @BANDIT_2535
+if 
+  10@($an,3f) > 0.0
+goto_if_false @BANDIT_2521
+add_timed_float_lvar_to_float_lvar 7@($an,3f) += frame_delta_time * 10@($an,3f)
+if or
+  7@($an,3f) > 360.0
+  7@($an,3f) == 360.0
+goto_if_false @BANDIT_2497
+7@($an,3f) -= 360.0
+
+:BANDIT_2497
+Object.SetRotation(1@($an,3i), 7@($an,3f), 0.0, $heading)
+
+:BANDIT_2521
+$an += 1
+goto @BANDIT_2385
+
+:BANDIT_2535
+gosub @BANDIT_2873
+goto @BANDIT_2824
+
+:BANDIT_2549
+set_var_float_to_lvar_float $temp_float_1 = 7@
+$temp_float_1 /= 20.0
+cset_var_int_to_var_float $temp_integer_1 = float $temp_float_1
+set_var_float_to_lvar_float $temp_float_1 = 8@
+$temp_float_1 /= 20.0
+cset_var_int_to_var_float $temp_integer_2 = float $temp_float_1
+set_var_float_to_lvar_float $temp_float_1 = 9@
+$temp_float_1 /= 20.0
+cset_var_int_to_var_float $temp_integer_3 = float $temp_float_1
+if and
+  is_int_var_equal_to_int_var $reel1_winnings($temp_integer_1,18i) == $reel2_winnings($temp_integer_2,18i)
+  is_int_var_equal_to_int_var $reel1_winnings($temp_integer_1,18i) == $reel3_winnings($temp_integer_3,18i)
+goto_if_false @BANDIT_2772
+set_var_int_to_lvar_int $temp_integer_4 = 14@
+mult_int_var_by_int_var $temp_integer_4 *= $reel1_winnings($temp_integer_1,18i)
+start_new_script @CASHWIN $temp_integer_4 
+Player.AddScore($player1, $temp_integer_4)
+Audio.LoadMissionAudio(1814, 4)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @BANDIT_2751
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1090)
+
+:BANDIT_2751
+Stat.IncrementInt($temp_integer_4, 37)
+Stat.RegisterInt(StatId.BiggestGamblingWin, $temp_integer_4)
+goto @BANDIT_2792
+
+:BANDIT_2772
+start_new_script @CASHWIN 0 2500 
+Stat.RegisterInt(StatId.BiggestGamblingLoss, 14@)
+
+:BANDIT_2792
+Player.SetControl($player1, True)
+Game.SetMinigameInProgress(False)
+4@ = 1
+gosub @BANDIT_2873
+goto @BANDIT_2824
+
+:BANDIT_2824
+goto @BANDIT_2838
+
+:BANDIT_2831
+goto @BANDIT_3455
+
+:BANDIT_2838
+goto @BANDIT_2852
+
+:BANDIT_2845
+goto @BANDIT_3455
+
+:BANDIT_2852
+goto @BANDIT_2866
+
+:BANDIT_2859
+goto @BANDIT_3455
+
+:BANDIT_2866
+goto @BANDIT_253
+
+:BANDIT_2873
+if 
+  13@ == 1
+goto_if_false @BANDIT_3453
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawWindow($3468, $3473, $3469, $3474, 'DUMMY', 0)
+$an = 0
+
+:BANDIT_2927
+if 
+  3 > $an
+goto_if_false @BANDIT_3453
+set_var_float_to_lvar_float $temp_float_1 = 7@($an,3f)
+$temp_float_1 /= 20.0
+cset_var_int_to_var_float $temp_integer_1 = float $temp_float_1
+if 
+  $an == 0
+goto_if_false @BANDIT_3013
+set_var_int_to_var_int $temp_integer_2 = $reel1_winnings($temp_integer_1,18i)
+set_var_float_to_var_float $x_temp = $reel_sprite_x
+
+:BANDIT_3013
+if 
+  $an == 1
+goto_if_false @BANDIT_3061
+set_var_int_to_var_int $temp_integer_2 = $reel2_winnings($temp_integer_1,18i)
+set_var_float_to_var_float $x_temp = $reel_sprite_x
+$x_temp += 64.0
+
+:BANDIT_3061
+if 
+  $an == 2
+goto_if_false @BANDIT_3109
+set_var_int_to_var_int $temp_integer_2 = $reel3_winnings($temp_integer_1,18i)
+set_var_float_to_var_float $x_temp = $reel_sprite_x
+$x_temp += 128.0
+
+:BANDIT_3109
+if 
+  is_int_var_equal_to_int_var $temp_integer_2 == $cherry
+goto_if_false @BANDIT_3164
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(1, $x_temp, $reel_sprite_y, 64.0, 64.0, 200, 200, 200, 255)
+
+:BANDIT_3164
+if 
+  is_int_var_equal_to_int_var $temp_integer_2 == $grape
+goto_if_false @BANDIT_3219
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(2, $x_temp, $reel_sprite_y, 64.0, 64.0, 200, 200, 200, 255)
+
+:BANDIT_3219
+if 
+  is_int_var_equal_to_int_var $temp_integer_2 == $r_69
+goto_if_false @BANDIT_3274
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(3, $x_temp, $reel_sprite_y, 64.0, 64.0, 200, 200, 200, 255)
+
+:BANDIT_3274
+if 
+  is_int_var_equal_to_int_var $temp_integer_2 == $bell
+goto_if_false @BANDIT_3329
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(4, $x_temp, $reel_sprite_y, 64.0, 64.0, 200, 200, 200, 255)
+
+:BANDIT_3329
+if 
+  is_int_var_equal_to_int_var $temp_integer_2 == $bar1_o
+goto_if_false @BANDIT_3384
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(5, $x_temp, $reel_sprite_y, 64.0, 64.0, 200, 200, 200, 255)
+
+:BANDIT_3384
+if 
+  is_int_var_equal_to_int_var $temp_integer_2 == $bar2_o
+goto_if_false @BANDIT_3439
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(6, $x_temp, $reel_sprite_y, 64.0, 64.0, 200, 200, 200, 255)
+
+:BANDIT_3439
+$an += 1
+goto @BANDIT_2927
+
+:BANDIT_3453
+return 
+
+:BANDIT_3455
+if 
+  4@ > 0
+goto_if_false @BANDIT_3550
+if 
+  4@ > 1
+goto_if_false @BANDIT_3500
+Text.ClearHelp
+Pad.SetPlayerEnterCarButton($player1, True)
+
+:BANDIT_3500
+if 
+  4@ > 2
+goto_if_false @BANDIT_3528
+Streaming.RemoveAnimation("CASINO")
+
+:BANDIT_3528
+Object.Delete(1@)
+Object.Delete(2@)
+Object.Delete(3@)
+4@ = 0
+
+:BANDIT_3550
+if 
+  13@ == 1
+goto_if_false @BANDIT_3577
+Txd.Remove
+13@ = 0
+
+:BANDIT_3577
+terminate_this_script 
+return 
+terminate_this_script 
+

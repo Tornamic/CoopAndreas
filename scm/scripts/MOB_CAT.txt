@@ -1,0 +1,218 @@
+:MOB_CAT
+set_deatharrest_state 0
+script_name 'MOB_CAT'
+
+:MOB_CAT_15
+wait 120
+if and
+  $onmission == 0
+  $flag_mobile_timer == 0
+goto_if_false @MOB_CAT_56
+$timer_mobile_start = Clock.GetGameTimer()
+$flag_mobile_timer = 1
+
+:MOB_CAT_56
+if 
+  $terminate_cat_calls == 1
+goto_if_false @MOB_CAT_76
+terminate_this_script 
+
+:MOB_CAT_76
+ENTEXT_214()
+if 
+  Player.IsPlaying($player1)
+goto_if_false @MOB_CAT_1215
+if 
+  $player_is_completely_safe_for_mobile == 1
+goto_if_false @MOB_CAT_1208
+if 
+  is_int_var_greater_than_int_var $timer_mobile_diff > $call_delay
+goto_if_false @MOB_CAT_1208
+if 
+  $flag_bcrash_mission_counter > 0
+goto_if_false @MOB_CAT_286
+if 
+  $flag_mob_cat == 0
+goto_if_false @MOB_CAT_286
+$call_number = 8
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_CAT_218
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_CAT_218
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_CAT_272
+$flag_mob_cat = 1
+start_new_script @CAT 
+Blip.Remove($cat_contact_blip)
+$cat_contact_blip = Blip.AddSpriteForContactPoint(37, $511, $517, $523)
+
+:MOB_CAT_272
+MOB_GF_3168()
+goto @MOB_CAT_15
+
+:MOB_CAT_286
+if 
+  $flag_bcrash_mission_counter > 0
+goto_if_false @MOB_CAT_407
+if 
+  $1359 == 0
+goto_if_false @MOB_CAT_407
+$call_number = 24
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_CAT_368
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_CAT_368
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_CAT_393
+$1359 = 1
+
+:MOB_CAT_393
+MOB_GF_3168()
+goto @MOB_CAT_15
+
+:MOB_CAT_407
+if and
+  $flag_truth_mission_counter == 0
+  $cat_counter == 1
+goto_if_false @MOB_CAT_565
+if 
+  $1357 == 0
+goto_if_false @MOB_CAT_565
+$call_number = 15
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_CAT_496
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_CAT_496
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_CAT_551
+$1357 = 1
+start_new_script @TRU 
+Blip.Remove($truth_contact_blip)
+$truth_contact_blip = Blip.AddSpriteForContactPoint($truth_blip_icon, $truth2X, $truth2Y, $truth2Z)
+
+:MOB_CAT_551
+MOB_GF_3168()
+goto @MOB_CAT_15
+
+:MOB_CAT_565
+if 
+  $cat_counter == 3
+goto_if_false @MOB_CAT_866
+if 
+  $1361 == 0
+goto_if_false @MOB_CAT_866
+$call_number = 0
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_CAT_647
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_CAT_647
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_CAT_852
+$1361 = 1
+Zone.SetGangStrength('ELCO1', GangType.Vagos, 40)
+Zone.SetGangStrength('ELCO2', GangType.Vagos, 40)
+Zone.SetGangStrength('ELCO1', GangType.Aztecas, 0)
+Zone.SetGangStrength('ELCO2', GangType.Aztecas, 0)
+Zone.SetGangStrength('ELCO1', GangType.Grove, 0)
+Zone.SetGangStrength('ELCO2', GangType.Grove, 0)
+Zone.SetGangStrength('LMEX1A', GangType.Vagos, 30)
+Zone.SetGangStrength('LMEX1B', GangType.Vagos, 30)
+Zone.SetGangStrength('LMEX1A', GangType.Aztecas, 0)
+Zone.SetGangStrength('LMEX1B', GangType.Aztecas, 0)
+Zone.SetGangStrength('LMEX1A', GangType.Grove, 0)
+Zone.SetGangStrength('LMEX1B', GangType.Grove, 0)
+
+:MOB_CAT_852
+MOB_GF_3168()
+goto @MOB_CAT_15
+
+:MOB_CAT_866
+if and
+  $cat_counter > 1
+  $flag_bcesar_mission_counter == 0
+goto_if_false @MOB_CAT_1047
+if 
+  $1362 == 0
+goto_if_false @MOB_CAT_1047
+$call_number = 10
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_CAT_955
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_CAT_955
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_CAT_1033
+$1362 = 1
+start_new_script @BCESAR 
+Blip.Remove($bcesar_contact_blip)
+$bcesar_contact_blip = Blip.AddSpriteForContactPoint($cesar_blip_icon, $bcesarX, $bcesarY, $bcesarZ)
+Blip.ChangeDisplay($bcesar_contact_blip, BlipDisplay.BlipOnly)
+Text.Print('BC4_1', 8000, 1)
+
+:MOB_CAT_1033
+MOB_GF_3168()
+goto @MOB_CAT_15
+
+:MOB_CAT_1047
+if and
+  $cat_counter > 3
+  $flag_bcesar_mission_counter > 9
+goto_if_false @MOB_CAT_1208
+if 
+  $1363 == 0
+goto_if_false @MOB_CAT_1208
+$call_number = 16
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_CAT_1136
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_CAT_1136
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_CAT_1194
+$1363 = 1
+Blip.Remove($truth_contact_blip)
+$truth_contact_blip = Blip.AddSpriteForContactPoint($truth_blip_icon, $truthX, $truthY, $truthZ)
+Game.SetMaxWantedLevel(5)
+$terminate_cat_calls = 1
+
+:MOB_CAT_1194
+MOB_GF_3168()
+goto @MOB_CAT_15
+
+:MOB_CAT_1208
+goto @MOB_CAT_1222
+
+:MOB_CAT_1215
+$flag_cell_nation = 0
+
+:MOB_CAT_1222
+goto @MOB_CAT_15
+

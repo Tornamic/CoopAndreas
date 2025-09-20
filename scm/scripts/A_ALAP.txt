@@ -1,0 +1,45 @@
+:A_ALAP
+script_name 'A_ALAP'
+if 
+  is_int_lvar_greater_or_equal_to_int_var 1@ >= $SLOT_priority($preload_slot,2i)
+goto_if_false @A_ALAP_317
+set_var_int_to_var_int $SLOT_sample($preload_slot,2i) = $load_sample
+set_var_text_label $SLOT_text($preload_slot,2s) = s$load_text
+Audio.ClearMissionAudio($actual_SLOT($preload_slot,2i))
+Audio.LoadMissionAudio($SLOT_sample($preload_slot,2i), $actual_SLOT($preload_slot,2i))
+if 
+  $SLOT_play_status($preload_slot,2i) <> 0
+goto_if_false @A_ALAP_159
+if 
+  not Char.IsDead($SLOT_ped($preload_slot,2i))
+goto_if_false @A_ALAP_159
+if 
+  not is_int_var_equal_to_int_lvar $SLOT_ped($preload_slot,2i) == 2@
+goto_if_false @A_ALAP_159
+Char.ShutUpForScriptedSpeech($SLOT_ped($preload_slot,2i), False)
+
+:A_ALAP_159
+$SLOT_status($preload_slot,2i) = 0
+set_var_int_to_lvar_int $SLOT_play_status($preload_slot,2i) = 0@
+if 
+  $SLOT_play_status($preload_slot,2i) <> 0
+goto_if_false @A_ALAP_293
+if 
+  $SLOT_play_status($preload_slot,2i) == 0
+goto_if_false @A_ALAP_250
+2@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+
+:A_ALAP_250
+set_var_int_to_lvar_int $SLOT_ped($preload_slot,2i) = 2@
+if 
+  not Char.IsDead($SLOT_ped($preload_slot,2i))
+goto_if_false @A_ALAP_293
+Char.ShutUpForScriptedSpeech($SLOT_ped($preload_slot,2i), True)
+
+:A_ALAP_293
+set_var_int_to_lvar_int $SLOT_play_status($preload_slot,2i) = 0@
+set_var_int_to_lvar_int $SLOT_priority($preload_slot,2i) = 1@
+
+:A_ALAP_317
+terminate_this_script 
+

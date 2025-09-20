@@ -1,0 +1,120 @@
+:KEYCARD_51
+World.SetClosestEntryExitFlag(345.5621, 306.2212, 10.0, EntryexitsFlag.Enabled, False)
+$millie_marker = User3DMarker.Create(2037.349, 2722.071, 12.0281, 14)
+$822 = User3DMarker.Create(343.9969, 305.104, 999.6557, 14)
+script_name 'KEYCARD'
+
+:KEYCARD_128
+wait 0
+$main_visible_area = Streaming.GetAreaVisible()
+if 
+  $main_visible_area == 0
+goto_if_false @KEYCARD_169
+$not_entered_millies_house = 0
+goto @KEYCARD_176
+
+:KEYCARD_169
+$not_entered_millies_house = 1
+
+:KEYCARD_176
+if 
+  Player.IsPlaying($player1)
+goto_if_false @KEYCARD_630
+if 
+  $not_entered_millies_house == 0
+goto_if_false @KEYCARD_421
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 2037.349, 2722.071, 9.8281, 1.2, 1.2, 2.0)
+goto_if_false @KEYCARD_414
+Player.SetControl($player1, False)
+LITCAS_267()
+Streaming.SetAreaVisible(6)
+Streaming.RequestCollision(345.5621, 306.2212)
+Streaming.LoadScene(345.5621, 306.2212, 998.1484)
+World.SetExtraColors(1, False)
+Game.SetIsInStadium(True)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @KEYCARD_372
+Char.SetAreaVisible($scplayer, 6)
+Char.SetCoordinates($scplayer, 345.5621, 306.2212, 998.4484)
+Char.SetHeading($scplayer, 260.0)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+
+:KEYCARD_372
+wait 1000
+Camera.DoFade(1, 500)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @KEYCARD_407
+Player.SetControl($player1, True)
+
+:KEYCARD_407
+$not_entered_millies_house = 1
+
+:KEYCARD_414
+goto @KEYCARD_623
+
+:KEYCARD_421
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 343.9969, 305.104, 998.1557, 1.2, 1.2, 2.0)
+goto_if_false @KEYCARD_623
+Player.SetControl($player1, False)
+LITCAS_267()
+Streaming.SetAreaVisible(0)
+Streaming.RequestCollision(2037.541, 2727.687)
+Streaming.LoadScene(2037.541, 2727.687, 9.8281)
+World.ClearExtraColors(False)
+Game.SetIsInStadium(False)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @KEYCARD_581
+Char.SetAreaVisible($scplayer, 0)
+Char.SetCoordinates($scplayer, 2037.541, 2727.687, 9.8281)
+Char.SetHeading($scplayer, 0.0)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+
+:KEYCARD_581
+wait 1000
+Camera.DoFade(1, 500)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @KEYCARD_616
+Player.SetControl($player1, True)
+
+:KEYCARD_616
+$not_entered_millies_house = 0
+
+:KEYCARD_623
+goto @KEYCARD_634
+
+:KEYCARD_630
+Game.SetIsInStadium(False)
+
+:KEYCARD_634
+if 
+  Pickup.HasBeenCollected($millies_keycard_pickup)
+goto_if_false @KEYCARD_703
+if 
+  $millies_keycard_pickup_flag == 0
+goto_if_false @KEYCARD_703
+Text.PrintNow('GOTKEY', 6000, 1)
+Blip.Remove($Thekeycard_contact_blip)
+$keycard_aquired_from_millie = 1
+$millies_keycard_pickup_flag = 1
+
+:KEYCARD_703
+$main_visible_area = Streaming.GetAreaVisible()
+if and
+  $millies_keycard_pickup_flag == 1
+  $main_visible_area == 0
+goto_if_false @KEYCARD_745
+User3DMarker.Remove($millie_marker)
+User3DMarker.Remove($822)
+terminate_this_script 
+
+:KEYCARD_745
+goto @KEYCARD_128
+

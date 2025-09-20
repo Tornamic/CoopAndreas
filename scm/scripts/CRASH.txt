@@ -1,0 +1,43 @@
+:CRASH
+script_name 'CRASH'
+
+:CRASH_11
+wait $mission_trigger_wait_time
+if 
+  $flag_crash_mission_counter == 2
+goto_if_false @CRASH_36
+terminate_this_script 
+
+:CRASH_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CRASH_232
+if 
+  $onmission == 0
+goto_if_false @CRASH_232
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $crashX, $crashY, $crashZ, 1.2, 1.2, 2.0)
+goto_if_false @CRASH_232
+if 
+  Player.CanStartMission($player1)
+goto_if_false @CRASH_232
+if 
+  $flag_crash_mission_counter == 0
+goto_if_false @CRASH_180
+$onmission = 1
+Text.PrintBig('CRASH_1', 1000, TextStyle.BottomRight)
+PSAVE1_1836()
+Mission.LoadAndLaunchInternal(22) // Burning Desire
+
+:CRASH_180
+if 
+  $flag_crash_mission_counter == 1
+goto_if_false @CRASH_232
+$onmission = 1
+Text.PrintBig('CRASH_3', 1000, TextStyle.BottomRight)
+PSAVE1_1836()
+Mission.LoadAndLaunchInternal(23) // Gray Imports
+
+:CRASH_232
+goto @CRASH_11
+

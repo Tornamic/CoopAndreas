@@ -1,0 +1,106 @@
+:STRAP
+script_name 'STRAP'
+
+:STRAP_11
+wait $mission_trigger_wait_time
+if 
+  $flag_strap_mission_counter == 5
+goto_if_false @STRAP_36
+terminate_this_script 
+
+:STRAP_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @STRAP_620
+if 
+  $onmission == 0
+goto_if_false @STRAP_620
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $strapX, $strapY, $strapZ, 1.2, 1.2, 2.0)
+goto_if_false @STRAP_452
+if 
+  Player.CanStartMission($player1)
+goto_if_false @STRAP_452
+if 
+  $flag_strap_mission_counter == 0
+goto_if_false @STRAP_238
+$hours, $minutes = Clock.GetTimeOfDay()
+if or
+  $hours >= 22
+  6 > $hours
+goto_if_false @STRAP_222
+Text.ClearPrints
+$onmission = 1
+Text.PrintBig('STRAP_1', 1000, TextStyle.BottomRight)
+PSAVE1_2014()
+Mission.LoadAndLaunchInternal(31) // Life's a Beach
+goto @STRAP_238
+
+:STRAP_222
+Text.PrintNow('MTIME5', 1000, 1)
+
+:STRAP_238
+if 
+  $flag_strap_mission_counter == 1
+goto_if_false @STRAP_290
+$onmission = 1
+Text.PrintBig('STRAP_2', 1000, TextStyle.BottomRight)
+PSAVE1_2014()
+Mission.LoadAndLaunchInternal(32) // Madd Dogg's Rhymes
+
+:STRAP_290
+if 
+  $flag_strap_mission_counter == 2
+goto_if_false @STRAP_400
+$hours, $minutes = Clock.GetTimeOfDay()
+if or
+  $hours >= 12
+  5 > $hours
+goto_if_false @STRAP_384
+Text.ClearPrints
+$onmission = 1
+Text.PrintBig('STRAP_3', 1000, TextStyle.BottomRight)
+PSAVE1_2014()
+Mission.LoadAndLaunchInternal(33) // Management Issues
+goto @STRAP_400
+
+:STRAP_384
+Text.PrintNow('MTIME2', 1000, 1)
+
+:STRAP_400
+if 
+  $flag_strap_mission_counter == 3
+goto_if_false @STRAP_452
+$onmission = 1
+PSAVE1_2014()
+Text.PrintBig('STRAP_4', 1000, TextStyle.BottomRight)
+Mission.LoadAndLaunchInternal(34) // House Party
+
+:STRAP_452
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $strap2X, $strap2Y, $strap2Z, 1.2, 1.2, 2.0)
+goto_if_false @STRAP_620
+if 
+  Player.CanStartMission($player1)
+goto_if_false @STRAP_620
+if 
+  $flag_strap_mission_counter == 4
+goto_if_false @STRAP_620
+$hours, $minutes = Clock.GetTimeOfDay()
+if or
+  $hours >= 20
+  6 > $hours
+goto_if_false @STRAP_604
+Text.ClearPrints
+$onmission = 1
+Text.PrintBig('STRAP_4', 1000, TextStyle.BottomRight)
+PSAVE1_2174()
+Mission.LoadAndLaunchInternal(34) // House Party
+goto @STRAP_620
+
+:STRAP_604
+Text.PrintNow('MTIME1', 1000, 1)
+
+:STRAP_620
+goto @STRAP_11
+

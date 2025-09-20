@@ -1,0 +1,352 @@
+:ZERO5_36
+66@ = 0
+$onmission = 1
+Text.ClearThisPrintBigNow(TextStyle.Middle)
+Stat.RegisterMissionGiven
+script_name 'ZERO5'
+Player.SetControl($player1, False)
+wait 0
+48@ = 1
+49@ = 0
+50@ = 0
+51@ = 0
+57@ = 0
+55@ = 0
+56@ = 0
+63@ = 0
+64@ = 0
+52@ = 0
+53@ = 0
+$van_death_counter_zero5 = 0
+$timer_time_limit_zero5 = 180000
+40@ = -2205.44
+41@ = 128.99
+42@ = 57.33
+43@ = 90.0
+44@ = -2227.0
+45@ = 113.0
+46@ = 35.5
+Player.ResetNumOfModelsKilled($player1)
+TIMERA = 0
+69@ = 0
+Streaming.RequestModel(464)
+Streaming.RequestModel(459)
+
+:ZERO5_271
+if or
+  not Streaming.HasModelLoaded(464)
+  not Streaming.HasModelLoaded(459)
+goto_if_false @ZERO5_303
+wait 0
+goto @ZERO5_271
+
+:ZERO5_303
+Hud.DisplayCarNames(False)
+Text.LoadMissionText('ZERO2')
+World.DisableAllEntryExits(True)
+
+:ZERO5_322
+wait 0
+if 
+  48@ == 1
+goto_if_false @ZERO5_351
+gosub @ZERO5_408
+
+:ZERO5_351
+if 
+  52@ == 1
+goto_if_false @ZERO5_376
+goto @ZERO5_1859
+
+:ZERO5_376
+if 
+  53@ == 1
+goto_if_false @ZERO5_401
+goto @ZERO5_1896
+
+:ZERO5_401
+goto @ZERO5_322
+
+:ZERO5_408
+TIMERB = 0
+World.ClearArea(1, 44@, 45@, 46@, 1000.0)
+35@ = Car.Create(459, -2250.9, 124.6, 28.48)
+Car.SetLoadCollisionFlag(35@, False)
+Car.OpenDoor(35@, CarDoor.LeftRearDoor)
+Car.OpenDoor(35@, CarDoor.RightRearDoor)
+Char.WarpIntoCar($scplayer, 35@)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Game.SetPoliceIgnorePlayer($player1, True)
+Camera.SetFadingColor(0, 0, 0)
+if 
+  not Car.IsDead(35@)
+goto_if_false @ZERO5_557
+Car.SetCoordinates(35@, -2233.9, 122.6, 746.48)
+Car.SetHeading(35@, 90.0)
+Car.FreezePosition(35@, True)
+
+:ZERO5_557
+wait 1000
+if 
+  not Car.IsDead(35@)
+goto_if_false @ZERO5_583
+Car.CloseAllDoors(35@)
+
+:ZERO5_583
+Streaming.SetAreaVisible(0)
+Char.SetHasUsedEntryExit($scplayer, -2240.854, 129.3346, 1.5)
+Streaming.LoadScene(40@, 41@, 42@)
+Rc.GiveModelToPlayer($player1, 40@, 41@, 42@, 40.09, 464)
+34@ = Rc.GetCar($player1)
+Car.SetHeading(34@, 90.0)
+Rc.SetEnableDetonateOnContact(False)
+Rc.SetEnableDetonate(False)
+Car.SetHealth(34@, 1000)
+Car.SetProofs(34@, False, True, True, False, False)
+Hud.SwitchWidescreen(False)
+if 
+  not Car.IsDead(34@)
+goto_if_false @ZERO5_733
+Camera.PointAtCar(34@, CameraMode.CamOnAString, SwitchType.JumpCut)
+Car.FreezePosition(34@, False)
+wait 0
+Camera.SetZoom(1)
+
+:ZERO5_733
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+
+:ZERO5_748
+if 
+  Camera.GetFadingStatus
+goto_if_false @ZERO5_772
+wait 0
+goto @ZERO5_748
+
+:ZERO5_772
+Player.SetControl($player1, True)
+Hud.DisplayTimerWithString($timer_time_limit_zero5, TimerDirection.Down, 'ZER2_5')
+Hud.DisplayCounterWithString($van_death_counter_zero5, CounterDisplay.Number, 'ZER2_43')
+Text.PrintNow('ZER2_45', 5000, 1)
+Game.SetForceRandomCarModel(459)
+
+:ZERO5_832
+if 
+  57@ <> 1
+goto_if_false @ZERO5_1857
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @ZERO5_913
+48@ = 0
+49@ = 0
+50@ = 0
+51@ = 0
+52@ = 1
+53@ = 0
+return 
+
+:ZERO5_913
+if 
+  0 >= $timer_time_limit_zero5
+goto_if_false @ZERO5_1156
+if 
+  not Car.IsDead(34@)
+goto_if_false @ZERO5_961
+Car.SetEngineOn(34@, False)
+Car.SetHeavy(34@, True)
+
+:ZERO5_961
+Rc.RemoveBuggy
+TIMERA = 0
+48@ = 0
+49@ = 0
+50@ = 0
+51@ = 0
+52@ = 1
+53@ = 0
+Text.PrintWithNumberBig('ZER2_43', $van_death_counter_zero5, 5000, TextStyle.Middle)
+Audio.PlayMissionPassedTune(1)
+wait 2000
+Char.SetHasUsedEntryExit($scplayer, -2241.854, 128.3346, 1.5)
+Streaming.LoadScene(-2241.854, 128.3346, 1034.641)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @ZERO5_1120
+Char.WarpFromCarToCoord($scplayer, -2220.146, 135.956, 1034.641)
+goto @ZERO5_1140
+
+:ZERO5_1120
+Char.SetCoordinates($scplayer, -2220.146, 135.956, 1034.641)
+
+:ZERO5_1140
+Char.SetHeading($scplayer, 183.6951)
+Streaming.SetAreaVisible(6)
+return 
+
+:ZERO5_1156
+if 
+  not Car.IsDead(34@)
+goto_if_false @ZERO5_1681
+if 
+  Player.IsInRemoteMode($player1)
+goto_if_false @ZERO5_1674
+70@ = Clock.GetGameTimer()
+if 
+  not Car.Locate3D(34@, 0, 72@, 73@, 74@, 1.5, 1.5, 1.5)
+goto_if_false @ZERO5_1272
+72@, 73@, 74@ = Car.GetCoordinates(34@)
+set_lvar_int_to_lvar_int 71@ = 70@
+71@ += 4000
+64@ = 0
+
+:ZERO5_1272
+if 
+  Car.Locate3D(34@, 0, 72@, 73@, 74@, 1.5, 1.5, 1.5)
+goto_if_false @ZERO5_1612
+if 
+  is_int_lvar_greater_than_int_lvar 70@ > 71@
+goto_if_false @ZERO5_1612
+if 
+  64@ == 0
+goto_if_false @ZERO5_1369
+Text.PrintHelp('ZER2_4')
+64@ = 1
+
+:ZERO5_1369
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @ZERO5_1612
+53@ = 1
+48@ = 0
+Player.SetControl($player1, False)
+Text.PrintNow('ZER2_8', 5000, 1)
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+Car.SetHealth(34@, 1)
+Fx.AddExplosion(0, 72@, 73@, 74@)
+Rc.RemoveBuggy
+53@ = 1
+48@ = 0
+Text.PrintNow('ZER2_8', 5000, 1)
+wait 2000
+Char.SetHasUsedEntryExit($scplayer, -2241.854, 128.3346, 1.5)
+Streaming.LoadScene(-2241.854, 128.3346, 1034.641)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @ZERO5_1576
+Char.WarpFromCarToCoord($scplayer, -2220.146, 135.956, 1034.641)
+goto @ZERO5_1596
+
+:ZERO5_1576
+Char.SetCoordinates($scplayer, -2220.146, 135.956, 1034.641)
+
+:ZERO5_1596
+Char.SetHeading($scplayer, 183.6951)
+Streaming.SetAreaVisible(6)
+return 
+
+:ZERO5_1612
+37@, 38@, 39@ = Car.GetCoordinates(34@)
+36@ = World.GetRandomCarInSphereNoSave(37@, 38@, 39@, 30.0, 459)
+if 
+  not Car.IsDead(36@)
+goto_if_false @ZERO5_1674
+Car.SetCruiseSpeed(36@, 10.0)
+
+:ZERO5_1674
+goto @ZERO5_1839
+
+:ZERO5_1681
+53@ = 1
+48@ = 0
+Text.PrintNow('ZER2_8', 5000, 1)
+Player.SetControl($player1, False)
+wait 2000
+Char.SetHasUsedEntryExit($scplayer, -2241.854, 128.3346, 1.5)
+Streaming.LoadScene(-2241.854, 128.3346, 1034.641)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @ZERO5_1803
+Char.WarpFromCarToCoord($scplayer, -2220.146, 135.956, 1034.641)
+goto @ZERO5_1823
+
+:ZERO5_1803
+Char.SetCoordinates($scplayer, -2220.146, 135.956, 1034.641)
+
+:ZERO5_1823
+Char.SetHeading($scplayer, 183.6951)
+Streaming.SetAreaVisible(6)
+return 
+
+:ZERO5_1839
+$van_death_counter_zero5 = Player.GetNumOfModelsKilled($player1, 459)
+goto @ZERO5_832
+
+:ZERO5_1857
+return 
+
+:ZERO5_1859
+Player.SetControl($player1, True)
+Player.ClearWantedLevel($player1)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @ZERO5_1894
+Player.SetControl($player1, True)
+
+:ZERO5_1894
+return 
+
+:ZERO5_1896
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @ZERO5_1919
+Player.SetControl($player1, True)
+
+:ZERO5_1919
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+
+:ZERO5_1935
+if 
+  3000 > TIMERA
+goto_if_false @ZERO5_1991
+wait 0
+if 
+  not Car.IsDead(34@)
+goto_if_false @ZERO5_1984
+Car.SetForwardSpeed(34@, 0.0)
+
+:ZERO5_1984
+goto @ZERO5_1935
+
+:ZERO5_1991
+return 
+
+:ZERO5_1993
+Camera.ResetNewScriptables
+$onmission = 0
+Game.SetPoliceIgnorePlayer($player1, False)
+Car.MarkAsNoLongerNeeded(35@)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @ZERO5_2076
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @ZERO5_2076
+Char.WarpFromCarToCoord($scplayer, -2244.444, 136.8633, 34.3203)
+Char.SetHeading($scplayer, 90.0)
+
+:ZERO5_2076
+Weather.Release
+Player.SetControl($player1, True)
+World.DisableAllEntryExits(False)
+Rc.RemoveBuggy
+Streaming.MarkModelAsNoLongerNeeded(459)
+Streaming.MarkModelAsNoLongerNeeded(464)
+Hud.ClearTimer($timer_time_limit_zero5)
+Hud.ClearCounter($van_death_counter_zero5)
+$timer_mobile_start = Clock.GetGameTimer()
+Hud.DisplayCarNames(True)
+Mission.Finish
+return 
+

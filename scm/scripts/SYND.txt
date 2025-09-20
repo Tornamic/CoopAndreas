@@ -1,0 +1,145 @@
+:SYND
+script_name 'SYND'
+
+:SYND_11
+wait $mission_trigger_wait_time
+if 
+  $flag_synd_mission_counter == 10
+goto_if_false @SYND_36
+terminate_this_script 
+
+:SYND_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @SYND_874
+if 
+  $onmission == 0
+goto_if_false @SYND_874
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $garageX, $garageY, $garageZ, 1.2, 1.2, 2.0)
+goto_if_false @SYND_512
+if 
+  Player.CanStartMission($player1)
+goto_if_false @SYND_512
+if 
+  $flag_synd_mission_counter == 0
+goto_if_false @SYND_180
+$onmission = 1
+Text.PrintBig('SYND_1', 1000, TextStyle.BottomRight)
+LITCAS_267()
+Mission.LoadAndLaunchInternal(58) // Photo Opportunity
+
+:SYND_180
+if 
+  $flag_synd_mission_counter == 1
+goto_if_false @SYND_232
+$onmission = 1
+Text.PrintBig('SYND_2', 1000, TextStyle.BottomRight)
+PSAVE1_2765()
+Mission.LoadAndLaunchInternal(59) // Jizzy
+
+:SYND_232
+if 
+  $flag_synd_mission_counter == 5
+goto_if_false @SYND_284
+$onmission = 1
+Text.PrintBig('SYND_3', 1000, TextStyle.BottomRight)
+LITCAS_267()
+Mission.LoadAndLaunchInternal(60) // Outrider
+
+:SYND_284
+if and
+  $flag_synd_mission_counter == 6
+  $flag_scrash_mission_counter == 2
+goto_if_false @SYND_401
+$hours, $minutes = Clock.GetTimeOfDay()
+if or
+  $hours >= 20
+  6 > $hours
+goto_if_false @SYND_385
+$onmission = 1
+Text.ClearPrints
+Text.PrintBig('SYND_4', 1000, TextStyle.BottomRight)
+PSAVE1_2765()
+Mission.LoadAndLaunchInternal(61) // Ice Cold Killa
+goto @SYND_401
+
+:SYND_385
+Text.PrintNow('MTIME1', 1000, 1)
+
+:SYND_401
+if 
+  $flag_synd_mission_counter == 8
+goto_if_false @SYND_453
+$onmission = 1
+Text.PrintBig('SYND_6', 1000, TextStyle.BottomRight)
+LITCAS_267()
+Mission.LoadAndLaunchInternal(62) // Toreno's Last Flight
+
+:SYND_453
+if and
+  $flag_synd_mission_counter == 9
+  $flag_wuzi_mission_counter == 5
+goto_if_false @SYND_512
+$onmission = 1
+Text.PrintBig('SYND_7', 1000, TextStyle.BottomRight)
+PSAVE1_2765()
+Mission.LoadAndLaunchInternal(63) // Yay Ka-Boom-Boom
+
+:SYND_512
+if 
+  Player.IsPlaying($player1)
+goto_if_false @SYND_644
+if 
+  $flag_synd_mission_counter == 7
+goto_if_false @SYND_644
+if 
+  Char.LocateOnFoot3D($scplayer, 0, -1717.05, 1280.91, 6.23, 1.2, 1.2, 2.5)
+goto_if_false @SYND_644
+if 
+  Player.CanStartMission($player1)
+goto_if_false @SYND_644
+$onmission = 1
+Text.PrintBig('SYND_5', 1000, TextStyle.BottomRight)
+LITCAS_267()
+Mission.LoadAndLaunchInternal(64) // Pier 69
+
+:SYND_644
+if 
+  Player.IsPlaying($player1)
+goto_if_false @SYND_874
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $syndX, $syndY, $syndZ, 1.2, 1.2, 2.5)
+goto_if_false @SYND_874
+if 
+  Player.CanStartMission($player1)
+goto_if_false @SYND_874
+if 
+  $flag_synd_mission_counter == 2
+goto_if_false @SYND_770
+$onmission = 1
+Text.PrintBig('SYND_2', 1000, TextStyle.BottomRight)
+PSAVE1_3725()
+Mission.LoadAndLaunchInternal(59) // Jizzy
+
+:SYND_770
+if 
+  $flag_synd_mission_counter == 3
+goto_if_false @SYND_822
+$onmission = 1
+Text.PrintBig('FAR_2', 1000, TextStyle.BottomRight)
+PSAVE1_3725()
+Mission.LoadAndLaunchInternal(65) // T-Bone Mendez
+
+:SYND_822
+if 
+  $flag_synd_mission_counter == 4
+goto_if_false @SYND_874
+$onmission = 1
+Text.PrintBig('FAR_3', 1000, TextStyle.BottomRight)
+PSAVE1_3725()
+Mission.LoadAndLaunchInternal(66) // Mike Toreno
+
+:SYND_874
+goto @SYND_11
+

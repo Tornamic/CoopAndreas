@@ -1,0 +1,85 @@
+//-------------Mission 87---------------
+// Originally: Fish in a Barrel
+
+:CASINO7
+script_name 'CASINO7'
+gosub @CASINO7_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @CASINO7_38
+gosub @CASINO7_301
+
+:CASINO7_38
+gosub @CASINO7_360
+terminate_this_script 
+
+:CASINO7_47
+Text.LoadMissionText('CASINO7')
+Stat.RegisterMissionGiven
+$onmission = 1
+wait 0
+Streaming.SetAreaVisible(11)
+Cutscene.Load('CAS_7B')
+
+:CASINO7_86
+if 
+  not Cutscene.HasLoaded
+goto_if_false @CASINO7_110
+wait 0
+goto @CASINO7_86
+
+:CASINO7_110
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:CASINO7_119
+if 
+  not Cutscene.HasFinished
+goto_if_false @CASINO7_143
+wait 0
+goto @CASINO7_119
+
+:CASINO7_143
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:CASINO7_156
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO7_180
+wait 0
+goto @CASINO7_156
+
+:CASINO7_180
+Cutscene.Clear
+Streaming.SetAreaVisible(0)
+Camera.SetFadingColor(0, 0, 0)
+Char.SetHasUsedEntryExit($scplayer, 2016.422, 1017.102, 10.0)
+Streaming.RequestCollision(2025.8, 1007.87)
+Streaming.LoadSceneInDirection(2025.8, 1007.87, 9.81, 279.83)
+Char.SetCoordinates($scplayer, 2025.8, 1007.87, 9.81)
+Char.SetHeading($scplayer, 279.83)
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Camera.DoFade(1, 2000)
+goto @CASINO7_319
+
+:CASINO7_301
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:CASINO7_319
+Blip.Remove($casino_contact_blip)
+$flag_casino_mission_counter += 1
+Stat.RegisterMissionPassed('CASINO7')
+Stat.SetInt(StatId.PassedCasino7, 1)
+Player.ClearWantedLevel($player1)
+Stat.PlayerMadeProgress(1)
+return 
+
+:CASINO7_360
+$onmission = 0
+$timer_mobile_start = Clock.GetGameTimer()
+Mission.Finish
+return 
+

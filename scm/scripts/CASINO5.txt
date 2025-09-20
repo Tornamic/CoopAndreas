@@ -1,0 +1,2071 @@
+//-------------Mission 89---------------
+// Originally: Intensive Care
+
+:CASINO5
+script_name 'CASINO5'
+gosub @CASINO5_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @CASINO5_38
+gosub @CASINO5_12932
+
+:CASINO5_38
+gosub @CASINO5_12978
+terminate_this_script 
+
+:CASINO5_47
+Stat.RegisterMissionGiven
+$onmission = 1
+Text.LoadMissionText('CASINO5')
+Char.SetCoordinates($scplayer, 2175.412, 1681.548, 9.8203)
+Char.SetHeading($scplayer, 90.0)
+Char.SetHasUsedEntryExit($scplayer, 2233.5, 1712.8, 9.8203)
+Player.SetGroupRecruitment($player1, False)
+Game.SetScriptLimitToGangSize(0)
+$iTerminateAllAmbience = 1
+Streaming.SetAreaVisible(2)
+Cutscene.Load('CAS_5A')
+
+:CASINO5_150
+if 
+  not Cutscene.HasLoaded
+goto_if_false @CASINO5_174
+wait 0
+goto @CASINO5_150
+
+:CASINO5_174
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:CASINO5_183
+if 
+  not Cutscene.HasFinished
+goto_if_false @CASINO5_207
+wait 0
+goto @CASINO5_183
+
+:CASINO5_207
+Cutscene.Clear
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:CASINO5_222
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO5_246
+wait 0
+goto @CASINO5_222
+
+:CASINO5_246
+Streaming.SetAreaVisible(0)
+Game.SetScriptLimitToGangSize(99)
+start_new_script @A_CONT 
+Streaming.LoadScene(2175.412, 1681.548, 9.8203)
+Streaming.RequestModel(416)
+Streaming.RequestModel(470)
+Streaming.RequestModel(275)
+Streaming.RequestModel(124)
+Streaming.RequestModel(125)
+Streaming.LoadSpecialCharacter('SINDACO', 1)
+Streaming.RequestModel(353)
+Streaming.RequestAnimation("GANGS")
+
+:CASINO5_329
+if or
+  not Streaming.HasModelLoaded(416)
+  not Streaming.HasModelLoaded(470)
+  not Streaming.HasModelLoaded(275)
+  not Streaming.HasModelLoaded(124)
+  not Streaming.HasModelLoaded(125)
+goto_if_false @CASINO5_374
+wait 0
+goto @CASINO5_329
+
+:CASINO5_374
+if or
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasModelLoaded(353)
+  not Streaming.HasAnimationLoaded("GANGS")
+goto_if_false @CASINO5_414
+wait 0
+goto @CASINO5_374
+
+:CASINO5_414
+47@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+49@ = DecisionMakerChar.Load(DecisionMakerType.Normal)
+48@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Player1)
+54@ = 0
+if 
+  54@ == 1
+goto_if_false @CASINO5_547
+72@ = Char.Create(24, 124, 0.0, 0.0, 0.0)
+99@(40@,2i) = Char.Create(24, 124, 0.0, 0.0, 0.0)
+97@(40@,2i) = Car.Create(416, 0.0, 0.0, 0.0)
+
+:CASINO5_547
+Camera.SetFadingColor(0, 0, 0)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Camera.DoFade(1, Fade.Out)
+Text.PrintNow('CAS5_00', 8000, 1)
+44@ = Blip.AddForCoord(1604.158, 1838.765, 9.828)
+set_lvar_text_label 140@s = 'CAS5_AA'
+set_lvar_int_to_constant 124@ = 8000
+set_lvar_text_label 142@s = 'CAS5_AB'
+set_lvar_int_to_constant 125@ = 8001
+set_lvar_text_label 144@s = 'CAS5_BA'
+set_lvar_int_to_constant 126@ = 8002
+set_lvar_text_label 146@s = 'CAS5_BB'
+set_lvar_int_to_constant 127@ = 8003
+set_lvar_text_label 148@s = 'CAS5_BC'
+set_lvar_int_to_constant 128@ = 8004
+set_lvar_text_label 150@s = 'CAS5_BD'
+set_lvar_int_to_constant 129@ = 8005
+set_lvar_text_label 152@s = 'CAS5_BE'
+set_lvar_int_to_constant 130@ = 8006
+set_lvar_text_label 154@s = 'CAS5_CA'
+set_lvar_int_to_constant 131@ = 8007
+set_lvar_text_label 156@s = 'CAS5_CB'
+set_lvar_int_to_constant 132@ = 8008
+set_lvar_text_label 158@s = 'CAS5_CC'
+set_lvar_int_to_constant 133@ = 8009
+set_lvar_text_label 160@s = 'CAS5_CD'
+set_lvar_int_to_constant 134@ = 8010
+set_lvar_text_label 162@s = 'CAS5_CE'
+set_lvar_int_to_constant 135@ = 8011
+set_lvar_text_label 164@s = 'CAS5_CF'
+set_lvar_int_to_constant 136@ = 8012
+set_lvar_text_label 166@s = 'CAS5_CG'
+set_lvar_int_to_constant 137@ = 8013
+set_lvar_text_label 168@s = 'CAS5_DA'
+set_lvar_int_to_constant 138@ = 8014
+set_lvar_text_label 170@s = 'CAS5_DB'
+set_lvar_int_to_constant 139@ = 8015
+set_lvar_int_to_lvar_int 122@ = 123@
+TIMERB = 0
+
+:CASINO5_979
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @CASINO5_1005
+goto @CASINO5_12838
+
+:CASINO5_1005
+if 
+  56@ == 0
+goto_if_false @CASINO5_1186
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 1604.158, 1838.765, 9.828, 120.0, 120.0, 120.0)
+goto_if_false @CASINO5_1186
+World.ClearArea(1, 1604.158, 1838.765, 9.828, 30.0)
+CarGenerator.SuppressCarModel(470)
+Car.CustomPlateForNextCar(470, "H_CARMAN")
+World.ClearArea(1, 1624.598, 1850.607, 9.828, 8.0)
+55@ = Car.Create(470, 1624.598, 1850.607, 9.828)
+Car.SetHeading(55@, 180.0)
+Car.SetStrong(55@, True)
+56@ += 1
+
+:CASINO5_1186
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 1604.158, 1838.765, 9.828, 4.0, 4.0, 4.0)
+goto_if_false @CASINO5_1325
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO5_1309
+Text.ClearPrints
+Player.SetControl($player1, False)
+Camera.DoFade(0, 400)
+
+:CASINO5_1266
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO5_1290
+wait 0
+goto @CASINO5_1266
+
+:CASINO5_1290
+Blip.Remove(44@)
+goto @CASINO5_1339
+goto @CASINO5_1325
+
+:CASINO5_1309
+Text.PrintNow('CAS5_01', 4000, 1)
+
+:CASINO5_1325
+gosub @CASINO5_10202
+goto @CASINO5_979
+
+:CASINO5_1339
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(1595.199, 1838.316, 12.4095, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1596.18, 1838.252, 12.2269, SwitchType.JumpCut)
+if 
+  0 <= $SLOT_status[0]
+goto_if_false @CASINO5_1426
+$SLOT_status[0] = -2
+
+:CASINO5_1426
+if 
+  0 <= $SLOT_status[0]
+goto_if_false @CASINO5_1451
+$SLOT_status[1] = -2
+
+:CASINO5_1451
+50@ = Char.StoreCarIsIn($scplayer)
+Car.SetHealth(50@, 2000)
+World.ClearArea(1, 1604.158, 1838.765, 9.828, 15.0)
+Camera.DoFade(1, Fade.Out)
+42@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.GoStraightToCoord(-1, 1606.106, 1825.065, 9.828, MoveState.Run, -1)
+Task.StandStill(-1, 100)
+Sequence.Close(42@)
+Char.PerformSequence($scplayer, 42@)
+Sequence.Clear(42@)
+43@ = 0
+46@ = 0
+
+:CASINO5_1567
+if 
+  2 > 43@
+goto_if_false @CASINO5_1604
+wait 0
+43@ = Char.GetSequenceProgress($scplayer)
+goto @CASINO5_1567
+
+:CASINO5_1604
+skip_cutscene_start_internal @CASINO5_1831
+123@ = 4
+
+:CASINO5_1618
+if 
+  7 > 122@
+goto_if_false @CASINO5_1654
+wait 0
+gosub @CASINO5_10202
+goto @CASINO5_1618
+
+:CASINO5_1654
+42@ = Sequence.Open()
+Task.StandStill(-1, 3800)
+if 
+  not Car.IsDead(50@)
+goto_if_false @CASINO5_1691
+Task.EnterCarAsDriver(-1, 50@, -1)
+
+:CASINO5_1691
+Sequence.Close(42@)
+Char.PerformSequence($scplayer, 42@)
+Sequence.Clear(42@)
+40@ = 0
+
+:CASINO5_1716
+if 
+  40@ == 0
+goto_if_false @CASINO5_1787
+wait 0
+if 
+  not Car.IsDead(50@)
+goto_if_false @CASINO5_1780
+if 
+  Char.IsInCar($scplayer, 50@)
+goto_if_false @CASINO5_1780
+40@ = 1
+
+:CASINO5_1780
+goto @CASINO5_1716
+
+:CASINO5_1787
+46@ = 1
+TIMERA = 0
+
+:CASINO5_1801
+if 
+  500 > TIMERA
+goto_if_false @CASINO5_1831
+wait 0
+goto @CASINO5_1801
+
+:CASINO5_1831
+skip_cutscene_end 
+Text.ClearPrints
+if 
+  0 <= $SLOT_status[0]
+goto_if_false @CASINO5_1860
+$SLOT_status[0] = -2
+
+:CASINO5_1860
+if 
+  0 <= $SLOT_status[0]
+goto_if_false @CASINO5_1885
+$SLOT_status[1] = -2
+
+:CASINO5_1885
+if or
+  not Char.IsGettingInToACar($scplayer)
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO5_1935
+Char.ClearTasksImmediately($scplayer)
+if 
+  not Car.IsDead(50@)
+goto_if_false @CASINO5_1935
+Char.WarpIntoCar($scplayer, 50@)
+
+:CASINO5_1935
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Text.PrintNow('CAS5_03', 8000, 1)
+Path.MarkRoadNodeAsDontWander(2066.25, 956.0, 9.125)
+Path.MarkRoadNodeAsDontWander(2048.625, 953.8749, 9.125)
+Path.MarkRoadNodeAsDontWander(2032.5, 973.25, 9.5)
+Path.MarkRoadNodeAsDontWander(2027.25, 1093.125, 9.625)
+Path.MarkRoadNodeAsDontWander(2030.125, 1273.0, 9.625)
+Path.MarkRoadNodeAsDontWander(2029.0, 1453.25, 9.625)
+Path.MarkRoadNodeAsDontWander(2033.75, 1713.125, 9.625)
+Path.MarkRoadNodeAsDontWander(2112.125, 1863.125, 9.75)
+Path.MarkRoadNodeAsDontWander(2104.0, 1969.125, 9.75)
+Path.MarkRoadNodeAsDontWander(2108.25, 2022.0, 9.625)
+Path.MarkRoadNodeAsDontWander(2107.625, 2113.125, 9.625)
+Path.MarkRoadNodeAsDontWander(2091.25, 2283.125, 9.625)
+Path.MarkRoadNodeAsDontWander(2005.625, 2393.25, 9.625)
+Path.MarkRoadNodeAsDontWander(1605.375, 2589.75, 9.625)
+Path.MarkRoadNodeAsDontWander(1477.375, 2563.125, 9.625)
+Path.MarkRoadNodeAsDontWander(1385.625, 2575.0, 9.625)
+Path.MarkRoadNodeAsDontWander(1293.875, 2574.625, 9.625)
+Path.MarkRoadNodeAsDontWander(1528.125, 2773.125, 9.625)
+Path.MarkRoadNodeAsDontWander(2127.375, 2792.875, 9.625)
+Path.MarkRoadNodeAsDontWander(2397.375, 2713.125, 9.625)
+Path.MarkRoadNodeAsDontWander(2404.625, 2513.125, 9.625)
+Path.MarkRoadNodeAsDontWander(2628.625, 2301.75, 9.625)
+Path.MarkRoadNodeAsDontWander(2787.25, 2303.5, 9.625)
+Path.MarkRoadNodeAsDontWander(2860.125, 2293.0, 9.625)
+Path.MarkRoadNodeAsDontWander(2796.125, 2135.375, 9.75)
+Path.MarkRoadNodeAsDontWander(2796.125, 2090.875, 9.625)
+Path.MarkRoadNodeAsDontWander(2638.375, 2135.375, 9.625)
+Path.MarkRoadNodeAsDontWander(2638.375, 2090.875, 9.75)
+Path.MarkRoadNodeAsDontWander(2621.625, 1473.125, 9.625)
+Path.MarkRoadNodeAsDontWander(2645.375, 1313.125, 9.75)
+Path.MarkRoadNodeAsDontWander(2547.25, 923.125, 9.625)
+Path.MarkRoadNodeAsDontWander(2287.25, 957.8749, 9.625)
+Path.MarkRoadNodeAsDontWander(2147.25, 963.2499, 9.625)
+World.ClearArea(1, 2152.029, 1912.456, 9.6797, 10.0)
+57@ = Car.Create(416, 2152.029, 1912.456, 9.6797)
+Car.SetHeading(57@, 0.0)
+Car.SetHealth(57@, 2000)
+60@ = Blip.AddForCar(57@)
+Car.LockDoors(57@, CarLock.LockoutPlayerOnly)
+Car.SetLoadCollisionFlag(57@, False)
+66@ = Char.CreateInsideCar(PedType.Mission1, 275, 57@)
+Char.SetCantBeDraggedOut(66@, True)
+Char.SetDecisionMaker(66@, 48@)
+69@ = Char.CreateAsPassenger(PedType.Mission1, 275, 57@, 0)
+Char.SetCantBeDraggedOut(69@, True)
+Char.SetDecisionMaker(69@, 48@)
+Task.CarDriveWander(66@, 57@, 15.0, DrivingMode.StopForCars)
+63@ = 0
+93@ = 0
+World.ClearArea(1, 2050.291, 1358.516, 9.6719, 10.0)
+58@ = Car.Create(416, 2050.291, 1358.516, 9.6719)
+Car.SetHeading(58@, 180.0)
+Car.SetHealth(58@, 2000)
+61@ = Blip.AddForCar(58@)
+Car.LockDoors(58@, CarLock.LockoutPlayerOnly)
+Car.SetLoadCollisionFlag(58@, False)
+67@ = Char.CreateInsideCar(PedType.Mission1, 275, 58@)
+Char.SetCantBeDraggedOut(67@, True)
+Char.SetDecisionMaker(67@, 48@)
+70@ = Char.CreateAsPassenger(PedType.Mission1, 275, 58@, 0)
+Char.SetCantBeDraggedOut(70@, True)
+Char.SetDecisionMaker(70@, 48@)
+Task.CarDriveWander(67@, 58@, 15.0, DrivingMode.StopForCars)
+64@ = 0
+94@ = 0
+World.ClearArea(1, 2544.98, 1395.797, 9.78, 10.0)
+59@ = Car.Create(416, 2544.98, 1395.797, 9.78)
+Car.SetHeading(59@, 180.0)
+Car.SetHealth(59@, 2000)
+62@ = Blip.AddForCar(59@)
+Car.LockDoors(59@, CarLock.LockoutPlayerOnly)
+Car.SetLoadCollisionFlag(59@, False)
+68@ = Char.CreateInsideCar(PedType.Mission1, 275, 59@)
+Char.SetCantBeDraggedOut(68@, True)
+Char.SetDecisionMaker(68@, 48@)
+71@ = Char.CreateAsPassenger(PedType.Mission1, 275, 59@, 0)
+Char.SetCantBeDraggedOut(71@, True)
+Char.SetDecisionMaker(71@, 48@)
+Task.CarDriveWander(68@, 59@, 15.0, DrivingMode.StopForCars)
+65@ = 0
+95@ = 0
+73@ = 0
+74@ = -1
+76@ = 0
+80@ = 0
+
+:CASINO5_3077
+wait 0
+40@ = 0
+
+:CASINO5_3088
+if 
+  3 > 40@
+goto_if_false @CASINO5_7042
+if and
+  not Car.IsDead(57@(40@,3i))
+  6 > 63@(40@,3i)
+goto_if_false @CASINO5_7028
+switch_start 63@(40@,3i) total_jumps 6 default_jump 0 @CASINO5_7028 jumps 0 @CASINO5_3204 1 @CASINO5_4019 2 @CASINO5_4588 3 @CASINO5_5080 4 @CASINO5_5177 5 @CASINO5_5731 -1 @CASINO5_7028
+
+:CASINO5_3204
+if or
+  Char.IsDead(66@(40@,3i))
+  Char.IsDead(69@(40@,3i))
+goto_if_false @CASINO5_3272
+77@ = 0
+if 
+  76@ == 0
+goto_if_false @CASINO5_3265
+gosub @CASINO5_7432
+
+:CASINO5_3265
+goto @CASINO5_3426
+
+:CASINO5_3272
+if 
+  Car.HasBeenDamagedByChar(57@(40@,3i), $scplayer)
+goto_if_false @CASINO5_3334
+77@ = 1
+if 
+  76@ == 0
+goto_if_false @CASINO5_3327
+gosub @CASINO5_7432
+
+:CASINO5_3327
+goto @CASINO5_3426
+
+:CASINO5_3334
+if 
+  78@ == 0
+goto_if_false @CASINO5_3419
+if and
+  Char.LocateAnyMeansCar2D($scplayer, 57@(40@,3i), 40.0, 40.0, False)
+  Car.IsOnScreen(57@(40@,3i))
+goto_if_false @CASINO5_3419
+Text.PrintNow('CAS5_04', 8000, 1)
+78@ = 1
+
+:CASINO5_3419
+goto @CASINO5_7028
+
+:CASINO5_3426
+if 
+  77@ == 0
+goto_if_false @CASINO5_3508
+if 
+  76@ == 0
+goto_if_false @CASINO5_3485
+Text.PrintNow('CAS5_07', 8000, 1)
+goto @CASINO5_3501
+
+:CASINO5_3485
+Text.PrintNow('CAS5_08', 8000, 1)
+
+:CASINO5_3501
+goto @CASINO5_3565
+
+:CASINO5_3508
+if 
+  76@ == 0
+goto_if_false @CASINO5_3549
+Text.PrintNow('CAS5_05', 8000, 1)
+goto @CASINO5_3565
+
+:CASINO5_3549
+Text.PrintNow('CAS5_06', 8000, 1)
+
+:CASINO5_3565
+Blip.Remove(60@(40@,3i))
+76@ += 1
+81@(40@,3i) = 0
+Car.SetTempAction(57@(40@,3i), TempAction.HandbrakeStraight, 5000)
+if 
+  not Char.IsDead(66@(40@,3i))
+goto_if_false @CASINO5_3787
+Char.ClearTasks(66@(40@,3i))
+42@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.LookAtChar(-1, $scplayer, 1500)
+Task.PlayAnim(-1, "PRTIAL_GNGTLKH", "GANGS", 1000.0, False, False, False, False, 2000)
+Task.PlayAnim(-1, "PRTIAL_GNGTLKG", "GANGS", 1000.0, False, False, False, False, 2000)
+Task.StandStill(-1, 5000)
+Sequence.Close(42@)
+Char.PerformSequence(66@(40@,3i), 42@)
+Sequence.Clear(42@)
+81@(40@,3i) += 1
+
+:CASINO5_3787
+if 
+  not Char.IsDead(69@(40@,3i))
+goto_if_false @CASINO5_3968
+Char.ClearTasks(69@(40@,3i))
+42@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.LookAtChar(-1, $scplayer, 1500)
+Task.PlayAnim(-1, "PRTIAL_GNGTLKB", "GANGS", 1000.0, False, False, False, False, 2000)
+Task.PlayAnim(-1, "PRTIAL_GNGTLKC", "GANGS", 1000.0, False, False, False, False, 2000)
+Task.StandStill(-1, 5000)
+Sequence.Close(42@)
+Char.PerformSequence(69@(40@,3i), 42@)
+Sequence.Clear(42@)
+81@(40@,3i) += 2
+
+:CASINO5_3968
+if 
+  81@(40@,3i) == 0
+goto_if_false @CASINO5_4008
+63@(40@,3i) = 3
+goto @CASINO5_7028
+
+:CASINO5_4008
+63@(40@,3i) += 1
+
+:CASINO5_4019
+if or
+  81@(40@,3i) == 1
+  81@(40@,3i) == 3
+goto_if_false @CASINO5_4202
+if 
+  not Char.IsDead(66@(40@,3i))
+goto_if_false @CASINO5_4158
+if 
+  not Char.IsInAnyCar(66@(40@,3i))
+goto_if_false @CASINO5_4151
+43@ = Char.GetSequenceProgress(66@(40@,3i))
+if 
+  43@ == 5
+goto_if_false @CASINO5_4151
+Task.EnterCarAsDriver(66@(40@,3i), 57@(40@,3i), -2)
+81@(40@,3i) -= 1
+
+:CASINO5_4151
+goto @CASINO5_4202
+
+:CASINO5_4158
+if or
+  81@(40@,3i) == 1
+  81@(40@,3i) == 3
+goto_if_false @CASINO5_4202
+81@(40@,3i) -= 1
+
+:CASINO5_4202
+if or
+  81@(40@,3i) == 2
+  81@(40@,3i) == 3
+goto_if_false @CASINO5_4432
+if 
+  not Char.IsDead(69@(40@,3i))
+goto_if_false @CASINO5_4388
+if 
+  not Char.IsInAnyCar(69@(40@,3i))
+goto_if_false @CASINO5_4381
+43@ = Char.GetSequenceProgress(69@(40@,3i))
+if 
+  43@ == 5
+goto_if_false @CASINO5_4381
+if 
+  Char.IsDead(66@(40@,3i))
+goto_if_false @CASINO5_4350
+Task.EnterCarAsDriver(69@(40@,3i), 57@(40@,3i), -2)
+goto @CASINO5_4370
+
+:CASINO5_4350
+Task.EnterCarAsPassenger(69@(40@,3i), 57@(40@,3i), 0, -2)
+
+:CASINO5_4370
+81@(40@,3i) -= 2
+
+:CASINO5_4381
+goto @CASINO5_4432
+
+:CASINO5_4388
+if or
+  81@(40@,3i) == 2
+  81@(40@,3i) == 3
+goto_if_false @CASINO5_4432
+81@(40@,3i) -= 2
+
+:CASINO5_4432
+if 
+  81@(40@,3i) == 0
+goto_if_false @CASINO5_4581
+if 
+  not Char.IsDead(66@(40@,3i))
+goto_if_false @CASINO5_4485
+81@(40@,3i) += 1
+
+:CASINO5_4485
+if 
+  not Char.IsDead(69@(40@,3i))
+goto_if_false @CASINO5_4516
+81@(40@,3i) += 2
+
+:CASINO5_4516
+if 
+  81@(40@,3i) == 0
+goto_if_false @CASINO5_4563
+63@(40@,3i) = 3
+goto @CASINO5_7028
+goto @CASINO5_4574
+
+:CASINO5_4563
+63@(40@,3i) += 1
+
+:CASINO5_4574
+goto @CASINO5_4588
+
+:CASINO5_4581
+goto @CASINO5_7028
+
+:CASINO5_4588
+if or
+  81@(40@,3i) == 1
+  81@(40@,3i) == 3
+goto_if_false @CASINO5_4730
+if 
+  not Char.IsDead(66@(40@,3i))
+goto_if_false @CASINO5_4686
+if 
+  Char.IsInCar(66@(40@,3i), 57@(40@,3i))
+goto_if_false @CASINO5_4679
+81@(40@,3i) -= 1
+
+:CASINO5_4679
+goto @CASINO5_4730
+
+:CASINO5_4686
+if or
+  81@(40@,3i) == 1
+  81@(40@,3i) == 3
+goto_if_false @CASINO5_4730
+81@(40@,3i) -= 1
+
+:CASINO5_4730
+if or
+  81@(40@,3i) == 2
+  81@(40@,3i) == 3
+goto_if_false @CASINO5_4872
+if 
+  not Char.IsDead(69@(40@,3i))
+goto_if_false @CASINO5_4828
+if 
+  Char.IsInCar(69@(40@,3i), 57@(40@,3i))
+goto_if_false @CASINO5_4821
+81@(40@,3i) -= 2
+
+:CASINO5_4821
+goto @CASINO5_4872
+
+:CASINO5_4828
+if or
+  81@(40@,3i) == 2
+  81@(40@,3i) == 3
+goto_if_false @CASINO5_4872
+81@(40@,3i) -= 2
+
+:CASINO5_4872
+if 
+  81@(40@,3i) == 0
+goto_if_false @CASINO5_5073
+if 
+  not Char.IsDead(66@(40@,3i))
+goto_if_false @CASINO5_4944
+Task.CarDriveWander(66@(40@,3i), 57@(40@,3i), 15.0, DrivingMode.StopForCars)
+goto @CASINO5_5055
+
+:CASINO5_4944
+if 
+  not Char.IsDead(69@(40@,3i))
+goto_if_false @CASINO5_5055
+87@ = Car.GetDriver(57@(40@,3i))
+42@ = Sequence.Open()
+if 
+  not is_int_lvar_equal_to_int_lvar 87@ == 69@(40@,3i)
+goto_if_false @CASINO5_5015
+Task.ShuffleToNextCarSeat(-1, 57@(40@,3i))
+
+:CASINO5_5015
+Task.CarDriveWander(-1, 57@(40@,3i), 15.0, DrivingMode.StopForCars)
+Sequence.Close(42@)
+Char.PerformSequence(69@(40@,3i), 42@)
+Sequence.Clear(42@)
+
+:CASINO5_5055
+63@(40@,3i) += 1
+goto @CASINO5_5080
+
+:CASINO5_5073
+goto @CASINO5_7028
+
+:CASINO5_5080
+if or
+  Char.LocateAnyMeansCar2D($scplayer, 57@(40@,3i), 50.0, 50.0, False)
+  Car.IsOnScreen(57@(40@,3i))
+goto_if_false @CASINO5_5131
+goto @CASINO5_7028
+
+:CASINO5_5131
+Car.MarkAsNoLongerNeeded(57@(40@,3i))
+Char.MarkAsNoLongerNeeded(66@(40@,3i))
+Char.MarkAsNoLongerNeeded(69@(40@,3i))
+63@(40@,3i) = 10000
+goto @CASINO5_7028
+
+:CASINO5_5177
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO5_5703
+if or
+  Char.IsDead(66@(40@,3i))
+  Char.IsDead(69@(40@,3i))
+goto_if_false @CASINO5_5256
+Text.PrintNow('CAS5_10', 8000, 1)
+63@(40@,3i) = 5
+goto @CASINO5_5696
+
+:CASINO5_5256
+if 
+  Car.HasBeenDamagedByChar(57@(40@,3i), $scplayer)
+goto_if_false @CASINO5_5313
+Text.PrintNow('CAS5_09', 8000, 1)
+63@(40@,3i) = 5
+goto @CASINO5_5696
+
+:CASINO5_5313
+if 
+  TIMERA > 120000
+goto_if_false @CASINO5_5574
+if or
+  Char.LocateAnyMeansCar2D($scplayer, 57@(40@,3i), 60.0, 60.0, False)
+  Car.IsOnScreen(57@(40@,3i))
+goto_if_false @CASINO5_5422
+if 
+  Char.IsInCar($scplayer, 57@(40@,3i))
+goto_if_false @CASINO5_5408
+89@ = 1
+
+:CASINO5_5408
+goto @CASINO5_7028
+goto @CASINO5_5567
+
+:CASINO5_5422
+Blip.Remove(60@(40@,3i))
+if 
+  Char.DoesExist(72@)
+goto_if_false @CASINO5_5452
+Char.Delete(72@)
+
+:CASINO5_5452
+if 
+  Char.DoesExist(66@(40@,3i))
+goto_if_false @CASINO5_5481
+Char.Delete(66@(40@,3i))
+
+:CASINO5_5481
+if 
+  Char.DoesExist(69@(40@,3i))
+goto_if_false @CASINO5_5510
+Char.Delete(69@(40@,3i))
+
+:CASINO5_5510
+if 
+  Car.DoesExist(57@(40@,3i))
+goto_if_false @CASINO5_5539
+Car.Delete(57@(40@,3i))
+
+:CASINO5_5539
+51@ = 1
+set_lvar_text_label 52@s = 'CAS5_32'
+goto @CASINO5_12932
+
+:CASINO5_5567
+goto @CASINO5_5696
+
+:CASINO5_5574
+if 
+  2 > 79@
+goto_if_false @CASINO5_5689
+if 
+  79@ == 0
+goto_if_false @CASINO5_5653
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO5_5646
+Text.PrintNow('CAS5_30', 8000, 1)
+79@ += 1
+
+:CASINO5_5646
+goto @CASINO5_5689
+
+:CASINO5_5653
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO5_5689
+Text.PrintNow('CAS5_31', 8000, 1)
+79@ += 1
+
+:CASINO5_5689
+goto @CASINO5_7028
+
+:CASINO5_5696
+goto @CASINO5_5731
+
+:CASINO5_5703
+51@ = 1
+set_lvar_text_label 52@s = 'CAS5_17'
+goto @CASINO5_12932
+
+:CASINO5_5731
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO5_6993
+if 
+  80@ == 0
+goto_if_false @CASINO5_6171
+41@ = 0
+
+:CASINO5_5772
+if 
+  3 > 41@
+goto_if_false @CASINO5_5865
+if 
+  not is_int_lvar_equal_to_int_lvar 40@ == 41@
+goto_if_false @CASINO5_5851
+Blip.Remove(60@(41@,3i))
+if 
+  3 > 63@(41@,3i)
+goto_if_false @CASINO5_5851
+63@(41@,3i) = 3
+
+:CASINO5_5851
+41@ += 1
+goto @CASINO5_5772
+
+:CASINO5_5865
+Streaming.MarkModelAsNoLongerNeeded(275)
+Streaming.RemoveAnimation("GANGS")
+Streaming.RequestModel(405)
+if 
+  89@ == 0
+goto_if_false @CASINO5_6120
+if 
+  not Char.IsDead(66@(40@,3i))
+goto_if_false @CASINO5_6028
+Char.ClearTasks(66@(40@,3i))
+Task.CarDriveWander(66@(40@,3i), 57@(40@,3i), 25.0, DrivingMode.AvoidCars)
+if 
+  not Char.IsDead(69@(40@,3i))
+goto_if_false @CASINO5_6014
+Task.DriveBy(69@(40@,3i), $scplayer, -1, 0.0, 0.0, 0.0, 300.0, DriveByType.FixedRight, True, 35)
+
+:CASINO5_6014
+88@ = 0
+goto @CASINO5_6120
+
+:CASINO5_6028
+if 
+  not Char.IsDead(69@(40@,3i))
+goto_if_false @CASINO5_6120
+Char.ClearTasks(69@(40@,3i))
+42@ = Sequence.Open()
+Task.ShuffleToNextCarSeat(-1, 57@(40@,3i))
+Task.CarDriveWander(-1, 57@(40@,3i), 25.0, DrivingMode.AvoidCars)
+Sequence.Close(42@)
+Char.PerformSequence(69@(40@,3i), 42@)
+Sequence.Clear(42@)
+88@ = 1
+
+:CASINO5_6120
+Car.SwitchSiren(57@(40@,3i), True)
+Car.SetHealth(57@(40@,3i), 96@)
+80@ = 1
+92@ = 0
+112@ = 0
+goto @CASINO5_6986
+
+:CASINO5_6171
+90@ = Car.GetHealth(57@(40@,3i))
+if 
+  Car.HasBeenDamagedByChar(57@(40@,3i), $scplayer)
+goto_if_false @CASINO5_6298
+set_lvar_int_to_lvar_int 91@ = 96@
+sub_int_lvar_from_int_lvar 91@ -= 90@
+if 
+  Car.HasBeenDamagedByWeapon(57@(40@,3i), WeaponType.AnyWeapon)
+goto_if_false @CASINO5_6283
+91@ /= 20
+if 
+  91@ == 0
+goto_if_false @CASINO5_6276
+91@ = 1
+
+:CASINO5_6276
+goto @CASINO5_6290
+
+:CASINO5_6283
+91@ *= 2
+
+:CASINO5_6290
+add_int_lvar_to_int_lvar 92@ += 91@
+
+:CASINO5_6298
+Car.SetHealth(57@(40@,3i), 96@)
+Car.ClearLastDamageEntity(57@(40@,3i))
+if 
+  200 > 92@
+goto_if_false @CASINO5_6526
+if 
+  not Char.IsInCar($scplayer, 57@(40@,3i))
+goto_if_false @CASINO5_6519
+if 
+  Char.IsDead(66@(40@,3i))
+goto_if_false @CASINO5_6505
+if 
+  not Char.IsDead(69@(40@,3i))
+goto_if_false @CASINO5_6498
+if 
+  88@ == 0
+goto_if_false @CASINO5_6491
+Char.ClearTasks(69@(40@,3i))
+42@ = Sequence.Open()
+Task.ShuffleToNextCarSeat(-1, 57@(40@,3i))
+Task.CarDriveWander(-1, 57@(40@,3i), 25.0, DrivingMode.AvoidCars)
+Sequence.Close(42@)
+Char.PerformSequence(69@(40@,3i), 42@)
+Sequence.Clear(42@)
+88@ = 1
+
+:CASINO5_6491
+goto @CASINO5_7028
+
+:CASINO5_6498
+goto @CASINO5_6512
+
+:CASINO5_6505
+goto @CASINO5_7028
+
+:CASINO5_6512
+goto @CASINO5_6526
+
+:CASINO5_6519
+89@ = 1
+
+:CASINO5_6526
+Car.SetHealth(57@(40@,3i), 3000)
+if 
+  89@ == 0
+goto_if_false @CASINO5_6570
+Car.SetTempAction(57@(40@,3i), TempAction.HandbrakeStraight, 5000)
+
+:CASINO5_6570
+if 
+  not Char.IsDead(66@(40@,3i))
+goto_if_false @CASINO5_6657
+Char.ClearTasks(66@(40@,3i))
+42@ = Sequence.Open()
+Task.LeaveCar(-1, 57@(40@,3i))
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(42@)
+Char.PerformSequence(66@(40@,3i), 42@)
+Sequence.Clear(42@)
+goto @CASINO5_6657
+
+:CASINO5_6657
+if 
+  not Char.IsDead(69@(40@,3i))
+goto_if_false @CASINO5_6744
+Char.ClearTasks(69@(40@,3i))
+42@ = Sequence.Open()
+Task.LeaveCar(-1, 57@(40@,3i))
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(42@)
+Char.PerformSequence(69@(40@,3i), 42@)
+Sequence.Clear(42@)
+goto @CASINO5_6744
+
+:CASINO5_6744
+if 
+  89@ == 0
+goto_if_false @CASINO5_6884
+Blip.Remove(60@(40@,3i))
+60@(40@,3i) = Blip.AddForCar(57@(40@,3i))
+Blip.SetAsFriendly(60@(40@,3i), True)
+Car.LockDoors(57@(40@,3i), CarLock.Unlocked)
+if or
+  not Char.IsDead(66@(40@,3i))
+  not Char.IsDead(69@(40@,3i))
+goto_if_false @CASINO5_6861
+Text.PrintNow('CAS5_11', 8000, 1)
+goto @CASINO5_6877
+
+:CASINO5_6861
+Text.PrintNow('CAS5_12', 8000, 1)
+
+:CASINO5_6877
+goto @CASINO5_6893
+
+:CASINO5_6884
+Blip.Remove(60@(40@,3i))
+
+:CASINO5_6893
+World.SetCarDensityMultiplier(0.6)
+World.SetPedDensityMultiplier(0.6)
+Path.UnmarkAllRoadNodesAsDontWander
+109@ = 100.0
+106@ = 0
+101@ = -1
+102@ = -1
+107@ = -10.0
+108@ = -10.0
+77@ = 0
+Car.SetHealth(57@(40@,3i), 1250)
+goto @CASINO5_8780
+
+:CASINO5_6986
+goto @CASINO5_7021
+
+:CASINO5_6993
+51@ = 1
+set_lvar_text_label 52@s = 'CAS5_17'
+goto @CASINO5_12932
+
+:CASINO5_7021
+goto @CASINO5_7028
+
+:CASINO5_7028
+40@ += 1
+goto @CASINO5_3088
+
+:CASINO5_7042
+gosub @CASINO5_7056
+goto @CASINO5_3077
+
+:CASINO5_7056
+if 
+  TIMERB > 500
+goto_if_false @CASINO5_7430
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+40@ = 0
+
+:CASINO5_7096
+if 
+  3 > 40@
+goto_if_false @CASINO5_7423
+if 
+  not Car.IsDead(57@(40@,3i))
+goto_if_false @CASINO5_7409
+if 
+  63@(40@,3i) == 0
+goto_if_false @CASINO5_7365
+$x, $y, $z = Car.GetCoordinates(57@(40@,3i))
+$distance = Math.GetDistanceBetweenCoords2D($player_x, $player_y, $x, $y)
+switch_start 93@(40@,3i) total_jumps 2 default_jump 0 @CASINO5_7358 jumps 0 @CASINO5_7258 1 @CASINO5_7308 -1 @CASINO5_7358 -1 @CASINO5_7358 -1 @CASINO5_7358 -1 @CASINO5_7358 -1 @CASINO5_7358
+
+:CASINO5_7258
+if 
+  120.0 > $distance
+goto_if_false @CASINO5_7301
+Car.SetLoadCollisionFlag(57@(40@,3i), True)
+93@(40@,3i) += 1
+
+:CASINO5_7301
+goto @CASINO5_7358
+
+:CASINO5_7308
+if 
+  $distance > 140.0
+goto_if_false @CASINO5_7351
+Car.SetLoadCollisionFlag(57@(40@,3i), False)
+93@(40@,3i) -= 1
+
+:CASINO5_7351
+goto @CASINO5_7358
+
+:CASINO5_7358
+goto @CASINO5_7409
+
+:CASINO5_7365
+if 
+  93@(40@,3i) == 0
+goto_if_false @CASINO5_7409
+Car.SetLoadCollisionFlag(57@(40@,3i), True)
+93@(40@,3i) = 1
+
+:CASINO5_7409
+40@ += 1
+goto @CASINO5_7096
+
+:CASINO5_7423
+TIMERB = 0
+
+:CASINO5_7430
+return 
+
+:CASINO5_7432
+45@ = Math.RandomIntInRange(0, 2)
+switch_start 40@ total_jumps 3 default_jump 0 @CASINO5_7642 jumps 0 @CASINO5_7504 1 @CASINO5_7550 2 @CASINO5_7596 -1 @CASINO5_7642 -1 @CASINO5_7642 -1 @CASINO5_7642 -1 @CASINO5_7642
+
+:CASINO5_7504
+if 
+  45@ == 0
+goto_if_false @CASINO5_7536
+74@ = 1
+goto @CASINO5_7543
+
+:CASINO5_7536
+74@ = 2
+
+:CASINO5_7543
+goto @CASINO5_7642
+
+:CASINO5_7550
+if 
+  45@ == 0
+goto_if_false @CASINO5_7582
+74@ = 0
+goto @CASINO5_7589
+
+:CASINO5_7582
+74@ = 2
+
+:CASINO5_7589
+goto @CASINO5_7642
+
+:CASINO5_7596
+if 
+  45@ == 0
+goto_if_false @CASINO5_7628
+74@ = 0
+goto @CASINO5_7635
+
+:CASINO5_7628
+74@ = 1
+
+:CASINO5_7635
+goto @CASINO5_7642
+
+:CASINO5_7642
+if 
+  not Car.IsDead(57@(74@,3i))
+goto_if_false @CASINO5_7980
+96@ = 5000
+Car.SetHealth(57@(74@,3i), 96@)
+Car.SetCanBurstTires(57@(74@,3i), False)
+if 
+  not Char.IsDead(66@(74@,3i))
+goto_if_false @CASINO5_7731
+Char.ClearTasks(66@(74@,3i))
+Char.Delete(66@(74@,3i))
+
+:CASINO5_7731
+66@(74@,3i) = Char.CreateInsideCar(PedType.Mission1, 124, 57@(74@,3i))
+Char.SetCantBeDraggedOut(66@(74@,3i), True)
+Char.GiveWeapon(66@(74@,3i), WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(66@(74@,3i), WeaponType.Mp5)
+Char.SetDecisionMaker(66@(74@,3i), 47@)
+if 
+  not Char.IsDead(69@(74@,3i))
+goto_if_false @CASINO5_7837
+Char.ClearTasks(69@(74@,3i))
+Char.Delete(69@(74@,3i))
+
+:CASINO5_7837
+69@(74@,3i) = Char.CreateAsPassenger(PedType.Mission1, 125, 57@(74@,3i), 0)
+Char.SetCantBeDraggedOut(69@(74@,3i), True)
+Char.GiveWeapon(69@(74@,3i), WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(69@(74@,3i), WeaponType.Mp5)
+Char.SetDecisionMaker(69@(74@,3i), 47@)
+72@ = Char.CreateAsPassenger(PedType.Special, 290, 57@(74@,3i), 1)
+Char.SetStayInCarWhenJacked(72@, True)
+Char.SetForceDieInCar(72@, True)
+Char.SetDecisionMaker(72@, 48@)
+Char.SetGetOutUpsideDownCar(72@, False)
+TIMERA = 0
+79@ = 0
+63@(74@,3i) = 4
+
+:CASINO5_7980
+return 
+
+:CASINO5_7982
+105@ = 0
+
+:CASINO5_7989
+if 
+  2 > 105@
+goto_if_false @CASINO5_8778
+if and
+  not Char.IsDead(99@(105@,2i))
+  not Car.IsDead(97@(105@,2i))
+goto_if_false @CASINO5_8416
+switch_start 101@(105@,2i) total_jumps 2 default_jump 0 @CASINO5_8409 jumps 1 @CASINO5_8103 2 @CASINO5_8332 -1 @CASINO5_8409 -1 @CASINO5_8409 -1 @CASINO5_8409 -1 @CASINO5_8409 -1 @CASINO5_8409
+
+:CASINO5_8103
+if 
+  106@ == 0
+goto_if_false @CASINO5_8135
+gosub @CASINO5_9852
+goto @CASINO5_8325
+
+:CASINO5_8135
+$x, $y, $z = Car.GetCoordinates(97@(105@,2i))
+$z = Math.GetDistanceBetweenCoords2D(1074.461, 2392.227, $x, $y)
+$distance = Math.GetDistanceBetweenCoords2D(1010.673, 1487.184, $x, $y)
+Char.ClearTasks(99@(105@,2i))
+if 
+  is_float_var_greater_than_float_var $distance > $z
+goto_if_false @CASINO5_8272
+Task.CarDriveToCoord(99@(105@,2i), 97@(105@,2i), 1074.461, 2392.227, 9.6796, 25.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+goto @CASINO5_8314
+
+:CASINO5_8272
+Task.CarDriveToCoord(99@(105@,2i), 97@(105@,2i), 1010.673, 1487.184, 9.6797, 25.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+
+:CASINO5_8314
+101@(105@,2i) = 2
+
+:CASINO5_8325
+goto @CASINO5_8409
+
+:CASINO5_8332
+if 
+  106@ == 0
+goto_if_false @CASINO5_8402
+101@(105@,2i) = 1
+Char.ClearTasks(99@(105@,2i))
+Task.CarMission(99@(105@,2i), 97@(105@,2i), 57@(74@,3i), CarMission.RamPlayerClose, 32.0, DrivingMode.AvoidCars)
+
+:CASINO5_8402
+goto @CASINO5_8409
+
+:CASINO5_8409
+goto @CASINO5_8764
+
+:CASINO5_8416
+switch_start 101@(105@,2i) total_jumps 2 default_jump 1 @CASINO5_8483 jumps -1 @CASINO5_8519 0 @CASINO5_8526 -1 @CASINO5_8764 -1 @CASINO5_8764 -1 @CASINO5_8764 -1 @CASINO5_8764 -1 @CASINO5_8764
+
+:CASINO5_8483
+Char.MarkAsNoLongerNeeded(99@(105@,2i))
+Car.MarkAsNoLongerNeeded(97@(105@,2i))
+101@(105@,2i) = -1
+goto @CASINO5_8764
+
+:CASINO5_8519
+goto @CASINO5_8764
+
+:CASINO5_8526
+if 
+  103@(105@,2i) > 9000
+goto_if_false @CASINO5_8757
+if 
+  Streaming.HasModelLoaded(405)
+goto_if_false @CASINO5_8757
+gosub @CASINO5_10001
+if 
+  114@ == 1
+goto_if_false @CASINO5_8757
+97@(105@,2i) = Car.Create(405, 118@, 119@, 120@)
+Car.SetHeading(97@(105@,2i), 121@)
+Car.LockDoors(97@(105@,2i), CarLock.LockoutPlayerOnly)
+Car.SetCanBeVisiblyDamaged(97@(105@,2i), False)
+Car.SetHealth(97@(105@,2i), 5000)
+99@(105@,2i) = Char.CreateInsideCar(PedType.Mission1, 125, 97@(105@,2i))
+Char.GiveWeapon(99@(105@,2i), WeaponType.Mp5, 30000)
+Char.SetDecisionMaker(99@(105@,2i), 48@)
+Char.SetCantBeDraggedOut(99@(105@,2i), True)
+Task.CarMission(99@(105@,2i), 97@(105@,2i), 57@(74@,3i), CarMission.RamPlayerClose, 32.0, DrivingMode.AvoidCars)
+101@(105@,2i) = 1
+
+:CASINO5_8757
+goto @CASINO5_8764
+
+:CASINO5_8764
+105@ += 1
+goto @CASINO5_7989
+
+:CASINO5_8778
+return 
+
+:CASINO5_8780
+wait 0
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO5_9817
+if 
+  not Car.IsDead(57@(74@,3i))
+goto_if_false @CASINO5_9810
+if 
+  Char.IsInCar($scplayer, 57@(74@,3i))
+goto_if_false @CASINO5_9197
+if 
+  110@ == 0
+goto_if_false @CASINO5_8999
+Blip.Remove(60@(74@,3i))
+44@ = Blip.AddForCoord(981.4241, 2132.469, 9.8203)
+if 
+  77@ == 0
+goto_if_false @CASINO5_8976
+Text.PrintNow('CAS5_13', 8000, 1)
+101@ = 0
+102@ = 0
+103@ = 0
+104@ = 0
+77@ = 1
+Car.MarkAsNoLongerNeeded(55@)
+Streaming.MarkModelAsNoLongerNeeded(470)
+goto @CASINO5_8992
+
+:CASINO5_8976
+Text.PrintNow('CAS5_14', 8000, 1)
+
+:CASINO5_8992
+110@ = 1
+
+:CASINO5_8999
+if 
+  Char.LocateInCar2D($scplayer, 0, 981.4241, 2132.469, 109@, 109@)
+goto_if_false @CASINO5_9130
+if 
+  Char.LocateInCar3D($scplayer, 981.4241, 2132.469, 9.8203, 4.0, 4.0, 4.0, True)
+goto_if_false @CASINO5_9088
+goto @CASINO5_10933
+
+:CASINO5_9088
+if 
+  106@ == 0
+goto_if_false @CASINO5_9123
+109@ = 120.0
+106@ = 1
+
+:CASINO5_9123
+goto @CASINO5_9165
+
+:CASINO5_9130
+if 
+  106@ == 1
+goto_if_false @CASINO5_9165
+109@ = 100.0
+106@ = 0
+
+:CASINO5_9165
+if 
+  112@ == 1
+goto_if_false @CASINO5_9190
+gosub @CASINO5_10202
+
+:CASINO5_9190
+goto @CASINO5_9550
+
+:CASINO5_9197
+if 
+  110@ == 1
+goto_if_false @CASINO5_9270
+Blip.Remove(44@)
+60@(74@,3i) = Blip.AddForCar(57@(74@,3i))
+Blip.SetAsFriendly(60@(74@,3i), True)
+Text.PrintNow('CAS5_15', 8000, 1)
+110@ = 0
+
+:CASINO5_9270
+if 
+  2 > 111@
+goto_if_false @CASINO5_9550
+if 
+  111@ == 0
+goto_if_false @CASINO5_9415
+if 
+  not Char.IsDead(66@(74@,3i))
+goto_if_false @CASINO5_9401
+if 
+  not Char.IsInAnyCar(66@(74@,3i))
+goto_if_false @CASINO5_9394
+set_var_int_to_constant $load_sample = 8016
+set_var_text_label s$load_text = 'CAS5_EA'
+start_new_script @A_ALAP 2 100 66@(74@,3i) 
+111@ += 1
+
+:CASINO5_9394
+goto @CASINO5_9408
+
+:CASINO5_9401
+111@ += 1
+
+:CASINO5_9408
+goto @CASINO5_9550
+
+:CASINO5_9415
+if 
+  not Char.IsDead(69@(74@,3i))
+goto_if_false @CASINO5_9543
+if 
+  not Char.IsInAnyCar(69@(74@,3i))
+goto_if_false @CASINO5_9536
+if 
+  $SLOT_status($preload_slot,2i) == -3
+goto_if_false @CASINO5_9536
+$SLOT_status($preload_slot,2i) = -4
+set_var_int_to_constant $load_sample = 8017
+set_var_text_label s$load_text = 'CAS5_EB'
+start_new_script @A_ALAP 2 100 69@(74@,3i) 
+111@ += 1
+
+:CASINO5_9536
+goto @CASINO5_9550
+
+:CASINO5_9543
+111@ += 1
+
+:CASINO5_9550
+if 
+  112@ == 0
+goto_if_false @CASINO5_9758
+if 
+  not Car.IsDead(97@)
+goto_if_false @CASINO5_9638
+if 
+  Char.LocateAnyMeansCar2D($scplayer, 97@, 10.0, 10.0, False)
+goto_if_false @CASINO5_9638
+Text.PrintNow('CAS5_16', 8000, 1)
+112@ = 1
+
+:CASINO5_9638
+if 
+  112@ == 0
+goto_if_false @CASINO5_9726
+if 
+  not Car.IsDead(98@)
+goto_if_false @CASINO5_9726
+if 
+  Char.LocateAnyMeansCar2D($scplayer, 98@, 10.0, 10.0, False)
+goto_if_false @CASINO5_9726
+Text.PrintNow('CAS5_16', 8000, 1)
+112@ = 1
+
+:CASINO5_9726
+if 
+  112@ == 1
+goto_if_false @CASINO5_9758
+TIMERB = 0
+123@ = 7
+
+:CASINO5_9758
+37@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 39@ = 37@
+sub_int_lvar_from_int_lvar 39@ -= 38@
+set_lvar_int_to_lvar_int 38@ = 37@
+add_int_lvar_to_int_lvar 103@ += 39@
+add_int_lvar_to_int_lvar 104@ += 39@
+gosub @CASINO5_7982
+
+:CASINO5_9810
+goto @CASINO5_9845
+
+:CASINO5_9817
+51@ = 1
+set_lvar_text_label 52@s = 'CAS5_17'
+goto @CASINO5_12932
+
+:CASINO5_9845
+goto @CASINO5_8780
+
+:CASINO5_9852
+if 
+  103@(105@,2i) > 500
+goto_if_false @CASINO5_9999
+if and
+  not Char.LocateAnyMeansCar2D($scplayer, 97@(105@,2i), 75.0, 75.0, False)
+  not Car.IsOnScreen(97@(105@,2i))
+goto_if_false @CASINO5_9988
+gosub @CASINO5_10001
+if 
+  114@ == 1
+goto_if_false @CASINO5_9988
+Car.SetCoordinates(97@(105@,2i), 118@, 119@, 120@)
+Car.SetHeading(97@(105@,2i), 121@)
+Car.SetForwardSpeed(97@(105@,2i), 32.0)
+
+:CASINO5_9988
+103@(105@,2i) = 0
+
+:CASINO5_9999
+return 
+
+:CASINO5_10001
+113@ = 1
+114@ = 0
+
+:CASINO5_10015
+if and
+  10 > 113@
+  114@ == 0
+goto_if_false @CASINO5_10200
+115@ = Char.GetOffsetInWorldCoords(116@, 117@, $scplayer, 0.0, 107@(105@,2f), 0.0)
+118@, 119@, 120@, 121@ = Path.GetNthClosestCarNodeWithHeading(115@, 116@, 117@, 113@)
+if 
+  not World.IsPointObscuredByAMissionEntity(118@, 119@, 120@, 5.0, 5.0, 5.0)
+goto_if_false @CASINO5_10186
+if 
+  not Camera.IsPointOnScreen(118@, 119@, 120@, 5.0)
+goto_if_false @CASINO5_10186
+World.ClearArea(1, 118@, 119@, 120@, 5.0)
+114@ = 1
+
+:CASINO5_10186
+113@ += 1
+goto @CASINO5_10015
+
+:CASINO5_10200
+return 
+
+:CASINO5_10202
+switch_start 123@ total_jumps 9 default_jump 0 @CASINO5_10931 jumps 0 @CASINO5_10330 1 @CASINO5_10363 2 @CASINO5_10452 4 @CASINO5_10499 5 @CASINO5_10588 7 @CASINO5_10635 8 @CASINO5_10677
+switch_continued 9 @CASINO5_10813 10 @CASINO5_10898 -1 @CASINO5_10931 -1 @CASINO5_10931 -1 @CASINO5_10931 -1 @CASINO5_10931 -1 @CASINO5_10931 -1 @CASINO5_10931 -1 @CASINO5_10931
+
+:CASINO5_10330
+if 
+  TIMERB > 8500
+goto_if_false @CASINO5_10356
+123@ += 1
+
+:CASINO5_10356
+goto @CASINO5_10931
+
+:CASINO5_10363
+if 
+  2 > 122@
+goto_if_false @CASINO5_10438
+set_var_int_to_lvar_int $load_sample = 124@(122@,16i)
+set_var_text_label s$load_text = 140@(122@,16s)
+start_new_script @A_ALAP 0 100 
+122@ += 1
+123@ += 1
+goto @CASINO5_10452
+
+:CASINO5_10438
+123@ = 3
+goto @CASINO5_10931
+
+:CASINO5_10452
+if 
+  $SLOT_status($preload_slot,2i) == -3
+goto_if_false @CASINO5_10492
+123@ = 1
+$SLOT_status($preload_slot,2i) = -4
+
+:CASINO5_10492
+goto @CASINO5_10931
+
+:CASINO5_10499
+if 
+  7 > 122@
+goto_if_false @CASINO5_10574
+set_var_int_to_lvar_int $load_sample = 124@(122@,16i)
+set_var_text_label s$load_text = 140@(122@,16s)
+start_new_script @A_ALAP 0 100 
+122@ += 1
+123@ += 1
+goto @CASINO5_10588
+
+:CASINO5_10574
+123@ = 6
+goto @CASINO5_10931
+
+:CASINO5_10588
+if 
+  $SLOT_status($preload_slot,2i) == -3
+goto_if_false @CASINO5_10628
+123@ = 4
+$SLOT_status($preload_slot,2i) = -4
+
+:CASINO5_10628
+goto @CASINO5_10931
+
+:CASINO5_10635
+if 
+  TIMERB > 8500
+goto_if_false @CASINO5_10670
+122@ = Math.RandomIntInRange(7, 14)
+123@ += 1
+
+:CASINO5_10670
+goto @CASINO5_10931
+
+:CASINO5_10677
+if 
+  not Car.IsDead(97@)
+goto_if_false @CASINO5_10728
+if 
+  Car.HasBeenDamagedByCar(57@(74@,3i), 97@)
+goto_if_false @CASINO5_10723
+123@ = 9
+
+:CASINO5_10723
+Car.ClearLastDamageEntity(97@)
+
+:CASINO5_10728
+if 
+  not Car.IsDead(98@)
+goto_if_false @CASINO5_10797
+if 
+  123@ <> 9
+goto_if_false @CASINO5_10792
+if 
+  Car.HasBeenDamagedByCar(57@(74@,3i), 98@)
+goto_if_false @CASINO5_10792
+123@ = 9
+
+:CASINO5_10792
+Car.ClearLastDamageEntity(98@)
+
+:CASINO5_10797
+Car.ClearLastDamageEntity(57@(74@,3i))
+goto @CASINO5_10931
+
+:CASINO5_10813
+set_var_int_to_lvar_int $load_sample = 124@(122@,16i)
+set_var_text_label s$load_text = 140@(122@,16s)
+start_new_script @A_ALAP 2 100 72@ 
+123@ = 10
+122@ += 1
+if 
+  122@ == 14
+goto_if_false @CASINO5_10891
+122@ = 7
+
+:CASINO5_10891
+TIMERB = 0
+
+:CASINO5_10898
+if 
+  TIMERB > 10000
+goto_if_false @CASINO5_10924
+123@ = 8
+
+:CASINO5_10924
+goto @CASINO5_10931
+
+:CASINO5_10931
+return 
+
+:CASINO5_10933
+Camera.DoFade(0, Fade.Out)
+
+:CASINO5_10939
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO5_10963
+wait 0
+goto @CASINO5_10939
+
+:CASINO5_10963
+Text.ClearPrints
+World.ClearArea(1, 979.7058, 2137.247, 9.8203, 200.0)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+if 
+  not Car.IsDead(57@(74@,3i))
+goto_if_false @CASINO5_11032
+Car.SetHealth(57@(74@,3i), 3000)
+
+:CASINO5_11032
+Streaming.RequestModel(126)
+Streaming.RequestModel(127)
+Streaming.RequestModel(#CJ_WHEELCHAIR1)
+
+:CASINO5_11045
+if or
+  not Streaming.HasModelLoaded(126)
+  not Streaming.HasModelLoaded(127)
+  not Streaming.HasModelLoaded(#CJ_WHEELCHAIR1)
+goto_if_false @CASINO5_11080
+wait 0
+goto @CASINO5_11045
+
+:CASINO5_11080
+if 
+  not Car.IsDead(57@(74@,3i))
+goto_if_false @CASINO5_11182
+Car.SetCoordinates(57@(74@,3i), 979.7058, 2137.247, 9.8203)
+Car.SetHeading(57@(74@,3i), 237.8897)
+Char.WarpFromCarToCoord($scplayer, 998.5278, 2118.589, 9.8203)
+172@ = Char.CreateInsideCar(PedType.Mission1, 126, 57@(74@,3i))
+Char.SetDecisionMaker(172@, 48@)
+
+:CASINO5_11182
+Camera.SetFixedPosition(972.8329, 2141.334, 11.0496, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(973.6994, 2140.839, 11.1103, SwitchType.JumpCut)
+Camera.DoFade(1, 500)
+
+:CASINO5_11240
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO5_11264
+wait 0
+goto @CASINO5_11240
+
+:CASINO5_11264
+if and
+  not Car.IsDead(57@(74@,3i))
+  not Char.IsDead(172@)
+goto_if_false @CASINO5_11351
+42@ = Sequence.Open()
+Task.CarTempAction(-1, 57@(74@,3i), TempAction.ReverseStraight, 500)
+Task.CarTempAction(-1, 57@(74@,3i), TempAction.HandbrakeStraight, 300)
+Task.StandStill(-1, 8000)
+Sequence.Close(42@)
+Char.PerformSequence(172@, 42@)
+Sequence.Clear(42@)
+
+:CASINO5_11351
+46@ = 0
+
+:CASINO5_11358
+if 
+  46@ == 0
+goto_if_false @CASINO5_11436
+wait 0
+if 
+  not Char.IsDead(172@)
+goto_if_false @CASINO5_11429
+43@ = Char.GetSequenceProgress(172@)
+if 
+  43@ > 0
+goto_if_false @CASINO5_11429
+46@ = 1
+
+:CASINO5_11429
+goto @CASINO5_11358
+
+:CASINO5_11436
+if and
+  not Char.IsDead(172@)
+  not Car.IsDead(57@(74@,3i))
+goto_if_false @CASINO5_11696
+Char.WarpFromCarToCoord(172@, 971.7789, 2137.288, 9.8203)
+Char.SetHeading(172@, 316.6316)
+Char.ClearTasksImmediately(172@)
+42@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 974.2065, 2140.108, 9.8203, MoveState.Walk, -2)
+Task.LookAtVehicle(-1, 57@(74@,3i), 8000)
+Task.StandStill(-1, 8000)
+Sequence.Close(42@)
+Char.PerformSequence(172@, 42@)
+Sequence.Clear(42@)
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO5_11591
+Char.WarpIntoCar($scplayer, 57@(74@,3i))
+
+:CASINO5_11591
+173@ = Char.Create(24, 127, 975.8311, 2144.959, 9.8203)
+Char.SetHeading(173@, 162.2693)
+Char.SetDecisionMaker(173@, 48@)
+42@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 975.0208, 2141.366, 9.8203, MoveState.Walk, -2)
+Task.LookAtChar(-1, 173@, 8000)
+Task.StandStill(-1, 8000)
+Sequence.Close(42@)
+Char.PerformSequence(173@, 42@)
+Sequence.Clear(42@)
+
+:CASINO5_11696
+46@ = 0
+
+:CASINO5_11703
+if 
+  46@ == 0
+goto_if_false @CASINO5_11781
+wait 0
+if 
+  not Char.IsDead(172@)
+goto_if_false @CASINO5_11774
+43@ = Char.GetSequenceProgress(172@)
+if 
+  43@ > 0
+goto_if_false @CASINO5_11774
+46@ = 1
+
+:CASINO5_11774
+goto @CASINO5_11703
+
+:CASINO5_11781
+set_var_int_to_constant $load_sample = 8014
+set_var_text_label s$load_text = 'CAS5_DA'
+start_new_script @A_ALAP 2 200 172@ 
+46@ = 0
+
+:CASINO5_11826
+if 
+  46@ == 0
+goto_if_false @CASINO5_11904
+wait 0
+if 
+  not Char.IsDead(173@)
+goto_if_false @CASINO5_11897
+43@ = Char.GetSequenceProgress(173@)
+if 
+  43@ > 0
+goto_if_false @CASINO5_11897
+46@ = 1
+
+:CASINO5_11897
+goto @CASINO5_11826
+
+:CASINO5_11904
+if 
+  $SLOT_status($preload_slot,2i) <> -3
+goto_if_false @CASINO5_11937
+wait 0
+goto @CASINO5_11904
+
+:CASINO5_11937
+set_var_int_to_constant $load_sample = 8015
+set_var_text_label s$load_text = 'CAS5_DB'
+start_new_script @A_ALAP 2 200 173@ 
+TIMERA = 0
+
+:CASINO5_11982
+if 
+  4500 > TIMERA
+goto_if_false @CASINO5_12012
+wait 0
+goto @CASINO5_11982
+
+:CASINO5_12012
+Camera.DoFade(0, Fade.Out)
+
+:CASINO5_12018
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO5_12042
+wait 0
+goto @CASINO5_12018
+
+:CASINO5_12042
+174@ = Object.Create(#CJ_WHEELCHAIR1, 971.5, 2140.5, 9.8203)
+Object.SetHeading(174@, 180.0)
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO5_12179
+Char.WarpFromCarToCoord(72@, 0.0, 0.0, 0.0)
+Char.AttachToObject(72@, 174@, 0.0, -0.575, 0.525, 2, 0.0, WeaponType.Unarmed)
+Task.PlayAnim(72@, "SEAT_DOWN", "PED", 9.0, False, False, False, True, -1)
+
+:CASINO5_12179
+if 
+  not Char.IsDead(172@)
+goto_if_false @CASINO5_12225
+Char.SetCoordinates(172@, 972.5, 2140.5, 9.8203)
+Char.SetHeading(172@, 0.0)
+
+:CASINO5_12225
+if 
+  not Char.IsDead(173@)
+goto_if_false @CASINO5_12271
+Char.SetCoordinates(173@, 971.5, 2139.5, 9.8203)
+Char.SetHeading(173@, 0.0)
+
+:CASINO5_12271
+46@ = 0
+
+:CASINO5_12278
+if 
+  46@ == 0
+goto_if_false @CASINO5_12378
+wait 0
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO5_12371
+if 
+  Char.IsPlayingAnim(72@, "SEAT_DOWN")
+goto_if_false @CASINO5_12371
+Char.SetAnimCurrentTime(72@, "SEAT_DOWN", 1.0)
+46@ = 1
+
+:CASINO5_12371
+goto @CASINO5_12278
+
+:CASINO5_12378
+Camera.SetFixedPosition(971.4178, 2146.135, 14.0976, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(971.5663, 2145.275, 13.6106, SwitchType.JumpCut)
+TIMERA = 0
+
+:CASINO5_12436
+if 
+  200 > TIMERA
+goto_if_false @CASINO5_12466
+wait 0
+goto @CASINO5_12436
+
+:CASINO5_12466
+if 
+  not Char.IsDead(172@)
+goto_if_false @CASINO5_12487
+Char.ClearTasks(172@)
+
+:CASINO5_12487
+Camera.DoFade(1, 500)
+
+:CASINO5_12494
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO5_12518
+wait 0
+goto @CASINO5_12494
+
+:CASINO5_12518
+if 
+  not Char.IsDead(172@)
+goto_if_false @CASINO5_12558
+Task.GoStraightToCoord(172@, 972.8889, 2148.039, 9.8203, MoveState.Walk, -2)
+
+:CASINO5_12558
+if 
+  not Car.IsDead(57@(74@,3i))
+goto_if_false @CASINO5_12616
+Task.CarDriveToCoord($scplayer, 57@(74@,3i), 991.3741, 2136.312, 9.8203, 5.0, DriveMode.Normal, 0, DrivingMode.StopForCars)
+
+:CASINO5_12616
+TIMERA = 0
+
+:CASINO5_12623
+if 
+  1700 > TIMERA
+goto_if_false @CASINO5_12653
+wait 0
+goto @CASINO5_12623
+
+:CASINO5_12653
+Camera.DoFade(0, 1000)
+
+:CASINO5_12660
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO5_12684
+wait 0
+goto @CASINO5_12660
+
+:CASINO5_12684
+if 
+  not Car.IsDead(57@(74@,3i))
+goto_if_false @CASINO5_12750
+Car.SetForwardSpeed(57@(74@,3i), 0.0)
+Char.WarpFromCarToCoord($scplayer, 0.0, 0.0, 0.0)
+Char.WarpIntoCar($scplayer, 57@(74@,3i))
+
+:CASINO5_12750
+Char.DetachFromCar(72@)
+Char.Delete(72@)
+Char.Delete(172@)
+Char.Delete(173@)
+Object.Delete(174@)
+Char.ClearTasks($scplayer)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(True)
+TIMERA = 0
+
+:CASINO5_12802
+if 
+  200 > TIMERA
+goto_if_false @CASINO5_12832
+wait 0
+goto @CASINO5_12802
+
+:CASINO5_12832
+Camera.DoFade(1, Fade.Out)
+
+:CASINO5_12838
+$flag_casino_mission_counter += 1
+Stat.RegisterMissionPassed('CASINO5')
+Stat.PlayerMadeProgress(1)
+Text.PrintWithNumberBig('M_PASSS', 5000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 5000)
+Stat.AwardPlayerMissionRespect(5)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+Blip.Remove($vcrash_contact_blip)
+$vcrash_contact_blip = Blip.AddSpriteForContactPoint($crash_blip_icon, $vcrashX, $vcrashY, $vcrashZ)
+start_new_script @VCRASH 
+return 
+
+:CASINO5_12932
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+if 
+  51@ == 1
+goto_if_false @CASINO5_12976
+Text.PrintNow(52@s, 5000, 1)
+
+:CASINO5_12976
+return 
+
+:CASINO5_12978
+start_new_script @A_TERM 
+Path.UnmarkAllRoadNodesAsDontWander
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CASINO5_13015
+Player.SetGroupRecruitment($player1, True)
+Game.SetScriptLimitToGangSize(99)
+
+:CASINO5_13015
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+Blip.Remove(44@)
+Blip.Remove(60@)
+Blip.Remove(61@)
+Blip.Remove(62@)
+Char.MarkAsNoLongerNeeded(66@)
+Char.MarkAsNoLongerNeeded(67@)
+Char.MarkAsNoLongerNeeded(68@)
+Char.MarkAsNoLongerNeeded(69@)
+Char.MarkAsNoLongerNeeded(70@)
+Char.MarkAsNoLongerNeeded(71@)
+Char.MarkAsNoLongerNeeded(72@)
+Char.MarkAsNoLongerNeeded(99@)
+Char.MarkAsNoLongerNeeded(100@)
+Car.MarkAsNoLongerNeeded(55@)
+Car.MarkAsNoLongerNeeded(57@)
+Car.MarkAsNoLongerNeeded(58@)
+Car.MarkAsNoLongerNeeded(59@)
+Car.MarkAsNoLongerNeeded(97@)
+Car.MarkAsNoLongerNeeded(98@)
+CarGenerator.DontSuppressCarModel(470)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.MarkModelAsNoLongerNeeded(275)
+Streaming.MarkModelAsNoLongerNeeded(124)
+Streaming.MarkModelAsNoLongerNeeded(125)
+Streaming.MarkModelAsNoLongerNeeded(126)
+Streaming.MarkModelAsNoLongerNeeded(127)
+Streaming.MarkModelAsNoLongerNeeded(470)
+Streaming.MarkModelAsNoLongerNeeded(416)
+Streaming.MarkModelAsNoLongerNeeded(405)
+Streaming.MarkModelAsNoLongerNeeded(353)
+Streaming.MarkModelAsNoLongerNeeded(#CJ_WHEELCHAIR1)
+Streaming.RemoveAnimation("GANGS")
+$onmission = 0
+$timer_mobile_start = Clock.GetGameTimer()
+Mission.Finish
+return 
+

@@ -1,0 +1,68 @@
+:CESAR
+script_name 'CESAR'
+
+:CESAR_11
+wait 0
+if 
+  $flag_cesar_mission_counter == 1
+goto_if_false @CESAR_35
+terminate_this_script 
+
+:CESAR_35
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CESAR_344
+if 
+  $onmission == 0
+goto_if_false @CESAR_130
+if 
+  $flag_cesar_mission_counter == 0
+goto_if_false @CESAR_130
+if 
+  $cs1_race_is_go == 1
+goto_if_false @CESAR_130
+set_var_int_to_constant $race_selection = 0
+$show_race_selection = 0
+Mission.LoadAndLaunchInternal(35) // Race Tournament / 8-track / Dirt Track
+$cs1_race_is_go = 2
+
+:CESAR_130
+if 
+  $onmission == 0
+goto_if_false @CESAR_344
+if 
+  $flag_cesar_mission_counter == 0
+goto_if_false @CESAR_344
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, $cesarX, $cesarY, $cesarZ, 4.0, 4.0, 3.0)
+goto_if_false @CESAR_344
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CESAR_328
+$cs1_player_car = Char.StoreCarIsInNoSave($scplayer)
+if 
+  Car.IsLowRider($cs1_player_car)
+goto_if_false @CESAR_305
+if 
+  Player.CanStartMission($player1)
+goto_if_false @CESAR_298
+$onmission = 1
+Text.PrintBig('CESAR_1', 1000, TextStyle.BottomRight)
+PSAVE1_2334()
+Mission.LoadAndLaunchInternal(36) // Lowrider (High Stakes)
+
+:CESAR_298
+goto @CESAR_321
+
+:CESAR_305
+Text.PrintNow('CES_CK1', 1000, 1)
+
+:CESAR_321
+goto @CESAR_344
+
+:CESAR_328
+Text.PrintNow('CES_CK1', 1000, 1)
+
+:CESAR_344
+goto @CESAR_11
+

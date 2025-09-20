@@ -1,0 +1,196 @@
+:ODDVEH
+script_name 'ODDVEH'
+
+:ODDVEH_11
+wait $mission_trigger_wait_time
+if 
+  Player.IsPlaying($player1)
+goto_if_false @ODDVEH_1149
+if 
+  $onmission == 0
+goto_if_false @ODDVEH_1149
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @ODDVEH_1114
+if 
+  Char.IsInModel($scplayer, 481)
+goto_if_false @ODDVEH_134
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, $cour1X, $cour1Y, $cour1Z, 3.0, 3.0, 3.0)
+goto_if_false @ODDVEH_134
+$flag_courier_trigger = 1
+
+:ODDVEH_134
+if 
+  Char.IsInModel($scplayer, 463)
+goto_if_false @ODDVEH_202
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, $cour2X, $cour2Y, $cour2Z, 3.0, 3.0, 3.0)
+goto_if_false @ODDVEH_202
+$flag_courier_trigger = 1
+
+:ODDVEH_202
+if 
+  Char.IsInModel($scplayer, 462)
+goto_if_false @ODDVEH_270
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, $cour3X, $cour3Y, $cour3Z, 3.0, 3.0, 3.0)
+goto_if_false @ODDVEH_270
+$flag_courier_trigger = 1
+
+:ODDVEH_270
+if 
+  Char.IsInModel($scplayer, 481)
+goto_if_false @ODDVEH_335
+if 
+  $flag_courier_trigger == 0
+goto_if_false @ODDVEH_335
+Text.PrintBig('COUR1', 1000, TextStyle.BottomRight)
+Mission.LoadAndLaunchInternal(131) // Courier
+$flag_courier_trigger = 1
+
+:ODDVEH_335
+if 
+  Char.IsInModel($scplayer, 463)
+goto_if_false @ODDVEH_400
+if 
+  $flag_courier_trigger == 0
+goto_if_false @ODDVEH_400
+Text.PrintBig('COUR1', 1000, TextStyle.BottomRight)
+Mission.LoadAndLaunchInternal(131) // Courier
+$flag_courier_trigger = 1
+
+:ODDVEH_400
+if 
+  Char.IsInModel($scplayer, 462)
+goto_if_false @ODDVEH_465
+if 
+  $flag_courier_trigger == 0
+goto_if_false @ODDVEH_465
+Text.PrintBig('COUR1', 1000, TextStyle.BottomRight)
+Mission.LoadAndLaunchInternal(131) // Courier
+$flag_courier_trigger = 1
+
+:ODDVEH_465
+if 
+  Char.IsInModel($scplayer, 510)
+goto_if_false @ODDVEH_533
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, $mountbX, $mountbY, $mountbZ, 10.5, 10.5, 10.5)
+goto_if_false @ODDVEH_533
+$flag_mtbike_trigger = 1
+
+:ODDVEH_533
+if and
+  Char.IsInModel($scplayer, 510)
+  $flag_mtbike_trigger == 0
+goto_if_false @ODDVEH_722
+Text.ClearPrints
+$stat_read_skill_temp = Stat.GetInt(230)
+if 
+  $stat_read_skill_temp >= 400
+goto_if_false @ODDVEH_679
+$hours, $minutes = Clock.GetTimeOfDay()
+if and
+  $hours >= 7
+  18 > $hours
+goto_if_false @ODDVEH_656
+Text.PrintBig('MOUNTN', 1000, TextStyle.BottomRight)
+Mission.LoadAndLaunchInternal(132) // The Chiliad Challenge
+$flag_mtbike_trigger = 1
+goto @ODDVEH_672
+
+:ODDVEH_656
+Text.PrintNow('MTIME4', 1000, 1)
+
+:ODDVEH_672
+goto @ODDVEH_715
+
+:ODDVEH_679
+if 
+  $flag_cycling_skill_help == 0
+goto_if_false @ODDVEH_715
+Text.PrintHelp('MTBSKIL')
+$flag_cycling_skill_help = 1
+
+:ODDVEH_715
+goto @ODDVEH_747
+
+:ODDVEH_722
+if 
+  $flag_cycling_skill_help == 1
+goto_if_false @ODDVEH_747
+$flag_cycling_skill_help = 0
+
+:ODDVEH_747
+if 
+  Char.IsInModel($scplayer, 481)
+goto_if_false @ODDVEH_815
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, $stunt_bmx1_x, $stunt_bmx1_y, $stunt_bmx1_z, 4.0, 4.0, 3.0)
+goto_if_false @ODDVEH_815
+$flag_bmx_trigger = 1
+
+:ODDVEH_815
+if and
+  Char.IsInModel($scplayer, 481)
+  $flag_bmx_trigger == 0
+goto_if_false @ODDVEH_953
+$stat_read_skill_temp = Stat.GetInt(230)
+if 
+  $stat_read_skill_temp >= 200
+goto_if_false @ODDVEH_910
+Text.PrintBig('BMX', 1000, TextStyle.BottomRight)
+$stunt_course = 0
+Mission.LoadAndLaunchInternal(133) // BMX / NRG-500 STUNT Mission
+$flag_bmx_trigger = 1
+goto @ODDVEH_946
+
+:ODDVEH_910
+if 
+  $flag_cycling_skill_help2 == 0
+goto_if_false @ODDVEH_946
+Text.PrintHelp('MTBSKI2')
+$flag_cycling_skill_help2 = 1
+
+:ODDVEH_946
+goto @ODDVEH_978
+
+:ODDVEH_953
+if 
+  $flag_cycling_skill_help2 == 1
+goto_if_false @ODDVEH_978
+$flag_cycling_skill_help2 = 0
+
+:ODDVEH_978
+if 
+  Char.IsInModel($scplayer, 522)
+goto_if_false @ODDVEH_1046
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, $stunt_nrg500_x, $stunt_nrg500_y, $stunt_nrg500_z, 4.0, 4.0, 3.0)
+goto_if_false @ODDVEH_1046
+$flag_nrg500_trigger = 1
+
+:ODDVEH_1046
+if and
+  Char.IsInModel($scplayer, 522)
+  $flag_nrg500_trigger == 0
+goto_if_false @ODDVEH_1107
+Text.PrintBig('NRG500', 1000, TextStyle.BottomRight)
+$stunt_course = 1
+Mission.LoadAndLaunchInternal(133) // BMX / NRG-500 STUNT Mission
+$flag_nrg500_trigger = 1
+
+:ODDVEH_1107
+goto @ODDVEH_1149
+
+:ODDVEH_1114
+$flag_hhiker_trigger = 0
+$flag_courier_trigger = 0
+$flag_mtbike_trigger = 0
+$flag_bmx_trigger = 0
+$flag_nrg500_trigger = 0
+
+:ODDVEH_1149
+goto @ODDVEH_11
+

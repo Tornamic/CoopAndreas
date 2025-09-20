@@ -1,0 +1,1583 @@
+//-------------Mission 70---------------
+// Originally: Puncture Wounds
+
+:STEAL5
+script_name 'STEAL5'
+gosub @STEAL5_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @STEAL5_38
+gosub @STEAL5_5099
+
+:STEAL5_38
+gosub @STEAL5_5195
+terminate_this_script 
+
+:STEAL5_47
+$onmission = 1
+Stat.RegisterMissionGiven
+Text.LoadMissionText('STEAL5')
+if 
+  $onmission == 0
+goto_if_false @STEAL5_128
+36@ = Object.Create(#TEMP_STINGER2, -2025.8, 169.2, 27.7)
+40@ = Blip.AddForCoord(-2025.8, 169.2, 27.7)
+
+:STEAL5_128
+Text.ClearPrints
+wait 0
+41@ = 0
+42@ = 0
+43@ = 0
+44@ = 0
+45@ = 0
+$s5_stingers_left = 3
+46@ = 0
+47@ = 0
+48@ = 0
+49@ = 0
+50@ = 0
+79@ = 0.0
+80@ = 0.0
+81@ = 0.0
+82@ = 0.0
+83@ = 0.0
+84@ = 0.0
+85@ = 0.0
+86@ = 0.0
+87@ = 0.0
+88@ = 0.0
+51@ = 0
+52@ = 0
+53@ = 0
+54@ = 0
+73@ = 0
+74@ = 0
+75@ = 0
+76@ = 0
+77@ = 0
+78@ = 0
+Player.MakeGangDisappear
+Streaming.SetAreaVisible(1)
+Char.SetAreaVisible($scplayer, 1)
+Streaming.LoadScene(-2031.0, 149.0, 29.0)
+Cutscene.Load('STEAL_5')
+
+:STEAL5_422
+if 
+  not Cutscene.HasLoaded
+goto_if_false @STEAL5_446
+wait 0
+goto @STEAL5_422
+
+:STEAL5_446
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:STEAL5_455
+if 
+  not Cutscene.HasFinished
+goto_if_false @STEAL5_479
+wait 0
+goto @STEAL5_455
+
+:STEAL5_479
+Camera.DoFade(0, Fade.Out)
+
+:STEAL5_485
+if 
+  Camera.GetFadingStatus
+goto_if_false @STEAL5_509
+wait 0
+goto @STEAL5_485
+
+:STEAL5_509
+Streaming.SetAreaVisible(0)
+Char.SetAreaVisible($scplayer, 0)
+Cutscene.Clear
+Player.SetControl($player1, False)
+Player.MakeGangReappear
+Camera.SetFadingColor(0, 0, 0)
+wait 0
+Streaming.RequestModel(561)
+Streaming.RequestModel(549)
+Streaming.RequestModel(40)
+Streaming.RequestModel(#TEMP_STINGER2)
+Streaming.RequestModel(330)
+Audio.LoadMissionAudio(1822, 3)
+
+:STEAL5_574
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @STEAL5_600
+wait 0
+goto @STEAL5_574
+
+:STEAL5_600
+Streaming.LoadAllModelsNow
+World.ClearArea(1, -2025.8, 169.2, 27.7, 5.0)
+set_lvar_int_to_constant 49@ = 549
+gosub @STEAL5_7258
+39@ = Car.Create(549, -2025.8, 169.2, 27.7)
+World.ClearArea(1, -1913.5, -593.8, 36.9, 5.0)
+set_lvar_int_to_constant 49@ = 561
+gosub @STEAL5_7258
+34@ = Car.Create(561, -1913.5, -593.8, 36.9)
+Car.SetHeading(34@, 180.0)
+Car.SetCanRespray(34@, False)
+Car.SetCanGoAgainstTraffic(34@, True)
+Car.LockDoors(34@, CarLock.LockoutPlayerOnly)
+Car.SetLoadCollisionFlag(34@, False)
+40@ = Blip.AddForCar(34@)
+Blip.SetAsFriendly(40@, False)
+45@ = 1
+Car.SetDrivingStyle(34@, DrivingMode.AvoidCars)
+Car.SetOnlyDamagedByPlayer(34@, True)
+StuckCarCheck.AddWithWarp(34@, 0.5, 4000, True, True, True, 7)
+35@ = Char.CreateInsideCar(PedType.CivFemale, 40, 34@)
+Char.SetLoadCollisionFlag(35@, True)
+Char.SetCanBeShotInVehicle(35@, False)
+Hud.DisplayCounterWithString($s5_stingers_left, CounterDisplay.Number, 'STE5_04')
+Text.PrintNow('STE5_12', 7000, 1)
+World.ClearArea(1, -2028.6, 162.9, 27.8, 1.0)
+Char.SetCoordinates($scplayer, -2028.6, 162.9, 27.8)
+Char.SetHeading($scplayer, 336.6)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Garage.ChangeType('AMUMIS', GarageType.ForScriptToOpenAndClose)
+Camera.DoFade(1, 500)
+TIMERB = 0
+
+:STEAL5_971
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @STEAL5_997
+goto @STEAL5_5117
+
+:STEAL5_997
+gosub @STEAL5_5303
+if 
+  44@ == 1
+goto_if_false @STEAL5_1029
+goto @STEAL5_5099
+
+:STEAL5_1029
+if 
+  41@ == 0
+goto_if_false @STEAL5_1072
+if 
+  47@ == 1
+goto_if_false @STEAL5_1072
+gosub @STEAL5_5405
+
+:STEAL5_1072
+if 
+  41@ == 0
+goto_if_false @STEAL5_1735
+if 
+  45@ == 1
+goto_if_false @STEAL5_1191
+if 
+  not Char.IsInCar($scplayer, 39@)
+goto_if_false @STEAL5_1191
+Blip.Remove(40@)
+40@ = Blip.AddForCar(39@)
+Blip.SetAsFriendly(40@, True)
+if 
+  TIMERB > 14000
+goto_if_false @STEAL5_1182
+Text.PrintNow('STE5_06', 4000, 1)
+
+:STEAL5_1182
+Text.ClearHelp
+45@ = 0
+
+:STEAL5_1191
+if 
+  45@ == 0
+goto_if_false @STEAL5_1290
+if 
+  Char.IsInCar($scplayer, 39@)
+goto_if_false @STEAL5_1290
+Blip.Remove(40@)
+40@ = Blip.AddForCar(34@)
+Blip.SetAsFriendly(40@, False)
+if 
+  TIMERB > 14000
+goto_if_false @STEAL5_1283
+Text.PrintNow('STE5_07', 4000, 1)
+
+:STEAL5_1283
+45@ = 1
+
+:STEAL5_1290
+if 
+  TIMERB > 14000
+goto_if_false @STEAL5_1395
+if 
+  $s5_stingers_left == 3
+goto_if_false @STEAL5_1393
+if 
+  Char.IsInCar($scplayer, 39@)
+goto_if_false @STEAL5_1377
+if 
+  not Game.IsMinigameInProgress
+goto_if_false @STEAL5_1370
+Text.PrintHelpForever('STE5_03')
+
+:STEAL5_1370
+goto @STEAL5_1379
+
+:STEAL5_1377
+Text.ClearHelp
+
+:STEAL5_1379
+47@ = 1
+goto @STEAL5_1395
+
+:STEAL5_1393
+Text.ClearHelp
+
+:STEAL5_1395
+if 
+  $s5_stingers_left == 0
+goto_if_false @STEAL5_1457
+if 
+  TIMERA > 5000
+goto_if_false @STEAL5_1457
+Text.ClearPrints
+Text.PrintNow('STE5_05', 4000, 1)
+goto @STEAL5_5099
+
+:STEAL5_1457
+gosub @STEAL5_6321
+gosub @STEAL5_6445
+gosub @STEAL5_6500
+if 
+  42@ == 0
+goto_if_false @STEAL5_1563
+if 
+  Char.IsInCar($scplayer, 39@)
+goto_if_false @STEAL5_1563
+Text.PrintNow('STE5_01', 7000, 1)
+Text.PrintWithNumber('STE5_02', 3, 7000, 1)
+TIMERB = 0
+42@ = 1
+
+:STEAL5_1563
+if 
+  42@ == 1
+goto_if_false @STEAL5_1735
+if 
+  Car.IsTireBurst(2, 34@)
+goto_if_false @STEAL5_1735
+Car.LockDoors(34@, CarLock.Unlocked)
+StuckCarCheck.Remove(34@)
+if 
+  not Char.IsDead(35@)
+goto_if_false @STEAL5_1735
+89@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.SmartFleeChar(-1, $scplayer, 100.0, 100000)
+Sequence.Close(89@)
+Char.PerformSequence(35@, 89@)
+Sequence.Clear(89@)
+Blip.Remove(40@)
+40@ = Blip.AddForCar(34@)
+Blip.SetAsFriendly(40@, True)
+Car.SetWatertight(34@, False)
+Text.PrintNow('STE5_13', 7000, 1)
+TIMERA = 0
+42@ = 0
+41@ = 1
+
+:STEAL5_1735
+if 
+  41@ == 1
+goto_if_false @STEAL5_2832
+if 
+  42@ == 0
+goto_if_false @STEAL5_1832
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @STEAL5_1825
+if 
+  Char.LocateAnyMeansCar2D($scplayer, 34@, 5.0, 5.0, False)
+goto_if_false @STEAL5_1825
+42@ = 1
+
+:STEAL5_1825
+gosub @STEAL5_5405
+
+:STEAL5_1832
+if 
+  42@ == 1
+goto_if_false @STEAL5_1956
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Text.ClearPrints
+51@ = 0
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Game.ShutAllCharsUp(True)
+43@ = 1
+skip_cutscene_start_internal @STEAL5_2403
+Task.UseMobilePhone($scplayer, True)
+Text.ClearHelp
+Hud.ClearCounter($s5_stingers_left)
+51@ = 3
+53@ = 0
+gosub @STEAL5_8489
+TIMERA = 0
+42@ = 2
+
+:STEAL5_1956
+if 
+  42@ == 2
+goto_if_false @STEAL5_2039
+if 
+  TIMERA > 2000
+goto_if_false @STEAL5_2039
+if 
+  51@ == 0
+goto_if_false @STEAL5_2039
+51@ = 1
+53@ = 0
+gosub @STEAL5_8489
+42@ = 3
+
+:STEAL5_2039
+if 
+  42@ == 3
+goto_if_false @STEAL5_2089
+if 
+  51@ == 0
+goto_if_false @STEAL5_2089
+Task.UseMobilePhone($scplayer, False)
+42@ = 4
+
+:STEAL5_2089
+if 
+  42@ == 4
+goto_if_false @STEAL5_2291
+$task_status = Char.GetScriptTaskStatus($scplayer, 1833)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @STEAL5_2291
+89@ = Sequence.Open()
+Task.GotoCar(-1, 34@, -2, 1.0)
+Sequence.Close(89@)
+Char.PerformSequence($scplayer, 89@)
+Sequence.Clear(89@)
+Audio.SetMusicDoesFade(False)
+Text.DrawSubtitlesBeforeFade(False)
+Camera.DoFade(0, 700)
+
+:STEAL5_2188
+if 
+  Camera.GetFadingStatus
+goto_if_false @STEAL5_2212
+wait 0
+goto @STEAL5_2188
+
+:STEAL5_2212
+Audio.LoadMissionAudio(32000, 3)
+
+:STEAL5_2219
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @STEAL5_2245
+wait 0
+goto @STEAL5_2219
+
+:STEAL5_2245
+gosub @STEAL5_5303
+if 
+  44@ == 1
+goto_if_false @STEAL5_2277
+goto @STEAL5_5099
+
+:STEAL5_2277
+TIMERA = 0
+42@ = 5
+
+:STEAL5_2291
+if 
+  42@ == 5
+goto_if_false @STEAL5_2360
+if 
+  TIMERA > 1000
+goto_if_false @STEAL5_2360
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+51@ = 2
+53@ = 0
+gosub @STEAL5_8489
+42@ = 6
+
+:STEAL5_2360
+if 
+  42@ == 6
+goto_if_false @STEAL5_2832
+if 
+  51@ == 0
+goto_if_false @STEAL5_2832
+43@ = 0
+
+:STEAL5_2403
+skip_cutscene_end 
+gosub @STEAL5_5303
+if 
+  44@ == 1
+goto_if_false @STEAL5_2437
+goto @STEAL5_5099
+
+:STEAL5_2437
+Audio.SetMusicDoesFade(True)
+Text.DrawSubtitlesBeforeFade(True)
+if 
+  43@ == 1
+goto_if_false @STEAL5_2545
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearPrints
+51@ = 0
+Camera.DoFade(0, 500)
+
+:STEAL5_2487
+if 
+  Camera.GetFadingStatus
+goto_if_false @STEAL5_2511
+wait 0
+goto @STEAL5_2487
+
+:STEAL5_2511
+gosub @STEAL5_5303
+if 
+  44@ == 1
+goto_if_false @STEAL5_2543
+goto @STEAL5_5099
+
+:STEAL5_2543
+Text.ClearPrints
+
+:STEAL5_2545
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Char.ClearTasksImmediately($scplayer)
+Char.Delete(35@)
+if 
+  not Car.IsDead(34@)
+goto_if_false @STEAL5_2618
+Char.WarpIntoCar($scplayer, 34@)
+Car.SetOnlyDamagedByPlayer(34@, False)
+Car.FixTire(34@, 2)
+Car.FixTire(34@, 0)
+Car.FixTire(34@, 1)
+Car.FixTire(34@, 3)
+
+:STEAL5_2618
+Object.Delete(36@)
+83@, 84@, 85@ = Char.GetCoordinates($scplayer)
+Streaming.LoadScene(83@, 84@, 85@)
+Car.MarkAsNoLongerNeeded(39@)
+Char.MarkAsNoLongerNeeded(35@)
+Streaming.MarkModelAsNoLongerNeeded(549)
+Streaming.MarkModelAsNoLongerNeeded(40)
+Streaming.MarkModelAsNoLongerNeeded(#TEMP_STINGER2)
+Car.SetOnlyDamagedByPlayer(34@, False)
+Game.ShutAllCharsUp(False)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Blip.Remove(40@)
+40@ = Blip.AddForCoord(-2026.9, 179.1, 27.5)
+45@ = 1
+Text.ClearPrints
+Text.PrintNow('STE5_11', 7000, 1)
+Camera.DoFade(1, 500)
+
+:STEAL5_2762
+if 
+  Camera.GetFadingStatus
+goto_if_false @STEAL5_2786
+wait 0
+goto @STEAL5_2762
+
+:STEAL5_2786
+gosub @STEAL5_5303
+if 
+  44@ == 1
+goto_if_false @STEAL5_2818
+goto @STEAL5_5099
+
+:STEAL5_2818
+42@ = 0
+41@ = 2
+
+:STEAL5_2832
+if 
+  41@ == 2
+goto_if_false @STEAL5_4228
+if 
+is_ps2_keyboard_key_pressed 81
+goto_if_false @STEAL5_2911
+if 
+  not Car.IsDead(34@)
+goto_if_false @STEAL5_2911
+Car.SetCoordinates(34@, -2011.8, 176.5, 26.6)
+Car.SetHeading(34@, 97.7)
+
+:STEAL5_2911
+if 
+  42@ == 0
+goto_if_false @STEAL5_3383
+if 
+  not Car.IsDead(34@)
+goto_if_false @STEAL5_3383
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @STEAL5_3383
+if 
+  Char.LocateInCar3D($scplayer, -2033.1, 178.6, 27.8, 4.0, 4.0, 4.0, True)
+goto_if_false @STEAL5_3383
+Player.SetControl($player1, False)
+Camera.DoFade(0, 500)
+
+:STEAL5_3026
+if 
+  Camera.GetFadingStatus
+goto_if_false @STEAL5_3050
+wait 0
+goto @STEAL5_3026
+
+:STEAL5_3050
+Streaming.SetAreaVisible(1)
+Blip.Remove(40@)
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+51@ = 0
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Char.SetAreaVisible($scplayer, 1)
+World.ClearArea(1, -2033.3, 179.1, 27.4, 25.0)
+if 
+  not Car.IsDead(34@)
+goto_if_false @STEAL5_3178
+Car.SetAreaVisible(34@, 1)
+Car.SetCoordinates(34@, -2033.3, 179.1, 27.4)
+Car.SetHeading(34@, 90.8)
+
+:STEAL5_3178
+Streaming.LoadSceneInDirection(-2048.1, 178.0, 28.8, 270.0)
+Camera.SetFixedPosition(-2048.1, 178.0, 28.8, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2037.9, 178.8, 27.4, SwitchType.JumpCut)
+Camera.DoFade(1, 1000)
+
+:STEAL5_3258
+if 
+  Camera.GetFadingStatus
+goto_if_false @STEAL5_3282
+wait 0
+goto @STEAL5_3258
+
+:STEAL5_3282
+Garage.Open('HBGDSFS')
+
+:STEAL5_3293
+if 
+  not Garage.IsOpen('HBGDSFS')
+goto_if_false @STEAL5_3326
+wait 0
+goto @STEAL5_3293
+
+:STEAL5_3326
+if 
+  not Car.IsDead(34@)
+goto_if_false @STEAL5_3376
+Task.CarDriveToCoord($scplayer, 34@, -2045.4, 178.3, 27.6, 10.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+
+:STEAL5_3376
+42@ = 1
+
+:STEAL5_3383
+if 
+  42@ == 1
+goto_if_false @STEAL5_3510
+if 
+  not Car.IsDead(34@)
+goto_if_false @STEAL5_3510
+$task_status = Char.GetScriptTaskStatus($scplayer, 1489)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @STEAL5_3510
+89@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.GoStraightToCoord(-1, -2035.471, 176.6342, 27.8359, MoveState.Walk, -1)
+Sequence.Close(89@)
+Char.PerformSequence($scplayer, 89@)
+Sequence.Clear(89@)
+TIMERA = 0
+42@ = 2
+
+:STEAL5_3510
+if 
+  42@ == 2
+goto_if_false @STEAL5_4041
+if 
+  TIMERA > 2000
+goto_if_false @STEAL5_4041
+Camera.DoFade(0, 500)
+
+:STEAL5_3554
+if 
+  Camera.GetFadingStatus
+goto_if_false @STEAL5_3578
+wait 0
+goto @STEAL5_3554
+
+:STEAL5_3578
+Streaming.SetAreaVisible(0)
+Char.SetAreaVisible($scplayer, 0)
+Streaming.LoadScene(-2045.4, 173.1, 27.8)
+Streaming.LoadSceneInDirection(-2045.4, 173.1, 27.8, 309.5)
+Text.ClearPrints
+Char.ClearTasksImmediately($scplayer)
+Car.Delete(34@)
+World.ClearArea(1, -2027.2, 179.5, 27.8, 1.0)
+Char.SetCoordinates($scplayer, -2027.2, 179.5, 27.8)
+Char.SetHeading($scplayer, 275.9)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Garage.Close('HBGDSFS')
+
+:STEAL5_3727
+if 
+  not Garage.IsClosed('HBGDSFS')
+goto_if_false @STEAL5_3760
+wait 0
+goto @STEAL5_3727
+
+:STEAL5_3760
+$showroom_cash_pickup = Pickup.CreateProtection(-1969.463, 289.5335, 34.6719, $showroom_revenue, $showroom_revenue)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Streaming.LoadScene(-1980.301, 288.1622, 38.2246)
+Camera.SetFixedPosition(-1980.301, 288.1622, 38.2246, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1979.313, 288.0155, 38.1743, SwitchType.JumpCut)
+Camera.DoFade(1, 500)
+
+:STEAL5_3872
+if 
+  Camera.GetFadingStatus
+goto_if_false @STEAL5_3896
+wait 0
+goto @STEAL5_3872
+
+:STEAL5_3896
+Audio.PlayMissionPassedTune(1)
+Text.PrintBig('ASS_ACQ', 5000, TextStyle.WhiteMiddleSmaller)
+wait 5000
+Camera.SetFixedPosition(-1972.185, 291.1454, 35.7724, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1971.343, 290.6249, 35.6284, SwitchType.JumpCut)
+Text.PrintWithNumberNow('ASS_LUV', $showroom_revenue, 6000, 1)
+wait 6000
+Camera.DoFade(0, 500)
+
+:STEAL5_4003
+if 
+  Camera.GetFadingStatus
+goto_if_false @STEAL5_4027
+wait 0
+goto @STEAL5_4003
+
+:STEAL5_4027
+Camera.DoFade(1, 500)
+goto @STEAL5_5117
+
+:STEAL5_4041
+if 
+  45@ == 1
+goto_if_false @STEAL5_4123
+if 
+  not Char.IsInCar($scplayer, 34@)
+goto_if_false @STEAL5_4123
+Blip.Remove(40@)
+40@ = Blip.AddForCar(34@)
+Blip.SetAsFriendly(40@, True)
+Text.ClearPrints
+Text.PrintNow('STE5_08', 4000, 1)
+45@ = 0
+
+:STEAL5_4123
+if 
+  45@ == 0
+goto_if_false @STEAL5_4228
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @STEAL5_4228
+Blip.Remove(40@)
+if 
+  42@ == 0
+goto_if_false @STEAL5_4203
+40@ = Blip.AddForCoord(-2033.1, 178.6, 27.8)
+
+:STEAL5_4203
+Text.ClearPrints
+Text.PrintNow('STE5_11', 7000, 1)
+45@ = 1
+
+:STEAL5_4228
+if 
+  41@ == 10
+goto_if_false @STEAL5_5085
+ENTEXT_63()
+if 
+  $player_is_completely_safe == 1
+goto_if_false @STEAL5_4788
+if 
+  50@ == 0
+goto_if_false @STEAL5_4788
+Text.ClearPrints
+Camera.DoFade(0, 500)
+
+:STEAL5_4298
+if 
+  Camera.GetFadingStatus
+goto_if_false @STEAL5_4322
+wait 0
+goto @STEAL5_4298
+
+:STEAL5_4322
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+51@ = 0
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+World.ClearArea(1, -2125.5, -2467.5, 29.6, 1.0)
+86@, 87@, 88@ = Char.GetCoordinates($scplayer)
+Streaming.RequestCollision(-2125.5, -2467.5)
+Streaming.LoadScene(-2125.5, -2467.5, 29.6)
+Char.SetCoordinates($scplayer, -2125.5, -2467.5, 29.6)
+if 
+  not Char.IsDead(35@)
+goto_if_false @STEAL5_4467
+Char.ClearTasks(35@)
+
+:STEAL5_4467
+Streaming.RequestCollision(-2117.8, -2456.8)
+Streaming.LoadScene(-2115.6, -2456.5, 30.6)
+Streaming.LoadAllModelsNow
+if 
+  not Car.IsDead(34@)
+goto_if_false @STEAL5_4573
+StuckCarCheck.Remove(34@)
+World.ClearArea(1, -2117.8, -2456.8, 29.3, 30.0)
+Car.SetCoordinates(34@, -2117.8, -2456.8, 29.3)
+Car.SetHeading(34@, 233.8)
+
+:STEAL5_4573
+Camera.SetFixedPosition(-2106.0, -2465.7, 30.8, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2112.2, -2461.1, 29.6, SwitchType.JumpCut)
+Text.PrintNow('STE5_14', 5000, 1)
+Camera.DoFade(1, 500)
+
+:STEAL5_4647
+if 
+  Camera.GetFadingStatus
+goto_if_false @STEAL5_4671
+wait 0
+goto @STEAL5_4647
+
+:STEAL5_4671
+Garage.Open('AMUMIS')
+
+:STEAL5_4682
+if 
+  not Garage.IsOpen('AMUMIS')
+goto_if_false @STEAL5_4715
+wait 0
+goto @STEAL5_4682
+
+:STEAL5_4715
+if 
+  not Char.IsDead(35@)
+goto_if_false @STEAL5_4781
+if 
+  not Car.IsDead(34@)
+goto_if_false @STEAL5_4781
+Task.CarDriveToCoord(35@, 34@, -2108.0, -2464.2, 29.6, 10.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+
+:STEAL5_4781
+50@ = 1
+
+:STEAL5_4788
+if 
+  50@ == 1
+goto_if_false @STEAL5_5085
+if 
+  not Char.IsDead(35@)
+goto_if_false @STEAL5_5085
+$task_status = Char.GetScriptTaskStatus(35@, 1489)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @STEAL5_5085
+Garage.Close('AMUMIS')
+
+:STEAL5_4862
+if 
+  not Garage.IsClosed('AMUMIS')
+goto_if_false @STEAL5_4895
+wait 0
+goto @STEAL5_4862
+
+:STEAL5_4895
+Camera.DoFade(0, 500)
+
+:STEAL5_4902
+if 
+  Camera.GetFadingStatus
+goto_if_false @STEAL5_4926
+wait 0
+goto @STEAL5_4902
+
+:STEAL5_4926
+Streaming.RequestCollision(86@, 87@)
+88@ -= 1.0
+Streaming.LoadScene(86@, 87@, 88@)
+Streaming.LoadAllModelsNow
+World.ClearArea(1, 86@, 87@, 88@, 1.0)
+Char.SetCoordinates($scplayer, 86@, 87@, 88@)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Text.ClearPrints
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+Text.PrintNow('STE5_14', 5500, 1)
+Camera.DoFade(1, 500)
+
+:STEAL5_5054
+if 
+  Camera.GetFadingStatus
+goto_if_false @STEAL5_5078
+wait 0
+goto @STEAL5_5054
+
+:STEAL5_5078
+goto @STEAL5_5099
+
+:STEAL5_5085
+gosub @STEAL5_8785
+goto @STEAL5_971
+
+:STEAL5_5099
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:STEAL5_5117
+$flag_steal_mission_counter += 1
+Blip.Remove($steal_contact_blip)
+CarGenerator.Switch($steal_car_cargen5, 101)
+Text.ClearPrints
+Text.PrintWithNumberBig('M_PASSS', 5000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 5000)
+Stat.AwardPlayerMissionRespect(5)
+Audio.PlayMissionPassedTune(1)
+Player.ClearWantedLevel($player1)
+Stat.RegisterMissionPassed('STEAL_5')
+Stat.PlayerMadeProgress(1)
+return 
+
+:STEAL5_5195
+if 
+  is_var_text_label_empty s$shop_name
+goto_if_false @STEAL5_5213
+Camera.RestoreJumpcut
+
+:STEAL5_5213
+Audio.SetMusicDoesFade(True)
+Blip.Remove(40@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Hud.ClearCounter($s5_stingers_left)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @STEAL5_5254
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:STEAL5_5254
+Game.ShutAllCharsUp(False)
+Object.Delete(36@)
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.MarkModelAsNoLongerNeeded(561)
+Streaming.MarkModelAsNoLongerNeeded(549)
+Streaming.MarkModelAsNoLongerNeeded(40)
+Streaming.MarkModelAsNoLongerNeeded(#TEMP_STINGER2)
+$timer_mobile_start = Clock.GetGameTimer()
+$onmission = 0
+Mission.Finish
+return 
+
+:STEAL5_5303
+if 
+  Car.IsDead(34@)
+goto_if_false @STEAL5_5344
+Text.ClearPrints
+Text.PrintNow('STE5_09', 4000, 1)
+44@ = 1
+
+:STEAL5_5344
+if 
+  41@ == 0
+goto_if_false @STEAL5_5403
+if 
+  Car.IsDead(39@)
+goto_if_false @STEAL5_5403
+Text.ClearPrints
+Text.PrintNow('STE5_10', 7000, 1)
+44@ = 1
+
+:STEAL5_5403
+return 
+
+:STEAL5_5405
+if 
+  not Car.IsDead(39@)
+goto_if_false @STEAL5_5652
+if 
+  Char.IsInCar($scplayer, 39@)
+goto_if_false @STEAL5_5652
+if 
+  TIMERA > 5000
+goto_if_false @STEAL5_5632
+if 
+  $s5_stingers_left > 0
+goto_if_false @STEAL5_5627
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @STEAL5_5620
+Object.Delete(36@)
+83@ = Car.GetOffsetInWorldCoords(84@, 85@, 39@, 0.0, -3.0, -0.5)
+$heading = Car.GetHeading(39@)
+$heading += 90.0
+85@ = World.GetGroundZFor3DCoord(83@, 84@, 85@)
+36@ = Object.Create(#TEMP_STINGER2, 83@, 84@, 85@)
+Object.SetHeading(36@, $heading)
+Audio.ReportMissionAudioEventAtPosition(83@, 84@, 85@, 1125)
+78@ = 1
+$s5_stingers_left -= 1
+TIMERA = 0
+
+:STEAL5_5620
+goto @STEAL5_5632
+
+:STEAL5_5627
+Hud.ClearCounter($s5_stingers_left)
+
+:STEAL5_5632
+if 
+  $s5_stingers_left <> 3
+goto_if_false @STEAL5_5652
+Text.ClearHelp
+
+:STEAL5_5652
+if 
+  78@ == 1
+goto_if_false @STEAL5_5735
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot3)
+goto_if_false @STEAL5_5735
+83@ = Car.GetOffsetInWorldCoords(84@, 85@, 39@, 0.0, -3.0, -0.5)
+Audio.ReportMissionAudioEventAtPosition(83@, 84@, 85@, 1104)
+78@ = 2
+
+:STEAL5_5735
+if 
+  Object.DoesExist(36@)
+goto_if_false @STEAL5_6297
+79@ = Object.GetOffsetInWorldCoords(81@, 85@, 36@, -0.5, 2.5, 0.0)
+80@ = Object.GetOffsetInWorldCoords(82@, 85@, 36@, -0.5, -2.5, 0.0)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @STEAL5_5968
+38@ = Char.StoreCarIsInNoSave($scplayer)
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 79@, 81@, 80@, 82@, 1.0, False)
+goto_if_false @STEAL5_5968
+if 
+  not Car.IsTireBurst(2, 38@)
+goto_if_false @STEAL5_5893
+Car.BurstTire(2, 38@)
+
+:STEAL5_5893
+if 
+  not Car.IsTireBurst(0, 38@)
+goto_if_false @STEAL5_5918
+Car.BurstTire(0, 38@)
+
+:STEAL5_5918
+if 
+  not Car.IsTireBurst(1, 38@)
+goto_if_false @STEAL5_5943
+Car.BurstTire(1, 38@)
+
+:STEAL5_5943
+if 
+  not Car.IsTireBurst(3, 38@)
+goto_if_false @STEAL5_5968
+Car.BurstTire(3, 38@)
+
+:STEAL5_5968
+if 
+  not Char.IsDead(35@)
+goto_if_false @STEAL5_6119
+if 
+  Char.IsInAngledAreaInCar2D(35@, 79@, 81@, 80@, 82@, 1.0, False)
+goto_if_false @STEAL5_6119
+if 
+  not Car.IsTireBurst(2, 34@)
+goto_if_false @STEAL5_6044
+Car.BurstTire(2, 34@)
+
+:STEAL5_6044
+if 
+  not Car.IsTireBurst(0, 34@)
+goto_if_false @STEAL5_6069
+Car.BurstTire(0, 34@)
+
+:STEAL5_6069
+if 
+  not Car.IsTireBurst(1, 34@)
+goto_if_false @STEAL5_6094
+Car.BurstTire(1, 34@)
+
+:STEAL5_6094
+if 
+  not Car.IsTireBurst(3, 34@)
+goto_if_false @STEAL5_6119
+Car.BurstTire(3, 34@)
+
+:STEAL5_6119
+37@ = World.GetRandomCarOfTypeInAngledAreaNoSave(79@, 81@, 80@, 82@, 1.0, -1)
+if 
+  not Car.IsDead(37@)
+goto_if_false @STEAL5_6297
+if 
+  not is_int_lvar_equal_to_int_lvar 37@ == 34@
+goto_if_false @STEAL5_6297
+if 
+  not is_int_lvar_equal_to_int_lvar 37@ == 39@
+goto_if_false @STEAL5_6297
+if 
+  not Car.IsTireBurst(2, 37@)
+goto_if_false @STEAL5_6222
+Car.BurstTire(2, 37@)
+
+:STEAL5_6222
+if 
+  not Car.IsTireBurst(0, 37@)
+goto_if_false @STEAL5_6247
+Car.BurstTire(0, 37@)
+
+:STEAL5_6247
+if 
+  not Car.IsTireBurst(1, 37@)
+goto_if_false @STEAL5_6272
+Car.BurstTire(1, 37@)
+
+:STEAL5_6272
+if 
+  not Car.IsTireBurst(3, 37@)
+goto_if_false @STEAL5_6297
+Car.BurstTire(3, 37@)
+
+:STEAL5_6297
+if 
+is_ps2_keyboard_key_pressed 81
+goto_if_false @STEAL5_6319
+Car.BurstTire(2, 34@)
+
+:STEAL5_6319
+return 
+
+:STEAL5_6321
+if 
+  not Car.IsDead(34@)
+goto_if_false @STEAL5_6443
+if 
+  Char.LocateAnyMeansCar2D($scplayer, 34@, 60.0, 60.0, False)
+goto_if_false @STEAL5_6385
+Car.SetCruiseSpeed(34@, 50.0)
+goto @STEAL5_6443
+
+:STEAL5_6385
+if 
+  Char.LocateAnyMeansCar2D($scplayer, 34@, 100.0, 100.0, False)
+goto_if_false @STEAL5_6433
+Car.SetCruiseSpeed(34@, 20.0)
+goto @STEAL5_6443
+
+:STEAL5_6433
+Car.SetCruiseSpeed(34@, 15.0)
+
+:STEAL5_6443
+return 
+
+:STEAL5_6445
+if 
+  not Car.IsDead(34@)
+goto_if_false @STEAL5_6498
+if 
+  Car.IsOnScreen(34@)
+goto_if_false @STEAL5_6491
+Car.SetWatertight(34@, False)
+goto @STEAL5_6498
+
+:STEAL5_6491
+Car.SetWatertight(34@, True)
+
+:STEAL5_6498
+return 
+
+:STEAL5_6500
+if 
+  not Char.IsDead(35@)
+goto_if_false @STEAL5_7256
+if 
+  Char.IsInCar(35@, 34@)
+goto_if_false @STEAL5_7256
+if 
+  46@ == 0
+goto_if_false @STEAL5_6847
+89@ = Sequence.Open()
+Task.CarDriveToCoord(-1, 34@, -1913.1, -593.8, 38.3, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -1912.6, -744.7, 44.7, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -1914.2, -894.9, 45.0, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -1914.3, -1045.0, 38.3, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -1907.9, -1195.2, 39.5, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -1910.7, -1345.3, 40.4, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -1795.1, -1442.4, 35.5, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -1658.5, -1506.1, 35.7, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Sequence.Close(89@)
+Char.PerformSequence(35@, 89@)
+Sequence.Clear(89@)
+46@ = 1
+
+:STEAL5_6847
+if 
+  46@ == 1
+goto_if_false @STEAL5_7188
+$task_status = Char.GetScriptTaskStatus(35@, 1560)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @STEAL5_7188
+89@ = Sequence.Open()
+Task.CarDriveToCoord(-1, 34@, -1704.1, -1649.1, 36.3, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -1832.4, -1727.6, 29.2, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -1954.5, -1815.3, 34.4, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -2046.9, -1932.7, 52.4, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -2106.8, -2070.0, 63.5, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -2213.2, -2175.1, 42.2, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -2160.4, -2315.1, 30.5, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Task.CarDriveToCoord(-1, 34@, -2120.2, -2456.7, 29.6, 20.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+Sequence.Close(89@)
+Char.PerformSequence(35@, 89@)
+Sequence.Clear(89@)
+46@ = 2
+
+:STEAL5_7188
+if 
+  46@ == 2
+goto_if_false @STEAL5_7256
+$task_status = Char.GetScriptTaskStatus(35@, 1560)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @STEAL5_7256
+50@ = 0
+41@ = 10
+46@ = 3
+
+:STEAL5_7256
+return 
+
+:STEAL5_7258
+48@ = Math.RandomIntInRange(1, 37)
+if 
+  48@ == 1
+goto_if_false @STEAL5_7300
+Car.CustomPlateForNextCar(49@, "GOT_M00_")
+
+:STEAL5_7300
+if 
+  48@ == 2
+goto_if_false @STEAL5_7333
+Car.CustomPlateForNextCar(49@, "M00TV_4U")
+
+:STEAL5_7333
+if 
+  48@ == 3
+goto_if_false @STEAL5_7366
+Car.CustomPlateForNextCar(49@, "MATHEW_2")
+
+:STEAL5_7366
+if 
+  48@ == 4
+goto_if_false @STEAL5_7399
+Car.CustomPlateForNextCar(49@, "D4_DEW0R")
+
+:STEAL5_7399
+if 
+  48@ == 5
+goto_if_false @STEAL5_7432
+Car.CustomPlateForNextCar(49@, "D0DE_777")
+
+:STEAL5_7432
+if 
+  48@ == 6
+goto_if_false @STEAL5_7465
+Car.CustomPlateForNextCar(49@, "DAM0_666")
+
+:STEAL5_7465
+if 
+  48@ == 7
+goto_if_false @STEAL5_7498
+Car.CustomPlateForNextCar(49@, "C0NEY_88")
+
+:STEAL5_7498
+if 
+  48@ == 8
+goto_if_false @STEAL5_7531
+Car.CustomPlateForNextCar(49@, "PRE4CHER")
+
+:STEAL5_7531
+if 
+  48@ == 9
+goto_if_false @STEAL5_7564
+Car.CustomPlateForNextCar(49@, "DBP_4NDY")
+
+:STEAL5_7564
+if 
+  48@ == 10
+goto_if_false @STEAL5_7597
+Car.CustomPlateForNextCar(49@, "EV1L_SLY")
+
+:STEAL5_7597
+if 
+  48@ == 11
+goto_if_false @STEAL5_7630
+Car.CustomPlateForNextCar(49@, "N1_R4V3N")
+
+:STEAL5_7630
+if 
+  48@ == 12
+goto_if_false @STEAL5_7663
+Car.CustomPlateForNextCar(49@, "D1VX_Z00")
+
+:STEAL5_7663
+if 
+  48@ == 13
+goto_if_false @STEAL5_7695
+Car.CustomPlateForNextCar(49@, "MR_B3NN")
+
+:STEAL5_7695
+if 
+  48@ == 14
+goto_if_false @STEAL5_7728
+Car.CustomPlateForNextCar(49@, "R3D_R4SP")
+
+:STEAL5_7728
+if 
+  48@ == 15
+goto_if_false @STEAL5_7761
+Car.CustomPlateForNextCar(49@, "LA_B0MBA")
+
+:STEAL5_7761
+if 
+  48@ == 16
+goto_if_false @STEAL5_7794
+Car.CustomPlateForNextCar(49@, "L3337_0G")
+
+:STEAL5_7794
+if 
+  48@ == 17
+goto_if_false @STEAL5_7827
+Car.CustomPlateForNextCar(49@, "BUDD4H_X")
+
+:STEAL5_7827
+if 
+  48@ == 18
+goto_if_false @STEAL5_7860
+Car.CustomPlateForNextCar(49@, "T3H_BUCK")
+
+:STEAL5_7860
+if 
+  48@ == 19
+goto_if_false @STEAL5_7893
+Car.CustomPlateForNextCar(49@, "CHUNKY_1")
+
+:STEAL5_7893
+if 
+  48@ == 20
+goto_if_false @STEAL5_7926
+Car.CustomPlateForNextCar(49@, "EV1L_BNZ")
+
+:STEAL5_7926
+if 
+  48@ == 21
+goto_if_false @STEAL5_7959
+Car.CustomPlateForNextCar(49@, "S4ND_M4N")
+
+:STEAL5_7959
+if 
+  48@ == 22
+goto_if_false @STEAL5_7992
+Car.CustomPlateForNextCar(49@, "RKK_DBP1")
+
+:STEAL5_7992
+if 
+  48@ == 23
+goto_if_false @STEAL5_8025
+Car.CustomPlateForNextCar(49@, "RE1_K0KU")
+
+:STEAL5_8025
+if 
+  48@ == 24
+goto_if_false @STEAL5_8058
+Car.CustomPlateForNextCar(49@, "S3XY_JUD")
+
+:STEAL5_8058
+if 
+  48@ == 25
+goto_if_false @STEAL5_8091
+Car.CustomPlateForNextCar(49@, "SUNRA_93")
+
+:STEAL5_8091
+if 
+  48@ == 26
+goto_if_false @STEAL5_8124
+Car.CustomPlateForNextCar(49@, "UG_FUX69")
+
+:STEAL5_8124
+if 
+  48@ == 27
+goto_if_false @STEAL5_8157
+Car.CustomPlateForNextCar(49@, "LI0N_CUM")
+
+:STEAL5_8157
+if 
+  48@ == 28
+goto_if_false @STEAL5_8190
+Car.CustomPlateForNextCar(49@, "RKK_PWND")
+
+:STEAL5_8190
+if 
+  48@ == 29
+goto_if_false @STEAL5_8223
+Car.CustomPlateForNextCar(49@, "HAZE_B0B")
+
+:STEAL5_8223
+if 
+  48@ == 30
+goto_if_false @STEAL5_8256
+Car.CustomPlateForNextCar(49@, "T3H_FLUF")
+
+:STEAL5_8256
+if 
+  48@ == 31
+goto_if_false @STEAL5_8289
+Car.CustomPlateForNextCar(49@, "BM_4NDY_")
+
+:STEAL5_8289
+if 
+  48@ == 32
+goto_if_false @STEAL5_8322
+Car.CustomPlateForNextCar(49@, "BM_D34N_")
+
+:STEAL5_8322
+if 
+  48@ == 33
+goto_if_false @STEAL5_8355
+Car.CustomPlateForNextCar(49@, "BM_L4C3Y")
+
+:STEAL5_8355
+if 
+  48@ == 34
+goto_if_false @STEAL5_8388
+Car.CustomPlateForNextCar(49@, "BM_D3V__")
+
+:STEAL5_8388
+if 
+  48@ == 35
+goto_if_false @STEAL5_8421
+Car.CustomPlateForNextCar(49@, "NU_SK00L")
+
+:STEAL5_8421
+if 
+  48@ == 36
+goto_if_false @STEAL5_8454
+Car.CustomPlateForNextCar(49@, "G4L_AVET")
+
+:STEAL5_8454
+if 
+  48@ == 37
+goto_if_false @STEAL5_8487
+Car.CustomPlateForNextCar(49@, "M0J0_J0J")
+
+:STEAL5_8487
+return 
+
+:STEAL5_8489
+if 
+  51@ == 1
+goto_if_false @STEAL5_8634
+set_lvar_text_label 55@s = 'STL5_AA'
+set_lvar_text_label 57@s = 'STL5_AB'
+set_lvar_text_label 59@s = 'STL5_AC'
+set_lvar_text_label 61@s = 'STL5_AD'
+set_lvar_text_label 63@s = 'STL5_AE'
+set_lvar_int_to_constant 67@ = 37200
+set_lvar_int_to_constant 68@ = 37201
+set_lvar_int_to_constant 69@ = 37202
+set_lvar_int_to_constant 70@ = 37203
+set_lvar_int_to_constant 71@ = 37204
+73@ = 5
+
+:STEAL5_8634
+if 
+  51@ == 2
+goto_if_false @STEAL5_8707
+set_lvar_text_label 55@s = 'STL5_AF'
+set_lvar_text_label 57@s = 'STL5_AG'
+set_lvar_int_to_constant 67@ = 37205
+set_lvar_int_to_constant 68@ = 37206
+73@ = 2
+
+:STEAL5_8707
+if 
+  51@ == 3
+goto_if_false @STEAL5_8754
+set_lvar_text_label 55@s = 'MOBRING'
+set_lvar_int_to_constant 67@ = 23000
+73@ = 1
+
+:STEAL5_8754
+set_lvar_int_to_lvar_int 76@ = 53@
+74@ = 0
+75@ = 0
+77@ = 1
+return 
+
+:STEAL5_8785
+if or
+  51@ == 1
+  51@ == 2
+  51@ == 3
+goto_if_false @STEAL5_8871
+if 
+  is_int_lvar_greater_than_int_lvar 73@ > 53@
+goto_if_false @STEAL5_8864
+gosub @STEAL5_8873
+gosub @STEAL5_8980
+gosub @STEAL5_9134
+goto @STEAL5_8871
+
+:STEAL5_8864
+51@ = 0
+
+:STEAL5_8871
+return 
+
+:STEAL5_8873
+if 
+  is_int_lvar_greater_than_int_lvar 73@ > 76@
+goto_if_false @STEAL5_8978
+if 
+  74@ == 0
+goto_if_false @STEAL5_8935
+Audio.LoadMissionAudio(67@(76@,6i), 1)
+76@ += 1
+74@ = 1
+
+:STEAL5_8935
+if 
+  75@ == 0
+goto_if_false @STEAL5_8978
+Audio.LoadMissionAudio(67@(76@,6i), 2)
+76@ += 1
+75@ = 1
+
+:STEAL5_8978
+return 
+
+:STEAL5_8980
+if 
+  77@ == 1
+goto_if_false @STEAL5_9056
+if 
+  74@ == 1
+goto_if_false @STEAL5_9056
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @STEAL5_9056
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(55@(53@,6s), 4500, 1)
+74@ = 2
+
+:STEAL5_9056
+if 
+  77@ == 2
+goto_if_false @STEAL5_9132
+if 
+  75@ == 1
+goto_if_false @STEAL5_9132
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @STEAL5_9132
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow(55@(53@,6s), 4500, 1)
+75@ = 2
+
+:STEAL5_9132
+return 
+
+:STEAL5_9134
+if 
+  74@ == 2
+goto_if_false @STEAL5_9197
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @STEAL5_9197
+Text.ClearThisPrint(55@(53@,6s))
+53@ += 1
+77@ = 2
+74@ = 0
+
+:STEAL5_9197
+if 
+  75@ == 2
+goto_if_false @STEAL5_9260
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @STEAL5_9260
+Text.ClearThisPrint(55@(53@,6s))
+53@ += 1
+77@ = 1
+75@ = 0
+
+:STEAL5_9260
+return 
+

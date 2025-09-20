@@ -1,0 +1,142 @@
+//-------------External script 6 (OTB_SCRIPT)---------------
+
+:OTB_MSC
+script_name 'OTB_MSC'
+1@ = 0
+if 
+  1@ == -1
+goto_if_false @OTB_MSC_58
+0@ = Object.Create(#OTB_MACHINE, 0.0, 0.0, 0.0)
+
+:OTB_MSC_58
+wait 0
+if 
+  Object.DoesExist(0@)
+goto_if_false @OTB_MSC_625
+if 
+  Object.IsWithinBrainActivationRange(0@)
+goto_if_false @OTB_MSC_589
+if 
+  Player.IsPlaying($player1)
+goto_if_false @OTB_MSC_555
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, -1.0, 0.0, 0.0)
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $x, $y, $z, 0.6, 0.6, 1.0)
+goto_if_false @OTB_MSC_521
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @OTB_MSC_478
+if 
+  1@ == 1
+goto_if_false @OTB_MSC_471
+Text.ClearHelp
+1@ = 0
+if 
+  $onmission == 0
+goto_if_false @OTB_MSC_455
+if 
+  not is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @OTB_MSC_432
+if 
+  Player.CanStartMission($player1)
+goto_if_false @OTB_MSC_425
+Player.SetControl($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Camera.DoFade(0, 500)
+
+:OTB_MSC_298
+if 
+  Camera.GetFadingStatus
+goto_if_false @OTB_MSC_322
+wait 0
+goto @OTB_MSC_298
+
+:OTB_MSC_322
+$load_and_launch_mission_if_poss = 4
+wait 0
+wait 0
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @OTB_MSC_425
+if 
+  $onmission == 0
+goto_if_false @OTB_MSC_382
+Player.SetControl($player1, True)
+
+:OTB_MSC_382
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, -2.0, 0.0, -1.0)
+Char.SetCoordinates($scplayer, $x, $y, $z)
+
+:OTB_MSC_425
+goto @OTB_MSC_448
+
+:OTB_MSC_432
+Text.PrintNow('BUSY', 3000, 1)
+
+:OTB_MSC_448
+goto @OTB_MSC_471
+
+:OTB_MSC_455
+Text.PrintNow('BUSY', 3000, 1)
+
+:OTB_MSC_471
+goto @OTB_MSC_514
+
+:OTB_MSC_478
+if 
+  1@ == 0
+goto_if_false @OTB_MSC_514
+Text.PrintHelpForever('OTB_A')
+1@ = 1
+
+:OTB_MSC_514
+goto @OTB_MSC_548
+
+:OTB_MSC_521
+if 
+  1@ == 1
+goto_if_false @OTB_MSC_548
+Text.ClearHelp
+1@ = 0
+
+:OTB_MSC_548
+goto @OTB_MSC_582
+
+:OTB_MSC_555
+if 
+  1@ == 1
+goto_if_false @OTB_MSC_582
+Text.ClearHelp
+1@ = 0
+
+:OTB_MSC_582
+goto @OTB_MSC_618
+
+:OTB_MSC_589
+if 
+  1@ == 1
+goto_if_false @OTB_MSC_616
+Text.ClearHelp
+1@ = 0
+
+:OTB_MSC_616
+terminate_this_script 
+
+:OTB_MSC_618
+goto @OTB_MSC_654
+
+:OTB_MSC_625
+if 
+  1@ == 1
+goto_if_false @OTB_MSC_652
+Text.ClearHelp
+1@ = 0
+
+:OTB_MSC_652
+terminate_this_script 
+
+:OTB_MSC_654
+goto @OTB_MSC_58
+terminate_this_script 
+

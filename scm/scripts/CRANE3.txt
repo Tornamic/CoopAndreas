@@ -1,0 +1,317 @@
+//-------------External script 69 (CRANE3)---------------
+
+:CRANE3
+script_name 'CRANE3'
+3@ = 0
+if 
+  3@ == 1
+goto_if_false @CRANE3_124
+0@ = Object.CreateNoOffset(#WOODENBOX, 0.0, 0.0, 0.0)
+1@ = Object.CreateNoOffset(#WOODENBOX, 0.0, 0.0, 0.0)
+2@ = Object.CreateNoOffset(#WOODENBOX, 0.0, 0.0, 0.0)
+3@ = Object.CreateNoOffset(#WOODENBOX, 0.0, 0.0, 0.0)
+
+:CRANE3_124
+$crane_help3 = 0
+
+:CRANE3_131
+wait 0
+if 
+  Object.DoesExist(0@)
+goto_if_false @CRANE3_1554
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CRANE3_1547
+if 
+  $disable_all_cranes == 0
+goto_if_false @CRANE3_1547
+if 
+  Char.LocateAnyMeansObject2D($scplayer, 0@, 100.0, 100.0, False)
+goto_if_false @CRANE3_1538
+if 
+  3@ == 0
+goto_if_false @CRANE3_270
+5@ = Object.GetOffsetInWorldCoords(6@, 7@, 0@, 3.0899, 2.9792, 0.0081)
+3@ += 1
+
+:CRANE3_270
+if 
+  3@ == 1
+goto_if_false @CRANE3_440
+if 
+  Char.LocateOnFoot3D($scplayer, 1, 5@, 6@, 7@, 1.2, 1.2, 1.5)
+goto_if_false @CRANE3_413
+if 
+  Char.IsOnFoot($scplayer)
+goto_if_false @CRANE3_406
+if 
+  $crane_help3 == 0
+goto_if_false @CRANE3_382
+Text.PrintHelpForever('CR_2')
+$crane_help3 = 1
+
+:CRANE3_382
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @CRANE3_406
+3@ += 1
+
+:CRANE3_406
+goto @CRANE3_440
+
+:CRANE3_413
+if 
+  $crane_help3 <> 0
+goto_if_false @CRANE3_440
+Text.ClearHelp
+$crane_help3 = 0
+
+:CRANE3_440
+if 
+  3@ == 2
+goto_if_false @CRANE3_719
+if 
+  Object.DoesExist(0@)
+goto_if_false @CRANE3_482
+Audio.ReportMissionAudioEventAtObject(0@, 1019)
+
+:CRANE3_482
+Player.SetControl($player1, False)
+Game.SetMinigameInProgress(True)
+Camera.DoFade(0, 500)
+
+:CRANE3_500
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRANE3_524
+wait 0
+goto @CRANE3_500
+
+:CRANE3_524
+Crane.PlayerEnteredQuarryCrane
+Text.DisplayNonMinigameHelpMessages(True)
+4@ = Object.GetHeading(1@)
+if 
+  Object.DoesExist(0@)
+goto_if_false @CRANE3_570
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CRANE3_570
+
+:CRANE3_570
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CRANE3_656
+Char.FreezePosition($scplayer, True)
+Char.SetCoordinates($scplayer, 713.5652, 906.2935, -18.0674)
+Char.SetVisible($scplayer, False)
+Player.SetControl($player1, True)
+Char.SetCollision($scplayer, False)
+Char.SetProofs($scplayer, True, True, True, True, True)
+15@ = 0
+
+:CRANE3_656
+Text.PrintHelpForever('QUAR_1')
+gosub @CRANE3_1570
+Game.SetEveryoneIgnorePlayer($player1, False)
+Camera.DoFade(1, 500)
+
+:CRANE3_688
+if 
+  Camera.GetFadingStatus
+goto_if_false @CRANE3_712
+wait 0
+goto @CRANE3_688
+
+:CRANE3_712
+3@ += 1
+
+:CRANE3_719
+if 
+  3@ == 3
+goto_if_false @CRANE3_1383
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CRANE3_1383
+gosub @CRANE3_1570
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.LeftStickX)
+goto_if_false @CRANE3_875
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+cset_lvar_float_to_var_int 8@ = integer $LStickX
+8@ /= 500.0
+sub_timed_float_lvar_from_float_lvar 4@ -= frame_delta_time * 8@
+if 
+  15@ <> 1
+goto_if_false @CRANE3_868
+if 
+  Object.DoesExist(0@)
+goto_if_false @CRANE3_868
+Audio.ReportMissionAudioEventAtObject(0@, 1020)
+15@ = 1
+
+:CRANE3_868
+goto @CRANE3_924
+
+:CRANE3_875
+if 
+  15@ <> 0
+goto_if_false @CRANE3_924
+if 
+  Object.DoesExist(0@)
+goto_if_false @CRANE3_924
+Audio.ReportMissionAudioEventAtObject(0@, 1021)
+15@ = 0
+
+:CRANE3_924
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.LeftStickY)
+goto_if_false @CRANE3_1187
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+cset_lvar_float_to_var_int 8@ = integer $LStickY
+8@ /= 1000.0
+8@ *= 1.5
+sub_timed_float_lvar_from_float_var $arm_rotate_y -= frame_delta_time * 8@
+
+:CRANE3_993
+if 
+  0.0 > $arm_rotate_y
+goto_if_false @CRANE3_1031
+$arm_rotate_y += 360.0
+goto @CRANE3_993
+
+:CRANE3_1031
+if 
+  $arm_rotate_y > 360.0
+goto_if_false @CRANE3_1069
+$arm_rotate_y += -360.0
+goto @CRANE3_1031
+
+:CRANE3_1069
+if 
+  $arm_rotate_y > 70.0
+goto_if_false @CRANE3_1100
+$arm_rotate_y = 70.0
+
+:CRANE3_1100
+if 
+  10.0 > $arm_rotate_y
+goto_if_false @CRANE3_1131
+$arm_rotate_y = 10.0
+
+:CRANE3_1131
+if 
+  16@ <> 1
+goto_if_false @CRANE3_1180
+if 
+  Object.DoesExist(0@)
+goto_if_false @CRANE3_1180
+Audio.ReportMissionAudioEventAtObject(2@, 1020)
+16@ = 1
+
+:CRANE3_1180
+goto @CRANE3_1236
+
+:CRANE3_1187
+if 
+  16@ <> 0
+goto_if_false @CRANE3_1236
+if 
+  Object.DoesExist(0@)
+goto_if_false @CRANE3_1236
+Audio.ReportMissionAudioEventAtObject(2@, 1021)
+16@ = 0
+
+:CRANE3_1236
+if 
+  Object.DoesExist(1@)
+goto_if_false @CRANE3_1268
+Object.SetHeading(1@, 4@)
+Char.SetHeading($scplayer, 4@)
+
+:CRANE3_1268
+if 
+  Object.DoesExist(2@)
+goto_if_false @CRANE3_1359
+if 
+  Object.DoesExist(1@)
+goto_if_false @CRANE3_1359
+$x = Object.GetOffsetInWorldCoords($y, $z, 1@, 0.0, 0.0, 1.0206)
+Object.SetCoordinatesAndVelocity(2@, $x, $y, $z)
+Object.SetRotation(2@, 0.0, $arm_rotate_y, 4@)
+
+:CRANE3_1359
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @CRANE3_1383
+3@ += 1
+
+:CRANE3_1383
+if 
+  3@ == 4
+goto_if_false @CRANE3_1531
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CRANE3_1531
+Text.ClearHelp
+if 
+  Object.DoesExist(0@)
+goto_if_false @CRANE3_1443
+Audio.ReportMissionAudioEventAtObject(0@, 1022)
+
+:CRANE3_1443
+Crane.PlayerLeftCrane
+Game.SetMinigameInProgress(False)
+Char.FreezePosition($scplayer, False)
+Char.SetVisible($scplayer, True)
+Char.SetCollision($scplayer, True)
+Char.SetProofs($scplayer, False, False, False, False, False)
+Player.SetControl($player1, True)
+Char.SetCoordinates($scplayer, 706.2595, 918.6275, -19.6407)
+Char.SetHeading($scplayer, 127.184)
+Camera.RestoreJumpcut
+3@ = 0
+
+:CRANE3_1531
+goto @CRANE3_1547
+
+:CRANE3_1538
+3@ = 0
+terminate_this_script 
+
+:CRANE3_1547
+goto @CRANE3_1563
+
+:CRANE3_1554
+3@ = 0
+terminate_this_script 
+
+:CRANE3_1563
+goto @CRANE3_131
+
+:CRANE3_1570
+if 
+  Object.DoesExist(1@)
+goto_if_false @CRANE3_1615
+9@ = Object.GetOffsetInWorldCoords(10@, 11@, 1@, -9.0, -6.8, 6.0)
+
+:CRANE3_1615
+if 
+  Object.DoesExist(2@)
+goto_if_false @CRANE3_1730
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, 0.0, 0.0, 59.0)
+8@ = Object.GetRopeHeight(2@)
+8@ += -1.0
+8@ *= -1.0
+8@ *= 72.0
+sub_float_lvar_from_float_var $z -= 8@
+set_lvar_float_to_var_float 12@ = $x
+set_lvar_float_to_var_float 13@ = $y
+set_lvar_float_to_var_float 14@ = $z
+
+:CRANE3_1730
+Camera.SetFixedPosition(9@, 10@, 11@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(12@, 13@, 14@, SwitchType.JumpCut)
+return 
+terminate_this_script 
+

@@ -1,0 +1,173 @@
+//-------------External script 7 (ARCADE)---------------
+
+:ARCADE
+script_name 'ARCADE'
+1@ = 0
+if 
+  1@ == -1
+goto_if_false @ARCADE_58
+0@ = Object.Create(#CJ_COIN_OP_2, 0.0, 0.0, 0.0)
+
+:ARCADE_58
+wait 0
+if 
+  Object.DoesExist(0@)
+goto_if_false @ARCADE_749
+if 
+  Object.IsWithinBrainActivationRange(0@)
+goto_if_false @ARCADE_713
+if 
+  Player.IsPlaying($player1)
+goto_if_false @ARCADE_679
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0, -1.0, 1.0)
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $x, $y, $z, 0.6, 0.6, 1.0)
+goto_if_false @ARCADE_645
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @ARCADE_602
+if 
+  1@ == 1
+goto_if_false @ARCADE_595
+Text.ClearHelp
+1@ = 0
+if 
+  $onmission == 0
+goto_if_false @ARCADE_563
+if 
+  not is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @ARCADE_524
+if 
+  Player.CanStartMission($player1)
+goto_if_false @ARCADE_517
+Player.SetControl($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Camera.DoFade(0, 500)
+
+:ARCADE_298
+if 
+  Camera.GetFadingStatus
+goto_if_false @ARCADE_322
+wait 0
+goto @ARCADE_298
+
+:ARCADE_322
+if 
+  Object.DoesHaveThisModel(0@, #CJ_COIN_OP_2)
+goto_if_false @ARCADE_354
+$load_and_launch_mission_if_poss = 1
+goto @ARCADE_464
+
+:ARCADE_354
+if or
+  Object.DoesHaveThisModel(0@, #CJ_COIN_OP_3)
+  Object.DoesHaveThisModel(0@, #SWANK_CONSOLE)
+goto_if_false @ARCADE_393
+$load_and_launch_mission_if_poss = 0
+goto @ARCADE_464
+
+:ARCADE_393
+if or
+  Object.DoesHaveThisModel(0@, #CJ_COIN_OP_1)
+  Object.DoesHaveThisModel(0@, #SNESISH)
+goto_if_false @ARCADE_432
+$load_and_launch_mission_if_poss = 3
+goto @ARCADE_464
+
+:ARCADE_432
+if or
+  Object.DoesHaveThisModel(0@, #CJ_COIN_OP)
+  Object.DoesHaveThisModel(0@, #LOW_CONSOLE)
+goto_if_false @ARCADE_464
+$load_and_launch_mission_if_poss = 2
+
+:ARCADE_464
+wait 0
+wait 0
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @ARCADE_517
+if 
+  $onmission == 0
+goto_if_false @ARCADE_517
+Player.SetControl($player1, True)
+
+:ARCADE_517
+goto @ARCADE_556
+
+:ARCADE_524
+if 
+  Player.IsControlOn($player1)
+goto_if_false @ARCADE_556
+Text.PrintNow('BUSY', 3000, 1)
+
+:ARCADE_556
+goto @ARCADE_595
+
+:ARCADE_563
+if 
+  Player.IsControlOn($player1)
+goto_if_false @ARCADE_595
+Text.PrintNow('BUSY', 3000, 1)
+
+:ARCADE_595
+goto @ARCADE_638
+
+:ARCADE_602
+if 
+  1@ == 0
+goto_if_false @ARCADE_638
+Text.PrintHelpForever('DUAL_A')
+1@ = 1
+
+:ARCADE_638
+goto @ARCADE_672
+
+:ARCADE_645
+if 
+  1@ == 1
+goto_if_false @ARCADE_672
+Text.ClearHelp
+1@ = 0
+
+:ARCADE_672
+goto @ARCADE_706
+
+:ARCADE_679
+if 
+  1@ == 1
+goto_if_false @ARCADE_706
+Text.ClearHelp
+1@ = 0
+
+:ARCADE_706
+goto @ARCADE_742
+
+:ARCADE_713
+if 
+  1@ == 1
+goto_if_false @ARCADE_740
+Text.ClearHelp
+1@ = 0
+
+:ARCADE_740
+terminate_this_script 
+
+:ARCADE_742
+goto @ARCADE_778
+
+:ARCADE_749
+if 
+  1@ == 1
+goto_if_false @ARCADE_776
+Text.ClearHelp
+1@ = 0
+
+:ARCADE_776
+terminate_this_script 
+
+:ARCADE_778
+goto @ARCADE_58
+terminate_this_script 
+

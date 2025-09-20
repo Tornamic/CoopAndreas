@@ -1,0 +1,204 @@
+//-------------External script 43 (OTBWTCH)---------------
+
+:OTBWTCH
+script_name 'OTBWTCH'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @OTBWTCH_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:OTBWTCH_60
+Streaming.RequestAnimation("OTB")
+
+:OTBWTCH_67
+if 
+  not Streaming.HasAnimationLoaded("OTB")
+goto_if_false @OTBWTCH_96
+wait 0
+goto @OTBWTCH_67
+
+:OTBWTCH_96
+3@ = 1
+4@ = 0
+
+:OTBWTCH_110
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @OTBWTCH_221
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @OTBWTCH_207
+if 
+  $iSetOTBPanic == 0
+goto_if_false @OTBWTCH_185
+gosub @OTBWTCH_235
+goto @OTBWTCH_200
+
+:OTBWTCH_185
+Char.SetDecisionMaker(0@, $iGlobalPedPanicDM)
+goto @OTBWTCH_1122
+
+:OTBWTCH_200
+goto @OTBWTCH_214
+
+:OTBWTCH_207
+gosub @OTBWTCH_1060
+
+:OTBWTCH_214
+goto @OTBWTCH_228
+
+:OTBWTCH_221
+gosub @OTBWTCH_1060
+
+:OTBWTCH_228
+goto @OTBWTCH_110
+
+:OTBWTCH_235
+switch_start 3@ total_jumps 1 default_jump 0 @OTBWTCH_312 jumps 1 @OTBWTCH_298 -1 @OTBWTCH_312 -1 @OTBWTCH_312 -1 @OTBWTCH_312 -1 @OTBWTCH_312 -1 @OTBWTCH_312 -1 @OTBWTCH_312
+
+:OTBWTCH_298
+gosub @OTBWTCH_314
+goto @OTBWTCH_312
+
+:OTBWTCH_312
+return 
+
+:OTBWTCH_314
+switch_start 4@ total_jumps 7 default_jump 0 @OTBWTCH_1058 jumps 0 @OTBWTCH_377 1 @OTBWTCH_429 2 @OTBWTCH_524 3 @OTBWTCH_682 4 @OTBWTCH_777 5 @OTBWTCH_933 6 @OTBWTCH_1015
+
+:OTBWTCH_377
+Task.PlayAnim(0@, "WTCHRACE_IN", "OTB", 4.0, False, False, False, False, -1)
+4@ += 1
+goto @OTBWTCH_1058
+
+:OTBWTCH_429
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @OTBWTCH_517
+2@ = Math.RandomIntInRange(4000, 8000)
+Task.PlayAnim(0@, "WTCHRACE_LOOP", "OTB", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:OTBWTCH_517
+goto @OTBWTCH_1058
+
+:OTBWTCH_524
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @OTBWTCH_675
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @OTBWTCH_627
+Task.PlayAnim(0@, "WTCHRACE_CMON", "OTB", 4.0, False, False, False, False, -1)
+goto @OTBWTCH_668
+
+:OTBWTCH_627
+Task.PlayAnim(0@, "WTCHRACE_LOOP", "OTB", 4.0, True, False, False, False, 1000)
+
+:OTBWTCH_668
+4@ += 1
+
+:OTBWTCH_675
+goto @OTBWTCH_1058
+
+:OTBWTCH_682
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @OTBWTCH_770
+2@ = Math.RandomIntInRange(4000, 8000)
+Task.PlayAnim(0@, "WTCHRACE_LOOP", "OTB", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:OTBWTCH_770
+goto @OTBWTCH_1058
+
+:OTBWTCH_777
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @OTBWTCH_926
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @OTBWTCH_879
+Task.PlayAnim(0@, "WTCHRACE_WIN", "OTB", 4.0, False, False, False, False, -1)
+goto @OTBWTCH_919
+
+:OTBWTCH_879
+Task.PlayAnim(0@, "WTCHRACE_LOSE", "OTB", 4.0, False, False, False, False, -1)
+
+:OTBWTCH_919
+4@ += 1
+
+:OTBWTCH_926
+goto @OTBWTCH_1058
+
+:OTBWTCH_933
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @OTBWTCH_1008
+Task.PlayAnim(0@, "WTCHRACE_OUT", "OTB", 4.0, False, False, False, False, -1)
+4@ += 1
+
+:OTBWTCH_1008
+goto @OTBWTCH_1058
+
+:OTBWTCH_1015
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @OTBWTCH_1051
+gosub @OTBWTCH_1060
+
+:OTBWTCH_1051
+goto @OTBWTCH_1058
+
+:OTBWTCH_1058
+return 
+
+:OTBWTCH_1060
+Streaming.RemoveAnimation("OTB")
+if 
+  not Char.IsDead(0@)
+goto_if_false @OTBWTCH_1118
+Task.UseClosestMapAttractor(0@, 100.0, 0, 0.0, 0.0, 0.0, "OTBSLP")
+
+:OTBWTCH_1118
+terminate_this_script 
+return 
+
+:OTBWTCH_1122
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @OTBWTCH_1192
+5@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @OTBWTCH_1185
+Task.Duck(0@, -2)
+
+:OTBWTCH_1185
+goto @OTBWTCH_1199
+
+:OTBWTCH_1192
+gosub @OTBWTCH_1060
+
+:OTBWTCH_1199
+goto @OTBWTCH_1122
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

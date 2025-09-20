@@ -1,0 +1,100 @@
+//-------------External script 34 (ZERO_AMBIENCE)---------------
+
+:RCSHOP
+script_name 'RCSHOP'
+$iSetRCPanic = 0
+2@ = -2237.291
+3@ = 128.5856
+4@ = 1034.422
+5@ = 0.0
+6@ = 360.0
+set_lvar_int_to_constant 10@ = 217
+Streaming.RequestModel(10@)
+
+:RCSHOP_81
+if 
+  not Streaming.HasModelLoaded(10@)
+goto_if_false @RCSHOP_108
+wait 0
+goto @RCSHOP_81
+
+:RCSHOP_108
+7@ = Sequence.Open()
+Task.StayInSamePlace(-1, True)
+Task.StandStill(-1, -2)
+Sequence.Close(7@)
+8@ = Attractor.Add(2@, 3@, 4@, 5@, 6@, 7@)
+9@ = Char.CreateAtAttractor(PedType.CivMale, 10@, 8@, 1466)
+
+:RCSHOP_169
+if 
+  Player.IsPlaying($player1)
+goto_if_false @RCSHOP_509
+$iAreaCode = Char.GetAreaVisible($scplayer)
+if or
+  $iAreaCode == 0
+  $iTerminateAllAmbience == 1
+goto_if_false @RCSHOP_225
+gosub @RCSHOP_520
+
+:RCSHOP_225
+if and
+  $flag_zero_mission_counter == 3
+  $onmission == 0
+goto_if_false @RCSHOP_305
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, -2219.287, 133.8895, 1034.641, 1.5, 1.5, 1.5, True)
+goto_if_false @RCSHOP_305
+$load_and_launch_mission_if_poss = 7
+
+:RCSHOP_305
+if or
+  Char.IsShooting($scplayer)
+  Player.IsWantedLevelGreater($player1, $iWantedOnEntry)
+goto_if_false @RCSHOP_336
+$iSetRCPanic = 1
+
+:RCSHOP_336
+if 
+  not Char.IsDead(9@)
+goto_if_false @RCSHOP_418
+if and
+  Player.IsTargetingChar($player1, 9@)
+  not Char.IsCurrentWeapon($scplayer, WeaponType.AnyMelee)
+goto_if_false @RCSHOP_392
+$iSetRCPanic = 1
+goto @RCSHOP_418
+
+:RCSHOP_392
+if 
+  Char.HasBeenDamagedByChar(9@, $scplayer)
+goto_if_false @RCSHOP_418
+$iSetRCPanic = 1
+
+:RCSHOP_418
+if 
+  $iSetRCPanic == 1
+goto_if_false @RCSHOP_509
+2@, 3@, 4@ = Char.GetCoordinates($scplayer)
+0@ = World.GetRandomCharInSphereNoBrain(2@, 3@, 4@, 20.0)
+if 
+  0@ > -1
+goto_if_false @RCSHOP_509
+1@ += 1
+StreamedScript.StartNew(37, 0@, 1@)
+StreamedScript.Stream(37)
+
+:RCSHOP_509
+wait 0
+goto @RCSHOP_169
+
+:RCSHOP_520
+$iSetRCPanic = 0
+Char.MarkAsNoLongerNeeded(9@)
+Streaming.MarkModelAsNoLongerNeeded(10@)
+Char.Delete(9@)
+Attractor.Clear(8@)
+Sequence.Clear(7@)
+terminate_this_script 
+terminate_this_script 
+

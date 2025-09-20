@@ -1,0 +1,61 @@
+:SMOKE
+script_name 'SMOKE'
+
+:SMOKE_11
+wait $mission_trigger_wait_time
+if 
+  $flag_smoke_mission_counter == 4
+goto_if_false @SMOKE_36
+terminate_this_script 
+
+:SMOKE_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @SMOKE_336
+if 
+  $onmission == 0
+goto_if_false @SMOKE_336
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $smokeX, $smokeY, $smokeZ, 1.2, 1.2, 2.0)
+goto_if_false @SMOKE_336
+if 
+  Player.CanStartMission($player1)
+goto_if_false @SMOKE_336
+if 
+  $flag_smoke_mission_counter == 0
+goto_if_false @SMOKE_180
+$onmission = 1
+Text.PrintBig('SMOKE_1', 1000, TextStyle.BottomRight)
+PSAVE1_1676()
+Mission.LoadAndLaunchInternal(27) // OG Loc
+
+:SMOKE_180
+if 
+  $flag_smoke_mission_counter == 1
+goto_if_false @SMOKE_232
+$onmission = 1
+Text.PrintBig('SMOKE_2', 1000, TextStyle.BottomRight)
+PSAVE1_1676()
+Mission.LoadAndLaunchInternal(28) // Running Dog
+
+:SMOKE_232
+if 
+  $flag_smoke_mission_counter == 2
+goto_if_false @SMOKE_284
+$onmission = 1
+Text.PrintBig('SMOKE_3', 1000, TextStyle.BottomRight)
+PSAVE1_1676()
+Mission.LoadAndLaunchInternal(29) // Wrong Side of the Tracks
+
+:SMOKE_284
+if 
+  $flag_smoke_mission_counter == 3
+goto_if_false @SMOKE_336
+$onmission = 1
+Text.PrintBig('SMOKE_4', 1000, TextStyle.BottomRight)
+PSAVE1_1676()
+Mission.LoadAndLaunchInternal(30) // Just Business
+
+:SMOKE_336
+goto @SMOKE_11
+

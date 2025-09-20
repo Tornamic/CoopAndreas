@@ -1,0 +1,144 @@
+//-------------External script 10 (GATES_SCRIPT)---------------
+
+:GATEOS
+script_name 'GATEOS'
+1@ = 0
+if 
+  1@ == 1
+goto_if_false @GATEOS_80
+0@ = Object.CreateNoOffset(#GATE_AUTOL, 0.0, 0.0, 0.0)
+0@ = Object.CreateNoOffset(#GATE_AUTOR, 0.0, 0.0, 0.0)
+
+:GATEOS_80
+wait 0
+$game_timer = Clock.GetGameTimer()
+if 
+  Object.DoesExist(0@)
+goto_if_false @GATEOS_997
+if 
+  Object.IsWithinBrainActivationRange(0@)
+goto_if_false @GATEOS_988
+if 
+  1@ == 0
+goto_if_false @GATEOS_502
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GATEOS_502
+9@ = Object.GetModel(0@)
+if 
+  Streaming.HasModelLoaded(9@)
+goto_if_false @GATEOS_502
+if 
+  Char.LocateAnyMeansObject2D($scplayer, 0@, 12.0, 12.0, False)
+goto_if_false @GATEOS_477
+if or
+  Char.IsInModel($scplayer, 433)
+  Char.IsInModel($scplayer, 470)
+  Char.IsInModel($scplayer, 432)
+goto_if_false @GATEOS_366
+$temp_float_1, $temp_float_2, $temp_float_3 = Object.GetLevelDesignCoords(0@, 5)
+$x_temp, $y_temp, $z_temp = Object.GetLevelDesignCoords(0@, 6)
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 7)
+$z = Math.GetDistanceBetweenCoords2D($x_temp, $y_temp, $x, $y)
+$z *= -1.0
+if 
+  Char.IsInAngledArea3D($scplayer, $temp_float_1, $temp_float_2, $temp_float_3, $x_temp, $y_temp, $z_temp, $z, False)
+goto_if_false @GATEOS_366
+1@ = 1
+
+:GATEOS_366
+$temp_float_1, $temp_float_2, $temp_float_3 = Object.GetLevelDesignCoords(0@, 1)
+$x_temp, $y_temp, $z_temp = Object.GetLevelDesignCoords(0@, 2)
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 3)
+$z = Math.GetDistanceBetweenCoords2D($x_temp, $y_temp, $x, $y)
+if 
+  Char.IsInAngledArea3D($scplayer, $temp_float_1, $temp_float_2, $temp_float_3, $x_temp, $y_temp, $z_temp, $z, False)
+goto_if_false @GATEOS_477
+1@ = 1
+
+:GATEOS_477
+if 
+  $open_gate_now_flag == 1
+goto_if_false @GATEOS_502
+1@ = 1
+
+:GATEOS_502
+if 
+  1@ == 1
+goto_if_false @GATEOS_589
+9@ = Object.GetModel(0@)
+if 
+  Streaming.HasModelLoaded(9@)
+goto_if_false @GATEOS_589
+2@, 3@, 4@ = Object.GetLevelDesignCoords(0@, 0)
+5@, 6@, 7@ = Object.GetCoordinates(0@)
+Audio.ReportMissionAudioEventAtObject(0@, 1100)
+1@ += 1
+
+:GATEOS_589
+if 
+  1@ == 2
+goto_if_false @GATEOS_727
+if 
+  Object.Slide(0@, 2@, 3@, 4@, 0.1, 0.1, 0.1, True)
+goto_if_false @GATEOS_727
+if 
+  Object.Locate3D(0@, 2@, 3@, 4@, 0.1, 0.1, 0.1, False)
+goto_if_false @GATEOS_727
+Object.SetCoordinates(0@, 2@, 3@, 4@)
+Audio.ReportMissionAudioEventAtObject(0@, 1101)
+$open_gate_now_flag += 1
+1@ += 1
+
+:GATEOS_727
+if 
+  1@ == 3
+goto_if_false @GATEOS_770
+if 
+  $gate_stay_open == 0
+goto_if_false @GATEOS_770
+1@ += 1
+
+:GATEOS_770
+if 
+  1@ == 4
+goto_if_false @GATEOS_850
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GATEOS_850
+if 
+  not Char.LocateAnyMeansObject2D($scplayer, 0@, 20.0, 20.0, False)
+goto_if_false @GATEOS_850
+Audio.ReportMissionAudioEventAtObject(0@, 1100)
+1@ += 1
+
+:GATEOS_850
+if 
+  1@ == 5
+goto_if_false @GATEOS_981
+if 
+  Object.Slide(0@, 5@, 6@, 7@, 0.1, 0.1, 0.1, True)
+goto_if_false @GATEOS_981
+if 
+  Object.Locate3D(0@, 5@, 6@, 7@, 0.1, 0.1, 0.1, False)
+goto_if_false @GATEOS_981
+Object.SetCoordinates(0@, 5@, 6@, 7@)
+Audio.ReportMissionAudioEventAtObject(0@, 1101)
+1@ = 0
+
+:GATEOS_981
+goto @GATEOS_990
+
+:GATEOS_988
+terminate_this_script 
+
+:GATEOS_990
+goto @GATEOS_999
+
+:GATEOS_997
+terminate_this_script 
+
+:GATEOS_999
+goto @GATEOS_80
+terminate_this_script 
+

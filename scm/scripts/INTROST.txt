@@ -1,0 +1,150 @@
+:INTROST
+script_name 'INTROST'
+
+:INTROST_11
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @INTROST_848
+if 
+  Coop.IsHost()
+goto_if_false @INTROST_848
+if 
+  $onmission == 0
+goto_if_false @INTROST_848
+if 
+  $voice_over_at_hub == 0
+goto_if_false @INTROST_343
+if 
+  Player.IsPlaying($player1)
+goto_if_false @INTROST_343
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2471.7, -1668.0, 12.3, 90.0, 40.0, 4.0)
+goto_if_false @INTROST_343
+Audio.LoadMissionAudio(43205, 1)
+Audio.LoadMissionAudio(43206, 2)
+
+:INTROST_149
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @INTROST_198
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @INTROST_191
+goto @INTROST_336
+
+:INTROST_191
+goto @INTROST_149
+
+:INTROST_198
+Text.PrintNow('VO_AF', 4000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:INTROST_218
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @INTROST_267
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @INTROST_260
+goto @INTROST_336
+
+:INTROST_260
+goto @INTROST_218
+
+:INTROST_267
+Text.PrintNow('VO_AG', 4000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+
+:INTROST_287
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @INTROST_336
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @INTROST_329
+goto @INTROST_336
+
+:INTROST_329
+goto @INTROST_287
+
+:INTROST_336
+$voice_over_at_hub = 1
+
+:INTROST_343
+if 
+  $funeral_mission_finished == 0
+goto_if_false @INTROST_407
+if 
+  $flag_intro_mission_counter == 1
+goto_if_false @INTROST_407
+wait 5000
+Text.PrintNow('INT_CJ1', 8000, 1)
+$funeral_mission_finished = 1
+
+:INTROST_407
+if 
+  $funeral_mission_finished == 1
+goto_if_false @INTROST_638
+if 
+  $flag_intro_mission_counter == 1
+goto_if_false @INTROST_638
+$main_visible_area = Streaming.GetAreaVisible()
+if 
+  $main_visible_area == 3
+goto_if_false @INTROST_638
+if 
+  Player.IsPlaying($player1)
+goto_if_false @INTROST_638
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2496.051, -1698.013, 1013.75, 10.0, 10.0, 5.0)
+goto_if_false @INTROST_638
+Player.SetControl($player1, False)
+Text.ClearPrints
+Camera.SetFixedPosition(2496.38, -1694.334, 1015.431, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2496.368, -1695.325, 1015.299, SwitchType.JumpCut)
+Text.PrintHelp('SAVE')
+wait 5000
+if 
+  Player.IsPlaying($player1)
+goto_if_false @INTROST_638
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+$funeral_mission_finished = 2
+
+:INTROST_638
+if 
+  $funeral_mission_finished == 2
+goto_if_false @INTROST_848
+if 
+  $flag_intro_mission_counter == 1
+goto_if_false @INTROST_848
+$main_visible_area = Streaming.GetAreaVisible()
+if 
+  $main_visible_area == 0
+goto_if_false @INTROST_848
+if 
+  Player.IsPlaying($player1)
+goto_if_false @INTROST_848
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2495.33, -1689.183, 13.2716, 20.0, 20.0, 6.0)
+goto_if_false @INTROST_848
+terminate_all_scripts_with_this_name 'INT'
+start_new_script @INT 
+Blip.Remove($intro_contact_blip)
+
+$intro_contact_blip = Blip.AddSpriteForContactPoint($ryder_blip_icon, $ryderX, $ryderY, $ryderZ)
+
+Text.PrintNow('INT2_1', 8000, 1)
+wait 2000
+Text.PrintHelp('RYBLIP')
+wait 4000
+$funeral_mission_finished = 3
+terminate_this_script 
+
+:INTROST_848
+goto @INTROST_11
+

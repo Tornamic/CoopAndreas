@@ -1,0 +1,2969 @@
+//-------------Mission 121---------------
+// Originally: Taxi-Driver Sub-Mission
+
+:TAXIODD
+script_name 'TAXIODD'
+34@ = 0
+gosub @TAXIODD_54
+if 
+  has_deatharrest_been_executed 
+goto_if_false @TAXIODD_45
+gosub @TAXIODD_18818
+
+:TAXIODD_45
+gosub @TAXIODD_18991
+terminate_this_script 
+
+:TAXIODD_54
+if 
+  $done_taxiodd_progress == 0
+goto_if_false @TAXIODD_74
+Stat.RegisterMissionGiven
+
+:TAXIODD_74
+$onmission = 1
+$flag_player_on_oddjob = 1
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @TAXIODD_231
+if 
+  Char.IsInTaxi($scplayer)
+goto_if_false @TAXIODD_231
+37@ = Char.StoreCarIsIn($scplayer)
+35@ = Car.GetNumberOfPassengers(37@)
+if 
+  35@ <> 0
+goto_if_false @TAXIODD_179
+Text.PrintNow('TX_FULL', 5000, 1)
+wait 4500
+Text.ClearPrints
+return 
+
+:TAXIODD_179
+36@ = Car.GetHealth(37@)
+if 
+  not Car.IsHealthGreater(37@, 400)
+goto_if_false @TAXIODD_231
+Text.PrintNow('TX_ILL', 5000, 1)
+wait 4500
+Text.ClearPrints
+return 
+
+:TAXIODD_231
+set_var_int_to_var_int $nHoldModGarageState = $stop_gargae_for_neil
+$stop_gargae_for_neil = 1
+85@ = 0
+86@ = 0
+87@ = 0
+38@ = 0
+39@ = 0
+40@ = 0
+41@ = 0
+42@ = 0
+47@ = 0
+48@ = 0
+TIMERA = 0
+TIMERB = 0
+102@ = 0
+127@ = 0
+130@ = 0
+132@ = 0
+133@ = 0
+134@ = 0
+135@ = 0
+136@ = 0
+137@ = 0
+139@ = 0
+140@ = 0
+141@ = 0
+142@ = 0
+143@ = 0
+144@ = 0
+145@ = 0
+124@ = 0
+125@ = 0
+126@ = 0
+108@ = 0
+146@ = 0
+if 
+  38@ == -99
+goto_if_false @TAXIODD_721
+write_debug "SHOULD_NEVER_BE_IN_FAKE_ENTITY_CREATION"
+89@ = Car.Create(420, 0.0, 0.0, 0.0)
+88@ = Char.Create(4, 147, 0.0, 0.0, 0.0)
+49@ = 0
+
+:TAXIODD_593
+90@(49@,4i) = Object.Create(#CR_AMMOBOX, 0.0, 0.0, 0.0)
+49@ += 1
+  49@ >= 4
+goto_if_false @TAXIODD_593
+96@ = Blip.AddForChar(88@)
+97@ = Blip.AddForCoord(0.0, 0.0, 0.0)
+49@ = 0
+
+:TAXIODD_676
+98@(49@,3i) = Blip.AddForCoord(0.0, 0.0, 0.0)
+49@ += 1
+  49@ >= 3
+goto_if_false @TAXIODD_676
+
+:TAXIODD_721
+Text.LoadMissionText('TAXI1')
+gosub @TAXIODD_17953
+101@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+gosub @TAXIODD_17955
+if 
+  34@ == 1
+goto_if_false @TAXIODD_778
+goto @TAXIODD_17025
+
+:TAXIODD_778
+wait 0
+gosub @TAXIODD_16595
+gosub @TAXIODD_16949
+if or
+  40@ == 1
+  41@ == 1
+goto_if_false @TAXIODD_828
+goto @TAXIODD_1465
+
+:TAXIODD_828
+gosub @TAXIODD_17820
+gosub @TAXIODD_17854
+if 
+  Char.IsDead($scplayer)
+goto_if_false @TAXIODD_872
+124@ = 1
+goto @TAXIODD_1465
+
+:TAXIODD_872
+if 
+  38@ == 0
+goto_if_false @TAXIODD_930
+write_debug "STAGE_SHOULD_NEVER_BE_0_IN_MAIN_LOOP"
+
+:TAXIODD_930
+83@ = 0
+$controlmode = Pad.GetControllerMode()
+if 
+  $controlmode <> 3
+goto_if_false @TAXIODD_991
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @TAXIODD_984
+83@ = 1
+
+:TAXIODD_984
+goto @TAXIODD_1015
+
+:TAXIODD_991
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @TAXIODD_1015
+83@ = 1
+
+:TAXIODD_1015
+if 
+  135@ == 0
+goto_if_false @TAXIODD_1081
+if 
+  83@ == 1
+goto_if_false @TAXIODD_1074
+if 
+  Player.IsPlaying($player1)
+goto_if_false @TAXIODD_1074
+135@ = 1
+
+:TAXIODD_1074
+goto @TAXIODD_1129
+
+:TAXIODD_1081
+if 
+  83@ == 0
+goto_if_false @TAXIODD_1129
+if 
+  Player.IsPlaying($player1)
+goto_if_false @TAXIODD_1129
+124@ = 1
+goto @TAXIODD_1465
+
+:TAXIODD_1129
+if 
+  Car.IsDead(89@)
+goto_if_false @TAXIODD_1159
+124@ = 1
+goto @TAXIODD_1465
+
+:TAXIODD_1159
+51@ = Car.GetHealth(89@)
+if 
+  250 >= 51@
+goto_if_false @TAXIODD_1287
+if 
+  not Char.IsDead(88@)
+goto_if_false @TAXIODD_1273
+if 
+  Char.IsInCar(88@, 89@)
+goto_if_false @TAXIODD_1273
+Text.PrintNow('TX_FLED', 5000, 1)
+if 
+  138@ == 0
+goto_if_false @TAXIODD_1273
+116@ = Char.SetSayContext(88@, 221)
+138@ = 1
+
+:TAXIODD_1273
+126@ = 1
+goto @TAXIODD_1465
+
+:TAXIODD_1287
+if 
+  130@ == 1
+goto_if_false @TAXIODD_1344
+if 
+  $g_Taxiodd_timerKM == 0
+goto_if_false @TAXIODD_1344
+124@ = 1
+108@ = 2
+goto @TAXIODD_1465
+
+:TAXIODD_1344
+gosub @TAXIODD_2884
+if 
+  127@ == 0
+goto_if_false @TAXIODD_1390
+124@ = 1
+108@ = 1
+goto @TAXIODD_1465
+
+:TAXIODD_1390
+if 
+  38@ == 1
+goto_if_false @TAXIODD_1415
+gosub @TAXIODD_1657
+
+:TAXIODD_1415
+if 
+  38@ == 2
+goto_if_false @TAXIODD_1440
+gosub @TAXIODD_2277
+
+:TAXIODD_1440
+if 
+  38@ == 3
+goto_if_false @TAXIODD_1465
+125@ = 1
+
+:TAXIODD_1465
+if 
+  40@ == 0
+goto_if_false @TAXIODD_1609
+if 
+  124@ == 0
+goto_if_false @TAXIODD_1593
+if 
+  126@ == 0
+goto_if_false @TAXIODD_1572
+if 
+  125@ == 0
+goto_if_false @TAXIODD_1551
+goto @TAXIODD_778
+goto @TAXIODD_1565
+
+:TAXIODD_1551
+gosub @TAXIODD_18716
+goto @TAXIODD_778
+
+:TAXIODD_1565
+goto @TAXIODD_1586
+
+:TAXIODD_1572
+gosub @TAXIODD_18752
+goto @TAXIODD_778
+
+:TAXIODD_1586
+goto @TAXIODD_1602
+
+:TAXIODD_1593
+gosub @TAXIODD_18818
+return 
+
+:TAXIODD_1602
+goto @TAXIODD_1611
+
+:TAXIODD_1609
+return 
+
+:TAXIODD_1611
+write_debug "SHOULD_NEVER_BE_HERE_IN_END_OF_MAIN_LOOP"
+return 
+
+:TAXIODD_1657
+if 
+  39@ == 0
+goto_if_false @TAXIODD_1829
+128@ = 0
+129@ = 0
+138@ = 0
+139@ = 0
+145@ = 0
+107@ = 0
+Car.SetTaxiLights(89@, True)
+if 
+  144@ == 1
+goto_if_false @TAXIODD_1756
+39@ = 20
+goto @TAXIODD_1829
+
+:TAXIODD_1756
+gosub @TAXIODD_3350
+if 
+  133@ == 0
+goto_if_false @TAXIODD_1795
+39@ = 1
+goto @TAXIODD_1829
+
+:TAXIODD_1795
+Text.PrintNow('TX_JUNK', $g_Taxiodd_timerKM, 1)
+139@ = 1
+Hud.FreezeTimer(False)
+39@ = 10
+
+:TAXIODD_1829
+if 
+  133@ == 1
+goto_if_false @TAXIODD_1966
+if 
+  134@ == 0
+goto_if_false @TAXIODD_1879
+gosub @TAXIODD_3392
+goto @TAXIODD_1966
+
+:TAXIODD_1879
+gosub @TAXIODD_3350
+if 
+  133@ == 0
+goto_if_false @TAXIODD_1966
+gosub @TAXIODD_3392
+Text.ClearThisPrint('TX_JUNK')
+$g_Taxiodd_timerKM += 10000
+if 
+  139@ == 1
+goto_if_false @TAXIODD_1959
+Hud.FreezeTimer(True)
+139@ = 0
+
+:TAXIODD_1959
+39@ = 0
+
+:TAXIODD_1966
+if 
+  39@ == 1
+goto_if_false @TAXIODD_2071
+gosub @TAXIODD_4416
+if 
+  128@ == 1
+goto_if_false @TAXIODD_2071
+if 
+  130@ == 0
+goto_if_false @TAXIODD_2060
+$g_Taxiodd_timerKM = 36000
+Hud.DisplayTimerWithString($g_Taxiodd_timerKM, TimerDirection.Down, 'TX_TIME')
+130@ = 1
+
+:TAXIODD_2060
+Hud.FreezeTimer(False)
+39@ = 2
+
+:TAXIODD_2071
+if 
+  39@ == 2
+goto_if_false @TAXIODD_2167
+if 
+  not Char.IsDead(88@)
+goto_if_false @TAXIODD_2167
+if 
+  Char.IsInCar(88@, 89@)
+goto_if_false @TAXIODD_2167
+Blip.Remove(96@)
+Char.ClearLookAt(88@)
+Car.SetTaxiLights(89@, False)
+116@ = Char.SetSayContext(88@, 224)
+117@ = Car.GetHealth(89@)
+39@ = 99
+
+:TAXIODD_2167
+if 
+  39@ == 10
+goto_if_false @TAXIODD_2185
+
+:TAXIODD_2185
+if 
+  39@ == 20
+goto_if_false @TAXIODD_2243
+if 
+  is_int_lvar_greater_than_int_lvar 47@ > 106@
+goto_if_false @TAXIODD_2243
+144@ = 0
+106@ = 0
+39@ = 0
+
+:TAXIODD_2243
+gosub @TAXIODD_4917
+if 
+  39@ == 99
+goto_if_false @TAXIODD_2275
+gosub @TAXIODD_17893
+
+:TAXIODD_2275
+return 
+
+:TAXIODD_2277
+if 
+  39@ == 0
+goto_if_false @TAXIODD_2368
+gosub @TAXIODD_7029
+Hud.FreezeTimer(False)
+131@ = 0
+102@ = 0
+136@ = 0
+if 
+  143@ == 0
+goto_if_false @TAXIODD_2361
+set_lvar_int_to_lvar_int 105@ = 47@
+105@ += 5000
+
+:TAXIODD_2361
+39@ += 1
+
+:TAXIODD_2368
+if 
+  Char.IsDead(88@)
+goto_if_false @TAXIODD_2391
+126@ = 1
+
+:TAXIODD_2391
+if and
+  not Char.IsInCar(88@, 89@)
+  131@ == 0
+goto_if_false @TAXIODD_2424
+126@ = 1
+
+:TAXIODD_2424
+gosub @TAXIODD_3350
+if 
+  133@ == 1
+goto_if_false @TAXIODD_2497
+if 
+  134@ == 0
+goto_if_false @TAXIODD_2490
+Text.PrintNow('TX_REP', 6000, 1)
+gosub @TAXIODD_3392
+
+:TAXIODD_2490
+goto @TAXIODD_2522
+
+:TAXIODD_2497
+if 
+  134@ == 1
+goto_if_false @TAXIODD_2522
+gosub @TAXIODD_3392
+
+:TAXIODD_2522
+if 
+  39@ == 1
+goto_if_false @TAXIODD_2639
+if 
+  Char.LocateInCar3D(88@, 121@, 122@, 123@, 4.0, 4.0, 4.0, True)
+goto_if_false @TAXIODD_2639
+if and
+  Char.IsInCar(88@, 89@)
+  Char.IsInCar($scplayer, 89@)
+goto_if_false @TAXIODD_2639
+Player.SetControl($player1, False)
+Blip.Remove(97@)
+131@ = 1
+Hud.FreezeTimer(True)
+39@ += 1
+
+:TAXIODD_2639
+if 
+  39@ == 2
+goto_if_false @TAXIODD_2714
+if 
+  Car.IsStopped(89@)
+goto_if_false @TAXIODD_2714
+if 
+  Char.IsInCar(88@, 89@)
+goto_if_false @TAXIODD_2700
+Task.LeaveCarImmediately(88@, 89@)
+
+:TAXIODD_2700
+gosub @TAXIODD_18204
+39@ += 1
+
+:TAXIODD_2714
+if 
+  39@ == 3
+goto_if_false @TAXIODD_2777
+if 
+  not Char.IsInCar(88@, 89@)
+goto_if_false @TAXIODD_2777
+Char.MarkAsNoLongerNeeded(88@)
+146@ -= 1
+Player.SetControl($player1, True)
+39@ = 99
+
+:TAXIODD_2777
+if 
+  131@ == 0
+goto_if_false @TAXIODD_2802
+gosub @TAXIODD_6778
+
+:TAXIODD_2802
+if 
+  143@ == 0
+goto_if_false @TAXIODD_2857
+if 
+  is_int_lvar_greater_than_int_lvar 47@ > 105@
+goto_if_false @TAXIODD_2857
+Text.PrintHelp('TX_TIP')
+143@ = 1
+
+:TAXIODD_2857
+if 
+  39@ == 99
+goto_if_false @TAXIODD_2882
+gosub @TAXIODD_17893
+
+:TAXIODD_2882
+return 
+
+:TAXIODD_2884
+if 
+  Char.IsInTaxi($scplayer)
+goto_if_false @TAXIODD_2947
+if 
+  127@ <> 1
+goto_if_false @TAXIODD_2940
+89@ = Char.StoreCarIsIn($scplayer)
+127@ = 1
+gosub @TAXIODD_2956
+
+:TAXIODD_2940
+goto @TAXIODD_2954
+
+:TAXIODD_2947
+127@ = 0
+
+:TAXIODD_2954
+return 
+
+:TAXIODD_2956
+51@ = 0
+90@(51@,4i) = Object.Create(#CR_AMMOBOX, 0.0, 0.0, 0.0)
+Object.SetCollision(90@(51@,4i), False)
+Object.SetVisible(90@(51@,4i), False)
+Object.AttachToCar(90@(51@,4i), 89@, 0.0, 2.3, 0.0, 0.0, 0.0, 0.0)
+51@ = 1
+90@(51@,4i) = Object.Create(#CR_AMMOBOX, 0.0, 0.0, 0.0)
+Object.SetCollision(90@(51@,4i), False)
+Object.SetVisible(90@(51@,4i), False)
+Object.AttachToCar(90@(51@,4i), 89@, 0.0, -2.6, 0.0, 0.0, 0.0, 0.0)
+51@ = 2
+90@(51@,4i) = Object.Create(#CR_AMMOBOX, 0.0, 0.0, 0.0)
+Object.SetCollision(90@(51@,4i), False)
+Object.SetVisible(90@(51@,4i), False)
+Object.AttachToCar(90@(51@,4i), 89@, -1.0, -1.0, 0.0, 0.0, 0.0, 0.0)
+51@ = 3
+90@(51@,4i) = Object.Create(#CR_AMMOBOX, 0.0, 0.0, 0.0)
+Object.SetCollision(90@(51@,4i), False)
+Object.SetVisible(90@(51@,4i), False)
+Object.AttachToCar(90@(51@,4i), 89@, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0)
+return 
+
+:TAXIODD_3350
+if 
+  Car.IsHealthGreater(89@, 400)
+goto_if_false @TAXIODD_3383
+133@ = 0
+goto @TAXIODD_3390
+
+:TAXIODD_3383
+133@ = 1
+
+:TAXIODD_3390
+return 
+
+:TAXIODD_3392
+if 
+  134@ == 1
+goto_if_false @TAXIODD_3456
+49@ = 0
+
+:TAXIODD_3417
+Blip.Remove(98@(49@,3i))
+49@ += 1
+  49@ >= 3
+goto_if_false @TAXIODD_3417
+134@ = 0
+return 
+
+:TAXIODD_3456
+if 
+  Char.IsInZone($scplayer, 'LA')
+goto_if_false @TAXIODD_3523
+51@ = 0
+gosub @TAXIODD_3903
+51@ += 1
+gosub @TAXIODD_3960
+51@ += 1
+gosub @TAXIODD_4245
+
+:TAXIODD_3523
+if 
+  Char.IsInZone($scplayer, 'VE')
+goto_if_false @TAXIODD_3562
+51@ = 0
+gosub @TAXIODD_4131
+
+:TAXIODD_3562
+if 
+  Char.IsInZone($scplayer, 'SF')
+goto_if_false @TAXIODD_3615
+51@ = 0
+gosub @TAXIODD_4188
+51@ += 1
+gosub @TAXIODD_4302
+
+:TAXIODD_3615
+if 
+  Char.IsInZone($scplayer, 'RED')
+goto_if_false @TAXIODD_3668
+51@ = 0
+gosub @TAXIODD_4017
+51@ += 1
+gosub @TAXIODD_4245
+
+:TAXIODD_3668
+if 
+  Char.IsInZone($scplayer, 'FLINTC')
+goto_if_false @TAXIODD_3735
+51@ = 0
+gosub @TAXIODD_3960
+51@ += 1
+gosub @TAXIODD_4017
+51@ += 1
+gosub @TAXIODD_4302
+
+:TAXIODD_3735
+if 
+  Char.IsInZone($scplayer, 'WHET')
+goto_if_false @TAXIODD_3802
+51@ = 0
+gosub @TAXIODD_3960
+51@ += 1
+gosub @TAXIODD_4017
+51@ += 1
+gosub @TAXIODD_4302
+
+:TAXIODD_3802
+if 
+  Char.IsInZone($scplayer, 'ROBAD')
+goto_if_false @TAXIODD_3841
+51@ = 0
+gosub @TAXIODD_4074
+
+:TAXIODD_3841
+if 
+  Char.IsInZone($scplayer, 'BONE')
+goto_if_false @TAXIODD_3894
+51@ = 0
+gosub @TAXIODD_4074
+51@ += 1
+gosub @TAXIODD_4131
+
+:TAXIODD_3894
+134@ = 1
+return 
+
+:TAXIODD_3903
+if 
+  Blip.DoesExist(98@(51@,3i))
+goto_if_false @TAXIODD_3932
+Blip.Remove(98@(51@,3i))
+
+:TAXIODD_3932
+98@(51@,3i) = Blip.AddSpriteForCoord(63, 2067.4, -1831.2, 13.5)
+return 
+
+:TAXIODD_3960
+if 
+  Blip.DoesExist(98@(51@,3i))
+goto_if_false @TAXIODD_3989
+Blip.Remove(98@(51@,3i))
+
+:TAXIODD_3989
+98@(51@,3i) = Blip.AddSpriteForCoord(63, 488.0, -1734.0, 34.4)
+return 
+
+:TAXIODD_4017
+if 
+  Blip.DoesExist(98@(51@,3i))
+goto_if_false @TAXIODD_4046
+Blip.Remove(98@(51@,3i))
+
+:TAXIODD_4046
+98@(51@,3i) = Blip.AddSpriteForCoord(63, 720.016, -454.625, 15.328)
+return 
+
+:TAXIODD_4074
+if 
+  Blip.DoesExist(98@(51@,3i))
+goto_if_false @TAXIODD_4103
+Blip.Remove(98@(51@,3i))
+
+:TAXIODD_4103
+98@(51@,3i) = Blip.AddSpriteForCoord(63, -1420.547, 2583.945, 58.031)
+return 
+
+:TAXIODD_4131
+if 
+  Blip.DoesExist(98@(51@,3i))
+goto_if_false @TAXIODD_4160
+Blip.Remove(98@(51@,3i))
+
+:TAXIODD_4160
+98@(51@,3i) = Blip.AddSpriteForCoord(63, 1966.532, 2162.65, 10.995)
+return 
+
+:TAXIODD_4188
+if 
+  Blip.DoesExist(98@(51@,3i))
+goto_if_false @TAXIODD_4217
+Blip.Remove(98@(51@,3i))
+
+:TAXIODD_4217
+98@(51@,3i) = Blip.AddSpriteForCoord(63, -2425.46, 1020.83, 49.39)
+return 
+
+:TAXIODD_4245
+if 
+  Blip.DoesExist(98@(51@,3i))
+goto_if_false @TAXIODD_4274
+Blip.Remove(98@(51@,3i))
+
+:TAXIODD_4274
+98@(51@,3i) = Blip.AddSpriteForCoord(63, 1021.8, -1018.7, 30.9)
+return 
+
+:TAXIODD_4302
+if 
+  Blip.DoesExist(98@(51@,3i))
+goto_if_false @TAXIODD_4331
+Blip.Remove(98@(51@,3i))
+
+:TAXIODD_4331
+98@(51@,3i) = Blip.AddSpriteForCoord(63, -1908.9, 292.3, 40.0)
+return 
+if 
+  Blip.DoesExist(98@(51@,3i))
+goto_if_false @TAXIODD_4388
+Blip.Remove(98@(51@,3i))
+
+:TAXIODD_4388
+98@(51@,3i) = Blip.AddSpriteForCoord(63, -103.6, 1112.4, 18.7)
+return 
+
+:TAXIODD_4416
+if 
+  is_int_lvar_greater_than_int_lvar 47@ > 102@
+goto_if_false @TAXIODD_4531
+if 
+  136@ == 0
+goto_if_false @TAXIODD_4499
+Text.PrintNow('TX_NONE', 6000, 1)
+set_lvar_int_to_lvar_int 102@ = 47@
+102@ += 5000
+137@ = 1
+goto @TAXIODD_4531
+
+:TAXIODD_4499
+Text.PrintNow('TX_PKUP', 6000, 1)
+set_lvar_int_to_lvar_int 102@ = 47@
+102@ += 5000
+
+:TAXIODD_4531
+88@ = Zone.GetRandomChar('SAN_AND', True, False, 1)
+if 
+  88@ == -1
+goto_if_false @TAXIODD_4571
+return 
+
+:TAXIODD_4571
+146@ += 1
+if or
+  Char.IsDead(88@)
+  Char.IsInAnyCar(88@)
+  Char.HasBeenDamagedByChar(88@, $scplayer)
+goto_if_false @TAXIODD_4621
+Char.MarkAsNoLongerNeeded(88@)
+146@ -= 1
+return 
+
+:TAXIODD_4621
+94@ = Char.GetModel(88@)
+if 
+  is_int_lvar_equal_to_int_lvar 94@ == 95@
+goto_if_false @TAXIODD_4662
+Char.MarkAsNoLongerNeeded(88@)
+146@ -= 1
+return 
+
+:TAXIODD_4662
+58@, 59@, 60@ = Char.GetCoordinates(88@)
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 58@, 59@, 60@, 88.0, 88.0, 19.0)
+goto_if_false @TAXIODD_4732
+Char.MarkAsNoLongerNeeded(88@)
+146@ -= 1
+return 
+
+:TAXIODD_4732
+136@ = 1
+if 
+  137@ == 1
+goto_if_false @TAXIODD_4796
+Text.PrintNow('TX_PKUP', 6000, 1)
+set_lvar_int_to_lvar_int 102@ = 47@
+102@ += 5000
+137@ = 0
+
+:TAXIODD_4796
+Char.ClearTasksImmediately(88@)
+Char.SetDecisionMaker(88@, 101@)
+Task.StandStill(88@, -2)
+145@ = 0
+gosub @TAXIODD_6172
+if 
+  Blip.DoesExist(96@)
+goto_if_false @TAXIODD_4851
+Blip.Remove(96@)
+
+:TAXIODD_4851
+96@ = Blip.AddForChar(88@)
+Blip.SetAsFriendly(96@, True)
+118@, 119@, 120@ = Char.GetCoordinates($scplayer)
+118@ += 4.0
+119@ += 4.0
+set_lvar_int_to_lvar_int 95@ = 94@
+128@ = 1
+return 
+
+:TAXIODD_4917
+if 
+  128@ == 0
+goto_if_false @TAXIODD_4937
+return 
+
+:TAXIODD_4937
+if 
+  is_int_lvar_greater_than_int_lvar 47@ > 102@
+goto_if_false @TAXIODD_4988
+Text.PrintNow('TX_PKUP', 6000, 1)
+set_lvar_int_to_lvar_int 102@ = 47@
+102@ += 5000
+
+:TAXIODD_4988
+83@ = 0
+84@ = 1
+if or
+  Char.IsDead(88@)
+  Char.HasBeenDamagedByChar(88@, $scplayer)
+goto_if_false @TAXIODD_5072
+83@ = 1
+84@ = 0
+Text.PrintNow('TX_OOPS', 6000, 1)
+set_lvar_int_to_lvar_int 102@ = 47@
+102@ += 5000
+
+:TAXIODD_5072
+if 
+  Car.IsDead(89@)
+goto_if_false @TAXIODD_5095
+83@ = 1
+
+:TAXIODD_5095
+if 
+  83@ == 0
+goto_if_false @TAXIODD_5139
+if 
+  not Char.IsInCar($scplayer, 89@)
+goto_if_false @TAXIODD_5139
+83@ = 1
+
+:TAXIODD_5139
+if 
+  83@ == 0
+goto_if_false @TAXIODD_5185
+58@, 59@, 60@ = Char.GetCoordinates($scplayer)
+61@, 62@, 63@ = Char.GetCoordinates(88@)
+
+:TAXIODD_5185
+if 
+  83@ == 0
+goto_if_false @TAXIODD_5252
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 61@, 62@, 63@, 90.0, 90.0, 20.0)
+goto_if_false @TAXIODD_5252
+83@ = 1
+
+:TAXIODD_5252
+if 
+  83@ == 1
+goto_if_false @TAXIODD_5399
+if 
+  84@ == 1
+goto_if_false @TAXIODD_5295
+102@ = 0
+
+:TAXIODD_5295
+128@ = 0
+138@ = 0
+Blip.Remove(96@)
+if 
+  133@ == 1
+goto_if_false @TAXIODD_5346
+39@ = 10
+goto @TAXIODD_5353
+
+:TAXIODD_5346
+39@ = 1
+
+:TAXIODD_5353
+if 
+  not Char.IsDead(88@)
+goto_if_false @TAXIODD_5381
+Char.ClearLookAt(88@)
+gosub @TAXIODD_6415
+
+:TAXIODD_5381
+Char.MarkAsNoLongerNeeded(88@)
+146@ -= 1
+Hud.FreezeTimer(False)
+return 
+
+:TAXIODD_5399
+if and
+  Char.IsInCar($scplayer, 89@)
+  Char.LocateStoppedInCar3D($scplayer, 61@, 62@, 63@, 10.0, 10.0, 3.0, False)
+goto_if_false @TAXIODD_5718
+if 
+  129@ == 0
+goto_if_false @TAXIODD_5556
+gosub @TAXIODD_3350
+if 
+  133@ == 1
+goto_if_false @TAXIODD_5515
+Text.PrintNow('TX_JUNK', 5000, 1)
+goto @TAXIODD_5295
+
+:TAXIODD_5515
+gosub @TAXIODD_6415
+set_lvar_int_to_lvar_int 107@ = 47@
+107@ += 300
+129@ = 1
+Hud.FreezeTimer(True)
+goto @TAXIODD_5709
+
+:TAXIODD_5556
+if 
+  107@ > 0
+goto_if_false @TAXIODD_5636
+if 
+  is_int_lvar_greater_than_int_lvar 47@ > 107@
+goto_if_false @TAXIODD_5636
+42@ = Char.GetScriptTaskStatus(88@, 2586)
+if 
+  is_int_lvar_equal_to_constant 42@ == 7
+goto_if_false @TAXIODD_5636
+gosub @TAXIODD_6453
+107@ = 0
+
+:TAXIODD_5636
+if 
+  107@ == 0
+goto_if_false @TAXIODD_5709
+if 
+  not Char.IsInCar(88@, 89@)
+goto_if_false @TAXIODD_5709
+42@ = Char.GetScriptTaskStatus(88@, 1482)
+if 
+  is_int_lvar_equal_to_constant 42@ == 7
+goto_if_false @TAXIODD_5709
+gosub @TAXIODD_6453
+
+:TAXIODD_5709
+return 
+goto @TAXIODD_5831
+
+:TAXIODD_5718
+if 
+  129@ == 1
+goto_if_false @TAXIODD_5824
+if 
+  Char.IsInCar($scplayer, 89@)
+goto_if_false @TAXIODD_5822
+if 
+  not Char.LocateInCar3D($scplayer, 61@, 62@, 63@, 10.0, 10.0, 3.0, False)
+goto_if_false @TAXIODD_5822
+gosub @TAXIODD_6172
+Task.StandStill(88@, -2)
+129@ = 0
+Hud.FreezeTimer(False)
+
+:TAXIODD_5822
+return 
+
+:TAXIODD_5824
+107@ = 0
+
+:TAXIODD_5831
+if 
+  not Char.IsInAnyCar(88@)
+goto_if_false @TAXIODD_5893
+42@ = Char.GetScriptTaskStatus(88@, 1471)
+if and
+  not is_int_lvar_equal_to_constant 42@ == 1
+  not is_int_lvar_equal_to_constant 42@ == 0
+goto_if_false @TAXIODD_5893
+Task.LookAtChar(88@, $scplayer, -2)
+
+:TAXIODD_5893
+if 
+  not Char.IsInAnyCar(88@)
+goto_if_false @TAXIODD_6072
+42@ = Char.GetScriptTaskStatus(88@, 1492)
+if and
+  not is_int_lvar_equal_to_constant 42@ == 1
+  not is_int_lvar_equal_to_constant 42@ == 0
+goto_if_false @TAXIODD_6072
+82@ = Math.GetDistanceBetweenCoords3D(58@, 59@, 60@, 118@, 119@, 120@)
+if 
+  82@ > 4.0
+goto_if_false @TAXIODD_6072
+set_lvar_float_to_lvar_float 74@ = 58@
+set_lvar_float_to_lvar_float 75@ = 59@
+set_lvar_float_to_lvar_float 77@ = 61@
+set_lvar_float_to_lvar_float 78@ = 62@
+set_lvar_float_to_lvar_float 58@ = 74@
+sub_float_lvar_from_float_lvar 58@ -= 77@
+set_lvar_float_to_lvar_float 59@ = 75@
+sub_float_lvar_from_float_lvar 59@ -= 78@
+73@ = Math.GetHeadingFromVector2D(58@, 59@)
+Task.AchieveHeading(88@, 73@)
+
+:TAXIODD_6072
+if 
+  145@ == 0
+goto_if_false @TAXIODD_6170
+if 
+  129@ == 0
+goto_if_false @TAXIODD_6170
+82@ = Math.GetDistanceBetweenCoords3D(58@, 59@, 60@, 61@, 62@, 63@)
+if 
+  10.0 > 82@
+goto_if_false @TAXIODD_6170
+116@ = Char.SetSayContext(88@, 222)
+145@ = 1
+
+:TAXIODD_6170
+return 
+
+:TAXIODD_6172
+140@ = 0
+gosub @TAXIODD_6518
+141@ = 0
+gosub @TAXIODD_6648
+83@ = 0
+if 
+  140@ == 1
+goto_if_false @TAXIODD_6271
+if 
+  141@ == 1
+goto_if_false @TAXIODD_6257
+83@ = 0
+goto @TAXIODD_6264
+
+:TAXIODD_6257
+83@ = 1
+
+:TAXIODD_6264
+goto @TAXIODD_6310
+
+:TAXIODD_6271
+if 
+  141@ == 1
+goto_if_false @TAXIODD_6303
+83@ = 1
+goto @TAXIODD_6310
+
+:TAXIODD_6303
+83@ = 0
+
+:TAXIODD_6310
+if 
+  83@ == 1
+goto_if_false @TAXIODD_6375
+Task.PlayAnimSecondary(88@, "HIKER_POSE_L", "MISC", 4.0, False, False, False, True, -1)
+goto @TAXIODD_6413
+
+:TAXIODD_6375
+Task.PlayAnimSecondary(88@, "HIKER_POSE", "MISC", 4.0, False, False, False, True, -1)
+
+:TAXIODD_6413
+return 
+
+:TAXIODD_6415
+Task.PlayAnimSecondary(88@, "ROADCROSS", "PED", 4.0, False, False, False, False, 100)
+return 
+
+:TAXIODD_6453
+140@ = 0
+gosub @TAXIODD_6518
+if 
+  140@ == 1
+goto_if_false @TAXIODD_6504
+Task.EnterCarAsPassenger(88@, 89@, 2, -2)
+goto @TAXIODD_6516
+
+:TAXIODD_6504
+Task.EnterCarAsPassenger(88@, 89@, 1, -2)
+
+:TAXIODD_6516
+return 
+
+:TAXIODD_6518
+58@, 59@, 60@ = Char.GetCoordinates(88@)
+61@, 62@, 63@ = Object.GetCoordinates(92@)
+64@, 65@, 66@ = Object.GetCoordinates(93@)
+80@ = Math.GetDistanceBetweenCoords3D(58@, 59@, 60@, 61@, 62@, 63@)
+81@ = Math.GetDistanceBetweenCoords3D(58@, 59@, 60@, 64@, 65@, 66@)
+if 
+  is_float_lvar_greater_than_float_lvar 81@ > 80@
+goto_if_false @TAXIODD_6639
+140@ = 0
+goto @TAXIODD_6646
+
+:TAXIODD_6639
+140@ = 1
+
+:TAXIODD_6646
+return 
+
+:TAXIODD_6648
+58@, 59@, 60@ = Char.GetCoordinates(88@)
+61@, 62@, 63@ = Object.GetCoordinates(90@)
+64@, 65@, 66@ = Object.GetCoordinates(91@)
+80@ = Math.GetDistanceBetweenCoords3D(58@, 59@, 60@, 61@, 62@, 63@)
+81@ = Math.GetDistanceBetweenCoords3D(58@, 59@, 60@, 64@, 65@, 66@)
+if 
+  is_float_lvar_greater_than_float_lvar 81@ > 80@
+goto_if_false @TAXIODD_6769
+141@ = 1
+goto @TAXIODD_6776
+
+:TAXIODD_6769
+141@ = 0
+
+:TAXIODD_6776
+return 
+
+:TAXIODD_6778
+if 
+  132@ == 0
+goto_if_false @TAXIODD_6798
+return 
+
+:TAXIODD_6798
+if 
+  is_int_lvar_greater_than_int_lvar 47@ > 104@
+goto_if_false @TAXIODD_6838
+Hud.ClearCounter($g_Taxiodd_bonusKM)
+132@ = 0
+$g_Taxiodd_bonusKM = 0
+return 
+
+:TAXIODD_6838
+51@ = Car.GetHealth(89@)
+if 
+  is_int_lvar_greater_than_int_lvar 51@ > 117@
+goto_if_false @TAXIODD_6880
+set_lvar_int_to_lvar_int 117@ = 51@
+goto @TAXIODD_6939
+
+:TAXIODD_6880
+if 
+  is_int_lvar_greater_than_int_lvar 117@ > 51@
+goto_if_false @TAXIODD_6939
+set_lvar_int_to_lvar_int 52@ = 117@
+sub_int_lvar_from_int_lvar 52@ -= 51@
+set_lvar_int_to_lvar_int 117@ = 51@
+52@ *= 180
+sub_int_lvar_from_int_lvar 104@ -= 52@
+
+:TAXIODD_6939
+set_lvar_int_to_lvar_int 51@ = 104@
+sub_int_lvar_from_int_lvar 51@ -= 103@
+set_lvar_int_to_lvar_int 52@ = 47@
+sub_int_lvar_from_int_lvar 52@ -= 103@
+set_var_int_to_lvar_int $g_Taxiodd_bonusKM = 51@
+sub_int_lvar_from_int_var $g_Taxiodd_bonusKM -= 52@
+$g_Taxiodd_bonusKM *= 100
+div_int_var_by_int_lvar $g_Taxiodd_bonusKM /= 51@
+if 
+  0 > $g_Taxiodd_bonusKM
+goto_if_false @TAXIODD_7027
+$g_Taxiodd_bonusKM = 0
+
+:TAXIODD_7027
+return 
+
+:TAXIODD_7029
+if 
+  Char.IsDead(88@)
+goto_if_false @TAXIODD_7047
+return 
+
+:TAXIODD_7047
+set_lvar_int_to_lvar_int 112@ = 113@
+113@ = 0
+110@ = -1
+gosub @TAXIODD_7670
+58@, 59@, 60@ = Char.GetCoordinates(88@)
+set_lvar_float_to_lvar_float 67@ = 58@
+sub_float_lvar_from_float_lvar 67@ -= 121@
+set_lvar_float_to_lvar_float 68@ = 59@
+sub_float_lvar_from_float_lvar 68@ -= 122@
+set_lvar_float_to_lvar_float 70@ = 67@
+mult_float_lvar_by_float_lvar 70@ *= 67@
+set_lvar_float_to_lvar_float 71@ = 68@
+mult_float_lvar_by_float_lvar 71@ *= 68@
+set_lvar_float_to_lvar_float 80@ = 70@
+add_float_lvar_to_float_lvar 80@ += 71@
+81@ = Math.Sqrt(80@)
+cset_lvar_int_to_lvar_float 111@ = float 81@
+if 
+  200 > 111@
+goto_if_false @TAXIODD_7212
+goto @TAXIODD_7029
+
+:TAXIODD_7212
+set_lvar_int_to_lvar_int 51@ = 111@
+if 
+  $g_Taxiodd_faresKM == 0
+goto_if_false @TAXIODD_7245
+51@ *= 100
+
+:TAXIODD_7245
+if 
+  $g_Taxiodd_faresKM == 1
+goto_if_false @TAXIODD_7270
+51@ *= 95
+
+:TAXIODD_7270
+if 
+  $g_Taxiodd_faresKM == 2
+goto_if_false @TAXIODD_7295
+51@ *= 80
+
+:TAXIODD_7295
+if 
+  $g_Taxiodd_faresKM == 3
+goto_if_false @TAXIODD_7320
+51@ *= 79
+
+:TAXIODD_7320
+if 
+  $g_Taxiodd_faresKM == 4
+goto_if_false @TAXIODD_7345
+51@ *= 78
+
+:TAXIODD_7345
+if 
+  $g_Taxiodd_faresKM == 5
+goto_if_false @TAXIODD_7370
+51@ *= 76
+
+:TAXIODD_7370
+if and
+  $g_Taxiodd_faresKM > 5
+  10 >= $g_Taxiodd_faresKM
+goto_if_false @TAXIODD_7402
+51@ *= 75
+
+:TAXIODD_7402
+if and
+  $g_Taxiodd_faresKM > 10
+  20 >= $g_Taxiodd_faresKM
+goto_if_false @TAXIODD_7434
+51@ *= 70
+
+:TAXIODD_7434
+if and
+  $g_Taxiodd_faresKM > 20
+  50 >= $g_Taxiodd_faresKM
+goto_if_false @TAXIODD_7466
+51@ *= 65
+
+:TAXIODD_7466
+if 
+  $g_Taxiodd_faresKM > 50
+goto_if_false @TAXIODD_7491
+51@ *= 60
+
+:TAXIODD_7491
+add_int_lvar_to_int_var $g_Taxiodd_timerKM += 51@
+set_lvar_int_to_lvar_int 52@ = 112@
+52@ *= 500
+add_int_lvar_to_int_var $g_Taxiodd_timerKM += 52@
+add_int_lvar_to_int_lvar 51@ += 52@
+set_lvar_int_to_lvar_int 52@ = 113@
+52@ *= 1000
+add_int_lvar_to_int_var $g_Taxiodd_timerKM += 52@
+add_int_lvar_to_int_lvar 51@ += 52@
+set_lvar_int_to_lvar_int 103@ = 47@
+set_lvar_int_to_lvar_int 104@ = 51@
+104@ *= 95
+104@ /= 100
+add_int_lvar_to_int_lvar 104@ += 47@
+$g_Taxiodd_bonusKM = 0
+Hud.DisplayNthCounterWithString($g_Taxiodd_bonusKM, CounterDisplay.Bar, 3, 'TX_ADDS')
+132@ = 1
+if 
+  Blip.DoesExist(97@)
+goto_if_false @TAXIODD_7654
+Blip.Remove(97@)
+
+:TAXIODD_7654
+97@ = Blip.AddForCoord(121@, 122@, 123@)
+return 
+
+:TAXIODD_7670
+if 
+  Char.IsInZone($scplayer, 'LA')
+goto_if_false @TAXIODD_7702
+gosub @TAXIODD_8407
+
+:TAXIODD_7702
+if 
+  Char.IsInZone($scplayer, 'VE')
+goto_if_false @TAXIODD_7734
+gosub @TAXIODD_10663
+
+:TAXIODD_7734
+if 
+  Char.IsInZone($scplayer, 'SF')
+goto_if_false @TAXIODD_7766
+gosub @TAXIODD_13606
+
+:TAXIODD_7766
+if 
+  Char.IsInZone($scplayer, 'RED')
+goto_if_false @TAXIODD_7891
+51@ = Math.RandomIntInRange(0, 2)
+switch_start 51@ total_jumps 2 default_jump 0 @TAXIODD_7891 jumps 0 @TAXIODD_7863 1 @TAXIODD_7877 -1 @TAXIODD_7891 -1 @TAXIODD_7891 -1 @TAXIODD_7891 -1 @TAXIODD_7891 -1 @TAXIODD_7891
+
+:TAXIODD_7863
+gosub @TAXIODD_15463
+goto @TAXIODD_7891
+
+:TAXIODD_7877
+gosub @TAXIODD_8407
+goto @TAXIODD_7891
+
+:TAXIODD_7891
+if 
+  Char.IsInZone($scplayer, 'FLINTC')
+goto_if_false @TAXIODD_8030
+51@ = Math.RandomIntInRange(0, 3)
+switch_start 51@ total_jumps 3 default_jump 0 @TAXIODD_8030 jumps 0 @TAXIODD_7988 1 @TAXIODD_8002 2 @TAXIODD_8016 -1 @TAXIODD_8030 -1 @TAXIODD_8030 -1 @TAXIODD_8030 -1 @TAXIODD_8030
+
+:TAXIODD_7988
+gosub @TAXIODD_15561
+goto @TAXIODD_8030
+
+:TAXIODD_8002
+gosub @TAXIODD_8407
+goto @TAXIODD_8030
+
+:TAXIODD_8016
+gosub @TAXIODD_13606
+goto @TAXIODD_8030
+
+:TAXIODD_8030
+if 
+  Char.IsInZone($scplayer, 'WHET')
+goto_if_false @TAXIODD_8155
+51@ = Math.RandomIntInRange(0, 2)
+switch_start 51@ total_jumps 2 default_jump 0 @TAXIODD_8155 jumps 0 @TAXIODD_8127 1 @TAXIODD_8141 -1 @TAXIODD_8155 -1 @TAXIODD_8155 -1 @TAXIODD_8155 -1 @TAXIODD_8155 -1 @TAXIODD_8155
+
+:TAXIODD_8127
+gosub @TAXIODD_15661
+goto @TAXIODD_8155
+
+:TAXIODD_8141
+gosub @TAXIODD_13606
+goto @TAXIODD_8155
+
+:TAXIODD_8155
+if 
+  Char.IsInZone($scplayer, 'ROBAD')
+goto_if_false @TAXIODD_8280
+51@ = Math.RandomIntInRange(0, 2)
+switch_start 51@ total_jumps 2 default_jump 0 @TAXIODD_8280 jumps 0 @TAXIODD_8252 1 @TAXIODD_8266 -1 @TAXIODD_8280 -1 @TAXIODD_8280 -1 @TAXIODD_8280 -1 @TAXIODD_8280 -1 @TAXIODD_8280
+
+:TAXIODD_8252
+gosub @TAXIODD_15758
+goto @TAXIODD_8280
+
+:TAXIODD_8266
+gosub @TAXIODD_13606
+goto @TAXIODD_8280
+
+:TAXIODD_8280
+if 
+  Char.IsInZone($scplayer, 'BONE')
+goto_if_false @TAXIODD_8405
+51@ = Math.RandomIntInRange(0, 2)
+switch_start 51@ total_jumps 2 default_jump 0 @TAXIODD_8405 jumps 0 @TAXIODD_8377 1 @TAXIODD_8391 -1 @TAXIODD_8405 -1 @TAXIODD_8405 -1 @TAXIODD_8405 -1 @TAXIODD_8405 -1 @TAXIODD_8405
+
+:TAXIODD_8377
+gosub @TAXIODD_16098
+goto @TAXIODD_8405
+
+:TAXIODD_8391
+gosub @TAXIODD_10663
+goto @TAXIODD_8405
+
+:TAXIODD_8405
+return 
+
+:TAXIODD_8407
+if 
+  34@ == 1
+goto_if_false @TAXIODD_8447
+set_lvar_int_to_lvar_int 110@ = 148@
+110@ += 1
+goto @TAXIODD_8456
+
+:TAXIODD_8447
+110@ = Math.RandomIntInRange(1, 35)
+
+:TAXIODD_8456
+switch_start 110@ total_jumps 34 default_jump 1 @TAXIODD_10544 jumps 1 @TAXIODD_8714 2 @TAXIODD_8767 3 @TAXIODD_8820 4 @TAXIODD_8873 5 @TAXIODD_8926 6 @TAXIODD_8979 7 @TAXIODD_9032
+switch_continued 8 @TAXIODD_9085 9 @TAXIODD_9138 10 @TAXIODD_9191 11 @TAXIODD_9244 12 @TAXIODD_9297 13 @TAXIODD_9350 14 @TAXIODD_9403 15 @TAXIODD_9456 16 @TAXIODD_9509
+switch_continued 17 @TAXIODD_9562 18 @TAXIODD_9622 19 @TAXIODD_9682 20 @TAXIODD_9742 21 @TAXIODD_9795 22 @TAXIODD_9848 23 @TAXIODD_9901 24 @TAXIODD_9954 25 @TAXIODD_10007
+switch_continued 26 @TAXIODD_10060 27 @TAXIODD_10113 28 @TAXIODD_10166 29 @TAXIODD_10219 30 @TAXIODD_10279 31 @TAXIODD_10332 32 @TAXIODD_10385 33 @TAXIODD_10438 34 @TAXIODD_10491
+
+:TAXIODD_8714
+Text.PrintNow('TX_LS1', 5000, 1)
+121@ = 2468.146
+122@ = -1736.184
+123@ = 12.3828
+goto @TAXIODD_10661
+
+:TAXIODD_8767
+Text.PrintNow('TX_LS2', 5000, 1)
+121@ = 2794.0
+122@ = -1828.0
+123@ = 10.0
+goto @TAXIODD_10661
+
+:TAXIODD_8820
+Text.PrintNow('TX_LS3', 5000, 1)
+121@ = 1884.193
+122@ = -1257.521
+123@ = 12.3984
+goto @TAXIODD_10661
+
+:TAXIODD_8873
+Text.PrintNow('TX_LS4', 5000, 1)
+121@ = 2317.48
+122@ = -1386.604
+123@ = 22.8784
+goto @TAXIODD_10661
+
+:TAXIODD_8926
+Text.PrintNow('TX_LS5', 5000, 1)
+121@ = 2237.76
+122@ = -1304.165
+123@ = 22.8488
+goto @TAXIODD_10661
+
+:TAXIODD_8979
+Text.PrintNow('TX_LS6', 5000, 1)
+121@ = 2221.087
+122@ = -1137.332
+123@ = 24.625
+goto @TAXIODD_10661
+
+:TAXIODD_9032
+Text.PrintNow('TX_LS7', 5000, 1)
+121@ = 2146.737
+122@ = -1179.795
+123@ = 22.8278
+goto @TAXIODD_10661
+
+:TAXIODD_9085
+Text.PrintNow('TX_LS8', 5000, 1)
+121@ = 2075.558
+122@ = -1202.793
+123@ = 22.7571
+goto @TAXIODD_10661
+
+:TAXIODD_9138
+Text.PrintNow('TX_LS9', 5000, 1)
+121@ = 2320.0
+122@ = -1655.0
+123@ = 14.0
+goto @TAXIODD_10661
+
+:TAXIODD_9191
+Text.PrintNow('TX_LS10', 5000, 1)
+121@ = 2455.0
+122@ = -1502.0
+123@ = 24.0
+goto @TAXIODD_10661
+
+:TAXIODD_9244
+Text.PrintNow('TX_LS11', 5000, 1)
+121@ = 2181.0
+122@ = -1771.0
+123@ = 13.0
+goto @TAXIODD_10661
+
+:TAXIODD_9297
+Text.PrintNow('TX_LS12', 5000, 1)
+121@ = 2084.731
+122@ = -1800.86
+123@ = 12.3828
+goto @TAXIODD_10661
+
+:TAXIODD_9350
+Text.PrintNow('TX_LS13', 5000, 1)
+121@ = 2078.015
+122@ = -1791.589
+123@ = 12.3828
+goto @TAXIODD_10661
+
+:TAXIODD_9403
+Text.PrintNow('TX_LS14', 5000, 1)
+121@ = 2081.287
+122@ = -1779.5
+123@ = 12.3828
+goto @TAXIODD_10661
+
+:TAXIODD_9456
+Text.PrintNow('TX_LS15', 5000, 1)
+121@ = 2418.542
+122@ = -2085.119
+123@ = 12.2928
+goto @TAXIODD_10661
+
+:TAXIODD_9509
+Text.PrintNow('TX_LS16', 5000, 1)
+121@ = 1742.689
+122@ = -1858.697
+123@ = 12.4185
+goto @TAXIODD_10661
+
+:TAXIODD_9562
+Text.PrintNow('TX_LS17', 5000, 1)
+121@ = 1668.0
+122@ = -2253.0
+123@ = 13.0
+113@ = 40
+goto @TAXIODD_10661
+
+:TAXIODD_9622
+Text.PrintNow('TX_LS18', 5000, 1)
+121@ = 1432.198
+122@ = -2274.648
+123@ = 12.3906
+113@ = 30
+goto @TAXIODD_10661
+
+:TAXIODD_9682
+Text.PrintNow('TX_LS19', 5000, 1)
+121@ = 1256.0
+122@ = -2028.0
+123@ = 60.0
+113@ = 30
+goto @TAXIODD_10661
+
+:TAXIODD_9742
+Text.PrintNow('TX_LS20', 5000, 1)
+121@ = 1532.789
+122@ = -1675.442
+123@ = 12.3828
+goto @TAXIODD_10661
+
+:TAXIODD_9795
+Text.PrintNow('TX_LS21', 5000, 1)
+121@ = 1472.35
+122@ = -1729.706
+123@ = 12.3828
+goto @TAXIODD_10661
+
+:TAXIODD_9848
+Text.PrintNow('TX_LS22', 5000, 1)
+121@ = 1855.419
+122@ = -1383.273
+123@ = 12.3984
+goto @TAXIODD_10661
+
+:TAXIODD_9901
+Text.PrintNow('TX_LS23', 5000, 1)
+121@ = 2025.0
+122@ = -1413.0
+123@ = 17.0
+goto @TAXIODD_10661
+
+:TAXIODD_9954
+Text.PrintNow('TX_LS24', 5000, 1)
+121@ = 1361.218
+122@ = -1277.904
+123@ = 12.3828
+goto @TAXIODD_10661
+
+:TAXIODD_10007
+Text.PrintNow('TX_LS25', 5000, 1)
+121@ = 1192.0
+122@ = -1324.0
+123@ = 13.0
+goto @TAXIODD_10661
+
+:TAXIODD_10060
+Text.PrintNow('TX_LS26', 5000, 1)
+121@ = 1031.066
+122@ = -1329.704
+123@ = 12.3861
+goto @TAXIODD_10661
+
+:TAXIODD_10113
+Text.PrintNow('TX_LS27', 5000, 1)
+121@ = 814.0
+122@ = -1330.0
+123@ = 13.0
+goto @TAXIODD_10661
+
+:TAXIODD_10166
+Text.PrintNow('TX_LS28', 5000, 1)
+121@ = 667.7637
+122@ = -1265.69
+123@ = 12.4687
+goto @TAXIODD_10661
+
+:TAXIODD_10219
+Text.PrintNow('TX_LS29', 5000, 1)
+121@ = 368.1992
+122@ = -2042.537
+123@ = 6.6582
+113@ = 30
+goto @TAXIODD_10661
+
+:TAXIODD_10279
+Text.PrintNow('TX_LS30', 5000, 1)
+121@ = 152.5806
+122@ = -1754.831
+123@ = 3.9518
+goto @TAXIODD_10661
+
+:TAXIODD_10332
+Text.PrintNow('TX_LS31', 5000, 1)
+121@ = 508.2797
+122@ = -1358.598
+123@ = 14.9532
+goto @TAXIODD_10661
+
+:TAXIODD_10385
+Text.PrintNow('TX_LS32', 5000, 1)
+121@ = 1199.846
+122@ = -933.0658
+123@ = 41.7332
+goto @TAXIODD_10661
+
+:TAXIODD_10438
+Text.PrintNow('TX_LS33', 5000, 1)
+121@ = 816.2869
+122@ = -1630.762
+123@ = 12.3906
+goto @TAXIODD_10661
+
+:TAXIODD_10491
+Text.PrintNow('TX_LS34', 5000, 1)
+121@ = 1311.97
+122@ = -1712.289
+123@ = 12.3906
+goto @TAXIODD_10661
+
+:TAXIODD_10544
+if 
+  34@ == 1
+goto_if_false @TAXIODD_10569
+110@ = 0
+
+:TAXIODD_10569
+write_debug "UNKNOWN_LOS_SANTOS_TAXI_DESTINATION"
+Text.PrintNow('TX_LS1', 5000, 1)
+121@ = 2468.146
+122@ = -1736.184
+123@ = 12.3828
+goto @TAXIODD_10661
+
+:TAXIODD_10661
+return 
+
+:TAXIODD_10663
+if 
+  34@ == 1
+goto_if_false @TAXIODD_10703
+set_lvar_int_to_lvar_int 110@ = 148@
+110@ += 1
+goto @TAXIODD_10712
+
+:TAXIODD_10703
+110@ = Math.RandomIntInRange(1, 46)
+
+:TAXIODD_10712
+switch_start 110@ total_jumps 45 default_jump 1 @TAXIODD_13485 jumps 1 @TAXIODD_11100 2 @TAXIODD_11153 3 @TAXIODD_11206 4 @TAXIODD_11259 5 @TAXIODD_11312 6 @TAXIODD_11365 7 @TAXIODD_11418
+switch_continued 8 @TAXIODD_11471 9 @TAXIODD_11524 10 @TAXIODD_11577 11 @TAXIODD_11630 12 @TAXIODD_11683 13 @TAXIODD_11736 14 @TAXIODD_11789 15 @TAXIODD_11842 16 @TAXIODD_11895
+switch_continued 17 @TAXIODD_11948 18 @TAXIODD_12001 19 @TAXIODD_12054 20 @TAXIODD_12107 21 @TAXIODD_12160 22 @TAXIODD_12213 23 @TAXIODD_12266 24 @TAXIODD_12319 25 @TAXIODD_12372
+switch_continued 26 @TAXIODD_12425 27 @TAXIODD_12478 28 @TAXIODD_12531 29 @TAXIODD_12584 30 @TAXIODD_12637 31 @TAXIODD_12690 32 @TAXIODD_12743 33 @TAXIODD_12796 34 @TAXIODD_12849
+switch_continued 35 @TAXIODD_12902 36 @TAXIODD_12955 37 @TAXIODD_13008 38 @TAXIODD_13061 39 @TAXIODD_13114 40 @TAXIODD_13167 41 @TAXIODD_13220 42 @TAXIODD_13273 43 @TAXIODD_13326
+switch_continued 44 @TAXIODD_13379 45 @TAXIODD_13432 -1 @TAXIODD_13604 -1 @TAXIODD_13604 -1 @TAXIODD_13604 -1 @TAXIODD_13604 -1 @TAXIODD_13604 -1 @TAXIODD_13604 -1 @TAXIODD_13604
+
+:TAXIODD_11100
+Text.PrintNow('TX_VE1', 5000, 1)
+121@ = 2491.378
+122@ = 2773.608
+123@ = 9.764
+goto @TAXIODD_13604
+
+:TAXIODD_11153
+Text.PrintNow('TX_VE2', 5000, 1)
+121@ = 2899.211
+122@ = 2435.624
+123@ = 9.764
+goto @TAXIODD_13604
+
+:TAXIODD_11206
+Text.PrintNow('TX_VE3', 5000, 1)
+121@ = 2220.495
+122@ = 1838.497
+123@ = 9.764
+goto @TAXIODD_13604
+
+:TAXIODD_11259
+Text.PrintNow('TX_VE4', 5000, 1)
+121@ = 2246.202
+122@ = 1896.591
+123@ = 9.764
+goto @TAXIODD_13604
+
+:TAXIODD_11312
+Text.PrintNow('TX_VE5', 5000, 1)
+121@ = 2127.307
+122@ = 2355.785
+123@ = 9.764
+goto @TAXIODD_13604
+
+:TAXIODD_11365
+Text.PrintNow('TX_VE6', 5000, 1)
+121@ = 2289.589
+122@ = 2415.939
+123@ = 9.7773
+goto @TAXIODD_13604
+
+:TAXIODD_11418
+Text.PrintNow('TX_VE7', 5000, 1)
+121@ = 2636.223
+122@ = 2344.803
+123@ = 9.764
+goto @TAXIODD_13604
+
+:TAXIODD_11471
+Text.PrintNow('TX_VE8', 5000, 1)
+121@ = 1439.0
+122@ = 754.0
+123@ = 9.764
+goto @TAXIODD_13604
+
+:TAXIODD_11524
+Text.PrintNow('TX_VE9', 5000, 1)
+121@ = 1095.619
+122@ = 1375.292
+123@ = 9.7977
+goto @TAXIODD_13604
+
+:TAXIODD_11577
+Text.PrintNow('TX_VE10', 5000, 1)
+121@ = 1162.077
+122@ = 1124.441
+123@ = 9.8125
+goto @TAXIODD_13604
+
+:TAXIODD_11630
+Text.PrintNow('TX_VE11', 5000, 1)
+121@ = 1710.624
+122@ = 1448.153
+123@ = 9.6643
+goto @TAXIODD_13604
+
+:TAXIODD_11683
+Text.PrintNow('TX_VE12', 5000, 1)
+121@ = 2490.384
+122@ = 2771.702
+123@ = 9.7964
+goto @TAXIODD_13604
+
+:TAXIODD_11736
+Text.PrintNow('TX_VE13', 5000, 1)
+121@ = 1465.187
+122@ = 2773.965
+123@ = 9.6875
+goto @TAXIODD_13604
+
+:TAXIODD_11789
+Text.PrintNow('TX_VE14', 5000, 1)
+121@ = 1436.145
+122@ = 2670.385
+123@ = 9.6797
+goto @TAXIODD_13604
+
+:TAXIODD_11842
+Text.PrintNow('TX_VE15', 5000, 1)
+121@ = 1486.472
+122@ = 2257.945
+123@ = 9.8128
+goto @TAXIODD_13604
+
+:TAXIODD_11895
+Text.PrintNow('TX_VE16', 5000, 1)
+121@ = 1694.188
+122@ = 2200.378
+123@ = 9.8203
+goto @TAXIODD_13604
+
+:TAXIODD_11948
+Text.PrintNow('TX_VE17', 5000, 1)
+121@ = 1744.656
+122@ = 2055.81
+123@ = 9.7309
+goto @TAXIODD_13604
+
+:TAXIODD_12001
+Text.PrintNow('TX_VE18', 5000, 1)
+121@ = 1840.554
+122@ = 2169.654
+123@ = 9.801
+goto @TAXIODD_13604
+
+:TAXIODD_12054
+Text.PrintNow('TX_VE19', 5000, 1)
+121@ = 1928.357
+122@ = 2434.31
+123@ = 9.813
+goto @TAXIODD_13604
+
+:TAXIODD_12107
+Text.PrintNow('TX_VE20', 5000, 1)
+121@ = 2424.123
+122@ = 2315.745
+123@ = 9.6797
+goto @TAXIODD_13604
+
+:TAXIODD_12160
+Text.PrintNow('TX_VE21', 5000, 1)
+121@ = 2431.154
+122@ = 2375.061
+123@ = 9.6797
+goto @TAXIODD_13604
+
+:TAXIODD_12213
+Text.PrintNow('TX_VE22', 5000, 1)
+121@ = 2370.298
+122@ = 2467.925
+123@ = 9.6797
+goto @TAXIODD_13604
+
+:TAXIODD_12266
+Text.PrintNow('TX_VE23', 5000, 1)
+121@ = 2272.043
+122@ = 2286.755
+123@ = 9.6797
+goto @TAXIODD_13604
+
+:TAXIODD_12319
+Text.PrintNow('TX_VE24', 5000, 1)
+121@ = 2324.513
+122@ = 2155.099
+123@ = 9.6797
+goto @TAXIODD_13604
+
+:TAXIODD_12372
+Text.PrintNow('TX_VE25', 5000, 1)
+121@ = 2508.472
+122@ = 2131.205
+123@ = 9.8125
+goto @TAXIODD_13604
+
+:TAXIODD_12425
+Text.PrintNow('TX_VE26', 5000, 1)
+121@ = 2530.914
+122@ = 2083.355
+123@ = 9.6797
+goto @TAXIODD_13604
+
+:TAXIODD_12478
+Text.PrintNow('TX_VE27', 5000, 1)
+121@ = 2546.51
+122@ = 1968.607
+123@ = 9.8125
+goto @TAXIODD_13604
+
+:TAXIODD_12531
+Text.PrintNow('TX_VE28', 5000, 1)
+121@ = 2530.781
+122@ = 1821.228
+123@ = 9.8129
+goto @TAXIODD_13604
+
+:TAXIODD_12584
+Text.PrintNow('TX_VE29', 5000, 1)
+121@ = 2360.313
+122@ = 2071.996
+123@ = 9.6797
+goto @TAXIODD_13604
+
+:TAXIODD_12637
+Text.PrintNow('TX_VE30', 5000, 1)
+121@ = 2035.457
+122@ = 1912.279
+123@ = 11.1768
+goto @TAXIODD_13604
+
+:TAXIODD_12690
+Text.PrintNow('TX_VE31', 5000, 1)
+121@ = 2078.414
+122@ = 2041.116
+123@ = 9.8203
+goto @TAXIODD_13604
+
+:TAXIODD_12743
+Text.PrintNow('TX_VE32', 5000, 1)
+121@ = 2159.09
+122@ = 1678.112
+123@ = 9.6953
+goto @TAXIODD_13604
+
+:TAXIODD_12796
+Text.PrintNow('TX_VE33', 5000, 1)
+121@ = 2028.496
+122@ = 1711.744
+123@ = 9.6797
+goto @TAXIODD_13604
+
+:TAXIODD_12849
+Text.PrintNow('TX_VE34', 5000, 1)
+121@ = 2076.406
+122@ = 1519.038
+123@ = 9.6875
+goto @TAXIODD_13604
+
+:TAXIODD_12902
+Text.PrintNow('TX_VE35', 5000, 1)
+121@ = 2040.251
+122@ = 1342.891
+123@ = 9.6797
+goto @TAXIODD_13604
+
+:TAXIODD_12955
+Text.PrintNow('TX_VE36', 5000, 1)
+121@ = 2230.47
+122@ = 1284.891
+123@ = 9.6797
+goto @TAXIODD_13604
+
+:TAXIODD_13008
+Text.PrintNow('TX_VE37', 5000, 1)
+121@ = 2074.51
+122@ = 1162.833
+123@ = 9.6875
+goto @TAXIODD_13604
+
+:TAXIODD_13061
+Text.PrintNow('TX_VE38', 5000, 1)
+121@ = 2039.257
+122@ = 1174.172
+123@ = 9.6797
+goto @TAXIODD_13604
+
+:TAXIODD_13114
+Text.PrintNow('TX_VE39', 5000, 1)
+121@ = 2040.284
+122@ = 1005.619
+123@ = 9.6645
+goto @TAXIODD_13604
+
+:TAXIODD_13167
+Text.PrintNow('TX_VE40', 5000, 1)
+121@ = 1608.522
+122@ = 1827.752
+123@ = 9.8281
+goto @TAXIODD_13604
+
+:TAXIODD_13220
+Text.PrintNow('TX_VE41', 5000, 1)
+121@ = 2483.514
+122@ = 922.5383
+123@ = 9.8203
+goto @TAXIODD_13604
+
+:TAXIODD_13273
+Text.PrintNow('TX_VE42', 5000, 1)
+121@ = 2544.668
+122@ = 1016.168
+123@ = 9.7593
+goto @TAXIODD_13604
+
+:TAXIODD_13326
+Text.PrintNow('TX_VE43', 5000, 1)
+121@ = 2491.765
+122@ = 1533.687
+123@ = 9.6875
+goto @TAXIODD_13604
+
+:TAXIODD_13379
+Text.PrintNow('TX_VE44', 5000, 1)
+121@ = 2828.649
+122@ = 1292.268
+123@ = 9.8281
+goto @TAXIODD_13604
+
+:TAXIODD_13432
+Text.PrintNow('TX_VE45', 5000, 1)
+121@ = 2524.493
+122@ = 2297.584
+123@ = 9.6797
+goto @TAXIODD_13604
+
+:TAXIODD_13485
+if 
+  34@ == 1
+goto_if_false @TAXIODD_13510
+110@ = 0
+
+:TAXIODD_13510
+write_debug "UNKNOWN_LAS_VENTURAS_TAXI_DESTINATION"
+Text.PrintNow('TX_VE1', 5000, 1)
+121@ = 2491.378
+122@ = 2773.608
+123@ = 9.764
+goto @TAXIODD_13604
+
+:TAXIODD_13604
+return 
+
+:TAXIODD_13606
+if 
+  34@ == 1
+goto_if_false @TAXIODD_13646
+set_lvar_int_to_lvar_int 110@ = 148@
+110@ += 1
+goto @TAXIODD_13655
+
+:TAXIODD_13646
+110@ = Math.RandomIntInRange(1, 28)
+
+:TAXIODD_13655
+switch_start 110@ total_jumps 27 default_jump 1 @TAXIODD_15344 jumps 1 @TAXIODD_13913 2 @TAXIODD_13966 3 @TAXIODD_14019 4 @TAXIODD_14072 5 @TAXIODD_14125 6 @TAXIODD_14178 7 @TAXIODD_14231
+switch_continued 8 @TAXIODD_14284 9 @TAXIODD_14337 10 @TAXIODD_14390 11 @TAXIODD_14443 12 @TAXIODD_14496 13 @TAXIODD_14549 14 @TAXIODD_14602 15 @TAXIODD_14655 16 @TAXIODD_14708
+switch_continued 17 @TAXIODD_14761 18 @TAXIODD_14814 19 @TAXIODD_14867 20 @TAXIODD_14920 21 @TAXIODD_14973 22 @TAXIODD_15026 23 @TAXIODD_15079 24 @TAXIODD_15132 25 @TAXIODD_15185
+switch_continued 26 @TAXIODD_15238 27 @TAXIODD_15291 -1 @TAXIODD_15461 -1 @TAXIODD_15461 -1 @TAXIODD_15461 -1 @TAXIODD_15461 -1 @TAXIODD_15461 -1 @TAXIODD_15461 -1 @TAXIODD_15461
+
+:TAXIODD_13913
+Text.PrintNow('TX_SF1', 5000, 1)
+121@ = -1974.876
+122@ = 486.737
+123@ = 30.371
+goto @TAXIODD_15461
+
+:TAXIODD_13966
+Text.PrintNow('TX_SF2', 5000, 1)
+121@ = -2044.419
+122@ = 500.771
+123@ = 35.176
+goto @TAXIODD_15461
+
+:TAXIODD_14019
+Text.PrintNow('TX_SF3', 5000, 1)
+121@ = -2150.581
+122@ = 251.624
+123@ = 35.176
+goto @TAXIODD_15461
+
+:TAXIODD_14072
+Text.PrintNow('TX_SF4', 5000, 1)
+121@ = -1988.513
+122@ = 138.31
+123@ = 27.857
+goto @TAXIODD_15461
+
+:TAXIODD_14125
+Text.PrintNow('TX_SF5', 5000, 1)
+121@ = -2216.399
+122@ = -297.305
+123@ = 35.202
+goto @TAXIODD_15461
+
+:TAXIODD_14178
+Text.PrintNow('TX_SF6', 5000, 1)
+121@ = -2726.428
+122@ = -310.5865
+123@ = 6.0313
+goto @TAXIODD_15461
+
+:TAXIODD_14231
+Text.PrintNow('TX_SF7', 5000, 1)
+121@ = -2704.649
+122@ = -3.5644
+123@ = 3.1953
+goto @TAXIODD_15461
+
+:TAXIODD_14284
+Text.PrintNow('TX_SF8', 5000, 1)
+121@ = -2708.997
+122@ = 127.501
+123@ = 4.584
+goto @TAXIODD_15461
+
+:TAXIODD_14337
+Text.PrintNow('TX_SF9', 5000, 1)
+121@ = -2751.905
+122@ = 376.781
+123@ = 4.584
+goto @TAXIODD_15461
+
+:TAXIODD_14390
+Text.PrintNow('TX_SF10', 5000, 1)
+121@ = -2415.75
+122@ = 330.9614
+123@ = 33.9765
+goto @TAXIODD_15461
+
+:TAXIODD_14443
+Text.PrintNow('TX_SF11', 5000, 1)
+121@ = -2454.926
+122@ = 138.9312
+123@ = 33.9765
+goto @TAXIODD_15461
+
+:TAXIODD_14496
+Text.PrintNow('TX_SF12', 5000, 1)
+121@ = -2499.214
+122@ = -16.6149
+123@ = 24.6094
+goto @TAXIODD_15461
+
+:TAXIODD_14549
+Text.PrintNow('TX_SF13', 5000, 1)
+121@ = -2431.735
+122@ = -198.9205
+123@ = 34.1563
+goto @TAXIODD_15461
+
+:TAXIODD_14602
+Text.PrintNow('TX_SF14', 5000, 1)
+121@ = -1815.151
+122@ = 597.754
+123@ = 38.528
+goto @TAXIODD_15461
+
+:TAXIODD_14655
+Text.PrintNow('TX_SF15', 5000, 1)
+121@ = -1530.776
+122@ = 487.201
+123@ = 9.44
+goto @TAXIODD_15461
+
+:TAXIODD_14708
+Text.PrintNow('TX_SF16', 5000, 1)
+121@ = -1745.08
+122@ = 27.759
+123@ = 5.452
+goto @TAXIODD_15461
+
+:TAXIODD_14761
+Text.PrintNow('TX_SF17', 5000, 1)
+121@ = -1414.557
+122@ = -301.347
+123@ = 14.637
+goto @TAXIODD_15461
+
+:TAXIODD_14814
+Text.PrintNow('TX_SF18', 5000, 1)
+121@ = -2618.467
+122@ = 1432.752
+123@ = 6.1016
+goto @TAXIODD_15461
+
+:TAXIODD_14867
+Text.PrintNow('TX_SF19', 5000, 1)
+121@ = -1904.765
+122@ = 882.7293
+123@ = 34.0156
+goto @TAXIODD_15461
+
+:TAXIODD_14920
+Text.PrintNow('TX_SF20', 5000, 1)
+121@ = -2134.729
+122@ = 919.0828
+123@ = 78.8438
+goto @TAXIODD_15461
+
+:TAXIODD_14973
+Text.PrintNow('TX_SF21', 5000, 1)
+121@ = -2361.836
+122@ = 993.0967
+123@ = 49.6875
+goto @TAXIODD_15461
+
+:TAXIODD_15026
+Text.PrintNow('TX_SF22', 5000, 1)
+121@ = -2753.69
+122@ = 779.9389
+123@ = 53.2422
+goto @TAXIODD_15461
+
+:TAXIODD_15079
+Text.PrintNow('TX_SF23', 5000, 1)
+121@ = -1714.717
+122@ = 1332.564
+123@ = 6.0391
+goto @TAXIODD_15461
+
+:TAXIODD_15132
+Text.PrintNow('TX_SF24', 5000, 1)
+121@ = -2251.033
+122@ = 717.7971
+123@ = 48.2969
+goto @TAXIODD_15461
+
+:TAXIODD_15185
+Text.PrintNow('TX_SF25', 5000, 1)
+121@ = -1807.813
+122@ = 936.0701
+123@ = 23.75
+goto @TAXIODD_15461
+
+:TAXIODD_15238
+Text.PrintNow('TX_SF26', 5000, 1)
+121@ = -1969.205
+122@ = 1115.312
+123@ = 52.6942
+goto @TAXIODD_15461
+
+:TAXIODD_15291
+Text.PrintNow('TX_SF27', 5000, 1)
+121@ = -2540.593
+122@ = 1222.188
+123@ = 36.4283
+goto @TAXIODD_15461
+
+:TAXIODD_15344
+if 
+  34@ == 1
+goto_if_false @TAXIODD_15369
+110@ = 0
+
+:TAXIODD_15369
+write_debug "UNKNOWN_SAN_FIERRO_TAXI_DESTINATION"
+Text.PrintNow('TX_SF1', 5000, 1)
+121@ = -1974.876
+122@ = 486.737
+123@ = 30.371
+goto @TAXIODD_15461
+
+:TAXIODD_15461
+return 
+
+:TAXIODD_15463
+write_debug "NO_RED_COUNTY_DESTINATIONS_YET"
+if 
+  34@ == 1
+goto_if_false @TAXIODD_15529
+110@ = 0
+goto @TAXIODD_15559
+
+:TAXIODD_15529
+write_debug "CHOOSING_LOS_SANTOS"
+gosub @TAXIODD_8407
+
+:TAXIODD_15559
+return 
+
+:TAXIODD_15561
+write_debug "NO_FLINT_COUNTY_DESTINATIONS_YET"
+if 
+  34@ == 1
+goto_if_false @TAXIODD_15629
+110@ = 0
+goto @TAXIODD_15659
+
+:TAXIODD_15629
+write_debug "CHOOSING_SAN_FIERRO"
+gosub @TAXIODD_13606
+
+:TAXIODD_15659
+return 
+
+:TAXIODD_15661
+write_debug "NO_WHETSTONE_DESTINATIONS_YET"
+if 
+  34@ == 1
+goto_if_false @TAXIODD_15726
+110@ = 0
+goto @TAXIODD_15756
+
+:TAXIODD_15726
+write_debug "CHOOSING_SAN_FIERRO"
+gosub @TAXIODD_13606
+
+:TAXIODD_15756
+return 
+
+:TAXIODD_15758
+if 
+  34@ == 1
+goto_if_false @TAXIODD_15798
+set_lvar_int_to_lvar_int 110@ = 148@
+110@ += 1
+goto @TAXIODD_15807
+
+:TAXIODD_15798
+110@ = Math.RandomIntInRange(1, 3)
+
+:TAXIODD_15807
+switch_start 110@ total_jumps 2 default_jump 1 @TAXIODD_15976 jumps 1 @TAXIODD_15870 2 @TAXIODD_15923 -1 @TAXIODD_16096 -1 @TAXIODD_16096 -1 @TAXIODD_16096 -1 @TAXIODD_16096 -1 @TAXIODD_16096
+
+:TAXIODD_15870
+Text.PrintNow('TX_TR1', 5000, 1)
+121@ = -1934.078
+122@ = 2382.762
+123@ = 48.5
+goto @TAXIODD_16096
+
+:TAXIODD_15923
+Text.PrintNow('TX_TR2', 5000, 1)
+121@ = -846.9434
+122@ = 1528.154
+123@ = 20.551
+goto @TAXIODD_16096
+
+:TAXIODD_15976
+if 
+  34@ == 1
+goto_if_false @TAXIODD_16001
+110@ = 0
+
+:TAXIODD_16001
+write_debug "UNKNOWN_TIERRA_ROBADA_TAXI_DESTINATION"
+Text.PrintNow('TX_TR1', 5000, 1)
+121@ = -1934.078
+122@ = 2382.762
+123@ = 48.5
+goto @TAXIODD_16096
+
+:TAXIODD_16096
+return 
+
+:TAXIODD_16098
+if 
+  34@ == 1
+goto_if_false @TAXIODD_16138
+set_lvar_int_to_lvar_int 110@ = 148@
+110@ += 1
+goto @TAXIODD_16147
+
+:TAXIODD_16138
+110@ = Math.RandomIntInRange(1, 6)
+
+:TAXIODD_16147
+switch_start 110@ total_jumps 5 default_jump 1 @TAXIODD_16475 jumps 1 @TAXIODD_16210 2 @TAXIODD_16263 3 @TAXIODD_16316 4 @TAXIODD_16369 5 @TAXIODD_16422 -1 @TAXIODD_16593 -1 @TAXIODD_16593
+
+:TAXIODD_16210
+Text.PrintNow('TX_BC1', 5000, 1)
+121@ = 689.646
+122@ = 1943.252
+123@ = 4.539
+goto @TAXIODD_16593
+
+:TAXIODD_16263
+Text.PrintNow('TX_BC2', 5000, 1)
+121@ = -904.3732
+122@ = 2007.643
+123@ = 59.9141
+goto @TAXIODD_16593
+
+:TAXIODD_16316
+Text.PrintNow('TX_BC3', 5000, 1)
+121@ = 392.0225
+122@ = 2547.806
+123@ = 15.5568
+goto @TAXIODD_16593
+
+:TAXIODD_16369
+Text.PrintNow('TX_BC4', 5000, 1)
+121@ = 832.8276
+122@ = 1705.429
+123@ = 4.8587
+goto @TAXIODD_16593
+
+:TAXIODD_16422
+Text.PrintNow('TX_BC5', 5000, 1)
+121@ = -84.9834
+122@ = 1358.616
+123@ = 9.3644
+goto @TAXIODD_16593
+
+:TAXIODD_16475
+if 
+  34@ == 1
+goto_if_false @TAXIODD_16500
+110@ = 0
+
+:TAXIODD_16500
+write_debug "UNKNOWN_BONE_COUNTY_TAXI_DESTINATION"
+Text.PrintNow('TX_BC1', 5000, 1)
+121@ = 689.646
+122@ = 1943.252
+123@ = 4.539
+goto @TAXIODD_16593
+
+:TAXIODD_16593
+return 
+
+:TAXIODD_16595
+if 
+is_ps2_keyboard_key_just_pressed 32
+goto_if_false @TAXIODD_16644
+48@ += 1
+if 
+  48@ > 2
+goto_if_false @TAXIODD_16642
+48@ = 0
+
+:TAXIODD_16642
+clear_all_view_variables 
+
+:TAXIODD_16644
+if 
+  48@ == 1
+goto_if_false @TAXIODD_16819
+set_var_int_to_lvar_int $Taxiodd_view_debug = 38@
+set_var_int_to_lvar_int $8203 = 39@
+set_var_int_to_lvar_int $8204 = 47@
+set_var_int_to_var_int $8205 = $taxi_passed
+set_var_int_to_lvar_int $8206 = 146@
+$8207 = 0
+$8208 = 0
+$8209 = 0
+view_integer_variable $Taxiodd_view_debug "M_STAGE"
+view_integer_variable $8203 "M_GOALS"
+view_integer_variable $8206 "CLEANUP_TESTING"
+view_integer_variable $8204 "M_MISSION_TIMER"
+view_integer_variable $8205 "TOTAL_TAXI_PASSED"
+
+:TAXIODD_16819
+if 
+  48@ == 2
+goto_if_false @TAXIODD_16837
+
+:TAXIODD_16837
+if 
+is_ps2_keyboard_key_just_pressed 98
+goto_if_false @TAXIODD_16859
+40@ = 1
+
+:TAXIODD_16859
+if 
+is_ps2_keyboard_key_just_pressed 80
+goto_if_false @TAXIODD_16947
+if 
+  41@ == 0
+goto_if_false @TAXIODD_16922
+41@ = 1
+write_debug "LEVEL_PAUSED"
+goto @TAXIODD_16947
+
+:TAXIODD_16922
+41@ = 0
+write_debug "LEVEL_UNPAUSED"
+
+:TAXIODD_16947
+return 
+
+:TAXIODD_16949
+if 
+  not is_ps2_keyboard_key_just_pressed 74
+goto_if_false @TAXIODD_16966
+return 
+
+:TAXIODD_16966
+if 
+  38@ == 2
+goto_if_false @TAXIODD_17023
+World.ClearArea(0, 121@, 122@, 123@, 10.0)
+Char.SetCoordinates($scplayer, 121@, 122@, 123@)
+39@ = 1
+
+:TAXIODD_17023
+return 
+
+:TAXIODD_17025
+147@ = 0
+148@ = 0
+
+:TAXIODD_17039
+110@ = 0
+switch_start 147@ total_jumps 8 default_jump 1 @TAXIODD_17549 jumps 0 @TAXIODD_17174 1 @TAXIODD_17220 2 @TAXIODD_17268 3 @TAXIODD_17314 4 @TAXIODD_17360 5 @TAXIODD_17408 6 @TAXIODD_17453
+switch_continued 7 @TAXIODD_17502 -1 @TAXIODD_17556 -1 @TAXIODD_17556 -1 @TAXIODD_17556 -1 @TAXIODD_17556 -1 @TAXIODD_17556 -1 @TAXIODD_17556 -1 @TAXIODD_17556 -1 @TAXIODD_17556
+
+:TAXIODD_17174
+gosub @TAXIODD_8407
+if 
+  110@ <> 0
+goto_if_false @TAXIODD_17213
+write_debug "LOS_SANTOS"
+
+:TAXIODD_17213
+goto @TAXIODD_17556
+
+:TAXIODD_17220
+gosub @TAXIODD_10663
+if 
+  110@ <> 0
+goto_if_false @TAXIODD_17261
+write_debug "LAS_VENTURAS"
+
+:TAXIODD_17261
+goto @TAXIODD_17556
+
+:TAXIODD_17268
+gosub @TAXIODD_13606
+if 
+  110@ <> 0
+goto_if_false @TAXIODD_17307
+write_debug "SAN_FIERRO"
+
+:TAXIODD_17307
+goto @TAXIODD_17556
+
+:TAXIODD_17314
+gosub @TAXIODD_15463
+if 
+  110@ <> 0
+goto_if_false @TAXIODD_17353
+write_debug "RED_COUNTY"
+
+:TAXIODD_17353
+goto @TAXIODD_17556
+
+:TAXIODD_17360
+gosub @TAXIODD_15561
+if 
+  110@ <> 0
+goto_if_false @TAXIODD_17401
+write_debug "FLINT_COUNTY"
+
+:TAXIODD_17401
+goto @TAXIODD_17556
+
+:TAXIODD_17408
+gosub @TAXIODD_15661
+if 
+  110@ <> 0
+goto_if_false @TAXIODD_17446
+write_debug "WHETSTONE"
+
+:TAXIODD_17446
+goto @TAXIODD_17556
+
+:TAXIODD_17453
+gosub @TAXIODD_15758
+if 
+  110@ <> 0
+goto_if_false @TAXIODD_17495
+write_debug "TIERRA_ROBADA"
+
+:TAXIODD_17495
+goto @TAXIODD_17556
+
+:TAXIODD_17502
+gosub @TAXIODD_16098
+if 
+  110@ <> 0
+goto_if_false @TAXIODD_17542
+write_debug "BONE_COUNTY"
+
+:TAXIODD_17542
+goto @TAXIODD_17556
+
+:TAXIODD_17549
+147@ = -1
+
+:TAXIODD_17556
+if 
+  110@ == 0
+goto_if_false @TAXIODD_17599
+wait 0
+147@ += 1
+148@ = 0
+goto @TAXIODD_17039
+
+:TAXIODD_17599
+write_debug_with_int "J_A_D___ID" 110@
+
+:TAXIODD_17616
+if 
+  not is_ps2_keyboard_key_just_pressed 74
+goto_if_false @TAXIODD_17700
+if 
+is_ps2_keyboard_key_just_pressed 65
+goto_if_false @TAXIODD_17660
+147@ += 1
+goto @TAXIODD_17039
+
+:TAXIODD_17660
+if 
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @TAXIODD_17689
+148@ += 1
+goto @TAXIODD_17039
+
+:TAXIODD_17689
+wait 0
+goto @TAXIODD_17616
+
+:TAXIODD_17700
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @TAXIODD_17744
+97@ = Blip.AddForCoord(121@, 122@, 123@)
+Char.SetCoordinates($scplayer, 121@, 122@, 123@)
+
+:TAXIODD_17744
+148@ += 1
+write_debug "PRESS_N_FOR_NEXT_FARE"
+
+:TAXIODD_17776
+if 
+  not is_ps2_keyboard_key_just_pressed 78
+goto_if_false @TAXIODD_17802
+wait 0
+goto @TAXIODD_17776
+
+:TAXIODD_17802
+Blip.Remove(97@)
+wait 0
+goto @TAXIODD_17039
+return 
+
+:TAXIODD_17820
+43@ += 1
+if 
+  43@ > 9
+goto_if_false @TAXIODD_17852
+43@ = 0
+
+:TAXIODD_17852
+return 
+
+:TAXIODD_17854
+44@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 46@ = 44@
+sub_int_lvar_from_int_lvar 46@ -= 45@
+set_lvar_int_to_lvar_int 45@ = 44@
+add_int_lvar_to_int_lvar 47@ += 46@
+return 
+
+:TAXIODD_17893
+38@ += 1
+39@ = 0
+TIMERA = 0
+TIMERB = 0
+return 
+
+:TAXIODD_17923
+38@ = 1
+39@ = 0
+TIMERA = 0
+TIMERB = 0
+return 
+
+:TAXIODD_17953
+return 
+
+:TAXIODD_17955
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @TAXIODD_17982
+wait 0
+goto @TAXIODD_17955
+
+:TAXIODD_17982
+gosub @TAXIODD_18128
+gosub @TAXIODD_18164
+if 
+  $done_taxi_help == 0
+goto_if_false @TAXIODD_18032
+Text.PrintHelp('TX_H1')
+$done_taxi_help = 1
+
+:TAXIODD_18032
+gosub @TAXIODD_2884
+109@ = 0
+112@ = 0
+113@ = 0
+$g_Taxiodd_faresKM = 0
+Hud.DisplayCounterWithString($g_Taxiodd_faresKM, CounterDisplay.Number, 'TX_TOTL')
+$g_Taxiodd_timerKM = 0
+114@ = 5
+115@ = 500
+94@ = -1
+95@ = -1
+gosub @TAXIODD_17893
+return 
+
+:TAXIODD_18128
+Streaming.RequestModel(#CR_AMMOBOX)
+Streaming.LoadAllModelsNow
+
+:TAXIODD_18135
+if 
+  not Streaming.HasModelLoaded(#CR_AMMOBOX)
+goto_if_false @TAXIODD_18162
+wait 0
+goto @TAXIODD_18135
+
+:TAXIODD_18162
+return 
+
+:TAXIODD_18164
+Streaming.RequestAnimation("MISC")
+
+:TAXIODD_18172
+if 
+  not Streaming.HasAnimationLoaded("MISC")
+goto_if_false @TAXIODD_18202
+wait 0
+goto @TAXIODD_18172
+
+:TAXIODD_18202
+return 
+
+:TAXIODD_18204
+if 
+  132@ == 1
+goto_if_false @TAXIODD_18244
+set_lvar_int_to_lvar_int 51@ = 111@
+51@ /= 16
+goto @TAXIODD_18259
+
+:TAXIODD_18244
+set_lvar_int_to_lvar_int 51@ = 111@
+51@ /= 40
+
+:TAXIODD_18259
+set_lvar_int_to_lvar_int 52@ = 51@
+Player.AddScore($player1, 51@)
+Text.PrintWithNumberBig('TX_PAY', 51@, 6000, TextStyle.WhiteMiddleSmaller)
+Sound.AddOneOffSound(1058, 0.0, 0.0, 0.0)
+add_int_lvar_to_int_lvar 109@ += 51@
+$g_Taxiodd_faresKM += 1
+$taxi_passed += 1
+142@ = 0
+if 
+  is_int_var_equal_to_int_lvar $g_Taxiodd_faresKM == 114@
+goto_if_false @TAXIODD_18430
+Text.PrintWith2NumbersBig('TX_SEQ', $g_Taxiodd_faresKM, 115@, 5000, TextStyle.MiddleSmallerHigher)
+Player.AddScore($player1, 115@)
+add_int_lvar_to_int_lvar 109@ += 115@
+142@ = 1
+add_int_lvar_to_int_lvar 52@ += 115@
+114@ += 5
+115@ += 500
+
+:TAXIODD_18430
+if and
+  $done_taxiodd_progress == 0
+  $taxi_passed > 49
+goto_if_false @TAXIODD_18538
+Stat.RegisterOddjobMissionPassed
+Stat.PlayerMadeProgress(1)
+Audio.PlayMissionPassedTune(2)
+Text.PrintBig('TX_DONE', 5000, TextStyle.MiddleSmallerHigher)
+Text.PrintNow('TX_NTRO', 7000, 1)
+144@ = 1
+set_lvar_int_to_lvar_int 106@ = 47@
+106@ += 7000
+Game.SetAllTaxisHaveNitro(True)
+$done_taxiodd_progress = 1
+goto @TAXIODD_18699
+
+:TAXIODD_18538
+if 
+  $g_Taxiodd_bonusKM > 0
+goto_if_false @TAXIODD_18631
+if 
+  142@ == 1
+goto_if_false @TAXIODD_18597
+Text.PrintBig('TX_FAST', 5000, TextStyle.MiddleSmaller)
+goto @TAXIODD_18613
+
+:TAXIODD_18597
+Text.PrintBig('TX_FAST', 5000, TextStyle.MiddleSmallerHigher)
+
+:TAXIODD_18613
+116@ = Char.SetSayContext(88@, 226)
+goto @TAXIODD_18699
+
+:TAXIODD_18631
+if 
+  142@ == 1
+goto_if_false @TAXIODD_18672
+Text.PrintBig('TX_WIN', 5000, TextStyle.MiddleSmaller)
+goto @TAXIODD_18688
+
+:TAXIODD_18672
+Text.PrintBig('TX_WIN', 5000, TextStyle.MiddleSmallerHigher)
+
+:TAXIODD_18688
+116@ = Char.SetSayContext(88@, 225)
+
+:TAXIODD_18699
+Stat.IncrementIntNoMessage(StatId.PassengersDeliveredInTaxi, 1)
+Stat.IncrementIntNoMessage(StatId.TaxiMoneyMade, 52@)
+return 
+
+:TAXIODD_18716
+$g_Taxiodd_timerKM += 10000
+Hud.ClearCounter($g_Taxiodd_bonusKM)
+132@ = 0
+125@ = 0
+gosub @TAXIODD_17923
+return 
+
+:TAXIODD_18752
+if 
+  not Char.IsDead(88@)
+goto_if_false @TAXIODD_18780
+Char.MarkAsNoLongerNeeded(88@)
+146@ -= 1
+
+:TAXIODD_18780
+Blip.Remove(96@)
+Blip.Remove(97@)
+Hud.ClearCounter($g_Taxiodd_bonusKM)
+132@ = 0
+126@ = 0
+gosub @TAXIODD_17923
+return 
+
+:TAXIODD_18818
+Text.PrintBig('TX_END', 5000, TextStyle.MiddleSmallerHigher)
+Text.PrintWithNumberBig('TX_PAY', 109@, 6000, TextStyle.WhiteMiddleSmaller)
+Text.ClearSmallPrints
+switch_start 108@ total_jumps 3 default_jump 0 @TAXIODD_18987 jumps 1 @TAXIODD_18918 2 @TAXIODD_18941 3 @TAXIODD_18964 -1 @TAXIODD_18987 -1 @TAXIODD_18987 -1 @TAXIODD_18987 -1 @TAXIODD_18987
+
+:TAXIODD_18918
+Text.PrintNow('TX_F1', 5000, 1)
+goto @TAXIODD_18987
+
+:TAXIODD_18941
+Text.PrintNow('TX_F2', 5000, 1)
+goto @TAXIODD_18987
+
+:TAXIODD_18964
+Text.PrintNow('TX_F3', 5000, 1)
+goto @TAXIODD_18987
+
+:TAXIODD_18987
+Text.ClearHelp
+return 
+
+:TAXIODD_18991
+if 
+  not Char.IsDead(88@)
+goto_if_false @TAXIODD_19068
+Char.ClearLookAt(88@)
+if 
+  Car.IsDead(89@)
+goto_if_false @TAXIODD_19042
+gosub @TAXIODD_6415
+goto @TAXIODD_19068
+
+:TAXIODD_19042
+if 
+  not Char.IsInCar(88@, 89@)
+goto_if_false @TAXIODD_19068
+gosub @TAXIODD_6415
+
+:TAXIODD_19068
+Car.MarkAsNoLongerNeeded(89@)
+Char.MarkAsNoLongerNeeded(88@)
+49@ = 0
+
+:TAXIODD_19085
+Object.MarkAsNoLongerNeeded(90@(49@,4i))
+49@ += 1
+  49@ >= 4
+goto_if_false @TAXIODD_19085
+Blip.Remove(96@)
+Blip.Remove(97@)
+49@ = 0
+
+:TAXIODD_19132
+Blip.Remove(98@(49@,3i))
+49@ += 1
+  49@ >= 3
+goto_if_false @TAXIODD_19132
+Hud.ClearCounter($g_Taxiodd_faresKM)
+Hud.ClearTimer($g_Taxiodd_timerKM)
+Hud.ClearCounter($g_Taxiodd_bonusKM)
+Streaming.RemoveAnimation("MISC")
+Streaming.MarkModelAsNoLongerNeeded(#CR_AMMOBOX)
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+Game.SetWantedMultiplier(1.0)
+Game.SwitchEmergencyServices(True)
+Game.SwitchRandomTrains(True)
+set_var_int_to_var_int $stop_gargae_for_neil = $nHoldModGarageState
+$timer_mobile_start = Clock.GetGameTimer()
+$flag_player_on_oddjob = 0
+$onmission = 0
+$flag_taxiodd_mission_launched = 0
+Mission.Finish
+return 
+
+//-------------Mission 122---------------
+// Originally: Paramedic Sub-Mission
+
+:AMBULAN
+gosub @AMBULAN_16
+gosub @AMBULAN_13159
+terminate_this_script 
+

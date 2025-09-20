@@ -1,0 +1,385 @@
+:BDISPLY
+script_name 'BDISPLY'
+if 
+  $beat_display_script_started == 0
+goto_if_false @BDISPLY_43
+$beat_display_script_started = 1
+$bd_terminate_script = 0
+
+:BDISPLY_43
+Text.UseCommands(True)
+Txd.LoadDictionary('LD_BEAT')
+Txd.LoadSprite("DOWN", 1)
+Txd.LoadSprite("LEFT", 2)
+Txd.LoadSprite("UP", 3)
+Txd.LoadSprite("RIGHT", 4)
+Txd.LoadSprite("UP", 13)
+Txd.LoadSprite("DOWN", 14)
+Txd.LoadSprite("RIGHT", 10)
+Txd.LoadSprite("LEFT", 9)
+Txd.LoadSprite("UPR", 11)
+Txd.LoadSprite("DOWNR", 16)
+Txd.LoadSprite("DOWNL", 12)
+Txd.LoadSprite("UPL", 15)
+Txd.LoadSprite("CRING", 17)
+Txd.LoadSprite("CHIT", 18)
+$bd_future_time_shown = 4500
+$bd_past_time_shown = 800
+$bd_x = 265.0
+$bd_y = 390.0
+$bd_width = 355.0
+$bd_sprite_height = 32.0
+$bd_sprite_width = 32.0
+19@ = 64.0
+20@ = 64.0
+22@ = 64.0
+21@ = 64.0
+16@ = Clock.GetGameTimer()
+wait 1000
+
+:BDISPLY_313
+wait 0
+if 
+  Game.HasGameJustReturnedFromFrontend
+goto_if_false @BDISPLY_344
+$BD_RenderHit = 0
+23@ = 0
+
+:BDISPLY_344
+0@ = Audio.GetBeatTrackStatus()
+if 
+  is_int_lvar_equal_to_constant 0@ == 3
+goto_if_false @BDISPLY_1198
+15@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 17@ = 15@
+sub_int_lvar_from_int_lvar 17@ -= 16@
+set_lvar_int_to_lvar_int 16@ = 15@
+set_lvar_int_to_var_int 0@ = $bd_past_time_shown
+add_int_var_to_int_lvar 0@ += $bd_future_time_shown
+cset_lvar_float_to_lvar_int 5@ = integer 0@
+cset_lvar_float_to_var_int 6@ = integer $bd_past_time_shown
+div_float_lvar_by_float_lvar 6@ /= 5@
+mult_float_lvar_by_float_var 6@ *= $bd_width
+set_var_float_to_var_float $x = $bd_x
+add_float_lvar_to_float_var $x += 6@
+set_var_float_to_var_float $y = $bd_y
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(17, $x, $y, 20@, 19@, 128, 128, 128, 255)
+$time_since_first_beat = Clock.GetGameTimer()
+sub_int_var_from_int_var $time_since_first_beat -= $time_of_first_beat
+0@ = 1
+
+:BDISPLY_520
+if 
+  11 > 0@
+goto_if_false @BDISPLY_846
+8@, 10@, 12@ = Audio.GetBeatProximity(0@)
+if 
+  10@ <> 0
+goto_if_false @BDISPLY_832
+if 
+  is_int_var_greater_than_int_lvar $bd_future_time_shown > 8@
+goto_if_false @BDISPLY_832
+BDISPLY_1266()
+set_lvar_int_to_var_int 3@ = $bd_past_time_shown
+add_int_var_to_int_lvar 3@ += $bd_future_time_shown
+set_lvar_int_to_lvar_int 4@ = 8@
+add_int_var_to_int_lvar 4@ += $bd_past_time_shown
+cset_lvar_float_to_lvar_int 5@ = integer 4@
+cset_lvar_float_to_lvar_int 6@ = integer 3@
+div_float_lvar_by_float_lvar 5@ /= 6@
+mult_float_lvar_by_float_var 5@ *= $bd_width
+set_var_float_to_var_float $x = $bd_x
+add_float_lvar_to_float_var $x += 5@
+set_var_float_to_var_float $y = $bd_y
+cset_lvar_float_to_lvar_int 5@ = integer 8@
+cset_lvar_float_to_var_int 6@ = integer $bd_future_time_shown
+div_float_lvar_by_float_lvar 5@ /= 6@
+5@ *= -1.0
+5@ += 1.0
+if 
+  0 > 8@
+goto_if_false @BDISPLY_756
+5@ = 1.0
+
+:BDISPLY_756
+5@ *= 255.0
+cset_lvar_int_to_lvar_float 4@ = float 5@
+if 
+  18@ <> 0
+goto_if_false @BDISPLY_832
+BDISPLY_1575()
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(18@, $x, $y, $bd_sprite_width, $bd_sprite_height, 128, 128, 128, 4@)
+
+:BDISPLY_832
+0@ += 1
+goto @BDISPLY_520
+
+:BDISPLY_846
+if 
+  $debug_show_beat_position == 0
+goto_if_false @BDISPLY_1191
+0@ = -1
+
+:BDISPLY_871
+if 
+  0@ > -11
+goto_if_false @BDISPLY_1191
+8@, 10@, 12@ = Audio.GetBeatProximity(0@)
+8@ *= -1
+if 
+  10@ <> 0
+goto_if_false @BDISPLY_1177
+if 
+  is_int_var_greater_than_int_lvar $bd_past_time_shown > 8@
+goto_if_false @BDISPLY_1177
+BDISPLY_1266()
+set_lvar_int_to_lvar_int 4@ = 8@
+4@ *= -1
+add_int_var_to_int_lvar 4@ += $bd_past_time_shown
+set_lvar_int_to_var_int 3@ = $bd_past_time_shown
+add_int_var_to_int_lvar 3@ += $bd_future_time_shown
+cset_lvar_float_to_lvar_int 5@ = integer 4@
+cset_lvar_float_to_lvar_int 6@ = integer 3@
+div_float_lvar_by_float_lvar 5@ /= 6@
+mult_float_lvar_by_float_var 5@ *= $bd_width
+set_var_float_to_var_float $x = $bd_x
+add_float_lvar_to_float_var $x += 5@
+set_var_float_to_var_float $y = $bd_y
+cset_lvar_float_to_lvar_int 5@ = integer 4@
+cset_lvar_float_to_var_int 6@ = integer $bd_past_time_shown
+div_float_lvar_by_float_lvar 5@ /= 6@
+if 
+  0 > 8@
+goto_if_false @BDISPLY_1101
+5@ = 1.0
+
+:BDISPLY_1101
+5@ *= 255.0
+cset_lvar_int_to_lvar_float 4@ = float 5@
+if 
+  18@ <> 0
+goto_if_false @BDISPLY_1177
+BDISPLY_1575()
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(18@, $x, $y, $bd_sprite_width, $bd_sprite_height, 128, 128, 128, 4@)
+
+:BDISPLY_1177
+0@ -= 1
+goto @BDISPLY_871
+
+:BDISPLY_1191
+goto @BDISPLY_1205
+
+:BDISPLY_1198
+goto @BDISPLY_1244
+
+:BDISPLY_1205
+if 
+  $bd_terminate_script == 0
+goto_if_false @BDISPLY_1237
+goto @BDISPLY_313
+goto @BDISPLY_1244
+
+:BDISPLY_1237
+goto @BDISPLY_1244
+
+:BDISPLY_1244
+$bd_terminate_script = 0
+$beat_display_script_started = 0
+Text.UseCommands(False)
+Txd.Remove
+terminate_this_script 
+
+:BDISPLY_1266
+18@ = 0
+if 
+  10@ == 1
+goto_if_false @BDISPLY_1298
+18@ = 1
+
+:BDISPLY_1298
+if 
+  10@ == 2
+goto_if_false @BDISPLY_1323
+18@ = 2
+
+:BDISPLY_1323
+if 
+  10@ == 3
+goto_if_false @BDISPLY_1348
+18@ = 3
+
+:BDISPLY_1348
+if 
+  10@ == 4
+goto_if_false @BDISPLY_1373
+18@ = 4
+
+:BDISPLY_1373
+if 
+  10@ == 9
+goto_if_false @BDISPLY_1398
+18@ = 9
+
+:BDISPLY_1398
+if 
+  10@ == 10
+goto_if_false @BDISPLY_1423
+18@ = 10
+
+:BDISPLY_1423
+if 
+  10@ == 11
+goto_if_false @BDISPLY_1448
+18@ = 11
+
+:BDISPLY_1448
+if 
+  10@ == 12
+goto_if_false @BDISPLY_1473
+18@ = 12
+
+:BDISPLY_1473
+if 
+  10@ == 13
+goto_if_false @BDISPLY_1498
+18@ = 13
+
+:BDISPLY_1498
+if 
+  10@ == 14
+goto_if_false @BDISPLY_1523
+18@ = 14
+
+:BDISPLY_1523
+if 
+  10@ == 15
+goto_if_false @BDISPLY_1548
+18@ = 15
+
+:BDISPLY_1548
+if 
+  10@ == 16
+goto_if_false @BDISPLY_1573
+18@ = 16
+
+:BDISPLY_1573
+return 
+
+:BDISPLY_1575
+if and
+  $BD_RenderHit > 0
+  23@ == 0
+goto_if_false @BDISPLY_1627
+1@, 1@, 25@ = Audio.GetBeatProximity(0)
+25@ += 1
+23@ = 1
+
+:BDISPLY_1627
+set_lvar_int_to_lvar_int 13@ = 12@
+add_int_lvar_to_int_lvar 13@ += 0@
+if 
+  0 > 0@
+goto_if_false @BDISPLY_1675
+8@ *= -1
+13@ += 1
+
+:BDISPLY_1675
+if 
+  is_int_lvar_equal_to_int_lvar 13@ == 25@
+goto_if_false @BDISPLY_1756
+if and
+  3000 >= 8@
+  8@ > -400
+goto_if_false @BDISPLY_1735
+BDISPLY_1765()
+goto @BDISPLY_1749
+
+:BDISPLY_1735
+23@ = 0
+$BD_RenderHit = 0
+
+:BDISPLY_1749
+goto @BDISPLY_1763
+
+:BDISPLY_1756
+$BD_RenderHit = 0
+
+:BDISPLY_1763
+return 
+
+:BDISPLY_1765
+switch_start 23@ total_jumps 3 default_jump 0 @BDISPLY_2214 jumps 1 @BDISPLY_1828 2 @BDISPLY_2001 3 @BDISPLY_2105 -1 @BDISPLY_2214 -1 @BDISPLY_2214 -1 @BDISPLY_2214 -1 @BDISPLY_2214
+
+:BDISPLY_1828
+if 
+  $BD_RenderHit == 1
+goto_if_false @BDISPLY_1867
+26@ = 90
+27@ = 100
+goto @BDISPLY_1940
+
+:BDISPLY_1867
+if 
+  $BD_RenderHit == 2
+goto_if_false @BDISPLY_1907
+26@ = 190
+27@ = 80
+goto @BDISPLY_1940
+
+:BDISPLY_1907
+if 
+  $BD_RenderHit == 3
+goto_if_false @BDISPLY_1940
+26@ = 255
+27@ = 25
+
+:BDISPLY_1940
+set_lvar_int_to_lvar_int 24@ = 26@
+TIMERB = 0
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(18, $x, $y, 21@, 22@, 128, 128, 128, 24@)
+23@ += 1
+goto @BDISPLY_2214
+
+:BDISPLY_2001
+if 
+  is_int_lvar_greater_than_int_lvar 27@ > TIMERB
+goto_if_false @BDISPLY_2059
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(18, $x, $y, 21@, 22@, 128, 128, 128, 24@)
+goto @BDISPLY_2098
+
+:BDISPLY_2059
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(18, $x, $y, 21@, 22@, 128, 128, 128, 24@)
+23@ += 1
+
+:BDISPLY_2098
+goto @BDISPLY_2214
+
+:BDISPLY_2105
+set_lvar_int_to_lvar_int 1@ = 26@
+div_int_lvar_by_int_lvar 1@ /= 17@
+1@ *= 4
+sub_int_lvar_from_int_lvar 24@ -= 1@
+if 
+  0 >= 24@
+goto_if_false @BDISPLY_2175
+24@ = 0
+23@ = 0
+$BD_RenderHit = 0
+
+:BDISPLY_2175
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(18, $x, $y, 21@, 22@, 128, 128, 128, 24@)
+goto @BDISPLY_2214
+
+:BDISPLY_2214
+return 
+
+:Noname_6
+terminate_this_script 
+

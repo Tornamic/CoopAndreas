@@ -1,0 +1,1325 @@
+//-------------External script 32 (PLANES)---------------
+
+:PLANES
+script_name 'PLANES'
+set_var_text_label s$pl_days[1] = 'PLA_9'
+set_var_text_label s$pl_days[2] = 'PLA_3'
+set_var_text_label s$pl_days[3] = 'PLA_4'
+set_var_text_label s$pl_days[4] = 'PLA_5'
+set_var_text_label s$pl_days[5] = 'PLA_6'
+set_var_text_label s$pl_days[6] = 'PLA_7'
+set_var_text_label s$pl_days[7] = 'PLA_8'
+$pl_days_flag = 0
+$pl_which_city_select = 0
+$pl_which_car_recording = 0
+$pl_ticket_price = 500
+$pl_players_money = 0
+$pl_denied_flag = 0
+$pl_control_flag = 0
+$pl_game_timer_start = 0
+$pl_game_timer_end = 0
+$pl_game_timer_diff = 0
+$pl_which_recording = 0
+$pl_has_player_skipped = 0
+$pl_undercarriage_flag = 0
+$pl_undercarriage_up_time = 0
+$pl_undercarriage_down_time = 0
+$pl_skip_in_how_much = 0.0
+$pl_playerx = 0.0
+$pl_playery = 0.0
+$pl_playerz = 0.0
+$pl_player_heading = 0.0
+$pl_planex = 0.0
+$pl_planey = 0.0
+$pl_planez = 0.0
+$pl_plane_heading = 0.0
+$pl_print_flag_11 = 0
+$pl_stop_player_skipping_flag = 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_342
+goto @PLANES_3712
+
+:PLANES_342
+Player.SetControl($player1, False)
+set_deatharrest_state 0
+Clock.Store
+$pl_days_flag = Clock.GetCurrentDayOfWeek()
+if 
+  $pl_days_flag == 7
+goto_if_false @PLANES_392
+$pl_days_flag = 1
+goto @PLANES_399
+
+:PLANES_392
+$pl_days_flag += 1
+
+:PLANES_399
+$pl_city_open = Stat.GetInt(181)
+gosub @PLANES_3818
+Hud.SwitchWidescreen(False)
+Camera.SetFadingColor(0, 0, 0)
+Text.ClearPrints
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_455
+goto @PLANES_3712
+
+:PLANES_455
+Camera.DoFade(0, 500)
+
+:PLANES_462
+if 
+  Camera.GetFadingStatus
+goto_if_false @PLANES_509
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_502
+goto @PLANES_3712
+
+:PLANES_502
+goto @PLANES_462
+
+:PLANES_509
+Txd.LoadDictionary('LD_PLAN')
+Txd.LoadSprite("AIRLOGO", 1)
+Txd.LoadSprite("TVCORN", 2)
+Txd.LoadSprite("TVBASE", 3)
+Txd.LoadSprite("BLKDOT", 4)
+Streaming.LoadAllModelsNow
+Text.ClearHelp
+Text.ClearPrints
+Text.UseCommands(True)
+Hud.Display(False)
+Hud.DisplayRadar(False)
+Stat.ShowUpdateStats(False)
+Camera.DoFade(1, 500)
+gosub @PLANES_4363
+
+:PLANES_605
+if 
+  Camera.GetFadingStatus
+goto_if_false @PLANES_659
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_645
+goto @PLANES_3712
+
+:PLANES_645
+gosub @PLANES_4363
+goto @PLANES_605
+
+:PLANES_659
+gosub @PLANES_4363
+
+:PLANES_666
+wait 0
+gosub @PLANES_4363
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_700
+goto @PLANES_3712
+
+:PLANES_700
+Clock.Restore
+if 
+  $pl_city_open > 1
+goto_if_false @PLANES_805
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+if or
+  -100 > $LStickX
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @PLANES_767
+$pl_which_city_select = 0
+
+:PLANES_767
+if or
+  $LStickX > 100
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @PLANES_798
+$pl_which_city_select = 1
+
+:PLANES_798
+goto @PLANES_812
+
+:PLANES_805
+$pl_which_city_select = 0
+
+:PLANES_812
+if 
+  $pl_city_open > 0
+goto_if_false @PLANES_1281
+if 
+  $pl_control_flag == 0
+goto_if_false @PLANES_879
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @PLANES_879
+$pl_denied_flag = 0
+$pl_control_flag = 1
+
+:PLANES_879
+if 
+  $pl_control_flag == 1
+goto_if_false @PLANES_921
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @PLANES_921
+$pl_control_flag = 2
+
+:PLANES_921
+if 
+  $pl_control_flag == 2
+goto_if_false @PLANES_1134
+$pl_players_money = Player.StoreScore($player1)
+if 
+  is_int_var_greater_or_equal_to_int_var $pl_players_money >= $pl_ticket_price
+goto_if_false @PLANES_1069
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1083)
+gosub @PLANES_4363
+Camera.DoFade(0, 500)
+
+:PLANES_994
+if 
+  Camera.GetFadingStatus
+goto_if_false @PLANES_1055
+gosub @PLANES_4363
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_1041
+goto @PLANES_3712
+
+:PLANES_1041
+gosub @PLANES_4363
+goto @PLANES_994
+
+:PLANES_1055
+goto @PLANES_1437
+goto @PLANES_1134
+
+:PLANES_1069
+if 
+  $pl_denied_flag == 0
+goto_if_false @PLANES_1134
+$pl_game_timer_start = Clock.GetGameTimer()
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1085)
+$pl_denied_flag = 1
+$pl_control_flag = 0
+
+:PLANES_1134
+$pl_game_timer_end = Clock.GetGameTimer()
+set_var_int_to_var_int $pl_game_timer_diff = $pl_game_timer_end
+sub_int_var_from_int_var $pl_game_timer_diff -= $pl_game_timer_start
+if 
+  5000 > $pl_game_timer_diff
+goto_if_false @PLANES_1281
+gosub @PLANES_7954
+Text.SetScale(0.41, 1.84)
+Text.SetColor(255, 255, 255, 255)
+if or
+  is_int_var_equal_to_constant $current_Language == 3
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @PLANES_1260
+Text.Display(40.0, 337.0, 'SHOPNO')
+goto @PLANES_1281
+
+:PLANES_1260
+Text.Display(93.0, 337.0, 'SHOPNO')
+
+:PLANES_1281
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @PLANES_1430
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1085)
+gosub @PLANES_4363
+Camera.DoFade(0, 500)
+
+:PLANES_1326
+if 
+  Camera.GetFadingStatus
+goto_if_false @PLANES_1387
+gosub @PLANES_4363
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_1373
+goto @PLANES_3712
+
+:PLANES_1373
+gosub @PLANES_4363
+goto @PLANES_1326
+
+:PLANES_1387
+gosub @PLANES_3818
+Char.SetCoordinates($scplayer, $pl_playerx, $pl_playery, $pl_playerz)
+Char.SetHeading($scplayer, $pl_player_heading)
+Camera.DoFade(1, 500)
+goto @PLANES_3712
+
+:PLANES_1430
+goto @PLANES_666
+
+:PLANES_1437
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_1460
+goto @PLANES_3712
+
+:PLANES_1460
+Clock.SetTimeOneDayForward
+Player.AddScore($player1, -500)
+Txd.Remove
+Streaming.RequestModel(577)
+Streaming.RequestModel(371)
+Streaming.LoadAllModelsNow
+Game.AllowPauseInWidescreen(True)
+gosub @PLANES_3818
+Streaming.RequestCollision($pl_planex, $pl_planey)
+World.ClearArea(1, $pl_planex, $pl_planey, $pl_planez, 100.0)
+$pl_plane = Car.Create(577, $pl_planex, $pl_planey, $pl_planez)
+Car.SetHeading($pl_plane, $pl_plane_heading)
+Char.WarpIntoCar($scplayer, $pl_plane)
+Streaming.LoadScene($pl_planex, $pl_planey, $pl_planez)
+Hud.SwitchWidescreen(True)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+if 
+  is_int_var_equal_to_constant $im_players_city == 1
+goto_if_false @PLANES_1709
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_1650
+Clock.SetTimeOfDay(10, 30)
+$pl_skip_in_how_much = 9500.0
+$pl_undercarriage_up_time = 20000
+$pl_undercarriage_down_time = 150000
+$pl_which_recording = 42
+
+:PLANES_1650
+if 
+  $pl_which_city_select == 1
+goto_if_false @PLANES_1709
+Clock.SetTimeOfDay(17, 50)
+$pl_skip_in_how_much = 5000.0
+$pl_undercarriage_up_time = 30000
+$pl_undercarriage_down_time = 110000
+$pl_which_recording = 46
+
+:PLANES_1709
+if 
+  is_int_var_equal_to_constant $im_players_city == 2
+goto_if_false @PLANES_1845
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_1786
+Clock.SetTimeOfDay(11, 20)
+$pl_skip_in_how_much = 6000.0
+$pl_undercarriage_up_time = 20000
+$pl_undercarriage_down_time = 120000
+$pl_which_recording = 49
+
+:PLANES_1786
+if 
+  $pl_which_city_select == 1
+goto_if_false @PLANES_1845
+Clock.SetTimeOfDay(14, 40)
+$pl_skip_in_how_much = 8000.0
+$pl_undercarriage_up_time = 20000
+$pl_undercarriage_down_time = 160000
+$pl_which_recording = 44
+
+:PLANES_1845
+if 
+  is_int_var_equal_to_constant $im_players_city == 3
+goto_if_false @PLANES_1981
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_1922
+Clock.SetTimeOfDay(19, 10)
+$pl_skip_in_how_much = 6600.0
+$pl_undercarriage_up_time = 20000
+$pl_undercarriage_down_time = 120000
+$pl_which_recording = 48
+
+:PLANES_1922
+if 
+  $pl_which_city_select == 1
+goto_if_false @PLANES_1981
+Clock.SetTimeOfDay(14, 30)
+$pl_skip_in_how_much = 3800.0
+$pl_undercarriage_up_time = 20000
+$pl_undercarriage_down_time = 70000
+$pl_which_recording = 43
+
+:PLANES_1981
+Streaming.RequestCarRecording($pl_which_recording)
+
+:PLANES_1986
+if 
+  not Streaming.HasCarRecordingBeenLoaded($pl_which_recording)
+goto_if_false @PLANES_2036
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_2029
+goto @PLANES_3712
+
+:PLANES_2029
+goto @PLANES_1986
+
+:PLANES_2036
+$pl_game_timer_start = Clock.GetGameTimer()
+$pl_control_flag = 0
+Camera.DoFade(1, 500)
+
+:PLANES_2055
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_2082
+goto @PLANES_3712
+
+:PLANES_2082
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PLANES_2103
+Player.ClearWantedLevel($player1)
+
+:PLANES_2103
+$pl_game_timer_end = Clock.GetGameTimer()
+set_var_int_to_var_int $pl_game_timer_diff = $pl_game_timer_end
+sub_int_var_from_int_var $pl_game_timer_diff -= $pl_game_timer_start
+if 
+  not Car.IsDead($pl_plane)
+goto_if_false @PLANES_3705
+if 
+  $pl_control_flag == 0
+goto_if_false @PLANES_2196
+if 
+  $pl_game_timer_diff > 2000
+goto_if_false @PLANES_2196
+Car.StartPlayback($pl_plane, $pl_which_recording)
+Camera.SetCinema(True)
+$pl_control_flag = 1
+
+:PLANES_2196
+if 
+  $pl_control_flag > 0
+goto_if_false @PLANES_2343
+if 
+  $pl_has_player_skipped == 0
+goto_if_false @PLANES_2343
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+if 
+  $player_z > 150.0
+goto_if_false @PLANES_2343
+Text.ClearThisPrint('PLA_11')
+if 
+  $pl_print_flag_11 == 0
+goto_if_false @PLANES_2319
+Text.PrintNow('PLA_12', 20000, 1)
+$pl_print_flag_11 = 1
+
+:PLANES_2319
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @PLANES_2343
+$pl_control_flag = 2
+
+:PLANES_2343
+if 
+  $pl_control_flag > 0
+goto_if_false @PLANES_2467
+if 
+  $pl_stop_player_skipping_flag == 0
+goto_if_false @PLANES_2421
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+if 
+  $player_z > 150.0
+goto_if_false @PLANES_2421
+$pl_stop_player_skipping_flag = 1
+
+:PLANES_2421
+if 
+  $pl_stop_player_skipping_flag == 1
+goto_if_false @PLANES_2467
+if 
+  150.0 > $player_z
+goto_if_false @PLANES_2467
+$pl_stop_player_skipping_flag = 2
+
+:PLANES_2467
+if 
+  $pl_control_flag == 1
+goto_if_false @PLANES_3342
+if 
+  $pl_has_player_skipped == 0
+goto_if_false @PLANES_3112
+if 
+  150.0 >= $player_z
+goto_if_false @PLANES_2569
+Text.ClearThisPrint('PLA_12')
+if 
+  $pl_print_flag_11 == 0
+goto_if_false @PLANES_2569
+Text.PrintNow('PLA_11', 5000, 1)
+
+:PLANES_2569
+if 
+  2 > $pl_stop_player_skipping_flag
+goto_if_false @PLANES_3112
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @PLANES_3112
+Camera.DoFade(0, 500)
+
+:PLANES_2611
+if 
+  Camera.GetFadingStatus
+goto_if_false @PLANES_2658
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_2651
+goto @PLANES_3712
+
+:PLANES_2651
+goto @PLANES_2611
+
+:PLANES_2658
+if 
+  not Car.IsDead($pl_plane)
+goto_if_false @PLANES_3056
+if 
+  Car.IsPlaybackGoingOn($pl_plane)
+goto_if_false @PLANES_3056
+if 
+  $pl_undercarriage_flag == 1
+goto_if_false @PLANES_2715
+Plane.SetUndercarriageUp($pl_plane, False)
+
+:PLANES_2715
+Car.SkipInPlayback($pl_plane, -1E07)
+Car.SkipInPlayback($pl_plane, $pl_skip_in_how_much)
+Camera.SetCinema(False)
+if or
+  $pl_which_recording == 48
+  $pl_which_recording == 49
+goto_if_false @PLANES_2841
+Camera.SetFixedPosition(1774.9, -2529.3, 30.9, 0.0, 0.0, 0.0)
+if 
+  not Car.IsDead($pl_plane)
+goto_if_false @PLANES_2819
+Camera.PointAtCar($pl_plane, CameraMode.Fixed, SwitchType.JumpCut)
+
+:PLANES_2819
+Streaming.LoadSceneInDirection(1774.9, -2529.3, 13.9, 48.0)
+
+:PLANES_2841
+if or
+  $pl_which_recording == 42
+  $pl_which_recording == 43
+goto_if_false @PLANES_2945
+Camera.SetFixedPosition(-1268.5, 106.9, 37.1, 0.0, 0.0, 0.0)
+if 
+  not Car.IsDead($pl_plane)
+goto_if_false @PLANES_2923
+Camera.PointAtCar($pl_plane, CameraMode.Fixed, SwitchType.JumpCut)
+
+:PLANES_2923
+Streaming.LoadSceneInDirection(-1268.5, 106.9, 13.0, 350.0)
+
+:PLANES_2945
+if or
+  $pl_which_recording == 46
+  $pl_which_recording == 44
+goto_if_false @PLANES_3049
+Camera.SetFixedPosition(1396.1, 1382.3, 25.4, 0.0, 0.0, 0.0)
+if 
+  not Car.IsDead($pl_plane)
+goto_if_false @PLANES_3027
+Camera.PointAtCar($pl_plane, CameraMode.Fixed, SwitchType.JumpCut)
+
+:PLANES_3027
+Streaming.LoadSceneInDirection(1396.1, 1382.3, 10.0, 264.0)
+
+:PLANES_3049
+$pl_has_player_skipped = 1
+
+:PLANES_3056
+Text.ClearPrints
+Camera.DoFade(1, 2500)
+
+:PLANES_3065
+if 
+  Camera.GetFadingStatus
+goto_if_false @PLANES_3112
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_3105
+goto @PLANES_3712
+
+:PLANES_3105
+goto @PLANES_3065
+
+:PLANES_3112
+if 
+  not Car.IsDead($pl_plane)
+goto_if_false @PLANES_3342
+if 
+  not Car.IsPlaybackGoingOn($pl_plane)
+goto_if_false @PLANES_3342
+Camera.DoFade(0, 2000)
+
+:PLANES_3151
+if 
+  Camera.GetFadingStatus
+goto_if_false @PLANES_3198
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_3191
+goto @PLANES_3712
+
+:PLANES_3191
+goto @PLANES_3151
+
+:PLANES_3198
+gosub @PLANES_3818
+Camera.SetCinema(False)
+Streaming.RequestCollision($pl_playerx, $pl_playery)
+World.ClearArea(1, $pl_playerx, $pl_playery, $pl_playerz, 100.0)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, $pl_playerx, $pl_playery, $pl_playerz)
+Char.SetHeading($scplayer, $pl_player_heading)
+Streaming.LoadScene($pl_playerx, $pl_playery, $pl_playerz)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Camera.DoFade(1, 500)
+
+:PLANES_3288
+if 
+  Camera.GetFadingStatus
+goto_if_false @PLANES_3335
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_3328
+goto @PLANES_3712
+
+:PLANES_3328
+goto @PLANES_3288
+
+:PLANES_3335
+goto @PLANES_3712
+
+:PLANES_3342
+if 
+  $pl_control_flag == 2
+goto_if_false @PLANES_3585
+Camera.DoFade(0, 500)
+
+:PLANES_3367
+if 
+  Camera.GetFadingStatus
+goto_if_false @PLANES_3414
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_3407
+goto @PLANES_3712
+
+:PLANES_3407
+goto @PLANES_3367
+
+:PLANES_3414
+Char.GiveWeapon($scplayer, WeaponType.Parachute, 1)
+Char.SetCurrentWeapon($scplayer, WeaponType.Parachute)
+Camera.SetCinema(False)
+Task.LeaveAnyCar($scplayer)
+Text.ClearThisPrint('PLA_11')
+Text.ClearThisPrint('PLA_12')
+
+:PLANES_3461
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @PLANES_3511
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_3504
+goto @PLANES_3712
+
+:PLANES_3504
+goto @PLANES_3461
+
+:PLANES_3511
+Car.Delete($pl_plane)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Camera.DoFade(1, 500)
+
+:PLANES_3531
+if 
+  Camera.GetFadingStatus
+goto_if_false @PLANES_3578
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @PLANES_3571
+goto @PLANES_3712
+
+:PLANES_3571
+goto @PLANES_3531
+
+:PLANES_3578
+goto @PLANES_3712
+
+:PLANES_3585
+if 
+  $pl_has_player_skipped == 0
+goto_if_false @PLANES_3705
+if 
+  $pl_undercarriage_flag == 0
+goto_if_false @PLANES_3654
+if 
+  is_int_var_greater_than_int_var $pl_game_timer_diff > $pl_undercarriage_up_time
+goto_if_false @PLANES_3654
+Plane.SetUndercarriageUp($pl_plane, True)
+$pl_undercarriage_flag = 1
+
+:PLANES_3654
+if 
+  $pl_undercarriage_flag == 1
+goto_if_false @PLANES_3705
+if 
+  is_int_var_greater_than_int_var $pl_game_timer_diff > $pl_undercarriage_down_time
+goto_if_false @PLANES_3705
+Plane.SetUndercarriageUp($pl_plane, False)
+$pl_undercarriage_flag = 2
+
+:PLANES_3705
+goto @PLANES_2055
+
+:PLANES_3712
+Text.ClearThisPrint('PLA_11')
+Text.ClearThisPrint('PLA_12')
+if 
+  is_var_text_label_empty s$shop_name
+goto_if_false @PLANES_3752
+Camera.RestoreJumpcut
+
+:PLANES_3752
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PLANES_3775
+Player.SetControl($player1, True)
+
+:PLANES_3775
+Camera.SetCinema(False)
+Game.AllowPauseInWidescreen(False)
+Text.UseCommands(False)
+Car.MarkAsNoLongerNeeded($pl_plane)
+Streaming.MarkModelAsNoLongerNeeded(577)
+Streaming.MarkModelAsNoLongerNeeded(371)
+Txd.Remove
+Hud.Display(True)
+Hud.DisplayRadar(True)
+Stat.ShowUpdateStats(True)
+terminate_this_script 
+
+:PLANES_3818
+if 
+  is_int_var_equal_to_constant $im_players_city == 1
+goto_if_false @PLANES_3999
+$pl_playerx = 1682.7
+$pl_playery = -2244.9
+$pl_playerz = 12.5
+$pl_player_heading = 178.9
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_3934
+$pl_planex = 2052.0
+$pl_planey = -2497.5
+$pl_planez = 12.4
+$pl_plane_heading = 89.9
+
+:PLANES_3934
+if 
+  $pl_which_city_select == 1
+goto_if_false @PLANES_3992
+$pl_planex = 1580.0
+$pl_planey = -2493.5
+$pl_planez = 12.4
+$pl_plane_heading = 270.0
+
+:PLANES_3992
+$pl_which_car_recording = 18
+
+:PLANES_3999
+if 
+  is_int_var_equal_to_constant $im_players_city == 2
+goto_if_false @PLANES_4180
+$pl_playerx = -1431.6
+$pl_playery = -283.9
+$pl_playerz = 13.1
+$pl_player_heading = 149.9
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_4115
+$pl_planex = -1626.0
+$pl_planey = -137.3
+$pl_planez = 13.0
+$pl_plane_heading = 315.6
+
+:PLANES_4115
+if 
+  $pl_which_city_select == 1
+goto_if_false @PLANES_4173
+$pl_planex = -1590.9
+$pl_planey = -103.5
+$pl_planez = 13.0
+$pl_plane_heading = 315.3
+
+:PLANES_4173
+$pl_which_car_recording = 19
+
+:PLANES_4180
+if 
+  is_int_var_equal_to_constant $im_players_city == 3
+goto_if_false @PLANES_4361
+$pl_playerx = 1669.8
+$pl_playery = 1422.1
+$pl_playerz = 9.7
+$pl_player_heading = 263.9
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_4296
+$pl_planex = 1479.7
+$pl_planey = 1716.1
+$pl_planez = 9.7
+$pl_plane_heading = 180.0
+
+:PLANES_4296
+if 
+  $pl_which_city_select == 1
+goto_if_false @PLANES_4354
+$pl_planex = 1475.7
+$pl_planey = 1636.0
+$pl_planez = 9.7
+$pl_plane_heading = 180.0
+
+:PLANES_4354
+$pl_which_car_recording = 20
+
+:PLANES_4361
+return 
+
+:PLANES_4363
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(4, 320.0, 225.0, 612.0, 438.0, 0, 0, 0, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(4, 320.0, 430.0, 640.0, 250.0, 0, 0, 0, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(1, 321.0, 246.0, 356.0, 246.0, 160, 160, 160, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(4, 326.0, 84.0, 602.0, 58.0, 73, 73, 73, 255)
+gosub @PLANES_7879
+Text.SetColor(255, 255, 255, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @PLANES_4574
+Text.Display(269.0, 65.0, 'PLA_1')
+
+:PLANES_4574
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @PLANES_4625
+Text.SetScale(0.9, 3.4)
+Text.Display(327.0, 65.0, 'PLA_1')
+
+:PLANES_4625
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @PLANES_4664
+Text.Display(269.0, 65.0, 'PLA_1')
+
+:PLANES_4664
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @PLANES_4715
+Text.SetScale(0.91, 3.43)
+Text.Display(322.0, 65.0, 'PLA_1')
+
+:PLANES_4715
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @PLANES_4766
+Text.SetScale(0.9, 3.4)
+Text.Display(322.0, 65.0, 'PLA_1')
+
+:PLANES_4766
+if 
+  $pl_city_open == 0
+goto_if_false @PLANES_4987
+gosub @PLANES_7879
+Text.SetColor(255, 255, 255, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @PLANES_4863
+Text.SetScale(1.21, 6.23)
+Text.Display(320.0, 204.0, 'PLA_25')
+goto @PLANES_4896
+
+:PLANES_4863
+Text.SetScale(1.41, 6.23)
+Text.Display(316.0, 204.0, 'PLA_25')
+
+:PLANES_4896
+gosub @PLANES_8029
+Text.SetColor(255, 255, 255, 255)
+Text.Display(210.0, 368.0, 'PLA_23')
+gosub @PLANES_8029
+Text.SetColor(255, 255, 255, 255)
+Text.Display(298.0, 368.0, 'PLA_21')
+goto @PLANES_7637
+
+:PLANES_4987
+gosub @PLANES_7954
+Text.SetColor(138, 138, 138, 255)
+Text.Display(92.0, 144.0, 'PLA_2')
+gosub @PLANES_7954
+Text.SetColor(138, 138, 138, 255)
+Text.Display(92.0, 207.0, 'PLA_13')
+gosub @PLANES_7954
+Text.SetColor(138, 138, 138, 255)
+Text.Display(92.0, 267.0, 'PLA_17')
+if 
+  $pl_city_open > 1
+goto_if_false @PLANES_6446
+gosub @PLANES_8029
+Text.SetScale(0.62, 1.54)
+Text.SetColor(255, 255, 255, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @PLANES_5203
+Text.Display(92.0, 372.0, 'PLA_22')
+
+:PLANES_5203
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @PLANES_5242
+Text.Display(52.0, 372.0, 'PLA_22')
+
+:PLANES_5242
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @PLANES_5281
+Text.Display(52.0, 372.0, 'PLA_22')
+
+:PLANES_5281
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @PLANES_5320
+Text.Display(52.0, 372.0, 'PLA_22')
+
+:PLANES_5320
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @PLANES_5359
+Text.Display(52.0, 372.0, 'PLA_22')
+
+:PLANES_5359
+gosub @PLANES_8029
+Text.SetColor(255, 255, 255, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @PLANES_5419
+Text.Display(124.0, 368.0, 'PLA_19')
+
+:PLANES_5419
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @PLANES_5458
+Text.Display(84.0, 368.0, 'PLA_19')
+
+:PLANES_5458
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @PLANES_5497
+Text.Display(84.0, 368.0, 'PLA_19')
+
+:PLANES_5497
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @PLANES_5536
+Text.Display(84.0, 368.0, 'PLA_19')
+
+:PLANES_5536
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @PLANES_5575
+Text.Display(84.0, 368.0, 'PLA_19')
+
+:PLANES_5575
+gosub @PLANES_8029
+Text.SetColor(255, 255, 255, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @PLANES_5635
+Text.Display(252.0, 368.0, 'PLA_24')
+
+:PLANES_5635
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @PLANES_5674
+Text.Display(294.0, 354.0, 'PLA_24')
+
+:PLANES_5674
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @PLANES_5713
+Text.Display(294.0, 354.0, 'PLA_24')
+
+:PLANES_5713
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @PLANES_5752
+Text.Display(255.0, 354.0, 'PLA_24')
+
+:PLANES_5752
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @PLANES_5791
+Text.Display(294.0, 354.0, 'PLA_24')
+
+:PLANES_5791
+gosub @PLANES_8029
+Text.SetColor(255, 255, 255, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @PLANES_5851
+Text.Display(337.0, 368.0, 'PLA_20')
+
+:PLANES_5851
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @PLANES_5890
+Text.Display(294.0, 373.0, 'PLA_20')
+
+:PLANES_5890
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @PLANES_5929
+Text.Display(294.0, 373.0, 'PLA_20')
+
+:PLANES_5929
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @PLANES_5968
+Text.Display(255.0, 373.0, 'PLA_20')
+
+:PLANES_5968
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @PLANES_6007
+Text.Display(294.0, 373.0, 'PLA_20')
+
+:PLANES_6007
+gosub @PLANES_8029
+Text.SetColor(255, 255, 255, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @PLANES_6067
+Text.Display(423.0, 368.0, 'PLA_23')
+
+:PLANES_6067
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @PLANES_6106
+Text.Display(457.0, 354.0, 'PLA_23')
+
+:PLANES_6106
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @PLANES_6145
+Text.Display(457.0, 354.0, 'PLA_23')
+
+:PLANES_6145
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @PLANES_6184
+Text.Display(457.0, 354.0, 'PLA_23')
+
+:PLANES_6184
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @PLANES_6223
+Text.Display(457.0, 354.0, 'PLA_23')
+
+:PLANES_6223
+gosub @PLANES_8029
+Text.SetColor(255, 255, 255, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @PLANES_6283
+Text.Display(507.0, 368.0, 'PLA_21')
+
+:PLANES_6283
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @PLANES_6322
+Text.Display(457.0, 373.0, 'PLA_21')
+
+:PLANES_6322
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @PLANES_6361
+Text.Display(457.0, 373.0, 'PLA_21')
+
+:PLANES_6361
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @PLANES_6400
+Text.Display(457.0, 373.0, 'PLA_21')
+
+:PLANES_6400
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @PLANES_6439
+Text.Display(457.0, 373.0, 'PLA_21')
+
+:PLANES_6439
+goto @PLANES_6706
+
+:PLANES_6446
+gosub @PLANES_8029
+Text.SetColor(255, 255, 255, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @PLANES_6513
+Text.Display(155.0, 368.0, 'PLA_24')
+goto @PLANES_6534
+
+:PLANES_6513
+Text.Display(105.0, 368.0, 'PLA_24')
+
+:PLANES_6534
+gosub @PLANES_8029
+Text.SetColor(255, 255, 255, 255)
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @PLANES_6601
+Text.Display(241.0, 368.0, 'PLA_20')
+goto @PLANES_6622
+
+:PLANES_6601
+Text.Display(191.0, 368.0, 'PLA_20')
+
+:PLANES_6622
+gosub @PLANES_8029
+Text.SetColor(255, 255, 255, 255)
+Text.Display(328.0, 368.0, 'PLA_23')
+gosub @PLANES_8029
+Text.SetColor(255, 255, 255, 255)
+Text.Display(412.0, 368.0, 'PLA_21')
+
+:PLANES_6706
+gosub @PLANES_7954
+Text.SetColor(255, 255, 255, 255)
+Text.Display(92.0, 167.0, $pl_days($pl_days_flag,8s))
+gosub @PLANES_7954
+Text.SetColor(255, 255, 255, 255)
+Text.DisplayWithNumber(92.0, 290.0, 'PLA_18', $pl_ticket_price)
+if 
+  is_int_var_equal_to_constant $im_players_city == 1
+goto_if_false @PLANES_7079
+gosub @PLANES_7954
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_6855
+Text.SetColor(255, 255, 255, 255)
+goto @PLANES_6866
+
+:PLANES_6855
+Text.SetColor(40, 40, 40, 255)
+
+:PLANES_6866
+Text.Display(92.0, 230.0, 'PLA_15')
+if 
+  $pl_city_open > 1
+goto_if_false @PLANES_6983
+gosub @PLANES_7954
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_6948
+Text.SetColor(40, 40, 40, 255)
+goto @PLANES_6962
+
+:PLANES_6948
+Text.SetColor(255, 255, 255, 255)
+
+:PLANES_6962
+Text.Display(282.0, 230.0, 'PLA_14')
+
+:PLANES_6983
+gosub @PLANES_7954
+Text.SetColor(255, 255, 255, 255)
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_7054
+Text.DisplayWith2Numbers(281.0, 167.0, 'PLA_10', 10, 30)
+goto @PLANES_7079
+
+:PLANES_7054
+Text.DisplayWith2Numbers(281.0, 167.0, 'PLA_10', 17, 50)
+
+:PLANES_7079
+if 
+  is_int_var_equal_to_constant $im_players_city == 2
+goto_if_false @PLANES_7367
+gosub @PLANES_7954
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_7143
+Text.SetColor(255, 255, 255, 255)
+goto @PLANES_7154
+
+:PLANES_7143
+Text.SetColor(40, 40, 40, 255)
+
+:PLANES_7154
+Text.Display(92.0, 230.0, 'PLA_16')
+if 
+  $pl_city_open > 1
+goto_if_false @PLANES_7271
+gosub @PLANES_7954
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_7236
+Text.SetColor(40, 40, 40, 255)
+goto @PLANES_7250
+
+:PLANES_7236
+Text.SetColor(255, 255, 255, 255)
+
+:PLANES_7250
+Text.Display(282.0, 230.0, 'PLA_14')
+
+:PLANES_7271
+gosub @PLANES_7954
+Text.SetColor(255, 255, 255, 255)
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_7342
+Text.DisplayWith2Numbers(281.0, 167.0, 'PLA_10', 11, 20)
+goto @PLANES_7367
+
+:PLANES_7342
+Text.DisplayWith2Numbers(281.0, 167.0, 'PLA_10', 14, 40)
+
+:PLANES_7367
+if 
+  is_int_var_equal_to_constant $im_players_city == 3
+goto_if_false @PLANES_7637
+gosub @PLANES_7954
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_7431
+Text.SetColor(255, 255, 255, 255)
+goto @PLANES_7442
+
+:PLANES_7431
+Text.SetColor(40, 40, 40, 255)
+
+:PLANES_7442
+Text.Display(92.0, 230.0, 'PLA_16')
+gosub @PLANES_7954
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_7506
+Text.SetColor(40, 40, 40, 255)
+goto @PLANES_7520
+
+:PLANES_7506
+Text.SetColor(255, 255, 255, 255)
+
+:PLANES_7520
+Text.Display(282.0, 230.0, 'PLA_15')
+gosub @PLANES_7954
+Text.SetColor(255, 255, 255, 255)
+if 
+  $pl_which_city_select == 0
+goto_if_false @PLANES_7612
+Text.DisplayWith2Numbers(281.0, 167.0, 'PLA_10', 19, 10)
+goto @PLANES_7637
+
+:PLANES_7612
+Text.DisplayWith2Numbers(281.0, 167.0, 'PLA_10', 14, 30)
+
+:PLANES_7637
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(2, 160.0, 112.0, 320.0, 224.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(2, 160.0, 317.0, 320.0, -224.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(2, 480.0, 112.0, -320.0, 224.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(2, 480.0, 317.0, -320.0, -224.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(3, 160.0, 435.0, 320.0, 17.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(3, 480.0, 435.0, -320.0, 17.0, 150, 150, 150, 255)
+return 
+
+:PLANES_7879
+Text.SetDrawBeforeFade(True)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+Text.SetScale(1.0, 3.4)
+Text.SetDropshadow(3, 0, 0, 0, 255)
+Text.SetEdge(2, 0, 0, 0, 255)
+Text.SetFont(Font.Menu)
+return 
+
+:PLANES_7954
+Text.SetDrawBeforeFade(True)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(False)
+Text.SetBackground(False)
+Text.SetScale(0.62, 2.34)
+Text.SetDropshadow(2, 0, 0, 0, 255)
+Text.SetEdge(2, 0, 0, 0, 255)
+Text.SetFont(Font.Menu)
+return 
+
+:PLANES_8029
+Text.SetDrawBeforeFade(True)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(False)
+Text.SetBackground(False)
+Text.SetScale(0.42, 2.24)
+Text.SetDropshadow(2, 0, 0, 0, 255)
+Text.SetEdge(2, 0, 0, 0, 255)
+Text.SetFont(Font.Menu)
+return 
+terminate_this_script 
+

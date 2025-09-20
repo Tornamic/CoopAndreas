@@ -1,0 +1,48 @@
+:KICKS
+script_name 'KICKS'
+
+:KICKS_11
+wait $mission_trigger_wait_time
+if 
+  $onmission == 0
+goto_if_false @KICKS_271
+if 
+  Player.IsPlaying($player1)
+goto_if_false @KICKS_271
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $kickX, $kickY, $kickZ, 1.4, 1.8, 1.5)
+goto_if_false @KICKS_271
+if 
+  Player.CanStartMission($player1)
+goto_if_false @KICKS_271
+$weekday = Clock.GetCurrentDayOfWeek()
+if or
+  $weekday == 0
+  $weekday == 2
+  $weekday == 4
+goto_if_false @KICKS_243
+$stat = Stat.GetInt(229)
+if 
+  $stat > 199
+goto_if_false @KICKS_220
+Text.PrintBig('STAD_01', 1000, TextStyle.BottomRight)
+LITCAS_267()
+set_var_int_to_constant $race_selection = 26
+$show_race_selection = 0
+Mission.LoadAndLaunchInternal(35) // Race Tournament / 8-track / Dirt Track
+goto @KICKS_236
+
+:KICKS_220
+Text.PrintNow('STATBIK', 500, 1)
+
+:KICKS_236
+goto @KICKS_271
+
+:KICKS_243
+Text.PrintBig('STAD_02', 1000, TextStyle.BottomRight)
+LITCAS_267()
+Mission.LoadAndLaunchInternal(129) // Arena Mission: Kickstart
+
+:KICKS_271
+goto @KICKS_11
+

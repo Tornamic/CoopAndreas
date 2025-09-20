@@ -1,0 +1,4315 @@
+//-------------Mission 56---------------
+// Originally: Amphibious Assault
+
+:WUZI2
+script_name 'WUZI2'
+gosub @WUZI2_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @WUZI2_38
+gosub @WUZI2_26542
+
+:WUZI2_38
+gosub @WUZI2_26652
+terminate_this_script 
+
+:WUZI2_47
+Stat.RegisterMissionGiven
+$onmission = 1
+257@ = Game.GetMaxWantedLevel()
+Text.LoadMissionText('WUZI2')
+$swim_stamina_check = Stat.GetInt(225)
+if 
+  not is_ps2_keyboard_key_pressed 81
+goto_if_false @WUZI2_242
+if 
+  50 >= $swim_stamina_check
+goto_if_false @WUZI2_242
+$swim_stamina_check = 1
+Streaming.SetAreaVisible(1)
+Cutscene.Load('W2_ALT')
+
+:WUZI2_135
+if 
+  not Cutscene.HasLoaded
+goto_if_false @WUZI2_159
+wait 0
+goto @WUZI2_135
+
+:WUZI2_159
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:WUZI2_168
+if 
+  not Cutscene.HasFinished
+goto_if_false @WUZI2_192
+wait 0
+goto @WUZI2_168
+
+:WUZI2_192
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:WUZI2_205
+if 
+  Camera.GetFadingStatus
+goto_if_false @WUZI2_229
+wait 0
+goto @WUZI2_205
+
+:WUZI2_229
+Cutscene.Clear
+Streaming.SetAreaVisible(0)
+goto @WUZI2_26652
+
+:WUZI2_242
+$swim_stamina_check = 0
+Player.SetGroupRecruitment($player1, False)
+Game.SetScriptLimitToGangSize(0)
+Streaming.SetAreaVisible(1)
+Cutscene.Load('WOOZIE2')
+
+:WUZI2_275
+if 
+  not Cutscene.HasLoaded
+goto_if_false @WUZI2_299
+wait 0
+goto @WUZI2_275
+
+:WUZI2_299
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:WUZI2_308
+if 
+  not Cutscene.HasFinished
+goto_if_false @WUZI2_332
+wait 0
+goto @WUZI2_308
+
+:WUZI2_332
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:WUZI2_345
+if 
+  Camera.GetFadingStatus
+goto_if_false @WUZI2_369
+wait 0
+goto @WUZI2_345
+
+:WUZI2_369
+Cutscene.Clear
+Streaming.SetAreaVisible(0)
+Game.SetScriptLimitToGangSize(99)
+start_new_script @A_CONT 
+Streaming.RequestModel(121)
+Streaming.RequestModel(122)
+Streaming.RequestModel(123)
+Streaming.RequestModel(454)
+Streaming.RequestModel(355)
+Streaming.RequestModel(335)
+Streaming.RequestModel(#A51_SPOTBASE)
+Streaming.RequestModel(#A51_SPOTHOUSING)
+Streaming.RequestModel(#A51_SPOTBULB)
+Streaming.RequestAnimation("DAM_JUMP")
+
+:WUZI2_441
+if or
+  not Streaming.HasModelLoaded(121)
+  not Streaming.HasModelLoaded(122)
+  not Streaming.HasModelLoaded(123)
+  not Streaming.HasModelLoaded(454)
+  not Streaming.HasModelLoaded(355)
+  not Streaming.HasModelLoaded(335)
+goto_if_false @WUZI2_490
+wait 0
+goto @WUZI2_441
+
+:WUZI2_490
+if or
+  not Streaming.HasModelLoaded(#A51_SPOTBASE)
+  not Streaming.HasModelLoaded(#A51_SPOTHOUSING)
+  not Streaming.HasModelLoaded(#A51_SPOTBULB)
+  not Streaming.HasAnimationLoaded("DAM_JUMP")
+goto_if_false @WUZI2_539
+wait 0
+goto @WUZI2_490
+
+:WUZI2_539
+34@ = DecisionMakerChar.Load(DecisionMakerType.Steal)
+35@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission2, PedType.Player1)
+Weather.ForceNow(WeatherType.FoggySf)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Player.SetControl($player1, True)
+Char.SetCoordinates($scplayer, -2153.611, 645.31, 51.3516)
+Char.SetHeading($scplayer, 270.0)
+Camera.DoFade(1, 1500)
+36@ = Blip.AddForCoord(-1641.995, 1309.217, 6.1764)
+Text.PrintNow('WZI2_1', 8000, 1)
+40@ = 0
+253@ = 0
+if 
+  253@ == 1
+goto_if_false @WUZI2_910
+290@($pointer_W2,2i) = Car.Create(454, 0.0, 0.0, 0.0)
+436@($pointer_W2,7i) = Char.Create(4, 121, 0.0, 0.0, 0.0)
+443@($pointer_W2,8i) = Blip.AddForChar(436@($pointer_W2,7i))
+413@($pointer_W2,2i) = Car.Create(454, 0.0, 0.0, 0.0)
+417@($pointer_W2,6i) = Char.Create(4, 121, 0.0, 0.0, 0.0)
+259@ = Blip.AddForChar(417@($pointer_W2,6i))
+383@($pointer_W2,6i) = Searchlight.Create(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+276@ = Checkpoint.Create(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3, 0.0)
+
+:WUZI2_910
+set_lvar_text_label 127@s = 'WUZ2_AA'
+set_lvar_int_to_constant 58@ = 44000
+set_lvar_text_label 129@s = 'WUZ2_NA'
+set_lvar_int_to_constant 59@ = 44036
+set_lvar_text_label 131@s = 'WUZ2_ZA'
+set_lvar_int_to_constant 60@ = 44083
+set_lvar_text_label 133@s = 'WUZ2_AB'
+set_lvar_int_to_constant 61@ = 44001
+set_lvar_text_label 135@s = 'WUZ2_NB'
+set_lvar_int_to_constant 62@ = 44037
+set_lvar_text_label 137@s = 'WUZ2_ZB'
+set_lvar_int_to_constant 63@ = 44084
+set_lvar_text_label 139@s = 'WUZ2_AC'
+set_lvar_int_to_constant 64@ = 44002
+set_lvar_text_label 141@s = 'WUZ2_NC'
+set_lvar_int_to_constant 65@ = 44038
+set_lvar_text_label 143@s = 'WUZ2_ZC'
+set_lvar_int_to_constant 66@ = 44085
+set_lvar_text_label 145@s = 'WUZ2_BA'
+set_lvar_int_to_constant 67@ = 44003
+set_lvar_text_label 147@s = 'WUZ2_OA'
+set_lvar_int_to_constant 68@ = 44039
+set_lvar_text_label 149@s = 'WUZ2_ZD'
+set_lvar_int_to_constant 69@ = 44086
+set_lvar_text_label 151@s = 'WUZ2_BB'
+set_lvar_int_to_constant 70@ = 44004
+set_lvar_text_label 153@s = 'WUZ2_OB'
+set_lvar_int_to_constant 71@ = 44040
+set_lvar_text_label 155@s = 'WUZ2_ZE'
+set_lvar_int_to_constant 72@ = 44087
+set_lvar_text_label 157@s = 'WUZ2_BC'
+set_lvar_int_to_constant 73@ = 44005
+set_lvar_text_label 159@s = 'WUZ2_OC'
+set_lvar_int_to_constant 74@ = 44041
+set_lvar_text_label 161@s = 'WUZ2_ZF'
+set_lvar_int_to_constant 75@ = 44088
+set_lvar_text_label 163@s = 'WUZ2_CA'
+set_lvar_int_to_constant 76@ = 44006
+set_lvar_text_label 165@s = 'WUZ2_PA'
+set_lvar_int_to_constant 77@ = 44042
+set_lvar_text_label 167@s = 'WUZ2_ZG'
+set_lvar_int_to_constant 78@ = 44089
+set_lvar_text_label 169@s = 'WUZ2_CB'
+set_lvar_int_to_constant 79@ = 44007
+set_lvar_text_label 171@s = 'WUZ2_PB'
+set_lvar_int_to_constant 80@ = 44043
+set_lvar_text_label 173@s = 'WUZ2_ZH'
+set_lvar_int_to_constant 81@ = 44090
+set_lvar_text_label 175@s = 'WUZ2_CC'
+set_lvar_int_to_constant 82@ = 44008
+set_lvar_text_label 177@s = 'WUZ2_PC'
+set_lvar_int_to_constant 83@ = 44044
+set_lvar_text_label 179@s = 'WUZ2_ZJ'
+set_lvar_int_to_constant 84@ = 44091
+set_lvar_text_label 181@s = 'WUZ2_DA'
+set_lvar_int_to_constant 85@ = 44009
+set_lvar_text_label 183@s = 'WUZ2_QA'
+set_lvar_int_to_constant 86@ = 44045
+set_lvar_text_label 185@s = 'WUZ2_ZK'
+set_lvar_int_to_constant 87@ = 44092
+set_lvar_text_label 187@s = 'WUZ2_DB'
+set_lvar_int_to_constant 88@ = 44010
+set_lvar_text_label 189@s = 'WUZ2_QB'
+set_lvar_int_to_constant 89@ = 44046
+set_lvar_text_label 191@s = 'WUZ2_ZL'
+set_lvar_int_to_constant 90@ = 44093
+set_lvar_text_label 193@s = 'WUZ2_DC'
+set_lvar_int_to_constant 91@ = 44011
+set_lvar_text_label 195@s = 'WUZ2_QC'
+set_lvar_int_to_constant 92@ = 44047
+set_lvar_text_label 197@s = 'WUZ2_ZM'
+set_lvar_int_to_constant 93@ = 44094
+set_lvar_text_label 199@s = 'WUZ2_EA'
+set_lvar_int_to_constant 94@ = 44012
+set_lvar_text_label 201@s = 'WUZ2_RA'
+set_lvar_int_to_constant 95@ = 44048
+set_lvar_text_label 203@s = 'WUZ2_ZN'
+set_lvar_int_to_constant 96@ = 44095
+set_lvar_text_label 205@s = 'WUZ2_EB'
+set_lvar_int_to_constant 97@ = 44013
+set_lvar_text_label 207@s = 'WUZ2_RB'
+set_lvar_int_to_constant 98@ = 44049
+set_lvar_text_label 209@s = 'WUZ2_ZO'
+set_lvar_int_to_constant 99@ = 44096
+set_lvar_text_label 211@s = 'WUZ2_EC'
+set_lvar_int_to_constant 100@ = 44014
+set_lvar_text_label 213@s = 'WUZ2_RC'
+set_lvar_int_to_constant 101@ = 44050
+set_lvar_text_label 215@s = 'WUZ2_ZP'
+set_lvar_int_to_constant 102@ = 44097
+set_lvar_text_label 217@s = 'WUZ2_FA'
+set_lvar_int_to_constant 103@ = 44015
+set_lvar_text_label 219@s = 'WUZ2_SA'
+set_lvar_int_to_constant 104@ = 44051
+set_lvar_text_label 221@s = 'WUZ2_ZQ'
+set_lvar_int_to_constant 105@ = 44098
+set_lvar_text_label 223@s = 'WUZ2_FB'
+set_lvar_int_to_constant 106@ = 44016
+set_lvar_text_label 225@s = 'WUZ2_SB'
+set_lvar_int_to_constant 107@ = 44052
+set_lvar_text_label 227@s = 'WUZ2_ZR'
+set_lvar_int_to_constant 108@ = 44099
+set_lvar_text_label 229@s = 'WUZ2_FC'
+set_lvar_int_to_constant 109@ = 44017
+set_lvar_text_label 231@s = 'WUZ2_SC'
+set_lvar_int_to_constant 110@ = 44053
+set_lvar_text_label 233@s = 'WUZ2_ZS'
+set_lvar_int_to_constant 111@ = 44100
+set_lvar_text_label 235@s = 'WUZ2_GA'
+set_lvar_int_to_constant 112@ = 44018
+set_lvar_text_label 237@s = 'WUZ2_TA'
+set_lvar_int_to_constant 113@ = 44054
+set_lvar_text_label 239@s = 'WUZ2_ZT'
+set_lvar_int_to_constant 114@ = 44101
+set_lvar_text_label 241@s = 'WUZ2_GB'
+set_lvar_int_to_constant 115@ = 44019
+set_lvar_text_label 243@s = 'WUZ2_TB'
+set_lvar_int_to_constant 116@ = 44055
+set_lvar_text_label 245@s = 'WUZ2_ZU'
+set_lvar_int_to_constant 117@ = 44102
+set_lvar_text_label 247@s = 'WUZ2_GC'
+set_lvar_int_to_constant 118@ = 44020
+set_lvar_text_label 249@s = 'WUZ2_TC'
+set_lvar_int_to_constant 119@ = 44056
+set_lvar_text_label 251@s = 'WUZ2_ZV'
+set_lvar_int_to_constant 120@ = 44103
+121@ = Math.RandomIntInRange(0, 3)
+122@ = Math.RandomIntInRange(0, 3)
+123@ = 0
+124@ = 10
+
+:WUZI2_2454
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @WUZI2_2480
+goto @WUZI2_26588
+
+:WUZI2_2480
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, -1641.995, 1309.217, 6.1764, 1.2, 1.2, 2.0, True)
+goto_if_false @WUZI2_2547
+Player.SetControl($player1, False)
+Blip.Remove(36@)
+goto @WUZI2_2554
+
+:WUZI2_2547
+goto @WUZI2_2454
+
+:WUZI2_2554
+Camera.DoFade(0, 500)
+
+:WUZI2_2561
+if 
+  Camera.GetFadingStatus
+goto_if_false @WUZI2_2585
+wait 0
+goto @WUZI2_2561
+
+:WUZI2_2585
+Player.ClearWantedLevel($player1)
+Game.SetMaxWantedLevel(0)
+World.ClearAreaOfCars(-1648.875, 1319.242, 6.0, -1636.367, 1297.54, 9.0)
+World.ClearAreaOfChars(-1648.875, 1319.242, 6.0, -1636.367, 1297.54, 9.0)
+gosub @WUZI2_8379
+gosub @WUZI2_18697
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @WUZI2_2715
+Char.WarpFromCarToCoord($scplayer, -1640.9, 1310.6, 6.1797)
+goto @WUZI2_2735
+
+:WUZI2_2715
+Char.SetCoordinates($scplayer, -1640.9, 1310.6, 6.1797)
+
+:WUZI2_2735
+Char.SetHeading($scplayer, 315.0)
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+47@ = 0
+Streaming.LoadScene(-1455.999, 1529.144, 19.179)
+Camera.SetFixedPosition(-1358.484, 1468.994, 18.4397, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1359.312, 1469.54, 18.3092, SwitchType.JumpCut)
+gosub @WUZI2_18118
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Camera.DoFade(1, 500)
+
+:WUZI2_2852
+if 
+  Camera.GetFadingStatus
+goto_if_false @WUZI2_2876
+wait 0
+goto @WUZI2_2852
+
+:WUZI2_2876
+skip_cutscene_start_internal @WUZI2_3040
+Text.PrintNow('WZI2_2', 6500, 1)
+TIMERA = 0
+
+:WUZI2_2906
+if 
+  6500 > TIMERA
+goto_if_false @WUZI2_2936
+wait 0
+goto @WUZI2_2906
+
+:WUZI2_2936
+Camera.SetFixedPosition(-1511.427, 1374.075, 5.9802, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1511.29, 1373.103, 5.7898, SwitchType.JumpCut)
+Text.PrintNow('WZI2_3', 6500, 1)
+TIMERA = 0
+
+:WUZI2_3010
+if 
+  6500 > TIMERA
+goto_if_false @WUZI2_3040
+wait 0
+goto @WUZI2_3010
+
+:WUZI2_3040
+skip_cutscene_end 
+Text.ClearPrints
+skip_cutscene_start_internal @WUZI2_3877
+Camera.SetFixedPosition(-1642.439, 1308.882, 11.1649, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1641.914, 1309.402, 10.4912, SwitchType.JumpCut)
+TIMERA = 0
+
+:WUZI2_3109
+if 
+  500 > TIMERA
+goto_if_false @WUZI2_3139
+wait 0
+goto @WUZI2_3109
+
+:WUZI2_3139
+Task.PlayAnim($scplayer, "SF_JUMPWALL", "DAM_JUMP", 1000.0, False, False, False, False, 0)
+TIMERA = 0
+
+:WUZI2_3189
+if 
+  1000 > TIMERA
+goto_if_false @WUZI2_3219
+wait 0
+goto @WUZI2_3189
+
+:WUZI2_3219
+Clock.SetTimeScale(0.2)
+Camera.SetFixedPosition(-1636.664, 1316.354, -3.7183, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1636.729, 1315.749, -2.925, SwitchType.JumpCut)
+$z = -2.925
+TIMERA = 0
+254@ = 0
+
+:WUZI2_3301
+if 
+  $z > -3.2406
+goto_if_false @WUZI2_3570
+wait 0
+$z -= 0.003
+if 
+  -3.2406 > $z
+goto_if_false @WUZI2_3367
+$z = -3.2406
+
+:WUZI2_3367
+Camera.PointAtPoint(-1636.729, 1315.749, $z, SwitchType.JumpCut)
+if and
+  TIMERA > 200
+  2 > 254@
+goto_if_false @WUZI2_3563
+if 
+  254@ == 0
+goto_if_false @WUZI2_3546
+$x = World.GetWaterHeightAtCoords(-1637.354, 1314.11, True)
+255@ = Particle.Create("WATER_SPLASH", -1637.354, 1314.11, $x, 1)
+256@ = Particle.Create("WATER_RIPPLES", -1637.354, 1314.11, $x, 1)
+Audio.ReportMissionAudioEventAtPosition(-1637.354, 1314.11, $x, 1144)
+254@ += 1
+goto @WUZI2_3563
+
+:WUZI2_3546
+Particle.Play(255@)
+Particle.Play(256@)
+254@ += 1
+
+:WUZI2_3563
+goto @WUZI2_3301
+
+:WUZI2_3570
+$z = 0.2
+
+:WUZI2_3580
+if 
+  0.5 > $z
+goto_if_false @WUZI2_3658
+wait 0
+$z += 0.014
+if 
+  $z > 0.5
+goto_if_false @WUZI2_3646
+$z = 0.5
+
+:WUZI2_3646
+Clock.SetTimeScale($z)
+goto @WUZI2_3580
+
+:WUZI2_3658
+Particle.Kill(255@)
+Particle.Kill(256@)
+
+:WUZI2_3668
+if 
+  Char.IsPlayingAnim($scplayer, "SF_JUMPWALL")
+goto_if_false @WUZI2_3708
+wait 0
+goto @WUZI2_3668
+
+:WUZI2_3708
+Char.SetCoordinates($scplayer, -1636.33, 1315.36, -1.0)
+Char.SetHeading($scplayer, 285.0)
+TIMERA = 0
+
+:WUZI2_3745
+if 
+  500 > TIMERA
+goto_if_false @WUZI2_3775
+wait 0
+goto @WUZI2_3745
+
+:WUZI2_3775
+Clock.SetTimeScale(1.0)
+Camera.SetFixedPosition(-1641.399, 1314.413, 1.3246, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1640.422, 1314.574, 1.1792, SwitchType.JumpCut)
+47@ = 1
+TIMERA = 0
+
+:WUZI2_3847
+if 
+  1500 > TIMERA
+goto_if_false @WUZI2_3877
+wait 0
+goto @WUZI2_3847
+
+:WUZI2_3877
+skip_cutscene_end 
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Particle.Kill(255@)
+Particle.Kill(256@)
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Game.SetAlwaysDraw3DMarkers(True)
+277@ = 0
+278@ = 0
+280@ = -1625.651
+281@ = 1317.92
+279@ = 1
+if 
+  47@ == 0
+goto_if_false @WUZI2_4018
+Char.SetCoordinates($scplayer, -1636.33, 1315.36, -1.0)
+Char.SetHeading($scplayer, 285.0)
+Clock.SetTimeScale(1.0)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+goto @WUZI2_4020
+
+:WUZI2_4018
+Camera.Restore
+
+:WUZI2_4020
+Streaming.RemoveAnimation("DAM_JUMP")
+47@ = 0
+Text.ClearPrints
+Text.PrintNow('WZI2_8', 8000, 1)
+36@ = Blip.AddForCoord(-1449.642, 1501.135, 0.7366)
+$help_text_switch_W2 = 0
+$help_text_flag_W2 = 0
+set_lvar_text_label 260@s = 'WZI2_A0'
+set_lvar_text_label 262@s = 'WZI2_A1'
+set_lvar_text_label 264@s = 'WZI2_A2'
+set_lvar_text_label 266@s = 'WZI2_A3'
+set_lvar_text_label 268@s = 'WZI2_A4'
+set_lvar_text_label 270@s = 'WZI2_A5'
+set_lvar_text_label 272@s = 'WZI2_A6'
+set_lvar_text_label 274@s = 'WZI2_A7'
+if 
+  379@ == 0
+goto_if_false @WUZI2_4248
+258@ = Pickup.CreateWithAmmo(335, 3, 1, -1595.0, 1345.0, -7.5)
+
+:WUZI2_4248
+TIMERB = 0
+
+:WUZI2_4255
+wait 0
+gosub @WUZI2_16055
+if 
+  373@ == 2
+goto_if_false @WUZI2_4296
+Blip.Remove(259@)
+goto @WUZI2_7278
+
+:WUZI2_4296
+gosub @WUZI2_8017
+if 
+  289@ == 2
+goto_if_false @WUZI2_4328
+goto @WUZI2_6224
+
+:WUZI2_4328
+switch_start $help_text_switch_W2 total_jumps 4 default_jump 0 @WUZI2_5276 jumps 0 @WUZI2_4391 1 @WUZI2_4880 2 @WUZI2_5040 3 @WUZI2_5217 -1 @WUZI2_5276 -1 @WUZI2_5276 -1 @WUZI2_5276
+
+:WUZI2_4391
+if and
+  Char.IsInArea3D($scplayer, 0, -1602.782, 1320.688, -8.0, -1606.119, 1331.51, 1.0)
+  287@ == 0
+goto_if_false @WUZI2_4759
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Text.ClearHelp
+Text.ClearPrints
+Camera.ResetNewScriptables
+Camera.PersistTrack(True)
+Camera.PersistPos(True)
+Camera.SetVectorTrack(-1600.998, 1323.041, 1.9093, -1600.315, 1322.414, -2.0672, 6000, True)
+Camera.SetVectorMove(-1598.525, 1318.594, 2.3701, -1598.525, 1318.594, -2.3701, 6000, True)
+Text.PrintNow('WZI2_5', 8000, 1)
+TIMERA = 0
+
+:WUZI2_4568
+if 
+  800 > TIMERA
+goto_if_false @WUZI2_4598
+wait 0
+goto @WUZI2_4568
+
+:WUZI2_4598
+skip_cutscene_start_internal @WUZI2_4717
+
+:WUZI2_4605
+if 
+  Camera.IsVectorTrackRunning
+goto_if_false @WUZI2_4629
+wait 0
+goto @WUZI2_4605
+
+:WUZI2_4629
+TIMERA = 0
+
+:WUZI2_4636
+if 
+  1500 > TIMERA
+goto_if_false @WUZI2_4666
+wait 0
+goto @WUZI2_4636
+
+:WUZI2_4666
+Camera.SetFixedPosition(-1598.525, 1318.594, 1.3701, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1599.181, 1319.288, 1.0744, SwitchType.JumpCut)
+
+:WUZI2_4717
+skip_cutscene_end 
+Text.ClearPrints
+Camera.ResetNewScriptables
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+$help_text_switch_W2 += 1
+TIMERB = 0
+goto @WUZI2_4873
+
+:WUZI2_4759
+if 
+  Char.IsInArea3D($scplayer, 0, -1611.833, 1334.313, 0.8012, -1615.812, 1329.394, -7.9862)
+goto_if_false @WUZI2_4821
+$help_text_switch_W2 = 3
+goto @WUZI2_4873
+
+:WUZI2_4821
+if 
+  Char.LocateOnFoot2D($scplayer, 0, -1549.125, 1339.961, 3.5, 3.5)
+goto_if_false @WUZI2_4873
+282@ = 0
+goto @WUZI2_5983
+
+:WUZI2_4873
+goto @WUZI2_5276
+
+:WUZI2_4880
+if 
+  Char.IsInAngledAreaOnFoot3D($scplayer, -1611.833, 1334.313, 0.8012, -1615.812, 1329.394, -7.9862, 2.0, False)
+goto_if_false @WUZI2_4981
+if 
+  287@ == 1
+goto_if_false @WUZI2_4967
+Text.PrintNow('WZI2_6', 5000, 1)
+
+:WUZI2_4967
+$help_text_switch_W2 += 1
+goto @WUZI2_5033
+
+:WUZI2_4981
+if 
+  Char.LocateOnFoot2D($scplayer, 0, -1549.125, 1339.961, 3.5, 3.5)
+goto_if_false @WUZI2_5033
+282@ = 0
+goto @WUZI2_5983
+
+:WUZI2_5033
+goto @WUZI2_5276
+
+:WUZI2_5040
+if 
+  Char.LocateOnFoot2D($scplayer, 0, -1612.208, 1349.552, 3.5, 3.5)
+goto_if_false @WUZI2_5158
+Text.ClearHelp
+if 
+  379@ == 0
+goto_if_false @WUZI2_5136
+Text.PrintNow('WZI2_7', 6000, 1)
+259@ = Blip.AddForPickup(258@)
+TIMERB = 0
+goto @WUZI2_5144
+
+:WUZI2_5136
+TIMERB = 6001
+
+:WUZI2_5144
+$help_text_switch_W2 += 1
+goto @WUZI2_5210
+
+:WUZI2_5158
+if 
+  Char.LocateOnFoot2D($scplayer, 0, -1549.125, 1339.961, 3.5, 3.5)
+goto_if_false @WUZI2_5210
+282@ = 0
+goto @WUZI2_5983
+
+:WUZI2_5210
+goto @WUZI2_5276
+
+:WUZI2_5217
+if 
+  Char.LocateOnFoot2D($scplayer, 0, -1549.125, 1339.961, 3.5, 3.5)
+goto_if_false @WUZI2_5269
+282@ = 0
+goto @WUZI2_5983
+
+:WUZI2_5269
+goto @WUZI2_5276
+
+:WUZI2_5276
+gosub @WUZI2_5297
+gosub @WUZI2_18290
+goto @WUZI2_4255
+
+:WUZI2_5297
+switch_start 278@ total_jumps 2 default_jump 0 @WUZI2_5487 jumps 0 @WUZI2_5360 1 @WUZI2_5466 -1 @WUZI2_5487 -1 @WUZI2_5487 -1 @WUZI2_5487 -1 @WUZI2_5487 -1 @WUZI2_5487
+
+:WUZI2_5360
+if 
+  Char.LocateOnFoot2D($scplayer, 279@, 280@, 281@, 4.0, 4.0)
+goto_if_false @WUZI2_5459
+Checkpoint.Delete(276@)
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1058)
+if 
+  6 > 277@
+goto_if_false @WUZI2_5452
+278@ += 1
+goto @WUZI2_5459
+
+:WUZI2_5452
+278@ = -1
+
+:WUZI2_5459
+goto @WUZI2_5487
+
+:WUZI2_5466
+gosub @WUZI2_5489
+278@ -= 1
+goto @WUZI2_5487
+
+:WUZI2_5487
+return 
+
+:WUZI2_5489
+277@ += 1
+switch_start 277@ total_jumps 7 default_jump 0 @WUZI2_5981 jumps 1 @WUZI2_5559 2 @WUZI2_5593 3 @WUZI2_5665 4 @WUZI2_5699 5 @WUZI2_5803 6 @WUZI2_5837 7 @WUZI2_5909
+
+:WUZI2_5559
+280@ = -1604.522
+281@ = 1312.674
+279@ = 1
+goto @WUZI2_5981
+
+:WUZI2_5593
+280@ = -1611.557
+281@ = 1330.789
+276@ = Checkpoint.Create(280@, 281@, -2.2294, -1610.672, 1330.325, -2.2294, 3, 0.8)
+279@ = 0
+goto @WUZI2_5981
+
+:WUZI2_5665
+280@ = -1626.098
+281@ = 1343.811
+279@ = 1
+goto @WUZI2_5981
+
+:WUZI2_5699
+if 
+  379@ > 0
+goto_if_false @WUZI2_5796
+280@ = -1596.333
+281@ = 1345.053
+276@ = Checkpoint.Create(280@, 281@, -6.2933, -1597.273, 1345.396, -6.2933, 3, 0.8)
+279@ = 0
+goto @WUZI2_5981
+goto @WUZI2_5803
+
+:WUZI2_5796
+277@ += 1
+
+:WUZI2_5803
+280@ = -1576.722
+281@ = 1338.477
+279@ = 1
+goto @WUZI2_5981
+
+:WUZI2_5837
+280@ = -1559.138
+281@ = 1333.954
+276@ = Checkpoint.Create(280@, 281@, -5.3882, -1560.119, 1334.147, -5.3819, 3, 1.2)
+279@ = 0
+goto @WUZI2_5981
+
+:WUZI2_5909
+280@ = -1548.216
+281@ = 1342.198
+276@ = Checkpoint.Create(280@, 281@, -7.0752, -1548.608, 1341.277, -7.0752, 3, 1.2)
+279@ = 0
+goto @WUZI2_5981
+
+:WUZI2_5981
+return 
+
+:WUZI2_5983
+wait 0
+gosub @WUZI2_8017
+if 
+  289@ == 2
+goto_if_false @WUZI2_6019
+goto @WUZI2_6224
+
+:WUZI2_6019
+if 
+  287@ == 0
+goto_if_false @WUZI2_6154
+if 
+  282@ == 0
+goto_if_false @WUZI2_6147
+if 
+  not Char.IsInAngledAreaOnFoot3D($scplayer, -1558.932, 1338.285, -5.0, -1563.078, 1329.29, 5.0, 10.0, False)
+goto_if_false @WUZI2_6140
+if 
+  289@ == 0
+goto_if_false @WUZI2_6133
+goto @WUZI2_6224
+
+:WUZI2_6133
+goto @WUZI2_6147
+
+:WUZI2_6140
+282@ = 1
+
+:WUZI2_6147
+goto @WUZI2_6217
+
+:WUZI2_6154
+if 
+  282@ == 1
+goto_if_false @WUZI2_6217
+if 
+  Char.LocateOnFoot2D($scplayer, 0, -1549.125, 1339.961, 3.5, 3.5)
+goto_if_false @WUZI2_6217
+282@ = 0
+
+:WUZI2_6217
+goto @WUZI2_5983
+
+:WUZI2_6224
+$player_status_W2 = -2
+Text.ClearHelp
+Text.ClearPrints
+Blip.Remove(259@)
+Checkpoint.Delete(276@)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+if 
+  289@ <> 2
+goto_if_false @WUZI2_6823
+Camera.SetBehindPlayer
+TIMERA = 0
+
+:WUZI2_6283
+if 
+  500 > TIMERA
+goto_if_false @WUZI2_6313
+wait 0
+goto @WUZI2_6283
+
+:WUZI2_6313
+51@, 52@, 53@ = Camera.GetActiveCoordinates()
+54@, 55@, 56@ = Camera.GetActivePointAt()
+if 
+  not Car.IsDead(291@)
+goto_if_false @WUZI2_6365
+$x, $y, $z = Car.GetCoordinates(291@)
+
+:WUZI2_6365
+Camera.ResetNewScriptables
+Camera.PersistTrack(True)
+Camera.PersistPos(True)
+Camera.SetVectorTrack(54@, 55@, 56@, $x, $y, $z, 3500, True)
+Camera.SetVectorMove(51@, 52@, 53@, 51@, 52@, 53@, 3500, True)
+Text.PrintNow('WZI2_40', 8000, 1)
+TIMERA = 0
+
+:WUZI2_6448
+if 
+  1000 > TIMERA
+goto_if_false @WUZI2_6478
+wait 0
+goto @WUZI2_6448
+
+:WUZI2_6478
+skip_cutscene_start_internal @WUZI2_6814
+wait 0
+
+:WUZI2_6489
+if 
+  Camera.IsVectorTrackRunning
+goto_if_false @WUZI2_6513
+wait 0
+goto @WUZI2_6489
+
+:WUZI2_6513
+if 
+  not Car.IsDead(290@)
+goto_if_false @WUZI2_6543
+$player_x, $player_y, $player_z = Car.GetCoordinates(290@)
+
+:WUZI2_6543
+Camera.ResetNewScriptables
+Camera.PersistTrack(True)
+Camera.PersistPos(True)
+Camera.SetVectorTrack($x, $y, $z, $player_x, $player_y, $player_z, 3000, False)
+Camera.SetVectorMove(51@, 52@, 53@, 51@, 52@, 53@, 3000, False)
+wait 0
+
+:WUZI2_6607
+if 
+  Camera.IsVectorTrackRunning
+goto_if_false @WUZI2_6645
+wait 0
+gosub @WUZI2_9364
+gosub @WUZI2_12194
+goto @WUZI2_6607
+
+:WUZI2_6645
+Text.PrintNow('WZI2_41', 8000, 1)
+Camera.ResetNewScriptables
+Camera.PersistTrack(True)
+Camera.PersistPos(True)
+Camera.SetVectorTrack($player_x, $player_y, $player_z, 54@, 55@, 56@, 4500, True)
+Camera.SetVectorMove(51@, 52@, 53@, 51@, 52@, 53@, 4500, True)
+wait 0
+
+:WUZI2_6725
+if 
+  Camera.IsVectorTrackRunning
+goto_if_false @WUZI2_6763
+wait 0
+gosub @WUZI2_9364
+gosub @WUZI2_12194
+goto @WUZI2_6725
+
+:WUZI2_6763
+TIMERA = 0
+
+:WUZI2_6770
+if 
+  1000 > TIMERA
+goto_if_false @WUZI2_6814
+wait 0
+gosub @WUZI2_9364
+gosub @WUZI2_12194
+goto @WUZI2_6770
+
+:WUZI2_6814
+skip_cutscene_end 
+goto @WUZI2_7040
+
+:WUZI2_6823
+skip_cutscene_start_internal @WUZI2_7038
+Camera.SetFixedPosition(-1568.742, 1385.366, 5.9871, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1569.707, 1385.126, 5.8767, SwitchType.JumpCut)
+Text.PrintNow('WZI2_40', 6000, 1)
+TIMERA = 0
+
+:WUZI2_6904
+if 
+  6000 > TIMERA
+goto_if_false @WUZI2_6934
+wait 0
+goto @WUZI2_6904
+
+:WUZI2_6934
+Camera.SetFixedPosition(-1494.649, 1350.358, 6.0727, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1495.164, 1349.516, 5.9146, SwitchType.JumpCut)
+Text.PrintNow('WZI2_41', 6000, 1)
+TIMERA = 0
+
+:WUZI2_7008
+if 
+  6000 > TIMERA
+goto_if_false @WUZI2_7038
+wait 0
+goto @WUZI2_7008
+
+:WUZI2_7038
+skip_cutscene_end 
+
+:WUZI2_7040
+Text.PrintNow('WZI2_8', 6000, 1)
+if 
+  not Car.IsDead(290@)
+goto_if_false @WUZI2_7087
+292@ = Blip.AddForCar(290@)
+Blip.ChangeDisplay(292@, BlipDisplay.BlipOnly)
+
+:WUZI2_7087
+if 
+  not Car.IsDead(291@)
+goto_if_false @WUZI2_7118
+293@ = Blip.AddForCar(291@)
+Blip.ChangeDisplay(293@, BlipDisplay.BlipOnly)
+
+:WUZI2_7118
+407@ = Blip.AddForSearchlight(383@)
+408@ = Blip.AddForSearchlight(384@)
+409@ = Blip.AddForSearchlight(385@)
+410@ = Blip.AddForSearchlight(386@)
+if 
+  not Car.IsDead(413@)
+goto_if_false @WUZI2_7181
+415@ = Blip.AddForCar(413@)
+Blip.ChangeDisplay(415@, BlipDisplay.BlipOnly)
+
+:WUZI2_7181
+if 
+  not Car.IsDead(414@)
+goto_if_false @WUZI2_7212
+416@ = Blip.AddForCar(414@)
+Blip.ChangeDisplay(416@, BlipDisplay.BlipOnly)
+
+:WUZI2_7212
+Text.PrintNow('WZI2_8', 6000, 1)
+$player_breath_W2 = 1
+288@ = 0
+$player_first_spot_W2 = 0
+Camera.ResetNewScriptables
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Char.ClearTasks($scplayer)
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+283@ = 0
+
+:WUZI2_7278
+wait 0
+37@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 38@ = 37@
+sub_int_lvar_from_int_lvar 38@ -= 39@
+set_lvar_int_to_lvar_int 39@ = 37@
+add_int_lvar_to_int_lvar 288@ += 38@
+add_int_lvar_to_int_var $guard_timer_W2[0] += 38@
+add_int_lvar_to_int_var $guard_timer_W2[1] += 38@
+if 
+  373@ <> 2
+goto_if_false @WUZI2_7459
+gosub @WUZI2_8017
+gosub @WUZI2_9364
+gosub @WUZI2_12194
+gosub @WUZI2_13003
+gosub @WUZI2_14422
+if 
+  $p_current_square > 35
+goto_if_false @WUZI2_7438
+if 
+  284@ == 0
+goto_if_false @WUZI2_7431
+284@ = 1
+
+:WUZI2_7431
+gosub @WUZI2_20108
+
+:WUZI2_7438
+gosub @WUZI2_18290
+gosub @WUZI2_16055
+goto @WUZI2_7466
+
+:WUZI2_7459
+gosub @WUZI2_16700
+
+:WUZI2_7466
+gosub @WUZI2_20987
+if 
+  283@ == 0
+goto_if_false @WUZI2_7597
+if 
+  Char.IsInWater($scplayer)
+goto_if_false @WUZI2_7590
+if 
+  287@ == 0
+goto_if_false @WUZI2_7590
+if 
+  Char.LocateOnFoot2D($scplayer, 0, -1447.128, 1501.241, 6.0, 6.0)
+goto_if_false @WUZI2_7590
+Text.ClearHelp
+Text.PrintHelpForever('WZI2_C0')
+TIMERB = 0
+283@ += 1
+
+:WUZI2_7590
+goto @WUZI2_8003
+
+:WUZI2_7597
+if 
+  283@ == 1
+goto_if_false @WUZI2_7723
+if 
+  TIMERB > 8000
+goto_if_false @WUZI2_7636
+Text.ClearHelp
+
+:WUZI2_7636
+if 
+  not Char.IsInWater($scplayer)
+goto_if_false @WUZI2_7716
+if 
+  Char.LocateOnFoot3D($scplayer, 0, -1449.642, 1501.135, 0.7366, 2.0, 2.0, 2.0)
+goto_if_false @WUZI2_7716
+Text.ClearHelp
+gosub @WUZI2_22319
+283@ += 1
+
+:WUZI2_7716
+goto @WUZI2_8003
+
+:WUZI2_7723
+gosub @WUZI2_23872
+gosub @WUZI2_24874
+gosub @WUZI2_25427
+if 
+  48@ == 0
+goto_if_false @WUZI2_7948
+if 
+  Char.LocateOnFoot3D($scplayer, 1, -1372.733, 1495.55, 0.8578, 1.2, 1.2, 2.0)
+goto_if_false @WUZI2_7941
+if 
+  522@ <> 2
+goto_if_false @WUZI2_7925
+Text.PrintNow('WZI2_30', 1000, 1)
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @WUZI2_7918
+Text.ClearPrints
+Text.PrintNow('WZI2_32', 6000, 1)
+Blip.Remove(36@)
+36@ = Blip.AddForCoord(-1508.558, 1296.067, 0.397)
+48@ = 1
+gosub @WUZI2_18207
+
+:WUZI2_7918
+goto @WUZI2_7941
+
+:WUZI2_7925
+Text.PrintNow('WZI2_31', 3000, 1)
+
+:WUZI2_7941
+goto @WUZI2_8003
+
+:WUZI2_7948
+if 
+  Char.LocateOnFoot3D($scplayer, 1, -1508.558, 1296.067, 0.397, 1.2, 1.2, 2.0)
+goto_if_false @WUZI2_8003
+goto @WUZI2_26588
+
+:WUZI2_8003
+gosub @WUZI2_21524
+goto @WUZI2_7278
+
+:WUZI2_8017
+287@ = 0
+286@ = 0
+if 
+  Char.IsSwimming($scplayer)
+goto_if_false @WUZI2_8329
+285@ = Char.GetSwimState($scplayer)
+if 
+  is_int_lvar_equal_to_constant 285@ == 4
+goto_if_false @WUZI2_8119
+287@ = 1
+if 
+  0 >= $player_status_W2
+goto_if_false @WUZI2_8112
+$player_breath_W2 = 1
+$player_status_W2 = -2
+
+:WUZI2_8112
+goto @WUZI2_8144
+
+:WUZI2_8119
+if 
+  is_int_lvar_equal_to_constant 285@ == 2
+goto_if_false @WUZI2_8144
+286@ = 1
+
+:WUZI2_8144
+if 
+  289@ == 1
+goto_if_false @WUZI2_8322
+if or
+  Char.IsInAngledArea2D($scplayer, -1559.287, 1337.199, -1562.583, 1327.257, -62.9096, False)
+  Char.IsInAngledArea2D($scplayer, -1590.327, 1336.881, -1607.206, 1307.565, -37.0915, False)
+  Char.IsInAngledArea2D($scplayer, -1616.574, 1319.336, -1632.86, 1303.452, -23.9075, False)
+  Char.IsInAngledArea2D($scplayer, -1595.184, 1316.681, -1603.483, 1308.894, -8.3514, False)
+goto_if_false @WUZI2_8315
+289@ = 0
+goto @WUZI2_8322
+
+:WUZI2_8315
+289@ = 2
+
+:WUZI2_8322
+goto @WUZI2_8377
+
+:WUZI2_8329
+if 
+  289@ == 0
+goto_if_false @WUZI2_8354
+289@ = 1
+
+:WUZI2_8354
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @WUZI2_8377
+286@ = 1
+
+:WUZI2_8377
+return 
+
+:WUZI2_8379
+Path.SwitchRoadsOff(-1328.999, 1239.997, -5.0, -1655.868, 1638.755, 10.0)
+World.ClearAreaOfCars(-1328.999, 1239.997, -5.0, -1655.868, 1638.755, 10.0)
+331@ = -1605.0
+332@ = -1565.0
+333@ = -1525.0
+334@ = -1485.0
+335@ = -1445.0
+336@ = -1405.0
+337@ = -1365.0
+338@ = 1315.0
+339@ = 1355.0
+340@ = 1395.0
+341@ = 1435.0
+342@ = 1475.0
+343@ = -1585.0
+344@ = -1545.0
+345@ = -1505.0
+346@ = -1465.0
+347@ = -1425.0
+348@ = -1385.0
+349@ = 1335.0
+350@ = 1375.0
+351@ = 1415.0
+352@ = 1455.0
+$p_current_square = 0
+$p_last_square = -1
+359@ = 40.0
+357@ = 3.0
+358@ = 0.1
+290@ = Car.Create(454, -1585.0, 1375.0, 1.0)
+Boat.Anchor(290@, True)
+300@ = Char.CreateInsideCar(PedType.Mission1, 121, 290@)
+308@ = Char.Create(24, 121, -1585.0, 1375.0, 4.0)
+Char.AttachToCar(308@, 290@, 0.0, 9.0, 2.1, 0, 360.0, WeaponType.Ak47)
+Task.StayInSamePlace(308@, True)
+Char.SetAccuracy(308@, 80)
+Char.SetShootRate(308@, 20)
+322@ = 0.0
+309@ = Char.Create(24, 122, -1585.0, 1375.0, 4.0)
+Char.AttachToCar(309@, 290@, -1.0, -1.0, 3.7, 0, 360.0, WeaponType.Ak47)
+Task.StayInSamePlace(309@, True)
+Char.SetAccuracy(309@, 80)
+Char.SetShootRate(309@, 20)
+323@ = -90.0
+310@ = Char.Create(24, 123, -1585.0, 1375.0, 4.0)
+Char.AttachToCar(310@, 290@, 1.0, -4.0, 1.15, 0, 360.0, WeaponType.Ak47)
+Task.StayInSamePlace(310@, True)
+Char.SetAccuracy(310@, 80)
+Char.SetShootRate(310@, 20)
+324@ = 140.0
+294@ = 0
+296@ = 17
+$guard_status_W2[0] = 0
+291@ = Car.Create(454, -1505.0, 1335.0, 1.0)
+Boat.Anchor(291@, True)
+301@ = Char.CreateInsideCar(PedType.Mission1, 121, 291@)
+311@ = Char.Create(24, 121, -1585.0, 1375.0, 4.0)
+Char.AttachToCar(311@, 291@, 0.0, 9.0, 2.1, 0, 360.0, WeaponType.Ak47)
+Task.StayInSamePlace(311@, True)
+Char.SetAccuracy(311@, 80)
+Char.SetShootRate(311@, 20)
+325@ = 0.0
+312@ = Char.Create(24, 122, -1585.0, 1375.0, 4.0)
+Char.AttachToCar(312@, 291@, -1.0, -1.0, 3.7, 0, 360.0, WeaponType.Ak47)
+Task.StayInSamePlace(312@, True)
+Char.SetAccuracy(312@, 80)
+Char.SetShootRate(312@, 20)
+326@ = -90.0
+313@ = Char.Create(24, 123, -1585.0, 1375.0, 4.0)
+Char.AttachToCar(313@, 291@, 1.0, -4.0, 1.15, 0, 360.0, WeaponType.Ak47)
+Task.StayInSamePlace(313@, True)
+Char.SetAccuracy(313@, 80)
+Char.SetShootRate(313@, 20)
+327@ = 140.0
+295@ = 0
+297@ = 11
+$guard_status_W2[1] = 0
+$attack_status_W2 = 0
+return 
+
+:WUZI2_9364
+$x, $y, $z = Char.GetCoordinates($scplayer)
+$x_grid_pos_W2 = -1
+$y_grid_pos_W2 = -1
+$pointer_W2 = 0
+
+:WUZI2_9399
+if 
+  7 > $pointer_W2
+goto_if_false @WUZI2_9469
+if 
+  is_float_lvar_greater_than_float_var 331@($pointer_W2,7f) > $x
+goto_if_false @WUZI2_9455
+set_var_int_to_var_int $x_grid_pos_W2 = $pointer_W2
+$pointer_W2 = 7
+
+:WUZI2_9455
+$pointer_W2 += 1
+goto @WUZI2_9399
+
+:WUZI2_9469
+if 
+  $x_grid_pos_W2 == -1
+goto_if_false @WUZI2_9494
+$x_grid_pos_W2 = 7
+
+:WUZI2_9494
+$pointer_W2 = 0
+
+:WUZI2_9501
+if 
+  5 > $pointer_W2
+goto_if_false @WUZI2_9571
+if 
+  is_float_lvar_greater_than_float_var 338@($pointer_W2,5f) > $y
+goto_if_false @WUZI2_9557
+set_var_int_to_var_int $y_grid_pos_W2 = $pointer_W2
+$pointer_W2 = 5
+
+:WUZI2_9557
+$pointer_W2 += 1
+goto @WUZI2_9501
+
+:WUZI2_9571
+if 
+  $y_grid_pos_W2 == -1
+goto_if_false @WUZI2_9596
+$y_grid_pos_W2 = 5
+
+:WUZI2_9596
+$y_grid_pos_W2 *= 8
+set_var_int_to_var_int $p_current_square = $x_grid_pos_W2
+add_int_var_to_int_var $p_current_square += $y_grid_pos_W2
+if 
+  not is_int_var_equal_to_int_var $p_current_square == $p_last_square
+goto_if_false @WUZI2_9653
+gosub @WUZI2_9655
+set_var_int_to_var_int $p_last_square = $p_current_square
+
+:WUZI2_9653
+return 
+
+:WUZI2_9655
+switch_start $p_current_square total_jumps 48 default_jump 0 @WUZI2_12067 jumps 0 @WUZI2_10043 1 @WUZI2_10043 2 @WUZI2_10099 3 @WUZI2_10099 4 @WUZI2_10155 5 @WUZI2_10211 6 @WUZI2_10267
+switch_continued 7 @WUZI2_10267 8 @WUZI2_10323 9 @WUZI2_10379 10 @WUZI2_10379 11 @WUZI2_10435 12 @WUZI2_10491 13 @WUZI2_10547 14 @WUZI2_10603 15 @WUZI2_10267
+switch_continued 16 @WUZI2_10659 17 @WUZI2_10715 18 @WUZI2_10771 19 @WUZI2_10827 20 @WUZI2_10883 21 @WUZI2_10939 22 @WUZI2_11041 23 @WUZI2_11143 24 @WUZI2_11199
+switch_continued 25 @WUZI2_11255 26 @WUZI2_11311 27 @WUZI2_11413 28 @WUZI2_11547 29 @WUZI2_11041 30 @WUZI2_10939 31 @WUZI2_11603 32 @WUZI2_11659 33 @WUZI2_11715
+switch_continued 34 @WUZI2_11413 35 @WUZI2_11311 36 @WUZI2_11803 37 @WUZI2_11891 38 @WUZI2_11979 39 @WUZI2_11979 40 @WUZI2_11659 41 @WUZI2_11659 42 @WUZI2_11715
+switch_continued 43 @WUZI2_11803 44 @WUZI2_11803 45 @WUZI2_11891 46 @WUZI2_11979 47 @WUZI2_11979 -1 @WUZI2_12067 -1 @WUZI2_12067 -1 @WUZI2_12067 -1 @WUZI2_12067
+
+:WUZI2_10043
+360@ = 17
+362@ = 0
+364@ = 1
+361@ = 11
+363@ = 2
+365@ = 0
+$square_attack_status_W2 = -1
+goto @WUZI2_12067
+
+:WUZI2_10099
+360@ = 18
+362@ = 1
+364@ = 1
+361@ = 11
+363@ = 2
+365@ = 0
+$square_attack_status_W2 = 4
+goto @WUZI2_12067
+
+:WUZI2_10155
+360@ = 18
+362@ = 1
+364@ = 1
+361@ = 12
+363@ = 3
+365@ = 0
+$square_attack_status_W2 = 4
+goto @WUZI2_12067
+
+:WUZI2_10211
+360@ = 18
+362@ = 1
+364@ = 1
+361@ = 13
+363@ = 4
+365@ = 0
+$square_attack_status_W2 = 4
+goto @WUZI2_12067
+
+:WUZI2_10267
+360@ = 18
+362@ = 1
+364@ = 1
+361@ = 14
+363@ = 5
+365@ = 0
+$square_attack_status_W2 = 4
+goto @WUZI2_12067
+
+:WUZI2_10323
+360@ = 17
+362@ = 0
+364@ = 1
+361@ = 11
+363@ = 2
+365@ = 0
+$square_attack_status_W2 = 3
+goto @WUZI2_12067
+
+:WUZI2_10379
+360@ = 18
+362@ = 1
+364@ = 1
+361@ = 11
+363@ = 2
+365@ = 0
+$square_attack_status_W2 = 5
+goto @WUZI2_12067
+
+:WUZI2_10435
+360@ = 18
+362@ = 1
+364@ = 1
+361@ = 12
+363@ = 3
+365@ = 0
+$square_attack_status_W2 = 2
+goto @WUZI2_12067
+
+:WUZI2_10491
+360@ = 18
+362@ = 1
+364@ = 1
+361@ = 20
+363@ = 3
+365@ = 1
+$square_attack_status_W2 = 1
+goto @WUZI2_12067
+
+:WUZI2_10547
+360@ = 18
+362@ = 1
+364@ = 1
+361@ = 21
+363@ = 4
+365@ = 1
+$square_attack_status_W2 = 1
+goto @WUZI2_12067
+
+:WUZI2_10603
+360@ = 18
+362@ = 1
+364@ = 1
+361@ = 22
+363@ = 5
+365@ = 1
+$square_attack_status_W2 = 1
+goto @WUZI2_12067
+
+:WUZI2_10659
+360@ = 17
+362@ = 0
+364@ = 1
+361@ = 20
+363@ = 3
+365@ = 1
+$square_attack_status_W2 = 3
+goto @WUZI2_12067
+
+:WUZI2_10715
+360@ = 25
+362@ = 0
+364@ = 2
+361@ = 20
+363@ = 3
+365@ = 1
+$square_attack_status_W2 = 0
+goto @WUZI2_12067
+
+:WUZI2_10771
+360@ = 26
+362@ = 1
+364@ = 2
+361@ = 20
+363@ = 3
+365@ = 1
+$square_attack_status_W2 = 0
+goto @WUZI2_12067
+
+:WUZI2_10827
+360@ = 27
+362@ = 2
+364@ = 2
+361@ = 20
+363@ = 3
+365@ = 1
+$square_attack_status_W2 = 2
+goto @WUZI2_12067
+
+:WUZI2_10883
+360@ = 27
+362@ = 2
+364@ = 2
+361@ = 28
+363@ = 3
+365@ = 2
+$square_attack_status_W2 = 1
+goto @WUZI2_12067
+
+:WUZI2_10939
+360@ = 27
+362@ = 2
+364@ = 2
+if 
+  $p_last_square == 29
+goto_if_false @WUZI2_11006
+361@ = 22
+363@ = 5
+365@ = 1
+goto @WUZI2_11027
+
+:WUZI2_11006
+361@ = 29
+363@ = 4
+365@ = 2
+
+:WUZI2_11027
+$square_attack_status_W2 = 1
+goto @WUZI2_12067
+
+:WUZI2_11041
+360@ = 27
+362@ = 2
+364@ = 2
+if 
+  $p_last_square == 30
+goto_if_false @WUZI2_11108
+361@ = 21
+363@ = 4
+365@ = 1
+goto @WUZI2_11129
+
+:WUZI2_11108
+361@ = 30
+363@ = 5
+365@ = 2
+
+:WUZI2_11129
+$square_attack_status_W2 = 1
+goto @WUZI2_12067
+
+:WUZI2_11143
+360@ = 27
+362@ = 2
+364@ = 2
+361@ = 22
+363@ = 5
+365@ = 1
+$square_attack_status_W2 = 4
+goto @WUZI2_12067
+
+:WUZI2_11199
+360@ = 25
+362@ = 0
+364@ = 2
+361@ = 28
+363@ = 3
+365@ = 2
+$square_attack_status_W2 = 3
+goto @WUZI2_12067
+
+:WUZI2_11255
+360@ = 33
+362@ = 0
+364@ = 3
+361@ = 28
+363@ = 3
+365@ = 2
+$square_attack_status_W2 = 0
+goto @WUZI2_12067
+
+:WUZI2_11311
+if 
+  $p_last_square == 34
+goto_if_false @WUZI2_11357
+360@ = 27
+362@ = 2
+364@ = 2
+goto @WUZI2_11378
+
+:WUZI2_11357
+360@ = 34
+362@ = 1
+364@ = 3
+
+:WUZI2_11378
+361@ = 28
+363@ = 3
+365@ = 2
+$square_attack_status_W2 = 0
+goto @WUZI2_12067
+
+:WUZI2_11413
+if 
+  $p_last_square == 35
+goto_if_false @WUZI2_11459
+360@ = 26
+362@ = 1
+364@ = 2
+goto @WUZI2_11480
+
+:WUZI2_11459
+360@ = 35
+362@ = 2
+364@ = 3
+
+:WUZI2_11480
+361@ = 28
+363@ = 3
+365@ = 2
+if 
+  $p_current_square == 27
+goto_if_false @WUZI2_11533
+$square_attack_status_W2 = 2
+goto @WUZI2_11540
+
+:WUZI2_11533
+$square_attack_status_W2 = 0
+
+:WUZI2_11540
+goto @WUZI2_12067
+
+:WUZI2_11547
+360@ = 27
+362@ = 2
+364@ = 2
+361@ = 29
+363@ = 4
+365@ = 2
+$square_attack_status_W2 = 2
+goto @WUZI2_12067
+
+:WUZI2_11603
+360@ = 27
+362@ = 2
+364@ = 2
+361@ = 30
+363@ = 5
+365@ = 2
+$square_attack_status_W2 = 4
+goto @WUZI2_12067
+
+:WUZI2_11659
+360@ = 33
+362@ = 0
+364@ = 3
+361@ = 28
+363@ = 3
+365@ = 2
+$square_attack_status_W2 = 3
+goto @WUZI2_12067
+
+:WUZI2_11715
+360@ = 34
+362@ = 1
+364@ = 3
+361@ = 28
+363@ = 3
+365@ = 2
+if 
+  $square_attack_status_W2 == 33
+goto_if_false @WUZI2_11789
+$square_attack_status_W2 = 0
+goto @WUZI2_11796
+
+:WUZI2_11789
+$square_attack_status_W2 = 3
+
+:WUZI2_11796
+goto @WUZI2_12067
+
+:WUZI2_11803
+360@ = 35
+362@ = 2
+364@ = 3
+361@ = 28
+363@ = 3
+365@ = 2
+if 
+  $square_attack_status_W2 == 36
+goto_if_false @WUZI2_11877
+$square_attack_status_W2 = 5
+goto @WUZI2_11884
+
+:WUZI2_11877
+$square_attack_status_W2 = 3
+
+:WUZI2_11884
+goto @WUZI2_12067
+
+:WUZI2_11891
+360@ = 35
+362@ = 2
+364@ = 3
+361@ = 29
+363@ = 4
+365@ = 2
+if 
+  $square_attack_status_W2 == 37
+goto_if_false @WUZI2_11965
+$square_attack_status_W2 = 4
+goto @WUZI2_11972
+
+:WUZI2_11965
+$square_attack_status_W2 = -1
+
+:WUZI2_11972
+goto @WUZI2_12067
+
+:WUZI2_11979
+360@ = 35
+362@ = 2
+364@ = 3
+361@ = 30
+363@ = 5
+365@ = 2
+if 
+  40 > $square_attack_status_W2
+goto_if_false @WUZI2_12053
+$square_attack_status_W2 = 4
+goto @WUZI2_12060
+
+:WUZI2_12053
+$square_attack_status_W2 = -1
+
+:WUZI2_12060
+goto @WUZI2_12067
+
+:WUZI2_12067
+$pointer_W2 = 0
+
+:WUZI2_12074
+if 
+  2 > $pointer_W2
+goto_if_false @WUZI2_12192
+if 
+  not is_int_lvar_equal_to_int_lvar 296@($pointer_W2,2i) == 360@($pointer_W2,2i)
+goto_if_false @WUZI2_12178
+set_lvar_int_to_lvar_int 353@($pointer_W2,2i) = 362@($pointer_W2,2i)
+set_lvar_int_to_lvar_int 355@($pointer_W2,2i) = 364@($pointer_W2,2i)
+294@($pointer_W2,2i) = 1
+set_lvar_int_to_lvar_int 296@($pointer_W2,2i) = 360@($pointer_W2,2i)
+
+:WUZI2_12178
+$pointer_W2 += 1
+goto @WUZI2_12074
+
+:WUZI2_12192
+return 
+
+:WUZI2_12194
+$pointer_W2 = 0
+
+:WUZI2_12201
+if 
+  2 > $pointer_W2
+goto_if_false @WUZI2_13001
+if 
+  not Car.IsDead(290@($pointer_W2,2i))
+goto_if_false @WUZI2_12987
+switch_start 294@($pointer_W2,2i) total_jumps 3 default_jump 0 @WUZI2_12987 jumps 1 @WUZI2_12306 2 @WUZI2_12417 3 @WUZI2_12882 -1 @WUZI2_12987 -1 @WUZI2_12987 -1 @WUZI2_12987 -1 @WUZI2_12987
+
+:WUZI2_12306
+set_lvar_int_to_lvar_int 366@ = 353@($pointer_W2,2i)
+set_lvar_int_to_lvar_int 367@ = 355@($pointer_W2,2i)
+Boat.Anchor(290@($pointer_W2,2i), False)
+Boat.Goto(290@($pointer_W2,2i), 343@(366@,6f), 349@(367@,4f), 0.0)
+Boat.SetCruiseSpeed(290@($pointer_W2,2i), 7.0)
+314@($pointer_W2,2f) = Car.GetSpeed(290@($pointer_W2,2i))
+294@($pointer_W2,2i) += 1
+goto @WUZI2_12987
+
+:WUZI2_12417
+set_lvar_int_to_lvar_int 366@ = 353@($pointer_W2,2i)
+set_lvar_int_to_lvar_int 367@ = 355@($pointer_W2,2i)
+if 
+  Car.Locate2D(290@($pointer_W2,2i), 0, 343@(366@,6f), 349@(367@,4f), 8.0, 8.0)
+goto_if_false @WUZI2_12521
+314@($pointer_W2,2f) = Car.GetSpeed(290@($pointer_W2,2i))
+294@($pointer_W2,2i) += 1
+goto @WUZI2_12875
+
+:WUZI2_12521
+if 
+  is_float_lvar_greater_than_float_lvar 357@ > 314@($pointer_W2,2f)
+goto_if_false @WUZI2_12572
+add_float_lvar_to_float_lvar 314@($pointer_W2,2f) += 358@
+Car.SetForwardSpeed(290@($pointer_W2,2i), 314@($pointer_W2,2f))
+
+:WUZI2_12572
+316@($pointer_W2,2f), 318@($pointer_W2,2f), $z = Car.GetCoordinates(290@($pointer_W2,2i))
+320@($pointer_W2,2f) = Car.GetHeading(290@($pointer_W2,2i))
+set_var_float_to_lvar_float $x = 343@(366@,6f)
+sub_float_lvar_from_float_var $x -= 316@($pointer_W2,2f)
+set_var_float_to_lvar_float $y = 349@(367@,4f)
+sub_float_lvar_from_float_var $y -= 318@($pointer_W2,2f)
+
+:WUZI2_12662
+if 
+  320@($pointer_W2,2f) >= 180.0
+goto_if_false @WUZI2_12708
+320@($pointer_W2,2f) += -360.0
+goto @WUZI2_12662
+
+:WUZI2_12708
+$heading = Math.GetHeadingFromVector2D($x, $y)
+
+:WUZI2_12719
+if 
+  $heading >= 180.0
+goto_if_false @WUZI2_12757
+$heading += -360.0
+goto @WUZI2_12719
+
+:WUZI2_12757
+set_var_float_to_var_float $z = $heading
+sub_float_lvar_from_float_var $z -= 320@($pointer_W2,2f)
+if 
+  -180.0 >= $z
+goto_if_false @WUZI2_12808
+$z += 360.0
+
+:WUZI2_12808
+if 
+  $z >= 180.0
+goto_if_false @WUZI2_12839
+$z += -360.0
+
+:WUZI2_12839
+div_float_var_by_float_lvar $z /= 359@
+add_float_var_to_float_lvar 320@($pointer_W2,2f) += $z
+Car.SetHeading(290@($pointer_W2,2i), 320@($pointer_W2,2f))
+
+:WUZI2_12875
+goto @WUZI2_12987
+
+:WUZI2_12882
+sub_float_lvar_from_float_lvar 314@($pointer_W2,2f) -= 358@
+Car.SetForwardSpeed(290@($pointer_W2,2i), 314@($pointer_W2,2f))
+if 
+  2.5 > 314@($pointer_W2,2f)
+goto_if_false @WUZI2_12980
+Car.SetForwardSpeed(290@($pointer_W2,2i), 1.0)
+Boat.Stop(290@($pointer_W2,2i))
+Boat.Anchor(290@($pointer_W2,2i), True)
+294@($pointer_W2,2i) = 0
+
+:WUZI2_12980
+goto @WUZI2_12987
+
+:WUZI2_12987
+$pointer_W2 += 1
+goto @WUZI2_12201
+
+:WUZI2_13001
+return 
+
+:WUZI2_13003
+$pointer_W2 = 0
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+
+:WUZI2_13024
+if 
+  2 > $pointer_W2
+goto_if_false @WUZI2_14314
+if 
+  not Car.IsDead(290@($pointer_W2,2i))
+goto_if_false @WUZI2_14238
+368@($pointer_W2,2i) = 0
+switch_start $pointer_W2 total_jumps 2 default_jump 0 @WUZI2_13399 jumps 0 @WUZI2_13136 1 @WUZI2_13278 -1 @WUZI2_13399 -1 @WUZI2_13399 -1 @WUZI2_13399 -1 @WUZI2_13399 -1 @WUZI2_13399
+
+:WUZI2_13136
+if or
+  $square_attack_status_W2 == 0
+  $square_attack_status_W2 == 2
+goto_if_false @WUZI2_13179
+368@($pointer_W2,2i) = 1
+goto @WUZI2_13271
+
+:WUZI2_13179
+if or
+  $square_attack_status_W2 == 3
+  $square_attack_status_W2 == 5
+goto_if_false @WUZI2_13271
+$x, $y, $z = Car.GetCoordinates(290@($pointer_W2,2i))
+$distance = Math.GetDistanceBetweenCoords2D($player_x, $player_y, $x, $y)
+if 
+  29.0 > $distance
+goto_if_false @WUZI2_13271
+368@($pointer_W2,2i) = 1
+
+:WUZI2_13271
+goto @WUZI2_13399
+
+:WUZI2_13278
+if or
+  $square_attack_status_W2 == 1
+  $square_attack_status_W2 == 2
+goto_if_false @WUZI2_13321
+368@($pointer_W2,2i) = 1
+goto @WUZI2_13392
+
+:WUZI2_13321
+if or
+  $square_attack_status_W2 == 4
+  $square_attack_status_W2 == 5
+goto_if_false @WUZI2_13392
+if 
+  Char.LocateAnyMeansCar2D($scplayer, 290@($pointer_W2,2i), 30.0, 30.0, False)
+goto_if_false @WUZI2_13392
+368@($pointer_W2,2i) = 1
+
+:WUZI2_13392
+goto @WUZI2_13399
+
+:WUZI2_13399
+switch_start $guard_status_W2($pointer_W2,2i) total_jumps 5 default_jump 0 @WUZI2_14231 jumps 0 @WUZI2_13466 1 @WUZI2_13732 2 @WUZI2_13841 3 @WUZI2_13986 4 @WUZI2_14136 -1 @WUZI2_14231 -1 @WUZI2_14231
+
+:WUZI2_13466
+if 
+  $player_breath_W2 == 0
+goto_if_false @WUZI2_13725
+if or
+  368@($pointer_W2,2i) == 0
+  287@ == 1
+goto_if_false @WUZI2_13639
+set_var_int_to_var_int $guard_pointer_W2 = $pointer_W2
+$guard_pointer_W2 *= 3
+set_var_int_to_var_int $guard_limit_W2 = $guard_pointer_W2
+$guard_limit_W2 += 3
+
+:WUZI2_13543
+if 
+  is_int_var_greater_than_int_var $guard_limit_W2 > $guard_pointer_W2
+goto_if_false @WUZI2_13632
+if 
+  not Char.IsDead(308@($guard_pointer_W2,6i))
+goto_if_false @WUZI2_13618
+set_var_float_to_lvar_float $heading = 320@($pointer_W2,2f)
+sub_float_lvar_from_float_var $heading -= 322@($guard_pointer_W2,6f)
+Char.SetHeading(308@($guard_pointer_W2,6i), $heading)
+
+:WUZI2_13618
+$guard_pointer_W2 += 1
+goto @WUZI2_13543
+
+:WUZI2_13632
+goto @WUZI2_13725
+
+:WUZI2_13639
+if or
+  286@ == 1
+  $player_status_W2 >= 3
+goto_if_false @WUZI2_13689
+gosub @WUZI2_14316
+$guard_status_W2($pointer_W2,2i) = 3
+goto @WUZI2_13725
+
+:WUZI2_13689
+if 
+  0 >= $player_status_W2
+goto_if_false @WUZI2_13714
+288@ = 0
+
+:WUZI2_13714
+$guard_status_W2($pointer_W2,2i) += 1
+
+:WUZI2_13725
+goto @WUZI2_14231
+
+:WUZI2_13732
+if or
+  368@($pointer_W2,2i) == 0
+  287@ == 1
+goto_if_false @WUZI2_13790
+$guard_timer_W2($pointer_W2,2i) = 0
+$guard_status_W2($pointer_W2,2i) += 1
+goto @WUZI2_13834
+
+:WUZI2_13790
+if or
+  288@ > 6000
+  286@ == 1
+goto_if_false @WUZI2_13834
+gosub @WUZI2_14316
+$guard_status_W2($pointer_W2,2i) = 3
+
+:WUZI2_13834
+goto @WUZI2_14231
+
+:WUZI2_13841
+if or
+  368@($pointer_W2,2i) == 0
+  287@ == 1
+goto_if_false @WUZI2_13911
+if 
+  $guard_timer_W2($pointer_W2,2i) > 3000
+goto_if_false @WUZI2_13904
+$guard_status_W2($pointer_W2,2i) = 0
+
+:WUZI2_13904
+goto @WUZI2_13979
+
+:WUZI2_13911
+if and
+  3 > $player_status_W2
+  286@ == 0
+goto_if_false @WUZI2_13961
+288@ = 0
+$guard_status_W2($pointer_W2,2i) -= 1
+goto @WUZI2_13979
+
+:WUZI2_13961
+gosub @WUZI2_14316
+$guard_status_W2($pointer_W2,2i) = 3
+
+:WUZI2_13979
+goto @WUZI2_14231
+
+:WUZI2_13986
+if or
+  368@($pointer_W2,2i) == 0
+  287@ == 1
+goto_if_false @WUZI2_14129
+set_var_int_to_var_int $guard_pointer_W2 = $pointer_W2
+$guard_pointer_W2 *= 3
+set_var_int_to_var_int $guard_limit_W2 = $guard_pointer_W2
+$guard_limit_W2 += 3
+
+:WUZI2_14045
+if 
+  is_int_var_greater_than_int_var $guard_limit_W2 > $guard_pointer_W2
+goto_if_false @WUZI2_14107
+if 
+  not Char.IsDead(308@($guard_pointer_W2,6i))
+goto_if_false @WUZI2_14093
+Char.ClearTasks(308@($guard_pointer_W2,6i))
+
+:WUZI2_14093
+$guard_pointer_W2 += 1
+goto @WUZI2_14045
+
+:WUZI2_14107
+$guard_timer_W2($pointer_W2,2i) = 0
+$guard_status_W2($pointer_W2,2i) += 1
+
+:WUZI2_14129
+goto @WUZI2_14231
+
+:WUZI2_14136
+if or
+  368@($pointer_W2,2i) == 0
+  287@ == 1
+goto_if_false @WUZI2_14206
+if 
+  $guard_timer_W2($pointer_W2,2i) > 5000
+goto_if_false @WUZI2_14199
+$guard_status_W2($pointer_W2,2i) = 0
+
+:WUZI2_14199
+goto @WUZI2_14224
+
+:WUZI2_14206
+gosub @WUZI2_14316
+$guard_status_W2($pointer_W2,2i) = 3
+
+:WUZI2_14224
+goto @WUZI2_14231
+
+:WUZI2_14231
+goto @WUZI2_14300
+
+:WUZI2_14238
+if 
+  Blip.DoesExist(292@($pointer_W2,2i))
+goto_if_false @WUZI2_14267
+Blip.Remove(292@($pointer_W2,2i))
+
+:WUZI2_14267
+if 
+  $guard_status_W2($pointer_W2,2i) <> 0
+goto_if_false @WUZI2_14300
+$guard_status_W2($pointer_W2,2i) = 0
+
+:WUZI2_14300
+$pointer_W2 += 1
+goto @WUZI2_13024
+
+:WUZI2_14314
+return 
+
+:WUZI2_14316
+set_var_int_to_var_int $guard_pointer_W2 = $pointer_W2
+$guard_pointer_W2 *= 3
+set_var_int_to_var_int $guard_limit_W2 = $guard_pointer_W2
+$guard_limit_W2 += 3
+
+:WUZI2_14346
+if 
+  is_int_var_greater_than_int_var $guard_limit_W2 > $guard_pointer_W2
+goto_if_false @WUZI2_14420
+if 
+  not Char.IsDead(308@($guard_pointer_W2,6i))
+goto_if_false @WUZI2_14406
+Char.ClearTasks(308@($guard_pointer_W2,6i))
+Task.KillCharOnFoot(308@($guard_pointer_W2,6i), $scplayer)
+
+:WUZI2_14406
+$guard_pointer_W2 += 1
+goto @WUZI2_14346
+
+:WUZI2_14420
+return 
+
+:WUZI2_14422
+switch_start $player_status_W2 total_jumps 7 default_jump 0 @WUZI2_15489 jumps -2 @WUZI2_14485 -1 @WUZI2_14531 0 @WUZI2_14586 1 @WUZI2_14742 2 @WUZI2_14919 3 @WUZI2_15124 4 @WUZI2_15248
+
+:WUZI2_14485
+if 
+  287@ == 0
+goto_if_false @WUZI2_14524
+370@, 371@, $z = Char.GetCoordinates($scplayer)
+$player_status_W2 = -1
+
+:WUZI2_14524
+goto @WUZI2_15489
+
+:WUZI2_14531
+if 
+  not Char.LocateOnFoot2D($scplayer, 0, 370@, 371@, 2.5, 2.5)
+goto_if_false @WUZI2_14579
+$player_breath_W2 = 0
+$player_status_W2 = 0
+
+:WUZI2_14579
+goto @WUZI2_15489
+
+:WUZI2_14586
+if or
+  $guard_status_W2[0] > 0
+  $guard_status_W2[1] > 0
+goto_if_false @WUZI2_14735
+if and
+  3 > $guard_status_W2[0]
+  3 > $guard_status_W2[1]
+goto_if_false @WUZI2_14689
+123@ = 0
+gosub @WUZI2_17920
+$player_status_W2 = 1
+if 
+  $player_first_spot_W2 == 0
+goto_if_false @WUZI2_14682
+$player_first_spot_W2 = 1
+
+:WUZI2_14682
+goto @WUZI2_14735
+
+:WUZI2_14689
+123@ = 18
+gosub @WUZI2_17920
+$player_status_W2 = 3
+if 
+  $player_first_spot_W2 == 0
+goto_if_false @WUZI2_14735
+$player_first_spot_W2 = 1
+
+:WUZI2_14735
+goto @WUZI2_15489
+
+:WUZI2_14742
+if or
+  $guard_status_W2[0] >= 3
+  $guard_status_W2[1] >= 3
+goto_if_false @WUZI2_14795
+123@ = 18
+gosub @WUZI2_17920
+$player_status_W2 = 3
+goto @WUZI2_14912
+
+:WUZI2_14795
+if and
+  $guard_status_W2[0] <> 1
+  $guard_status_W2[1] <> 1
+goto_if_false @WUZI2_14912
+if or
+  $guard_status_W2[0] == 2
+  $guard_status_W2[1] == 2
+goto_if_false @WUZI2_14859
+$player_status_W2 = 2
+goto @WUZI2_14912
+
+:WUZI2_14859
+if or
+  $guard_status_W2[0] == 0
+  $guard_status_W2[1] == 0
+goto_if_false @WUZI2_14912
+123@ = 9
+gosub @WUZI2_17920
+$player_breath_W2 = 1
+$player_status_W2 = -2
+
+:WUZI2_14912
+goto @WUZI2_15489
+
+:WUZI2_14919
+if or
+  $guard_status_W2[0] >= 3
+  $guard_status_W2[1] >= 3
+goto_if_false @WUZI2_14972
+123@ = 18
+gosub @WUZI2_17920
+$player_status_W2 = 3
+goto @WUZI2_15117
+
+:WUZI2_14972
+if and
+  $guard_status_W2[0] <> 2
+  $guard_status_W2[1] <> 2
+goto_if_false @WUZI2_15117
+if or
+  $guard_status_W2[0] == 1
+  $guard_status_W2[1] == 1
+goto_if_false @WUZI2_15057
+123@ = 0
+gosub @WUZI2_18052
+gosub @WUZI2_17920
+$player_status_W2 = 1
+goto @WUZI2_15117
+
+:WUZI2_15057
+if or
+  $guard_status_W2[0] == 0
+  $guard_status_W2[1] == 0
+goto_if_false @WUZI2_15117
+123@ = 9
+gosub @WUZI2_17920
+gosub @WUZI2_18052
+$player_breath_W2 = 1
+$player_status_W2 = -2
+
+:WUZI2_15117
+goto @WUZI2_15489
+
+:WUZI2_15124
+if and
+  $guard_status_W2[0] <> 3
+  $guard_status_W2[1] <> 3
+goto_if_false @WUZI2_15241
+if or
+  $guard_status_W2[0] == 4
+  $guard_status_W2[1] == 4
+goto_if_false @WUZI2_15241
+123@ = 27
+if 
+  $guard_status_W2[0] == 4
+goto_if_false @WUZI2_15213
+125@ = 0
+goto @WUZI2_15220
+
+:WUZI2_15213
+125@ = 1
+
+:WUZI2_15220
+gosub @WUZI2_17920
+$player_status_W2 = 4
+gosub @WUZI2_18052
+
+:WUZI2_15241
+goto @WUZI2_15489
+
+:WUZI2_15248
+if and
+  $guard_status_W2[0] <> 4
+  $guard_status_W2[1] <> 4
+goto_if_false @WUZI2_15482
+if or
+  $guard_status_W2[0] == 3
+  $guard_status_W2[1] == 3
+goto_if_false @WUZI2_15429
+if 
+  $guard_status_W2[0] == 3
+goto_if_false @WUZI2_15362
+if 
+  125@ == 0
+goto_if_false @WUZI2_15348
+123@ = 45
+goto @WUZI2_15355
+
+:WUZI2_15348
+123@ = 45
+
+:WUZI2_15355
+goto @WUZI2_15401
+
+:WUZI2_15362
+if 
+  125@ == 1
+goto_if_false @WUZI2_15394
+123@ = 45
+goto @WUZI2_15401
+
+:WUZI2_15394
+123@ = 45
+
+:WUZI2_15401
+gosub @WUZI2_18052
+gosub @WUZI2_17920
+$player_status_W2 = 3
+goto @WUZI2_15482
+
+:WUZI2_15429
+if and
+  $guard_status_W2[0] == 0
+  $guard_status_W2[1] == 0
+goto_if_false @WUZI2_15482
+123@ = 36
+gosub @WUZI2_17920
+$player_breath_W2 = 1
+$player_status_W2 = -2
+
+:WUZI2_15482
+goto @WUZI2_15489
+
+:WUZI2_15489
+switch_start $player_first_spot_W2 total_jumps 6 default_jump 0 @WUZI2_16053 jumps 0 @WUZI2_15552 1 @WUZI2_15602 2 @WUZI2_15634 3 @WUZI2_15737 4 @WUZI2_15840 5 @WUZI2_15943 -1 @WUZI2_16053
+
+:WUZI2_15552
+if 
+  284@ == 1
+goto_if_false @WUZI2_15595
+Text.PrintHelpForever('WZI2_42')
+TIMERB = 0
+284@ += 1
+
+:WUZI2_15595
+goto @WUZI2_16053
+
+:WUZI2_15602
+Text.PrintHelpForever('WZI2_36')
+TIMERB = 0
+$player_first_spot_W2 += 1
+goto @WUZI2_16053
+
+:WUZI2_15634
+if 
+  TIMERB > 6000
+goto_if_false @WUZI2_15730
+Text.ClearHelp
+if 
+  284@ == 1
+goto_if_false @WUZI2_15705
+Text.PrintHelpForever('WZI2_42')
+TIMERB = 0
+284@ += 1
+goto @WUZI2_15730
+
+:WUZI2_15705
+Text.PrintHelpForever('WZI2_37')
+TIMERB = 0
+$player_first_spot_W2 += 1
+
+:WUZI2_15730
+goto @WUZI2_16053
+
+:WUZI2_15737
+if 
+  TIMERB > 6000
+goto_if_false @WUZI2_15833
+Text.ClearHelp
+if 
+  284@ == 1
+goto_if_false @WUZI2_15808
+Text.PrintHelpForever('WZI2_42')
+TIMERB = 0
+284@ += 1
+goto @WUZI2_15833
+
+:WUZI2_15808
+Text.PrintHelpForever('WZI2_38')
+TIMERB = 0
+$player_first_spot_W2 += 1
+
+:WUZI2_15833
+goto @WUZI2_16053
+
+:WUZI2_15840
+if 
+  TIMERB > 6000
+goto_if_false @WUZI2_15936
+Text.ClearHelp
+if 
+  284@ == 1
+goto_if_false @WUZI2_15911
+Text.PrintHelpForever('WZI2_42')
+TIMERB = 0
+284@ += 1
+goto @WUZI2_15936
+
+:WUZI2_15911
+Text.PrintHelpForever('WZI2_39')
+TIMERB = 0
+$player_first_spot_W2 += 1
+
+:WUZI2_15936
+goto @WUZI2_16053
+
+:WUZI2_15943
+if 
+  TIMERB > 6000
+goto_if_false @WUZI2_16046
+Text.ClearHelp
+if 
+  284@ == 1
+goto_if_false @WUZI2_16021
+Text.PrintHelpForever('WZI2_42')
+TIMERB = 0
+284@ += 1
+$player_first_spot_W2 += 1
+goto @WUZI2_16046
+
+:WUZI2_16021
+if 
+  284@ == 2
+goto_if_false @WUZI2_16046
+$player_first_spot_W2 += 1
+
+:WUZI2_16046
+goto @WUZI2_16053
+
+:WUZI2_16053
+return 
+
+:WUZI2_16055
+372@ = 0
+
+:WUZI2_16062
+if 
+  6 > 372@
+goto_if_false @WUZI2_16179
+if 
+  not Char.IsDead(308@(372@,6i))
+goto_if_false @WUZI2_16158
+if 
+  Char.HasBeenDamagedByChar(308@(372@,6i), $scplayer)
+goto_if_false @WUZI2_16144
+373@ = 1
+372@ = 6
+goto @WUZI2_16151
+
+:WUZI2_16144
+372@ += 1
+
+:WUZI2_16151
+goto @WUZI2_16172
+
+:WUZI2_16158
+373@ = 1
+372@ = 6
+
+:WUZI2_16172
+goto @WUZI2_16062
+
+:WUZI2_16179
+if 
+  373@ == 0
+goto_if_false @WUZI2_16321
+372@ = 0
+
+:WUZI2_16204
+if 
+  6 > 372@
+goto_if_false @WUZI2_16321
+if 
+  not Char.IsDead(417@(372@,6i))
+goto_if_false @WUZI2_16300
+if 
+  Char.HasBeenDamagedByChar(417@(372@,6i), $scplayer)
+goto_if_false @WUZI2_16286
+373@ = 1
+372@ = 6
+goto @WUZI2_16293
+
+:WUZI2_16286
+372@ += 1
+
+:WUZI2_16293
+goto @WUZI2_16314
+
+:WUZI2_16300
+373@ = 1
+372@ = 6
+
+:WUZI2_16314
+goto @WUZI2_16204
+
+:WUZI2_16321
+if 
+  373@ == 1
+goto_if_false @WUZI2_16353
+gosub @WUZI2_16355
+373@ = 2
+
+:WUZI2_16353
+return 
+
+:WUZI2_16355
+Text.ClearHelp
+Text.ClearPrints
+if 
+  not Car.IsDead(290@)
+goto_if_false @WUZI2_16406
+if 
+  not Blip.DoesExist(292@)
+goto_if_false @WUZI2_16406
+292@ = Blip.AddForCar(290@)
+Blip.ChangeDisplay(292@, BlipDisplay.BlipOnly)
+
+:WUZI2_16406
+if 
+  not Car.IsDead(291@)
+goto_if_false @WUZI2_16453
+if 
+  not Blip.DoesExist(293@)
+goto_if_false @WUZI2_16453
+293@ = Blip.AddForCar(291@)
+Blip.ChangeDisplay(293@, BlipDisplay.BlipOnly)
+
+:WUZI2_16453
+if 
+  not Car.IsDead(413@)
+goto_if_false @WUZI2_16500
+if 
+  not Blip.DoesExist(415@)
+goto_if_false @WUZI2_16500
+415@ = Blip.AddForCar(413@)
+Blip.ChangeDisplay(415@, BlipDisplay.BlipOnly)
+
+:WUZI2_16500
+if 
+  not Car.IsDead(414@)
+goto_if_false @WUZI2_16547
+if 
+  not Blip.DoesExist(416@)
+goto_if_false @WUZI2_16547
+416@ = Blip.AddForCar(414@)
+Blip.ChangeDisplay(416@, BlipDisplay.BlipOnly)
+
+:WUZI2_16547
+372@ = 0
+
+:WUZI2_16554
+if 
+  6 > 372@
+goto_if_false @WUZI2_16670
+if 
+  not Char.IsDead(308@(372@,6i))
+goto_if_false @WUZI2_16614
+Char.SetAccuracy(308@(372@,6i), 80)
+Char.SetShootRate(308@(372@,6i), 50)
+
+:WUZI2_16614
+if 
+  not Char.IsDead(417@(372@,6i))
+goto_if_false @WUZI2_16656
+Char.SetAccuracy(417@(372@,6i), 80)
+Char.SetShootRate(417@(372@,6i), 50)
+
+:WUZI2_16656
+372@ += 1
+goto @WUZI2_16554
+
+:WUZI2_16670
+374@ = 0
+375@ = 0
+376@ = 0
+377@ = 0
+return 
+
+:WUZI2_16700
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+if 
+  not Car.IsDead(290@)
+goto_if_false @WUZI2_16994
+if 
+  374@ == 0
+goto_if_false @WUZI2_16883
+if 
+  Car.Locate2D(290@, 0, $player_x, $player_y, 75.0, 75.0)
+goto_if_false @WUZI2_16876
+if 
+  not Char.IsDead(308@)
+goto_if_false @WUZI2_16811
+Char.ClearTasks(308@)
+Task.KillCharOnFoot(308@, $scplayer)
+
+:WUZI2_16811
+if 
+  not Char.IsDead(309@)
+goto_if_false @WUZI2_16840
+Char.ClearTasks(309@)
+Task.KillCharOnFoot(309@, $scplayer)
+
+:WUZI2_16840
+if 
+  not Char.IsDead(310@)
+goto_if_false @WUZI2_16869
+Char.ClearTasks(310@)
+Task.KillCharOnFoot(310@, $scplayer)
+
+:WUZI2_16869
+374@ = 1
+
+:WUZI2_16876
+goto @WUZI2_16987
+
+:WUZI2_16883
+if 
+  not Car.Locate2D(290@, 0, $player_x, $player_y, 85.0, 85.0)
+goto_if_false @WUZI2_16987
+if 
+  not Char.IsDead(308@)
+goto_if_false @WUZI2_16938
+Char.ClearTasks(308@)
+
+:WUZI2_16938
+if 
+  not Char.IsDead(309@)
+goto_if_false @WUZI2_16959
+Char.ClearTasks(309@)
+
+:WUZI2_16959
+if 
+  not Char.IsDead(310@)
+goto_if_false @WUZI2_16980
+Char.ClearTasks(310@)
+
+:WUZI2_16980
+374@ = 0
+
+:WUZI2_16987
+goto @WUZI2_17015
+
+:WUZI2_16994
+if 
+  Blip.DoesExist(292@)
+goto_if_false @WUZI2_17015
+Blip.Remove(292@)
+
+:WUZI2_17015
+if 
+  not Car.IsDead(291@)
+goto_if_false @WUZI2_17295
+if 
+  375@ == 0
+goto_if_false @WUZI2_17184
+if 
+  Car.Locate2D(291@, 0, $player_x, $player_y, 75.0, 75.0)
+goto_if_false @WUZI2_17177
+if 
+  not Char.IsDead(311@)
+goto_if_false @WUZI2_17112
+Char.ClearTasks(311@)
+Task.KillCharOnFoot(311@, $scplayer)
+
+:WUZI2_17112
+if 
+  not Char.IsDead(312@)
+goto_if_false @WUZI2_17141
+Char.ClearTasks(312@)
+Task.KillCharOnFoot(312@, $scplayer)
+
+:WUZI2_17141
+if 
+  not Char.IsDead(313@)
+goto_if_false @WUZI2_17170
+Char.ClearTasks(313@)
+Task.KillCharOnFoot(313@, $scplayer)
+
+:WUZI2_17170
+375@ = 1
+
+:WUZI2_17177
+goto @WUZI2_17288
+
+:WUZI2_17184
+if 
+  not Car.Locate2D(291@, 0, $player_x, $player_y, 85.0, 85.0)
+goto_if_false @WUZI2_17288
+if 
+  not Char.IsDead(311@)
+goto_if_false @WUZI2_17239
+Char.ClearTasks(311@)
+
+:WUZI2_17239
+if 
+  not Char.IsDead(312@)
+goto_if_false @WUZI2_17260
+Char.ClearTasks(312@)
+
+:WUZI2_17260
+if 
+  not Char.IsDead(313@)
+goto_if_false @WUZI2_17281
+Char.ClearTasks(313@)
+
+:WUZI2_17281
+375@ = 0
+
+:WUZI2_17288
+goto @WUZI2_17316
+
+:WUZI2_17295
+if 
+  Blip.DoesExist(293@)
+goto_if_false @WUZI2_17316
+Blip.Remove(293@)
+
+:WUZI2_17316
+if 
+  not Car.IsDead(413@)
+goto_if_false @WUZI2_17596
+if 
+  376@ == 0
+goto_if_false @WUZI2_17485
+if 
+  Car.Locate2D(413@, 0, $player_x, $player_y, 75.0, 75.0)
+goto_if_false @WUZI2_17478
+if 
+  not Char.IsDead(417@)
+goto_if_false @WUZI2_17413
+Char.ClearTasks(417@)
+Task.KillCharOnFoot(417@, $scplayer)
+
+:WUZI2_17413
+if 
+  not Char.IsDead(418@)
+goto_if_false @WUZI2_17442
+Char.ClearTasks(418@)
+Task.KillCharOnFoot(418@, $scplayer)
+
+:WUZI2_17442
+if 
+  not Char.IsDead(419@)
+goto_if_false @WUZI2_17471
+Char.ClearTasks(419@)
+Task.KillCharOnFoot(419@, $scplayer)
+
+:WUZI2_17471
+376@ = 1
+
+:WUZI2_17478
+goto @WUZI2_17589
+
+:WUZI2_17485
+if 
+  not Car.Locate2D(413@, 0, $player_x, $player_y, 85.0, 85.0)
+goto_if_false @WUZI2_17589
+if 
+  not Char.IsDead(417@)
+goto_if_false @WUZI2_17540
+Char.ClearTasks(417@)
+
+:WUZI2_17540
+if 
+  not Char.IsDead(418@)
+goto_if_false @WUZI2_17561
+Char.ClearTasks(418@)
+
+:WUZI2_17561
+if 
+  not Char.IsDead(419@)
+goto_if_false @WUZI2_17582
+Char.ClearTasks(419@)
+
+:WUZI2_17582
+376@ = 0
+
+:WUZI2_17589
+goto @WUZI2_17617
+
+:WUZI2_17596
+if 
+  Blip.DoesExist(415@)
+goto_if_false @WUZI2_17617
+Blip.Remove(415@)
+
+:WUZI2_17617
+if 
+  not Car.IsDead(414@)
+goto_if_false @WUZI2_17897
+if 
+  377@ == 0
+goto_if_false @WUZI2_17786
+if 
+  Car.Locate2D(414@, 0, $player_x, $player_y, 75.0, 75.0)
+goto_if_false @WUZI2_17779
+if 
+  not Char.IsDead(420@)
+goto_if_false @WUZI2_17714
+Char.ClearTasks(420@)
+Task.KillCharOnFoot(420@, $scplayer)
+
+:WUZI2_17714
+if 
+  not Char.IsDead(421@)
+goto_if_false @WUZI2_17743
+Char.ClearTasks(421@)
+Task.KillCharOnFoot(421@, $scplayer)
+
+:WUZI2_17743
+if 
+  not Char.IsDead(422@)
+goto_if_false @WUZI2_17772
+Char.ClearTasks(422@)
+Task.KillCharOnFoot(422@, $scplayer)
+
+:WUZI2_17772
+377@ = 1
+
+:WUZI2_17779
+goto @WUZI2_17890
+
+:WUZI2_17786
+if 
+  not Car.Locate2D(414@, 0, $player_x, $player_y, 85.0, 85.0)
+goto_if_false @WUZI2_17890
+if 
+  not Char.IsDead(420@)
+goto_if_false @WUZI2_17841
+Char.ClearTasks(420@)
+
+:WUZI2_17841
+if 
+  not Char.IsDead(421@)
+goto_if_false @WUZI2_17862
+Char.ClearTasks(421@)
+
+:WUZI2_17862
+if 
+  not Char.IsDead(422@)
+goto_if_false @WUZI2_17883
+Char.ClearTasks(422@)
+
+:WUZI2_17883
+377@ = 0
+
+:WUZI2_17890
+goto @WUZI2_17918
+
+:WUZI2_17897
+if 
+  Blip.DoesExist(416@)
+goto_if_false @WUZI2_17918
+Blip.Remove(416@)
+
+:WUZI2_17918
+return 
+
+:WUZI2_17920
+set_lvar_int_to_lvar_int 57@ = 122@
+57@ *= 3
+add_int_lvar_to_int_lvar 57@ += 121@
+add_int_lvar_to_int_lvar 57@ += 123@
+if 
+  368@ == 1
+goto_if_false @WUZI2_17984
+set_lvar_int_to_lvar_int 378@ = 121@
+goto @WUZI2_17999
+
+:WUZI2_17984
+set_lvar_int_to_lvar_int 378@ = 121@
+378@ += 3
+
+:WUZI2_17999
+set_var_int_to_lvar_int $load_sample = 58@(57@,63i)
+set_var_text_label s$load_text = 127@(57@,63s)
+start_new_script @A_ALAP 2 124@ 308@(378@,6i) 
+124@ += 1
+return 
+
+:WUZI2_18052
+121@ += 1
+if 
+  121@ == 3
+goto_if_false @WUZI2_18116
+121@ = 0
+122@ += 1
+if 
+  122@ == 3
+goto_if_false @WUZI2_18116
+122@ = 0
+
+:WUZI2_18116
+return 
+
+:WUZI2_18118
+380@, 381@, 381@ = Char.GetWeaponInSlot($scplayer, WeaponSlot.Melee)
+if 
+  is_int_lvar_equal_to_constant 380@ == 0
+goto_if_false @WUZI2_18166
+379@ = 0
+goto @WUZI2_18205
+
+:WUZI2_18166
+if 
+  is_int_lvar_equal_to_constant 380@ == 4
+goto_if_false @WUZI2_18198
+379@ = 1
+goto @WUZI2_18205
+
+:WUZI2_18198
+379@ = 2
+
+:WUZI2_18205
+return 
+
+:WUZI2_18207
+$guard_pointer_W2 = 0
+
+:WUZI2_18214
+if 
+  6 > $guard_pointer_W2
+goto_if_false @WUZI2_18288
+if 
+  not Char.IsDead(308@($guard_pointer_W2,6i))
+goto_if_false @WUZI2_18274
+Char.SetAccuracy(308@($guard_pointer_W2,6i), 30)
+Char.SetShootRate(308@($guard_pointer_W2,6i), 30)
+
+:WUZI2_18274
+$guard_pointer_W2 += 1
+goto @WUZI2_18214
+
+:WUZI2_18288
+return 
+
+:WUZI2_18290
+if 
+  382@ == 1
+goto_if_false @WUZI2_18640
+if and
+is_ps2_keyboard_key_pressed 71
+  TIMERB > 200
+goto_if_false @WUZI2_18345
+TIMERB = 0
+382@ = 0
+
+:WUZI2_18345
+Debugger.Line(331@, 338@, 2.0, 337@, 338@, 2.0)
+Debugger.Line(331@, 339@, 2.0, 337@, 339@, 2.0)
+Debugger.Line(331@, 340@, 2.0, 337@, 340@, 2.0)
+Debugger.Line(331@, 341@, 2.0, 337@, 341@, 2.0)
+Debugger.Line(331@, 342@, 2.0, 337@, 342@, 2.0)
+Debugger.Line(331@, 338@, 2.0, 331@, 342@, 2.0)
+Debugger.Line(332@, 338@, 2.0, 332@, 342@, 2.0)
+Debugger.Line(333@, 338@, 2.0, 333@, 342@, 2.0)
+Debugger.Line(334@, 338@, 2.0, 334@, 342@, 2.0)
+Debugger.Line(335@, 338@, 2.0, 335@, 342@, 2.0)
+Debugger.Line(336@, 338@, 2.0, 336@, 342@, 2.0)
+Debugger.Line(337@, 338@, 2.0, 337@, 342@, 2.0)
+goto @WUZI2_18695
+
+:WUZI2_18640
+if 
+  382@ == 0
+goto_if_false @WUZI2_18695
+if and
+is_ps2_keyboard_key_pressed 71
+  TIMERB > 200
+goto_if_false @WUZI2_18695
+TIMERB = 0
+382@ = 1
+
+:WUZI2_18695
+return 
+
+:WUZI2_18697
+383@ = Searchlight.Create(-1474.145, 1484.038, 11.3824, 1.0, -1465.154, 1463.004, -0.5, 25.0)
+389@ = Object.CreateNoOffset(#A51_SPOTBASE, -1474.145, 1484.038, 10.8824)
+Object.SetHeading(389@, 326.1907)
+395@ = Object.CreateNoOffset(#A51_SPOTHOUSING, -1474.145, 1484.038, 10.8824)
+401@ = Object.CreateNoOffset(#A51_SPOTBULB, -1474.145, 1484.038, 10.8824)
+Searchlight.AttachToObject(383@, 389@, 395@, 401@, 0.0, 1.181, 0.768)
+Object.SetHealth(401@, 1000)
+Searchlight.MoveBetweenCoords(383@, -1465.154, 1463.004, -0.5, -1489.672, 1472.111, -0.5, 0.1)
+Searchlight.SetClipIfColliding(383@, False)
+428@ = 0
+384@ = Searchlight.Create(-1474.198, 1494.927, 11.6265, 1.0, -1459.363, 1514.413, -0.5, 25.0)
+390@ = Object.CreateNoOffset(#A51_SPOTBASE, -1474.198, 1494.927, 10.8824)
+Object.SetHeading(390@, 34.4591)
+396@ = Object.CreateNoOffset(#A51_SPOTHOUSING, -1474.198, 1494.927, 10.8824)
+402@ = Object.CreateNoOffset(#A51_SPOTBULB, -1474.198, 1494.927, 10.8824)
+Searchlight.AttachToObject(384@, 390@, 396@, 402@, 0.0, 1.181, 0.768)
+Object.SetHealth(402@, 1000)
+Searchlight.MoveBetweenCoords(384@, -1459.363, 1514.413, -0.5, -1491.379, 1501.309, -0.5, 0.08)
+Searchlight.SetClipIfColliding(384@, False)
+429@ = 0
+385@ = Searchlight.Create(-1369.279, 1484.219, 14.3425, 1.0, -1351.937, 1504.435, -0.5, 25.0)
+391@ = Object.CreateNoOffset(#A51_SPOTBASE, -1369.279, 1484.219, 13.8425)
+Object.SetHeading(391@, 32.5701)
+397@ = Object.CreateNoOffset(#A51_SPOTHOUSING, -1369.279, 1484.219, 13.8425)
+403@ = Object.CreateNoOffset(#A51_SPOTBULB, -1369.279, 1484.219, 13.8425)
+Searchlight.AttachToObject(385@, 391@, 397@, 403@, 0.0, 1.181, 0.768)
+Object.SetHealth(403@, 1000)
+Searchlight.MoveBetweenCoords(385@, -1347.143, 1476.63, -0.5, -1370.499, 1465.479, -0.5, 0.08)
+Searchlight.SetClipIfColliding(385@, False)
+430@ = 0
+386@ = Searchlight.Create(-1368.467, 1494.225, 14.3425, 1.0, -1347.143, 1476.63, -0.5, 25.0)
+392@ = Object.CreateNoOffset(#A51_SPOTBASE, -1368.467, 1494.225, 13.8425)
+Object.SetHeading(392@, 327.3304)
+398@ = Object.CreateNoOffset(#A51_SPOTHOUSING, -1368.467, 1494.225, 13.8425)
+404@ = Object.CreateNoOffset(#A51_SPOTBULB, -1368.467, 1494.225, 13.8425)
+Searchlight.AttachToObject(386@, 392@, 398@, 404@, 0.0, 1.181, 0.768)
+Object.SetHealth(404@, 1000)
+Searchlight.MoveBetweenCoords(386@, -1351.937, 1504.435, -0.5, -1377.028, 1515.729, -0.5, 0.1)
+Searchlight.SetClipIfColliding(386@, False)
+431@ = 0
+413@ = Car.Create(454, -1491.662, 1488.5, 1.0)
+Car.SetHeading(413@, 180.0)
+Boat.Anchor(413@, True)
+417@ = Char.Create(24, 123, -1521.0, 1492.0, 5.0)
+Char.AttachToCar(417@, 413@, 0.0, 9.0, 2.1, 0, 360.0, WeaponType.Ak47)
+Task.StayInSamePlace(417@, True)
+Char.SetAccuracy(417@, 80)
+Char.SetShootRate(417@, 20)
+418@ = Char.Create(24, 122, -1521.0, 1492.0, 5.0)
+Char.AttachToCar(418@, 413@, -1.0, -1.0, 3.7, 0, 360.0, WeaponType.Ak47)
+Task.StayInSamePlace(418@, True)
+Char.SetAccuracy(418@, 80)
+Char.SetShootRate(418@, 20)
+419@ = Char.Create(24, 121, -1521.0, 1492.0, 5.0)
+Char.AttachToCar(419@, 413@, 1.0, -4.0, 1.15, 0, 360.0, WeaponType.Ak47)
+Task.StayInSamePlace(419@, True)
+Char.SetAccuracy(419@, 80)
+Char.SetShootRate(419@, 20)
+414@ = Car.Create(454, -1350.12, 1488.5, 1.0)
+Car.SetHeading(414@, 0.0)
+Boat.Anchor(414@, True)
+420@ = Char.Create(24, 123, -1322.0, 1489.5, 5.0)
+Char.AttachToCar(420@, 414@, 0.0, 9.0, 2.1, 0, 360.0, WeaponType.Ak47)
+Task.StayInSamePlace(420@, True)
+Char.SetAccuracy(420@, 80)
+Char.SetShootRate(420@, 20)
+421@ = Char.Create(24, 122, -1322.0, 1489.5, 5.0)
+Char.AttachToCar(421@, 414@, -1.0, -1.0, 3.7, 0, 360.0, WeaponType.Ak47)
+Task.StayInSamePlace(421@, True)
+Char.SetAccuracy(421@, 80)
+Char.SetShootRate(421@, 20)
+422@ = Char.Create(24, 121, -1322.0, 1489.5, 5.0)
+Char.AttachToCar(422@, 414@, 1.0, -4.0, 1.15, 0, 360.0, WeaponType.Ak47)
+Task.StayInSamePlace(422@, True)
+Char.SetAccuracy(422@, 80)
+Char.SetShootRate(422@, 20)
+423@ = 0
+return 
+
+:WUZI2_20108
+switch_start 423@ total_jumps 2 default_jump 0 @WUZI2_20689 jumps 0 @WUZI2_20171 1 @WUZI2_20483 -1 @WUZI2_20689 -1 @WUZI2_20689 -1 @WUZI2_20689 -1 @WUZI2_20689 -1 @WUZI2_20689
+
+:WUZI2_20171
+if 
+  287@ == 0
+goto_if_false @WUZI2_20476
+if 
+  not 424@ = Char.IsInAnySearchlight($scplayer)
+goto_if_false @WUZI2_20392
+if 
+  not Char.IsInWater($scplayer)
+goto_if_false @WUZI2_20378
+if 
+  not Car.IsDead(413@)
+goto_if_false @WUZI2_20301
+if 
+  Char.IsTouchingVehicle($scplayer, 413@)
+goto_if_false @WUZI2_20301
+123@ = 18
+gosub @WUZI2_17920
+425@ = 0
+gosub @WUZI2_20691
+423@ = 1
+goto @WUZI2_20689
+
+:WUZI2_20301
+if 
+  not Car.IsDead(414@)
+goto_if_false @WUZI2_20371
+if 
+  Char.IsTouchingVehicle($scplayer, 414@)
+goto_if_false @WUZI2_20371
+123@ = 18
+gosub @WUZI2_17920
+425@ = 1
+gosub @WUZI2_20691
+423@ = 1
+
+:WUZI2_20371
+goto @WUZI2_20385
+
+:WUZI2_20378
+goto @WUZI2_20689
+
+:WUZI2_20385
+goto @WUZI2_20476
+
+:WUZI2_20392
+123@ = 18
+gosub @WUZI2_17920
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+if 
+  -1430.0 > $player_x
+goto_if_false @WUZI2_20455
+425@ = 0
+goto @WUZI2_20462
+
+:WUZI2_20455
+425@ = 1
+
+:WUZI2_20462
+gosub @WUZI2_20691
+423@ = 1
+
+:WUZI2_20476
+goto @WUZI2_20689
+
+:WUZI2_20483
+if 
+  not Car.IsDead(413@(425@,2i))
+goto_if_false @WUZI2_20661
+if 
+  287@ == 0
+goto_if_false @WUZI2_20612
+$x, $y, $z = Car.GetCoordinates(413@(425@,2i))
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+$distance = Math.GetDistanceBetweenCoords2D($x, $y, $player_x, $player_y)
+if 
+  55.0 > $distance
+goto_if_false @WUZI2_20598
+goto @WUZI2_20689
+
+:WUZI2_20598
+123@ = 36
+goto @WUZI2_20619
+
+:WUZI2_20612
+123@ = 27
+
+:WUZI2_20619
+gosub @WUZI2_17920
+425@ += 2
+gosub @WUZI2_20691
+gosub @WUZI2_18052
+423@ = 0
+goto @WUZI2_20682
+
+:WUZI2_20661
+425@ += 2
+gosub @WUZI2_20691
+423@ = 0
+
+:WUZI2_20682
+goto @WUZI2_20689
+
+:WUZI2_20689
+return 
+
+:WUZI2_20691
+427@ = 0
+switch_start 425@ total_jumps 4 default_jump 0 @WUZI2_20985 jumps 0 @WUZI2_20761 1 @WUZI2_20873 2 @WUZI2_20761 3 @WUZI2_20873 -1 @WUZI2_20985 -1 @WUZI2_20985 -1 @WUZI2_20985
+
+:WUZI2_20761
+426@ = 0
+
+:WUZI2_20768
+if 
+  3 > 426@
+goto_if_false @WUZI2_20866
+if 
+  not Char.IsDead(417@(426@,6i))
+goto_if_false @WUZI2_20852
+Char.ClearTasks(417@(426@,6i))
+if 
+  425@ == 0
+goto_if_false @WUZI2_20845
+Task.KillCharOnFoot(417@(426@,6i), $scplayer)
+
+:WUZI2_20845
+427@ += 1
+
+:WUZI2_20852
+426@ += 1
+goto @WUZI2_20768
+
+:WUZI2_20866
+goto @WUZI2_20985
+
+:WUZI2_20873
+426@ = 3
+
+:WUZI2_20880
+if 
+  6 > 426@
+goto_if_false @WUZI2_20978
+if 
+  not Char.IsDead(417@(426@,6i))
+goto_if_false @WUZI2_20964
+Char.ClearTasks(417@(426@,6i))
+if 
+  425@ == 1
+goto_if_false @WUZI2_20957
+Task.KillCharOnFoot(417@(426@,6i), $scplayer)
+
+:WUZI2_20957
+427@ += 1
+
+:WUZI2_20964
+426@ += 1
+goto @WUZI2_20880
+
+:WUZI2_20978
+goto @WUZI2_20985
+
+:WUZI2_20985
+return 
+
+:WUZI2_20987
+$pointer_W2 = 0
+
+:WUZI2_20994
+if 
+  4 > $pointer_W2
+goto_if_false @WUZI2_21117
+if and
+  428@($pointer_W2,6i) == 0
+  Object.DoesExist(401@($pointer_W2,6i))
+goto_if_false @WUZI2_21103
+434@ = Object.GetHealth(401@($pointer_W2,6i))
+if 
+  1000 > 434@
+goto_if_false @WUZI2_21103
+Searchlight.Delete(383@($pointer_W2,6i))
+Blip.Remove(407@($pointer_W2,6i))
+428@($pointer_W2,6i) += 1
+
+:WUZI2_21103
+$pointer_W2 += 1
+goto @WUZI2_20994
+
+:WUZI2_21117
+return 
+if 
+  $help_text_flag_W2 > 0
+goto_if_false @WUZI2_21497
+if and
+  $help_text_flag_W2 == 1
+  $player_status_W2 > 0
+goto_if_false @WUZI2_21229
+if and
+  TIMERB > 6500
+  4 > $help_text_switch_W2
+goto_if_false @WUZI2_21195
+$help_text_switch_W2 += 1
+
+:WUZI2_21195
+Text.ClearHelp
+Text.PrintHelpForever('WZI2_B4')
+TIMERB = 0
+$help_text_flag_W2 += 1
+goto @WUZI2_21490
+
+:WUZI2_21229
+if 
+  5 > $help_text_switch_W2
+goto_if_false @WUZI2_21490
+switch_start $help_text_switch_W2 total_jumps 3 default_jump 1 @WUZI2_21439 jumps -2 @WUZI2_21310 -1 @WUZI2_21347 4 @WUZI2_21404 -1 @WUZI2_21490 -1 @WUZI2_21490 -1 @WUZI2_21490 -1 @WUZI2_21490
+
+:WUZI2_21310
+Text.PrintNow('WZI2_8', 7000, 1)
+TIMERB = 0
+$help_text_switch_W2 += 1
+goto @WUZI2_21490
+
+:WUZI2_21347
+if 
+  TIMERB > 7000
+goto_if_false @WUZI2_21397
+Text.PrintNow('WZI2_9', 8000, 1)
+TIMERB = 6500
+$help_text_switch_W2 += 1
+
+:WUZI2_21397
+goto @WUZI2_21490
+
+:WUZI2_21404
+if 
+  TIMERB > 8000
+goto_if_false @WUZI2_21432
+Text.ClearHelp
+$help_text_switch_W2 += 1
+
+:WUZI2_21432
+goto @WUZI2_21490
+
+:WUZI2_21439
+if 
+  TIMERB > 8000
+goto_if_false @WUZI2_21483
+Text.ClearHelp
+Text.PrintHelpForever(260@($help_text_switch_W2,8s))
+TIMERB = 0
+$help_text_switch_W2 += 1
+
+:WUZI2_21483
+goto @WUZI2_21490
+
+:WUZI2_21490
+goto @WUZI2_21522
+
+:WUZI2_21497
+if 
+  287@ == 0
+goto_if_false @WUZI2_21522
+$help_text_flag_W2 = 1
+
+:WUZI2_21522
+return 
+
+:WUZI2_21524
+switch_start 435@ total_jumps 2 default_jump 0 @WUZI2_21723 jumps 0 @WUZI2_21587 1 @WUZI2_21679 -1 @WUZI2_21723 -1 @WUZI2_21723 -1 @WUZI2_21723 -1 @WUZI2_21723 -1 @WUZI2_21723
+
+:WUZI2_21587
+if 
+  not Char.IsInWater($scplayer)
+goto_if_false @WUZI2_21672
+if 
+  Char.IsInArea3D($scplayer, 0, -1491.319, 1505.334, 0.0, -1352.436, 1475.738, 15.0)
+goto_if_false @WUZI2_21672
+gosub @WUZI2_22064
+435@ += 1
+goto @WUZI2_21723
+
+:WUZI2_21672
+goto @WUZI2_21723
+
+:WUZI2_21679
+if 
+  Char.IsInWater($scplayer)
+goto_if_false @WUZI2_21716
+gosub @WUZI2_21725
+435@ -= 1
+goto @WUZI2_21723
+
+:WUZI2_21716
+goto @WUZI2_21723
+
+:WUZI2_21723
+return 
+
+:WUZI2_21725
+$pointer_W2 = 0
+
+:WUZI2_21732
+if 
+  5 > $pointer_W2
+goto_if_false @WUZI2_21773
+Blip.Remove(443@($pointer_W2,8i))
+$pointer_W2 += 1
+goto @WUZI2_21732
+
+:WUZI2_21773
+Hud.SetRadarZoom(0)
+if 
+  not Car.IsDead(290@)
+goto_if_false @WUZI2_21824
+if 
+  not Blip.DoesExist(292@)
+goto_if_false @WUZI2_21824
+292@ = Blip.AddForCar(290@)
+Blip.ChangeDisplay(292@, BlipDisplay.BlipOnly)
+
+:WUZI2_21824
+if 
+  not Car.IsDead(291@)
+goto_if_false @WUZI2_21871
+if 
+  not Blip.DoesExist(293@)
+goto_if_false @WUZI2_21871
+293@ = Blip.AddForCar(291@)
+Blip.ChangeDisplay(293@, BlipDisplay.BlipOnly)
+
+:WUZI2_21871
+if 
+  not Car.IsDead(413@)
+goto_if_false @WUZI2_21918
+if 
+  not Blip.DoesExist(415@)
+goto_if_false @WUZI2_21918
+415@ = Blip.AddForCar(413@)
+Blip.ChangeDisplay(415@, BlipDisplay.BlipOnly)
+
+:WUZI2_21918
+if 
+  not Car.IsDead(414@)
+goto_if_false @WUZI2_21965
+if 
+  not Blip.DoesExist(416@)
+goto_if_false @WUZI2_21965
+416@ = Blip.AddForCar(414@)
+Blip.ChangeDisplay(416@, BlipDisplay.BlipOnly)
+
+:WUZI2_21965
+$pointer_W2 = 0
+
+:WUZI2_21972
+if 
+  4 > $pointer_W2
+goto_if_false @WUZI2_22062
+if 
+  428@($pointer_W2,6i) == 0
+goto_if_false @WUZI2_22048
+if 
+  not Blip.DoesExist(407@($pointer_W2,6i))
+goto_if_false @WUZI2_22048
+407@($pointer_W2,6i) = Blip.AddForSearchlight(383@($pointer_W2,6i))
+
+:WUZI2_22048
+$pointer_W2 += 1
+goto @WUZI2_21972
+
+:WUZI2_22062
+return 
+
+:WUZI2_22064
+if 
+  not Car.IsDead(290@)
+goto_if_false @WUZI2_22085
+Blip.Remove(292@)
+
+:WUZI2_22085
+if 
+  not Car.IsDead(291@)
+goto_if_false @WUZI2_22106
+Blip.Remove(293@)
+
+:WUZI2_22106
+if 
+  not Car.IsDead(413@)
+goto_if_false @WUZI2_22127
+Blip.Remove(415@)
+
+:WUZI2_22127
+if 
+  not Car.IsDead(414@)
+goto_if_false @WUZI2_22148
+Blip.Remove(416@)
+
+:WUZI2_22148
+$pointer_W2 = 0
+
+:WUZI2_22155
+if 
+  4 > $pointer_W2
+goto_if_false @WUZI2_22196
+Blip.Remove(407@($pointer_W2,6i))
+$pointer_W2 += 1
+goto @WUZI2_22155
+
+:WUZI2_22196
+Hud.SetRadarZoom(90)
+$pointer_W2 = 0
+
+:WUZI2_22207
+if 
+  5 > $pointer_W2
+goto_if_false @WUZI2_22317
+if 
+  not Char.IsDead(436@($pointer_W2,7i))
+goto_if_false @WUZI2_22303
+if 
+  not Blip.DoesExist(443@($pointer_W2,8i))
+goto_if_false @WUZI2_22303
+443@($pointer_W2,8i) = Blip.AddForChar(436@($pointer_W2,7i))
+Blip.ChangeDisplay(443@($pointer_W2,8i), BlipDisplay.BlipOnly)
+Blip.SetAlwaysDisplayOnZoomedRadar(443@($pointer_W2,8i), True)
+
+:WUZI2_22303
+$pointer_W2 += 1
+goto @WUZI2_22207
+
+:WUZI2_22317
+return 
+
+:WUZI2_22319
+Text.ClearHelp
+Text.ClearPrints
+if 
+  379@ == 0
+goto_if_false @WUZI2_22346
+Pickup.Remove(258@)
+
+:WUZI2_22346
+gosub @WUZI2_18118
+if 
+  379@ <> 1
+goto_if_false @WUZI2_22398
+258@ = Pickup.CreateWithAmmo(335, 3, 1, -1456.289, 1497.905, 6.7)
+
+:WUZI2_22398
+Blip.Remove(36@)
+36@ = Blip.AddForCoord(-1372.733, 1495.55, 0.8578)
+466@ = -1442.207
+470@ = 1489.462
+474@ = 6.1016
+478@ = 270.0
+467@ = -1402.308
+471@ = 1486.719
+475@ = 6.0938
+479@ = 301.3607
+468@ = -1382.657
+472@ = 1480.446
+476@ = 7.5625
+480@ = 180.0
+469@ = -1370.584
+473@ = 1486.74
+477@ = 10.0313
+481@ = 347.1257
+436@ = Char.Create(25, 121, 466@, 470@, 474@)
+Char.SetHeading(436@, 478@)
+Char.GiveWeapon(436@, WeaponType.Knife, 1)
+Char.SetCurrentWeapon(436@, WeaponType.Knife)
+Char.SetDecisionMaker(436@, 34@)
+443@ = Blip.AddForChar(436@)
+Blip.ChangeDisplay(443@, BlipDisplay.BlipOnly)
+Blip.SetAlwaysDisplayOnZoomedRadar(443@, True)
+Char.SetShootRate(436@, 80)
+Char.SetSenseRange(436@, 80.0)
+451@ = 0
+437@ = Char.Create(25, 122, 467@, 471@, 475@)
+Char.SetHeading(437@, 479@)
+Char.GiveWeapon(437@, WeaponType.Knife, 1)
+Char.SetCurrentWeapon(437@, WeaponType.Knife)
+Char.SetDecisionMaker(437@, 34@)
+444@ = Blip.AddForChar(437@)
+Blip.ChangeDisplay(444@, BlipDisplay.BlipOnly)
+Blip.SetAlwaysDisplayOnZoomedRadar(444@, True)
+Char.SetShootRate(437@, 80)
+Char.SetSenseRange(437@, 80.0)
+452@ = 0
+438@ = Char.Create(25, 123, 468@, 472@, 476@)
+Char.SetHeading(438@, 480@)
+Char.GiveWeapon(438@, WeaponType.Knife, 1)
+Char.SetCurrentWeapon(438@, WeaponType.Knife)
+Char.SetDecisionMaker(438@, 34@)
+445@ = Blip.AddForChar(438@)
+Blip.ChangeDisplay(445@, BlipDisplay.BlipOnly)
+Blip.SetAlwaysDisplayOnZoomedRadar(445@, True)
+Char.SetShootRate(438@, 80)
+Char.SetSenseRange(438@, 80.0)
+453@ = 0
+439@ = Char.Create(25, 121, 469@, 473@, 477@)
+Char.SetHeading(439@, 481@)
+Char.GiveWeapon(439@, WeaponType.Knife, 1)
+Char.SetCurrentWeapon(439@, WeaponType.Knife)
+Char.SetDecisionMaker(439@, 34@)
+446@ = Blip.AddForChar(439@)
+Blip.ChangeDisplay(446@, BlipDisplay.BlipOnly)
+Blip.SetAlwaysDisplayOnZoomedRadar(446@, True)
+Char.SetShootRate(439@, 80)
+Char.SetSenseRange(439@, 80.0)
+454@ = 0
+482@ = -1415.15
+492@ = 1489.33
+502@ = 6.1092
+512@ = 274.6376
+483@ = -1393.05
+493@ = 1490.035
+503@ = 6.1016
+513@ = 273.1324
+484@ = -1377.694
+494@ = 1494.01
+504@ = 0.8594
+514@ = 268.1749
+485@ = -1384.855
+495@ = 1493.904
+505@ = 0.8594
+515@ = 86.0142
+486@ = -1433.38
+496@ = 1483.448
+506@ = 0.625
+516@ = 272.9424
+487@ = -1393.022
+497@ = 1483.625
+507@ = 0.625
+517@ = 266.08
+488@ = -1392.567
+498@ = 1496.273
+508@ = 0.6312
+518@ = 163.775
+489@ = -1423.06
+499@ = 1496.289
+509@ = 0.625
+519@ = 134.281
+490@ = -1423.291
+500@ = 1491.614
+510@ = 0.625
+520@ = 172.1411
+491@ = -1433.231
+501@ = 1488.718
+511@ = 0.625
+521@ = 106.1638
+458@ = 0
+462@ = 1
+set_var_int_to_lvar_int $pointer2_W2 = 458@
+440@ = Char.Create(25, 123, 482@($pointer2_W2,10f), 492@($pointer2_W2,10f), 502@($pointer2_W2,10f))
+Char.SetHeading(440@, 512@($pointer2_W2,10f))
+Char.GiveWeapon(440@, WeaponType.Knife, 1)
+Char.SetCurrentWeapon(440@, WeaponType.Knife)
+Char.SetDecisionMaker(440@, 34@)
+447@ = Blip.AddForChar(440@)
+Blip.ChangeDisplay(447@, BlipDisplay.BlipOnly)
+Blip.SetAlwaysDisplayOnZoomedRadar(447@, True)
+Char.SetShootRate(440@, 80)
+Char.SetSenseRange(440@, 80.0)
+455@ = 0
+459@ = 2
+463@ = 3
+set_var_int_to_lvar_int $pointer2_W2 = 459@
+441@ = Char.Create(25, 122, 482@($pointer2_W2,10f), 492@($pointer2_W2,10f), 502@($pointer2_W2,10f))
+Char.SetHeading(441@, 512@($pointer2_W2,10f))
+Char.GiveWeapon(441@, WeaponType.Knife, 1)
+Char.SetCurrentWeapon(441@, WeaponType.Knife)
+Char.SetDecisionMaker(441@, 34@)
+448@ = Blip.AddForChar(441@)
+Blip.ChangeDisplay(448@, BlipDisplay.BlipOnly)
+Blip.SetAlwaysDisplayOnZoomedRadar(448@, True)
+Char.SetShootRate(441@, 80)
+Char.SetSenseRange(441@, 80.0)
+456@ = 0
+460@ = 4
+464@ = 9
+set_var_int_to_lvar_int $pointer2_W2 = 460@
+442@ = Char.Create(25, 121, 482@($pointer2_W2,10f), 492@($pointer2_W2,10f), 502@($pointer2_W2,10f))
+Char.SetHeading(442@, 512@($pointer2_W2,10f))
+Char.GiveWeapon(442@, WeaponType.Knife, 1)
+Char.SetCurrentWeapon(442@, WeaponType.Knife)
+Char.SetDecisionMaker(442@, 34@)
+449@ = Blip.AddForChar(442@)
+Blip.ChangeDisplay(449@, BlipDisplay.BlipOnly)
+Blip.SetAlwaysDisplayOnZoomedRadar(449@, True)
+Char.SetShootRate(442@, 80)
+Char.SetSenseRange(442@, 80.0)
+457@ = 0
+Text.PrintNow('WZI2_35', 7000, 1)
+522@ = 0
+$pointer_W2 = 0
+
+:WUZI2_23799
+if 
+  4 > $pointer_W2
+goto_if_false @WUZI2_23863
+if 
+  not Char.IsDead(436@($pointer_W2,7i))
+goto_if_false @WUZI2_23849
+Char.SetDecisionMaker(436@($pointer_W2,7i), 34@)
+
+:WUZI2_23849
+$pointer_W2 += 1
+goto @WUZI2_23799
+
+:WUZI2_23863
+283@ = 1
+return 
+
+:WUZI2_23872
+$pointer_W2 = 0
+530@ = 0
+531@ = 0
+531@ = 0
+
+:WUZI2_23900
+if 
+  7 > $pointer_W2
+goto_if_false @WUZI2_24617
+if 
+  not Char.IsDead(436@($pointer_W2,7i))
+goto_if_false @WUZI2_24561
+switch_start 523@($pointer_W2,7i) total_jumps 3 default_jump 0 @WUZI2_24554 jumps 0 @WUZI2_24005 1 @WUZI2_24237 2 @WUZI2_24419 -1 @WUZI2_24554 -1 @WUZI2_24554 -1 @WUZI2_24554 -1 @WUZI2_24554
+
+:WUZI2_24005
+if or
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 62)
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 63)
+goto_if_false @WUZI2_24132
+if 
+  not Char.IsRespondingToEvent(436@($pointer_W2,7i), 36)
+goto_if_false @WUZI2_24096
+523@($pointer_W2,7i) = 1
+451@($pointer_W2,7i) = -1
+531@ += 1
+goto @WUZI2_24125
+
+:WUZI2_24096
+523@($pointer_W2,7i) = 2
+451@($pointer_W2,7i) = -1
+531@ += 1
+
+:WUZI2_24125
+goto @WUZI2_24230
+
+:WUZI2_24132
+if or
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 36)
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 15)
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 9)
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 31)
+goto_if_false @WUZI2_24223
+523@($pointer_W2,7i) = 2
+451@($pointer_W2,7i) = -1
+531@ += 1
+goto @WUZI2_24230
+
+:WUZI2_24223
+530@ += 1
+
+:WUZI2_24230
+goto @WUZI2_24554
+
+:WUZI2_24237
+if or
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 36)
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 15)
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 9)
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 31)
+goto_if_false @WUZI2_24336
+523@($pointer_W2,7i) = 2
+451@($pointer_W2,7i) = -1
+set_lvar_int_to_var_int 532@ = $pointer_W2
+531@ += 1
+goto @WUZI2_24412
+
+:WUZI2_24336
+if or
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 63)
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 62)
+goto_if_false @WUZI2_24383
+531@ += 1
+goto @WUZI2_24412
+
+:WUZI2_24383
+523@($pointer_W2,7i) = 0
+451@($pointer_W2,7i) = 0
+530@ += 1
+
+:WUZI2_24412
+goto @WUZI2_24554
+
+:WUZI2_24419
+if or
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 36)
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 63)
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 15)
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 9)
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 31)
+  Char.IsRespondingToEvent(436@($pointer_W2,7i), 62)
+goto_if_false @WUZI2_24518
+set_lvar_int_to_var_int 532@ = $pointer_W2
+531@ += 1
+goto @WUZI2_24547
+
+:WUZI2_24518
+523@($pointer_W2,7i) = 0
+451@($pointer_W2,7i) = 0
+530@ += 1
+
+:WUZI2_24547
+goto @WUZI2_24554
+
+:WUZI2_24554
+goto @WUZI2_24603
+
+:WUZI2_24561
+if 
+  523@($pointer_W2,7i) <> -1
+goto_if_false @WUZI2_24603
+Blip.Remove(443@($pointer_W2,8i))
+523@($pointer_W2,7i) = -1
+
+:WUZI2_24603
+$pointer_W2 += 1
+goto @WUZI2_23900
+
+:WUZI2_24617
+switch_start 522@ total_jumps 3 default_jump 0 @WUZI2_24872 jumps 0 @WUZI2_24680 1 @WUZI2_24744 2 @WUZI2_24808 -1 @WUZI2_24872 -1 @WUZI2_24872 -1 @WUZI2_24872 -1 @WUZI2_24872
+
+:WUZI2_24680
+if 
+  531@ > 0
+goto_if_false @WUZI2_24712
+522@ = 2
+goto @WUZI2_24737
+
+:WUZI2_24712
+if 
+  531@ > 0
+goto_if_false @WUZI2_24737
+522@ = 1
+
+:WUZI2_24737
+goto @WUZI2_24872
+
+:WUZI2_24744
+if 
+  531@ > 0
+goto_if_false @WUZI2_24776
+522@ = 2
+goto @WUZI2_24801
+
+:WUZI2_24776
+if 
+  531@ == 0
+goto_if_false @WUZI2_24801
+522@ = 0
+
+:WUZI2_24801
+goto @WUZI2_24872
+
+:WUZI2_24808
+if and
+  531@ == 0
+  531@ == 0
+goto_if_false @WUZI2_24865
+522@ = 0
+if and
+  not Char.IsDead(436@(532@,7i))
+  not Char.IsDead($scplayer)
+goto_if_false @WUZI2_24865
+
+:WUZI2_24865
+goto @WUZI2_24872
+
+:WUZI2_24872
+return 
+
+:WUZI2_24874
+$pointer_W2 = 0
+
+:WUZI2_24881
+if 
+  4 > $pointer_W2
+goto_if_false @WUZI2_25425
+if 
+  451@($pointer_W2,7i) <> -1
+goto_if_false @WUZI2_25411
+if 
+  not Char.IsDead(436@($pointer_W2,7i))
+goto_if_false @WUZI2_25411
+switch_start 451@($pointer_W2,7i) total_jumps 5 default_jump 0 @WUZI2_25411 jumps 0 @WUZI2_25008 1 @WUZI2_25100 2 @WUZI2_25221 3 @WUZI2_25347 4 @WUZI2_25404 -1 @WUZI2_25411 -1 @WUZI2_25411
+
+:WUZI2_25008
+43@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 466@($pointer_W2,4f), 470@($pointer_W2,4f), 474@($pointer_W2,4f), 4, -2)
+Task.AchieveHeading(-1, 478@($pointer_W2,4f))
+Task.StandStill(-1, 5000)
+Sequence.Close(43@)
+Char.PerformSequence(436@($pointer_W2,7i), 43@)
+Sequence.Clear(43@)
+451@($pointer_W2,7i) += 1
+goto @WUZI2_25411
+
+:WUZI2_25100
+44@ = Char.GetSequenceProgress(436@($pointer_W2,7i))
+if 
+  44@ == 2
+goto_if_false @WUZI2_25214
+if 
+  Char.LocateOnFoot2D(436@($pointer_W2,7i), 0, 466@($pointer_W2,4f), 470@($pointer_W2,4f), 2.0, 2.0)
+goto_if_false @WUZI2_25194
+451@($pointer_W2,7i) += 1
+goto @WUZI2_25214
+
+:WUZI2_25194
+Char.ClearTasks(436@($pointer_W2,7i))
+451@($pointer_W2,7i) -= 1
+
+:WUZI2_25214
+goto @WUZI2_25411
+
+:WUZI2_25221
+45@ = Math.RandomIntInRange(7000, 15000)
+46@ = Math.RandomIntInRange(0, 500)
+Char.ClearTasks(436@($pointer_W2,7i))
+43@ = Sequence.Open()
+Task.StandStill(-1, 45@)
+if 
+  250 > 46@
+goto_if_false @WUZI2_25296
+Task.LookAbout(-1, 8000)
+goto @WUZI2_25300
+
+:WUZI2_25296
+Task.ScratchHead(-1)
+
+:WUZI2_25300
+Task.StandStill(-1, 5000)
+Sequence.Close(43@)
+Char.PerformSequence(436@($pointer_W2,7i), 43@)
+Sequence.Clear(43@)
+451@($pointer_W2,7i) += 1
+goto @WUZI2_25411
+
+:WUZI2_25347
+44@ = Char.GetSequenceProgress(436@($pointer_W2,7i))
+if 
+  44@ == 2
+goto_if_false @WUZI2_25397
+Char.ClearTasks(436@($pointer_W2,7i))
+451@($pointer_W2,7i) -= 1
+
+:WUZI2_25397
+goto @WUZI2_25411
+
+:WUZI2_25404
+goto @WUZI2_25411
+
+:WUZI2_25411
+$pointer_W2 += 1
+goto @WUZI2_24881
+
+:WUZI2_25425
+return 
+
+:WUZI2_25427
+$pointer_W2 = 4
+$pointer2_W2 = 0
+
+:WUZI2_25441
+if 
+  7 > $pointer_W2
+goto_if_false @WUZI2_26089
+if 
+  451@($pointer_W2,7i) <> -1
+goto_if_false @WUZI2_26068
+if 
+  not Char.IsDead(436@($pointer_W2,7i))
+goto_if_false @WUZI2_26068
+set_var_int_to_lvar_int $pointer3_W2 = 458@($pointer2_W2,4i)
+set_var_int_to_lvar_int $pointer4_W2 = 462@($pointer2_W2,4i)
+switch_start 451@($pointer_W2,7i) total_jumps 5 default_jump 0 @WUZI2_26068 jumps 0 @WUZI2_25592 1 @WUZI2_25767 2 @WUZI2_25857 3 @WUZI2_25989 4 @WUZI2_26061 -1 @WUZI2_26068 -1 @WUZI2_26068
+
+:WUZI2_25592
+43@ = Sequence.Open()
+
+:WUZI2_25597
+if 
+  is_int_var_greater_or_equal_to_int_var $pointer4_W2 >= $pointer3_W2
+goto_if_false @WUZI2_25659
+Task.GoToCoordAnyMeans(-1, 482@($pointer3_W2,10f), 492@($pointer3_W2,10f), 502@($pointer3_W2,10f), 4, -2)
+$pointer3_W2 += 1
+goto @WUZI2_25597
+
+:WUZI2_25659
+if 
+  $pointer_W2 == 6
+goto_if_false @WUZI2_25702
+Sequence.SetToRepeat(43@, True)
+451@($pointer_W2,7i) = 90
+goto @WUZI2_25738
+
+:WUZI2_25702
+Task.AchieveHeading(-1, 512@($pointer4_W2,10f))
+Task.StandStill(-1, 5000)
+Task.StandStill(-1, 5000)
+451@($pointer_W2,7i) += 1
+
+:WUZI2_25738
+Sequence.Close(43@)
+Char.PerformSequence(436@($pointer_W2,7i), 43@)
+Sequence.Clear(43@)
+goto @WUZI2_26068
+
+:WUZI2_25767
+set_lvar_int_to_var_int 533@ = $pointer4_W2
+sub_int_var_from_int_lvar 533@ -= $pointer3_W2
+533@ += 3
+44@ = Char.GetSequenceProgress(436@($pointer_W2,7i))
+if 
+  is_int_lvar_equal_to_int_lvar 44@ == 533@
+goto_if_false @WUZI2_25850
+if 
+  $pointer_W2 == 4
+goto_if_false @WUZI2_25839
+
+:WUZI2_25839
+451@($pointer_W2,7i) += 1
+
+:WUZI2_25850
+goto @WUZI2_26068
+
+:WUZI2_25857
+43@ = Sequence.Open()
+
+:WUZI2_25862
+if 
+  is_int_var_greater_or_equal_to_int_var $pointer4_W2 >= $pointer3_W2
+goto_if_false @WUZI2_25924
+Task.GoToCoordAnyMeans(-1, 482@($pointer4_W2,10f), 492@($pointer4_W2,10f), 502@($pointer4_W2,10f), 4, -2)
+$pointer4_W2 -= 1
+goto @WUZI2_25862
+
+:WUZI2_25924
+Task.AchieveHeading(-1, 512@($pointer3_W2,10f))
+Task.StandStill(-1, 5000)
+Task.StandStill(-1, 5000)
+451@($pointer_W2,7i) += 1
+Sequence.Close(43@)
+Char.PerformSequence(436@($pointer_W2,7i), 43@)
+Sequence.Clear(43@)
+goto @WUZI2_26068
+
+:WUZI2_25989
+set_lvar_int_to_var_int 533@ = $pointer4_W2
+sub_int_var_from_int_lvar 533@ -= $pointer3_W2
+533@ += 3
+44@ = Char.GetSequenceProgress(436@($pointer_W2,7i))
+if 
+  is_int_lvar_equal_to_int_lvar 44@ == 533@
+goto_if_false @WUZI2_26054
+451@($pointer_W2,7i) = 0
+
+:WUZI2_26054
+goto @WUZI2_26068
+
+:WUZI2_26061
+goto @WUZI2_26068
+
+:WUZI2_26068
+$pointer_W2 += 1
+$pointer2_W2 += 1
+goto @WUZI2_25441
+
+:WUZI2_26089
+return 
+$pointer_W2 = 0
+574@ = 1
+573@ = Char.GetCurrentWeapon($scplayer)
+
+:WUZI2_26113
+if 
+  13 > $pointer_W2
+goto_if_false @WUZI2_26181
+534@($pointer_W2,13i), 547@($pointer_W2,13i), 560@($pointer_W2,13i) = Char.GetWeaponInSlot($scplayer, 574@)
+$pointer_W2 += 1
+574@ += 1
+goto @WUZI2_26113
+
+:WUZI2_26181
+return 
+$pointer_W2 = 0
+
+:WUZI2_26190
+if 
+  13 > $pointer_W2
+goto_if_false @WUZI2_26260
+if 
+  534@($pointer_W2,13i) <> 0
+goto_if_false @WUZI2_26246
+Streaming.RequestModel(560@($pointer_W2,13i))
+575@ += 1
+
+:WUZI2_26246
+$pointer_W2 += 1
+goto @WUZI2_26190
+
+:WUZI2_26260
+if 
+  not is_int_lvar_equal_to_int_lvar 576@ == 575@
+goto_if_false @WUZI2_26385
+wait 0
+576@ = 0
+$pointer_W2 = 0
+
+:WUZI2_26297
+if 
+  13 > $pointer_W2
+goto_if_false @WUZI2_26378
+if 
+  534@($pointer_W2,13i) <> 0
+goto_if_false @WUZI2_26364
+if 
+  Streaming.HasModelLoaded(560@($pointer_W2,13i))
+goto_if_false @WUZI2_26364
+576@ += 1
+
+:WUZI2_26364
+$pointer_W2 += 1
+goto @WUZI2_26297
+
+:WUZI2_26378
+goto @WUZI2_26260
+
+:WUZI2_26385
+Char.RemoveAllWeapons($scplayer)
+$pointer_W2 = 0
+574@ = 1
+
+:WUZI2_26404
+if 
+  13 > $pointer_W2
+goto_if_false @WUZI2_26462
+Char.GiveWeapon($scplayer, 534@($pointer_W2,13i), 547@($pointer_W2,13i))
+$pointer_W2 += 1
+574@ += 1
+goto @WUZI2_26404
+
+:WUZI2_26462
+Char.SetCurrentWeapon($scplayer, 573@)
+$pointer_W2 = 0
+
+:WUZI2_26477
+if 
+  13 > $pointer_W2
+goto_if_false @WUZI2_26540
+if 
+  534@($pointer_W2,13i) <> 0
+goto_if_false @WUZI2_26526
+Streaming.MarkModelAsNoLongerNeeded(560@($pointer_W2,13i))
+
+:WUZI2_26526
+$pointer_W2 += 1
+goto @WUZI2_26477
+
+:WUZI2_26540
+return 
+
+:WUZI2_26542
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+if 
+  40@ == 1
+goto_if_false @WUZI2_26586
+Text.PrintNow(41@s, 5000, 1)
+
+:WUZI2_26586
+return 
+
+:WUZI2_26588
+$flag_wuzi_mission_counter += 1
+Stat.RegisterMissionPassed('WUZI_2')
+Stat.PlayerMadeProgress(1)
+Text.PrintWithNumberBig('M_PASSS', 11000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 11000)
+Stat.AwardPlayerMissionRespect(25)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+return 
+
+:WUZI2_26652
+if 
+  $swim_stamina_check == 0
+goto_if_false @WUZI2_27103
+Game.SetMaxWantedLevel(257@)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @WUZI2_26702
+Player.SetGroupRecruitment($player1, True)
+Game.SetScriptLimitToGangSize(99)
+
+:WUZI2_26702
+start_new_script @A_TERM 
+Blip.Remove(259@)
+Pickup.Remove(258@)
+$timer_mobile_start = Clock.GetGameTimer()
+Path.SwitchRoadsBackToOriginal(-1328.999, 1239.997, -5.0, -1655.868, 1638.755, 10.0)
+Streaming.MarkModelAsNoLongerNeeded(121)
+Streaming.MarkModelAsNoLongerNeeded(122)
+Streaming.MarkModelAsNoLongerNeeded(123)
+Streaming.MarkModelAsNoLongerNeeded(454)
+Streaming.MarkModelAsNoLongerNeeded(355)
+Streaming.MarkModelAsNoLongerNeeded(335)
+Streaming.MarkModelAsNoLongerNeeded(#A51_SPOTBASE)
+Streaming.MarkModelAsNoLongerNeeded(#A51_SPOTHOUSING)
+Streaming.MarkModelAsNoLongerNeeded(#A51_SPOTBULB)
+Streaming.RemoveAnimation("DAM_JUMP")
+Blip.Remove(36@)
+$pointer_W2 = 0
+
+:WUZI2_26823
+if 
+  5 > $pointer_W2
+goto_if_false @WUZI2_26873
+Blip.Remove(443@($pointer_W2,8i))
+Char.MarkAsNoLongerNeeded(436@($pointer_W2,7i))
+$pointer_W2 += 1
+goto @WUZI2_26823
+
+:WUZI2_26873
+$pointer_W2 = 0
+
+:WUZI2_26880
+if 
+  4 > $pointer_W2
+goto_if_false @WUZI2_26948
+Blip.Remove(407@($pointer_W2,6i))
+Object.MarkAsNoLongerNeeded(389@($pointer_W2,6i))
+Object.MarkAsNoLongerNeeded(395@($pointer_W2,6i))
+Object.MarkAsNoLongerNeeded(401@($pointer_W2,6i))
+$pointer_W2 += 1
+goto @WUZI2_26880
+
+:WUZI2_26948
+$pointer_W2 = 0
+
+:WUZI2_26955
+if 
+  6 > $pointer_W2
+goto_if_false @WUZI2_27005
+Char.MarkAsNoLongerNeeded(308@($pointer_W2,6i))
+Char.MarkAsNoLongerNeeded(417@($pointer_W2,6i))
+$pointer_W2 += 1
+goto @WUZI2_26955
+
+:WUZI2_27005
+$pointer_W2 = 0
+
+:WUZI2_27012
+if 
+  2 > $pointer_W2
+goto_if_false @WUZI2_27094
+Blip.Remove(292@($pointer_W2,2i))
+Char.MarkAsNoLongerNeeded(300@($pointer_W2,2i))
+Car.MarkAsNoLongerNeeded(290@($pointer_W2,2i))
+Blip.Remove(415@)
+Char.MarkAsNoLongerNeeded(417@($pointer_W2,6i))
+Car.MarkAsNoLongerNeeded(413@($pointer_W2,2i))
+$pointer_W2 += 1
+goto @WUZI2_27012
+
+:WUZI2_27094
+Weather.Release
+goto @WUZI2_27255
+
+:WUZI2_27103
+if 
+  Player.IsPlaying($player1)
+goto_if_false @WUZI2_27126
+Player.SetControl($player1, False)
+
+:WUZI2_27126
+Char.SetCoordinates($scplayer, -2154.815, 641.3157, 51.3594)
+Char.SetHeading($scplayer, 268.4865)
+Streaming.LoadScene(-2154.815, 641.3157, 51.3594)
+TIMERA = 0
+
+:WUZI2_27180
+if 
+  500 > TIMERA
+goto_if_false @WUZI2_27210
+wait 0
+goto @WUZI2_27180
+
+:WUZI2_27210
+Camera.DoFade(1, Fade.Out)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @WUZI2_27239
+Player.SetControl($player1, True)
+
+:WUZI2_27239
+Text.PrintNow('WZI2_60', 8000, 1)
+
+:WUZI2_27255
+$onmission = 0
+Mission.Finish
+return 
+

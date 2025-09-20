@@ -1,0 +1,3116 @@
+//-------------Mission 12---------------
+// Originally: Ryder
+
+:INTRO2
+script_name 'INTRO2'
+Coop.EnableSyncingThisScript()
+
+gosub @INTRO2_908
+if 
+  has_deatharrest_been_executed 
+goto_if_false @INTRO2_38
+gosub @INTRO2_13667
+
+:INTRO2_38
+gosub @INTRO2_14817
+terminate_this_script 
+
+:INTRO2_47
+switch_start 40@ total_jumps 5 default_jump 0 @INTRO2_906 jumps 0 @INTRO2_110 1 @INTRO2_498 2 @INTRO2_600 3 @INTRO2_768 4 @INTRO2_848 -1 @INTRO2_906 -1 @INTRO2_906
+
+:INTRO2_110
+set_var_text_label s$intro2_chat[0] = 'INT2_CA'
+set_var_text_label s$intro2_chat[1] = 'INT2_CB'
+set_var_text_label s$intro2_chat[2] = 'INT2_CC'
+set_var_text_label s$intro2_chat[3] = 'INT2_CD'
+set_var_text_label s$intro2_chat[4] = 'INT2_CE'
+set_var_text_label s$intro2_chat[5] = 'INT2_CF'
+set_var_text_label s$intro2_chat[6] = 'INT2_CG'
+set_var_text_label s$intro2_chat[7] = 'INT2_BA'
+set_var_text_label s$intro2_chat[8] = 'INT2_BB'
+set_var_text_label s$intro2_chat[9] = 'INT2_BC'
+set_var_text_label s$intro2_chat[10] = 'INT2_BD'
+set_var_text_label s$intro2_chat[11] = 'INT2_BE'
+set_var_text_label s$intro2_chat[12] = 'INT2_BF'
+set_var_text_label s$intro2_chat[13] = 'INT2_BG'
+set_var_text_label s$intro2_chat[14] = 'INT2_BH'
+set_var_text_label s$intro2_chat[15] = 'INT2_BJ'
+set_var_text_label s$intro2_chat[16] = 'INT2_BK'
+set_lvar_int_to_constant 70@ = 20211
+set_lvar_int_to_constant 71@ = 20212
+set_lvar_int_to_constant 72@ = 20213
+set_lvar_int_to_constant 73@ = 20214
+set_lvar_int_to_constant 74@ = 20215
+set_lvar_int_to_constant 75@ = 20216
+set_lvar_int_to_constant 76@ = 20217
+set_lvar_int_to_constant 77@ = 20201
+set_lvar_int_to_constant 78@ = 20202
+set_lvar_int_to_constant 79@ = 20203
+set_lvar_int_to_constant 80@ = 20204
+set_lvar_int_to_constant 81@ = 20205
+set_lvar_int_to_constant 82@ = 20206
+set_lvar_int_to_constant 83@ = 20207
+set_lvar_int_to_constant 84@ = 20208
+set_lvar_int_to_constant 85@ = 20209
+set_lvar_int_to_constant 86@ = 20210
+50@ = 16
+goto @INTRO2_906
+
+:INTRO2_498
+set_var_text_label s$intro2_chat[0] = 'INT2_FA'
+set_var_text_label s$intro2_chat[1] = 'INT2_FB'
+set_var_text_label s$intro2_chat[2] = 'INT2_FC'
+set_var_text_label s$intro2_chat[3] = 'INT2_FD'
+set_lvar_int_to_constant 70@ = 20222
+set_lvar_int_to_constant 71@ = 20223
+set_lvar_int_to_constant 72@ = 20224
+set_lvar_int_to_constant 73@ = 20225
+50@ = 3
+goto @INTRO2_906
+
+:INTRO2_600
+set_var_text_label s$intro2_chat[0] = 'INT2_GA'
+set_var_text_label s$intro2_chat[1] = 'INT2_GB'
+set_var_text_label s$intro2_chat[2] = 'INT2_GC'
+set_var_text_label s$intro2_chat[3] = 'INT2_GD'
+set_var_text_label s$intro2_chat[4] = 'INT2_GE'
+set_var_text_label s$intro2_chat[5] = 'INT2_GF'
+set_var_text_label s$intro2_chat[6] = 'INT2_HB'
+set_lvar_int_to_constant 70@ = 20226
+set_lvar_int_to_constant 71@ = 20227
+set_lvar_int_to_constant 72@ = 20228
+set_lvar_int_to_constant 73@ = 20229
+set_lvar_int_to_constant 74@ = 20230
+set_lvar_int_to_constant 75@ = 20231
+set_lvar_int_to_constant 76@ = 20233
+50@ = 7
+goto @INTRO2_906
+
+:INTRO2_768
+set_var_text_label s$intro2_chat[0] = 'INT2_NB'
+set_var_text_label s$intro2_chat[1] = 'INT2_NC'
+set_var_text_label s$intro2_chat[2] = 'INT2_ND'
+set_lvar_int_to_constant 70@ = 20246
+set_lvar_int_to_constant 71@ = 20247
+set_lvar_int_to_constant 72@ = 20248
+50@ = 2
+goto @INTRO2_906
+
+:INTRO2_848
+set_var_text_label s$intro2_chat[0] = 'INT2_JA'
+set_var_text_label s$intro2_chat[1] = 'INT2_JB'
+set_lvar_int_to_constant 70@ = 20236
+set_lvar_int_to_constant 71@ = 20237
+50@ = 1
+goto @INTRO2_906
+
+:INTRO2_906
+return 
+
+:INTRO2_908
+Stat.RegisterMissionGiven
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
+
+// store hair style for all players
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        219@ = Coop.GetNetworkPlayerInternalId($NETWORK_PLAYER[$temp_int])
+        226@, 227@ = Player.GetClothesItem(219@, BodyPart.Head)
+        0085: 220@($temp_int, 3i) = 226@ 
+        0085: 223@($temp_int, 3i) = 227@
+    end
+end
+
+
+CarGenerator.Switch($gen_car6, 0)
+CarGenerator.Switch($gen_car7, 0)
+World.ClearArea(1, $ryder_carX, $ryder_carY, $ryder_carZ, 10.0)
+World.ClearArea(1, $sweet_carX, $sweet_carY, $sweet_carZ, 10.0)
+
+$onmission = 1
+36@ = 0
+38@ = 0
+$flag_changed_hair_intro2 = 0
+59@ = 0
+60@ = 0
+$flag_menace_buyfood = 0
+44@ = 0
+66@ = 0
+$cj_vomits_for_menace = 0
+68@ = 0
+61@ = 0
+69@ = 0
+48@ = 0
+63@ = 0
+57@ = 0
+87@ = 0
+88@ = 0
+89@ = 0
+90@ = 0.05
+91@ = 0.12
+92@ = 0.0
+Zone.SetGangStrength('IWD1', GangType.Ballas, 5)
+Zone.SetGangStrength('IWD2', GangType.Ballas, 5)
+Zone.SetGangStrength('IWD3A', GangType.Ballas, 5)
+Zone.SetGangStrength('IWD3B', GangType.Ballas, 5)
+Zone.SetGangStrength('IWD4', GangType.Ballas, 5)
+Zone.SetGangStrength('IWD5', GangType.Ballas, 5)
+wait 0
+Text.LoadMissionText('INTRO2')
+goto @INTRO2_1204
+$shop_keep_junkfud = Char.Create(24, $shopkeeper_model_shops, $junkfudX, $junkfudY, $junkfudZ)
+
+:INTRO2_1204
+Streaming.SetAreaVisible(2)
+Cutscene.Load('INTRO2A')
+
+:INTRO2_1219
+if 
+  not Cutscene.HasLoaded
+goto_if_false @INTRO2_1243
+wait 0
+goto @INTRO2_1219
+
+:INTRO2_1243
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:INTRO2_1252
+if 
+  not Cutscene.HasFinished
+goto_if_false @INTRO2_1276
+wait 0
+goto @INTRO2_1252
+
+:INTRO2_1276
+Camera.DoFade(0, Fade.Out)
+
+:INTRO2_1282
+if 
+  Camera.GetFadingStatus
+goto_if_false @INTRO2_1306
+wait 0
+goto @INTRO2_1282
+
+:INTRO2_1306
+Cutscene.Clear
+Player.SetControl($player1, False)
+Streaming.SetAreaVisible(0)
+Blip.Remove($spray_shop1)
+Streaming.LoadSpecialCharacter('RYDER2', 1)
+Streaming.RequestModel(600)
+Streaming.RequestModel(492)
+Streaming.RequestModel(#CIGAR)
+Streaming.RequestModel(#CIGAR_GLOW)
+Streaming.LoadAllModelsNow
+
+:INTRO2_1352
+if or
+  not Streaming.HasModelLoaded(600)
+  not Streaming.HasModelLoaded(492)
+  not Streaming.HasModelLoaded(#CIGAR)
+  not Streaming.HasModelLoaded(#CIGAR_GLOW)
+  not Streaming.HasSpecialCharacterLoaded(1)
+goto_if_false @INTRO2_1391
+wait 0
+goto @INTRO2_1352
+
+:INTRO2_1391
+200@ = Car.Create(492, $sweet_carX, $sweet_carY, $sweet_carZ)
+Car.SetHeading(200@, $sweet_carH)
+Car.ChangeColor(200@, 59, 34)
+
+World.SwitchEntryExit('BARBERS', False)
+World.SwitchEntryExit('BARBER2', False)
+World.SwitchEntryExit('BARBER3', False)
+World.SwitchEntryExit('FDPIZA', False)
+World.SwitchEntryExit('FDCHICK', False)
+World.SwitchEntryExit('FDBURG', False)
+
+Char.ClearTasks($scplayer)
+Char.ClearTasksImmediately($scplayer)
+
+Car.CustomPlateForNextCar(600, "_SHERM__")
+$ryder_car = Car.Create(600, $ryder_carX, $ryder_carY, $ryder_carZ)
+Car.SetCanBurstTires($ryder_car, False)
+Car.ChangeColor($ryder_car, 84, 84)
+Car.SetHeading($ryder_car, 0.0)
+Car.SetCanBeVisiblyDamaged($ryder_car, False)
+Audio.SetRadioChannel(RadioChannel.RadioLosSantos)
+$ryder = Char.Create(24, 290, 2475.29, -1687.85, 12.51)
+
+// waiting for the server to create the vehicles
+while true
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(200@)
+    67@ = Coop.GetVehicleNetworkId($ryder_car)
+    37@ = Coop.GetPedNetworkId($ryder)
+    
+    if and
+        $temp_int <> -1  
+        67@ <> -1  
+        37@ <> -1
+    then
+        break
+    end
+end
+
+67@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+Char.SetDecisionMaker($ryder, 67@)
+Char.SetAnimGroup($ryder, "GANG1")
+Char.SetHeading($scplayer, 176.0)
+Char.SetNeverTargeted($ryder, True)
+Char.SetHealth($ryder, 500)
+Char.SetMaxHealth($ryder, 500)
+Char.SetSuffersCriticalHits($ryder, False)
+Char.SetNextDesiredMoveState(MoveState.Walk)
+Task.EnterCarAsPassenger($ryder, $ryder_car, 0, 20000)
+Char.SetCantBeDraggedOut($ryder, True)
+Char.SetStayInCarWhenJacked($ryder, True)
+Char.SetGetOutUpsideDownCar($ryder, False)
+37@ = Blip.AddForCar($ryder_car)
+Blip.SetAsFriendly(37@, True)
+34@ = Blip.AddForCoord(2074.4, -1800.8, 12.5)
+Blip.Remove(34@)
+Audio.LoadMissionAudio(20200, 1)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 2464.03, -1687.61, 12.51)
+Char.SetHeading($scplayer, 252.27)
+
+if
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[0])
+then
+    Char.ClearTasksImmediately($NETWORK_PLAYER[0])
+    Char.SetCoordinates($NETWORK_PLAYER[0], 2463.76, -1684.55, 13.53)
+    Char.SetHeading($NETWORK_PLAYER[0], 248.93)
+end
+
+if
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[1])
+then
+    Char.ClearTasksImmediately($NETWORK_PLAYER[1])
+    Char.SetCoordinates($NETWORK_PLAYER[1], 2464.51, -1682.21, 13.52)
+    Char.SetHeading($NETWORK_PLAYER[1], 230.52)
+end
+
+if
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[2])
+then
+    Char.ClearTasksImmediately($NETWORK_PLAYER[2])
+    Char.SetCoordinates($NETWORK_PLAYER[2], 2466.36, -1680.31, 13.51)
+    Char.SetHeading($NETWORK_PLAYER[2], 219.66)
+end
+
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        201@($temp_int,3i) = 0
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 200@, true, BlipDisplay.MarkerOnly, BlipColor.Blue, 3)
+    end
+end
+
+Streaming.SetAreaVisible(0)
+Streaming.LoadScene(2464.03, -1687.61, 12.51)
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Camera.DoFade(1, 1000)
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_1851
+goto @INTRO2_13667
+
+:INTRO2_1851
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_1874
+goto @INTRO2_13667
+
+:INTRO2_1874
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @INTRO2_1978
+wait 0
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_1932
+Text.PrintNow('INT2_12', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_1932
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_1971
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_1971
+goto @INTRO2_1874
+
+:INTRO2_1978
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('INT2_AA', 10000, 1)
+
+for $temp_int = 0 to 2
+    if 
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('INT2_AA', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
+
+:INTRO2_1998
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @INTRO2_2102
+wait 0
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_2056
+Text.PrintNow('INT2_12', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_2056
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_2095
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_2095
+goto @INTRO2_1998
+
+:INTRO2_2102
+$blob_flag = 0
+49@ = 0
+56@ = 0
+64@ = 0
+40@ = 0
+gosub @INTRO2_47
+Text.ClearThisPrint('INT2_1')
+Text.PrintNow('INT2_6', 6000, 1)
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_2210
+Text.PrintNow('INT2_12', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_2210
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_2249
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_2249
+$flag_player_on_menace_mission = 1
+
+:INTRO2_2256
+
+150@ = 1
+FOR $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2077.84, -1792.59, 12.38, 12.0, 12.0, 12.0)
+        then
+            150@ = 0
+            Break
+        end
+    end
+end
+
+if or
+  not Car.Locate3D($ryder_car, $blob_flag, 2077.84, -1792.59, 12.38, 4.0, 4.0, 4.0)
+  not Char.IsSittingInCar($scplayer, $ryder_car)
+  not Char.IsInCar($ryder, $ryder_car)
+  not Car.IsOnAllWheels($ryder_car)
+  150@ == 0
+goto_if_false @INTRO2_2886
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @INTRO2_2352
+goto @INTRO2_13692
+
+:INTRO2_2352
+
+
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        
+        if // clear blip on the Greenwood, if its not interesting for player
+            201@($temp_int,3i) == 0
+        then
+            if or
+                Car.IsDead(200@)
+                Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
+                not Char.LocateOnFootCar3D($NETWORK_PLAYER[$temp_int], 200@, 100.0, 100.0, 100.0, false)
+            then
+                201@($temp_int,3i) = 1
+                Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 200@)
+            end
+        end
+        
+        if and
+            204@($temp_int, 3i) == 0
+            Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2077.84, -1792.59, 12.38, 15.0, 15.0, 4.0)
+        then
+            Coop.PrintHelpForNetworkPlayer('HELP44B', $NETWORK_PLAYER[$temp_int])
+            204@($temp_int,3i) = 1
+        end
+    end     
+end
+
+if 
+  48@ == 0
+goto_if_false @INTRO2_2436
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2077.84, -1792.59, 12.38, 15.0, 15.0, 4.0)
+goto_if_false @INTRO2_2436
+Text.PrintHelp('HELP44B') // Drive your vehicle onto the red marker.
+48@ = 1
+
+:INTRO2_2436
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_2475
+Text.PrintNow('INT2_12', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_2475
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_2521
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+goto @INTRO2_2724
+
+:INTRO2_2521
+if 
+  Char.IsInCar($scplayer, $ryder_car)
+goto_if_false @INTRO2_2632
+if 
+  38@ == 0
+goto_if_false @INTRO2_2625
+Blip.Remove(37@)
+Blip.Remove(34@)
+34@ = Blip.AddForCoord(2077.84, -1792.59, 12.56)
+$blob_flag = 1
+
+FOR $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2077.84, -1792.59, 12.38, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
+
+Text.PrintNow('HOOD2_A', 6000, 1)
+TIMERB = 0
+38@ = 1
+
+:INTRO2_2625
+goto @INTRO2_2724
+
+:INTRO2_2632
+if 
+  38@ == 1
+goto_if_false @INTRO2_2724
+Blip.Remove(34@)
+Blip.Remove(37@)
+37@ = Blip.AddForCar($ryder_car)
+Blip.SetAsFriendly(37@, True)
+$blob_flag = 0
+
+FOR $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
+
+gosub @INTRO2_15117
+Text.PrintNow('INT2_6', 6000, 1)
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.StopFacialTalk($scplayer)
+38@ = 0
+
+:INTRO2_2724
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_2801
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_2801
+if 
+  Char.IsInCar($scplayer, $ryder_car)
+goto_if_false @INTRO2_2801
+if 
+  TIMERB > 3000
+goto_if_false @INTRO2_2801
+gosub @INTRO2_16035
+
+:INTRO2_2801
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_2840
+Text.PrintNow('INT2_12', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_2840
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_2879
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_2879
+goto @INTRO2_2256
+
+:INTRO2_2886
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Text.ClearHelp
+World.SwitchEntryExit('BARBERS', True)
+
+Camera.SetFixedPosition(2086.424, -1783.578, 16.9391, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2085.603, -1784.143, 16.8617, SwitchType.JumpCut)
+TIMERB = 0
+
+:INTRO2_2970
+if 
+  3000 > TIMERB
+goto_if_false @INTRO2_3058
+wait 0
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_3051
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_3051
+if 
+  Char.IsInCar($scplayer, $ryder_car)
+goto_if_false @INTRO2_3051
+gosub @INTRO2_16035
+
+:INTRO2_3051
+goto @INTRO2_2970
+
+:INTRO2_3058
+skip_cutscene_start_internal @INTRO2_3229
+Camera.SetFixedPosition(2075.418, -1794.748, 14.3637, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2074.44, -1794.564, 14.2591, SwitchType.JumpCut)
+Text.PrintHelp('INT2_8')
+Player.SetControl($player1, True)
+TIMERB = 0
+
+:INTRO2_3141
+if 
+  3000 > TIMERB
+goto_if_false @INTRO2_3229
+wait 0
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_3222
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_3222
+if 
+  Char.IsInCar($scplayer, $ryder_car)
+goto_if_false @INTRO2_3222
+gosub @INTRO2_16035
+
+:INTRO2_3222
+goto @INTRO2_3141
+
+:INTRO2_3229
+skip_cutscene_end 
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+
+FOR $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
+Blip.Remove(34@)
+34@ = Blip.AddForCoord(413.6397, -19.9389, 1000.812)
+Blip.SetEntryExit(34@, 2073.042, -1794.563, 20.0)
+
+$flag_changed_hair_intro2 = 0
+
+
+:INTRO2_3298
+
+228@ = True // haircutsChanged
+
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        219@ = Coop.GetNetworkPlayerInternalId($NETWORK_PLAYER[$temp_int])
+        226@, 227@ = Player.GetClothesItem(219@, BodyPart.Head)
+        if and
+            003B: 220@($temp_int,3i) == 226@ 
+            003B: 223@($temp_int,3i) == 227@ 
+            not Char.LocateOnFoot3D($NETWORK_PLAYER[$temp_int], 0, 2072.11, -1793.8, 12.56, 20.0, 20.0, 20.0)
+        then
+            228@ = False // haircutsChanged = False
+        end
+    end
+end
+
+229@ = False
+
+if or
+    not Char.LocateOnFoot3D($scplayer, 0, 2072.11, -1793.8, 12.56, 10.0, 10.0, 3.0)
+    228@ == False
+then
+    229@ = True
+end
+
+
+if or
+  $flag_changed_hair_intro2 == 0
+  229@ == True
+goto_if_false @INTRO2_3809
+wait 0
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_3396
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_3396
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_3435
+Text.PrintNow('INT2_12', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_3435
+if 
+  57@ == 0
+goto_if_false @INTRO2_3525
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_3525
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_3525
+if 
+  Char.IsInCar($scplayer, $ryder_car)
+goto_if_false @INTRO2_3518
+gosub @INTRO2_16035
+goto @INTRO2_3525
+
+:INTRO2_3518
+57@ = 1
+
+:INTRO2_3525
+58@ = Streaming.GetAreaVisible()
+if 
+  58@ == 2
+goto_if_false @INTRO2_3654
+if 
+  59@ == 0
+goto_if_false @INTRO2_3647
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 411.68, -21.77, 1000.79, 10.0, 10.0, 3.0)
+goto_if_false @INTRO2_3647
+Text.ClearPrints
+Text.PrintNow('INT2_9', 5000, 1)
+Streaming.RequestAnimation("SHOP")
+59@ = 1
+
+:INTRO2_3647
+goto @INTRO2_3743
+
+:INTRO2_3654
+if 
+  59@ == 1
+goto_if_false @INTRO2_3743
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 2072.11, -1793.8, 12.56, 10.0, 10.0, 3.0)
+goto_if_false @INTRO2_3743
+Text.PrintNow('INT2_8', 10000, 1)
+59@ = 0
+
+:INTRO2_3743
+if 
+  $flag_changed_hair_intro2 == 0
+goto_if_false @INTRO2_3802
+if 
+  $flag_attacked_barber == 1
+goto_if_false @INTRO2_3802
+Text.PrintNow('INT2_14', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_3802
+goto @INTRO2_3298
+
+:INTRO2_3809
+Camera.DoFade(0, Fade.Out)
+Text.ClearPrints
+Blip.Remove(34@)
+World.SwitchEntryExit('FDPIZA', True)
+
+// OUTSIDE BARBERS CUTSCENE START
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+World.ClearArea(1, 2072.04, -1800.92, 12.55, 200.0)
+World.SetCarDensityMultiplier(0.0)
+World.SetPedDensityMultiplier(0.0)
+Camera.SetNearClip(0.2)
+Task.StandStill($scplayer, 10)
+
+Streaming.SetAreaVisible(0)
+if 
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[0])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[0], 2075.8372, -1794.8527, 13.5469)
+    Char.SetHeading($NETWORK_PLAYER[0], 226.2577)
+end
+
+if 
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[1])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[1], 2074.8403, -1797.6621, 13.5469)
+    Char.SetHeading($NETWORK_PLAYER[1], 277.6862)
+end
+
+if 
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[2])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[2], 2075.4749, -1799.4458, 13.5469)
+    Char.SetHeading($NETWORK_PLAYER[2], 315.2956)
+end
+
+for $temp_int = 0 to 2
+    if 
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
+        Task.LookAtChar($NETWORK_PLAYER[$temp_int], $ryder, 10000) 
+    end
+end
+
+:INTRO2_3898
+if 
+  not Streaming.HasAnimationLoaded("SHOP")
+goto_if_false @INTRO2_3934
+wait 0
+Camera.DoFade(0, Fade.Out)
+goto @INTRO2_3898
+
+:INTRO2_3934
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_4403
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_4373
+
+:INTRO2_3966
+if 
+  Car.IsWaitingForWorldCollision($ryder_car)
+goto_if_false @INTRO2_4038
+wait 0
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_4025
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_4025
+Camera.DoFade(0, Fade.Out)
+goto @INTRO2_3966
+
+:INTRO2_4038
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_4270
+Char.SetCoordinates($scplayer, 2072.55, -1794.67, 12.56)
+Char.SetHeading($scplayer, 240.55)
+Char.ClearTasksImmediately($ryder)
+if 
+  Char.IsInAnyCar($ryder)
+goto_if_false @INTRO2_4132
+Char.WarpFromCarToCoord($ryder, 2076.492, -1796.413, 12.5545)
+goto @INTRO2_4152
+
+:INTRO2_4132
+Char.SetCoordinates($ryder, 2076.492, -1796.413, 12.5545)
+
+:INTRO2_4152
+Char.SetHeading($ryder, 80.0)
+Char.SetHealth($ryder, 500)
+46@ = Object.Create(#CIGAR, 2440.58, -1979.89, 14.2)
+Task.PickUpObject($ryder, 46@, 0.04, 0.1, -0.02, 5, 16, "NULL", "NULL", -1)
+Task.PlayAnim($ryder, "SMOKE_RYD", "SHOP", 4.0, True, False, False, False, -1)
+
+:INTRO2_4270
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_4340
+
+/// Greenwood near to the pizza rest
+World.ClearArea(2095.52, -1799.78, 13.06, 5.0, 0)
+if Car.IsDead(200@) 
+then
+    200@ = Car.Create(492, 2095.52, -1799.78, 13.06)
+    
+    while true
+        wait 0
+        $temp_int = Coop.GetVehicleNetworkId(200@)
+        
+        if and
+            $temp_int <> -1  
+        then
+            break
+        end
+    end
+    
+    Car.ChangeColor(200@, 59, 34)
+else
+    Car.SetCoordinates(200@, 2095.52, -1799.78, 13.06)
+end
+
+Car.SetHeading(200@, 270.00)
+///
+
+World.ClearArea(1, 2078.09, -1796.21, 12.3828, 100.0)
+Car.SetCoordinates($ryder_car, 2078.09, -1796.21, 12.3828)
+Car.SetHeading($ryder_car, 176.9536)
+
+:INTRO2_4340
+Car.FixDoor($ryder_car, CarDoor.LeftFrontDoor)
+Car.FixDoor($ryder_car, CarDoor.RightFrontDoor)
+Car.CloseAllDoors($ryder_car)
+Car.LockDoors($ryder_car, CarLock.LockoutPlayerOnly)
+goto @INTRO2_4396
+
+:INTRO2_4373
+Text.PrintNow('INT2_12', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_4396
+goto @INTRO2_4426
+
+:INTRO2_4403
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_4426
+TIMERA = 0
+
+:INTRO2_4433
+if 
+  TIMERA <= 400
+goto_if_false @INTRO2_4469
+wait 0
+Camera.DoFade(0, Fade.Out)
+goto @INTRO2_4433
+
+:INTRO2_4469
+Text.ClearPrints
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_4535
+45@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2075.53, -1796.32, 12.55, MoveState.Walk, 10000)
+Char.ClearLookAt(-1)
+Task.LookAtChar(-1, $ryder, 4500)
+Sequence.Close(45@)
+
+:INTRO2_4535
+Char.PerformSequence($scplayer, 45@)
+Sequence.Clear(45@)
+Camera.SetFixedPosition(2074.866, -1800.882, 13.4518, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2075.067, -1799.903, 13.4124, SwitchType.JumpCut)
+Text.ClearPrints
+Camera.DoFade(1, 500)
+63@ = 0
+49@ = 0
+56@ = 0
+64@ = 0
+40@ = 1
+gosub @INTRO2_47
+TIMERA = 0
+
+:INTRO2_4657
+if 
+  TIMERA <= 1700
+goto_if_false @INTRO2_4694
+wait 0
+gosub @INTRO2_15726
+goto @INTRO2_4657
+
+:INTRO2_4694
+if 
+  $can_skip_smoking_cutscene == 1
+goto_if_false @INTRO2_4719
+skip_cutscene_start_internal @INTRO2_6566
+
+:INTRO2_4719
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_4751
+Char.ClearLookAt($ryder)
+Task.LookAtChar($ryder, $scplayer, 2000)
+
+:INTRO2_4751
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_4804
+55@ = Particle.CreateOnChar("EXHALE", $ryder, 90@, 91@, 92@, 1)
+Particle.AttachToCharBone(55@, $ryder, 5)
+
+:INTRO2_4804
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_4825
+Char.StopFacialTalk($ryder)
+
+:INTRO2_4825
+if or
+  Player.IsWearing($player1, "TASH", BodyPart.Head)
+  Player.IsWearing($player1, "GOATEE", BodyPart.Head)
+  Player.IsWearing($player1, "BEARD", BodyPart.Head)
+  Player.IsWearing($player1, "PLAYER_FACE", BodyPart.Head)
+  Player.IsWearing($player1, "HIGHFADE", BodyPart.Head)
+  Player.IsWearing($player1, "FLATTOP", BodyPart.Head)
+goto_if_false @INTRO2_5442
+Audio.LoadMissionAudio(20218, 1)
+Audio.LoadMissionAudio(20219, 2)
+64@ = 0
+
+:INTRO2_4952
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @INTRO2_5021
+wait 0
+gosub @INTRO2_15726
+if 
+  64@ == 0
+goto_if_false @INTRO2_5014
+if 
+  56@ == 2
+goto_if_false @INTRO2_5014
+
+:INTRO2_5014
+goto @INTRO2_4952
+
+:INTRO2_5021
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('INT2_DA', 10000, 1)
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_5065
+Char.StartFacialTalk($ryder, 2000)
+
+:INTRO2_5065
+64@ = 0
+
+:INTRO2_5072
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @INTRO2_5141
+wait 0
+gosub @INTRO2_15726
+if 
+  64@ == 0
+goto_if_false @INTRO2_5134
+if 
+  56@ == 2
+goto_if_false @INTRO2_5134
+
+:INTRO2_5134
+goto @INTRO2_5072
+
+:INTRO2_5141
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_5162
+Char.StopFacialTalk($ryder)
+
+:INTRO2_5162
+Camera.SetFixedPosition(2074.827, -1797.414, 14.233, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2075.432, -1796.664, 13.9678, SwitchType.JumpCut)
+wait 1000
+64@ = 0
+
+:INTRO2_5225
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @INTRO2_5294
+wait 0
+gosub @INTRO2_15726
+if 
+  64@ == 0
+goto_if_false @INTRO2_5287
+if 
+  56@ == 2
+goto_if_false @INTRO2_5287
+
+:INTRO2_5287
+goto @INTRO2_5225
+
+:INTRO2_5294
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow('INT2_DB', 10000, 1)
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_5338
+Char.StartFacialTalk($ryder, 2000)
+
+:INTRO2_5338
+64@ = 0
+
+:INTRO2_5345
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @INTRO2_5414
+wait 0
+gosub @INTRO2_15726
+if 
+  64@ == 0
+goto_if_false @INTRO2_5407
+if 
+  56@ == 2
+goto_if_false @INTRO2_5407
+
+:INTRO2_5407
+goto @INTRO2_5345
+
+:INTRO2_5414
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_5435
+Char.StopFacialTalk($ryder)
+
+:INTRO2_5435
+goto @INTRO2_5731
+
+:INTRO2_5442
+Audio.LoadMissionAudio(20221, 1)
+Audio.LoadMissionAudio(65535, 2)
+64@ = 0
+
+:INTRO2_5465
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @INTRO2_5534
+wait 0
+gosub @INTRO2_15726
+if 
+  64@ == 0
+goto_if_false @INTRO2_5527
+if 
+  56@ == 2
+goto_if_false @INTRO2_5527
+
+:INTRO2_5527
+goto @INTRO2_5465
+
+:INTRO2_5534
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('INT2_EA', 10000, 1)
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_5578
+Char.StartFacialTalk($ryder, 2000)
+
+:INTRO2_5578
+64@ = 0
+
+:INTRO2_5585
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @INTRO2_5654
+wait 0
+gosub @INTRO2_15726
+if 
+  64@ == 0
+goto_if_false @INTRO2_5647
+if 
+  56@ == 2
+goto_if_false @INTRO2_5647
+
+:INTRO2_5647
+goto @INTRO2_5585
+
+:INTRO2_5654
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_5675
+Char.StopFacialTalk($ryder)
+
+:INTRO2_5675
+Camera.SetFixedPosition(2075.19, -1797.282, 14.4799, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2075.638, -1796.471, 14.103, SwitchType.JumpCut)
+wait 1000
+
+:INTRO2_5731
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_5752
+Char.StopFacialTalk($ryder)
+
+:INTRO2_5752
+TIMERA = 0
+
+:INTRO2_5759
+if 
+  TIMERA <= 1000
+goto_if_false @INTRO2_5796
+wait 0
+gosub @INTRO2_15726
+goto @INTRO2_5759
+
+:INTRO2_5796
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_5817
+Char.StopFacialTalk($ryder)
+
+:INTRO2_5817
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_5861
+Char.ClearLookAt($ryder)
+Task.LookAtCoord($ryder, 2102.0, -1806.0, 14.0, 3000)
+
+:INTRO2_5861
+64@ = 0
+
+:INTRO2_5868
+if 
+  49@ <> 1
+goto_if_false @INTRO2_5954
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_5940
+if 
+  56@ == 2
+goto_if_false @INTRO2_5940
+64@ = 1
+
+:INTRO2_5940
+gosub @INTRO2_15726
+goto @INTRO2_5868
+
+:INTRO2_5954
+Char.ClearLookAt($scplayer)
+Task.LookAtCoord($scplayer, 2102.0, -1806.0, 14.0, 3000)
+Camera.ResetNewScriptables
+Camera.PersistTrack(True)
+Camera.PersistPos(True)
+Camera.SetVectorMove(2074.23, -1795.03, 14.4282, 2074.983, -1798.671, 14.4451, 12000, True)
+Camera.SetVectorTrack(2077.167, -1795.729, 14.1884, 2075.973, -1798.734, 14.5649, 12000, True)
+64@ = 0
+
+:INTRO2_6073
+if 
+  49@ <> 2
+goto_if_false @INTRO2_6175
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_6161
+if 
+  56@ == 2
+goto_if_false @INTRO2_6161
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_6154
+
+:INTRO2_6154
+64@ = 1
+
+:INTRO2_6161
+gosub @INTRO2_15726
+goto @INTRO2_6073
+
+:INTRO2_6175
+TIMERB = 0
+64@ = 0
+
+:INTRO2_6189
+if 
+  49@ <> 3
+goto_if_false @INTRO2_6291
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_6277
+if 
+  56@ == 2
+goto_if_false @INTRO2_6277
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_6270
+
+:INTRO2_6270
+64@ = 1
+
+:INTRO2_6277
+gosub @INTRO2_15726
+goto @INTRO2_6189
+
+:INTRO2_6291
+64@ = 0
+
+:INTRO2_6298
+if 
+  49@ <> 4
+goto_if_false @INTRO2_6400
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_6386
+if 
+  56@ == 2
+goto_if_false @INTRO2_6386
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_6379
+
+:INTRO2_6379
+64@ = 1
+
+:INTRO2_6386
+gosub @INTRO2_15726
+goto @INTRO2_6298
+
+:INTRO2_6400
+if 
+  TIMERB <= 18000
+goto_if_false @INTRO2_6548
+wait 0
+if 
+  44@ == 0
+goto_if_false @INTRO2_6482
+if 
+  TIMERB > 7500
+goto_if_false @INTRO2_6482
+Text.PrintHelp('FUDHLP1')
+Hud.FlashObject(HudObject.Health)
+44@ = 1
+
+:INTRO2_6482
+if 
+  44@ == 1
+goto_if_false @INTRO2_6541
+if 
+  TIMERB > 13500
+goto_if_false @INTRO2_6541
+Text.PrintHelp('FUDHLP2')
+Hud.FlashObject(-1)
+44@ = 2
+
+:INTRO2_6541
+goto @INTRO2_6400
+
+:INTRO2_6548
+if 
+  $can_skip_smoking_cutscene == 1
+goto_if_false @INTRO2_6576
+
+:INTRO2_6566
+skip_cutscene_end 
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+
+:INTRO2_6576
+Text.ClearHelp
+Camera.ResetNewScriptables
+Text.PrintNow('HOOD2_B', 10000, 1)
+
+for $temp_int = 0 to 2
+    if 
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('HOOD2_B', 10000, 1, $NETWORK_PLAYER[$temp_int])
+        Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+    end
+end
+
+
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_6634
+Car.SetCanBeVisiblyDamaged($ryder_car, True)
+
+:INTRO2_6634
+Blip.Remove(34@)
+34@ = Blip.AddForCoord(372.9, -118.8, 1000.57)
+Blip.SetEntryExit(34@, 2103.376, -1806.311, 20.0)
+59@ = 0
+$flag_menace_buyfood = 1
+World.SetCarDensityMultiplier(0.5)
+World.SetPedDensityMultiplier(0.5)
+TIMERB = 0
+$blob_flag = 1
+
+:INTRO2_6721
+if or
+  not Char.LocateStoppedOnFoot3D($scplayer, $keep_offX, $keep_offY, $keep_offZ, 1.0, 1.0, 3.0, False)
+  $flag_menace_buyfood <> 3
+goto_if_false @INTRO2_7480
+wait 0
+if 
+  87@ == 0
+goto_if_false @INTRO2_6829
+if 
+  TIMERB > 2000
+goto_if_false @INTRO2_6829
+Text.PrintHelp('FUDHLP3')
+87@ = 1
+
+:INTRO2_6829
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_6868
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_6868
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_6907
+Text.PrintNow('INT2_12', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_6907
+gosub @INTRO2_15726
+if 
+  $flag_menace_buyfood <> 3
+goto_if_false @INTRO2_7083
+if 
+  $jfud_keep_created == 1
+goto_if_false @INTRO2_7083
+if 
+  Char.IsDead($shop_keep_junkfud)
+goto_if_false @INTRO2_6996
+Text.PrintNow('INT2_10', 10000, 1)
+goto @INTRO2_13667
+goto @INTRO2_7083
+
+:INTRO2_6996
+if 
+  not Char.IsHealthGreater($shop_keep_junkfud, 99)
+goto_if_false @INTRO2_7083
+if 
+  not Char.IsDead($shop_keep_junkfud)
+goto_if_false @INTRO2_7083
+Char.GiveWeapon($shop_keep_junkfud, WeaponType.Shotgun, 30)
+Char.SetCurrentWeapon($shop_keep_junkfud, WeaponType.Shotgun)
+Char.SetRelationship($shop_keep_junkfud, RelationshipType.Hate, PedType.Player1)
+wait 1000
+Text.PrintNow('INT2_14', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_7083
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_7209
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_7209
+if 
+  68@ == 0
+goto_if_false @INTRO2_7209
+if or
+  not Car.Locate3D($ryder_car, 0, 2078.09, -1796.2, 12.38, 0.2, 0.2, 2.0)
+  not Char.IsHealthGreater($ryder, 499)
+goto_if_false @INTRO2_7209
+Task.EnterCarAsPassenger($ryder, $ryder_car, 0, 20000)
+68@ = 1
+
+:INTRO2_7209
+58@ = Streaming.GetAreaVisible()
+if 
+  58@ == 5
+goto_if_false @INTRO2_7405
+if 
+  59@ == 0
+goto_if_false @INTRO2_7309
+Streaming.RequestAnimation("GANGS")
+Streaming.RequestAnimation("FOOD")
+Streaming.RequestModel(346)
+Streaming.RequestModel(349)
+Streaming.LoadSpecialCharacter('RYDER3', 2)
+Streaming.RequestModel(155)
+TIMERA = 0
+59@ = 1
+
+:INTRO2_7309
+if 
+  59@ == 1
+goto_if_false @INTRO2_7398
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 372.05, -130.63, 1000.49, 20.0, 20.0, 3.0)
+goto_if_false @INTRO2_7398
+Text.PrintNow('INT2_13', 5000, 1)
+59@ = 2
+
+:INTRO2_7398
+goto @INTRO2_7432
+
+:INTRO2_7405
+if 
+  59@ == 2
+goto_if_false @INTRO2_7432
+Text.ClearPrints
+59@ = 1
+
+:INTRO2_7432
+if 
+  $flag_attacked_keeper_food == 1
+goto_if_false @INTRO2_7473
+Text.PrintNow('INT2_14', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_7473
+goto @INTRO2_6721
+
+:INTRO2_7480
+
+150@ = Streaming.GetAreaVisible()
+Streaming.SetAreaVisible(150@) // sync it
+
+if 
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[0])
+then
+    if not Char.LocateAnyMeans3D($NETWORK_PLAYER[0], 0, 373.98, -127.63, 1001.49, 50.0, 50.0, 50.0)
+    then
+        Char.SetAreaVisible($NETWORK_PLAYER[0], 150@)
+        Char.SetCoordinates($NETWORK_PLAYER[0], 370.32, -126.28, 1001.49)
+    end
+end
+
+if 
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[1])
+then
+    if not Char.LocateAnyMeans3D($NETWORK_PLAYER[1], 0, 373.98, -127.63, 1001.49, 50.0, 50.0, 50.0)
+    then
+        Char.SetAreaVisible($NETWORK_PLAYER[1], 150@)
+        Char.SetCoordinates($NETWORK_PLAYER[1], 371.40, -128.03, 1001.49)
+    end
+end
+
+if 
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[2])
+then
+    if not Char.LocateAnyMeans3D($NETWORK_PLAYER[2], 0, 373.98, -127.63, 1001.49, 50.0, 50.0, 50.0)
+    then
+        Char.SetAreaVisible($NETWORK_PLAYER[2], 150@)
+        Char.SetCoordinates($NETWORK_PLAYER[2], 370.30, -129.44, 1001.49)
+    end
+end
+
+
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Text.ClearPrints
+Camera.SetNearClip(0.1)
+Particle.Stop(55@)
+Streaming.MarkModelAsNoLongerNeeded(#CIGAR)
+Streaming.MarkModelAsNoLongerNeeded(#CIGAR_GLOW)
+Audio.LoadMissionAudio(1828, 4)
+
+:INTRO2_7520
+if or
+  not Streaming.HasAnimationLoaded("FOOD")
+  not Streaming.HasAnimationLoaded("GANGS")
+  not Streaming.HasSpecialCharacterLoaded(2)
+  not Streaming.HasModelLoaded(155)
+  not Streaming.HasModelLoaded(346)
+  not Streaming.HasModelLoaded(349)
+goto_if_false @INTRO2_7697
+wait 0
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_7610
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_7610
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_7649
+Text.PrintNow('INT2_12', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_7649
+if 
+  $flag_attacked_keeper_food == 1
+goto_if_false @INTRO2_7690
+Text.PrintNow('INT2_14', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_7690
+goto @INTRO2_7520
+
+:INTRO2_7697
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_7816
+Char.DropObject($ryder, True)
+Char.ClearTasksImmediately($ryder)
+Task.StandStill($ryder, 100)
+Char.SetCoordinates($ryder, 375.7327, -125.2345, 1000.53)
+Char.SetHeading($ryder, 201.2298)
+Char.SetHealth($ryder, 500)
+Char.SetMaxHealth($ryder, 500)
+Task.PlayAnim($ryder, "ROB_SHIFTY", "SHOP", 4.0, False, False, False, False, -1)
+
+:INTRO2_7816
+World.ClearArea(1, 372.9, -118.8, 1000.57, 20.0)
+World.ClearArea(1, 369.058, -4.92, 1000.883, 20.0)
+35@ = Char.Create(24, 155, 373.14, -117.11, 1000.57)
+Char.SetHeading(35@, 180.0)
+43@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+Char.SetDecisionMaker(35@, 43@)
+Char.ClearLookAt(35@)
+Task.LookAtChar(35@, $scplayer, 4700)
+Task.TurnCharToFaceChar(35@, $scplayer)
+Char.SetCoordinates($scplayer, 372.9, -118.8, 1000.57)
+Task.TurnCharToFaceChar($scplayer, 35@)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+51@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 375.2, -119.8, 1000.5, MoveState.Walk, 7000)
+Task.PlayAnim(-1, "ROB_STICKUP_IN", "SHOP", 4.0, False, False, False, True, -1)
+Task.PlayAnim(-1, "ROB_LOOP_THREAT", "SHOP", 4.0, True, False, False, False, -1)
+Sequence.Close(51@)
+49@ = 0
+56@ = 0
+64@ = 0
+40@ = 2
+gosub @INTRO2_47
+wait 200
+if 
+  $cj_vomits_for_menace == 0
+goto_if_false @INTRO2_8192
+Task.PlayAnim($scplayer, "EAT_PIZZA", "FOOD", 4.0, False, False, False, False, -1)
+goto @INTRO2_8332
+
+:INTRO2_8192
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+set_lvar_float_to_var_float 90@ = $player_x
+90@ += 0.355
+set_lvar_float_to_var_float 91@ = $player_y
+91@ -= 0.116
+set_lvar_float_to_var_float 92@ = $player_z
+92@ -= 0.048
+62@ = Particle.Create("PUKE", 90@, 91@, 92@, 1)
+Task.PlayAnimNonInterruptable($scplayer, "EAT_VOMIT_P", "FOOD", 4.0, False, False, False, False, -1)
+$sample_name_shop = Char.SetSayContext($scplayer, 353)
+
+:INTRO2_8332
+Camera.DoFade(1, 500)
+Audio.SetMusicDoesFade(True)
+Camera.SetFixedPosition(376.4939, -126.0317, 1002.396, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(375.9087, -125.2215, 1002.361, SwitchType.JumpCut)
+wait 4500
+Camera.ResetNewScriptables
+Camera.PersistTrack(True)
+Camera.PersistPos(True)
+Camera.SetVectorMove(377.0709, -121.8843, 1000.714, 377.3563, -119.1986, 1002.57, 7000, True)
+Camera.SetVectorTrack(376.4134, -122.6288, 1000.598, 376.423, -119.1806, 1002.211, 7000, True)
+Char.Delete($ryder)
+Streaming.UnloadSpecialCharacter(1)
+$ryder = Char.Create(24, 291, 376.3327, -125.2345, 1000.53)
+Char.SetAnimGroup($ryder, "GANG1")
+Char.SetNeverTargeted($ryder, True)
+Char.SetHealth($ryder, 500)
+Char.SetMaxHealth($ryder, 500)
+Char.SetSuffersCriticalHits($ryder, False)
+Char.SetCantBeDraggedOut($ryder, True)
+Char.SetStayInCarWhenJacked($ryder, True)
+Char.SetDecisionMaker($ryder, 67@)
+Char.SetGetOutUpsideDownCar($ryder, False)
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_8649
+Char.GiveWeapon($ryder, WeaponType.Pistol, 30)
+Char.SetCurrentWeapon($ryder, WeaponType.Pistol)
+if 
+  not Char.IsDead(35@)
+goto_if_false @INTRO2_8649
+Char.PerformSequence($ryder, 51@)
+Sequence.Clear(51@)
+
+:INTRO2_8649
+41@ = 0
+skip_cutscene_start_internal @INTRO2_10954
+TIMERA = 0
+63@ = 0
+
+:INTRO2_8677
+if 
+  not Char.LocateAnyMeans3D($ryder, 0, 375.2, -119.8, 1000.5, 0.4, 0.6, 2.0)
+goto_if_false @INTRO2_9124
+wait 0
+if 
+  Char.IsPlayingAnim($scplayer, "EAT_VOMIT_P")
+goto_if_false @INTRO2_8899
+93@ = Char.GetAnimCurrentTime($scplayer, "EAT_VOMIT_P")
+if 
+  63@ == 0
+goto_if_false @INTRO2_8848
+if 
+  93@ >= 0.463
+goto_if_false @INTRO2_8848
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @INTRO2_8841
+Audio.ReportMissionAudioEventAtChar($scplayer, 1169)
+
+:INTRO2_8841
+63@ = 1
+
+:INTRO2_8848
+if 
+  63@ == 1
+goto_if_false @INTRO2_8899
+if 
+  93@ >= 0.52
+goto_if_false @INTRO2_8899
+Particle.Play(62@)
+63@ = 2
+
+:INTRO2_8899
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_8938
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_8938
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_8977
+Text.PrintNow('INT2_12', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_8977
+if 
+  $flag_attacked_keeper_food == 1
+goto_if_false @INTRO2_9018
+Text.PrintNow('INT2_14', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_9018
+if 
+  69@ == 0
+goto_if_false @INTRO2_9117
+if 
+  TIMERA > 1000
+goto_if_false @INTRO2_9117
+if 
+  $cj_vomits_for_menace == 0
+goto_if_false @INTRO2_9110
+Task.PlayAnim($scplayer, "IDLE_CHAT", "PED", 4.0, False, False, False, False, 3000)
+
+:INTRO2_9110
+69@ = 1
+
+:INTRO2_9117
+goto @INTRO2_8677
+
+:INTRO2_9124
+if 
+  not Char.IsDead(35@)
+goto_if_false @INTRO2_9253
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_9253
+Char.ClearTasks(35@)
+Char.ClearLookAt(35@)
+Task.LookAtChar(35@, $ryder, 12500)
+Task.StandStill($scplayer, 100)
+Char.ClearLookAt($scplayer)
+Task.LookAtChar($scplayer, $ryder, 10000)
+Char.SetHeading(35@, 200.0)
+Task.PlayAnim(35@, "SHP_ROB_HANDSUP", "SHOP", 4.0, True, False, False, False, -1)
+
+:INTRO2_9253
+$iSetPizzaPanic = 1
+64@ = 0
+
+:INTRO2_9267
+if 
+  49@ <> 1
+goto_if_false @INTRO2_9378
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_9371
+if 
+  56@ == 2
+goto_if_false @INTRO2_9371
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_9364
+Char.ClearLookAt($scplayer)
+Task.LookAtChar($scplayer, $ryder, 6000)
+
+:INTRO2_9364
+64@ = 1
+
+:INTRO2_9371
+goto @INTRO2_9267
+
+:INTRO2_9378
+64@ = 0
+
+:INTRO2_9385
+if 
+  49@ <> 2
+goto_if_false @INTRO2_9548
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_9541
+if 
+  56@ == 2
+goto_if_false @INTRO2_9541
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_9502
+Task.PlayAnim($ryder, "ROB_LOOP", "SHOP", 4.0, True, False, False, False, -1)
+
+:INTRO2_9502
+if 
+  not Char.IsDead(35@)
+goto_if_false @INTRO2_9534
+Char.ClearLookAt($scplayer)
+Task.LookAtChar($scplayer, 35@, 6000)
+
+:INTRO2_9534
+64@ = 1
+
+:INTRO2_9541
+goto @INTRO2_9385
+
+:INTRO2_9548
+64@ = 0
+
+:INTRO2_9555
+if 
+  49@ <> 3
+goto_if_false @INTRO2_9778
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_9771
+if 
+  56@ == 2
+goto_if_false @INTRO2_9771
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_9679
+Task.PlayAnim($ryder, "ROB_LOOP_THREAT", "SHOP", 4.0, True, False, False, False, -1)
+
+:INTRO2_9679
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_9711
+Char.ClearLookAt($scplayer)
+Task.LookAtChar($scplayer, $ryder, 6000)
+
+:INTRO2_9711
+Camera.ResetNewScriptables
+Camera.SetFixedPosition(374.9156, -121.7312, 1002.5, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(374.7307, -120.7778, 1002.262, SwitchType.JumpCut)
+64@ = 1
+
+:INTRO2_9771
+goto @INTRO2_9555
+
+:INTRO2_9778
+64@ = 0
+
+:INTRO2_9785
+if 
+  49@ <> 4
+goto_if_false @INTRO2_9948
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_9941
+if 
+  56@ == 2
+goto_if_false @INTRO2_9941
+if 
+  not Char.IsDead(35@)
+goto_if_false @INTRO2_9882
+Char.ClearLookAt($scplayer)
+Task.LookAtChar($scplayer, 35@, 6000)
+
+:INTRO2_9882
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_9934
+Task.PlayAnim($ryder, "ROB_LOOP", "SHOP", 4.0, True, False, False, False, -1)
+
+:INTRO2_9934
+64@ = 1
+
+:INTRO2_9941
+goto @INTRO2_9785
+
+:INTRO2_9948
+42@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.PlayAnim(-1, "ROB_2IDLE", "SHOP", 4.0, False, False, False, True, -1)
+Task.PlayAnim(-1, "PRTIAL_GNGTLKH", "GANGS", 4.0, False, False, False, False, -1)
+Sequence.Close(42@)
+64@ = 0
+
+:INTRO2_10050
+if 
+  49@ <> 5
+goto_if_false @INTRO2_10289
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_10282
+if 
+  56@ == 2
+goto_if_false @INTRO2_10282
+Camera.SetFixedPosition(371.562, -120.1569, 1002.404, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(372.4125, -119.6767, 1002.19, SwitchType.JumpCut)
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_10275
+Char.ClearTasks($scplayer)
+Char.ClearLookAt($scplayer)
+Task.LookAtChar($scplayer, $ryder, 10000)
+Char.ClearTasks($ryder)
+Char.ClearLookAt($ryder)
+Task.LookAtChar($ryder, $scplayer, 10000)
+Task.TurnCharToFaceChar($scplayer, $ryder)
+Task.PlayAnim($scplayer, "PRTIAL_GNGTLKA", "GANGS", 4.0, False, False, False, False, -1)
+
+:INTRO2_10275
+64@ = 1
+
+:INTRO2_10282
+goto @INTRO2_10050
+
+:INTRO2_10289
+64@ = 0
+
+:INTRO2_10296
+if 
+  49@ <> 6
+goto_if_false @INTRO2_10455
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_10448
+if 
+  56@ == 2
+goto_if_false @INTRO2_10448
+Camera.SetFixedPosition(374.6357, -121.6844, 1001.637, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(374.5972, -120.6883, 1001.716, SwitchType.JumpCut)
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_10441
+Char.PerformSequence($ryder, 42@)
+Sequence.Clear(42@)
+
+:INTRO2_10441
+64@ = 1
+
+:INTRO2_10448
+goto @INTRO2_10296
+
+:INTRO2_10455
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_10476
+Char.ClearTasks($ryder)
+
+:INTRO2_10476
+if 
+  not Char.IsDead(35@)
+goto_if_false @INTRO2_10542
+Char.SetHeading(35@, 180.0)
+Task.PlayAnim(35@, "SHP_GUN_GRAB", "SHOP", 4.0, False, False, False, True, -1)
+
+:INTRO2_10542
+wait 500
+if 
+  not Char.IsDead(35@)
+goto_if_false @INTRO2_10580
+Char.GiveWeapon(35@, WeaponType.Shotgun, 30000)
+Char.SetCurrentWeapon(35@, WeaponType.Shotgun)
+
+:INTRO2_10580
+wait 500
+Camera.SetFixedPosition(373.03, -116.1498, 1002.375, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(373.0192, -117.1292, 1002.173, SwitchType.JumpCut)
+wait 300
+if 
+  not Char.IsDead(35@)
+goto_if_false @INTRO2_10680
+Task.ShootAtCoord(35@, 374.2905, -125.681, 1001.308, 2000)
+
+:INTRO2_10680
+64@ = 0
+
+:INTRO2_10687
+if 
+  49@ <> 7
+goto_if_false @INTRO2_10947
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_10940
+if 
+  56@ == 2
+goto_if_false @INTRO2_10940
+Path.FlushRoute
+Path.ExtendRoute(372.0, -120.1, 1000.5)
+Path.ExtendRoute(370.5, -132.3, 1000.4)
+Task.FollowPointRoute($scplayer, 6, RouteMode.Once)
+
+for $temp_int = 0 to 2
+    if 
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Task.GoToCoordAnyMeans($NETWORK_PLAYER[$temp_int], 372.422, -132.1289, 1001.4922, 6, -1)
+    end
+end
+
+Path.FlushRoute
+Path.ExtendRoute(376.3, -121.0, 1000.5)
+Path.ExtendRoute(375.9, -132.0, 1000.5)
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_10858
+Task.FollowPointRoute($ryder, 6, RouteMode.Once)
+
+:INTRO2_10858
+if and
+  not Char.IsDead($ryder)
+  not Char.IsDead(35@)
+goto_if_false @INTRO2_10894
+Char.ClearLookAt($ryder)
+Char.ClearLookAt($scplayer)
+Char.ClearLookAt(35@)
+
+:INTRO2_10894
+if 
+  not Char.IsDead(35@)
+goto_if_false @INTRO2_10933
+Task.ShootAtCoord(35@, 374.2905, -125.681, 1001.308, 1500)
+
+:INTRO2_10933
+64@ = 1
+
+:INTRO2_10940
+goto @INTRO2_10687
+
+:INTRO2_10947
+41@ = 1
+
+:INTRO2_10954
+skip_cutscene_end 
+if 
+  41@ == 0
+goto_if_false @INTRO2_11013
+Camera.DoFade(0, Fade.Out)
+Text.ClearPrints
+
+:INTRO2_10982
+if 
+  Camera.GetFadingStatus
+goto_if_false @INTRO2_11006
+wait 0
+goto @INTRO2_10982
+
+:INTRO2_11006
+goto @INTRO2_11046
+
+:INTRO2_11013
+Camera.DoFade(0, 500)
+Text.ClearPrints
+
+:INTRO2_11022
+if 
+  Camera.GetFadingStatus
+goto_if_false @INTRO2_11046
+wait 0
+goto @INTRO2_11022
+
+:INTRO2_11046
+Camera.ResetNewScriptables
+World.ClearArea(1, 372.9, -118.8, 1000.57, 100.0)
+Streaming.SetAreaVisible(0)
+Task.StandStill($scplayer, 0)
+Char.SetCoordinates($scplayer, 2102.21, -1806.65, 12.4)
+Char.SetHeading($scplayer, 75.0)
+Char.SetCantBeDraggedOut($scplayer, True)
+Char.SetAreaVisible($scplayer, 0)
+
+if
+    not Car.IsDead(200@)
+then
+    for $temp_int = 0 to 2
+        if
+            Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        then
+            201@($temp_int,3i) = 0
+            Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 200@, true, BlipDisplay.MarkerOnly, BlipColor.Blue, 3)
+        end
+    end
+end
+
+if 
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[0])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[0], 2102.21, -1805.65, 12.4)
+end
+
+if 
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[1])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[1], 2102.21, -1804.65, 12.4)
+end
+
+if 
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[2])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[2], 2102.21, -1803.65, 12.4)
+end
+    
+for $temp_int = 0 to 2
+    if 
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Task.StandStill($NETWORK_PLAYER[$temp_int], 0)
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], 75.0)
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
+    end
+end
+
+wait 0
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_11322
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_11322
+Char.ClearLookAt($ryder)
+Char.ClearLookAt($scplayer)
+World.ClearArea(1, 2077.57, -1796.41, 12.38, 100.0)
+Car.SetCoordinates($ryder_car, 2077.57, -1796.41, 12.0)
+Car.SetHeading($ryder_car, 180.0)
+Car.SetHealth($ryder_car, 1000)
+World.ClearArea(1, 2098.61, -1801.62, 12.39, 100.0)
+Char.SetCoordinates($ryder, 2092.61, -1801.62, 12.39)
+Char.SetHeading($ryder, 72.0)
+Char.SetAreaVisible($ryder, 0)
+Car.LockDoors($ryder_car, CarLock.Unlocked)
+Char.SetNextDesiredMoveState(MoveState.Run)
+Task.EnterCarAsPassenger($ryder, $ryder_car, 0, 40000)
+
+:INTRO2_11322
+Weather.Release
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Text.ClearPrints
+Shopping.ClearLoaded
+World.ClearExtraColors(False)
+Streaming.RemoveAnimation("SHOP")
+Streaming.RemoveAnimation("GANGS")
+Streaming.RemoveAnimation("FOOD")
+38@ = 0
+Text.PrintNow('INT2_6', 10000, 1)
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_11425
+goto @INTRO2_13667
+goto @INTRO2_11454
+
+:INTRO2_11425
+Char.SetHealth($ryder, 500)
+Char.SetMaxHealth($ryder, 500)
+47@ = Blip.AddForChar($ryder)
+Blip.Remove(47@)
+
+:INTRO2_11454
+Blip.Remove(34@)
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_11502
+Blip.Remove(37@)
+37@ = Blip.AddForCar($ryder_car)
+Blip.SetAsFriendly(37@, True)
+goto @INTRO2_11509
+
+:INTRO2_11502
+goto @INTRO2_13667
+
+:INTRO2_11509
+World.SwitchEntryExit('FDPIZA', False)
+$blob_flag = 1
+60@ = 0
+54@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2102.77, -1806.35, 12.55, MoveState.Run, 4000)
+Task.ShootAtCoord(-1, 2092.67, -1803.64, 15.56, 1000)
+Sequence.Close(54@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.LoadMissionAudio(20232, 1)
+
+:INTRO2_11607
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @INTRO2_11633
+wait 0
+goto @INTRO2_11607
+
+:INTRO2_11633
+Streaming.LoadSceneInDirection(2102.21, -1806.65, 12.4, 75.0)
+Camera.DoFade(1, 500)
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_11701
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_11701
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_11740
+Text.PrintNow('INT2_12', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_11740
+49@ = 0
+56@ = 0
+64@ = 0
+40@ = 4
+gosub @INTRO2_47
+TIMERA = 0
+TIMERB = 0
+World.ClearArea(1, 2077.57, -1796.41, 12.38, 20.0)
+
+
+for $temp_int = 0 to 2
+    201@($temp_int,3i) = 0
+    204@($temp_int,3i) = 0
+end
+
+:INTRO2_11813 // the loop condition start
+
+150@ = 1
+FOR $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2491.80, -1667.94, 13.34, 20.0, 20.0, 5.0)
+        then
+            150@ = 0
+            Break
+        end
+    end
+end
+
+
+if or
+  not Car.Locate3D($ryder_car, $blob_flag, 2473.88, -1692.81, 12.52, 4.0, 4.0, 4.0) //Race back to the hood
+  not Char.IsInCar($ryder, $ryder_car)
+  not Char.IsSittingInCar($scplayer, $ryder_car)
+  not Car.IsOnAllWheels($ryder_car)
+  150@ == 0
+goto_if_false @INTRO2_12919
+wait 0
+
+
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if // clear blip on the Greenwood, if its not interesting for player
+            201@($temp_int,3i) == 0
+        then
+            if or
+                Car.IsDead(200@)
+                Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
+                not Char.LocateOnFootCar3D($NETWORK_PLAYER[$temp_int], 200@, 50.0, 50.0, 50.0, false)
+            then
+                201@($temp_int,3i) = 1
+                Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 200@)
+            end
+        end
+        
+        if and
+            204@($temp_int, 3i) == 0
+            Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
+        then
+            Coop.PrintNowForNetworkPlayer('INT2_O', 10000, 1, $NETWORK_PLAYER[$temp_int])
+            204@($temp_int,3i) = 1
+        end
+    end     
+end
+
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_11926
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_11926
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_11965
+Text.PrintNow('INT2_12', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_11965
+if 
+  not Char.LocateOnFoot3D($scplayer, 0, 2104.62, -1806.54, 12.55, 7.0, 6.0, 3.0)
+goto_if_false @INTRO2_12304
+if 
+  66@ == 0
+goto_if_false @INTRO2_12187
+if 
+  not Char.IsDead(35@)
+goto_if_false @INTRO2_12180
+Char.ClearTasks(35@)
+Char.ClearTasksImmediately(35@)
+Char.SetCoordinates(35@, 2105.32, -1806.24, 12.55)
+Char.SetHeading(35@, 90.0)
+Char.GiveWeapon(35@, WeaponType.Shotgun, 30000)
+Char.SetCurrentWeapon(35@, WeaponType.Shotgun)
+Char.SetAccuracy(35@, 30)
+Camera.SetNearClip(0.1)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @INTRO2_12153
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('INT2_HA', 2000, 1)
+
+:INTRO2_12153
+Char.PerformSequence(35@, 54@)
+Sequence.Clear(54@)
+TIMERA = 0
+66@ = 1
+
+:INTRO2_12180
+goto @INTRO2_12304
+
+:INTRO2_12187
+if 
+  TIMERA > 2000
+goto_if_false @INTRO2_12304
+if 
+  66@ == 1
+goto_if_false @INTRO2_12304
+if 
+  not Char.IsDead(35@)
+goto_if_false @INTRO2_12304
+if 
+  Char.LocateOnFoot3D(35@, 0, 2102.77, -1806.35, 12.55, 1.0, 1.0, 3.0)
+goto_if_false @INTRO2_12304
+Char.SetRelationship(35@, RelationshipType.Hate, PedType.Player1)
+66@ = 2
+
+:INTRO2_12304
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_12413
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_12413
+if 
+  Char.IsInCar($scplayer, $ryder_car)
+goto_if_false @INTRO2_12413
+if 
+  Char.IsSittingInCar($ryder, $ryder_car)
+goto_if_false @INTRO2_12413
+gosub @INTRO2_16035
+if 
+  88@ == 0
+goto_if_false @INTRO2_12413
+TIMERB = 0
+88@ = 1
+
+:INTRO2_12413
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_12834
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_12811
+if 
+  Char.IsInCar($scplayer, $ryder_car)
+goto_if_false @INTRO2_12712
+if 
+  Char.IsSittingInCar($ryder, $ryder_car)
+goto_if_false @INTRO2_12610
+if 
+  38@ == 0
+goto_if_false @INTRO2_12603
+Blip.Remove(47@)
+Blip.Remove(37@)
+Blip.Remove(34@)
+34@ = Blip.AddForCoord(2473.88, -1692.81, 12.52)
+$blob_flag = 1
+if 
+  88@ == 1
+goto_if_false @INTRO2_12603
+if 
+  TIMERB > 7000
+goto_if_false @INTRO2_12603
+Text.PrintNow('INT2_O', 10000, 1)
+
+for $temp_int = 0 to 2
+    if 
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2473.88, -1692.81, 12.52, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
+
+38@ = 1
+
+:INTRO2_12603
+goto @INTRO2_12705
+
+:INTRO2_12610
+Blip.Remove(37@)
+Blip.Remove(34@)
+Blip.Remove(47@)
+47@ = Blip.AddForChar($ryder)
+Blip.SetAsFriendly(47@, True)
+Text.PrintNow('INT2_5', 1000, 1)
+65@ = Char.GetScriptTaskStatus($ryder, 1482)
+if 
+  is_int_lvar_equal_to_constant 65@ == 7
+goto_if_false @INTRO2_12698
+Task.EnterCarAsPassenger($ryder, $ryder_car, 0, 20000)
+
+:INTRO2_12698
+$blob_flag = 0
+
+:INTRO2_12705
+goto @INTRO2_12804
+
+:INTRO2_12712
+if 
+  38@ == 1
+goto_if_false @INTRO2_12804
+Blip.Remove(34@)
+Blip.Remove(37@)
+37@ = Blip.AddForCar($ryder_car)
+Blip.SetAsFriendly(37@, True)
+$blob_flag = 0
+gosub @INTRO2_15117
+Text.PrintNow('INT2_6', 10000, 1)
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.StopFacialTalk($scplayer)
+38@ = 0
+
+:INTRO2_12804
+goto @INTRO2_12834
+
+:INTRO2_12811
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_12834
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_12873
+Text.PrintNow('INT2_12', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_12873
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_12912
+Text.PrintNow('INT2_11', 10000, 1)
+goto @INTRO2_13667
+
+:INTRO2_12912
+goto @INTRO2_11813
+
+:INTRO2_12919
+
+for $temp_int = 0 to 2
+    if 
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
+
+Player.SetControl($player1, False)
+49@ = 0
+56@ = 0
+64@ = 0
+40@ = 3
+gosub @INTRO2_47
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_13030
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_13030
+Task.LeaveCar($ryder, $ryder_car)
+wait 700
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_13030
+Task.LeaveCar($scplayer, $ryder_car)
+
+:INTRO2_13030
+Camera.DoFade(0, 1600)
+
+:INTRO2_13037
+if 
+  Camera.GetFadingStatus
+goto_if_false @INTRO2_13061
+wait 0
+goto @INTRO2_13037
+
+:INTRO2_13061
+Hud.SwitchWidescreen(True)
+Camera.DoFade(1, 1500)
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_13151
+if 
+  Char.IsInAnyCar($ryder)
+goto_if_false @INTRO2_13131
+Char.WarpFromCarToCoord($ryder, 2467.345, -1688.22, 12.5156)
+goto @INTRO2_13151
+
+:INTRO2_13131
+Char.SetCoordinates($ryder, 2467.345, -1688.22, 12.5156)
+
+:INTRO2_13151
+Char.SetHeading($ryder, 284.0)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @INTRO2_13204
+Char.WarpFromCarToCoord($scplayer, 2468.359, -1687.39, 12.518)
+goto @INTRO2_13224
+
+:INTRO2_13204
+Char.SetCoordinates($scplayer, 2468.359, -1687.39, 12.5189)
+
+:INTRO2_13224
+Char.SetHeading($scplayer, 108.0)
+Camera.SetFixedPosition(2464.771, -1687.493, 14.2709, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2465.75, -1687.675, 14.1833, SwitchType.JumpCut)
+64@ = 0
+
+:INTRO2_13292
+if 
+  49@ <> 1
+goto_if_false @INTRO2_13371
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_13364
+if 
+  56@ == 2
+goto_if_false @INTRO2_13364
+64@ = 1
+
+:INTRO2_13364
+goto @INTRO2_13292
+
+:INTRO2_13371
+64@ = 0
+
+:INTRO2_13378
+if 
+  49@ <> 2
+goto_if_false @INTRO2_13457
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_13450
+if 
+  56@ == 2
+goto_if_false @INTRO2_13450
+64@ = 1
+
+:INTRO2_13450
+goto @INTRO2_13378
+
+:INTRO2_13457
+64@ = 0
+
+:INTRO2_13464
+if 
+  49@ <> 3
+goto_if_false @INTRO2_13584
+wait 0
+gosub @INTRO2_16035
+if 
+  64@ == 0
+goto_if_false @INTRO2_13577
+if 
+  56@ == 2
+goto_if_false @INTRO2_13577
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_13570
+Task.GoStraightToCoord($ryder, 2459.79, -1688.18, 12.56, MoveState.Walk, 3000)
+
+:INTRO2_13570
+64@ = 1
+
+:INTRO2_13577
+goto @INTRO2_13464
+
+:INTRO2_13584
+Task.GoStraightToCoord($scplayer, 2471.58, -1685.73, 12.51, MoveState.Walk, 3000)
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_13630
+Char.StopFacialTalk($ryder)
+
+:INTRO2_13630
+wait 1000
+Char.ClearTasks($scplayer)
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+Char.Delete($ryder)
+goto @INTRO2_13692
+
+:INTRO2_13667
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+$can_skip_smoking_cutscene = 1
+
+for $temp_int = 0 to 2
+    if 
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
+
+return 
+
+:INTRO2_13692
+Stat.RegisterMissionPassed('INTRO_2')
+Text.PrintWithNumberBig('M_PASSR', 3, 5000, TextStyle.Middle)
+Stat.AwardPlayerMissionRespect(3)
+CarGenerator.Switch($gen_car6, 101)
+$flag_intro_mission_counter += 1
+
+Blip.Remove($intro_contact_blip)
+
+start_new_script @SWEET 
+
+Blip.Remove($sweet_contact_blip)
+
+$sweet_contact_blip = Blip.AddSpriteForContactPoint($sweet_blip_icon, $sweetX, $sweetY, $sweetZ)
+
+for $temp_int = 0 to 2
+    if 
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
+
+Player.ClearWantedLevel($player1)
+World.SwitchEntryExit('BARBERS', True)
+World.SwitchEntryExit('BARBER2', True)
+World.SwitchEntryExit('BARBER3', True)
+World.SwitchEntryExit('FDPIZA', True)
+World.SwitchEntryExit('FDCHICK', True)
+World.SwitchEntryExit('FDBURG', True)
+World.SwitchEntryExit('TATTOO', True)
+Blip.Remove($barber_shop1)
+$barber_shop1 = Blip.AddShortRangeSpriteForCoord(7, 2070.27, -1791.092, 17.1484)
+Blip.Remove($food_shop1)
+$food_shop1 = Blip.AddShortRangeSpriteForCoord(29, 2107.624, -1807.516, 21.2114)
+Audio.PlayMissionPassedTune(1)
+if 
+  $added_all_food_blips_before == 0
+goto_if_false @INTRO2_14811
+$barbers_blips = Blip.AddShortRangeSpriteForCoord(7, 822.6, -1590.3, 13.5)
+$2592 = Blip.AddShortRangeSpriteForCoord(7, -2570.1, 245.4, 10.3)
+$2593 = Blip.AddShortRangeSpriteForCoord(7, 2726.6, -2026.4, 17.5)
+$2594 = Blip.AddShortRangeSpriteForCoord(7, 2080.3, 2119.0, 10.8)
+$2595 = Blip.AddShortRangeSpriteForCoord(7, 675.7, -496.6, 16.8)
+$pizza_blips = Blip.AddShortRangeSpriteForCoord(29, -1805.7, 943.2, 24.8)
+$2597 = Blip.AddShortRangeSpriteForCoord(29, 2750.9, 2470.9, 11.0)
+$2598 = Blip.AddShortRangeSpriteForCoord(29, 2351.8, 2529.0, 10.8)
+$2599 = Blip.AddShortRangeSpriteForCoord(29, 2635.5, 1847.4, 11.0)
+$2600 = Blip.AddShortRangeSpriteForCoord(29, 2083.4, 2221.0, 11.0)
+$2601 = Blip.AddShortRangeSpriteForCoord(29, -1719.1, 1359.4, 8.6)
+$2602 = Blip.AddShortRangeSpriteForCoord(29, 2330.2, 75.2, 31.0)
+$2603 = Blip.AddShortRangeSpriteForCoord(29, 203.2, -200.4, 6.5)
+$burger_blips = Blip.AddShortRangeSpriteForCoord(10, 812.9, -1616.1, 13.6)
+$2605 = Blip.AddShortRangeSpriteForCoord(10, 1199.1, -924.0, 43.3)
+$2606 = Blip.AddShortRangeSpriteForCoord(10, 2362.2, 2069.9, 10.8)
+$2607 = Blip.AddShortRangeSpriteForCoord(10, 2469.5, 2033.8, 10.8)
+$2608 = Blip.AddShortRangeSpriteForCoord(10, 2172.9, 2795.7, 10.8)
+$2609 = Blip.AddShortRangeSpriteForCoord(10, 1875.3, 2072.0, 10.8)
+$2610 = Blip.AddShortRangeSpriteForCoord(10, 1161.5, 2072.0, 10.8)
+$2611 = Blip.AddShortRangeSpriteForCoord(10, -2356.0, 1009.0, 49.0)
+$2612 = Blip.AddShortRangeSpriteForCoord(10, -1913.3, 826.2, 36.9)
+$2613 = Blip.AddShortRangeSpriteForCoord(10, -2335.6, -165.6, 39.5)
+$chicken_blips = Blip.AddShortRangeSpriteForCoord(14, 2397.8, -1895.6, 13.7)
+$2615 = Blip.AddShortRangeSpriteForCoord(14, 2421.6, -1509.6, 24.1)
+$2616 = Blip.AddShortRangeSpriteForCoord(14, -2671.6, 257.4, 4.6)
+$2617 = Blip.AddShortRangeSpriteForCoord(14, 2392.4, 2046.5, 10.8)
+$2618 = Blip.AddShortRangeSpriteForCoord(14, 2844.5, 2401.1, 11.0)
+$2619 = Blip.AddShortRangeSpriteForCoord(14, 2635.5, 1674.3, 11.0)
+$2620 = Blip.AddShortRangeSpriteForCoord(14, 2105.7, 2228.7, 11.0)
+$2621 = Blip.AddShortRangeSpriteForCoord(14, -2154.0, -2461.2, 30.8)
+$2622 = Blip.AddShortRangeSpriteForCoord(14, -1816.2, 620.8, 37.5)
+$2623 = Blip.AddShortRangeSpriteForCoord(14, -1216.0, 1831.4, 45.3)
+$2624 = Blip.AddShortRangeSpriteForCoord(14, 172.73, 1176.76, 13.7)
+$2625 = Blip.AddShortRangeSpriteForCoord(14, 932.0, -1353.0, 14.0)
+$tattoo_blips = Blip.AddShortRangeSpriteForCoord(39, 1971.7, -2036.6, 13.5)
+$2627 = Blip.AddShortRangeSpriteForCoord(39, 2071.6, -1779.9, 13.5)
+$2628 = Blip.AddShortRangeSpriteForCoord(39, 2094.6, 2119.0, 10.8)
+$2629 = Blip.AddShortRangeSpriteForCoord(39, -2490.5, -40.1, 39.3)
+$added_all_food_blips_before = 1
+
+:INTRO2_14811
+Stat.PlayerMadeProgress(1)
+return 
+
+:INTRO2_14817
+$onmission = 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @INTRO2_14852
+Char.SetCantBeDraggedOut($scplayer, False)
+Char.ClearLookAt($scplayer)
+
+:INTRO2_14852
+if 
+  not Car.IsDead($ryder_car)
+goto_if_false @INTRO2_14875
+Car.SetCanBurstTires($ryder_car, True)
+
+:INTRO2_14875
+
+for $temp_int = 0 to 2
+    if 
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
+
+Streaming.MarkModelAsNoLongerNeeded(155)
+Streaming.MarkModelAsNoLongerNeeded(600)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(349)
+Streaming.MarkModelAsNoLongerNeeded(#CIGAR)
+Streaming.MarkModelAsNoLongerNeeded(#CIGAR_GLOW)
+Streaming.RemoveAnimation("SHOP")
+Streaming.RemoveAnimation("GANGS")
+Streaming.RemoveAnimation("FOOD")
+$flag_menace_buyfood = 0
+$flag_changed_hair_intro2 = 0
+$timer_mobile_start = Clock.GetGameTimer()
+Blip.Remove(47@)
+Blip.Remove(34@)
+Blip.Remove(37@)
+Char.RemoveElegantly($ryder)
+Char.MarkAsNoLongerNeeded(35@)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.UnloadSpecialCharacter(2)
+$spray_shop1 = Blip.AddShortRangeSpriteForCoord(63, 2067.4, -1831.2, 13.5)
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+Zone.SetGangStrength('IWD1', GangType.Ballas, 20)
+Zone.SetGangStrength('IWD2', GangType.Ballas, 20)
+Zone.SetGangStrength('IWD3A', GangType.Ballas, 20)
+Zone.SetGangStrength('IWD3B', GangType.Ballas, 20)
+Zone.SetGangStrength('IWD4', GangType.Ballas, 20)
+Zone.SetGangStrength('IWD5', GangType.Ballas, 20)
+$flag_player_on_menace_mission = 0
+Mission.Finish
+return 
+
+:INTRO2_15117
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+if 
+  89@ == 0
+goto_if_false @INTRO2_15148
+Audio.LoadMissionAudio(34200, 2)
+
+:INTRO2_15148
+if 
+  89@ == 1
+goto_if_false @INTRO2_15175
+Audio.LoadMissionAudio(34201, 2)
+
+:INTRO2_15175
+if 
+  89@ == 2
+goto_if_false @INTRO2_15202
+Audio.LoadMissionAudio(34202, 2)
+
+:INTRO2_15202
+if 
+  89@ == 3
+goto_if_false @INTRO2_15229
+Audio.LoadMissionAudio(34203, 2)
+
+:INTRO2_15229
+if 
+  89@ == 4
+goto_if_false @INTRO2_15256
+Audio.LoadMissionAudio(34204, 2)
+
+:INTRO2_15256
+if 
+  89@ == 5
+goto_if_false @INTRO2_15283
+Audio.LoadMissionAudio(34205, 2)
+
+:INTRO2_15283
+if 
+  89@ == 6
+goto_if_false @INTRO2_15310
+Audio.LoadMissionAudio(34206, 2)
+
+:INTRO2_15310
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.StopFacialTalk($scplayer)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+
+:INTRO2_15326
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @INTRO2_15388
+wait 0
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_15363
+return 
+
+:INTRO2_15363
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_15381
+return 
+
+:INTRO2_15381
+goto @INTRO2_15326
+
+:INTRO2_15388
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+if 
+  89@ == 0
+goto_if_false @INTRO2_15426
+Text.PrintNow('RYDX_AA', 3000, 1)
+
+:INTRO2_15426
+if 
+  89@ == 1
+goto_if_false @INTRO2_15460
+Text.PrintNow('RYDX_AB', 3000, 1)
+
+:INTRO2_15460
+if 
+  89@ == 2
+goto_if_false @INTRO2_15494
+Text.PrintNow('RYDX_AC', 3000, 1)
+
+:INTRO2_15494
+if 
+  89@ == 3
+goto_if_false @INTRO2_15528
+Text.PrintNow('RYDX_AD', 3000, 1)
+
+:INTRO2_15528
+if 
+  89@ == 4
+goto_if_false @INTRO2_15562
+Text.PrintNow('RYDX_AE', 3000, 1)
+
+:INTRO2_15562
+if 
+  89@ == 5
+goto_if_false @INTRO2_15596
+Text.PrintNow('RYDX_AF', 3000, 1)
+
+:INTRO2_15596
+if 
+  89@ == 6
+goto_if_false @INTRO2_15630
+Text.PrintNow('RYDX_AG', 3000, 1)
+
+:INTRO2_15630
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @INTRO2_15692
+wait 0
+if 
+  Car.IsDead($ryder_car)
+goto_if_false @INTRO2_15667
+return 
+
+:INTRO2_15667
+if 
+  Char.IsDead($ryder)
+goto_if_false @INTRO2_15685
+return 
+
+:INTRO2_15685
+goto @INTRO2_15630
+
+:INTRO2_15692
+89@ += 1
+if 
+  89@ > 6
+goto_if_false @INTRO2_15724
+89@ = 0
+
+:INTRO2_15724
+return 
+
+:INTRO2_15726
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_16033
+if 
+  Char.IsPlayingAnim($ryder, "SMOKE_RYD")
+goto_if_false @INTRO2_16028
+93@ = Char.GetAnimCurrentTime($ryder, "SMOKE_RYD")
+if 
+  63@ == 0
+goto_if_false @INTRO2_15894
+if 
+  93@ >= 0.785
+goto_if_false @INTRO2_15894
+39@ = Object.Create(#CIGAR_GLOW, 2440.58, -1979.89, 14.2)
+Object.AttachToObject(39@, 46@, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+63@ = 1
+
+:INTRO2_15894
+if 
+  63@ == 1
+goto_if_false @INTRO2_15960
+if and
+  93@ >= 0.15
+  0.335 > 93@
+goto_if_false @INTRO2_15960
+Particle.Play(55@)
+Object.Delete(39@)
+63@ = 2
+
+:INTRO2_15960
+if 
+  63@ == 2
+goto_if_false @INTRO2_16021
+if or
+  93@ >= 0.335
+  0.15 > 93@
+goto_if_false @INTRO2_16021
+Particle.Stop(55@)
+63@ = 0
+
+:INTRO2_16021
+goto @INTRO2_16033
+
+:INTRO2_16028
+Particle.Stop(55@)
+
+:INTRO2_16033
+return 
+
+:INTRO2_16035
+if or
+  56@ == 0
+  56@ == 1
+goto_if_false @INTRO2_16105
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar 50@ >= 49@
+goto_if_false @INTRO2_16105
+if 
+  TIMERA > 200
+goto_if_false @INTRO2_16105
+gosub @INTRO2_16177
+
+:INTRO2_16105
+if 
+  56@ == 2
+goto_if_false @INTRO2_16175
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @INTRO2_16175
+gosub @INTRO2_16526
+56@ = 0
+49@ += 1
+64@ = 0
+Text.ClearPrints
+TIMERA = 0
+
+:INTRO2_16175
+return 
+
+:INTRO2_16177
+if 
+  56@ == 0
+goto_if_false @INTRO2_16213
+Audio.LoadMissionAudio(70@(49@,17i), 1)
+56@ = 1
+
+:INTRO2_16213
+if 
+  56@ == 1
+goto_if_false @INTRO2_16278
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @INTRO2_16278
+Text.PrintNow($intro2_chat(49@,17s), 4000, 1)
+
+for $temp_int = 0 to 2
+    if 
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer($intro2_chat(49@,17s), 4000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
+
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+gosub @INTRO2_16280
+56@ = 2
+
+:INTRO2_16278
+return 
+
+:INTRO2_16280
+if or
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20227
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20229
+goto_if_false @INTRO2_16348
+if 
+  not Char.IsDead(35@)
+goto_if_false @INTRO2_16348
+Char.ShutUpForScriptedSpeech(35@, True)
+Char.StartFacialTalk(35@, 3000)
+return 
+
+:INTRO2_16348
+if or
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20211
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20215
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20202
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20204
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20206
+goto_if_false @INTRO2_16436
+Char.ShutUpForScriptedSpeech($scplayer, True)
+Char.StartFacialTalk($scplayer, 3000)
+return 
+
+:INTRO2_16436
+if or
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20209
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20230
+goto_if_false @INTRO2_16493
+Char.ShutUpForScriptedSpeech($scplayer, True)
+Char.StartFacialTalk($scplayer, 3000)
+goto @INTRO2_16524
+
+:INTRO2_16493
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_16524
+Char.ShutUpForScriptedSpeech($ryder, True)
+Char.StartFacialTalk($ryder, 3000)
+
+:INTRO2_16524
+return 
+
+:INTRO2_16526
+if or
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20227
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20229
+goto_if_false @INTRO2_16591
+if 
+  not Char.IsDead(35@)
+goto_if_false @INTRO2_16591
+Char.ShutUpForScriptedSpeech(35@, False)
+Char.StopFacialTalk(35@)
+return 
+
+:INTRO2_16591
+if or
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20211
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20215
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20202
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20204
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20206
+goto_if_false @INTRO2_16676
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.StopFacialTalk($scplayer)
+return 
+
+:INTRO2_16676
+if or
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20209
+  is_int_lvar_equal_to_constant 70@(49@,17i) == 20230
+goto_if_false @INTRO2_16730
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.StopFacialTalk($scplayer)
+goto @INTRO2_16758
+
+:INTRO2_16730
+if 
+  not Char.IsDead($ryder)
+goto_if_false @INTRO2_16758
+Char.ShutUpForScriptedSpeech($ryder, False)
+Char.StopFacialTalk($ryder)
+
+:INTRO2_16758
+return 
+

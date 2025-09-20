@@ -1,0 +1,549 @@
+:DES10_36
+$onmission = 1
+Stat.RegisterMissionGiven
+script_name 'DES10'
+wait 0
+Text.LoadMissionText('DSERT10')
+Weather.ForceNow(WeatherType.ExtraSunnyDesert)
+Player.MakeGangDisappear
+57@ = Stat.GetInt(21)
+if 
+  57@ > 600
+goto_if_false @DES10_330
+Cutscene.Load('D10_ALT')
+
+:DES10_114
+if 
+  not Cutscene.HasLoaded
+goto_if_false @DES10_138
+wait 0
+goto @DES10_114
+
+:DES10_138
+World.ClearArea(0, 405.2136, 2525.9, 16.4918, 7.5)
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:DES10_171
+if 
+  not Cutscene.HasFinished
+goto_if_false @DES10_195
+wait 0
+goto @DES10_171
+
+:DES10_195
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:DES10_208
+if 
+  Camera.GetFadingStatus
+goto_if_false @DES10_232
+wait 0
+goto @DES10_208
+
+:DES10_232
+Cutscene.Clear
+World.ClearArea(0, 419.4488, 2529.914, 15.6219, 0.5)
+Streaming.LoadScene(419.4488, 2529.914, 15.6219)
+Char.SetCoordinates($scplayer, 419.4488, 2529.914, 15.6219)
+Char.SetHeading($scplayer, 180.0)
+Camera.SetBehindPlayer
+Camera.DoFade(1, 1500)
+Player.SetControl($player1, True)
+return 
+goto @DES10_461
+
+:DES10_330
+Cutscene.Load('DES_10A')
+
+:DES10_341
+if 
+  not Cutscene.HasLoaded
+goto_if_false @DES10_365
+wait 0
+goto @DES10_341
+
+:DES10_365
+World.ClearArea(0, 419.6919, 2529.914, 16.6612, 6.86)
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:DES10_398
+if 
+  not Cutscene.HasFinished
+goto_if_false @DES10_422
+wait 0
+goto @DES10_398
+
+:DES10_422
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:DES10_435
+if 
+  Camera.GetFadingStatus
+goto_if_false @DES10_459
+wait 0
+goto @DES10_435
+
+:DES10_459
+Cutscene.Clear
+
+:DES10_461
+Weather.Release
+Streaming.RequestModel(352)
+Streaming.RequestModel(537)
+Streaming.RequestModel(569)
+Streaming.RequestModel(353)
+Streaming.RequestModel(432)
+Streaming.RequestModel(287)
+Streaming.RequestModel(370)
+Streaming.LoadAllModelsNow
+
+:DES10_500
+if or
+  not Streaming.HasModelLoaded(352)
+  not Streaming.HasModelLoaded(537)
+  not Streaming.HasModelLoaded(569)
+  not Streaming.HasModelLoaded(353)
+  not Streaming.HasModelLoaded(432)
+  not Streaming.HasModelLoaded(287)
+goto_if_false @DES10_552
+wait 0
+goto @DES10_500
+
+:DES10_552
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @DES10_579
+wait 0
+goto @DES10_552
+
+:DES10_579
+Game.SwitchRandomTrains(False)
+World.ClearArea(0, 419.4488, 2529.914, 15.6219, 0.5)
+Streaming.LoadScene(419.4488, 2529.914, 15.6219)
+Char.SetCoordinates($scplayer, 419.4488, 2529.914, 15.6219)
+Char.SetHeading($scplayer, 180.0)
+Camera.SetBehindPlayer
+Pad.SetPlayerEnterCarButton($player1, False)
+Task.Jetpack($scplayer)
+Char.GiveWeapon($scplayer, WeaponType.MicroUzi, 2000)
+
+:DES10_678
+if 
+  not Streaming.HasModelLoaded(370)
+goto_if_false @DES10_705
+wait 0
+goto @DES10_678
+
+:DES10_705
+Player.MakeGangReappear
+Camera.DoFade(1, 1500)
+Player.SetControl($player1, True)
+58@ = Train.Create(2120.257, 2694.058, 9.8359, 13, 0)
+Car.LockDoors(58@, CarLock.Locked)
+Train.SetSpeed(58@, 5.0)
+Train.SetCruiseSpeed(58@, 5.0)
+Text.PrintNow('DE10_01', 5000, 1)
+$x, $y, $z = Car.GetCoordinates(58@)
+$z += 10.0
+44@ = 0
+
+:DES10_819
+if 
+  12 > 44@
+goto_if_false @DES10_960
+66@(44@,12i) = Char.Create(4, 287, $x, $y, $z)
+Task.StayInSamePlace(66@(44@,12i), True)
+Char.SetOnlyDamagedByPlayer(66@(44@,12i), True)
+Char.GiveWeapon(66@(44@,12i), WeaponType.Mp5, 9999)
+Task.KillCharOnFoot(66@(44@,12i), $scplayer)
+Char.SetRelationship(66@(44@,12i), RelationshipType.Hate, PedType.Player1)
+Char.SetSenseRange(66@(44@,12i), 150.0)
+Char.SetLoadCollisionFlag(66@(44@,12i), False)
+44@ += 1
+goto @DES10_819
+
+:DES10_960
+Char.AttachToCar(66@, 58@, -0.0032, -8.3584, -0.055, 3, 360.0, WeaponType.Mp5)
+Char.AttachToCar(67@, 58@, 0.1129, 6.521, 1.9285, 1, 360.0, WeaponType.Mp5)
+59@ = Train.GetCarriage(58@, 1)
+Char.AttachToCar(68@, 59@, -0.014, -7.179, -0.055, 3, 360.0, WeaponType.Mp5)
+Char.AttachToCar(69@, 59@, -1.0891, 0.6968, -0.055, 1, 360.0, WeaponType.Mp5)
+78@ = Object.CreateNoOffset(#KMILITARY_CRATE, $x, $y, $z)
+Object.AttachToCar(78@, 59@, -0.0485, 5.578, -1.0661, 0.0, 0.0, 90.1967)
+Object.MakeTargetable(78@, True)
+Object.SetHealth(78@, 180)
+81@ = Blip.AddForObject(78@)
+84@ = Object.CreateNoOffset(#KMILITARY_BASE, $x, $y, $z)
+Object.AttachToCar(84@, 59@, -0.0485, 5.578, -1.0661, 0.0, 0.0, 90.1967)
+85@ = Object.CreateNoOffset(#BLOCKPALLET, $x, $y, $z)
+Object.AttachToCar(85@, 59@, 0.2634, 1.2508, -0.3321, 0.0, 0.0, 90.1967)
+86@ = Object.CreateNoOffset(#TEMP_CRATE1, $x, $y, $z)
+Object.AttachToCar(86@, 59@, 1.1025, -7.3122, -1.0766, 0.0, 0.0, 90.1967)
+87@ = Object.CreateNoOffset(#TEMP_CRATE1, $x, $y, $z)
+Object.AttachToCar(87@, 59@, 0.8835, -6.5365, -1.1047, 0.0, 0.0, 93.7464)
+88@ = Object.CreateNoOffset(#TEMP_CRATE1, $x, $y, $z)
+Object.AttachToCar(88@, 59@, 1.1395, -5.6969, -1.0827, 0.0, 0.0, 83.6459)
+89@ = Object.CreateNoOffset(#K_SMASHBOXES, $x, $y, $z)
+Object.AttachToCar(89@, 59@, 0.4817, -1.5356, -1.0651, 0.0, 0.0, 93.1856)
+60@ = Train.GetCarriage(58@, 2)
+Char.AttachToCar(70@, 60@, -0.014, -7.179, -0.055, 3, 360.0, WeaponType.Mp5)
+Char.AttachToCar(71@, 60@, -1.0891, 0.6968, -0.055, 1, 360.0, WeaponType.Mp5)
+61@ = Train.GetCarriage(58@, 3)
+Char.AttachToCar(72@, 61@, 0.3372, -1.3877, -0.055, 3, 360.0, WeaponType.Mp5)
+Char.AttachToCar(73@, 61@, -0.0956, 2.1291, -0.055, 3, 360.0, WeaponType.Mp5)
+79@ = Object.CreateNoOffset(#KMILITARY_CRATE, $x, $y, $z)
+Object.AttachToCar(79@, 61@, -0.0403, 4.0293, -1.0661, 0.0, 0.0, 90.1967)
+Object.MakeTargetable(79@, True)
+Object.SetHealth(79@, 180)
+82@ = Blip.AddForObject(79@)
+90@ = Object.CreateNoOffset(#KMILITARY_BASE, $x, $y, $z)
+Object.AttachToCar(90@, 61@, -0.0403, 4.0293, -1.0661, 0.0, 0.0, 2.7605)
+91@ = Object.CreateNoOffset(#K_CARGO1, $x, $y, $z)
+Object.AttachToCar(91@, 61@, -0.0177, 0.6971, -1.0662, 0.0, 0.0, 91.0)
+92@ = Object.CreateNoOffset(#K_SMASHBOXES, $x, $y, $z)
+Object.AttachToCar(92@, 61@, -0.0228, -2.9213, -1.0651, 0.0, 0.0, 87.9095)
+93@ = Object.CreateNoOffset(#K_SMASHBOXES, $x, $y, $z)
+Object.AttachToCar(93@, 61@, 0.1054, 6.4364, -1.0651, 0.0, 0.0, 89.7187)
+96@ = Object.CreateNoOffset(#K_CARGO4, $x, $y, $z)
+Object.AttachToCar(96@, 61@, 0.4192, -6.0624, -1.0628, 0.0, 0.0, 2.7605)
+62@ = Train.GetCarriage(58@, 4)
+Char.AttachToCar(74@, 62@, -0.516, 7.4724, -0.055, 3, 360.0, WeaponType.Mp5)
+103@ = Car.Create(432, $x, $y, $z)
+Car.LockDoors(103@, CarLock.Locked)
+Car.AttachToCar(103@, 62@, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+63@ = Train.GetCarriage(58@, 5)
+Char.AttachToCar(75@, 63@, 0.2861, -5.3712, -0.055, 3, 360.0, WeaponType.Mp5)
+Char.AttachToCar(76@, 63@, -0.2277, 7.3808, -0.055, 3, 360.0, WeaponType.Mp5)
+Char.AttachToCar(77@, 63@, 0.6604, 3.8015, -0.055, 3, 360.0, WeaponType.Mp5)
+80@ = Object.CreateNoOffset(#KMILITARY_CRATE, $x, $y, $z)
+Object.AttachToCar(80@, 63@, 0.0853, 5.9501, -1.0583, 0.0, 0.0, 90.1967)
+Object.MakeTargetable(80@, True)
+Object.SetHealth(80@, 180)
+83@ = Blip.AddForObject(80@)
+97@ = Object.CreateNoOffset(#KMILITARY_BASE, $x, $y, $z)
+Object.AttachToCar(97@, 63@, 0.0853, 5.9501, -1.0583, 0.0, 0.0, 92.239)
+98@ = Object.CreateNoOffset(#K_CARGO4, $x, $y, $z)
+Object.AttachToCar(98@, 63@, -0.8464, -6.5879, -1.0628, 0.0, 0.0, 0.12)
+100@ = Object.CreateNoOffset(#K_CARGO1, $x, $y, $z)
+Object.AttachToCar(100@, 63@, 0.8877, 0.1707, -1.0564, 0.0, 0.0, 177.5167)
+101@ = Object.CreateNoOffset(#K_CARGO1, $x, $y, $z)
+Object.AttachToCar(101@, 63@, -0.6907, 0.205, -1.0662, 0.0, 0.0, 179.6863)
+102@ = Object.CreateNoOffset(#K_CARGO1, $x, $y, $z)
+Object.AttachToCar(102@, 63@, 0.0036, 2.2326, -1.0644, 0.0, 0.0, 267.6086)
+104@ = 0
+105@ = 0
+106@ = 0
+107@ = 0
+108@ = 0
+$game_timer = Clock.GetGameTimer()
+set_lvar_int_to_var_int 36@ = $game_timer
+36@ += 600000
+35@ = 0
+109@ = 0
+Audio.LoadMissionAudio(40600, 3)
+
+:DES10_2651
+wait 0
+$game_timer = Clock.GetGameTimer()
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @DES10_2682
+goto @DES10_4130
+
+:DES10_2682
+if 
+  not Car.IsDead(58@)
+goto_if_false @DES10_2708
+Train.SetCruiseSpeed(58@, 10.0)
+
+:DES10_2708
+if 
+  109@ == 0
+goto_if_false @DES10_2780
+if 
+  Char.LocateAnyMeansCar2D($scplayer, 58@, 150.0, 150.0, False)
+goto_if_false @DES10_2780
+Text.PrintNow('DE10_06', 5000, 1)
+109@ += 1
+
+:DES10_2780
+44@ = 0
+
+:DES10_2787
+if 
+  3 > 44@
+goto_if_false @DES10_3998
+if 
+  104@(44@,3i) == 0
+goto_if_false @DES10_2865
+if 
+  Object.DoesExist(78@(44@,3i))
+goto_if_false @DES10_2865
+107@ += 1
+104@(44@,3i) += 1
+
+:DES10_2865
+if 
+  104@(44@,3i) == 1
+goto_if_false @DES10_2934
+if 
+  Object.HasBeenDamaged(78@(44@,3i))
+goto_if_false @DES10_2934
+Blip.Remove(81@(44@,3i))
+108@ += 1
+104@(44@,3i) += 1
+
+:DES10_2934
+if 
+  104@(44@,3i) == 2
+goto_if_false @DES10_3393
+if 
+  is_int_lvar_equal_to_int_lvar 108@ == 107@
+goto_if_false @DES10_3357
+$x, $y, $z = Object.GetCoordinates(78@(44@,3i))
+$z += 1.0
+Object.Delete(78@(44@,3i))
+78@(44@,3i) = Object.CreateNoOffset(#GREEN_GLOOP, $x, $y, $z)
+if 
+  44@ == 0
+goto_if_false @DES10_3116
+if 
+  not Car.IsDead(59@)
+goto_if_false @DES10_3109
+Object.AttachToCar(78@(44@,3i), 59@, -0.0485, 5.578, -0.0661, 0.0, 0.0, 90.1967)
+
+:DES10_3109
+goto @DES10_3257
+
+:DES10_3116
+if 
+  44@ == 1
+goto_if_false @DES10_3199
+if 
+  not Car.IsDead(61@)
+goto_if_false @DES10_3192
+Object.AttachToCar(78@(44@,3i), 61@, -0.0485, 5.578, -0.0661, 0.0, 0.0, 90.1967)
+
+:DES10_3192
+goto @DES10_3257
+
+:DES10_3199
+if 
+  not Car.IsDead(63@)
+goto_if_false @DES10_3257
+Object.AttachToCar(78@(44@,3i), 63@, -0.0485, 5.578, -0.0661, 0.0, 0.0, 90.1967)
+
+:DES10_3257
+Object.SetCollision(78@(44@,3i), False)
+81@(44@,3i) = Blip.AddForObject(78@(44@,3i))
+Text.PrintNow('DE10_02', 5000, 1)
+Audio.LoadMissionAudio(40600, 3)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @DES10_3339
+Audio.AttachMissionAudioToObject(MissionAudioSlot.Slot3, 78@(44@,3i))
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:DES10_3339
+104@(44@,3i) = 4
+goto @DES10_3393
+
+:DES10_3357
+Object.MarkAsNoLongerNeeded(78@(44@,3i))
+Text.PrintNow('DE10_03', 5000, 1)
+104@(44@,3i) += 1
+
+:DES10_3393
+if 
+  104@(44@,3i) == 4
+goto_if_false @DES10_3660
+$x, $y, $z = Object.GetCoordinates(78@(44@,3i))
+add_float_lvar_to_float_lvar 110@ += 111@
+if 
+  110@ > 0.2
+goto_if_false @DES10_3472
+111@ = -0.01
+
+:DES10_3472
+if 
+  0.0 > 110@
+goto_if_false @DES10_3513
+110@ = 0.0
+111@ = 0.01
+
+:DES10_3513
+Fx.DrawWeaponshopCorona($x, $y, $z, 110@, CoronaType.Moon, FlareType.Headlights, 0, 255, 0)
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, $x, $y, $z, 1.5, 1.5, 1.5)
+goto_if_false @DES10_3660
+Object.Delete(78@(44@,3i))
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Text.PrintNow('DE10_04', 5000, 1)
+Blip.Remove(81@(44@,3i))
+81@(44@,3i) = Blip.AddForCoord(408.7383, 2515.838, 15.4918)
+104@(44@,3i) += 1
+35@ += 1
+
+:DES10_3660
+if 
+  104@(44@,3i) == 5
+goto_if_false @DES10_3984
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 408.7383, 2515.838, 15.4918, 1.5, 1.5, 1.5)
+goto_if_false @DES10_3984
+Camera.DoFade(0, 1000)
+
+:DES10_3737
+if 
+  Camera.GetFadingStatus
+goto_if_false @DES10_3761
+wait 0
+goto @DES10_3737
+
+:DES10_3761
+Char.ClearTasksImmediately($scplayer)
+Cutscene.Load('DES_10B')
+
+:DES10_3777
+if 
+  not Cutscene.HasLoaded
+goto_if_false @DES10_3801
+wait 0
+goto @DES10_3777
+
+:DES10_3801
+World.ClearArea(0, 398.7038, 2529.735, 16.563, 7.35)
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:DES10_3834
+if 
+  not Cutscene.HasFinished
+goto_if_false @DES10_3858
+wait 0
+goto @DES10_3834
+
+:DES10_3858
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:DES10_3871
+if 
+  Camera.GetFadingStatus
+goto_if_false @DES10_3895
+wait 0
+goto @DES10_3871
+
+:DES10_3895
+Cutscene.Clear
+World.ClearArea(0, 402.8737, 2531.582, 15.5558, 0.5)
+Streaming.LoadScene(402.8737, 2531.582, 15.5558)
+Char.SetCoordinates($scplayer, 402.8737, 2531.582, 15.5558)
+Char.SetHeading($scplayer, 224.0)
+Camera.SetBehindPlayer
+Player.SetControl($player1, True)
+goto @DES10_4130
+
+:DES10_3984
+44@ += 1
+goto @DES10_2787
+
+:DES10_3998
+if 
+  35@ == 0
+goto_if_false @DES10_4105
+if 
+  not Car.IsDead(58@)
+goto_if_false @DES10_4105
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 36@
+goto_if_false @DES10_4105
+if 
+  not Char.LocateAnyMeansCar2D($scplayer, 58@, 300.0, 300.0, False)
+goto_if_false @DES10_4105
+Text.PrintNow('DE10_05', 5000, 1)
+goto @DES10_4112
+
+:DES10_4105
+goto @DES10_2651
+
+:DES10_4112
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:DES10_4130
+$pilot_revenue = 10000
+112@ = Pickup.Create(370, 15, 431.045, 2537.78, 16.2463)
+$pilot_cash_pickup = Pickup.CreateProtection(420.5204, 2532.687, 16.0869, $pilot_revenue, $pilot_revenue)
+Player.SetControl($player1, False)
+wait 0
+Hud.SwitchWidescreen(True)
+Streaming.LoadScene(407.8369, 2515.65, 18.9138)
+Camera.SetFixedPosition(407.8369, 2515.65, 18.9138, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(408.3296, 2516.52, 18.9449, SwitchType.JumpCut)
+Camera.DoFade(1, 500)
+
+:DES10_4279
+if 
+  Camera.GetFadingStatus
+goto_if_false @DES10_4303
+wait 0
+goto @DES10_4279
+
+:DES10_4303
+Audio.PlayMissionPassedTune(1)
+Text.PrintBig('ASS_ACQ', 5000, TextStyle.WhiteMiddleSmaller)
+wait 5000
+Camera.SetFixedPosition(419.7284, 2526.546, 16.8, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(419.897, 2527.531, 16.8356, SwitchType.JumpCut)
+Text.PrintWithNumberNow('ASS_LUV', $pilot_revenue, 6000, 1)
+wait 6000
+Camera.DoFade(0, 500)
+
+:DES10_4410
+if 
+  Camera.GetFadingStatus
+goto_if_false @DES10_4434
+wait 0
+goto @DES10_4410
+
+:DES10_4434
+Camera.DoFade(1, 500)
+Stat.SetInt(StatId.PassedDesert10, 1)
+Camera.RestoreJumpcut
+$flag_desert_mission_counter += 1
+Text.PrintWithNumberBig('M_PASS', 20000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 20000)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+Stat.RegisterMissionPassed('DESER10')
+Stat.PlayerMadeProgress(1)
+Blip.Remove($desert2_contact_blip)
+return 
+
+:DES10_4515
+if 
+  is_int_lvar_equal_to_int_lvar 108@ == 107@
+goto_if_false @DES10_4538
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+
+:DES10_4538
+Blip.Remove(81@)
+Blip.Remove(82@)
+Blip.Remove(83@)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(537)
+Streaming.MarkModelAsNoLongerNeeded(569)
+Streaming.MarkModelAsNoLongerNeeded(353)
+Streaming.MarkModelAsNoLongerNeeded(432)
+Streaming.MarkModelAsNoLongerNeeded(287)
+Streaming.MarkModelAsNoLongerNeeded(370)
+Game.SwitchRandomTrains(True)
+$onmission = 0
+Mission.Finish
+return 
+

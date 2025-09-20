@@ -1,0 +1,1489 @@
+//-------------Mission 54---------------
+// Originally: Ran Fa Li
+
+:FARLIE4
+script_name 'FARLIE4'
+gosub @FARLIE4_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @FARLIE4_38
+gosub @FARLIE4_7851
+
+:FARLIE4_38
+gosub @FARLIE4_8352
+terminate_this_script 
+
+:FARLIE4_47
+Text.LoadMissionText('FARLIE4')
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:FARLIE4_73
+if 
+  Camera.GetFadingStatus
+goto_if_false @FARLIE4_97
+wait 0
+goto @FARLIE4_73
+
+:FARLIE4_97
+Streaming.SetAreaVisible(1)
+Cutscene.Load('FARL_4A')
+
+:FARLIE4_112
+if 
+  not Cutscene.HasLoaded
+goto_if_false @FARLIE4_136
+wait 0
+goto @FARLIE4_112
+
+:FARLIE4_136
+Cutscene.Start
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+
+:FARLIE4_153
+if 
+  not Cutscene.HasFinished
+goto_if_false @FARLIE4_177
+wait 0
+goto @FARLIE4_153
+
+:FARLIE4_177
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, Fade.Out)
+
+:FARLIE4_191
+if 
+  Camera.GetFadingStatus
+goto_if_false @FARLIE4_215
+wait 0
+goto @FARLIE4_191
+
+:FARLIE4_215
+Cutscene.Clear
+Streaming.SetAreaVisible(0)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FARLIE4_286
+Streaming.LoadScene(-2154.998, 645.5436, 51.3516)
+Char.SetCoordinates($scplayer, -2154.998, 645.5436, 51.3516)
+Char.SetHeading($scplayer, 271.113)
+Camera.SetBehindPlayer
+
+:FARLIE4_286
+Hud.SwitchWidescreen(False)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+Stat.RegisterMissionGiven
+$onmission = 1
+Path.SwitchRoadsOff(-1478.294, -65.4014, 0.0, -1395.423, 2.7054, 10.0)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Player1)
+Game.SetRelationship(RelationshipType.Like, PedType.Mission1, PedType.Mission1)
+46@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+146@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+DecisionMakerChar.AddEventResponse(146@, 17, 704, 0.0, 0.0, 100.0, 0.0, True, True)
+DecisionMakerChar.AddEventResponse(46@, 17, 704, 0.0, 0.0, 100.0, 0.0, True, True)
+37@ = Blip.AddForCoord(-1742.273, 1422.631, 6.1842)
+Blip.ChangeDisplay(37@, BlipDisplay.Neither)
+41@ = Blip.AddForCoord(-1409.9, -303.4, 4.5)
+Garage.ChangeType('FDORSFE', GarageType.ForScriptToOpenAndClose)
+Streaming.RequestModel(352)
+
+:FARLIE4_509
+if 
+  not Streaming.HasModelLoaded(352)
+goto_if_false @FARLIE4_536
+wait 0
+goto @FARLIE4_509
+
+:FARLIE4_536
+if and
+  not Char.HasGotWeapon($scplayer, WeaponType.MicroUzi)
+  not Char.HasGotWeapon($scplayer, WeaponType.Mp5)
+goto_if_false @FARLIE4_578
+Char.GiveWeapon($scplayer, WeaponType.MicroUzi, 150)
+Char.SetCurrentWeapon($scplayer, WeaponType.MicroUzi)
+
+:FARLIE4_578
+TIMERA = 0
+140@ = 2
+Text.PrintNow('F4_T0', 9000, 1)
+
+:FARLIE4_608
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FARLIE4_875
+wait 0
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @FARLIE4_650
+goto @FARLIE4_8013
+
+:FARLIE4_650
+gosub @FARLIE4_8744
+gosub @FARLIE4_9534
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, -1409.9, -303.4, 4.5, 4.0, 4.0, 4.0)
+goto_if_false @FARLIE4_868
+Streaming.RequestModel(475)
+Streaming.RequestModel(410)
+
+:FARLIE4_722
+if or
+  not Streaming.HasModelLoaded(475)
+  not Streaming.HasModelLoaded(410)
+goto_if_false @FARLIE4_754
+wait 0
+goto @FARLIE4_722
+
+:FARLIE4_754
+141@ = 1
+Blip.Remove(41@)
+34@ = Car.Create(410, -1425.512, -21.2813, 5.0078)
+Car.SetHeading(34@, 88.7848)
+Car.FreezePosition(34@, True)
+35@ = Blip.AddForCar(34@)
+Blip.SetAsFriendly(35@, True)
+Car.SetCanBurstTires(34@, False)
+Car.SetHealth(34@, 3000)
+Car.ChangeColor(34@, 3, 3)
+Text.PrintNow('F4_T7', 4000, 1)
+goto @FARLIE4_882
+
+:FARLIE4_868
+goto @FARLIE4_608
+
+:FARLIE4_875
+goto @FARLIE4_7851
+
+:FARLIE4_882
+if and
+  not Char.IsDead($scplayer)
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_1039
+wait 0
+gosub @FARLIE4_8744
+gosub @FARLIE4_9534
+if and
+  Char.IsInAnyCar($scplayer)
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_969
+if 
+  not Char.IsInCar($scplayer, 34@)
+goto_if_false @FARLIE4_969
+$car = Char.StoreCarIsIn($scplayer)
+
+:FARLIE4_969
+if 
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_1032
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @FARLIE4_1032
+Blip.ChangeDisplay(35@, BlipDisplay.Neither)
+Blip.ChangeDisplay(37@, BlipDisplay.Both)
+Car.FreezePosition(34@, False)
+goto @FARLIE4_1046
+
+:FARLIE4_1032
+goto @FARLIE4_882
+
+:FARLIE4_1039
+goto @FARLIE4_7851
+
+:FARLIE4_1046
+Player.SetControl($player1, False)
+Streaming.RequestModel(121)
+Streaming.RequestModel(122)
+Streaming.RequestModel(521)
+Streaming.RequestModel(352)
+Streaming.RequestModel(414)
+Streaming.RequestModel(330)
+Streaming.RequestModel(475)
+Streaming.RequestModel(543)
+
+:FARLIE4_1091
+if or
+  not Streaming.HasModelLoaded(121)
+  not Streaming.HasModelLoaded(122)
+  not Streaming.HasModelLoaded(521)
+  not Streaming.HasModelLoaded(352)
+  not Streaming.HasModelLoaded(414)
+  not Streaming.HasModelLoaded(330)
+goto_if_false @FARLIE4_1141
+wait 0
+goto @FARLIE4_1091
+
+:FARLIE4_1141
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Audio.LoadMissionAudio(28000, 3)
+
+:FARLIE4_1152
+if or
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+  not Streaming.HasModelLoaded(475)
+  not Streaming.HasModelLoaded(543)
+goto_if_false @FARLIE4_1188
+wait 0
+goto @FARLIE4_1152
+
+:FARLIE4_1188
+World.SetCarDensityMultiplier(0.0)
+
+:FARLIE4_1195
+gosub @FARLIE4_8286
+if 
+  not Car.IsDead($car)
+goto_if_false @FARLIE4_1306
+if 
+  Car.Locate3D($car, 0, -1429.619, -21.2788, 5.0078, 10.0, 10.0, 10.0)
+goto_if_false @FARLIE4_1301
+Car.SetAsMissionCar($car)
+Car.SetCoordinates($car, -1425.615, -16.4956, 5.0078)
+Car.SetHeading($car, 271.5388)
+
+:FARLIE4_1301
+wait 500
+
+:FARLIE4_1306
+World.ClearArea(1, -1412.56, -138.0878, 5.0, 200.0)
+gosub @FARLIE4_8252
+Camera.SetFixedPosition(-1430.361, -18.6971, 6.191, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1429.655, -19.4032, 6.1376, SwitchType.JumpCut)
+49@ = Car.Create(414, -1414.173, -50.4918, 5.0)
+Car.SetHeading(49@, 0.0)
+59@ = Char.CreateInsideCar(PedType.Mission1, 121, 49@)
+Char.GiveWeapon(59@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(59@, WeaponType.MicroUzi)
+if and
+  not Car.IsDead(49@)
+  not Char.IsDead(59@)
+  not Char.IsDead($scplayer)
+goto_if_false @FARLIE4_1541
+142@ = Sequence.Open()
+Task.CarDriveToCoord(-1, 49@, -1414.428, -32.5711, 5.0069, 15.0, DriveMode.Straightline, 0, DrivingMode.AvoidCars)
+Task.LeaveCar(-1, 49@)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(142@)
+Char.PerformSequence(59@, 142@)
+
+:FARLIE4_1541
+if 
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_1565
+43@ = Car.GetHealth(34@)
+
+:FARLIE4_1565
+set_var_int_to_lvar_int $f4_car_damage = 43@
+$f4_car_damage /= 30
+Hud.DisplayCounterWithString($f4_car_damage, CounterDisplay.Bar, 'F4_D')
+gosub @FARLIE4_8319
+Text.PrintNow('F4_T5', 5000, 1)
+TIMERB = 0
+
+:FARLIE4_1626
+if 
+  2000 > TIMERB
+goto_if_false @FARLIE4_1680
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @FARLIE4_1673
+goto @FARLIE4_1760
+
+:FARLIE4_1673
+goto @FARLIE4_1626
+
+:FARLIE4_1680
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @FARLIE4_1699
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:FARLIE4_1699
+TIMERB = 0
+
+:FARLIE4_1706
+if 
+  2000 > TIMERB
+goto_if_false @FARLIE4_1760
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @FARLIE4_1753
+goto @FARLIE4_1760
+
+:FARLIE4_1753
+goto @FARLIE4_1706
+
+:FARLIE4_1760
+gosub @FARLIE4_8267
+Text.PrintNow('F4_T8', 4000, 1)
+if 
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_1806
+Car.FreezePosition(34@, False)
+
+:FARLIE4_1806
+if and
+  not Char.IsDead($scplayer)
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_7844
+wait 0
+gosub @FARLIE4_8744
+gosub @FARLIE4_9534
+if 
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_1885
+if 
+  Car.HasBeenResprayed(34@)
+goto_if_false @FARLIE4_1885
+Car.SetHealth(34@, 3000)
+
+:FARLIE4_1885
+if 
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_2044
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @FARLIE4_1966
+if 
+  40@ == 0
+goto_if_false @FARLIE4_1959
+Blip.ChangeDisplay(35@, BlipDisplay.Neither)
+Blip.ChangeDisplay(37@, BlipDisplay.Both)
+40@ = 1
+
+:FARLIE4_1959
+goto @FARLIE4_2021
+
+:FARLIE4_1966
+if 
+  40@ == 1
+goto_if_false @FARLIE4_2021
+Blip.ChangeDisplay(35@, BlipDisplay.Both)
+Blip.ChangeDisplay(37@, BlipDisplay.Neither)
+Text.PrintNow('F4_T4', 4000, 1)
+40@ = 0
+
+:FARLIE4_2021
+43@ = Car.GetHealth(34@)
+set_var_int_to_lvar_int $f4_car_damage = 43@
+$f4_car_damage /= 30
+
+:FARLIE4_2044
+if or
+  Char.LocateAnyMeans3D($scplayer, 0, -1467.032, -133.7941, 5.0078, 60.0, 60.0, 10.0)
+  Char.LocateAnyMeans3D($scplayer, 0, -1347.11, -49.7249, 5.0078, 20.0, 20.0, 10.0)
+  Char.LocateAnyMeans3D($scplayer, 0, -1421.344, -238.9247, 5.0, 20.0, 20.0, 10.0)
+goto_if_false @FARLIE4_2368
+if 
+  79@ == 0
+goto_if_false @FARLIE4_2368
+World.ClearArea(1, -1474.466, -162.8309, 5.0234, 10.0)
+51@ = Car.Create(414, -1474.466, -162.8309, 5.0234)
+Car.SetHeading(51@, 272.5542)
+61@ = Char.CreateInsideCar(PedType.Mission1, 121, 51@)
+Char.GiveWeapon(61@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(61@, WeaponType.MicroUzi)
+if and
+  not Car.IsDead(51@)
+  not Char.IsDead(61@)
+  not Char.IsDead($scplayer)
+goto_if_false @FARLIE4_2361
+144@ = Sequence.Open()
+Task.CarDriveToCoord(-1, 51@, -1464.862, -162.4026, 5.0226, 25.0, DriveMode.Straightline, 0, DrivingMode.AvoidCars)
+Task.LeaveCar(-1, 51@)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(144@)
+Char.PerformSequence(61@, 144@)
+
+:FARLIE4_2361
+79@ = 1
+
+:FARLIE4_2368
+if or
+  Char.LocateAnyMeans3D($scplayer, 0, -1423.849, -135.7411, 5.0078, 20.0, 20.0, 10.0)
+  Char.LocateAnyMeans3D($scplayer, 0, -1347.11, -49.7249, 5.0078, 20.0, 20.0, 10.0)
+  Char.LocateAnyMeans3D($scplayer, 0, -1421.344, -238.9247, 5.0, 20.0, 20.0, 10.0)
+goto_if_false @FARLIE4_2692
+if 
+  80@ == 0
+goto_if_false @FARLIE4_2692
+World.ClearArea(1, -1387.268, -126.9234, 5.0078, 10.0)
+50@ = Car.Create(414, -1387.268, -126.9234, 5.0078)
+Car.SetHeading(50@, 180.2388)
+60@ = Char.CreateInsideCar(PedType.Mission1, 121, 50@)
+Char.GiveWeapon(60@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(60@, WeaponType.MicroUzi)
+if and
+  not Car.IsDead(50@)
+  not Char.IsDead(60@)
+  not Char.IsDead($scplayer)
+goto_if_false @FARLIE4_2685
+143@ = Sequence.Open()
+Task.CarDriveToCoord(-1, 50@, -1387.225, -135.6199, 5.0078, 25.0, DriveMode.Straightline, 0, DrivingMode.AvoidCars)
+Task.LeaveCar(-1, 50@)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(143@)
+Char.PerformSequence(60@, 143@)
+
+:FARLIE4_2685
+80@ = 1
+
+:FARLIE4_2692
+if or
+  Char.LocateAnyMeans3D($scplayer, 0, -1427.269, -238.5722, 5.0234, 20.0, 20.0, 10.0)
+  Char.LocateAnyMeans3D($scplayer, 0, -1347.11, -49.7249, 5.0078, 20.0, 20.0, 10.0)
+  Char.LocateAnyMeans3D($scplayer, 0, -1421.344, -238.9247, 5.0, 20.0, 20.0, 10.0)
+goto_if_false @FARLIE4_3011
+if 
+  89@ == 0
+goto_if_false @FARLIE4_3011
+World.ClearArea(1, -1387.792, -230.1776, 5.0078, 10.0)
+52@ = Car.Create(414, -1387.792, -230.1776, 5.0078)
+Car.SetHeading(52@, 179.5878)
+62@ = Char.CreateInsideCar(PedType.Mission1, 121, 52@)
+Char.GiveWeapon(62@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(62@, WeaponType.MicroUzi)
+if and
+  not Car.IsDead(52@)
+  not Char.IsDead($scplayer)
+goto_if_false @FARLIE4_3004
+145@ = Sequence.Open()
+Task.CarDriveToCoord(-1, 52@, -1387.862, -240.3811, 5.0078, 25.0, DriveMode.Straightline, 0, DrivingMode.AvoidCars)
+Task.LeaveCar(-1, 52@)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(145@)
+Char.PerformSequence(62@, 145@)
+
+:FARLIE4_3004
+89@ = 1
+
+:FARLIE4_3011
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -1399.686, -184.757, 5.3047, 5.0, 5.0, 10.0)
+  81@ == 0
+goto_if_false @FARLIE4_3146
+44@ = Char.Create(24, 122, -1404.049, -234.7071, 5.3047)
+Char.SetHeading(44@, 353.8535)
+Char.GiveWeapon(44@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(44@, WeaponType.MicroUzi)
+Char.SetAccuracy(44@, 80)
+Char.SetDecisionMaker(44@, 46@)
+Task.WeaponRoll(44@, True)
+81@ = 1
+
+:FARLIE4_3146
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -1400.184, -205.7361, 5.3047, 5.0, 5.0, 10.0)
+  82@ == 0
+goto_if_false @FARLIE4_3281
+45@ = Char.Create(24, 121, -1394.235, -234.735, 5.3047)
+Char.SetHeading(45@, 1.5813)
+Char.GiveWeapon(45@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(45@, WeaponType.MicroUzi)
+Char.SetAccuracy(45@, 80)
+Char.SetDecisionMaker(45@, 46@)
+Task.WeaponRoll(45@, False)
+82@ = 1
+
+:FARLIE4_3281
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -1407.187, -239.4782, 5.3047, 20.0, 20.0, 10.0)
+  83@ == 0
+goto_if_false @FARLIE4_3822
+69@ = Char.Create(24, 122, -1407.076, -358.3559, 8.3099)
+Char.SetHeading(69@, 9.5994)
+70@ = Char.Create(24, 121, -1476.887, -291.53, 8.7087)
+Char.SetHeading(70@, 258.9856)
+36@ = 0
+
+:FARLIE4_3411
+Char.GiveWeapon(69@(36@,10i), WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(69@(36@,10i), WeaponType.MicroUzi)
+Char.SetAccuracy(69@(36@,10i), 80)
+Char.SetDecisionMaker(69@(36@,10i), 46@)
+Task.StayInSamePlace(69@(36@,10i), True)
+Task.KillCharOnFoot(69@(36@,10i), $scplayer)
+Task.ToggleDuck(69@(36@,10i), True)
+36@ += 1
+  36@ >= 2
+goto_if_false @FARLIE4_3411
+52@ = Car.Create(414, -1478.896, -470.3535, 10.9926)
+Car.SetHeading(52@, 11.1921)
+99@ = Char.Create(24, 122, -1478.188, -476.1086, 11.1411)
+Char.SetHeading(99@, 277.8792)
+100@ = Char.Create(24, 122, -1479.535, -466.4356, 11.0)
+Char.SetHeading(100@, 263.3237)
+53@ = Car.Create(414, -1586.023, -359.7679, 10.9926)
+Car.SetHeading(53@, 248.7342)
+101@ = Char.Create(24, 122, -1582.225, -362.0264, 11.0)
+Char.SetHeading(101@, 356.2877)
+102@ = Char.Create(24, 122, -1590.694, -357.4667, 11.1411)
+Char.SetHeading(102@, 323.3828)
+36@ = 0
+
+:FARLIE4_3723
+Char.GiveWeapon(99@(36@,10i), WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(99@(36@,10i), WeaponType.MicroUzi)
+Char.SetAccuracy(99@(36@,10i), 80)
+Char.SetDecisionMaker(99@(36@,10i), 46@)
+Task.StayInSamePlace(99@(36@,10i), True)
+Task.KillCharOnFoot(99@(36@,10i), $scplayer)
+36@ += 1
+  36@ >= 4
+goto_if_false @FARLIE4_3723
+83@ = 1
+
+:FARLIE4_3822
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -1570.888, -455.6748, 5.0, 25.0, 25.0, 10.0)
+  84@ == 0
+goto_if_false @FARLIE4_3999
+World.SetCarDensityMultiplier(1.0)
+Char.Delete(44@)
+Char.Delete(45@)
+36@ = 0
+
+:FARLIE4_3901
+Char.Delete(59@(36@,10i))
+if 
+  not Car.IsDead(49@(36@,10i))
+goto_if_false @FARLIE4_3962
+if 
+  not Char.IsInCar($scplayer, 49@(36@,10i))
+goto_if_false @FARLIE4_3962
+Car.Delete(49@(36@,10i))
+
+:FARLIE4_3962
+Char.Delete(69@(36@,10i))
+36@ += 1
+  36@ >= 3
+goto_if_false @FARLIE4_3901
+84@ = 1
+
+:FARLIE4_3999
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -2258.519, 124.3485, 34.3125, 150.0, 150.0, 10.0)
+  85@ == 0
+goto_if_false @FARLIE4_4309
+World.ClearArea(1, -2258.519, 124.3485, 34.3125, 10.0)
+109@ = Car.Create(521, -2258.519, 124.3485, 34.3125)
+129@ = Blip.AddForCar(109@)
+Car.SetDrivingStyle(109@, DrivingMode.AvoidCars)
+Car.SetHeading(109@, 179.5562)
+119@ = Char.CreateInsideCar(PedType.Mission1, 121, 109@)
+120@ = Char.CreateAsPassenger(PedType.Mission1, 122, 109@, 0)
+Char.SetCanBeKnockedOffBike(119@, False)
+Char.SetCanBeKnockedOffBike(120@, False)
+Char.GiveWeapon(119@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(119@, WeaponType.MicroUzi)
+Char.SetAccuracy(119@, 30)
+Char.GiveWeapon(120@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(120@, WeaponType.MicroUzi)
+Char.SetAccuracy(120@, 30)
+Char.SetDecisionMaker(119@, 46@)
+Char.SetDecisionMaker(120@, 46@)
+Task.DriveBy(120@, $scplayer, -1, 0.0, 0.0, 0.0, 999.0, DriveByType.Ai, False, 50)
+if 
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_4302
+Task.CarMission(119@, 109@, 34@, CarMission.EscortLeft, 100.0, DrivingMode.AvoidCars)
+
+:FARLIE4_4302
+85@ = 1
+
+:FARLIE4_4309
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -1817.805, -552.1889, 15.0039, 150.0, 150.0, 10.0)
+  86@ == 0
+goto_if_false @FARLIE4_4648
+World.ClearArea(1, -1817.805, -552.1889, 15.0039, 10.0)
+110@ = Car.Create(521, -1817.805, -552.1889, 15.0039)
+130@ = Blip.AddForCar(110@)
+Car.SetHeading(110@, 174.0251)
+Car.SetDrivingStyle(110@, DrivingMode.AvoidCars)
+121@ = Char.CreateInsideCar(PedType.Mission1, 121, 110@)
+122@ = Char.CreateAsPassenger(PedType.Mission1, 122, 110@, 0)
+Char.SetCanBeKnockedOffBike(121@, False)
+Char.SetCanBeKnockedOffBike(122@, False)
+Char.GiveWeapon(121@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(121@, WeaponType.MicroUzi)
+Char.SetAccuracy(121@, 30)
+Char.GiveWeapon(122@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(122@, WeaponType.MicroUzi)
+Char.SetAccuracy(122@, 30)
+Task.DriveBy(122@, $scplayer, -1, 0.0, 0.0, 0.0, 999.0, DriveByType.Ai, False, 50)
+Char.SetDecisionMaker(122@, 46@)
+Char.SetDecisionMaker(121@, 46@)
+if 
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_4641
+38@ = Sequence.Open()
+Task.Pause(-1, 5000)
+Task.CarMission(-1, 110@, 34@, CarMission.EscortRight, 100.0, DrivingMode.AvoidCars)
+Sequence.Close(38@)
+Char.PerformSequence(121@, 38@)
+Sequence.Clear(38@)
+
+:FARLIE4_4641
+86@ = 1
+
+:FARLIE4_4648
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -1818.385, -621.8912, 15.312, 150.0, 150.0, 10.0)
+  87@ == 0
+goto_if_false @FARLIE4_4987
+World.ClearArea(1, -1818.385, -621.8912, 15.312, 10.0)
+111@ = Car.Create(521, -1818.385, -621.8912, 15.312)
+131@ = Blip.AddForCar(111@)
+Car.SetHeading(111@, 1.701)
+Car.SetDrivingStyle(111@, DrivingMode.AvoidCars)
+123@ = Char.CreateInsideCar(PedType.Mission1, 121, 111@)
+124@ = Char.CreateAsPassenger(PedType.Mission1, 122, 111@, 0)
+Char.SetCanBeKnockedOffBike(123@, False)
+Char.SetCanBeKnockedOffBike(124@, False)
+Char.GiveWeapon(123@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(123@, WeaponType.MicroUzi)
+Char.SetAccuracy(123@, 30)
+Char.GiveWeapon(124@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(124@, WeaponType.MicroUzi)
+Char.SetAccuracy(124@, 30)
+Task.DriveBy(124@, $scplayer, -1, 0.0, 0.0, 0.0, 999.0, DriveByType.Ai, False, 50)
+Char.SetDecisionMaker(124@, 46@)
+Char.SetDecisionMaker(123@, 46@)
+if 
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_4980
+38@ = Sequence.Open()
+Task.Pause(-1, 5000)
+Task.CarMission(-1, 111@, 34@, CarMission.EscortLeft, 100.0, DrivingMode.AvoidCars)
+Sequence.Close(38@)
+Char.PerformSequence(123@, 38@)
+Sequence.Clear(38@)
+
+:FARLIE4_4980
+87@ = 1
+
+:FARLIE4_4987
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -2211.62, 580.9911, 34.1691, 300.0, 300.0, 10.0)
+  157@ == 0
+goto_if_false @FARLIE4_5290
+World.ClearArea(1, -2211.62, 580.9911, 34.1691, 10.0)
+162@ = Car.Create(410, -2211.62, 580.9911, 34.1691)
+167@ = Blip.AddForCar(162@)
+Car.SetHeading(162@, 176.7102)
+Car.SetDrivingStyle(162@, DrivingMode.AvoidCars)
+147@ = Char.CreateInsideCar(PedType.Mission1, 121, 162@)
+148@ = Char.CreateAsPassenger(PedType.Mission1, 122, 162@, 0)
+Char.SetCanBeKnockedOffBike(148@, 2)
+Char.GiveWeapon(147@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(147@, WeaponType.MicroUzi)
+Char.SetAccuracy(147@, 30)
+Char.GiveWeapon(148@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(148@, WeaponType.MicroUzi)
+Char.SetAccuracy(148@, 30)
+Task.DriveBy(148@, $scplayer, -1, 0.0, 0.0, 0.0, 999.0, DriveByType.Ai, False, 50)
+Char.SetDecisionMaker(148@, 46@)
+Char.SetDecisionMaker(147@, 46@)
+if 
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_5283
+Task.CarMission(147@, 162@, 34@, CarMission.EscortRight, 100.0, DrivingMode.AvoidCars)
+
+:FARLIE4_5283
+157@ = 1
+
+:FARLIE4_5290
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -1850.127, 1096.324, 44.2969, 300.0, 300.0, 10.0)
+  158@ == 0
+goto_if_false @FARLIE4_5586
+World.ClearArea(1, -1850.127, 1096.324, 44.2969, 10.0)
+163@ = Car.Create(475, -1850.127, 1096.324, 44.2969)
+168@ = Blip.AddForCar(163@)
+Car.SetHeading(163@, 81.5282)
+Car.SetDrivingStyle(163@, DrivingMode.AvoidCars)
+149@ = Char.CreateInsideCar(PedType.Mission1, 121, 163@)
+150@ = Char.CreateAsPassenger(PedType.Mission1, 122, 163@, 0)
+Char.GiveWeapon(149@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(149@, WeaponType.MicroUzi)
+Char.SetAccuracy(149@, 30)
+Char.GiveWeapon(150@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(150@, WeaponType.MicroUzi)
+Char.SetAccuracy(150@, 30)
+Task.DriveBy(150@, $scplayer, -1, 0.0, 0.0, 0.0, 999.0, DriveByType.Ai, False, 50)
+Char.SetDecisionMaker(150@, 46@)
+Char.SetDecisionMaker(149@, 46@)
+if 
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_5579
+Task.CarMission(149@, 163@, 34@, CarMission.EscortLeft, 100.0, DrivingMode.AvoidCars)
+
+:FARLIE4_5579
+158@ = 1
+
+:FARLIE4_5586
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -1740.369, 1404.461, 6.1875, 300.0, 300.0, 10.0)
+  159@ == 0
+goto_if_false @FARLIE4_5882
+World.ClearArea(1, -1740.369, 1404.461, 6.1875, 10.0)
+164@ = Car.Create(543, -1740.369, 1404.461, 6.1875)
+169@ = Blip.AddForCar(164@)
+Car.SetHeading(164@, 172.1585)
+Car.SetDrivingStyle(164@, DrivingMode.AvoidCars)
+151@ = Char.CreateInsideCar(PedType.Mission1, 121, 164@)
+152@ = Char.CreateAsPassenger(PedType.Mission1, 122, 164@, 0)
+Char.GiveWeapon(151@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(151@, WeaponType.MicroUzi)
+Char.SetAccuracy(151@, 30)
+Char.GiveWeapon(152@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(152@, WeaponType.MicroUzi)
+Char.SetAccuracy(152@, 30)
+Task.DriveBy(152@, $scplayer, -1, 0.0, 0.0, 0.0, 999.0, DriveByType.Ai, False, 50)
+Char.SetDecisionMaker(152@, 46@)
+Char.SetDecisionMaker(151@, 46@)
+if 
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_5875
+Task.CarMission(151@, 164@, 34@, CarMission.EscortRight, 100.0, DrivingMode.AvoidCars)
+
+:FARLIE4_5875
+159@ = 1
+
+:FARLIE4_5882
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -1892.652, 745.0367, 44.2969, 300.0, 300.0, 10.0)
+  160@ == 0
+goto_if_false @FARLIE4_6185
+World.ClearArea(1, -1892.652, 745.0367, 44.2969, 10.0)
+165@ = Car.Create(475, -1892.652, 745.0367, 44.2969)
+170@ = Blip.AddForCar(165@)
+Car.SetHeading(165@, 167.9494)
+Car.SetDrivingStyle(165@, DrivingMode.AvoidCars)
+Car.SetMission(165@, CarMission.BlockPlayerClose)
+153@ = Char.CreateInsideCar(PedType.Mission1, 121, 165@)
+154@ = Char.CreateAsPassenger(PedType.Mission1, 122, 165@, 0)
+Char.GiveWeapon(153@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(153@, WeaponType.MicroUzi)
+Char.SetAccuracy(153@, 30)
+Char.GiveWeapon(154@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(154@, WeaponType.MicroUzi)
+Char.SetAccuracy(154@, 30)
+Task.DriveBy(153@, $scplayer, -1, 0.0, 0.0, 0.0, 999.0, DriveByType.Ai, False, 50)
+Char.SetDecisionMaker(154@, 46@)
+Char.SetDecisionMaker(153@, 46@)
+if 
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_6178
+Task.CarMission(154@, 165@, 34@, CarMission.EscortLeft, 100.0, DrivingMode.AvoidCars)
+
+:FARLIE4_6178
+160@ = 1
+
+:FARLIE4_6185
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -2154.207, 576.4759, 34.1719, 150.0, 150.0, 10.0)
+  88@ == 0
+goto_if_false @FARLIE4_6377
+World.ClearArea(1, -1818.385, -621.8912, 15.312, 10.0)
+183@ = Char.Create(24, 121, -2154.207, 576.4759, 34.1719)
+182@ = Car.Create(521, -2154.382, 577.5017, 34.1719)
+Car.SetHeading(182@, 114.1029)
+Char.SetHeading(183@, 211.0992)
+Char.GiveWeapon(183@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(183@, WeaponType.MicroUzi)
+Char.SetAccuracy(183@, 90)
+Char.SetDecisionMaker(183@, 46@)
+Task.StayInSamePlace(183@, True)
+88@ = 1
+
+:FARLIE4_6377
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, -2245.675, 303.3215, 34.3203, 150.0, 150.0, 10.0)
+  88@ == 0
+goto_if_false @FARLIE4_6569
+World.ClearArea(1, -2245.675, 303.3215, 34.3203, 10.0)
+185@ = Char.Create(24, 121, -2245.675, 303.3215, 34.3203)
+184@ = Car.Create(521, -2244.782, 304.8253, 34.3203)
+Car.SetHeading(184@, 191.9683)
+Char.SetHeading(185@, 165.1429)
+Char.GiveWeapon(185@, WeaponType.MicroUzi, 30000)
+Char.SetCurrentWeapon(185@, WeaponType.MicroUzi)
+Char.SetAccuracy(185@, 90)
+Char.SetDecisionMaker(185@, 46@)
+Task.StayInSamePlace(185@, True)
+88@ = 1
+
+:FARLIE4_6569
+if 
+  not Char.IsDead(119@)
+goto_if_false @FARLIE4_6634
+if 
+  not Char.IsInAnyCar(119@)
+goto_if_false @FARLIE4_6627
+Task.Die(119@)
+if 
+  Blip.DoesExist(129@)
+goto_if_false @FARLIE4_6627
+Blip.Remove(129@)
+
+:FARLIE4_6627
+goto @FARLIE4_6655
+
+:FARLIE4_6634
+if 
+  Blip.DoesExist(129@)
+goto_if_false @FARLIE4_6655
+Blip.Remove(129@)
+
+:FARLIE4_6655
+if 
+  not Char.IsDead(121@)
+goto_if_false @FARLIE4_6715
+if 
+  not Char.IsInAnyCar(121@)
+goto_if_false @FARLIE4_6708
+if 
+  Blip.DoesExist(130@)
+goto_if_false @FARLIE4_6708
+Blip.Remove(130@)
+
+:FARLIE4_6708
+goto @FARLIE4_6736
+
+:FARLIE4_6715
+if 
+  Blip.DoesExist(130@)
+goto_if_false @FARLIE4_6736
+Blip.Remove(130@)
+
+:FARLIE4_6736
+if 
+  not Char.IsDead(123@)
+goto_if_false @FARLIE4_6796
+if 
+  not Char.IsInAnyCar(123@)
+goto_if_false @FARLIE4_6789
+if 
+  Blip.DoesExist(131@)
+goto_if_false @FARLIE4_6789
+Blip.Remove(131@)
+
+:FARLIE4_6789
+goto @FARLIE4_6817
+
+:FARLIE4_6796
+if 
+  Blip.DoesExist(131@)
+goto_if_false @FARLIE4_6817
+Blip.Remove(131@)
+
+:FARLIE4_6817
+if 
+  not Char.IsDead(147@)
+goto_if_false @FARLIE4_6877
+if 
+  not Char.IsInAnyCar(147@)
+goto_if_false @FARLIE4_6870
+if 
+  Blip.DoesExist(167@)
+goto_if_false @FARLIE4_6870
+Blip.Remove(167@)
+
+:FARLIE4_6870
+goto @FARLIE4_6898
+
+:FARLIE4_6877
+if 
+  Blip.DoesExist(167@)
+goto_if_false @FARLIE4_6898
+Blip.Remove(167@)
+
+:FARLIE4_6898
+if 
+  not Char.IsDead(149@)
+goto_if_false @FARLIE4_6958
+if 
+  not Char.IsInAnyCar(149@)
+goto_if_false @FARLIE4_6951
+if 
+  Blip.DoesExist(168@)
+goto_if_false @FARLIE4_6951
+Blip.Remove(168@)
+
+:FARLIE4_6951
+goto @FARLIE4_6979
+
+:FARLIE4_6958
+if 
+  Blip.DoesExist(168@)
+goto_if_false @FARLIE4_6979
+Blip.Remove(168@)
+
+:FARLIE4_6979
+if 
+  not Char.IsDead(151@)
+goto_if_false @FARLIE4_7039
+if 
+  not Char.IsInAnyCar(151@)
+goto_if_false @FARLIE4_7032
+if 
+  Blip.DoesExist(169@)
+goto_if_false @FARLIE4_7032
+Blip.Remove(169@)
+
+:FARLIE4_7032
+goto @FARLIE4_7060
+
+:FARLIE4_7039
+if 
+  Blip.DoesExist(169@)
+goto_if_false @FARLIE4_7060
+Blip.Remove(169@)
+
+:FARLIE4_7060
+if 
+  not Char.IsDead(153@)
+goto_if_false @FARLIE4_7120
+if 
+  not Char.IsInAnyCar(153@)
+goto_if_false @FARLIE4_7113
+if 
+  Blip.DoesExist(170@)
+goto_if_false @FARLIE4_7113
+Blip.Remove(170@)
+
+:FARLIE4_7113
+goto @FARLIE4_7141
+
+:FARLIE4_7120
+if 
+  Blip.DoesExist(170@)
+goto_if_false @FARLIE4_7141
+Blip.Remove(170@)
+
+:FARLIE4_7141
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FARLIE4_7507
+36@ = 0
+
+:FARLIE4_7164
+if 
+  not Char.IsDead(119@(36@,10i))
+goto_if_false @FARLIE4_7226
+if 
+  Char.LocateAnyMeansChar2D($scplayer, 119@(36@,10i), 10.0, 10.0, False)
+goto_if_false @FARLIE4_7226
+gosub @FARLIE4_8976
+
+:FARLIE4_7226
+if 
+  not Char.IsDead(99@(36@,10i))
+goto_if_false @FARLIE4_7288
+if 
+  Char.LocateAnyMeansChar2D($scplayer, 99@(36@,10i), 10.0, 10.0, False)
+goto_if_false @FARLIE4_7288
+gosub @FARLIE4_8976
+
+:FARLIE4_7288
+36@ += 1
+  36@ >= 4
+goto_if_false @FARLIE4_7164
+36@ = 0
+
+:FARLIE4_7316
+if 
+  not Char.IsDead(69@(36@,10i))
+goto_if_false @FARLIE4_7378
+if 
+  Char.LocateAnyMeansChar2D($scplayer, 69@(36@,10i), 10.0, 10.0, False)
+goto_if_false @FARLIE4_7378
+gosub @FARLIE4_8976
+
+:FARLIE4_7378
+36@ += 1
+  36@ >= 2
+goto_if_false @FARLIE4_7316
+if 
+  not Char.IsDead(44@)
+goto_if_false @FARLIE4_7453
+if 
+  Char.LocateAnyMeansChar2D($scplayer, 44@, 10.0, 10.0, False)
+goto_if_false @FARLIE4_7453
+gosub @FARLIE4_8976
+
+:FARLIE4_7453
+if 
+  not Char.IsDead(45@)
+goto_if_false @FARLIE4_7507
+if 
+  Char.LocateAnyMeansChar2D($scplayer, 45@, 10.0, 10.0, False)
+goto_if_false @FARLIE4_7507
+gosub @FARLIE4_8976
+
+:FARLIE4_7507
+if 
+  not Car.IsDead(34@)
+goto_if_false @FARLIE4_7837
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @FARLIE4_7837
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, -1742.273, 1422.631, 6.1842, 4.0, 4.0, 4.0)
+goto_if_false @FARLIE4_7837
+Player.SetControl($player1, False)
+gosub @FARLIE4_8286
+if 
+  not Car.IsDead(109@)
+goto_if_false @FARLIE4_7625
+Car.Delete(109@)
+
+:FARLIE4_7625
+if 
+  not Car.IsDead(110@)
+goto_if_false @FARLIE4_7646
+Car.Delete(110@)
+
+:FARLIE4_7646
+if 
+  not Car.IsDead(111@)
+goto_if_false @FARLIE4_7667
+Car.Delete(111@)
+
+:FARLIE4_7667
+if 
+  not Car.IsDead(162@)
+goto_if_false @FARLIE4_7688
+Car.Delete(162@)
+
+:FARLIE4_7688
+if 
+  not Car.IsDead(163@)
+goto_if_false @FARLIE4_7709
+Car.Delete(163@)
+
+:FARLIE4_7709
+if 
+  not Car.IsDead(164@)
+goto_if_false @FARLIE4_7730
+Car.Delete(164@)
+
+:FARLIE4_7730
+if 
+  not Car.IsDead(165@)
+goto_if_false @FARLIE4_7751
+Car.Delete(165@)
+
+:FARLIE4_7751
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FARLIE4_7797
+Char.WarpFromCarToCoord($scplayer, -1741.706, 1425.384, 6.1842)
+Char.SetHeading($scplayer, 179.2136)
+
+:FARLIE4_7797
+Hud.ClearCounter($f4_car_damage)
+Car.Delete(34@)
+Player.SetControl($player1, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+wait 2000
+gosub @FARLIE4_8319
+goto @FARLIE4_8013
+
+:FARLIE4_7837
+goto @FARLIE4_1806
+
+:FARLIE4_7844
+goto @FARLIE4_7851
+
+:FARLIE4_7851
+if 
+  Blip.DoesExist(37@)
+goto_if_false @FARLIE4_7872
+Blip.Remove(37@)
+
+:FARLIE4_7872
+if 
+  Blip.DoesExist(35@)
+goto_if_false @FARLIE4_7893
+Blip.Remove(35@)
+
+:FARLIE4_7893
+if 
+  Blip.DoesExist(129@)
+goto_if_false @FARLIE4_7914
+Blip.Remove(129@)
+
+:FARLIE4_7914
+if 
+  Blip.DoesExist(130@)
+goto_if_false @FARLIE4_7935
+Blip.Remove(130@)
+
+:FARLIE4_7935
+if 
+  Blip.DoesExist(131@)
+goto_if_false @FARLIE4_7956
+Blip.Remove(131@)
+
+:FARLIE4_7956
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+if and
+  Car.IsDead(34@)
+  141@ == 1
+goto_if_false @FARLIE4_8011
+Text.PrintNow('F4_F', 4000, 1)
+
+:FARLIE4_8011
+return 
+
+:FARLIE4_8013
+$flag_wuzi_mission_counter += 1
+if 
+  Blip.DoesExist(37@)
+goto_if_false @FARLIE4_8041
+Blip.Remove(37@)
+
+:FARLIE4_8041
+if 
+  Blip.DoesExist(35@)
+goto_if_false @FARLIE4_8062
+Blip.Remove(35@)
+
+:FARLIE4_8062
+Stat.RegisterMissionPassed('FAR_4')
+Stat.PlayerMadeProgress(1)
+Audio.PlayMissionPassedTune(1)
+Text.PrintWithNumberBig('M_PASSS', 6000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 6000)
+Stat.AwardPlayerMissionRespect(15)
+Player.ClearWantedLevel($player1)
+if 
+  Blip.DoesExist(129@)
+goto_if_false @FARLIE4_8138
+Blip.Remove(129@)
+
+:FARLIE4_8138
+if 
+  Blip.DoesExist(130@)
+goto_if_false @FARLIE4_8159
+Blip.Remove(130@)
+
+:FARLIE4_8159
+if 
+  Blip.DoesExist(131@)
+goto_if_false @FARLIE4_8180
+Blip.Remove(131@)
+
+:FARLIE4_8180
+if 
+  not Car.IsDead(109@)
+goto_if_false @FARLIE4_8201
+Car.Delete(109@)
+
+:FARLIE4_8201
+if 
+  not Car.IsDead(110@)
+goto_if_false @FARLIE4_8222
+Car.Delete(110@)
+
+:FARLIE4_8222
+if 
+  not Car.IsDead(111@)
+goto_if_false @FARLIE4_8243
+Car.Delete(111@)
+
+:FARLIE4_8243
+gosub @FARLIE4_8319
+return 
+
+:FARLIE4_8252
+Text.ClearPrints
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+return 
+
+:FARLIE4_8267
+Text.ClearPrints
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+return 
+
+:FARLIE4_8286
+Camera.DoFade(0, 500)
+
+:FARLIE4_8293
+if 
+  Camera.GetFadingStatus
+goto_if_false @FARLIE4_8317
+wait 0
+goto @FARLIE4_8293
+
+:FARLIE4_8317
+return 
+
+:FARLIE4_8319
+Camera.DoFade(1, 500)
+
+:FARLIE4_8326
+if 
+  Camera.GetFadingStatus
+goto_if_false @FARLIE4_8350
+wait 0
+goto @FARLIE4_8326
+
+:FARLIE4_8350
+return 
+
+:FARLIE4_8352
+$onmission = 0
+Hud.ClearCounter($f4_car_damage)
+Path.SwitchRoadsBackToOriginal(-1478.294, -65.4014, 0.0, -1395.423, 2.7054, 10.0)
+Streaming.MarkModelAsNoLongerNeeded(121)
+Streaming.MarkModelAsNoLongerNeeded(122)
+Streaming.MarkModelAsNoLongerNeeded(521)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(414)
+Streaming.MarkModelAsNoLongerNeeded(475)
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.MarkModelAsNoLongerNeeded(410)
+Streaming.MarkModelAsNoLongerNeeded(543)
+$timer_mobile_start = Clock.GetGameTimer()
+if 
+  Blip.DoesExist(37@)
+goto_if_false @FARLIE4_8465
+Blip.Remove(37@)
+
+:FARLIE4_8465
+if 
+  Blip.DoesExist(35@)
+goto_if_false @FARLIE4_8486
+Blip.Remove(35@)
+
+:FARLIE4_8486
+if 
+  Blip.DoesExist(41@)
+goto_if_false @FARLIE4_8507
+Blip.Remove(41@)
+
+:FARLIE4_8507
+if 
+  Blip.DoesExist(129@)
+goto_if_false @FARLIE4_8528
+Blip.Remove(129@)
+
+:FARLIE4_8528
+if 
+  Blip.DoesExist(130@)
+goto_if_false @FARLIE4_8549
+Blip.Remove(130@)
+
+:FARLIE4_8549
+if 
+  Blip.DoesExist(131@)
+goto_if_false @FARLIE4_8570
+Blip.Remove(131@)
+
+:FARLIE4_8570
+if 
+  Blip.DoesExist(167@)
+goto_if_false @FARLIE4_8591
+Blip.Remove(167@)
+
+:FARLIE4_8591
+if 
+  Blip.DoesExist(168@)
+goto_if_false @FARLIE4_8612
+Blip.Remove(168@)
+
+:FARLIE4_8612
+if 
+  Blip.DoesExist(169@)
+goto_if_false @FARLIE4_8633
+Blip.Remove(169@)
+
+:FARLIE4_8633
+if 
+  Blip.DoesExist(170@)
+goto_if_false @FARLIE4_8654
+Blip.Remove(170@)
+
+:FARLIE4_8654
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FARLIE4_8740
+if and
+  Garage.IsOpen('FDORSFE')
+  not Char.LocateAnyMeans3D($scplayer, 0, -2161.628, 654.652, 51.3706, 10.0, 10.0, 10.0)
+goto_if_false @FARLIE4_8740
+Garage.Close('FDORSFE')
+
+:FARLIE4_8740
+Mission.Finish
+return 
+
+:FARLIE4_8744
+if 
+is_ps2_keyboard_key_just_pressed 66
+goto_if_false @FARLIE4_8805
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FARLIE4_8805
+Char.SetCoordinates($scplayer, -1403.283, -395.7443, 11.0)
+Char.SetHeading($scplayer, 343.9661)
+
+:FARLIE4_8805
+if 
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @FARLIE4_8849
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @FARLIE4_8849
+186@ = Char.StoreCarIsIn($scplayer)
+Car.PopBoot(186@)
+
+:FARLIE4_8849
+if 
+is_ps2_keyboard_key_just_pressed 70
+goto_if_false @FARLIE4_8871
+goto @FARLIE4_1046
+
+:FARLIE4_8871
+if 
+is_ps2_keyboard_key_just_pressed 75
+goto_if_false @FARLIE4_8907
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FARLIE4_8907
+Task.Die($scplayer)
+
+:FARLIE4_8907
+if 
+is_ps2_keyboard_key_just_pressed 72
+goto_if_false @FARLIE4_8952
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @FARLIE4_8952
+Char.AddArmor($scplayer, 100)
+Player.IncreaseMaxHealth($player1, 100)
+
+:FARLIE4_8952
+if 
+is_ps2_keyboard_key_just_pressed 90
+goto_if_false @FARLIE4_8974
+goto @FARLIE4_1195
+
+:FARLIE4_8974
+return 
+
+:FARLIE4_8976
+if 
+  TIMERB > 15000
+goto_if_false @FARLIE4_9512
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @FARLIE4_9512
+switch_start $f4_rnd total_jumps 8 default_jump 0 @FARLIE4_9480 jumps 0 @FARLIE4_9136 1 @FARLIE4_9179 2 @FARLIE4_9222 3 @FARLIE4_9265 4 @FARLIE4_9308 5 @FARLIE4_9351 6 @FARLIE4_9394
+switch_continued 7 @FARLIE4_9437 -1 @FARLIE4_9480 -1 @FARLIE4_9480 -1 @FARLIE4_9480 -1 @FARLIE4_9480 -1 @FARLIE4_9480 -1 @FARLIE4_9480 -1 @FARLIE4_9480 -1 @FARLIE4_9480
+
+:FARLIE4_9136
+set_lvar_text_label 177@s = 'FAR4_AA'
+set_lvar_int_to_constant 139@ = 15400
+gosub @FARLIE4_9514
+TIMERB = 0
+goto @FARLIE4_9480
+
+:FARLIE4_9179
+set_lvar_text_label 177@s = 'FAR4_AB'
+set_lvar_int_to_constant 139@ = 15401
+gosub @FARLIE4_9514
+TIMERB = 0
+goto @FARLIE4_9480
+
+:FARLIE4_9222
+set_lvar_text_label 177@s = 'FAR4_AC'
+set_lvar_int_to_constant 139@ = 15402
+gosub @FARLIE4_9514
+TIMERB = 0
+goto @FARLIE4_9480
+
+:FARLIE4_9265
+set_lvar_text_label 177@s = 'FAR4_AD'
+set_lvar_int_to_constant 139@ = 15403
+gosub @FARLIE4_9514
+TIMERB = 0
+goto @FARLIE4_9480
+
+:FARLIE4_9308
+set_lvar_text_label 177@s = 'FAR4_AE'
+set_lvar_int_to_constant 139@ = 15404
+gosub @FARLIE4_9514
+TIMERB = 0
+goto @FARLIE4_9480
+
+:FARLIE4_9351
+set_lvar_text_label 177@s = 'FAR4_AG'
+set_lvar_int_to_constant 139@ = 15406
+gosub @FARLIE4_9514
+TIMERB = 0
+goto @FARLIE4_9480
+
+:FARLIE4_9394
+set_lvar_text_label 177@s = 'FAR4_AH'
+set_lvar_int_to_constant 139@ = 15407
+gosub @FARLIE4_9514
+TIMERB = 0
+goto @FARLIE4_9480
+
+:FARLIE4_9437
+set_lvar_text_label 177@s = 'FAR4_AJ'
+set_lvar_int_to_constant 139@ = 15408
+gosub @FARLIE4_9514
+TIMERB = 0
+goto @FARLIE4_9480
+
+:FARLIE4_9480
+$f4_rnd += 1
+if 
+  $f4_rnd == 8
+goto_if_false @FARLIE4_9512
+$f4_rnd = 0
+
+:FARLIE4_9512
+return 
+
+:FARLIE4_9514
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(139@, 1)
+140@ = 0
+return 
+
+:FARLIE4_9534
+if and
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+  140@ == 0
+goto_if_false @FARLIE4_9577
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(177@s, 10000, 1)
+140@ = 1
+
+:FARLIE4_9577
+if and
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+  140@ == 1
+goto_if_false @FARLIE4_9615
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearThisPrint(177@s)
+140@ = 2
+
+:FARLIE4_9615
+return 
+

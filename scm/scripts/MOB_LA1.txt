@@ -1,0 +1,313 @@
+:MOB_LA1
+set_deatharrest_state 0
+script_name 'MOB_LA1'
+
+:MOB_LA1_15
+wait 90
+if and
+  $onmission == 0
+  $flag_mobile_timer == 0
+goto_if_false @MOB_LA1_56
+$timer_mobile_start = Clock.GetGameTimer()
+$flag_mobile_timer = 1
+
+:MOB_LA1_56
+if 
+  $Return_cities_passed > 0
+goto_if_false @MOB_LA1_76
+terminate_this_script 
+
+:MOB_LA1_76
+ENTEXT_214()
+if 
+  Player.IsPlaying($player1)
+goto_if_false @MOB_LA1_1712
+if 
+  $player_is_completely_safe_for_mobile == 1
+goto_if_false @MOB_LA1_1705
+if 
+  is_int_var_greater_than_int_var $timer_mobile_diff > $call_delay
+goto_if_false @MOB_LA1_1705
+if 
+  $flag_intro_mission_counter > 0
+goto_if_false @MOB_LA1_293
+if 
+  2 > $flag_sweet_mission_counter
+goto_if_false @MOB_LA1_293
+if 
+  $funeral_mission_finished == 3
+goto_if_false @MOB_LA1_293
+if 
+  $1347 == 0
+goto_if_false @MOB_LA1_293
+$call_number = 19
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_254
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_LA1_254
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_279
+$1347 = 1
+
+:MOB_LA1_279
+MOB_GF_3168()
+goto @MOB_LA1_15
+
+:MOB_LA1_293
+if 
+  $flag_sweet_mission_counter > 0
+goto_if_false @MOB_LA1_414
+if 
+  $1349 == 0
+goto_if_false @MOB_LA1_414
+$call_number = 9
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_375
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_LA1_375
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_400
+$1349 = 1
+
+:MOB_LA1_400
+MOB_GF_3168()
+goto @MOB_LA1_15
+
+:MOB_LA1_414
+if 
+  $flag_strap_mission_counter == 4
+goto_if_false @MOB_LA1_568
+$hours, $minutes = Clock.GetTimeOfDay()
+if or
+  $hours >= 20
+  6 > $hours
+goto_if_false @MOB_LA1_568
+if 
+  $flag_mob_la1 == 0
+goto_if_false @MOB_LA1_568
+$call_number = 6
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_529
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_LA1_529
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_554
+$flag_mob_la1 = 1
+
+:MOB_LA1_554
+MOB_GF_3168()
+goto @MOB_LA1_15
+
+:MOB_LA1_568
+if 
+  $flag_sweet_mission_counter > 2
+goto_if_false @MOB_LA1_1216
+if 
+  $1348 == 0
+goto_if_false @MOB_LA1_1216
+$Returnedfat = Stat.GetFloat(21)
+if 
+  450.0 > $Returnedfat
+goto_if_false @MOB_LA1_639
+$call_number = 20
+
+:MOB_LA1_639
+if 
+  $Returnedfat >= 450.0
+goto_if_false @MOB_LA1_667
+$call_number = 21
+
+:MOB_LA1_667
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_706
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_LA1_706
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_1202
+$1348 = 1
+Camera.DoFade(0, 500)
+
+:MOB_LA1_738
+if 
+  Camera.GetFadingStatus
+goto_if_false @MOB_LA1_762
+wait 0
+goto @MOB_LA1_738
+
+:MOB_LA1_762
+if 
+  Player.IsPlaying($player1)
+goto_if_false @MOB_LA1_819
+Player.SetControl($player1, False)
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+Char.SetCoordinates($scplayer, 2228.891, -1737.128, 12.3906)
+
+:MOB_LA1_819
+Text.ClearPrints
+Streaming.LoadScene(2228.517, -1734.274, 15.744)
+Blip.Remove($gym_contact_blip)
+$gym_contact_blip = Blip.AddShortRangeSpriteForCoord(54, 2228.0, -1722.811, 12.5543)
+Camera.SetFixedPosition(2228.094, -1735.179, 15.6865, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2228.517, -1734.274, 15.744, SwitchType.JumpCut)
+wait 500
+Camera.DoFade(1, 1000)
+Text.PrintHelp('GYMHELP')
+wait 5000
+Text.PrintHelp('DUMBELL')
+Hud.FlashObject(HudObject.Radar)
+wait 5000
+Hud.FlashObject(-1)
+Camera.DoFade(0, 500)
+
+:MOB_LA1_975
+if 
+  Camera.GetFadingStatus
+goto_if_false @MOB_LA1_999
+wait 0
+goto @MOB_LA1_975
+
+:MOB_LA1_999
+if 
+  Player.IsPlaying($player1)
+goto_if_false @MOB_LA1_1059
+$player_z -= 0.5
+Char.SetCoordinates($scplayer, $player_x, $player_y, $player_z)
+Streaming.LoadScene($player_x, $player_y, $player_z)
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+
+:MOB_LA1_1059
+World.SwitchEntryExit('GYM1', True)
+World.SwitchEntryExit('GYM2', True)
+World.SwitchEntryExit('GYM3', True)
+Blip.Remove($gym_contact_blip)
+$gym_contact_blip = Blip.AddShortRangeSpriteForContactPoint(54, 2228.0, -1722.811, 12.5543)
+Blip.ChangeDisplay($gym_contact_blip, BlipDisplay.BlipOnly)
+$gym_blips = Blip.AddShortRangeSpriteForContactPoint(54, -2269.4, -155.6, 35.3)
+Blip.ChangeDisplay($gym_blips, BlipDisplay.BlipOnly)
+$2631 = Blip.AddShortRangeSpriteForContactPoint(54, 1968.6, 2292.1, 16.4)
+Blip.ChangeDisplay($2631, BlipDisplay.BlipOnly)
+wait 500
+Camera.DoFade(1, 1000)
+
+:MOB_LA1_1202
+MOB_GF_3168()
+goto @MOB_LA1_15
+
+:MOB_LA1_1216
+if 
+  $flag_strap_mission_counter > 1
+goto_if_false @MOB_LA1_1367
+if 
+  $1343 == 0
+goto_if_false @MOB_LA1_1367
+$call_number = 12
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_1298
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_LA1_1298
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_1353
+$1343 = 1
+start_new_script @CRASH 
+Blip.Remove($crash_contact_blip)
+$crash_contact_blip = Blip.AddSpriteForContactPoint($crash_blip_icon, $crashX, $crashY, $crashZ)
+
+:MOB_LA1_1353
+MOB_GF_3168()
+goto @MOB_LA1_15
+
+:MOB_LA1_1367
+if 
+  $flag_sweet_mission_counter > 6
+goto_if_false @MOB_LA1_1525
+if 
+  $1344 == 0
+goto_if_false @MOB_LA1_1525
+$call_number = 7
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_1449
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_LA1_1449
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_1511
+$1344 = 1
+start_new_script @CESAR 
+Blip.Remove($cesar_contact_blip)
+$cesar_contact_blip = Blip.AddSpriteForContactPoint($cesar_blip_icon, $cesarX, $cesarY, $cesarZ)
+Blip.ChangeDisplay($cesar_contact_blip, BlipDisplay.BlipOnly)
+
+:MOB_LA1_1511
+MOB_GF_3168()
+goto @MOB_LA1_15
+
+:MOB_LA1_1525
+if 
+  $flag_sweet_mission_counter > 6
+goto_if_false @MOB_LA1_1705
+if 
+  $flag_crash_mission_counter > 0
+goto_if_false @MOB_LA1_1705
+if 
+  $1346 == 0
+goto_if_false @MOB_LA1_1705
+$call_number = 18
+MOB_GF_1087()
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_1625
+CELLFON_60()
+MOB_GF_3328()
+
+:MOB_LA1_1625
+if 
+  $flag_player_answered_phone == 1
+goto_if_false @MOB_LA1_1691
+$1346 = 1
+World.SwitchEntryExit('AMMUN1', False)
+Blip.Remove($sweet_contact_blip)
+$sweet_contact_blip = Blip.AddSpriteForContactPoint($sweet_blip_icon, 1365.251, -1280.12, 12.5469)
+
+:MOB_LA1_1691
+MOB_GF_3168()
+goto @MOB_LA1_15
+
+:MOB_LA1_1705
+goto @MOB_LA1_1719
+
+:MOB_LA1_1712
+$flag_cell_nation = 0
+
+:MOB_LA1_1719
+goto @MOB_LA1_15
+

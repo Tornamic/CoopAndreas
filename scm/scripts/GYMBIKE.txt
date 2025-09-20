@@ -1,0 +1,933 @@
+//-------------External script 11 (GYMBIKE)---------------
+
+:GYMBIKE
+script_name 'GYMBIKE'
+$bike_start_sound = 0
+$temp_ply_z = 0.0
+$bike_shake_speed = 0
+$bike_TIMERC = 0
+$bike_has_KD = 0
+5@ = 0.0
+6@ = 0.0
+7@ = 0.0
+8@ = 0.0
+9@ = 0.0
+10@ = 0.0
+11@ = 0.0
+12@ = 0.0
+13@ = 0.0
+14@ = 0.0
+15@ = 0.0
+$ply_exbikex = 0.0
+$ply_exbikey = 0.0
+16@ = 0.0
+17@ = 0.0
+19@ = 0.0
+$bike_speed_level = 0
+20@ = 0
+21@ = 0
+22@ = 0
+23@ = 0
+24@ = 0
+25@ = 0
+26@ = 0
+27@ = 0
+28@ = 0
+$ply_exbikex = 0.0
+$ply_exbikey = 0.0
+$speedbar_bike = 0
+$levelbar_bike = 0
+$distanceon_bike = 0
+$distancetoaddbike_gym = 0.0
+$distanceon_bikefloat = 0.0
+20@ = 0
+21@ = 0
+22@ = 0
+23@ = 0
+24@ = 0
+25@ = 0
+26@ = 0
+27@ = 0
+28@ = 0
+$levelbar_bike = 0
+30@ = 0
+29@ = 0
+$bike_txt = 0
+TIMERA = 0
+TIMERB = 0
+if 
+  30@ == 1
+goto_if_false @GYMBIKE_486
+0@ = Object.CreateNoOffset(#CM_BOX, 0.0, 0.0, 0.0)
+
+:GYMBIKE_486
+if 
+  Object.DoesExist(0@)
+goto_if_false @GYMBIKE_538
+5@, 6@, 7@ = Object.GetCoordinates(0@)
+11@, 12@, 13@ = Object.GetCoordinates(0@)
+4@ = Object.GetHeading(0@)
+
+:GYMBIKE_538
+set_var_float_to_lvar_float $bike_pedals_z = 7@
+$bike_pedals_z += 0.15
+set_lvar_float_to_lvar_float 3@ = 4@
+3@ -= 90.0
+1@ = Math.Sin(3@)
+2@ = Math.Cos(3@)
+1@ *= 0.05
+2@ *= 0.05
+set_var_float_to_lvar_float $expedalsx = 5@
+add_float_lvar_to_float_var $expedalsx += 2@
+set_var_float_to_lvar_float $expedalsy = 6@
+add_float_lvar_to_float_var $expedalsy += 1@
+$bike_pedals = Object.Create(#PEDALS, $expedalsx, $expedalsy, $bike_pedals_z)
+Object.SetHeading($bike_pedals, 4@)
+set_lvar_float_to_lvar_float 10@ = 7@
+10@ += 0.9
+set_lvar_float_to_lvar_float 3@ = 4@
+3@ -= 45.0
+1@ = Math.Sin(3@)
+2@ = Math.Cos(3@)
+1@ *= 2.8
+2@ *= 2.8
+set_lvar_float_to_lvar_float 8@ = 5@
+add_float_lvar_to_float_lvar 8@ += 2@
+set_lvar_float_to_lvar_float 9@ = 6@
+add_float_lvar_to_float_lvar 9@ += 1@
+4@ -= 180.0
+3@ += 45.0
+1@ = Math.Sin(3@)
+2@ = Math.Cos(3@)
+1@ *= 0.5
+2@ *= 0.5
+add_float_lvar_to_float_lvar 5@ += 2@
+add_float_lvar_to_float_lvar 6@ += 1@
+set_lvar_float_to_lvar_float 3@ = 4@
+3@ -= 90.0
+1@ = Math.Sin(3@)
+2@ = Math.Cos(3@)
+1@ *= 0.5
+2@ *= 0.5
+set_var_float_to_lvar_float $ply_exbikex = 5@
+add_float_lvar_to_float_var $ply_exbikex += 2@
+set_var_float_to_lvar_float $ply_exbikey = 6@
+add_float_lvar_to_float_var $ply_exbikey += 1@
+7@ += 0.05
+$speedbar_bike = 0
+$distanceon_bike = 0
+$are_anims_loaded = 0
+
+:GYMBIKE_960
+wait 0
+if 
+  not Object.DoesExist(0@)
+goto_if_false @GYMBIKE_987
+Object.Delete($bike_pedals)
+terminate_this_script 
+
+:GYMBIKE_987
+if 
+  not Object.IsWithinBrainActivationRange(0@)
+goto_if_false @GYMBIKE_1010
+Object.Delete($bike_pedals)
+terminate_this_script 
+
+:GYMBIKE_1010
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GYMBIKE_6332
+if 
+  20@ == 0
+goto_if_false @GYMBIKE_1371
+if and
+  28@ == 0
+  not Player.IsUsingJetpack($player1)
+goto_if_false @GYMBIKE_1330
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 5@, 6@, 7@, 1.2, 1.2, 4.0)
+goto_if_false @GYMBIKE_1296
+if 
+  29@ == 0
+goto_if_false @GYMBIKE_1145
+Text.PrintHelpForever('GYM1_81')
+29@ = 1
+
+:GYMBIKE_1145
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @GYMBIKE_1289
+if or
+  $onmission == 0
+  $gym_is_running == 1
+goto_if_false @GYMBIKE_1273
+$gym_day, $gym_month = Clock.GetCurrentDate()
+if or
+  is_int_var_greater_than_int_var $gym_day > $gym_final_day
+  is_int_var_greater_than_int_var $gym_month > $gym_final_month
+goto_if_false @GYMBIKE_1250
+20@ = 1
+$playerexercising_flag = 1
+$gym_TIMERC = 0
+goto @GYMBIKE_1266
+
+:GYMBIKE_1250
+Text.PrintNow('GYM1_1A', 4000, 1)
+
+:GYMBIKE_1266
+goto @GYMBIKE_1289
+
+:GYMBIKE_1273
+Text.PrintNow('GYM1_90', 4000, 1)
+
+:GYMBIKE_1289
+goto @GYMBIKE_1323
+
+:GYMBIKE_1296
+if 
+  29@ == 1
+goto_if_false @GYMBIKE_1323
+Text.ClearHelp
+29@ = 0
+
+:GYMBIKE_1323
+goto @GYMBIKE_1371
+
+:GYMBIKE_1330
+if 
+  not Char.LocateOnFoot2D($scplayer, 0, 5@, 6@, 2.0, 2.0)
+goto_if_false @GYMBIKE_1371
+28@ = 0
+
+:GYMBIKE_1371
+if 
+  20@ == 1
+goto_if_false @GYMBIKE_6332
+if and
+  $playerexercising_flag == 1
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_1501
+Char.SetCollision($scplayer, False)
+Player.SetControl($player1, False)
+Char.SetCoordinatesDontWarpGang($scplayer, $ply_exbikex, $ply_exbikey, 7@)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Camera.SetFixedPosition(8@, 9@, 10@, 0.0, 0.0, 0.0)
+Char.SetHeading($scplayer, 4@)
+Camera.PointAtPoint(11@, 12@, 10@, SwitchType.JumpCut)
+$playerexercising_flag = 2
+
+:GYMBIKE_1501
+if 
+  $are_anims_loaded == 0
+goto_if_false @GYMBIKE_1611
+Streaming.RequestAnimation("GYMNASIUM")
+
+:GYMBIKE_1532
+if 
+  not Streaming.HasAnimationLoaded("GYMNASIUM")
+goto_if_false @GYMBIKE_1567
+wait 0
+goto @GYMBIKE_1532
+
+:GYMBIKE_1567
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Audio.LoadMissionAudio(1820, 4)
+
+:GYMBIKE_1578
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @GYMBIKE_1604
+wait 0
+goto @GYMBIKE_1578
+
+:GYMBIKE_1604
+$are_anims_loaded = 1
+
+:GYMBIKE_1611
+if and
+  $playerexercising_flag == 2
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_2197
+Char.ClearTasksImmediately($scplayer)
+Task.PlayAnim($scplayer, "GYM_BIKE_GETON", "GYMNASIUM", 4.0, False, False, False, True, -1)
+Text.PrintHelpForever('GYM1_60')
+if or
+  $current_Language == 4
+  $current_Language == 2
+goto_if_false @GYMBIKE_1890
+$main_menu_bike = Menu.Create('GYM1_D', 31.0, 180.0, 178.0, True, True, 1, 0)
+Menu.SetColumn($main_menu_bike, 0, 'GYM1_89', 'GYM1_61', 'GYM1_62', 'GYM1_63', 'GYM1_64', 'GYM1_65', 'GYM1_66', 'GYM1_67', 'GYM1_68', 'GYM1_69', 'GYM1_70', 'DUMMY', 'DUMMY')
+goto @GYMBIKE_2051
+
+:GYMBIKE_1890
+$main_menu_bike = Menu.Create('GYM1_D', 31.0, 150.0, 178.0, True, True, 1, 0)
+Menu.SetColumn($main_menu_bike, 0, 'GYM1_89', 'GYM1_61', 'GYM1_62', 'GYM1_63', 'GYM1_64', 'GYM1_65', 'GYM1_66', 'GYM1_67', 'GYM1_68', 'GYM1_69', 'GYM1_70', 'DUMMY', 'DUMMY')
+
+:GYMBIKE_2051
+Menu.SetActiveItem($main_menu_bike, 0)
+
+:GYMBIKE_2058
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_2183
+wait 0
+$gym_TIMERC += 1
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+  $gym_TIMERC > 20
+goto_if_false @GYMBIKE_2130
+Text.ClearHelp
+Menu.Delete($main_menu_bike)
+$levelbar_bike = 0
+goto @GYMBIKE_5327
+
+:GYMBIKE_2130
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMBIKE_2176
+Text.ClearHelp
+$levelbar_bike = Menu.GetItemSelected($main_menu_bike)
+$levelbar_bike += 1
+Menu.Delete($main_menu_bike)
+goto @GYMBIKE_2183
+
+:GYMBIKE_2176
+goto @GYMBIKE_2058
+
+:GYMBIKE_2183
+$playerexercising_flag = 3
+TIMERB = 0
+
+:GYMBIKE_2197
+if and
+  $playerexercising_flag == 3
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_2388
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_BIKE_GETON")
+goto_if_false @GYMBIKE_2388
+15@ = Char.GetAnimCurrentTime($scplayer, "GYM_BIKE_GETON")
+if 
+  15@ == 1.0
+goto_if_false @GYMBIKE_2388
+Task.PlayAnim($scplayer, "GYM_BIKE_SLOW", "GYMNASIUM", 4.0, True, False, False, True, -1)
+Object.PlayAnim($bike_pedals, "PEDALS_SLOW", "GYMNASIUM", 4.0, True, -1)
+$playerexercising_flag = 4
+
+:GYMBIKE_2388
+if and
+  $playerexercising_flag == 4
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_2583
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_BIKE_SLOW")
+goto_if_false @GYMBIKE_2583
+15@ = Char.GetAnimCurrentTime($scplayer, "GYM_BIKE_SLOW")
+if 
+  15@ == 0.0
+goto_if_false @GYMBIKE_2583
+Char.SetAnimPlayingFlag($scplayer, "GYM_BIKE_SLOW", False)
+Hud.DisplayNthCounterWithString($speedbar_bike, CounterDisplay.Bar, 1, 'GYM1_1')
+Hud.DisplayNthCounterWithString($levelbar_bike, CounterDisplay.Number, 2, 'GYM1_4')
+Hud.DisplayNthCounterWithString($distanceon_bike, CounterDisplay.Number, 3, 'GYM1_3')
+21@ = 1
+$playerexercising_flag = 5
+TIMERB = 0
+
+:GYMBIKE_2583
+if and
+  $playerexercising_flag == 5
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_6332
+if 
+  $bike_txt == 0
+goto_if_false @GYMBIKE_2642
+Text.PrintHelpForever('GYM1_40')
+$bike_txt = 1
+
+:GYMBIKE_2642
+if and
+  TIMERB > 4000
+  $bike_txt == 1
+goto_if_false @GYMBIKE_2688
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_41')
+$bike_txt = 2
+
+:GYMBIKE_2688
+if and
+  TIMERB > 8000
+  $bike_txt == 2
+goto_if_false @GYMBIKE_2723
+Text.ClearHelp
+$bike_txt = 101
+
+:GYMBIKE_2723
+19@ = Stat.GetFloat(22)
+19@ /= 100.0
+set_lvar_float_to_lvar_float 16@ = 17@
+add_float_lvar_to_float_lvar 16@ += 19@
+sub_timed_val_from_float_lvar 14@ -= frame_delta_time * 0.35
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMBIKE_2816
+if 
+  22@ == 0
+goto_if_false @GYMBIKE_2816
+add_float_lvar_to_float_lvar 14@ += 16@
+22@ = 1
+
+:GYMBIKE_2816
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMBIKE_2858
+if 
+  22@ == 1
+goto_if_false @GYMBIKE_2858
+22@ = 0
+
+:GYMBIKE_2858
+if 
+  0.0 > 14@
+goto_if_false @GYMBIKE_2889
+14@ = 0.0
+
+:GYMBIKE_2889
+if 
+  14@ > 100.0
+goto_if_false @GYMBIKE_2920
+14@ = 100.0
+
+:GYMBIKE_2920
+if 
+  21@ == 1
+goto_if_false @GYMBIKE_3053
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_BIKE_SLOW")
+goto_if_false @GYMBIKE_3053
+Char.SetAnimPlayingFlag($scplayer, "GYM_BIKE_SLOW", True)
+Char.SetAnimSpeed($scplayer, "GYM_BIKE_SLOW", 0.5)
+Object.SetAnimSpeed($bike_pedals, "PEDALS_SLOW", 0.5)
+TIMERA = 0
+21@ = 2
+
+:GYMBIKE_3053
+if and
+  21@ == 2
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_6228
+19@ = Stat.GetFloat(22)
+19@ /= 200.0
+if 
+  0.0 > 19@
+goto_if_false @GYMBIKE_3124
+19@ = 0.0
+
+:GYMBIKE_3124
+cset_var_int_to_lvar_float $bike_speed_level = float 19@
+set_var_int_to_var_int $levelbar_bike_1 = $levelbar_bike
+sub_int_var_from_int_var $levelbar_bike_1 -= $bike_speed_level
+if 
+  14@ == 0.0
+goto_if_false @GYMBIKE_3301
+if 
+  23@ == 0
+goto_if_false @GYMBIKE_3301
+Task.PlayAnim($scplayer, "GYM_BIKE_STILL", "GYMNASIUM", 4.0, True, False, False, True, -1)
+Object.PlayAnim($bike_pedals, "PEDALS_STILL", "GYMNASIUM", 4.0, True, -1)
+24@ = 0
+25@ = 0
+26@ = 0
+23@ = 1
+
+:GYMBIKE_3301
+if 
+  24@ == 0
+goto_if_false @GYMBIKE_3459
+if and
+  3 > $levelbar_bike_1
+  14@ <> 0.0
+goto_if_false @GYMBIKE_3459
+Task.PlayAnim($scplayer, "GYM_BIKE_SLOW", "GYMNASIUM", 4.0, True, False, False, True, -1)
+Object.PlayAnim($bike_pedals, "PEDALS_SLOW", "GYMNASIUM", 4.0, True, -1)
+24@ = 1
+25@ = 0
+26@ = 0
+23@ = 0
+
+:GYMBIKE_3459
+if 
+  25@ == 0
+goto_if_false @GYMBIKE_3623
+if and
+  $levelbar_bike_1 > 2
+  7 > $levelbar_bike_1
+  14@ <> 0.0
+goto_if_false @GYMBIKE_3623
+Task.PlayAnim($scplayer, "GYM_BIKE_FAST", "GYMNASIUM", 4.0, True, False, False, True, -1)
+Object.PlayAnim($bike_pedals, "PEDALS_MED", "GYMNASIUM", 4.0, True, -1)
+24@ = 0
+26@ = 0
+25@ = 1
+23@ = 0
+
+:GYMBIKE_3623
+if 
+  26@ == 0
+goto_if_false @GYMBIKE_3790
+if and
+  $levelbar_bike_1 > 6
+  11 > $levelbar_bike_1
+  14@ <> 0.0
+goto_if_false @GYMBIKE_3790
+Task.PlayAnim($scplayer, "GYM_BIKE_FASTER", "GYMNASIUM", 4.0, True, False, False, True, -1)
+Object.PlayAnim($bike_pedals, "PEDALS_FAST", "GYMNASIUM", 4.0, True, -1)
+24@ = 0
+25@ = 0
+26@ = 1
+23@ = 0
+
+:GYMBIKE_3790
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @GYMBIKE_3928
+if 
+  27@ == 0
+goto_if_false @GYMBIKE_3928
+if and
+  $levelbar_bike > 0
+  10 > $levelbar_bike
+goto_if_false @GYMBIKE_3928
+$levelbar_bike += 1
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @GYMBIKE_3880
+Audio.ReportMissionAudioEventAtObject(0@, 1116)
+
+:GYMBIKE_3880
+14@ -= 20.0
+if 
+  0.0 > 14@
+goto_if_false @GYMBIKE_3921
+14@ = 0.0
+
+:GYMBIKE_3921
+27@ = 1
+
+:GYMBIKE_3928
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @GYMBIKE_4025
+if 
+  27@ == 0
+goto_if_false @GYMBIKE_4025
+if and
+  $levelbar_bike > 1
+  11 > $levelbar_bike
+goto_if_false @GYMBIKE_4025
+$levelbar_bike -= 1
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @GYMBIKE_4018
+Audio.ReportMissionAudioEventAtObject(0@, 1116)
+
+:GYMBIKE_4018
+27@ = 2
+
+:GYMBIKE_4025
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @GYMBIKE_4067
+if 
+  27@ == 1
+goto_if_false @GYMBIKE_4067
+27@ = 0
+
+:GYMBIKE_4067
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @GYMBIKE_4109
+if 
+  27@ == 2
+goto_if_false @GYMBIKE_4109
+27@ = 0
+
+:GYMBIKE_4109
+if 
+  $levelbar_bike == 1
+goto_if_false @GYMBIKE_4137
+17@ = 6.5
+
+:GYMBIKE_4137
+if 
+  $levelbar_bike == 2
+goto_if_false @GYMBIKE_4165
+17@ = 5.9
+
+:GYMBIKE_4165
+if 
+  $levelbar_bike == 3
+goto_if_false @GYMBIKE_4193
+17@ = 5.0
+
+:GYMBIKE_4193
+if 
+  $levelbar_bike == 4
+goto_if_false @GYMBIKE_4221
+17@ = 4.3
+
+:GYMBIKE_4221
+if 
+  $levelbar_bike == 5
+goto_if_false @GYMBIKE_4249
+17@ = 3.7
+
+:GYMBIKE_4249
+if 
+  $levelbar_bike == 6
+goto_if_false @GYMBIKE_4277
+17@ = 2.9
+
+:GYMBIKE_4277
+if 
+  $levelbar_bike == 7
+goto_if_false @GYMBIKE_4305
+17@ = 2.2
+
+:GYMBIKE_4305
+if 
+  $levelbar_bike == 8
+goto_if_false @GYMBIKE_4333
+17@ = 1.5
+
+:GYMBIKE_4333
+if 
+  $levelbar_bike == 9
+goto_if_false @GYMBIKE_4361
+17@ = 1.1
+
+:GYMBIKE_4361
+if 
+  $levelbar_bike == 10
+goto_if_false @GYMBIKE_4389
+17@ = 0.7
+
+:GYMBIKE_4389
+if 
+  14@ >= 0.0
+goto_if_false @GYMBIKE_4441
+if 
+  10.0 >= 14@
+goto_if_false @GYMBIKE_4441
+18@ = 0.9
+
+:GYMBIKE_4441
+if 
+  14@ >= 11.0
+goto_if_false @GYMBIKE_4493
+if 
+  20.0 >= 14@
+goto_if_false @GYMBIKE_4493
+18@ = 1.0
+
+:GYMBIKE_4493
+if 
+  14@ >= 21.0
+goto_if_false @GYMBIKE_4545
+if 
+  30.0 >= 14@
+goto_if_false @GYMBIKE_4545
+18@ = 1.1
+
+:GYMBIKE_4545
+if 
+  14@ >= 31.0
+goto_if_false @GYMBIKE_4597
+if 
+  40.0 >= 14@
+goto_if_false @GYMBIKE_4597
+18@ = 1.2
+
+:GYMBIKE_4597
+if 
+  14@ >= 41.0
+goto_if_false @GYMBIKE_4649
+if 
+  50.0 >= 14@
+goto_if_false @GYMBIKE_4649
+18@ = 1.3
+
+:GYMBIKE_4649
+if 
+  14@ >= 51.0
+goto_if_false @GYMBIKE_4701
+if 
+  60.0 >= 14@
+goto_if_false @GYMBIKE_4701
+18@ = 1.4
+
+:GYMBIKE_4701
+if 
+  14@ >= 61.0
+goto_if_false @GYMBIKE_4753
+if 
+  70.0 >= 14@
+goto_if_false @GYMBIKE_4753
+18@ = 1.5
+
+:GYMBIKE_4753
+if 
+  14@ >= 71.0
+goto_if_false @GYMBIKE_4805
+if 
+  80.0 >= 14@
+goto_if_false @GYMBIKE_4805
+18@ = 1.6
+
+:GYMBIKE_4805
+if 
+  14@ >= 81.0
+goto_if_false @GYMBIKE_4857
+if 
+  90.0 >= 14@
+goto_if_false @GYMBIKE_4857
+18@ = 1.7
+
+:GYMBIKE_4857
+if 
+  14@ >= 91.0
+goto_if_false @GYMBIKE_4909
+if 
+  100.0 >= 14@
+goto_if_false @GYMBIKE_4909
+18@ = 1.8
+
+:GYMBIKE_4909
+if and
+  Char.IsPlayingAnim($scplayer, "GYM_BIKE_SLOW")
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_4968
+Char.SetAnimSpeed($scplayer, "GYM_BIKE_SLOW", 18@)
+
+:GYMBIKE_4968
+if and
+  Object.IsPlayingAnim($bike_pedals, "PEDALS_SLOW")
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_5023
+Object.SetAnimSpeed($bike_pedals, "PEDALS_SLOW", 18@)
+
+:GYMBIKE_5023
+if and
+  Char.IsPlayingAnim($scplayer, "GYM_BIKE_FAST")
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_5082
+Char.SetAnimSpeed($scplayer, "GYM_BIKE_FAST", 18@)
+
+:GYMBIKE_5082
+if and
+  Object.IsPlayingAnim($bike_pedals, "PEDALS_MED")
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_5135
+Object.SetAnimSpeed($bike_pedals, "PEDALS_MED", 18@)
+
+:GYMBIKE_5135
+if and
+  Char.IsPlayingAnim($scplayer, "GYM_BIKE_FASTER")
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_5198
+Char.SetAnimSpeed($scplayer, "GYM_BIKE_FASTER", 18@)
+
+:GYMBIKE_5198
+if and
+  Object.IsPlayingAnim($bike_pedals, "PEDALS_FAST")
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_5253
+Object.SetAnimSpeed($bike_pedals, "PEDALS_FAST", 18@)
+
+:GYMBIKE_5253
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+  $gym_day_fitness > 200.0
+goto_if_false @GYMBIKE_5787
+if 
+  $gym_day_fitness > 200.0
+goto_if_false @GYMBIKE_5311
+$gym_day_fitness = 0.0
+
+:GYMBIKE_5311
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_5787
+
+:GYMBIKE_5327
+Pad.Shake(PadId.Pad1, 1, 1)
+Stat.IncrementInt($distanceon_bike, 29)
+set_lvar_int_to_lvar_int 31@ = TIMERB
+31@ /= 1000
+Stat.IncrementInt(31@, 45)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_5468
+Task.PlayAnim($scplayer, "GYM_BIKE_GETOFF", "GYMNASIUM", 4.0, False, False, False, False, -1)
+Object.PlayAnim($bike_pedals, "PEDALS_STILL", "GYMNASIUM", 4.0, False, -1)
+
+:GYMBIKE_5468
+21@ = 0
+22@ = 0
+23@ = 0
+24@ = 0
+25@ = 0
+26@ = 0
+27@ = 0
+20@ = 0
+$playerexercising_flag = 0
+$levelbar_bike = 0
+$distanceon_bike = 0
+$distanceon_bikefloat = 0.0
+$distancetoaddbike_gym = 0.0
+$speedbar_bike = 0
+14@ = 0.0
+$fatstat_gym = Stat.GetFloat(21)
+if 
+  0.0 >= $fatstat_gym
+goto_if_false @GYMBIKE_5619
+Stat.SetFloat(StatId.Fat, 0.0)
+
+:GYMBIKE_5619
+if 
+  Object.DoesExist(0@)
+goto_if_false @GYMBIKE_5642
+Object.SetCollision(0@, True)
+
+:GYMBIKE_5642
+$animstate_flag = 0
+$playernextset_flag = 0
+$are_anims_loaded = 0
+Streaming.RemoveAnimation("GYMNASIUM")
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Hud.ClearCounter($speedbar_bike)
+Hud.ClearCounter($levelbar_bike)
+Hud.ClearCounter($distanceon_bike)
+Camera.RestoreJumpcut
+Player.SetControl($player1, False)
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMBIKE_5731
+Player.SetControl($player1, True)
+
+:GYMBIKE_5731
+28@ = 1
+Menu.Delete($main_menu_bike)
+Text.ClearHelp
+Player.SetControl($player1, True)
+Char.SetCollision($scplayer, True)
+
+:GYMBIKE_5759
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMBIKE_5787
+wait 0
+goto @GYMBIKE_5759
+
+:GYMBIKE_5787
+if 
+  Object.DoesExist(0@)
+goto_if_false @GYMBIKE_5912
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @GYMBIKE_5912
+if 
+  14@ > 10.0
+goto_if_false @GYMBIKE_5879
+if 
+  $bike_start_sound == 0
+goto_if_false @GYMBIKE_5872
+Audio.ReportMissionAudioEventAtObject(0@, 1113)
+$bike_start_sound = 1
+
+:GYMBIKE_5872
+goto @GYMBIKE_5912
+
+:GYMBIKE_5879
+if 
+  $bike_start_sound == 1
+goto_if_false @GYMBIKE_5912
+Audio.ReportMissionAudioEventAtObject(0@, 1114)
+$bike_start_sound = 0
+
+:GYMBIKE_5912
+if 
+  TIMERA > 250
+goto_if_false @GYMBIKE_6228
+TIMERA -= 250
+set_var_float_to_lvar_float $distancetoaddbike_gym = 14@
+$distancetoaddbike_gym /= 10.0
+cset_var_float_to_var_int $statbike_temp = integer $levelbar_bike
+$statbike_temp /= 10.0
+$statbike_temp += 1.0
+mult_float_var_by_float_var $statbike_temp *= $distancetoaddbike_gym
+add_float_var_to_float_var $statbikestamina_ctr += $statbike_temp
+if 
+  $statbikestamina_ctr >= 400.0
+goto_if_false @GYMBIKE_6146
+$statbikestamina_ctr -= 400.0
+$fatstat_gym = Stat.GetFloat(21)
+if 
+  $fatstat_gym >= 1.0
+goto_if_false @GYMBIKE_6069
+Stat.DecrementFloat(StatId.Fat, 8.0)
+
+:GYMBIKE_6069
+if 
+  $bike_show_stat == 3
+goto_if_false @GYMBIKE_6120
+$bike_show_stat = 0
+Stat.IncrementFloat(4.0, 22)
+$gym_day_fitness += 4.0
+goto @GYMBIKE_6146
+
+:GYMBIKE_6120
+Stat.IncrementFloatNoMessage(StatId.Stamina, 4.0)
+$gym_day_fitness += 4.0
+$bike_show_stat += 1
+
+:GYMBIKE_6146
+if 
+  $gym_day_fitness > 200.0
+goto_if_false @GYMBIKE_6191
+$gym_final_day, $gym_final_month = Clock.GetCurrentDate()
+Text.PrintNow('GYM1_1B', 4000, 1)
+
+:GYMBIKE_6191
+if 
+  $distanceon_bike < 999999
+goto_if_false @GYMBIKE_6228
+add_float_var_to_float_var $distanceon_bikefloat += $distancetoaddbike_gym
+cset_var_int_to_var_float $distanceon_bike = float $distanceon_bikefloat
+
+:GYMBIKE_6228
+$bike_TIMERC += 1
+set_var_int_to_var_int $bike_shake_speed = $speedbar_bike
+$bike_shake_speed -= 100
+if 
+  $bike_shake_speed > -40
+goto_if_false @GYMBIKE_6275
+$bike_shake_speed = -40
+
+:GYMBIKE_6275
+if 
+  is_int_var_greater_or_equal_to_int_var $bike_TIMERC >= $bike_shake_speed
+goto_if_false @GYMBIKE_6324
+$bike_TIMERC = 0
+$speedbar_bike *= 12
+$speedbar_bike /= 10
+Pad.Shake(PadId.Pad1, 100, $speedbar_bike)
+
+:GYMBIKE_6324
+cset_var_int_to_lvar_float $speedbar_bike = float 14@
+
+:GYMBIKE_6332
+goto @GYMBIKE_960
+terminate_this_script 
+

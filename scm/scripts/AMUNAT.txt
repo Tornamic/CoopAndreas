@@ -1,0 +1,1848 @@
+:AMUNAT_525
+set_var_int_to_constant $shopkeeper_model_shops = 179
+Streaming.RequestModel($shopkeeper_model_shops)
+Streaming.RequestModel(346)
+Streaming.RequestModel(372)
+Streaming.RequestModel(352)
+Streaming.RequestModel(349)
+Streaming.RequestModel(342)
+Streaming.RequestModel(373)
+Streaming.RequestModel(353)
+Streaming.RequestModel(350)
+Streaming.RequestModel(347)
+Streaming.RequestModel(363)
+Streaming.RequestModel(364)
+Streaming.RequestModel(357)
+Streaming.RequestModel(358)
+Streaming.RequestModel(355)
+Streaming.RequestModel(356)
+Streaming.RequestModel(348)
+Streaming.RequestModel(351)
+Streaming.LoadAllModelsNow
+set_deatharrest_state 0
+script_name 'AMUNAT'
+
+:AMUNAT_640
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @AMUNAT_7618
+if 
+  not is_var_text_label_empty s$shop_name
+goto_if_false @AMUNAT_7604
+if 
+  $flag_ammu > 0
+goto_if_false @AMUNAT_762
+if 
+  Game.HasLanguageChanged
+goto_if_false @AMUNAT_762
+Text.ClearHelp
+Menu.Delete($main_menu_shops)
+Menu.Delete($sub_menu_shops)
+Menu.Delete($bought_menu_shops)
+Menu.Delete($cost_menu_shops)
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$current_Language = Game.GetCurrentLanguage()
+
+:AMUNAT_762
+if 
+  $flag_ammu == 0
+goto_if_false @AMUNAT_1286
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'AMMUN1'
+goto_if_false @AMUNAT_884
+$ammu_offX = 0.0
+$ammu_offY = 0.0
+$ammu_offZ = 0.0
+$player_heading_ammunation = 180.0
+$shop_keep_heading_ammunation = 0.0
+$blob_flag_shop = 1
+set_var_text_label s$stored_weapon_shop = s$shop_name
+$shop_progress_ammunation = 0
+$flag_ammu = 1
+
+:AMUNAT_884
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'AMMUN2'
+goto_if_false @AMUNAT_988
+$ammu_offX = -0.765
+$ammu_offY = -42.311
+$ammu_offZ = -0.013
+$player_heading_ammunation = 180.0
+$shop_keep_heading_ammunation = 0.0
+$blob_flag_shop = 1
+set_var_text_label s$stored_weapon_shop = s$shop_name
+$shop_progress_ammunation = 0
+$flag_ammu = 1
+
+:AMUNAT_988
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'AMMUN3'
+goto_if_false @AMUNAT_1092
+$ammu_offX = -6.264
+$ammu_offY = -71.34
+$ammu_offZ = -0.002
+$player_heading_ammunation = 180.0
+$shop_keep_heading_ammunation = 0.0
+$blob_flag_shop = 1
+set_var_text_label s$stored_weapon_shop = s$shop_name
+$shop_progress_ammunation = 0
+$flag_ammu = 1
+
+:AMUNAT_1092
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'AMMUN4'
+goto_if_false @AMUNAT_1189
+$ammu_offX = 11.642
+$ammu_offY = -102.936
+$ammu_offZ = -1.929
+$player_heading_ammunation = 180.0
+$shop_keep_heading_ammunation = 0.0
+$blob_flag_shop = 1
+set_var_text_label s$stored_weapon_shop = s$shop_name
+$flag_ammu = 1
+
+:AMUNAT_1189
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'AMMUN5'
+goto_if_false @AMUNAT_1286
+$ammu_offX = 16.285
+$ammu_offY = -127.781
+$ammu_offZ = -1.929
+$player_heading_ammunation = 180.0
+$shop_keep_heading_ammunation = 0.0
+$blob_flag_shop = 1
+set_var_text_label s$stored_weapon_shop = s$shop_name
+$flag_ammu = 1
+
+:AMUNAT_1286
+if 
+  $flag_ammu == 1
+goto_if_false @AMUNAT_2318
+Text.UseCommands(True)
+Stat.ShowUpdateStats(False)
+$keep_offX = 296.506
+add_float_var_to_float_var $keep_offX += $ammu_offX
+$keep_offY = -38.168
+add_float_var_to_float_var $keep_offY += $ammu_offY
+$keep_offZ = 1000.547
+add_float_var_to_float_var $keep_offZ += $ammu_offZ
+$ammuX = 296.506
+add_float_var_to_float_var $ammuX += $ammu_offX
+$ammuY = -40.35
+add_float_var_to_float_var $ammuY += $ammu_offY
+$ammuZ = 1000.54
+add_float_var_to_float_var $ammuZ += $ammu_offZ
+$cam_offx = 296.585
+add_float_var_to_float_var $cam_offx += $ammu_offX
+$cam_offy = -38.345
+add_float_var_to_float_var $cam_offy += $ammu_offY
+$cam_offz = 1002.236
+add_float_var_to_float_var $cam_offz += $ammu_offZ
+$ammu_camera_pointX = 296.501
+add_float_var_to_float_var $ammu_camera_pointX += $ammu_offX
+$ammu_camera_pointY = -39.298
+add_float_var_to_float_var $ammu_camera_pointY += $ammu_offY
+$ammu_camera_pointZ = 1001.943
+add_float_var_to_float_var $ammu_camera_pointZ += $ammu_offZ
+$shop_keep_ammunation = Char.Create(4, $shopkeeper_model_shops, $ammuX, $ammuY, $ammuZ)
+Char.SetHeading($shop_keep_ammunation, $shop_keep_heading_ammunation)
+Char.SetOnlyDamagedByPlayer($shop_keep_ammunation, True)
+Char.SetDecisionMaker($shop_keep_ammunation, 65542)
+if 
+  $flag_casino_mission_counter > 2
+goto_if_false @AMUNAT_1638
+$num_of_weapons = Shopping.GetNumberOfItems()
+if 
+  $flag_16weapons_open == 0
+goto_if_false @AMUNAT_1631
+Text.PrintHelp('NEWWEAP')
+$flag_16weapons_open = 1
+
+:AMUNAT_1631
+goto @AMUNAT_2311
+
+:AMUNAT_1638
+if 
+  $flag_desert_mission_counter > 7
+goto_if_false @AMUNAT_1706
+$num_of_weapons = 15
+if 
+  $flag_15weapons_open == 0
+goto_if_false @AMUNAT_1699
+Text.PrintHelp('NEWWEAP')
+$flag_15weapons_open = 1
+
+:AMUNAT_1699
+goto @AMUNAT_2311
+
+:AMUNAT_1706
+if 
+  $flag_synd_mission_counter > 9
+goto_if_false @AMUNAT_1774
+$num_of_weapons = 14
+if 
+  $flag_14weapons_open == 0
+goto_if_false @AMUNAT_1767
+Text.PrintHelp('NEWWEAP')
+$flag_14weapons_open = 1
+
+:AMUNAT_1767
+goto @AMUNAT_2311
+
+:AMUNAT_1774
+if 
+  $flag_wuzi_mission_counter > 0
+goto_if_false @AMUNAT_1842
+$num_of_weapons = 13
+if 
+  $flag_13weapons_open == 0
+goto_if_false @AMUNAT_1835
+Text.PrintHelp('NEWWEAP')
+$flag_13weapons_open = 1
+
+:AMUNAT_1835
+goto @AMUNAT_2311
+
+:AMUNAT_1842
+if 
+  $flag_synd_mission_counter > 7
+goto_if_false @AMUNAT_1910
+$num_of_weapons = 12
+if 
+  $flag_12weapons_open == 0
+goto_if_false @AMUNAT_1903
+Text.PrintHelp('NEWWEAP')
+$flag_12weapons_open = 1
+
+:AMUNAT_1903
+goto @AMUNAT_2311
+
+:AMUNAT_1910
+if 
+  $flag_truth_mission_counter > 0
+goto_if_false @AMUNAT_1978
+$num_of_weapons = 11
+if 
+  $flag_11weapons_open == 0
+goto_if_false @AMUNAT_1971
+Text.PrintHelp('NEWWEAP')
+$flag_11weapons_open = 1
+
+:AMUNAT_1971
+goto @AMUNAT_2311
+
+:AMUNAT_1978
+if 
+  $flag_cat_mission4_passed == 1
+goto_if_false @AMUNAT_2046
+$num_of_weapons = 10
+if 
+  $flag_10weapons_open == 0
+goto_if_false @AMUNAT_2039
+Text.PrintHelp('NEWWEAP')
+$flag_10weapons_open = 1
+
+:AMUNAT_2039
+goto @AMUNAT_2311
+
+:AMUNAT_2046
+if 
+  $flag_strap_mission_counter > 4
+goto_if_false @AMUNAT_2114
+$num_of_weapons = 9
+if 
+  $flag_9weapons_open == 0
+goto_if_false @AMUNAT_2107
+Text.PrintHelp('NEWWEAP')
+$flag_9weapons_open = 1
+
+:AMUNAT_2107
+goto @AMUNAT_2311
+
+:AMUNAT_2114
+if 
+  $flag_smoke_mission_counter > 3
+goto_if_false @AMUNAT_2182
+$num_of_weapons = 8
+if 
+  $flag_8weapons_open == 0
+goto_if_false @AMUNAT_2175
+Text.PrintHelp('NEWWEAP')
+$flag_8weapons_open = 1
+
+:AMUNAT_2175
+goto @AMUNAT_2311
+
+:AMUNAT_2182
+if 
+  $flag_ryder_mission_counter > 2
+goto_if_false @AMUNAT_2250
+$num_of_weapons = 7
+if 
+  $flag_7weapons_open == 0
+goto_if_false @AMUNAT_2243
+Text.PrintHelp('NEWWEAP')
+$flag_7weapons_open = 1
+
+:AMUNAT_2243
+goto @AMUNAT_2311
+
+:AMUNAT_2250
+if 
+  2 > $flag_la1fin1_mission_counter
+goto_if_false @AMUNAT_2311
+$num_of_weapons = 6
+if 
+  $flag_6weapons_open == 0
+goto_if_false @AMUNAT_2311
+Text.PrintHelp('NEWWEAP')
+$flag_6weapons_open = 1
+
+:AMUNAT_2311
+$flag_ammu = 2
+
+:AMUNAT_2318
+if 
+  $flag_ammu == 2
+goto_if_false @AMUNAT_2978
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_weapon_shop
+goto_if_false @AMUNAT_2367
+gosub @AMUNAT_8535
+
+:AMUNAT_2367
+if 
+  not Char.IsDead($shop_keep_ammunation)
+goto_if_false @AMUNAT_2933
+if 
+  $flag_attacked_ammu_keeper == 0
+goto_if_false @AMUNAT_2881
+if 
+  $shop_progress_ammunation == 0
+goto_if_false @AMUNAT_2480
+Task.PlayAnimNonInterruptable($shop_keep_ammunation, "SHP_TRAY_POSE", "WEAPONS", 1000.0, True, False, False, False, -1)
+$return_animation_time_ammunation = 0.0
+$shop_progress_ammunation = 1
+
+:AMUNAT_2480
+if 
+  $flag_shooting_range_mission == 0
+goto_if_false @AMUNAT_2700
+if or
+  Char.IsShooting($scplayer)
+  Player.IsTargetingChar($player1, $shop_keep_ammunation)
+  Char.HasBeenDamagedByWeapon($shop_keep_ammunation, WeaponType.AnyWeapon)
+goto_if_false @AMUNAT_2613
+$sample_name_shops = Char.SetSayContextImportant($shop_keep_ammunation, 327, False, False, True)
+Task.StandStill($shop_keep_ammunation, 5)
+Char.SetWeaponSkill($shop_keep_ammunation, 2)
+Char.GiveWeapon($shop_keep_ammunation, WeaponType.Pistol, 30000)
+Char.SetAccuracy($shop_keep_ammunation, 80)
+Task.StayInSamePlace($shop_keep_ammunation, True)
+Task.KillCharOnFoot($shop_keep_ammunation, $scplayer)
+$blob_flag_shop = 0
+$flag_attacked_ammu_keeper = 1
+goto @AMUNAT_2693
+
+:AMUNAT_2613
+$blob_flag_shop = 1
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, $keep_offX, $keep_offY, $keep_offZ, 1.0, 1.0, 4.0, $blob_flag_shop)
+goto_if_false @AMUNAT_2693
+if 
+  Player.CanStartMission($player1)
+goto_if_false @AMUNAT_2693
+$shop_progress_ammunation = 0
+$flag_ammu = 3
+
+:AMUNAT_2693
+goto @AMUNAT_2874
+
+:AMUNAT_2700
+if or
+  Player.IsTargetingChar($player1, $shop_keep_ammunation)
+  Char.HasBeenDamagedByWeapon($shop_keep_ammunation, WeaponType.AnyWeapon)
+goto_if_false @AMUNAT_2810
+$sample_name_shops = Char.SetSayContextImportant($shop_keep_ammunation, 327, False, False, True)
+Task.StandStill($shop_keep_ammunation, 5)
+Char.SetWeaponSkill($shop_keep_ammunation, 2)
+Char.GiveWeapon($shop_keep_ammunation, WeaponType.Pistol, 30000)
+Char.SetAccuracy($shop_keep_ammunation, 80)
+Task.StayInSamePlace($shop_keep_ammunation, True)
+Task.KillCharOnFoot($shop_keep_ammunation, $scplayer)
+$blob_flag_shop = 0
+$flag_attacked_ammu_keeper = 1
+goto @AMUNAT_2874
+
+:AMUNAT_2810
+$blob_flag_shop = 1
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, $keep_offX, $keep_offY, $keep_offZ, 1.0, 1.0, 4.0, $blob_flag_shop)
+goto_if_false @AMUNAT_2874
+$shop_progress_ammunation = 0
+$flag_ammu = 3
+
+:AMUNAT_2874
+goto @AMUNAT_2926
+
+:AMUNAT_2881
+gosub @AMUNAT_8273
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_weapon_shop
+goto_if_false @AMUNAT_2919
+gosub @AMUNAT_8535
+
+:AMUNAT_2919
+goto @AMUNAT_640
+
+:AMUNAT_2926
+goto @AMUNAT_2978
+
+:AMUNAT_2933
+gosub @AMUNAT_8273
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_weapon_shop
+goto_if_false @AMUNAT_2971
+gosub @AMUNAT_8535
+
+:AMUNAT_2971
+goto @AMUNAT_640
+
+:AMUNAT_2978
+if 
+  $flag_ammu == 3
+goto_if_false @AMUNAT_3062
+Player.SetControl($player1, False)
+Game.SetMinigameInProgress(True)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Char.ClearTasksImmediately($scplayer)
+World.ClearArea(1, $player_x, $player_y, $player_z, 1.0)
+Text.ClearThisPrint('SHOPNO')
+TIMERA = 0
+$flag_ammu = 4
+
+:AMUNAT_3062
+if 
+  $flag_ammu == 4
+goto_if_false @AMUNAT_3421
+if 
+  Char.IsDead($shop_keep_ammunation)
+goto_if_false @AMUNAT_3141
+gosub @AMUNAT_8273
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_weapon_shop
+goto_if_false @AMUNAT_3134
+gosub @AMUNAT_8535
+
+:AMUNAT_3134
+goto @AMUNAT_640
+
+:AMUNAT_3141
+if 
+  $shop_progress_ammunation == 0
+goto_if_false @AMUNAT_3421
+if 
+  TIMERA >= 300
+goto_if_false @AMUNAT_3421
+Char.SetCoordinatesDontWarpGang($scplayer, $keep_offX, $keep_offY, $keep_offZ)
+Char.SetHeading($scplayer, $player_heading_ammunation)
+$temp_shopX, $temp_shopY, $temp_shopZ = Char.GetCoordinates($shop_keep_ammunation)
+if or
+  not is_float_var_equal_to_float_var $temp_shopX == $ammuX
+  not is_float_var_equal_to_float_var $temp_shopY == $ammuY
+  not is_float_var_equal_to_float_var $temp_shopZ == $ammuZ
+goto_if_false @AMUNAT_3271
+Char.SetCoordinates($shop_keep_ammunation, $ammuX, $ammuY, $ammuZ)
+Char.SetHeading($shop_keep_ammunation, $shop_keep_heading_ammunation)
+
+:AMUNAT_3271
+Camera.SetFixedPosition($cam_offx, $cam_offy, $cam_offz, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($ammu_camera_pointX, $ammu_camera_pointY, $ammu_camera_pointZ, SwitchType.JumpCut)
+$sample_name_shops = Char.SetSayContextImportant($shop_keep_ammunation, 333, False, False, True)
+if 
+  $flag_on_doberman_mission == 1
+goto_if_false @AMUNAT_3352
+$flag_bought_gun_for_doberman = 1
+
+:AMUNAT_3352
+if 
+  Player.IsPlaying($player1)
+goto_if_false @AMUNAT_3389
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+goto @AMUNAT_3403
+
+:AMUNAT_3389
+gosub @AMUNAT_8535
+goto @AMUNAT_640
+
+:AMUNAT_3403
+Hud.DisplayRadar(False)
+$flag_ammu = 5
+$shop_progress_ammunation = 0
+
+:AMUNAT_3421
+if 
+  $flag_ammu == 5
+goto_if_false @AMUNAT_4241
+if 
+  Char.IsDead($shop_keep_ammunation)
+goto_if_false @AMUNAT_3500
+gosub @AMUNAT_8273
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_weapon_shop
+goto_if_false @AMUNAT_3493
+gosub @AMUNAT_8535
+
+:AMUNAT_3493
+goto @AMUNAT_640
+
+:AMUNAT_3500
+if 
+  1 > $shop_progress_ammunation
+goto_if_false @AMUNAT_3550
+if 
+  $main_menu_drawn_shops == 0
+goto_if_false @AMUNAT_3550
+gosub @AMUNAT_9980
+gosub @AMUNAT_10986
+
+:AMUNAT_3550
+if 
+  $shop_progress_ammunation == 0
+goto_if_false @AMUNAT_3616
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @AMUNAT_3592
+$shop_progress_ammunation = 3
+
+:AMUNAT_3592
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @AMUNAT_3616
+$shop_progress_ammunation = 1
+
+:AMUNAT_3616
+if 
+  $shop_progress_ammunation == 1
+goto_if_false @AMUNAT_3862
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @AMUNAT_3862
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @AMUNAT_3683
+Text.ClearHelp
+Menu.Delete($main_menu_shops)
+$main_menu_drawn_shops = 0
+
+:AMUNAT_3683
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @AMUNAT_3715
+Text.ClearHelp
+Menu.Delete($sub_menu_shops)
+$sub_menu_drawn_shops = 0
+
+:AMUNAT_3715
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @AMUNAT_3747
+Text.ClearHelp
+Menu.Delete($cost_menu_shops)
+$cost_menu_drawn_shops = 0
+
+:AMUNAT_3747
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @AMUNAT_3777
+Menu.Delete($bought_menu_shops)
+$bought_menu_drawn_shops = 0
+
+:AMUNAT_3777
+Text.ClearThisPrint('AMMUA')
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('AMMUC')
+Text.ClearThisPrint('AMMUD')
+$sample_name_shops = Char.SetSayContextImportant($shop_keep_ammunation, 331, False, False, True)
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Game.SetMinigameInProgress(False)
+Hud.DisplayRadar(True)
+$shop_progress_ammunation = 2
+
+:AMUNAT_3862
+if 
+  $shop_progress_ammunation == 2
+goto_if_false @AMUNAT_4090
+if 
+  $flag_attacked_ammu_keeper == 0
+goto_if_false @AMUNAT_3999
+if or
+  Char.IsShooting($scplayer)
+  Player.IsTargetingChar($player1, $shop_keep_ammunation)
+  Char.HasBeenDamagedByWeapon($shop_keep_ammunation, WeaponType.AnyWeapon)
+goto_if_false @AMUNAT_3999
+$sample_name_shops = Char.SetSayContextImportant($shop_keep_ammunation, 327, False, False, True)
+Task.StandStill($shop_keep_ammunation, 5)
+Char.SetWeaponSkill($shop_keep_ammunation, 2)
+Char.GiveWeapon($shop_keep_ammunation, WeaponType.Pistol, 30000)
+Char.SetAccuracy($shop_keep_ammunation, 80)
+Task.StayInSamePlace($shop_keep_ammunation, True)
+Task.KillCharOnFoot($shop_keep_ammunation, $scplayer)
+$flag_attacked_ammu_keeper = 1
+
+:AMUNAT_3999
+if 
+  not Char.LocateOnFoot3D($scplayer, 0, $keep_offX, $keep_offY, $keep_offZ, 1.0, 1.0, 4.0)
+goto_if_false @AMUNAT_4090
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$created_this_weapon = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_ammu = 2
+$shop_progress_ammunation = 0
+
+:AMUNAT_4090
+if 
+  $shop_progress_ammunation == 3
+goto_if_false @AMUNAT_4241
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @AMUNAT_4241
+$main_menu_selection_ammu = Menu.GetItemAccepted($main_menu_shops)
+set_var_text_label s$section_selected_ammu = $item_text_label($main_menu_selection_ammu,12s)
+if 
+  0 > $main_menu_selection_ammu
+goto_if_false @AMUNAT_4170
+$main_menu_selection_ammu = 0
+
+:AMUNAT_4170
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @AMUNAT_4202
+Text.ClearHelp
+Menu.Delete($main_menu_shops)
+$main_menu_drawn_shops = 0
+
+:AMUNAT_4202
+if 
+  $sub_menu_drawn_shops == 0
+goto_if_false @AMUNAT_4227
+gosub @AMUNAT_11388
+
+:AMUNAT_4227
+$shop_progress_ammunation = 0
+$flag_ammu = 6
+
+:AMUNAT_4241
+if 
+  $flag_ammu == 6
+goto_if_false @AMUNAT_5565
+if 
+  Char.IsDead($shop_keep_ammunation)
+goto_if_false @AMUNAT_4320
+gosub @AMUNAT_8273
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_weapon_shop
+goto_if_false @AMUNAT_4313
+gosub @AMUNAT_8535
+
+:AMUNAT_4313
+goto @AMUNAT_640
+
+:AMUNAT_4320
+if 
+  1 > $shop_progress_ammunation
+goto_if_false @AMUNAT_4363
+if 
+  $sub_menu_drawn_shops == 0
+goto_if_false @AMUNAT_4363
+gosub @AMUNAT_11388
+
+:AMUNAT_4363
+if 
+  $shop_progress_ammunation == 0
+goto_if_false @AMUNAT_4429
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @AMUNAT_4405
+$shop_progress_ammunation = 2
+
+:AMUNAT_4405
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @AMUNAT_4429
+$shop_progress_ammunation = 1
+
+:AMUNAT_4429
+if 
+  $shop_progress_ammunation == 1
+goto_if_false @AMUNAT_4542
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @AMUNAT_4542
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @AMUNAT_4496
+Text.ClearHelp
+Menu.Delete($sub_menu_shops)
+$sub_menu_drawn_shops = 0
+
+:AMUNAT_4496
+if 
+  $main_menu_drawn_shops == 0
+goto_if_false @AMUNAT_4528
+gosub @AMUNAT_9980
+gosub @AMUNAT_10986
+
+:AMUNAT_4528
+$shop_progress_ammunation = 0
+$flag_ammu = 5
+
+:AMUNAT_4542
+if 
+  $shop_progress_ammunation == 2
+goto_if_false @AMUNAT_4834
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @AMUNAT_4834
+$sub_menu_selection_ammu = Menu.GetItemAccepted($sub_menu_shops)
+if 
+  0 > $sub_menu_selection_ammu
+goto_if_false @AMUNAT_4610
+$sub_menu_selection_ammu = 0
+
+:AMUNAT_4610
+set_var_int_to_var_int $weapon_ammu = $second_menu_weapon($sub_menu_selection_ammu,3i)
+s$weapon_name = Shopping.GetNameOfItem($weapon_ammu)
+$weapon_price = Shopping.GetPriceOfItem($weapon_ammu)
+if 
+  not is_int_var_equal_to_constant $weapon_ammu == 48
+goto_if_false @AMUNAT_4679
+$what_slot = Weapon.GetSlot($weapon_ammu)
+$model_index_ammu = Weapon.GetModel($weapon_ammu)
+goto @AMUNAT_4687
+
+:AMUNAT_4679
+set_var_int_to_constant $model_index_ammu = 373
+
+:AMUNAT_4687
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @AMUNAT_4719
+Text.ClearHelp
+Menu.Delete($sub_menu_shops)
+$sub_menu_drawn_shops = 0
+
+:AMUNAT_4719
+Task.PlayAnimNonInterruptable($shop_keep_ammunation, "SHP_G_LIFT_IN", "WEAPONS", 1000.0, False, False, False, True, -1)
+$return_animation_time_ammunation = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_ammunation, "SHP_G_LIFT_IN")
+goto_if_false @AMUNAT_4827
+$return_animation_time_ammunation = Char.GetAnimCurrentTime($shop_keep_ammunation, "SHP_G_LIFT_IN")
+
+:AMUNAT_4827
+$shop_progress_ammunation = 3
+
+:AMUNAT_4834
+if 
+  $shop_progress_ammunation == 3
+goto_if_false @AMUNAT_4934
+if 
+  Char.IsPlayingAnim($shop_keep_ammunation, "SHP_G_LIFT_IN")
+goto_if_false @AMUNAT_4906
+$return_animation_time_ammunation = Char.GetAnimCurrentTime($shop_keep_ammunation, "SHP_G_LIFT_IN")
+
+:AMUNAT_4906
+if 
+  $return_animation_time_ammunation == 1.0
+goto_if_false @AMUNAT_4934
+$shop_progress_ammunation = 4
+
+:AMUNAT_4934
+if 
+  $shop_progress_ammunation == 4
+goto_if_false @AMUNAT_5110
+$weapon_obj = Object.Create($model_index_ammu, $ammuX, $ammuY, $ammuZ)
+gosub @AMUNAT_8960
+gosub @AMUNAT_9615
+Task.PickUpObject($shop_keep_ammunation, $weapon_obj, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 0)
+Object.FreezePosition($weapon_obj, False)
+Task.PlayAnimNonInterruptable($shop_keep_ammunation, v$anim_name_lift_ammu, "WEAPONS", 1000.0, False, False, False, True, -1)
+$return_animation_time_ammunation = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_ammunation, v$anim_name_lift_ammu)
+goto_if_false @AMUNAT_5103
+$return_animation_time_ammunation = Char.GetAnimCurrentTime($shop_keep_ammunation, v$anim_name_lift_ammu)
+
+:AMUNAT_5103
+$shop_progress_ammunation = 5
+
+:AMUNAT_5110
+if 
+  $shop_progress_ammunation == 5
+goto_if_false @AMUNAT_5300
+if 
+  Char.IsPlayingAnim($shop_keep_ammunation, v$anim_name_lift_ammu)
+goto_if_false @AMUNAT_5158
+$return_animation_time_ammunation = Char.GetAnimCurrentTime($shop_keep_ammunation, v$anim_name_lift_ammu)
+
+:AMUNAT_5158
+if 
+  $return_animation_time_ammunation == 1.0
+goto_if_false @AMUNAT_5300
+Char.DropObject($shop_keep_ammunation, False)
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1131)
+Object.SetCoordinates($weapon_obj, $weapon_on_counterX_shops, $weapon_on_counterY_shops, $weapon_on_counterZ_shops)
+Object.FreezePosition($weapon_obj, True)
+Task.PlayAnimNonInterruptable($shop_keep_ammunation, v$anim_name_lift_end_ammu, "WEAPONS", 1000.0, False, False, False, True, -1)
+$return_animation_time_ammunation = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_ammunation, v$anim_name_lift_end_ammu)
+goto_if_false @AMUNAT_5293
+$return_animation_time_ammunation = Char.GetAnimCurrentTime($shop_keep_ammunation, v$anim_name_lift_end_ammu)
+
+:AMUNAT_5293
+$shop_progress_ammunation = 6
+
+:AMUNAT_5300
+if 
+  $shop_progress_ammunation == 6
+goto_if_false @AMUNAT_5565
+if 
+  Char.IsPlayingAnim($shop_keep_ammunation, v$anim_name_lift_end_ammu)
+goto_if_false @AMUNAT_5348
+$return_animation_time_ammunation = Char.GetAnimCurrentTime($shop_keep_ammunation, v$anim_name_lift_end_ammu)
+
+:AMUNAT_5348
+if 
+  $return_animation_time_ammunation == 1.0
+goto_if_false @AMUNAT_5565
+Task.PlayAnimNonInterruptable($shop_keep_ammunation, "SHP_TRAY_POSE", "WEAPONS", 1000.0, True, False, False, False, -1)
+$return_animation_time_ammunation = 0.0
+if 
+  $cost_menu_drawn_shops == 0
+goto_if_false @AMUNAT_5448
+gosub @AMUNAT_7632
+
+:AMUNAT_5448
+if 
+  not is_int_var_equal_to_constant $weapon_ammu == 48
+goto_if_false @AMUNAT_5551
+set_var_int_to_var_int $temp_slot = $what_slot
+$temp_slot += 1
+$player_weapontype, $player_ammo, $player_weapon_model = Char.GetWeaponInSlot($scplayer, $temp_slot)
+if 
+  not is_int_var_equal_to_int_var $player_weapontype == $weapon_ammu
+goto_if_false @AMUNAT_5551
+if 
+  $player_ammo > 0
+goto_if_false @AMUNAT_5551
+Text.PrintNow('AMMUA', 5000, 1)
+
+:AMUNAT_5551
+$flag_ammu = 7
+$shop_progress_ammunation = 0
+
+:AMUNAT_5565
+if 
+  $flag_ammu == 7
+goto_if_false @AMUNAT_7597
+if 
+  Char.IsDead($shop_keep_ammunation)
+goto_if_false @AMUNAT_5644
+gosub @AMUNAT_8273
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_weapon_shop
+goto_if_false @AMUNAT_5637
+gosub @AMUNAT_8535
+
+:AMUNAT_5637
+goto @AMUNAT_640
+
+:AMUNAT_5644
+if 
+  1 > $shop_progress_ammunation
+goto_if_false @AMUNAT_5687
+if 
+  $cost_menu_drawn_shops == 0
+goto_if_false @AMUNAT_5687
+gosub @AMUNAT_7632
+
+:AMUNAT_5687
+if 
+  $shop_progress_ammunation == 0
+goto_if_false @AMUNAT_5753
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @AMUNAT_5729
+$shop_progress_ammunation = 5
+
+:AMUNAT_5729
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @AMUNAT_5753
+$shop_progress_ammunation = 1
+
+:AMUNAT_5753
+if 
+  $shop_progress_ammunation == 1
+goto_if_false @AMUNAT_5899
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @AMUNAT_5899
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @AMUNAT_5820
+Text.ClearHelp
+Menu.Delete($cost_menu_shops)
+$cost_menu_drawn_shops = 0
+
+:AMUNAT_5820
+Task.PlayAnimNonInterruptable($shop_keep_ammunation, v$anim_name_return_start_ammu, "WEAPONS", 1000.0, False, False, False, True, -1)
+$return_animation_time_ammunation = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_ammunation, v$anim_name_return_start_ammu)
+goto_if_false @AMUNAT_5892
+$return_animation_time_ammunation = Char.GetAnimCurrentTime($shop_keep_ammunation, v$anim_name_return_start_ammu)
+
+:AMUNAT_5892
+$shop_progress_ammunation = 2
+
+:AMUNAT_5899
+if 
+  $shop_progress_ammunation == 2
+goto_if_false @AMUNAT_6095
+if 
+  Char.IsPlayingAnim($shop_keep_ammunation, v$anim_name_return_start_ammu)
+goto_if_false @AMUNAT_5947
+$return_animation_time_ammunation = Char.GetAnimCurrentTime($shop_keep_ammunation, v$anim_name_return_start_ammu)
+
+:AMUNAT_5947
+if 
+  $return_animation_time_ammunation == 1.0
+goto_if_false @AMUNAT_6095
+Task.PickUpObject($shop_keep_ammunation, $weapon_obj, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 0)
+Object.FreezePosition($weapon_obj, False)
+Task.PlayAnimNonInterruptable($shop_keep_ammunation, v$anim_name_return_ammu, "WEAPONS", 1000.0, False, False, False, True, -1)
+$return_animation_time_ammunation = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_ammunation, v$anim_name_return_ammu)
+goto_if_false @AMUNAT_6088
+$return_animation_time_ammunation = Char.GetAnimCurrentTime($shop_keep_ammunation, v$anim_name_return_ammu)
+
+:AMUNAT_6088
+$shop_progress_ammunation = 3
+
+:AMUNAT_6095
+if 
+  $shop_progress_ammunation == 3
+goto_if_false @AMUNAT_6317
+if 
+  Char.IsPlayingAnim($shop_keep_ammunation, v$anim_name_return_ammu)
+goto_if_false @AMUNAT_6143
+$return_animation_time_ammunation = Char.GetAnimCurrentTime($shop_keep_ammunation, v$anim_name_return_ammu)
+
+:AMUNAT_6143
+if 
+  $return_animation_time_ammunation == 1.0
+goto_if_false @AMUNAT_6317
+Char.DropObject($shop_keep_ammunation, False)
+Object.SetCoordinates($weapon_obj, $weapon_on_counterX_shops, $weapon_on_counterY_shops, $weapon_on_counterZ_shops)
+Object.FreezePosition($weapon_obj, True)
+gosub @AMUNAT_8953
+Task.PlayAnimNonInterruptable($shop_keep_ammunation, "SHP_G_LIFT_OUT", "WEAPONS", 1000.0, False, False, False, True, -1)
+$return_animation_time_ammunation = 0.0
+if 
+  Char.IsPlayingAnim($shop_keep_ammunation, "SHP_G_LIFT_OUT")
+goto_if_false @AMUNAT_6310
+$return_animation_time_ammunation = Char.GetAnimCurrentTime($shop_keep_ammunation, "SHP_G_LIFT_OUT")
+
+:AMUNAT_6310
+$shop_progress_ammunation = 4
+
+:AMUNAT_6317
+if 
+  $shop_progress_ammunation == 4
+goto_if_false @AMUNAT_6480
+if 
+  Char.IsPlayingAnim($shop_keep_ammunation, "SHP_G_LIFT_OUT")
+goto_if_false @AMUNAT_6391
+$return_animation_time_ammunation = Char.GetAnimCurrentTime($shop_keep_ammunation, "SHP_G_LIFT_OUT")
+
+:AMUNAT_6391
+if 
+  $return_animation_time_ammunation == 1.0
+goto_if_false @AMUNAT_6480
+Task.PlayAnimNonInterruptable($shop_keep_ammunation, "SHP_TRAY_POSE", "WEAPONS", 1000.0, True, False, False, False, -1)
+$return_animation_time_ammunation = 0.0
+$shop_progress_ammunation = 0
+$flag_ammu = 6
+
+:AMUNAT_6480
+if 
+  $shop_progress_ammunation == 5
+goto_if_false @AMUNAT_7048
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @AMUNAT_7048
+Text.ClearThisPrint('AMMUA')
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('AMMUC')
+Text.ClearThisPrint('AMMUD')
+$flag_no_money_shops = 0
+$flag_buy_ammo_flag = 0
+$players_money = Player.StoreScore($player1)
+if 
+  is_int_var_greater_or_equal_to_int_var $players_money >= $weapon_price
+goto_if_false @AMUNAT_6969
+if 
+  not is_int_var_equal_to_constant $weapon_ammu == 48
+goto_if_false @AMUNAT_6791
+$player_ammo = Char.GetAmmoInWeapon($scplayer, $weapon_ammu)
+if 
+  9999 > $player_ammo
+goto_if_false @AMUNAT_6705
+Shopping.BuyItem($weapon_ammu)
+$sample_name_shops = Char.SetSayContextImportant($shop_keep_ammunation, 323, False, False, True)
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1052)
+$shop_progress_ammunation = 6
+TIMERB = 0
+goto @AMUNAT_6784
+
+:AMUNAT_6705
+if 
+  $flag_buy_ammo_flag == 0
+goto_if_false @AMUNAT_6784
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1053)
+Text.PrintNow('AMMUC', 5000, 1)
+$sample_name_shops = Char.SetSayContextImportant($shop_keep_ammunation, 322, False, False, True)
+$shop_progress_ammunation = 0
+$flag_buy_ammo_flag = 1
+
+:AMUNAT_6784
+goto @AMUNAT_6962
+
+:AMUNAT_6791
+$player_armour = Char.GetArmor($scplayer)
+$player_max_armour = Player.GetMaxArmor($player1)
+if 
+  is_int_var_greater_than_int_var $player_max_armour > $player_armour
+goto_if_false @AMUNAT_6883
+$sample_name_shops = Char.SetSayContextImportant($shop_keep_ammunation, 323, False, False, True)
+Shopping.BuyItem($weapon_ammu)
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1052)
+$shop_progress_ammunation = 6
+TIMERB = 0
+goto @AMUNAT_6962
+
+:AMUNAT_6883
+if 
+  $flag_buy_ammo_flag == 0
+goto_if_false @AMUNAT_6962
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1053)
+$sample_name_shops = Char.SetSayContextImportant($shop_keep_ammunation, 322, False, False, True)
+Text.PrintNow('AMMUD', 5000, 1)
+$shop_progress_ammunation = 0
+$flag_buy_ammo_flag = 1
+
+:AMUNAT_6962
+goto @AMUNAT_7048
+
+:AMUNAT_6969
+if 
+  $flag_no_money_shops == 0
+goto_if_false @AMUNAT_7048
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1053)
+$sample_name_shops = Char.SetSayContextImportant($shop_keep_ammunation, 324, False, False, True)
+Text.PrintNow('SHOPNO', 5000, 1)
+$shop_progress_ammunation = 0
+$flag_no_money_shops = 1
+
+:AMUNAT_7048
+if 
+  $shop_progress_ammunation == 6
+goto_if_false @AMUNAT_7480
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @AMUNAT_7098
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:AMUNAT_7098
+if 
+  $bought_menu_drawn_shops == 0
+goto_if_false @AMUNAT_7466
+$bought_menu_shops = Menu.Create('AMMUN', 29.0, 20.0, 93.0, 2, False, 1, 1)
+Menu.SetColumnOrientation($bought_menu_shops, 0, 1)
+Menu.SetColumn($bought_menu_shops, 0, 'WEAPON', 'BOUGHT', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetColumnOrientation($bought_menu_shops, 1, 0)
+Menu.SetColumn($bought_menu_shops, 1, 'COST', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetItemWithNumber($bought_menu_shops, 1, 0, 'DOLLAR', $weapon_price)
+Menu.SetColumnWidth($bought_menu_shops, 0, 140)
+Menu.SetColumnWidth($bought_menu_shops, 1, 46)
+$bought_menu_drawn_shops = 1
+
+:AMUNAT_7466
+TIMERB = 0
+$shop_progress_ammunation = 7
+
+:AMUNAT_7480
+if 
+  $shop_progress_ammunation == 7
+goto_if_false @AMUNAT_7597
+if 
+  TIMERB >= 1000
+goto_if_false @AMUNAT_7597
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @AMUNAT_7547
+Menu.Delete($bought_menu_shops)
+$bought_menu_drawn_shops = 0
+
+:AMUNAT_7547
+$shop_progress_ammunation = 0
+if 
+  1 > $shop_progress_ammunation
+goto_if_false @AMUNAT_7597
+if 
+  $cost_menu_drawn_shops == 0
+goto_if_false @AMUNAT_7597
+gosub @AMUNAT_7632
+
+:AMUNAT_7597
+goto @AMUNAT_7611
+
+:AMUNAT_7604
+gosub @AMUNAT_8535
+
+:AMUNAT_7611
+goto @AMUNAT_7625
+
+:AMUNAT_7618
+gosub @AMUNAT_8535
+
+:AMUNAT_7625
+goto @AMUNAT_640
+
+:AMUNAT_7632
+if 
+  $cost_menu_drawn_shops == 0
+goto_if_false @AMUNAT_8271
+Text.PrintHelpForever('AMMU_H3')
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @AMUNAT_7723
+$cost_menu_shops = Menu.Create('AMMUN', 29.0, 95.0, 93.0, 2, False, 1, 1)
+goto @AMUNAT_7964
+
+:AMUNAT_7723
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @AMUNAT_7785
+$cost_menu_shops = Menu.Create('AMMUN', 29.0, 95.0, 93.0, 2, False, 1, 1)
+goto @AMUNAT_7964
+
+:AMUNAT_7785
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @AMUNAT_7847
+$cost_menu_shops = Menu.Create('AMMUN', 29.0, 95.0, 93.0, 2, False, 1, 1)
+goto @AMUNAT_7964
+
+:AMUNAT_7847
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @AMUNAT_7909
+$cost_menu_shops = Menu.Create('AMMUN', 29.0, 95.0, 93.0, 2, False, 1, 1)
+goto @AMUNAT_7964
+
+:AMUNAT_7909
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @AMUNAT_7964
+$cost_menu_shops = Menu.Create('AMMUN', 29.0, 95.0, 93.0, 2, False, 1, 1)
+
+:AMUNAT_7964
+Menu.SetColumnOrientation($cost_menu_shops, 0, 1)
+Menu.SetColumn($cost_menu_shops, 0, 'WEAPON', s$weapon_name, 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetColumnOrientation($cost_menu_shops, 1, 0)
+Menu.SetColumn($cost_menu_shops, 1, 'COST', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetItemWithNumber($cost_menu_shops, 1, 0, 'DOLLAR', $weapon_price)
+Menu.SetColumnWidth($cost_menu_shops, 0, 140)
+Menu.SetColumnWidth($cost_menu_shops, 1, 46)
+$cost_menu_drawn_shops = 1
+
+:AMUNAT_8271
+return 
+
+:AMUNAT_8273
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @AMUNAT_8305
+Text.ClearHelp
+Menu.Delete($main_menu_shops)
+$main_menu_drawn_shops = 0
+
+:AMUNAT_8305
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @AMUNAT_8337
+Text.ClearHelp
+Menu.Delete($sub_menu_shops)
+$sub_menu_drawn_shops = 0
+
+:AMUNAT_8337
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @AMUNAT_8369
+Text.ClearHelp
+Menu.Delete($cost_menu_shops)
+$cost_menu_drawn_shops = 0
+
+:AMUNAT_8369
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @AMUNAT_8399
+Menu.Delete($bought_menu_shops)
+$bought_menu_drawn_shops = 0
+
+:AMUNAT_8399
+if 
+  $flag_ammu >= 1
+goto_if_false @AMUNAT_8419
+Text.ClearHelp
+
+:AMUNAT_8419
+Text.ClearThisPrint('AMMUA')
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('AMMUC')
+Text.ClearThisPrint('AMMUD')
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$created_this_weapon = 0
+$shop_progress_ammunation = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$flag_buy_ammo_flag = 0
+$flag_ammu = 2
+return 
+
+:AMUNAT_8535
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @AMUNAT_8567
+Text.ClearHelp
+Menu.Delete($main_menu_shops)
+$main_menu_drawn_shops = 0
+
+:AMUNAT_8567
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @AMUNAT_8599
+Text.ClearHelp
+Menu.Delete($sub_menu_shops)
+$sub_menu_drawn_shops = 0
+
+:AMUNAT_8599
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @AMUNAT_8631
+Text.ClearHelp
+Menu.Delete($cost_menu_shops)
+$cost_menu_drawn_shops = 0
+
+:AMUNAT_8631
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @AMUNAT_8661
+Menu.Delete($bought_menu_shops)
+$bought_menu_drawn_shops = 0
+
+:AMUNAT_8661
+if 
+  $flag_ammu >= 1
+goto_if_false @AMUNAT_8681
+Text.ClearHelp
+
+:AMUNAT_8681
+Text.ClearThisPrint('AMMUA')
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('AMMUC')
+Text.ClearThisPrint('AMMUD')
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$flag_attacked_ammu_keeper = 0
+$created_this_weapon = 0
+$shop_progress_ammunation = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$flag_buy_ammo_flag = 0
+$flag_ammu = 0
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(347)
+Streaming.MarkModelAsNoLongerNeeded(348)
+Streaming.MarkModelAsNoLongerNeeded(349)
+Streaming.MarkModelAsNoLongerNeeded(350)
+Streaming.MarkModelAsNoLongerNeeded(351)
+Streaming.MarkModelAsNoLongerNeeded(342)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(353)
+Streaming.MarkModelAsNoLongerNeeded(372)
+Streaming.MarkModelAsNoLongerNeeded(355)
+Streaming.MarkModelAsNoLongerNeeded(356)
+Streaming.MarkModelAsNoLongerNeeded(357)
+Streaming.MarkModelAsNoLongerNeeded(358)
+Streaming.MarkModelAsNoLongerNeeded(373)
+Streaming.MarkModelAsNoLongerNeeded(363)
+Streaming.MarkModelAsNoLongerNeeded(364)
+Text.UseCommands(False)
+Streaming.MarkModelAsNoLongerNeeded($shopkeeper_model_shops)
+Char.Delete($shop_keep_ammunation)
+Stat.ShowUpdateStats(True)
+Hud.DisplayRadar(True)
+Game.SetMinigameInProgress(False)
+if 
+  $trigger_new_range_level == 1
+goto_if_false @AMUNAT_8949
+Text.PrintHelp('ANR_56')
+$trigger_new_range_level = 0
+
+:AMUNAT_8949
+terminate_this_script 
+return 
+
+:AMUNAT_8953
+Object.Delete($weapon_obj)
+return 
+
+:AMUNAT_8960
+if or
+  is_int_var_equal_to_constant $model_index_ammu == 349
+  is_int_var_equal_to_constant $model_index_ammu == 351
+  is_int_var_equal_to_constant $model_index_ammu == 355
+  is_int_var_equal_to_constant $model_index_ammu == 356
+  is_int_var_equal_to_constant $model_index_ammu == 358
+  is_int_var_equal_to_constant $model_index_ammu == 357
+goto_if_false @AMUNAT_9113
+set_var_text_label16 v$anim_name_lift_ammu = "SHP_2H_LIFT"
+set_var_text_label16 v$anim_name_lift_end_ammu = "SHP_2H_LIFT_END"
+set_var_float_to_var_float $weapon_on_counterX_shops = $ammuX
+$weapon_on_counterX_shops += 0.231
+set_var_float_to_var_float $weapon_on_counterY_shops = $ammuY
+$weapon_on_counterY_shops += 0.636
+set_var_float_to_var_float $weapon_on_counterZ_shops = $ammuZ
+$weapon_on_counterZ_shops += 1.053
+
+:AMUNAT_9113
+if 
+  is_int_var_equal_to_constant $model_index_ammu == 350
+goto_if_false @AMUNAT_9226
+set_var_text_label16 v$anim_name_lift_ammu = "SHP_2H_LIFT"
+set_var_text_label16 v$anim_name_lift_end_ammu = "SHP_2H_LIFT_END"
+set_var_float_to_var_float $weapon_on_counterX_shops = $ammuX
+$weapon_on_counterX_shops += 0.231
+set_var_float_to_var_float $weapon_on_counterY_shops = $ammuY
+$weapon_on_counterY_shops += 0.636
+set_var_float_to_var_float $weapon_on_counterZ_shops = $ammuZ
+$weapon_on_counterZ_shops += 1.053
+
+:AMUNAT_9226
+if or
+  is_int_var_equal_to_constant $model_index_ammu == 346
+  is_int_var_equal_to_constant $model_index_ammu == 347
+  is_int_var_equal_to_constant $model_index_ammu == 348
+  is_int_var_equal_to_constant $model_index_ammu == 342
+  is_int_var_equal_to_constant $model_index_ammu == 352
+  is_int_var_equal_to_constant $model_index_ammu == 353
+goto_if_false @AMUNAT_9379
+set_var_text_label16 v$anim_name_lift_ammu = "SHP_1H_LIFT"
+set_var_text_label16 v$anim_name_lift_end_ammu = "SHP_1H_LIFT_END"
+set_var_float_to_var_float $weapon_on_counterX_shops = $ammuX
+$weapon_on_counterX_shops += 0.108
+set_var_float_to_var_float $weapon_on_counterY_shops = $ammuY
+$weapon_on_counterY_shops += 0.654
+set_var_float_to_var_float $weapon_on_counterZ_shops = $ammuZ
+$weapon_on_counterZ_shops += 1.053
+
+:AMUNAT_9379
+if or
+  is_int_var_equal_to_constant $model_index_ammu == 363
+  is_int_var_equal_to_constant $model_index_ammu == 372
+goto_if_false @AMUNAT_9500
+set_var_text_label16 v$anim_name_lift_ammu = "SHP_1H_LIFT"
+set_var_text_label16 v$anim_name_lift_end_ammu = "SHP_1H_LIFT_END"
+set_var_float_to_var_float $weapon_on_counterX_shops = $ammuX
+$weapon_on_counterX_shops += 0.108
+set_var_float_to_var_float $weapon_on_counterY_shops = $ammuY
+$weapon_on_counterY_shops += 0.654
+set_var_float_to_var_float $weapon_on_counterZ_shops = $ammuZ
+$weapon_on_counterZ_shops += 1.053
+
+:AMUNAT_9500
+if 
+  is_int_var_equal_to_constant $model_index_ammu == 373
+goto_if_false @AMUNAT_9613
+set_var_text_label16 v$anim_name_lift_ammu = "SHP_AR_LIFT"
+set_var_text_label16 v$anim_name_lift_end_ammu = "SHP_AR_LIFT_END"
+set_var_float_to_var_float $weapon_on_counterX_shops = $ammuX
+$weapon_on_counterX_shops += 0.175
+set_var_float_to_var_float $weapon_on_counterY_shops = $ammuY
+$weapon_on_counterY_shops += 0.676
+set_var_float_to_var_float $weapon_on_counterZ_shops = $ammuZ
+$weapon_on_counterZ_shops += 1.5
+
+:AMUNAT_9613
+return 
+
+:AMUNAT_9615
+if or
+  is_int_var_equal_to_constant $model_index_ammu == 349
+  is_int_var_equal_to_constant $model_index_ammu == 351
+  is_int_var_equal_to_constant $model_index_ammu == 355
+  is_int_var_equal_to_constant $model_index_ammu == 356
+  is_int_var_equal_to_constant $model_index_ammu == 358
+  is_int_var_equal_to_constant $model_index_ammu == 357
+goto_if_false @AMUNAT_9710
+set_var_text_label16 v$anim_name_return_start_ammu = "SHP_2H_RET_S"
+set_var_text_label16 v$anim_name_return_ammu = "SHP_2H_RET"
+
+:AMUNAT_9710
+if 
+  is_int_var_equal_to_constant $model_index_ammu == 350
+goto_if_false @AMUNAT_9765
+set_var_text_label16 v$anim_name_return_start_ammu = "SHP_2H_RET_S"
+set_var_text_label16 v$anim_name_return_ammu = "SHP_2H_RET"
+
+:AMUNAT_9765
+if or
+  is_int_var_equal_to_constant $model_index_ammu == 346
+  is_int_var_equal_to_constant $model_index_ammu == 347
+  is_int_var_equal_to_constant $model_index_ammu == 348
+  is_int_var_equal_to_constant $model_index_ammu == 342
+  is_int_var_equal_to_constant $model_index_ammu == 352
+  is_int_var_equal_to_constant $model_index_ammu == 353
+goto_if_false @AMUNAT_9860
+set_var_text_label16 v$anim_name_return_start_ammu = "SHP_1H_RET_S"
+set_var_text_label16 v$anim_name_return_ammu = "SHP_1H_RET"
+
+:AMUNAT_9860
+if or
+  is_int_var_equal_to_constant $model_index_ammu == 363
+  is_int_var_equal_to_constant $model_index_ammu == 372
+goto_if_false @AMUNAT_9923
+set_var_text_label16 v$anim_name_return_start_ammu = "SHP_1H_RET_S"
+set_var_text_label16 v$anim_name_return_ammu = "SHP_1H_RET"
+
+:AMUNAT_9923
+if 
+  is_int_var_equal_to_constant $model_index_ammu == 373
+goto_if_false @AMUNAT_9978
+set_var_text_label16 v$anim_name_return_start_ammu = "SHP_AR_RET_S"
+set_var_text_label16 v$anim_name_return_ammu = "SHP_AR_RET"
+
+:AMUNAT_9978
+return 
+
+:AMUNAT_9980
+$weapon_count_ammu = 0
+$no_of_different_type_weapons = 0
+$temp_var_shops = 0
+$no_of_pistols = 0
+$no_of_shotguns = 0
+$no_of_microSMG = 0
+$no_of_SMG = 0
+$no_of_assault = 0
+$no_of_thrown = 0
+$no_of_rifle = 0
+$no_of_armour = 0
+$no_of_heavy = 0
+$pistol_name_menu = 0
+$shotgun_name_menu = 0
+$microSMG_name_menu = 0
+$SMG_name_menu = 0
+$assault_name_menu = 0
+$rifle_name_menu = 0
+$thrown_name_menu = 0
+$armour_name_menu = 0
+$heavy_name_menu = 0
+
+:AMUNAT_10127
+if 
+  is_int_var_greater_than_int_var $num_of_weapons > $weapon_count_ammu
+goto_if_false @AMUNAT_10904
+$weapon_ammu = Shopping.GetItem($weapon_count_ammu)
+switch_start $weapon_ammu total_jumps 16 default_jump 0 @AMUNAT_10890 jumps 16 @AMUNAT_10738 22 @AMUNAT_10282 23 @AMUNAT_10282 24 @AMUNAT_10282 25 @AMUNAT_10358 26 @AMUNAT_10358 27 @AMUNAT_10358
+switch_continued 28 @AMUNAT_10434 29 @AMUNAT_10510 30 @AMUNAT_10586 31 @AMUNAT_10586 32 @AMUNAT_10434 33 @AMUNAT_10662 34 @AMUNAT_10662 39 @AMUNAT_10738 48 @AMUNAT_10814
+
+:AMUNAT_10282
+set_var_int_to_var_int $pistol_array($no_of_pistols,3i) = $weapon_ammu
+$no_of_pistols += 1
+if 
+  $pistol_name_menu == 0
+goto_if_false @AMUNAT_10351
+set_var_text_label $item_text_label($no_of_different_type_weapons,12s) = 'GUN1'
+$no_of_different_type_weapons += 1
+$pistol_name_menu = 1
+
+:AMUNAT_10351
+goto @AMUNAT_10890
+
+:AMUNAT_10358
+set_var_int_to_var_int $shotgun_array($no_of_shotguns,3i) = $weapon_ammu
+$no_of_shotguns += 1
+if 
+  $shotgun_name_menu == 0
+goto_if_false @AMUNAT_10427
+set_var_text_label $item_text_label($no_of_different_type_weapons,12s) = 'GUN2'
+$no_of_different_type_weapons += 1
+$shotgun_name_menu = 1
+
+:AMUNAT_10427
+goto @AMUNAT_10890
+
+:AMUNAT_10434
+set_var_int_to_var_int $microSMG_array($no_of_microSMG,2i) = $weapon_ammu
+$no_of_microSMG += 1
+if 
+  $microSMG_name_menu == 0
+goto_if_false @AMUNAT_10503
+set_var_text_label $item_text_label($no_of_different_type_weapons,12s) = 'GUN3'
+$no_of_different_type_weapons += 1
+$microSMG_name_menu = 1
+
+:AMUNAT_10503
+goto @AMUNAT_10890
+
+:AMUNAT_10510
+set_var_int_to_var_int $SMG_array($no_of_SMG,1i) = $weapon_ammu
+$no_of_SMG += 1
+if 
+  $SMG_name_menu == 0
+goto_if_false @AMUNAT_10579
+set_var_text_label $item_text_label($no_of_different_type_weapons,12s) = 'GUN4'
+$no_of_different_type_weapons += 1
+$SMG_name_menu = 1
+
+:AMUNAT_10579
+goto @AMUNAT_10890
+
+:AMUNAT_10586
+set_var_int_to_var_int $assault_array($no_of_assault,2i) = $weapon_ammu
+$no_of_assault += 1
+if 
+  $assault_name_menu == 0
+goto_if_false @AMUNAT_10655
+set_var_text_label $item_text_label($no_of_different_type_weapons,12s) = 'GUN5'
+$no_of_different_type_weapons += 1
+$assault_name_menu = 1
+
+:AMUNAT_10655
+goto @AMUNAT_10890
+
+:AMUNAT_10662
+set_var_int_to_var_int $rifle_array($no_of_rifle,2i) = $weapon_ammu
+$no_of_rifle += 1
+if 
+  $rifle_name_menu == 0
+goto_if_false @AMUNAT_10731
+set_var_text_label $item_text_label($no_of_different_type_weapons,12s) = 'GUN6'
+$no_of_different_type_weapons += 1
+$rifle_name_menu = 1
+
+:AMUNAT_10731
+goto @AMUNAT_10890
+
+:AMUNAT_10738
+set_var_int_to_var_int $thrown_array($no_of_thrown,2i) = $weapon_ammu
+$no_of_thrown += 1
+if 
+  $thrown_name_menu == 0
+goto_if_false @AMUNAT_10807
+set_var_text_label $item_text_label($no_of_different_type_weapons,12s) = 'GUN7'
+$no_of_different_type_weapons += 1
+$thrown_name_menu = 1
+
+:AMUNAT_10807
+goto @AMUNAT_10890
+
+:AMUNAT_10814
+set_var_int_to_var_int $armour_array($no_of_armour,1i) = $weapon_ammu
+$no_of_armour += 1
+if 
+  $armour_name_menu == 0
+goto_if_false @AMUNAT_10883
+set_var_text_label $item_text_label($no_of_different_type_weapons,12s) = 'GUN8'
+$no_of_different_type_weapons += 1
+$armour_name_menu = 1
+
+:AMUNAT_10883
+goto @AMUNAT_10890
+
+:AMUNAT_10890
+$weapon_count_ammu += 1
+goto @AMUNAT_10127
+
+:AMUNAT_10904
+set_var_int_to_var_int $temp_var_shops = $no_of_different_type_weapons
+
+:AMUNAT_10912
+if 
+  12 > $temp_var_shops
+goto_if_false @AMUNAT_10984
+$item_model_index($temp_var_shops,12i) = -1
+$item_price($temp_var_shops,12i) = 0
+set_var_text_label $item_text_label($temp_var_shops,12s) = 'DUMMY'
+$temp_var_shops += 1
+goto @AMUNAT_10912
+
+:AMUNAT_10984
+return 
+
+:AMUNAT_10986
+if 
+  $main_menu_drawn_shops == 0
+goto_if_false @AMUNAT_11386
+Text.PrintHelpForever('AMMU_H')
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @AMUNAT_11077
+$main_menu_shops = Menu.Create('AMMUN', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @AMUNAT_11318
+
+:AMUNAT_11077
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @AMUNAT_11139
+$main_menu_shops = Menu.Create('AMMUN', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @AMUNAT_11318
+
+:AMUNAT_11139
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @AMUNAT_11201
+$main_menu_shops = Menu.Create('AMMUN', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @AMUNAT_11318
+
+:AMUNAT_11201
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @AMUNAT_11263
+$main_menu_shops = Menu.Create('AMMUN', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @AMUNAT_11318
+
+:AMUNAT_11263
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @AMUNAT_11318
+$main_menu_shops = Menu.Create('AMMUN', 29.0, 145.0, 186.0, True, True, 1, 1)
+
+:AMUNAT_11318
+Menu.SetColumnOrientation($main_menu_shops, 0, 1)
+Menu.SetColumn($main_menu_shops, 0, 'DUMMY', s$item_text_label[0], s$item_text_label[1], s$item_text_label[2], s$item_text_label[3], s$item_text_label[4], s$item_text_label[5], s$item_text_label[6], s$item_text_label[7], s$item_text_label[8], s$item_text_label[9], s$item_text_label[10], s$item_text_label[11])
+$main_menu_drawn_shops = 1
+
+:AMUNAT_11386
+return 
+
+:AMUNAT_11388
+$temp_var_ammu = 0
+if 
+  is_var_text_label_equal_to_text_label s$section_selected_ammu == 'GUN1'
+goto_if_false @AMUNAT_11493
+
+:AMUNAT_11420
+if 
+  is_int_var_greater_than_int_var $no_of_pistols > $temp_var_ammu
+goto_if_false @AMUNAT_11493
+s$weapon_name = Shopping.GetNameOfItem($pistol_array($temp_var_ammu,3i))
+set_var_text_label $item_text_label($temp_var_ammu,12s) = s$weapon_name
+set_var_int_to_var_int $second_menu_weapon($temp_var_ammu,3i) = $pistol_array($temp_var_ammu,3i)
+$temp_var_ammu += 1
+goto @AMUNAT_11420
+
+:AMUNAT_11493
+if 
+  is_var_text_label_equal_to_text_label s$section_selected_ammu == 'GUN2'
+goto_if_false @AMUNAT_11591
+
+:AMUNAT_11518
+if 
+  is_int_var_greater_than_int_var $no_of_shotguns > $temp_var_ammu
+goto_if_false @AMUNAT_11591
+s$weapon_name = Shopping.GetNameOfItem($shotgun_array($temp_var_ammu,3i))
+set_var_text_label $item_text_label($temp_var_ammu,12s) = s$weapon_name
+set_var_int_to_var_int $second_menu_weapon($temp_var_ammu,3i) = $shotgun_array($temp_var_ammu,3i)
+$temp_var_ammu += 1
+goto @AMUNAT_11518
+
+:AMUNAT_11591
+if 
+  is_var_text_label_equal_to_text_label s$section_selected_ammu == 'GUN3'
+goto_if_false @AMUNAT_11689
+
+:AMUNAT_11616
+if 
+  is_int_var_greater_than_int_var $no_of_microSMG > $temp_var_ammu
+goto_if_false @AMUNAT_11689
+s$weapon_name = Shopping.GetNameOfItem($microSMG_array($temp_var_ammu,2i))
+set_var_text_label $item_text_label($temp_var_ammu,12s) = s$weapon_name
+set_var_int_to_var_int $second_menu_weapon($temp_var_ammu,3i) = $microSMG_array($temp_var_ammu,2i)
+$temp_var_ammu += 1
+goto @AMUNAT_11616
+
+:AMUNAT_11689
+if 
+  is_var_text_label_equal_to_text_label s$section_selected_ammu == 'GUN4'
+goto_if_false @AMUNAT_11787
+
+:AMUNAT_11714
+if 
+  is_int_var_greater_than_int_var $no_of_SMG > $temp_var_ammu
+goto_if_false @AMUNAT_11787
+s$weapon_name = Shopping.GetNameOfItem($SMG_array($temp_var_ammu,1i))
+set_var_text_label $item_text_label($temp_var_ammu,12s) = s$weapon_name
+set_var_int_to_var_int $second_menu_weapon($temp_var_ammu,3i) = $SMG_array($temp_var_ammu,1i)
+$temp_var_ammu += 1
+goto @AMUNAT_11714
+
+:AMUNAT_11787
+if 
+  is_var_text_label_equal_to_text_label s$section_selected_ammu == 'GUN5'
+goto_if_false @AMUNAT_11885
+
+:AMUNAT_11812
+if 
+  is_int_var_greater_than_int_var $no_of_assault > $temp_var_ammu
+goto_if_false @AMUNAT_11885
+s$weapon_name = Shopping.GetNameOfItem($assault_array($temp_var_ammu,2i))
+set_var_text_label $item_text_label($temp_var_ammu,12s) = s$weapon_name
+set_var_int_to_var_int $second_menu_weapon($temp_var_ammu,3i) = $assault_array($temp_var_ammu,2i)
+$temp_var_ammu += 1
+goto @AMUNAT_11812
+
+:AMUNAT_11885
+if 
+  is_var_text_label_equal_to_text_label s$section_selected_ammu == 'GUN6'
+goto_if_false @AMUNAT_11983
+
+:AMUNAT_11910
+if 
+  is_int_var_greater_than_int_var $no_of_rifle > $temp_var_ammu
+goto_if_false @AMUNAT_11983
+s$weapon_name = Shopping.GetNameOfItem($rifle_array($temp_var_ammu,2i))
+set_var_text_label $item_text_label($temp_var_ammu,12s) = s$weapon_name
+set_var_int_to_var_int $second_menu_weapon($temp_var_ammu,3i) = $rifle_array($temp_var_ammu,2i)
+$temp_var_ammu += 1
+goto @AMUNAT_11910
+
+:AMUNAT_11983
+if 
+  is_var_text_label_equal_to_text_label s$section_selected_ammu == 'GUN7'
+goto_if_false @AMUNAT_12081
+
+:AMUNAT_12008
+if 
+  is_int_var_greater_than_int_var $no_of_thrown > $temp_var_ammu
+goto_if_false @AMUNAT_12081
+s$weapon_name = Shopping.GetNameOfItem($thrown_array($temp_var_ammu,2i))
+set_var_text_label $item_text_label($temp_var_ammu,12s) = s$weapon_name
+set_var_int_to_var_int $second_menu_weapon($temp_var_ammu,3i) = $thrown_array($temp_var_ammu,2i)
+$temp_var_ammu += 1
+goto @AMUNAT_12008
+
+:AMUNAT_12081
+if 
+  is_var_text_label_equal_to_text_label s$section_selected_ammu == 'GUN8'
+goto_if_false @AMUNAT_12179
+
+:AMUNAT_12106
+if 
+  is_int_var_greater_than_int_var $no_of_armour > $temp_var_ammu
+goto_if_false @AMUNAT_12179
+s$weapon_name = Shopping.GetNameOfItem($armour_array($temp_var_ammu,1i))
+set_var_text_label $item_text_label($temp_var_ammu,12s) = s$weapon_name
+set_var_int_to_var_int $second_menu_weapon($temp_var_ammu,3i) = $armour_array($temp_var_ammu,1i)
+$temp_var_ammu += 1
+goto @AMUNAT_12106
+
+:AMUNAT_12179
+set_var_int_to_var_int $temp_var_shops = $temp_var_ammu
+
+:AMUNAT_12187
+if 
+  12 > $temp_var_shops
+goto_if_false @AMUNAT_12259
+$item_model_index($temp_var_shops,12i) = -1
+$item_price($temp_var_shops,12i) = 0
+set_var_text_label $item_text_label($temp_var_shops,12s) = 'DUMMY'
+$temp_var_shops += 1
+goto @AMUNAT_12187
+
+:AMUNAT_12259
+if 
+  $sub_menu_drawn_shops == 0
+goto_if_false @AMUNAT_12659
+Text.PrintHelpForever('AMMU_H2')
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @AMUNAT_12350
+$sub_menu_shops = Menu.Create('AMMUN', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @AMUNAT_12591
+
+:AMUNAT_12350
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @AMUNAT_12412
+$sub_menu_shops = Menu.Create('AMMUN', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @AMUNAT_12591
+
+:AMUNAT_12412
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @AMUNAT_12474
+$sub_menu_shops = Menu.Create('AMMUN', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @AMUNAT_12591
+
+:AMUNAT_12474
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @AMUNAT_12536
+$sub_menu_shops = Menu.Create('AMMUN', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @AMUNAT_12591
+
+:AMUNAT_12536
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @AMUNAT_12591
+$sub_menu_shops = Menu.Create('AMMUN', 29.0, 145.0, 186.0, True, True, 1, 1)
+
+:AMUNAT_12591
+Menu.SetColumnOrientation($sub_menu_shops, 0, 1)
+Menu.SetColumn($sub_menu_shops, 0, 'DUMMY', s$item_text_label[0], s$item_text_label[1], s$item_text_label[2], s$item_text_label[3], s$item_text_label[4], s$item_text_label[5], s$item_text_label[6], s$item_text_label[7], s$item_text_label[8], s$item_text_label[9], s$item_text_label[10], s$item_text_label[11])
+$sub_menu_drawn_shops = 1
+
+:AMUNAT_12659
+return 
+terminate_this_script 
+
+//-------------External script 61 (TATTOO)---------------
+

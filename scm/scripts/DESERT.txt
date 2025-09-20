@@ -1,0 +1,123 @@
+:DESERT
+script_name 'DESERT'
+
+:DESERT_11
+wait $mission_trigger_wait_time
+if 
+  $flag_desert_mission_counter == 9
+goto_if_false @DESERT_36
+terminate_this_script 
+
+:DESERT_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DESERT_721
+if 
+  $onmission == 0
+goto_if_false @DESERT_721
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $desertX, $desertY, $desertZ, 1.2, 1.2, 2.0)
+goto_if_false @DESERT_372
+if 
+  Player.CanStartMission($player1)
+goto_if_false @DESERT_372
+if 
+  $flag_desert_mission_counter == 0
+goto_if_false @DESERT_180
+$onmission = 1
+Text.PrintBig('DESERT1', 1000, TextStyle.BottomRight)
+PSAVE1_3885()
+Mission.LoadAndLaunchInternal(75) // Monster
+
+:DESERT_180
+if 
+  $1400 == 1
+goto_if_false @DESERT_250
+if 
+  $flag_desert_mission_counter == 1
+goto_if_false @DESERT_250
+$onmission = 1
+Text.PrintBig('DESERT2', 1000, TextStyle.BottomRight)
+PSAVE1_3885()
+Mission.LoadAndLaunchInternal(76) // Highjack
+
+:DESERT_250
+if 
+  $1402 == 1
+goto_if_false @DESERT_320
+if 
+  $flag_desert_mission_counter == 2
+goto_if_false @DESERT_320
+$onmission = 1
+Text.PrintBig('DESERT3', 1000, TextStyle.BottomRight)
+PSAVE1_3885()
+Mission.LoadAndLaunchInternal(77) // Interdiction
+
+:DESERT_320
+if 
+  $flag_desert_mission_counter == 3
+goto_if_false @DESERT_372
+$onmission = 1
+Text.PrintBig('DESERT4', 1000, TextStyle.BottomRight)
+PSAVE1_3885()
+Mission.LoadAndLaunchInternal(78) // Verdant Meadows
+
+:DESERT_372
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $desert2X, $desert2Y, $desert2Z, 1.2, 1.2, 2.0)
+goto_if_false @DESERT_721
+if 
+  Player.CanStartMission($player1)
+goto_if_false @DESERT_721
+if 
+  $pilot_test_passed == 1
+goto_if_false @DESERT_500
+if 
+  $flag_desert_mission_counter == 5
+goto_if_false @DESERT_500
+$onmission = 1
+Text.PrintBig('DESERT6', 1000, TextStyle.BottomRight)
+PSAVE1_4156()
+Mission.LoadAndLaunchInternal(79) // N.O.E.
+
+:DESERT_500
+if 
+  $flag_desert_mission_counter == 6
+goto_if_false @DESERT_552
+$onmission = 1
+Text.PrintBig('DESERT9', 1000, TextStyle.BottomRight)
+PSAVE1_4156()
+Mission.LoadAndLaunchInternal(80) // Stowaway
+
+:DESERT_552
+if 
+  $flag_desert_mission_counter == 7
+goto_if_false @DESERT_662
+$hours, $minutes = Clock.GetTimeOfDay()
+if or
+  $hours >= 20
+  6 > $hours
+goto_if_false @DESERT_646
+Text.ClearPrints
+$onmission = 1
+Text.PrintBig('DESERT8', 1000, TextStyle.BottomRight)
+PSAVE1_4156()
+Mission.LoadAndLaunchInternal(81) // Black Project
+goto @DESERT_662
+
+:DESERT_646
+Text.PrintNow('MTIME1', 1000, 1)
+
+:DESERT_662
+if and
+  $flag_desert_mission_counter == 8
+  $1389 == 1
+goto_if_false @DESERT_721
+$onmission = 1
+Text.PrintBig('DESER10', 1000, TextStyle.BottomRight)
+PSAVE1_4156()
+Mission.LoadAndLaunchInternal(82) // Green Goo
+
+:DESERT_721
+goto @DESERT_11
+

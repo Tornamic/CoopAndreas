@@ -1,0 +1,26 @@
+:TRUCKS
+script_name 'TRUCKS'
+
+:TRUCKS_11
+wait $mission_trigger_wait_time
+if 
+  $onmission == 0
+goto_if_false @TRUCKS_146
+if 
+  Player.IsPlaying($player1)
+goto_if_false @TRUCKS_146
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $truckX, $truckY, $truckZ, 1.2, 1.2, 1.5)
+goto_if_false @TRUCKS_146
+if 
+  Player.CanStartMission($player1)
+goto_if_false @TRUCKS_146
+Player.SetControl($player1, False)
+Text.DrawOddjobTitleBeforeFade(False)
+Text.PrintBig('TRUCK', 3000, TextStyle.MiddleSmallerHigher)
+LITCAS_267()
+Mission.LoadAndLaunchInternal(117) // Trucking
+
+:TRUCKS_146
+goto @TRUCKS_11
+

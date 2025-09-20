@@ -1,0 +1,155 @@
+:BCESAR
+script_name 'BCESAR'
+
+:BCESAR_11
+wait 0
+if 
+  $flag_bcesar_mission_counter == 10
+goto_if_false @BCESAR_42
+Stat.SetInt(StatId.PassedBcesar4, 1)
+terminate_this_script 
+
+:BCESAR_42
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BCESAR_880
+if 
+  $onmission == 0
+goto_if_false @BCESAR_880
+if 
+  $flag_bcesar_mission_counter == 2
+goto_if_false @BCESAR_116
+if 
+  $start_the_bcesar_race == 0
+goto_if_false @BCESAR_116
+Mission.LoadAndLaunchInternal(48) // Wu Zi Mu / Farewell, My Love...
+
+:BCESAR_116
+if 
+  $flag_bcesar_mission_counter == 0
+goto_if_false @BCESAR_382
+if 
+  $start_the_bcesar_race == 0
+goto_if_false @BCESAR_382
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, $bcesarX, $bcesarY, $bcesarZ, 4.0, 4.0, 4.0)
+goto_if_false @BCESAR_382
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @BCESAR_366
+if 
+  Player.CanStartMission($player1)
+goto_if_false @BCESAR_359
+$car = Char.GetCarIsUsing($scplayer)
+$car_class = Car.GetClass($car)
+if or
+  is_int_var_equal_to_constant $car_class == 0
+  is_int_var_equal_to_constant $car_class == 1
+  is_int_var_equal_to_constant $car_class == 2
+  is_int_var_equal_to_constant $car_class == 3
+  is_int_var_equal_to_constant $car_class == 4
+  is_int_var_equal_to_constant $car_class == 6
+goto_if_false @BCESAR_343
+$flag_bcesar_mission_counter = 0
+$onmission = 1
+Text.PrintBig('BCESAR4', 1000, TextStyle.BottomRight)
+LITCAS_267()
+Mission.LoadAndLaunchInternal(48) // Wu Zi Mu / Farewell, My Love...
+goto @BCESAR_359
+
+:BCESAR_343
+Text.PrintNow('BC4_7', 1000, 1)
+
+:BCESAR_359
+goto @BCESAR_382
+
+:BCESAR_366
+Text.PrintNow('BC4_2', 1000, 1)
+
+:BCESAR_382
+if 
+  $flag_bcesar_mission_counter == 3
+goto_if_false @BCESAR_425
+$flag_bcesar_mission_counter = 4
+$onmission = 1
+LITCAS_267()
+Mission.LoadAndLaunchInternal(48) // Wu Zi Mu / Farewell, My Love...
+
+:BCESAR_425
+if and
+  $flag_stage_of_bcesar_race == 1
+  4 > $cat_counter
+goto_if_false @BCESAR_479
+Blip.Remove($cat_contact_blip)
+$cat_contact_blip = Blip.AddSpriteForContactPoint($cat_blip_icon, $catX, $catY, $catZ)
+$flag_stage_of_bcesar_race = 0
+
+:BCESAR_479
+if 
+  $cat_counter > 3
+goto_if_false @BCESAR_695
+if 
+  $start_the_bcesar_race == 0
+goto_if_false @BCESAR_652
+if or
+  $flag_bcesar_mission_counter == 5
+  $flag_bcesar_mission_counter == 6
+  $flag_bcesar_mission_counter == 7
+goto_if_false @BCESAR_652
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -513.9356, -188.314, 77.4599, 1.2, 1.2, 2.0)
+goto_if_false @BCESAR_652
+if 
+  Player.CanStartMission($player1)
+goto_if_false @BCESAR_652
+$flag_bcesar_mission_counter = 5
+$onmission = 1
+Text.PrintBig('BCES4_2', 1000, TextStyle.BottomRight)
+LITCAS_267()
+Mission.LoadAndLaunchInternal(48) // Wu Zi Mu / Farewell, My Love...
+
+:BCESAR_652
+if 
+  $flag_bcesar_mission_counter == 8
+goto_if_false @BCESAR_695
+$flag_bcesar_mission_counter = 9
+$onmission = 1
+LITCAS_267()
+Mission.LoadAndLaunchInternal(48) // Wu Zi Mu / Farewell, My Love...
+
+:BCESAR_695
+if and
+  $cat_counter == 4
+  $flag_bcesar_mission_counter > 4
+goto_if_false @BCESAR_755
+Blip.Remove($bcesar_contact_blip)
+$bcesar_contact_blip = Blip.AddSpriteForContactPoint($cesar_blip_icon, -513.9356, -188.314, 77.4599)
+$cat_counter = 5
+
+:BCESAR_755
+if 
+  $start_the_bcesar_race == 1
+goto_if_false @BCESAR_880
+if 
+  $flag_bcesar_mission_counter == 1
+goto_if_false @BCESAR_823
+$flag_bcesar_mission_counter = 2
+set_var_int_to_constant $race_selection = 7
+$show_race_selection = 0
+Mission.LoadAndLaunchInternal(35) // Race Tournament / 8-track / Dirt Track
+$start_the_bcesar_race = 0
+
+:BCESAR_823
+if 
+  $flag_bcesar_mission_counter == 6
+goto_if_false @BCESAR_880
+$flag_bcesar_mission_counter = 7
+set_var_int_to_constant $race_selection = 8
+$show_race_selection = 0
+Stat.SetInt(StatId.StartedCrash1, 1)
+Mission.LoadAndLaunchInternal(35) // Race Tournament / 8-track / Dirt Track
+$start_the_bcesar_race = 0
+
+:BCESAR_880
+goto @BCESAR_11
+

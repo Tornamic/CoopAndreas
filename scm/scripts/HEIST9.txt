@@ -1,0 +1,8090 @@
+//-------------Mission 101---------------
+// Originally: Breaking the Bank at Caligula's
+
+:HEIST9
+script_name 'HEIST9'
+gosub @HEIST9_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @HEIST9_38
+gosub @HEIST9_44468
+
+:HEIST9_38
+gosub @HEIST9_44948
+terminate_this_script 
+
+:HEIST9_47
+if 
+  $d5_bronze_generator_unlocked == 1
+goto_if_false @HEIST9_72
+CarGenerator.Switch($d5_bronze_generator, 0)
+
+:HEIST9_72
+if 
+  $d5_silver_generator_unlocked == 1
+goto_if_false @HEIST9_97
+CarGenerator.Switch($d5_silver_generator, 0)
+
+:HEIST9_97
+if 
+  $d5_gold_generator_unlocked == 1
+goto_if_false @HEIST9_122
+CarGenerator.Switch($d5_gold_generator, 0)
+
+:HEIST9_122
+Zone.SetNoCops('MEAD', True)
+Text.LoadMissionText('HEIST9')
+$h9_health = 0
+$h9_z1 = 0.0
+$h9_offset = 0.0
+$h9_calculus = 0.0
+$h9_under_door = 0.0
+$h9_TIMERC = 0
+$h9_can_see = 0
+Camera.SetFadingColor(0, 0, 0)
+Stat.RegisterMissionGiven
+$onmission = 1
+$iSetCasinoPanic = 0
+231@ = 2
+$disable_mod_garage = 1
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_340
+Player.StoreClothesState
+Player.GiveClothesOutsideShop($player1, "CROUPIER", "VALET", BodyPart.SpecialCostume)
+Player.GiveClothes($player1, 0, 0, BodyPart.Head)
+Player.GiveClothes($player1, 0, 0, BodyPart.Necklace)
+Player.GiveClothes($player1, 0, 0, BodyPart.Glasses)
+Player.GiveClothes($player1, 0, 0, BodyPart.Hat)
+Player.BuildModel($player1)
+
+:HEIST9_340
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:HEIST9_355
+if 
+  Camera.GetFadingStatus
+goto_if_false @HEIST9_379
+wait 0
+goto @HEIST9_355
+
+:HEIST9_379
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_490
+Streaming.SetAreaVisible(0)
+Char.SetHasUsedEntryExit($scplayer, 2016.422, 1017.102, 10.0)
+Streaming.LoadScene(2028.932, 1023.292, 9.813)
+World.ClearArea(1, 2028.932, 1023.292, 9.813, 20.0)
+Char.SetCoordinatesDontWarpGang($scplayer, 2028.932, 1023.292, 9.813)
+Char.SetHeading($scplayer, 278.4092)
+
+:HEIST9_490
+Streaming.SetAreaVisible(0)
+Cutscene.Load('HEIST8A')
+
+:HEIST9_505
+if 
+  not Cutscene.HasLoaded
+goto_if_false @HEIST9_529
+wait 0
+goto @HEIST9_505
+
+:HEIST9_529
+World.ClearArea(1, 1908.433, 957.3687, 9.8203, 40.0)
+Cutscene.Start
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+
+:HEIST9_570
+if 
+  not Cutscene.HasFinished
+goto_if_false @HEIST9_594
+wait 0
+goto @HEIST9_570
+
+:HEIST9_594
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, Fade.Out)
+
+:HEIST9_608
+if 
+  Camera.GetFadingStatus
+goto_if_false @HEIST9_632
+wait 0
+goto @HEIST9_608
+
+:HEIST9_632
+Cutscene.Clear
+39@ = Blip.AddForCoord(2196.715, 1677.198, 11.375)
+217@ = DecisionMakerChar.Load(DecisionMakerType.Weak)
+89@ = DecisionMakerChar.Load(DecisionMakerType.Normal)
+120@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+245@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+Game.SetRelationship(RelationshipType.Like, PedType.Mission3, PedType.Mission3)
+Game.SetRelationship(RelationshipType.Dislike, PedType.Mission3, PedType.Player1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Player1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Mission2)
+Game.SetRelationship(RelationshipType.Like, PedType.Mission2, PedType.Player1)
+DecisionMakerChar.AddEventResponse(89@, 37, 300, 0.0, 100.0, 0.0, 0.0, True, True)
+DecisionMakerChar.AddEventResponse(245@, 37, 300, 0.0, 100.0, 0.0, 0.0, True, True)
+Streaming.RequestModel(347)
+Streaming.RequestModel(343)
+Streaming.RequestModel(368)
+Streaming.RequestModel(#BODYARMOUR)
+Streaming.RequestModel(353)
+Streaming.RequestModel(335)
+Streaming.RequestModel(346)
+Streaming.RequestAnimation("HEIST9")
+
+:HEIST9_834
+if or
+  not Streaming.HasModelLoaded(347)
+  not Streaming.HasModelLoaded(343)
+  not Streaming.HasModelLoaded(368)
+  not Streaming.HasModelLoaded(#BODYARMOUR)
+goto_if_false @HEIST9_875
+wait 0
+goto @HEIST9_834
+
+:HEIST9_875
+if or
+  not Streaming.HasModelLoaded(353)
+  not Streaming.HasModelLoaded(335)
+  not Streaming.HasAnimationLoaded("HEIST9")
+  not Streaming.HasModelLoaded(346)
+goto_if_false @HEIST9_922
+wait 0
+goto @HEIST9_875
+
+:HEIST9_922
+$h9_safe_timer = 240000
+Player.ClearWantedLevel($player1)
+Game.SetWantedMultiplier(0.0)
+Player.SetControl($player1, True)
+171@ = Object.Create(#GENERATOR_BIG, 2145.05, 1613.49, 999.9764)
+Object.SetAreaVisible(171@, 1)
+Object.SetHeading(171@, 1.2043)
+172@ = Object.Create(#GENERATOR_BIG, 2148.8, 1613.49, 999.9764)
+Object.SetAreaVisible(172@, 1)
+Object.SetHeading(172@, 354.0372)
+212@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R", "HEIST9", 8.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_IN_R", "HEIST9", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFootTimed(-1, $scplayer, 2000)
+Task.StayInSamePlace(-1, False)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_OUT_R", "HEIST9", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R_BACK", "HEIST9", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(212@, True)
+Sequence.Close(212@)
+213@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_L", "HEIST9", 8.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_IN_L", "HEIST9", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFootTimed(-1, $scplayer, 2000)
+Task.StayInSamePlace(-1, False)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_OUT_L", "HEIST9", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_L_BACK", "HEIST9", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(213@, True)
+Sequence.Close(213@)
+Group.SetSeparationRange($Players_Group, 300.0)
+Group.SetDefaultTaskAllocator($Players_Group, DefaultTaskAllocator.FollowAnyMeans)
+Char.GiveWeapon($scplayer, WeaponType.PistolSilenced, 300)
+Char.GiveWeapon($scplayer, WeaponType.Teargas, 10)
+Char.GiveWeapon($scplayer, WeaponType.Mp5, 300)
+Char.GiveWeapon($scplayer, WeaponType.NightVision, 300)
+Char.GiveWeapon($scplayer, WeaponType.Knife, 300)
+Char.SetCurrentWeapon($scplayer, WeaponType.Teargas)
+Streaming.MarkModelAsNoLongerNeeded(335)
+Streaming.MarkModelAsNoLongerNeeded(347)
+Streaming.MarkModelAsNoLongerNeeded(368)
+Streaming.MarkModelAsNoLongerNeeded(343)
+41@ = Object.CreateNoOffset(#AB_CASDORLOK, 2148.56, 1604.609, 1006.5)
+Object.SetAreaVisible(41@, 1)
+Object.SetHeading(41@, 180.0)
+48@ = Object.CreateNoOffset(#AB_CASDORLOK, 2177.16, 1594.322, 1000.4)
+Object.SetAreaVisible(48@, 1)
+Object.SetHeading(48@, 180.0)
+49@ = Object.CreateNoOffset(#WAREHOUSE_DOOR2B, 2220.188, 1571.763, 1001.6)
+Object.SetAreaVisible(49@, 1)
+Object.SetHeading(49@, 270.0)
+Object.SetCollisionDamageEffect(49@, False)
+196@ = Object.CreateNoOffset(#WAREHOUSE_DOOR2B, 2220.188, 1571.7, 1005.8)
+Object.SetAreaVisible(196@, 1)
+Object.SetHeading(196@, 270.0)
+Object.SetCollision(196@, False)
+Object.SetCollisionDamageEffect(49@, False)
+42@ = Object.CreateNoOffset(#WAREHOUSE_DOOR2B, 2203.2, 1551.743, 1009.0)
+Object.SetAreaVisible(42@, 1)
+Object.SetHeading(42@, 0.0)
+Object.SetCollisionDamageEffect(42@, False)
+34@ = 1001.4
+60@ = Object.CreateNoOffset(#AB_VAULTDOOR, 2144.18, 1626.947, 994.28)
+Object.SetHeading(60@, 180.0)
+Object.SetAreaVisible(60@, 1)
+96@ = Object.CreateNoOffset(#SEC_KEYPAD, 2168.5, 1617.335, 1000.4)
+Object.SetAreaVisible(96@, 1)
+Object.SetHeading(96@, 270.0)
+Object.SetCollision(96@, False)
+$h9_health = Pickup.Create(#BODYARMOUR, 3, 2176.471, 1597.394, 1000.0)
+285@ = Pickup.Create(#BODYARMOUR, 3, 2144.339, 1640.666, 993.5)
+goto @HEIST9_2362
+
+:HEIST9_1936
+Streaming.RequestModel(117)
+Streaming.RequestModel(428)
+Streaming.LoadSpecialCharacter('WUZIMU', 2)
+Streaming.LoadSpecialCharacter('JANITOR', 3)
+
+:HEIST9_1971
+if or
+  not Streaming.HasModelLoaded(117)
+  not Streaming.HasModelLoaded(428)
+  not Streaming.HasSpecialCharacterLoaded(2)
+  not Streaming.HasSpecialCharacterLoaded(3)
+goto_if_false @HEIST9_2010
+wait 0
+goto @HEIST9_1971
+
+:HEIST9_2010
+51@ = Car.Create(428, 2220.344, 1551.767, 1003.719)
+Car.SetAreaVisible(51@, 1)
+Car.SetHeading(51@, 176.7739)
+Car.SetAlwaysCreateSkids(51@, False)
+Car.LockDoors(51@, CarLock.LockoutPlayerOnly)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Player1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Mission2)
+Game.SetRelationship(RelationshipType.Like, PedType.Mission2, PedType.Player1)
+54@ = Char.CreateInsideCar(PedType.Mission2, 291, 51@)
+Char.SetAreaVisible(54@, 1)
+55@ = Char.CreateAsPassenger(PedType.Mission2, 117, 51@, 2)
+Char.SetAreaVisible(55@, 1)
+56@ = Char.CreateAsPassenger(PedType.Mission2, 117, 51@, 1)
+Char.SetAreaVisible(56@, 1)
+57@ = Char.CreateAsPassenger(PedType.Mission2, 292, 51@, 0)
+Char.SetAreaVisible(57@, 1)
+Char.SetAnimGroup(54@, "BLINDMAN")
+58@ = 0
+
+:HEIST9_2194
+Char.SetFollowNodeThresholdDistance(54@(58@,4i), 2.0)
+Char.GiveWeapon(54@(58@,4i), WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(54@(58@,4i), WeaponType.Mp5)
+Char.SetDecisionMaker(54@(58@,4i), 120@)
+Char.SetNeverTargeted(54@(58@,4i), True)
+Char.SetProofs(54@(58@,4i), False, False, False, True, False)
+Char.SetSuffersCriticalHits(54@(58@,4i), False)
+Char.SetMaxHealth(54@(58@,4i), 500)
+Char.SetHealth(54@(58@,4i), 500)
+Char.SetAccuracy(54@(58@,4i), 60)
+Char.SetSignalAfterKill(54@(58@,4i), False)
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_2194
+250@ = 1
+return 
+
+:HEIST9_2362
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_2390
+Char.SetHeading($scplayer, 270.0)
+Camera.SetBehindPlayer
+
+:HEIST9_2390
+gosub @HEIST9_46358
+215@ = 1
+231@ = 2
+38@ = 1
+107@ = 0
+TIMERB = 0
+World.SwitchEntryExit('JUMP1', False)
+World.SwitchEntryExit('JUMP2', False)
+World.SwitchEntryExit('MAFCAS2', False)
+290@ = 1
+308@ = Object.CreateNoOffset(#TMP_BIN, 2188.845, 1619.136, 999.3)
+Object.SetAreaVisible(308@, 1)
+Object.SetHeading(308@, 270.0)
+310@ = Object.CreateNoOffset(#K_SMASHBOXES, 2139.343, 1617.604, 992.5)
+Object.SetAreaVisible(310@, 1)
+Object.SetHeading(310@, 0.1132)
+311@ = Object.CreateNoOffset(#K_SMASHBOXES, 2148.0, 1622.107, 992.5)
+Object.SetAreaVisible(311@, 1)
+Object.SetHeading(311@, 179.6736)
+
+:HEIST9_2598
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_43649
+wait 0
+gosub @HEIST9_46391
+gosub @HEIST9_50668
+$h9_fuck_off = Streaming.GetAreaVisible()
+if 
+  0 >= $h9_safe_timer
+goto_if_false @HEIST9_2690
+gosub @HEIST9_50388
+Text.PrintNow('HM9_1B', 4000, 1)
+goto @HEIST9_44468
+Hud.ClearTimer($h9_safe_timer)
+
+:HEIST9_2690
+if 
+  290@ <> 0
+goto_if_false @HEIST9_3136
+if and
+  231@ == 2
+  290@ == 1
+goto_if_false @HEIST9_2792
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_2756
+Char.ShutUpForScriptedSpeech($scplayer, True)
+
+:HEIST9_2756
+set_lvar_text_label 288@s = 'HE8_AA'
+set_lvar_int_to_constant 232@ = 19000
+gosub @HEIST9_50648
+290@ = 2
+
+:HEIST9_2792
+if and
+  231@ == 2
+  290@ == 2
+goto_if_false @HEIST9_2877
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_2841
+Char.StartFacialTalk($scplayer, 10000)
+
+:HEIST9_2841
+set_lvar_text_label 288@s = 'HE8_AB'
+set_lvar_int_to_constant 232@ = 19001
+gosub @HEIST9_50648
+290@ = 3
+
+:HEIST9_2877
+if and
+  231@ == 2
+  290@ == 3
+goto_if_false @HEIST9_2959
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_2923
+Char.StopFacialTalk($scplayer)
+
+:HEIST9_2923
+set_lvar_text_label 288@s = 'HE8_AC'
+set_lvar_int_to_constant 232@ = 19002
+gosub @HEIST9_50648
+290@ = 4
+
+:HEIST9_2959
+if and
+  231@ == 2
+  290@ == 4
+goto_if_false @HEIST9_3044
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_3008
+Char.StartFacialTalk($scplayer, 10000)
+
+:HEIST9_3008
+set_lvar_text_label 288@s = 'HE8_AD'
+set_lvar_int_to_constant 232@ = 19003
+gosub @HEIST9_50648
+290@ = 5
+
+:HEIST9_3044
+if and
+  231@ == 2
+  290@ == 5
+goto_if_false @HEIST9_3136
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_3090
+Char.StopFacialTalk($scplayer)
+
+:HEIST9_3090
+Text.PrintNow('HM9_28', 9000, 1)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_3129
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:HEIST9_3129
+290@ = 6
+
+:HEIST9_3136
+$h9_can_see = Streaming.GetAreaVisible()
+if 
+  $h9_can_see == 0
+goto_if_false @HEIST9_3207
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_3200
+Player.DisableSprint($player1, False)
+$iSetCasinoPanic = 0
+$h9_player_in_casino = 0
+Hud.SetRadarZoom(0)
+
+:HEIST9_3200
+goto @HEIST9_3234
+
+:HEIST9_3207
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_3234
+Player.DisableSprint($player1, True)
+Hud.SetRadarZoom(100)
+
+:HEIST9_3234
+if or
+  Char.LocateAnyMeans3D($scplayer, 0, 2233.91, 1712.599, 1010.877, 50.0, 50.0, 50.0)
+  Char.LocateAnyMeans3D($scplayer, 0, 2265.79, 1619.58, 1089.445, 50.0, 50.0, 50.0)
+  Char.LocateAnyMeans3D($scplayer, 0, 2267.056, 1675.385, 1089.445, 50.0, 50.0, 50.0)
+goto_if_false @HEIST9_3367
+Hud.SetRadarZoom(100)
+$h9_player_in_casino = 1
+
+:HEIST9_3367
+if and
+  303@ == 0
+  $h9_player_in_casino == 1
+goto_if_false @HEIST9_3506
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_3506
+if and
+  not Char.IsCurrentWeapon($scplayer, WeaponType.Unarmed)
+  not Char.IsCurrentWeapon($scplayer, WeaponType.NightVision)
+  not Char.IsCurrentWeapon($scplayer, WeaponType.Teargas)
+  not Char.IsCurrentWeapon($scplayer, WeaponType.BrassKnuckles)
+  not Char.IsCurrentWeapon($scplayer, WeaponType.Knife)
+goto_if_false @HEIST9_3491
+Game.SetRelationship(RelationshipType.Hate, PedType.CivMale, PedType.Player1)
+Text.PrintNow('HM9_99', 100, 1)
+300@ = 1
+goto @HEIST9_3506
+
+:HEIST9_3491
+Game.SetRelationship(RelationshipType.Like, PedType.CivMale, PedType.Player1)
+300@ = 0
+
+:HEIST9_3506
+if 
+  not Player.IsWearing($player1, "CROUPIER", BodyPart.SpecialCostume)
+goto_if_false @HEIST9_3557
+Text.PrintNow('HM9_52', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_3557
+if and
+  $iSetCasinoPanic == 1
+  106@ == 0
+  $h9_player_in_casino == 1
+goto_if_false @HEIST9_3619
+gosub @HEIST9_50388
+Text.PrintNow('HM9_52', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_3619
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_3713
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2180.981, 1677.813, 10.0609, 30.0, 30.0, 30.0)
+  243@ == 0
+goto_if_false @HEIST9_3713
+Text.PrintNow('HM9_54', 7000, 1)
+243@ = 1
+
+:HEIST9_3713
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @HEIST9_3735
+goto @HEIST9_44516
+
+:HEIST9_3735
+if and
+  2 >= 38@
+  not Char.IsDead($scplayer)
+  284@ == 0
+goto_if_false @HEIST9_3814
+175@ = Char.GetAmmoInWeapon($scplayer, 17)
+if and
+  0 >= 175@
+  2 >= 38@
+goto_if_false @HEIST9_3814
+284@ = 1
+TIMERA = 0
+
+:HEIST9_3814
+if and
+  TIMERA > 2000
+  284@ == 1
+  173@ == 0
+goto_if_false @HEIST9_3934
+if or
+  $h9_player_in_casino == 1
+  $h9_can_see == 0
+goto_if_false @HEIST9_3934
+if 
+  $h9_player_in_casino == 1
+goto_if_false @HEIST9_3904
+gosub @HEIST9_50388
+goto @HEIST9_3911
+
+:HEIST9_3904
+gosub @HEIST9_50602
+
+:HEIST9_3911
+Text.PrintNow('HM9_48', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_3934
+if and
+  Car.IsDead(51@)
+  174@ == 0
+  250@ == 1
+goto_if_false @HEIST9_3994
+gosub @HEIST9_50388
+Text.PrintNow('HM9_15', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_3994
+$h9_TIMERC += 1
+if 
+  38@ == 1
+goto_if_false @HEIST9_4398
+if 
+  $h9_player_in_casino == 1
+goto_if_false @HEIST9_4398
+if 
+  Blip.DoesExist(39@)
+goto_if_false @HEIST9_4058
+Blip.Remove(39@)
+
+:HEIST9_4058
+Text.ClearPrints
+38@ = 2
+215@ = 1
+TIMERB = 0
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+44@ = Blip.AddForCoord(2148.995, 1605.08, 1005.172)
+Blip.SetEntryExit(44@, 2196.635, 1676.841, 10.0)
+Streaming.RequestModel(163)
+Streaming.RequestModel(164)
+
+:HEIST9_4138
+if or
+  not Streaming.HasModelLoaded(163)
+  not Streaming.HasModelLoaded(164)
+goto_if_false @HEIST9_4170
+wait 0
+goto @HEIST9_4138
+
+:HEIST9_4170
+109@ = Char.Create(24, 163, 2146.58, 1622.228, 992.6882)
+Char.SetAreaVisible(109@, 1)
+Char.SetHeading(109@, 83.607)
+110@ = Char.Create(24, 163, 2141.41, 1626.068, 992.6882)
+Char.SetAreaVisible(110@, 1)
+Char.SetHeading(110@, 188.011)
+111@ = Char.Create(4, 164, 2151.187, 1605.832, 1005.188)
+Char.SetAreaVisible(111@, 1)
+Char.SetHeading(111@, 359.346)
+Char.SetDecisionMaker(111@, 120@)
+Task.StayInSamePlace(111@, True)
+58@ = 0
+
+:HEIST9_4318
+Char.GiveWeapon(109@(58@,5i), WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(109@(58@,5i), WeaponType.Mp5)
+Char.AddArmor(109@(58@,5i), 200)
+Task.StayInSamePlace(109@(58@,5i), True)
+Char.SetNeverTargeted(109@(58@,5i), True)
+58@ += 1
+  58@ >= 2
+goto_if_false @HEIST9_4318
+
+:HEIST9_4398
+if 
+  38@ == 2
+goto_if_false @HEIST9_10444
+if 
+  not Char.IsDead(111@)
+goto_if_false @HEIST9_4481
+if 
+  Char.HasBeenDamagedByChar(111@, $scplayer)
+goto_if_false @HEIST9_4481
+gosub @HEIST9_50388
+Text.PrintNow('HM9_52', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_4481
+if and
+  Char.IsDead(111@)
+  106@ == 0
+goto_if_false @HEIST9_4534
+gosub @HEIST9_50388
+Text.PrintNow('HM9_52', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_4534
+if 
+  215@ <> 0
+goto_if_false @HEIST9_5179
+if 
+  215@ == 1
+goto_if_false @HEIST9_4628
+$h9_safe_timer = 240000
+Hud.DisplayTimerWithString($h9_safe_timer, TimerDirection.Down, 'HM9_1A')
+Text.PrintWithNumberNow('HM9_1D', 4, 5000, 1)
+TIMERB = 0
+215@ = 2
+
+:HEIST9_4628
+if and
+  TIMERB > 4000
+  215@ == 2
+goto_if_false @HEIST9_4713
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_4677
+Char.ShutUpForScriptedSpeech($scplayer, True)
+
+:HEIST9_4677
+set_lvar_text_label 288@s = 'HE8_BA'
+set_lvar_int_to_constant 232@ = 19004
+gosub @HEIST9_50648
+215@ = 3
+
+:HEIST9_4713
+if and
+  231@ == 2
+  215@ == 3
+goto_if_false @HEIST9_4798
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_4762
+Char.StartFacialTalk($scplayer, 10000)
+
+:HEIST9_4762
+set_lvar_text_label 288@s = 'HE8_BB'
+set_lvar_int_to_constant 232@ = 19005
+gosub @HEIST9_50648
+215@ = 4
+
+:HEIST9_4798
+if and
+  231@ == 2
+  215@ == 4
+goto_if_false @HEIST9_4880
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_4844
+Char.StopFacialTalk($scplayer)
+
+:HEIST9_4844
+set_lvar_text_label 288@s = 'HE8_BC'
+set_lvar_int_to_constant 232@ = 19006
+gosub @HEIST9_50648
+215@ = 5
+
+:HEIST9_4880
+if and
+  231@ == 2
+  215@ == 5
+goto_if_false @HEIST9_4965
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_4929
+Char.StartFacialTalk($scplayer, 10000)
+
+:HEIST9_4929
+set_lvar_text_label 288@s = 'HE8_BD'
+set_lvar_int_to_constant 232@ = 19007
+gosub @HEIST9_50648
+215@ = 6
+
+:HEIST9_4965
+if and
+  231@ == 2
+  215@ == 6
+goto_if_false @HEIST9_5047
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_5011
+Char.StopFacialTalk($scplayer)
+
+:HEIST9_5011
+set_lvar_text_label 288@s = 'HE8_BE'
+set_lvar_int_to_constant 232@ = 19008
+gosub @HEIST9_50648
+215@ = 7
+
+:HEIST9_5047
+if and
+  231@ == 2
+  215@ == 7
+goto_if_false @HEIST9_5108
+set_lvar_text_label 288@s = 'HE8_BF'
+set_lvar_int_to_constant 232@ = 19009
+gosub @HEIST9_50648
+215@ = 8
+
+:HEIST9_5108
+if and
+  231@ == 2
+  215@ == 8
+goto_if_false @HEIST9_5179
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_5156
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:HEIST9_5156
+Text.PrintNow('HM9_2', 7000, 1)
+215@ = 0
+
+:HEIST9_5179
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2147.756, 1605.401, 1005.17, 3.0, 3.0, 3.0)
+  216@ == 0
+goto_if_false @HEIST9_6325
+if 
+  300@ == 1
+goto_if_false @HEIST9_5282
+gosub @HEIST9_50388
+Text.PrintNow('HM9_52', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_5282
+gosub @HEIST9_46289
+if and
+  not Char.IsDead($scplayer)
+  not Char.IsDead(111@)
+goto_if_false @HEIST9_5363
+Char.SetCoordinatesDontWarpGang($scplayer, 2147.675, 1607.399, 1005.188)
+Char.SetHeading($scplayer, 188.6317)
+Player.SetControl($player1, False)
+Task.TurnCharToFaceChar($scplayer, 111@)
+Task.TurnCharToFaceChar(111@, $scplayer)
+
+:HEIST9_5363
+if 
+  not Char.IsDead(111@)
+goto_if_false @HEIST9_5409
+Char.SetCoordinatesDontWarpGang(111@, 2151.187, 1605.832, 1005.188)
+Char.SetHeading(111@, 359.346)
+
+:HEIST9_5409
+Camera.SetFixedPosition(2152.125, 1606.502, 1006.716, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2151.135, 1606.365, 1006.719, SwitchType.JumpCut)
+Text.PrintNow('HE8_CA', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19010, 1)
+
+:HEIST9_5487
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_5513
+wait 0
+goto @HEIST9_5487
+
+:HEIST9_5513
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+wait 1000
+TIMERB = 0
+
+:HEIST9_5529
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_5579
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_5572
+goto @HEIST9_6254
+
+:HEIST9_5572
+goto @HEIST9_5529
+
+:HEIST9_5579
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_5631
+Task.PlayAnim($scplayer, "IDLE_CHAT", "PED", 1.0, False, False, False, False, -1)
+
+:HEIST9_5631
+Text.PrintNow('HE8_CB', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19011, 1)
+
+:HEIST9_5658
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_5684
+wait 0
+goto @HEIST9_5658
+
+:HEIST9_5684
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_5695
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_5745
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_5738
+goto @HEIST9_6254
+
+:HEIST9_5738
+goto @HEIST9_5695
+
+:HEIST9_5745
+Text.PrintNow('HE8_CC', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19012, 1)
+
+:HEIST9_5772
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_5798
+wait 0
+goto @HEIST9_5772
+
+:HEIST9_5798
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_5809
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_5859
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_5852
+goto @HEIST9_6254
+
+:HEIST9_5852
+goto @HEIST9_5809
+
+:HEIST9_5859
+Text.PrintNow('HE8_CD', 2000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19013, 1)
+
+:HEIST9_5886
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_5912
+wait 0
+goto @HEIST9_5886
+
+:HEIST9_5912
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_5923
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_5973
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_5966
+goto @HEIST9_6254
+
+:HEIST9_5966
+goto @HEIST9_5923
+
+:HEIST9_5973
+Text.PrintNow('HE8_CE', 2000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19014, 1)
+
+:HEIST9_6000
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_6026
+wait 0
+goto @HEIST9_6000
+
+:HEIST9_6026
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_6037
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_6087
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_6080
+goto @HEIST9_6254
+
+:HEIST9_6080
+goto @HEIST9_6037
+
+:HEIST9_6087
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_6140
+Task.PlayAnim($scplayer, "IDLE_TIRED", "PED", 1.0, False, False, False, False, -1)
+
+:HEIST9_6140
+Text.PrintNow('HE8_CF', 3000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19015, 1)
+
+:HEIST9_6167
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_6193
+wait 0
+goto @HEIST9_6167
+
+:HEIST9_6193
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_6204
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_6254
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_6247
+goto @HEIST9_6254
+
+:HEIST9_6247
+goto @HEIST9_6204
+
+:HEIST9_6254
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+if and
+  not Char.IsDead($scplayer)
+  not Char.IsDead(111@)
+goto_if_false @HEIST9_6304
+Char.ClearTasksImmediately($scplayer)
+Char.SetHeading(111@, 3.8184)
+Char.SetHeading($scplayer, 207.6449)
+
+:HEIST9_6304
+gosub @HEIST9_46306
+215@ = 0
+216@ = 1
+
+:HEIST9_6325
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2149.008, 1605.299, 1005.172, 2.0, 2.0, 2.0)
+  36@ == 0
+goto_if_false @HEIST9_6642
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @HEIST9_6404
+Text.PrintHelpForever('HM9_29')
+
+:HEIST9_6404
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @HEIST9_6635
+if and
+  not Char.IsDead($scplayer)
+  not Player.IsDead($player1)
+goto_if_false @HEIST9_6527
+Player.SetControl($player1, False)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinatesDontWarpGang($scplayer, 2149.008, 1605.299, 1005.172)
+Char.SetHeading($scplayer, 188.7539)
+Task.PlayAnim($scplayer, "USE_SWIPECARD", "HEIST9", 2.0, False, False, False, False, -1)
+
+:HEIST9_6527
+wait 500
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Audio.LoadMissionAudio(6400, 3)
+
+:HEIST9_6543
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @HEIST9_6569
+wait 0
+goto @HEIST9_6543
+
+:HEIST9_6569
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @HEIST9_6588
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:HEIST9_6588
+wait 1000
+if and
+  not Char.IsDead($scplayer)
+  not Player.IsDead($player1)
+goto_if_false @HEIST9_6621
+Player.SetControl($player1, True)
+
+:HEIST9_6621
+303@ = 1
+36@ = 1
+
+:HEIST9_6635
+goto @HEIST9_6644
+
+:HEIST9_6642
+Text.ClearHelp
+
+:HEIST9_6644
+if and
+  36@ == 1
+  107@ == 0
+goto_if_false @HEIST9_7355
+Text.ClearHelp
+Streaming.RequestModel(11)
+Streaming.RequestModel(172)
+
+:HEIST9_6680
+if or
+  not Streaming.HasModelLoaded(172)
+  not Streaming.HasModelLoaded(11)
+goto_if_false @HEIST9_6711
+wait 0
+goto @HEIST9_6680
+
+:HEIST9_6711
+53@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2144.01, 1603.086, 1000.968)
+Path.ExtendRoute(2163.409, 1602.779, 998.9785)
+Path.ExtendRoute(2158.457, 1602.36, 998.9719)
+Path.ExtendRoute(2158.192, 1597.875, 998.9711)
+Path.ExtendRoute(2157.961, 1612.835, 998.9677)
+Task.FollowPointRoute(-1, 4, RouteMode.Once)
+Path.FlushRoute
+Path.ExtendRoute(2158.395, 1618.554, 998.9647)
+Path.ExtendRoute(2157.961, 1612.835, 998.9677)
+Path.ExtendRoute(2158.192, 1597.875, 998.9711)
+Path.ExtendRoute(2158.457, 1602.36, 998.9719)
+Path.ExtendRoute(2163.409, 1602.779, 998.9785)
+Task.FollowPointRoute(-1, 4, RouteMode.Once)
+Path.FlushRoute
+Sequence.SetToRepeat(53@, True)
+Sequence.Close(53@)
+218@ = Char.Create(26, 172, 2144.01, 1603.086, 1000.968)
+Char.SetAreaVisible(218@, 1)
+Char.SetDecisionMaker(218@, 89@)
+Char.PerformSequence(218@, 53@)
+219@ = Char.Create(26, 11, 2148.394, 1596.737, 998.768)
+Char.SetAreaVisible(219@, 1)
+Char.SetDecisionMaker(219@, 89@)
+220@ = Char.Create(26, 172, 2149.355, 1597.133, 998.768)
+Char.SetAreaVisible(220@, 1)
+Char.SetDecisionMaker(220@, 89@)
+222@ = Char.Create(26, 163, 2146.831, 1603.942, 1000.968)
+Char.SetHeading(222@, 187.4626)
+Char.SetAreaVisible(222@, 1)
+Char.GiveWeapon(222@, WeaponType.Pistol, 30000)
+Char.SetCurrentWeapon(222@, WeaponType.Pistol)
+Char.SetDecisionMaker(222@, 245@)
+Task.StayInSamePlace(222@, True)
+223@ = Char.Create(26, 172, 2170.674, 1603.371, 998.9696)
+Char.SetAreaVisible(223@, 1)
+Char.SetDecisionMaker(223@, 89@)
+224@ = Char.Create(26, 172, 2169.843, 1605.299, 998.9706)
+Char.SetAreaVisible(224@, 1)
+Char.SetDecisionMaker(224@, 89@)
+Task.ChatWithChar(219@, 220@, True, 1)
+Task.ChatWithChar(220@, 219@, False, 1)
+Task.ChatWithChar(223@, 224@, True, 1)
+Task.ChatWithChar(224@, 223@, False, 1)
+117@ = 1
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_7277
+Char.ClearTasksImmediately($scplayer)
+
+:HEIST9_7277
+Sequence.Clear(53@)
+Blip.Remove(44@)
+35@ = 1
+108@ = Blip.AddForCoord(2143.046, 1620.661, 999.968)
+Blip.SetEntryExit(108@, 2196.635, 1676.841, 10.0)
+107@ = 1
+302@ = 2
+TIMERA = 0
+
+:HEIST9_7355
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2147.863, 1599.649, 1003.534, 2.0, 2.0, 2.0)
+  106@ == 0
+goto_if_false @HEIST9_7460
+106@ = 1
+World.ClearArea(1, 2192.605, 1601.92, 1004.063, 100.0)
+World.SetPedDensityMultiplier(0.0)
+Char.Delete(111@)
+TIMERB = 0
+
+:HEIST9_7460
+if and
+  231@ == 2
+  302@ == 2
+  TIMERA > 1000
+goto_if_false @HEIST9_7552
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_7516
+Char.ShutUpForScriptedSpeech($scplayer, True)
+
+:HEIST9_7516
+set_lvar_text_label 288@s = 'HE8_DB'
+set_lvar_int_to_constant 232@ = 19017
+gosub @HEIST9_50648
+302@ = 3
+
+:HEIST9_7552
+if and
+  231@ == 2
+  302@ == 3
+goto_if_false @HEIST9_7613
+set_lvar_text_label 288@s = 'HE8_DD'
+set_lvar_int_to_constant 232@ = 19019
+gosub @HEIST9_50648
+302@ = 0
+
+:HEIST9_7613
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2148.252, 1605.901, 1000.114, 1.2, 1.2, 1.2)
+  244@ == 0
+goto_if_false @HEIST9_7682
+244@ = 1
+302@ = 0
+
+:HEIST9_7682
+if and
+  231@ == 2
+  244@ == 1
+goto_if_false @HEIST9_7774
+303@ = 1
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_7738
+Char.StartFacialTalk($scplayer, 10000)
+
+:HEIST9_7738
+set_lvar_text_label 288@s = 'HE8_EA'
+set_lvar_int_to_constant 232@ = 19020
+gosub @HEIST9_50648
+244@ = 2
+
+:HEIST9_7774
+if and
+  231@ == 2
+  244@ == 2
+goto_if_false @HEIST9_7856
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_7820
+Char.StopFacialTalk($scplayer)
+
+:HEIST9_7820
+set_lvar_text_label 288@s = 'HE8_EB'
+set_lvar_int_to_constant 232@ = 19021
+gosub @HEIST9_50648
+244@ = 3
+
+:HEIST9_7856
+if and
+  231@ == 2
+  244@ == 3
+goto_if_false @HEIST9_7917
+set_lvar_text_label 288@s = 'HE8_EC'
+set_lvar_int_to_constant 232@ = 19022
+gosub @HEIST9_50648
+244@ = 4
+
+:HEIST9_7917
+if and
+  231@ == 2
+  244@ == 4
+goto_if_false @HEIST9_8001
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_7965
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:HEIST9_7965
+set_lvar_text_label 288@s = 'HE8_ED'
+set_lvar_int_to_constant 232@ = 19023
+gosub @HEIST9_50648
+244@ = 5
+
+:HEIST9_8001
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2254.543, 1706.5, 1.1746, 1.2, 1.2, 1.2)
+goto_if_false @HEIST9_8065
+Text.PrintNow('HM9_36', 1000, 1)
+
+:HEIST9_8065
+if and
+  45 > 106@
+  106@ <> 0
+goto_if_false @HEIST9_8114
+  Object.Rotate(41@, 180.0, 2.0, False)
+106@ += 1
+
+:HEIST9_8114
+if and
+  45 > 117@
+  117@ <> 0
+goto_if_false @HEIST9_8163
+  Object.Rotate(41@, 270.0, 2.0, False)
+117@ += 1
+
+:HEIST9_8163
+58@ = 0
+
+:HEIST9_8170
+if 
+  not Char.IsDead(109@(58@,5i))
+goto_if_false @HEIST9_8349
+if 
+  Char.HasBeenDamagedByChar(109@(58@,5i), $scplayer)
+goto_if_false @HEIST9_8243
+gosub @HEIST9_50388
+Text.PrintNow('HM9_52', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_8243
+if 
+  Char.HasBeenDamagedByChar($scplayer, 109@(58@,5i))
+goto_if_false @HEIST9_8296
+gosub @HEIST9_50388
+Text.PrintNow('HM9_52', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_8296
+if 
+  Char.HasSpottedChar(109@(58@,5i), $scplayer)
+goto_if_false @HEIST9_8349
+gosub @HEIST9_50388
+Text.PrintNow('HM9_37', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_8349
+58@ += 1
+  58@ >= 2
+goto_if_false @HEIST9_8170
+if and
+  World.IsProjectileInArea(2144.464, 1621.26, 1002.136, 2136.209, 1626.877, 997.7474)
+  173@ == 0
+goto_if_false @HEIST9_8475
+173@ = 1
+302@ = 0
+244@ = 0
+Game.SwitchObjectBrains(ScriptBrainAttachType.Object, False)
+$iTerminateAllAmbience = 1
+TIMERA = 0
+gosub @HEIST9_46325
+gosub @HEIST9_1936
+
+:HEIST9_8475
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2145.79, 1613.851, 999.968, 5.0, 5.0, 5.0)
+  114@ == 0
+  173@ == 0
+goto_if_false @HEIST9_8625
+114@ = 1
+World.ClearArea(1, 2144.323, 1622.684, 992.5681, 30.0)
+58@ = 0
+
+:HEIST9_8575
+if 
+  not Char.IsDead(109@(58@,5i))
+goto_if_false @HEIST9_8604
+Char.ClearTasksImmediately(109@(58@,5i))
+
+:HEIST9_8604
+58@ += 1
+  58@ >= 2
+goto_if_false @HEIST9_8575
+
+:HEIST9_8625
+if 
+  173@ == 1
+goto_if_false @HEIST9_10412
+303@ = 1
+Text.ClearPrints
+World.SwitchEntryExit('MAFCAS', False)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_8688
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:HEIST9_8688
+gosub @HEIST9_46289
+Camera.SetFixedPosition(2139.85, 1609.236, 995.7649, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2140.229, 1610.145, 995.5919, SwitchType.JumpCut)
+Streaming.RequestModel(343)
+
+:HEIST9_8751
+if 
+  not Streaming.HasModelLoaded(343)
+goto_if_false @HEIST9_8778
+wait 0
+goto @HEIST9_8751
+
+:HEIST9_8778
+World.ClearArea(1, 2144.323, 1622.684, 997.0, 10.0)
+World.ClearArea(1, 2143.266, 1618.145, 999.9764, 10.0)
+314@ = Object.Create(343, 2144.323, 1622.684, 997.0)
+gosub @HEIST9_46358
+$x, $y, 313@ = Object.GetCoordinates(314@)
+
+:HEIST9_8870
+if 
+  313@ > 992.6
+goto_if_false @HEIST9_8940
+wait 20
+$x, $y, 313@ = Object.GetCoordinates(314@)
+313@ -= 0.3
+Object.SetCoordinates(314@, $x, $y, 313@)
+goto @HEIST9_8870
+
+:HEIST9_8940
+139@ = Particle.Create("TEARGASAD", 2144.323, 1622.684, 992.5681, 1)
+Particle.Play(139@)
+wait 1500
+58@ = 0
+
+:HEIST9_8990
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_9014
+goto @HEIST9_10100
+
+:HEIST9_9014
+if 
+  not Char.IsDead(109@(58@,5i))
+goto_if_false @HEIST9_9189
+if 
+  58@ == 0
+goto_if_false @HEIST9_9112
+Char.ClearTasksImmediately(109@(58@,5i))
+Task.PlayAnim(109@(58@,5i), "CAS_G2_GASKO", "HEIST9", 1.0, False, False, False, True, -1)
+wait 200
+
+:HEIST9_9112
+if 
+  58@ == 1
+goto_if_false @HEIST9_9189
+Char.ClearTasksImmediately(109@(58@,5i))
+Task.PlayAnim(109@(58@,5i), "CAS_G2_GASKO", "HEIST9", 1.0, False, False, False, True, -1)
+wait 100
+
+:HEIST9_9189
+if 
+  not Char.IsDead(109@(58@,5i))
+goto_if_false @HEIST9_9220
+Char.SetCollision(109@(58@,5i), False)
+
+:HEIST9_9220
+58@ += 1
+  58@ >= 2
+goto_if_false @HEIST9_8990
+TIMERB = 0
+
+:HEIST9_9248
+if 
+  1000 > TIMERB
+goto_if_false @HEIST9_9302
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_9295
+goto @HEIST9_10100
+
+:HEIST9_9295
+goto @HEIST9_9248
+
+:HEIST9_9302
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19024, 1)
+
+:HEIST9_9313
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_9339
+wait 0
+goto @HEIST9_9313
+
+:HEIST9_9339
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_9350
+if 
+  1500 > TIMERB
+goto_if_false @HEIST9_9404
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_9397
+goto @HEIST9_10100
+
+:HEIST9_9397
+goto @HEIST9_9350
+
+:HEIST9_9404
+if 
+  not Char.IsDead(110@)
+goto_if_false @HEIST9_9428
+Audio.ReportMissionAudioEventAtChar(110@, 1163)
+
+:HEIST9_9428
+TIMERB = 0
+
+:HEIST9_9435
+if 
+  500 > TIMERB
+goto_if_false @HEIST9_9489
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_9482
+goto @HEIST9_10100
+
+:HEIST9_9482
+goto @HEIST9_9435
+
+:HEIST9_9489
+Text.PrintNow('HE8_FB', 2000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19025, 1)
+
+:HEIST9_9516
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_9542
+wait 0
+goto @HEIST9_9516
+
+:HEIST9_9542
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_9553
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_9603
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_9596
+goto @HEIST9_10100
+
+:HEIST9_9596
+goto @HEIST9_9553
+
+:HEIST9_9603
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_9649
+Char.SetCoordinatesDontWarpGang($scplayer, 2143.376, 1619.655, 999.9764)
+Char.SetHeading($scplayer, 182.7419)
+
+:HEIST9_9649
+Particle.Stop(139@)
+Particle.KillNow(139@)
+World.ClearArea(1, 2144.323, 1622.684, 997.0, 10.0)
+World.ClearArea(1, 2143.266, 1618.145, 999.9764, 10.0)
+Camera.SetFixedPosition(2142.75, 1617.836, 1001.143, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2142.997, 1618.803, 1001.197, SwitchType.JumpCut)
+Text.PrintNow('HE8_FC', 2000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19026, 1)
+
+:HEIST9_9785
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_9811
+wait 0
+goto @HEIST9_9785
+
+:HEIST9_9811
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_9822
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_9872
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_9865
+goto @HEIST9_10100
+
+:HEIST9_9865
+goto @HEIST9_9822
+
+:HEIST9_9872
+Text.PrintNow('HE8_FD', 2000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19027, 1)
+
+:HEIST9_9899
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_9925
+wait 0
+goto @HEIST9_9899
+
+:HEIST9_9925
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_9936
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_9986
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_9979
+goto @HEIST9_10100
+
+:HEIST9_9979
+goto @HEIST9_9936
+
+:HEIST9_9986
+Text.PrintNow('HE8_FE', 2000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19028, 1)
+
+:HEIST9_10013
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_10039
+wait 0
+goto @HEIST9_10013
+
+:HEIST9_10039
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_10050
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_10100
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_10093
+goto @HEIST9_10100
+
+:HEIST9_10093
+goto @HEIST9_10050
+
+:HEIST9_10100
+Object.Delete(314@)
+Streaming.MarkModelAsNoLongerNeeded(343)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_10156
+Char.SetCoordinatesDontWarpGang($scplayer, 2143.22, 1618.372, 999.9688)
+Char.SetHeading($scplayer, 175.5027)
+
+:HEIST9_10156
+if 
+  not Char.IsDead(109@)
+goto_if_false @HEIST9_10238
+Char.ClearTasksImmediately(109@)
+Task.PlayAnimNonInterruptable(109@, "CAS_G2_GASKO", "HEIST9", 1.0, False, False, False, True, -1)
+Task.TogglePedThreatScanner(109@, False, False, False)
+Char.SetDecisionMaker(109@, 120@)
+
+:HEIST9_10238
+if 
+  not Char.IsDead(110@)
+goto_if_false @HEIST9_10320
+Char.ClearTasksImmediately(110@)
+Task.PlayAnimNonInterruptable(110@, "CAS_G2_GASKO", "HEIST9", 1.0, False, False, False, True, -1)
+Task.TogglePedThreatScanner(110@, False, False, False)
+Char.SetDecisionMaker(110@, 120@)
+
+:HEIST9_10320
+gosub @HEIST9_46306
+Particle.Stop(139@)
+Particle.KillNow(139@)
+
+:HEIST9_10337
+Text.PrintNow('HM9_12', 5000, 1)
+Blip.Remove(108@)
+45@ = Blip.AddForCoord(2168.173, 1616.986, 998.97)
+Blip.SetEntryExit(45@, 2196.635, 1676.841, 10.0)
+38@ = 3
+246@ = 1
+
+:HEIST9_10412
+if 
+  116@ == 4
+goto_if_false @HEIST9_10444
+116@ = 5
+goto @HEIST9_10337
+
+:HEIST9_10444
+if and
+  not Text.IsMessageBeingDisplayed
+  246@ <> 12
+  246@ <> 0
+goto_if_false @HEIST9_11312
+if and
+  231@ == 2
+  246@ == 1
+goto_if_false @HEIST9_10555
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_10519
+Char.ShutUpForScriptedSpeech($scplayer, True)
+
+:HEIST9_10519
+set_lvar_text_label 288@s = 'HE8_GB'
+set_lvar_int_to_constant 232@ = 19030
+gosub @HEIST9_50648
+246@ = 2
+
+:HEIST9_10555
+if and
+  231@ == 2
+  246@ == 2
+goto_if_false @HEIST9_10616
+set_lvar_text_label 288@s = 'HE8_GC'
+set_lvar_int_to_constant 232@ = 19031
+gosub @HEIST9_50648
+246@ = 3
+
+:HEIST9_10616
+if and
+  231@ == 2
+  246@ == 3
+goto_if_false @HEIST9_10677
+set_lvar_text_label 288@s = 'HE8_GD'
+set_lvar_int_to_constant 232@ = 19032
+gosub @HEIST9_50648
+246@ = 4
+
+:HEIST9_10677
+if and
+  231@ == 2
+  246@ == 4
+goto_if_false @HEIST9_10982
+Camera.SetDarknessEffect(True, 220)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Audio.LoadMissionAudio(6402, 3)
+
+:HEIST9_10720
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @HEIST9_10746
+wait 0
+goto @HEIST9_10720
+
+:HEIST9_10746
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @HEIST9_10765
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:HEIST9_10765
+wait 100
+set_lvar_text_label 288@s = 'HE8_GE'
+set_lvar_int_to_constant 232@ = 19033
+gosub @HEIST9_50648
+53@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 2157.597, 1597.863, 998.9694, 6, -1)
+Task.LookAtCoord(-1, 2155.781, 1598.063, 998.9686, -2)
+Task.PlayAnim(-1, "IDLE_CHAT", "PED", 1.0, True, False, False, False, -1)
+Task.Pause(-1, 1000)
+Sequence.SetToRepeat(53@, True)
+Sequence.Close(53@)
+58@ = 0
+
+:HEIST9_10908
+if 
+  not Char.IsDead(218@(58@,10i))
+goto_if_false @HEIST9_10949
+Char.ClearTasksImmediately(218@(58@,10i))
+Char.PerformSequence(218@(58@,10i), 53@)
+
+:HEIST9_10949
+58@ += 1
+  58@ >= 7
+goto_if_false @HEIST9_10908
+Sequence.Clear(53@)
+246@ = 5
+
+:HEIST9_10982
+if and
+  231@ == 2
+  246@ == 5
+goto_if_false @HEIST9_11080
+if 
+  not Game.IsNightVisionActive
+goto_if_false @HEIST9_11073
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_11044
+Char.StartFacialTalk($scplayer, 10000)
+
+:HEIST9_11044
+set_lvar_text_label 288@s = 'HE8_GF'
+set_lvar_int_to_constant 232@ = 19034
+gosub @HEIST9_50648
+
+:HEIST9_11073
+246@ = 9
+
+:HEIST9_11080
+if and
+  231@ == 2
+  246@ == 9
+goto_if_false @HEIST9_11156
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_11126
+Char.StopFacialTalk($scplayer)
+
+:HEIST9_11126
+Text.PrintNow('HM9_49', 5000, 1)
+246@ = 10
+TIMERB = 0
+
+:HEIST9_11156
+if and
+  TIMERB > 5000
+  249@ == 0
+goto_if_false @HEIST9_11312
+if and
+  38@ == 5
+  231@ == 2
+  246@ == 10
+goto_if_false @HEIST9_11221
+246@ = 11
+
+:HEIST9_11221
+if and
+  38@ == 5
+  231@ == 2
+  246@ == 11
+goto_if_false @HEIST9_11312
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_11276
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:HEIST9_11276
+set_lvar_text_label 288@s = 'HE8_HB'
+set_lvar_int_to_constant 232@ = 19038
+gosub @HEIST9_50648
+246@ = 12
+
+:HEIST9_11312
+if 
+  38@ == 3
+goto_if_false @HEIST9_11712
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2167.599, 1617.412, 998.9715, 2.0, 2.0, 2.0)
+goto_if_false @HEIST9_11710
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @HEIST9_11402
+Text.PrintHelpForever('HM9_29')
+
+:HEIST9_11402
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @HEIST9_11703
+58@ = 0
+
+:HEIST9_11426
+Char.Delete(218@(58@,10i))
+58@ += 1
+  58@ >= 7
+goto_if_false @HEIST9_11426
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Audio.LoadMissionAudio(6400, 3)
+
+:HEIST9_11467
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @HEIST9_11493
+wait 0
+goto @HEIST9_11467
+
+:HEIST9_11493
+Streaming.MarkModelAsNoLongerNeeded(172)
+Streaming.MarkModelAsNoLongerNeeded(164)
+Streaming.MarkModelAsNoLongerNeeded(214)
+Blip.Remove(45@)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinatesDontWarpGang($scplayer, 2167.599, 1617.287, 998.9715)
+Char.SetHeading($scplayer, 270.0)
+Task.PlayAnim($scplayer, "USE_SWIPECARD", "HEIST9", 2.0, False, False, False, False, -1)
+wait 500
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @HEIST9_11615
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:HEIST9_11615
+wait 500
+58@ = 0
+
+:HEIST9_11627
+if 
+  58@ <> 33
+goto_if_false @HEIST9_11680
+wait 0
+  Object.Rotate($h9_door_c, 180.0, 3.0, False)
+58@ += 1
+goto @HEIST9_11627
+
+:HEIST9_11680
+38@ = 5
+Text.ClearHelp
+215@ = 0
+TIMERA = 0
+
+:HEIST9_11703
+goto @HEIST9_11712
+
+:HEIST9_11710
+Text.ClearHelp
+
+:HEIST9_11712
+if 
+  38@ == 5
+goto_if_false @HEIST9_12426
+if and
+  231@ == 2
+  215@ == 0
+goto_if_false @HEIST9_11913
+Streaming.RequestModel(530)
+
+:HEIST9_11760
+if 
+  not Streaming.HasModelLoaded(530)
+goto_if_false @HEIST9_11787
+wait 0
+goto @HEIST9_11760
+
+:HEIST9_11787
+46@ = Car.Create(530, 2173.621, 1585.964, 998.9722)
+Car.SetAreaVisible(46@, 1)
+Car.SetHeading(46@, 270.0)
+Car.ChangeColor(46@, 6, 6)
+209@ = 1
+if 
+  not Car.IsDead(46@)
+goto_if_false @HEIST9_11866
+Car.SetAreaVisible(46@, 1)
+
+:HEIST9_11866
+90@ = Blip.AddForCoord(2220.543, 1572.625, 998.9531)
+Blip.SetEntryExit(90@, 2196.635, 1676.841, 10.0)
+215@ = 1
+
+:HEIST9_11913
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2224.452, 1595.435, 998.9753, 1.2, 1.2, 1.2)
+  249@ == 0
+goto_if_false @HEIST9_11975
+249@ = 1
+
+:HEIST9_11975
+if and
+  231@ == 2
+  249@ == 1
+goto_if_false @HEIST9_12036
+set_lvar_text_label 288@s = 'HE8_JA'
+set_lvar_int_to_constant 232@ = 19039
+gosub @HEIST9_50648
+249@ = 2
+
+:HEIST9_12036
+if and
+  231@ == 2
+  249@ == 2
+goto_if_false @HEIST9_12097
+set_lvar_text_label 288@s = 'HE8_JB'
+set_lvar_int_to_constant 232@ = 19040
+gosub @HEIST9_50648
+249@ = 3
+
+:HEIST9_12097
+if and
+  231@ == 2
+  249@ == 3
+goto_if_false @HEIST9_12201
+if 
+  Blip.DoesExist(90@)
+goto_if_false @HEIST9_12143
+Blip.Remove(90@)
+
+:HEIST9_12143
+if 
+  not Car.IsDead(46@)
+goto_if_false @HEIST9_12194
+47@ = Blip.AddForCar(46@)
+Blip.SetEntryExit(47@, 2196.635, 1676.841, 10.0)
+Blip.SetAsFriendly(47@, True)
+
+:HEIST9_12194
+249@ = 4
+
+:HEIST9_12201
+if and
+  231@ == 2
+  249@ == 4
+goto_if_false @HEIST9_12249
+Text.PrintNow('HM9_51', 7000, 1)
+249@ = 5
+
+:HEIST9_12249
+if 
+  209@ == 1
+goto_if_false @HEIST9_12426
+if 
+  not Car.IsDead(46@)
+goto_if_false @HEIST9_12426
+if 
+  Char.IsInCar($scplayer, 46@)
+goto_if_false @HEIST9_12426
+if and
+  50@ == 0
+  Char.IsInCar($scplayer, 46@)
+goto_if_false @HEIST9_12426
+Text.PrintNow('HM9_5', 5000, 1)
+50@ = 1
+38@ = 6
+211@ = 1
+if 
+  Blip.DoesExist(90@)
+goto_if_false @HEIST9_12386
+Blip.Remove(90@)
+
+:HEIST9_12386
+90@ = Blip.AddForCoord(2220.543, 1572.625, 998.9531)
+Blip.SetEntryExit(90@, 2196.635, 1676.841, 10.0)
+
+:HEIST9_12426
+if and
+  Car.IsDead(46@)
+  7 > 38@
+  209@ == 1
+goto_if_false @HEIST9_12486
+gosub @HEIST9_50388
+Text.PrintNow('HM9_13', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_12486
+if 
+  38@ == 6
+goto_if_false @HEIST9_17984
+if 
+  not Car.IsDead(46@)
+goto_if_false @HEIST9_12630
+if and
+  Char.IsInCar($scplayer, 46@)
+  95@ == 0
+goto_if_false @HEIST9_12567
+Blip.ChangeDisplay(47@, BlipDisplay.Neither)
+Blip.ChangeDisplay(90@, BlipDisplay.Both)
+95@ = 1
+
+:HEIST9_12567
+if and
+  not Char.IsInCar($scplayer, 46@)
+  95@ == 1
+goto_if_false @HEIST9_12630
+Text.PrintNow('HM9_23', 3000, 1)
+Blip.ChangeDisplay(47@, BlipDisplay.Both)
+Blip.ChangeDisplay(90@, BlipDisplay.Neither)
+95@ = 0
+
+:HEIST9_12630
+if 
+  not Car.IsDead(46@)
+goto_if_false @HEIST9_13014
+$h9_offset = Car.GetMovingComponentOffset(46@)
+if 
+  Char.IsInCar($scplayer, 46@)
+goto_if_false @HEIST9_13014
+if 
+  Char.LocateStoppedAnyMeans3D($scplayer, 2220.543, 1573.141, 998.9672, 6.0, 6.0, 6.0, False)
+goto_if_false @HEIST9_12739
+Text.PrintHelpForever('HM9_53')
+goto @HEIST9_12741
+
+:HEIST9_12739
+Text.ClearHelp
+
+:HEIST9_12741
+$x, $y, $z = Char.GetCoordinates($scplayer)
+287@ = Char.GetHeading($scplayer)
+set_var_float_to_var_float $h9_calculus = $h9_offset
+$h9_calculus += 1001.6
+add_float_var_to_float_var $h9_offset += $z
+if and
+  287@ > 140.0
+  220.0 > 287@
+goto_if_false @HEIST9_13014
+if and
+  $y > 1572.8
+  1573.8 > $y
+goto_if_false @HEIST9_13014
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.RightStickY)
+goto_if_false @HEIST9_12981
+177@, 178@, $h9_z1 = Object.GetCoordinates(49@)
+$RStickY = 0
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+set_var_float_to_var_float $h9_z1 = $h9_calculus
+$h9_z1 -= 0.1
+Object.SetCoordinates(49@, 2220.188, 1571.763, $h9_z1)
+if 
+  305@ == 0
+goto_if_false @HEIST9_12974
+Audio.ReportMissionAudioEventAtObject(49@, 1165)
+305@ = 1
+
+:HEIST9_12974
+goto @HEIST9_13014
+
+:HEIST9_12981
+if 
+  305@ == 1
+goto_if_false @HEIST9_13014
+Audio.ReportMissionAudioEventAtObject(49@, 1166)
+305@ = 0
+
+:HEIST9_13014
+if and
+  $h9_z1 >= 1002.8
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_17984
+if 
+  Char.IsInModel($scplayer, 530)
+goto_if_false @HEIST9_17968
+214@ = Pickup.CreateWithAmmo(363, 3, 10, 2146.487, 1622.805, 993.5)
+if 
+  not Char.IsDead(225@)
+goto_if_false @HEIST9_13107
+Char.Delete(225@)
+
+:HEIST9_13107
+if 
+  not Char.IsDead(226@)
+goto_if_false @HEIST9_13128
+Char.Delete(226@)
+
+:HEIST9_13128
+if 
+  not Char.IsDead(227@)
+goto_if_false @HEIST9_13149
+Char.Delete(227@)
+
+:HEIST9_13149
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_13172
+Player.SetControl($player1, False)
+
+:HEIST9_13172
+Blip.Remove(90@)
+Text.ClearHelp
+Streaming.RequestCarRecording(499)
+Streaming.RequestCarRecording(487)
+
+:HEIST9_13189
+if or
+  not Streaming.HasCarRecordingBeenLoaded(499)
+  not Streaming.HasCarRecordingBeenLoaded(487)
+goto_if_false @HEIST9_13221
+wait 0
+goto @HEIST9_13189
+
+:HEIST9_13221
+if 
+  not Car.IsDead(51@)
+goto_if_false @HEIST9_13251
+Car.SetAreaVisible(51@, 1)
+Car.SwitchSiren(51@, True)
+
+:HEIST9_13251
+if 
+  not Car.IsDead(46@)
+goto_if_false @HEIST9_13297
+Car.SetCoordinates(46@, 2220.543, 1573.141, 998.9672)
+Car.SetHeading(46@, 180.0)
+
+:HEIST9_13297
+gosub @HEIST9_46289
+Camera.SetFixedPosition(2224.694, 1577.632, 1002.633, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2224.199, 1576.857, 1002.241, SwitchType.JumpCut)
+if and
+  Streaming.HasCarRecordingBeenLoaded(487)
+  not Car.IsDead(46@)
+goto_if_false @HEIST9_13384
+Car.StartPlayback(46@, 487)
+
+:HEIST9_13384
+Audio.ReportMissionAudioEventAtObject(49@, 1035)
+if 
+  Object.DoesExist(49@)
+goto_if_false @HEIST9_13422
+177@, 178@, $h9_z1 = Object.GetCoordinates(49@)
+
+:HEIST9_13422
+if 
+  $h9_z1 <= 1005.4
+goto_if_false @HEIST9_13482
+wait 50
+$h9_z1 += 0.1
+Object.SetCoordinates(49@, 2220.188, 1571.763, $h9_z1)
+goto @HEIST9_13422
+
+:HEIST9_13482
+Audio.ReportMissionAudioEventAtObject(49@, 1036)
+if and
+  Streaming.HasCarRecordingBeenLoaded(499)
+  not Car.IsDead(51@)
+goto_if_false @HEIST9_13519
+Car.StartPlayback(51@, 499)
+
+:HEIST9_13519
+if 
+  not Car.IsDead(46@)
+goto_if_false @HEIST9_13586
+if 
+  Car.IsPlaybackGoingOn(46@)
+goto_if_false @HEIST9_13556
+Car.StopPlayback(46@)
+
+:HEIST9_13556
+Car.SetCoordinates(46@, 2218.039, 1592.232, 998.9783)
+Car.SetHeading(46@, 26.1233)
+
+:HEIST9_13586
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_13675
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HEIST9_13645
+Char.WarpFromCarToCoord($scplayer, 2217.115, 1589.683, 998.9709)
+goto @HEIST9_13665
+
+:HEIST9_13645
+Char.SetCoordinatesDontWarpGang($scplayer, 2217.115, 1589.683, 998.9709)
+
+:HEIST9_13665
+Char.SetHeading($scplayer, 209.5064)
+
+:HEIST9_13675
+58@ = 0
+
+:HEIST9_13682
+if 
+  not Char.IsDead(218@(58@,10i))
+goto_if_false @HEIST9_13711
+Char.Delete(218@(58@,10i))
+
+:HEIST9_13711
+58@ += 1
+  58@ >= 7
+goto_if_false @HEIST9_13682
+Streaming.RequestModel(363)
+Streaming.RequestModel(364)
+Streaming.RequestModel(353)
+Streaming.RequestModel(164)
+
+:HEIST9_13752
+if or
+  not Streaming.HasModelLoaded(363)
+  not Streaming.HasModelLoaded(364)
+  not Streaming.HasModelLoaded(353)
+  not Streaming.HasModelLoaded(164)
+goto_if_false @HEIST9_13794
+wait 0
+goto @HEIST9_13752
+
+:HEIST9_13794
+Camera.SetFixedPosition(2217.37, 1580.595, 1000.582, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2217.663, 1579.639, 1000.559, SwitchType.JumpCut)
+TIMERB = 0
+
+:HEIST9_13852
+if 
+  3000 > TIMERB
+goto_if_false @HEIST9_13906
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_13899
+goto @HEIST9_15911
+
+:HEIST9_13899
+goto @HEIST9_13852
+
+:HEIST9_13906
+Camera.SetFixedPosition(2215.132, 1594.248, 1002.778, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2215.409, 1593.319, 1002.531, SwitchType.JumpCut)
+if 
+  not Car.IsDead(51@)
+goto_if_false @HEIST9_13980
+Car.FreezePosition(51@, True)
+
+:HEIST9_13980
+Text.PrintNow('HE8_KA', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19042, 1)
+
+:HEIST9_14007
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_14033
+wait 0
+goto @HEIST9_14007
+
+:HEIST9_14033
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_14044
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_14094
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_14087
+goto @HEIST9_15911
+
+:HEIST9_14087
+goto @HEIST9_14044
+
+:HEIST9_14094
+if 
+  not Car.IsDead(51@)
+goto_if_false @HEIST9_14557
+53@ = Sequence.Open()
+Task.Pause(-1, 500)
+Task.LeaveCar(-1, 51@)
+Path.FlushRoute
+Path.ExtendRoute(2224.155, 1579.691, 998.9739)
+Path.ExtendRoute(2223.636, 1585.549, 998.9675)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.PlayAnim(-1, "IDLE_CHAT", "PED", 1.0, True, False, False, False, -1)
+Sequence.Close(53@)
+if 
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_14239
+Char.PerformSequence(54@, 53@)
+
+:HEIST9_14239
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.LeaveCar(-1, 51@)
+Path.FlushRoute
+Path.ExtendRoute(2220.033, 1584.614, 998.9719)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.TurnCharToFaceCoord(-1, 2216.44, 1589.13, 998.979)
+Sequence.Close(53@)
+if 
+  not Char.IsDead(55@)
+goto_if_false @HEIST9_14333
+Char.PerformSequence(55@, 53@)
+
+:HEIST9_14333
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.Pause(-1, 500)
+Task.LeaveCar(-1, 51@)
+Path.FlushRoute
+Path.ExtendRoute(2221.495, 1584.948, 998.9701)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.TurnCharToFaceCoord(-1, 2216.44, 1589.13, 998.979)
+Sequence.Close(53@)
+if 
+  not Char.IsDead(56@)
+goto_if_false @HEIST9_14434
+Char.PerformSequence(56@, 53@)
+
+:HEIST9_14434
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.Pause(-1, 1000)
+Task.LeaveCar(-1, 51@)
+Path.FlushRoute
+Path.ExtendRoute(2216.699, 1578.363, 998.9761)
+Path.ExtendRoute(2217.538, 1583.64, 998.9749)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.TurnCharToFaceCoord(-1, 2216.44, 1589.13, 998.979)
+Sequence.Close(53@)
+if 
+  not Char.IsDead(57@)
+goto_if_false @HEIST9_14552
+Char.PerformSequence(57@, 53@)
+
+:HEIST9_14552
+Sequence.Clear(53@)
+
+:HEIST9_14557
+Text.PrintNow('HE8_KB', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19043, 1)
+
+:HEIST9_14584
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_14610
+wait 0
+goto @HEIST9_14584
+
+:HEIST9_14610
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_14621
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_14671
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_14664
+goto @HEIST9_15911
+
+:HEIST9_14664
+goto @HEIST9_14621
+
+:HEIST9_14671
+Text.PrintNow('HE8_KC', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19044, 1)
+
+:HEIST9_14698
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_14724
+wait 0
+goto @HEIST9_14698
+
+:HEIST9_14724
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_14735
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_14785
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_14778
+goto @HEIST9_15911
+
+:HEIST9_14778
+goto @HEIST9_14735
+
+:HEIST9_14785
+Text.PrintNow('HE8_KD', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19045, 1)
+
+:HEIST9_14812
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_14838
+wait 0
+goto @HEIST9_14812
+
+:HEIST9_14838
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_14849
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_14899
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_14892
+goto @HEIST9_15911
+
+:HEIST9_14892
+goto @HEIST9_14849
+
+:HEIST9_14899
+Camera.SetFixedPosition(2219.653, 1584.915, 1001.211, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2220.18, 1585.746, 1001.034, SwitchType.JumpCut)
+Text.PrintNow('HE8_KE', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19046, 1)
+
+:HEIST9_14977
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_15003
+wait 0
+goto @HEIST9_14977
+
+:HEIST9_15003
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+if 
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_15151
+53@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2224.192, 1589.193, 998.9668)
+Path.ExtendRoute(2225.465, 1592.997, 998.9677)
+Path.ExtendRoute(2226.739, 1597.796, 998.9755)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.PlayAnim(-1, "GETUP_FRONT", "PED", 1.0, False, False, False, False, -1)
+Sequence.Close(53@)
+Char.ClearTasksImmediately(54@)
+Char.PerformSequence(54@, 53@)
+Sequence.Clear(53@)
+
+:HEIST9_15151
+TIMERB = 0
+
+:HEIST9_15158
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_15208
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_15201
+goto @HEIST9_15911
+
+:HEIST9_15201
+goto @HEIST9_15158
+
+:HEIST9_15208
+TIMERB = 0
+
+:HEIST9_15215
+if 
+  2500 > TIMERB
+goto_if_false @HEIST9_15269
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_15262
+goto @HEIST9_15911
+
+:HEIST9_15262
+goto @HEIST9_15215
+
+:HEIST9_15269
+Camera.Shake(30)
+TIMERB = 0
+
+:HEIST9_15280
+if 
+  1500 > TIMERB
+goto_if_false @HEIST9_15334
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_15327
+goto @HEIST9_15911
+
+:HEIST9_15327
+goto @HEIST9_15280
+
+:HEIST9_15334
+if 
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_15484
+if 
+  not Char.IsDead(55@)
+goto_if_false @HEIST9_15379
+Char.ClearTasks(55@)
+Task.TurnCharToFaceChar(55@, 54@)
+
+:HEIST9_15379
+if 
+  not Char.IsDead(56@)
+goto_if_false @HEIST9_15408
+Char.ClearTasks(56@)
+Task.TurnCharToFaceChar(56@, 54@)
+
+:HEIST9_15408
+wait 100
+if and
+  not Char.IsDead(57@)
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_15446
+Char.ClearTasks(57@)
+Task.TurnCharToFaceChar(57@, 54@)
+
+:HEIST9_15446
+wait 100
+if and
+  not Char.IsDead($scplayer)
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_15484
+Char.ClearTasks($scplayer)
+Task.TurnCharToFaceChar($scplayer, 54@)
+
+:HEIST9_15484
+Text.PrintNow('HE8_KF', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19047, 1)
+
+:HEIST9_15511
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_15537
+wait 0
+goto @HEIST9_15511
+
+:HEIST9_15537
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_15548
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_15598
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_15591
+goto @HEIST9_15911
+
+:HEIST9_15591
+goto @HEIST9_15548
+
+:HEIST9_15598
+if and
+  not Char.IsDead($scplayer)
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_15632
+Char.ClearTasks(54@)
+Task.TurnCharToFaceChar(54@, $scplayer)
+
+:HEIST9_15632
+Camera.SetFixedPosition(2216.963, 1581.526, 1000.579, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2217.403, 1582.416, 1000.465, SwitchType.JumpCut)
+Text.PrintNow('HE8_KG', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19048, 1)
+
+:HEIST9_15710
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_15736
+wait 0
+goto @HEIST9_15710
+
+:HEIST9_15736
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_15747
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_15797
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_15790
+goto @HEIST9_15911
+
+:HEIST9_15790
+goto @HEIST9_15747
+
+:HEIST9_15797
+Text.PrintNow('HE8_KH', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19049, 1)
+
+:HEIST9_15824
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_15850
+wait 0
+goto @HEIST9_15824
+
+:HEIST9_15850
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_15861
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_15911
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_15904
+goto @HEIST9_15911
+
+:HEIST9_15904
+goto @HEIST9_15861
+
+:HEIST9_15911
+315@ = Char.Create(24, 163, 2201.126, 1617.877, 998.9827)
+Char.SetAreaVisible(315@, 1)
+Char.SetHeading(315@, 267.4834)
+Task.ToggleDuck(315@, True)
+316@ = Char.Create(24, 164, 2196.083, 1618.684, 998.9766)
+Char.SetAreaVisible(316@, 1)
+Char.SetHeading(316@, 263.4616)
+317@ = Char.Create(24, 163, 2207.917, 1620.372, 998.9827)
+Char.SetAreaVisible(317@, 1)
+Char.SetHeading(317@, 267.4754)
+Task.ToggleDuck(317@, True)
+Char.SetOnlyDamagedByPlayer(317@, True)
+58@ = 0
+
+:HEIST9_16065
+Char.SetMoney(315@(58@,5i), 0)
+if 
+  58@ <> 2
+goto_if_false @HEIST9_16118
+Char.SetHealth(315@(58@,5i), 200)
+Char.SetMaxHealth(315@(58@,5i), 200)
+
+:HEIST9_16118
+320@(58@,15i) = Blip.AddForChar(315@(58@,5i))
+Blip.SetEntryExit(320@(58@,15i), 2196.635, 1676.841, 10.0)
+Blip.ChangeDisplay(320@(58@,15i), BlipDisplay.BlipOnly)
+Char.GiveWeapon(315@(58@,5i), WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(315@(58@,5i), WeaponType.Mp5)
+Char.SetAccuracy(315@(58@,5i), 20)
+Char.SetShootRate(315@(58@,5i), 20)
+Char.SetDecisionMaker(315@(58@,5i), 245@)
+Task.StayInSamePlace(315@(58@,5i), True)
+58@ += 1
+  58@ >= 3
+goto_if_false @HEIST9_16065
+335@ = Char.Create(24, 163, 2180.075, 1611.573, 998.9766)
+Char.SetAreaVisible(335@, 1)
+Char.SetHeading(335@, 273.7555)
+Char.SetOnlyDamagedByPlayer(335@, True)
+336@ = Char.Create(24, 164, 2186.142, 1612.398, 998.9777)
+Char.SetAreaVisible(336@, 1)
+Char.SetHeading(336@, 306.4445)
+Task.ToggleDuck(336@, True)
+337@ = Char.Create(24, 163, 2183.521, 1615.246, 998.9766)
+Char.SetAreaVisible(337@, 1)
+Char.SetHeading(337@, 294.2185)
+338@ = Char.Create(24, 164, 2182.612, 1623.697, 998.9742)
+Char.SetAreaVisible(338@, 1)
+Char.SetHeading(338@, 248.6147)
+Task.ToggleDuck(338@, True)
+339@ = Char.Create(24, 164, 2179.681, 1622.404, 998.9764)
+Char.SetAreaVisible(339@, 1)
+Char.SetHeading(339@, 268.7008)
+Char.SetOnlyDamagedByPlayer(339@, True)
+340@ = Char.Create(24, 163, 2178.853, 1625.603, 998.9709)
+Char.SetAreaVisible(340@, 1)
+Char.SetHeading(340@, 250.7106)
+341@ = Char.Create(24, 163, 2176.363, 1606.599, 998.9827)
+Char.SetAreaVisible(341@, 1)
+Char.SetHeading(341@, 0.8709)
+Char.SetSenseRange(341@, 5.0)
+Task.ToggleDuck(341@, True)
+342@ = Char.Create(24, 164, 2176.491, 1600.897, 998.9827)
+Char.SetAreaVisible(342@, 1)
+Char.SetSenseRange(342@, 5.0)
+Char.SetHeading(342@, 352.937)
+343@ = Char.Create(24, 163, 2169.117, 1618.626, 998.9766)
+Char.SetAreaVisible(343@, 1)
+Char.SetHeading(343@, 272.9878)
+344@ = Char.Create(24, 163, 2161.208, 1602.776, 998.9812)
+Char.SetAreaVisible(344@, 1)
+Char.SetHeading(344@, 4.2093)
+345@ = Char.Create(24, 164, 2156.54, 1605.252, 998.9725)
+Char.SetAreaVisible(345@, 1)
+Char.SetHeading(345@, 353.705)
+58@ = 0
+
+:HEIST9_16784
+Char.SetMoney(335@(58@,15i), 0)
+if and
+  58@ <> 0
+  58@ <> 4
+goto_if_false @HEIST9_16844
+Char.SetHealth(335@(58@,15i), 200)
+Char.SetMaxHealth(335@(58@,15i), 200)
+
+:HEIST9_16844
+350@(58@,15i) = Blip.AddForChar(335@(58@,15i))
+Blip.SetEntryExit(350@(58@,15i), 2196.635, 1676.841, 10.0)
+Blip.ChangeDisplay(350@(58@,15i), BlipDisplay.BlipOnly)
+Char.GiveWeapon(335@(58@,15i), WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(335@(58@,15i), WeaponType.Mp5)
+Char.SetShootRate(335@(58@,15i), 20)
+Char.SetAccuracy(335@(58@,15i), 20)
+Char.SetDecisionMaker(335@(58@,15i), 245@)
+Task.StayInSamePlace(335@(58@,15i), True)
+58@ += 1
+  58@ >= 11
+goto_if_false @HEIST9_16784
+$h9_safe_timer = 420000
+Hud.ClearTimer($h9_safe_timer)
+Hud.DisplayTimerWithString($h9_safe_timer, TimerDirection.Down, 'HM9_1A')
+gosub @HEIST9_46306
+Object.Delete(49@)
+if 
+  not Car.IsDead(51@)
+goto_if_false @HEIST9_17101
+if 
+  Car.IsPlaybackGoingOn(51@)
+goto_if_false @HEIST9_17066
+Car.StopPlayback(51@)
+
+:HEIST9_17066
+Car.SetCoordinates(51@, 2220.39, 1577.623, 998.967)
+Car.SetHeading(51@, 179.9804)
+Car.SkipToEndAndStopPlayback(51@)
+
+:HEIST9_17101
+if 
+  not Car.IsDead(51@)
+goto_if_false @HEIST9_17850
+if and
+  not Char.IsDead(54@)
+  not Char.IsDead(55@)
+  not Char.IsDead(56@)
+  not Char.IsDead(57@)
+goto_if_false @HEIST9_17850
+286@ = Sequence.Open()
+Task.Pause(-1, 10)
+if 
+  not Char.IsDead(315@)
+goto_if_false @HEIST9_17182
+Task.KillCharOnFoot(-1, 315@)
+
+:HEIST9_17182
+if 
+  not Char.IsDead(316@)
+goto_if_false @HEIST9_17205
+Task.KillCharOnFoot(-1, 316@)
+
+:HEIST9_17205
+if 
+  not Char.IsDead(317@)
+goto_if_false @HEIST9_17228
+Task.KillCharOnFoot(-1, 317@)
+
+:HEIST9_17228
+Sequence.Close(286@)
+365@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2221.952, 1586.563, 998.9695)
+Path.ExtendRoute(2223.39, 1591.61, 998.9678)
+Path.ExtendRoute(2224.253, 1597.906, 998.9766)
+Path.ExtendRoute(2224.359, 1599.682, 998.983)
+Task.ToggleDuck(-1, False)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Sequence.Close(365@)
+366@ = Sequence.Open()
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Path.ExtendRoute(2224.593, 1602.669, 998.9816)
+Path.ExtendRoute(2224.79, 1609.521, 998.975)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Sequence.Close(366@)
+53@ = Sequence.Open()
+if 
+  Char.IsInCar(55@, 51@)
+goto_if_false @HEIST9_17422
+Task.LeaveCar(-1, 51@)
+
+:HEIST9_17422
+Char.PerformSequence(-1, 365@)
+Char.PerformSequence(-1, 366@)
+Task.FollowPathNodesToCoord(-1, 2222.452, 1617.022, 998.9678, 6, -1)
+Task.StayInSamePlace(-1, True)
+Char.PerformSequence(-1, 286@)
+Sequence.Close(53@)
+Char.ClearTasks(55@)
+Char.PerformSequence(55@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.Pause(-1, 500)
+if 
+  Char.IsInCar(56@, 51@)
+goto_if_false @HEIST9_17533
+Task.LeaveCar(-1, 51@)
+
+:HEIST9_17533
+Char.PerformSequence(-1, 365@)
+Task.Pause(-1, 1000)
+Char.PerformSequence(-1, 366@)
+Task.FollowPathNodesToCoord(-1, 2222.943, 1620.636, 998.9709, 6, -1)
+Task.StayInSamePlace(-1, True)
+Char.PerformSequence(-1, 286@)
+Sequence.Close(53@)
+Char.ClearTasks(56@)
+Char.PerformSequence(56@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.Pause(-1, 1500)
+if 
+  Char.IsInCar(57@, 51@)
+goto_if_false @HEIST9_17651
+Task.LeaveCar(-1, 51@)
+
+:HEIST9_17651
+Char.PerformSequence(-1, 365@)
+Task.Pause(-1, 3000)
+Char.PerformSequence(-1, 366@)
+Task.FollowPathNodesToCoord(-1, 2223.133, 1610.966, 998.9728, 4, -1)
+Task.StayInSamePlace(-1, True)
+Sequence.Close(53@)
+Char.ClearTasks(57@)
+Char.PerformSequence(57@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.Pause(-1, 2000)
+if 
+  Char.IsInCar(54@, 51@)
+goto_if_false @HEIST9_17762
+Task.LeaveCar(-1, 51@)
+
+:HEIST9_17762
+Char.PerformSequence(-1, 365@)
+Task.Pause(-1, 2500)
+Char.PerformSequence(-1, 366@)
+Task.FollowPathNodesToCoord(-1, 2223.133, 1610.966, 998.9728, 4, -1)
+Task.StayInSamePlace(-1, True)
+Sequence.Close(53@)
+Char.ClearTasks(54@)
+Char.PerformSequence(54@, 53@)
+Sequence.Clear(286@)
+Sequence.Clear(53@)
+Sequence.Clear(365@)
+Sequence.Clear(366@)
+
+:HEIST9_17850
+58@ = 0
+
+:HEIST9_17857
+if and
+  not Char.IsDead(54@(58@,4i))
+  not Car.IsDead(51@)
+goto_if_false @HEIST9_17933
+91@(58@,4i) = Blip.AddForChar(54@(58@,4i))
+Blip.SetEntryExit(91@(58@,4i), 2196.635, 1676.841, 10.0)
+Blip.SetAsFriendly(91@(58@,4i), True)
+
+:HEIST9_17933
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_17857
+38@ = 7
+goto @HEIST9_17984
+
+:HEIST9_17968
+Text.PrintNow('HM9_14', 5000, 1)
+
+:HEIST9_17984
+if 
+  38@ == 7
+goto_if_false @HEIST9_18058
+Streaming.RequestAnimation("BOMBER")
+
+:HEIST9_18012
+if 
+  not Streaming.HasAnimationLoaded("BOMBER")
+goto_if_false @HEIST9_18044
+wait 0
+goto @HEIST9_18012
+
+:HEIST9_18044
+38@ = 8
+TIMERA = 0
+
+:HEIST9_18058
+if 
+  38@ == 8
+goto_if_false @HEIST9_24146
+58@ = 0
+
+:HEIST9_18083
+if and
+  Char.IsDead(315@(58@,5i))
+  320@(58@,15i) <> 0
+goto_if_false @HEIST9_18163
+if 
+  Blip.DoesExist(320@(58@,15i))
+goto_if_false @HEIST9_18163
+Blip.Remove(320@(58@,15i))
+320@(58@,15i) = 0
+Char.MarkAsNoLongerNeeded(315@(58@,5i))
+
+:HEIST9_18163
+58@ += 1
+  58@ >= 3
+goto_if_false @HEIST9_18083
+58@ = 0
+
+:HEIST9_18191
+if and
+  Char.IsDead(335@(58@,15i))
+  350@(58@,15i) <> 0
+goto_if_false @HEIST9_18271
+if 
+  Blip.DoesExist(350@(58@,15i))
+goto_if_false @HEIST9_18271
+Blip.Remove(350@(58@,15i))
+350@(58@,15i) = 0
+Char.MarkAsNoLongerNeeded(335@(58@,15i))
+
+:HEIST9_18271
+58@ += 1
+  58@ >= 11
+goto_if_false @HEIST9_18191
+if and
+  Char.IsDead(315@)
+  Char.IsDead(316@)
+  Char.IsDead(317@)
+  257@ == 0
+goto_if_false @HEIST9_19157
+if and
+  not Char.IsDead(54@)
+  not Char.IsDead(55@)
+  not Char.IsDead(56@)
+  not Char.IsDead(57@)
+goto_if_false @HEIST9_19150
+286@ = Sequence.Open()
+Task.Pause(-1, 1)
+if 
+  not Char.IsDead(335@)
+goto_if_false @HEIST9_18390
+Task.KillCharOnFoot(-1, 335@)
+
+:HEIST9_18390
+if 
+  not Char.IsDead(337@)
+goto_if_false @HEIST9_18413
+Task.KillCharOnFoot(-1, 337@)
+
+:HEIST9_18413
+if 
+  not Char.IsDead(336@)
+goto_if_false @HEIST9_18436
+Task.KillCharOnFoot(-1, 336@)
+
+:HEIST9_18436
+if 
+  not Char.IsDead(341@)
+goto_if_false @HEIST9_18459
+Task.KillCharOnFoot(-1, 341@)
+
+:HEIST9_18459
+if 
+  not Char.IsDead(342@)
+goto_if_false @HEIST9_18482
+Task.KillCharOnFoot(-1, 342@)
+
+:HEIST9_18482
+Sequence.Close(286@)
+365@ = Sequence.Open()
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Path.ExtendRoute(2217.468, 1619.031, 998.9766)
+Path.ExtendRoute(2209.887, 1618.989, 998.9766)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Path.ExtendRoute(2203.74, 1619.167, 998.9827)
+Path.ExtendRoute(2199.119, 1618.858, 998.9827)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Sequence.Close(365@)
+53@ = Sequence.Open()
+Char.PerformSequence(-1, 365@)
+Task.FollowPathNodesToCoord(-1, 2196.144, 1618.719, 998.9766, 6, -1)
+Task.FollowPathNodesToCoord(-1, 2192.726, 1618.628, 998.9766, 6, -1)
+Task.FollowPathNodesToCoord(-1, 2190.531, 1617.373, 998.9766, 6, -1)
+Task.StayInSamePlace(-1, True)
+Char.PerformSequence(-1, 286@)
+Sequence.Close(53@)
+Char.ClearTasks(55@)
+Char.PerformSequence(55@, 53@)
+Sequence.Clear(286@)
+286@ = Sequence.Open()
+Task.Pause(-1, 1)
+if 
+  not Char.IsDead(338@)
+goto_if_false @HEIST9_18750
+Task.KillCharOnFoot(-1, 338@)
+
+:HEIST9_18750
+if 
+  not Char.IsDead(339@)
+goto_if_false @HEIST9_18773
+Task.KillCharOnFoot(-1, 339@)
+
+:HEIST9_18773
+if 
+  not Char.IsDead(340@)
+goto_if_false @HEIST9_18796
+Task.KillCharOnFoot(-1, 340@)
+
+:HEIST9_18796
+if 
+  not Char.IsDead(341@)
+goto_if_false @HEIST9_18819
+Task.KillCharOnFoot(-1, 341@)
+
+:HEIST9_18819
+if 
+  not Char.IsDead(342@)
+goto_if_false @HEIST9_18842
+Task.KillCharOnFoot(-1, 342@)
+
+:HEIST9_18842
+Sequence.Close(286@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Char.PerformSequence(-1, 365@)
+Task.FollowPathNodesToCoord(-1, 2196.144, 1618.719, 998.9766, 6, -1)
+Task.FollowPathNodesToCoord(-1, 2191.214, 1620.229, 998.9802, 6, -1)
+Task.ToggleDuck(-1, False)
+Task.StayInSamePlace(-1, True)
+Char.PerformSequence(-1, 286@)
+Sequence.Close(53@)
+Char.ClearTasks(56@)
+Char.PerformSequence(56@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.Pause(-1, 500)
+Task.FollowPathNodesToCoord(-1, 2223.391, 1619.15, 998.9672, 6, -1)
+Char.PerformSequence(-1, 365@)
+Task.FollowPathNodesToCoord(-1, 2198.942, 1617.974, 998.9766, 6, -1)
+Task.StayInSamePlace(-1, True)
+Sequence.Close(53@)
+Char.ClearTasks(57@)
+Char.PerformSequence(57@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.Pause(-1, 500)
+Task.FollowPathNodesToCoord(-1, 2223.391, 1619.15, 998.9672, 6, -1)
+Char.PerformSequence(-1, 365@)
+Task.FollowPathNodesToCoord(-1, 2197.816, 1617.827, 998.9766, 6, -1)
+Task.StayInSamePlace(-1, True)
+Sequence.Close(53@)
+Char.ClearTasks(54@)
+Char.PerformSequence(54@, 53@)
+Sequence.Clear(286@)
+Sequence.Clear(53@)
+Sequence.Clear(365@)
+
+:HEIST9_19150
+257@ = 1
+
+:HEIST9_19157
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2158.438, 1618.74, 998.965, 4.0, 4.0, 4.0)
+  37@ == 0
+goto_if_false @HEIST9_19248
+if 
+  not Char.IsDead(344@)
+goto_if_false @HEIST9_19241
+Char.ClearTasks(344@)
+Char.PerformSequence(344@, 212@)
+
+:HEIST9_19241
+37@ = 1
+
+:HEIST9_19248
+if and
+  Char.IsDead(335@)
+  Char.IsDead(336@)
+  Char.IsDead(337@)
+  Char.IsDead(338@)
+  258@ == 0
+goto_if_false @HEIST9_19839
+if and
+  Char.IsDead(339@)
+  Char.IsDead(340@)
+  257@ == 1
+goto_if_false @HEIST9_19839
+if and
+  not Char.IsDead(54@)
+  not Char.IsDead(55@)
+  not Char.IsDead(56@)
+  not Char.IsDead(57@)
+goto_if_false @HEIST9_19839
+286@ = Sequence.Open()
+Task.Pause(-1, 1)
+if 
+  not Char.IsDead(343@)
+goto_if_false @HEIST9_19379
+Task.KillCharOnFoot(-1, 343@)
+
+:HEIST9_19379
+if 
+  not Char.IsDead(341@)
+goto_if_false @HEIST9_19402
+Task.KillCharOnFoot(-1, 341@)
+
+:HEIST9_19402
+if 
+  not Char.IsDead(342@)
+goto_if_false @HEIST9_19425
+Task.KillCharOnFoot(-1, 342@)
+
+:HEIST9_19425
+Sequence.Close(286@)
+53@ = Sequence.Open()
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Path.ExtendRoute(2188.958, 1615.043, 998.9766)
+Path.ExtendRoute(2184.968, 1614.836, 998.9766)
+Path.ExtendRoute(2181.061, 1612.783, 998.9766)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.StayInSamePlace(-1, True)
+Char.PerformSequence(-1, 286@)
+Sequence.Close(53@)
+Char.ClearTasks(55@)
+Char.PerformSequence(55@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Path.ExtendRoute(2187.532, 1623.486, 998.9746)
+Path.ExtendRoute(2182.643, 1624.14, 998.9734)
+Path.ExtendRoute(2180.778, 1624.237, 998.9733)
+Path.ExtendRoute(2178.494, 1623.014, 998.9754)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.StayInSamePlace(-1, True)
+Char.PerformSequence(-1, 286@)
+Sequence.Close(53@)
+Char.ClearTasks(56@)
+Char.PerformSequence(56@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Path.ExtendRoute(2195.998, 1618.965, 998.9766)
+Path.ExtendRoute(2190.157, 1620.457, 998.9797)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Sequence.Close(53@)
+Char.ClearTasks(57@)
+Char.PerformSequence(57@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Path.ExtendRoute(2195.998, 1618.965, 998.9766)
+Path.ExtendRoute(2190.435, 1616.811, 998.9766)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Sequence.Close(53@)
+Char.ClearTasks(54@)
+Char.PerformSequence(54@, 53@)
+Sequence.Clear(53@)
+Sequence.Clear(286@)
+258@ = 1
+
+:HEIST9_19839
+if and
+  Char.IsDead(341@)
+  Char.IsDead(342@)
+  Char.IsDead(343@)
+  258@ == 1
+goto_if_false @HEIST9_20545
+if and
+  not Char.IsDead(54@)
+  not Char.IsDead(55@)
+  not Char.IsDead(56@)
+  not Char.IsDead(57@)
+goto_if_false @HEIST9_20545
+286@ = Sequence.Open()
+Task.Pause(-1, 1)
+if 
+  not Char.IsDead(345@)
+goto_if_false @HEIST9_19937
+Task.KillCharOnFoot(-1, 345@)
+
+:HEIST9_19937
+if 
+  not Char.IsDead(344@)
+goto_if_false @HEIST9_19960
+Task.KillCharOnFoot(-1, 344@)
+
+:HEIST9_19960
+Sequence.Close(286@)
+53@ = Sequence.Open()
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Path.ExtendRoute(2177.684, 1614.631, 998.9766)
+Path.ExtendRoute(2173.296, 1618.374, 998.9766)
+Path.ExtendRoute(2169.075, 1618.589, 998.9766)
+Path.ExtendRoute(2165.563, 1618.568, 998.9752)
+Path.ExtendRoute(2159.532, 1617.056, 998.9662)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.StayInSamePlace(-1, True)
+Char.PerformSequence(-1, 286@)
+Sequence.Close(53@)
+Char.ClearTasks(55@)
+Char.PerformSequence(55@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Path.ExtendRoute(2174.709, 1621.068, 998.978)
+Path.ExtendRoute(2169.154, 1618.646, 998.9766)
+Path.ExtendRoute(2161.401, 1619.628, 998.9706)
+Path.ExtendRoute(2155.982, 1619.06, 998.9666)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.AchieveHeading(-1, 180.0)
+Task.StayInSamePlace(-1, True)
+Char.PerformSequence(-1, 286@)
+Sequence.Close(53@)
+Char.ClearTasks(56@)
+Char.PerformSequence(56@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Path.ExtendRoute(2190.003, 1622.425, 998.9764)
+Path.ExtendRoute(2186.135, 1623.306, 998.9749)
+Path.ExtendRoute(2182.44, 1624.333, 998.9731)
+Path.ExtendRoute(2178.639, 1623.895, 998.9739)
+Path.ExtendRoute(2174.756, 1622.692, 998.976)
+Path.ExtendRoute(2169.405, 1620.61, 998.9795)
+Task.AchieveHeading(-1, 172.0)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Sequence.Close(53@)
+Char.ClearTasks(57@)
+Char.PerformSequence(57@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Path.ExtendRoute(2188.537, 1615.527, 998.9766)
+Path.ExtendRoute(2184.411, 1614.467, 998.9766)
+Path.ExtendRoute(2180.224, 1614.09, 998.9766)
+Path.ExtendRoute(2175.855, 1615.655, 998.9766)
+Path.ExtendRoute(2169.48, 1617.185, 998.9766)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Sequence.Close(53@)
+Char.ClearTasks(54@)
+Char.PerformSequence(54@, 53@)
+Sequence.Clear(53@)
+Sequence.Clear(286@)
+258@ = 2
+
+:HEIST9_20545
+if and
+  Char.IsDead(344@)
+  Char.IsDead(345@)
+  258@ == 2
+goto_if_false @HEIST9_20730
+53@ = Sequence.Open()
+Task.ToggleDuck(-1, False)
+Task.FollowPathNodesToCoord(-1, 2157.872, 1603.249, 998.973, 6, -1)
+Task.FollowPathNodesToCoord(-1, 2144.301, 1610.444, 992.6882, 6, -1)
+Sequence.Close(53@)
+58@ = 0
+
+:HEIST9_20642
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_20683
+Char.ClearTasks(54@(58@,4i))
+Char.PerformSequence(54@(58@,4i), 53@)
+
+:HEIST9_20683
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_20642
+Sequence.Clear(53@)
+367@ = 1
+TIMERB = 0
+258@ = 3
+
+:HEIST9_20730
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2195.041, 1618.905, 998.9766, 2.0, 2.0, 2.0)
+goto_if_false @HEIST9_21072
+if and
+  not Car.IsDead(46@)
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_20828
+if 
+  not Char.IsInCar($scplayer, 46@)
+goto_if_false @HEIST9_20828
+Car.Delete(46@)
+Streaming.MarkModelAsNoLongerNeeded(530)
+
+:HEIST9_20828
+if 
+  304@ == 0
+goto_if_false @HEIST9_21072
+if 
+  not Char.IsDead(341@)
+goto_if_false @HEIST9_20953
+53@ = Sequence.Open()
+Task.StayInSamePlace(-1, False)
+Task.Pause(-1, 3000)
+Path.FlushRoute
+Path.ExtendRoute(2176.628, 1610.473, 998.9766)
+Path.ExtendRoute(2173.56, 1623.915, 998.9739)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.AchieveHeading(-1, 270.0)
+Sequence.Close(53@)
+Char.PerformSequence(341@, 53@)
+Sequence.Clear(53@)
+
+:HEIST9_20953
+if 
+  not Char.IsDead(342@)
+goto_if_false @HEIST9_21065
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.StayInSamePlace(-1, False)
+Task.Pause(-1, 3000)
+Path.FlushRoute
+Path.ExtendRoute(2176.628, 1610.473, 998.9766)
+Path.ExtendRoute(2175.972, 1613.853, 998.9766)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.AchieveHeading(-1, 270.0)
+Sequence.Close(53@)
+Char.PerformSequence(342@, 53@)
+Sequence.Clear(53@)
+
+:HEIST9_21065
+304@ = 1
+
+:HEIST9_21072
+if 
+  251@ == 0
+goto_if_false @HEIST9_21252
+if and
+  231@ == 2
+  105@ == 0
+goto_if_false @HEIST9_21147
+Text.PrintWithNumberNow('HM9_1C', 7, 5000, 1)
+105@ = 1
+TIMERB = 0
+
+:HEIST9_21147
+if and
+  TIMERB > 5000
+  105@ == 1
+goto_if_false @HEIST9_21203
+Text.PrintNow('HM9_21', 6000, 1)
+105@ = 2
+TIMERB = 0
+
+:HEIST9_21203
+if and
+  TIMERB > 6000
+  105@ == 2
+goto_if_false @HEIST9_21252
+Text.PrintNow('HM9_1G', 7000, 1)
+105@ = 3
+
+:HEIST9_21252
+if 
+  367@ <> 0
+goto_if_false @HEIST9_21722
+if 
+  367@ == 1
+goto_if_false @HEIST9_21355
+58@ = 0
+
+:HEIST9_21295
+Char.Delete(315@(58@,5i))
+58@ += 1
+  58@ >= 3
+goto_if_false @HEIST9_21295
+Text.PrintNow('HM9_1E', 5000, 1)
+367@ = 2
+TIMERA = 0
+
+:HEIST9_21355
+if and
+  TIMERA > 4000
+  367@ == 2
+goto_if_false @HEIST9_21417
+set_lvar_text_label 288@s = 'HE8_LA'
+set_lvar_int_to_constant 232@ = 19050
+gosub @HEIST9_50648
+367@ = 3
+
+:HEIST9_21417
+if and
+  231@ == 2
+  367@ == 3
+goto_if_false @HEIST9_21478
+set_lvar_text_label 288@s = 'HE8_LB'
+set_lvar_int_to_constant 232@ = 19051
+gosub @HEIST9_50648
+367@ = 4
+
+:HEIST9_21478
+if and
+  231@ == 2
+  367@ == 4
+goto_if_false @HEIST9_21539
+set_lvar_text_label 288@s = 'HE8_LC'
+set_lvar_int_to_constant 232@ = 19052
+gosub @HEIST9_50648
+367@ = 5
+
+:HEIST9_21539
+if and
+  231@ == 2
+  367@ == 5
+goto_if_false @HEIST9_21600
+set_lvar_text_label 288@s = 'HE8_LD'
+set_lvar_int_to_constant 232@ = 19053
+gosub @HEIST9_50648
+367@ = 6
+
+:HEIST9_21600
+if and
+  231@ == 2
+  367@ == 6
+goto_if_false @HEIST9_21661
+set_lvar_text_label 288@s = 'HE8_LE'
+set_lvar_int_to_constant 232@ = 19054
+gosub @HEIST9_50648
+367@ = 7
+
+:HEIST9_21661
+if and
+  231@ == 2
+  367@ == 7
+goto_if_false @HEIST9_21722
+set_lvar_text_label 288@s = 'HE8_LF'
+set_lvar_int_to_constant 232@ = 19055
+gosub @HEIST9_50648
+367@ = 0
+
+:HEIST9_21722
+234@ = 0
+if and
+  251@ > 1
+  252@ == 1
+goto_if_false @HEIST9_22816
+if and
+  231@ == 2
+  105@ == 0
+goto_if_false @HEIST9_21899
+58@ = 0
+
+:HEIST9_21786
+Char.Delete(335@(58@,15i))
+58@ += 1
+  58@ >= 11
+goto_if_false @HEIST9_21786
+233@ = Blip.AddForCoord(2144.101, 1623.453, 993.5677)
+Blip.SetEntryExit(233@, 2196.635, 1676.841, 10.0)
+Blip.ChangeDisplay(233@, BlipDisplay.Neither)
+set_lvar_text_label 288@s = 'HE8_MA'
+set_lvar_int_to_constant 232@ = 19056
+gosub @HEIST9_50648
+105@ = 1
+
+:HEIST9_21899
+if and
+  231@ == 2
+  105@ == 1
+goto_if_false @HEIST9_21960
+set_lvar_text_label 288@s = 'HE8_MB'
+set_lvar_int_to_constant 232@ = 19057
+gosub @HEIST9_50648
+105@ = 2
+
+:HEIST9_21960
+if and
+  231@ == 2
+  105@ == 2
+goto_if_false @HEIST9_22028
+set_lvar_text_label 288@s = 'HE8_MC'
+set_lvar_int_to_constant 232@ = 19058
+gosub @HEIST9_50648
+105@ = 3
+TIMERA = 0
+
+:HEIST9_22028
+if and
+  231@ == 2
+  105@ == 3
+goto_if_false @HEIST9_22089
+set_lvar_text_label 288@s = 'HE8_NA'
+set_lvar_int_to_constant 232@ = 19059
+gosub @HEIST9_50648
+105@ = 4
+
+:HEIST9_22089
+if and
+  231@ == 2
+  105@ == 4
+goto_if_false @HEIST9_22150
+set_lvar_text_label 288@s = 'HE8_NB'
+set_lvar_int_to_constant 232@ = 19060
+gosub @HEIST9_50648
+105@ = 5
+
+:HEIST9_22150
+if and
+  231@ == 2
+  105@ == 5
+goto_if_false @HEIST9_22218
+set_lvar_text_label 288@s = 'HE8_NC'
+set_lvar_int_to_constant 232@ = 19061
+gosub @HEIST9_50648
+105@ = 6
+TIMERA = 0
+
+:HEIST9_22218
+if and
+  231@ == 2
+  105@ == 6
+goto_if_false @HEIST9_22279
+set_lvar_text_label 288@s = 'HE8_ND'
+set_lvar_int_to_constant 232@ = 19062
+gosub @HEIST9_50648
+105@ = 7
+
+:HEIST9_22279
+if and
+  231@ == 2
+  105@ == 7
+goto_if_false @HEIST9_22347
+set_lvar_text_label 288@s = 'HE8_NE'
+set_lvar_int_to_constant 232@ = 19063
+gosub @HEIST9_50648
+105@ = 8
+TIMERA = 0
+
+:HEIST9_22347
+if and
+  231@ == 2
+  105@ == 8
+goto_if_false @HEIST9_22816
+if 
+  Char.HasGotWeapon($scplayer, WeaponType.Satchel)
+goto_if_false @HEIST9_22758
+Streaming.RequestModel(163)
+
+:HEIST9_22395
+if 
+  not Streaming.HasModelLoaded(163)
+goto_if_false @HEIST9_22422
+wait 0
+goto @HEIST9_22395
+
+:HEIST9_22422
+295@ = Char.Create(24, 164, 2146.665, 1611.452, 999.9764)
+Char.SetAreaVisible(295@, 1)
+Char.SetHeading(295@, 189.8734)
+Char.SetDecisionMaker(295@, 89@)
+Char.GiveWeapon(295@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(295@, WeaponType.Mp5)
+Task.StayInSamePlace(295@, True)
+Char.SetMoney(295@, 0)
+296@ = Char.Create(24, 163, 2147.982, 1605.254, 1000.752)
+Char.SetAreaVisible(296@, 1)
+Char.SetHeading(296@, 191.7168)
+Char.GiveWeapon(296@, WeaponType.Mp5, 30000)
+Char.SetDecisionMaker(296@, 89@)
+Char.SetCurrentWeapon(296@, WeaponType.Mp5)
+Task.StayInSamePlace(296@, True)
+Char.SetMoney(296@, 0)
+if 
+  Blip.DoesExist(233@)
+goto_if_false @HEIST9_22605
+Blip.Remove(233@)
+
+:HEIST9_22605
+58@ = 0
+
+:HEIST9_22612
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_22651
+Char.SetProofs(54@(58@,4i), False, True, True, True, False)
+
+:HEIST9_22651
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_22612
+Text.PrintNow('HM9_22', 4000, 1)
+38@ = 13
+228@ = Blip.AddForObject(171@)
+Blip.SetEntryExit(228@, 2196.635, 1676.841, 10.0)
+229@ = Blip.AddForObject(172@)
+Blip.SetEntryExit(229@, 2196.635, 1676.841, 10.0)
+goto @HEIST9_22802
+
+:HEIST9_22758
+Text.PrintNow('HM9_PK', 4000, 1)
+299@ = Blip.AddForPickup(214@)
+Blip.SetEntryExit(299@, 2196.635, 1676.841, 10.0)
+
+:HEIST9_22802
+105@ = 101
+TIMERA = 0
+
+:HEIST9_22816
+if and
+  Char.HasGotWeapon($scplayer, WeaponType.Satchel)
+  105@ == 101
+  38@ <> 13
+goto_if_false @HEIST9_23216
+Streaming.RequestModel(163)
+
+:HEIST9_22853
+if 
+  not Streaming.HasModelLoaded(163)
+goto_if_false @HEIST9_22880
+wait 0
+goto @HEIST9_22853
+
+:HEIST9_22880
+295@ = Char.Create(24, 164, 2146.665, 1611.452, 999.9764)
+Char.SetAreaVisible(295@, 1)
+Char.SetHeading(295@, 189.8734)
+Char.SetDecisionMaker(295@, 89@)
+Char.GiveWeapon(295@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(295@, WeaponType.Mp5)
+Task.StayInSamePlace(295@, True)
+296@ = Char.Create(24, 163, 2147.982, 1605.254, 1000.752)
+Char.SetAreaVisible(296@, 1)
+Char.SetHeading(296@, 191.7168)
+Char.GiveWeapon(296@, WeaponType.Mp5, 30000)
+Char.SetDecisionMaker(296@, 89@)
+Char.SetCurrentWeapon(296@, WeaponType.Mp5)
+Task.StayInSamePlace(296@, True)
+if 
+  Blip.DoesExist(233@)
+goto_if_false @HEIST9_23049
+Blip.Remove(233@)
+
+:HEIST9_23049
+58@ = 0
+
+:HEIST9_23056
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_23095
+Char.SetProofs(54@(58@,4i), False, True, True, True, False)
+
+:HEIST9_23095
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_23056
+if 
+  Blip.DoesExist(299@)
+goto_if_false @HEIST9_23137
+Blip.Remove(299@)
+
+:HEIST9_23137
+Text.PrintNow('HM9_22', 4000, 1)
+38@ = 13
+228@ = Blip.AddForObject(171@)
+Blip.SetEntryExit(228@, 2196.635, 1676.841, 10.0)
+229@ = Blip.AddForObject(172@)
+Blip.SetEntryExit(229@, 2196.635, 1676.841, 10.0)
+
+:HEIST9_23216
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2144.393, 1616.653, 992.5681, 20.0, 20.0, 2.0)
+goto_if_false @HEIST9_23333
+if and
+  105@ <> 0
+  105@ <> 9
+  251@ > 1
+goto_if_false @HEIST9_23319
+if 
+  Blip.DoesExist(233@)
+goto_if_false @HEIST9_23319
+Blip.ChangeDisplay(233@, BlipDisplay.Neither)
+
+:HEIST9_23319
+252@ = 1
+goto @HEIST9_23411
+
+:HEIST9_23333
+if and
+  105@ <> 0
+  105@ <> 9
+  251@ > 1
+goto_if_false @HEIST9_23404
+if 
+  Blip.DoesExist(233@)
+goto_if_false @HEIST9_23388
+Blip.ChangeDisplay(233@, BlipDisplay.Both)
+
+:HEIST9_23388
+Text.PrintNow('HM9_56', 1000, 1)
+
+:HEIST9_23404
+252@ = 0
+
+:HEIST9_23411
+58@ = 0
+
+:HEIST9_23418
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_24125
+if and
+  Char.LocateAnyMeans3D(54@(58@,4i), 0, 2143.693, 1610.628, 992.6882, 4.0, 4.0, 2.0)
+  239@(58@,4i) == 0
+goto_if_false @HEIST9_24125
+if and
+  58@ == 0
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_23669
+53@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2144.202, 1618.696, 992.6882)
+Path.ExtendRoute(2143.036, 1626.497, 992.5681)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.TurnCharToFaceCoord(-1, 2144.231, 1629.507, 992.5703)
+Task.StayInSamePlace(-1, True)
+Task.PlayAnim(-1, "BOM_PLANT_LOOP", "BOMBER", 1.0, True, False, False, False, -1)
+Task.StayInSamePlace(-1, True)
+Sequence.SetToRepeat(53@, True)
+Sequence.Close(53@)
+Char.PerformSequence(54@, 53@)
+
+:HEIST9_23669
+if and
+  58@ == 1
+  not Char.IsDead(55@)
+goto_if_false @HEIST9_23831
+53@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2144.202, 1618.696, 992.6882)
+Path.ExtendRoute(2145.696, 1626.496, 992.5681)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.TurnCharToFaceCoord(-1, 2144.231, 1629.507, 992.5703)
+Task.StayInSamePlace(-1, True)
+Task.PlayAnim(-1, "BOM_PLANT_LOOP", "BOMBER", 1.0, True, False, False, False, -1)
+Sequence.SetToRepeat(53@, True)
+Sequence.Close(53@)
+Char.PerformSequence(55@, 53@)
+
+:HEIST9_23831
+if and
+  58@ == 2
+  not Char.IsDead(56@)
+goto_if_false @HEIST9_23943
+53@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2144.202, 1618.696, 992.6882)
+Path.ExtendRoute(2147.744, 1620.447, 992.6882)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.StayInSamePlace(-1, True)
+Task.TurnCharToFaceCoord(-1, 2144.231, 1629.507, 992.5703)
+Sequence.Close(53@)
+Char.PerformSequence(56@, 53@)
+
+:HEIST9_23943
+if and
+  58@ == 3
+  not Char.IsDead(57@)
+goto_if_false @HEIST9_24055
+53@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2144.202, 1618.696, 992.6882)
+Path.ExtendRoute(2136.254, 1621.628, 992.6882)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.StayInSamePlace(-1, True)
+Task.TurnCharToFaceCoord(-1, 2144.231, 1629.507, 992.5703)
+Sequence.Close(53@)
+Char.PerformSequence(57@, 53@)
+
+:HEIST9_24055
+Sequence.Clear(53@)
+Char.SetOnlyDamagedByPlayer(54@(58@,4i), False)
+Blip.ChangeDisplay(91@(58@,4i), BlipDisplay.Neither)
+239@(58@,4i) = 1
+if 
+  251@ == 0
+goto_if_false @HEIST9_24118
+105@ = 0
+
+:HEIST9_24118
+251@ += 1
+
+:HEIST9_24125
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_23418
+
+:HEIST9_24146
+if and
+  38@ == 13
+  TIMERA > 5000
+goto_if_false @HEIST9_31401
+if 
+  119@ == 0
+goto_if_false @HEIST9_24617
+if and
+  231@ == 2
+  105@ == 0
+goto_if_false @HEIST9_24251
+set_lvar_text_label 288@s = 'HE8_OA'
+set_lvar_int_to_constant 232@ = 19064
+gosub @HEIST9_50648
+105@ = 1
+
+:HEIST9_24251
+if and
+  231@ == 2
+  105@ == 1
+goto_if_false @HEIST9_24312
+set_lvar_text_label 288@s = 'HE8_OB'
+set_lvar_int_to_constant 232@ = 19065
+gosub @HEIST9_50648
+105@ = 2
+
+:HEIST9_24312
+if and
+  231@ == 2
+  105@ == 2
+goto_if_false @HEIST9_24373
+set_lvar_text_label 288@s = 'HE8_OC'
+set_lvar_int_to_constant 232@ = 19066
+gosub @HEIST9_50648
+105@ = 3
+
+:HEIST9_24373
+if and
+  231@ == 2
+  105@ == 3
+goto_if_false @HEIST9_24434
+set_lvar_text_label 288@s = 'HE8_OD'
+set_lvar_int_to_constant 232@ = 19067
+gosub @HEIST9_50648
+105@ = 4
+
+:HEIST9_24434
+if and
+  231@ == 2
+  105@ == 4
+goto_if_false @HEIST9_24495
+set_lvar_text_label 288@s = 'HE8_OE'
+set_lvar_int_to_constant 232@ = 19068
+gosub @HEIST9_50648
+105@ = 5
+
+:HEIST9_24495
+if and
+  231@ == 2
+  105@ == 5
+goto_if_false @HEIST9_24556
+set_lvar_text_label 288@s = 'HE8_OF'
+set_lvar_int_to_constant 232@ = 19069
+gosub @HEIST9_50648
+105@ = 8
+
+:HEIST9_24556
+if and
+  231@ == 2
+  105@ == 8
+goto_if_false @HEIST9_24617
+set_lvar_text_label 288@s = 'HE8_OJ'
+set_lvar_int_to_constant 232@ = 19072
+gosub @HEIST9_50648
+105@ = 9
+
+:HEIST9_24617
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_24643
+175@ = Char.GetAmmoInWeapon($scplayer, 39)
+
+:HEIST9_24643
+if 
+  not World.IsAnyPickupAtCoords(2146.487, 1622.805, 993.0)
+goto_if_false @HEIST9_24739
+if and
+  0 >= 175@
+  119@ == 0
+goto_if_false @HEIST9_24739
+if 
+  not Pickup.DoesExist(214@)
+goto_if_false @HEIST9_24739
+214@ = Pickup.CreateWithAmmo(363, 3, 5, 2146.487, 1622.805, 993.0)
+
+:HEIST9_24739
+if or
+  World.IsExplosionInArea(ExplosionType.Grenade, 2150.966, 1618.857, 999.9688, 2142.472, 1608.066, 1003.0)
+  World.IsExplosionInArea(ExplosionType.Molotov, 2150.966, 1618.857, 999.9688, 2142.472, 1608.066, 1003.0)
+  World.IsExplosionInArea(ExplosionType.WeakRocket, 2150.966, 1618.857, 999.9688, 2142.472, 1608.066, 1003.0)
+  World.IsExplosionInArea(ExplosionType.Rocket, 2150.966, 1618.857, 999.9688, 2142.472, 1608.066, 1003.0)
+goto_if_false @HEIST9_25621
+if 
+  119@ == 0
+goto_if_false @HEIST9_25621
+312@ = Object.CreateNoOffset(#WAREHOUSE_DOOR2B, 2195.769, 1585.199, 1002.0)
+Object.SetAreaVisible(312@, 1)
+Object.SetHeading(312@, 180.0)
+Object.SetCollisionDamageEffect(312@, False)
+gosub @HEIST9_46289
+Object.SetCollisionDamageEffect(60@, True)
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2146.146, 1613.818, 999.968, 7.0, 7.0, 2.0)
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_25023
+Task.Die($scplayer)
+
+:HEIST9_25023
+if 
+  Blip.DoesExist(228@)
+goto_if_false @HEIST9_25044
+Blip.Remove(228@)
+
+:HEIST9_25044
+if 
+  Blip.DoesExist(229@)
+goto_if_false @HEIST9_25065
+Blip.Remove(229@)
+
+:HEIST9_25065
+Camera.SetFixedPosition(2141.361, 1619.829, 1000.669, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2141.925, 1619.005, 1000.723, SwitchType.JumpCut)
+gosub @HEIST9_43886
+Object.Delete(171@)
+Object.Delete(172@)
+Streaming.MarkModelAsNoLongerNeeded(#GENERATOR_BIG)
+171@ = Object.Create(#GENERATOR_BIG_D, 2145.05, 1613.49, 999.9764)
+Object.SetHeading(171@, 1.2043)
+172@ = Object.Create(#GENERATOR_BIG_D, 2148.8, 1613.49, 999.9764)
+Object.SetHeading(172@, 354.0372)
+368@ = 0
+
+:HEIST9_25211
+Fx.AddExplosion(11, 2143.107, 1611.332, 1000.5)
+201@ = Particle.Create("EXPLOSION_SMALL", 2143.107, 1611.332, 1000.5, 1)
+Particle.Play(201@)
+wait 150
+Fx.AddExplosion(11, 2149.51, 1614.586, 1000.5)
+202@ = Particle.Create("EXPLOSION_SMALL", 2149.51, 1614.586, 1000.5, 1)
+Particle.Play(202@)
+wait 10
+58@ = 0
+
+:HEIST9_25353
+Particle.Stop(201@(58@,6i))
+Particle.Kill(201@(58@,6i))
+58@ += 1
+  58@ >= 6
+goto_if_false @HEIST9_25353
+368@ += 1
+  368@ >= 3
+goto_if_false @HEIST9_25211
+wait 2000
+58@ = 0
+
+:HEIST9_25425
+Blip.ChangeDisplay(91@(58@,4i), BlipDisplay.Both)
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_25486
+Task.StayInSamePlace(54@(58@,4i), False)
+Char.SetProofs(54@(58@,4i), False, False, False, True, False)
+
+:HEIST9_25486
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_25425
+105@ = 6
+gosub @HEIST9_46306
+gosub @HEIST9_43955
+TIMERA = 0
+119@ = 1
+Text.ClearHelp
+58@ = 0
+
+:HEIST9_25551
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_25551
+if 
+  World.IsAnyPickupAtCoords(2146.487, 1622.805, 993.0)
+goto_if_false @HEIST9_25605
+Pickup.Remove(214@)
+
+:HEIST9_25605
+Text.PrintNow('HM9_40', 5000, 1)
+
+:HEIST9_25621
+if 
+  119@ == 1
+goto_if_false @HEIST9_25700
+if and
+  231@ == 2
+  105@ == 0
+goto_if_false @HEIST9_25700
+set_lvar_text_label 288@s = 'HE8_OK'
+set_lvar_int_to_constant 232@ = 19073
+gosub @HEIST9_50648
+105@ = 10
+
+:HEIST9_25700
+if and
+  121@ == 0
+  119@ == 1
+goto_if_false @HEIST9_27722
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2143.975, 1624.443, 992.5681, 20.0, 20.0, 2.0)
+goto_if_false @HEIST9_27722
+105@ = 10
+121@ = 1
+58@ = 0
+
+:HEIST9_25794
+Blip.ChangeDisplay(91@(58@,4i), BlipDisplay.Neither)
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_25794
+gosub @HEIST9_46289
+if 
+  not Char.IsDead(56@)
+goto_if_false @HEIST9_25879
+Char.SetCoordinatesDontWarpGang(56@, 2147.744, 1620.447, 992.6882)
+Char.SetHeading(56@, 346.8824)
+
+:HEIST9_25879
+if 
+  not Char.IsDead(57@)
+goto_if_false @HEIST9_25925
+Char.SetCoordinatesDontWarpGang(57@, 2136.254, 1621.628, 992.6882)
+Char.SetHeading(57@, 358.8987)
+
+:HEIST9_25925
+Camera.SetFixedPosition(2140.489, 1617.689, 993.7817, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2140.831, 1618.629, 993.7844, SwitchType.JumpCut)
+wait 1000
+Text.PrintNow('HE8_QA', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19083, 1)
+
+:HEIST9_26008
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_26034
+wait 0
+goto @HEIST9_26008
+
+:HEIST9_26034
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_26045
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_26088
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_26081
+
+:HEIST9_26081
+goto @HEIST9_26045
+
+:HEIST9_26088
+Text.PrintNow('HE8_QC', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19085, 1)
+
+:HEIST9_26115
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_26141
+wait 0
+goto @HEIST9_26115
+
+:HEIST9_26141
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+if 
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_26211
+Task.Pause(54@, 1000)
+Char.ClearTasksImmediately(54@)
+Path.FlushRoute
+Path.ExtendRoute(2135.497, 1625.518, 992.5681)
+Task.ToggleDuck(54@, True)
+Task.FollowPointRoute(54@, 6, RouteMode.Once)
+Path.FlushRoute
+
+:HEIST9_26211
+if 
+  not Char.IsDead(55@)
+goto_if_false @HEIST9_26269
+Char.ClearTasksImmediately(55@)
+Path.FlushRoute
+Path.ExtendRoute(2152.954, 1625.076, 992.5681)
+Task.ToggleDuck(55@, True)
+Task.FollowPointRoute(55@, 6, RouteMode.Once)
+Path.FlushRoute
+
+:HEIST9_26269
+TIMERB = 0
+
+:HEIST9_26276
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_26319
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_26312
+
+:HEIST9_26312
+goto @HEIST9_26276
+
+:HEIST9_26319
+Text.PrintNow('HE8_QB', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19084, 1)
+
+:HEIST9_26346
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_26372
+wait 0
+goto @HEIST9_26346
+
+:HEIST9_26372
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_26383
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_26426
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_26419
+
+:HEIST9_26419
+goto @HEIST9_26383
+
+:HEIST9_26426
+58@ = 0
+
+:HEIST9_26433
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_26473
+Char.ClearTasksImmediately(54@(58@,4i))
+Task.ToggleDuck(54@(58@,4i), True)
+
+:HEIST9_26473
+Blip.ChangeDisplay(91@(58@,4i), BlipDisplay.Both)
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_26433
+Fx.AddExplosion(11, 2144.533, 1626.747, 992.707)
+369@ = Particle.Create("EXPLOSION_SMALL", 2144.533, 1626.747, 992.707, 1)
+Particle.PlayAndKill(369@)
+Fx.AddExplosion(11, 2144.533, 1626.747, 994.0)
+wait 500
+370@ = Particle.Create("EXPLOSION_SMALL", 2144.533, 1626.747, 994.0, 1)
+Particle.PlayAndKill(370@)
+Fx.AddExplosion(11, 2144.533, 1626.747, 996.0)
+Object.Delete(60@)
+wait 500
+371@ = Particle.Create("EXPLOSION_SMALL", 2144.533, 1626.747, 996.0, 1)
+Particle.PlayAndKill(371@)
+Text.PrintNow('HE8_RA', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19086, 1)
+
+:HEIST9_26736
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_26762
+wait 0
+goto @HEIST9_26736
+
+:HEIST9_26762
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_26773
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_26816
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_26809
+
+:HEIST9_26809
+goto @HEIST9_26773
+
+:HEIST9_26816
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_26862
+Char.SetCoordinatesDontWarpGang($scplayer, 2144.266, 1610.649, 992.5681)
+Char.SetHeading($scplayer, 359.3881)
+
+:HEIST9_26862
+gosub @HEIST9_46306
+Text.PrintNow('HM9_58', 7000, 1)
+61@ = Object.Create(#CJ_MONEY_BAG, 2146.27, 1636.314, 992.5683)
+Object.SetAreaVisible(61@, 1)
+Object.SetHeading(61@, 268.4277)
+Object.SetCollision(61@, False)
+62@ = Object.Create(#CJ_MONEY_BAG, 2146.137, 1632.404, 992.5683)
+Object.SetAreaVisible(62@, 1)
+Object.SetHeading(62@, 89.5044)
+Object.SetCollision(62@, False)
+63@ = Object.Create(#CJ_MONEY_BAG, 2142.148, 1632.426, 992.5683)
+Object.SetAreaVisible(63@, 1)
+Object.SetHeading(63@, 97.3067)
+Object.SetCollision(63@, False)
+64@ = Object.Create(#CJ_MONEY_BAG, 2142.07, 1636.137, 992.5683)
+Object.SetAreaVisible(64@, 1)
+Object.SetHeading(64@, 51.5319)
+Object.SetCollision(64@, False)
+if and
+  not Char.IsDead(54@)
+  not Char.IsDead(55@)
+  not Char.IsDead(56@)
+  not Char.IsDead(57@)
+goto_if_false @HEIST9_27722
+373@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.Pause(-1, 500)
+Sequence.SetToRepeat(373@, True)
+Sequence.Close(373@)
+53@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.Pause(-1, 3000)
+Task.FollowPathNodesToCoord(-1, 2146.27, 1636.314, 992.5683, 6, -1)
+Task.PickUpObject(-1, 61@, 0.0, 0.0, -0.5, 6, 1, "NULL", "NULL", 0)
+Task.ToggleDuck(-1, False)
+Task.StayInSamePlace(-1, True)
+Char.PerformSequence(-1, 373@)
+Sequence.Close(53@)
+Char.ClearTasksImmediately(54@)
+Task.ToggleDuck(54@, False)
+Char.PerformSequence(54@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.Pause(-1, 100)
+Task.ToggleDuck(-1, True)
+Task.FollowPathNodesToCoord(-1, 2146.137, 1632.404, 992.5683, 6, -1)
+Task.PickUpObject(-1, 62@, 0.0, 0.0, -0.5, 6, 1, "NULL", "NULL", 0)
+Task.ToggleDuck(-1, False)
+Task.StayInSamePlace(-1, True)
+Char.PerformSequence(-1, 373@)
+Sequence.Close(53@)
+Char.ClearTasksImmediately(55@)
+Task.ToggleDuck(55@, False)
+Char.PerformSequence(55@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.Pause(-1, 200)
+Task.ToggleDuck(-1, True)
+Task.Pause(-1, 2000)
+Task.FollowPathNodesToCoord(-1, 2142.148, 1632.426, 992.5683, 6, -1)
+Task.PickUpObject(-1, 63@, 0.0, 0.0, -0.5, 6, 1, "NULL", "NULL", 0)
+Task.ToggleDuck(-1, False)
+Task.StayInSamePlace(-1, True)
+Char.PerformSequence(-1, 373@)
+Sequence.Close(53@)
+Char.ClearTasksImmediately(56@)
+Task.ToggleDuck(56@, False)
+Char.PerformSequence(56@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.Pause(-1, 100)
+Task.ToggleDuck(-1, True)
+Task.Pause(-1, 3000)
+Task.FollowPathNodesToCoord(-1, 2142.07, 1636.137, 992.5683, 6, -1)
+Task.PickUpObject(-1, 64@, 0.0, 0.0, -0.5, 6, 1, "NULL", "NULL", 0)
+Task.ToggleDuck(-1, False)
+Task.StayInSamePlace(-1, True)
+Char.PerformSequence(-1, 373@)
+Sequence.Close(53@)
+Char.ClearTasksImmediately(57@)
+Task.ToggleDuck(57@, False)
+Char.PerformSequence(57@, 53@)
+Streaming.RemoveAnimation("BOMBER")
+372@ = Blip.AddForCoord(2144.152, 1636.462, 992.5703)
+Blip.SetEntryExit(372@, 2196.635, 1676.841, 10.0)
+Sequence.Clear(373@)
+Sequence.Clear(53@)
+
+:HEIST9_27722
+if 
+  121@ == 1
+goto_if_false @HEIST9_27915
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2144.152, 1636.462, 992.5703, 10.0, 10.0, 2.0)
+  Blip.DoesExist(372@)
+goto_if_false @HEIST9_27915
+if 
+  Blip.DoesExist(372@)
+goto_if_false @HEIST9_27814
+Blip.Remove(372@)
+
+:HEIST9_27814
+140@ = 1
+121@ = 2
+TIMERB = 0
+58@ = 0
+
+:HEIST9_27842
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_27894
+142@(58@,5i) = Char.GetHealth(54@(58@,4i))
+set_lvar_int_to_lvar_int 148@(58@,5i) = 142@(58@,5i)
+
+:HEIST9_27894
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_27842
+
+:HEIST9_27915
+if and
+  231@ == 2
+  140@ == 1
+goto_if_false @HEIST9_27976
+set_lvar_text_label 288@s = 'HE8_RB'
+set_lvar_int_to_constant 232@ = 19087
+gosub @HEIST9_50648
+140@ = 2
+
+:HEIST9_27976
+if and
+  231@ == 2
+  140@ == 2
+goto_if_false @HEIST9_28044
+set_lvar_text_label 288@s = 'HE8_RC'
+set_lvar_int_to_constant 232@ = 19088
+gosub @HEIST9_50648
+TIMERA = 0
+140@ = 3
+
+:HEIST9_28044
+if and
+  231@ == 2
+  140@ == 3
+  TIMERA > 3000
+goto_if_false @HEIST9_29538
+gosub @HEIST9_46325
+gosub @HEIST9_46289
+131@ = 4
+58@ = 0
+
+:HEIST9_28105
+if 
+  not Char.IsDead(335@(58@,15i))
+goto_if_false @HEIST9_28134
+Char.Delete(335@(58@,15i))
+
+:HEIST9_28134
+58@ += 1
+  58@ >= 11
+goto_if_false @HEIST9_28105
+58@ = 0
+
+:HEIST9_28162
+Char.Delete(109@(58@,5i))
+58@ += 1
+  58@ >= 3
+goto_if_false @HEIST9_28162
+Char.Delete(295@)
+Char.Delete(296@)
+Streaming.MarkModelAsNoLongerNeeded(163)
+Streaming.MarkModelAsNoLongerNeeded(164)
+Streaming.RequestModel(124)
+Streaming.RequestModel(125)
+
+:HEIST9_28220
+if or
+  not Streaming.HasModelLoaded(124)
+  not Streaming.HasModelLoaded(125)
+goto_if_false @HEIST9_28250
+wait 0
+goto @HEIST9_28220
+
+:HEIST9_28250
+335@ = Char.Create(24, 124, 2150.831, 1611.033, 992.6882)
+Char.SetAreaVisible(335@, 1)
+Char.SetHeading(335@, 353.2278)
+Char.SetOnlyDamagedByPlayer(335@, True)
+336@ = Char.Create(24, 124, 2135.702, 1611.064, 992.6882)
+Char.SetAreaVisible(336@, 1)
+Char.SetHeading(336@, 354.2745)
+374@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2144.14, 1610.015, 992.6882)
+Path.ExtendRoute(2146.085, 1611.896, 992.6882)
+Task.ToggleDuck(-1, True)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Task.AchieveHeading(-1, 6.3138)
+Task.StandStill(-1, 1)
+Path.FlushRoute
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_28434
+Task.KillCharOnFoot(-1, $scplayer)
+
+:HEIST9_28434
+Sequence.Close(374@)
+337@ = Char.Create(24, 125, 2144.029, 1605.352, 992.5684)
+Char.SetAreaVisible(337@, 1)
+Char.SetHeading(337@, 356.695)
+Char.PerformSequence(337@, 374@)
+Sequence.Clear(374@)
+374@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2144.14, 1610.015, 992.6882)
+Path.ExtendRoute(2139.815, 1615.471, 992.6882)
+Task.ToggleDuck(-1, True)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Task.ToggleDuck(-1, False)
+Task.AchieveHeading(-1, 335.8946)
+Task.StandStill(-1, 1)
+Path.FlushRoute
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_28594
+Task.KillCharOnFoot(-1, $scplayer)
+
+:HEIST9_28594
+Sequence.Close(374@)
+338@ = Char.Create(24, 124, 2144.22, 1601.963, 992.5684)
+Char.SetAreaVisible(338@, 1)
+Char.SetHeading(338@, 358.3628)
+Char.PerformSequence(338@, 374@)
+339@ = Char.Create(24, 125, 2146.605, 1597.785, 994.5676)
+Char.SetAreaVisible(339@, 1)
+Char.SetHeading(339@, 89.7654)
+Char.SetOnlyDamagedByPlayer(339@, True)
+Task.StayInSamePlace(339@, True)
+Char.SetSenseRange(339@, 5.0)
+340@ = Char.Create(24, 125, 2147.77, 1596.479, 994.5676)
+Char.SetAreaVisible(340@, 1)
+Char.SetHeading(340@, 78.7631)
+Task.StayInSamePlace(340@, True)
+Char.SetSenseRange(340@, 5.0)
+341@ = Char.Create(24, 124, 2148.627, 1602.235, 996.7766)
+Char.SetAreaVisible(341@, 1)
+Char.SetHeading(341@, 170.4726)
+Task.StayInSamePlace(341@, True)
+Char.SetSenseRange(341@, 5.0)
+342@ = Char.Create(24, 125, 2148.358, 1603.734, 996.7766)
+Char.SetAreaVisible(342@, 1)
+Char.SetHeading(342@, 158.879)
+Task.StayInSamePlace(342@, True)
+Char.SetSenseRange(342@, 5.0)
+Sequence.Clear(374@)
+58@ = 0
+
+:HEIST9_28899
+Char.SetKeepTask(335@(58@,15i), True)
+Char.SetMoney(335@(58@,15i), 0)
+if and
+  58@ <> 0
+  58@ <> 4
+goto_if_false @HEIST9_28970
+Char.SetHealth(335@(58@,15i), 200)
+Char.SetMaxHealth(335@(58@,15i), 200)
+
+:HEIST9_28970
+if or
+  58@ == 3
+  58@ == 4
+  58@ == 7
+goto_if_false @HEIST9_29034
+Char.SetWeaponSkill(335@(58@,15i), 2)
+Char.GiveWeapon(335@(58@,15i), WeaponType.Pistol, 9999)
+goto @HEIST9_29059
+
+:HEIST9_29034
+Char.GiveWeapon(335@(58@,15i), WeaponType.Mp5, 9999)
+Char.SetCurrentWeapon(335@(58@,15i), WeaponType.Mp5)
+
+:HEIST9_29059
+350@(58@,15i) = Blip.AddForChar(335@(58@,15i))
+Blip.SetEntryExit(350@(58@,15i), 2196.635, 1676.841, 10.0)
+Blip.ChangeDisplay(350@(58@,15i), BlipDisplay.BlipOnly)
+Char.SetShootRate(335@(58@,15i), 30)
+Char.SetAccuracy(335@(58@,15i), 20)
+Char.SetDecisionMaker(335@(58@,15i), 245@)
+58@ += 1
+  58@ >= 8
+goto_if_false @HEIST9_28899
+Camera.SetFixedPosition(2142.248, 1611.113, 993.2602, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2142.669, 1610.211, 993.3487, SwitchType.JumpCut)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_29262
+Char.SetCoordinatesDontWarpGang($scplayer, 2144.048, 1627.986, 992.5703)
+Char.SetHeading($scplayer, 181.8141)
+
+:HEIST9_29262
+gosub @HEIST9_46358
+Text.PrintNow('HM9_57', 5000, 1)
+wait 2000
+Camera.SetFixedPosition(2140.785, 1619.831, 993.4654, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2141.078, 1618.876, 993.4291, SwitchType.JumpCut)
+if 
+  not Char.IsDead(338@)
+goto_if_false @HEIST9_29399
+Char.ClearTasks(338@)
+Task.ToggleDuck(338@, True)
+Char.SetCoordinatesDontWarpGang(338@, 2140.249, 1615.12, 992.6882)
+Char.SetHeading(338@, 340.6346)
+
+:HEIST9_29399
+wait 3000
+if 
+  not Char.IsDead(335@)
+goto_if_false @HEIST9_29428
+Char.PerformSequence(335@, 212@)
+
+:HEIST9_29428
+if 
+  not Char.IsDead(336@)
+goto_if_false @HEIST9_29452
+Char.PerformSequence(336@, 213@)
+
+:HEIST9_29452
+if 
+  Object.DoesExist(308@)
+goto_if_false @HEIST9_29488
+Object.SetCoordinates(308@, 2173.867, 1619.415, 999.3)
+
+:HEIST9_29488
+gosub @HEIST9_46306
+set_lvar_text_label 288@s = 'HE8_RD'
+set_lvar_int_to_constant 232@ = 19089
+gosub @HEIST9_50648
+140@ = 4
+TIMERA = 0
+
+:HEIST9_29538
+if 
+  140@ == 4
+goto_if_false @HEIST9_30079
+if and
+  Char.IsDead(335@)
+  Char.IsDead(336@)
+  Char.IsDead(337@)
+  Char.IsDead(338@)
+  375@ == 0
+goto_if_false @HEIST9_29760
+Sequence.Clear(374@)
+374@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2143.927, 1597.674, 994.5676)
+Path.ExtendRoute(2144.14, 1603.111, 992.5684)
+Path.ExtendRoute(2142.907, 1614.151, 992.6882)
+Path.ExtendRoute(2143.105, 1621.571, 992.6882)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Sequence.Close(374@)
+if 
+  not Char.IsDead(339@)
+goto_if_false @HEIST9_29724
+Char.ClearTasks(339@)
+Char.PerformSequence(339@, 374@)
+
+:HEIST9_29724
+if 
+  not Char.IsDead(340@)
+goto_if_false @HEIST9_29753
+Char.ClearTasks(340@)
+Char.PerformSequence(340@, 374@)
+
+:HEIST9_29753
+375@ = 1
+
+:HEIST9_29760
+if and
+  Char.IsDead(339@)
+  Char.IsDead(340@)
+  375@ == 1
+goto_if_false @HEIST9_29971
+Sequence.Clear(374@)
+374@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2147.772, 1597.552, 994.5676)
+Path.ExtendRoute(2144.127, 1597.792, 994.5676)
+Path.ExtendRoute(2144.378, 1603.689, 992.5684)
+Path.ExtendRoute(2143.987, 1609.467, 992.6882)
+Path.ExtendRoute(2143.722, 1618.05, 992.6882)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Sequence.Close(374@)
+if 
+  not Char.IsDead(341@)
+goto_if_false @HEIST9_29935
+Char.ClearTasks(341@)
+Char.PerformSequence(341@, 374@)
+
+:HEIST9_29935
+if 
+  not Char.IsDead(342@)
+goto_if_false @HEIST9_29964
+Char.ClearTasks(342@)
+Char.PerformSequence(342@, 374@)
+
+:HEIST9_29964
+375@ = 2
+
+:HEIST9_29971
+58@ = 0
+
+:HEIST9_29978
+if and
+  Char.IsDead(335@(58@,15i))
+  350@(58@,15i) <> 0
+goto_if_false @HEIST9_30058
+if 
+  Blip.DoesExist(350@(58@,15i))
+goto_if_false @HEIST9_30058
+Blip.Remove(350@(58@,15i))
+350@(58@,15i) = 0
+Char.MarkAsNoLongerNeeded(335@(58@,15i))
+
+:HEIST9_30058
+58@ += 1
+  58@ >= 8
+goto_if_false @HEIST9_29978
+
+:HEIST9_30079
+if and
+  140@ > 3
+  Char.LocateAnyMeans3D($scplayer, 0, 2144.245, 1606.821, 992.6882, 3.0, 3.0, 3.0)
+  256@ == 0
+goto_if_false @HEIST9_30490
+Sequence.Clear(374@)
+374@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2143.927, 1597.674, 994.5676)
+Path.ExtendRoute(2144.14, 1603.111, 992.5684)
+Path.ExtendRoute(2142.907, 1614.151, 992.6882)
+Path.ExtendRoute(2143.105, 1621.571, 992.6882)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Sequence.Close(374@)
+if 
+  not Char.IsDead(339@)
+goto_if_false @HEIST9_30271
+Char.ClearTasks(339@)
+Char.PerformSequence(339@, 374@)
+
+:HEIST9_30271
+if 
+  not Char.IsDead(340@)
+goto_if_false @HEIST9_30300
+Char.ClearTasks(340@)
+Char.PerformSequence(340@, 374@)
+
+:HEIST9_30300
+Sequence.Clear(374@)
+374@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2147.772, 1597.552, 994.5676)
+Path.ExtendRoute(2144.127, 1597.792, 994.5676)
+Path.ExtendRoute(2144.378, 1603.689, 992.5684)
+Path.ExtendRoute(2143.987, 1609.467, 992.6882)
+Path.ExtendRoute(2143.722, 1618.05, 992.6882)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Task.ToggleDuck(-1, True)
+Sequence.Close(374@)
+if 
+  not Char.IsDead(341@)
+goto_if_false @HEIST9_30447
+Char.ClearTasks(341@)
+Char.PerformSequence(341@, 374@)
+
+:HEIST9_30447
+if 
+  not Char.IsDead(342@)
+goto_if_false @HEIST9_30476
+Char.ClearTasks(342@)
+Char.PerformSequence(342@, 374@)
+
+:HEIST9_30476
+375@ = 2
+256@ = 1
+
+:HEIST9_30490
+if 
+  121@ == 2
+goto_if_false @HEIST9_30631
+58@ = 0
+
+:HEIST9_30515
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_30610
+set_lvar_int_to_lvar_int 148@(58@,5i) = 142@(58@,5i)
+142@(58@,5i) = Char.GetHealth(54@(58@,4i))
+if 
+  not is_int_lvar_equal_to_int_lvar 148@(58@,5i) == 142@(58@,5i)
+goto_if_false @HEIST9_30610
+Text.PrintNow('HM9_44', 4000, 1)
+
+:HEIST9_30610
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_30515
+
+:HEIST9_30631
+if 
+  121@ == 2
+goto_if_false @HEIST9_30681
+if and
+  140@ == 4
+  52@ == 0
+goto_if_false @HEIST9_30681
+gosub @HEIST9_44024
+
+:HEIST9_30681
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2146.329, 1597.409, 998.7676, 4.0, 4.0, 4.0)
+  52@ == 1
+goto_if_false @HEIST9_31401
+58@ = 0
+
+:HEIST9_30743
+Char.Delete(335@(58@,15i))
+58@ += 1
+  58@ >= 8
+goto_if_false @HEIST9_30743
+335@ = Char.Create(24, 124, 2152.015, 1602.51, 1000.971)
+Char.SetAreaVisible(335@, 1)
+Char.SetHeading(335@, 270.0812)
+Task.StayInSamePlace(335@, True)
+336@ = Char.Create(24, 125, 2160.985, 1616.689, 998.9657)
+Char.SetAreaVisible(336@, 1)
+Char.SetHeading(336@, 178.5078)
+Char.PerformSequence(336@, 213@)
+337@ = Char.Create(24, 124, 2181.32, 1625.335, 998.9714)
+Char.SetAreaVisible(337@, 1)
+Char.SetHeading(337@, 117.5403)
+Task.StayInSamePlace(337@, True)
+Task.ToggleDuck(337@, True)
+338@ = Char.Create(24, 124, 2183.653, 1623.66, 998.9743)
+Char.SetAreaVisible(338@, 1)
+Char.SetHeading(338@, 98.1814)
+Task.StayInSamePlace(338@, True)
+339@ = Char.Create(24, 125, 2182.494, 1611.846, 998.9766)
+Char.SetAreaVisible(339@, 1)
+Char.SetHeading(339@, 57.0007)
+Task.StayInSamePlace(339@, True)
+340@ = Char.Create(24, 125, 2191.278, 1619.051, 998.9766)
+Char.SetAreaVisible(340@, 1)
+Char.SetHeading(340@, 85.6714)
+341@ = Char.Create(24, 124, 2222.654, 1616.012, 998.9688)
+Char.SetAreaVisible(341@, 1)
+Char.SetHeading(341@, 97.3112)
+Char.PerformSequence(341@, 213@)
+342@ = Char.Create(24, 125, 2210.106, 1620.387, 998.9766)
+Char.SetAreaVisible(342@, 1)
+Char.SetHeading(342@, 90.3344)
+Task.ToggleDuck(342@, True)
+Task.StayInSamePlace(342@, True)
+343@ = Char.Create(24, 124, 2224.578, 1619.114, 998.9679)
+Char.SetAreaVisible(343@, 1)
+Char.SetHeading(343@, 86.7328)
+Task.ToggleDuck(343@, True)
+Task.StayInSamePlace(343@, True)
+58@ = 0
+
+:HEIST9_31228
+Char.SetMoney(335@(58@,15i), 0)
+350@(58@,15i) = Blip.AddForChar(335@(58@,15i))
+Blip.SetEntryExit(350@(58@,15i), 2196.635, 1676.841, 10.0)
+Blip.ChangeDisplay(350@(58@,15i), BlipDisplay.BlipOnly)
+Char.SetHealth(335@(58@,15i), 200)
+Char.SetMaxHealth(335@(58@,15i), 200)
+Char.GiveWeapon(335@(58@,15i), WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(335@(58@,15i), WeaponType.Mp5)
+Char.SetShootRate(335@(58@,15i), 30)
+Char.SetAccuracy(335@(58@,15i), 20)
+Char.SetDecisionMaker(335@(58@,15i), 245@)
+58@ += 1
+  58@ >= 9
+goto_if_false @HEIST9_31228
+38@ = 15
+
+:HEIST9_31401
+if 
+  38@ == 15
+goto_if_false @HEIST9_35092
+58@ = 0
+
+:HEIST9_31426
+if and
+  Char.IsDead(335@(58@,15i))
+  350@(58@,15i) <> 0
+goto_if_false @HEIST9_31506
+if 
+  Blip.DoesExist(350@(58@,15i))
+goto_if_false @HEIST9_31506
+Blip.Remove(350@(58@,15i))
+350@(58@,15i) = 0
+Char.MarkAsNoLongerNeeded(335@(58@,15i))
+
+:HEIST9_31506
+58@ += 1
+  58@ >= 9
+goto_if_false @HEIST9_31426
+if and
+  TIMERB > 7000
+  278@ == 1
+goto_if_false @HEIST9_31589
+set_lvar_text_label 288@s = 'HE8_TA'
+set_lvar_int_to_constant 232@ = 19093
+gosub @HEIST9_50648
+278@ = 2
+
+:HEIST9_31589
+if and
+  231@ == 2
+  278@ == 2
+goto_if_false @HEIST9_31650
+set_lvar_text_label 288@s = 'HE8_TB'
+set_lvar_int_to_constant 232@ = 19094
+gosub @HEIST9_50648
+278@ = 3
+
+:HEIST9_31650
+if and
+  231@ == 2
+  278@ == 3
+goto_if_false @HEIST9_31711
+set_lvar_text_label 288@s = 'HE8_TC'
+set_lvar_int_to_constant 232@ = 19095
+gosub @HEIST9_50648
+278@ = 0
+
+:HEIST9_31711
+if and
+  Char.IsDead(335@)
+  257@ == 0
+goto_if_false @HEIST9_31844
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 2157.629, 1602.604, 998.9766, 6, -1)
+Sequence.Close(53@)
+58@ = 0
+
+:HEIST9_31779
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_31811
+Char.PerformSequence(54@(58@,4i), 53@)
+
+:HEIST9_31811
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_31779
+Sequence.Clear(53@)
+257@ = 1
+
+:HEIST9_31844
+if and
+  Char.IsDead(336@)
+  257@ == 1
+goto_if_false @HEIST9_31972
+53@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 2165.423, 1618.386, 998.9747, 6, -1)
+Sequence.Close(53@)
+58@ = 0
+
+:HEIST9_31907
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_31939
+Char.PerformSequence(54@(58@,4i), 53@)
+
+:HEIST9_31939
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_31907
+Sequence.Clear(53@)
+257@ = 2
+
+:HEIST9_31972
+if and
+  Char.IsDead(337@)
+  Char.IsDead(338@)
+  Char.IsDead(339@)
+  Char.IsDead(340@)
+  257@ == 2
+goto_if_false @HEIST9_32388
+53@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2169.045, 1618.73, 998.9766)
+Path.ExtendRoute(2171.097, 1618.622, 998.9766)
+Path.ExtendRoute(2172.748, 1621.935, 998.9772)
+Path.ExtendRoute(2179.594, 1623.489, 998.9745)
+Path.ExtendRoute(2184.2, 1623.908, 998.9739)
+Path.ExtendRoute(2187.764, 1622.788, 998.9758)
+Path.ExtendRoute(2190.13, 1618.664, 998.9766)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Sequence.Close(53@)
+if 
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_32175
+Char.PerformSequence(54@, 53@)
+
+:HEIST9_32175
+if 
+  not Char.IsDead(55@)
+goto_if_false @HEIST9_32199
+Char.PerformSequence(55@, 53@)
+
+:HEIST9_32199
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Path.FlushRoute
+Path.ExtendRoute(2169.019, 1618.764, 998.9766)
+Path.ExtendRoute(2171.71, 1618.252, 998.9766)
+Path.ExtendRoute(2174.539, 1615.005, 998.9766)
+Path.ExtendRoute(2180.379, 1614.246, 998.9766)
+Path.ExtendRoute(2185.445, 1614.739, 998.9766)
+Path.ExtendRoute(2190.13, 1618.664, 998.9766)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Path.FlushRoute
+Sequence.Close(53@)
+if 
+  not Char.IsDead(56@)
+goto_if_false @HEIST9_32352
+Char.PerformSequence(56@, 53@)
+
+:HEIST9_32352
+if 
+  not Char.IsDead(57@)
+goto_if_false @HEIST9_32376
+Char.PerformSequence(57@, 53@)
+
+:HEIST9_32376
+Sequence.Clear(53@)
+257@ = 3
+
+:HEIST9_32388
+if 
+  257@ == 3
+goto_if_false @HEIST9_32698
+Streaming.RequestModel(523)
+Streaming.RequestModel(284)
+Streaming.LoadSpecialCharacter('ZERO', 1)
+
+:HEIST9_32429
+if or
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasModelLoaded(523)
+  not Streaming.HasModelLoaded(284)
+goto_if_false @HEIST9_32465
+wait 0
+goto @HEIST9_32429
+
+:HEIST9_32465
+Streaming.RequestCarRecording(494)
+Streaming.LoadSpecialCharacter('ZERO', 1)
+
+:HEIST9_32483
+if 
+  not Streaming.HasCarRecordingBeenLoaded(494)
+goto_if_false @HEIST9_32510
+wait 0
+goto @HEIST9_32483
+
+:HEIST9_32510
+World.ClearArea(1, 2220.34, 1582.068, 998.9764, 10.0)
+97@ = Char.Create(25, 290, 2220.34, 1582.068, 998.9764)
+Char.SetAreaVisible(97@, 1)
+Char.SetHeading(97@, 350.4443)
+Char.SetNeverTargeted(97@, True)
+279@ = Car.Create(523, 2223.699, 1582.78, 998.0)
+Car.SetAreaVisible(279@, 1)
+Car.SetHeading(279@, 175.8434)
+Car.LockDoors(279@, CarLock.LockoutPlayerOnly)
+Car.FreezePosition(279@, True)
+280@ = Car.Create(523, 2217.549, 1583.667, 998.0)
+Car.SetAreaVisible(280@, 1)
+Car.SetHeading(280@, 175.3717)
+Car.LockDoors(280@, CarLock.LockoutPlayerOnly)
+Car.FreezePosition(280@, True)
+257@ = 4
+
+:HEIST9_32698
+if and
+  Char.IsDead(341@)
+  Char.IsDead(342@)
+  Char.IsDead(343@)
+  257@ == 4
+goto_if_false @HEIST9_32859
+53@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 2222.995, 1618.726, 998.9672, 6, -1)
+Task.FollowPathNodesToCoord(-1, 2220.908, 1585.695, 998.9708, 6, -1)
+Sequence.Close(53@)
+58@ = 0
+
+:HEIST9_32794
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_32826
+Char.PerformSequence(54@(58@,4i), 53@)
+
+:HEIST9_32826
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_32794
+Sequence.Clear(53@)
+257@ = 5
+
+:HEIST9_32859
+if 
+  257@ >= 4
+goto_if_false @HEIST9_33015
+if 
+  Char.IsDead(97@)
+goto_if_false @HEIST9_32923
+gosub @HEIST9_50388
+Text.PrintNow('HM9_63', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_32923
+if 
+  Car.IsDead(279@)
+goto_if_false @HEIST9_32969
+gosub @HEIST9_50388
+Text.PrintNow('HM9_60', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_32969
+if 
+  Car.IsDead(280@)
+goto_if_false @HEIST9_33015
+gosub @HEIST9_50388
+Text.PrintNow('HM9_60', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_33015
+58@ = 0
+
+:HEIST9_33022
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_33117
+set_lvar_int_to_lvar_int 148@(58@,5i) = 142@(58@,5i)
+142@(58@,5i) = Char.GetHealth(54@(58@,4i))
+if 
+  not is_int_lvar_equal_to_int_lvar 148@(58@,5i) == 142@(58@,5i)
+goto_if_false @HEIST9_33117
+Text.PrintNow('HM9_44', 5000, 1)
+
+:HEIST9_33117
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_33022
+58@ = 0
+
+:HEIST9_33145
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_33246
+if and
+  Char.LocateAnyMeans3D(54@(58@,4i), 0, 2220.205, 1585.422, 998.9717, 5.0, 5.0, 5.0)
+  78@(58@,4i) == 0
+goto_if_false @HEIST9_33246
+82@ += 1
+78@(58@,4i) = 1
+
+:HEIST9_33246
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_33145
+if 
+  257@ <> 5
+goto_if_false @HEIST9_33349
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2220.205, 1585.422, 998.9717, 10.0, 10.0, 10.0)
+goto_if_false @HEIST9_33349
+Text.PrintNow('HM9_1F', 4000, 1)
+
+:HEIST9_33349
+if and
+  257@ == 5
+  Char.LocateAnyMeans3D($scplayer, 0, 2220.205, 1585.422, 998.9717, 10.0, 10.0, 10.0)
+goto_if_false @HEIST9_35092
+Text.ClearPrints
+gosub @HEIST9_46325
+if 
+  Blip.DoesExist(90@)
+goto_if_false @HEIST9_33434
+Blip.Remove(90@)
+
+:HEIST9_33434
+if 
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_33485
+Char.ClearTasksImmediately(54@)
+Char.SetCoordinatesDontWarpGang(54@, 2224.042, 1589.367, 998.967)
+Char.SetHeading(54@, 165.2519)
+
+:HEIST9_33485
+if 
+  not Char.IsDead(55@)
+goto_if_false @HEIST9_33536
+Char.ClearTasksImmediately(55@)
+Char.SetCoordinatesDontWarpGang(55@, 2222.893, 1589.583, 998.9684)
+Char.SetHeading(55@, 173.9364)
+
+:HEIST9_33536
+if 
+  not Char.IsDead(56@)
+goto_if_false @HEIST9_33587
+Char.ClearTasksImmediately(56@)
+Char.SetCoordinatesDontWarpGang(56@, 2221.866, 1589.245, 998.9696)
+Char.SetHeading(56@, 177.0563)
+
+:HEIST9_33587
+if 
+  not Char.IsDead(57@)
+goto_if_false @HEIST9_33638
+Char.ClearTasksImmediately(57@)
+Char.SetCoordinatesDontWarpGang(57@, 2220.723, 1589.224, 998.971)
+Char.SetHeading(57@, 171.7417)
+
+:HEIST9_33638
+if 
+  not Char.IsDead(97@)
+goto_if_false @HEIST9_33684
+Char.SetCoordinatesDontWarpGang(97@, 2220.34, 1582.068, 998.9764)
+Char.SetHeading(97@, 350.4443)
+
+:HEIST9_33684
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_33773
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HEIST9_33743
+Char.WarpFromCarToCoord($scplayer, 2225.541, 1586.834, 998.9651)
+goto @HEIST9_33763
+
+:HEIST9_33743
+Char.SetCoordinatesDontWarpGang($scplayer, 2225.541, 1586.834, 998.9651)
+
+:HEIST9_33763
+Char.SetHeading($scplayer, 124.4066)
+
+:HEIST9_33773
+if 
+  not Car.IsDead(279@)
+goto_if_false @HEIST9_33796
+Car.FreezePosition(279@, False)
+
+:HEIST9_33796
+if 
+  not Car.IsDead(280@)
+goto_if_false @HEIST9_33819
+Car.FreezePosition(280@, False)
+
+:HEIST9_33819
+Hud.ClearTimer($h9_safe_timer)
+gosub @HEIST9_46289
+Camera.SetFixedPosition(2216.721, 1579.81, 1000.833, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2217.382, 1580.538, 1000.654, SwitchType.JumpCut)
+gosub @HEIST9_46358
+if 
+  not Char.IsDead(97@)
+goto_if_false @HEIST9_33946
+Char.ClearTasks(97@)
+Task.PlayAnim(97@, "IDLE_CHAT", "PED", 1.0, True, False, False, False, -1)
+
+:HEIST9_33946
+Text.PrintNow('HE8_UA', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19104, 1)
+
+:HEIST9_33973
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_33999
+wait 0
+goto @HEIST9_33973
+
+:HEIST9_33999
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_34010
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_34060
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_34053
+goto @HEIST9_34841
+
+:HEIST9_34053
+goto @HEIST9_34010
+
+:HEIST9_34060
+Text.PrintNow('HE8_UB', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19105, 1)
+
+:HEIST9_34087
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_34113
+wait 0
+goto @HEIST9_34087
+
+:HEIST9_34113
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_34124
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_34174
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_34167
+goto @HEIST9_34841
+
+:HEIST9_34167
+goto @HEIST9_34124
+
+:HEIST9_34174
+Char.Delete(97@)
+Char.Delete(56@)
+Char.Delete(57@)
+Camera.SetFixedPosition(2216.914, 1571.622, 999.7229, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2217.27, 1572.557, 999.7267, SwitchType.JumpCut)
+281@ = Char.Create(25, 284, 2220.8, 1581.163, 998.9764)
+Char.SetHeading(281@, 196.0524)
+Char.SetAreaVisible(281@, 1)
+282@ = Char.Create(25, 284, 2220.019, 1581.179, 998.9772)
+Char.SetHeading(282@, 74.4668)
+Char.SetAreaVisible(282@, 1)
+if and
+  not Car.IsDead(51@)
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_34356
+Task.EnterCarAsDriver(54@, 51@, 8000)
+
+:HEIST9_34356
+if and
+  not Car.IsDead(51@)
+  not Char.IsDead(55@)
+goto_if_false @HEIST9_34390
+Task.EnterCarAsPassenger(55@, 51@, 0, 8000)
+
+:HEIST9_34390
+if and
+  not Car.IsDead(279@)
+  not Char.IsDead(281@)
+goto_if_false @HEIST9_34422
+Task.EnterCarAsDriver(281@, 279@, 8000)
+
+:HEIST9_34422
+if and
+  not Car.IsDead(280@)
+  not Char.IsDead(282@)
+goto_if_false @HEIST9_34454
+Task.EnterCarAsDriver(282@, 280@, 8000)
+
+:HEIST9_34454
+TIMERB = 0
+
+:HEIST9_34461
+if 
+  8000 > TIMERB
+goto_if_false @HEIST9_34515
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_34508
+goto @HEIST9_34841
+
+:HEIST9_34508
+goto @HEIST9_34461
+
+:HEIST9_34515
+Camera.SetFixedPosition(2223.85, 1572.014, 1001.623, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2223.371, 1572.844, 1001.336, SwitchType.JumpCut)
+if and
+  Streaming.HasCarRecordingBeenLoaded(494)
+  not Car.IsDead(51@)
+goto_if_false @HEIST9_34595
+Car.StartPlayback(51@, 494)
+
+:HEIST9_34595
+TIMERB = 0
+
+:HEIST9_34602
+if 
+  500 > TIMERB
+goto_if_false @HEIST9_34656
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_34649
+goto @HEIST9_34841
+
+:HEIST9_34649
+goto @HEIST9_34602
+
+:HEIST9_34656
+if and
+  not Car.IsDead(279@)
+  not Char.IsDead(281@)
+goto_if_false @HEIST9_34718
+Car.SwitchSiren(279@, True)
+Task.CarDriveToCoord(281@, 279@, 2223.455, 1564.892, 1000.873, 10.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:HEIST9_34718
+if and
+  not Car.IsDead(280@)
+  not Char.IsDead(282@)
+goto_if_false @HEIST9_34780
+Car.SwitchSiren(280@, True)
+Task.CarDriveToCoord(282@, 280@, 2217.319, 1566.6, 1000.3, 10.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:HEIST9_34780
+TIMERB = 0
+
+:HEIST9_34787
+if 
+  2000 > TIMERB
+goto_if_false @HEIST9_34841
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_34834
+goto @HEIST9_34841
+
+:HEIST9_34834
+goto @HEIST9_34787
+
+:HEIST9_34841
+58@ = 0
+
+:HEIST9_34848
+if 
+  Blip.DoesExist(91@(58@,4i))
+goto_if_false @HEIST9_34886
+Blip.Remove(91@(58@,4i))
+Char.Delete(54@(58@,4i))
+
+:HEIST9_34886
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_34848
+gosub @HEIST9_46306
+if 
+  not Char.IsDead(97@)
+goto_if_false @HEIST9_34935
+Char.Delete(97@)
+
+:HEIST9_34935
+if 
+  not Char.IsDead(281@)
+goto_if_false @HEIST9_34956
+Char.Delete(281@)
+
+:HEIST9_34956
+if 
+  not Char.IsDead(282@)
+goto_if_false @HEIST9_34977
+Char.Delete(282@)
+
+:HEIST9_34977
+if 
+  not Car.IsDead(279@)
+goto_if_false @HEIST9_34998
+Car.Delete(279@)
+
+:HEIST9_34998
+if 
+  not Car.IsDead(280@)
+goto_if_false @HEIST9_35019
+Car.Delete(280@)
+
+:HEIST9_35019
+if 
+  not Car.IsDead(51@)
+goto_if_false @HEIST9_35040
+Car.Delete(51@)
+
+:HEIST9_35040
+Streaming.MarkModelAsNoLongerNeeded(117)
+Streaming.MarkModelAsNoLongerNeeded(284)
+Streaming.MarkModelAsNoLongerNeeded(523)
+Streaming.MarkModelAsNoLongerNeeded(428)
+Streaming.UnloadSpecialCharacter(3)
+Streaming.UnloadSpecialCharacter(2)
+Streaming.UnloadSpecialCharacter(1)
+174@ = 1
+38@ = 16
+TIMERA = 0
+
+:HEIST9_35092
+if 
+  38@ == 16
+goto_if_false @HEIST9_35852
+58@ = 0
+
+:HEIST9_35117
+Char.Delete(335@(58@,15i))
+58@ += 1
+  58@ >= 9
+goto_if_false @HEIST9_35117
+Streaming.MarkModelAsNoLongerNeeded(125)
+Streaming.MarkModelAsNoLongerNeeded(124)
+Streaming.RequestModel(126)
+Streaming.RequestModel(127)
+
+:HEIST9_35163
+if or
+  not Streaming.HasModelLoaded(126)
+  not Streaming.HasModelLoaded(127)
+goto_if_false @HEIST9_35193
+wait 0
+goto @HEIST9_35163
+
+:HEIST9_35193
+335@ = Char.Create(24, 127, 2221.34, 1616.971, 998.9719)
+Char.SetAreaVisible(335@, 1)
+Char.SetHeading(335@, 173.3951)
+Task.StayInSamePlace(335@, True)
+Char.PerformSequence(335@, 212@)
+336@ = Char.Create(24, 126, 2204.911, 1615.991, 998.982)
+Char.SetAreaVisible(336@, 1)
+Char.SetHeading(336@, 266.9222)
+Task.StayInSamePlace(336@, True)
+337@ = Char.Create(24, 127, 2196.664, 1618.759, 998.9766)
+Char.SetAreaVisible(337@, 1)
+Char.SetHeading(337@, 266.9185)
+338@ = Char.Create(24, 126, 2172.996, 1616.329, 998.9766)
+Char.SetAreaVisible(338@, 1)
+Char.SetHeading(338@, 263.6073)
+339@ = Char.Create(24, 127, 2173.003, 1622.626, 998.9761)
+Char.SetAreaVisible(339@, 1)
+Char.SetHeading(339@, 261.2549)
+340@ = Char.Create(24, 126, 2179.727, 1611.811, 998.9766)
+Char.SetAreaVisible(340@, 1)
+Char.SetHeading(340@, 263.1769)
+Task.ToggleDuck(340@, True)
+Task.StayInSamePlace(340@, True)
+341@ = Char.Create(24, 126, 2181.543, 1622.657, 998.976)
+Char.SetAreaVisible(341@, 1)
+Char.SetHeading(341@, 263.6053)
+Task.ToggleDuck(341@, True)
+Task.StayInSamePlace(341@, True)
+342@ = Char.Create(24, 126, 2151.578, 1602.322, 1000.971)
+Char.SetAreaVisible(342@, 1)
+Char.SetHeading(342@, 264.2166)
+Task.StayInSamePlace(342@, True)
+58@ = 0
+
+:HEIST9_35585
+350@(58@,15i) = 1
+Char.SetMoney(335@(58@,15i), 0)
+Char.SetHealth(335@(58@,15i), 200)
+Char.SetMaxHealth(335@(58@,15i), 200)
+if or
+  58@ == 3
+  58@ == 4
+  58@ == 7
+goto_if_false @HEIST9_35695
+Char.SetWeaponSkill(335@(58@,15i), 2)
+Char.GiveWeapon(335@(58@,15i), WeaponType.Pistol, 9999)
+goto @HEIST9_35720
+
+:HEIST9_35695
+Char.GiveWeapon(335@(58@,15i), WeaponType.Mp5, 9999)
+Char.SetCurrentWeapon(335@(58@,15i), WeaponType.Mp5)
+
+:HEIST9_35720
+Char.SetShootRate(335@(58@,15i), 30)
+Char.SetAccuracy(335@(58@,15i), 30)
+Char.SetDecisionMaker(335@(58@,15i), 245@)
+58@ += 1
+  58@ >= 8
+goto_if_false @HEIST9_35585
+Text.PrintNow('HM9_10', 7000, 1)
+84@ = Blip.AddForCoord(2156.188, 1597.98, 998.9766)
+Blip.SetEntryExit(84@, 2196.635, 1676.841, 10.0)
+38@ = 17
+255@ = 1
+TIMERA = 0
+
+:HEIST9_35852
+if 
+  38@ == 17
+goto_if_false @HEIST9_37681
+58@ = 0
+
+:HEIST9_35877
+if and
+  Char.IsDead(335@(58@,15i))
+  350@(58@,15i) <> 0
+goto_if_false @HEIST9_35928
+350@(58@,15i) = 0
+Char.MarkAsNoLongerNeeded(335@(58@,15i))
+
+:HEIST9_35928
+58@ += 1
+  58@ >= 8
+goto_if_false @HEIST9_35877
+if and
+  not Char.IsDead(336@)
+  Char.LocateAnyMeans3D($scplayer, 0, 2208.021, 1619.125, 998.9827, 5.0, 5.0, 5.0)
+goto_if_false @HEIST9_36073
+if 
+  351@ == 1
+goto_if_false @HEIST9_36073
+Char.ClearTasksImmediately(336@)
+53@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.WeaponRoll(-1, False)
+Task.ToggleDuck(-1, True)
+Sequence.Close(53@)
+Char.PerformSequence(336@, 53@)
+Sequence.Clear(53@)
+351@ = 2
+
+:HEIST9_36073
+if and
+  not Char.IsDead(337@)
+  Char.LocateAnyMeans3D($scplayer, 0, 2224.02, 1618.927, 998.9655, 5.0, 5.0, 5.0)
+goto_if_false @HEIST9_36186
+if 
+  352@ == 1
+goto_if_false @HEIST9_36186
+Char.ClearTasksImmediately(337@)
+Path.FlushRoute
+Path.ExtendRoute(2224.02, 1618.927, 998.9655)
+Task.FollowPointRoute(337@, 6, RouteMode.Once)
+Path.FlushRoute
+352@ = 2
+
+:HEIST9_36186
+if and
+  not Char.IsDead(340@)
+  Char.LocateAnyMeans3D($scplayer, 0, 2183.907, 1613.572, 998.9766, 5.0, 5.0, 5.0)
+goto_if_false @HEIST9_36329
+if 
+  355@ == 1
+goto_if_false @HEIST9_36329
+Task.ToggleDuck(340@, False)
+355@ = 2
+if 
+  not Char.IsDead(338@)
+goto_if_false @HEIST9_36329
+Char.ClearTasksImmediately(338@)
+Path.FlushRoute
+Path.ExtendRoute(2183.907, 1613.572, 998.9766)
+Task.ToggleDuck(338@, True)
+Task.FollowPointRoute(338@, 6, RouteMode.Once)
+Path.FlushRoute
+
+:HEIST9_36329
+if and
+  not Char.IsDead(341@)
+  Char.LocateAnyMeans3D($scplayer, 0, 2185.579, 1624.431, 998.973, 5.0, 5.0, 5.0)
+goto_if_false @HEIST9_36511
+if 
+  356@ == 1
+goto_if_false @HEIST9_36511
+Char.ClearTasksImmediately(341@)
+53@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.WeaponRoll(-1, False)
+Task.ToggleDuck(-1, True)
+Sequence.Close(53@)
+Char.PerformSequence(341@, 53@)
+Sequence.Clear(53@)
+356@ = 2
+if 
+  not Char.IsDead(339@)
+goto_if_false @HEIST9_36511
+Char.ClearTasksImmediately(339@)
+Path.FlushRoute
+Path.ExtendRoute(2185.579, 1624.431, 998.973)
+Task.ToggleDuck(339@, True)
+Task.FollowPointRoute(339@, 6, RouteMode.Once)
+Path.FlushRoute
+
+:HEIST9_36511
+if and
+  not Char.IsDead(342@)
+  Char.LocateAnyMeans3D($scplayer, 0, 2160.279, 1618.668, 998.9676, 5.0, 5.0, 5.0)
+goto_if_false @HEIST9_36641
+if 
+  357@ == 1
+goto_if_false @HEIST9_36641
+Char.ClearTasksImmediately(342@)
+Path.FlushRoute
+Path.ExtendRoute(2157.58, 1601.944, 998.9766)
+Path.ExtendRoute(2157.832, 1616.024, 998.9669)
+Task.FollowPointRoute(342@, 6, RouteMode.Once)
+Path.FlushRoute
+357@ = 2
+
+:HEIST9_36641
+if and
+  TIMERA > 7000
+  255@ == 1
+goto_if_false @HEIST9_36703
+set_lvar_text_label 288@s = 'HE8_VA'
+set_lvar_int_to_constant 232@ = 19112
+gosub @HEIST9_50648
+255@ = 2
+
+:HEIST9_36703
+if and
+  231@ == 2
+  255@ == 2
+goto_if_false @HEIST9_36764
+set_lvar_text_label 288@s = 'HE8_VB'
+set_lvar_int_to_constant 232@ = 19113
+gosub @HEIST9_50648
+255@ = 3
+
+:HEIST9_36764
+if and
+  231@ == 2
+  255@ == 3
+goto_if_false @HEIST9_36825
+set_lvar_text_label 288@s = 'HE8_VC'
+set_lvar_int_to_constant 232@ = 19114
+gosub @HEIST9_50648
+255@ = 4
+
+:HEIST9_36825
+if and
+  231@ == 2
+  255@ == 4
+goto_if_false @HEIST9_36886
+set_lvar_text_label 288@s = 'HE8_VD'
+set_lvar_int_to_constant 232@ = 19115
+gosub @HEIST9_50648
+255@ = 101
+
+:HEIST9_36886
+if and
+  255@ == 101
+  254@ == 0
+goto_if_false @HEIST9_36977
+Camera.SetDarknessEffect(False, 0)
+World.SwitchEntryExit('JUMP1', True)
+World.SwitchEntryExit('JUMP2', False)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_36966
+Player.TakeOffGoggles($player1, True)
+
+:HEIST9_36966
+Game.SetNightVision(False)
+254@ = 1
+
+:HEIST9_36977
+if and
+  254@ <> 0
+  254@ <> 7
+goto_if_false @HEIST9_37352
+if and
+  231@ == 2
+  254@ == 1
+goto_if_false @HEIST9_37063
+set_lvar_text_label 288@s = 'HE8_WA'
+set_lvar_int_to_constant 232@ = 19116
+gosub @HEIST9_50648
+254@ = 2
+
+:HEIST9_37063
+if and
+  231@ == 2
+  254@ == 2
+goto_if_false @HEIST9_37124
+set_lvar_text_label 288@s = 'HE8_WB'
+set_lvar_int_to_constant 232@ = 19117
+gosub @HEIST9_50648
+254@ = 3
+
+:HEIST9_37124
+if and
+  231@ == 2
+  254@ == 3
+goto_if_false @HEIST9_37209
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_37173
+Char.StartFacialTalk($scplayer, 10000)
+
+:HEIST9_37173
+set_lvar_text_label 288@s = 'HE8_WC'
+set_lvar_int_to_constant 232@ = 19118
+gosub @HEIST9_50648
+254@ = 4
+
+:HEIST9_37209
+if and
+  231@ == 2
+  254@ == 4
+goto_if_false @HEIST9_37291
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_37255
+Char.StopFacialTalk($scplayer)
+
+:HEIST9_37255
+set_lvar_text_label 288@s = 'HE8_WE'
+set_lvar_int_to_constant 232@ = 19120
+gosub @HEIST9_50648
+254@ = 5
+
+:HEIST9_37291
+if and
+  231@ == 2
+  254@ == 5
+goto_if_false @HEIST9_37352
+set_lvar_text_label 288@s = 'HE8_WF'
+set_lvar_int_to_constant 232@ = 19121
+gosub @HEIST9_50648
+254@ = 7
+
+:HEIST9_37352
+if and
+  Char.LocateAnyMeans3D($scplayer, 1, 2156.188, 1597.98, 998.9766, 1.2, 1.2, 2.0)
+  153@ == 0
+goto_if_false @HEIST9_37681
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_37430
+Player.SetControl($player1, False)
+
+:HEIST9_37430
+gosub @HEIST9_46325
+if 
+  Blip.DoesExist(84@)
+goto_if_false @HEIST9_37458
+Blip.Remove(84@)
+
+:HEIST9_37458
+Streaming.LoadScene(2266.511, 1647.517, 1083.241)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_37525
+Char.SetCoordinatesDontWarpGang($scplayer, 2266.511, 1647.517, 1083.241)
+Char.SetHeading($scplayer, 268.927)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+
+:HEIST9_37525
+376@ = Blip.AddForCoord(2266.225, 1619.766, 1089.445)
+Blip.SetEntryExit(376@, 2196.635, 1676.841, 10.0)
+gosub @HEIST9_44781
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Audio.LoadMissionAudio(6401, 3)
+
+:HEIST9_37583
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @HEIST9_37609
+wait 0
+goto @HEIST9_37583
+
+:HEIST9_37609
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @HEIST9_37628
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:HEIST9_37628
+gosub @HEIST9_46358
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_37658
+Player.SetControl($player1, True)
+
+:HEIST9_37658
+Text.PrintNow('HM9_45', 4000, 1)
+153@ = 1
+
+:HEIST9_37681
+if or
+  38@ == 17
+  38@ == 18
+goto_if_false @HEIST9_40679
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2266.598, 1647.378, 1083.241, 1.2, 1.2, 2.0)
+  294@ == 0
+goto_if_false @HEIST9_38136
+58@ = 0
+
+:HEIST9_37768
+Char.Delete(335@(58@,15i))
+58@ += 1
+  58@ >= 8
+goto_if_false @HEIST9_37768
+Streaming.RequestModel(371)
+
+:HEIST9_37803
+if 
+  not Streaming.HasModelLoaded(371)
+goto_if_false @HEIST9_37830
+wait 0
+goto @HEIST9_37803
+
+:HEIST9_37830
+298@ = Pickup.Create(371, 3, 2267.989, 1699.668, 101.4)
+$para_freefall_Vz = -6.0
+$para_freefall_Vy = 35.0
+292@ = Char.Create(24, 126, 2269.732, 1620.345, 1085.25)
+Char.SetAreaVisible(292@, 1)
+Char.SetHeading(292@, 0.7663)
+Char.GiveWeapon(292@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(292@, WeaponType.Mp5)
+Char.SetAccuracy(292@, 80)
+Char.SetDecisionMaker(292@, 89@)
+Path.FlushRoute
+Path.ExtendRoute(2269.577, 1624.246, 1083.258)
+Path.ExtendRoute(2269.986, 1628.803, 1083.245)
+Path.ExtendRoute(2268.948, 1641.64, 1083.234)
+Task.FollowPointRoute(292@, 6, RouteMode.Once)
+Path.FlushRoute
+Char.SetMoney(292@, 0)
+293@ = Char.Create(24, 127, 2265.832, 1624.938, 1087.448)
+Char.SetAreaVisible(293@, 1)
+Char.SetHeading(293@, 178.1353)
+Char.GiveWeapon(293@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(293@, WeaponType.Mp5)
+Char.SetAccuracy(293@, 80)
+Char.SetDecisionMaker(293@, 89@)
+Task.ToggleDuck(293@, True)
+Task.StayInSamePlace(293@, True)
+Char.SetMoney(293@, 0)
+Streaming.MarkModelAsNoLongerNeeded(124)
+Streaming.MarkModelAsNoLongerNeeded(125)
+Streaming.MarkModelAsNoLongerNeeded(126)
+Streaming.MarkModelAsNoLongerNeeded(127)
+294@ = 1
+
+:HEIST9_38136
+if 
+  100@ == 0
+goto_if_false @HEIST9_39553
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2269.068, 1624.648, 93.922, 10.0, 10.0, 10.0)
+  100@ == 0
+goto_if_false @HEIST9_39553
+Hud.SetRadarZoom(0)
+Game.SetWantedMultiplier(1.0)
+Camera.DoFade(0, Fade.Out)
+Clock.SetTimeOfDay(0, 0)
+gosub @HEIST9_46289
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_38285
+Char.SetCoordinatesDontWarpGang($scplayer, 2268.666, 1620.91, 93.922)
+Char.SetHeading($scplayer, 270.0)
+
+:HEIST9_38285
+Streaming.LoadScene(2269.811, 1625.442, 93.922)
+Streaming.LoadSceneInDirection(2270.095, 1692.939, 101.2986, 129.3904)
+Streaming.RequestModel(497)
+
+:HEIST9_38329
+if 
+  not Streaming.HasModelLoaded(497)
+goto_if_false @HEIST9_38356
+wait 0
+goto @HEIST9_38329
+
+:HEIST9_38356
+198@ = Car.Create(497, 2295.622, 1839.804, 38.2713)
+Car.SetHeading(198@, 191.5123)
+Streaming.RequestModel(285)
+Streaming.RequestCarRecording(484)
+
+:HEIST9_38399
+if or
+  not Streaming.HasModelLoaded(285)
+  not Streaming.HasCarRecordingBeenLoaded(484)
+goto_if_false @HEIST9_38431
+wait 0
+goto @HEIST9_38399
+
+:HEIST9_38431
+377@ = Car.Create(497, 2253.068, 1626.562, 87.9584)
+378@ = Char.CreateInsideCar(PedType.Mission4, 285, 377@)
+Char.SetCanBeShotInVehicle(378@, False)
+Car.LockDoors(377@, CarLock.Locked)
+Char.SetCantBeDraggedOut(378@, True)
+Heli.SetBladesFullSpeed(377@)
+Car.SetForwardSpeed(377@, 10.0)
+380@ = Char.Create(24, 285, 2253.068, 1626.562, 87.9584)
+Char.SetDecisionMaker(380@, 245@)
+381@ = Char.Create(24, 285, 2253.068, 1626.562, 87.9584)
+Char.SetDecisionMaker(381@, 245@)
+382@ = Char.Create(24, 285, 2253.068, 1626.562, 87.9584)
+Char.SetDecisionMaker(382@, 245@)
+383@ = Char.Create(24, 285, 2253.068, 1626.562, 87.9584)
+Char.SetDecisionMaker(383@, 245@)
+Char.AttachToCar(380@, 377@, 1.4, 1.3, -0.1, 3, 190.0, WeaponType.Mp5)
+Char.AttachToCar(381@, 377@, 1.4, -0.8, -0.1, 3, 190.0, WeaponType.Mp5)
+Char.AttachToCar(382@, 377@, -1.4, 1.3, -0.1, 1, 190.0, WeaponType.Mp5)
+Char.AttachToCar(383@, 377@, -1.4, -0.8, -0.1, 1, 190.0, WeaponType.Mp5)
+58@ = 0
+
+:HEIST9_38770
+Char.SetMoney(380@(58@,4i), 0)
+Char.SetHealth(380@(58@,4i), 150)
+Char.SetShootRate(380@(58@,4i), 40)
+Char.SetAccuracy(380@(58@,4i), 40)
+Task.StayInSamePlace(380@(58@,4i), True)
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_38770
+379@ = Searchlight.CreateOnVehicle(377@, 0.0, 1.0, -0.5, 0.4, 2269.456, 1625.442, 93.922, 5.0)
+Searchlight.PointAtChar(379@, $scplayer, 10.0)
+if 
+  not Car.IsDead(377@)
+goto_if_false @HEIST9_38953
+if 
+  Streaming.HasCarRecordingBeenLoaded(484)
+goto_if_false @HEIST9_38953
+Car.StartPlayback(377@, 484)
+Car.PausePlayback(377@)
+
+:HEIST9_38953
+335@ = Char.Create(24, 285, 2293.68, 1837.016, 38.2713)
+Char.SetHeading(335@, 164.9221)
+Task.StandStill(335@, 1)
+336@ = Char.Create(24, 285, 2298.492, 1836.946, 38.2713)
+Char.SetHeading(336@, 170.0207)
+Task.StandStill(336@, 1)
+Task.ToggleDuck(336@, True)
+58@ = 0
+
+:HEIST9_39051
+350@(58@,15i) = 1
+Char.SetHealth(335@(58@,15i), 200)
+Char.SetMaxHealth(335@(58@,15i), 200)
+Char.GiveWeapon(335@(58@,15i), WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(335@(58@,15i), WeaponType.Mp5)
+Char.SetShootRate(335@(58@,15i), 30)
+Char.SetAccuracy(335@(58@,15i), 20)
+Char.SetDecisionMaker(335@(58@,15i), 245@)
+58@ += 1
+  58@ >= 2
+goto_if_false @HEIST9_39051
+World.SwitchEntryExit('JUMP1', False)
+World.SwitchEntryExit('JUMP2', False)
+World.ClearArea(1, 2270.021, 1623.486, 93.922, 20.0)
+if 
+  Blip.DoesExist(84@)
+goto_if_false @HEIST9_39237
+Blip.Remove(84@)
+
+:HEIST9_39237
+if 
+  Blip.DoesExist(376@)
+goto_if_false @HEIST9_39258
+Blip.Remove(376@)
+
+:HEIST9_39258
+384@ = Blip.AddForPickup(298@)
+World.SetCarDensityMultiplier(1.0)
+Camera.SetFixedPosition(2305.338, 1721.1, 126.2864, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2304.813, 1720.407, 125.7915, SwitchType.JumpCut)
+gosub @HEIST9_46358
+Camera.SetInterpolationParameters(0.0, 8000)
+Camera.SetFixedPosition(2307.409, 1599.532, 118.4341, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2306.749, 1600.164, 118.0293, SwitchType.Interpolation)
+Text.PrintNow('HM9_25', 8000, 1)
+wait 3000
+if 
+  not Car.IsDead(377@)
+goto_if_false @HEIST9_39450
+if 
+  Streaming.HasCarRecordingBeenLoaded(484)
+goto_if_false @HEIST9_39450
+Car.UnpausePlayback(377@)
+
+:HEIST9_39450
+wait 5000
+gosub @HEIST9_46306
+385@ = Pickup.Create(#BODYARMOUR, 3, 2265.825, 1617.069, 94.5)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_39539
+Char.ClearTasks($scplayer)
+Char.SetCoordinatesDontWarpGang($scplayer, 2269.139, 1622.576, 93.922)
+Char.SetHeading($scplayer, 0.0)
+Camera.SetBehindPlayer
+
+:HEIST9_39539
+100@ = 1
+TIMERB = 0
+
+:HEIST9_39553
+if 
+  Car.IsDead(377@)
+goto_if_false @HEIST9_39590
+if 
+  Searchlight.DoesExist(379@)
+goto_if_false @HEIST9_39590
+Searchlight.Delete(379@)
+
+:HEIST9_39590
+if and
+  100@ == 1
+  TIMERB > 10800
+  not Car.IsDead(377@)
+goto_if_false @HEIST9_40122
+if 
+  Car.IsPlaybackGoingOn(377@)
+goto_if_false @HEIST9_39642
+Car.PausePlayback(377@)
+
+:HEIST9_39642
+58@ = 0
+
+:HEIST9_39649
+if 
+  not Char.IsDead(380@(58@,4i))
+goto_if_false @HEIST9_39778
+$x, $y, $z = Char.GetCoordinates(380@(58@,4i))
+Char.Delete(380@(58@,4i))
+380@(58@,4i) = Char.CreateSwatRope(PedType.Mission1, 285, $x, $y, $z)
+Char.SetShootRate(380@(58@,4i), 70)
+Char.SetDecisionMaker(380@(58@,4i), 245@)
+Char.GiveWeapon(380@(58@,4i), WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(380@(58@,4i), WeaponType.Mp5)
+Task.StayInSamePlace(380@(58@,4i), True)
+
+:HEIST9_39778
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_39649
+53@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.StayInSamePlace(-1, True)
+Task.AchieveHeading(-1, 170.7766)
+Task.ToggleDuck(-1, False)
+Task.Pause(-1, 3000)
+Task.ShootAtChar(-1, $scplayer, -1)
+Sequence.Close(53@)
+if 
+  not Char.IsDead(380@)
+goto_if_false @HEIST9_39876
+Char.PerformSequence(380@, 53@)
+
+:HEIST9_39876
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.StayInSamePlace(-1, True)
+Task.AchieveHeading(-1, 170.7766)
+Task.Pause(-1, 3000)
+Task.ShootAtChar(-1, $scplayer, -1)
+Sequence.Close(53@)
+if 
+  not Char.IsDead(381@)
+goto_if_false @HEIST9_39952
+Char.PerformSequence(381@, 53@)
+
+:HEIST9_39952
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.StayInSamePlace(-1, True)
+Task.AchieveHeading(-1, 170.7766)
+Task.ToggleDuck(-1, False)
+Task.Pause(-1, 3000)
+Task.ShootAtChar(-1, $scplayer, -1)
+Sequence.Close(53@)
+if 
+  not Char.IsDead(382@)
+goto_if_false @HEIST9_40034
+Char.PerformSequence(382@, 53@)
+
+:HEIST9_40034
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.StayInSamePlace(-1, True)
+Task.AchieveHeading(-1, 170.7766)
+Task.Pause(-1, 3000)
+Task.ShootAtChar(-1, $scplayer, -1)
+Sequence.Close(53@)
+if 
+  not Char.IsDead(383@)
+goto_if_false @HEIST9_40110
+Char.PerformSequence(383@, 53@)
+
+:HEIST9_40110
+Sequence.Clear(53@)
+100@ = 2
+
+:HEIST9_40122
+if and
+  100@ == 2
+  TIMERB > 18000
+  not Car.IsDead(377@)
+goto_if_false @HEIST9_40181
+if 
+  Car.IsPlaybackGoingOn(377@)
+goto_if_false @HEIST9_40174
+Car.UnpausePlayback(377@)
+
+:HEIST9_40174
+100@ = 3
+
+:HEIST9_40181
+if 
+  294@ == 1
+goto_if_false @HEIST9_40540
+if 
+  Pickup.HasBeenCollected(298@)
+goto_if_false @HEIST9_40540
+if 
+  Blip.DoesExist(384@)
+goto_if_false @HEIST9_40236
+Blip.Remove(384@)
+
+:HEIST9_40236
+if 
+  not Car.IsDead(198@)
+goto_if_false @HEIST9_40267
+247@ = Blip.AddForCar(198@)
+Blip.SetAsFriendly(247@, True)
+
+:HEIST9_40267
+38@ = 18
+99@ = 2
+if 
+  not Car.IsDead(198@)
+goto_if_false @HEIST9_40471
+gosub @HEIST9_46289
+Camera.SetFixedPosition(2267.88, 1692.82, 111.0014, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2267.876, 1693.396, 110.1835, SwitchType.JumpCut)
+wait 100
+Camera.SetInterpolationParameters(0.0, 6000)
+Camera.SetFixedPosition(2293.709, 1832.279, 41.1442, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2294.057, 1833.15, 40.7979, SwitchType.Interpolation)
+Text.PrintNow('HM9_24', 6000, 1)
+wait 6000
+gosub @HEIST9_46306
+Text.PrintNow('HM9_1H', 6000, 1)
+goto @HEIST9_40507
+
+:HEIST9_40471
+102@ = Blip.AddForCoord(365.5647, 2536.76, 15.6637)
+Text.PrintNow('HM9_X', 6000, 1)
+
+:HEIST9_40507
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_40533
+Char.SetHeading($scplayer, 353.9519)
+
+:HEIST9_40533
+Char.SetCurrentWeapon($scplayer, WeaponType.Parachute)
+
+:HEIST9_40540
+if and
+  Car.IsDead(198@)
+  Blip.DoesExist(247@)
+goto_if_false @HEIST9_40618
+if 
+  not Blip.DoesExist(102@)
+goto_if_false @HEIST9_40613
+102@ = Blip.AddForCoord(365.5647, 2536.76, 15.6637)
+Text.PrintNow('HM9_1J', 6000, 1)
+
+:HEIST9_40613
+Blip.Remove(247@)
+
+:HEIST9_40618
+if 
+  not Car.IsDead(377@)
+goto_if_false @HEIST9_40679
+if and
+  not Car.IsPlaybackGoingOn(377@)
+  40@ == 0
+goto_if_false @HEIST9_40679
+Heli.ChaseEntity(377@, $scplayer, -1, 20.0)
+40@ = 1
+
+:HEIST9_40679
+if 
+  38@ == 18
+goto_if_false @HEIST9_43350
+if and
+  Car.IsDead(198@)
+  Blip.DoesExist(247@)
+goto_if_false @HEIST9_40723
+Blip.Remove(247@)
+
+:HEIST9_40723
+if and
+  not Car.IsDead(198@)
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_40825
+if and
+  Blip.DoesExist(247@)
+  Char.IsInCar($scplayer, 198@)
+goto_if_false @HEIST9_40825
+if 
+  not Blip.DoesExist(102@)
+goto_if_false @HEIST9_40820
+102@ = Blip.AddForCoord(365.5647, 2536.76, 15.6637)
+Text.PrintNow('HM9_1J', 6000, 1)
+
+:HEIST9_40820
+Blip.Remove(247@)
+
+:HEIST9_40825
+if and
+  not Char.IsDead($scplayer)
+  Blip.DoesExist(384@)
+goto_if_false @HEIST9_40909
+$x, $y, $z = Char.GetCoordinates($scplayer)
+if 
+  90.0 > $z
+goto_if_false @HEIST9_40909
+if and
+  Blip.DoesExist(384@)
+  $h9_can_see == 0
+goto_if_false @HEIST9_40909
+Blip.Remove(384@)
+
+:HEIST9_40909
+if and
+  not Char.IsDead($scplayer)
+  Blip.DoesExist(247@)
+goto_if_false @HEIST9_41059
+if 
+  not Car.IsDead(198@)
+goto_if_false @HEIST9_41059
+$x, $y, $z = Char.GetCoordinates($scplayer)
+if 
+  36.0 > $z
+goto_if_false @HEIST9_41059
+if and
+  Blip.DoesExist(247@)
+  $h9_can_see == 0
+  307@ == 0
+goto_if_false @HEIST9_41059
+Blip.Remove(247@)
+102@ = Blip.AddForCoord(365.5647, 2536.76, 15.6637)
+Text.PrintNow('HM9_1J', 6000, 1)
+307@ = 1
+
+:HEIST9_41059
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 365.5647, 2536.76, 15.6637, 4.0, 4.0, 4.0)
+goto_if_false @HEIST9_43350
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_41130
+Player.SetControl($player1, False)
+
+:HEIST9_41130
+43@ = 1
+Blip.Remove(102@)
+gosub @HEIST9_46325
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_41189
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HEIST9_41189
+$car = Char.StoreCarIsIn($scplayer)
+
+:HEIST9_41189
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_41278
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HEIST9_41248
+Char.WarpFromCarToCoord($scplayer, 345.389, 2539.21, 15.7622)
+goto @HEIST9_41268
+
+:HEIST9_41248
+Char.SetCoordinatesDontWarpGang($scplayer, 345.389, 2539.21, 15.7622)
+
+:HEIST9_41268
+Char.SetHeading($scplayer, 300.8022)
+
+:HEIST9_41278
+if 
+  not Car.IsDead(377@)
+goto_if_false @HEIST9_41299
+Car.Delete(377@)
+
+:HEIST9_41299
+if 
+  not Car.IsDead(198@)
+goto_if_false @HEIST9_41320
+Car.Delete(198@)
+
+:HEIST9_41320
+if 
+  not Car.IsDead($car)
+goto_if_false @HEIST9_41341
+Car.Delete($car)
+
+:HEIST9_41341
+Streaming.RequestModel(428)
+Streaming.RequestModel(523)
+Streaming.RequestModel(284)
+Streaming.LoadSpecialCharacter('ZERO', 1)
+Streaming.LoadSpecialCharacter('WUZIMU', 2)
+
+:HEIST9_41382
+if or
+  not Streaming.HasModelLoaded(428)
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasSpecialCharacterLoaded(2)
+  not Streaming.HasModelLoaded(523)
+  not Streaming.HasModelLoaded(284)
+goto_if_false @HEIST9_41427
+wait 0
+goto @HEIST9_41382
+
+:HEIST9_41427
+61@ = Object.Create(#CJ_MONEY_BAG, 344.9779, 2545.213, 15.7642)
+62@ = Object.Create(#CJ_MONEY_BAG, 347.936, 2543.972, 15.7498)
+63@ = Object.Create(#CJ_MONEY_BAG, 348.9375, 2545.841, 15.7383)
+64@ = Object.Create(#CJ_MONEY_BAG, 343.8135, 2545.722, 15.7699)
+World.ClearArea(1, 345.2756, 2546.824, 15.7628, 50.0)
+51@ = Car.Create(428, 345.2756, 2546.824, 15.7628)
+Car.SetHeading(51@, 58.9413)
+Car.LockDoors(51@, CarLock.LockoutPlayerOnly)
+Car.FreezePosition(51@, True)
+54@ = Char.Create(25, 291, 343.7633, 2545.022, 15.7702)
+Char.SetHeading(54@, 202.9705)
+Char.SetAnimGroup(54@, "BLINDMAN")
+Task.StayInSamePlace(54@, True)
+Char.SetDecisionMaker(54@, 120@)
+Char.SetNeverTargeted(54@, True)
+Char.SetOnlyDamagedByPlayer(54@, True)
+World.ClearArea(1, 344.5244, 2540.563, 15.7743, 200.0)
+World.ClearArea(1, 346.5559, 2548.027, 15.7244, 2.0)
+97@ = Char.Create(25, 290, 346.5559, 2548.027, 15.7244)
+Char.SetHeading(97@, 242.1164)
+Char.SetNeverTargeted(97@, True)
+Task.StayInSamePlace(97@, True)
+Char.SetDecisionMaker(97@, 120@)
+Char.SetNeverTargeted(97@, True)
+Char.SetOnlyDamagedByPlayer(97@, True)
+279@ = Car.Create(523, 360.2574, 2547.46, 15.5491)
+Car.SetHeading(279@, 107.4242)
+280@ = Car.Create(523, 362.587, 2542.715, 15.618)
+Car.SetHeading(280@, 95.499)
+281@ = Char.CreateInsideCar(PedType.Mission2, 284, 279@)
+282@ = Char.CreateInsideCar(PedType.Mission2, 284, 280@)
+Player.ClearWantedLevel($player1)
+Streaming.LoadSceneInDirection(345.6064, 2536.51, 15.7612, 4.4301)
+if 
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_41953
+Char.SetCoordinatesDontWarpGang(54@, 342.5135, 2545.147, 15.7763)
+Char.SetHeading(54@, 215.4312)
+
+:HEIST9_41953
+gosub @HEIST9_46289
+Streaming.RequestAnimation("FIGHT_B")
+
+:HEIST9_41971
+if 
+  not Streaming.HasAnimationLoaded("FIGHT_B")
+goto_if_false @HEIST9_42004
+wait 0
+goto @HEIST9_41971
+
+:HEIST9_42004
+if and
+  not Char.IsDead($scplayer)
+  not Char.IsDead(97@)
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_42154
+Char.ClearTasksImmediately($scplayer)
+53@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 347.2988, 2541.483, 15.7529, 4, -1)
+Task.TurnCharToFaceChar(-1, 97@)
+Task.Pause(-1, 4500)
+Task.TurnCharToFaceChar(-1, 97@)
+Task.PlayAnim(-1, "FIGHTB_M", "FIGHT_B", 4.0, False, False, False, False, -1)
+Task.Pause(-1, 3000)
+Task.TurnCharToFaceChar(-1, 54@)
+Sequence.Close(53@)
+Char.PerformSequence($scplayer, 53@)
+Sequence.Clear(53@)
+
+:HEIST9_42154
+Camera.SetFixedPosition(346.245, 2537.94, 16.7555, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(346.7908, 2538.778, 16.7555, SwitchType.JumpCut)
+if and
+  not Car.IsDead(279@)
+  not Car.IsDead(280@)
+  not Char.IsDead(281@)
+  not Char.IsDead(282@)
+goto_if_false @HEIST9_42397
+53@ = Sequence.Open()
+Task.CarDriveToCoord(-1, 279@, 351.2343, 2544.125, 15.7337, 5.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+Task.Pause(-1, 2000)
+Task.LeaveCar(-1, 279@)
+Car.SwitchSiren(279@, False)
+Sequence.Close(53@)
+Char.PerformSequence(281@, 53@)
+Sequence.Clear(53@)
+53@ = Sequence.Open()
+Task.CarDriveToCoord(-1, 280@, 351.4331, 2542.753, 15.7337, 5.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+Task.Pause(-1, 2000)
+Task.LeaveCar(-1, 280@)
+Car.SwitchSiren(280@, False)
+Sequence.Close(53@)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Char.PerformSequence(282@, 53@)
+Sequence.Clear(53@)
+
+:HEIST9_42397
+if and
+  not Car.IsDead(279@)
+  not Char.IsDead(281@)
+goto_if_false @HEIST9_42425
+Car.SwitchSiren(279@, True)
+
+:HEIST9_42425
+if and
+  not Car.IsDead(280@)
+  not Char.IsDead(282@)
+goto_if_false @HEIST9_42453
+Car.SwitchSiren(280@, True)
+
+:HEIST9_42453
+gosub @HEIST9_46358
+Text.PrintNow('HE8_ZA', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19128, 1)
+
+:HEIST9_42487
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_42513
+wait 0
+goto @HEIST9_42487
+
+:HEIST9_42513
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+if 
+  not Char.IsDead(97@)
+goto_if_false @HEIST9_42597
+Path.FlushRoute
+Path.ExtendRoute(350.6611, 2546.735, 15.6957)
+Path.ExtendRoute(348.9894, 2543.476, 15.7446)
+Path.ExtendRoute(347.4687, 2541.793, 15.7521)
+Task.FollowPointRoute(97@, 6, RouteMode.Once)
+Path.FlushRoute
+
+:HEIST9_42597
+TIMERB = 0
+
+:HEIST9_42604
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_42630
+wait 0
+goto @HEIST9_42604
+
+:HEIST9_42630
+Text.PrintNow('HE8_ZB', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19129, 1)
+
+:HEIST9_42657
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_42683
+wait 0
+goto @HEIST9_42657
+
+:HEIST9_42683
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_42694
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_42720
+wait 0
+goto @HEIST9_42694
+
+:HEIST9_42720
+if 
+  not Char.IsDead(97@)
+goto_if_false @HEIST9_42775
+Task.PlayAnim(97@, "KO_SHOT_FACE", "PED", 4.0, False, False, False, True, -1)
+
+:HEIST9_42775
+Text.PrintNow('ZER1_DB', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(44620, 1)
+
+:HEIST9_42804
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_42830
+wait 0
+goto @HEIST9_42804
+
+:HEIST9_42830
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_42841
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_42867
+wait 0
+goto @HEIST9_42841
+
+:HEIST9_42867
+wait 500
+Camera.SetInterpolationParameters(0.0, 3000)
+Camera.SetFixedPosition(348.9764, 2538.029, 16.6197, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(348.743, 2539.001, 16.6362, SwitchType.Interpolation)
+Text.PrintNow('WUZX_BR', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(44443, 1)
+
+:HEIST9_42962
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_42988
+wait 0
+goto @HEIST9_42962
+
+:HEIST9_42988
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_42999
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_43025
+wait 0
+goto @HEIST9_42999
+
+:HEIST9_43025
+wait 1000
+Text.PrintNow('WUZX_AK', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(44410, 1)
+
+:HEIST9_43059
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_43085
+wait 0
+goto @HEIST9_43059
+
+:HEIST9_43085
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_43096
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_43122
+wait 0
+goto @HEIST9_43096
+
+:HEIST9_43122
+gosub @HEIST9_46325
+Char.Delete(54@)
+Char.Delete(97@)
+Char.Delete(281@)
+Char.Delete(282@)
+Car.Delete(279@)
+Car.Delete(280@)
+Car.Delete(51@)
+Streaming.RemoveAnimation("FIGHT_B")
+Object.Delete(61@)
+Object.Delete(62@)
+Object.Delete(63@)
+Object.Delete(64@)
+230@ = 1
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_43225
+Player.RestoreClothesState
+Player.BuildModel($player1)
+
+:HEIST9_43225
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_43324
+Streaming.LoadScene(2023.783, 1007.845, 9.8203)
+World.ClearArea(1, 2023.783, 1007.845, 9.8203, 20.0)
+Streaming.RequestCollision(2023.783, 1007.845)
+Char.SetCoordinatesDontWarpGang($scplayer, 2023.783, 1007.845, 9.813)
+Char.SetHeading($scplayer, 270.9639)
+
+:HEIST9_43324
+gosub @HEIST9_46306
+wait 500
+gosub @HEIST9_46358
+goto @HEIST9_44516
+
+:HEIST9_43350
+if and
+  16 > 38@
+  174@ == 0
+  250@ == 1
+goto_if_false @HEIST9_43642
+58@ = 0
+
+:HEIST9_43389
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_43439
+180@(58@,4f), 184@(58@,4f), 188@(58@,4f) = Char.GetCoordinates(54@(58@,4i))
+
+:HEIST9_43439
+if 
+  Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_43621
+if 
+  Blip.DoesExist(91@(58@,4i))
+goto_if_false @HEIST9_43488
+Blip.Remove(91@(58@,4i))
+
+:HEIST9_43488
+gosub @HEIST9_46289
+188@(58@,4f) += 2.5
+Camera.SetFixedPosition(180@(58@,4f), 184@(58@,4f), 188@(58@,4f), 0.0, 0.0, 0.0)
+188@(58@,4f) -= 2.5
+Camera.PointAtPoint(180@(58@,4f), 184@(58@,4f), 188@(58@,4f), SwitchType.JumpCut)
+wait 4000
+gosub @HEIST9_50388
+Text.PrintNow('HM9_9', 4000, 1)
+goto @HEIST9_44468
+
+:HEIST9_43621
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_43389
+
+:HEIST9_43642
+goto @HEIST9_2598
+
+:HEIST9_43649
+goto @HEIST9_44468
+Car.Delete(46@)
+Streaming.MarkModelAsNoLongerNeeded(530)
+if 
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_43724
+Char.ClearTasksImmediately(54@)
+Char.SetCoordinatesDontWarpGang(54@, 2145.146, 1626.464, 992.5681)
+Char.SetHeading(54@, 11.1673)
+Task.Duck(54@, -1)
+
+:HEIST9_43724
+if 
+  not Char.IsDead(55@)
+goto_if_false @HEIST9_43782
+Char.ClearTasksImmediately(55@)
+Char.SetCoordinatesDontWarpGang(55@, 2143.25, 1626.482, 992.5681)
+Char.SetHeading(55@, 3.4561)
+Task.Duck(55@, -1)
+
+:HEIST9_43782
+if 
+  not Char.IsDead(56@)
+goto_if_false @HEIST9_43833
+Char.ClearTasksImmediately(56@)
+Char.SetCoordinatesDontWarpGang(56@, 2140.753, 1616.249, 992.5681)
+Char.SetHeading(56@, 342.9477)
+
+:HEIST9_43833
+if 
+  not Char.IsDead(57@)
+goto_if_false @HEIST9_43884
+Char.ClearTasksImmediately(57@)
+Char.SetCoordinatesDontWarpGang(57@, 2147.739, 1616.703, 992.5681)
+Char.SetHeading(57@, 33.9273)
+
+:HEIST9_43884
+return 
+
+:HEIST9_43886
+58@ = 0
+
+:HEIST9_43893
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_43932
+Char.SetProofs(54@(58@,4i), False, False, True, True, False)
+
+:HEIST9_43932
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_43893
+return 
+
+:HEIST9_43955
+58@ = 0
+
+:HEIST9_43962
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_44001
+Char.SetProofs(54@(58@,4i), False, False, False, True, False)
+
+:HEIST9_44001
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_43962
+return 
+
+:HEIST9_44024
+if and
+  Char.IsDead(335@)
+  Char.IsDead(336@)
+  Char.IsDead(337@)
+  Char.IsDead(338@)
+  Char.IsDead(339@)
+goto_if_false @HEIST9_44466
+if and
+  Char.IsDead(340@)
+  Char.IsDead(341@)
+  Char.IsDead(342@)
+goto_if_false @HEIST9_44466
+53@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 2148.017, 1597.457, 998.7676, 6, -1)
+Sequence.Close(53@)
+58@ = 0
+
+:HEIST9_44126
+266@(58@,4i) = 0
+270@(58@,4i) = 0
+if and
+  not Char.IsDead(54@(58@,4i))
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_44194
+Char.ClearTasksImmediately(54@(58@,4i))
+Char.PerformSequence(54@(58@,4i), 53@)
+
+:HEIST9_44194
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_44289
+set_lvar_int_to_lvar_int 148@(58@,5i) = 142@(58@,5i)
+142@(58@,5i) = Char.GetHealth(54@(58@,4i))
+if 
+  not is_int_lvar_equal_to_int_lvar 148@(58@,5i) == 142@(58@,5i)
+goto_if_false @HEIST9_44289
+Text.PrintNow('HM9_44', 5000, 1)
+
+:HEIST9_44289
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_44126
+Sequence.Clear(53@)
+257@ = 0
+258@ = 0
+278@ = 1
+TIMERB = 0
+58@ = 0
+
+:HEIST9_44350
+Blip.ChangeDisplay(91@(58@,4i), BlipDisplay.Both)
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_44350
+if 
+  Blip.DoesExist(90@)
+goto_if_false @HEIST9_44403
+Blip.Remove(90@)
+
+:HEIST9_44403
+90@ = Blip.AddForCoord(2220.543, 1572.625, 998.9531)
+Blip.SetEntryExit(90@, 2196.635, 1676.841, 10.0)
+Text.PrintNow('HM9_8', 7000, 1)
+52@ = 1
+
+:HEIST9_44466
+return 
+
+:HEIST9_44468
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_44498
+Player.DisableSprint($player1, False)
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:HEIST9_44498
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:HEIST9_44516
+$3253 = Pickup.CreateWithAmmo(368, 15, 1, 102.7728, 1899.192, 33.1572)
+$3254 = Pickup.CreateWithAmmo(368, 15, 1, 1274.301, -825.7809, 1085.079)
+$3255 = Pickup.CreateWithAmmo(368, 15, 1, -948.3487, 1858.023, 8.3237)
+$3256 = Pickup.CreateWithAmmo(368, 15, 1, -1956.274, -853.7687, 31.873)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_44654
+Player.DisableSprint($player1, False)
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:HEIST9_44654
+if 
+  Blip.DoesExist($Theheist_contact_blip)
+goto_if_false @HEIST9_44675
+Blip.Remove($Theheist_contact_blip)
+
+:HEIST9_44675
+$flag_heist_mission_counter += 1
+Stat.PlayerMadeProgress(1)
+Stat.RegisterMissionPassed('HEIST_9')
+Text.PrintWithNumberBig('M_PASSS', 100000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 100000)
+Stat.AwardPlayerMissionRespect(100)
+Audio.PlayMissionPassedTune(1)
+Player.ClearWantedLevel($player1)
+World.ClearArea(1, 2444.772, 655.0391, 10.3874, 30.0)
+$flag_player_got_casino_uniform = 1
+Stat.SetInt(StatId.PassedHeist8, 1)
+return 
+
+:HEIST9_44781
+Streaming.MarkModelAsNoLongerNeeded(530)
+Streaming.MarkModelAsNoLongerNeeded(428)
+Streaming.MarkModelAsNoLongerNeeded(124)
+Streaming.MarkModelAsNoLongerNeeded(125)
+Streaming.MarkModelAsNoLongerNeeded(126)
+Streaming.MarkModelAsNoLongerNeeded(127)
+Streaming.MarkModelAsNoLongerNeeded(347)
+Streaming.MarkModelAsNoLongerNeeded(343)
+Streaming.MarkModelAsNoLongerNeeded(163)
+Streaming.MarkModelAsNoLongerNeeded(#GENERATOR_BIG)
+Streaming.MarkModelAsNoLongerNeeded(363)
+Streaming.MarkModelAsNoLongerNeeded(368)
+Streaming.MarkModelAsNoLongerNeeded(#CJ_MONEY_BAG)
+Streaming.MarkModelAsNoLongerNeeded(#GENERATOR_BIG_D)
+Streaming.MarkModelAsNoLongerNeeded(164)
+Streaming.MarkModelAsNoLongerNeeded(117)
+Streaming.MarkModelAsNoLongerNeeded(523)
+Streaming.MarkModelAsNoLongerNeeded(284)
+Streaming.MarkModelAsNoLongerNeeded(#BODYARMOUR)
+Streaming.MarkModelAsNoLongerNeeded(364)
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.MarkModelAsNoLongerNeeded(11)
+Streaming.MarkModelAsNoLongerNeeded(172)
+Streaming.MarkModelAsNoLongerNeeded(497)
+Streaming.MarkModelAsNoLongerNeeded(371)
+Streaming.MarkModelAsNoLongerNeeded(335)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.UnloadSpecialCharacter(2)
+Streaming.UnloadSpecialCharacter(3)
+Streaming.RemoveAnimation("BOMBER")
+Streaming.RemoveCarRecording(499)
+Streaming.RemoveCarRecording(487)
+Streaming.RemoveCarRecording(494)
+Streaming.RemoveCarRecording(484)
+return 
+
+:HEIST9_44948
+$disable_mod_garage = 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_44976
+Char.StopFacialTalk($scplayer)
+
+:HEIST9_44976
+Game.SetWantedMultiplier(1.0)
+Hud.SetRadarZoom(0)
+58@ = 0
+
+:HEIST9_44994
+if 
+  Blip.DoesExist(350@(58@,15i))
+goto_if_false @HEIST9_45023
+Blip.Remove(350@(58@,15i))
+
+:HEIST9_45023
+if 
+  Blip.DoesExist(320@(58@,15i))
+goto_if_false @HEIST9_45052
+Blip.Remove(320@(58@,15i))
+
+:HEIST9_45052
+58@ += 1
+  58@ >= 11
+goto_if_false @HEIST9_44994
+if 
+  $d5_bronze_generator_unlocked == 1
+goto_if_false @HEIST9_45098
+CarGenerator.Switch($d5_bronze_generator, 101)
+
+:HEIST9_45098
+if 
+  $d5_silver_generator_unlocked == 1
+goto_if_false @HEIST9_45123
+CarGenerator.Switch($d5_silver_generator, 101)
+
+:HEIST9_45123
+if 
+  $d5_gold_generator_unlocked == 1
+goto_if_false @HEIST9_45148
+CarGenerator.Switch($d5_gold_generator, 101)
+
+:HEIST9_45148
+if 
+  not Char.IsDead(97@)
+goto_if_false @HEIST9_45169
+Char.RemoveElegantly(97@)
+
+:HEIST9_45169
+if 
+  not Char.IsDead(281@)
+goto_if_false @HEIST9_45190
+Char.RemoveElegantly(281@)
+
+:HEIST9_45190
+if 
+  not Char.IsDead(282@)
+goto_if_false @HEIST9_45211
+Char.RemoveElegantly(282@)
+
+:HEIST9_45211
+Zone.SetNoCops('MEAD', False)
+Hud.ClearTimer($h9_safe_timer)
+if 
+  $player_fall_state > 0
+goto_if_false @HEIST9_45254
+$player_fall_state = 6
+
+:HEIST9_45254
+$para_float_Vy = 5.0
+$para_flare_Vy = 8.5
+$para_freefall_Vz = -30.0
+$para_freefall_Vy = 32.0
+$iTerminateAllAmbience = 0
+Game.SwitchObjectBrains(ScriptBrainAttachType.Object, True)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_45337
+Char.RemoveWeapon(44, $scplayer)
+Char.RemoveWeapon(17, $scplayer)
+
+:HEIST9_45337
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_45367
+Player.DisableSprint($player1, False)
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:HEIST9_45367
+Object.SetHeading($h9_door_c, 270.0)
+World.SwitchEntryExit('MAFCAS', True)
+World.SwitchEntryExit('MAFCAS2', True)
+World.SwitchEntryExit('JUMP1', True)
+World.SwitchEntryExit('JUMP2', True)
+Camera.SetDarknessEffect(False, 0)
+Game.SetNightVision(False)
+$onmission = 0
+Player.ClearWantedLevel($player1)
+Object.Delete(41@)
+58@ = 0
+
+:HEIST9_45463
+if 
+  not Char.IsDead(54@(58@,4i))
+goto_if_false @HEIST9_45492
+Char.RemoveElegantly(54@(58@,4i))
+
+:HEIST9_45492
+if 
+  not Char.IsDead(109@(58@,5i))
+goto_if_false @HEIST9_45521
+Char.MarkAsNoLongerNeeded(109@(58@,5i))
+
+:HEIST9_45521
+if 
+  Blip.DoesExist(91@(58@,4i))
+goto_if_false @HEIST9_45550
+Blip.Remove(91@(58@,4i))
+
+:HEIST9_45550
+if 
+  Object.DoesExist(61@(58@,4i))
+goto_if_false @HEIST9_45579
+Object.Delete(61@(58@,4i))
+
+:HEIST9_45579
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_45463
+if 
+  Blip.DoesExist(299@)
+goto_if_false @HEIST9_45621
+Blip.Remove(299@)
+
+:HEIST9_45621
+if 
+  Blip.DoesExist(233@)
+goto_if_false @HEIST9_45642
+Blip.Remove(233@)
+
+:HEIST9_45642
+if 
+  Blip.DoesExist(45@)
+goto_if_false @HEIST9_45663
+Blip.Remove(45@)
+
+:HEIST9_45663
+if 
+  Blip.DoesExist(108@)
+goto_if_false @HEIST9_45684
+Blip.Remove(108@)
+
+:HEIST9_45684
+if 
+  Blip.DoesExist(39@)
+goto_if_false @HEIST9_45705
+Blip.Remove(39@)
+
+:HEIST9_45705
+if 
+  Blip.DoesExist(44@)
+goto_if_false @HEIST9_45726
+Blip.Remove(44@)
+
+:HEIST9_45726
+if 
+  Blip.DoesExist(47@)
+goto_if_false @HEIST9_45747
+Blip.Remove(47@)
+
+:HEIST9_45747
+if 
+  Blip.DoesExist(90@)
+goto_if_false @HEIST9_45768
+Blip.Remove(90@)
+
+:HEIST9_45768
+if 
+  Blip.DoesExist(384@)
+goto_if_false @HEIST9_45789
+Blip.Remove(384@)
+
+:HEIST9_45789
+if 
+  Blip.DoesExist(376@)
+goto_if_false @HEIST9_45810
+Blip.Remove(376@)
+
+:HEIST9_45810
+if 
+  Blip.DoesExist(84@)
+goto_if_false @HEIST9_45831
+Blip.Remove(84@)
+
+:HEIST9_45831
+if 
+  Blip.DoesExist(102@)
+goto_if_false @HEIST9_45852
+Blip.Remove(102@)
+
+:HEIST9_45852
+if 
+  Blip.DoesExist(372@)
+goto_if_false @HEIST9_45873
+Blip.Remove(372@)
+
+:HEIST9_45873
+if 
+  Blip.DoesExist(228@)
+goto_if_false @HEIST9_45894
+Blip.Remove(228@)
+
+:HEIST9_45894
+if 
+  Blip.DoesExist(229@)
+goto_if_false @HEIST9_45915
+Blip.Remove(229@)
+
+:HEIST9_45915
+if 
+  World.IsAnyPickupAtCoords(2176.471, 1597.394, 1000.0)
+goto_if_false @HEIST9_45948
+Pickup.Remove($h9_health)
+
+:HEIST9_45948
+if 
+  World.IsAnyPickupAtCoords(2144.339, 1640.666, 993.5)
+goto_if_false @HEIST9_45981
+Pickup.Remove(285@)
+
+:HEIST9_45981
+if 
+  World.IsAnyPickupAtCoords(2146.487, 1622.805, 993.0)
+goto_if_false @HEIST9_46014
+Pickup.Remove(214@)
+
+:HEIST9_46014
+if 
+  World.IsAnyPickupAtCoords(2267.989, 1699.668, 101.4)
+goto_if_false @HEIST9_46047
+Pickup.Remove(298@)
+
+:HEIST9_46047
+if 
+  World.IsAnyPickupAtCoords(2265.825, 1617.069, 94.5)
+goto_if_false @HEIST9_46080
+Pickup.Remove(385@)
+
+:HEIST9_46080
+$timer_mobile_start = Clock.GetGameTimer()
+Streaming.MarkModelAsNoLongerNeeded(530)
+Streaming.MarkModelAsNoLongerNeeded(428)
+Streaming.MarkModelAsNoLongerNeeded(124)
+Streaming.MarkModelAsNoLongerNeeded(125)
+Streaming.MarkModelAsNoLongerNeeded(126)
+Streaming.MarkModelAsNoLongerNeeded(127)
+Streaming.MarkModelAsNoLongerNeeded(#PARA_PACK)
+Streaming.MarkModelAsNoLongerNeeded(347)
+Streaming.MarkModelAsNoLongerNeeded(343)
+Streaming.MarkModelAsNoLongerNeeded(164)
+Streaming.MarkModelAsNoLongerNeeded(163)
+Streaming.MarkModelAsNoLongerNeeded(#GENERATOR_BIG)
+Streaming.MarkModelAsNoLongerNeeded(363)
+Streaming.MarkModelAsNoLongerNeeded(368)
+Streaming.MarkModelAsNoLongerNeeded(#CJ_MONEY_BAG)
+Streaming.MarkModelAsNoLongerNeeded(497)
+Streaming.MarkModelAsNoLongerNeeded(#GENERATOR_BIG_D)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(117)
+Streaming.MarkModelAsNoLongerNeeded(523)
+Streaming.MarkModelAsNoLongerNeeded(284)
+Streaming.MarkModelAsNoLongerNeeded(#BODYARMOUR)
+Streaming.MarkModelAsNoLongerNeeded(364)
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.MarkModelAsNoLongerNeeded(11)
+Streaming.MarkModelAsNoLongerNeeded(172)
+Streaming.MarkModelAsNoLongerNeeded(353)
+Streaming.MarkModelAsNoLongerNeeded(335)
+Streaming.MarkModelAsNoLongerNeeded(285)
+Streaming.MarkModelAsNoLongerNeeded(371)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.UnloadSpecialCharacter(2)
+Streaming.UnloadSpecialCharacter(3)
+Streaming.RemoveAnimation("HEIST9")
+Streaming.RemoveAnimation("BOMBER")
+Streaming.RemoveAnimation("FIGHT_B")
+Mission.Finish
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+return 
+
+:HEIST9_46289
+Text.ClearPrints
+Text.ClearHelp
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+return 
+
+:HEIST9_46306
+Text.ClearPrints
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+return 
+
+:HEIST9_46325
+Camera.DoFade(0, 500)
+
+:HEIST9_46332
+if 
+  Camera.GetFadingStatus
+goto_if_false @HEIST9_46356
+wait 0
+goto @HEIST9_46332
+
+:HEIST9_46356
+return 
+
+:HEIST9_46358
+Camera.DoFade(1, 500)
+
+:HEIST9_46365
+if 
+  Camera.GetFadingStatus
+goto_if_false @HEIST9_46389
+wait 0
+goto @HEIST9_46365
+
+:HEIST9_46389
+return 
+
+:HEIST9_46391
+if 
+is_ps2_keyboard_key_just_pressed 89
+goto_if_false @HEIST9_46482
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_46482
+Char.SetCoordinatesDontWarpGang($scplayer, 2179.354, 1673.18, 10.0469)
+Char.SetHeading($scplayer, 285.6208)
+Camera.SetBehindPlayer
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_46475
+Char.StopFacialTalk($scplayer)
+
+:HEIST9_46475
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:HEIST9_46482
+if 
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @HEIST9_46543
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_46543
+Char.SetCoordinatesDontWarpGang($scplayer, 2176.583, 1600.462, 998.9749)
+Char.SetHeading($scplayer, 179.7799)
+
+:HEIST9_46543
+if 
+is_ps2_keyboard_key_just_pressed 70
+goto_if_false @HEIST9_46746
+gosub @HEIST9_46289
+Camera.SetFixedPosition(2144.677, 1614.061, 1001.469, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2144.413, 1615.016, 1001.331, SwitchType.JumpCut)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_46710
+Char.ClearTasksImmediately($scplayer)
+Char.SetVelocity($scplayer, 0.0, 0.0, 0.0)
+Char.SetCoordinatesDontWarpGang($scplayer, 2142.664, 1617.397, 999.968)
+Char.SetHeading($scplayer, 352.2108)
+Task.ShootAtCoord($scplayer, 2142.664, 1620.397, 1003.0, 1000)
+
+:HEIST9_46710
+wait 4000
+World.ClearArea(1, 2143.124, 1618.427, 999.968, 10.0)
+gosub @HEIST9_46306
+
+:HEIST9_46746
+if 
+is_ps2_keyboard_key_just_pressed 66
+goto_if_false @HEIST9_46830
+Streaming.SetAreaVisible(1)
+Streaming.LoadScene(2147.778, 1611.972, 1005.188)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_46830
+Char.SetCoordinatesDontWarpGang($scplayer, 2147.778, 1611.972, 1005.188)
+Char.SetHeading($scplayer, 182.1343)
+Camera.SetBehindPlayer
+
+:HEIST9_46830
+if 
+is_ps2_keyboard_key_just_pressed 75
+goto_if_false @HEIST9_47095
+gosub @HEIST9_46325
+gosub @HEIST9_46289
+Streaming.RequestModel(330)
+Streaming.LoadSpecialCharacter('ZERO', 1)
+
+:HEIST9_46877
+if or
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasModelLoaded(330)
+goto_if_false @HEIST9_46908
+wait 0
+goto @HEIST9_46877
+
+:HEIST9_46908
+Game.SetNightVision(False)
+Camera.SetDarknessEffect(True, 220)
+Camera.SetFixedPosition(2219.456, 1587.37, 999.1768, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2219.68, 1586.409, 999.3383, SwitchType.JumpCut)
+97@ = Char.Create(23, 290, 2221.122, 1582.974, 998.9675)
+Char.SetAreaVisible(97@, 1)
+Char.SetHeading(97@, 4.8671)
+Task.UseMobilePhone(97@, True)
+gosub @HEIST9_46358
+Text.PrintNow('HM9_46', 4000, 1)
+wait 2000
+Camera.SetDarknessEffect(False, 0)
+wait 2000
+gosub @HEIST9_46306
+Text.PrintNow('HM9_8', 5000, 1)
+105@ = 1
+200@ = 1
+
+:HEIST9_47095
+if 
+is_ps2_keyboard_key_just_pressed 67
+goto_if_false @HEIST9_47156
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_47156
+Char.SetCoordinatesDontWarpGang($scplayer, 2144.021, 1612.867, 992.5681)
+Char.SetHeading($scplayer, 0.0)
+
+:HEIST9_47156
+if 
+is_ps2_keyboard_key_just_pressed 69
+goto_if_false @HEIST9_47194
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_47194
+Player.RestoreClothesState
+Player.BuildModel($player1)
+
+:HEIST9_47194
+if 
+is_ps2_keyboard_key_just_pressed 80
+goto_if_false @HEIST9_47367
+38@ = 6
+46@ = Car.Create(530, 2173.621, 1585.964, 998.9722)
+Car.SetAreaVisible(46@, 1)
+Car.SetHeading(46@, 270.0)
+Car.ChangeColor(46@, 6, 6)
+Streaming.MarkModelAsNoLongerNeeded(530)
+209@ = 1
+if 
+  not Car.IsDead(46@)
+goto_if_false @HEIST9_47300
+Car.SetAreaVisible(46@, 1)
+
+:HEIST9_47300
+Streaming.SetAreaVisible(1)
+Streaming.LoadScene(2256.551, 1704.762, 1.1747)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_47367
+Char.SetCoordinatesDontWarpGang($scplayer, 2220.37, 1574.484, 998.9695)
+Char.SetHeading($scplayer, 180.0)
+
+:HEIST9_47367
+if 
+is_ps2_keyboard_key_just_pressed 76
+goto_if_false @HEIST9_47428
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_47428
+Char.SetCoordinatesDontWarpGang($scplayer, 1962.841, 1060.633, 993.4688)
+Char.SetHeading($scplayer, 346.1133)
+
+:HEIST9_47428
+if 
+is_ps2_keyboard_key_just_pressed 85
+goto_if_false @HEIST9_47496
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_47489
+Char.SetCoordinatesDontWarpGang($scplayer, 362.6579, 2525.248, 15.6336)
+Char.SetHeading($scplayer, 11.8402)
+
+:HEIST9_47489
+38@ = 18
+
+:HEIST9_47496
+if 
+is_ps2_keyboard_key_just_pressed 90
+goto_if_false @HEIST9_48136
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_47557
+Char.SetCoordinatesDontWarpGang($scplayer, 346.9504, 2539.025, 15.7546)
+Char.SetHeading($scplayer, 2.8895)
+
+:HEIST9_47557
+gosub @HEIST9_46289
+Camera.SetFixedPosition(350.102, 2536.995, 16.9325, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(349.5165, 2537.801, 16.844, SwitchType.JumpCut)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_47667
+Task.PlayAnim($scplayer, "IDLE_CHAT", "PED", 1.0, False, False, False, False, -1)
+
+:HEIST9_47667
+Text.PrintNow('HE8_ZA', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19128, 1)
+
+:HEIST9_47694
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_47720
+wait 0
+goto @HEIST9_47694
+
+:HEIST9_47720
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_47731
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_47757
+wait 0
+goto @HEIST9_47731
+
+:HEIST9_47757
+Text.PrintNow('HE8_ZB', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19129, 1)
+
+:HEIST9_47784
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_47810
+wait 0
+goto @HEIST9_47784
+
+:HEIST9_47810
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_47821
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_47847
+wait 0
+goto @HEIST9_47821
+
+:HEIST9_47847
+Text.PrintNow('HE8_ZC', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(65535, 1)
+
+:HEIST9_47876
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_47902
+wait 0
+goto @HEIST9_47876
+
+:HEIST9_47902
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_47913
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_47939
+wait 0
+goto @HEIST9_47913
+
+:HEIST9_47939
+Text.PrintNow('HE8_ZD', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19130, 1)
+
+:HEIST9_47966
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_47992
+wait 0
+goto @HEIST9_47966
+
+:HEIST9_47992
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_48003
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_48029
+wait 0
+goto @HEIST9_48003
+
+:HEIST9_48029
+gosub @HEIST9_46325
+Char.Delete(54@)
+Char.Delete(97@)
+Car.Delete(51@)
+Object.Delete(61@)
+Object.Delete(62@)
+Object.Delete(63@)
+Object.Delete(64@)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_48122
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinatesDontWarpGang($scplayer, 347.167, 2538.484, 15.7535)
+Char.SetHeading($scplayer, 191.987)
+
+:HEIST9_48122
+gosub @HEIST9_46306
+gosub @HEIST9_46358
+
+:HEIST9_48136
+if 
+is_ps2_keyboard_key_just_pressed 79
+goto_if_false @HEIST9_48155
+Hud.SetRadarZoom(0)
+
+:HEIST9_48155
+if 
+is_ps2_keyboard_key_just_pressed 82
+goto_if_false @HEIST9_48174
+Hud.SetRadarZoom(100)
+
+:HEIST9_48174
+if 
+is_ps2_keyboard_key_just_pressed 84
+goto_if_false @HEIST9_49689
+Streaming.RequestModel(117)
+Streaming.RequestModel(120)
+Streaming.RequestModel(428)
+Streaming.RequestModel(523)
+Streaming.RequestModel(284)
+Streaming.LoadSpecialCharacter('ZERO', 1)
+
+:HEIST9_48225
+if or
+  not Streaming.HasModelLoaded(117)
+  not Streaming.HasModelLoaded(120)
+  not Streaming.HasModelLoaded(428)
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasModelLoaded(523)
+  not Streaming.HasModelLoaded(284)
+goto_if_false @HEIST9_48274
+wait 0
+goto @HEIST9_48225
+
+:HEIST9_48274
+Streaming.RequestCarRecording(494)
+
+:HEIST9_48279
+if 
+  not Streaming.HasCarRecordingBeenLoaded(494)
+goto_if_false @HEIST9_48306
+wait 0
+goto @HEIST9_48279
+
+:HEIST9_48306
+Object.Delete(49@)
+387@ = Car.Create(428, 2220.389, 1577.623, 998.0)
+Car.SetAreaVisible(387@, 1)
+Car.SetHeading(387@, 179.9804)
+54@ = Char.Create(25, 117, 2224.042, 1589.367, 998.967)
+Char.SetAreaVisible(54@, 1)
+Char.SetHeading(54@, 165.2519)
+55@ = Char.Create(25, 120, 2222.893, 1589.583, 998.9684)
+Char.SetAreaVisible(55@, 1)
+Char.SetHeading(55@, 173.9364)
+56@ = Char.Create(25, 120, 2221.866, 1589.245, 998.9696)
+Char.SetAreaVisible(56@, 1)
+Char.SetHeading(56@, 177.0563)
+57@ = Char.Create(25, 120, 2220.723, 1589.224, 998.971)
+Char.SetAreaVisible(57@, 1)
+Char.SetHeading(57@, 171.7417)
+gosub @HEIST9_46289
+Camera.SetFixedPosition(2216.721, 1579.81, 1000.833, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2217.382, 1580.538, 1000.654, SwitchType.JumpCut)
+Text.PrintNow('HE8_UA', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19104, 1)
+
+:HEIST9_48600
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_48626
+wait 0
+goto @HEIST9_48600
+
+:HEIST9_48626
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_48637
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_48687
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_48680
+goto @HEIST9_49515
+
+:HEIST9_48680
+goto @HEIST9_48637
+
+:HEIST9_48687
+Text.PrintNow('HE8_UB', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(19105, 1)
+
+:HEIST9_48714
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_48740
+wait 0
+goto @HEIST9_48714
+
+:HEIST9_48740
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+TIMERB = 0
+
+:HEIST9_48751
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @HEIST9_48801
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_48794
+goto @HEIST9_49515
+
+:HEIST9_48794
+goto @HEIST9_48751
+
+:HEIST9_48801
+Char.Delete(97@)
+Char.Delete(56@)
+Char.Delete(57@)
+Camera.SetFixedPosition(2216.914, 1571.622, 999.7229, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2217.27, 1572.557, 999.7267, SwitchType.JumpCut)
+281@ = Char.Create(25, 284, 2220.8, 1581.163, 998.9764)
+Char.SetHeading(281@, 196.0524)
+Char.SetAreaVisible(281@, 1)
+282@ = Char.Create(25, 284, 2220.019, 1581.179, 998.9772)
+Char.SetHeading(282@, 74.4668)
+Char.SetAreaVisible(282@, 1)
+if and
+  not Car.IsDead(387@)
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_48983
+Task.EnterCarAsDriver(54@, 387@, 8000)
+
+:HEIST9_48983
+if and
+  not Car.IsDead(387@)
+  not Char.IsDead(55@)
+goto_if_false @HEIST9_49017
+Task.EnterCarAsPassenger(55@, 387@, 0, 8000)
+
+:HEIST9_49017
+TIMERB = 0
+
+:HEIST9_49024
+if 
+  4000 > TIMERB
+goto_if_false @HEIST9_49078
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_49071
+goto @HEIST9_49515
+
+:HEIST9_49071
+goto @HEIST9_49024
+
+:HEIST9_49078
+if and
+  not Car.IsDead(279@)
+  not Char.IsDead(281@)
+goto_if_false @HEIST9_49110
+Task.EnterCarAsDriver(281@, 279@, 4000)
+
+:HEIST9_49110
+if and
+  not Car.IsDead(280@)
+  not Char.IsDead(282@)
+goto_if_false @HEIST9_49142
+Task.EnterCarAsDriver(282@, 280@, 4000)
+
+:HEIST9_49142
+TIMERB = 0
+
+:HEIST9_49149
+if 
+  4000 > TIMERB
+goto_if_false @HEIST9_49203
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_49196
+goto @HEIST9_49515
+
+:HEIST9_49196
+goto @HEIST9_49149
+
+:HEIST9_49203
+Camera.SetFixedPosition(2223.85, 1572.014, 1001.623, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2223.371, 1572.844, 1001.336, SwitchType.JumpCut)
+if and
+  Streaming.HasCarRecordingBeenLoaded(494)
+  not Car.IsDead(387@)
+goto_if_false @HEIST9_49283
+Car.StartPlayback(387@, 494)
+
+:HEIST9_49283
+TIMERB = 0
+
+:HEIST9_49290
+if 
+  500 > TIMERB
+goto_if_false @HEIST9_49344
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_49337
+goto @HEIST9_49515
+
+:HEIST9_49337
+goto @HEIST9_49290
+
+:HEIST9_49344
+if and
+  not Car.IsDead(279@)
+  not Char.IsDead(281@)
+goto_if_false @HEIST9_49399
+Task.CarDriveToCoord(281@, 279@, 2223.486, 1564.463, 1001.016, 10.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:HEIST9_49399
+if and
+  not Car.IsDead(280@)
+  not Char.IsDead(282@)
+goto_if_false @HEIST9_49454
+Task.CarDriveToCoord(282@, 280@, 2217.319, 1566.6, 1000.3, 10.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:HEIST9_49454
+TIMERB = 0
+
+:HEIST9_49461
+if 
+  2000 > TIMERB
+goto_if_false @HEIST9_49515
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HEIST9_49508
+goto @HEIST9_49515
+
+:HEIST9_49508
+goto @HEIST9_49461
+
+:HEIST9_49515
+58@ = 0
+
+:HEIST9_49522
+if 
+  Blip.DoesExist(91@(58@,4i))
+goto_if_false @HEIST9_49560
+Blip.Remove(91@(58@,4i))
+Char.Delete(54@(58@,4i))
+
+:HEIST9_49560
+58@ += 1
+  58@ >= 4
+goto_if_false @HEIST9_49522
+if 
+  not Car.IsDead(387@)
+goto_if_false @HEIST9_49602
+Car.Delete(387@)
+
+:HEIST9_49602
+if 
+  not Car.IsDead(279@)
+goto_if_false @HEIST9_49623
+Car.Delete(279@)
+
+:HEIST9_49623
+if 
+  not Car.IsDead(280@)
+goto_if_false @HEIST9_49644
+Car.Delete(280@)
+
+:HEIST9_49644
+if 
+  not Char.IsDead(97@)
+goto_if_false @HEIST9_49665
+Char.Delete(97@)
+
+:HEIST9_49665
+gosub @HEIST9_46306
+Streaming.MarkModelAsNoLongerNeeded(117)
+Streaming.MarkModelAsNoLongerNeeded(120)
+Streaming.MarkModelAsNoLongerNeeded(285)
+Streaming.UnloadSpecialCharacter(2)
+
+:HEIST9_49689
+if 
+is_ps2_keyboard_key_just_pressed 73
+goto_if_false @HEIST9_49727
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_49727
+Player.TakeOffGoggles($player1, True)
+
+:HEIST9_49727
+if 
+is_ps2_keyboard_key_just_pressed 87
+goto_if_false @HEIST9_49785
+38@ = 18
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_49785
+Char.SetCoordinatesDontWarpGang($scplayer, 338.0, 2540.563, 15.7743)
+
+:HEIST9_49785
+if 
+is_ps2_keyboard_key_just_pressed 74
+goto_if_false @HEIST9_50386
+Streaming.RequestModel(523)
+Streaming.RequestModel(284)
+Streaming.LoadSpecialCharacter('ZERO', 1)
+
+:HEIST9_49823
+if or
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasModelLoaded(523)
+  not Streaming.HasModelLoaded(284)
+  not Streaming.HasModelLoaded(284)
+goto_if_false @HEIST9_49864
+wait 0
+goto @HEIST9_49823
+
+:HEIST9_49864
+Streaming.RequestCarRecording(494)
+Streaming.LoadSpecialCharacter('ZERO', 1)
+
+:HEIST9_49882
+if 
+  not Streaming.HasCarRecordingBeenLoaded(494)
+goto_if_false @HEIST9_49909
+wait 0
+goto @HEIST9_49882
+
+:HEIST9_49909
+World.SwitchEntryExit('JUMP1', True)
+World.SwitchEntryExit('JUMP2', False)
+106@ = 1
+World.ClearArea(1, 2220.34, 1582.068, 998.9764, 10.0)
+97@ = Char.Create(25, 290, 2220.34, 1582.068, 998.9764)
+Char.SetAreaVisible(97@, 1)
+Char.SetHeading(97@, 350.4443)
+279@ = Car.Create(523, 2223.699, 1582.78, 998.0)
+Car.SetAreaVisible(279@, 1)
+Car.SetHeading(279@, 175.8434)
+Car.LockDoors(279@, CarLock.LockoutPlayerOnly)
+Car.FreezePosition(279@, True)
+280@ = Car.Create(523, 2217.549, 1583.667, 998.0)
+Car.SetAreaVisible(280@, 1)
+Car.SetHeading(280@, 175.3717)
+Car.LockDoors(280@, CarLock.LockoutPlayerOnly)
+Car.FreezePosition(280@, True)
+gosub @HEIST9_1936
+if 
+  not Car.IsDead(51@)
+goto_if_false @HEIST9_50169
+Car.SetCoordinates(51@, 2220.294, 1578.07, 998.9756)
+Car.SetHeading(51@, 177.9097)
+
+:HEIST9_50169
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_50215
+Char.SetCoordinatesDontWarpGang($scplayer, 2216.031, 1618.646, 998.9766)
+Char.SetHeading($scplayer, 269.4771)
+
+:HEIST9_50215
+if 
+  not Char.IsDead(54@)
+goto_if_false @HEIST9_50256
+Char.WarpFromCarToCoord(54@, 2219.758, 1585.285, 998.9722)
+Char.ClearTasksImmediately(54@)
+
+:HEIST9_50256
+if 
+  not Char.IsDead(55@)
+goto_if_false @HEIST9_50297
+Char.WarpFromCarToCoord(55@, 2221.883, 1584.261, 998.9696)
+Char.ClearTasksImmediately(55@)
+
+:HEIST9_50297
+if 
+  not Char.IsDead(56@)
+goto_if_false @HEIST9_50338
+Char.WarpFromCarToCoord(56@, 2222.705, 1586.266, 998.9686)
+Char.ClearTasksImmediately(56@)
+
+:HEIST9_50338
+if 
+  not Char.IsDead(57@)
+goto_if_false @HEIST9_50379
+Char.WarpFromCarToCoord(57@, 2220.302, 1586.568, 998.9716)
+Char.ClearTasksImmediately(57@)
+
+:HEIST9_50379
+38@ = 14
+
+:HEIST9_50386
+return 
+
+:HEIST9_50388
+388@ = Streaming.GetAreaVisible()
+gosub @HEIST9_46325
+Game.SetNightVision(False)
+if and
+  not Char.IsDead($scplayer)
+  not Game.IsMinigameInProgress
+goto_if_false @HEIST9_50563
+Streaming.SetAreaVisible(0)
+Streaming.LoadScene(2185.739, 1677.396, 10.0946)
+World.ClearArea(1, 2185.739, 1677.396, 10.0946, 10.0)
+Streaming.RequestCollision(2185.739, 1677.396)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HEIST9_50522
+Char.WarpFromCarToCoord($scplayer, 2185.739, 1677.396, 10.0946)
+goto @HEIST9_50542
+
+:HEIST9_50522
+Char.SetCoordinatesDontWarpGang($scplayer, 2185.739, 1677.396, 10.0946)
+
+:HEIST9_50542
+Char.SetHeading($scplayer, 88.4776)
+Char.SetAreaVisible($scplayer, 0)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+
+:HEIST9_50563
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_50593
+Player.RestoreClothesState
+Player.BuildModel($player1)
+230@ = 1
+
+:HEIST9_50593
+gosub @HEIST9_46358
+return 
+
+:HEIST9_50602
+gosub @HEIST9_46325
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HEIST9_50639
+Player.RestoreClothesState
+Player.BuildModel($player1)
+230@ = 1
+
+:HEIST9_50639
+gosub @HEIST9_46358
+return 
+
+:HEIST9_50648
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(232@, 1)
+231@ = 0
+return 
+
+:HEIST9_50668
+if and
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+  231@ == 0
+goto_if_false @HEIST9_50711
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(288@s, 20000, 1)
+231@ = 1
+
+:HEIST9_50711
+if and
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+  231@ == 1
+goto_if_false @HEIST9_50749
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearThisPrint(288@s)
+231@ = 2
+
+:HEIST9_50749
+return 
+

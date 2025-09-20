@@ -1,0 +1,758 @@
+//-------------External script 76 (DEBT)---------------
+
+:DEBT
+script_name 'DEBT'
+0@ = 0
+1@ = 0
+2@ = 0
+3@ = 0
+4@ = 0
+5@ = 0
+6@ = 0
+7@ = 0
+8@ = 0
+$game_timer = Clock.GetGameTimer()
+set_lvar_int_to_var_int 9@ = $game_timer
+9@ += 50
+set_lvar_int_to_var_int 10@ = $game_timer
+10@ -= 10
+
+:DEBT_109
+wait 250
+$game_timer = Clock.GetGameTimer()
+if 
+  0@ == 0
+goto_if_false @DEBT_644
+if 
+  $onmission == 0
+goto_if_false @DEBT_607
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 9@
+goto_if_false @DEBT_600
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DEBT_563
+11@ = Streaming.GetAreaVisible()
+if 
+  11@ == 0
+goto_if_false @DEBT_519
+if 
+  not Player.IsWantedLevelGreater($player1, 1)
+goto_if_false @DEBT_475
+if 
+  not Char.IsInFlyingVehicle($scplayer)
+goto_if_false @DEBT_431
+if 
+  is_int_var_equal_to_constant $im_players_city == 3
+goto_if_false @DEBT_387
+11@ = Player.StoreScore($player1)
+if 
+  11@ > -1
+goto_if_false @DEBT_291
+
+:DEBT_291
+if 
+  -5000 > 11@
+goto_if_false @DEBT_317
+1@ = 1
+
+:DEBT_317
+if 
+  -50000 > 11@
+goto_if_false @DEBT_345
+1@ = 2
+
+:DEBT_345
+if 
+  -500000 > 11@
+goto_if_false @DEBT_373
+1@ = 3
+
+:DEBT_373
+0@ += 1
+goto @DEBT_424
+
+:DEBT_387
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 9@
+goto_if_false @DEBT_424
+set_lvar_int_to_var_int 9@ = $game_timer
+9@ += 120000
+
+:DEBT_424
+goto @DEBT_468
+
+:DEBT_431
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 9@
+goto_if_false @DEBT_468
+set_lvar_int_to_var_int 9@ = $game_timer
+9@ += 60000
+
+:DEBT_468
+goto @DEBT_512
+
+:DEBT_475
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 9@
+goto_if_false @DEBT_512
+set_lvar_int_to_var_int 9@ = $game_timer
+9@ += 60000
+
+:DEBT_512
+goto @DEBT_556
+
+:DEBT_519
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 9@
+goto_if_false @DEBT_556
+set_lvar_int_to_var_int 9@ = $game_timer
+9@ += 60000
+
+:DEBT_556
+goto @DEBT_600
+
+:DEBT_563
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 9@
+goto_if_false @DEBT_600
+set_lvar_int_to_var_int 9@ = $game_timer
+9@ += 120000
+
+:DEBT_600
+goto @DEBT_644
+
+:DEBT_607
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 9@
+goto_if_false @DEBT_644
+set_lvar_int_to_var_int 9@ = $game_timer
+9@ += 120000
+
+:DEBT_644
+if 
+  0@ == 1
+goto_if_false @DEBT_977
+
+:DEBT_662
+$game_timer = Clock.GetGameTimer()
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DEBT_945
+$player_x, $player_y, $z = Char.GetCoordinates($scplayer)
+set_var_float_to_var_float $x = $player_x
+$x -= 200.0
+$player_x += 200.0
+$x = Math.RandomFloatInRange($x, $player_x)
+set_var_float_to_var_float $y = $player_y
+$y -= 200.0
+$player_y += 200.0
+$y = Math.RandomFloatInRange($y, $player_y)
+$x, $y, $z, $heading = Path.GetClosestCarNodeWithHeading($x, $y, $z)
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+$distance = Math.GetDistanceBetweenCoords2D($player_x, $player_y, $x, $y)
+if 
+  1.0 > $z
+goto_if_false @DEBT_861
+wait 0
+goto @DEBT_662
+
+:DEBT_861
+if 
+  50.0 > $distance
+goto_if_false @DEBT_893
+wait 0
+goto @DEBT_662
+
+:DEBT_893
+if 
+  Camera.IsPointOnScreen($x, $y, $z, 4.0)
+goto_if_false @DEBT_931
+wait 0
+goto @DEBT_662
+
+:DEBT_931
+0@ += 1
+goto @DEBT_977
+
+:DEBT_945
+gosub @DEBT_3801
+set_lvar_int_to_var_int 9@ = $game_timer
+9@ += 120000
+0@ = 0
+
+:DEBT_977
+if 
+  0@ == 2
+goto_if_false @DEBT_1931
+if and
+  Streaming.HasModelLoaded(540)
+  Streaming.HasModelLoaded(181)
+  Streaming.HasModelLoaded(183)
+  Streaming.HasModelLoaded(206)
+  Streaming.HasModelLoaded(47)
+  Streaming.HasModelLoaded(352)
+goto_if_false @DEBT_1737
+if 
+  Streaming.HasModelLoaded(355)
+goto_if_false @DEBT_1702
+12@ = Car.Create(540, $x, $y, $z)
+Car.SetHeading(12@, $heading)
+Car.ChangeColor(12@, 75, 0)
+Car.SetHealth(12@, 1500)
+Car.SetDrivingStyle(12@, DrivingMode.AvoidCars)
+StuckCarCheck.AddWithWarp(12@, 4.0, 4000, True, True, True, -1)
+if 
+  2@ == 1
+goto_if_false @DEBT_1151
+Streaming.MarkModelAsNoLongerNeeded(540)
+2@ = 0
+
+:DEBT_1151
+13@ = Char.CreateInsideCar(PedType.Mission1, 181, 12@)
+if 
+  3@ == 1
+goto_if_false @DEBT_1194
+Streaming.MarkModelAsNoLongerNeeded(181)
+3@ = 0
+
+:DEBT_1194
+if 
+  1@ > 0
+goto_if_false @DEBT_1418
+17@ = Group.Create(0)
+Group.SetLeader(13@, 17@)
+18@ = DecisionMakerGroup.Copy(-1)
+DecisionMakerGroup.ClearEventResponse(18@, 41)
+Group.SetDecisionMaker(17@, 18@)
+14@ = Char.CreateAsPassenger(PedType.Mission1, 183, 12@, 0)
+if 
+  4@ == 1
+goto_if_false @DEBT_1294
+Streaming.MarkModelAsNoLongerNeeded(183)
+4@ = 0
+
+:DEBT_1294
+if 
+  1@ > 1
+goto_if_false @DEBT_1357
+15@ = Char.CreateAsPassenger(PedType.Mission1, 206, 12@, 1)
+if 
+  5@ == 1
+goto_if_false @DEBT_1357
+Streaming.MarkModelAsNoLongerNeeded(206)
+5@ = 0
+
+:DEBT_1357
+if 
+  1@ > 2
+goto_if_false @DEBT_1418
+16@ = Char.CreateAsPassenger(PedType.Mission1, 47, 12@, 2)
+if 
+  6@ == 1
+goto_if_false @DEBT_1418
+Streaming.MarkModelAsNoLongerNeeded(47)
+6@ = 0
+
+:DEBT_1418
+19@ = DecisionMakerChar.Copy(-1)
+DecisionMakerChar.ClearEventResponse(19@, 41)
+$an = 0
+
+:DEBT_1439
+if 
+  4 > $an
+goto_if_false @DEBT_1628
+if 
+  not Char.IsDead(13@($an,4i))
+goto_if_false @DEBT_1614
+Char.SetDecisionMaker(13@($an,4i), 19@)
+Char.SetOnlyDamagedByPlayer(13@($an,4i), True)
+Char.SetRelationship(13@($an,4i), RelationshipType.Hate, PedType.Player1)
+Char.SetMoney(13@($an,4i), 10000)
+Char.SetKeepTask(13@($an,4i), True)
+if or
+  $an == 0
+  $an == 2
+goto_if_false @DEBT_1575
+Char.GiveWeapon(13@($an,4i), WeaponType.MicroUzi, 9999)
+
+:DEBT_1575
+if or
+  $an == 1
+  $an == 3
+goto_if_false @DEBT_1614
+Char.GiveWeapon(13@($an,4i), WeaponType.Ak47, 9999)
+
+:DEBT_1614
+$an += 1
+goto @DEBT_1439
+
+:DEBT_1628
+if 
+  7@ == 1
+goto_if_false @DEBT_1658
+Streaming.MarkModelAsNoLongerNeeded(352)
+7@ = 0
+
+:DEBT_1658
+if 
+  8@ == 1
+goto_if_false @DEBT_1688
+Streaming.MarkModelAsNoLongerNeeded(355)
+8@ = 0
+
+:DEBT_1688
+0@ += 1
+goto @DEBT_1730
+
+:DEBT_1702
+if 
+  not Streaming.HasModelLoaded(355)
+goto_if_false @DEBT_1730
+Streaming.RequestModel(355)
+8@ = 1
+
+:DEBT_1730
+goto @DEBT_1931
+
+:DEBT_1737
+if 
+  not Streaming.HasModelLoaded(540)
+goto_if_false @DEBT_1765
+Streaming.RequestModel(540)
+2@ = 1
+
+:DEBT_1765
+if 
+  not Streaming.HasModelLoaded(181)
+goto_if_false @DEBT_1793
+Streaming.RequestModel(181)
+3@ = 1
+
+:DEBT_1793
+if 
+  not Streaming.HasModelLoaded(183)
+goto_if_false @DEBT_1821
+Streaming.RequestModel(183)
+4@ = 1
+
+:DEBT_1821
+if 
+  not Streaming.HasModelLoaded(206)
+goto_if_false @DEBT_1849
+Streaming.RequestModel(206)
+5@ = 1
+
+:DEBT_1849
+if 
+  not Streaming.HasModelLoaded(47)
+goto_if_false @DEBT_1875
+Streaming.RequestModel(47)
+6@ = 1
+
+:DEBT_1875
+if 
+  not Streaming.HasModelLoaded(352)
+goto_if_false @DEBT_1903
+Streaming.RequestModel(352)
+7@ = 1
+
+:DEBT_1903
+if 
+  not Streaming.HasModelLoaded(355)
+goto_if_false @DEBT_1931
+Streaming.RequestModel(355)
+8@ = 1
+
+:DEBT_1931
+if 
+  0@ == 3
+goto_if_false @DEBT_3778
+if 
+  $onmission == 0
+goto_if_false @DEBT_3683
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DEBT_3644
+if 
+  not Player.IsScoreGreater($player1, -1)
+goto_if_false @DEBT_3621
+11@ = Streaming.GetAreaVisible()
+if 
+  11@ == 0
+goto_if_false @DEBT_3582
+if 
+  not Char.IsDead(13@)
+goto_if_false @DEBT_3169
+if 
+  Char.LocateAnyMeansChar2D($scplayer, 13@, 500.0, 500.0, False)
+goto_if_false @DEBT_3130
+if 
+  Char.IsSittingInAnyCar(13@)
+goto_if_false @DEBT_2690
+if 
+  not Car.IsDead(12@)
+goto_if_false @DEBT_2678
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 10@
+goto_if_false @DEBT_2349
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DEBT_2314
+11@ = Math.RandomIntInRange(0, 4)
+$car = Char.StoreCarIsInNoSave($scplayer)
+if 
+  11@ == 0
+goto_if_false @DEBT_2193
+Task.CarMission(13@, 12@, $car, CarMission.RamCarFaraway, 100.0, DrivingMode.AvoidCars)
+
+:DEBT_2193
+if 
+  11@ == 1
+goto_if_false @DEBT_2231
+Task.CarMission(13@, 12@, $car, CarMission.BlockCarHandbrakeStop, 100.0, DrivingMode.AvoidCars)
+
+:DEBT_2231
+if 
+  11@ == 2
+goto_if_false @DEBT_2269
+Task.CarMission(13@, 12@, $car, CarMission.EscortLeft, 100.0, DrivingMode.AvoidCars)
+
+:DEBT_2269
+if 
+  11@ == 3
+goto_if_false @DEBT_2307
+Task.CarMission(13@, 12@, $car, CarMission.EscortRight, 100.0, DrivingMode.AvoidCars)
+
+:DEBT_2307
+goto @DEBT_2333
+
+:DEBT_2314
+Task.CarMission(13@, 12@, -1, CarMission.RamPlayerFaraway, 100.0, DrivingMode.AvoidCars)
+
+:DEBT_2333
+set_lvar_int_to_var_int 10@ = $game_timer
+10@ += 8000
+
+:DEBT_2349
+$distance = Char.GetSpeed($scplayer)
+if or
+  Char.IsOnFoot($scplayer)
+  5.0 > $distance
+goto_if_false @DEBT_2558
+if 
+  Char.LocateAnyMeansChar2D(13@, $scplayer, 15.0, 15.0, False)
+goto_if_false @DEBT_2558
+$task_status = Char.GetScriptTaskStatus(13@, 1560)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @DEBT_2558
+20@ = Sequence.Open()
+11@ = Math.RandomIntInRange(0, 2)
+if 
+  11@ == 0
+goto_if_false @DEBT_2506
+Task.CarTempAction(-1, 12@, TempAction.TurnLeft, 200)
+Task.CarTempAction(-1, 12@, TempAction.HandbrakeTurnLeft, 1000)
+goto @DEBT_2530
+
+:DEBT_2506
+Task.CarTempAction(-1, 12@, TempAction.TurnRight, 200)
+Task.CarTempAction(-1, 12@, TempAction.HandbrakeTurnRight, 1000)
+
+:DEBT_2530
+Task.KillCharOnFootTimed(-1, $scplayer, 5000)
+Sequence.Close(20@)
+Char.PerformSequence(13@, 20@)
+Sequence.Clear(20@)
+
+:DEBT_2558
+if and
+  StuckCarCheck.IsCarStuck(12@)
+  15.0 > $distance
+goto_if_false @DEBT_2671
+if 
+  Char.LocateAnyMeansCar2D($scplayer, 12@, 30.0, 30.0, False)
+goto_if_false @DEBT_2671
+if 
+  Car.IsOnScreen(12@)
+goto_if_false @DEBT_2671
+$task_status = Char.GetScriptTaskStatus(13@, 1957)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @DEBT_2671
+Task.KillCharOnFootTimed(13@, $scplayer, 5000)
+
+:DEBT_2671
+goto @DEBT_2683
+
+:DEBT_2678
+Car.MarkAsNoLongerNeeded(12@)
+
+:DEBT_2683
+goto @DEBT_3123
+
+:DEBT_2690
+if 
+  Char.LocateAnyMeansChar2D(13@, $scplayer, 30.0, 30.0, False)
+goto_if_false @DEBT_2768
+$task_status = Char.GetScriptTaskStatus(13@, 1957)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @DEBT_2761
+Task.KillCharOnFootTimed(13@, $scplayer, 5000)
+
+:DEBT_2761
+goto @DEBT_3123
+
+:DEBT_2768
+if 
+  not Car.IsDead(12@)
+goto_if_false @DEBT_2869
+$task_status = Char.GetScriptTaskStatus(13@, 1560)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @DEBT_2862
+20@ = Sequence.Open()
+Task.GotoCar(-1, 12@, 99999, 5.0)
+Task.EnterCarAsDriver(-1, 12@, -2)
+Sequence.Close(20@)
+Char.PerformSequence(13@, 20@)
+Sequence.Clear(20@)
+
+:DEBT_2862
+goto @DEBT_3123
+
+:DEBT_2869
+Car.MarkAsNoLongerNeeded(12@)
+if 
+  not Char.LocateAnyMeansChar2D($scplayer, 13@, 60.0, 60.0, False)
+goto_if_false @DEBT_3083
+$x, $y, $z = Char.GetCoordinates(13@)
+$x, $y, $z, $heading = Path.GetClosestCarNodeWithHeading($x, $y, $z)
+if 
+  not World.IsPointObscuredByAMissionEntity($x, $y, $z, 4.0, 4.0, 4.0)
+goto_if_false @DEBT_3076
+if 
+  not Camera.IsPointOnScreen($x, $y, $z, 4.0)
+goto_if_false @DEBT_3076
+12@ = Car.Create(540, $x, $y, $z)
+Car.SetHeading(12@, $heading)
+Car.ChangeColor(12@, 75, 0)
+Car.SetHealth(12@, 1500)
+Car.SetDrivingStyle(12@, DrivingMode.AvoidCars)
+StuckCarCheck.AddWithWarp(12@, 4.0, 4000, True, True, True, -1)
+
+:DEBT_3076
+goto @DEBT_3123
+
+:DEBT_3083
+$task_status = Char.GetScriptTaskStatus(13@, 1957)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @DEBT_3123
+Task.KillCharOnFootTimed(13@, $scplayer, 5000)
+
+:DEBT_3123
+goto @DEBT_3162
+
+:DEBT_3130
+gosub @DEBT_3801
+set_lvar_int_to_var_int 9@ = $game_timer
+9@ += 60000
+0@ = 0
+
+:DEBT_3162
+goto @DEBT_3334
+
+:DEBT_3169
+Char.MarkAsNoLongerNeeded(13@)
+$an = 1
+
+:DEBT_3181
+if 
+  4 > $an
+goto_if_false @DEBT_3334
+if 
+  not Char.IsDead(13@($an,4i))
+goto_if_false @DEBT_3311
+if 
+  Group.DoesExist(17@)
+goto_if_false @DEBT_3304
+if 
+  Char.IsGroupMember(13@($an,4i), 17@)
+goto_if_false @DEBT_3304
+if 
+  Char.IsGroupLeader(13@($an,4i), 17@)
+goto_if_false @DEBT_3304
+set_lvar_int_to_lvar_int 13@ = 13@($an,4i)
+13@($an,4i) = -1
+
+:DEBT_3304
+goto @DEBT_3320
+
+:DEBT_3311
+Char.MarkAsNoLongerNeeded(13@($an,4i))
+
+:DEBT_3320
+$an += 1
+goto @DEBT_3181
+
+:DEBT_3334
+$an = 1
+
+:DEBT_3341
+if 
+  4 > $an
+goto_if_false @DEBT_3575
+if 
+  not Char.IsDead(13@)
+goto_if_false @DEBT_3561
+if 
+  not Char.IsDead(13@($an,4i))
+goto_if_false @DEBT_3552
+if 
+  Group.DoesExist(17@)
+goto_if_false @DEBT_3545
+if 
+  not Char.IsGroupMember(13@($an,4i), 17@)
+goto_if_false @DEBT_3545
+if 
+  Char.LocateAnyMeansChar2D(13@($an,4i), 13@, 30.0, 30.0, False)
+goto_if_false @DEBT_3488
+Group.SetMember(13@($an,4i), 17@)
+goto @DEBT_3545
+
+:DEBT_3488
+$task_status = Char.GetScriptTaskStatus(13@($an,4i), 1957)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @DEBT_3545
+Char.MarkAsNoLongerNeeded(13@($an,4i))
+Task.KillCharOnFootTimed(13@($an,4i), $scplayer, 5000)
+
+:DEBT_3545
+goto @DEBT_3561
+
+:DEBT_3552
+Char.MarkAsNoLongerNeeded(13@($an,4i))
+
+:DEBT_3561
+$an += 1
+goto @DEBT_3341
+
+:DEBT_3575
+goto @DEBT_3614
+
+:DEBT_3582
+gosub @DEBT_3801
+set_lvar_int_to_var_int 9@ = $game_timer
+9@ += 60000
+0@ = 0
+
+:DEBT_3614
+goto @DEBT_3637
+
+:DEBT_3621
+gosub @DEBT_3801
+$1376 = 0
+terminate_this_script 
+
+:DEBT_3637
+goto @DEBT_3676
+
+:DEBT_3644
+gosub @DEBT_3801
+set_lvar_int_to_var_int 9@ = $game_timer
+9@ += 120000
+0@ = 0
+
+:DEBT_3676
+goto @DEBT_3715
+
+:DEBT_3683
+gosub @DEBT_3801
+set_lvar_int_to_var_int 9@ = $game_timer
+9@ += 120000
+0@ = 0
+
+:DEBT_3715
+if and
+  Char.IsDead(13@)
+  Char.IsDead(14@)
+  Char.IsDead(15@)
+  Char.IsDead(16@)
+goto_if_false @DEBT_3778
+gosub @DEBT_3801
+set_lvar_int_to_var_int 9@ = $game_timer
+9@ += 120000
+0@ = 0
+
+:DEBT_3778
+goto @DEBT_109
+if 
+  not Car.IsOnScreen(12@)
+goto_if_false @DEBT_3801
+
+:DEBT_3801
+Char.MarkAsNoLongerNeeded(13@)
+Char.MarkAsNoLongerNeeded(14@)
+Char.MarkAsNoLongerNeeded(15@)
+Char.MarkAsNoLongerNeeded(16@)
+Car.MarkAsNoLongerNeeded(12@)
+DecisionMaker.Remove(19@)
+DecisionMaker.Remove(18@)
+Group.Remove(17@)
+if 
+  2@ == 1
+goto_if_false @DEBT_3871
+Streaming.MarkModelAsNoLongerNeeded(540)
+2@ = 0
+
+:DEBT_3871
+if 
+  3@ == 1
+goto_if_false @DEBT_3901
+Streaming.MarkModelAsNoLongerNeeded(181)
+3@ = 0
+
+:DEBT_3901
+if 
+  4@ == 1
+goto_if_false @DEBT_3931
+Streaming.MarkModelAsNoLongerNeeded(183)
+4@ = 0
+
+:DEBT_3931
+if 
+  5@ == 1
+goto_if_false @DEBT_3961
+Streaming.MarkModelAsNoLongerNeeded(206)
+5@ = 0
+
+:DEBT_3961
+if 
+  6@ == 1
+goto_if_false @DEBT_3990
+Streaming.MarkModelAsNoLongerNeeded(47)
+6@ = 0
+
+:DEBT_3990
+if 
+  7@ == 1
+goto_if_false @DEBT_4020
+Streaming.MarkModelAsNoLongerNeeded(352)
+7@ = 0
+
+:DEBT_4020
+if 
+  8@ == 1
+goto_if_false @DEBT_4050
+Streaming.MarkModelAsNoLongerNeeded(355)
+8@ = 0
+
+:DEBT_4050
+return 
+terminate_this_script 
+

@@ -1,0 +1,64 @@
+:MANSION
+script_name 'MANSION'
+
+:MANSION_11
+wait $mission_trigger_wait_time
+if 
+  $flag_mansion_mission_counter == 4
+goto_if_false @MANSION_36
+terminate_this_script 
+
+:MANSION_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @MANSION_378
+if 
+  $onmission == 0
+goto_if_false @MANSION_378
+if 
+  Player.CanStartMission($player1)
+goto_if_false @MANSION_378
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $casinoX, $casinoY, $casinoZ, 1.2, 1.2, 2.0)
+goto_if_false @MANSION_180
+if 
+  $flag_mansion_mission_counter == 0
+goto_if_false @MANSION_180
+$onmission = 1
+Text.PrintBig('MAN_1', 1000, TextStyle.BottomRight)
+PSAVE1_3245()
+Mission.LoadAndLaunchInternal(102) // A Home In The Hills
+
+:MANSION_180
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $mansionX, $mansionY, $mansionZ, 1.2, 1.2, 2.0)
+goto_if_false @MANSION_378
+if 
+  $flag_mansion_mission_counter == 1
+goto_if_false @MANSION_274
+$onmission = 1
+Text.PrintBig('MAN_2', 1000, TextStyle.BottomRight)
+PSAVE1_4427()
+Mission.LoadAndLaunchInternal(103) // Vertical Bird
+
+:MANSION_274
+if 
+  $flag_mansion_mission_counter == 2
+goto_if_false @MANSION_326
+$onmission = 1
+Text.PrintBig('MAN_3', 1000, TextStyle.BottomRight)
+PSAVE1_4427()
+Mission.LoadAndLaunchInternal(104) // Home Coming
+
+:MANSION_326
+if 
+  $flag_mansion_mission_counter == 3
+goto_if_false @MANSION_378
+$onmission = 1
+Text.PrintBig('MAN_5', 1000, TextStyle.BottomRight)
+PSAVE1_4427()
+Mission.LoadAndLaunchInternal(105) // Cut Throat Business
+
+:MANSION_378
+goto @MANSION_11
+

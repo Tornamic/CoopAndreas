@@ -1,0 +1,2450 @@
+//-------------Mission 18---------------
+// Originally: Sweet's Girl
+
+:HOODS5
+script_name 'HOODS5'
+gosub @HOODS5_251
+if 
+  has_deatharrest_been_executed 
+goto_if_false @HOODS5_38
+gosub @HOODS5_15256
+
+:HOODS5_38
+gosub @HOODS5_15329
+terminate_this_script 
+if 
+  127@ == 99
+goto_if_false @HOODS5_251
+50@ = Pickup.CreateWithAmmo(346, 3, 20, 2444.895, -1981.524, 13.933)
+49@ = Blip.AddSpriteForCoord(6, 2444.895, -1981.524, 13.933)
+48@ = Blip.AddSpriteForCoord(6, 2444.895, -1981.524, 13.933)
+75@ = Char.Create(8, 290, 2752.341, -1948.867, 16.3125)
+43@ = Char.Create(8, 290, 2752.341, -1948.867, 16.3125)
+37@ = Char.Create(8, 290, 2752.341, -1948.867, 16.3125)
+71@ = Blip.AddForChar(75@)
+72@ = Blip.AddForChar(75@)
+201@ = Blip.AddForChar(75@)
+202@ = Blip.AddForChar(75@)
+167@ = Blip.AddForPickup(50@)
+
+:HOODS5_251
+Stat.RegisterMissionGiven
+$onmission = 1
+Player.SetGroupToFollowAlways($player1, True)
+154@ = 14
+155@ = 15
+156@ = 16
+157@ = 17
+158@ = 18
+161@ = 21
+148@ = 0
+Char.SetRelationship($scplayer, RelationshipType.Hate, PedType.Mission1)
+
+:HOODS5_325
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @HOODS5_351
+goto @HOODS5_15274
+
+:HOODS5_351
+if 
+is_ps2_keyboard_key_pressed 68
+goto_if_false @HOODS5_454
+Char.SetCoordinates($scplayer, 2769.492, -1967.329, 12.3834)
+36@ = 0
+
+:HOODS5_393
+if 
+  6 > 36@
+goto_if_false @HOODS5_454
+if 
+  not Char.IsDead(37@(36@,6i))
+goto_if_false @HOODS5_440
+Task.Die(37@(36@,6i))
+
+:HOODS5_440
+36@ += 1
+goto @HOODS5_393
+
+:HOODS5_454
+if 
+is_ps2_keyboard_key_pressed 70
+goto_if_false @HOODS5_476
+127@ = 7
+
+:HOODS5_476
+switch_start 127@ total_jumps 9 default_jump 0 @HOODS5_737 jumps 0 @HOODS5_604 1 @HOODS5_625 2 @HOODS5_639 3 @HOODS5_653 4 @HOODS5_667 5 @HOODS5_681 6 @HOODS5_695
+switch_continued 7 @HOODS5_709 8 @HOODS5_723 -1 @HOODS5_737 -1 @HOODS5_737 -1 @HOODS5_737 -1 @HOODS5_737 -1 @HOODS5_737 -1 @HOODS5_737 -1 @HOODS5_737
+
+:HOODS5_604
+gosub @HOODS5_918
+127@ = 1
+goto @HOODS5_737
+
+:HOODS5_625
+gosub @HOODS5_1302
+goto @HOODS5_737
+
+:HOODS5_639
+gosub @HOODS5_3513
+goto @HOODS5_737
+
+:HOODS5_653
+gosub @HOODS5_4668
+goto @HOODS5_737
+
+:HOODS5_667
+gosub @HOODS5_5153
+goto @HOODS5_737
+
+:HOODS5_681
+gosub @HOODS5_5483
+goto @HOODS5_737
+
+:HOODS5_695
+gosub @HOODS5_7802
+goto @HOODS5_737
+
+:HOODS5_709
+gosub @HOODS5_9684
+goto @HOODS5_737
+
+:HOODS5_723
+goto @HOODS5_15274
+goto @HOODS5_737
+
+:HOODS5_737
+gosub @HOODS5_792
+gosub @HOODS5_890
+gosub @HOODS5_13224
+if 
+  126@ == 1
+goto_if_false @HOODS5_783
+goto @HOODS5_15256
+
+:HOODS5_783
+goto @HOODS5_325
+return 
+
+:HOODS5_792
+if 
+  125@ == 1
+goto_if_false @HOODS5_888
+if 
+  Char.IsDead(75@)
+goto_if_false @HOODS5_849
+126@ = 1
+Text.Print('SW5_L', 4000, 1)
+
+:HOODS5_849
+if 
+  Char.IsDead(43@)
+goto_if_false @HOODS5_888
+126@ = 1
+Text.Print('SW5_M', 4000, 1)
+
+:HOODS5_888
+return 
+
+:HOODS5_890
+if 
+  Pickup.HasBeenCollected($emmets_gun)
+goto_if_false @HOODS5_916
+Blip.Remove(49@)
+Blip.Remove(167@)
+
+:HOODS5_916
+return 
+
+:HOODS5_918
+World.ClearArea(1, $sweet_carX, $sweet_carY, $sweet_carZ, 5.0)
+CarGenerator.Switch($gen_car7, 0)
+Streaming.RequestModel(330)
+Streaming.RequestModel(12)
+Streaming.RequestModel(372)
+Streaming.RequestModel(405)
+Streaming.RequestModel(346)
+Streaming.RequestModel(492)
+Streaming.RequestModel(105)
+Streaming.RequestModel(106)
+Streaming.LoadSpecialCharacter('SWEET', 1)
+Streaming.LoadAllModelsNow
+
+:HOODS5_995
+if or
+  not Streaming.HasModelLoaded(330)
+  not Streaming.HasModelLoaded(12)
+  not Streaming.HasModelLoaded(372)
+  not Streaming.HasModelLoaded(346)
+  not Streaming.HasModelLoaded(405)
+goto_if_false @HOODS5_1041
+wait 0
+goto @HOODS5_995
+
+:HOODS5_1041
+if or
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasModelLoaded(105)
+  not Streaming.HasModelLoaded(106)
+  not Streaming.HasModelLoaded(492)
+goto_if_false @HOODS5_1080
+wait 0
+goto @HOODS5_1041
+
+:HOODS5_1080
+Streaming.RequestAnimation("SWEET")
+Streaming.RequestAnimation("GANGS")
+
+:HOODS5_1098
+if or
+  not Streaming.HasAnimationLoaded("SWEET")
+  not Streaming.HasAnimationLoaded("GANGS")
+goto_if_false @HOODS5_1138
+wait 0
+goto @HOODS5_1098
+
+:HOODS5_1138
+Streaming.RequestCarRecording(153)
+Streaming.RequestCarRecording(154)
+
+:HOODS5_1148
+if or
+  not Streaming.HasCarRecordingBeenLoaded(153)
+  not Streaming.HasCarRecordingBeenLoaded(154)
+goto_if_false @HOODS5_1180
+wait 0
+goto @HOODS5_1148
+
+:HOODS5_1180
+99@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+100@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+47@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission3, PedType.Mission1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Mission3)
+DecisionMakerChar.ClearEventResponse(47@, 12)
+DecisionMakerChar.ClearEventResponse(47@, 9)
+DecisionMakerChar.ClearEventResponse(47@, 31)
+$sw5_target = 0
+$6676 = 0
+$6677 = 0
+$6678 = 0
+$6679 = 0
+$6680 = 0
+198@ = 99999.0
+199@ = 99999.0
+return 
+
+:HOODS5_1302
+if 
+  148@ > 1
+goto_if_false @HOODS5_1379
+if 
+  166@ == 0
+goto_if_false @HOODS5_1379
+if 
+  Pad.IsSkipCutsceneButtonPressed
+goto_if_false @HOODS5_1379
+148@ = 7
+147@ = 1
+355@ = 5
+35@ = 0
+
+:HOODS5_1379
+if 
+  148@ == 0
+goto_if_false @HOODS5_1786
+Text.LoadMissionText('SWEET5')
+World.SetCarDensityMultiplier(0.0)
+World.SetPedDensityMultiplier(0.0)
+Streaming.SetAreaVisible(1)
+Cutscene.Load('SWEET5A')
+
+:HOODS5_1437
+if 
+  not Cutscene.HasLoaded
+goto_if_false @HOODS5_1461
+wait 0
+goto @HOODS5_1437
+
+:HOODS5_1461
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:HOODS5_1470
+if 
+  not Cutscene.HasFinished
+goto_if_false @HOODS5_1494
+wait 0
+goto @HOODS5_1470
+
+:HOODS5_1494
+Camera.DoFade(0, Fade.Out)
+
+:HOODS5_1500
+if 
+  Camera.GetFadingStatus
+goto_if_false @HOODS5_1524
+wait 0
+goto @HOODS5_1500
+
+:HOODS5_1524
+Cutscene.Clear
+Streaming.SetAreaVisible(0)
+48@ = Blip.AddForCoord(2775.793, -1942.909, 15.6576)
+Blip.SetCoordAppearance(48@, 2)
+49@ = Blip.AddSpriteForCoord(18, 2444.895, -1981.524, 13.933)
+Pickup.Remove($emmets_gun)
+$emmets_gun = Pickup.CreateWithAmmo(346, 15, 16, 2447.773, -1975.663, 13.0)
+167@ = Blip.AddForPickup($emmets_gun)
+Blip.ChangeDisplay(167@, BlipDisplay.MarkerOnly)
+Streaming.RequestCollision(2770.116, -1915.896)
+Char.SetCoordinates($scplayer, 2770.116, -1915.896, 11.651)
+Char.ClearTasksImmediately($scplayer)
+Streaming.LoadScene(2770.116, -1915.896, 11.651)
+Camera.SetFixedPosition(2770.897, -1915.951, 12.6746, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2770.337, -1916.334, 13.4091, SwitchType.JumpCut)
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Camera.DoFade(1, 1500)
+352@ = 29
+148@ = 1
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 2000
+
+:HOODS5_1786
+if 
+  148@ == 1
+goto_if_false @HOODS5_1860
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_1860
+Task.UseMobilePhone($scplayer, True)
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 2200
+355@ = 3
+148@ = 20
+
+:HOODS5_1860
+if 
+  148@ == 20
+goto_if_false @HOODS5_2062
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_2062
+if 
+  352@ == 0
+goto_if_false @HOODS5_2062
+75@ = Char.Create(26, 290, 2752.341, -1948.867, 16.3125)
+105@ = Car.Create(492, 2745.545, -1942.74, 12.5394)
+Car.SetHeading(105@, 90.0)
+Char.SetHeading(75@, 0.0)
+43@ = Char.Create(26, 12, 2751.282, -1948.867, 16.3125)
+Char.SetHeading(43@, 0.0)
+Char.SetDecisionMaker(43@, 99@)
+set_lvar_int_to_lvar_int 399@ = 75@
+set_lvar_int_to_lvar_int 400@ = 43@
+352@ = 1
+354@ = 7
+148@ = 2
+
+:HOODS5_2062
+if 
+  148@ == 2
+goto_if_false @HOODS5_2469
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_2469
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_2150
+68@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.UseMobilePhone(-1, True)
+Sequence.Close(68@)
+Char.PerformSequence(75@, 68@)
+Sequence.Clear(68@)
+
+:HOODS5_2150
+if 
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_2233
+68@ = Sequence.Open()
+Task.Pause(-1, 500)
+Task.PlayAnim(-1, "DUCK_COWER", "PED", 8.0, False, False, False, False, 16000)
+Sequence.Close(68@)
+Char.PerformSequence(43@, 68@)
+Sequence.Clear(68@)
+
+:HOODS5_2233
+37@ = Char.Create(25, 106, 2751.515, -1973.178, 16.3051)
+Char.SetAccuracy(37@, 40)
+Char.SetDecisionMaker(37@, 99@)
+Char.GiveWeapon(37@, WeaponType.Pistol, 99999)
+Task.ToggleDuck(37@, True)
+68@ = Sequence.Open()
+Task.Pause(-1, 2500)
+Task.GoStraightToCoord(-1, 2751.791, -1964.08, 16.3125, MoveState.Walk, -2)
+Task.Pause(-1, 3500)
+Task.GoStraightToCoord(-1, 2751.791, -1954.08, 16.3125, MoveState.Walk, -2)
+Sequence.Close(68@)
+Char.PerformSequence(37@, 68@)
+Sequence.Clear(68@)
+38@ = Char.Create(25, 105, 2753.197, -1973.946, 16.3051)
+Char.SetAccuracy(38@, 40)
+Char.GiveWeapon(38@, WeaponType.Pistol, 99999)
+Task.ToggleDuck(38@, True)
+Task.ShootAtCoord(38@, 2753.15, -1949.642, 16.5866, -2)
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 2000
+148@ = 3
+
+:HOODS5_2469
+if 
+  148@ == 3
+goto_if_false @HOODS5_2598
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_2598
+if 
+  352@ == 3
+goto_if_false @HOODS5_2598
+Camera.SetFixedPosition(2753.784, -1947.466, 16.489, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2753.255, -1948.292, 16.6835, SwitchType.JumpCut)
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 4000
+148@ = 4
+
+:HOODS5_2598
+if 
+  148@ == 4
+goto_if_false @HOODS5_2658
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_2658
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 4000
+148@ = 5
+
+:HOODS5_2658
+if 
+  148@ == 5
+goto_if_false @HOODS5_2791
+if 
+  352@ == 7
+goto_if_false @HOODS5_2791
+Camera.SetFixedPosition(2770.897, -1915.951, 12.6746, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2770.337, -1916.334, 13.4091, SwitchType.JumpCut)
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_2768
+Char.SetAccuracy(75@, 100)
+
+:HOODS5_2768
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 4500
+148@ = 21
+
+:HOODS5_2791
+if 
+  148@ == 21
+goto_if_false @HOODS5_2858
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_2858
+Task.UseMobilePhone($scplayer, False)
+148@ = 6
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 1000
+
+:HOODS5_2858
+if 
+  148@ == 6
+goto_if_false @HOODS5_3111
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_3111
+Camera.SetFixedPosition(2756.252, -1949.02, 17.513, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2755.402, -1949.518, 17.3404, SwitchType.JumpCut)
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_3088
+Char.ClearTasksImmediately(75@)
+Task.ToggleDuck(75@, True)
+Char.GiveWeapon(75@, WeaponType.Pistol, 500)
+Char.SetCurrentWeapon(75@, WeaponType.Pistol)
+Char.SetHeading(75@, 180.0)
+68@ = Sequence.Open()
+Task.PlayAnim(-1, "CROUCH_ROLL_L", "PED", 8.0, False, True, True, False, -1)
+if 
+  not Char.IsDead(37@)
+goto_if_false @HOODS5_3070
+Task.ShootAtChar(-1, 37@, -2)
+
+:HOODS5_3070
+Sequence.Close(68@)
+Char.PerformSequence(75@, 68@)
+Sequence.Clear(68@)
+
+:HOODS5_3088
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 2500
+148@ = 7
+
+:HOODS5_3111
+if 
+  148@ == 7
+goto_if_false @HOODS5_3171
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_3171
+Text.ClearPrints
+166@ = 1
+Camera.DoFade(0, 1000)
+148@ = 8
+
+:HOODS5_3171
+if 
+  148@ == 8
+goto_if_false @HOODS5_3345
+if 
+  not Camera.GetFadingStatus
+goto_if_false @HOODS5_3345
+Streaming.RequestCollision(2518.789, -1677.22)
+Char.SetCoordinates($scplayer, 2518.448, -1677.224, 13.4109)
+Char.SetHeading($scplayer, 90.691)
+Streaming.LoadScene(2510.284, -1674.066, 14.5338)
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 300
+148@ = 9
+$sw5_sweet_health = 100
+170@ = Math.RandomIntInRange(2500, 6000)
+add_int_lvar_to_int_lvar 170@ += TIMERA
+Hud.DisplayCounterWithString($sw5_sweet_health, CounterDisplay.Bar, 'SW5_A3')
+170@ = Math.RandomIntInRange(2500, 6000)
+add_int_lvar_to_int_lvar 170@ += TIMERA
+
+:HOODS5_3345
+if 
+  148@ == 9
+goto_if_false @HOODS5_3511
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_3511
+Camera.DoFade(1, 1500)
+Char.Delete(75@)
+Char.Delete(37@)
+Char.Delete(38@)
+Char.Delete(43@)
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+34@ = Char.GetScriptTaskStatus($scplayer, 1833)
+Text.Print('SW5_A2', 6000, 1)
+Text.Print('SW5_17', 6000, 1)
+Player.SetControl($player1, True)
+Player.MakeGangReappear
+Hud.SwitchWidescreen(False)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Game.SetWantedMultiplier(0.2)
+147@ = 1
+127@ = 2
+
+:HOODS5_3511
+return 
+
+:HOODS5_3513
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 170@
+goto_if_false @HOODS5_3616
+170@ = Math.RandomIntInRange(2500, 6000)
+add_int_lvar_to_int_lvar 170@ += TIMERA
+171@ = Math.RandomIntInRange(2, 4)
+sub_int_lvar_from_int_var $sw5_sweet_health -= 171@
+if 
+  0 >= $sw5_sweet_health
+goto_if_false @HOODS5_3616
+$sw5_sweet_health = 0
+Text.Print('SW5_L', 4000, 1)
+125@ = 1
+
+:HOODS5_3616
+if 
+  97@ == 0
+goto_if_false @HOODS5_4349
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2775.793, -1942.909, 15.6576, 100.0, 100.0, 50.0)
+goto_if_false @HOODS5_4349
+Game.SetCreateRandomGangMembers(False)
+97@ = 1
+Text.Print('SW5_J', 4000, 1)
+106@ = 2761.516
+112@ = -1972.028
+118@ = 12.5459
+set_lvar_int_to_constant 140@ = 105
+107@ = 2761.599
+113@ = -1955.673
+119@ = 12.5469
+set_lvar_int_to_constant 141@ = 106
+108@ = 2768.451
+114@ = -1972.605
+120@ = 12.3837
+set_lvar_int_to_constant 142@ = 105
+109@ = 2761.551
+115@ = -1980.099
+121@ = 12.5478
+set_lvar_int_to_constant 143@ = 106
+110@ = 2752.159
+116@ = -1979.574
+122@ = 14.0469
+set_lvar_int_to_constant 144@ = 106
+111@ = 2768.451
+117@ = -1972.605
+123@ = 12.3837
+set_lvar_int_to_constant 145@ = 105
+172@ = Car.Create(492, 2766.923, -1974.348, 12.3783)
+Car.SetHeading(172@, 4.0)
+36@ = 0
+
+:HOODS5_3971
+if 
+  5 > 36@
+goto_if_false @HOODS5_4165
+37@(36@,6i) = Char.Create(24, 140@(36@,6i), 106@(36@,6f), 112@(36@,6f), 118@(36@,6f))
+Char.SetAccuracy(37@(36@,6i), 65)
+if or
+  36@ == 0
+  36@ == 3
+goto_if_false @HOODS5_4087
+Char.GiveWeapon(37@(36@,6i), WeaponType.Tec9, 99999)
+goto @HOODS5_4103
+
+:HOODS5_4087
+Char.GiveWeapon(37@(36@,6i), WeaponType.Pistol, 99999)
+
+:HOODS5_4103
+Task.ToggleDuck(37@(36@,6i), True)
+Task.ShootAtCoord(37@(36@,6i), 2750.957, -1968.016, 17.9291, -2)
+Char.SetKindaStayInSamePlace(37@(36@,6i), True)
+36@ += 1
+goto @HOODS5_3971
+
+:HOODS5_4165
+51@ = Blip.AddForChar(37@)
+52@ = Blip.AddForChar(38@)
+53@ = Blip.AddForChar(39@)
+54@ = Blip.AddForChar(40@)
+55@ = Blip.AddForChar(41@)
+Blip.Remove(48@)
+Char.SetDecisionMaker(37@, 47@)
+Char.SetDecisionMaker(38@, 47@)
+Char.SetDecisionMaker(39@, 47@)
+Char.SetDecisionMaker(40@, 47@)
+Char.SetDecisionMaker(41@, 47@)
+Char.SetIsTargetPriority(37@, True)
+Char.SetIsTargetPriority(38@, True)
+Char.SetIsTargetPriority(39@, True)
+Char.SetIsTargetPriority(40@, True)
+Char.SetIsTargetPriority(41@, True)
+Path.SwitchRoadsOff(2793.814, -1987.935, 15.3045, 2754.324, -1900.369, 9.8752)
+Path.SwitchPedRoadsOff(2793.814, -1987.935, 15.3045, 2754.324, -1900.369, 9.8752)
+
+:HOODS5_4349
+if 
+  97@ == 1
+goto_if_false @HOODS5_4666
+gosub @HOODS5_11951
+if 
+  146@ == 0
+goto_if_false @HOODS5_4474
+if 
+  Char.IsInArea3D($scplayer, 0, 2782.693, -1921.125, 11.7984, 2746.098, -1993.905, 16.9599)
+goto_if_false @HOODS5_4474
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @HOODS5_4474
+146@ = 1
+Text.PrintHelp('SW5_19')
+
+:HOODS5_4474
+36@ = 0
+57@ = 0
+
+:HOODS5_4488
+if 
+  5 > 36@
+goto_if_false @HOODS5_4587
+if 
+  Char.IsDead(37@(36@,6i))
+goto_if_false @HOODS5_4549
+Blip.Remove(51@(36@,6i))
+57@ += 1
+goto @HOODS5_4573
+
+:HOODS5_4549
+Char.SetAccuracy(37@(36@,6i), 173@)
+Char.SetShootRate(37@(36@,6i), 173@)
+
+:HOODS5_4573
+36@ += 1
+goto @HOODS5_4488
+
+:HOODS5_4587
+set_lvar_int_to_lvar_int 173@ = 57@
+173@ *= 6
+173@ += 60
+if 
+  57@ == 5
+goto_if_false @HOODS5_4666
+148@ = 0
+130@ = 0
+131@ = 0
+128@ = 0
+127@ = 3
+Game.SetScriptLimitToGangSize(0)
+
+:HOODS5_4666
+return 
+
+:HOODS5_4668
+if 
+  148@ == 0
+goto_if_false @HOODS5_4709
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 1500
+148@ = 1
+
+:HOODS5_4709
+if 
+  148@ == 1
+goto_if_false @HOODS5_4781
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_4781
+352@ = 29
+Hud.ClearCounter($sw5_sweet_health)
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 2500
+148@ = 2
+
+:HOODS5_4781
+if 
+  148@ == 2
+goto_if_false @HOODS5_4848
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_4848
+352@ = 29
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 2500
+148@ = 3
+
+:HOODS5_4848
+if 
+  148@ == 3
+goto_if_false @HOODS5_4943
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_4943
+if and
+  not Char.IsInAir($scplayer)
+  not Char.IsGettingInToACar($scplayer)
+goto_if_false @HOODS5_4943
+174@ = 1
+Task.UseMobilePhone($scplayer, True)
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 2500
+148@ = 4
+
+:HOODS5_4943
+if 
+  148@ == 4
+goto_if_false @HOODS5_5001
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_5001
+148@ = 5
+352@ = 8
+354@ = 2
+
+:HOODS5_5001
+if 
+  148@ == 5
+goto_if_false @HOODS5_5151
+if 
+  352@ == 0
+goto_if_false @HOODS5_5151
+Task.UseMobilePhone($scplayer, False)
+48@ = Blip.AddForCoord(2764.272, -1979.494, 12.5394)
+Path.SwitchRoadsBackToOriginal(2793.814, -1987.935, 15.3045, 2754.324, -1900.369, 9.8752)
+Path.SwitchPedRoadsBackToOriginal(2793.814, -1987.935, 15.3045, 2754.324, -1900.369, 9.8752)
+Text.Print('SW5_14', 5000, 1)
+127@ = 4
+
+:HOODS5_5151
+return 
+
+:HOODS5_5153
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 2764.272, -1979.494, 12.5394, 4.0, 4.0, 4.0)
+goto_if_false @HOODS5_5481
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HOODS5_5481
+59@ = Char.StoreCarIsIn($scplayer)
+if 
+  not Car.IsDead(59@)
+goto_if_false @HOODS5_5481
+60@ = Car.GetMaximumNumberOfPassengers(59@)
+if 
+  2 > 60@
+goto_if_false @HOODS5_5315
+if 
+  61@ == 0
+goto_if_false @HOODS5_5308
+Text.PrintNow('SW5_G', 5000, 1)
+61@ = 1
+
+:HOODS5_5308
+goto @HOODS5_5481
+
+:HOODS5_5315
+104@ = Car.GetClass(59@)
+102@ = Car.GetModel(59@)
+if or
+  is_int_lvar_equal_to_constant 104@ == 0
+  is_int_lvar_equal_to_constant 104@ == 1
+  is_int_lvar_equal_to_constant 104@ == 2
+  is_int_lvar_equal_to_constant 104@ == 3
+  is_int_lvar_equal_to_constant 102@ == 596
+  is_int_lvar_equal_to_constant 102@ == 420
+goto_if_false @HOODS5_5465
+Player.SetControl($player1, False)
+Task.CarTempAction($scplayer, 59@, TempAction.HandbrakeStraight, 2000000)
+Camera.DoFade(0, 800)
+
+:HOODS5_5415
+if 
+  Camera.GetFadingStatus
+goto_if_false @HOODS5_5439
+wait 0
+goto @HOODS5_5415
+
+:HOODS5_5439
+127@ = 5
+148@ = 0
+Blip.Remove(48@)
+goto @HOODS5_5481
+
+:HOODS5_5465
+Text.PrintNow('SW5_16', 1000, 1)
+
+:HOODS5_5481
+return 
+
+:HOODS5_5483
+if 
+  130@ == 0
+goto_if_false @HOODS5_5532
+130@ = 1
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HOODS5_5532
+131@ = 1
+
+:HOODS5_5532
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @HOODS5_5648
+if 
+  131@ == 0
+goto_if_false @HOODS5_5641
+if and
+  not Char.IsDead(75@)
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_5641
+if and
+  148@ <> 0
+  148@ <> 5
+goto_if_false @HOODS5_5641
+148@ = 4
+35@ = 0
+131@ = 1
+355@ = 5
+
+:HOODS5_5641
+goto @HOODS5_5673
+
+:HOODS5_5648
+if 
+  131@ == 1
+goto_if_false @HOODS5_5673
+131@ = 0
+
+:HOODS5_5673
+if 
+  148@ == 5
+goto_if_false @HOODS5_5740
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_5740
+Camera.DoFade(1, 800)
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 3000
+148@ = 1
+
+:HOODS5_5740
+if 
+  148@ == 0
+goto_if_false @HOODS5_6493
+Text.ClearPrints
+World.ClearAreaOfCars(2746.504, -2001.611, 10.775, 2789.562, -1927.154, 21.633)
+Path.SwitchRoadsOff(2793.814, -1987.935, 15.3045, 2754.324, -1900.369, 9.8752)
+Path.SwitchPedRoadsOff(2793.814, -1987.935, 15.3045, 2754.324, -1900.369, 9.8752)
+Hud.SwitchWidescreen(True)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+DecisionMakerChar.ClearEventResponse(47@, 36)
+DecisionMakerChar.AddEventResponse(47@, 36, 1022, 0.0, 100.0, 0.0, 0.0, True, False)
+75@ = Char.Create(26, 290, 2752.341, -1948.867, 16.3125)
+43@ = Char.Create(26, 12, 2751.282, -1948.867, 16.3125)
+set_lvar_int_to_lvar_int 399@ = 75@
+set_lvar_int_to_lvar_int 400@ = 43@
+Char.SetSuffersCriticalHits(75@, False)
+Char.SetSuffersCriticalHits(43@, False)
+Char.SetOnlyDamagedByPlayer(75@, False)
+Char.SetOnlyDamagedByPlayer(43@, False)
+62@ = Car.Create(405, 2766.665, -1901.943, 10.005)
+63@ = Car.Create(405, 2772.638, -1903.127, 10.1479)
+Car.SetHeading(62@, 180.0)
+Car.SetHeading(63@, 180.0)
+Car.SetCanGoAgainstTraffic(62@, True)
+Car.SetCanGoAgainstTraffic(63@, True)
+Car.StartPlayback(62@, 153)
+Car.StartPlayback(63@, 154)
+65@ = Char.CreateInsideCar(PedType.Mission1, 105, 63@)
+64@ = Char.CreateInsideCar(PedType.Mission1, 105, 62@)
+Char.SetDecisionMaker(64@, 47@)
+Char.SetDecisionMaker(65@, 47@)
+Char.GiveWeapon(64@, WeaponType.Pistol, 99999)
+Char.GiveWeapon(65@, WeaponType.Pistol, 99999)
+Car.SetPlaybackSpeed(62@, 0.0)
+Car.SetPlaybackSpeed(63@, 0.0)
+if 
+  not Car.IsDead(59@)
+goto_if_false @HOODS5_6293
+Car.SetCoordinates(59@, 2763.96, -1978.898, 12.5394)
+Car.SetHeading(59@, 0.0)
+if 
+  not Car.IsPassengerSeatFree(59@, SeatIndex.TandemRear)
+goto_if_false @HOODS5_6260
+175@ = Car.GetCharInPassengerSeat(59@, 0)
+Char.Delete(175@)
+
+:HOODS5_6260
+if 
+  not Car.IsPassengerSeatFree(59@, SeatIndex.RearLeft)
+goto_if_false @HOODS5_6293
+175@ = Car.GetCharInPassengerSeat(59@, 1)
+Char.Delete(175@)
+
+:HOODS5_6293
+Camera.SetFixedPosition(2756.231, -1949.667, 18.0543, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2755.751, -1950.535, 17.9303, SwitchType.JumpCut)
+Path.FlushRoute
+Path.ExtendRoute(2752.402, -1974.077, 16.3125)
+Char.SetCoordinates(43@, 2752.312, -1952.896, 16.3051)
+Char.SetHeading(43@, 180.0)
+Task.FollowPointRoute(43@, 6, RouteMode.Once)
+Char.SetCoordinates(75@, 2752.395, -1950.699, 16.3125)
+Char.SetHeading(75@, 180.0)
+68@ = Sequence.Open()
+Task.Pause(-1, 1000)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Sequence.Close(68@)
+Char.PerformSequence(75@, 68@)
+Sequence.Clear(68@)
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 500
+148@ = 5
+
+:HOODS5_6493
+if 
+  148@ == 1
+goto_if_false @HOODS5_6771
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_6771
+Camera.SetFixedPosition(2764.601, -1986.696, 15.021, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2764.32, -1985.751, 14.8511, SwitchType.JumpCut)
+if 
+  not Car.IsDead(59@)
+goto_if_false @HOODS5_6715
+if 
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_6656
+Char.SetCoordinates(43@, 2760.358, -1979.501, 12.5394)
+Char.SetHeading(43@, 330.0)
+Task.EnterCarAsPassenger(43@, 59@, 1, 5000)
+
+:HOODS5_6656
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_6715
+Char.SetCoordinates(75@, 2767.224, -1981.524, 12.381)
+Char.SetHeading(75@, 0.0)
+Task.EnterCarAsPassenger(75@, 59@, 0, 5000)
+
+:HOODS5_6715
+if 
+  not Car.IsDead(63@)
+goto_if_false @HOODS5_6748
+Car.SetPlaybackSpeed(63@, 1.0)
+66@ = 1
+
+:HOODS5_6748
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 500
+148@ = 2
+
+:HOODS5_6771
+if 
+  148@ == 2
+goto_if_false @HOODS5_6864
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_6864
+if 
+  not Car.IsDead(62@)
+goto_if_false @HOODS5_6841
+Car.SetPlaybackSpeed(62@, 1.0)
+66@ = 1
+
+:HOODS5_6841
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 2000
+148@ = 3
+
+:HOODS5_6864
+if 
+  148@ == 3
+goto_if_false @HOODS5_6931
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_6931
+352@ = 12
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 2000
+148@ = 4
+
+:HOODS5_6931
+if 
+  148@ == 4
+goto_if_false @HOODS5_7800
+if 
+  176@ == 0
+goto_if_false @HOODS5_7041
+if 
+  not Car.IsDead(62@)
+goto_if_false @HOODS5_7041
+if 
+  not Car.IsPlaybackGoingOn(62@)
+goto_if_false @HOODS5_7041
+Car.SetMission(62@, CarMission.BlockPlayerClose)
+Car.SetCruiseSpeed(62@, 60.0)
+Car.SetHealth(62@, 2500)
+Car.SetAirResistanceMultiplier(62@, 0.1)
+176@ = 1
+
+:HOODS5_7041
+if 
+  177@ == 0
+goto_if_false @HOODS5_7133
+if 
+  not Car.IsDead(63@)
+goto_if_false @HOODS5_7133
+if 
+  not Car.IsPlaybackGoingOn(63@)
+goto_if_false @HOODS5_7133
+Car.SetMission(63@, CarMission.BlockPlayerClose)
+Car.SetCruiseSpeed(63@, 60.0)
+Car.SetHealth(63@, 2500)
+Car.SetAirResistanceMultiplier(63@, 0.1)
+177@ = 1
+
+:HOODS5_7133
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_7800
+if 
+  352@ == 0
+goto_if_false @HOODS5_7800
+66@ = 1
+Path.SwitchRoadsBackToOriginal(2793.814, -1987.935, 15.3045, 2754.324, -1900.369, 9.8752)
+Path.SwitchPedRoadsBackToOriginal(2793.814, -1987.935, 15.3045, 2754.324, -1900.369, 9.8752)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HOODS5_7275
+59@ = Char.GetCarIsUsing($scplayer)
+Car.SetAirResistanceMultiplier(59@, 5.0)
+
+:HOODS5_7275
+if 
+  131@ == 1
+goto_if_false @HOODS5_7367
+if 
+  not Car.IsDead(62@)
+goto_if_false @HOODS5_7330
+if 
+  Car.IsPlaybackGoingOn(62@)
+goto_if_false @HOODS5_7330
+Car.SkipToEndAndStopPlayback(62@)
+
+:HOODS5_7330
+if 
+  not Car.IsDead(63@)
+goto_if_false @HOODS5_7367
+if 
+  Car.IsPlaybackGoingOn(63@)
+goto_if_false @HOODS5_7367
+Car.SkipToEndAndStopPlayback(63@)
+
+:HOODS5_7367
+if and
+  not Car.IsDead(62@)
+  not Car.IsDead(63@)
+goto_if_false @HOODS5_7458
+Car.SetMission(62@, CarMission.BlockPlayerClose)
+Car.SetMission(63@, CarMission.RamPlayerClose)
+Car.SetCruiseSpeed(62@, 60.0)
+Car.SetCruiseSpeed(63@, 60.0)
+Car.SetHealth(62@, 2500)
+Car.SetHealth(63@, 2500)
+Car.SetAirResistanceMultiplier(62@, 0.1)
+Car.SetAirResistanceMultiplier(63@, 0.1)
+
+:HOODS5_7458
+73@ = Blip.AddForCoord(2509.062, -1672.527, 12.386)
+Blip.SetAsFriendly(73@, True)
+if and
+  not Char.IsDead(75@)
+  not Car.IsDead(59@)
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_7619
+Group.SetMember(75@, $Players_Group)
+Group.SetMember(43@, $Players_Group)
+Char.ListenToPlayerGroupCommands(75@, False)
+Char.ListenToPlayerGroupCommands(43@, False)
+Char.GiveWeapon(75@, WeaponType.Pistol, 9999)
+if 
+  not Char.IsInCar(75@, 59@)
+goto_if_false @HOODS5_7585
+Char.ClearTasksImmediately(75@)
+Char.WarpIntoCarAsPassenger(75@, 59@, 0)
+
+:HOODS5_7585
+if 
+  not Char.IsInCar(43@, 59@)
+goto_if_false @HOODS5_7619
+Char.ClearTasksImmediately(43@)
+Char.WarpIntoCarAsPassenger(43@, 59@, 1)
+
+:HOODS5_7619
+if and
+  not Car.IsDead(63@)
+  not Char.IsDead(65@)
+goto_if_false @HOODS5_7687
+68@ = Sequence.Open()
+Task.CarTempAction(-1, 63@, TempAction.Wait, 1500)
+Task.CarTempAction(-1, 63@, TempAction.ReverseRight, 1000)
+Sequence.Close(68@)
+Char.PerformSequence(65@, 68@)
+Sequence.Clear(68@)
+
+:HOODS5_7687
+if and
+  not Car.IsDead(62@)
+  not Char.IsDead(64@)
+goto_if_false @HOODS5_7721
+Task.CarTempAction(64@, 62@, TempAction.Wait, 1500)
+
+:HOODS5_7721
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Text.ClearPrints
+Text.Print('SW5_I', 5000, 1)
+127@ = 6
+125@ = 1
+set_lvar_int_to_lvar_int 153@ = TIMERA
+153@ += 3000
+164@ = 0
+Player.MakeGangReappear
+
+:HOODS5_7800
+return 
+
+:HOODS5_7802
+if 
+  152@ == 0
+goto_if_false @HOODS5_7938
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HOODS5_7938
+149@ = Char.GetCarIsUsing($scplayer)
+150@ = Car.GetHealth(149@)
+if 
+  900 > 150@
+goto_if_false @HOODS5_7938
+if 
+  352@ == 0
+goto_if_false @HOODS5_7938
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 153@
+goto_if_false @HOODS5_7938
+352@ = 13
+152@ = 1
+set_lvar_int_to_lvar_int 153@ = TIMERA
+153@ += 6000
+
+:HOODS5_7938
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 153@
+goto_if_false @HOODS5_8497
+if and
+  not Car.IsDead(62@)
+  not Car.IsDead(63@)
+goto_if_false @HOODS5_8349
+if or
+  Char.LocateInCarCar3D($scplayer, 62@, 20.0, 20.0, 10.0, False)
+  Char.LocateInCarCar3D($scplayer, 63@, 20.0, 20.0, 10.0, False)
+goto_if_false @HOODS5_8194
+151@ = Math.RandomIntInRange(0, 5)
+165@ = 0
+
+:HOODS5_8055
+if 
+  154@(151@,7i) == 0
+goto_if_false @HOODS5_8148
+151@ += 1
+165@ += 1
+if 
+  151@ > 4
+goto_if_false @HOODS5_8116
+151@ = 0
+
+:HOODS5_8116
+if 
+  165@ > 4
+goto_if_false @HOODS5_8141
+goto @HOODS5_8171
+
+:HOODS5_8141
+goto @HOODS5_8055
+
+:HOODS5_8148
+set_lvar_int_to_lvar_int 352@ = 154@(151@,7i)
+154@(151@,7i) = 0
+
+:HOODS5_8171
+set_lvar_int_to_lvar_int 153@ = TIMERA
+153@ += 7500
+goto @HOODS5_8342
+
+:HOODS5_8194
+151@ = Math.RandomIntInRange(0, 1)
+165@ = 0
+
+:HOODS5_8210
+if 
+  161@(151@,3i) == 0
+goto_if_false @HOODS5_8303
+151@ += 1
+165@ += 1
+if 
+  151@ > 1
+goto_if_false @HOODS5_8271
+151@ = 0
+
+:HOODS5_8271
+if 
+  165@ > 2
+goto_if_false @HOODS5_8296
+goto @HOODS5_8481
+
+:HOODS5_8296
+goto @HOODS5_8210
+
+:HOODS5_8303
+set_lvar_int_to_lvar_int 352@ = 161@(151@,3i)
+161@(151@,3i) = 0
+set_lvar_int_to_lvar_int 153@ = TIMERA
+153@ += 7500
+
+:HOODS5_8342
+goto @HOODS5_8497
+
+:HOODS5_8349
+151@ = Math.RandomIntInRange(0, 2)
+165@ = 0
+
+:HOODS5_8365
+if 
+  161@(151@,3i) == 0
+goto_if_false @HOODS5_8458
+151@ += 1
+165@ += 1
+if 
+  151@ > 1
+goto_if_false @HOODS5_8426
+151@ = 0
+
+:HOODS5_8426
+if 
+  165@ > 2
+goto_if_false @HOODS5_8451
+goto @HOODS5_8481
+
+:HOODS5_8451
+goto @HOODS5_8365
+
+:HOODS5_8458
+set_lvar_int_to_lvar_int 352@ = 161@(151@,3i)
+161@(151@,3i) = 0
+
+:HOODS5_8481
+set_lvar_int_to_lvar_int 153@ = TIMERA
+153@ += 7500
+
+:HOODS5_8497
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_8712
+if 
+  not Char.IsGroupMember(75@, $Players_Group)
+goto_if_false @HOODS5_8712
+if 
+  69@ == 0
+goto_if_false @HOODS5_8609
+69@ = 1
+Text.Print('SW5_T', 4000, 1)
+if 
+  not Blip.DoesExist(71@)
+goto_if_false @HOODS5_8604
+71@ = Blip.AddForChar(75@)
+Blip.SetAsFriendly(71@, True)
+
+:HOODS5_8604
+Blip.Remove(73@)
+
+:HOODS5_8609
+if and
+  Char.LocateAnyMeansChar2D($scplayer, 75@, 6.0, 6.0, False)
+  69@ == 1
+goto_if_false @HOODS5_8712
+69@ = 0
+Group.SetMember(75@, $Players_Group)
+Char.ListenToPlayerGroupCommands(75@, False)
+Blip.Remove(71@)
+if 
+  70@ == 0
+goto_if_false @HOODS5_8712
+73@ = Blip.AddForCoord(2509.062, -1672.527, 12.386)
+
+:HOODS5_8712
+if 
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_8934
+if 
+  not Char.IsGroupMember(43@, $Players_Group)
+goto_if_false @HOODS5_8934
+if 
+  70@ == 0
+goto_if_false @HOODS5_8824
+70@ = 1
+Text.Print('SW5_U', 4000, 1)
+if 
+  not Blip.DoesExist(72@)
+goto_if_false @HOODS5_8819
+72@ = Blip.AddForChar(43@)
+Blip.SetAsFriendly(72@, True)
+
+:HOODS5_8819
+Blip.Remove(73@)
+
+:HOODS5_8824
+if and
+  Char.LocateAnyMeansChar2D($scplayer, 43@, 6.0, 6.0, False)
+  70@ == 1
+goto_if_false @HOODS5_8934
+70@ = 0
+Group.SetMember(43@, $Players_Group)
+Char.ListenToPlayerGroupCommands(43@, False)
+Blip.Remove(72@)
+if 
+  69@ == 0
+goto_if_false @HOODS5_8934
+73@ = Blip.AddForCoord(2509.062, -1672.527, 12.386)
+Blip.SetAsFriendly(73@, True)
+
+:HOODS5_8934
+if 
+  66@ == 1
+goto_if_false @HOODS5_9054
+if and
+  not Car.IsDead(63@)
+  not Char.IsDead(65@)
+goto_if_false @HOODS5_9054
+if 
+  not Char.LocateAnyMeansChar3D($scplayer, 65@, 50.0, 50.0, 20.0, False)
+goto_if_false @HOODS5_9054
+85@, 86@, 87@ = Char.GetCoordinates($scplayer)
+91@ = Char.GetHeading($scplayer)
+66@ = 2
+set_lvar_int_to_lvar_int 67@ = TIMERA
+67@ += 800
+
+:HOODS5_9054
+if and
+  66@ == 2
+  103@ == 0
+goto_if_false @HOODS5_9284
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 67@
+goto_if_false @HOODS5_9284
+88@, 89@, 90@ = Path.GetNthClosestCarNode($player_x, $player_y, $player_z, 2)
+if 
+  not Camera.IsPointOnScreen(85@, 86@, 87@, 8.0)
+goto_if_false @HOODS5_9284
+if 
+  not Char.LocateStoppedAnyMeans3D($scplayer, 88@, 89@, 90@, 10.0, 10.0, 10.0, False)
+goto_if_false @HOODS5_9284
+if and
+  not Car.IsDead(63@)
+  not Char.IsDead(65@)
+goto_if_false @HOODS5_9284
+if 
+  not Car.IsUpsidedown(63@)
+goto_if_false @HOODS5_9284
+if 
+  Char.IsInCar(65@, 63@)
+goto_if_false @HOODS5_9284
+Car.SetCoordinates(63@, 85@, 86@, 87@)
+Car.SetHeading(63@, 91@)
+Car.SetForwardSpeed(63@, 25.0)
+66@ = 1
+
+:HOODS5_9284
+if and
+  not Char.IsDead(75@)
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_9682
+if 
+  103@ == 0
+goto_if_false @HOODS5_9464
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2509.062, -1672.527, 12.386, 63.0, 63.0, 60.0)
+goto_if_false @HOODS5_9464
+103@ = 1
+if 
+  not Car.IsDead(62@)
+goto_if_false @HOODS5_9421
+Car.SetMission(62@, CarMission.Cruise)
+Car.SetCruiseSpeed(62@, 20.0)
+Car.MarkAsNoLongerNeeded(62@)
+Char.MarkAsNoLongerNeeded(64@)
+
+:HOODS5_9421
+if 
+  not Car.IsDead(63@)
+goto_if_false @HOODS5_9464
+Car.SetMission(63@, CarMission.Cruise)
+Car.SetCruiseSpeed(63@, 20.0)
+Car.MarkAsNoLongerNeeded(63@)
+Char.MarkAsNoLongerNeeded(65@)
+
+:HOODS5_9464
+if and
+  70@ == 0
+  69@ == 0
+goto_if_false @HOODS5_9682
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 2509.062, -1672.527, 12.386, 4.0, 4.0, 4.0)
+goto_if_false @HOODS5_9682
+if and
+  Char.LocateAnyMeans3D(75@, 0, 2509.062, -1672.527, 12.386, 8.0, 8.0, 4.0)
+  Char.LocateAnyMeans3D(43@, 0, 2509.062, -1672.527, 12.386, 8.0, 8.0, 4.0)
+goto_if_false @HOODS5_9682
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HOODS5_9668
+Player.SetControl($player1, False)
+$car = Char.StoreCarIsInNoSave($scplayer)
+Task.CarTempAction($scplayer, $car, TempAction.HandbrakeStraight, 2000000)
+
+:HOODS5_9668
+127@ = 7
+148@ = 0
+
+:HOODS5_9682
+return 
+
+:HOODS5_9684
+if 
+  148@ == 0
+goto_if_false @HOODS5_9732
+125@ = 0
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 600
+148@ = 12
+
+:HOODS5_9732
+if 
+  148@ == 12
+goto_if_false @HOODS5_10395
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_10395
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HOODS5_9801
+59@ = Char.GetCarIsUsing($scplayer)
+129@ = Car.GetModel(59@)
+
+:HOODS5_9801
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_9832
+Char.SetProofs(75@, True, True, True, True, True)
+
+:HOODS5_9832
+if 
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_9863
+Char.SetProofs(43@, True, True, True, True, True)
+
+:HOODS5_9863
+World.SetPedDensityMultiplier(0.0)
+World.SetCarDensityMultiplier(0.0)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+World.ClearAreaOfCars(2472.102, -1646.181, 19.6421, 2517.383, -1691.232, 9.4098)
+World.ClearAreaOfChars(2472.102, -1646.181, 19.6421, 2517.383, -1691.232, 9.4098)
+if 
+  not Car.IsDead(62@)
+goto_if_false @HOODS5_9992
+if 
+  not Char.IsInCar($scplayer, 62@)
+goto_if_false @HOODS5_9992
+Car.Delete(62@)
+
+:HOODS5_9992
+if 
+  not Car.IsDead(63@)
+goto_if_false @HOODS5_10032
+if 
+  not Char.IsInCar($scplayer, 63@)
+goto_if_false @HOODS5_10032
+Car.Delete(63@)
+
+:HOODS5_10032
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HOODS5_10099
+if 
+  not Car.IsDead(59@)
+goto_if_false @HOODS5_10099
+Task.LeaveAnyCar($scplayer)
+Car.SetCoordinates(59@, 2507.709, -1672.192, 13.458)
+Car.SetHeading(59@, 340.0)
+
+:HOODS5_10099
+Camera.SetFixedPosition(2514.24, -1679.268, 14.5054, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2513.649, -1678.483, 14.3221, SwitchType.JumpCut)
+if 
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_10246
+$car = Char.GetCarIsUsing(43@)
+if 
+  $car == -1
+goto_if_false @HOODS5_10246
+Char.SetCoordinates(43@, 2509.821, -1675.815, 12.5469)
+Char.SetHeading(43@, 337.0)
+Task.GoStraightToCoord(43@, 2512.229, -1672.784, 12.4531, MoveState.Walk, -2)
+
+:HOODS5_10246
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_10342
+$car = Char.GetCarIsUsing(75@)
+if 
+  $car == -1
+goto_if_false @HOODS5_10342
+Char.SetCoordinates(75@, 2508.821, -1675.815, 12.5469)
+Char.SetHeading(75@, 337.0)
+Task.GoStraightToCoord(75@, 2511.229, -1672.784, 12.4531, MoveState.Walk, -2)
+
+:HOODS5_10342
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HOODS5_10388
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 300
+148@ = 10
+goto @HOODS5_10395
+
+:HOODS5_10388
+148@ = 2
+
+:HOODS5_10395
+if 
+  148@ == 10
+goto_if_false @HOODS5_10502
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_10502
+if 
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_10502
+$car = Char.GetCarIsUsing(43@)
+if 
+  $car <> -1
+goto_if_false @HOODS5_10479
+Task.LeaveAnyCar(43@)
+
+:HOODS5_10479
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 400
+148@ = 11
+
+:HOODS5_10502
+if 
+  148@ == 11
+goto_if_false @HOODS5_10609
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_10609
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_10609
+$car = Char.GetCarIsUsing(75@)
+if 
+  $car <> -1
+goto_if_false @HOODS5_10586
+Task.LeaveAnyCar(75@)
+
+:HOODS5_10586
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 2000
+148@ = 1
+
+:HOODS5_10609
+if 
+  148@ == 1
+goto_if_false @HOODS5_10653
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_10653
+148@ = 2
+
+:HOODS5_10653
+if 
+  148@ == 2
+goto_if_false @HOODS5_11132
+if 
+  not Car.IsDead(59@)
+goto_if_false @HOODS5_10694
+Car.SetVisible(59@, False)
+
+:HOODS5_10694
+Camera.SetFixedPosition(2509.713, -1671.558, 13.5033, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2510.19, -1672.389, 13.8387, SwitchType.JumpCut)
+Char.SetCoordinatesNoOffset($scplayer, 2509.892, -1672.469, 13.5032)
+Char.SetHeading($scplayer, 270.0)
+if and
+  not Char.IsDead(75@)
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_11006
+Char.Delete(75@)
+75@ = Char.Create(4, 290, 2752.341, -1948.867, 16.3125)
+Char.SetCurrentWeapon(75@, WeaponType.Unarmed)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Char.RemoveFromGroup(75@)
+Char.RemoveFromGroup(43@)
+Char.ClearTasksImmediately(75@)
+Char.ClearTasksImmediately(43@)
+Char.SetCoordinatesNoOffset(75@, 2510.792, -1672.469, 13.5032)
+Char.SetCoordinatesNoOffset(43@, 2510.792, -1673.469, 13.5032)
+Char.SetHeading(75@, 90.0)
+Char.SetHeading(43@, 90.0)
+Task.PlayAnimNonInterruptable(75@, "SWEET_ASS_SLAP", "SWEET", 4.0, False, False, False, False, -2)
+Task.PlayAnimNonInterruptable(43@, "HO_ASS_SLAPPED", "SWEET", 4.0, False, False, False, False, -2)
+
+:HOODS5_11006
+set_lvar_int_to_lvar_int 399@ = 75@
+$play_audio_global = 1
+203@ = 23
+227@ = 5
+207@ = 100
+208@ = 1900
+209@ = 4200
+210@ = 6000
+211@ = 8000
+217@ = 23
+218@ = 24
+219@ = 25
+220@ = 26
+221@ = 27
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 1700
+148@ = 3
+
+:HOODS5_11132
+if 
+  148@ == 3
+goto_if_false @HOODS5_11251
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_11251
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_11228
+Task.PlayAnimNonInterruptable(75@, "PRTIAL_GNGTLKA", "GANGS", 4.0, False, False, False, False, -2)
+
+:HOODS5_11228
+148@ = 4
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 300
+
+:HOODS5_11251
+if 
+  148@ == 4
+goto_if_false @HOODS5_11352
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_11352
+if 
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_11329
+Task.FollowPathNodesToCoord(43@, 2516.686, -1675.861, 13.1227, 4, 5500)
+
+:HOODS5_11329
+148@ = 5
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 2000
+
+:HOODS5_11352
+if 
+  148@ == 5
+goto_if_false @HOODS5_11503
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_11503
+Task.PlayAnim($scplayer, "HNDSHKFA", "GANGS", 4.0, False, False, False, False, -2)
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_11480
+Task.PlayAnimNonInterruptable(75@, "HNDSHKFA", "GANGS", 4.0, False, False, False, False, 3400)
+
+:HOODS5_11480
+148@ = 7
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 4000
+
+:HOODS5_11503
+if 
+  148@ == 7
+goto_if_false @HOODS5_11691
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_11691
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_11668
+Task.PlayAnimNonInterruptable(75@, "SWEET_HNDSHLDR_01", "SWEET", 4.0, False, False, False, False, -2)
+Task.PlayAnimNonInterruptable($scplayer, "PLYR_HNDSHLDR_01", "SWEET", 4.0, False, False, False, False, -2)
+if 
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_11668
+Char.Delete(43@)
+
+:HOODS5_11668
+148@ = 8
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 3500
+
+:HOODS5_11691
+if 
+  148@ == 8
+goto_if_false @HOODS5_11799
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_11799
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_11776
+Char.FreezePosition(75@, False)
+Task.FollowPathNodesToCoord(75@, 2516.686, -1675.861, 13.1227, 4, 5500)
+
+:HOODS5_11776
+148@ = 9
+set_lvar_int_to_lvar_int 35@ = TIMERA
+35@ += 1500
+
+:HOODS5_11799
+if 
+  148@ == 9
+goto_if_false @HOODS5_11949
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 35@
+goto_if_false @HOODS5_11949
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_11857
+Char.Delete(75@)
+
+:HOODS5_11857
+if 
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_11878
+Char.Delete(43@)
+
+:HOODS5_11878
+if 
+  not Car.IsDead(59@)
+goto_if_false @HOODS5_11901
+Car.SetVisible(59@, True)
+
+:HOODS5_11901
+Char.FreezePosition($scplayer, False)
+Player.SetControl($player1, True)
+Char.SetHeading($scplayer, 90.0)
+Hud.SwitchWidescreen(False)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.MakeGangReappear
+127@ = 8
+
+:HOODS5_11949
+return 
+
+:HOODS5_11951
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 179@
+goto_if_false @HOODS5_13222
+set_lvar_int_to_lvar_int 179@ = TIMERA
+179@ += 50
+180@ += 1
+if 
+  180@ == 5
+goto_if_false @HOODS5_12017
+180@ = 0
+
+:HOODS5_12017
+if 
+  not Char.IsDead(37@(180@,6i))
+goto_if_false @HOODS5_13109
+if 
+  96@ == 0
+goto_if_false @HOODS5_12085
+if 
+  Char.HasBeenDamagedByChar(37@(180@,6i), $scplayer)
+goto_if_false @HOODS5_12085
+96@ = 1
+
+:HOODS5_12085
+82@, 83@, 84@ = Char.GetCoordinates(37@(180@,6i))
+85@, 86@, 87@ = Char.GetCoordinates($scplayer)
+200@ = Math.GetDistanceBetweenCoords2D(85@, 86@, 82@, 83@)
+if 
+  not is_int_lvar_equal_to_int_lvar 193@ == 180@
+goto_if_false @HOODS5_12211
+if 
+  is_float_lvar_greater_than_float_lvar 198@ > 200@
+goto_if_false @HOODS5_12204
+set_lvar_int_to_lvar_int 194@ = 193@
+set_lvar_float_to_lvar_float 199@ = 198@
+set_lvar_float_to_lvar_float 198@ = 200@
+set_lvar_int_to_lvar_int 193@ = 180@
+
+:HOODS5_12204
+goto @HOODS5_12219
+
+:HOODS5_12211
+set_lvar_float_to_lvar_float 198@ = 200@
+
+:HOODS5_12219
+if 
+  not is_int_lvar_equal_to_int_lvar 194@ == 180@
+goto_if_false @HOODS5_12299
+if 
+  not is_int_lvar_equal_to_int_lvar 193@ == 180@
+goto_if_false @HOODS5_12292
+if 
+  is_float_lvar_greater_than_float_lvar 199@ > 200@
+goto_if_false @HOODS5_12292
+set_lvar_int_to_lvar_int 194@ = 180@
+set_lvar_float_to_lvar_float 199@ = 200@
+
+:HOODS5_12292
+goto @HOODS5_12307
+
+:HOODS5_12299
+set_lvar_float_to_lvar_float 199@ = 200@
+
+:HOODS5_12307
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HOODS5_12573
+59@ = Char.GetCarIsUsing($scplayer)
+188@ = Car.GetSpeed(59@)
+if 
+  188@ > 5.0
+goto_if_false @HOODS5_12573
+197@ = Math.RandomFloatInRange(-0.2, 0.2)
+set_lvar_float_to_lvar_float 196@ = 188@
+196@ *= 1.6
+add_float_lvar_to_float_lvar 196@ += 197@
+if 
+  is_float_lvar_greater_than_float_lvar 196@ > 200@
+goto_if_false @HOODS5_12573
+set_lvar_float_to_lvar_float 196@ = 87@
+sub_float_lvar_from_float_lvar 196@ -= 84@
+196@ = Math.Abs()
+if 
+  1.0 > 196@
+goto_if_false @HOODS5_12573
+set_lvar_float_to_lvar_float 195@ = 82@
+sub_float_lvar_from_float_lvar 195@ -= 85@
+set_lvar_float_to_lvar_float 196@ = 83@
+sub_float_lvar_from_float_lvar 196@ -= 86@
+190@ = Math.GetHeadingFromVector2D(195@, 196@)
+189@ = Car.GetHeading(59@)
+set_lvar_float_to_lvar_float 195@ = 190@
+sub_float_lvar_from_float_lvar 195@ -= 189@
+195@ = Math.Abs()
+if 
+  5.0 > 195@
+goto_if_false @HOODS5_12573
+96@ = 1
+181@(180@,6i) = 4
+
+:HOODS5_12573
+if 
+  181@(180@,6i) == 4
+goto_if_false @HOODS5_12661
+34@ = Char.GetScriptTaskStatus(37@(180@,6i), 1651)
+if 
+  is_int_lvar_equal_to_constant 34@ == 7
+goto_if_false @HOODS5_12661
+Task.DiveAndGetUp(37@(180@,6i), 1.0, 0.0, 500)
+181@(180@,6i) = 5
+
+:HOODS5_12661
+if 
+  181@(180@,6i) == 5
+goto_if_false @HOODS5_12727
+34@ = Char.GetScriptTaskStatus(37@(180@,6i), 1651)
+if 
+  is_int_lvar_equal_to_constant 34@ == 7
+goto_if_false @HOODS5_12727
+181@(180@,6i) = 0
+
+:HOODS5_12727
+if 
+  181@(180@,6i) == 0
+goto_if_false @HOODS5_12805
+if 
+  96@ == 1
+goto_if_false @HOODS5_12805
+if or
+  is_int_lvar_equal_to_int_lvar 180@ == 193@
+  is_int_lvar_equal_to_int_lvar 180@ == 194@
+goto_if_false @HOODS5_12805
+181@(180@,6i) = 1
+
+:HOODS5_12805
+if 
+  181@(180@,6i) == 1
+goto_if_false @HOODS5_13102
+34@ = Char.GetScriptTaskStatus(37@(180@,6i), 1869)
+if 
+  is_int_lvar_equal_to_constant 34@ == 7
+goto_if_false @HOODS5_12953
+34@ = Char.GetScriptTaskStatus(37@(180@,6i), 1506)
+if 
+  is_int_lvar_equal_to_constant 34@ == 7
+goto_if_false @HOODS5_12953
+187@ = Math.RandomIntInRange(0, 2)
+if 
+  187@ == 0
+goto_if_false @HOODS5_12941
+Task.ShootAtChar(37@(180@,6i), $scplayer, -2)
+goto @HOODS5_12953
+
+:HOODS5_12941
+Task.KillCharOnFoot(37@(180@,6i), $scplayer)
+
+:HOODS5_12953
+if and
+  not is_int_lvar_equal_to_int_lvar 180@ == 193@
+  not is_int_lvar_equal_to_int_lvar 180@ == 194@
+goto_if_false @HOODS5_13102
+34@ = Char.GetScriptTaskStatus(37@(180@,6i), 1560)
+if 
+  is_int_lvar_equal_to_constant 34@ == 7
+goto_if_false @HOODS5_13102
+68@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 106@(180@,6f), 112@(180@,6f), 118@(180@,6f), 6, 6000)
+Task.ShootAtCoord(-1, 2750.957, -1968.016, 17.9291, -2)
+Sequence.Close(68@)
+Char.PerformSequence(37@(180@,6i), 68@)
+Sequence.Clear(68@)
+181@(180@,6i) = 0
+
+:HOODS5_13102
+goto @HOODS5_13222
+
+:HOODS5_13109
+if 
+  96@ == 0
+goto_if_false @HOODS5_13134
+96@ = 1
+
+:HOODS5_13134
+if 
+  is_int_lvar_equal_to_int_lvar 180@ == 193@
+goto_if_false @HOODS5_13186
+set_lvar_int_to_lvar_int 193@ = 194@
+set_lvar_float_to_lvar_float 198@ = 199@
+194@ = 0
+199@ = 99999.0
+
+:HOODS5_13186
+if 
+  is_int_lvar_equal_to_int_lvar 180@ == 194@
+goto_if_false @HOODS5_13222
+194@ = 0
+199@ = 99999.0
+
+:HOODS5_13222
+return 
+
+:HOODS5_13224
+if 
+  203@ <> 0
+goto_if_false @HOODS5_13424
+if 
+  204@ == 0
+goto_if_false @HOODS5_13302
+204@ = 1
+set_lvar_int_to_lvar_int 205@ = TIMERA
+206@ = 0
+set_lvar_int_to_lvar_int 408@ = 205@
+add_int_lvar_to_int_lvar 408@ += 207@(206@,10i)
+
+:HOODS5_13302
+if 
+  204@ == 1
+goto_if_false @HOODS5_13424
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 408@
+goto_if_false @HOODS5_13424
+set_lvar_int_to_lvar_int 352@ = 217@(206@,10i)
+206@ += 1
+227@ -= 1
+if 
+  227@ == 0
+goto_if_false @HOODS5_13404
+203@ = 0
+204@ = 0
+goto @HOODS5_13424
+
+:HOODS5_13404
+set_lvar_int_to_lvar_int 408@ = 205@
+add_int_lvar_to_int_lvar 408@ += 207@(206@,10i)
+
+:HOODS5_13424
+switch_start 355@ total_jumps 6 default_jump 0 @HOODS5_15254 jumps 0 @HOODS5_13487 1 @HOODS5_14396 2 @HOODS5_14925 3 @HOODS5_15001 4 @HOODS5_15059 5 @HOODS5_15173 -1 @HOODS5_15254
+
+:HOODS5_13487
+set_lvar_text_label 230@s = 'MSWE13A'
+set_lvar_int_to_constant 309@ = 29137
+set_lvar_text_label 232@s = 'MSWE13B'
+set_lvar_int_to_constant 310@ = 29138
+set_lvar_text_label 234@s = 'MSWE13C'
+set_lvar_int_to_constant 311@ = 29139
+set_lvar_text_label 236@s = 'MSWE13D'
+set_lvar_int_to_constant 312@ = 29140
+set_lvar_text_label 238@s = 'MSWE13E'
+set_lvar_int_to_constant 313@ = 29141
+set_lvar_text_label 240@s = 'MSWE13F'
+set_lvar_int_to_constant 314@ = 29142
+set_lvar_text_label 242@s = 'MSWE13G'
+set_lvar_int_to_constant 315@ = 29143
+set_lvar_text_label 244@s = 'SWE5_FA'
+set_lvar_int_to_constant 316@ = 38226
+set_lvar_text_label 246@s = 'SWE5_FB'
+set_lvar_int_to_constant 317@ = 38227
+set_lvar_text_label 248@s = 'SWE5_GH'
+set_lvar_int_to_constant 318@ = 38235
+set_lvar_text_label 250@s = 'SWE5_CA'
+set_lvar_int_to_constant 319@ = 38216
+set_lvar_text_label 252@s = 'SWE5_CC'
+set_lvar_int_to_constant 320@ = 38218
+set_lvar_text_label 254@s = 'SWE5_GA'
+set_lvar_int_to_constant 321@ = 38228
+set_lvar_text_label 256@s = 'SWE5_GC'
+set_lvar_int_to_constant 322@ = 38230
+set_lvar_text_label 258@s = 'SWE5_GD'
+set_lvar_int_to_constant 323@ = 38231
+set_lvar_text_label 260@s = 'SWE5_GE'
+set_lvar_int_to_constant 324@ = 38232
+set_lvar_text_label 262@s = 'SWE5_GF'
+set_lvar_int_to_constant 325@ = 38233
+set_lvar_text_label 264@s = 'SWE5_GG'
+set_lvar_int_to_constant 326@ = 38234
+set_lvar_text_label 266@s = 'SWE5_GJ'
+set_lvar_int_to_constant 327@ = 38236
+set_lvar_text_label 268@s = 'SWE5_GK'
+set_lvar_int_to_constant 328@ = 38237
+set_lvar_text_label 270@s = 'SWE5_GB'
+set_lvar_int_to_constant 329@ = 38229
+set_lvar_text_label 272@s = 'SWE5_GL'
+set_lvar_int_to_constant 330@ = 38238
+set_lvar_text_label 274@s = 'SWE5_EA'
+set_lvar_int_to_constant 331@ = 38221
+set_lvar_text_label 276@s = 'SWE5_EB'
+set_lvar_int_to_constant 332@ = 38222
+set_lvar_text_label 278@s = 'SWE5_EC'
+set_lvar_int_to_constant 333@ = 38223
+set_lvar_text_label 280@s = 'SWE5_ED'
+set_lvar_int_to_constant 334@ = 38224
+set_lvar_text_label 282@s = 'SWE5_EE'
+set_lvar_int_to_constant 335@ = 38225
+set_lvar_text_label 286@s = 'MOBRING'
+set_lvar_int_to_constant 337@ = 23000
+358@ = 1
+359@ = 0
+360@ = 0
+361@ = 0
+362@ = 0
+363@ = 1
+364@ = 0
+365@ = 0
+366@ = 0
+367@ = 3
+368@ = 0
+369@ = 0
+370@ = 2
+371@ = 2
+372@ = 2
+373@ = 1
+374@ = 1
+375@ = 1
+376@ = 3
+377@ = 3
+378@ = 2
+379@ = 3
+380@ = 2
+381@ = 2
+382@ = 2
+383@ = 1
+384@ = 2
+385@ = 2
+386@ = 0
+set_lvar_int_to_var_int 398@ = $scplayer
+355@ = 1
+Audio.LoadMissionAudio(309@, 1)
+Audio.LoadMissionAudio(310@, 2)
+349@ = 1
+350@ = 2
+goto @HOODS5_15254
+
+:HOODS5_14396
+if 
+  352@ <> 0
+goto_if_false @HOODS5_14918
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 356@
+goto_if_false @HOODS5_14918
+if and
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @HOODS5_14918
+if 
+  is_int_lvar_equal_to_int_lvar 349@ == 352@
+goto_if_false @HOODS5_14485
+351@ = 1
+goto @HOODS5_14548
+
+:HOODS5_14485
+if 
+  is_int_lvar_equal_to_int_lvar 350@ == 352@
+goto_if_false @HOODS5_14518
+351@ = 2
+goto @HOODS5_14548
+
+:HOODS5_14518
+351@ = 1
+set_lvar_int_to_lvar_int 349@ = 352@
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(308@(352@,40i), 1)
+
+:HOODS5_14548
+if 
+  Audio.HasMissionAudioLoaded(351@)
+goto_if_false @HOODS5_14906
+if 
+  357@(352@,40i) <> 0
+goto_if_false @HOODS5_14679
+set_lvar_int_to_lvar_int 405@ = 357@(352@,40i)
+set_lvar_int_to_lvar_int 406@ = 397@(405@,7i)
+if 
+  not Char.IsDead(406@)
+goto_if_false @HOODS5_14679
+Audio.AttachMissionAudioToChar(351@, 406@)
+if 
+  not Char.IsTalking(406@)
+goto_if_false @HOODS5_14672
+404@ = 1
+Char.StartFacialTalk(406@, 15000)
+goto @HOODS5_14679
+
+:HOODS5_14672
+Char.DisableSpeech(406@, False)
+
+:HOODS5_14679
+if 
+  357@(352@,40i) == 0
+goto_if_false @HOODS5_14708
+404@ = 1
+
+:HOODS5_14708
+if 
+  404@ == 1
+goto_if_false @HOODS5_14899
+Audio.PlayMissionAudio(351@)
+Text.ClearPrints
+Text.Print(228@(352@,40s), 10000, 1)
+355@ += 1
+404@ = 0
+352@ += 1
+set_lvar_int_to_lvar_int 353@ = 352@
+if 
+  308@(352@,40i) <> 0
+goto_if_false @HOODS5_14899
+if 
+  351@ == 1
+goto_if_false @HOODS5_14861
+if 
+  not is_int_lvar_equal_to_int_lvar 350@ == 352@
+goto_if_false @HOODS5_14854
+Audio.LoadMissionAudio(308@(352@,40i), 2)
+set_lvar_int_to_lvar_int 350@ = 352@
+
+:HOODS5_14854
+goto @HOODS5_14899
+
+:HOODS5_14861
+if 
+  not is_int_lvar_equal_to_int_lvar 349@ == 352@
+goto_if_false @HOODS5_14899
+Audio.LoadMissionAudio(308@(352@,40i), 1)
+set_lvar_int_to_lvar_int 349@ = 352@
+
+:HOODS5_14899
+goto @HOODS5_14918
+
+:HOODS5_14906
+Audio.LoadMissionAudio(308@(352@,40i), 351@)
+
+:HOODS5_14918
+goto @HOODS5_15254
+
+:HOODS5_14925
+if 
+  Audio.HasMissionAudioFinished(351@)
+goto_if_false @HOODS5_14955
+355@ += 1
+goto @HOODS5_14994
+
+:HOODS5_14955
+if 
+  Char.DoesExist(406@)
+goto_if_false @HOODS5_14994
+if 
+  Char.IsDead(406@)
+goto_if_false @HOODS5_14994
+355@ += 1
+
+:HOODS5_14994
+goto @HOODS5_15254
+
+:HOODS5_15001
+Audio.ClearMissionAudio(351@)
+348@(351@,3i) = 0
+Text.ClearPrints
+if 
+  not Char.IsDead(406@)
+goto_if_false @HOODS5_15045
+Char.StopFacialTalk(406@)
+Char.EnableSpeech(406@)
+
+:HOODS5_15045
+355@ += 1
+goto @HOODS5_15254
+
+:HOODS5_15059
+352@ += 1
+if 
+  308@(352@,40i) <> 0
+goto_if_false @HOODS5_15112
+Audio.LoadMissionAudio(308@(352@,40i), 351@)
+set_lvar_int_to_lvar_int 348@(351@,3i) = 352@
+
+:HOODS5_15112
+354@ -= 1
+if 
+  354@ <= 0
+goto_if_false @HOODS5_15151
+352@ = 0
+goto @HOODS5_15159
+
+:HOODS5_15151
+set_lvar_int_to_lvar_int 352@ = 353@
+
+:HOODS5_15159
+355@ = 1
+goto @HOODS5_15254
+
+:HOODS5_15173
+355@ = 1
+352@ = 0
+354@ = 0
+203@ = 0
+227@ = 0
+Audio.ClearMissionAudio(351@)
+348@(351@,3i) = 0
+Text.ClearPrints
+if 
+  not Char.IsDead(406@)
+goto_if_false @HOODS5_15247
+Char.EnableSpeech(406@)
+
+:HOODS5_15247
+goto @HOODS5_15254
+
+:HOODS5_15254
+return 
+
+:HOODS5_15256
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:HOODS5_15274
+$flag_sweet_mission_counter += 1
+Stat.RegisterMissionPassed('SWEET_5')
+Stat.PlayerMadeProgress(1)
+Audio.PlayMissionPassedTune(1)
+Player.ClearWantedLevel($player1)
+Text.PrintWithNumberBig('M_PASSR', 7, 5000, TextStyle.Middle)
+Stat.AwardPlayerMissionRespect(7)
+return 
+
+:HOODS5_15329
+$onmission = 0
+CarGenerator.Switch($gen_car7, 101)
+Game.SetScriptLimitToGangSize(99)
+if 
+  Char.DoesExist(75@)
+goto_if_false @HOODS5_15413
+if 
+  not Char.IsDead(75@)
+goto_if_false @HOODS5_15413
+Char.SetProofs(75@, False, False, False, False, False)
+Char.SetOnlyDamagedByPlayer(75@, False)
+Char.SetNeverTargeted(75@, False)
+Char.MarkAsNoLongerNeeded(75@)
+
+:HOODS5_15413
+if 
+  Char.DoesExist(43@)
+goto_if_false @HOODS5_15479
+if 
+  not Char.IsDead(43@)
+goto_if_false @HOODS5_15479
+Char.SetProofs(43@, False, False, False, False, False)
+Char.SetOnlyDamagedByPlayer(43@, False)
+Char.SetNeverTargeted(43@, False)
+Char.MarkAsNoLongerNeeded(43@)
+
+:HOODS5_15479
+36@ = 0
+
+:HOODS5_15486
+if 
+  5 > 36@
+goto_if_false @HOODS5_15527
+Char.MarkAsNoLongerNeeded(37@(36@,6i))
+36@ += 1
+goto @HOODS5_15486
+
+:HOODS5_15527
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @HOODS5_15550
+Task.UseMobilePhone($scplayer, False)
+
+:HOODS5_15550
+Streaming.RemoveAnimation("SWEET")
+Streaming.RemoveAnimation("GANGS")
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.MarkModelAsNoLongerNeeded(12)
+Streaming.MarkModelAsNoLongerNeeded(372)
+Streaming.MarkModelAsNoLongerNeeded(405)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(492)
+Streaming.MarkModelAsNoLongerNeeded(105)
+Streaming.MarkModelAsNoLongerNeeded(106)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.RemoveCarRecording(153)
+Streaming.RemoveCarRecording(154)
+Path.SwitchRoadsBackToOriginal(2793.814, -1987.935, 15.3045, 2754.324, -1900.369, 9.8752)
+Path.SwitchPedRoadsBackToOriginal(2793.814, -1987.935, 15.3045, 2754.324, -1900.369, 9.8752)
+Path.SwitchRoadsBackToOriginal(2463.375, -1702.695, 17.9193, 2508.735, -1644.574, 10.5835)
+if 
+  not Car.IsDead(105@)
+goto_if_false @HOODS5_15736
+Car.MarkAsNoLongerNeeded(105@)
+
+:HOODS5_15736
+Hud.ClearCounter($sw5_sweet_health)
+Char.ClearRelationship($scplayer, RelationshipType.Hate, PedType.Mission1)
+Blip.Remove(51@)
+Blip.Remove(52@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+Blip.Remove(55@)
+Blip.Remove(48@)
+Blip.Remove(73@)
+Blip.Remove(49@)
+Blip.Remove(71@)
+Blip.Remove(72@)
+Game.SetWantedMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+Game.SwitchEmergencyServices(True)
+DecisionMaker.Remove(47@)
+DecisionMaker.Remove(99@)
+Game.SetCreateRandomGangMembers(True)
+Player.SetGroupToFollowAlways($player1, False)
+$onmission = 0
+$timer_mobile_start = Clock.GetGameTimer()
+Mission.Finish
+return 
+

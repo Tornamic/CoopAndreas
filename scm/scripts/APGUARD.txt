@@ -1,0 +1,169 @@
+:APGUARD
+script_name 'APGUARD'
+3@ = 0
+
+:APGUARD_18
+if 
+  not Streaming.HasModelLoaded(71)
+goto_if_false @APGUARD_48
+Streaming.RequestModel(71)
+wait 0
+goto @APGUARD_18
+
+:APGUARD_48
+switch_start 0@ total_jumps 5 default_jump 0 @APGUARD_333 jumps -1 @APGUARD_111 1 @APGUARD_169 2 @APGUARD_210 3 @APGUARD_251 4 @APGUARD_292 -1 @APGUARD_333 -1 @APGUARD_333
+
+:APGUARD_111
+1@ = Char.Create(4, 71, -1544.88, -441.1089, 5.0068)
+Char.SetHeading(1@, 7.3631)
+Char.SetMoney(1@, 0)
+Char.DontRemove(1@)
+Task.Dead(1@)
+goto @APGUARD_333
+
+:APGUARD_169
+1@ = Char.Create(4, 71, -1544.396, -443.2464, 5.045)
+Char.SetHeading(1@, 54.6458)
+goto @APGUARD_333
+
+:APGUARD_210
+1@ = Char.Create(4, 71, 1955.809, -2181.541, 12.5865)
+Char.SetHeading(1@, 272.1978)
+goto @APGUARD_333
+
+:APGUARD_251
+1@ = Char.Create(4, 71, 1717.202, 1617.376, 9.1924)
+Char.SetHeading(1@, 186.0379)
+goto @APGUARD_333
+
+:APGUARD_292
+1@ = Char.Create(4, 71, -1229.438, 55.3906, 13.2328)
+Char.SetHeading(1@, 301.4596)
+goto @APGUARD_333
+
+:APGUARD_333
+Char.SetDecisionMaker(1@, 65543)
+Char.SetOnlyDamagedByPlayer(1@, True)
+Char.DontRemove(1@)
+
+:APGUARD_355
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @APGUARD_542
+if 
+  not Char.IsDead(1@)
+goto_if_false @APGUARD_528
+if 
+  not Char.LocateAnyMeansChar3D($scplayer, 1@, 67.0, 67.0, 10.0, False)
+goto_if_false @APGUARD_434
+APGUARD_883()
+
+:APGUARD_434
+if 
+  not Char.IsDead(1@)
+goto_if_false @APGUARD_493
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 1@, 15.0, 15.0, 15.0, False)
+goto_if_false @APGUARD_493
+APGUARD_556()
+
+:APGUARD_493
+if 
+  Char.HasBeenDamagedByChar(1@, $scplayer)
+goto_if_false @APGUARD_521
+Char.SetRelationship(1@, RelationshipType.Hate, PedType.Player1)
+
+:APGUARD_521
+goto @APGUARD_535
+
+:APGUARD_528
+APGUARD_883()
+
+:APGUARD_535
+goto @APGUARD_549
+
+:APGUARD_542
+APGUARD_883()
+
+:APGUARD_549
+goto @APGUARD_355
+
+:APGUARD_556
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 1@, 5.0, 5.0, 3.0, False)
+goto_if_false @APGUARD_881
+2@ = Stat.GetInt(223)
+if and
+  not Char.IsRespondingToEvent(1@, 36)
+  is_int_lvar_greater_or_equal_to_constant 2@ >= 180
+goto_if_false @APGUARD_757
+if 
+  3@ == 0
+goto_if_false @APGUARD_750
+3@ = Math.RandomIntInRange(1, 100)
+if 
+  3@ > 50
+goto_if_false @APGUARD_700
+set_var_text_label s$audio_string = 'G_OPEN1'
+set_var_int_to_constant $audio_sound_file = 16802
+goto @APGUARD_722
+
+:APGUARD_700
+set_var_text_label s$audio_string = 'G_OPEN2'
+set_var_int_to_constant $audio_sound_file = 16803
+
+:APGUARD_722
+start_new_script @AUDIOL 1@ 1 1 2 0 
+3@ = 1
+return 
+
+:APGUARD_750
+goto @APGUARD_881
+
+:APGUARD_757
+if 
+  3@ == 0
+goto_if_false @APGUARD_881
+3@ = Math.RandomIntInRange(1, 100)
+if 
+  3@ > 50
+goto_if_false @APGUARD_831
+set_var_text_label s$audio_string = 'G_CLOS1'
+set_var_int_to_constant $audio_sound_file = 16800
+goto @APGUARD_853
+
+:APGUARD_831
+set_var_text_label s$audio_string = 'G_CLOS2'
+set_var_int_to_constant $audio_sound_file = 16801
+
+:APGUARD_853
+start_new_script @AUDIOL 1@ 1 1 2 0 
+3@ = 1
+return 
+
+:APGUARD_881
+return 
+
+:APGUARD_883
+if 
+  Player.IsPlaying($player1)
+goto_if_false @APGUARD_935
+if 
+  $onmission == 0
+goto_if_false @APGUARD_928
+Char.Delete(1@)
+Streaming.MarkModelAsNoLongerNeeded(71)
+terminate_this_script 
+
+:APGUARD_928
+goto @APGUARD_946
+
+:APGUARD_935
+Char.Delete(1@)
+Streaming.MarkModelAsNoLongerNeeded(71)
+terminate_this_script 
+
+:APGUARD_946
+return 
+

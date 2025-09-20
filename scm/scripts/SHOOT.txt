@@ -1,0 +1,64 @@
+:SHOOT
+script_name 'SHOOT'
+
+:SHOOT_11
+wait 125
+if 
+  Player.IsPlaying($player1)
+goto_if_false @SHOOT_324
+if 
+  $onmission == 0
+goto_if_false @SHOOT_238
+if 
+  $main_visible_area <> 0
+goto_if_false @SHOOT_231
+if 
+  $flag_shooting_range_mission == 0
+goto_if_false @SHOOT_231
+if 
+  $flag_dont_start_shooting_range == 0
+goto_if_false @SHOOT_231
+$sr_i = 0
+
+:SHOOT_110
+if 
+  4 > $sr_i
+goto_if_false @SHOOT_231
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $Srange_X($sr_i,4f), $Srange_Y($sr_i,4f), $Srange_Z($sr_i,4f), 20.0, 20.0, 10.0)
+goto_if_false @SHOOT_217
+if 
+  Player.CanStartMission($player1)
+goto_if_false @SHOOT_217
+$onmission = 1
+set_var_int_to_var_int $SR_range_id = $sr_i
+Mission.LoadAndLaunchInternal(113) // Shooting range
+
+:SHOOT_217
+$sr_i += 1
+goto @SHOOT_110
+
+:SHOOT_231
+goto @SHOOT_281
+
+:SHOOT_238
+if 
+  $main_visible_area <> 0
+goto_if_false @SHOOT_281
+if 
+  $flag_dont_start_shooting_range == 0
+goto_if_false @SHOOT_281
+$flag_dont_start_shooting_range = 1
+
+:SHOOT_281
+if 
+  $flag_dont_start_shooting_range == 1
+goto_if_false @SHOOT_324
+if 
+  $main_visible_area == 0
+goto_if_false @SHOOT_324
+$flag_dont_start_shooting_range = 0
+
+:SHOOT_324
+goto @SHOOT_11
+

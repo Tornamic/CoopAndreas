@@ -1,0 +1,6065 @@
+//-------------Mission 109---------------
+// Originally: Los Desperados
+
+:RIOT2
+script_name 'RIOT2'
+gosub @RIOT2_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @RIOT2_38
+gosub @RIOT2_30241
+
+:RIOT2_38
+gosub @RIOT2_30499
+terminate_this_script 
+
+:RIOT2_47
+$onmission = 1
+Stat.RegisterMissionGiven
+Text.LoadMissionText('RIOT2')
+if 
+  $onmission == 0
+goto_if_false @RIOT2_350
+88@ = Object.Create(#BBALL_INGAME, 0.0, 0.0, 0.0)
+89@ = Blip.AddForCoord(1774.9, -1974.9, 13.1)
+37@ = Char.Create(25, 146@(148@,2i), 1831.9, -2004.6, 12.6)
+43@ = Char.Create(25, 146@(148@,2i), 1831.9, -2004.6, 12.6)
+49@ = Char.Create(25, 146@(148@,2i), 1831.9, -2004.6, 12.6)
+55@ = Char.Create(25, 146@(148@,2i), 1831.9, -2004.6, 12.6)
+61@ = Char.Create(25, 146@(148@,2i), 1831.9, -2004.6, 12.6)
+79@ = Char.Create(25, 146@(148@,2i), 1831.9, -2004.6, 12.6)
+96@ = Blip.AddForChar(37@)
+102@ = Blip.AddForChar(43@)
+108@ = Blip.AddForChar(49@)
+114@ = Blip.AddForChar(55@)
+120@ = Blip.AddForChar(61@)
+132@ = Blip.AddForChar(79@)
+
+:RIOT2_350
+Text.ClearPrints
+wait 0
+142@ = 0
+143@ = 0
+144@ = 0
+145@ = 0
+187@ = 0
+set_lvar_int_to_constant 146@ = 108
+set_lvar_int_to_constant 147@ = 109
+148@ = 0
+149@ = 2
+150@ = 0
+152@ = 0
+153@ = 0
+154@ = 0
+155@ = 0
+156@ = 0
+157@ = 0
+158@ = 0
+159@ = 0
+160@ = 0
+161@ = 0
+162@ = 0
+163@ = 0
+164@ = 0
+165@ = 0
+166@ = 0
+167@ = 0
+170@ = 0
+171@ = 0
+172@ = 0
+173@ = 0
+174@ = 0
+175@ = 0
+176@ = 0
+262@ = 0.0
+263@ = 0.0
+264@ = 0.0
+168@ = 0
+169@ = 0
+177@ = 0
+178@ = 0
+185@ = 0
+188@ = 0
+255@ = 0
+256@ = 0
+257@ = 0
+258@ = 0
+259@ = 0
+260@ = 0
+261@ = 0
+183@ = 0.0
+180@ = 0
+181@ = 60
+270@ = 0
+Player.MakeGangDisappear
+Streaming.SetAreaVisible(1)
+Cutscene.Load('RIOT_2')
+
+:RIOT2_756
+if 
+  not Cutscene.HasLoaded
+goto_if_false @RIOT2_780
+wait 0
+goto @RIOT2_756
+
+:RIOT2_780
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:RIOT2_789
+if 
+  not Cutscene.HasFinished
+goto_if_false @RIOT2_813
+wait 0
+goto @RIOT2_789
+
+:RIOT2_813
+Camera.DoFade(0, Fade.Out)
+
+:RIOT2_819
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_843
+wait 0
+goto @RIOT2_819
+
+:RIOT2_843
+Streaming.SetAreaVisible(0)
+Cutscene.Clear
+Player.SetControl($player1, False)
+Player.MakeGangReappear
+Camera.SetFadingColor(0, 0, 0)
+wait 0
+Streaming.LoadSpecialCharacter('CESAR', 1)
+Streaming.RequestModel(114)
+Streaming.RequestModel(115)
+Streaming.RequestModel(116)
+Streaming.RequestModel(108)
+Streaming.RequestModel(109)
+Streaming.RequestModel(339)
+Streaming.RequestModel(348)
+Streaming.RequestModel(372)
+Streaming.LoadAllModelsNow
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Mission2)
+Game.SetRelationship(RelationshipType.Respect, PedType.Mission1, PedType.Player1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission2, PedType.Mission1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission2, PedType.Player1)
+Game.SetRelationship(RelationshipType.Respect, PedType.Mission2, PedType.Mission2)
+Game.SetRelationship(RelationshipType.Respect, PedType.Mission1, PedType.Mission1)
+265@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+266@ = DecisionMakerChar.Copy(65542)
+267@ = DecisionMakerGroup.Load(0)
+World.ClearArea(1, 2520.8, -1678.5, 14.2, 30.0)
+Streaming.LoadScene(2520.8, -1678.5, 14.2)
+Char.SetCoordinates($scplayer, 2520.8, -1678.5, 14.2)
+Char.SetHeading($scplayer, 68.6)
+World.ClearArea(1, 2520.8, -1678.5, 14.2, 1.0)
+$cesar = Char.Create(24, 290, 2519.8, -1677.5, 13.7)
+Char.SetHeading($cesar, 68.6)
+Char.GiveWeapon($cesar, WeaponType.DesertEagle, 30000)
+Char.SetNeverTargeted($cesar, True)
+Char.AddArmor($cesar, 100)
+Char.SetRelationship($cesar, RelationshipType.Respect, PedType.Mission1)
+Char.SetOnlyDamagedByPlayer($cesar, True)
+Char.SetSuffersCriticalHits($cesar, False)
+Char.SetDecisionMaker($cesar, 265@)
+Path.SwitchPedRoadsOff(1945.8, -1956.5, 0.0, 1642.9, -2174.3, 50.0)
+World.ClearArea(1, 1784.6, -1969.5, 13.1, 30.0)
+35@ = Char.Create(24, 114, 1784.6, -1969.5, 13.1)
+Char.SetHeading(35@, 103.1)
+Char.GiveWeapon(35@, WeaponType.Tec9, 30000)
+Char.SetNeverTargeted(35@, True)
+Char.AddArmor(35@, 100)
+Char.SetRelationship(35@, RelationshipType.Respect, PedType.Mission1)
+Char.SetOnlyDamagedByPlayer(35@, True)
+Char.SetSuffersCriticalHits(35@, False)
+Char.SetDecisionMaker(35@, 266@)
+34@ = Char.Create(24, 115, 1784.4, -1971.1, 13.1)
+Char.SetHeading(34@, 52.8)
+Char.GiveWeapon(34@, WeaponType.Tec9, 30000)
+Char.SetNeverTargeted(34@, True)
+Char.AddArmor(34@, 100)
+Char.SetRelationship(34@, RelationshipType.Respect, PedType.Mission1)
+Char.SetOnlyDamagedByPlayer(34@, True)
+Char.SetSuffersCriticalHits(34@, False)
+Char.SetDecisionMaker(34@, 266@)
+36@ = Char.Create(24, 116, 1782.6, -1969.4, 13.1)
+Char.SetHeading(36@, 250.2)
+Char.GiveWeapon(36@, WeaponType.Katana, 30000)
+Char.SetNeverTargeted(36@, True)
+Char.AddArmor(36@, 100)
+Char.SetRelationship(36@, RelationshipType.Respect, PedType.Mission1)
+Char.SetOnlyDamagedByPlayer(36@, True)
+Char.SetSuffersCriticalHits(36@, False)
+Char.SetProofs(36@, True, False, False, False, False)
+Char.SetDecisionMaker(36@, 266@)
+Garage.ChangeType('DUF_LAS', GarageType.ForScriptToOpen)
+Game.SwitchEmergencyServices(False)
+Garage.Close('DUF_LAS')
+Zone.SetNoCops('ELCO', True)
+184@ = Pickup.Create(#HEALTH, 15, 1877.54, -1982.63, 13.48)
+Game.EnableAmbientCrime(False)
+
+:RIOT2_1585
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @RIOT2_1611
+goto @RIOT2_30259
+
+:RIOT2_1611
+Player.AlterWantedLevel($player1, 0)
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_1650
+goto @RIOT2_30241
+
+:RIOT2_1650
+174@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 175@ = 174@
+sub_int_lvar_from_int_lvar 175@ -= 176@
+set_lvar_int_to_lvar_int 176@ = 174@
+add_int_lvar_to_int_lvar 170@ += 175@
+add_int_lvar_to_int_lvar 171@ += 175@
+add_int_lvar_to_int_lvar 172@ += 175@
+add_int_lvar_to_int_lvar 173@ += 175@
+if 
+is_ps2_keyboard_key_pressed 81
+goto_if_false @RIOT2_1766
+Char.SetCoordinates($scplayer, 1776.0, -1988.1, 12.9)
+Char.SetCoordinates($cesar, 1776.0, -1990.1, 12.9)
+
+:RIOT2_1766
+$minutes, 177@ = Group.GetSize($Players_Group)
+if 
+  142@ == 0
+goto_if_false @RIOT2_3308
+if 
+  143@ == 0
+goto_if_false @RIOT2_2116
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+185@ = 0
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Camera.SetFixedPosition(2509.0, -1672.7, 13.3, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2523.1, -1678.2, 15.2, SwitchType.JumpCut)
+Game.ShutAllCharsUp(True)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2512.8, -1673.2, 12.5, MoveState.Walk, -1)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence($cesar, 268@)
+Sequence.Clear(268@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2514.1, -1675.2, 12.5, MoveState.Walk, -1)
+Task.TurnCharToFaceChar(-1, $cesar)
+Sequence.Close(268@)
+Char.PerformSequence($scplayer, 268@)
+Sequence.Clear(268@)
+Camera.DoFade(1, 500)
+
+:RIOT2_2018
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_2042
+wait 0
+goto @RIOT2_2018
+
+:RIOT2_2042
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_2074
+goto @RIOT2_30241
+
+:RIOT2_2074
+185@ = 1
+186@ = 0
+gosub @RIOT2_40912
+143@ = 1
+144@ = 1
+skip_cutscene_start_internal @RIOT2_2249
+
+:RIOT2_2116
+if 
+  143@ == 1
+goto_if_false @RIOT2_2206
+$task_status = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @RIOT2_2206
+Task.PlayAnim($scplayer, "IDLE_CHAT", "PED", 4.0, True, False, False, False, -1)
+143@ = 2
+
+:RIOT2_2206
+if 
+  143@ == 2
+goto_if_false @RIOT2_2607
+if 
+  185@ == 0
+goto_if_false @RIOT2_2607
+144@ = 0
+
+:RIOT2_2249
+skip_cutscene_end 
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_2283
+goto @RIOT2_30241
+
+:RIOT2_2283
+if 
+  144@ == 1
+goto_if_false @RIOT2_2441
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+185@ = 0
+Camera.DoFade(0, 500)
+
+:RIOT2_2325
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_2349
+wait 0
+goto @RIOT2_2325
+
+:RIOT2_2349
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_2381
+goto @RIOT2_30241
+
+:RIOT2_2381
+Char.SetCoordinates($scplayer, 2512.8, -1673.2, 12.5)
+Char.SetHeading($scplayer, 40.6)
+Char.SetCoordinates($cesar, 2514.1, -1675.2, 12.5)
+Char.SetHeading($cesar, 220.0)
+
+:RIOT2_2441
+Char.ClearTasksImmediately($scplayer)
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Group.SetMember($cesar, $Players_Group)
+167@ = 1
+Group.SetDecisionMaker($Players_Group, 267@)
+Game.ShutAllCharsUp(False)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Text.PrintNow('R2_01', 60000, 1)
+if 
+  144@ == 1
+goto_if_false @RIOT2_2600
+Camera.DoFade(1, 500)
+
+:RIOT2_2544
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_2568
+wait 0
+goto @RIOT2_2544
+
+:RIOT2_2568
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_2600
+goto @RIOT2_30241
+
+:RIOT2_2600
+143@ = 3
+
+:RIOT2_2607
+if 
+  143@ > 2
+goto_if_false @RIOT2_2632
+gosub @RIOT2_37859
+
+:RIOT2_2632
+if 
+  143@ == 3
+goto_if_false @RIOT2_2730
+if 
+  177@ > 2
+goto_if_false @RIOT2_2730
+Blip.Remove(89@)
+89@ = Blip.AddForCoord(1774.9, -1974.9, 13.1)
+Blip.SetAsFriendly(89@, False)
+Text.PrintNow('R2_13', 7000, 1)
+TIMERB = 0
+143@ = 4
+
+:RIOT2_2730
+if 
+  143@ == 4
+goto_if_false @RIOT2_3308
+if 
+  187@ == 0
+goto_if_false @RIOT2_2827
+if 
+  TIMERB > 7000
+goto_if_false @RIOT2_2827
+Char.ShutUpForScriptedSpeech($scplayer, True)
+Char.ShutUpForScriptedSpeech($cesar, True)
+185@ = 2
+186@ = 0
+gosub @RIOT2_40912
+187@ = 1
+
+:RIOT2_2827
+if 
+  187@ == 1
+goto_if_false @RIOT2_2877
+if 
+  185@ == 0
+goto_if_false @RIOT2_2877
+TIMERB = 0
+187@ = 2
+
+:RIOT2_2877
+if 
+  187@ == 2
+goto_if_false @RIOT2_2942
+if 
+  TIMERB > 7000
+goto_if_false @RIOT2_2942
+185@ = 3
+186@ = 0
+gosub @RIOT2_40912
+187@ = 3
+
+:RIOT2_2942
+if 
+  187@ == 3
+goto_if_false @RIOT2_2999
+if 
+  185@ == 0
+goto_if_false @RIOT2_2999
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.ShutUpForScriptedSpeech($cesar, False)
+187@ = 4
+
+:RIOT2_2999
+if 
+  167@ == 1
+goto_if_false @RIOT2_3207
+$minutes, 177@ = Group.GetSize($Players_Group)
+if 
+  178@ == 0
+goto_if_false @RIOT2_3105
+if 
+  3 > 177@
+goto_if_false @RIOT2_3105
+Blip.Remove(89@)
+Text.ClearThisPrint('R2_13')
+Text.PrintNow('R2_01', 60000, 1)
+178@ = 1
+
+:RIOT2_3105
+if 
+  178@ == 1
+goto_if_false @RIOT2_3207
+if 
+  177@ > 2
+goto_if_false @RIOT2_3207
+Blip.Remove(89@)
+89@ = Blip.AddForCoord(1774.9, -1974.9, 13.1)
+Blip.SetAsFriendly(89@, False)
+Text.ClearThisPrint('R2_01')
+Text.PrintNow('R2_13', 7000, 1)
+178@ = 0
+
+:RIOT2_3207
+if 
+  178@ == 0
+goto_if_false @RIOT2_3308
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 1774.9, -1974.9, 13.1, 4.0, 4.0, 4.0)
+goto_if_false @RIOT2_3308
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.ShutUpForScriptedSpeech($cesar, False)
+187@ = 0
+143@ = 0
+142@ = 1
+
+:RIOT2_3308
+if 
+  142@ == 1
+goto_if_false @RIOT2_6797
+if 
+  143@ == 0
+goto_if_false @RIOT2_3975
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+185@ = 0
+Camera.DoFade(0, 500)
+
+:RIOT2_3368
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_3392
+wait 0
+goto @RIOT2_3368
+
+:RIOT2_3392
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_3424
+goto @RIOT2_30241
+
+:RIOT2_3424
+World.ClearArea(1, 1781.1, -1974.8, 13.1, 30.0)
+Game.ShutAllCharsUp(True)
+World.SetPedDensityMultiplier(0.0)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Char.RemoveFromGroup($cesar)
+Streaming.RequestModel(#BBALL_INGAME)
+Streaming.RequestAnimation("BSKTBALL")
+Streaming.RequestAnimation("SMOKING")
+Streaming.RequestAnimation("GANGS")
+Streaming.LoadAllModelsNow
+Player.MakeGangDisappear
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @RIOT2_3618
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 1781.1, -1974.8, 13.1)
+Char.SetHeading($scplayer, 325.3)
+Char.ClearTasksImmediately($cesar)
+Char.SetCoordinates($cesar, 1781.8, -1976.4, 13.1)
+Char.SetHeading($cesar, 302.3)
+goto @RIOT2_3656
+
+:RIOT2_3618
+87@ = Char.StoreCarIsInNoSave($scplayer)
+Car.SetCoordinates(87@, 1774.9, -1974.9, 13.1)
+Task.LeaveAnyCar($scplayer)
+Task.LeaveAnyCar($cesar)
+
+:RIOT2_3656
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 1781.1, -1974.8, 13.1)
+Char.SetHeading($scplayer, 325.3)
+Char.ClearTasksImmediately($cesar)
+Char.SetCoordinates($cesar, 1781.8, -1976.4, 13.1)
+Char.SetHeading($cesar, 302.3)
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "PRTIAL_GNGTLKA", "GANGS", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PRTIAL_GNGTLKB", "GANGS", 4.0, False, False, False, False, -1)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(35@, 268@)
+Sequence.Clear(268@)
+Camera.SetFixedPosition(1781.1, -1970.4, 14.7, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1783.2, -1969.9, 14.5, SwitchType.JumpCut)
+Camera.DoFade(1, 500)
+
+:RIOT2_3898
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_3922
+wait 0
+goto @RIOT2_3898
+
+:RIOT2_3922
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_3954
+goto @RIOT2_30241
+
+:RIOT2_3954
+143@ = 1
+144@ = 1
+skip_cutscene_start_internal @RIOT2_5994
+
+:RIOT2_3975
+if 
+  143@ == 1
+goto_if_false @RIOT2_4028
+185@ = 4
+186@ = 0
+188@ = 2
+gosub @RIOT2_40912
+143@ = 2
+
+:RIOT2_4028
+if 
+  143@ == 2
+goto_if_false @RIOT2_4259
+if 
+  185@ == 0
+goto_if_false @RIOT2_4259
+Camera.SetFixedPosition(1784.5, -1967.7, 14.7, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1781.4, -1973.5, 14.3, SwitchType.JumpCut)
+Task.GoStraightToCoord($scplayer, 1782.3, -1972.8, 13.1, MoveState.Walk, -1)
+Task.TurnCharToFaceChar(36@, $scplayer)
+Task.GoStraightToCoord(34@, 1783.8, -1972.4, 13.1, MoveState.Walk, -1)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1783.3, -1973.0, 13.1, MoveState.Walk, -1)
+Sequence.Close(268@)
+Char.PerformSequence($cesar, 268@)
+Sequence.Clear(268@)
+185@ = 4
+186@ = 2
+188@ = 4
+gosub @RIOT2_40912
+TIMERA = 0
+143@ = 3
+
+:RIOT2_4259
+if 
+  143@ == 3
+goto_if_false @RIOT2_4367
+if 
+  185@ == 0
+goto_if_false @RIOT2_4367
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "PRTIAL_GNGTLKD", "GANGS", 4.0, False, False, False, False, -1)
+Sequence.Close(268@)
+Char.PerformSequence($cesar, 268@)
+Sequence.Clear(268@)
+143@ = 4
+
+:RIOT2_4367
+if 
+  143@ == 4
+goto_if_false @RIOT2_4586
+if 
+  185@ == 0
+goto_if_false @RIOT2_4586
+$task_status = Char.GetScriptTaskStatus($cesar, 1560)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @RIOT2_4586
+Char.ClearTasks(34@)
+268@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.PlayAnim(-1, "PRTIAL_GNGTLKC", "GANGS", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PRTIAL_GNGTLKE", "GANGS", 4.0, False, False, False, False, -1)
+Sequence.Close(268@)
+Char.PerformSequence(34@, 268@)
+Sequence.Clear(268@)
+185@ = 4
+186@ = 4
+188@ = 5
+gosub @RIOT2_40912
+143@ = 5
+
+:RIOT2_4586
+if 
+  143@ == 5
+goto_if_false @RIOT2_4636
+if 
+  185@ == 0
+goto_if_false @RIOT2_4636
+TIMERA = 0
+143@ = 6
+
+:RIOT2_4636
+if 
+  143@ == 6
+goto_if_false @RIOT2_5228
+if 
+  TIMERA > 1000
+goto_if_false @RIOT2_5228
+Camera.DoFade(0, 500)
+
+:RIOT2_4680
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_4704
+wait 0
+goto @RIOT2_4680
+
+:RIOT2_4704
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_4736
+goto @RIOT2_30241
+
+:RIOT2_4736
+World.ClearArea(1, 1793.8, -1970.6, 12.5, 30.0)
+Char.ClearTasks($scplayer)
+Char.SetCoordinates($scplayer, 1789.5, -1968.5, 12.5)
+Char.SetHeading($scplayer, 234.3)
+Task.GoStraightToCoord($scplayer, 1798.2, -1974.4, 12.5, MoveState.Walk, -1)
+Char.ClearTasks($cesar)
+Char.SetCoordinates($cesar, 1789.0, -1970.6, 12.5)
+Char.SetHeading($cesar, 231.5)
+Task.GoStraightToCoord($cesar, 1794.0, -1973.5, 12.5, MoveState.Walk, -1)
+Char.SetCoordinates(35@, 1789.3, -1967.4, 12.5)
+Char.SetHeading(35@, 231.5)
+Task.GoStraightToCoord(35@, 1796.3, -1970.7, 12.5, MoveState.Walk, -1)
+Char.SetCoordinates(36@, 1787.4, -1967.2, 12.5)
+Char.SetHeading(36@, 234.5)
+Task.GoStraightToCoord(36@, 1792.9, -1972.3, 12.5, MoveState.Walk, -1)
+Char.SetCoordinates(34@, 1786.3, -1966.7, 12.5)
+Char.SetHeading(34@, 251.5)
+Task.GoStraightToCoord(34@, 1793.8, -1970.6, 12.5, MoveState.Walk, -1)
+if 
+  150@ == 0
+goto_if_false @RIOT2_5072
+gosub @RIOT2_31232
+150@ = 1
+
+:RIOT2_5072
+Camera.SetFixedPosition(1788.0, -1968.0, 14.5, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1799.5, -1973.8, 13.6, SwitchType.JumpCut)
+Camera.DoFade(1, 500)
+
+:RIOT2_5130
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_5154
+wait 0
+goto @RIOT2_5130
+
+:RIOT2_5154
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_5186
+goto @RIOT2_30241
+
+:RIOT2_5186
+185@ = 4
+186@ = 5
+188@ = 6
+gosub @RIOT2_40912
+TIMERA = 0
+143@ = 7
+
+:RIOT2_5228
+if 
+  143@ == 7
+goto_if_false @RIOT2_5376
+if 
+  185@ == 0
+goto_if_false @RIOT2_5376
+if 
+  TIMERA > 4000
+goto_if_false @RIOT2_5376
+185@ = 4
+186@ = 8
+188@ = 10
+gosub @RIOT2_40912
+Camera.SetFixedPosition(1823.1, -1997.4, 13.5, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1829.3, -2003.7, 14.4, SwitchType.JumpCut)
+TIMERA = 0
+143@ = 8
+
+:RIOT2_5376
+if 
+  143@ == 8
+goto_if_false @RIOT2_5914
+if 
+  not Char.IsDead(38@)
+goto_if_false @RIOT2_5675
+if 
+  Object.IsAttached(88@)
+goto_if_false @RIOT2_5637
+if 
+  Char.IsPlayingAnim(38@, "BBALL_IDLELOOP")
+goto_if_false @RIOT2_5630
+183@ = Char.GetAnimCurrentTime(38@, "BBALL_IDLELOOP")
+if 
+  Object.IsPlayingAnim(88@, "BBALL_IDLELOOP_O")
+goto_if_false @RIOT2_5549
+Object.SetAnimCurrentTime(88@, "BBALL_IDLELOOP_O", 183@)
+goto @RIOT2_5630
+
+:RIOT2_5549
+if 
+Object.PlayAnim(88@, "BBALL_IDLELOOP_O", "BSKTBALL", 10000.0, False, False)
+goto_if_false @RIOT2_5630
+Object.SetAnimSpeed(88@, "BBALL_IDLELOOP_O", 0.0)
+
+:RIOT2_5630
+goto @RIOT2_5675
+
+:RIOT2_5637
+Object.AttachToChar(88@, 38@, 0.0, 0.5, -1.0, 0.0, 0.0, 0.0)
+
+:RIOT2_5675
+if 
+  185@ == 0
+goto_if_false @RIOT2_5914
+if 
+  TIMERA > 4000
+goto_if_false @RIOT2_5914
+Camera.SetFixedPosition(1827.4, -1998.7, 13.1, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1830.2, -1995.2, 13.4, SwitchType.JumpCut)
+if 
+  not Char.IsDead(42@)
+goto_if_false @RIOT2_5872
+268@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 1831.1, -1995.9, 12.6, 4, -1)
+Task.AchieveHeading(-1, 180.0)
+Task.PlayAnim(-1, "M_SMK_IN", "SMOKING", 4.0, False, False, False, False, -1)
+Sequence.Close(268@)
+Char.PerformSequence(42@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_5872
+185@ = 4
+186@ = 10
+188@ = 12
+gosub @RIOT2_40912
+TIMERA = 0
+143@ = 9
+
+:RIOT2_5914
+if 
+  143@ == 9
+goto_if_false @RIOT2_6797
+if 
+  185@ == 0
+goto_if_false @RIOT2_6797
+if 
+  TIMERA > 4000
+goto_if_false @RIOT2_6797
+if 
+  185@ == 0
+goto_if_false @RIOT2_6797
+144@ = 0
+
+:RIOT2_5994
+skip_cutscene_end 
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_6028
+goto @RIOT2_30241
+
+:RIOT2_6028
+if 
+  144@ == 1
+goto_if_false @RIOT2_6445
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+185@ = 0
+Camera.DoFade(0, 500)
+
+:RIOT2_6070
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_6094
+wait 0
+goto @RIOT2_6070
+
+:RIOT2_6094
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_6126
+goto @RIOT2_30241
+
+:RIOT2_6126
+if 
+  150@ == 0
+goto_if_false @RIOT2_6158
+gosub @RIOT2_31232
+150@ = 1
+
+:RIOT2_6158
+if 
+  not Char.IsDead(42@)
+goto_if_false @RIOT2_6270
+Char.ClearTasksImmediately(42@)
+Char.SetCoordinates(42@, 1831.1, -1995.9, 12.6)
+Char.SetHeading(42@, 180.0)
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "M_SMK_IN", "SMOKING", 4.0, False, False, False, False, -1)
+Sequence.Close(268@)
+Char.PerformSequence(42@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_6270
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 1793.8, -1970.6, 12.5)
+Char.SetHeading($scplayer, 234.3)
+Char.ClearTasksImmediately($cesar)
+Char.SetCoordinates($cesar, 1792.9, -1972.3, 12.5)
+Char.SetHeading($cesar, 231.5)
+Char.ClearTasksImmediately(35@)
+Char.SetCoordinates(35@, 1794.8, -1969.8, 12.5)
+Char.SetHeading(35@, 231.5)
+Char.ClearTasksImmediately(36@)
+Char.SetCoordinates(36@, 1791.8, -1971.1, 12.5)
+Char.SetHeading(36@, 234.5)
+Char.ClearTasksImmediately(34@)
+Char.SetCoordinates(34@, 1792.5, -1970.4, 12.5)
+Char.SetHeading(34@, 251.5)
+
+:RIOT2_6445
+Object.Delete(88@)
+Streaming.MarkModelAsNoLongerNeeded(#BBALL_INGAME)
+if 
+  not Char.IsDead(38@)
+goto_if_false @RIOT2_6486
+Char.GiveWeapon(38@, WeaponType.Tec9, 3000)
+Char.ClearTasksImmediately(38@)
+
+:RIOT2_6486
+if 
+  not Char.IsDead(39@)
+goto_if_false @RIOT2_6507
+Char.ClearTasksImmediately(38@)
+
+:RIOT2_6507
+if 
+  not Char.IsDead(38@)
+goto_if_false @RIOT2_6563
+if 
+  not Char.IsDead(39@)
+goto_if_false @RIOT2_6563
+Task.ChatWithChar(38@, 39@, True, 1)
+Task.ChatWithChar(39@, 38@, False, 1)
+
+:RIOT2_6563
+if 
+  not Char.IsDead(42@)
+goto_if_false @RIOT2_6589
+Char.GiveWeapon(42@, WeaponType.Tec9, 3000)
+
+:RIOT2_6589
+Char.SetDecisionMaker(35@, 265@)
+Char.SetDecisionMaker(34@, 265@)
+Char.SetDecisionMaker(36@, 265@)
+Player.MakeGangReappear
+Game.SetGunshotSenseRangeForRiot2(15.0)
+Streaming.RemoveAnimation("GANGS")
+Game.ShutAllCharsUp(False)
+Blip.Remove(89@)
+89@ = Blip.AddForChar($cesar)
+Blip.SetAsFriendly(89@, True)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Text.PrintNow('R2_03', 7000, 1)
+if 
+  144@ == 1
+goto_if_false @RIOT2_6776
+Camera.DoFade(1, 500)
+
+:RIOT2_6720
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_6744
+wait 0
+goto @RIOT2_6720
+
+:RIOT2_6744
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_6776
+goto @RIOT2_30241
+
+:RIOT2_6776
+143@ = 0
+142@ = 2
+TIMERB = 0
+
+:RIOT2_6797
+if 
+  142@ == 2
+goto_if_false @RIOT2_13879
+if 
+  150@ == 1
+goto_if_false @RIOT2_7103
+if 
+  6 > 151@
+goto_if_false @RIOT2_7096
+if 
+  not Char.IsDead(37@(151@,6i))
+goto_if_false @RIOT2_7075
+if 
+  Char.HasSpottedChar(37@(151@,6i), $scplayer)
+goto_if_false @RIOT2_7031
+if 
+  not Char.IsDead(40@)
+goto_if_false @RIOT2_6959
+268@ = Sequence.Open()
+Task.GotoCharOffset(-1, $scplayer, -1, 1.5, 0.0)
+Sequence.SetToRepeat(268@, True)
+Sequence.Close(268@)
+Char.PerformSequence(40@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_6959
+if 
+  not Char.IsDead(41@)
+goto_if_false @RIOT2_7024
+268@ = Sequence.Open()
+Task.GotoCharOffset(-1, $scplayer, -1, 3.0, 0.0)
+Sequence.SetToRepeat(268@, True)
+Sequence.Close(268@)
+Char.PerformSequence(41@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_7024
+150@ = 3
+
+:RIOT2_7031
+164@ = Char.GetHealth(37@(151@,6i))
+if 
+  100 > 164@
+goto_if_false @RIOT2_7068
+150@ = 4
+
+:RIOT2_7068
+goto @RIOT2_7082
+
+:RIOT2_7075
+150@ = 4
+
+:RIOT2_7082
+151@ += 1
+goto @RIOT2_7103
+
+:RIOT2_7096
+151@ = 0
+
+:RIOT2_7103
+if 
+  150@ == 3
+goto_if_false @RIOT2_7303
+if 
+  6 > 151@
+goto_if_false @RIOT2_7296
+if 
+  not Char.IsDead(37@(151@,6i))
+goto_if_false @RIOT2_7275
+164@ = Char.GetHealth(37@(151@,6i))
+if 
+  100 > 164@
+goto_if_false @RIOT2_7196
+150@ = 4
+
+:RIOT2_7196
+if 
+  not Char.IsDead(37@)
+goto_if_false @RIOT2_7238
+if 
+  Char.HasSpottedChar(37@, $scplayer)
+goto_if_false @RIOT2_7238
+150@ = 4
+
+:RIOT2_7238
+if 
+  Player.IsTargetingChar($player1, 37@(151@,6i))
+goto_if_false @RIOT2_7268
+150@ = 4
+
+:RIOT2_7268
+goto @RIOT2_7282
+
+:RIOT2_7275
+150@ = 4
+
+:RIOT2_7282
+151@ += 1
+goto @RIOT2_7303
+
+:RIOT2_7296
+151@ = 0
+
+:RIOT2_7303
+if 
+  150@ == 4
+goto_if_false @RIOT2_7421
+if 
+  185@ == 0
+goto_if_false @RIOT2_7414
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_7414
+if 
+  Char.LocateAnyMeansChar2D($scplayer, $cesar, 60.0, 60.0, False)
+goto_if_false @RIOT2_7414
+185@ = 5
+186@ = 11
+188@ = 12
+gosub @RIOT2_40912
+
+:RIOT2_7414
+150@ = 5
+
+:RIOT2_7421
+if 
+  150@ > 3
+goto_if_false @RIOT2_7658
+if or
+  158@ == 0
+  161@ == 0
+  152@ == 0
+  155@ == 0
+goto_if_false @RIOT2_7526
+if 
+  not Char.IsDead(37@)
+goto_if_false @RIOT2_7526
+if 
+  149@ == 2
+goto_if_false @RIOT2_7519
+149@ = 0
+
+:RIOT2_7519
+gosub @RIOT2_32036
+
+:RIOT2_7526
+if 
+  158@ > 0
+goto_if_false @RIOT2_7658
+if 
+  161@ > 0
+goto_if_false @RIOT2_7658
+if 
+  152@ > 0
+goto_if_false @RIOT2_7658
+if 
+  155@ > 0
+goto_if_false @RIOT2_7658
+if 
+  not Char.IsDead(37@)
+goto_if_false @RIOT2_7658
+$task_status = Char.GetScriptTaskStatus(37@, 1506)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @RIOT2_7658
+Task.KillCharOnFoot(37@, $scplayer)
+149@ = 3
+
+:RIOT2_7658
+if 
+  150@ == 5
+goto_if_false @RIOT2_7908
+if 
+  Char.IsDead(37@)
+goto_if_false @RIOT2_7908
+if 
+  Char.IsDead(38@)
+goto_if_false @RIOT2_7908
+if 
+  Char.IsDead(39@)
+goto_if_false @RIOT2_7908
+if 
+  Char.IsDead(40@)
+goto_if_false @RIOT2_7908
+if 
+  Char.IsDead(41@)
+goto_if_false @RIOT2_7908
+if 
+  Char.IsDead(42@)
+goto_if_false @RIOT2_7908
+Blip.Remove(96@)
+Blip.Remove(97@)
+Blip.Remove(98@)
+Blip.Remove(99@)
+Blip.Remove(100@)
+Blip.Remove(101@)
+Char.MarkAsNoLongerNeeded(37@)
+Char.MarkAsNoLongerNeeded(38@)
+Char.MarkAsNoLongerNeeded(39@)
+Char.MarkAsNoLongerNeeded(40@)
+Char.MarkAsNoLongerNeeded(41@)
+Char.MarkAsNoLongerNeeded(42@)
+if and
+  158@ == 0
+  161@ == 0
+  152@ == 0
+  155@ == 0
+goto_if_false @RIOT2_7878
+158@ = 1
+
+:RIOT2_7878
+Streaming.RemoveAnimation("BSKTBALL")
+Streaming.RemoveAnimation("SMOKING")
+150@ = 6
+
+:RIOT2_7908
+if 
+  6 > 150@
+goto_if_false @RIOT2_8082
+if 
+  Char.IsDead(37@)
+goto_if_false @RIOT2_7952
+Blip.Remove(96@)
+Char.MarkAsNoLongerNeeded(37@)
+
+:RIOT2_7952
+if 
+  Char.IsDead(38@)
+goto_if_false @RIOT2_7978
+Blip.Remove(97@)
+Char.MarkAsNoLongerNeeded(38@)
+
+:RIOT2_7978
+if 
+  Char.IsDead(39@)
+goto_if_false @RIOT2_8004
+Blip.Remove(98@)
+Char.MarkAsNoLongerNeeded(39@)
+
+:RIOT2_8004
+if 
+  Char.IsDead(40@)
+goto_if_false @RIOT2_8030
+Blip.Remove(99@)
+Char.MarkAsNoLongerNeeded(40@)
+
+:RIOT2_8030
+if 
+  Char.IsDead(41@)
+goto_if_false @RIOT2_8056
+Blip.Remove(100@)
+Char.MarkAsNoLongerNeeded(41@)
+
+:RIOT2_8056
+if 
+  Char.IsDead(42@)
+goto_if_false @RIOT2_8082
+Blip.Remove(101@)
+Char.MarkAsNoLongerNeeded(42@)
+
+:RIOT2_8082
+if 
+  152@ == 1
+goto_if_false @RIOT2_8121
+gosub @RIOT2_32547
+171@ = 0
+152@ = 2
+
+:RIOT2_8121
+if 
+  152@ == 2
+goto_if_false @RIOT2_8198
+if 
+  Char.IsDead(43@)
+goto_if_false @RIOT2_8198
+if 
+  Char.IsDead(44@)
+goto_if_false @RIOT2_8198
+Blip.Remove(102@)
+Char.MarkAsNoLongerNeeded(43@)
+Blip.Remove(103@)
+Char.MarkAsNoLongerNeeded(44@)
+152@ = 3
+
+:RIOT2_8198
+if 
+  3 > 152@
+goto_if_false @RIOT2_8268
+if 
+  Char.IsDead(43@)
+goto_if_false @RIOT2_8242
+Blip.Remove(102@)
+Char.MarkAsNoLongerNeeded(43@)
+
+:RIOT2_8242
+if 
+  Char.IsDead(44@)
+goto_if_false @RIOT2_8268
+Blip.Remove(103@)
+Char.MarkAsNoLongerNeeded(44@)
+
+:RIOT2_8268
+if 
+  152@ > 0
+goto_if_false @RIOT2_8351
+if 
+  153@ == 0
+goto_if_false @RIOT2_8351
+if 
+  171@ > 500
+goto_if_false @RIOT2_8351
+153@ = 1
+gosub @RIOT2_32547
+153@ = 2
+171@ = 0
+
+:RIOT2_8351
+if 
+  153@ == 2
+goto_if_false @RIOT2_8428
+if 
+  Char.IsDead(45@)
+goto_if_false @RIOT2_8428
+if 
+  Char.IsDead(46@)
+goto_if_false @RIOT2_8428
+Blip.Remove(104@)
+Char.MarkAsNoLongerNeeded(45@)
+Blip.Remove(105@)
+Char.MarkAsNoLongerNeeded(46@)
+153@ = 3
+
+:RIOT2_8428
+if 
+  3 > 153@
+goto_if_false @RIOT2_8498
+if 
+  Char.IsDead(45@)
+goto_if_false @RIOT2_8472
+Blip.Remove(104@)
+Char.MarkAsNoLongerNeeded(45@)
+
+:RIOT2_8472
+if 
+  Char.IsDead(46@)
+goto_if_false @RIOT2_8498
+Blip.Remove(105@)
+Char.MarkAsNoLongerNeeded(46@)
+
+:RIOT2_8498
+if 
+  152@ > 0
+goto_if_false @RIOT2_8599
+if 
+  153@ > 0
+goto_if_false @RIOT2_8599
+if 
+  154@ == 0
+goto_if_false @RIOT2_8599
+if 
+  171@ > 500
+goto_if_false @RIOT2_8599
+154@ = 1
+gosub @RIOT2_32547
+154@ = 2
+171@ = 0
+
+:RIOT2_8599
+if 
+  154@ == 2
+goto_if_false @RIOT2_8676
+if 
+  Char.IsDead(47@)
+goto_if_false @RIOT2_8676
+if 
+  Char.IsDead(48@)
+goto_if_false @RIOT2_8676
+Blip.Remove(106@)
+Char.MarkAsNoLongerNeeded(47@)
+Blip.Remove(107@)
+Char.MarkAsNoLongerNeeded(48@)
+154@ = 3
+
+:RIOT2_8676
+if 
+  3 > 154@
+goto_if_false @RIOT2_8746
+if 
+  Char.IsDead(47@)
+goto_if_false @RIOT2_8720
+Blip.Remove(106@)
+Char.MarkAsNoLongerNeeded(47@)
+
+:RIOT2_8720
+if 
+  Char.IsDead(48@)
+goto_if_false @RIOT2_8746
+Blip.Remove(107@)
+Char.MarkAsNoLongerNeeded(48@)
+
+:RIOT2_8746
+if 
+  152@ == 3
+goto_if_false @RIOT2_8970
+if 
+  153@ == 3
+goto_if_false @RIOT2_8970
+if 
+  154@ == 3
+goto_if_false @RIOT2_8970
+if 
+  155@ == 0
+goto_if_false @RIOT2_8832
+155@ = 1
+goto @RIOT2_8889
+
+:RIOT2_8832
+if 
+  158@ == 0
+goto_if_false @RIOT2_8864
+158@ = 1
+goto @RIOT2_8889
+
+:RIOT2_8864
+if 
+  161@ == 0
+goto_if_false @RIOT2_8889
+161@ = 1
+
+:RIOT2_8889
+Char.MarkAsNoLongerNeeded(43@)
+Char.MarkAsNoLongerNeeded(44@)
+Char.MarkAsNoLongerNeeded(45@)
+Char.MarkAsNoLongerNeeded(46@)
+Char.MarkAsNoLongerNeeded(47@)
+Char.MarkAsNoLongerNeeded(48@)
+Blip.Remove(102@)
+Blip.Remove(103@)
+Blip.Remove(104@)
+Blip.Remove(105@)
+Blip.Remove(106@)
+Blip.Remove(107@)
+152@ = 4
+153@ = 4
+154@ = 4
+
+:RIOT2_8970
+if 
+  155@ == 1
+goto_if_false @RIOT2_9009
+gosub @RIOT2_33875
+170@ = 0
+155@ = 2
+
+:RIOT2_9009
+if 
+  155@ == 2
+goto_if_false @RIOT2_9086
+if 
+  Char.IsDead(49@)
+goto_if_false @RIOT2_9086
+if 
+  Char.IsDead(50@)
+goto_if_false @RIOT2_9086
+Blip.Remove(108@)
+Char.MarkAsNoLongerNeeded(49@)
+Blip.Remove(109@)
+Char.MarkAsNoLongerNeeded(50@)
+155@ = 3
+
+:RIOT2_9086
+if 
+  3 > 155@
+goto_if_false @RIOT2_9156
+if 
+  Char.IsDead(49@)
+goto_if_false @RIOT2_9130
+Blip.Remove(108@)
+Char.MarkAsNoLongerNeeded(49@)
+
+:RIOT2_9130
+if 
+  Char.IsDead(50@)
+goto_if_false @RIOT2_9156
+Blip.Remove(109@)
+Char.MarkAsNoLongerNeeded(50@)
+
+:RIOT2_9156
+if 
+  155@ > 0
+goto_if_false @RIOT2_9239
+if 
+  156@ == 0
+goto_if_false @RIOT2_9239
+if 
+  170@ > 500
+goto_if_false @RIOT2_9239
+156@ = 1
+gosub @RIOT2_33875
+156@ = 2
+170@ = 0
+
+:RIOT2_9239
+if 
+  156@ == 2
+goto_if_false @RIOT2_9316
+if 
+  Char.IsDead(51@)
+goto_if_false @RIOT2_9316
+if 
+  Char.IsDead(52@)
+goto_if_false @RIOT2_9316
+Blip.Remove(110@)
+Char.MarkAsNoLongerNeeded(51@)
+Blip.Remove(111@)
+Char.MarkAsNoLongerNeeded(52@)
+156@ = 3
+
+:RIOT2_9316
+if 
+  3 > 156@
+goto_if_false @RIOT2_9386
+if 
+  Char.IsDead(51@)
+goto_if_false @RIOT2_9360
+Blip.Remove(110@)
+Char.MarkAsNoLongerNeeded(51@)
+
+:RIOT2_9360
+if 
+  Char.IsDead(52@)
+goto_if_false @RIOT2_9386
+Blip.Remove(111@)
+Char.MarkAsNoLongerNeeded(52@)
+
+:RIOT2_9386
+if 
+  155@ > 0
+goto_if_false @RIOT2_9487
+if 
+  156@ > 0
+goto_if_false @RIOT2_9487
+if 
+  157@ == 0
+goto_if_false @RIOT2_9487
+if 
+  170@ > 500
+goto_if_false @RIOT2_9487
+157@ = 1
+gosub @RIOT2_33875
+157@ = 2
+170@ = 0
+
+:RIOT2_9487
+if 
+  157@ == 2
+goto_if_false @RIOT2_9564
+if 
+  Char.IsDead(53@)
+goto_if_false @RIOT2_9564
+if 
+  Char.IsDead(54@)
+goto_if_false @RIOT2_9564
+Blip.Remove(112@)
+Char.MarkAsNoLongerNeeded(53@)
+Blip.Remove(113@)
+Char.MarkAsNoLongerNeeded(54@)
+157@ = 3
+
+:RIOT2_9564
+if 
+  3 > 157@
+goto_if_false @RIOT2_9634
+if 
+  Char.IsDead(53@)
+goto_if_false @RIOT2_9608
+Blip.Remove(112@)
+Char.MarkAsNoLongerNeeded(53@)
+
+:RIOT2_9608
+if 
+  Char.IsDead(54@)
+goto_if_false @RIOT2_9634
+Blip.Remove(113@)
+Char.MarkAsNoLongerNeeded(54@)
+
+:RIOT2_9634
+if 
+  155@ == 3
+goto_if_false @RIOT2_9858
+if 
+  156@ == 3
+goto_if_false @RIOT2_9858
+if 
+  157@ == 3
+goto_if_false @RIOT2_9858
+if 
+  161@ == 0
+goto_if_false @RIOT2_9720
+161@ = 1
+goto @RIOT2_9777
+
+:RIOT2_9720
+if 
+  152@ == 0
+goto_if_false @RIOT2_9752
+152@ = 1
+goto @RIOT2_9777
+
+:RIOT2_9752
+if 
+  158@ == 0
+goto_if_false @RIOT2_9777
+158@ = 1
+
+:RIOT2_9777
+Char.MarkAsNoLongerNeeded(49@)
+Char.MarkAsNoLongerNeeded(50@)
+Char.MarkAsNoLongerNeeded(51@)
+Char.MarkAsNoLongerNeeded(52@)
+Char.MarkAsNoLongerNeeded(53@)
+Char.MarkAsNoLongerNeeded(54@)
+Blip.Remove(108@)
+Blip.Remove(109@)
+Blip.Remove(110@)
+Blip.Remove(111@)
+Blip.Remove(112@)
+Blip.Remove(113@)
+155@ = 4
+156@ = 4
+157@ = 4
+
+:RIOT2_9858
+if 
+  158@ == 1
+goto_if_false @RIOT2_9897
+gosub @RIOT2_35203
+173@ = 0
+158@ = 2
+
+:RIOT2_9897
+if 
+  158@ == 2
+goto_if_false @RIOT2_9974
+if 
+  Char.IsDead(55@)
+goto_if_false @RIOT2_9974
+if 
+  Char.IsDead(56@)
+goto_if_false @RIOT2_9974
+Blip.Remove(114@)
+Char.MarkAsNoLongerNeeded(55@)
+Blip.Remove(115@)
+Char.MarkAsNoLongerNeeded(56@)
+158@ = 3
+
+:RIOT2_9974
+if 
+  3 > 158@
+goto_if_false @RIOT2_10044
+if 
+  Char.IsDead(55@)
+goto_if_false @RIOT2_10018
+Blip.Remove(114@)
+Char.MarkAsNoLongerNeeded(55@)
+
+:RIOT2_10018
+if 
+  Char.IsDead(56@)
+goto_if_false @RIOT2_10044
+Blip.Remove(115@)
+Char.MarkAsNoLongerNeeded(56@)
+
+:RIOT2_10044
+if 
+  158@ > 0
+goto_if_false @RIOT2_10127
+if 
+  159@ == 0
+goto_if_false @RIOT2_10127
+if 
+  173@ > 500
+goto_if_false @RIOT2_10127
+159@ = 1
+gosub @RIOT2_35203
+159@ = 2
+173@ = 0
+
+:RIOT2_10127
+if 
+  159@ == 2
+goto_if_false @RIOT2_10204
+if 
+  Char.IsDead(57@)
+goto_if_false @RIOT2_10204
+if 
+  Char.IsDead(58@)
+goto_if_false @RIOT2_10204
+Blip.Remove(116@)
+Char.MarkAsNoLongerNeeded(57@)
+Blip.Remove(117@)
+Char.MarkAsNoLongerNeeded(58@)
+159@ = 3
+
+:RIOT2_10204
+if 
+  3 > 159@
+goto_if_false @RIOT2_10274
+if 
+  Char.IsDead(57@)
+goto_if_false @RIOT2_10248
+Blip.Remove(116@)
+Char.MarkAsNoLongerNeeded(57@)
+
+:RIOT2_10248
+if 
+  Char.IsDead(58@)
+goto_if_false @RIOT2_10274
+Blip.Remove(117@)
+Char.MarkAsNoLongerNeeded(58@)
+
+:RIOT2_10274
+if 
+  158@ > 0
+goto_if_false @RIOT2_10375
+if 
+  159@ > 0
+goto_if_false @RIOT2_10375
+if 
+  160@ == 0
+goto_if_false @RIOT2_10375
+if 
+  173@ > 500
+goto_if_false @RIOT2_10375
+160@ = 1
+gosub @RIOT2_35203
+160@ = 2
+173@ = 0
+
+:RIOT2_10375
+if 
+  160@ == 2
+goto_if_false @RIOT2_10452
+if 
+  Char.IsDead(59@)
+goto_if_false @RIOT2_10452
+if 
+  Char.IsDead(60@)
+goto_if_false @RIOT2_10452
+Blip.Remove(118@)
+Char.MarkAsNoLongerNeeded(59@)
+Blip.Remove(119@)
+Char.MarkAsNoLongerNeeded(60@)
+160@ = 3
+
+:RIOT2_10452
+if 
+  3 > 160@
+goto_if_false @RIOT2_10522
+if 
+  Char.IsDead(59@)
+goto_if_false @RIOT2_10496
+Blip.Remove(118@)
+Char.MarkAsNoLongerNeeded(59@)
+
+:RIOT2_10496
+if 
+  Char.IsDead(60@)
+goto_if_false @RIOT2_10522
+Blip.Remove(119@)
+Char.MarkAsNoLongerNeeded(60@)
+
+:RIOT2_10522
+if 
+  158@ == 3
+goto_if_false @RIOT2_10746
+if 
+  159@ == 3
+goto_if_false @RIOT2_10746
+if 
+  160@ == 3
+goto_if_false @RIOT2_10746
+if 
+  152@ == 0
+goto_if_false @RIOT2_10608
+152@ = 1
+goto @RIOT2_10665
+
+:RIOT2_10608
+if 
+  161@ == 0
+goto_if_false @RIOT2_10640
+161@ = 1
+goto @RIOT2_10665
+
+:RIOT2_10640
+if 
+  155@ == 0
+goto_if_false @RIOT2_10665
+155@ = 1
+
+:RIOT2_10665
+Char.MarkAsNoLongerNeeded(55@)
+Char.MarkAsNoLongerNeeded(56@)
+Char.MarkAsNoLongerNeeded(57@)
+Char.MarkAsNoLongerNeeded(58@)
+Char.MarkAsNoLongerNeeded(59@)
+Char.MarkAsNoLongerNeeded(60@)
+Blip.Remove(114@)
+Blip.Remove(115@)
+Blip.Remove(116@)
+Blip.Remove(117@)
+Blip.Remove(118@)
+Blip.Remove(119@)
+158@ = 4
+159@ = 4
+160@ = 4
+
+:RIOT2_10746
+if 
+  161@ == 1
+goto_if_false @RIOT2_10785
+gosub @RIOT2_36531
+172@ = 0
+161@ = 2
+
+:RIOT2_10785
+if 
+  161@ == 2
+goto_if_false @RIOT2_10862
+if 
+  Char.IsDead(61@)
+goto_if_false @RIOT2_10862
+if 
+  Char.IsDead(62@)
+goto_if_false @RIOT2_10862
+Blip.Remove(120@)
+Char.MarkAsNoLongerNeeded(61@)
+Blip.Remove(121@)
+Char.MarkAsNoLongerNeeded(62@)
+161@ = 3
+
+:RIOT2_10862
+if 
+  3 > 161@
+goto_if_false @RIOT2_10932
+if 
+  Char.IsDead(61@)
+goto_if_false @RIOT2_10906
+Blip.Remove(120@)
+Char.MarkAsNoLongerNeeded(61@)
+
+:RIOT2_10906
+if 
+  Char.IsDead(62@)
+goto_if_false @RIOT2_10932
+Blip.Remove(121@)
+Char.MarkAsNoLongerNeeded(62@)
+
+:RIOT2_10932
+if 
+  161@ > 0
+goto_if_false @RIOT2_11015
+if 
+  162@ == 0
+goto_if_false @RIOT2_11015
+if 
+  172@ > 500
+goto_if_false @RIOT2_11015
+162@ = 1
+gosub @RIOT2_36531
+162@ = 2
+172@ = 0
+
+:RIOT2_11015
+if 
+  162@ == 2
+goto_if_false @RIOT2_11092
+if 
+  Char.IsDead(63@)
+goto_if_false @RIOT2_11092
+if 
+  Char.IsDead(64@)
+goto_if_false @RIOT2_11092
+Blip.Remove(122@)
+Char.MarkAsNoLongerNeeded(63@)
+Blip.Remove(123@)
+Char.MarkAsNoLongerNeeded(64@)
+162@ = 3
+
+:RIOT2_11092
+if 
+  3 > 162@
+goto_if_false @RIOT2_11162
+if 
+  Char.IsDead(63@)
+goto_if_false @RIOT2_11136
+Blip.Remove(122@)
+Char.MarkAsNoLongerNeeded(63@)
+
+:RIOT2_11136
+if 
+  Char.IsDead(64@)
+goto_if_false @RIOT2_11162
+Blip.Remove(123@)
+Char.MarkAsNoLongerNeeded(64@)
+
+:RIOT2_11162
+if 
+  161@ > 0
+goto_if_false @RIOT2_11263
+if 
+  162@ > 0
+goto_if_false @RIOT2_11263
+if 
+  163@ == 0
+goto_if_false @RIOT2_11263
+if 
+  172@ > 500
+goto_if_false @RIOT2_11263
+163@ = 1
+gosub @RIOT2_36531
+163@ = 2
+172@ = 0
+
+:RIOT2_11263
+if 
+  163@ == 2
+goto_if_false @RIOT2_11340
+if 
+  Char.IsDead(65@)
+goto_if_false @RIOT2_11340
+if 
+  Char.IsDead(66@)
+goto_if_false @RIOT2_11340
+Blip.Remove(124@)
+Char.MarkAsNoLongerNeeded(65@)
+Blip.Remove(125@)
+Char.MarkAsNoLongerNeeded(66@)
+163@ = 3
+
+:RIOT2_11340
+if 
+  3 > 163@
+goto_if_false @RIOT2_11410
+if 
+  Char.IsDead(65@)
+goto_if_false @RIOT2_11384
+Blip.Remove(124@)
+Char.MarkAsNoLongerNeeded(65@)
+
+:RIOT2_11384
+if 
+  Char.IsDead(66@)
+goto_if_false @RIOT2_11410
+Blip.Remove(125@)
+Char.MarkAsNoLongerNeeded(66@)
+
+:RIOT2_11410
+if 
+  161@ == 3
+goto_if_false @RIOT2_11634
+if 
+  162@ == 3
+goto_if_false @RIOT2_11634
+if 
+  163@ == 3
+goto_if_false @RIOT2_11634
+if 
+  158@ == 0
+goto_if_false @RIOT2_11496
+158@ = 1
+goto @RIOT2_11553
+
+:RIOT2_11496
+if 
+  155@ == 0
+goto_if_false @RIOT2_11528
+155@ = 1
+goto @RIOT2_11553
+
+:RIOT2_11528
+if 
+  152@ == 0
+goto_if_false @RIOT2_11553
+152@ = 1
+
+:RIOT2_11553
+Char.MarkAsNoLongerNeeded(61@)
+Char.MarkAsNoLongerNeeded(62@)
+Char.MarkAsNoLongerNeeded(63@)
+Char.MarkAsNoLongerNeeded(64@)
+Char.MarkAsNoLongerNeeded(65@)
+Char.MarkAsNoLongerNeeded(66@)
+Blip.Remove(120@)
+Blip.Remove(121@)
+Blip.Remove(122@)
+Blip.Remove(123@)
+Blip.Remove(124@)
+Blip.Remove(125@)
+161@ = 4
+162@ = 4
+163@ = 4
+
+:RIOT2_11634
+if 
+  187@ == 0
+goto_if_false @RIOT2_11796
+if 
+  6 > 165@
+goto_if_false @RIOT2_11796
+if 
+  TIMERB > 7000
+goto_if_false @RIOT2_11796
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_11796
+if 
+  Char.LocateAnyMeansChar2D($scplayer, $cesar, 60.0, 60.0, False)
+goto_if_false @RIOT2_11796
+if 
+  185@ == 0
+goto_if_false @RIOT2_11796
+Char.ShutUpForScriptedSpeech($cesar, True)
+185@ = 5
+186@ = 3
+188@ = 4
+gosub @RIOT2_40912
+187@ = 1
+
+:RIOT2_11796
+if 
+  165@ == 0
+goto_if_false @RIOT2_11937
+Char.ClearTasks(34@)
+Char.ClearTasks(35@)
+Char.ClearTasks(36@)
+Char.ClearTasks($cesar)
+Task.FollowPathNodesToCoord(34@, 1824.9, -1986.7, 12.6, 4, -2)
+Task.FollowPathNodesToCoord(35@, 1822.3, -1986.7, 12.6, 4, -2)
+Task.FollowPathNodesToCoord(36@, 1820.9, -1984.7, 12.6, 4, -2)
+Task.FollowPathNodesToCoord($cesar, 1824.5, -1984.0, 12.6, 4, -2)
+165@ = 1
+
+:RIOT2_11937
+if 
+  165@ == 1
+goto_if_false @RIOT2_12485
+if 
+  150@ == 6
+goto_if_false @RIOT2_12189
+Char.ClearTasks(34@)
+Char.ClearTasks(35@)
+Char.ClearTasks(36@)
+Char.ClearTasks($cesar)
+Task.FollowPathNodesToCoord(34@, 1856.6, -2008.5, 12.6, 4, -2)
+Task.FollowPathNodesToCoord(35@, 1859.6, -2007.5, 12.6, 4, -2)
+Task.FollowPathNodesToCoord(36@, 1853.6, -2007.5, 12.6, 4, -2)
+Task.FollowPathNodesToCoord($cesar, 1854.8, -2005.5, 12.6, 4, -2)
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_12182
+if 
+  Char.LocateAnyMeansChar2D($scplayer, $cesar, 60.0, 60.0, False)
+goto_if_false @RIOT2_12182
+if 
+  185@ == 0
+goto_if_false @RIOT2_12182
+185@ = 5
+186@ = 4
+188@ = 5
+gosub @RIOT2_40912
+
+:RIOT2_12182
+165@ = 2
+
+:RIOT2_12189
+if 
+  Char.IsDead(38@)
+goto_if_false @RIOT2_12485
+if 
+  Char.IsDead(39@)
+goto_if_false @RIOT2_12485
+if 
+  Char.IsDead(40@)
+goto_if_false @RIOT2_12485
+if 
+  Char.IsDead(41@)
+goto_if_false @RIOT2_12485
+if 
+  Char.IsDead(42@)
+goto_if_false @RIOT2_12485
+Char.ClearTasks(34@)
+Char.ClearTasks(35@)
+Char.ClearTasks(36@)
+Char.ClearTasks($cesar)
+Task.FollowPathNodesToCoord(34@, 1856.6, -2008.5, 12.6, 4, -2)
+Task.FollowPathNodesToCoord(35@, 1859.6, -2007.5, 12.6, 4, -2)
+Task.FollowPathNodesToCoord(36@, 1853.6, -2007.5, 12.6, 4, -2)
+Task.FollowPathNodesToCoord($cesar, 1854.8, -2005.5, 12.6, 4, -2)
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_12478
+if 
+  Char.LocateAnyMeansChar2D($scplayer, $cesar, 60.0, 60.0, False)
+goto_if_false @RIOT2_12478
+if 
+  185@ == 0
+goto_if_false @RIOT2_12478
+185@ = 5
+186@ = 5
+188@ = 6
+gosub @RIOT2_40912
+
+:RIOT2_12478
+165@ = 2
+
+:RIOT2_12485
+if 
+  165@ == 2
+goto_if_false @RIOT2_12737
+if 
+  158@ == 4
+goto_if_false @RIOT2_12737
+Char.ClearTasks(34@)
+Char.ClearTasks(35@)
+Char.ClearTasks(36@)
+Char.ClearTasks($cesar)
+Task.FollowPathNodesToCoord(34@, 1858.8, -1993.7, 12.6, 4, -2)
+Task.FollowPathNodesToCoord(35@, 1858.8, -1991.6, 12.6, 4, -2)
+Task.FollowPathNodesToCoord(36@, 1858.8, -1989.7, 12.6, 4, -2)
+Task.FollowPathNodesToCoord($cesar, 1858.8, -1987.7, 12.6, 4, -2)
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_12730
+if 
+  Char.LocateAnyMeansChar2D($scplayer, $cesar, 60.0, 60.0, False)
+goto_if_false @RIOT2_12730
+if 
+  185@ == 0
+goto_if_false @RIOT2_12730
+185@ = 5
+186@ = 6
+188@ = 7
+gosub @RIOT2_40912
+
+:RIOT2_12730
+165@ = 3
+
+:RIOT2_12737
+if 
+  165@ == 3
+goto_if_false @RIOT2_12989
+if 
+  152@ == 4
+goto_if_false @RIOT2_12989
+Char.ClearTasks(34@)
+Char.ClearTasks(35@)
+Char.ClearTasks(36@)
+Char.ClearTasks($cesar)
+Task.FollowPathNodesToCoord(34@, 1886.2, -1995.2, 12.6, 4, -2)
+Task.FollowPathNodesToCoord(35@, 1886.2, -1993.2, 12.6, 4, -2)
+Task.FollowPathNodesToCoord(36@, 1886.2, -1991.2, 12.6, 4, -2)
+Task.FollowPathNodesToCoord($cesar, 1886.2, -1989.2, 12.6, 4, -2)
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_12982
+if 
+  Char.LocateAnyMeansChar2D($scplayer, $cesar, 60.0, 60.0, False)
+goto_if_false @RIOT2_12982
+if 
+  185@ == 0
+goto_if_false @RIOT2_12982
+185@ = 5
+186@ = 7
+188@ = 8
+gosub @RIOT2_40912
+
+:RIOT2_12982
+165@ = 4
+
+:RIOT2_12989
+if 
+  165@ == 4
+goto_if_false @RIOT2_13241
+if 
+  155@ == 4
+goto_if_false @RIOT2_13241
+Char.ClearTasks(34@)
+Char.ClearTasks(35@)
+Char.ClearTasks(36@)
+Char.ClearTasks($cesar)
+Task.FollowPathNodesToCoord(34@, 1903.1, -2009.3, 12.6, 4, -2)
+Task.FollowPathNodesToCoord(35@, 1905.1, -2009.3, 12.6, 4, -2)
+Task.FollowPathNodesToCoord(36@, 1907.1, -2009.3, 12.6, 4, -2)
+Task.FollowPathNodesToCoord($cesar, 1909.1, -2009.3, 12.6, 4, -2)
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_13234
+if 
+  Char.LocateAnyMeansChar2D($scplayer, $cesar, 60.0, 60.0, False)
+goto_if_false @RIOT2_13234
+if 
+  185@ == 0
+goto_if_false @RIOT2_13234
+185@ = 5
+186@ = 8
+188@ = 9
+gosub @RIOT2_40912
+
+:RIOT2_13234
+165@ = 5
+
+:RIOT2_13241
+if 
+  165@ == 5
+goto_if_false @RIOT2_13723
+if 
+  161@ == 4
+goto_if_false @RIOT2_13723
+Char.ClearTasks(34@)
+Char.ClearTasks(35@)
+Char.ClearTasks(36@)
+Char.ClearTasks($cesar)
+268@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 1916.8, -2059.2, 12.4, 6, -2)
+Task.GoStraightToCoord(-1, 1921.6, -2077.1, 12.5, MoveState.Run, -2)
+Task.AchieveHeading(-1, 5.1)
+Sequence.Close(268@)
+Char.PerformSequence($cesar, 268@)
+Sequence.Clear(268@)
+268@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 1914.5, -2058.4, 12.4, 6, -2)
+Task.GoStraightToCoord(-1, 1922.6, -2077.1, 12.5, MoveState.Run, -2)
+Task.AchieveHeading(-1, 5.1)
+Sequence.Close(268@)
+Char.PerformSequence(34@, 268@)
+Sequence.Clear(268@)
+268@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 1918.1, -2061.8, 12.4, 6, -2)
+Task.GoStraightToCoord(-1, 1923.6, -2077.1, 12.5, MoveState.Run, -2)
+Task.AchieveHeading(-1, 5.1)
+Sequence.Close(268@)
+Char.PerformSequence(35@, 268@)
+Sequence.Clear(268@)
+268@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 1919.8, -2059.6, 12.4, 6, -2)
+Task.GoStraightToCoord(-1, 1924.6, -2077.1, 12.5, MoveState.Run, -2)
+Task.AchieveHeading(-1, 5.1)
+Sequence.Close(268@)
+Char.PerformSequence(36@, 268@)
+Sequence.Clear(268@)
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_13684
+if 
+  Char.LocateAnyMeansChar2D($scplayer, $cesar, 60.0, 60.0, False)
+goto_if_false @RIOT2_13684
+185@ = 5
+186@ = 0
+188@ = 1
+gosub @RIOT2_40912
+
+:RIOT2_13684
+Blip.Remove(89@)
+89@ = Blip.AddForCoord(1922.8, -2075.0, 12.5)
+187@ = 0
+165@ = 6
+
+:RIOT2_13723
+if 
+  165@ == 6
+goto_if_false @RIOT2_13879
+if 
+  187@ == 0
+goto_if_false @RIOT2_13800
+if 
+  185@ == 0
+goto_if_false @RIOT2_13800
+Text.PrintNow('R2_04', 11000, 1)
+187@ = 1
+
+:RIOT2_13800
+if 
+  Char.LocateOnFoot3D($scplayer, 1, 1922.8, -2075.0, 12.5, 1.2, 1.2, 2.0)
+goto_if_false @RIOT2_13879
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+185@ = 0
+143@ = 0
+142@ = 3
+
+:RIOT2_13879
+if 
+  142@ == 3
+goto_if_false @RIOT2_19283
+if 
+  143@ == 0
+goto_if_false @RIOT2_15311
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+185@ = 0
+Camera.DoFade(0, 500)
+
+:RIOT2_13939
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_13963
+wait 0
+goto @RIOT2_13939
+
+:RIOT2_13963
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_13995
+goto @RIOT2_30241
+
+:RIOT2_13995
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Game.ShutAllCharsUp(True)
+Char.ShutUpForScriptedSpeech($cesar, False)
+World.SetCarDensityMultiplier(0.0)
+if 
+  not Garage.IsClosed('DUF_LAS')
+goto_if_false @RIOT2_14066
+Garage.Close('DUF_LAS')
+
+:RIOT2_14066
+Streaming.RequestModel(466)
+Streaming.RequestModel(359)
+Streaming.RequestAnimation("CAR")
+Streaming.RequestAnimation("SWAT")
+Streaming.RequestAnimation("CRACK")
+Streaming.RequestAnimation("CASINO")
+Streaming.LoadAllModelsNow
+DecisionMakerChar.ClearEventResponse(265@, 36)
+DecisionMakerChar.ClearEventResponse(265@, 37)
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_14158
+goto @RIOT2_30241
+
+:RIOT2_14158
+World.ClearArea(1, 1897.0, -2103.8, 12.3, 300.0)
+67@ = Car.Create(466, 1897.0, -2103.8, 12.3)
+Car.SetHeading(67@, 2.4)
+Car.FreezePosition(67@, True)
+Car.LockDoors(67@, CarLock.Locked)
+Car.SetProofs(67@, True, True, True, True, True)
+68@ = Car.Create(466, 1857.3, -2101.3, 12.3)
+Car.FreezePosition(68@, True)
+Car.SetHeading(68@, 359.7)
+Car.LockDoors(68@, CarLock.Locked)
+148@ = Math.RandomIntInRange(0, 2)
+69@ = Char.Create(25, 146@(148@,2i), 1860.9, -2099.6, 12.6)
+Char.SetHeading(69@, 270.0)
+Char.GiveWeapon(69@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(69@, 266@)
+Task.PlayAnim(69@, "FIXN_CAR_LOOP", "CAR", 4.0, True, False, False, False, -1)
+126@ = Blip.AddForChar(69@)
+Blip.ChangeScale(126@, 1)
+Char.SetAccuracy(69@, 181@)
+Char.AddArmor(69@, 50)
+148@ = Math.RandomIntInRange(0, 2)
+70@ = Char.Create(25, 146@(148@,2i), 1859.9, -2102.5, 12.5)
+Char.SetHeading(70@, 48.0)
+Char.GiveWeapon(70@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(70@, 266@)
+127@ = Blip.AddForChar(70@)
+Blip.ChangeScale(127@, 1)
+Char.SetAccuracy(70@, 181@)
+148@ = Math.RandomIntInRange(0, 2)
+71@ = Char.Create(25, 146@(148@,2i), 1855.6, -2102.6, 12.5)
+Char.SetHeading(71@, 282.0)
+Char.GiveWeapon(71@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(71@, 266@)
+Task.PlayAnim(71@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+128@ = Blip.AddForChar(71@)
+Blip.ChangeScale(128@, 1)
+Char.SetAccuracy(71@, 181@)
+Char.AddArmor(71@, 50)
+148@ = Math.RandomIntInRange(0, 2)
+72@ = Char.Create(25, 146@(148@,2i), 1855.6, -2099.6, 12.5)
+Char.SetHeading(72@, 282.0)
+Char.GiveWeapon(72@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(72@, 266@)
+Task.PlayAnim(72@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+129@ = Blip.AddForChar(72@)
+Blip.ChangeScale(129@, 1)
+Char.SetAccuracy(72@, 181@)
+144@ = 1
+skip_cutscene_start_internal @RIOT2_16263
+World.ClearArea(1, 1918.1, -2076.9, 12.5, 30.0)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 1918.1, -2076.9, 12.5)
+Char.SetHeading($scplayer, 171.1)
+Task.GoStraightToCoord($scplayer, 1916.1, -2093.3, 12.5, MoveState.Walk, -1)
+Char.ClearTasksImmediately($cesar)
+Char.SetCoordinates($cesar, 1919.1, -2077.7, 12.5)
+Char.SetHeading($cesar, 171.5)
+Task.GoStraightToCoord($cesar, 1917.1, -2094.1, 12.5, MoveState.Walk, -1)
+Char.SetDecisionMaker($cesar, 266@)
+Char.ClearTasksImmediately(35@)
+Char.SetCoordinates(35@, 1920.3, -2075.3, 12.5)
+Char.SetHeading(35@, 189.5)
+Char.GiveWeapon(35@, WeaponType.RocketLauncher, 1)
+Task.GoStraightToCoord(35@, 1918.3, -2091.7, 12.5, MoveState.Walk, -1)
+Char.SetDecisionMaker(35@, 266@)
+Char.ClearTasksImmediately(34@)
+Char.SetCoordinates(34@, 1918.8, -2075.3, 12.5)
+Char.SetHeading(34@, 165.9)
+Task.GoStraightToCoord(34@, 1916.8, -2091.7, 12.5, MoveState.Walk, -1)
+Char.SetDecisionMaker(34@, 266@)
+Char.ClearTasksImmediately(36@)
+Char.SetCoordinates(36@, 1919.6, -2074.0, 12.5)
+Char.SetHeading(36@, 173.0)
+Task.GoStraightToCoord(36@, 1917.6, -2090.4, 12.5, MoveState.Walk, -1)
+Char.SetDecisionMaker(36@, 266@)
+Camera.SetFixedPosition(1914.65, -2087.8, 13.4, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1917.9, -2080.7, 13.0, SwitchType.JumpCut)
+Camera.DoFade(1, 500)
+
+:RIOT2_15213
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_15237
+wait 0
+goto @RIOT2_15213
+
+:RIOT2_15237
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_15269
+goto @RIOT2_30241
+
+:RIOT2_15269
+185@ = 6
+186@ = 0
+188@ = 6
+gosub @RIOT2_40912
+TIMERA = 0
+143@ = 1
+
+:RIOT2_15311
+if 
+  143@ == 1
+goto_if_false @RIOT2_15732
+if 
+  TIMERA > 8000
+goto_if_false @RIOT2_15732
+World.ClearArea(1, 1916.9, -2101.1, 12.6, 30.0)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 1916.9, -2101.1, 12.6)
+Char.SetHeading($scplayer, 90.0)
+Task.GoStraightToCoord($scplayer, 1912.4, -2101.1, 12.5, MoveState.Walk, -1)
+Char.ClearTasksImmediately($cesar)
+Char.SetCoordinates($cesar, 1916.9, -2102.1, 12.6)
+Char.SetHeading($cesar, 90.0)
+Task.GoStraightToCoord($cesar, 1912.4, -2102.1, 12.5, MoveState.Walk, -1)
+Char.ClearTasksImmediately(35@)
+Char.SetCoordinates(35@, 1916.9, -2103.1, 12.6)
+Char.SetHeading(35@, 90.0)
+Task.GoStraightToCoord(35@, 1912.4, -2103.1, 12.5, MoveState.Walk, -1)
+Char.ClearTasksImmediately(36@)
+Char.SetCoordinates(36@, 1916.9, -2100.1, 12.6)
+Char.SetHeading(36@, 90.0)
+Task.GoStraightToCoord(36@, 1912.4, -2100.1, 12.5, MoveState.Walk, -1)
+Char.ClearTasksImmediately(34@)
+Char.SetCoordinates(34@, 1916.9, -2099.1, 12.6)
+Char.SetHeading(34@, 90.0)
+Task.GoStraightToCoord(34@, 1912.4, -2099.1, 12.5, MoveState.Walk, -1)
+Camera.SetFixedPosition(1916.5, -2100.9, 12.8, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1906.2, -2101.0, 14.8, SwitchType.JumpCut)
+TIMERA = 0
+143@ = 2
+
+:RIOT2_15732
+if 
+  143@ == 2
+goto_if_false @RIOT2_16201
+if 
+  185@ == 0
+goto_if_false @RIOT2_16201
+if 
+  TIMERA > 4000
+goto_if_false @RIOT2_16201
+if 
+  not Char.IsDead(69@)
+goto_if_false @RIOT2_15886
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "FIXN_CAR_OUT", "CAR", 4.0, False, False, False, False, -1)
+Task.ShootAtCoord(-1, 1916.5, -2100.9, 12.8, 3000)
+Sequence.Close(268@)
+Char.PerformSequence(69@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_15886
+if 
+  not Char.IsDead(70@)
+goto_if_false @RIOT2_15960
+268@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.ToggleDuck(-1, True)
+Task.ShootAtCoord(-1, 1916.5, -2100.9, 12.8, 3000)
+Sequence.Close(268@)
+Char.PerformSequence(70@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_15960
+if 
+  not Char.IsDead(71@)
+goto_if_false @RIOT2_16034
+268@ = Sequence.Open()
+Task.Pause(-1, 700)
+Task.StandStill(-1, 100)
+Task.ShootAtCoord(-1, 1916.5, -2100.9, 12.8, 3000)
+Sequence.Close(268@)
+Char.PerformSequence(71@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_16034
+if 
+  not Char.IsDead(72@)
+goto_if_false @RIOT2_16108
+268@ = Sequence.Open()
+Task.Pause(-1, 1000)
+Task.StandStill(-1, 100)
+Task.ShootAtCoord(-1, 1916.5, -2100.9, 12.8, 3000)
+Sequence.Close(268@)
+Char.PerformSequence(72@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_16108
+185@ = 6
+186@ = 6
+188@ = 7
+gosub @RIOT2_40912
+Camera.SetFixedPosition(1866.1, -2101.8, 13.4, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1849.9, -2101.0, 14.98, SwitchType.JumpCut)
+TIMERA = 0
+143@ = 3
+
+:RIOT2_16201
+if 
+  143@ == 3
+goto_if_false @RIOT2_19283
+if 
+  185@ == 0
+goto_if_false @RIOT2_19283
+if 
+  TIMERA > 4000
+goto_if_false @RIOT2_19283
+144@ = 0
+
+:RIOT2_16263
+skip_cutscene_end 
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_16297
+goto @RIOT2_30241
+
+:RIOT2_16297
+if 
+  144@ == 1
+goto_if_false @RIOT2_16654
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+185@ = 0
+Camera.DoFade(0, 500)
+
+:RIOT2_16339
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_16363
+wait 0
+goto @RIOT2_16339
+
+:RIOT2_16363
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_16395
+goto @RIOT2_30241
+
+:RIOT2_16395
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 1912.4, -2101.1, 12.5)
+Char.SetHeading($scplayer, 90.0)
+Char.ClearTasksImmediately($cesar)
+Char.SetCoordinates($cesar, 1912.4, -2102.1, 12.5)
+Char.SetHeading($cesar, 90.0)
+Char.ClearTasksImmediately(35@)
+Char.SetCoordinates(35@, 1912.4, -2103.1, 12.5)
+Char.SetHeading(35@, 90.0)
+Char.ClearTasksImmediately(36@)
+Char.SetCoordinates(36@, 1912.4, -2100.1, 12.5)
+Char.SetHeading(36@, 90.0)
+Char.ClearTasksImmediately(34@)
+Char.SetCoordinates(34@, 1912.4, -2099.1, 12.5)
+Char.SetHeading(34@, 90.0)
+if 
+  not Char.IsDead(69@)
+goto_if_false @RIOT2_16591
+Char.ClearTasksImmediately(69@)
+
+:RIOT2_16591
+if 
+  not Char.IsDead(70@)
+goto_if_false @RIOT2_16612
+Char.ClearTasksImmediately(70@)
+
+:RIOT2_16612
+if 
+  not Char.IsDead(71@)
+goto_if_false @RIOT2_16633
+Char.ClearTasksImmediately(71@)
+
+:RIOT2_16633
+if 
+  not Char.IsDead(72@)
+goto_if_false @RIOT2_16654
+Char.ClearTasksImmediately(72@)
+
+:RIOT2_16654
+Char.SetStayInSamePlace($cesar, True)
+269@ = Sequence.Open()
+Task.PlayAnim(-1, "GUN_STAND", "PED", 8.0, False, False, False, False, 10)
+168@ = Math.RandomIntInRange(1500, 4000)
+Task.ShootAtCoord(-1, 1871.1, -2102.3, 14.6, 168@)
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+168@ = Math.RandomIntInRange(1500, 4000)
+Task.Pause(-1, 168@)
+Sequence.SetToRepeat(269@, True)
+Sequence.Close(269@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1898.7, -2102.1, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 90.0)
+Char.PerformSequence(-1, 269@)
+Sequence.Close(268@)
+Char.PerformSequence($cesar, 268@)
+Sequence.Clear(268@)
+Sequence.Clear(269@)
+Char.ClearTasksImmediately(35@)
+Char.SetCoordinates(35@, 1912.4, -2103.1, 12.5)
+Char.SetHeading(35@, 90.0)
+Char.SetStayInSamePlace(35@, True)
+269@ = Sequence.Open()
+Task.PlayAnim(-1, "GUN_STAND", "PED", 8.0, False, False, False, False, 10)
+168@ = Math.RandomIntInRange(1500, 4000)
+Task.ShootAtCoord(-1, 1878.7, -2105.5, 14.6, 168@)
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+168@ = Math.RandomIntInRange(1500, 4000)
+Task.Pause(-1, 168@)
+Sequence.SetToRepeat(269@, True)
+Sequence.Close(269@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1898.7, -2106.1, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 90.0)
+if 
+  not Car.IsDead(68@)
+goto_if_false @RIOT2_17114
+Task.DestroyCar(-1, 68@)
+
+:RIOT2_17114
+Task.Pause(-1, 500)
+Task.PlayAnim(-1, "MANWINB", "CASINO", 8.0, False, False, False, False, -1)
+Char.PerformSequence(-1, 269@)
+Sequence.Close(268@)
+Char.PerformSequence(35@, 268@)
+Sequence.Clear(268@)
+Sequence.Clear(269@)
+Char.SetStayInSamePlace(34@, True)
+269@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R", "SWAT", 8.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_IN_R", "SWAT", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+168@ = Math.RandomIntInRange(1500, 4000)
+Task.ShootAtCoord(-1, 1891.2, -2099.6, 14.0, 168@)
+Task.StayInSamePlace(-1, False)
+Task.CharSlideToCoordAndPlayAnim(-1, 1903.7, -2096.6, 12.5, 75.0, -1.0, "SWT_WLLSHOOT_OUT_R", "SWAT", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R_BACK", "SWAT", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(269@, True)
+Sequence.Close(269@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1903.5, -2096.6, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 75.0)
+Char.PerformSequence(-1, 269@)
+Sequence.Close(268@)
+Char.PerformSequence(34@, 268@)
+Sequence.Clear(268@)
+Sequence.Clear(269@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1894.6, -2099.2, 12.4, MoveState.Run, -1)
+Task.AchieveHeading(-1, 90.0)
+Task.PlayAnimNonInterruptable(-1, "CROUCH_ROLL_L", "PED", 8.0, False, True, True, False, -1)
+Task.GoStraightToCoord(-1, 1884.6, -2107.6, 12.4, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 1874.9, -2102.8, 12.4, MoveState.Run, -1)
+Task.PlayAnimNonInterruptable(-1, "KO_SPIN_L", "PED", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "CRCKIDLE4", "CRACK", 8.0, True, False, False, False, -1)
+Sequence.Close(268@)
+Char.PerformSequence(36@, 268@)
+Sequence.Clear(268@)
+if 
+  not Char.IsDead(69@)
+goto_if_false @RIOT2_18065
+Char.SetStayInSamePlace(69@, True)
+269@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_L", "SWAT", 8.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_IN_L", "SWAT", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+168@ = Math.RandomIntInRange(1500, 4000)
+Task.KillCharOnFootTimed(-1, $scplayer, 168@)
+Task.StayInSamePlace(-1, False)
+Task.CharSlideToCoordAndPlayAnim(-1, 1872.8, -2096.1, 12.5, 275.0, -1.0, "SWT_WLLSHOOT_OUT_L", "SWAT", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_L_BACK", "SWAT", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(269@, True)
+Sequence.Close(269@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1872.8, -2096.1, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 275.0)
+Char.PerformSequence(-1, 269@)
+Sequence.Close(268@)
+Char.PerformSequence(69@, 268@)
+Sequence.Clear(268@)
+Sequence.Clear(269@)
+
+:RIOT2_18065
+if 
+  not Char.IsDead(70@)
+goto_if_false @RIOT2_18089
+Task.KillCharOnFoot(70@, $scplayer)
+
+:RIOT2_18089
+if 
+  not Char.IsDead(71@)
+goto_if_false @RIOT2_18424
+Char.SetStayInSamePlace(71@, True)
+269@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R", "SWAT", 8.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_IN_R", "SWAT", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+168@ = Math.RandomIntInRange(1500, 4000)
+Task.KillCharOnFootTimed(-1, $scplayer, 168@)
+Task.StayInSamePlace(-1, False)
+Task.CharSlideToCoordAndPlayAnim(-1, 1864.1, -2107.4, 12.6, 275.0, -0.1, "SWT_WLLSHOOT_OUT_R", "SWAT", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R_BACK", "SWAT", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(269@, True)
+Sequence.Close(269@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1864.1, -2107.4, 12.6, MoveState.Run, -1)
+Task.AchieveHeading(-1, 275.0)
+Char.PerformSequence(-1, 269@)
+Sequence.Close(268@)
+Char.PerformSequence(71@, 268@)
+Sequence.Clear(268@)
+Sequence.Clear(269@)
+
+:RIOT2_18424
+if 
+  not Char.IsDead(72@)
+goto_if_false @RIOT2_18448
+Task.KillCharOnFoot(72@, $scplayer)
+
+:RIOT2_18448
+148@ = Math.RandomIntInRange(0, 2)
+73@ = Char.Create(25, 146@(148@,2i), 1806.1, -2121.7, 12.5)
+Char.SetHeading(73@, 357.8)
+Char.GiveWeapon(73@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(73@, 266@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1837.5, -2102.3, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 275.0)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(73@, 268@)
+Sequence.Clear(268@)
+130@ = Blip.AddForChar(73@)
+Blip.ChangeScale(130@, 1)
+Char.SetAccuracy(73@, 181@)
+148@ = Math.RandomIntInRange(0, 2)
+74@ = Char.Create(25, 146@(148@,2i), 1801.5, -2120.7, 12.5)
+Char.SetHeading(74@, 357.8)
+Char.GiveWeapon(74@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(74@, 266@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1833.8, -2097.8, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 275.0)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(74@, 268@)
+Sequence.Clear(268@)
+131@ = Blip.AddForChar(74@)
+Blip.ChangeScale(131@, 1)
+Char.SetAccuracy(74@, 181@)
+Char.AddArmor(74@, 50)
+148@ = Math.RandomIntInRange(0, 2)
+75@ = Char.Create(25, 146@(148@,2i), 1879.7, -2094.9, 12.5)
+Char.SetHeading(75@, 180.0)
+Char.GiveWeapon(75@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(75@, 266@)
+Char.SetStayInSamePlace(75@, True)
+Char.SetAccuracy(75@, 181@)
+148@ = Math.RandomIntInRange(0, 2)
+76@ = Char.Create(25, 146@(148@,2i), 1878.7, -2094.9, 12.5)
+Char.SetHeading(76@, 180.0)
+Char.GiveWeapon(76@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(76@, 266@)
+Char.SetStayInSamePlace(76@, True)
+Char.SetAccuracy(76@, 181@)
+Char.AddArmor(76@, 50)
+148@ = Math.RandomIntInRange(0, 2)
+77@ = Char.Create(25, 146@(148@,2i), 1876.7, -2094.9, 12.5)
+Char.SetHeading(77@, 180.0)
+Char.GiveWeapon(77@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(77@, 266@)
+Char.SetStayInSamePlace(77@, True)
+Char.SetAccuracy(77@, 181@)
+148@ = Math.RandomIntInRange(0, 2)
+78@ = Char.Create(25, 146@(148@,2i), 1875.2, -2094.9, 12.5)
+Char.SetHeading(78@, 180.0)
+Char.GiveWeapon(78@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(78@, 266@)
+Char.SetProofs(78@, True, True, True, True, True)
+Char.SetStayInSamePlace(78@, True)
+Char.SetAccuracy(78@, 181@)
+Char.AddArmor(78@, 50)
+Blip.Remove(89@)
+89@ = Blip.AddForChar($cesar)
+Blip.SetAsFriendly(89@, True)
+Game.SetGunshotSenseRangeForRiot2(-1.0)
+Game.ShutAllCharsUp(True)
+Streaming.RemoveAnimation("CAR")
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Player.SetControl($player1, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Text.PrintNow('R2_05', 7000, 1)
+if 
+  144@ == 1
+goto_if_false @RIOT2_19269
+Camera.DoFade(1, 500)
+
+:RIOT2_19213
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_19237
+wait 0
+goto @RIOT2_19213
+
+:RIOT2_19237
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_19269
+goto @RIOT2_30241
+
+:RIOT2_19269
+143@ = 0
+142@ = 4
+
+:RIOT2_19283
+if 
+  142@ == 4
+goto_if_false @RIOT2_21030
+if 
+  not Char.IsDead(69@)
+goto_if_false @RIOT2_19400
+if or
+  Char.IsInArea2D($scplayer, 0, 1877.6, -2050.8, 1815.3, -2171.4)
+  Char.HasBeenDamagedByChar(69@, $scplayer)
+goto_if_false @RIOT2_19400
+$task_status = Char.GetScriptTaskStatus(69@, 1506)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @RIOT2_19400
+Task.KillCharOnFoot(69@, $scplayer)
+
+:RIOT2_19400
+if 
+  not Char.IsDead(71@)
+goto_if_false @RIOT2_19499
+if or
+  Char.IsInArea2D($scplayer, 0, 1872.6, -2050.8, 1815.3, -2171.4)
+  Char.HasBeenDamagedByChar(71@, $scplayer)
+goto_if_false @RIOT2_19499
+$task_status = Char.GetScriptTaskStatus(71@, 1506)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @RIOT2_19499
+Task.KillCharOnFoot(71@, $scplayer)
+
+:RIOT2_19499
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_19572
+180@ = Char.GetHealth($cesar)
+if 
+  50 > 180@
+goto_if_false @RIOT2_19572
+Task.DieNamedAnim($cesar, "KO_SHOT_STOM", "PED", 8.0, 0)
+
+:RIOT2_19572
+if 
+  not Char.IsDead(34@)
+goto_if_false @RIOT2_19645
+180@ = Char.GetHealth(34@)
+if 
+  50 > 180@
+goto_if_false @RIOT2_19645
+Task.DieNamedAnim(34@, "KO_SHOT_STOM", "PED", 8.0, 0)
+
+:RIOT2_19645
+if 
+  143@ == 0
+goto_if_false @RIOT2_19736
+$task_status = Char.GetScriptTaskStatus(36@, 1560)
+if 
+  not is_int_var_equal_to_constant $task_status == 7
+goto_if_false @RIOT2_19736
+270@ = Char.GetSequenceProgress(36@)
+if 
+  270@ >= 3
+goto_if_false @RIOT2_19736
+Garage.Open('DUF_LAS')
+143@ = 1
+
+:RIOT2_19736
+if 
+  143@ == 1
+goto_if_false @RIOT2_20402
+$task_status = Char.GetScriptTaskStatus(36@, 1560)
+if 
+  not is_int_var_equal_to_constant $task_status == 7
+goto_if_false @RIOT2_20402
+270@ = Char.GetSequenceProgress(36@)
+if 
+  270@ >= 5
+goto_if_false @RIOT2_20402
+if 
+  not Char.IsDead(75@)
+goto_if_false @RIOT2_19934
+269@ = Sequence.Open()
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(269@)
+268@ = Sequence.Open()
+Task.KillCharOnFootTimed(-1, 36@, 3000)
+Task.GoStraightToCoord(-1, 1872.8, -2096.1, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 275.0)
+Char.PerformSequence(-1, 269@)
+Sequence.Close(268@)
+Char.PerformSequence(75@, 268@)
+Sequence.Clear(268@)
+Sequence.Clear(269@)
+138@ = Blip.AddForChar(75@)
+Blip.ChangeScale(138@, 1)
+
+:RIOT2_19934
+if 
+  not Char.IsDead(76@)
+goto_if_false @RIOT2_20083
+Char.SetStayInSamePlace(76@, False)
+268@ = Sequence.Open()
+Task.KillCharOnFootTimed(-1, 36@, 3000)
+Task.GoStraightToCoord(-1, 1872.8, -2096.1, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 275.0)
+Task.PlayAnimNonInterruptable(-1, "CROUCH_ROLL_R", "PED", 8.0, False, True, True, False, -1)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(76@, 268@)
+Sequence.Clear(268@)
+139@ = Blip.AddForChar(76@)
+Blip.ChangeScale(139@, 1)
+
+:RIOT2_20083
+if 
+  not Char.IsDead(77@)
+goto_if_false @RIOT2_20213
+Char.SetStayInSamePlace(77@, False)
+268@ = Sequence.Open()
+Task.KillCharOnFootTimed(-1, 36@, 3000)
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Task.ToggleDuck(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(77@, 268@)
+Sequence.Clear(268@)
+Char.SetKindaStayInSamePlace(77@, True)
+140@ = Blip.AddForChar(77@)
+Blip.ChangeScale(140@, 1)
+
+:RIOT2_20213
+if 
+  not Char.IsDead(78@)
+goto_if_false @RIOT2_20358
+Char.SetStayInSamePlace(78@, False)
+Char.SetProofs(78@, False, False, False, False, False)
+268@ = Sequence.Open()
+Task.KillCharOnFootTimed(-1, 36@, 3000)
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Task.ToggleDuck(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(78@, 268@)
+Sequence.Clear(268@)
+Char.SetKindaStayInSamePlace(78@, True)
+141@ = Blip.AddForChar(78@)
+Blip.ChangeScale(141@, 1)
+
+:RIOT2_20358
+Text.ClearPrints
+185@ = 7
+186@ = 0
+gosub @RIOT2_40912
+Char.SetBleeding(36@, True)
+TIMERB = 0
+143@ = 2
+
+:RIOT2_20402
+if 
+  143@ == 2
+goto_if_false @RIOT2_20453
+if 
+  TIMERB > 1000
+goto_if_false @RIOT2_20453
+Char.SetCollision(36@, False)
+143@ = 3
+
+:RIOT2_20453
+if 
+  143@ == 3
+goto_if_false @RIOT2_20752
+if 
+  Char.IsDead(69@)
+goto_if_false @RIOT2_20752
+if 
+  Char.IsDead(70@)
+goto_if_false @RIOT2_20752
+if 
+  Char.IsDead(71@)
+goto_if_false @RIOT2_20752
+if 
+  Char.IsDead(72@)
+goto_if_false @RIOT2_20752
+if 
+  Char.IsDead(73@)
+goto_if_false @RIOT2_20752
+if 
+  Char.IsDead(74@)
+goto_if_false @RIOT2_20752
+if 
+  Char.IsDead(75@)
+goto_if_false @RIOT2_20752
+if 
+  Char.IsDead(76@)
+goto_if_false @RIOT2_20752
+if 
+  Char.IsDead(77@)
+goto_if_false @RIOT2_20752
+if 
+  Char.IsDead(78@)
+goto_if_false @RIOT2_20752
+Blip.Remove(126@)
+Blip.Remove(127@)
+Blip.Remove(128@)
+Blip.Remove(129@)
+Blip.Remove(130@)
+Blip.Remove(131@)
+Blip.Remove(138@)
+Blip.Remove(139@)
+Blip.Remove(140@)
+Blip.Remove(141@)
+Char.MarkAsNoLongerNeeded(69@)
+Char.MarkAsNoLongerNeeded(70@)
+Char.MarkAsNoLongerNeeded(71@)
+Char.MarkAsNoLongerNeeded(72@)
+Char.MarkAsNoLongerNeeded(73@)
+Char.MarkAsNoLongerNeeded(74@)
+Char.MarkAsNoLongerNeeded(75@)
+Char.MarkAsNoLongerNeeded(76@)
+Char.MarkAsNoLongerNeeded(77@)
+Char.MarkAsNoLongerNeeded(78@)
+TIMERA = 0
+143@ = 0
+142@ = 5
+
+:RIOT2_20752
+if 
+  Char.IsDead(69@)
+goto_if_false @RIOT2_20778
+Char.MarkAsNoLongerNeeded(69@)
+Blip.Remove(126@)
+
+:RIOT2_20778
+if 
+  Char.IsDead(70@)
+goto_if_false @RIOT2_20804
+Char.MarkAsNoLongerNeeded(70@)
+Blip.Remove(127@)
+
+:RIOT2_20804
+if 
+  Char.IsDead(71@)
+goto_if_false @RIOT2_20830
+Char.MarkAsNoLongerNeeded(71@)
+Blip.Remove(128@)
+
+:RIOT2_20830
+if 
+  Char.IsDead(72@)
+goto_if_false @RIOT2_20856
+Char.MarkAsNoLongerNeeded(72@)
+Blip.Remove(129@)
+
+:RIOT2_20856
+if 
+  Char.IsDead(73@)
+goto_if_false @RIOT2_20882
+Char.MarkAsNoLongerNeeded(73@)
+Blip.Remove(130@)
+
+:RIOT2_20882
+if 
+  Char.IsDead(74@)
+goto_if_false @RIOT2_20908
+Char.MarkAsNoLongerNeeded(74@)
+Blip.Remove(131@)
+
+:RIOT2_20908
+if 
+  143@ > 1
+goto_if_false @RIOT2_21030
+if 
+  Char.IsDead(75@)
+goto_if_false @RIOT2_20952
+Char.MarkAsNoLongerNeeded(75@)
+Blip.Remove(138@)
+
+:RIOT2_20952
+if 
+  Char.IsDead(76@)
+goto_if_false @RIOT2_20978
+Char.MarkAsNoLongerNeeded(76@)
+Blip.Remove(139@)
+
+:RIOT2_20978
+if 
+  Char.IsDead(77@)
+goto_if_false @RIOT2_21004
+Char.MarkAsNoLongerNeeded(77@)
+Blip.Remove(140@)
+
+:RIOT2_21004
+if 
+  Char.IsDead(78@)
+goto_if_false @RIOT2_21030
+Char.MarkAsNoLongerNeeded(78@)
+Blip.Remove(141@)
+
+:RIOT2_21030
+if 
+  142@ == 5
+goto_if_false @RIOT2_24541
+if 
+  143@ == 0
+goto_if_false @RIOT2_21495
+if 
+  TIMERA > 2000
+goto_if_false @RIOT2_21495
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+185@ = 0
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Car.Delete(68@)
+World.ClearArea(1, 1905.1, -2103.9, 12.5, 60.0)
+Char.SetCoordinates($scplayer, 1905.1, -2103.9, 12.5)
+Char.SetHeading($scplayer, 80.2)
+Char.ClearTasks($cesar)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1897.8, -2099.5, 12.5, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 1890.8, -2099.5, 12.5, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 1877.2, -2101.2, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 110.0)
+Sequence.Close(268@)
+Char.PerformSequence($cesar, 268@)
+Sequence.Clear(268@)
+Char.ClearTasksImmediately(34@)
+Char.SetCoordinates(34@, 1900.4, -2098.2, 12.5)
+Char.SetHeading(34@, 92.3)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1875.7, -2102.4, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 95.0)
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Sequence.Close(268@)
+Char.PerformSequence(34@, 268@)
+Sequence.Clear(268@)
+144@ = 1
+skip_cutscene_start_internal @RIOT2_21846
+Camera.SetFixedPosition(1900.4, -2099.6, 12.8, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1879.4, -2107.7, 17.9, SwitchType.JumpCut)
+TIMERA = 0
+143@ = 1
+
+:RIOT2_21495
+if 
+  143@ == 1
+goto_if_false @RIOT2_21784
+if 
+  TIMERA > 3000
+goto_if_false @RIOT2_21784
+Char.ClearTasksImmediately(34@)
+Char.SetCoordinates(34@, 1875.7, -2102.4, 12.5)
+Char.SetHeading(34@, 95.0)
+Task.PlayAnim(34@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Char.SetCoordinates($cesar, 1881.2, -2099.6, 12.5)
+Char.SetHeading($cesar, 69.4)
+Char.SetCoordinates($scplayer, 1886.2, -2099.6, 12.5)
+Char.SetHeading($scplayer, 69.4)
+Task.GoStraightToCoord($scplayer, 1877.6, -2099.8, 12.5, MoveState.Walk, -1)
+gosub @RIOT2_38067
+Camera.SetFixedPosition(1880.2, -2103.1, 14.46, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1874.3, -2100.77, 12.8, SwitchType.JumpCut)
+185@ = 8
+186@ = 0
+gosub @RIOT2_40912
+TIMERA = 0
+143@ = 2
+
+:RIOT2_21784
+if 
+  143@ == 2
+goto_if_false @RIOT2_24541
+if 
+  185@ == 0
+goto_if_false @RIOT2_24541
+if 
+  TIMERA > 8000
+goto_if_false @RIOT2_24541
+144@ = 0
+
+:RIOT2_21846
+skip_cutscene_end 
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_21880
+goto @RIOT2_30241
+
+:RIOT2_21880
+if 
+  144@ == 1
+goto_if_false @RIOT2_22870
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+185@ = 0
+Camera.DoFade(0, 500)
+
+:RIOT2_21922
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_21946
+wait 0
+goto @RIOT2_21922
+
+:RIOT2_21946
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_21978
+goto @RIOT2_30241
+
+:RIOT2_21978
+gosub @RIOT2_38067
+Char.ClearTasksImmediately(34@)
+Char.SetCoordinates(34@, 1875.7, -2102.4, 12.5)
+Char.SetHeading(34@, 95.0)
+Task.PlayAnim(34@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Char.ClearTasksImmediately($cesar)
+Char.SetCoordinates($cesar, 1881.2, -2099.6, 12.5)
+Char.SetHeading($cesar, 69.4)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 1879.7, -2101.7, 12.5)
+Char.SetHeading($scplayer, 90.0)
+Char.ClearTasksImmediately(79@)
+Char.SetDecisionMaker(79@, 265@)
+Char.SetCoordinates(79@, 1861.1, -2096.9, 12.5)
+Char.SetHeading(79@, 270.3)
+$task_status = Char.GetScriptTaskStatus(80@, 1560)
+if 
+  not is_int_var_equal_to_constant $task_status == 7
+goto_if_false @RIOT2_22344
+Char.ClearTasksImmediately(80@)
+Task.PlayAnim(80@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Task.Climb(-1, True)
+Task.ShootAtCoord(-1, 1874.4, -2101.5, 14.8, 2000)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(80@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_22344
+$task_status = Char.GetScriptTaskStatus(81@, 1560)
+if 
+  not is_int_var_equal_to_constant $task_status == 7
+goto_if_false @RIOT2_22522
+Char.ClearTasksImmediately(81@)
+Task.PlayAnim(81@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Task.Pause(-1, 2000)
+Task.Climb(-1, True)
+Task.ShootAtCoord(-1, 1874.4, -2101.5, 14.8, 2000)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(81@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_22522
+Char.ClearTasksImmediately(82@)
+Char.SetDecisionMaker(82@, 265@)
+Char.SetCoordinates(82@, 1859.1, -2106.0, 14.0)
+Char.SetHeading(82@, 264.4)
+$task_status = Char.GetScriptTaskStatus(83@, 1560)
+if 
+  not is_int_var_equal_to_constant $task_status == 7
+goto_if_false @RIOT2_22714
+Char.ClearTasksImmediately(83@)
+Task.PlayAnim(83@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Task.Climb(-1, True)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(83@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_22714
+$task_status = Char.GetScriptTaskStatus(84@, 1560)
+if 
+  not is_int_var_equal_to_constant $task_status == 7
+goto_if_false @RIOT2_22870
+Char.ClearTasksImmediately(84@)
+Task.PlayAnim(84@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Task.Pause(-1, 3000)
+Task.Climb(-1, True)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(84@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_22870
+DecisionMakerChar.AddEventResponse(265@, 36, 1000, 0.0, 100.0, 0.0, 0.0, False, True)
+DecisionMakerChar.AddEventResponse(265@, 37, 1000, 0.0, 100.0, 0.0, 0.0, False, True)
+85@ = Pickup.Create(#HEALTH, 15, 1875.6, -2091.4, 13.5)
+86@ = Pickup.CreateWithAmmo(372, 15, 48, 1878.3, -2091.1, 13.5)
+269@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R", "SWAT", 8.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_IN_R", "SWAT", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+168@ = Math.RandomIntInRange(1500, 4000)
+Task.ShootAtCoord(-1, 1864.9, -2101.2, 14.0, 168@)
+Task.StayInSamePlace(-1, False)
+Task.CharSlideToCoordAndPlayAnim(-1, 1874.9, -2096.5, 12.5, 75.0, -0.1, "SWT_WLLSHOOT_OUT_R", "SWAT", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R_BACK", "SWAT", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(269@, True)
+Sequence.Close(269@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1874.9, -2096.5, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 75.0)
+Char.PerformSequence(-1, 269@)
+Sequence.Close(268@)
+Char.PerformSequence($cesar, 268@)
+Sequence.Clear(268@)
+Sequence.Clear(269@)
+269@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_L", "SWAT", 8.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_IN_L", "SWAT", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+168@ = Math.RandomIntInRange(1500, 4000)
+Task.ShootAtCoord(-1, 1862.6, -2104.1, 14.0, 168@)
+Task.StayInSamePlace(-1, False)
+Task.CharSlideToCoordAndPlayAnim(-1, 1873.3, -2107.4, 12.5, 98.8, -0.1, "SWT_WLLSHOOT_OUT_L", "SWAT", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_L_BACK", "SWAT", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(269@, True)
+Sequence.Close(269@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1873.3, -2107.4, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 98.8)
+Char.PerformSequence(-1, 269@)
+Sequence.Close(268@)
+Char.PerformSequence(34@, 268@)
+Sequence.Clear(268@)
+Sequence.Clear(269@)
+Char.GiveWeapon(35@, WeaponType.RocketLauncher, 1)
+269@ = Sequence.Open()
+Task.PlayAnim(-1, "GUN_STAND", "PED", 8.0, False, False, False, False, 10)
+168@ = Math.RandomIntInRange(1500, 4000)
+Task.ShootAtCoord(-1, 1878.7, -2105.5, 14.6, 168@)
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+168@ = Math.RandomIntInRange(1500, 4000)
+Task.Pause(-1, 168@)
+Sequence.SetToRepeat(269@, True)
+Sequence.Close(269@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1898.7, -2106.1, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 90.0)
+Task.ShootAtCoord(-1, 1852.1, -2096.6, 16.5, 10)
+Char.PerformSequence(-1, 269@)
+Sequence.Close(268@)
+Char.PerformSequence(35@, 268@)
+Sequence.Clear(268@)
+Sequence.Clear(269@)
+148@ = Math.RandomIntInRange(0, 2)
+69@ = Char.Create(25, 146@(148@,2i), 1913.7, -2109.2, 12.6)
+Char.SetHeading(69@, 90.5)
+Char.GiveWeapon(69@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(69@, 266@)
+Char.SetStayInSamePlace(69@, True)
+Char.SetProofs(69@, True, True, True, True, True)
+Char.SetAccuracy(69@, 181@)
+Char.AddArmor(69@, 50)
+148@ = Math.RandomIntInRange(0, 2)
+70@ = Char.Create(25, 146@(148@,2i), 1916.5, -2113.1, 12.6)
+Char.SetHeading(70@, 20.1)
+Char.GiveWeapon(70@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(70@, 266@)
+Char.SetStayInSamePlace(70@, True)
+Char.SetProofs(70@, True, True, True, True, True)
+Char.SetAccuracy(70@, 181@)
+148@ = Math.RandomIntInRange(0, 2)
+73@ = Char.Create(25, 146@(148@,2i), 1806.1, -2121.7, 12.5)
+Char.SetHeading(73@, 357.8)
+Char.GiveWeapon(73@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(73@, 265@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1837.5, -2102.3, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 275.0)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(73@, 268@)
+Sequence.Clear(268@)
+Blip.Remove(130@)
+130@ = Blip.AddForChar(73@)
+Blip.ChangeScale(130@, 1)
+Char.SetAccuracy(73@, 181@)
+148@ = Math.RandomIntInRange(0, 2)
+74@ = Char.Create(25, 146@(148@,2i), 1801.5, -2120.7, 12.5)
+Char.SetHeading(74@, 357.8)
+Char.GiveWeapon(74@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(74@, 265@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1833.8, -2097.8, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 275.0)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(74@, 268@)
+Sequence.Clear(268@)
+Blip.Remove(131@)
+131@ = Blip.AddForChar(74@)
+Blip.ChangeScale(131@, 1)
+Char.SetAccuracy(74@, 181@)
+Char.AddArmor(74@, 50)
+Game.ShutAllCharsUp(False)
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Player.SetControl($player1, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Text.PrintNow('R2_06', 4000, 1)
+if 
+  144@ == 1
+goto_if_false @RIOT2_24520
+Camera.DoFade(1, 500)
+
+:RIOT2_24464
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_24488
+wait 0
+goto @RIOT2_24464
+
+:RIOT2_24488
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_24520
+goto @RIOT2_30241
+
+:RIOT2_24520
+TIMERA = 0
+143@ = 0
+142@ = 6
+
+:RIOT2_24541
+if 
+  142@ == 6
+goto_if_false @RIOT2_26110
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_24632
+180@ = Char.GetHealth($cesar)
+if 
+  50 > 180@
+goto_if_false @RIOT2_24632
+Task.DieNamedAnim($cesar, "KO_SHOT_STOM", "PED", 8.0, 0)
+
+:RIOT2_24632
+if 
+  not Char.IsDead(34@)
+goto_if_false @RIOT2_24705
+180@ = Char.GetHealth(34@)
+if 
+  50 > 180@
+goto_if_false @RIOT2_24705
+Task.DieNamedAnim(34@, "KO_SHOT_STOM", "PED", 8.0, 0)
+
+:RIOT2_24705
+if 
+  169@ == 0
+goto_if_false @RIOT2_24879
+if 
+  Char.IsDead(79@)
+goto_if_false @RIOT2_24826
+if 
+  Char.IsDead(80@)
+goto_if_false @RIOT2_24826
+if 
+  Char.IsDead(81@)
+goto_if_false @RIOT2_24826
+if 
+  Char.IsDead(82@)
+goto_if_false @RIOT2_24826
+if 
+  Char.IsDead(83@)
+goto_if_false @RIOT2_24826
+if 
+  Char.IsDead(84@)
+goto_if_false @RIOT2_24826
+169@ = 1
+
+:RIOT2_24826
+if or
+  TIMERA > 15000
+  Char.IsInArea2D($scplayer, 0, 1893.6, -2043.3, 1888.1, -2175.6)
+goto_if_false @RIOT2_24879
+169@ = 1
+
+:RIOT2_24879
+if 
+  169@ == 1
+goto_if_false @RIOT2_25014
+185@ = 9
+186@ = Math.RandomIntInRange(0, 3)
+set_lvar_int_to_lvar_int 188@ = 186@
+188@ += 1
+gosub @RIOT2_40912
+if 
+  not Char.IsDead(69@)
+goto_if_false @RIOT2_24971
+Blip.Remove(126@)
+126@ = Blip.AddForChar(69@)
+Blip.ChangeScale(126@, 1)
+
+:RIOT2_24971
+if 
+  not Char.IsDead(70@)
+goto_if_false @RIOT2_25007
+Blip.Remove(127@)
+127@ = Blip.AddForChar(70@)
+Blip.ChangeScale(127@, 1)
+
+:RIOT2_25007
+169@ = 2
+
+:RIOT2_25014
+if 
+  169@ == 2
+goto_if_false @RIOT2_25444
+if 
+  Char.IsOnScreen(35@)
+goto_if_false @RIOT2_25444
+if 
+  not Char.IsDead(69@)
+goto_if_false @RIOT2_25163
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1913.5, -2106.1, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 90.0)
+Task.ShootAtCoord(-1, 1900.8, -2106.2, 12.6, 1500)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(69@, 268@)
+Sequence.Clear(268@)
+Char.SetProofs(69@, False, False, False, False, False)
+
+:RIOT2_25163
+if 
+  not Char.IsDead(70@)
+goto_if_false @RIOT2_25278
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1914.2, -2104.2, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 90.0)
+Task.ShootAtCoord(-1, 1900.8, -2106.2, 12.6, 1500)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(70@, 268@)
+Sequence.Clear(268@)
+Char.SetProofs(70@, False, False, False, False, False)
+
+:RIOT2_25278
+Char.GiveWeapon(35@, WeaponType.RocketLauncher, 1)
+268@ = Sequence.Open()
+Task.AchieveHeading(-1, 269.0)
+Task.Pause(-1, 200)
+Task.ShootAtCoord(-1, 1951.1, -2103.9, 19.3, 500)
+Task.PlayAnimNonInterruptable(-1, "KO_SHOT_FACE", "PED", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "CRCKIDLE1", "CRACK", 1000.0, True, False, False, False, -1)
+Sequence.Close(268@)
+Char.PerformSequence(35@, 268@)
+Sequence.Clear(268@)
+Char.SetBleeding(35@, True)
+TIMERA = 0
+169@ = 3
+
+:RIOT2_25444
+if 
+  143@ == 0
+goto_if_false @RIOT2_25749
+if 
+  Char.IsDead(79@)
+goto_if_false @RIOT2_25749
+if 
+  Char.IsDead(80@)
+goto_if_false @RIOT2_25749
+if 
+  Char.IsDead(81@)
+goto_if_false @RIOT2_25749
+if 
+  Char.IsDead(82@)
+goto_if_false @RIOT2_25749
+if 
+  Char.IsDead(83@)
+goto_if_false @RIOT2_25749
+if 
+  Char.IsDead(84@)
+goto_if_false @RIOT2_25749
+if 
+  Char.IsDead(73@)
+goto_if_false @RIOT2_25749
+if 
+  Char.IsDead(74@)
+goto_if_false @RIOT2_25749
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1895.3, -2102.2, 12.6, MoveState.Run, -1)
+Task.AchieveHeading(-1, 274.7)
+Task.ShootAtCoord(-1, 1913.5, -2104.4, 13.9, -2)
+Sequence.Close(268@)
+Char.PerformSequence($cesar, 268@)
+Sequence.Clear(268@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1895.6, -2104.2, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 271.0)
+Task.ShootAtCoord(-1, 1912.9, -2106.4, 13.9, -2)
+Sequence.Close(268@)
+Char.PerformSequence(34@, 268@)
+Sequence.Clear(268@)
+143@ = 1
+
+:RIOT2_25749
+if 
+  143@ == 1
+goto_if_false @RIOT2_25850
+if 
+  Char.IsDead(69@)
+goto_if_false @RIOT2_25850
+if 
+  Char.IsDead(70@)
+goto_if_false @RIOT2_25850
+Char.MarkAsNoLongerNeeded(69@)
+Char.MarkAsNoLongerNeeded(70@)
+Char.MarkAsNoLongerNeeded(73@)
+Char.MarkAsNoLongerNeeded(74@)
+Streaming.RemoveAnimation("CASINO")
+TIMERA = 0
+143@ = 0
+142@ = 7
+
+:RIOT2_25850
+if 
+  Char.IsDead(69@)
+goto_if_false @RIOT2_25876
+Char.MarkAsNoLongerNeeded(69@)
+Blip.Remove(126@)
+
+:RIOT2_25876
+if 
+  Char.IsDead(70@)
+goto_if_false @RIOT2_25902
+Char.MarkAsNoLongerNeeded(70@)
+Blip.Remove(127@)
+
+:RIOT2_25902
+if 
+  Char.IsDead(73@)
+goto_if_false @RIOT2_25928
+Char.MarkAsNoLongerNeeded(73@)
+Blip.Remove(130@)
+
+:RIOT2_25928
+if 
+  Char.IsDead(74@)
+goto_if_false @RIOT2_25954
+Char.MarkAsNoLongerNeeded(74@)
+Blip.Remove(131@)
+
+:RIOT2_25954
+if 
+  Char.IsDead(79@)
+goto_if_false @RIOT2_25980
+Char.MarkAsNoLongerNeeded(79@)
+Blip.Remove(132@)
+
+:RIOT2_25980
+if 
+  Char.IsDead(80@)
+goto_if_false @RIOT2_26006
+Char.MarkAsNoLongerNeeded(80@)
+Blip.Remove(133@)
+
+:RIOT2_26006
+if 
+  Char.IsDead(81@)
+goto_if_false @RIOT2_26032
+Char.MarkAsNoLongerNeeded(81@)
+Blip.Remove(134@)
+
+:RIOT2_26032
+if 
+  Char.IsDead(82@)
+goto_if_false @RIOT2_26058
+Char.MarkAsNoLongerNeeded(82@)
+Blip.Remove(135@)
+
+:RIOT2_26058
+if 
+  Char.IsDead(83@)
+goto_if_false @RIOT2_26084
+Char.MarkAsNoLongerNeeded(83@)
+Blip.Remove(136@)
+
+:RIOT2_26084
+if 
+  Char.IsDead(84@)
+goto_if_false @RIOT2_26110
+Char.MarkAsNoLongerNeeded(84@)
+Blip.Remove(137@)
+
+:RIOT2_26110
+if 
+  142@ == 7
+goto_if_false @RIOT2_28983
+if 
+  143@ == 0
+goto_if_false @RIOT2_27274
+if 
+  TIMERA > 2000
+goto_if_false @RIOT2_27274
+Camera.DoFade(0, 500)
+
+:RIOT2_26172
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_26196
+wait 0
+goto @RIOT2_26172
+
+:RIOT2_26196
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_26228
+goto @RIOT2_30241
+
+:RIOT2_26228
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+185@ = 0
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Game.ShutAllCharsUp(True)
+Streaming.RemoveAnimation("SWAT")
+Streaming.RequestModel(361)
+DecisionMakerChar.ClearEventResponse(265@, 36)
+DecisionMakerChar.ClearEventResponse(265@, 37)
+Streaming.LoadScene(1855.5, -2101.8, 12.5)
+69@ = Char.Create(25, 108, 1805.0, -2126.0, 17.8)
+Char.SetHeading(69@, 306.5)
+Char.SetStayInSamePlace(69@, True)
+Char.AddArmor(69@, 100)
+Char.SetSuffersCriticalHits(69@, False)
+Char.GiveWeapon(69@, WeaponType.RocketLauncher, 30000)
+Char.SetDecisionMaker(69@, 266@)
+90@ = Blip.AddForChar(69@)
+Blip.ChangeScale(90@, 1)
+Char.SetAccuracy(69@, 181@)
+Char.AddArmor(69@, 100)
+148@ = Math.RandomIntInRange(0, 2)
+70@ = Char.Create(25, 146@(148@,2i), 1811.8, -2124.0, 12.6)
+Char.SetHeading(70@, 287.5)
+Char.SetStayInSamePlace(70@, True)
+Char.GiveWeapon(70@, WeaponType.Flamethrower, 30000)
+Char.SetDecisionMaker(70@, 266@)
+91@ = Blip.AddForChar(70@)
+Blip.ChangeScale(91@, 1)
+Char.SetAccuracy(70@, 181@)
+148@ = Math.RandomIntInRange(0, 2)
+71@ = Char.Create(25, 146@(148@,2i), 1795.0, -2126.7, 12.5)
+Char.SetHeading(71@, 358.6)
+Char.GiveWeapon(71@, WeaponType.Tec9, 3000)
+Char.SetKindaStayInSamePlace(71@, True)
+Char.SetDecisionMaker(71@, 266@)
+92@ = Blip.AddForChar(71@)
+Blip.ChangeScale(92@, 1)
+Char.SetAccuracy(71@, 181@)
+148@ = Math.RandomIntInRange(0, 2)
+72@ = Char.Create(25, 146@(148@,2i), 1795.0, -2130.7, 12.5)
+Char.SetHeading(72@, 357.8)
+Char.GiveWeapon(72@, WeaponType.Tec9, 3000)
+Char.SetKindaStayInSamePlace(72@, True)
+Char.SetDecisionMaker(72@, 266@)
+93@ = Blip.AddForChar(72@)
+Blip.ChangeScale(93@, 1)
+Char.SetAccuracy(72@, 181@)
+148@ = Math.RandomIntInRange(0, 2)
+73@ = Char.Create(25, 146@(148@,2i), 1806.1, -2121.7, 12.5)
+Char.SetHeading(73@, 357.8)
+Char.GiveWeapon(73@, WeaponType.Tec9, 3000)
+Char.SetStayInSamePlace(73@, True)
+Char.SetDecisionMaker(73@, 266@)
+94@ = Blip.AddForChar(73@)
+Blip.ChangeScale(94@, 1)
+Char.SetAccuracy(73@, 181@)
+Char.AddArmor(73@, 100)
+148@ = Math.RandomIntInRange(0, 2)
+74@ = Char.Create(25, 146@(148@,2i), 1801.5, -2120.7, 12.5)
+Char.SetHeading(74@, 357.8)
+Char.GiveWeapon(74@, WeaponType.Tec9, 3000)
+Char.SetStayInSamePlace(74@, True)
+Char.SetDecisionMaker(74@, 266@)
+95@ = Blip.AddForChar(74@)
+Blip.ChangeScale(95@, 1)
+Char.SetAccuracy(74@, 181@)
+Char.AddArmor(74@, 100)
+World.ClearArea(1, 1855.5, -2101.8, 12.5, 30.0)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 1855.5, -2101.8, 12.5)
+Char.SetHeading($scplayer, 90.0)
+Task.GoStraightToCoord($scplayer, 1846.6, -2102.8, 12.5, MoveState.Walk, -1)
+Char.ClearTasksImmediately($cesar)
+Char.SetCoordinates($cesar, 1855.5, -2102.8, 12.5)
+Char.SetHeading($cesar, 90.0)
+Task.GoStraightToCoord($cesar, 1846.6, -2102.8, 12.5, MoveState.Walk, -1)
+Char.ClearTasksImmediately(34@)
+Char.SetCoordinates(34@, 1855.5, -2100.8, 12.5)
+Char.SetHeading(34@, 90.0)
+Task.GoStraightToCoord(34@, 1846.6, -2100.8, 12.5, MoveState.Walk, -1)
+Camera.SetFixedPosition(1846.6, -2101.8, 13.88, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1853.9, -2101.4, 12.7, SwitchType.JumpCut)
+Camera.DoFade(1, 500)
+
+:RIOT2_27169
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_27193
+wait 0
+goto @RIOT2_27169
+
+:RIOT2_27193
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_27225
+goto @RIOT2_30241
+
+:RIOT2_27225
+144@ = 1
+skip_cutscene_start_internal @RIOT2_27824
+185@ = 10
+186@ = 0
+gosub @RIOT2_40912
+TIMERA = 0
+143@ = 1
+
+:RIOT2_27274
+if 
+  143@ == 1
+goto_if_false @RIOT2_27575
+if 
+  185@ == 0
+goto_if_false @RIOT2_27575
+if 
+  TIMERA > 4000
+goto_if_false @RIOT2_27575
+Camera.DoFade(0, 500)
+
+:RIOT2_27336
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_27360
+wait 0
+goto @RIOT2_27336
+
+:RIOT2_27360
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_27392
+goto @RIOT2_30241
+
+:RIOT2_27392
+Streaming.LoadScene(1809.8, -2123.4, 12.7)
+Camera.SetFixedPosition(1816.2, -2116.8, 13.16, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1808.6, -2123.8, 15.0, SwitchType.JumpCut)
+Camera.DoFade(1, 500)
+
+:RIOT2_27467
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_27491
+wait 0
+goto @RIOT2_27467
+
+:RIOT2_27491
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_27523
+goto @RIOT2_30241
+
+:RIOT2_27523
+185@ = 11
+186@ = Math.RandomIntInRange(0, 3)
+set_lvar_int_to_lvar_int 188@ = 186@
+188@ += 1
+gosub @RIOT2_40912
+TIMERA = 0
+143@ = 2
+
+:RIOT2_27575
+if 
+  143@ == 2
+goto_if_false @RIOT2_27762
+if 
+  185@ == 0
+goto_if_false @RIOT2_27762
+if 
+  TIMERA > 4000
+goto_if_false @RIOT2_27762
+Camera.SetFixedPosition(1816.2, -2116.8, 13.16, 0.0, 0.0, 0.0)
+if 
+  not Char.IsDead(70@)
+goto_if_false @RIOT2_27710
+Camera.PointAtChar(70@, CameraMode.Fixed, SwitchType.Interpolation)
+Task.ShootAtCoord(70@, 1831.6, -2118.9, 12.5, 4000)
+
+:RIOT2_27710
+185@ = 12
+186@ = Math.RandomIntInRange(0, 3)
+set_lvar_int_to_lvar_int 188@ = 186@
+188@ += 1
+gosub @RIOT2_40912
+TIMERA = 0
+143@ = 3
+
+:RIOT2_27762
+if 
+  143@ == 3
+goto_if_false @RIOT2_28983
+if 
+  185@ == 0
+goto_if_false @RIOT2_28983
+if 
+  TIMERA > 4000
+goto_if_false @RIOT2_28983
+144@ = 0
+
+:RIOT2_27824
+skip_cutscene_end 
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_27858
+goto @RIOT2_30241
+
+:RIOT2_27858
+if 
+  144@ == 1
+goto_if_false @RIOT2_27956
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+185@ = 0
+Camera.DoFade(0, 500)
+
+:RIOT2_27900
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_27924
+wait 0
+goto @RIOT2_27900
+
+:RIOT2_27924
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_27956
+goto @RIOT2_30241
+
+:RIOT2_27956
+if 
+  not Char.IsDead(69@)
+goto_if_false @RIOT2_28176
+268@ = Sequence.Open()
+Task.ShootAtCoord(-1, 1832.7, -2090.1, 14.1, 500)
+Task.PlayAnim(-1, "GUN_STAND", "PED", 8.0, False, False, False, False, 1000)
+Task.ShootAtCoord(-1, 1853.6, -2087.0, 20.5, 500)
+Task.PlayAnim(-1, "GUN_STAND", "PED", 8.0, False, False, False, True, 1000)
+Task.ShootAtCoord(-1, 1819.5, -2113.1, 12.9, 500)
+Task.PlayAnim(-1, "GUN_STAND", "PED", 8.0, False, False, False, False, 1000)
+Sequence.SetToRepeat(268@, True)
+Sequence.Close(268@)
+Char.PerformSequence(69@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_28176
+if 
+  not Char.IsDead(70@)
+goto_if_false @RIOT2_28251
+268@ = Sequence.Open()
+Task.ShootAtCoord(-1, 1831.6, -2118.9, 12.5, 2000)
+Task.Pause(-1, 2000)
+Sequence.SetToRepeat(268@, True)
+Sequence.Close(268@)
+Char.PerformSequence(70@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_28251
+if 
+  not Char.IsDead(71@)
+goto_if_false @RIOT2_28335
+268@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.GoStraightToCoord(-1, 1795.0, -2106.7, 12.5, MoveState.Walk, -1)
+Task.AchieveHeading(-1, 277.9)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(71@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_28335
+if 
+  not Char.IsDead(72@)
+goto_if_false @RIOT2_28419
+268@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.GoStraightToCoord(-1, 1792.0, -2103.7, 12.5, MoveState.Walk, -1)
+Task.AchieveHeading(-1, 277.9)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(72@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_28419
+if 
+  not Char.IsDead(73@)
+goto_if_false @RIOT2_28488
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1809.4, -2116.3, 12.5, MoveState.Run, -1)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(73@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_28488
+if 
+  not Char.IsDead(74@)
+goto_if_false @RIOT2_28557
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1809.4, -2111.8, 12.5, MoveState.Run, -1)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(74@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_28557
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 1833.9, -2104.2, 12.5)
+Char.SetHeading($scplayer, 122.4)
+Char.ClearTasksImmediately($cesar)
+Char.SetCoordinates($cesar, 1833.0, -2106.6, 12.5)
+Char.SetHeading($cesar, 122.3)
+Char.SetStayInSamePlace($cesar, True)
+Char.SetDecisionMaker($cesar, 265@)
+Char.ClearTasksImmediately(34@)
+Char.SetCoordinates(34@, 1834.4, -2102.0, 12.5)
+Char.SetHeading(34@, 99.6)
+Char.SetStayInSamePlace(34@, True)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1814.1, -2102.4, 12.5, MoveState.Run, -1)
+Task.AchieveHeading(-1, 112.7)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(34@, 268@)
+Sequence.Clear(268@)
+Char.MarkAsNoLongerNeeded(79@)
+Char.MarkAsNoLongerNeeded(80@)
+Char.MarkAsNoLongerNeeded(81@)
+Char.MarkAsNoLongerNeeded(82@)
+Char.MarkAsNoLongerNeeded(83@)
+Char.MarkAsNoLongerNeeded(84@)
+DecisionMakerChar.AddEventResponse(265@, 36, 1000, 0.0, 100.0, 0.0, 0.0, False, True)
+DecisionMakerChar.AddEventResponse(265@, 37, 1000, 0.0, 100.0, 0.0, 0.0, False, True)
+Game.ShutAllCharsUp(False)
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Player.SetControl($player1, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Text.PrintNow('R2_07', 4000, 1)
+if 
+  144@ == 1
+goto_if_false @RIOT2_28969
+Camera.DoFade(1, 500)
+
+:RIOT2_28913
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_28937
+wait 0
+goto @RIOT2_28913
+
+:RIOT2_28937
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_28969
+goto @RIOT2_30241
+
+:RIOT2_28969
+143@ = 0
+142@ = 8
+
+:RIOT2_28983
+if 
+  142@ == 8
+goto_if_false @RIOT2_30227
+if 
+  143@ == 0
+goto_if_false @RIOT2_29255
+if 
+  Char.IsDead(69@)
+goto_if_false @RIOT2_29040
+Blip.Remove(90@)
+
+:RIOT2_29040
+if 
+  Char.IsDead(70@)
+goto_if_false @RIOT2_29061
+Blip.Remove(91@)
+
+:RIOT2_29061
+if 
+  Char.IsDead(71@)
+goto_if_false @RIOT2_29082
+Blip.Remove(92@)
+
+:RIOT2_29082
+if 
+  Char.IsDead(72@)
+goto_if_false @RIOT2_29103
+Blip.Remove(93@)
+
+:RIOT2_29103
+if 
+  Char.IsDead(73@)
+goto_if_false @RIOT2_29124
+Blip.Remove(94@)
+
+:RIOT2_29124
+if 
+  Char.IsDead(74@)
+goto_if_false @RIOT2_29145
+Blip.Remove(95@)
+
+:RIOT2_29145
+if 
+  Char.IsDead(69@)
+goto_if_false @RIOT2_29255
+if 
+  Char.IsDead(70@)
+goto_if_false @RIOT2_29255
+if 
+  Char.IsDead(71@)
+goto_if_false @RIOT2_29255
+if 
+  Char.IsDead(72@)
+goto_if_false @RIOT2_29255
+if 
+  Char.IsDead(73@)
+goto_if_false @RIOT2_29255
+if 
+  Char.IsDead(74@)
+goto_if_false @RIOT2_29255
+TIMERA = 0
+143@ = 1
+
+:RIOT2_29255
+if 
+  143@ == 1
+goto_if_false @RIOT2_29850
+if 
+  TIMERA > 2000
+goto_if_false @RIOT2_29850
+Camera.DoFade(0, 500)
+
+:RIOT2_29299
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_29323
+wait 0
+goto @RIOT2_29299
+
+:RIOT2_29323
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_29355
+goto @RIOT2_30241
+
+:RIOT2_29355
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+185@ = 0
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Game.ShutAllCharsUp(True)
+Streaming.LoadScene(1814.9, -2112.1, 12.4)
+World.ClearArea(1, 1814.9, -2112.1, 12.4, 30.0)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 1814.9, -2112.1, 12.4)
+Char.SetHeading($scplayer, 127.9)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1807.8, -2122.0, 12.5, MoveState.Walk, -1)
+Task.TurnCharToFaceChar(-1, $cesar)
+Sequence.Close(268@)
+Char.PerformSequence($scplayer, 268@)
+Sequence.Clear(268@)
+Char.ClearTasksImmediately($cesar)
+Char.SetCoordinates($cesar, 1812.4, -2111.3, 12.4)
+Char.SetHeading($cesar, 127.9)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1804.8, -2120.2, 12.5, MoveState.Walk, -1)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence($cesar, 268@)
+Sequence.Clear(268@)
+Char.ClearTasksImmediately(34@)
+Char.SetCoordinates(34@, 1810.4, -2111.0, 12.4)
+Char.SetHeading(34@, 135.1)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1807.0, -2118.8, 12.5, MoveState.Walk, -1)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence(34@, 268@)
+Sequence.Clear(268@)
+Camera.SetFixedPosition(1812.6, -2114.5, 13.0, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1804.5, -2123.6, 15.0, SwitchType.JumpCut)
+Camera.DoFade(1, 500)
+
+:RIOT2_29759
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT2_29783
+wait 0
+goto @RIOT2_29759
+
+:RIOT2_29783
+gosub @RIOT2_31066
+if 
+  145@ == 1
+goto_if_false @RIOT2_29815
+goto @RIOT2_30241
+
+:RIOT2_29815
+185@ = 13
+186@ = 0
+188@ = 4
+gosub @RIOT2_40912
+143@ = 2
+
+:RIOT2_29850
+if 
+  143@ == 2
+goto_if_false @RIOT2_29981
+if 
+  185@ == 0
+goto_if_false @RIOT2_29981
+268@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, $cesar)
+Sequence.Close(268@)
+Char.PerformSequence($scplayer, 268@)
+Sequence.Clear(268@)
+268@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.Close(268@)
+Char.PerformSequence($cesar, 268@)
+Sequence.Clear(268@)
+185@ = 13
+186@ = 4
+188@ = 8
+gosub @RIOT2_40912
+143@ = 3
+
+:RIOT2_29981
+if 
+  143@ == 3
+goto_if_false @RIOT2_30169
+if 
+  185@ == 0
+goto_if_false @RIOT2_30169
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1794.8, -2124.5, 12.5, MoveState.Walk, -1)
+Task.GoStraightToCoord(-1, 1794.8, -2137.2, 12.5, MoveState.Walk, -1)
+Sequence.Close(268@)
+Char.PerformSequence($cesar, 268@)
+Sequence.Clear(268@)
+268@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1794.8, -2122.5, 12.4, MoveState.Walk, -1)
+Task.GoStraightToCoord(-1, 1794.8, -2137.2, 12.5, MoveState.Walk, -1)
+Sequence.Close(268@)
+Char.PerformSequence(34@, 268@)
+Sequence.Clear(268@)
+TIMERA = 0
+143@ = 4
+
+:RIOT2_30169
+if 
+  143@ == 4
+goto_if_false @RIOT2_30227
+if 
+  TIMERA > 3000
+goto_if_false @RIOT2_30227
+Game.ShutAllCharsUp(False)
+Char.Delete($cesar)
+Char.Delete(34@)
+goto @RIOT2_30259
+
+:RIOT2_30227
+gosub @RIOT2_39478
+goto @RIOT2_1585
+
+:RIOT2_30241
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:RIOT2_30259
+$flag_riot_mission_counter += 1
+Text.PrintWithNumberBig('M_PASSR', 60, 5000, TextStyle.Middle)
+Stat.AwardPlayerMissionRespect(60)
+Blip.Remove($sweet_contact_blip)
+Zone.SetGangStrength('ELCO1', GangType.Aztecas, 40)
+Zone.SetGangStrength('ELCO2', GangType.Aztecas, 40)
+Zone.SetGangStrength('ELCO1', GangType.Vagos, 0)
+Zone.SetGangStrength('ELCO2', GangType.Vagos, 0)
+Zone.SetGangStrength('ELCO1', GangType.Grove, 0)
+Zone.SetGangStrength('ELCO2', GangType.Grove, 0)
+Zone.SetGangStrength('LMEX1A', GangType.Aztecas, 40)
+Zone.SetGangStrength('LMEX1B', GangType.Aztecas, 40)
+Zone.SetGangStrength('LMEX1A', GangType.Vagos, 0)
+Zone.SetGangStrength('LMEX1B', GangType.Vagos, 0)
+Zone.SetGangStrength('LMEX1A', GangType.Grove, 0)
+Zone.SetGangStrength('LMEX1B', GangType.Grove, 0)
+Audio.PlayMissionPassedTune(1)
+Player.ClearWantedLevel($player1)
+Stat.RegisterMissionPassed('RIOT_2')
+Stat.PlayerMadeProgress(1)
+return 
+
+:RIOT2_30499
+if 
+  is_var_text_label_empty s$shop_name
+goto_if_false @RIOT2_30517
+Camera.RestoreJumpcut
+
+:RIOT2_30517
+Zone.SetNoCops('ELCO', False)
+if 
+  not Char.IsDead(36@)
+goto_if_false @RIOT2_30558
+Char.SetCollision(36@, True)
+Char.RemoveElegantly(36@)
+
+:RIOT2_30558
+start_new_script @DOORS 
+Streaming.MarkModelAsNoLongerNeeded(114)
+Streaming.MarkModelAsNoLongerNeeded(115)
+Streaming.MarkModelAsNoLongerNeeded(116)
+Streaming.MarkModelAsNoLongerNeeded(108)
+Streaming.MarkModelAsNoLongerNeeded(109)
+Game.SwitchEmergencyServices(True)
+Streaming.MarkModelAsNoLongerNeeded(339)
+Streaming.MarkModelAsNoLongerNeeded(348)
+Streaming.MarkModelAsNoLongerNeeded(372)
+Streaming.MarkModelAsNoLongerNeeded(359)
+Streaming.MarkModelAsNoLongerNeeded(361)
+Streaming.MarkModelAsNoLongerNeeded(466)
+Streaming.MarkModelAsNoLongerNeeded(#BBALL_INGAME)
+Path.SwitchPedRoadsBackToOriginal(1945.8, -1956.5, 0.0, 1642.9, -2174.3, 50.0)
+Pickup.Remove(85@)
+Pickup.Remove(86@)
+Pickup.Remove(184@)
+Streaming.RemoveAnimation("CAR")
+Streaming.RemoveAnimation("BSKTBALL")
+Streaming.RemoveAnimation("SMOKING")
+Streaming.RemoveAnimation("SWAT")
+Streaming.RemoveAnimation("CASINO")
+Streaming.RemoveAnimation("CRACK")
+Streaming.RemoveAnimation("GANGS")
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RIOT2_30761
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:RIOT2_30761
+Game.ShutAllCharsUp(False)
+Char.RemoveElegantly($cesar)
+Streaming.UnloadSpecialCharacter(1)
+Game.SetGunshotSenseRangeForRiot2(-1.0)
+Blip.Remove(89@)
+Blip.Remove(90@)
+Blip.Remove(91@)
+Blip.Remove(92@)
+Blip.Remove(93@)
+Blip.Remove(94@)
+Blip.Remove(95@)
+Blip.Remove(96@)
+Blip.Remove(97@)
+Blip.Remove(98@)
+Blip.Remove(99@)
+Blip.Remove(100@)
+Blip.Remove(101@)
+Blip.Remove(102@)
+Blip.Remove(103@)
+Blip.Remove(104@)
+Blip.Remove(105@)
+Blip.Remove(106@)
+Blip.Remove(107@)
+Blip.Remove(108@)
+Blip.Remove(109@)
+Blip.Remove(110@)
+Blip.Remove(111@)
+Blip.Remove(112@)
+Blip.Remove(113@)
+Blip.Remove(114@)
+Blip.Remove(115@)
+Blip.Remove(116@)
+Blip.Remove(117@)
+Blip.Remove(118@)
+Blip.Remove(119@)
+Blip.Remove(120@)
+Blip.Remove(121@)
+Blip.Remove(122@)
+Blip.Remove(123@)
+Blip.Remove(124@)
+Blip.Remove(125@)
+Blip.Remove(126@)
+Blip.Remove(127@)
+Blip.Remove(128@)
+Blip.Remove(129@)
+Blip.Remove(130@)
+Blip.Remove(131@)
+Blip.Remove(132@)
+Blip.Remove(133@)
+Blip.Remove(134@)
+Blip.Remove(135@)
+Blip.Remove(136@)
+Blip.Remove(137@)
+Blip.Remove(138@)
+Blip.Remove(139@)
+Blip.Remove(140@)
+Blip.Remove(141@)
+Game.EnableAmbientCrime(True)
+$timer_mobile_start = Clock.GetGameTimer()
+$onmission = 0
+Mission.Finish
+return 
+
+:RIOT2_31066
+if 
+  Char.IsDead($cesar)
+goto_if_false @RIOT2_31107
+Text.ClearPrints
+Text.PrintNow('R2_08', 7000, 1)
+145@ = 1
+
+:RIOT2_31107
+if 
+  Char.IsDead(35@)
+goto_if_false @RIOT2_31148
+Text.ClearPrints
+Text.PrintNow('R2_09', 7000, 1)
+145@ = 1
+
+:RIOT2_31148
+if 
+  Char.IsDead(34@)
+goto_if_false @RIOT2_31189
+Text.ClearPrints
+Text.PrintNow('R2_10', 7000, 1)
+145@ = 1
+
+:RIOT2_31189
+if 
+  Char.IsDead(36@)
+goto_if_false @RIOT2_31230
+Text.ClearPrints
+Text.PrintNow('R2_11', 7000, 1)
+145@ = 1
+
+:RIOT2_31230
+return 
+
+:RIOT2_31232
+148@ = Math.RandomIntInRange(0, 2)
+37@ = Char.Create(25, 146@(148@,2i), 1831.6, -2004.6, 12.6)
+Char.SetInformRespectedFriends(37@, 8.0, 6)
+Char.SetHeading(37@, 90.0)
+Char.GiveWeapon(37@, WeaponType.Tec9, 3000)
+Task.PlayAnim(37@, "M_SMKLEAN_LOOP", "SMOKING", 4.0, True, False, False, False, -1)
+Char.SetDecisionMaker(37@, 266@)
+96@ = Blip.AddForChar(37@)
+Blip.ChangeScale(96@, 1)
+Char.SetAccuracy(37@, 181@)
+Char.AddArmor(37@, 100)
+148@ = Math.RandomIntInRange(0, 2)
+38@ = Char.Create(25, 146@(148@,2i), 1825.5, -2002.4, 12.6)
+Char.SetInformRespectedFriends(38@, 8.0, 6)
+Char.SetHeading(38@, 89.7)
+Task.PlayAnim(38@, "BBALL_IDLELOOP", "BSKTBALL", 4.0, True, False, False, False, -1)
+88@ = Object.Create(#BBALL_INGAME, 0.0, 0.0, 0.0)
+97@ = Blip.AddForChar(38@)
+Blip.ChangeScale(97@, 1)
+Char.SetAccuracy(38@, 181@)
+Char.SetDecisionMaker(38@, 265@)
+Char.SetKindaStayInSamePlace(38@, True)
+148@ = Math.RandomIntInRange(0, 2)
+39@ = Char.Create(25, 146@(148@,2i), 1824.3, -2002.4, 12.6)
+Char.SetInformRespectedFriends(39@, 8.0, 6)
+Char.SetHeading(39@, 270.0)
+Char.GiveWeapon(39@, WeaponType.Tec9, 3000)
+Task.PlayAnim(39@, "BBALL_DEF_LOOP", "BSKTBALL", 4.0, True, False, False, False, -1)
+Char.SetDecisionMaker(39@, 265@)
+Char.SetKindaStayInSamePlace(39@, True)
+98@ = Blip.AddForChar(39@)
+Blip.ChangeScale(98@, 1)
+Char.SetAccuracy(39@, 181@)
+Char.AddArmor(39@, 100)
+148@ = Math.RandomIntInRange(0, 2)
+40@ = Char.Create(25, 146@(148@,2i), 1827.7, -1999.1, 12.6)
+Char.SetInformRespectedFriends(40@, 8.0, 6)
+Char.SetHeading(40@, 133.6)
+Char.GiveWeapon(40@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(40@, 265@)
+Char.SetKindaStayInSamePlace(40@, True)
+99@ = Blip.AddForChar(40@)
+Blip.ChangeScale(99@, 1)
+Char.SetAccuracy(40@, 181@)
+148@ = Math.RandomIntInRange(0, 2)
+41@ = Char.Create(25, 146@(148@,2i), 1828.2, -2000.4, 12.6)
+Char.SetInformRespectedFriends(41@, 8.0, 6)
+Char.SetHeading(41@, 108.2)
+Char.GiveWeapon(41@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(41@, 265@)
+Char.SetKindaStayInSamePlace(41@, True)
+100@ = Blip.AddForChar(41@)
+Blip.ChangeScale(100@, 1)
+Char.SetAccuracy(41@, 181@)
+Char.AddArmor(41@, 100)
+148@ = Math.RandomIntInRange(0, 2)
+42@ = Char.Create(25, 146@(148@,2i), 1834.3, -1995.9, 12.6)
+Char.SetInformRespectedFriends(42@, 8.0, 6)
+Char.SetHeading(42@, 88.1)
+Char.SetDecisionMaker(42@, 265@)
+Char.SetKindaStayInSamePlace(42@, True)
+101@ = Blip.AddForChar(42@)
+Blip.ChangeScale(101@, 1)
+Char.SetAccuracy(42@, 181@)
+return 
+
+:RIOT2_32036
+if 
+  158@ == 0
+goto_if_false @RIOT2_32091
+262@ = 1857.2
+263@ = -2020.6
+264@ = 12.6
+goto @RIOT2_32249
+
+:RIOT2_32091
+if 
+  152@ == 0
+goto_if_false @RIOT2_32146
+262@ = 1865.3
+263@ = -1992.2
+264@ = 12.6
+goto @RIOT2_32249
+
+:RIOT2_32146
+if 
+  155@ == 0
+goto_if_false @RIOT2_32201
+262@ = 1899.3
+263@ = -1991.7
+264@ = 12.6
+goto @RIOT2_32249
+
+:RIOT2_32201
+if 
+  161@ == 0
+goto_if_false @RIOT2_32249
+262@ = 1908.3
+263@ = -2020.1
+264@ = 12.6
+
+:RIOT2_32249
+if 
+  not Char.IsDead(37@)
+goto_if_false @RIOT2_32545
+if 
+  149@ == 0
+goto_if_false @RIOT2_32330
+268@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 262@, 263@, 264@, 7, -2)
+Sequence.Close(268@)
+Char.PerformSequence(37@, 268@)
+Sequence.Clear(268@)
+149@ = 1
+
+:RIOT2_32330
+if 
+  149@ == 1
+goto_if_false @RIOT2_32545
+$task_status = Char.GetScriptTaskStatus(37@, 1560)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @RIOT2_32545
+if 
+  158@ == 0
+goto_if_false @RIOT2_32419
+182@ = Char.SetSayContext(37@, 65)
+158@ = 1
+goto @RIOT2_32538
+
+:RIOT2_32419
+if 
+  152@ == 0
+goto_if_false @RIOT2_32461
+182@ = Char.SetSayContext(37@, 65)
+152@ = 1
+goto @RIOT2_32538
+
+:RIOT2_32461
+if 
+  155@ == 0
+goto_if_false @RIOT2_32503
+182@ = Char.SetSayContext(37@, 65)
+155@ = 1
+goto @RIOT2_32538
+
+:RIOT2_32503
+if 
+  161@ == 0
+goto_if_false @RIOT2_32538
+182@ = Char.SetSayContext(37@, 65)
+161@ = 1
+
+:RIOT2_32538
+149@ = 2
+
+:RIOT2_32545
+return 
+
+:RIOT2_32547
+if 
+  152@ == 1
+goto_if_false @RIOT2_32989
+  Object.Rotate($2709, 270.0, 360.0, False)
+148@ = Math.RandomIntInRange(0, 2)
+43@ = Char.Create(25, 146@(148@,2i), 1850.3, -1990.0, 12.6)
+Char.SetInformRespectedFriends(43@, 8.0, 6)
+Char.SetHeading(43@, 270.0)
+Char.GiveWeapon(43@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(43@, 266@)
+Char.SetKindaStayInSamePlace(43@, True)
+102@ = Blip.AddForChar(43@)
+Blip.ChangeScale(102@, 1)
+Char.SetAccuracy(43@, 181@)
+Char.AddArmor(43@, 100)
+268@ = Sequence.Open()
+Task.Pause(-1, 200)
+Task.GoStraightToCoord(-1, 1852.9, -1990.0, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1853.9, -1984.1, 12.6, 7, -2)
+Task.AchieveHeading(-1, 355.4)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(43@, 268@)
+Sequence.Clear(268@)
+148@ = Math.RandomIntInRange(0, 2)
+44@ = Char.Create(25, 146@(148@,2i), 1851.7, -1989.9, 12.6)
+Char.SetInformRespectedFriends(44@, 8.0, 6)
+Char.SetHeading(44@, 270.7)
+Char.GiveWeapon(44@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(44@, 266@)
+Char.SetKindaStayInSamePlace(44@, True)
+103@ = Blip.AddForChar(44@)
+Blip.ChangeScale(103@, 1)
+Char.SetAccuracy(44@, 181@)
+268@ = Sequence.Open()
+Task.Pause(-1, 400)
+Task.GoStraightToCoord(-1, 1852.9, -1990.0, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1854.5, -1985.1, 12.6, 7, -2)
+Task.AchieveHeading(-1, 186.2)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(44@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_32989
+if 
+  153@ == 1
+goto_if_false @RIOT2_33431
+  Object.Rotate($2710, 180.0, 360.0, False)
+148@ = Math.RandomIntInRange(0, 2)
+45@ = Char.Create(25, 146@(148@,2i), 1867.7, -1983.7, 12.6)
+Char.SetInformRespectedFriends(45@, 8.0, 6)
+Char.SetHeading(45@, 180.0)
+Char.GiveWeapon(45@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(45@, 266@)
+Char.SetKindaStayInSamePlace(45@, True)
+104@ = Blip.AddForChar(45@)
+Blip.ChangeScale(104@, 1)
+Char.SetAccuracy(45@, 181@)
+Char.AddArmor(45@, 100)
+268@ = Sequence.Open()
+Task.Pause(-1, 400)
+Task.GoStraightToCoord(-1, 1867.7, -1986.8, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1854.5, -1999.6, 12.6, 7, -2)
+Task.AchieveHeading(-1, 198.8)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(45@, 268@)
+Sequence.Clear(268@)
+148@ = Math.RandomIntInRange(0, 2)
+46@ = Char.Create(25, 146@(148@,2i), 1867.7, -1984.7, 12.6)
+Char.SetInformRespectedFriends(46@, 8.0, 6)
+Char.SetHeading(46@, 180.0)
+Char.GiveWeapon(46@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(46@, 266@)
+Char.SetKindaStayInSamePlace(46@, True)
+105@ = Blip.AddForChar(46@)
+Blip.ChangeScale(105@, 1)
+Char.SetAccuracy(46@, 181@)
+268@ = Sequence.Open()
+Task.Pause(-1, 200)
+Task.GoStraightToCoord(-1, 1867.7, -1986.8, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1854.5, -1997.6, 12.6, 7, -2)
+Task.AchieveHeading(-1, 315.1)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(46@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_33431
+if 
+  154@ == 1
+goto_if_false @RIOT2_33873
+  Object.Rotate($2711, 0.0, 360.0, False)
+148@ = Math.RandomIntInRange(0, 2)
+47@ = Char.Create(25, 146@(148@,2i), 1866.2, -1999.7, 12.6)
+Char.SetInformRespectedFriends(47@, 8.0, 6)
+Char.SetHeading(47@, 0.0)
+Char.GiveWeapon(47@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(47@, 266@)
+Char.SetKindaStayInSamePlace(47@, True)
+106@ = Blip.AddForChar(47@)
+Blip.ChangeScale(106@, 1)
+Char.SetAccuracy(47@, 181@)
+Char.AddArmor(47@, 100)
+268@ = Sequence.Open()
+Task.Pause(-1, 200)
+Task.GoStraightToCoord(-1, 1866.2, -1997.0, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1859.5, -1996.2, 12.6, 7, -2)
+Task.AchieveHeading(-1, 148.0)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(47@, 268@)
+Sequence.Clear(268@)
+148@ = Math.RandomIntInRange(0, 2)
+48@ = Char.Create(25, 146@(148@,2i), 1865.9, -1998.7, 12.6)
+Char.SetInformRespectedFriends(48@, 8.0, 6)
+Char.SetHeading(48@, 0.0)
+Char.GiveWeapon(48@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(48@, 266@)
+Char.SetKindaStayInSamePlace(48@, True)
+107@ = Blip.AddForChar(48@)
+Blip.ChangeScale(107@, 1)
+Char.SetAccuracy(48@, 181@)
+268@ = Sequence.Open()
+Task.Pause(-1, 400)
+Task.GoStraightToCoord(-1, 1866.2, -1997.0, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1860.0, -1994.0, 12.6, 7, -2)
+Task.AchieveHeading(-1, 280.2)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(48@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_33873
+return 
+
+:RIOT2_33875
+if 
+  155@ == 1
+goto_if_false @RIOT2_34317
+  Object.Rotate($2712, 180.0, 360.0, False)
+148@ = Math.RandomIntInRange(0, 2)
+49@ = Char.Create(25, 146@(148@,2i), 1900.1, -1983.5, 12.6)
+Char.SetInformRespectedFriends(49@, 8.0, 6)
+Char.SetHeading(49@, 180.0)
+Char.GiveWeapon(49@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(49@, 266@)
+Char.SetKindaStayInSamePlace(49@, True)
+108@ = Blip.AddForChar(49@)
+Blip.ChangeScale(108@, 1)
+Char.SetAccuracy(49@, 181@)
+Char.AddArmor(49@, 100)
+268@ = Sequence.Open()
+Task.Pause(-1, 400)
+Task.GoStraightToCoord(-1, 1900.1, -1987.4, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1905.0, -1987.2, 12.6, 7, -2)
+Task.AchieveHeading(-1, 267.4)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(49@, 268@)
+Sequence.Clear(268@)
+148@ = Math.RandomIntInRange(0, 2)
+50@ = Char.Create(25, 146@(148@,2i), 1900.1, -1984.5, 12.6)
+Char.SetInformRespectedFriends(50@, 8.0, 6)
+Char.SetHeading(50@, 180.7)
+Char.GiveWeapon(50@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(50@, 266@)
+Char.SetKindaStayInSamePlace(50@, True)
+109@ = Blip.AddForChar(50@)
+Blip.ChangeScale(109@, 1)
+Char.SetAccuracy(50@, 181@)
+268@ = Sequence.Open()
+Task.Pause(-1, 200)
+Task.GoStraightToCoord(-1, 1900.1, -1987.4, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1904.4, -1988.1, 12.6, 7, -2)
+Task.AchieveHeading(-1, 108.9)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(50@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_34317
+if 
+  156@ == 1
+goto_if_false @RIOT2_34759
+  Object.Rotate($2713, 90.0, 360.0, False)
+148@ = Math.RandomIntInRange(0, 2)
+51@ = Char.Create(25, 146@(148@,2i), 1915.8, -1993.5, 12.6)
+Char.SetInformRespectedFriends(51@, 8.0, 6)
+Char.SetHeading(51@, 90.0)
+Char.GiveWeapon(51@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(51@, 266@)
+Char.SetKindaStayInSamePlace(51@, True)
+110@ = Blip.AddForChar(51@)
+Blip.ChangeScale(110@, 1)
+Char.SetAccuracy(51@, 181@)
+Char.AddArmor(51@, 100)
+268@ = Sequence.Open()
+Task.Pause(-1, 400)
+Task.GoStraightToCoord(-1, 1912.1, -1993.2, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1911.9, -1998.5, 12.6, 7, -2)
+Task.AchieveHeading(-1, 198.9)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(51@, 268@)
+Sequence.Clear(268@)
+148@ = Math.RandomIntInRange(0, 2)
+52@ = Char.Create(25, 146@(148@,2i), 1914.8, -1993.5, 12.6)
+Char.SetInformRespectedFriends(52@, 8.0, 6)
+Char.SetHeading(52@, 90.0)
+Char.GiveWeapon(52@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(52@, 266@)
+Char.SetKindaStayInSamePlace(52@, True)
+111@ = Blip.AddForChar(52@)
+Blip.ChangeScale(111@, 1)
+Char.SetAccuracy(52@, 181@)
+268@ = Sequence.Open()
+Task.Pause(-1, 200)
+Task.GoStraightToCoord(-1, 1912.1, -1993.2, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1911.0, -1997.1, 12.6, 7, -2)
+Task.AchieveHeading(-1, 36.7)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(52@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_34759
+if 
+  157@ == 1
+goto_if_false @RIOT2_35201
+  Object.Rotate($2714, 0.0, 360.0, False)
+148@ = Math.RandomIntInRange(0, 2)
+53@ = Char.Create(25, 146@(148@,2i), 1898.3, -1999.9, 12.6)
+Char.SetInformRespectedFriends(53@, 8.0, 6)
+Char.SetHeading(53@, 0.0)
+Char.GiveWeapon(53@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(53@, 266@)
+Char.SetKindaStayInSamePlace(53@, True)
+112@ = Blip.AddForChar(53@)
+Blip.ChangeScale(112@, 1)
+Char.SetAccuracy(53@, 181@)
+Char.AddArmor(53@, 100)
+268@ = Sequence.Open()
+Task.Pause(-1, 400)
+Task.GoStraightToCoord(-1, 1898.4, -1996.8, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1891.8, -1996.0, 12.6, 7, -2)
+Task.AchieveHeading(-1, 71.9)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(53@, 268@)
+Sequence.Clear(268@)
+148@ = Math.RandomIntInRange(0, 2)
+54@ = Char.Create(25, 146@(148@,2i), 1898.3, -1998.9, 12.6)
+Char.SetInformRespectedFriends(54@, 8.0, 6)
+Char.SetHeading(54@, 0.0)
+Char.GiveWeapon(54@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(54@, 266@)
+Char.SetKindaStayInSamePlace(54@, True)
+113@ = Blip.AddForChar(54@)
+Blip.ChangeScale(113@, 1)
+Char.SetAccuracy(54@, 181@)
+268@ = Sequence.Open()
+Task.Pause(-1, 200)
+Task.GoStraightToCoord(-1, 1898.4, -1996.8, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1892.4, -1995.1, 12.6, 7, -2)
+Task.AchieveHeading(-1, 302.4)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(54@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_35201
+return 
+
+:RIOT2_35203
+if 
+  158@ == 1
+goto_if_false @RIOT2_35645
+  Object.Rotate($2718, 270.0, 360.0, False)
+148@ = Math.RandomIntInRange(0, 2)
+55@ = Char.Create(25, 146@(148@,2i), 1850.4, -2019.5, 12.6)
+Char.SetInformRespectedFriends(55@, 8.0, 6)
+Char.SetHeading(55@, 270.0)
+Char.GiveWeapon(55@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(55@, 266@)
+Char.SetKindaStayInSamePlace(55@, True)
+114@ = Blip.AddForChar(55@)
+Blip.ChangeScale(114@, 1)
+Char.SetAccuracy(55@, 181@)
+Char.AddArmor(55@, 100)
+268@ = Sequence.Open()
+Task.Pause(-1, 400)
+Task.GoStraightToCoord(-1, 1854.1, -2019.4, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1855.3, -2010.4, 12.6, 7, -2)
+Task.AchieveHeading(-1, 30.7)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(55@, 268@)
+Sequence.Clear(268@)
+148@ = Math.RandomIntInRange(0, 2)
+56@ = Char.Create(25, 146@(148@,2i), 1851.7, -2019.5, 12.6)
+Char.SetInformRespectedFriends(56@, 8.0, 6)
+Char.SetHeading(56@, 270.7)
+Char.GiveWeapon(56@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(56@, 266@)
+Char.SetKindaStayInSamePlace(56@, True)
+115@ = Blip.AddForChar(56@)
+Blip.ChangeScale(115@, 1)
+Char.SetAccuracy(56@, 181@)
+268@ = Sequence.Open()
+Task.Pause(-1, 200)
+Task.GoStraightToCoord(-1, 1854.1, -2019.4, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1855.3, -2012.4, 12.6, 7, -2)
+Task.AchieveHeading(-1, 195.4)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(56@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_35645
+if 
+  159@ == 1
+goto_if_false @RIOT2_36087
+  Object.Rotate($2719, 90.0, 360.0, False)
+148@ = Math.RandomIntInRange(0, 2)
+57@ = Char.Create(25, 146@(148@,2i), 1866.7, -2021.1, 12.6)
+Char.SetInformRespectedFriends(57@, 8.0, 6)
+Char.SetHeading(57@, 90.0)
+Char.GiveWeapon(57@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(57@, 266@)
+Char.SetKindaStayInSamePlace(57@, True)
+116@ = Blip.AddForChar(57@)
+Blip.ChangeScale(116@, 1)
+Char.SetAccuracy(57@, 181@)
+Char.AddArmor(57@, 100)
+268@ = Sequence.Open()
+Task.Pause(-1, 400)
+Task.GoStraightToCoord(-1, 1863.3, -2021.2, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1862.9, -2011.7, 12.6, 7, -2)
+Task.AchieveHeading(-1, 43.3)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(57@, 268@)
+Sequence.Clear(268@)
+148@ = Math.RandomIntInRange(0, 2)
+58@ = Char.Create(25, 146@(148@,2i), 1865.5, -2021.3, 12.6)
+Char.SetInformRespectedFriends(58@, 8.0, 6)
+Char.SetHeading(58@, 90.0)
+Char.GiveWeapon(58@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(58@, 266@)
+Char.SetKindaStayInSamePlace(58@, True)
+117@ = Blip.AddForChar(58@)
+Blip.ChangeScale(117@, 1)
+Char.SetAccuracy(58@, 181@)
+268@ = Sequence.Open()
+Task.Pause(-1, 200)
+Task.GoStraightToCoord(-1, 1863.3, -2021.2, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1863.4, -2013.9, 12.6, 7, -2)
+Task.AchieveHeading(-1, 154.0)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(58@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_36087
+if 
+  160@ == 1
+goto_if_false @RIOT2_36529
+  Object.Rotate($2720, 0.0, 360.0, False)
+148@ = Math.RandomIntInRange(0, 2)
+59@ = Char.Create(25, 146@(148@,2i), 1857.2, -2036.9, 12.6)
+Char.SetInformRespectedFriends(59@, 8.0, 6)
+Char.SetHeading(59@, 0.0)
+Char.GiveWeapon(59@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(59@, 266@)
+Char.SetKindaStayInSamePlace(59@, True)
+118@ = Blip.AddForChar(59@)
+Blip.ChangeScale(118@, 1)
+Char.SetAccuracy(59@, 181@)
+Char.AddArmor(59@, 100)
+268@ = Sequence.Open()
+Task.Pause(-1, 400)
+Task.GoStraightToCoord(-1, 1857.2, -2032.9, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1854.5, -2026.5, 12.6, 7, -2)
+Task.AchieveHeading(-1, 198.8)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(59@, 268@)
+Sequence.Clear(268@)
+148@ = Math.RandomIntInRange(0, 2)
+60@ = Char.Create(25, 146@(148@,2i), 1857.1, -2035.8, 12.6)
+Char.SetInformRespectedFriends(60@, 8.0, 6)
+Char.SetHeading(60@, 0.0)
+Char.GiveWeapon(60@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(60@, 266@)
+Char.SetKindaStayInSamePlace(60@, True)
+119@ = Blip.AddForChar(60@)
+Blip.ChangeScale(119@, 1)
+Char.SetAccuracy(60@, 181@)
+268@ = Sequence.Open()
+Task.Pause(-1, 200)
+Task.GoStraightToCoord(-1, 1857.2, -2032.9, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1854.5, -2024.3, 12.6, 7, -2)
+Task.AchieveHeading(-1, 346.3)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(60@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_36529
+return 
+
+:RIOT2_36531
+if 
+  161@ == 1
+goto_if_false @RIOT2_36973
+  Object.Rotate($2715, 270.0, 360.0, False)
+148@ = Math.RandomIntInRange(0, 2)
+61@ = Char.Create(25, 146@(148@,2i), 1899.3, -2019.5, 12.6)
+Char.SetInformRespectedFriends(61@, 8.0, 6)
+Char.SetHeading(61@, 270.0)
+Char.GiveWeapon(61@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(61@, 266@)
+Char.SetKindaStayInSamePlace(61@, True)
+120@ = Blip.AddForChar(61@)
+Blip.ChangeScale(120@, 1)
+Char.SetAccuracy(61@, 181@)
+Char.AddArmor(61@, 100)
+268@ = Sequence.Open()
+Task.Pause(-1, 400)
+Task.GoStraightToCoord(-1, 1902.1, -2019.7, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1903.2, -2012.3, 12.6, 7, -2)
+Task.AchieveHeading(-1, 330.8)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(61@, 268@)
+Sequence.Clear(268@)
+148@ = Math.RandomIntInRange(0, 2)
+62@ = Char.Create(25, 146@(148@,2i), 1900.3, -2019.5, 12.6)
+Char.SetInformRespectedFriends(62@, 8.0, 6)
+Char.SetHeading(62@, 270.7)
+Char.GiveWeapon(62@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(62@, 266@)
+Char.SetKindaStayInSamePlace(62@, True)
+121@ = Blip.AddForChar(62@)
+Blip.ChangeScale(121@, 1)
+Char.SetAccuracy(62@, 181@)
+268@ = Sequence.Open()
+Task.Pause(-1, 200)
+Task.GoStraightToCoord(-1, 1902.1, -2019.7, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1903.2, -2013.6, 12.6, 7, -2)
+Task.AchieveHeading(-1, 195.6)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(62@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_36973
+if 
+  162@ == 1
+goto_if_false @RIOT2_37415
+  Object.Rotate($2716, 90.0, 360.0, False)
+148@ = Math.RandomIntInRange(0, 2)
+63@ = Char.Create(25, 146@(148@,2i), 1915.8, -2021.5, 12.6)
+Char.SetInformRespectedFriends(63@, 8.0, 6)
+Char.SetHeading(63@, 90.0)
+Char.GiveWeapon(63@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(63@, 266@)
+Char.SetKindaStayInSamePlace(63@, True)
+122@ = Blip.AddForChar(63@)
+Blip.ChangeScale(122@, 1)
+Char.SetAccuracy(63@, 181@)
+Char.AddArmor(63@, 100)
+268@ = Sequence.Open()
+Task.Pause(-1, 400)
+Task.GoStraightToCoord(-1, 1912.8, -2021.4, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1912.1, -2012.8, 12.6, 7, -2)
+Task.AchieveHeading(-1, 21.8)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(63@, 268@)
+Sequence.Clear(268@)
+148@ = Math.RandomIntInRange(0, 2)
+64@ = Char.Create(25, 146@(148@,2i), 1914.8, -2021.5, 12.6)
+Char.SetInformRespectedFriends(64@, 8.0, 6)
+Char.SetHeading(64@, 90.0)
+Char.GiveWeapon(64@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(64@, 266@)
+Char.SetKindaStayInSamePlace(64@, True)
+123@ = Blip.AddForChar(64@)
+Blip.ChangeScale(123@, 1)
+Char.SetAccuracy(64@, 181@)
+268@ = Sequence.Open()
+Task.Pause(-1, 200)
+Task.GoStraightToCoord(-1, 1912.8, -2021.4, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1911.7, -2014.3, 12.6, 7, -2)
+Task.AchieveHeading(-1, 171.0)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(64@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_37415
+if 
+  163@ == 1
+goto_if_false @RIOT2_37857
+  Object.Rotate($2717, 0.0, 360.0, False)
+148@ = Math.RandomIntInRange(0, 2)
+65@ = Char.Create(25, 146@(148@,2i), 1906.1, -2036.9, 12.6)
+Char.SetInformRespectedFriends(65@, 8.0, 6)
+Char.SetHeading(65@, 0.0)
+Char.GiveWeapon(65@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(65@, 266@)
+Char.SetKindaStayInSamePlace(65@, True)
+124@ = Blip.AddForChar(65@)
+Blip.ChangeScale(124@, 1)
+Char.SetAccuracy(65@, 181@)
+Char.AddArmor(65@, 100)
+268@ = Sequence.Open()
+Task.Pause(-1, 400)
+Task.GoStraightToCoord(-1, 1906.0, -2033.5, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1907.3, -2033.3, 12.6, 7, -2)
+Task.AchieveHeading(-1, 32.4)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(65@, 268@)
+Sequence.Clear(268@)
+148@ = Math.RandomIntInRange(0, 2)
+66@ = Char.Create(25, 146@(148@,2i), 1906.1, -2035.9, 12.6)
+Char.SetInformRespectedFriends(66@, 8.0, 6)
+Char.SetHeading(66@, 0.0)
+Char.GiveWeapon(66@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(66@, 266@)
+Char.SetKindaStayInSamePlace(66@, True)
+125@ = Blip.AddForChar(66@)
+Blip.ChangeScale(125@, 1)
+Char.SetAccuracy(66@, 181@)
+268@ = Sequence.Open()
+Task.Pause(-1, 200)
+Task.GoStraightToCoord(-1, 1906.0, -2033.5, 12.5, MoveState.Walk, -1)
+Task.FollowPathNodesToCoord(-1, 1906.3, -2030.3, 12.6, 7, -2)
+Task.AchieveHeading(-1, 315.5)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(66@, 268@)
+Sequence.Clear(268@)
+
+:RIOT2_37857
+return 
+
+:RIOT2_37859
+if 
+  167@ == 1
+goto_if_false @RIOT2_37923
+if 
+  not Char.IsGroupMember($cesar, $Players_Group)
+goto_if_false @RIOT2_37923
+Blip.Remove(89@)
+89@ = Blip.AddForChar($cesar)
+Blip.SetAsFriendly(89@, True)
+167@ = 0
+
+:RIOT2_37923
+if 
+  167@ == 0
+goto_if_false @RIOT2_38065
+if 
+  Char.LocateAnyMeansChar3D($scplayer, $cesar, 8.0, 8.0, 8.0, False)
+goto_if_false @RIOT2_38065
+if 
+  not Char.IsGroupMember($cesar, $Players_Group)
+goto_if_false @RIOT2_38008
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Group.SetMember($cesar, $Players_Group)
+
+:RIOT2_38008
+Blip.Remove(89@)
+if 
+  177@ > 2
+goto_if_false @RIOT2_38058
+89@ = Blip.AddForCoord(1774.9, -1974.9, 13.1)
+Blip.SetAsFriendly(89@, False)
+
+:RIOT2_38058
+167@ = 1
+
+:RIOT2_38065
+return 
+
+:RIOT2_38067
+if 
+  Char.IsDead(79@)
+goto_if_false @RIOT2_38283
+148@ = Math.RandomIntInRange(0, 2)
+79@ = Char.Create(25, 146@(148@,2i), 1860.1, -2094.8, 14.0)
+Char.SetHeading(79@, 187.0)
+Char.GiveWeapon(79@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(79@, 266@)
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Task.Pause(-1, 4000)
+Task.Climb(-1, True)
+Task.ShootAtCoord(-1, 1874.4, -2101.5, 14.8, 2000)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(79@, 268@)
+Sequence.Clear(268@)
+132@ = Blip.AddForChar(79@)
+Blip.ChangeScale(132@, 1)
+Char.SetAccuracy(79@, 181@)
+Char.AddArmor(79@, 50)
+
+:RIOT2_38283
+if 
+  Char.IsDead(80@)
+goto_if_false @RIOT2_38532
+148@ = Math.RandomIntInRange(0, 2)
+80@ = Char.Create(25, 146@(148@,2i), 1857.3, -2094.8, 14.0)
+Char.SetHeading(80@, 187.0)
+Char.GiveWeapon(80@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(80@, 266@)
+Task.PlayAnim(80@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Task.Pause(-1, 6000)
+Task.Climb(-1, True)
+Task.ShootAtCoord(-1, 1874.4, -2101.5, 14.8, 2000)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(80@, 268@)
+Sequence.Clear(268@)
+133@ = Blip.AddForChar(80@)
+Blip.ChangeScale(133@, 1)
+Char.SetAccuracy(80@, 181@)
+
+:RIOT2_38532
+if 
+  Char.IsDead(81@)
+goto_if_false @RIOT2_38788
+148@ = Math.RandomIntInRange(0, 2)
+81@ = Char.Create(25, 146@(148@,2i), 1854.3, -2094.8, 14.0)
+Char.SetHeading(81@, 187.0)
+Char.GiveWeapon(81@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(81@, 266@)
+Task.PlayAnim(81@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Task.Pause(-1, 8000)
+Task.Climb(-1, True)
+Task.ShootAtCoord(-1, 1874.4, -2101.5, 14.8, 2000)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(81@, 268@)
+Sequence.Clear(268@)
+134@ = Blip.AddForChar(81@)
+Blip.ChangeScale(134@, 1)
+Char.SetAccuracy(81@, 181@)
+Char.AddArmor(81@, 50)
+
+:RIOT2_38788
+if 
+  Char.IsDead(82@)
+goto_if_false @RIOT2_39015
+148@ = Math.RandomIntInRange(0, 2)
+82@ = Char.Create(25, 146@(148@,2i), 1859.1, -2108.8, 14.0)
+Char.SetHeading(82@, 2.0)
+Char.GiveWeapon(82@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(82@, 266@)
+Task.PlayAnim(82@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Task.Pause(-1, 5000)
+Task.Climb(-1, True)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(82@, 268@)
+Sequence.Clear(268@)
+135@ = Blip.AddForChar(82@)
+Blip.ChangeScale(135@, 1)
+Char.SetAccuracy(82@, 181@)
+
+:RIOT2_39015
+if 
+  Char.IsDead(83@)
+goto_if_false @RIOT2_39249
+148@ = Math.RandomIntInRange(0, 2)
+83@ = Char.Create(25, 146@(148@,2i), 1856.3, -2108.8, 14.0)
+Char.SetHeading(83@, 2.0)
+Char.GiveWeapon(83@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(83@, 266@)
+Task.PlayAnim(83@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Task.Pause(-1, 7000)
+Task.Climb(-1, True)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(83@, 268@)
+Sequence.Clear(268@)
+136@ = Blip.AddForChar(83@)
+Blip.ChangeScale(136@, 1)
+Char.SetAccuracy(83@, 181@)
+Char.AddArmor(83@, 50)
+
+:RIOT2_39249
+if 
+  Char.IsDead(84@)
+goto_if_false @RIOT2_39476
+148@ = Math.RandomIntInRange(0, 2)
+84@ = Char.Create(25, 146@(148@,2i), 1853.3, -2108.8, 14.0)
+Char.SetHeading(84@, 2.0)
+Char.GiveWeapon(84@, WeaponType.Tec9, 3000)
+Char.SetDecisionMaker(84@, 266@)
+Task.PlayAnim(84@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+268@ = Sequence.Open()
+Task.PlayAnim(-1, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+Task.Pause(-1, 9000)
+Task.Climb(-1, True)
+Task.SetCharDecisionMaker(-1, 265@)
+Sequence.Close(268@)
+Char.PerformSequence(84@, 268@)
+Sequence.Clear(268@)
+137@ = Blip.AddForChar(84@)
+Blip.ChangeScale(137@, 1)
+Char.SetAccuracy(84@, 181@)
+
+:RIOT2_39476
+return 
+
+:RIOT2_39478
+if or
+  185@ == 1
+  185@ == 4
+  185@ == 6
+  185@ == 8
+  185@ == 9
+goto_if_false @RIOT2_39578
+if 
+  is_int_lvar_greater_than_int_lvar 255@ > 186@
+goto_if_false @RIOT2_39571
+gosub @RIOT2_43165
+gosub @RIOT2_43272
+gosub @RIOT2_43426
+goto @RIOT2_39578
+
+:RIOT2_39571
+185@ = 0
+
+:RIOT2_39578
+if or
+  185@ == 10
+  185@ == 11
+  185@ == 12
+  185@ == 13
+goto_if_false @RIOT2_39671
+if 
+  is_int_lvar_greater_than_int_lvar 255@ > 186@
+goto_if_false @RIOT2_39664
+gosub @RIOT2_43165
+gosub @RIOT2_43272
+gosub @RIOT2_43426
+goto @RIOT2_39671
+
+:RIOT2_39664
+185@ = 0
+
+:RIOT2_39671
+if or
+  185@ == 5
+  185@ == 7
+goto_if_false @RIOT2_39804
+if 
+  is_int_lvar_greater_than_int_lvar 255@ > 186@
+goto_if_false @RIOT2_39797
+gosub @RIOT2_43165
+gosub @RIOT2_43272
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_39759
+gosub @RIOT2_43426
+goto @RIOT2_39790
+
+:RIOT2_39759
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(189@(186@,22s))
+256@ = 0
+257@ = 0
+
+:RIOT2_39790
+goto @RIOT2_39804
+
+:RIOT2_39797
+185@ = 0
+
+:RIOT2_39804
+if 
+  185@ == 9
+goto_if_false @RIOT2_39930
+if 
+  is_int_lvar_greater_than_int_lvar 255@ > 186@
+goto_if_false @RIOT2_39923
+gosub @RIOT2_43165
+gosub @RIOT2_43272
+if 
+  not Char.IsDead(35@)
+goto_if_false @RIOT2_39885
+gosub @RIOT2_43426
+goto @RIOT2_39916
+
+:RIOT2_39885
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(189@(186@,22s))
+256@ = 0
+257@ = 0
+
+:RIOT2_39916
+goto @RIOT2_39930
+
+:RIOT2_39923
+185@ = 0
+
+:RIOT2_39930
+if 
+  142@ == 0
+goto_if_false @RIOT2_40910
+if 
+  143@ > 2
+goto_if_false @RIOT2_40910
+if 
+  Char.IsGroupMember($cesar, $Players_Group)
+goto_if_false @RIOT2_40336
+if 
+  Char.LocateAnyMeansChar3D($cesar, $scplayer, 10.0, 10.0, 8.0, False)
+goto_if_false @RIOT2_40329
+if and
+  Char.IsOnFoot($scplayer)
+  Char.IsOnFoot($cesar)
+goto_if_false @RIOT2_40175
+if or
+  185@ == 2
+  185@ == 3
+goto_if_false @RIOT2_40175
+if 
+  is_int_lvar_greater_than_int_lvar 255@ > 186@
+goto_if_false @RIOT2_40168
+gosub @RIOT2_43165
+gosub @RIOT2_43272
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_40130
+gosub @RIOT2_43426
+goto @RIOT2_40161
+
+:RIOT2_40130
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(189@(186@,22s))
+256@ = 0
+257@ = 0
+
+:RIOT2_40161
+goto @RIOT2_40175
+
+:RIOT2_40168
+185@ = 0
+
+:RIOT2_40175
+if and
+  Char.IsInAnyCar($scplayer)
+  Char.IsInAnyCar($cesar)
+goto_if_false @RIOT2_40329
+if or
+  185@ == 2
+  185@ == 3
+goto_if_false @RIOT2_40329
+if 
+  is_int_lvar_greater_than_int_lvar 255@ > 186@
+goto_if_false @RIOT2_40322
+gosub @RIOT2_43165
+gosub @RIOT2_43272
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_40284
+gosub @RIOT2_43426
+goto @RIOT2_40315
+
+:RIOT2_40284
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(189@(186@,22s))
+256@ = 0
+257@ = 0
+
+:RIOT2_40315
+goto @RIOT2_40329
+
+:RIOT2_40322
+185@ = 0
+
+:RIOT2_40329
+goto @RIOT2_40453
+
+:RIOT2_40336
+if 
+  14 > 185@
+goto_if_false @RIOT2_40453
+if 
+  is_int_lvar_greater_than_int_lvar 255@ > 186@
+goto_if_false @RIOT2_40380
+186@ += 1
+
+:RIOT2_40380
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(189@(186@,22s))
+Text.ClearPrints
+set_lvar_int_to_lvar_int 260@ = 185@
+set_lvar_int_to_lvar_int 261@ = 186@
+185@ = 14
+186@ = Math.RandomIntInRange(0, 4)
+set_lvar_int_to_lvar_int 188@ = 186@
+188@ += 1
+gosub @RIOT2_40912
+
+:RIOT2_40453
+if 
+  185@ == 14
+goto_if_false @RIOT2_40644
+if 
+  not Char.IsGroupMember($cesar, $Players_Group)
+goto_if_false @RIOT2_40621
+if 
+  is_int_lvar_greater_than_int_lvar 255@ > 186@
+goto_if_false @RIOT2_40591
+gosub @RIOT2_43165
+gosub @RIOT2_43272
+if 
+  not Char.IsDead($cesar)
+goto_if_false @RIOT2_40553
+gosub @RIOT2_43426
+goto @RIOT2_40584
+
+:RIOT2_40553
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(189@(186@,22s))
+256@ = 0
+257@ = 0
+
+:RIOT2_40584
+goto @RIOT2_40614
+
+:RIOT2_40591
+Text.PrintNow('R2_12', 7000, 1)
+185@ = 15
+
+:RIOT2_40614
+goto @RIOT2_40644
+
+:RIOT2_40621
+Text.PrintNow('R2_12', 7000, 1)
+185@ = 15
+
+:RIOT2_40644
+if 
+  185@ == 15
+goto_if_false @RIOT2_40697
+if 
+  Char.IsGroupMember($cesar, $Players_Group)
+goto_if_false @RIOT2_40697
+185@ = 16
+186@ = 0
+Text.ClearPrints
+
+:RIOT2_40697
+if 
+  185@ == 16
+goto_if_false @RIOT2_40910
+if 
+  Char.IsGroupMember($cesar, $Players_Group)
+goto_if_false @RIOT2_40855
+TIMERB = 0
+set_lvar_int_to_lvar_int 185@ = 260@
+set_lvar_int_to_lvar_int 186@ = 261@
+gosub @RIOT2_40912
+if 
+  260@ == 0
+goto_if_false @RIOT2_40848
+if 
+  3 > 177@
+goto_if_false @RIOT2_40825
+Text.PrintNow('R2_01', 60000, 1)
+goto @RIOT2_40841
+
+:RIOT2_40825
+Text.PrintNow('R2_13', 7000, 1)
+
+:RIOT2_40841
+TIMERB = 0
+
+:RIOT2_40848
+goto @RIOT2_40910
+
+:RIOT2_40855
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(189@(186@,22s))
+185@ = 14
+186@ = Math.RandomIntInRange(0, 4)
+set_lvar_int_to_lvar_int 188@ = 186@
+188@ += 1
+gosub @RIOT2_40912
+
+:RIOT2_40910
+return 
+
+:RIOT2_40912
+if 
+  185@ == 1
+goto_if_false @RIOT2_41033
+set_lvar_text_label 189@s = 'ROT2_AA'
+set_lvar_text_label 191@s = 'ROT2_AB'
+set_lvar_text_label 193@s = 'ROT2_AD'
+set_lvar_text_label 195@s = 'ROT2_AE'
+set_lvar_int_to_constant 233@ = 33000
+set_lvar_int_to_constant 234@ = 33001
+set_lvar_int_to_constant 235@ = 33002
+set_lvar_int_to_constant 236@ = 33003
+255@ = 4
+
+:RIOT2_41033
+if 
+  185@ == 2
+goto_if_false @RIOT2_41154
+set_lvar_text_label 189@s = 'ROT2_BA'
+set_lvar_text_label 191@s = 'ROT2_BB'
+set_lvar_text_label 193@s = 'ROT2_BC'
+set_lvar_text_label 195@s = 'ROT2_BD'
+set_lvar_int_to_constant 233@ = 33004
+set_lvar_int_to_constant 234@ = 33005
+set_lvar_int_to_constant 235@ = 33006
+set_lvar_int_to_constant 236@ = 33007
+255@ = 4
+
+:RIOT2_41154
+if 
+  185@ == 3
+goto_if_false @RIOT2_41563
+set_lvar_text_label 189@s = 'ROT2_CA'
+set_lvar_text_label 191@s = 'ROT2_CB'
+set_lvar_text_label 193@s = 'ROT2_CC'
+set_lvar_text_label 195@s = 'ROT2_CD'
+set_lvar_text_label 197@s = 'ROT2_CE'
+set_lvar_text_label 199@s = 'ROT2_CF'
+set_lvar_text_label 201@s = 'ROT2_CG'
+set_lvar_text_label 203@s = 'ROT2_CH'
+set_lvar_text_label 205@s = 'ROT2_CJ'
+set_lvar_text_label 207@s = 'ROT2_CK'
+set_lvar_text_label 209@s = 'ROT2_CL'
+set_lvar_text_label 211@s = 'ROT2_CM'
+set_lvar_text_label 213@s = 'ROT2_CN'
+set_lvar_text_label 215@s = 'ROT2_CO'
+set_lvar_text_label 217@s = 'ROT2_CP'
+set_lvar_text_label 219@s = 'ROT2_CQ'
+set_lvar_int_to_constant 233@ = 33008
+set_lvar_int_to_constant 234@ = 33009
+set_lvar_int_to_constant 235@ = 33010
+set_lvar_int_to_constant 236@ = 33011
+set_lvar_int_to_constant 237@ = 33012
+set_lvar_int_to_constant 238@ = 33013
+set_lvar_int_to_constant 239@ = 33014
+set_lvar_int_to_constant 240@ = 33015
+set_lvar_int_to_constant 241@ = 33016
+set_lvar_int_to_constant 242@ = 33017
+set_lvar_int_to_constant 243@ = 33018
+set_lvar_int_to_constant 244@ = 33019
+set_lvar_int_to_constant 245@ = 33020
+set_lvar_int_to_constant 246@ = 33021
+set_lvar_int_to_constant 247@ = 33022
+set_lvar_int_to_constant 248@ = 33023
+255@ = 16
+
+:RIOT2_41563
+if 
+  185@ == 4
+goto_if_false @RIOT2_41829
+set_lvar_text_label 189@s = 'ROT2_DA'
+set_lvar_text_label 191@s = 'ROT2_DB'
+set_lvar_text_label 193@s = 'ROT2_DC'
+set_lvar_text_label 195@s = 'ROT2_DD'
+set_lvar_text_label 197@s = 'ROT2_DE'
+set_lvar_text_label 199@s = 'ROT2_DF'
+set_lvar_text_label 205@s = 'ROT2_DJ'
+set_lvar_text_label 207@s = 'ROT2_DK'
+set_lvar_text_label 209@s = 'ROT2_DL'
+set_lvar_text_label 211@s = 'ROT2_DM'
+set_lvar_int_to_constant 233@ = 33024
+set_lvar_int_to_constant 234@ = 33025
+set_lvar_int_to_constant 235@ = 33026
+set_lvar_int_to_constant 236@ = 33027
+set_lvar_int_to_constant 237@ = 33028
+set_lvar_int_to_constant 238@ = 33029
+set_lvar_int_to_constant 241@ = 33031
+set_lvar_int_to_constant 242@ = 33032
+set_lvar_int_to_constant 243@ = 33033
+set_lvar_int_to_constant 244@ = 33034
+set_lvar_int_to_lvar_int 255@ = 188@
+
+:RIOT2_41829
+if 
+  185@ == 5
+goto_if_false @RIOT2_42071
+set_lvar_text_label 189@s = 'ROT2_EA'
+set_lvar_text_label 195@s = 'ROT2_ED'
+set_lvar_text_label 197@s = 'ROT2_EE'
+set_lvar_text_label 199@s = 'ROT2_EF'
+set_lvar_text_label 201@s = 'ROT2_EG'
+set_lvar_text_label 203@s = 'ROT2_EH'
+set_lvar_text_label 205@s = 'ROT2_EJ'
+set_lvar_text_label 211@s = 'ROT2_EM'
+set_lvar_text_label 213@s = 'ROT2_EN'
+set_lvar_int_to_constant 233@ = 33035
+set_lvar_int_to_constant 236@ = 33038
+set_lvar_int_to_constant 237@ = 33039
+set_lvar_int_to_constant 238@ = 33040
+set_lvar_int_to_constant 239@ = 33041
+set_lvar_int_to_constant 240@ = 33042
+set_lvar_int_to_constant 241@ = 33043
+set_lvar_int_to_constant 244@ = 33046
+set_lvar_int_to_constant 245@ = 33047
+set_lvar_int_to_lvar_int 255@ = 188@
+
+:RIOT2_42071
+if 
+  185@ == 6
+goto_if_false @RIOT2_42265
+set_lvar_text_label 189@s = 'ROT2_FA'
+set_lvar_text_label 191@s = 'ROT2_FB'
+set_lvar_text_label 193@s = 'ROT2_FC'
+set_lvar_text_label 195@s = 'ROT2_FD'
+set_lvar_text_label 197@s = 'ROT2_FE'
+set_lvar_text_label 199@s = 'ROT2_FG'
+set_lvar_text_label 201@s = 'ROT2_FH'
+set_lvar_int_to_constant 233@ = 33059
+set_lvar_int_to_constant 234@ = 33060
+set_lvar_int_to_constant 235@ = 33061
+set_lvar_int_to_constant 236@ = 33062
+set_lvar_int_to_constant 237@ = 33063
+set_lvar_int_to_constant 238@ = 33064
+set_lvar_int_to_constant 239@ = 33065
+set_lvar_int_to_lvar_int 255@ = 188@
+
+:RIOT2_42265
+if 
+  185@ == 7
+goto_if_false @RIOT2_42314
+set_lvar_text_label 189@s = 'ROT2_GA'
+set_lvar_int_to_constant 233@ = 33066
+255@ = 1
+
+:RIOT2_42314
+if 
+  185@ == 8
+goto_if_false @RIOT2_42435
+set_lvar_text_label 189@s = 'ROT2_GB'
+set_lvar_text_label 191@s = 'ROT2_GC'
+set_lvar_text_label 193@s = 'ROT2_GD'
+set_lvar_text_label 195@s = 'ROT2_EW'
+set_lvar_int_to_constant 233@ = 33067
+set_lvar_int_to_constant 234@ = 33068
+set_lvar_int_to_constant 235@ = 33069
+set_lvar_int_to_constant 236@ = 33056
+255@ = 4
+
+:RIOT2_42435
+if 
+  185@ == 9
+goto_if_false @RIOT2_42533
+set_lvar_text_label 189@s = 'ROT2_HA'
+set_lvar_text_label 191@s = 'ROT2_HB'
+set_lvar_text_label 193@s = 'ROT2_HC'
+set_lvar_int_to_constant 233@ = 33070
+set_lvar_int_to_constant 234@ = 33071
+set_lvar_int_to_constant 235@ = 33072
+set_lvar_int_to_lvar_int 255@ = 188@
+
+:RIOT2_42533
+if 
+  185@ == 10
+goto_if_false @RIOT2_42606
+set_lvar_text_label 189@s = 'ROT2_JA'
+set_lvar_text_label 191@s = 'ROT2_JB'
+set_lvar_int_to_constant 233@ = 33073
+set_lvar_int_to_constant 234@ = 33074
+255@ = 2
+
+:RIOT2_42606
+if 
+  185@ == 11
+goto_if_false @RIOT2_42704
+set_lvar_text_label 189@s = 'ROT2_KA'
+set_lvar_text_label 191@s = 'ROT2_KB'
+set_lvar_text_label 193@s = 'ROT2_KC'
+set_lvar_int_to_constant 233@ = 33075
+set_lvar_int_to_constant 234@ = 33076
+set_lvar_int_to_constant 235@ = 33077
+set_lvar_int_to_lvar_int 255@ = 188@
+
+:RIOT2_42704
+if 
+  185@ == 12
+goto_if_false @RIOT2_42802
+set_lvar_text_label 189@s = 'ROT2_LA'
+set_lvar_text_label 191@s = 'ROT2_LB'
+set_lvar_text_label 193@s = 'ROT2_LC'
+set_lvar_int_to_constant 233@ = 33078
+set_lvar_int_to_constant 234@ = 33079
+set_lvar_int_to_constant 235@ = 33080
+set_lvar_int_to_lvar_int 255@ = 188@
+
+:RIOT2_42802
+if 
+  185@ == 13
+goto_if_false @RIOT2_43020
+set_lvar_text_label 189@s = 'ROT2_MA'
+set_lvar_text_label 191@s = 'ROT2_MB'
+set_lvar_text_label 193@s = 'ROT2_MC'
+set_lvar_text_label 195@s = 'ROT2_MD'
+set_lvar_text_label 197@s = 'ROT2_ME'
+set_lvar_text_label 199@s = 'ROT2_MF'
+set_lvar_text_label 201@s = 'ROT2_MG'
+set_lvar_text_label 203@s = 'ROT2_MH'
+set_lvar_int_to_constant 233@ = 33081
+set_lvar_int_to_constant 234@ = 33082
+set_lvar_int_to_constant 235@ = 33083
+set_lvar_int_to_constant 236@ = 33084
+set_lvar_int_to_constant 237@ = 33085
+set_lvar_int_to_constant 238@ = 33086
+set_lvar_int_to_constant 239@ = 33087
+set_lvar_int_to_constant 240@ = 33088
+set_lvar_int_to_lvar_int 255@ = 188@
+
+:RIOT2_43020
+if 
+  185@ == 14
+goto_if_false @RIOT2_43134
+set_lvar_text_label 189@s = 'CESX_BA'
+set_lvar_text_label 191@s = 'CESX_BB'
+set_lvar_text_label 193@s = 'CESX_BC'
+set_lvar_text_label 195@s = 'CESX_BD'
+set_lvar_int_to_constant 233@ = 10406
+set_lvar_int_to_constant 234@ = 10407
+set_lvar_int_to_constant 235@ = 10408
+set_lvar_int_to_constant 236@ = 10409
+set_lvar_int_to_lvar_int 255@ = 188@
+
+:RIOT2_43134
+set_lvar_int_to_lvar_int 258@ = 186@
+256@ = 0
+257@ = 0
+259@ = 1
+return 
+
+:RIOT2_43165
+if 
+  is_int_lvar_greater_than_int_lvar 255@ > 258@
+goto_if_false @RIOT2_43270
+if 
+  256@ == 0
+goto_if_false @RIOT2_43227
+Audio.LoadMissionAudio(233@(258@,22i), 1)
+258@ += 1
+256@ = 1
+
+:RIOT2_43227
+if 
+  257@ == 0
+goto_if_false @RIOT2_43270
+Audio.LoadMissionAudio(233@(258@,22i), 2)
+258@ += 1
+257@ = 1
+
+:RIOT2_43270
+return 
+
+:RIOT2_43272
+if 
+  259@ == 1
+goto_if_false @RIOT2_43348
+if 
+  256@ == 1
+goto_if_false @RIOT2_43348
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @RIOT2_43348
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(189@(186@,22s), 4500, 1)
+256@ = 2
+
+:RIOT2_43348
+if 
+  259@ == 2
+goto_if_false @RIOT2_43424
+if 
+  257@ == 1
+goto_if_false @RIOT2_43424
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @RIOT2_43424
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow(189@(186@,22s), 4500, 1)
+257@ = 2
+
+:RIOT2_43424
+return 
+
+:RIOT2_43426
+if 
+  256@ == 2
+goto_if_false @RIOT2_43489
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @RIOT2_43489
+Text.ClearThisPrint(189@(186@,22s))
+186@ += 1
+259@ = 2
+256@ = 0
+
+:RIOT2_43489
+if 
+  257@ == 2
+goto_if_false @RIOT2_43552
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @RIOT2_43552
+Text.ClearThisPrint(189@(186@,22s))
+186@ += 1
+259@ = 1
+257@ = 0
+
+:RIOT2_43552
+return 
+
+//-------------Mission 110---------------
+// Originally: End Of The Line (1)
+
+:FINALEA
+gosub @FINALEA_36
+if 
+  has_deatharrest_been_executed 
+goto_if_false @FINALEA_27
+gosub @FINALEA_32509
+
+:FINALEA_27
+gosub @FINALEA_32621
+terminate_this_script 
+

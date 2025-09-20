@@ -1,0 +1,2652 @@
+//-------------External script 18 (WHEELO)---------------
+
+:WOF
+script_name 'WOF'
+5@ = 0
+6@ = 0
+22@ = 0.0
+23@ = 0.0
+13@ = 0
+15@ = 0
+16@ = 0
+25@ = -1
+27@ = 0
+TIMERA = Math.RandomIntInRange(0, 30000)
+goto @WOF_438
+0@ = Object.Create(#WHEEL_O_FORTUNE, 0.0, 0.0, 0.0)
+4@ = Object.Create(#WHEEL_O_FORTUNE, 0.0, 0.0, 0.0)
+2@ = Object.Create(#WHEEL_O_FORTUNE, 0.0, 0.0, 0.0)
+1@ = Object.Create(#WHEEL_O_FORTUNE, 0.0, 0.0, 0.0)
+3@ = Object.Create(#WHEEL_O_FORTUNE, 0.0, 0.0, 0.0)
+7@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+$chip_set_1[0] = Object.Create(#CHIP_STACK07, 0.0, 0.0, 0.0)
+$chip_set_2[0] = Object.Create(#CHIP_STACK07, 0.0, 0.0, 0.0)
+$chip_set_3[0] = Object.Create(#CHIP_STACK07, 0.0, 0.0, 0.0)
+$chip_set_4[0] = Object.Create(#CHIP_STACK07, 0.0, 0.0, 0.0)
+$chip_set_5[0] = Object.Create(#CHIP_STACK07, 0.0, 0.0, 0.0)
+$chip_set_6[0] = Object.Create(#CHIP_STACK07, 0.0, 0.0, 0.0)
+$chip_set_7[0] = Object.Create(#CHIP_STACK07, 0.0, 0.0, 0.0)
+$chip_set_8[0] = Object.Create(#CHIP_STACK07, 0.0, 0.0, 0.0)
+$marker = Object.Create(#ROULETTE_MARKER, 0.0, 0.0, 0.0)
+
+:WOF_438
+wait 0
+if 
+  $iTerminateAllAmbience == 0
+goto_if_false @WOF_2376
+if 
+  Object.DoesExist(0@)
+goto_if_false @WOF_2362
+if 
+  Object.IsWithinBrainActivationRange(0@)
+goto_if_false @WOF_2348
+if 
+  $active_wheel == 0
+goto_if_false @WOF_2253
+if 
+  Player.IsPlaying($player1)
+goto_if_false @WOF_2239
+if 
+  5@ == 0
+goto_if_false @WOF_1066
+if 
+  6@ == 0
+goto_if_false @WOF_583
+Streaming.RequestModel(11)
+Streaming.RequestAnimation("CASINO")
+6@ += 1
+
+:WOF_583
+if 
+  6@ == 1
+goto_if_false @WOF_633
+if and
+  Streaming.HasModelLoaded(11)
+  Streaming.HasAnimationLoaded("CASINO")
+goto_if_false @WOF_633
+6@ += 1
+
+:WOF_633
+if 
+  6@ == 2
+goto_if_false @WOF_1029
+if 
+  not Char.DoesExist(7@)
+goto_if_false @WOF_781
+20@ = Object.GetHeading(0@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.5, -0.3974, 0.0)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+7@ = Char.Create(5, 11, $x, $y, $z)
+Char.SetDecisionMaker(7@, $iGlobalPedPanicDM)
+set_var_float_to_lvar_float $heading = 20@
+$heading += 180.0
+Char.SetHeading(7@, $heading)
+Char.FreezePosition(7@, True)
+Streaming.MarkModelAsNoLongerNeeded(11)
+
+:WOF_781
+if 
+  not Object.DoesExist(4@)
+goto_if_false @WOF_851
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0, 0.159, 0.0)
+4@ = Object.CreateNoOffset(#WHEEL_SUPPORT, $x, $y, $z)
+Object.SetHeading(4@, 20@)
+
+:WOF_851
+if 
+  not Object.DoesExist(2@)
+goto_if_false @WOF_952
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, -0.132, -1.049194, -0.834192)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+$z += 1.0
+2@ = Object.CreateNoOffset(#WHEEL_TABLE, $x, $y, $z)
+Object.SetHeading(2@, 20@)
+gosub @WOF_15505
+
+:WOF_952
+if 
+  not Object.DoesExist(1@)
+goto_if_false @WOF_1022
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0, 0.0, 1.05)
+1@ = Object.CreateNoOffset(#CLICKER, $x, $y, $z)
+Object.SetHeading(1@, 20@)
+
+:WOF_1022
+6@ += 1
+
+:WOF_1029
+if 
+  6@ == 3
+goto_if_false @WOF_1066
+TIMERA = Math.RandomIntInRange(0, 50000)
+5@ += 1
+
+:WOF_1066
+if 
+  5@ == 1
+goto_if_false @WOF_2189
+if 
+  not Char.IsDead(7@)
+goto_if_false @WOF_1309
+if 
+  TIMERA > 50000
+goto_if_false @WOF_1309
+Task.PlayAnim(7@, "WOF", "CASINO", 4.0, False, False, False, False, -1)
+10@ = Math.RandomIntInRange(0, 3)
+switch_start 10@ total_jumps 3 default_jump 0 @WOF_1295 jumps 0 @WOF_1226 1 @WOF_1249 2 @WOF_1272 -1 @WOF_1295 -1 @WOF_1295 -1 @WOF_1295 -1 @WOF_1295
+
+:WOF_1226
+Char.SetSayScript(7@, 43608, True, True, False)
+goto @WOF_1295
+
+:WOF_1249
+Char.SetSayScript(7@, 43609, True, True, False)
+goto @WOF_1295
+
+:WOF_1272
+Char.SetSayScript(7@, 43610, True, True, False)
+goto @WOF_1295
+
+:WOF_1295
+25@ = 0
+TIMERA = 0
+
+:WOF_1309
+if 
+  not Char.IsDead(7@)
+goto_if_false @WOF_2189
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, 0.0, -1.0, 0.0)
+if 
+  $iSetCasinoPanic == 0
+goto_if_false @WOF_2189
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $x, $y, $z, 0.5, 0.5, 2.0)
+goto_if_false @WOF_2162
+if 
+  Char.IsOnFoot($scplayer)
+goto_if_false @WOF_2155
+if 
+  15@ == 0
+goto_if_false @WOF_2131
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @WOF_1865
+10@ = 0
+8@ = Stat.GetFloat(81)
+if 
+  19@ == 1000000
+goto_if_false @WOF_1558
+if 
+  1000.0 > 8@
+goto_if_false @WOF_1551
+Text.PrintNow('GAMBSTA', 5000, 1)
+gosub @WOF_2390
+10@ = 1
+
+:WOF_1551
+goto @WOF_1784
+
+:WOF_1558
+if 
+  19@ == 100000
+goto_if_false @WOF_1637
+if 
+  100.0 > 8@
+goto_if_false @WOF_1630
+Text.PrintNow('GAMBSTA', 5000, 1)
+gosub @WOF_2390
+10@ = 1
+
+:WOF_1630
+goto @WOF_1784
+
+:WOF_1637
+if 
+  19@ == 10000
+goto_if_false @WOF_1714
+if 
+  10.0 > 8@
+goto_if_false @WOF_1707
+Text.PrintNow('GAMBSTA', 5000, 1)
+gosub @WOF_2390
+10@ = 1
+
+:WOF_1707
+goto @WOF_1784
+
+:WOF_1714
+if 
+  19@ == 1000
+goto_if_false @WOF_1784
+if 
+  1.0 > 8@
+goto_if_false @WOF_1784
+Text.PrintNow('GAMBSTA', 5000, 1)
+gosub @WOF_2390
+10@ = 1
+
+:WOF_1784
+if 
+  10@ == 0
+goto_if_false @WOF_1858
+if 
+  14@ == 1
+goto_if_false @WOF_1829
+Text.ClearHelp
+14@ = 0
+
+:WOF_1829
+5@ = 0
+6@ = 0
+set_var_int_to_lvar_int $active_wheel = 0@
+15@ = 1
+
+:WOF_1858
+goto @WOF_2124
+
+:WOF_1865
+if 
+  14@ == 0
+goto_if_false @WOF_2124
+if and
+  not Text.IsThisHelpMessageBeingDisplayed('SGPUNT')
+  not Text.IsThisHelpMessageBeingDisplayed('SGGAMB')
+  not Text.IsThisHelpMessageBeingDisplayed('SGPROF')
+  not Text.IsThisHelpMessageBeingDisplayed('SGHIRO')
+goto_if_false @WOF_2124
+switch_start 19@ total_jumps 5 default_jump 1 @WOF_2099 jumps 100 @WOF_2009 1000 @WOF_2027 10000 @WOF_2045 100000 @WOF_2063 1000000 @WOF_2081 -1 @WOF_2117 -1 @WOF_2117
+
+:WOF_2009
+Text.PrintHelpForever('WOF_06A')
+goto @WOF_2117
+
+:WOF_2027
+Text.PrintHelpForever('WOF_06B')
+goto @WOF_2117
+
+:WOF_2045
+Text.PrintHelpForever('WOF_06C')
+goto @WOF_2117
+
+:WOF_2063
+Text.PrintHelpForever('WOF_06D')
+goto @WOF_2117
+
+:WOF_2081
+Text.PrintHelpForever('WOF_06E')
+goto @WOF_2117
+
+:WOF_2099
+Text.PrintHelpForever('WOF_06')
+goto @WOF_2117
+
+:WOF_2117
+14@ = 1
+
+:WOF_2124
+goto @WOF_2155
+
+:WOF_2131
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @WOF_2155
+15@ = 0
+
+:WOF_2155
+goto @WOF_2189
+
+:WOF_2162
+if 
+  14@ == 1
+goto_if_false @WOF_2189
+Text.ClearHelp
+14@ = 0
+
+:WOF_2189
+if or
+  Object.IsOnScreen(0@)
+  Char.LocateAnyMeansObject2D($scplayer, 0@, 5.0, 5.0, False)
+goto_if_false @WOF_2232
+gosub @WOF_9892
+
+:WOF_2232
+goto @WOF_2246
+
+:WOF_2239
+gosub @WOF_2465
+
+:WOF_2246
+goto @WOF_2341
+
+:WOF_2253
+if 
+  is_int_var_equal_to_int_lvar $active_wheel == 0@
+goto_if_false @WOF_2341
+if 
+  Player.IsPlaying($player1)
+goto_if_false @WOF_2341
+if 
+  13@ == 0
+goto_if_false @WOF_2327
+gosub @WOF_9892
+gosub @WOF_2506
+goto @WOF_2341
+
+:WOF_2327
+gosub @WOF_11175
+$active_wheel = 0
+
+:WOF_2341
+goto @WOF_2355
+
+:WOF_2348
+gosub @WOF_2465
+
+:WOF_2355
+goto @WOF_2369
+
+:WOF_2362
+gosub @WOF_2465
+
+:WOF_2369
+goto @WOF_2383
+
+:WOF_2376
+gosub @WOF_2465
+
+:WOF_2383
+goto @WOF_438
+
+:WOF_2390
+10@ = 0
+10@ = Math.RandomIntInRange(0, 2)
+if 
+  10@ == 0
+goto_if_false @WOF_2447
+Char.SetSayScript(7@, 43651, True, True, False)
+goto @WOF_2463
+
+:WOF_2447
+Char.SetSayScript(7@, 43651, True, True, False)
+
+:WOF_2463
+return 
+
+:WOF_2465
+Char.MarkAsNoLongerNeeded(7@)
+Object.MarkAsNoLongerNeeded(4@)
+Object.MarkAsNoLongerNeeded(2@)
+Object.MarkAsNoLongerNeeded(1@)
+Streaming.RemoveAnimation("CASINO")
+$total_wof_tables -= 1
+terminate_this_script 
+return 
+
+:WOF_2506
+switch_start 5@ total_jumps 7 default_jump 0 @WOF_2667 jumps 0 @WOF_2569 1 @WOF_2583 2 @WOF_2597 3 @WOF_2611 4 @WOF_2625 5 @WOF_2639 6 @WOF_2653
+
+:WOF_2569
+gosub @WOF_2815
+goto @WOF_2667
+
+:WOF_2583
+gosub @WOF_4181
+goto @WOF_2667
+
+:WOF_2597
+gosub @WOF_7344
+goto @WOF_2667
+
+:WOF_2611
+gosub @WOF_7670
+goto @WOF_2667
+
+:WOF_2625
+gosub @WOF_7814
+goto @WOF_2667
+
+:WOF_2639
+gosub @WOF_7848
+goto @WOF_2667
+
+:WOF_2653
+gosub @WOF_9496
+goto @WOF_2667
+
+:WOF_2667
+gosub @WOF_13533
+if 
+  5@ == 1
+goto_if_false @WOF_2772
+if 
+  15@ == 0
+goto_if_false @WOF_2748
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @WOF_2741
+13@ = 1
+15@ = 1
+
+:WOF_2741
+goto @WOF_2772
+
+:WOF_2748
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @WOF_2772
+15@ = 0
+
+:WOF_2772
+if 
+  Char.IsDead(7@)
+goto_if_false @WOF_2813
+if 
+  5@ > 0
+goto_if_false @WOF_2813
+13@ = 1
+
+:WOF_2813
+return 
+
+:WOF_2815
+if 
+  6@ == 0
+goto_if_false @WOF_4076
+if 
+  Player.IsPlaying($player1)
+goto_if_false @WOF_4069
+Game.SetMinigameInProgress(True)
+Player.SetControl($player1, False)
+$x, $y, $z = Object.GetCoordinates(0@)
+Task.TurnCharToFaceCoord($scplayer, $x, $y, $z)
+Text.UseCommands(True)
+Hud.DisplayRadar(False)
+Streaming.RequestAnimation("CASINO")
+Text.ClearPrints
+10@ = 0
+
+:WOF_2915
+if 
+  6 > 10@
+goto_if_false @WOF_3053
+$chip_set_z = -0.118
+set_var_float_to_var_float $chip_set_1_z(10@,6f) = $chip_set_z
+set_var_float_to_var_float $chip_set_2_z(10@,6f) = $chip_set_z
+set_var_float_to_var_float $chip_set_3_z(10@,6f) = $chip_set_z
+set_var_float_to_var_float $chip_set_4_z(10@,6f) = $chip_set_z
+set_var_float_to_var_float $chip_set_5_z(10@,6f) = $chip_set_z
+set_var_float_to_var_float $chip_set_6_z(10@,6f) = $chip_set_z
+set_var_float_to_var_float $chip_set_7_z(10@,6f) = $chip_set_z
+set_var_float_to_var_float $chip_set_8_z(10@,6f) = $chip_set_z
+10@ += 1
+goto @WOF_2915
+
+:WOF_3053
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, -0.634, 0.253, $chip_set_1_z[0])
+$chip_set_1[0] = Object.CreateNoOffset(#CHIP_STACK07, $x, $y, $z)
+Object.SetHeading($chip_set_1[0], 20@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, -0.201, 0.253, $chip_set_1_z[1])
+$chip_set_1[1] = Object.CreateNoOffset(#CHIP_STACK07, $x, $y, $z)
+Object.SetHeading($chip_set_1[1], 20@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, 0.243, 0.253, $chip_set_1_z[2])
+$chip_set_1[2] = Object.CreateNoOffset(#CHIP_STACK07, $x, $y, $z)
+Object.SetHeading($chip_set_1[2], 20@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, -0.635, -0.106, $chip_set_1_z[3])
+$chip_set_1[3] = Object.CreateNoOffset(#CHIP_STACK07, $x, $y, $z)
+Object.SetHeading($chip_set_1[3], 20@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, -0.201, -0.106, $chip_set_1_z[4])
+$chip_set_1[4] = Object.CreateNoOffset(#CHIP_STACK07, $x, $y, $z)
+Object.SetHeading($chip_set_1[4], 20@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, 0.243, -0.106, $chip_set_1_z[5])
+$chip_set_1[5] = Object.CreateNoOffset(#CHIP_STACK07, $x, $y, $z)
+Object.SetHeading($chip_set_1[5], 20@)
+10@ = 0
+
+:WOF_3372
+if 
+  6 > 10@
+goto_if_false @WOF_3458
+$x = Object.GetOffsetInWorldCoords($y, $z, $chip_set_1(10@,6i), 0.07, 0.0, 0.0)
+$chip_set_2(10@,6i) = Object.CreateNoOffset(#CHIP_STACK08, $x, $y, $z)
+10@ += 1
+goto @WOF_3372
+
+:WOF_3458
+10@ = 0
+
+:WOF_3465
+if 
+  6 > 10@
+goto_if_false @WOF_3551
+$x = Object.GetOffsetInWorldCoords($y, $z, $chip_set_1(10@,6i), -0.07, 0.0, 0.0)
+$chip_set_3(10@,6i) = Object.CreateNoOffset(#CHIP_STACK09, $x, $y, $z)
+10@ += 1
+goto @WOF_3465
+
+:WOF_3551
+10@ = 0
+
+:WOF_3558
+if 
+  6 > 10@
+goto_if_false @WOF_3644
+$x = Object.GetOffsetInWorldCoords($y, $z, $chip_set_1(10@,6i), 0.07, 0.07, 0.0)
+$chip_set_4(10@,6i) = Object.CreateNoOffset(#CHIP_STACK10, $x, $y, $z)
+10@ += 1
+goto @WOF_3558
+
+:WOF_3644
+10@ = 0
+
+:WOF_3651
+if 
+  6 > 10@
+goto_if_false @WOF_3737
+$x = Object.GetOffsetInWorldCoords($y, $z, $chip_set_1(10@,6i), 0.07, -0.07, 0.0)
+$chip_set_5(10@,6i) = Object.CreateNoOffset(#CHIP_STACK11, $x, $y, $z)
+10@ += 1
+goto @WOF_3651
+
+:WOF_3737
+10@ = 0
+
+:WOF_3744
+if 
+  6 > 10@
+goto_if_false @WOF_3830
+$x = Object.GetOffsetInWorldCoords($y, $z, $chip_set_1(10@,6i), -0.07, 0.07, 0.0)
+$chip_set_6(10@,6i) = Object.CreateNoOffset(#CHIP_STACK12, $x, $y, $z)
+10@ += 1
+goto @WOF_3744
+
+:WOF_3830
+10@ = 0
+
+:WOF_3837
+if 
+  6 > 10@
+goto_if_false @WOF_3923
+$x = Object.GetOffsetInWorldCoords($y, $z, $chip_set_1(10@,6i), -0.07, -0.07, 0.0)
+$chip_set_7(10@,6i) = Object.CreateNoOffset(#CHIP_STACK13, $x, $y, $z)
+10@ += 1
+goto @WOF_3837
+
+:WOF_3923
+10@ = 0
+
+:WOF_3930
+if 
+  6 > 10@
+goto_if_false @WOF_4016
+$x = Object.GetOffsetInWorldCoords($y, $z, $chip_set_1(10@,6i), 0.0, 0.07, 0.0)
+$chip_set_8(10@,6i) = Object.CreateNoOffset(#CHIP_STACK14, $x, $y, $z)
+10@ += 1
+goto @WOF_3930
+
+:WOF_4016
+$winning_streak = 0
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, -0.635, 0.253, 0.041)
+$marker = Object.CreateNoOffset(#ROULETTE_MARKER, $x, $y, $z)
+
+:WOF_4069
+6@ += 1
+
+:WOF_4076
+if 
+  6@ == 1
+goto_if_false @WOF_4122
+if 
+  Streaming.HasAnimationLoaded("CASINO")
+goto_if_false @WOF_4122
+6@ += 1
+
+:WOF_4122
+if 
+  6@ == 2
+goto_if_false @WOF_4147
+6@ = 99
+
+:WOF_4147
+if 
+  6@ == 99
+goto_if_false @WOF_4179
+5@ += 1
+6@ = 0
+
+:WOF_4179
+return 
+
+:WOF_4181
+if 
+  6@ == 0
+goto_if_false @WOF_4648
+10@ = 0
+
+:WOF_4206
+if 
+  6 > 10@
+goto_if_false @WOF_4249
+$current_bet(10@,6i) = 0
+10@ += 1
+goto @WOF_4206
+
+:WOF_4249
+$total_bet = 0
+$current_bet_type = 0
+TIMERA = 0
+TIMERB = 0
+Text.PrintHelpForever('WOFHD01')
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, 0.0, -0.7, 0.0)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+Char.SetCoordinates($scplayer, $x, $y, $z)
+Char.SetHeading($scplayer, 20@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, -0.7734, -0.6326, 0.9882)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, -0.4684, -0.0634, 0.2246)
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+if 
+  Object.DoesExist($marker)
+goto_if_false @WOF_4473
+Object.SetVisible($marker, True)
+
+:WOF_4473
+23@ = 0.0
+24@ = 0.0
+$wof_initial_stake = 0
+$wof_refund = 0
+if 
+  not Char.IsDead(7@)
+goto_if_false @WOF_4641
+10@ = Math.RandomIntInRange(0, 2)
+switch_start 10@ total_jumps 2 default_jump 0 @WOF_4641 jumps 0 @WOF_4595 1 @WOF_4618 -1 @WOF_4641 -1 @WOF_4641 -1 @WOF_4641 -1 @WOF_4641 -1 @WOF_4641
+
+:WOF_4595
+Char.SetSayScript(7@, 43600, True, True, False)
+goto @WOF_4641
+
+:WOF_4618
+Char.SetSayScript(7@, 43601, True, True, False)
+goto @WOF_4641
+
+:WOF_4641
+6@ += 1
+
+:WOF_4648
+if 
+  6@ == 1
+goto_if_false @WOF_7308
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+if 
+  17@ <> 0
+goto_if_false @WOF_4820
+10@ = 0
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @WOF_4749
+10@ = 1
+
+:WOF_4749
+if or
+  $LStickY > 100
+  -100 > $LStickY
+  $LStickX > 100
+  -100 > $LStickX
+goto_if_false @WOF_4795
+10@ = 1
+
+:WOF_4795
+if 
+  10@ == 0
+goto_if_false @WOF_4820
+17@ = 0
+
+:WOF_4820
+set_lvar_int_to_lvar_int 10@ = 17@
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+  -100 > $LStickY
+goto_if_false @WOF_4859
+17@ = 1
+
+:WOF_4859
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+  $LStickY > 100
+goto_if_false @WOF_4890
+17@ = 2
+
+:WOF_4890
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+  -100 > $LStickX
+goto_if_false @WOF_4921
+17@ = 3
+
+:WOF_4921
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+  $LStickX > 100
+goto_if_false @WOF_4952
+17@ = 4
+
+:WOF_4952
+if 
+  not is_int_lvar_equal_to_int_lvar 17@ == 10@
+goto_if_false @WOF_5226
+if 
+  17@ == 4
+goto_if_false @WOF_5056
+if or
+  $current_bet_type == 0
+  $current_bet_type == 1
+  $current_bet_type == 3
+  $current_bet_type == 4
+goto_if_false @WOF_5042
+$current_bet_type += 1
+goto @WOF_5049
+
+:WOF_5042
+$current_bet_type += -2
+
+:WOF_5049
+TIMERA = 0
+
+:WOF_5056
+if 
+  17@ == 3
+goto_if_false @WOF_5141
+if or
+  $current_bet_type == 1
+  $current_bet_type == 2
+  $current_bet_type == 4
+  $current_bet_type == 5
+goto_if_false @WOF_5127
+$current_bet_type += -1
+goto @WOF_5134
+
+:WOF_5127
+$current_bet_type += 2
+
+:WOF_5134
+TIMERA = 0
+
+:WOF_5141
+if or
+  17@ == 1
+  17@ == 2
+goto_if_false @WOF_5226
+if or
+  $current_bet_type == 0
+  $current_bet_type == 1
+  $current_bet_type == 2
+goto_if_false @WOF_5212
+$current_bet_type += 3
+goto @WOF_5219
+
+:WOF_5212
+$current_bet_type += -3
+
+:WOF_5219
+TIMERA = 0
+
+:WOF_5226
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @WOF_5817
+if and
+  16@ <> 1
+  16@ <> -1
+goto_if_false @WOF_5766
+if 
+  $current_bet($current_bet_type,6i) >= 100000
+goto_if_false @WOF_5308
+$betting_step = 10000
+goto @WOF_5494
+
+:WOF_5308
+if 
+  $current_bet($current_bet_type,6i) >= 10000
+goto_if_false @WOF_5346
+$betting_step = 1000
+goto @WOF_5494
+
+:WOF_5346
+if 
+  $current_bet($current_bet_type,6i) >= 1000
+goto_if_false @WOF_5383
+$betting_step = 100
+goto @WOF_5494
+
+:WOF_5383
+if 
+  $current_bet($current_bet_type,6i) >= 100
+goto_if_false @WOF_5419
+$betting_step = 10
+goto @WOF_5494
+
+:WOF_5419
+if 
+  $current_bet($current_bet_type,6i) == 0
+goto_if_false @WOF_5487
+if 
+  $current_bet_type == 2
+goto_if_false @WOF_5473
+$betting_step = 5
+goto @WOF_5480
+
+:WOF_5473
+$betting_step = 2
+
+:WOF_5480
+goto @WOF_5494
+
+:WOF_5487
+$betting_step = 1
+
+:WOF_5494
+10@ = Player.StoreScore($player1)
+gosub @WOF_11541
+add_int_var_to_int_lvar 10@ += $casino_credit
+if 
+  is_int_var_greater_than_int_lvar $betting_step > 10@
+goto_if_false @WOF_5544
+set_var_int_to_lvar_int $betting_step = 10@
+
+:WOF_5544
+$total_bet = 0
+10@ = 0
+
+:WOF_5558
+if 
+  6 > 10@
+goto_if_false @WOF_5602
+add_int_var_to_int_var $total_bet += $current_bet(10@,6i)
+10@ += 1
+goto @WOF_5558
+
+:WOF_5602
+set_lvar_int_to_lvar_int 10@ = 19@
+sub_int_var_from_int_lvar 10@ -= $total_bet
+if 
+  is_int_var_greater_than_int_lvar $betting_step > 10@
+goto_if_false @WOF_5645
+set_var_int_to_lvar_int $betting_step = 10@
+
+:WOF_5645
+if 
+  0 > $betting_step
+goto_if_false @WOF_5670
+$betting_step *= -1
+
+:WOF_5670
+add_int_var_to_int_var $current_bet($current_bet_type,6i) += $betting_step
+add_int_var_to_int_var $wof_initial_stake += $betting_step
+add_int_var_to_int_var $wof_refund += $betting_step
+$betting_step *= -1
+Player.AddScore($player1, $betting_step)
+16@ += 1
+if 
+  16@ > 1
+goto_if_false @WOF_5752
+16@ = 2
+goto @WOF_5759
+
+:WOF_5752
+TIMERA = 0
+
+:WOF_5759
+goto @WOF_5810
+
+:WOF_5766
+if 
+  16@ == 1
+goto_if_false @WOF_5810
+if 
+  TIMERA > 500
+goto_if_false @WOF_5810
+16@ = 2
+
+:WOF_5810
+goto @WOF_6337
+
+:WOF_5817
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @WOF_6312
+if 
+  18@ <> 1
+goto_if_false @WOF_6279
+if 
+  $current_bet($current_bet_type,6i) > 100000
+goto_if_false @WOF_5892
+$betting_step = -10000
+goto @WOF_6010
+
+:WOF_5892
+if 
+  $current_bet($current_bet_type,6i) > 10000
+goto_if_false @WOF_5930
+$betting_step = -1000
+goto @WOF_6010
+
+:WOF_5930
+if 
+  $current_bet($current_bet_type,6i) > 1000
+goto_if_false @WOF_5967
+$betting_step = -100
+goto @WOF_6010
+
+:WOF_5967
+if 
+  $current_bet($current_bet_type,6i) > 100
+goto_if_false @WOF_6003
+$betting_step = -10
+goto @WOF_6010
+
+:WOF_6003
+$betting_step = -1
+
+:WOF_6010
+set_lvar_int_to_var_int 10@ = $current_bet($current_bet_type,6i)
+add_int_var_to_int_var $current_bet($current_bet_type,6i) += $betting_step
+if 
+  $current_bet_type == 2
+goto_if_false @WOF_6107
+if 
+  5 > $current_bet($current_bet_type,6i)
+goto_if_false @WOF_6100
+$current_bet($current_bet_type,6i) = 0
+set_var_int_to_lvar_int $betting_step = 10@
+$betting_step *= -1
+
+:WOF_6100
+goto @WOF_6155
+
+:WOF_6107
+if 
+  2 > $current_bet($current_bet_type,6i)
+goto_if_false @WOF_6155
+$current_bet($current_bet_type,6i) = 0
+set_var_int_to_lvar_int $betting_step = 10@
+$betting_step *= -1
+
+:WOF_6155
+if 
+  0 > $current_bet($current_bet_type,6i)
+goto_if_false @WOF_6195
+$current_bet($current_bet_type,6i) = 0
+goto @WOF_6226
+
+:WOF_6195
+add_int_var_to_int_var $wof_initial_stake += $betting_step
+add_int_var_to_int_var $wof_refund += $betting_step
+$betting_step *= -1
+Player.AddScore($player1, $betting_step)
+
+:WOF_6226
+18@ += 1
+if 
+  18@ > 1
+goto_if_false @WOF_6265
+18@ = 2
+goto @WOF_6272
+
+:WOF_6265
+TIMERA = 0
+
+:WOF_6272
+goto @WOF_6305
+
+:WOF_6279
+if 
+  TIMERA > 500
+goto_if_false @WOF_6305
+18@ = 2
+
+:WOF_6305
+goto @WOF_6337
+
+:WOF_6312
+if 
+  18@ <> 0
+goto_if_false @WOF_6337
+18@ = 0
+
+:WOF_6337
+$total_bet = 0
+10@ = 0
+
+:WOF_6351
+if 
+  6 > 10@
+goto_if_false @WOF_6395
+add_int_var_to_int_var $total_bet += $current_bet(10@,6i)
+10@ += 1
+goto @WOF_6351
+
+:WOF_6395
+if 
+  $current_bet_type == 0
+goto_if_false @WOF_6456
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, -0.635, 0.253, 0.041)
+Object.SetCoordinates($marker, $x, $y, $z)
+
+:WOF_6456
+if 
+  $current_bet_type == 1
+goto_if_false @WOF_6517
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, -0.201, 0.253, 0.041)
+Object.SetCoordinates($marker, $x, $y, $z)
+
+:WOF_6517
+if 
+  $current_bet_type == 2
+goto_if_false @WOF_6578
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, 0.243, 0.253, 0.041)
+Object.SetCoordinates($marker, $x, $y, $z)
+
+:WOF_6578
+if 
+  $current_bet_type == 3
+goto_if_false @WOF_6639
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, -0.635, -0.106, 0.041)
+Object.SetCoordinates($marker, $x, $y, $z)
+
+:WOF_6639
+if 
+  $current_bet_type == 4
+goto_if_false @WOF_6700
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, -0.201, -0.106, 0.041)
+Object.SetCoordinates($marker, $x, $y, $z)
+
+:WOF_6700
+if 
+  $current_bet_type == 5
+goto_if_false @WOF_6761
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, 0.243, -0.106, 0.041)
+Object.SetCoordinates($marker, $x, $y, $z)
+
+:WOF_6761
+switch_start $current_Language total_jumps 1 default_jump 1 @WOF_6864 jumps 3 @WOF_6824 -1 @WOF_6904 -1 @WOF_6904 -1 @WOF_6904 -1 @WOF_6904 -1 @WOF_6904 -1 @WOF_6904
+
+:WOF_6824
+Hud.DrawWindow(29.0, 220.0, 173.0, 409.0, 'BJ_TITL', 2)
+goto @WOF_6904
+
+:WOF_6864
+Hud.DrawWindow(29.0, 220.0, 157.0, 409.0, 'BJ_TITL', 2)
+goto @WOF_6904
+
+:WOF_6904
+gosub @WOF_11748
+Text.SetColor(134, 155, 184, 255)
+Text.Display(36.0, 240.0, 'WOF_04')
+gosub @WOF_11748
+Text.SetScale(0.6253, 2.7876)
+Text.DisplayWithNumber(36.0, 260.0, 'DOLLAR', $current_bet($current_bet_type,6i))
+gosub @WOF_11748
+Text.SetColor(134, 155, 184, 255)
+Text.Display(36.0, 290.0, 'WOF_05')
+gosub @WOF_11748
+Text.SetScale(0.6253, 2.7876)
+Text.DisplayWithNumber(36.0, 310.0, 'DOLLAR', $total_bet)
+gosub @WOF_11748
+Text.SetColor(134, 155, 184, 255)
+Text.Display(36.0, 340.0, 'BJ_03')
+gosub @WOF_11748
+Text.SetScale(0.6253, 2.7876)
+Text.DisplayWithNumber(36.0, 360.0, 'DOLLAR', 19@)
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @WOF_7283
+if 
+  16@ == 0
+goto_if_false @WOF_7276
+if 
+  $total_bet > 0
+goto_if_false @WOF_7269
+Stat.IncrementInt($total_bet, 35)
+cset_lvar_float_to_var_int 8@ = integer $total_bet
+8@ *= 0.001
+Stat.IncrementFloat(8@, 81)
+TIMERA = 0
+$wof_refund = 0
+6@ = 99
+
+:WOF_7269
+16@ = 1
+
+:WOF_7276
+goto @WOF_7308
+
+:WOF_7283
+if 
+  16@ <> 0
+goto_if_false @WOF_7308
+16@ = 0
+
+:WOF_7308
+if 
+  6@ == 99
+goto_if_false @WOF_7342
+Text.ClearHelp
+5@ += 1
+6@ = 0
+
+:WOF_7342
+return 
+
+:WOF_7344
+if 
+  not Char.IsDead(7@)
+goto_if_false @WOF_7668
+Task.PlayAnim(7@, "WOF", "CASINO", 4.0, False, False, False, False, -1)
+10@ = Math.RandomIntInRange(0, 3)
+switch_start 10@ total_jumps 3 default_jump 0 @WOF_7534 jumps 0 @WOF_7465 1 @WOF_7488 2 @WOF_7511 -1 @WOF_7534 -1 @WOF_7534 -1 @WOF_7534 -1 @WOF_7534
+
+:WOF_7465
+Char.SetSayScript(7@, 43608, True, True, False)
+goto @WOF_7534
+
+:WOF_7488
+Char.SetSayScript(7@, 43609, True, True, False)
+goto @WOF_7534
+
+:WOF_7511
+Char.SetSayScript(7@, 43610, True, True, False)
+goto @WOF_7534
+
+:WOF_7534
+25@ = 0
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, -1.3681, -2.0088, 0.7317)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x = Object.GetOffsetInWorldCoords($y, $z, 2@, -0.8154, -1.1754, 0.7401)
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+if 
+  Object.DoesExist($marker)
+goto_if_false @WOF_7661
+Object.SetVisible($marker, False)
+
+:WOF_7661
+5@ += 1
+
+:WOF_7668
+return 
+
+:WOF_7670
+if and
+  2.0 > 23@
+  25@ > 1
+goto_if_false @WOF_7812
+$x = Object.GetOffsetInWorldCoords($y, $z, 4@, -0.3059, -0.9385, 0.4225)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x = Object.GetOffsetInWorldCoords($y, $z, 4@, -0.0298, -0.0515, 0.7929)
+Camera.SetInterpolationParameters(0.0, 6000)
+Camera.PointAtPoint($x, $y, $z, SwitchType.Interpolation)
+5@ += 1
+
+:WOF_7812
+return 
+
+:WOF_7814
+if 
+  25@ == 4
+goto_if_false @WOF_7846
+6@ = 0
+5@ += 1
+
+:WOF_7846
+return 
+
+:WOF_7848
+if 
+  6@ == 0
+goto_if_false @WOF_9049
+set_lvar_float_to_lvar_float 8@ = 21@
+8@ -= 3.333333
+if 
+  0.0 > 8@
+goto_if_false @WOF_7915
+8@ += 360.0
+
+:WOF_7915
+8@ /= 6.666667
+cset_var_int_to_lvar_float $wheel_position = float 8@
+$wheel_position += 1
+gosub @WOF_11803
+10@ = 0
+$wof_winnings = 0
+if 
+  $wheel_position_value == 1
+goto_if_false @WOF_8012
+if 
+  $current_bet[2] > 0
+goto_if_false @WOF_8012
+$wof_winnings = 2
+mult_int_var_by_int_var $wof_winnings *= $current_bet[2]
+
+:WOF_8012
+if 
+  $wheel_position_value == 2
+goto_if_false @WOF_8063
+if 
+  $current_bet[4] > 0
+goto_if_false @WOF_8063
+$wof_winnings = 3
+mult_int_var_by_int_var $wof_winnings *= $current_bet[4]
+
+:WOF_8063
+if 
+  $wheel_position_value == 5
+goto_if_false @WOF_8114
+if 
+  $current_bet[1] > 0
+goto_if_false @WOF_8114
+$wof_winnings = 6
+mult_int_var_by_int_var $wof_winnings *= $current_bet[1]
+
+:WOF_8114
+if 
+  $wheel_position_value == 10
+goto_if_false @WOF_8165
+if 
+  $current_bet[3] > 0
+goto_if_false @WOF_8165
+$wof_winnings = 11
+mult_int_var_by_int_var $wof_winnings *= $current_bet[3]
+
+:WOF_8165
+if 
+  $wheel_position_value == 20
+goto_if_false @WOF_8216
+if 
+  $current_bet[0] > 0
+goto_if_false @WOF_8216
+$wof_winnings = 21
+mult_int_var_by_int_var $wof_winnings *= $current_bet[0]
+
+:WOF_8216
+if 
+  $wheel_position_value == 40
+goto_if_false @WOF_8267
+if 
+  $current_bet[5] > 0
+goto_if_false @WOF_8267
+$wof_winnings = 41
+mult_int_var_by_int_var $wof_winnings *= $current_bet[5]
+
+:WOF_8267
+TIMERA = 0
+set_lvar_int_to_var_int 10@ = $wof_winnings
+sub_int_var_from_int_lvar 10@ -= $wof_initial_stake
+Player.AddScore($player1, $wof_winnings)
+if 
+  10@ > 0
+goto_if_false @WOF_8330
+Stat.IncrementInt(10@, 37)
+goto @WOF_8330
+
+:WOF_8330
+start_new_script @CASHWIN 10@ 3000 
+Stat.ShowUpdateStats(False)
+if 
+  10@ > 0
+goto_if_false @WOF_9003
+Stat.RegisterInt(StatId.BiggestGamblingWin, 10@)
+cset_lvar_float_to_lvar_int 8@ = integer 10@
+cset_lvar_float_to_lvar_int 9@ = integer 19@
+div_float_lvar_by_float_lvar 8@ /= 9@
+$winning_streak += 1
+if 
+  3 > $winning_streak
+goto_if_false @WOF_8832
+if 
+  8@ > 0.9
+goto_if_false @WOF_8654
+if 
+  Player.IsPlaying($player1)
+goto_if_false @WOF_8647
+if 
+  not Char.IsDead(7@)
+goto_if_false @WOF_8647
+10@ = Math.RandomIntInRange(0, 5)
+switch_start 10@ total_jumps 4 default_jump 1 @WOF_8633 jumps 0 @WOF_8547 1 @WOF_8570 2 @WOF_8593 3 @WOF_8616 -1 @WOF_8647 -1 @WOF_8647 -1 @WOF_8647
+
+:WOF_8547
+Char.SetSayScript(7@, 43648, True, True, False)
+goto @WOF_8647
+
+:WOF_8570
+Char.SetSayScript(7@, 43649, True, True, False)
+goto @WOF_8647
+
+:WOF_8593
+Char.SetSayScript(7@, 43650, True, True, False)
+goto @WOF_8647
+
+:WOF_8616
+10@ = Char.SetSayContext($scplayer, 100)
+goto @WOF_8647
+
+:WOF_8633
+gosub @WOF_9227
+goto @WOF_8647
+
+:WOF_8647
+goto @WOF_8825
+
+:WOF_8654
+if 
+  not Char.IsDead(7@)
+goto_if_false @WOF_8825
+10@ = Math.RandomIntInRange(0, 10)
+switch_start 10@ total_jumps 3 default_jump 1 @WOF_8811 jumps 0 @WOF_8742 1 @WOF_8765 2 @WOF_8788 -1 @WOF_8825 -1 @WOF_8825 -1 @WOF_8825 -1 @WOF_8825
+
+:WOF_8742
+Char.SetSayScript(7@, 43648, True, True, False)
+goto @WOF_8825
+
+:WOF_8765
+Char.SetSayScript(7@, 43649, True, True, False)
+goto @WOF_8825
+
+:WOF_8788
+Char.SetSayScript(7@, 43650, True, True, False)
+goto @WOF_8825
+
+:WOF_8811
+gosub @WOF_9227
+goto @WOF_8825
+
+:WOF_8825
+goto @WOF_8996
+
+:WOF_8832
+if 
+  not Char.IsDead(7@)
+goto_if_false @WOF_8989
+10@ = Math.RandomIntInRange(0, 3)
+switch_start 10@ total_jumps 3 default_jump 0 @WOF_8989 jumps 0 @WOF_8920 1 @WOF_8943 2 @WOF_8966 -1 @WOF_8989 -1 @WOF_8989 -1 @WOF_8989 -1 @WOF_8989
+
+:WOF_8920
+Char.SetSayScript(7@, 43662, True, True, False)
+goto @WOF_8989
+
+:WOF_8943
+Char.SetSayScript(7@, 43663, True, True, False)
+goto @WOF_8989
+
+:WOF_8966
+Char.SetSayScript(7@, 43664, True, True, False)
+goto @WOF_8989
+
+:WOF_8989
+$winning_streak = 0
+
+:WOF_8996
+goto @WOF_9038
+
+:WOF_9003
+10@ *= -1
+Stat.RegisterInt(StatId.BiggestGamblingLoss, 10@)
+10@ *= -1
+gosub @WOF_9227
+$winning_streak = 0
+
+:WOF_9038
+Stat.ShowUpdateStats(True)
+6@ += 1
+
+:WOF_9049
+if 
+  6@ == 1
+goto_if_false @WOF_9100
+if 
+  3000 > TIMERA
+goto_if_false @WOF_9093
+goto @WOF_9100
+
+:WOF_9093
+6@ += 1
+
+:WOF_9100
+if 
+  6@ == 2
+goto_if_false @WOF_9193
+Text.PrintHelpForever('WOF_09')
+10@ = 0
+
+:WOF_9136
+if 
+  6 > 10@
+goto_if_false @WOF_9179
+$current_bet(10@,6i) = 0
+10@ += 1
+goto @WOF_9136
+
+:WOF_9179
+TIMERA = 0
+6@ = 99
+
+:WOF_9193
+if 
+  6@ == 99
+goto_if_false @WOF_9225
+TIMERA = 0
+5@ += 1
+
+:WOF_9225
+return 
+
+:WOF_9227
+if 
+  not Char.IsDead(7@)
+goto_if_false @WOF_9494
+switch_start $wheel_position_value total_jumps 6 default_jump 0 @WOF_9494 jumps 1 @WOF_9306 2 @WOF_9329 5 @WOF_9352 10 @WOF_9375 20 @WOF_9398 40 @WOF_9421 -1 @WOF_9494
+
+:WOF_9306
+Char.SetSayScript(7@, 43655, True, True, False)
+goto @WOF_9494
+
+:WOF_9329
+Char.SetSayScript(7@, 43656, True, True, False)
+goto @WOF_9494
+
+:WOF_9352
+Char.SetSayScript(7@, 43657, True, True, False)
+goto @WOF_9494
+
+:WOF_9375
+Char.SetSayScript(7@, 43658, True, True, False)
+goto @WOF_9494
+
+:WOF_9398
+Char.SetSayScript(7@, 43659, True, True, False)
+goto @WOF_9494
+
+:WOF_9421
+10@ = Math.RandomIntInRange(0, 2)
+if 
+  10@ == 0
+goto_if_false @WOF_9471
+Char.SetSayScript(7@, 43660, True, True, False)
+goto @WOF_9487
+
+:WOF_9471
+Char.SetSayScript(7@, 43661, True, True, False)
+
+:WOF_9487
+goto @WOF_9494
+
+:WOF_9494
+return 
+
+:WOF_9496
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @WOF_9538
+16@ = -1
+Text.ClearPrints
+Text.ClearHelp
+5@ = 1
+6@ = 0
+
+:WOF_9538
+return 
+$colour_r, $colour_g, $colour_b, $colour_a = Hud.GetColor(6)
+Text.SetColor($colour_r, $colour_g, $colour_b, $colour_a)
+Text.SetFont(Font.Pricedown)
+Text.SetEdge(3, 0, 0, 0, 255)
+Text.SetScale(1.2, 4.0)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+return 
+$colour_r, $colour_g, $colour_b, $colour_a = Hud.GetColor(0)
+Text.SetColor($colour_r, $colour_g, $colour_b, $colour_a)
+Text.SetFont(Font.Pricedown)
+Text.SetEdge(3, 0, 0, 0, 255)
+Text.SetScale(1.2, 4.0)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+return 
+$colour_r, $colour_g, $colour_b, $colour_a = Hud.GetColor(HudObject.Health)
+Text.SetColor($colour_r, $colour_g, $colour_b, $colour_a)
+Text.SetFont(Font.Pricedown)
+Text.SetEdge(3, 0, 0, 0, 255)
+Text.SetScale(1.2, 4.0)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+return 
+$colour_r, $colour_g, $colour_b, $colour_a = Hud.GetColor(HudObject.Health)
+Text.SetColor($colour_r, $colour_g, $colour_b, $colour_a)
+Text.SetFont(Font.Menu)
+Text.SetEdge(2, 0, 0, 0, 255)
+Text.SetScale(0.52, 1.45)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+return 
+
+:WOF_9892
+switch_start 25@ total_jumps 5 default_jump 0 @WOF_10591 jumps 0 @WOF_9955 1 @WOF_9991 2 @WOF_10050 3 @WOF_10220 4 @WOF_10584 -1 @WOF_10591 -1 @WOF_10591
+
+:WOF_9955
+24@ = Math.RandomFloatInRange(0.1, 0.15)
+TIMERB = 0
+25@ += 1
+goto @WOF_10591
+
+:WOF_9991
+add_timed_float_lvar_to_float_lvar 23@ += frame_delta_time * 24@
+add_timed_float_lvar_to_float_lvar 22@ += frame_delta_time * 23@
+if 
+  TIMERB > 500
+goto_if_false @WOF_10043
+24@ = -0.005
+25@ += 1
+
+:WOF_10043
+goto @WOF_10591
+
+:WOF_10050
+add_timed_float_lvar_to_float_lvar 23@ += frame_delta_time * 24@
+add_timed_float_lvar_to_float_lvar 22@ += frame_delta_time * 23@
+if 
+  0.3 > 23@
+goto_if_false @WOF_10213
+set_lvar_float_to_lvar_float 21@ = 22@
+set_lvar_float_to_lvar_float 8@ = 21@
+8@ /= 6.6667
+cset_lvar_int_to_lvar_float 10@ = float 8@
+cset_lvar_float_to_lvar_int 9@ = integer 10@
+sub_float_lvar_from_float_lvar 8@ -= 9@
+8@ += -1.0
+8@ *= -1.0
+8@ *= 6.666667
+add_float_lvar_to_float_lvar 21@ += 8@
+if 
+  21@ > 360.0
+goto_if_false @WOF_10206
+21@ += -360.0
+
+:WOF_10206
+25@ += 1
+
+:WOF_10213
+goto @WOF_10591
+
+:WOF_10220
+set_lvar_float_to_lvar_float 8@ = 22@
+sub_float_lvar_from_float_lvar 8@ -= 21@
+if 
+  -180.0 > 8@
+goto_if_false @WOF_10267
+8@ += 360.0
+
+:WOF_10267
+if 
+  8@ > 180.0
+goto_if_false @WOF_10298
+8@ += -360.0
+
+:WOF_10298
+if 
+  23@ > 0.01
+goto_if_false @WOF_10416
+if 
+  8@ > 3.333333
+goto_if_false @WOF_10409
+set_lvar_float_to_lvar_float 22@ = 21@
+22@ += 3.333333
+if 
+  22@ > 360.0
+goto_if_false @WOF_10389
+22@ += -360.0
+
+:WOF_10389
+23@ *= -1.0
+24@ *= -1.0
+
+:WOF_10409
+goto @WOF_10561
+
+:WOF_10416
+if 
+  -0.01 > 23@
+goto_if_false @WOF_10534
+if 
+  -3.333333 > 8@
+goto_if_false @WOF_10527
+set_lvar_float_to_lvar_float 22@ = 21@
+22@ -= 3.333333
+if 
+  0.0 > 22@
+goto_if_false @WOF_10507
+22@ += 360.0
+
+:WOF_10507
+23@ *= -1.0
+24@ *= -1.0
+
+:WOF_10527
+goto @WOF_10561
+
+:WOF_10534
+23@ = 0.0
+24@ = 0.0
+25@ += 1
+
+:WOF_10561
+add_timed_float_lvar_to_float_lvar 23@ += frame_delta_time * 24@
+add_timed_float_lvar_to_float_lvar 22@ += frame_delta_time * 23@
+goto @WOF_10591
+
+:WOF_10584
+goto @WOF_10591
+
+:WOF_10591
+if 
+  23@ <> 0.0
+goto_if_false @WOF_10690
+if 
+  22@ > 360.0
+goto_if_false @WOF_10643
+22@ += -360.0
+
+:WOF_10643
+if 
+  0.0 > 22@
+goto_if_false @WOF_10674
+22@ += 360.0
+
+:WOF_10674
+Object.SetRotation(0@, 0.0, 22@, 20@)
+
+:WOF_10690
+if 
+  Object.DoesExist(1@)
+goto_if_false @WOF_11173
+if 
+  23@ > 0.2
+goto_if_false @WOF_11095
+if 
+  0.8 > 23@
+goto_if_false @WOF_11032
+set_lvar_float_to_lvar_float 8@ = 22@
+8@ += 3.33333
+8@ /= 6.6667
+cset_lvar_int_to_lvar_float 10@ = float 8@
+cset_lvar_float_to_lvar_int 9@ = integer 10@
+sub_float_lvar_from_float_lvar 8@ -= 9@
+8@ += -1.0
+8@ *= -1.0
+8@ *= 6.666667
+if 
+  8@ > 5.0
+goto_if_false @WOF_10959
+8@ += -5.0
+8@ /= 1.66667
+8@ += -1.0
+8@ *= -1.0
+8@ *= 5.0
+set_lvar_float_to_lvar_float 26@ = 8@
+26@ *= -1.0
+if 
+  27@ <> 1
+goto_if_false @WOF_10952
+Audio.ReportMissionAudioEventAtObject(1@, 1027)
+27@ = 1
+
+:WOF_10952
+goto @WOF_11025
+
+:WOF_10959
+add_timed_val_to_float_lvar 26@ += frame_delta_time * 0.5
+if 
+  26@ > 0.0
+goto_if_false @WOF_11000
+26@ = 0.0
+
+:WOF_11000
+if 
+  27@ <> 0
+goto_if_false @WOF_11025
+27@ = 0
+
+:WOF_11025
+goto @WOF_11088
+
+:WOF_11032
+if 
+  26@ == -5.0
+goto_if_false @WOF_11078
+26@ = -2.0
+Audio.ReportMissionAudioEventAtObject(1@, 1027)
+goto @WOF_11088
+
+:WOF_11078
+26@ = -5.0
+
+:WOF_11088
+goto @WOF_11157
+
+:WOF_11095
+if 
+  0.0 > 26@
+goto_if_false @WOF_11157
+add_timed_val_to_float_lvar 26@ += frame_delta_time * 0.5
+if 
+  26@ > 0.0
+goto_if_false @WOF_11157
+26@ = 0.0
+
+:WOF_11157
+Object.SetRotation(1@, 0.0, 26@, 20@)
+
+:WOF_11173
+return 
+
+:WOF_11175
+Game.SetMinigameInProgress(False)
+13@ = 0
+5@ = 0
+6@ = 0
+if 
+  $wof_refund > 0
+goto_if_false @WOF_11226
+Player.AddScore($player1, $wof_refund)
+
+:WOF_11226
+$wof_refund = 0
+if 
+  not Char.IsDead(7@)
+goto_if_false @WOF_11315
+10@ = Math.RandomIntInRange(0, 2)
+if 
+  10@ == 0
+goto_if_false @WOF_11299
+Char.SetSayScript(7@, 43653, True, True, False)
+goto @WOF_11315
+
+:WOF_11299
+Char.SetSayScript(7@, 43654, True, True, False)
+
+:WOF_11315
+if 
+  Player.IsPlaying($player1)
+goto_if_false @WOF_11338
+Player.SetControl($player1, True)
+
+:WOF_11338
+terminate_all_scripts_with_this_name 'CASHWIN'
+Text.UseCommands(False)
+Hud.DisplayRadar(True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+10@ = 0
+
+:WOF_11368
+if 
+  6 > 10@
+goto_if_false @WOF_11472
+Object.Delete($chip_set_1(10@,6i))
+Object.Delete($chip_set_2(10@,6i))
+Object.Delete($chip_set_3(10@,6i))
+Object.Delete($chip_set_4(10@,6i))
+Object.Delete($chip_set_5(10@,6i))
+Object.Delete($chip_set_6(10@,6i))
+Object.Delete($chip_set_7(10@,6i))
+Object.Delete($chip_set_8(10@,6i))
+10@ += 1
+goto @WOF_11368
+
+:WOF_11472
+Object.Delete($marker)
+Menu.Delete($wof_betting_menu)
+if and
+  not Text.IsThisHelpMessageBeingDisplayed('SGPUNT')
+  not Text.IsThisHelpMessageBeingDisplayed('SGGAMB')
+  not Text.IsThisHelpMessageBeingDisplayed('SGPROF')
+  not Text.IsThisHelpMessageBeingDisplayed('SGHIRO')
+goto_if_false @WOF_11539
+Text.ClearHelp
+
+:WOF_11539
+return 
+
+:WOF_11541
+8@ = Stat.GetFloat(81)
+if 
+  1.0 > 8@
+goto_if_false @WOF_11583
+$casino_credit = 100
+goto @WOF_11703
+
+:WOF_11583
+if 
+  10.0 > 8@
+goto_if_false @WOF_11619
+$casino_credit = 1000
+goto @WOF_11703
+
+:WOF_11619
+if 
+  100.0 > 8@
+goto_if_false @WOF_11655
+$casino_credit = 10000
+goto @WOF_11703
+
+:WOF_11655
+if 
+  1000.0 > 8@
+goto_if_false @WOF_11693
+$casino_credit = 100000
+goto @WOF_11703
+
+:WOF_11693
+$casino_credit = 1000000
+
+:WOF_11703
+return 
+Text.SetScale(0.4487, 1.5974)
+Text.SetColor(128, 148, 178, 255)
+Text.SetJustify(True)
+Text.SetWrapX(2000.0)
+Text.SetProportional(True)
+return 
+
+:WOF_11748
+Text.SetColor(180, 180, 180, 255)
+Text.SetScale(0.4714, 2.5077)
+Text.SetRightJustify(False)
+Text.SetJustify(False)
+Text.SetCenter(False)
+Text.SetWrapX(640.0)
+Text.SetProportional(True)
+Text.SetBackground(False)
+return 
+
+:WOF_11803
+if 
+  $wheel_position == 1
+goto_if_false @WOF_11835
+$wheel_position_value = 40
+goto @WOF_13531
+
+:WOF_11835
+if 
+  $wheel_position == 2
+goto_if_false @WOF_11867
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_11867
+if 
+  $wheel_position == 3
+goto_if_false @WOF_11899
+$wheel_position_value = 10
+goto @WOF_13531
+
+:WOF_11899
+if 
+  $wheel_position == 4
+goto_if_false @WOF_11931
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_11931
+if 
+  $wheel_position == 5
+goto_if_false @WOF_11963
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_11963
+if 
+  $wheel_position == 6
+goto_if_false @WOF_11995
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_11995
+if 
+  $wheel_position == 7
+goto_if_false @WOF_12027
+$wheel_position_value = 5
+goto @WOF_13531
+
+:WOF_12027
+if 
+  $wheel_position == 8
+goto_if_false @WOF_12059
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_12059
+if 
+  $wheel_position == 9
+goto_if_false @WOF_12091
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_12091
+if 
+  $wheel_position == 10
+goto_if_false @WOF_12123
+$wheel_position_value = 10
+goto @WOF_13531
+
+:WOF_12123
+if 
+  $wheel_position == 11
+goto_if_false @WOF_12155
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_12155
+if 
+  $wheel_position == 12
+goto_if_false @WOF_12187
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_12187
+if 
+  $wheel_position == 13
+goto_if_false @WOF_12219
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_12219
+if 
+  $wheel_position == 14
+goto_if_false @WOF_12251
+$wheel_position_value = 5
+goto @WOF_13531
+
+:WOF_12251
+if 
+  $wheel_position == 15
+goto_if_false @WOF_12283
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_12283
+if 
+  $wheel_position == 16
+goto_if_false @WOF_12315
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_12315
+if 
+  $wheel_position == 17
+goto_if_false @WOF_12347
+$wheel_position_value = 20
+goto @WOF_13531
+
+:WOF_12347
+if 
+  $wheel_position == 18
+goto_if_false @WOF_12379
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_12379
+if 
+  $wheel_position == 19
+goto_if_false @WOF_12411
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_12411
+if 
+  $wheel_position == 20
+goto_if_false @WOF_12443
+$wheel_position_value = 5
+goto @WOF_13531
+
+:WOF_12443
+if 
+  $wheel_position == 21
+goto_if_false @WOF_12475
+$wheel_position_value = 10
+goto @WOF_13531
+
+:WOF_12475
+if 
+  $wheel_position == 22
+goto_if_false @WOF_12507
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_12507
+if 
+  $wheel_position == 23
+goto_if_false @WOF_12539
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_12539
+if 
+  $wheel_position == 24
+goto_if_false @WOF_12571
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_12571
+if 
+  $wheel_position == 25
+goto_if_false @WOF_12603
+$wheel_position_value = 5
+goto @WOF_13531
+
+:WOF_12603
+if 
+  $wheel_position == 26
+goto_if_false @WOF_12635
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_12635
+if 
+  $wheel_position == 27
+goto_if_false @WOF_12667
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_12667
+if 
+  $wheel_position == 28
+goto_if_false @WOF_12699
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_12699
+if 
+  $wheel_position == 29
+goto_if_false @WOF_12731
+$wheel_position_value = 40
+goto @WOF_13531
+
+:WOF_12731
+if 
+  $wheel_position == 30
+goto_if_false @WOF_12763
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_12763
+if 
+  $wheel_position == 31
+goto_if_false @WOF_12795
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_12795
+if 
+  $wheel_position == 32
+goto_if_false @WOF_12827
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_12827
+if 
+  $wheel_position == 33
+goto_if_false @WOF_12859
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_12859
+if 
+  $wheel_position == 34
+goto_if_false @WOF_12891
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_12891
+if 
+  $wheel_position == 35
+goto_if_false @WOF_12923
+$wheel_position_value = 5
+goto @WOF_13531
+
+:WOF_12923
+if 
+  $wheel_position == 36
+goto_if_false @WOF_12955
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_12955
+if 
+  $wheel_position == 37
+goto_if_false @WOF_12987
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_12987
+if 
+  $wheel_position == 38
+goto_if_false @WOF_13019
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_13019
+if 
+  $wheel_position == 39
+goto_if_false @WOF_13051
+$wheel_position_value = 5
+goto @WOF_13531
+
+:WOF_13051
+if 
+  $wheel_position == 40
+goto_if_false @WOF_13083
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_13083
+if 
+  $wheel_position == 41
+goto_if_false @WOF_13115
+$wheel_position_value = 20
+goto @WOF_13531
+
+:WOF_13115
+if 
+  $wheel_position == 42
+goto_if_false @WOF_13147
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_13147
+if 
+  $wheel_position == 43
+goto_if_false @WOF_13179
+$wheel_position_value = 10
+goto @WOF_13531
+
+:WOF_13179
+if 
+  $wheel_position == 44
+goto_if_false @WOF_13211
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_13211
+if 
+  $wheel_position == 45
+goto_if_false @WOF_13243
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_13243
+if 
+  $wheel_position == 46
+goto_if_false @WOF_13275
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_13275
+if 
+  $wheel_position == 47
+goto_if_false @WOF_13307
+$wheel_position_value = 5
+goto @WOF_13531
+
+:WOF_13307
+if 
+  $wheel_position == 48
+goto_if_false @WOF_13339
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_13339
+if 
+  $wheel_position == 49
+goto_if_false @WOF_13371
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_13371
+if 
+  $wheel_position == 50
+goto_if_false @WOF_13403
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_13403
+if 
+  $wheel_position == 51
+goto_if_false @WOF_13435
+$wheel_position_value = 5
+goto @WOF_13531
+
+:WOF_13435
+if 
+  $wheel_position == 52
+goto_if_false @WOF_13467
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_13467
+if 
+  $wheel_position == 53
+goto_if_false @WOF_13499
+$wheel_position_value = 2
+goto @WOF_13531
+
+:WOF_13499
+if 
+  $wheel_position == 54
+goto_if_false @WOF_13531
+$wheel_position_value = 1
+goto @WOF_13531
+
+:WOF_13531
+return 
+
+:WOF_13533
+if 
+is_ps2_keyboard_key_just_pressed 85
+goto_if_false @WOF_13575
+$chip_set_z += 0.001
+write_debug_with_float "CHIP_SET_Z" $chip_set_z
+
+:WOF_13575
+if 
+is_ps2_keyboard_key_just_pressed 74
+goto_if_false @WOF_13617
+$chip_set_z += -0.001
+write_debug_with_float "CHIP_SET_Z" $chip_set_z
+
+:WOF_13617
+10@ = 0
+
+:WOF_13624
+if 
+  6 > 10@
+goto_if_false @WOF_15503
+set_lvar_int_to_var_int 12@ = $current_bet(10@,6i)
+cset_lvar_float_to_lvar_int 8@ = integer 12@
+8@ /= 1.0
+if 
+  8@ > 10.0
+goto_if_false @WOF_13703
+8@ = 10.0
+
+:WOF_13703
+cset_lvar_int_to_lvar_float 11@ = float 8@
+cset_lvar_float_to_lvar_int 9@ = integer 11@
+9@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @WOF_13757
+9@ += 0.03
+
+:WOF_13757
+set_var_float_to_var_float $chip_set_1_z(10@,6f) = $chip_set_z
+add_float_lvar_to_float_var $chip_set_1_z(10@,6f) += 9@
+11@ *= -1
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($chip_set_1(10@,6i))
+goto_if_false @WOF_13883
+$x, $y, $z = Object.GetCoordinates($chip_set_1(10@,6i))
+8@ = Object.GetOffsetInWorldCoords(8@, $z, 2@, 0.0, 0.0, $chip_set_1_z(10@,6f))
+Object.SetCoordinates($chip_set_1(10@,6i), $x, $y, $z)
+
+:WOF_13883
+cset_lvar_float_to_lvar_int 8@ = integer 12@
+8@ /= 5.0
+if 
+  8@ > 10.0
+goto_if_false @WOF_13932
+8@ = 10.0
+
+:WOF_13932
+cset_lvar_int_to_lvar_float 11@ = float 8@
+cset_lvar_float_to_lvar_int 9@ = integer 11@
+9@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @WOF_13986
+9@ += 0.03
+
+:WOF_13986
+set_var_float_to_var_float $chip_set_2_z(10@,6f) = $chip_set_z
+add_float_lvar_to_float_var $chip_set_2_z(10@,6f) += 9@
+11@ *= -5
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($chip_set_2(10@,6i))
+goto_if_false @WOF_14112
+$x, $y, $z = Object.GetCoordinates($chip_set_2(10@,6i))
+8@ = Object.GetOffsetInWorldCoords(8@, $z, 2@, 0.0, 0.0, $chip_set_2_z(10@,6f))
+Object.SetCoordinates($chip_set_2(10@,6i), $x, $y, $z)
+
+:WOF_14112
+cset_lvar_float_to_lvar_int 8@ = integer 12@
+8@ /= 10.0
+if 
+  8@ > 10.0
+goto_if_false @WOF_14161
+8@ = 10.0
+
+:WOF_14161
+cset_lvar_int_to_lvar_float 11@ = float 8@
+cset_lvar_float_to_lvar_int 9@ = integer 11@
+9@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @WOF_14215
+9@ += 0.03
+
+:WOF_14215
+set_var_float_to_var_float $chip_set_3_z(10@,6f) = $chip_set_z
+add_float_lvar_to_float_var $chip_set_3_z(10@,6f) += 9@
+11@ *= -10
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($chip_set_3(10@,6i))
+goto_if_false @WOF_14341
+$x, $y, $z = Object.GetCoordinates($chip_set_3(10@,6i))
+8@ = Object.GetOffsetInWorldCoords(8@, $z, 2@, 0.0, 0.0, $chip_set_3_z(10@,6f))
+Object.SetCoordinates($chip_set_3(10@,6i), $x, $y, $z)
+
+:WOF_14341
+cset_lvar_float_to_lvar_int 8@ = integer 12@
+8@ /= 50.0
+if 
+  8@ > 10.0
+goto_if_false @WOF_14390
+8@ = 10.0
+
+:WOF_14390
+cset_lvar_int_to_lvar_float 11@ = float 8@
+cset_lvar_float_to_lvar_int 9@ = integer 11@
+9@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @WOF_14444
+9@ += 0.03
+
+:WOF_14444
+set_var_float_to_var_float $chip_set_4_z(10@,6f) = $chip_set_z
+add_float_lvar_to_float_var $chip_set_4_z(10@,6f) += 9@
+11@ *= -50
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($chip_set_4(10@,6i))
+goto_if_false @WOF_14570
+$x, $y, $z = Object.GetCoordinates($chip_set_4(10@,6i))
+8@ = Object.GetOffsetInWorldCoords(8@, $z, 2@, 0.0, 0.0, $chip_set_4_z(10@,6f))
+Object.SetCoordinates($chip_set_4(10@,6i), $x, $y, $z)
+
+:WOF_14570
+cset_lvar_float_to_lvar_int 8@ = integer 12@
+8@ /= 100.0
+if 
+  8@ > 10.0
+goto_if_false @WOF_14619
+8@ = 10.0
+
+:WOF_14619
+cset_lvar_int_to_lvar_float 11@ = float 8@
+cset_lvar_float_to_lvar_int 9@ = integer 11@
+9@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @WOF_14673
+9@ += 0.03
+
+:WOF_14673
+set_var_float_to_var_float $chip_set_5_z(10@,6f) = $chip_set_z
+add_float_lvar_to_float_var $chip_set_5_z(10@,6f) += 9@
+11@ *= -100
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($chip_set_5(10@,6i))
+goto_if_false @WOF_14799
+$x, $y, $z = Object.GetCoordinates($chip_set_5(10@,6i))
+8@ = Object.GetOffsetInWorldCoords(8@, $z, 2@, 0.0, 0.0, $chip_set_5_z(10@,6f))
+Object.SetCoordinates($chip_set_5(10@,6i), $x, $y, $z)
+
+:WOF_14799
+cset_lvar_float_to_lvar_int 8@ = integer 12@
+8@ /= 200.0
+if 
+  8@ > 10.0
+goto_if_false @WOF_14848
+8@ = 10.0
+
+:WOF_14848
+cset_lvar_int_to_lvar_float 11@ = float 8@
+cset_lvar_float_to_lvar_int 9@ = integer 11@
+9@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @WOF_14902
+9@ += 0.03
+
+:WOF_14902
+set_var_float_to_var_float $chip_set_6_z(10@,6f) = $chip_set_z
+add_float_lvar_to_float_var $chip_set_6_z(10@,6f) += 9@
+11@ *= -200
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($chip_set_6(10@,6i))
+goto_if_false @WOF_15029
+$x, $y, $z = Object.GetCoordinates($chip_set_6(10@,6i))
+8@ = Object.GetOffsetInWorldCoords(8@, $z, 2@, 0.0, 0.0, $chip_set_6_z(10@,6f))
+Object.SetCoordinates($chip_set_6(10@,6i), $x, $y, $z)
+
+:WOF_15029
+cset_lvar_float_to_lvar_int 8@ = integer 12@
+8@ /= 500.0
+if 
+  8@ > 10.0
+goto_if_false @WOF_15078
+8@ = 10.0
+
+:WOF_15078
+cset_lvar_int_to_lvar_float 11@ = float 8@
+cset_lvar_float_to_lvar_int 9@ = integer 11@
+9@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @WOF_15132
+9@ += 0.03
+
+:WOF_15132
+set_var_float_to_var_float $chip_set_7_z(10@,6f) = $chip_set_z
+add_float_lvar_to_float_var $chip_set_7_z(10@,6f) += 9@
+11@ *= -500
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($chip_set_7(10@,6i))
+goto_if_false @WOF_15259
+$x, $y, $z = Object.GetCoordinates($chip_set_7(10@,6i))
+8@ = Object.GetOffsetInWorldCoords(8@, $z, 2@, 0.0, 0.0, $chip_set_7_z(10@,6f))
+Object.SetCoordinates($chip_set_7(10@,6i), $x, $y, $z)
+
+:WOF_15259
+cset_lvar_float_to_lvar_int 8@ = integer 12@
+8@ /= 1000.0
+if 
+  8@ > 10.0
+goto_if_false @WOF_15308
+8@ = 10.0
+
+:WOF_15308
+cset_lvar_int_to_lvar_float 11@ = float 8@
+cset_lvar_float_to_lvar_int 9@ = integer 11@
+9@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @WOF_15362
+9@ += 0.03
+
+:WOF_15362
+set_var_float_to_var_float $chip_set_8_z(10@,6f) = $chip_set_z
+add_float_lvar_to_float_var $chip_set_8_z(10@,6f) += 9@
+11@ *= -1000
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($chip_set_8(10@,6i))
+goto_if_false @WOF_15489
+$x, $y, $z = Object.GetCoordinates($chip_set_8(10@,6i))
+8@ = Object.GetOffsetInWorldCoords(8@, $z, 2@, 0.0, 0.0, $chip_set_8_z(10@,6f))
+Object.SetCoordinates($chip_set_8(10@,6i), $x, $y, $z)
+
+:WOF_15489
+10@ += 1
+goto @WOF_13624
+
+:WOF_15503
+return 
+
+:WOF_15505
+if 
+  Object.DoesExist(0@)
+goto_if_false @WOF_15865
+8@ = Stat.GetFloat(81)
+if 
+  $total_wof_tables == 0
+goto_if_false @WOF_15715
+if 
+  1.0 > 8@
+goto_if_false @WOF_15581
+19@ = 100
+goto @WOF_15701
+
+:WOF_15581
+if 
+  10.0 > 8@
+goto_if_false @WOF_15617
+19@ = 1000
+goto @WOF_15701
+
+:WOF_15617
+if 
+  100.0 > 8@
+goto_if_false @WOF_15653
+19@ = 10000
+goto @WOF_15701
+
+:WOF_15653
+if 
+  1000.0 > 8@
+goto_if_false @WOF_15691
+19@ = 100000
+goto @WOF_15701
+
+:WOF_15691
+19@ = 1000000
+
+:WOF_15701
+$total_wof_tables += 1
+goto @WOF_15865
+
+:WOF_15715
+10@ = Math.RandomIntInRange(0, 5)
+switch_start 10@ total_jumps 5 default_jump 0 @WOF_15865 jumps 0 @WOF_15787 1 @WOF_15801 2 @WOF_15816 3 @WOF_15831 4 @WOF_15848 -1 @WOF_15865 -1 @WOF_15865
+
+:WOF_15787
+19@ = 100
+goto @WOF_15865
+
+:WOF_15801
+19@ = 1000
+goto @WOF_15865
+
+:WOF_15816
+19@ = 10000
+goto @WOF_15865
+
+:WOF_15831
+19@ = 100000
+goto @WOF_15865
+
+:WOF_15848
+19@ = 1000000
+goto @WOF_15865
+
+:WOF_15865
+return 
+$x, $y, $z = Camera.GetDebugCoordinates()
+if 
+  Object.DoesExist(4@)
+goto_if_false @WOF_15916
+$wof_x2, $wof_y2, $wof_z2 = Object.GetCoordinates(4@)
+$heading = Object.GetHeading(4@)
+
+:WOF_15916
+$heading *= -1.0
+8@ = Math.Cos($heading)
+9@ = Math.Sin($heading)
+set_var_float_to_var_float $wof_vec_x = $x
+sub_float_var_from_float_var $wof_vec_x -= $wof_x2
+set_var_float_to_var_float $wof_vec_y = $y
+sub_float_var_from_float_var $wof_vec_y -= $wof_y2
+set_var_float_to_var_float $wof_vec_z = $z
+sub_float_var_from_float_var $wof_vec_z -= $wof_z2
+set_var_float_to_var_float $wof_vec2_x = $wof_vec_x
+mult_float_var_by_float_lvar $wof_vec2_x *= 8@
+set_var_float_to_var_float $wof_temp_float3 = $wof_vec_y
+mult_float_var_by_float_lvar $wof_temp_float3 *= 9@
+sub_float_var_from_float_var $wof_vec2_x -= $wof_temp_float3
+set_var_float_to_var_float $wof_vec2_y = $wof_vec_x
+mult_float_var_by_float_lvar $wof_vec2_y *= 9@
+set_var_float_to_var_float $wof_temp_float3 = $wof_vec_y
+mult_float_var_by_float_lvar $wof_temp_float3 *= 8@
+add_float_var_to_float_var $wof_vec2_y += $wof_temp_float3
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("FIXED_CAMERA_POSITION - OFFSET FROM TABLE =  ESTINATION) = ")
+save_float_to_debug_file $wof_vec2_x
+save_float_to_debug_file $wof_vec2_y
+save_float_to_debug_file $wof_vec_z
+$x, $y, $z = Camera.GetDebugPointAt()
+set_var_float_to_var_float $wof_vec_x = $x
+sub_float_var_from_float_var $wof_vec_x -= $wof_x2
+set_var_float_to_var_float $wof_vec_y = $y
+sub_float_var_from_float_var $wof_vec_y -= $wof_y2
+set_var_float_to_var_float $wof_vec_z = $z
+sub_float_var_from_float_var $wof_vec_z -= $wof_z2
+set_var_float_to_var_float $wof_vec2_x = $wof_vec_x
+mult_float_var_by_float_lvar $wof_vec2_x *= 8@
+set_var_float_to_var_float $wof_temp_float3 = $wof_vec_y
+mult_float_var_by_float_lvar $wof_temp_float3 *= 9@
+sub_float_var_from_float_var $wof_vec2_x -= $wof_temp_float3
+set_var_float_to_var_float $wof_vec2_y = $wof_vec_x
+mult_float_var_by_float_lvar $wof_vec2_y *= 9@
+set_var_float_to_var_float $wof_temp_float3 = $wof_vec_y
+mult_float_var_by_float_lvar $wof_temp_float3 *= 8@
+add_float_var_to_float_var $wof_vec2_y += $wof_temp_float3
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CAMERA_POINT_AT - OFFSET FROM TABLE = BLE =  ESTINATION) = ")
+save_float_to_debug_file $wof_vec2_x
+save_float_to_debug_file $wof_vec2_y
+save_float_to_debug_file $wof_vec_z
+return 
+terminate_this_script 
+

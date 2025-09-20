@@ -1,0 +1,32 @@
+:BUY_PRO
+script_name 'BUY_PRO'
+
+:BUY_PRO_11
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BUY_PRO_145
+if 
+  $onmission == 0
+goto_if_false @BUY_PRO_145
+if 
+  $already_bought_house($save_house_index,32i) == 0
+goto_if_false @BUY_PRO_145
+if 
+  Pickup.HasBeenCollected($save_housepickup($save_house_index,32i))
+goto_if_false @BUY_PRO_145
+set_var_int_to_var_int $buying_property_switch = $prorerty_switch($save_house_index,32i)
+Audio.ReportMissionAudioEventAtPosition($propertyX($save_house_index,32f), $propertyY($save_house_index,32f), $propertyZ($save_house_index,32f), 1149)
+Mission.LoadAndLaunchInternal(134) // Buy Properties Mission
+$already_bought_house($save_house_index,32i) = 1
+
+:BUY_PRO_145
+$save_house_index += 1
+if 
+  $save_house_index >= 32
+goto_if_false @BUY_PRO_177
+$save_house_index = 3
+
+:BUY_PRO_177
+goto @BUY_PRO_11
+

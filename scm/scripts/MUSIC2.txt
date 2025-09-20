@@ -1,0 +1,1435 @@
+//-------------Mission 32---------------
+// Originally: Madd Dogg's Rhymes
+
+:MUSIC2
+script_name 'MUSIC2'
+gosub @MUSIC2_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @MUSIC2_38
+gosub @MUSIC2_10509
+
+:MUSIC2_38
+gosub @MUSIC2_10582
+terminate_this_script 
+
+:MUSIC2_47
+$onmission = 1
+Stat.RegisterMissionGiven
+Text.LoadMissionText('STRAP2')
+Camera.SetFadingColor(0, 0, 0)
+Streaming.SetAreaVisible(10)
+Camera.DoFade(0, 2000)
+
+:MUSIC2_86
+if 
+  Camera.GetFadingStatus
+goto_if_false @MUSIC2_110
+wait 0
+goto @MUSIC2_86
+
+:MUSIC2_110
+Cutscene.Load('STRAP2A')
+
+:MUSIC2_121
+if 
+  not Cutscene.HasLoaded
+goto_if_false @MUSIC2_145
+wait 0
+goto @MUSIC2_121
+
+:MUSIC2_145
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:MUSIC2_154
+if 
+  not Cutscene.HasFinished
+goto_if_false @MUSIC2_178
+wait 0
+goto @MUSIC2_154
+
+:MUSIC2_178
+Cutscene.Clear
+Camera.DoFade(0, Fade.Out)
+
+:MUSIC2_186
+if 
+  Camera.GetFadingStatus
+goto_if_false @MUSIC2_210
+wait 0
+goto @MUSIC2_186
+
+:MUSIC2_210
+Streaming.SetAreaVisible(0)
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+Streaming.RequestModel(579)
+Streaming.RequestModel(580)
+Streaming.RequestModel(#KMB_RHYMESBOOK)
+Streaming.RequestModel(#CJ_JUICE_CAN)
+Streaming.RequestModel(347)
+Streaming.RequestModel(510)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.LoadMissionAudio(21803, 1)
+Audio.LoadMissionAudio(21804, 2)
+Streaming.LoadAllModelsNow
+
+:MUSIC2_281
+if or
+  not Streaming.HasModelLoaded(579)
+  not Streaming.HasModelLoaded(580)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @MUSIC2_321
+wait 0
+goto @MUSIC2_281
+
+:MUSIC2_321
+if or
+  not Streaming.HasModelLoaded(#KMB_RHYMESBOOK)
+  not Streaming.HasModelLoaded(#CJ_JUICE_CAN)
+  not Streaming.HasModelLoaded(347)
+  not Streaming.HasModelLoaded(510)
+goto_if_false @MUSIC2_363
+wait 0
+goto @MUSIC2_321
+
+:MUSIC2_363
+61@ = Blip.AddForCoord(1239.032, -741.106, 94.76)
+Char.SetCoordinates($scplayer, 790.0, -1626.0, 12.5)
+Streaming.LoadScene(790.0, -1626.0, 12.5)
+Camera.SetBehindPlayer
+Char.SetHeading($scplayer, 356.0)
+45@ = DecisionMakerChar.Load(DecisionMakerType.Steal)
+46@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Player1)
+Game.SetRelationship(RelationshipType.Respect, PedType.Mission1, PedType.Mission1)
+World.SwitchEntryExit('MDDOGS', True)
+Player.SetGroupRecruitment($player1, False)
+Game.SetScriptLimitToGangSize(0)
+Camera.DoFade(1, 1500)
+70@ = 0
+71@ = 0
+72@ = 0
+73@ = 0
+74@ = 0
+75@ = 0
+76@ = 0
+77@ = 0
+78@ = 0
+79@ = 0
+80@ = 0
+81@ = 0
+82@ = 0
+83@ = 0
+84@ = 0
+85@ = 0
+86@ = 0
+87@ = 0
+88@ = 0
+89@ = 0
+90@ = 0
+91@ = 0
+92@ = 0
+93@ = 0
+94@ = 0
+95@ = 0
+96@ = 0
+97@ = 0
+Text.PrintNow('STP2_1', 10000, 1)
+if 
+  $tripskip_s2flag > 0
+goto_if_false @MUSIC2_745
+Skip.SetUp(1242.659, -748.503, 94.33, 191.586)
+
+:MUSIC2_745
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @MUSIC2_771
+goto @MUSIC2_10527
+
+:MUSIC2_771
+if 
+  70@ == 0
+goto_if_false @MUSIC2_973
+if 
+  Char.IsInAngledArea2D($scplayer, 1222.799, -735.563, 1348.407, -759.322, -100.0, False)
+goto_if_false @MUSIC2_973
+if 
+  $tripskip_s2flag == 0
+goto_if_false @MUSIC2_857
+$tripskip_s2flag = 1
+
+:MUSIC2_857
+Skip.Clear
+Blip.Remove(61@)
+61@ = Blip.AddForCoord(1298.66, -795.58, 83.84)
+Text.PrintNow('STP2_2', 5000, 1)
+35@ = Car.Create(579, 1243.154, -805.76, 83.188)
+Car.SetHeading(35@, 1.533)
+36@ = Car.Create(580, 1255.024, -804.587, 83.934)
+Car.SetHeading(36@, 182.9)
+70@ = 1
+
+:MUSIC2_973
+if 
+  70@ == 1
+goto_if_false @MUSIC2_1832
+34@ = Char.GetAreaVisible($scplayer)
+if 
+  34@ == 5
+goto_if_false @MUSIC2_1832
+Game.SetWantedMultiplier(0.0)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(1256.623, -801.0125, 1084.091, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1255.93, -801.7316, 1084.044, SwitchType.JumpCut)
+Char.SetCoordinates($scplayer, 1299.352, -792.6416, 1083.008)
+Char.SetHeading($scplayer, 0.0)
+World.ClearArea(0, 1299.352, -792.6416, 200.0, 200.0)
+Streaming.RequestAnimation("CRIB")
+Streaming.RequestAnimation("VENDING")
+Streaming.RequestModel(335)
+Streaming.RequestModel(24)
+Streaming.RequestModel(25)
+Streaming.RequestModel(352)
+Audio.LoadMissionAudio(23600, 3)
+Streaming.LoadAllModelsNow
+Streaming.LoadScene(1256.623, -801.0125, 1084.091)
+
+:MUSIC2_1196
+if or
+  not Streaming.HasAnimationLoaded("CRIB")
+  not Streaming.HasAnimationLoaded("VENDING")
+  not Streaming.HasModelLoaded(335)
+  not Streaming.HasModelLoaded(24)
+Streaming.RequestModel(25)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @MUSIC2_1254
+wait 0
+goto @MUSIC2_1196
+
+:MUSIC2_1254
+Player.SetControl($player1, False)
+Hud.SetRadarZoom(100)
+Blip.Remove(61@)
+37@ = Char.Create(24, 24, 1301.98, -785.31, 1083.05)
+Char.SetHasUsedEntryExit(37@, 1298.78, -798.2, 1.0)
+Char.SetFollowNodeThresholdDistance(37@, 2.0)
+Char.SetHeading(37@, 358.83)
+Char.SetDecisionMaker(37@, 45@)
+62@ = Blip.AddForChar(37@)
+Blip.ChangeDisplay(62@, BlipDisplay.BlipOnly)
+Char.GiveWeapon(37@, WeaponType.MicroUzi, 9999)
+Char.SetAccuracy(37@, 90)
+Char.SetDropsWeaponsWhenDead(37@, False)
+Char.SetAreaVisible(37@, 5)
+Text.PrintNow('STP2_3', 7000, 1)
+wait 2000
+skip_cutscene_start_internal @MUSIC2_1701
+wait 1000
+38@ = Char.Create(24, 25, 1249.063, -769.8262, 1083.023)
+Char.SetHasUsedEntryExit(38@, 1298.78, -798.2, 1.0)
+Char.SetAreaVisible(38@, 5)
+Char.SetHeading(38@, 270.552)
+Char.SetFollowNodeThresholdDistance(38@, 5.0)
+Char.SetDecisionMaker(38@, 45@)
+wait 3500
+if 
+  not Char.IsDead(38@)
+goto_if_false @MUSIC2_1545
+Task.GoStraightToCoord(38@, 1262.056, -769.9772, 1083.988, MoveState.Walk, -1)
+
+:MUSIC2_1545
+wait 500
+Camera.SetFixedPosition(1260.744, -769.5749, 1085.258, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1259.781, -769.5841, 1084.988, SwitchType.JumpCut)
+Text.PrintNow('STP2_39', 7000, 1)
+wait 7000
+Camera.SetNearClip(0.1)
+Camera.SetFixedPosition(1299.504, -793.3958, 1084.693, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1299.589, -792.3994, 1084.685, SwitchType.JumpCut)
+Text.PrintNow('STP2_5', 7000, 1)
+wait 7000
+
+:MUSIC2_1701
+skip_cutscene_end 
+Char.Delete(38@)
+59@ = Pickup.Create(#KMB_RHYMESBOOK, 3, 1256.871, -801.048, 1084.063)
+61@ = Blip.AddForPickup(59@)
+Blip.SetEntryExit(61@, 1298.78, -798.2, 1.0)
+World.DisableAllEntryExits(True)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Char.GiveWeapon($scplayer, WeaponType.Knife, 1)
+Pad.SetPlayerCycleWeaponButton($player1, False)
+Car.Delete(35@)
+Streaming.MarkModelAsNoLongerNeeded(579)
+Streaming.MarkModelAsNoLongerNeeded(580)
+Car.Delete(36@)
+Text.ClearPrints
+TIMERA = 0
+70@ = 2
+
+:MUSIC2_1832
+if 
+  85@ == 0
+goto_if_false @MUSIC2_6610
+if 
+  70@ == 2
+goto_if_false @MUSIC2_6610
+if 
+  71@ == 0
+goto_if_false @MUSIC2_1922
+Text.PrintHelp('STP2_7')
+Hud.FlashObject(HudObject.Radar)
+TIMERA = 0
+TIMERB = 0
+71@ = 1
+
+:MUSIC2_1922
+if 
+  79@ == 0
+goto_if_false @MUSIC2_1970
+if 
+  TIMERB > 5000
+goto_if_false @MUSIC2_1970
+Hud.FlashObject(-1)
+79@ = 1
+
+:MUSIC2_1970
+if 
+  not Char.IsDead(37@)
+goto_if_false @MUSIC2_2301
+if 
+  71@ == 1
+goto_if_false @MUSIC2_2052
+if 
+  TIMERA > 5000
+goto_if_false @MUSIC2_2052
+Text.PrintHelp('STP2_9')
+Hud.FlashObject(-1)
+TIMERA = 0
+71@ = 2
+
+:MUSIC2_2052
+if 
+  71@ == 2
+goto_if_false @MUSIC2_2139
+if 
+  not Char.IsDead(37@)
+goto_if_false @MUSIC2_2139
+if or
+  Char.LocateAnyMeansChar2D($scplayer, 37@, 5.0, 5.0, False)
+  TIMERA > 9500
+goto_if_false @MUSIC2_2139
+TIMERA = 0
+71@ = 3
+
+:MUSIC2_2139
+if 
+  71@ == 3
+goto_if_false @MUSIC2_2228
+if or
+  TIMERA > 10000
+  Char.IsPlayingAnim($scplayer, "KILL_PARTIAL")
+  Player.IsTargetingChar($player1, 37@)
+goto_if_false @MUSIC2_2228
+Text.PrintHelp('STP2_10')
+TIMERA = 0
+71@ = 4
+
+:MUSIC2_2228
+if 
+  71@ == 4
+goto_if_false @MUSIC2_2301
+if 
+  Char.IsPlayingAnim($scplayer, "KILL_PARTIAL")
+goto_if_false @MUSIC2_2301
+Text.PrintHelp('STP2_11')
+TIMERA = 0
+71@ = 5
+
+:MUSIC2_2301
+if 
+  72@ == 0
+goto_if_false @MUSIC2_3036
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 1290.907, -781.423, 1083.59, 4.3, 4.3, 6.0)
+goto_if_false @MUSIC2_3036
+if 
+  Char.IsDucking($scplayer)
+goto_if_false @MUSIC2_2390
+96@ = 1
+
+:MUSIC2_2390
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Char.ClearTasksImmediately($scplayer)
+Camera.SetNearClip(0.1)
+World.ClearArea(0, 1290.907, -781.423, 100.0, 100.0)
+38@ = Char.Create(24, 25, 1290.667, -778.9339, 1083.012)
+Char.SetHasUsedEntryExit(38@, 1298.78, -798.2, 1.0)
+Char.SetAreaVisible(38@, 5)
+Char.SetHeading(38@, 350.151)
+Char.SetFollowNodeThresholdDistance(38@, 5.0)
+Char.SetDecisionMaker(38@, 45@)
+63@ = Blip.AddForChar(38@)
+Blip.ChangeDisplay(63@, BlipDisplay.BlipOnly)
+Char.GiveWeapon(38@, WeaponType.MicroUzi, 9999)
+Char.SetAccuracy(38@, 90)
+Char.SetDropsWeaponsWhenDead(38@, False)
+Path.FlushPatrolRoute
+Path.ExtendPatrolRoute(1289.988, -766.581, 1084.063, "NONE", "NONE")
+Path.ExtendPatrolRoute(1270.314, -766.564, 1084.063, "ROADCROSS", "PED")
+Path.ExtendPatrolRoute(1270.074, -782.155, 1084.063, "NONE", "NONE")
+Path.ExtendPatrolRoute(1290.246, -782.463, 1084.056, "ROADCROSS", "PED")
+Task.FollowPatrolRoute(38@, 4, RouteMode.Loop)
+Char.SetCoordinates($scplayer, 1297.599, -781.234, 1083.048)
+Char.SetHeading($scplayer, 89.58)
+Camera.SetFixedPosition(1291.055, -784.506, 1084.514, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1290.55, -783.6482, 1084.417, SwitchType.JumpCut)
+if 
+  not Char.IsDead(37@)
+goto_if_false @MUSIC2_2910
+Char.Delete(37@)
+37@ = Char.Create(24, 24, 1304.189, -785.871, 1084.048)
+Char.SetHasUsedEntryExit(37@, 1298.78, -798.2, 1.0)
+Char.SetAreaVisible(37@, 5)
+Char.SetFollowNodeThresholdDistance(37@, 2.0)
+Char.SetHeading(37@, 311.2134)
+Char.SetDecisionMaker(37@, 45@)
+62@ = Blip.AddForChar(37@)
+Blip.ChangeDisplay(62@, BlipDisplay.BlipOnly)
+Char.GiveWeapon(37@, WeaponType.MicroUzi, 9999)
+Char.SetAccuracy(37@, 90)
+Char.SetDropsWeaponsWhenDead(37@, False)
+
+:MUSIC2_2910
+Text.PrintNow('STP2_13', 6000, 1)
+wait 2000
+skip_cutscene_start_internal @MUSIC2_2943
+wait 4000
+
+:MUSIC2_2943
+skip_cutscene_end 
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Player.SetControl($player1, True)
+if 
+  96@ == 1
+goto_if_false @MUSIC2_2981
+Task.ToggleDuck($scplayer, True)
+
+:MUSIC2_2981
+96@ = 0
+Hud.SwitchWidescreen(False)
+Text.PrintNow('STP2_14', 5000, 1)
+TIMERA = 0
+TIMERB = 0
+72@ = 1
+71@ = 6
+
+:MUSIC2_3036
+if 
+  71@ == 6
+goto_if_false @MUSIC2_3080
+if 
+  TIMERA > 5000
+goto_if_false @MUSIC2_3080
+71@ = 7
+
+:MUSIC2_3080
+if 
+  73@ == 0
+goto_if_false @MUSIC2_4088
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 1260.104, -769.51, 1083.06, 5.0, 5.0, 6.0)
+goto_if_false @MUSIC2_4088
+if 
+  Char.IsDucking($scplayer)
+goto_if_false @MUSIC2_3169
+96@ = 1
+
+:MUSIC2_3169
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Char.ClearTasksImmediately($scplayer)
+Text.ClearPrints
+World.ClearArea(0, 1260.104, -769.51, 100.0, 100.0)
+39@ = Char.Create(24, 25, 1249.598, -780.06, 1083.063)
+Char.SetHasUsedEntryExit(39@, 1298.78, -798.2, 1.0)
+Char.SetAreaVisible(39@, 5)
+Char.SetAccuracy(39@, 90)
+Char.SetHeading(39@, 355.188)
+Char.SetFollowNodeThresholdDistance(39@, 5.0)
+Char.SetDecisionMaker(39@, 45@)
+Task.GoStraightToCoord(39@, 1250.092, -769.277, 1083.064, MoveState.Walk, -1)
+Camera.SetFixedPosition(1249.856, -766.8402, 1084.777, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1249.814, -767.8293, 1084.637, SwitchType.JumpCut)
+Char.SetCoordinates($scplayer, 1266.494, -769.705, 1083.06)
+Char.SetHeading($scplayer, 92.259)
+if 
+  not Char.IsDead(38@)
+goto_if_false @MUSIC2_3669
+Char.Delete(38@)
+38@ = Char.Create(24, 25, 1290.667, -778.9339, 1083.012)
+Char.SetHasUsedEntryExit(38@, 1298.78, -798.2, 1.0)
+Char.SetHeading(38@, 350.151)
+Char.SetFollowNodeThresholdDistance(38@, 2.0)
+Char.SetDecisionMaker(38@, 45@)
+63@ = Blip.AddForChar(38@)
+Blip.ChangeDisplay(63@, BlipDisplay.BlipOnly)
+Char.GiveWeapon(38@, WeaponType.MicroUzi, 9999)
+Char.SetAccuracy(38@, 90)
+Char.SetDropsWeaponsWhenDead(38@, False)
+Path.FlushPatrolRoute
+Path.ExtendPatrolRoute(1289.988, -766.581, 1084.063, "NONE", "NONE")
+Path.ExtendPatrolRoute(1270.314, -766.564, 1084.063, "ROADCROSS", "PED")
+Path.ExtendPatrolRoute(1270.074, -782.155, 1084.063, "NONE", "NONE")
+Path.ExtendPatrolRoute(1290.246, -782.463, 1084.056, "ROADCROSS", "PED")
+Task.FollowPatrolRoute(38@, 4, RouteMode.Loop)
+
+:MUSIC2_3669
+Text.PrintNow('STP2_15', 3000, 1)
+wait 2000
+skip_cutscene_start_internal @MUSIC2_3844
+wait 1000
+Text.PrintNow('STP2_16', 4000, 1)
+Camera.SetFixedPosition(1267.405, -769.6973, 1084.667, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1266.412, -769.6685, 1084.551, SwitchType.JumpCut)
+if 
+  not Char.IsDead(39@)
+goto_if_false @MUSIC2_3815
+Char.SetCoordinates(39@, 1249.598, -780.06, 1083.063)
+Char.SetHeading(39@, 355.188)
+
+:MUSIC2_3815
+wait 2000
+Camera.PointAtPoint(1266.912, -770.5618, 1084.569, SwitchType.Interpolation)
+wait 2000
+
+:MUSIC2_3844
+skip_cutscene_end 
+Char.Delete(39@)
+39@ = Char.Create(24, 25, 1249.634, -781.405, 1083.5)
+Char.SetHasUsedEntryExit(39@, 1298.78, -798.2, 1.0)
+Char.SetAreaVisible(39@, 5)
+Char.SetHeading(39@, 357.273)
+64@ = Blip.AddForChar(39@)
+Blip.ChangeDisplay(64@, BlipDisplay.BlipOnly)
+Char.SetFollowNodeThresholdDistance(39@, 5.0)
+Char.SetDecisionMaker(39@, 45@)
+58@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 1267.96, -769.792, 1084.06, 4, -2)
+Sequence.SetToRepeat(58@, True)
+Sequence.Close(58@)
+Char.PerformSequence(39@, 58@)
+Sequence.Clear(58@)
+Char.GiveWeapon(39@, WeaponType.MicroUzi, 50)
+Char.SetAccuracy(39@, 90)
+Char.SetDropsWeaponsWhenDead(39@, False)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+if 
+  96@ == 1
+goto_if_false @MUSIC2_4061
+Task.ToggleDuck($scplayer, True)
+
+:MUSIC2_4061
+96@ = 0
+Text.ClearPrints
+Text.PrintHelp('STP2_41')
+73@ = 1
+
+:MUSIC2_4088
+if 
+  74@ == 0
+goto_if_false @MUSIC2_6068
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 1249.466, -789.487, 1083.063, 7.5, 7.5, 6.0)
+goto_if_false @MUSIC2_6068
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @MUSIC2_4192
+Audio.SetMissionAudioPosition(MissionAudioSlot.Slot3, 1276.31, -793.92, 1084.12)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:MUSIC2_4192
+if 
+  Char.IsDucking($scplayer)
+goto_if_false @MUSIC2_4215
+96@ = 1
+
+:MUSIC2_4215
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Char.ClearTasksImmediately($scplayer)
+World.ClearArea(0, 1249.466, -789.487, 100.0, 100.0)
+Char.SetCoordinates($scplayer, 1249.825, -780.682, 1083.06)
+Char.SetHeading($scplayer, 180.659)
+Text.ClearPrints
+40@ = Char.Create(24, 25, 1258.271, -793.395, 1083.289)
+Char.SetHasUsedEntryExit(40@, 1298.78, -798.2, 1.0)
+Char.SetAreaVisible(40@, 5)
+Char.SetHeading(40@, 354.328)
+65@ = Blip.AddForChar(40@)
+Blip.ChangeDisplay(65@, BlipDisplay.BlipOnly)
+Char.SetFollowNodeThresholdDistance(40@, 5.0)
+Char.SetDecisionMaker(40@, 45@)
+Char.SetDropsWeaponsWhenDead(40@, False)
+47@ = Object.CreateNoOffset(#CJ_JUICE_CAN, 1258.25, -792.64, 1084.16)
+$x, $y, $z, $x, $y, $z = Streaming.GetModelDimensions(#CJ_JUICE_CAN)
+$y /= 2.0
+$y += 0.027
+41@ = Char.Create(24, 24, 1276.795, -792.368, 1083.055)
+Char.SetHasUsedEntryExit(41@, 1298.78, -798.2, 1.0)
+Char.SetAccuracy(41@, 100)
+Char.SetAreaVisible(41@, 5)
+Char.SetHeading(41@, 180.0)
+Char.SetDecisionMaker(41@, 45@)
+if 
+  not Char.IsDead(40@)
+goto_if_false @MUSIC2_4668
+49@ = Sequence.Open()
+Task.PickUpObject(-1, 47@, 0.062, $y, 0.0, 5, 16, "VEND_USE_PT2", "VENDING", 0)
+Task.PickUpObject(-1, 47@, 0.062, $y, 0.0, 5, 16, "VEND_DRINK2_P", "VENDING", 0)
+Sequence.Close(49@)
+Char.PerformSequence(40@, 49@)
+Sequence.Clear(49@)
+
+:MUSIC2_4668
+Camera.SetFixedPosition(1251.82, -788.354, 1084.502, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1252.463, -789.1154, 1084.42, SwitchType.JumpCut)
+Text.PrintNow('STP2_19', 5000, 1)
+if 
+  not Char.IsDead(38@)
+goto_if_false @MUSIC2_5002
+Char.Delete(38@)
+38@ = Char.Create(24, 25, 1290.667, -778.9339, 1083.012)
+Char.SetHasUsedEntryExit(38@, 1298.78, -798.2, 1.0)
+Char.SetHeading(38@, 350.151)
+Char.SetFollowNodeThresholdDistance(38@, 2.0)
+Char.SetDecisionMaker(38@, 45@)
+63@ = Blip.AddForChar(38@)
+Blip.ChangeDisplay(63@, BlipDisplay.BlipOnly)
+Char.GiveWeapon(38@, WeaponType.MicroUzi, 9999)
+Char.SetAccuracy(38@, 100)
+Char.SetDropsWeaponsWhenDead(38@, False)
+Path.FlushPatrolRoute
+Path.ExtendPatrolRoute(1289.988, -766.581, 1084.063, "NONE", "NONE")
+Path.ExtendPatrolRoute(1270.314, -766.564, 1084.063, "ROADCROSS", "PED")
+Path.ExtendPatrolRoute(1270.074, -782.155, 1084.063, "NONE", "NONE")
+Path.ExtendPatrolRoute(1290.246, -782.463, 1084.056, "ROADCROSS", "PED")
+Task.FollowPatrolRoute(38@, 4, RouteMode.Loop)
+
+:MUSIC2_5002
+if 
+  not Char.IsDead(39@)
+goto_if_false @MUSIC2_5133
+Char.Delete(39@)
+39@ = Char.Create(24, 25, 1267.96, -769.792, 1084.06)
+Char.SetHasUsedEntryExit(39@, 1298.78, -798.2, 1.0)
+Char.SetHeading(39@, 0.141)
+64@ = Blip.AddForChar(39@)
+Blip.ChangeDisplay(64@, BlipDisplay.BlipOnly)
+Char.SetFollowNodeThresholdDistance(39@, 5.0)
+Char.SetDecisionMaker(39@, 45@)
+Char.GiveWeapon(39@, WeaponType.MicroUzi, 50)
+Char.SetAccuracy(39@, 100)
+Char.SetDropsWeaponsWhenDead(39@, False)
+
+:MUSIC2_5133
+wait 1750
+skip_cutscene_start_internal @MUSIC2_5543
+wait 2000
+if 
+  not Char.IsDead(41@)
+goto_if_false @MUSIC2_5218
+Task.PlayAnim(41@, "PED_CONSOLE_LOOP", "CRIB", 4.0, True, False, False, False, -1)
+Char.StartFacialTalk(41@, 10000)
+
+:MUSIC2_5218
+wait 500
+Camera.SetFixedPosition(1274.983, -790.5506, 1084.063, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1275.575, -791.356, 1084.035, SwitchType.JumpCut)
+Text.PrintNow('LOC2_BA', 4000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:MUSIC2_5294
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @MUSIC2_5320
+wait 0
+goto @MUSIC2_5294
+
+:MUSIC2_5320
+Camera.SetFixedPosition(1276.301, -794.5306, 1084.231, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1276.292, -793.5345, 1084.143, SwitchType.JumpCut)
+Text.PrintNow('LOC2_BB', 4000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+if 
+  not Char.IsDead(41@)
+goto_if_false @MUSIC2_5517
+50@ = Sequence.Open()
+Task.PlayAnim(-1, "PED_CONSOLE_LOOSE", "CRIB", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PED_CONSOLE_LOOP", "CRIB", 4.0, True, False, False, False, -1)
+Sequence.Close(50@)
+Char.PerformSequence(41@, 50@)
+Sequence.Clear(50@)
+
+:MUSIC2_5517
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @MUSIC2_5543
+wait 0
+goto @MUSIC2_5517
+
+:MUSIC2_5543
+skip_cutscene_end 
+Char.Delete(40@)
+Char.Delete(41@)
+40@ = Char.Create(24, 25, 1258.271, -793.395, 1083.289)
+Char.SetHasUsedEntryExit(40@, 1298.78, -798.2, 1.0)
+Char.SetHeading(40@, 354.328)
+Task.PlayAnim(40@, "ATM", "PED", 4.0, True, False, False, False, -1)
+65@ = Blip.AddForChar(40@)
+Blip.ChangeDisplay(65@, BlipDisplay.BlipOnly)
+Char.SetDecisionMaker(40@, 45@)
+Char.SetDropsWeaponsWhenDead(40@, False)
+Char.GiveWeapon(40@, WeaponType.MicroUzi, 5000)
+Char.SetAccuracy(40@, 100)
+Char.SetInformRespectedFriends(40@, 5.0, 1)
+41@ = Char.Create(24, 24, 1276.795, -792.368, 1083.055)
+Char.SetHasUsedEntryExit(41@, 1298.78, -798.2, 1.0)
+Char.SetHeading(41@, 180.0)
+Char.SetDecisionMaker(41@, 45@)
+Char.SetDropsWeaponsWhenDead(41@, False)
+Char.GiveWeapon(41@, WeaponType.MicroUzi, 5000)
+66@ = Blip.AddForChar(41@)
+Blip.ChangeDisplay(66@, BlipDisplay.BlipOnly)
+Char.SetAccuracy(41@, 100)
+Char.SetInformRespectedFriends(41@, 5.0, 1)
+43@ = Char.Create(24, 25, 1262.533, -805.139, 1083.056)
+Char.SetHasUsedEntryExit(43@, 1298.78, -798.2, 1.0)
+Char.SetHeading(43@, 359.265)
+Char.SetDecisionMaker(43@, 45@)
+68@ = Blip.AddForChar(43@)
+Blip.ChangeDisplay(68@, BlipDisplay.BlipOnly)
+Char.SetDropsWeaponsWhenDead(43@, False)
+Char.GiveWeapon(43@, WeaponType.MicroUzi, 5555)
+Char.SetAccuracy(43@, 100)
+if 
+  not Char.IsDead(41@)
+goto_if_false @MUSIC2_5972
+Task.PlayAnim(41@, "PED_CONSOLE_LOOP", "CRIB", 4.0, True, False, False, False, -1)
+
+:MUSIC2_5972
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+if 
+  96@ == 1
+goto_if_false @MUSIC2_6022
+Task.ToggleDuck($scplayer, True)
+
+:MUSIC2_6022
+96@ = 0
+TIMERA = 0
+TIMERB = 0
+71@ = 9
+Text.PrintHelp('STP2_36')
+74@ = 1
+
+:MUSIC2_6068
+if 
+  74@ == 1
+goto_if_false @MUSIC2_6260
+$x = Char.GetSpeed($scplayer)
+if 
+  not Char.IsDead(40@)
+goto_if_false @MUSIC2_6260
+if or
+  Char.IsInArea3D($scplayer, 0, 1246.77, -785.08, 1083.26, 1255.87, -797.69, 1090.0)
+  $x > 0.0
+goto_if_false @MUSIC2_6260
+Char.SetHeading(40@, 168.503)
+51@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1256.29, -795.6, 1084.289, MoveState.Walk, -1)
+Task.PlayAnim(-1, "ATM", "PED", 4.0, True, False, False, False, -1)
+Sequence.Close(51@)
+Char.PerformSequence(40@, 51@)
+Sequence.Clear(51@)
+74@ = 2
+
+:MUSIC2_6260
+if 
+  Pickup.HasBeenCollected(59@)
+goto_if_false @MUSIC2_6388
+Blip.Remove(61@)
+61@ = Blip.AddForCoord(1298.74, -797.46, 1083.4)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @MUSIC2_6324
+Pad.SetPlayerCycleWeaponButton($player1, True)
+
+:MUSIC2_6324
+Blip.SetEntryExit(61@, 1298.78, -798.2, 1.0)
+Text.PrintNow('STP2_40', 7000, 1)
+TIMERA = 0
+TIMERB = 0
+70@ = 3
+85@ = 1
+
+:MUSIC2_6388
+if 
+  Char.IsDead(37@)
+goto_if_false @MUSIC2_6425
+if 
+  Blip.DoesExist(62@)
+goto_if_false @MUSIC2_6425
+Blip.Remove(62@)
+
+:MUSIC2_6425
+if 
+  Char.IsDead(38@)
+goto_if_false @MUSIC2_6462
+if 
+  Blip.DoesExist(63@)
+goto_if_false @MUSIC2_6462
+Blip.Remove(63@)
+
+:MUSIC2_6462
+if 
+  Char.IsDead(39@)
+goto_if_false @MUSIC2_6499
+if 
+  Blip.DoesExist(64@)
+goto_if_false @MUSIC2_6499
+Blip.Remove(64@)
+
+:MUSIC2_6499
+if 
+  Char.IsDead(40@)
+goto_if_false @MUSIC2_6536
+if 
+  Blip.DoesExist(65@)
+goto_if_false @MUSIC2_6536
+Blip.Remove(65@)
+
+:MUSIC2_6536
+if 
+  Char.IsDead(41@)
+goto_if_false @MUSIC2_6573
+if 
+  Blip.DoesExist(66@)
+goto_if_false @MUSIC2_6573
+Blip.Remove(66@)
+
+:MUSIC2_6573
+if 
+  Char.IsDead(43@)
+goto_if_false @MUSIC2_6610
+if 
+  Blip.DoesExist(68@)
+goto_if_false @MUSIC2_6610
+Blip.Remove(68@)
+
+:MUSIC2_6610
+if 
+  70@ == 3
+goto_if_false @MUSIC2_8699
+if 
+  85@ == 1
+goto_if_false @MUSIC2_8011
+World.DisableAllEntryExits(False)
+60@ = Pickup.CreateWithAmmo(347, 3, 30, 1237.418, -808.5872, 1084.09)
+Char.Delete(37@)
+Char.Delete(38@)
+Char.Delete(39@)
+37@ = Char.Create(24, 24, 1243.53, -812.19, 1083.04)
+Char.SetHasUsedEntryExit(37@, 1298.78, -798.2, 1.0)
+Char.SetHeading(37@, 270.948)
+Char.SetDecisionMaker(37@, 45@)
+62@ = Blip.AddForChar(37@)
+Blip.ChangeDisplay(62@, BlipDisplay.BlipOnly)
+Char.GiveWeapon(37@, WeaponType.PistolSilenced, 99999)
+Char.SetFollowNodeThresholdDistance(37@, 2.0)
+Task.FollowPathNodesToCoord(37@, 1270.694, -802.518, 1084.05, 4, -2)
+Char.SetInformRespectedFriends(37@, 10.0, 1)
+Char.SetAccuracy(37@, 100)
+38@ = Char.Create(24, 25, 1280.02, -789.01, 1083.05)
+Char.SetHasUsedEntryExit(38@, 1298.78, -798.2, 1.0)
+Char.SetHeading(38@, 91.837)
+Char.SetDecisionMaker(38@, 45@)
+63@ = Blip.AddForChar(38@)
+Blip.ChangeDisplay(63@, BlipDisplay.BlipOnly)
+Char.GiveWeapon(38@, WeaponType.PistolSilenced, 99999)
+Char.SetInformRespectedFriends(38@, 5.0, 1)
+Char.SetAccuracy(38@, 100)
+42@ = Char.Create(24, 24, 1249.768, -780.616, 1084.063)
+Char.SetHasUsedEntryExit(42@, 1298.78, -798.2, 1.0)
+Char.SetHeading(42@, 3.43)
+67@ = Blip.AddForChar(42@)
+Blip.ChangeDisplay(67@, BlipDisplay.BlipOnly)
+Char.SetDecisionMaker(42@, 45@)
+Char.GiveWeapon(42@, WeaponType.PistolSilenced, 99999)
+Path.FlushPatrolRoute
+Path.ExtendPatrolRoute(1249.799, -769.679, 1084.063, "ROADCROSS", "PED")
+Path.ExtendPatrolRoute(1267.62, -769.651, 1084.06, "NONE", "NONE")
+Path.ExtendPatrolRoute(1249.799, -769.679, 1084.063, "NONE", "NONE")
+Path.ExtendPatrolRoute(1249.768, -780.616, 1084.063, "NONE", "NONE")
+Task.FollowPatrolRoute(42@, 4, RouteMode.Loop)
+Char.SetInformRespectedFriends(42@, 15.0, 2)
+if 
+  not Char.IsDead(41@)
+goto_if_false @MUSIC2_7347
+Char.Delete(41@)
+41@ = Char.Create(24, 24, 1276.795, -792.368, 1083.055)
+Char.SetHasUsedEntryExit(41@, 1298.78, -798.2, 1.0)
+Char.SetHeading(41@, 180.0)
+Char.SetDecisionMaker(41@, 46@)
+Char.GiveWeapon(41@, WeaponType.PistolSilenced, 99999)
+66@ = Blip.AddForChar(41@)
+Blip.ChangeDisplay(66@, BlipDisplay.BlipOnly)
+Task.PlayAnim(41@, "PED_CONSOLE_LOOP", "CRIB", 4.0, True, False, False, False, -1)
+Char.SetInformRespectedFriends(41@, 20.0, 1)
+goto @MUSIC2_7463
+
+:MUSIC2_7347
+Char.RemoveElegantly(41@)
+41@ = Char.Create(24, 24, 1270.616, -792.298, 1084.047)
+Char.SetHasUsedEntryExit(41@, 1298.78, -798.2, 1.0)
+Char.SetHeading(41@, 186.126)
+Char.SetDecisionMaker(41@, 46@)
+Char.GiveWeapon(41@, WeaponType.PistolSilenced, 99999)
+66@ = Blip.AddForChar(41@)
+Blip.ChangeDisplay(66@, BlipDisplay.BlipOnly)
+Task.SitDown(41@, 400000)
+Char.SetInformRespectedFriends(41@, 20.0, 1)
+
+:MUSIC2_7463
+if 
+  not Char.IsDead(40@)
+goto_if_false @MUSIC2_7622
+Char.Delete(40@)
+40@ = Char.Create(24, 25, 1256.492, -795.662, 1084.282)
+Char.SetHasUsedEntryExit(40@, 1298.78, -798.2, 1.0)
+Char.SetHeading(40@, 186.842)
+Task.PlayAnim(40@, "ATM", "PED", 4.0, True, False, False, False, -1)
+65@ = Blip.AddForChar(40@)
+Blip.ChangeDisplay(65@, BlipDisplay.BlipOnly)
+Char.SetDecisionMaker(40@, 46@)
+Char.GiveWeapon(40@, WeaponType.PistolSilenced, 99999)
+Char.SetInformRespectedFriends(40@, 10.0, 1)
+goto @MUSIC2_7758
+
+:MUSIC2_7622
+Char.RemoveElegantly(40@)
+40@ = Char.Create(24, 25, 1252.99, -795.461, 1083.282)
+Char.SetHasUsedEntryExit(40@, 1298.78, -798.2, 1.0)
+Char.SetHeading(40@, 186.842)
+Task.PlayAnim(40@, "ATM", "PED", 4.0, True, False, False, False, -1)
+65@ = Blip.AddForChar(40@)
+Blip.ChangeDisplay(65@, BlipDisplay.BlipOnly)
+Char.SetDecisionMaker(40@, 46@)
+Char.GiveWeapon(40@, WeaponType.PistolSilenced, 99999)
+Char.SetInformRespectedFriends(40@, 10.0, 1)
+
+:MUSIC2_7758
+44@ = Char.Create(24, 25, 1290.667, -778.9339, 1083.012)
+Char.SetHasUsedEntryExit(44@, 1298.78, -798.2, 1.0)
+Char.SetHeading(44@, 350.151)
+Char.SetFollowNodeThresholdDistance(44@, 5.0)
+Char.SetDecisionMaker(44@, 46@)
+69@ = Blip.AddForChar(44@)
+Blip.ChangeDisplay(69@, BlipDisplay.BlipOnly)
+Char.GiveWeapon(44@, WeaponType.PistolSilenced, 5000)
+Char.SetAccuracy(44@, 100)
+Path.FlushPatrolRoute
+Path.ExtendPatrolRoute(1289.988, -766.581, 1084.063, "NONE", "NONE")
+Path.ExtendPatrolRoute(1270.314, -766.564, 1084.063, "ROADCROSS", "PED")
+Path.ExtendPatrolRoute(1270.074, -782.155, 1084.063, "NONE", "NONE")
+Path.ExtendPatrolRoute(1290.246, -782.463, 1084.056, "ROADCROSS", "PED")
+Task.FollowPatrolRoute(44@, 4, RouteMode.Loop)
+78@ = 0
+85@ = 2
+
+:MUSIC2_8011
+if 
+  94@ == 0
+goto_if_false @MUSIC2_8132
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 1282.61, -787.389, 1084.063, 6.0, 6.0, 6.0)
+goto_if_false @MUSIC2_8132
+if 
+  not Char.IsDead(40@)
+goto_if_false @MUSIC2_8101
+Char.SetDecisionMaker(40@, 45@)
+
+:MUSIC2_8101
+if 
+  not Char.IsDead(41@)
+goto_if_false @MUSIC2_8125
+Char.SetDecisionMaker(41@, 45@)
+
+:MUSIC2_8125
+94@ = 1
+
+:MUSIC2_8132
+if 
+  78@ == 0
+goto_if_false @MUSIC2_8229
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 1249.61, -772.86, 1083.46, 7.0, 7.0, 5.0)
+goto_if_false @MUSIC2_8229
+if 
+  not Char.IsDead(44@)
+goto_if_false @MUSIC2_8229
+Char.SetDecisionMaker(44@, 45@)
+78@ = 1
+
+:MUSIC2_8229
+if 
+  85@ > 0
+goto_if_false @MUSIC2_8302
+if 
+  71@ == 9
+goto_if_false @MUSIC2_8302
+if 
+  TIMERA > 8500
+goto_if_false @MUSIC2_8302
+Text.PrintHelp('STP2_33')
+71@ = 10
+
+:MUSIC2_8302
+34@ = Char.GetAreaVisible($scplayer)
+if 
+  34@ == 0
+goto_if_false @MUSIC2_8403
+Blip.Remove(61@)
+
+:MUSIC2_8333
+if 
+  not Camera.GetFadingStatus
+goto_if_false @MUSIC2_8357
+wait 0
+goto @MUSIC2_8333
+
+:MUSIC2_8357
+Char.SetCoordinates($scplayer, 1299.664, -800.546, 83.148)
+Char.SetHeading($scplayer, 271.284)
+Camera.SetBehindPlayer
+85@ = 2
+70@ = 4
+
+:MUSIC2_8403
+if 
+  Char.IsDead(37@)
+goto_if_false @MUSIC2_8440
+if 
+  Blip.DoesExist(62@)
+goto_if_false @MUSIC2_8440
+Blip.Remove(62@)
+
+:MUSIC2_8440
+if 
+  Char.IsDead(38@)
+goto_if_false @MUSIC2_8477
+if 
+  Blip.DoesExist(63@)
+goto_if_false @MUSIC2_8477
+Blip.Remove(63@)
+
+:MUSIC2_8477
+if 
+  Char.IsDead(39@)
+goto_if_false @MUSIC2_8514
+if 
+  Blip.DoesExist(64@)
+goto_if_false @MUSIC2_8514
+Blip.Remove(64@)
+
+:MUSIC2_8514
+if 
+  Char.IsDead(40@)
+goto_if_false @MUSIC2_8551
+if 
+  Blip.DoesExist(65@)
+goto_if_false @MUSIC2_8551
+Blip.Remove(65@)
+
+:MUSIC2_8551
+if 
+  Char.IsDead(41@)
+goto_if_false @MUSIC2_8588
+if 
+  Blip.DoesExist(66@)
+goto_if_false @MUSIC2_8588
+Blip.Remove(66@)
+
+:MUSIC2_8588
+if 
+  Char.IsDead(42@)
+goto_if_false @MUSIC2_8625
+if 
+  Blip.DoesExist(67@)
+goto_if_false @MUSIC2_8625
+Blip.Remove(67@)
+
+:MUSIC2_8625
+if 
+  Char.IsDead(43@)
+goto_if_false @MUSIC2_8662
+if 
+  Blip.DoesExist(68@)
+goto_if_false @MUSIC2_8662
+Blip.Remove(68@)
+
+:MUSIC2_8662
+if 
+  Char.IsDead(44@)
+goto_if_false @MUSIC2_8699
+if 
+  Blip.DoesExist(69@)
+goto_if_false @MUSIC2_8699
+Blip.Remove(69@)
+
+:MUSIC2_8699
+if 
+  85@ == 2
+goto_if_false @MUSIC2_8988
+if 
+  70@ == 4
+goto_if_false @MUSIC2_8988
+61@ = Blip.AddForCoord(790.0, -1631.0, 12.43)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+53@ = Car.Create(510, 1306.718, -797.24, 83.66)
+Car.SetHeading(53@, 206.253)
+Char.Delete(37@)
+Char.Delete(38@)
+Char.Delete(39@)
+Char.Delete(40@)
+Char.Delete(41@)
+Char.Delete(42@)
+Char.Delete(43@)
+Blip.Remove(62@)
+Blip.Remove(63@)
+Blip.Remove(64@)
+Blip.Remove(65@)
+Blip.Remove(66@)
+Blip.Remove(67@)
+Blip.Remove(68@)
+Streaming.MarkModelAsNoLongerNeeded(24)
+Streaming.MarkModelAsNoLongerNeeded(25)
+Streaming.MarkModelAsNoLongerNeeded(579)
+Streaming.MarkModelAsNoLongerNeeded(580)
+Streaming.MarkModelAsNoLongerNeeded(#KMB_RHYMESBOOK)
+Streaming.MarkModelAsNoLongerNeeded(#CJ_JUICE_CAN)
+Streaming.MarkModelAsNoLongerNeeded(347)
+Streaming.RemoveAnimation("CRIB")
+Streaming.RemoveAnimation("VENDING")
+Streaming.MarkModelAsNoLongerNeeded(335)
+Hud.SetRadarZoom(0)
+Blip.Remove(62@)
+Blip.Remove(63@)
+Blip.Remove(64@)
+Blip.Remove(65@)
+Blip.Remove(66@)
+Blip.Remove(67@)
+Blip.Remove(68@)
+Text.PrintNow('STP2_30', 7000, 1)
+70@ = 5
+TIMERA = 0
+
+:MUSIC2_8988
+if 
+  97@ == 0
+goto_if_false @MUSIC2_9048
+if 
+  not Car.IsDead(53@)
+goto_if_false @MUSIC2_9048
+if 
+  Char.IsSittingInCar($scplayer, 53@)
+goto_if_false @MUSIC2_9048
+97@ = 1
+
+:MUSIC2_9048
+if 
+  70@ == 5
+goto_if_false @MUSIC2_9582
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 788.05, -1630.31, 12.42, 2.0, 2.0, 5.0)
+goto_if_false @MUSIC2_9582
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.DoFade(0, 1000)
+
+:MUSIC2_9132
+if 
+  Camera.GetFadingStatus
+goto_if_false @MUSIC2_9156
+wait 0
+goto @MUSIC2_9132
+
+:MUSIC2_9156
+World.ClearArea(1, -1095.489, -1630.609, 50.0, 50.0)
+Car.MarkAsNoLongerNeeded(53@)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @MUSIC2_9276
+$car = Char.StoreCarIsIn($scplayer)
+Car.SetCoordinates($car, 784.686, -1613.7, 12.22)
+Car.SetHeading($car, 353.08)
+Char.WarpFromCarToCoord($scplayer, 785.75, -1632.84, 12.43)
+Char.SetHeading($scplayer, 316.0)
+goto @MUSIC2_9306
+
+:MUSIC2_9276
+Char.SetCoordinates($scplayer, 785.75, -1632.84, 12.43)
+Char.SetHeading($scplayer, 316.0)
+
+:MUSIC2_9306
+Streaming.RequestAnimation("GANGS")
+Streaming.LoadSpecialCharacter('OGLOC', 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(21805, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.LoadMissionAudio(21806, 2)
+Streaming.LoadAllModelsNow
+
+:MUSIC2_9352
+if or
+  not Streaming.HasAnimationLoaded("GANGS")
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @MUSIC2_9391
+wait 0
+goto @MUSIC2_9352
+
+:MUSIC2_9391
+52@ = Char.Create(23, 290, 792.72, -1626.6, 12.43)
+Char.SetHeading(52@, 114.71)
+Char.SetDecisionMaker(52@, 46@)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Char.ShutUp(52@, True)
+Char.ShutUp($scplayer, True)
+Camera.DoFade(1, 2000)
+95@ = 1
+Camera.SetFixedPosition(785.7997, -1635.43, 13.4579, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(786.2913, -1634.565, 13.3583, SwitchType.JumpCut)
+Task.GoStraightToCoord($scplayer, 788.98, -1629.61, 12.59, MoveState.Walk, -1)
+Task.GoStraightToCoord(52@, 788.98, -1629.61, 12.59, MoveState.Walk, -1)
+TIMERA = 0
+70@ = 6
+
+:MUSIC2_9582
+if 
+  70@ == 6
+goto_if_false @MUSIC2_9837
+if 
+  TIMERA > 2440
+goto_if_false @MUSIC2_9837
+if 
+  not Char.IsDead(52@)
+goto_if_false @MUSIC2_9837
+Camera.SetFixedPosition(788.2733, -1628.832, 13.9503, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(788.473, -1629.811, 13.9214, SwitchType.JumpCut)
+Char.SetCoordinates($scplayer, 787.973, -1630.274, 12.42)
+Char.SetHeading($scplayer, 310.378)
+Char.SetCoordinates(52@, 788.7348, -1629.626, 12.42)
+Char.SetHeading(52@, 130.378)
+Char.ClearTasksImmediately(52@)
+Char.ClearTasksImmediately($scplayer)
+Task.PlayAnim(52@, "HNDSHKFA", "GANGS", 4.0, False, False, False, False, -1)
+Task.PlayAnim($scplayer, "HNDSHKFA", "GANGS", 4.0, False, False, False, False, -1)
+70@ = 7
+
+:MUSIC2_9837
+if 
+  70@ > 4
+goto_if_false @MUSIC2_10502
+if 
+  not Char.IsDead(52@)
+goto_if_false @MUSIC2_10502
+if 
+  95@ == 1
+goto_if_false @MUSIC2_9924
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Char.StartFacialTalk($scplayer, 10000)
+Text.PrintNow('LOC2_CA', 5000, 1)
+95@ = 2
+
+:MUSIC2_9924
+if 
+  95@ == 2
+goto_if_false @MUSIC2_9982
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @MUSIC2_9982
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Char.StopFacialTalk($scplayer)
+Audio.LoadMissionAudio(21807, 1)
+95@ = 3
+
+:MUSIC2_9982
+if 
+  95@ == 3
+goto_if_false @MUSIC2_10035
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow('LOC2_CB', 5000, 1)
+Char.StartFacialTalk(52@, 10000)
+95@ = 4
+
+:MUSIC2_10035
+if 
+  95@ == 4
+goto_if_false @MUSIC2_10093
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @MUSIC2_10093
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Char.StopFacialTalk(52@)
+Audio.LoadMissionAudio(21808, 2)
+95@ = 5
+
+:MUSIC2_10093
+if 
+  95@ == 5
+goto_if_false @MUSIC2_10161
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @MUSIC2_10161
+Text.PrintNow('LOC2_CC', 5000, 1)
+Char.StartFacialTalk($scplayer, 10000)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+95@ = 6
+
+:MUSIC2_10161
+if 
+  95@ == 6
+goto_if_false @MUSIC2_10208
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @MUSIC2_10208
+Text.ClearPrints
+Char.StopFacialTalk($scplayer)
+95@ = 7
+
+:MUSIC2_10208
+if 
+  95@ == 7
+goto_if_false @MUSIC2_10366
+Camera.SetFixedPosition(773.2047, -1633.066, 17.7324, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(774.1813, -1632.908, 17.5877, SwitchType.JumpCut)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow('LOC2_DC', 5000, 1)
+Char.StartFacialTalk(52@, 4000)
+Task.GoStraightToCoord($scplayer, 806.1331, -1630.219, 12.3906, MoveState.Walk, 60000)
+Task.GoStraightToCoord(52@, 793.8177, -1625.155, 12.3828, MoveState.Walk, 60000)
+95@ = 8
+
+:MUSIC2_10366
+if 
+  95@ == 8
+goto_if_false @MUSIC2_10502
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @MUSIC2_10502
+Camera.DoFade(0, 1000)
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+
+:MUSIC2_10412
+if 
+  Camera.GetFadingStatus
+goto_if_false @MUSIC2_10436
+wait 0
+goto @MUSIC2_10412
+
+:MUSIC2_10436
+Char.SetCoordinates($scplayer, 808.299, -1630.424, 12.42)
+Char.SetHeading($scplayer, 254.602)
+Camera.DoFade(1, 1000)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+goto @MUSIC2_10527
+95@ = 9
+
+:MUSIC2_10502
+goto @MUSIC2_745
+
+:MUSIC2_10509
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:MUSIC2_10527
+Stat.RegisterMissionPassed('STRAP_2')
+Text.PrintWithNumberBig('M_PASSR', 4, 5000, TextStyle.Middle)
+Stat.AwardPlayerMissionRespect(4)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+Stat.PlayerMadeProgress(1)
+$flag_strap_mission_counter += 1
+return 
+
+:MUSIC2_10582
+Game.SetScriptLimitToGangSize(99)
+Char.RemoveElegantly(52@)
+Pickup.Remove(60@)
+World.SwitchEntryExit('MADDOGS', False)
+World.SwitchEntryExit('MDDOGS', False)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @MUSIC2_10652
+Pad.SetPlayerCycleWeaponButton($player1, True)
+Player.SetGroupRecruitment($player1, True)
+
+:MUSIC2_10652
+Game.SetWantedMultiplier(1.0)
+Hud.SetRadarZoom(0)
+Char.ShutUp($scplayer, False)
+Blip.Remove(61@)
+Blip.Remove(62@)
+Blip.Remove(63@)
+Blip.Remove(64@)
+Blip.Remove(65@)
+Blip.Remove(66@)
+Blip.Remove(67@)
+Blip.Remove(68@)
+Pickup.Remove(59@)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.RemoveAnimation("GANGS")
+Streaming.MarkModelAsNoLongerNeeded(510)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(24)
+Streaming.MarkModelAsNoLongerNeeded(25)
+Streaming.MarkModelAsNoLongerNeeded(579)
+Streaming.MarkModelAsNoLongerNeeded(580)
+Streaming.MarkModelAsNoLongerNeeded(#KMB_RHYMESBOOK)
+Streaming.MarkModelAsNoLongerNeeded(#CJ_JUICE_CAN)
+Streaming.MarkModelAsNoLongerNeeded(347)
+Streaming.RemoveAnimation("CRIB")
+Streaming.RemoveAnimation("VENDING")
+Streaming.MarkModelAsNoLongerNeeded(335)
+$onmission = 0
+World.DisableAllEntryExits(False)
+$timer_mobile_start = Clock.GetGameTimer()
+Mission.Finish
+return 
+

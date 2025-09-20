@@ -1,0 +1,164 @@
+:AUDIOL
+script_name 'AUDIOL'
+8@ = 0
+if 
+  8@ == -1
+goto_if_false @AUDIOL_60
+0@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+
+:AUDIOL_60
+if 
+  $audio_line_is_active <> 0
+goto_if_false @AUDIOL_169
+if 
+  2@ == 1
+goto_if_false @AUDIOL_162
+Audio.ClearMissionAudio(3@)
+
+:AUDIOL_101
+if 
+  $audio_line_is_active <> 0
+goto_if_false @AUDIOL_155
+if 
+  $audio_line_terminate_all == 1
+goto_if_false @AUDIOL_144
+goto @AUDIOL_737
+
+:AUDIOL_144
+wait 0
+goto @AUDIOL_101
+
+:AUDIOL_155
+goto @AUDIOL_169
+
+:AUDIOL_162
+goto @AUDIOL_737
+
+:AUDIOL_169
+set_lvar_text_label 5@s = s$audio_string
+set_lvar_int_to_var_int 7@ = $audio_sound_file
+$audio_line_is_active = 1
+
+:AUDIOL_192
+if 
+  $audio_line_terminate_all == 1
+goto_if_false @AUDIOL_217
+goto @AUDIOL_662
+
+:AUDIOL_217
+switch_start 8@ total_jumps 4 default_jump 0 @AUDIOL_651 jumps 0 @AUDIOL_280 1 @AUDIOL_362 2 @AUDIOL_531 3 @AUDIOL_637 -1 @AUDIOL_651 -1 @AUDIOL_651 -1 @AUDIOL_651
+
+:AUDIOL_280
+if 
+  4@ == 0
+goto_if_false @AUDIOL_311
+Audio.ClearMissionAudio(3@)
+Audio.LoadMissionAudio(7@, 3@)
+
+:AUDIOL_311
+if 
+  not Char.IsDead(0@)
+goto_if_false @AUDIOL_341
+Char.DisableSpeech(0@, True)
+Char.ShutUpForScriptedSpeech(0@, True)
+
+:AUDIOL_341
+TIMERA = 0
+8@ += 1
+goto @AUDIOL_651
+
+:AUDIOL_362
+if 
+  Audio.HasMissionAudioLoaded(3@)
+goto_if_false @AUDIOL_498
+if 
+  not Char.IsDead(0@)
+goto_if_false @AUDIOL_444
+if 
+  not Char.IsTalking(0@)
+goto_if_false @AUDIOL_436
+if 
+  1@ == 1
+goto_if_false @AUDIOL_436
+Audio.AttachMissionAudioToChar(3@, 0@)
+
+:AUDIOL_436
+Char.StartFacialTalk(0@, 10000)
+
+:AUDIOL_444
+Audio.PlayMissionAudio(3@)
+if 
+  not is_lvar_text_label_equal_to_text_label 5@s == 'DUMMY'
+goto_if_false @AUDIOL_484
+Text.PrintNow(5@s, 10000, 1)
+
+:AUDIOL_484
+8@ += 1
+goto @AUDIOL_524
+
+:AUDIOL_498
+if 
+  TIMERA > 5000
+goto_if_false @AUDIOL_524
+8@ += 1
+
+:AUDIOL_524
+goto @AUDIOL_651
+
+:AUDIOL_531
+if 
+  Audio.HasMissionAudioLoaded(3@)
+goto_if_false @AUDIOL_623
+if 
+  Audio.HasMissionAudioFinished(3@)
+goto_if_false @AUDIOL_577
+8@ += 1
+goto @AUDIOL_616
+
+:AUDIOL_577
+if 
+  Char.DoesExist(0@)
+goto_if_false @AUDIOL_616
+if 
+  Char.IsDead(0@)
+goto_if_false @AUDIOL_616
+8@ += 1
+
+:AUDIOL_616
+goto @AUDIOL_630
+
+:AUDIOL_623
+8@ += 1
+
+:AUDIOL_630
+goto @AUDIOL_651
+
+:AUDIOL_637
+goto @AUDIOL_662
+goto @AUDIOL_651
+
+:AUDIOL_651
+wait 0
+goto @AUDIOL_192
+
+:AUDIOL_662
+if 
+  not Char.IsDead(0@)
+goto_if_false @AUDIOL_695
+Char.EnableSpeech(0@)
+Char.ShutUpForScriptedSpeech(0@, False)
+Char.StopFacialTalk(0@)
+
+:AUDIOL_695
+Audio.ClearMissionAudio(3@)
+if 
+  not is_lvar_text_label_equal_to_text_label 5@s == 'DUMMY'
+goto_if_false @AUDIOL_730
+Text.ClearThisPrint(5@s)
+
+:AUDIOL_730
+$audio_line_is_active = 0
+
+:AUDIOL_737
+terminate_this_script 
+

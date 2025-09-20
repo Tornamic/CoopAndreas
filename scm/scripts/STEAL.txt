@@ -1,0 +1,61 @@
+:STEAL
+script_name 'STEAL'
+
+:STEAL_11
+wait $mission_trigger_wait_time
+if 
+  $flag_steal_mission_counter == 4
+goto_if_false @STEAL_36
+terminate_this_script 
+
+:STEAL_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @STEAL_336
+if 
+  $onmission == 0
+goto_if_false @STEAL_336
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $stealX, $stealY, $stealZ, 1.2, 1.2, 2.0)
+goto_if_false @STEAL_336
+if 
+  Player.CanStartMission($player1)
+goto_if_false @STEAL_336
+if 
+  $flag_steal_mission_counter == 0
+goto_if_false @STEAL_180
+$onmission = 1
+Text.PrintBig('STEAL_1', 1000, TextStyle.BottomRight)
+PSAVE1_2925()
+Mission.LoadAndLaunchInternal(67) // Zeroing In
+
+:STEAL_180
+if 
+  $flag_steal_mission_counter == 1
+goto_if_false @STEAL_232
+$onmission = 1
+Text.PrintBig('STEAL_2', 1000, TextStyle.BottomRight)
+PSAVE1_2925()
+Mission.LoadAndLaunchInternal(68) // Test Drive
+
+:STEAL_232
+if 
+  $flag_steal_mission_counter == 2
+goto_if_false @STEAL_284
+$onmission = 1
+Text.PrintBig('STEAL_4', 1000, TextStyle.BottomRight)
+PSAVE1_2925()
+Mission.LoadAndLaunchInternal(69) // Customs Fast Track
+
+:STEAL_284
+if 
+  $flag_steal_mission_counter == 3
+goto_if_false @STEAL_336
+$onmission = 1
+Text.PrintBig('STEAL_5', 1000, TextStyle.BottomRight)
+PSAVE1_2925()
+Mission.LoadAndLaunchInternal(70) // Puncture Wounds
+
+:STEAL_336
+goto @STEAL_11
+

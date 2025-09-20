@@ -1,0 +1,2474 @@
+:GFAGNT
+script_name 'GFAGNT'
+$iGFTimeStep = 0
+3@ = 0
+4@ = 0
+$iAgentFlags = 0
+0@ = 0
+1@ = 0
+set_var_text_label16 v$GF_txtConsoleCheck = "NIL"
+$iPhoneState = 20
+$iGFidx = -1
+8@ = -1
+7@ = 1
+if 
+  3@ > 0
+goto_if_false @GFAGNT_335
+2@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+$iGFHomeBlips[0] = Blip.AddForCoord(0.0, 0.0, 0.0)
+$iGFHomeBlips[1] = Blip.AddForCoord(0.0, 0.0, 0.0)
+$iGFHomeBlips[2] = Blip.AddForCoord(0.0, 0.0, 0.0)
+$iGFHomeBlips[3] = Blip.AddForCoord(0.0, 0.0, 0.0)
+$iGFHomeBlips[4] = Blip.AddForCoord(0.0, 0.0, 0.0)
+$iGFHomeBlips[5] = Blip.AddForCoord(0.0, 0.0, 0.0)
+$iGFLockedCarGenerator[0] = CarGenerator.Create(0, 0, 0, 0, 0, 0, False, 0, 0.0, 0.0, 0.0, 0.0)
+$iGFUnlockedCarGenerator[0] = CarGenerator.Create(0, 0, 0, 0, 0, 0, False, 0, 0.0, 0.0, 0.0, 0.0)
+
+:GFAGNT_335
+wait $iGFTimeStep
+if and
+  Player.IsPlaying($player1)
+  not Char.IsDead($scplayer)
+  $onmission == 0
+goto_if_false @GFAGNT_389
+clear_global_var_bit_const $iAgentFlags bit 31
+GFAGNT_428()
+goto @GFAGNT_421
+
+:GFAGNT_389
+if 
+  not is_global_var_bit_set_const $iAgentFlags bit 31
+goto_if_false @GFAGNT_421
+GFAGNT_11185()
+set_global_var_bit_const $iAgentFlags bit 31
+
+:GFAGNT_421
+goto @GFAGNT_335
+
+:GFAGNT_428
+switch_start 0@ total_jumps 5 default_jump 0 @GFAGNT_561 jumps 0 @GFAGNT_491 1 @GFAGNT_505 2 @GFAGNT_519 3 @GFAGNT_533 4 @GFAGNT_547 -1 @GFAGNT_561 -1 @GFAGNT_561
+
+:GFAGNT_491
+GFAGNT_563()
+goto @GFAGNT_561
+
+:GFAGNT_505
+GFAGNT_1605()
+goto @GFAGNT_561
+
+:GFAGNT_519
+GFAGNT_2298()
+goto @GFAGNT_561
+
+:GFAGNT_533
+GFAGNT_2604()
+goto @GFAGNT_561
+
+:GFAGNT_547
+GFAGNT_2781()
+goto @GFAGNT_561
+
+:GFAGNT_561
+return 
+
+:GFAGNT_563
+GFAGNT_5005()
+if 
+  is_global_var_bit_set_var $iActiveGF bit $iGFidx
+goto_if_false @GFAGNT_1167
+if 
+  is_global_var_bit_set_const $iAgentFlags bit 25
+goto_if_false @GFAGNT_621
+3@ = 1
+goto @GFAGNT_891
+
+:GFAGNT_621
+3@ = 0
+4@ = Player.GetCityIsIn($player1)
+switch_start $iGFidx total_jumps 6 default_jump 0 @GFAGNT_891 jumps 0 @GFAGNT_699 1 @GFAGNT_795 2 @GFAGNT_763 3 @GFAGNT_731 4 @GFAGNT_827 5 @GFAGNT_859 -1 @GFAGNT_891
+
+:GFAGNT_699
+if 
+  is_int_lvar_equal_to_constant 4@ == 1
+goto_if_false @GFAGNT_724
+3@ = 1
+
+:GFAGNT_724
+goto @GFAGNT_891
+
+:GFAGNT_731
+if 
+  is_int_lvar_equal_to_constant 4@ == 0
+goto_if_false @GFAGNT_756
+3@ = 1
+
+:GFAGNT_756
+goto @GFAGNT_891
+
+:GFAGNT_763
+if 
+  is_int_lvar_equal_to_constant 4@ == 0
+goto_if_false @GFAGNT_788
+3@ = 1
+
+:GFAGNT_788
+goto @GFAGNT_891
+
+:GFAGNT_795
+if 
+  is_int_lvar_equal_to_constant 4@ == 2
+goto_if_false @GFAGNT_820
+3@ = 1
+
+:GFAGNT_820
+goto @GFAGNT_891
+
+:GFAGNT_827
+if 
+  is_int_lvar_equal_to_constant 4@ == 2
+goto_if_false @GFAGNT_852
+3@ = 1
+
+:GFAGNT_852
+goto @GFAGNT_891
+
+:GFAGNT_859
+if 
+  is_int_lvar_equal_to_constant 4@ == 3
+goto_if_false @GFAGNT_884
+3@ = 1
+
+:GFAGNT_884
+goto @GFAGNT_891
+
+:GFAGNT_891
+if 
+  3@ == 1
+goto_if_false @GFAGNT_1158
+GFAGNT_2980()
+GFAGNT_5122()
+if 
+  3@ > 0
+goto_if_false @GFAGNT_1144
+$iGFTimeStep = 250
+if 
+  not is_global_var_bit_set_const $iDateReport bit 20
+goto_if_false @GFAGNT_1137
+GFAGNT_4358()
+GFAGNT_5333()
+if 
+  3@ > 0
+goto_if_false @GFAGNT_1044
+$iGFTimeStep = 0
+GFAGNT_5639()
+set_global_var_bit_var $iGFAvailableFor2Player bit $iGFidx
+0@ = 4
+1@ = 0
+return 
+goto @GFAGNT_1137
+
+:GFAGNT_1044
+clear_global_var_bit_var $iGFAvailableFor2Player bit $iGFidx
+GFAGNT_5742()
+$iGFTimeStep = 250
+if 
+  Char.LocateStoppedAnyMeans3D($scplayer, 10@, 11@, 12@, 5.0, 5.0, 3.0, False)
+goto_if_false @GFAGNT_1137
+if and
+  not Text.IsHelpMessageBeingDisplayed
+  not Text.IsMessageBeingDisplayed
+goto_if_false @GFAGNT_1135
+Text.PrintHelp('GF_0048')
+
+:GFAGNT_1135
+return 
+
+:GFAGNT_1137
+goto @GFAGNT_1151
+
+:GFAGNT_1144
+GFAGNT_6114()
+
+:GFAGNT_1151
+goto @GFAGNT_1160
+
+:GFAGNT_1158
+return 
+
+:GFAGNT_1160
+goto @GFAGNT_1603
+
+:GFAGNT_1167
+GFAGNT_3801()
+if 
+  not is_global_var_bit_set_const $iDateReport bit 20
+goto_if_false @GFAGNT_1603
+GFAGNT_5196()
+if 
+  3@ > 0
+goto_if_false @GFAGNT_1591
+$iGFTimeStep = 250
+if and
+  $iGFidx == 2
+  2 > $flag_la1fin1_mission_counter
+goto_if_false @GFAGNT_1256
+StreamedScript.MarkAsNoLongerNeeded(24)
+return 
+
+:GFAGNT_1256
+if and
+  $iGFLikesPlayer($iGFidx,6i) <> -100
+  $iGFLikesPlayer($iGFidx,6i) <> -999
+goto_if_false @GFAGNT_1584
+if 
+  is_global_var_bit_set_const $iGFDiaryOfBusyHours($iGFidx,6i) bit 31
+goto_if_false @GFAGNT_1460
+3@ = Clock.GetCurrentDayOfWeek()
+3@ += 22
+if 
+  is_global_var_bit_set_lvar $iGFDiaryOfBusyHours($iGFidx,6i) bit 3@
+goto_if_false @GFAGNT_1368
+GFAGNT_9541()
+3@ = 1
+goto @GFAGNT_1453
+
+:GFAGNT_1368
+3@ += 1
+if 
+  3@ > 29
+goto_if_false @GFAGNT_1400
+3@ = 23
+
+:GFAGNT_1400
+if 
+  is_global_var_bit_set_lvar $iGFDiaryOfBusyHours($iGFidx,6i) bit 3@
+goto_if_false @GFAGNT_1439
+3@ = -1
+return 
+goto @GFAGNT_1453
+
+:GFAGNT_1439
+GFAGNT_9541()
+3@ = 1
+
+:GFAGNT_1453
+goto @GFAGNT_1467
+
+:GFAGNT_1460
+3@ = 1
+
+:GFAGNT_1467
+if 
+  3@ == 1
+goto_if_false @GFAGNT_1584
+GFAGNT_4705()
+3@ = StreamedScript.GetNumberOfInstances(24)
+if 
+  3@ == 0
+goto_if_false @GFAGNT_1584
+StreamedScript.Stream(24)
+if 
+  StreamedScript.HasLoaded(24)
+goto_if_false @GFAGNT_1584
+set_global_var_bit_const $iDateReport bit 20
+StreamedScript.StartNew(24, $iGFidx, 10@, 11@, 12@, 13@)
+$iGFTimeStep = 0
+0@ = 3
+1@ = 0
+
+:GFAGNT_1584
+goto @GFAGNT_1603
+
+:GFAGNT_1591
+$iGFTimeStep = 500
+StreamedScript.MarkAsNoLongerNeeded(24)
+
+:GFAGNT_1603
+return 
+
+:GFAGNT_1605
+switch_start 1@ total_jumps 5 default_jump 0 @GFAGNT_2296 jumps 0 @GFAGNT_1668 1 @GFAGNT_1890 2 @GFAGNT_1942 3 @GFAGNT_2095 4 @GFAGNT_2218 -1 @GFAGNT_2296 -1 @GFAGNT_2296
+
+:GFAGNT_1668
+if 
+  is_int_var_equal_to_int_var $iCaller == $iGFidx
+goto_if_false @GFAGNT_1701
+GFAGNT_7091()
+$iPhoneState = 20
+
+:GFAGNT_1701
+clear_global_var_bit_var $iAgentFlags bit $iGFidx
+GFAGNT_7457()
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFAGNT_1746
+Group.Remove($Players_Group)
+Player.SetGroupRecruitment($player1, False)
+Game.GetRidOfPlayerProstitute
+
+:GFAGNT_1746
+if 
+  not is_global_var_bit_set_const $iActiveGF bit 31
+goto_if_false @GFAGNT_1771
+$iDateReport = 0
+
+:GFAGNT_1771
+GFAGNT_9631()
+if and
+  3@ == 1
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 23
+goto_if_false @GFAGNT_1821
+set_global_var_bit_const $iDateReport bit 14
+goto @GFAGNT_1872
+
+:GFAGNT_1821
+if 
+  30 >= $iGFLikesPlayer($iGFidx,6i)
+goto_if_false @GFAGNT_1857
+set_global_var_bit_const $iDateReport bit 11
+goto @GFAGNT_1872
+
+:GFAGNT_1857
+GFAGNT_7115()
+set_global_var_bit_lvar $iDateReport bit 3@
+
+:GFAGNT_1872
+StreamedScript.Stream(25)
+1@ += 1
+goto @GFAGNT_2296
+
+:GFAGNT_1890
+if 
+  StreamedScript.HasLoaded(25)
+goto_if_false @GFAGNT_1935
+set_global_var_bit_const $iDateReport bit 1
+clear_global_var_bit_var $iGFAvailableFor2Player bit $iGFidx
+StreamedScript.StartNew(25, 2@)
+1@ += 1
+
+:GFAGNT_1935
+goto @GFAGNT_2296
+
+:GFAGNT_1942
+if 
+  not is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @GFAGNT_2056
+if 
+  is_global_var_bit_set_const $iDateReport bit 3
+goto_if_false @GFAGNT_2028
+if 
+  not is_global_var_bit_set_const $iDateReport bit 5
+goto_if_false @GFAGNT_2021
+Player.SetControl($player1, False)
+GFAGNT_9180()
+StreamedScript.Stream(26)
+1@ += 1
+
+:GFAGNT_2021
+goto @GFAGNT_2049
+
+:GFAGNT_2028
+Camera.DoFade(1, 1000)
+0@ = 2
+1@ = 0
+
+:GFAGNT_2049
+goto @GFAGNT_2088
+
+:GFAGNT_2056
+3@ = StreamedScript.GetNumberOfInstances(25)
+if 
+  3@ == 0
+goto_if_false @GFAGNT_2088
+clear_global_var_bit_const $iDateReport bit 1
+
+:GFAGNT_2088
+goto @GFAGNT_2296
+
+:GFAGNT_2095
+if 
+  StreamedScript.HasLoaded(26)
+goto_if_false @GFAGNT_2211
+3@ = Streaming.GetAreaVisible()
+GFAGNT_4358()
+if 
+  is_global_var_bit_set_const $iDateReport bit 14
+goto_if_false @GFAGNT_2172
+StreamedScript.StartNew(26, $iGFidx, 1, 3@, 10@, 11@, 12@, 13@)
+goto @GFAGNT_2197
+
+:GFAGNT_2172
+StreamedScript.StartNew(26, $iGFidx, 0, 3@, 10@, 11@, 12@, 13@)
+
+:GFAGNT_2197
+set_global_var_bit_const $iDateReport bit 5
+1@ += 1
+
+:GFAGNT_2211
+goto @GFAGNT_2296
+
+:GFAGNT_2218
+if 
+  not is_global_var_bit_set_const $iDateReport bit 5
+goto_if_false @GFAGNT_2257
+0@ = 2
+1@ = 0
+goto @GFAGNT_2289
+
+:GFAGNT_2257
+3@ = StreamedScript.GetNumberOfInstances(26)
+if 
+  3@ == 0
+goto_if_false @GFAGNT_2289
+clear_global_var_bit_const $iDateReport bit 5
+
+:GFAGNT_2289
+goto @GFAGNT_2296
+
+:GFAGNT_2296
+return 
+
+:GFAGNT_2298
+switch_start 1@ total_jumps 2 default_jump 0 @GFAGNT_2602 jumps 0 @GFAGNT_2361 1 @GFAGNT_2477 -1 @GFAGNT_2602 -1 @GFAGNT_2602 -1 @GFAGNT_2602 -1 @GFAGNT_2602 -1 @GFAGNT_2602
+
+:GFAGNT_2361
+clear_global_var_bit_var $iAgentFlags bit $iGFidx
+GFAGNT_9180()
+if 
+  $iGFLikesPlayer($iGFidx,6i) == -999
+goto_if_false @GFAGNT_2427
+Text.ClearHelp
+Text.PrintHelp('GF_0039')
+clear_global_var_bit_var $iActiveGF bit $iGFidx
+goto @GFAGNT_2463
+
+:GFAGNT_2427
+GFAGNT_8694()
+if 
+  $iGFLikesPlayer($iGFidx,6i) >= 50
+goto_if_false @GFAGNT_2463
+GFAGNT_5791()
+
+:GFAGNT_2463
+1@ += 1
+goto @GFAGNT_2602
+
+:GFAGNT_2477
+if or
+  $iGFLikesPlayer($iGFidx,6i) == -100
+  $iGFLikesPlayer($iGFidx,6i) == -999
+goto_if_false @GFAGNT_2539
+GFAGNT_9697()
+0@ = 0
+1@ = 0
+goto @GFAGNT_2595
+
+:GFAGNT_2539
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 10@, 11@, 12@, 10.0, 10.0, 10.0)
+goto_if_false @GFAGNT_2595
+0@ = 0
+1@ = 0
+
+:GFAGNT_2595
+goto @GFAGNT_2602
+
+:GFAGNT_2602
+return 
+
+:GFAGNT_2604
+if 
+  not is_global_var_bit_set_const $iDateReport bit 20
+goto_if_false @GFAGNT_2747
+GFAGNT_4705()
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 10@, 11@, 12@, 65.0, 65.0, 5.0)
+goto_if_false @GFAGNT_2740
+if 
+  is_global_var_bit_set_const $iDateReport bit 21
+goto_if_false @GFAGNT_2726
+7@ = Clock.GetCurrentDayOfWeek()
+7@ += 1
+if 
+  7@ > 7
+goto_if_false @GFAGNT_2726
+7@ = 1
+
+:GFAGNT_2726
+0@ = 0
+1@ = 0
+
+:GFAGNT_2740
+goto @GFAGNT_2779
+
+:GFAGNT_2747
+3@ = StreamedScript.GetNumberOfInstances(24)
+if 
+  3@ == 0
+goto_if_false @GFAGNT_2779
+clear_global_var_bit_const $iDateReport bit 20
+
+:GFAGNT_2779
+return 
+
+:GFAGNT_2781
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 10@, 11@, 12@, 75.0, 75.0, 10.0)
+goto_if_false @GFAGNT_2964
+GFAGNT_5333()
+if 
+  3@ > 0
+goto_if_false @GFAGNT_2943
+if 
+  Char.LocateStoppedAnyMeans3D($scplayer, 10@, 11@, 12@, 1.5, 1.5, 1.5, True)
+goto_if_false @GFAGNT_2936
+if and
+  not is_global_var_bit_set_const $iAgentFlags bit 11
+  Player.CanStartMission($player1)
+goto_if_false @GFAGNT_2936
+Player.SetControl($player1, False)
+0@ = 1
+1@ = 0
+return 
+
+:GFAGNT_2936
+goto @GFAGNT_2957
+
+:GFAGNT_2943
+0@ = 0
+1@ = 0
+
+:GFAGNT_2957
+goto @GFAGNT_2978
+
+:GFAGNT_2964
+0@ = 0
+1@ = 0
+
+:GFAGNT_2978
+return 
+
+:GFAGNT_2980
+if 
+  not Blip.DoesExist($iGFHomeBlips($iGFidx,6i))
+goto_if_false @GFAGNT_3094
+GFAGNT_4358()
+$iGFHomeBlips($iGFidx,6i) = Blip.AddShortRangeSpriteForCoord(21, 10@, 11@, 12@)
+Stat.IncrementInt(StatId.TotalProgress, 184)
+Stat.IncrementInt(StatId.TotalProgress, 186)
+3@ = Stat.GetInt(65)
+add_int_var_to_int_lvar 3@ += $iGFRespectGiven($iGFidx,6i)
+if 
+  3@ > 1000
+goto_if_false @GFAGNT_3087
+3@ = 1000
+
+:GFAGNT_3087
+Stat.SetInt(StatId.RespectGirlfriend, 3@)
+
+:GFAGNT_3094
+switch_start $iGFidx total_jumps 5 default_jump 0 @GFAGNT_3799 jumps 0 @GFAGNT_3157 1 @GFAGNT_3224 2 @GFAGNT_3342 3 @GFAGNT_3553 4 @GFAGNT_3676 -1 @GFAGNT_3799 -1 @GFAGNT_3799
+
+:GFAGNT_3157
+if and
+  $iGFLikesPlayer($iGFidx,6i) >= 100
+  $flag_got_pimp_clothes == 0
+goto_if_false @GFAGNT_3217
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @GFAGNT_3217
+Text.PrintHelp('GF_H006')
+$flag_got_pimp_clothes = 1
+
+:GFAGNT_3217
+goto @GFAGNT_3799
+
+:GFAGNT_3224
+if and
+  $iGFLikesPlayer($iGFidx,6i) >= 100
+  $flag_got_mechanic_clothes == 0
+goto_if_false @GFAGNT_3284
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @GFAGNT_3284
+Text.PrintHelp('GF_H006')
+$flag_got_mechanic_clothes = 1
+
+:GFAGNT_3284
+if 
+  not is_global_var_bit_set_const $iActiveGF bit 21
+goto_if_false @GFAGNT_3335
+Garage.ChangeType('MICHDR', GarageType.Respray)
+Garage.SetResprayFree('MICHDR', True)
+set_global_var_bit_const $iActiveGF bit 21
+
+:GFAGNT_3335
+goto @GFAGNT_3799
+
+:GFAGNT_3342
+if and
+  $iGFLikesPlayer($iGFidx,6i) >= 100
+  $flag_player_got_country_clothes == 0
+goto_if_false @GFAGNT_3402
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @GFAGNT_3402
+Text.PrintHelp('GF_H006')
+$flag_player_got_country_clothes = 1
+
+:GFAGNT_3402
+if 
+  not is_global_var_bit_set_const $iActiveGF bit 22
+goto_if_false @GFAGNT_3546
+Object.SetVisible($iGFdoor[6], False)
+Object.SetCollision($iGFdoor[6], False)
+$iGFBonusPickupID = Pickup.Create(344, 15, -366.2235, -1429.088, 25.5)
+$395 = Pickup.Create(341, 15, -365.7906, -1425.253, 25.5)
+$396 = Pickup.CreateWithAmmo(346, 15, 100, -365.4774, -1422.401, 25.5)
+$397 = Pickup.CreateWithAmmo(361, 15, 200, -366.066, -1418.683, 25.5)
+set_global_var_bit_const $iActiveGF bit 22
+
+:GFAGNT_3546
+goto @GFAGNT_3799
+
+:GFAGNT_3553
+if and
+  $iGFLikesPlayer($iGFidx,6i) >= 100
+  $flag_player_got_police_uniform == 0
+goto_if_false @GFAGNT_3613
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @GFAGNT_3613
+Text.PrintHelp('GF_H006')
+$flag_player_got_police_uniform = 1
+
+:GFAGNT_3613
+if 
+  not is_global_var_bit_set_const $iActiveGF bit 23
+goto_if_false @GFAGNT_3669
+Restart.SetExtraPoliceStationRestartPoint(-1379.843, 2635.74, 54.4315, 1500.0, 170.6194)
+Game.SwitchArrestPenalties(False)
+set_global_var_bit_const $iActiveGF bit 23
+
+:GFAGNT_3669
+goto @GFAGNT_3799
+
+:GFAGNT_3676
+if and
+  $iGFLikesPlayer($iGFidx,6i) >= 100
+  $flag_got_medic_clothes == 0
+goto_if_false @GFAGNT_3736
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @GFAGNT_3736
+Text.PrintHelp('GF_H006')
+$flag_got_medic_clothes = 1
+
+:GFAGNT_3736
+if 
+  not is_global_var_bit_set_const $iActiveGF bit 24
+goto_if_false @GFAGNT_3792
+Restart.SetExtraHospitalRestartPoint(-2570.511, 1139.582, 54.8547, 1500.0, 160.0)
+Game.SwitchDeathPenalties(False)
+set_global_var_bit_const $iActiveGF bit 24
+
+:GFAGNT_3792
+goto @GFAGNT_3799
+
+:GFAGNT_3799
+return 
+
+:GFAGNT_3801
+if 
+  $Returned_oysters == 50
+goto_if_false @GFAGNT_3866
+if and
+  0 > $iGFLikesPlayer($iGFidx,6i)
+  $iGFidx <> 0
+  $iGFidx <> 5
+goto_if_false @GFAGNT_3866
+$iGFLikesPlayer($iGFidx,6i) = 45
+
+:GFAGNT_3866
+if 
+  Blip.DoesExist($iGFHomeBlips($iGFidx,6i))
+goto_if_false @GFAGNT_3982
+Blip.Remove($iGFHomeBlips($iGFidx,6i))
+GFAGNT_9697()
+GFAGNT_5742()
+clear_global_var_bit_var $iGFAvailableFor2Player bit $iGFidx
+Stat.DecrementInt(StatId.CurrentGirlfriends, 1)
+Stat.IncrementInt(StatId.TotalProgress, 189)
+3@ = Stat.GetInt(65)
+sub_int_var_from_int_lvar 3@ -= $iGFRespectGiven($iGFidx,6i)
+if 
+  0 > 3@
+goto_if_false @GFAGNT_3975
+3@ = 0
+
+:GFAGNT_3975
+Stat.SetInt(StatId.RespectGirlfriend, 3@)
+
+:GFAGNT_3982
+set_lvar_int_to_var_int 3@ = $iGFidx
+3@ += 20
+if 
+  is_global_var_bit_set_lvar $iActiveGF bit 3@
+goto_if_false @GFAGNT_4356
+switch_start $iGFidx total_jumps 4 default_jump 0 @GFAGNT_4356 jumps 1 @GFAGNT_4079 2 @GFAGNT_4178 3 @GFAGNT_4274 4 @GFAGNT_4319 -1 @GFAGNT_4356 -1 @GFAGNT_4356 -1 @GFAGNT_4356
+
+:GFAGNT_4079
+if 
+  not Char.IsInArea3D($scplayer, 0, -1790.7, 1209.0, 23.0, -1784.0, 1221.5, 27.5)
+goto_if_false @GFAGNT_4171
+Garage.SetResprayFree('MICHDR', False)
+Garage.ChangeType('MICHDR', GarageType.ForScriptToOpenAndClose)
+Garage.Close('MICHDR')
+clear_global_var_bit_const $iActiveGF bit 21
+
+:GFAGNT_4171
+goto @GFAGNT_4356
+
+:GFAGNT_4178
+if 
+  not Char.IsInArea3D($scplayer, 0, -361.0, -1417.0, 23.0, -372.0, -1431.0, 30.0)
+goto_if_false @GFAGNT_4267
+Pickup.Remove($iGFBonusPickupID)
+Pickup.Remove($395)
+Pickup.Remove($396)
+Pickup.Remove($397)
+Object.SetVisible($iGFdoor[6], True)
+Object.SetCollision($iGFdoor[6], True)
+clear_global_var_bit_const $iActiveGF bit 22
+
+:GFAGNT_4267
+goto @GFAGNT_4356
+
+:GFAGNT_4274
+Restart.SetExtraPoliceStationRestartPoint(-1379.843, 2635.74, 54.4315, 0.0, 170.6194)
+Game.SwitchArrestPenalties(True)
+clear_global_var_bit_const $iActiveGF bit 23
+goto @GFAGNT_4356
+
+:GFAGNT_4319
+Restart.SetExtraHospitalRestartPoint(10@, 11@, 12@, 0.0, 13@)
+Game.SwitchDeathPenalties(True)
+clear_global_var_bit_const $iActiveGF bit 24
+goto @GFAGNT_4356
+
+:GFAGNT_4356
+return 
+
+:GFAGNT_4358
+switch_start $iGFidx total_jumps 6 default_jump 0 @GFAGNT_4703 jumps 0 @GFAGNT_4421 1 @GFAGNT_4468 2 @GFAGNT_4515 3 @GFAGNT_4562 4 @GFAGNT_4609 5 @GFAGNT_4656 -1 @GFAGNT_4703
+
+:GFAGNT_4421
+10@ = 2401.965
+11@ = -1723.22
+12@ = 12.6005
+13@ = 180.0
+goto @GFAGNT_4703
+
+:GFAGNT_4468
+10@ = -1799.5
+11@ = 1195.5
+12@ = 24.1094
+13@ = 180.0
+goto @GFAGNT_4703
+
+:GFAGNT_4515
+10@ = -377.3978
+11@ = -1438.692
+12@ = 24.7209
+13@ = 270.0
+goto @GFAGNT_4703
+
+:GFAGNT_4562
+10@ = -1398.101
+11@ = 2636.873
+12@ = 54.7031
+13@ = 75.0
+goto @GFAGNT_4703
+
+:GFAGNT_4609
+10@ = -2576.808
+11@ = 1144.744
+12@ = 54.7422
+13@ = 164.0
+goto @GFAGNT_4703
+
+:GFAGNT_4656
+10@ = 2035.362
+11@ = 2732.411
+12@ = 9.8203
+13@ = 0.0
+goto @GFAGNT_4703
+
+:GFAGNT_4703
+return 
+
+:GFAGNT_4705
+switch_start $iGFidx total_jumps 4 default_jump 1 @GFAGNT_4956 jumps 1 @GFAGNT_4768 2 @GFAGNT_4815 3 @GFAGNT_4862 4 @GFAGNT_4909 -1 @GFAGNT_5003 -1 @GFAGNT_5003 -1 @GFAGNT_5003
+
+:GFAGNT_4768
+10@ = -2027.583
+11@ = -118.7022
+12@ = 1034.0
+13@ = 3.4
+goto @GFAGNT_5003
+
+:GFAGNT_4815
+10@ = 257.6682
+11@ = -154.7475
+12@ = 4.0786
+13@ = 268.7731
+goto @GFAGNT_5003
+
+:GFAGNT_4862
+10@ = -1410.1
+11@ = 2648.731
+12@ = 54.6875
+13@ = 130.0
+goto @GFAGNT_5003
+
+:GFAGNT_4909
+10@ = -2291.708
+11@ = -233.0215
+12@ = 41.7185
+13@ = 360.0
+goto @GFAGNT_5003
+
+:GFAGNT_4956
+10@ = 0.0
+11@ = 0.0
+12@ = 0.0
+13@ = 0.0
+goto @GFAGNT_5003
+
+:GFAGNT_5003
+return 
+
+:GFAGNT_5005
+8@ += 1
+if 
+  8@ >= 6
+goto_if_false @GFAGNT_5037
+8@ = 0
+
+:GFAGNT_5037
+if 
+  is_global_var_bit_set_const $iAgentFlags bit 25
+goto_if_false @GFAGNT_5088
+if 
+  is_int_lvar_equal_to_int_var 8@ == $iGFidx
+goto_if_false @GFAGNT_5081
+clear_global_var_bit_const $iAgentFlags bit 25
+
+:GFAGNT_5081
+goto @GFAGNT_5120
+
+:GFAGNT_5088
+$iGFidx += 1
+if 
+  $iGFidx >= 6
+goto_if_false @GFAGNT_5120
+$iGFidx = 0
+
+:GFAGNT_5120
+return 
+
+:GFAGNT_5122
+GFAGNT_4358()
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 10@, 11@, 12@, 65.0, 65.0, 5.0)
+goto_if_false @GFAGNT_5187
+set_global_var_bit_const $iAgentFlags bit 25
+3@ = 1
+return 
+
+:GFAGNT_5187
+3@ = -1
+return 
+
+:GFAGNT_5196
+GFAGNT_4705()
+if 
+  10@ <> 0.0
+goto_if_false @GFAGNT_5324
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 10@, 11@, 12@, 80.0, 80.0, 10.0)
+goto_if_false @GFAGNT_5324
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 10@, 11@, 12@, 8.0, 8.0, 10.0)
+goto_if_false @GFAGNT_5324
+set_global_var_bit_const $iAgentFlags bit 25
+3@ = 1
+return 
+
+:GFAGNT_5324
+3@ = -1
+return 
+
+:GFAGNT_5333
+3@ = -1
+if and
+  is_global_var_bit_set_const $iAgentFlags bit 11
+  is_int_var_equal_to_int_var $iCaller == $iGFidx
+goto_if_false @GFAGNT_5375
+3@ = 1
+return 
+
+:GFAGNT_5375
+if and
+  is_global_var_bit_set_const $iAgentFlags bit 10
+  is_int_var_equal_to_int_var $iCaller == $iGFidx
+goto_if_false @GFAGNT_5410
+3@ = 1
+return 
+
+:GFAGNT_5410
+if 
+  is_global_var_bit_set_const $iGFDiaryOfBusyHours($iGFidx,6i) bit 31
+goto_if_false @GFAGNT_5559
+3@ = Clock.GetCurrentDayOfWeek()
+3@ += 22
+if 
+  is_global_var_bit_set_lvar $iGFDiaryOfBusyHours($iGFidx,6i) bit 3@
+goto_if_false @GFAGNT_5481
+GFAGNT_9541()
+goto @GFAGNT_5559
+
+:GFAGNT_5481
+3@ += 1
+if 
+  3@ > 29
+goto_if_false @GFAGNT_5513
+3@ = 23
+
+:GFAGNT_5513
+if 
+  is_global_var_bit_set_lvar $iGFDiaryOfBusyHours($iGFidx,6i) bit 3@
+goto_if_false @GFAGNT_5552
+3@ = -1
+return 
+goto @GFAGNT_5559
+
+:GFAGNT_5552
+GFAGNT_9541()
+
+:GFAGNT_5559
+3@, 4@ = Clock.GetTimeOfDay()
+set_lvar_int_to_lvar_int 4@ = 3@
+4@ /= 2
+4@ *= 2
+if 
+  is_global_var_bit_set_lvar $iGFDiaryOfBusyHours($iGFidx,6i) bit 4@
+goto_if_false @GFAGNT_5628
+3@ = -1
+return 
+goto @GFAGNT_5637
+
+:GFAGNT_5628
+3@ = 1
+return 
+
+:GFAGNT_5637
+return 
+
+:GFAGNT_5639
+if 
+  $iGFLikesPlayer($iGFidx,6i) >= 50
+goto_if_false @GFAGNT_5704
+if 
+  not is_global_var_bit_set_const $iAgentFlags bit 26
+goto_if_false @GFAGNT_5697
+CarGenerator.Switch($iGFUnlockedCarGenerator($iGFidx,6i), 101)
+set_global_var_bit_const $iAgentFlags bit 26
+
+:GFAGNT_5697
+goto @GFAGNT_5740
+
+:GFAGNT_5704
+if 
+  not is_global_var_bit_set_const $iAgentFlags bit 26
+goto_if_false @GFAGNT_5740
+CarGenerator.Switch($iGFLockedCarGenerator($iGFidx,6i), 101)
+set_global_var_bit_const $iAgentFlags bit 26
+
+:GFAGNT_5740
+return 
+
+:GFAGNT_5742
+if 
+  is_global_var_bit_set_const $iAgentFlags bit 26
+goto_if_false @GFAGNT_5789
+CarGenerator.Switch($iGFUnlockedCarGenerator($iGFidx,6i), 0)
+CarGenerator.Switch($iGFLockedCarGenerator($iGFidx,6i), 0)
+clear_global_var_bit_const $iAgentFlags bit 26
+
+:GFAGNT_5789
+return 
+
+:GFAGNT_5791
+switch_start $iGFidx total_jumps 6 default_jump 0 @GFAGNT_6112 jumps 0 @GFAGNT_5854 1 @GFAGNT_5897 2 @GFAGNT_5940 3 @GFAGNT_5983 4 @GFAGNT_6026 5 @GFAGNT_6069 -1 @GFAGNT_6112
+
+:GFAGNT_5854
+if 
+  not is_global_var_bit_set_const $iActiveGF bit 25
+goto_if_false @GFAGNT_5890
+Text.PrintHelp('GF_H007')
+set_global_var_bit_const $iActiveGF bit 25
+
+:GFAGNT_5890
+goto @GFAGNT_6112
+
+:GFAGNT_5897
+if 
+  not is_global_var_bit_set_const $iActiveGF bit 26
+goto_if_false @GFAGNT_5933
+Text.PrintHelp('GF_H008')
+set_global_var_bit_const $iActiveGF bit 26
+
+:GFAGNT_5933
+goto @GFAGNT_6112
+
+:GFAGNT_5940
+if 
+  not is_global_var_bit_set_const $iActiveGF bit 27
+goto_if_false @GFAGNT_5976
+Text.PrintHelp('GF_H009')
+set_global_var_bit_const $iActiveGF bit 27
+
+:GFAGNT_5976
+goto @GFAGNT_6112
+
+:GFAGNT_5983
+if 
+  not is_global_var_bit_set_const $iActiveGF bit 28
+goto_if_false @GFAGNT_6019
+Text.PrintHelp('GF_H010')
+set_global_var_bit_const $iActiveGF bit 28
+
+:GFAGNT_6019
+goto @GFAGNT_6112
+
+:GFAGNT_6026
+if 
+  not is_global_var_bit_set_const $iActiveGF bit 29
+goto_if_false @GFAGNT_6062
+Text.PrintHelp('GF_H011')
+set_global_var_bit_const $iActiveGF bit 29
+
+:GFAGNT_6062
+goto @GFAGNT_6112
+
+:GFAGNT_6069
+if 
+  not is_global_var_bit_set_const $iActiveGF bit 30
+goto_if_false @GFAGNT_6105
+Text.PrintHelp('GF_H012')
+set_global_var_bit_const $iActiveGF bit 30
+
+:GFAGNT_6105
+goto @GFAGNT_6112
+
+:GFAGNT_6112
+return 
+
+:GFAGNT_6114
+switch_start $iPhoneState total_jumps 5 default_jump 0 @GFAGNT_6636 jumps 20 @GFAGNT_6177 21 @GFAGNT_6205 22 @GFAGNT_6338 23 @GFAGNT_6434 24 @GFAGNT_6492 -1 @GFAGNT_6636 -1 @GFAGNT_6636
+
+:GFAGNT_6177
+GFAGNT_7091()
+GFAGNT_9070()
+GFAGNT_6638()
+goto @GFAGNT_6636
+
+:GFAGNT_6205
+3@ = Clock.GetMinutesToTimeOfDay(5@, 6@)
+if 
+  5 >= 3@
+goto_if_false @GFAGNT_6331
+if 
+  not is_global_var_bit_set_const $iAgentFlags bit 11
+goto_if_false @GFAGNT_6331
+if 
+  is_int_var_equal_to_int_var $iCaller == $iGFidx
+goto_if_false @GFAGNT_6298
+start_new_script @MOB_GF $iGFidx 1 
+$iPhoneState = 22
+goto @GFAGNT_6331
+
+:GFAGNT_6298
+if 
+  not is_global_var_bit_set_var $iActiveGF bit $iCaller
+goto_if_false @GFAGNT_6331
+GFAGNT_7091()
+$iPhoneState = 20
+
+:GFAGNT_6331
+goto @GFAGNT_6636
+
+:GFAGNT_6338
+if 
+  not is_global_var_bit_set_const $iAgentFlags bit 11
+goto_if_false @GFAGNT_6427
+if 
+  is_global_var_bit_set_const $iAgentFlags bit 10
+goto_if_false @GFAGNT_6395
+GFAGNT_6757()
+$iPhoneState = 23
+goto @GFAGNT_6427
+
+:GFAGNT_6395
+$iGFLikesPlayer($iCaller,6i) -= 2
+GFAGNT_9854()
+GFAGNT_7091()
+$iPhoneState = 20
+
+:GFAGNT_6427
+goto @GFAGNT_6636
+
+:GFAGNT_6434
+3@ = Clock.GetMinutesToTimeOfDay(5@, 6@)
+if 
+  5 >= 3@
+goto_if_false @GFAGNT_6485
+set_var_int_to_var_int $iGFidx = $iCaller
+GFAGNT_6829()
+$iPhoneState = 20
+
+:GFAGNT_6485
+goto @GFAGNT_6636
+
+:GFAGNT_6492
+if 
+  not is_global_var_bit_set_const $iAgentFlags bit 11
+goto_if_false @GFAGNT_6629
+if 
+  is_global_var_bit_set_const $iAgentFlags bit 10
+goto_if_false @GFAGNT_6586
+if and
+  $iCaller > -1
+  6 > $iCaller
+goto_if_false @GFAGNT_6572
+$iGFLikesPlayer($iCaller,6i) = -100
+clear_global_var_bit_var $iActiveGF bit $iCaller
+
+:GFAGNT_6572
+$iPhoneState = 20
+goto @GFAGNT_6629
+
+:GFAGNT_6586
+if and
+  $iCaller > -1
+  6 > $iCaller
+goto_if_false @GFAGNT_6622
+$iGFLikesPlayer($iCaller,6i) = -99
+
+:GFAGNT_6622
+$iPhoneState = 20
+
+:GFAGNT_6629
+goto @GFAGNT_6636
+
+:GFAGNT_6636
+return 
+
+:GFAGNT_6638
+3@ = Math.RandomIntInRange(0, 6)
+if 
+  is_global_var_bit_set_lvar $iActiveGF bit 3@
+goto_if_false @GFAGNT_6755
+if 
+  $iGFLikesPlayer(3@,6i) > -15
+goto_if_false @GFAGNT_6755
+if and
+  $iGFLikesPlayer(3@,6i) <> -100
+  $iGFLikesPlayer($iGFidx,6i) <> -999
+goto_if_false @GFAGNT_6755
+5@ = Math.RandomIntInRange(1, 23)
+6@ = Math.RandomIntInRange(1, 59)
+set_var_int_to_lvar_int $iCaller = 3@
+$iPhoneState = 21
+
+:GFAGNT_6755
+return 
+
+:GFAGNT_6757
+5@, 6@ = Clock.GetTimeOfDay()
+6@ = 31
+5@ += 5
+if 
+  5@ > 23
+goto_if_false @GFAGNT_6827
+set_lvar_int_to_lvar_int 3@ = 5@
+3@ -= 23
+5@ = 0
+add_int_lvar_to_int_lvar 5@ += 3@
+
+:GFAGNT_6827
+return 
+
+:GFAGNT_6829
+if and
+  $iCaller > -1
+  6 > $iCaller
+goto_if_false @GFAGNT_7089
+$iGFLikesPlayer($iCaller,6i) -= 3
+GFAGNT_9854()
+if and
+  not Text.IsHelpMessageBeingDisplayed
+  $iGFLikesPlayer($iCaller,6i) > -15
+goto_if_false @GFAGNT_7089
+switch_start $iCaller total_jumps 6 default_jump 0 @GFAGNT_7067 jumps 0 @GFAGNT_6959 1 @GFAGNT_6977 2 @GFAGNT_6995 3 @GFAGNT_7013 4 @GFAGNT_7031 5 @GFAGNT_7049 -1 @GFAGNT_7067
+
+:GFAGNT_6959
+Text.PrintHelp('GF_APP0')
+goto @GFAGNT_7067
+
+:GFAGNT_6977
+Text.PrintHelp('GF_APP1')
+goto @GFAGNT_7067
+
+:GFAGNT_6995
+Text.PrintHelp('GF_APP2')
+goto @GFAGNT_7067
+
+:GFAGNT_7013
+Text.PrintHelp('GF_APP3')
+goto @GFAGNT_7067
+
+:GFAGNT_7031
+Text.PrintHelp('GF_APP4')
+goto @GFAGNT_7067
+
+:GFAGNT_7049
+Text.PrintHelp('GF_APP5')
+goto @GFAGNT_7067
+
+:GFAGNT_7067
+clear_global_var_bit_const $iAgentFlags bit 10
+clear_global_var_bit_var $iAgentFlags bit $iCaller
+$iCaller = -1
+
+:GFAGNT_7089
+return 
+
+:GFAGNT_7091
+$iCaller = -1
+clear_global_var_bit_const $iAgentFlags bit 10
+clear_global_var_bit_var $iAgentFlags bit $iGFidx
+return 
+
+:GFAGNT_7115
+3@ = Math.RandomIntInRange(0, 45)
+if 
+  3@ > 10
+goto_if_false @GFAGNT_7288
+if 
+  3@ > 20
+goto_if_false @GFAGNT_7274
+if 
+  3@ > 30
+goto_if_false @GFAGNT_7260
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 22
+goto_if_false @GFAGNT_7214
+3@ = 15
+goto @GFAGNT_7253
+
+:GFAGNT_7214
+if 
+  3@ > 35
+goto_if_false @GFAGNT_7246
+3@ = 12
+goto @GFAGNT_7253
+
+:GFAGNT_7246
+3@ = 13
+
+:GFAGNT_7253
+goto @GFAGNT_7267
+
+:GFAGNT_7260
+3@ = 13
+
+:GFAGNT_7267
+goto @GFAGNT_7281
+
+:GFAGNT_7274
+3@ = 12
+
+:GFAGNT_7281
+goto @GFAGNT_7295
+
+:GFAGNT_7288
+3@ = 11
+
+:GFAGNT_7295
+if 
+  is_global_var_bit_set_const $iDateReport bit 27
+goto_if_false @GFAGNT_7327
+3@ = 11
+$iDateReport = 0
+
+:GFAGNT_7327
+if 
+  is_global_var_bit_set_const $iDateReport bit 28
+goto_if_false @GFAGNT_7359
+3@ = 12
+$iDateReport = 0
+
+:GFAGNT_7359
+if 
+  is_global_var_bit_set_const $iDateReport bit 29
+goto_if_false @GFAGNT_7391
+3@ = 13
+$iDateReport = 0
+
+:GFAGNT_7391
+if 
+  is_global_var_bit_set_const $iDateReport bit 30
+goto_if_false @GFAGNT_7423
+3@ = 14
+$iDateReport = 0
+
+:GFAGNT_7423
+if 
+  is_global_var_bit_set_const $iDateReport bit 31
+goto_if_false @GFAGNT_7455
+3@ = 15
+$iDateReport = 0
+
+:GFAGNT_7455
+return 
+
+:GFAGNT_7457
+switch_start $iGFidx total_jumps 6 default_jump 0 @GFAGNT_8692 jumps 0 @GFAGNT_7520 1 @GFAGNT_7866 2 @GFAGNT_8006 3 @GFAGNT_8188 4 @GFAGNT_8370 5 @GFAGNT_8552 -1 @GFAGNT_8692
+
+:GFAGNT_7520
+if or
+  not Streaming.HasModelLoaded(195)
+  not Streaming.HasModelLoaded(352)
+goto_if_false @GFAGNT_7562
+Streaming.RequestModel(352)
+Streaming.RequestModel(195)
+wait 0
+goto @GFAGNT_7520
+
+:GFAGNT_7562
+2@ = Char.Create(5, 195, 2402.39, -1712.899, 13.1402)
+Char.SetHeading(2@, 180.0)
+Char.GiveWeapon(2@, WeaponType.MicroUzi, 60)
+Char.SetCurrentWeapon(2@, WeaponType.Unarmed)
+Char.SetAccuracy(2@, 75)
+$iGF_GlobalDM_Weak_Gang = DecisionMakerChar.CopyShared(65540)
+DecisionMakerChar.AddEventResponse($iGF_GlobalDM_Weak_Gang, 36, 1022, 0.0, 100.0, 0.0, 0.0, True, False)
+DecisionMakerChar.AddEventResponse($iGF_GlobalDM_Weak_Gang, 37, 1022, 0.0, 100.0, 0.0, 0.0, True, False)
+DecisionMakerChar.AddEventResponse($iGF_GlobalDM_Weak_Gang, 36, 1024, 0.0, 50.0, 0.0, 0.0, False, True)
+Char.SetDecisionMaker(2@, $iGF_GlobalDM_Weak_Gang)
+Char.SetRelationship(2@, RelationshipType.Hate, PedType.Gang1)
+Char.SetRelationship(2@, RelationshipType.Hate, PedType.Gang3)
+Char.SetRelationship(2@, RelationshipType.Hate, PedType.Gang4)
+Char.SetRelationship(2@, RelationshipType.Hate, PedType.Gang5)
+Char.SetRelationship(2@, RelationshipType.Hate, PedType.Gang6)
+Char.SetRelationship(2@, RelationshipType.Hate, PedType.Gang7)
+Char.SetRelationship(2@, RelationshipType.Hate, PedType.Gang8)
+Char.SetStayInSamePlace(2@, True)
+Char.SetSuffersCriticalHits(2@, False)
+Char.SetNeverTargeted(2@, True)
+Char.SetProofs(2@, False, False, True, True, False)
+Char.SetHealth(2@, 500)
+Char.DontRemove(2@)
+Task.StandStill(2@, -1)
+goto @GFAGNT_8692
+
+:GFAGNT_7866
+if 
+  not Streaming.HasModelLoaded(192)
+goto_if_false @GFAGNT_7898
+Streaming.RequestModel(192)
+wait 0
+goto @GFAGNT_7866
+
+:GFAGNT_7898
+2@ = Char.Create(5, 192, -1799.875, 1202.057, 24.1328)
+Char.SetHeading(2@, 180.0)
+Char.SetDecisionMaker(2@, 65543)
+Char.SetStayInSamePlace(2@, True)
+Char.SetSuffersCriticalHits(2@, False)
+Char.SetNeverTargeted(2@, True)
+Char.SetProofs(2@, False, False, True, True, False)
+Char.SetHealth(2@, 500)
+Char.DontRemove(2@)
+Task.StandStill(2@, -1)
+goto @GFAGNT_8692
+
+:GFAGNT_8006
+if 
+  not Streaming.HasModelLoaded(191)
+goto_if_false @GFAGNT_8038
+Streaming.RequestModel(191)
+wait 0
+goto @GFAGNT_8006
+
+:GFAGNT_8038
+2@ = Char.Create(5, 191, -384.6795, -1438.84, 25.3281)
+Char.SetHeading(2@, 268.2687)
+$iGF_GlobalDM_Tough = DecisionMakerChar.CopyShared(65539)
+DecisionMakerChar.AddEventResponse($iGF_GlobalDM_Tough, 36, 1024, 0.0, 50.0, 0.0, 0.0, False, True)
+Char.SetDecisionMaker(2@, $iGF_GlobalDM_Tough)
+Char.SetStayInSamePlace(2@, True)
+Char.SetSuffersCriticalHits(2@, False)
+Char.SetNeverTargeted(2@, True)
+Char.SetProofs(2@, False, False, True, True, False)
+Char.SetHealth(2@, 500)
+Char.DontRemove(2@)
+Task.StandStill(2@, -1)
+goto @GFAGNT_8692
+
+:GFAGNT_8188
+if 
+  not Streaming.HasModelLoaded(190)
+goto_if_false @GFAGNT_8220
+Streaming.RequestModel(190)
+wait 0
+goto @GFAGNT_8188
+
+:GFAGNT_8220
+2@ = Char.Create(5, 190, -1390.303, 2641.066, 54.9844)
+Char.SetHeading(2@, 187.2)
+$iGF_GlobalDM_Tough = DecisionMakerChar.CopyShared(65539)
+DecisionMakerChar.AddEventResponse($iGF_GlobalDM_Tough, 36, 1024, 0.0, 50.0, 0.0, 0.0, False, True)
+Char.SetDecisionMaker(2@, $iGF_GlobalDM_Tough)
+Char.SetStayInSamePlace(2@, True)
+Char.SetSuffersCriticalHits(2@, False)
+Char.SetNeverTargeted(2@, True)
+Char.SetProofs(2@, False, False, True, True, False)
+Char.SetHealth(2@, 500)
+Char.DontRemove(2@)
+Task.StandStill(2@, -1)
+goto @GFAGNT_8692
+
+:GFAGNT_8370
+if 
+  not Streaming.HasModelLoaded(193)
+goto_if_false @GFAGNT_8402
+Streaming.RequestModel(193)
+wait 0
+goto @GFAGNT_8370
+
+:GFAGNT_8402
+2@ = Char.Create(5, 193, -2573.357, 1155.091, 54.7347)
+Char.SetHeading(2@, 167.8854)
+$iGF_GlobalDM_Tough = DecisionMakerChar.CopyShared(65539)
+DecisionMakerChar.AddEventResponse($iGF_GlobalDM_Tough, 36, 1024, 0.0, 50.0, 0.0, 0.0, False, True)
+Char.SetDecisionMaker(2@, $iGF_GlobalDM_Tough)
+Char.SetStayInSamePlace(2@, True)
+Char.SetSuffersCriticalHits(2@, False)
+Char.SetNeverTargeted(2@, True)
+Char.SetProofs(2@, False, False, True, True, False)
+Char.SetHealth(2@, 500)
+Char.DontRemove(2@)
+Task.StandStill(2@, -1)
+goto @GFAGNT_8692
+
+:GFAGNT_8552
+if 
+  not Streaming.HasModelLoaded(194)
+goto_if_false @GFAGNT_8584
+Streaming.RequestModel(194)
+wait 0
+goto @GFAGNT_8552
+
+:GFAGNT_8584
+2@ = Char.Create(5, 194, 2037.476, 2719.794, 10.5436)
+Char.SetHeading(2@, 9.2)
+Char.SetDecisionMaker(2@, 65543)
+Char.SetStayInSamePlace(2@, True)
+Char.SetSuffersCriticalHits(2@, False)
+Char.SetNeverTargeted(2@, True)
+Char.SetProofs(2@, False, False, True, True, False)
+Char.SetHealth(2@, 500)
+Char.DontRemove(2@)
+Task.StandStill(2@, -1)
+goto @GFAGNT_8692
+
+:GFAGNT_8692
+return 
+
+:GFAGNT_8694
+if 
+  is_global_var_bit_set_const $iDateReport bit 2
+goto_if_false @GFAGNT_8806
+if and
+  0 >= $iGFLikesPlayer($iGFidx,6i)
+  $iGFLikesPlayer($iGFidx,6i) > -15
+goto_if_false @GFAGNT_8774
+$iGFLikesPlayer($iGFidx,6i) = 0
+$iGFLikesPlayer($iGFidx,6i) += 5
+goto @GFAGNT_8785
+
+:GFAGNT_8774
+$iGFLikesPlayer($iGFidx,6i) += 5
+
+:GFAGNT_8785
+GFAGNT_9854()
+Stat.IncrementInt(StatId.TotalProgress, 188)
+goto @GFAGNT_8908
+
+:GFAGNT_8806
+if 
+  is_global_var_bit_set_const $iDateReport bit 8
+goto_if_false @GFAGNT_8883
+if and
+  $iGFLikesPlayer($iGFidx,6i) <> -100
+  $iGFLikesPlayer($iGFidx,6i) <> -999
+goto_if_false @GFAGNT_8876
+$iGFLikesPlayer($iGFidx,6i) -= 1
+GFAGNT_9854()
+
+:GFAGNT_8876
+goto @GFAGNT_8908
+
+:GFAGNT_8883
+$iGFLikesPlayer($iGFidx,6i) -= 5
+GFAGNT_9854()
+Stat.IncrementInt(StatId.TotalProgress, 185)
+
+:GFAGNT_8908
+if 
+  is_global_var_bit_set_const $iDateReport bit 4
+goto_if_false @GFAGNT_8958
+$iGFLikesPlayer($iGFidx,6i) += 5
+GFAGNT_9854()
+Stat.IncrementInt(StatId.TotalProgress, 187)
+goto @GFAGNT_8994
+
+:GFAGNT_8958
+if 
+  is_global_var_bit_set_const $iDateReport bit 3
+goto_if_false @GFAGNT_8994
+$iGFLikesPlayer($iGFidx,6i) -= 5
+GFAGNT_9854()
+
+:GFAGNT_8994
+if and
+  $iGFLikesPlayer($iGFidx,6i) <> -100
+  $iGFLikesPlayer($iGFidx,6i) <> -999
+goto_if_false @GFAGNT_9061
+if 
+  -15 >= $iGFLikesPlayer($iGFidx,6i)
+goto_if_false @GFAGNT_9061
+$iGFLikesPlayer($iGFidx,6i) = -99
+
+:GFAGNT_9061
+$iDateReport = 0
+return 
+
+:GFAGNT_9070
+if and
+  $iGFLikesPlayer($iGFidx,6i) <> -100
+  $iGFLikesPlayer($iGFidx,6i) <> -999
+goto_if_false @GFAGNT_9178
+if 
+  $iGFLikesPlayer($iGFidx,6i) <> -99
+goto_if_false @GFAGNT_9178
+if 
+  -15 >= $iGFLikesPlayer($iGFidx,6i)
+goto_if_false @GFAGNT_9178
+$iPhoneState = 24
+set_var_int_to_var_int $iCaller = $iGFidx
+start_new_script @MOB_GF $iCaller 2 
+return 
+
+:GFAGNT_9178
+return 
+
+:GFAGNT_9180
+switch_start $iGFidx total_jumps 6 default_jump 0 @GFAGNT_9340 jumps 0 @GFAGNT_9243 1 @GFAGNT_9265 2 @GFAGNT_9277 3 @GFAGNT_9294 4 @GFAGNT_9311 5 @GFAGNT_9328 -1 @GFAGNT_9340
+
+:GFAGNT_9243
+Streaming.MarkModelAsNoLongerNeeded(195)
+Streaming.MarkModelAsNoLongerNeeded(352)
+DecisionMaker.Remove($iGF_GlobalDM_Weak_Gang)
+goto @GFAGNT_9340
+
+:GFAGNT_9265
+Streaming.MarkModelAsNoLongerNeeded(192)
+goto @GFAGNT_9340
+
+:GFAGNT_9277
+Streaming.MarkModelAsNoLongerNeeded(191)
+DecisionMaker.Remove($iGF_GlobalDM_Tough)
+goto @GFAGNT_9340
+
+:GFAGNT_9294
+Streaming.MarkModelAsNoLongerNeeded(190)
+DecisionMaker.Remove($iGF_GlobalDM_Tough)
+goto @GFAGNT_9340
+
+:GFAGNT_9311
+Streaming.MarkModelAsNoLongerNeeded(193)
+DecisionMaker.Remove($iGF_GlobalDM_Tough)
+goto @GFAGNT_9340
+
+:GFAGNT_9328
+Streaming.MarkModelAsNoLongerNeeded(194)
+goto @GFAGNT_9340
+
+:GFAGNT_9340
+if 
+  is_global_var_bit_set_const $iDateReport bit 6
+goto_if_false @GFAGNT_9370
+Char.Delete(2@)
+goto @GFAGNT_9440
+
+:GFAGNT_9370
+if 
+  is_global_var_bit_set_const $iDateReport bit 22
+goto_if_false @GFAGNT_9400
+Char.Delete(2@)
+goto @GFAGNT_9440
+
+:GFAGNT_9400
+if 
+  $iGFLikesPlayer($iGFidx,6i) == -999
+goto_if_false @GFAGNT_9435
+Char.MarkAsNoLongerNeeded(2@)
+goto @GFAGNT_9440
+
+:GFAGNT_9435
+Char.RemoveElegantly(2@)
+
+:GFAGNT_9440
+$iDanceGirlfriend = 0
+if 
+  is_global_var_bit_set_const $iDateReport bit 21
+goto_if_false @GFAGNT_9539
+3@ = Clock.GetCurrentDayOfWeek()
+3@ += 1
+if 
+  3@ > 7
+goto_if_false @GFAGNT_9502
+3@ = 1
+
+:GFAGNT_9502
+GFAGNT_9541()
+3@ += 22
+set_global_var_bit_lvar $iGFDiaryOfBusyHours($iGFidx,6i) bit 3@
+set_global_var_bit_const $iGFDiaryOfBusyHours($iGFidx,6i) bit 31
+
+:GFAGNT_9539
+return 
+
+:GFAGNT_9541
+clear_global_var_bit_const $iGFDiaryOfBusyHours($iGFidx,6i) bit 31
+clear_global_var_bit_const $iGFDiaryOfBusyHours($iGFidx,6i) bit 23
+clear_global_var_bit_const $iGFDiaryOfBusyHours($iGFidx,6i) bit 24
+clear_global_var_bit_const $iGFDiaryOfBusyHours($iGFidx,6i) bit 25
+clear_global_var_bit_const $iGFDiaryOfBusyHours($iGFidx,6i) bit 26
+clear_global_var_bit_const $iGFDiaryOfBusyHours($iGFidx,6i) bit 27
+clear_global_var_bit_const $iGFDiaryOfBusyHours($iGFidx,6i) bit 28
+clear_global_var_bit_const $iGFDiaryOfBusyHours($iGFidx,6i) bit 29
+return 
+
+:GFAGNT_9631
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFAGNT_9695
+if 
+  Player.IsWearing($player1, "GIMPLEG", BodyPart.SpecialCostume)
+goto_if_false @GFAGNT_9688
+3@ = 1
+goto @GFAGNT_9695
+
+:GFAGNT_9688
+3@ = 0
+
+:GFAGNT_9695
+return 
+
+:GFAGNT_9697
+Stat.ShowUpdateStats(False)
+switch_start $iGFidx total_jumps 6 default_jump 0 @GFAGNT_9848 jumps 0 @GFAGNT_9764 1 @GFAGNT_9778 2 @GFAGNT_9792 3 @GFAGNT_9806 4 @GFAGNT_9820 5 @GFAGNT_9834 -1 @GFAGNT_9848
+
+:GFAGNT_9764
+Stat.SetInt(StatId.GirlfriendDenise, 0)
+goto @GFAGNT_9848
+
+:GFAGNT_9778
+Stat.SetInt(StatId.GirlfriendMichelle, 0)
+goto @GFAGNT_9848
+
+:GFAGNT_9792
+Stat.SetInt(StatId.GirlfriendHelena, 0)
+goto @GFAGNT_9848
+
+:GFAGNT_9806
+Stat.SetInt(StatId.GirlfriendBarbara, 0)
+goto @GFAGNT_9848
+
+:GFAGNT_9820
+Stat.SetInt(StatId.GirlfriendKatie, 0)
+goto @GFAGNT_9848
+
+:GFAGNT_9834
+Stat.SetInt(StatId.GirlfriendMillie, 0)
+goto @GFAGNT_9848
+
+:GFAGNT_9848
+Stat.ShowUpdateStats(True)
+return 
+
+:GFAGNT_9854
+switch_start $iGFidx total_jumps 6 default_jump 0 @GFAGNT_11183 jumps 0 @GFAGNT_9917 1 @GFAGNT_10128 2 @GFAGNT_10339 3 @GFAGNT_10550 4 @GFAGNT_10761 5 @GFAGNT_10972 -1 @GFAGNT_11183
+
+:GFAGNT_9917
+9@ = Stat.GetInt(252)
+if 
+  is_int_var_greater_than_int_lvar $iGFLikesPlayer[0] > 9@
+goto_if_false @GFAGNT_10029
+if 
+  $iGFLikesPlayer[0] > 100
+goto_if_false @GFAGNT_9969
+$iGFLikesPlayer[0] = 100
+
+:GFAGNT_9969
+if 
+  0 > $iGFLikesPlayer[0]
+goto_if_false @GFAGNT_10001
+Stat.SetInt(StatId.GirlfriendDenise, 0)
+goto @GFAGNT_10022
+
+:GFAGNT_10001
+sub_int_var_from_int_lvar 9@ -= $iGFLikesPlayer[0]
+abs_lvar_int 9@
+Stat.IncrementInt(9@, 252)
+
+:GFAGNT_10022
+goto @GFAGNT_10121
+
+:GFAGNT_10029
+if 
+  is_int_lvar_greater_than_int_var 9@ > $iGFLikesPlayer[0]
+goto_if_false @GFAGNT_10121
+if 
+  $iGFLikesPlayer[0] > 100
+goto_if_false @GFAGNT_10073
+$iGFLikesPlayer[0] = 100
+
+:GFAGNT_10073
+if 
+  0 > $iGFLikesPlayer[0]
+goto_if_false @GFAGNT_10105
+Stat.SetInt(StatId.GirlfriendDenise, 0)
+goto @GFAGNT_10121
+
+:GFAGNT_10105
+sub_int_var_from_int_lvar 9@ -= $iGFLikesPlayer[0]
+Stat.DecrementInt(StatId.GirlfriendDenise, 9@)
+
+:GFAGNT_10121
+goto @GFAGNT_11183
+
+:GFAGNT_10128
+9@ = Stat.GetInt(253)
+if 
+  is_int_var_greater_than_int_lvar $iGFLikesPlayer[1] > 9@
+goto_if_false @GFAGNT_10240
+if 
+  $iGFLikesPlayer[1] > 100
+goto_if_false @GFAGNT_10180
+$iGFLikesPlayer[1] = 100
+
+:GFAGNT_10180
+if 
+  0 > $iGFLikesPlayer[1]
+goto_if_false @GFAGNT_10212
+Stat.SetInt(StatId.GirlfriendMichelle, 0)
+goto @GFAGNT_10233
+
+:GFAGNT_10212
+sub_int_var_from_int_lvar 9@ -= $iGFLikesPlayer[1]
+abs_lvar_int 9@
+Stat.IncrementInt(9@, 253)
+
+:GFAGNT_10233
+goto @GFAGNT_10332
+
+:GFAGNT_10240
+if 
+  is_int_lvar_greater_than_int_var 9@ > $iGFLikesPlayer[1]
+goto_if_false @GFAGNT_10332
+if 
+  $iGFLikesPlayer[1] > 100
+goto_if_false @GFAGNT_10284
+$iGFLikesPlayer[1] = 100
+
+:GFAGNT_10284
+if 
+  0 > $iGFLikesPlayer[1]
+goto_if_false @GFAGNT_10316
+Stat.SetInt(StatId.GirlfriendMichelle, 0)
+goto @GFAGNT_10332
+
+:GFAGNT_10316
+sub_int_var_from_int_lvar 9@ -= $iGFLikesPlayer[1]
+Stat.DecrementInt(StatId.GirlfriendMichelle, 9@)
+
+:GFAGNT_10332
+goto @GFAGNT_11183
+
+:GFAGNT_10339
+9@ = Stat.GetInt(254)
+if 
+  is_int_var_greater_than_int_lvar $iGFLikesPlayer[2] > 9@
+goto_if_false @GFAGNT_10451
+if 
+  $iGFLikesPlayer[2] > 100
+goto_if_false @GFAGNT_10391
+$iGFLikesPlayer[2] = 100
+
+:GFAGNT_10391
+if 
+  0 > $iGFLikesPlayer[2]
+goto_if_false @GFAGNT_10423
+Stat.SetInt(StatId.GirlfriendHelena, 0)
+goto @GFAGNT_10444
+
+:GFAGNT_10423
+sub_int_var_from_int_lvar 9@ -= $iGFLikesPlayer[2]
+abs_lvar_int 9@
+Stat.IncrementInt(9@, 254)
+
+:GFAGNT_10444
+goto @GFAGNT_10543
+
+:GFAGNT_10451
+if 
+  is_int_lvar_greater_than_int_var 9@ > $iGFLikesPlayer[2]
+goto_if_false @GFAGNT_10543
+if 
+  $iGFLikesPlayer[2] > 100
+goto_if_false @GFAGNT_10495
+$iGFLikesPlayer[2] = 100
+
+:GFAGNT_10495
+if 
+  0 > $iGFLikesPlayer[2]
+goto_if_false @GFAGNT_10527
+Stat.SetInt(StatId.GirlfriendHelena, 0)
+goto @GFAGNT_10543
+
+:GFAGNT_10527
+sub_int_var_from_int_lvar 9@ -= $iGFLikesPlayer[2]
+Stat.DecrementInt(StatId.GirlfriendHelena, 9@)
+
+:GFAGNT_10543
+goto @GFAGNT_11183
+
+:GFAGNT_10550
+9@ = Stat.GetInt(255)
+if 
+  is_int_var_greater_than_int_lvar $iGFLikesPlayer[3] > 9@
+goto_if_false @GFAGNT_10662
+if 
+  $iGFLikesPlayer[3] > 100
+goto_if_false @GFAGNT_10602
+$iGFLikesPlayer[3] = 100
+
+:GFAGNT_10602
+if 
+  0 > $iGFLikesPlayer[3]
+goto_if_false @GFAGNT_10634
+Stat.SetInt(StatId.GirlfriendBarbara, 0)
+goto @GFAGNT_10655
+
+:GFAGNT_10634
+sub_int_var_from_int_lvar 9@ -= $iGFLikesPlayer[3]
+abs_lvar_int 9@
+Stat.IncrementInt(9@, 255)
+
+:GFAGNT_10655
+goto @GFAGNT_10754
+
+:GFAGNT_10662
+if 
+  is_int_lvar_greater_than_int_var 9@ > $iGFLikesPlayer[3]
+goto_if_false @GFAGNT_10754
+if 
+  $iGFLikesPlayer[3] > 100
+goto_if_false @GFAGNT_10706
+$iGFLikesPlayer[3] = 100
+
+:GFAGNT_10706
+if 
+  0 > $iGFLikesPlayer[3]
+goto_if_false @GFAGNT_10738
+Stat.SetInt(StatId.GirlfriendBarbara, 0)
+goto @GFAGNT_10754
+
+:GFAGNT_10738
+sub_int_var_from_int_lvar 9@ -= $iGFLikesPlayer[3]
+Stat.DecrementInt(StatId.GirlfriendBarbara, 9@)
+
+:GFAGNT_10754
+goto @GFAGNT_11183
+
+:GFAGNT_10761
+9@ = Stat.GetInt(256)
+if 
+  is_int_var_greater_than_int_lvar $iGFLikesPlayer[4] > 9@
+goto_if_false @GFAGNT_10873
+if 
+  $iGFLikesPlayer[4] > 100
+goto_if_false @GFAGNT_10813
+$iGFLikesPlayer[4] = 100
+
+:GFAGNT_10813
+if 
+  0 > $iGFLikesPlayer[4]
+goto_if_false @GFAGNT_10845
+Stat.SetInt(StatId.GirlfriendKatie, 0)
+goto @GFAGNT_10866
+
+:GFAGNT_10845
+sub_int_var_from_int_lvar 9@ -= $iGFLikesPlayer[4]
+abs_lvar_int 9@
+Stat.IncrementInt(9@, 256)
+
+:GFAGNT_10866
+goto @GFAGNT_10965
+
+:GFAGNT_10873
+if 
+  is_int_lvar_greater_than_int_var 9@ > $iGFLikesPlayer[4]
+goto_if_false @GFAGNT_10965
+if 
+  $iGFLikesPlayer[4] > 100
+goto_if_false @GFAGNT_10917
+$iGFLikesPlayer[4] = 100
+
+:GFAGNT_10917
+if 
+  0 > $iGFLikesPlayer[4]
+goto_if_false @GFAGNT_10949
+Stat.SetInt(StatId.GirlfriendKatie, 0)
+goto @GFAGNT_10965
+
+:GFAGNT_10949
+sub_int_var_from_int_lvar 9@ -= $iGFLikesPlayer[4]
+Stat.DecrementInt(StatId.GirlfriendKatie, 9@)
+
+:GFAGNT_10965
+goto @GFAGNT_11183
+
+:GFAGNT_10972
+9@ = Stat.GetInt(257)
+if 
+  is_int_var_greater_than_int_lvar $iGFLikesPlayer[5] > 9@
+goto_if_false @GFAGNT_11084
+if 
+  $iGFLikesPlayer[5] > 100
+goto_if_false @GFAGNT_11024
+$iGFLikesPlayer[5] = 100
+
+:GFAGNT_11024
+if 
+  0 > $iGFLikesPlayer[5]
+goto_if_false @GFAGNT_11056
+Stat.SetInt(StatId.GirlfriendMillie, 0)
+goto @GFAGNT_11077
+
+:GFAGNT_11056
+sub_int_var_from_int_lvar 9@ -= $iGFLikesPlayer[5]
+abs_lvar_int 9@
+Stat.IncrementInt(9@, 257)
+
+:GFAGNT_11077
+goto @GFAGNT_11176
+
+:GFAGNT_11084
+if 
+  is_int_lvar_greater_than_int_var 9@ > $iGFLikesPlayer[5]
+goto_if_false @GFAGNT_11176
+if 
+  $iGFLikesPlayer[5] > 100
+goto_if_false @GFAGNT_11128
+$iGFLikesPlayer[5] = 100
+
+:GFAGNT_11128
+if 
+  0 > $iGFLikesPlayer[5]
+goto_if_false @GFAGNT_11160
+Stat.SetInt(StatId.GirlfriendMillie, 0)
+goto @GFAGNT_11176
+
+:GFAGNT_11160
+sub_int_var_from_int_lvar 9@ -= $iGFLikesPlayer[5]
+Stat.DecrementInt(StatId.GirlfriendMillie, 9@)
+
+:GFAGNT_11176
+goto @GFAGNT_11183
+
+:GFAGNT_11183
+return 
+
+:GFAGNT_11185
+if 
+  0@ == 1
+goto_if_false @GFAGNT_11236
+if 
+  is_global_var_bit_set_var $iActiveGF bit $iGFidx
+goto_if_false @GFAGNT_11236
+GFAGNT_9180()
+GFAGNT_8694()
+
+:GFAGNT_11236
+0@ = 0
+4@ = -1
+3@ = 0
+
+:GFAGNT_11257
+if 
+  is_global_var_bit_set_lvar $iAgentFlags bit 3@
+goto_if_false @GFAGNT_11284
+clear_global_var_bit_lvar $iAgentFlags bit 3@
+
+:GFAGNT_11284
+3@ += 1
+  3@ >= 6
+goto_if_false @GFAGNT_11257
+Stat.ShowUpdateStats(True)
+$iGFTimeStep = 500
+return 
+get_latest_console_command v$GF_txtConsoleIn
+if 
+  not is_var_text_label16_empty v$GF_txtConsoleIn
+goto_if_false @GFAGNT_13496
+set_var_text_label16 v$GF_txtConsoleCheck = "DOCOOCHIE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_11386
+set_global_var_bit_const $iActiveGF bit 0
+reset_latest_console_command 
+return 
+
+:GFAGNT_11386
+set_var_text_label16 v$GF_txtConsoleCheck = "DOMICHELLE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_11433
+set_global_var_bit_const $iActiveGF bit 1
+reset_latest_console_command 
+return 
+
+:GFAGNT_11433
+set_var_text_label16 v$GF_txtConsoleCheck = "DOKYLIE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_11477
+set_global_var_bit_const $iActiveGF bit 2
+reset_latest_console_command 
+return 
+
+:GFAGNT_11477
+set_var_text_label16 v$GF_txtConsoleCheck = "DOBARBARA"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_11523
+set_global_var_bit_const $iActiveGF bit 3
+reset_latest_console_command 
+return 
+
+:GFAGNT_11523
+set_var_text_label16 v$GF_txtConsoleCheck = "DOSUZIE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_11567
+set_global_var_bit_const $iActiveGF bit 4
+reset_latest_console_command 
+return 
+
+:GFAGNT_11567
+set_var_text_label16 v$GF_txtConsoleCheck = "DOMILLIE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_11612
+set_global_var_bit_const $iActiveGF bit 5
+reset_latest_console_command 
+return 
+
+:GFAGNT_11612
+set_var_text_label16 v$GF_txtConsoleCheck = "FASTDATE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_11712
+set_global_var_bit_const $iActiveGF bit 31
+set_var_int_to_var_int $iGFLikesPlayer[0] = $iGFSelfRespect[0]
+set_var_int_to_var_int $iGFLikesPlayer[1] = $iGFSelfRespect[1]
+set_var_int_to_var_int $iGFLikesPlayer[3] = $iGFSelfRespect[3]
+set_var_int_to_var_int $iGFLikesPlayer[2] = $iGFSelfRespect[2]
+set_var_int_to_var_int $iGFLikesPlayer[4] = $iGFSelfRespect[4]
+set_var_int_to_var_int $iGFLikesPlayer[5] = $iGFSelfRespect[5]
+set_global_var_bit_const $iDateReport bit 26
+reset_latest_console_command 
+return 
+
+:GFAGNT_11712
+set_var_text_label16 v$GF_txtConsoleCheck = "GOCOOCHIE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_11787
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFAGNT_11783
+Char.SetCoordinates($scplayer, 2405.212, -1720.688, 12.6365)
+
+:GFAGNT_11783
+reset_latest_console_command 
+return 
+
+:GFAGNT_11787
+set_var_text_label16 v$GF_txtConsoleCheck = "GOMICHELLE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_11863
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFAGNT_11859
+Char.SetCoordinates($scplayer, -1788.0, 1202.0, 30.0)
+
+:GFAGNT_11859
+reset_latest_console_command 
+return 
+
+:GFAGNT_11863
+set_var_text_label16 v$GF_txtConsoleCheck = "GOKYLIE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_11936
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFAGNT_11932
+Char.SetCoordinates($scplayer, -371.4376, -1440.072, 24.7209)
+
+:GFAGNT_11932
+reset_latest_console_command 
+return 
+
+:GFAGNT_11936
+set_var_text_label16 v$GF_txtConsoleCheck = "GOBARBARA"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_12011
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFAGNT_12007
+Char.SetCoordinates($scplayer, -1400.0, 2640.0, -100.0)
+
+:GFAGNT_12007
+reset_latest_console_command 
+return 
+
+:GFAGNT_12011
+set_var_text_label16 v$GF_txtConsoleCheck = "GOSUZIE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_12084
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFAGNT_12080
+Char.SetCoordinates($scplayer, -2570.511, 1139.582, 54.8547)
+
+:GFAGNT_12080
+reset_latest_console_command 
+return 
+
+:GFAGNT_12084
+set_var_text_label16 v$GF_txtConsoleCheck = "GOMILLIE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_12158
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFAGNT_12154
+Char.SetCoordinates($scplayer, 2028.347, 2736.969, 10.8603)
+
+:GFAGNT_12154
+reset_latest_console_command 
+return 
+
+:GFAGNT_12158
+set_var_text_label16 v$GF_txtConsoleCheck = "DATEFOOD"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_12210
+set_global_var_bit_const $iActiveGF bit 31
+set_global_var_bit_const $iDateReport bit 27
+reset_latest_console_command 
+return 
+
+:GFAGNT_12210
+set_var_text_label16 v$GF_txtConsoleCheck = "DATEDRIVE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_12305
+set_global_var_bit_const $iActiveGF bit 31
+$iGFLikesPlayer[0] = 50
+$iGFLikesPlayer[1] = 50
+$iGFLikesPlayer[3] = 50
+$iGFLikesPlayer[2] = 50
+$iGFLikesPlayer[4] = 50
+$iGFLikesPlayer[5] = 50
+set_global_var_bit_const $iDateReport bit 28
+reset_latest_console_command 
+return 
+
+:GFAGNT_12305
+set_var_text_label16 v$GF_txtConsoleCheck = "DATEDANCE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_12400
+set_global_var_bit_const $iActiveGF bit 31
+$iGFLikesPlayer[0] = 50
+$iGFLikesPlayer[1] = 50
+$iGFLikesPlayer[3] = 50
+$iGFLikesPlayer[2] = 50
+$iGFLikesPlayer[4] = 50
+$iGFLikesPlayer[5] = 50
+set_global_var_bit_const $iDateReport bit 29
+reset_latest_console_command 
+return 
+
+:GFAGNT_12400
+set_var_text_label16 v$GF_txtConsoleCheck = "DATESPANK"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_12453
+set_global_var_bit_const $iActiveGF bit 31
+set_global_var_bit_const $iDateReport bit 30
+reset_latest_console_command 
+return 
+
+:GFAGNT_12453
+set_var_text_label16 v$GF_txtConsoleCheck = "DATESHEDRIVES"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_12517
+set_global_var_bit_const $iActiveGF bit 31
+$iGFLikesPlayer[1] = 50
+set_global_var_bit_const $iDateReport bit 31
+reset_latest_console_command 
+return 
+
+:GFAGNT_12517
+set_var_text_label16 v$GF_txtConsoleCheck = "MEETMICHELLE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_12605
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFAGNT_12601
+Char.SetCoordinates($scplayer, -2026.92, -99.9395, 34.1641)
+Char.SetHeading($scplayer, 180.0)
+
+:GFAGNT_12601
+reset_latest_console_command 
+return 
+
+:GFAGNT_12605
+set_var_text_label16 v$GF_txtConsoleCheck = "MEETKYLIE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_12697
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFAGNT_12693
+$flag_la1fin1_mission_counter = 2
+Char.SetCoordinates($scplayer, 243.9633, -161.2493, 0.5781)
+Char.SetHeading($scplayer, 291.5735)
+
+:GFAGNT_12693
+reset_latest_console_command 
+return 
+
+:GFAGNT_12697
+set_var_text_label16 v$GF_txtConsoleCheck = "MEETBARBARA"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_12784
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFAGNT_12780
+Char.SetCoordinates($scplayer, -1411.294, 2637.609, 54.6875)
+Char.SetHeading($scplayer, 348.9253)
+
+:GFAGNT_12780
+reset_latest_console_command 
+return 
+
+:GFAGNT_12784
+set_var_text_label16 v$GF_txtConsoleCheck = "MEETSUZIE"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_12869
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFAGNT_12865
+Char.SetCoordinates($scplayer, -2266.253, -155.7216, 34.3125)
+Char.SetHeading($scplayer, 85.0)
+
+:GFAGNT_12865
+reset_latest_console_command 
+return 
+
+:GFAGNT_12869
+set_var_text_label16 v$GF_txtConsoleCheck = "GIMPSUIT"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_12953
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFAGNT_12949
+Player.GiveClothesOutsideShop($player1, "GIMPLEG", "GIMPLEG", BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+
+:GFAGNT_12949
+reset_latest_console_command 
+return 
+
+:GFAGNT_12953
+set_var_text_label16 v$GF_txtConsoleCheck = "TWOTIMING"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_13006
+set_global_var_bit_const $iActiveGF bit 31
+set_global_var_bit_const $iDateReport bit 25
+reset_latest_console_command 
+return 
+
+:GFAGNT_13006
+set_var_text_label16 v$GF_txtConsoleCheck = "ELEGANTMAN"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_13088
+$iGFDesiredSexAppeal[0] = 0
+$iGFDesiredSexAppeal[1] = 0
+$iGFDesiredSexAppeal[3] = 0
+$iGFDesiredSexAppeal[2] = 0
+$iGFDesiredSexAppeal[4] = 0
+$iGFDesiredSexAppeal[5] = 0
+reset_latest_console_command 
+return 
+
+:GFAGNT_13088
+set_var_text_label16 v$GF_txtConsoleCheck = "SHOWENTRY"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_13192
+World.SwitchEntryExit('FDREST1', True)
+World.SwitchEntryExit('REST2', True)
+World.SwitchEntryExit('DINER1', True)
+World.SwitchEntryExit('DINER2', True)
+World.SwitchEntryExit('TSDINER', True)
+reset_latest_console_command 
+return 
+
+:GFAGNT_13192
+set_var_text_label16 v$GF_txtConsoleCheck = "HIDEENTRY"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_13283
+World.SwitchEntryExit('FDREST1', False)
+World.SwitchEntryExit('REST2', False)
+World.SwitchEntryExit('DINER1', False)
+World.SwitchEntryExit('DINER2', False)
+reset_latest_console_command 
+return 
+
+:GFAGNT_13283
+set_var_text_label16 v$GF_txtConsoleCheck = "UNCENSORED"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_13330
+$iCensoredVersion = 0
+reset_latest_console_command 
+return 
+
+:GFAGNT_13330
+set_var_text_label16 v$GF_txtConsoleCheck = "STATSUP"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_13385
+$iGFLikesPlayer($iGFidx,6i) += 10
+GFAGNT_9854()
+reset_latest_console_command 
+return 
+
+:GFAGNT_13385
+set_var_text_label16 v$GF_txtConsoleCheck = "STATSDOWN"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_13442
+$iGFLikesPlayer($iGFidx,6i) -= 10
+GFAGNT_9854()
+reset_latest_console_command 
+return 
+
+:GFAGNT_13442
+set_var_text_label16 v$GF_txtConsoleCheck = "DUMPME"
+if 
+  is_var_text_label16_equal_to_text_label v$GF_txtConsoleCheck == v$GF_txtConsoleIn
+goto_if_false @GFAGNT_13496
+$iGFLikesPlayer($iGFidx,6i) = -15
+GFAGNT_9854()
+reset_latest_console_command 
+return 
+
+:GFAGNT_13496
+return 
+write_debug "I__________________________I"
+write_debug "H"
+write_debug "G"
+write_debug "F"
+write_debug "E"
+write_debug "D"
+write_debug s$txtCurrZone
+write_debug_with_int "IGFIDX" $iGFidx
+switch_start 0@ total_jumps 5 default_jump 1 @GFAGNT_13731 jumps 0 @GFAGNT_13636 1 @GFAGNT_13655 2 @GFAGNT_13674 3 @GFAGNT_13693 4 @GFAGNT_13712 -1 @GFAGNT_13760 -1 @GFAGNT_13760
+
+:GFAGNT_13636
+write_debug "STATE0__"
+goto @GFAGNT_13760
+
+:GFAGNT_13655
+write_debug "STATE1__"
+goto @GFAGNT_13760
+
+:GFAGNT_13674
+write_debug "STATE2__"
+goto @GFAGNT_13760
+
+:GFAGNT_13693
+write_debug "STATE3__"
+goto @GFAGNT_13760
+
+:GFAGNT_13712
+write_debug "STATE4__"
+goto @GFAGNT_13760
+
+:GFAGNT_13731
+write_debug "UNTRAPPED_STATE___"
+goto @GFAGNT_13760
+
+:GFAGNT_13760
+write_debug "I__________________________I"
+return 
+
+:Noname_7
+start_new_script @INTMAN 
+terminate_this_script 
+

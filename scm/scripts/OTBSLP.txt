@@ -1,0 +1,177 @@
+//-------------External script 44 (OTBSLP)---------------
+
+:OTBSLP
+script_name 'OTBSLP'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @OTBSLP_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:OTBSLP_60
+Streaming.RequestAnimation("OTB")
+
+:OTBSLP_67
+if 
+  not Streaming.HasAnimationLoaded("OTB")
+goto_if_false @OTBSLP_96
+wait 0
+goto @OTBSLP_67
+
+:OTBSLP_96
+3@ = 1
+4@ = 0
+
+:OTBSLP_110
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @OTBSLP_221
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @OTBSLP_207
+if 
+  $iSetOTBPanic == 0
+goto_if_false @OTBSLP_185
+gosub @OTBSLP_235
+goto @OTBSLP_200
+
+:OTBSLP_185
+Char.SetDecisionMaker(0@, $iGlobalPedPanicDM)
+goto @OTBSLP_902
+
+:OTBSLP_200
+goto @OTBSLP_214
+
+:OTBSLP_207
+gosub @OTBSLP_891
+
+:OTBSLP_214
+goto @OTBSLP_228
+
+:OTBSLP_221
+gosub @OTBSLP_891
+
+:OTBSLP_228
+goto @OTBSLP_110
+
+:OTBSLP_235
+switch_start 3@ total_jumps 1 default_jump 0 @OTBSLP_312 jumps 1 @OTBSLP_298 -1 @OTBSLP_312 -1 @OTBSLP_312 -1 @OTBSLP_312 -1 @OTBSLP_312 -1 @OTBSLP_312 -1 @OTBSLP_312
+
+:OTBSLP_298
+gosub @OTBSLP_314
+goto @OTBSLP_312
+
+:OTBSLP_312
+return 
+
+:OTBSLP_314
+switch_start 4@ total_jumps 6 default_jump 0 @OTBSLP_889 jumps 0 @OTBSLP_377 1 @OTBSLP_427 2 @OTBSLP_520 3 @OTBSLP_673 4 @OTBSLP_766 5 @OTBSLP_846 -1 @OTBSLP_889
+
+:OTBSLP_377
+Task.PlayAnim(0@, "BETSLP_IN", "OTB", 4.0, False, False, False, False, -1)
+4@ += 1
+goto @OTBSLP_889
+
+:OTBSLP_427
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @OTBSLP_513
+2@ = Math.RandomIntInRange(4000, 8000)
+Task.PlayAnim(0@, "BETSLP_LOOP", "OTB", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:OTBSLP_513
+goto @OTBSLP_889
+
+:OTBSLP_520
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @OTBSLP_666
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @OTBSLP_622
+Task.PlayAnim(0@, "BETSLP_LKABT", "OTB", 16.0, False, False, False, False, -1)
+goto @OTBSLP_659
+
+:OTBSLP_622
+Task.PlayAnim(0@, "BETSLP_TNK", "OTB", 16.0, False, False, False, False, -1)
+
+:OTBSLP_659
+4@ += 1
+
+:OTBSLP_666
+goto @OTBSLP_889
+
+:OTBSLP_673
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @OTBSLP_759
+2@ = Math.RandomIntInRange(4000, 8000)
+Task.PlayAnim(0@, "BETSLP_LOOP", "OTB", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:OTBSLP_759
+goto @OTBSLP_889
+
+:OTBSLP_766
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @OTBSLP_839
+Task.PlayAnim(0@, "BETSLP_OUT", "OTB", 4.0, False, False, False, False, -1)
+4@ += 1
+
+:OTBSLP_839
+goto @OTBSLP_889
+
+:OTBSLP_846
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @OTBSLP_882
+gosub @OTBSLP_891
+
+:OTBSLP_882
+goto @OTBSLP_889
+
+:OTBSLP_889
+return 
+
+:OTBSLP_891
+Streaming.RemoveAnimation("OTB")
+terminate_this_script 
+return 
+
+:OTBSLP_902
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @OTBSLP_972
+5@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @OTBSLP_965
+Task.Duck(0@, -2)
+
+:OTBSLP_965
+goto @OTBSLP_979
+
+:OTBSLP_972
+gosub @OTBSLP_891
+
+:OTBSLP_979
+goto @OTBSLP_902
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

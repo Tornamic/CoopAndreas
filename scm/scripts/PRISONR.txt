@@ -1,0 +1,238 @@
+//-------------External script 74 (PRISONR)---------------
+
+:PRISONR
+script_name 'PRISONR'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @PRISONR_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:PRISONR_60
+if 
+  not Char.IsDead(0@)
+goto_if_false @PRISONR_109
+9@ = Char.GetPedType(0@)
+if 
+  is_int_lvar_equal_to_constant 9@ == 6
+goto_if_false @PRISONR_109
+Char.Delete(0@)
+terminate_this_script 
+
+:PRISONR_109
+Streaming.RequestAnimation("GANGS")
+Streaming.RequestModel(#CIGAR)
+
+:PRISONR_122
+if 
+  not Streaming.HasAnimationLoaded("GANGS")
+goto_if_false @PRISONR_153
+wait 0
+goto @PRISONR_122
+
+:PRISONR_153
+if 
+  not Streaming.HasModelLoaded(#CIGAR)
+goto_if_false @PRISONR_179
+wait 0
+goto @PRISONR_153
+
+:PRISONR_179
+if 
+  not Char.IsDead(0@)
+goto_if_false @PRISONR_266
+6@, 7@, 8@ = Char.GetCoordinates(0@)
+12@ = Object.Create(#CIGAR, 6@, 7@, 8@)
+Task.PickUpObject(0@, 12@, 0.0, 0.1, -0.02, 6, 16, "NULL", "NULL", -1)
+
+:PRISONR_266
+3@ = 1
+4@ = 0
+10@ = 0
+
+:PRISONR_287
+wait 0
+if and
+  not Char.IsDead(0@)
+  Player.IsPlaying($player1)
+  $iTerminateAllAmbience == 0
+goto_if_false @PRISONR_374
+if 
+  Char.HasBeenDamagedByChar(0@, $scplayer)
+goto_if_false @PRISONR_360
+Char.SetDecisionMaker(0@, $iGlobalPedPanicDM)
+goto @PRISONR_1286
+goto @PRISONR_367
+
+:PRISONR_360
+gosub @PRISONR_388
+
+:PRISONR_367
+goto @PRISONR_381
+
+:PRISONR_374
+gosub @PRISONR_1259
+
+:PRISONR_381
+goto @PRISONR_287
+
+:PRISONR_388
+switch_start 3@ total_jumps 1 default_jump 0 @PRISONR_465 jumps 1 @PRISONR_451 -1 @PRISONR_465 -1 @PRISONR_465 -1 @PRISONR_465 -1 @PRISONR_465 -1 @PRISONR_465 -1 @PRISONR_465
+
+:PRISONR_451
+gosub @PRISONR_467
+goto @PRISONR_465
+
+:PRISONR_465
+return 
+
+:PRISONR_467
+switch_start 4@ total_jumps 5 default_jump 0 @PRISONR_1257 jumps 0 @PRISONR_530 1 @PRISONR_943 2 @PRISONR_986 3 @PRISONR_1029 4 @PRISONR_1148 -1 @PRISONR_1257 -1 @PRISONR_1257
+
+:PRISONR_530
+9@ = Math.RandomIntInRange(0, 100)
+if 
+  9@ >= 80
+goto_if_false @PRISONR_753
+6@, 7@, 8@ = Char.GetCoordinates(0@)
+11@ = World.GetRandomCharInSphere(6@, 7@, 8@, 2.0, True, True, True)
+if and
+  not Char.IsDead(11@)
+  not is_int_lvar_equal_to_int_lvar 11@ == 0@
+goto_if_false @PRISONR_649
+Task.KillCharOnFoot(0@, 11@)
+4@ = 2
+goto @PRISONR_1257
+goto @PRISONR_746
+
+:PRISONR_649
+Task.PlayAnim(0@, "SMKCIG_PRTL", "GANGS", 1.0, False, False, False, False, 0)
+13@ = Particle.CreateOnChar("EXHALE", 0@, 0.0, 0.0, 0.0, 1)
+Particle.AttachToCharBone(13@, 0@, 5)
+4@ = 3
+goto @PRISONR_1257
+
+:PRISONR_746
+goto @PRISONR_936
+
+:PRISONR_753
+if 
+  9@ >= 30
+goto_if_false @PRISONR_839
+Task.PlayAnim(0@, "IDLE_CHAT", "PED", 1.0, True, False, False, False, 5000)
+9@ = Char.SetSayContext(0@, 45)
+4@ = 1
+goto @PRISONR_1257
+goto @PRISONR_936
+
+:PRISONR_839
+Task.PlayAnim(0@, "SMKCIG_PRTL", "GANGS", 1.0, False, False, False, False, 0)
+13@ = Particle.CreateOnChar("EXHALE", 0@, 0.0, 0.0, 0.0, 1)
+Particle.AttachToCharBone(13@, 0@, 5)
+4@ = 3
+goto @PRISONR_1257
+
+:PRISONR_936
+goto @PRISONR_1257
+
+:PRISONR_943
+9@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 9@ == 7
+goto_if_false @PRISONR_979
+4@ = 0
+
+:PRISONR_979
+goto @PRISONR_1257
+
+:PRISONR_986
+9@ = Char.GetScriptTaskStatus(0@, 1506)
+if 
+  is_int_lvar_equal_to_constant 9@ == 7
+goto_if_false @PRISONR_1022
+4@ = 0
+
+:PRISONR_1022
+goto @PRISONR_1257
+
+:PRISONR_1029
+if 
+  Char.IsPlayingAnim(0@, "SMKCIG_PRTL")
+goto_if_false @PRISONR_1129
+6@ = Char.GetAnimCurrentTime(0@, "SMKCIG_PRTL")
+if and
+  6@ >= 0.5
+  1.0 > 6@
+goto_if_false @PRISONR_1122
+Particle.Play(13@)
+4@ += 1
+
+:PRISONR_1122
+goto @PRISONR_1141
+
+:PRISONR_1129
+4@ = 0
+Particle.Kill(13@)
+
+:PRISONR_1141
+goto @PRISONR_1257
+
+:PRISONR_1148
+if 
+  Char.IsPlayingAnim(0@, "SMKCIG_PRTL")
+goto_if_false @PRISONR_1238
+6@ = Char.GetAnimCurrentTime(0@, "SMKCIG_PRTL")
+if 
+  6@ >= 1.0
+goto_if_false @PRISONR_1231
+Particle.Kill(13@)
+4@ = 0
+
+:PRISONR_1231
+goto @PRISONR_1250
+
+:PRISONR_1238
+4@ = 0
+Particle.Kill(13@)
+
+:PRISONR_1250
+goto @PRISONR_1257
+
+:PRISONR_1257
+return 
+
+:PRISONR_1259
+Streaming.RemoveAnimation("GANGS")
+Streaming.MarkModelAsNoLongerNeeded(#CIGAR)
+Object.Delete(12@)
+Particle.Kill(13@)
+terminate_this_script 
+return 
+
+:PRISONR_1286
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @PRISONR_1356
+10@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @PRISONR_1349
+Task.Duck(0@, -2)
+
+:PRISONR_1349
+goto @PRISONR_1363
+
+:PRISONR_1356
+gosub @PRISONR_1259
+
+:PRISONR_1363
+goto @PRISONR_1286
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

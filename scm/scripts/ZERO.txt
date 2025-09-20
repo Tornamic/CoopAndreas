@@ -1,0 +1,52 @@
+:ZERO
+script_name 'ZERO'
+
+:ZERO_11
+wait $mission_trigger_wait_time
+if 
+  $flag_zero_mission_counter == 3
+goto_if_false @ZERO_36
+terminate_this_script 
+
+:ZERO_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @ZERO_284
+if 
+  $onmission == 0
+goto_if_false @ZERO_284
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $zeroX, $zeroY, $zeroZ, 1.2, 1.2, 2.0)
+goto_if_false @ZERO_284
+if 
+  Player.CanStartMission($player1)
+goto_if_false @ZERO_284
+if 
+  $flag_zero_mission_counter == 0
+goto_if_false @ZERO_180
+$onmission = 1
+Text.PrintBig('ZERO_1', 1000, TextStyle.BottomRight)
+PSAVE1_4587()
+Mission.LoadAndLaunchInternal(72) // Air Raid
+
+:ZERO_180
+if 
+  $flag_zero_mission_counter == 1
+goto_if_false @ZERO_232
+$onmission = 1
+Text.PrintBig('ZERO_2', 1000, TextStyle.BottomRight)
+PSAVE1_4587()
+Mission.LoadAndLaunchInternal(73) // Supply Lines...
+
+:ZERO_232
+if 
+  $flag_zero_mission_counter == 2
+goto_if_false @ZERO_284
+$onmission = 1
+Text.PrintBig('ZERO_4', 1000, TextStyle.BottomRight)
+PSAVE1_4587()
+Mission.LoadAndLaunchInternal(74) // New Model Army
+
+:ZERO_284
+goto @ZERO_11
+

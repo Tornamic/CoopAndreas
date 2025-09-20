@@ -1,0 +1,62 @@
+:RYDER
+script_name 'RYDER'
+
+:RYDER_11
+wait $mission_trigger_wait_time
+if 
+  $flag_ryder_mission_counter == 3
+goto_if_false @RYDER_36
+terminate_this_script 
+
+:RYDER_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @RYDER_342
+if 
+  $onmission == 0
+goto_if_false @RYDER_342
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $ryderX, $ryderY, $ryderZ, 1.6, 1.2, 2.0)
+goto_if_false @RYDER_342
+if 
+  Player.CanStartMission($player1)
+goto_if_false @RYDER_342
+if 
+  $flag_ryder_mission_counter == 0
+goto_if_false @RYDER_238
+$hours, $minutes = Clock.GetTimeOfDay()
+if and
+  $hours >= 12
+  20 > $hours
+goto_if_false @RYDER_222
+Text.ClearPrints
+$onmission = 1
+Text.PrintBig('RYDER_1', 1000, TextStyle.BottomRight)
+PSAVE1_1498()
+Mission.LoadAndLaunchInternal(24) // Home Invasion
+goto @RYDER_238
+
+:RYDER_222
+Text.PrintNow('MTIME6', 1000, 1)
+
+:RYDER_238
+if 
+  $flag_ryder_mission_counter == 1
+goto_if_false @RYDER_290
+$onmission = 1
+Text.PrintBig('RYDER_3', 1000, TextStyle.BottomRight)
+PSAVE1_1498()
+Mission.LoadAndLaunchInternal(25) // Catalyst
+
+:RYDER_290
+if 
+  $flag_ryder_mission_counter == 2
+goto_if_false @RYDER_342
+$onmission = 1
+Text.PrintBig('RYDER_2', 1000, TextStyle.BottomRight)
+PSAVE1_1498()
+Mission.LoadAndLaunchInternal(26) // Robbing Uncle Sam
+
+:RYDER_342
+goto @RYDER_11
+

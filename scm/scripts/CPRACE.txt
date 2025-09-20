@@ -1,0 +1,6531 @@
+:CPRACE_112
+$onmission = 1
+$disable_mod_garage = 1
+script_name 'CPRACE'
+wait 0
+World.DisableAllEntryExits(True)
+Text.LoadMissionText('RACETOR')
+if 
+  $show_race_selection == 1
+goto_if_false @CPRACE_372
+set_lvar_int_to_constant 49@ = 1
+53@ = 0
+if 
+  $menu_mode == 0
+goto_if_false @CPRACE_220
+50@ = 0
+51@ = 8
+
+:CPRACE_220
+if 
+  $menu_mode == 1
+goto_if_false @CPRACE_252
+50@ = 9
+51@ = 14
+
+:CPRACE_252
+if 
+  $menu_mode == 2
+goto_if_false @CPRACE_284
+50@ = 15
+51@ = 18
+
+:CPRACE_284
+if 
+  $menu_mode == 3
+goto_if_false @CPRACE_316
+50@ = 19
+51@ = 24
+
+:CPRACE_316
+if or
+  is_int_lvar_greater_than_int_var 50@ > $race_selection
+  is_int_var_greater_than_int_lvar $race_selection > 51@
+goto_if_false @CPRACE_351
+set_var_int_to_lvar_int $race_selection = 50@
+
+:CPRACE_351
+52@ = 0
+gosub @CPRACE_46974
+goto @CPRACE_425
+
+:CPRACE_372
+set_lvar_int_to_constant 49@ = 2
+if or
+  $race_selection == 25
+  $race_selection == 26
+goto_if_false @CPRACE_418
+53@ = 3
+goto @CPRACE_425
+
+:CPRACE_418
+53@ = 2
+
+:CPRACE_425
+if 
+  is_int_lvar_equal_to_constant 49@ == 10
+goto_if_false @CPRACE_1239
+54@ = Blip.AddForCoord($x, $y, $z)
+449@ = Checkpoint.Create($x, $y, $z, $x, $y, $z, 205@, 6.0)
+
+:CPRACE_488
+363@(253@,16f) += 3.0
+363@(253@,16f) = World.GetGroundZFor3DCoord(331@(253@,16f), 347@(253@,16f), 363@(253@,16f))
+if 
+  0.0 > 363@(253@,16f)
+goto_if_false @CPRACE_591
+if 
+  Streaming.IsThisModelABoat(716@(253@,16i))
+goto_if_false @CPRACE_591
+363@(253@,16f) = 0.0
+
+:CPRACE_591
+379@(253@,16i) = Car.Create(716@(253@,16i), 331@(253@,16f), 347@(253@,16f), 363@(253@,16f))
+Car.SetHeading(379@(253@,16i), $heading)
+Car.SetAreaVisible(379@(253@,16i), 221@)
+Car.LockDoors(379@(253@,16i), CarLock.LockoutPlayerOnly)
+if 
+  $race_selection == 25
+goto_if_false @CPRACE_693
+Car.SetHealth(379@(253@,16i), 2200)
+
+:CPRACE_693
+if 
+  $race_selection == 26
+goto_if_false @CPRACE_742
+Car.SetHealth(379@(253@,16i), 10000)
+Car.SetProofs(379@(253@,16i), False, False, False, True, False)
+
+:CPRACE_742
+if 
+  221@ == 0
+goto_if_false @CPRACE_933
+Car.SetProofs(379@(253@,16i), False, True, False, False, False)
+Car.SetStrong(379@(253@,16i), True)
+Car.SetOnlyDamagedByPlayer(379@(253@,16i), True)
+if 
+  is_int_lvar_equal_to_constant 49@ == 6
+goto_if_false @CPRACE_915
+
+:CPRACE_819
+if 
+  Car.IsWaitingForWorldCollision(379@(253@,16i))
+goto_if_false @CPRACE_915
+wait 0
+if 
+  Car.IsDead(379@(253@,16i))
+goto_if_false @CPRACE_908
+if 
+  $show_race_selection == 0
+goto_if_false @CPRACE_906
+if 
+  $race_selection == 0
+goto_if_false @CPRACE_906
+$failed_cesar_race = 1
+
+:CPRACE_906
+return 
+
+:CPRACE_908
+goto @CPRACE_819
+
+:CPRACE_915
+Car.SetLoadCollisionFlag(379@(253@,16i), False)
+goto @CPRACE_944
+
+:CPRACE_933
+Car.SetLoadCollisionFlag(379@(253@,16i), True)
+
+:CPRACE_944
+if 
+  209@ <> -1
+goto_if_false @CPRACE_985
+Car.ChangeColor(379@(253@,16i), 209@(253@,6i), 215@(253@,6i))
+
+:CPRACE_985
+if 
+  Streaming.IsThisModelABoat(716@(253@,16i))
+goto_if_false @CPRACE_1037
+Car.SetStraightLineDistance(379@(253@,16i), 40)
+Boat.SetCruiseSpeed(379@(253@,16i), 50.0)
+goto @CPRACE_1237
+
+:CPRACE_1037
+if 
+  Streaming.IsThisModelAHeli(716@(253@,16i))
+goto_if_false @CPRACE_1089
+Car.FreezePosition(379@(253@,16i), True)
+Car.SetForwardSpeed(379@(253@,16i), 10.0)
+goto @CPRACE_1237
+
+:CPRACE_1089
+if 
+  Streaming.IsThisModelAPlane(716@(253@,16i))
+goto_if_false @CPRACE_1141
+Car.FreezePosition(379@(253@,16i), True)
+Car.SetForwardSpeed(379@(253@,16i), 10.0)
+goto @CPRACE_1237
+
+:CPRACE_1141
+Car.SetWatertight(379@(253@,16i), True)
+Car.SetCanBurstTires(379@(253@,16i), False)
+if 
+  221@ == 0
+goto_if_false @CPRACE_1192
+Car.SetUpsidedownNotDamaged(379@(253@,16i), True)
+
+:CPRACE_1192
+Car.SetStraightLineDistance(379@(253@,16i), 5)
+Car.SetDrivingStyle(379@(253@,16i), DrivingMode.AvoidCars)
+Car.SetCruiseSpeed(379@(253@,16i), 50.0)
+Car.SetIdle(379@(253@,16i))
+
+:CPRACE_1237
+return 
+
+:CPRACE_1239
+$x_hud_pos = 70.3919
+$y_hud_pos = 154.6278
+$x_hud_scale = 0.6617
+$y_hud_scale = 2.5845
+$6918 = 203.8119
+$6932 = 0.7208
+$6946 = 2.5114
+$6919 = 228.9919
+$6933 = 0.7377
+$6947 = 2.2364
+$6920 = 279.6367
+$6922 = 333.4643
+$6923 = 358.6443
+$6924 = 25.18
+55@ = 2357.239
+56@ = 1321.193
+57@ = 3300.968
+58@ = 3646.799
+59@ = 3880.677
+60@ = 4216.273
+61@ = 8410.458
+62@ = 4817.636
+63@ = 4817.636
+64@ = 3203.229
+65@ = 3265.028
+66@ = 1901.285
+67@ = 2644.297
+68@ = 8372.679
+69@ = 10760.5
+70@ = 7806.103
+71@ = 4307.65
+72@ = 4696.661
+73@ = 5960.28
+74@ = 6826.647
+75@ = 12299.14
+76@ = 17384.62
+77@ = 4922.472
+78@ = 4398.5
+79@ = 4970.742
+80@ = 0.0
+81@ = 0.0
+82@ = 0.0
+83@ = 0.0
+84@ = 0.0
+set_lvar_text_label 85@s = 'RACE00'
+set_lvar_text_label 87@s = 'RACE01'
+set_lvar_text_label 89@s = 'RACE02'
+set_lvar_text_label 91@s = 'RACE03'
+set_lvar_text_label 93@s = 'RACE04'
+set_lvar_text_label 95@s = 'RACE05'
+set_lvar_text_label 97@s = 'RACE06'
+set_lvar_text_label 99@s = 'RACE07'
+set_lvar_text_label 101@s = 'RACE08'
+set_lvar_text_label 103@s = 'RACE09'
+set_lvar_text_label 105@s = 'RACE10'
+set_lvar_text_label 107@s = 'RACE11'
+set_lvar_text_label 109@s = 'RACE12'
+set_lvar_text_label 111@s = 'RACE13'
+set_lvar_text_label 113@s = 'RACE14'
+set_lvar_text_label 115@s = 'RACE15'
+set_lvar_text_label 117@s = 'RACE16'
+set_lvar_text_label 119@s = 'RACE17'
+set_lvar_text_label 121@s = 'RACE18'
+set_lvar_text_label 123@s = 'RACE19'
+set_lvar_text_label 125@s = 'RACE20'
+set_lvar_text_label 127@s = 'RACE21'
+set_lvar_text_label 129@s = 'RACE22'
+set_lvar_text_label 131@s = 'RACE23'
+set_lvar_text_label 133@s = 'RACE24'
+set_lvar_int_to_constant 145@ = 259
+set_lvar_int_to_constant 146@ = 261
+set_lvar_int_to_constant 147@ = 263
+set_lvar_int_to_constant 148@ = 265
+set_lvar_int_to_constant 149@ = 267
+set_lvar_int_to_constant 150@ = 269
+set_lvar_int_to_constant 151@ = 271
+set_lvar_int_to_constant 152@ = 273
+set_lvar_int_to_constant 153@ = 275
+set_lvar_int_to_constant 154@ = 277
+set_lvar_int_to_constant 155@ = 279
+set_lvar_int_to_constant 156@ = 281
+set_lvar_int_to_constant 157@ = 283
+set_lvar_int_to_constant 158@ = 285
+set_lvar_int_to_constant 159@ = 287
+set_lvar_int_to_constant 160@ = 289
+set_lvar_int_to_constant 161@ = 291
+set_lvar_int_to_constant 162@ = 293
+set_lvar_int_to_constant 163@ = 295
+set_lvar_int_to_constant 164@ = 296
+set_lvar_int_to_constant 165@ = 297
+set_lvar_int_to_constant 166@ = 298
+set_lvar_int_to_constant 167@ = 299
+set_lvar_int_to_constant 168@ = 300
+set_lvar_int_to_constant 169@ = 301
+set_lvar_int_to_constant 170@ = 48
+set_lvar_int_to_constant 171@ = 220
+set_lvar_int_to_constant 175@ = 258
+set_lvar_int_to_constant 176@ = 260
+set_lvar_int_to_constant 177@ = 262
+set_lvar_int_to_constant 178@ = 264
+set_lvar_int_to_constant 179@ = 266
+set_lvar_int_to_constant 180@ = 268
+set_lvar_int_to_constant 181@ = 270
+set_lvar_int_to_constant 182@ = 272
+set_lvar_int_to_constant 183@ = 274
+set_lvar_int_to_constant 184@ = 276
+set_lvar_int_to_constant 185@ = 278
+set_lvar_int_to_constant 186@ = 280
+set_lvar_int_to_constant 187@ = 282
+set_lvar_int_to_constant 188@ = 284
+set_lvar_int_to_constant 189@ = 286
+set_lvar_int_to_constant 190@ = 288
+set_lvar_int_to_constant 191@ = 290
+set_lvar_int_to_constant 192@ = 292
+set_lvar_int_to_constant 193@ = 294
+set_lvar_int_to_constant 200@ = 172
+set_lvar_int_to_constant 201@ = 221
+$x, $y, $z = Char.GetCoordinates($scplayer)
+Restart.SetRespawnPointForDurationOfMission($x, $y, $z)
+set_lvar_int_to_constant 205@ = 0
+Text.UseCommands(True)
+Text.SetMessageFormatting(True, 355, 370)
+Player.SetControl($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Game.SetAllCarsCanBeDamaged(False)
+Hud.DisplayRadar(False)
+206@ = 0
+207@ = 0
+208@ = 25
+209@ = -1
+221@ = 0
+222@ = 0
+223@ = 0
+224@ = 1
+225@ = 0
+226@ = 0
+227@ = 0
+if 
+is_ps2_keyboard_key_pressed 82
+goto_if_false @CPRACE_2627
+$race_debug = 0
+$coords = 0
+view_integer_variable $coords "COORDS"
+Player.SetControl($player1, True)
+set_lvar_int_to_constant 49@ = 0
+228@ = 1
+goto @CPRACE_2634
+
+:CPRACE_2627
+$race_debug = -1
+
+:CPRACE_2634
+wait 0
+$game_timer = Clock.GetGameTimer()
+if 
+  13 > 49@
+goto_if_false @CPRACE_2668
+229@ = 0
+
+:CPRACE_2668
+253@ = 0
+switch_start 49@ total_jumps 15 default_jump 0 @CPRACE_20805 jumps 0 @CPRACE_2803 1 @CPRACE_5836 2 @CPRACE_7391 3 @CPRACE_7577 4 @CPRACE_7924 5 @CPRACE_8660 6 @CPRACE_8772
+switch_continued 7 @CPRACE_11220 8 @CPRACE_11297 9 @CPRACE_11382 10 @CPRACE_11467 11 @CPRACE_12351 12 @CPRACE_12351 13 @CPRACE_19581 14 @CPRACE_20088 -1 @CPRACE_20805
+
+:CPRACE_2803
+if 
+  $race_debug > -1
+goto_if_false @CPRACE_4452
+if 
+is_ps2_keyboard_key_pressed 82
+goto_if_false @CPRACE_4445
+if 
+  228@ == 0
+goto_if_false @CPRACE_4438
+if 
+  $race_debug == 0
+goto_if_false @CPRACE_2909
+$coords += 1
+Text.PrintNow('CHEATON', 800, 1)
+$race_debug = 1
+goto @CPRACE_4431
+
+:CPRACE_2909
+if 
+is_ps2_keyboard_key_pressed 151
+goto_if_false @CPRACE_4401
+224@ = 1
+save_newline_to_debug_file 
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("TOTAL_LAPS = 1HECKPOINT_INDEXSN_LOOPION =   DESTINATION) = ")
+256@ = 6
+save_newline_to_debug_file 
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("TOTAL_RACERS = 6CKPOINT_INDEXSN_LOOPION =   DESTINATION) = ")
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+save_newline_to_debug_file 
+252@ = 0
+
+:CPRACE_3258
+if 
+  is_int_lvar_greater_than_int_lvar 256@ > 252@
+goto_if_false @CPRACE_3558
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("RACER_MODEL[ = 6CKPOINT_INDEXSN_LOOPION =   DESTINATION) = ")
+save_int_to_debug_file 252@
+Debugger.SaveStringToDebugFile("] = MALE01L[ = 6CKPOINT_INDEXSN_LOOPION =   DESTINATION) = ")
+252@ += 1
+goto @CPRACE_3258
+
+:CPRACE_3558
+set_lvar_int_to_lvar_int 716@ = 230@
+set_lvar_int_to_lvar_int 717@ = 230@
+set_lvar_int_to_lvar_int 718@ = 230@
+set_lvar_int_to_lvar_int 719@ = 230@
+set_lvar_int_to_lvar_int 720@ = 230@
+set_lvar_int_to_lvar_int 721@ = 230@
+save_newline_to_debug_file 
+252@ = 0
+
+:CPRACE_3615
+if 
+  is_int_lvar_greater_than_int_lvar 256@ > 252@
+goto_if_false @CPRACE_3920
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("RACERS_CAR_MODEL[KPOINT_INDEXSN_LOOPION =   DESTINATION) = ")
+save_int_to_debug_file 252@
+Debugger.SaveStringToDebugFile("] = RS_CAR_MODEL[KPOINT_INDEXSN_LOOPION =   DESTINATION) = ")
+save_int_to_debug_file 230@
+252@ += 1
+goto @CPRACE_3615
+
+:CPRACE_3920
+set_var_float_to_lvar_float $x = 454@
+set_var_float_to_lvar_float $y = 536@
+set_var_float_to_lvar_float $z = 618@
+save_newline_to_debug_file 
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CHECKPOINTS_X[0] = OINT_INDEXSN_LOOPION =   DESTINATION) = ")
+save_float_to_debug_file $x
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CHECKPOINTS_Y[0] = OINT_INDEXSN_LOOPION =   DESTINATION) = ")
+save_float_to_debug_file $y
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CHECKPOINTS_Z[0] = OINT_INDEXSN_LOOPION =   DESTINATION) = ")
+save_float_to_debug_file $z
+Text.PrintNow('LABEL', 1000, 1)
+49@ = 3
+$coords = 0
+$race_debug = 0
+goto @CPRACE_4431
+
+:CPRACE_4401
+$coords = 0
+Text.PrintNow('CHEATOF', 800, 1)
+$race_debug = 0
+
+:CPRACE_4431
+228@ = 1
+
+:CPRACE_4438
+goto @CPRACE_4452
+
+:CPRACE_4445
+228@ = 0
+
+:CPRACE_4452
+if 
+  $race_debug == 1
+goto_if_false @CPRACE_5829
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CPRACE_5829
+if 
+  $coords == 0
+goto_if_false @CPRACE_4567
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @CPRACE_4560
+if 
+  235@ == 0
+goto_if_false @CPRACE_4553
+$coords += 1
+235@ = 1
+
+:CPRACE_4553
+goto @CPRACE_4567
+
+:CPRACE_4560
+235@ = 0
+
+:CPRACE_4567
+if 
+  $coords > 0
+goto_if_false @CPRACE_5829
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CPRACE_5829
+443@ = Char.StoreCarIsInNoSave($scplayer)
+230@ = Car.GetModel(443@)
+if or
+  Streaming.IsThisModelAPlane(230@)
+  Streaming.IsThisModelAHeli(230@)
+goto_if_false @CPRACE_4656
+$x, $y, $z = Camera.GetDebugCoordinates()
+goto @CPRACE_4670
+
+:CPRACE_4656
+$x, $y, $z = Char.GetCoordinates($scplayer)
+
+:CPRACE_4670
+$distance = Math.GetDistanceBetweenCoords3D($x, $y, $z, 231@, 232@, 233@)
+cset_lvar_int_to_var_float 234@ = float $distance
+gosub @CPRACE_47594
+Text.SetDropshadow(2, 0, 0, 0, 255)
+Text.SetScale(0.8, 2.0)
+Text.DisplayWithNumber(30.0, 145.0, 'RACES00', 234@)
+if or
+  $distance > 200.0
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @CPRACE_5822
+if 
+  235@ == 0
+goto_if_false @CPRACE_5815
+Text.PrintNow('TEXXYZ4', 800, 1)
+$coords -= 1
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CHECKPOINTS_X[HECKPOINT_INDEXSN_LOOPION =   DESTINATION) = ")
+save_int_to_debug_file $coords
+Debugger.SaveStringToDebugFile("] = CE_DEBUG_CHECKPOINT_INDEXSN_LOOPION =   DESTINATION) = ")
+save_float_to_debug_file $x
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CHECKPOINTS_Y[1ECKPOINT_INDEXSN_LOOPION =   DESTINATION) = ")
+save_int_to_debug_file $coords
+Debugger.SaveStringToDebugFile("] = CE_DEBUG_CHECKPOINT_INDEXSN_LOOPION =   DESTINATION) = ")
+save_float_to_debug_file $y
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CHECKPOINTS_Z[2ECKPOINT_INDEXSN_LOOPION =   DESTINATION) = ")
+save_int_to_debug_file $coords
+Debugger.SaveStringToDebugFile("] = CE_DEBUG_CHECKPOINT_INDEXSN_LOOPION =   DESTINATION) = ")
+if 
+  Streaming.IsThisModelABoat(230@)
+goto_if_false @CPRACE_5659
+goto @CPRACE_5719
+
+:CPRACE_5659
+if 
+  Streaming.IsThisModelAHeli(230@)
+goto_if_false @CPRACE_5682
+goto @CPRACE_5719
+
+:CPRACE_5682
+if 
+  Streaming.IsThisModelAPlane(230@)
+goto_if_false @CPRACE_5705
+goto @CPRACE_5719
+
+:CPRACE_5705
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+
+:CPRACE_5719
+save_float_to_debug_file $z
+save_newline_to_debug_file 
+set_lvar_float_to_var_float 454@($coords,82f) = $x
+set_lvar_float_to_var_float 536@($coords,82f) = $y
+set_lvar_float_to_var_float 618@($coords,82f) = $z
+set_lvar_float_to_var_float 231@ = $x
+set_lvar_float_to_var_float 232@ = $y
+set_lvar_float_to_var_float 233@ = $z
+$coords += 1
+set_lvar_int_to_var_int 250@ = $coords
+$coords += 1
+235@ = 1
+
+:CPRACE_5815
+goto @CPRACE_5829
+
+:CPRACE_5822
+235@ = 0
+
+:CPRACE_5829
+goto @CPRACE_20805
+
+:CPRACE_5836
+Hud.Display(False)
+Hud.DisplayRadar(False)
+$current_Language = Game.GetCurrentLanguage()
+if 
+  not is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @CPRACE_5879
+Text.SetHelpMessageBoxSize(250)
+goto @CPRACE_5884
+
+:CPRACE_5879
+Text.SetHelpMessageBoxSize(200)
+
+:CPRACE_5884
+Text.PrintHelpForever('RACES33')
+236@, 237@, 238@, 239@ = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+if or
+  -100 > 237@
+  236@ > 100
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @CPRACE_6028
+if 
+  240@ == 0
+goto_if_false @CPRACE_6021
+if 
+  is_int_lvar_greater_than_int_var 51@ > $race_selection
+goto_if_false @CPRACE_5999
+$race_selection += 1
+goto @CPRACE_6007
+
+:CPRACE_5999
+set_var_int_to_lvar_int $race_selection = 50@
+
+:CPRACE_6007
+gosub @CPRACE_46974
+240@ = 1
+
+:CPRACE_6021
+goto @CPRACE_6035
+
+:CPRACE_6028
+240@ = 0
+
+:CPRACE_6035
+if or
+  237@ > 100
+  -100 > 236@
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @CPRACE_6152
+if 
+  241@ == 0
+goto_if_false @CPRACE_6145
+if 
+  is_int_var_greater_than_int_lvar $race_selection > 50@
+goto_if_false @CPRACE_6123
+$race_selection -= 1
+goto @CPRACE_6131
+
+:CPRACE_6123
+set_var_int_to_lvar_int $race_selection = 51@
+
+:CPRACE_6131
+gosub @CPRACE_46974
+241@ = 1
+
+:CPRACE_6145
+goto @CPRACE_6159
+
+:CPRACE_6152
+241@ = 0
+
+:CPRACE_6159
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @CPRACE_6229
+if 
+  242@ == 0
+goto_if_false @CPRACE_6222
+Txd.Remove
+Hud.Display(True)
+Hud.DisplayRadar(True)
+Text.ClearHelp
+53@ = 1
+return 
+242@ = 1
+
+:CPRACE_6222
+goto @CPRACE_6236
+
+:CPRACE_6229
+242@ = 0
+
+:CPRACE_6236
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @CPRACE_6317
+if 
+  243@ == 0
+goto_if_false @CPRACE_6310
+if 
+  $race_selection > -1
+goto_if_false @CPRACE_6303
+Camera.DoFade(0, 500)
+49@ = 2
+
+:CPRACE_6303
+243@ = 1
+
+:CPRACE_6310
+goto @CPRACE_6324
+
+:CPRACE_6317
+243@ = 0
+
+:CPRACE_6324
+Hud.DrawWindow(53.0, 130.0, 597.0, 410.0, 'RACES_0', 3)
+gosub @CPRACE_47594
+Text.SetWrapX(320.0)
+Text.SetScale($x_hud_scale, $y_hud_scale)
+Text.Display($x_hud_pos, $y_hud_pos, 85@($race_selection,30s))
+gosub @CPRACE_47594
+Text.SetScale($6932, $6946)
+Text.Display($x_hud_pos, $6918, 'RACES36')
+gosub @CPRACE_47594
+Text.SetColor(180, 180, 180, 255)
+Text.SetScale($6933, $6947)
+set_var_float_to_var_float $6919 = $6918
+add_float_var_to_float_var $6919 += $6924
+if 
+  Game.AreMeasurementsInMeters
+goto_if_false @CPRACE_6624
+set_lvar_float_to_lvar_float 244@ = 55@($race_selection,30f)
+244@ /= 1000.0
+cset_lvar_int_to_lvar_float 246@ = float 244@
+cset_lvar_float_to_lvar_int 47@ = integer 246@
+set_lvar_float_to_lvar_float 245@ = 244@
+sub_float_lvar_from_float_lvar 245@ -= 47@
+cset_lvar_int_to_lvar_float 247@ = float 245@
+if 
+  10 > 247@
+goto_if_false @CPRACE_6594
+Text.DisplayWith2Numbers($x_hud_pos, $6919, 'RACES35', 246@, 247@)
+goto @CPRACE_6617
+
+:CPRACE_6594
+Text.DisplayWith2Numbers($x_hud_pos, $6919, 'RACES34', 246@, 247@)
+
+:CPRACE_6617
+goto @CPRACE_6767
+
+:CPRACE_6624
+set_lvar_float_to_lvar_float 248@ = 55@($race_selection,30f)
+248@ /= 1609.0
+cset_lvar_int_to_lvar_float 246@ = float 248@
+cset_lvar_float_to_lvar_int 47@ = integer 246@
+set_lvar_float_to_lvar_float 245@ = 248@
+sub_float_lvar_from_float_lvar 245@ -= 47@
+245@ *= 100.0
+cset_lvar_int_to_lvar_float 247@ = float 245@
+if 
+  10 > 247@
+goto_if_false @CPRACE_6744
+Text.DisplayWith2Numbers($x_hud_pos, $6919, 'RACES47', 246@, 247@)
+goto @CPRACE_6767
+
+:CPRACE_6744
+Text.DisplayWith2Numbers($x_hud_pos, $6919, 'RACES46', 246@, 247@)
+
+:CPRACE_6767
+gosub @CPRACE_47594
+Text.SetScale($6932, $6946)
+Text.Display($x_hud_pos, $6920, 'RACES38')
+gosub @CPRACE_47594
+Text.SetColor(180, 180, 180, 255)
+Text.SetScale($6933, $6947)
+set_var_float_to_var_float $6921 = $6920
+add_float_var_to_float_var $6921 += $6924
+if 
+  $cprace_best_times($race_selection,30i) == 999999999
+goto_if_false @CPRACE_6893
+Text.Display($x_hud_pos, $6921, 'RACES45')
+goto @CPRACE_7018
+
+:CPRACE_6893
+set_lvar_int_to_var_int 452@ = $cprace_best_times($race_selection,30i)
+452@ /= 60
+set_lvar_int_to_lvar_int 36@ = 452@
+36@ *= 60
+set_lvar_int_to_var_int 453@ = $cprace_best_times($race_selection,30i)
+sub_int_lvar_from_int_lvar 453@ -= 36@
+if 
+  10 > 453@
+goto_if_false @CPRACE_6995
+Text.DisplayWith2Numbers($x_hud_pos, $6921, 'RACES40', 452@, 453@)
+goto @CPRACE_7018
+
+:CPRACE_6995
+Text.DisplayWith2Numbers($x_hud_pos, $6921, 'RACES39', 452@, 453@)
+
+:CPRACE_7018
+if 
+  $menu_mode <> 3
+goto_if_false @CPRACE_7332
+gosub @CPRACE_47594
+Text.SetScale($6932, $6946)
+Text.Display($x_hud_pos, $6922, 'RACES37')
+gosub @CPRACE_47594
+Text.SetColor(180, 180, 180, 255)
+Text.SetScale($6933, $6947)
+set_var_float_to_var_float $6923 = $6922
+add_float_var_to_float_var $6923 += $6924
+if 
+  $cprace_best_position($race_selection,30i) == 1
+goto_if_false @CPRACE_7159
+Text.Display($x_hud_pos, $6923, 'RACES41')
+goto @CPRACE_7332
+
+:CPRACE_7159
+if 
+  $cprace_best_position($race_selection,30i) == 2
+goto_if_false @CPRACE_7205
+Text.Display($x_hud_pos, $6923, 'RACES42')
+goto @CPRACE_7332
+
+:CPRACE_7205
+if 
+  $cprace_best_position($race_selection,30i) == 3
+goto_if_false @CPRACE_7251
+Text.Display($x_hud_pos, $6923, 'RACES43')
+goto @CPRACE_7332
+
+:CPRACE_7251
+if and
+  $cprace_best_position($race_selection,30i) > 3
+  100 > $cprace_best_position($race_selection,30i)
+goto_if_false @CPRACE_7315
+Text.DisplayWithNumber($x_hud_pos, $6923, 'RACES44', $cprace_best_position($race_selection,30i))
+goto @CPRACE_7332
+
+:CPRACE_7315
+Text.Display($x_hud_pos, $6923, 'RACES45')
+
+:CPRACE_7332
+set_lvar_int_to_var_int 36@ = $race_selection
+36@ += 1
+Hud.DrawSprite(36@, 454.98, 268.18, 256.0, 256.0, 180, 180, 180, 255)
+goto @CPRACE_20805
+
+:CPRACE_7391
+if 
+  not Camera.GetFadingStatus
+goto_if_false @CPRACE_7570
+Text.SetHelpMessageBoxSize(200)
+Txd.Remove
+Text.ClearHelp
+gosub @CPRACE_20812
+Hud.DisplayCarNames(False)
+Hud.Display(True)
+if 
+  221@ == 0
+goto_if_false @CPRACE_7457
+Hud.DisplayRadar(True)
+goto @CPRACE_7475
+
+:CPRACE_7457
+Game.SetIsInStadium(True)
+Hud.DisplayZoneNames(False)
+Game.HideAllFrontendBlips(True)
+World.SetExtraColors(2, False)
+
+:CPRACE_7475
+$disable_all_cranes = 1
+if 
+  $got_race_made_progress($race_selection,30i) == 0
+goto_if_false @CPRACE_7538
+if and
+  $race_selection == 0
+  $show_race_selection == 0
+goto_if_false @CPRACE_7536
+goto @CPRACE_7538
+
+:CPRACE_7536
+Stat.RegisterMissionGiven
+
+:CPRACE_7538
+if 
+  $race_selection == 23
+goto_if_false @CPRACE_7563
+CarGenerator.Switch($gen_car_flying[1], 0)
+
+:CPRACE_7563
+49@ = 3
+
+:CPRACE_7570
+goto @CPRACE_20805
+
+:CPRACE_7577
+set_lvar_int_to_lvar_int 249@ = 250@
+249@ -= 1
+set_lvar_int_to_lvar_int 251@ = 224@
+251@ -= 1
+252@ = 0
+253@ = 0
+254@ = 0
+255@ = 0
+
+:CPRACE_7635
+if 
+  is_int_lvar_greater_than_int_lvar 256@ > 253@
+goto_if_false @CPRACE_7712
+257@(253@,16i) = 0
+273@(253@,16i) = 0
+289@(253@,16i) = 0
+305@(253@,16i) = 0
+253@ += 1
+goto @CPRACE_7635
+
+:CPRACE_7712
+253@ = 0
+321@ = -1
+49@ = 4
+if 
+  is_int_lvar_equal_to_constant 205@ == 3
+goto_if_false @CPRACE_7877
+if or
+  $race_selection == 22
+  $race_selection == 23
+  $race_selection == 24
+goto_if_false @CPRACE_7830
+322@ = 12.0
+323@ = 12.0
+324@ = 12.0
+325@ = 6.0
+goto @CPRACE_7870
+
+:CPRACE_7830
+322@ = 25.0
+323@ = 25.0
+324@ = 25.0
+325@ = 12.0
+
+:CPRACE_7870
+goto @CPRACE_7917
+
+:CPRACE_7877
+322@ = 12.0
+323@ = 12.0
+324@ = 7.0
+325@ = 6.0
+
+:CPRACE_7917
+goto @CPRACE_20805
+
+:CPRACE_7924
+252@ = 0
+
+:CPRACE_7931
+if 
+  is_int_lvar_greater_than_int_lvar 256@ > 252@
+goto_if_false @CPRACE_8154
+if 
+  is_int_lvar_equal_to_constant 700@(252@,16i) == 290
+goto_if_false @CPRACE_8099
+if 
+  $race_selection == 0
+goto_if_false @CPRACE_8017
+Streaming.LoadSpecialCharacter('CESAR', 1)
+Streaming.LoadSpecialCharacter('KENDL', 2)
+
+:CPRACE_8017
+if 
+  $race_selection == 7
+goto_if_false @CPRACE_8048
+Streaming.LoadSpecialCharacter('WUZIMU', 1)
+
+:CPRACE_8048
+if 
+  $race_selection == 8
+goto_if_false @CPRACE_8092
+Streaming.LoadSpecialCharacter('WUZIMU', 1)
+Streaming.LoadSpecialCharacter('CAT', 2)
+
+:CPRACE_8092
+goto @CPRACE_8108
+
+:CPRACE_8099
+Streaming.RequestModel(700@(252@,16i))
+
+:CPRACE_8108
+if 
+  $race_selection == 8
+goto_if_false @CPRACE_8131
+Streaming.RequestVehicleMod(#WHEEL_OR1)
+
+:CPRACE_8131
+Streaming.RequestModel(716@(252@,16i))
+252@ += 1
+goto @CPRACE_7931
+
+:CPRACE_8154
+Streaming.RequestAnimation("CAR")
+Streaming.RequestAnimation("RIOT")
+Streaming.LoadAllModelsNow
+326@ = 0
+
+:CPRACE_8178
+if 
+  326@ == 0
+goto_if_false @CPRACE_8646
+wait 0
+326@ = 1
+252@ = 0
+
+:CPRACE_8214
+if 
+  is_int_lvar_greater_than_int_lvar 256@ > 252@
+goto_if_false @CPRACE_8639
+if 
+  is_int_lvar_equal_to_constant 700@(252@,16i) == 290
+goto_if_false @CPRACE_8498
+if 
+  not Streaming.HasSpecialCharacterLoaded(1)
+goto_if_false @CPRACE_8385
+if 
+  $race_selection == 0
+goto_if_false @CPRACE_8309
+Streaming.LoadSpecialCharacter('CESAR', 1)
+326@ = 0
+
+:CPRACE_8309
+if 
+  $race_selection == 7
+goto_if_false @CPRACE_8347
+Streaming.LoadSpecialCharacter('WUZIMU', 1)
+326@ = 0
+
+:CPRACE_8347
+if 
+  $race_selection == 8
+goto_if_false @CPRACE_8385
+Streaming.LoadSpecialCharacter('WUZIMU', 1)
+326@ = 0
+
+:CPRACE_8385
+if 
+  $race_selection == 0
+goto_if_false @CPRACE_8438
+if 
+  not Streaming.HasSpecialCharacterLoaded(2)
+goto_if_false @CPRACE_8438
+Streaming.LoadSpecialCharacter('KENDL', 2)
+326@ = 0
+
+:CPRACE_8438
+if 
+  $race_selection == 8
+goto_if_false @CPRACE_8491
+if 
+  not Streaming.HasSpecialCharacterLoaded(2)
+goto_if_false @CPRACE_8491
+Streaming.LoadSpecialCharacter('CAT', 2)
+326@ = 0
+
+:CPRACE_8491
+goto @CPRACE_8534
+
+:CPRACE_8498
+if 
+  not Streaming.HasModelLoaded(700@(252@,16i))
+goto_if_false @CPRACE_8534
+Streaming.RequestModel(700@(252@,16i))
+326@ = 0
+
+:CPRACE_8534
+if 
+  $race_selection == 8
+goto_if_false @CPRACE_8580
+if 
+  not Streaming.HasVehicleModLoaded(#WHEEL_OR1)
+goto_if_false @CPRACE_8580
+Streaming.RequestVehicleMod(#WHEEL_OR1)
+326@ = 0
+
+:CPRACE_8580
+if 
+  not Streaming.HasModelLoaded(716@(252@,16i))
+goto_if_false @CPRACE_8625
+Streaming.RequestModel(700@(252@,16i))
+Streaming.RequestModel(716@(252@,16i))
+326@ = 0
+
+:CPRACE_8625
+252@ += 1
+goto @CPRACE_8214
+
+:CPRACE_8639
+goto @CPRACE_8178
+
+:CPRACE_8646
+49@ = 5
+goto @CPRACE_20805
+
+:CPRACE_8660
+World.SetCarDensityMultiplier(0.0)
+World.ClearArea(0, 454@, 536@, 618@, 30.0)
+if 
+  $show_race_selection == 1
+goto_if_false @CPRACE_8708
+Char.ClearTasksImmediately($scplayer)
+
+:CPRACE_8708
+Char.SetCoordinates($scplayer, 454@, 536@, 618@)
+Char.SetAreaVisible($scplayer, 221@)
+Streaming.SetAreaVisible(221@)
+Streaming.RequestCollision(454@, 536@)
+Camera.RestoreJumpcut
+Streaming.LoadScene(454@, 536@, 618@)
+Weather.SetToAppropriateTypeNow
+49@ = 6
+goto @CPRACE_20805
+
+:CPRACE_8772
+if and
+  Streaming.HasAnimationLoaded("CAR")
+  Streaming.HasAnimationLoaded("RIOT")
+goto_if_false @CPRACE_11198
+443@ = Car.Create(716@, 454@, 536@, 618@)
+Car.TurnToFaceCoord(443@, 455@, 537@)
+set_lvar_int_to_lvar_int 36@ = 256@
+36@ -= 1
+253@ = 0
+
+:CPRACE_8848
+if 
+  is_int_lvar_greater_than_int_lvar 256@ > 253@
+goto_if_false @CPRACE_11173
+if 
+  256@ > 1
+goto_if_false @CPRACE_9265
+329@, 330@, $z, 327@, 328@, $z = Streaming.GetModelDimensions(716@)
+329@ *= -1.0
+add_float_lvar_to_float_lvar 327@ += 329@
+if 
+  2.0 > 327@
+goto_if_false @CPRACE_8957
+327@ = 2.0
+
+:CPRACE_8957
+set_lvar_float_to_lvar_float 329@ = 327@
+329@ *= -1.0
+330@ *= -1.0
+add_float_lvar_to_float_lvar 328@ += 330@
+set_lvar_int_to_lvar_int 254@ = 253@
+254@ /= 2
+254@ *= 2
+if 
+  is_int_lvar_equal_to_int_lvar 254@ == 253@
+goto_if_false @CPRACE_9083
+set_var_float_to_lvar_float $x = 327@
+cset_lvar_float_to_lvar_int 47@ = integer 253@
+mult_float_lvar_by_float_lvar 47@ *= 328@
+47@ *= -1.0
+set_var_float_to_lvar_float $y = 47@
+goto @CPRACE_9140
+
+:CPRACE_9083
+set_var_float_to_lvar_float $x = 329@
+set_lvar_int_to_lvar_int 255@ = 253@
+255@ -= 1
+cset_lvar_float_to_lvar_int 47@ = integer 255@
+mult_float_lvar_by_float_lvar 47@ *= 328@
+47@ *= -1.0
+set_var_float_to_lvar_float $y = 47@
+
+:CPRACE_9140
+if 
+  Car.IsDead(443@)
+goto_if_false @CPRACE_9201
+if 
+  $show_race_selection == 0
+goto_if_false @CPRACE_9199
+if 
+  $race_selection == 0
+goto_if_false @CPRACE_9199
+$failed_cesar_race = 1
+
+:CPRACE_9199
+return 
+
+:CPRACE_9201
+$x = Car.GetOffsetInWorldCoords($y, $z, 443@, $x, $y, 0.0)
+$heading = Car.GetHeading(443@)
+set_lvar_float_to_var_float 331@(253@,16f) = $x
+set_lvar_float_to_var_float 347@(253@,16f) = $y
+goto @CPRACE_9329
+
+:CPRACE_9265
+$heading = Car.GetHeading(443@)
+set_var_float_to_lvar_float $x = 331@(253@,16f)
+set_var_float_to_lvar_float $y = 347@(253@,16f)
+set_lvar_float_to_lvar_float 331@(253@,16f) = 454@
+set_lvar_float_to_lvar_float 347@(253@,16f) = 536@
+set_var_float_to_lvar_float $z = 618@
+
+:CPRACE_9329
+if 
+  not Streaming.IsThisModelABoat(716@(253@,16i))
+goto_if_false @CPRACE_9403
+if 
+  not Streaming.IsThisModelAPlane(716@(253@,16i))
+goto_if_false @CPRACE_9403
+if 
+  not Streaming.IsThisModelAHeli(716@(253@,16i))
+goto_if_false @CPRACE_9403
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+
+:CPRACE_9403
+set_lvar_float_to_var_float 363@(253@,16f) = $z
+if 
+  is_int_lvar_greater_than_int_lvar 36@ > 253@
+goto_if_false @CPRACE_9756
+gosub @CPRACE_488
+395@(253@,16i) = Char.CreateInsideCar(PedType.CivMale, 700@(253@,16i), 379@(253@,16i))
+if 
+  is_int_lvar_equal_to_constant 700@(253@,16i) == 290
+goto_if_false @CPRACE_9552
+if or
+  $race_selection == 0
+  $race_selection == 8
+goto_if_false @CPRACE_9533
+411@ = Char.CreateAsPassenger(PedType.CivFemale, 291, 379@(253@,16i), 0)
+
+:CPRACE_9533
+Car.SetProofs(379@(253@,16i), True, True, True, False, True)
+
+:CPRACE_9552
+if 
+  221@ > 0
+goto_if_false @CPRACE_9614
+if 
+  321@ == -1
+goto_if_false @CPRACE_9602
+321@ = DecisionMakerChar.Copy(-1)
+DecisionMakerChar.ClearEventResponse(321@, 79)
+
+:CPRACE_9602
+Char.SetDecisionMaker(395@(253@,16i), 321@)
+
+:CPRACE_9614
+Char.SetAreaVisible(395@(253@,16i), 221@)
+Char.SetCanBeShotInVehicle(395@(253@,16i), False)
+Char.SetSuffersCriticalHits(395@(253@,16i), False)
+Char.SetNeverTargeted(395@(253@,16i), True)
+Char.SetOnlyDamagedByPlayer(395@(253@,16i), True)
+Char.SetCantBeDraggedOut(395@(253@,16i), False)
+Char.SetDrownsInWater(395@(253@,16i), False)
+Char.SetHealth(395@(253@,16i), 500)
+if 
+  221@ == 0
+goto_if_false @CPRACE_9738
+412@(253@,16i) = Blip.AddForChar(395@(253@,16i))
+
+:CPRACE_9738
+Blip.ChangeDisplay(412@(253@,16i), BlipDisplay.MarkerOnly)
+goto @CPRACE_11159
+
+:CPRACE_9756
+if 
+  not Streaming.IsThisModelABoat(716@(253@,16i))
+goto_if_false @CPRACE_10754
+if 
+  not Streaming.IsThisModelAPlane(716@(253@,16i))
+goto_if_false @CPRACE_10754
+if 
+  not Streaming.IsThisModelAHeli(716@(253@,16i))
+goto_if_false @CPRACE_10754
+if 
+  221@ == 0
+goto_if_false @CPRACE_10754
+428@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+$x = Car.GetOffsetInWorldCoords($y, $z, 443@, -4.0435, 6.5755, -0.8)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+429@ = Char.CreateRandom($x, $y, $z)
+Char.SetKeepTask(429@, True)
+Char.SetDecisionMaker(429@, 428@)
+Task.TurnCharToFaceCoord(429@, 454@, 536@, 618@)
+430@ = Object.CreateNoOffset(#KMB_GOFLAG, $x, $y, $z)
+Task.PickUpObject(429@, 430@, 0.062, 0.027, -0.15, 5, 16, "FLAG_DROP", "CAR", 0)
+$x = Car.GetOffsetInWorldCoords($y, $z, 443@, -5.6392, 2.9435, -0.8)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+431@ = Char.CreateRandom($x, $y, $z)
+$x = Car.GetOffsetInWorldCoords($y, $z, 443@, -6.0071, -2.0778, 2.5)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+432@ = Char.CreateRandom($x, $y, $z)
+$x = Car.GetOffsetInWorldCoords($y, $z, 443@, -7.6039, -5.0807, 2.5)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+433@ = Char.CreateRandom($x, $y, $z)
+$x = Car.GetOffsetInWorldCoords($y, $z, 443@, -7.0724, -6.4057, 2.5)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+434@ = Char.CreateRandom($x, $y, $z)
+$x = Car.GetOffsetInWorldCoords($y, $z, 443@, -5.9988, -13.553, 2.5)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+435@ = Char.CreateRandom($x, $y, $z)
+$x = Car.GetOffsetInWorldCoords($y, $z, 443@, 6.073, -15.2059, 2.5)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+436@ = Char.CreateRandom($x, $y, $z)
+$x = Car.GetOffsetInWorldCoords($y, $z, 443@, 7.2639, -12.9933, 2.5)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+437@ = Char.CreateRandom($x, $y, $z)
+$x = Car.GetOffsetInWorldCoords($y, $z, 443@, 5.8429, -7.7069, 2.5)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+438@ = Char.CreateRandom($x, $y, $z)
+$x = Car.GetOffsetInWorldCoords($y, $z, 443@, 8.4135, -3.7971, 2.5)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+439@ = Char.CreateRandom($x, $y, $z)
+$x = Car.GetOffsetInWorldCoords($y, $z, 443@, 6.2507, 0.3634, 2.5)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+440@ = Char.CreateRandom($x, $y, $z)
+$x = Car.GetOffsetInWorldCoords($y, $z, 443@, 8.6397, 2.419, 2.5)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+441@ = Char.CreateRandom($x, $y, $z)
+252@ = 0
+
+:CPRACE_10623
+if 
+  11 > 252@
+goto_if_false @CPRACE_10754
+Char.SetDecisionMaker(431@(252@,11i), 428@)
+Char.SetKeepTask(431@(252@,11i), True)
+38@ = Sequence.Open()
+gosub @CPRACE_50648
+Sequence.SetToRepeat(38@, True)
+Sequence.Close(38@)
+37@ = Sequence.Open()
+Task.TurnCharToFaceCoord(-1, 454@, 536@, 618@)
+Char.PerformSequence(-1, 38@)
+Sequence.Close(37@)
+Char.PerformSequence(431@(252@,11i), 37@)
+Sequence.Clear(38@)
+Sequence.Clear(37@)
+252@ += 1
+goto @CPRACE_10623
+
+:CPRACE_10754
+Car.Delete(443@)
+set_lvar_int_to_var_int 395@(253@,16i) = $scplayer
+set_lvar_int_to_lvar_int 442@ = 253@
+363@(442@,16f) += 3.0
+363@(442@,16f) = World.GetGroundZFor3DCoord(331@(442@,16f), 347@(442@,16f), 363@(442@,16f))
+if 
+  0.0 > 363@(442@,16f)
+goto_if_false @CPRACE_10882
+if 
+  Streaming.IsThisModelABoat(716@(442@,16i))
+goto_if_false @CPRACE_10882
+363@(442@,16f) = 0.0
+
+:CPRACE_10882
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CPRACE_10947
+379@(442@,16i) = Char.GetCarIsUsing($scplayer)
+Car.SetCoordinates(379@(442@,16i), 331@(442@,16f), 347@(442@,16f), 363@(442@,16f))
+goto @CPRACE_11070
+
+:CPRACE_10947
+379@(442@,16i) = Car.Create(716@(442@,16i), 331@(442@,16f), 347@(442@,16f), 363@(442@,16f))
+if 
+  $race_selection == 8
+goto_if_false @CPRACE_11017
+36@ = Car.AddMod(#WHEEL_OR1, 379@(442@,16i))
+
+:CPRACE_11017
+if 
+  209@ <> -1
+goto_if_false @CPRACE_11058
+Car.ChangeColor(379@(442@,16i), 209@(442@,6i), 215@(442@,6i))
+
+:CPRACE_11058
+Char.WarpIntoCar($scplayer, 379@(442@,16i))
+
+:CPRACE_11070
+Car.SetAreaVisible(379@(442@,16i), 221@)
+Car.SetHeading(379@(442@,16i), $heading)
+if or
+  Streaming.IsThisModelAPlane(716@(442@,16i))
+  Streaming.IsThisModelAHeli(716@(442@,16i))
+goto_if_false @CPRACE_11148
+Car.FreezePosition(379@(442@,16i), True)
+Car.SetForwardSpeed(379@(442@,16i), 10.0)
+
+:CPRACE_11148
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Camera.DoFade(1, 500)
+
+:CPRACE_11159
+253@ += 1
+goto @CPRACE_8848
+
+:CPRACE_11173
+Player.SetControl($player1, False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+49@ = 7
+goto @CPRACE_11213
+
+:CPRACE_11198
+Streaming.RequestAnimation("CAR")
+Streaming.RequestAnimation("RIOT")
+
+:CPRACE_11213
+goto @CPRACE_20805
+
+:CPRACE_11220
+Game.SetEveryoneIgnorePlayer($player1, True)
+Game.SetAllCarsCanBeDamaged(False)
+Text.PrintBig('RACES_4', 1100, TextStyle.MiddleSmaller)
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1056)
+set_var_int_to_var_int $races_timer = $game_timer
+$races_timer += 999
+49@ = 8
+goto @CPRACE_20805
+
+:CPRACE_11297
+if 
+  is_int_var_greater_than_int_var $game_timer > $races_timer
+goto_if_false @CPRACE_11375
+Text.PrintBig('RACES_5', 1100, TextStyle.MiddleSmaller)
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1056)
+set_var_int_to_var_int $races_timer = $game_timer
+$races_timer += 999
+49@ = 9
+
+:CPRACE_11375
+goto @CPRACE_20805
+
+:CPRACE_11382
+if 
+  is_int_var_greater_than_int_var $game_timer > $races_timer
+goto_if_false @CPRACE_11460
+Text.PrintBig('RACES_6', 1100, TextStyle.MiddleSmaller)
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1056)
+set_var_int_to_var_int $races_timer = $game_timer
+$races_timer += 999
+49@ = 10
+
+:CPRACE_11460
+goto @CPRACE_20805
+
+:CPRACE_11467
+if 
+  is_int_var_greater_than_int_var $game_timer > $races_timer
+goto_if_false @CPRACE_12344
+Text.PrintBig('RACES_7', 800, TextStyle.MiddleSmaller)
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1057)
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Game.SetAllCarsCanBeDamaged(True)
+253@ = 0
+
+:CPRACE_11547
+if 
+  11 > 253@
+goto_if_false @CPRACE_11588
+Char.MarkAsNoLongerNeeded(431@(253@,11i))
+253@ += 1
+goto @CPRACE_11547
+
+:CPRACE_11588
+Char.MarkAsNoLongerNeeded(429@)
+Streaming.RemoveAnimation("CAR")
+253@ = 0
+
+:CPRACE_11607
+if 
+  is_int_lvar_greater_than_int_lvar 256@ > 253@
+goto_if_false @CPRACE_11829
+if 
+  not Car.IsDead(379@(253@,16i))
+goto_if_false @CPRACE_11815
+Car.SetOnlyDamagedByPlayer(379@(253@,16i), False)
+if 
+  not Streaming.IsThisModelABoat(716@(253@,16i))
+goto_if_false @CPRACE_11815
+if 
+  not Streaming.IsThisModelAPlane(716@(253@,16i))
+goto_if_false @CPRACE_11804
+if 
+  not Streaming.IsThisModelAHeli(716@(253@,16i))
+goto_if_false @CPRACE_11786
+if 
+  not is_int_lvar_equal_to_int_lvar 253@ == 442@
+goto_if_false @CPRACE_11779
+if 
+  221@ == 0
+goto_if_false @CPRACE_11779
+StuckCarCheck.AddWithWarp(379@(253@,16i), 3.0, 4000, True, True, True, -1)
+
+:CPRACE_11779
+goto @CPRACE_11797
+
+:CPRACE_11786
+Car.FreezePosition(379@(253@,16i), False)
+
+:CPRACE_11797
+goto @CPRACE_11815
+
+:CPRACE_11804
+Car.FreezePosition(379@(253@,16i), False)
+
+:CPRACE_11815
+253@ += 1
+goto @CPRACE_11607
+
+:CPRACE_11829
+World.SetCarDensityMultiplier(1.0)
+$x_hud_pos = 582.7242
+$y_hud_pos = 356.2812
+$x_hud_scale = 52.2072
+$y_hud_scale = 52.2072
+$6904 = 584.0833
+$6918 = 329.3647
+$6932 = 0.4943
+$6946 = 2.097
+$6905 = 570.6411
+$6919 = 323.5937
+$6933 = 0.9127
+$6947 = 4.8106
+$6906 = 585.941
+$6920 = 345.6341
+$6934 = 0.4197
+$6948 = 1.8511
+$6907 = 582.7242
+$6921 = 359.0323
+$6935 = 0.4993
+$6949 = 2.637
+$6908 = 582.7242
+$6922 = 356.2812
+$6936 = 56.2072
+$6950 = 56.2072
+$6909 = 582.7242
+$6923 = 356.2812
+$6937 = 58.2072
+$6951 = 58.2072
+$6910 = 582.7242
+$6924 = 400.7518
+$6938 = 58.2072
+$6952 = 32.7789
+$6911 = 582.7242
+$6925 = 400.2518
+$6939 = 56.2072
+$6953 = 31.7789
+$6912 = 582.7242
+$6926 = 399.2518
+$6940 = 52.2072
+$6954 = 29.7789
+$6913 = 560.4862
+$6927 = 384.5027
+$6941 = 0.5
+$6955 = 1.5393
+set_var_int_to_var_int $races_timer = $game_timer
+set_lvar_int_to_var_int 206@ = $game_timer
+if 
+  256@ == 1
+goto_if_false @CPRACE_12333
+$races_timer = 0
+Hud.DisplayTimerWithString($races_timer, TimerDirection.Up, 'TIMER')
+
+:CPRACE_12333
+Text.ClearThisPrintBigNow(TextStyle.BottomRight)
+49@ = 11
+
+:CPRACE_12344
+goto @CPRACE_20805
+
+:CPRACE_12351
+if 
+  is_int_lvar_greater_than_int_lvar 256@ > 253@
+goto_if_false @CPRACE_18590
+if 
+  not Char.IsDead(395@(253@,16i))
+goto_if_false @CPRACE_18123
+if 
+  13 > 49@
+goto_if_false @CPRACE_12732
+if 
+  not is_int_var_equal_to_int_lvar $scplayer == 395@(253@,16i)
+goto_if_false @CPRACE_12732
+if 
+  is_int_lvar_greater_than_int_lvar 273@(253@,16i) > 273@(442@,16i)
+goto_if_false @CPRACE_12472
+229@ += 1
+goto @CPRACE_12732
+
+:CPRACE_12472
+if 
+  is_int_lvar_equal_to_int_lvar 273@(442@,16i) == 273@(253@,16i)
+goto_if_false @CPRACE_12732
+if 
+  is_int_lvar_greater_than_int_lvar 257@(253@,16i) > 257@(442@,16i)
+goto_if_false @CPRACE_12540
+229@ += 1
+goto @CPRACE_12732
+
+:CPRACE_12540
+if 
+  is_int_lvar_greater_than_int_lvar 257@(253@,16i) > 249@
+goto_if_false @CPRACE_12577
+229@ += 1
+goto @CPRACE_12732
+
+:CPRACE_12577
+if 
+  is_int_lvar_equal_to_int_lvar 257@(442@,16i) == 257@(253@,16i)
+goto_if_false @CPRACE_12732
+$x, $y, $z = Char.GetCoordinates(395@(253@,16i))
+444@ = Math.GetDistanceBetweenCoords3D($x, $y, $z, 331@(253@,16f), 347@(253@,16f), 363@(253@,16f))
+$x, $y, $z = Char.GetCoordinates($scplayer)
+445@ = Math.GetDistanceBetweenCoords3D($x, $y, $z, 331@(253@,16f), 347@(253@,16f), 363@(253@,16f))
+if 
+  is_float_lvar_greater_than_float_lvar 445@ > 444@
+goto_if_false @CPRACE_12732
+229@ += 1
+
+:CPRACE_12732
+if 
+  49@ == 12
+goto_if_false @CPRACE_15498
+if 
+  is_int_var_equal_to_int_lvar $scplayer == 395@(253@,16i)
+goto_if_false @CPRACE_14121
+if 
+  not Car.IsDead(379@(442@,16i))
+goto_if_false @CPRACE_13748
+if 
+  Char.IsInCar($scplayer, 379@(442@,16i))
+goto_if_false @CPRACE_13359
+if 
+  207@ == 1
+goto_if_false @CPRACE_13352
+Text.ClearThisPrint('RACES21')
+Blip.Remove(54@)
+363@(253@,16f) -= 1000.0
+if 
+  221@ == 0
+goto_if_false @CPRACE_13345
+254@ = 0
+set_lvar_int_to_lvar_int 36@ = 256@
+36@ -= 1
+
+:CPRACE_12904
+if 
+  is_int_lvar_greater_than_int_lvar 36@ > 254@
+goto_if_false @CPRACE_12984
+if 
+  not Char.IsDead(395@(254@,16i))
+goto_if_false @CPRACE_12970
+412@(254@,16i) = Blip.AddForChar(395@(254@,16i))
+Blip.ChangeDisplay(412@(254@,16i), BlipDisplay.MarkerOnly)
+
+:CPRACE_12970
+254@ += 1
+goto @CPRACE_12904
+
+:CPRACE_12984
+54@ = Blip.AddForCoord(331@(253@,16f), 347@(253@,16f), 363@(253@,16f))
+Blip.ChangeColor(54@, BlipColor.Red)
+Blip.ChangeDisplay(54@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(54@, 3)
+if and
+  is_int_lvar_equal_to_int_lvar 257@(253@,16i) == 249@
+  is_int_lvar_equal_to_int_lvar 273@(253@,16i) == 251@
+goto_if_false @CPRACE_13243
+if 
+  is_int_lvar_equal_to_constant 205@ == 3
+goto_if_false @CPRACE_13188
+set_lvar_int_to_lvar_int 36@ = 257@(253@,16i)
+36@ -= 1
+if 
+  0 > 36@
+goto_if_false @CPRACE_13128
+36@ = 0
+
+:CPRACE_13128
+449@ = Checkpoint.Create(331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 454@(36@,82f), 536@(36@,82f), 618@(36@,82f), 205@, 325@)
+goto @CPRACE_13236
+
+:CPRACE_13188
+449@ = Checkpoint.Create(331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 0.0, 0.0, 0.0, 1, 6.0)
+
+:CPRACE_13236
+goto @CPRACE_13345
+
+:CPRACE_13243
+set_lvar_int_to_lvar_int 36@ = 257@(253@,16i)
+36@ += 1
+if 
+  is_int_lvar_equal_to_int_lvar 257@(253@,16i) == 249@
+goto_if_false @CPRACE_13292
+36@ = 1
+
+:CPRACE_13292
+449@ = Checkpoint.Create(331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 454@(36@,82f), 536@(36@,82f), 618@(36@,82f), 205@, 325@)
+
+:CPRACE_13345
+207@ = 0
+
+:CPRACE_13352
+goto @CPRACE_13741
+
+:CPRACE_13359
+if 
+  207@ == 0
+goto_if_false @CPRACE_13507
+Checkpoint.Delete(449@)
+Blip.Remove(54@)
+254@ = 0
+set_lvar_int_to_lvar_int 36@ = 256@
+36@ -= 1
+
+:CPRACE_13409
+if 
+  is_int_lvar_greater_than_int_lvar 36@ > 254@
+goto_if_false @CPRACE_13451
+Blip.Remove(412@(254@,16i))
+254@ += 1
+goto @CPRACE_13409
+
+:CPRACE_13451
+54@ = Blip.AddForCar(379@(442@,16i))
+Blip.SetAsFriendly(54@, True)
+363@(253@,16f) += 1000.0
+set_lvar_int_to_var_int 446@ = $game_timer
+446@ += 25400
+207@ = 1
+
+:CPRACE_13507
+set_lvar_int_to_lvar_int 453@ = 446@
+sub_int_var_from_int_lvar 453@ -= $game_timer
+453@ /= 1000
+if 
+  1 > 453@
+goto_if_false @CPRACE_13556
+453@ = 0
+
+:CPRACE_13556
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 446@
+goto_if_false @CPRACE_13670
+Text.PrintNow('RACES20', 5000, 1)
+if 
+  $show_race_selection == 0
+goto_if_false @CPRACE_13625
+Text.PrintBig('M_FAIL', 3000, TextStyle.Middle)
+
+:CPRACE_13625
+if 
+  $show_race_selection == 0
+goto_if_false @CPRACE_13668
+if 
+  $race_selection == 0
+goto_if_false @CPRACE_13668
+$failed_cesar_race = 1
+
+:CPRACE_13668
+return 
+
+:CPRACE_13670
+if 
+  453@ == 1
+goto_if_false @CPRACE_13718
+Text.AddNextMessageToPreviousBriefs(False)
+Text.PrintWithNumberNow('RACE_21', 453@, 200, 1)
+goto @CPRACE_13741
+
+:CPRACE_13718
+Text.AddNextMessageToPreviousBriefs(False)
+Text.PrintWithNumberNow('RACES21', 453@, 200, 1)
+
+:CPRACE_13741
+goto @CPRACE_14114
+
+:CPRACE_13748
+if 
+  Car.IsInWater(379@(442@,16i))
+goto_if_false @CPRACE_14019
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CPRACE_13917
+443@ = Char.StoreCarIsInNoSave($scplayer)
+if 
+  not is_int_lvar_equal_to_int_lvar 443@ == 379@(442@,16i)
+goto_if_false @CPRACE_13910
+Text.PrintNow('RACES24', 5000, 1)
+if 
+  $show_race_selection == 0
+goto_if_false @CPRACE_13865
+Text.PrintBig('M_FAIL', 3000, TextStyle.Middle)
+
+:CPRACE_13865
+if 
+  $show_race_selection == 0
+goto_if_false @CPRACE_13908
+if 
+  $race_selection == 0
+goto_if_false @CPRACE_13908
+$failed_cesar_race = 1
+
+:CPRACE_13908
+return 
+
+:CPRACE_13910
+goto @CPRACE_14012
+
+:CPRACE_13917
+Text.PrintNow('RACES24', 5000, 1)
+if 
+  $show_race_selection == 0
+goto_if_false @CPRACE_13967
+Text.PrintBig('M_FAIL', 3000, TextStyle.Middle)
+
+:CPRACE_13967
+if 
+  $show_race_selection == 0
+goto_if_false @CPRACE_14010
+if 
+  $race_selection == 0
+goto_if_false @CPRACE_14010
+$failed_cesar_race = 1
+
+:CPRACE_14010
+return 
+
+:CPRACE_14012
+goto @CPRACE_14114
+
+:CPRACE_14019
+Text.PrintNow('RACES24', 5000, 1)
+if 
+  $show_race_selection == 0
+goto_if_false @CPRACE_14069
+Text.PrintBig('M_FAIL', 3000, TextStyle.Middle)
+
+:CPRACE_14069
+if 
+  $show_race_selection == 0
+goto_if_false @CPRACE_14112
+if 
+  $race_selection == 0
+goto_if_false @CPRACE_14112
+$failed_cesar_race = 1
+
+:CPRACE_14112
+return 
+
+:CPRACE_14114
+goto @CPRACE_15498
+
+:CPRACE_14121
+if 
+  is_int_lvar_greater_than_int_lvar 250@ > 257@(253@,16i)
+goto_if_false @CPRACE_15498
+if 
+  Char.IsInAnyCar(395@(253@,16i))
+goto_if_false @CPRACE_14412
+if 
+  221@ == 0
+goto_if_false @CPRACE_14405
+set_lvar_int_to_lvar_int 36@ = 257@(442@,16i)
+36@ += 4
+443@ = Char.StoreCarIsInNoSave(395@(253@,16i))
+if 
+  is_int_lvar_greater_than_int_lvar 257@(253@,16i) > 36@
+goto_if_false @CPRACE_14253
+Car.SetCruiseSpeed(443@, 25.0)
+goto @CPRACE_14312
+
+:CPRACE_14253
+if or
+  $race_selection == 7
+  $race_selection == 8
+  $race_selection == 0
+goto_if_false @CPRACE_14302
+Car.SetCruiseSpeed(443@, 35.0)
+goto @CPRACE_14312
+
+:CPRACE_14302
+Car.SetCruiseSpeed(443@, 50.0)
+
+:CPRACE_14312
+if 
+  $race_selection == 8
+goto_if_false @CPRACE_14405
+if or
+  Car.Locate2D(443@, 0, -882.9833, -47.9468, 24.61, 25.64)
+  Car.Locate2D(443@, 0, -843.0954, -141.9169, 24.59, -29.24)
+goto_if_false @CPRACE_14405
+Car.SetCruiseSpeed(443@, 30.0)
+
+:CPRACE_14405
+goto @CPRACE_14933
+
+:CPRACE_14412
+if 
+  $race_selection == 25
+goto_if_false @CPRACE_14444
+goto @CPRACE_18141
+goto @CPRACE_14933
+
+:CPRACE_14444
+if 
+  305@(253@,16i) == 0
+goto_if_false @CPRACE_14490
+set_lvar_int_to_var_int 305@(253@,16i) = $game_timer
+305@(253@,16i) += 8000
+
+:CPRACE_14490
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 305@(253@,16i)
+goto_if_false @CPRACE_14933
+if 
+  not is_int_lvar_equal_to_int_lvar 257@(253@,16i) == 257@(442@,16i)
+goto_if_false @CPRACE_14933
+if 
+  not Char.LocateAnyMeansChar2D($scplayer, 395@(253@,16i), 30.0, 30.0, False)
+goto_if_false @CPRACE_14922
+if 
+  not Char.LocateAnyMeans2D($scplayer, 0, 331@(253@,16f), 347@(253@,16f), 30.0, 30.0)
+goto_if_false @CPRACE_14904
+if 
+  not World.IsPointObscuredByAMissionEntity(331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 4.0, 4.0, 3.0)
+goto_if_false @CPRACE_14886
+if 
+  not Char.IsOnScreen(395@(253@,16i))
+goto_if_false @CPRACE_14868
+if 
+  not Camera.IsPointOnScreen(331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 4.0)
+goto_if_false @CPRACE_14850
+Car.MarkAsNoLongerNeeded(379@(253@,16i))
+gosub @CPRACE_488
+Char.WarpIntoCar(395@(253@,16i), 379@(253@,16i))
+set_lvar_int_to_lvar_int 36@ = 257@(253@,16i)
+36@ += 1
+if 
+  is_int_lvar_greater_than_int_lvar 250@ > 36@
+goto_if_false @CPRACE_14832
+Car.TurnToFaceCoord(379@(253@,16i), 454@(36@,82f), 536@(36@,82f))
+Car.SetForwardSpeed(379@(253@,16i), 20.0)
+
+:CPRACE_14832
+305@(253@,16i) = 0
+goto @CPRACE_14861
+
+:CPRACE_14850
+305@(253@,16i) = 0
+
+:CPRACE_14861
+goto @CPRACE_14879
+
+:CPRACE_14868
+305@(253@,16i) = 0
+
+:CPRACE_14879
+goto @CPRACE_14897
+
+:CPRACE_14886
+305@(253@,16i) = 0
+
+:CPRACE_14897
+goto @CPRACE_14915
+
+:CPRACE_14904
+305@(253@,16i) = 0
+
+:CPRACE_14915
+goto @CPRACE_14933
+
+:CPRACE_14922
+305@(253@,16i) = 0
+
+:CPRACE_14933
+if 
+  221@ == 0
+goto_if_false @CPRACE_15498
+252@ = 0
+255@ = 0
+
+:CPRACE_14965
+if 
+  is_int_lvar_greater_than_int_lvar 256@ > 252@
+goto_if_false @CPRACE_15047
+set_lvar_int_to_lvar_int 447@ = 257@(252@,16i)
+447@ -= 4
+if 
+  is_int_lvar_greater_than_int_lvar 447@ > 257@(253@,16i)
+goto_if_false @CPRACE_15033
+255@ += 1
+
+:CPRACE_15033
+252@ += 1
+goto @CPRACE_14965
+
+:CPRACE_15047
+if 
+  255@ > 0
+goto_if_false @CPRACE_15498
+if 
+  not Char.LocateAnyMeansChar2D($scplayer, 395@(253@,16i), 150.0, 150.0, False)
+goto_if_false @CPRACE_15498
+if 
+  not Char.LocateAnyMeans2D($scplayer, 0, 331@(253@,16f), 347@(253@,16f), 150.0, 150.0)
+goto_if_false @CPRACE_15498
+if 
+  not Char.LocateAnyMeans2D(395@(253@,16i), 0, 331@(253@,16f), 347@(253@,16f), 40.0, 40.0)
+goto_if_false @CPRACE_15498
+if 
+  not World.IsPointObscuredByAMissionEntity(331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 4.0, 4.0, 3.0)
+goto_if_false @CPRACE_15498
+if 
+  not Char.IsOnScreen(395@(253@,16i))
+goto_if_false @CPRACE_15498
+if 
+  not Camera.IsPointOnScreen(331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 4.0)
+goto_if_false @CPRACE_15498
+if 
+  Char.IsSittingInAnyCar(395@(253@,16i))
+goto_if_false @CPRACE_15391
+Char.SetCoordinates(395@(253@,16i), 331@(253@,16f), 347@(253@,16f), 363@(253@,16f))
+set_lvar_int_to_lvar_int 36@ = 257@(253@,16i)
+36@ += 1
+Car.TurnToFaceCoord(443@, 454@(36@,82f), 536@(36@,82f))
+goto @CPRACE_15498
+
+:CPRACE_15391
+Car.MarkAsNoLongerNeeded(379@(253@,16i))
+gosub @CPRACE_488
+Char.WarpIntoCar(395@(253@,16i), 379@(253@,16i))
+set_lvar_int_to_lvar_int 36@ = 257@(253@,16i)
+36@ += 1
+if 
+  is_int_lvar_greater_than_int_lvar 250@ > 36@
+goto_if_false @CPRACE_15498
+Car.TurnToFaceCoord(379@(253@,16i), 454@(36@,82f), 536@(36@,82f))
+Car.SetForwardSpeed(379@(253@,16i), 20.0)
+
+:CPRACE_15498
+36@ = 0
+if 
+  Char.LocateInCar3D(395@(253@,16i), 331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 322@, 323@, 324@, False)
+goto_if_false @CPRACE_15571
+36@ = 1
+goto @CPRACE_15700
+
+:CPRACE_15571
+if 
+  is_int_lvar_equal_to_int_var 395@(253@,16i) == $scplayer
+goto_if_false @CPRACE_15700
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @CPRACE_15700
+Streaming.RequestCollision(331@(253@,16f), 347@(253@,16f))
+Streaming.LoadScene(331@(253@,16f), 347@(253@,16f), 363@(253@,16f))
+set_var_float_to_lvar_float $x = 363@(253@,16f)
+$x += 1.0
+Char.SetCoordinates(395@(253@,16i), 331@(253@,16f), 347@(253@,16f), 363@(253@,16f))
+
+:CPRACE_15700
+if 
+  36@ == 1
+goto_if_false @CPRACE_18116
+if 
+  49@ == 11
+goto_if_false @CPRACE_15743
+49@ = 12
+
+:CPRACE_15743
+if 
+  is_int_var_equal_to_int_lvar $scplayer == 395@(253@,16i)
+goto_if_false @CPRACE_15809
+if 
+  221@ == 0
+goto_if_false @CPRACE_15809
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1058)
+Blip.Remove(54@)
+
+:CPRACE_15809
+257@(253@,16i) += 1
+if 
+  is_int_lvar_greater_than_int_lvar 250@ > 257@(253@,16i)
+goto_if_false @CPRACE_15910
+set_lvar_int_to_lvar_int 36@ = 257@(253@,16i)
+set_lvar_float_to_lvar_float 331@(253@,16f) = 454@(36@,82f)
+set_lvar_float_to_lvar_float 347@(253@,16f) = 536@(36@,82f)
+set_lvar_float_to_lvar_float 363@(253@,16f) = 618@(36@,82f)
+goto @CPRACE_16948
+
+:CPRACE_15910
+if 
+  is_int_lvar_greater_than_int_lvar 224@ > 273@(253@,16i)
+goto_if_false @CPRACE_15944
+273@(253@,16i) += 1
+
+:CPRACE_15944
+if 
+  is_int_lvar_equal_to_int_lvar 273@(253@,16i) == 224@
+goto_if_false @CPRACE_16620
+if 
+  is_int_lvar_equal_to_int_var 395@(253@,16i) == $scplayer
+goto_if_false @CPRACE_16209
+if 
+  224@ > 1
+goto_if_false @CPRACE_16119
+set_lvar_int_to_var_int 448@ = $game_timer
+sub_int_lvar_from_int_lvar 448@ -= 206@
+448@ /= 1000
+if 
+  is_int_var_greater_than_int_lvar $cprace_best_lap_times($race_selection,30i) > 448@
+goto_if_false @CPRACE_16119
+set_var_int_to_lvar_int $cprace_best_lap_times($race_selection,30i) = 448@
+if 
+  $race_selection == 25
+goto_if_false @CPRACE_16093
+Stat.RegisterFastestTime(StatId.BestLapTimeHotring, 448@)
+
+:CPRACE_16093
+if 
+  $race_selection == 26
+goto_if_false @CPRACE_16119
+Stat.RegisterFastestTime(StatId.BestLapTimeDirttrack, 448@)
+
+:CPRACE_16119
+Checkpoint.Delete(449@)
+Blip.Remove(54@)
+49@ = 13
+if 
+  $show_race_selection == 0
+goto_if_false @CPRACE_16188
+if 
+  229@ > 0
+goto_if_false @CPRACE_16188
+Text.PrintBig('M_FAIL', 3000, TextStyle.Middle)
+
+:CPRACE_16188
+363@(253@,16f) = 99999.0
+goto @CPRACE_16613
+
+:CPRACE_16209
+if 
+  not Car.IsDead(379@(253@,16i))
+goto_if_false @CPRACE_16238
+StuckCarCheck.Remove(379@(253@,16i))
+
+:CPRACE_16238
+if 
+  221@ == 0
+goto_if_false @CPRACE_16548
+$task_status = Char.GetScriptTaskStatus(395@(253@,16i), 1560)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @CPRACE_16541
+37@ = Sequence.Open()
+47@ = Char.GetSpeed(395@(253@,16i))
+cset_lvar_int_to_lvar_float 36@ = float 47@
+36@ *= -100
+36@ += 4000
+if 
+  10 > 36@
+goto_if_false @CPRACE_16354
+36@ = 10
+
+:CPRACE_16354
+Task.CarTempAction(-1, -1, TempAction.GoForward, 36@)
+36@ = Math.RandomIntInRange(0, 5)
+if or
+  36@ == 0
+  36@ == 1
+goto_if_false @CPRACE_16430
+Task.CarTempAction(-1, -1, TempAction.TurnLeft, 200)
+Task.CarTempAction(-1, -1, TempAction.HandbrakeTurnLeft, 250000)
+goto @CPRACE_16454
+
+:CPRACE_16430
+Task.CarTempAction(-1, -1, TempAction.TurnRight, 200)
+Task.CarTempAction(-1, -1, TempAction.HandbrakeTurnRight, 250000)
+
+:CPRACE_16454
+Task.CarTempAction(-1, -1, TempAction.HandbrakeStraight, 250000)
+Task.CarTempAction(-1, -1, TempAction.HandbrakeStraight, 250000)
+Task.CarTempAction(-1, -1, TempAction.HandbrakeStraight, 250000)
+Task.CarTempAction(-1, -1, TempAction.HandbrakeStraight, 250000)
+Task.CarDriveWander(-1, -1, 100.0, DrivingMode.AvoidCars)
+Sequence.Close(37@)
+Char.PerformSequence(395@(253@,16i), 37@)
+Sequence.Clear(37@)
+
+:CPRACE_16541
+goto @CPRACE_16599
+
+:CPRACE_16548
+$task_status = Char.GetScriptTaskStatus(395@(253@,16i), 1490)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @CPRACE_16599
+Task.CarDriveWander(395@(253@,16i), -1, 100.0, DrivingMode.AvoidCars)
+
+:CPRACE_16599
+363@(253@,16f) = 99999.0
+
+:CPRACE_16613
+goto @CPRACE_16948
+
+:CPRACE_16620
+if 
+  is_int_var_equal_to_int_lvar $scplayer == 395@(253@,16i)
+goto_if_false @CPRACE_16877
+set_lvar_int_to_var_int 448@ = $game_timer
+sub_int_lvar_from_int_lvar 448@ -= 206@
+448@ /= 1000
+if 
+  is_int_var_greater_than_int_lvar $cprace_best_lap_times($race_selection,30i) > 448@
+goto_if_false @CPRACE_16869
+set_var_int_to_lvar_int $cprace_best_lap_times($race_selection,30i) = 448@
+if 
+  $race_selection == 25
+goto_if_false @CPRACE_16728
+Stat.RegisterFastestTime(StatId.BestLapTimeHotring, 448@)
+
+:CPRACE_16728
+if 
+  $race_selection == 26
+goto_if_false @CPRACE_16754
+Stat.RegisterFastestTime(StatId.BestLapTimeDirttrack, 448@)
+
+:CPRACE_16754
+set_lvar_int_to_lvar_int 452@ = 448@
+452@ /= 60
+set_lvar_int_to_lvar_int 36@ = 452@
+36@ *= 60
+set_lvar_int_to_lvar_int 453@ = 448@
+sub_int_lvar_from_int_lvar 453@ -= 36@
+if 
+  10 > 453@
+goto_if_false @CPRACE_16847
+Text.PrintWith2NumbersNow('LAPTIM0', 452@, 453@, 5000, TextStyle.Middle)
+goto @CPRACE_16869
+
+:CPRACE_16847
+Text.PrintWith2NumbersNow('LAPTIME', 452@, 453@, 5000, TextStyle.Middle)
+
+:CPRACE_16869
+set_lvar_int_to_var_int 206@ = $game_timer
+
+:CPRACE_16877
+257@(253@,16i) = 0
+set_lvar_int_to_lvar_int 36@ = 257@(253@,16i)
+set_lvar_float_to_lvar_float 331@(253@,16f) = 454@(36@,82f)
+set_lvar_float_to_lvar_float 347@(253@,16f) = 536@(36@,82f)
+set_lvar_float_to_lvar_float 363@(253@,16f) = 618@(36@,82f)
+
+:CPRACE_16948
+if 
+  is_int_var_equal_to_int_lvar $scplayer == 395@(253@,16i)
+goto_if_false @CPRACE_17405
+if 
+  363@(253@,16f) <> 99999.0
+goto_if_false @CPRACE_17398
+if 
+  221@ == 0
+goto_if_false @CPRACE_17066
+54@ = Blip.AddForCoord(331@(253@,16f), 347@(253@,16f), 363@(253@,16f))
+Blip.ChangeColor(54@, BlipColor.Red)
+Blip.ChangeDisplay(54@, BlipDisplay.BlipOnly)
+Blip.ChangeScale(54@, 3)
+Checkpoint.Delete(449@)
+
+:CPRACE_17066
+if and
+  is_int_lvar_equal_to_int_lvar 257@(253@,16i) == 249@
+  is_int_lvar_equal_to_int_lvar 273@(253@,16i) == 251@
+goto_if_false @CPRACE_17278
+if 
+  is_int_lvar_equal_to_constant 205@ == 3
+goto_if_false @CPRACE_17223
+set_lvar_int_to_lvar_int 36@ = 257@(253@,16i)
+36@ -= 1
+if 
+  0 > 36@
+goto_if_false @CPRACE_17163
+36@ = 0
+
+:CPRACE_17163
+449@ = Checkpoint.Create(331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 454@(36@,82f), 536@(36@,82f), 618@(36@,82f), 205@, 325@)
+goto @CPRACE_17271
+
+:CPRACE_17223
+449@ = Checkpoint.Create(331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 0.0, 0.0, 0.0, 1, 6.0)
+
+:CPRACE_17271
+goto @CPRACE_17398
+
+:CPRACE_17278
+if 
+  221@ == 0
+goto_if_false @CPRACE_17398
+set_lvar_int_to_lvar_int 36@ = 257@(253@,16i)
+36@ += 1
+if 
+  is_int_lvar_equal_to_int_lvar 257@(253@,16i) == 249@
+goto_if_false @CPRACE_17345
+36@ = 1
+
+:CPRACE_17345
+449@ = Checkpoint.Create(331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 454@(36@,82f), 536@(36@,82f), 618@(36@,82f), 205@, 325@)
+
+:CPRACE_17398
+goto @CPRACE_18116
+
+:CPRACE_17405
+if 
+  363@(253@,16f) <> 99999.0
+goto_if_false @CPRACE_18116
+if 
+  Char.IsInAnyHeli(395@(253@,16i))
+goto_if_false @CPRACE_17660
+if 
+  not Car.IsDead(379@(253@,16i))
+goto_if_false @CPRACE_17603
+if 
+  Char.IsInCar(395@(253@,16i), 379@(253@,16i))
+goto_if_false @CPRACE_17546
+Heli.GotoCoords(379@(253@,16i), 331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 0.0, 363@(253@,16f))
+goto @CPRACE_17596
+
+:CPRACE_17546
+443@ = Char.StoreCarIsInNoSave(395@(253@,16i))
+Heli.GotoCoords(443@, 331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 0.0, 363@(253@,16f))
+
+:CPRACE_17596
+goto @CPRACE_17653
+
+:CPRACE_17603
+443@ = Char.StoreCarIsInNoSave(395@(253@,16i))
+Heli.GotoCoords(443@, 331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 0.0, 363@(253@,16f))
+
+:CPRACE_17653
+goto @CPRACE_18116
+
+:CPRACE_17660
+if 
+  Char.IsInAnyPlane(395@(253@,16i))
+goto_if_false @CPRACE_17890
+if 
+  not Car.IsDead(379@(253@,16i))
+goto_if_false @CPRACE_17833
+if 
+  Char.IsInCar(395@(253@,16i), 379@(253@,16i))
+goto_if_false @CPRACE_17776
+Plane.GotoCoords(379@(253@,16i), 331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 0.0, 363@(253@,16f))
+goto @CPRACE_17826
+
+:CPRACE_17776
+443@ = Char.StoreCarIsInNoSave(395@(253@,16i))
+Plane.GotoCoords(443@, 331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 0.0, 363@(253@,16f))
+
+:CPRACE_17826
+goto @CPRACE_17883
+
+:CPRACE_17833
+443@ = Char.StoreCarIsInNoSave(395@(253@,16i))
+Plane.GotoCoords(443@, 331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 0.0, 363@(253@,16f))
+
+:CPRACE_17883
+goto @CPRACE_18116
+
+:CPRACE_17890
+$task_status = Char.GetScriptTaskStatus(395@(253@,16i), 1560)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @CPRACE_18116
+$task_status = Char.GetScriptTaskStatus(395@(253@,16i), 1490)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @CPRACE_18116
+if 
+  not Car.IsDead(379@(253@,16i))
+goto_if_false @CPRACE_18068
+Task.CarDriveToCoord(395@(253@,16i), 379@(253@,16i), 331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 50.0, DriveMode.Racing, 716@(253@,16i), DrivingMode.AvoidCars)
+if 
+  is_int_lvar_greater_than_int_lvar 257@(253@,16i) > 250@
+goto_if_false @CPRACE_18061
+StuckCarCheck.Remove(379@(253@,16i))
+
+:CPRACE_18061
+goto @CPRACE_18116
+
+:CPRACE_18068
+Task.CarDriveToCoord(395@(253@,16i), -1, 331@(253@,16f), 347@(253@,16f), 363@(253@,16f), 50.0, DriveMode.Racing, 716@(253@,16i), DrivingMode.AvoidCars)
+
+:CPRACE_18116
+goto @CPRACE_18576
+
+:CPRACE_18123
+if 
+  221@ > 0
+goto_if_false @CPRACE_18426
+
+:CPRACE_18141
+if 
+  not is_int_var_equal_to_int_lvar $scplayer == 395@(253@,16i)
+goto_if_false @CPRACE_18419
+if 
+  not World.IsPointObscuredByAMissionEntity(732@, 733@, 734@, 2.5, 2.5, 2.5)
+goto_if_false @CPRACE_18419
+257@(253@,16i) = 1
+Blip.Remove(412@(253@,16i))
+Car.MarkAsNoLongerNeeded(379@(253@,16i))
+Char.MarkAsNoLongerNeeded(395@(253@,16i))
+set_lvar_float_to_lvar_float 331@(253@,16f) = 732@
+set_lvar_float_to_lvar_float 347@(253@,16f) = 733@
+set_lvar_float_to_lvar_float 363@(253@,16f) = 734@
+set_var_float_to_lvar_float $heading = 735@
+gosub @CPRACE_488
+395@(253@,16i) = Char.CreateInsideCar(PedType.CivMale, 700@(253@,16i), 379@(253@,16i))
+Char.SetAreaVisible(395@(253@,16i), 221@)
+Char.SetCanBeShotInVehicle(395@(253@,16i), False)
+Char.SetSuffersCriticalHits(395@(253@,16i), False)
+Char.SetNeverTargeted(395@(253@,16i), True)
+Char.SetOnlyDamagedByPlayer(395@(253@,16i), True)
+Char.SetCantBeDraggedOut(395@(253@,16i), False)
+Char.SetDrownsInWater(395@(253@,16i), False)
+Char.SetHealth(395@(253@,16i), 500)
+Car.SetForwardSpeed(379@(253@,16i), 25.0)
+
+:CPRACE_18419
+goto @CPRACE_18576
+
+:CPRACE_18426
+if 
+  not is_int_var_equal_to_int_lvar $scplayer == 395@(253@,16i)
+goto_if_false @CPRACE_18576
+if 
+  13 > 49@
+goto_if_false @CPRACE_18529
+if or
+  is_int_lvar_equal_to_int_lvar 257@(442@,16i) == 257@(253@,16i)
+  is_int_lvar_greater_than_int_lvar 257@(253@,16i) > 257@(442@,16i)
+  is_int_lvar_greater_than_int_lvar 257@(253@,16i) > 249@
+goto_if_false @CPRACE_18529
+229@ += 1
+
+:CPRACE_18529
+if 
+  not Char.IsInWater(395@(253@,16i))
+goto_if_false @CPRACE_18576
+Blip.Remove(412@(253@,16i))
+Char.MarkAsNoLongerNeeded(395@(253@,16i))
+Car.MarkAsNoLongerNeeded(379@(253@,16i))
+
+:CPRACE_18576
+253@ += 1
+goto @CPRACE_12351
+
+:CPRACE_18590
+if 
+  256@ > 1
+goto_if_false @CPRACE_19517
+Hud.DrawRect($6909, $6923, $6937, $6951, 0, 0, 0, 255)
+Hud.DrawRect($6908, $6922, $6936, $6950, 134, 155, 184, 255)
+Hud.DrawRect($x_hud_pos, $y_hud_pos, $x_hud_scale, $y_hud_scale, 0, 0, 0, 255)
+if 
+  224@ > 1
+goto_if_false @CPRACE_18950
+Hud.DrawRect($6910, $6924, $6938, $6952, 0, 0, 0, 255)
+Hud.DrawRect($6911, $6925, $6939, $6953, 134, 155, 184, 255)
+Hud.DrawRect($6912, $6926, $6940, $6954, 0, 0, 0, 255)
+set_lvar_int_to_lvar_int 36@ = 273@(442@,16i)
+36@ += 1
+if 
+  is_int_lvar_greater_than_int_lvar 36@ > 224@
+goto_if_false @CPRACE_18816
+set_lvar_int_to_lvar_int 36@ = 224@
+
+:CPRACE_18816
+gosub @CPRACE_47594
+$current_Language = Game.GetCurrentLanguage()
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @CPRACE_18863
+$6941 = 0.4235
+goto @CPRACE_18908
+
+:CPRACE_18863
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @CPRACE_18898
+$6941 = 0.3786
+goto @CPRACE_18908
+
+:CPRACE_18898
+$6941 = 0.5
+
+:CPRACE_18908
+Text.SetScale($6941, $6955)
+Text.SetJustify(True)
+Text.SetWrapX(600.0)
+Text.DisplayWith2Numbers($6913, $6927, 'RACES32', 36@, 224@)
+
+:CPRACE_18950
+set_lvar_int_to_lvar_int 450@ = 229@
+450@ += 1
+gosub @CPRACE_47594
+if 
+  223@ == 1
+goto_if_false @CPRACE_19002
+Text.SetColor(180, 25, 29, 255)
+
+:CPRACE_19002
+Text.SetScale($6932, $6946)
+if 
+  450@ == 1
+goto_if_false @CPRACE_19045
+Text.Display($6904, $6918, 'ST')
+
+:CPRACE_19045
+if 
+  450@ == 2
+goto_if_false @CPRACE_19080
+Text.Display($6904, $6918, 'ND')
+
+:CPRACE_19080
+if 
+  450@ == 3
+goto_if_false @CPRACE_19115
+Text.Display($6904, $6918, 'RD')
+
+:CPRACE_19115
+if 
+  450@ > 3
+goto_if_false @CPRACE_19150
+Text.Display($6904, $6918, 'TH')
+
+:CPRACE_19150
+gosub @CPRACE_47594
+if 
+  223@ == 1
+goto_if_false @CPRACE_19187
+Text.SetColor(180, 25, 29, 255)
+
+:CPRACE_19187
+Text.SetScale($6933, $6947)
+Text.SetCenter(True)
+Text.DisplayWithNumber($6905, $6919, 'NUMBER', 450@)
+gosub @CPRACE_47594
+if 
+  223@ == 1
+goto_if_false @CPRACE_19256
+Text.SetColor(180, 25, 29, 255)
+
+:CPRACE_19256
+Text.SetScale($6934, $6948)
+Text.DisplayWithNumber($6906, $6920, 'OUT_OF', 256@)
+if 
+  13 > 49@
+goto_if_false @CPRACE_19326
+set_lvar_int_to_var_int 451@ = $game_timer
+sub_int_var_from_int_lvar 451@ -= $races_timer
+451@ /= 1000
+
+:CPRACE_19326
+set_lvar_int_to_lvar_int 452@ = 451@
+452@ /= 60
+if 
+  452@ > 99
+goto_if_false @CPRACE_19366
+452@ = 99
+
+:CPRACE_19366
+set_lvar_int_to_lvar_int 36@ = 452@
+36@ *= 60
+set_lvar_int_to_lvar_int 453@ = 451@
+sub_int_lvar_from_int_lvar 453@ -= 36@
+gosub @CPRACE_47594
+if 
+  222@ == 1
+goto_if_false @CPRACE_19434
+Text.SetColor(180, 25, 29, 255)
+
+:CPRACE_19434
+Text.SetCenter(True)
+Text.SetScale($6935, $6949)
+if 
+  453@ > 9
+goto_if_false @CPRACE_19494
+Text.DisplayWith2Numbers($6907, $6921, 'TIME', 452@, 453@)
+goto @CPRACE_19517
+
+:CPRACE_19494
+Text.DisplayWith2Numbers($6907, $6921, 'TIME_0', 452@, 453@)
+
+:CPRACE_19517
+if 
+  $race_selection == 7
+goto_if_false @CPRACE_19542
+gosub @CPRACE_46264
+
+:CPRACE_19542
+if or
+  $race_selection == 25
+  $race_selection == 26
+goto_if_false @CPRACE_19574
+gosub @CPRACE_50980
+
+:CPRACE_19574
+goto @CPRACE_20805
+
+:CPRACE_19581
+if 
+  $show_race_selection == 0
+goto_if_false @CPRACE_19766
+if 
+  450@ == 1
+goto_if_false @CPRACE_19718
+if or
+  $race_selection == 7
+  $race_selection == 8
+goto_if_false @CPRACE_19649
+$flag_bcesar_mission_counter += 1
+
+:CPRACE_19649
+if 
+  $race_selection == 0
+goto_if_false @CPRACE_19706
+Text.PrintWithNumberBig('M_PASS', 1000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 1000)
+Blip.Remove($cesar_contact_blip)
+$flag_cesar_mission_counter += 1
+
+:CPRACE_19706
+Player.ClearWantedLevel($player1)
+goto @CPRACE_19766
+
+:CPRACE_19718
+if or
+  $race_selection == 0
+  $race_selection == 7
+  $race_selection == 8
+goto_if_false @CPRACE_19766
+Text.PrintBig('M_FAIL', 3000, TextStyle.Middle)
+
+:CPRACE_19766
+Hud.ClearTimer($races_timer)
+if 
+  is_int_var_greater_than_int_lvar $cprace_best_times($race_selection,30i) > 451@
+goto_if_false @CPRACE_19859
+if 
+  256@ == 1
+goto_if_false @CPRACE_19828
+set_lvar_int_to_var_int 451@ = $races_timer
+451@ /= 1000
+
+:CPRACE_19828
+set_var_int_to_lvar_int $cprace_best_times($race_selection,30i) = 451@
+Stat.RegisterFastestTime(145@($race_selection,30i), 451@)
+222@ = 1
+
+:CPRACE_19859
+if 
+  256@ > 1
+goto_if_false @CPRACE_19931
+if 
+  is_int_var_greater_than_int_lvar $cprace_best_position($race_selection,30i) > 450@
+goto_if_false @CPRACE_19931
+set_var_int_to_lvar_int $cprace_best_position($race_selection,30i) = 450@
+Stat.RegisterBestPosition(175@($race_selection,30i), 450@)
+223@ = 1
+
+:CPRACE_19931
+$x_hud_pos = 208.0665
+$y_hud_pos = 297.9241
+$x_hud_scale = 474.2788
+$y_hud_scale = 383.4714
+$6904 = 229.648
+$6918 = 313.8785
+$6932 = 0.5858
+$6946 = 2.5296
+$6905 = 455.3051
+$6933 = 0.4116
+$6920 = 339.1096
+$6934 = 0.5858
+gosub @CPRACE_48585
+set_var_int_to_var_int $races_timer = $game_timer
+$races_timer += 8000
+49@ = 14
+goto @CPRACE_20805
+
+:CPRACE_20088
+$current_Language = Game.GetCurrentLanguage()
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @CPRACE_20126
+set_var_float_to_var_float $6932 = $6934
+goto @CPRACE_20134
+
+:CPRACE_20126
+set_var_float_to_var_float $6932 = $6933
+
+:CPRACE_20134
+if 
+  256@ == 1
+goto_if_false @CPRACE_20202
+set_var_float_to_var_float $y = $y_hud_pos
+$y += 25.0
+Hud.DrawWindow($x_hud_pos, $y, $x_hud_scale, $y_hud_scale, 'DUMMY', 3)
+goto @CPRACE_20277
+
+:CPRACE_20202
+if 
+  450@ == 1
+goto_if_false @CPRACE_20252
+Hud.DrawWindow($x_hud_pos, $y_hud_pos, $x_hud_scale, $y_hud_scale, 'RACES18', 3)
+goto @CPRACE_20277
+
+:CPRACE_20252
+Hud.DrawWindow($x_hud_pos, $y_hud_pos, $x_hud_scale, $y_hud_scale, 'RACES_8', 3)
+
+:CPRACE_20277
+if 
+  256@ > 1
+goto_if_false @CPRACE_20549
+gosub @CPRACE_47594
+Text.SetJustify(True)
+Text.SetScale($6932, $6946)
+if 
+  223@ == 1
+goto_if_false @CPRACE_20356
+Text.Display($6904, $6918, 'TOP_POS')
+goto @CPRACE_20373
+
+:CPRACE_20356
+Text.Display($6904, $6918, 'RACES30')
+
+:CPRACE_20373
+gosub @CPRACE_47594
+Text.SetRightJustify(True)
+Text.SetScale($6932, $6946)
+Text.SetColor(180, 180, 180, 255)
+if 
+  450@ == 1
+goto_if_false @CPRACE_20441
+Text.Display($6905, $6918, 'RACES26')
+
+:CPRACE_20441
+if 
+  450@ == 2
+goto_if_false @CPRACE_20476
+Text.Display($6905, $6918, 'RACES27')
+
+:CPRACE_20476
+if 
+  450@ == 3
+goto_if_false @CPRACE_20511
+Text.Display($6905, $6918, 'RACES28')
+
+:CPRACE_20511
+if 
+  450@ > 3
+goto_if_false @CPRACE_20549
+Text.DisplayWithNumber($6905, $6918, 'RACES29', 450@)
+
+:CPRACE_20549
+gosub @CPRACE_47594
+Text.SetJustify(True)
+Text.SetScale($6932, $6946)
+if 
+  222@ == 1
+goto_if_false @CPRACE_20610
+Text.Display($6904, $6920, 'TOPTIME')
+goto @CPRACE_20627
+
+:CPRACE_20610
+Text.Display($6904, $6920, 'RACES31')
+
+:CPRACE_20627
+set_lvar_int_to_lvar_int 452@ = 451@
+452@ /= 60
+set_lvar_int_to_lvar_int 36@ = 452@
+36@ *= 60
+set_lvar_int_to_lvar_int 453@ = 451@
+sub_int_lvar_from_int_lvar 453@ -= 36@
+gosub @CPRACE_47594
+Text.SetRightJustify(True)
+Text.SetScale($6932, $6946)
+Text.SetColor(180, 180, 180, 255)
+if 
+  453@ > 9
+goto_if_false @CPRACE_20754
+Text.DisplayWith2Numbers($6905, $6920, 'TIME', 452@, 453@)
+goto @CPRACE_20777
+
+:CPRACE_20754
+Text.DisplayWith2Numbers($6905, $6920, 'TIME_0', 452@, 453@)
+
+:CPRACE_20777
+if 
+  is_int_var_greater_than_int_var $game_timer > $races_timer
+goto_if_false @CPRACE_20798
+return 
+
+:CPRACE_20798
+goto @CPRACE_20805
+
+:CPRACE_20805
+goto @CPRACE_2634
+
+:CPRACE_20812
+switch_start $race_selection total_jumps 27 default_jump 0 @CPRACE_46262 jumps 0 @CPRACE_21070 1 @CPRACE_21616 2 @CPRACE_22058 3 @CPRACE_22740 4 @CPRACE_23422 5 @CPRACE_24164 6 @CPRACE_25116
+switch_continued 7 @CPRACE_26038 8 @CPRACE_27092 9 @CPRACE_28206 10 @CPRACE_28894 11 @CPRACE_29612 12 @CPRACE_30204 13 @CPRACE_30802 14 @CPRACE_32150 15 @CPRACE_33528
+switch_continued 16 @CPRACE_34456 17 @CPRACE_35318 18 @CPRACE_36240 19 @CPRACE_36982 20 @CPRACE_38120 21 @CPRACE_40068 22 @CPRACE_42256 23 @CPRACE_43154 24 @CPRACE_44052
+switch_continued 25 @CPRACE_44980 26 @CPRACE_45529 -1 @CPRACE_46262 -1 @CPRACE_46262 -1 @CPRACE_46262 -1 @CPRACE_46262 -1 @CPRACE_46262 -1 @CPRACE_46262 -1 @CPRACE_46262
+
+:CPRACE_21070
+454@ = 1492.407
+536@ = -1872.365
+618@ = 15.8
+455@ = 1384.263
+537@ = -1872.015
+619@ = 12.3828
+456@ = 1075.442
+538@ = -1851.978
+620@ = 12.391
+457@ = 647.3663
+539@ = -1734.185
+621@ = 12.4844
+458@ = 627.2474
+540@ = -1228.55
+622@ = 16.9893
+459@ = 497.0043
+541@ = -1282.818
+623@ = 14.6513
+460@ = 500.412
+542@ = -1326.649
+624@ = 14.8178
+461@ = 401.0033
+543@ = -1404.457
+625@ = 32.8973
+462@ = 420.3067
+544@ = -1450.714
+626@ = 29.5842
+463@ = 329.1244
+545@ = -1631.112
+627@ = 32.1247
+464@ = 366.4376
+546@ = -1647.349
+628@ = 31.7176
+465@ = 369.98
+547@ = -2030.34
+629@ = 5.55
+250@ = 12
+256@ = 6
+set_lvar_int_to_constant 700@ = 133
+set_lvar_int_to_constant 701@ = 217
+set_lvar_int_to_constant 702@ = 157
+set_lvar_int_to_constant 703@ = 248
+set_lvar_int_to_constant 704@ = 290
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 517
+set_lvar_int_to_constant 717@ = 534
+set_lvar_int_to_constant 718@ = 517
+set_lvar_int_to_constant 719@ = 536
+set_lvar_int_to_constant 720@ = 567
+set_lvar_int_to_constant 721@ = 536
+209@ = 6
+215@ = 0
+210@ = 8
+216@ = 0
+211@ = 2
+217@ = 1
+212@ = 0
+218@ = 0
+213@ = 3
+219@ = 3
+goto @CPRACE_46262
+
+:CPRACE_21616
+454@ = 2875.192
+536@ = -1458.85
+618@ = 10.5892
+455@ = 2875.362
+537@ = -1404.768
+619@ = 10.7143
+456@ = 2797.037
+538@ = -1291.152
+620@ = 41.389
+457@ = 2609.984
+539@ = -1256.458
+621@ = 47.9322
+458@ = 2371.282
+540@ = -1280.477
+622@ = 23.6341
+459@ = 2450.557
+541@ = -1444.24
+623@ = 23.6318
+460@ = 2618.436
+542@ = -1444.826
+624@ = 31.6234
+461@ = 2657.3
+543@ = -1404.327
+625@ = 30.0795
+462@ = 2680.506
+544@ = -1489.556
+626@ = 30.2098
+463@ = 2755.952
+545@ = -1488.515
+627@ = 29.3812
+set_lvar_float_to_lvar_float 464@ = 454@
+set_lvar_float_to_lvar_float 546@ = 536@
+set_lvar_float_to_lvar_float 628@ = 618@
+250@ = 11
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 461
+set_lvar_int_to_constant 717@ = 521
+set_lvar_int_to_constant 718@ = 522
+set_lvar_int_to_constant 719@ = 461
+set_lvar_int_to_constant 720@ = 521
+set_lvar_int_to_constant 721@ = 522
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_22058
+454@ = 261.7816
+536@ = -1243.111
+618@ = 71.8851
+455@ = 312.9973
+537@ = -1206.853
+619@ = 74.9057
+456@ = 440.3485
+538@ = -1186.672
+620@ = 67.2076
+457@ = 623.8817
+539@ = -1109.967
+621@ = 45.6186
+458@ = 745.0934
+540@ = -951.0351
+622@ = 53.766
+459@ = 873.6384
+541@ = -860.0975
+623@ = 76.5242
+460@ = 1053.818
+542@ = -777.5837
+624@ = 104.7803
+461@ = 1248.368
+543@ = -731.3474
+625@ = 93.7346
+462@ = 1372.402
+544@ = -675.6946
+626@ = 92.6217
+463@ = 1328.011
+545@ = -583.8703
+627@ = 93.4113
+464@ = 1167.315
+546@ = -633.0795
+628@ = 102.7501
+465@ = 968.4116
+547@ = -646.252
+629@ = 120.7201
+466@ = 791.077
+548@ = -800.4396
+630@ = 65.0537
+467@ = 620.9355
+549@ = -905.8031
+631@ = 62.1261
+468@ = 454.9853
+550@ = -1013.546
+632@ = 92.0091
+469@ = 276.8912
+551@ = -1104.159
+633@ = 80.0612
+470@ = 141.6012
+552@ = -1247.267
+634@ = 43.792
+471@ = 192.4688
+553@ = -1380.597
+635@ = 47.6608
+set_lvar_float_to_lvar_float 472@ = 454@
+set_lvar_float_to_lvar_float 554@ = 536@
+set_lvar_float_to_lvar_float 636@ = 618@
+250@ = 19
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 461
+set_lvar_int_to_constant 717@ = 521
+set_lvar_int_to_constant 718@ = 522
+set_lvar_int_to_constant 719@ = 461
+set_lvar_int_to_constant 720@ = 521
+set_lvar_int_to_constant 721@ = 521
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_22740
+454@ = 1927.48
+536@ = -1515.516
+618@ = 2.2978
+455@ = 2018.401
+537@ = -1515.405
+619@ = 2.4054
+456@ = 2179.006
+538@ = -1559.661
+620@ = 1.1797
+457@ = 2370.138
+539@ = -1619.553
+621@ = 7.3323
+458@ = 2570.841
+540@ = -1619.056
+622@ = 17.6841
+459@ = 2756.846
+541@ = -1657.173
+623@ = 11.5191
+460@ = 2915.178
+542@ = -1534.362
+624@ = 9.875
+461@ = 2916.228
+543@ = -1333.491
+625@ = 9.875
+462@ = 2819.331
+544@ = -1142.638
+626@ = 15.7018
+463@ = 2622.646
+545@ = -1152.872
+627@ = 50.4181
+464@ = 2423.186
+546@ = -1154.169
+628@ = 30.5642
+465@ = 2167.046
+547@ = -1101.915
+629@ = 24.3864
+466@ = 2006.077
+548@ = -1027.839
+630@ = 34.3152
+467@ = 1835.824
+549@ = -991.5906
+631@ = 35.8824
+468@ = 1636.313
+550@ = -1005.15
+632@ = 49.8831
+469@ = 1617.024
+551@ = -1215.833
+633@ = 51.0566
+470@ = 1577.972
+552@ = -1417.831
+634@ = 27.6154
+471@ = 1722.823
+553@ = -1525.932
+635@ = 18.3927
+set_lvar_float_to_lvar_float 472@ = 454@
+set_lvar_float_to_lvar_float 554@ = 536@
+set_lvar_float_to_lvar_float 636@ = 618@
+250@ = 19
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 461
+set_lvar_int_to_constant 717@ = 521
+set_lvar_int_to_constant 718@ = 522
+set_lvar_int_to_constant 719@ = 461
+set_lvar_int_to_constant 720@ = 521
+set_lvar_int_to_constant 721@ = 521
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_23422
+454@ = 1357.656
+536@ = -1361.671
+618@ = 12.3828
+455@ = 1357.689
+537@ = -1186.404
+619@ = 20.2744
+456@ = 1369.741
+538@ = -1000.526
+620@ = 27.02
+457@ = 1505.818
+539@ = -868.7814
+621@ = 61.0462
+458@ = 1452.794
+540@ = -711.5325
+622@ = 89.8766
+459@ = 1253.572
+541@ = -729.2587
+623@ = 93.4292
+460@ = 1059.306
+542@ = -775.9847
+624@ = 105.3241
+461@ = 878.665
+543@ = -858.1913
+625@ = 76.8826
+462@ = 721.7916
+544@ = -980.4561
+626@ = 51.9555
+463@ = 571.0251
+545@ = -1045.203
+627@ = 72.2876
+464@ = 373.2952
+546@ = -1075.644
+628@ = 72.8049
+465@ = 288.4963
+547@ = -1249.747
+629@ = 72.721
+466@ = 481.2224
+548@ = -1240.976
+630@ = 19.3512
+467@ = 518.334
+549@ = -1377.603
+631@ = 14.9457
+468@ = 448.0064
+550@ = -1540.832
+632@ = 27.8796
+469@ = 487.4595
+551@ = -1661.575
+633@ = 20.74
+470@ = 687.2253
+552@ = -1673.48
+634@ = 10.7959
+471@ = 866.4786
+553@ = -1584.698
+635@ = 12.3828
+472@ = 1066.729
+554@ = -1572.305
+636@ = 12.375
+473@ = 1261.214
+555@ = -1572.243
+637@ = 12.3906
+set_lvar_float_to_lvar_float 474@ = 454@
+set_lvar_float_to_lvar_float 556@ = 536@
+set_lvar_float_to_lvar_float 638@ = 618@
+250@ = 21
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 558
+set_lvar_int_to_constant 717@ = 555
+set_lvar_int_to_constant 718@ = 496
+set_lvar_int_to_constant 719@ = 555
+set_lvar_int_to_constant 720@ = 405
+set_lvar_int_to_constant 721@ = 550
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_24164
+454@ = 852.0544
+536@ = -1405.622
+618@ = 12.217
+455@ = 1102.789
+537@ = -1405.766
+619@ = 12.428
+456@ = 1353.038
+538@ = -1405.544
+620@ = 12.3251
+457@ = 1600.965
+539@ = -1440.852
+621@ = 12.3828
+458@ = 1850.622
+540@ = -1461.777
+622@ = 12.3984
+454@ = 831.7679
+536@ = -1405.588
+618@ = 12.3849
+455@ = 1031.822
+537@ = -1405.615
+619@ = 12.0966
+456@ = 1232.144
+538@ = -1405.732
+620@ = 12.0633
+457@ = 1429.508
+539@ = -1439.091
+621@ = 12.3828
+458@ = 1630.18
+540@ = -1440.858
+622@ = 12.3828
+459@ = 1829.527
+541@ = -1460.804
+623@ = 12.3448
+460@ = 2029.979
+542@ = -1463.381
+624@ = 14.4553
+461@ = 2175.823
+543@ = -1384.403
+625@ = 22.8281
+462@ = 2342.427
+544@ = -1442.324
+626@ = 22.8281
+463@ = 2191.875
+545@ = -1545.934
+627@ = 1.1724
+464@ = 1997.078
+546@ = -1499.951
+628@ = 2.3804
+465@ = 1797.065
+547@ = -1500.874
+629@ = 6.8307
+466@ = 1641.002
+548@ = -1439.345
+630@ = 27.0747
+467@ = 1627.555
+549@ = -1280.703
+631@ = 41.885
+468@ = 1683.507
+550@ = -1089.012
+632@ = 55.7917
+469@ = 1566.054
+551@ = -927.5945
+633@ = 42.7541
+470@ = 1366.105
+552@ = -933.6759
+634@ = 33.1953
+471@ = 1166.087
+553@ = -941.9011
+635@ = 41.8697
+472@ = 966.715
+554@ = -962.2038
+636@ = 38.1905
+473@ = 784.2582
+555@ = -1043.979
+637@ = 23.6177
+474@ = 677.2552
+556@ = -1164.128
+638@ = 14.164
+475@ = 627.7037
+557@ = -1337.904
+639@ = 12.4227
+set_lvar_float_to_lvar_float 476@ = 454@
+set_lvar_float_to_lvar_float 558@ = 536@
+set_lvar_float_to_lvar_float 640@ = 618@
+250@ = 23
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 429
+set_lvar_int_to_constant 717@ = 541
+set_lvar_int_to_constant 718@ = 402
+set_lvar_int_to_constant 719@ = 429
+set_lvar_int_to_constant 720@ = 541
+set_lvar_int_to_constant 721@ = 506
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_25116
+454@ = 1331.926
+536@ = -2280.51
+618@ = 13.1732
+455@ = 1331.775
+537@ = -2541.682
+619@ = 13.1765
+456@ = 1544.309
+538@ = -2684.983
+620@ = 7.5074
+457@ = 1945.947
+539@ = -2685.131
+621@ = 6.5549
+458@ = 2175.141
+540@ = -2557.994
+622@ = 13.173
+459@ = 2352.719
+541@ = -2222.223
+623@ = 13.1737
+460@ = 2740.522
+542@ = -2168.782
+624@ = 10.7349
+461@ = 2844.832
+543@ = -1812.965
+625@ = 10.6737
+462@ = 2926.094
+544@ = -1421.263
+626@ = 10.657
+463@ = 2888.946
+545@ = -1022.685
+627@ = 10.6607
+464@ = 2896.483
+546@ = -621.0989
+628@ = 10.63
+465@ = 2718.623
+547@ = -273.2495
+629@ = 27.6705
+466@ = 2774.299
+548@ = 119.9424
+630@ = 22.8712
+467@ = 2612.82
+549@ = 327.3945
+631@ = 25.6764
+468@ = 2213.983
+550@ = 324.9601
+632@ = 32.5307
+469@ = 1817.184
+551@ = 278.3323
+633@ = 21.5314
+470@ = 1621.185
+552@ = 312.8743
+634@ = 20.8534
+471@ = 1608.029
+553@ = 372.27
+635@ = 26.4284
+472@ = 1658.672
+554@ = 317.3336
+636@ = 30.0474
+473@ = 1651.536
+555@ = -68.8376
+637@ = 35.9156
+474@ = 1668.653
+556@ = -369.1116
+638@ = 34.3923
+475@ = 1699.785
+557@ = -665.8258
+639@ = 43.3311
+476@ = 1640.03
+558@ = -1062.329
+640@ = 60.8035
+477@ = 1594.408
+559@ = -1457.834
+641@ = 28.3679
+478@ = 1622.355
+560@ = -1856.505
+642@ = 25.4707
+479@ = 1452.159
+561@ = -2117.271
+643@ = 13.1726
+set_lvar_float_to_lvar_float 480@ = 454@
+set_lvar_float_to_lvar_float 562@ = 536@
+set_lvar_float_to_lvar_float 644@ = 618@
+250@ = 27
+256@ = 4
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 451
+set_lvar_int_to_constant 717@ = 429
+set_lvar_int_to_constant 718@ = 415
+set_lvar_int_to_constant 719@ = 541
+set_lvar_int_to_constant 720@ = 451
+set_lvar_int_to_constant 721@ = 411
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_26038
+454@ = 1559.983
+536@ = 17.468
+618@ = 26.1563
+455@ = 1556.426
+537@ = -94.0345
+619@ = 19.4957
+456@ = 1434.738
+538@ = -214.9645
+620@ = 7.3527
+457@ = 1321.254
+539@ = -195.8984
+621@ = 15.7447
+458@ = 1211.007
+540@ = -102.6927
+622@ = 39.3603
+459@ = 892.2923
+541@ = -88.1123
+623@ = 22.4405
+460@ = 789.9247
+542@ = -124.3171
+624@ = 21.3365
+461@ = 659.6545
+543@ = -196.7497
+625@ = 11.7663
+462@ = 419.4744
+544@ = -302.5507
+626@ = 6.446
+463@ = 289.8085
+545@ = -380.3828
+627@ = 7.8753
+464@ = 207.4451
+546@ = -298.923
+628@ = 0.4375
+465@ = 182.497
+547@ = -217.8004
+629@ = 0.4216
+466@ = 22.0727
+548@ = -207.7681
+630@ = 0.5827
+467@ = -114.231
+549@ = -132.3417
+631@ = 2.1236
+468@ = -38.4818
+550@ = 140.8613
+632@ = 2.1234
+469@ = -141.4718
+551@ = 187.6611
+633@ = 6.2406
+470@ = -329.7878
+552@ = 173.921
+634@ = 5.403
+471@ = -507.6872
+553@ = 221.0444
+635@ = 8.7633
+472@ = -661.1096
+554@ = 226.3879
+636@ = 16.7064
+473@ = -618.4406
+555@ = -67.8995
+637@ = 62.3489
+474@ = -507.8417
+556@ = -45.9077
+638@ = 59.2556
+475@ = -520.6511
+557@ = 79.6011
+639@ = 32.2117
+476@ = -715.4454
+558@ = 225.1288
+640@ = 0.2899
+477@ = -770.0811
+559@ = 130.1324
+641@ = 9.4651
+478@ = -738.1151
+560@ = 25.555
+642@ = 32.2336
+479@ = -885.785
+561@ = -41.3927
+643@ = 33.2347
+480@ = -716.4521
+562@ = 5.1206
+644@ = 59.1055
+481@ = -759.2693
+563@ = -92.0455
+645@ = 64.8686
+482@ = -826.881
+564@ = -167.7603
+646@ = 64.99
+483@ = -728.9467
+565@ = -173.5218
+647@ = 65.1248
+484@ = -544.8638
+566@ = -189.4458
+648@ = 77.8383
+250@ = 31
+256@ = 4
+set_lvar_int_to_constant 700@ = 101
+set_lvar_int_to_constant 701@ = 23
+set_lvar_int_to_constant 702@ = 290
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 716@ = 439
+set_lvar_int_to_constant 717@ = 475
+set_lvar_int_to_constant 718@ = 526
+set_lvar_int_to_constant 719@ = 475
+209@ = 4
+215@ = 80
+210@ = 3
+216@ = 80
+211@ = 5
+217@ = 80
+goto @CPRACE_46262
+
+:CPRACE_27092
+454@ = -544.8638
+536@ = -189.4458
+618@ = 81.8383
+455@ = -728.9467
+537@ = -173.5218
+619@ = 65.1248
+456@ = -826.881
+538@ = -167.7603
+620@ = 64.99
+457@ = -759.2693
+539@ = -92.0455
+621@ = 64.8686
+458@ = -716.4521
+540@ = 5.1206
+622@ = 59.1055
+459@ = -885.785
+541@ = -41.3927
+623@ = 33.2347
+460@ = -738.1151
+542@ = 25.555
+624@ = 32.2336
+461@ = -770.0811
+543@ = 130.1324
+625@ = 9.4651
+462@ = -715.4454
+544@ = 225.1288
+626@ = 0.2899
+463@ = -624.6024
+545@ = 187.2405
+627@ = 15.4381
+464@ = -520.6511
+546@ = 79.6011
+628@ = 32.2117
+465@ = -507.8417
+547@ = -45.9077
+629@ = 59.2556
+466@ = -618.4406
+548@ = -67.8995
+630@ = 62.3489
+467@ = -658.3503
+549@ = 146.4855
+631@ = 28.2693
+468@ = -507.6872
+550@ = 221.0444
+632@ = 8.7633
+469@ = -329.7878
+551@ = 173.921
+633@ = 5.5
+470@ = -149.4881
+552@ = 189.6471
+634@ = 7.2644
+471@ = -38.4818
+553@ = 140.8613
+635@ = 2.1234
+472@ = -114.231
+554@ = -132.3417
+636@ = 2.1236
+473@ = 22.0727
+555@ = -207.7681
+637@ = 0.5827
+474@ = 182.497
+556@ = -217.8004
+638@ = 0.4216
+475@ = 207.4451
+557@ = -298.923
+639@ = 0.4375
+476@ = 279.6441
+558@ = -378.3416
+640@ = 7.9003
+477@ = 419.4744
+559@ = -302.5507
+641@ = 6.446
+478@ = 573.52
+560@ = -202.8494
+642@ = 13.7118
+479@ = 748.4567
+561@ = -150.8298
+643@ = 18.3722
+480@ = 820.4231
+562@ = -111.5991
+644@ = 23.2476
+481@ = 1000.325
+563@ = -80.3516
+645@ = 21.0326
+482@ = 1187.393
+564@ = -83.879
+646@ = 35.2576
+483@ = 1265.847
+565@ = -153.0857
+647@ = 36.8097
+484@ = 1434.738
+566@ = -214.9645
+648@ = 7.3527
+485@ = 1548.963
+567@ = -146.2702
+649@ = 16.4932
+486@ = 1559.983
+568@ = 17.468
+650@ = 23.1563
+250@ = 33
+256@ = 4
+set_lvar_int_to_constant 700@ = 101
+set_lvar_int_to_constant 701@ = 23
+set_lvar_int_to_constant 702@ = 290
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 716@ = 477
+set_lvar_int_to_constant 717@ = 560
+set_lvar_int_to_constant 718@ = 562
+set_lvar_int_to_constant 719@ = 477
+209@ = 4
+215@ = 80
+210@ = 3
+216@ = 80
+211@ = 5
+217@ = 80
+goto @CPRACE_46262
+
+:CPRACE_28206
+454@ = -796.8273
+536@ = -2468.529
+618@ = 83.6549
+455@ = -938.5198
+537@ = -2364.511
+619@ = 57.0608
+456@ = -1065.656
+538@ = -2379.436
+620@ = 46.5486
+457@ = -1247.823
+539@ = -2313.528
+621@ = 19.8007
+458@ = -1356.137
+540@ = -2180.365
+622@ = 21.3467
+459@ = -1541.303
+541@ = -2154.782
+623@ = 5.8607
+460@ = -1674.876
+542@ = -2235.132
+624@ = 33.8691
+461@ = -1839.937
+543@ = -2349.368
+625@ = 31.9587
+462@ = -1841.037
+544@ = -2454.4
+626@ = 27.4044
+463@ = -1702.044
+545@ = -2587.976
+627@ = 26.1706
+464@ = -1508.332
+546@ = -2634.733
+628@ = 46.8766
+465@ = -1310.905
+547@ = -2637.832
+629@ = 12.808
+466@ = -1122.617
+548@ = -2652.592
+630@ = 15.4117
+467@ = -934.2363
+549@ = -2668.473
+631@ = 80.3479
+468@ = -753.5882
+550@ = -2672.785
+632@ = 84.0788
+469@ = -668.018
+551@ = -2496.988
+633@ = 37.5787
+470@ = -550.4019
+552@ = -2334.539
+634@ = 26.8502
+471@ = -366.3848
+553@ = -2257.25
+635@ = 41.7144
+472@ = -276.1146
+554@ = -2189.364
+636@ = 27.7264
+250@ = 19
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 468
+set_lvar_int_to_constant 717@ = 468
+set_lvar_int_to_constant 718@ = 468
+set_lvar_int_to_constant 719@ = 468
+set_lvar_int_to_constant 720@ = 468
+set_lvar_int_to_constant 721@ = 468
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_28894
+454@ = -1936.791
+536@ = -2452.235
+618@ = 29.6377
+455@ = -1862.54
+537@ = -2379.437
+619@ = 30.1425
+456@ = -1690.144
+538@ = -2303.846
+620@ = 43.3626
+457@ = -1676.317
+539@ = -2132.699
+621@ = 35.2082
+458@ = -1855.421
+540@ = -2087.117
+622@ = 58.3697
+459@ = -1919.802
+541@ = -1937.457
+623@ = 78.5313
+460@ = -1749.334
+542@ = -1899.519
+624@ = 95.8199
+461@ = -1571.292
+543@ = -1904.166
+625@ = 84.3076
+462@ = -1483.784
+544@ = -1783.286
+626@ = 49.8768
+463@ = -1429.878
+545@ = -1915.641
+627@ = 25.1751
+464@ = -1301.801
+546@ = -2084.054
+628@ = 22.9116
+465@ = -1269.913
+547@ = -2248.736
+629@ = 21.3152
+466@ = -1146.514
+548@ = -2371.508
+630@ = 27.0467
+467@ = -959.5773
+549@ = -2306.27
+631@ = 56.1859
+468@ = -867.9595
+550@ = -2180.891
+632@ = 25.6567
+469@ = -843.4177
+551@ = -2018.734
+633@ = 20.9828
+470@ = -767.7295
+552@ = -1865.533
+634@ = 11.4149
+471@ = -666.3682
+553@ = -1996.276
+635@ = 23.9143
+472@ = -486.6196
+554@ = -2025.765
+636@ = 48.245
+473@ = -323.4612
+555@ = -1914.206
+637@ = 11.1951
+250@ = 20
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 568
+set_lvar_int_to_constant 717@ = 568
+set_lvar_int_to_constant 718@ = 568
+set_lvar_int_to_constant 719@ = 568
+set_lvar_int_to_constant 720@ = 568
+set_lvar_int_to_constant 721@ = 568
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_29612
+454@ = -2728.309
+536@ = -310.8731
+618@ = 6.0391
+455@ = -2668.671
+537@ = -251.6207
+619@ = 5.4984
+456@ = -2655.978
+538@ = -104.6751
+620@ = 2.9982
+457@ = -2460.835
+539@ = -69.9766
+621@ = 31.2
+458@ = -2421.263
+540@ = 55.6089
+622@ = 34.0156
+459@ = -2545.26
+541@ = 137.9111
+623@ = 15.2177
+460@ = -2604.136
+542@ = 136.8579
+624@ = 3.1797
+461@ = -2558.661
+543@ = 245.625
+625@ = 10.7931
+462@ = -2578.504
+544@ = 345.8331
+626@ = 7.2168
+463@ = -2706.282
+545@ = 317.6024
+627@ = 3.1797
+464@ = -2809.244
+546@ = 232.3965
+628@ = 6.0313
+465@ = -2757.749
+547@ = 138.2248
+629@ = 5.9033
+466@ = -2758.39
+548@ = -43.991
+630@ = 6.1263
+467@ = -2756.892
+549@ = -184.0135
+631@ = 5.8843
+468@ = -2812.464
+550@ = -299.5974
+632@ = 6.039
+set_lvar_float_to_lvar_float 469@ = 454@
+set_lvar_float_to_lvar_float 551@ = 536@
+set_lvar_float_to_lvar_float 633@ = 618@
+250@ = 16
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 571
+set_lvar_int_to_constant 717@ = 571
+set_lvar_int_to_constant 718@ = 571
+set_lvar_int_to_constant 719@ = 571
+set_lvar_int_to_constant 720@ = 571
+set_lvar_int_to_constant 721@ = 571
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_30204
+454@ = -2657.164
+536@ = 1153.872
+618@ = 34.7396
+455@ = -2593.221
+537@ = 1217.854
+619@ = 34.7402
+456@ = -2312.288
+538@ = 1176.387
+620@ = 49.608
+457@ = -2157.193
+539@ = 1268.197
+621@ = 26.0127
+458@ = -1959.526
+540@ = 1287.205
+622@ = 6.7514
+459@ = -1741.076
+541@ = 1325.298
+623@ = 6.083
+460@ = -1759.865
+542@ = 1269.147
+624@ = 8.8598
+461@ = -1884.242
+543@ = 1160.691
+625@ = 45.0107
+462@ = -1897.101
+544@ = 960.1686
+626@ = 34.7366
+463@ = -1998.178
+545@ = 841.1865
+627@ = 45.0219
+464@ = -2189.259
+546@ = 808.5273
+628@ = 56.0602
+465@ = -2389.186
+547@ = 808.6409
+629@ = 34.7495
+466@ = -2589.692
+548@ = 808.5219
+630@ = 49.5411
+467@ = -2711.488
+549@ = 812.8809
+631@ = 48.9309
+468@ = -2750.894
+550@ = 890.6993
+632@ = 65.8952
+469@ = -2653.912
+551@ = 1157.345
+633@ = 34.7386
+250@ = 16
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 559
+set_lvar_int_to_constant 717@ = 589
+set_lvar_int_to_constant 718@ = 559
+set_lvar_int_to_constant 719@ = 565
+set_lvar_int_to_constant 720@ = 558
+set_lvar_int_to_constant 721@ = 602
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_30802
+454@ = -1584.141
+536@ = 1053.439
+618@ = 6.8392
+455@ = -1584.128
+537@ = 1150.261
+619@ = 6.8387
+456@ = -1699.077
+538@ = 1312.02
+620@ = 6.8293
+457@ = -1875.891
+539@ = 1352.059
+621@ = 6.8322
+458@ = -2060.741
+540@ = 1274.452
+622@ = 8.0659
+459@ = -2258.306
+541@ = 1257.682
+623@ = 42.6038
+460@ = -2143.281
+542@ = 1075.652
+624@ = 79.1249
+461@ = -2143.141
+543@ = 896.6196
+625@ = 79.6432
+462@ = -2143.084
+544@ = 696.6971
+626@ = 67.6451
+463@ = -2146.737
+545@ = 532.8465
+627@ = 34.8181
+464@ = -2055.564
+546@ = 504.0781
+628@ = 34.8168
+465@ = -1968.175
+547@ = 605.5881
+629@ = 34.8199
+466@ = -1820.393
+548@ = 475.0548
+630@ = 23.4295
+467@ = -1876.903
+549@ = 288.4981
+631@ = 32.6699
+468@ = -1897.585
+550@ = 87.7896
+632@ = 37.9384
+469@ = -1911.151
+551@ = -214.2394
+633@ = 38.032
+470@ = -1910.974
+552@ = -515.5727
+634@ = 38.0323
+471@ = -1910.675
+553@ = -816.3037
+635@ = 44.7432
+472@ = -1910.658
+554@ = -1117.409
+636@ = 38.0214
+473@ = -1907.276
+555@ = -1317.626
+637@ = 39.3164
+474@ = -1996.896
+556@ = -1289.264
+638@ = 37.3518
+475@ = -2153.53
+557@ = -1031.597
+639@ = 32.3638
+476@ = -2205.567
+558@ = -859.1885
+640@ = 54.6872
+477@ = -2202.666
+559@ = -759.2505
+641@ = 62.3413
+478@ = -2352.255
+560@ = -775.5399
+642@ = 95.1597
+479@ = -2421.544
+561@ = -610.6656
+643@ = 132.3493
+480@ = -2627.138
+562@ = -496.4363
+644@ = 70.09
+481@ = -2351.247
+563@ = -460.0875
+645@ = 79.9485
+482@ = -2599.996
+564@ = -372.7368
+646@ = 43.7794
+483@ = -2702.314
+565@ = -530.1367
+647@ = 12.4366
+484@ = -2699.197
+566@ = -401.205
+648@ = 7.7008
+485@ = -2210.255
+567@ = -348.0724
+649@ = 36.8384
+486@ = -1897.734
+568@ = -314.4976
+650@ = 48.9384
+487@ = -1890.36
+569@ = -45.4288
+651@ = 38.0312
+488@ = -1886.557
+570@ = 55.293
+652@ = 38.0326
+489@ = -1848.039
+571@ = 242.5393
+653@ = 30.825
+490@ = -1736.635
+572@ = 316.5836
+654@ = 6.039
+491@ = -1682.981
+573@ = 367.1342
+655@ = 6.028
+492@ = -1559.293
+574@ = 528.332
+656@ = 6.8409
+493@ = -1535.552
+575@ = 827.4427
+657@ = 6.8401
+494@ = -1584.129
+576@ = 1115.601
+658@ = 6.8376
+250@ = 41
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 402
+set_lvar_int_to_constant 717@ = 560
+set_lvar_int_to_constant 718@ = 506
+set_lvar_int_to_constant 719@ = 506
+set_lvar_int_to_constant 720@ = 477
+set_lvar_int_to_constant 721@ = 603
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_32150
+454@ = -1761.655
+536@ = -606.3881
+618@ = 15.8961
+455@ = -1760.54
+537@ = -686.4133
+619@ = 24.2389
+456@ = -1502.876
+538@ = -820.2545
+620@ = 61.3357
+457@ = -1219.332
+539@ = -759.4814
+621@ = 62.0285
+458@ = -1096.152
+540@ = -489.1358
+622@ = 32.7156
+459@ = -911.5416
+541@ = -455.9558
+623@ = 26.7166
+460@ = -621.3364
+542@ = -393.158
+624@ = 22.1878
+461@ = -395.5605
+543@ = -533.522
+625@ = 17.6561
+462@ = -372.2669
+544@ = -819.4839
+626@ = 28.1926
+463@ = -584.5377
+545@ = -1160.572
+627@ = 21.8153
+464@ = -659.3533
+546@ = -1548.814
+628@ = 22.1495
+465@ = -717.1517
+547@ = -1697.205
+629@ = 48.2586
+466@ = -714.6181
+548@ = -1395.094
+630@ = 60.5799
+467@ = -764.046
+549@ = -1385.027
+631@ = 82.2146
+468@ = -762.7014
+550@ = -1685.041
+632@ = 96.9103
+469@ = -945.4141
+551@ = -1903.227
+633@ = 81.3436
+470@ = -1104.541
+552@ = -2155.325
+634@ = 34.6761
+471@ = -1186.201
+553@ = -2444.541
+635@ = 54.4532
+472@ = -982.3237
+554@ = -2611.624
+636@ = 86.253
+473@ = -713.2529
+555@ = -2336.617
+637@ = 36.4201
+474@ = -512.3461
+556@ = -2166.417
+638@ = 53.5212
+475@ = -258.5978
+557@ = -2074.872
+639@ = 36.648
+476@ = -260.1367
+558@ = -1777.191
+640@ = 7.5735
+477@ = -57.3444
+559@ = -1601.375
+641@ = 1.3776
+478@ = -124.296
+560@ = -1466.575
+642@ = 2.4045
+479@ = -143.4815
+561@ = -1270.317
+643@ = 2.404
+480@ = -113.7683
+562@ = -998.821
+644@ = 23.9178
+481@ = -377.3843
+563@ = -838.2166
+645@ = 47.1444
+482@ = -626.0056
+564@ = -989.012
+646@ = 66.0268
+483@ = -877.4561
+565@ = -1097.426
+647@ = 96.1699
+484@ = -925.9376
+566@ = -1391.353
+648@ = 126.2905
+485@ = -1219.141
+567@ = -1347.249
+649@ = 122.5235
+486@ = -1407.723
+568@ = -1414.45
+650@ = 104.9232
+487@ = -1577.013
+569@ = -1168.802
+651@ = 102.3586
+488@ = -1626.067
+570@ = -882.9627
+652@ = 97.5243
+489@ = -1744.303
+571@ = -853.2858
+653@ = 77.1834
+490@ = -1684.612
+572@ = -1143.291
+654@ = 72.4364
+491@ = -1549.538
+573@ = -1286.347
+655@ = 57.1135
+492@ = -1525.757
+574@ = -1383.531
+656@ = 45.1796
+493@ = -1626.142
+575@ = -1375.587
+657@ = 45.2062
+494@ = -1800.174
+576@ = -1016.79
+658@ = 51.6322
+495@ = -1817.478
+577@ = -617.6195
+659@ = 15.9507
+250@ = 42
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 451
+set_lvar_int_to_constant 717@ = 415
+set_lvar_int_to_constant 718@ = 411
+set_lvar_int_to_constant 719@ = 451
+set_lvar_int_to_constant 720@ = 429
+set_lvar_int_to_constant 721@ = 541
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_33528
+454@ = -2001.856
+536@ = 1076.302
+618@ = 54.5637
+455@ = -2302.386
+537@ = 1076.754
+619@ = 54.5859
+456@ = -2596.785
+538@ = 1136.728
+620@ = 54.4297
+457@ = -2673.767
+539@ = 1427.293
+621@ = 54.4271
+458@ = -2673.775
+540@ = 1728.239
+622@ = 66.8937
+459@ = -2673.807
+541@ = 2028.896
+623@ = 57.2377
+460@ = -2731.742
+542@ = 2323.183
+624@ = 67.5411
+461@ = -2622.094
+543@ = 2602.597
+625@ = 68.7
+462@ = -2322.772
+544@ = 2637.1
+626@ = 53.2135
+463@ = -2027.122
+545@ = 2585.865
+627@ = 53.9804
+464@ = -1885.621
+546@ = 2321.522
+628@ = 38.5395
+465@ = -1675.296
+547@ = 2107.697
+629@ = 17.3995
+466@ = -1629.976
+548@ = 1810.828
+630@ = 11.059
+467@ = -1347.988
+549@ = 1705.67
+631@ = 4.8179
+468@ = -1125.87
+550@ = 1504.095
+632@ = 22.1877
+469@ = -1010.766
+551@ = 1227.044
+633@ = 31.1773
+470@ = -908.7908
+552@ = 944.9431
+634@ = 17.337
+471@ = -744.0402
+553@ = 694.0286
+635@ = 16.9982
+472@ = -469.1425
+554@ = 573.061
+636@ = 16.0649
+473@ = -168.3162
+555@ = 562.0268
+637@ = 14.9046
+474@ = 110.1296
+556@ = 673.4105
+638@ = 4.6336
+475@ = 400.681
+557@ = 749.8367
+639@ = 5.0607
+476@ = 686.3097
+558@ = 656.6995
+640@ = 7.8963
+477@ = 975.3585
+559@ = 738.1249
+641@ = 9.6719
+478@ = 1242.045
+560@ = 876.267
+642@ = 13.1519
+479@ = 1226.81
+561@ = 1169.877
+643@ = 5.8125
+480@ = 1226.664
+562@ = 1469.936
+644@ = 5.742
+250@ = 27
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 451
+set_lvar_int_to_constant 717@ = 415
+set_lvar_int_to_constant 718@ = 411
+set_lvar_int_to_constant 719@ = 451
+set_lvar_int_to_constant 720@ = 429
+set_lvar_int_to_constant 721@ = 429
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_34456
+454@ = -878.0113
+536@ = 1947.484
+618@ = 59.1845
+455@ = -857.6418
+537@ = 1873.25
+619@ = 59.183
+456@ = -1030.689
+538@ = 1853.546
+620@ = 58.8558
+457@ = -1093.182
+539@ = 1748.023
+621@ = 31.6318
+458@ = -902.488
+540@ = 1687.666
+622@ = 26.267
+459@ = -847.1951
+541@ = 1495.581
+623@ = 17.5443
+460@ = -782.4052
+542@ = 1305.811
+624@ = 12.6016
+461@ = -616.3677
+543@ = 1193.645
+625@ = 9.2126
+462@ = -474.1805
+544@ = 1052.086
+626@ = 10.0313
+463@ = -319.1918
+545@ = 925.6066
+627@ = 10.3099
+464@ = -267.4492
+546@ = 825.0159
+628@ = 13.2739
+465@ = -188.4539
+547@ = 1007.19
+629@ = 18.5885
+466@ = -164.8873
+548@ = 1198.263
+630@ = 18.5938
+467@ = -142.1028
+549@ = 1250.022
+631@ = 18.5869
+468@ = -341.5205
+550@ = 1265.695
+632@ = 22.1515
+469@ = -440.031
+551@ = 1439.669
+633@ = 32.334
+470@ = -438.1716
+552@ = 1639.673
+634@ = 34.6319
+471@ = -381.6811
+553@ = 1831.026
+635@ = 49.8567
+472@ = -433.4627
+554@ = 1883.992
+636@ = 59.8611
+473@ = -465.4392
+555@ = 1768.532
+637@ = 71.9576
+474@ = -464.5399
+556@ = 1968.423
+638@ = 81.2536
+475@ = -411.0666
+557@ = 2074.596
+639@ = 60.6433
+476@ = -610.1716
+558@ = 2050.887
+640@ = 59.1798
+477@ = -790.69
+559@ = 2053.91
+641@ = 59.1798
+set_lvar_float_to_lvar_float 478@ = 454@
+set_lvar_float_to_lvar_float 560@ = 536@
+set_lvar_float_to_lvar_float 642@ = 618@
+250@ = 25
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 461
+set_lvar_int_to_constant 717@ = 521
+set_lvar_int_to_constant 718@ = 522
+set_lvar_int_to_constant 719@ = 461
+set_lvar_int_to_constant 720@ = 521
+set_lvar_int_to_constant 721@ = 522
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_35318
+454@ = -375.6397
+536@ = 2204.217
+618@ = 41.0938
+455@ = -388.8497
+537@ = 2258.056
+619@ = 40.9952
+456@ = -410.6823
+538@ = 2455.747
+620@ = 42.9124
+457@ = -608.4162
+539@ = 2447.19
+621@ = 71.7551
+458@ = -715.864
+540@ = 2536.594
+622@ = 72.7592
+459@ = -713.7043
+541@ = 2697.466
+623@ = 53.2852
+460@ = -912.5499
+542@ = 2721.987
+624@ = 44.8627
+461@ = -1112.755
+543@ = 2698.651
+625@ = 44.875
+462@ = -1238.171
+544@ = 2679.861
+626@ = 45.9321
+463@ = -1359.55
+545@ = 2659.557
+627@ = 50.4683
+464@ = -1545.773
+546@ = 2732.354
+628@ = 61.3062
+465@ = -1746.036
+547@ = 2727.448
+629@ = 59.0648
+466@ = -1860.247
+548@ = 2563.043
+630@ = 48.8929
+467@ = -2002.133
+549@ = 2422.603
+631@ = 32.9752
+468@ = -1961.463
+550@ = 2227.891
+632@ = 10.7077
+469@ = -1807.124
+551@ = 2100.1
+633@ = 7.4268
+470@ = -1782.09
+552@ = 1901.775
+634@ = 14.7248
+471@ = -1591.908
+553@ = 1837.29
+635@ = 24.8515
+472@ = -1392.057
+554@ = 1852.968
+636@ = 35.4945
+473@ = -1199.365
+555@ = 1799.638
+637@ = 40.4346
+474@ = -1008.306
+556@ = 1855.604
+638@ = 61.6784
+475@ = -857.7028
+557@ = 1874.014
+639@ = 59.1758
+476@ = -758.5721
+558@ = 2048.232
+640@ = 59.1866
+477@ = -563.1158
+559@ = 2005.574
+641@ = 59.2474
+478@ = -468.9791
+560@ = 2056.811
+642@ = 59.875
+479@ = -392.3245
+561@ = 2154.448
+643@ = 42.1847
+set_lvar_float_to_lvar_float 480@ = 454@
+set_lvar_float_to_lvar_float 562@ = 536@
+set_lvar_float_to_lvar_float 644@ = 618@
+250@ = 27
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 461
+set_lvar_int_to_constant 717@ = 521
+set_lvar_int_to_constant 718@ = 522
+set_lvar_int_to_constant 719@ = 461
+set_lvar_int_to_constant 720@ = 521
+set_lvar_int_to_constant 721@ = 521
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_36240
+454@ = 1446.426
+536@ = 834.0658
+618@ = 5.8125
+455@ = 1747.259
+537@ = 834.025
+619@ = 8.6815
+456@ = 2047.335
+538@ = 834.1916
+620@ = 5.7422
+457@ = 2348.722
+539@ = 834.1481
+621@ = 5.7422
+458@ = 2637.92
+540@ = 915.6277
+622@ = 5.7498
+459@ = 2726.824
+541@ = 1202.266
+623@ = 5.7422
+460@ = 2726.698
+542@ = 1502.967
+624@ = 5.7422
+461@ = 2726.958
+543@ = 1804.343
+625@ = 5.7393
+462@ = 2726.579
+544@ = 2125.796
+626@ = 5.7269
+463@ = 2705.172
+545@ = 2405.567
+627@ = 5.7277
+464@ = 2489.267
+546@ = 2614.273
+628@ = 4.1679
+465@ = 2188.479
+547@ = 2609.629
+629@ = 5.8164
+466@ = 1898.309
+548@ = 2529.155
+630@ = 5.8125
+467@ = 1603.524
+549@ = 2473.083
+631@ = 5.8516
+468@ = 1305.181
+550@ = 2439.19
+632@ = 5.7422
+469@ = 1208.232
+551@ = 2154.514
+633@ = 5.7422
+470@ = 1208.38
+552@ = 1853.837
+634@ = 5.7422
+471@ = 1208.322
+553@ = 1553.025
+635@ = 5.7422
+472@ = 1208.126
+554@ = 1252.557
+636@ = 5.7498
+473@ = 1229.187
+555@ = 952.9079
+637@ = 5.8125
+set_lvar_float_to_lvar_float 474@ = 454@
+set_lvar_float_to_lvar_float 556@ = 536@
+set_lvar_float_to_lvar_float 638@ = 618@
+250@ = 21
+256@ = 6
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 716@ = 451
+set_lvar_int_to_constant 717@ = 562
+set_lvar_int_to_constant 718@ = 415
+set_lvar_int_to_constant 719@ = 411
+set_lvar_int_to_constant 720@ = 562
+set_lvar_int_to_constant 721@ = 451
+gosub @CPRACE_47662
+goto @CPRACE_46262
+
+:CPRACE_36982
+454@ = 1796.901
+536@ = -2593.329
+618@ = 12.5982
+455@ = 1596.915
+537@ = -2592.123
+619@ = 25.9969
+456@ = 1425.429
+538@ = -2549.107
+620@ = 37.8234
+457@ = 1280.556
+539@ = -2394.586
+621@ = 52.2127
+458@ = 1296.165
+540@ = -2194.131
+622@ = 72.3519
+459@ = 1317.012
+541@ = -1995.026
+623@ = 77.657
+460@ = 1385.216
+542@ = -1807.25
+624@ = 64.6153
+461@ = 1501.202
+543@ = -1642.892
+625@ = 78.2774
+462@ = 1597.783
+544@ = -1466.853
+626@ = 87.9007
+463@ = 1621.693
+545@ = -1267.59
+627@ = 84.5704
+464@ = 1592.626
+546@ = -1069.313
+628@ = 87.8825
+465@ = 1477.096
+547@ = -905.3071
+629@ = 103.4455
+466@ = 1388.884
+548@ = -725.4239
+630@ = 125.9394
+467@ = 1320.715
+549@ = -536.3066
+631@ = 127.73
+468@ = 1233.948
+550@ = -356.5205
+632@ = 103.7008
+469@ = 1235.221
+551@ = -155.8231
+633@ = 83.5
+470@ = 1362.454
+552@ = -2.0532
+634@ = 70.1118
+471@ = 1562.073
+553@ = -27.0897
+635@ = 64.6716
+472@ = 1670.313
+554@ = -196.5335
+636@ = 77.4671
+473@ = 1698.697
+555@ = -394.7666
+637@ = 84.513
+474@ = 1841.239
+556@ = -535.4985
+638@ = 105.1396
+475@ = 1999.777
+557@ = -658.853
+639@ = 125.3019
+476@ = 2117.771
+558@ = -819.4944
+640@ = 144.8639
+477@ = 2200.181
+559@ = -1001.27
+641@ = 129.4889
+478@ = 2265.805
+560@ = -1184.584
+642@ = 83.0669
+479@ = 2296.145
+561@ = -1383.394
+643@ = 62.1655
+480@ = 2321.608
+562@ = -1582.03
+644@ = 63.1144
+481@ = 2400.442
+563@ = -1766.227
+645@ = 56.7954
+482@ = 2525.256
+564@ = -1922.68
+646@ = 52.2529
+483@ = 2593.726
+565@ = -2111.734
+647@ = 53.1139
+484@ = 2575.049
+566@ = -2313.631
+648@ = 53.9683
+485@ = 2455.397
+567@ = -2476.633
+649@ = 54.8922
+486@ = 2264.071
+568@ = -2548.592
+650@ = 55.7578
+487@ = 2065.285
+569@ = -2571.635
+651@ = 56.5966
+488@ = 1862.502
+570@ = -2582.099
+652@ = 54.6357
+250@ = 35
+256@ = 1
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 716@ = 476
+set_lvar_int_to_constant 717@ = 476
+set_lvar_int_to_constant 718@ = 476
+set_lvar_int_to_constant 719@ = 476
+set_lvar_int_to_constant 205@ = 3
+goto @CPRACE_46262
+
+:CPRACE_38120
+454@ = -1582.67
+536@ = -89.9953
+618@ = 13.1683
+455@ = -1439.187
+537@ = 53.2109
+619@ = 30.0
+456@ = -1286.686
+538@ = 185.0573
+620@ = 32.9885
+457@ = -1091.876
+539@ = 137.3885
+621@ = 46.7629
+458@ = -1042.169
+540@ = -59.4087
+622@ = 43.603
+459@ = -1047.567
+541@ = -259.0437
+623@ = 23.8409
+460@ = -1126.559
+542@ = -445.5607
+624@ = 28.0502
+461@ = -1261.24
+543@ = -598.8228
+625@ = 37.4576
+462@ = -1444.803
+544@ = -690.5997
+626@ = 52.7263
+463@ = -1649.008
+545@ = -681.264
+627@ = 60.8852
+464@ = -1845.585
+546@ = -636.4395
+628@ = 61.1217
+465@ = -2044.818
+547@ = -658.4432
+629@ = 71.2804
+466@ = -2206.165
+548@ = -778.5996
+630@ = 85.9739
+467@ = -2240.928
+549@ = -976.7443
+631@ = 75.2422
+468@ = -2139.48
+550@ = -1148.617
+632@ = 61.3795
+469@ = -2028.634
+551@ = -1315.712
+633@ = 40.653
+470@ = -1884.623
+552@ = -1459.337
+634@ = 37.0927
+471@ = -1725.283
+553@ = -1581.193
+635@ = 51.3609
+472@ = -1548.501
+554@ = -1676.223
+636@ = 63.2502
+473@ = -1368.613
+555@ = -1769.197
+637@ = 52.099
+474@ = -1327.042
+556@ = -1980.883
+638@ = 35.4768
+475@ = -1462.659
+557@ = -2110.34
+639@ = 22.6174
+476@ = -1551.068
+558@ = -2287.276
+640@ = 56.7071
+477@ = -1624.645
+559@ = -2464.302
+641@ = 115.5442
+478@ = -1735.012
+560@ = -2633.092
+642@ = 101.7228
+479@ = -1673.618
+561@ = -2817.32
+643@ = 50.492
+480@ = -1529.398
+562@ = -2958.864
+644@ = 35.2493
+481@ = -1331.87
+563@ = -3016.815
+645@ = 36.5563
+482@ = -1140.517
+564@ = -2957.838
+646@ = 35.4633
+483@ = -1133.483
+565@ = -2757.115
+647@ = 30.2641
+484@ = -1219.593
+566@ = -2575.6
+648@ = 35.8018
+485@ = -1227.193
+567@ = -2375.099
+649@ = 31.7209
+486@ = -1172.746
+568@ = -2182.804
+650@ = 45.2393
+487@ = -1144.312
+569@ = -1988.018
+651@ = 83.1497
+488@ = -1021.386
+570@ = -1832.821
+652@ = 115.2484
+489@ = -943.5054
+571@ = -1647.992
+653@ = 133.3276
+490@ = -900.7032
+572@ = -1450.585
+654@ = 142.0757
+491@ = -884.4996
+573@ = -1249.642
+655@ = 148.1781
+492@ = -880.2889
+574@ = -1048.99
+656@ = 158.8745
+493@ = -936.6008
+575@ = -855.3414
+657@ = 160.157
+494@ = -972.9082
+576@ = -660.9503
+658@ = 116.3043
+495@ = -980.3859
+577@ = -464.2646
+659@ = 79.1644
+496@ = -818.388
+578@ = -348.3954
+660@ = 51.4388
+497@ = -617.8265
+579@ = -330.2328
+661@ = 37.1987
+498@ = -415.4925
+580@ = -339.8519
+662@ = 28.2761
+499@ = -248.3391
+581@ = -451.8987
+663@ = 18.5819
+500@ = -192.9961
+582@ = -643.989
+664@ = 8.889
+501@ = -128.7125
+583@ = -835.6478
+665@ = 24.9195
+502@ = 63.3296
+584@ = -892.0873
+666@ = 40.4431
+503@ = 236.1952
+585@ = -791.0125
+667@ = 46.7307
+504@ = 298.5167
+586@ = -600.2706
+668@ = 53.5437
+505@ = 326.4258
+587@ = -400.9587
+669@ = 50.4641
+506@ = 308.5928
+588@ = -201.9229
+670@ = 40.3219
+507@ = 244.4628
+589@ = -8.211
+671@ = 31.0744
+508@ = 129.2121
+590@ = 155.3022
+672@ = 27.6231
+509@ = -37.7018
+591@ = 268.3331
+673@ = 26.3544
+510@ = -224.3873
+592@ = 341.0904
+674@ = 28.1078
+511@ = -420.1607
+593@ = 382.1896
+675@ = 29.8681
+512@ = -622.4773
+594@ = 381.915
+676@ = 31.6354
+513@ = -822.824
+595@ = 370.0051
+677@ = 33.4142
+514@ = -1012.349
+596@ = 300.3856
+678@ = 35.7468
+515@ = -1193.1
+597@ = 214.7394
+679@ = 38.0629
+250@ = 62
+256@ = 1
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 716@ = 513
+set_lvar_int_to_constant 717@ = 513
+set_lvar_int_to_constant 718@ = 513
+set_lvar_int_to_constant 719@ = 513
+set_lvar_int_to_constant 205@ = 3
+goto @CPRACE_46262
+
+:CPRACE_40068
+454@ = 366.982
+536@ = 2502.595
+618@ = 15.5571
+455@ = 116.652
+537@ = 2502.902
+619@ = 47.5682
+456@ = -133.6242
+538@ = 2524.392
+620@ = 55.1281
+457@ = -377.8474
+539@ = 2588.068
+621@ = 67.6866
+458@ = -604.1302
+540@ = 2694.639
+622@ = 84.7931
+459@ = -838.685
+541@ = 2779.901
+623@ = 69.2036
+460@ = -1045.629
+542@ = 2639.279
+624@ = 69.0984
+461@ = -984.3267
+543@ = 2395.508
+625@ = 64.5187
+462@ = -873.4733
+544@ = 2171.186
+626@ = 64.5549
+463@ = -770.134
+545@ = 1943.248
+627@ = 70.927
+464@ = -653.4092
+546@ = 1720.47
+628@ = 47.6015
+465@ = -578.5898
+547@ = 1481.972
+629@ = 21.5084
+466@ = -521.8337
+548@ = 1238.437
+630@ = 11.6736
+467@ = -469.9443
+549@ = 995.721
+631@ = 51.4066
+468@ = -525.42
+550@ = 750.7462
+632@ = 44.2215
+469@ = -664.0441
+551@ = 541.0659
+633@ = 15.9243
+470@ = -914.7918
+552@ = 536.2426
+634@ = 11.804
+471@ = -1131.918
+553@ = 661.8135
+635@ = 13.6564
+472@ = -1309.833
+554@ = 839.316
+636@ = 10.7039
+473@ = -1449.372
+555@ = 1045.777
+637@ = 31.9947
+474@ = -1603.122
+556@ = 1243.21
+638@ = 38.6648
+475@ = -1813.101
+557@ = 1379.44
+639@ = 28.4044
+476@ = -2061.489
+558@ = 1418.549
+640@ = 22.0099
+477@ = -2312.469
+559@ = 1430.699
+641@ = 42.3744
+478@ = -2522.745
+560@ = 1564.194
+642@ = 75.9034
+479@ = -2689.238
+561@ = 1753.745
+643@ = 99.5865
+480@ = -2759.371
+562@ = 1994.265
+644@ = 110.8744
+481@ = -2682.772
+563@ = 2233.097
+645@ = 113.4608
+482@ = -2493.907
+564@ = 2397.506
+646@ = 102.0156
+483@ = -2245.109
+565@ = 2418.773
+647@ = 83.5877
+484@ = -1994.605
+566@ = 2407.942
+648@ = 87.4376
+485@ = -1751.471
+567@ = 2349.74
+649@ = 90.2881
+486@ = -1535.099
+568@ = 2217.656
+650@ = 75.7349
+487@ = -1305.302
+569@ = 2118.716
+651@ = 74.7752
+488@ = -1064.807
+570@ = 2187.768
+652@ = 66.2415
+489@ = -814.3556
+571@ = 2195.872
+653@ = 56.1521
+490@ = -563.2742
+572@ = 2203.33
+654@ = 60.9129
+491@ = -313.3741
+573@ = 2229.26
+655@ = 73.2015
+492@ = -66.3647
+574@ = 2178.082
+656@ = 71.9294
+493@ = 186.4198
+575@ = 2211.213
+657@ = 71.6732
+494@ = 390.8383
+576@ = 2356.514
+658@ = 65.1402
+495@ = 639.1594
+577@ = 2385.26
+659@ = 47.4816
+496@ = 857.994
+578@ = 2510.157
+660@ = 50.2583
+497@ = 929.9869
+579@ = 2748.352
+661@ = 77.8011
+498@ = 760.5828
+580@ = 2935.73
+662@ = 91.5673
+499@ = 512.0109
+581@ = 2901.74
+663@ = 93.8596
+500@ = 309.843
+582@ = 2752.892
+664@ = 93.5908
+501@ = 153.0242
+583@ = 2560.321
+665@ = 64.3547
+502@ = 18.2657
+584@ = 2347.904
+666@ = 66.4087
+503@ = -99.4455
+585@ = 2126.343
+667@ = 75.4819
+504@ = -257.6325
+586@ = 1931.184
+668@ = 75.4922
+505@ = -392.7389
+587@ = 1720.594
+669@ = 94.1061
+506@ = -499.7809
+588@ = 1492.545
+670@ = 58.172
+507@ = -687.7847
+589@ = 1327.026
+671@ = 45.0028
+508@ = -881.8704
+590@ = 1169.769
+672@ = 68.6343
+509@ = -1075.92
+591@ = 1008.155
+673@ = 61.9286
+510@ = -1272.957
+592@ = 852.6403
+674@ = 61.1137
+511@ = -1457.539
+593@ = 680.1183
+675@ = 69.2464
+512@ = -1634.648
+594@ = 496.5454
+676@ = 79.7593
+513@ = -1839.814
+595@ = 342.0907
+677@ = 77.0974
+514@ = -2063.729
+596@ = 218.3637
+678@ = 74.2748
+515@ = -2305.257
+597@ = 145.857
+679@ = 72.5908
+516@ = -2554.304
+598@ = 126.6046
+680@ = 96.9355
+517@ = -2745.509
+599@ = -33.5993
+681@ = 80.174
+518@ = -2863.942
+600@ = -255.546
+682@ = 62.7643
+519@ = -2912.281
+601@ = -500.7706
+683@ = 51.8291
+520@ = -2947.388
+602@ = -759.2774
+684@ = 44.0041
+521@ = -2962.423
+603@ = -1011.333
+685@ = 42.2517
+522@ = -2955.506
+604@ = -1276.023
+686@ = 45.302
+523@ = -3000.904
+605@ = -1528.563
+687@ = 51.004
+250@ = 70
+256@ = 1
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 716@ = 520
+set_lvar_int_to_constant 717@ = 520
+set_lvar_int_to_constant 718@ = 520
+set_lvar_int_to_constant 719@ = 520
+set_lvar_int_to_constant 205@ = 3
+goto @CPRACE_46262
+
+:CPRACE_42256
+454@ = 381.9952
+536@ = 2542.088
+618@ = 15.6876
+455@ = 304.6997
+537@ = 2547.057
+619@ = 37.975
+456@ = -97.4654
+538@ = 2554.841
+620@ = 32.4746
+457@ = -102.6455
+539@ = 2699.236
+621@ = 63.5945
+458@ = -221.948
+540@ = 2718.08
+622@ = 82.385
+459@ = -418.3279
+541@ = 2691.081
+623@ = 78.5077
+460@ = -392.2611
+542@ = 2492.193
+624@ = 84.257
+461@ = -360.1944
+543@ = 2294.638
+625@ = 79.344
+462@ = -238.1485
+544@ = 2230.007
+626@ = 81.9684
+463@ = -287.1143
+545@ = 2091.03
+627@ = 70.2663
+464@ = -481.0875
+546@ = 2051.74
+628@ = 76.2466
+465@ = -665.1192
+547@ = 2131.252
+629@ = 77.2696
+466@ = -845.4529
+548@ = 2218.861
+630@ = 80.0327
+467@ = -1044.866
+549@ = 2207.615
+631@ = 67.0078
+468@ = -1234.234
+550@ = 2142.393
+632@ = 66.1648
+469@ = -1424.931
+551@ = 2205.699
+633@ = 70.8862
+470@ = -1571.237
+552@ = 2247.766
+634@ = 65.1073
+471@ = -1745.637
+553@ = 2292.511
+635@ = 49.3695
+472@ = -1945.602
+554@ = 2285.913
+636@ = 44.2433
+473@ = -1953.881
+555@ = 2484.877
+637@ = 63.2602
+474@ = -1895.095
+556@ = 2633.034
+638@ = 74.4549
+475@ = -1706.873
+557@ = 2703.232
+639@ = 72.8798
+476@ = -1505.724
+558@ = 2721.034
+640@ = 69.9706
+477@ = -1305.595
+559@ = 2708.321
+641@ = 66.4619
+478@ = -1105.89
+560@ = 2731.611
+642@ = 62.9933
+479@ = -905.1519
+561@ = 2728.83
+643@ = 64.0124
+480@ = -704.1036
+562@ = 2733.898
+644@ = 66.2347
+250@ = 27
+256@ = 1
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 716@ = 487
+set_lvar_int_to_constant 717@ = 487
+set_lvar_int_to_constant 718@ = 487
+set_lvar_int_to_constant 719@ = 487
+set_lvar_int_to_constant 205@ = 3
+goto @CPRACE_46262
+
+:CPRACE_43154
+454@ = -1962.871
+536@ = 628.0812
+618@ = 150.2844
+455@ = -1848.341
+537@ = 531.9294
+619@ = 86.1743
+456@ = -1827.913
+538@ = 399.3668
+620@ = 29.91
+457@ = -1751.361
+539@ = 326.9781
+621@ = 25.4958
+458@ = -1647.958
+540@ = 412.8291
+622@ = 26.6578
+459@ = -1560.513
+541@ = 532.7433
+623@ = 18.6913
+460@ = -1572.197
+542@ = 638.3369
+624@ = 25.3806
+461@ = -1700.555
+543@ = 706.7762
+625@ = 53.3757
+462@ = -1715.507
+544@ = 777.6501
+626@ = 45.9312
+463@ = -1715.978
+545@ = 978.3165
+627@ = 51.989
+464@ = -1714.958
+546@ = 1178.562
+628@ = 54.9734
+465@ = -1912.922
+547@ = 1146.255
+629@ = 56.3473
+466@ = -2003.248
+548@ = 982.3228
+630@ = 58.819
+467@ = -2006.168
+549@ = 810.2207
+631@ = 54.1756
+468@ = -1959.234
+550@ = 713.3063
+632@ = 75.2571
+469@ = -1793.007
+551@ = 730.7606
+633@ = 44.6388
+470@ = -1593.731
+552@ = 732.4928
+634@ = 20.5721
+471@ = -1533.424
+553@ = 923.6081
+635@ = 29.4493
+472@ = -1489.172
+554@ = 1118.737
+636@ = 17.2211
+473@ = -1605.045
+555@ = 1284.044
+637@ = 27.5543
+474@ = -1787.921
+556@ = 1365.81
+638@ = 32.2595
+475@ = -1986.429
+557@ = 1319.338
+639@ = 23.0384
+476@ = -2185.997
+558@ = 1345.112
+640@ = 19.4206
+477@ = -2384.599
+559@ = 1380.588
+641@ = 17.9485
+478@ = -2537.759
+560@ = 1369.641
+642@ = 23.8562
+479@ = -2719.315
+561@ = 1345.675
+643@ = 32.2039
+480@ = -2875.142
+562@ = 1245.782
+644@ = 20.7763
+250@ = 27
+256@ = 1
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 716@ = 488
+set_lvar_int_to_constant 717@ = 488
+set_lvar_int_to_constant 718@ = 488
+set_lvar_int_to_constant 719@ = 488
+set_lvar_int_to_constant 205@ = 3
+goto @CPRACE_46262
+
+:CPRACE_44052
+454@ = 1765.609
+536@ = -2285.911
+618@ = 25.9621
+455@ = 1764.294
+537@ = -2084.371
+619@ = 26.0431
+456@ = 1649.402
+538@ = -1920.231
+620@ = 40.6173
+457@ = 1552.024
+539@ = -1745.273
+621@ = 30.0462
+458@ = 1419.031
+540@ = -1595.618
+622@ = 25.4285
+459@ = 1402.089
+541@ = -1441.622
+623@ = 18.2271
+460@ = 1545.335
+542@ = -1431.194
+624@ = 36.437
+461@ = 1653.446
+543@ = -1305.841
+625@ = 49.6078
+462@ = 1786.094
+544@ = -1276.766
+626@ = 22.6321
+463@ = 1901.04
+545@ = -1221.949
+627@ = 34.699
+464@ = 1848.224
+546@ = -1097.652
+628@ = 46.0898
+465@ = 1649.377
+547@ = -1085.296
+629@ = 36.7768
+466@ = 1487.205
+548@ = -970.0334
+630@ = 60.1281
+467@ = 1304.22
+549@ = -1038.929
+631@ = 39.8547
+468@ = 1215.798
+550@ = -1218.862
+632@ = 27.923
+469@ = 1302.613
+551@ = -1399.127
+633@ = 26.3812
+470@ = 1437.015
+552@ = -1321.431
+634@ = 45.396
+471@ = 1609.09
+553@ = -1299.497
+635@ = 25.0714
+472@ = 1791.421
+554@ = -1381.364
+636@ = 35.17
+473@ = 1827.021
+555@ = -1567.279
+637@ = 22.9243
+474@ = 1628.196
+556@ = -1600.6
+638@ = 38.8226
+475@ = 1450.909
+557@ = -1694.839
+639@ = 25.2192
+476@ = 1389.812
+558@ = -1852.984
+640@ = 24.997
+477@ = 1206.609
+559@ = -1933.723
+641@ = 57.1028
+478@ = 1053.461
+560@ = -2063.933
+642@ = 70.7254
+479@ = 1048.698
+561@ = -2265.503
+643@ = 47.2394
+480@ = 1224.402
+562@ = -2359.494
+644@ = 28.5888
+481@ = 1425.61
+563@ = -2360.047
+645@ = 28.3338
+250@ = 28
+256@ = 1
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 716@ = 425
+set_lvar_int_to_constant 717@ = 425
+set_lvar_int_to_constant 718@ = 425
+set_lvar_int_to_constant 719@ = 425
+set_lvar_int_to_constant 205@ = 3
+goto @CPRACE_46262
+
+:CPRACE_44980
+454@ = -1398.355
+536@ = -197.2079
+618@ = 1043.119
+455@ = -1398.988
+537@ = -188.7892
+619@ = 1043.202
+456@ = -1465.939
+538@ = -134.0836
+620@ = 1046.011
+457@ = -1530.138
+539@ = -193.3988
+621@ = 1050.756
+458@ = -1415.686
+540@ = -274.1765
+622@ = 1051.149
+459@ = -1305.178
+541@ = -143.5283
+623@ = 1050.125
+460@ = -1302.774
+542@ = -268.6358
+624@ = 1048.487
+set_lvar_float_to_lvar_float 461@ = 454@
+set_lvar_float_to_lvar_float 543@ = 536@
+set_lvar_float_to_lvar_float 625@ = 618@
+732@ = -1406.327
+733@ = -265.7914
+734@ = 1042.656
+735@ = 346.3297
+250@ = 8
+221@ = 7
+224@ = 12
+256@ = 12
+set_lvar_int_to_constant 700@ = 7
+set_lvar_int_to_constant 701@ = 7
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 7
+set_lvar_int_to_constant 704@ = 7
+set_lvar_int_to_constant 705@ = 7
+set_lvar_int_to_constant 706@ = 7
+set_lvar_int_to_constant 707@ = 7
+set_lvar_int_to_constant 708@ = 7
+set_lvar_int_to_constant 709@ = 7
+set_lvar_int_to_constant 710@ = 7
+set_lvar_int_to_constant 711@ = 7
+set_lvar_int_to_constant 712@ = 7
+set_lvar_int_to_constant 713@ = 7
+set_lvar_int_to_constant 714@ = 7
+set_lvar_int_to_constant 715@ = 7
+set_lvar_int_to_constant 716@ = 503
+set_lvar_int_to_constant 717@ = 502
+set_lvar_int_to_constant 718@ = 494
+set_lvar_int_to_constant 719@ = 503
+set_lvar_int_to_constant 720@ = 502
+set_lvar_int_to_constant 721@ = 494
+set_lvar_int_to_constant 722@ = 502
+set_lvar_int_to_constant 723@ = 494
+set_lvar_int_to_constant 724@ = 503
+set_lvar_int_to_constant 725@ = 494
+set_lvar_int_to_constant 726@ = 503
+set_lvar_int_to_constant 727@ = 503
+set_lvar_int_to_constant 728@ = 494
+set_lvar_int_to_constant 729@ = 502
+set_lvar_int_to_constant 730@ = 494
+set_lvar_int_to_constant 731@ = 502
+goto @CPRACE_46262
+
+:CPRACE_45529
+454@ = -1354.358
+536@ = -590.5628
+618@ = 1055.453
+455@ = -1431.177
+537@ = -588.3124
+619@ = 1054.512
+456@ = -1516.874
+538@ = -635.0942
+620@ = 1050.275
+457@ = -1500.678
+539@ = -719.0175
+621@ = 1051.643
+458@ = -1387.502
+540@ = -743.1501
+622@ = 1051.016
+459@ = -1295.54
+541@ = -705.3506
+623@ = 1055.255
+460@ = -1365.312
+542@ = -666.0998
+624@ = 1055.058
+461@ = -1486.5
+543@ = -636.4586
+625@ = 1052.225
+462@ = -1447.86
+544@ = -690.3426
+626@ = 1052.834
+463@ = -1389.908
+545@ = -720.9943
+627@ = 1055.119
+464@ = -1370.685
+546@ = -687.8977
+628@ = 1053.783
+465@ = -1399.136
+547@ = -635.8359
+629@ = 1051.043
+466@ = -1308.639
+548@ = -649.4201
+630@ = 1054.972
+set_lvar_float_to_lvar_float 467@ = 454@
+set_lvar_float_to_lvar_float 549@ = 536@
+set_lvar_float_to_lvar_float 631@ = 618@
+732@ = -1344.163
+733@ = -598.8836
+734@ = 1051.829
+735@ = 103.3822
+250@ = 14
+221@ = 4
+224@ = 6
+256@ = 12
+set_lvar_int_to_constant 700@ = 100
+set_lvar_int_to_constant 701@ = 133
+set_lvar_int_to_constant 702@ = 7
+set_lvar_int_to_constant 703@ = 181
+set_lvar_int_to_constant 704@ = 60
+set_lvar_int_to_constant 705@ = 34
+set_lvar_int_to_constant 706@ = 198
+set_lvar_int_to_constant 707@ = 250
+set_lvar_int_to_constant 708@ = 7
+set_lvar_int_to_constant 709@ = 100
+set_lvar_int_to_constant 710@ = 34
+set_lvar_int_to_constant 711@ = 7
+set_lvar_int_to_constant 712@ = 7
+set_lvar_int_to_constant 713@ = 7
+set_lvar_int_to_constant 714@ = 7
+set_lvar_int_to_constant 715@ = 7
+set_lvar_int_to_constant 716@ = 468
+set_lvar_int_to_constant 717@ = 468
+set_lvar_int_to_constant 718@ = 468
+set_lvar_int_to_constant 719@ = 468
+set_lvar_int_to_constant 720@ = 468
+set_lvar_int_to_constant 721@ = 468
+set_lvar_int_to_constant 722@ = 468
+set_lvar_int_to_constant 723@ = 468
+set_lvar_int_to_constant 724@ = 468
+set_lvar_int_to_constant 725@ = 468
+set_lvar_int_to_constant 726@ = 468
+set_lvar_int_to_constant 727@ = 468
+set_lvar_int_to_constant 728@ = 468
+set_lvar_int_to_constant 729@ = 468
+set_lvar_int_to_constant 730@ = 468
+set_lvar_int_to_constant 731@ = 468
+goto @CPRACE_46262
+
+:CPRACE_46262
+return 
+
+:CPRACE_46264
+if 
+  736@ == 0
+goto_if_false @CPRACE_46337
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -148.2144, 87.3396, 2.1234, 280.0, 280.0, 30.0)
+goto_if_false @CPRACE_46337
+736@ = 1
+
+:CPRACE_46337
+if 
+  736@ == 1
+goto_if_false @CPRACE_46371
+736@ = 2
+Streaming.RequestModel(532)
+Streaming.RequestModel(82)
+
+:CPRACE_46371
+if 
+  736@ == 2
+goto_if_false @CPRACE_46525
+if and
+  Streaming.HasModelLoaded(532)
+  Streaming.HasModelLoaded(82)
+goto_if_false @CPRACE_46525
+736@ = 3
+738@ = Car.Create(532, -128.2144, 80.3396, 2.1234)
+Car.SetHeading(738@, 250.5799)
+740@ = Char.CreateInsideCar(PedType.CivMale, 82, 738@)
+Streaming.MarkModelAsNoLongerNeeded(532)
+Streaming.MarkModelAsNoLongerNeeded(82)
+Path.FlushRoute
+Path.ExtendRoute(-95.8304, 68.27, 3.4764)
+Path.ExtendRoute(-77.3806, 70.3096, 3.5478)
+Task.DrivePointRouteAdvanced(740@, 738@, 7.5, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:CPRACE_46525
+if 
+  736@ == 3
+goto_if_false @CPRACE_46621
+if 
+  not Char.IsDead(740@)
+goto_if_false @CPRACE_46621
+742@ = Char.GetScriptTaskStatus(740@, 2023)
+if 
+  is_int_lvar_equal_to_constant 742@ == 7
+goto_if_false @CPRACE_46621
+736@ = 4
+if 
+  not Car.IsDead(738@)
+goto_if_false @CPRACE_46616
+Car.MarkAsNoLongerNeeded(738@)
+
+:CPRACE_46616
+Char.MarkAsNoLongerNeeded(740@)
+
+:CPRACE_46621
+if 
+  737@ == 0
+goto_if_false @CPRACE_46694
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -542.1076, 230.7356, 11.6475, 320.0, 320.0, 30.0)
+goto_if_false @CPRACE_46694
+737@ = 1
+
+:CPRACE_46694
+if 
+  737@ == 1
+goto_if_false @CPRACE_46728
+737@ = 2
+Streaming.RequestModel(478)
+Streaming.RequestModel(82)
+
+:CPRACE_46728
+if 
+  737@ == 2
+goto_if_false @CPRACE_46861
+if and
+  Streaming.HasModelLoaded(478)
+  Streaming.HasModelLoaded(82)
+goto_if_false @CPRACE_46861
+737@ = 3
+739@ = Car.Create(478, -542.1076, 230.7356, 11.6475)
+Car.SetHeading(739@, 262.8685)
+741@ = Char.CreateInsideCar(PedType.CivMale, 82, 739@)
+Streaming.MarkModelAsNoLongerNeeded(478)
+Streaming.MarkModelAsNoLongerNeeded(82)
+Task.CarDriveToCoord(741@, 739@, -270.5629, 199.0073, 6.99, 11.5, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+
+:CPRACE_46861
+if 
+  737@ == 3
+goto_if_false @CPRACE_46972
+if 
+  not Char.IsDead(741@)
+goto_if_false @CPRACE_46972
+742@ = Char.GetScriptTaskStatus(741@, 1489)
+if 
+  is_int_lvar_equal_to_constant 742@ == 7
+goto_if_false @CPRACE_46972
+737@ = 4
+if 
+  not Car.IsDead(739@)
+goto_if_false @CPRACE_46967
+Task.CarDriveWander(741@, 739@, 11.5, DrivingMode.AvoidCars)
+Car.MarkAsNoLongerNeeded(739@)
+
+:CPRACE_46967
+Char.MarkAsNoLongerNeeded(741@)
+
+:CPRACE_46972
+return 
+
+:CPRACE_46974
+if 
+  6 > $race_selection
+goto_if_false @CPRACE_47104
+if 
+  52@ <> 1
+goto_if_false @CPRACE_47104
+Txd.Remove
+Txd.LoadDictionary('LD_RCE1')
+Txd.LoadSprite("RACE00", 1)
+Txd.LoadSprite("RACE01", 2)
+Txd.LoadSprite("RACE02", 3)
+Txd.LoadSprite("RACE03", 4)
+Txd.LoadSprite("RACE04", 5)
+Txd.LoadSprite("RACE05", 6)
+52@ = 1
+return 
+
+:CPRACE_47104
+if and
+  $race_selection > 5
+  12 > $race_selection
+goto_if_false @CPRACE_47241
+if 
+  52@ <> 2
+goto_if_false @CPRACE_47241
+Txd.Remove
+Txd.LoadDictionary('LD_RCE2')
+Txd.LoadSprite("RACE06", 7)
+Txd.LoadSprite("RACE07", 8)
+Txd.LoadSprite("RACE08", 9)
+Txd.LoadSprite("RACE09", 10)
+Txd.LoadSprite("RACE10", 11)
+Txd.LoadSprite("RACE11", 12)
+52@ = 2
+return 
+
+:CPRACE_47241
+if and
+  $race_selection > 11
+  18 > $race_selection
+goto_if_false @CPRACE_47378
+if 
+  52@ <> 3
+goto_if_false @CPRACE_47378
+Txd.Remove
+Txd.LoadDictionary('LD_RCE3')
+Txd.LoadSprite("RACE12", 13)
+Txd.LoadSprite("RACE13", 14)
+Txd.LoadSprite("RACE14", 15)
+Txd.LoadSprite("RACE15", 16)
+Txd.LoadSprite("RACE16", 17)
+Txd.LoadSprite("RACE17", 18)
+52@ = 3
+return 
+
+:CPRACE_47378
+if and
+  $race_selection > 17
+  24 > $race_selection
+goto_if_false @CPRACE_47515
+if 
+  52@ <> 4
+goto_if_false @CPRACE_47515
+Txd.Remove
+Txd.LoadDictionary('LD_RCE4')
+Txd.LoadSprite("RACE18", 19)
+Txd.LoadSprite("RACE19", 20)
+Txd.LoadSprite("RACE20", 21)
+Txd.LoadSprite("RACE21", 22)
+Txd.LoadSprite("RACE22", 23)
+Txd.LoadSprite("RACE23", 24)
+52@ = 4
+return 
+
+:CPRACE_47515
+if and
+  $race_selection > 23
+  30 > $race_selection
+goto_if_false @CPRACE_47592
+if 
+  52@ <> 5
+goto_if_false @CPRACE_47592
+Txd.Remove
+Txd.LoadDictionary('LD_RCE5')
+Txd.LoadSprite("RACE24", 25)
+52@ = 5
+return 
+
+:CPRACE_47592
+return 
+
+:CPRACE_47594
+Text.SetColor(134, 155, 184, 255)
+Text.SetScale(0.6146, 2.4961)
+Text.SetRightJustify(False)
+Text.SetJustify(False)
+Text.SetCenter(False)
+Text.SetWrapX(640.0)
+Text.SetProportional(True)
+Text.SetBackground(False)
+Text.SetDropshadow(2, 0, 0, 0, 255)
+return 
+
+:CPRACE_47662
+254@ = 0
+set_lvar_int_to_lvar_int 255@ = 256@
+255@ -= 1
+
+:CPRACE_47684
+if 
+  is_int_lvar_greater_than_int_lvar 255@ > 254@
+goto_if_false @CPRACE_48583
+253@ = Math.RandomIntInRange(0, 32)
+switch_start 253@ total_jumps 32 default_jump 0 @CPRACE_48569 jumps 0 @CPRACE_47970 1 @CPRACE_47988 2 @CPRACE_48006 3 @CPRACE_48024 4 @CPRACE_48042 5 @CPRACE_48060 6 @CPRACE_48078
+switch_continued 7 @CPRACE_48096 8 @CPRACE_48114 9 @CPRACE_48132 10 @CPRACE_48151 11 @CPRACE_48170 12 @CPRACE_48189 13 @CPRACE_48208 14 @CPRACE_48227 15 @CPRACE_48246
+switch_continued 16 @CPRACE_48265 17 @CPRACE_48284 18 @CPRACE_48303 19 @CPRACE_48322 20 @CPRACE_48341 21 @CPRACE_48360 22 @CPRACE_48379 23 @CPRACE_48398 24 @CPRACE_48417
+switch_continued 25 @CPRACE_48436 26 @CPRACE_48455 27 @CPRACE_48474 28 @CPRACE_48493 29 @CPRACE_48512 30 @CPRACE_48531 31 @CPRACE_48550 -1 @CPRACE_48569 -1 @CPRACE_48569
+
+:CPRACE_47970
+set_lvar_int_to_constant 700@(254@,16i) = 34
+goto @CPRACE_48569
+
+:CPRACE_47988
+set_lvar_int_to_constant 700@(254@,16i) = 60
+goto @CPRACE_48569
+
+:CPRACE_48006
+set_lvar_int_to_constant 700@(254@,16i) = 69
+goto @CPRACE_48569
+
+:CPRACE_48024
+set_lvar_int_to_constant 700@(254@,16i) = 96
+goto @CPRACE_48569
+
+:CPRACE_48042
+set_lvar_int_to_constant 700@(254@,16i) = 100
+goto @CPRACE_48569
+
+:CPRACE_48060
+set_lvar_int_to_constant 700@(254@,16i) = 101
+goto @CPRACE_48569
+
+:CPRACE_48078
+set_lvar_int_to_constant 700@(254@,16i) = 112
+goto @CPRACE_48569
+
+:CPRACE_48096
+set_lvar_int_to_constant 700@(254@,16i) = 122
+goto @CPRACE_48569
+
+:CPRACE_48114
+set_lvar_int_to_constant 700@(254@,16i) = 125
+goto @CPRACE_48569
+
+:CPRACE_48132
+set_lvar_int_to_constant 700@(254@,16i) = 128
+goto @CPRACE_48569
+
+:CPRACE_48151
+set_lvar_int_to_constant 700@(254@,16i) = 131
+goto @CPRACE_48569
+
+:CPRACE_48170
+set_lvar_int_to_constant 700@(254@,16i) = 133
+goto @CPRACE_48569
+
+:CPRACE_48189
+set_lvar_int_to_constant 700@(254@,16i) = 140
+goto @CPRACE_48569
+
+:CPRACE_48208
+set_lvar_int_to_constant 700@(254@,16i) = 142
+goto @CPRACE_48569
+
+:CPRACE_48227
+set_lvar_int_to_constant 700@(254@,16i) = 151
+goto @CPRACE_48569
+
+:CPRACE_48246
+set_lvar_int_to_constant 700@(254@,16i) = 157
+goto @CPRACE_48569
+
+:CPRACE_48265
+set_lvar_int_to_constant 700@(254@,16i) = 170
+goto @CPRACE_48569
+
+:CPRACE_48284
+set_lvar_int_to_constant 700@(254@,16i) = 181
+goto @CPRACE_48569
+
+:CPRACE_48303
+set_lvar_int_to_constant 700@(254@,16i) = 183
+goto @CPRACE_48569
+
+:CPRACE_48322
+set_lvar_int_to_constant 700@(254@,16i) = 186
+goto @CPRACE_48569
+
+:CPRACE_48341
+set_lvar_int_to_constant 700@(254@,16i) = 192
+goto @CPRACE_48569
+
+:CPRACE_48360
+set_lvar_int_to_constant 700@(254@,16i) = 198
+goto @CPRACE_48569
+
+:CPRACE_48379
+set_lvar_int_to_constant 700@(254@,16i) = 201
+goto @CPRACE_48569
+
+:CPRACE_48398
+set_lvar_int_to_constant 700@(254@,16i) = 206
+goto @CPRACE_48569
+
+:CPRACE_48417
+set_lvar_int_to_constant 700@(254@,16i) = 211
+goto @CPRACE_48569
+
+:CPRACE_48436
+set_lvar_int_to_constant 700@(254@,16i) = 217
+goto @CPRACE_48569
+
+:CPRACE_48455
+set_lvar_int_to_constant 700@(254@,16i) = 220
+goto @CPRACE_48569
+
+:CPRACE_48474
+set_lvar_int_to_constant 700@(254@,16i) = 223
+goto @CPRACE_48569
+
+:CPRACE_48493
+set_lvar_int_to_constant 700@(254@,16i) = 233
+goto @CPRACE_48569
+
+:CPRACE_48512
+set_lvar_int_to_constant 700@(254@,16i) = 246
+goto @CPRACE_48569
+
+:CPRACE_48531
+set_lvar_int_to_constant 700@(254@,16i) = 248
+goto @CPRACE_48569
+
+:CPRACE_48550
+set_lvar_int_to_constant 700@(254@,16i) = 250
+goto @CPRACE_48569
+
+:CPRACE_48569
+254@ += 1
+goto @CPRACE_47684
+
+:CPRACE_48583
+return 
+
+:CPRACE_48585
+if or
+  450@ == 1
+  256@ == 1
+goto_if_false @CPRACE_50543
+Audio.PlayMissionPassedTune(1)
+switch_start $race_selection total_jumps 27 default_jump 0 @CPRACE_50543 jumps 0 @CPRACE_48872 1 @CPRACE_48960 2 @CPRACE_49019 3 @CPRACE_49078 4 @CPRACE_49137 5 @CPRACE_49196 6 @CPRACE_49255
+switch_continued 7 @CPRACE_49314 8 @CPRACE_49388 9 @CPRACE_49440 10 @CPRACE_49499 11 @CPRACE_49558 12 @CPRACE_49617 13 @CPRACE_49676 14 @CPRACE_49735 15 @CPRACE_49794
+switch_continued 16 @CPRACE_49853 17 @CPRACE_49912 18 @CPRACE_49971 19 @CPRACE_50030 20 @CPRACE_50089 21 @CPRACE_50148 22 @CPRACE_50207 23 @CPRACE_50266 24 @CPRACE_50325
+switch_continued 25 @CPRACE_50384 26 @CPRACE_50467 -1 @CPRACE_50543 -1 @CPRACE_50543 -1 @CPRACE_50543 -1 @CPRACE_50543 -1 @CPRACE_50543 -1 @CPRACE_50543 -1 @CPRACE_50543
+
+:CPRACE_48872
+if 
+  $got_race_made_progress[0] == 0
+goto_if_false @CPRACE_48953
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+if 
+  $show_race_selection == 0
+goto_if_false @CPRACE_48937
+Stat.RegisterMissionPassed('CESAR_1')
+goto @CPRACE_48946
+
+:CPRACE_48937
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+
+:CPRACE_48946
+$got_race_made_progress[0] = 1
+
+:CPRACE_48953
+goto @CPRACE_50543
+
+:CPRACE_48960
+if 
+  $got_race_made_progress[1] == 0
+goto_if_false @CPRACE_49012
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[1] = 1
+
+:CPRACE_49012
+goto @CPRACE_50543
+
+:CPRACE_49019
+if 
+  $got_race_made_progress[2] == 0
+goto_if_false @CPRACE_49071
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[2] = 1
+
+:CPRACE_49071
+goto @CPRACE_50543
+
+:CPRACE_49078
+if 
+  $got_race_made_progress[3] == 0
+goto_if_false @CPRACE_49130
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[3] = 1
+
+:CPRACE_49130
+goto @CPRACE_50543
+
+:CPRACE_49137
+if 
+  $got_race_made_progress[4] == 0
+goto_if_false @CPRACE_49189
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[4] = 1
+
+:CPRACE_49189
+goto @CPRACE_50543
+
+:CPRACE_49196
+if 
+  $got_race_made_progress[5] == 0
+goto_if_false @CPRACE_49248
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[5] = 1
+
+:CPRACE_49248
+goto @CPRACE_50543
+
+:CPRACE_49255
+if 
+  $got_race_made_progress[6] == 0
+goto_if_false @CPRACE_49307
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[6] = 1
+
+:CPRACE_49307
+goto @CPRACE_50543
+
+:CPRACE_49314
+if 
+  $got_race_made_progress[7] == 0
+goto_if_false @CPRACE_49381
+Stat.PlayerMadeProgress(1)
+start_new_script @CASHWIN 5000 5000 
+Player.AddScore($player1, 5000)
+$total_races_completed += 1
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[7] = 1
+
+:CPRACE_49381
+goto @CPRACE_50543
+
+:CPRACE_49388
+if 
+  $got_race_made_progress[8] == 0
+goto_if_false @CPRACE_49433
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[8] = 1
+
+:CPRACE_49433
+goto @CPRACE_50543
+
+:CPRACE_49440
+if 
+  $got_race_made_progress[9] == 0
+goto_if_false @CPRACE_49492
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[9] = 1
+
+:CPRACE_49492
+goto @CPRACE_50543
+
+:CPRACE_49499
+if 
+  $got_race_made_progress[10] == 0
+goto_if_false @CPRACE_49551
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[10] = 1
+
+:CPRACE_49551
+goto @CPRACE_50543
+
+:CPRACE_49558
+if 
+  $got_race_made_progress[11] == 0
+goto_if_false @CPRACE_49610
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[11] = 1
+
+:CPRACE_49610
+goto @CPRACE_50543
+
+:CPRACE_49617
+if 
+  $got_race_made_progress[12] == 0
+goto_if_false @CPRACE_49669
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[12] = 1
+
+:CPRACE_49669
+goto @CPRACE_50543
+
+:CPRACE_49676
+if 
+  $got_race_made_progress[13] == 0
+goto_if_false @CPRACE_49728
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[13] = 1
+
+:CPRACE_49728
+goto @CPRACE_50543
+
+:CPRACE_49735
+if 
+  $got_race_made_progress[14] == 0
+goto_if_false @CPRACE_49787
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[14] = 1
+
+:CPRACE_49787
+goto @CPRACE_50543
+
+:CPRACE_49794
+if 
+  $got_race_made_progress[15] == 0
+goto_if_false @CPRACE_49846
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[15] = 1
+
+:CPRACE_49846
+goto @CPRACE_50543
+
+:CPRACE_49853
+if 
+  $got_race_made_progress[16] == 0
+goto_if_false @CPRACE_49905
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[16] = 1
+
+:CPRACE_49905
+goto @CPRACE_50543
+
+:CPRACE_49912
+if 
+  $got_race_made_progress[17] == 0
+goto_if_false @CPRACE_49964
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[17] = 1
+
+:CPRACE_49964
+goto @CPRACE_50543
+
+:CPRACE_49971
+if 
+  $got_race_made_progress[18] == 0
+goto_if_false @CPRACE_50023
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[18] = 1
+
+:CPRACE_50023
+goto @CPRACE_50543
+
+:CPRACE_50030
+if 
+  $got_race_made_progress[19] == 0
+goto_if_false @CPRACE_50082
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[19] = 1
+
+:CPRACE_50082
+goto @CPRACE_50543
+
+:CPRACE_50089
+if 
+  $got_race_made_progress[20] == 0
+goto_if_false @CPRACE_50141
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[20] = 1
+
+:CPRACE_50141
+goto @CPRACE_50543
+
+:CPRACE_50148
+if 
+  $got_race_made_progress[21] == 0
+goto_if_false @CPRACE_50200
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[21] = 1
+
+:CPRACE_50200
+goto @CPRACE_50543
+
+:CPRACE_50207
+if 
+  $got_race_made_progress[22] == 0
+goto_if_false @CPRACE_50259
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[22] = 1
+
+:CPRACE_50259
+goto @CPRACE_50543
+
+:CPRACE_50266
+if 
+  $got_race_made_progress[23] == 0
+goto_if_false @CPRACE_50318
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[23] = 1
+
+:CPRACE_50318
+goto @CPRACE_50543
+
+:CPRACE_50325
+if 
+  $got_race_made_progress[24] == 0
+goto_if_false @CPRACE_50377
+Stat.PlayerMadeProgress(1)
+$total_races_completed += 1
+gosub @CPRACE_50545
+Stat.RegisterMissionPassed(85@($race_selection,30s))
+$got_race_made_progress[24] = 1
+
+:CPRACE_50377
+goto @CPRACE_50543
+
+:CPRACE_50384
+if 
+  $got_race_made_progress[25] == 0
+goto_if_false @CPRACE_50460
+start_new_script @CASHWIN 10000 5000 
+Player.AddScore($player1, 10000)
+Stat.PlayerMadeProgress(1)
+Stat.RegisterMissionPassed('STAD_03')
+CarGenerator.Switch($nascar_reward_cargen1, 101)
+CarGenerator.Switch($nascar_reward_cargen2, 101)
+$got_race_made_progress[25] = 1
+
+:CPRACE_50460
+goto @CPRACE_50543
+
+:CPRACE_50467
+if 
+  $got_race_made_progress[26] == 0
+goto_if_false @CPRACE_50536
+start_new_script @CASHWIN 25000 5000 
+Player.AddScore($player1, 25000)
+Stat.PlayerMadeProgress(1)
+Stat.RegisterMissionPassed('STAD_01')
+CarGenerator.Switch($dirtrack_reward_cargen, 101)
+$got_race_made_progress[26] = 1
+
+:CPRACE_50536
+goto @CPRACE_50543
+
+:CPRACE_50543
+return 
+
+:CPRACE_50545
+if 
+  is_int_var_equal_to_int_lvar $total_races_completed == 208@
+goto_if_false @CPRACE_50624
+if 
+  $got_race_mission_complete == 0
+goto_if_false @CPRACE_50617
+start_new_script @CASHWIN 1000000 5000 45 
+Player.AddScore($player1, 1000000)
+$got_race_mission_complete = 1
+
+:CPRACE_50617
+goto @CPRACE_50646
+
+:CPRACE_50624
+start_new_script @CASHWIN 10000 5000 
+Player.AddScore($player1, 10000)
+
+:CPRACE_50646
+return 
+
+:CPRACE_50648
+254@ = 0
+
+:CPRACE_50655
+255@ = Math.RandomIntInRange(0, 5)
+switch_start 255@ total_jumps 5 default_jump 0 @CPRACE_50957 jumps 0 @CPRACE_50727 1 @CPRACE_50772 2 @CPRACE_50821 3 @CPRACE_50866 4 @CPRACE_50910 -1 @CPRACE_50957 -1 @CPRACE_50957
+
+:CPRACE_50727
+Task.PlayAnim(-1, "RIOT_CHANT", "RIOT", 4.0, True, False, False, False, 2700)
+goto @CPRACE_50957
+
+:CPRACE_50772
+Task.PlayAnim(-1, "RIOT_CHALLENGE", "RIOT", 4.0, True, False, False, False, 2000)
+goto @CPRACE_50957
+
+:CPRACE_50821
+Task.PlayAnim(-1, "RIOT_SHOUT", "RIOT", 4.0, True, False, False, False, 2000)
+goto @CPRACE_50957
+
+:CPRACE_50866
+Task.PlayAnim(-1, "RIOT_FUKU", "RIOT", 4.0, True, False, False, False, 3000)
+goto @CPRACE_50957
+
+:CPRACE_50910
+Task.PlayAnim(-1, "RIOT_PUNCHES", "RIOT", 4.0, True, False, False, False, 2200)
+goto @CPRACE_50957
+
+:CPRACE_50957
+254@ += 1
+  254@ >= 7
+goto_if_false @CPRACE_50655
+return 
+
+:CPRACE_50980
+if 
+  225@ == 0
+goto_if_false @CPRACE_51177
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot4)
+goto_if_false @CPRACE_51177
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 226@
+goto_if_false @CPRACE_51177
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+227@ = Math.RandomIntInRange(0, 4)
+switch_start 227@ total_jumps 4 default_jump 0 @CPRACE_51170 jumps 0 @CPRACE_51108 1 @CPRACE_51124 2 @CPRACE_51140 3 @CPRACE_51156 -1 @CPRACE_51170 -1 @CPRACE_51170 -1 @CPRACE_51170
+
+:CPRACE_51108
+Audio.LoadMissionAudio(36200, 4)
+goto @CPRACE_51170
+
+:CPRACE_51124
+Audio.LoadMissionAudio(36202, 4)
+goto @CPRACE_51170
+
+:CPRACE_51140
+Audio.LoadMissionAudio(36205, 4)
+goto @CPRACE_51170
+
+:CPRACE_51156
+Audio.LoadMissionAudio(1827, 4)
+goto @CPRACE_51170
+
+:CPRACE_51170
+225@ += 1
+
+:CPRACE_51177
+if 
+  225@ == 1
+goto_if_false @CPRACE_51285
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @CPRACE_51285
+if 
+  227@ == 3
+goto_if_false @CPRACE_51255
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1164)
+goto @CPRACE_51259
+
+:CPRACE_51255
+Audio.PlayMissionAudio(MissionAudioSlot.Slot4)
+
+:CPRACE_51259
+226@ = Math.RandomIntInRange(2000, 10000)
+add_int_var_to_int_lvar 226@ += $game_timer
+225@ = 0
+
+:CPRACE_51285
+return 
+return 
+return 
+47@ = 0.0
+47@ = 0.0
+47@ = 0.0
+return 
+return 
+return 
+
+:CPRACE_51327
+if or
+  53@ == 0
+  53@ == 1
+  53@ == 3
+goto_if_false @CPRACE_51851
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CPRACE_51851
+if 
+  53@ == 3
+goto_if_false @CPRACE_51516
+if 
+  $race_selection == 25
+goto_if_false @CPRACE_51451
+$x = 2693.184
+$y = -1699.655
+$z = 9.3891
+$heading = 34.2987
+
+:CPRACE_51451
+if 
+  $race_selection == 26
+goto_if_false @CPRACE_51509
+$x = 1101.781
+$y = 1604.578
+$z = 11.5506
+$heading = 353.1771
+
+:CPRACE_51509
+goto @CPRACE_51763
+
+:CPRACE_51516
+if 
+  $menu_mode == 0
+goto_if_false @CPRACE_51578
+set_var_float_to_var_float $x = $traceX($menu_mode,4f)
+set_var_float_to_var_float $y = $traceY($menu_mode,4f)
+$y += 4.0
+$heading = 180.0
+
+:CPRACE_51578
+if 
+  $menu_mode == 1
+goto_if_false @CPRACE_51640
+set_var_float_to_var_float $x = $traceX($menu_mode,4f)
+$x += 4.0
+set_var_float_to_var_float $y = $traceY($menu_mode,4f)
+$heading = 90.0
+
+:CPRACE_51640
+if or
+  $menu_mode == 2
+  $menu_mode == 3
+goto_if_false @CPRACE_51709
+set_var_float_to_var_float $x = $traceX($menu_mode,4f)
+$x += 4.0
+set_var_float_to_var_float $y = $traceY($menu_mode,4f)
+$heading = 90.0
+
+:CPRACE_51709
+if 
+  53@ <> 1
+goto_if_false @CPRACE_51751
+set_var_float_to_var_float $x = $traceX($menu_mode,4f)
+set_var_float_to_var_float $y = $traceY($menu_mode,4f)
+
+:CPRACE_51751
+set_var_float_to_var_float $z = $traceZ($menu_mode,4f)
+
+:CPRACE_51763
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, $x, $y, $z)
+Char.SetHeading($scplayer, $heading)
+World.ClearArea(0, $x, $y, $z, 0.5)
+Streaming.RequestCollision($x, $y)
+Streaming.LoadScene($x, $y, $z)
+Weather.SetToAppropriateTypeNow
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Camera.DoFade(1, 2000)
+Streaming.SetAreaVisible(0)
+Char.SetAreaVisible($scplayer, 0)
+
+:CPRACE_51851
+253@ = 0
+
+:CPRACE_51858
+if 
+  is_int_lvar_greater_than_int_lvar 256@ > 253@
+goto_if_false @CPRACE_51978
+if 
+  not is_int_lvar_equal_to_int_lvar 253@ == 442@
+goto_if_false @CPRACE_51937
+if 
+  not is_int_lvar_equal_to_int_var 395@(253@,16i) == $scplayer
+goto_if_false @CPRACE_51937
+Car.MarkAsNoLongerNeeded(379@(253@,16i))
+Char.MarkAsNoLongerNeeded(395@(253@,16i))
+
+:CPRACE_51937
+Streaming.MarkModelAsNoLongerNeeded(700@(253@,16i))
+Streaming.MarkModelAsNoLongerNeeded(716@(253@,16i))
+Blip.Remove(412@(253@,16i))
+253@ += 1
+goto @CPRACE_51858
+
+:CPRACE_51978
+Char.RemoveElegantly(411@)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.UnloadSpecialCharacter(2)
+if 
+  $player_fall_state > 0
+goto_if_false @CPRACE_52016
+$player_fall_state = 6
+
+:CPRACE_52016
+Char.MarkAsNoLongerNeeded(411@)
+Char.MarkAsNoLongerNeeded(429@)
+253@ = 0
+
+:CPRACE_52033
+if 
+  11 > 253@
+goto_if_false @CPRACE_52070
+Char.MarkAsNoLongerNeeded(441@)
+253@ += 1
+goto @CPRACE_52033
+
+:CPRACE_52070
+if 
+  $race_selection == 23
+goto_if_false @CPRACE_52113
+if 
+  $d5_pilot_licence_obtained == 1
+goto_if_false @CPRACE_52113
+CarGenerator.Switch($gen_car_flying[1], 101)
+
+:CPRACE_52113
+Blip.Remove(54@)
+Checkpoint.Delete(449@)
+Object.Delete(430@)
+Hud.ClearTimer($races_timer)
+Streaming.RemoveAnimation("RIOT")
+Streaming.RemoveAnimation("CAR")
+Text.UseCommands(False)
+Text.SetMessageFormatting(False, 380, 464)
+World.SetCarDensityMultiplier(1.0)
+World.DisableAllEntryExits(False)
+Hud.DisplayRadar(True)
+Hud.DisplayCarNames(True)
+Hud.DisplayZoneNames(True)
+Game.HideAllFrontendBlips(False)
+Game.SetIsInStadium(False)
+Hud.Display(True)
+World.ClearExtraColors(False)
+Text.SetHelpMessageBoxSize(200)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CPRACE_52229
+Char.SetAreaVisible($scplayer, 0)
+
+:CPRACE_52229
+$disable_all_cranes = 0
+$disable_mod_garage = 0
+$onmission = 0
+Mission.Finish
+return 
+

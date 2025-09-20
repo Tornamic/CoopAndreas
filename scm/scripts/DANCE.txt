@@ -1,0 +1,3092 @@
+//-------------External script 35 (DANCE)---------------
+
+:DANCE
+script_name 'DANCE'
+set_global_var_bit_const $iDanceReport bit 31
+Game.SetMinigameInProgress(True)
+Text.UseCommands(True)
+Hud.ForceBigMessageAndCounter(True)
+if 
+  13@ > 0
+goto_if_false @DANCE_72
+5@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:DANCE_72
+18@ = 5
+23@ = 5
+16@ = -1
+24@ = -1
+17@ = -1
+13@ = 0
+$iDanceScore = 0
+$iDance_SpeechState = 0
+$iDance_SpeechRequest = -1
+$iDance_SpeechCounter = 1
+22@ = 5
+TIMERA = 10000
+
+:DANCE_157
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DANCE_367
+if 
+  6@ > 0
+goto_if_false @DANCE_353
+if 
+  $iTerminateDanceMiniGame == 1
+goto_if_false @DANCE_245
+if 
+  6@ <> 2
+goto_if_false @DANCE_245
+6@ = 2
+7@ = 0
+
+:DANCE_245
+if 
+  5@ == -1
+goto_if_false @DANCE_302
+if 
+  22@ <> 5
+goto_if_false @DANCE_288
+gosub @DANCE_9479
+
+:DANCE_288
+gosub @DANCE_381
+goto @DANCE_346
+
+:DANCE_302
+if 
+  not Char.IsDead(5@)
+goto_if_false @DANCE_339
+gosub @DANCE_9479
+gosub @DANCE_381
+goto @DANCE_346
+
+:DANCE_339
+gosub @DANCE_16653
+
+:DANCE_346
+goto @DANCE_360
+
+:DANCE_353
+gosub @DANCE_381
+
+:DANCE_360
+goto @DANCE_374
+
+:DANCE_367
+gosub @DANCE_16653
+
+:DANCE_374
+goto @DANCE_157
+
+:DANCE_381
+switch_start 6@ total_jumps 4 default_jump 0 @DANCE_500 jumps 0 @DANCE_444 1 @DANCE_458 2 @DANCE_472 3 @DANCE_486 -1 @DANCE_500 -1 @DANCE_500 -1 @DANCE_500
+
+:DANCE_444
+gosub @DANCE_502
+goto @DANCE_500
+
+:DANCE_458
+gosub @DANCE_1090
+goto @DANCE_500
+
+:DANCE_472
+gosub @DANCE_2086
+goto @DANCE_500
+
+:DANCE_486
+gosub @DANCE_2412
+goto @DANCE_500
+
+:DANCE_500
+return 
+
+:DANCE_502
+switch_start 7@ total_jumps 4 default_jump 0 @DANCE_1088 jumps 0 @DANCE_565 1 @DANCE_646 2 @DANCE_803 3 @DANCE_948 -1 @DANCE_1088 -1 @DANCE_1088 -1 @DANCE_1088
+
+:DANCE_565
+Player.SetControl($player1, False)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Game.SetAllCarsCanBeDamaged(False)
+Hud.Display(False)
+Hud.DisplayRadar(False)
+if 
+  5@ <> -1
+goto_if_false @DANCE_625
+Clock.Store
+
+:DANCE_625
+Camera.DoFade(0, 500)
+7@ += 1
+goto @DANCE_1088
+
+:DANCE_646
+if 
+  not Camera.GetFadingStatus
+goto_if_false @DANCE_796
+gosub @DANCE_2764
+Streaming.RequestAnimation(v$txtCURR_DANCE_BLOCK)
+if 
+  not Streaming.HasAnimationLoaded(v$txtCURR_DANCE_BLOCK)
+goto_if_false @DANCE_694
+goto @DANCE_1088
+
+:DANCE_694
+if 
+  5@ <> -1
+goto_if_false @DANCE_718
+Clock.SetTimeOfDay(0, 0)
+
+:DANCE_718
+Char.ClearTasksImmediately($scplayer)
+World.ClearArea(1, 0@, 1@, 2@, 1.5)
+Char.SetCoordinates($scplayer, 0@, 1@, 2@)
+Char.SetHeading($scplayer, 3@)
+gosub @DANCE_6883
+gosub @DANCE_5828
+17@ = 0
+Audio.PreloadBeatTrack(4@)
+7@ += 1
+
+:DANCE_796
+goto @DANCE_1088
+
+:DANCE_803
+13@ = Audio.GetBeatTrackStatus()
+if 
+  is_int_lvar_equal_to_constant 13@ == 2
+goto_if_false @DANCE_941
+Audio.PlayBeatTrack
+Task.PlayAnimNonInterruptable($scplayer, "DANCE_LOOP", v$txtCURR_DANCE_BLOCK, 99.0, True, False, False, True, 1215752191)
+if 
+  not Char.IsDead(5@)
+goto_if_false @DANCE_920
+Task.PlayAnimNonInterruptable(5@, "DANCE_LOOP", v$txtCURR_DANCE_BLOCK, 99.0, True, False, False, True, 1215752191)
+
+:DANCE_920
+Camera.DoFade(1, 500)
+TIMERB = 0
+7@ += 1
+
+:DANCE_941
+goto @DANCE_1088
+
+:DANCE_948
+if 
+  not Camera.GetFadingStatus
+goto_if_false @DANCE_1081
+if 
+  5@ == -1
+goto_if_false @DANCE_1043
+if 
+  TIMERB >= 10000
+goto_if_false @DANCE_1036
+start_new_script @BDISPLY 
+Hud.DisplayCounterWithString($iDanceScore, CounterDisplay.Number, 'DNC_001')
+6@ = 1
+7@ = 1
+
+:DANCE_1036
+goto @DANCE_1081
+
+:DANCE_1043
+start_new_script @BDISPLY 
+Hud.DisplayCounterWithString($iDanceScore, CounterDisplay.Number, 'DNC_001')
+6@ = 1
+7@ = 1
+
+:DANCE_1081
+goto @DANCE_1088
+
+:DANCE_1088
+return 
+
+:DANCE_1090
+switch_start 7@ total_jumps 1 default_jump 0 @DANCE_2084 jumps 1 @DANCE_1153 -1 @DANCE_2084 -1 @DANCE_2084 -1 @DANCE_2084 -1 @DANCE_2084 -1 @DANCE_2084 -1 @DANCE_2084
+
+:DANCE_1153
+gosub @DANCE_5692
+gosub @DANCE_8068
+gosub @DANCE_5723
+gosub @DANCE_5504
+gosub @DANCE_2932
+if 
+  6@ == 3
+goto_if_false @DANCE_1213
+goto @DANCE_2084
+
+:DANCE_1213
+gosub @DANCE_3662
+gosub @DANCE_5367
+gosub @DANCE_5828
+gosub @DANCE_8952
+gosub @DANCE_9617
+if 
+  22@ == 3
+goto_if_false @DANCE_1387
+if 
+  99999999 > $iDanceScore
+goto_if_false @DANCE_1341
+if 
+  29@ == 2
+goto_if_false @DANCE_1334
+30@ = 10
+30@ *= 2
+add_int_lvar_to_int_var $iDanceScore += 30@
+goto @DANCE_1341
+
+:DANCE_1334
+$iDanceScore += 10
+
+:DANCE_1341
+26@ += 1
+gosub @DANCE_8131
+if 
+  31@ <> -1
+goto_if_false @DANCE_1380
+gosub @DANCE_4113
+
+:DANCE_1380
+goto @DANCE_2084
+
+:DANCE_1387
+if 
+  22@ == 1
+goto_if_false @DANCE_1526
+if 
+  99999999 > $iDanceScore
+goto_if_false @DANCE_1480
+if 
+  29@ == 2
+goto_if_false @DANCE_1473
+30@ = 50
+30@ *= 2
+add_int_lvar_to_int_var $iDanceScore += 30@
+goto @DANCE_1480
+
+:DANCE_1473
+$iDanceScore += 50
+
+:DANCE_1480
+28@ += 1
+gosub @DANCE_8131
+if 
+  31@ <> -1
+goto_if_false @DANCE_1519
+gosub @DANCE_4113
+
+:DANCE_1519
+goto @DANCE_2084
+
+:DANCE_1526
+if 
+  22@ == 2
+goto_if_false @DANCE_1665
+if 
+  99999999 > $iDanceScore
+goto_if_false @DANCE_1619
+if 
+  29@ == 2
+goto_if_false @DANCE_1612
+30@ = 20
+30@ *= 2
+add_int_lvar_to_int_var $iDanceScore += 30@
+goto @DANCE_1619
+
+:DANCE_1612
+$iDanceScore += 20
+
+:DANCE_1619
+26@ += 1
+gosub @DANCE_8131
+if 
+  31@ <> -1
+goto_if_false @DANCE_1658
+gosub @DANCE_4113
+
+:DANCE_1658
+goto @DANCE_2084
+
+:DANCE_1665
+if 
+  22@ == 0
+goto_if_false @DANCE_1768
+if 
+  $iDanceScore > 0
+goto_if_false @DANCE_1715
+$iDanceScore -= 0
+goto @DANCE_1722
+
+:DANCE_1715
+$iDanceScore = 0
+
+:DANCE_1722
+27@ += 1
+gosub @DANCE_8131
+if 
+  31@ <> -1
+goto_if_false @DANCE_1761
+gosub @DANCE_4740
+
+:DANCE_1761
+goto @DANCE_2084
+
+:DANCE_1768
+if 
+  22@ == 4
+goto_if_false @DANCE_1871
+if 
+  $iDanceScore > 0
+goto_if_false @DANCE_1818
+$iDanceScore -= 0
+goto @DANCE_1825
+
+:DANCE_1818
+$iDanceScore = 0
+
+:DANCE_1825
+27@ += 1
+gosub @DANCE_8131
+if 
+  31@ <> -1
+goto_if_false @DANCE_1864
+gosub @DANCE_4740
+
+:DANCE_1864
+goto @DANCE_2084
+
+:DANCE_1871
+if 
+  22@ == 10
+goto_if_false @DANCE_1974
+if 
+  $iDanceScore > 0
+goto_if_false @DANCE_1921
+$iDanceScore -= 0
+goto @DANCE_1928
+
+:DANCE_1921
+$iDanceScore = 0
+
+:DANCE_1928
+27@ += 1
+gosub @DANCE_8131
+if 
+  31@ <> -1
+goto_if_false @DANCE_1967
+gosub @DANCE_4740
+
+:DANCE_1967
+goto @DANCE_2084
+
+:DANCE_1974
+if 
+  22@ == 11
+goto_if_false @DANCE_2077
+if 
+  $iDanceScore > 0
+goto_if_false @DANCE_2024
+$iDanceScore -= 0
+goto @DANCE_2031
+
+:DANCE_2024
+$iDanceScore = 0
+
+:DANCE_2031
+27@ += 1
+gosub @DANCE_8131
+if 
+  31@ <> -1
+goto_if_false @DANCE_2070
+gosub @DANCE_4740
+
+:DANCE_2070
+goto @DANCE_2084
+
+:DANCE_2077
+goto @DANCE_2084
+
+:DANCE_2084
+return 
+
+:DANCE_2086
+switch_start 7@ total_jumps 4 default_jump 0 @DANCE_2410 jumps 0 @DANCE_2149 1 @DANCE_2170 2 @DANCE_2222 3 @DANCE_2396 -1 @DANCE_2410 -1 @DANCE_2410 -1 @DANCE_2410
+
+:DANCE_2149
+Camera.DoFade(0, 500)
+7@ += 1
+goto @DANCE_2410
+
+:DANCE_2170
+if 
+  not Camera.GetFadingStatus
+goto_if_false @DANCE_2215
+13@ = Audio.GetBeatTrackStatus()
+if 
+  is_int_lvar_equal_to_constant 13@ == 3
+goto_if_false @DANCE_2208
+Audio.StopBeatTrack
+
+:DANCE_2208
+7@ += 1
+
+:DANCE_2215
+goto @DANCE_2410
+
+:DANCE_2222
+Hud.ClearCounter($iDanceScore)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Game.SetAllCarsCanBeDamaged(True)
+Hud.Display(True)
+Hud.DisplayRadar(True)
+Text.ClearHelp
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Game.SetEveryoneIgnorePlayer($player1, False)
+Char.ClearTasksImmediately($scplayer)
+Task.PlayAnimNonInterruptable($scplayer, "DANCE_LOOP", v$txtCURR_DANCE_BLOCK, 16.0, False, False, False, False, 0)
+if 
+  not Char.IsDead(5@)
+goto_if_false @DANCE_2355
+Char.ClearTasksImmediately(5@)
+Task.PlayAnimNonInterruptable(5@, "DANCE_LOOP", v$txtCURR_DANCE_BLOCK, 16.0, False, False, False, False, 0)
+
+:DANCE_2355
+if 
+  5@ <> -1
+goto_if_false @DANCE_2375
+Clock.Restore
+
+:DANCE_2375
+Camera.DoFade(1, 1500)
+7@ += 1
+goto @DANCE_2410
+
+:DANCE_2396
+gosub @DANCE_16653
+goto @DANCE_2410
+
+:DANCE_2410
+return 
+
+:DANCE_2412
+switch_start 7@ total_jumps 2 default_jump 0 @DANCE_2762 jumps 0 @DANCE_2475 1 @DANCE_2567 -1 @DANCE_2762 -1 @DANCE_2762 -1 @DANCE_2762 -1 @DANCE_2762 -1 @DANCE_2762
+
+:DANCE_2475
+Audio.PauseCurrentBeatTrack(True)
+if 
+  Char.IsPlayingAnim($scplayer, v$txtCURR_DANCE_MOVE)
+goto_if_false @DANCE_2508
+Char.SetAnimPlayingFlag($scplayer, v$txtCURR_DANCE_MOVE, False)
+
+:DANCE_2508
+if 
+  not Char.IsDead(5@)
+goto_if_false @DANCE_2553
+if 
+  Char.IsPlayingAnim(5@, v$txtCURR_DANCE_MOVE_P)
+goto_if_false @DANCE_2553
+Char.SetAnimPlayingFlag(5@, v$txtCURR_DANCE_MOVE_P, False)
+
+:DANCE_2553
+7@ += 1
+goto @DANCE_2762
+
+:DANCE_2567
+gosub @DANCE_2932
+if 
+  18@ == 100
+goto_if_false @DANCE_2620
+$iDanceScore = 0
+6@ = 2
+7@ = 0
+goto @DANCE_2762
+
+:DANCE_2620
+if 
+  18@ == 99
+goto_if_false @DANCE_2755
+if 
+  6@ > 0
+goto_if_false @DANCE_2755
+Audio.PauseCurrentBeatTrack(False)
+if 
+  Char.IsPlayingAnim($scplayer, v$txtCURR_DANCE_MOVE)
+goto_if_false @DANCE_2689
+Char.SetAnimPlayingFlag($scplayer, v$txtCURR_DANCE_MOVE, True)
+
+:DANCE_2689
+if 
+  not Char.IsDead(5@)
+goto_if_false @DANCE_2734
+if 
+  Char.IsPlayingAnim(5@, v$txtCURR_DANCE_MOVE_P)
+goto_if_false @DANCE_2734
+Char.SetAnimPlayingFlag(5@, v$txtCURR_DANCE_MOVE_P, True)
+
+:DANCE_2734
+6@ = 1
+7@ = 1
+goto @DANCE_2762
+
+:DANCE_2755
+goto @DANCE_2762
+
+:DANCE_2762
+return 
+
+:DANCE_2764
+switch_start 4@ total_jumps 4 default_jump 1 @DANCE_2906 jumps 1 @DANCE_2827 2 @DANCE_2846 3 @DANCE_2865 4 @DANCE_2889 -1 @DANCE_2930 -1 @DANCE_2930 -1 @DANCE_2930
+
+:DANCE_2827
+set_var_text_label16 v$txtCURR_DANCE_BLOCK = "GFUNK"
+goto @DANCE_2930
+
+:DANCE_2846
+set_var_text_label16 v$txtCURR_DANCE_BLOCK = "GFUNK"
+goto @DANCE_2930
+
+:DANCE_2865
+set_var_text_label16 v$txtCURR_DANCE_BLOCK = "RUNNINGMAN"
+goto @DANCE_2930
+
+:DANCE_2889
+set_var_text_label16 v$txtCURR_DANCE_BLOCK = "WOP"
+goto @DANCE_2930
+
+:DANCE_2906
+set_var_text_label16 v$txtCURR_DANCE_BLOCK = "WOP"
+4@ = 4
+goto @DANCE_2930
+
+:DANCE_2930
+return 
+
+:DANCE_2932
+gosub @DANCE_16964
+switch_start 23@ total_jumps 7 default_jump 0 @DANCE_3660 jumps 1 @DANCE_3386 2 @DANCE_3340 3 @DANCE_3294 4 @DANCE_3248 5 @DANCE_3002 99 @DANCE_3432 100 @DANCE_3615
+
+:DANCE_3002
+if 
+  $d_player_stick_position == 10
+goto_if_false @DANCE_3041
+18@ = 4
+23@ = 4
+goto @DANCE_3660
+
+:DANCE_3041
+if 
+  $d_player_stick_position == 13
+goto_if_false @DANCE_3080
+18@ = 3
+23@ = 3
+goto @DANCE_3660
+
+:DANCE_3080
+if 
+  $d_player_stick_position == 9
+goto_if_false @DANCE_3119
+18@ = 2
+23@ = 2
+goto @DANCE_3660
+
+:DANCE_3119
+if 
+  $d_player_stick_position == 14
+goto_if_false @DANCE_3158
+18@ = 1
+23@ = 1
+goto @DANCE_3660
+
+:DANCE_3158
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @DANCE_3203
+18@ = 99
+23@ = 99
+TIMERB = 0
+goto @DANCE_3660
+
+:DANCE_3203
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DANCE_3241
+18@ = 100
+23@ = 100
+goto @DANCE_3660
+
+:DANCE_3241
+goto @DANCE_3660
+
+:DANCE_3248
+18@ = 5
+if 
+  $d_player_stick_position == 0
+goto_if_false @DANCE_3287
+23@ = 5
+goto @DANCE_3660
+
+:DANCE_3287
+goto @DANCE_3660
+
+:DANCE_3294
+18@ = 5
+if 
+  $d_player_stick_position == 0
+goto_if_false @DANCE_3333
+23@ = 5
+goto @DANCE_3660
+
+:DANCE_3333
+goto @DANCE_3660
+
+:DANCE_3340
+18@ = 5
+if 
+  $d_player_stick_position == 0
+goto_if_false @DANCE_3379
+23@ = 5
+goto @DANCE_3660
+
+:DANCE_3379
+goto @DANCE_3660
+
+:DANCE_3386
+18@ = 5
+if 
+  $d_player_stick_position == 0
+goto_if_false @DANCE_3425
+23@ = 5
+goto @DANCE_3660
+
+:DANCE_3425
+goto @DANCE_3660
+
+:DANCE_3432
+18@ = 5
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @DANCE_3477
+23@ = 5
+goto @DANCE_3660
+goto @DANCE_3608
+
+:DANCE_3477
+if 
+  5@ == -1
+goto_if_false @DANCE_3564
+if 
+  22@ <> 5
+goto_if_false @DANCE_3557
+if and
+  6@ <> 3
+  TIMERB >= 800
+goto_if_false @DANCE_3557
+Text.ClearHelp
+6@ = 3
+7@ = 0
+return 
+
+:DANCE_3557
+goto @DANCE_3608
+
+:DANCE_3564
+if and
+  6@ <> 3
+  TIMERB >= 800
+goto_if_false @DANCE_3608
+Text.ClearHelp
+6@ = 3
+7@ = 0
+return 
+
+:DANCE_3608
+goto @DANCE_3660
+
+:DANCE_3615
+18@ = 5
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DANCE_3653
+23@ = 5
+goto @DANCE_3660
+
+:DANCE_3653
+goto @DANCE_3660
+
+:DANCE_3660
+return 
+
+:DANCE_3662
+14@, 13@, 15@ = Audio.GetBeatProximity(0)
+if 
+  14@ > 3000
+goto_if_false @DANCE_3708
+22@ = 5
+goto @DANCE_4111
+
+:DANCE_3708
+if 
+  is_int_lvar_greater_than_int_lvar 15@ > 16@
+goto_if_false @DANCE_4022
+if 
+  18@ == 5
+goto_if_false @DANCE_3787
+if 
+  -110 > 14@
+goto_if_false @DANCE_3780
+22@ = 0
+set_lvar_int_to_lvar_int 16@ = 15@
+return 
+
+:DANCE_3780
+goto @DANCE_4015
+
+:DANCE_3787
+$BD_RenderHit = 1
+if 
+  is_int_lvar_equal_to_int_lvar 18@ == 13@
+goto_if_false @DANCE_3998
+if and
+  35 >= 14@
+  14@ >= -35
+goto_if_false @DANCE_3869
+22@ = 1
+$BD_RenderHit = 3
+set_lvar_int_to_lvar_int 16@ = 15@
+return 
+goto @DANCE_3991
+
+:DANCE_3869
+if and
+  60 >= 14@
+  14@ >= -60
+goto_if_false @DANCE_3925
+22@ = 2
+$BD_RenderHit = 2
+set_lvar_int_to_lvar_int 16@ = 15@
+return 
+goto @DANCE_3991
+
+:DANCE_3925
+if and
+  110 >= 14@
+  14@ >= -110
+goto_if_false @DANCE_3974
+22@ = 3
+set_lvar_int_to_lvar_int 16@ = 15@
+return 
+goto @DANCE_3991
+
+:DANCE_3974
+22@ = 11
+set_lvar_int_to_lvar_int 16@ = 15@
+return 
+
+:DANCE_3991
+goto @DANCE_4015
+
+:DANCE_3998
+22@ = 10
+set_lvar_int_to_lvar_int 16@ = 15@
+return 
+
+:DANCE_4015
+goto @DANCE_4111
+
+:DANCE_4022
+if or
+  22@ == 1
+  22@ == 2
+  22@ == 3
+goto_if_false @DANCE_4063
+22@ = 8
+return 
+
+:DANCE_4063
+if or
+  22@ == 0
+  22@ == 4
+  22@ == 10
+  22@ == 11
+goto_if_false @DANCE_4111
+22@ = 9
+return 
+
+:DANCE_4111
+return 
+
+:DANCE_4113
+switch_start 17@ total_jumps 15 default_jump 1 @DANCE_4241 jumps 2 @DANCE_4270 3 @DANCE_4299 4 @DANCE_4328 5 @DANCE_4357 6 @DANCE_4386 7 @DANCE_4415 8 @DANCE_4444
+switch_continued 9 @DANCE_4473 10 @DANCE_4502 11 @DANCE_4532 12 @DANCE_4562 13 @DANCE_4592 14 @DANCE_4622 15 @DANCE_4652 16 @DANCE_4682 -1 @DANCE_4712
+
+:DANCE_4241
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G1"
+17@ = 2
+goto @DANCE_4712
+
+:DANCE_4270
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G2"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4299
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G3"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4328
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G4"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4357
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G5"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4386
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G6"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4415
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G7"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4444
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G8"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4473
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G9"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4502
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G10"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4532
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G11"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4562
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G12"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4592
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G13"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4622
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G14"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4652
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G15"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4682
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_G16"
+17@ += 1
+goto @DANCE_4712
+
+:DANCE_4712
+Task.PlayAnimNonInterruptable($scplayer, v$txtCURR_DANCE_MOVE, v$txtCURR_DANCE_BLOCK, 4.0, False, False, False, False, 0)
+return 
+
+:DANCE_4740
+switch_start 17@ total_jumps 15 default_jump 1 @DANCE_4868 jumps 2 @DANCE_4897 3 @DANCE_4926 4 @DANCE_4955 5 @DANCE_4984 6 @DANCE_5013 7 @DANCE_5042 8 @DANCE_5071
+switch_continued 9 @DANCE_5100 10 @DANCE_5129 11 @DANCE_5159 12 @DANCE_5189 13 @DANCE_5219 14 @DANCE_5249 15 @DANCE_5279 16 @DANCE_5309 -1 @DANCE_5339
+
+:DANCE_4868
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B1"
+17@ = 2
+goto @DANCE_5339
+
+:DANCE_4897
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B2"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_4926
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B3"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_4955
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B4"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_4984
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B5"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_5013
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B6"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_5042
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B7"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_5071
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B8"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_5100
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B9"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_5129
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B10"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_5159
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B11"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_5189
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B12"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_5219
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B13"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_5249
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B14"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_5279
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B15"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_5309
+set_var_text_label16 v$txtCURR_DANCE_MOVE = "DANCE_B16"
+17@ += 1
+goto @DANCE_5339
+
+:DANCE_5339
+Task.PlayAnimNonInterruptable($scplayer, v$txtCURR_DANCE_MOVE, v$txtCURR_DANCE_BLOCK, 4.0, False, False, False, False, 0)
+return 
+
+:DANCE_5367
+if 
+  Char.IsPlayingAnim($scplayer, v$txtCURR_DANCE_MOVE)
+goto_if_false @DANCE_5493
+12@ = Char.GetAnimTotalTime($scplayer, v$txtCURR_DANCE_MOVE)
+11@ = Char.GetAnimCurrentTime($scplayer, v$txtCURR_DANCE_MOVE)
+cset_lvar_float_to_lvar_int 8@ = integer 21@
+set_lvar_float_to_lvar_float 0@ = 8@
+div_float_lvar_by_float_lvar 0@ /= 12@
+add_float_lvar_to_float_lvar 11@ += 0@
+if 
+  11@ >= 1.0
+goto_if_false @DANCE_5477
+31@ = 1
+return 
+goto @DANCE_5486
+
+:DANCE_5477
+31@ = -1
+return 
+
+:DANCE_5486
+goto @DANCE_5502
+
+:DANCE_5493
+31@ = 0
+return 
+
+:DANCE_5502
+return 
+
+:DANCE_5504
+if 
+  5@ > -1
+goto_if_false @DANCE_5690
+if 
+  Char.IsPlayingAnim(5@, v$txtCURR_DANCE_MOVE_P)
+goto_if_false @DANCE_5632
+12@ = Char.GetAnimTotalTime(5@, v$txtCURR_DANCE_MOVE_P)
+11@ = Char.GetAnimCurrentTime(5@, v$txtCURR_DANCE_MOVE_P)
+cset_lvar_float_to_lvar_int 8@ = integer 21@
+set_lvar_float_to_lvar_float 0@ = 8@
+div_float_lvar_by_float_lvar 0@ /= 12@
+add_float_lvar_to_float_lvar 11@ += 0@
+if 
+  11@ >= 1.0
+goto_if_false @DANCE_5625
+gosub @DANCE_7066
+return 
+
+:DANCE_5625
+goto @DANCE_5690
+
+:DANCE_5632
+14@, 13@, 15@ = Audio.GetBeatProximity(0)
+if 
+  15@ == 0
+goto_if_false @DANCE_5690
+if 
+  25 >= 14@
+goto_if_false @DANCE_5690
+gosub @DANCE_7066
+return 
+
+:DANCE_5690
+return 
+
+:DANCE_5692
+19@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 21@ = 19@
+sub_int_lvar_from_int_lvar 21@ -= 20@
+set_lvar_int_to_lvar_int 20@ = 19@
+return 
+
+:DANCE_5723
+gosub @DANCE_5367
+if 
+  31@ == 1
+goto_if_false @DANCE_5826
+if or
+  22@ == 1
+  22@ == 2
+  22@ == 3
+  22@ == 8
+goto_if_false @DANCE_5810
+gosub @DANCE_4113
+31@ = -1
+return 
+goto @DANCE_5826
+
+:DANCE_5810
+gosub @DANCE_4740
+31@ = -1
+return 
+
+:DANCE_5826
+return 
+
+:DANCE_5828
+switch_start 17@ total_jumps 5 default_jump 0 @DANCE_6881 jumps -1 @DANCE_5891 4 @DANCE_6089 8 @DANCE_6287 12 @DANCE_6485 16 @DANCE_6683 -1 @DANCE_6881 -1 @DANCE_6881
+
+:DANCE_5891
+if and
+  5@ == -1
+  $fDanceCameraX[0] > 0.0
+goto_if_false @DANCE_5965
+Camera.SetFixedPosition($fDanceCameraX[0], $fDanceCameraY[0], $fDanceCameraZ[0], 0.0, 0.0, 0.0)
+Camera.PointAtPoint($fDanceTargetX[0], $fDanceTargetY[0], $fDanceTargetZ[0], SwitchType.JumpCut)
+goto @DANCE_6082
+
+:DANCE_5965
+8@ = Char.GetOffsetInWorldCoords(9@, 10@, $scplayer, -2.3176, 0.9635, 0.5141)
+0@ = Char.GetOffsetInWorldCoords(1@, 2@, $scplayer, -1.3381, 0.8235, 0.6587)
+10@ -= 1.0
+2@ -= 1.0
+Camera.SetFixedPosition(8@, 9@, 10@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(0@, 1@, 2@, SwitchType.JumpCut)
+
+:DANCE_6082
+goto @DANCE_6881
+
+:DANCE_6089
+if and
+  5@ == -1
+  $fDanceCameraX[1] > 0.0
+goto_if_false @DANCE_6163
+Camera.SetFixedPosition($fDanceCameraX[1], $fDanceCameraY[1], $fDanceCameraZ[1], 0.0, 0.0, 0.0)
+Camera.PointAtPoint($fDanceTargetX[1], $fDanceTargetY[1], $fDanceTargetZ[1], SwitchType.JumpCut)
+goto @DANCE_6280
+
+:DANCE_6163
+8@ = Char.GetOffsetInWorldCoords(9@, 10@, $scplayer, 3.5814, 0.8987, 0.6651)
+0@ = Char.GetOffsetInWorldCoords(1@, 2@, $scplayer, 2.6071, 0.853, 0.8857)
+10@ -= 1.0
+2@ -= 1.0
+Camera.SetFixedPosition(8@, 9@, 10@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(0@, 1@, 2@, SwitchType.JumpCut)
+
+:DANCE_6280
+goto @DANCE_6881
+
+:DANCE_6287
+if and
+  5@ == -1
+  $fDanceCameraX[2] > 0.0
+goto_if_false @DANCE_6361
+Camera.SetFixedPosition($fDanceCameraX[2], $fDanceCameraY[2], $fDanceCameraZ[2], 0.0, 0.0, 0.0)
+Camera.PointAtPoint($fDanceTargetX[2], $fDanceTargetY[2], $fDanceTargetZ[2], SwitchType.JumpCut)
+goto @DANCE_6478
+
+:DANCE_6361
+8@ = Char.GetOffsetInWorldCoords(9@, 10@, $scplayer, 0.3843, 2.9502, 1.8476)
+0@ = Char.GetOffsetInWorldCoords(1@, 2@, $scplayer, 0.461, 2.0089, 1.5188)
+10@ -= 1.0
+2@ -= 1.0
+Camera.SetFixedPosition(8@, 9@, 10@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(0@, 1@, 2@, SwitchType.JumpCut)
+
+:DANCE_6478
+goto @DANCE_6881
+
+:DANCE_6485
+if and
+  5@ == -1
+  $fDanceCameraX[3] > 0.0
+goto_if_false @DANCE_6559
+Camera.SetFixedPosition($fDanceCameraX[3], $fDanceCameraY[3], $fDanceCameraZ[3], 0.0, 0.0, 0.0)
+Camera.PointAtPoint($fDanceTargetX[3], $fDanceTargetY[3], $fDanceTargetZ[3], SwitchType.JumpCut)
+goto @DANCE_6676
+
+:DANCE_6559
+8@ = Char.GetOffsetInWorldCoords(9@, 10@, $scplayer, -2.2621, 0.1226, 0.6863)
+0@ = Char.GetOffsetInWorldCoords(1@, 2@, $scplayer, -1.2706, 0.1649, 0.8096)
+10@ -= 1.0
+2@ -= 1.0
+Camera.SetFixedPosition(8@, 9@, 10@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(0@, 1@, 2@, SwitchType.JumpCut)
+
+:DANCE_6676
+goto @DANCE_6881
+
+:DANCE_6683
+if and
+  5@ == -1
+  $fDanceCameraX[4] > 0.0
+goto_if_false @DANCE_6757
+Camera.SetFixedPosition($fDanceCameraX[4], $fDanceCameraY[4], $fDanceCameraZ[4], 0.0, 0.0, 0.0)
+Camera.PointAtPoint($fDanceTargetX[4], $fDanceTargetY[4], $fDanceTargetZ[4], SwitchType.JumpCut)
+goto @DANCE_6874
+
+:DANCE_6757
+8@ = Char.GetOffsetInWorldCoords(9@, 10@, $scplayer, -1.6647, 1.7322, 2.3217)
+0@ = Char.GetOffsetInWorldCoords(1@, 2@, $scplayer, -0.8677, 1.3108, 1.889)
+10@ -= 1.0
+2@ -= 1.0
+Camera.SetFixedPosition(8@, 9@, 10@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(0@, 1@, 2@, SwitchType.JumpCut)
+
+:DANCE_6874
+goto @DANCE_6881
+
+:DANCE_6881
+return 
+
+:DANCE_6883
+if 
+  5@ <> -1
+goto_if_false @DANCE_7064
+8@ = Char.GetOffsetInWorldCoords(9@, 10@, $scplayer, 1.0, 1.3, 0.0)
+10@ = World.GetGroundZFor3DCoord(8@, 9@, 10@)
+if 
+  Char.IsDead(5@)
+goto_if_false @DANCE_6974
+gosub @DANCE_7709
+goto @DANCE_7017
+
+:DANCE_6974
+if 
+  Char.IsGroupMember(5@, $Players_Group)
+goto_if_false @DANCE_6998
+Char.RemoveFromGroup(5@)
+
+:DANCE_6998
+Char.ClearTasksImmediately(5@)
+Char.SetCoordinates(5@, 8@, 9@, 10@)
+
+:DANCE_7017
+if and
+  not Char.IsDead(5@)
+  not Char.IsDead($scplayer)
+goto_if_false @DANCE_7064
+11@ = Char.GetHeading($scplayer)
+11@ += 180.0
+Char.SetHeading(5@, 11@)
+
+:DANCE_7064
+return 
+
+:DANCE_7066
+switch_start 25@ total_jumps 15 default_jump 1 @DANCE_7194 jumps 2 @DANCE_7223 3 @DANCE_7252 4 @DANCE_7281 5 @DANCE_7310 6 @DANCE_7339 7 @DANCE_7368 8 @DANCE_7397
+switch_continued 9 @DANCE_7426 10 @DANCE_7455 11 @DANCE_7485 12 @DANCE_7515 13 @DANCE_7545 14 @DANCE_7575 15 @DANCE_7605 16 @DANCE_7635 -1 @DANCE_7665
+
+:DANCE_7194
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G1"
+25@ = 2
+goto @DANCE_7665
+
+:DANCE_7223
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G2"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7252
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G3"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7281
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G4"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7310
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G5"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7339
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G6"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7368
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G7"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7397
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G8"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7426
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G9"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7455
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G10"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7485
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G11"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7515
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G12"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7545
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G13"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7575
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G14"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7605
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G15"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7635
+set_var_text_label16 v$txtCURR_DANCE_MOVE_P = "DANCE_G16"
+25@ += 1
+goto @DANCE_7665
+
+:DANCE_7665
+if 
+  not Char.IsDead(5@)
+goto_if_false @DANCE_7707
+Task.PlayAnimNonInterruptable(5@, v$txtCURR_DANCE_MOVE_P, v$txtCURR_DANCE_BLOCK, 4.0, False, False, False, False, 0)
+
+:DANCE_7707
+return 
+
+:DANCE_7709
+13@ = Math.RandomIntInRange(1, 5)
+switch_start 13@ total_jumps 5 default_jump 0 @DANCE_8066 jumps 1 @DANCE_7781 2 @DANCE_7838 3 @DANCE_7895 4 @DANCE_7952 5 @DANCE_8009 -1 @DANCE_8066 -1 @DANCE_8066
+
+:DANCE_7781
+if 
+  not Streaming.HasModelLoaded(12)
+goto_if_false @DANCE_7811
+Streaming.RequestModel(12)
+wait 0
+goto @DANCE_7781
+
+:DANCE_7811
+5@ = Char.Create(5, 12, 8@, 9@, 10@)
+return 
+goto @DANCE_8066
+
+:DANCE_7838
+if 
+  not Streaming.HasModelLoaded(56)
+goto_if_false @DANCE_7868
+Streaming.RequestModel(56)
+wait 0
+goto @DANCE_7838
+
+:DANCE_7868
+5@ = Char.Create(5, 56, 8@, 9@, 10@)
+return 
+goto @DANCE_8066
+
+:DANCE_7895
+if 
+  not Streaming.HasModelLoaded(93)
+goto_if_false @DANCE_7925
+Streaming.RequestModel(93)
+wait 0
+goto @DANCE_7895
+
+:DANCE_7925
+5@ = Char.Create(5, 93, 8@, 9@, 10@)
+return 
+goto @DANCE_8066
+
+:DANCE_7952
+if 
+  not Streaming.HasModelLoaded(40)
+goto_if_false @DANCE_7982
+Streaming.RequestModel(40)
+wait 0
+goto @DANCE_7952
+
+:DANCE_7982
+5@ = Char.Create(5, 40, 8@, 9@, 10@)
+return 
+goto @DANCE_8066
+
+:DANCE_8009
+if 
+  not Streaming.HasModelLoaded(91)
+goto_if_false @DANCE_8039
+Streaming.RequestModel(91)
+wait 0
+goto @DANCE_8009
+
+:DANCE_8039
+5@ = Char.Create(5, 91, 8@, 9@, 10@)
+return 
+goto @DANCE_8066
+
+:DANCE_8066
+return 
+
+:DANCE_8068
+if 
+  not is_var_text_label16_empty v$txtCURR_DANCE_MOVE
+goto_if_false @DANCE_8129
+14@, 13@, 15@ = Audio.GetBeatProximity(0)
+if 
+  13@ == 33
+goto_if_false @DANCE_8129
+6@ = 2
+7@ = 0
+
+:DANCE_8129
+return 
+
+:DANCE_8131
+switch_start 24@ total_jumps 2 default_jump 1 @DANCE_8194 jumps 2 @DANCE_8446 3 @DANCE_8698 -1 @DANCE_8950 -1 @DANCE_8950 -1 @DANCE_8950 -1 @DANCE_8950 -1 @DANCE_8950
+
+:DANCE_8194
+if 
+  22@ == 1
+goto_if_false @DANCE_8228
+Text.PrintBig('DNC_005', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8228
+if 
+  22@ == 2
+goto_if_false @DANCE_8262
+Text.PrintBig('DNC_006', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8262
+if 
+  22@ == 3
+goto_if_false @DANCE_8296
+Text.PrintBig('DNC_007', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8296
+if 
+  22@ == 0
+goto_if_false @DANCE_8330
+Text.PrintBig('DNC_008', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8330
+if 
+  22@ == 4
+goto_if_false @DANCE_8364
+Text.PrintBig('DNC_009', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8364
+if 
+  22@ == 10
+goto_if_false @DANCE_8398
+Text.PrintBig('DNC_010', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8398
+if 
+  22@ == 11
+goto_if_false @DANCE_8432
+Text.PrintBig('DNC_011', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8432
+24@ = 2
+goto @DANCE_8950
+
+:DANCE_8446
+if 
+  22@ == 1
+goto_if_false @DANCE_8480
+Text.PrintBig('DNC_012', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8480
+if 
+  22@ == 2
+goto_if_false @DANCE_8514
+Text.PrintBig('DNC_013', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8514
+if 
+  22@ == 3
+goto_if_false @DANCE_8548
+Text.PrintBig('DNC_014', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8548
+if 
+  22@ == 0
+goto_if_false @DANCE_8582
+Text.PrintBig('DNC_015', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8582
+if 
+  22@ == 4
+goto_if_false @DANCE_8616
+Text.PrintBig('DNC_016', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8616
+if 
+  22@ == 10
+goto_if_false @DANCE_8650
+Text.PrintBig('DNC_017', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8650
+if 
+  22@ == 11
+goto_if_false @DANCE_8684
+Text.PrintBig('DNC_018', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8684
+24@ += 1
+goto @DANCE_8950
+
+:DANCE_8698
+if 
+  22@ == 1
+goto_if_false @DANCE_8732
+Text.PrintBig('DNC_019', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8732
+if 
+  22@ == 2
+goto_if_false @DANCE_8766
+Text.PrintBig('DNC_020', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8766
+if 
+  22@ == 3
+goto_if_false @DANCE_8800
+Text.PrintBig('DNC_021', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8800
+if 
+  22@ == 0
+goto_if_false @DANCE_8834
+Text.PrintBig('DNC_022', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8834
+if 
+  22@ == 4
+goto_if_false @DANCE_8868
+Text.PrintBig('DNC_023', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8868
+if 
+  22@ == 10
+goto_if_false @DANCE_8902
+Text.PrintBig('DNC_024', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8902
+if 
+  22@ == 11
+goto_if_false @DANCE_8936
+Text.PrintBig('DNC_025', 1000, TextStyle.MiddleSmallerHigher)
+
+:DANCE_8936
+24@ += 1
+goto @DANCE_8950
+
+:DANCE_8950
+return 
+
+:DANCE_8952
+set_lvar_int_to_lvar_int 13@ = 26@
+add_int_lvar_to_int_lvar 13@ += 27@
+add_int_lvar_to_int_lvar 13@ += 28@
+if 
+  13@ > 0
+goto_if_false @DANCE_9477
+if 
+  13@ >= 4
+goto_if_false @DANCE_9477
+if 
+  28@ == 4
+goto_if_false @DANCE_9147
+if or
+  29@ == 1
+  29@ == 2
+goto_if_false @DANCE_9101
+$iDance_SpeechRequest = 2
+TIMERA = 0
+Text.PrintBig('DNC_002', 50000, TextStyle.LightBlueTop)
+29@ = 2
+goto @DANCE_9140
+
+:DANCE_9101
+$iDance_SpeechRequest = 2
+TIMERA = 0
+Text.PrintBig('DNC_004', 50000, TextStyle.LightBlueTop)
+29@ = 1
+
+:DANCE_9140
+goto @DANCE_9456
+
+:DANCE_9147
+if 
+  is_int_lvar_greater_than_int_lvar 26@ > 27@
+goto_if_false @DANCE_9270
+if 
+  29@ <> 1
+goto_if_false @DANCE_9205
+$iDance_SpeechRequest = 4
+TIMERA = 0
+goto @DANCE_9238
+
+:DANCE_9205
+if 
+  TIMERA >= 10000
+goto_if_false @DANCE_9238
+$iDance_SpeechRequest = 4
+TIMERA = 0
+
+:DANCE_9238
+Text.PrintBig('DNC_004', 50000, TextStyle.LightBlueTop)
+29@ = 1
+goto @DANCE_9456
+
+:DANCE_9270
+if 
+  29@ == 2
+goto_if_false @DANCE_9334
+$iDance_SpeechRequest = 3
+TIMERA = 0
+Text.PrintBig('DNC_004', 50000, TextStyle.LightBlueTop)
+29@ = 1
+goto @DANCE_9456
+
+:DANCE_9334
+if 
+  29@ == 1
+goto_if_false @DANCE_9398
+$iDance_SpeechRequest = 5
+TIMERA = 0
+Text.PrintBig('DNC_003', 50000, TextStyle.LightBlueTop)
+29@ = 0
+goto @DANCE_9456
+
+:DANCE_9398
+if 
+  TIMERA >= 10000
+goto_if_false @DANCE_9431
+$iDance_SpeechRequest = 5
+TIMERA = 0
+
+:DANCE_9431
+Text.PrintBig('DNC_003', 50000, TextStyle.LightBlueTop)
+29@ = 0
+
+:DANCE_9456
+28@ = 0
+26@ = 0
+27@ = 0
+
+:DANCE_9477
+return 
+
+:DANCE_9479
+Text.SetRightJustify(False)
+Text.SetProportional(True)
+Text.SetBackground(True)
+Text.SetScale(0.5014, 1.8889)
+Text.SetEdge(2, 0, 0, 0, 255)
+if 
+  6@ == 3
+goto_if_false @DANCE_9569
+Text.SetWrapX(240.0)
+Text.Display(32.0, 32.0, 'DNC_H2')
+goto @DANCE_9615
+
+:DANCE_9569
+if 
+  6@ <> 2
+goto_if_false @DANCE_9615
+Text.SetWrapX(220.0)
+Text.Display(32.0, 32.0, 'DNC_H1')
+
+:DANCE_9615
+return 
+
+:DANCE_9617
+switch_start $iDance_SpeechState total_jumps 6 default_jump 0 @DANCE_10043 jumps 0 @DANCE_9680 1 @DANCE_10003 6 @DANCE_9843 8 @DANCE_9883 9 @DANCE_9923 10 @DANCE_9963 -1 @DANCE_10043
+
+:DANCE_9680
+if 
+  $iDance_SpeechRequest == 2
+goto_if_false @DANCE_9719
+$iDance_SpeechState = 6
+$iDance_SpeechRequest = -1
+goto @DANCE_10043
+
+:DANCE_9719
+if 
+  $iDance_SpeechRequest == 3
+goto_if_false @DANCE_9758
+$iDance_SpeechState = 8
+$iDance_SpeechRequest = -1
+goto @DANCE_10043
+
+:DANCE_9758
+if 
+  $iDance_SpeechRequest == 4
+goto_if_false @DANCE_9797
+$iDance_SpeechState = 9
+$iDance_SpeechRequest = -1
+goto @DANCE_10043
+
+:DANCE_9797
+if 
+  $iDance_SpeechRequest == 5
+goto_if_false @DANCE_9836
+$iDance_SpeechState = 10
+$iDance_SpeechRequest = -1
+goto @DANCE_10043
+
+:DANCE_9836
+goto @DANCE_10043
+
+:DANCE_9843
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot4)
+goto_if_false @DANCE_9876
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+gosub @DANCE_10045
+$iDance_SpeechState = 1
+
+:DANCE_9876
+goto @DANCE_10043
+
+:DANCE_9883
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot4)
+goto_if_false @DANCE_9916
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+gosub @DANCE_11697
+$iDance_SpeechState = 1
+
+:DANCE_9916
+goto @DANCE_10043
+
+:DANCE_9923
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot4)
+goto_if_false @DANCE_9956
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+gosub @DANCE_13349
+$iDance_SpeechState = 1
+
+:DANCE_9956
+goto @DANCE_10043
+
+:DANCE_9963
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot4)
+goto_if_false @DANCE_9996
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+gosub @DANCE_15001
+$iDance_SpeechState = 1
+
+:DANCE_9996
+goto @DANCE_10043
+
+:DANCE_10003
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @DANCE_10036
+Audio.AttachMissionAudioToChar(MissionAudioSlot.Slot4, $scplayer)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot4)
+$iDance_SpeechState = 0
+
+:DANCE_10036
+goto @DANCE_10043
+
+:DANCE_10043
+return 
+
+:DANCE_10045
+switch_start $iDance_SpeechCounter total_jumps 56 default_jump 1 @DANCE_10498 jumps 1 @DANCE_10519 2 @DANCE_10540 3 @DANCE_10561 4 @DANCE_10582 5 @DANCE_10603 6 @DANCE_10624 7 @DANCE_10645
+switch_continued 8 @DANCE_10666 9 @DANCE_10687 10 @DANCE_10708 11 @DANCE_10729 12 @DANCE_10750 13 @DANCE_10771 14 @DANCE_10792 15 @DANCE_10813 16 @DANCE_10834
+switch_continued 17 @DANCE_10855 18 @DANCE_10876 19 @DANCE_10897 20 @DANCE_10918 21 @DANCE_10939 22 @DANCE_10960 23 @DANCE_10981 24 @DANCE_11002 25 @DANCE_11023
+switch_continued 26 @DANCE_11044 27 @DANCE_11065 28 @DANCE_11086 29 @DANCE_11107 30 @DANCE_11128 31 @DANCE_11149 32 @DANCE_11170 33 @DANCE_11191 34 @DANCE_11212
+switch_continued 35 @DANCE_11233 36 @DANCE_11254 37 @DANCE_11275 38 @DANCE_11296 39 @DANCE_11317 40 @DANCE_11338 41 @DANCE_11359 42 @DANCE_11380 43 @DANCE_11401
+switch_continued 44 @DANCE_11422 45 @DANCE_11443 46 @DANCE_11464 47 @DANCE_11485 48 @DANCE_11506 49 @DANCE_11527 50 @DANCE_11548 51 @DANCE_11569 52 @DANCE_11590
+switch_continued 53 @DANCE_11611 54 @DANCE_11632 55 @DANCE_11653 56 @DANCE_11674 -1 @DANCE_11695 -1 @DANCE_11695 -1 @DANCE_11695 -1 @DANCE_11695 -1 @DANCE_11695
+
+:DANCE_10498
+Audio.LoadMissionAudio(11455, 4)
+$iDance_SpeechCounter = 1
+goto @DANCE_11695
+
+:DANCE_10519
+Audio.LoadMissionAudio(11400, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10540
+Audio.LoadMissionAudio(11401, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10561
+Audio.LoadMissionAudio(11402, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10582
+Audio.LoadMissionAudio(11403, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10603
+Audio.LoadMissionAudio(11404, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10624
+Audio.LoadMissionAudio(11405, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10645
+Audio.LoadMissionAudio(11406, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10666
+Audio.LoadMissionAudio(11407, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10687
+Audio.LoadMissionAudio(11408, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10708
+Audio.LoadMissionAudio(11409, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10729
+Audio.LoadMissionAudio(11410, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10750
+Audio.LoadMissionAudio(11411, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10771
+Audio.LoadMissionAudio(11412, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10792
+Audio.LoadMissionAudio(11413, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10813
+Audio.LoadMissionAudio(11414, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10834
+Audio.LoadMissionAudio(11415, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10855
+Audio.LoadMissionAudio(11416, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10876
+Audio.LoadMissionAudio(11417, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10897
+Audio.LoadMissionAudio(11418, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10918
+Audio.LoadMissionAudio(11419, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10939
+Audio.LoadMissionAudio(11420, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10960
+Audio.LoadMissionAudio(11421, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_10981
+Audio.LoadMissionAudio(11422, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11002
+Audio.LoadMissionAudio(11423, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11023
+Audio.LoadMissionAudio(11424, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11044
+Audio.LoadMissionAudio(11425, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11065
+Audio.LoadMissionAudio(11426, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11086
+Audio.LoadMissionAudio(11427, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11107
+Audio.LoadMissionAudio(11428, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11128
+Audio.LoadMissionAudio(11429, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11149
+Audio.LoadMissionAudio(11430, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11170
+Audio.LoadMissionAudio(11431, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11191
+Audio.LoadMissionAudio(11432, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11212
+Audio.LoadMissionAudio(11433, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11233
+Audio.LoadMissionAudio(11434, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11254
+Audio.LoadMissionAudio(11435, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11275
+Audio.LoadMissionAudio(11436, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11296
+Audio.LoadMissionAudio(11437, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11317
+Audio.LoadMissionAudio(11438, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11338
+Audio.LoadMissionAudio(11439, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11359
+Audio.LoadMissionAudio(11440, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11380
+Audio.LoadMissionAudio(11441, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11401
+Audio.LoadMissionAudio(11442, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11422
+Audio.LoadMissionAudio(11443, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11443
+Audio.LoadMissionAudio(11444, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11464
+Audio.LoadMissionAudio(11445, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11485
+Audio.LoadMissionAudio(11446, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11506
+Audio.LoadMissionAudio(11447, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11527
+Audio.LoadMissionAudio(11448, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11548
+Audio.LoadMissionAudio(11449, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11569
+Audio.LoadMissionAudio(11450, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11590
+Audio.LoadMissionAudio(11451, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11611
+Audio.LoadMissionAudio(11452, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11632
+Audio.LoadMissionAudio(11453, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11653
+Audio.LoadMissionAudio(11454, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_11695
+
+:DANCE_11674
+Audio.LoadMissionAudio(11455, 4)
+$iDance_SpeechCounter = 1
+goto @DANCE_11695
+
+:DANCE_11695
+return 
+
+:DANCE_11697
+switch_start $iDance_SpeechCounter total_jumps 56 default_jump 1 @DANCE_12150 jumps 1 @DANCE_12171 2 @DANCE_12192 3 @DANCE_12213 4 @DANCE_12234 5 @DANCE_12255 6 @DANCE_12276 7 @DANCE_12297
+switch_continued 8 @DANCE_12318 9 @DANCE_12339 10 @DANCE_12360 11 @DANCE_12381 12 @DANCE_12402 13 @DANCE_12423 14 @DANCE_12444 15 @DANCE_12465 16 @DANCE_12486
+switch_continued 17 @DANCE_12507 18 @DANCE_12528 19 @DANCE_12549 20 @DANCE_12570 21 @DANCE_12591 22 @DANCE_12612 23 @DANCE_12633 24 @DANCE_12654 25 @DANCE_12675
+switch_continued 26 @DANCE_12696 27 @DANCE_12717 28 @DANCE_12738 29 @DANCE_12759 30 @DANCE_12780 31 @DANCE_12801 32 @DANCE_12822 33 @DANCE_12843 34 @DANCE_12864
+switch_continued 35 @DANCE_12885 36 @DANCE_12906 37 @DANCE_12927 38 @DANCE_12948 39 @DANCE_12969 40 @DANCE_12990 41 @DANCE_13011 42 @DANCE_13032 43 @DANCE_13053
+switch_continued 44 @DANCE_13074 45 @DANCE_13095 46 @DANCE_13116 47 @DANCE_13137 48 @DANCE_13158 49 @DANCE_13179 50 @DANCE_13200 51 @DANCE_13221 52 @DANCE_13242
+switch_continued 53 @DANCE_13263 54 @DANCE_13284 55 @DANCE_13305 56 @DANCE_13326 -1 @DANCE_13347 -1 @DANCE_13347 -1 @DANCE_13347 -1 @DANCE_13347 -1 @DANCE_13347
+
+:DANCE_12150
+Audio.LoadMissionAudio(11655, 4)
+$iDance_SpeechCounter = 1
+goto @DANCE_13347
+
+:DANCE_12171
+Audio.LoadMissionAudio(11600, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12192
+Audio.LoadMissionAudio(11601, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12213
+Audio.LoadMissionAudio(11602, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12234
+Audio.LoadMissionAudio(11603, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12255
+Audio.LoadMissionAudio(11604, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12276
+Audio.LoadMissionAudio(11605, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12297
+Audio.LoadMissionAudio(11606, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12318
+Audio.LoadMissionAudio(11607, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12339
+Audio.LoadMissionAudio(11608, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12360
+Audio.LoadMissionAudio(11609, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12381
+Audio.LoadMissionAudio(11610, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12402
+Audio.LoadMissionAudio(11611, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12423
+Audio.LoadMissionAudio(11612, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12444
+Audio.LoadMissionAudio(11613, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12465
+Audio.LoadMissionAudio(11614, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12486
+Audio.LoadMissionAudio(11615, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12507
+Audio.LoadMissionAudio(11616, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12528
+Audio.LoadMissionAudio(11617, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12549
+Audio.LoadMissionAudio(11618, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12570
+Audio.LoadMissionAudio(11619, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12591
+Audio.LoadMissionAudio(11620, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12612
+Audio.LoadMissionAudio(11621, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12633
+Audio.LoadMissionAudio(11622, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12654
+Audio.LoadMissionAudio(11623, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12675
+Audio.LoadMissionAudio(11624, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12696
+Audio.LoadMissionAudio(11625, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12717
+Audio.LoadMissionAudio(11626, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12738
+Audio.LoadMissionAudio(11627, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12759
+Audio.LoadMissionAudio(11628, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12780
+Audio.LoadMissionAudio(11629, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12801
+Audio.LoadMissionAudio(11630, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12822
+Audio.LoadMissionAudio(11631, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12843
+Audio.LoadMissionAudio(11632, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12864
+Audio.LoadMissionAudio(11633, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12885
+Audio.LoadMissionAudio(11634, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12906
+Audio.LoadMissionAudio(11635, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12927
+Audio.LoadMissionAudio(11636, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12948
+Audio.LoadMissionAudio(11637, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12969
+Audio.LoadMissionAudio(11638, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_12990
+Audio.LoadMissionAudio(11639, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13011
+Audio.LoadMissionAudio(11640, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13032
+Audio.LoadMissionAudio(11641, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13053
+Audio.LoadMissionAudio(11642, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13074
+Audio.LoadMissionAudio(11643, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13095
+Audio.LoadMissionAudio(11644, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13116
+Audio.LoadMissionAudio(11645, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13137
+Audio.LoadMissionAudio(11646, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13158
+Audio.LoadMissionAudio(11647, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13179
+Audio.LoadMissionAudio(11648, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13200
+Audio.LoadMissionAudio(11649, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13221
+Audio.LoadMissionAudio(11650, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13242
+Audio.LoadMissionAudio(11651, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13263
+Audio.LoadMissionAudio(11652, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13284
+Audio.LoadMissionAudio(11653, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13305
+Audio.LoadMissionAudio(11654, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_13347
+
+:DANCE_13326
+Audio.LoadMissionAudio(11655, 4)
+$iDance_SpeechCounter = 1
+goto @DANCE_13347
+
+:DANCE_13347
+return 
+
+:DANCE_13349
+switch_start $iDance_SpeechCounter total_jumps 56 default_jump 1 @DANCE_13802 jumps 1 @DANCE_13823 2 @DANCE_13844 3 @DANCE_13865 4 @DANCE_13886 5 @DANCE_13907 6 @DANCE_13928 7 @DANCE_13949
+switch_continued 8 @DANCE_13970 9 @DANCE_13991 10 @DANCE_14012 11 @DANCE_14033 12 @DANCE_14054 13 @DANCE_14075 14 @DANCE_14096 15 @DANCE_14117 16 @DANCE_14138
+switch_continued 17 @DANCE_14159 18 @DANCE_14180 19 @DANCE_14201 20 @DANCE_14222 21 @DANCE_14243 22 @DANCE_14264 23 @DANCE_14285 24 @DANCE_14306 25 @DANCE_14327
+switch_continued 26 @DANCE_14348 27 @DANCE_14369 28 @DANCE_14390 29 @DANCE_14411 30 @DANCE_14432 31 @DANCE_14453 32 @DANCE_14474 33 @DANCE_14495 34 @DANCE_14516
+switch_continued 35 @DANCE_14537 36 @DANCE_14558 37 @DANCE_14579 38 @DANCE_14600 39 @DANCE_14621 40 @DANCE_14642 41 @DANCE_14663 42 @DANCE_14684 43 @DANCE_14705
+switch_continued 44 @DANCE_14726 45 @DANCE_14747 46 @DANCE_14768 47 @DANCE_14789 48 @DANCE_14810 49 @DANCE_14831 50 @DANCE_14852 51 @DANCE_14873 52 @DANCE_14894
+switch_continued 53 @DANCE_14915 54 @DANCE_14936 55 @DANCE_14957 56 @DANCE_14978 -1 @DANCE_14999 -1 @DANCE_14999 -1 @DANCE_14999 -1 @DANCE_14999 -1 @DANCE_14999
+
+:DANCE_13802
+Audio.LoadMissionAudio(11855, 4)
+$iDance_SpeechCounter = 1
+goto @DANCE_14999
+
+:DANCE_13823
+Audio.LoadMissionAudio(11800, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_13844
+Audio.LoadMissionAudio(11801, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_13865
+Audio.LoadMissionAudio(11802, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_13886
+Audio.LoadMissionAudio(11803, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_13907
+Audio.LoadMissionAudio(11804, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_13928
+Audio.LoadMissionAudio(11805, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_13949
+Audio.LoadMissionAudio(11806, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_13970
+Audio.LoadMissionAudio(11807, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_13991
+Audio.LoadMissionAudio(11808, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14012
+Audio.LoadMissionAudio(11809, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14033
+Audio.LoadMissionAudio(11810, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14054
+Audio.LoadMissionAudio(11811, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14075
+Audio.LoadMissionAudio(11812, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14096
+Audio.LoadMissionAudio(11813, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14117
+Audio.LoadMissionAudio(11814, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14138
+Audio.LoadMissionAudio(11815, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14159
+Audio.LoadMissionAudio(11816, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14180
+Audio.LoadMissionAudio(11817, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14201
+Audio.LoadMissionAudio(11818, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14222
+Audio.LoadMissionAudio(11819, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14243
+Audio.LoadMissionAudio(11820, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14264
+Audio.LoadMissionAudio(11821, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14285
+Audio.LoadMissionAudio(11822, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14306
+Audio.LoadMissionAudio(11823, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14327
+Audio.LoadMissionAudio(11824, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14348
+Audio.LoadMissionAudio(11825, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14369
+Audio.LoadMissionAudio(11826, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14390
+Audio.LoadMissionAudio(11827, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14411
+Audio.LoadMissionAudio(11828, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14432
+Audio.LoadMissionAudio(11829, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14453
+Audio.LoadMissionAudio(11830, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14474
+Audio.LoadMissionAudio(11831, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14495
+Audio.LoadMissionAudio(11832, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14516
+Audio.LoadMissionAudio(11833, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14537
+Audio.LoadMissionAudio(11834, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14558
+Audio.LoadMissionAudio(11835, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14579
+Audio.LoadMissionAudio(11836, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14600
+Audio.LoadMissionAudio(11837, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14621
+Audio.LoadMissionAudio(11838, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14642
+Audio.LoadMissionAudio(11839, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14663
+Audio.LoadMissionAudio(11840, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14684
+Audio.LoadMissionAudio(11841, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14705
+Audio.LoadMissionAudio(11842, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14726
+Audio.LoadMissionAudio(11843, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14747
+Audio.LoadMissionAudio(11844, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14768
+Audio.LoadMissionAudio(11845, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14789
+Audio.LoadMissionAudio(11846, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14810
+Audio.LoadMissionAudio(11847, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14831
+Audio.LoadMissionAudio(11848, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14852
+Audio.LoadMissionAudio(11849, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14873
+Audio.LoadMissionAudio(11850, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14894
+Audio.LoadMissionAudio(11851, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14915
+Audio.LoadMissionAudio(11852, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14936
+Audio.LoadMissionAudio(11853, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14957
+Audio.LoadMissionAudio(11854, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_14999
+
+:DANCE_14978
+Audio.LoadMissionAudio(11855, 4)
+$iDance_SpeechCounter = 1
+goto @DANCE_14999
+
+:DANCE_14999
+return 
+
+:DANCE_15001
+switch_start $iDance_SpeechCounter total_jumps 56 default_jump 1 @DANCE_15454 jumps 1 @DANCE_15475 2 @DANCE_15496 3 @DANCE_15517 4 @DANCE_15538 5 @DANCE_15559 6 @DANCE_15580 7 @DANCE_15601
+switch_continued 8 @DANCE_15622 9 @DANCE_15643 10 @DANCE_15664 11 @DANCE_15685 12 @DANCE_15706 13 @DANCE_15727 14 @DANCE_15748 15 @DANCE_15769 16 @DANCE_15790
+switch_continued 17 @DANCE_15811 18 @DANCE_15832 19 @DANCE_15853 20 @DANCE_15874 21 @DANCE_15895 22 @DANCE_15916 23 @DANCE_15937 24 @DANCE_15958 25 @DANCE_15979
+switch_continued 26 @DANCE_16000 27 @DANCE_16021 28 @DANCE_16042 29 @DANCE_16063 30 @DANCE_16084 31 @DANCE_16105 32 @DANCE_16126 33 @DANCE_16147 34 @DANCE_16168
+switch_continued 35 @DANCE_16189 36 @DANCE_16210 37 @DANCE_16231 38 @DANCE_16252 39 @DANCE_16273 40 @DANCE_16294 41 @DANCE_16315 42 @DANCE_16336 43 @DANCE_16357
+switch_continued 44 @DANCE_16378 45 @DANCE_16399 46 @DANCE_16420 47 @DANCE_16441 48 @DANCE_16462 49 @DANCE_16483 50 @DANCE_16504 51 @DANCE_16525 52 @DANCE_16546
+switch_continued 53 @DANCE_16567 54 @DANCE_16588 55 @DANCE_16609 56 @DANCE_16630 -1 @DANCE_16651 -1 @DANCE_16651 -1 @DANCE_16651 -1 @DANCE_16651 -1 @DANCE_16651
+
+:DANCE_15454
+Audio.LoadMissionAudio(12055, 4)
+$iDance_SpeechCounter = 1
+goto @DANCE_16651
+
+:DANCE_15475
+Audio.LoadMissionAudio(12000, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15496
+Audio.LoadMissionAudio(12001, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15517
+Audio.LoadMissionAudio(12002, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15538
+Audio.LoadMissionAudio(12003, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15559
+Audio.LoadMissionAudio(12004, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15580
+Audio.LoadMissionAudio(12005, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15601
+Audio.LoadMissionAudio(12006, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15622
+Audio.LoadMissionAudio(12007, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15643
+Audio.LoadMissionAudio(12008, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15664
+Audio.LoadMissionAudio(12009, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15685
+Audio.LoadMissionAudio(12010, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15706
+Audio.LoadMissionAudio(12011, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15727
+Audio.LoadMissionAudio(12012, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15748
+Audio.LoadMissionAudio(12013, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15769
+Audio.LoadMissionAudio(12014, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15790
+Audio.LoadMissionAudio(12015, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15811
+Audio.LoadMissionAudio(12016, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15832
+Audio.LoadMissionAudio(12017, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15853
+Audio.LoadMissionAudio(12018, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15874
+Audio.LoadMissionAudio(12019, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15895
+Audio.LoadMissionAudio(12020, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15916
+Audio.LoadMissionAudio(12021, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15937
+Audio.LoadMissionAudio(12022, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15958
+Audio.LoadMissionAudio(12023, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_15979
+Audio.LoadMissionAudio(12024, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16000
+Audio.LoadMissionAudio(12025, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16021
+Audio.LoadMissionAudio(12026, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16042
+Audio.LoadMissionAudio(12027, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16063
+Audio.LoadMissionAudio(12028, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16084
+Audio.LoadMissionAudio(12029, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16105
+Audio.LoadMissionAudio(12030, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16126
+Audio.LoadMissionAudio(12031, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16147
+Audio.LoadMissionAudio(12032, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16168
+Audio.LoadMissionAudio(12033, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16189
+Audio.LoadMissionAudio(12034, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16210
+Audio.LoadMissionAudio(12035, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16231
+Audio.LoadMissionAudio(12036, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16252
+Audio.LoadMissionAudio(12037, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16273
+Audio.LoadMissionAudio(12038, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16294
+Audio.LoadMissionAudio(12039, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16315
+Audio.LoadMissionAudio(12040, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16336
+Audio.LoadMissionAudio(12041, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16357
+Audio.LoadMissionAudio(12042, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16378
+Audio.LoadMissionAudio(12043, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16399
+Audio.LoadMissionAudio(12044, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16420
+Audio.LoadMissionAudio(12045, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16441
+Audio.LoadMissionAudio(12046, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16462
+Audio.LoadMissionAudio(12047, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16483
+Audio.LoadMissionAudio(12048, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16504
+Audio.LoadMissionAudio(12049, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16525
+Audio.LoadMissionAudio(12050, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16546
+Audio.LoadMissionAudio(12051, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16567
+Audio.LoadMissionAudio(12052, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16588
+Audio.LoadMissionAudio(12053, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16609
+Audio.LoadMissionAudio(12054, 4)
+$iDance_SpeechCounter += 1
+goto @DANCE_16651
+
+:DANCE_16630
+Audio.LoadMissionAudio(12055, 4)
+$iDance_SpeechCounter = 1
+goto @DANCE_16651
+
+:DANCE_16651
+return 
+
+:DANCE_16653
+$bd_terminate_script = 1
+$iTerminateDanceMiniGame = 0
+Streaming.RemoveAnimation(v$txtCURR_DANCE_BLOCK)
+Text.ClearPrints
+if 
+  not Char.IsDead(5@)
+goto_if_false @DANCE_16767
+if and
+  not Char.IsModel(5@, 195)
+  not Char.IsModel(5@, 192)
+  not Char.IsModel(5@, 191)
+  not Char.IsModel(5@, 190)
+  not Char.IsModel(5@, 193)
+  not Char.IsModel(5@, 194)
+goto_if_false @DANCE_16767
+13@ = Char.GetModel(5@)
+Streaming.MarkModelAsNoLongerNeeded(13@)
+Char.Delete(5@)
+
+:DANCE_16767
+13@ = Audio.GetBeatTrackStatus()
+if 
+  is_int_lvar_equal_to_constant 13@ == 3
+goto_if_false @DANCE_16792
+Audio.StopBeatTrack
+
+:DANCE_16792
+13@ = 0
+
+:DANCE_16799
+$fDanceCameraX(13@,5f) = 0.0
+$fDanceCameraY(13@,5f) = 0.0
+$fDanceCameraZ(13@,5f) = 0.0
+$fDanceTargetX(13@,5f) = 0.0
+$fDanceTargetY(13@,5f) = 0.0
+$fDanceTargetZ(13@,5f) = 0.0
+13@ += 1
+  13@ >= 5
+goto_if_false @DANCE_16799
+Hud.ForceBigMessageAndCounter(False)
+Text.UseCommands(False)
+if 
+  $iDanceScore >= 0
+goto_if_false @DANCE_16938
+Stat.SetInt(StatId.LatestDanceScore, $iDanceScore)
+
+:DANCE_16938
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Player.SetControl($player1, True)
+clear_global_var_bit_const $iDanceReport bit 31
+Game.SetMinigameInProgress(False)
+terminate_this_script 
+return 
+
+:DANCE_16964
+$d_lstickx, $d_lsticky, $d_rstickx, $d_rsticky = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+cset_var_float_to_var_int $d_temp_float = integer $d_lstickx
+set_var_float_to_var_float $d_vec_x = $d_temp_float
+cset_var_float_to_var_int $d_temp_float = integer $d_lsticky
+set_var_float_to_var_float $d_vec_y = $d_temp_float
+$d_temp_float = Math.GetDistanceBetweenCoords2D(0.0, 0.0, $d_vec_x, $d_vec_y)
+$d_player_stick_position = 0
+if 
+  $d_temp_float > 64.0
+goto_if_false @DANCE_17325
+$d_temp_float = Math.GetAngleBetween2DVectors($d_vec_x, $d_vec_y, 0.0, -1.0)
+if 
+  15.0 > $d_temp_float
+goto_if_false @DANCE_17117
+$d_player_stick_position = 13
+goto @DANCE_17325
+
+:DANCE_17117
+if 
+  75.0 > $d_temp_float
+goto_if_false @DANCE_17184
+if 
+  $d_lstickx > 0
+goto_if_false @DANCE_17170
+$d_player_stick_position = 11
+goto @DANCE_17177
+
+:DANCE_17170
+$d_player_stick_position = 15
+
+:DANCE_17177
+goto @DANCE_17325
+
+:DANCE_17184
+if 
+  105.0 > $d_temp_float
+goto_if_false @DANCE_17251
+if 
+  $d_lstickx > 0
+goto_if_false @DANCE_17237
+$d_player_stick_position = 10
+goto @DANCE_17244
+
+:DANCE_17237
+$d_player_stick_position = 9
+
+:DANCE_17244
+goto @DANCE_17325
+
+:DANCE_17251
+if 
+  165.0 > $d_temp_float
+goto_if_false @DANCE_17318
+if 
+  $d_lstickx > 0
+goto_if_false @DANCE_17304
+$d_player_stick_position = 16
+goto @DANCE_17311
+
+:DANCE_17304
+$d_player_stick_position = 12
+
+:DANCE_17311
+goto @DANCE_17325
+
+:DANCE_17318
+$d_player_stick_position = 14
+
+:DANCE_17325
+return 
+write_debug v$txtCURR_DANCE_MOVE
+13@, 13@, 13@ = Audio.GetBeatProximity(1)
+write_debug_with_int "NEXT_BEAT_NUMBER" 13@
+return 
+terminate_this_script 
+

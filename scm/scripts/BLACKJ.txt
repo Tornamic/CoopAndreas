@@ -1,0 +1,5298 @@
+//-------------External script 17 (BLACKJ)---------------
+
+:BLACKJ
+script_name 'BLACKJ'
+2@ = 0
+3@ = 0
+4@ = 0
+5@ = 0
+22@ = 0
+23@ = 0
+24@ = 0
+if 
+  3@ == -1
+goto_if_false @BLACKJ_193
+0@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+1@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+$active_bj_table = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+$active_bj_croupier = Char.Create(4, 7, 0.0, 0.0, 0.0)
+$bj_chip_set[0] = Object.Create(#CHIP_STACK07, 0.0, 0.0, 0.0)
+
+:BLACKJ_193
+29@ = -99
+
+:BLACKJ_200
+wait 0
+if 
+  $iTerminateAllAmbience == 0
+goto_if_false @BLACKJ_2463
+if 
+  Object.DoesExist(0@)
+goto_if_false @BLACKJ_2447
+if 
+  Object.IsWithinBrainActivationRange(0@)
+goto_if_false @BLACKJ_2431
+if 
+  $active_bj_table == 0
+goto_if_false @BLACKJ_2343
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BLACKJ_2327
+if 
+  2@ == 0
+goto_if_false @BLACKJ_1076
+if 
+  3@ == 0
+goto_if_false @BLACKJ_869
+10@ = Math.RandomIntInRange(0, 2)
+if 
+  10@ == 0
+goto_if_false @BLACKJ_366
+set_lvar_int_to_constant 26@ = 171
+goto @BLACKJ_374
+
+:BLACKJ_366
+set_lvar_int_to_constant 26@ = 171
+
+:BLACKJ_374
+if 
+  not Streaming.HasModelLoaded(26@)
+goto_if_false @BLACKJ_395
+Streaming.RequestModel(26@)
+
+:BLACKJ_395
+if 
+  not Streaming.HasAnimationLoaded("CASINO")
+goto_if_false @BLACKJ_426
+Streaming.RequestAnimation("CASINO")
+
+:BLACKJ_426
+if 
+  29@ == -99
+goto_if_false @BLACKJ_862
+13@ = Stat.GetFloat(81)
+if 
+  $total_bj_tables == 0
+goto_if_false @BLACKJ_675
+if 
+  1.0 > 13@
+goto_if_false @BLACKJ_511
+29@ = 100
+30@ = 1
+goto @BLACKJ_661
+
+:BLACKJ_511
+if 
+  10.0 > 13@
+goto_if_false @BLACKJ_554
+29@ = 1000
+30@ = 10
+goto @BLACKJ_661
+
+:BLACKJ_554
+if 
+  100.0 > 13@
+goto_if_false @BLACKJ_597
+29@ = 10000
+30@ = 100
+goto @BLACKJ_661
+
+:BLACKJ_597
+if 
+  1000.0 > 13@
+goto_if_false @BLACKJ_643
+29@ = 100000
+30@ = 1000
+goto @BLACKJ_661
+
+:BLACKJ_643
+29@ = 1000000
+30@ = 10000
+
+:BLACKJ_661
+$total_bj_tables += 1
+goto @BLACKJ_862
+
+:BLACKJ_675
+10@ = Math.RandomIntInRange(0, 5)
+switch_start 10@ total_jumps 5 default_jump 0 @BLACKJ_862 jumps 0 @BLACKJ_747 1 @BLACKJ_768 2 @BLACKJ_790 3 @BLACKJ_812 4 @BLACKJ_837 -1 @BLACKJ_862 -1 @BLACKJ_862
+
+:BLACKJ_747
+29@ = 100
+30@ = 1
+goto @BLACKJ_862
+
+:BLACKJ_768
+29@ = 1000
+30@ = 10
+goto @BLACKJ_862
+
+:BLACKJ_790
+29@ = 10000
+30@ = 100
+goto @BLACKJ_862
+
+:BLACKJ_812
+29@ = 100000
+30@ = 1000
+goto @BLACKJ_862
+
+:BLACKJ_837
+29@ = 1000000
+30@ = 10000
+goto @BLACKJ_862
+
+:BLACKJ_862
+3@ += 1
+
+:BLACKJ_869
+if 
+  3@ == 1
+goto_if_false @BLACKJ_920
+if and
+  Streaming.HasModelLoaded(26@)
+  Streaming.HasAnimationLoaded("CASINO")
+goto_if_false @BLACKJ_920
+3@ += 1
+
+:BLACKJ_920
+if 
+  3@ == 2
+goto_if_false @BLACKJ_1076
+if 
+  not Char.DoesExist(1@)
+goto_if_false @BLACKJ_1062
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0, 0.4, 0.0)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+1@ = Char.Create(4, 26@, $x, $y, $z)
+Char.SetDecisionMaker(1@, $iGlobalPedPanicDM)
+$heading = Object.GetHeading(0@)
+$heading += 180.0
+Char.SetHeading(1@, $heading)
+Streaming.MarkModelAsNoLongerNeeded(26@)
+Object.EnableDisabledAttractors(0@, True)
+
+:BLACKJ_1062
+2@ += 1
+3@ = 0
+
+:BLACKJ_1076
+if 
+  2@ == 1
+goto_if_false @BLACKJ_2320
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_2320
+if 
+  $iSetCasinoPanic == 0
+goto_if_false @BLACKJ_2271
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0, 0.4, 0.0)
+if 
+  Char.LocateOnFoot3D(1@, 0, $x, $y, $z, 0.4, 0.4, 2.0)
+goto_if_false @BLACKJ_2215
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0, -1.5, 0.0)
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $x, $y, $z, 0.5, 0.5, 2.0)
+goto_if_false @BLACKJ_2159
+if 
+  Char.IsOnFoot($scplayer)
+goto_if_false @BLACKJ_2152
+if 
+  22@ == 0
+goto_if_false @BLACKJ_2128
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BLACKJ_1875
+$bj_players_cash = Player.StoreScore($player1)
+gosub @BLACKJ_33768
+add_int_var_to_int_var $bj_players_cash += $casino_credit
+if 
+  is_int_var_greater_than_int_lvar $bj_players_cash > 30@
+goto_if_false @BLACKJ_1845
+10@ = 0
+13@ = Stat.GetFloat(81)
+if 
+  29@ == 1000000
+goto_if_false @BLACKJ_1449
+if 
+  1000.0 > 13@
+goto_if_false @BLACKJ_1442
+Text.PrintNow('GAMBSTA', 5000, 1)
+10@ = 1
+
+:BLACKJ_1442
+goto @BLACKJ_1654
+
+:BLACKJ_1449
+if 
+  29@ == 100000
+goto_if_false @BLACKJ_1521
+if 
+  100.0 > 13@
+goto_if_false @BLACKJ_1514
+Text.PrintNow('GAMBSTA', 5000, 1)
+10@ = 1
+
+:BLACKJ_1514
+goto @BLACKJ_1654
+
+:BLACKJ_1521
+if 
+  29@ == 10000
+goto_if_false @BLACKJ_1591
+if 
+  10.0 > 13@
+goto_if_false @BLACKJ_1584
+Text.PrintNow('GAMBSTA', 5000, 1)
+10@ = 1
+
+:BLACKJ_1584
+goto @BLACKJ_1654
+
+:BLACKJ_1591
+if 
+  29@ == 1000
+goto_if_false @BLACKJ_1654
+if 
+  1.0 > 13@
+goto_if_false @BLACKJ_1654
+Text.PrintNow('GAMBSTA', 5000, 1)
+10@ = 1
+
+:BLACKJ_1654
+if 
+  10@ == 0
+goto_if_false @BLACKJ_1744
+if 
+  21@ == 1
+goto_if_false @BLACKJ_1701
+Text.ClearPrints
+Text.ClearHelp
+21@ = 0
+
+:BLACKJ_1701
+2@ = 0
+3@ = 0
+set_var_int_to_lvar_int $active_bj_table = 0@
+$bj_initial_last_bet = 0
+22@ = 1
+goto @BLACKJ_1838
+
+:BLACKJ_1744
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_1838
+10@ = Math.RandomIntInRange(0, 2)
+if 
+  10@ == 0
+goto_if_false @BLACKJ_1816
+Char.SetSayScript(1@, 5850, True, True, False)
+Char.StartFacialTalk(1@, 2000)
+goto @BLACKJ_1838
+
+:BLACKJ_1816
+Char.SetSayScript(1@, 5851, True, True, False)
+Char.StartFacialTalk(1@, 2000)
+
+:BLACKJ_1838
+goto @BLACKJ_1868
+
+:BLACKJ_1845
+Text.PrintNow('BJ_2', 5000, 1)
+gosub @BLACKJ_18303
+
+:BLACKJ_1868
+goto @BLACKJ_2121
+
+:BLACKJ_1875
+if 
+  21@ <> 1
+goto_if_false @BLACKJ_2121
+if and
+  not Text.IsThisHelpMessageBeingDisplayed('SGPUNT')
+  not Text.IsThisHelpMessageBeingDisplayed('SGGAMB')
+  not Text.IsThisHelpMessageBeingDisplayed('SGPROF')
+  not Text.IsThisHelpMessageBeingDisplayed('SGHIRO')
+goto_if_false @BLACKJ_2121
+Text.SetHelpMessageBoxSize(200)
+switch_start 29@ total_jumps 5 default_jump 0 @BLACKJ_2114 jumps 100 @BLACKJ_2024 1000 @BLACKJ_2042 10000 @BLACKJ_2060 100000 @BLACKJ_2078 1000000 @BLACKJ_2096 -1 @BLACKJ_2114 -1 @BLACKJ_2114
+
+:BLACKJ_2024
+Text.PrintHelpForever('BJ_1A')
+goto @BLACKJ_2114
+
+:BLACKJ_2042
+Text.PrintHelpForever('BJ_1B')
+goto @BLACKJ_2114
+
+:BLACKJ_2060
+Text.PrintHelpForever('BJ_1C')
+goto @BLACKJ_2114
+
+:BLACKJ_2078
+Text.PrintHelpForever('BJ_1D')
+goto @BLACKJ_2114
+
+:BLACKJ_2096
+Text.PrintHelpForever('BJ_1E')
+goto @BLACKJ_2114
+
+:BLACKJ_2114
+21@ = 1
+
+:BLACKJ_2121
+goto @BLACKJ_2152
+
+:BLACKJ_2128
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BLACKJ_2152
+22@ = 0
+
+:BLACKJ_2152
+goto @BLACKJ_2208
+
+:BLACKJ_2159
+if 
+  21@ == 1
+goto_if_false @BLACKJ_2208
+Text.ClearThisPrint('BJ_2')
+Text.ClearThisPrint('GAMBSTA')
+Text.ClearHelp
+21@ = 0
+
+:BLACKJ_2208
+goto @BLACKJ_2264
+
+:BLACKJ_2215
+if 
+  21@ == 1
+goto_if_false @BLACKJ_2264
+Text.ClearThisPrint('BJ_2')
+Text.ClearThisPrint('GAMBSTA')
+Text.ClearHelp
+21@ = 0
+
+:BLACKJ_2264
+goto @BLACKJ_2320
+
+:BLACKJ_2271
+if 
+  21@ == 1
+goto_if_false @BLACKJ_2320
+Text.ClearThisPrint('BJ_2')
+Text.ClearThisPrint('GAMBSTA')
+Text.ClearHelp
+21@ = 0
+
+:BLACKJ_2320
+goto @BLACKJ_2336
+
+:BLACKJ_2327
+gosub @BLACKJ_2479
+terminate_this_script 
+
+:BLACKJ_2336
+goto @BLACKJ_2424
+
+:BLACKJ_2343
+if 
+  is_int_var_equal_to_int_lvar $active_bj_table == 0@
+goto_if_false @BLACKJ_2424
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BLACKJ_2424
+if 
+  5@ == 0
+goto_if_false @BLACKJ_2410
+gosub @BLACKJ_2533
+goto @BLACKJ_2424
+
+:BLACKJ_2410
+gosub @BLACKJ_34567
+$active_bj_table = 0
+
+:BLACKJ_2424
+goto @BLACKJ_2440
+
+:BLACKJ_2431
+gosub @BLACKJ_2479
+terminate_this_script 
+
+:BLACKJ_2440
+goto @BLACKJ_2456
+
+:BLACKJ_2447
+gosub @BLACKJ_2479
+terminate_this_script 
+
+:BLACKJ_2456
+goto @BLACKJ_2472
+
+:BLACKJ_2463
+gosub @BLACKJ_2479
+terminate_this_script 
+
+:BLACKJ_2472
+goto @BLACKJ_200
+
+:BLACKJ_2479
+if 
+  Object.DoesExist(0@)
+goto_if_false @BLACKJ_2502
+Object.EnableDisabledAttractors(0@, False)
+
+:BLACKJ_2502
+Char.MarkAsNoLongerNeeded(1@)
+Streaming.RemoveAnimation("CASINO")
+$total_bj_tables -= 1
+2@ = 0
+return 
+
+:BLACKJ_2533
+if 
+is_ps2_keyboard_key_just_pressed 32
+goto_if_false @BLACKJ_2582
+31@ += 1
+if 
+  31@ > 5
+goto_if_false @BLACKJ_2580
+31@ = 0
+
+:BLACKJ_2580
+clear_all_view_variables 
+
+:BLACKJ_2582
+if 
+  31@ == 1
+goto_if_false @BLACKJ_2838
+set_var_int_to_lvar_int $BLACKJ_view_debug = 2@
+set_var_int_to_lvar_int $9220 = 3@
+set_var_int_to_lvar_int $9221 = 4@
+set_var_int_to_var_int $9222 = $player_total1
+set_var_int_to_var_int $9223 = $player_total1_b
+set_var_int_to_var_int $9224 = $player_total2
+set_var_int_to_var_int $9225 = $player_total2_b
+set_var_int_to_var_int $9226 = $dealer_total
+set_var_int_to_var_int $9227 = $dealer_total2
+view_integer_variable $BLACKJ_view_debug "M_STAGE"
+view_integer_variable $9220 "M_GOALS"
+view_integer_variable $9221 "M_GOALS2"
+view_integer_variable $9222 "PLAYER_TOTAL1"
+view_integer_variable $9223 "PLAYER_TOTAL1_B"
+view_integer_variable $9224 "PLAYER_TOTAL2"
+view_integer_variable $9225 "PLAYER_TOTAL2_B"
+view_integer_variable $9226 "DEALER_TOTAL"
+view_integer_variable $9227 "DEALER_TOTAL2"
+
+:BLACKJ_2838
+if 
+  31@ == 2
+goto_if_false @BLACKJ_3148
+set_var_int_to_var_int $BLACKJ_view_debug = $player_cannot_split
+set_var_int_to_var_int $9220 = $player_has_split
+set_var_int_to_var_int $9221 = $player_cannot_double
+set_var_int_to_var_int $9222 = $player_has_doubled1
+set_var_int_to_var_int $9223 = $player_has_doubled2
+set_var_int_to_var_int $9224 = $player_has_stuck1
+set_var_int_to_var_int $9225 = $player_has_stuck2
+set_var_int_to_var_int $9226 = $player_has_hit
+set_var_int_to_var_int $9227 = $dealer_has_stuck
+view_integer_variable $BLACKJ_view_debug "PLAYER_CANNOT_SPLIT"
+view_integer_variable $9220 "PLAYER_HAS_SPLIT"
+view_integer_variable $9221 "PLAYER_CANNOT_DOUBLE"
+view_integer_variable $9222 "PLAYER_HAS_DOUBLED1"
+view_integer_variable $9223 "PLAYER_HAS_DOUBLED2"
+view_integer_variable $9224 "PLAYER_HAS_STUCK1"
+view_integer_variable $9225 "PLAYER_HAS_STUCK2"
+view_integer_variable $9226 "PLAYER_HAS_HIT"
+view_integer_variable $9227 "DEALER_HAS_STUCK"
+
+:BLACKJ_3148
+if 
+  31@ == 3
+goto_if_false @BLACKJ_3441
+set_var_int_to_var_int $BLACKJ_view_debug = $player_has_quit
+set_var_int_to_var_int $9220 = $player_has_won1
+set_var_int_to_var_int $9221 = $player_has_won2
+set_var_int_to_var_int $9222 = $player_has_input
+set_var_int_to_var_int $9223 = $dealer_wins_by_default
+set_var_int_to_var_int $9224 = $dealer_got_ace
+set_var_int_to_var_int $9225 = $player_got_ace1
+set_var_int_to_var_int $9226 = $player_got_ace2
+set_var_int_to_var_int $9227 = $player_got_bj
+view_integer_variable $BLACKJ_view_debug "PLAYER_HAS_QUIT"
+view_integer_variable $9220 "PLAYER_HAS_WON1"
+view_integer_variable $9221 "PLAYER_HAS_WON2"
+view_integer_variable $9222 "PLAYER_HAS_INPUT"
+view_integer_variable $9223 "DEALER_WINS_BY_DEFAULT"
+view_integer_variable $9224 "DEALER_GOT_ACE"
+view_integer_variable $9225 "PLAYER_GOT_ACE1"
+view_integer_variable $9226 "PLAYER_GOT_ACE2"
+view_integer_variable $9227 "PLAYER_GOT_BJ"
+
+:BLACKJ_3441
+if 
+  31@ == 4
+goto_if_false @BLACKJ_3679
+set_var_int_to_var_int $BLACKJ_view_debug = $bj_players_cash
+set_var_int_to_lvar_int $9220 = 30@
+set_var_int_to_lvar_int $9221 = 29@
+set_var_int_to_var_int $9222 = $bj_last_bet
+set_var_int_to_var_int $9223 = $bj_bet1
+set_var_int_to_var_int $9224 = $bj_bet2
+set_var_int_to_var_int $9225 = $bj_bet_step
+set_var_int_to_var_int $9226 = $bj_half_bet
+set_var_int_to_var_int $9227 = $bj_refund
+view_integer_variable $BLACKJ_view_debug "BJ_PLAYERS_CASH"
+view_integer_variable $9220 "MIN_BET"
+view_integer_variable $9221 "MAX_BET"
+view_integer_variable $9222 "BJ_LAST_BET"
+view_integer_variable $9223 "BJ_BET1"
+view_integer_variable $9224 "BJ_BET2"
+view_integer_variable $9225 "BJ_BET_STEP"
+view_integer_variable $9226 "BJ_HALF_BET"
+view_integer_variable $9227 "BJ_REFUND"
+
+:BLACKJ_3679
+if 
+  31@ == 5
+goto_if_false @BLACKJ_3780
+set_var_int_to_var_int $BLACKJ_view_debug = $player_got_bj
+set_var_int_to_var_int $9220 = $bj_payout
+set_var_int_to_var_int $9221 = $bj_initial_stake
+view_integer_variable $BLACKJ_view_debug "PLAYER_GOT_BJ"
+view_integer_variable $9220 "BJ_PAYOUT"
+view_integer_variable $9221 "BJ_INITIAL_STAKE"
+
+:BLACKJ_3780
+6@ += 1
+if 
+  6@ > 9
+goto_if_false @BLACKJ_3812
+6@ = 0
+
+:BLACKJ_3812
+7@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 9@ = 7@
+sub_int_lvar_from_int_lvar 9@ -= 8@
+set_lvar_int_to_lvar_int 8@ = 7@
+if or
+  Text.IsThisHelpMessageBeingDisplayed('SGPUNT')
+  Text.IsThisHelpMessageBeingDisplayed('SGGAMB')
+  Text.IsThisHelpMessageBeingDisplayed('SGPROF')
+  Text.IsThisHelpMessageBeingDisplayed('SGHIRO')
+goto_if_false @BLACKJ_4365
+if 
+  $bj_offering_credit <> 1
+goto_if_false @BLACKJ_4079
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_4065
+10@ = Math.RandomIntInRange(0, 3)
+switch_start 10@ total_jumps 3 default_jump 0 @BLACKJ_4065 jumps 0 @BLACKJ_4002 1 @BLACKJ_4023 2 @BLACKJ_4044 -1 @BLACKJ_4065 -1 @BLACKJ_4065 -1 @BLACKJ_4065 -1 @BLACKJ_4065
+
+:BLACKJ_4002
+Char.SetSayScript(1@, 5820, True, True, False)
+goto @BLACKJ_4065
+
+:BLACKJ_4023
+Char.SetSayScript(1@, 5821, True, True, False)
+goto @BLACKJ_4065
+
+:BLACKJ_4044
+Char.SetSayScript(1@, 5822, True, True, False)
+goto @BLACKJ_4065
+
+:BLACKJ_4065
+$bj_offering_credit = 1
+TIMERA = 0
+
+:BLACKJ_4079
+if 
+  23@ == 0
+goto_if_false @BLACKJ_4130
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BLACKJ_4123
+Text.ClearHelp
+23@ = 1
+
+:BLACKJ_4123
+goto @BLACKJ_4172
+
+:BLACKJ_4130
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BLACKJ_4172
+if 
+  23@ <> 0
+goto_if_false @BLACKJ_4172
+23@ = 0
+
+:BLACKJ_4172
+if 
+  25@ == 0
+goto_if_false @BLACKJ_4223
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @BLACKJ_4216
+Text.ClearHelp
+25@ = 1
+
+:BLACKJ_4216
+goto @BLACKJ_4265
+
+:BLACKJ_4223
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @BLACKJ_4265
+if 
+  25@ <> 0
+goto_if_false @BLACKJ_4265
+25@ = 0
+
+:BLACKJ_4265
+if 
+  24@ == 0
+goto_if_false @BLACKJ_4316
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @BLACKJ_4309
+Text.ClearHelp
+24@ = 1
+
+:BLACKJ_4309
+goto @BLACKJ_4358
+
+:BLACKJ_4316
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @BLACKJ_4358
+if 
+  24@ <> 0
+goto_if_false @BLACKJ_4358
+24@ = 0
+
+:BLACKJ_4358
+goto @BLACKJ_4390
+
+:BLACKJ_4365
+if 
+  $bj_offering_credit <> 0
+goto_if_false @BLACKJ_4390
+$bj_offering_credit = 0
+
+:BLACKJ_4390
+switch_start 2@ total_jumps 7 default_jump 0 @BLACKJ_4551 jumps 0 @BLACKJ_4453 1 @BLACKJ_4467 2 @BLACKJ_4481 3 @BLACKJ_4495 4 @BLACKJ_4509 5 @BLACKJ_4523 6 @BLACKJ_4537
+
+:BLACKJ_4453
+gosub @BLACKJ_5015
+goto @BLACKJ_4551
+
+:BLACKJ_4467
+gosub @BLACKJ_7716
+goto @BLACKJ_4551
+
+:BLACKJ_4481
+gosub @BLACKJ_9615
+goto @BLACKJ_4551
+
+:BLACKJ_4495
+gosub @BLACKJ_10189
+goto @BLACKJ_4551
+
+:BLACKJ_4509
+gosub @BLACKJ_10622
+goto @BLACKJ_4551
+
+:BLACKJ_4523
+gosub @BLACKJ_15357
+goto @BLACKJ_4551
+
+:BLACKJ_4537
+gosub @BLACKJ_15879
+goto @BLACKJ_4551
+
+:BLACKJ_4551
+if 
+is_ps2_keyboard_key_just_pressed 85
+goto_if_false @BLACKJ_4646
+$card_cheat_on += 1
+if 
+  $card_cheat_on > 1
+goto_if_false @BLACKJ_4626
+$card_cheat_on = 0
+write_debug_with_int "CARD_CHEAT_OFF" $card_cheat_on
+goto @BLACKJ_4646
+
+:BLACKJ_4626
+write_debug_with_int "CARD_CHEAT_ON" $card_cheat_on
+
+:BLACKJ_4646
+if 
+  $card_cheat_on <> 0
+goto_if_false @BLACKJ_4792
+if 
+is_ps2_keyboard_key_just_pressed 131
+goto_if_false @BLACKJ_4728
+$card_cheat_value += 1
+if 
+  $card_cheat_value > 52
+goto_if_false @BLACKJ_4712
+$card_cheat_value = 1
+
+:BLACKJ_4712
+write_debug_with_int "NEXT_CARD" $card_cheat_value
+
+:BLACKJ_4728
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @BLACKJ_4792
+$card_cheat_value -= 1
+if 
+  1 > $card_cheat_value
+goto_if_false @BLACKJ_4776
+$card_cheat_value = 52
+
+:BLACKJ_4776
+write_debug_with_int "NEXT_CARD" $card_cheat_value
+
+:BLACKJ_4792
+if 
+  22@ == 0
+goto_if_false @BLACKJ_4966
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+  2@ <> 2
+goto_if_false @BLACKJ_4959
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_4912
+10@ = Math.RandomIntInRange(0, 2)
+if 
+  10@ == 0
+goto_if_false @BLACKJ_4898
+Char.SetSayScript(1@, 5852, True, True, False)
+goto @BLACKJ_4912
+
+:BLACKJ_4898
+Char.SetSayScript(1@, 5853, True, True, False)
+
+:BLACKJ_4912
+5@ = 1
+22@ = 1
+if 
+  $bj_refund <> 0
+goto_if_false @BLACKJ_4952
+Player.AddScore($player1, $bj_refund)
+
+:BLACKJ_4952
+$bj_last_bet = 0
+
+:BLACKJ_4959
+goto @BLACKJ_4990
+
+:BLACKJ_4966
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BLACKJ_4990
+22@ = 0
+
+:BLACKJ_4990
+if 
+  Char.IsDead(1@)
+goto_if_false @BLACKJ_5013
+5@ = 1
+
+:BLACKJ_5013
+return 
+
+:BLACKJ_5015
+if 
+  3@ == 0
+goto_if_false @BLACKJ_5950
+Game.SetMinigameInProgress(True)
+Player.SetControl($player1, False)
+$winning_streak = 0
+$card_width = 51.0
+$card_height = 64.0
+$player_sprite1_x[0] = 233.0
+$player_sprite1_y[0] = 381.0
+$player_sprite1b_x[0] = 233.0
+$player_sprite1b_y[0] = 311.0
+$player_sprite2_x[0] = 233.0
+$player_sprite2_y[0] = 381.0
+$dealer_sprite_x[0] = 226.0
+$dealer_sprite_y[0] = 60.0
+$border_width = 6.0
+$screen_pos_x[0] = 29.0
+$screen_pos_y[0] = 220.0
+switch_start $current_Language total_jumps 1 default_jump 1 @BLACKJ_5271 jumps 3 @BLACKJ_5244 -1 @BLACKJ_5298 -1 @BLACKJ_5298 -1 @BLACKJ_5298 -1 @BLACKJ_5298 -1 @BLACKJ_5298 -1 @BLACKJ_5298
+
+:BLACKJ_5244
+$screen_pos_x[1] = 173.9799
+$screen_pos_y[1] = 409.0
+goto @BLACKJ_5298
+
+:BLACKJ_5271
+$screen_pos_x[1] = 157.0
+$screen_pos_y[1] = 409.0
+goto @BLACKJ_5298
+
+:BLACKJ_5298
+$screen_pos_x[2] = 36.0
+$screen_pos_y[2] = 240.0
+$screen_pos_x[3] = 36.0
+$screen_pos_y[3] = 260.0
+$screen_pos_x[4] = 36.0
+$screen_pos_y[4] = 290.0
+$screen_pos_x[5] = 36.0
+$screen_pos_y[5] = 310.0
+$screen_pos_x[6] = 36.0
+$screen_pos_y[6] = 340.0
+$screen_pos_x[7] = 36.0
+$screen_pos_y[7] = 360.0
+$screen_pos_x[8] = 29.0
+$screen_pos_y[8] = 220.0
+switch_start $current_Language total_jumps 4 default_jump 1 @BLACKJ_5555 jumps 1 @BLACKJ_5528 2 @BLACKJ_5501 3 @BLACKJ_5501 4 @BLACKJ_5501 -1 @BLACKJ_5582 -1 @BLACKJ_5582 -1 @BLACKJ_5582
+
+:BLACKJ_5501
+$screen_pos_x[9] = 169.0
+$screen_pos_y[9] = 409.0
+goto @BLACKJ_5582
+
+:BLACKJ_5528
+$screen_pos_x[9] = 177.0
+$screen_pos_y[9] = 409.0
+goto @BLACKJ_5582
+
+:BLACKJ_5555
+$screen_pos_x[9] = 157.0
+$screen_pos_y[9] = 409.0
+goto @BLACKJ_5582
+
+:BLACKJ_5582
+$screen_pos_x[10] = 36.0
+$screen_pos_y[10] = 240.0
+$screen_pos_x[11] = 36.0
+$screen_pos_y[11] = 260.0
+$screen_pos_x[12] = 36.0
+$screen_pos_y[12] = 290.0
+$screen_pos_x[13] = 40.0
+$screen_pos_y[13] = 310.0
+$screen_pos_x[14] = 40.0
+$screen_pos_y[14] = 310.0
+$screen_pos_x[15] = 36.0
+$screen_pos_y[15] = 340.0
+$screen_pos_x[16] = 40.0
+$screen_pos_y[16] = 360.0
+$screen_pos_x[17] = 40.0
+$screen_pos_y[17] = 360.0
+$screen_pos_x[18] = 40.0
+$screen_pos_y[18] = 360.0
+$screen_pos_x[19] = 40.0
+$screen_pos_y[19] = 360.0
+$screen_pos_x[20] = 40.0
+$screen_pos_y[20] = 382.0
+$screen_pos_x[21] = 40.0
+$screen_pos_y[21] = 382.0
+$screen_pos_x[22] = 209.0
+$screen_pos_y[22] = 293.0
+$screen_pos_x[23] = 209.0
+$screen_pos_y[23] = 361.0
+$screen_pos_x[24] = 1.0
+$screen_pos_y[24] = 4.0
+$screen_pos_x[25] = 320.0
+$screen_pos_y[25] = 197.0
+$screen_pos_x[26] = 320.0
+$screen_pos_y[26] = 233.0
+gosub @BLACKJ_32389
+Streaming.RequestModel(#BLCK_JACK)
+Streaming.RequestAnimation("CASINO")
+3@ += 1
+
+:BLACKJ_5950
+if 
+  3@ == 1
+goto_if_false @BLACKJ_6000
+if and
+  Streaming.HasModelLoaded(#BLCK_JACK)
+  Streaming.HasAnimationLoaded("CASINO")
+goto_if_false @BLACKJ_6000
+3@ += 1
+
+:BLACKJ_6000
+if 
+  3@ == 2
+goto_if_false @BLACKJ_7552
+Text.UseCommands(True)
+Txd.LoadDictionary('LD_CARD')
+Txd.LoadSprite("CD1C", 1)
+Txd.LoadSprite("CD2C", 2)
+Txd.LoadSprite("CD3C", 3)
+Txd.LoadSprite("CD4C", 4)
+Txd.LoadSprite("CD5C", 5)
+Txd.LoadSprite("CD6C", 6)
+Txd.LoadSprite("CD7C", 7)
+Txd.LoadSprite("CD8C", 8)
+Txd.LoadSprite("CD9C", 9)
+Txd.LoadSprite("CD10C", 10)
+Txd.LoadSprite("CD11C", 11)
+Txd.LoadSprite("CD12C", 12)
+Txd.LoadSprite("CD13C", 13)
+Txd.LoadSprite("CD1D", 14)
+Txd.LoadSprite("CD2D", 15)
+Txd.LoadSprite("CD3D", 16)
+Txd.LoadSprite("CD4D", 17)
+Txd.LoadSprite("CD5D", 18)
+Txd.LoadSprite("CD6D", 19)
+Txd.LoadSprite("CD7D", 20)
+Txd.LoadSprite("CD8D", 21)
+Txd.LoadSprite("CD9D", 22)
+Txd.LoadSprite("CD10D", 23)
+Txd.LoadSprite("CD11D", 24)
+Txd.LoadSprite("CD12D", 25)
+Txd.LoadSprite("CD13D", 26)
+Txd.LoadSprite("CD1S", 27)
+Txd.LoadSprite("CD2S", 28)
+Txd.LoadSprite("CD3S", 29)
+Txd.LoadSprite("CD4S", 30)
+Txd.LoadSprite("CD5S", 31)
+Txd.LoadSprite("CD6S", 32)
+Txd.LoadSprite("CD7S", 33)
+Txd.LoadSprite("CD8S", 34)
+Txd.LoadSprite("CD9S", 35)
+Txd.LoadSprite("CD10S", 36)
+Txd.LoadSprite("CD11S", 37)
+Txd.LoadSprite("CD12S", 38)
+Txd.LoadSprite("CD13S", 39)
+Txd.LoadSprite("CD1H", 40)
+Txd.LoadSprite("CD2H", 41)
+Txd.LoadSprite("CD3H", 42)
+Txd.LoadSprite("CD4H", 43)
+Txd.LoadSprite("CD5H", 44)
+Txd.LoadSprite("CD6H", 45)
+Txd.LoadSprite("CD7H", 46)
+Txd.LoadSprite("CD8H", 47)
+Txd.LoadSprite("CD9H", 48)
+Txd.LoadSprite("CD10H", 49)
+Txd.LoadSprite("CD11H", 50)
+Txd.LoadSprite("CD12H", 51)
+Txd.LoadSprite("CD13H", 52)
+Txd.LoadSprite("CDBACK", 53)
+CardDecks.Shuffle(6)
+Hud.DisplayRadar(False)
+switch_rubbish 0
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0, 0.4, 0.0)
+$heading = Object.GetHeading(0@)
+$heading += 180.0
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+$z += -0.4
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_6707
+Char.ClearTasksImmediately(1@)
+Char.SetCoordinates(1@, $x, $y, $z)
+Char.SetHeading(1@, $heading)
+
+:BLACKJ_6707
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.3192, -1.6334, 0.1415)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+$z += -0.4
+Char.SetCoordinates($scplayer, $x, $y, $z)
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_6798
+Task.TurnCharToFaceChar($scplayer, 1@)
+
+:BLACKJ_6798
+if 
+  Object.DoesExist(0@)
+goto_if_false @BLACKJ_6911
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, -0.4379, -2.243, 1.16)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, -0.2822, -1.3256, 0.7939)
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+
+:BLACKJ_6911
+if 
+  Object.DoesExist(0@)
+goto_if_false @BLACKJ_7545
+$bj_chip_set_default_z = -0.14
+$bj_chip_off_x[0] = 0.0
+$bj_chip_off_y[0] = -0.885
+set_var_float_to_var_float $bj_chip_off_z[0] = $bj_chip_set_default_z
+$bj_chip_off_x[1] = 0.045
+$bj_chip_off_y[1] = -0.935
+set_var_float_to_var_float $bj_chip_off_z[1] = $bj_chip_set_default_z
+$bj_chip_off_x[2] = -0.05
+$bj_chip_off_y[2] = -0.93
+set_var_float_to_var_float $bj_chip_off_z[2] = $bj_chip_set_default_z
+$bj_chip_off_x[3] = -0.01
+$bj_chip_off_y[3] = -0.98
+set_var_float_to_var_float $bj_chip_off_z[3] = $bj_chip_set_default_z
+$bj_chip_off_x[4] = 0.06
+$bj_chip_off_y[4] = -0.995
+set_var_float_to_var_float $bj_chip_off_z[4] = $bj_chip_set_default_z
+$bj_chip_off_x[5] = 0.02
+$bj_chip_off_y[5] = -1.075
+set_var_float_to_var_float $bj_chip_off_z[5] = $bj_chip_set_default_z
+$bj_chip_off_x[6] = -0.07
+$bj_chip_off_y[6] = -1.03
+set_var_float_to_var_float $bj_chip_off_z[6] = $bj_chip_set_default_z
+$bj_chip_off_x[7] = 0.065
+$bj_chip_off_y[7] = -1.05
+set_var_float_to_var_float $bj_chip_off_z[7] = $bj_chip_set_default_z
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, $bj_chip_off_x[0], $bj_chip_off_y[0], $bj_chip_set_default_z)
+$bj_chip_set[0] = Object.CreateNoOffset(#CHIP_STACK07, $x, $y, $z)
+Object.SetHeading($bj_chip_set[0], $heading)
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, $bj_chip_off_x[1], $bj_chip_off_y[1], $bj_chip_set_default_z)
+$bj_chip_set[1] = Object.CreateNoOffset(#CHIP_STACK08, $x, $y, $z)
+Object.SetHeading($bj_chip_set[1], $heading)
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, $bj_chip_off_x[2], $bj_chip_off_y[2], $bj_chip_set_default_z)
+$bj_chip_set[2] = Object.CreateNoOffset(#CHIP_STACK09, $x, $y, $z)
+Object.SetHeading($bj_chip_set[2], $heading)
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, $bj_chip_off_x[3], $bj_chip_off_y[3], $bj_chip_set_default_z)
+$bj_chip_set[3] = Object.CreateNoOffset(#CHIP_STACK10, $x, $y, $z)
+Object.SetHeading($bj_chip_set[3], $heading)
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, $bj_chip_off_x[4], $bj_chip_off_y[4], $bj_chip_set_default_z)
+$bj_chip_set[4] = Object.CreateNoOffset(#CHIP_STACK11, $x, $y, $z)
+Object.SetHeading($bj_chip_set[4], $heading)
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, $bj_chip_off_x[5], $bj_chip_off_y[5], $bj_chip_set_default_z)
+$bj_chip_set[5] = Object.CreateNoOffset(#CHIP_STACK12, $x, $y, $z)
+Object.SetHeading($bj_chip_set[5], $heading)
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, $bj_chip_off_x[6], $bj_chip_off_y[6], $bj_chip_set_default_z)
+$bj_chip_set[6] = Object.CreateNoOffset(#CHIP_STACK13, $x, $y, $z)
+Object.SetHeading($bj_chip_set[6], $heading)
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, $bj_chip_off_x[7], $bj_chip_off_y[7], $bj_chip_set_default_z)
+$bj_chip_set[7] = Object.CreateNoOffset(#CHIP_STACK14, $x, $y, $z)
+Object.SetHeading($bj_chip_set[7], $heading)
+
+:BLACKJ_7545
+3@ = 99
+
+:BLACKJ_7552
+if 
+  3@ == 99
+goto_if_false @BLACKJ_7714
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_7700
+10@ = Math.RandomIntInRange(0, 2)
+switch_start 10@ total_jumps 2 default_jump 0 @BLACKJ_7700 jumps 0 @BLACKJ_7658 1 @BLACKJ_7679 -1 @BLACKJ_7700 -1 @BLACKJ_7700 -1 @BLACKJ_7700 -1 @BLACKJ_7700 -1 @BLACKJ_7700
+
+:BLACKJ_7658
+Char.SetSayScript(1@, 5809, True, True, False)
+goto @BLACKJ_7700
+
+:BLACKJ_7679
+Char.SetSayScript(1@, 5810, True, True, False)
+goto @BLACKJ_7700
+
+:BLACKJ_7700
+2@ += 1
+3@ = 0
+
+:BLACKJ_7714
+return 
+
+:BLACKJ_7716
+if 
+  3@ == 0
+goto_if_false @BLACKJ_8323
+$next_card = 0
+10@ = 0
+
+:BLACKJ_7748
+if 
+  8 > 10@
+goto_if_false @BLACKJ_7813
+$dealers_cards(10@,8i) = 0
+$players_cards1(10@,8i) = 0
+$players_cards2(10@,8i) = 0
+10@ += 1
+goto @BLACKJ_7748
+
+:BLACKJ_7813
+$player_cannot_split = 0
+$player_has_split = 0
+$player_cannot_double = 0
+$player_has_doubled1 = 0
+$player_has_doubled2 = 0
+$player_has_stuck1 = 0
+$player_has_stuck2 = 0
+$player_has_hit = 0
+$dealer_has_stuck = 0
+$player_has_quit = 0
+$player_has_won1 = 0
+$player_has_won2 = 0
+$player_has_input = 0
+$dealer_wins_by_default = 0
+$player_total1 = 0
+$player_total1_b = 0
+$player_total2 = 0
+$player_total2_b = 0
+$dealer_total = 0
+$dealer_total2 = 0
+$dealer_got_ace = 0
+$player_got_ace1 = 0
+$player_got_ace2 = 0
+$bj_refund = 0
+if 
+  is_int_lvar_greater_than_int_var 30@ > $bj_initial_last_bet
+goto_if_false @BLACKJ_8008
+set_var_int_to_lvar_int $bj_initial_last_bet = 30@
+
+:BLACKJ_8008
+set_var_int_to_var_int $bj_bet1 = $bj_initial_last_bet
+$bj_bet2 = 0
+$bj_players_cash = Player.StoreScore($player1)
+gosub @BLACKJ_33768
+add_int_var_to_int_var $bj_players_cash += $casino_credit
+if 
+  is_int_var_greater_than_int_var $bj_bet1 > $bj_players_cash
+goto_if_false @BLACKJ_8073
+set_var_int_to_lvar_int $bj_bet1 = 30@
+
+:BLACKJ_8073
+if 
+  is_int_var_greater_than_int_var $bj_bet1 > $bj_players_cash
+goto_if_false @BLACKJ_8136
+Text.PrintNow('BJ_2', 5000, 1)
+gosub @BLACKJ_18303
+5@ = 1
+goto @BLACKJ_9613
+goto @BLACKJ_8305
+
+:BLACKJ_8136
+set_lvar_int_to_var_int 10@ = $bj_bet1
+10@ *= -1
+Player.AddScore($player1, 10@)
+set_var_int_to_var_int $bj_refund = $bj_bet1
+set_var_int_to_var_int $bj_initial_stake = $bj_bet1
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_8305
+10@ = Math.RandomIntInRange(0, 2)
+switch_start 10@ total_jumps 2 default_jump 0 @BLACKJ_8305 jumps 0 @BLACKJ_8263 1 @BLACKJ_8284 -1 @BLACKJ_8305 -1 @BLACKJ_8305 -1 @BLACKJ_8305 -1 @BLACKJ_8305 -1 @BLACKJ_8305
+
+:BLACKJ_8263
+Char.SetSayScript(1@, 5809, True, True, False)
+goto @BLACKJ_8305
+
+:BLACKJ_8284
+Char.SetSayScript(1@, 5810, True, True, False)
+goto @BLACKJ_8305
+
+:BLACKJ_8305
+terminate_all_scripts_with_this_name 'CASHWIN'
+3@ += 1
+
+:BLACKJ_8323
+if 
+  3@ == 1
+goto_if_false @BLACKJ_9542
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @BLACKJ_9467
+if and
+  not Text.IsThisHelpMessageBeingDisplayed('SGPUNT')
+  not Text.IsThisHelpMessageBeingDisplayed('SGGAMB')
+  not Text.IsThisHelpMessageBeingDisplayed('SGPROF')
+  not Text.IsThisHelpMessageBeingDisplayed('SGHIRO')
+goto_if_false @BLACKJ_8438
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @BLACKJ_8438
+Text.SetHelpMessageBoxSize(200)
+Text.PrintHelpForever('BJ_H1')
+
+:BLACKJ_8438
+$bj_players_cash = Player.StoreScore($player1)
+gosub @BLACKJ_33768
+add_int_var_to_int_var $bj_players_cash += $casino_credit
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @BLACKJ_8887
+if and
+  24@ <> 1
+  24@ <> -1
+goto_if_false @BLACKJ_8836
+if 
+  $bj_bet1 >= 10000
+goto_if_false @BLACKJ_8537
+$bj_bet_step = 1000
+goto @BLACKJ_8641
+
+:BLACKJ_8537
+if 
+  $bj_bet1 >= 1000
+goto_if_false @BLACKJ_8570
+$bj_bet_step = 100
+goto @BLACKJ_8641
+
+:BLACKJ_8570
+if 
+  $bj_bet1 >= 100
+goto_if_false @BLACKJ_8602
+$bj_bet_step = 10
+goto @BLACKJ_8641
+
+:BLACKJ_8602
+if 
+  $bj_bet1 == 0
+goto_if_false @BLACKJ_8634
+$bj_bet_step = 2
+goto @BLACKJ_8641
+
+:BLACKJ_8634
+$bj_bet_step = 1
+
+:BLACKJ_8641
+if 
+  is_int_var_greater_than_int_var $bj_bet_step > $bj_players_cash
+goto_if_false @BLACKJ_8668
+set_var_int_to_var_int $bj_bet_step = $bj_players_cash
+
+:BLACKJ_8668
+set_lvar_int_to_var_int 10@ = $bj_bet1
+add_int_var_to_int_lvar 10@ += $bj_bet_step
+if 
+  is_int_lvar_greater_than_int_lvar 10@ > 29@
+goto_if_false @BLACKJ_8719
+set_var_int_to_lvar_int $bj_bet_step = 29@
+sub_int_var_from_int_var $bj_bet_step -= $bj_bet1
+
+:BLACKJ_8719
+if 
+  0 > $bj_bet_step
+goto_if_false @BLACKJ_8744
+$bj_bet_step *= -1
+
+:BLACKJ_8744
+add_int_var_to_int_var $bj_bet1 += $bj_bet_step
+add_int_var_to_int_var $bj_refund += $bj_bet_step
+add_int_var_to_int_var $bj_initial_stake += $bj_bet_step
+$bj_bet_step *= -1
+Player.AddScore($player1, $bj_bet_step)
+24@ += 1
+if 
+  24@ > 1
+goto_if_false @BLACKJ_8822
+24@ = 2
+goto @BLACKJ_8829
+
+:BLACKJ_8822
+TIMERA = 0
+
+:BLACKJ_8829
+goto @BLACKJ_8880
+
+:BLACKJ_8836
+if 
+  24@ == 1
+goto_if_false @BLACKJ_8880
+if 
+  TIMERA > 500
+goto_if_false @BLACKJ_8880
+24@ = 2
+
+:BLACKJ_8880
+goto @BLACKJ_9286
+
+:BLACKJ_8887
+if 
+  25@ <> 0
+goto_if_false @BLACKJ_8912
+25@ = 0
+
+:BLACKJ_8912
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @BLACKJ_9261
+if 
+  25@ <> 1
+goto_if_false @BLACKJ_9228
+if 
+  $bj_bet1 > 10000
+goto_if_false @BLACKJ_8981
+$bj_bet_step = -1000
+goto @BLACKJ_9053
+
+:BLACKJ_8981
+if 
+  $bj_bet1 > 1000
+goto_if_false @BLACKJ_9014
+$bj_bet_step = -100
+goto @BLACKJ_9053
+
+:BLACKJ_9014
+if 
+  $bj_bet1 > 100
+goto_if_false @BLACKJ_9046
+$bj_bet_step = -10
+goto @BLACKJ_9053
+
+:BLACKJ_9046
+$bj_bet_step = -1
+
+:BLACKJ_9053
+set_lvar_int_to_var_int 10@ = $bj_bet1
+add_int_var_to_int_var $bj_bet1 += $bj_bet_step
+if 
+  is_int_lvar_greater_than_int_var 30@ > $bj_bet1
+goto_if_false @BLACKJ_9110
+$bj_bet1 = 0
+set_var_int_to_lvar_int $bj_bet_step = 10@
+$bj_bet_step *= -1
+
+:BLACKJ_9110
+if 
+  is_int_lvar_greater_than_int_var 30@ > $bj_bet1
+goto_if_false @BLACKJ_9144
+set_var_int_to_lvar_int $bj_bet1 = 30@
+goto @BLACKJ_9175
+
+:BLACKJ_9144
+$bj_bet_step *= -1
+sub_int_var_from_int_var $bj_refund -= $bj_bet_step
+sub_int_var_from_int_var $bj_initial_stake -= $bj_bet_step
+Player.AddScore($player1, $bj_bet_step)
+
+:BLACKJ_9175
+25@ += 1
+if 
+  25@ > 1
+goto_if_false @BLACKJ_9214
+25@ = 2
+goto @BLACKJ_9221
+
+:BLACKJ_9214
+TIMERA = 0
+
+:BLACKJ_9221
+goto @BLACKJ_9254
+
+:BLACKJ_9228
+if 
+  TIMERA > 500
+goto_if_false @BLACKJ_9254
+25@ = 2
+
+:BLACKJ_9254
+goto @BLACKJ_9286
+
+:BLACKJ_9261
+if 
+  25@ <> 0
+goto_if_false @BLACKJ_9286
+25@ = 0
+
+:BLACKJ_9286
+if 
+  23@ == 0
+goto_if_false @BLACKJ_9404
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BLACKJ_9397
+set_var_int_to_var_int $bj_initial_last_bet = $bj_bet1
+Stat.IncrementInt($bj_bet1, 35)
+cset_lvar_float_to_var_int 13@ = integer $bj_bet1
+13@ *= 0.001
+Stat.IncrementFloat(13@, 81)
+$bj_refund = 0
+set_var_int_to_var_int $bj_last_bet = $bj_bet1
+gosub @BLACKJ_24857
+23@ = 1
+3@ = 99
+
+:BLACKJ_9397
+goto @BLACKJ_9428
+
+:BLACKJ_9404
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BLACKJ_9428
+23@ = 0
+
+:BLACKJ_9428
+gosub @BLACKJ_23204
+if 
+  3@ <> 99
+goto_if_false @BLACKJ_9460
+3@ += 1
+
+:BLACKJ_9460
+goto @BLACKJ_9542
+
+:BLACKJ_9467
+if 
+  23@ == 0
+goto_if_false @BLACKJ_9518
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BLACKJ_9511
+23@ = 1
+Text.ClearPrints
+
+:BLACKJ_9511
+goto @BLACKJ_9542
+
+:BLACKJ_9518
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BLACKJ_9542
+23@ = 0
+
+:BLACKJ_9542
+if 
+  3@ == 2
+goto_if_false @BLACKJ_9574
+gosub @BLACKJ_24857
+3@ = 1
+
+:BLACKJ_9574
+if 
+  3@ == 99
+goto_if_false @BLACKJ_9613
+gosub @BLACKJ_10563
+3@ = 0
+2@ += 1
+
+:BLACKJ_9613
+return 
+
+:BLACKJ_9615
+if 
+  3@ == 0
+goto_if_false @BLACKJ_9673
+gosub @BLACKJ_29764
+if 
+  $next_card <> 0
+goto_if_false @BLACKJ_9666
+set_var_int_to_var_int $players_cards1[0] = $next_card
+
+:BLACKJ_9666
+3@ += 1
+
+:BLACKJ_9673
+if 
+  3@ == 1
+goto_if_false @BLACKJ_9743
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_9743
+10@ = Char.GetScriptTaskStatus(1@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BLACKJ_9743
+3@ += 1
+
+:BLACKJ_9743
+if 
+  3@ == 2
+goto_if_false @BLACKJ_9801
+gosub @BLACKJ_29764
+if 
+  $next_card <> 0
+goto_if_false @BLACKJ_9794
+set_var_int_to_var_int $dealers_cards[0] = $next_card
+
+:BLACKJ_9794
+3@ += 1
+
+:BLACKJ_9801
+if 
+  3@ == 3
+goto_if_false @BLACKJ_9871
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_9871
+10@ = Char.GetScriptTaskStatus(1@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BLACKJ_9871
+3@ += 1
+
+:BLACKJ_9871
+if 
+  3@ == 4
+goto_if_false @BLACKJ_9929
+gosub @BLACKJ_29764
+if 
+  $next_card <> 0
+goto_if_false @BLACKJ_9922
+set_var_int_to_var_int $players_cards1[1] = $next_card
+
+:BLACKJ_9922
+3@ += 1
+
+:BLACKJ_9929
+if 
+  3@ == 5
+goto_if_false @BLACKJ_9999
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_9999
+10@ = Char.GetScriptTaskStatus(1@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BLACKJ_9999
+3@ += 1
+
+:BLACKJ_9999
+if 
+  3@ == 6
+goto_if_false @BLACKJ_10057
+gosub @BLACKJ_29764
+if 
+  $next_card <> 0
+goto_if_false @BLACKJ_10050
+set_var_int_to_var_int $dealers_cards[1] = $next_card
+
+:BLACKJ_10050
+3@ += 1
+
+:BLACKJ_10057
+if 
+  3@ == 7
+goto_if_false @BLACKJ_10127
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_10127
+10@ = Char.GetScriptTaskStatus(1@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BLACKJ_10127
+3@ = 99
+
+:BLACKJ_10127
+if 
+  3@ == 99
+goto_if_false @BLACKJ_10166
+21@ = 0
+3@ = 0
+2@ += 1
+
+:BLACKJ_10166
+gosub @BLACKJ_31220
+gosub @BLACKJ_29865
+gosub @BLACKJ_25143
+return 
+
+:BLACKJ_10189
+gosub @BLACKJ_10563
+if 
+  3@ == 0
+goto_if_false @BLACKJ_10352
+gosub @BLACKJ_31220
+$player_got_bj = 0
+$dealer_got_bj = 0
+if or
+  $player_total1 == 21
+  $dealer_total == 21
+goto_if_false @BLACKJ_10345
+if 
+  $player_total1 == 21
+goto_if_false @BLACKJ_10285
+$player_got_bj = 1
+
+:BLACKJ_10285
+if 
+  $dealer_total == 21
+goto_if_false @BLACKJ_10310
+$dealer_got_bj = 1
+
+:BLACKJ_10310
+$player_has_stuck1 = 1
+$dealer_has_stuck = 1
+2@ += 2
+3@ = 0
+goto @BLACKJ_10352
+
+:BLACKJ_10345
+3@ = 99
+
+:BLACKJ_10352
+if 
+  3@ == 99
+goto_if_false @BLACKJ_10398
+3@ = 0
+4@ = 0
+21@ = 0
+2@ += 1
+
+:BLACKJ_10398
+gosub @BLACKJ_31220
+gosub @BLACKJ_29865
+gosub @BLACKJ_25143
+if 
+  $player_got_bj == 0
+goto_if_false @BLACKJ_10451
+gosub @BLACKJ_18456
+goto @BLACKJ_10561
+
+:BLACKJ_10451
+if 
+  $dealer_total <> 21
+goto_if_false @BLACKJ_10554
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_10547
+10@ = Math.RandomIntInRange(0, 2)
+if 
+  10@ == 0
+goto_if_false @BLACKJ_10533
+Char.SetSayScript(1@, 5811, True, True, False)
+goto @BLACKJ_10547
+
+:BLACKJ_10533
+Char.SetSayScript(1@, 5812, True, True, False)
+
+:BLACKJ_10547
+goto @BLACKJ_10561
+
+:BLACKJ_10554
+gosub @BLACKJ_18456
+
+:BLACKJ_10561
+return 
+
+:BLACKJ_10563
+if and
+  not Text.IsThisHelpMessageBeingDisplayed('SGPUNT')
+  not Text.IsThisHelpMessageBeingDisplayed('SGGAMB')
+  not Text.IsThisHelpMessageBeingDisplayed('SGPROF')
+  not Text.IsThisHelpMessageBeingDisplayed('SGHIRO')
+goto_if_false @BLACKJ_10620
+Text.ClearHelp
+
+:BLACKJ_10620
+return 
+
+:BLACKJ_10622
+if 
+  3@ == 0
+goto_if_false @BLACKJ_12235
+if 
+  $player_cannot_split == 0
+goto_if_false @BLACKJ_10808
+set_var_int_to_var_int $in_card_value = $players_cards1[0]
+gosub @BLACKJ_32241
+set_lvar_int_to_var_int 10@ = $out_card_value
+set_var_int_to_var_int $in_card_value = $players_cards1[1]
+gosub @BLACKJ_32241
+set_lvar_int_to_var_int 11@ = $out_card_value
+if 
+  is_int_lvar_equal_to_int_lvar 10@ == 11@
+goto_if_false @BLACKJ_10762
+if 
+  $players_cards1[2] <> 0
+goto_if_false @BLACKJ_10755
+gosub @BLACKJ_10563
+$player_cannot_split = 1
+
+:BLACKJ_10755
+goto @BLACKJ_10776
+
+:BLACKJ_10762
+gosub @BLACKJ_10563
+$player_cannot_split = 1
+
+:BLACKJ_10776
+if 
+  $player_has_split <> 0
+goto_if_false @BLACKJ_10808
+gosub @BLACKJ_10563
+$player_cannot_split = 1
+
+:BLACKJ_10808
+if 
+  $player_cannot_double == 0
+goto_if_false @BLACKJ_11140
+if 
+  $player_has_split == 0
+goto_if_false @BLACKJ_10939
+if 
+  $players_cards1[2] <> 0
+goto_if_false @BLACKJ_10876
+gosub @BLACKJ_10563
+$player_cannot_double = 1
+
+:BLACKJ_10876
+$bj_players_cash = Player.StoreScore($player1)
+gosub @BLACKJ_33768
+add_int_var_to_int_var $bj_players_cash += $casino_credit
+if 
+  is_int_var_greater_than_int_var $bj_bet1 > $bj_players_cash
+goto_if_false @BLACKJ_10932
+gosub @BLACKJ_10563
+$player_cannot_double = 1
+
+:BLACKJ_10932
+goto @BLACKJ_11140
+
+:BLACKJ_10939
+if 
+  $player_has_stuck1 == 0
+goto_if_false @BLACKJ_11052
+if 
+  $players_cards1[2] <> 0
+goto_if_false @BLACKJ_10989
+gosub @BLACKJ_10563
+$player_cannot_double = 1
+
+:BLACKJ_10989
+$bj_players_cash = Player.StoreScore($player1)
+gosub @BLACKJ_33768
+add_int_var_to_int_var $bj_players_cash += $casino_credit
+if 
+  is_int_var_greater_than_int_var $bj_bet1 > $bj_players_cash
+goto_if_false @BLACKJ_11045
+gosub @BLACKJ_10563
+$player_cannot_double = 1
+
+:BLACKJ_11045
+goto @BLACKJ_11140
+
+:BLACKJ_11052
+if 
+  $players_cards2[2] <> 0
+goto_if_false @BLACKJ_11084
+gosub @BLACKJ_10563
+$player_cannot_double = 1
+
+:BLACKJ_11084
+$bj_players_cash = Player.StoreScore($player1)
+gosub @BLACKJ_33768
+add_int_var_to_int_var $bj_players_cash += $casino_credit
+if 
+  is_int_var_greater_than_int_var $bj_bet2 > $bj_players_cash
+goto_if_false @BLACKJ_11140
+gosub @BLACKJ_10563
+$player_cannot_double = 1
+
+:BLACKJ_11140
+if and
+  not Text.IsThisHelpMessageBeingDisplayed('SGPUNT')
+  not Text.IsThisHelpMessageBeingDisplayed('SGGAMB')
+  not Text.IsThisHelpMessageBeingDisplayed('SGPROF')
+  not Text.IsThisHelpMessageBeingDisplayed('SGHIRO')
+goto_if_false @BLACKJ_11744
+if and
+  $player_cannot_split == 0
+  $player_cannot_double == 0
+goto_if_false @BLACKJ_11256
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @BLACKJ_11249
+Text.SetHelpMessageBoxSize(128)
+Text.PrintHelpForever('BJ_H3')
+
+:BLACKJ_11249
+21@ = 1
+
+:BLACKJ_11256
+if and
+  $player_cannot_split == 1
+  $player_cannot_double == 0
+goto_if_false @BLACKJ_11317
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @BLACKJ_11310
+Text.SetHelpMessageBoxSize(128)
+Text.PrintHelpForever('BJ_H2')
+
+:BLACKJ_11310
+21@ = 2
+
+:BLACKJ_11317
+if and
+  $player_cannot_split == 1
+  $player_cannot_double == 1
+goto_if_false @BLACKJ_11378
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @BLACKJ_11371
+Text.SetHelpMessageBoxSize(128)
+Text.PrintHelpForever('BJ_H5')
+
+:BLACKJ_11371
+21@ = 3
+
+:BLACKJ_11378
+if and
+  $player_cannot_split == 1
+  $player_cannot_double == 0
+goto_if_false @BLACKJ_11439
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @BLACKJ_11432
+Text.SetHelpMessageBoxSize(128)
+Text.PrintHelpForever('BJ_H2')
+
+:BLACKJ_11432
+21@ = 2
+
+:BLACKJ_11439
+if and
+  $player_cannot_split == 1
+  $player_cannot_double == 1
+goto_if_false @BLACKJ_11500
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @BLACKJ_11493
+Text.SetHelpMessageBoxSize(128)
+Text.PrintHelpForever('BJ_H5')
+
+:BLACKJ_11493
+21@ = 3
+
+:BLACKJ_11500
+if and
+  $player_cannot_split == 0
+  $player_cannot_double == 0
+goto_if_false @BLACKJ_11561
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @BLACKJ_11554
+Text.SetHelpMessageBoxSize(128)
+Text.PrintHelpForever('BJ_H3')
+
+:BLACKJ_11554
+21@ = 1
+
+:BLACKJ_11561
+if and
+  $player_cannot_split == 1
+  $player_cannot_double == 1
+goto_if_false @BLACKJ_11622
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @BLACKJ_11615
+Text.SetHelpMessageBoxSize(128)
+Text.PrintHelpForever('BJ_H5')
+
+:BLACKJ_11615
+21@ = 3
+
+:BLACKJ_11622
+if and
+  $player_cannot_split == 0
+  $player_cannot_double == 0
+goto_if_false @BLACKJ_11683
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @BLACKJ_11676
+Text.SetHelpMessageBoxSize(128)
+Text.PrintHelpForever('BJ_H3')
+
+:BLACKJ_11676
+21@ = 1
+
+:BLACKJ_11683
+if and
+  $player_cannot_split == 1
+  $player_cannot_double == 0
+goto_if_false @BLACKJ_11744
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @BLACKJ_11737
+Text.SetHelpMessageBoxSize(128)
+Text.PrintHelpForever('BJ_H2')
+
+:BLACKJ_11737
+21@ = 2
+
+:BLACKJ_11744
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @BLACKJ_12160
+if 
+  25@ == 0
+goto_if_false @BLACKJ_11834
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @BLACKJ_11827
+$player_has_hit = 1
+4@ = 0
+3@ += 1
+25@ = 1
+goto @BLACKJ_12235
+
+:BLACKJ_11827
+goto @BLACKJ_11858
+
+:BLACKJ_11834
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @BLACKJ_11858
+25@ = 0
+
+:BLACKJ_11858
+if 
+  $player_cannot_split == 0
+goto_if_false @BLACKJ_11939
+if 
+  $player_has_split == 0
+goto_if_false @BLACKJ_11939
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.RightShoulder2)
+goto_if_false @BLACKJ_11939
+$player_has_split = 1
+3@ += 1
+4@ = 0
+goto @BLACKJ_12235
+
+:BLACKJ_11939
+if 
+  $player_cannot_double == 0
+goto_if_false @BLACKJ_12027
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @BLACKJ_12027
+if 
+  $player_has_stuck1 == 0
+goto_if_false @BLACKJ_12006
+$player_has_doubled1 = 1
+goto @BLACKJ_12013
+
+:BLACKJ_12006
+$player_has_doubled2 = 1
+
+:BLACKJ_12013
+3@ += 1
+goto @BLACKJ_12235
+
+:BLACKJ_12027
+if 
+  23@ == 0
+goto_if_false @BLACKJ_12129
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BLACKJ_12122
+if 
+  $player_has_stuck1 == 0
+goto_if_false @BLACKJ_12094
+$player_has_stuck1 = 1
+goto @BLACKJ_12101
+
+:BLACKJ_12094
+$player_has_stuck2 = 1
+
+:BLACKJ_12101
+23@ = 1
+3@ += 1
+goto @BLACKJ_12235
+
+:BLACKJ_12122
+goto @BLACKJ_12153
+
+:BLACKJ_12129
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BLACKJ_12153
+23@ = 0
+
+:BLACKJ_12153
+goto @BLACKJ_12235
+
+:BLACKJ_12160
+if 
+  25@ == 0
+goto_if_false @BLACKJ_12211
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @BLACKJ_12204
+25@ = 1
+Text.ClearPrints
+
+:BLACKJ_12204
+goto @BLACKJ_12235
+
+:BLACKJ_12211
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @BLACKJ_12235
+25@ = 0
+
+:BLACKJ_12235
+if 
+  3@ == 1
+goto_if_false @BLACKJ_15204
+if 
+  $player_has_hit == 1
+goto_if_false @BLACKJ_12734
+if 
+  4@ == 0
+goto_if_false @BLACKJ_12303
+gosub @BLACKJ_29764
+4@ += 1
+
+:BLACKJ_12303
+if 
+  4@ == 1
+goto_if_false @BLACKJ_12373
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_12373
+10@ = Char.GetScriptTaskStatus(1@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BLACKJ_12373
+4@ += 1
+
+:BLACKJ_12373
+if 
+  4@ == 2
+goto_if_false @BLACKJ_12702
+if 
+  $player_has_split == 0
+goto_if_false @BLACKJ_12503
+10@ = 0
+
+:BLACKJ_12416
+if 
+  8 > 10@
+goto_if_false @BLACKJ_12496
+if 
+  $players_cards1(10@,8i) == 0
+goto_if_false @BLACKJ_12482
+set_var_int_to_var_int $players_cards1(10@,8i) = $next_card
+10@ = 8
+4@ = 99
+
+:BLACKJ_12482
+10@ += 1
+goto @BLACKJ_12416
+
+:BLACKJ_12496
+goto @BLACKJ_12702
+
+:BLACKJ_12503
+if 
+  $player_has_stuck1 == 0
+goto_if_false @BLACKJ_12615
+10@ = 0
+
+:BLACKJ_12528
+if 
+  8 > 10@
+goto_if_false @BLACKJ_12608
+if 
+  $players_cards1(10@,8i) == 0
+goto_if_false @BLACKJ_12594
+set_var_int_to_var_int $players_cards1(10@,8i) = $next_card
+10@ = 8
+4@ = 99
+
+:BLACKJ_12594
+10@ += 1
+goto @BLACKJ_12528
+
+:BLACKJ_12608
+goto @BLACKJ_12702
+
+:BLACKJ_12615
+10@ = 0
+
+:BLACKJ_12622
+if 
+  8 > 10@
+goto_if_false @BLACKJ_12702
+if 
+  $players_cards2(10@,8i) == 0
+goto_if_false @BLACKJ_12688
+set_var_int_to_var_int $players_cards2(10@,8i) = $next_card
+10@ = 8
+4@ = 99
+
+:BLACKJ_12688
+10@ += 1
+goto @BLACKJ_12622
+
+:BLACKJ_12702
+if 
+  4@ == 99
+goto_if_false @BLACKJ_12734
+$player_has_hit = 0
+gosub @BLACKJ_18456
+
+:BLACKJ_12734
+10@ = 0
+if 
+  $player_has_split == 1
+goto_if_false @BLACKJ_12791
+if or
+  $players_cards2[0] == 0
+  $players_cards1[1] == 0
+goto_if_false @BLACKJ_12791
+10@ = 1
+
+:BLACKJ_12791
+if and
+  $player_has_split == 1
+  10@ == 1
+goto_if_false @BLACKJ_13266
+if 
+  4@ == 0
+goto_if_false @BLACKJ_12943
+cset_var_float_to_var_int $bj_half_bet_f = integer $bj_bet1
+cset_var_int_to_var_float $bj_half_bet = float $bj_half_bet_f
+$bj_players_cash = Player.StoreScore($player1)
+gosub @BLACKJ_33768
+add_int_var_to_int_var $bj_players_cash += $casino_credit
+if 
+  is_int_var_greater_than_int_var $bj_half_bet > $bj_players_cash
+goto_if_false @BLACKJ_12936
+$player_has_split = 0
+4@ = 99
+Text.PrintNow('BJ_3', 5000, 1)
+gosub @BLACKJ_18303
+goto @BLACKJ_12943
+
+:BLACKJ_12936
+4@ += 1
+
+:BLACKJ_12943
+if 
+  4@ == 1
+goto_if_false @BLACKJ_13045
+Stat.IncrementInt($bj_half_bet, 35)
+cset_lvar_float_to_var_int 13@ = integer $bj_half_bet
+13@ *= 0.001
+Stat.IncrementFloat(13@, 81)
+$bj_half_bet *= -1
+Player.AddScore($player1, $bj_half_bet)
+$bj_half_bet *= -1
+add_int_var_to_int_var $bj_bet1 += $bj_half_bet
+add_int_var_to_int_var $bj_initial_stake += $bj_half_bet
+gosub @BLACKJ_23204
+4@ += 1
+
+:BLACKJ_13045
+if 
+  4@ == 2
+goto_if_false @BLACKJ_13100
+set_var_int_to_var_int $players_cards2[0] = $players_cards1[0]
+set_var_int_to_var_int $players_cards1[0] = $players_cards1[1]
+$players_cards1[1] = 0
+gosub @BLACKJ_29764
+4@ += 1
+
+:BLACKJ_13100
+if 
+  4@ == 3
+goto_if_false @BLACKJ_13178
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_13178
+10@ = Char.GetScriptTaskStatus(1@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BLACKJ_13178
+set_var_int_to_var_int $players_cards1[1] = $next_card
+4@ += 1
+
+:BLACKJ_13178
+if 
+  4@ == 4
+goto_if_false @BLACKJ_13266
+cset_var_float_to_var_int $bj_half_bet_f = integer $bj_bet1
+$bj_half_bet_f /= 2.0
+cset_var_int_to_var_float $bj_half_bet = float $bj_half_bet_f
+set_var_int_to_var_int $bj_bet1 = $bj_half_bet
+set_var_int_to_var_int $bj_bet2 = $bj_half_bet
+$player_cannot_double = 0
+gosub @BLACKJ_10563
+gosub @BLACKJ_18456
+4@ = 99
+
+:BLACKJ_13266
+if and
+  $player_has_split == 1
+  $player_has_stuck1 == 1
+  $players_cards2[1] == 0
+goto_if_false @BLACKJ_13472
+if 
+  4@ == 0
+goto_if_false @BLACKJ_13330
+gosub @BLACKJ_29764
+4@ += 1
+
+:BLACKJ_13330
+if 
+  4@ == 1
+goto_if_false @BLACKJ_13400
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_13400
+10@ = Char.GetScriptTaskStatus(1@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BLACKJ_13400
+4@ += 1
+
+:BLACKJ_13400
+if 
+  4@ == 2
+goto_if_false @BLACKJ_13454
+set_var_int_to_var_int $players_cards2[1] = $next_card
+$player_cannot_double = 0
+gosub @BLACKJ_10563
+gosub @BLACKJ_18456
+4@ = 99
+
+:BLACKJ_13454
+if 
+  4@ == 99
+goto_if_false @BLACKJ_13472
+
+:BLACKJ_13472
+if 
+  $player_has_split == 0
+goto_if_false @BLACKJ_13875
+if and
+  $player_has_doubled1 == 1
+  $player_has_stuck1 == 0
+goto_if_false @BLACKJ_13868
+if 
+  4@ == 0
+goto_if_false @BLACKJ_13642
+cset_var_float_to_var_int $bj_half_bet_f = integer $bj_bet1
+cset_var_int_to_var_float $bj_half_bet = float $bj_half_bet_f
+$bj_players_cash = Player.StoreScore($player1)
+gosub @BLACKJ_33768
+add_int_var_to_int_var $bj_players_cash += $casino_credit
+if 
+  is_int_var_greater_than_int_var $bj_half_bet > $bj_players_cash
+goto_if_false @BLACKJ_13635
+$player_has_doubled1 = 0
+4@ = 99
+Text.PrintNow('BJ_3', 5000, 1)
+gosub @BLACKJ_18303
+goto @BLACKJ_13642
+
+:BLACKJ_13635
+4@ += 1
+
+:BLACKJ_13642
+if 
+  4@ == 1
+goto_if_false @BLACKJ_13751
+Stat.IncrementInt($bj_half_bet, 35)
+cset_lvar_float_to_var_int 13@ = integer $bj_half_bet
+13@ *= 0.001
+Stat.IncrementFloat(13@, 81)
+$bj_half_bet *= -1
+Player.AddScore($player1, $bj_half_bet)
+$bj_half_bet *= -1
+add_int_var_to_int_var $bj_bet1 += $bj_half_bet
+add_int_var_to_int_var $bj_initial_stake += $bj_half_bet
+gosub @BLACKJ_23204
+gosub @BLACKJ_29764
+4@ += 1
+
+:BLACKJ_13751
+if 
+  4@ == 2
+goto_if_false @BLACKJ_13821
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_13821
+10@ = Char.GetScriptTaskStatus(1@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BLACKJ_13821
+4@ += 1
+
+:BLACKJ_13821
+if 
+  4@ == 3
+goto_if_false @BLACKJ_13868
+set_var_int_to_var_int $players_cards1[2] = $next_card
+$player_has_stuck1 = 1
+gosub @BLACKJ_18456
+4@ = 99
+
+:BLACKJ_13868
+goto @BLACKJ_14638
+
+:BLACKJ_13875
+if and
+  $player_has_doubled1 == 1
+  $player_has_stuck1 == 0
+goto_if_false @BLACKJ_14260
+if 
+  4@ == 0
+goto_if_false @BLACKJ_14027
+cset_var_float_to_var_int $bj_half_bet_f = integer $bj_bet1
+cset_var_int_to_var_float $bj_half_bet = float $bj_half_bet_f
+$bj_players_cash = Player.StoreScore($player1)
+gosub @BLACKJ_33768
+add_int_var_to_int_var $bj_players_cash += $casino_credit
+if 
+  is_int_var_greater_than_int_var $bj_half_bet > $bj_players_cash
+goto_if_false @BLACKJ_14020
+$player_has_doubled1 = 0
+Text.PrintNow('BJ_3', 5000, 1)
+gosub @BLACKJ_18303
+4@ = 99
+goto @BLACKJ_14027
+
+:BLACKJ_14020
+4@ += 1
+
+:BLACKJ_14027
+if 
+  4@ == 1
+goto_if_false @BLACKJ_14136
+Stat.IncrementInt($bj_half_bet, 35)
+cset_lvar_float_to_var_int 13@ = integer $bj_half_bet
+13@ *= 0.001
+Stat.IncrementFloat(13@, 81)
+$bj_half_bet *= -1
+Player.AddScore($player1, $bj_half_bet)
+$bj_half_bet *= -1
+add_int_var_to_int_var $bj_bet1 += $bj_half_bet
+add_int_var_to_int_var $bj_initial_stake += $bj_half_bet
+gosub @BLACKJ_23204
+gosub @BLACKJ_29764
+4@ += 1
+
+:BLACKJ_14136
+if 
+  4@ == 2
+goto_if_false @BLACKJ_14206
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_14206
+10@ = Char.GetScriptTaskStatus(1@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BLACKJ_14206
+4@ += 1
+
+:BLACKJ_14206
+if 
+  4@ == 3
+goto_if_false @BLACKJ_14260
+set_var_int_to_var_int $players_cards1[2] = $next_card
+$player_has_stuck1 = 1
+gosub @BLACKJ_18456
+4@ = 0
+goto @BLACKJ_13266
+
+:BLACKJ_14260
+if and
+  $player_has_doubled2 == 1
+  $player_has_stuck2 == 0
+goto_if_false @BLACKJ_14638
+if 
+  4@ == 0
+goto_if_false @BLACKJ_14412
+cset_var_float_to_var_int $bj_half_bet_f = integer $bj_bet1
+cset_var_int_to_var_float $bj_half_bet = float $bj_half_bet_f
+$bj_players_cash = Player.StoreScore($player1)
+gosub @BLACKJ_33768
+add_int_var_to_int_var $bj_players_cash += $casino_credit
+if 
+  is_int_var_greater_than_int_var $bj_half_bet > $bj_players_cash
+goto_if_false @BLACKJ_14405
+$player_has_doubled2 = 0
+4@ = 99
+Text.PrintNow('BJ_3', 5000, 1)
+gosub @BLACKJ_18303
+goto @BLACKJ_14412
+
+:BLACKJ_14405
+4@ += 1
+
+:BLACKJ_14412
+if 
+  4@ == 1
+goto_if_false @BLACKJ_14521
+Stat.IncrementInt($bj_half_bet, 35)
+cset_lvar_float_to_var_int 13@ = integer $bj_half_bet
+13@ *= 0.001
+Stat.IncrementFloat(13@, 81)
+$bj_half_bet *= -1
+Player.AddScore($player1, $bj_half_bet)
+$bj_half_bet *= -1
+add_int_var_to_int_var $bj_bet2 += $bj_half_bet
+add_int_var_to_int_var $bj_initial_stake += $bj_half_bet
+gosub @BLACKJ_23204
+gosub @BLACKJ_29764
+4@ += 1
+
+:BLACKJ_14521
+if 
+  4@ == 2
+goto_if_false @BLACKJ_14591
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_14591
+10@ = Char.GetScriptTaskStatus(1@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BLACKJ_14591
+4@ += 1
+
+:BLACKJ_14591
+if 
+  4@ == 3
+goto_if_false @BLACKJ_14638
+set_var_int_to_var_int $players_cards2[2] = $next_card
+$player_has_stuck2 = 1
+gosub @BLACKJ_18456
+4@ = 99
+
+:BLACKJ_14638
+gosub @BLACKJ_31220
+if 
+  $player_has_split == 0
+goto_if_false @BLACKJ_14720
+if 
+  $player_total1 > 20
+goto_if_false @BLACKJ_14688
+$player_has_stuck1 = 1
+
+:BLACKJ_14688
+if 
+  $players_cards1[4] <> 0
+goto_if_false @BLACKJ_14713
+$player_has_stuck1 = 1
+
+:BLACKJ_14713
+goto @BLACKJ_14866
+
+:BLACKJ_14720
+if 
+  $player_has_stuck1 == 0
+goto_if_false @BLACKJ_14816
+if 
+  $player_total1 > 20
+goto_if_false @BLACKJ_14777
+$player_has_stuck1 = 1
+4@ = 0
+goto @BLACKJ_13266
+
+:BLACKJ_14777
+if 
+  $players_cards1[4] <> 0
+goto_if_false @BLACKJ_14816
+$player_has_stuck1 = 1
+4@ = 0
+goto @BLACKJ_13266
+
+:BLACKJ_14816
+if 
+  $player_total2 > 20
+goto_if_false @BLACKJ_14841
+$player_has_stuck2 = 1
+
+:BLACKJ_14841
+if 
+  $players_cards2[4] <> 0
+goto_if_false @BLACKJ_14866
+$player_has_stuck2 = 1
+
+:BLACKJ_14866
+if 
+  $player_has_split == 1
+goto_if_false @BLACKJ_15044
+if and
+  $player_has_stuck1 == 1
+  $player_has_stuck2 == 1
+goto_if_false @BLACKJ_15044
+if and
+  $player_total1 == 21
+  $players_cards1[2] == 0
+goto_if_false @BLACKJ_15012
+if or
+  $player_total2 <> 21
+  $players_cards2[2] <> 0
+goto_if_false @BLACKJ_14973
+$player_got_bj = 2
+goto @BLACKJ_15005
+
+:BLACKJ_14973
+if and
+  $player_total2 == 21
+  $players_cards2[2] == 0
+goto_if_false @BLACKJ_15005
+$player_got_bj = 4
+
+:BLACKJ_15005
+goto @BLACKJ_15044
+
+:BLACKJ_15012
+if and
+  $player_total2 == 21
+  $players_cards2[2] == 0
+goto_if_false @BLACKJ_15044
+$player_got_bj = 3
+
+:BLACKJ_15044
+if 
+  $player_has_split == 0
+goto_if_false @BLACKJ_15133
+if 
+  $player_has_stuck1 == 1
+goto_if_false @BLACKJ_15094
+3@ = 99
+goto @BLACKJ_15126
+
+:BLACKJ_15094
+if 
+  4@ == 99
+goto_if_false @BLACKJ_15126
+3@ = 0
+4@ = 0
+
+:BLACKJ_15126
+goto @BLACKJ_15204
+
+:BLACKJ_15133
+if and
+  $player_has_stuck1 == 1
+  $player_has_stuck2 == 1
+goto_if_false @BLACKJ_15172
+3@ = 99
+goto @BLACKJ_15204
+
+:BLACKJ_15172
+if 
+  4@ == 99
+goto_if_false @BLACKJ_15204
+3@ = 0
+4@ = 0
+
+:BLACKJ_15204
+if 
+  $player_has_split == 1
+goto_if_false @BLACKJ_15295
+if 
+  $player_has_stuck1 == 0
+goto_if_false @BLACKJ_15271
+gosub @BLACKJ_34152
+Text.Display($screen_pos_x[22], $screen_pos_y[22], 'BJ_ARR')
+goto @BLACKJ_15295
+
+:BLACKJ_15271
+gosub @BLACKJ_34152
+Text.Display($screen_pos_x[23], $screen_pos_y[23], 'BJ_ARR')
+
+:BLACKJ_15295
+if 
+  3@ == 99
+goto_if_false @BLACKJ_15334
+gosub @BLACKJ_10563
+3@ = 0
+2@ += 1
+
+:BLACKJ_15334
+gosub @BLACKJ_31220
+gosub @BLACKJ_29865
+gosub @BLACKJ_25143
+return 
+
+:BLACKJ_15357
+if 
+  3@ == 0
+goto_if_false @BLACKJ_15510
+if 
+  $player_has_split == 0
+goto_if_false @BLACKJ_15439
+if 
+  $player_total1 > 21
+goto_if_false @BLACKJ_15432
+$dealer_has_stuck = 1
+$dealer_wins_by_default = 1
+3@ = 99
+
+:BLACKJ_15432
+goto @BLACKJ_15485
+
+:BLACKJ_15439
+if and
+  $player_total1 > 21
+  $player_total2 > 21
+goto_if_false @BLACKJ_15485
+$dealer_has_stuck = 1
+$dealer_wins_by_default = 1
+3@ = 99
+
+:BLACKJ_15485
+if 
+  3@ <> 99
+goto_if_false @BLACKJ_15510
+3@ += 1
+
+:BLACKJ_15510
+if 
+  3@ == 1
+goto_if_false @BLACKJ_15617
+if 
+  $dealer_total > 16
+goto_if_false @BLACKJ_15560
+$dealer_has_stuck = 1
+goto @BLACKJ_15567
+
+:BLACKJ_15560
+3@ += 1
+
+:BLACKJ_15567
+if 
+  $dealers_cards[4] <> 0
+goto_if_false @BLACKJ_15592
+$dealer_has_stuck = 1
+
+:BLACKJ_15592
+if 
+  $dealer_has_stuck == 1
+goto_if_false @BLACKJ_15617
+3@ = 99
+
+:BLACKJ_15617
+if 
+  3@ == 2
+goto_if_false @BLACKJ_15649
+gosub @BLACKJ_29764
+3@ += 1
+
+:BLACKJ_15649
+if 
+  3@ == 3
+goto_if_false @BLACKJ_15719
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_15719
+10@ = Char.GetScriptTaskStatus(1@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @BLACKJ_15719
+3@ += 1
+
+:BLACKJ_15719
+if 
+  3@ == 4
+goto_if_false @BLACKJ_15824
+10@ = 0
+
+:BLACKJ_15744
+if 
+  8 > 10@
+goto_if_false @BLACKJ_15817
+if 
+  $dealers_cards(10@,8i) == 0
+goto_if_false @BLACKJ_15803
+set_var_int_to_var_int $dealers_cards(10@,8i) = $next_card
+10@ = 8
+
+:BLACKJ_15803
+10@ += 1
+goto @BLACKJ_15744
+
+:BLACKJ_15817
+3@ = 0
+
+:BLACKJ_15824
+if 
+  3@ == 99
+goto_if_false @BLACKJ_15856
+2@ += 1
+3@ = 0
+
+:BLACKJ_15856
+gosub @BLACKJ_31220
+gosub @BLACKJ_29865
+gosub @BLACKJ_25143
+return 
+
+:BLACKJ_15879
+if 
+  3@ == 0
+goto_if_false @BLACKJ_17945
+if 
+  $player_has_split == 0
+goto_if_false @BLACKJ_16141
+if 
+  $player_total1 <= 21
+goto_if_false @BLACKJ_16134
+if 
+  $dealer_total > 21
+goto_if_false @BLACKJ_15965
+$player_has_won1 = 1
+goto @BLACKJ_16134
+
+:BLACKJ_15965
+if 
+  is_int_var_greater_than_int_var $player_total1 > $dealer_total
+goto_if_false @BLACKJ_15998
+$player_has_won1 = 1
+goto @BLACKJ_16134
+
+:BLACKJ_15998
+if 
+  is_int_var_equal_to_int_var $player_total1 == $dealer_total
+goto_if_false @BLACKJ_16127
+if 
+  $player_got_bj == 1
+goto_if_false @BLACKJ_16081
+if 
+  $dealer_got_bj == 1
+goto_if_false @BLACKJ_16067
+$player_has_won1 = 2
+goto @BLACKJ_16074
+
+:BLACKJ_16067
+$player_has_won1 = 1
+
+:BLACKJ_16074
+goto @BLACKJ_16120
+
+:BLACKJ_16081
+if 
+  $dealer_got_bj == 1
+goto_if_false @BLACKJ_16113
+$player_has_won1 = 0
+goto @BLACKJ_16120
+
+:BLACKJ_16113
+$player_has_won1 = 2
+
+:BLACKJ_16120
+goto @BLACKJ_16134
+
+:BLACKJ_16127
+$player_has_won1 = 0
+
+:BLACKJ_16134
+goto @BLACKJ_16593
+
+:BLACKJ_16141
+if 
+  $player_total1 <= 21
+goto_if_false @BLACKJ_16367
+if 
+  $dealer_total > 21
+goto_if_false @BLACKJ_16191
+$player_has_won1 = 1
+goto @BLACKJ_16367
+
+:BLACKJ_16191
+if 
+  is_int_var_greater_than_int_var $player_total1 > $dealer_total
+goto_if_false @BLACKJ_16224
+$player_has_won1 = 1
+goto @BLACKJ_16367
+
+:BLACKJ_16224
+if 
+  is_int_var_equal_to_int_var $player_total1 == $dealer_total
+goto_if_false @BLACKJ_16360
+if or
+  $player_got_bj == 2
+  $player_got_bj == 4
+goto_if_false @BLACKJ_16314
+if 
+  $dealer_got_bj == 1
+goto_if_false @BLACKJ_16300
+$player_has_won1 = 2
+goto @BLACKJ_16307
+
+:BLACKJ_16300
+$player_has_won1 = 1
+
+:BLACKJ_16307
+goto @BLACKJ_16353
+
+:BLACKJ_16314
+if 
+  $dealer_got_bj == 1
+goto_if_false @BLACKJ_16346
+$player_has_won1 = 0
+goto @BLACKJ_16353
+
+:BLACKJ_16346
+$player_has_won1 = 2
+
+:BLACKJ_16353
+goto @BLACKJ_16367
+
+:BLACKJ_16360
+$player_has_won1 = 0
+
+:BLACKJ_16367
+if 
+  $player_total2 <= 21
+goto_if_false @BLACKJ_16593
+if 
+  $dealer_total > 21
+goto_if_false @BLACKJ_16417
+$player_has_won2 = 1
+goto @BLACKJ_16593
+
+:BLACKJ_16417
+if 
+  is_int_var_greater_than_int_var $player_total2 > $dealer_total
+goto_if_false @BLACKJ_16450
+$player_has_won2 = 1
+goto @BLACKJ_16593
+
+:BLACKJ_16450
+if 
+  is_int_var_equal_to_int_var $player_total2 == $dealer_total
+goto_if_false @BLACKJ_16586
+if or
+  $player_got_bj == 3
+  $player_got_bj == 4
+goto_if_false @BLACKJ_16540
+if 
+  $dealer_got_bj == 1
+goto_if_false @BLACKJ_16526
+$player_has_won2 = 2
+goto @BLACKJ_16533
+
+:BLACKJ_16526
+$player_has_won2 = 1
+
+:BLACKJ_16533
+goto @BLACKJ_16579
+
+:BLACKJ_16540
+if 
+  $dealer_got_bj == 1
+goto_if_false @BLACKJ_16572
+$player_has_won2 = 0
+goto @BLACKJ_16579
+
+:BLACKJ_16572
+$player_has_won2 = 2
+
+:BLACKJ_16579
+goto @BLACKJ_16593
+
+:BLACKJ_16586
+$player_has_won2 = 0
+
+:BLACKJ_16593
+TIMERA = 0
+$bj_payout = 0
+if 
+  $player_has_split == 0
+goto_if_false @BLACKJ_16738
+if 
+  $player_has_won1 == 1
+goto_if_false @BLACKJ_16705
+if 
+  $player_got_bj == 1
+goto_if_false @BLACKJ_16683
+$bj_payout = 3
+mult_int_var_by_int_var $bj_payout *= $bj_bet1
+goto @BLACKJ_16698
+
+:BLACKJ_16683
+$bj_payout = 2
+mult_int_var_by_int_var $bj_payout *= $bj_bet1
+
+:BLACKJ_16698
+goto @BLACKJ_16731
+
+:BLACKJ_16705
+if 
+  $player_has_won1 == 2
+goto_if_false @BLACKJ_16731
+set_var_int_to_var_int $bj_payout = $bj_bet1
+
+:BLACKJ_16731
+goto @BLACKJ_16980
+
+:BLACKJ_16738
+if 
+  $player_has_won1 == 1
+goto_if_false @BLACKJ_16825
+if or
+  $player_got_bj == 2
+  $player_got_bj == 4
+goto_if_false @BLACKJ_16803
+$bj_payout = 3
+mult_int_var_by_int_var $bj_payout *= $bj_bet1
+goto @BLACKJ_16818
+
+:BLACKJ_16803
+$bj_payout = 2
+mult_int_var_by_int_var $bj_payout *= $bj_bet1
+
+:BLACKJ_16818
+goto @BLACKJ_16851
+
+:BLACKJ_16825
+if 
+  $player_has_won1 == 2
+goto_if_false @BLACKJ_16851
+set_var_int_to_var_int $bj_payout = $bj_bet1
+
+:BLACKJ_16851
+if 
+  $player_has_won2 == 1
+goto_if_false @BLACKJ_16954
+if or
+  $player_got_bj == 3
+  $player_got_bj == 4
+goto_if_false @BLACKJ_16924
+set_lvar_int_to_var_int 10@ = $bj_bet2
+10@ *= 3
+add_int_lvar_to_int_var $bj_payout += 10@
+goto @BLACKJ_16947
+
+:BLACKJ_16924
+set_lvar_int_to_var_int 10@ = $bj_bet2
+10@ *= 2
+add_int_lvar_to_int_var $bj_payout += 10@
+
+:BLACKJ_16947
+goto @BLACKJ_16980
+
+:BLACKJ_16954
+if 
+  $player_has_won2 == 2
+goto_if_false @BLACKJ_16980
+add_int_var_to_int_var $bj_payout += $bj_bet2
+
+:BLACKJ_16980
+set_lvar_int_to_var_int 10@ = $bj_payout
+sub_int_var_from_int_lvar 10@ -= $bj_initial_stake
+Stat.IncrementInt(10@, 37)
+Player.AddScore($player1, $bj_payout)
+start_new_script @CASHWIN 10@ 3000 69 
+Stat.ShowUpdateStats(False)
+if 
+  10@ > 0
+goto_if_false @BLACKJ_17498
+Stat.RegisterInt(StatId.BiggestGamblingWin, 10@)
+cset_lvar_float_to_lvar_int 13@ = integer 10@
+cset_lvar_float_to_lvar_int 14@ = integer 29@
+div_float_lvar_by_float_lvar 13@ /= 14@
+$winning_streak += 1
+if 
+  5 > $winning_streak
+goto_if_false @BLACKJ_17333
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_17326
+if 
+  13@ > 0.8
+goto_if_false @BLACKJ_17158
+10@ = Math.RandomIntInRange(0, 4)
+goto @BLACKJ_17167
+
+:BLACKJ_17158
+10@ = Math.RandomIntInRange(0, 3)
+
+:BLACKJ_17167
+switch_start 10@ total_jumps 4 default_jump 0 @BLACKJ_17326 jumps 0 @BLACKJ_17230 1 @BLACKJ_17251 2 @BLACKJ_17272 3 @BLACKJ_17293 -1 @BLACKJ_17326 -1 @BLACKJ_17326 -1 @BLACKJ_17326
+
+:BLACKJ_17230
+Char.SetSayScript(1@, 5847, True, True, False)
+goto @BLACKJ_17326
+
+:BLACKJ_17251
+Char.SetSayScript(1@, 5848, True, True, False)
+goto @BLACKJ_17326
+
+:BLACKJ_17272
+Char.SetSayScript(1@, 5849, True, True, False)
+goto @BLACKJ_17326
+
+:BLACKJ_17293
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BLACKJ_17319
+10@ = Char.SetSayContext($scplayer, 100)
+
+:BLACKJ_17319
+goto @BLACKJ_17326
+
+:BLACKJ_17326
+goto @BLACKJ_17491
+
+:BLACKJ_17333
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_17484
+10@ = Math.RandomIntInRange(0, 3)
+switch_start 10@ total_jumps 3 default_jump 0 @BLACKJ_17484 jumps 0 @BLACKJ_17421 1 @BLACKJ_17442 2 @BLACKJ_17463 -1 @BLACKJ_17484 -1 @BLACKJ_17484 -1 @BLACKJ_17484 -1 @BLACKJ_17484
+
+:BLACKJ_17421
+Char.SetSayScript(1@, 5854, True, True, False)
+goto @BLACKJ_17484
+
+:BLACKJ_17442
+Char.SetSayScript(1@, 5855, True, True, False)
+goto @BLACKJ_17484
+
+:BLACKJ_17463
+Char.SetSayScript(1@, 5856, True, True, False)
+goto @BLACKJ_17484
+
+:BLACKJ_17484
+$winning_streak = 0
+
+:BLACKJ_17491
+goto @BLACKJ_17920
+
+:BLACKJ_17498
+10@ *= -1
+Stat.RegisterInt(StatId.BiggestGamblingLoss, 10@)
+10@ *= -1
+$winning_streak = 0
+cset_lvar_float_to_lvar_int 13@ = integer 10@
+13@ *= -1.0
+cset_lvar_float_to_lvar_int 14@ = integer 29@
+div_float_lvar_by_float_lvar 13@ /= 14@
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_17920
+if 
+  0 > 10@
+goto_if_false @BLACKJ_17806
+if 
+  13@ > 0.8
+goto_if_false @BLACKJ_17631
+10@ = Math.RandomIntInRange(0, 4)
+goto @BLACKJ_17640
+
+:BLACKJ_17631
+10@ = Math.RandomIntInRange(0, 3)
+
+:BLACKJ_17640
+switch_start 10@ total_jumps 4 default_jump 0 @BLACKJ_17799 jumps 0 @BLACKJ_17703 1 @BLACKJ_17724 2 @BLACKJ_17745 3 @BLACKJ_17766 -1 @BLACKJ_17799 -1 @BLACKJ_17799 -1 @BLACKJ_17799
+
+:BLACKJ_17703
+Char.SetSayScript(1@, 5817, True, True, False)
+goto @BLACKJ_17799
+
+:BLACKJ_17724
+Char.SetSayScript(1@, 5818, True, True, False)
+goto @BLACKJ_17799
+
+:BLACKJ_17745
+Char.SetSayScript(1@, 5819, True, True, False)
+goto @BLACKJ_17799
+
+:BLACKJ_17766
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BLACKJ_17792
+10@ = Char.SetSayContext($scplayer, 101)
+
+:BLACKJ_17792
+goto @BLACKJ_17799
+
+:BLACKJ_17799
+goto @BLACKJ_17920
+
+:BLACKJ_17806
+10@ = Math.RandomIntInRange(0, 2)
+switch_start 10@ total_jumps 2 default_jump 0 @BLACKJ_17920 jumps 0 @BLACKJ_17878 1 @BLACKJ_17899 -1 @BLACKJ_17920 -1 @BLACKJ_17920 -1 @BLACKJ_17920 -1 @BLACKJ_17920 -1 @BLACKJ_17920
+
+:BLACKJ_17878
+Char.SetSayScript(1@, 5815, True, True, False)
+goto @BLACKJ_17920
+
+:BLACKJ_17899
+Char.SetSayScript(1@, 5816, True, True, False)
+goto @BLACKJ_17920
+
+:BLACKJ_17920
+Stat.ShowUpdateStats(True)
+$bj_initial_stake = 0
+gosub @BLACKJ_23204
+3@ += 1
+
+:BLACKJ_17945
+if 
+  3@ == 1
+goto_if_false @BLACKJ_18076
+if 
+  TIMERA > 3000
+goto_if_false @BLACKJ_17996
+3@ += 1
+goto @BLACKJ_18076
+
+:BLACKJ_17996
+if 
+  23@ == 0
+goto_if_false @BLACKJ_18052
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BLACKJ_18045
+23@ = 1
+3@ += 1
+
+:BLACKJ_18045
+goto @BLACKJ_18076
+
+:BLACKJ_18052
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BLACKJ_18076
+23@ = 0
+
+:BLACKJ_18076
+if 
+  3@ == 2
+goto_if_false @BLACKJ_18108
+TIMERA = 0
+3@ += 1
+
+:BLACKJ_18108
+if 
+  3@ == 3
+goto_if_false @BLACKJ_18248
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BLACKJ_18164
+23@ = 1
+3@ = 99
+goto @BLACKJ_18248
+
+:BLACKJ_18164
+if and
+  not Text.IsThisHelpMessageBeingDisplayed('SGPUNT')
+  not Text.IsThisHelpMessageBeingDisplayed('SGGAMB')
+  not Text.IsThisHelpMessageBeingDisplayed('SGPROF')
+  not Text.IsThisHelpMessageBeingDisplayed('SGHIRO')
+goto_if_false @BLACKJ_18248
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @BLACKJ_18248
+Text.SetHelpMessageBoxSize(128)
+Text.PrintHelpForever('BJ_H4')
+
+:BLACKJ_18248
+if 
+  3@ == 99
+goto_if_false @BLACKJ_18287
+gosub @BLACKJ_10563
+2@ = 1
+3@ = 0
+
+:BLACKJ_18287
+gosub @BLACKJ_29865
+gosub @BLACKJ_25143
+return 
+
+:BLACKJ_18303
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_18454
+10@ = Math.RandomIntInRange(0, 3)
+switch_start 10@ total_jumps 3 default_jump 0 @BLACKJ_18454 jumps 0 @BLACKJ_18391 1 @BLACKJ_18412 2 @BLACKJ_18433 -1 @BLACKJ_18454 -1 @BLACKJ_18454 -1 @BLACKJ_18454 -1 @BLACKJ_18454
+
+:BLACKJ_18391
+Char.SetSayScript(1@, 5823, True, True, False)
+goto @BLACKJ_18454
+
+:BLACKJ_18412
+Char.SetSayScript(1@, 5824, True, True, False)
+goto @BLACKJ_18454
+
+:BLACKJ_18433
+Char.SetSayScript(1@, 5825, True, True, False)
+goto @BLACKJ_18454
+
+:BLACKJ_18454
+return 
+
+:BLACKJ_18456
+gosub @BLACKJ_31220
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_21799
+if 
+  $player_has_split == 0
+goto_if_false @BLACKJ_19594
+if 
+  $player_total1_b == 0
+goto_if_false @BLACKJ_19170
+switch_start $player_total1 total_jumps 18 default_jump 1 @BLACKJ_19086 jumps 4 @BLACKJ_18708 5 @BLACKJ_18729 6 @BLACKJ_18750 7 @BLACKJ_18771 8 @BLACKJ_18792 9 @BLACKJ_18813 10 @BLACKJ_18834
+switch_continued 11 @BLACKJ_18855 12 @BLACKJ_18876 13 @BLACKJ_18897 14 @BLACKJ_18918 15 @BLACKJ_18939 16 @BLACKJ_18960 17 @BLACKJ_18981 18 @BLACKJ_19002 19 @BLACKJ_19023
+switch_continued 20 @BLACKJ_19044 21 @BLACKJ_19065 -1 @BLACKJ_19155 -1 @BLACKJ_19155 -1 @BLACKJ_19155 -1 @BLACKJ_19155 -1 @BLACKJ_19155 -1 @BLACKJ_19155 -1 @BLACKJ_19155
+
+:BLACKJ_18708
+Char.SetSayScript(1@, 5841, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_18729
+Char.SetSayScript(1@, 5842, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_18750
+Char.SetSayScript(1@, 5843, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_18771
+Char.SetSayScript(1@, 5844, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_18792
+Char.SetSayScript(1@, 5845, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_18813
+Char.SetSayScript(1@, 5846, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_18834
+Char.SetSayScript(1@, 5829, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_18855
+Char.SetSayScript(1@, 5830, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_18876
+Char.SetSayScript(1@, 5831, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_18897
+Char.SetSayScript(1@, 5832, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_18918
+Char.SetSayScript(1@, 5833, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_18939
+Char.SetSayScript(1@, 5834, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_18960
+Char.SetSayScript(1@, 5835, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_18981
+Char.SetSayScript(1@, 5836, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_19002
+Char.SetSayScript(1@, 5837, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_19023
+Char.SetSayScript(1@, 5838, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_19044
+Char.SetSayScript(1@, 5839, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_19065
+Char.SetSayScript(1@, 5840, True, True, False)
+goto @BLACKJ_19155
+
+:BLACKJ_19086
+10@ = Math.RandomIntInRange(0, 2)
+if 
+  10@ == 0
+goto_if_false @BLACKJ_19134
+Char.SetSayScript(1@, 5813, True, True, False)
+goto @BLACKJ_19148
+
+:BLACKJ_19134
+Char.SetSayScript(1@, 5814, True, True, False)
+
+:BLACKJ_19148
+goto @BLACKJ_19155
+
+:BLACKJ_19155
+Char.StartFacialTalk(1@, 1500)
+goto @BLACKJ_19587
+
+:BLACKJ_19170
+switch_start $player_total1 total_jumps 10 default_jump 1 @BLACKJ_19510 jumps 12 @BLACKJ_19298 13 @BLACKJ_19319 14 @BLACKJ_19340 15 @BLACKJ_19361 16 @BLACKJ_19382 17 @BLACKJ_19403 18 @BLACKJ_19424
+switch_continued 19 @BLACKJ_19445 20 @BLACKJ_19466 21 @BLACKJ_19487 -1 @BLACKJ_19579 -1 @BLACKJ_19579 -1 @BLACKJ_19579 -1 @BLACKJ_19579 -1 @BLACKJ_19579 -1 @BLACKJ_19579
+
+:BLACKJ_19298
+Char.SetSayScript(1@, 5801, True, True, False)
+goto @BLACKJ_19579
+
+:BLACKJ_19319
+Char.SetSayScript(1@, 5802, True, True, False)
+goto @BLACKJ_19579
+
+:BLACKJ_19340
+Char.SetSayScript(1@, 5803, True, True, False)
+goto @BLACKJ_19579
+
+:BLACKJ_19361
+Char.SetSayScript(1@, 5804, True, True, False)
+goto @BLACKJ_19579
+
+:BLACKJ_19382
+Char.SetSayScript(1@, 5805, True, True, False)
+goto @BLACKJ_19579
+
+:BLACKJ_19403
+Char.SetSayScript(1@, 5806, True, True, False)
+goto @BLACKJ_19579
+
+:BLACKJ_19424
+Char.SetSayScript(1@, 5807, True, True, False)
+goto @BLACKJ_19579
+
+:BLACKJ_19445
+Char.SetSayScript(1@, 5808, True, True, False)
+goto @BLACKJ_19579
+
+:BLACKJ_19466
+Char.SetSayScript(1@, 5800, True, True, False)
+goto @BLACKJ_19579
+
+:BLACKJ_19487
+Char.SetSayScript(1@, 65535, True, True, False)
+goto @BLACKJ_19579
+
+:BLACKJ_19510
+10@ = Math.RandomIntInRange(0, 2)
+if 
+  10@ == 0
+goto_if_false @BLACKJ_19558
+Char.SetSayScript(1@, 5813, True, True, False)
+goto @BLACKJ_19572
+
+:BLACKJ_19558
+Char.SetSayScript(1@, 5814, True, True, False)
+
+:BLACKJ_19572
+goto @BLACKJ_19579
+
+:BLACKJ_19579
+Char.StartFacialTalk(1@, 3000)
+
+:BLACKJ_19587
+goto @BLACKJ_21799
+
+:BLACKJ_19594
+if 
+  $player_has_stuck1 == 0
+goto_if_false @BLACKJ_20709
+if 
+  $player_total1_b == 0
+goto_if_false @BLACKJ_20285
+switch_start $player_total1 total_jumps 18 default_jump 1 @BLACKJ_20201 jumps 4 @BLACKJ_19823 5 @BLACKJ_19844 6 @BLACKJ_19865 7 @BLACKJ_19886 8 @BLACKJ_19907 9 @BLACKJ_19928 10 @BLACKJ_19949
+switch_continued 11 @BLACKJ_19970 12 @BLACKJ_19991 13 @BLACKJ_20012 14 @BLACKJ_20033 15 @BLACKJ_20054 16 @BLACKJ_20075 17 @BLACKJ_20096 18 @BLACKJ_20117 19 @BLACKJ_20138
+switch_continued 20 @BLACKJ_20159 21 @BLACKJ_20180 -1 @BLACKJ_20270 -1 @BLACKJ_20270 -1 @BLACKJ_20270 -1 @BLACKJ_20270 -1 @BLACKJ_20270 -1 @BLACKJ_20270 -1 @BLACKJ_20270
+
+:BLACKJ_19823
+Char.SetSayScript(1@, 5841, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_19844
+Char.SetSayScript(1@, 5842, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_19865
+Char.SetSayScript(1@, 5843, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_19886
+Char.SetSayScript(1@, 5844, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_19907
+Char.SetSayScript(1@, 5845, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_19928
+Char.SetSayScript(1@, 5846, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_19949
+Char.SetSayScript(1@, 5829, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_19970
+Char.SetSayScript(1@, 5830, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_19991
+Char.SetSayScript(1@, 5831, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_20012
+Char.SetSayScript(1@, 5832, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_20033
+Char.SetSayScript(1@, 5833, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_20054
+Char.SetSayScript(1@, 5834, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_20075
+Char.SetSayScript(1@, 5835, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_20096
+Char.SetSayScript(1@, 5836, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_20117
+Char.SetSayScript(1@, 5837, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_20138
+Char.SetSayScript(1@, 5838, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_20159
+Char.SetSayScript(1@, 5839, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_20180
+Char.SetSayScript(1@, 5840, True, True, False)
+goto @BLACKJ_20270
+
+:BLACKJ_20201
+10@ = Math.RandomIntInRange(0, 2)
+if 
+  10@ == 0
+goto_if_false @BLACKJ_20249
+Char.SetSayScript(1@, 5813, True, True, False)
+goto @BLACKJ_20263
+
+:BLACKJ_20249
+Char.SetSayScript(1@, 5814, True, True, False)
+
+:BLACKJ_20263
+goto @BLACKJ_20270
+
+:BLACKJ_20270
+Char.StartFacialTalk(1@, 1500)
+goto @BLACKJ_20702
+
+:BLACKJ_20285
+switch_start $player_total1 total_jumps 10 default_jump 1 @BLACKJ_20625 jumps 12 @BLACKJ_20413 13 @BLACKJ_20434 14 @BLACKJ_20455 15 @BLACKJ_20476 16 @BLACKJ_20497 17 @BLACKJ_20518 18 @BLACKJ_20539
+switch_continued 19 @BLACKJ_20560 20 @BLACKJ_20581 21 @BLACKJ_20602 -1 @BLACKJ_20694 -1 @BLACKJ_20694 -1 @BLACKJ_20694 -1 @BLACKJ_20694 -1 @BLACKJ_20694 -1 @BLACKJ_20694
+
+:BLACKJ_20413
+Char.SetSayScript(1@, 5801, True, True, False)
+goto @BLACKJ_20694
+
+:BLACKJ_20434
+Char.SetSayScript(1@, 5802, True, True, False)
+goto @BLACKJ_20694
+
+:BLACKJ_20455
+Char.SetSayScript(1@, 5803, True, True, False)
+goto @BLACKJ_20694
+
+:BLACKJ_20476
+Char.SetSayScript(1@, 5804, True, True, False)
+goto @BLACKJ_20694
+
+:BLACKJ_20497
+Char.SetSayScript(1@, 5805, True, True, False)
+goto @BLACKJ_20694
+
+:BLACKJ_20518
+Char.SetSayScript(1@, 5806, True, True, False)
+goto @BLACKJ_20694
+
+:BLACKJ_20539
+Char.SetSayScript(1@, 5807, True, True, False)
+goto @BLACKJ_20694
+
+:BLACKJ_20560
+Char.SetSayScript(1@, 5808, True, True, False)
+goto @BLACKJ_20694
+
+:BLACKJ_20581
+Char.SetSayScript(1@, 5800, True, True, False)
+goto @BLACKJ_20694
+
+:BLACKJ_20602
+Char.SetSayScript(1@, 65535, True, True, False)
+goto @BLACKJ_20694
+
+:BLACKJ_20625
+10@ = Math.RandomIntInRange(0, 2)
+if 
+  10@ == 0
+goto_if_false @BLACKJ_20673
+Char.SetSayScript(1@, 5813, True, True, False)
+goto @BLACKJ_20687
+
+:BLACKJ_20673
+Char.SetSayScript(1@, 5814, True, True, False)
+
+:BLACKJ_20687
+goto @BLACKJ_20694
+
+:BLACKJ_20694
+Char.StartFacialTalk(1@, 3000)
+
+:BLACKJ_20702
+goto @BLACKJ_21799
+
+:BLACKJ_20709
+if 
+  $player_total2_b == 0
+goto_if_false @BLACKJ_21382
+switch_start $player_total2 total_jumps 18 default_jump 1 @BLACKJ_21298 jumps 4 @BLACKJ_20920 5 @BLACKJ_20941 6 @BLACKJ_20962 7 @BLACKJ_20983 8 @BLACKJ_21004 9 @BLACKJ_21025 10 @BLACKJ_21046
+switch_continued 11 @BLACKJ_21067 12 @BLACKJ_21088 13 @BLACKJ_21109 14 @BLACKJ_21130 15 @BLACKJ_21151 16 @BLACKJ_21172 17 @BLACKJ_21193 18 @BLACKJ_21214 19 @BLACKJ_21235
+switch_continued 20 @BLACKJ_21256 21 @BLACKJ_21277 -1 @BLACKJ_21367 -1 @BLACKJ_21367 -1 @BLACKJ_21367 -1 @BLACKJ_21367 -1 @BLACKJ_21367 -1 @BLACKJ_21367 -1 @BLACKJ_21367
+
+:BLACKJ_20920
+Char.SetSayScript(1@, 5841, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_20941
+Char.SetSayScript(1@, 5842, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_20962
+Char.SetSayScript(1@, 5843, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_20983
+Char.SetSayScript(1@, 5844, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21004
+Char.SetSayScript(1@, 5845, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21025
+Char.SetSayScript(1@, 5846, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21046
+Char.SetSayScript(1@, 5829, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21067
+Char.SetSayScript(1@, 5830, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21088
+Char.SetSayScript(1@, 5831, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21109
+Char.SetSayScript(1@, 5832, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21130
+Char.SetSayScript(1@, 5833, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21151
+Char.SetSayScript(1@, 5834, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21172
+Char.SetSayScript(1@, 5835, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21193
+Char.SetSayScript(1@, 5836, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21214
+Char.SetSayScript(1@, 5837, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21235
+Char.SetSayScript(1@, 5838, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21256
+Char.SetSayScript(1@, 5839, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21277
+Char.SetSayScript(1@, 5840, True, True, False)
+goto @BLACKJ_21367
+
+:BLACKJ_21298
+10@ = Math.RandomIntInRange(0, 2)
+if 
+  10@ == 0
+goto_if_false @BLACKJ_21346
+Char.SetSayScript(1@, 5813, True, True, False)
+goto @BLACKJ_21360
+
+:BLACKJ_21346
+Char.SetSayScript(1@, 5814, True, True, False)
+
+:BLACKJ_21360
+goto @BLACKJ_21367
+
+:BLACKJ_21367
+Char.StartFacialTalk(1@, 1500)
+goto @BLACKJ_21799
+
+:BLACKJ_21382
+switch_start $player_total2 total_jumps 10 default_jump 1 @BLACKJ_21722 jumps 12 @BLACKJ_21510 13 @BLACKJ_21531 14 @BLACKJ_21552 15 @BLACKJ_21573 16 @BLACKJ_21594 17 @BLACKJ_21615 18 @BLACKJ_21636
+switch_continued 19 @BLACKJ_21657 20 @BLACKJ_21678 21 @BLACKJ_21699 -1 @BLACKJ_21791 -1 @BLACKJ_21791 -1 @BLACKJ_21791 -1 @BLACKJ_21791 -1 @BLACKJ_21791 -1 @BLACKJ_21791
+
+:BLACKJ_21510
+Char.SetSayScript(1@, 5801, True, True, False)
+goto @BLACKJ_21791
+
+:BLACKJ_21531
+Char.SetSayScript(1@, 5802, True, True, False)
+goto @BLACKJ_21791
+
+:BLACKJ_21552
+Char.SetSayScript(1@, 5803, True, True, False)
+goto @BLACKJ_21791
+
+:BLACKJ_21573
+Char.SetSayScript(1@, 5804, True, True, False)
+goto @BLACKJ_21791
+
+:BLACKJ_21594
+Char.SetSayScript(1@, 5805, True, True, False)
+goto @BLACKJ_21791
+
+:BLACKJ_21615
+Char.SetSayScript(1@, 5806, True, True, False)
+goto @BLACKJ_21791
+
+:BLACKJ_21636
+Char.SetSayScript(1@, 5807, True, True, False)
+goto @BLACKJ_21791
+
+:BLACKJ_21657
+Char.SetSayScript(1@, 5808, True, True, False)
+goto @BLACKJ_21791
+
+:BLACKJ_21678
+Char.SetSayScript(1@, 5800, True, True, False)
+goto @BLACKJ_21791
+
+:BLACKJ_21699
+Char.SetSayScript(1@, 65535, True, True, False)
+goto @BLACKJ_21791
+
+:BLACKJ_21722
+10@ = Math.RandomIntInRange(0, 2)
+if 
+  10@ == 0
+goto_if_false @BLACKJ_21770
+Char.SetSayScript(1@, 5813, True, True, False)
+goto @BLACKJ_21784
+
+:BLACKJ_21770
+Char.SetSayScript(1@, 5814, True, True, False)
+
+:BLACKJ_21784
+goto @BLACKJ_21791
+
+:BLACKJ_21791
+Char.StartFacialTalk(1@, 3000)
+
+:BLACKJ_21799
+return 
+if 
+is_ps2_keyboard_key_just_pressed 67
+goto_if_false @BLACKJ_21866
+$bj_chip_num += 1
+if 
+  $bj_chip_num > 7
+goto_if_false @BLACKJ_21848
+$bj_chip_num = 0
+
+:BLACKJ_21848
+write_debug_with_int "BJ_CHIP_NUM" $bj_chip_num
+
+:BLACKJ_21866
+if 
+  Object.DoesExist(0@)
+goto_if_false @BLACKJ_22185
+if 
+  Object.DoesExist($bj_chip_set($bj_chip_num,8i))
+goto_if_false @BLACKJ_22185
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, $bj_chip_off_x($bj_chip_num,8f), $bj_chip_off_y($bj_chip_num,8f), $bj_chip_off_z($bj_chip_num,8f))
+Object.SetCoordinates($bj_chip_set($bj_chip_num,8i), $x, $y, $z)
+if 
+is_ps2_keyboard_key_just_pressed 131
+goto_if_false @BLACKJ_21985
+$bj_chip_off_z($bj_chip_num,8f) += 0.005
+
+:BLACKJ_21985
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @BLACKJ_22015
+$bj_chip_off_z($bj_chip_num,8f) += -0.005
+
+:BLACKJ_22015
+if 
+is_ps2_keyboard_key_just_pressed 128
+goto_if_false @BLACKJ_22045
+$bj_chip_off_x($bj_chip_num,8f) += 0.005
+
+:BLACKJ_22045
+if 
+is_ps2_keyboard_key_just_pressed 129
+goto_if_false @BLACKJ_22075
+$bj_chip_off_x($bj_chip_num,8f) += -0.005
+
+:BLACKJ_22075
+if 
+is_ps2_keyboard_key_just_pressed 139
+goto_if_false @BLACKJ_22105
+$bj_chip_off_y($bj_chip_num,8f) += 0.005
+
+:BLACKJ_22105
+if 
+is_ps2_keyboard_key_just_pressed 145
+goto_if_false @BLACKJ_22135
+$bj_chip_off_y($bj_chip_num,8f) += -0.005
+
+:BLACKJ_22135
+if 
+is_ps2_keyboard_key_just_pressed 69
+goto_if_false @BLACKJ_22160
+$bj_chip_set_default_z += 0.005
+
+:BLACKJ_22160
+if 
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @BLACKJ_22185
+$bj_chip_set_default_z += -0.005
+
+:BLACKJ_22185
+if 
+is_ps2_keyboard_key_just_pressed 137
+goto_if_false @BLACKJ_23202
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("// ------ BJ CHIP OFFSETS -------OOP = OOP = ESTINATION) = ")
+save_newline_to_debug_file 
+10@ = 0
+
+:BLACKJ_22342
+if 
+  8 > 10@
+goto_if_false @BLACKJ_23202
+Debugger.SaveStringToDebugFile("BJ_CHIP_OFF_X[HIP OFFSETS -------OOP = OOP = ESTINATION) = ")
+save_int_to_debug_file 10@
+Debugger.SaveStringToDebugFile("] = HIP_OFF_X[HIP OFFSETS -------OOP = OOP = ESTINATION) = ")
+save_float_to_debug_file $bj_chip_off_x(10@,8f)
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BJ_CHIP_OFF_Y[HIP OFFSETS -------OOP = OOP = ESTINATION) = ")
+save_int_to_debug_file 10@
+Debugger.SaveStringToDebugFile("] = HIP_OFF_Y[HIP OFFSETS -------OOP = OOP = ESTINATION) = ")
+save_float_to_debug_file $bj_chip_off_y(10@,8f)
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BJ_CHIP_OFF_Z[HIP OFFSETS -------OOP = OOP = ESTINATION) = ")
+save_int_to_debug_file 10@
+Debugger.SaveStringToDebugFile("] = HIP_OFF_Z[HIP OFFSETS -------OOP = OOP = ESTINATION) = ")
+save_float_to_debug_file $bj_chip_off_z(10@,8f)
+save_newline_to_debug_file 
+10@ += 1
+goto @BLACKJ_22342
+
+:BLACKJ_23202
+return 
+
+:BLACKJ_23204
+set_lvar_int_to_var_int 12@ = $bj_initial_stake
+cset_lvar_float_to_lvar_int 13@ = integer 12@
+13@ /= 1.0
+if 
+  13@ > 10.0
+goto_if_false @BLACKJ_23261
+13@ = 10.0
+
+:BLACKJ_23261
+cset_lvar_int_to_lvar_float 11@ = float 13@
+cset_lvar_float_to_lvar_int 14@ = integer 11@
+14@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @BLACKJ_23315
+14@ += 0.0
+
+:BLACKJ_23315
+set_lvar_float_to_var_float 13@ = $bj_chip_set_default_z
+add_float_lvar_to_float_lvar 13@ += 14@
+11@ *= -1
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($bj_chip_set[0])
+goto_if_false @BLACKJ_23417
+$x, $y, $z = Object.GetCoordinates($bj_chip_set[0])
+13@ = Object.GetOffsetInWorldCoords(13@, $z, 0@, 0.0, 0.0, 13@)
+Object.SetCoordinates($bj_chip_set[0], $x, $y, $z)
+
+:BLACKJ_23417
+cset_lvar_float_to_lvar_int 13@ = integer 12@
+13@ /= 5.0
+if 
+  13@ > 10.0
+goto_if_false @BLACKJ_23466
+13@ = 10.0
+
+:BLACKJ_23466
+cset_lvar_int_to_lvar_float 11@ = float 13@
+cset_lvar_float_to_lvar_int 14@ = integer 11@
+14@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @BLACKJ_23520
+14@ += 0.0
+
+:BLACKJ_23520
+set_lvar_float_to_var_float 13@ = $bj_chip_set_default_z
+add_float_lvar_to_float_lvar 13@ += 14@
+11@ *= -5
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($bj_chip_set[1])
+goto_if_false @BLACKJ_23622
+$x, $y, $z = Object.GetCoordinates($bj_chip_set[1])
+13@ = Object.GetOffsetInWorldCoords(13@, $z, 0@, 0.0, 0.0, 13@)
+Object.SetCoordinates($bj_chip_set[1], $x, $y, $z)
+
+:BLACKJ_23622
+cset_lvar_float_to_lvar_int 13@ = integer 12@
+13@ /= 10.0
+if 
+  13@ > 10.0
+goto_if_false @BLACKJ_23671
+13@ = 10.0
+
+:BLACKJ_23671
+cset_lvar_int_to_lvar_float 11@ = float 13@
+cset_lvar_float_to_lvar_int 14@ = integer 11@
+14@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @BLACKJ_23725
+14@ += 0.0
+
+:BLACKJ_23725
+set_lvar_float_to_var_float 13@ = $bj_chip_set_default_z
+add_float_lvar_to_float_lvar 13@ += 14@
+11@ *= -10
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($bj_chip_set[2])
+goto_if_false @BLACKJ_23827
+$x, $y, $z = Object.GetCoordinates($bj_chip_set[2])
+13@ = Object.GetOffsetInWorldCoords(13@, $z, 0@, 0.0, 0.0, 13@)
+Object.SetCoordinates($bj_chip_set[2], $x, $y, $z)
+
+:BLACKJ_23827
+cset_lvar_float_to_lvar_int 13@ = integer 12@
+13@ /= 50.0
+if 
+  13@ > 10.0
+goto_if_false @BLACKJ_23876
+13@ = 10.0
+
+:BLACKJ_23876
+cset_lvar_int_to_lvar_float 11@ = float 13@
+cset_lvar_float_to_lvar_int 14@ = integer 11@
+14@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @BLACKJ_23930
+14@ += 0.0
+
+:BLACKJ_23930
+set_lvar_float_to_var_float 13@ = $bj_chip_set_default_z
+add_float_lvar_to_float_lvar 13@ += 14@
+11@ *= -50
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($bj_chip_set[3])
+goto_if_false @BLACKJ_24032
+$x, $y, $z = Object.GetCoordinates($bj_chip_set[3])
+13@ = Object.GetOffsetInWorldCoords(13@, $z, 0@, 0.0, 0.0, 13@)
+Object.SetCoordinates($bj_chip_set[3], $x, $y, $z)
+
+:BLACKJ_24032
+cset_lvar_float_to_lvar_int 13@ = integer 12@
+13@ /= 100.0
+if 
+  13@ > 10.0
+goto_if_false @BLACKJ_24081
+13@ = 10.0
+
+:BLACKJ_24081
+cset_lvar_int_to_lvar_float 11@ = float 13@
+cset_lvar_float_to_lvar_int 14@ = integer 11@
+14@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @BLACKJ_24135
+14@ += 0.0
+
+:BLACKJ_24135
+set_lvar_float_to_var_float 13@ = $bj_chip_set_default_z
+add_float_lvar_to_float_lvar 13@ += 14@
+11@ *= -100
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($bj_chip_set[4])
+goto_if_false @BLACKJ_24237
+$x, $y, $z = Object.GetCoordinates($bj_chip_set[4])
+13@ = Object.GetOffsetInWorldCoords(13@, $z, 0@, 0.0, 0.0, 13@)
+Object.SetCoordinates($bj_chip_set[4], $x, $y, $z)
+
+:BLACKJ_24237
+cset_lvar_float_to_lvar_int 13@ = integer 12@
+13@ /= 200.0
+if 
+  13@ > 10.0
+goto_if_false @BLACKJ_24286
+13@ = 10.0
+
+:BLACKJ_24286
+cset_lvar_int_to_lvar_float 11@ = float 13@
+cset_lvar_float_to_lvar_int 14@ = integer 11@
+14@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @BLACKJ_24340
+14@ += 0.0
+
+:BLACKJ_24340
+set_lvar_float_to_var_float 13@ = $bj_chip_set_default_z
+add_float_lvar_to_float_lvar 13@ += 14@
+11@ *= -200
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($bj_chip_set[5])
+goto_if_false @BLACKJ_24443
+$x, $y, $z = Object.GetCoordinates($bj_chip_set[5])
+13@ = Object.GetOffsetInWorldCoords(13@, $z, 0@, 0.0, 0.0, 13@)
+Object.SetCoordinates($bj_chip_set[5], $x, $y, $z)
+
+:BLACKJ_24443
+cset_lvar_float_to_lvar_int 13@ = integer 12@
+13@ /= 500.0
+if 
+  13@ > 10.0
+goto_if_false @BLACKJ_24492
+13@ = 10.0
+
+:BLACKJ_24492
+cset_lvar_int_to_lvar_float 11@ = float 13@
+cset_lvar_float_to_lvar_int 14@ = integer 11@
+14@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @BLACKJ_24546
+14@ += 0.0
+
+:BLACKJ_24546
+set_lvar_float_to_var_float 13@ = $bj_chip_set_default_z
+add_float_lvar_to_float_lvar 13@ += 14@
+11@ *= -500
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($bj_chip_set[6])
+goto_if_false @BLACKJ_24649
+$x, $y, $z = Object.GetCoordinates($bj_chip_set[6])
+13@ = Object.GetOffsetInWorldCoords(13@, $z, 0@, 0.0, 0.0, 13@)
+Object.SetCoordinates($bj_chip_set[6], $x, $y, $z)
+
+:BLACKJ_24649
+cset_lvar_float_to_lvar_int 13@ = integer 12@
+13@ /= 1000.0
+if 
+  13@ > 10.0
+goto_if_false @BLACKJ_24698
+13@ = 10.0
+
+:BLACKJ_24698
+cset_lvar_int_to_lvar_float 11@ = float 13@
+cset_lvar_float_to_lvar_int 14@ = integer 11@
+14@ *= 0.0126
+if 
+  11@ > 0
+goto_if_false @BLACKJ_24752
+14@ += 0.0
+
+:BLACKJ_24752
+set_lvar_float_to_var_float 13@ = $bj_chip_set_default_z
+add_float_lvar_to_float_lvar 13@ += 14@
+11@ *= -1000
+add_int_lvar_to_int_lvar 12@ += 11@
+if 
+  Object.DoesExist($bj_chip_set[7])
+goto_if_false @BLACKJ_24855
+$x, $y, $z = Object.GetCoordinates($bj_chip_set[7])
+13@ = Object.GetOffsetInWorldCoords(13@, $z, 0@, 0.0, 0.0, 13@)
+Object.SetCoordinates($bj_chip_set[7], $x, $y, $z)
+
+:BLACKJ_24855
+return 
+
+:BLACKJ_24857
+Hud.SetSpritesDrawBeforeFade(False)
+Hud.DrawWindow($screen_pos_x[0], $screen_pos_y[0], $screen_pos_x[1], $screen_pos_y[1], 'BJ_TITL', 2)
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetColor(134, 155, 184, 255)
+Text.Display($screen_pos_x[2], $screen_pos_y[2], 'BJ_01')
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetScale(0.6253, 2.7876)
+Text.DisplayWithNumber($screen_pos_x[3], $screen_pos_y[3], 'DOLLAR', $bj_initial_stake)
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetColor(134, 155, 184, 255)
+Text.Display($screen_pos_x[4], $screen_pos_y[4], 'BJ_02')
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetScale(0.6253, 2.7876)
+Text.DisplayWithNumber($screen_pos_x[5], $screen_pos_y[5], 'DOLLAR', 30@)
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetColor(134, 155, 184, 255)
+Text.Display($screen_pos_x[6], $screen_pos_y[6], 'BJ_03')
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetScale(0.6253, 2.7876)
+Text.DisplayWithNumber($screen_pos_x[7], $screen_pos_y[7], 'DOLLAR', 29@)
+return 
+
+:BLACKJ_25143
+Hud.SetSpritesDrawBeforeFade(False)
+Hud.DrawWindow($screen_pos_x[8], $screen_pos_y[8], $screen_pos_x[9], $screen_pos_y[9], 'BJ_TITL', 2)
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetColor(134, 155, 184, 255)
+Text.Display($screen_pos_x[10], $screen_pos_y[10], 'BJ_01')
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetScale(0.6253, 2.7876)
+Text.DisplayWithNumber($screen_pos_x[11], $screen_pos_y[11], 'DOLLAR', $bj_initial_stake)
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetColor(134, 155, 184, 255)
+Text.Display($screen_pos_x[12], $screen_pos_y[12], 'BJ_04')
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetScale(0.6253, 2.7876)
+if 
+  2@ > 4
+goto_if_false @BLACKJ_25457
+if 
+  $dealer_total2 == 0
+goto_if_false @BLACKJ_25427
+if 
+  $dealer_total > 21
+goto_if_false @BLACKJ_25400
+Text.Display($screen_pos_x[13], $screen_pos_y[13], 'BJ_BUST')
+goto @BLACKJ_25420
+
+:BLACKJ_25400
+Text.DisplayWithNumber($screen_pos_x[13], $screen_pos_y[13], 'BJ_0', $dealer_total)
+
+:BLACKJ_25420
+goto @BLACKJ_25450
+
+:BLACKJ_25427
+Text.DisplayWith2Numbers($screen_pos_x[14], $screen_pos_y[14], 'BJ_OR2', $dealer_total, $dealer_total2)
+
+:BLACKJ_25450
+goto @BLACKJ_25474
+
+:BLACKJ_25457
+Text.Display($screen_pos_x[13], $screen_pos_y[13], 'BJ_HIDE')
+
+:BLACKJ_25474
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetColor(134, 155, 184, 255)
+Text.Display($screen_pos_x[15], $screen_pos_y[15], 'BJ_05')
+if 
+  $player_total2 == 0
+goto_if_false @BLACKJ_25674
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetScale(0.6253, 2.7876)
+if 
+  $player_total1_b == 0
+goto_if_false @BLACKJ_25644
+if 
+  $player_total1 > 21
+goto_if_false @BLACKJ_25617
+Text.Display($screen_pos_x[16], $screen_pos_y[16], 'BJ_BUST')
+goto @BLACKJ_25637
+
+:BLACKJ_25617
+Text.DisplayWithNumber($screen_pos_x[16], $screen_pos_y[16], 'BJ_0', $player_total1)
+
+:BLACKJ_25637
+goto @BLACKJ_25667
+
+:BLACKJ_25644
+Text.DisplayWith2Numbers($screen_pos_x[17], $screen_pos_y[17], 'BJ_OR2', $player_total1, $player_total1_b)
+
+:BLACKJ_25667
+goto @BLACKJ_25940
+
+:BLACKJ_25674
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetScale(0.6253, 2.7876)
+if 
+  $player_total1_b == 0
+goto_if_false @BLACKJ_25784
+if 
+  $player_total1 > 21
+goto_if_false @BLACKJ_25757
+Text.Display($screen_pos_x[18], $screen_pos_y[18], 'BJ_BUST')
+goto @BLACKJ_25777
+
+:BLACKJ_25757
+Text.DisplayWithNumber($screen_pos_x[18], $screen_pos_y[18], 'BJ_0', $player_total1)
+
+:BLACKJ_25777
+goto @BLACKJ_25807
+
+:BLACKJ_25784
+Text.DisplayWith2Numbers($screen_pos_x[19], $screen_pos_y[19], 'BJ_OR2', $player_total1, $player_total1_b)
+
+:BLACKJ_25807
+gosub @BLACKJ_34042
+Hud.SetSpritesDrawBeforeFade(False)
+Text.SetScale(0.6253, 2.7876)
+if 
+  $player_total2_b == 0
+goto_if_false @BLACKJ_25917
+if 
+  $player_total2 > 21
+goto_if_false @BLACKJ_25890
+Text.Display($screen_pos_x[20], $screen_pos_y[20], 'BJ_BUST')
+goto @BLACKJ_25910
+
+:BLACKJ_25890
+Text.DisplayWithNumber($screen_pos_x[20], $screen_pos_y[20], 'BJ_0', $player_total2)
+
+:BLACKJ_25910
+goto @BLACKJ_25940
+
+:BLACKJ_25917
+Text.DisplayWith2Numbers($screen_pos_x[21], $screen_pos_y[21], 'BJ_OR2', $player_total2, $player_total2_b)
+
+:BLACKJ_25940
+return 
+if 
+is_ps2_keyboard_key_just_pressed 76
+goto_if_false @BLACKJ_26016
+$screen_pos += 1
+if 
+  $screen_pos > 26
+goto_if_false @BLACKJ_25989
+$screen_pos = -1
+
+:BLACKJ_25989
+write_debug_with_int "SCREEN_POSITION_EDIT" $screen_pos
+
+:BLACKJ_26016
+if 
+  $screen_pos > -1
+goto_if_false @BLACKJ_26154
+if 
+is_ps2_keyboard_key_just_pressed 128
+goto_if_false @BLACKJ_26064
+$screen_pos_x($screen_pos,27f) += 1.0
+
+:BLACKJ_26064
+if 
+is_ps2_keyboard_key_just_pressed 129
+goto_if_false @BLACKJ_26094
+$screen_pos_x($screen_pos,27f) += -1.0
+
+:BLACKJ_26094
+if 
+is_ps2_keyboard_key_just_pressed 131
+goto_if_false @BLACKJ_26124
+$screen_pos_y($screen_pos,27f) += -1.0
+
+:BLACKJ_26124
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @BLACKJ_26154
+$screen_pos_y($screen_pos,27f) += 1.0
+
+:BLACKJ_26154
+if 
+  $screen_pos > -1
+goto_if_false @BLACKJ_26913
+if 
+is_ps2_keyboard_key_just_pressed 137
+goto_if_false @BLACKJ_26913
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("------ SCREEN COORDS ------------OOP = OOP = ESTINATION) = ")
+10@ = 0
+
+:BLACKJ_26327
+if 
+  27 > 10@
+goto_if_false @BLACKJ_26911
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("SCREEN_POS_X[ COORDS ------------OOP = OOP = ESTINATION) = ")
+save_int_to_debug_file 10@
+Debugger.SaveStringToDebugFile("] = EN_POS_X[ COORDS ------------OOP = OOP = ESTINATION) = ")
+save_float_to_debug_file $screen_pos_x(10@,27f)
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("SCREEN_POS_Y[ COORDS ------------OOP = OOP = ESTINATION) = ")
+save_int_to_debug_file 10@
+Debugger.SaveStringToDebugFile("] = EN_POS_Y[ COORDS ------------OOP = OOP = ESTINATION) = ")
+save_float_to_debug_file $screen_pos_y(10@,27f)
+10@ += 1
+goto @BLACKJ_26327
+
+:BLACKJ_26911
+save_newline_to_debug_file 
+
+:BLACKJ_26913
+return 
+if 
+is_ps2_keyboard_key_just_pressed 66
+goto_if_false @BLACKJ_27279
+$bj_adjust_mode += 1
+if 
+  $bj_adjust_mode > 7
+goto_if_false @BLACKJ_26962
+$bj_adjust_mode = 0
+
+:BLACKJ_26962
+if 
+  $bj_adjust_mode == 1
+goto_if_false @BLACKJ_26998
+write_debug "EDIT_CARD_SIZE"
+
+:BLACKJ_26998
+if 
+  $bj_adjust_mode == 2
+goto_if_false @BLACKJ_27041
+write_debug "EDIT_CARD_POSITIONS_X"
+
+:BLACKJ_27041
+if 
+  $bj_adjust_mode == 3
+goto_if_false @BLACKJ_27091
+write_debug "EDIT_PLAYERS_CARD_POSITION_1"
+
+:BLACKJ_27091
+if 
+  $bj_adjust_mode == 4
+goto_if_false @BLACKJ_27142
+write_debug "EDIT_PLAYERS_CARD_POSITION_1B"
+
+:BLACKJ_27142
+if 
+  $bj_adjust_mode == 5
+goto_if_false @BLACKJ_27192
+write_debug "EDIT_PLAYERS_CARD_POSITION_2"
+
+:BLACKJ_27192
+if 
+  $bj_adjust_mode == 6
+goto_if_false @BLACKJ_27240
+write_debug "EDIT_DEALERS_CARD_POSITION"
+
+:BLACKJ_27240
+if 
+  $bj_adjust_mode == 7
+goto_if_false @BLACKJ_27279
+write_debug "EDIT_BORDER_WIDTH"
+
+:BLACKJ_27279
+if 
+  $bj_adjust_mode == 1
+goto_if_false @BLACKJ_27491
+if 
+is_ps2_keyboard_key_just_pressed 131
+goto_if_false @BLACKJ_27330
+$card_height += 1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_27330
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @BLACKJ_27394
+$card_height += -1.0
+if 
+  1.0 > $card_height
+goto_if_false @BLACKJ_27387
+$card_height = 1.0
+
+:BLACKJ_27387
+gosub @BLACKJ_32389
+
+:BLACKJ_27394
+if 
+is_ps2_keyboard_key_just_pressed 128
+goto_if_false @BLACKJ_27427
+$card_width += 1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_27427
+if 
+is_ps2_keyboard_key_just_pressed 129
+goto_if_false @BLACKJ_27491
+$card_width += -1.0
+if 
+  1.0 > $card_width
+goto_if_false @BLACKJ_27484
+$card_width = 1.0
+
+:BLACKJ_27484
+gosub @BLACKJ_32389
+
+:BLACKJ_27491
+if 
+  $bj_adjust_mode == 2
+goto_if_false @BLACKJ_27615
+if 
+is_ps2_keyboard_key_just_pressed 128
+goto_if_false @BLACKJ_27562
+$player_sprite1_x[0] += 1.0
+$player_sprite1b_x[0] += 1.0
+$player_sprite2_x[0] += 1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_27562
+if 
+is_ps2_keyboard_key_just_pressed 129
+goto_if_false @BLACKJ_27615
+$player_sprite1_x[0] += -1.0
+$player_sprite1b_x[0] += -1.0
+$player_sprite2_x[0] += -1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_27615
+if 
+  $bj_adjust_mode == 3
+goto_if_false @BLACKJ_27699
+if 
+is_ps2_keyboard_key_just_pressed 131
+goto_if_false @BLACKJ_27666
+$player_sprite1_y[0] += -1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_27666
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @BLACKJ_27699
+$player_sprite1_y[0] += 1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_27699
+if 
+  $bj_adjust_mode == 4
+goto_if_false @BLACKJ_27783
+if 
+is_ps2_keyboard_key_just_pressed 131
+goto_if_false @BLACKJ_27750
+$player_sprite1b_y[0] += -1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_27750
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @BLACKJ_27783
+$player_sprite1b_y[0] += 1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_27783
+if 
+  $bj_adjust_mode == 5
+goto_if_false @BLACKJ_27867
+if 
+is_ps2_keyboard_key_just_pressed 131
+goto_if_false @BLACKJ_27834
+$player_sprite2_y[0] += -1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_27834
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @BLACKJ_27867
+$player_sprite2_y[0] += 1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_27867
+if 
+  $bj_adjust_mode == 6
+goto_if_false @BLACKJ_28017
+if 
+is_ps2_keyboard_key_just_pressed 128
+goto_if_false @BLACKJ_27918
+$dealer_sprite_x[0] += 1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_27918
+if 
+is_ps2_keyboard_key_just_pressed 129
+goto_if_false @BLACKJ_27951
+$dealer_sprite_x[0] += -1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_27951
+if 
+is_ps2_keyboard_key_just_pressed 131
+goto_if_false @BLACKJ_27984
+$dealer_sprite_y[0] += -1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_27984
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @BLACKJ_28017
+$dealer_sprite_y[0] += 1.0
+gosub @BLACKJ_32389
+
+:BLACKJ_28017
+if 
+  $bj_adjust_mode == 7
+goto_if_false @BLACKJ_28087
+if 
+is_ps2_keyboard_key_just_pressed 128
+goto_if_false @BLACKJ_28061
+$border_width += 1.0
+
+:BLACKJ_28061
+if 
+is_ps2_keyboard_key_just_pressed 129
+goto_if_false @BLACKJ_28087
+$border_width += -1.0
+
+:BLACKJ_28087
+if 
+  $bj_adjust_mode > 0
+goto_if_false @BLACKJ_29762
+if 
+is_ps2_keyboard_key_just_pressed 137
+goto_if_false @BLACKJ_29762
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("----- BLACKJACK SCREEN COORDS ------ = OOP = ESTINATION) = ")
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CARD_WIDTH = CK SCREEN COORDS ------ = OOP = ESTINATION) = ")
+save_float_to_debug_file $card_width
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CARD_HEIGHT = THSCREEN COORDS ------ = OOP = ESTINATION) = ")
+save_float_to_debug_file $card_height
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("PLAYER_SPRITE1_X[0] =  COORDS ------ = OOP = ESTINATION) = ")
+save_float_to_debug_file $player_sprite1_x[0]
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("PLAYER_SPRITE1_Y[0] =  COORDS ------ = OOP = ESTINATION) = ")
+save_float_to_debug_file $player_sprite1_y[0]
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("PLAYER_SPRITE1B_X[0] = COORDS ------ = OOP = ESTINATION) = ")
+save_float_to_debug_file $player_sprite1b_x[0]
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("PLAYER_SPRITE1B_Y[0] = COORDS ------ = OOP = ESTINATION) = ")
+save_float_to_debug_file $player_sprite1b_y[0]
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("PLAYER_SPRITE2_X[0] =  COORDS ------ = OOP = ESTINATION) = ")
+save_float_to_debug_file $player_sprite2_x[0]
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("PLAYER_SPRITE2_Y[0] =  COORDS ------ = OOP = ESTINATION) = ")
+save_float_to_debug_file $player_sprite2_y[0]
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("DEALER_SPRITE_X[0] =   COORDS ------ = OOP = ESTINATION) = ")
+save_float_to_debug_file $dealer_sprite_x[0]
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("DEALER_SPRITE_Y[0] =   COORDS ------ = OOP = ESTINATION) = ")
+save_float_to_debug_file $dealer_sprite_y[0]
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BORDER_WIDTH = SPRITE  COORDS ------ = OOP = ESTINATION) = ")
+save_float_to_debug_file $border_width
+save_newline_to_debug_file 
+
+:BLACKJ_29762
+return 
+
+:BLACKJ_29764
+if 
+  $card_cheat_on == 0
+goto_if_false @BLACKJ_29801
+$next_card = 0
+$next_card = CardDecks.FetchNextCard()
+goto @BLACKJ_29809
+
+:BLACKJ_29801
+set_var_int_to_var_int $next_card = $card_cheat_value
+
+:BLACKJ_29809
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_29863
+Task.PlayAnim(1@, "DEALONE", "CASINO", 6.0, False, False, False, False, 500)
+
+:BLACKJ_29863
+return 
+
+:BLACKJ_29865
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @BLACKJ_31218
+if 
+  $player_has_split == 0
+goto_if_false @BLACKJ_30100
+set_lvar_float_to_var_float 13@ = $card_width
+13@ /= 2.0
+set_var_float_to_var_float $x = $player_sprite1_x[0]
+sub_float_lvar_from_float_var $x -= 13@
+sub_float_var_from_float_var $x -= $border_width
+set_lvar_float_to_var_float 13@ = $card_height
+13@ /= 2.0
+set_var_float_to_var_float $y = $player_sprite1_y[0]
+sub_float_lvar_from_float_var $y -= 13@
+sub_float_var_from_float_var $y -= $border_width
+set_lvar_float_to_var_float 13@ = $card_width
+13@ /= 2.0
+set_lvar_float_to_var_float 17@ = $player_sprite1_x[4]
+add_float_lvar_to_float_lvar 17@ += 13@
+add_float_var_to_float_lvar 17@ += $border_width
+set_lvar_float_to_var_float 13@ = $card_height
+13@ /= 2.0
+set_lvar_float_to_var_float 18@ = $player_sprite1_y[4]
+add_float_lvar_to_float_lvar 18@ += 13@
+add_float_var_to_float_lvar 18@ += $border_width
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawWindow($x, $y, 17@, 18@, 'DUMMY', 0)
+goto @BLACKJ_30297
+
+:BLACKJ_30100
+set_lvar_float_to_var_float 13@ = $card_width
+13@ /= 2.0
+set_var_float_to_var_float $x = $player_sprite1b_x[0]
+sub_float_lvar_from_float_var $x -= 13@
+sub_float_var_from_float_var $x -= $border_width
+set_lvar_float_to_var_float 13@ = $card_height
+13@ /= 2.0
+set_var_float_to_var_float $y = $player_sprite1b_y[0]
+sub_float_lvar_from_float_var $y -= 13@
+sub_float_var_from_float_var $y -= $border_width
+set_lvar_float_to_var_float 13@ = $card_width
+13@ /= 2.0
+set_lvar_float_to_var_float 17@ = $player_sprite2_x[4]
+add_float_lvar_to_float_lvar 17@ += 13@
+add_float_var_to_float_lvar 17@ += $border_width
+set_lvar_float_to_var_float 13@ = $card_height
+13@ /= 2.0
+set_lvar_float_to_var_float 18@ = $player_sprite2_y[4]
+add_float_lvar_to_float_lvar 18@ += 13@
+add_float_var_to_float_lvar 18@ += $border_width
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawWindow($x, $y, 17@, 18@, 'DUMMY', 0)
+
+:BLACKJ_30297
+if and
+  not Text.IsThisHelpMessageBeingDisplayed('SGPUNT')
+  not Text.IsThisHelpMessageBeingDisplayed('SGGAMB')
+  not Text.IsThisHelpMessageBeingDisplayed('SGPROF')
+  not Text.IsThisHelpMessageBeingDisplayed('SGHIRO')
+goto_if_false @BLACKJ_30549
+set_lvar_float_to_var_float 13@ = $card_width
+13@ /= 2.0
+set_var_float_to_var_float $x = $dealer_sprite_x[0]
+sub_float_lvar_from_float_var $x -= 13@
+sub_float_var_from_float_var $x -= $border_width
+set_lvar_float_to_var_float 13@ = $card_height
+13@ /= 2.0
+set_var_float_to_var_float $y = $dealer_sprite_y[0]
+sub_float_lvar_from_float_var $y -= 13@
+sub_float_var_from_float_var $y -= $border_width
+set_lvar_float_to_var_float 13@ = $card_width
+13@ /= 2.0
+set_lvar_float_to_var_float 17@ = $dealer_sprite_x[4]
+add_float_lvar_to_float_lvar 17@ += 13@
+add_float_var_to_float_lvar 17@ += $border_width
+set_lvar_float_to_var_float 13@ = $card_height
+13@ /= 2.0
+set_lvar_float_to_var_float 18@ = $dealer_sprite_y[4]
+add_float_lvar_to_float_lvar 18@ += 13@
+add_float_var_to_float_lvar 18@ += $border_width
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawWindow($x, $y, 17@, 18@, 'DUMMY', 0)
+
+:BLACKJ_30549
+$counter_disp = 0
+
+:BLACKJ_30556
+if 
+  8 > $counter_disp
+goto_if_false @BLACKJ_31218
+if 
+  $player_has_split == 0
+goto_if_false @BLACKJ_30666
+if 
+  $players_cards1($counter_disp,8i) <> 0
+goto_if_false @BLACKJ_30659
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite($players_cards1($counter_disp,8i), $player_sprite1_x($counter_disp,8f), $player_sprite1_y($counter_disp,8f), $card_width, $card_height, 128, 128, 128, 255)
+
+:BLACKJ_30659
+goto @BLACKJ_30800
+
+:BLACKJ_30666
+if 
+  $players_cards1($counter_disp,8i) <> 0
+goto_if_false @BLACKJ_30733
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite($players_cards1($counter_disp,8i), $player_sprite1b_x($counter_disp,8f), $player_sprite1b_y($counter_disp,8f), $card_width, $card_height, 128, 128, 128, 255)
+
+:BLACKJ_30733
+if 
+  $players_cards2($counter_disp,8i) <> 0
+goto_if_false @BLACKJ_30800
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite($players_cards2($counter_disp,8i), $player_sprite2_x($counter_disp,8f), $player_sprite2_y($counter_disp,8f), $card_width, $card_height, 128, 128, 128, 255)
+
+:BLACKJ_30800
+if and
+  not Text.IsThisHelpMessageBeingDisplayed('SGPUNT')
+  not Text.IsThisHelpMessageBeingDisplayed('SGGAMB')
+  not Text.IsThisHelpMessageBeingDisplayed('SGPROF')
+  not Text.IsThisHelpMessageBeingDisplayed('SGHIRO')
+goto_if_false @BLACKJ_31199
+if 
+  $dealers_cards($counter_disp,8i) <> 0
+goto_if_false @BLACKJ_31192
+if 
+  $counter_disp == 0
+goto_if_false @BLACKJ_31147
+if 
+  $player_has_split == 0
+goto_if_false @BLACKJ_31030
+if 
+  $player_has_stuck1 == 0
+goto_if_false @BLACKJ_30978
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(53, $dealer_sprite_x($counter_disp,8f), $dealer_sprite_y($counter_disp,8f), $card_width, $card_height, 128, 128, 128, 255)
+goto @BLACKJ_31023
+
+:BLACKJ_30978
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite($dealers_cards($counter_disp,8i), $dealer_sprite_x($counter_disp,8f), $dealer_sprite_y($counter_disp,8f), $card_width, $card_height, 128, 128, 128, 255)
+
+:BLACKJ_31023
+goto @BLACKJ_31140
+
+:BLACKJ_31030
+if 
+  $player_has_stuck2 == 0
+goto_if_false @BLACKJ_31095
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(53, $dealer_sprite_x($counter_disp,8f), $dealer_sprite_y($counter_disp,8f), $card_width, $card_height, 128, 128, 128, 255)
+goto @BLACKJ_31140
+
+:BLACKJ_31095
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite($dealers_cards($counter_disp,8i), $dealer_sprite_x($counter_disp,8f), $dealer_sprite_y($counter_disp,8f), $card_width, $card_height, 128, 128, 128, 255)
+
+:BLACKJ_31140
+goto @BLACKJ_31192
+
+:BLACKJ_31147
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite($dealers_cards($counter_disp,8i), $dealer_sprite_x($counter_disp,8f), $dealer_sprite_y($counter_disp,8f), $card_width, $card_height, 128, 128, 128, 255)
+
+:BLACKJ_31192
+goto @BLACKJ_31204
+
+:BLACKJ_31199
+Text.SetHelpMessageBoxSize(200)
+
+:BLACKJ_31204
+$counter_disp += 1
+goto @BLACKJ_30556
+
+:BLACKJ_31218
+return 
+
+:BLACKJ_31220
+$dealer_total = 0
+$dealer_total2 = 0
+$player_total1 = 0
+$player_total1_b = 0
+$player_total2 = 0
+$player_total2_b = 0
+$dealer_got_ace = 0
+$player_got_ace1 = 0
+$player_got_ace2 = 0
+$ct_temp_int = 0
+
+:BLACKJ_31290
+if 
+  8 > $ct_temp_int
+goto_if_false @BLACKJ_31775
+if 
+  $dealers_cards($ct_temp_int,8i) <> 0
+goto_if_false @BLACKJ_31459
+set_var_int_to_var_int $ct_this_card_value = $dealers_cards($ct_temp_int,8i)
+set_var_int_to_var_int $in_card_value = $ct_this_card_value
+gosub @BLACKJ_32050
+set_var_int_to_var_int $ct_this_card_value = $out_card_value
+if 
+  $ct_this_card_value == 1
+goto_if_false @BLACKJ_31443
+if 
+  $dealer_got_ace == 0
+goto_if_false @BLACKJ_31422
+$dealer_total += 11
+$dealer_got_ace = 1
+goto @BLACKJ_31429
+
+:BLACKJ_31422
+$dealer_total += 1
+
+:BLACKJ_31429
+$dealer_total2 += 1
+goto @BLACKJ_31459
+
+:BLACKJ_31443
+add_int_var_to_int_var $dealer_total += $ct_this_card_value
+add_int_var_to_int_var $dealer_total2 += $ct_this_card_value
+
+:BLACKJ_31459
+if 
+  $players_cards1($ct_temp_int,8i) <> 0
+goto_if_false @BLACKJ_31610
+set_var_int_to_var_int $ct_this_card_value = $players_cards1($ct_temp_int,8i)
+set_var_int_to_var_int $in_card_value = $ct_this_card_value
+gosub @BLACKJ_32050
+set_var_int_to_var_int $ct_this_card_value = $out_card_value
+if 
+  $ct_this_card_value == 1
+goto_if_false @BLACKJ_31594
+if 
+  $player_got_ace1 == 0
+goto_if_false @BLACKJ_31573
+$player_total1 += 11
+$player_got_ace1 = 1
+goto @BLACKJ_31580
+
+:BLACKJ_31573
+$player_total1 += 1
+
+:BLACKJ_31580
+$player_total1_b += 1
+goto @BLACKJ_31610
+
+:BLACKJ_31594
+add_int_var_to_int_var $player_total1 += $ct_this_card_value
+add_int_var_to_int_var $player_total1_b += $ct_this_card_value
+
+:BLACKJ_31610
+if 
+  $players_cards2($ct_temp_int,8i) <> 0
+goto_if_false @BLACKJ_31761
+set_var_int_to_var_int $ct_this_card_value = $players_cards2($ct_temp_int,8i)
+set_var_int_to_var_int $in_card_value = $ct_this_card_value
+gosub @BLACKJ_32050
+set_var_int_to_var_int $ct_this_card_value = $out_card_value
+if 
+  $ct_this_card_value == 1
+goto_if_false @BLACKJ_31745
+if 
+  $player_got_ace2 == 0
+goto_if_false @BLACKJ_31724
+$player_total2 += 11
+$player_got_ace2 = 1
+goto @BLACKJ_31731
+
+:BLACKJ_31724
+$player_total2 += 1
+
+:BLACKJ_31731
+$player_total2_b += 1
+goto @BLACKJ_31761
+
+:BLACKJ_31745
+add_int_var_to_int_var $player_total2 += $ct_this_card_value
+add_int_var_to_int_var $player_total2_b += $ct_this_card_value
+
+:BLACKJ_31761
+$ct_temp_int += 1
+goto @BLACKJ_31290
+
+:BLACKJ_31775
+if 
+  is_int_var_greater_than_int_var $dealer_total > $dealer_total2
+goto_if_false @BLACKJ_31859
+if 
+  $dealer_total > 21
+goto_if_false @BLACKJ_31827
+set_var_int_to_var_int $dealer_total = $dealer_total2
+$dealer_total2 = 0
+
+:BLACKJ_31827
+if 
+  $dealer_total == 21
+goto_if_false @BLACKJ_31852
+$dealer_total2 = 0
+
+:BLACKJ_31852
+goto @BLACKJ_31866
+
+:BLACKJ_31859
+$dealer_total2 = 0
+
+:BLACKJ_31866
+if 
+  is_int_var_greater_than_int_var $player_total1 > $player_total1_b
+goto_if_false @BLACKJ_31950
+if 
+  $player_total1 > 21
+goto_if_false @BLACKJ_31918
+set_var_int_to_var_int $player_total1 = $player_total1_b
+$player_total1_b = 0
+
+:BLACKJ_31918
+if 
+  $player_total1 == 21
+goto_if_false @BLACKJ_31943
+$player_total1_b = 0
+
+:BLACKJ_31943
+goto @BLACKJ_31957
+
+:BLACKJ_31950
+$player_total1_b = 0
+
+:BLACKJ_31957
+if 
+  is_int_var_greater_than_int_var $player_total2 > $player_total2_b
+goto_if_false @BLACKJ_32041
+if 
+  $player_total2 > 21
+goto_if_false @BLACKJ_32009
+set_var_int_to_var_int $player_total2 = $player_total2_b
+$player_total2_b = 0
+
+:BLACKJ_32009
+if 
+  $player_total2 == 21
+goto_if_false @BLACKJ_32034
+$player_total2_b = 0
+
+:BLACKJ_32034
+goto @BLACKJ_32048
+
+:BLACKJ_32041
+$player_total2_b = 0
+
+:BLACKJ_32048
+return 
+
+:BLACKJ_32050
+if 
+  14 > $in_card_value
+goto_if_false @BLACKJ_32076
+set_var_int_to_var_int $out_card_value = $in_card_value
+
+:BLACKJ_32076
+if and
+  27 > $in_card_value
+  $in_card_value > 13
+goto_if_false @BLACKJ_32116
+set_var_int_to_var_int $out_card_value = $in_card_value
+$out_card_value -= 13
+
+:BLACKJ_32116
+if and
+  40 > $in_card_value
+  $in_card_value > 26
+goto_if_false @BLACKJ_32156
+set_var_int_to_var_int $out_card_value = $in_card_value
+$out_card_value -= 26
+
+:BLACKJ_32156
+if and
+  53 > $in_card_value
+  $in_card_value > 39
+goto_if_false @BLACKJ_32196
+set_var_int_to_var_int $out_card_value = $in_card_value
+$out_card_value -= 39
+
+:BLACKJ_32196
+if 
+  14 > $out_card_value
+goto_if_false @BLACKJ_32239
+if 
+  $out_card_value > 10
+goto_if_false @BLACKJ_32239
+$out_card_value = 10
+
+:BLACKJ_32239
+return 
+
+:BLACKJ_32241
+if 
+  14 > $in_card_value
+goto_if_false @BLACKJ_32267
+set_var_int_to_var_int $out_card_value = $in_card_value
+
+:BLACKJ_32267
+if and
+  27 > $in_card_value
+  $in_card_value > 13
+goto_if_false @BLACKJ_32307
+set_var_int_to_var_int $out_card_value = $in_card_value
+$out_card_value -= 13
+
+:BLACKJ_32307
+if and
+  40 > $in_card_value
+  $in_card_value > 26
+goto_if_false @BLACKJ_32347
+set_var_int_to_var_int $out_card_value = $in_card_value
+$out_card_value -= 26
+
+:BLACKJ_32347
+if and
+  53 > $in_card_value
+  $in_card_value > 39
+goto_if_false @BLACKJ_32387
+set_var_int_to_var_int $out_card_value = $in_card_value
+$out_card_value -= 39
+
+:BLACKJ_32387
+return 
+
+:BLACKJ_32389
+set_var_float_to_var_float $player_sprite2_x[0] = $player_sprite1_x[0]
+set_var_float_to_var_float $player_sprite2_y[0] = $player_sprite1_y[0]
+set_var_float_to_var_float $player_sprite1b_x[0] = $player_sprite1_x[0]
+set_var_float_to_var_float $player_sprite1b_y[0] = $player_sprite1_y[0]
+sub_float_var_from_float_var $player_sprite1b_y[0] -= $card_height
+sub_float_var_from_float_var $player_sprite1b_y[0] -= $border_width
+10@ = 0
+
+:BLACKJ_32444
+if 
+  8 > 10@
+goto_if_false @BLACKJ_32773
+if 
+  5 > 10@
+goto_if_false @BLACKJ_32663
+set_var_float_to_var_float $spacing_x = $card_width
+add_float_var_to_float_var $spacing_x += $border_width
+cset_var_float_to_lvar_int $multiplier = integer 10@
+mult_float_var_by_float_var $multiplier *= $spacing_x
+set_var_float_to_var_float $player_sprite1_x(10@,8f) = $player_sprite1_x[0]
+add_float_var_to_float_var $player_sprite1_x(10@,8f) += $multiplier
+set_var_float_to_var_float $player_sprite1_y(10@,8f) = $player_sprite1_y[0]
+set_var_float_to_var_float $player_sprite1b_x(10@,8f) = $player_sprite1b_x[0]
+add_float_var_to_float_var $player_sprite1b_x(10@,8f) += $multiplier
+set_var_float_to_var_float $player_sprite1b_y(10@,8f) = $player_sprite1b_y[0]
+set_var_float_to_var_float $player_sprite2_x(10@,8f) = $player_sprite2_x[0]
+add_float_var_to_float_var $player_sprite2_x(10@,8f) += $multiplier
+set_var_float_to_var_float $player_sprite2_y(10@,8f) = $player_sprite2_y[0]
+set_var_float_to_var_float $dealer_sprite_x(10@,8f) = $dealer_sprite_x[0]
+add_float_var_to_float_var $dealer_sprite_x(10@,8f) += $multiplier
+set_var_float_to_var_float $dealer_sprite_y(10@,8f) = $dealer_sprite_y[0]
+goto @BLACKJ_32759
+
+:BLACKJ_32663
+set_var_float_to_var_float $player_sprite1_x(10@,8f) = $player_sprite1_x[4]
+set_var_float_to_var_float $player_sprite1_y(10@,8f) = $player_sprite1_y[4]
+set_var_float_to_var_float $player_sprite1b_x(10@,8f) = $player_sprite1b_x[4]
+set_var_float_to_var_float $player_sprite1b_y(10@,8f) = $player_sprite1b_y[4]
+set_var_float_to_var_float $player_sprite2_x(10@,8f) = $player_sprite2_x[4]
+set_var_float_to_var_float $player_sprite2_y(10@,8f) = $player_sprite2_y[4]
+set_var_float_to_var_float $dealer_sprite_x(10@,8f) = $dealer_sprite_x[4]
+set_var_float_to_var_float $dealer_sprite_y(10@,8f) = $dealer_sprite_y[4]
+
+:BLACKJ_32759
+10@ += 1
+goto @BLACKJ_32444
+
+:BLACKJ_32773
+return 
+$x, $y, $z = Camera.GetDebugCoordinates()
+if 
+  Object.DoesExist(0@)
+goto_if_false @BLACKJ_32824
+$bj_x2, $bj_y2, $bj_z2 = Object.GetCoordinates(0@)
+$heading = Object.GetHeading(0@)
+
+:BLACKJ_32824
+$heading *= -1.0
+13@ = Math.Cos($heading)
+14@ = Math.Sin($heading)
+set_var_float_to_var_float $bj_vec_x = $x
+sub_float_var_from_float_var $bj_vec_x -= $bj_x2
+set_var_float_to_var_float $bj_vec_y = $y
+sub_float_var_from_float_var $bj_vec_y -= $bj_y2
+set_var_float_to_var_float $bj_vec_z = $z
+sub_float_var_from_float_var $bj_vec_z -= $bj_z2
+set_var_float_to_var_float $bj_vec2_x = $bj_vec_x
+mult_float_var_by_float_lvar $bj_vec2_x *= 13@
+set_var_float_to_var_float $bj_temp_float3 = $bj_vec_y
+mult_float_var_by_float_lvar $bj_temp_float3 *= 14@
+sub_float_var_from_float_var $bj_vec2_x -= $bj_temp_float3
+set_var_float_to_var_float $bj_vec2_y = $bj_vec_x
+mult_float_var_by_float_lvar $bj_vec2_y *= 14@
+set_var_float_to_var_float $bj_temp_float3 = $bj_vec_y
+mult_float_var_by_float_lvar $bj_temp_float3 *= 13@
+add_float_var_to_float_var $bj_vec2_y += $bj_temp_float3
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("FIXED_CAMERA_POSITION - OFFSET FROM TABLE =  ESTINATION) = ")
+save_float_to_debug_file $bj_vec2_x
+save_float_to_debug_file $bj_vec2_y
+save_float_to_debug_file $bj_vec_z
+$x, $y, $z = Camera.GetDebugPointAt()
+set_var_float_to_var_float $bj_vec_x = $x
+sub_float_var_from_float_var $bj_vec_x -= $bj_x2
+set_var_float_to_var_float $bj_vec_y = $y
+sub_float_var_from_float_var $bj_vec_y -= $bj_y2
+set_var_float_to_var_float $bj_vec_z = $z
+sub_float_var_from_float_var $bj_vec_z -= $bj_z2
+set_var_float_to_var_float $bj_vec2_x = $bj_vec_x
+mult_float_var_by_float_lvar $bj_vec2_x *= 13@
+set_var_float_to_var_float $bj_temp_float3 = $bj_vec_y
+mult_float_var_by_float_lvar $bj_temp_float3 *= 14@
+sub_float_var_from_float_var $bj_vec2_x -= $bj_temp_float3
+set_var_float_to_var_float $bj_vec2_y = $bj_vec_x
+mult_float_var_by_float_lvar $bj_vec2_y *= 14@
+set_var_float_to_var_float $bj_temp_float3 = $bj_vec_y
+mult_float_var_by_float_lvar $bj_temp_float3 *= 13@
+add_float_var_to_float_var $bj_vec2_y += $bj_temp_float3
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CAMERA_POINT_AT - OFFSET FROM TABLE = BLE =  ESTINATION) = ")
+save_float_to_debug_file $bj_vec2_x
+save_float_to_debug_file $bj_vec2_y
+save_float_to_debug_file $bj_vec_z
+return 
+$x, $y, $z = Char.GetCoordinates($scplayer)
+if 
+  Object.DoesExist(0@)
+goto_if_false @BLACKJ_33465
+$bj_x2, $bj_y2, $bj_z2 = Object.GetCoordinates(0@)
+$heading = Object.GetHeading(0@)
+
+:BLACKJ_33465
+$heading *= -1.0
+13@ = Math.Cos($heading)
+14@ = Math.Sin($heading)
+set_var_float_to_var_float $bj_vec_x = $x
+sub_float_var_from_float_var $bj_vec_x -= $bj_x2
+set_var_float_to_var_float $bj_vec_y = $y
+sub_float_var_from_float_var $bj_vec_y -= $bj_y2
+set_var_float_to_var_float $bj_vec_z = $z
+sub_float_var_from_float_var $bj_vec_z -= $bj_z2
+set_var_float_to_var_float $bj_vec2_x = $bj_vec_x
+mult_float_var_by_float_lvar $bj_vec2_x *= 13@
+set_var_float_to_var_float $bj_temp_float3 = $bj_vec_y
+mult_float_var_by_float_lvar $bj_temp_float3 *= 14@
+sub_float_var_from_float_var $bj_vec2_x -= $bj_temp_float3
+set_var_float_to_var_float $bj_vec2_y = $bj_vec_x
+mult_float_var_by_float_lvar $bj_vec2_y *= 14@
+set_var_float_to_var_float $bj_temp_float3 = $bj_vec_y
+mult_float_var_by_float_lvar $bj_temp_float3 *= 13@
+add_float_var_to_float_var $bj_vec2_y += $bj_temp_float3
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("PLAYER_COORDINATES - OFFSET FROM TABLE =  =  ESTINATION) = ")
+save_float_to_debug_file $bj_vec2_x
+save_float_to_debug_file $bj_vec2_y
+save_float_to_debug_file $bj_vec_z
+return 
+
+:BLACKJ_33768
+13@ = Stat.GetFloat(81)
+if 
+  1.0 > 13@
+goto_if_false @BLACKJ_33810
+$casino_credit = 100
+goto @BLACKJ_33930
+
+:BLACKJ_33810
+if 
+  10.0 > 13@
+goto_if_false @BLACKJ_33846
+$casino_credit = 1000
+goto @BLACKJ_33930
+
+:BLACKJ_33846
+if 
+  100.0 > 13@
+goto_if_false @BLACKJ_33882
+$casino_credit = 10000
+goto @BLACKJ_33930
+
+:BLACKJ_33882
+if 
+  1000.0 > 13@
+goto_if_false @BLACKJ_33920
+$casino_credit = 100000
+goto @BLACKJ_33930
+
+:BLACKJ_33920
+$casino_credit = 1000000
+
+:BLACKJ_33930
+return 
+Text.SetColor(255, 255, 255, 255)
+Text.SetJustify(False)
+Text.SetRightJustify(False)
+Text.SetWrapX(2000.0)
+Text.SetProportional(True)
+Text.SetCenter(False)
+Text.SetBackground(False)
+Text.SetScale(0.6, 1.6)
+return 
+Text.SetColor(255, 180, 180, 255)
+Text.SetJustify(False)
+Text.SetRightJustify(False)
+Text.SetWrapX(2000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+Text.SetScale(2.0, 3.0)
+return 
+
+:BLACKJ_34042
+Text.SetColor(180, 180, 180, 255)
+Text.SetScale(0.4714, 2.5077)
+Text.SetRightJustify(False)
+Text.SetJustify(False)
+Text.SetCenter(False)
+Text.SetWrapX(640.0)
+Text.SetProportional(True)
+Text.SetBackground(False)
+return 
+Text.SetColor(180, 180, 180, 255)
+Text.SetScale(0.4714, 2.5077)
+Text.SetRightJustify(False)
+Text.SetJustify(False)
+Text.SetCenter(True)
+Text.SetWrapX(640.0)
+Text.SetProportional(True)
+Text.SetBackground(False)
+return 
+
+:BLACKJ_34152
+Text.SetColor(255, 255, 0, 255)
+Text.SetEdge(2, 0, 0, 0, 255)
+Text.SetScale($screen_pos_x[24], $screen_pos_y[24])
+Text.SetRightJustify(False)
+Text.SetJustify(False)
+Text.SetCenter(True)
+Text.SetWrapX(640.0)
+Text.SetProportional(True)
+Text.SetBackground(False)
+return 
+$colour_r, $colour_g, $colour_b, $colour_a = Hud.GetColor(6)
+Text.SetColor($colour_r, $colour_g, $colour_b, $colour_a)
+Text.SetFont(Font.Pricedown)
+Text.SetEdge(3, 0, 0, 0, 255)
+Text.SetScale(1.2, 4.0)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+return 
+$colour_r, $colour_g, $colour_b, $colour_a = Hud.GetColor(0)
+Text.SetColor($colour_r, $colour_g, $colour_b, $colour_a)
+Text.SetFont(Font.Pricedown)
+Text.SetEdge(3, 0, 0, 0, 255)
+Text.SetScale(1.2, 4.0)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+return 
+$colour_r, $colour_g, $colour_b, $colour_a = Hud.GetColor(HudObject.Health)
+Text.SetColor($colour_r, $colour_g, $colour_b, $colour_a)
+Text.SetFont(Font.Pricedown)
+Text.SetEdge(3, 0, 0, 0, 255)
+Text.SetScale(1.2, 4.0)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+return 
+$colour_r, $colour_g, $colour_b, $colour_a = Hud.GetColor(HudObject.Health)
+Text.SetColor($colour_r, $colour_g, $colour_b, $colour_a)
+Text.SetFont(Font.Menu)
+Text.SetEdge(2, 0, 0, 0, 255)
+Text.SetScale(0.52, 1.45)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+return 
+
+:BLACKJ_34567
+Game.SetMinigameInProgress(False)
+2@ = 0
+3@ = 0
+4@ = 0
+5@ = 0
+if and
+  not Text.IsThisHelpMessageBeingDisplayed('SGPUNT')
+  not Text.IsThisHelpMessageBeingDisplayed('SGGAMB')
+  not Text.IsThisHelpMessageBeingDisplayed('SGPROF')
+  not Text.IsThisHelpMessageBeingDisplayed('SGHIRO')
+goto_if_false @BLACKJ_34656
+Text.ClearHelp
+
+:BLACKJ_34656
+Camera.Restore
+10@ = 0
+
+:BLACKJ_34665
+if 
+  8 > 10@
+goto_if_false @BLACKJ_34726
+if 
+  Object.DoesExist($bj_chip_set(10@,8i))
+goto_if_false @BLACKJ_34712
+Object.Delete($bj_chip_set(10@,8i))
+
+:BLACKJ_34712
+10@ += 1
+goto @BLACKJ_34665
+
+:BLACKJ_34726
+if 
+  not Char.IsDead(1@)
+goto_if_false @BLACKJ_34749
+Task.StayInSamePlace(1@, True)
+
+:BLACKJ_34749
+terminate_all_scripts_with_this_name 'CASHWIN'
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+Streaming.RemoveAnimation("CASINO")
+Txd.Remove
+Text.UseCommands(False)
+Hud.DisplayRadar(True)
+switch_rubbish 1
+Text.SetHelpMessageBoxSize(200)
+return 
+terminate_this_script 
+

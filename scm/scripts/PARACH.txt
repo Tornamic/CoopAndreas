@@ -1,0 +1,1019 @@
+//-------------External script 1 (PARACHUTE)---------------
+
+:PARACH
+script_name 'PARACH'
+$has_freefall_started = 0
+31@ = Math.RandomIntInRange(0, 6)
+11@ = 10
+17@ = 0
+12@ = 0
+$ai_landed = 0
+if 
+  12@ == 100
+goto_if_false @PARACH_122
+0@ = Pickup.Create(#BRIEFCASE, 3, 32.1527, 2239.726, 125.672)
+8@ = Char.Create(4, 61, 32.1527, 2239.726, 125.672)
+
+:PARACH_122
+if 
+  not Char.IsDead(8@)
+goto_if_false @PARACH_146
+30@ = Char.GetHeightAboveGround(8@)
+
+:PARACH_146
+wait 0
+set_var_int_to_lvar_int $player_freefall = 17@
+if 
+  $ai_landed == 2
+goto_if_false @PARACH_202
+if 
+  is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_202
+gosub @PARACH_6417
+
+:PARACH_202
+if 
+  0@ <> -1
+goto_if_false @PARACH_293
+if 
+  11@ == 10
+goto_if_false @PARACH_293
+if 
+  0@ <> -1
+goto_if_false @PARACH_286
+if 
+  Pickup.HasBeenCollected(0@)
+goto_if_false @PARACH_279
+11@ = 0
+
+:PARACH_279
+goto @PARACH_293
+
+:PARACH_286
+11@ = 0
+
+:PARACH_293
+if 
+  0@ == -1
+goto_if_false @PARACH_336
+if 
+  11@ == 10
+goto_if_false @PARACH_336
+11@ = 0
+
+:PARACH_336
+if 
+  11@ == 0
+goto_if_false @PARACH_384
+Streaming.RequestAnimation("PARACHUTE")
+Streaming.RequestModel(#PARACHUTE)
+Streaming.RequestModel(#PARA_PACK)
+11@ = 1
+
+:PARACH_384
+if 
+  11@ == 1
+goto_if_false @PARACH_443
+if and
+  Streaming.HasAnimationLoaded("PARACHUTE")
+  Streaming.HasModelLoaded(#PARACHUTE)
+  Streaming.HasModelLoaded(#PARA_PACK)
+goto_if_false @PARACH_443
+11@ = 2
+
+:PARACH_443
+if 
+  11@ == 2
+goto_if_false @PARACH_654
+if 
+  not Char.IsDead(8@)
+goto_if_false @PARACH_491
+$player_x, $player_y, $player_z = Char.GetCoordinates(8@)
+
+:PARACH_491
+9@ = Object.Create(#PARACHUTE, $player_x, $player_y, $player_z)
+10@ = Object.Create(#PARA_PACK, $player_x, $player_y, $player_z)
+Object.SetVisible(9@, False)
+if 
+  not Char.IsDead(8@)
+goto_if_false @PARACH_647
+Object.AttachToChar(9@, 8@, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+Object.SetRotation(10@, 90.0, 90.0, 90.0)
+Task.PickUpObject(8@, 10@, -0.11, -0.05, 0.0, 1, 16, "NULL", "NULL", 0)
+
+:PARACH_647
+11@ = 3
+
+:PARACH_654
+if 
+  11@ == 3
+goto_if_false @PARACH_6053
+if 
+  not Char.IsDead(8@)
+goto_if_false @PARACH_6053
+if 
+  31@ == 0
+goto_if_false @PARACH_756
+30@ = Char.GetHeightAboveGround(8@)
+if 
+  5.0 > 30@
+goto_if_false @PARACH_749
+31@ = 2
+goto @PARACH_756
+
+:PARACH_749
+31@ = 5
+
+:PARACH_756
+31@ -= 1
+if 
+  not is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_789
+gosub @PARACH_6503
+
+:PARACH_789
+if 
+  Char.IsInAnyCar(8@)
+goto_if_false @PARACH_819
+$p_in_air = 1
+goto @PARACH_826
+
+:PARACH_819
+$p_in_air = 0
+
+:PARACH_826
+if 
+  not Char.IsDead(8@)
+goto_if_false @PARACH_1186
+if or
+  Char.IsInAir(8@)
+  $p_in_air == 0
+goto_if_false @PARACH_1186
+if and
+  17@ == 0
+  14@ == 0
+  30@ > 5.0
+goto_if_false @PARACH_1186
+if 
+  $p_in_air == 0
+goto_if_false @PARACH_988
+$x_car_speed = Math.Sin($para_give_heading)
+mult_float_var_by_float_var $x_car_speed *= $para_give_speed
+$x_car_speed *= -1.0
+$y_car_speed = Math.Cos($para_give_heading)
+mult_float_var_by_float_var $y_car_speed *= $para_give_speed
+$tempf1, $tempf1, $tempf1 = Char.GetVelocity(8@)
+Char.SetVelocity(8@, $x_car_speed, $y_car_speed, $tempf1)
+
+:PARACH_988
+17@ = 1
+$has_freefall_started = 1
+set_lvar_int_to_lvar_int 18@ = TIMERA
+27@ = Char.GetHeading(8@)
+if 
+  is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_1071
+$end_cam_z = 3.0
+$end_cam_y = -2.0
+16@ = 0
+gosub @PARACH_6083
+
+:PARACH_1071
+if 
+  7@ == 0
+goto_if_false @PARACH_1141
+Task.PlayAnimNonInterruptable(8@, "FALL_SKYDIVE", "PARACHUTE", 1.0, True, False, False, False, -1)
+goto @PARACH_1186
+
+:PARACH_1141
+Task.PlayAnimNonInterruptable(8@, "FALL_SKYDIVE", "PARACHUTE", 1000.0, True, False, False, False, -1)
+
+:PARACH_1186
+if 
+  17@ == 1
+goto_if_false @PARACH_2838
+if 
+  Char.IsInWater(8@)
+goto_if_false @PARACH_1268
+Task.DieNamedAnim(8@, "FALL_SKYDIVE_DIE", "PARACHUTE", 1000.0, 0)
+17@ = 2
+
+:PARACH_1268
+if 
+  3.0 > 30@
+goto_if_false @PARACH_1337
+Task.DieNamedAnim(8@, "FALL_SKYDIVE_DIE", "PARACHUTE", 1000.0, 0)
+17@ = 2
+
+:PARACH_1337
+$tempf1, $tempf1, $tempf2 = Char.GetVelocity(8@)
+if 
+  is_float_lvar_greater_than_float_var 1@ > $tempf2
+goto_if_false @PARACH_1378
+set_var_float_to_lvar_float $tempf2 = 1@
+
+:PARACH_1378
+set_var_int_to_lvar_int $tempv1 = TIMERA
+sub_int_lvar_from_int_var $tempv1 -= 18@
+cset_lvar_float_to_var_int 28@ = integer $tempv1
+28@ /= 2000.0
+if 
+  28@ > 1.0
+goto_if_false @PARACH_1443
+28@ = 1.0
+
+:PARACH_1443
+if 
+  is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_1490
+if 
+  1.0 >= 28@
+goto_if_false @PARACH_1490
+gosub @PARACH_6307
+
+:PARACH_1490
+if 
+  28@ == 1.0
+goto_if_false @PARACH_2431
+if 
+  is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_2413
+$tempv1, $tempv2, $tempv3, $tempv3 = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+cset_var_float_to_var_int $tempf4 = integer $tempv1
+$tempf4 /= 256.0
+add_float_var_to_float_lvar 25@ += $tempf4
+set_var_float_to_lvar_float $tempf5 = 25@
+$tempf5 /= 30.0
+if 
+  -1.6 > $tempf5
+goto_if_false @PARACH_1621
+$tempf5 = -1.6
+
+:PARACH_1621
+if 
+  $tempf5 > 1.6
+goto_if_false @PARACH_1652
+$tempf5 = 1.6
+
+:PARACH_1652
+sub_float_var_from_float_lvar 27@ -= $tempf5
+if 
+  $tempf4 == 0.0
+goto_if_false @PARACH_1712
+if 
+  25@ <> 0.0
+goto_if_false @PARACH_1712
+25@ *= 0.95
+
+:PARACH_1712
+set_var_float_to_lvar_float $tempf3 = 26@
+$tempf3 *= 6.0
+cset_var_float_to_var_int $para_turny_rate = integer $tempv2
+sub_float_var_from_float_var $para_turny_rate -= $tempf3
+$para_turny_rate /= 256.0
+add_float_var_to_float_lvar 26@ += $para_turny_rate
+if 
+  -30.0 > 26@
+goto_if_false @PARACH_1795
+26@ = -30.0
+
+:PARACH_1795
+if 
+  26@ > 30.0
+goto_if_false @PARACH_1826
+26@ = 30.0
+
+:PARACH_1826
+if 
+  $para_turny_rate == 0.0
+goto_if_false @PARACH_1878
+if 
+  26@ <> 0.0
+goto_if_false @PARACH_1878
+26@ *= 0.97
+
+:PARACH_1878
+$x = Math.Sin(27@)
+$y = Math.Cos(27@)
+set_var_float_to_lvar_float $tempf4 = 26@
+$tempf4 /= -5.0
+mult_float_var_by_float_lvar $x *= 2@
+mult_float_var_by_float_var $x *= $tempf4
+$x *= -1.0
+mult_float_var_by_float_lvar $y *= 2@
+mult_float_var_by_float_var $y *= $tempf4
+$tempf3, $tempf4, $tempf1 = Char.GetVelocity(8@)
+$x *= -1.0
+add_float_var_to_float_var $x += $tempf3
+$x *= 0.1
+sub_float_var_from_float_var $tempf3 -= $x
+$y *= -1.0
+add_float_var_to_float_var $y += $tempf4
+$y *= 0.1
+sub_float_var_from_float_var $tempf4 -= $y
+Char.SetVelocity(8@, $tempf3, $tempf4, $tempf2)
+Char.SetRotation(8@, 26@, 0.0, 27@)
+if 
+  -100 > $tempv2
+goto_if_false @PARACH_2171
+if 
+  15@ <> 4
+goto_if_false @PARACH_2164
+15@ = 4
+Task.PlayAnimNonInterruptable(8@, "FALL_SKYDIVE_ACCEL", "PARACHUTE", 1.0, True, False, False, True, -2)
+
+:PARACH_2164
+goto @PARACH_2406
+
+:PARACH_2171
+if and
+  $tempv1 == 0
+  15@ <> 0
+goto_if_false @PARACH_2248
+15@ = 0
+Task.PlayAnimNonInterruptable(8@, "FALL_SKYDIVE", "PARACHUTE", 1.0, True, False, False, True, -2)
+
+:PARACH_2248
+if and
+  0 > $tempv1
+  15@ <> -1
+goto_if_false @PARACH_2327
+15@ = -1
+Task.PlayAnimNonInterruptable(8@, "FALL_SKYDIVE_L", "PARACHUTE", 1.0, True, False, False, True, -2)
+
+:PARACH_2327
+if and
+  $tempv1 > 0
+  15@ <> 1
+goto_if_false @PARACH_2406
+15@ = 1
+Task.PlayAnimNonInterruptable(8@, "FALL_SKYDIVE_R", "PARACHUTE", 1.0, True, False, False, True, -2)
+
+:PARACH_2406
+goto @PARACH_2431
+
+:PARACH_2413
+Char.SetVelocity(8@, 0.0, 0.0, 1@)
+
+:PARACH_2431
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+  $force_chute_open == 1
+goto_if_false @PARACH_2652
+if 
+  $force_chute_open <> 2
+goto_if_false @PARACH_2652
+if 
+  is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_2652
+17@ = 0
+15@ = 0
+14@ = 1
+Object.SetVisible(9@, True)
+wait 0
+if 
+  not Char.IsDead(8@)
+goto_if_false @PARACH_2652
+Task.PlayAnimNonInterruptable(8@, "PARA_OPEN", "PARACHUTE", 1000.0, False, False, False, True, -2)
+Object.PlayAnim(9@, "PARA_OPEN_O", "PARACHUTE", 1000.0, False, True)
+$tempf1, $tempf1, 24@ = Char.GetVelocity(8@)
+set_var_float_to_lvar_float $para_vel_change = 24@
+$para_vel_change += 5.0
+
+:PARACH_2652
+if and
+  12@ == 1
+  not is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_2838
+17@ = 0
+15@ = 0
+14@ = 1
+Object.SetVisible(9@, True)
+wait 0
+if 
+  not Char.IsDead(8@)
+goto_if_false @PARACH_2838
+Task.PlayAnimNonInterruptable(8@, "PARA_OPEN", "PARACHUTE", 1000.0, False, False, False, True, -2)
+Object.PlayAnim(9@, "PARA_OPEN_O", "PARACHUTE", 1000.0, False, True)
+$tempf1, $tempf1, 24@ = Char.GetVelocity(8@)
+set_var_float_to_lvar_float $para_vel_change = 24@
+$para_vel_change += 5.0
+
+:PARACH_2838
+if 
+  14@ == 1
+goto_if_false @PARACH_3568
+if 
+  not Char.IsDead(8@)
+goto_if_false @PARACH_3540
+if 
+  Char.IsPlayingAnim(8@, "PARA_OPEN")
+goto_if_false @PARACH_3540
+$para_anim_time = Char.GetAnimCurrentTime(8@, "PARA_OPEN")
+$player_x, $player_y, $player_z = Char.GetCoordinates(8@)
+$para_anim_time *= 2.0
+$para_anim_time -= 0.5
+if 
+  $para_anim_time > 1.0
+goto_if_false @PARACH_2983
+$para_anim_time = 1.0
+
+:PARACH_2983
+if 
+  0.0 > $para_anim_time
+goto_if_false @PARACH_3014
+$para_anim_time = 0.0
+
+:PARACH_3014
+if and
+  0.25 >= $para_anim_time
+  is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_3120
+$end_cam_z = -2.0
+$end_cam_y = -2.0
+set_lvar_float_to_var_float 28@ = $para_anim_time
+28@ *= 4.0
+if 
+  16@ == 1
+goto_if_false @PARACH_3113
+16@ = 2
+gosub @PARACH_6083
+
+:PARACH_3113
+gosub @PARACH_6307
+
+:PARACH_3120
+if and
+  $para_anim_time > 0.25
+  is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_3236
+$end_cam_z = 5.0
+$end_cam_y = -5.0
+set_lvar_float_to_var_float 28@ = $para_anim_time
+28@ -= 0.25
+28@ *= 1.333
+if 
+  16@ == 2
+goto_if_false @PARACH_3229
+16@ = 3
+gosub @PARACH_6083
+
+:PARACH_3229
+gosub @PARACH_6307
+
+:PARACH_3236
+set_var_float_to_var_float $tempf1 = $para_vel_change
+mult_float_var_by_float_var $tempf1 *= $para_anim_time
+$tempf1 *= -1.0
+add_float_lvar_to_float_var $tempf1 += 24@
+$tempf3, $tempf4, $tempf2 = Char.GetVelocity(8@)
+$x = Math.Sin(27@)
+$y = Math.Cos(27@)
+mult_float_var_by_float_lvar $x *= 5@
+$x *= -1.0
+mult_float_var_by_float_lvar $y *= 5@
+$x *= -1.0
+add_float_var_to_float_var $x += $tempf3
+$x *= 0.01
+sub_float_var_from_float_var $tempf3 -= $x
+$y *= -1.0
+add_float_var_to_float_var $y += $tempf4
+$y *= 0.01
+sub_float_var_from_float_var $tempf4 -= $y
+Char.SetVelocity(8@, $tempf3, $tempf4, $tempf1)
+if 
+  $para_anim_time == 1.0
+goto_if_false @PARACH_3540
+Task.PlayAnimNonInterruptable(8@, "PARA_FLOAT", "PARACHUTE", 2.0, True, False, False, True, -2)
+Object.PlayAnim(9@, "PARA_FLOAT_O", "PARACHUTE", 2.0, True, True)
+14@ = 2
+set_lvar_float_to_var_float 29@ = $tempf1
+25@ = 0.0
+
+:PARACH_3540
+if 
+  3.0 > 30@
+goto_if_false @PARACH_3568
+14@ = 3
+
+:PARACH_3568
+if 
+  14@ == 2
+goto_if_false @PARACH_5824
+if and
+  13@ <> 5
+  Char.IsInWater(8@)
+goto_if_false @PARACH_3616
+13@ = 4
+
+:PARACH_3616
+if 
+  13@ == 0
+goto_if_false @PARACH_4766
+$x = Math.Sin(27@)
+$y = Math.Cos(27@)
+$tempv3 = 0
+$tempv4 = 0
+if 
+  is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_3706
+$tempv1, $tempv2, $tempv3, $tempv4 = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+goto @PARACH_3728
+
+:PARACH_3706
+set_var_int_to_lvar_int $tempv1 = 22@
+$tempv2 = 0
+$tempv3 = 0
+
+:PARACH_3728
+if and
+  $tempv3 <> 0
+  $tempv4 <> 0
+goto_if_false @PARACH_3753
+
+:PARACH_3753
+if or
+  $tempv2 > 100
+  12@ == 2
+goto_if_false @PARACH_3811
+mult_float_var_by_float_lvar $x *= 6@
+$x *= -1.0
+mult_float_var_by_float_lvar $y *= 6@
+goto @PARACH_3837
+
+:PARACH_3811
+mult_float_var_by_float_lvar $x *= 5@
+$x *= -1.0
+mult_float_var_by_float_lvar $y *= 5@
+
+:PARACH_3837
+set_var_int_to_var_int $tempv4 = $tempv2
+Char.SetRotation(8@, 0.0, 25@, 27@)
+if 
+  30@ > 3.0
+goto_if_false @PARACH_4574
+cset_var_float_to_var_int $para_turny_rate = integer $tempv1
+$para_turny_rate /= 128.0
+add_float_var_to_float_lvar 25@ += $para_turny_rate
+if 
+  25@ > 45.0
+goto_if_false @PARACH_3939
+25@ = 45.0
+
+:PARACH_3939
+if 
+  -45.0 > 25@
+goto_if_false @PARACH_3970
+25@ = -45.0
+
+:PARACH_3970
+set_var_float_to_lvar_float $tempf5 = 25@
+$tempf5 /= 15.0
+sub_float_var_from_float_lvar 27@ -= $tempf5
+if 
+  $para_turny_rate == 0.0
+goto_if_false @PARACH_4048
+if 
+  25@ <> 0.0
+goto_if_false @PARACH_4048
+25@ *= 0.95
+
+:PARACH_4048
+Char.SetRotation(8@, 0.0, 25@, 27@)
+if or
+  $tempv2 > 100
+  12@ == 2
+goto_if_false @PARACH_4211
+set_var_float_to_lvar_float $z = 4@
+if 
+  15@ <> 4
+goto_if_false @PARACH_4204
+15@ = 4
+Task.PlayAnimNonInterruptable(8@, "PARA_DECEL", "PARACHUTE", 1.0, True, False, False, True, -2)
+Object.PlayAnim(9@, "PARA_DECEL_O", "PARACHUTE", 1.0, True, True)
+
+:PARACH_4204
+goto @PARACH_4574
+
+:PARACH_4211
+set_var_float_to_lvar_float $z = 3@
+if and
+  $para_turny_rate == 0.0
+  15@ <> 0
+goto_if_false @PARACH_4336
+15@ = 0
+Task.PlayAnimNonInterruptable(8@, "PARA_FLOAT", "PARACHUTE", 1.0, True, False, False, True, -2)
+Object.PlayAnim(9@, "PARA_FLOAT_O", "PARACHUTE", 1.0, True, True)
+
+:PARACH_4336
+if and
+  0.0 > $para_turny_rate
+  15@ <> -1
+goto_if_false @PARACH_4455
+15@ = -1
+Task.PlayAnimNonInterruptable(8@, "PARA_STEERL", "PARACHUTE", 1.0, True, False, False, True, -2)
+Object.PlayAnim(9@, "PARA_STEERL_O", "PARACHUTE", 1.0, True, True)
+
+:PARACH_4455
+if and
+  $para_turny_rate > 0.0
+  15@ <> 1
+goto_if_false @PARACH_4574
+15@ = 1
+Task.PlayAnimNonInterruptable(8@, "PARA_STEERR", "PARACHUTE", 1.0, True, False, False, True, -2)
+Object.PlayAnim(9@, "PARA_STEERR_O", "PARACHUTE", 1.0, True, True)
+
+:PARACH_4574
+$tempf3, $tempf4, $tempf1 = Char.GetVelocity(8@)
+$x *= -1.0
+add_float_var_to_float_var $x += $tempf3
+$x *= 0.1
+sub_float_var_from_float_var $tempf3 -= $x
+$y *= -1.0
+add_float_var_to_float_var $y += $tempf4
+$y *= 0.1
+sub_float_var_from_float_var $tempf4 -= $y
+$z *= -1.0
+add_float_lvar_to_float_var $z += 29@
+$z *= 0.2
+set_var_float_to_lvar_float $tempf1 = 29@
+sub_float_var_from_float_var $tempf1 -= $z
+set_lvar_float_to_var_float 29@ = $tempf1
+Char.SetVelocity(8@, $tempf3, $tempf4, $tempf1)
+mult_float_var_by_float_var $tempf3 *= $tempf3
+mult_float_var_by_float_var $tempf4 *= $tempf4
+set_var_float_to_var_float $tempf5 = $tempf3
+add_float_var_to_float_var $tempf5 += $tempf4
+$tempf5 = Math.Sqrt($tempf5)
+
+:PARACH_4766
+if 
+  3.0 > 30@
+goto_if_false @PARACH_5104
+Char.SetHeading(8@, 27@)
+25@ = 0.0
+$x = Math.Sin(27@)
+$y = Math.Cos(27@)
+mult_float_var_by_float_lvar $x *= 6@
+$x *= -1.0
+mult_float_var_by_float_lvar $y *= 6@
+Char.SetVelocity(8@, $x, $y, -2.0)
+if 
+  13@ == 0
+goto_if_false @PARACH_5012
+13@ = 1
+Task.PlayAnimNonInterruptable(8@, "PARA_DECEL", "PARACHUTE", 4.0, True, False, False, True, -2)
+Object.PlayAnim(9@, "PARA_DECEL_O", "PARACHUTE", 4.0, True, True)
+if 
+  is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_5012
+set_var_float_to_var_float $end_cam_z = $initial_z
+set_var_float_to_var_float $end_cam_y = $initial_y
+gosub @PARACH_6083
+
+:PARACH_5012
+if and
+  13@ == 1
+  is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_5104
+28@ = 3.0
+sub_float_lvar_from_float_lvar 28@ -= 30@
+28@ *= 0.75
+if 
+  28@ > 1.0
+goto_if_false @PARACH_5097
+28@ = 1.0
+
+:PARACH_5097
+gosub @PARACH_6307
+
+:PARACH_5104
+if and
+  1.5 > 30@
+  13@ == 1
+goto_if_false @PARACH_5219
+13@ = 2
+Task.PlayAnimNonInterruptable(8@, "PARA_LAND", "PARACHUTE", 1000.0, False, True, False, True, -2)
+Object.PlayAnim(9@, "PARA_LAND_O", "PARACHUTE", 1000.0, False, True)
+
+:PARACH_5219
+if 
+  13@ == 2
+goto_if_false @PARACH_5496
+if 
+  Char.IsPlayingAnim(8@, "PARA_LAND")
+goto_if_false @PARACH_5496
+$para_anim_time = Char.GetAnimCurrentTime(8@, "PARA_LAND")
+if 
+  $para_anim_time == 1.0
+goto_if_false @PARACH_5496
+Object.Delete(9@)
+Object.Delete(10@)
+$player_x, $player_y, $player_z = World.GetDeadCharPickupCoords(8@)
+if 
+  0@ <> -1
+goto_if_false @PARACH_5351
+Pickup.Remove(0@)
+
+:PARACH_5351
+Task.Pause(8@, 1)
+Char.ClearTasksImmediately(8@)
+14@ = 3
+Char.SetRotation(8@, 0.0, 0.0, 0.0)
+Char.SetHeading(8@, 27@)
+$player_x, $player_y, $player_z = Char.GetCoordinates(8@)
+if 
+  is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_5438
+$ai_landed = 1
+
+:PARACH_5438
+if 
+  $onmission == 1
+goto_if_false @PARACH_5463
+gosub @PARACH_6417
+
+:PARACH_5463
+0@ = 0
+0@ = Pickup.Create(#BRIEFCASE, 3, $player_x, $player_y, $player_z)
+13@ = 3
+
+:PARACH_5496
+if 
+  13@ == 4
+goto_if_false @PARACH_5623
+Task.PlayAnimNonInterruptable(8@, "PARA_LAND_WATER", "PARACHUTE", 1000.0, False, True, False, True, -2)
+Object.PlayAnim(9@, "PARA_LAND_WATER_O", "PARACHUTE", 1.0, False, True)
+13@ = 5
+$para_anim_time = 0.0
+
+:PARACH_5623
+if 
+  13@ == 5
+goto_if_false @PARACH_5824
+if 
+  Char.IsPlayingAnim(8@, "PARA_LAND_WATER")
+goto_if_false @PARACH_5699
+$para_anim_time = Char.GetAnimCurrentTime(8@, "PARA_LAND_WATER")
+
+:PARACH_5699
+if 
+  $para_anim_time == 1.0
+goto_if_false @PARACH_5824
+if 
+  is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_5746
+$ai_landed = 1
+
+:PARACH_5746
+Object.Delete(9@)
+Object.Delete(10@)
+13@ = 3
+Task.Pause(8@, 1)
+Char.ClearTasksImmediately(8@)
+14@ = 3
+Char.SetRotation(8@, 0.0, 0.0, 0.0)
+Char.SetHeading(8@, 27@)
+$player_x, $player_y, $player_z = Char.GetCoordinates(8@)
+
+:PARACH_5824
+if and
+  14@ == 3
+  13@ == 0
+goto_if_false @PARACH_5935
+Object.PlayAnim(9@, "PARA_LAND_O", "PARACHUTE", 1.0, False, True)
+Task.DieNamedAnim(8@, "FALL_SKYDIVE_DIE", "PARACHUTE", 1000.0, 0)
+13@ = 1
+
+:PARACH_5935
+if 
+  14@ == 3
+goto_if_false @PARACH_6053
+if 
+  Pickup.HasBeenCollected(0@)
+goto_if_false @PARACH_6004
+11@ = 10
+17@ = 0
+14@ = 0
+7@ = 0
+13@ = 0
+
+:PARACH_6004
+if 
+  not Char.LocateAnyMeans3D(8@, 0, $player_x, $player_y, $player_z, 50.0, 50.0, 50.0)
+goto_if_false @PARACH_6053
+goto @PARACH_6417
+
+:PARACH_6053
+if 
+  Char.IsDead(8@)
+goto_if_false @PARACH_6076
+goto @PARACH_6417
+
+:PARACH_6076
+goto @PARACH_146
+
+:PARACH_6083
+$x, $y, $z = Camera.GetActiveCoordinates()
+$player_x, $player_y, $player_z = Char.GetCoordinates(8@)
+set_var_float_to_var_float $tempf3 = $player_x
+sub_float_var_from_float_var $tempf3 -= $x
+set_var_float_to_var_float $tempf4 = $player_y
+sub_float_var_from_float_var $tempf4 -= $y
+set_var_float_to_var_float $start_cam_z = $z
+sub_float_var_from_float_var $start_cam_z -= $player_z
+set_var_float_to_var_float $tempf1 = $tempf3
+mult_float_var_by_float_var $tempf1 *= $tempf3
+set_var_float_to_var_float $tempf2 = $tempf4
+mult_float_var_by_float_var $tempf2 *= $tempf4
+set_var_float_to_var_float $start_cam_y = $tempf1
+add_float_var_to_float_var $start_cam_y += $tempf2
+$start_cam_y *= -1.0
+$start_cam_y = Math.Sqrt($start_cam_y)
+set_var_float_to_var_float $para_cam_z_change = $end_cam_z
+sub_float_var_from_float_var $para_cam_z_change -= $start_cam_z
+$start_cam_y *= -1.0
+set_var_float_to_var_float $para_cam_y_change = $end_cam_y
+sub_float_var_from_float_var $para_cam_y_change -= $start_cam_y
+if 
+  16@ == 0
+goto_if_false @PARACH_6305
+16@ = 1
+set_var_float_to_var_float $initial_y = $start_cam_y
+set_var_float_to_var_float $initial_z = $start_cam_z
+
+:PARACH_6305
+return 
+
+:PARACH_6307
+$player_x, $player_y, $player_z = Char.GetCoordinates(8@)
+set_var_float_to_lvar_float $tempf3 = 28@
+$tempf3 *= 180.0
+$tempf3 = Math.Cos($tempf3)
+$tempf3 -= 1.0
+$tempf3 *= -0.5
+set_var_float_to_var_float $z = $para_cam_z_change
+mult_float_var_by_float_var $z *= $tempf3
+add_float_var_to_float_var $z += $start_cam_z
+set_var_float_to_var_float $y = $para_cam_y_change
+mult_float_var_by_float_var $y *= $tempf3
+add_float_var_to_float_var $y += $start_cam_y
+return 
+
+:PARACH_6417
+Streaming.RemoveAnimation("PARACHUTE")
+Streaming.MarkModelAsNoLongerNeeded(#PARACHUTE)
+Streaming.MarkModelAsNoLongerNeeded(#PARA_PACK)
+if 
+  0@ <> -1
+goto_if_false @PARACH_6463
+Pickup.Remove(0@)
+
+:PARACH_6463
+Object.Delete(9@)
+Object.Delete(10@)
+if 
+  is_int_lvar_equal_to_int_var 8@ == $scplayer
+goto_if_false @PARACH_6499
+$force_chute_open = 0
+
+:PARACH_6499
+terminate_this_script 
+return 
+
+:PARACH_6503
+$player_x, $player_y, $player_z = Char.GetCoordinates(8@)
+set_var_float_to_var_float $x = $ai_target_x
+sub_float_var_from_float_var $x -= $player_x
+set_var_float_to_var_float $y = $ai_target_y
+sub_float_var_from_float_var $y -= $player_y
+set_var_float_to_var_float $z = $player_z
+sub_float_var_from_float_var $z -= $ai_target_z
+if 
+  17@ == 1
+goto_if_false @PARACH_6683
+mult_float_var_by_float_var $x *= $x
+mult_float_var_by_float_var $y *= $y
+add_float_var_to_float_var $x += $y
+$x = Math.Sqrt($x)
+set_var_float_to_var_float $tempf1 = $z
+div_float_var_by_float_var $tempf1 /= $x
+set_var_float_to_lvar_float $tempf2 = 3@
+div_float_var_by_float_lvar $tempf2 /= 5@
+$tempf2 *= -1.2
+if 
+  is_float_var_greater_than_float_var $tempf2 > $tempf1
+goto_if_false @PARACH_6683
+12@ = 1
+
+:PARACH_6683
+if 
+  14@ == 2
+goto_if_false @PARACH_7350
+20@ = Math.GetHeadingFromVector2D($x, $y)
+19@ = Char.GetHeading(8@)
+3@ -= 1.0
+4@ -= 1.0
+set_lvar_float_to_lvar_float 21@ = 20@
+sub_float_lvar_from_float_lvar 21@ -= 19@
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 23@
+goto_if_false @PARACH_7137
+set_lvar_int_to_lvar_int 23@ = TIMERA
+23@ += 3000
+$left_angle_check = Math.RandomFloatInRange(-20.0, 0.0)
+$right_angle_check = Math.RandomFloatInRange(0.0, 20.0)
+mult_float_var_by_float_var $x *= $x
+mult_float_var_by_float_var $y *= $y
+add_float_var_to_float_var $x += $y
+$x = Math.Sqrt($x)
+set_var_float_to_var_float $tempf2 = $x
+div_float_var_by_float_lvar $tempf2 /= 5@
+set_var_float_to_var_float $tempf1 = $z
+div_float_var_by_float_var $tempf1 /= $tempf2
+set_var_float_to_lvar_float $tempf2 = 3@
+add_float_lvar_to_float_var $tempf2 += 4@
+$tempf2 /= 2.0
+set_var_float_to_lvar_float $tempf3 = 3@
+sub_float_lvar_from_float_var $tempf3 -= 4@
+$tempf3 /= 4.0
+add_float_var_to_float_var $tempf3 += $tempf2
+set_var_float_to_lvar_float $tempf4 = 3@
+sub_float_lvar_from_float_var $tempf4 -= 4@
+$tempf4 /= -4.0
+add_float_var_to_float_var $tempf4 += $tempf2
+$tempf3 *= -1.0
+$tempf4 *= -1.0
+if and
+  is_float_var_greater_than_float_var $tempf3 > $tempf1
+  is_float_var_greater_than_float_var $tempf1 > $tempf4
+goto_if_false @PARACH_7085
+$tempv1 = Math.RandomIntInRange(0, 2)
+if 
+  $tempv1 == 0
+goto_if_false @PARACH_7060
+12@ = 2
+
+:PARACH_7060
+if 
+  $tempv1 == 1
+goto_if_false @PARACH_7085
+12@ = 0
+
+:PARACH_7085
+if 
+  is_float_var_greater_or_equal_to_float_var $tempf1 >= $tempf3
+goto_if_false @PARACH_7111
+12@ = 0
+
+:PARACH_7111
+if 
+  is_float_var_greater_or_equal_to_float_var $tempf4 >= $tempf1
+goto_if_false @PARACH_7137
+12@ = 2
+
+:PARACH_7137
+if or
+  is_float_var_greater_than_float_lvar $left_angle_check > 21@
+  is_float_lvar_greater_than_float_var 21@ > $right_angle_check
+goto_if_false @PARACH_7323
+if 
+  -180.0 > 21@
+goto_if_false @PARACH_7195
+21@ += 360.0
+
+:PARACH_7195
+if 
+  21@ > 180.0
+goto_if_false @PARACH_7226
+21@ -= 360.0
+
+:PARACH_7226
+21@ /= 180.0
+if 
+  21@ > 1.0
+goto_if_false @PARACH_7267
+21@ = 1.0
+
+:PARACH_7267
+if 
+  -1.0 > 21@
+goto_if_false @PARACH_7298
+21@ = -1.0
+
+:PARACH_7298
+21@ *= -128.0
+cset_lvar_int_to_lvar_float 22@ = float 21@
+goto @PARACH_7330
+
+:PARACH_7323
+22@ = 0
+
+:PARACH_7330
+3@ += 1.0
+4@ += 1.0
+
+:PARACH_7350
+return 
+terminate_this_script 
+

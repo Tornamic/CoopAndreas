@@ -1,0 +1,3603 @@
+//-------------Mission 52---------------
+// Originally: Snail Trail
+
+:SCRASH2
+script_name 'SCRASH2'
+$g_SCrash2_spookKM = 0
+gosub @SCRASH2_54
+if 
+  has_deatharrest_been_executed 
+goto_if_false @SCRASH2_45
+gosub @SCRASH2_20955
+
+:SCRASH2_45
+gosub @SCRASH2_21293
+terminate_this_script 
+
+:SCRASH2_54
+Stat.RegisterMissionGiven
+$onmission = 1
+75@ = 0
+76@ = 0
+77@ = 0
+34@ = 0
+35@ = 0
+36@ = 0
+37@ = 0
+38@ = 0
+39@ = 0
+40@ = 0
+45@ = 0
+46@ = 0
+47@ = 0
+TIMERA = 0
+TIMERB = 0
+166@ = 0
+167@ = 0
+168@ = 0
+169@ = 0
+170@ = 0
+144@ = 0
+145@ = 0
+146@ = 0
+149@ = 0
+153@ = 0
+155@ = 1
+161@ = 0
+164@ = 0
+165@ = 0
+if 
+  34@ == -99
+goto_if_false @SCRASH2_605
+write_debug "SHOULD_NEVER_BE_IN_FAKE_ENTITY_CREATION"
+81@ = Train.Create(0.0, 0.0, 0.0, 11, 0)
+87@ = Car.Create(420, 0.0, 0.0, 0.0)
+89@ = Car.Create(468, 0.0, 0.0, 0.0)
+48@ = 0
+
+:SCRASH2_404
+84@(48@,3i) = Train.Create(0.0, 0.0, 0.0, 10, 0)
+48@ += 1
+  48@ >= 3
+goto_if_false @SCRASH2_404
+78@ = Char.Create(4, 147, 0.0, 0.0, 0.0)
+79@ = Char.Create(4, 18, 0.0, 0.0, 0.0)
+80@ = Char.Create(4, 46, 0.0, 0.0, 0.0)
+95@ = Pickup.CreateWithAmmo(358, 3, 0, 0.0, 0.0, 0.0)
+90@ = Blip.AddForCoord(0.0, 0.0, 0.0)
+91@ = Blip.AddForCar(81@)
+92@ = Blip.AddForChar(78@)
+93@ = Blip.AddForChar(80@)
+94@ = Blip.AddForPickup(95@)
+
+:SCRASH2_605
+Text.LoadMissionText('SCRASH2')
+gosub @SCRASH2_20312
+96@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+97@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+gosub @SCRASH2_20489
+131@ = Char.GetAmmoInWeapon($scplayer, 34)
+155@ = 1
+
+:SCRASH2_661
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @SCRASH2_694
+36@ = 1
+goto @SCRASH2_1017
+
+:SCRASH2_694
+gosub @SCRASH2_18834
+gosub @SCRASH2_19245
+if or
+  38@ == 1
+  39@ == 1
+goto_if_false @SCRASH2_740
+goto @SCRASH2_1017
+
+:SCRASH2_740
+gosub @SCRASH2_20209
+gosub @SCRASH2_20243
+if 
+  Char.IsDead($scplayer)
+goto_if_false @SCRASH2_784
+37@ = 1
+goto @SCRASH2_1017
+
+:SCRASH2_784
+if 
+  34@ == 0
+goto_if_false @SCRASH2_842
+write_debug "STAGE_SHOULD_NEVER_BE_0_IN_MAIN_LOOP"
+
+:SCRASH2_842
+if 
+  34@ == 1
+goto_if_false @SCRASH2_867
+gosub @SCRASH2_1165
+
+:SCRASH2_867
+if 
+  34@ == 2
+goto_if_false @SCRASH2_892
+gosub @SCRASH2_1286
+
+:SCRASH2_892
+if 
+  34@ == 3
+goto_if_false @SCRASH2_917
+gosub @SCRASH2_2139
+
+:SCRASH2_917
+if 
+  34@ == 4
+goto_if_false @SCRASH2_942
+gosub @SCRASH2_3032
+
+:SCRASH2_942
+if 
+  34@ == 5
+goto_if_false @SCRASH2_967
+gosub @SCRASH2_5855
+
+:SCRASH2_967
+if 
+  34@ == 6
+goto_if_false @SCRASH2_992
+gosub @SCRASH2_6907
+
+:SCRASH2_992
+if 
+  34@ == 7
+goto_if_false @SCRASH2_1017
+36@ = 1
+
+:SCRASH2_1017
+if 
+  38@ == 0
+goto_if_false @SCRASH2_1117
+if 
+  37@ == 0
+goto_if_false @SCRASH2_1101
+if 
+  36@ == 0
+goto_if_false @SCRASH2_1085
+goto @SCRASH2_661
+goto @SCRASH2_1094
+
+:SCRASH2_1085
+gosub @SCRASH2_21206
+return 
+
+:SCRASH2_1094
+goto @SCRASH2_1110
+
+:SCRASH2_1101
+gosub @SCRASH2_20955
+return 
+
+:SCRASH2_1110
+goto @SCRASH2_1119
+
+:SCRASH2_1117
+return 
+
+:SCRASH2_1119
+write_debug "SHOULD_NEVER_BE_HERE_IN_END_OF_MAIN_LOOP"
+return 
+
+:SCRASH2_1165
+if 
+  35@ == 0
+goto_if_false @SCRASH2_1213
+gosub @SCRASH2_10051
+Text.PrintNow('SCR2_21', 7000, 1)
+35@ += 1
+
+:SCRASH2_1213
+if 
+  35@ == 1
+goto_if_false @SCRASH2_1259
+if 
+  Pickup.HasBeenCollected(95@)
+goto_if_false @SCRASH2_1259
+Blip.Remove(94@)
+35@ = 99
+
+:SCRASH2_1259
+if 
+  35@ == 99
+goto_if_false @SCRASH2_1284
+gosub @SCRASH2_20282
+
+:SCRASH2_1284
+return 
+
+:SCRASH2_1286
+if and
+  35@ > 0
+  Char.IsDead(78@)
+goto_if_false @SCRASH2_1318
+37@ = 1
+return 
+
+:SCRASH2_1318
+if and
+  35@ > 1
+  Car.IsDead(81@)
+goto_if_false @SCRASH2_1350
+37@ = 1
+return 
+
+:SCRASH2_1350
+if 
+  35@ == 0
+goto_if_false @SCRASH2_1465
+gosub @SCRASH2_10187
+132@ = -1952.791
+133@ = 136.5608
+134@ = 25.2734
+90@ = Blip.AddForCoord(132@, 133@, 134@)
+Blip.ChangeDisplay(90@, BlipDisplay.BlipOnly)
+Text.PrintNow('SCR2_00', 8000, 1)
+set_lvar_int_to_lvar_int 103@ = 46@
+103@ += 6000
+35@ += 1
+
+:SCRASH2_1465
+if 
+  35@ == 1
+goto_if_false @SCRASH2_1552
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 103@
+goto_if_false @SCRASH2_1552
+gosub @SCRASH2_10112
+Train.SetSpeed(81@, 20.0)
+Train.SetCruiseSpeed(81@, 20.0)
+Text.Print('SCR2_01', 10000, 1)
+35@ += 1
+
+:SCRASH2_1552
+if 
+  35@ == 2
+goto_if_false @SCRASH2_1635
+if 
+  Car.Locate2D(81@, 0, -1944.545, 130.8166, 5.0, 5.0)
+goto_if_false @SCRASH2_1635
+Train.SetSpeed(81@, 4.0)
+Train.SetCruiseSpeed(81@, 0.0)
+35@ += 1
+
+:SCRASH2_1635
+if 
+  35@ == 3
+goto_if_false @SCRASH2_1717
+if 
+  Car.IsStopped(81@)
+goto_if_false @SCRASH2_1717
+82@ = Train.GetCarriage(81@, 1)
+Task.EnterCarAsPassenger(78@, 82@, -1, 500)
+set_lvar_int_to_lvar_int 103@ = 46@
+103@ += 60000
+35@ += 1
+
+:SCRASH2_1717
+if 
+  35@ == 4
+goto_if_false @SCRASH2_1938
+64@ = -1978.101
+65@ = 78.224
+67@ = -1922.002
+68@ = 203.4028
+if 
+  Char.IsInArea2D($scplayer, 0, 64@, 65@, 67@, 68@)
+goto_if_false @SCRASH2_1877
+Car.LockDoors(81@, CarLock.LockoutPlayerOnly)
+Train.SetCruiseSpeed(81@, 40.0)
+Blip.Remove(90@)
+91@ = Blip.AddForCar(81@)
+Char.RemoveElegantly(78@)
+167@ = 0
+Text.PrintNow('SCR2_02', 10000, 1)
+35@ = 99
+goto @SCRASH2_1938
+
+:SCRASH2_1877
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 103@
+goto_if_false @SCRASH2_1938
+Car.LockDoors(81@, CarLock.LockoutPlayerOnly)
+Train.SetCruiseSpeed(81@, 5.0)
+set_lvar_int_to_lvar_int 103@ = 46@
+103@ += 60000
+35@ += 1
+
+:SCRASH2_1938
+if 
+  35@ == 5
+goto_if_false @SCRASH2_2112
+64@ = -1978.101
+65@ = 78.224
+67@ = -1922.002
+68@ = 203.4028
+if 
+  Char.IsInArea2D($scplayer, 0, 64@, 65@, 67@, 68@)
+goto_if_false @SCRASH2_2079
+Blip.Remove(90@)
+91@ = Blip.AddForCar(81@)
+Text.PrintNow('SCR2_02', 10000, 1)
+Train.SetCruiseSpeed(81@, 10.0)
+35@ = 99
+goto @SCRASH2_2112
+
+:SCRASH2_2079
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 103@
+goto_if_false @SCRASH2_2112
+37@ = 1
+45@ = 1
+
+:SCRASH2_2112
+if 
+  35@ == 99
+goto_if_false @SCRASH2_2137
+gosub @SCRASH2_20282
+
+:SCRASH2_2137
+return 
+
+:SCRASH2_2139
+if 
+  Car.IsDead(81@)
+goto_if_false @SCRASH2_2164
+37@ = 1
+return 
+
+:SCRASH2_2164
+if 
+  35@ == 0
+goto_if_false @SCRASH2_2314
+119@ = 0
+120@ = 0
+121@ = 0
+122@ = 0
+138@ = 0
+139@ = 0
+140@ = 0
+132@ = 833.7101
+133@ = -1383.643
+134@ = -2.6352
+48@ = 0
+
+:SCRASH2_2268
+123@(48@,3i) = -1
+48@ += 1
+  48@ >= 3
+goto_if_false @SCRASH2_2268
+Game.SetWantedMultiplier(0.3)
+35@ += 1
+
+:SCRASH2_2314
+if 
+  35@ == 1
+goto_if_false @SCRASH2_2432
+if 
+  Car.Locate2D(81@, 0, 132@, 133@, 5.0, 5.0)
+goto_if_false @SCRASH2_2432
+Train.SetSpeed(81@, 16.0)
+Train.SetCruiseSpeed(81@, 0.0)
+Text.PrintNow('SCR2_03', 11000, 1)
+set_lvar_int_to_lvar_int 111@ = 46@
+111@ += 10000
+138@ = 1
+35@ += 1
+
+:SCRASH2_2432
+if 
+  35@ == 2
+goto_if_false @SCRASH2_2515
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 111@
+goto_if_false @SCRASH2_2515
+gosub @SCRASH2_18816
+Text.PrintNow('SCR2_09', 9000, 1)
+set_lvar_int_to_lvar_int 111@ = 46@
+111@ += 8000
+35@ += 1
+
+:SCRASH2_2515
+if 
+  35@ == 3
+goto_if_false @SCRASH2_2559
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 111@
+goto_if_false @SCRASH2_2559
+35@ += 1
+
+:SCRASH2_2559
+if 
+  35@ == 4
+goto_if_false @SCRASH2_2630
+if 
+  Car.IsStopped(81@)
+goto_if_false @SCRASH2_2630
+140@ = 1
+set_lvar_int_to_lvar_int 103@ = 46@
+103@ += 120000
+Blip.Remove(91@)
+35@ += 1
+
+:SCRASH2_2630
+if 
+  35@ == 5
+goto_if_false @SCRASH2_2673
+if 
+  139@ == 1
+goto_if_false @SCRASH2_2673
+35@ = 99
+
+:SCRASH2_2673
+gosub @SCRASH2_10288
+gosub @SCRASH2_10454
+gosub @SCRASH2_10613
+gosub @SCRASH2_10745
+gosub @SCRASH2_10963
+gosub @SCRASH2_11038
+if and
+  139@ == 0
+  140@ == 1
+goto_if_false @SCRASH2_2766
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 103@
+goto_if_false @SCRASH2_2766
+139@ = 1
+
+:SCRASH2_2766
+if and
+  139@ == 0
+  140@ == 1
+goto_if_false @SCRASH2_2817
+if 
+  300 > 121@
+goto_if_false @SCRASH2_2817
+139@ = 1
+
+:SCRASH2_2817
+if 
+  161@ == 1
+goto_if_false @SCRASH2_3005
+if 
+  not Char.IsInZone($scplayer, 'SF')
+goto_if_false @SCRASH2_3005
+if 
+  Car.IsDead(89@)
+goto_if_false @SCRASH2_2883
+161@ = 0
+
+:SCRASH2_2883
+if 
+  2800 > 121@
+goto_if_false @SCRASH2_3005
+57@, 58@, 59@ = Char.GetCoordinates($scplayer)
+60@, 61@, 62@ = Car.GetCoordinates(89@)
+72@ = Math.GetDistanceBetweenCoords3D(57@, 58@, 59@, 60@, 61@, 62@)
+if 
+  100.0 > 72@
+goto_if_false @SCRASH2_2988
+161@ = 0
+goto @SCRASH2_3005
+
+:SCRASH2_2988
+161@ = 0
+Car.MarkAsNoLongerNeeded(89@)
+Streaming.MarkModelAsNoLongerNeeded(468)
+
+:SCRASH2_3005
+if 
+  35@ == 99
+goto_if_false @SCRASH2_3030
+gosub @SCRASH2_20282
+
+:SCRASH2_3030
+return 
+
+:SCRASH2_3032
+if 
+  35@ == 0
+goto_if_false @SCRASH2_3284
+Text.Print('SCR2_04', 5000, 1)
+gosub @SCRASH2_15982
+gosub @SCRASH2_12265
+92@ = Blip.AddForChar(78@)
+set_lvar_int_to_lvar_int 103@ = 46@
+103@ += 10000
+109@ = 0
+118@ = 0
+143@ = 0
+142@ = 0
+141@ = 0
+154@ = 0
+157@ = 0
+160@ = 0
+163@ = 0
+Path.SwitchRoadsOff(789.595, -1387.97, 11.5469, 807.2843, -1334.546, 13.725)
+Path.SwitchRoadsOff(804.9978, -1414.032, 11.3801, 908.0844, -1386.618, 13.5524)
+Path.SwitchRoadsOff(802.1913, -1335.066, 11.1828, 911.4662, -1313.045, 13.7469)
+101@ = 0
+102@ = 0
+35@ += 1
+
+:SCRASH2_3284
+if 
+  167@ == 1
+goto_if_false @SCRASH2_3385
+if 
+  Char.IsDead(78@)
+goto_if_false @SCRASH2_3334
+37@ = 1
+45@ = 2
+return 
+
+:SCRASH2_3334
+if 
+  Char.HasBeenDamagedByChar(78@, $scplayer)
+goto_if_false @SCRASH2_3385
+37@ = 1
+45@ = 7
+Task.SmartFleeChar(78@, $scplayer, 9999.0, 10000)
+return 
+
+:SCRASH2_3385
+if 
+  156@ == 1
+goto_if_false @SCRASH2_3438
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 118@
+goto_if_false @SCRASH2_3436
+37@ = 1
+45@ = 7
+
+:SCRASH2_3436
+return 
+
+:SCRASH2_3438
+if 
+  157@ == 1
+goto_if_false @SCRASH2_3491
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 118@
+goto_if_false @SCRASH2_3489
+37@ = 1
+45@ = 7
+
+:SCRASH2_3489
+return 
+
+:SCRASH2_3491
+if and
+  168@ == 1
+  141@ == 1
+goto_if_false @SCRASH2_3830
+if 
+  not Car.IsDead(87@)
+goto_if_false @SCRASH2_3773
+if 
+  Char.IsDead(79@)
+goto_if_false @SCRASH2_3555
+157@ = 1
+
+:SCRASH2_3555
+if 
+  not Char.IsInCar(79@, 87@)
+goto_if_false @SCRASH2_3581
+157@ = 1
+
+:SCRASH2_3581
+if 
+  Car.HasBeenDamagedByChar(87@, $scplayer)
+goto_if_false @SCRASH2_3672
+73@ = 1
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @SCRASH2_3664
+70@ = Char.GetSpeed($scplayer)
+if 
+  13.0 > 70@
+goto_if_false @SCRASH2_3664
+73@ = 0
+Car.ClearLastDamageEntity(87@)
+
+:SCRASH2_3664
+set_lvar_int_to_lvar_int 157@ = 73@
+
+:SCRASH2_3672
+if 
+  Char.IsInCar($scplayer, 87@)
+goto_if_false @SCRASH2_3698
+157@ = 1
+
+:SCRASH2_3698
+if 
+  157@ == 1
+goto_if_false @SCRASH2_3766
+if 
+  not Char.IsInAnyCar(78@)
+goto_if_false @SCRASH2_3748
+Task.SmartFleeChar(78@, $scplayer, 9999.0, 10000)
+
+:SCRASH2_3748
+set_lvar_int_to_lvar_int 118@ = 46@
+118@ += 1000
+return 
+
+:SCRASH2_3766
+goto @SCRASH2_3830
+
+:SCRASH2_3773
+157@ = 1
+if 
+  not Char.IsInAnyCar(78@)
+goto_if_false @SCRASH2_3812
+Task.SmartFleeChar(78@, $scplayer, 9999.0, 10000)
+
+:SCRASH2_3812
+set_lvar_int_to_lvar_int 118@ = 46@
+118@ += 1000
+return 
+
+:SCRASH2_3830
+if and
+  168@ == 1
+  141@ == 0
+goto_if_false @SCRASH2_4066
+if 
+  not Car.IsDead(87@)
+goto_if_false @SCRASH2_4035
+73@ = 0
+if 
+  Char.IsDead(79@)
+goto_if_false @SCRASH2_3901
+73@ = 1
+
+:SCRASH2_3901
+if 
+  not Char.IsInCar(79@, 87@)
+goto_if_false @SCRASH2_3927
+73@ = 1
+
+:SCRASH2_3927
+if 
+  Car.HasBeenDamagedByChar(87@, $scplayer)
+goto_if_false @SCRASH2_3953
+73@ = 1
+
+:SCRASH2_3953
+if 
+  Char.IsInCar($scplayer, 87@)
+goto_if_false @SCRASH2_3979
+73@ = 1
+
+:SCRASH2_3979
+if 
+  73@ == 1
+goto_if_false @SCRASH2_4028
+Car.MarkAsNoLongerNeeded(87@)
+Char.MarkAsNoLongerNeeded(79@)
+168@ = 0
+158@ = 0
+gosub @SCRASH2_12377
+
+:SCRASH2_4028
+goto @SCRASH2_4066
+
+:SCRASH2_4035
+Car.MarkAsNoLongerNeeded(87@)
+Char.MarkAsNoLongerNeeded(79@)
+168@ = 0
+158@ = 0
+gosub @SCRASH2_12377
+
+:SCRASH2_4066
+if 
+  35@ == 1
+goto_if_false @SCRASH2_4115
+Task.GoStraightToCoord(78@, 833.4493, -1374.261, -1.5078, MoveState.Walk, -1)
+35@ += 1
+
+:SCRASH2_4115
+if 
+  35@ == 2
+goto_if_false @SCRASH2_4221
+40@ = Char.GetScriptTaskStatus(78@, 1491)
+if 
+  is_int_lvar_equal_to_constant 40@ == 7
+goto_if_false @SCRASH2_4221
+Task.PlayAnim(78@, "ROADCROSS", "PED", 4.0, False, False, False, False, -1)
+set_lvar_int_to_lvar_int 104@ = 46@
+104@ += 250
+35@ += 1
+
+:SCRASH2_4221
+if 
+  35@ == 3
+goto_if_false @SCRASH2_4292
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 104@
+goto_if_false @SCRASH2_4292
+if 
+  not Char.IsPlayingAnim(78@, "ROADCROSS")
+goto_if_false @SCRASH2_4292
+35@ += 1
+
+:SCRASH2_4292
+if 
+  35@ == 4
+goto_if_false @SCRASH2_4342
+gosub @SCRASH2_12646
+if 
+  101@ == 7
+goto_if_false @SCRASH2_4342
+35@ += 1
+
+:SCRASH2_4342
+if 
+  35@ == 5
+goto_if_false @SCRASH2_4419
+Task.PlayAnim(78@, "ROADCROSS", "PED", 4.0, False, False, False, False, -1)
+set_lvar_int_to_lvar_int 104@ = 46@
+104@ += 250
+35@ += 1
+
+:SCRASH2_4419
+if 
+  35@ == 6
+goto_if_false @SCRASH2_4504
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 104@
+goto_if_false @SCRASH2_4504
+if 
+  not Char.IsPlayingAnim(78@, "ROADCROSS")
+goto_if_false @SCRASH2_4504
+101@ = 8
+102@ = 8
+35@ += 1
+
+:SCRASH2_4504
+if 
+  35@ == 7
+goto_if_false @SCRASH2_4641
+gosub @SCRASH2_12646
+if 
+  101@ == 10
+goto_if_false @SCRASH2_4641
+143@ = 1
+set_lvar_int_to_lvar_int 105@ = 46@
+105@ += 60000
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @SCRASH2_4611
+Text.PrintNow('SCR2_20', 10000, 1)
+goto @SCRASH2_4627
+
+:SCRASH2_4611
+Text.PrintNow('SCR2_06', 10000, 1)
+
+:SCRASH2_4627
+163@ = 1
+35@ += 1
+
+:SCRASH2_4641
+if 
+  35@ == 8
+goto_if_false @SCRASH2_4774
+gosub @SCRASH2_12646
+if 
+  153@ == 0
+goto_if_false @SCRASH2_4774
+56@ = Sequence.Open()
+Task.AchieveHeading(-1, 90.0)
+Task.PlayAnim(-1, "ROADCROSS", "PED", 4.0, False, False, False, False, -1)
+Sequence.Close(56@)
+Char.PerformSequence(78@, 56@)
+Sequence.Clear(56@)
+set_lvar_int_to_lvar_int 104@ = 46@
+104@ += 250
+35@ += 1
+
+:SCRASH2_4774
+if 
+  35@ == 9
+goto_if_false @SCRASH2_4903
+gosub @SCRASH2_12646
+if 
+  153@ == 0
+goto_if_false @SCRASH2_4903
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 104@
+goto_if_false @SCRASH2_4903
+40@ = Char.GetScriptTaskStatus(78@, -1)
+if 
+  is_int_lvar_equal_to_constant 40@ == 7
+goto_if_false @SCRASH2_4903
+if 
+  141@ == 1
+goto_if_false @SCRASH2_4896
+35@ += 1
+goto @SCRASH2_4903
+
+:SCRASH2_4896
+35@ -= 1
+
+:SCRASH2_4903
+if 
+  35@ == 10
+goto_if_false @SCRASH2_5046
+if 
+  158@ == 1
+goto_if_false @SCRASH2_5015
+56@ = Sequence.Open()
+Task.AchieveHeading(-1, 180.0)
+Task.PlayAnim(-1, "HIKER_POSE", "MISC", 4.0, False, False, False, True, -1)
+Sequence.Close(56@)
+Char.PerformSequence(78@, 56@)
+Sequence.Clear(56@)
+goto @SCRASH2_5039
+
+:SCRASH2_5015
+Task.GoStraightToCoord(78@, 821.7603, -1334.683, 12.5391, MoveState.Run, -2)
+
+:SCRASH2_5039
+35@ += 1
+
+:SCRASH2_5046
+if 
+  35@ == 11
+goto_if_false @SCRASH2_5375
+gosub @SCRASH2_12646
+if 
+  153@ == 0
+goto_if_false @SCRASH2_5276
+73@ = 0
+if and
+  158@ == 1
+  Car.Locate3D(87@, 0, 803.7784, -1342.926, 12.5469, 7.0, 7.0, 2.0)
+goto_if_false @SCRASH2_5158
+73@ = 1
+
+:SCRASH2_5158
+if and
+  158@ == 0
+  Car.Locate3D(87@, 0, 824.4391, -1330.707, 12.4174, 7.0, 7.0, 2.0)
+goto_if_false @SCRASH2_5220
+73@ = 1
+
+:SCRASH2_5220
+if and
+  73@ == 1
+  Car.IsStopped(87@)
+goto_if_false @SCRASH2_5269
+Task.EnterCarAsPassenger(78@, 87@, 2, -2)
+154@ = 1
+35@ += 1
+
+:SCRASH2_5269
+goto @SCRASH2_5375
+
+:SCRASH2_5276
+if 
+  Char.IsPlayingAnim(78@, "HIKER_POSE")
+goto_if_false @SCRASH2_5375
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 109@
+goto_if_false @SCRASH2_5375
+Task.PlayAnim(78@, "ROADCROSS", "PED", 4.0, False, False, False, False, 100)
+set_lvar_int_to_lvar_int 109@ = 46@
+109@ += 250
+
+:SCRASH2_5375
+if 
+  35@ == 12
+goto_if_false @SCRASH2_5451
+40@ = Char.GetScriptTaskStatus(78@, 1482)
+if 
+  is_int_lvar_equal_to_constant 40@ == 7
+goto_if_false @SCRASH2_5451
+Car.SetTaxiLights(87@, False)
+126@ = 0
+set_lvar_int_to_lvar_int 88@ = 87@
+35@ = 99
+
+:SCRASH2_5451
+if 
+  170@ == 0
+goto_if_false @SCRASH2_5499
+Streaming.RequestModel(420)
+Streaming.LoadAllModelsNow
+if 
+  Streaming.HasModelLoaded(420)
+goto_if_false @SCRASH2_5499
+170@ = 1
+
+:SCRASH2_5499
+if 
+  166@ == 1
+goto_if_false @SCRASH2_5571
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 103@
+goto_if_false @SCRASH2_5571
+if 
+  not Car.IsDead(81@)
+goto_if_false @SCRASH2_5562
+Train.SetCruiseSpeed(81@, 30.0)
+
+:SCRASH2_5562
+Streaming.MarkMissionTrainsAsNoLongerNeeded
+166@ = 0
+
+:SCRASH2_5571
+if and
+  143@ == 1
+  142@ == 0
+goto_if_false @SCRASH2_5714
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 812.4495, -1343.488, 12.532, 80.0, 80.0, 20.0)
+goto_if_false @SCRASH2_5679
+142@ = 1
+gosub @SCRASH2_12313
+gosub @SCRASH2_12377
+Car.SetTaxiLights(87@, True)
+goto @SCRASH2_5714
+
+:SCRASH2_5679
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 105@
+goto_if_false @SCRASH2_5714
+37@ = 1
+45@ = 3
+return 
+
+:SCRASH2_5714
+if and
+  141@ == 0
+  168@ == 1
+goto_if_false @SCRASH2_5794
+if 
+  Car.Locate3D(87@, 0, 796.9285, -1374.867, 12.3949, 10.0, 10.0, 2.0)
+goto_if_false @SCRASH2_5794
+141@ = 1
+
+:SCRASH2_5794
+gosub @SCRASH2_16005
+gosub @SCRASH2_16193
+if 
+  37@ == 1
+goto_if_false @SCRASH2_5828
+return 
+
+:SCRASH2_5828
+if 
+  35@ == 99
+goto_if_false @SCRASH2_5853
+gosub @SCRASH2_20282
+
+:SCRASH2_5853
+return 
+
+:SCRASH2_5855
+if 
+  35@ == 0
+goto_if_false @SCRASH2_6033
+132@ = 366.4698
+133@ = -2030.643
+134@ = 6.6582
+128@ = 0
+129@ = 0
+127@ = 0
+gosub @SCRASH2_13627
+Car.SetCanGoAgainstTraffic(87@, False)
+set_lvar_int_to_lvar_int 116@ = 46@
+116@ += 3000
+152@ = 1
+149@ = 0
+150@ = 0
+159@ = 0
+160@ = 0
+StuckCarCheck.AddWithWarp(87@, 2.0, 30000, True, True, True, 20)
+Text.PrintNow('SCR2_07', 5000, 1)
+35@ += 1
+
+:SCRASH2_6033
+if 
+  Char.IsDead(78@)
+goto_if_false @SCRASH2_6065
+37@ = 1
+45@ = 2
+return 
+
+:SCRASH2_6065
+if 
+  Char.HasBeenDamagedByChar(78@, $scplayer)
+goto_if_false @SCRASH2_6100
+37@ = 1
+45@ = 7
+return 
+
+:SCRASH2_6100
+if 
+  157@ == 1
+goto_if_false @SCRASH2_6153
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 118@
+goto_if_false @SCRASH2_6151
+37@ = 1
+45@ = 7
+
+:SCRASH2_6151
+return 
+
+:SCRASH2_6153
+if 
+  not Car.IsDead(87@)
+goto_if_false @SCRASH2_6431
+if 
+  Char.IsDead(79@)
+goto_if_false @SCRASH2_6192
+157@ = 1
+
+:SCRASH2_6192
+if 
+  not Char.IsInCar(79@, 87@)
+goto_if_false @SCRASH2_6218
+157@ = 1
+
+:SCRASH2_6218
+if 
+  Car.HasBeenDamagedByChar(87@, $scplayer)
+goto_if_false @SCRASH2_6309
+73@ = 1
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @SCRASH2_6301
+70@ = Char.GetSpeed($scplayer)
+if 
+  13.0 > 70@
+goto_if_false @SCRASH2_6301
+73@ = 0
+Car.ClearLastDamageEntity(87@)
+
+:SCRASH2_6301
+set_lvar_int_to_lvar_int 157@ = 73@
+
+:SCRASH2_6309
+if 
+  Char.IsInCar($scplayer, 87@)
+goto_if_false @SCRASH2_6335
+157@ = 1
+
+:SCRASH2_6335
+if 
+  157@ == 1
+goto_if_false @SCRASH2_6424
+if 
+  Char.IsInAnyCar(78@)
+goto_if_false @SCRASH2_6390
+37@ = 1
+45@ = 7
+goto @SCRASH2_6422
+
+:SCRASH2_6390
+set_lvar_int_to_lvar_int 118@ = 46@
+118@ += 1000
+Task.SmartFleeChar(78@, $scplayer, 9999.0, 10000)
+
+:SCRASH2_6422
+return 
+
+:SCRASH2_6424
+goto @SCRASH2_6472
+
+:SCRASH2_6431
+157@ = 1
+set_lvar_int_to_lvar_int 118@ = 46@
+118@ += 1000
+Task.SmartFleeChar(78@, $scplayer, 9999.0, 10000)
+return 
+
+:SCRASH2_6472
+if 
+  35@ == 1
+goto_if_false @SCRASH2_6569
+if and
+  100@ <> 1
+  100@ <> 3
+goto_if_false @SCRASH2_6569
+if 
+  Char.LocateAnyMeans3D(78@, 0, 132@, 133@, 134@, 4.0, 4.0, 4.0)
+goto_if_false @SCRASH2_6569
+Hud.ClearCounter($g_SCrash2_spookKM)
+35@ = 99
+
+:SCRASH2_6569
+if 
+  149@ == 0
+goto_if_false @SCRASH2_6656
+if 
+  Char.LocateAnyMeans3D(78@, 0, 369.3609, -1671.889, 31.811, 14.0, 6.0, 4.0)
+goto_if_false @SCRASH2_6656
+149@ = 1
+World.SetCarDensityMultiplier(0.0)
+World.SetPedDensityMultiplier(0.0)
+
+:SCRASH2_6656
+if 
+  150@ == 0
+goto_if_false @SCRASH2_6736
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 369.3609, -1671.889, 31.811, 14.0, 4.0, 4.0)
+goto_if_false @SCRASH2_6729
+150@ = 1
+
+:SCRASH2_6729
+goto @SCRASH2_6791
+
+:SCRASH2_6736
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 370.2572, -1656.79, 31.7201, 14.0, 4.0, 4.0)
+goto_if_false @SCRASH2_6791
+150@ = 0
+
+:SCRASH2_6791
+gosub @SCRASH2_17369
+if 
+  37@ == 1
+goto_if_false @SCRASH2_6818
+return 
+
+:SCRASH2_6818
+if and
+  151@ == 0
+  149@ == 1
+  150@ == 1
+goto_if_false @SCRASH2_6873
+151@ = 1
+Text.PrintNow('SCR2_18', 10000, 1)
+
+:SCRASH2_6873
+gosub @SCRASH2_15210
+if 
+  35@ == 99
+goto_if_false @SCRASH2_6905
+gosub @SCRASH2_20282
+
+:SCRASH2_6905
+return 
+
+:SCRASH2_6907
+if 
+  Char.IsDead(78@)
+goto_if_false @SCRASH2_6935
+144@ = 1
+Blip.Remove(92@)
+
+:SCRASH2_6935
+if 
+  169@ == 1
+goto_if_false @SCRASH2_6981
+if 
+  Char.IsDead(80@)
+goto_if_false @SCRASH2_6981
+145@ = 1
+Blip.Remove(93@)
+
+:SCRASH2_6981
+if and
+  144@ == 1
+  145@ == 1
+goto_if_false @SCRASH2_7013
+35@ = 99
+
+:SCRASH2_7013
+if 
+  35@ == 0
+goto_if_false @SCRASH2_7345
+gosub @SCRASH2_15427
+93@ = Blip.AddForChar(80@)
+56@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 359.4136, -2036.943, 6.836, MoveState.Walk, -2)
+Task.GoStraightToCoord(-1, 362.2674, -2035.844, 6.836, MoveState.Walk, -2)
+Task.AchieveHeading(-1, 270.0)
+Sequence.Close(56@)
+Char.PerformSequence(80@, 56@)
+Sequence.Clear(56@)
+56@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 363.1874, -2035.844, 6.836, MoveState.Walk, -2)
+Task.AchieveHeading(-1, 90.0)
+Sequence.Close(56@)
+Char.PerformSequence(78@, 56@)
+Sequence.Clear(56@)
+set_lvar_int_to_lvar_int 106@ = 46@
+106@ += 180000
+146@ = 0
+147@ = 0
+98@ = 0
+99@ = 0
+107@ = 0
+148@ = 0
+Text.PrintNow('SCR2_19', 10000, 1)
+if 
+  $displayed_sniper_help_text == 0
+goto_if_false @SCRASH2_7317
+164@ = 0
+165@ = 0
+set_lvar_int_to_lvar_int 112@ = 46@
+112@ += 10000
+$displayed_sniper_help_text = 1
+goto @SCRASH2_7338
+
+:SCRASH2_7317
+164@ = 1
+165@ = 1
+112@ = 0
+
+:SCRASH2_7338
+35@ += 1
+
+:SCRASH2_7345
+if 
+  35@ == 1
+goto_if_false @SCRASH2_7447
+if and
+  not Char.IsDead(78@)
+  not Char.IsDead(80@)
+goto_if_false @SCRASH2_7447
+40@ = Char.GetScriptTaskStatus(78@, -1)
+if 
+  is_int_lvar_equal_to_constant 40@ == 1
+goto_if_false @SCRASH2_7447
+40@ = Char.GetScriptTaskStatus(80@, -1)
+if 
+  is_int_lvar_equal_to_constant 40@ == 1
+goto_if_false @SCRASH2_7447
+35@ += 1
+
+:SCRASH2_7447
+if 
+  35@ == 2
+goto_if_false @SCRASH2_7625
+if and
+  not Char.IsDead(78@)
+  not Char.IsDead(80@)
+goto_if_false @SCRASH2_7625
+40@ = Char.GetScriptTaskStatus(78@, -1)
+if 
+  is_int_lvar_equal_to_constant 40@ == 7
+goto_if_false @SCRASH2_7625
+40@ = Char.GetScriptTaskStatus(80@, -1)
+if 
+  is_int_lvar_equal_to_constant 40@ == 7
+goto_if_false @SCRASH2_7625
+Task.CharSlideToCoord(80@, 362.2674, -2035.844, 6.836, 270.0, 4.0)
+Task.CharSlideToCoord(78@, 363.1874, -2035.844, 6.836, 90.0, 4.0)
+set_lvar_int_to_lvar_int 104@ = 46@
+104@ += 250
+35@ += 1
+
+:SCRASH2_7625
+if 
+  35@ == 3
+goto_if_false @SCRASH2_7814
+if and
+  not Char.IsDead(78@)
+  not Char.IsDead(80@)
+goto_if_false @SCRASH2_7814
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 104@
+goto_if_false @SCRASH2_7814
+Task.PlayAnim(78@, "PRTIAL_HNDSHK_BIZ_01", "GANGS", 4.0, False, False, False, False, -1)
+Task.PlayAnim(80@, "PRTIAL_HNDSHK_BIZ_01", "GANGS", 4.0, False, False, False, False, -1)
+set_lvar_int_to_lvar_int 104@ = 46@
+104@ += 250
+Char.MarkAsNoLongerNeeded(79@)
+Car.MarkAsNoLongerNeeded(87@)
+35@ += 1
+
+:SCRASH2_7814
+if 
+  35@ == 4
+goto_if_false @SCRASH2_7944
+if and
+  not Char.IsDead(78@)
+  not Char.IsDead(80@)
+goto_if_false @SCRASH2_7944
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 104@
+goto_if_false @SCRASH2_7944
+if and
+  not Char.IsPlayingAnim(78@, "PRTIAL_HNDSHK_BIZ_01")
+  not Char.IsPlayingAnim(80@, "PRTIAL_HNDSHK_BIZ_01")
+goto_if_false @SCRASH2_7944
+35@ += 1
+
+:SCRASH2_7944
+if 
+  35@ == 5
+goto_if_false @SCRASH2_8053
+if and
+  not Char.IsDead(78@)
+  not Char.IsDead(80@)
+goto_if_false @SCRASH2_8053
+Task.PlayAnim(78@, "IDLE_CHAT", "PED", 4.0, True, False, False, False, -1)
+50@ = Math.RandomIntInRange(2000, 5000)
+set_lvar_int_to_lvar_int 104@ = 46@
+add_int_lvar_to_int_lvar 104@ += 50@
+35@ += 1
+
+:SCRASH2_8053
+if 
+  35@ == 6
+goto_if_false @SCRASH2_8123
+if and
+  not Char.IsDead(78@)
+  not Char.IsDead(80@)
+goto_if_false @SCRASH2_8123
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 104@
+goto_if_false @SCRASH2_8123
+Char.ClearTasks(78@)
+35@ += 1
+
+:SCRASH2_8123
+if 
+  35@ == 7
+goto_if_false @SCRASH2_8232
+if and
+  not Char.IsDead(78@)
+  not Char.IsDead(80@)
+goto_if_false @SCRASH2_8232
+Task.PlayAnim(80@, "IDLE_CHAT", "PED", 4.0, True, False, False, False, -1)
+50@ = Math.RandomIntInRange(5000, 10000)
+set_lvar_int_to_lvar_int 104@ = 46@
+add_int_lvar_to_int_lvar 104@ += 50@
+35@ += 1
+
+:SCRASH2_8232
+if 
+  35@ == 8
+goto_if_false @SCRASH2_8302
+if and
+  not Char.IsDead(78@)
+  not Char.IsDead(80@)
+goto_if_false @SCRASH2_8302
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 104@
+goto_if_false @SCRASH2_8302
+Char.ClearTasks(80@)
+35@ = 5
+
+:SCRASH2_8302
+if 
+  35@ == 20
+goto_if_false @SCRASH2_8559
+if 
+  not Char.IsDead(80@)
+goto_if_false @SCRASH2_8428
+56@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 361.2376, -2047.841, 6.836, MoveState.Walk, -2)
+Task.GoStraightToCoord(-1, 354.2802, -2049.696, 6.836, MoveState.Walk, -2)
+Task.GoStraightToCoord(-1, 354.8605, -2057.588, 6.836, MoveState.Walk, -2)
+Sequence.Close(56@)
+Char.PerformSequence(80@, 56@)
+Sequence.Clear(56@)
+
+:SCRASH2_8428
+if 
+  not Char.IsDead(78@)
+goto_if_false @SCRASH2_8536
+56@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 361.2376, -2047.841, 6.836, MoveState.Walk, -2)
+Task.GoStraightToCoord(-1, 354.2802, -2049.696, 6.836, MoveState.Walk, -2)
+Task.GoStraightToCoord(-1, 354.863, -2060.05, 6.836, MoveState.Walk, -2)
+Sequence.Close(56@)
+Char.PerformSequence(78@, 56@)
+Sequence.Clear(56@)
+
+:SCRASH2_8536
+Text.PrintNow('SCR2_05', 10000, 1)
+35@ += 1
+
+:SCRASH2_8559
+if 
+  35@ == 21
+goto_if_false @SCRASH2_8661
+if and
+  not Char.IsDead(78@)
+  not Char.IsDead(80@)
+goto_if_false @SCRASH2_8661
+40@ = Char.GetScriptTaskStatus(78@, -1)
+if 
+  is_int_lvar_equal_to_constant 40@ == 1
+goto_if_false @SCRASH2_8661
+40@ = Char.GetScriptTaskStatus(80@, -1)
+if 
+  is_int_lvar_equal_to_constant 40@ == 1
+goto_if_false @SCRASH2_8661
+35@ += 1
+
+:SCRASH2_8661
+if 
+  35@ == 22
+goto_if_false @SCRASH2_8782
+if and
+  not Char.IsDead(78@)
+  not Char.IsDead(80@)
+goto_if_false @SCRASH2_8782
+40@ = Char.GetScriptTaskStatus(78@, -1)
+if 
+  is_int_lvar_equal_to_constant 40@ == 7
+goto_if_false @SCRASH2_8782
+40@ = Char.GetScriptTaskStatus(80@, -1)
+if 
+  is_int_lvar_equal_to_constant 40@ == 7
+goto_if_false @SCRASH2_8782
+37@ = 1
+45@ = 4
+Char.RemoveElegantly(78@)
+Char.RemoveElegantly(80@)
+return 
+
+:SCRASH2_8782
+if 
+  35@ == 30
+goto_if_false @SCRASH2_8873
+98@ = 3
+99@ = 3
+if 
+  not Char.IsDead(78@)
+goto_if_false @SCRASH2_8835
+Char.ClearTasks(78@)
+
+:SCRASH2_8835
+if 
+  not Char.IsDead(80@)
+goto_if_false @SCRASH2_8856
+Char.ClearTasks(80@)
+
+:SCRASH2_8856
+Char.MarkAsNoLongerNeeded(79@)
+Car.MarkAsNoLongerNeeded(87@)
+35@ += 1
+
+:SCRASH2_8873
+if 
+  35@ == 31
+goto_if_false @SCRASH2_8905
+gosub @SCRASH2_15527
+gosub @SCRASH2_15749
+
+:SCRASH2_8905
+if 
+  146@ == 0
+goto_if_false @SCRASH2_9434
+if 
+  144@ == 1
+goto_if_false @SCRASH2_8964
+146@ = 1
+Text.PrintNow('SCR2_10', 10000, 1)
+
+:SCRASH2_8964
+if 
+  146@ == 0
+goto_if_false @SCRASH2_9023
+if 
+  145@ == 1
+goto_if_false @SCRASH2_9023
+146@ = 1
+Text.PrintNow('SCR2_11', 10000, 1)
+
+:SCRASH2_9023
+if 
+  146@ == 0
+goto_if_false @SCRASH2_9083
+if 
+  Char.HasBeenDamagedByChar(78@, $scplayer)
+goto_if_false @SCRASH2_9083
+146@ = 1
+Text.PrintNow('SCR2_14', 10000, 1)
+
+:SCRASH2_9083
+if 
+  146@ == 0
+goto_if_false @SCRASH2_9143
+if 
+  Char.HasBeenDamagedByChar(80@, $scplayer)
+goto_if_false @SCRASH2_9143
+146@ = 1
+Text.PrintNow('SCR2_15', 10000, 1)
+
+:SCRASH2_9143
+if and
+  146@ == 0
+  148@ == 0
+goto_if_false @SCRASH2_9229
+if 
+  Char.IsShootingInArea($scplayer, 0, 349.8409, -2088.798, 409.7505, -1869.887)
+goto_if_false @SCRASH2_9229
+148@ = 1
+set_lvar_int_to_lvar_int 107@ = 46@
+107@ += 1000
+
+:SCRASH2_9229
+if and
+  146@ == 0
+  148@ == 1
+goto_if_false @SCRASH2_9296
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 107@
+goto_if_false @SCRASH2_9296
+146@ = 1
+Text.PrintNow('SCR2_12', 10000, 1)
+
+:SCRASH2_9296
+if 
+  146@ == 0
+goto_if_false @SCRASH2_9409
+57@, 58@, 59@ = Char.GetCoordinates(80@)
+60@, 61@, 62@ = Char.GetCoordinates($scplayer)
+70@ = Math.GetDistanceBetweenCoords3D(57@, 58@, 59@, 60@, 61@, 62@)
+if 
+  30.0 > 70@
+goto_if_false @SCRASH2_9409
+146@ = 1
+Text.PrintNow('SCR2_13', 10000, 1)
+
+:SCRASH2_9409
+if 
+  146@ == 1
+goto_if_false @SCRASH2_9434
+35@ = 30
+
+:SCRASH2_9434
+if and
+  146@ == 0
+  147@ == 0
+goto_if_false @SCRASH2_9492
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 106@
+goto_if_false @SCRASH2_9492
+147@ = 1
+35@ = 20
+
+:SCRASH2_9492
+if 
+  146@ == 1
+goto_if_false @SCRASH2_9798
+if 
+  144@ == 0
+goto_if_false @SCRASH2_9654
+if 
+  not Char.IsInArea2D(78@, 0, 349.8409, -2088.798, 409.7505, -1869.887)
+goto_if_false @SCRASH2_9654
+57@, 58@, 59@ = Char.GetCoordinates(78@)
+60@, 61@, 62@ = Char.GetCoordinates($scplayer)
+70@ = Math.GetDistanceBetweenCoords3D(57@, 58@, 59@, 60@, 61@, 62@)
+if 
+  70@ > 200.0
+goto_if_false @SCRASH2_9654
+37@ = 1
+45@ = 5
+return 
+
+:SCRASH2_9654
+if 
+  145@ == 0
+goto_if_false @SCRASH2_9798
+if 
+  not Char.IsInArea2D(80@, 0, 349.8409, -2088.798, 409.7505, -1869.887)
+goto_if_false @SCRASH2_9798
+57@, 58@, 59@ = Char.GetCoordinates(80@)
+60@, 61@, 62@ = Char.GetCoordinates($scplayer)
+70@ = Math.GetDistanceBetweenCoords3D(57@, 58@, 59@, 60@, 61@, 62@)
+if 
+  70@ > 200.0
+goto_if_false @SCRASH2_9798
+37@ = 1
+45@ = 6
+return 
+
+:SCRASH2_9798
+if 
+  164@ == 0
+goto_if_false @SCRASH2_9869
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 112@
+goto_if_false @SCRASH2_9869
+Text.PrintHelpForever('SNIPER1')
+164@ = 1
+set_lvar_int_to_lvar_int 112@ = 46@
+112@ += 15000
+
+:SCRASH2_9869
+if 
+  164@ == 1
+goto_if_false @SCRASH2_9960
+if 
+  165@ == 0
+goto_if_false @SCRASH2_9960
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 112@
+goto_if_false @SCRASH2_9960
+Text.ClearHelp
+Text.PrintHelpForever('SNIPER2')
+165@ = 1
+set_lvar_int_to_lvar_int 112@ = 46@
+112@ += 10000
+
+:SCRASH2_9960
+if 
+  165@ == 1
+goto_if_false @SCRASH2_10024
+if 
+  112@ > 0
+goto_if_false @SCRASH2_10024
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 112@
+goto_if_false @SCRASH2_10024
+Text.ClearHelp
+112@ = 0
+
+:SCRASH2_10024
+if 
+  35@ == 99
+goto_if_false @SCRASH2_10049
+gosub @SCRASH2_20282
+
+:SCRASH2_10049
+return 
+
+:SCRASH2_10051
+57@ = -2063.225
+58@ = 258.3273
+59@ = 35.3958
+95@ = Pickup.CreateWithAmmo(358, 3, 5, 57@, 58@, 59@)
+94@ = Blip.AddForPickup(95@)
+return 
+
+:SCRASH2_10112
+57@ = -1937.312
+58@ = 221.1162
+59@ = 23.8414
+World.ClearArea(1, 57@, 58@, 59@, 60.0)
+81@ = Train.Create(57@, 58@, 59@, 11, 0)
+166@ = 1
+return 
+
+:SCRASH2_10187
+57@ = -1939.52
+58@ = 132.8362
+59@ = 25.2734
+63@ = 90.4279
+World.ClearArea(1, 57@, 58@, 59@, 1.0)
+78@ = Char.Create(4, 147, 57@, 58@, 59@)
+Char.SetHeading(78@, 63@)
+Char.SetIsTargetPriority(78@, True)
+167@ = 1
+return 
+
+:SCRASH2_10288
+if 
+  138@ == 1
+goto_if_false @SCRASH2_10308
+return 
+
+:SCRASH2_10308
+if 
+  41@ <> 5
+goto_if_false @SCRASH2_10328
+return 
+
+:SCRASH2_10328
+57@, 58@, 59@ = Car.GetCoordinates(81@)
+60@, 61@, 62@ = Char.GetCoordinates($scplayer)
+set_lvar_float_to_lvar_float 64@ = 57@
+sub_float_lvar_from_float_lvar 64@ -= 60@
+set_lvar_float_to_lvar_float 65@ = 58@
+sub_float_lvar_from_float_lvar 65@ -= 61@
+set_lvar_float_to_lvar_float 67@ = 64@
+mult_float_lvar_by_float_lvar 67@ *= 64@
+set_lvar_float_to_lvar_float 68@ = 65@
+mult_float_lvar_by_float_lvar 68@ *= 65@
+set_lvar_float_to_lvar_float 70@ = 67@
+add_float_lvar_to_float_lvar 70@ += 68@
+71@ = Math.Sqrt(70@)
+cset_lvar_int_to_lvar_float 119@ = float 71@
+return 
+
+:SCRASH2_10454
+if 
+  138@ == 1
+goto_if_false @SCRASH2_10481
+120@ = 0
+return 
+
+:SCRASH2_10481
+if 
+  41@ <> 3
+goto_if_false @SCRASH2_10501
+return 
+
+:SCRASH2_10501
+57@, 58@, 59@ = Car.GetCoordinates(81@)
+set_lvar_float_to_lvar_float 64@ = 57@
+sub_float_lvar_from_float_lvar 64@ -= 132@
+set_lvar_float_to_lvar_float 65@ = 58@
+sub_float_lvar_from_float_lvar 65@ -= 133@
+set_lvar_float_to_lvar_float 67@ = 64@
+mult_float_lvar_by_float_lvar 67@ *= 64@
+set_lvar_float_to_lvar_float 68@ = 65@
+mult_float_lvar_by_float_lvar 68@ *= 65@
+set_lvar_float_to_lvar_float 70@ = 67@
+add_float_lvar_to_float_lvar 70@ += 68@
+71@ = Math.Sqrt(70@)
+cset_lvar_int_to_lvar_float 120@ = float 71@
+return 
+
+:SCRASH2_10613
+if 
+  41@ <> 1
+goto_if_false @SCRASH2_10633
+return 
+
+:SCRASH2_10633
+57@, 58@, 59@ = Char.GetCoordinates($scplayer)
+set_lvar_float_to_lvar_float 64@ = 57@
+sub_float_lvar_from_float_lvar 64@ -= 132@
+set_lvar_float_to_lvar_float 65@ = 58@
+sub_float_lvar_from_float_lvar 65@ -= 133@
+set_lvar_float_to_lvar_float 67@ = 64@
+mult_float_lvar_by_float_lvar 67@ *= 64@
+set_lvar_float_to_lvar_float 68@ = 65@
+mult_float_lvar_by_float_lvar 68@ *= 65@
+set_lvar_float_to_lvar_float 70@ = 67@
+add_float_lvar_to_float_lvar 70@ += 68@
+71@ = Math.Sqrt(70@)
+cset_lvar_int_to_lvar_float 121@ = float 71@
+return 
+
+:SCRASH2_10745
+if 
+  138@ == 1
+goto_if_false @SCRASH2_10765
+return 
+
+:SCRASH2_10765
+if 
+  41@ <> 7
+goto_if_false @SCRASH2_10785
+return 
+
+:SCRASH2_10785
+70@ = 25.0
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar 121@ >= 120@
+goto_if_false @SCRASH2_10896
+if 
+  80 > 119@
+goto_if_false @SCRASH2_10889
+71@ = Car.GetSpeed(81@)
+71@ += 2.0
+if 
+  71@ > 25.0
+goto_if_false @SCRASH2_10881
+71@ = 25.0
+
+:SCRASH2_10881
+Train.SetSpeed(81@, 71@)
+
+:SCRASH2_10889
+goto @SCRASH2_10953
+
+:SCRASH2_10896
+71@ = Car.GetSpeed(81@)
+71@ += 2.0
+if 
+  71@ > 25.0
+goto_if_false @SCRASH2_10945
+71@ = 25.0
+
+:SCRASH2_10945
+Train.SetSpeed(81@, 71@)
+
+:SCRASH2_10953
+Train.SetCruiseSpeed(81@, 70@)
+return 
+
+:SCRASH2_10963
+if 
+  122@ == 0
+goto_if_false @SCRASH2_11016
+if 
+  120@ == 0
+goto_if_false @SCRASH2_11006
+goto @SCRASH2_11014
+
+:SCRASH2_11006
+set_lvar_int_to_lvar_int 122@ = 120@
+
+:SCRASH2_11014
+return 
+
+:SCRASH2_11016
+if 
+  5 > 120@
+goto_if_false @SCRASH2_11036
+return 
+
+:SCRASH2_11036
+return 
+
+:SCRASH2_11038
+73@ = 1
+48@ = 0
+
+:SCRASH2_11052
+if 
+  123@(48@,3i) <> -2
+goto_if_false @SCRASH2_11081
+73@ = 0
+
+:SCRASH2_11081
+48@ += 1
+  48@ >= 3
+goto_if_false @SCRASH2_11052
+if 
+  73@ == 1
+goto_if_false @SCRASH2_11122
+return 
+
+:SCRASH2_11122
+48@ = 0
+
+:SCRASH2_11129
+if 
+  123@(48@,3i) == -1
+goto_if_false @SCRASH2_11288
+
+:SCRASH2_11151
+123@(48@,3i) = Math.RandomIntInRange(0, 5)
+73@ = 0
+49@ = 0
+
+:SCRASH2_11178
+if 
+  is_int_lvar_greater_than_int_lvar 48@ > 49@
+goto_if_false @SCRASH2_11263
+if 
+  73@ == 0
+goto_if_false @SCRASH2_11249
+if 
+  is_int_lvar_equal_to_int_lvar 123@(48@,3i) == 123@(49@,3i)
+goto_if_false @SCRASH2_11249
+73@ = 1
+
+:SCRASH2_11249
+49@ += 1
+goto @SCRASH2_11178
+
+:SCRASH2_11263
+if 
+  73@ == 1
+goto_if_false @SCRASH2_11288
+goto @SCRASH2_11151
+
+:SCRASH2_11288
+48@ += 1
+  48@ >= 3
+goto_if_false @SCRASH2_11129
+48@ = 0
+
+:SCRASH2_11316
+73@ = 0
+switch_start 123@(48@,3i) total_jumps 5 default_jump 0 @SCRASH2_11700 jumps 0 @SCRASH2_11390 1 @SCRASH2_11452 2 @SCRASH2_11514 3 @SCRASH2_11576 4 @SCRASH2_11638 -1 @SCRASH2_11700 -1 @SCRASH2_11700
+
+:SCRASH2_11390
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -1982.442, -598.0178, 24.7266, 8.0, 8.0, 2.0)
+goto_if_false @SCRASH2_11445
+73@ = 1
+
+:SCRASH2_11445
+goto @SCRASH2_11700
+
+:SCRASH2_11452
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -1827.173, -1332.306, 12.9453, 8.0, 8.0, 2.0)
+goto_if_false @SCRASH2_11507
+73@ = 1
+
+:SCRASH2_11507
+goto @SCRASH2_11700
+
+:SCRASH2_11514
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -946.4463, -1497.618, 89.28716, 8.0, 8.0, 2.0)
+goto_if_false @SCRASH2_11569
+73@ = 1
+
+:SCRASH2_11569
+goto @SCRASH2_11700
+
+:SCRASH2_11576
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -620.5595, -1144.573, 42.0616, 8.0, 8.0, 2.0)
+goto_if_false @SCRASH2_11631
+73@ = 1
+
+:SCRASH2_11631
+goto @SCRASH2_11700
+
+:SCRASH2_11638
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 98.3887, -1021.795, 21.2188, 8.0, 8.0, 2.0)
+goto_if_false @SCRASH2_11693
+73@ = 1
+
+:SCRASH2_11693
+goto @SCRASH2_11700
+
+:SCRASH2_11700
+if 
+  73@ == 1
+goto_if_false @SCRASH2_12242
+50@ = Math.RandomIntInRange(10, 14)
+51@ = Math.RandomIntInRange(10, 20)
+cset_lvar_float_to_lvar_int 70@ = integer 51@
+switch_start 123@(48@,3i) total_jumps 5 default_jump 0 @SCRASH2_12231 jumps 0 @SCRASH2_11811 1 @SCRASH2_11895 2 @SCRASH2_11979 3 @SCRASH2_12063 4 @SCRASH2_12147 -1 @SCRASH2_12231 -1 @SCRASH2_12231
+
+:SCRASH2_11811
+World.ClearArea(1, -1875.72, -1267.059, 12.9511, 100.0)
+84@(48@,3i) = Train.Create(-1875.72, -1267.059, 12.9511, 50@, 1)
+Train.SetSpeed(84@(48@,3i), 70@)
+Train.SetCruiseSpeed(84@(48@,3i), 70@)
+goto @SCRASH2_12231
+
+:SCRASH2_11895
+World.ClearArea(1, -1332.721, -1514.888, 22.7265, 100.0)
+84@(48@,3i) = Train.Create(-1332.721, -1514.888, 22.7265, 50@, 1)
+Train.SetSpeed(84@(48@,3i), 70@)
+Train.SetCruiseSpeed(84@(48@,3i), 70@)
+goto @SCRASH2_12231
+
+:SCRASH2_11979
+World.ClearArea(1, -673.6719, -1127.875, 48.8875, 100.0)
+84@(48@,3i) = Train.Create(-673.6719, -1127.875, 48.8875, 50@, 1)
+Train.SetSpeed(84@(48@,3i), 70@)
+Train.SetCruiseSpeed(84@(48@,3i), 70@)
+goto @SCRASH2_12231
+
+:SCRASH2_12063
+World.ClearArea(1, -321.8627, -1191.647, 35.5265, 100.0)
+84@(48@,3i) = Train.Create(-321.8627, -1191.647, 35.5265, 50@, 1)
+Train.SetSpeed(84@(48@,3i), 70@)
+Train.SetCruiseSpeed(84@(48@,3i), 70@)
+goto @SCRASH2_12231
+
+:SCRASH2_12147
+World.ClearArea(1, 802.302, -1362.661, -2.6302, 100.0)
+84@(48@,3i) = Train.Create(802.302, -1362.661, -2.6302, 50@, 1)
+Train.SetSpeed(84@(48@,3i), 70@)
+Train.SetCruiseSpeed(84@(48@,3i), 70@)
+goto @SCRASH2_12231
+
+:SCRASH2_12231
+123@(48@,3i) = -2
+
+:SCRASH2_12242
+48@ += 1
+  48@ >= 3
+goto_if_false @SCRASH2_11316
+return 
+
+:SCRASH2_12265
+83@ = Train.GetCarriage(81@, 2)
+78@ = Char.CreateInsideCar(PedType.CivMale, 147, 83@)
+Char.SetDecisionMaker(78@, 96@)
+Task.LeaveCar(78@, 83@)
+167@ = 1
+return 
+
+:SCRASH2_12313
+158@ = 1
+if 
+  Char.IsInArea3D($scplayer, 0, 685.9716, -1433.523, 11.0857, 965.9512, -1379.386, 14.9731)
+goto_if_false @SCRASH2_12375
+158@ = 0
+
+:SCRASH2_12375
+return 
+
+:SCRASH2_12377
+if 
+  158@ == 1
+goto_if_false @SCRASH2_12442
+57@ = 850.1132
+58@ = -1391.708
+59@ = 12.4161
+63@ = 101.528
+goto @SCRASH2_12482
+
+:SCRASH2_12442
+57@ = 847.1364
+58@ = -1331.128
+59@ = 12.5097
+63@ = 91.6504
+
+:SCRASH2_12482
+World.ClearArea(1, 57@, 58@, 59@, 10.0)
+87@ = Car.Create(420, 57@, 58@, 59@)
+Car.SetHeading(87@, 63@)
+79@ = Char.CreateInsideCar(PedType.CivMale, 18, 87@)
+if 
+  158@ == 1
+goto_if_false @SCRASH2_12596
+Task.CarDriveToCoord(79@, 87@, 801.0299, -1337.929, 12.3906, 12.0, DriveMode.Normal, 0, DrivingMode.StopForCarsIgnoreLights)
+goto @SCRASH2_12637
+
+:SCRASH2_12596
+Task.CarDriveToCoord(79@, 87@, 824.4391, -1330.707, 12.4174, 12.0, DriveMode.Normal, 0, DrivingMode.StopForCarsIgnoreLights)
+141@ = 1
+
+:SCRASH2_12637
+168@ = 1
+return 
+
+:SCRASH2_12646
+if 
+  153@ == 1
+goto_if_false @SCRASH2_12930
+if 
+  163@ == 1
+goto_if_false @SCRASH2_12700
+40@ = Char.GetScriptTaskStatus(78@, 1492)
+goto @SCRASH2_12711
+
+:SCRASH2_12700
+40@ = Char.GetScriptTaskStatus(78@, 1471)
+
+:SCRASH2_12711
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 117@
+goto_if_false @SCRASH2_12928
+if and
+  not is_int_lvar_equal_to_constant 40@ == 1
+  not is_int_lvar_equal_to_constant 40@ == 0
+goto_if_false @SCRASH2_12928
+if 
+  163@ == 1
+goto_if_false @SCRASH2_12876
+57@, 58@, 59@ = Char.GetCoordinates($scplayer)
+set_lvar_float_to_lvar_float 64@ = 57@
+set_lvar_float_to_lvar_float 65@ = 58@
+57@, 58@, 59@ = Char.GetCoordinates(78@)
+set_lvar_float_to_lvar_float 67@ = 57@
+set_lvar_float_to_lvar_float 68@ = 58@
+set_lvar_float_to_lvar_float 57@ = 64@
+sub_float_lvar_from_float_lvar 57@ -= 67@
+set_lvar_float_to_lvar_float 58@ = 65@
+sub_float_lvar_from_float_lvar 58@ -= 68@
+63@ = Math.GetHeadingFromVector2D(57@, 58@)
+
+:SCRASH2_12876
+Task.LookAtChar(78@, $scplayer, -2)
+if 
+  163@ == 1
+goto_if_false @SCRASH2_12928
+Task.AchieveHeading(78@, 63@)
+set_lvar_int_to_lvar_int 117@ = 46@
+117@ += 250
+
+:SCRASH2_12928
+return 
+
+:SCRASH2_12930
+switch_start 101@ total_jumps 11 default_jump 1 @SCRASH2_13594 jumps 0 @SCRASH2_13058 1 @SCRASH2_13352 2 @SCRASH2_13390 3 @SCRASH2_13193 4 @SCRASH2_13276 5 @SCRASH2_13079 6 @SCRASH2_13117
+switch_continued 7 @SCRASH2_13466 8 @SCRASH2_13473 9 @SCRASH2_13511 10 @SCRASH2_13587 -1 @SCRASH2_13625 -1 @SCRASH2_13625 -1 @SCRASH2_13625 -1 @SCRASH2_13625 -1 @SCRASH2_13625
+
+:SCRASH2_13058
+101@ = 5
+102@ = 5
+goto @SCRASH2_13625
+
+:SCRASH2_13079
+Task.GoStraightToCoord(78@, 828.2594, -1358.995, -1.5078, MoveState.Walk, -2)
+101@ = 6
+goto @SCRASH2_13625
+
+:SCRASH2_13117
+if 
+  Char.LocateAnyMeans3D(78@, 0, 828.2594, -1358.995, -1.5078, 1.2, 1.2, 1.2)
+goto_if_false @SCRASH2_13186
+101@ = 3
+102@ = 3
+126@ = 2
+
+:SCRASH2_13186
+goto @SCRASH2_13625
+
+:SCRASH2_13193
+56@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 837.388, -1346.233, 6.1719, MoveState.Walk, -2)
+Task.GoStraightToCoord(-1, 836.6295, -1342.926, 6.1719, MoveState.Walk, -2)
+Sequence.Close(56@)
+Char.PerformSequence(78@, 56@)
+Sequence.Clear(56@)
+101@ = 4
+goto @SCRASH2_13625
+
+:SCRASH2_13276
+if 
+  Char.LocateAnyMeans3D(78@, 0, 836.6295, -1342.926, 6.1719, 1.2, 1.2, 1.2)
+goto_if_false @SCRASH2_13345
+101@ = 1
+102@ = 1
+126@ = 3
+
+:SCRASH2_13345
+goto @SCRASH2_13625
+
+:SCRASH2_13352
+Task.GoStraightToCoord(78@, 822.0569, -1342.302, 12.519, MoveState.Walk, -2)
+101@ = 2
+goto @SCRASH2_13625
+
+:SCRASH2_13390
+if 
+  Char.LocateAnyMeans3D(78@, 0, 822.0569, -1342.302, 12.519, 1.2, 1.2, 1.2)
+goto_if_false @SCRASH2_13459
+101@ = 7
+102@ = 7
+126@ = 4
+
+:SCRASH2_13459
+goto @SCRASH2_13625
+
+:SCRASH2_13466
+goto @SCRASH2_13625
+
+:SCRASH2_13473
+Task.GoStraightToCoord(78@, 803.7784, -1340.535, 12.5469, MoveState.Walk, -2)
+101@ = 9
+goto @SCRASH2_13625
+
+:SCRASH2_13511
+if 
+  Char.LocateAnyMeans3D(78@, 0, 803.7784, -1340.535, 12.5469, 1.2, 1.2, 1.2)
+goto_if_false @SCRASH2_13580
+101@ = 10
+102@ = 10
+126@ = 5
+
+:SCRASH2_13580
+goto @SCRASH2_13625
+
+:SCRASH2_13587
+goto @SCRASH2_13625
+
+:SCRASH2_13594
+write_debug "UNKNOWN_STATION_WALK_STATUS"
+
+:SCRASH2_13625
+return 
+
+:SCRASH2_13627
+73@ = 1
+74@ = 1
+if 
+  127@ == 0
+goto_if_false @SCRASH2_13666
+73@ = 0
+
+:SCRASH2_13666
+switch_start 127@ total_jumps 14 default_jump 1 @SCRASH2_14144 jumps 0 @SCRASH2_13794 1 @SCRASH2_13885 2 @SCRASH2_13899 3 @SCRASH2_13913 4 @SCRASH2_13927 5 @SCRASH2_13941 6 @SCRASH2_13955
+switch_continued 7 @SCRASH2_13969 8 @SCRASH2_13983 9 @SCRASH2_13997 10 @SCRASH2_14011 11 @SCRASH2_14025 12 @SCRASH2_14039 13 @SCRASH2_14053 -1 @SCRASH2_14177 -1 @SCRASH2_14177
+
+:SCRASH2_13794
+50@ = Math.RandomIntInRange(0, 3)
+if 
+  50@ == 0
+goto_if_false @SCRASH2_13828
+127@ = 1
+
+:SCRASH2_13828
+if 
+  50@ == 1
+goto_if_false @SCRASH2_13853
+127@ = 2
+
+:SCRASH2_13853
+if 
+  50@ == 2
+goto_if_false @SCRASH2_13878
+127@ = 3
+
+:SCRASH2_13878
+goto @SCRASH2_14177
+
+:SCRASH2_13885
+127@ = 4
+goto @SCRASH2_14177
+
+:SCRASH2_13899
+127@ = 6
+goto @SCRASH2_14177
+
+:SCRASH2_13913
+127@ = 7
+goto @SCRASH2_14177
+
+:SCRASH2_13927
+127@ = 9
+goto @SCRASH2_14177
+
+:SCRASH2_13941
+127@ = 10
+goto @SCRASH2_14177
+
+:SCRASH2_13955
+127@ = 5
+goto @SCRASH2_14177
+
+:SCRASH2_13969
+127@ = 12
+goto @SCRASH2_14177
+
+:SCRASH2_13983
+127@ = 13
+goto @SCRASH2_14177
+
+:SCRASH2_13997
+127@ = 8
+goto @SCRASH2_14177
+
+:SCRASH2_14011
+127@ = 13
+goto @SCRASH2_14177
+
+:SCRASH2_14025
+127@ = 13
+goto @SCRASH2_14177
+
+:SCRASH2_14039
+127@ = 11
+goto @SCRASH2_14177
+
+:SCRASH2_14053
+50@ = Math.RandomIntInRange(0, 3)
+if 
+  50@ == 0
+goto_if_false @SCRASH2_14087
+127@ = 9
+
+:SCRASH2_14087
+if 
+  50@ == 1
+goto_if_false @SCRASH2_14112
+127@ = 5
+
+:SCRASH2_14112
+if 
+  50@ == 2
+goto_if_false @SCRASH2_14137
+127@ = 12
+
+:SCRASH2_14137
+goto @SCRASH2_14177
+
+:SCRASH2_14144
+write_debug "UNKNOWN_CURRENT_TAXI_WAYPOINT"
+
+:SCRASH2_14177
+if 
+  127@ == 13
+goto_if_false @SCRASH2_14209
+73@ = 0
+74@ = 0
+
+:SCRASH2_14209
+switch_start 127@ total_jumps 14 default_jump 0 @SCRASH2_14847 jumps 0 @SCRASH2_14337 1 @SCRASH2_14372 2 @SCRASH2_14409 3 @SCRASH2_14446 4 @SCRASH2_14483 5 @SCRASH2_14520 6 @SCRASH2_14557
+switch_continued 7 @SCRASH2_14594 8 @SCRASH2_14631 9 @SCRASH2_14668 10 @SCRASH2_14705 11 @SCRASH2_14742 12 @SCRASH2_14779 13 @SCRASH2_14816 -1 @SCRASH2_14847 -1 @SCRASH2_14847
+
+:SCRASH2_14337
+write_debug "TAXI_WAYPOINT_STILL_NONE"
+goto @SCRASH2_14847
+
+:SCRASH2_14372
+135@ = 728.2346
+136@ = -1068.529
+137@ = 21.3149
+goto @SCRASH2_14847
+
+:SCRASH2_14409
+135@ = 885.8015
+136@ = -1152.047
+137@ = 22.7156
+goto @SCRASH2_14847
+
+:SCRASH2_14446
+135@ = 623.9262
+136@ = -1356.336
+137@ = 12.4009
+goto @SCRASH2_14847
+
+:SCRASH2_14483
+135@ = 554.1271
+136@ = -1327.217
+137@ = 12.3984
+goto @SCRASH2_14847
+
+:SCRASH2_14520
+135@ = 552.7402
+136@ = -1401.848
+137@ = 14.0907
+goto @SCRASH2_14847
+
+:SCRASH2_14557
+135@ = 913.4064
+136@ = -1381.039
+137@ = 12.3208
+goto @SCRASH2_14847
+
+:SCRASH2_14594
+135@ = 807.6411
+136@ = -1737.392
+137@ = 12.3906
+goto @SCRASH2_14847
+
+:SCRASH2_14631
+135@ = 318.3799
+136@ = -1464.926
+137@ = 33.003
+goto @SCRASH2_14847
+
+:SCRASH2_14668
+135@ = 461.6126
+136@ = -1433.671
+137@ = 23.2117
+goto @SCRASH2_14847
+
+:SCRASH2_14705
+135@ = 484.8509
+136@ = -1579.22
+137@ = 20.2086
+goto @SCRASH2_14847
+
+:SCRASH2_14742
+135@ = 570.8074
+136@ = -1580.052
+137@ = 15.0078
+goto @SCRASH2_14847
+
+:SCRASH2_14779
+135@ = 673.4271
+136@ = -1737.34
+137@ = 12.4441
+goto @SCRASH2_14847
+
+:SCRASH2_14816
+set_lvar_float_to_lvar_float 135@ = 132@
+set_lvar_float_to_lvar_float 136@ = 133@
+set_lvar_float_to_lvar_float 137@ = 134@
+goto @SCRASH2_14847
+
+:SCRASH2_14847
+if 
+  73@ == 1
+goto_if_false @SCRASH2_14932
+if 
+  128@ == 0
+goto_if_false @SCRASH2_14897
+73@ = 0
+goto @SCRASH2_14932
+
+:SCRASH2_14897
+50@ = Math.RandomIntInRange(0, 3)
+if 
+  is_int_lvar_greater_than_int_lvar 50@ > 128@
+goto_if_false @SCRASH2_14932
+73@ = 0
+
+:SCRASH2_14932
+if 
+  73@ == 1
+goto_if_false @SCRASH2_14964
+128@ = 0
+goto @SCRASH2_14971
+
+:SCRASH2_14964
+128@ += 1
+
+:SCRASH2_14971
+if 
+  not Char.IsDead(79@)
+goto_if_false @SCRASH2_15201
+if 
+  73@ == 1
+goto_if_false @SCRASH2_15039
+Task.CarDriveToCoord(79@, -1, 135@, 136@, 137@, 25.0, DriveMode.Accurate, 0, DrivingMode.AvoidCars)
+goto @SCRASH2_15201
+
+:SCRASH2_15039
+if 
+  127@ == 13
+goto_if_false @SCRASH2_15071
+50@ = 15
+goto @SCRASH2_15118
+
+:SCRASH2_15071
+set_lvar_int_to_lvar_int 50@ = 129@
+50@ *= 3
+50@ += 18
+if 
+  50@ > 25
+goto_if_false @SCRASH2_15118
+50@ = 25
+
+:SCRASH2_15118
+cset_lvar_float_to_lvar_int 70@ = integer 50@
+if 
+  2 > 129@
+goto_if_false @SCRASH2_15176
+Task.CarDriveToCoord(79@, -1, 135@, 136@, 137@, 70@, DriveMode.Accurate, 0, DrivingMode.AvoidCarsObeyLights)
+goto @SCRASH2_15201
+
+:SCRASH2_15176
+Task.CarDriveToCoord(79@, -1, 135@, 136@, 137@, 70@, DriveMode.Accurate, 0, DrivingMode.AvoidCars)
+
+:SCRASH2_15201
+129@ += 1
+return 
+
+:SCRASH2_15210
+if 
+  Char.IsDead(78@)
+goto_if_false @SCRASH2_15228
+return 
+
+:SCRASH2_15228
+if 
+  not Char.IsInCar(78@, 87@)
+goto_if_false @SCRASH2_15249
+return 
+
+:SCRASH2_15249
+if 
+  Car.IsDead(87@)
+goto_if_false @SCRASH2_15267
+return 
+
+:SCRASH2_15267
+if 
+  127@ <> 13
+goto_if_false @SCRASH2_15334
+if 
+  Car.Locate3D(87@, 0, 135@, 136@, 137@, 18.0, 18.0, 4.0)
+goto_if_false @SCRASH2_15334
+gosub @SCRASH2_13627
+
+:SCRASH2_15334
+if 
+  127@ == 13
+goto_if_false @SCRASH2_15425
+if 
+  Car.Locate3D(87@, 0, 370.0204, -1647.647, 31.7173, 14.0, 14.0, 4.0)
+goto_if_false @SCRASH2_15425
+if 
+  150@ == 1
+goto_if_false @SCRASH2_15425
+gosub @SCRASH2_13627
+
+:SCRASH2_15425
+return 
+
+:SCRASH2_15427
+57@ = 355.618
+58@ = -2037.007
+59@ = 6.836
+63@ = 271.1917
+World.ClearArea(1, 57@, 58@, 59@, 10.0)
+80@ = Char.Create(4, 46, 57@, 58@, 59@)
+Char.SetHeading(80@, 63@)
+Char.SetIsTargetPriority(80@, True)
+169@ = 1
+return 
+
+:SCRASH2_15527
+if 
+  144@ == 1
+goto_if_false @SCRASH2_15547
+return 
+
+:SCRASH2_15547
+switch_start 98@ total_jumps 2 default_jump 0 @SCRASH2_15747 jumps 3 @SCRASH2_15610 4 @SCRASH2_15658 -1 @SCRASH2_15747 -1 @SCRASH2_15747 -1 @SCRASH2_15747 -1 @SCRASH2_15747 -1 @SCRASH2_15747
+
+:SCRASH2_15610
+Task.SmartFleeChar(78@, $scplayer, 4000.0, 3600000)
+98@ = 4
+set_lvar_int_to_lvar_int 108@ = 46@
+108@ += 250
+goto @SCRASH2_15747
+
+:SCRASH2_15658
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 108@
+goto_if_false @SCRASH2_15740
+40@ = Char.GetScriptTaskStatus(78@, 1501)
+if 
+  is_int_lvar_equal_to_constant 40@ == 7
+goto_if_false @SCRASH2_15740
+Task.SmartFleeChar(78@, $scplayer, 4000.0, 3600000)
+set_lvar_int_to_lvar_int 108@ = 46@
+108@ += 250
+
+:SCRASH2_15740
+goto @SCRASH2_15747
+
+:SCRASH2_15747
+return 
+
+:SCRASH2_15749
+if 
+  145@ == 1
+goto_if_false @SCRASH2_15769
+return 
+
+:SCRASH2_15769
+switch_start 99@ total_jumps 2 default_jump 0 @SCRASH2_15980 jumps 3 @SCRASH2_15832 4 @SCRASH2_15894 -1 @SCRASH2_15980 -1 @SCRASH2_15980 -1 @SCRASH2_15980 -1 @SCRASH2_15980 -1 @SCRASH2_15980
+
+:SCRASH2_15832
+Char.GiveWeapon(80@, WeaponType.Pistol, 99)
+Char.SetDecisionMaker(80@, 97@)
+Task.KillCharOnFootWhileDucking(80@, $scplayer, 4, 4000, 34)
+99@ = 4
+set_lvar_int_to_lvar_int 110@ = 46@
+110@ += 250
+goto @SCRASH2_15980
+
+:SCRASH2_15894
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 110@
+goto_if_false @SCRASH2_15973
+40@ = Char.GetScriptTaskStatus(80@, 1588)
+if 
+  is_int_lvar_equal_to_constant 40@ == 7
+goto_if_false @SCRASH2_15973
+Task.KillCharOnFootWhileDucking(80@, $scplayer, 4, 4000, 34)
+set_lvar_int_to_lvar_int 110@ = 46@
+110@ += 250
+
+:SCRASH2_15973
+goto @SCRASH2_15980
+
+:SCRASH2_15980
+return 
+
+:SCRASH2_15982
+126@ = 0
+100@ = 0
+153@ = 0
+return 
+
+:SCRASH2_16005
+switch_start 126@ total_jumps 6 default_jump 1 @SCRASH2_16165 jumps 0 @SCRASH2_16068 1 @SCRASH2_16130 2 @SCRASH2_16137 3 @SCRASH2_16144 4 @SCRASH2_16151 5 @SCRASH2_16158 -1 @SCRASH2_16191
+
+:SCRASH2_16068
+if 
+  Char.LocateAnyMeans3D(78@, 0, 833.4493, -1374.261, -1.5078, 1.2, 1.2, 1.2)
+goto_if_false @SCRASH2_16123
+126@ = 1
+
+:SCRASH2_16123
+goto @SCRASH2_16191
+
+:SCRASH2_16130
+goto @SCRASH2_16191
+
+:SCRASH2_16137
+goto @SCRASH2_16191
+
+:SCRASH2_16144
+goto @SCRASH2_16191
+
+:SCRASH2_16151
+goto @SCRASH2_16191
+
+:SCRASH2_16158
+goto @SCRASH2_16191
+
+:SCRASH2_16165
+write_debug "UNKNOWN_SUSPICION_AREA"
+
+:SCRASH2_16191
+return 
+
+:SCRASH2_16193
+if 
+  156@ == 1
+goto_if_false @SCRASH2_16213
+return 
+
+:SCRASH2_16213
+if 
+  Char.IsShooting($scplayer)
+goto_if_false @SCRASH2_16236
+156@ = 1
+
+:SCRASH2_16236
+73@ = 0
+switch_start 126@ total_jumps 6 default_jump 1 @SCRASH2_16752 jumps 0 @SCRASH2_16306 1 @SCRASH2_16313 2 @SCRASH2_16375 3 @SCRASH2_16474 4 @SCRASH2_16573 5 @SCRASH2_16672 -1 @SCRASH2_16778
+
+:SCRASH2_16306
+goto @SCRASH2_16778
+
+:SCRASH2_16313
+if 
+  Char.IsInArea3D($scplayer, 0, 783.9064, -1393.156, -2.7078, 858.4905, -1322.64, -0.3006)
+goto_if_false @SCRASH2_16368
+73@ = 1
+
+:SCRASH2_16368
+goto @SCRASH2_16778
+
+:SCRASH2_16375
+if or
+  Char.IsInArea3D($scplayer, 0, 825.3654, -1359.666, -2.7078, 842.8153, -1338.893, 7.3875)
+  Char.IsInArea3D($scplayer, 0, 820.1507, -1365.766, -2.7078, 831.27, -1354.908, -0.3078)
+goto_if_false @SCRASH2_16467
+73@ = 1
+
+:SCRASH2_16467
+goto @SCRASH2_16778
+
+:SCRASH2_16474
+if or
+  Char.IsInArea3D($scplayer, 0, 819.6318, -1344.258, 4.9875, 842.2764, -1338.742, 13.7162)
+  Char.IsInArea3D($scplayer, 0, 816.749, -1345.116, 8.8156, 829.4735, -1338.895, 13.7281)
+goto_if_false @SCRASH2_16566
+73@ = 1
+
+:SCRASH2_16566
+goto @SCRASH2_16778
+
+:SCRASH2_16573
+if or
+  Char.IsInArea3D($scplayer, 0, 787.7994, -1357.323, 11.3391, 827.1069, -1309.406, 13.7625)
+  Char.IsInArea3D($scplayer, 0, 816.749, -1345.116, 8.8156, 829.4735, -1338.895, 13.7281)
+goto_if_false @SCRASH2_16665
+73@ = 1
+
+:SCRASH2_16665
+goto @SCRASH2_16778
+
+:SCRASH2_16672
+if 
+  154@ == 0
+goto_if_false @SCRASH2_16745
+if 
+  Char.IsInArea3D($scplayer, 0, 787.0083, -1376.24, 11.3391, 809.962, -1310.506, 13.8144)
+goto_if_false @SCRASH2_16745
+73@ = 1
+
+:SCRASH2_16745
+goto @SCRASH2_16778
+
+:SCRASH2_16752
+write_debug "UNKNOWN_SUSPICION_AREA"
+
+:SCRASH2_16778
+if 
+  156@ == 1
+goto_if_false @SCRASH2_16804
+set_lvar_int_to_lvar_int 156@ = 73@
+
+:SCRASH2_16804
+if 
+  156@ == 1
+goto_if_false @SCRASH2_16854
+set_lvar_int_to_lvar_int 118@ = 46@
+118@ += 1000
+Task.SmartFleeChar(78@, $scplayer, 9999.0, 10000)
+
+:SCRASH2_16854
+if 
+  73@ == 1
+goto_if_false @SCRASH2_17004
+57@, 58@, 59@ = Char.GetCoordinates(78@)
+60@, 61@, 62@ = Char.GetCoordinates($scplayer)
+72@ = Math.GetDistanceBetweenCoords3D(57@, 58@, 59@, 60@, 61@, 62@)
+if 
+  100@ == 1
+goto_if_false @SCRASH2_16976
+if 
+  72@ > 10.0
+goto_if_false @SCRASH2_16969
+73@ = 0
+
+:SCRASH2_16969
+goto @SCRASH2_17004
+
+:SCRASH2_16976
+if 
+  72@ > 8.0
+goto_if_false @SCRASH2_17004
+73@ = 0
+
+:SCRASH2_17004
+if 
+  73@ == 1
+goto_if_false @SCRASH2_17215
+if 
+  100@ == 0
+goto_if_false @SCRASH2_17117
+set_lvar_int_to_lvar_int 114@ = 46@
+114@ += 60
+if 
+  160@ == 0
+goto_if_false @SCRASH2_17096
+Text.PrintNow('SCR2_08', 30000, 1)
+160@ = 1
+
+:SCRASH2_17096
+153@ = 1
+100@ = 1
+goto @SCRASH2_17208
+
+:SCRASH2_17117
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 114@
+goto_if_false @SCRASH2_17208
+$g_SCrash2_spookKM += 1
+if 
+  $g_SCrash2_spookKM > 100
+goto_if_false @SCRASH2_17193
+$g_SCrash2_spookKM = 100
+37@ = 1
+45@ = 7
+Text.ClearSmallPrints
+return 
+goto @SCRASH2_17208
+
+:SCRASH2_17193
+set_lvar_int_to_lvar_int 114@ = 46@
+114@ += 60
+
+:SCRASH2_17208
+goto @SCRASH2_17367
+
+:SCRASH2_17215
+if 
+  100@ == 1
+goto_if_false @SCRASH2_17284
+Text.ClearSmallPrints
+100@ = 0
+153@ = 0
+set_lvar_int_to_lvar_int 101@ = 102@
+Char.ClearLookAt(78@)
+set_lvar_int_to_lvar_int 114@ = 46@
+114@ += 40
+goto @SCRASH2_17367
+
+:SCRASH2_17284
+if 
+  $g_SCrash2_spookKM > 0
+goto_if_false @SCRASH2_17367
+if and
+  114@ > 0
+  is_int_lvar_greater_than_int_lvar 46@ > 114@
+goto_if_false @SCRASH2_17367
+$g_SCrash2_spookKM -= 1
+if 
+  0 > $g_SCrash2_spookKM
+goto_if_false @SCRASH2_17367
+$g_SCrash2_spookKM = 0
+114@ = 0
+
+:SCRASH2_17367
+return 
+
+:SCRASH2_17369
+if 
+  152@ == 1
+goto_if_false @SCRASH2_17420
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 116@
+goto_if_false @SCRASH2_17420
+152@ = 0
+116@ = 0
+
+:SCRASH2_17420
+162@ = 0
+if or
+  100@ == 3
+  100@ == 1
+goto_if_false @SCRASH2_17459
+162@ = 1
+
+:SCRASH2_17459
+73@ = 0
+74@ = 0
+159@ = 0
+if and
+  150@ == 1
+  149@ == 1
+goto_if_false @SCRASH2_17617
+57@, 58@, 59@ = Char.GetCoordinates(78@)
+72@ = Math.GetDistanceBetweenCoords3D(57@, 58@, 59@, 372.661, -2088.79, 6.836)
+60@, 61@, 62@ = Char.GetCoordinates($scplayer)
+70@ = Math.GetDistanceBetweenCoords3D(60@, 61@, 62@, 372.661, -2088.79, 6.836)
+if 
+  is_float_lvar_greater_than_float_lvar 72@ > 70@
+goto_if_false @SCRASH2_17617
+159@ = 1
+
+:SCRASH2_17617
+if 
+  159@ == 1
+goto_if_false @SCRASH2_17809
+if 
+  100@ <> 3
+goto_if_false @SCRASH2_17716
+if 
+  100@ <> 1
+goto_if_false @SCRASH2_17686
+set_lvar_int_to_lvar_int 114@ = 46@
+114@ += 60
+
+:SCRASH2_17686
+100@ = 3
+Text.PrintNow('SCR2_23', 30000, 1)
+goto @SCRASH2_17807
+
+:SCRASH2_17716
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 114@
+goto_if_false @SCRASH2_17807
+$g_SCrash2_spookKM += 1
+if 
+  $g_SCrash2_spookKM > 100
+goto_if_false @SCRASH2_17792
+$g_SCrash2_spookKM = 100
+37@ = 1
+45@ = 7
+Text.ClearSmallPrints
+return 
+goto @SCRASH2_17807
+
+:SCRASH2_17792
+set_lvar_int_to_lvar_int 114@ = 46@
+114@ += 60
+
+:SCRASH2_17807
+return 
+
+:SCRASH2_17809
+if 
+  159@ == 0
+goto_if_false @SCRASH2_17959
+57@, 58@, 59@ = Char.GetCoordinates(78@)
+60@, 61@, 62@ = Char.GetCoordinates($scplayer)
+72@ = Math.GetDistanceBetweenCoords3D(57@, 58@, 59@, 60@, 61@, 62@)
+if 
+  40.0 >= 72@
+goto_if_false @SCRASH2_17931
+if 
+  152@ == 0
+goto_if_false @SCRASH2_17924
+73@ = 1
+
+:SCRASH2_17924
+goto @SCRASH2_17959
+
+:SCRASH2_17931
+if 
+  72@ >= 100.0
+goto_if_false @SCRASH2_17959
+74@ = 1
+
+:SCRASH2_17959
+if 
+  159@ == 0
+goto_if_false @SCRASH2_18029
+if 
+  100@ == 3
+goto_if_false @SCRASH2_18029
+if and
+  73@ == 0
+  74@ == 0
+goto_if_false @SCRASH2_18029
+Text.ClearSmallPrints
+100@ = 0
+
+:SCRASH2_18029
+if 
+  73@ == 1
+goto_if_false @SCRASH2_18288
+if 
+  100@ <> 1
+goto_if_false @SCRASH2_18190
+set_lvar_int_to_lvar_int 114@ = 46@
+114@ += 60
+if 
+  100@ <> 3
+goto_if_false @SCRASH2_18146
+if 
+  160@ == 0
+goto_if_false @SCRASH2_18139
+Text.PrintNow('SCR2_08', 30000, 1)
+160@ = 1
+
+:SCRASH2_18139
+goto @SCRASH2_18169
+
+:SCRASH2_18146
+Text.PrintNow('SCR2_08', 30000, 1)
+160@ = 1
+
+:SCRASH2_18169
+153@ = 1
+100@ = 1
+goto @SCRASH2_18281
+
+:SCRASH2_18190
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 114@
+goto_if_false @SCRASH2_18281
+$g_SCrash2_spookKM += 1
+if 
+  $g_SCrash2_spookKM > 100
+goto_if_false @SCRASH2_18266
+$g_SCrash2_spookKM = 100
+37@ = 1
+45@ = 7
+Text.ClearSmallPrints
+return 
+goto @SCRASH2_18281
+
+:SCRASH2_18266
+set_lvar_int_to_lvar_int 114@ = 46@
+114@ += 60
+
+:SCRASH2_18281
+goto @SCRASH2_18315
+
+:SCRASH2_18288
+if 
+  100@ == 1
+goto_if_false @SCRASH2_18315
+Text.ClearSmallPrints
+100@ = 0
+
+:SCRASH2_18315
+if 
+  74@ == 1
+goto_if_false @SCRASH2_18365
+if and
+  149@ == 1
+  150@ == 1
+goto_if_false @SCRASH2_18365
+74@ = 0
+
+:SCRASH2_18365
+if 
+  74@ == 1
+goto_if_false @SCRASH2_18615
+if 
+  100@ == 0
+goto_if_false @SCRASH2_18438
+130@ = 21
+set_lvar_int_to_lvar_int 113@ = 46@
+113@ += 1000
+100@ = 2
+goto @SCRASH2_18608
+
+:SCRASH2_18438
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 113@
+goto_if_false @SCRASH2_18530
+130@ -= 1
+if 
+  0 > 130@
+goto_if_false @SCRASH2_18514
+130@ = 0
+37@ = 1
+45@ = 3
+Text.ClearSmallPrints
+return 
+goto @SCRASH2_18530
+
+:SCRASH2_18514
+set_lvar_int_to_lvar_int 113@ = 46@
+113@ += 1000
+
+:SCRASH2_18530
+if and
+  130@ > 10
+  72@ >= 140.0
+goto_if_false @SCRASH2_18574
+Text.PrintNow('SCR2_16', 30000, 1)
+
+:SCRASH2_18574
+if 
+  130@ == 10
+goto_if_false @SCRASH2_18608
+Text.PrintNow('SCR2_16', 30000, 1)
+
+:SCRASH2_18608
+goto @SCRASH2_18651
+
+:SCRASH2_18615
+if 
+  100@ == 2
+goto_if_false @SCRASH2_18651
+Text.ClearThisPrint('SCR2_16')
+100@ = 0
+
+:SCRASH2_18651
+if and
+  100@ <> 1
+  100@ <> 3
+goto_if_false @SCRASH2_18814
+if 
+  162@ == 1
+goto_if_false @SCRASH2_18716
+set_lvar_int_to_lvar_int 114@ = 46@
+114@ += 40
+goto @SCRASH2_18814
+
+:SCRASH2_18716
+if 
+  $g_SCrash2_spookKM > 0
+goto_if_false @SCRASH2_18814
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 114@
+goto_if_false @SCRASH2_18814
+$g_SCrash2_spookKM -= 1
+if 
+  0 > $g_SCrash2_spookKM
+goto_if_false @SCRASH2_18799
+$g_SCrash2_spookKM = 0
+114@ = 0
+goto @SCRASH2_18814
+
+:SCRASH2_18799
+set_lvar_int_to_lvar_int 114@ = 46@
+114@ += 40
+
+:SCRASH2_18814
+return 
+
+:SCRASH2_18816
+Hud.DisplayCounterWithString($g_SCrash2_spookKM, CounterDisplay.Bar, 'SCR2_52')
+return 
+
+:SCRASH2_18834
+if 
+is_ps2_keyboard_key_just_pressed 32
+goto_if_false @SCRASH2_18883
+47@ += 1
+if 
+  47@ > 2
+goto_if_false @SCRASH2_18881
+47@ = 0
+
+:SCRASH2_18881
+clear_all_view_variables 
+
+:SCRASH2_18883
+if 
+  47@ == 1
+goto_if_false @SCRASH2_19115
+if 
+  not Car.IsDead(81@)
+goto_if_false @SCRASH2_18933
+70@ = Car.GetSpeed(81@)
+cset_var_int_to_lvar_float $7245 = float 70@
+
+:SCRASH2_18933
+set_var_int_to_lvar_int $SCrash2_view_debug = 34@
+set_var_int_to_lvar_int $7240 = 35@
+set_var_int_to_lvar_int $7241 = TIMERA
+set_var_int_to_lvar_int $7242 = TIMERB
+set_var_int_to_lvar_int $7243 = 46@
+set_var_int_to_lvar_int $7244 = 119@
+set_var_int_to_lvar_int $7246 = 121@
+view_integer_variable $SCrash2_view_debug "M_STAGE"
+view_integer_variable $7240 "M_GOALS"
+view_integer_variable $7243 "M_MISSION_TIMER"
+view_integer_variable $7244 "TRAIN_DISTANCE"
+if 
+  not Car.IsDead(81@)
+goto_if_false @SCRASH2_19094
+view_integer_variable $7245 "TRAIN_SPEED"
+
+:SCRASH2_19094
+view_integer_variable $7246 "PLAYER_FROM_LS"
+
+:SCRASH2_19115
+if 
+  47@ == 2
+goto_if_false @SCRASH2_19133
+
+:SCRASH2_19133
+if 
+is_ps2_keyboard_key_just_pressed 98
+goto_if_false @SCRASH2_19155
+38@ = 1
+
+:SCRASH2_19155
+if 
+is_ps2_keyboard_key_just_pressed 80
+goto_if_false @SCRASH2_19243
+if 
+  39@ == 0
+goto_if_false @SCRASH2_19218
+39@ = 1
+write_debug "LEVEL_PAUSED"
+goto @SCRASH2_19243
+
+:SCRASH2_19218
+39@ = 0
+write_debug "LEVEL_UNPAUSED"
+
+:SCRASH2_19243
+return 
+
+:SCRASH2_19245
+if 
+  not is_ps2_keyboard_key_just_pressed 74
+goto_if_false @SCRASH2_19262
+return 
+
+:SCRASH2_19262
+if 
+  34@ == 1
+goto_if_false @SCRASH2_19334
+World.ClearArea(1, -2063.547, 253.2754, 34.3043, 0.5)
+Char.SetCoordinates($scplayer, -2063.547, 253.2754, 34.3043)
+Char.SetHeading($scplayer, 0.0)
+
+:SCRASH2_19334
+if and
+  34@ == 2
+  4 > 35@
+goto_if_false @SCRASH2_19585
+if 
+  166@ == 0
+goto_if_false @SCRASH2_19452
+World.ClearArea(1, -1944.025, 135.5236, 24.7109, 100.0)
+81@ = Train.Create(-1944.025, 135.5236, 24.7109, 11, 0)
+Train.SetSpeed(81@, 0.0)
+Train.SetCruiseSpeed(81@, 0.0)
+166@ = 1
+
+:SCRASH2_19452
+if 
+  not Car.IsDead(81@)
+goto_if_false @SCRASH2_19478
+82@ = Train.GetCarriage(81@, 1)
+
+:SCRASH2_19478
+if 
+  not Char.IsDead(78@)
+goto_if_false @SCRASH2_19506
+Task.EnterCarAsPassenger(78@, 82@, -1, 100)
+
+:SCRASH2_19506
+World.ClearArea(1, -1989.161, 208.5921, 26.6797, 0.5)
+Char.SetCoordinates($scplayer, -1989.161, 208.5921, 26.6797)
+Char.SetHeading($scplayer, 221.8946)
+set_lvar_int_to_lvar_int 103@ = 46@
+103@ += 60000
+35@ = 4
+
+:SCRASH2_19585
+if and
+  34@ == 3
+  4 > 35@
+goto_if_false @SCRASH2_19732
+if 
+  35@ == 1
+goto_if_false @SCRASH2_19671
+if 
+  not Car.IsDead(81@)
+goto_if_false @SCRASH2_19664
+Train.SetCoordinates(81@, 779.9327, -1334.155, -2.534)
+
+:SCRASH2_19664
+goto @SCRASH2_19678
+
+:SCRASH2_19671
+35@ = 4
+
+:SCRASH2_19678
+World.ClearArea(1, 815.0453, -1323.097, 12.5036, 5.0)
+Char.SetCoordinates($scplayer, 815.0453, -1323.097, 12.5036)
+Char.SetHeading($scplayer, 187.142)
+
+:SCRASH2_19732
+if and
+  34@ == 4
+  11 > 35@
+goto_if_false @SCRASH2_20028
+if 
+  not Char.IsDead(78@)
+goto_if_false @SCRASH2_19803
+Char.SetCoordinates(78@, 803.7784, -1342.926, 12.5469)
+Char.SetHeading(78@, 92.3748)
+
+:SCRASH2_19803
+if 
+  168@ == 1
+goto_if_false @SCRASH2_19874
+if 
+  not Car.IsDead(87@)
+goto_if_false @SCRASH2_19867
+Car.SetCoordinates(87@, 799.7784, -1342.926, 12.5469)
+Car.SetHeading(87@, 7.9128)
+
+:SCRASH2_19867
+goto @SCRASH2_19950
+
+:SCRASH2_19874
+World.ClearArea(1, 799.7784, -1342.926, 12.5469, 10.0)
+87@ = Car.Create(420, 799.7784, -1342.926, 12.5469)
+Car.SetHeading(87@, 7.9128)
+79@ = Char.CreateInsideCar(PedType.CivMale, 18, 87@)
+168@ = 1
+
+:SCRASH2_19950
+if and
+  not Car.IsDead(81@)
+  166@ == 1
+goto_if_false @SCRASH2_19995
+Train.SetCruiseSpeed(81@, 30.0)
+Train.MarkAsNoLongerNeeded(81@)
+166@ = 0
+
+:SCRASH2_19995
+156@ = 0
+157@ = 0
+158@ = 1
+Blip.Remove(90@)
+35@ = 11
+
+:SCRASH2_20028
+if 
+  34@ == 5
+goto_if_false @SCRASH2_20207
+132@ = 366.4698
+133@ = -2030.643
+134@ = 6.6582
+if 
+  not Char.IsDead(78@)
+goto_if_false @SCRASH2_20146
+World.ClearArea(1, 366.4698, -2030.643, 6.6582, 5.0)
+Char.SetCoordinates(78@, 366.4698, -2030.643, 6.6582)
+Char.SetHeading(78@, 179.2269)
+
+:SCRASH2_20146
+World.ClearArea(1, 383.3648, -1930.448, 6.8301, 5.0)
+Char.SetCoordinates($scplayer, 383.3648, -1930.448, 6.8301)
+Char.SetHeading($scplayer, 88.4042)
+35@ = 1
+
+:SCRASH2_20207
+return 
+
+:SCRASH2_20209
+41@ += 1
+if 
+  41@ > 9
+goto_if_false @SCRASH2_20241
+41@ = 0
+
+:SCRASH2_20241
+return 
+
+:SCRASH2_20243
+42@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 44@ = 42@
+sub_int_lvar_from_int_lvar 44@ -= 43@
+set_lvar_int_to_lvar_int 43@ = 42@
+add_int_lvar_to_int_lvar 46@ += 44@
+return 
+
+:SCRASH2_20282
+34@ += 1
+35@ = 0
+TIMERA = 0
+TIMERB = 0
+return 
+
+:SCRASH2_20312
+Player.SetControl($player1, False)
+Cutscene.Load('SCRASH2')
+
+:SCRASH2_20330
+if 
+  not Cutscene.HasLoaded
+goto_if_false @SCRASH2_20354
+wait 0
+goto @SCRASH2_20330
+
+:SCRASH2_20354
+Streaming.SetAreaVisible(1)
+Char.SetAreaVisible($scplayer, 1)
+Streaming.LoadScene(-2031.0, 149.0, 29.0)
+Cutscene.Start
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+
+:SCRASH2_20399
+if 
+  not Cutscene.HasFinished
+goto_if_false @SCRASH2_20423
+wait 0
+goto @SCRASH2_20399
+
+:SCRASH2_20423
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, Fade.Out)
+
+:SCRASH2_20437
+if 
+  Camera.GetFadingStatus
+goto_if_false @SCRASH2_20461
+wait 0
+goto @SCRASH2_20437
+
+:SCRASH2_20461
+Cutscene.Clear
+Streaming.SetAreaVisible(0)
+Char.SetAreaVisible($scplayer, 0)
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+return 
+
+:SCRASH2_20489
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @SCRASH2_20516
+wait 0
+goto @SCRASH2_20489
+
+:SCRASH2_20516
+gosub @SCRASH2_20731
+gosub @SCRASH2_20897
+World.ClearArea(0, -1978.85, 169.6607, 26.6953, 3.0)
+89@ = Car.Create(468, -1978.85, 169.6607, 26.6953)
+Car.SetHeading(89@, 90.1127)
+161@ = 1
+World.ClearArea(0, -2033.339, 148.6139, 27.8359, 0.5)
+Streaming.LoadScene(-2033.339, 148.6139, 27.8359)
+Char.SetCoordinates($scplayer, -2033.339, 148.6139, 27.8359)
+Char.SetHeading($scplayer, 270.0)
+Camera.SetBehindPlayer
+Player.SetControl($player1, True)
+Game.SwitchRandomTrains(False)
+Restart.SetRespawnPointForDurationOfMission(-2026.061, 148.828, 27.8359)
+World.SetRailtrackResistanceMult(0.4)
+wait 1000
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+gosub @SCRASH2_20282
+return 
+
+:SCRASH2_20731
+Streaming.RequestModel(538)
+Streaming.RequestModel(570)
+Streaming.RequestModel(537)
+Streaming.RequestModel(569)
+Streaming.RequestModel(468)
+Streaming.RequestModel(147)
+Streaming.RequestModel(18)
+Streaming.RequestModel(46)
+Streaming.RequestModel(358)
+Streaming.RequestModel(346)
+Streaming.LoadAllModelsNow
+
+:SCRASH2_20781
+if or
+  not Streaming.HasModelLoaded(538)
+  not Streaming.HasModelLoaded(570)
+  not Streaming.HasModelLoaded(537)
+  not Streaming.HasModelLoaded(569)
+  not Streaming.HasModelLoaded(468)
+goto_if_false @SCRASH2_20828
+wait 0
+goto @SCRASH2_20781
+
+:SCRASH2_20828
+if or
+  not Streaming.HasModelLoaded(147)
+  not Streaming.HasModelLoaded(18)
+  not Streaming.HasModelLoaded(46)
+goto_if_false @SCRASH2_20863
+wait 0
+goto @SCRASH2_20828
+
+:SCRASH2_20863
+if or
+  not Streaming.HasModelLoaded(358)
+  not Streaming.HasModelLoaded(346)
+goto_if_false @SCRASH2_20895
+wait 0
+goto @SCRASH2_20863
+
+:SCRASH2_20895
+return 
+
+:SCRASH2_20897
+Streaming.RequestAnimation("MISC")
+Streaming.RequestAnimation("GANGS")
+
+:SCRASH2_20914
+if or
+  not Streaming.HasAnimationLoaded("MISC")
+  not Streaming.HasAnimationLoaded("GANGS")
+goto_if_false @SCRASH2_20953
+wait 0
+goto @SCRASH2_20914
+
+:SCRASH2_20953
+return 
+
+:SCRASH2_20955
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+Text.ClearSmallPrints
+switch_start 45@ total_jumps 7 default_jump 0 @SCRASH2_21197 jumps 1 @SCRASH2_21036 2 @SCRASH2_21059 3 @SCRASH2_21082 4 @SCRASH2_21105 5 @SCRASH2_21128 6 @SCRASH2_21151 7 @SCRASH2_21174
+
+:SCRASH2_21036
+Text.PrintNow('SCR2_80', 5000, 1)
+goto @SCRASH2_21197
+
+:SCRASH2_21059
+Text.PrintNow('SCR2_81', 5000, 1)
+goto @SCRASH2_21197
+
+:SCRASH2_21082
+Text.PrintNow('SCR2_82', 5000, 1)
+goto @SCRASH2_21197
+
+:SCRASH2_21105
+Text.PrintNow('SCR2_83', 5000, 1)
+goto @SCRASH2_21197
+
+:SCRASH2_21128
+Text.PrintNow('SCR2_84', 5000, 1)
+goto @SCRASH2_21197
+
+:SCRASH2_21151
+Text.PrintNow('SCR2_85', 5000, 1)
+goto @SCRASH2_21197
+
+:SCRASH2_21174
+Text.PrintNow('SCR2_86', 5000, 1)
+goto @SCRASH2_21197
+
+:SCRASH2_21197
+155@ = 1
+return 
+
+:SCRASH2_21206
+Text.ClearSmallPrints
+Text.PrintWithNumberBig('M_PASSD', 0, 5000, TextStyle.Middle)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+Stat.RegisterMissionPassed('SCRA_2')
+Stat.PlayerMadeProgress(1)
+$flag_scrash_mission_counter += 1
+Blip.Remove($scrash_contact_blip)
+Blip.Remove($garage_contact_blip)
+$garage_contact_blip = Blip.AddSpriteForContactPoint($garage_blip_icon, $garageX, $garageY, $garageZ)
+155@ = 0
+return 
+
+:SCRASH2_21293
+if 
+  Player.IsPlaying($player1)
+goto_if_false @SCRASH2_21398
+if 
+  155@ == 1
+goto_if_false @SCRASH2_21398
+if 
+  131@ == 0
+goto_if_false @SCRASH2_21359
+Char.RemoveWeapon(34, $scplayer)
+goto @SCRASH2_21398
+
+:SCRASH2_21359
+50@ = Char.GetAmmoInWeapon($scplayer, 34)
+if 
+  is_int_lvar_greater_than_int_lvar 50@ > 131@
+goto_if_false @SCRASH2_21398
+Char.SetAmmo($scplayer, WeaponType.Sniper, 131@)
+
+:SCRASH2_21398
+if and
+  168@ == 1
+  not Car.IsDead(87@)
+goto_if_false @SCRASH2_21428
+Car.SetTaxiLights(87@, False)
+
+:SCRASH2_21428
+if 
+  not Char.IsDead(79@)
+goto_if_false @SCRASH2_21449
+Char.ClearTasks(79@)
+
+:SCRASH2_21449
+if 
+  not Char.IsDead(78@)
+goto_if_false @SCRASH2_21470
+Char.ClearLookAt(78@)
+
+:SCRASH2_21470
+Pickup.Remove(95@)
+Char.MarkAsNoLongerNeeded(78@)
+Car.MarkAsNoLongerNeeded(87@)
+Char.MarkAsNoLongerNeeded(79@)
+Char.MarkAsNoLongerNeeded(80@)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(358)
+48@ = 0
+
+:SCRASH2_21512
+Train.MarkAsNoLongerNeeded(84@(48@,3i))
+48@ += 1
+  48@ >= 3
+goto_if_false @SCRASH2_21512
+if 
+  166@ == 1
+goto_if_false @SCRASH2_21591
+if 
+  not Car.IsDead(81@)
+goto_if_false @SCRASH2_21591
+Train.SetCruiseSpeed(81@, 30.0)
+Train.MarkAsNoLongerNeeded(81@)
+
+:SCRASH2_21591
+Blip.Remove(90@)
+Blip.Remove(91@)
+Blip.Remove(92@)
+Blip.Remove(93@)
+Blip.Remove(94@)
+Hud.ClearCounter($g_SCrash2_spookKM)
+Streaming.RemoveAnimation("MISC")
+Streaming.RemoveAnimation("GANGS")
+Text.ClearHelp
+Streaming.MarkModelAsNoLongerNeeded(538)
+Streaming.MarkModelAsNoLongerNeeded(570)
+Streaming.MarkModelAsNoLongerNeeded(537)
+Streaming.MarkModelAsNoLongerNeeded(569)
+Streaming.MarkModelAsNoLongerNeeded(420)
+Streaming.MarkModelAsNoLongerNeeded(468)
+Streaming.MarkModelAsNoLongerNeeded(147)
+Streaming.MarkModelAsNoLongerNeeded(18)
+Streaming.MarkModelAsNoLongerNeeded(46)
+Streaming.MarkModelAsNoLongerNeeded(358)
+Streaming.MarkModelAsNoLongerNeeded(346)
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+Game.SetWantedMultiplier(1.0)
+Game.SwitchEmergencyServices(True)
+Game.SwitchRandomTrains(True)
+$timer_mobile_start = Clock.GetGameTimer()
+Path.SwitchRoadsBackToOriginal(789.595, -1387.97, 11.5469, 807.2843, -1334.546, 13.725)
+Path.SwitchRoadsBackToOriginal(804.9978, -1414.032, 11.3801, 908.0844, -1386.618, 13.5524)
+Path.SwitchRoadsBackToOriginal(802.1913, -1335.066, 11.1828, 911.4662, -1313.045, 13.7469)
+World.SetRailtrackResistanceMult(-1.0)
+$onmission = 0
+Mission.Finish
+return 
+

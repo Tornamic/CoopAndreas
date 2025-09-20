@@ -1,0 +1,2192 @@
+:TATTO
+$number_of_tats_in_shop = 0
+$number_of_tattoos_in_area = 0
+$area_looked_for_shops = 0
+$price_counter = 0
+$item_no_shops = 0
+$temp_var_shops = 0
+$shop_progress_tattoo = 0
+$shop_keep_tattooX = 0.0
+$shop_keep_tattooY = 0.0
+$shop_keep_tattooZ = 0.0
+$shop_keep_heading_tattoo = 0.0
+$tattoo_heading = 0.0
+$return_animation_time_tattoo = 0.0
+$shop_keep_animation_time_tattoo = 0.0
+$object_animation_time_tattoo = 0.0
+$tattoo_needleX = 0.0
+$tattoo_needleY = 0.0
+$tattoo_needleZ = 0.0
+$tattoo_needle_heading = 0.0
+$flag_tattoo = 0
+$player_in_view_mode_tattoo = 0
+$shopkeeper_attacked_tattoo = 0
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$stored_item_picked_shops = 0
+$shop_main_item_picked_shops = 0
+$shop_sub_item_picked_shops = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$menu_two_item_hilighted = 0
+$previous_menu_two_item_hilighted = 500
+$temp_var_shops2 = 0
+$number_of_tats_player_has = 0
+$flag_in_remove_tattoo_section = 0
+$remove_tats_menu_drawn = 0
+$menu_item_no_tats = 0
+$remove_menu_item_selected = 0
+$keep_offX = 0.0
+$keep_offY = 0.0
+$keep_offZ = 0.0
+$shop_keep_tattooX = 0.0
+$shop_keep_tattooY = 0.0
+$shop_keep_tattooZ = 0.0
+$cam_offx = 0.0
+$cam_offy = 0.0
+$cam_offz = 0.0
+$cam_point_tattooX = 0.0
+$cam_point_tattooY = 0.0
+$cam_point_tattooZ = 0.0
+$tattoo_offsetX = 0.0
+$tattoo_offsetY = 0.0
+$tattoo_offsetZ = 0.0
+set_var_int_to_constant $shopkeeper_model_shops = 180
+Streaming.RequestModel(#TATTOO_KIT)
+Txd.LoadDictionary('LD_TATT')
+Streaming.RequestModel($shopkeeper_model_shops)
+Audio.LoadMissionAudio(40000, 4)
+Streaming.LoadAllModelsNow
+set_deatharrest_state 0
+script_name 'TATTO'
+
+:TATTO_515
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @TATTO_7605
+if 
+  not is_var_text_label_empty s$shop_name
+goto_if_false @TATTO_7591
+if 
+  $flag_tattoo > 0
+goto_if_false @TATTO_637
+if 
+  Game.HasLanguageChanged
+goto_if_false @TATTO_637
+Text.ClearHelp
+Menu.Delete($bought_menu_shops)
+Menu.Delete($sub_menu_shops)
+Menu.Delete($main_menu_shops)
+Menu.Delete($remove_menu_tattoo)
+$main_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$remove_tats_menu_drawn = 0
+$current_Language = Game.GetCurrentLanguage()
+
+:TATTO_637
+if 
+  $flag_tattoo == 0
+goto_if_false @TATTO_940
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'TATTO2'
+goto_if_false @TATTO_750
+$tattoo_offsetX = 0.0
+$tattoo_offsetY = 0.0
+$tattoo_offsetZ = 0.0
+$tattoo_heading = 125.0
+$shop_keep_heading_tattoo = 155.0
+set_var_text_label s$stored_tattoo_shop = s$shop_name
+$number_of_tats_in_shop = Shopping.GetNumberOfItems()
+$flag_tattoo = 1
+
+:TATTO_750
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'TATTOO'
+goto_if_false @TATTO_845
+$tattoo_offsetX = 0.0
+$tattoo_offsetY = -18.266
+$tattoo_offsetZ = 0.0
+$tattoo_heading = 125.0
+$shop_keep_heading_tattoo = 155.0
+set_var_text_label s$stored_tattoo_shop = s$shop_name
+$number_of_tats_in_shop = Shopping.GetNumberOfItems()
+$flag_tattoo = 1
+
+:TATTO_845
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'TATTO3'
+goto_if_false @TATTO_940
+$tattoo_offsetX = 0.0
+$tattoo_offsetY = -35.32
+$tattoo_offsetZ = 0.0
+$tattoo_heading = 125.0
+$shop_keep_heading_tattoo = 155.0
+set_var_text_label s$stored_tattoo_shop = s$shop_name
+$number_of_tats_in_shop = Shopping.GetNumberOfItems()
+$flag_tattoo = 1
+
+:TATTO_940
+if 
+  $flag_tattoo == 1
+goto_if_false @TATTO_1579
+if 
+  $shop_progress_tattoo == 0
+goto_if_false @TATTO_1462
+$keep_offX = -203.318
+add_float_var_to_float_var $keep_offX += $tattoo_offsetX
+$keep_offY = -7.062
+add_float_var_to_float_var $keep_offY += $tattoo_offsetY
+$keep_offZ = 1001.28
+add_float_var_to_float_var $keep_offZ += $tattoo_offsetZ
+$shop_keep_tattooX = -201.668
+add_float_var_to_float_var $shop_keep_tattooX += $tattoo_offsetX
+$shop_keep_tattooY = -6.217
+add_float_var_to_float_var $shop_keep_tattooY += $tattoo_offsetY
+$shop_keep_tattooZ = 1001.28
+add_float_var_to_float_var $shop_keep_tattooZ += $tattoo_offsetZ
+$cam_offx = -203.2045
+add_float_var_to_float_var $cam_offx += $tattoo_offsetX
+$cam_offy = -5.3316
+add_float_var_to_float_var $cam_offy += $tattoo_offsetY
+$cam_offz = 1002.432
+add_float_var_to_float_var $cam_offz += $tattoo_offsetZ
+$cam_point_tattooX = -202.2993
+add_float_var_to_float_var $cam_point_tattooX += $tattoo_offsetX
+$cam_point_tattooY = -5.7376
+add_float_var_to_float_var $cam_point_tattooY += $tattoo_offsetY
+$cam_point_tattooZ = 1002.306
+add_float_var_to_float_var $cam_point_tattooZ += $tattoo_offsetZ
+set_var_float_to_var_float $tattoo_needleX = $shop_keep_tattooX
+set_var_float_to_var_float $tattoo_needleY = $shop_keep_tattooY
+set_var_float_to_var_float $tattoo_needleZ = $shop_keep_tattooZ
+$tattoo_needleZ += 1.0
+set_var_float_to_var_float $tattoo_needle_heading = $shop_keep_heading_tattoo
+Text.UseCommands(True)
+Stat.ShowUpdateStats(False)
+
+
+$shop_keep_tattoo = Coop.GetPedInAreaWithModel($shop_keep_tattooX, $shop_keep_tattooY, $shop_keep_tattooZ, 4.0, 4.0, 40.0, 180, -1, -1)
+
+if $shop_keep_tattoo == -1
+then
+    $shop_keep_tattoo = Char.Create(4, $shopkeeper_model_shops, $shop_keep_tattooX, $shop_keep_tattooY, $shop_keep_tattooZ)
+else
+    Coop.ClaimPedOnRelease($shop_keep_tattoo)
+end
+
+
+Char.SetOnlyDamagedByPlayer($shop_keep_tattoo, True)
+Char.SetDecisionMaker($shop_keep_tattoo, 65542)
+Char.SetHeading($shop_keep_tattoo, $shop_keep_heading_tattoo)
+World.SetCharUsesCollisionClosestObjectOfType($shop_keep_tattooX, $shop_keep_tattooY, $shop_keep_tattooZ, 1.5, -369, False, $shop_keep_tattoo)
+$shopkeeper_attacked_tattoo = 0
+$tattoo_needle = Object.CreateNoOffset(#TATTOO_KIT, $tattoo_needleX, $tattoo_needleY, $tattoo_needleZ)
+Object.SetHeading($tattoo_needle, $tattoo_needle_heading)
+Char.AttachToObject($shop_keep_tattoo, $tattoo_needle, 0.0, 0.0, 0.0, 0, 180.0, WeaponType.Unarmed)
+$blob_flag_shop = 1
+Task.PlayAnimNonInterruptable($shop_keep_tattoo, "TAT_IDLE_LOOP_T", "TATTOOS", 4.0, True, False, False, False, -1)
+$shop_keep_animation_time_tattoo = 0.0
+TIMERA = 0
+$sample_name_shops = Char.SetSayContext($shop_keep_tattoo, 330)
+$shop_progress_tattoo = 1
+
+:TATTO_1462
+if 
+  $shop_progress_tattoo == 1
+goto_if_false @TATTO_1579
+if 
+  TIMERA >= 300
+goto_if_false @TATTO_1579
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_1565
+Object.PlayAnim($tattoo_needle, "TAT_IDLE_LOOP_O", "TATTOOS", 4.0, True, False)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_1565
+$shop_progress_tattoo = 0
+$flag_tattoo = 2
+
+:TATTO_1579
+if 
+  $flag_tattoo == 2
+goto_if_false @TATTO_1963
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_tattoo_shop
+goto_if_false @TATTO_1628
+gosub @TATTO_7873
+
+:TATTO_1628
+if 
+  not Char.IsDead($shop_keep_tattoo)
+goto_if_false @TATTO_1918
+if 
+  $shopkeeper_attacked_tattoo == 0
+goto_if_false @TATTO_1866
+if or
+  Char.IsShooting($scplayer)
+  Player.IsTargetingChar($player1, $shop_keep_tattoo)
+  Char.HasBeenDamagedByWeapon($shop_keep_tattoo, WeaponType.AnyWeapon)
+goto_if_false @TATTO_1786
+$sample_name_shops = Char.SetSayContext($shop_keep_tattoo, 327)
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_1765
+Object.PlayAnim($tattoo_needle, "TAT_DROP_O", "TATTOOS", 1000.0, False, True)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_1765
+Task.HandsUp($shop_keep_tattoo, -2)
+$shopkeeper_attacked_tattoo = 1
+goto @TATTO_1859
+
+:TATTO_1786
+$blob_flag_shop = 1
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, $keep_offX, $keep_offY, $keep_offZ, 1.0, 1.0, 4.0, $blob_flag_shop)
+goto_if_false @TATTO_1859
+if 
+  Player.CanStartMission($player1)
+goto_if_false @TATTO_1859
+$flag_tattoo = 3
+
+:TATTO_1859
+goto @TATTO_1911
+
+:TATTO_1866
+gosub @TATTO_7619
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_tattoo_shop
+goto_if_false @TATTO_1904
+gosub @TATTO_7873
+
+:TATTO_1904
+goto @TATTO_515
+
+:TATTO_1911
+goto @TATTO_1963
+
+:TATTO_1918
+gosub @TATTO_7619
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_tattoo_shop
+goto_if_false @TATTO_1956
+gosub @TATTO_7873
+
+:TATTO_1956
+goto @TATTO_515
+
+:TATTO_1963
+if 
+  $flag_tattoo == 3
+goto_if_false @TATTO_2098
+if 
+  Player.IsPlaying($player1)
+goto_if_false @TATTO_2084
+Player.SetControl($player1, False)
+Game.SetMinigameInProgress(True)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+Char.ClearTasksImmediately($scplayer)
+World.ClearArea(1, $player_x, $player_y, $player_z, 1.0)
+Hud.DisplayRadar(False)
+TIMERA = 0
+$shop_progress_tattoo = 0
+$flag_tattoo = 4
+goto @TATTO_2098
+
+:TATTO_2084
+gosub @TATTO_7873
+goto @TATTO_515
+
+:TATTO_2098
+if 
+  $flag_tattoo == 4
+goto_if_false @TATTO_2930
+if 
+  Char.IsDead($shop_keep_tattoo)
+goto_if_false @TATTO_2177
+gosub @TATTO_7619
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_tattoo_shop
+goto_if_false @TATTO_2170
+gosub @TATTO_7873
+
+:TATTO_2170
+goto @TATTO_515
+
+:TATTO_2177
+if 
+  $shop_progress_tattoo == 0
+goto_if_false @TATTO_2639
+if 
+  TIMERA >= 300
+goto_if_false @TATTO_2639
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Char.SetCoordinatesDontWarpGang($scplayer, $keep_offX, $keep_offY, $keep_offZ)
+Char.SetHeading($scplayer, $tattoo_heading)
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+$temp_shopX, $temp_shopY, $temp_shopZ = Char.GetCoordinates($shop_keep_tattoo)
+if or
+  not is_float_var_equal_to_float_var $temp_shopX == $shop_keep_tattooX
+  not is_float_var_equal_to_float_var $temp_shopY == $shop_keep_tattooY
+  not is_float_var_equal_to_float_var $temp_shopZ == $shop_keep_tattooZ
+goto_if_false @TATTO_2328
+Char.SetCoordinates($shop_keep_tattoo, $shop_keep_tattooX, $shop_keep_tattooY, $shop_keep_tattooZ)
+Char.SetHeading($shop_keep_tattoo, $shop_keep_heading_tattoo)
+
+:TATTO_2328
+Camera.SetFixedPosition($cam_offx, $cam_offy, $cam_offz, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($cam_point_tattooX, $cam_point_tattooY, $cam_point_tattooZ, SwitchType.JumpCut)
+Player.StoreClothesState
+$tex_tattoo, $model_tattoo = Player.GetClothesItem($player1, BodyPart.Torso)
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.GiveClothes($player1, 0, 0, BodyPart.Torso)
+Player.BuildModel($player1)
+Player.StoreClothesState
+Task.PlayAnimNonInterruptable($scplayer, "TAT_SIT_IN_P", "TATTOOS", 4.0, False, False, False, True, -1)
+$return_animation_time_tattoo = 0.0
+if 
+  Char.IsPlayingAnim($scplayer, "TAT_SIT_IN_P")
+goto_if_false @TATTO_2516
+$return_animation_time_tattoo = Char.GetAnimCurrentTime($scplayer, "TAT_SIT_IN_P")
+
+:TATTO_2516
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_2579
+Object.PlayAnim($tattoo_needle, "TAT_SIT_IN_O", "TATTOOS", 4.0, False, True)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_2579
+Task.PlayAnimNonInterruptable($shop_keep_tattoo, "TAT_SIT_IN_T", "TATTOOS", 4.0, False, False, False, True, -1)
+$shop_keep_animation_time_tattoo = 0.0
+$shop_progress_tattoo = 1
+
+:TATTO_2639
+if 
+  $shop_progress_tattoo == 1
+goto_if_false @TATTO_2930
+if 
+  Char.IsPlayingAnim($scplayer, "TAT_SIT_IN_P")
+goto_if_false @TATTO_2709
+$return_animation_time_tattoo = Char.GetAnimCurrentTime($scplayer, "TAT_SIT_IN_P")
+
+:TATTO_2709
+if 
+  $return_animation_time_tattoo == 1.0
+goto_if_false @TATTO_2930
+Task.PlayAnimNonInterruptable($scplayer, "TAT_SIT_LOOP_P", "TATTOOS", 1000.0, True, False, False, False, -1)
+$return_animation_time_tattoo = 0.0
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_2850
+Object.PlayAnim($tattoo_needle, "TAT_SIT_LOOP_O", "TATTOOS", 1000.0, True, False)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_2850
+Task.PlayAnimNonInterruptable($shop_keep_tattoo, "TAT_SIT_LOOP_T", "TATTOOS", 1000.0, True, False, False, False, -1)
+$shop_keep_animation_time_tattoo = 0.0
+$sample_name_shops = Char.SetSayContext($shop_keep_tattoo, 333)
+$shop_progress_tattoo = 0
+$flag_tattoo = 5
+
+:TATTO_2930
+if 
+  $flag_tattoo == 5
+goto_if_false @TATTO_4725
+if 
+  Char.IsDead($shop_keep_tattoo)
+goto_if_false @TATTO_3009
+gosub @TATTO_7619
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_tattoo_shop
+goto_if_false @TATTO_3002
+gosub @TATTO_7873
+
+:TATTO_3002
+goto @TATTO_515
+
+:TATTO_3009
+if 
+  2 > $shop_progress_tattoo
+goto_if_false @TATTO_3041
+gosub @TATTO_12073
+gosub @TATTO_10776
+
+:TATTO_3041
+$blob_flag_shop = 0
+if 
+  $shop_progress_tattoo == 0
+goto_if_false @TATTO_3114
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @TATTO_3090
+$shop_progress_tattoo = 1
+
+:TATTO_3090
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @TATTO_3114
+$shop_progress_tattoo = 4
+
+:TATTO_3114
+if 
+  $shop_progress_tattoo == 1
+goto_if_false @TATTO_3306
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @TATTO_3306
+$shop_main_item_picked_shops = Menu.GetItemAccepted($main_menu_shops)
+if 
+  0 > $shop_main_item_picked_shops
+goto_if_false @TATTO_3182
+$shop_main_item_picked_shops = 0
+
+:TATTO_3182
+if 
+  $shop_main_item_picked_shops == 9
+goto_if_false @TATTO_3278
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @TATTO_3232
+Menu.Delete($main_menu_shops)
+Text.ClearHelp
+$main_menu_drawn_shops = 0
+
+:TATTO_3232
+if 
+  $remove_tats_menu_drawn == 0
+goto_if_false @TATTO_3257
+gosub @TATTO_12175
+
+:TATTO_3257
+$shop_progress_tattoo = 0
+$flag_tattoo = 8
+goto @TATTO_3306
+
+:TATTO_3278
+gosub @TATTO_8186
+gosub @TATTO_8413
+$flag_in_remove_tattoo_section = 0
+gosub @TATTO_13314
+
+:TATTO_3306
+if 
+  $shop_progress_tattoo == 2
+goto_if_false @TATTO_3338
+$flag_in_remove_tattoo_section = 0
+gosub @TATTO_13835
+
+:TATTO_3338
+if 
+  $shop_progress_tattoo == 3
+goto_if_false @TATTO_3418
+set_var_int_to_var_int $stored_item_picked_shops = $shop_main_item_picked_shops
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @TATTO_3396
+Text.ClearHelp
+Menu.Delete($main_menu_shops)
+$main_menu_drawn_shops = 0
+
+:TATTO_3396
+$previous_menu_two_item_hilighted = 500
+$flag_tattoo = 6
+$shop_progress_tattoo = 0
+
+:TATTO_3418
+if 
+  $shop_progress_tattoo == 4
+goto_if_false @TATTO_3524
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @TATTO_3524
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @TATTO_3485
+Menu.Delete($main_menu_shops)
+Text.ClearHelp
+$main_menu_drawn_shops = 0
+
+:TATTO_3485
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @TATTO_3517
+Menu.Delete($sub_menu_shops)
+Text.ClearHelp
+$sub_menu_drawn_shops = 0
+
+:TATTO_3517
+$shop_progress_tattoo = 5
+
+:TATTO_3524
+if 
+  $shop_progress_tattoo == 5
+goto_if_false @TATTO_3838
+$flag_in_remove_tattoo_section = 0
+if 
+  Char.IsPlayingAnim($scplayer, "TAT_BACK_SIT_LOOP_P")
+goto_if_false @TATTO_3659
+Task.PlayAnimNonInterruptable($scplayer, "TAT_BACK_SIT_OUT_P", "TATTOOS", 1000.0, False, False, False, True, -1)
+$return_animation_time_tattoo = 0.0
+$shop_progress_tattoo = 6
+goto @TATTO_3838
+
+:TATTO_3659
+Task.PlayAnimNonInterruptable($scplayer, "TAT_SIT_OUT_P", "TATTOOS", 1000.0, False, False, False, False, -1)
+$return_animation_time_tattoo = 0.0
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_3777
+Object.PlayAnim($tattoo_needle, "TAT_SIT_OUT_O", "TATTOOS", 1000.0, False, True)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_3777
+Task.PlayAnimNonInterruptable($shop_keep_tattoo, "TAT_SIT_OUT_T", "TATTOOS", 1000.0, False, False, False, True, -1)
+$shop_keep_animation_time_tattoo = 0.0
+$shop_progress_tattoo = 7
+
+:TATTO_3838
+if 
+  $shop_progress_tattoo == 6
+goto_if_false @TATTO_4131
+if 
+  Char.IsPlayingAnim($scplayer, "TAT_BACK_SIT_OUT_P")
+goto_if_false @TATTO_3920
+$return_animation_time_tattoo = Char.GetAnimCurrentTime($scplayer, "TAT_BACK_SIT_OUT_P")
+
+:TATTO_3920
+if 
+  $return_animation_time_tattoo == 1.0
+goto_if_false @TATTO_4131
+Task.PlayAnimNonInterruptable($scplayer, "TAT_SIT_OUT_P", "TATTOOS", 1000.0, False, False, False, False, -1)
+$return_animation_time_tattoo = 0.0
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_4059
+Object.PlayAnim($tattoo_needle, "TAT_SIT_OUT_O", "TATTOOS", 1000.0, False, True)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_4059
+Task.PlayAnimNonInterruptable($shop_keep_tattoo, "TAT_SIT_OUT_T", "TATTOOS", 1000.0, False, False, False, True, -1)
+$sample_name_shops = Char.SetSayContext($shop_keep_tattoo, 331)
+$shop_keep_animation_time_tattoo = 0.0
+$shop_progress_tattoo = 7
+
+:TATTO_4131
+if 
+  $shop_progress_tattoo == 7
+goto_if_false @TATTO_4442
+if 
+  Char.IsPlayingAnim($scplayer, "TAT_SIT_OUT_P")
+goto_if_false @TATTO_4203
+$return_animation_time_tattoo = Char.GetAnimCurrentTime($scplayer, "TAT_SIT_OUT_P")
+
+:TATTO_4203
+if 
+  Char.IsPlayingAnim($shop_keep_tattoo, "TAT_SIT_OUT_T")
+goto_if_false @TATTO_4257
+$shop_keep_animation_time_tattoo = Char.GetAnimCurrentTime($shop_keep_tattoo, "TAT_SIT_OUT_T")
+
+:TATTO_4257
+if 
+  $shop_keep_animation_time_tattoo == 1.0
+goto_if_false @TATTO_4400
+Task.PlayAnimNonInterruptable($shop_keep_tattoo, "TAT_IDLE_LOOP_T", "TATTOOS", 1000.0, True, False, False, False, -1)
+$shop_keep_animation_time_tattoo = 0.0
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_4400
+Object.PlayAnim($tattoo_needle, "TAT_IDLE_LOOP_O", "TATTOOS", 1000.0, True, False)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_4400
+if 
+  $return_animation_time_tattoo == 1.0
+goto_if_false @TATTO_4442
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$shop_progress_tattoo = 8
+
+:TATTO_4442
+if 
+  $shop_progress_tattoo == 8
+goto_if_false @TATTO_4725
+Player.GiveClothes($player1, $tex_tattoo, $model_tattoo, BodyPart.Torso)
+Player.BuildModel($player1)
+Player.StoreClothesState
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('CLTHNO2')
+Player.SetControl($player1, True)
+Game.SetMinigameInProgress(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Hud.DisplayRadar(True)
+if 
+  Char.IsPlayingAnim($shop_keep_tattoo, "TAT_SIT_OUT_T")
+goto_if_false @TATTO_4575
+$shop_keep_animation_time_tattoo = Char.GetAnimCurrentTime($shop_keep_tattoo, "TAT_SIT_OUT_T")
+
+:TATTO_4575
+if 
+  $shop_keep_animation_time_tattoo == 1.0
+goto_if_false @TATTO_4718
+Task.PlayAnimNonInterruptable($shop_keep_tattoo, "TAT_IDLE_LOOP_T", "TATTOOS", 1000.0, True, False, False, False, -1)
+$shop_keep_animation_time_tattoo = 0.0
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_4718
+Object.PlayAnim($tattoo_needle, "TAT_IDLE_LOOP_O", "TATTOOS", 1000.0, True, False)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_4718
+$flag_tattoo = 7
+
+:TATTO_4725
+if 
+  $flag_tattoo == 6
+goto_if_false @TATTO_6147
+if 
+  Char.IsDead($shop_keep_tattoo)
+goto_if_false @TATTO_4804
+gosub @TATTO_7619
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_tattoo_shop
+goto_if_false @TATTO_4797
+gosub @TATTO_7873
+
+:TATTO_4797
+goto @TATTO_515
+
+:TATTO_4804
+$blob_flag_shop = 0
+if 
+  1 > $shop_progress_tattoo
+goto_if_false @TATTO_4836
+gosub @TATTO_11385
+
+:TATTO_4836
+if 
+  $shop_progress_tattoo == 0
+goto_if_false @TATTO_5032
+$menu_two_item_hilighted = Menu.GetItemSelected($sub_menu_shops)
+if 
+  0 > $menu_two_item_hilighted
+goto_if_false @TATTO_4887
+$menu_two_item_hilighted = 0
+
+:TATTO_4887
+if 
+  not is_int_var_equal_to_int_var $previous_menu_two_item_hilighted == $menu_two_item_hilighted
+goto_if_false @TATTO_4921
+gosub @TATTO_12060
+set_var_int_to_var_int $previous_menu_two_item_hilighted = $menu_two_item_hilighted
+
+:TATTO_4921
+gosub @TATTO_15460
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @TATTO_4980
+$flag_no_money_shops = 0
+$flag_bought_item_already_shops = 0
+$bought_menu_drawn_shops = 0
+gosub @TATTO_15460
+$shop_progress_tattoo = 1
+
+:TATTO_4980
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @TATTO_5032
+gosub @TATTO_10503
+$flag_no_money_shops = 0
+$flag_bought_item_already_shops = 0
+$bought_menu_drawn_shops = 0
+$shop_progress_tattoo = 8
+
+:TATTO_5032
+if 
+  $shop_progress_tattoo == 8
+goto_if_false @TATTO_5127
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @TATTO_5127
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @TATTO_5099
+Text.ClearHelp
+Menu.Delete($sub_menu_shops)
+$sub_menu_drawn_shops = 0
+
+:TATTO_5099
+gosub @TATTO_12073
+gosub @TATTO_10776
+$shop_progress_tattoo = 0
+$flag_tattoo = 5
+
+:TATTO_5127
+if 
+  $shop_progress_tattoo == 1
+goto_if_false @TATTO_5248
+gosub @TATTO_15460
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @TATTO_5248
+gosub @TATTO_15460
+$shop_sub_item_picked_shops = Menu.GetItemAccepted($sub_menu_shops)
+if 
+  0 > $shop_sub_item_picked_shops
+goto_if_false @TATTO_5209
+$shop_sub_item_picked_shops = 0
+
+:TATTO_5209
+set_var_int_to_var_int $model_index = $item_model_index($shop_sub_item_picked_shops,12i)
+set_var_int_to_var_int $tattoo_price = $item_price($shop_sub_item_picked_shops,12i)
+$players_money = Player.StoreScore($player1)
+$shop_progress_tattoo = 2
+
+:TATTO_5248
+if 
+  $shop_progress_tattoo == 2
+goto_if_false @TATTO_5950
+gosub @TATTO_15460
+if 
+  is_int_var_greater_or_equal_to_int_var $players_money >= $tattoo_price
+goto_if_false @TATTO_5877
+gosub @TATTO_15460
+if 
+  not is_int_var_equal_to_int_var $player_item_texture_shops == $model_index
+goto_if_false @TATTO_5808
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @TATTO_5350
+Menu.Delete($sub_menu_shops)
+Text.ClearHelp
+$sub_menu_drawn_shops = 0
+
+:TATTO_5350
+$sample_name_shops = Char.SetSayContext($shop_keep_tattoo, 323)
+Shopping.BuyItem($model_index)
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1054)
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @TATTO_5412
+Menu.Delete($sub_menu_shops)
+Text.ClearHelp
+$sub_menu_drawn_shops = 0
+
+:TATTO_5412
+if 
+  $bought_menu_drawn_shops == 0
+goto_if_false @TATTO_5780
+$bought_menu_shops = Menu.Create('TATTO', 29.0, 25.0, 93.0, 2, False, 1, 1)
+Menu.SetColumnOrientation($bought_menu_shops, 0, 1)
+Menu.SetColumn($bought_menu_shops, 0, 'TATTO', 'BOUGHT', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetColumnOrientation($bought_menu_shops, 1, 2)
+Menu.SetColumn($bought_menu_shops, 1, 'COST', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetItemWithNumber($bought_menu_shops, 1, 0, 'DOLLAR', $tattoo_price)
+Menu.SetColumnWidth($bought_menu_shops, 0, 140)
+Menu.SetColumnWidth($bought_menu_shops, 1, 46)
+$bought_menu_drawn_shops = 1
+
+:TATTO_5780
+$flag_in_remove_tattoo_section = 0
+gosub @TATTO_14230
+$shop_progress_tattoo = 3
+goto @TATTO_5870
+
+:TATTO_5808
+if 
+  $flag_bought_item_already_shops == 0
+goto_if_false @TATTO_5870
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1055)
+Text.PrintNow('CLTHNO2', 5000, 1)
+$shop_progress_tattoo = 0
+$flag_bought_item_already_shops = 1
+
+:TATTO_5870
+goto @TATTO_5950
+
+:TATTO_5877
+if 
+  $flag_no_money_shops == 0
+goto_if_false @TATTO_5950
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1055)
+$sample_name_shops = Char.SetSayContext($shop_keep_tattoo, 324)
+Text.PrintNow('SHOPNO', 5000, 1)
+$shop_progress_tattoo = 0
+$flag_no_money_shops = 1
+
+:TATTO_5950
+if 
+  $shop_progress_tattoo == 3
+goto_if_false @TATTO_5982
+$flag_in_remove_tattoo_section = 0
+gosub @TATTO_14372
+
+:TATTO_5982
+if 
+  $shop_progress_tattoo == 4
+goto_if_false @TATTO_6021
+$flag_in_remove_tattoo_section = 0
+gosub @TATTO_14704
+$shop_progress_tattoo = 5
+
+:TATTO_6021
+if 
+  $shop_progress_tattoo == 5
+goto_if_false @TATTO_6053
+$flag_in_remove_tattoo_section = 0
+gosub @TATTO_14842
+
+:TATTO_6053
+if 
+  $shop_progress_tattoo == 6
+goto_if_false @TATTO_6147
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @TATTO_6101
+Menu.Delete($bought_menu_shops)
+$bought_menu_drawn_shops = 0
+
+:TATTO_6101
+$shop_progress_tattoo = 0
+$flag_tattoo = 5
+if 
+  2 > $shop_progress_tattoo
+goto_if_false @TATTO_6147
+gosub @TATTO_12073
+gosub @TATTO_10776
+
+:TATTO_6147
+if 
+  $flag_tattoo == 7
+goto_if_false @TATTO_6714
+if 
+  Char.IsDead($shop_keep_tattoo)
+goto_if_false @TATTO_6226
+gosub @TATTO_7619
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_tattoo_shop
+goto_if_false @TATTO_6219
+gosub @TATTO_7873
+
+:TATTO_6219
+goto @TATTO_515
+
+:TATTO_6226
+if 
+  $shopkeeper_attacked_tattoo == 0
+goto_if_false @TATTO_6361
+if or
+  Char.IsShooting($scplayer)
+  Player.IsTargetingChar($player1, $shop_keep_tattoo)
+  Char.HasBeenDamagedByWeapon($shop_keep_tattoo, WeaponType.AnyWeapon)
+goto_if_false @TATTO_6361
+$sample_name_shops = Char.SetSayContext($shop_keep_tattoo, 327)
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_6347
+Object.PlayAnim($tattoo_needle, "TAT_DROP_O", "TATTOOS", 1000.0, False, True)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_6347
+Task.HandsUp($shop_keep_tattoo, -2)
+$shopkeeper_attacked_tattoo = 1
+
+:TATTO_6361
+if 
+  Char.IsPlayingAnim($shop_keep_tattoo, "TAT_SIT_OUT_T")
+goto_if_false @TATTO_6415
+$shop_keep_animation_time_tattoo = Char.GetAnimCurrentTime($shop_keep_tattoo, "TAT_SIT_OUT_T")
+
+:TATTO_6415
+if 
+  $shop_keep_animation_time_tattoo == 1.0
+goto_if_false @TATTO_6558
+Task.PlayAnimNonInterruptable($shop_keep_tattoo, "TAT_IDLE_LOOP_T", "TATTOOS", 1000.0, True, False, False, False, -1)
+$shop_keep_animation_time_tattoo = 0.0
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_6558
+Object.PlayAnim($tattoo_needle, "TAT_IDLE_LOOP_O", "TATTOOS", 1000.0, True, False)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_6558
+if 
+  not Char.LocateOnFoot3D($scplayer, $blob_flag_shop, $keep_offX, $keep_offY, $keep_offZ, 1.0, 1.0, 4.0)
+goto_if_false @TATTO_6714
+$flag_tattoo = 2
+$shop_progress_tattoo = 0
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$stored_item_picked_shops = 0
+$shop_main_item_picked_shops = 0
+$shop_sub_item_picked_shops = 0
+$remove_menu_item_selected = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('CLTHNO2')
+$blob_flag_shop = 1
+
+:TATTO_6714
+if 
+  $flag_tattoo == 8
+goto_if_false @TATTO_7584
+if 
+  Char.IsDead($shop_keep_tattoo)
+goto_if_false @TATTO_6793
+gosub @TATTO_7619
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_tattoo_shop
+goto_if_false @TATTO_6786
+gosub @TATTO_7873
+
+:TATTO_6786
+goto @TATTO_515
+
+:TATTO_6793
+if 
+  1 > $shop_progress_tattoo
+goto_if_false @TATTO_6836
+if 
+  $remove_tats_menu_drawn == 0
+goto_if_false @TATTO_6836
+gosub @TATTO_12175
+
+:TATTO_6836
+if 
+  $shop_progress_tattoo == 0
+goto_if_false @TATTO_6916
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @TATTO_6885
+$flag_no_money_shops = 0
+$shop_progress_tattoo = 1
+
+:TATTO_6885
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @TATTO_6916
+$flag_no_money_shops = 0
+$shop_progress_tattoo = 2
+
+:TATTO_6916
+if 
+  $shop_progress_tattoo == 1
+goto_if_false @TATTO_7036
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @TATTO_7036
+if 
+  $remove_tats_menu_drawn == 1
+goto_if_false @TATTO_6983
+Menu.Delete($remove_menu_tattoo)
+Text.ClearHelp
+$remove_tats_menu_drawn = 0
+
+:TATTO_6983
+if 
+  $main_menu_drawn_shops == 0
+goto_if_false @TATTO_7015
+gosub @TATTO_12073
+gosub @TATTO_10776
+
+:TATTO_7015
+$flag_no_money_shops = 0
+$shop_progress_tattoo = 0
+$flag_tattoo = 5
+
+:TATTO_7036
+if 
+  $shop_progress_tattoo == 2
+goto_if_false @TATTO_7302
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @TATTO_7302
+$players_money = Player.StoreScore($player1)
+if 
+  $players_money >= 400
+goto_if_false @TATTO_7229
+$remove_menu_item_selected = Menu.GetItemAccepted($remove_menu_tattoo)
+if 
+  0 > $remove_menu_item_selected
+goto_if_false @TATTO_7131
+$remove_menu_item_selected = 0
+
+:TATTO_7131
+if 
+  $remove_tats_menu_drawn == 1
+goto_if_false @TATTO_7163
+Menu.Delete($remove_menu_tattoo)
+Text.ClearHelp
+$remove_tats_menu_drawn = 0
+
+:TATTO_7163
+set_var_int_to_var_int $area_to_look_at_shops = $player_has_tattoo_in_area($remove_menu_item_selected,9i)
+gosub @TATTO_8413
+Player.AddScore($player1, -400)
+$sample_name_shops = Char.SetSayContext($shop_keep_tattoo, 326)
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1054)
+$shop_progress_tattoo = 3
+goto @TATTO_7302
+
+:TATTO_7229
+if 
+  $flag_no_money_shops == 0
+goto_if_false @TATTO_7302
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1055)
+$sample_name_shops = Char.SetSayContext($shop_keep_tattoo, 324)
+Text.PrintNow('SHOPNO', 5000, 1)
+$shop_progress_tattoo = 0
+$flag_no_money_shops = 1
+
+:TATTO_7302
+if 
+  $shop_progress_tattoo == 3
+goto_if_false @TATTO_7334
+$flag_in_remove_tattoo_section = 1
+gosub @TATTO_13314
+
+:TATTO_7334
+if 
+  $shop_progress_tattoo == 4
+goto_if_false @TATTO_7366
+$flag_in_remove_tattoo_section = 1
+gosub @TATTO_13835
+
+:TATTO_7366
+if 
+  $shop_progress_tattoo == 5
+goto_if_false @TATTO_7417
+Player.GiveClothes($player1, 0, 0, $area_to_look_at_shops)
+$flag_in_remove_tattoo_section = 1
+gosub @TATTO_14230
+$shop_progress_tattoo = 6
+
+:TATTO_7417
+if 
+  $shop_progress_tattoo == 6
+goto_if_false @TATTO_7449
+$flag_in_remove_tattoo_section = 1
+gosub @TATTO_14372
+
+:TATTO_7449
+if 
+  $shop_progress_tattoo == 7
+goto_if_false @TATTO_7488
+$flag_in_remove_tattoo_section = 1
+gosub @TATTO_14704
+$shop_progress_tattoo = 8
+
+:TATTO_7488
+if 
+  $shop_progress_tattoo == 8
+goto_if_false @TATTO_7520
+$flag_in_remove_tattoo_section = 1
+gosub @TATTO_14842
+
+:TATTO_7520
+if 
+  $shop_progress_tattoo == 9
+goto_if_false @TATTO_7584
+$shop_progress_tattoo = 0
+$flag_tattoo = 5
+if 
+  2 > $shop_progress_tattoo
+goto_if_false @TATTO_7584
+gosub @TATTO_12073
+gosub @TATTO_10776
+
+:TATTO_7584
+goto @TATTO_7598
+
+:TATTO_7591
+gosub @TATTO_7873
+
+:TATTO_7598
+goto @TATTO_7612
+
+:TATTO_7605
+gosub @TATTO_7873
+
+:TATTO_7612
+goto @TATTO_515
+
+:TATTO_7619
+if 
+  $flag_tattoo >= 1
+goto_if_false @TATTO_7639
+Text.ClearHelp
+
+:TATTO_7639
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('CLTHNO2')
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @TATTO_7693
+Menu.Delete($main_menu_shops)
+Text.ClearHelp
+$main_menu_drawn_shops = 0
+
+:TATTO_7693
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @TATTO_7725
+Menu.Delete($sub_menu_shops)
+Text.ClearHelp
+$sub_menu_drawn_shops = 0
+
+:TATTO_7725
+if 
+  $remove_tats_menu_drawn == 1
+goto_if_false @TATTO_7757
+Menu.Delete($remove_menu_tattoo)
+Text.ClearHelp
+$remove_tats_menu_drawn = 0
+
+:TATTO_7757
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @TATTO_7787
+Menu.Delete($bought_menu_shops)
+$bought_menu_drawn_shops = 0
+
+:TATTO_7787
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$stored_item_picked_shops = 0
+$shop_main_item_picked_shops = 0
+$shop_sub_item_picked_shops = 0
+$remove_menu_item_selected = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$flag_tattoo = 2
+$shop_progress_tattoo = 0
+return 
+
+:TATTO_7873
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('CLTHNO2')
+$blob_flag_shop = 1
+$shopkeeper_attacked_tattoo = 0
+$flag_tattoo = 0
+$shop_progress_tattoo = 0
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @TATTO_7955
+Menu.Delete($main_menu_shops)
+Text.ClearHelp
+$main_menu_drawn_shops = 0
+
+:TATTO_7955
+if 
+  $sub_menu_drawn_shops == 1
+goto_if_false @TATTO_7987
+Menu.Delete($sub_menu_shops)
+Text.ClearHelp
+$sub_menu_drawn_shops = 0
+
+:TATTO_7987
+if 
+  $remove_tats_menu_drawn == 1
+goto_if_false @TATTO_8019
+Menu.Delete($remove_menu_tattoo)
+Text.ClearHelp
+$remove_tats_menu_drawn = 0
+
+:TATTO_8019
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @TATTO_8049
+Menu.Delete($bought_menu_shops)
+$bought_menu_drawn_shops = 0
+
+:TATTO_8049
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$stored_item_picked_shops = 0
+$shop_main_item_picked_shops = 0
+$shop_sub_item_picked_shops = 0
+$remove_menu_item_selected = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+if 
+  not Char.IsDead($shop_keep_tattoo)
+goto_if_false @TATTO_8140
+Char.DetachFromCar($shop_keep_tattoo)
+
+:TATTO_8140
+Object.Delete($tattoo_needle)
+Streaming.MarkModelAsNoLongerNeeded(#TATTOO_KIT)
+
+if 
+    Coop.IsSyncingThisPed($shop_keep_tattoo)
+then
+    Char.Delete($shop_keep_tattoo)
+else
+    Coop.CancelPedClaim($shop_keep_tattoo)
+end
+
+Streaming.MarkModelAsNoLongerNeeded($shopkeeper_model_shops)
+Txd.Remove
+Text.UseCommands(False)
+Hud.DisplayRadar(True)
+Stat.ShowUpdateStats(True)
+Game.SetMinigameInProgress(False)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+terminate_this_script 
+return 
+
+:TATTO_8186
+if 
+  $shop_main_item_picked_shops == 0
+goto_if_false @TATTO_8211
+set_var_int_to_constant $area_to_look_at_shops = 4
+
+:TATTO_8211
+if 
+  $shop_main_item_picked_shops == 1
+goto_if_false @TATTO_8236
+set_var_int_to_constant $area_to_look_at_shops = 5
+
+:TATTO_8236
+if 
+  $shop_main_item_picked_shops == 2
+goto_if_false @TATTO_8261
+set_var_int_to_constant $area_to_look_at_shops = 6
+
+:TATTO_8261
+if 
+  $shop_main_item_picked_shops == 3
+goto_if_false @TATTO_8286
+set_var_int_to_constant $area_to_look_at_shops = 7
+
+:TATTO_8286
+if 
+  $shop_main_item_picked_shops == 4
+goto_if_false @TATTO_8311
+set_var_int_to_constant $area_to_look_at_shops = 8
+
+:TATTO_8311
+if 
+  $shop_main_item_picked_shops == 5
+goto_if_false @TATTO_8336
+set_var_int_to_constant $area_to_look_at_shops = 9
+
+:TATTO_8336
+if 
+  $shop_main_item_picked_shops == 6
+goto_if_false @TATTO_8361
+set_var_int_to_constant $area_to_look_at_shops = 10
+
+:TATTO_8361
+if 
+  $shop_main_item_picked_shops == 7
+goto_if_false @TATTO_8386
+set_var_int_to_constant $area_to_look_at_shops = 11
+
+:TATTO_8386
+if 
+  $shop_main_item_picked_shops == 8
+goto_if_false @TATTO_8411
+set_var_int_to_constant $area_to_look_at_shops = 12
+
+:TATTO_8411
+return 
+
+:TATTO_8413
+if 
+  is_int_var_equal_to_constant $area_to_look_at_shops == 4
+goto_if_false @TATTO_8648
+$area_looked_for_shops = 4
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @TATTO_10503
+set_var_text_label16 v$name_of_player_in_anim_tattoo = "TAT_ARML_IN_P"
+set_var_text_label16 v$name_of_shop_in_anim_tattoo = "TAT_ARML_IN_T"
+set_var_text_label16 v$name_of_object_in_anim_tattoo = "TAT_ARML_IN_O"
+set_var_text_label16 v$name_of_player_pose_anim_tattoo = "TAT_ARML_POSE_P"
+set_var_text_label16 v$name_of_shop_pose_anim_tattoo = "TAT_ARML_POSE_T"
+set_var_text_label16 v$name_of_object_pose_anim_tattoo = "TAT_ARML_POSE_O"
+set_var_text_label16 v$name_of_player_out_anim_tattoo = "TAT_ARML_OUT_P"
+set_var_text_label16 v$name_of_shop_out_anim_tattoo = "TAT_ARML_OUT_T"
+set_var_text_label16 v$name_of_object_out_anim_tattoo = "TAT_ARML_OUT_O"
+
+:TATTO_8648
+if 
+  is_int_var_equal_to_constant $area_to_look_at_shops == 5
+goto_if_false @TATTO_8883
+$area_looked_for_shops = 5
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @TATTO_10503
+set_var_text_label16 v$name_of_player_in_anim_tattoo = "TAT_ARML_IN_P"
+set_var_text_label16 v$name_of_shop_in_anim_tattoo = "TAT_ARML_IN_T"
+set_var_text_label16 v$name_of_object_in_anim_tattoo = "TAT_ARML_IN_O"
+set_var_text_label16 v$name_of_player_pose_anim_tattoo = "TAT_ARML_POSE_P"
+set_var_text_label16 v$name_of_shop_pose_anim_tattoo = "TAT_ARML_POSE_T"
+set_var_text_label16 v$name_of_object_pose_anim_tattoo = "TAT_ARML_POSE_O"
+set_var_text_label16 v$name_of_player_out_anim_tattoo = "TAT_ARML_OUT_P"
+set_var_text_label16 v$name_of_shop_out_anim_tattoo = "TAT_ARML_OUT_T"
+set_var_text_label16 v$name_of_object_out_anim_tattoo = "TAT_ARML_OUT_O"
+
+:TATTO_8883
+if 
+  is_int_var_equal_to_constant $area_to_look_at_shops == 6
+goto_if_false @TATTO_9118
+$area_looked_for_shops = 6
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @TATTO_10503
+set_var_text_label16 v$name_of_player_in_anim_tattoo = "TAT_ARMR_IN_P"
+set_var_text_label16 v$name_of_shop_in_anim_tattoo = "TAT_ARMR_IN_T"
+set_var_text_label16 v$name_of_object_in_anim_tattoo = "TAT_ARMR_IN_O"
+set_var_text_label16 v$name_of_player_pose_anim_tattoo = "TAT_ARMR_POSE_P"
+set_var_text_label16 v$name_of_shop_pose_anim_tattoo = "TAT_ARMR_POSE_T"
+set_var_text_label16 v$name_of_object_pose_anim_tattoo = "TAT_ARMR_POSE_O"
+set_var_text_label16 v$name_of_player_out_anim_tattoo = "TAT_ARMR_OUT_P"
+set_var_text_label16 v$name_of_shop_out_anim_tattoo = "TAT_ARMR_OUT_T"
+set_var_text_label16 v$name_of_object_out_anim_tattoo = "TAT_ARMR_OUT_O"
+
+:TATTO_9118
+if 
+  is_int_var_equal_to_constant $area_to_look_at_shops == 7
+goto_if_false @TATTO_9353
+$area_looked_for_shops = 7
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @TATTO_10503
+set_var_text_label16 v$name_of_player_in_anim_tattoo = "TAT_ARMR_IN_P"
+set_var_text_label16 v$name_of_shop_in_anim_tattoo = "TAT_ARMR_IN_T"
+set_var_text_label16 v$name_of_object_in_anim_tattoo = "TAT_ARMR_IN_O"
+set_var_text_label16 v$name_of_player_pose_anim_tattoo = "TAT_ARMR_POSE_P"
+set_var_text_label16 v$name_of_shop_pose_anim_tattoo = "TAT_ARMR_POSE_T"
+set_var_text_label16 v$name_of_object_pose_anim_tattoo = "TAT_ARMR_POSE_O"
+set_var_text_label16 v$name_of_player_out_anim_tattoo = "TAT_ARMR_OUT_P"
+set_var_text_label16 v$name_of_shop_out_anim_tattoo = "TAT_ARMR_OUT_T"
+set_var_text_label16 v$name_of_object_out_anim_tattoo = "TAT_ARMR_OUT_O"
+
+:TATTO_9353
+if 
+  is_int_var_equal_to_constant $area_to_look_at_shops == 8
+goto_if_false @TATTO_9588
+$area_looked_for_shops = 8
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @TATTO_10503
+set_var_text_label16 v$name_of_player_in_anim_tattoo = "TAT_BACK_IN_P"
+set_var_text_label16 v$name_of_shop_in_anim_tattoo = "TAT_BACK_IN_T"
+set_var_text_label16 v$name_of_object_in_anim_tattoo = "TAT_BACK_IN_O"
+set_var_text_label16 v$name_of_player_pose_anim_tattoo = "TAT_BACK_POSE_P"
+set_var_text_label16 v$name_of_shop_pose_anim_tattoo = "TAT_BACK_POSE_T"
+set_var_text_label16 v$name_of_object_pose_anim_tattoo = "TAT_BACK_POSE_O"
+set_var_text_label16 v$name_of_player_out_anim_tattoo = "TAT_BACK_OUT_P"
+set_var_text_label16 v$name_of_shop_out_anim_tattoo = "TAT_BACK_OUT_T"
+set_var_text_label16 v$name_of_object_out_anim_tattoo = "TAT_BACK_OUT_O"
+
+:TATTO_9588
+if 
+  is_int_var_equal_to_constant $area_to_look_at_shops == 9
+goto_if_false @TATTO_9814
+$area_looked_for_shops = 9
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @TATTO_10503
+set_var_text_label16 v$name_of_player_in_anim_tattoo = "TAT_CHE_IN_P"
+set_var_text_label16 v$name_of_shop_in_anim_tattoo = "TAT_CHE_IN_T"
+set_var_text_label16 v$name_of_object_in_anim_tattoo = "TAT_CHE_IN_O"
+set_var_text_label16 v$name_of_player_pose_anim_tattoo = "TAT_CHE_POSE_P"
+set_var_text_label16 v$name_of_shop_pose_anim_tattoo = "TAT_CHE_POSE_T"
+set_var_text_label16 v$name_of_object_pose_anim_tattoo = "TAT_CHE_POSE_O"
+set_var_text_label16 v$name_of_player_out_anim_tattoo = "TAT_CHE_OUT_P"
+set_var_text_label16 v$name_of_shop_out_anim_tattoo = "TAT_CHE_OUT_T"
+set_var_text_label16 v$name_of_object_out_anim_tattoo = "TAT_CHE_OUT_O"
+
+:TATTO_9814
+if 
+  is_int_var_equal_to_constant $area_to_look_at_shops == 10
+goto_if_false @TATTO_10040
+$area_looked_for_shops = 10
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @TATTO_10503
+set_var_text_label16 v$name_of_player_in_anim_tattoo = "TAT_CHE_IN_P"
+set_var_text_label16 v$name_of_shop_in_anim_tattoo = "TAT_CHE_IN_T"
+set_var_text_label16 v$name_of_object_in_anim_tattoo = "TAT_CHE_IN_O"
+set_var_text_label16 v$name_of_player_pose_anim_tattoo = "TAT_CHE_POSE_P"
+set_var_text_label16 v$name_of_shop_pose_anim_tattoo = "TAT_CHE_POSE_T"
+set_var_text_label16 v$name_of_object_pose_anim_tattoo = "TAT_CHE_POSE_O"
+set_var_text_label16 v$name_of_player_out_anim_tattoo = "TAT_CHE_OUT_P"
+set_var_text_label16 v$name_of_shop_out_anim_tattoo = "TAT_CHE_OUT_T"
+set_var_text_label16 v$name_of_object_out_anim_tattoo = "TAT_CHE_OUT_O"
+
+:TATTO_10040
+if 
+  is_int_var_equal_to_constant $area_to_look_at_shops == 11
+goto_if_false @TATTO_10266
+$area_looked_for_shops = 11
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @TATTO_10503
+set_var_text_label16 v$name_of_player_in_anim_tattoo = "TAT_CHE_IN_P"
+set_var_text_label16 v$name_of_shop_in_anim_tattoo = "TAT_BEL_IN_T"
+set_var_text_label16 v$name_of_object_in_anim_tattoo = "TAT_BEL_IN_O"
+set_var_text_label16 v$name_of_player_pose_anim_tattoo = "TAT_CHE_POSE_P"
+set_var_text_label16 v$name_of_shop_pose_anim_tattoo = "TAT_BEL_POSE_T"
+set_var_text_label16 v$name_of_object_pose_anim_tattoo = "TAT_BEL_POSE_O"
+set_var_text_label16 v$name_of_player_out_anim_tattoo = "TAT_CHE_OUT_P"
+set_var_text_label16 v$name_of_shop_out_anim_tattoo = "TAT_BEL_OUT_T"
+set_var_text_label16 v$name_of_object_out_anim_tattoo = "TAT_BEL_OUT_O"
+
+:TATTO_10266
+if 
+  is_int_var_equal_to_constant $area_to_look_at_shops == 12
+goto_if_false @TATTO_10501
+$area_looked_for_shops = 12
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+gosub @TATTO_10503
+set_var_text_label16 v$name_of_player_in_anim_tattoo = "TAT_BACK_IN_P"
+set_var_text_label16 v$name_of_shop_in_anim_tattoo = "TAT_BACK_IN_T"
+set_var_text_label16 v$name_of_object_in_anim_tattoo = "TAT_BACK_IN_O"
+set_var_text_label16 v$name_of_player_pose_anim_tattoo = "TAT_BACK_POSE_P"
+set_var_text_label16 v$name_of_shop_pose_anim_tattoo = "TAT_BACK_POSE_T"
+set_var_text_label16 v$name_of_object_pose_anim_tattoo = "TAT_BACK_POSE_O"
+set_var_text_label16 v$name_of_player_out_anim_tattoo = "TAT_BACK_OUT_P"
+set_var_text_label16 v$name_of_shop_out_anim_tattoo = "TAT_BACK_OUT_T"
+set_var_text_label16 v$name_of_object_out_anim_tattoo = "TAT_BACK_OUT_O"
+
+:TATTO_10501
+return 
+
+:TATTO_10503
+$item_no_shops = 0
+$number_of_tattoos_in_area = 0
+
+:TATTO_10517
+if 
+  is_int_var_greater_than_int_var $number_of_tats_in_shop > $item_no_shops
+goto_if_false @TATTO_10694
+$model_index = Shopping.GetItem($item_no_shops)
+$modelid_shops = Shopping.GetExtraInfo($model_index, 0)
+if 
+  is_int_var_equal_to_int_var $modelid_shops == $area_looked_for_shops
+goto_if_false @TATTO_10680
+set_var_int_to_var_int $item_model_index($number_of_tattoos_in_area,12i) = $model_index
+s$tattoo_name = Shopping.GetNameOfItem($model_index)
+$tattoo_price = Shopping.GetPriceOfItem($model_index)
+set_var_int_to_var_int $item_price($number_of_tattoos_in_area,12i) = $tattoo_price
+set_var_text_label $item_text_label($number_of_tattoos_in_area,12s) = s$tattoo_name
+if 
+  is_int_var_equal_to_int_var $player_item_texture_shops == $model_index
+goto_if_false @TATTO_10662
+$item_hilight_shops($number_of_tattoos_in_area,12i) = 0
+goto @TATTO_10673
+
+:TATTO_10662
+$item_hilight_shops($number_of_tattoos_in_area,12i) = 1
+
+:TATTO_10673
+$number_of_tattoos_in_area += 1
+
+:TATTO_10680
+$item_no_shops += 1
+goto @TATTO_10517
+
+:TATTO_10694
+set_var_int_to_var_int $temp_var_shops = $number_of_tattoos_in_area
+
+:TATTO_10702
+if 
+  12 > $temp_var_shops
+goto_if_false @TATTO_10774
+$item_model_index($temp_var_shops,12i) = -1
+$item_price($temp_var_shops,12i) = 0
+set_var_text_label $item_text_label($temp_var_shops,12s) = 'DUMMY'
+$temp_var_shops += 1
+goto @TATTO_10702
+
+:TATTO_10774
+return 
+
+:TATTO_10776
+if 
+  $main_menu_drawn_shops == 0
+goto_if_false @TATTO_11383
+Text.PrintHelpForever('TATTA')
+set_var_text_label s$ITEM1 = 'LARMTP'
+set_var_text_label s$ITEM2 = 'LARMLW'
+set_var_text_label s$ITEM3 = 'RARMTP'
+set_var_text_label s$ITEM4 = 'RARMLW'
+set_var_text_label s$ITEM5 = 'BACK'
+set_var_text_label s$ITEM6 = 'LCHEST'
+set_var_text_label s$ITEM7 = 'RCHEST'
+set_var_text_label s$ITEM8 = 'BELLY'
+set_var_text_label s$ITEM9 = 'LBACK'
+if 
+  $number_of_tats_player_has > 0
+goto_if_false @TATTO_10970
+set_var_text_label s$ITEM10 = 'TATREM'
+goto @TATTO_10984
+
+:TATTO_10970
+set_var_text_label s$ITEM10 = 'DUMMY'
+
+:TATTO_10984
+set_var_text_label s$ITEM11 = 'DUMMY'
+set_var_text_label s$ITEM12 = 'DUMMY'
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @TATTO_11074
+$main_menu_shops = Menu.Create('TATTO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @TATTO_11315
+
+:TATTO_11074
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @TATTO_11136
+$main_menu_shops = Menu.Create('TATTO', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @TATTO_11315
+
+:TATTO_11136
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @TATTO_11198
+$main_menu_shops = Menu.Create('TATTO', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @TATTO_11315
+
+:TATTO_11198
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @TATTO_11260
+$main_menu_shops = Menu.Create('TATTO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @TATTO_11315
+
+:TATTO_11260
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @TATTO_11315
+$main_menu_shops = Menu.Create('TATTO', 29.0, 145.0, 186.0, True, True, 1, 1)
+
+:TATTO_11315
+Menu.SetColumnOrientation($main_menu_shops, 1, 1)
+Menu.SetColumn($main_menu_shops, 0, 'DUMMY', s$ITEM1, s$ITEM2, s$ITEM3, s$ITEM4, s$ITEM5, s$ITEM6, s$ITEM7, s$ITEM8, s$ITEM9, s$ITEM10, s$ITEM11, s$ITEM12)
+$main_menu_drawn_shops = 1
+
+:TATTO_11383
+return 
+
+:TATTO_11385
+if 
+  $sub_menu_drawn_shops == 0
+goto_if_false @TATTO_12058
+Text.PrintHelpForever('TATTB')
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @TATTO_11476
+$sub_menu_shops = Menu.Create('TATTO', 29.0, 145.0, 93.0, 2, True, 1, 1)
+goto @TATTO_11717
+
+:TATTO_11476
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @TATTO_11538
+$sub_menu_shops = Menu.Create('TATTO', 29.0, 145.0, 93.0, 2, True, 1, 1)
+goto @TATTO_11717
+
+:TATTO_11538
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @TATTO_11600
+$sub_menu_shops = Menu.Create('TATTO', 29.0, 165.0, 93.0, 2, True, 1, 1)
+goto @TATTO_11717
+
+:TATTO_11600
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @TATTO_11662
+$sub_menu_shops = Menu.Create('TATTO', 29.0, 145.0, 93.0, 2, True, 1, 1)
+goto @TATTO_11717
+
+:TATTO_11662
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @TATTO_11717
+$sub_menu_shops = Menu.Create('TATTO', 29.0, 145.0, 93.0, 2, True, 1, 1)
+
+:TATTO_11717
+Menu.SetColumnOrientation($sub_menu_shops, 0, 1)
+Menu.SetColumn($sub_menu_shops, 0, 'TATTO', s$item_text_label[0], s$item_text_label[1], s$item_text_label[2], s$item_text_label[3], s$item_text_label[4], s$item_text_label[5], s$item_text_label[6], s$item_text_label[7], s$item_text_label[8], s$item_text_label[9], s$item_text_label[10], s$item_text_label[11])
+Menu.SetColumnOrientation($sub_menu_shops, 1, 2)
+Menu.SetColumn($sub_menu_shops, 1, 'COST', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+$price_counter = 0
+
+:TATTO_11918
+if 
+  is_int_var_greater_than_int_var $number_of_tattoos_in_area > $price_counter
+goto_if_false @TATTO_11977
+Menu.SetItemWithNumber($sub_menu_shops, 1, $price_counter, 'DOLLAR', $item_price($price_counter,12i))
+$price_counter += 1
+goto @TATTO_11918
+
+:TATTO_11977
+$temp_var_shops = 0
+
+:TATTO_11984
+if 
+  is_int_var_greater_than_int_var $number_of_tattoos_in_area > $temp_var_shops
+goto_if_false @TATTO_12032
+Menu.ActivateItem($sub_menu_shops, $temp_var_shops, $item_hilight_shops($temp_var_shops,12i))
+$temp_var_shops += 1
+goto @TATTO_11984
+
+:TATTO_12032
+Menu.SetColumnWidth($sub_menu_shops, 0, 140)
+Menu.SetColumnWidth($sub_menu_shops, 1, 46)
+$sub_menu_drawn_shops = 1
+
+:TATTO_12058
+return 
+
+:TATTO_12060
+Txd.LoadSprite($item_text_label($menu_two_item_hilighted,12s), 1)
+return 
+
+:TATTO_12073
+$temp_var_shops = 0
+$number_of_tats_player_has = 0
+
+:TATTO_12087
+if 
+  9 > $temp_var_shops
+goto_if_false @TATTO_12173
+set_var_int_to_constant $temp_var_shops2 = 4
+add_int_var_to_int_var $temp_var_shops2 += $temp_var_shops
+$tex_tattoo2, $model_tattoo2 = Player.GetClothesItem($player1, $temp_var_shops2)
+if 
+  $tex_tattoo2 <> 0
+goto_if_false @TATTO_12159
+$number_of_tats_player_has += 1
+
+:TATTO_12159
+$temp_var_shops += 1
+goto @TATTO_12087
+
+:TATTO_12173
+return 
+
+:TATTO_12175
+if 
+  $remove_tats_menu_drawn == 0
+goto_if_false @TATTO_13312
+$menu_item_no_tats = 0
+$temp_var_shops = 0
+
+:TATTO_12207
+if 
+  9 > $temp_var_shops
+goto_if_false @TATTO_12658
+set_var_int_to_constant $temp_var_shops2 = 4
+add_int_var_to_int_var $temp_var_shops2 += $temp_var_shops
+$tex_tattoo2, $model_tattoo2 = Player.GetClothesItem($player1, $temp_var_shops2)
+if 
+  $tex_tattoo2 <> 0
+goto_if_false @TATTO_12644
+set_var_int_to_var_int $player_has_tattoo_in_area($menu_item_no_tats,9i) = $temp_var_shops2
+switch_start $temp_var_shops2 total_jumps 9 default_jump 0 @TATTO_12637 jumps 4 @TATTO_12412 5 @TATTO_12437 6 @TATTO_12462 7 @TATTO_12487 8 @TATTO_12512 9 @TATTO_12537 10 @TATTO_12562
+switch_continued 11 @TATTO_12587 12 @TATTO_12612 -1 @TATTO_12637 -1 @TATTO_12637 -1 @TATTO_12637 -1 @TATTO_12637 -1 @TATTO_12637 -1 @TATTO_12637 -1 @TATTO_12637
+
+:TATTO_12412
+set_var_text_label $item_text_label($menu_item_no_tats,12s) = 'LARMTP'
+goto @TATTO_12637
+
+:TATTO_12437
+set_var_text_label $item_text_label($menu_item_no_tats,12s) = 'LARMLW'
+goto @TATTO_12637
+
+:TATTO_12462
+set_var_text_label $item_text_label($menu_item_no_tats,12s) = 'RARMTP'
+goto @TATTO_12637
+
+:TATTO_12487
+set_var_text_label $item_text_label($menu_item_no_tats,12s) = 'RARMLW'
+goto @TATTO_12637
+
+:TATTO_12512
+set_var_text_label $item_text_label($menu_item_no_tats,12s) = 'BACK'
+goto @TATTO_12637
+
+:TATTO_12537
+set_var_text_label $item_text_label($menu_item_no_tats,12s) = 'LCHEST'
+goto @TATTO_12637
+
+:TATTO_12562
+set_var_text_label $item_text_label($menu_item_no_tats,12s) = 'RCHEST'
+goto @TATTO_12637
+
+:TATTO_12587
+set_var_text_label $item_text_label($menu_item_no_tats,12s) = 'BELLY'
+goto @TATTO_12637
+
+:TATTO_12612
+set_var_text_label $item_text_label($menu_item_no_tats,12s) = 'LBACK'
+goto @TATTO_12637
+
+:TATTO_12637
+$menu_item_no_tats += 1
+
+:TATTO_12644
+$temp_var_shops += 1
+goto @TATTO_12207
+
+:TATTO_12658
+set_var_int_to_var_int $temp_var_shops = $menu_item_no_tats
+
+:TATTO_12666
+if 
+  12 > $temp_var_shops
+goto_if_false @TATTO_12716
+set_var_text_label $item_text_label($temp_var_shops,12s) = 'DUMMY'
+$temp_var_shops += 1
+goto @TATTO_12666
+
+:TATTO_12716
+Text.PrintHelpForever('TATTA')
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @TATTO_12789
+$remove_menu_tattoo = Menu.Create('TATTO', 29.0, 145.0, 93.0, 2, True, 1, 1)
+goto @TATTO_13030
+
+:TATTO_12789
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @TATTO_12851
+$remove_menu_tattoo = Menu.Create('TATTO', 29.0, 165.0, 93.0, 2, True, 1, 1)
+goto @TATTO_13030
+
+:TATTO_12851
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @TATTO_12913
+$remove_menu_tattoo = Menu.Create('TATTO', 29.0, 165.0, 93.0, 2, True, 1, 1)
+goto @TATTO_13030
+
+:TATTO_12913
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @TATTO_12975
+$remove_menu_tattoo = Menu.Create('TATTO', 29.0, 145.0, 93.0, 2, True, 1, 1)
+goto @TATTO_13030
+
+:TATTO_12975
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @TATTO_13030
+$remove_menu_tattoo = Menu.Create('TATTO', 29.0, 145.0, 93.0, 2, True, 1, 1)
+
+:TATTO_13030
+Menu.SetColumnOrientation($remove_menu_tattoo, 0, 1)
+Menu.SetColumn($remove_menu_tattoo, 0, 'TATTO', s$item_text_label[0], s$item_text_label[1], s$item_text_label[2], s$item_text_label[3], s$item_text_label[4], s$item_text_label[5], s$item_text_label[6], s$item_text_label[7], s$item_text_label[8], s$item_text_label[9], s$item_text_label[10], s$item_text_label[11])
+Menu.SetColumnOrientation($remove_menu_tattoo, 1, 2)
+Menu.SetColumn($remove_menu_tattoo, 1, 'COST', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+$price_counter = 0
+
+:TATTO_13231
+if 
+  is_int_var_greater_than_int_var $menu_item_no_tats > $price_counter
+goto_if_false @TATTO_13286
+Menu.SetItemWithNumber($sub_menu_shops, 1, $price_counter, 'DOLLAR', 400)
+$price_counter += 1
+goto @TATTO_13231
+
+:TATTO_13286
+Menu.SetColumnWidth($remove_menu_tattoo, 0, 140)
+Menu.SetColumnWidth($remove_menu_tattoo, 1, 46)
+$remove_tats_menu_drawn = 1
+
+:TATTO_13312
+return 
+
+:TATTO_13314
+if or
+  is_int_var_equal_to_constant $area_to_look_at_shops == 8
+  is_int_var_equal_to_constant $area_to_look_at_shops == 12
+goto_if_false @TATTO_13588
+if 
+  not Char.IsPlayingAnim($scplayer, "TAT_BACK_SIT_LOOP_P")
+goto_if_false @TATTO_13542
+Task.PlayAnimNonInterruptable($scplayer, "TAT_BACK_SIT_IN_P", "TATTOOS", 1000.0, False, False, False, True, -1)
+$return_animation_time_tattoo = 0.0
+if 
+  Char.IsPlayingAnim($scplayer, "TAT_BACK_SIT_IN_P")
+goto_if_false @TATTO_13496
+$return_animation_time_tattoo = Char.GetAnimCurrentTime($scplayer, "TAT_BACK_SIT_IN_P")
+
+:TATTO_13496
+if 
+  $flag_in_remove_tattoo_section == 1
+goto_if_false @TATTO_13528
+$shop_progress_tattoo = 4
+goto @TATTO_13535
+
+:TATTO_13528
+$shop_progress_tattoo = 2
+
+:TATTO_13535
+goto @TATTO_13581
+
+:TATTO_13542
+if 
+  $flag_in_remove_tattoo_section == 1
+goto_if_false @TATTO_13574
+$shop_progress_tattoo = 5
+goto @TATTO_13581
+
+:TATTO_13574
+$shop_progress_tattoo = 3
+
+:TATTO_13581
+goto @TATTO_13833
+
+:TATTO_13588
+if 
+  Char.IsPlayingAnim($scplayer, "TAT_BACK_SIT_LOOP_P")
+goto_if_false @TATTO_13794
+Task.PlayAnimNonInterruptable($scplayer, "TAT_BACK_SIT_OUT_P", "TATTOOS", 1000.0, False, False, False, True, -1)
+$return_animation_time_tattoo = 0.0
+if 
+  Char.IsPlayingAnim($scplayer, "TAT_BACK_SIT_OUT_P")
+goto_if_false @TATTO_13748
+$return_animation_time_tattoo = Char.GetAnimCurrentTime($scplayer, "TAT_BACK_SIT_OUT_P")
+
+:TATTO_13748
+if 
+  $flag_in_remove_tattoo_section == 1
+goto_if_false @TATTO_13780
+$shop_progress_tattoo = 4
+goto @TATTO_13787
+
+:TATTO_13780
+$shop_progress_tattoo = 2
+
+:TATTO_13787
+goto @TATTO_13833
+
+:TATTO_13794
+if 
+  $flag_in_remove_tattoo_section == 1
+goto_if_false @TATTO_13826
+$shop_progress_tattoo = 5
+goto @TATTO_13833
+
+:TATTO_13826
+$shop_progress_tattoo = 3
+
+:TATTO_13833
+return 
+
+:TATTO_13835
+if or
+  is_int_var_equal_to_constant $area_to_look_at_shops == 8
+  is_int_var_equal_to_constant $area_to_look_at_shops == 12
+goto_if_false @TATTO_14049
+if 
+  Char.IsPlayingAnim($scplayer, "TAT_BACK_SIT_IN_P")
+goto_if_false @TATTO_13922
+$return_animation_time_tattoo = Char.GetAnimCurrentTime($scplayer, "TAT_BACK_SIT_IN_P")
+
+:TATTO_13922
+if 
+  $return_animation_time_tattoo == 1.0
+goto_if_false @TATTO_14042
+Task.PlayAnimNonInterruptable($scplayer, "TAT_BACK_SIT_LOOP_P", "TATTOOS", 1000.0, True, False, False, False, -1)
+$return_animation_time_tattoo = 0.0
+if 
+  $flag_in_remove_tattoo_section == 1
+goto_if_false @TATTO_14035
+$shop_progress_tattoo = 5
+goto @TATTO_14042
+
+:TATTO_14035
+$shop_progress_tattoo = 3
+
+:TATTO_14042
+goto @TATTO_14228
+
+:TATTO_14049
+if 
+  Char.IsPlayingAnim($scplayer, "TAT_BACK_SIT_OUT_P")
+goto_if_false @TATTO_14113
+$return_animation_time_tattoo = Char.GetAnimCurrentTime($scplayer, "TAT_BACK_SIT_OUT_P")
+
+:TATTO_14113
+if 
+  $return_animation_time_tattoo == 1.0
+goto_if_false @TATTO_14228
+Task.PlayAnimNonInterruptable($scplayer, "TAT_SIT_LOOP_P", "TATTOOS", 1000.0, True, False, False, False, -1)
+$return_animation_time_tattoo = 0.0
+if 
+  $flag_in_remove_tattoo_section == 1
+goto_if_false @TATTO_14221
+$shop_progress_tattoo = 5
+goto @TATTO_14228
+
+:TATTO_14221
+$shop_progress_tattoo = 3
+
+:TATTO_14228
+return 
+
+:TATTO_14230
+Task.PlayAnimNonInterruptable($scplayer, v$name_of_player_in_anim_tattoo, "TATTOOS", 1000.0, False, False, False, True, -1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot4)
+$return_animation_time_tattoo = 0.0
+Task.PlayAnimNonInterruptable($shop_keep_tattoo, v$name_of_shop_in_anim_tattoo, "TATTOOS", 1000.0, False, False, False, True, -1)
+$shop_keep_animation_time_tattoo = 0.0
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_14370
+Object.PlayAnim($tattoo_needle, v$name_of_object_in_anim_tattoo, "TATTOOS", 1000.0, False, True)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_14370
+return 
+
+:TATTO_14372
+if 
+  Char.IsPlayingAnim($scplayer, v$name_of_player_in_anim_tattoo)
+goto_if_false @TATTO_14402
+$return_animation_time_tattoo = Char.GetAnimCurrentTime($scplayer, v$name_of_player_in_anim_tattoo)
+
+:TATTO_14402
+if 
+  Char.IsPlayingAnim($shop_keep_tattoo, v$name_of_shop_in_anim_tattoo)
+goto_if_false @TATTO_14432
+$return_animation_time_tattoo = Char.GetAnimCurrentTime($shop_keep_tattoo, v$name_of_shop_in_anim_tattoo)
+
+:TATTO_14432
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_14478
+if 
+  Object.IsPlayingAnim($tattoo_needle, v$name_of_object_in_anim_tattoo)
+goto_if_false @TATTO_14478
+$object_animation_time_tattoo = Object.GetAnimCurrentTime($tattoo_needle, v$name_of_object_in_anim_tattoo)
+
+:TATTO_14478
+if 
+  $return_animation_time_tattoo == 1.0
+goto_if_false @TATTO_14702
+Task.PlayAnimNonInterruptable($scplayer, v$name_of_player_pose_anim_tattoo, "TATTOOS", 1000.0, True, False, False, False, -1)
+$return_animation_time_tattoo = 0.0
+Task.PlayAnimNonInterruptable($shop_keep_tattoo, v$name_of_shop_pose_anim_tattoo, "TATTOOS", 1000.0, True, False, False, False, -1)
+$shop_keep_animation_time_tattoo = 0.0
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_14635
+Object.PlayAnim($tattoo_needle, v$name_of_object_pose_anim_tattoo, "TATTOOS", 1000.0, True, False)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_14635
+Player.StoreClothesState
+Player.BuildModel($player1)
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+if 
+  $flag_in_remove_tattoo_section == 1
+goto_if_false @TATTO_14688
+$shop_progress_tattoo = 7
+goto @TATTO_14702
+
+:TATTO_14688
+gosub @TATTO_10503
+$shop_progress_tattoo = 4
+
+:TATTO_14702
+return 
+
+:TATTO_14704
+Task.PlayAnimNonInterruptable($scplayer, v$name_of_player_out_anim_tattoo, "TATTOOS", 1000.0, False, False, False, True, -1)
+$return_animation_time_tattoo = 0.0
+Task.PlayAnimNonInterruptable($shop_keep_tattoo, v$name_of_shop_out_anim_tattoo, "TATTOOS", 1000.0, False, False, False, True, -1)
+$shop_keep_animation_time_tattoo = 0.0
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_14840
+Object.PlayAnim($tattoo_needle, v$name_of_object_out_anim_tattoo, "TATTOOS", 1000.0, False, True)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_14840
+return 
+
+:TATTO_14842
+if 
+  Char.IsPlayingAnim($scplayer, v$name_of_player_out_anim_tattoo)
+goto_if_false @TATTO_14872
+$return_animation_time_tattoo = Char.GetAnimCurrentTime($scplayer, v$name_of_player_out_anim_tattoo)
+
+:TATTO_14872
+if 
+  Char.IsPlayingAnim($shop_keep_tattoo, v$name_of_shop_out_anim_tattoo)
+goto_if_false @TATTO_14902
+$shop_keep_animation_time_tattoo = Char.GetAnimCurrentTime($shop_keep_tattoo, v$name_of_shop_out_anim_tattoo)
+
+:TATTO_14902
+if 
+  Char.IsPlayingAnim($scplayer, "TAT_BACK_OUT_P")
+goto_if_false @TATTO_15202
+if 
+  $return_animation_time_tattoo == 1.0
+goto_if_false @TATTO_15054
+Task.PlayAnimNonInterruptable($scplayer, "TAT_BACK_SIT_LOOP_P", "TATTOOS", 1000.0, True, False, False, False, -1)
+$return_animation_time_tattoo = 0.0
+if 
+  $flag_in_remove_tattoo_section == 1
+goto_if_false @TATTO_15047
+$shop_progress_tattoo = 9
+goto @TATTO_15054
+
+:TATTO_15047
+$shop_progress_tattoo = 6
+
+:TATTO_15054
+if 
+  $shop_keep_animation_time_tattoo == 1.0
+goto_if_false @TATTO_15195
+Task.PlayAnimNonInterruptable($shop_keep_tattoo, "TAT_SIT_LOOP_T", "TATTOOS", 1000.0, True, False, False, False, -1)
+$shop_keep_animation_time_tattoo = 0.0
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_15195
+Object.PlayAnim($tattoo_needle, "TAT_SIT_LOOP_O", "TATTOOS", 1000.0, True, False)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_15195
+goto @TATTO_15458
+
+:TATTO_15202
+if 
+  $return_animation_time_tattoo == 1.0
+goto_if_false @TATTO_15317
+Task.PlayAnimNonInterruptable($scplayer, "TAT_SIT_LOOP_P", "TATTOOS", 1000.0, True, False, False, False, -1)
+$return_animation_time_tattoo = 0.0
+if 
+  $flag_in_remove_tattoo_section == 1
+goto_if_false @TATTO_15310
+$shop_progress_tattoo = 9
+goto @TATTO_15317
+
+:TATTO_15310
+$shop_progress_tattoo = 6
+
+:TATTO_15317
+if 
+  $shop_keep_animation_time_tattoo == 1.0
+goto_if_false @TATTO_15458
+Task.PlayAnimNonInterruptable($shop_keep_tattoo, "TAT_SIT_LOOP_T", "TATTOOS", 1000.0, True, False, False, False, -1)
+$shop_keep_animation_time_tattoo = 0.0
+if 
+  Object.DoesExist($tattoo_needle)
+goto_if_false @TATTO_15458
+Object.PlayAnim($tattoo_needle, "TAT_SIT_LOOP_O", "TATTOOS", 1000.0, True, False)
+$object_animation_time_tattoo = 0.0
+
+:TATTO_15458
+return 
+
+:TATTO_15460
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawRect(280.0, 58.0, 70.0, 70.0, 0, 0, 0, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(1, 280.0, 58.0, 64.0, 64.0, 255, 255, 255, 200)
+return 
+terminate_this_script 
+
+//-------------External script 62 (BARBER)---------------
+
+:BARB
+$getin_chaircam_offX = 0.0
+$getin_chaircam_offY = 0.0
+$getin_chaircam_offZ = 0.0
+$getin_chaircam_lookat_offX = 0.0
+$getin_chaircam_lookat_offY = 0.0
+$getin_chaircam_lookat_offZ = 0.0
+$chaircam_offX = 0.0
+$chaircam_offY = 0.0
+$chaircam_offZ = 0.0
+$chaircam_lookat_offX = 0.0
+$chaircam_lookat_offY = 0.0
+$chaircam_lookat_offZ = 0.0
+$hairstyle_cam_offX = 0.0
+$hairstyle_cam_offY = 0.0
+$hairstyle_cam_offZ = 0.0
+$hairstyle_cam_lookat_offX = 0.0
+$hairstyle_cam_lookat_offY = 0.0
+$hairstyle_cam_lookat_offZ = 0.0
+$getout_chair_cam_offX = 0.0
+$getout_chair_cam_offY = 0.0
+$getout_chair_cam_offZ = 0.0
+$getout_chair_cam_lookat_offX = 0.0
+$getout_chair_cam_lookat_offY = 0.0
+$getout_chair_cam_lookat_offZ = 0.0
+$leave_barb_cam_offX = 0.0
+$leave_barb_cam_offY = 0.0
+$leave_barb_cam_offZ = 0.0
+$leave_barb_cam_lookat_offX = 0.0
+$leave_barb_cam_lookat_offY = 0.0
+$leave_barb_cam_lookat_offZ = 0.0
+$player_heading_barbers = 0.0
+$player_task_progress_barber = 0
+$walk_offX_barbers = 0.0
+$walk_offY_barbers = 0.0
+$walk_offZ_barbers = 0.0
+$walk2_offX_barbers = 0.0
+$walk2_offY_barbers = 0.0
+$walk2_offZ_barbers = 0.0
+$flag_viewed_hair = 0
+$haircut_picked_barbers = 0
+$return_animation_time_barbers = 0.0
+$random_number_barbers = 0
+$flag_barber = 0
+$barberX = 0.0
+$barberY = 0.0
+$barberZ = 0.0
+$barber_heading = 0.0
+$unk9747 = 0
+$shop_item_price = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$control_flag_barbers = 0
+$item_no_hairstyles = 0
+$number_of_hairstyles_in_area = 0
+$barber_look_shops = 0
+$flag_restored_camera_barbers = 0
+$cut_hair_flag_barber = 0
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'BARBERS'
+goto_if_false @BARB_558
+set_var_int_to_constant $shopkeeper_model_shops = 156
+
+:BARB_558
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'BARBER2'
+goto_if_false @BARB_591
+set_var_int_to_constant $shopkeeper_model_shops = 177
+
+:BARB_591
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'BARBER3'
+goto_if_false @BARB_624
+set_var_int_to_constant $shopkeeper_model_shops = 176
+

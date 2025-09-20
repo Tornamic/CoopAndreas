@@ -1,0 +1,153 @@
+//-------------External script 40 (OTB_STAFF)---------------
+
+:OTBSTAF
+script_name 'OTBSTAF'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @OTBSTAF_92
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+1@ = Attractor.Add(0.0, 0.0, 0.0, 0.0, 0.0, -1)
+
+:OTBSTAF_92
+Streaming.RequestAnimation("INT_SHOP")
+
+:OTBSTAF_104
+if 
+  not Streaming.HasAnimationLoaded("INT_SHOP")
+goto_if_false @OTBSTAF_138
+wait 0
+goto @OTBSTAF_104
+
+:OTBSTAF_138
+if 
+  not Char.IsDead(0@)
+goto_if_false @OTBSTAF_162
+Char.SetDecisionMaker(0@, $iGlobalShopkeeperDM)
+
+:OTBSTAF_162
+3@ = 1
+4@ = 0
+6@ = 0
+
+:OTBSTAF_183
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @OTBSTAF_256
+if 
+  $iSetOTBPanic == 0
+goto_if_false @OTBSTAF_242
+gosub @OTBSTAF_270
+goto @OTBSTAF_249
+
+:OTBSTAF_242
+goto @OTBSTAF_848
+
+:OTBSTAF_249
+goto @OTBSTAF_263
+
+:OTBSTAF_256
+gosub @OTBSTAF_832
+
+:OTBSTAF_263
+goto @OTBSTAF_183
+
+:OTBSTAF_270
+switch_start 3@ total_jumps 2 default_jump 0 @OTBSTAF_361 jumps 1 @OTBSTAF_333 2 @OTBSTAF_347 -1 @OTBSTAF_361 -1 @OTBSTAF_361 -1 @OTBSTAF_361 -1 @OTBSTAF_361 -1 @OTBSTAF_361
+
+:OTBSTAF_333
+gosub @OTBSTAF_363
+goto @OTBSTAF_361
+
+:OTBSTAF_347
+gosub @OTBSTAF_668
+goto @OTBSTAF_361
+
+:OTBSTAF_361
+return 
+
+:OTBSTAF_363
+switch_start 4@ total_jumps 2 default_jump 0 @OTBSTAF_666 jumps 0 @OTBSTAF_426 1 @OTBSTAF_562 -1 @OTBSTAF_666 -1 @OTBSTAF_666 -1 @OTBSTAF_666 -1 @OTBSTAF_666 -1 @OTBSTAF_666
+
+:OTBSTAF_426
+9@ = Char.GetOffsetInWorldCoords(10@, 11@, 0@, 0.0, 3.0, 3.0)
+2@ = World.GetUserOfClosestMapAttractor(9@, 10@, 11@, 3.0, #CJ_FF_TILL_QUE, "PCUSTOM")
+if 
+  2@ > -1
+goto_if_false @OTBSTAF_555
+Task.PlayAnim(0@, "SHOP_CASHIER", "INT_SHOP", 4.0, False, False, False, False, -1)
+4@ += 1
+
+:OTBSTAF_555
+goto @OTBSTAF_666
+
+:OTBSTAF_562
+8@ = 0.0
+if 
+  Char.IsPlayingAnim(0@, "SHOP_CASHIER")
+goto_if_false @OTBSTAF_659
+8@ = Char.GetAnimCurrentTime(0@, "SHOP_CASHIER")
+if 
+  8@ == 1.0
+goto_if_false @OTBSTAF_659
+4@ = 0
+3@ += 1
+
+:OTBSTAF_659
+goto @OTBSTAF_666
+
+:OTBSTAF_666
+return 
+
+:OTBSTAF_668
+switch_start 4@ total_jumps 1 default_jump 0 @OTBSTAF_830 jumps 0 @OTBSTAF_731 -1 @OTBSTAF_830 -1 @OTBSTAF_830 -1 @OTBSTAF_830 -1 @OTBSTAF_830 -1 @OTBSTAF_830 -1 @OTBSTAF_830
+
+:OTBSTAF_731
+9@ = Char.GetOffsetInWorldCoords(10@, 11@, 0@, 0.0, 3.0, 3.0)
+2@ = World.GetUserOfClosestMapAttractor(9@, 10@, 11@, 3.0, #CJ_FF_TILL_QUE, "PCUSTOM")
+if 
+  2@ == -1
+goto_if_false @OTBSTAF_823
+4@ = 0
+3@ = 1
+
+:OTBSTAF_823
+goto @OTBSTAF_830
+
+:OTBSTAF_830
+return 
+
+:OTBSTAF_832
+Streaming.RemoveAnimation("INT_SHOP")
+terminate_this_script 
+return 
+
+:OTBSTAF_848
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @OTBSTAF_918
+6@ = Char.GetScriptTaskStatus(0@, 1476)
+if 
+  is_int_lvar_equal_to_constant 6@ == 7
+goto_if_false @OTBSTAF_911
+Task.HandsUp(0@, -2)
+
+:OTBSTAF_911
+goto @OTBSTAF_925
+
+:OTBSTAF_918
+gosub @OTBSTAF_832
+
+:OTBSTAF_925
+goto @OTBSTAF_848
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

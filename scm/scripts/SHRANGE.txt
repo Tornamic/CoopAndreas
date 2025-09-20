@@ -1,0 +1,2797 @@
+//-------------Mission 113---------------
+// Originally: Shooting range
+
+:SHRANGE
+script_name 'SHRANGE'
+set_deatharrest_state 0
+$onmission = 1
+$flag_shooting_range_mission = 1
+$Schallenge_X = 286.1649
+$Schallenge_Y = -30.9591
+$8018 = 301.8877
+$8022 = -77.2586
+$8019 = 306.4883
+$8023 = -141.9047
+$8020 = 307.0919
+$8024 = -159.2197
+$sr_object_name[0] = -319
+$sr_object_name[1] = -320
+$sr_object_name[2] = -321
+$sr_object_name[3] = -322
+$sr_object_name[4] = -323
+$sr_object_name[5] = -324
+$sr_object_name[6] = -325
+$sr_object_name[7] = -326
+$target_offset_x[1] = 0.275
+$target_offset_z[1] = -3.502
+$target_offset_x[2] = -0.214
+$target_offset_z[2] = -3.479
+$target_offset_x[3] = 0.245
+$target_offset_z[3] = -2.791
+$target_offset_x[4] = -0.168
+$target_offset_z[4] = -2.806
+$target_offset_x[5] = 0.079
+$target_offset_z[5] = -2.123
+$target_offset_x[6] = -0.589
+$target_offset_z[6] = -2.317
+$target_offset_x[7] = -0.357
+$target_offset_z[7] = -1.855
+35@ = 290.6264
+39@ = -24.5548
+43@ = 1000.523
+47@ = 3.0583
+51@ = 6.1726
+55@ = -13.6242
+59@ = 0.0
+36@ = 303.0788
+40@ = -61.2269
+44@ = 1000.523
+48@ = 2.9464
+52@ = 6.0799
+56@ = -13.6242
+60@ = 270.0
+37@ = 300.1018
+41@ = -137.0399
+45@ = 1003.055
+49@ = 3.1341
+53@ = 6.1264
+57@ = -13.6242
+61@ = 90.0
+38@ = 299.4518
+42@ = -166.3517
+46@ = 998.6105
+50@ = 3.0055
+54@ = 4.6018
+58@ = -13.6242
+62@ = 90.0
+$sr_i = 0
+
+:SHRANGE_600
+if 
+  3 > $sr_i
+goto_if_false @SHRANGE_723
+$SR_ped_can_be_created($sr_i,3i) = 1
+$SR_ped_state($sr_i,3i) = 0
+$SR_ped_weapon($sr_i,4i) = 0
+$SR_range_level($sr_i,3i) = 0
+$SR_target_state($sr_i,3i) = 0
+$sr_target_rotation($sr_i,3f) = 90.0
+$sr_time_to_new_target($sr_i,3i) = 0
+$SR_targets_created($sr_i,3i) = 0
+$sr_i += 1
+goto @SHRANGE_600
+
+:SHRANGE_723
+$SR_mission_state = 0
+$SR_flag = 0
+$SR_time_check = 0
+$Return_cities_passed = Stat.GetInt(181)
+if 
+  $Return_cities_passed == 0
+goto_if_false @SHRANGE_777
+$range_weapons_open = 2
+
+:SHRANGE_777
+if 
+  $Return_cities_passed == 1
+goto_if_false @SHRANGE_827
+if 
+  $range_weapons_open == 2
+goto_if_false @SHRANGE_820
+$trigger_new_range_level = 1
+
+:SHRANGE_820
+$range_weapons_open = 3
+
+:SHRANGE_827
+if 
+  $Return_cities_passed > 1
+goto_if_false @SHRANGE_877
+if 
+  4 > $range_weapons_open
+goto_if_false @SHRANGE_870
+$trigger_new_range_level = 1
+
+:SHRANGE_870
+$range_weapons_open = 4
+
+:SHRANGE_877
+$sr_Dec = DecisionMakerChar.Copy(65538)
+DecisionMakerChar.ClearEventResponse($sr_Dec, 15)
+DecisionMakerChar.AddEventResponse($sr_Dec, 15, 300, 100.0, 100.0, 100.0, 100.0, True, True)
+Audio.LoadMissionAudio(1801, 4)
+Streaming.RequestModel(#TARGET_HEAD)
+Streaming.RequestModel(#TARGET_LARM)
+Streaming.RequestModel(#TARGET_RARM)
+Streaming.RequestModel(#TARGET_LLEG)
+Streaming.RequestModel(#TARGET_RLEG)
+Streaming.RequestModel(#TARGET_RTORSO)
+Streaming.RequestModel(#TARGET_LTORSO)
+Streaming.RequestModel(#TARGET_FRAME)
+Streaming.RequestModel(346)
+Streaming.RequestModel(352)
+Streaming.RequestModel(349)
+Streaming.RequestModel(355)
+
+:SHRANGE_995
+if or
+  not Streaming.HasModelLoaded(346)
+  not Streaming.HasModelLoaded(352)
+  not Streaming.HasModelLoaded(349)
+  not Streaming.HasModelLoaded(355)
+goto_if_false @SHRANGE_1037
+wait 0
+goto @SHRANGE_995
+
+:SHRANGE_1037
+if or
+  not Streaming.HasModelLoaded(#TARGET_HEAD)
+  not Streaming.HasModelLoaded(#TARGET_LARM)
+  not Streaming.HasModelLoaded(#TARGET_RARM)
+  not Streaming.HasModelLoaded(#TARGET_LLEG)
+  not Streaming.HasModelLoaded(#TARGET_RLEG)
+goto_if_false @SHRANGE_1084
+wait 0
+goto @SHRANGE_1037
+
+:SHRANGE_1084
+if or
+  not Streaming.HasModelLoaded(#TARGET_RTORSO)
+  not Streaming.HasModelLoaded(#TARGET_LTORSO)
+  not Streaming.HasModelLoaded(#TARGET_FRAME)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @SHRANGE_1125
+wait 0
+goto @SHRANGE_1084
+
+:SHRANGE_1125
+if 
+  $flag_shooting_range_mission == 47
+goto_if_false @SHRANGE_1201
+$sr_target[0] = Object.CreateNoOffset($sr_object_name($sr_i,8i), 293.757, 1.0, 1000.516)
+$SR_ped[0] = Char.CreateRandom($x, $y, $z)
+$sr_obj = Object.Create(338, $x, $y, $z)
+
+:SHRANGE_1201
+$sr_area = Streaming.GetAreaVisible()
+
+:SHRANGE_1206
+if 
+is_ps2_keyboard_key_just_pressed 87
+goto_if_false @SHRANGE_1298
+$sr_i = 9
+
+:SHRANGE_1228
+if 
+  16 > $sr_i
+goto_if_false @SHRANGE_1291
+if 
+  Object.DoesExist($sr_target($sr_i,24i))
+goto_if_false @SHRANGE_1277
+Object.Break($sr_target($sr_i,24i), 1)
+
+:SHRANGE_1277
+$sr_i += 1
+goto @SHRANGE_1228
+
+:SHRANGE_1291
+$8126 = 20
+
+:SHRANGE_1298
+wait 0
+$sr_i = Streaming.GetAreaVisible()
+if 
+  not is_int_var_equal_to_int_var $sr_i == $sr_area
+goto_if_false @SHRANGE_1333
+goto @SHRANGE_17017
+
+:SHRANGE_1333
+if 
+  Player.IsPlaying($player1)
+goto_if_false @SHRANGE_1370
+gosub @SHRANGE_13478
+gosub @SHRANGE_11089
+gosub @SHRANGE_1379
+
+:SHRANGE_1370
+goto @SHRANGE_1206
+terminate_this_script 
+
+:SHRANGE_1379
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @SHRANGE_1444
+if 
+  $SR_mission_state <> 0
+goto_if_false @SHRANGE_1444
+Text.ClearPrints
+34@ = 1
+$SR_mission_state = 20
+$SR_flag = 1
+$SR_time_check = 0
+
+:SHRANGE_1444
+switch_start $SR_mission_state total_jumps 7 default_jump 0 @SHRANGE_11087 jumps 0 @SHRANGE_1507 1 @SHRANGE_1813 2 @SHRANGE_5136 3 @SHRANGE_5349 4 @SHRANGE_6544 5 @SHRANGE_8395 20 @SHRANGE_10212
+
+:SHRANGE_1507
+if 
+  $SR_range_id == 0
+goto_if_false @SHRANGE_1580
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 286.1649, -30.9591, 1000.516, 2.0, 2.0, 2.0)
+goto_if_false @SHRANGE_1580
+$SR_mission_state = 1
+
+:SHRANGE_1580
+if 
+  $SR_range_id == 1
+goto_if_false @SHRANGE_1653
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 301.8877, -77.2586, 1000.523, 2.0, 2.0, 2.0)
+goto_if_false @SHRANGE_1653
+$SR_mission_state = 1
+
+:SHRANGE_1653
+if 
+  $SR_range_id == 2
+goto_if_false @SHRANGE_1726
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 306.4883, -141.9047, 1003.055, 2.0, 2.0, 2.0)
+goto_if_false @SHRANGE_1726
+$SR_mission_state = 1
+
+:SHRANGE_1726
+if 
+  $SR_range_id == 3
+goto_if_false @SHRANGE_1799
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 307.0919, -159.2197, 998.601, 2.0, 2.0, 2.0)
+goto_if_false @SHRANGE_1799
+$SR_mission_state = 1
+
+:SHRANGE_1799
+64@ = 0
+goto @SHRANGE_11087
+
+:SHRANGE_1813
+if 
+  $range_cuts_watched > 0
+goto_if_false @SHRANGE_1881
+if and
+  7 > $SR_flag
+  $SR_flag > 0
+goto_if_false @SHRANGE_1881
+$SR_flag = 7
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+Text.ClearPrints
+
+:SHRANGE_1881
+if 
+  $SR_flag == 0
+goto_if_false @SHRANGE_2033
+34@ = 0
+Pad.SetPlayerCycleWeaponButton($player1, False)
+$WeaponType, $ammo, $ModelForWeaponType = Char.GetWeaponInSlot($scplayer, WeaponSlot.Pistols)
+$8136, $8132, $8140 = Char.GetWeaponInSlot($scplayer, WeaponSlot.Shotguns)
+$8137, $8133, $8141 = Char.GetWeaponInSlot($scplayer, WeaponSlot.SMG)
+$8138, $8134, $8142 = Char.GetWeaponInSlot($scplayer, WeaponSlot.Assault)
+$SR_skill_won = 0
+Player.SetControl($player1, False)
+Camera.SetFadingColor(0, 0, 0)
+Stat.ShowUpdateStats(False)
+Camera.DoFade(0, 1000)
+$SR_flag = 1
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1500
+
+:SHRANGE_2033
+if 
+  $SR_flag == 1
+goto_if_false @SHRANGE_2267
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_2267
+Hud.SwitchWidescreen(True)
+Text.ClearPrints
+Text.Print('ANR_1', 4000, 1)
+Text.Print('ANR_2', 4000, 1)
+Text.Print('ANR_3', 4000, 1)
+$sr_float3 = -0.83
+$sr_float4 = 0.47
+$z = 1.7
+gosub @SHRANGE_16849
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$sr_float3 = 0.17
+$sr_float4 = 0.63
+$z = 1.7
+gosub @SHRANGE_16849
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+Camera.DoFade(1, 1000)
+$SR_flag = 2
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 4000
+
+:SHRANGE_2267
+if 
+  $SR_flag == 2
+goto_if_false @SHRANGE_2461
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_2461
+$SR_ped_state[1] = 3
+$SR_ped_can_be_created[1] = 0
+$sr_float3 = -0.63
+$sr_float4 = -3.47
+$z = 0.2
+gosub @SHRANGE_16849
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$sr_float3 = 0.4
+$sr_float4 = -2.5
+$z = 0.5
+gosub @SHRANGE_16849
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+Camera.DoFade(1, 1000)
+$SR_flag = 3
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 2000
+
+:SHRANGE_2461
+if 
+  $SR_flag == 3
+goto_if_false @SHRANGE_2590
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_2590
+Char.GiveWeapon($scplayer, WeaponType.Pistol, 99999)
+$sr_float3 = 0.0
+add_float_lvar_to_float_var $sr_float3 += 47@($SR_range_id,4f)
+$sr_float4 = -1.0
+gosub @SHRANGE_16849
+Task.GoStraightToCoord($scplayer, $x, $y, $z, MoveState.Walk, -2)
+$SR_flag = 4
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 3000
+
+:SHRANGE_2590
+if 
+  $SR_flag == 4
+goto_if_false @SHRANGE_3034
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_3034
+$SR_ped_state[1] = 4
+set_var_float_to_lvar_float $sr_float1 = 59@($SR_range_id,4f)
+$sr_float1 += 90.0
+Char.SetHeading($scplayer, $sr_float1)
+set_var_float_to_lvar_float $sr_float3 = 47@($SR_range_id,4f)
+$sr_float3 -= 0.8201
+$sr_float4 = -0.4944
+$z = 2.1312
+gosub @SHRANGE_16849
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+set_var_float_to_lvar_float $sr_float3 = 47@($SR_range_id,4f)
+$sr_float3 -= 0.1125
+$sr_float4 = -0.0237
+$z = 1.6042
+gosub @SHRANGE_16849
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+set_var_float_to_lvar_float $sr_float3 = 47@($SR_range_id,4f)
+$sr_float4 = -2.0
+$z = 0.0
+gosub @SHRANGE_16849
+Char.SetCoordinatesDontWarpGang($scplayer, $x, $y, $z)
+set_var_float_to_lvar_float $sr_float3 = 47@($SR_range_id,4f)
+$sr_float4 = 0.0
+$z = 0.0
+gosub @SHRANGE_16849
+Char.SetHeading($scplayer, 59@($SR_range_id,4f))
+Task.GoStraightToCoord($scplayer, $x, $y, $z, MoveState.Walk, -2)
+if 
+  $SR_skill_won == 0
+goto_if_false @SHRANGE_2955
+$SR_ped_weapon[0] = 1
+$SR_ped_weapon[2] = 1
+
+:SHRANGE_2955
+$SR_ped_state[0] = 1
+$SR_ped_state[2] = 1
+$SR_target_state[0] = 0
+$SR_target_state[1] = 0
+$SR_target_state[2] = 0
+$SR_range_level[0] = 1
+$SR_range_level[1] = 1
+$SR_range_level[2] = 1
+$SR_flag = 5
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 3000
+
+:SHRANGE_3034
+if 
+  $SR_flag == 5
+goto_if_false @SHRANGE_3225
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_3225
+Text.ClearPrints
+Text.PrintBig('ANR_6', 2000, TextStyle.Middle)
+$sr_float3 = 2.1566
+$sr_float4 = 2.4369
+$z = 1.4565
+gosub @SHRANGE_16849
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$sr_float3 = 1.9771
+$sr_float4 = 3.4129
+$z = 1.3326
+gosub @SHRANGE_16849
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+$SR_flag = 6
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 3000
+
+:SHRANGE_3225
+if 
+  $SR_flag == 6
+goto_if_false @SHRANGE_3464
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_3464
+if 
+  not Char.IsDead($SR_ped[0])
+goto_if_false @SHRANGE_3285
+Char.SetAccuracy($SR_ped[0], 100)
+
+:SHRANGE_3285
+Text.ClearThisBigPrint('ANR_6')
+Text.Print('ANR_7', 4000, 1)
+Text.Print('ANR_10', 4000, 1)
+$sr_float3 = 0.7525
+$sr_float4 = -0.3628
+$z = 1.6174
+gosub @SHRANGE_16849
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$sr_float3 = 0.1734
+$sr_float4 = 0.446
+$z = 1.5146
+gosub @SHRANGE_16849
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+$SR_flag = 7
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 8000
+
+:SHRANGE_3464
+if 
+  $SR_flag == 7
+goto_if_false @SHRANGE_3595
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_3595
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SHRANGE_3517
+
+:SHRANGE_3517
+if 
+  $range_cuts_watched == 0
+goto_if_false @SHRANGE_3572
+$range_cuts_watched = 1
+Camera.DoFade(0, 1000)
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+goto @SHRANGE_3588
+
+:SHRANGE_3572
+Text.PrintBig('ANR_6', 2000, TextStyle.Middle)
+
+:SHRANGE_3588
+$SR_flag = 8
+
+:SHRANGE_3595
+if 
+  $SR_flag == 8
+goto_if_false @SHRANGE_3903
+if and
+  not Camera.GetFadingStatus
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_3903
+set_var_float_to_lvar_float $sr_float3 = 47@($SR_range_id,4f)
+$sr_float4 = 0.0
+$z = 0.0
+gosub @SHRANGE_16849
+if 
+  not Object.DoesExist($sr_obj)
+goto_if_false @SHRANGE_3725
+$sr_obj = Object.Create(338, $x, $y, $z)
+Object.SetVisible($sr_obj, False)
+Char.SetHeading($scplayer, 59@($SR_range_id,4f))
+
+:SHRANGE_3725
+Char.ClearTasksImmediately($scplayer)
+Char.AttachToObject($scplayer, $sr_obj, 0.0, 0.0, 1.0, 0, 90.0, WeaponType.Pistol)
+Pad.SetPlayerDuckButton($player1, False)
+if 
+  $SR_skill_won == 0
+goto_if_false @SHRANGE_3799
+Char.GiveWeapon($scplayer, WeaponType.Pistol, 99999)
+
+:SHRANGE_3799
+$SR_ped_state[1] = 4
+$SR_ped_can_be_created[1] = 0
+$SR_flag = 9
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 800
+if 
+  $SR_skill_won == 0
+goto_if_false @SHRANGE_3868
+$SR_ped_weapon[0] = 1
+$SR_ped_weapon[2] = 1
+
+:SHRANGE_3868
+$SR_ped_state[0] = 1
+$SR_ped_state[2] = 1
+$SR_target_state[0] = 4
+$SR_target_state[1] = 4
+$SR_target_state[2] = 4
+
+:SHRANGE_3903
+if 
+  $SR_flag == 9
+goto_if_false @SHRANGE_4082
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_4082
+Camera.DoFade(1, 1000)
+Char.DetachFromCar($scplayer)
+Char.AttachToObject($scplayer, $sr_obj, 0.0, 0.0, 1.0, 0, 90.0, WeaponType.Pistol)
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+$SR_target_state[0] = 0
+$SR_target_state[1] = 0
+$SR_target_state[2] = 0
+$SR_range_level[0] = 1
+$SR_range_level[1] = 1
+$SR_range_level[2] = 1
+if 
+  $trigger_new_range_level == 1
+goto_if_false @SHRANGE_4075
+Text.PrintHelp('ANR_56')
+$trigger_new_range_level = 0
+
+:SHRANGE_4075
+$SR_flag = 10
+
+:SHRANGE_4082
+if 
+  $SR_flag == 10
+goto_if_false @SHRANGE_4165
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_4165
+Text.PrintBig('RACE2', 1000, TextStyle.MiddleSmaller)
+$SR_flag = 11
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+Player.SetControl($player1, True)
+
+:SHRANGE_4165
+if 
+  $SR_flag == 11
+goto_if_false @SHRANGE_4241
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_4241
+Text.PrintBig('RACE3', 1000, TextStyle.MiddleSmaller)
+$SR_flag = 12
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+
+:SHRANGE_4241
+if 
+  $SR_flag == 12
+goto_if_false @SHRANGE_4317
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_4317
+Text.PrintBig('RACE4', 1000, TextStyle.MiddleSmaller)
+$SR_flag = 13
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+
+:SHRANGE_4317
+if 
+  $SR_flag == 13
+goto_if_false @SHRANGE_4400
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_4400
+Text.PrintBig('RACE5', 1000, TextStyle.MiddleSmaller)
+$SR_flag = 14
+if 
+  not Char.IsDead($SR_ped[0])
+goto_if_false @SHRANGE_4400
+Char.SetAccuracy($SR_ped[0], 80)
+
+:SHRANGE_4400
+if 
+  $SR_flag == 14
+goto_if_false @SHRANGE_4432
+$SR_mission_state = 2
+$SR_flag = 0
+
+:SHRANGE_4432
+if 
+  $SR_flag == 16
+goto_if_false @SHRANGE_4651
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_4651
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SHRANGE_4621
+if 
+  not Object.DoesExist($sr_obj)
+goto_if_false @SHRANGE_4621
+set_var_float_to_lvar_float $sr_float3 = 47@($SR_range_id,4f)
+$sr_float4 = 0.0
+$z = 0.0
+gosub @SHRANGE_16849
+$sr_obj = Object.Create(338, $x, $y, $z)
+Object.SetVisible($sr_obj, False)
+Char.SetHeading($scplayer, 59@($SR_range_id,4f))
+Char.AttachToObject($scplayer, $sr_obj, 0.0, 0.0, 1.0, 0, 90.0, WeaponType.Pistol)
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Pad.SetPlayerDuckButton($player1, False)
+
+:SHRANGE_4621
+Camera.DoFade(0, 1000)
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 2500
+$SR_flag = 17
+
+:SHRANGE_4651
+if 
+  $SR_flag == 17
+goto_if_false @SHRANGE_5036
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_5036
+if 
+  $SR_skill_won == 3
+goto_if_false @SHRANGE_4755
+Char.GiveWeapon($scplayer, WeaponType.MicroUzi, 99999)
+Char.DetachFromCar($scplayer)
+Char.AttachToObject($scplayer, $sr_obj, 0.0, 0.0, 1.0, 0, 90.0, WeaponType.MicroUzi)
+
+:SHRANGE_4755
+if 
+  $SR_skill_won == 6
+goto_if_false @SHRANGE_4822
+Char.GiveWeapon($scplayer, WeaponType.Shotgun, 99999)
+Char.DetachFromCar($scplayer)
+Char.AttachToObject($scplayer, $sr_obj, 0.0, 0.0, 1.0, 0, 90.0, WeaponType.Shotgun)
+
+:SHRANGE_4822
+if 
+  $SR_skill_won == 9
+goto_if_false @SHRANGE_4889
+Char.GiveWeapon($scplayer, WeaponType.Ak47, 99999)
+Char.DetachFromCar($scplayer)
+Char.AttachToObject($scplayer, $sr_obj, 0.0, 0.0, 1.0, 0, 90.0, WeaponType.Ak47)
+
+:SHRANGE_4889
+Camera.DoFade(1, 1000)
+Text.ClearPrints
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+if 
+  $SR_skill_won == 3
+goto_if_false @SHRANGE_4945
+Text.PrintBig('ANR_47', 3000, TextStyle.Middle)
+
+:SHRANGE_4945
+if 
+  $SR_skill_won == 6
+goto_if_false @SHRANGE_4979
+Text.PrintBig('ANR_23', 3000, TextStyle.Middle)
+
+:SHRANGE_4979
+if 
+  $SR_skill_won == 9
+goto_if_false @SHRANGE_5013
+Text.PrintBig('ANR_50', 3000, TextStyle.Middle)
+
+:SHRANGE_5013
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 4000
+$SR_flag = 18
+
+:SHRANGE_5036
+if 
+  $SR_flag == 18
+goto_if_false @SHRANGE_5129
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_5129
+$SR_target_state[0] = 0
+$SR_target_state[1] = 0
+$SR_target_state[2] = 0
+64@ = 0
+$SR_range_level[0] = 1
+$SR_range_level[1] = 1
+$SR_range_level[2] = 1
+$SR_flag = 10
+
+:SHRANGE_5129
+goto @SHRANGE_11087
+
+:SHRANGE_5136
+if 
+  $SR_flag == 0
+goto_if_false @SHRANGE_5207
+if 
+  not Char.IsDead($SR_ped[0])
+goto_if_false @SHRANGE_5177
+Char.SetAccuracy($SR_ped[0], 87)
+
+:SHRANGE_5177
+if 
+  not Char.IsDead($SR_ped[2])
+goto_if_false @SHRANGE_5200
+Char.SetAccuracy($SR_ped[2], 87)
+
+:SHRANGE_5200
+$SR_flag = 1
+
+:SHRANGE_5207
+if 
+  $SR_flag == 1
+goto_if_false @SHRANGE_5342
+if and
+  $SR_target_state[0] == 3
+  $SR_range_level[0] == 3
+goto_if_false @SHRANGE_5264
+$SR_mission_state = 20
+$SR_flag = 0
+
+:SHRANGE_5264
+if and
+  $SR_target_state[2] == 3
+  $SR_range_level[2] == 3
+goto_if_false @SHRANGE_5303
+$SR_mission_state = 20
+$SR_flag = 0
+
+:SHRANGE_5303
+if and
+  $SR_target_state[1] == 3
+  $SR_range_level[1] == 3
+goto_if_false @SHRANGE_5342
+$SR_mission_state = 3
+$SR_flag = 0
+
+:SHRANGE_5342
+goto @SHRANGE_11087
+
+:SHRANGE_5349
+if 
+  $SR_flag == 0
+goto_if_false @SHRANGE_5946
+if or
+  $SR_skill_won == 0
+  $SR_skill_won == 3
+  $SR_skill_won == 6
+  $SR_skill_won == 9
+goto_if_false @SHRANGE_5422
+Text.PrintBig('ANR_41', 2000, TextStyle.Middle)
+
+:SHRANGE_5422
+if or
+  $SR_skill_won == 1
+  $SR_skill_won == 4
+  $SR_skill_won == 7
+  $SR_skill_won == 10
+goto_if_false @SHRANGE_5477
+Text.PrintBig('ANR_42', 2000, TextStyle.Middle)
+
+:SHRANGE_5477
+if or
+  $SR_skill_won == 2
+  $SR_skill_won == 5
+  $SR_skill_won == 8
+goto_if_false @SHRANGE_5546
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 5500
+$SR_target_state[0] = 5
+$SR_target_state[1] = 5
+$SR_target_state[2] = 5
+
+:SHRANGE_5546
+if 
+  $SR_skill_won == 11
+goto_if_false @SHRANGE_5617
+Text.PrintBig('ANR_45', 3000, TextStyle.Middle)
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 5500
+$SR_target_state[0] = 5
+$SR_target_state[1] = 5
+$SR_target_state[2] = 5
+
+:SHRANGE_5617
+if 
+  is_int_var_equal_to_int_var $SR_skill_won == $SR_skill_award_given
+goto_if_false @SHRANGE_5939
+if or
+  $SR_skill_won == 0
+  $SR_skill_won == 1
+goto_if_false @SHRANGE_5670
+Stat.IncrementFloat(50.0, 69)
+
+:SHRANGE_5670
+if or
+  $SR_skill_won == 3
+  $SR_skill_won == 4
+goto_if_false @SHRANGE_5704
+Stat.IncrementFloat(50.0, 75)
+
+:SHRANGE_5704
+if or
+  $SR_skill_won == 6
+  $SR_skill_won == 7
+goto_if_false @SHRANGE_5738
+Stat.IncrementFloat(50.0, 72)
+
+:SHRANGE_5738
+if or
+  $SR_skill_won == 9
+  $SR_skill_won == 10
+goto_if_false @SHRANGE_5772
+Stat.IncrementFloat(50.0, 77)
+
+:SHRANGE_5772
+if 
+  $SR_skill_won == 2
+goto_if_false @SHRANGE_5803
+Stat.IncrementFloat(100.0, 69)
+Stat.PlayerMadeProgress(1)
+
+:SHRANGE_5803
+if 
+  $SR_skill_won == 5
+goto_if_false @SHRANGE_5834
+Stat.IncrementFloat(100.0, 75)
+Stat.PlayerMadeProgress(1)
+
+:SHRANGE_5834
+if 
+  $SR_skill_won == 8
+goto_if_false @SHRANGE_5865
+Stat.IncrementFloat(100.0, 72)
+Stat.PlayerMadeProgress(1)
+
+:SHRANGE_5865
+if 
+  $SR_skill_won == 11
+goto_if_false @SHRANGE_5924
+Stat.IncrementFloat(100.0, 77)
+Stat.SetFloat(StatId.WeapontypePistolSkill, 1000.0)
+Player.AddScore($player1, 10000)
+Stat.PlayerMadeProgress(1)
+Audio.PlayMissionPassedTune(2)
+$player_has_fast_reload = 1
+
+:SHRANGE_5924
+$SR_skill_award_given += 1
+Stat.SetInt(StatId.ShootingRangeScore, $SR_skill_award_given)
+
+:SHRANGE_5939
+$SR_flag = 1
+
+:SHRANGE_5946
+if 
+  $SR_flag == 1
+goto_if_false @SHRANGE_6537
+if 
+  $SR_skill_won == 0
+goto_if_false @SHRANGE_5996
+$SR_mission_state = 4
+$SR_flag = 0
+
+:SHRANGE_5996
+if or
+  $SR_skill_won == 3
+  $SR_skill_won == 6
+  $SR_skill_won == 9
+goto_if_false @SHRANGE_6042
+$SR_mission_state = 4
+$SR_flag = 10
+
+:SHRANGE_6042
+if 
+  $SR_skill_won == 1
+goto_if_false @SHRANGE_6074
+$SR_mission_state = 5
+$SR_flag = 0
+
+:SHRANGE_6074
+if or
+  $SR_skill_won == 4
+  $SR_skill_won == 7
+  $SR_skill_won == 10
+goto_if_false @SHRANGE_6120
+$SR_mission_state = 5
+$SR_flag = 10
+
+:SHRANGE_6120
+if or
+  $SR_skill_won == 2
+  $SR_skill_won == 5
+  $SR_skill_won == 8
+goto_if_false @SHRANGE_6166
+$SR_mission_state = 1
+$SR_flag = 16
+
+:SHRANGE_6166
+if 
+  $SR_skill_won == 2
+goto_if_false @SHRANGE_6228
+$SR_ped_weapon[0] = 2
+$SR_ped_weapon[2] = 2
+$SR_ped_state[0] = 1
+$SR_ped_state[2] = 1
+Text.PrintBig('ANR_29', 2000, TextStyle.Middle)
+
+:SHRANGE_6228
+if 
+  $SR_skill_won == 5
+goto_if_false @SHRANGE_6290
+$SR_ped_weapon[0] = 3
+$SR_ped_weapon[2] = 3
+$SR_ped_state[0] = 1
+$SR_ped_state[2] = 1
+Text.PrintBig('ANR_53', 2000, TextStyle.Middle)
+
+:SHRANGE_6290
+if 
+  $SR_skill_won == 8
+goto_if_false @SHRANGE_6352
+$SR_ped_weapon[0] = 4
+$SR_ped_weapon[2] = 4
+$SR_ped_state[0] = 1
+$SR_ped_state[2] = 1
+Text.PrintBig('ANR_31', 2000, TextStyle.Middle)
+
+:SHRANGE_6352
+if 
+  $SR_skill_won == 5
+goto_if_false @SHRANGE_6425
+if 
+  2 >= $range_weapons_open
+goto_if_false @SHRANGE_6409
+$SR_mission_state = 20
+$SR_flag = 1
+goto @SHRANGE_6425
+
+:SHRANGE_6409
+Text.Print('ANR_44', 4000, 1)
+
+:SHRANGE_6425
+if 
+  $SR_skill_won == 8
+goto_if_false @SHRANGE_6498
+if 
+  3 >= $range_weapons_open
+goto_if_false @SHRANGE_6482
+$SR_mission_state = 20
+$SR_flag = 1
+goto @SHRANGE_6498
+
+:SHRANGE_6482
+Text.Print('ANR_44', 4000, 1)
+
+:SHRANGE_6498
+if 
+  $SR_skill_won == 11
+goto_if_false @SHRANGE_6530
+$SR_mission_state = 20
+$SR_flag = 1
+
+:SHRANGE_6530
+$SR_skill_won += 1
+
+:SHRANGE_6537
+goto @SHRANGE_11087
+
+:SHRANGE_6544
+if 
+  $SR_flag == 0
+goto_if_false @SHRANGE_6655
+$SR_targets_created[0] = 0
+$SR_targets_created[1] = 0
+$SR_targets_created[2] = 0
+$SR_target_state[0] = 5
+$SR_target_state[1] = 5
+$SR_target_state[2] = 5
+$SR_range_level[0] = 4
+$SR_range_level[1] = 4
+$SR_range_level[2] = 4
+$SR_flag = 1
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 6000
+64@ = 0
+
+:SHRANGE_6655
+if 
+  $SR_flag == 1
+goto_if_false @SHRANGE_6748
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_6748
+if 
+  3 > $range_cuts_watched
+goto_if_false @SHRANGE_6725
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:SHRANGE_6725
+$SR_flag = 2
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1500
+
+:SHRANGE_6748
+if 
+  $SR_flag == 2
+goto_if_false @SHRANGE_7053
+if 
+  $range_cuts_watched > 1
+goto_if_false @SHRANGE_6857
+Text.ClearPrints
+if 
+  Object.DoesExist($sr_target[8])
+goto_if_false @SHRANGE_6807
+Object.Delete($sr_target[8])
+
+:SHRANGE_6807
+Text.ClearThisBigPrint('ANR_18')
+Text.ClearThisBigPrint('ANR_19')
+$SR_time_check = 0
+$SR_flag = 3
+$SR_time_check = 0
+goto @SHRANGE_7053
+
+:SHRANGE_6857
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_7053
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Text.ClearThisBigPrint('ANR_41')
+Text.PrintBig('ANR_18', 4000, TextStyle.Middle)
+Text.Print('ANR_9', 4000, 1)
+Text.Print('ANR_10', 3000, 1)
+$sr_float3 = -2.0835
+$sr_float4 = 6.0428
+$z = 0.0387
+gosub @SHRANGE_16849
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$SR_flag = 3
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+$SR_target_state[0] = 0
+$SR_target_state[1] = 0
+$SR_target_state[2] = 0
+
+:SHRANGE_7053
+if 
+  $SR_flag == 3
+goto_if_false @SHRANGE_7127
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_7127
+Camera.DoFade(1, 1000)
+$SR_flag = 4
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 6000
+64@ = 0
+
+:SHRANGE_7127
+if 
+  $SR_flag == 4
+goto_if_false @SHRANGE_7709
+if 
+  $range_cuts_watched == 1
+goto_if_false @SHRANGE_7216
+if 
+  Object.DoesExist($sr_target[8])
+goto_if_false @SHRANGE_7216
+$x, $y, $z = Object.GetCoordinates($sr_target[8])
+$z -= 2.0
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+
+:SHRANGE_7216
+if or
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+  $range_cuts_watched > 1
+goto_if_false @SHRANGE_7709
+if 
+  not Camera.GetFadingStatus
+goto_if_false @SHRANGE_7489
+if 
+  $range_cuts_watched == 1
+goto_if_false @SHRANGE_7312
+if 
+  64@ == 0
+goto_if_false @SHRANGE_7305
+Camera.DoFade(0, 1000)
+64@ = 1
+
+:SHRANGE_7305
+goto @SHRANGE_7489
+
+:SHRANGE_7312
+if 
+  64@ == 0
+goto_if_false @SHRANGE_7489
+if 
+  $SR_skill_won == 1
+goto_if_false @SHRANGE_7364
+Text.PrintBig('ANR_18', 3000, TextStyle.Middle)
+
+:SHRANGE_7364
+if 
+  $SR_skill_won == 4
+goto_if_false @SHRANGE_7398
+Text.PrintBig('ANR_48', 3000, TextStyle.Middle)
+
+:SHRANGE_7398
+if 
+  $SR_skill_won == 7
+goto_if_false @SHRANGE_7432
+Text.PrintBig('ANR_24', 3000, TextStyle.Middle)
+
+:SHRANGE_7432
+if 
+  $SR_skill_won == 10
+goto_if_false @SHRANGE_7466
+Text.PrintBig('ANR_51', 3000, TextStyle.Middle)
+
+:SHRANGE_7466
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+64@ = 1
+
+:SHRANGE_7489
+if 
+  not Camera.GetFadingStatus
+goto_if_false @SHRANGE_7709
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_7709
+if 
+  2 > $range_cuts_watched
+goto_if_false @SHRANGE_7621
+if 
+  64@ == 1
+goto_if_false @SHRANGE_7621
+64@ = 2
+Camera.DoFade(1, 700)
+$range_cuts_watched = 2
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Char.DetachFromCar($scplayer)
+Char.AttachToObject($scplayer, $sr_obj, 0.0, 0.0, 1.0, 0, 90.0, WeaponType.Pistol)
+
+:SHRANGE_7621
+$SR_target_state[0] = 0
+$SR_target_state[1] = 0
+$SR_target_state[2] = 0
+$SR_targets_created[0] = 0
+$SR_targets_created[1] = 0
+$SR_targets_created[2] = 0
+Text.PrintBig('RACE2', 1000, TextStyle.MiddleSmaller)
+$SR_flag = 5
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+Player.SetControl($player1, True)
+
+:SHRANGE_7709
+if 
+  $SR_flag == 5
+goto_if_false @SHRANGE_7785
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_7785
+Text.PrintBig('RACE3', 1000, TextStyle.MiddleSmaller)
+$SR_flag = 6
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+
+:SHRANGE_7785
+if 
+  $SR_flag == 6
+goto_if_false @SHRANGE_7861
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_7861
+Text.PrintBig('RACE4', 1000, TextStyle.MiddleSmaller)
+$SR_flag = 7
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+
+:SHRANGE_7861
+if 
+  $SR_flag == 7
+goto_if_false @SHRANGE_7921
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_7921
+Text.PrintBig('RACE5', 1000, TextStyle.MiddleSmaller)
+$SR_flag = 8
+
+:SHRANGE_7921
+if 
+  $SR_flag == 8
+goto_if_false @SHRANGE_8056
+if and
+  $SR_target_state[0] == 3
+  $SR_targets_created[0] == 3
+goto_if_false @SHRANGE_7978
+$SR_mission_state = 20
+$SR_flag = 0
+
+:SHRANGE_7978
+if and
+  $SR_target_state[2] == 3
+  $SR_targets_created[2] == 3
+goto_if_false @SHRANGE_8017
+$SR_mission_state = 20
+$SR_flag = 0
+
+:SHRANGE_8017
+if and
+  $SR_target_state[1] == 3
+  $SR_targets_created[1] == 3
+goto_if_false @SHRANGE_8056
+$SR_mission_state = 3
+$SR_flag = 0
+
+:SHRANGE_8056
+if 
+  $SR_flag == 10
+goto_if_false @SHRANGE_8102
+$SR_target_state[0] = 5
+$SR_target_state[1] = 5
+$SR_target_state[2] = 5
+$SR_flag = 11
+
+:SHRANGE_8102
+if 
+  $SR_flag == 11
+goto_if_false @SHRANGE_8279
+if and
+  $SR_target_state[0] == 99
+  $SR_target_state[1] == 99
+  $SR_target_state[2] == 99
+goto_if_false @SHRANGE_8279
+Text.ClearPrints
+if 
+  $SR_skill_won == 4
+goto_if_false @SHRANGE_8188
+Text.PrintBig('ANR_48', 3000, TextStyle.Middle)
+
+:SHRANGE_8188
+if 
+  $SR_skill_won == 7
+goto_if_false @SHRANGE_8222
+Text.PrintBig('ANR_24', 3000, TextStyle.Middle)
+
+:SHRANGE_8222
+if 
+  $SR_skill_won == 10
+goto_if_false @SHRANGE_8256
+Text.PrintBig('ANR_51', 3000, TextStyle.Middle)
+
+:SHRANGE_8256
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 4000
+$SR_flag = 12
+
+:SHRANGE_8279
+if 
+  $SR_flag == 12
+goto_if_false @SHRANGE_8388
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_8388
+$SR_range_level[0] = 4
+$SR_range_level[1] = 4
+$SR_range_level[2] = 4
+$SR_targets_created[0] = 0
+$SR_targets_created[1] = 0
+$SR_targets_created[2] = 0
+$SR_flag = 4
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+Player.SetControl($player1, True)
+
+:SHRANGE_8388
+goto @SHRANGE_11087
+
+:SHRANGE_8395
+if 
+  $range_cuts_watched > 2
+goto_if_false @SHRANGE_8452
+if and
+  4 > $SR_flag
+  $SR_flag > 1
+goto_if_false @SHRANGE_8452
+$SR_time_check = 0
+$SR_flag = 4
+
+:SHRANGE_8452
+if 
+  $SR_flag == 0
+goto_if_false @SHRANGE_8577
+$sr_Score = 0
+$8126 = 0
+$8127 = 0
+$SR_targets_created[0] = 0
+$SR_targets_created[1] = 0
+$SR_targets_created[2] = 0
+$SR_target_state[0] = 5
+$SR_target_state[1] = 5
+$SR_target_state[2] = 5
+$SR_range_level[0] = 0
+$SR_range_level[1] = 5
+$SR_range_level[2] = 0
+$SR_flag = 1
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 8000
+
+:SHRANGE_8577
+if 
+  $SR_flag == 1
+goto_if_false @SHRANGE_8670
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_8670
+if 
+  3 > $range_cuts_watched
+goto_if_false @SHRANGE_8647
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:SHRANGE_8647
+$SR_flag = 2
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1500
+
+:SHRANGE_8670
+if 
+  $SR_flag == 2
+goto_if_false @SHRANGE_8980
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_8980
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Text.ClearThisBigPrint('ANR_41')
+Text.PrintBig('ANR_19', 4000, TextStyle.Middle)
+Text.Print('ANR_33', 3000, 1)
+Text.Print('ANR_34', 3000, 1)
+Text.Print('ANR_35', 3000, 1)
+Text.Print('ANR_46', 3000, 1)
+$sr_float3 = 3.0583
+$sr_float4 = 0.6889
+$z = 1.2953
+gosub @SHRANGE_16849
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$sr_float3 = 2.9703
+$sr_float4 = 1.684
+$z = 1.2513
+gosub @SHRANGE_16849
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+Camera.DoFade(1, 1000)
+$SR_flag = 3
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 12000
+$SR_target_state[0] = 5
+$SR_target_state[1] = 0
+$SR_target_state[2] = 5
+
+:SHRANGE_8980
+if 
+  $SR_flag == 3
+goto_if_false @SHRANGE_9086
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_9086
+if 
+  3 > $range_cuts_watched
+goto_if_false @SHRANGE_9042
+Camera.DoFade(0, 1000)
+
+:SHRANGE_9042
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1500
+$SR_flag = 4
+$sr_Score = 0
+$8126 = 0
+$8127 = 0
+
+:SHRANGE_9086
+if 
+  $SR_flag == 4
+goto_if_false @SHRANGE_9392
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_9392
+if 
+  not Camera.GetFadingStatus
+goto_if_false @SHRANGE_9392
+Hud.DisplayCounterWithString($sr_Score, CounterDisplay.Number, 'ANR_37')
+Hud.DisplayNthCounterWithString($8126, CounterDisplay.Number, 2, 'ANR_39')
+Hud.DisplayNthCounterWithString($8127, CounterDisplay.Number, 3, 'ANR_38')
+Camera.DoFade(1, 1000)
+if 
+  3 > $range_cuts_watched
+goto_if_false @SHRANGE_9252
+Char.DetachFromCar($scplayer)
+Char.AttachToObject($scplayer, $sr_obj, 0.0, 0.0, 1.0, 0, 90.0, WeaponType.Pistol)
+Camera.RestoreJumpcut
+
+:SHRANGE_9252
+if 
+  $range_cuts_watched == 2
+goto_if_false @SHRANGE_9284
+$range_cuts_watched = 3
+goto @SHRANGE_9300
+
+:SHRANGE_9284
+Text.PrintBig('ANR_19', 2000, TextStyle.Middle)
+
+:SHRANGE_9300
+$SR_targets_created[0] = 0
+$SR_targets_created[1] = 0
+$SR_targets_created[2] = 0
+$SR_target_state[0] = 5
+$SR_target_state[1] = 0
+$SR_target_state[2] = 5
+Text.PrintBig('RACE2', 1000, TextStyle.MiddleSmaller)
+$SR_flag = 5
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+
+:SHRANGE_9392
+if 
+  $SR_flag == 5
+goto_if_false @SHRANGE_9468
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_9468
+Text.PrintBig('RACE3', 1000, TextStyle.MiddleSmaller)
+$SR_flag = 6
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+
+:SHRANGE_9468
+if 
+  $SR_flag == 6
+goto_if_false @SHRANGE_9544
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_9544
+Text.PrintBig('RACE4', 1000, TextStyle.MiddleSmaller)
+$SR_flag = 7
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+
+:SHRANGE_9544
+if 
+  $SR_flag == 7
+goto_if_false @SHRANGE_9625
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_9625
+Text.PrintBig('RACE5', 1000, TextStyle.MiddleSmaller)
+$SR_flag = 8
+$sr_Score = 0
+$8126 = 0
+$8127 = 0
+
+:SHRANGE_9625
+if 
+  $SR_flag == 8
+goto_if_false @SHRANGE_9744
+if 
+  $8126 >= 20
+goto_if_false @SHRANGE_9690
+$SR_mission_state = 3
+$SR_flag = 0
+Hud.ClearCounter($sr_Score)
+Hud.ClearCounter($8126)
+Hud.ClearCounter($8127)
+
+:SHRANGE_9690
+if or
+  $sr_Score >= 20
+  $8127 >= 20
+goto_if_false @SHRANGE_9744
+$SR_mission_state = 20
+$SR_flag = 0
+Hud.ClearCounter($sr_Score)
+Hud.ClearCounter($8126)
+Hud.ClearCounter($8127)
+
+:SHRANGE_9744
+if 
+  $SR_flag == 10
+goto_if_false @SHRANGE_9806
+$SR_target_state[0] = 5
+$SR_target_state[1] = 5
+$SR_target_state[2] = 5
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 7000
+$SR_flag = 11
+
+:SHRANGE_9806
+if 
+  $SR_flag == 11
+goto_if_false @SHRANGE_9989
+if and
+  $SR_target_state[0] == 99
+  $SR_target_state[1] == 99
+  $SR_target_state[2] == 99
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_9989
+if 
+  $SR_skill_won == 5
+goto_if_false @SHRANGE_9898
+Text.PrintBig('ANR_49', 2000, TextStyle.Middle)
+
+:SHRANGE_9898
+if 
+  $SR_skill_won == 8
+goto_if_false @SHRANGE_9932
+Text.PrintBig('ANR_25', 2000, TextStyle.Middle)
+
+:SHRANGE_9932
+if 
+  $SR_skill_won == 11
+goto_if_false @SHRANGE_9966
+Text.PrintBig('ANR_52', 2000, TextStyle.Middle)
+
+:SHRANGE_9966
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 4000
+$SR_flag = 12
+
+:SHRANGE_9989
+if 
+  $SR_flag == 12
+goto_if_false @SHRANGE_10205
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_10205
+$sr_Score = 0
+$8126 = 0
+$8127 = 0
+$SR_targets_created[1] = 0
+$SR_target_state[1] = 0
+$SR_range_level[0] = 0
+$SR_range_level[1] = 5
+$SR_range_level[2] = 0
+$sr_Score = 0
+$8126 = 0
+$8127 = 0
+Hud.DisplayCounterWithString($sr_Score, CounterDisplay.Number, 'ANR_37')
+Hud.DisplayNthCounterWithString($8126, CounterDisplay.Number, 2, 'ANR_39')
+Hud.DisplayNthCounterWithString($8127, CounterDisplay.Number, 3, 'ANR_38')
+Text.PrintBig('RACE2', 1000, TextStyle.MiddleSmaller)
+$SR_flag = 5
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 1000
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+
+:SHRANGE_10205
+goto @SHRANGE_11087
+
+:SHRANGE_10212
+if 
+  $SR_flag == 0
+goto_if_false @SHRANGE_10269
+Text.PrintBig('ANR_16', 3000, TextStyle.Middle)
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 3000
+$SR_flag = 1
+
+:SHRANGE_10269
+if 
+  $SR_flag == 1
+goto_if_false @SHRANGE_10320
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_10320
+Camera.DoFade(0, 1000)
+$SR_flag = 2
+
+:SHRANGE_10320
+if 
+  $SR_flag == 2
+goto_if_false @SHRANGE_10378
+if 
+  not Camera.GetFadingStatus
+goto_if_false @SHRANGE_10378
+set_var_int_to_lvar_int $SR_time_check = TIMERA
+$SR_time_check += 500
+Stat.ShowUpdateStats(True)
+$SR_flag = 3
+
+:SHRANGE_10378
+if 
+  $SR_flag == 3
+goto_if_false @SHRANGE_11080
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $SR_time_check
+goto_if_false @SHRANGE_11080
+$sr_float3 = 2.0
+$sr_float4 = -12.0
+$z = 0.0
+Hud.ClearCounter($sr_Score)
+Hud.ClearCounter($8126)
+Hud.ClearCounter($8127)
+Char.DetachFromCar($scplayer)
+gosub @SHRANGE_16849
+Pad.SetPlayerCycleWeaponButton($player1, True)
+Char.RemoveWeapon(22, $scplayer)
+if 
+  $ammo > 0
+goto_if_false @SHRANGE_10547
+
+:SHRANGE_10504
+if 
+  not Streaming.HasModelLoaded($ModelForWeaponType)
+goto_if_false @SHRANGE_10536
+Streaming.RequestModel($ModelForWeaponType)
+wait 0
+goto @SHRANGE_10504
+
+:SHRANGE_10536
+Char.GiveWeapon($scplayer, $WeaponType, $ammo)
+
+:SHRANGE_10547
+Char.RemoveWeapon(28, $scplayer)
+if 
+  $8132 > 0
+goto_if_false @SHRANGE_10615
+
+:SHRANGE_10572
+if 
+  not Streaming.HasModelLoaded($8140)
+goto_if_false @SHRANGE_10604
+Streaming.RequestModel($8140)
+wait 0
+goto @SHRANGE_10572
+
+:SHRANGE_10604
+Char.GiveWeapon($scplayer, $8136, $8132)
+
+:SHRANGE_10615
+Char.RemoveWeapon(25, $scplayer)
+if 
+  $8133 > 0
+goto_if_false @SHRANGE_10683
+
+:SHRANGE_10640
+if 
+  not Streaming.HasModelLoaded($8141)
+goto_if_false @SHRANGE_10672
+Streaming.RequestModel($8141)
+wait 0
+goto @SHRANGE_10640
+
+:SHRANGE_10672
+Char.GiveWeapon($scplayer, $8137, $8133)
+
+:SHRANGE_10683
+Char.RemoveWeapon(30, $scplayer)
+if 
+  $8134 > 0
+goto_if_false @SHRANGE_10751
+
+:SHRANGE_10708
+if 
+  not Streaming.HasModelLoaded($8142)
+goto_if_false @SHRANGE_10740
+Streaming.RequestModel($8142)
+wait 0
+goto @SHRANGE_10708
+
+:SHRANGE_10740
+Char.GiveWeapon($scplayer, $8138, $8134)
+
+:SHRANGE_10751
+Pad.SetPlayerDuckButton($player1, True)
+Object.Delete($sr_obj)
+Text.ClearPrints
+Char.SetCoordinatesDontWarpGang($scplayer, $x, $y, $z)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SHRANGE_10802
+Char.FreezePosition($scplayer, False)
+
+:SHRANGE_10802
+Player.SetControl($player1, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SHRANGE_10845
+Char.SetHeading($scplayer, 59@($SR_range_id,4f))
+
+:SHRANGE_10845
+$SR_ped_can_be_created[1] = 1
+Camera.DoFade(1, 1000)
+$SR_mission_state = 0
+$SR_flag = 0
+$SR_targets_created[0] = 0
+$SR_targets_created[1] = 0
+$SR_targets_created[2] = 0
+$SR_ped_weapon[0] = 0
+$SR_ped_weapon[1] = 0
+$SR_ped_weapon[2] = 0
+$SR_ped_state[0] = 1
+if 
+  Char.IsDead($SR_ped[1])
+goto_if_false @SHRANGE_10945
+$SR_ped_state[1] = 0
+
+:SHRANGE_10945
+$SR_ped_state[2] = 1
+$SR_range_level[0] = 0
+$SR_range_level[1] = 0
+$SR_range_level[2] = 0
+$SR_target_state[0] = 0
+$SR_target_state[1] = 0
+$SR_target_state[2] = 0
+if 
+  34@ == 1
+goto_if_false @SHRANGE_11039
+Text.ClearThisPrintBigNow(TextStyle.Middle)
+Text.Print('ANR_A1', 4000, 1)
+34@ = 0
+
+:SHRANGE_11039
+if and
+  $range_weapons_open <> 4
+  34@ <> 1
+goto_if_false @SHRANGE_11080
+Text.Print('ANR_55', 4000, 1)
+
+:SHRANGE_11080
+goto @SHRANGE_11087
+
+:SHRANGE_11087
+return 
+
+:SHRANGE_11089
+$sr_i = 0
+set_var_int_to_var_int $this_Watch = $SR_target_state[0]
+set_var_int_to_var_int $8146 = $SR_target_state[1]
+set_var_int_to_var_int $8149 = $SR_target_state[2]
+
+:SHRANGE_11120
+if 
+  3 > $sr_i
+goto_if_false @SHRANGE_13476
+switch_start $SR_ped_state($sr_i,3i) total_jumps 5 default_jump 0 @SHRANGE_13462 jumps 0 @SHRANGE_11205 1 @SHRANGE_11619 2 @SHRANGE_11888 3 @SHRANGE_12876 4 @SHRANGE_13415 -1 @SHRANGE_13462 -1 @SHRANGE_13462
+
+:SHRANGE_11205
+if 
+  $SR_ped_can_be_created($sr_i,3i) == 1
+goto_if_false @SHRANGE_11612
+$SR_ped_state($sr_i,3i) = 1
+set_var_float_to_lvar_float $x = 35@($SR_range_id,4f)
+set_var_float_to_lvar_float $y = 39@($SR_range_id,4f)
+set_var_float_to_lvar_float $z = 43@($SR_range_id,4f)
+set_lvar_float_to_lvar_float 63@ = 59@($SR_range_id,4f)
+if 
+  $sr_i == 1
+goto_if_false @SHRANGE_11403
+if 
+  63@ == 90.0
+goto_if_false @SHRANGE_11337
+add_float_lvar_to_float_var $y += 47@($SR_range_id,4f)
+
+:SHRANGE_11337
+if 
+  63@ == 270.0
+goto_if_false @SHRANGE_11370
+sub_float_lvar_from_float_var $y -= 47@($SR_range_id,4f)
+
+:SHRANGE_11370
+if 
+  63@ == 0.0
+goto_if_false @SHRANGE_11403
+add_float_lvar_to_float_var $x += 47@($SR_range_id,4f)
+
+:SHRANGE_11403
+if 
+  $sr_i == 2
+goto_if_false @SHRANGE_11520
+if 
+  63@ == 90.0
+goto_if_false @SHRANGE_11454
+add_float_lvar_to_float_var $y += 51@($SR_range_id,4f)
+
+:SHRANGE_11454
+if 
+  63@ == 270.0
+goto_if_false @SHRANGE_11487
+sub_float_lvar_from_float_var $y -= 51@($SR_range_id,4f)
+
+:SHRANGE_11487
+if 
+  63@ == 0.0
+goto_if_false @SHRANGE_11520
+add_float_lvar_to_float_var $x += 51@($SR_range_id,4f)
+
+:SHRANGE_11520
+$SR_ped($sr_i,3i) = Char.CreateRandom($x, $y, $z)
+if 
+  not Char.IsDead($SR_ped($sr_i,3i))
+goto_if_false @SHRANGE_11612
+Char.SetProofs($SR_ped($sr_i,3i), True, True, True, True, True)
+Char.SetDecisionMaker($SR_ped($sr_i,3i), $sr_Dec)
+Char.SetAccuracy($SR_ped($sr_i,3i), 93)
+Char.SetHeading($SR_ped($sr_i,3i), 63@)
+
+:SHRANGE_11612
+goto @SHRANGE_13462
+
+:SHRANGE_11619
+if 
+  not Char.IsDead($SR_ped($sr_i,3i))
+goto_if_false @SHRANGE_11881
+if 
+  $SR_ped_weapon($sr_i,4i) == 0
+goto_if_false @SHRANGE_11674
+$SR_ped_weapon($sr_i,4i) = Math.RandomIntInRange(1, 5)
+
+:SHRANGE_11674
+if 
+  $SR_ped_weapon($sr_i,4i) == 1
+goto_if_false @SHRANGE_11723
+Char.GiveWeapon($SR_ped($sr_i,3i), WeaponType.Pistol, 99999)
+Char.SetCurrentWeapon($SR_ped($sr_i,3i), WeaponType.Pistol)
+
+:SHRANGE_11723
+if 
+  $SR_ped_weapon($sr_i,4i) == 2
+goto_if_false @SHRANGE_11772
+Char.GiveWeapon($SR_ped($sr_i,3i), WeaponType.MicroUzi, 99999)
+Char.SetCurrentWeapon($SR_ped($sr_i,3i), WeaponType.MicroUzi)
+
+:SHRANGE_11772
+if 
+  $SR_ped_weapon($sr_i,4i) == 3
+goto_if_false @SHRANGE_11821
+Char.GiveWeapon($SR_ped($sr_i,3i), WeaponType.Shotgun, 99999)
+Char.SetCurrentWeapon($SR_ped($sr_i,3i), WeaponType.Shotgun)
+
+:SHRANGE_11821
+if 
+  $SR_ped_weapon($sr_i,4i) == 4
+goto_if_false @SHRANGE_11870
+Char.GiveWeapon($SR_ped($sr_i,3i), WeaponType.Ak47, 99999)
+Char.SetCurrentWeapon($SR_ped($sr_i,3i), WeaponType.Ak47)
+
+:SHRANGE_11870
+$SR_ped_state($sr_i,3i) = 2
+
+:SHRANGE_11881
+goto @SHRANGE_13462
+
+:SHRANGE_11888
+$sr_int1 = 0
+if 
+  $SR_target_state($sr_i,3i) == 2
+goto_if_false @SHRANGE_11924
+$sr_int1 = 1
+
+:SHRANGE_11924
+if and
+  $SR_mission_state == 5
+  $SR_target_state[1] == 2
+goto_if_false @SHRANGE_11956
+$sr_int1 = 1
+
+:SHRANGE_11956
+if 
+  $sr_i == 0
+goto_if_false @SHRANGE_11982
+set_var_int_to_var_int $8144 = $sr_int1
+
+:SHRANGE_11982
+if 
+  $sr_i == 1
+goto_if_false @SHRANGE_12008
+set_var_int_to_var_int $8147 = $sr_int1
+
+:SHRANGE_12008
+if 
+  $sr_i == 2
+goto_if_false @SHRANGE_12034
+set_var_int_to_var_int $8150 = $sr_int1
+
+:SHRANGE_12034
+if 
+  $sr_int1 == 1
+goto_if_false @SHRANGE_12807
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $sr_time_to_new_target($sr_i,3i)
+goto_if_false @SHRANGE_12800
+$sr_int1 = Math.RandomIntInRange(1, 8)
+if 
+  $SR_mission_state == 5
+goto_if_false @SHRANGE_12116
+$sr_int1 += 8
+goto @SHRANGE_12166
+
+:SHRANGE_12116
+if 
+  $sr_i == 2
+goto_if_false @SHRANGE_12141
+$sr_int1 += 16
+
+:SHRANGE_12141
+if 
+  $sr_i == 1
+goto_if_false @SHRANGE_12166
+$sr_int1 += 8
+
+:SHRANGE_12166
+$sr_j = 0
+
+:SHRANGE_12173
+if and
+  Object.HasBeenDamaged($sr_target($sr_int1,24i))
+  8 > $sr_j
+goto_if_false @SHRANGE_12260
+$sr_int1 += 1
+$sr_j += 1
+if or
+  $sr_int1 == 8
+  $sr_int1 == 24
+  $sr_int1 == 16
+goto_if_false @SHRANGE_12253
+$sr_int1 -= 7
+
+:SHRANGE_12253
+goto @SHRANGE_12173
+
+:SHRANGE_12260
+if 
+  $sr_i == 0
+goto_if_false @SHRANGE_12286
+set_var_int_to_var_int $8145 = $sr_j
+
+:SHRANGE_12286
+if 
+  $sr_i == 1
+goto_if_false @SHRANGE_12312
+set_var_int_to_var_int $8148 = $sr_j
+
+:SHRANGE_12312
+if 
+  $sr_i == 2
+goto_if_false @SHRANGE_12338
+set_var_int_to_var_int $8151 = $sr_j
+
+:SHRANGE_12338
+if 
+  not Char.IsDead($SR_ped($sr_i,3i))
+goto_if_false @SHRANGE_12800
+$x, $y, $z = Object.GetCoordinates($sr_target($sr_int1,24i))
+if and
+  $sr_int1 > 8
+  16 > $sr_int1
+goto_if_false @SHRANGE_12408
+$sr_int1 -= 8
+
+:SHRANGE_12408
+if and
+  $sr_int1 > 16
+  24 > $sr_int1
+goto_if_false @SHRANGE_12440
+$sr_int1 -= 16
+
+:SHRANGE_12440
+if 
+  63@ == 0.0
+goto_if_false @SHRANGE_12473
+add_float_var_to_float_var $x += $target_offset_x($sr_int1,8f)
+
+:SHRANGE_12473
+if 
+  63@ == 90.0
+goto_if_false @SHRANGE_12506
+add_float_var_to_float_var $y += $target_offset_x($sr_int1,8f)
+
+:SHRANGE_12506
+if 
+  63@ == 270.0
+goto_if_false @SHRANGE_12539
+sub_float_var_from_float_var $y -= $target_offset_x($sr_int1,8f)
+
+:SHRANGE_12539
+add_float_var_to_float_var $z += $target_offset_z($sr_int1,8f)
+if 
+  $SR_skill_won >= 8
+goto_if_false @SHRANGE_12652
+$sr_int1 = Char.GetScriptTaskStatus($SR_ped($sr_i,3i), 1640)
+if 
+  is_int_var_equal_to_constant $sr_int1 == 7
+goto_if_false @SHRANGE_12645
+Char.FreezePosition($SR_ped($sr_i,3i), True)
+Task.ShootAtCoord($SR_ped($sr_i,3i), $x, $y, $z, 800)
+Char.SetAccuracy($SR_ped($sr_i,3i), 95)
+
+:SHRANGE_12645
+goto @SHRANGE_12717
+
+:SHRANGE_12652
+$sr_int1 = Char.GetScriptTaskStatus($SR_ped($sr_i,3i), 1640)
+if 
+  is_int_var_equal_to_constant $sr_int1 == 7
+goto_if_false @SHRANGE_12717
+Char.FreezePosition($SR_ped($sr_i,3i), True)
+Task.ShootAtCoord($SR_ped($sr_i,3i), $x, $y, $z, 1500)
+
+:SHRANGE_12717
+if 
+  $SR_skill_won >= 8
+goto_if_false @SHRANGE_12765
+$sr_int1 = Math.RandomIntInRange(200, 400)
+$sr_time_to_new_target($sr_i,3i) += 600
+goto @SHRANGE_12776
+
+:SHRANGE_12765
+$sr_int1 = Math.RandomIntInRange(200, 1600)
+
+:SHRANGE_12776
+set_var_int_to_lvar_int $sr_time_to_new_target($sr_i,3i) = TIMERA
+add_int_var_to_int_var $sr_time_to_new_target($sr_i,3i) += $sr_int1
+
+:SHRANGE_12800
+goto @SHRANGE_12869
+
+:SHRANGE_12807
+if 
+  not Char.IsDead($SR_ped($sr_i,3i))
+goto_if_false @SHRANGE_12869
+$sr_int1 = Char.GetScriptTaskStatus($SR_ped($sr_i,3i), 1640)
+if 
+  not is_int_var_equal_to_constant $sr_int1 == 7
+goto_if_false @SHRANGE_12869
+Char.ClearTasks($SR_ped($sr_i,3i))
+
+:SHRANGE_12869
+goto @SHRANGE_13462
+
+:SHRANGE_12876
+if 
+  not Char.IsDead($SR_ped($sr_i,3i))
+goto_if_false @SHRANGE_13408
+$x, $y, $z = Char.GetCoordinates($SR_ped($sr_i,3i))
+Char.FreezePosition($SR_ped($sr_i,3i), False)
+Path.FlushRoute
+$sr_seq = Sequence.Open()
+$sr_float3 = 0.0
+add_float_lvar_to_float_var $sr_float3 += 47@($SR_range_id,4f)
+$sr_float4 = -1.0
+$sr_float1 = Math.Cos(59@($SR_range_id,4f))
+$sr_float2 = Math.Sin(59@($SR_range_id,4f))
+if 
+  59@($SR_range_id,4f) == 0.0
+goto_if_false @SHRANGE_13052
+set_var_float_to_var_float $x = $sr_float3
+mult_float_var_by_float_var $x *= $sr_float1
+set_var_float_to_var_float $y = $sr_float4
+mult_float_var_by_float_var $y *= $sr_float1
+goto @SHRANGE_13094
+
+:SHRANGE_13052
+$sr_float4 *= -1.0
+set_var_float_to_var_float $x = $sr_float4
+mult_float_var_by_float_var $x *= $sr_float2
+set_var_float_to_var_float $y = $sr_float3
+mult_float_var_by_float_var $y *= $sr_float2
+
+:SHRANGE_13094
+add_float_lvar_to_float_var $x += 35@($SR_range_id,4f)
+add_float_lvar_to_float_var $y += 39@($SR_range_id,4f)
+add_float_lvar_to_float_var $z += 43@($SR_range_id,4f)
+set_lvar_float_to_lvar_float 63@ = 59@($SR_range_id,4f)
+63@ -= 180.0
+Task.AchieveHeading(-1, 63@)
+set_lvar_float_to_lvar_float 63@ = 59@($SR_range_id,4f)
+Path.ExtendRoute($x, $y, $z)
+$sr_float3 = -0.5
+add_float_lvar_to_float_var $sr_float3 += 47@($SR_range_id,4f)
+$sr_float4 = -4.5
+if 
+  59@($SR_range_id,4f) == 0.0
+goto_if_false @SHRANGE_13278
+set_var_float_to_var_float $x = $sr_float3
+mult_float_var_by_float_var $x *= $sr_float1
+set_var_float_to_var_float $y = $sr_float4
+mult_float_var_by_float_var $y *= $sr_float1
+goto @SHRANGE_13320
+
+:SHRANGE_13278
+$sr_float4 *= -1.0
+set_var_float_to_var_float $x = $sr_float4
+mult_float_var_by_float_var $x *= $sr_float2
+set_var_float_to_var_float $y = $sr_float3
+mult_float_var_by_float_var $y *= $sr_float2
+
+:SHRANGE_13320
+add_float_lvar_to_float_var $x += 35@($SR_range_id,4f)
+add_float_lvar_to_float_var $y += 39@($SR_range_id,4f)
+add_float_lvar_to_float_var $z += 43@($SR_range_id,4f)
+Path.ExtendRoute($x, $y, $z)
+Task.FollowPointRoute(-1, 4, RouteMode.Once)
+Sequence.Close($sr_seq)
+Char.PerformSequence($SR_ped($sr_i,3i), $sr_seq)
+Sequence.Clear($sr_seq)
+$SR_ped_state($sr_i,3i) = 99
+
+:SHRANGE_13408
+goto @SHRANGE_13462
+
+:SHRANGE_13415
+if 
+  not Char.IsDead($SR_ped($sr_i,3i))
+goto_if_false @SHRANGE_13444
+Char.Delete($SR_ped($sr_i,3i))
+
+:SHRANGE_13444
+$SR_ped_state($sr_i,3i) = 0
+goto @SHRANGE_13462
+
+:SHRANGE_13462
+$sr_i += 1
+goto @SHRANGE_11120
+
+:SHRANGE_13476
+return 
+
+:SHRANGE_13478
+$sr_i = 0
+
+:SHRANGE_13485
+if 
+  3 > $sr_i
+goto_if_false @SHRANGE_16847
+switch_start $SR_target_state($sr_i,3i) total_jumps 6 default_jump 0 @SHRANGE_16833 jumps 0 @SHRANGE_13570 1 @SHRANGE_14352 2 @SHRANGE_14681 3 @SHRANGE_16282 4 @SHRANGE_16584 5 @SHRANGE_16705 -1 @SHRANGE_16833
+
+:SHRANGE_13570
+DecisionMakerChar.ClearEventResponse($sr_Dec, 15)
+$SR_target_state($sr_i,3i) = 1
+if 
+  $SR_range_level($sr_i,3i) == 0
+goto_if_false @SHRANGE_13656
+$SR_range_level($sr_i,3i) = Math.RandomIntInRange(1, 3)
+if 
+  $SR_range_level($sr_i,3i) == 2
+goto_if_false @SHRANGE_13656
+$SR_range_level($sr_i,3i) = 4
+
+:SHRANGE_13656
+$x = 0.0
+$y = 5.0
+$z = 4.0
+set_lvar_float_to_lvar_float 63@ = 59@($SR_range_id,4f)
+if 
+  5 > $SR_range_level($sr_i,3i)
+goto_if_false @SHRANGE_13887
+if 
+  $sr_i == 1
+goto_if_false @SHRANGE_13750
+add_float_lvar_to_float_var $x += 47@($SR_range_id,4f)
+
+:SHRANGE_13750
+if 
+  $sr_i == 2
+goto_if_false @SHRANGE_13780
+add_float_lvar_to_float_var $x += 51@($SR_range_id,4f)
+
+:SHRANGE_13780
+if 
+  $SR_range_level($sr_i,3i) == 1
+goto_if_false @SHRANGE_13812
+$y += 0.0
+
+:SHRANGE_13812
+if 
+  $SR_range_level($sr_i,3i) == 2
+goto_if_false @SHRANGE_13844
+$y += 5.0
+
+:SHRANGE_13844
+if or
+  $SR_range_level($sr_i,3i) == 3
+  $SR_range_level($sr_i,3i) == 4
+goto_if_false @SHRANGE_13887
+$y += 10.0
+
+:SHRANGE_13887
+if 
+  $SR_range_level($sr_i,3i) == 5
+goto_if_false @SHRANGE_13971
+$sr_yoffset = Math.RandomFloatInRange(0.0, 10.0)
+add_float_var_to_float_var $y += $sr_yoffset
+$sr_direction = Math.RandomIntInRange(0, 2)
+if 
+  $sr_direction == 1
+goto_if_false @SHRANGE_13971
+add_float_lvar_to_float_var $x += 51@($SR_range_id,4f)
+
+:SHRANGE_13971
+set_var_float_to_var_float $sr_float3 = $x
+set_var_float_to_var_float $sr_float4 = $y
+gosub @SHRANGE_16849
+set_var_int_to_var_int $sr_int1 = $sr_i
+$sr_int1 *= 8
+if 
+  Object.DoesExist($sr_target($sr_int1,24i))
+goto_if_false @SHRANGE_14038
+Object.Delete($sr_target($sr_int1,24i))
+
+:SHRANGE_14038
+$sr_target($sr_int1,24i) = Object.CreateNoOffset($sr_object_name[0], $x, $y, $z)
+Object.SetRotation($sr_target($sr_int1,24i), 90.0, 0.0, 63@)
+Audio.ReportMissionAudioEventAtObject($sr_target($sr_int1,24i), 1032)
+$sr_target_rotation($sr_i,3f) = 90.0
+$sr_j = 1
+
+:SHRANGE_14114
+if 
+  8 > $sr_j
+goto_if_false @SHRANGE_14322
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+add_int_var_to_int_var $sr_obj_number += $sr_j
+if 
+  Object.DoesExist($sr_target($sr_obj_number,24i))
+goto_if_false @SHRANGE_14184
+Object.Delete($sr_target($sr_obj_number,24i))
+
+:SHRANGE_14184
+$sr_target($sr_obj_number,24i) = Object.CreateNoOffset($sr_object_name($sr_j,8i), $x, $y, $z)
+Object.AttachToObject($sr_target($sr_obj_number,24i), $sr_target($sr_int1,24i), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+if 
+  Object.DoesExist($sr_target($sr_obj_number,24i))
+goto_if_false @SHRANGE_14308
+Object.SetRotation($sr_target($sr_obj_number,24i), 90.0, 0.0, 63@)
+Object.SetCollision($sr_target($sr_obj_number,24i), False)
+
+:SHRANGE_14308
+$sr_j += 1
+goto @SHRANGE_14114
+
+:SHRANGE_14322
+$SR_targets_created($sr_i,3i) += 1
+set_var_int_to_lvar_int $sr_target_advance_time($sr_i,3i) = TIMERA
+goto @SHRANGE_16833
+
+:SHRANGE_14352
+set_var_int_to_lvar_int $sr_int1 = TIMERA
+sub_int_var_from_int_var $sr_int1 -= $sr_target_advance_time($sr_i,3i)
+if 
+  $sr_int1 > 3000
+goto_if_false @SHRANGE_14399
+$sr_int1 = 3000
+
+:SHRANGE_14399
+cset_var_float_to_var_int $sr_float1 = integer $sr_int1
+$sr_float1 /= 3000.0
+$sr_float1 *= -90.0
+$sr_float1 += 90.0
+set_var_float_to_var_float $sr_target_rotation($sr_i,3f) = $sr_float1
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+if 
+  Object.DoesExist($sr_target($sr_obj_number,24i))
+goto_if_false @SHRANGE_14508
+Object.SetRotation($sr_target($sr_obj_number,24i), $sr_target_rotation($sr_i,3f), 0.0, 63@)
+
+:SHRANGE_14508
+if 
+  0.0 >= $sr_target_rotation($sr_i,3f)
+goto_if_false @SHRANGE_14674
+$SR_target_state($sr_i,3i) = 2
+set_var_int_to_lvar_int $sr_target_advance_time($sr_i,3i) = TIMERA
+if or
+  $SR_range_level($sr_i,3i) == 4
+  $SR_range_level($sr_i,3i) == 5
+goto_if_false @SHRANGE_14601
+Audio.ReportMissionAudioEventAtObject($sr_target($sr_obj_number,24i), 1033)
+
+:SHRANGE_14601
+$sr_j = 0
+
+:SHRANGE_14608
+if 
+  8 > $sr_j
+goto_if_false @SHRANGE_14674
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+add_int_var_to_int_var $sr_obj_number += $sr_j
+Object.SetCollision($sr_target($sr_obj_number,24i), True)
+$sr_j += 1
+goto @SHRANGE_14608
+
+:SHRANGE_14674
+goto @SHRANGE_16833
+
+:SHRANGE_14681
+if 
+  $SR_range_level($sr_i,3i) == 4
+goto_if_false @SHRANGE_15317
+set_var_int_to_lvar_int $sr_int1 = TIMERA
+sub_int_var_from_int_var $sr_int1 -= $sr_target_advance_time($sr_i,3i)
+if 
+  $SR_targets_created($sr_i,3i) == 4
+goto_if_false @SHRANGE_14756
+$SR_targets_created($sr_i,3i) = 1
+
+:SHRANGE_14756
+if 
+  $SR_targets_created($sr_i,3i) == 1
+goto_if_false @SHRANGE_14832
+if 
+  $sr_int1 > 20000
+goto_if_false @SHRANGE_14832
+$sr_int1 = 20000
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+Audio.ReportMissionAudioEventAtObject($sr_target($sr_obj_number,24i), 1034)
+
+:SHRANGE_14832
+if 
+  $SR_targets_created($sr_i,3i) == 2
+goto_if_false @SHRANGE_14908
+if 
+  $sr_int1 > 15000
+goto_if_false @SHRANGE_14908
+$sr_int1 = 15000
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+Audio.ReportMissionAudioEventAtObject($sr_target($sr_obj_number,24i), 1034)
+
+:SHRANGE_14908
+if 
+  $SR_targets_created($sr_i,3i) == 3
+goto_if_false @SHRANGE_14984
+if 
+  $sr_int1 > 10000
+goto_if_false @SHRANGE_14984
+$sr_int1 = 10000
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+Audio.ReportMissionAudioEventAtObject($sr_target($sr_obj_number,24i), 1034)
+
+:SHRANGE_14984
+cset_var_float_to_var_int $sr_float1 = integer $sr_int1
+if 
+  $SR_targets_created($sr_i,3i) == 1
+goto_if_false @SHRANGE_15024
+$sr_float1 /= 20000.0
+
+:SHRANGE_15024
+if 
+  $SR_targets_created($sr_i,3i) == 2
+goto_if_false @SHRANGE_15056
+$sr_float1 /= 15000.0
+
+:SHRANGE_15056
+if 
+  $SR_targets_created($sr_i,3i) == 3
+goto_if_false @SHRANGE_15088
+$sr_float1 /= 10000.0
+
+:SHRANGE_15088
+$sr_float1 *= 10.0
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+$x, $y, $z = Object.GetCoordinates($sr_target($sr_obj_number,24i))
+if 
+  63@ == 90.0
+goto_if_false @SHRANGE_15182
+set_var_float_to_lvar_float $x = 35@($SR_range_id,4f)
+$x -= 15.0
+add_float_var_to_float_var $x += $sr_float1
+
+:SHRANGE_15182
+if 
+  63@ == 270.0
+goto_if_false @SHRANGE_15233
+set_var_float_to_lvar_float $x = 35@($SR_range_id,4f)
+$x += 15.0
+sub_float_var_from_float_var $x -= $sr_float1
+
+:SHRANGE_15233
+if 
+  63@ == 0.0
+goto_if_false @SHRANGE_15284
+set_var_float_to_lvar_float $y = 39@($SR_range_id,4f)
+$y += 15.0
+sub_float_var_from_float_var $y -= $sr_float1
+
+:SHRANGE_15284
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+Object.SetCoordinates($sr_target($sr_obj_number,24i), $x, $y, $z)
+
+:SHRANGE_15317
+if 
+  $SR_range_level($sr_i,3i) == 5
+goto_if_false @SHRANGE_15674
+set_var_int_to_lvar_int $sr_int1 = TIMERA
+sub_int_var_from_int_var $sr_int1 -= $sr_target_advance_time($sr_i,3i)
+if 
+  $sr_int1 > 10000
+goto_if_false @SHRANGE_15523
+$sr_int1 = 10000
+$SR_target_state($sr_i,3i) = 3
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+Audio.ReportMissionAudioEventAtObject($sr_target($sr_obj_number,24i), 1034)
+Audio.ReportMissionAudioEventAtPosition($x, $y, $z, 1032)
+set_var_int_to_lvar_int $sr_target_advance_time($sr_i,3i) = TIMERA
+$sr_j = 0
+
+:SHRANGE_15457
+if 
+  8 > $sr_j
+goto_if_false @SHRANGE_15523
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+add_int_var_to_int_var $sr_obj_number += $sr_j
+Object.SetCollision($sr_target($sr_obj_number,24i), False)
+$sr_j += 1
+goto @SHRANGE_15457
+
+:SHRANGE_15523
+cset_var_float_to_var_int $sr_float1 = integer $sr_int1
+$sr_float1 /= 10000.0
+mult_float_var_by_float_lvar $sr_float1 *= 51@($SR_range_id,4f)
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+if 
+  $sr_direction == 0
+goto_if_false @SHRANGE_15601
+set_var_float_to_var_float $sr_float3 = $sr_float1
+goto @SHRANGE_15621
+
+:SHRANGE_15601
+set_var_float_to_lvar_float $sr_float3 = 51@($SR_range_id,4f)
+sub_float_var_from_float_var $sr_float3 -= $sr_float1
+
+:SHRANGE_15621
+$z = 4.0
+set_var_float_to_var_float $sr_float4 = $sr_yoffset
+$sr_float4 += 5.0
+gosub @SHRANGE_16849
+Object.SetCoordinates($sr_target($sr_obj_number,24i), $x, $y, $z)
+
+:SHRANGE_15674
+set_var_int_to_var_int $sr_int1 = $sr_destroyed_elements($sr_i,3i)
+$sr_destroyed_elements($sr_i,3i) = 0
+$sr_j = 0
+
+:SHRANGE_15704
+if 
+  8 > $sr_j
+goto_if_false @SHRANGE_15790
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+add_int_var_to_int_var $sr_obj_number += $sr_j
+if 
+  Object.HasBeenDamaged($sr_target($sr_obj_number,24i))
+goto_if_false @SHRANGE_15776
+$sr_destroyed_elements($sr_i,3i) += 1
+
+:SHRANGE_15776
+$sr_j += 1
+goto @SHRANGE_15704
+
+:SHRANGE_15790
+if 
+  is_int_var_greater_than_int_var $sr_destroyed_elements($sr_i,3i) > $sr_int1
+goto_if_false @SHRANGE_15825
+Audio.ReportMissionAudioEventAtObject($sr_target($sr_obj_number,24i), 1031)
+
+:SHRANGE_15825
+if 
+  $sr_i == 1
+goto_if_false @SHRANGE_16148
+if 
+  is_int_var_greater_than_int_var $sr_destroyed_elements[1] > $sr_int1
+goto_if_false @SHRANGE_16148
+set_var_int_to_var_int $sr_int2 = $sr_destroyed_elements[1]
+sub_int_var_from_int_var $sr_int2 -= $sr_int1
+$sr_int1 = Math.RandomIntInRange(0, 2)
+if 
+  $sr_int1 == 0
+goto_if_false @SHRANGE_16030
+if 
+  not Char.IsDead($SR_ped[0])
+goto_if_false @SHRANGE_16023
+if 
+  Char.IsShooting($SR_ped[0])
+goto_if_false @SHRANGE_15952
+add_int_var_to_int_var $sr_Score += $sr_int2
+goto @SHRANGE_16023
+
+:SHRANGE_15952
+if 
+  Char.IsShooting($scplayer)
+goto_if_false @SHRANGE_15983
+add_int_var_to_int_var $8126 += $sr_int2
+goto @SHRANGE_16023
+
+:SHRANGE_15983
+if 
+  not Char.IsDead($SR_ped[2])
+goto_if_false @SHRANGE_16023
+if 
+  Char.IsShooting($SR_ped[2])
+goto_if_false @SHRANGE_16023
+add_int_var_to_int_var $8127 += $sr_int2
+
+:SHRANGE_16023
+goto @SHRANGE_16148
+
+:SHRANGE_16030
+if 
+  not Char.IsDead($SR_ped[2])
+goto_if_false @SHRANGE_16148
+if 
+  Char.IsShooting($SR_ped[2])
+goto_if_false @SHRANGE_16077
+add_int_var_to_int_var $8127 += $sr_int2
+goto @SHRANGE_16148
+
+:SHRANGE_16077
+if 
+  Char.IsShooting($scplayer)
+goto_if_false @SHRANGE_16108
+add_int_var_to_int_var $8126 += $sr_int2
+goto @SHRANGE_16148
+
+:SHRANGE_16108
+if 
+  not Char.IsDead($SR_ped[0])
+goto_if_false @SHRANGE_16148
+if 
+  Char.IsShooting($SR_ped[0])
+goto_if_false @SHRANGE_16148
+add_int_var_to_int_var $sr_Score += $sr_int2
+
+:SHRANGE_16148
+if 
+  $sr_destroyed_elements($sr_i,3i) == 7
+goto_if_false @SHRANGE_16275
+set_var_int_to_lvar_int $sr_target_advance_time($sr_i,3i) = TIMERA
+$SR_target_state($sr_i,3i) = 3
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+Audio.ReportMissionAudioEventAtObject($sr_target($sr_obj_number,24i), 1034)
+Audio.ReportMissionAudioEventAtPosition($x, $y, $z, 1032)
+DecisionMakerChar.ClearEventResponse($sr_Dec, 15)
+DecisionMakerChar.AddEventResponse($sr_Dec, 15, 300, 100.0, 100.0, 100.0, 100.0, True, True)
+
+:SHRANGE_16275
+goto @SHRANGE_16833
+
+:SHRANGE_16282
+set_var_int_to_lvar_int $sr_int1 = TIMERA
+sub_int_var_from_int_var $sr_int1 -= $sr_target_advance_time($sr_i,3i)
+if 
+  $sr_int1 > 2000
+goto_if_false @SHRANGE_16329
+$sr_int1 = 2000
+
+:SHRANGE_16329
+cset_var_float_to_var_int $sr_float1 = integer $sr_int1
+$sr_float1 /= 2000.0
+$sr_float1 *= 90.0
+set_var_float_to_var_float $sr_target_rotation($sr_i,3f) = $sr_float1
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+if 
+  Object.DoesExist($sr_target($sr_obj_number,24i))
+goto_if_false @SHRANGE_16428
+Object.SetRotation($sr_target($sr_obj_number,24i), $sr_target_rotation($sr_i,3f), 0.0, 63@)
+
+:SHRANGE_16428
+if 
+  $sr_target_rotation($sr_i,3f) >= 90.0
+goto_if_false @SHRANGE_16577
+$SR_target_state($sr_i,3i) = 0
+if 
+  $SR_range_level($sr_i,3i) == 3
+goto_if_false @SHRANGE_16504
+$SR_range_level($sr_i,3i) = 1
+goto @SHRANGE_16577
+
+:SHRANGE_16504
+if 
+  $SR_range_level($sr_i,3i) == 2
+goto_if_false @SHRANGE_16544
+$SR_range_level($sr_i,3i) = 3
+goto @SHRANGE_16577
+
+:SHRANGE_16544
+if 
+  $SR_range_level($sr_i,3i) == 1
+goto_if_false @SHRANGE_16577
+$SR_range_level($sr_i,3i) = 2
+
+:SHRANGE_16577
+goto @SHRANGE_16833
+
+:SHRANGE_16584
+$sr_j = 0
+
+:SHRANGE_16591
+if 
+  8 > $sr_j
+goto_if_false @SHRANGE_16687
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+add_int_var_to_int_var $sr_obj_number += $sr_j
+if 
+  Object.DoesExist($sr_target($sr_j,24i))
+goto_if_false @SHRANGE_16673
+Audio.ReportMissionAudioEventAtObject($sr_target($sr_j,24i), 1034)
+Object.Delete($sr_target($sr_j,24i))
+
+:SHRANGE_16673
+$sr_j += 1
+goto @SHRANGE_16591
+
+:SHRANGE_16687
+$SR_target_state($sr_i,3i) = 99
+goto @SHRANGE_16833
+
+:SHRANGE_16705
+$sr_target_rotation($sr_i,3f) += 1.0
+set_var_int_to_var_int $sr_obj_number = $sr_i
+$sr_obj_number *= 8
+if 
+  Object.DoesExist($sr_target($sr_obj_number,24i))
+goto_if_false @SHRANGE_16790
+Audio.ReportMissionAudioEventAtObject($sr_target($sr_obj_number,24i), 1034)
+Object.SetRotation($sr_target($sr_obj_number,24i), $sr_target_rotation($sr_i,3f), 0.0, 63@)
+
+:SHRANGE_16790
+if 
+  $sr_target_rotation($sr_i,3f) >= 90.0
+goto_if_false @SHRANGE_16826
+$SR_target_state($sr_i,3i) = 4
+
+:SHRANGE_16826
+goto @SHRANGE_16833
+
+:SHRANGE_16833
+$sr_i += 1
+goto @SHRANGE_13485
+
+:SHRANGE_16847
+return 
+
+:SHRANGE_16849
+$sr_float1 = Math.Cos(59@($SR_range_id,4f))
+$sr_float2 = Math.Sin(59@($SR_range_id,4f))
+if 
+  59@($SR_range_id,4f) == 0.0
+goto_if_false @SHRANGE_16937
+set_var_float_to_var_float $x = $sr_float3
+mult_float_var_by_float_var $x *= $sr_float1
+set_var_float_to_var_float $y = $sr_float4
+mult_float_var_by_float_var $y *= $sr_float1
+goto @SHRANGE_16979
+
+:SHRANGE_16937
+$sr_float4 *= -1.0
+set_var_float_to_var_float $x = $sr_float4
+mult_float_var_by_float_var $x *= $sr_float2
+set_var_float_to_var_float $y = $sr_float3
+mult_float_var_by_float_var $y *= $sr_float2
+
+:SHRANGE_16979
+add_float_lvar_to_float_var $x += 35@($SR_range_id,4f)
+add_float_lvar_to_float_var $y += 39@($SR_range_id,4f)
+add_float_lvar_to_float_var $z += 43@($SR_range_id,4f)
+return 
+
+:SHRANGE_17017
+Char.Delete($SR_ped[0])
+Char.Delete($SR_ped[1])
+Char.Delete($SR_ped[2])
+Hud.ClearCounter($sr_Score)
+Hud.ClearCounter($8126)
+Hud.ClearCounter($8127)
+Streaming.MarkModelAsNoLongerNeeded(#TARGET_HEAD)
+Streaming.MarkModelAsNoLongerNeeded(#TARGET_LARM)
+Streaming.MarkModelAsNoLongerNeeded(#TARGET_RARM)
+Streaming.MarkModelAsNoLongerNeeded(#TARGET_LLEG)
+Streaming.MarkModelAsNoLongerNeeded(#TARGET_RLEG)
+Streaming.MarkModelAsNoLongerNeeded(#TARGET_RTORSO)
+Streaming.MarkModelAsNoLongerNeeded(#TARGET_LTORSO)
+Streaming.MarkModelAsNoLongerNeeded(#TARGET_FRAME)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(349)
+Streaming.MarkModelAsNoLongerNeeded(355)
+DecisionMaker.Remove($sr_Dec)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+$sr_j = 0
+
+:SHRANGE_17123
+if 
+  24 > $sr_j
+goto_if_false @SHRANGE_17184
+if 
+  Object.DoesExist($sr_target($sr_j,24i))
+goto_if_false @SHRANGE_17170
+Object.Delete($sr_target($sr_j,24i))
+
+:SHRANGE_17170
+$sr_j += 1
+goto @SHRANGE_17123
+
+:SHRANGE_17184
+$flag_shooting_range_mission = 0
+$onmission = 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @SHRANGE_17221
+Char.FreezePosition($scplayer, False)
+
+:SHRANGE_17221
+terminate_this_script 
+return 
+terminate_this_script 
+

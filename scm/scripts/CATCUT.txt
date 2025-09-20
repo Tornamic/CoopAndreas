@@ -1,0 +1,233 @@
+//-------------Mission 45---------------
+// Originally: King in Exile
+
+:CATCUT
+script_name 'CATCUT'
+gosub @CATCUT_302
+if 
+  has_deatharrest_been_executed 
+goto_if_false @CATCUT_38
+gosub @CATCUT_795
+
+:CATCUT_38
+gosub @CATCUT_912
+terminate_this_script 
+
+:CATCUT_47
+switch_start 34@ total_jumps 1 default_jump 0 @CATCUT_300 jumps 0 @CATCUT_110 -1 @CATCUT_300 -1 @CATCUT_300 -1 @CATCUT_300 -1 @CATCUT_300 -1 @CATCUT_300 -1 @CATCUT_300
+
+:CATCUT_110
+set_var_text_label s$catcut_chat[0] = 'MCAT01A'
+set_var_text_label s$catcut_chat[1] = 'MCAT01B'
+set_var_text_label s$catcut_chat[2] = 'MCAT01C'
+set_var_text_label s$catcut_chat[3] = 'MCAT01D'
+set_var_text_label s$catcut_chat[4] = 'MCAT01E'
+set_var_text_label s$catcut_chat[5] = 'MCAT01F'
+set_var_text_label s$catcut_chat[6] = 'MCAT01G'
+set_var_text_label s$catcut_chat[7] = 'MCAT01H'
+set_lvar_int_to_constant 39@ = 25000
+set_lvar_int_to_constant 40@ = 25001
+set_lvar_int_to_constant 41@ = 25002
+set_lvar_int_to_constant 42@ = 25003
+set_lvar_int_to_constant 43@ = 25004
+set_lvar_int_to_constant 44@ = 25005
+set_lvar_int_to_constant 45@ = 25006
+set_lvar_int_to_constant 46@ = 25007
+38@ = 7
+goto @CATCUT_300
+
+:CATCUT_300
+return 
+
+:CATCUT_302
+Stat.RegisterMissionGiven
+$onmission = 1
+Text.LoadMissionText('BCESAR2')
+wait 0
+Streaming.SetAreaVisible(2)
+Cutscene.Load('BCESAR2')
+
+:CATCUT_341
+if 
+  not Cutscene.HasLoaded
+goto_if_false @CATCUT_365
+wait 0
+goto @CATCUT_341
+
+:CATCUT_365
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:CATCUT_374
+if 
+  not Cutscene.HasFinished
+goto_if_false @CATCUT_398
+wait 0
+goto @CATCUT_374
+
+:CATCUT_398
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:CATCUT_411
+if 
+  Camera.GetFadingStatus
+goto_if_false @CATCUT_435
+wait 0
+goto @CATCUT_411
+
+:CATCUT_435
+Cutscene.Clear
+Streaming.SetAreaVisible(0)
+Streaming.RequestModel(330)
+
+:CATCUT_446
+if 
+  not Streaming.HasModelLoaded(330)
+goto_if_false @CATCUT_473
+wait 0
+goto @CATCUT_446
+
+:CATCUT_473
+Audio.LoadMissionAudio(23000, 3)
+35@ = 0
+36@ = 0
+37@ = 0
+34@ = 0
+gosub @CATCUT_47
+Char.SetCoordinates($scplayer, -2042.129, -2528.791, 29.625)
+Char.SetHeading($scplayer, 284.27)
+Streaming.LoadScene(-2042.129, -2528.791, 29.625)
+Camera.RestoreJumpcut
+Camera.DoFade(1, 1000)
+
+:CATCUT_571
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @CATCUT_597
+wait 0
+goto @CATCUT_571
+
+:CATCUT_597
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+TIMERA = 0
+
+:CATCUT_608
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot3)
+goto_if_false @CATCUT_660
+wait 0
+if 
+  1500 > TIMERA
+goto_if_false @CATCUT_653
+goto @CATCUT_660
+
+:CATCUT_653
+goto @CATCUT_608
+
+:CATCUT_660
+Task.UseMobilePhone($scplayer, True)
+TIMERA = 0
+
+:CATCUT_674
+if 
+  1500 > TIMERA
+goto_if_false @CATCUT_704
+wait 0
+goto @CATCUT_674
+
+:CATCUT_704
+Player.SetControl($player1, True)
+
+:CATCUT_711
+if 
+  35@ <> 8
+goto_if_false @CATCUT_771
+wait 0
+gosub @CATCUT_933
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @CATCUT_764
+goto @CATCUT_771
+
+:CATCUT_764
+goto @CATCUT_711
+
+:CATCUT_771
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearPrints
+Task.UseMobilePhone($scplayer, False)
+goto @CATCUT_813
+
+:CATCUT_795
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:CATCUT_813
+Blip.Remove($bcrash_contact_blip)
+Player.ClearWantedLevel($player1)
+$flag_trailor_cutscene = 1
+Blip.Remove($cat_contact_blip)
+$cat_contact_blip = Blip.AddSpriteForContactPoint($cat_blip_icon, $catX, $catY, $catZ)
+Blip.Remove($1731)
+$1731 = Blip.AddShortRangeSpriteForContactPoint(35, $save_pickupX[14], $save_pickupY[14], $save_pickupZ[14])
+Blip.ChangeDisplay($1731, BlipDisplay.BlipOnly)
+Pickup.Remove($grove_save_pickup[14])
+$grove_save_pickup[14] = Pickup.Create(#PICKUPSAVE, 3, $save_pickupX[14], $save_pickupY[14], $save_pickupZ[14])
+$number_of_save_icons = 15
+return 
+
+:CATCUT_912
+$onmission = 0
+$timer_mobile_start = Clock.GetGameTimer()
+Mission.Finish
+Streaming.MarkModelAsNoLongerNeeded(330)
+return 
+
+:CATCUT_933
+if or
+  36@ == 0
+  36@ == 1
+goto_if_false @CATCUT_984
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar 38@ >= 35@
+goto_if_false @CATCUT_984
+gosub @CATCUT_1042
+
+:CATCUT_984
+if 
+  36@ == 2
+goto_if_false @CATCUT_1040
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CATCUT_1040
+36@ = 0
+35@ += 1
+37@ = 0
+Text.ClearPrints
+
+:CATCUT_1040
+return 
+
+:CATCUT_1042
+if 
+  36@ == 0
+goto_if_false @CATCUT_1078
+Audio.LoadMissionAudio(39@(35@,8i), 1)
+36@ = 1
+
+:CATCUT_1078
+if 
+  36@ == 1
+goto_if_false @CATCUT_1136
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CATCUT_1136
+Text.PrintNow($catcut_chat(35@,8s), 4000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+36@ = 2
+
+:CATCUT_1136
+return 
+

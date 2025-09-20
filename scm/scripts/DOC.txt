@@ -1,0 +1,34 @@
+:DOC
+script_name 'DOC'
+
+:DOC_11
+wait $mission_trigger_wait_time
+if 
+  $flag_doc_mission_counter == 1
+goto_if_false @DOC_36
+terminate_this_script 
+
+:DOC_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DOC_180
+if 
+  $onmission == 0
+goto_if_false @DOC_180
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $docX, $docY, $docZ, 1.2, 1.2, 2.0)
+goto_if_false @DOC_180
+if 
+  Player.CanStartMission($player1)
+goto_if_false @DOC_180
+if 
+  $flag_doc_mission_counter == 0
+goto_if_false @DOC_180
+$onmission = 1
+Text.PrintBig('DOC_2', 1000, TextStyle.BottomRight)
+LITCAS_267()
+Mission.LoadAndLaunchInternal(95) // Madd Dogg
+
+:DOC_180
+goto @DOC_11
+

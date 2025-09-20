@@ -1,0 +1,140 @@
+:COLLS
+script_name 'COLLS'
+
+:COLLS_11
+wait 3000
+$Return_progress_Percentage = Stat.GetProgressPercentage()
+if 
+  $returned_oysters_flag == 0
+goto_if_false @COLLS_285
+$Returned_oysters = Stat.GetInt(243)
+if 
+  $Returned_oysters == 50
+goto_if_false @COLLS_285
+Audio.PlayMissionPassedTune(2)
+Stat.PlayerMadeProgress(1)
+Stat.SetInt(StatId.UnderwaterBreathStamina, 1000)
+if 
+  0 >= $iGFLikesPlayer[4]
+goto_if_false @COLLS_106
+$iGFLikesPlayer[4] = 45
+
+:COLLS_106
+if 
+  0 >= $iGFLikesPlayer[1]
+goto_if_false @COLLS_131
+$iGFLikesPlayer[1] = 45
+
+:COLLS_131
+if 
+  0 >= $iGFLikesPlayer[3]
+goto_if_false @COLLS_156
+$iGFLikesPlayer[3] = 45
+
+:COLLS_156
+if 
+  0 >= $iGFLikesPlayer[2]
+goto_if_false @COLLS_181
+$iGFLikesPlayer[2] = 45
+
+:COLLS_181
+$iGFDesiredSexAppeal[0] = -100
+$iGFDesiredSexAppeal[1] = -100
+$iGFDesiredSexAppeal[3] = -100
+$iGFDesiredSexAppeal[2] = -100
+$iGFDesiredSexAppeal[4] = -100
+$iGFDesiredSexAppeal[5] = -100
+$iGFSelfRespect[0] = 1
+$iGFSelfRespect[1] = 1
+$iGFSelfRespect[3] = 1
+$iGFSelfRespect[2] = 1
+$iGFSelfRespect[4] = 1
+$iGFSelfRespect[5] = 1
+Text.ClearHelp
+Text.PrintHelp('OYST100')
+$returned_oysters_flag = 1
+
+:COLLS_285
+if 
+  $flag_returned_shoehorses == 0
+goto_if_false @COLLS_465
+$Returned_shoehorses = Stat.GetInt(241)
+if 
+  $Returned_shoehorses == 50
+goto_if_false @COLLS_465
+Audio.PlayMissionPassedTune(2)
+Stat.PlayerMadeProgress(1)
+$all_horse_pickup1 = Pickup.CreateWithAmmo(356, 15, 60, 2021.879, 1001.467, 10.3203)
+$all_horse_pickup2 = Pickup.CreateWithAmmo(353, 15, 120, 2025.286, 1001.496, 10.3203)
+$all_horse_pickup3 = Pickup.CreateWithAmmo(351, 15, 120, 2021.327, 1013.349, 10.3203)
+$all_horse_pickup4 = Pickup.CreateWithAmmo(363, 15, 20, 2023.775, 1013.527, 10.5203)
+Text.ClearHelp
+Text.PrintHelp('LUCK100')
+$flag_returned_shoehorses = 1
+
+:COLLS_465
+if 
+  $flag_returned_snapshots == 0
+goto_if_false @COLLS_645
+$Returned_snapshots = Stat.GetInt(231)
+if 
+  $Returned_snapshots == 50
+goto_if_false @COLLS_645
+Audio.PlayMissionPassedTune(2)
+Stat.PlayerMadeProgress(1)
+$all_photos_pickup1 = Pickup.CreateWithAmmo(358, 15, 60, -2035.773, 139.4337, 28.3359)
+$all_photos_pickup2 = Pickup.CreateWithAmmo(352, 15, 120, -2038.43, 139.6281, 28.3359)
+$all_photos_pickup3 = Pickup.CreateWithAmmo(349, 15, 120, -2038.664, 137.4694, 28.3359)
+$all_photos_pickup4 = Pickup.CreateWithAmmo(342, 15, 20, -2035.474, 137.2511, 28.3359)
+Text.ClearHelp
+Text.PrintHelp('FOTO100')
+$flag_returned_snapshots = 1
+
+:COLLS_645
+if 
+  $flag_returned_tags == 0
+goto_if_false @COLLS_832
+$Returned_tags = Stat.FindNumberTagsTagged()
+if 
+  $Returned_tags == 100
+goto_if_false @COLLS_832
+Audio.PlayMissionPassedTune(2)
+Stat.PlayerMadeProgress(1)
+Gang.SetWeapons(GangType.Grove, WeaponType.DesertEagle, WeaponType.Mp5, WeaponType.Knife)
+$all_tags_pickup1 = Pickup.CreateWithAmmo(355, 15, 120, 2499.39, -1707.463, 1014.25)
+$all_tags_pickup2 = Pickup.CreateWithAmmo(372, 15, 120, 2499.514, -1709.64, 1014.25)
+$all_tags_pickup3 = Pickup.CreateWithAmmo(350, 15, 60, 2493.491, -1708.237, 1014.932)
+$all_tags_pickup4 = Pickup.CreateWithAmmo(344, 15, 20, 2493.553, -1706.863, 1015.132)
+Text.ClearHelp
+Text.PrintHelp('TAG_100')
+$flag_returned_tags = 1
+
+:COLLS_832
+if 
+  $game_complete == 0
+goto_if_false @COLLS_994
+if 
+  $Return_progress_Percentage >= 100.0
+goto_if_false @COLLS_994
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COLLS_994
+CarGenerator.Switch($tank_gen1, 101)
+CarGenerator.Switch($hyfra_gen1, 101)
+Player.AddScore($player1, 1000000)
+Stat.SetInt(StatId.UnderwaterBreathStamina, 1000)
+Stat.SetInt(StatId.Stamina, 1000)
+Stat.SetInt(StatId.SexAppeal, 1000)
+Stat.SetInt(StatId.SexAppealClothes, 1000)
+Stat.SetInt(StatId.Respect, 1000)
+Stat.SetInt(StatId.RespectGirlfriend, 1000)
+Stat.SetInt(StatId.RespectClothes, 1000)
+Stat.SetInt(StatId.CycleSkill, 1000)
+wait 2000
+Text.ClearHelp
+Text.PrintHelp('GAME100')
+$game_complete = 1
+
+:COLLS_994
+goto @COLLS_11
+

@@ -1,0 +1,5447 @@
+//-------------Mission 119---------------
+// Originally: Boat School
+
+:BOAT
+script_name 'BOAT'
+gosub @BOAT_416
+if 
+  has_deatharrest_been_executed 
+goto_if_false @BOAT_38
+gosub @BOAT_37691
+
+:BOAT_38
+gosub @BOAT_37809
+terminate_this_script 
+if 
+  $onmission == 0
+goto_if_false @BOAT_416
+if 
+  36@ == 13
+goto_if_false @BOAT_416
+37@ = Car.Create(415, 0.0, 0.0, 0.0)
+46@ = Car.Create(415, 5.0, 5.0, 10.0)
+47@ = Char.Create(24, 210, 20.0, 20.0, 20.0)
+39@ = Char.Create(24, 210, 30.0, 30.0, 20.0)
+42@ = Char.Create(24, 210, 30.0, 30.0, 20.0)
+43@ = Char.Create(24, 210, 30.0, 30.0, 20.0)
+40@ = Car.Create(415, 0.0, 0.0, 0.0)
+41@ = Car.Create(415, 0.0, 0.0, 0.0)
+45@ = Char.Create(24, 210, 30.0, 30.0, 20.0)
+44@ = Car.Create(415, 0.0, 0.0, 0.0)
+156@ = 0
+
+:BOAT_330
+if 
+  13 > 156@
+goto_if_false @BOAT_416
+56@(156@,50i) = Object.CreateNoOffset(#BOUY, 0.0, 0.0, 100.0)
+106@(156@,50i) = Object.CreateNoOffset(#WATERJUMP1, 0.0, 0.0, 150.0)
+156@ += 1
+goto @BOAT_330
+
+:BOAT_416
+$onmission = 1
+if 
+  $boat_passed_once == 0
+goto_if_false @BOAT_443
+Stat.RegisterMissionGiven
+
+:BOAT_443
+Text.LoadMissionText('BOAT')
+Stat.ShowUpdateStats(False)
+Hud.DisplayCarNames(False)
+Hud.DisplayZoneNames(False)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BOAT_489
+Player.SetCanDoDriveBy($player1, False)
+
+:BOAT_489
+wait 0
+249@ = 0
+251@ = 0
+34@ = 0
+35@ = 0
+248@ = 0
+36@ = 0
+$boat_mission_selection = 1
+182@ = -2215.58
+183@ = 2391.7
+184@ = 3.965
+174@ = -2185.335
+175@ = 2410.409
+176@ = 3.9752
+177@ = 122.2585
+178@ = -2216.327
+179@ = 2393.209
+180@ = 3.9
+181@ = 238.0
+55@ = 0
+158@ = 0
+159@ = 0
+160@ = 0
+161@ = 0
+162@ = 0
+$boat_which_medal_displayed = 0
+$boat_which_score_displayed = 0
+169@ = 0
+232@ = 0
+192@ = 0.0
+193@ = 0.0
+194@ = 0.0
+212@ = 12000
+213@ = 12000
+214@ = 10500
+215@ = 9700
+216@ = 40000
+217@ = 40000
+218@ = 37000
+219@ = 33000
+220@ = 120000
+221@ = 120000
+222@ = 85000
+223@ = 80000
+224@ = 55
+225@ = 55
+226@ = 63
+227@ = 67
+228@ = 180000
+229@ = 180000
+230@ = 150000
+231@ = 130000
+Camera.SetFadingColor(0, 0, 0)
+wait 0
+Streaming.RequestModel(210)
+Streaming.RequestModel(473)
+Streaming.RequestModel(497)
+Streaming.RequestModel(472)
+Streaming.RequestModel(484)
+Streaming.RequestModel(454)
+Streaming.RequestModel(539)
+Streaming.LoadAllModelsNow
+
+:BOAT_981
+if or
+  not Streaming.HasModelLoaded(210)
+  not Streaming.HasModelLoaded(473)
+  not Streaming.HasModelLoaded(497)
+  not Streaming.HasModelLoaded(472)
+goto_if_false @BOAT_1023
+wait 0
+goto @BOAT_981
+
+:BOAT_1023
+if or
+  not Streaming.HasModelLoaded(484)
+  not Streaming.HasModelLoaded(454)
+  not Streaming.HasModelLoaded(539)
+goto_if_false @BOAT_1060
+wait 0
+goto @BOAT_1023
+
+:BOAT_1060
+Txd.LoadDictionary('LD_DRV')
+Txd.LoadSprite("BRONZE", 1)
+Txd.LoadSprite("SILVER", 2)
+Txd.LoadSprite("GOLD", 3)
+Txd.LoadSprite("RIBB", 4)
+Txd.LoadSprite("TVCORN", 5)
+Txd.LoadSprite("NAWARD", 6)
+Txd.LoadSprite("RIBBW", 7)
+Txd.LoadSprite("BLKDOT", 8)
+Txd.LoadSprite("TVBASE", 9)
+Char.SetCoordinates($scplayer, 174@, 175@, 176@)
+Char.SetHeading($scplayer, 177@)
+Char.SetDrownsInWater($scplayer, False)
+38@ = Char.Create(24, 210, 178@, 179@, 180@)
+Char.SetHeading(38@, 181@)
+Char.SetNeverTargeted(38@, True)
+if 
+  $boat_introcutscene == 0
+goto_if_false @BOAT_1262
+$boat_introcutscene = 50
+
+:BOAT_1262
+wait 0
+if 
+  $boat_introcutscene == 50
+goto_if_false @BOAT_1316
+goto @BOAT_1323
+if 
+  Char.IsDead(38@)
+goto_if_false @BOAT_1316
+Text.ClearHelp
+goto @BOAT_37691
+
+:BOAT_1316
+goto @BOAT_1262
+
+:BOAT_1323
+Hud.Display(False)
+Hud.DisplayRadar(False)
+Player.SetControl($player1, False)
+Text.ClearHelp
+Text.ClearPrints
+World.SetCarDensityMultiplier(0.0)
+World.SetPedDensityMultiplier(0.0)
+gosub @BOAT_19792
+$boatpb_flag = 0
+$boat_control_flag = 0
+Text.UseCommands(True)
+$boat_alpha = 255
+$boat_fade_flag = 2
+if 
+  6 > $boat_which_missions_are_open_flag
+goto_if_false @BOAT_1422
+set_var_int_to_var_int $boat_mission_selection = $boat_which_missions_are_open_flag
+
+:BOAT_1422
+gosub @BOAT_25116
+Hud.Display(False)
+Hud.DisplayRadar(False)
+Streaming.SetAreaVisible(0)
+Camera.DoFade(1, 500)
+
+:BOAT_1448
+wait 0
+gosub @BOAT_25116
+if 
+  34@ == 0
+goto_if_false @BOAT_1491
+Audio.LoadMissionAudio(3800, 3)
+34@ = 1
+
+:BOAT_1491
+if 
+  34@ == 1
+goto_if_false @BOAT_1531
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @BOAT_1531
+34@ = 2
+
+:BOAT_1531
+if 
+  34@ == 2
+goto_if_false @BOAT_1560
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+34@ = 3
+
+:BOAT_1560
+Weather.ForceNow(WeatherType.ExtraSunnyCountryside)
+Clock.SetTimeOfDay(12, 50)
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1000)
+if 
+  $boat_control_flag == 0
+goto_if_false @BOAT_2122
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+if or
+  -100 > $LStickX
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @BOAT_1698
+if 
+  $boat_which_missions_are_open_flag > 1
+goto_if_false @BOAT_1698
+$boat_mission_selection -= 1
+if 
+  4 > $boatpb_flag
+goto_if_false @BOAT_1698
+$boatpb_flag = 3
+
+:BOAT_1698
+if or
+  $LStickX > 100
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @BOAT_1772
+if 
+  $boat_which_missions_are_open_flag > 1
+goto_if_false @BOAT_1772
+$boat_mission_selection += 1
+if 
+  4 > $boatpb_flag
+goto_if_false @BOAT_1772
+$boatpb_flag = 3
+
+:BOAT_1772
+if 
+  1 > $boat_mission_selection
+goto_if_false @BOAT_1798
+set_var_int_to_var_int $boat_mission_selection = $boat_which_missions_are_open_flag
+
+:BOAT_1798
+if 
+  is_int_var_greater_than_int_var $boat_mission_selection > $boat_which_missions_are_open_flag
+goto_if_false @BOAT_1824
+$boat_mission_selection = 1
+
+:BOAT_1824
+if 
+  $boat_which_missions_are_open_flag > 1
+goto_if_false @BOAT_2016
+
+:BOAT_1842
+if 
+  -100 > $LStickX
+goto_if_false @BOAT_1894
+wait 0
+gosub @BOAT_25116
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+goto @BOAT_1842
+
+:BOAT_1894
+if 
+  $LStickX > 100
+goto_if_false @BOAT_1946
+wait 0
+gosub @BOAT_25116
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+goto @BOAT_1894
+
+:BOAT_1946
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @BOAT_1981
+wait 0
+gosub @BOAT_25116
+goto @BOAT_1946
+
+:BOAT_1981
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @BOAT_2016
+wait 0
+gosub @BOAT_25116
+goto @BOAT_1981
+
+:BOAT_2016
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BOAT_2076
+if 
+  4 > $boatpb_flag
+goto_if_false @BOAT_2058
+$boatpb_flag = 3
+
+:BOAT_2058
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+34@ = 0
+goto @BOAT_2136
+
+:BOAT_2076
+if 
+is_ps2_keyboard_key_pressed 81
+goto_if_false @BOAT_2098
+$boat_which_missions_are_open_flag = 5
+
+:BOAT_2098
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BOAT_2122
+goto @BOAT_37691
+
+:BOAT_2122
+gosub @BOAT_32194
+goto @BOAT_1448
+
+:BOAT_2136
+Camera.DoFade(0, 500)
+
+:BOAT_2143
+if 
+  Camera.GetFadingStatus
+goto_if_false @BOAT_2174
+wait 0
+gosub @BOAT_25116
+goto @BOAT_2143
+
+:BOAT_2174
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_2195
+Car.StopPlayback(37@)
+
+:BOAT_2195
+Camera.RestoreJumpcut
+Car.Delete(37@)
+Car.Delete(46@)
+Char.Delete(47@)
+Char.Delete(39@)
+gosub @BOAT_37625
+$boatpb_flag = 5
+Hud.Display(True)
+Hud.DisplayRadar(True)
+if 
+  $boat_mission_selection == 1
+goto_if_false @BOAT_3803
+
+:BOAT_2257
+gosub @BOAT_34020
+
+:BOAT_2264
+Player.SetControl($player1, True)
+gosub @BOAT_19792
+46@ = Car.Create(497, -3303.627, 2105.29, 200.0)
+Char.Delete(47@)
+47@ = Char.CreateInsideCar(PedType.Mission1, 210, 46@)
+248@ = 0
+Char.ClearTasks(47@)
+Heli.SetBladesFullSpeed(46@)
+Car.SetCruiseSpeed(46@, 250.0)
+Heli.GotoCoords(46@, -2303.627, 2105.29, 200.0, 200.0, 200.0)
+37@ = Car.Create(472, -2323.627, 2105.29, 0.0)
+Car.ChangeColor(37@, 1, 114)
+Car.SetHeading(37@, 90.0)
+39@ = Char.CreateInsideCar(PedType.Mission1, 210, 37@)
+gosub @BOAT_34197
+if 
+  $boatpb_flag == 0
+goto_if_false @BOAT_2488
+Camera.AttachToVehicleLookAtVehicle(46@, 10.0, 10.0, 0.0, 37@, 0.0, SwitchType.JumpCut)
+return 
+
+:BOAT_2488
+gosub @BOAT_33612
+Text.PrintHelp('BOAT_H2')
+Player.SetControl($player1, True)
+52@ = Blip.AddForObject(56@)
+51@ = Blip.AddForObject(57@)
+53@ = Blip.AddForObject(62@)
+54@ = Blip.AddForObject(63@)
+Blip.ChangeColor(52@, BlipColor.Yellow)
+Blip.ChangeColor(51@, BlipColor.Yellow)
+Blip.ChangeColor(53@, BlipColor.Yellow)
+Blip.ChangeColor(54@, BlipColor.Yellow)
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_2637
+185@, 186@, 187@ = Car.GetCoordinates(37@)
+set_lvar_float_to_lvar_float 192@ = 185@
+192@ -= 195.0
+set_lvar_float_to_lvar_float 193@ = 186@
+set_lvar_float_to_lvar_float 194@ = 187@
+
+:BOAT_2637
+wait 0
+if 
+  not Car.IsDead(46@)
+goto_if_false @BOAT_2731
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_2731
+185@, 186@, 187@ = Car.GetCoordinates(37@)
+185@ -= 150.0
+186@ -= 150.0
+Heli.GotoCoords(46@, 185@, 186@, 187@, 120.0, 120.0)
+
+:BOAT_2731
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BOAT_2762
+164@ = 2
+goto @BOAT_3743
+
+:BOAT_2762
+gosub @BOAT_20340
+if 
+  164@ == 1
+goto_if_false @BOAT_2794
+goto @BOAT_37691
+
+:BOAT_2794
+if 
+  158@ == 0
+goto_if_false @BOAT_2971
+Text.PrintNow('BOAT_A4', 5000, 1)
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_2852
+250@ = Car.GetHealth(37@)
+
+:BOAT_2852
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @BOAT_2971
+World.SyncWater
+set_lvar_int_to_lvar_int 211@ = 215@
+set_lvar_int_to_lvar_int 210@ = 214@
+set_lvar_int_to_lvar_int 209@ = 213@
+158@ = 1
+$boat_timer = 0
+Hud.ClearTimer($boat_timer)
+Hud.DisplayTimerWithString($boat_timer, TimerDirection.Up, 'BOAT_T1')
+198@, 199@, 200@ = Object.GetCoordinates(56@)
+195@, 196@, 197@ = Object.GetCoordinates(57@)
+TIMERA = 0
+
+:BOAT_2971
+if 
+  158@ == 1
+goto_if_false @BOAT_3267
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_3221
+49@ = Car.GetSpeed(37@)
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, -30.0, False)
+goto_if_false @BOAT_3110
+Text.PrintNow('BOAT_32', 4000, 1)
+if 
+  7.0 > 49@
+goto_if_false @BOAT_3110
+Text.ClearPrints
+Text.PrintNow('BOAT_33', 4000, 1)
+158@ = 99
+
+:BOAT_3110
+if 
+  TIMERA > 4500
+goto_if_false @BOAT_3166
+if 
+  not Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, -30.0, False)
+goto_if_false @BOAT_3166
+Text.ClearPrints
+
+:BOAT_3166
+if 
+  248@ == 0
+goto_if_false @BOAT_3221
+if 
+  TIMERA > 4500
+goto_if_false @BOAT_3221
+248@ = 1
+Text.PrintHelp('BOAT_A5')
+
+:BOAT_3221
+if 
+  $boat_timer > 60000
+goto_if_false @BOAT_3267
+Text.ClearPrints
+Text.PrintNow('BOAT_34', 4000, 1)
+158@ = 99
+
+:BOAT_3267
+if 
+  158@ == 99
+goto_if_false @BOAT_3796
+gosub @BOAT_20088
+gosub @BOAT_20416
+if 
+  is_int_var_greater_than_int_lvar $boat_accelerate_best_score > 168@
+goto_if_false @BOAT_3505
+set_lvar_int_to_var_int 169@ = $boat_accelerate_best_score
+set_var_int_to_lvar_int $boat_accelerate_best_score = 168@
+167@ = 1
+gosub @BOAT_21188
+if 
+  $boat_which_medal_displayed == 4
+goto_if_false @BOAT_3405
+if 
+  $boat_accelerate_goldachieved == 0
+goto_if_false @BOAT_3405
+$boat_accelerate_goldachieved = 1
+$boat_accelerate_silverachieved = 1
+$boat_accelerate_bronzeachieved = 1
+
+:BOAT_3405
+if 
+  $boat_which_medal_displayed == 3
+goto_if_false @BOAT_3455
+if 
+  $boat_accelerate_silverachieved == 0
+goto_if_false @BOAT_3455
+$boat_accelerate_silverachieved = 1
+$boat_accelerate_bronzeachieved = 1
+
+:BOAT_3455
+if 
+  $boat_which_medal_displayed == 2
+goto_if_false @BOAT_3498
+if 
+  $boat_accelerate_bronzeachieved == 0
+goto_if_false @BOAT_3498
+$boat_accelerate_bronzeachieved = 1
+
+:BOAT_3498
+goto @BOAT_3512
+
+:BOAT_3505
+$boat_which_medal_displayed = 0
+
+:BOAT_3512
+if 
+  $boat_which_missions_are_open_flag == 1
+goto_if_false @BOAT_3590
+if 
+  is_int_lvar_greater_than_int_lvar 212@ > 168@
+goto_if_false @BOAT_3590
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1097)
+167@ = 2
+$boat_which_missions_are_open_flag = 2
+164@ = 2
+
+:BOAT_3590
+TIMERA = 0
+
+:BOAT_3597
+if 
+  TIMERA > -1
+goto_if_false @BOAT_3743
+wait 0
+gosub @BOAT_20759
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BOAT_3677
+164@ = 2
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1098)
+goto @BOAT_3743
+
+:BOAT_3677
+gosub @BOAT_21719
+gosub @BOAT_20005
+if 
+  165@ == 1
+goto_if_false @BOAT_3736
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1098)
+goto @BOAT_3743
+
+:BOAT_3736
+goto @BOAT_3597
+
+:BOAT_3743
+gosub @BOAT_24852
+gosub @BOAT_37625
+if 
+  164@ == 2
+goto_if_false @BOAT_3789
+goto @BOAT_1323
+goto @BOAT_3796
+
+:BOAT_3789
+goto @BOAT_2257
+
+:BOAT_3796
+goto @BOAT_2637
+
+:BOAT_3803
+if 
+  $boat_mission_selection == 2
+goto_if_false @BOAT_6502
+
+:BOAT_3821
+gosub @BOAT_34020
+
+:BOAT_3828
+Player.SetControl($player1, True)
+gosub @BOAT_19792
+46@ = Car.Create(497, -2303.627, 2105.29, 200.0)
+Char.Delete(47@)
+47@ = Char.CreateInsideCar(PedType.Mission1, 210, 46@)
+Char.ClearTasks(47@)
+Heli.SetBladesFullSpeed(46@)
+Car.SetCruiseSpeed(46@, 250.0)
+Heli.GotoCoords(46@, -2303.627, 2105.29, 200.0, 200.0, 200.0)
+37@ = Car.Create(472, -2578.671, 2050.845, 0.0)
+Car.ChangeColor(37@, 1, 114)
+Car.SetHeading(37@, 0.0)
+39@ = Char.CreateInsideCar(PedType.Mission1, 210, 37@)
+gosub @BOAT_34197
+if 
+  $boatpb_flag == 0
+goto_if_false @BOAT_4045
+Camera.AttachToVehicleLookAtVehicle(46@, 10.0, 10.0, 0.0, 37@, 0.0, SwitchType.JumpCut)
+return 
+
+:BOAT_4045
+gosub @BOAT_33612
+Text.PrintHelp('BOAT_H2')
+Player.SetControl($player1, True)
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_4181
+185@, 186@, 187@ = Car.GetCoordinates(37@)
+198@, 199@, 200@ = Object.GetCoordinates(56@)
+195@, 196@, 197@ = Object.GetCoordinates(57@)
+52@ = Blip.AddForObject(56@)
+Blip.ChangeColor(52@, BlipColor.Yellow)
+51@ = Blip.AddForObject(57@)
+Blip.ChangeColor(51@, BlipColor.Yellow)
+53@ = Blip.AddForObject(58@)
+54@ = Blip.AddForObject(59@)
+gosub @BOAT_34153
+
+:BOAT_4181
+wait 0
+if 
+  not Car.IsDead(46@)
+goto_if_false @BOAT_4275
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_4275
+185@, 186@, 187@ = Car.GetCoordinates(37@)
+185@ -= 150.0
+186@ -= 150.0
+Heli.GotoCoords(46@, 185@, 186@, 187@, 200.0, 200.0)
+
+:BOAT_4275
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BOAT_4306
+164@ = 2
+goto @BOAT_6442
+
+:BOAT_4306
+gosub @BOAT_20340
+if 
+  164@ == 1
+goto_if_false @BOAT_4338
+goto @BOAT_37691
+
+:BOAT_4338
+if 
+  159@ == 0
+goto_if_false @BOAT_4456
+Text.PrintNow('BOAT_B4', 4000, 1)
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @BOAT_4456
+World.SyncWater
+set_lvar_int_to_lvar_int 211@ = 219@
+set_lvar_int_to_lvar_int 210@ = 218@
+set_lvar_int_to_lvar_int 209@ = 217@
+159@ = 5
+$boat_timer = 0
+Hud.ClearTimer($boat_timer)
+Hud.DisplayTimerWithString($boat_timer, TimerDirection.Up, 'BOAT_T1')
+
+:BOAT_4456
+if 
+  159@ > 0
+goto_if_false @BOAT_4502
+if 
+  $boat_timer > 600000
+goto_if_false @BOAT_4502
+159@ = 99
+
+:BOAT_4502
+if 
+  159@ == 5
+goto_if_false @BOAT_4708
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_4708
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_4708
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+Text.ClearHelp
+Text.PrintHelp('BOAT_B5')
+159@ = 10
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(58@)
+195@, 196@, 197@ = Object.GetCoordinates(59@)
+52@ = Blip.AddForObject(58@)
+51@ = Blip.AddForObject(59@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(60@)
+54@ = Blip.AddForObject(61@)
+gosub @BOAT_34153
+
+:BOAT_4708
+if 
+  159@ == 10
+goto_if_false @BOAT_4901
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_4901
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_4901
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+159@ = 15
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(60@)
+195@, 196@, 197@ = Object.GetCoordinates(61@)
+52@ = Blip.AddForObject(60@)
+51@ = Blip.AddForObject(61@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(62@)
+54@ = Blip.AddForObject(63@)
+gosub @BOAT_34153
+
+:BOAT_4901
+if 
+  159@ == 15
+goto_if_false @BOAT_5094
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_5094
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_5094
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+159@ = 20
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(62@)
+195@, 196@, 197@ = Object.GetCoordinates(63@)
+52@ = Blip.AddForObject(62@)
+51@ = Blip.AddForObject(63@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(64@)
+54@ = Blip.AddForObject(65@)
+gosub @BOAT_34153
+
+:BOAT_5094
+if 
+  159@ == 20
+goto_if_false @BOAT_5287
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_5287
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_5287
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+159@ = 25
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(64@)
+195@, 196@, 197@ = Object.GetCoordinates(65@)
+52@ = Blip.AddForObject(64@)
+51@ = Blip.AddForObject(65@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(66@)
+54@ = Blip.AddForObject(67@)
+gosub @BOAT_34153
+
+:BOAT_5287
+if 
+  159@ == 25
+goto_if_false @BOAT_5480
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_5480
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_5480
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+159@ = 30
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(66@)
+195@, 196@, 197@ = Object.GetCoordinates(67@)
+52@ = Blip.AddForObject(66@)
+51@ = Blip.AddForObject(67@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(68@)
+54@ = Blip.AddForObject(69@)
+gosub @BOAT_34153
+
+:BOAT_5480
+if 
+  159@ == 30
+goto_if_false @BOAT_5673
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_5673
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_5673
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+159@ = 35
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(68@)
+195@, 196@, 197@ = Object.GetCoordinates(69@)
+52@ = Blip.AddForObject(68@)
+51@ = Blip.AddForObject(69@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(70@)
+54@ = Blip.AddForObject(71@)
+gosub @BOAT_34153
+
+:BOAT_5673
+if 
+  159@ == 35
+goto_if_false @BOAT_5850
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_5850
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_5850
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+159@ = 40
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(70@)
+195@, 196@, 197@ = Object.GetCoordinates(71@)
+52@ = Blip.AddForObject(70@)
+51@ = Blip.AddForObject(71@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+gosub @BOAT_34153
+
+:BOAT_5850
+if 
+  159@ == 40
+goto_if_false @BOAT_5966
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_5966
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_5966
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_33', 1000, 1)
+159@ = 99
+Blip.Remove(52@)
+Blip.Remove(51@)
+
+:BOAT_5966
+if 
+  159@ == 99
+goto_if_false @BOAT_6495
+gosub @BOAT_20088
+gosub @BOAT_20416
+if 
+  is_int_var_greater_than_int_lvar $boat_simplecircuit_best_score > 168@
+goto_if_false @BOAT_6204
+set_lvar_int_to_var_int 169@ = $boat_simplecircuit_best_score
+set_var_int_to_lvar_int $boat_simplecircuit_best_score = 168@
+167@ = 1
+gosub @BOAT_21188
+if 
+  $boat_which_medal_displayed == 4
+goto_if_false @BOAT_6104
+if 
+  $boat_simplecircuit_goldachieved == 0
+goto_if_false @BOAT_6104
+$boat_simplecircuit_goldachieved = 1
+$boat_simplecircuit_silverachieved = 1
+$boat_simplecircuit_bronzeachieved = 1
+
+:BOAT_6104
+if 
+  $boat_which_medal_displayed == 3
+goto_if_false @BOAT_6154
+if 
+  $boat_simplecircuit_silverachieved == 0
+goto_if_false @BOAT_6154
+$boat_simplecircuit_silverachieved = 1
+$boat_simplecircuit_bronzeachieved = 1
+
+:BOAT_6154
+if 
+  $boat_which_medal_displayed == 2
+goto_if_false @BOAT_6197
+if 
+  $boat_simplecircuit_bronzeachieved == 0
+goto_if_false @BOAT_6197
+$boat_simplecircuit_bronzeachieved = 1
+
+:BOAT_6197
+goto @BOAT_6211
+
+:BOAT_6204
+$boat_which_medal_displayed = 0
+
+:BOAT_6211
+if 
+  $boat_which_missions_are_open_flag == 2
+goto_if_false @BOAT_6289
+if 
+  is_int_lvar_greater_than_int_lvar 216@ > 168@
+goto_if_false @BOAT_6289
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1097)
+167@ = 2
+$boat_which_missions_are_open_flag = 3
+164@ = 2
+
+:BOAT_6289
+TIMERA = 0
+
+:BOAT_6296
+if 
+  TIMERA > -1
+goto_if_false @BOAT_6442
+wait 0
+gosub @BOAT_20759
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BOAT_6376
+164@ = 2
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1098)
+goto @BOAT_6442
+
+:BOAT_6376
+gosub @BOAT_21719
+gosub @BOAT_20005
+if 
+  165@ == 1
+goto_if_false @BOAT_6435
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1098)
+goto @BOAT_6442
+
+:BOAT_6435
+goto @BOAT_6296
+
+:BOAT_6442
+gosub @BOAT_24852
+gosub @BOAT_37625
+if 
+  164@ == 2
+goto_if_false @BOAT_6488
+goto @BOAT_1323
+goto @BOAT_6495
+
+:BOAT_6488
+goto @BOAT_3821
+
+:BOAT_6495
+goto @BOAT_4181
+
+:BOAT_6502
+if 
+  $boat_mission_selection == 3
+goto_if_false @BOAT_10905
+
+:BOAT_6520
+gosub @BOAT_34020
+
+:BOAT_6527
+Player.SetControl($player1, True)
+gosub @BOAT_19792
+46@ = Car.Create(497, -2303.627, 2105.29, 200.0)
+Char.Delete(47@)
+47@ = Char.CreateInsideCar(PedType.Mission1, 210, 46@)
+Char.ClearTasks(47@)
+Heli.SetBladesFullSpeed(46@)
+Car.SetCruiseSpeed(46@, 250.0)
+Heli.GotoCoords(46@, -2303.627, 2105.29, 200.0, 200.0, 200.0)
+37@ = Car.Create(473, -2124.125, 2438.352, 0.0)
+Car.ChangeColor(37@, 114, 1)
+Car.SetHeading(37@, 180.0)
+39@ = Char.CreateInsideCar(PedType.Mission1, 210, 37@)
+gosub @BOAT_34197
+if 
+  $boatpb_flag == 0
+goto_if_false @BOAT_6744
+Camera.AttachToVehicleLookAtVehicle(46@, 10.0, 10.0, 0.0, 37@, 0.0, SwitchType.JumpCut)
+return 
+
+:BOAT_6744
+gosub @BOAT_33612
+Text.PrintHelp('BOAT_H2')
+Player.SetControl($player1, True)
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_6880
+185@, 186@, 187@ = Car.GetCoordinates(37@)
+198@, 199@, 200@ = Object.GetCoordinates(56@)
+195@, 196@, 197@ = Object.GetCoordinates(57@)
+52@ = Blip.AddForObject(56@)
+51@ = Blip.AddForObject(57@)
+Blip.ChangeColor(52@, BlipColor.Yellow)
+Blip.ChangeColor(51@, BlipColor.Yellow)
+53@ = Blip.AddForObject(58@)
+54@ = Blip.AddForObject(59@)
+gosub @BOAT_34153
+
+:BOAT_6880
+35@ = 0
+
+:BOAT_6887
+wait 0
+if 
+  35@ == 0
+goto_if_false @BOAT_6923
+Audio.LoadMissionAudio(6200, 3)
+35@ = 1
+
+:BOAT_6923
+if 
+  35@ == 1
+goto_if_false @BOAT_6963
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @BOAT_6963
+35@ = 2
+
+:BOAT_6963
+if 
+  not Car.IsDead(46@)
+goto_if_false @BOAT_7053
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_7053
+185@, 186@, 187@ = Car.GetCoordinates(37@)
+185@ -= 150.0
+186@ -= 150.0
+Heli.GotoCoords(46@, 185@, 186@, 187@, 200.0, 200.0)
+
+:BOAT_7053
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BOAT_7084
+164@ = 2
+goto @BOAT_10845
+
+:BOAT_7084
+gosub @BOAT_20340
+if 
+  164@ == 1
+goto_if_false @BOAT_7116
+goto @BOAT_37691
+
+:BOAT_7116
+if 
+  160@ == 0
+goto_if_false @BOAT_7250
+Text.PrintNow('BOAT_C1', 4000, 1)
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @BOAT_7250
+World.SyncWater
+set_lvar_int_to_lvar_int 211@ = 223@
+set_lvar_int_to_lvar_int 210@ = 222@
+set_lvar_int_to_lvar_int 209@ = 221@
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 65535)
+160@ = 5
+$boat_timer = 0
+Hud.ClearTimer($boat_timer)
+Hud.DisplayTimerWithString($boat_timer, TimerDirection.Up, 'BOAT_T1')
+
+:BOAT_7250
+if 
+  160@ > 0
+goto_if_false @BOAT_7296
+if 
+  $boat_timer > 600000
+goto_if_false @BOAT_7296
+160@ = 99
+
+:BOAT_7296
+if 
+  160@ == 5
+goto_if_false @BOAT_7489
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_7489
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_7489
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 10
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(58@)
+195@, 196@, 197@ = Object.GetCoordinates(59@)
+52@ = Blip.AddForObject(58@)
+51@ = Blip.AddForObject(59@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(60@)
+54@ = Blip.AddForObject(61@)
+gosub @BOAT_34153
+
+:BOAT_7489
+if 
+  160@ == 10
+goto_if_false @BOAT_7682
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_7682
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_7682
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 15
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(60@)
+195@, 196@, 197@ = Object.GetCoordinates(61@)
+52@ = Blip.AddForObject(60@)
+51@ = Blip.AddForObject(61@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(62@)
+54@ = Blip.AddForObject(63@)
+gosub @BOAT_34153
+
+:BOAT_7682
+if 
+  160@ == 15
+goto_if_false @BOAT_7963
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_7963
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_7963
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 20
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(62@)
+195@, 196@, 197@ = Object.GetCoordinates(63@)
+52@ = Blip.AddForObject(62@)
+51@ = Blip.AddForObject(63@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(64@)
+54@ = Blip.AddForObject(65@)
+gosub @BOAT_34153
+if 
+  not Car.IsDead(44@)
+goto_if_false @BOAT_7963
+if 
+  not Char.IsDead(45@)
+goto_if_false @BOAT_7963
+if 
+  35@ == 2
+goto_if_false @BOAT_7929
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:BOAT_7929
+Task.CarDriveToCoord(45@, 44@, -2013.476, 1748.499, 0.0, 18.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:BOAT_7963
+if 
+  160@ == 20
+goto_if_false @BOAT_8156
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_8156
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_8156
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 25
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(64@)
+195@, 196@, 197@ = Object.GetCoordinates(65@)
+52@ = Blip.AddForObject(64@)
+51@ = Blip.AddForObject(65@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(66@)
+54@ = Blip.AddForObject(67@)
+gosub @BOAT_34153
+
+:BOAT_8156
+if 
+  160@ == 25
+goto_if_false @BOAT_8349
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_8349
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_8349
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 30
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(66@)
+195@, 196@, 197@ = Object.GetCoordinates(67@)
+52@ = Blip.AddForObject(66@)
+51@ = Blip.AddForObject(67@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(68@)
+54@ = Blip.AddForObject(69@)
+gosub @BOAT_34153
+
+:BOAT_8349
+if 
+  160@ == 30
+goto_if_false @BOAT_8542
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_8542
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_8542
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 35
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(68@)
+195@, 196@, 197@ = Object.GetCoordinates(69@)
+52@ = Blip.AddForObject(68@)
+51@ = Blip.AddForObject(69@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(70@)
+54@ = Blip.AddForObject(71@)
+gosub @BOAT_34153
+
+:BOAT_8542
+if 
+  160@ == 35
+goto_if_false @BOAT_8735
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_8735
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_8735
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 40
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(70@)
+195@, 196@, 197@ = Object.GetCoordinates(71@)
+52@ = Blip.AddForObject(70@)
+51@ = Blip.AddForObject(71@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(72@)
+54@ = Blip.AddForObject(73@)
+gosub @BOAT_34153
+
+:BOAT_8735
+if 
+  160@ == 40
+goto_if_false @BOAT_8928
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_8928
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_8928
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 45
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(72@)
+195@, 196@, 197@ = Object.GetCoordinates(73@)
+52@ = Blip.AddForObject(72@)
+51@ = Blip.AddForObject(73@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(74@)
+54@ = Blip.AddForObject(75@)
+gosub @BOAT_34153
+
+:BOAT_8928
+if 
+  160@ == 45
+goto_if_false @BOAT_9121
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_9121
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_9121
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 50
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(74@)
+195@, 196@, 197@ = Object.GetCoordinates(75@)
+52@ = Blip.AddForObject(74@)
+51@ = Blip.AddForObject(75@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(76@)
+54@ = Blip.AddForObject(77@)
+gosub @BOAT_34153
+
+:BOAT_9121
+if 
+  160@ == 50
+goto_if_false @BOAT_9314
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_9314
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_9314
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 55
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(76@)
+195@, 196@, 197@ = Object.GetCoordinates(77@)
+52@ = Blip.AddForObject(76@)
+51@ = Blip.AddForObject(77@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(78@)
+54@ = Blip.AddForObject(79@)
+gosub @BOAT_34153
+
+:BOAT_9314
+if 
+  160@ == 55
+goto_if_false @BOAT_9507
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_9507
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_9507
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 60
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(78@)
+195@, 196@, 197@ = Object.GetCoordinates(79@)
+52@ = Blip.AddForObject(78@)
+51@ = Blip.AddForObject(79@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(80@)
+54@ = Blip.AddForObject(81@)
+gosub @BOAT_34153
+
+:BOAT_9507
+if 
+  160@ == 60
+goto_if_false @BOAT_9788
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_9788
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_9788
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 65
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(80@)
+195@, 196@, 197@ = Object.GetCoordinates(81@)
+52@ = Blip.AddForObject(80@)
+51@ = Blip.AddForObject(81@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(82@)
+54@ = Blip.AddForObject(83@)
+gosub @BOAT_34153
+if 
+  not Car.IsDead(41@)
+goto_if_false @BOAT_9788
+if 
+  not Char.IsDead(43@)
+goto_if_false @BOAT_9788
+if 
+  35@ == 2
+goto_if_false @BOAT_9754
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:BOAT_9754
+Task.CarDriveToCoord(43@, 41@, -2763.105, 1954.129, 0.0, 10.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:BOAT_9788
+if 
+  160@ == 65
+goto_if_false @BOAT_10069
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_10069
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_10069
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 70
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(82@)
+195@, 196@, 197@ = Object.GetCoordinates(83@)
+52@ = Blip.AddForObject(82@)
+51@ = Blip.AddForObject(83@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(56@)
+54@ = Blip.AddForObject(57@)
+gosub @BOAT_34153
+if 
+  not Car.IsDead(40@)
+goto_if_false @BOAT_10069
+if 
+  not Char.IsDead(42@)
+goto_if_false @BOAT_10069
+if 
+  35@ == 2
+goto_if_false @BOAT_10035
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:BOAT_10035
+Task.CarDriveToCoord(42@, 40@, -2763.105, 1954.129, 0.0, 15.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:BOAT_10069
+if 
+  160@ == 70
+goto_if_false @BOAT_10253
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_10253
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_10253
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+160@ = 80
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(56@)
+195@, 196@, 197@ = Object.GetCoordinates(57@)
+52@ = Blip.AddForObject(56@)
+51@ = Blip.AddForObject(57@)
+Blip.ChangeColor(52@, BlipColor.Yellow)
+Blip.ChangeColor(51@, BlipColor.Yellow)
+Blip.Remove(53@)
+Blip.Remove(54@)
+
+:BOAT_10253
+if 
+  160@ == 80
+goto_if_false @BOAT_10369
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_10369
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_10369
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_33', 1000, 1)
+160@ = 99
+Blip.Remove(52@)
+Blip.Remove(51@)
+
+:BOAT_10369
+if 
+  160@ == 99
+goto_if_false @BOAT_10898
+gosub @BOAT_20088
+gosub @BOAT_20416
+if 
+  is_int_var_greater_than_int_lvar $boat_slalom_best_score > 168@
+goto_if_false @BOAT_10607
+set_lvar_int_to_var_int 169@ = $boat_slalom_best_score
+set_var_int_to_lvar_int $boat_slalom_best_score = 168@
+167@ = 1
+gosub @BOAT_21188
+if 
+  $boat_which_medal_displayed == 4
+goto_if_false @BOAT_10507
+if 
+  $boat_slalom_goldachieved == 0
+goto_if_false @BOAT_10507
+$boat_slalom_goldachieved = 1
+$boat_slalom_silverachieved = 1
+$boat_slalom_bronzeachieved = 1
+
+:BOAT_10507
+if 
+  $boat_which_medal_displayed == 3
+goto_if_false @BOAT_10557
+if 
+  $boat_slalom_silverachieved == 0
+goto_if_false @BOAT_10557
+$boat_slalom_silverachieved = 1
+$boat_slalom_bronzeachieved = 1
+
+:BOAT_10557
+if 
+  $boat_which_medal_displayed == 2
+goto_if_false @BOAT_10600
+if 
+  $boat_slalom_bronzeachieved == 0
+goto_if_false @BOAT_10600
+$boat_slalom_bronzeachieved = 1
+
+:BOAT_10600
+goto @BOAT_10614
+
+:BOAT_10607
+$boat_which_medal_displayed = 0
+
+:BOAT_10614
+if 
+  $boat_which_missions_are_open_flag == 3
+goto_if_false @BOAT_10692
+if 
+  is_int_lvar_greater_than_int_lvar 220@ > 168@
+goto_if_false @BOAT_10692
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1097)
+167@ = 2
+$boat_which_missions_are_open_flag = 4
+164@ = 2
+
+:BOAT_10692
+TIMERA = 0
+
+:BOAT_10699
+if 
+  TIMERA > -1
+goto_if_false @BOAT_10845
+wait 0
+gosub @BOAT_20759
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BOAT_10779
+164@ = 2
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1098)
+goto @BOAT_10845
+
+:BOAT_10779
+gosub @BOAT_21719
+gosub @BOAT_20005
+if 
+  165@ == 1
+goto_if_false @BOAT_10838
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1098)
+goto @BOAT_10845
+
+:BOAT_10838
+goto @BOAT_10699
+
+:BOAT_10845
+gosub @BOAT_24852
+gosub @BOAT_37625
+if 
+  164@ == 2
+goto_if_false @BOAT_10891
+goto @BOAT_1323
+goto @BOAT_10898
+
+:BOAT_10891
+goto @BOAT_6520
+
+:BOAT_10898
+goto @BOAT_6887
+
+:BOAT_10905
+if 
+  $boat_mission_selection == 4
+goto_if_false @BOAT_12785
+
+:BOAT_10923
+gosub @BOAT_34020
+
+:BOAT_10930
+Player.SetControl($player1, True)
+gosub @BOAT_19792
+46@ = Car.Create(497, -3303.627, 2105.29, 200.0)
+Char.Delete(47@)
+47@ = Char.CreateInsideCar(PedType.Mission1, 210, 46@)
+Char.ClearTasks(47@)
+Heli.SetBladesFullSpeed(46@)
+Car.SetCruiseSpeed(46@, 250.0)
+Heli.GotoCoords(46@, -2303.627, 2105.29, 200.0, 200.0, 200.0)
+37@ = Car.Create(539, -2584.316, 2213.475, 0.0)
+Car.ChangeColor(37@, 78, 14)
+Car.SetHeading(37@, 250.0)
+39@ = Char.CreateInsideCar(PedType.Mission1, 210, 37@)
+gosub @BOAT_34197
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_11143
+Car.SetCoordinates(37@, -2318.049, 2312.302, 10.0)
+Car.SetHeading(37@, 174.6078)
+
+:BOAT_11143
+if 
+  $boatpb_flag == 0
+goto_if_false @BOAT_11193
+Camera.AttachToVehicleLookAtVehicle(46@, 10.0, 10.0, 0.0, 37@, 0.0, SwitchType.JumpCut)
+return 
+
+:BOAT_11193
+gosub @BOAT_33612
+Text.PrintHelp('BOAT_H2')
+Player.SetControl($player1, True)
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_11294
+192@ = 0.0
+193@ = 0.0
+194@ = 0.0
+201@ = 0.0
+202@ = 0.0
+203@ = 0.0
+
+:BOAT_11294
+wait 0
+if 
+  not Car.IsDead(46@)
+goto_if_false @BOAT_11388
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_11388
+185@, 186@, 187@ = Car.GetCoordinates(37@)
+185@ -= 150.0
+186@ -= 150.0
+Heli.GotoCoords(46@, 185@, 186@, 187@, 120.0, 120.0)
+
+:BOAT_11388
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BOAT_11419
+164@ = 2
+goto @BOAT_12725
+
+:BOAT_11419
+gosub @BOAT_20340
+if 
+  164@ == 1
+goto_if_false @BOAT_11451
+goto @BOAT_37691
+
+:BOAT_11451
+if 
+  161@ == 0
+goto_if_false @BOAT_11656
+Text.PrintNow('BOAT_D1', 4000, 1)
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @BOAT_11656
+World.SyncWater
+set_lvar_int_to_lvar_int 211@ = 227@
+set_lvar_int_to_lvar_int 210@ = 226@
+set_lvar_int_to_lvar_int 209@ = 225@
+Hud.ClearTimer($boat_timer)
+$boat_timer = 46000
+161@ = 1
+Hud.DisplayTimerWithString($boat_timer, TimerDirection.Down, 'BOAT_T1')
+Blip.Remove(52@)
+Blip.Remove(51@)
+52@ = Blip.AddForObject(56@)
+51@ = Blip.AddForObject(57@)
+Blip.ChangeColor(52@, BlipColor.Yellow)
+Blip.ChangeColor(51@, BlipColor.Yellow)
+198@, 199@, 200@ = Object.GetCoordinates(56@)
+195@, 196@, 197@ = Object.GetCoordinates(57@)
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 65535)
+
+:BOAT_11656
+if 
+  161@ == 1
+goto_if_false @BOAT_11809
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_11809
+if 
+  Char.IsInAngledAreaInCar3D($scplayer, 198@, 199@, 1.0, 195@, 196@, 3.0, 10.0, False)
+goto_if_false @BOAT_11809
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Blip.Remove(52@)
+Blip.Remove(51@)
+49@ = Car.GetSpeed(37@)
+161@ = 2
+198@, 199@, 200@ = Object.GetCoordinates(58@)
+195@, 196@, 197@ = Object.GetCoordinates(59@)
+TIMERB = 0
+
+:BOAT_11809
+if 
+  161@ == 2
+goto_if_false @BOAT_12009
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_12009
+if 
+  TIMERB > 1000
+goto_if_false @BOAT_12009
+192@, 193@, 194@ = Car.GetCoordinates(37@)
+if 
+  1.0 > 194@
+goto_if_false @BOAT_12009
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 600.0, False)
+goto_if_false @BOAT_11960
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+161@ = 3
+TIMERB = 0
+
+:BOAT_11960
+if 
+  not Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 600.0, False)
+goto_if_false @BOAT_12009
+161@ = 4
+TIMERB = 0
+
+:BOAT_12009
+if 
+  161@ == 3
+goto_if_false @BOAT_12095
+201@, 202@, 203@ = Object.GetCoordinates(106@)
+246@ = Math.GetDistanceBetweenCoords2D(201@, 202@, 192@, 193@)
+
+:BOAT_12058
+if 
+  1000 > TIMERB
+goto_if_false @BOAT_12088
+wait 0
+goto @BOAT_12058
+
+:BOAT_12088
+161@ = 99
+
+:BOAT_12095
+if 
+  161@ == 4
+goto_if_false @BOAT_12160
+
+:BOAT_12113
+if 
+  1000 > TIMERB
+goto_if_false @BOAT_12143
+wait 0
+goto @BOAT_12113
+
+:BOAT_12143
+246@ = 0.0
+161@ = 99
+
+:BOAT_12160
+if 
+  161@ > 0
+goto_if_false @BOAT_12233
+if 
+  1 > $boat_timer
+goto_if_false @BOAT_12233
+Text.ClearPrints
+Text.PrintNow('BOAT_34', 4000, 1)
+161@ = 99
+wait 3000
+goto @BOAT_12725
+
+:BOAT_12233
+if 
+  161@ == 99
+goto_if_false @BOAT_12778
+gosub @BOAT_20088
+gosub @BOAT_20416
+if or
+  is_int_lvar_greater_than_int_var 168@ > $boat_skijump_best_score
+  is_int_lvar_greater_than_int_var 168@ > $boat_skijump_best_score
+goto_if_false @BOAT_12479
+set_lvar_int_to_var_int 169@ = $boat_skijump_best_score
+set_var_int_to_lvar_int $boat_skijump_best_score = 168@
+167@ = 1
+gosub @BOAT_21188
+if 
+  $boat_which_medal_displayed == 4
+goto_if_false @BOAT_12379
+if 
+  $boat_skijump_goldachieved == 0
+goto_if_false @BOAT_12379
+$boat_skijump_goldachieved = 1
+$boat_skijump_silverachieved = 1
+$boat_skijump_bronzeachieved = 1
+
+:BOAT_12379
+if 
+  $boat_which_medal_displayed == 3
+goto_if_false @BOAT_12429
+if 
+  $boat_skijump_silverachieved == 0
+goto_if_false @BOAT_12429
+$boat_skijump_silverachieved = 1
+$boat_skijump_bronzeachieved = 1
+
+:BOAT_12429
+if 
+  $boat_which_medal_displayed == 2
+goto_if_false @BOAT_12472
+if 
+  $boat_skijump_bronzeachieved == 0
+goto_if_false @BOAT_12472
+$boat_skijump_bronzeachieved = 1
+
+:BOAT_12472
+goto @BOAT_12486
+
+:BOAT_12479
+$boat_which_medal_displayed = 0
+
+:BOAT_12486
+if 
+  $boat_which_missions_are_open_flag == 4
+goto_if_false @BOAT_12572
+if or
+  is_int_lvar_greater_than_int_lvar 168@ > 224@
+  is_int_lvar_equal_to_int_lvar 168@ == 224@
+goto_if_false @BOAT_12572
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1097)
+167@ = 2
+$boat_which_missions_are_open_flag = 5
+164@ = 2
+
+:BOAT_12572
+TIMERA = 0
+
+:BOAT_12579
+if 
+  TIMERA > -1
+goto_if_false @BOAT_12725
+wait 0
+gosub @BOAT_20759
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BOAT_12659
+164@ = 2
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1098)
+goto @BOAT_12725
+
+:BOAT_12659
+gosub @BOAT_21719
+gosub @BOAT_20005
+if 
+  165@ == 1
+goto_if_false @BOAT_12718
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1098)
+goto @BOAT_12725
+
+:BOAT_12718
+goto @BOAT_12579
+
+:BOAT_12725
+gosub @BOAT_24852
+gosub @BOAT_37625
+if 
+  164@ == 2
+goto_if_false @BOAT_12771
+goto @BOAT_1323
+goto @BOAT_12778
+
+:BOAT_12771
+goto @BOAT_10923
+
+:BOAT_12778
+goto @BOAT_11294
+
+:BOAT_12785
+if 
+  $boat_mission_selection == 5
+goto_if_false @BOAT_19792
+
+:BOAT_12803
+gosub @BOAT_34020
+
+:BOAT_12810
+Player.SetControl($player1, True)
+gosub @BOAT_19792
+46@ = Car.Create(497, -2303.627, 2105.29, 200.0)
+Char.Delete(47@)
+47@ = Char.CreateInsideCar(PedType.Mission1, 210, 46@)
+Char.ClearTasks(47@)
+Heli.SetBladesFullSpeed(46@)
+Car.SetCruiseSpeed(46@, 250.0)
+Heli.GotoCoords(46@, -2303.627, 2105.29, 200.0, 200.0, 200.0)
+37@ = Car.Create(539, -2014.267, 2365.429, 6.0509)
+Car.ChangeColor(37@, 6, 2)
+Car.SetHeading(37@, 111.0)
+39@ = Char.CreateInsideCar(PedType.Mission1, 210, 37@)
+gosub @BOAT_34197
+if 
+  $boatpb_flag == 0
+goto_if_false @BOAT_13027
+Camera.AttachToVehicleLookAtVehicle(46@, 10.0, 10.0, 0.0, 37@, 0.0, SwitchType.JumpCut)
+return 
+
+:BOAT_13027
+gosub @BOAT_33612
+Text.PrintHelp('BOAT_H2')
+Player.SetControl($player1, True)
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_13156
+185@, 186@, 187@ = Car.GetCoordinates(37@)
+198@, 199@, 200@ = Object.GetCoordinates(56@)
+195@, 196@, 197@ = Object.GetCoordinates(57@)
+52@ = Blip.AddForObject(56@)
+51@ = Blip.AddForObject(57@)
+53@ = Blip.AddForObject(58@)
+54@ = Blip.AddForObject(59@)
+gosub @BOAT_34153
+Car.FreezePosition(37@, True)
+
+:BOAT_13156
+35@ = 0
+
+:BOAT_13163
+wait 0
+if 
+  35@ == 0
+goto_if_false @BOAT_13199
+Audio.LoadMissionAudio(6200, 3)
+35@ = 1
+
+:BOAT_13199
+if 
+  35@ == 1
+goto_if_false @BOAT_13239
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @BOAT_13239
+35@ = 2
+
+:BOAT_13239
+if 
+is_ps2_keyboard_key_pressed 87
+goto_if_false @BOAT_13261
+162@ = 99
+
+:BOAT_13261
+if 
+  not Car.IsDead(46@)
+goto_if_false @BOAT_13351
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_13351
+185@, 186@, 187@ = Car.GetCoordinates(37@)
+185@ -= 150.0
+186@ -= 150.0
+Heli.GotoCoords(46@, 185@, 186@, 187@, 200.0, 200.0)
+
+:BOAT_13351
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BOAT_13382
+164@ = 2
+goto @BOAT_19598
+
+:BOAT_13382
+gosub @BOAT_20340
+if 
+  164@ == 1
+goto_if_false @BOAT_13414
+goto @BOAT_37691
+
+:BOAT_13414
+if 
+  162@ == 0
+goto_if_false @BOAT_13555
+Text.PrintNow('BOAT_C1', 4000, 1)
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @BOAT_13555
+World.SyncWater
+set_lvar_int_to_lvar_int 211@ = 231@
+set_lvar_int_to_lvar_int 210@ = 230@
+set_lvar_int_to_lvar_int 209@ = 229@
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 65535)
+162@ = 5
+$boat_timer = 0
+Hud.ClearTimer($boat_timer)
+Hud.DisplayTimerWithString($boat_timer, TimerDirection.Up, 'BOAT_T1')
+Car.FreezePosition(37@, False)
+
+:BOAT_13555
+if 
+  162@ > 0
+goto_if_false @BOAT_13601
+if 
+  $boat_timer > 600000
+goto_if_false @BOAT_13601
+162@ = 99
+
+:BOAT_13601
+if 
+  162@ == 5
+goto_if_false @BOAT_13794
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_13794
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_13794
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 10
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(58@)
+195@, 196@, 197@ = Object.GetCoordinates(59@)
+52@ = Blip.AddForObject(58@)
+51@ = Blip.AddForObject(59@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(60@)
+54@ = Blip.AddForObject(61@)
+gosub @BOAT_34153
+
+:BOAT_13794
+if 
+  162@ == 10
+goto_if_false @BOAT_13987
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_13987
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_13987
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 15
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(60@)
+195@, 196@, 197@ = Object.GetCoordinates(61@)
+52@ = Blip.AddForObject(60@)
+51@ = Blip.AddForObject(61@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(62@)
+54@ = Blip.AddForObject(63@)
+gosub @BOAT_34153
+
+:BOAT_13987
+if 
+  162@ == 15
+goto_if_false @BOAT_14180
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_14180
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_14180
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 20
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(62@)
+195@, 196@, 197@ = Object.GetCoordinates(63@)
+52@ = Blip.AddForObject(62@)
+51@ = Blip.AddForObject(63@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(64@)
+54@ = Blip.AddForObject(65@)
+gosub @BOAT_34153
+
+:BOAT_14180
+if 
+  162@ == 20
+goto_if_false @BOAT_14373
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_14373
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_14373
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 25
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(64@)
+195@, 196@, 197@ = Object.GetCoordinates(65@)
+52@ = Blip.AddForObject(64@)
+51@ = Blip.AddForObject(65@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(66@)
+54@ = Blip.AddForObject(67@)
+gosub @BOAT_34153
+
+:BOAT_14373
+if 
+  162@ == 25
+goto_if_false @BOAT_14566
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_14566
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_14566
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 30
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(66@)
+195@, 196@, 197@ = Object.GetCoordinates(67@)
+52@ = Blip.AddForObject(66@)
+51@ = Blip.AddForObject(67@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(68@)
+54@ = Blip.AddForObject(69@)
+gosub @BOAT_34153
+
+:BOAT_14566
+if 
+  162@ == 30
+goto_if_false @BOAT_14759
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_14759
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_14759
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 35
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(68@)
+195@, 196@, 197@ = Object.GetCoordinates(69@)
+52@ = Blip.AddForObject(68@)
+51@ = Blip.AddForObject(69@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(70@)
+54@ = Blip.AddForObject(71@)
+gosub @BOAT_34153
+
+:BOAT_14759
+if 
+  162@ == 35
+goto_if_false @BOAT_14952
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_14952
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_14952
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 40
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(70@)
+195@, 196@, 197@ = Object.GetCoordinates(71@)
+52@ = Blip.AddForObject(70@)
+51@ = Blip.AddForObject(71@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(72@)
+54@ = Blip.AddForObject(73@)
+gosub @BOAT_34153
+
+:BOAT_14952
+if 
+  162@ == 40
+goto_if_false @BOAT_15145
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_15145
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_15145
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 45
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(72@)
+195@, 196@, 197@ = Object.GetCoordinates(73@)
+52@ = Blip.AddForObject(72@)
+51@ = Blip.AddForObject(73@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(74@)
+54@ = Blip.AddForObject(75@)
+gosub @BOAT_34153
+
+:BOAT_15145
+if 
+  162@ == 45
+goto_if_false @BOAT_15338
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_15338
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_15338
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 50
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(74@)
+195@, 196@, 197@ = Object.GetCoordinates(75@)
+52@ = Blip.AddForObject(74@)
+51@ = Blip.AddForObject(75@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(76@)
+54@ = Blip.AddForObject(77@)
+gosub @BOAT_34153
+
+:BOAT_15338
+if 
+  162@ == 50
+goto_if_false @BOAT_15531
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_15531
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_15531
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 55
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(76@)
+195@, 196@, 197@ = Object.GetCoordinates(77@)
+52@ = Blip.AddForObject(76@)
+51@ = Blip.AddForObject(77@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(78@)
+54@ = Blip.AddForObject(79@)
+gosub @BOAT_34153
+
+:BOAT_15531
+if 
+  162@ == 55
+goto_if_false @BOAT_15724
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_15724
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_15724
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 60
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(78@)
+195@, 196@, 197@ = Object.GetCoordinates(79@)
+52@ = Blip.AddForObject(78@)
+51@ = Blip.AddForObject(79@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(80@)
+54@ = Blip.AddForObject(81@)
+gosub @BOAT_34153
+
+:BOAT_15724
+if 
+  162@ == 60
+goto_if_false @BOAT_16005
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_16005
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_16005
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 65
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(80@)
+195@, 196@, 197@ = Object.GetCoordinates(81@)
+52@ = Blip.AddForObject(80@)
+51@ = Blip.AddForObject(81@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(82@)
+54@ = Blip.AddForObject(83@)
+gosub @BOAT_34153
+if 
+  not Car.IsDead(41@)
+goto_if_false @BOAT_16005
+if 
+  not Char.IsDead(43@)
+goto_if_false @BOAT_16005
+if 
+  35@ == 2
+goto_if_false @BOAT_15971
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:BOAT_15971
+Task.CarDriveToCoord(43@, 41@, -2763.105, 1954.129, 0.0, 10.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:BOAT_16005
+if 
+  162@ == 65
+goto_if_false @BOAT_16286
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_16286
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_16286
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 70
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(82@)
+195@, 196@, 197@ = Object.GetCoordinates(83@)
+52@ = Blip.AddForObject(82@)
+51@ = Blip.AddForObject(83@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(84@)
+54@ = Blip.AddForObject(85@)
+gosub @BOAT_34153
+if 
+  not Car.IsDead(40@)
+goto_if_false @BOAT_16286
+if 
+  not Char.IsDead(42@)
+goto_if_false @BOAT_16286
+if 
+  35@ == 2
+goto_if_false @BOAT_16252
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:BOAT_16252
+Task.CarDriveToCoord(42@, 40@, -2763.105, 1954.129, 0.0, 15.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:BOAT_16286
+if 
+  162@ == 70
+goto_if_false @BOAT_16545
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_16545
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_16545
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 75
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(84@)
+195@, 196@, 197@ = Object.GetCoordinates(85@)
+52@ = Blip.AddForObject(84@)
+51@ = Blip.AddForObject(85@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(86@)
+54@ = Blip.AddForObject(87@)
+gosub @BOAT_34153
+if 
+  not Car.IsDead(40@)
+goto_if_false @BOAT_16545
+if 
+  not Char.IsDead(42@)
+goto_if_false @BOAT_16545
+Task.CarDriveToCoord(42@, 40@, -2763.105, 1954.129, 0.0, 15.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:BOAT_16545
+if 
+  162@ == 75
+goto_if_false @BOAT_16826
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_16826
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_16826
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 80
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(86@)
+195@, 196@, 197@ = Object.GetCoordinates(87@)
+52@ = Blip.AddForObject(86@)
+51@ = Blip.AddForObject(87@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(88@)
+54@ = Blip.AddForObject(89@)
+gosub @BOAT_34153
+if 
+  not Car.IsDead(40@)
+goto_if_false @BOAT_16826
+if 
+  not Char.IsDead(42@)
+goto_if_false @BOAT_16826
+if 
+  35@ == 2
+goto_if_false @BOAT_16792
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:BOAT_16792
+Task.CarDriveToCoord(42@, 40@, -2763.105, 1954.129, 0.0, 15.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:BOAT_16826
+if 
+  162@ == 80
+goto_if_false @BOAT_17085
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_17085
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_17085
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 82
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(88@)
+195@, 196@, 197@ = Object.GetCoordinates(89@)
+52@ = Blip.AddForObject(88@)
+51@ = Blip.AddForObject(89@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(90@)
+54@ = Blip.AddForObject(91@)
+gosub @BOAT_34153
+if 
+  not Car.IsDead(40@)
+goto_if_false @BOAT_17085
+if 
+  not Char.IsDead(42@)
+goto_if_false @BOAT_17085
+Task.CarDriveToCoord(42@, 40@, -2763.105, 1954.129, 0.0, 15.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:BOAT_17085
+if 
+  162@ == 82
+goto_if_false @BOAT_17366
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_17366
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_17366
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 84
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(90@)
+195@, 196@, 197@ = Object.GetCoordinates(91@)
+52@ = Blip.AddForObject(90@)
+51@ = Blip.AddForObject(91@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(92@)
+54@ = Blip.AddForObject(93@)
+gosub @BOAT_34153
+if 
+  not Car.IsDead(40@)
+goto_if_false @BOAT_17366
+if 
+  not Char.IsDead(42@)
+goto_if_false @BOAT_17366
+if 
+  35@ == 2
+goto_if_false @BOAT_17332
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:BOAT_17332
+Task.CarDriveToCoord(42@, 40@, -2763.105, 1954.129, 0.0, 15.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:BOAT_17366
+if 
+  162@ == 84
+goto_if_false @BOAT_17625
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_17625
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_17625
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 86
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(92@)
+195@, 196@, 197@ = Object.GetCoordinates(93@)
+52@ = Blip.AddForObject(92@)
+51@ = Blip.AddForObject(93@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(94@)
+54@ = Blip.AddForObject(95@)
+gosub @BOAT_34153
+if 
+  not Car.IsDead(40@)
+goto_if_false @BOAT_17625
+if 
+  not Char.IsDead(42@)
+goto_if_false @BOAT_17625
+Task.CarDriveToCoord(42@, 40@, -2763.105, 1954.129, 0.0, 15.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:BOAT_17625
+if 
+  162@ == 86
+goto_if_false @BOAT_17884
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_17884
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_17884
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 88
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(94@)
+195@, 196@, 197@ = Object.GetCoordinates(95@)
+52@ = Blip.AddForObject(94@)
+51@ = Blip.AddForObject(95@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(96@)
+54@ = Blip.AddForObject(97@)
+gosub @BOAT_34153
+if 
+  not Car.IsDead(40@)
+goto_if_false @BOAT_17884
+if 
+  not Char.IsDead(42@)
+goto_if_false @BOAT_17884
+Task.CarDriveToCoord(42@, 40@, -2763.105, 1954.129, 0.0, 15.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:BOAT_17884
+if 
+  162@ == 88
+goto_if_false @BOAT_18143
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_18143
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_18143
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 90
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(96@)
+195@, 196@, 197@ = Object.GetCoordinates(97@)
+52@ = Blip.AddForObject(96@)
+51@ = Blip.AddForObject(97@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(98@)
+54@ = Blip.AddForObject(99@)
+gosub @BOAT_34153
+if 
+  not Car.IsDead(40@)
+goto_if_false @BOAT_18143
+if 
+  not Char.IsDead(42@)
+goto_if_false @BOAT_18143
+Task.CarDriveToCoord(42@, 40@, -2763.105, 1954.129, 0.0, 15.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+
+:BOAT_18143
+if 
+  162@ == 90
+goto_if_false @BOAT_18320
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_18320
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_18320
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 91
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(98@)
+195@, 196@, 197@ = Object.GetCoordinates(99@)
+52@ = Blip.AddForObject(98@)
+51@ = Blip.AddForObject(99@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+gosub @BOAT_34153
+
+:BOAT_18320
+if 
+  162@ == 91
+goto_if_false @BOAT_18436
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_18436
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_18436
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_33', 1000, 1)
+162@ = 99
+Blip.Remove(52@)
+Blip.Remove(51@)
+
+:BOAT_18436
+if 
+  162@ == 92
+goto_if_false @BOAT_18629
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_18629
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_18629
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 93
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(102@)
+195@, 196@, 197@ = Object.GetCoordinates(103@)
+52@ = Blip.AddForObject(102@)
+51@ = Blip.AddForObject(103@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(104@)
+54@ = Blip.AddForObject(105@)
+gosub @BOAT_34153
+
+:BOAT_18629
+if 
+  162@ == 93
+goto_if_false @BOAT_18822
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_18822
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_18822
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 94
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(104@)
+195@, 196@, 197@ = Object.GetCoordinates(105@)
+52@ = Blip.AddForObject(104@)
+51@ = Blip.AddForObject(105@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+53@ = Blip.AddForObject(56@)
+54@ = Blip.AddForObject(57@)
+gosub @BOAT_34153
+
+:BOAT_18822
+if 
+  162@ == 94
+goto_if_false @BOAT_18999
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_18999
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_18999
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_31', 1000, 1)
+162@ = 97
+Blip.Remove(52@)
+Blip.Remove(51@)
+198@, 199@, 200@ = Object.GetCoordinates(56@)
+195@, 196@, 197@ = Object.GetCoordinates(57@)
+52@ = Blip.AddForObject(56@)
+51@ = Blip.AddForObject(57@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+gosub @BOAT_34153
+
+:BOAT_18999
+if 
+  162@ == 97
+goto_if_false @BOAT_19115
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_19115
+if 
+  Char.IsInAngledAreaInCar2D($scplayer, 198@, 199@, 195@, 196@, 3.0, False)
+goto_if_false @BOAT_19115
+Audio.ReportMissionAudioEventAtPosition(198@, 199@, 200@, 249@)
+Text.PrintNow('BOAT_33', 1000, 1)
+162@ = 99
+Blip.Remove(52@)
+Blip.Remove(51@)
+
+:BOAT_19115
+if 
+  162@ == 99
+goto_if_false @BOAT_19785
+Blip.Remove(52@)
+Blip.Remove(51@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+gosub @BOAT_20088
+gosub @BOAT_20416
+if 
+  is_int_var_greater_than_int_lvar $boat_hover_best_score > 168@
+goto_if_false @BOAT_19373
+set_lvar_int_to_var_int 169@ = $boat_hover_best_score
+set_var_int_to_lvar_int $boat_hover_best_score = 168@
+167@ = 1
+gosub @BOAT_21188
+if 
+  $boat_which_medal_displayed == 4
+goto_if_false @BOAT_19273
+if 
+  $boat_hover_goldachieved == 0
+goto_if_false @BOAT_19273
+$boat_hover_goldachieved = 1
+$boat_hover_silverachieved = 1
+$boat_hover_bronzeachieved = 1
+
+:BOAT_19273
+if 
+  $boat_which_medal_displayed == 3
+goto_if_false @BOAT_19323
+if 
+  $boat_hover_silverachieved == 0
+goto_if_false @BOAT_19323
+$boat_hover_silverachieved = 1
+$boat_hover_bronzeachieved = 1
+
+:BOAT_19323
+if 
+  $boat_which_medal_displayed == 2
+goto_if_false @BOAT_19366
+if 
+  $boat_hover_bronzeachieved == 0
+goto_if_false @BOAT_19366
+$boat_hover_bronzeachieved = 1
+
+:BOAT_19366
+goto @BOAT_19380
+
+:BOAT_19373
+$boat_which_medal_displayed = 0
+
+:BOAT_19380
+if 
+  $boat_which_missions_are_open_flag == 5
+goto_if_false @BOAT_19445
+if 
+  is_int_lvar_greater_than_int_lvar 228@ > 168@
+goto_if_false @BOAT_19445
+167@ = 2
+$boat_which_missions_are_open_flag = 5
+251@ = 1
+164@ = 2
+
+:BOAT_19445
+TIMERA = 0
+
+:BOAT_19452
+if 
+  TIMERA > -1
+goto_if_false @BOAT_19598
+wait 0
+gosub @BOAT_20759
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BOAT_19532
+164@ = 2
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1098)
+goto @BOAT_19598
+
+:BOAT_19532
+gosub @BOAT_21719
+gosub @BOAT_20005
+if 
+  165@ == 1
+goto_if_false @BOAT_19591
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1098)
+goto @BOAT_19598
+
+:BOAT_19591
+goto @BOAT_19452
+
+:BOAT_19598
+gosub @BOAT_24852
+gosub @BOAT_37625
+if 
+  164@ == 2
+goto_if_false @BOAT_19778
+if 
+  251@ == 1
+goto_if_false @BOAT_19764
+if 
+  $boat_passed_once == 0
+goto_if_false @BOAT_19764
+Camera.DoFade(0, 1000)
+
+:BOAT_19673
+if 
+  Camera.GetFadingStatus
+goto_if_false @BOAT_19697
+wait 0
+goto @BOAT_19673
+
+:BOAT_19697
+Char.SetHeading($scplayer, 177@)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Streaming.LoadScene(-2185.335, 2410.409, 3.9752)
+Camera.DoFade(1, 2000)
+
+:BOAT_19733
+if 
+  Camera.GetFadingStatus
+goto_if_false @BOAT_19757
+wait 0
+goto @BOAT_19733
+
+:BOAT_19757
+goto @BOAT_37731
+
+:BOAT_19764
+goto @BOAT_1323
+goto @BOAT_19785
+
+:BOAT_19778
+goto @BOAT_12803
+
+:BOAT_19785
+goto @BOAT_13163
+
+:BOAT_19792
+158@ = 0
+159@ = 0
+160@ = 0
+161@ = 0
+162@ = 0
+$boat_timer = 0
+163@ = 0
+164@ = 0
+165@ = 0
+166@ = 0
+167@ = 0
+168@ = 0
+48@ = 1000
+188@ = 0.0
+189@ = 0.0
+190@ = 0.0
+191@ = 0
+207@ = 0
+208@ = 0
+49@ = 0.0
+211@ = 0
+210@ = 0
+209@ = 0
+233@ = 0
+192@ = 0.0
+193@ = 0.0
+194@ = 0.0
+return 
+
+:BOAT_20005
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BOAT_20061
+if 
+  166@ == 1
+goto_if_false @BOAT_20054
+166@ = 0
+165@ = 1
+
+:BOAT_20054
+goto @BOAT_20086
+
+:BOAT_20061
+if 
+  166@ == 0
+goto_if_false @BOAT_20086
+166@ = 1
+
+:BOAT_20086
+return 
+
+:BOAT_20088
+Text.ClearHelp
+Player.SetControl($player1, False)
+if 
+  $boat_mission_selection == 1
+goto_if_false @BOAT_20155
+Hud.FreezeTimer(True)
+Boat.Stop(37@)
+Car.SetForwardSpeed(37@, 0.0)
+Car.FreezePosition(37@, False)
+Boat.Anchor(37@, True)
+Car.FreezePosition(37@, False)
+
+:BOAT_20155
+if 
+  $boat_mission_selection > 1
+goto_if_false @BOAT_20338
+Hud.FreezeTimer(True)
+TIMERB = 0
+
+:BOAT_20184
+if 
+  1000 > TIMERB
+goto_if_false @BOAT_20214
+wait 0
+goto @BOAT_20184
+
+:BOAT_20214
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_20338
+if 
+  $boat_mission_selection <> 4
+goto_if_false @BOAT_20271
+if 
+  $boat_mission_selection <> 5
+goto_if_false @BOAT_20271
+Boat.Stop(37@)
+
+:BOAT_20271
+Car.SetForwardSpeed(37@, 0.0)
+Car.FreezePosition(37@, False)
+if 
+  $boat_mission_selection <> 4
+goto_if_false @BOAT_20331
+if 
+  $boat_mission_selection <> 5
+goto_if_false @BOAT_20331
+Boat.Anchor(37@, True)
+
+:BOAT_20331
+Car.FreezePosition(37@, False)
+
+:BOAT_20338
+return 
+
+:BOAT_20340
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_20407
+if 
+  163@ == 1
+goto_if_false @BOAT_20400
+if 
+  not Char.IsInCar($scplayer, 37@)
+goto_if_false @BOAT_20400
+164@ = 1
+
+:BOAT_20400
+goto @BOAT_20414
+
+:BOAT_20407
+164@ = 1
+
+:BOAT_20414
+return 
+
+:BOAT_20416
+if 
+  $boat_mission_selection <> 4
+goto_if_false @BOAT_20603
+set_lvar_int_to_var_int 208@ = $boat_timer
+233@ = 0
+48@ = 1000
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_20481
+250@ = Car.GetHealth(37@)
+
+:BOAT_20481
+if 
+  $boat_mission_selection == 5
+goto_if_false @BOAT_20506
+250@ += 120
+
+:BOAT_20506
+if 
+  1000 > 250@
+goto_if_false @BOAT_20533
+233@ = 5000
+
+:BOAT_20533
+if 
+  995 > 250@
+goto_if_false @BOAT_20560
+233@ = 7000
+
+:BOAT_20560
+if 
+  990 > 250@
+goto_if_false @BOAT_20587
+233@ = 10000
+
+:BOAT_20587
+set_lvar_int_to_lvar_int 168@ = 208@
+add_int_lvar_to_int_lvar 168@ += 233@
+
+:BOAT_20603
+if 
+  $boat_mission_selection == 4
+goto_if_false @BOAT_20757
+set_lvar_int_to_var_int 208@ = $boat_timer
+233@ = 0
+48@ = 1000
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_20668
+250@ = Car.GetHealth(37@)
+
+:BOAT_20668
+if 
+  995 > 250@
+goto_if_false @BOAT_20695
+233@ = 5000
+
+:BOAT_20695
+if 
+  990 > 250@
+goto_if_false @BOAT_20722
+233@ = 10000
+
+:BOAT_20722
+if 
+  985 > 250@
+goto_if_false @BOAT_20749
+233@ = 15000
+
+:BOAT_20749
+cset_lvar_int_to_lvar_float 168@ = float 246@
+
+:BOAT_20757
+return 
+
+:BOAT_20759
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_21186
+if 
+  191@ == 0
+goto_if_false @BOAT_20898
+188@, 189@, 190@ = Car.GetCoordinates(37@)
+190@ += 5.0
+188@ = Car.GetOffsetInWorldCoords(189@, 190@, 37@, 10.0, 0.0, 5.0)
+Camera.SetFixedPosition(188@, 189@, 190@, 0.0, 0.0, 0.0)
+Camera.PointAtCar(37@, CameraMode.Fixed, SwitchType.Interpolation)
+Camera.SetInterpolationParameters(50.0, 2000)
+191@ = 1
+
+:BOAT_20898
+if 
+  TIMERA > 3000
+goto_if_false @BOAT_21035
+if 
+  6000 > TIMERA
+goto_if_false @BOAT_21035
+if 
+  191@ == 1
+goto_if_false @BOAT_21035
+188@ = Car.GetOffsetInWorldCoords(189@, 190@, 37@, 0.0, 10.0, 5.0)
+Camera.SetFixedPosition(188@, 189@, 190@, 0.0, 0.0, 0.0)
+Camera.PointAtCar(37@, CameraMode.Fixed, SwitchType.Interpolation)
+Camera.SetInterpolationParameters(50.0, 2000)
+191@ = 2
+
+:BOAT_21035
+if 
+  TIMERA > 6000
+goto_if_false @BOAT_21153
+if 
+  191@ == 2
+goto_if_false @BOAT_21153
+188@ = Car.GetOffsetInWorldCoords(189@, 190@, 37@, -10.0, 0.0, 5.0)
+Camera.SetFixedPosition(188@, 189@, 190@, 0.0, 0.0, 0.0)
+Camera.PointAtCar(37@, CameraMode.Fixed, SwitchType.Interpolation)
+Camera.SetInterpolationParameters(50.0, 2000)
+191@ = 3
+
+:BOAT_21153
+if 
+  TIMERA > 9000
+goto_if_false @BOAT_21186
+191@ = 1
+TIMERA = 0
+
+:BOAT_21186
+return 
+
+:BOAT_21188
+$boat_which_medal_displayed = 0
+if 
+  $boat_mission_selection <> 4
+goto_if_false @BOAT_21444
+if 
+  is_int_lvar_greater_than_int_lvar 209@ > 168@
+goto_if_false @BOAT_21299
+if 
+  is_int_lvar_greater_than_int_lvar 168@ > 210@
+goto_if_false @BOAT_21299
+if and
+  is_int_lvar_greater_than_int_lvar 209@ > 169@
+  is_int_lvar_greater_than_int_lvar 169@ > 210@
+goto_if_false @BOAT_21292
+$boat_which_medal_displayed = 0
+goto @BOAT_21299
+
+:BOAT_21292
+$boat_which_medal_displayed = 2
+
+:BOAT_21299
+if 
+  is_int_lvar_greater_than_int_lvar 210@ > 168@
+goto_if_false @BOAT_21385
+if 
+  is_int_lvar_greater_than_int_lvar 168@ > 211@
+goto_if_false @BOAT_21385
+if and
+  is_int_lvar_greater_than_int_lvar 210@ > 169@
+  is_int_lvar_greater_than_int_lvar 169@ > 211@
+goto_if_false @BOAT_21378
+$boat_which_medal_displayed = 0
+goto @BOAT_21385
+
+:BOAT_21378
+$boat_which_medal_displayed = 3
+
+:BOAT_21385
+if 
+  is_int_lvar_greater_than_int_lvar 211@ > 168@
+goto_if_false @BOAT_21444
+if 
+  is_int_lvar_greater_than_int_lvar 211@ > 169@
+goto_if_false @BOAT_21437
+$boat_which_medal_displayed = 0
+goto @BOAT_21444
+
+:BOAT_21437
+$boat_which_medal_displayed = 4
+
+:BOAT_21444
+if 
+  $boat_mission_selection == 4
+goto_if_false @BOAT_21717
+if or
+  is_int_lvar_greater_than_int_lvar 168@ > 209@
+  is_int_lvar_equal_to_int_lvar 168@ == 209@
+goto_if_false @BOAT_21556
+if 
+  is_int_lvar_greater_than_int_lvar 210@ > 168@
+goto_if_false @BOAT_21556
+if and
+  is_int_lvar_greater_than_int_lvar 169@ > 209@
+  is_int_lvar_greater_than_int_lvar 210@ > 169@
+goto_if_false @BOAT_21549
+$boat_which_medal_displayed = 0
+goto @BOAT_21556
+
+:BOAT_21549
+$boat_which_medal_displayed = 2
+
+:BOAT_21556
+if or
+  is_int_lvar_greater_than_int_lvar 168@ > 210@
+  is_int_lvar_equal_to_int_lvar 168@ == 210@
+goto_if_false @BOAT_21650
+if 
+  is_int_lvar_greater_than_int_lvar 211@ > 168@
+goto_if_false @BOAT_21650
+if and
+  is_int_lvar_greater_than_int_lvar 169@ > 210@
+  is_int_lvar_greater_than_int_lvar 211@ > 169@
+goto_if_false @BOAT_21643
+$boat_which_medal_displayed = 0
+goto @BOAT_21650
+
+:BOAT_21643
+$boat_which_medal_displayed = 3
+
+:BOAT_21650
+if or
+  is_int_lvar_greater_than_int_lvar 168@ > 211@
+  is_int_lvar_equal_to_int_lvar 168@ == 211@
+goto_if_false @BOAT_21717
+if 
+  is_int_lvar_greater_than_int_lvar 169@ > 211@
+goto_if_false @BOAT_21710
+$boat_which_medal_displayed = 0
+goto @BOAT_21717
+
+:BOAT_21710
+$boat_which_medal_displayed = 4
+
+:BOAT_21717
+return 
+
+:BOAT_21719
+Hud.Display(False)
+Hud.DisplayRadar(False)
+if 
+  2 > $boat_which_medal_displayed
+goto_if_false @BOAT_21850
+gosub @BOAT_37684
+if 
+  252@ == 4
+goto_if_false @BOAT_21810
+Hud.DrawWindow(122.0, 240.0, 520.0, 400.0, 'BOAT_75', 3)
+goto @BOAT_21843
+
+:BOAT_21810
+Hud.DrawWindow(152.0, 240.0, 490.0, 400.0, 'BOAT_75', 3)
+
+:BOAT_21843
+goto @BOAT_21948
+
+:BOAT_21850
+gosub @BOAT_37684
+if 
+  252@ == 4
+goto_if_false @BOAT_21915
+Hud.DrawWindow(122.0, 220.0, 520.0, 400.0, 'DUMMY', 3)
+goto @BOAT_21948
+
+:BOAT_21915
+Hud.DrawWindow(152.0, 220.0, 490.0, 400.0, 'DUMMY', 3)
+
+:BOAT_21948
+gosub @BOAT_33376
+gosub @BOAT_33376
+if 
+  48@ > 0
+goto_if_false @BOAT_24257
+Text.ClearPrints
+gosub @BOAT_33376
+Text.SetBackground(False)
+170@, 171@, 172@, 173@ = Hud.GetColor(HudObject.Armor)
+Text.SetColor(170@, 171@, 172@, 173@)
+241@ = 0.0
+cset_lvar_float_to_lvar_int 241@ = integer 208@
+241@ /= 1000.0
+if 
+  $boat_mission_selection <> 4
+goto_if_false @BOAT_22153
+gosub @BOAT_37684
+if 
+  252@ == 4
+goto_if_false @BOAT_22127
+Text.DisplayWithFloat(145.0, 275.0, 'BOAT_7', 241@, 2)
+goto @BOAT_22153
+
+:BOAT_22127
+Text.DisplayWithFloat(180.0, 275.0, 'BOAT_7', 241@, 2)
+
+:BOAT_22153
+gosub @BOAT_33376
+170@, 171@, 172@, 173@ = Hud.GetColor(HudObject.Armor)
+Text.SetColor(170@, 171@, 172@, 173@)
+240@ = 0.0
+cset_lvar_float_to_lvar_int 240@ = integer 233@
+240@ /= 1000.0
+if 
+  $boat_mission_selection <> 4
+goto_if_false @BOAT_22320
+gosub @BOAT_37684
+if 
+  252@ == 4
+goto_if_false @BOAT_22294
+Text.DisplayWithFloat(145.0, 295.0, 'BOAT_9', 240@, 2)
+goto @BOAT_22320
+
+:BOAT_22294
+Text.DisplayWithFloat(180.0, 295.0, 'BOAT_9', 240@, 2)
+
+:BOAT_22320
+gosub @BOAT_33376
+if or
+  167@ == 1
+  167@ == 2
+goto_if_false @BOAT_22389
+170@, 171@, 172@, 173@ = Hud.GetColor(HudObject.Armor)
+Text.SetColor(170@, 171@, 172@, 173@)
+goto @BOAT_22419
+
+:BOAT_22389
+170@, 171@, 172@, 173@ = Hud.GetColor(HudObject.Armor)
+Text.SetColor(170@, 171@, 172@, 173@)
+
+:BOAT_22419
+242@ = 0.0
+cset_lvar_float_to_lvar_int 242@ = integer 168@
+242@ /= 1000.0
+if 
+  $boat_mission_selection <> 4
+goto_if_false @BOAT_22549
+gosub @BOAT_37684
+if 
+  252@ == 4
+goto_if_false @BOAT_22523
+Text.DisplayWithFloat(145.0, 315.0, 'BOAT_10', 242@, 2)
+goto @BOAT_22549
+
+:BOAT_22523
+Text.DisplayWithFloat(180.0, 315.0, 'BOAT_10', 242@, 2)
+
+:BOAT_22549
+if 
+  $boat_mission_selection == 4
+goto_if_false @BOAT_22833
+if 
+  246@ > 0.0
+goto_if_false @BOAT_22759
+gosub @BOAT_37684
+if 
+  252@ == 4
+goto_if_false @BOAT_22646
+Text.DisplayWithFloat(145.0, 315.0, 'BOAT_11', 246@, 2)
+goto @BOAT_22752
+
+:BOAT_22646
+if 
+  252@ == 3
+goto_if_false @BOAT_22690
+Text.DisplayWithFloat(175.0, 315.0, 'BOAT_11', 246@, 2)
+
+:BOAT_22690
+if 
+  252@ <> 3
+goto_if_false @BOAT_22752
+if 
+  252@ <> 4
+goto_if_false @BOAT_22752
+Text.DisplayWithFloat(180.0, 315.0, 'BOAT_11', 246@, 2)
+
+:BOAT_22752
+goto @BOAT_22833
+
+:BOAT_22759
+gosub @BOAT_37684
+if 
+  252@ == 4
+goto_if_false @BOAT_22812
+Text.Display(145.0, 315.0, 'BOAT_12')
+goto @BOAT_22833
+
+:BOAT_22812
+Text.Display(180.0, 315.0, 'BOAT_12')
+
+:BOAT_22833
+gosub @BOAT_33376
+Text.SetColor(255, 255, 255, 255)
+241@ = 0.0
+cset_lvar_float_to_lvar_int 241@ = integer 208@
+241@ /= 1000.0
+if 
+  $boat_mission_selection <> 4
+goto_if_false @BOAT_22984
+gosub @BOAT_37684
+if 
+  252@ == 4
+goto_if_false @BOAT_22958
+Text.DisplayWithFloat(425.0, 275.0, 'BOAT_77', 241@, 2)
+goto @BOAT_22984
+
+:BOAT_22958
+Text.DisplayWithFloat(390.0, 275.0, 'BOAT_77', 241@, 2)
+
+:BOAT_22984
+gosub @BOAT_33376
+170@, 171@, 172@, 173@ = Hud.GetColor(0)
+Text.SetColor(170@, 171@, 172@, 173@)
+240@ = 0.0
+cset_lvar_float_to_lvar_int 240@ = integer 233@
+240@ /= 1000.0
+if 
+  240@ > 0.0
+goto_if_false @BOAT_23107
+170@, 171@, 172@, 173@ = Hud.GetColor(0)
+Text.SetColor(170@, 171@, 172@, 173@)
+goto @BOAT_23137
+
+:BOAT_23107
+170@, 171@, 172@, 173@ = Hud.GetColor(HudObject.Radar)
+Text.SetColor(170@, 171@, 172@, 173@)
+
+:BOAT_23137
+if 
+  $boat_mission_selection <> 4
+goto_if_false @BOAT_23239
+gosub @BOAT_37684
+if 
+  252@ == 4
+goto_if_false @BOAT_23213
+Text.DisplayWithFloat(425.0, 295.0, 'BOAT_77', 240@, 2)
+goto @BOAT_23239
+
+:BOAT_23213
+Text.DisplayWithFloat(390.0, 295.0, 'BOAT_77', 240@, 2)
+
+:BOAT_23239
+gosub @BOAT_33376
+if or
+  167@ == 1
+  167@ == 2
+goto_if_false @BOAT_23292
+Text.SetColor(255, 255, 255, 255)
+goto @BOAT_23306
+
+:BOAT_23292
+Text.SetColor(255, 255, 255, 255)
+
+:BOAT_23306
+242@ = 0.0
+cset_lvar_float_to_lvar_int 242@ = integer 168@
+242@ /= 1000.0
+if 
+  $boat_mission_selection <> 4
+goto_if_false @BOAT_23436
+gosub @BOAT_37684
+if 
+  252@ == 4
+goto_if_false @BOAT_23410
+Text.DisplayWithFloat(425.0, 315.0, 'BOAT_77', 242@, 2)
+goto @BOAT_23436
+
+:BOAT_23410
+Text.DisplayWithFloat(390.0, 315.0, 'BOAT_77', 242@, 2)
+
+:BOAT_23436
+if 
+  $boat_mission_selection == 4
+goto_if_false @BOAT_23566
+if 
+  246@ > 0.0
+goto_if_false @BOAT_23566
+gosub @BOAT_37684
+if 
+  252@ == 4
+goto_if_false @BOAT_23533
+Text.DisplayWithFloat(425.0, 315.0, 'BOAT_80', 246@, 2)
+goto @BOAT_23559
+
+:BOAT_23533
+Text.DisplayWithFloat(390.0, 315.0, 'BOAT_80', 246@, 2)
+
+:BOAT_23559
+goto @BOAT_23566
+
+:BOAT_23566
+170@, 171@, 172@, 173@ = Hud.GetColor(HudObject.Health)
+Text.SetColor(170@, 171@, 172@, 173@)
+Text.SetScale(0.52, 1.45)
+Text.SetDropshadow(2, 0, 0, 0, 255)
+Text.SetFont(Font.Menu)
+Text.Display(340.0, 345.0, 'SCH_PRS')
+Text.SetScale(0.52, 1.45)
+Text.SetDropshadow(2, 0, 0, 0, 255)
+Text.SetFont(Font.Menu)
+Text.Display(340.0, 365.0, 'BOAT_73')
+gosub @BOAT_33376
+Text.SetScale(0.52, 1.45)
+170@, 171@, 172@, 173@ = Hud.GetColor(6)
+Text.SetColor(170@, 171@, 172@, 173@)
+Text.Display(180.0, 345.0, 'BOAT_76')
+gosub @BOAT_33376
+170@, 171@, 172@, 173@ = Hud.GetColor(6)
+Text.SetColor(170@, 171@, 172@, 173@)
+Text.Display(180.0, 365.0, 'BOAT_53')
+if or
+  167@ == 1
+  167@ == 2
+goto_if_false @BOAT_23903
+gosub @BOAT_33492
+Text.SetScale(1.0, 3.4)
+Text.SetColor(255, 255, 255, 255)
+Text.Display(323.0, 110.0, 'BOAT_46')
+
+:BOAT_23903
+if or
+  167@ == 1
+  167@ == 2
+goto_if_false @BOAT_24250
+if 
+  $boat_which_medal_displayed > 0
+goto_if_false @BOAT_24250
+Hud.DrawSprite(4, 250.0, 219.0, -60.0, 60.0, 180, 180, 180, 255)
+Hud.DrawSprite(4, 392.0, 219.0, 60.0, 60.0, 180, 180, 180, 255)
+if 
+  $boat_which_medal_displayed == 2
+goto_if_false @BOAT_24072
+Hud.DrawSprite(1, 320.0, 220.0, 110.0, 95.0, 160, 160, 160, 255)
+
+:BOAT_24072
+if 
+  $boat_which_medal_displayed == 3
+goto_if_false @BOAT_24126
+Hud.DrawSprite(2, 320.0, 220.0, 110.0, 95.0, 160, 160, 160, 255)
+
+:BOAT_24126
+if 
+  $boat_which_medal_displayed == 4
+goto_if_false @BOAT_24180
+Hud.DrawSprite(3, 320.0, 220.0, 110.0, 95.0, 160, 160, 160, 255)
+
+:BOAT_24180
+gosub @BOAT_33492
+Text.SetScale(1.0, 3.4)
+170@, 171@, 172@, 173@ = Hud.GetColor(6)
+Text.SetColor(170@, 171@, 172@, 173@)
+Text.Display(323.0, 65.0, 'BOAT_47')
+
+:BOAT_24250
+goto @BOAT_24845
+
+:BOAT_24257
+gosub @BOAT_33376
+Text.SetColor(134, 155, 184, 255)
+241@ = 0.0
+cset_lvar_float_to_lvar_int 241@ = integer 208@
+241@ /= 1000.0
+Text.DisplayWithFloat(30.0, 55.0, 'BOAT_7', 241@, 2)
+gosub @BOAT_33376
+if or
+  167@ == 1
+  167@ == 2
+goto_if_false @BOAT_24383
+Text.SetColor(107, 148, 49, 255)
+goto @BOAT_24397
+
+:BOAT_24383
+Text.SetColor(134, 155, 184, 255)
+
+:BOAT_24397
+242@ = 0.0
+cset_lvar_float_to_lvar_int 242@ = integer 168@
+242@ /= 1000.0
+Text.DisplayWithFloat(30.0, 65.0, 'BOAT_10', 242@, 2)
+if or
+  167@ == 1
+  167@ == 2
+goto_if_false @BOAT_24516
+gosub @BOAT_33376
+Text.SetColor(107, 148, 49, 255)
+Text.Display(260.0, 65.0, 'BOAT_46')
+
+:BOAT_24516
+if or
+  167@ == 1
+  167@ == 2
+goto_if_false @BOAT_24845
+if 
+  $boat_which_medal_displayed > 0
+goto_if_false @BOAT_24845
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(4, 68.0, 145.0, -60.0, 60.0, 180, 180, 180, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(4, 210.0, 145.0, 60.0, 60.0, 180, 180, 180, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+if 
+  $boat_which_medal_displayed == 2
+goto_if_false @BOAT_24697
+Hud.DrawSprite(1, 138.0, 145.0, 110.0, 95.0, 160, 160, 160, 255)
+
+:BOAT_24697
+if 
+  $boat_which_medal_displayed == 3
+goto_if_false @BOAT_24751
+Hud.DrawSprite(2, 138.0, 145.0, 110.0, 95.0, 160, 160, 160, 255)
+
+:BOAT_24751
+if 
+  $boat_which_medal_displayed == 4
+goto_if_false @BOAT_24805
+Hud.DrawSprite(3, 138.0, 145.0, 110.0, 95.0, 160, 160, 160, 255)
+
+:BOAT_24805
+gosub @BOAT_33376
+Text.SetColor(107, 148, 49, 255)
+Text.Display(260.0, 172.0, 'BOAT_47')
+
+:BOAT_24845
+Hud.ClearTimer($boat_timer)
+return 
+
+:BOAT_24852
+Camera.DoFade(0, 500)
+
+:BOAT_24859
+if 
+  Camera.GetFadingStatus
+goto_if_false @BOAT_24883
+wait 0
+goto @BOAT_24859
+
+:BOAT_24883
+Hud.Display(True)
+Hud.DisplayRadar(True)
+Text.ClearPrints
+Text.ClearHelp
+Text.ClearThisBigPrint('BOAT_46')
+Text.ClearThisBigPrint('BOAT_47')
+Player.ApplyBrakesToCar($player1, False)
+Char.ClearTasksImmediately($scplayer)
+if 
+  164@ == 2
+goto_if_false @BOAT_25007
+Text.ClearPrints
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @BOAT_24986
+Char.WarpFromCarToCoord($scplayer, 174@, 175@, 176@)
+goto @BOAT_25000
+
+:BOAT_24986
+Char.SetCoordinates($scplayer, 174@, 175@, 176@)
+
+:BOAT_25000
+goto @BOAT_25058
+
+:BOAT_25007
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @BOAT_25044
+Char.WarpFromCarToCoord($scplayer, 174@, 175@, 176@)
+goto @BOAT_25058
+
+:BOAT_25044
+Char.SetCoordinates($scplayer, 174@, 175@, 176@)
+
+:BOAT_25058
+wait 0
+Car.Delete(37@)
+Car.Delete(46@)
+Char.Delete(39@)
+Blip.Remove(52@)
+Blip.Remove(51@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+wait 0
+Hud.ClearTimer($boat_timer)
+Hud.FreezeTimer(False)
+return 
+
+:BOAT_25116
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(8, 320.0, 225.0, 612.0, 438.0, 0, 0, 0, $boat_alpha)
+if 
+  $boat_fade_flag == 1
+goto_if_false @BOAT_25238
+if 
+  255 > $boat_alpha
+goto_if_false @BOAT_25231
+$boat_alpha += 20
+if 
+  $boat_alpha > 255
+goto_if_false @BOAT_25224
+$boat_alpha = 255
+
+:BOAT_25224
+goto @BOAT_25238
+
+:BOAT_25231
+$boat_fade_flag = 2
+
+:BOAT_25238
+if 
+  $boat_fade_flag == 3
+goto_if_false @BOAT_25320
+if 
+  $boat_alpha > 0
+goto_if_false @BOAT_25313
+$boat_alpha -= 5
+if 
+  0 > $boat_alpha
+goto_if_false @BOAT_25306
+$boat_alpha = 0
+
+:BOAT_25306
+goto @BOAT_25320
+
+:BOAT_25313
+$boat_fade_flag = 0
+
+:BOAT_25320
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(8, 320.0, 0.0, 640.0, 197.0, 0, 0, 0, 255)
+gosub @BOAT_33492
+Text.SetColor(255, 255, 255, 255)
+if 
+  $boat_mission_selection == 1
+goto_if_false @BOAT_25432
+Text.Display(322.0, 31.0, 'BOAT_A')
+set_var_int_to_var_int $boat_which_score_displayed = $boat_accelerate_best_score
+gosub @BOAT_27098
+
+:BOAT_25432
+if 
+  $boat_mission_selection == 2
+goto_if_false @BOAT_25486
+Text.Display(322.0, 31.0, 'BOAT_B')
+set_var_int_to_var_int $boat_which_score_displayed = $boat_simplecircuit_best_score
+gosub @BOAT_27098
+
+:BOAT_25486
+if 
+  $boat_mission_selection == 3
+goto_if_false @BOAT_25540
+Text.Display(322.0, 31.0, 'BOAT_C')
+set_var_int_to_var_int $boat_which_score_displayed = $boat_slalom_best_score
+gosub @BOAT_27098
+
+:BOAT_25540
+if 
+  $boat_mission_selection == 4
+goto_if_false @BOAT_25594
+Text.Display(322.0, 31.0, 'BOAT_D')
+set_var_int_to_var_int $boat_which_score_displayed = $boat_skijump_best_score
+gosub @BOAT_27098
+
+:BOAT_25594
+if 
+  $boat_mission_selection == 5
+goto_if_false @BOAT_25648
+Text.Display(322.0, 31.0, 'BOAT_E')
+set_var_int_to_var_int $boat_which_score_displayed = $boat_hover_best_score
+gosub @BOAT_27098
+
+:BOAT_25648
+gosub @BOAT_33314
+170@, 171@, 172@, 173@ = Hud.GetColor(6)
+Text.SetColor(170@, 171@, 172@, 173@)
+gosub @BOAT_37684
+if 
+  252@ == 1
+goto_if_false @BOAT_25750
+Text.SetScale(0.32, 1.25)
+Text.Display(70.0, 360.0, 'BOAT_53')
+goto @BOAT_25783
+
+:BOAT_25750
+Text.SetScale(0.32, 1.25)
+Text.Display(70.0, 360.0, 'BOAT_53')
+
+:BOAT_25783
+if 
+  $boat_control_flag <> 1
+goto_if_false @BOAT_26249
+gosub @BOAT_33314
+170@, 171@, 172@, 173@ = Hud.GetColor(6)
+Text.SetColor(170@, 171@, 172@, 173@)
+gosub @BOAT_37684
+if 
+  252@ == 1
+goto_if_false @BOAT_25903
+Text.SetScale(0.32, 1.25)
+Text.Display(70.0, 340.0, 'BOAT_54')
+goto @BOAT_25936
+
+:BOAT_25903
+Text.SetScale(0.32, 1.25)
+Text.Display(70.0, 340.0, 'BOAT_54')
+
+:BOAT_25936
+if 
+  $boat_which_missions_are_open_flag <> 1
+goto_if_false @BOAT_26089
+gosub @BOAT_33314
+170@, 171@, 172@, 173@ = Hud.GetColor(6)
+Text.SetColor(170@, 171@, 172@, 173@)
+gosub @BOAT_37684
+if 
+  252@ == 1
+goto_if_false @BOAT_26056
+Text.SetScale(0.32, 1.25)
+Text.Display(437.0, 340.0, 'BOAT_52')
+goto @BOAT_26089
+
+:BOAT_26056
+Text.SetScale(0.32, 1.25)
+Text.Display(437.0, 340.0, 'BOAT_52')
+
+:BOAT_26089
+if 
+  $boat_which_missions_are_open_flag == 1
+goto_if_false @BOAT_26242
+gosub @BOAT_33314
+170@, 171@, 172@, 173@ = Hud.GetColor(HudObject.Radar)
+Text.SetColor(170@, 171@, 172@, 173@)
+gosub @BOAT_37684
+if 
+  252@ == 1
+goto_if_false @BOAT_26209
+Text.SetScale(0.32, 1.25)
+Text.Display(437.0, 340.0, 'BOAT_52')
+goto @BOAT_26242
+
+:BOAT_26209
+Text.SetScale(0.32, 1.25)
+Text.Display(437.0, 340.0, 'BOAT_52')
+
+:BOAT_26242
+goto @BOAT_26384
+
+:BOAT_26249
+gosub @BOAT_33314
+170@, 171@, 172@, 173@ = Hud.GetColor(6)
+Text.SetColor(170@, 171@, 172@, 173@)
+gosub @BOAT_37684
+if 
+  252@ == 1
+goto_if_false @BOAT_26351
+Text.SetScale(0.32, 1.25)
+Text.Display(437.0, 340.0, 'BOAT_52')
+goto @BOAT_26384
+
+:BOAT_26351
+Text.SetScale(0.32, 1.25)
+Text.Display(437.0, 340.0, 'BOAT_52')
+
+:BOAT_26384
+gosub @BOAT_33314
+Text.SetColor(248, 211, 7, 255)
+170@, 171@, 172@, 173@ = Hud.GetColor(HudObject.Health)
+Text.SetScale(0.32, 1.25)
+Text.SetColor(170@, 171@, 172@, 173@)
+Text.Display(150.0, 360.0, 'BOAT_73')
+if 
+  $boat_control_flag <> 1
+goto_if_false @BOAT_26762
+gosub @BOAT_33314
+170@, 171@, 172@, 173@ = Hud.GetColor(HudObject.Health)
+Text.SetColor(170@, 171@, 172@, 173@)
+Text.SetScale(0.32, 1.25)
+Text.Display(150.0, 340.0, 'SCH_PRS')
+if 
+  $boat_which_missions_are_open_flag <> 1
+goto_if_false @BOAT_26655
+gosub @BOAT_33314
+170@, 171@, 172@, 173@ = Hud.GetColor(HudObject.Health)
+Text.SetColor(170@, 171@, 172@, 173@)
+Text.SetScale(1.45, 2.0)
+Text.SetScale(0.32, 1.25)
+Text.Display(537.4, 340.0, 'BOAT_72')
+
+:BOAT_26655
+if 
+  $boat_which_missions_are_open_flag == 1
+goto_if_false @BOAT_26755
+gosub @BOAT_33314
+170@, 171@, 172@, 173@ = Hud.GetColor(HudObject.Health)
+Text.SetColor(170@, 171@, 172@, 173@)
+Text.SetScale(1.45, 2.0)
+Text.SetScale(0.32, 1.25)
+Text.Display(537.4, 340.0, 'BOAT_72')
+
+:BOAT_26755
+goto @BOAT_26844
+
+:BOAT_26762
+gosub @BOAT_33314
+170@, 171@, 172@, 173@ = Hud.GetColor(HudObject.Health)
+Text.SetColor(170@, 171@, 172@, 173@)
+Text.SetScale(1.45, 2.0)
+Text.SetScale(0.32, 1.25)
+Text.Display(537.4, 340.0, 'BOAT_72')
+
+:BOAT_26844
+Text.SetScale(0.52, 1.45)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(5, 160.0, 112.0, 320.0, 224.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(5, 160.0, 317.0, 320.0, -224.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(5, 480.0, 112.0, -320.0, 224.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(5, 480.0, 317.0, -320.0, -224.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(9, 160.0, 435.0, 320.0, 17.0, 150, 150, 150, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(9, 480.0, 435.0, -320.0, 17.0, 150, 150, 150, 255)
+return 
+
+:BOAT_27098
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(8, 320.0, 430.0, 640.0, 250.0, 0, 0, 0, 255)
+gosub @BOAT_33314
+Text.SetRightJustify(False)
+170@, 171@, 172@, 173@ = Hud.GetColor(HudObject.Armor)
+Text.SetColor(170@, 171@, 172@, 173@)
+if 
+  $boat_mission_selection == 1
+goto_if_false @BOAT_27919
+if 
+  is_int_lvar_greater_than_int_var 212@ > $boat_accelerate_best_score
+goto_if_false @BOAT_27483
+239@ = 0.0
+cset_lvar_float_to_var_int 239@ = integer $boat_which_score_displayed
+239@ /= 1000.0
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_27476 jumps 0 @BOAT_27311 1 @BOAT_27344 2 @BOAT_27377 3 @BOAT_27410 4 @BOAT_27443 -1 @BOAT_27476 -1 @BOAT_27476
+
+:BOAT_27311
+Text.DisplayWithFloat(217.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_27476
+
+:BOAT_27344
+Text.DisplayWithFloat(200.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_27476
+
+:BOAT_27377
+Text.DisplayWithFloat(217.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_27476
+
+:BOAT_27410
+Text.DisplayWithFloat(187.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_27476
+
+:BOAT_27443
+Text.DisplayWithFloat(193.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_27476
+
+:BOAT_27476
+goto @BOAT_27777
+
+:BOAT_27483
+247@ = 0
+234@ = 0.0
+cset_lvar_float_to_lvar_int 234@ = integer 212@
+234@ /= 1000.0
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_27777 jumps 0 @BOAT_27588 1 @BOAT_27621 2 @BOAT_27654 3 @BOAT_27687 4 @BOAT_27720 -1 @BOAT_27777 -1 @BOAT_27777
+
+:BOAT_27588
+Text.DisplayWithFloat(137.0, 75.0, 'BOAT_62', 234@, 1)
+goto @BOAT_27777
+
+:BOAT_27621
+Text.DisplayWithFloat(77.0, 75.0, 'BOAT_62', 234@, 1)
+goto @BOAT_27777
+
+:BOAT_27654
+Text.DisplayWithFloat(77.0, 75.0, 'BOAT_62', 234@, 1)
+goto @BOAT_27777
+
+:BOAT_27687
+Text.DisplayWithFloat(97.0, 75.0, 'BOAT_62', 234@, 1)
+goto @BOAT_27777
+
+:BOAT_27720
+Text.SetScale(0.45, 1.35)
+Text.DisplayWithFloat(93.0, 75.0, 'BOAT_62', 234@, 1)
+Text.SetScale(0.52, 1.45)
+goto @BOAT_27777
+
+:BOAT_27777
+if 
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 213@
+goto_if_false @BOAT_27803
+$boat_which_medal_displayed = 1
+
+:BOAT_27803
+if 
+  is_int_lvar_greater_than_int_var 213@ > $boat_which_score_displayed
+goto_if_false @BOAT_27848
+if 
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 214@
+goto_if_false @BOAT_27848
+$boat_which_medal_displayed = 2
+
+:BOAT_27848
+if 
+  is_int_lvar_greater_than_int_var 214@ > $boat_which_score_displayed
+goto_if_false @BOAT_27893
+if 
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 215@
+goto_if_false @BOAT_27893
+$boat_which_medal_displayed = 3
+
+:BOAT_27893
+if 
+  is_int_lvar_greater_than_int_var 215@ > $boat_which_score_displayed
+goto_if_false @BOAT_27919
+$boat_which_medal_displayed = 4
+
+:BOAT_27919
+if 
+  $boat_mission_selection == 2
+goto_if_false @BOAT_28655
+if 
+  is_int_lvar_greater_than_int_var 216@ > $boat_simplecircuit_best_score
+goto_if_false @BOAT_28226
+239@ = 0.0
+cset_lvar_float_to_var_int 239@ = integer $boat_which_score_displayed
+239@ /= 1000.0
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_28219 jumps 0 @BOAT_28054 1 @BOAT_28087 2 @BOAT_28120 3 @BOAT_28153 4 @BOAT_28186 -1 @BOAT_28219 -1 @BOAT_28219
+
+:BOAT_28054
+Text.DisplayWithFloat(217.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_28219
+
+:BOAT_28087
+Text.DisplayWithFloat(200.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_28219
+
+:BOAT_28120
+Text.DisplayWithFloat(217.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_28219
+
+:BOAT_28153
+Text.DisplayWithFloat(187.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_28219
+
+:BOAT_28186
+Text.DisplayWithFloat(190.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_28219
+
+:BOAT_28219
+goto @BOAT_28513
+
+:BOAT_28226
+235@ = 0.0
+cset_lvar_float_to_lvar_int 235@ = integer 216@
+235@ /= 1000.0
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_28513 jumps 0 @BOAT_28324 1 @BOAT_28357 2 @BOAT_28390 3 @BOAT_28423 4 @BOAT_28456 -1 @BOAT_28513 -1 @BOAT_28513
+
+:BOAT_28324
+Text.DisplayWithFloat(137.0, 75.0, 'BOAT_62', 235@, 1)
+goto @BOAT_28513
+
+:BOAT_28357
+Text.DisplayWithFloat(77.0, 75.0, 'BOAT_62', 235@, 1)
+goto @BOAT_28513
+
+:BOAT_28390
+Text.DisplayWithFloat(77.0, 75.0, 'BOAT_62', 235@, 1)
+goto @BOAT_28513
+
+:BOAT_28423
+Text.DisplayWithFloat(97.0, 75.0, 'BOAT_62', 235@, 1)
+goto @BOAT_28513
+
+:BOAT_28456
+Text.SetScale(0.45, 1.35)
+Text.DisplayWithFloat(88.0, 75.0, 'BOAT_62', 235@, 1)
+Text.SetScale(0.52, 1.45)
+goto @BOAT_28513
+
+:BOAT_28513
+if 
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 217@
+goto_if_false @BOAT_28539
+$boat_which_medal_displayed = 1
+
+:BOAT_28539
+if 
+  is_int_lvar_greater_than_int_var 217@ > $boat_which_score_displayed
+goto_if_false @BOAT_28584
+if 
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 218@
+goto_if_false @BOAT_28584
+$boat_which_medal_displayed = 2
+
+:BOAT_28584
+if 
+  is_int_lvar_greater_than_int_var 218@ > $boat_which_score_displayed
+goto_if_false @BOAT_28629
+if 
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 219@
+goto_if_false @BOAT_28629
+$boat_which_medal_displayed = 3
+
+:BOAT_28629
+if 
+  is_int_lvar_greater_than_int_var 219@ > $boat_which_score_displayed
+goto_if_false @BOAT_28655
+$boat_which_medal_displayed = 4
+
+:BOAT_28655
+if 
+  $boat_mission_selection == 3
+goto_if_false @BOAT_29401
+if 
+  is_int_lvar_greater_than_int_var 220@ > $boat_slalom_best_score
+goto_if_false @BOAT_28962
+239@ = 0.0
+cset_lvar_float_to_var_int 239@ = integer $boat_which_score_displayed
+239@ /= 1000.0
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_28955 jumps 0 @BOAT_28790 1 @BOAT_28823 2 @BOAT_28856 3 @BOAT_28889 4 @BOAT_28922 -1 @BOAT_28955 -1 @BOAT_28955
+
+:BOAT_28790
+Text.DisplayWithFloat(217.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_28955
+
+:BOAT_28823
+Text.DisplayWithFloat(200.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_28955
+
+:BOAT_28856
+Text.DisplayWithFloat(217.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_28955
+
+:BOAT_28889
+Text.DisplayWithFloat(187.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_28955
+
+:BOAT_28922
+Text.DisplayWithFloat(190.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_28955
+
+:BOAT_28955
+goto @BOAT_29259
+
+:BOAT_28962
+236@ = 0.0
+cset_lvar_float_to_lvar_int 236@ = integer 220@
+236@ /= 1000.0
+236@ /= 60.0
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_29259 jumps 0 @BOAT_29070 1 @BOAT_29103 2 @BOAT_29136 3 @BOAT_29169 4 @BOAT_29202 -1 @BOAT_29259 -1 @BOAT_29259
+
+:BOAT_29070
+Text.DisplayWithFloat(142.0, 75.0, 'BOAT_63', 236@, 1)
+goto @BOAT_29259
+
+:BOAT_29103
+Text.DisplayWithFloat(87.0, 75.0, 'BOAT_63', 236@, 1)
+goto @BOAT_29259
+
+:BOAT_29136
+Text.DisplayWithFloat(83.0, 75.0, 'BOAT_63', 236@, 1)
+goto @BOAT_29259
+
+:BOAT_29169
+Text.DisplayWithFloat(112.0, 75.0, 'BOAT_63', 236@, 1)
+goto @BOAT_29259
+
+:BOAT_29202
+Text.SetScale(0.45, 1.35)
+Text.DisplayWithFloat(103.0, 75.0, 'BOAT_63', 236@, 1)
+Text.SetScale(0.52, 1.45)
+goto @BOAT_29259
+
+:BOAT_29259
+if 
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 221@
+goto_if_false @BOAT_29285
+$boat_which_medal_displayed = 1
+
+:BOAT_29285
+if 
+  is_int_lvar_greater_than_int_var 221@ > $boat_which_score_displayed
+goto_if_false @BOAT_29330
+if 
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 222@
+goto_if_false @BOAT_29330
+$boat_which_medal_displayed = 2
+
+:BOAT_29330
+if 
+  is_int_lvar_greater_than_int_var 222@ > $boat_which_score_displayed
+goto_if_false @BOAT_29375
+if 
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 223@
+goto_if_false @BOAT_29375
+$boat_which_medal_displayed = 3
+
+:BOAT_29375
+if 
+  is_int_lvar_greater_than_int_var 223@ > $boat_which_score_displayed
+goto_if_false @BOAT_29401
+$boat_which_medal_displayed = 4
+
+:BOAT_29401
+if 
+  $boat_mission_selection == 4
+goto_if_false @BOAT_30117
+if 
+  is_int_var_greater_than_int_lvar $boat_skijump_best_score > 224@
+goto_if_false @BOAT_29698
+239@ = 0.0
+cset_lvar_float_to_var_int 239@ = integer $boat_which_score_displayed
+239@ /= 1000.0
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_29691 jumps 0 @BOAT_29536 1 @BOAT_29567 2 @BOAT_29598 3 @BOAT_29629 4 @BOAT_29660 -1 @BOAT_29691 -1 @BOAT_29691
+
+:BOAT_29536
+Text.DisplayWithNumber(185.0, 75.0, 'BOAT_60', $boat_skijump_best_score)
+goto @BOAT_29691
+
+:BOAT_29567
+Text.DisplayWithNumber(167.0, 75.0, 'BOAT_60', $boat_skijump_best_score)
+goto @BOAT_29691
+
+:BOAT_29598
+Text.DisplayWithNumber(167.0, 75.0, 'BOAT_60', $boat_skijump_best_score)
+goto @BOAT_29691
+
+:BOAT_29629
+Text.DisplayWithNumber(177.0, 75.0, 'BOAT_60', $boat_skijump_best_score)
+goto @BOAT_29691
+
+:BOAT_29660
+Text.DisplayWithNumber(160.0, 75.0, 'BOAT_60', $boat_skijump_best_score)
+goto @BOAT_29691
+
+:BOAT_29691
+goto @BOAT_29951
+
+:BOAT_29698
+237@ = 0.0
+cset_lvar_float_to_lvar_int 237@ = integer 224@
+237@ /= 1000.0
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_29951 jumps 0 @BOAT_29796 1 @BOAT_29827 2 @BOAT_29858 3 @BOAT_29889 4 @BOAT_29920 -1 @BOAT_29951 -1 @BOAT_29951
+
+:BOAT_29796
+Text.DisplayWithNumber(153.0, 75.0, 'BOAT_61', 224@)
+goto @BOAT_29951
+
+:BOAT_29827
+Text.DisplayWithNumber(103.0, 75.0, 'BOAT_61', 224@)
+goto @BOAT_29951
+
+:BOAT_29858
+Text.DisplayWithNumber(93.0, 75.0, 'BOAT_61', 224@)
+goto @BOAT_29951
+
+:BOAT_29889
+Text.DisplayWithNumber(123.0, 75.0, 'BOAT_61', 224@)
+goto @BOAT_29951
+
+:BOAT_29920
+Text.DisplayWithNumber(103.0, 75.0, 'BOAT_61', 224@)
+goto @BOAT_29951
+
+:BOAT_29951
+if 
+  is_int_lvar_greater_than_int_var 225@ > $boat_which_score_displayed
+goto_if_false @BOAT_29977
+$boat_which_medal_displayed = 1
+
+:BOAT_29977
+if or
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 225@
+  is_int_var_equal_to_int_lvar $boat_which_score_displayed == 225@
+goto_if_false @BOAT_30030
+if 
+  is_int_lvar_greater_than_int_var 226@ > $boat_which_score_displayed
+goto_if_false @BOAT_30030
+$boat_which_medal_displayed = 2
+
+:BOAT_30030
+if or
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 226@
+  is_int_var_equal_to_int_lvar $boat_which_score_displayed == 226@
+goto_if_false @BOAT_30083
+if 
+  is_int_lvar_greater_than_int_var 227@ > $boat_which_score_displayed
+goto_if_false @BOAT_30083
+$boat_which_medal_displayed = 3
+
+:BOAT_30083
+if or
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 227@
+  is_int_var_equal_to_int_lvar $boat_which_score_displayed == 227@
+goto_if_false @BOAT_30117
+$boat_which_medal_displayed = 4
+
+:BOAT_30117
+if 
+  $boat_mission_selection == 5
+goto_if_false @BOAT_30863
+if 
+  is_int_lvar_greater_than_int_var 228@ > $boat_hover_best_score
+goto_if_false @BOAT_30424
+239@ = 0.0
+cset_lvar_float_to_var_int 239@ = integer $boat_which_score_displayed
+239@ /= 1000.0
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_30417 jumps 0 @BOAT_30252 1 @BOAT_30285 2 @BOAT_30318 3 @BOAT_30351 4 @BOAT_30384 -1 @BOAT_30417 -1 @BOAT_30417
+
+:BOAT_30252
+Text.DisplayWithFloat(217.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_30417
+
+:BOAT_30285
+Text.DisplayWithFloat(200.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_30417
+
+:BOAT_30318
+Text.DisplayWithFloat(217.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_30417
+
+:BOAT_30351
+Text.DisplayWithFloat(187.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_30417
+
+:BOAT_30384
+Text.DisplayWithFloat(190.0, 75.0, 'BOAT_58', 239@, 2)
+goto @BOAT_30417
+
+:BOAT_30417
+goto @BOAT_30721
+
+:BOAT_30424
+238@ = 0.0
+cset_lvar_float_to_lvar_int 238@ = integer 228@
+238@ /= 1000.0
+238@ /= 60.0
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_30721 jumps 0 @BOAT_30532 1 @BOAT_30565 2 @BOAT_30598 3 @BOAT_30631 4 @BOAT_30664 -1 @BOAT_30721 -1 @BOAT_30721
+
+:BOAT_30532
+Text.DisplayWithFloat(144.0, 75.0, 'BOAT_63', 238@, 1)
+goto @BOAT_30721
+
+:BOAT_30565
+Text.DisplayWithFloat(87.0, 75.0, 'BOAT_63', 238@, 1)
+goto @BOAT_30721
+
+:BOAT_30598
+Text.DisplayWithFloat(88.0, 75.0, 'BOAT_63', 238@, 1)
+goto @BOAT_30721
+
+:BOAT_30631
+Text.DisplayWithFloat(117.0, 75.0, 'BOAT_63', 238@, 1)
+goto @BOAT_30721
+
+:BOAT_30664
+Text.SetScale(0.45, 1.35)
+Text.DisplayWithFloat(103.0, 75.0, 'BOAT_63', 238@, 1)
+Text.SetScale(0.52, 1.45)
+goto @BOAT_30721
+
+:BOAT_30721
+if 
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 229@
+goto_if_false @BOAT_30747
+$boat_which_medal_displayed = 1
+
+:BOAT_30747
+if 
+  is_int_lvar_greater_than_int_var 229@ > $boat_which_score_displayed
+goto_if_false @BOAT_30792
+if 
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 230@
+goto_if_false @BOAT_30792
+$boat_which_medal_displayed = 2
+
+:BOAT_30792
+if 
+  is_int_lvar_greater_than_int_var 230@ > $boat_which_score_displayed
+goto_if_false @BOAT_30837
+if 
+  is_int_var_greater_than_int_lvar $boat_which_score_displayed > 231@
+goto_if_false @BOAT_30837
+$boat_which_medal_displayed = 3
+
+:BOAT_30837
+if 
+  is_int_lvar_greater_than_int_var 231@ > $boat_which_score_displayed
+goto_if_false @BOAT_30863
+$boat_which_medal_displayed = 4
+
+:BOAT_30863
+if 
+  $boat_which_medal_displayed > 1
+goto_if_false @BOAT_30968
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(4, 250.0, 306.0, -60.0, 60.0, 180, 180, 180, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(4, 395.0, 306.0, 60.0, 60.0, 180, 180, 180, 255)
+goto @BOAT_31048
+
+:BOAT_30968
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(7, 250.0, 306.0, -60.0, 60.0, 180, 180, 180, 255)
+Hud.SetSpritesDrawBeforeFade(True)
+Hud.DrawSprite(7, 395.0, 306.0, 60.0, 60.0, 180, 180, 180, 255)
+
+:BOAT_31048
+Hud.SetSpritesDrawBeforeFade(True)
+if 
+  $boat_which_medal_displayed == 1
+goto_if_false @BOAT_31337
+Hud.DrawSprite(6, 320.0, 307.0, 110.0, 95.0, 160, 160, 160, 255)
+gosub @BOAT_33314
+Text.SetColor(166, 202, 240, 255)
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_31337 jumps 0 @BOAT_31197 1 @BOAT_31225 2 @BOAT_31253 3 @BOAT_31281 4 @BOAT_31309 -1 @BOAT_31337 -1 @BOAT_31337
+
+:BOAT_31197
+Text.Display(266.0, 375.0, 'BOAT_64')
+goto @BOAT_31337
+
+:BOAT_31225
+Text.Display(216.0, 375.0, 'BOAT_64')
+goto @BOAT_31337
+
+:BOAT_31253
+Text.Display(233.0, 375.0, 'BOAT_64')
+goto @BOAT_31337
+
+:BOAT_31281
+Text.Display(216.0, 375.0, 'BOAT_64')
+goto @BOAT_31337
+
+:BOAT_31309
+Text.Display(216.0, 375.0, 'BOAT_64')
+goto @BOAT_31337
+
+:BOAT_31337
+if 
+  $boat_which_medal_displayed == 2
+goto_if_false @BOAT_31622
+Hud.DrawSprite(1, 320.0, 307.0, 110.0, 95.0, 160, 160, 160, 255)
+gosub @BOAT_33314
+Text.SetColor(166, 202, 240, 255)
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_31622 jumps 0 @BOAT_31482 1 @BOAT_31510 2 @BOAT_31538 3 @BOAT_31566 4 @BOAT_31594 -1 @BOAT_31622 -1 @BOAT_31622
+
+:BOAT_31482
+Text.Display(280.0, 375.0, 'BOAT_57')
+goto @BOAT_31622
+
+:BOAT_31510
+Text.Display(280.0, 375.0, 'BOAT_57')
+goto @BOAT_31622
+
+:BOAT_31538
+Text.Display(280.0, 375.0, 'BOAT_57')
+goto @BOAT_31622
+
+:BOAT_31566
+Text.Display(280.0, 375.0, 'BOAT_57')
+goto @BOAT_31622
+
+:BOAT_31594
+Text.Display(280.0, 375.0, 'BOAT_57')
+goto @BOAT_31622
+
+:BOAT_31622
+if 
+  $boat_which_medal_displayed == 3
+goto_if_false @BOAT_31907
+Hud.DrawSprite(2, 320.0, 307.0, 110.0, 95.0, 160, 160, 160, 255)
+gosub @BOAT_33314
+Text.SetColor(166, 202, 240, 255)
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_31907 jumps 0 @BOAT_31767 1 @BOAT_31795 2 @BOAT_31823 3 @BOAT_31851 4 @BOAT_31879 -1 @BOAT_31907 -1 @BOAT_31907
+
+:BOAT_31767
+Text.Display(283.0, 375.0, 'BOAT_56')
+goto @BOAT_31907
+
+:BOAT_31795
+Text.Display(278.0, 375.0, 'BOAT_56')
+goto @BOAT_31907
+
+:BOAT_31823
+Text.Display(283.0, 375.0, 'BOAT_56')
+goto @BOAT_31907
+
+:BOAT_31851
+Text.Display(273.0, 375.0, 'BOAT_56')
+goto @BOAT_31907
+
+:BOAT_31879
+Text.Display(286.0, 375.0, 'BOAT_56')
+goto @BOAT_31907
+
+:BOAT_31907
+if 
+  $boat_which_medal_displayed == 4
+goto_if_false @BOAT_32192
+Hud.DrawSprite(3, 320.0, 307.0, 110.0, 95.0, 160, 160, 160, 255)
+gosub @BOAT_33314
+Text.SetColor(166, 202, 240, 255)
+gosub @BOAT_37684
+switch_start 252@ total_jumps 5 default_jump 0 @BOAT_32192 jumps 0 @BOAT_32052 1 @BOAT_32080 2 @BOAT_32108 3 @BOAT_32136 4 @BOAT_32164 -1 @BOAT_32192 -1 @BOAT_32192
+
+:BOAT_32052
+Text.Display(294.0, 375.0, 'BOAT_55')
+goto @BOAT_32192
+
+:BOAT_32080
+Text.Display(307.0, 375.0, 'BOAT_55')
+goto @BOAT_32192
+
+:BOAT_32108
+Text.Display(294.0, 375.0, 'BOAT_55')
+goto @BOAT_32192
+
+:BOAT_32136
+Text.Display(300.0, 375.0, 'BOAT_55')
+goto @BOAT_32192
+
+:BOAT_32164
+Text.Display(300.0, 375.0, 'BOAT_55')
+goto @BOAT_32192
+
+:BOAT_32192
+return 
+
+:BOAT_32194
+if 
+  $boatpb_flag == 0
+goto_if_false @BOAT_32344
+if 
+  $boat_mission_selection == 1
+goto_if_false @BOAT_32237
+gosub @BOAT_2264
+
+:BOAT_32237
+if 
+  $boat_mission_selection == 2
+goto_if_false @BOAT_32262
+gosub @BOAT_3828
+
+:BOAT_32262
+if 
+  $boat_mission_selection == 3
+goto_if_false @BOAT_32287
+gosub @BOAT_6527
+
+:BOAT_32287
+if 
+  $boat_mission_selection == 4
+goto_if_false @BOAT_32312
+gosub @BOAT_10930
+
+:BOAT_32312
+if 
+  $boat_mission_selection == 5
+goto_if_false @BOAT_32337
+gosub @BOAT_12810
+
+:BOAT_32337
+$boatpb_flag = 1
+
+:BOAT_32344
+if 
+  $boatpb_flag == 1
+goto_if_false @BOAT_32824
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_32824
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_32426
+204@, 205@, 206@ = Car.GetCoordinates(37@)
+World.ClearArea(1, 204@, 205@, 206@, 1000.0)
+
+:BOAT_32426
+if 
+  $boat_mission_selection == 1
+goto_if_false @BOAT_32496
+if 
+  not Streaming.HasCarRecordingBeenLoaded(752)
+goto_if_false @BOAT_32472
+Streaming.RequestCarRecording(752)
+goto @BOAT_32496
+
+:BOAT_32472
+World.SyncWater
+Car.StartPlayback(37@, 752)
+$boat_fade_flag = 3
+$boatpb_flag = 2
+
+:BOAT_32496
+if 
+  $boat_mission_selection == 2
+goto_if_false @BOAT_32566
+if 
+  not Streaming.HasCarRecordingBeenLoaded(755)
+goto_if_false @BOAT_32542
+Streaming.RequestCarRecording(755)
+goto @BOAT_32566
+
+:BOAT_32542
+World.SyncWater
+Car.StartPlayback(37@, 755)
+$boat_fade_flag = 3
+$boatpb_flag = 2
+
+:BOAT_32566
+if 
+  $boat_mission_selection == 3
+goto_if_false @BOAT_32636
+if 
+  not Streaming.HasCarRecordingBeenLoaded(757)
+goto_if_false @BOAT_32612
+Streaming.RequestCarRecording(757)
+goto @BOAT_32636
+
+:BOAT_32612
+World.SyncWater
+Car.StartPlayback(37@, 757)
+$boat_fade_flag = 3
+$boatpb_flag = 2
+
+:BOAT_32636
+if 
+  $boat_mission_selection == 4
+goto_if_false @BOAT_32754
+if 
+  not Streaming.HasCarRecordingBeenLoaded(759)
+goto_if_false @BOAT_32682
+Streaming.RequestCarRecording(759)
+goto @BOAT_32754
+
+:BOAT_32682
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_32730
+204@, 205@, 206@ = Car.GetCoordinates(37@)
+World.ClearArea(1, 204@, 205@, 206@, 1000.0)
+
+:BOAT_32730
+World.SyncWater
+Car.StartPlayback(37@, 759)
+$boat_fade_flag = 3
+$boatpb_flag = 2
+
+:BOAT_32754
+if 
+  $boat_mission_selection == 5
+goto_if_false @BOAT_32824
+if 
+  not Streaming.HasCarRecordingBeenLoaded(760)
+goto_if_false @BOAT_32800
+Streaming.RequestCarRecording(760)
+goto @BOAT_32824
+
+:BOAT_32800
+World.SyncWater
+Car.StartPlayback(37@, 760)
+$boat_fade_flag = 3
+$boatpb_flag = 2
+
+:BOAT_32824
+if 
+  $boatpb_flag == 2
+goto_if_false @BOAT_33145
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_33131
+if 
+  not Car.IsDead(46@)
+goto_if_false @BOAT_33094
+185@, 186@, 187@ = Car.GetCoordinates(37@)
+if 
+  $boat_mission_selection == 1
+goto_if_false @BOAT_32926
+185@ -= 35.0
+186@ -= 30.0
+
+:BOAT_32926
+if 
+  $boat_mission_selection == 2
+goto_if_false @BOAT_32964
+185@ -= 15.0
+186@ -= 30.0
+
+:BOAT_32964
+if 
+  $boat_mission_selection == 3
+goto_if_false @BOAT_33002
+185@ -= 13.0
+186@ -= 13.0
+
+:BOAT_33002
+if 
+  $boat_mission_selection == 4
+goto_if_false @BOAT_33040
+185@ -= 10.0
+186@ -= 20.0
+
+:BOAT_33040
+if 
+  $boat_mission_selection == 5
+goto_if_false @BOAT_33078
+185@ -= 10.0
+186@ -= 20.0
+
+:BOAT_33078
+Car.SetCoordinates(46@, 185@, 186@, 10.0)
+
+:BOAT_33094
+if 
+  not Car.IsPlaybackGoingOn(37@)
+goto_if_false @BOAT_33124
+$boat_fade_flag = 1
+$boatpb_flag = 4
+
+:BOAT_33124
+goto @BOAT_33145
+
+:BOAT_33131
+$boat_fade_flag = 1
+$boatpb_flag = 4
+
+:BOAT_33145
+if 
+  $boatpb_flag == 3
+goto_if_false @BOAT_33177
+$boat_fade_flag = 1
+$boatpb_flag = 4
+
+:BOAT_33177
+if 
+  $boatpb_flag == 4
+goto_if_false @BOAT_33312
+if 
+  $boat_fade_flag == 2
+goto_if_false @BOAT_33312
+Car.StopPlayback(37@)
+Camera.RestoreJumpcut
+Hud.ClearTimer($boat_timer)
+Hud.FreezeTimer(False)
+Car.Delete(46@)
+Car.Delete(37@)
+gosub @BOAT_37625
+$boatpb_flag = 0
+Hud.ClearTimer($boat_timer)
+Hud.FreezeTimer(False)
+Car.Delete(37@)
+Car.Delete(46@)
+Char.Delete(47@)
+Char.Delete(39@)
+Car.Delete(40@)
+Car.Delete(41@)
+Car.Delete(44@)
+Char.Delete(42@)
+Char.Delete(43@)
+Char.Delete(45@)
+
+:BOAT_33312
+return 
+
+:BOAT_33314
+Text.SetDrawBeforeFade(True)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(False)
+Text.SetBackground(False)
+Text.SetScale(0.52, 1.45)
+Text.SetDropshadow(2, 0, 0, 0, 255)
+Text.SetFont(Font.Menu)
+return 
+
+:BOAT_33376
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(False)
+Text.SetBackground(False)
+Text.SetScale(0.52, 1.45)
+Text.SetDropshadow(2, 0, 0, 0, 255)
+Text.SetFont(Font.Menu)
+return 
+Text.SetDrawBeforeFade(True)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+Text.SetScale(0.8, 2.6)
+Text.SetDropshadow(2, 0, 0, 0, 255)
+return 
+
+:BOAT_33492
+Text.SetDrawBeforeFade(True)
+Text.SetJustify(True)
+Text.SetRightJustify(False)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+Text.SetScale(1.2, 4.0)
+Text.SetDropshadow(3, 0, 0, 0, 255)
+Text.SetFont(Font.Pricedown)
+return 
+Text.SetDrawBeforeFade(True)
+Text.SetJustify(True)
+Text.SetWrapX(1000.0)
+Text.SetProportional(True)
+Text.SetCenter(True)
+Text.SetBackground(False)
+Text.SetScale(1.0, 3.8)
+Text.SetDropshadow(2, 0, 0, 0, 255)
+Text.SetFont(Font.Menu)
+return 
+
+:BOAT_33612
+Player.SetControl($player1, False)
+Char.Delete(39@)
+Char.Delete(42@)
+Char.Delete(43@)
+Car.Delete(40@)
+Car.Delete(41@)
+Car.Delete(44@)
+Char.Delete(45@)
+Hud.ClearTimer($boat_timer)
+40@ = Car.Create(454, -2100.836, 2247.862, 0.0)
+Car.SetHeading(40@, 122.0)
+42@ = Char.CreateInsideCar(PedType.Mission1, 210, 40@)
+41@ = Car.Create(484, -1996.127, 2125.169, 0.0)
+Car.SetHeading(41@, 160.0)
+43@ = Char.CreateInsideCar(PedType.Mission1, 210, 41@)
+44@ = Car.Create(454, -2251.171, 2129.291, 0.0)
+Car.SetHeading(44@, 182.0)
+45@ = Char.CreateInsideCar(PedType.Mission1, 210, 44@)
+Char.WarpIntoCar($scplayer, 37@)
+Car.LockDoors(37@, CarLock.LockedPlayerInside)
+wait 1000
+Camera.DoFade(0, 2000)
+
+:BOAT_33824
+if 
+  Camera.GetFadingStatus
+goto_if_false @BOAT_33848
+wait 0
+goto @BOAT_33824
+
+:BOAT_33848
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+if 
+  $boat_mission_selection == 4
+goto_if_false @BOAT_33891
+Streaming.LoadScene(-2318.049, 2312.302, 10.0)
+wait 0
+
+:BOAT_33891
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_33939
+204@, 205@, 206@ = Car.GetCoordinates(37@)
+World.ClearArea(1, 204@, 205@, 206@, 1000.0)
+
+:BOAT_33939
+Camera.DoFade(1, 2000)
+
+:BOAT_33946
+if 
+  Camera.GetFadingStatus
+goto_if_false @BOAT_33970
+wait 0
+goto @BOAT_33946
+
+:BOAT_33970
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_34018
+204@, 205@, 206@ = Car.GetCoordinates(37@)
+World.ClearArea(1, 204@, 205@, 206@, 1000.0)
+
+:BOAT_34018
+return 
+
+:BOAT_34020
+Camera.DoFade(0, 500)
+
+:BOAT_34027
+if 
+  Camera.GetFadingStatus
+goto_if_false @BOAT_34051
+wait 0
+goto @BOAT_34027
+
+:BOAT_34051
+if 
+  $boat_mission_selection == 16
+goto_if_false @BOAT_34090
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+goto @BOAT_34104
+
+:BOAT_34090
+World.SetCarDensityMultiplier(0.0)
+World.SetPedDensityMultiplier(0.0)
+
+:BOAT_34104
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Weather.ForceNow(WeatherType.ExtraSunnyCountryside)
+Streaming.SetAreaVisible(0)
+Char.Delete(39@)
+Char.Delete(42@)
+Char.Delete(43@)
+Car.Delete(40@)
+Car.Delete(41@)
+Car.Delete(44@)
+Char.Delete(45@)
+return 
+
+:BOAT_34153
+Blip.ChangeScale(53@, 1)
+Blip.ChangeScale(54@, 1)
+Blip.ChangeColor(52@, BlipColor.Yellow)
+Blip.ChangeColor(51@, BlipColor.Yellow)
+Blip.ChangeColor(53@, BlipColor.Yellow)
+Blip.ChangeColor(54@, BlipColor.Yellow)
+return 
+
+:BOAT_34197
+if 
+  $boat_mission_selection == 1
+goto_if_false @BOAT_34503
+156@ = 0
+
+:BOAT_34222
+if 
+  8 > 156@
+goto_if_false @BOAT_34303
+56@(156@,50i) = Object.CreateNoOffset(#BOUY, 0.0, 0.0, 100.0)
+Object.SetCollision(56@(156@,50i), True)
+Object.SetDynamic(56@(156@,50i), True)
+156@ += 1
+goto @BOAT_34222
+
+:BOAT_34303
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_34503
+Object.PlaceRelativeToCar(56@, 37@, 20.0, 180.0, 0.0)
+Object.PlaceRelativeToCar(57@, 37@, -20.0, 180.0, 0.0)
+Object.PlaceRelativeToCar(58@, 37@, 20.0, 190.0, 0.0)
+Object.PlaceRelativeToCar(59@, 37@, -20.0, 190.0, 0.0)
+Object.PlaceRelativeToCar(60@, 37@, 20.0, 200.0, 0.0)
+Object.PlaceRelativeToCar(61@, 37@, -20.0, 200.0, 0.0)
+Object.PlaceRelativeToCar(62@, 37@, 20.0, 210.0, 0.0)
+Object.PlaceRelativeToCar(63@, 37@, -20.0, 210.0, 0.0)
+
+:BOAT_34503
+if 
+  $boat_mission_selection == 2
+goto_if_false @BOAT_34993
+156@ = 0
+
+:BOAT_34528
+if 
+  16 > 156@
+goto_if_false @BOAT_34609
+56@(156@,50i) = Object.CreateNoOffset(#BOUY, 0.0, 0.0, 100.0)
+Object.SetCollision(56@(156@,50i), True)
+Object.SetDynamic(56@(156@,50i), True)
+156@ += 1
+goto @BOAT_34528
+
+:BOAT_34609
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_34993
+Object.PlaceRelativeToCar(56@, 37@, 0.0, 80.0, 0.0)
+Object.PlaceRelativeToCar(57@, 37@, 15.0, 70.0, 0.0)
+Object.PlaceRelativeToCar(58@, 37@, 55.0, 145.0, 0.0)
+Object.PlaceRelativeToCar(59@, 37@, 70.0, 130.0, 0.0)
+Object.PlaceRelativeToCar(60@, 37@, 150.0, 110.0, 0.0)
+Object.PlaceRelativeToCar(61@, 37@, 160.0, 130.0, 0.0)
+Object.PlaceRelativeToCar(62@, 37@, 250.0, 80.0, 0.0)
+Object.PlaceRelativeToCar(63@, 37@, 240.0, 60.0, 0.0)
+Object.PlaceRelativeToCar(64@, 37@, 300.0, 0.0, 0.0)
+Object.PlaceRelativeToCar(65@, 37@, 290.0, -20.0, 0.0)
+Object.PlaceRelativeToCar(66@, 37@, 380.0, -150.0, 0.0)
+Object.PlaceRelativeToCar(67@, 37@, 360.0, -150.0, 0.0)
+Object.PlaceRelativeToCar(68@, 37@, 320.0, -300.0, 0.0)
+Object.PlaceRelativeToCar(69@, 37@, 340.0, -325.0, 0.0)
+Object.PlaceRelativeToCar(70@, 37@, 230.0, -280.0, 0.0)
+Object.PlaceRelativeToCar(71@, 37@, 210.0, -300.0, 0.0)
+
+:BOAT_34993
+if 
+  $boat_mission_selection == 3
+goto_if_false @BOAT_35759
+156@ = 0
+
+:BOAT_35018
+if 
+  28 > 156@
+goto_if_false @BOAT_35099
+56@(156@,50i) = Object.CreateNoOffset(#BOUY, 0.0, 0.0, 100.0)
+Object.SetCollision(56@(156@,50i), True)
+Object.SetDynamic(56@(156@,50i), True)
+156@ += 1
+goto @BOAT_35018
+
+:BOAT_35099
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_35759
+Object.PlaceRelativeToCar(56@, 37@, 0.0, 100.0, 0.0)
+Object.PlaceRelativeToCar(57@, 37@, 15.0, 100.0, 0.0)
+Object.PlaceRelativeToCar(58@, 37@, 40.0, 200.0, 0.0)
+Object.PlaceRelativeToCar(59@, 37@, 55.0, 190.0, 0.0)
+Object.PlaceRelativeToCar(60@, 37@, 0.0, 300.0, 0.0)
+Object.PlaceRelativeToCar(61@, 37@, -15.0, 290.0, 0.0)
+Object.PlaceRelativeToCar(62@, 37@, 140.0, 320.0, 0.0)
+Object.PlaceRelativeToCar(63@, 37@, 140.0, 335.0, 0.0)
+Object.PlaceRelativeToCar(64@, 37@, 220.0, 370.0, 0.0)
+Object.PlaceRelativeToCar(65@, 37@, 210.0, 385.0, 0.0)
+Object.PlaceRelativeToCar(66@, 37@, 210.0, 470.0, 0.0)
+Object.PlaceRelativeToCar(67@, 37@, 195.0, 460.0, 0.0)
+Object.PlaceRelativeToCar(68@, 37@, 195.0, 570.0, 0.0)
+Object.PlaceRelativeToCar(69@, 37@, 180.0, 570.0, 0.0)
+Object.PlaceRelativeToCar(70@, 37@, 95.0, 570.0, 0.0)
+Object.PlaceRelativeToCar(71@, 37@, 95.0, 585.0, 0.0)
+Object.PlaceRelativeToCar(72@, 37@, 15.0, 500.0, 0.0)
+Object.PlaceRelativeToCar(73@, 37@, 0.0, 515.0, 0.0)
+Object.PlaceRelativeToCar(74@, 37@, -90.0, 585.0, 0.0)
+Object.PlaceRelativeToCar(75@, 37@, -90.0, 570.0, 0.0)
+Object.PlaceRelativeToCar(76@, 37@, -160.0, 500.0, 0.0)
+Object.PlaceRelativeToCar(77@, 37@, -150.0, 485.0, 0.0)
+Object.PlaceRelativeToCar(78@, 37@, -240.0, 430.0, 0.0)
+Object.PlaceRelativeToCar(79@, 37@, -230.0, 415.0, 0.0)
+Object.PlaceRelativeToCar(80@, 37@, -140.0, 330.0, 0.0)
+Object.PlaceRelativeToCar(81@, 37@, -140.0, 315.0, 0.0)
+Object.PlaceRelativeToCar(82@, 37@, -30.0, 220.0, 0.0)
+Object.PlaceRelativeToCar(83@, 37@, -40.0, 205.0, 0.0)
+
+:BOAT_35759
+if 
+  $boat_mission_selection == 4
+goto_if_false @BOAT_36430
+156@ = 0
+
+:BOAT_35784
+if 
+  20 > 156@
+goto_if_false @BOAT_35865
+56@(156@,50i) = Object.CreateNoOffset(#BOUY, 0.0, 0.0, 100.0)
+Object.SetCollision(56@(156@,50i), True)
+Object.SetDynamic(56@(156@,50i), True)
+156@ += 1
+goto @BOAT_35784
+
+:BOAT_35865
+157@ = 0
+
+:BOAT_35872
+if 
+  1 > 157@
+goto_if_false @BOAT_35931
+106@(157@,50i) = Object.CreateNoOffset(#WATERJUMPX2, 20.0, 20.0, 150.0)
+157@ += 1
+goto @BOAT_35872
+
+:BOAT_35931
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_36430
+Object.PlaceRelativeToCar(56@, 37@, 91.0, 480.0, 0.0)
+Object.PlaceRelativeToCar(57@, 37@, 109.0, 480.0, 0.0)
+Object.PlaceRelativeToCar(106@, 37@, 100.0, 480.0, 0.0)
+Object.PlaceRelativeToCar(58@, 37@, 75.0, 500.0, 0.0)
+Object.PlaceRelativeToCar(59@, 37@, 125.0, 500.0, 0.0)
+Object.PlaceRelativeToCar(60@, 37@, 75.0, 510.0, 0.0)
+Object.PlaceRelativeToCar(61@, 37@, 125.0, 510.0, 0.0)
+Object.PlaceRelativeToCar(62@, 37@, 75.0, 520.0, 0.0)
+Object.PlaceRelativeToCar(63@, 37@, 125.0, 520.0, 0.0)
+Object.PlaceRelativeToCar(64@, 37@, 75.0, 530.0, 0.0)
+Object.PlaceRelativeToCar(65@, 37@, 125.0, 530.0, 0.0)
+Object.PlaceRelativeToCar(66@, 37@, 75.0, 540.0, 0.0)
+Object.PlaceRelativeToCar(67@, 37@, 125.0, 540.0, 0.0)
+Object.PlaceRelativeToCar(68@, 37@, 75.0, 550.0, 0.0)
+Object.PlaceRelativeToCar(69@, 37@, 125.0, 550.0, 0.0)
+Object.PlaceRelativeToCar(70@, 37@, 75.0, 560.0, 0.0)
+Object.PlaceRelativeToCar(71@, 37@, 125.0, 560.0, 0.0)
+Object.PlaceRelativeToCar(72@, 37@, 75.0, 570.0, 0.0)
+Object.PlaceRelativeToCar(73@, 37@, 125.0, 570.0, 0.0)
+Object.PlaceRelativeToCar(74@, 37@, 75.0, 580.0, 0.0)
+Object.PlaceRelativeToCar(75@, 37@, 125.0, 580.0, 0.0)
+
+:BOAT_36430
+if 
+  $boat_mission_selection == 5
+goto_if_false @BOAT_37623
+156@ = 0
+
+:BOAT_36455
+if 
+  44 > 156@
+goto_if_false @BOAT_36536
+56@(156@,50i) = Object.CreateNoOffset(#BOUY, 0.0, 0.0, 100.0)
+Object.SetCollision(56@(156@,50i), True)
+Object.SetDynamic(56@(156@,50i), True)
+156@ += 1
+goto @BOAT_36455
+
+:BOAT_36536
+157@ = 0
+
+:BOAT_36543
+if 
+  3 > 157@
+goto_if_false @BOAT_36602
+106@(157@,50i) = Object.CreateNoOffset(#WATERJUMPX2, 20.0, 20.0, 150.0)
+157@ += 1
+goto @BOAT_36543
+
+:BOAT_36602
+if 
+  not Car.IsDead(37@)
+goto_if_false @BOAT_37623
+Object.PlaceRelativeToCar(56@, 37@, 25.0, 100.0, 0.0)
+Object.PlaceRelativeToCar(57@, 37@, 10.0, 100.0, 0.0)
+Object.PlaceRelativeToCar(58@, 37@, -30.0, 170.0, 0.0)
+Object.PlaceRelativeToCar(59@, 37@, -50.0, 160.0, 0.0)
+Object.PlaceRelativeToCar(60@, 37@, -100.0, 190.0, 0.0)
+Object.PlaceRelativeToCar(61@, 37@, -120.0, 170.0, 0.0)
+Object.PlaceRelativeToCar(62@, 37@, -170.0, 260.0, 0.0)
+Object.PlaceRelativeToCar(63@, 37@, -188.0, 260.0, 0.0)
+Object.PlaceRelativeToCar(106@, 37@, -179.0, 360.0, -6.509)
+Object.PlaceRelativeToCar(64@, 37@, -170.0, 360.0, 0.0)
+Object.PlaceRelativeToCar(65@, 37@, -188.0, 360.0, 0.0)
+Object.PlaceRelativeToCar(66@, 37@, -180.0, 500.0, 0.0)
+Object.PlaceRelativeToCar(67@, 37@, -195.0, 500.0, 0.0)
+Object.PlaceRelativeToCar(68@, 37@, -50.0, 600.0, 0.0)
+Object.PlaceRelativeToCar(69@, 37@, -30.0, 600.0, 0.0)
+Object.SetCoordinates(107@, -2682.159, 1946.412, 0.9)
+Object.SetHeading(107@, 180.0)
+Object.SetCoordinates(70@, -2689.573, 1944.864, 0.0)
+Object.SetCoordinates(71@, -2674.354, 1944.607, 0.0)
+Object.SetCoordinates(108@, -2681.746, 1608.794, 0.9)
+Object.SetHeading(108@, 180.0)
+Object.SetCoordinates(72@, -2689.573, 1607.794, 0.0)
+Object.SetCoordinates(73@, -2674.354, 1607.794, 0.0)
+Object.SetCoordinates(74@, -2689.27, 1533.282, 0.0)
+Object.SetCoordinates(75@, -2674.64, 1530.12, 0.0)
+Object.SetCoordinates(76@, -2553.7, 1494.392, 0.0)
+Object.SetCoordinates(77@, -2550.742, 1481.417, 0.0)
+Object.SetCoordinates(78@, -2453.7, 1494.392, 0.0)
+Object.SetCoordinates(79@, -2450.742, 1481.417, 0.0)
+Object.SetCoordinates(80@, -2353.7, 1474.392, 0.0)
+Object.SetCoordinates(81@, -2350.742, 1461.417, 0.0)
+Object.SetCoordinates(82@, -2284.242, 1547.581, 0.0)
+Object.SetCoordinates(83@, -2270.893, 1550.765, 0.0)
+Object.SetCoordinates(84@, -2334.242, 1647.581, 0.0)
+Object.SetCoordinates(85@, -2320.893, 1650.765, 0.0)
+Object.SetCoordinates(86@, -2284.242, 1747.581, 0.0)
+Object.SetCoordinates(87@, -2270.893, 1750.765, 0.0)
+Object.SetCoordinates(88@, -2139.394, 1821.263, 0.0)
+Object.SetCoordinates(89@, -2134.581, 1808.785, 0.0)
+Object.SetCoordinates(90@, -2039.394, 1761.263, 0.0)
+Object.SetCoordinates(91@, -2034.581, 1748.785, 0.0)
+Object.SetCoordinates(92@, -1939.394, 1841.263, 0.0)
+Object.SetCoordinates(93@, -1934.581, 1828.785, 0.0)
+Object.SetCoordinates(94@, -1809.394, 1801.263, 0.0)
+Object.SetCoordinates(95@, -1804.581, 1788.785, 0.0)
+Object.SetCoordinates(96@, -1831.853, 1909.105, 0.0)
+Object.SetCoordinates(97@, -1847.253, 1906.112, 0.0)
+Object.SetCoordinates(98@, -1879.002, 2073.601, 0.0)
+Object.SetCoordinates(99@, -1893.786, 2068.166, 0.0)
+
+:BOAT_37623
+return 
+
+:BOAT_37625
+156@ = 0
+
+:BOAT_37632
+if 
+  50 > 156@
+goto_if_false @BOAT_37682
+Object.Delete(56@(156@,50i))
+Object.Delete(106@(156@,50i))
+156@ += 1
+goto @BOAT_37632
+
+:BOAT_37682
+return 
+
+:BOAT_37684
+252@ = Game.GetCurrentLanguage()
+return 
+
+:BOAT_37691
+Streaming.LoadSceneInDirection(-2185.335, 2410.409, 3.9752, 122.2585)
+Text.ClearHelp
+Text.ClearPrints
+Char.SetHeading($scplayer, 177@)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+return 
+
+:BOAT_37731
+if 
+  $boat_passed_once == 0
+goto_if_false @BOAT_37807
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Text.PrintBig('BOAT_P2', 5000, TextStyle.Middle)
+Text.Print('BOAT_P1', 5000, 1)
+Audio.PlayMissionPassedTune(2)
+Player.ClearWantedLevel($player1)
+Stat.PlayerMadeProgress(1)
+Stat.RegisterOddjobMissionPassed
+$boat_passed_once = 1
+
+:BOAT_37807
+return 
+
+:BOAT_37809
+Audio.ReportMissionAudioEventAtPosition(0.0, 0.0, 0.0, 1001)
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1098)
+Player.SetCanDoDriveBy($player1, True)
+Char.SetDrownsInWater($scplayer, True)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Hud.Display(True)
+Hud.DisplayRadar(True)
+Hud.DisplayCarNames(True)
+Hud.DisplayZoneNames(True)
+Hud.ClearTimer($boat_timer)
+Blip.Remove(52@)
+Blip.Remove(51@)
+Blip.Remove(53@)
+Blip.Remove(54@)
+Streaming.MarkModelAsNoLongerNeeded(210)
+Char.MarkAsNoLongerNeeded(39@)
+Char.MarkAsNoLongerNeeded(38@)
+Car.Delete(37@)
+Car.Delete(46@)
+Char.Delete(42@)
+Char.Delete(43@)
+Car.Delete(40@)
+Car.Delete(41@)
+Car.Delete(44@)
+Char.Delete(45@)
+Streaming.MarkModelAsNoLongerNeeded(473)
+Streaming.MarkModelAsNoLongerNeeded(497)
+Streaming.MarkModelAsNoLongerNeeded(472)
+Streaming.MarkModelAsNoLongerNeeded(484)
+Streaming.MarkModelAsNoLongerNeeded(454)
+Streaming.MarkModelAsNoLongerNeeded(539)
+Weather.Release
+Player.SetControl($player1, True)
+$timer_mobile_start = Clock.GetGameTimer()
+if 
+  $boat_gold_rewardgiven == 0
+goto_if_false @BOAT_38136
+if 
+  $boat_accelerate_goldachieved == 1
+goto_if_false @BOAT_38136
+if 
+  $boat_simplecircuit_goldachieved == 1
+goto_if_false @BOAT_38136
+if 
+  $boat_slalom_goldachieved == 1
+goto_if_false @BOAT_38136
+if 
+  $boat_skijump_goldachieved == 1
+goto_if_false @BOAT_38136
+if 
+  $boat_hover_goldachieved == 1
+goto_if_false @BOAT_38136
+$boat_gold_rewardgiven = 1
+$boat_silver_rewardgiven = 99
+$boat_bronze_rewardgiven = 99
+
+:BOAT_38136
+if 
+  $boat_silver_rewardgiven == 0
+goto_if_false @BOAT_38258
+if 
+  $boat_accelerate_silverachieved == 1
+goto_if_false @BOAT_38258
+if 
+  $boat_simplecircuit_silverachieved == 1
+goto_if_false @BOAT_38258
+if 
+  $boat_slalom_silverachieved == 1
+goto_if_false @BOAT_38258
+if 
+  $boat_skijump_silverachieved == 1
+goto_if_false @BOAT_38258
+if 
+  $boat_hover_silverachieved == 1
+goto_if_false @BOAT_38258
+$boat_silver_rewardgiven = 1
+$boat_bronze_rewardgiven = 99
+
+:BOAT_38258
+if 
+  $boat_bronze_rewardgiven == 0
+goto_if_false @BOAT_38373
+if 
+  $boat_accelerate_bronzeachieved == 1
+goto_if_false @BOAT_38373
+if 
+  $boat_simplecircuit_bronzeachieved == 1
+goto_if_false @BOAT_38373
+if 
+  $boat_slalom_bronzeachieved == 1
+goto_if_false @BOAT_38373
+if 
+  $boat_skijump_bronzeachieved == 1
+goto_if_false @BOAT_38373
+if 
+  $boat_hover_bronzeachieved == 1
+goto_if_false @BOAT_38373
+$boat_bronze_rewardgiven = 1
+
+:BOAT_38373
+if 
+  $boat_gold_rewardgiven == 1
+goto_if_false @BOAT_38440
+CarGenerator.Switch($boat_gold_generator, 101)
+CarGenerator.SetHasBeenOwned($boat_gold_generator, True)
+CarGenerator.Switch($boat_silver_generator, 101)
+CarGenerator.SetHasBeenOwned($boat_silver_generator, True)
+CarGenerator.Switch($boat_bronze_generator, 101)
+CarGenerator.SetHasBeenOwned($boat_bronze_generator, True)
+$boat_gold_rewardgiven = 2
+
+:BOAT_38440
+if 
+  $boat_silver_rewardgiven == 1
+goto_if_false @BOAT_38493
+CarGenerator.Switch($boat_silver_generator, 101)
+CarGenerator.SetHasBeenOwned($boat_silver_generator, True)
+CarGenerator.Switch($boat_bronze_generator, 101)
+CarGenerator.SetHasBeenOwned($boat_bronze_generator, True)
+$boat_silver_rewardgiven = 2
+
+:BOAT_38493
+if 
+  $boat_bronze_rewardgiven == 1
+goto_if_false @BOAT_38532
+CarGenerator.Switch($boat_bronze_generator, 101)
+CarGenerator.SetHasBeenOwned($boat_bronze_generator, True)
+$boat_bronze_rewardgiven = 2
+
+:BOAT_38532
+$onmission = 0
+Mission.Finish
+return 
+

@@ -1,0 +1,279 @@
+//-------------External script 8 (VENDING_MACHINE)---------------
+
+:VENDING
+script_name 'VENDING'
+1@ = 0
+if 
+  1@ == 1
+goto_if_false @VENDING_80
+0@ = Object.CreateNoOffset(#VENDMACHFD, 0.0, 0.0, 0.0)
+3@ = Object.CreateNoOffset(#KB_BEER, 0.0, 0.0, 0.0)
+
+:VENDING_80
+wait 0
+$game_timer = Clock.GetGameTimer()
+if 
+  Object.DoesExist(0@)
+goto_if_false @VENDING_1579
+if 
+  Object.IsWithinBrainActivationRange(0@)
+goto_if_false @VENDING_1484
+if 
+  Player.IsPlaying($player1)
+goto_if_false @VENDING_1391
+if 
+  1@ == 0
+goto_if_false @VENDING_173
+Streaming.RequestAnimation("VENDING")
+1@ += 1
+
+:VENDING_173
+if 
+  1@ == 1
+goto_if_false @VENDING_395
+if 
+  Streaming.HasAnimationLoaded("VENDING")
+goto_if_false @VENDING_384
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0, -1.0, 0.5)
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $x, $y, $z, 0.6, 0.6, 1.0)
+goto_if_false @VENDING_377
+if or
+  Object.DoesHaveThisModel(0@, #VENDIN3)
+  Object.DoesHaveThisModel(0@, #CJ_CANDYVENDOR)
+  Object.DoesHaveThisModel(0@, #CJ_EXT_CANDY)
+goto_if_false @VENDING_343
+Audio.LoadMissionAudio(42601, 4)
+Text.PrintHelpForever('SLOT_04')
+goto @VENDING_363
+
+:VENDING_343
+Audio.LoadMissionAudio(42600, 4)
+Text.PrintHelpForever('SLOT_05')
+
+:VENDING_363
+Pad.SetPlayerEnterCarButton($player1, False)
+1@ += 1
+
+:VENDING_377
+goto @VENDING_395
+
+:VENDING_384
+Streaming.RequestAnimation("VENDING")
+
+:VENDING_395
+if 
+  1@ == 2
+goto_if_false @VENDING_1210
+if 
+  Streaming.HasAnimationLoaded("VENDING")
+goto_if_false @VENDING_1199
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0, -1.0, 0.5)
+if or
+  Object.DoesHaveThisModel(0@, #VENDIN3)
+  Object.DoesHaveThisModel(0@, #CJ_CANDYVENDOR)
+  Object.DoesHaveThisModel(0@, #CJ_EXT_CANDY)
+goto_if_false @VENDING_512
+Audio.LoadMissionAudio(42601, 4)
+goto @VENDING_521
+
+:VENDING_512
+Audio.LoadMissionAudio(42600, 4)
+
+:VENDING_521
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $x, $y, $z, 0.6, 0.6, 1.0)
+goto_if_false @VENDING_1176
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @VENDING_1169
+if 
+  Player.CanStartMission($player1)
+goto_if_false @VENDING_1169
+if 
+  Player.IsScoreGreater($player1, 0)
+goto_if_false @VENDING_1141
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @VENDING_1134
+$heading = Object.GetHeading(0@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.0, -0.2, 0.6)
+3@ = Object.CreateNoOffset(#CJ_JUICE_CAN, $x, $y, $z)
+$heading = Object.GetHeading(0@)
+$sequence_task_obj = Sequence.Open()
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 0.2, -1.0, 0.0)
+Task.CharSlideToCoordAndPlayAnim(-1, $x, $y, $z, $heading, 0.4, "VEND_USE", "VENDING", 4.0, False, False, False, True, 0)
+if or
+  Object.DoesHaveThisModel(0@, #VENDIN3)
+  Object.DoesHaveThisModel(0@, #CJ_CANDYVENDOR)
+  Object.DoesHaveThisModel(0@, #CJ_EXT_CANDY)
+goto_if_false @VENDING_859
+Task.PlayAnimSecondary(-1, "VEND_EAT_P", "VENDING", 4.0, False, False, False, False, -1)
+goto @VENDING_1001
+
+:VENDING_859
+$x, $y, $z, $x, $y, $z = Streaming.GetModelDimensions(#CJ_JUICE_CAN)
+$y /= 2.0
+$y += 0.027
+Task.PickUpObject(-1, 3@, 0.062, $y, 0.0, 5, 16, "VEND_USE_PT2", "VENDING", 0)
+Task.PickUpObject(-1, 3@, 0.062, $y, 0.0, 5, 16, "VEND_DRINK2_P", "VENDING", 0)
+
+:VENDING_1001
+Sequence.Close($sequence_task_obj)
+Char.PerformSequence($scplayer, $sequence_task_obj)
+Sequence.Clear($sequence_task_obj)
+Player.AddScore($player1, -1)
+Text.ClearHelp
+if or
+  Object.DoesHaveThisModel(0@, #VENDIN3)
+  Object.DoesHaveThisModel(0@, #CJ_CANDYVENDOR)
+  Object.DoesHaveThisModel(0@, #CJ_EXT_CANDY)
+goto_if_false @VENDING_1076
+Audio.LoadMissionAudio(42601, 4)
+goto @VENDING_1085
+
+:VENDING_1076
+Audio.LoadMissionAudio(42600, 4)
+
+:VENDING_1085
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @VENDING_1111
+Audio.AttachMissionAudioToChar(MissionAudioSlot.Slot4, $scplayer)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot4)
+
+:VENDING_1111
+set_lvar_int_to_var_int 2@ = $game_timer
+2@ += 3000
+1@ += 1
+
+:VENDING_1134
+goto @VENDING_1169
+
+:VENDING_1141
+$x, $y, $z = Char.GetCoordinates($scplayer)
+Sound.AddOneOffSound(1053, $x, $y, $z)
+
+:VENDING_1169
+goto @VENDING_1192
+
+:VENDING_1176
+Text.ClearHelp
+Pad.SetPlayerEnterCarButton($player1, True)
+1@ = 1
+
+:VENDING_1192
+goto @VENDING_1210
+
+:VENDING_1199
+Streaming.RequestAnimation("VENDING")
+
+:VENDING_1210
+if 
+  1@ == 3
+goto_if_false @VENDING_1324
+$task_status = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @VENDING_1324
+Stat.IncrementInt(StatId.DistBike, 245)
+$temp_integer_1 = Char.GetHealth($scplayer)
+$temp_integer_1 += 30
+Char.SetHealth($scplayer, $temp_integer_1)
+Object.MarkAsNoLongerNeeded(3@)
+Text.ClearHelp
+Pad.SetPlayerEnterCarButton($player1, True)
+set_lvar_int_to_var_int 2@ = $game_timer
+2@ += 1500
+1@ += 1
+
+:VENDING_1324
+if 
+  1@ == 4
+goto_if_false @VENDING_1384
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 2@
+goto_if_false @VENDING_1384
+Char.ClearTasks($scplayer)
+Streaming.RemoveAnimation("VENDING")
+1@ = 0
+
+:VENDING_1384
+goto @VENDING_1477
+
+:VENDING_1391
+if 
+  1@ > 0
+goto_if_false @VENDING_1477
+if 
+  1@ > 1
+goto_if_false @VENDING_1436
+Text.ClearHelp
+Pad.SetPlayerEnterCarButton($player1, True)
+
+:VENDING_1436
+if 
+  1@ > 2
+goto_if_false @VENDING_1459
+Object.MarkAsNoLongerNeeded(3@)
+
+:VENDING_1459
+Streaming.RemoveAnimation("VENDING")
+1@ = 0
+
+:VENDING_1477
+goto @VENDING_1572
+
+:VENDING_1484
+if 
+  1@ > 0
+goto_if_false @VENDING_1570
+if 
+  1@ > 1
+goto_if_false @VENDING_1529
+Text.ClearHelp
+Pad.SetPlayerEnterCarButton($player1, True)
+
+:VENDING_1529
+if 
+  1@ > 2
+goto_if_false @VENDING_1552
+Object.MarkAsNoLongerNeeded(3@)
+
+:VENDING_1552
+Streaming.RemoveAnimation("VENDING")
+1@ = 0
+
+:VENDING_1570
+terminate_this_script 
+
+:VENDING_1572
+goto @VENDING_1667
+
+:VENDING_1579
+if 
+  1@ > 0
+goto_if_false @VENDING_1665
+if 
+  1@ > 1
+goto_if_false @VENDING_1624
+Text.ClearHelp
+Pad.SetPlayerEnterCarButton($player1, True)
+
+:VENDING_1624
+if 
+  1@ > 2
+goto_if_false @VENDING_1647
+Object.MarkAsNoLongerNeeded(3@)
+
+:VENDING_1647
+Streaming.RemoveAnimation("VENDING")
+1@ = 0
+
+:VENDING_1665
+terminate_this_script 
+
+:VENDING_1667
+goto @VENDING_80
+terminate_this_script 
+

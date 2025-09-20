@@ -1,0 +1,778 @@
+//-------------External script 0 (PLAYER_PARACHUTE)---------------
+
+:PLCHUTE
+script_name 'PLCHUTE'
+Streaming.RequestModel(371)
+
+:PLCHUTE_16
+if 
+  not Streaming.HasModelLoaded(371)
+goto_if_false @PLCHUTE_43
+wait 0
+goto @PLCHUTE_16
+
+:PLCHUTE_43
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @PLCHUTE_59
+
+:PLCHUTE_59
+$player_landed = 0
+$player_fall_state = 0
+$player_has_parachute = 0
+if 
+  $player_landed == 999
+goto_if_false @PLCHUTE_118
+$para_pickup = Pickup.Create(371, 3, $player_x, $player_y, $player_z)
+
+:PLCHUTE_118
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @PLCHUTE_5455
+if 
+  not Game.Is2PlayerGameGoingOn
+goto_if_false @PLCHUTE_5455
+if 
+  $player_fall_state <> 0
+goto_if_false @PLCHUTE_176
+Pad.SetPlayerCycleWeaponButton($player1, False)
+
+:PLCHUTE_176
+if 
+  $player_has_parachute > 0
+goto_if_false @PLCHUTE_219
+if 
+  not Char.HasGotWeapon($scplayer, WeaponType.Parachute)
+goto_if_false @PLCHUTE_219
+gosub @PLCHUTE_5521
+
+:PLCHUTE_219
+if 
+  $player_has_parachute == 0
+goto_if_false @PLCHUTE_274
+if 
+  Char.HasGotWeapon($scplayer, WeaponType.Parachute)
+goto_if_false @PLCHUTE_274
+Streaming.RequestModel(#PARACHUTE)
+$player_has_parachute = 1
+$player_landed = 0
+
+:PLCHUTE_274
+if 
+  $player_has_parachute == 1
+goto_if_false @PLCHUTE_377
+if 
+  Streaming.HasModelLoaded(#PARACHUTE)
+goto_if_false @PLCHUTE_377
+17@ = Object.Create(#PARACHUTE, $player_x, $player_y, $player_z)
+Object.AttachToChar(17@, $scplayer, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+Object.SetVisible(17@, False)
+$player_has_parachute = 2
+
+:PLCHUTE_377
+if and
+  $player_has_parachute == 2
+  $player_fall_state == 1
+goto_if_false @PLCHUTE_409
+$player_has_parachute = 3
+
+:PLCHUTE_409
+if and
+  $player_fall_state == 0
+  $player_has_parachute > 0
+goto_if_false @PLCHUTE_565
+if 
+  Char.IsInAir($scplayer)
+goto_if_false @PLCHUTE_565
+$para_Vx, $para_Vy, $para_Vz = Char.GetVelocity($scplayer)
+if 
+  -10.0 > $para_Vz
+goto_if_false @PLCHUTE_565
+7@ = Char.GetHeightAboveGround($scplayer)
+if 
+  7@ > 20.0
+goto_if_false @PLCHUTE_565
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1037)
+$player_fall_state = 1
+Char.SetCurrentWeapon($scplayer, WeaponType.Parachute)
+0@ = 0
+$para_max_Vz = 0.0
+
+:PLCHUTE_565
+if 
+  $player_fall_state == 1
+goto_if_false @PLCHUTE_2386
+if 
+  0@ == 0
+goto_if_false @PLCHUTE_608
+0@ = 2
+
+:PLCHUTE_608
+if 
+  0@ == 2
+goto_if_false @PLCHUTE_729
+27@ = Char.GetScriptTaskStatus($scplayer, 2066)
+if 
+  is_int_lvar_equal_to_constant 27@ == 7
+goto_if_false @PLCHUTE_729
+Task.PlayAnimNonInterruptable($scplayer, "FALL_SKYDIVE", "PED", 1.0, True, False, False, False, -1)
+Streaming.RequestAnimation("PARACHUTE")
+15@ = 1
+1@ = Char.GetHeading($scplayer)
+0@ = 3
+
+:PLCHUTE_729
+if 
+  0@ == 3
+goto_if_false @PLCHUTE_2386
+27@ = Char.GetScriptTaskStatus($scplayer, 2066)
+if 
+  is_int_lvar_equal_to_constant 27@ == 7
+goto_if_false @PLCHUTE_815
+Task.PlayAnimNonInterruptable($scplayer, "FALL_SKYDIVE", "PED", 1.0, True, False, False, False, -1)
+
+:PLCHUTE_815
+7@ = Char.GetHeightAboveGround($scplayer)
+if and
+  100.0 > 7@
+  7@ > 60.0
+goto_if_false @PLCHUTE_912
+if 
+  Streaming.HasAnimationLoaded("PARACHUTE")
+goto_if_false @PLCHUTE_912
+if 
+  $onmission == 0
+goto_if_false @PLCHUTE_912
+Text.PrintNow('PARA_01', 1000, 1)
+
+:PLCHUTE_912
+10@, 11@, 12@, 12@ = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+if 
+  $para_control_off == 1
+goto_if_false @PLCHUTE_960
+10@ = 0
+11@ = 0
+
+:PLCHUTE_960
+cset_lvar_float_to_lvar_int 21@ = integer 10@
+21@ /= 4.267
+sub_float_lvar_from_float_lvar 21@ -= 2@
+21@ /= 20.0
+add_float_lvar_to_float_lvar 2@ += 21@
+set_lvar_float_to_lvar_float 21@ = 2@
+21@ /= 5.0
+sub_float_lvar_from_float_lvar 1@ -= 21@
+if 
+  1@ > 180.0
+goto_if_false @PLCHUTE_1061
+1@ -= 360.0
+
+:PLCHUTE_1061
+if 
+  -180.0 > 1@
+goto_if_false @PLCHUTE_1092
+1@ += 360.0
+
+:PLCHUTE_1092
+cset_lvar_float_to_lvar_int 22@ = integer 11@
+22@ /= 4.267
+sub_float_lvar_from_float_lvar 22@ -= 3@
+22@ /= 20.0
+add_float_lvar_to_float_lvar 3@ += 22@
+8@, 9@, $para_Vz = Char.GetVelocity($scplayer)
+if 
+  is_float_var_greater_than_float_var $para_freefall_Vz > $para_Vz
+goto_if_false @PLCHUTE_1177
+set_var_float_to_var_float $para_Vz = $para_freefall_Vz
+
+:PLCHUTE_1177
+if 
+  is_float_var_greater_than_float_var $para_max_Vz > $para_Vz
+goto_if_false @PLCHUTE_1204
+set_var_float_to_var_float $para_max_Vz = $para_Vz
+
+:PLCHUTE_1204
+if 
+  is_float_var_greater_than_float_var $para_freefall_Vz > $para_max_Vz
+goto_if_false @PLCHUTE_1231
+set_var_float_to_var_float $para_max_Vz = $para_freefall_Vz
+
+:PLCHUTE_1231
+if and
+  is_float_var_greater_than_float_var $para_Vz > $para_max_Vz
+  $player_fall_safe <> 1
+goto_if_false @PLCHUTE_1407
+if 
+  not Char.IsInWater($scplayer)
+goto_if_false @PLCHUTE_1361
+if 
+  -20.0 > $para_max_Vz
+goto_if_false @PLCHUTE_1308
+$player_fall_state = 2
+goto @PLCHUTE_1354
+
+:PLCHUTE_1308
+Task.PlayAnimNonInterruptable($scplayer, "FALL_SKYDIVE", "PED", 1.0, True, False, False, False, 100)
+$player_fall_state = 7
+
+:PLCHUTE_1354
+goto @PLCHUTE_1407
+
+:PLCHUTE_1361
+Task.PlayAnimNonInterruptable($scplayer, "FALL_SKYDIVE", "PED", 1.0, True, False, False, False, 100)
+$player_fall_state = 7
+
+:PLCHUTE_1407
+set_lvar_float_to_lvar_float 4@ = 3@
+4@ /= 30.0
+mult_float_lvar_by_float_var 4@ *= $para_freefall_Vy
+$para_Vx = Math.Sin(1@)
+$para_Vy = Math.Cos(1@)
+mult_float_var_by_float_lvar $para_Vx *= 4@
+mult_float_var_by_float_lvar $para_Vy *= 4@
+$para_Vy *= -1.0
+add_float_var_to_float_var $para_Vy += $para_default_Vy
+set_lvar_float_to_lvar_float 21@ = 8@
+sub_float_var_from_float_lvar 21@ -= $para_Vx
+21@ *= 0.01
+set_var_float_to_lvar_float $para_Vx = 8@
+sub_float_lvar_from_float_var $para_Vx -= 21@
+set_lvar_float_to_lvar_float 21@ = 9@
+sub_float_var_from_float_lvar 21@ -= $para_Vy
+21@ *= 0.01
+set_var_float_to_lvar_float $para_Vy = 9@
+sub_float_lvar_from_float_var $para_Vy -= 21@
+set_lvar_int_to_lvar_int 12@ = 10@
+set_lvar_int_to_lvar_int 13@ = 11@
+abs_lvar_int 12@
+abs_lvar_int 13@
+if or
+  12@ > 40
+  13@ > 40
+goto_if_false @PLCHUTE_2109
+if 
+  is_int_lvar_greater_than_int_lvar 12@ > 13@
+goto_if_false @PLCHUTE_1872
+if 
+  10@ >= 0
+goto_if_false @PLCHUTE_1751
+if 
+  15@ <> 2
+goto_if_false @PLCHUTE_1751
+if 
+  Streaming.HasAnimationLoaded("PARACHUTE")
+goto_if_false @PLCHUTE_1744
+Task.PlayAnimNonInterruptable($scplayer, "FALL_SKYDIVE_R", "PARACHUTE", 1.0, True, False, False, True, -2)
+
+:PLCHUTE_1744
+15@ = 2
+
+:PLCHUTE_1751
+if 
+  0 > 10@
+goto_if_false @PLCHUTE_1865
+if 
+  15@ <> 3
+goto_if_false @PLCHUTE_1865
+if 
+  Streaming.HasAnimationLoaded("PARACHUTE")
+goto_if_false @PLCHUTE_1858
+Task.PlayAnimNonInterruptable($scplayer, "FALL_SKYDIVE_L", "PARACHUTE", 1.0, True, False, False, True, -2)
+
+:PLCHUTE_1858
+15@ = 3
+
+:PLCHUTE_1865
+goto @PLCHUTE_2102
+
+:PLCHUTE_1872
+if 
+  11@ >= 0
+goto_if_false @PLCHUTE_1984
+if 
+  15@ <> 4
+goto_if_false @PLCHUTE_1984
+if 
+  Streaming.HasAnimationLoaded("PARACHUTE")
+goto_if_false @PLCHUTE_1977
+Task.PlayAnimNonInterruptable($scplayer, "FALL_SKYDIVE", "PARACHUTE", 1.0, True, False, False, True, -2)
+
+:PLCHUTE_1977
+15@ = 4
+
+:PLCHUTE_1984
+if 
+  0 > 11@
+goto_if_false @PLCHUTE_2102
+if 
+  15@ <> 5
+goto_if_false @PLCHUTE_2102
+if 
+  Streaming.HasAnimationLoaded("PARACHUTE")
+goto_if_false @PLCHUTE_2095
+Task.PlayAnimNonInterruptable($scplayer, "FALL_SKYDIVE_ACCEL", "PARACHUTE", 1.0, True, False, False, True, -2)
+
+:PLCHUTE_2095
+15@ = 5
+
+:PLCHUTE_2102
+goto @PLCHUTE_2203
+
+:PLCHUTE_2109
+if 
+  15@ <> 1
+goto_if_false @PLCHUTE_2203
+if 
+  Streaming.HasAnimationLoaded("PARACHUTE")
+goto_if_false @PLCHUTE_2203
+Task.PlayAnimNonInterruptable($scplayer, "FALL_SKYDIVE", "PARACHUTE", 1.0, True, False, False, True, -2)
+15@ = 1
+
+:PLCHUTE_2203
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+  $para_force_chute_open == 1
+goto_if_false @PLCHUTE_2386
+if 
+  $player_fall_safe <> 1
+goto_if_false @PLCHUTE_2386
+if 
+  Streaming.HasAnimationLoaded("PARACHUTE")
+goto_if_false @PLCHUTE_2386
+if and
+  $player_has_parachute == 3
+  $para_control_off == 0
+goto_if_false @PLCHUTE_2386
+Task.PlayAnimNonInterruptable($scplayer, "PARA_OPEN", "PARACHUTE", 8.0, False, False, False, True, -2)
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1038)
+set_var_int_to_lvar_int $play_open_timer = TIMERA
+$play_open_timer += 1100
+$player_fall_state = 3
+0@ = 0
+
+:PLCHUTE_2386
+if 
+  $player_fall_state == 2
+goto_if_false @PLCHUTE_2504
+if 
+  Streaming.HasAnimationLoaded("PARACHUTE")
+goto_if_false @PLCHUTE_2492
+Char.SetHeading($scplayer, 1@)
+Task.DieNamedAnim($scplayer, "FALL_SKYDIVE_DIE", "PARACHUTE", 1000.0, 0)
+Audio.ReportMissionAudioEventAtChar($scplayer, 1189)
+goto @PLCHUTE_2497
+
+:PLCHUTE_2492
+Task.Die($scplayer)
+
+:PLCHUTE_2497
+gosub @PLCHUTE_5521
+
+:PLCHUTE_2504
+if 
+  $player_fall_state == 3
+goto_if_false @PLCHUTE_4781
+if 
+  $play_open_timer > 0
+goto_if_false @PLCHUTE_2586
+if 
+  is_int_lvar_greater_than_int_var TIMERA > $play_open_timer
+goto_if_false @PLCHUTE_2586
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1039)
+$play_open_timer = 0
+
+:PLCHUTE_2586
+if 
+  0@ == 0
+goto_if_false @PLCHUTE_2689
+set_lvar_float_to_lvar_float 25@ = 3@
+25@ /= 500.0
+set_lvar_float_to_lvar_float 26@ = 2@
+26@ /= 500.0
+set_lvar_int_to_lvar_int 18@ = TIMERA
+set_lvar_int_to_lvar_int 19@ = TIMERA
+set_lvar_float_to_lvar_float 5@ = 4@
+5@ *= -1.0
+set_lvar_float_to_var_float 6@ = $para_Vz
+0@ = 1
+
+:PLCHUTE_2689
+if 
+  0@ == 1
+goto_if_false @PLCHUTE_2856
+set_lvar_int_to_lvar_int 10@ = TIMERA
+sub_int_lvar_from_int_lvar 10@ -= 19@
+if 
+  500 > 10@
+goto_if_false @PLCHUTE_2829
+set_lvar_int_to_lvar_int 10@ = TIMERA
+sub_int_lvar_from_int_lvar 10@ -= 18@
+set_lvar_int_to_lvar_int 18@ = TIMERA
+cset_lvar_float_to_lvar_int 21@ = integer 10@
+set_lvar_float_to_lvar_float 22@ = 25@
+mult_float_lvar_by_float_lvar 22@ *= 21@
+set_lvar_float_to_lvar_float 23@ = 26@
+mult_float_lvar_by_float_lvar 23@ *= 21@
+sub_float_lvar_from_float_lvar 3@ -= 22@
+sub_float_lvar_from_float_lvar 2@ -= 23@
+goto @PLCHUTE_2856
+
+:PLCHUTE_2829
+2@ = 0.0
+3@ = 0.0
+0@ = 2
+
+:PLCHUTE_2856
+if 
+  0@ == 2
+goto_if_false @PLCHUTE_2964
+if 
+  Object.DoesExist(17@)
+goto_if_false @PLCHUTE_2964
+Object.SetVisible(17@, True)
+Object.SetScale(17@, 0.0)
+set_lvar_int_to_lvar_int 19@ = TIMERA
+wait 0
+Object.PlayAnim(17@, "PARA_OPEN_O", "PARACHUTE", 1000.0, False, True)
+0@ = 3
+
+:PLCHUTE_2964
+if 
+  0@ == 3
+goto_if_false @PLCHUTE_3067
+set_lvar_int_to_lvar_int 10@ = TIMERA
+sub_int_lvar_from_int_lvar 10@ -= 19@
+if 
+  500 > 10@
+goto_if_false @PLCHUTE_3050
+cset_lvar_float_to_lvar_int 21@ = integer 10@
+21@ /= 500.0
+Object.SetScale(17@, 21@)
+goto @PLCHUTE_3067
+
+:PLCHUTE_3050
+Object.SetScale(17@, 1.0)
+0@ = 4
+
+:PLCHUTE_3067
+if 
+  0@ == 5
+goto_if_false @PLCHUTE_3136
+20@ = Object.Create(#PARA_COLLISION, 0.0, 0.0, 0.0)
+Object.SetVisible(20@, False)
+Object.SetDynamic(20@, True)
+Object.SetRecordsCollisions(20@, True)
+0@ = 6
+
+:PLCHUTE_3136
+if 
+  0@ == 6
+goto_if_false @PLCHUTE_4354
+10@, 11@, 12@, 12@ = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+if 
+  $para_control_off == 1
+goto_if_false @PLCHUTE_3202
+10@ = 0
+11@ = 0
+
+:PLCHUTE_3202
+cset_lvar_float_to_lvar_int 21@ = integer 10@
+21@ /= 4.267
+sub_float_lvar_from_float_lvar 21@ -= 2@
+21@ /= 20.0
+add_float_lvar_to_float_lvar 2@ += 21@
+set_lvar_float_to_lvar_float 21@ = 2@
+21@ /= 15.0
+sub_float_lvar_from_float_lvar 1@ -= 21@
+if 
+  1@ > 180.0
+goto_if_false @PLCHUTE_3303
+1@ -= 360.0
+
+:PLCHUTE_3303
+if 
+  -180.0 > 1@
+goto_if_false @PLCHUTE_3334
+1@ += 360.0
+
+:PLCHUTE_3334
+$para_Vx = Math.Sin(1@)
+$para_Vy = Math.Cos(1@)
+mult_float_var_by_float_var $para_Vx *= $para_float_Vy
+mult_float_var_by_float_var $para_Vy *= $para_float_Vy
+$para_Vx *= -1.0
+set_lvar_int_to_lvar_int 12@ = 10@
+set_lvar_int_to_lvar_int 13@ = 11@
+abs_lvar_int 12@
+abs_lvar_int 13@
+if or
+  12@ > 40
+  13@ > 40
+goto_if_false @PLCHUTE_4066
+if 
+  is_int_lvar_greater_than_int_lvar 12@ > 13@
+goto_if_false @PLCHUTE_3741
+set_lvar_float_to_var_float 21@ = $para_float_Vz
+sub_float_var_from_float_lvar 21@ -= $para_Vz
+21@ /= 20.0
+add_float_lvar_to_float_var $para_Vz += 21@
+if 
+  10@ >= 0
+goto_if_false @PLCHUTE_3607
+if 
+  15@ <> 2
+goto_if_false @PLCHUTE_3607
+Task.PlayAnimNonInterruptable($scplayer, "PARA_STEERR", "PARACHUTE", 1.0, True, False, False, True, -2)
+Object.PlayAnim(17@, "PARA_STEERR_O", "PARACHUTE", 1.0, True, True)
+15@ = 2
+
+:PLCHUTE_3607
+if 
+  0 > 10@
+goto_if_false @PLCHUTE_3734
+if 
+  15@ <> 3
+goto_if_false @PLCHUTE_3734
+Task.PlayAnimNonInterruptable($scplayer, "PARA_STEERL", "PARACHUTE", 1.0, True, False, False, True, -2)
+Object.PlayAnim(17@, "PARA_STEERL_O", "PARACHUTE", 1.0, True, True)
+15@ = 3
+
+:PLCHUTE_3734
+goto @PLCHUTE_4059
+
+:PLCHUTE_3741
+if 
+  11@ >= 0
+goto_if_false @PLCHUTE_3900
+set_lvar_float_to_var_float 21@ = $para_flare_Vz
+sub_float_var_from_float_lvar 21@ -= $para_Vz
+21@ /= 20.0
+add_float_lvar_to_float_var $para_Vz += 21@
+if 
+  15@ <> 4
+goto_if_false @PLCHUTE_3900
+Task.PlayAnimNonInterruptable($scplayer, "PARA_DECEL", "PARACHUTE", 1.0, True, False, False, True, -2)
+Object.PlayAnim(17@, "PARA_DECEL_O", "PARACHUTE", 1.0, True, True)
+15@ = 4
+
+:PLCHUTE_3900
+if 
+  0 > 11@
+goto_if_false @PLCHUTE_4059
+set_lvar_float_to_var_float 21@ = $para_float_Vz
+sub_float_var_from_float_lvar 21@ -= $para_Vz
+21@ /= 20.0
+add_float_lvar_to_float_var $para_Vz += 21@
+if 
+  15@ <> 5
+goto_if_false @PLCHUTE_4059
+Task.PlayAnimNonInterruptable($scplayer, "PARA_FLOAT", "PARACHUTE", 1.0, True, False, False, True, -2)
+Object.PlayAnim(17@, "PARA_FLOAT_O", "PARACHUTE", 1.0, True, True)
+15@ = 5
+
+:PLCHUTE_4059
+goto @PLCHUTE_4225
+
+:PLCHUTE_4066
+set_lvar_float_to_var_float 21@ = $para_float_Vz
+sub_float_var_from_float_lvar 21@ -= $para_Vz
+21@ /= 20.0
+add_float_lvar_to_float_var $para_Vz += 21@
+if 
+  15@ <> 5
+goto_if_false @PLCHUTE_4225
+if 
+  15@ <> 1
+goto_if_false @PLCHUTE_4225
+Task.PlayAnimNonInterruptable($scplayer, "PARA_FLOAT", "PARACHUTE", 1.0, True, False, False, True, -2)
+Object.PlayAnim(17@, "PARA_FLOAT_O", "PARACHUTE", 1.0, True, True)
+15@ = 1
+
+:PLCHUTE_4225
+$x, $y, $z = Object.GetCoordinates(17@)
+Object.SetCoordinatesAndVelocity(20@, $x, $y, $z)
+if 
+  Object.HasCollidedWithAnything(20@)
+goto_if_false @PLCHUTE_4318
+Object.PlayAnim(17@, "PARA_RIP_LOOP_O", "PARACHUTE", 8.0, True, True)
+0@ = 7
+
+:PLCHUTE_4318
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @PLCHUTE_4354
+Char.ClearTasksImmediately($scplayer)
+$player_fall_state = 6
+$player_landed = 3
+
+:PLCHUTE_4354
+if 
+  Object.DoesExist(17@)
+goto_if_false @PLCHUTE_4593
+if 
+  Object.IsPlayingAnim(17@, "PARA_OPEN_O")
+goto_if_false @PLCHUTE_4593
+21@ = Object.GetAnimCurrentTime(17@, "PARA_OPEN_O")
+set_lvar_float_to_lvar_float 22@ = 6@
+sub_float_var_from_float_lvar 22@ -= $para_float_Vz
+set_lvar_float_to_lvar_float 23@ = 22@
+mult_float_lvar_by_float_lvar 23@ *= 21@
+set_var_float_to_lvar_float $para_Vz = 6@
+sub_float_lvar_from_float_var $para_Vz -= 23@
+set_lvar_float_to_lvar_float 22@ = 5@
+sub_float_var_from_float_lvar 22@ -= $para_float_Vy
+set_lvar_float_to_lvar_float 23@ = 22@
+mult_float_lvar_by_float_lvar 23@ *= 21@
+set_lvar_float_to_lvar_float 4@ = 5@
+sub_float_lvar_from_float_lvar 4@ -= 23@
+$para_Vx = Math.Sin(1@)
+$para_Vy = Math.Cos(1@)
+mult_float_var_by_float_lvar $para_Vx *= 4@
+mult_float_var_by_float_lvar $para_Vy *= 4@
+$para_Vx *= -1.0
+if and
+  21@ == 1.0
+  0@ == 4
+goto_if_false @PLCHUTE_4593
+0@ = 5
+
+:PLCHUTE_4593
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @PLCHUTE_4781
+if 
+  Char.IsInWater($scplayer)
+goto_if_false @PLCHUTE_4732
+Task.PlayAnimNonInterruptable($scplayer, "PARA_LAND_WATER", "PARACHUTE", 8.0, True, True, False, False, 1000)
+Object.PlayAnim(17@, "PARA_LAND_WATER_O", "PARACHUTE", 1000.0, False, True)
+$player_fall_state = 5
+0@ = 0
+
+:PLCHUTE_4732
+21@, 21@, 23@ = Char.GetVelocity($scplayer)
+if 
+  23@ > -0.1
+goto_if_false @PLCHUTE_4781
+$player_fall_state = 4
+0@ = 0
+
+:PLCHUTE_4781
+if 
+  $player_fall_state == 4
+goto_if_false @PLCHUTE_5271
+if 
+  0@ == 0
+goto_if_false @PLCHUTE_5168
+$player_landed = 1
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+$player_z -= 1.0
+Char.SetCoordinates($scplayer, $player_x, $player_y, $player_z)
+Char.SetRotation($scplayer, 0.0, 0.0, 1@)
+if 
+  -10.0 > $para_Vz
+goto_if_false @PLCHUTE_4922
+$player_fall_state = 2
+0@ = 0
+goto @PLCHUTE_5092
+
+:PLCHUTE_4922
+if 
+  -4.0 > $para_Vz
+goto_if_false @PLCHUTE_5047
+14@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "FALL_FRONT", "PED", 20.0, False, False, False, True, 700)
+Task.PlayAnimNonInterruptable(-1, "GETUP_FRONT", "PED", 8.0, False, True, False, False, -2)
+Sequence.Close(14@)
+Char.PerformSequence($scplayer, 14@)
+Sequence.Clear(14@)
+goto @PLCHUTE_5085
+
+:PLCHUTE_5047
+Task.PlayAnimNonInterruptable($scplayer, "RUN_PLAYER", "PED", 8.0, True, True, False, False, 1000)
+
+:PLCHUTE_5085
+0@ = 1
+
+:PLCHUTE_5092
+Object.PlayAnim(17@, "PARA_LAND_O", "PARACHUTE", 1000.0, False, True)
+Object.Detach(17@, 0.0, 0.0, 0.0, False)
+set_lvar_int_to_lvar_int 18@ = TIMERA
+18@ += 1000
+
+:PLCHUTE_5168
+if 
+  0@ == 1
+goto_if_false @PLCHUTE_5271
+if 
+  Object.IsPlayingAnim(17@, "PARA_LAND_O")
+goto_if_false @PLCHUTE_5271
+21@ = Object.GetAnimCurrentTime(17@, "PARA_LAND_O")
+if 
+  21@ == 1.0
+goto_if_false @PLCHUTE_5271
+$player_landed = 2
+gosub @PLCHUTE_5521
+
+:PLCHUTE_5271
+if 
+  $player_fall_state == 5
+goto_if_false @PLCHUTE_5328
+$player_landed = 1
+if 
+  0@ == 0
+goto_if_false @PLCHUTE_5328
+$player_landed = 2
+gosub @PLCHUTE_5521
+
+:PLCHUTE_5328
+if and
+  $player_fall_state > 0
+  4 > $player_fall_state
+goto_if_false @PLCHUTE_5405
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @PLCHUTE_5405
+Char.SetVelocity($scplayer, $para_Vx, $para_Vy, $para_Vz)
+Char.SetHeading($scplayer, 1@)
+Char.SetRotation($scplayer, 3@, 2@, 1@)
+
+:PLCHUTE_5405
+if 
+  $player_fall_state == 6
+goto_if_false @PLCHUTE_5430
+gosub @PLCHUTE_5521
+
+:PLCHUTE_5430
+if 
+  $player_fall_state == 7
+goto_if_false @PLCHUTE_5455
+gosub @PLCHUTE_5462
+
+:PLCHUTE_5455
+goto @PLCHUTE_118
+
+:PLCHUTE_5462
+$player_fall_state = 0
+0@ = 0
+Streaming.MarkModelAsNoLongerNeeded(#PARACHUTE)
+Streaming.RemoveAnimation("PARACHUTE")
+Char.SetRotation($scplayer, 0.0, 0.0, 1@)
+Pad.SetPlayerCycleWeaponButton($player1, True)
+return 
+
+:PLCHUTE_5521
+Object.Detach(17@, 0.0, 0.0, 0.0, False)
+Object.RemoveElegantly(17@)
+Object.Delete(20@)
+Char.RemoveWeapon(46, $scplayer)
+$player_fall_state = 0
+$player_has_parachute = 0
+0@ = 0
+Streaming.MarkModelAsNoLongerNeeded(#PARACHUTE)
+Streaming.RemoveAnimation("PARACHUTE")
+Streaming.MarkModelAsNoLongerNeeded(371)
+Char.SetRotation($scplayer, 0.0, 0.0, 1@)
+Pad.SetPlayerCycleWeaponButton($player1, True)
+terminate_this_script 
+

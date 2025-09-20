@@ -1,0 +1,2953 @@
+//-------------Mission 23---------------
+// Originally: Gray Imports
+
+:DRUGS3
+script_name 'DRUGS3'
+gosub @DRUGS3_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @DRUGS3_38
+gosub @DRUGS3_19343
+
+:DRUGS3_38
+gosub @DRUGS3_19417
+terminate_this_script 
+
+:DRUGS3_47
+$onmission = 1
+Stat.RegisterMissionGiven
+Text.LoadMissionText('CRASH3')
+World.SetPedDensityMultiplier(0.0)
+World.SetCarDensityMultiplier(0.0)
+World.ClearArea(0, 1036.86, -1336.49, 20.0, 20.0)
+Cutscene.Load('CRASH3A')
+
+:DRUGS3_116
+if 
+  not Cutscene.HasLoaded
+goto_if_false @DRUGS3_140
+wait 0
+goto @DRUGS3_116
+
+:DRUGS3_140
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:DRUGS3_149
+if 
+  not Cutscene.HasFinished
+goto_if_false @DRUGS3_173
+wait 0
+goto @DRUGS3_149
+
+:DRUGS3_173
+Camera.DoFade(0, Fade.Out)
+
+:DRUGS3_179
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRUGS3_203
+wait 0
+goto @DRUGS3_179
+
+:DRUGS3_203
+Cutscene.Clear
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+Streaming.RequestModel(530)
+Streaming.RequestModel(414)
+Streaming.RequestModel(353)
+Streaming.RequestModel(#SEC_KEYPAD)
+Streaming.RequestModel(#KMB_RAMP)
+Streaming.RequestModel(429)
+Streaming.RequestModel(461)
+Streaming.RequestCarRecording(342)
+Streaming.LoadAllModelsNow
+
+:DRUGS3_260
+if or
+  not Streaming.HasModelLoaded(530)
+  not Streaming.HasModelLoaded(414)
+  not Streaming.HasCarRecordingBeenLoaded(342)
+goto_if_false @DRUGS3_297
+wait 0
+goto @DRUGS3_260
+
+:DRUGS3_297
+if or
+  not Streaming.HasModelLoaded(#SEC_KEYPAD)
+  not Streaming.HasModelLoaded(353)
+  not Streaming.HasModelLoaded(#KMB_RAMP)
+  not Streaming.HasModelLoaded(429)
+  not Streaming.HasModelLoaded(461)
+goto_if_false @DRUGS3_344
+wait 0
+goto @DRUGS3_297
+
+:DRUGS3_344
+Game.SetWantedMultiplier(0.1)
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+52@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+DecisionMakerChar.ClearEventResponse(52@, 7)
+DecisionMakerChar.AddEventResponse(52@, 7, 1000, 50.0, 50.0, 50.0, 50.0, True, True)
+53@ = DecisionMakerChar.Load(DecisionMakerType.Weak)
+Char.SetCoordinates($scplayer, 1038.0, -1339.0, 12.8)
+Char.SetHeading($scplayer, 1.0)
+Camera.SetBehindPlayer
+Streaming.LoadSceneInDirection(1038.0, -1340.99, 13.94, 1.0)
+Camera.DoFade(1, 1500)
+141@ = 0
+142@ = 0
+143@ = 0
+144@ = 0
+145@ = 0
+146@ = 0
+147@ = 0
+148@ = 0
+149@ = 0
+150@ = 0
+151@ = 0
+152@ = 0
+153@ = 0
+154@ = 0
+155@ = 0
+156@ = 0
+157@ = 0
+158@ = 0
+159@ = 0
+160@ = 0
+161@ = 0
+162@ = 0
+163@ = 0
+164@ = 0
+165@ = 0
+166@ = 0
+167@ = 0
+168@ = 0
+169@ = 0
+170@ = 0
+171@ = 0
+172@ = 0
+173@ = 0
+174@ = 0
+175@ = 0
+176@ = 0
+177@ = 0
+178@ = 0
+179@ = 0
+180@ = 0
+181@ = 0
+182@ = 0
+183@ = 0
+184@ = 0
+185@ = 0
+186@ = 0
+187@ = 0
+if 
+  $tripskip_c3flag > 0
+goto_if_false @DRUGS3_850
+Skip.SetUp(2263.378, -2226.33, 12.4, 47.416)
+
+:DRUGS3_850
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @DRUGS3_876
+goto @DRUGS3_19361
+
+:DRUGS3_876
+if 
+  141@ == 0
+goto_if_false @DRUGS3_937
+137@ = Blip.AddForCoord(2247.639, -2202.144, 12.59)
+Text.PrintNow('CSH3_1', 7000, 1)
+141@ = 1
+
+:DRUGS3_937
+if 
+  141@ == 1
+goto_if_false @DRUGS3_3398
+if 
+  Char.LocateAnyMeans2D($scplayer, 1, 2247.639, -2202.144, 3.0, 3.0)
+goto_if_false @DRUGS3_3398
+if 
+  $tripskip_c3flag == 0
+goto_if_false @DRUGS3_1018
+$tripskip_c3flag = 1
+
+:DRUGS3_1018
+Skip.Clear
+Player.SetControl($player1, False)
+Game.SwitchEmergencyServices(False)
+Camera.DoFade(0, 500)
+
+:DRUGS3_1038
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRUGS3_1062
+wait 0
+goto @DRUGS3_1038
+
+:DRUGS3_1062
+if 
+  Char.IsSittingInAnyCar($scplayer)
+goto_if_false @DRUGS3_1126
+$car = Char.StoreCarIsInNoSave($scplayer)
+Car.SetProofs($car, False, True, True, False, False)
+Car.SetHeading($car, 128.0)
+Car.SetHealth($car, 2000)
+goto @DRUGS3_1136
+
+:DRUGS3_1126
+Char.SetHeading($scplayer, 128.0)
+
+:DRUGS3_1136
+World.ClearArea(1, 2174.896, -2258.914, 150.0, 150.0)
+Streaming.RequestModel(#IMCMPTRKDRL_LAS)
+Streaming.RequestModel(#IMCMPTRKDRR_LAS)
+Streaming.RequestModel(#IMCOMPMOVEDR1_LAS)
+Streaming.RequestModel(50)
+Streaming.RequestModel(346)
+Streaming.RequestModel(#BARREL4)
+Streaming.RequestCarRecording(310)
+Streaming.RequestCarRecording(328)
+Streaming.RequestCarRecording(329)
+Streaming.RequestCarRecording(309)
+Streaming.RequestCarRecording(347)
+Streaming.LoadAllModelsNow
+
+:DRUGS3_1216
+if or
+  not Streaming.HasModelLoaded(50)
+  not Streaming.HasModelLoaded(346)
+  not Streaming.HasModelLoaded(#BARREL4)
+goto_if_false @DRUGS3_1252
+wait 0
+goto @DRUGS3_1216
+
+:DRUGS3_1252
+if or
+  not Streaming.HasCarRecordingBeenLoaded(310)
+  not Streaming.HasCarRecordingBeenLoaded(328)
+  not Streaming.HasCarRecordingBeenLoaded(329)
+  not Streaming.HasCarRecordingBeenLoaded(309)
+goto_if_false @DRUGS3_1294
+wait 0
+goto @DRUGS3_1252
+
+:DRUGS3_1294
+if or
+  not Streaming.HasCarRecordingBeenLoaded(347)
+  not Streaming.HasModelLoaded(#IMCMPTRKDRL_LAS)
+  not Streaming.HasModelLoaded(#IMCMPTRKDRR_LAS)
+  not Streaming.HasModelLoaded(#IMCOMPMOVEDR1_LAS)
+goto_if_false @DRUGS3_1336
+wait 0
+goto @DRUGS3_1294
+
+:DRUGS3_1336
+Streaming.LoadScene(2212.02, -2225.45, 12.24)
+34@ = Object.Create(#IMCMPTRKDRL_LAS, 2192.925, -2231.824, 14.205)
+35@ = Object.Create(#IMCMPTRKDRR_LAS, 2195.072, -2229.589, 14.205)
+Object.SetHeading(34@, 135.0)
+Object.SetHeading(35@, 85.0)
+36@ = Object.Create(#IMCMPTRKDRL_LAS, 2200.184, -2224.419, 14.205)
+37@ = Object.Create(#IMCMPTRKDRR_LAS, 2202.432, -2222.266, 14.205)
+Object.SetHeading(36@, 135.0)
+Object.SetHeading(37@, 85.0)
+38@ = Object.Create(#IMCMPTRKDRL_LAS, 2207.766, -2217.281, 14.205)
+39@ = Object.Create(#IMCMPTRKDRR_LAS, 2210.014, -2215.058, 14.205)
+Object.SetHeading(38@, 135.0)
+Object.SetHeading(39@, 85.0)
+40@ = Object.Create(#IMCMPTRKDRL_LAS, 2215.096, -2210.761, 14.205)
+41@ = Object.Create(#IMCMPTRKDRR_LAS, 2217.344, -2208.537, 14.205)
+Object.SetHeading(40@, 135.0)
+Object.SetHeading(41@, 85.0)
+42@ = Object.CreateNoOffset(#KMB_RAMP, 2193.418, -2231.352, 14.183)
+43@ = Object.CreateNoOffset(#KMB_RAMP, 2194.642, -2230.128, 14.183)
+44@ = Object.CreateNoOffset(#KMB_RAMP, 2200.686, -2224.019, 14.183)
+45@ = Object.CreateNoOffset(#KMB_RAMP, 2201.91, -2222.795, 14.183)
+46@ = Object.CreateNoOffset(#KMB_RAMP, 2208.243, -2216.833, 14.183)
+47@ = Object.CreateNoOffset(#KMB_RAMP, 2209.468, -2215.609, 14.183)
+48@ = Object.CreateNoOffset(#KMB_RAMP, 2215.489, -2210.406, 14.183)
+49@ = Object.CreateNoOffset(#KMB_RAMP, 2216.713, -2209.182, 14.183)
+Object.SetRotation(42@, 0.0, 0.0, 45.0)
+Object.SetRotation(43@, 0.0, 0.0, 45.0)
+Object.SetRotation(44@, 0.0, 0.0, 45.0)
+Object.SetRotation(45@, 0.0, 0.0, 45.0)
+Object.SetRotation(46@, 0.0, 0.0, 45.0)
+Object.SetRotation(47@, 0.0, 0.0, 45.0)
+Object.SetRotation(48@, 0.0, 0.0, 45.0)
+Object.SetRotation(49@, 0.0, 0.0, 45.0)
+50@ = Object.CreateNoOffset(#IMCOMPMOVEDR1_LAS, 2178.073, -2254.384, 15.9)
+Object.SetHeading(50@, 224.0)
+51@ = Object.Create(#SEC_KEYPAD, 2174.896, -2258.914, 15.0)
+Object.FreezePosition(51@, True)
+Object.SetHeading(51@, 35.23)
+Object.SetHealth(51@, 10)
+Object.SetOnlyDamagedByPlayer(51@, True)
+73@ = Object.Create(#BARREL4, 2187.538, -2255.581, 12.51)
+Object.SetOnlyDamagedByPlayer(73@, True)
+58@ = Car.Create(414, 2175.94, -2268.1, 12.66)
+Car.SetHeading(58@, 48.24)
+Car.SetHealth(58@, 450)
+59@ = Car.Create(414, 2159.395, -2295.29, 12.688)
+Car.SetHeading(59@, 44.51)
+Car.SetHealth(59@, 450)
+60@ = Car.Create(530, 2174.87, -2289.22, 12.06)
+Car.SetHeading(60@, 321.59)
+62@ = Char.CreateInsideCar(PedType.Mission1, 50, 60@)
+Car.SetStraightLineDistance(60@, 150)
+Char.SetDecisionMaker(62@, 52@)
+61@ = Car.Create(530, 2193.25, -2256.4, 12.25)
+Car.SetHeading(61@, 266.92)
+63@ = Char.CreateInsideCar(PedType.Mission1, 50, 61@)
+Car.SetStraightLineDistance(61@, 150)
+Char.SetDecisionMaker(63@, 52@)
+if 
+  not Car.IsDead(60@)
+goto_if_false @DRUGS3_2503
+if 
+  not Char.IsDead(62@)
+goto_if_false @DRUGS3_2503
+if 
+  Char.IsSittingInCar(62@, 60@)
+goto_if_false @DRUGS3_2503
+71@ = Object.Create(#BARREL4, 2179.18, -2270.92, -14.0)
+Object.SetOnlyDamagedByPlayer(71@, True)
+72@ = Object.Create(#BARREL4, 2179.18, -2270.92, -10.0)
+Object.SetOnlyDamagedByPlayer(72@, True)
+Object.AttachToCar(71@, 60@, 0.5, 0.3, 0.3, 0.0, 0.0, 0.0)
+Object.AttachToCar(72@, 60@, -0.5, 0.3, 0.3, 0.0, 0.0, 0.0)
+Task.CarDriveToCoord(62@, 60@, 2179.49, -2280.46, 14.03, 5.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+
+:DRUGS3_2503
+if 
+  not Car.IsDead(61@)
+goto_if_false @DRUGS3_2724
+if 
+  not Char.IsDead(63@)
+goto_if_false @DRUGS3_2724
+if 
+  Char.IsInCar(63@, 61@)
+goto_if_false @DRUGS3_2724
+69@ = Object.Create(#BARREL4, 2179.18, -2270.92, -14.0)
+Object.SetOnlyDamagedByPlayer(69@, True)
+70@ = Object.Create(#BARREL4, 2179.18, -2270.92, -10.0)
+Object.SetOnlyDamagedByPlayer(70@, True)
+Object.AttachToCar(69@, 61@, 0.5, 0.3, 0.3, 0.0, 0.0, 0.0)
+Object.AttachToCar(70@, 61@, -0.5, 0.3, 0.3, 0.0, 0.0, 0.0)
+Task.CarDriveToCoord(63@, 61@, 2209.1, -2253.64, 12.25, 6.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+
+:DRUGS3_2724
+54@ = Car.Create(429, 2207.7, -2246.157, 12.597)
+83@ = Char.CreateInsideCar(PedType.Mission1, 50, 54@)
+Char.SetDecisionMaker(83@, 52@)
+55@ = Car.Create(461, 2212.9, -2241.6, 12.59)
+84@ = Char.CreateInsideCar(PedType.Mission1, 50, 55@)
+Char.SetDecisionMaker(84@, 52@)
+56@ = Car.Create(429, 2218.87, -2234.29, 12.6)
+85@ = Char.CreateInsideCar(PedType.Mission1, 50, 56@)
+Char.SetDecisionMaker(85@, 52@)
+57@ = Car.Create(461, 2224.3, -2228.19, 12.597)
+86@ = Char.CreateInsideCar(PedType.Mission1, 50, 57@)
+Char.SetDecisionMaker(86@, 52@)
+64@ = Char.Create(24, 50, 2181.97, -2252.695, 13.82)
+Char.SetHeading(64@, 231.26)
+Char.GiveWeapon(64@, WeaponType.Mp5, 99999)
+Char.SetDecisionMaker(64@, 52@)
+Char.SetAccuracy(64@, 30)
+65@ = Char.Create(24, 50, 2189.65, -2250.05, 12.597)
+Char.SetHeading(65@, 229.24)
+Char.SetDecisionMaker(65@, 52@)
+Char.GiveWeapon(65@, WeaponType.Pistol, 9999)
+Char.SetAccuracy(65@, 30)
+66@ = Char.Create(24, 50, 2193.126, -2233.95, 12.59)
+Char.SetHeading(66@, 249.77)
+Char.SetDecisionMaker(66@, 52@)
+Char.GiveWeapon(66@, WeaponType.Mp5, 9999)
+Char.SetAccuracy(66@, 30)
+67@ = Char.Create(24, 50, 2199.71, -2257.841, 12.597)
+Char.SetHeading(67@, 347.22)
+Char.SetDecisionMaker(67@, 52@)
+Char.GiveWeapon(67@, WeaponType.Pistol, 9999)
+Char.SetAccuracy(67@, 30)
+68@ = Char.Create(24, 50, 2200.2, -2256.49, 12.597)
+Char.SetHeading(68@, 168.1)
+Task.ChatWithChar(67@, 68@, True, 1)
+Char.SetDecisionMaker(68@, 52@)
+Char.GiveWeapon(68@, WeaponType.Mp5, 9999)
+Char.SetAccuracy(68@, 30)
+Task.ChatWithChar(68@, 67@, False, 1)
+Camera.SetFixedPosition(2256.623, -2213.522, 23.0389, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2255.702, -2213.833, 22.8027, SwitchType.JumpCut)
+Hud.SwitchWidescreen(True)
+Camera.DoFade(1, 500)
+if 
+  not Car.IsDead(54@)
+goto_if_false @DRUGS3_3391
+if 
+  not Car.IsDead(55@)
+goto_if_false @DRUGS3_3391
+if 
+  not Car.IsDead(56@)
+goto_if_false @DRUGS3_3391
+if 
+  not Car.IsDead(57@)
+goto_if_false @DRUGS3_3391
+Car.StartPlayback(55@, 310)
+Car.StartPlayback(56@, 328)
+Car.StartPlayback(57@, 329)
+Car.StartPlayback(54@, 309)
+Text.PrintNow('CSH3_2', 5000, 1)
+
+:DRUGS3_3391
+141@ = 2
+
+:DRUGS3_3398
+if 
+  141@ == 2
+goto_if_false @DRUGS3_3490
+if 
+  not Car.IsDead(54@)
+goto_if_false @DRUGS3_3483
+if 
+  Car.IsPlaybackGoingOn(54@)
+goto_if_false @DRUGS3_3483
+if 
+  not Car.IsDead(54@)
+goto_if_false @DRUGS3_3483
+Car.PausePlayback(54@)
+TIMERA = 0
+141@ = 3
+
+:DRUGS3_3483
+skip_cutscene_start_internal @DRUGS3_5144
+
+:DRUGS3_3490
+if 
+  141@ == 3
+goto_if_false @DRUGS3_3679
+if 
+  TIMERA > 5499
+goto_if_false @DRUGS3_3679
+Camera.SetFixedPosition(2207.014, -2244.207, 13.7376, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2206.333, -2243.486, 13.613, SwitchType.JumpCut)
+if 
+  not Char.IsDead(66@)
+goto_if_false @DRUGS3_3628
+Task.PlayAnim(66@, "HANDSUP", "PED", 4.0, False, False, False, False, -1)
+
+:DRUGS3_3628
+if 
+  not Car.IsDead(54@)
+goto_if_false @DRUGS3_3679
+if 
+  Car.IsPlaybackGoingOn(54@)
+goto_if_false @DRUGS3_3679
+Car.UnpausePlayback(54@)
+TIMERA = 0
+141@ = 4
+
+:DRUGS3_3679
+if 
+  141@ == 4
+goto_if_false @DRUGS3_3833
+if 
+  TIMERA > 1799
+goto_if_false @DRUGS3_3833
+Camera.SetFixedPosition(2205.371, -2235.253, 14.1153, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2204.374, -2235.265, 14.0397, SwitchType.JumpCut)
+if 
+  not Char.IsDead(66@)
+goto_if_false @DRUGS3_3819
+Task.PlayAnim(66@, "ROADCROSS", "PED", 4.0, False, False, False, False, -1)
+
+:DRUGS3_3819
+TIMERA = 0
+141@ = 5
+
+:DRUGS3_3833
+if 
+  141@ == 5
+goto_if_false @DRUGS3_4088
+if 
+  TIMERA > 3150
+goto_if_false @DRUGS3_4088
+Text.PrintNow('CSH3_3', 7000, 2)
+Camera.SetFixedPosition(2210.3, -2254.067, 16.7105, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2209.311, -2254.181, 16.6143, SwitchType.JumpCut)
+if 
+  not Char.IsDead(68@)
+goto_if_false @DRUGS3_3989
+Task.PlayAnim(68@, "IDLE_CHAT", "PED", 4.0, False, False, False, False, -1)
+
+:DRUGS3_3989
+if 
+  not Char.IsDead(62@)
+goto_if_false @DRUGS3_4074
+if 
+  not Car.IsDead(60@)
+goto_if_false @DRUGS3_4074
+if 
+  not Char.IsSittingInCar(62@, 60@)
+goto_if_false @DRUGS3_4074
+Task.CarDriveToCoord(62@, 60@, 2187.88, -2265.11, 12.6, 6.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+
+:DRUGS3_4074
+TIMERA = 0
+141@ = 6
+
+:DRUGS3_4088
+if 
+  TIMERA > 2999
+goto_if_false @DRUGS3_5126
+if 
+  141@ == 6
+goto_if_false @DRUGS3_5126
+87@ = Char.Create(24, 50, 2177.95, -2261.002, 13.818)
+Char.SetHeading(87@, 45.4)
+Char.SetDecisionMaker(87@, 52@)
+Camera.SetFixedPosition(2187.079, -2255.27, 15.5563, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2186.082, -2255.316, 15.5002, SwitchType.JumpCut)
+75@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2175.29, -2259.22, 14.8, MoveState.Run, -1)
+Task.PlayAnim(-1, "ATM", "PED", 4.0, False, False, False, False, -1)
+Sequence.Close(75@)
+Char.PerformSequence(87@, 75@)
+Sequence.Clear(75@)
+if 
+  not Char.IsDead(64@)
+goto_if_false @DRUGS3_4345
+Task.PlayAnim(64@, "ROADCROSS", "PED", 4.0, False, False, False, False, -1)
+
+:DRUGS3_4345
+if 
+  142@ <> 6
+goto_if_false @DRUGS3_5119
+wait 0
+if 
+  142@ == 0
+goto_if_false @DRUGS3_4453
+if 
+  not Char.IsDead(87@)
+goto_if_false @DRUGS3_4453
+if 
+  Char.LocateStoppedOnFoot2D(87@, 0, 2175.29, -2259.22, 3.0, 3.0)
+goto_if_false @DRUGS3_4453
+TIMERB = 0
+142@ = 1
+
+:DRUGS3_4453
+if 
+  142@ == 1
+goto_if_false @DRUGS3_4583
+if 
+  not Char.IsDead(87@)
+goto_if_false @DRUGS3_4583
+if 
+  Char.LocateStoppedOnFoot2D(87@, 0, 2175.29, -2259.22, 3.0, 3.0)
+goto_if_false @DRUGS3_4583
+if 
+  TIMERB > 1000
+goto_if_false @DRUGS3_4583
+Task.AchieveHeading(87@, 308.1)
+Audio.ReportMissionAudioEventAtObject(50@, 1035)
+TIMERB = 0
+159@ = 1
+142@ = 2
+
+:DRUGS3_4583
+if 
+  159@ == 1
+goto_if_false @DRUGS3_4686
+if 
+  not Char.IsDead(87@)
+goto_if_false @DRUGS3_4686
+77@ = Char.GetScriptTaskStatus(87@, 1492)
+if or
+  is_int_lvar_equal_to_constant 77@ == 7
+  TIMERB > 1000
+goto_if_false @DRUGS3_4686
+Task.GoStraightToCoord(87@, 2179.523, -2256.364, 14.81, MoveState.Run, 5000)
+159@ = 2
+
+:DRUGS3_4686
+if 
+  142@ == 2
+goto_if_false @DRUGS3_4799
+if 
+  not Char.IsDead(87@)
+goto_if_false @DRUGS3_4799
+if 
+  Object.DoesExist(50@)
+goto_if_false @DRUGS3_4799
+if 
+  Object.Slide(50@, 2178.073, -2254.384, 19.7, 0.0, 0.0, 0.15, False)
+goto_if_false @DRUGS3_4799
+Audio.ReportMissionAudioEventAtObject(50@, 1036)
+142@ = 3
+
+:DRUGS3_4799
+if 
+  142@ == 3
+goto_if_false @DRUGS3_4903
+if 
+  not Char.IsDead(87@)
+goto_if_false @DRUGS3_4903
+if 
+  Char.LocateOnFoot2D(87@, 0, 2179.522, -2256.364, 1.0, 1.0)
+goto_if_false @DRUGS3_4903
+Task.GoStraightToCoord(87@, 2173.5, -2250.35, 14.81, MoveState.Run, 5000)
+142@ = 4
+
+:DRUGS3_4903
+if 
+  142@ == 4
+goto_if_false @DRUGS3_5015
+if 
+  not Char.IsDead(87@)
+goto_if_false @DRUGS3_5015
+if 
+  Char.LocateOnFoot2D(87@, 0, 2174.31, -2251.09, 1.0, 1.0)
+goto_if_false @DRUGS3_5015
+Task.GoStraightToCoord(87@, 2168.66, -2254.904, 14.59, MoveState.Run, 5000)
+Audio.ReportMissionAudioEventAtObject(50@, 1035)
+142@ = 5
+
+:DRUGS3_5015
+if 
+  142@ == 5
+goto_if_false @DRUGS3_5112
+if 
+  Object.DoesExist(50@)
+goto_if_false @DRUGS3_5112
+if 
+  Object.Slide(50@, 2178.073, -2254.384, 15.9, 0.0, 0.0, 0.15, False)
+goto_if_false @DRUGS3_5112
+Audio.ReportMissionAudioEventAtObject(50@, 1036)
+142@ = 6
+
+:DRUGS3_5112
+goto @DRUGS3_4345
+
+:DRUGS3_5119
+141@ = 7
+
+:DRUGS3_5126
+if 
+  141@ == 7
+goto_if_false @DRUGS3_6312
+
+:DRUGS3_5144
+skip_cutscene_end 
+Camera.DoFade(0, 500)
+
+:DRUGS3_5153
+if 
+  Camera.GetFadingStatus
+goto_if_false @DRUGS3_5177
+wait 0
+goto @DRUGS3_5153
+
+:DRUGS3_5177
+Audio.ReportMissionAudioEventAtObject(50@, 1036)
+159@ = 0
+Car.StopPlayback(54@)
+Car.StopPlayback(55@)
+Car.StopPlayback(56@)
+Car.StopPlayback(57@)
+Object.Delete(50@)
+Object.Delete(42@)
+Object.Delete(43@)
+Object.Delete(44@)
+Object.Delete(45@)
+Object.Delete(46@)
+Object.Delete(47@)
+Object.Delete(48@)
+Object.Delete(49@)
+Object.Delete(34@)
+Object.Delete(35@)
+Object.Delete(36@)
+Object.Delete(37@)
+Object.Delete(38@)
+Object.Delete(39@)
+Object.Delete(40@)
+Object.Delete(41@)
+Car.Delete(54@)
+Car.Delete(55@)
+Car.Delete(56@)
+Car.Delete(57@)
+Car.Delete(60@)
+Car.Delete(61@)
+Char.Delete(62@)
+Char.Delete(63@)
+Object.Delete(69@)
+Object.Delete(70@)
+Object.Delete(71@)
+Object.Delete(72@)
+Char.Delete(83@)
+Char.Delete(84@)
+Char.Delete(85@)
+Char.Delete(86@)
+Char.Delete(87@)
+World.ClearArea(0, 2192.925, -2231.824, 100.0, 100.0)
+34@ = Object.Create(#IMCMPTRKDRL_LAS, 2192.925, -2231.824, 14.205)
+35@ = Object.Create(#IMCMPTRKDRR_LAS, 2195.072, -2229.589, 14.205)
+Object.SetHeading(34@, 315.0)
+Object.SetHeading(35@, 315.0)
+36@ = Object.Create(#IMCMPTRKDRL_LAS, 2200.184, -2224.419, 14.205)
+37@ = Object.Create(#IMCMPTRKDRR_LAS, 2202.432, -2222.266, 14.205)
+Object.SetHeading(36@, 315.0)
+Object.SetHeading(37@, 315.0)
+38@ = Object.Create(#IMCMPTRKDRL_LAS, 2207.766, -2217.281, 14.205)
+39@ = Object.Create(#IMCMPTRKDRR_LAS, 2210.014, -2215.058, 14.205)
+Object.SetHeading(38@, 315.0)
+Object.SetHeading(39@, 315.0)
+40@ = Object.Create(#IMCMPTRKDRL_LAS, 2215.096, -2210.761, 14.205)
+41@ = Object.Create(#IMCMPTRKDRR_LAS, 2217.344, -2208.537, 14.205)
+Object.SetHeading(40@, 315.0)
+Object.SetHeading(41@, 315.0)
+50@ = Object.CreateNoOffset(#IMCOMPMOVEDR1_LAS, 2178.073, -2254.384, 15.9)
+Object.SetHeading(50@, 224.0)
+60@ = Car.Create(530, 2176.89, -2291.75, 12.25)
+Car.SetHeading(60@, 321.59)
+62@ = Char.CreateInsideCar(PedType.Mission1, 50, 60@)
+Char.GiveWeapon(62@, WeaponType.Pistol, 9999)
+Char.SetAccuracy(62@, 30)
+Car.SetStraightLineDistance(60@, 150)
+Char.SetDecisionMaker(62@, 52@)
+Car.SetHealth(60@, 600)
+Car.SetOnlyDamagedByPlayer(60@, True)
+61@ = Car.Create(530, 2210.81, -2253.72, 12.598)
+Car.SetHeading(61@, 71.09)
+63@ = Char.CreateInsideCar(PedType.Mission1, 50, 61@)
+Char.GiveWeapon(63@, WeaponType.Pistol, 9999)
+Char.SetAccuracy(63@, 30)
+Car.SetStraightLineDistance(61@, 150)
+Char.SetDecisionMaker(63@, 52@)
+Car.SetOnlyDamagedByPlayer(61@, True)
+Car.SetHealth(61@, 600)
+69@ = Object.Create(#BARREL4, 2179.18, -2270.92, -14.0)
+70@ = Object.Create(#BARREL4, 2179.18, -2270.92, -10.0)
+Object.SetOnlyDamagedByPlayer(69@, True)
+Object.SetOnlyDamagedByPlayer(70@, True)
+Object.AttachToCar(69@, 61@, 0.5, 0.3, 0.3, 0.0, 0.0, 0.0)
+Object.AttachToCar(70@, 61@, -0.5, 0.3, 0.3, 0.0, 0.0, 0.0)
+133@ = Pickup.Create(#BODYARMOUR, 3, 2186.507, -2244.993, 15.81)
+134@ = Pickup.Create(#BODYARMOUR, 3, 2146.559, -2244.46, 13.58)
+135@ = Pickup.Create(#HEALTH, 3, 2158.82, -2232.747, 13.59)
+Streaming.RequestModel(102)
+Streaming.RequestModel(#IMY_BBOX)
+Streaming.RequestAnimation("SWAT")
+Streaming.RequestAnimation("DODGE")
+Streaming.RequestCarRecording(347)
+Streaming.LoadSpecialCharacter('ANDRE', 1)
+Streaming.LoadAllModelsNow
+
+:DRUGS3_6144
+if or
+  not Streaming.HasModelLoaded(102)
+  not Streaming.HasAnimationLoaded("SWAT")
+  not Streaming.HasModelLoaded(#IMY_BBOX)
+  not Streaming.HasCarRecordingBeenLoaded(347)
+goto_if_false @DRUGS3_6188
+wait 0
+goto @DRUGS3_6144
+
+:DRUGS3_6188
+if or
+  not Streaming.HasAnimationLoaded("DODGE")
+  not Streaming.HasSpecialCharacterLoaded(1)
+goto_if_false @DRUGS3_6223
+wait 0
+goto @DRUGS3_6188
+
+:DRUGS3_6223
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Text.ClearPrints
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Blip.Remove(137@)
+137@ = Blip.AddForCoord(2178.38, -2254.89, 13.81)
+Camera.DoFade(1, 500)
+111@ = Object.CreateNoOffset(#IMY_LA_DOOR, 2118.088, -2274.635, 20.867)
+Object.SetHeading(111@, 225.0)
+141@ = 8
+
+:DRUGS3_6312
+if 
+  141@ == 8
+goto_if_false @DRUGS3_9925
+if 
+  149@ == 0
+goto_if_false @DRUGS3_6434
+if 
+  Object.DoesExist(51@)
+goto_if_false @DRUGS3_6434
+if 
+  not Object.HasBeenDamaged(51@)
+goto_if_false @DRUGS3_6434
+if 
+  Char.LocateAnyMeansObject3D($scplayer, 51@, 15.0, 15.0, 4.0, False)
+goto_if_false @DRUGS3_6434
+Text.PrintHelp('CSH3_7')
+149@ = 1
+
+:DRUGS3_6434
+if 
+  149@ == 1
+goto_if_false @DRUGS3_6538
+if 
+  Object.DoesExist(51@)
+goto_if_false @DRUGS3_6538
+if 
+  not Object.HasBeenDamaged(51@)
+goto_if_false @DRUGS3_6538
+if 
+  Char.LocateAnyMeansObject3D($scplayer, 51@, 5.0, 5.0, 4.0, False)
+goto_if_false @DRUGS3_6538
+Text.PrintHelp('CSH3_7')
+149@ = 2
+
+:DRUGS3_6538
+if 
+  149@ == 2
+goto_if_false @DRUGS3_6631
+if 
+  Object.DoesExist(51@)
+goto_if_false @DRUGS3_6631
+if 
+  not Object.HasBeenDamaged(51@)
+goto_if_false @DRUGS3_6631
+if 
+  not Char.LocateAnyMeansObject3D($scplayer, 51@, 5.0, 5.0, 4.0, False)
+goto_if_false @DRUGS3_6631
+149@ = 1
+
+:DRUGS3_6631
+if 
+  Object.DoesExist(51@)
+goto_if_false @DRUGS3_6672
+if 
+  Object.HasBeenDamaged(51@)
+goto_if_false @DRUGS3_6672
+Text.ClearPrints
+141@ = 9
+
+:DRUGS3_6672
+if 
+  147@ == 0
+goto_if_false @DRUGS3_9007
+if 
+  144@ == 0
+goto_if_false @DRUGS3_6783
+if 
+  145@ == 0
+goto_if_false @DRUGS3_6783
+if 
+  Char.IsInAngledArea2D($scplayer, 2198.686, -2180.832, 2116.212, -2263.317, 82.0, False)
+goto_if_false @DRUGS3_6783
+144@ = 1
+145@ = 1
+
+:DRUGS3_6783
+if 
+  Char.IsInAngledArea2D($scplayer, 2172.36, -2207.176, 2116.212, -2263.317, 82.0, False)
+goto_if_false @DRUGS3_6849
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DRUGS3_6849
+147@ = 1
+
+:DRUGS3_6849
+if 
+  Char.IsInAngledArea2D($scplayer, 2198.686, -2180.832, 2116.212, -2263.317, 82.0, False)
+goto_if_false @DRUGS3_6938
+if 
+  Char.IsShooting($scplayer)
+goto_if_false @DRUGS3_6915
+147@ = 1
+
+:DRUGS3_6915
+if 
+  Player.IsTargetingAnything($player1)
+goto_if_false @DRUGS3_6938
+147@ = 1
+
+:DRUGS3_6938
+if 
+  Char.DoesExist(62@)
+goto_if_false @DRUGS3_6980
+if 
+  Char.HasBeenDamagedByChar(62@, $scplayer)
+goto_if_false @DRUGS3_6980
+147@ = 1
+
+:DRUGS3_6980
+if 
+  Char.DoesExist(63@)
+goto_if_false @DRUGS3_7022
+if 
+  Char.HasBeenDamagedByChar(62@, $scplayer)
+goto_if_false @DRUGS3_7022
+147@ = 1
+
+:DRUGS3_7022
+if 
+  Char.DoesExist(64@)
+goto_if_false @DRUGS3_7064
+if 
+  Char.HasBeenDamagedByChar(64@, $scplayer)
+goto_if_false @DRUGS3_7064
+147@ = 1
+
+:DRUGS3_7064
+if 
+  Char.DoesExist(65@)
+goto_if_false @DRUGS3_7106
+if 
+  Char.HasBeenDamagedByChar(65@, $scplayer)
+goto_if_false @DRUGS3_7106
+147@ = 1
+
+:DRUGS3_7106
+if 
+  Char.DoesExist(66@)
+goto_if_false @DRUGS3_7148
+if 
+  Char.HasBeenDamagedByChar(66@, $scplayer)
+goto_if_false @DRUGS3_7148
+147@ = 1
+
+:DRUGS3_7148
+if 
+  Char.DoesExist(67@)
+goto_if_false @DRUGS3_7190
+if 
+  Char.HasBeenDamagedByChar(67@, $scplayer)
+goto_if_false @DRUGS3_7190
+147@ = 1
+
+:DRUGS3_7190
+if 
+  Char.DoesExist(68@)
+goto_if_false @DRUGS3_7232
+if 
+  Char.HasBeenDamagedByChar(68@, $scplayer)
+goto_if_false @DRUGS3_7232
+147@ = 1
+
+:DRUGS3_7232
+if 
+  145@ == 1
+goto_if_false @DRUGS3_7350
+if 
+  not Char.IsDead(66@)
+goto_if_false @DRUGS3_7350
+if 
+  Char.IsInAngledArea2D($scplayer, 2198.686, -2180.832, 2116.212, -2263.317, 82.0, False)
+goto_if_false @DRUGS3_7350
+Task.GotoCharOffset(66@, $scplayer, -1, 1.5, 0.0)
+Audio.LoadMissionAudio(11008, 1)
+Audio.LoadMissionAudio(11010, 2)
+145@ = 2
+
+:DRUGS3_7350
+if 
+  145@ == 2
+goto_if_false @DRUGS3_7436
+if 
+  not Char.IsDead(66@)
+goto_if_false @DRUGS3_7436
+if 
+  Char.LocateAnyMeansChar2D(66@, $scplayer, 5.0, 5.0, False)
+goto_if_false @DRUGS3_7436
+Audio.AttachMissionAudioToChar(MissionAudioSlot.Slot1, 66@)
+Audio.AttachMissionAudioToChar(MissionAudioSlot.Slot2, 66@)
+145@ = 3
+
+:DRUGS3_7436
+if 
+  145@ == 3
+goto_if_false @DRUGS3_7512
+if 
+  not Char.IsDead(66@)
+goto_if_false @DRUGS3_7512
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS3_7512
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('CRA3_EA', 3000, 1)
+145@ = 4
+
+:DRUGS3_7512
+if 
+  145@ == 4
+goto_if_false @DRUGS3_7609
+if 
+  not Char.IsDead(66@)
+goto_if_false @DRUGS3_7609
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS3_7609
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS3_7609
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow('CRA3_EC', 3000, 1)
+145@ = 5
+
+:DRUGS3_7609
+if 
+  145@ == 5
+goto_if_false @DRUGS3_7658
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @DRUGS3_7658
+Text.ClearPrints
+147@ = 1
+145@ = 6
+
+:DRUGS3_7658
+if 
+  144@ == 1
+goto_if_false @DRUGS3_7784
+if 
+  not Car.IsDead(61@)
+goto_if_false @DRUGS3_7784
+if 
+  not Char.IsDead(63@)
+goto_if_false @DRUGS3_7784
+if 
+  Char.IsInCar(63@, 61@)
+goto_if_false @DRUGS3_7784
+if 
+  Car.IsOnScreen(61@)
+goto_if_false @DRUGS3_7784
+Task.CarDriveToCoord(63@, 61@, 2195.84, -2251.522, 12.598, 5.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+144@ = 2
+
+:DRUGS3_7784
+if 
+  144@ == 2
+goto_if_false @DRUGS3_7965
+if 
+  not Char.IsDead(63@)
+goto_if_false @DRUGS3_7965
+if 
+  not Car.IsDead(61@)
+goto_if_false @DRUGS3_7965
+if 
+  Char.IsInCar(63@, 61@)
+goto_if_false @DRUGS3_7965
+if 
+  Car.LocateStopped2D(61@, 0, 2195.84, -2251.522, 3.0, 3.0)
+goto_if_false @DRUGS3_7965
+if 
+  not Char.IsDead(63@)
+goto_if_false @DRUGS3_7965
+if 
+  not Char.IsDead(65@)
+goto_if_false @DRUGS3_7958
+Task.LookAtChar(63@, 65@, 30000)
+Task.GoStraightToCoord(65@, 2197.896, -2249.251, 12.59, MoveState.Walk, -1)
+
+:DRUGS3_7958
+144@ = 3
+
+:DRUGS3_7965
+if 
+  144@ == 3
+goto_if_false @DRUGS3_8097
+if 
+  not Char.IsDead(63@)
+goto_if_false @DRUGS3_8097
+if 
+  Char.IsSittingInAnyCar(63@)
+goto_if_false @DRUGS3_8097
+if 
+  not Char.IsDead(65@)
+goto_if_false @DRUGS3_8097
+if 
+  Char.LocateStoppedOnFoot2D(65@, 0, 2197.896, -2249.251, 3.0, 3.0)
+goto_if_false @DRUGS3_8097
+Task.TurnCharToFaceChar(65@, 63@)
+Task.LookAtChar(63@, 65@, 60000)
+144@ = 4
+
+:DRUGS3_8097
+if 
+  144@ == 4
+goto_if_false @DRUGS3_8244
+if 
+  not Char.IsDead(63@)
+goto_if_false @DRUGS3_8244
+if 
+  Char.IsSittingInAnyCar(63@)
+goto_if_false @DRUGS3_8244
+if 
+  not Char.IsDead(65@)
+goto_if_false @DRUGS3_8244
+if 
+  Char.LocateStoppedOnFoot2D(65@, 0, 2197.896, -2249.251, 3.0, 3.0)
+goto_if_false @DRUGS3_8244
+Task.PlayAnim(65@, "IDLE_CHAT", "PED", 4.0, True, False, False, False, -1)
+144@ = 5
+
+:DRUGS3_8244
+if 
+  143@ == 0
+goto_if_false @DRUGS3_8320
+if 
+  not Car.IsDead(60@)
+goto_if_false @DRUGS3_8320
+if 
+  not Char.IsDead(62@)
+goto_if_false @DRUGS3_8320
+if 
+  Char.IsSittingInCar(62@, 60@)
+goto_if_false @DRUGS3_8320
+143@ = 1
+
+:DRUGS3_8320
+if 
+  143@ == 1
+goto_if_false @DRUGS3_8563
+if 
+  not Car.IsDead(60@)
+goto_if_false @DRUGS3_8563
+if 
+  not Char.IsDead(62@)
+goto_if_false @DRUGS3_8563
+if 
+  Char.IsSittingInCar(62@, 60@)
+goto_if_false @DRUGS3_8563
+if 
+  Streaming.HasCarRecordingBeenLoaded(347)
+goto_if_false @DRUGS3_8563
+Car.StartPlaybackLooped(60@, 347)
+71@ = Object.Create(#BARREL4, 2179.18, -2270.92, -14.0)
+72@ = Object.Create(#BARREL4, 2179.18, -2270.92, -10.0)
+Object.AttachToCar(71@, 60@, 0.5, 0.3, 0.3, 0.0, 0.0, 0.0)
+Object.AttachToCar(72@, 60@, -0.5, 0.3, 0.3, 0.0, 0.0, 0.0)
+Object.SetOnlyDamagedByPlayer(71@, True)
+Object.SetOnlyDamagedByPlayer(72@, True)
+146@ = 1
+143@ = 2
+
+:DRUGS3_8563
+if 
+  143@ == 2
+goto_if_false @DRUGS3_8662
+if 
+  not Car.IsDead(60@)
+goto_if_false @DRUGS3_8662
+if 
+  not Char.IsDead(62@)
+goto_if_false @DRUGS3_8662
+if 
+  Char.IsSittingInCar(62@, 60@)
+goto_if_false @DRUGS3_8662
+if 
+  not Car.IsPlaybackGoingOn(60@)
+goto_if_false @DRUGS3_8662
+TIMERA = 0
+143@ = 3
+
+:DRUGS3_8662
+if 
+  143@ == 3
+goto_if_false @DRUGS3_8757
+if 
+  not Car.IsDead(60@)
+goto_if_false @DRUGS3_8757
+if 
+  not Char.IsDead(62@)
+goto_if_false @DRUGS3_8757
+if 
+  Char.IsInCar(62@, 60@)
+goto_if_false @DRUGS3_8757
+if 
+  TIMERA > 500
+goto_if_false @DRUGS3_8757
+143@ = 0
+
+:DRUGS3_8757
+if 
+  146@ == 1
+goto_if_false @DRUGS3_8881
+if 
+  not Car.IsDead(60@)
+goto_if_false @DRUGS3_8881
+if 
+  not Char.IsDead(62@)
+goto_if_false @DRUGS3_8881
+if 
+  Char.IsSittingInCar(62@, 60@)
+goto_if_false @DRUGS3_8881
+if 
+  Car.Locate2D(60@, 0, 2179.18, -2270.92, 2.0, 2.0)
+goto_if_false @DRUGS3_8881
+Object.Delete(71@)
+Object.Delete(72@)
+146@ = 0
+
+:DRUGS3_8881
+if 
+  4 > 143@
+goto_if_false @DRUGS3_9007
+if 
+  not Car.IsDead(60@)
+goto_if_false @DRUGS3_8995
+if 
+  not Char.IsDead(62@)
+goto_if_false @DRUGS3_8976
+if 
+  Char.IsSittingInCar(62@, 60@)
+goto_if_false @DRUGS3_8957
+goto @DRUGS3_8969
+
+:DRUGS3_8957
+Car.StopPlayback(60@)
+143@ = 4
+
+:DRUGS3_8969
+goto @DRUGS3_8988
+
+:DRUGS3_8976
+Car.StopPlayback(60@)
+143@ = 4
+
+:DRUGS3_8988
+goto @DRUGS3_9007
+
+:DRUGS3_8995
+Car.StopPlayback(60@)
+143@ = 4
+
+:DRUGS3_9007
+if 
+  147@ == 1
+goto_if_false @DRUGS3_9461
+if 
+  not Char.IsDead(67@)
+goto_if_false @DRUGS3_9086
+set_lvar_int_to_lvar_int 112@ = 67@
+116@ = 2203.12
+117@ = -2264.767
+118@ = 14.0
+gosub @DRUGS3_18833
+
+:DRUGS3_9086
+if 
+  not Char.IsDead(68@)
+goto_if_false @DRUGS3_9147
+set_lvar_int_to_lvar_int 112@ = 68@
+116@ = 2188.586
+117@ = -2258.273
+118@ = 14.0
+gosub @DRUGS3_18706
+
+:DRUGS3_9147
+if 
+  not Char.IsDead(65@)
+goto_if_false @DRUGS3_9208
+set_lvar_int_to_lvar_int 112@ = 65@
+116@ = 2207.985
+117@ = -2244.51
+118@ = 14.0
+gosub @DRUGS3_18833
+
+:DRUGS3_9208
+if 
+  not Char.IsDead(66@)
+goto_if_false @DRUGS3_9232
+Task.KillCharOnFoot(66@, $scplayer)
+
+:DRUGS3_9232
+if 
+  not Char.IsDead(64@)
+goto_if_false @DRUGS3_9263
+set_lvar_int_to_lvar_int 112@ = 64@
+gosub @DRUGS3_18882
+
+:DRUGS3_9263
+if 
+  not Car.IsDead(60@)
+goto_if_false @DRUGS3_9361
+if 
+  not Char.IsDead(62@)
+goto_if_false @DRUGS3_9361
+if 
+  Char.IsSittingInCar(62@, 60@)
+goto_if_false @DRUGS3_9361
+if 
+  not Car.IsDead(60@)
+goto_if_false @DRUGS3_9361
+Car.StopPlayback(60@)
+Task.CarMission(62@, 60@, -1, CarMission.RamPlayerFaraway, 6.0, DrivingMode.PloughThrough)
+185@ = 1
+
+:DRUGS3_9361
+if 
+  not Car.IsDead(61@)
+goto_if_false @DRUGS3_9454
+if 
+  not Char.IsDead(63@)
+goto_if_false @DRUGS3_9454
+if 
+  Char.IsSittingInCar(63@, 61@)
+goto_if_false @DRUGS3_9454
+if 
+  not Car.IsDead(61@)
+goto_if_false @DRUGS3_9454
+Task.CarMission(63@, 61@, -1, CarMission.RamPlayerFaraway, 5.0, DrivingMode.PloughThrough)
+186@ = 1
+
+:DRUGS3_9454
+147@ = 2
+
+:DRUGS3_9461
+if 
+  185@ == 1
+goto_if_false @DRUGS3_9569
+if 
+  not Car.IsDead(60@)
+goto_if_false @DRUGS3_9569
+if 
+  not Char.IsDead(62@)
+goto_if_false @DRUGS3_9569
+if 
+  Char.IsSittingInCar(62@, 60@)
+goto_if_false @DRUGS3_9569
+if 
+  Char.IsTouchingChar(62@, $scplayer)
+goto_if_false @DRUGS3_9569
+Task.CarTempAction(62@, 60@, TempAction.Reverse, 2000)
+185@ = 2
+
+:DRUGS3_9569
+if 
+  185@ == 2
+goto_if_false @DRUGS3_9693
+if 
+  not Car.IsDead(60@)
+goto_if_false @DRUGS3_9693
+if 
+  not Char.IsDead(62@)
+goto_if_false @DRUGS3_9693
+if 
+  Char.IsSittingInCar(62@, 60@)
+goto_if_false @DRUGS3_9693
+132@ = Char.GetScriptTaskStatus(62@, 1735)
+if 
+  is_int_lvar_equal_to_constant 132@ == 7
+goto_if_false @DRUGS3_9693
+Task.CarMission(62@, 60@, -1, CarMission.RamPlayerFaraway, 6.0, DrivingMode.PloughThrough)
+185@ = 1
+
+:DRUGS3_9693
+if 
+  186@ == 1
+goto_if_false @DRUGS3_9801
+if 
+  not Car.IsDead(61@)
+goto_if_false @DRUGS3_9801
+if 
+  not Char.IsDead(63@)
+goto_if_false @DRUGS3_9801
+if 
+  Char.IsSittingInCar(63@, 61@)
+goto_if_false @DRUGS3_9801
+if 
+  Char.IsTouchingChar(63@, $scplayer)
+goto_if_false @DRUGS3_9801
+Task.CarTempAction(63@, 61@, TempAction.Reverse, 2000)
+186@ = 2
+
+:DRUGS3_9801
+if 
+  186@ == 2
+goto_if_false @DRUGS3_9925
+if 
+  not Car.IsDead(61@)
+goto_if_false @DRUGS3_9925
+if 
+  not Char.IsDead(63@)
+goto_if_false @DRUGS3_9925
+if 
+  Char.IsSittingInCar(63@, 61@)
+goto_if_false @DRUGS3_9925
+132@ = Char.GetScriptTaskStatus(63@, 1735)
+if 
+  is_int_lvar_equal_to_constant 132@ == 7
+goto_if_false @DRUGS3_9925
+Task.CarMission(63@, 61@, -1, CarMission.RamPlayerFaraway, 6.0, DrivingMode.PloughThrough)
+186@ = 1
+
+:DRUGS3_9925
+if 
+  141@ == 9
+goto_if_false @DRUGS3_10758
+if 
+  150@ == 0
+goto_if_false @DRUGS3_10758
+Text.PrintNow('CSH3_13', 5000, 1)
+Object.Delete(51@)
+Streaming.MarkModelAsNoLongerNeeded(#SEC_KEYPAD)
+Sound.AddOneOffSound(65535, 2181.127, -2251.999, 14.036)
+add_continuous_sound 76@ 65535 2181.127 -2251.999 14.036
+Blip.Remove(137@)
+Game.SetMaxFireGenerations(0)
+101@ = Char.Create(23, 290, 2125.8, -2274.24, 19.67)
+Char.SetHeading(101@, 221.579)
+Char.SetDecisionMaker(101@, 52@)
+Char.SetHealth(101@, 1000)
+Char.SetMaxHealth(101@, 1000)
+Char.SetMoney(101@, 3000)
+Char.SetSuffersCriticalHits(101@, False)
+Char.SetUsesUpperbodyDamageAnimsOnly(101@, True)
+138@ = Blip.AddForChar(101@)
+109@ = Char.Create(24, 102, 2129.217, -2281.78, 19.6719)
+Char.SetHeading(109@, 314.7061)
+Char.SetDecisionMaker(109@, 52@)
+Char.GiveWeapon(109@, WeaponType.Pistol, 99999)
+Char.SetWeaponSkill(109@, 2)
+Char.SetAccuracy(109@, 20)
+Char.SetHealth(109@, 50)
+110@ = Char.Create(24, 102, 2124.154, -2277.243, 19.6719)
+Char.SetHeading(110@, 241.1202)
+Char.SetDecisionMaker(110@, 52@)
+Char.GiveWeapon(110@, WeaponType.Pistol, 99999)
+Char.SetWeaponSkill(110@, 2)
+Char.SetAccuracy(110@, 20)
+Char.SetHealth(110@, 50)
+179@ = 1
+83@ = Char.Create(24, 50, 2172.73, -2249.83, 12.6)
+Char.SetHeading(83@, 227.0)
+Char.SetDecisionMaker(83@, 52@)
+Char.GiveWeapon(83@, WeaponType.Pistol, 99999)
+Char.SetAccuracy(83@, 20)
+Char.SetHealth(83@, 30)
+84@ = Char.Create(24, 50, 2168.42, -2252.714, 12.59)
+Char.SetHeading(84@, 250.942)
+Char.SetDecisionMaker(84@, 52@)
+Char.GiveWeapon(84@, WeaponType.Pistol, 99999)
+Char.SetAccuracy(84@, 20)
+Char.SetShootRate(84@, 30)
+Char.SetHealth(84@, 20)
+85@ = Char.Create(24, 50, 2174.66, -2248.6, 12.6)
+Char.SetHeading(85@, 227.0)
+Char.SetDecisionMaker(85@, 52@)
+Char.GiveWeapon(85@, WeaponType.Mp5, 99999)
+Char.SetAllowedToDuck(85@, False)
+Char.SetAccuracy(85@, 20)
+87@ = Char.Create(24, 50, 2163.072, -2246.027, 12.59)
+Char.SetHeading(87@, 224.58)
+Char.SetDecisionMaker(87@, 52@)
+Char.GiveWeapon(87@, WeaponType.Mp5, 99999)
+Char.SetAccuracy(87@, 20)
+88@ = Char.Create(24, 50, 2158.03, -2233.23, 12.59)
+Char.SetHeading(88@, 230.37)
+Char.SetDecisionMaker(88@, 52@)
+Char.GiveWeapon(88@, WeaponType.Pistol, 99999)
+Char.SetAccuracy(88@, 20)
+if 
+  155@ == 0
+goto_if_false @DRUGS3_10671
+if 
+  not Char.IsDead(83@)
+goto_if_false @DRUGS3_10671
+Task.KillCharOnFoot(83@, $scplayer)
+155@ = 1
+
+:DRUGS3_10671
+if 
+  157@ == 0
+goto_if_false @DRUGS3_10720
+if 
+  not Char.IsDead(85@)
+goto_if_false @DRUGS3_10720
+Task.KillCharOnFoot(85@, $scplayer)
+157@ = 1
+
+:DRUGS3_10720
+if 
+  Object.DoesExist(50@)
+goto_if_false @DRUGS3_10744
+Audio.ReportMissionAudioEventAtObject(50@, 1035)
+
+:DRUGS3_10744
+150@ = 1
+141@ = 10
+
+:DRUGS3_10758
+if 
+  150@ == 1
+goto_if_false @DRUGS3_10855
+if 
+  Object.DoesExist(50@)
+goto_if_false @DRUGS3_10855
+if 
+  Object.Slide(50@, 2178.073, -2254.384, 19.7, 0.0, 0.0, 0.1, False)
+goto_if_false @DRUGS3_10855
+Audio.ReportMissionAudioEventAtObject(50@, 1036)
+150@ = 2
+
+:DRUGS3_10855
+if 
+  141@ == 10
+goto_if_false @DRUGS3_11049
+if 
+  Char.IsInAngledArea2D($scplayer, 2167.955, -2253.054, 2175.023, -2245.327, -11.5, False)
+goto_if_false @DRUGS3_10923
+141@ = 11
+
+:DRUGS3_10923
+if 
+  Char.DoesExist(83@)
+goto_if_false @DRUGS3_10965
+if 
+  Char.HasBeenDamagedByChar(83@, $scplayer)
+goto_if_false @DRUGS3_10965
+141@ = 11
+
+:DRUGS3_10965
+if 
+  Char.DoesExist(84@)
+goto_if_false @DRUGS3_11007
+if 
+  Char.HasBeenDamagedByChar(84@, $scplayer)
+goto_if_false @DRUGS3_11007
+141@ = 11
+
+:DRUGS3_11007
+if 
+  Char.DoesExist(85@)
+goto_if_false @DRUGS3_11049
+if 
+  Char.HasBeenDamagedByChar(85@, $scplayer)
+goto_if_false @DRUGS3_11049
+141@ = 11
+
+:DRUGS3_11049
+if 
+  141@ == 11
+goto_if_false @DRUGS3_18446
+if 
+  178@ == 0
+goto_if_false @DRUGS3_11176
+if 
+  TIMERA > 0
+goto_if_false @DRUGS3_11176
+if 
+  Char.IsDead(83@)
+goto_if_false @DRUGS3_11176
+if 
+  Char.IsDead(85@)
+goto_if_false @DRUGS3_11176
+if 
+  Char.IsDead(87@)
+goto_if_false @DRUGS3_11176
+Text.PrintHelp('CSH3_10')
+TIMERA = 0
+178@ = 1
+
+:DRUGS3_11176
+if 
+  178@ == 1
+goto_if_false @DRUGS3_11238
+if 
+  TIMERA > 8000
+goto_if_false @DRUGS3_11238
+Text.PrintHelp('CSH3_11')
+TIMERA = 0
+178@ = 2
+
+:DRUGS3_11238
+if 
+  178@ == 2
+goto_if_false @DRUGS3_11300
+if 
+  TIMERA > 8000
+goto_if_false @DRUGS3_11300
+Text.PrintHelp('CSH3_12')
+TIMERA = 0
+178@ = 3
+
+:DRUGS3_11300
+if 
+  178@ == 3
+goto_if_false @DRUGS3_11362
+if 
+  TIMERA > 8000
+goto_if_false @DRUGS3_11362
+Text.PrintHelp('CSH3_52')
+TIMERA = 0
+178@ = 4
+
+:DRUGS3_11362
+if 
+  178@ == 4
+goto_if_false @DRUGS3_11417
+if 
+  TIMERA > 8000
+goto_if_false @DRUGS3_11417
+Text.PrintHelp('CSH3_51')
+178@ = 5
+
+:DRUGS3_11417
+if 
+  151@ == 0
+goto_if_false @DRUGS3_11761
+if 
+  156@ == 0
+goto_if_false @DRUGS3_11491
+if 
+  not Char.IsDead(84@)
+goto_if_false @DRUGS3_11491
+set_lvar_int_to_lvar_int 112@ = 84@
+gosub @DRUGS3_18882
+156@ = 1
+
+:DRUGS3_11491
+if 
+  159@ == 0
+goto_if_false @DRUGS3_11547
+if 
+  not Char.IsDead(87@)
+goto_if_false @DRUGS3_11547
+set_lvar_int_to_lvar_int 112@ = 87@
+gosub @DRUGS3_19119
+159@ = 1
+
+:DRUGS3_11547
+if 
+  159@ == 1
+goto_if_false @DRUGS3_11654
+if 
+  not Char.IsDead(87@)
+goto_if_false @DRUGS3_11642
+if or
+  Char.HasBeenDamagedByChar(87@, $scplayer)
+  Char.LocateAnyMeansChar2D(87@, $scplayer, 3.0, 3.0, False)
+goto_if_false @DRUGS3_11635
+Task.KillCharOnFoot(87@, $scplayer)
+159@ = 2
+
+:DRUGS3_11635
+goto @DRUGS3_11654
+
+:DRUGS3_11642
+Char.MarkAsNoLongerNeeded(87@)
+159@ = 2
+
+:DRUGS3_11654
+if 
+  160@ == 0
+goto_if_false @DRUGS3_11761
+if 
+  not Char.IsDead(88@)
+goto_if_false @DRUGS3_11761
+if or
+  Char.IsInAngledArea2D($scplayer, 2161.927, -2243.252, 2168.71, -2237.79, 10.0, False)
+  Char.HasBeenDamagedByChar(88@, $scplayer)
+goto_if_false @DRUGS3_11761
+set_lvar_int_to_lvar_int 112@ = 88@
+gosub @DRUGS3_19036
+160@ = 1
+
+:DRUGS3_11761
+if 
+  152@ == 0
+goto_if_false @DRUGS3_12231
+if 
+  Char.IsInAngledArea2D($scplayer, 2160.659, -2244.409, 2168.71, -2237.79, 12.0, False)
+goto_if_false @DRUGS3_12231
+Streaming.MarkModelAsNoLongerNeeded(414)
+Streaming.MarkModelAsNoLongerNeeded(#SEC_KEYPAD)
+Streaming.MarkModelAsNoLongerNeeded(#KMB_RAMP)
+Car.MarkAsNoLongerNeeded(60@)
+Car.MarkAsNoLongerNeeded(61@)
+Char.MarkAsNoLongerNeeded(62@)
+Char.MarkAsNoLongerNeeded(63@)
+Object.MarkAsNoLongerNeeded(69@)
+Object.MarkAsNoLongerNeeded(70@)
+Object.MarkAsNoLongerNeeded(71@)
+Object.MarkAsNoLongerNeeded(72@)
+Object.MarkAsNoLongerNeeded(73@)
+Char.MarkAsNoLongerNeeded(62@)
+Char.MarkAsNoLongerNeeded(63@)
+Char.MarkAsNoLongerNeeded(64@)
+Char.MarkAsNoLongerNeeded(65@)
+Char.MarkAsNoLongerNeeded(66@)
+Char.MarkAsNoLongerNeeded(67@)
+Char.MarkAsNoLongerNeeded(68@)
+Car.MarkAsNoLongerNeeded(58@)
+Car.MarkAsNoLongerNeeded(59@)
+89@ = Char.Create(24, 50, 2149.249, -2243.958, 12.6)
+Char.SetHeading(89@, 312.4132)
+Char.SetDecisionMaker(89@, 52@)
+Char.GiveWeapon(89@, WeaponType.Mp5, 99999)
+Char.SetAccuracy(89@, 20)
+Char.SetHealth(89@, 50)
+90@ = Char.Create(24, 50, 2156.04, -2250.73, 12.59)
+Char.SetHeading(90@, 46.763)
+Char.SetDecisionMaker(90@, 52@)
+Char.GiveWeapon(90@, WeaponType.Pistol, 99999)
+Char.SetAccuracy(90@, 20)
+69@ = Object.Create(#BARREL4, 2149.725, -2249.85, 12.35)
+70@ = Object.Create(#BARREL4, 2162.399, -2259.433, 12.35)
+71@ = Object.Create(#BARREL4, 2152.317, -2270.389, 12.35)
+72@ = Object.Create(#BARREL4, 2139.31, -2270.019, 14.7)
+Object.SetOnlyDamagedByPlayer(69@, True)
+Object.SetOnlyDamagedByPlayer(70@, True)
+Object.SetOnlyDamagedByPlayer(71@, True)
+Object.SetOnlyDamagedByPlayer(72@, True)
+102@ = Object.Create(#IMY_BBOX, 2140.91, -2260.2, 18.1)
+Object.SetHeading(102@, 317.068)
+Object.SetHealth(102@, 1000)
+Object.SetOnlyDamagedByPlayer(102@, True)
+152@ = 1
+
+:DRUGS3_12231
+if 
+  152@ == 1
+goto_if_false @DRUGS3_12498
+if 
+  161@ == 0
+goto_if_false @DRUGS3_12305
+if 
+  not Char.IsDead(89@)
+goto_if_false @DRUGS3_12305
+set_lvar_int_to_lvar_int 112@ = 89@
+gosub @DRUGS3_19119
+161@ = 1
+
+:DRUGS3_12305
+if 
+  161@ == 1
+goto_if_false @DRUGS3_12412
+if 
+  not Char.IsDead(89@)
+goto_if_false @DRUGS3_12400
+if or
+  Char.HasBeenDamagedByChar(89@, $scplayer)
+  Char.LocateAnyMeansChar2D(89@, $scplayer, 3.0, 3.0, False)
+goto_if_false @DRUGS3_12393
+Task.KillCharOnFoot(89@, $scplayer)
+161@ = 2
+
+:DRUGS3_12393
+goto @DRUGS3_12412
+
+:DRUGS3_12400
+Char.MarkAsNoLongerNeeded(89@)
+161@ = 2
+
+:DRUGS3_12412
+if 
+  162@ == 0
+goto_if_false @DRUGS3_12498
+if 
+  not Char.IsDead(90@)
+goto_if_false @DRUGS3_12498
+set_lvar_int_to_lvar_int 112@ = 90@
+116@ = 2152.019
+117@ = -2246.949
+118@ = 12.595
+gosub @DRUGS3_18964
+162@ = 1
+
+:DRUGS3_12498
+if 
+  153@ == 0
+goto_if_false @DRUGS3_13164
+if 
+  Char.IsInAngledArea2D($scplayer, 2157.47, -2246.72, 2152.737, -2251.857, -10.0, False)
+goto_if_false @DRUGS3_13164
+92@ = Char.Create(24, 50, 2164.943, -2259.275, 12.594)
+Char.SetHeading(92@, 46.776)
+Char.SetDecisionMaker(92@, 52@)
+Char.GiveWeapon(92@, WeaponType.Mp5, 99999)
+Char.SetAccuracy(92@, 30)
+Char.SetShootRate(92@, 20)
+93@ = Char.Create(24, 50, 2159.296, -2256.66, 12.59)
+Char.SetHeading(93@, 46.776)
+Char.SetDecisionMaker(93@, 52@)
+Char.GiveWeapon(93@, WeaponType.Mp5, 99999)
+Char.SetAccuracy(93@, 20)
+Char.SetAllowedToDuck(93@, False)
+Char.SetShootRate(93@, 20)
+94@ = Char.Create(24, 50, 2137.578, -2262.216, 12.59)
+Char.SetHeading(94@, 211.9)
+Char.SetDecisionMaker(94@, 52@)
+Char.GiveWeapon(94@, WeaponType.Mp5, 99999)
+Char.SetAccuracy(94@, 10)
+95@ = Char.Create(24, 50, 2138.008, -2253.369, 12.59)
+Char.SetHeading(95@, 139.993)
+Char.SetDecisionMaker(95@, 52@)
+Char.GiveWeapon(95@, WeaponType.Pistol, 99999)
+Char.SetAccuracy(95@, 10)
+96@ = Char.Create(24, 50, 2151.545, -2279.607, 13.82)
+Char.SetHeading(96@, 46.63)
+Char.SetDecisionMaker(96@, 52@)
+Char.GiveWeapon(96@, WeaponType.Mp5, 99999)
+Char.SetAccuracy(96@, 10)
+97@ = Char.Create(24, 50, 2140.695, -2259.877, 12.5547)
+Char.SetHeading(97@, 259.7427)
+Char.SetDecisionMaker(97@, 52@)
+Char.GiveWeapon(97@, WeaponType.Mp5, 99999)
+Char.SetAccuracy(97@, 10)
+Char.SetShootRate(97@, 20)
+98@ = Char.Create(24, 50, 2141.763, -2261.277, 12.5547)
+Char.SetHeading(98@, 259.742)
+Char.SetDecisionMaker(98@, 52@)
+Char.GiveWeapon(98@, WeaponType.Mp5, 99999)
+Char.SetAccuracy(98@, 10)
+Char.SetShootRate(98@, 20)
+99@ = Char.Create(24, 102, 2131.561, -2279.424, 19.712)
+Char.SetHeading(99@, 313.176)
+Char.SetDecisionMaker(99@, 52@)
+Char.GiveWeapon(99@, WeaponType.Pistol, 99999)
+Char.SetAccuracy(99@, 10)
+Char.SetShootRate(99@, 20)
+100@ = Char.Create(24, 102, 2128.952, -2282.271, 19.712)
+Char.SetHeading(100@, 313.176)
+Char.SetDecisionMaker(100@, 52@)
+Char.GiveWeapon(100@, WeaponType.Pistol, 99999)
+Char.SetAccuracy(100@, 10)
+Char.SetShootRate(100@, 20)
+153@ = 1
+
+:DRUGS3_13164
+if 
+  153@ == 1
+goto_if_false @DRUGS3_13294
+if 
+  164@ == 0
+goto_if_false @DRUGS3_13238
+if 
+  not Char.IsDead(92@)
+goto_if_false @DRUGS3_13238
+set_lvar_int_to_lvar_int 112@ = 92@
+gosub @DRUGS3_18882
+164@ = 1
+
+:DRUGS3_13238
+if 
+  165@ == 0
+goto_if_false @DRUGS3_13294
+if 
+  not Char.IsDead(93@)
+goto_if_false @DRUGS3_13294
+set_lvar_int_to_lvar_int 112@ = 93@
+gosub @DRUGS3_18882
+165@ = 1
+
+:DRUGS3_13294
+if 
+  154@ == 0
+goto_if_false @DRUGS3_14045
+if 
+  Char.IsInAngledArea2D($scplayer, 2160.728, -2254.586, 2152.4, -2263.3, 10.0, False)
+goto_if_false @DRUGS3_14045
+if 
+  166@ == 0
+goto_if_false @DRUGS3_13464
+if 
+  Object.DoesExist(102@)
+goto_if_false @DRUGS3_13389
+
+:DRUGS3_13389
+if 
+  not Char.IsDead(94@)
+goto_if_false @DRUGS3_13464
+set_lvar_int_to_lvar_int 112@ = 94@
+116@ = 2148.945
+117@ = -2273.314
+118@ = 13.595
+Char.SetAllowedToDuck(94@, False)
+gosub @DRUGS3_18706
+166@ = 1
+
+:DRUGS3_13464
+if 
+  167@ == 0
+goto_if_false @DRUGS3_13587
+if 
+  not Char.IsDead(95@)
+goto_if_false @DRUGS3_13587
+set_lvar_int_to_lvar_int 112@ = 95@
+116@ = 2133.613
+117@ = -2258.067
+118@ = 12.59
+119@ = 2143.387
+120@ = -2267.5
+121@ = 13.595
+Task.ToggleDuck(95@, True)
+gosub @DRUGS3_18761
+167@ = 1
+
+:DRUGS3_13587
+if 
+  168@ == 0
+goto_if_false @DRUGS3_13680
+if 
+  not Char.IsDead(96@)
+goto_if_false @DRUGS3_13680
+set_lvar_int_to_lvar_int 112@ = 96@
+116@ = 2140.375
+117@ = -2269.66
+118@ = 13.59
+Task.ToggleDuck(96@, True)
+gosub @DRUGS3_18706
+168@ = 1
+
+:DRUGS3_13680
+if 
+  171@ == 0
+goto_if_false @DRUGS3_13803
+if 
+  not Char.IsDead(99@)
+goto_if_false @DRUGS3_13803
+set_lvar_int_to_lvar_int 112@ = 99@
+116@ = 2134.504
+117@ = -2276.708
+118@ = 19.712
+119@ = 2130.845
+120@ = -2272.55
+121@ = 19.71
+Char.SetAllowedToDuck(99@, False)
+gosub @DRUGS3_18761
+171@ = 1
+
+:DRUGS3_13803
+if 
+  172@ == 0
+goto_if_false @DRUGS3_13926
+if 
+  not Char.IsDead(100@)
+goto_if_false @DRUGS3_13926
+set_lvar_int_to_lvar_int 112@ = 100@
+116@ = 2134.788
+117@ = -2275.941
+118@ = 19.712
+119@ = 2139.879
+120@ = -2270.926
+121@ = 18.0
+Char.SetAllowedToDuck(100@, False)
+gosub @DRUGS3_18761
+172@ = 1
+
+:DRUGS3_13926
+if 
+  169@ == 0
+goto_if_false @DRUGS3_13982
+if 
+  not Char.IsDead(97@)
+goto_if_false @DRUGS3_13982
+set_lvar_int_to_lvar_int 112@ = 97@
+gosub @DRUGS3_18882
+169@ = 1
+
+:DRUGS3_13982
+if 
+  170@ == 0
+goto_if_false @DRUGS3_14038
+if 
+  not Char.IsDead(98@)
+goto_if_false @DRUGS3_14038
+set_lvar_int_to_lvar_int 112@ = 98@
+gosub @DRUGS3_18882
+170@ = 1
+
+:DRUGS3_14038
+154@ = 1
+
+:DRUGS3_14045
+if 
+  173@ == 0
+goto_if_false @DRUGS3_14209
+if 
+  Char.IsInAngledArea3D($scplayer, 2136.48, -2266.78, 28.0, 2145.55, -2275.04, 18.0, -20.0, False)
+goto_if_false @DRUGS3_14209
+Streaming.MarkModelAsNoLongerNeeded(#IMCMPTRKDRL_LAS)
+Streaming.MarkModelAsNoLongerNeeded(#IMCMPTRKDRR_LAS)
+Streaming.MarkModelAsNoLongerNeeded(#IMCOMPMOVEDR1_LAS)
+Text.PrintNow('CSH3_53', 7000, 1)
+if 
+  not Char.IsDead(109@)
+goto_if_false @DRUGS3_14178
+set_lvar_int_to_lvar_int 112@ = 109@
+gosub @DRUGS3_18882
+
+:DRUGS3_14178
+if 
+  not Char.IsDead(110@)
+goto_if_false @DRUGS3_14202
+Task.KillCharOnFoot(110@, $scplayer)
+
+:DRUGS3_14202
+173@ = 1
+
+:DRUGS3_14209
+if 
+  179@ == 1
+goto_if_false @DRUGS3_14250
+if 
+  Char.IsDead(101@)
+goto_if_false @DRUGS3_14250
+179@ = 2
+
+:DRUGS3_14250
+if 
+  179@ == 2
+goto_if_false @DRUGS3_14275
+goto @DRUGS3_19361
+
+:DRUGS3_14275
+if 
+  Char.IsDead(101@)
+goto_if_false @DRUGS3_14312
+if 
+  Blip.DoesExist(138@)
+goto_if_false @DRUGS3_14312
+Blip.Remove(138@)
+
+:DRUGS3_14312
+if 
+  174@ == 0
+goto_if_false @DRUGS3_14467
+if 
+  Object.DoesExist(102@)
+goto_if_false @DRUGS3_14467
+103@ = Object.GetHealth(102@)
+if 
+  1000 > 103@
+goto_if_false @DRUGS3_14467
+Object.SetProofs(102@, True, True, True, True, True)
+if 
+  not Char.IsDead(98@)
+goto_if_false @DRUGS3_14453
+Char.SetHeading(98@, 200.025)
+Task.PlayAnimNonInterruptable(98@, "CRUSH_JUMP", "DODGE", 1000.0, False, True, True, True, -1)
+
+:DRUGS3_14453
+TIMERB = 0
+174@ = 1
+
+:DRUGS3_14467
+if 
+  174@ == 1
+goto_if_false @DRUGS3_14647
+if 
+  TIMERB > 1500
+goto_if_false @DRUGS3_14647
+if 
+  Object.DoesExist(102@)
+goto_if_false @DRUGS3_14647
+Object.SetCoordinates(102@, 2140.91, -2260.2, 18.1)
+Object.SetDynamic(102@, True)
+Object.SetCollision(102@, True)
+Object.AddToVelocity(102@, 0.0, 0.0, -2.0)
+if 
+  not Char.IsDead(97@)
+goto_if_false @DRUGS3_14633
+Char.SetCollision(97@, False)
+Task.PlayAnimNonInterruptable(97@, "CRUSHED", "DODGE", 1000.0, False, True, True, True, -1)
+
+:DRUGS3_14633
+TIMERB = 0
+174@ = 2
+
+:DRUGS3_14647
+if 
+  174@ == 2
+goto_if_false @DRUGS3_14742
+if 
+  TIMERB > 600
+goto_if_false @DRUGS3_14742
+if 
+  not Char.IsDead(97@)
+goto_if_false @DRUGS3_14712
+Char.SetNeverTargeted(97@, True)
+Char.RemoveElegantly(97@)
+
+:DRUGS3_14712
+if 
+  not Char.IsDead(98@)
+goto_if_false @DRUGS3_14735
+Char.SetNeverTargeted(98@, True)
+
+:DRUGS3_14735
+174@ = 3
+
+:DRUGS3_14742
+if 
+  155@ == 1
+goto_if_false @DRUGS3_14788
+if 
+  Char.IsDead(83@)
+goto_if_false @DRUGS3_14788
+Char.MarkAsNoLongerNeeded(83@)
+155@ = 2
+
+:DRUGS3_14788
+if 
+  156@ == 1
+goto_if_false @DRUGS3_14834
+if 
+  Char.IsDead(84@)
+goto_if_false @DRUGS3_14834
+Char.MarkAsNoLongerNeeded(84@)
+156@ = 2
+
+:DRUGS3_14834
+if 
+  157@ == 1
+goto_if_false @DRUGS3_14880
+if 
+  Char.IsDead(85@)
+goto_if_false @DRUGS3_14880
+Char.MarkAsNoLongerNeeded(85@)
+157@ = 2
+
+:DRUGS3_14880
+if 
+  159@ > 0
+goto_if_false @DRUGS3_14944
+if 
+  3 > 159@
+goto_if_false @DRUGS3_14944
+if 
+  Char.IsDead(87@)
+goto_if_false @DRUGS3_14944
+Char.MarkAsNoLongerNeeded(87@)
+159@ = 2
+
+:DRUGS3_14944
+if 
+  160@ == 1
+goto_if_false @DRUGS3_14990
+if 
+  Char.IsDead(88@)
+goto_if_false @DRUGS3_14990
+Char.MarkAsNoLongerNeeded(88@)
+160@ = 2
+
+:DRUGS3_14990
+if 
+  161@ > 0
+goto_if_false @DRUGS3_15054
+if 
+  3 > 161@
+goto_if_false @DRUGS3_15054
+if 
+  Char.IsDead(89@)
+goto_if_false @DRUGS3_15054
+Char.MarkAsNoLongerNeeded(89@)
+161@ = 3
+
+:DRUGS3_15054
+if 
+  162@ == 1
+goto_if_false @DRUGS3_15100
+if 
+  Char.IsDead(90@)
+goto_if_false @DRUGS3_15100
+Char.MarkAsNoLongerNeeded(90@)
+162@ = 2
+
+:DRUGS3_15100
+if 
+  164@ == 1
+goto_if_false @DRUGS3_15146
+if 
+  Char.IsDead(92@)
+goto_if_false @DRUGS3_15146
+Char.MarkAsNoLongerNeeded(92@)
+164@ = 2
+
+:DRUGS3_15146
+if 
+  165@ == 1
+goto_if_false @DRUGS3_15192
+if 
+  Char.IsDead(93@)
+goto_if_false @DRUGS3_15192
+Char.MarkAsNoLongerNeeded(93@)
+165@ = 2
+
+:DRUGS3_15192
+if 
+  166@ == 1
+goto_if_false @DRUGS3_15238
+if 
+  Char.IsDead(94@)
+goto_if_false @DRUGS3_15238
+Char.MarkAsNoLongerNeeded(94@)
+166@ = 2
+
+:DRUGS3_15238
+if 
+  167@ == 1
+goto_if_false @DRUGS3_15284
+if 
+  Char.IsDead(95@)
+goto_if_false @DRUGS3_15284
+Char.MarkAsNoLongerNeeded(95@)
+167@ = 2
+
+:DRUGS3_15284
+if 
+  168@ == 1
+goto_if_false @DRUGS3_15330
+if 
+  Char.IsDead(96@)
+goto_if_false @DRUGS3_15330
+Char.MarkAsNoLongerNeeded(96@)
+168@ = 2
+
+:DRUGS3_15330
+if 
+  171@ == 1
+goto_if_false @DRUGS3_15376
+if 
+  Char.IsDead(99@)
+goto_if_false @DRUGS3_15376
+Char.MarkAsNoLongerNeeded(99@)
+171@ = 2
+
+:DRUGS3_15376
+if 
+  172@ == 1
+goto_if_false @DRUGS3_15422
+if 
+  Char.IsDead(100@)
+goto_if_false @DRUGS3_15422
+Char.MarkAsNoLongerNeeded(100@)
+172@ = 2
+
+:DRUGS3_15422
+if 
+  173@ == 1
+goto_if_false @DRUGS3_16461
+if 
+  Char.IsInAngledArea3D($scplayer, 2125.14, -2270.97, 27.0, 2121.09, -2275.33, 19.0, 14.0, False)
+goto_if_false @DRUGS3_16461
+Char.MarkAsNoLongerNeeded(83@)
+Char.MarkAsNoLongerNeeded(84@)
+Char.MarkAsNoLongerNeeded(85@)
+Char.MarkAsNoLongerNeeded(86@)
+Char.MarkAsNoLongerNeeded(87@)
+Char.MarkAsNoLongerNeeded(88@)
+Char.MarkAsNoLongerNeeded(89@)
+Char.MarkAsNoLongerNeeded(90@)
+Char.RemoveElegantly(83@)
+Char.RemoveElegantly(84@)
+Char.RemoveElegantly(85@)
+Char.RemoveElegantly(86@)
+Char.RemoveElegantly(87@)
+Char.RemoveElegantly(88@)
+Char.RemoveElegantly(89@)
+Char.RemoveElegantly(90@)
+Car.Delete(54@)
+Car.Delete(55@)
+Car.Delete(60@)
+World.ClearArea(0, 2185.53, -2271.95, 50.0, 50.0)
+Streaming.MarkModelAsNoLongerNeeded(102)
+74@ = Object.Create(#BARREL4, 2170.366, -2337.439, 12.54)
+Object.SetOnlyDamagedByPlayer(74@, True)
+60@ = Car.Create(530, 2122.092, -2307.141, 12.5693)
+Car.SetHeading(60@, 265.9861)
+Car.SetCanBurstTires(60@, False)
+54@ = Car.Create(429, 2190.07, -2269.8, 12.5693)
+Car.SetHeading(54@, 308.99)
+Car.SetHealth(54@, 1000)
+55@ = Car.Create(461, 2175.75, -2280.57, 12.5693)
+Car.SetHeading(55@, 315.41)
+Car.SetCanBurstTires(55@, False)
+136@ = Pickup.CreateWithAmmo(353, 3, 250, 2175.614, -2282.959, 13.54)
+83@ = Char.Create(24, 50, 2132.698, -2303.37, 13.699)
+Char.SetHeading(83@, 826.228)
+Char.SetDecisionMaker(83@, 52@)
+Char.GiveWeapon(83@, WeaponType.Mp5, 99999)
+Char.SetAccuracy(83@, 30)
+set_lvar_int_to_lvar_int 112@ = 83@
+gosub @DRUGS3_18882
+84@ = Char.Create(24, 50, 2138.06, -2308.614, 19.7)
+Char.SetHeading(84@, 60.478)
+Char.SetDecisionMaker(84@, 52@)
+Char.GiveWeapon(84@, WeaponType.Mp5, 99999)
+Char.SetAccuracy(84@, 30)
+set_lvar_int_to_lvar_int 112@ = 84@
+gosub @DRUGS3_18926
+85@ = Char.Create(24, 50, 2144.007, -2295.194, 19.676)
+Char.SetHeading(85@, 119.8487)
+Char.SetDecisionMaker(85@, 52@)
+Char.GiveWeapon(85@, WeaponType.Pistol, 99999)
+Char.SetAllowedToDuck(85@, False)
+Char.SetHealth(85@, 50)
+Char.SetAccuracy(85@, 30)
+set_lvar_int_to_lvar_int 112@ = 85@
+gosub @DRUGS3_18926
+86@ = Char.Create(24, 50, 2131.56, -2313.6, 12.5719)
+Char.SetHeading(86@, 265.9861)
+Char.SetDecisionMaker(86@, 52@)
+Char.GiveWeapon(86@, WeaponType.Mp5, 99999)
+Char.SetAllowedToDuck(86@, False)
+Char.SetAccuracy(86@, 30)
+set_lvar_int_to_lvar_int 112@ = 86@
+gosub @DRUGS3_18882
+88@ = Char.Create(24, 50, 2183.367, -2293.234, 12.5)
+Char.SetHeading(88@, 148.671)
+Char.SetDecisionMaker(88@, 52@)
+Char.GiveWeapon(88@, WeaponType.Mp5, 99999)
+Task.KillCharOnFoot(88@, $scplayer)
+Char.SetHealth(88@, 50)
+set_lvar_int_to_lvar_int 112@ = 88@
+gosub @DRUGS3_18926
+89@ = Char.Create(24, 50, 2165.737, -2324.289, 17.515)
+Char.SetHeading(89@, 224.6632)
+Char.SetDecisionMaker(89@, 52@)
+Char.GiveWeapon(89@, WeaponType.Mp5, 99999)
+Char.SetHealth(89@, 70)
+Char.SetAccuracy(89@, 30)
+set_lvar_int_to_lvar_int 112@ = 89@
+gosub @DRUGS3_18926
+90@ = Char.Create(24, 50, 2170.07, -2334.498, 12.547)
+Char.SetHeading(90@, 89.2721)
+Char.SetDecisionMaker(90@, 52@)
+Char.GiveWeapon(90@, WeaponType.Mp5, 99999)
+Char.SetHealth(90@, 50)
+set_lvar_int_to_lvar_int 112@ = 90@
+gosub @DRUGS3_18926
+if 
+  Object.DoesExist(111@)
+goto_if_false @DRUGS3_16396
+Object.SetHeading(111@, 90.0)
+goto @DRUGS3_16401
+
+:DRUGS3_16396
+Object.Delete(111@)
+
+:DRUGS3_16401
+if 
+  not Char.IsDead(101@)
+goto_if_false @DRUGS3_16454
+Task.PlayAnim(101@, "IDLE_CHAT", "PED", 4.0, False, False, False, False, 2000)
+
+:DRUGS3_16454
+173@ = 2
+
+:DRUGS3_16461
+if 
+  173@ == 2
+goto_if_false @DRUGS3_16689
+if 
+  not Char.IsDead(101@)
+goto_if_false @DRUGS3_16689
+if or
+  TIMERA > 750
+  Char.HasBeenDamagedByChar(101@, $scplayer)
+  Player.IsTargetingChar($player1, 101@)
+goto_if_false @DRUGS3_16689
+87@ = Char.Create(24, 50, 2135.46, -2296.64, 12.9)
+Char.SetHeading(87@, 337.5533)
+Char.SetDecisionMaker(87@, 52@)
+Char.GiveWeapon(87@, WeaponType.Pistol, 99999)
+Task.KillCharOnFoot(87@, $scplayer)
+set_lvar_int_to_lvar_int 112@ = 87@
+gosub @DRUGS3_18926
+113@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 2128.43, -2292.01, 13.75, 6, 350000)
+Task.FollowPathNodesToCoord(-1, 2185.5, -2274.8, 13.75, 7, 350000)
+Sequence.Close(113@)
+Char.PerformSequence(101@, 113@)
+Sequence.Clear(113@)
+173@ = 3
+
+:DRUGS3_16689
+if 
+  173@ == 3
+goto_if_false @DRUGS3_16773
+if 
+  not Char.IsDead(101@)
+goto_if_false @DRUGS3_16773
+if 
+  Char.LocateAnyMeans2D(101@, 0, 2185.5, -2274.8, 10.0, 10.0)
+goto_if_false @DRUGS3_16773
+Char.MarkAsNoLongerNeeded(86@)
+173@ = 4
+
+:DRUGS3_16773
+if 
+  not Char.IsDead(101@)
+goto_if_false @DRUGS3_18210
+if 
+  173@ == 4
+goto_if_false @DRUGS3_17553
+if 
+  not Char.LocateAnyMeansChar2D($scplayer, 101@, 200.0, 200.0, False)
+goto_if_false @DRUGS3_16877
+if 
+  not Char.IsOnScreen(101@)
+goto_if_false @DRUGS3_16877
+Text.PrintNow('CSH3_55', 5000, 1)
+goto @DRUGS3_19343
+
+:DRUGS3_16877
+if 
+  2 > 182@
+goto_if_false @DRUGS3_17553
+if 
+  182@ == 1
+goto_if_false @DRUGS3_16970
+if 
+  not Car.IsDead(54@)
+goto_if_false @DRUGS3_16970
+$car = Char.GetCarIsUsing($scplayer)
+if 
+  is_int_var_equal_to_int_lvar $car == 54@
+goto_if_false @DRUGS3_16970
+gosub @DRUGS3_18627
+182@ = 2
+
+:DRUGS3_16970
+if 
+  182@ == 0
+goto_if_false @DRUGS3_17185
+if 
+  not Car.IsDead(54@)
+goto_if_false @DRUGS3_17171
+if 
+  Car.Locate2D(54@, 0, 2190.07, -2269.8, 6.0, 6.0)
+goto_if_false @DRUGS3_17150
+if 
+  not Char.IsInCar($scplayer, 54@)
+goto_if_false @DRUGS3_17129
+if 
+  184@ == 0
+goto_if_false @DRUGS3_17108
+Char.ClearTasks(101@)
+Task.EnterCarAsDriver(101@, 54@, -2)
+182@ = 1
+goto @DRUGS3_17122
+
+:DRUGS3_17108
+gosub @DRUGS3_18627
+182@ = 2
+
+:DRUGS3_17122
+goto @DRUGS3_17143
+
+:DRUGS3_17129
+gosub @DRUGS3_18627
+182@ = 2
+
+:DRUGS3_17143
+goto @DRUGS3_17164
+
+:DRUGS3_17150
+gosub @DRUGS3_18627
+182@ = 2
+
+:DRUGS3_17164
+goto @DRUGS3_17185
+
+:DRUGS3_17171
+gosub @DRUGS3_18627
+182@ = 2
+
+:DRUGS3_17185
+if 
+  182@ == 1
+goto_if_false @DRUGS3_17421
+if 
+  184@ == 0
+goto_if_false @DRUGS3_17407
+if 
+  not Car.IsDead(54@)
+goto_if_false @DRUGS3_17400
+if 
+  Char.IsInCar(101@, 54@)
+goto_if_false @DRUGS3_17400
+if 
+  Char.LocateAnyMeansChar2D(101@, $scplayer, 60.0, 60.0, False)
+goto_if_false @DRUGS3_17400
+Text.PrintNow('CSH3_54', 5000, 1)
+Char.SetHealth(101@, 100)
+Char.SetSuffersCriticalHits(101@, True)
+Car.GotoCoordinates(54@, 2246.61, -2204.78, 13.65)
+Car.SetCruiseSpeed(54@, 20.0)
+Car.SetDrivingStyle(54@, DrivingMode.AvoidCars)
+Path.SwitchRoadsOff(2203.8, -2174.63, 0.0, 2279.2, -2234.63, 18.21)
+183@ = 1
+182@ = 2
+
+:DRUGS3_17400
+goto @DRUGS3_17421
+
+:DRUGS3_17407
+gosub @DRUGS3_18627
+182@ = 2
+
+:DRUGS3_17421
+if 
+  not Car.IsDead(54@)
+goto_if_false @DRUGS3_17539
+if 
+  184@ == 0
+goto_if_false @DRUGS3_17488
+if 
+  Char.IsInCar($scplayer, 54@)
+goto_if_false @DRUGS3_17488
+gosub @DRUGS3_18627
+184@ = 1
+
+:DRUGS3_17488
+if 
+  184@ == 1
+goto_if_false @DRUGS3_17532
+if 
+  not Char.IsInCar($scplayer, 54@)
+goto_if_false @DRUGS3_17532
+184@ = 0
+
+:DRUGS3_17532
+goto @DRUGS3_17553
+
+:DRUGS3_17539
+gosub @DRUGS3_18627
+182@ = 2
+
+:DRUGS3_17553
+if 
+  183@ == 1
+goto_if_false @DRUGS3_17649
+if 
+  not Char.IsSittingInAnyCar(101@)
+goto_if_false @DRUGS3_17649
+Task.SmartFleeChar(101@, $scplayer, 300.0, 500000)
+if 
+  not Car.IsDead(54@)
+goto_if_false @DRUGS3_17642
+if 
+  Car.IsPlaybackGoingOn(54@)
+goto_if_false @DRUGS3_17642
+Car.StopPlayback(54@)
+
+:DRUGS3_17642
+183@ = 2
+
+:DRUGS3_17649
+if 
+  182@ == 2
+goto_if_false @DRUGS3_17854
+if 
+  not Car.IsDead(54@)
+goto_if_false @DRUGS3_17854
+if 
+  Char.IsSittingInCar(101@, 54@)
+goto_if_false @DRUGS3_17854
+if 
+  Car.Locate2D(54@, 0, 2246.61, -2204.78, 10.0, 10.0)
+goto_if_false @DRUGS3_17854
+Char.MarkAsNoLongerNeeded(83@)
+Char.MarkAsNoLongerNeeded(84@)
+Char.MarkAsNoLongerNeeded(85@)
+Char.MarkAsNoLongerNeeded(86@)
+Char.MarkAsNoLongerNeeded(87@)
+Char.MarkAsNoLongerNeeded(88@)
+Char.MarkAsNoLongerNeeded(89@)
+Char.MarkAsNoLongerNeeded(90@)
+Car.MarkAsNoLongerNeeded(60@)
+Car.SetIdle(54@)
+Car.StartPlaybackUsingAi(54@, 342)
+Car.SetPlaybackSpeed(54@, 0.85)
+Path.SwitchRoadsOff(2203.8, -2174.63, 0.0, 2279.2, -2234.63, 18.21)
+187@ = 1
+182@ = 3
+
+:DRUGS3_17854
+if 
+  182@ == 3
+goto_if_false @DRUGS3_18071
+if 
+  not Car.IsDead(54@)
+goto_if_false @DRUGS3_18071
+if 
+  Char.IsSittingInCar(101@, 54@)
+goto_if_false @DRUGS3_18071
+if 
+  187@ == 1
+goto_if_false @DRUGS3_17989
+if 
+  Car.IsPlaybackGoingOn(54@)
+goto_if_false @DRUGS3_17989
+if 
+  not Char.LocateAnyMeansChar2D(101@, $scplayer, 40.0, 40.0, False)
+goto_if_false @DRUGS3_17989
+Car.SetPlaybackSpeed(54@, 0.4)
+187@ = 2
+
+:DRUGS3_17989
+if 
+  187@ == 2
+goto_if_false @DRUGS3_18071
+if 
+  Car.IsPlaybackGoingOn(54@)
+goto_if_false @DRUGS3_18071
+if 
+  Char.LocateAnyMeansChar2D(101@, $scplayer, 40.0, 40.0, False)
+goto_if_false @DRUGS3_18071
+Car.SetPlaybackSpeed(54@, 0.85)
+187@ = 1
+
+:DRUGS3_18071
+if 
+  182@ == 3
+goto_if_false @DRUGS3_18210
+if 
+  not Car.IsDead(54@)
+goto_if_false @DRUGS3_18210
+if 
+  Char.IsSittingInCar(101@, 54@)
+goto_if_false @DRUGS3_18210
+if 
+  Car.Locate2D(54@, 0, 1440.92, -1594.59, 20.0, 20.0)
+goto_if_false @DRUGS3_18210
+if 
+  Car.IsPlaybackGoingOn(54@)
+goto_if_false @DRUGS3_18188
+Car.StopPlayback(54@)
+Car.SetIdle(54@)
+
+:DRUGS3_18188
+Task.CarDriveWander(101@, 54@, 25.0, DrivingMode.AvoidCars)
+182@ = 4
+
+:DRUGS3_18210
+if 
+  173@ > 1
+goto_if_false @DRUGS3_18446
+if 
+  not Char.IsDead(101@)
+goto_if_false @DRUGS3_18446
+gosub @DRUGS3_18495
+if 
+  180@ == 0
+goto_if_false @DRUGS3_18316
+if 
+  181@ == 0
+goto_if_false @DRUGS3_18316
+set_lvar_int_to_constant 80@ = 11004
+set_lvar_text_label 81@s = 'CRA3_DB'
+gosub @DRUGS3_18453
+
+:DRUGS3_18316
+if 
+  180@ == 1
+goto_if_false @DRUGS3_18381
+if 
+  181@ == 0
+goto_if_false @DRUGS3_18381
+set_lvar_int_to_constant 80@ = 11005
+set_lvar_text_label 81@s = 'CRA3_DC'
+gosub @DRUGS3_18453
+
+:DRUGS3_18381
+if 
+  180@ == 2
+goto_if_false @DRUGS3_18446
+if 
+  181@ == 0
+goto_if_false @DRUGS3_18446
+set_lvar_int_to_constant 80@ = 11006
+set_lvar_text_label 81@s = 'CRA3_DD'
+gosub @DRUGS3_18453
+
+:DRUGS3_18446
+goto @DRUGS3_850
+
+:DRUGS3_18453
+if 
+  181@ == 0
+goto_if_false @DRUGS3_18493
+Audio.LoadMissionAudio(80@, 1)
+set_lvar_text_label 78@s = 81@s
+181@ = 1
+
+:DRUGS3_18493
+return 
+
+:DRUGS3_18495
+if 
+  181@ == 1
+goto_if_false @DRUGS3_18572
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS3_18572
+Text.PrintNow(78@s, 4000, 1)
+if 
+  not Char.IsDead(101@)
+goto_if_false @DRUGS3_18561
+Audio.AttachMissionAudioToChar(MissionAudioSlot.Slot1, 101@)
+
+:DRUGS3_18561
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+181@ = 2
+
+:DRUGS3_18572
+if 
+  181@ == 2
+goto_if_false @DRUGS3_18625
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @DRUGS3_18625
+180@ += 1
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearPrints
+181@ = 0
+
+:DRUGS3_18625
+return 
+
+:DRUGS3_18627
+Char.SetHealth(101@, 100)
+Char.SetMaxHealth(101@, 100)
+114@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 2191.422, -2183.429, 13.55, 6, -2)
+Task.SmartFleeChar(-1, $scplayer, 300.0, 500000)
+Sequence.Close(114@)
+Char.PerformSequence(101@, 114@)
+Sequence.Clear(114@)
+return 
+
+:DRUGS3_18706
+124@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 116@, 117@, 118@, MoveState.Run, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(124@)
+Char.PerformSequence(112@, 124@)
+Sequence.Clear(124@)
+return 
+
+:DRUGS3_18761
+125@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 116@, 117@, 118@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 119@, 120@, 121@, MoveState.Run, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(125@)
+Char.PerformSequence(112@, 125@)
+Sequence.Clear(125@)
+return 
+
+:DRUGS3_18833
+123@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 116@, 117@, 118@, MoveState.Run, -1)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(123@)
+Char.PerformSequence(112@, 123@)
+Sequence.Clear(123@)
+return 
+
+:DRUGS3_18882
+122@ = Sequence.Open()
+Task.StayInSamePlace(-1, True)
+Task.ToggleDuck(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(122@)
+Char.PerformSequence(112@, 122@)
+Sequence.Clear(122@)
+return 
+
+:DRUGS3_18926
+129@ = Sequence.Open()
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(129@)
+Char.PerformSequence(112@, 129@)
+Sequence.Clear(129@)
+return 
+
+:DRUGS3_18964
+128@ = Sequence.Open()
+Task.GoToCoordWhileShooting(-1, 116@, 117@, 118@, 6, 0.5, 1.0, $scplayer)
+Task.StayInSamePlace(-1, True)
+Task.ToggleDuck(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(128@)
+Char.PerformSequence(112@, 128@)
+Sequence.Clear(128@)
+return 
+
+:DRUGS3_19036
+127@ = Sequence.Open()
+Task.PlayAnim(-1, "CROUCH_ROLL_R", "PED", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+Task.ToggleDuck(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(127@)
+Char.PerformSequence(112@, 127@)
+Sequence.Clear(127@)
+return 
+
+:DRUGS3_19119
+126@ = Sequence.Open()
+Task.PlayAnim(-1, "SWT_WLLPK_L", "SWAT", 8.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "SWT_WLLSHOOT_IN_L", "SWAT", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFootTimed(-1, $scplayer, 1500)
+Task.StayInSamePlace(-1, False)
+Task.PlayAnim(-1, "SWT_WLLSHOOT_OUT_L", "SWAT", 8.0, False, True, True, False, -1)
+Task.PlayAnim(-1, "SWT_WLLPK_L_BACK", "SWAT", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(126@, True)
+Sequence.Close(126@)
+Char.PerformSequence(112@, 126@)
+Sequence.Clear(126@)
+return 
+
+:DRUGS3_19343
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:DRUGS3_19361
+Text.PrintWithNumberBig('M_PASSD', 0, 5000, TextStyle.Middle)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+Stat.PlayerMadeProgress(1)
+Stat.RegisterMissionPassed('CRASH_3')
+$flag_crash_mission_counter += 1
+Blip.Remove($crash_contact_blip)
+return 
+
+:DRUGS3_19417
+if 
+  not Car.IsDead($car)
+goto_if_false @DRUGS3_19448
+Car.SetProofs($car, False, False, False, False, False)
+
+:DRUGS3_19448
+if 
+  Object.DoesExist(50@)
+goto_if_false @DRUGS3_19469
+Object.Delete(50@)
+
+:DRUGS3_19469
+if 
+  Object.DoesExist(34@)
+goto_if_false @DRUGS3_19490
+Object.Delete(35@)
+
+:DRUGS3_19490
+if 
+  Object.DoesExist(36@)
+goto_if_false @DRUGS3_19511
+Object.Delete(37@)
+
+:DRUGS3_19511
+if 
+  Object.DoesExist(38@)
+goto_if_false @DRUGS3_19532
+Object.Delete(39@)
+
+:DRUGS3_19532
+if 
+  Object.DoesExist(40@)
+goto_if_false @DRUGS3_19553
+Object.Delete(41@)
+
+:DRUGS3_19553
+if 
+  Object.DoesExist(50@)
+goto_if_false @DRUGS3_19574
+Object.Delete(50@)
+
+:DRUGS3_19574
+if 
+  Object.DoesExist(51@)
+goto_if_false @DRUGS3_19595
+Object.Delete(51@)
+
+:DRUGS3_19595
+Path.SwitchRoadsOn(2203.8, -2174.63, 0.0, 2279.2, -2234.63, 18.21)
+Blip.Remove(137@)
+Blip.Remove(138@)
+Streaming.RemoveAnimation("SWAT")
+Streaming.RemoveAnimation("DODGE")
+Pickup.Remove(133@)
+Pickup.Remove(134@)
+Pickup.Remove(135@)
+Object.Delete(102@)
+Car.MarkAsNoLongerNeeded(58@)
+Car.MarkAsNoLongerNeeded(59@)
+Car.MarkAsNoLongerNeeded(60@)
+Car.MarkAsNoLongerNeeded(61@)
+Pickup.Remove(136@)
+Char.RemoveElegantly(83@)
+Char.RemoveElegantly(84@)
+Char.RemoveElegantly(85@)
+Char.RemoveElegantly(86@)
+Char.RemoveElegantly(87@)
+Char.RemoveElegantly(88@)
+Char.RemoveElegantly(89@)
+Char.RemoveElegantly(90@)
+Char.RemoveElegantly(92@)
+Char.RemoveElegantly(93@)
+Char.RemoveElegantly(94@)
+Char.RemoveElegantly(95@)
+Char.RemoveElegantly(96@)
+Char.RemoveElegantly(97@)
+Char.RemoveElegantly(98@)
+Game.SetWantedMultiplier(1.0)
+Streaming.MarkModelAsNoLongerNeeded(50)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(#BARREL4)
+Streaming.MarkModelAsNoLongerNeeded(530)
+Streaming.MarkModelAsNoLongerNeeded(414)
+Streaming.MarkModelAsNoLongerNeeded(353)
+Streaming.MarkModelAsNoLongerNeeded(#SEC_KEYPAD)
+Streaming.MarkModelAsNoLongerNeeded(#KMB_RAMP)
+Streaming.MarkModelAsNoLongerNeeded(429)
+Streaming.MarkModelAsNoLongerNeeded(461)
+Streaming.MarkModelAsNoLongerNeeded(#IMCMPTRKDRL_LAS)
+Streaming.MarkModelAsNoLongerNeeded(#IMCMPTRKDRR_LAS)
+Streaming.MarkModelAsNoLongerNeeded(#IMCOMPMOVEDR1_LAS)
+Streaming.MarkModelAsNoLongerNeeded(102)
+Streaming.MarkModelAsNoLongerNeeded(#IMY_BBOX)
+Streaming.MarkModelAsNoLongerNeeded(461)
+Streaming.UnloadSpecialCharacter(1)
+if 
+  not Car.IsDead(55@)
+goto_if_false @DRUGS3_19886
+Car.SetCanBurstTires(55@, True)
+
+:DRUGS3_19886
+if 
+  not Car.IsDead(60@)
+goto_if_false @DRUGS3_19909
+Car.SetCanBurstTires(60@, True)
+
+:DRUGS3_19909
+if 
+  not Car.IsDead($car)
+goto_if_false @DRUGS3_19940
+Car.SetProofs($car, False, False, True, False, False)
+
+:DRUGS3_19940
+$timer_mobile_start = Clock.GetGameTimer()
+Game.SwitchEmergencyServices(True)
+$onmission = 0
+Mission.Finish
+return 
+

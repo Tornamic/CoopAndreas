@@ -1,0 +1,47 @@
+:VCRASH
+script_name 'VCRASH'
+
+:VCRASH_11
+wait $mission_trigger_wait_time
+if 
+  $flag_vcrash_mission_counter == 2
+goto_if_false @VCRASH_36
+terminate_this_script 
+
+:VCRASH_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @VCRASH_287
+if 
+  $onmission == 0
+goto_if_false @VCRASH_287
+if 
+  Player.CanStartMission($player1)
+goto_if_false @VCRASH_287
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $vcrashX, $vcrashY, $vcrashZ, 1.2, 1.2, 2.0)
+goto_if_false @VCRASH_180
+if 
+  $flag_vcrash_mission_counter == 0
+goto_if_false @VCRASH_180
+$onmission = 1
+Text.PrintBig('VCRASH1', 1000, TextStyle.BottomRight)
+LITCAS_267()
+Mission.LoadAndLaunchInternal(93) // Misappropriation
+
+:VCRASH_180
+if and
+  $flag_vcrash_mission_counter == 1
+  $flag_mob_vegas == 1
+goto_if_false @VCRASH_287
+if 
+  Char.LocateOnFoot3D($scplayer, 0, -378.75, 2235.85, 41.42, 1.2, 1.2, 2.0)
+goto_if_false @VCRASH_287
+$onmission = 1
+Text.PrintBig('VCRASH2', 1000, TextStyle.BottomRight)
+LITCAS_267()
+Mission.LoadAndLaunchInternal(94) // High Noon
+
+:VCRASH_287
+goto @VCRASH_11
+

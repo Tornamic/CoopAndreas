@@ -1,0 +1,482 @@
+:BBCHAL
+script_name 'BBCHAL'
+19@ = 0
+20@ = 0
+21@ = 0
+$bball_challenge_timer = 60500
+$bball_challenge_score = 0
+26@ = 0
+27@ = 0
+28@ = 0
+29@ = 3000
+30@ = 4.0
+TIMERA = 0
+TIMERB = 0
+$bball_challenge_active = 1
+if 
+  19@ == -1
+goto_if_false @BBCHAL_149
+0@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+
+:BBCHAL_149
+wait 0
+switch_start 19@ total_jumps 2 default_jump 0 @BBCHAL_244 jumps 0 @BBCHAL_216 1 @BBCHAL_230 -1 @BBCHAL_244 -1 @BBCHAL_244 -1 @BBCHAL_244 -1 @BBCHAL_244 -1 @BBCHAL_244
+
+:BBCHAL_216
+BBCHAL_580()
+goto @BBCHAL_244
+
+:BBCHAL_230
+BBCHAL_916()
+goto @BBCHAL_244
+
+:BBCHAL_244
+if and
+  $bball_active == 0
+  $bball_throw_active == 0
+goto_if_false @BBCHAL_276
+BBCHAL_2538()
+
+:BBCHAL_276
+BBCHAL_395()
+if 
+  $bball_is_active == 0
+goto_if_false @BBCHAL_308
+BBCHAL_2538()
+
+:BBCHAL_308
+if 
+  $bball_r3_is_pressed == 0
+goto_if_false @BBCHAL_364
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @BBCHAL_357
+$bball_r3_is_pressed = 1
+BBCHAL_2538()
+
+:BBCHAL_357
+goto @BBCHAL_388
+
+:BBCHAL_364
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @BBCHAL_388
+$bball_r3_is_pressed = 0
+
+:BBCHAL_388
+goto @BBCHAL_149
+
+:BBCHAL_395
+switch_start 21@ total_jumps 3 default_jump 0 @BBCHAL_578 jumps 0 @BBCHAL_458 1 @BBCHAL_498 2 @BBCHAL_538 -1 @BBCHAL_578 -1 @BBCHAL_578 -1 @BBCHAL_578 -1 @BBCHAL_578
+
+:BBCHAL_458
+if and
+  not Text.IsHelpMessageBeingDisplayed
+  not Text.IsMessageBeingDisplayed
+goto_if_false @BBCHAL_491
+Text.PrintHelp('BB_11')
+21@ += 1
+
+:BBCHAL_491
+goto @BBCHAL_578
+
+:BBCHAL_498
+if and
+  not Text.IsHelpMessageBeingDisplayed
+  not Text.IsMessageBeingDisplayed
+goto_if_false @BBCHAL_531
+Text.PrintHelp('BB_12')
+21@ += 1
+
+:BBCHAL_531
+goto @BBCHAL_578
+
+:BBCHAL_538
+if and
+  not Text.IsHelpMessageBeingDisplayed
+  not Text.IsMessageBeingDisplayed
+goto_if_false @BBCHAL_571
+Text.PrintHelp('BB_10')
+21@ += 1
+
+:BBCHAL_571
+goto @BBCHAL_578
+
+:BBCHAL_578
+return 
+
+:BBCHAL_580
+if 
+  20@ == 0
+goto_if_false @BBCHAL_628
+Text.PrintNow('BB_13', 5000, 1)
+TIMERA = 0
+20@ += 1
+
+:BBCHAL_628
+if 
+  20@ == 1
+goto_if_false @BBCHAL_653
+20@ += 1
+
+:BBCHAL_653
+if 
+  20@ == 2
+goto_if_false @BBCHAL_751
+Hud.DisplayTimerWithString($bball_challenge_timer, TimerDirection.Down, 'BB_19')
+Hud.DisplayNthCounterWithString($bball_challenge_score, CounterDisplay.Number, 1, 'BB_18')
+Hud.DisplayNthCounterWithString($bball_challenge_high_score, CounterDisplay.Number, 2, 'BB_14')
+BBCHAL_2396()
+1@ = Blip.AddForCoord(14@, 15@, 16@)
+20@ += 1
+
+:BBCHAL_751
+if 
+  20@ == 3
+goto_if_false @BBCHAL_914
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BBCHAL_914
+if 
+  Char.LocateOnFoot3D($scplayer, 1, 14@, 15@, 16@, 1.5, 1.5, 2.0)
+goto_if_false @BBCHAL_904
+if 
+  $bball_throw_active == 1
+goto_if_false @BBCHAL_887
+if 
+  Blip.DoesExist(1@)
+goto_if_false @BBCHAL_866
+Blip.Remove(1@)
+
+:BBCHAL_866
+20@ = 1
+19@ += 1
+goto @BBCHAL_897
+
+:BBCHAL_887
+$bball_challenge_timer = 60500
+
+:BBCHAL_897
+goto @BBCHAL_914
+
+:BBCHAL_904
+$bball_challenge_timer = 60500
+
+:BBCHAL_914
+return 
+
+:BBCHAL_916
+if 
+  20@ == 0
+goto_if_false @BBCHAL_1135
+if 
+  $points_scored <> 0
+goto_if_false @BBCHAL_1135
+if 
+  $points_scored > 0
+goto_if_false @BBCHAL_1052
+add_int_var_to_int_var $bball_challenge_score += $points_scored
+add_int_lvar_to_int_var $bball_challenge_timer += 25@
+30@ += 0.5
+BBCHAL_2396()
+if 
+  Blip.DoesExist(1@)
+goto_if_false @BBCHAL_1024
+Blip.Remove(1@)
+
+:BBCHAL_1024
+1@ = Blip.AddForCoord(14@, 15@, 16@)
+20@ += 1
+goto @BBCHAL_1135
+
+:BBCHAL_1052
+if 
+  Blip.DoesExist(1@)
+goto_if_false @BBCHAL_1073
+Blip.Remove(1@)
+
+:BBCHAL_1073
+1@ = Blip.AddForCoord(14@, 15@, 16@)
+if 
+  27@ == 0
+goto_if_false @BBCHAL_1128
+Text.PrintNow('BB_20', 5000, 1)
+27@ += 1
+
+:BBCHAL_1128
+20@ += 1
+
+:BBCHAL_1135
+if 
+  20@ == 1
+goto_if_false @BBCHAL_1380
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BBCHAL_1200
+  Char.LocateOnFoot3D($scplayer, 1, 14@, 15@, 16@, 1.5, 1.5, 2.0)
+
+:BBCHAL_1200
+if 
+  $bball_throw_active == 1
+goto_if_false @BBCHAL_1373
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BBCHAL_1366
+if 
+  Char.LocateOnFoot3D($scplayer, 1, 14@, 15@, 16@, 1.5, 1.5, 2.0)
+goto_if_false @BBCHAL_1318
+if 
+  Blip.DoesExist(1@)
+goto_if_false @BBCHAL_1297
+Blip.Remove(1@)
+
+:BBCHAL_1297
+20@ = 0
+$bball_throw_active = 0
+goto @BBCHAL_1366
+
+:BBCHAL_1318
+if 
+  28@ == 0
+goto_if_false @BBCHAL_1359
+Text.PrintNow('BB_16', 5000, 1)
+28@ += 1
+
+:BBCHAL_1359
+$bball_throw_active = 0
+
+:BBCHAL_1366
+goto @BBCHAL_1380
+
+:BBCHAL_1373
+28@ = 0
+
+:BBCHAL_1380
+if 
+  20@ == 3
+goto_if_false @BBCHAL_1424
+if 
+  TIMERA > 5000
+goto_if_false @BBCHAL_1424
+BBCHAL_2538()
+
+:BBCHAL_1424
+if 
+  26@ == 0
+goto_if_false @BBCHAL_1483
+if 
+  is_int_var_greater_than_int_var $bball_challenge_score > $bball_challenge_high_score
+goto_if_false @BBCHAL_1476
+set_var_int_to_var_int $bball_challenge_high_score = $bball_challenge_score
+26@ += 1
+
+:BBCHAL_1476
+goto @BBCHAL_1510
+
+:BBCHAL_1483
+if 
+  is_int_var_greater_than_int_var $bball_challenge_score > $bball_challenge_high_score
+goto_if_false @BBCHAL_1510
+set_var_int_to_var_int $bball_challenge_high_score = $bball_challenge_score
+
+:BBCHAL_1510
+if 
+  0 >= $bball_challenge_timer
+goto_if_false @BBCHAL_1576
+if 
+  3 > 20@
+goto_if_false @BBCHAL_1569
+Text.PrintNow('BB_17', 5000, 1)
+TIMERA = 0
+
+:BBCHAL_1569
+20@ = 3
+
+:BBCHAL_1576
+return 
+
+:BBCHAL_1578
+if 
+  Object.DoesExist(0@)
+goto_if_false @BBCHAL_2394
+2@, 3@, 4@ = Object.GetLevelDesignCoords(0@, 2)
+5@, 6@, 7@ = Object.GetLevelDesignCoords(0@, 3)
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 0)
+switch_start $hoop_direction total_jumps 4 default_jump 0 @BBCHAL_1893 jumps 1 @BBCHAL_1705 2 @BBCHAL_1752 3 @BBCHAL_1799 4 @BBCHAL_1846 -1 @BBCHAL_1893 -1 @BBCHAL_1893 -1 @BBCHAL_1893
+
+:BBCHAL_1705
+2@ += -1.5
+3@ += 1.5
+5@ += 1.5
+6@ += -1.5
+goto @BBCHAL_1893
+
+:BBCHAL_1752
+2@ += -1.5
+3@ += -1.5
+5@ += 1.5
+6@ += 1.5
+goto @BBCHAL_1893
+
+:BBCHAL_1799
+2@ += 1.5
+3@ += -1.5
+5@ += -1.5
+6@ += 1.5
+goto @BBCHAL_1893
+
+:BBCHAL_1846
+2@ += 1.5
+3@ += 1.5
+5@ += -1.5
+6@ += -1.5
+goto @BBCHAL_1893
+
+:BBCHAL_1893
+4@ += 5.0
+16@ = World.GetGroundZFor3DCoord(2@, 3@, 4@)
+if 
+  is_float_lvar_greater_than_float_lvar 5@ > 2@
+goto_if_false @BBCHAL_1954
+14@ = Math.RandomFloatInRange(2@, 5@)
+goto @BBCHAL_1965
+
+:BBCHAL_1954
+14@ = Math.RandomFloatInRange(5@, 2@)
+
+:BBCHAL_1965
+if 
+  is_float_lvar_greater_than_float_lvar 6@ > 3@
+goto_if_false @BBCHAL_2002
+15@ = Math.RandomFloatInRange(3@, 6@)
+goto @BBCHAL_2013
+
+:BBCHAL_2002
+15@ = Math.RandomFloatInRange(3@, 6@)
+
+:BBCHAL_2013
+set_lvar_float_to_lvar_float 8@ = 14@
+sub_float_var_from_float_lvar 8@ -= $x
+set_lvar_float_to_lvar_float 9@ = 15@
+sub_float_var_from_float_lvar 9@ -= $y
+17@ = Math.GetDistanceBetweenCoords2D($x, $y, 14@, 15@)
+div_float_lvar_by_float_lvar 8@ /= 17@
+div_float_lvar_by_float_lvar 9@ /= 17@
+mult_float_lvar_by_float_lvar 8@ *= 30@
+mult_float_lvar_by_float_lvar 9@ *= 30@
+set_lvar_float_to_var_float 14@ = $x
+add_float_lvar_to_float_lvar 14@ += 8@
+set_lvar_float_to_var_float 15@ = $y
+add_float_lvar_to_float_lvar 15@ += 9@
+if 
+  is_float_lvar_greater_than_float_lvar 5@ > 2@
+goto_if_false @BBCHAL_2206
+if 
+  is_float_lvar_greater_than_float_lvar 2@ > 14@
+goto_if_false @BBCHAL_2172
+set_lvar_float_to_lvar_float 14@ = 2@
+
+:BBCHAL_2172
+if 
+  is_float_lvar_greater_than_float_lvar 14@ > 5@
+goto_if_false @BBCHAL_2199
+set_lvar_float_to_lvar_float 14@ = 5@
+
+:BBCHAL_2199
+goto @BBCHAL_2260
+
+:BBCHAL_2206
+if 
+  is_float_lvar_greater_than_float_lvar 14@ > 2@
+goto_if_false @BBCHAL_2233
+set_lvar_float_to_lvar_float 14@ = 2@
+
+:BBCHAL_2233
+if 
+  is_float_lvar_greater_than_float_lvar 5@ > 14@
+goto_if_false @BBCHAL_2260
+set_lvar_float_to_lvar_float 14@ = 5@
+
+:BBCHAL_2260
+if 
+  is_float_lvar_greater_than_float_lvar 6@ > 3@
+goto_if_false @BBCHAL_2340
+if 
+  is_float_lvar_greater_than_float_lvar 3@ > 15@
+goto_if_false @BBCHAL_2306
+set_lvar_float_to_lvar_float 15@ = 3@
+
+:BBCHAL_2306
+if 
+  is_float_lvar_greater_than_float_lvar 15@ > 6@
+goto_if_false @BBCHAL_2333
+set_lvar_float_to_lvar_float 15@ = 6@
+
+:BBCHAL_2333
+goto @BBCHAL_2394
+
+:BBCHAL_2340
+if 
+  is_float_lvar_greater_than_float_lvar 15@ > 3@
+goto_if_false @BBCHAL_2367
+set_lvar_float_to_lvar_float 15@ = 3@
+
+:BBCHAL_2367
+if 
+  is_float_lvar_greater_than_float_lvar 6@ > 15@
+goto_if_false @BBCHAL_2394
+set_lvar_float_to_lvar_float 15@ = 6@
+
+:BBCHAL_2394
+return 
+
+:BBCHAL_2396
+BBCHAL_1578()
+if 
+  Object.DoesExist(0@)
+goto_if_false @BBCHAL_2435
+$x, $y, $z = Object.GetLevelDesignCoords(0@, 0)
+
+:BBCHAL_2435
+$distance = Math.GetDistanceBetweenCoords2D(14@, 15@, $x, $y)
+cset_lvar_int_to_var_float 25@ = float $distance
+mult_int_lvar_by_int_lvar 25@ *= 29@
+cset_lvar_float_to_lvar_int 17@ = integer 29@
+17@ *= 0.1
+cset_lvar_int_to_lvar_float 22@ = float 17@
+22@ *= -1
+add_int_lvar_to_int_lvar 29@ += 22@
+if 
+  500 > 29@
+goto_if_false @BBCHAL_2536
+29@ = 500
+
+:BBCHAL_2536
+return 
+
+:BBCHAL_2538
+Text.ClearPrints
+if 
+  26@ <> 0
+goto_if_false @BBCHAL_2589
+Text.PrintWithNumberBig('BB_15', $bball_challenge_high_score, 5000, TextStyle.Middle)
+Stat.RegisterInt(StatId.HighestScoreInBasketballChallenge, $bball_challenge_high_score)
+Audio.PlayMissionPassedTune(1)
+
+:BBCHAL_2589
+if 
+  Blip.DoesExist(1@)
+goto_if_false @BBCHAL_2610
+Blip.Remove(1@)
+
+:BBCHAL_2610
+Hud.ClearCounter($bball_challenge_score)
+Hud.ClearCounter($bball_challenge_high_score)
+Hud.ClearTimer($bball_challenge_timer)
+$bball_challenge_active = 0
+terminate_this_script 
+return 
+
+:Noname_3
+terminate_this_script 
+

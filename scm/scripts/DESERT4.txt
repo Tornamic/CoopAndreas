@@ -1,0 +1,93 @@
+//-------------Mission 78---------------
+// Originally: Verdant Meadows
+
+:DESERT4
+script_name 'DESERT4'
+gosub @DESERT4_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @DESERT4_38
+gosub @DESERT4_292
+
+:DESERT4_38
+gosub @DESERT4_429
+terminate_this_script 
+
+:DESERT4_47
+Stat.RegisterMissionGiven
+$onmission = 1
+wait 0
+Text.LoadMissionText('DSERT4')
+Weather.Force(WeatherType.ExtraSunnyDesert)
+World.ClearArea(1, -688.1717, 937.9888, 12.6328, 10.0)
+Cutscene.Load('DESERT4')
+
+:DESERT4_110
+if 
+  not Cutscene.HasLoaded
+goto_if_false @DESERT4_134
+wait 0
+goto @DESERT4_110
+
+:DESERT4_134
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:DESERT4_143
+if 
+  not Cutscene.HasFinished
+goto_if_false @DESERT4_167
+wait 0
+goto @DESERT4_143
+
+:DESERT4_167
+Camera.DoFade(0, Fade.Out)
+
+:DESERT4_173
+if 
+  Camera.GetFadingStatus
+goto_if_false @DESERT4_197
+wait 0
+goto @DESERT4_173
+
+:DESERT4_197
+Weather.Release
+Cutscene.Clear
+Char.SetCoordinates($scplayer, -696.0359, 948.1198, 11.276)
+Char.SetHeading($scplayer, 33.1992)
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Streaming.LoadScene(-696.0359, 948.1198, 11.276)
+Camera.DoFade(1, 1000)
+wait 1000
+Text.PrintNow('BUY_AIR', 10000, 1)
+goto @DESERT4_310
+
+:DESERT4_292
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:DESERT4_310
+$flag_desert_mission_counter += 1
+Stat.RegisterMissionPassed('DESERT4')
+Blip.Remove($desert_contact_blip)
+CarGenerator.Switch($area51_gen, 101)
+CarGenerator.Switch($5180, 101)
+start_new_script @BUY3 
+Blip.Remove($airstrip_contact_blip)
+$airstrip_contact_blip = Blip.AddShortRangeSpriteForContactPoint(31, $propertyX[2], $propertyY[2], $propertyZ[2])
+Blip.ChangeDisplay($airstrip_contact_blip, BlipDisplay.BlipOnly)
+Blip.Remove($desert2_contact_blip)
+$desert2_contact_blip = Blip.AddSpriteForContactPoint($desert2_blip_icon, $pilotx, $piloty, $pilotz)
+Blip.ChangeDisplay($desert2_contact_blip, BlipDisplay.BlipOnly)
+Stat.SetInt(StatId.PassedDesert4, 1)
+Game.SetMaxWantedLevel(6)
+Stat.PlayerMadeProgress(1)
+return 
+
+:DESERT4_429
+$onmission = 0
+$timer_mobile_start = Clock.GetGameTimer()
+Mission.Finish
+return 
+

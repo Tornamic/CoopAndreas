@@ -1,0 +1,4110 @@
+//-------------Mission 118---------------
+// Originally: Quarry
+
+:QUARRY
+script_name 'QUARRY'
+gosub @QUARRY_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @QUARRY_38
+gosub @QUARRY_25912
+
+:QUARRY_38
+gosub @QUARRY_27546
+terminate_this_script 
+
+:QUARRY_47
+if 
+  $done_quarry_progress == 0
+goto_if_false @QUARRY_67
+Stat.RegisterMissionGiven
+
+:QUARRY_67
+$onmission = 1
+$flag_player_on_oddjob = 1
+82@ = 0
+83@ = 0
+84@ = 0
+34@ = 0
+35@ = 0
+36@ = 0
+37@ = 0
+38@ = 0
+39@ = 0
+40@ = 0
+45@ = 0
+46@ = 0
+47@ = 0
+TIMERA = 0
+TIMERB = 0
+230@ = 0
+231@ = 0
+233@ = 0
+234@ = 0
+235@ = 0
+236@ = 0
+238@ = 0
+239@ = 0
+240@ = 0
+241@ = 0
+242@ = 0
+243@ = 0
+251@ = 0
+252@ = 0
+262@ = 0
+263@ = 0
+264@ = 0
+265@ = 0
+266@ = 0
+267@ = 0
+278@ = 0
+279@ = 0
+280@ = 0
+281@ = 0
+282@ = 0
+283@ = 0
+284@ = 0
+292@ = 0
+293@ = 0
+294@ = 0
+295@ = 0
+if 
+  34@ == -99
+goto_if_false @QUARRY_1311
+write_debug "SHOULD_NEVER_BE_IN_FAKE_ENTITY_CREATION"
+86@ = Car.Create(468, 0.0, 0.0, 0.0)
+87@ = Car.Create(486, 0.0, 0.0, 0.0)
+88@ = Car.Create(406, 0.0, 0.0, 0.0)
+89@ = Car.Create(523, 0.0, 0.0, 0.0)
+91@ = Car.Create(406, 0.0, 0.0, 0.0)
+85@ = Char.Create(4, 18, 0.0, 0.0, 0.0)
+92@ = Object.Create(#DEAD_TIED_COP, 0.0, 0.0, 0.0)
+93@ = Object.Create(#CR_AMMOBOX, 0.0, 0.0, 0.0)
+121@ = Object.Create(#CR_AMMOBOX, 0.0, 0.0, 0.0)
+48@ = 0
+
+:QUARRY_679
+94@(48@,7i) = Object.Create(#DYN_QUARRYROCK03, 0.0, 0.0, 0.0)
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_679
+48@ = 0
+
+:QUARRY_734
+101@(48@,10i) = Object.Create(#KB_BARREL, 0.0, 0.0, 0.0)
+48@ += 1
+  48@ >= 10
+goto_if_false @QUARRY_734
+48@ = 0
+
+:QUARRY_789
+111@(48@,3i) = Object.Create(#DEAD_TIED_COP, 0.0, 0.0, 0.0)
+48@ += 1
+  48@ >= 3
+goto_if_false @QUARRY_789
+48@ = 0
+
+:QUARRY_844
+114@(48@,7i) = Object.Create(#CM_BOX, 0.0, 0.0, 0.0)
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_844
+90@ = Train.Create(0.0, 0.0, 0.0, 11, 0)
+48@ = 0
+
+:QUARRY_923
+190@(48@,7i) = Checkpoint.Create(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2, 0.0)
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_923
+48@ = 0
+
+:QUARRY_997
+122@(48@,3i) = Object.Create(#CR_AMMOBOX, 0.0, 0.0, 0.0)
+48@ += 1
+  48@ >= 3
+goto_if_false @QUARRY_997
+197@ = Checkpoint.Create(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2, 0.0)
+125@ = Blip.AddForCar(87@)
+126@ = Blip.AddForCar(88@)
+130@ = Blip.AddForCar(89@)
+141@ = Blip.AddForCar(90@)
+152@ = Blip.AddForCar(91@)
+127@ = Blip.AddForCoord(0.0, 0.0, 0.0)
+128@ = Blip.AddForCoord(0.0, 0.0, 0.0)
+131@ = Blip.AddForCoord(0.0, 0.0, 0.0)
+132@ = Blip.AddForCoord(0.0, 0.0, 0.0)
+129@ = Blip.AddForObject(92@)
+140@ = Blip.AddForObject(101@)
+48@ = 0
+
+:QUARRY_1230
+133@(48@,7i) = Blip.AddForObject(94@(48@,7i))
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_1230
+48@ = 0
+
+:QUARRY_1274
+142@(48@,10i) = Blip.AddForObject(101@(48@,10i))
+48@ += 1
+  48@ >= 10
+goto_if_false @QUARRY_1274
+
+:QUARRY_1311
+Text.LoadMissionText('QUARRY')
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @QUARRY_1424
+if 
+  Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @QUARRY_1424
+Text.PrintNow('VAL_C1', 5000, 1)
+Char.SetCoordinates($scplayer, 827.9296, 857.7913, 11.311)
+Char.SetHeading($scplayer, 120.0)
+Camera.SetBehindPlayer
+Player.SetControl($player1, True)
+Camera.DoFade(1, 500)
+Text.DrawOddjobTitleBeforeFade(True)
+return 
+
+:QUARRY_1424
+gosub @QUARRY_21090
+
+:QUARRY_1431
+wait 0
+if and
+  34@ <> 18
+  34@ <> 19
+goto_if_false @QUARRY_1701
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @QUARRY_1525
+set_lvar_int_to_var_int 50@ = $g_Quarry_recordsKM($g_nQuarryMissionsPassed,7i)
+50@ *= 1000
+set_lvar_int_to_lvar_int 206@ = 46@
+sub_int_lvar_from_int_lvar 206@ -= 50@
+36@ = 1
+goto @QUARRY_2224
+
+:QUARRY_1525
+if 
+  $done_quarry_progress == 1
+goto_if_false @QUARRY_1701
+if 
+  292@ == 1
+goto_if_false @QUARRY_1677
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @QUARRY_1670
+38@ = 1
+Text.PrintNow('QUAR_37', 5000, 1)
+Text.PrintBig('SKIPPED', 5000, TextStyle.MiddleSmallerHigher)
+$g_nQuarryMissionsPassed += 1
+if 
+  $g_nQuarryMissionsPassed == 7
+goto_if_false @QUARRY_1649
+$g_nQuarryMissionsPassed = 0
+
+:QUARRY_1649
+CarGenerator.Switch($gen_car1, 101)
+CarGenerator.Switch($gen_car2, 101)
+goto @QUARRY_2224
+
+:QUARRY_1670
+goto @QUARRY_1701
+
+:QUARRY_1677
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @QUARRY_1701
+292@ = 1
+
+:QUARRY_1701
+gosub @QUARRY_20409
+gosub @QUARRY_20898
+if or
+  38@ == 1
+  39@ == 1
+goto_if_false @QUARRY_1747
+goto @QUARRY_2224
+
+:QUARRY_1747
+gosub @QUARRY_20987
+gosub @QUARRY_21021
+if 
+  Char.IsDead($scplayer)
+goto_if_false @QUARRY_1791
+37@ = 1
+goto @QUARRY_2224
+
+:QUARRY_1791
+if 
+  34@ == 0
+goto_if_false @QUARRY_1849
+write_debug "STAGE_SHOULD_NEVER_BE_0_IN_MAIN_LOOP"
+
+:QUARRY_1849
+switch_start 34@ total_jumps 19 default_jump 0 @QUARRY_2224 jumps 1 @QUARRY_2126 2 @QUARRY_2140 3 @QUARRY_2154 4 @QUARRY_2182 5 @QUARRY_2042 6 @QUARRY_2182 7 @QUARRY_2056
+switch_continued 8 @QUARRY_2182 9 @QUARRY_2070 10 @QUARRY_2084 11 @QUARRY_2182 12 @QUARRY_2098 13 @QUARRY_2182 14 @QUARRY_2112 15 @QUARRY_2182 16 @QUARRY_2168
+switch_continued 17 @QUARRY_2182 18 @QUARRY_2196 19 @QUARRY_2210 -1 @QUARRY_2224 -1 @QUARRY_2224 -1 @QUARRY_2224 -1 @QUARRY_2224 -1 @QUARRY_2224 -1 @QUARRY_2224
+
+:QUARRY_2042
+gosub @QUARRY_6252
+goto @QUARRY_2224
+
+:QUARRY_2056
+gosub @QUARRY_8986
+goto @QUARRY_2224
+
+:QUARRY_2070
+gosub @QUARRY_11447
+goto @QUARRY_2224
+
+:QUARRY_2084
+gosub @QUARRY_11875
+goto @QUARRY_2224
+
+:QUARRY_2098
+gosub @QUARRY_13354
+goto @QUARRY_2224
+
+:QUARRY_2112
+gosub @QUARRY_15693
+goto @QUARRY_2224
+
+:QUARRY_2126
+gosub @QUARRY_2425
+goto @QUARRY_2224
+
+:QUARRY_2140
+gosub @QUARRY_3641
+goto @QUARRY_2224
+
+:QUARRY_2154
+gosub @QUARRY_4711
+goto @QUARRY_2224
+
+:QUARRY_2168
+gosub @QUARRY_17197
+goto @QUARRY_2224
+
+:QUARRY_2182
+36@ = 1
+goto @QUARRY_2224
+
+:QUARRY_2196
+gosub @QUARRY_18899
+goto @QUARRY_2224
+
+:QUARRY_2210
+38@ = 1
+goto @QUARRY_2224
+
+:QUARRY_2224
+if 
+  38@ == 0
+goto_if_false @QUARRY_2377
+if 
+  37@ == 0
+goto_if_false @QUARRY_2361
+if 
+  36@ == 0
+goto_if_false @QUARRY_2292
+goto @QUARRY_1431
+goto @QUARRY_2354
+
+:QUARRY_2292
+gosub @QUARRY_26382
+if 
+  295@ == 1
+goto_if_false @QUARRY_2352
+36@ = 0
+34@ = 18
+35@ = 0
+295@ = 0
+goto @QUARRY_1431
+
+:QUARRY_2352
+return 
+
+:QUARRY_2354
+goto @QUARRY_2370
+
+:QUARRY_2361
+gosub @QUARRY_25912
+return 
+
+:QUARRY_2370
+goto @QUARRY_2379
+
+:QUARRY_2377
+return 
+
+:QUARRY_2379
+write_debug "SHOULD_NEVER_BE_HERE_IN_END_OF_MAIN_LOOP"
+return 
+
+:QUARRY_2425
+if 
+  Car.IsDead(87@)
+goto_if_false @QUARRY_2457
+37@ = 1
+45@ = 1
+return 
+
+:QUARRY_2457
+if 
+  Car.IsDead(88@)
+goto_if_false @QUARRY_2489
+37@ = 1
+45@ = 2
+return 
+
+:QUARRY_2489
+if 
+  not Car.IsDead(89@)
+goto_if_false @QUARRY_2513
+Car.SetHealth(89@, 10000)
+
+:QUARRY_2513
+if 
+  35@ == 0
+goto_if_false @QUARRY_2722
+125@ = Blip.AddForCar(87@)
+Blip.SetAsFriendly(125@, True)
+230@ = 0
+233@ = 0
+234@ = 0
+282@ = 0
+212@ = 672.7664
+213@ = 888.3682
+214@ = -41.3985
+Text.PrintNow('QUAR_00', 10000, 1)
+50@ = 7
+50@ -= 1
+set_var_int_to_var_int $g_Quarry_timerKM = $g_Quarry_recordsKM(50@,7i)
+$g_Quarry_timerKM *= 1000
+Hud.DisplayTimerWithString($g_Quarry_timerKM, TimerDirection.Down, 'QUAR_D1')
+set_lvar_int_to_lvar_int 206@ = 46@
+if 
+  not Car.IsDead(89@)
+goto_if_false @QUARRY_2701
+Car.SetIsConsideredByPlayer(89@, False)
+
+:QUARRY_2701
+Car.WinchCanPickUp(88@, False)
+Car.WinchCanPickUp(87@, False)
+35@ += 1
+
+:QUARRY_2722
+if 
+  0 >= $g_Quarry_timerKM
+goto_if_false @QUARRY_2756
+37@ = 1
+45@ = 4
+return 
+
+:QUARRY_2756
+if 
+  35@ == 1
+goto_if_false @QUARRY_2819
+if 
+  230@ == 1
+goto_if_false @QUARRY_2819
+Blip.Remove(128@)
+Blip.Remove(125@)
+Blip.Remove(129@)
+Blip.Remove(130@)
+35@ = 99
+
+:QUARRY_2819
+if 
+  230@ == 0
+goto_if_false @QUARRY_3030
+if 
+  Char.IsInCar($scplayer, 87@)
+goto_if_false @QUARRY_2968
+if 
+  Blip.DoesExist(125@)
+goto_if_false @QUARRY_2961
+Blip.Remove(125@)
+128@ = Blip.AddForCoord(212@, 213@, 214@)
+Text.ClearThisPrint('QUAR_35')
+if 
+  234@ == 0
+goto_if_false @QUARRY_2928
+129@ = Blip.AddForObject(92@)
+
+:QUARRY_2928
+if 
+  233@ == 0
+goto_if_false @QUARRY_2961
+130@ = Blip.AddForCar(89@)
+Blip.ChangeColor(130@, BlipColor.Green)
+
+:QUARRY_2961
+goto @QUARRY_3030
+
+:QUARRY_2968
+if 
+  not Blip.DoesExist(125@)
+goto_if_false @QUARRY_3030
+125@ = Blip.AddForCar(87@)
+Blip.SetAsFriendly(125@, True)
+Blip.Remove(128@)
+Blip.Remove(129@)
+Blip.Remove(130@)
+Text.PrintNow('QUAR_35', 5000, 1)
+
+:QUARRY_3030
+if 
+  232@ == 0
+goto_if_false @QUARRY_3098
+if or
+  Char.IsInCar($scplayer, 89@)
+  Char.IsInCar($scplayer, 87@)
+goto_if_false @QUARRY_3098
+232@ = 1
+Text.PrintNow('QUAR_02', 7000, 1)
+
+:QUARRY_3098
+if 
+  230@ == 0
+goto_if_false @QUARRY_3614
+if 
+  233@ == 0
+goto_if_false @QUARRY_3279
+if 
+  Car.Locate3D(89@, 232@, 212@, 213@, 214@, 7.0, 7.0, 4.0)
+goto_if_false @QUARRY_3279
+if 
+  Car.Locate3D(89@, 0, 212@, 213@, 214@, 4.0, 4.0, 4.0)
+goto_if_false @QUARRY_3279
+233@ = 1
+Blip.Remove(130@)
+Car.FreezePosition(89@, True)
+Car.SetCollision(89@, False)
+if 
+  234@ == 0
+goto_if_false @QUARRY_3279
+Text.PrintNow('QUAR_03', 5000, 1)
+
+:QUARRY_3279
+if 
+  234@ == 0
+goto_if_false @QUARRY_3559
+if 
+  233@ == 1
+goto_if_false @QUARRY_3433
+if 
+  Object.Locate3D(92@, 212@, 213@, 214@, 7.0, 7.0, 4.0, 232@)
+goto_if_false @QUARRY_3426
+if 
+  Object.Locate3D(92@, 212@, 213@, 214@, 4.0, 4.0, 4.0, False)
+goto_if_false @QUARRY_3426
+234@ = 1
+Blip.Remove(129@)
+Object.FreezePosition(92@, True)
+Object.SetCollision(92@, False)
+
+:QUARRY_3426
+goto @QUARRY_3559
+
+:QUARRY_3433
+if 
+  Object.Locate3D(92@, 212@, 213@, 214@, 7.0, 7.0, 4.0, False)
+goto_if_false @QUARRY_3559
+if 
+  Object.Locate3D(92@, 212@, 213@, 214@, 4.0, 4.0, 4.0, False)
+goto_if_false @QUARRY_3559
+234@ = 1
+Blip.Remove(129@)
+Object.FreezePosition(92@, True)
+Object.SetCollision(92@, False)
+Text.PrintNow('QUAR_04', 5000, 1)
+
+:QUARRY_3559
+if and
+  234@ == 1
+  233@ == 1
+goto_if_false @QUARRY_3614
+230@ = 1
+Text.PrintNow('QUAR_05', 5000, 1)
+282@ = 1
+
+:QUARRY_3614
+if 
+  35@ == 99
+goto_if_false @QUARRY_3639
+gosub @QUARRY_21060
+
+:QUARRY_3639
+return 
+
+:QUARRY_3641
+if 
+  Car.IsDead(87@)
+goto_if_false @QUARRY_3673
+37@ = 1
+45@ = 1
+return 
+
+:QUARRY_3673
+if 
+  Car.IsDead(88@)
+goto_if_false @QUARRY_3705
+37@ = 1
+45@ = 2
+return 
+
+:QUARRY_3705
+if 
+  not Car.IsDead(89@)
+goto_if_false @QUARRY_3729
+Car.SetHealth(89@, 10000)
+
+:QUARRY_3729
+if 
+  35@ == 0
+goto_if_false @QUARRY_3809
+231@ = 0
+233@ = 0
+234@ = 0
+127@ = Blip.AddForCoord(705.1055, 916.3154, -19.6407)
+Blip.SetAsFriendly(127@, True)
+240@ = 1
+35@ += 1
+
+:QUARRY_3809
+if 
+  0 >= $g_Quarry_timerKM
+goto_if_false @QUARRY_3843
+37@ = 1
+45@ = 4
+return 
+
+:QUARRY_3843
+if 
+  35@ == 1
+goto_if_false @QUARRY_3898
+if 
+  231@ == 1
+goto_if_false @QUARRY_3898
+Blip.Remove(126@)
+Car.SetHeavy(88@, True)
+35@ = 99
+
+:QUARRY_3898
+if 
+  not Object.IsAttached(93@)
+goto_if_false @QUARRY_3952
+Object.AttachToCar(93@, 88@, 0.0, -1.7, 1.5, 0.0, 0.0, 0.0)
+
+:QUARRY_3952
+if 
+  231@ == 0
+goto_if_false @QUARRY_4503
+59@, 60@, 61@ = Object.GetCoordinates(93@)
+53@, 54@, 55@ = Object.GrabEntityOnRope($quarry_arm)
+if 
+  234@ == 0
+goto_if_false @QUARRY_4143
+if 
+  Object.Locate3D(92@, 59@, 60@, 61@, 3.2, 3.2, 1.5, False)
+goto_if_false @QUARRY_4136
+if 
+  Object.IsAttached(92@)
+goto_if_false @QUARRY_4136
+if 
+  not is_int_lvar_equal_to_int_lvar 55@ == 92@
+goto_if_false @QUARRY_4114
+234@ = 1
+Object.WinchCanPickUp(92@, False)
+goto @QUARRY_4136
+
+:QUARRY_4114
+Object.Detach(92@, 0.0, 0.0, 0.0, False)
+
+:QUARRY_4136
+goto @QUARRY_4238
+
+:QUARRY_4143
+if 
+  not Object.IsAttached(92@)
+goto_if_false @QUARRY_4238
+59@, 60@, 61@ = Object.GetCoordinates(92@)
+75@ = World.GetGroundZFor3DCoord(59@, 60@, 61@)
+set_lvar_float_to_lvar_float 76@ = 61@
+sub_float_lvar_from_float_lvar 76@ -= 75@
+if 
+  1.5 > 76@
+goto_if_false @QUARRY_4238
+234@ = 0
+Object.WinchCanPickUp(92@, True)
+
+:QUARRY_4238
+if 
+  233@ == 0
+goto_if_false @QUARRY_4376
+if 
+  Car.LocateStopped3D(89@, 0, 59@, 60@, 61@, 3.2, 3.2, 1.5)
+goto_if_false @QUARRY_4369
+if 
+  not is_int_lvar_equal_to_int_lvar 53@ == 89@
+goto_if_false @QUARRY_4369
+Car.AttachToCar(89@, 88@, -1000.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+233@ = 1
+Car.WinchCanPickUp(89@, False)
+
+:QUARRY_4369
+goto @QUARRY_4471
+
+:QUARRY_4376
+if 
+  not Car.IsAttached(89@)
+goto_if_false @QUARRY_4471
+59@, 60@, 61@ = Car.GetCoordinates(89@)
+75@ = World.GetGroundZFor3DCoord(59@, 60@, 61@)
+set_lvar_float_to_lvar_float 76@ = 61@
+sub_float_lvar_from_float_lvar 76@ -= 75@
+if 
+  1.5 > 76@
+goto_if_false @QUARRY_4471
+233@ = 0
+Car.WinchCanPickUp(89@, True)
+
+:QUARRY_4471
+if and
+  234@ == 1
+  233@ == 1
+goto_if_false @QUARRY_4503
+231@ = 1
+
+:QUARRY_4503
+if 
+  240@ == 1
+goto_if_false @QUARRY_4612
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 705.1055, 916.3154, -19.6407, 4.0, 4.0, 1.2)
+goto_if_false @QUARRY_4612
+Blip.Remove(127@)
+240@ = 0
+126@ = Blip.AddForCar(88@)
+Blip.SetAsFriendly(126@, True)
+Text.PrintNow('QUAR_06', 7000, 1)
+
+:QUARRY_4612
+if 
+  282@ == 1
+goto_if_false @QUARRY_4684
+if 
+  not Char.IsInCar($scplayer, 87@)
+goto_if_false @QUARRY_4684
+Object.FreezePosition(92@, False)
+Object.SetCollision(92@, True)
+Car.FreezePosition(89@, False)
+Car.SetCollision(89@, True)
+282@ = 0
+
+:QUARRY_4684
+if 
+  35@ == 99
+goto_if_false @QUARRY_4709
+gosub @QUARRY_21060
+
+:QUARRY_4709
+return 
+
+:QUARRY_4711
+if 
+  Car.IsDead(88@)
+goto_if_false @QUARRY_4743
+37@ = 1
+45@ = 2
+return 
+
+:QUARRY_4743
+if 
+  not Car.IsDead(89@)
+goto_if_false @QUARRY_4767
+Car.SetHealth(89@, 10000)
+
+:QUARRY_4767
+if 
+  35@ == 0
+goto_if_false @QUARRY_4894
+212@ = 985.1581
+213@ = 688.4734
+214@ = 8.7255
+gosub @QUARRY_19761
+236@ = 0
+235@ = 0
+242@ = 0
+280@ = 0
+281@ = 0
+284@ = 0
+172@ = 0
+Text.PrintNow('QUAR_07', 5000, 1)
+35@ += 1
+
+:QUARRY_4894
+if 
+  0 >= $g_Quarry_timerKM
+goto_if_false @QUARRY_4928
+37@ = 1
+45@ = 4
+return 
+
+:QUARRY_4928
+if 
+  235@ == 0
+goto_if_false @QUARRY_5136
+if 
+  not Car.IsAttached(89@)
+goto_if_false @QUARRY_5041
+59@, 60@, 61@ = Car.GetCoordinates(89@)
+75@ = World.GetGroundZFor3DCoord(59@, 60@, 61@)
+set_lvar_float_to_lvar_float 76@ = 61@
+sub_float_lvar_from_float_lvar 76@ -= 75@
+if 
+  1.5 > 76@
+goto_if_false @QUARRY_5041
+37@ = 1
+45@ = 3
+
+:QUARRY_5041
+if 
+  not Object.IsAttached(92@)
+goto_if_false @QUARRY_5136
+59@, 60@, 61@ = Object.GetCoordinates(92@)
+75@ = World.GetGroundZFor3DCoord(59@, 60@, 61@)
+set_lvar_float_to_lvar_float 76@ = 61@
+sub_float_lvar_from_float_lvar 76@ -= 75@
+if 
+  1.5 > 76@
+goto_if_false @QUARRY_5136
+37@ = 1
+45@ = 3
+
+:QUARRY_5136
+if 
+  35@ == 1
+goto_if_false @QUARRY_5208
+if 
+  236@ == 1
+goto_if_false @QUARRY_5208
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 172@
+goto_if_false @QUARRY_5208
+Blip.Remove(128@)
+Checkpoint.Delete(197@)
+35@ = 99
+
+:QUARRY_5208
+if 
+  Char.IsInCar($scplayer, 88@)
+goto_if_false @QUARRY_5373
+if 
+  Blip.DoesExist(126@)
+goto_if_false @QUARRY_5359
+Blip.Remove(126@)
+Text.ClearThisPrint('QUAR_36')
+if 
+  238@ == 1
+goto_if_false @QUARRY_5291
+gosub @QUARRY_19761
+goto @QUARRY_5359
+
+:QUARRY_5291
+128@ = Blip.AddForCoord(212@, 213@, 214@)
+set_lvar_float_to_lvar_float 75@ = 213@
+75@ -= 5.0
+197@ = Checkpoint.Create(212@, 75@, 214@, 0.0, 0.0, 0.0, 2, 5.0)
+
+:QUARRY_5359
+284@ = 1
+goto @QUARRY_5453
+
+:QUARRY_5373
+if 
+  not Blip.DoesExist(126@)
+goto_if_false @QUARRY_5453
+126@ = Blip.AddForCar(88@)
+Blip.SetAsFriendly(126@, True)
+Blip.Remove(128@)
+Checkpoint.Delete(197@)
+Blip.Remove(131@)
+if 
+  284@ == 1
+goto_if_false @QUARRY_5453
+Text.PrintNow('QUAR_36', 5000, 1)
+
+:QUARRY_5453
+if 
+  242@ == 0
+goto_if_false @QUARRY_5513
+if 
+  Char.IsInCar($scplayer, 88@)
+goto_if_false @QUARRY_5513
+Text.PrintNow('QUAR_08', 7000, 1)
+242@ = 1
+
+:QUARRY_5513
+if 
+  Blip.DoesExist(131@)
+goto_if_false @QUARRY_5698
+  Char.LocateAnyMeans3D($scplayer, 1, 215@, 216@, 217@, 4.0, 4.0, 4.0)
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 215@, 216@, 217@, 12.0, 12.0, 12.0)
+goto_if_false @QUARRY_5698
+Blip.Remove(131@)
+238@ = 0
+128@ = Blip.AddForCoord(212@, 213@, 214@)
+set_lvar_float_to_lvar_float 75@ = 213@
+75@ -= 5.0
+197@ = Checkpoint.Create(212@, 75@, 214@, 0.0, 0.0, 0.0, 2, 5.0)
+Text.PrintNow('QUAR_09', 5000, 1)
+
+:QUARRY_5698
+if 
+  235@ == 0
+goto_if_false @QUARRY_5790
+if 
+  Car.Locate3D(88@, 0, 212@, 213@, 214@, 50.0, 30.0, 10.0)
+goto_if_false @QUARRY_5783
+235@ = 1
+Text.PrintHelp('QUAR_H4')
+goto @QUARRY_5790
+
+:QUARRY_5783
+235@ = 0
+
+:QUARRY_5790
+if 
+  235@ == 1
+goto_if_false @QUARRY_5913
+75@ = Car.GetMovingComponentOffset(88@)
+if 
+  75@ > 0.05
+goto_if_false @QUARRY_5913
+if 
+  Car.IsAttached(89@)
+goto_if_false @QUARRY_5875
+Car.Detach(89@, 0.0, 0.0, 0.0, False)
+
+:QUARRY_5875
+if 
+  Object.IsAttached(92@)
+goto_if_false @QUARRY_5913
+Object.Detach(92@, 0.0, 0.0, 0.0, False)
+
+:QUARRY_5913
+if 
+  280@ == 0
+goto_if_false @QUARRY_5954
+if 
+  Car.IsInWater(89@)
+goto_if_false @QUARRY_5954
+280@ = 1
+
+:QUARRY_5954
+if 
+  281@ == 0
+goto_if_false @QUARRY_5995
+if 
+  Object.IsInWater(92@)
+goto_if_false @QUARRY_5995
+281@ = 1
+
+:QUARRY_5995
+if 
+  236@ == 0
+goto_if_false @QUARRY_6061
+if and
+  280@ == 1
+  281@ == 1
+goto_if_false @QUARRY_6061
+236@ = 1
+set_lvar_int_to_lvar_int 172@ = 46@
+172@ += 2000
+
+:QUARRY_6061
+if 
+  not Object.IsAttached(93@)
+goto_if_false @QUARRY_6115
+Object.AttachToCar(93@, 88@, 0.0, -1.7, 1.5, 0.0, 0.0, 0.0)
+
+:QUARRY_6115
+if 
+  not Car.IsAttached(89@)
+goto_if_false @QUARRY_6225
+59@, 60@, 61@ = Object.GetCoordinates(93@)
+if 
+  Car.LocateStopped3D(89@, 0, 59@, 60@, 61@, 3.2, 3.2, 1.5)
+goto_if_false @QUARRY_6225
+Car.AttachToCar(89@, 88@, -1000.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
+:QUARRY_6225
+if 
+  35@ == 99
+goto_if_false @QUARRY_6250
+gosub @QUARRY_21060
+
+:QUARRY_6250
+return 
+
+:QUARRY_6252
+if 
+  Car.IsDead(87@)
+goto_if_false @QUARRY_6284
+37@ = 1
+45@ = 1
+return 
+
+:QUARRY_6284
+if 
+  35@ == 0
+goto_if_false @QUARRY_6462
+199@ = 0
+48@ = 0
+
+:QUARRY_6316
+244@(48@,7i) = 0
+285@(48@,7i) = 0
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_6316
+125@ = Blip.AddForCar(87@)
+Blip.SetAsFriendly(125@, True)
+Text.PrintNow('QUAR_11', 10000, 1)
+50@ = 1
+50@ -= 1
+set_var_int_to_var_int $g_Quarry_timerKM = $g_Quarry_recordsKM(50@,7i)
+$g_Quarry_timerKM *= 1000
+Hud.DisplayTimerWithString($g_Quarry_timerKM, TimerDirection.Down, 'QUAR_D2')
+set_lvar_int_to_lvar_int 206@ = 46@
+243@ = 0
+35@ += 1
+
+:QUARRY_6462
+if 
+  0 >= $g_Quarry_timerKM
+goto_if_false @QUARRY_6496
+37@ = 1
+45@ = 5
+return 
+
+:QUARRY_6496
+if 
+  35@ == 1
+goto_if_false @QUARRY_6539
+if 
+  199@ == 7
+goto_if_false @QUARRY_6539
+35@ = 99
+
+:QUARRY_6539
+if 
+  Blip.DoesExist(125@)
+goto_if_false @QUARRY_6663
+if 
+  Char.IsInCar($scplayer, 87@)
+goto_if_false @QUARRY_6656
+Blip.Remove(125@)
+Text.ClearThisPrint('QUAR_35')
+48@ = 0
+
+:QUARRY_6597
+if 
+  244@(48@,7i) == 0
+goto_if_false @QUARRY_6635
+133@(48@,7i) = Blip.AddForObject(94@(48@,7i))
+
+:QUARRY_6635
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_6597
+
+:QUARRY_6656
+goto @QUARRY_8899
+
+:QUARRY_6663
+if 
+  not Char.IsInCar($scplayer, 87@)
+goto_if_false @QUARRY_6757
+48@ = 0
+
+:QUARRY_6689
+Blip.Remove(133@(48@,7i))
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_6689
+125@ = Blip.AddForCar(87@)
+Blip.SetAsFriendly(125@, True)
+Text.PrintNow('QUAR_35', 5000, 1)
+goto @QUARRY_8899
+
+:QUARRY_6757
+59@, 60@, 61@ = Char.GetCoordinates($scplayer)
+48@ = 0
+
+:QUARRY_6778
+80@ = 0
+if 
+  244@(48@,7i) == 0
+goto_if_false @QUARRY_8878
+switch_start 48@ total_jumps 7 default_jump 1 @QUARRY_8662 jumps 0 @QUARRY_6870 1 @QUARRY_7126 2 @QUARRY_7382 3 @QUARRY_7638 4 @QUARRY_7894 5 @QUARRY_8150 6 @QUARRY_8406
+
+:QUARRY_6870
+62@, 63@, 64@ = Object.GetCoordinates(94@(48@,7i))
+78@ = Math.GetDistanceBetweenCoords3D(59@, 60@, 61@, 62@, 63@, 64@)
+if 
+  30.0 > 78@
+goto_if_false @QUARRY_7077
+if 
+  285@(48@,7i) == 0
+goto_if_false @QUARRY_7011
+190@(48@,7i) = Checkpoint.Create(762.119, 836.6474, -3.4382, 0.0, 0.0, 0.0, 2, 5.0)
+285@(48@,7i) = 1
+
+:QUARRY_7011
+if 
+  Object.Locate3D(94@(48@,7i), 762.119, 836.6474, -5.4382, 15.0, 35.0, 5.0, False)
+goto_if_false @QUARRY_7070
+80@ = 1
+
+:QUARRY_7070
+goto @QUARRY_7119
+
+:QUARRY_7077
+if 
+  285@(48@,7i) == 1
+goto_if_false @QUARRY_7119
+Checkpoint.Delete(190@(48@,7i))
+285@(48@,7i) = 0
+
+:QUARRY_7119
+goto @QUARRY_8680
+
+:QUARRY_7126
+62@, 63@, 64@ = Object.GetCoordinates(94@(48@,7i))
+78@ = Math.GetDistanceBetweenCoords3D(59@, 60@, 61@, 62@, 63@, 64@)
+if 
+  50.0 > 78@
+goto_if_false @QUARRY_7333
+if 
+  285@(48@,7i) == 0
+goto_if_false @QUARRY_7267
+190@(48@,7i) = Checkpoint.Create(735.8682, 933.0437, -4.3942, 0.0, 0.0, 0.0, 2, 5.0)
+285@(48@,7i) = 1
+
+:QUARRY_7267
+if 
+  Object.Locate3D(94@(48@,7i), 735.8682, 933.0437, -4.3942, 20.0, 30.0, 5.0, False)
+goto_if_false @QUARRY_7326
+80@ = 1
+
+:QUARRY_7326
+goto @QUARRY_7375
+
+:QUARRY_7333
+if 
+  285@(48@,7i) == 1
+goto_if_false @QUARRY_7375
+Checkpoint.Delete(190@(48@,7i))
+285@(48@,7i) = 0
+
+:QUARRY_7375
+goto @QUARRY_8680
+
+:QUARRY_7382
+62@, 63@, 64@ = Object.GetCoordinates(94@(48@,7i))
+78@ = Math.GetDistanceBetweenCoords3D(59@, 60@, 61@, 62@, 63@, 64@)
+if 
+  30.0 > 78@
+goto_if_false @QUARRY_7589
+if 
+  285@(48@,7i) == 0
+goto_if_false @QUARRY_7523
+190@(48@,7i) = Checkpoint.Create(518.9683, 967.7642, -25.891, 0.0, 0.0, 0.0, 2, 5.0)
+285@(48@,7i) = 1
+
+:QUARRY_7523
+if 
+  Object.Locate3D(94@(48@,7i), 518.9683, 967.7642, -17.891, 45.0, 20.0, 9.0, False)
+goto_if_false @QUARRY_7582
+80@ = 1
+
+:QUARRY_7582
+goto @QUARRY_7631
+
+:QUARRY_7589
+if 
+  285@(48@,7i) == 1
+goto_if_false @QUARRY_7631
+Checkpoint.Delete(190@(48@,7i))
+285@(48@,7i) = 0
+
+:QUARRY_7631
+goto @QUARRY_8680
+
+:QUARRY_7638
+62@, 63@, 64@ = Object.GetCoordinates(94@(48@,7i))
+78@ = Math.GetDistanceBetweenCoords3D(59@, 60@, 61@, 62@, 63@, 64@)
+if 
+  30.0 > 78@
+goto_if_false @QUARRY_7845
+if 
+  285@(48@,7i) == 0
+goto_if_false @QUARRY_7779
+190@(48@,7i) = Checkpoint.Create(671.3267, 941.1938, -29.338, 0.0, 0.0, 0.0, 2, 5.0)
+285@(48@,7i) = 1
+
+:QUARRY_7779
+if 
+  Object.Locate3D(94@(48@,7i), 671.3267, 941.1938, -29.338, 25.0, 25.0, 5.0, False)
+goto_if_false @QUARRY_7838
+80@ = 1
+
+:QUARRY_7838
+goto @QUARRY_7887
+
+:QUARRY_7845
+if 
+  285@(48@,7i) == 1
+goto_if_false @QUARRY_7887
+Checkpoint.Delete(190@(48@,7i))
+285@(48@,7i) = 0
+
+:QUARRY_7887
+goto @QUARRY_8680
+
+:QUARRY_7894
+62@, 63@, 64@ = Object.GetCoordinates(94@(48@,7i))
+78@ = Math.GetDistanceBetweenCoords3D(59@, 60@, 61@, 62@, 63@, 64@)
+if 
+  30.0 > 78@
+goto_if_false @QUARRY_8101
+if 
+  285@(48@,7i) == 0
+goto_if_false @QUARRY_8035
+190@(48@,7i) = Checkpoint.Create(523.2235, 907.1995, -43.4101, 0.0, 0.0, 0.0, 2, 5.0)
+285@(48@,7i) = 1
+
+:QUARRY_8035
+if 
+  Object.Locate3D(94@(48@,7i), 523.2235, 907.1995, -40.4101, 35.0, 25.0, 5.0, False)
+goto_if_false @QUARRY_8094
+80@ = 1
+
+:QUARRY_8094
+goto @QUARRY_8143
+
+:QUARRY_8101
+if 
+  285@(48@,7i) == 1
+goto_if_false @QUARRY_8143
+Checkpoint.Delete(190@(48@,7i))
+285@(48@,7i) = 0
+
+:QUARRY_8143
+goto @QUARRY_8680
+
+:QUARRY_8150
+62@, 63@, 64@ = Object.GetCoordinates(94@(48@,7i))
+78@ = Math.GetDistanceBetweenCoords3D(59@, 60@, 61@, 62@, 63@, 64@)
+if 
+  30.0 > 78@
+goto_if_false @QUARRY_8357
+if 
+  285@(48@,7i) == 0
+goto_if_false @QUARRY_8291
+190@(48@,7i) = Checkpoint.Create(536.8022, 838.0778, -38.2296, 0.0, 0.0, 0.0, 2, 5.0)
+285@(48@,7i) = 1
+
+:QUARRY_8291
+if 
+  Object.Locate3D(94@(48@,7i), 536.8022, 838.0778, -38.2296, 25.0, 15.0, 5.0, False)
+goto_if_false @QUARRY_8350
+80@ = 1
+
+:QUARRY_8350
+goto @QUARRY_8399
+
+:QUARRY_8357
+if 
+  285@(48@,7i) == 1
+goto_if_false @QUARRY_8399
+Checkpoint.Delete(190@(48@,7i))
+285@(48@,7i) = 0
+
+:QUARRY_8399
+goto @QUARRY_8680
+
+:QUARRY_8406
+62@, 63@, 64@ = Object.GetCoordinates(94@(48@,7i))
+78@ = Math.GetDistanceBetweenCoords3D(59@, 60@, 61@, 62@, 63@, 64@)
+if 
+  50.0 > 78@
+goto_if_false @QUARRY_8613
+if 
+  285@(48@,7i) == 0
+goto_if_false @QUARRY_8547
+190@(48@,7i) = Checkpoint.Create(645.2571, 773.7028, -28.2457, 0.0, 0.0, 0.0, 2, 5.0)
+285@(48@,7i) = 1
+
+:QUARRY_8547
+if 
+  Object.Locate3D(94@(48@,7i), 645.2571, 773.7028, -26.2457, 35.0, 20.0, 7.0, False)
+goto_if_false @QUARRY_8606
+80@ = 1
+
+:QUARRY_8606
+goto @QUARRY_8655
+
+:QUARRY_8613
+if 
+  285@(48@,7i) == 1
+goto_if_false @QUARRY_8655
+Checkpoint.Delete(190@(48@,7i))
+285@(48@,7i) = 0
+
+:QUARRY_8655
+goto @QUARRY_8680
+
+:QUARRY_8662
+write_debug "TOO_MANY_ROCKS"
+
+:QUARRY_8680
+if 
+  80@ == 1
+goto_if_false @QUARRY_8878
+Blip.Remove(133@(48@,7i))
+Object.Delete(94@(48@,7i))
+if 
+  285@(48@,7i) == 1
+goto_if_false @QUARRY_8758
+Checkpoint.Delete(190@(48@,7i))
+285@(48@,7i) = 0
+
+:QUARRY_8758
+244@(48@,7i) = 1
+199@ += 1
+50@ = 7
+sub_int_lvar_from_int_lvar 50@ -= 199@
+if 
+  50@ <> 0
+goto_if_false @QUARRY_8878
+if 
+  199@ == 1
+goto_if_false @QUARRY_8856
+Text.PrintWith2NumbersNow('QUAR_14', 199@, 50@, 5000, TextStyle.Middle)
+goto @QUARRY_8878
+
+:QUARRY_8856
+Text.PrintWith2NumbersNow('QUAR_13', 199@, 50@, 5000, TextStyle.Middle)
+
+:QUARRY_8878
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_6778
+
+:QUARRY_8899
+if 
+  243@ == 0
+goto_if_false @QUARRY_8959
+if 
+  Char.IsInCar($scplayer, 87@)
+goto_if_false @QUARRY_8959
+Text.PrintNow('QUAR_12', 7000, 1)
+243@ = 1
+
+:QUARRY_8959
+if 
+  35@ == 99
+goto_if_false @QUARRY_8984
+gosub @QUARRY_21060
+
+:QUARRY_8984
+return 
+
+:QUARRY_8986
+if 
+  Car.IsDead(87@)
+goto_if_false @QUARRY_9018
+37@ = 1
+45@ = 1
+return 
+
+:QUARRY_9018
+if 
+  35@ == 0
+goto_if_false @QUARRY_9242
+204@ = 0
+48@ = 0
+
+:QUARRY_9050
+253@(48@,4i) = 0
+257@(48@,4i) = 0
+178@(48@,4i) = 0
+48@ += 1
+  48@ >= 4
+goto_if_false @QUARRY_9050
+125@ = Blip.AddForCar(87@)
+Blip.SetAsFriendly(125@, True)
+Text.PrintNow('QUAR_15', 10000, 1)
+set_var_int_to_lvar_int $g_Quarry_timerKM = 174@
+Hud.DisplayTimerWithString($g_Quarry_timerKM, TimerDirection.Down, 'QUAR_D3')
+set_lvar_int_to_lvar_int 206@ = 46@
+48@ = 0
+
+:QUARRY_9174
+add_int_lvar_to_int_lvar 174@(48@,4i) += 46@
+48@ += 1
+  48@ >= 4
+goto_if_false @QUARRY_9174
+251@ = 0
+252@ = 0
+261@ = 0
+243@ = 0
+35@ += 1
+
+:QUARRY_9242
+if 
+  35@ == 1
+goto_if_false @QUARRY_9408
+if 
+  252@ == 1
+goto_if_false @QUARRY_9408
+59@, 60@, 61@ = Char.GetCoordinates($scplayer)
+50@ = 4
+50@ -= 1
+62@, 63@, 64@ = Object.GetCoordinates(101@(50@,10i))
+78@ = Math.GetDistanceBetweenCoords3D(59@, 60@, 61@, 62@, 63@, 64@)
+if 
+  78@ > 20.0
+goto_if_false @QUARRY_9408
+Fx.AddExplosion(7, 62@, 63@, 64@)
+Object.Delete(101@(50@,10i))
+253@(50@,4i) = 1
+35@ = 99
+
+:QUARRY_9408
+if 
+  Blip.DoesExist(125@)
+goto_if_false @QUARRY_9466
+if 
+  Char.IsInCar($scplayer, 87@)
+goto_if_false @QUARRY_9459
+Blip.Remove(125@)
+Text.ClearThisPrint('QUAR_35')
+
+:QUARRY_9459
+goto @QUARRY_9533
+
+:QUARRY_9466
+if 
+  not Char.IsInCar($scplayer, 87@)
+goto_if_false @QUARRY_9533
+Blip.Remove(140@)
+Blip.Remove(128@)
+251@ = 0
+125@ = Blip.AddForCar(87@)
+Blip.SetAsFriendly(125@, True)
+Text.PrintNow('QUAR_35', 5000, 1)
+
+:QUARRY_9533
+if 
+  252@ == 0
+goto_if_false @QUARRY_10787
+80@ = 0
+switch_start 204@ total_jumps 4 default_jump 1 @QUARRY_10048 jumps 0 @QUARRY_9621 1 @QUARRY_9687 2 @QUARRY_9916 3 @QUARRY_9982 -1 @QUARRY_10067 -1 @QUARRY_10067 -1 @QUARRY_10067
+
+:QUARRY_9621
+if 
+  Object.Locate3D(101@(204@,10i), 830.4274, 889.852, 12.3516, 4.0, 4.0, 1.0, True)
+goto_if_false @QUARRY_9680
+80@ = 1
+
+:QUARRY_9680
+goto @QUARRY_10067
+
+:QUARRY_9687
+if 
+  261@ == 0
+goto_if_false @QUARRY_9850
+if 
+  Object.Locate3D(101@(204@,10i), 678.5786, 981.4282, -13.749, 4.0, 4.0, 1.0, True)
+goto_if_false @QUARRY_9764
+80@ = 1
+
+:QUARRY_9764
+59@, 60@, 61@ = Object.GetCoordinates(101@(204@,10i))
+if 
+  -23.6787 > 61@
+goto_if_false @QUARRY_9843
+261@ = 1
+Blip.Remove(140@)
+Blip.Remove(128@)
+251@ = 0
+Text.PrintNow('QUAR_21', 7000, 1)
+
+:QUARRY_9843
+goto @QUARRY_9909
+
+:QUARRY_9850
+if 
+  Object.Locate3D(101@(204@,10i), 660.666, 913.719, -41.4059, 4.0, 4.0, 1.0, True)
+goto_if_false @QUARRY_9909
+80@ = 1
+
+:QUARRY_9909
+goto @QUARRY_10067
+
+:QUARRY_9916
+if 
+  Object.Locate3D(101@(204@,10i), 648.9208, 916.257, -42.2287, 4.0, 4.0, 1.0, True)
+goto_if_false @QUARRY_9975
+80@ = 1
+
+:QUARRY_9975
+goto @QUARRY_10067
+
+:QUARRY_9982
+if 
+  Object.Locate3D(101@(204@,10i), 632.4524, 810.3196, -43.9609, 4.0, 4.0, 1.0, True)
+goto_if_false @QUARRY_10041
+80@ = 1
+
+:QUARRY_10041
+goto @QUARRY_10067
+
+:QUARRY_10048
+write_debug "UNKNOWN_BOMB_ID"
+
+:QUARRY_10067
+if 
+  80@ == 1
+goto_if_false @QUARRY_10222
+Blip.Remove(140@)
+Blip.Remove(128@)
+251@ = 0
+261@ = 0
+Object.FreezePosition(101@(204@,10i), True)
+Object.SetCollision(101@(204@,10i), False)
+set_lvar_int_to_lvar_int 50@ = 204@
+50@ += 1
+if 
+  50@ == 4
+goto_if_false @QUARRY_10215
+set_lvar_int_to_lvar_int 51@ = 46@
+51@ += 15000
+if 
+  is_int_lvar_greater_than_int_lvar 174@(204@,4i) > 51@
+goto_if_false @QUARRY_10215
+set_lvar_int_to_lvar_int 174@(204@,4i) = 51@
+
+:QUARRY_10215
+204@ += 1
+
+:QUARRY_10222
+if 
+  204@ == 4
+goto_if_false @QUARRY_10247
+252@ = 1
+
+:QUARRY_10247
+if 
+  80@ == 1
+goto_if_false @QUARRY_10324
+Hud.ClearTimer($g_Quarry_timerKM)
+if 
+  252@ == 0
+goto_if_false @QUARRY_10324
+set_var_int_to_lvar_int $g_Quarry_timerKM = 174@(204@,4i)
+sub_int_lvar_from_int_var $g_Quarry_timerKM -= 46@
+Hud.DisplayTimerWithString($g_Quarry_timerKM, TimerDirection.Down, 'QUAR_D3')
+
+:QUARRY_10324
+if 
+  80@ == 1
+goto_if_false @QUARRY_10522
+if 
+  252@ == 1
+goto_if_false @QUARRY_10383
+Text.PrintNow('QUAR_20', 7000, 1)
+goto @QUARRY_10522
+
+:QUARRY_10383
+switch_start 204@ total_jumps 4 default_jump 0 @QUARRY_10522 jumps 0 @QUARRY_10446 1 @QUARRY_10453 2 @QUARRY_10476 3 @QUARRY_10499 -1 @QUARRY_10522 -1 @QUARRY_10522 -1 @QUARRY_10522
+
+:QUARRY_10446
+goto @QUARRY_10522
+
+:QUARRY_10453
+Text.PrintNow('QUAR_17', 7000, 1)
+goto @QUARRY_10522
+
+:QUARRY_10476
+Text.PrintNow('QUAR_18', 7000, 1)
+goto @QUARRY_10522
+
+:QUARRY_10499
+Text.PrintNow('QUAR_34', 7000, 1)
+goto @QUARRY_10522
+
+:QUARRY_10522
+if and
+  251@ == 0
+  252@ == 0
+  not Blip.DoesExist(125@)
+goto_if_false @QUARRY_10787
+140@ = Blip.AddForObject(101@(204@,10i))
+251@ = 1
+switch_start 204@ total_jumps 4 default_jump 0 @QUARRY_10787 jumps 0 @QUARRY_10634 1 @QUARRY_10661 2 @QUARRY_10733 3 @QUARRY_10760 -1 @QUARRY_10787 -1 @QUARRY_10787 -1 @QUARRY_10787
+
+:QUARRY_10634
+128@ = Blip.AddForCoord(830.4274, 889.852, 12.3516)
+goto @QUARRY_10787
+
+:QUARRY_10661
+if 
+  261@ == 0
+goto_if_false @QUARRY_10706
+128@ = Blip.AddForCoord(678.5786, 981.4282, -13.749)
+goto @QUARRY_10726
+
+:QUARRY_10706
+128@ = Blip.AddForCoord(660.666, 913.719, -41.4059)
+
+:QUARRY_10726
+goto @QUARRY_10787
+
+:QUARRY_10733
+128@ = Blip.AddForCoord(648.9208, 916.257, -42.2287)
+goto @QUARRY_10787
+
+:QUARRY_10760
+128@ = Blip.AddForCoord(632.4524, 810.3196, -43.9609)
+goto @QUARRY_10787
+
+:QUARRY_10787
+48@ = 0
+set_lvar_int_to_lvar_int 50@ = 204@
+if 
+  252@ == 1
+goto_if_false @QUARRY_10827
+50@ -= 1
+
+:QUARRY_10827
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar 50@ >= 48@
+goto_if_false @QUARRY_11360
+if 
+  253@(48@,4i) == 0
+goto_if_false @QUARRY_11265
+59@, 60@, 61@ = Object.GetCoordinates(101@(48@,10i))
+62@, 63@, 64@ = Car.GetCoordinates(87@)
+78@ = Math.GetDistanceBetweenCoords3D(59@, 60@, 61@, 62@, 63@, 64@)
+65@, 66@, 67@ = Char.GetCoordinates($scplayer)
+79@ = Math.GetDistanceBetweenCoords3D(59@, 60@, 61@, 65@, 66@, 67@)
+if 
+  not is_int_lvar_equal_to_int_lvar 48@ == 204@
+goto_if_false @QUARRY_11033
+if and
+  78@ > 21.0
+  79@ > 21.0
+goto_if_false @QUARRY_11033
+set_lvar_int_to_lvar_int 174@(48@,4i) = 46@
+174@(48@,4i) -= 1
+
+:QUARRY_11033
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 174@(48@,4i)
+goto_if_false @QUARRY_11258
+Fx.AddExplosion(10, 59@, 60@, 61@)
+Object.Delete(101@(48@,10i))
+253@(48@,4i) = 1
+257@(48@,4i) = 0
+set_lvar_int_to_lvar_int 178@(48@,4i) = 46@
+178@(48@,4i) += 2000
+set_lvar_float_to_lvar_float 218@(48@,4f) = 59@
+set_lvar_float_to_lvar_float 222@(48@,4f) = 60@
+set_lvar_float_to_lvar_float 226@(48@,4f) = 61@
+if 
+  20.0 > 78@
+goto_if_false @QUARRY_11186
+Car.Explode(87@)
+
+:QUARRY_11186
+if 
+  20.0 > 79@
+goto_if_false @QUARRY_11223
+37@ = 1
+45@ = 7
+return 
+
+:QUARRY_11223
+if 
+  is_int_lvar_equal_to_int_lvar 48@ == 204@
+goto_if_false @QUARRY_11258
+37@ = 1
+45@ = 6
+return 
+
+:QUARRY_11258
+goto @QUARRY_11346
+
+:QUARRY_11265
+if 
+  257@(48@,4i) == 0
+goto_if_false @QUARRY_11346
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 178@(48@,4i)
+goto_if_false @QUARRY_11346
+Fx.AddExplosion(9, 218@(48@,4f), 222@(48@,4f), 226@(48@,4f))
+257@(48@,4i) = 1
+
+:QUARRY_11346
+48@ += 1
+goto @QUARRY_10827
+
+:QUARRY_11360
+if 
+  243@ == 0
+goto_if_false @QUARRY_11420
+if 
+  Char.IsInCar($scplayer, 87@)
+goto_if_false @QUARRY_11420
+Text.PrintNow('QUAR_16', 7000, 1)
+243@ = 1
+
+:QUARRY_11420
+if 
+  35@ == 99
+goto_if_false @QUARRY_11445
+gosub @QUARRY_21060
+
+:QUARRY_11445
+return 
+
+:QUARRY_11447
+if 
+  Car.IsDead(88@)
+goto_if_false @QUARRY_11479
+37@ = 1
+45@ = 2
+return 
+
+:QUARRY_11479
+if 
+  35@ == 0
+goto_if_false @QUARRY_11607
+126@ = Blip.AddForCar(88@)
+Blip.SetAsFriendly(126@, True)
+gosub @QUARRY_19814
+Text.PrintNow('QUAR_22', 10000, 1)
+235@ = 0
+50@ = 4
+50@ -= 1
+set_var_int_to_var_int $g_Quarry_timerKM = $g_Quarry_recordsKM(50@,7i)
+$g_Quarry_timerKM *= 1000
+Hud.DisplayTimerWithString($g_Quarry_timerKM, TimerDirection.Down, 'QUAR_D1')
+set_lvar_int_to_lvar_int 206@ = 46@
+35@ += 1
+
+:QUARRY_11607
+if 
+  0 >= $g_Quarry_timerKM
+goto_if_false @QUARRY_11641
+37@ = 1
+45@ = 4
+return 
+
+:QUARRY_11641
+if 
+  35@ == 1
+goto_if_false @QUARRY_11701
+if 
+  235@ == 1
+goto_if_false @QUARRY_11701
+Blip.Remove(132@)
+239@ = 0
+Blip.Remove(126@)
+35@ = 99
+
+:QUARRY_11701
+if 
+  235@ == 0
+goto_if_false @QUARRY_11745
+if 
+  Char.IsInCar($scplayer, 88@)
+goto_if_false @QUARRY_11745
+235@ = 1
+
+:QUARRY_11745
+if 
+  239@ == 1
+goto_if_false @QUARRY_11848
+  Char.LocateAnyMeans3D($scplayer, 1, 215@, 216@, 217@, 4.0, 4.0, 4.0)
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 215@, 216@, 217@, 15.0, 10.0, 4.0)
+goto_if_false @QUARRY_11848
+Blip.Remove(132@)
+239@ = 0
+
+:QUARRY_11848
+if 
+  35@ == 99
+goto_if_false @QUARRY_11873
+gosub @QUARRY_21060
+
+:QUARRY_11873
+return 
+
+:QUARRY_11875
+if 
+  Car.IsDead(88@)
+goto_if_false @QUARRY_11907
+37@ = 1
+45@ = 2
+return 
+
+:QUARRY_11907
+if 
+  35@ == 0
+goto_if_false @QUARRY_12473
+212@ = 469.377
+213@ = 877.2751
+214@ = -29.0362
+gosub @QUARRY_19761
+48@ = 0
+
+:QUARRY_11969
+50@ = Math.RandomIntInRange(2, 4)
+59@ = Math.RandomFloatInRange(-2.0, 2.0)
+60@ = Math.RandomFloatInRange(-3.0, 3.0)
+add_float_lvar_to_float_lvar 59@ += 212@
+add_float_lvar_to_float_lvar 60@ += 213@
+61@ = World.GetGroundZFor3DCoord(59@, 60@, -20.0)
+153@(48@,18i) = ScriptFire.Start(59@, 60@, 61@, 0, 50@)
+48@ += 1
+  48@ >= 15
+goto_if_false @QUARRY_11969
+48@ = 0
+
+:QUARRY_12091
+50@ = Math.RandomIntInRange(0, 4)
+59@ = Math.RandomFloatInRange(-1.3, 1.3)
+60@ = Math.RandomFloatInRange(-1.8, 1.8)
+add_float_lvar_to_float_lvar 59@ += 212@
+add_float_lvar_to_float_lvar 60@ += 213@
+61@ = World.GetGroundZFor3DCoord(59@, 60@, -20.0)
+switch_start 50@ total_jumps 4 default_jump 0 @QUARRY_12337 jumps 0 @QUARRY_12225 1 @QUARRY_12253 2 @QUARRY_12281 3 @QUARRY_12309 -1 @QUARRY_12337 -1 @QUARRY_12337 -1 @QUARRY_12337
+
+:QUARRY_12225
+114@(50@,7i) = Object.Create(#CM_BOX, 59@, 60@, 61@)
+goto @QUARRY_12337
+
+:QUARRY_12253
+114@(50@,7i) = Object.Create(#BLACKBAG2, 59@, 60@, 61@)
+goto @QUARRY_12337
+
+:QUARRY_12281
+114@(50@,7i) = Object.Create(#DYN_WOODPILE, 59@, 60@, 61@)
+goto @QUARRY_12337
+
+:QUARRY_12309
+114@(50@,7i) = Object.Create(#DYN_WOODPILE2, 59@, 60@, 61@)
+goto @QUARRY_12337
+
+:QUARRY_12337
+75@ = Math.RandomFloatInRange(0.0, 359.0)
+76@ = Math.RandomFloatInRange(0.0, 359.0)
+77@ = Math.RandomFloatInRange(0.0, 359.0)
+Object.SetRotation(114@(50@,7i), 75@, 76@, 77@)
+Object.SetRenderScorched(114@(50@,7i), True)
+Object.SetCollision(114@(50@,7i), False)
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_12091
+Text.PrintNow('QUAR_23', 7000, 1)
+263@ = 0
+35@ += 1
+
+:QUARRY_12473
+if 
+  236@ == 0
+goto_if_false @QUARRY_12806
+50@ = 0
+48@ = 0
+
+:QUARRY_12505
+if 
+  not Object.IsAttached(111@(48@,3i))
+goto_if_false @QUARRY_12760
+59@, 60@, 61@ = Object.GetCoordinates(111@(48@,3i))
+75@ = World.GetGroundZFor3DCoord(59@, 60@, 61@)
+set_lvar_float_to_lvar_float 76@ = 61@
+sub_float_lvar_from_float_lvar 76@ -= 75@
+if 
+  0.5 > 76@
+goto_if_false @QUARRY_12760
+if 
+  Object.Locate3D(111@(48@,3i), 212@, 213@, 214@, 12.0, 15.0, 3.0, False)
+goto_if_false @QUARRY_12744
+51@ = 15
+add_int_lvar_to_int_lvar 51@ += 48@
+if 
+  not ScriptFire.DoesExist(153@(51@,18i))
+goto_if_false @QUARRY_12730
+153@(51@,18i) = ScriptFire.Start(59@, 60@, 61@, 0, 3)
+Object.SetRenderScorched(111@(48@,3i), True)
+Object.FreezePosition(111@(48@,3i), True)
+Object.SetCollision(111@(48@,3i), False)
+
+:QUARRY_12730
+50@ += 1
+goto @QUARRY_12760
+
+:QUARRY_12744
+37@ = 1
+45@ = 8
+return 
+
+:QUARRY_12760
+48@ += 1
+  48@ >= 3
+goto_if_false @QUARRY_12505
+if 
+  50@ == 3
+goto_if_false @QUARRY_12806
+236@ = 1
+
+:QUARRY_12806
+if 
+  0 >= $g_Quarry_timerKM
+goto_if_false @QUARRY_12840
+37@ = 1
+45@ = 4
+return 
+
+:QUARRY_12840
+if 
+  35@ == 1
+goto_if_false @QUARRY_12883
+if 
+  236@ == 1
+goto_if_false @QUARRY_12883
+35@ = 99
+
+:QUARRY_12883
+if 
+  Char.IsInCar($scplayer, 88@)
+goto_if_false @QUARRY_12994
+if 
+  Blip.DoesExist(126@)
+goto_if_false @QUARRY_12987
+Blip.Remove(126@)
+Text.ClearThisPrint('QUAR_36')
+if 
+  238@ == 1
+goto_if_false @QUARRY_12973
+128@ = Blip.AddForCoord(215@, 216@, 217@)
+goto @QUARRY_12987
+
+:QUARRY_12973
+128@ = Blip.AddForCoord(212@, 213@, 214@)
+
+:QUARRY_12987
+goto @QUARRY_13046
+
+:QUARRY_12994
+if 
+  not Blip.DoesExist(126@)
+goto_if_false @QUARRY_13046
+Blip.Remove(128@)
+126@ = Blip.AddForCar(88@)
+Blip.SetAsFriendly(126@, True)
+Text.PrintNow('QUAR_36', 5000, 1)
+
+:QUARRY_13046
+if 
+  236@ == 0
+goto_if_false @QUARRY_13199
+if 
+  Char.IsInCar($scplayer, 88@)
+goto_if_false @QUARRY_13199
+if 
+  not Char.LocateInCar3D($scplayer, 212@, 213@, 214@, 25.0, 25.0, 20.0, False)
+goto_if_false @QUARRY_13163
+  Char.LocateInCar3D($scplayer, 212@, 213@, 214@, 4.0, 4.0, 4.0, True)
+goto @QUARRY_13199
+
+:QUARRY_13163
+if 
+  262@ == 0
+goto_if_false @QUARRY_13199
+Text.PrintHelpForever('QUAR_H1')
+262@ = 1
+
+:QUARRY_13199
+if 
+  263@ == 0
+goto_if_false @QUARRY_13327
+if 
+  Char.IsInCar($scplayer, 88@)
+goto_if_false @QUARRY_13327
+if 
+  Char.LocateInCar3D($scplayer, 215@, 216@, 217@, 12.0, 12.0, 12.0, True)
+goto_if_false @QUARRY_13327
+Text.PrintNow('QUAR_24', 7000, 1)
+263@ = 1
+Blip.Remove(131@)
+238@ = 0
+128@ = Blip.AddForCoord(212@, 213@, 214@)
+
+:QUARRY_13327
+if 
+  35@ == 99
+goto_if_false @QUARRY_13352
+gosub @QUARRY_21060
+
+:QUARRY_13352
+return 
+
+:QUARRY_13354
+if 
+  Car.IsDead(88@)
+goto_if_false @QUARRY_13386
+37@ = 1
+45@ = 2
+return 
+
+:QUARRY_13386
+if 
+  35@ == 0
+goto_if_false @QUARRY_13602
+212@ = -59.3126
+213@ = 2502.254
+214@ = 15.4766
+205@ = Car.GetHealth(88@)
+126@ = Blip.AddForCar(88@)
+Blip.SetAsFriendly(126@, True)
+50@ = 5
+50@ -= 1
+set_var_int_to_var_int $g_Quarry_timerKM = $g_Quarry_recordsKM(50@,7i)
+$g_Quarry_timerKM *= 1000
+Hud.DisplayTimerWithString($g_Quarry_timerKM, TimerDirection.Down, 'QUAR_D4')
+set_lvar_int_to_lvar_int 206@ = 46@
+Text.PrintNow('QUAR_38', 10000, 1)
+236@ = 0
+264@ = 0
+48@ = 0
+
+:QUARRY_13552
+296@(48@,6i) = 0
+184@(48@,6i) = 0
+48@ += 1
+  48@ >= 6
+goto_if_false @QUARRY_13552
+35@ += 1
+
+:QUARRY_13602
+if 
+  236@ == 0
+goto_if_false @QUARRY_13974
+80@ = 0
+50@ = 0
+48@ = 0
+
+:QUARRY_13641
+if 
+  not Object.IsAttached(101@(48@,10i))
+goto_if_false @QUARRY_13819
+59@, 60@, 61@ = Object.GetCoordinates(101@(48@,10i))
+75@ = World.GetGroundZFor3DCoord(59@, 60@, 61@)
+set_lvar_float_to_lvar_float 76@ = 61@
+sub_float_lvar_from_float_lvar 76@ -= 75@
+if 
+  1.0 > 76@
+goto_if_false @QUARRY_13819
+if 
+  Object.Locate3D(101@(48@,10i), 212@, 213@, 214@, 12.0, 15.0, 3.0, False)
+goto_if_false @QUARRY_13790
+50@ += 1
+goto @QUARRY_13819
+
+:QUARRY_13790
+Fx.AddExplosion(2, 59@, 60@, 61@)
+Object.Delete(101@(48@,10i))
+80@ = 1
+
+:QUARRY_13819
+48@ += 1
+  48@ >= 6
+goto_if_false @QUARRY_13641
+if 
+  80@ == 1
+goto_if_false @QUARRY_13949
+48@ = 0
+
+:QUARRY_13865
+if 
+  Object.DoesExist(101@(48@,10i))
+goto_if_false @QUARRY_13907
+Fx.AddExplosion(2, 59@, 60@, 61@)
+Object.Delete(101@(48@,10i))
+
+:QUARRY_13907
+48@ += 1
+  48@ >= 6
+goto_if_false @QUARRY_13865
+Car.Explode(88@)
+37@ = 1
+45@ = 9
+return 
+
+:QUARRY_13949
+if 
+  50@ == 6
+goto_if_false @QUARRY_13974
+236@ = 1
+
+:QUARRY_13974
+if 
+  236@ == 0
+goto_if_false @QUARRY_14151
+50@ = Car.GetHealth(88@)
+set_lvar_int_to_lvar_int 51@ = 205@
+sub_int_lvar_from_int_lvar 51@ -= 50@
+if 
+  51@ > 10
+goto_if_false @QUARRY_14143
+48@ = 0
+
+:QUARRY_14041
+if 
+  Object.DoesExist(101@(48@,10i))
+goto_if_false @QUARRY_14101
+59@, 60@, 61@ = Object.GetCoordinates(101@(48@,10i))
+Fx.AddExplosion(2, 59@, 60@, 61@)
+Object.Delete(101@(48@,10i))
+
+:QUARRY_14101
+48@ += 1
+  48@ >= 6
+goto_if_false @QUARRY_14041
+Car.Explode(88@)
+37@ = 1
+45@ = 9
+return 
+
+:QUARRY_14143
+set_lvar_int_to_lvar_int 205@ = 50@
+
+:QUARRY_14151
+if 
+  0 >= $g_Quarry_timerKM
+goto_if_false @QUARRY_14185
+37@ = 1
+45@ = 10
+return 
+
+:QUARRY_14185
+if 
+  35@ == 1
+goto_if_false @QUARRY_14228
+if 
+  236@ == 1
+goto_if_false @QUARRY_14228
+35@ = 99
+
+:QUARRY_14228
+48@ = 0
+
+:QUARRY_14235
+if 
+  Object.DoesExist(122@(48@,3i))
+goto_if_false @QUARRY_14485
+if 
+  not Object.IsAttached(122@(48@,3i))
+goto_if_false @QUARRY_14485
+switch_start 48@ total_jumps 3 default_jump 0 @QUARRY_14485 jumps 0 @QUARRY_14338 1 @QUARRY_14387 2 @QUARRY_14436 -1 @QUARRY_14485 -1 @QUARRY_14485 -1 @QUARRY_14485 -1 @QUARRY_14485
+
+:QUARRY_14338
+Object.AttachToCar(122@(48@,3i), 88@, -1.0, -5.0, 0.3, 0.0, 0.0, 0.0)
+goto @QUARRY_14485
+
+:QUARRY_14387
+Object.AttachToCar(122@(48@,3i), 88@, 0.0, -5.0, 0.3, 0.0, 0.0, 0.0)
+goto @QUARRY_14485
+
+:QUARRY_14436
+Object.AttachToCar(122@(48@,3i), 88@, 1.0, -5.0, 0.3, 0.0, 0.0, 0.0)
+goto @QUARRY_14485
+
+:QUARRY_14485
+48@ += 1
+  48@ >= 3
+goto_if_false @QUARRY_14235
+if 
+  Char.IsInCar($scplayer, 88@)
+goto_if_false @QUARRY_14578
+if 
+  not Blip.DoesExist(128@)
+goto_if_false @QUARRY_14571
+Blip.Remove(126@)
+128@ = Blip.AddForCoord(212@, 213@, 214@)
+Text.ClearThisPrint('QUAR_36')
+
+:QUARRY_14571
+goto @QUARRY_14630
+
+:QUARRY_14578
+if 
+  not Blip.DoesExist(126@)
+goto_if_false @QUARRY_14630
+Blip.Remove(128@)
+126@ = Blip.AddForCar(88@)
+Blip.SetAsFriendly(126@, True)
+Text.PrintNow('QUAR_36', 5000, 1)
+
+:QUARRY_14630
+if 
+  Blip.DoesExist(128@)
+goto_if_false @QUARRY_14677
+  Char.LocateAnyMeans3D($scplayer, 1, 212@, 213@, 214@, 8.0, 8.0, 4.0)
+
+:QUARRY_14677
+if 
+  264@ == 0
+goto_if_false @QUARRY_14760
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 212@, 213@, 214@, 24.0, 30.0, 8.0)
+goto_if_false @QUARRY_14760
+Text.PrintNow('QUAR_26', 7000, 1)
+264@ = 1
+
+:QUARRY_14760
+if 
+  Car.Locate3D(88@, 0, 212@, 213@, 214@, 10.0, 10.0, 5.0)
+goto_if_false @QUARRY_14925
+75@ = Car.GetMovingComponentOffset(88@)
+if 
+  75@ > 0.05
+goto_if_false @QUARRY_14925
+48@ = 0
+
+:QUARRY_14838
+if 
+  Object.DoesExist(101@(48@,10i))
+goto_if_false @QUARRY_14904
+if 
+  Object.IsAttached(101@(48@,10i))
+goto_if_false @QUARRY_14904
+Object.Detach(101@(48@,10i), 0.0, 0.0, 0.0, False)
+
+:QUARRY_14904
+48@ += 1
+  48@ >= 6
+goto_if_false @QUARRY_14838
+
+:QUARRY_14925
+80@ = 0
+48@ = 0
+
+:QUARRY_14939
+if 
+  Object.DoesExist(101@(48@,10i))
+goto_if_false @QUARRY_14997
+50@ = Object.GetHealth(101@(48@,10i))
+if 
+  950 >= 50@
+goto_if_false @QUARRY_14997
+80@ = 1
+
+:QUARRY_14997
+48@ += 1
+  48@ >= 6
+goto_if_false @QUARRY_14939
+if 
+  80@ == 1
+goto_if_false @QUARRY_15145
+48@ = 0
+
+:QUARRY_15043
+if 
+  Object.DoesExist(101@(48@,10i))
+goto_if_false @QUARRY_15103
+59@, 60@, 61@ = Object.GetCoordinates(101@(48@,10i))
+Fx.AddExplosion(2, 59@, 60@, 61@)
+Object.Delete(101@(48@,10i))
+
+:QUARRY_15103
+48@ += 1
+  48@ >= 6
+goto_if_false @QUARRY_15043
+Car.Explode(88@)
+37@ = 1
+45@ = 9
+return 
+
+:QUARRY_15145
+if 
+  Car.Locate3D(88@, 0, 212@, 213@, 214@, 10.0, 10.0, 5.0)
+goto_if_false @QUARRY_15656
+75@ = Car.GetMovingComponentOffset(88@)
+if 
+  75@ > 0.25
+goto_if_false @QUARRY_15656
+48@ = 0
+
+:QUARRY_15223
+if 
+  Object.DoesExist(101@(48@,10i))
+goto_if_false @QUARRY_15635
+59@, 60@, 61@ = Object.GetCoordinates(101@(48@,10i))
+80@ = 0
+50@ = 0
+
+:QUARRY_15275
+if 
+  3 > 50@
+goto_if_false @QUARRY_15403
+if and
+  80@ == 0
+  Object.DoesExist(122@(50@,3i))
+goto_if_false @QUARRY_15389
+62@, 63@, 64@ = Object.GetCoordinates(122@(50@,3i))
+78@ = Math.GetDistanceBetweenCoords3D(59@, 60@, 61@, 62@, 63@, 64@)
+if 
+  0.75 > 78@
+goto_if_false @QUARRY_15389
+80@ = 1
+
+:QUARRY_15389
+50@ += 1
+goto @QUARRY_15275
+
+:QUARRY_15403
+if 
+  80@ == 1
+goto_if_false @QUARRY_15613
+if 
+  296@(48@,6i) == 0
+goto_if_false @QUARRY_15485
+296@(48@,6i) = 1
+set_lvar_int_to_lvar_int 184@(48@,6i) = 46@
+184@(48@,6i) += 5000
+goto @QUARRY_15606
+
+:QUARRY_15485
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 184@(48@,6i)
+goto_if_false @QUARRY_15606
+set_lvar_int_to_lvar_int 184@(48@,6i) = 46@
+184@(48@,6i) += 5000
+if 
+  Object.IsAttached(101@(48@,10i))
+goto_if_false @QUARRY_15578
+Object.Detach(101@(48@,10i), 0.0, 0.0, 0.0, False)
+
+:QUARRY_15578
+61@ += 1.2
+Object.SetCoordinates(101@(48@,10i), 59@, 60@, 61@)
+
+:QUARRY_15606
+goto @QUARRY_15635
+
+:QUARRY_15613
+296@(48@,6i) = 0
+184@(48@,6i) = 0
+
+:QUARRY_15635
+48@ += 1
+  48@ >= 6
+goto_if_false @QUARRY_15223
+
+:QUARRY_15656
+if 
+  35@ == 99
+goto_if_false @QUARRY_15691
+Blip.Remove(128@)
+Blip.Remove(126@)
+gosub @QUARRY_21060
+
+:QUARRY_15691
+return 
+
+:QUARRY_15693
+if 
+  Car.IsDead(87@)
+goto_if_false @QUARRY_15725
+37@ = 1
+45@ = 1
+return 
+
+:QUARRY_15725
+if 
+  Car.IsDead(90@)
+goto_if_false @QUARRY_15757
+37@ = 1
+45@ = 12
+return 
+
+:QUARRY_15757
+if 
+  35@ == 0
+goto_if_false @QUARRY_15966
+265@ = 0
+125@ = Blip.AddForCar(87@)
+Blip.SetAsFriendly(125@, True)
+50@ = 6
+50@ -= 1
+set_var_int_to_var_int $g_Quarry_timerKM = $g_Quarry_recordsKM(50@,7i)
+$g_Quarry_timerKM *= 1000
+Hud.DisplayTimerWithString($g_Quarry_timerKM, TimerDirection.Down, 'QUAR_D5')
+set_lvar_int_to_lvar_int 206@ = 46@
+set_lvar_int_to_var_int 182@ = $g_Quarry_recordsKM(50@,7i)
+182@ -= 15
+182@ *= 1000
+add_int_lvar_to_int_lvar 182@ += 46@
+266@ = 0
+267@ = 0
+48@ = 0
+
+:QUARRY_15911
+268@(48@,10i) = 1
+48@ += 1
+  48@ >= 10
+goto_if_false @QUARRY_15911
+Text.PrintNow('QUAR_28', 10000, 1)
+35@ += 1
+
+:QUARRY_15966
+if 
+  266@ == 1
+goto_if_false @QUARRY_16217
+62@, 63@, 64@ = Object.GetCoordinates(121@)
+48@ = 0
+
+:QUARRY_16005
+if 
+  Object.DoesExist(101@(48@,10i))
+goto_if_false @QUARRY_16176
+if 
+  268@(48@,10i) == 1
+goto_if_false @QUARRY_16176
+59@, 60@, 61@ = Object.GetCoordinates(101@(48@,10i))
+78@ = Math.GetDistanceBetweenCoords3D(59@, 60@, 61@, 62@, 63@, 64@)
+if 
+  2.0 > 78@
+goto_if_false @QUARRY_16176
+Fx.AddExplosion(7, 59@, 60@, 61@)
+Object.Delete(101@(48@,10i))
+if 
+  not Car.IsDead(90@)
+goto_if_false @QUARRY_16176
+Car.Explode(90@)
+Train.SetCruiseSpeed(90@, 0.0)
+37@ = 1
+45@ = 11
+
+:QUARRY_16176
+48@ += 1
+  48@ >= 10
+goto_if_false @QUARRY_16005
+if 
+  37@ == 1
+goto_if_false @QUARRY_16217
+return 
+
+:QUARRY_16217
+if 
+  35@ == 1
+goto_if_false @QUARRY_16260
+if 
+  267@ == 1
+goto_if_false @QUARRY_16260
+35@ = 99
+
+:QUARRY_16260
+if 
+  Char.IsInCar($scplayer, 87@)
+goto_if_false @QUARRY_16327
+if 
+  265@ == 0
+goto_if_false @QUARRY_16320
+265@ = 1
+Blip.Remove(125@)
+Text.ClearThisPrint('QUAR_35')
+
+:QUARRY_16320
+goto @QUARRY_16436
+
+:QUARRY_16327
+if 
+  265@ == 1
+goto_if_false @QUARRY_16389
+48@ = 0
+
+:QUARRY_16352
+Blip.Remove(142@(48@,10i))
+48@ += 1
+  48@ >= 10
+goto_if_false @QUARRY_16352
+265@ = 0
+
+:QUARRY_16389
+if 
+  not Blip.DoesExist(125@)
+goto_if_false @QUARRY_16436
+125@ = Blip.AddForCar(87@)
+Blip.SetAsFriendly(125@, True)
+Text.PrintNow('QUAR_35', 5000, 1)
+
+:QUARRY_16436
+if 
+  266@ == 0
+goto_if_false @QUARRY_16531
+if 
+  15000 >= $g_Quarry_timerKM
+goto_if_false @QUARRY_16531
+Train.SetSpeed(90@, 56.0)
+Train.SetCruiseSpeed(90@, 56.0)
+141@ = Blip.AddForCar(90@)
+Blip.SetAsFriendly(141@, True)
+Text.PrintNow('QUAR_29', 7000, 1)
+266@ = 1
+
+:QUARRY_16531
+if 
+  266@ == 0
+goto_if_false @QUARRY_16660
+if 
+  Char.IsInArea3D($scplayer, 0, 727.6937, 2412.204, 17.6685, 872.5978, 2714.917, 21.0511)
+goto_if_false @QUARRY_16660
+Train.SetSpeed(90@, 56.0)
+Train.SetCruiseSpeed(90@, 56.0)
+141@ = Blip.AddForCar(90@)
+Blip.SetAsFriendly(141@, True)
+Hud.ClearTimer($g_Quarry_timerKM)
+Text.PrintNow('QUAR_29', 7000, 1)
+266@ = 1
+
+:QUARRY_16660
+if and
+  266@ == 1
+  267@ == 0
+goto_if_false @QUARRY_16740
+if 
+  Car.Locate3D(90@, 0, 673.9813, 1331.079, 10.7891, 20.0, 20.0, 8.0)
+goto_if_false @QUARRY_16740
+267@ = 1
+
+:QUARRY_16740
+if 
+  265@ == 1
+goto_if_false @QUARRY_16949
+48@ = 0
+
+:QUARRY_16765
+if 
+  Object.DoesExist(101@(48@,10i))
+goto_if_false @QUARRY_16928
+59@, 60@, 61@ = Object.GetCoordinates(101@(48@,10i))
+if and
+  59@ > 739.0
+  747.0 > 59@
+goto_if_false @QUARRY_16888
+268@(48@,10i) = 1
+if 
+  not Blip.DoesExist(142@(48@,10i))
+goto_if_false @QUARRY_16881
+142@(48@,10i) = Blip.AddForObject(101@(48@,10i))
+
+:QUARRY_16881
+goto @QUARRY_16928
+
+:QUARRY_16888
+268@(48@,10i) = 0
+if 
+  Blip.DoesExist(142@(48@,10i))
+goto_if_false @QUARRY_16928
+Blip.Remove(142@(48@,10i))
+
+:QUARRY_16928
+48@ += 1
+  48@ >= 10
+goto_if_false @QUARRY_16765
+
+:QUARRY_16949
+if 
+  266@ == 0
+goto_if_false @QUARRY_17170
+50@ = 0
+48@ = 0
+
+:QUARRY_16981
+if 
+  Object.DoesExist(101@(48@,10i))
+goto_if_false @QUARRY_17037
+if 
+  268@(48@,10i) == 0
+goto_if_false @QUARRY_17030
+50@ += 1
+
+:QUARRY_17030
+goto @QUARRY_17044
+
+:QUARRY_17037
+50@ += 1
+
+:QUARRY_17044
+48@ += 1
+  48@ >= 10
+goto_if_false @QUARRY_16981
+if 
+  50@ == 10
+goto_if_false @QUARRY_17170
+75@ = 56.0
+75@ *= 2.0
+Train.SetSpeed(90@, 75@)
+Train.SetCruiseSpeed(90@, 75@)
+141@ = Blip.AddForCar(90@)
+Blip.SetAsFriendly(141@, True)
+Hud.ClearTimer($g_Quarry_timerKM)
+Text.PrintNow('QUAR_29', 7000, 1)
+set_lvar_int_to_lvar_int 207@ = 46@
+266@ = 1
+
+:QUARRY_17170
+if 
+  35@ == 99
+goto_if_false @QUARRY_17195
+gosub @QUARRY_21060
+
+:QUARRY_17195
+return 
+
+:QUARRY_17197
+if 
+  Car.IsDead(91@)
+goto_if_false @QUARRY_17220
+278@ = 1
+
+:QUARRY_17220
+if 
+  Car.IsDead(88@)
+goto_if_false @QUARRY_17252
+37@ = 1
+45@ = 2
+return 
+
+:QUARRY_17252
+if 
+  35@ == 0
+goto_if_false @QUARRY_17632
+Car.WanderRandomly(91@)
+Car.SetCruiseSpeed(91@, 26.0)
+Car.SetDrivingStyle(91@, DrivingMode.AvoidCars)
+Car.SetOnlyDamagedByPlayer(91@, True)
+152@ = Blip.AddForCar(91@)
+Car.LockDoors(91@, CarLock.LockoutPlayerOnly)
+126@ = Blip.AddForCar(88@)
+Blip.SetAsFriendly(126@, True)
+Text.PrintNow('QUAR_32', 10000, 1)
+Hud.DisplayCounterWithString($g_Quarry_damageKM, CounterDisplay.Bar, 'QUAR_D6')
+50@ = 3
+50@ -= 1
+set_var_int_to_var_int $g_Quarry_timerKM = $g_Quarry_recordsKM(50@,7i)
+$g_Quarry_timerKM *= 1000
+Hud.DisplayTimerWithString($g_Quarry_timerKM, TimerDirection.Down, 'QUAR_D4')
+set_lvar_int_to_lvar_int 206@ = 46@
+Path.SwitchRoadsOff(256.6312, 734.7498, 4.0053, 343.9576, 765.6713, 6.4852)
+Path.SwitchRoadsOff(291.2253, 762.6765, 4.0625, 354.4869, 784.4223, 6.6101)
+Path.SwitchRoadsOff(-149.9865, 460.067, 4.9719, -119.7325, 530.4155, 12.4813)
+Path.SwitchRoadsOff(-100.9858, 1190.38, 16.1736, 97.0928, 1205.202, 19.9344)
+Path.SwitchRoadsOff(-124.9028, 1209.581, 14.6519, -108.1954, 1243.821, 19.8554)
+Path.SwitchRoadsOff(-113.2273, 1246.477, 11.3781, -84.1825, 1268.751, 17.5621)
+283@ = 1
+279@ = 0
+35@ += 1
+
+:QUARRY_17632
+if 
+  not Car.IsDead(91@)
+goto_if_false @QUARRY_17855
+59@, 60@, 61@ = Char.GetCoordinates($scplayer)
+62@, 63@, 64@ = Car.GetCoordinates(91@)
+78@ = Math.GetDistanceBetweenCoords3D(59@, 60@, 61@, 62@, 63@, 64@)
+if 
+  78@ > 600.0
+goto_if_false @QUARRY_17736
+37@ = 1
+45@ = 13
+return 
+
+:QUARRY_17736
+if 
+  279@ == 0
+goto_if_false @QUARRY_17798
+if 
+  78@ > 500.0
+goto_if_false @QUARRY_17798
+Text.PrintNow('QUAR_33', 7000, 1)
+279@ = 1
+
+:QUARRY_17798
+if 
+  279@ == 1
+goto_if_false @QUARRY_17855
+if 
+  400.0 > 78@
+goto_if_false @QUARRY_17855
+Text.ClearThisPrint('QUAR_33')
+279@ = 0
+
+:QUARRY_17855
+if 
+  0 >= $g_Quarry_timerKM
+goto_if_false @QUARRY_17889
+37@ = 1
+45@ = 14
+return 
+
+:QUARRY_17889
+if 
+  35@ == 1
+goto_if_false @QUARRY_17948
+if 
+  278@ == 1
+goto_if_false @QUARRY_17948
+set_lvar_int_to_lvar_int 172@ = 46@
+172@ += 2000
+35@ += 1
+
+:QUARRY_17948
+if 
+  35@ == 2
+goto_if_false @QUARRY_17992
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 172@
+goto_if_false @QUARRY_17992
+35@ = 99
+
+:QUARRY_17992
+if 
+  Char.IsInCar($scplayer, 88@)
+goto_if_false @QUARRY_18050
+if 
+  Blip.DoesExist(126@)
+goto_if_false @QUARRY_18043
+Blip.Remove(126@)
+Text.ClearThisPrint('QUAR_36')
+
+:QUARRY_18043
+goto @QUARRY_18097
+
+:QUARRY_18050
+if 
+  not Blip.DoesExist(126@)
+goto_if_false @QUARRY_18097
+126@ = Blip.AddForCar(88@)
+Blip.SetAsFriendly(126@, True)
+Text.PrintNow('QUAR_36', 5000, 1)
+
+:QUARRY_18097
+if 
+  not Car.IsDead(91@)
+goto_if_false @QUARRY_18156
+50@ = Car.GetHealth(91@)
+if and
+  50@ > 300
+  800 >= 50@
+goto_if_false @QUARRY_18156
+Car.SetHealth(91@, 300)
+
+:QUARRY_18156
+if 
+  not Car.IsDead(91@)
+goto_if_false @QUARRY_18431
+50@ = Car.GetHealth(91@)
+if 
+  250 >= 50@
+goto_if_false @QUARRY_18213
+$g_Quarry_damageKM = 0
+goto @QUARRY_18431
+
+:QUARRY_18213
+if 
+  50@ == 1000
+goto_if_false @QUARRY_18246
+$g_Quarry_damageKM = 100
+goto @QUARRY_18431
+
+:QUARRY_18246
+if 
+  50@ == 300
+goto_if_false @QUARRY_18279
+$g_Quarry_damageKM = 20
+goto @QUARRY_18431
+
+:QUARRY_18279
+if 
+  300 > 50@
+goto_if_false @QUARRY_18350
+51@ = 300
+sub_int_lvar_from_int_lvar 51@ -= 50@
+$g_Quarry_damageKM = 50
+sub_int_lvar_from_int_var $g_Quarry_damageKM -= 51@
+$g_Quarry_damageKM *= 20
+$g_Quarry_damageKM /= 50
+goto @QUARRY_18431
+
+:QUARRY_18350
+if 
+  800 > 50@
+goto_if_false @QUARRY_18377
+50@ = 800
+
+:QUARRY_18377
+51@ = 1000
+sub_int_lvar_from_int_lvar 51@ -= 50@
+$g_Quarry_damageKM = 200
+sub_int_lvar_from_int_var $g_Quarry_damageKM -= 51@
+$g_Quarry_damageKM *= 80
+$g_Quarry_damageKM /= 200
+$g_Quarry_damageKM += 20
+
+:QUARRY_18431
+if 
+  not Car.IsDead(91@)
+goto_if_false @QUARRY_18872
+48@ = 0
+
+:QUARRY_18454
+if 
+  Object.DoesExist(94@(48@,7i))
+goto_if_false @QUARRY_18851
+if 
+  not Object.IsAttached(94@(48@,7i))
+goto_if_false @QUARRY_18851
+switch_start 48@ total_jumps 6 default_jump 0 @QUARRY_18851 jumps 0 @QUARRY_18557 1 @QUARRY_18606 2 @QUARRY_18655 3 @QUARRY_18704 4 @QUARRY_18753 5 @QUARRY_18802 -1 @QUARRY_18851
+
+:QUARRY_18557
+Object.AttachToCar(94@(48@,7i), 91@, 0.5, -0.7, 0.7, 90.0, 0.0, 0.0)
+goto @QUARRY_18851
+
+:QUARRY_18606
+Object.AttachToCar(94@(48@,7i), 91@, -0.5, -0.7, 0.7, 90.0, 0.0, 0.0)
+goto @QUARRY_18851
+
+:QUARRY_18655
+Object.AttachToCar(94@(48@,7i), 91@, 0.5, -1.7, 0.73, 90.0, 0.0, 0.0)
+goto @QUARRY_18851
+
+:QUARRY_18704
+Object.AttachToCar(94@(48@,7i), 91@, -0.5, -1.7, 0.73, 90.0, 0.0, 0.0)
+goto @QUARRY_18851
+
+:QUARRY_18753
+Object.AttachToCar(94@(48@,7i), 91@, 0.5, -2.7, 0.76, 90.0, 0.0, 0.0)
+goto @QUARRY_18851
+
+:QUARRY_18802
+Object.AttachToCar(94@(48@,7i), 91@, -0.5, -2.7, 0.76, 90.0, 0.0, 0.0)
+goto @QUARRY_18851
+
+:QUARRY_18851
+48@ += 1
+  48@ >= 6
+goto_if_false @QUARRY_18454
+
+:QUARRY_18872
+if 
+  35@ == 99
+goto_if_false @QUARRY_18897
+gosub @QUARRY_21060
+
+:QUARRY_18897
+return 
+
+:QUARRY_18899
+if 
+  35@ == 0
+goto_if_false @QUARRY_18952
+Player.SetControl($player1, False)
+set_lvar_int_to_lvar_int 183@ = 46@
+183@ += 5000
+Hud.ClearTimer($g_Quarry_timerKM)
+35@ += 1
+
+:QUARRY_18952
+if 
+  35@ == 1
+goto_if_false @QUARRY_19019
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 183@
+goto_if_false @QUARRY_19019
+Camera.DoFade(0, 500)
+set_lvar_int_to_lvar_int 183@ = 46@
+183@ += 500
+35@ += 1
+
+:QUARRY_19019
+if 
+  35@ == 2
+goto_if_false @QUARRY_19190
+if and
+  is_int_lvar_greater_than_int_lvar 46@ > 183@
+  not Camera.GetFadingStatus
+goto_if_false @QUARRY_19190
+$g_Quarry_CashPickupKM = Pickup.CreateProtection(818.2578, 853.8873, 10.8059, $g_Quarry_CashPickupValueKM, $g_Quarry_CashPickupValueKM)
+Hud.SwitchWidescreen(True)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Game.SetAllCarsCanBeDamaged(False)
+Streaming.LoadScene(818.2578, 853.8873, 10.8059)
+Camera.SetFixedPosition(849.6491, 839.9428, 42.7363, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(848.7661, 840.1115, 42.2983, SwitchType.JumpCut)
+set_lvar_int_to_lvar_int 183@ = 46@
+183@ += 2000
+35@ += 1
+
+:QUARRY_19190
+if 
+  35@ == 3
+goto_if_false @QUARRY_19273
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 183@
+goto_if_false @QUARRY_19273
+Camera.DoFade(1, 500)
+Text.PrintBig('ASS_ACQ', 5000, TextStyle.WhiteMiddleSmaller)
+set_lvar_int_to_lvar_int 183@ = 46@
+183@ += 5000
+35@ += 1
+
+:QUARRY_19273
+if 
+  35@ == 4
+goto_if_false @QUARRY_19403
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 183@
+goto_if_false @QUARRY_19403
+Camera.SetFixedPosition(825.0984, 855.4503, 13.577, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(824.1995, 855.1732, 13.2376, SwitchType.JumpCut)
+Text.PrintWithNumberNow('ASS_LUV', $g_Quarry_CashPickupValueKM, 6000, 1)
+set_lvar_int_to_lvar_int 183@ = 46@
+183@ += 6000
+35@ += 1
+
+:QUARRY_19403
+if 
+  35@ == 5
+goto_if_false @QUARRY_19470
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 183@
+goto_if_false @QUARRY_19470
+Camera.DoFade(0, 500)
+set_lvar_int_to_lvar_int 183@ = 46@
+183@ += 500
+35@ += 1
+
+:QUARRY_19470
+if 
+  35@ == 6
+goto_if_false @QUARRY_19565
+if and
+  is_int_lvar_greater_than_int_lvar 46@ > 183@
+  not Camera.GetFadingStatus
+goto_if_false @QUARRY_19565
+59@, 60@, 61@ = Char.GetCoordinates($scplayer)
+Streaming.LoadScene(59@, 60@, 61@)
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+set_lvar_int_to_lvar_int 183@ = 46@
+183@ += 2000
+35@ += 1
+
+:QUARRY_19565
+if 
+  35@ == 7
+goto_if_false @QUARRY_19670
+if 
+  is_int_lvar_greater_than_int_lvar 46@ > 183@
+goto_if_false @QUARRY_19670
+Text.PrintWith2NumbersNow('QUAR_P7', 210@, 211@, 10000, TextStyle.Middle)
+Text.Print('QUAR_H3', 7000, 1)
+Camera.DoFade(1, 500)
+set_lvar_int_to_lvar_int 183@ = 46@
+183@ += 500
+35@ += 1
+
+:QUARRY_19670
+if 
+  35@ == 8
+goto_if_false @QUARRY_19734
+if and
+  is_int_lvar_greater_than_int_lvar 46@ > 183@
+  not Camera.GetFadingStatus
+goto_if_false @QUARRY_19734
+Game.SetEveryoneIgnorePlayer($player1, False)
+Game.SetAllCarsCanBeDamaged(True)
+Player.SetControl($player1, True)
+35@ = 99
+
+:QUARRY_19734
+if 
+  35@ == 99
+goto_if_false @QUARRY_19759
+gosub @QUARRY_21060
+
+:QUARRY_19759
+return 
+
+:QUARRY_19761
+215@ = 808.4078
+216@ = 841.9887
+217@ = 8.6694
+131@ = Blip.AddForCoord(215@, 216@, 217@)
+238@ = 1
+return 
+
+:QUARRY_19814
+215@ = 371.5454
+216@ = 978.1724
+217@ = 28.521
+132@ = Blip.AddForCoord(215@, 216@, 217@)
+239@ = 1
+return 
+200@, 201@ = Clock.GetTimeOfDay()
+set_lvar_int_to_lvar_int 50@ = 202@
+50@ *= 60
+add_int_lvar_to_int_lvar 50@ += 203@
+50@ *= 1000
+set_lvar_int_to_lvar_int 173@ = 50@
+add_int_lvar_to_int_lvar 173@ += 46@
+add_int_lvar_to_int_lvar 201@ += 203@
+if 
+  201@ >= 60
+goto_if_false @QUARRY_19962
+200@ += 1
+201@ -= 60
+
+:QUARRY_19962
+add_int_lvar_to_int_lvar 200@ += 202@
+
+:QUARRY_19970
+if 
+  200@ >= 24
+goto_if_false @QUARRY_20002
+200@ -= 24
+goto @QUARRY_19970
+
+:QUARRY_20002
+80@ = 0
+if 
+  201@ > 45
+goto_if_false @QUARRY_20104
+50@ = 60
+sub_int_lvar_from_int_lvar 50@ -= 201@
+201@ = 0
+200@ += 1
+if 
+  200@ == 24
+goto_if_false @QUARRY_20081
+200@ = 0
+
+:QUARRY_20081
+50@ *= 1000
+add_int_lvar_to_int_lvar 173@ += 50@
+80@ = 1
+
+:QUARRY_20104
+if 
+  80@ == 0
+goto_if_false @QUARRY_20192
+if and
+  201@ > 30
+  45 > 201@
+goto_if_false @QUARRY_20192
+50@ = 45
+sub_int_lvar_from_int_lvar 50@ -= 201@
+201@ = 45
+50@ *= 1000
+add_int_lvar_to_int_lvar 173@ += 50@
+80@ = 1
+
+:QUARRY_20192
+if 
+  80@ == 0
+goto_if_false @QUARRY_20280
+if and
+  201@ > 15
+  30 > 201@
+goto_if_false @QUARRY_20280
+50@ = 30
+sub_int_lvar_from_int_lvar 50@ -= 201@
+201@ = 30
+50@ *= 1000
+add_int_lvar_to_int_lvar 173@ += 50@
+80@ = 1
+
+:QUARRY_20280
+if 
+  80@ == 0
+goto_if_false @QUARRY_20368
+if and
+  201@ > 0
+  15 > 201@
+goto_if_false @QUARRY_20368
+50@ = 15
+sub_int_lvar_from_int_lvar 50@ -= 201@
+201@ = 15
+50@ *= 1000
+add_int_lvar_to_int_lvar 173@ += 50@
+80@ = 1
+
+:QUARRY_20368
+set_lvar_int_to_lvar_int 50@ = 200@
+50@ *= 60
+add_int_lvar_to_int_lvar 50@ += 201@
+50@ *= 1000
+set_var_int_to_lvar_int $g_Quarry_timerKM = 50@
+return 
+
+:QUARRY_20409
+if 
+is_ps2_keyboard_key_just_pressed 32
+goto_if_false @QUARRY_20458
+47@ += 1
+if 
+  47@ > 2
+goto_if_false @QUARRY_20456
+47@ = 0
+
+:QUARRY_20456
+clear_all_view_variables 
+
+:QUARRY_20458
+if 
+  47@ == 1
+goto_if_false @QUARRY_20585
+set_var_int_to_lvar_int $Quarry_view_debug[0] = 34@
+set_var_int_to_lvar_int $Quarry_view_debug[1] = 35@
+set_var_int_to_lvar_int $Quarry_view_debug[2] = 46@
+$Quarry_view_debug[3] = 0
+$Quarry_view_debug[4] = 0
+$Quarry_view_debug[5] = 0
+$Quarry_view_debug[6] = 0
+$Quarry_view_debug[7] = 0
+view_integer_variable $Quarry_view_debug[0] "M_STAGE"
+view_integer_variable $Quarry_view_debug[1] "M_GOALS"
+view_integer_variable $Quarry_view_debug[2] "M_MISSION_TIMER"
+
+:QUARRY_20585
+if 
+  47@ == 2
+goto_if_false @QUARRY_20786
+$Quarry_view_debug[7] = 0
+48@ = 0
+
+:QUARRY_20617
+set_var_int_to_var_int $Quarry_view_debug(48@,8i) = $g_Quarry_recordsKM(48@,7i)
+add_int_var_to_int_var $Quarry_view_debug[7] += $g_Quarry_recordsKM(48@,7i)
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_20617
+view_integer_variable $Quarry_view_debug[0] "ROCKFALL"
+view_integer_variable $Quarry_view_debug[1] "SABOTAGE"
+view_integer_variable $Quarry_view_debug[2] "DESTROY."
+view_integer_variable $Quarry_view_debug[3] "REMOVAL."
+view_integer_variable $Quarry_view_debug[4] "DELIVERY"
+view_integer_variable $Quarry_view_debug[5] "SPILLAGE"
+view_integer_variable $Quarry_view_debug[6] "BURIAL.."
+view_integer_variable $Quarry_view_debug[7] "TOTAL..."
+
+:QUARRY_20786
+if 
+is_ps2_keyboard_key_just_pressed 98
+goto_if_false @QUARRY_20808
+38@ = 1
+
+:QUARRY_20808
+if 
+is_ps2_keyboard_key_just_pressed 80
+goto_if_false @QUARRY_20896
+if 
+  39@ == 0
+goto_if_false @QUARRY_20871
+39@ = 1
+write_debug "LEVEL_PAUSED"
+goto @QUARRY_20896
+
+:QUARRY_20871
+39@ = 0
+write_debug "LEVEL_UNPAUSED"
+
+:QUARRY_20896
+return 
+
+:QUARRY_20898
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @QUARRY_20922
+36@ = 1
+return 
+
+:QUARRY_20922
+if 
+is_ps2_keyboard_key_just_pressed 77
+goto_if_false @QUARRY_20968
+$g_nQuarryMissionsPassed += 1
+write_debug_with_int "MISSIONS_PASSED" $g_nQuarryMissionsPassed
+return 
+
+:QUARRY_20968
+if 
+  not is_ps2_keyboard_key_just_pressed 74
+goto_if_false @QUARRY_20985
+return 
+
+:QUARRY_20985
+return 
+
+:QUARRY_20987
+41@ += 1
+if 
+  41@ > 9
+goto_if_false @QUARRY_21019
+41@ = 0
+
+:QUARRY_21019
+return 
+
+:QUARRY_21021
+42@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 44@ = 42@
+sub_int_lvar_from_int_lvar 44@ -= 43@
+set_lvar_int_to_lvar_int 43@ = 42@
+add_int_lvar_to_int_lvar 46@ += 44@
+return 
+
+:QUARRY_21060
+34@ += 1
+35@ = 0
+TIMERA = 0
+TIMERB = 0
+return 
+
+:QUARRY_21090
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @QUARRY_21117
+wait 0
+goto @QUARRY_21090
+
+:QUARRY_21117
+Player.SetControl($player1, False)
+wait 1000
+Camera.DoFade(0, 1000)
+
+:QUARRY_21136
+if 
+  Camera.GetFadingStatus
+goto_if_false @QUARRY_21160
+wait 0
+goto @QUARRY_21136
+
+:QUARRY_21160
+if 
+  $done_quarry_progress == 0
+goto_if_false @QUARRY_21378
+if 
+  $g_nQuarryMissionsPassed == 0
+goto_if_false @QUARRY_21378
+50@ = 1
+50@ -= 1
+$g_Quarry_recordsKM(50@,7i) = 211
+50@ = 2
+50@ -= 1
+$g_Quarry_recordsKM(50@,7i) = 300
+50@ = 3
+50@ -= 1
+$g_Quarry_recordsKM(50@,7i) = 481
+50@ = 4
+50@ -= 1
+$g_Quarry_recordsKM(50@,7i) = 241
+50@ = 5
+50@ -= 1
+$g_Quarry_recordsKM(50@,7i) = 181
+50@ = 6
+50@ -= 1
+$g_Quarry_recordsKM(50@,7i) = 181
+50@ = 7
+50@ -= 1
+$g_Quarry_recordsKM(50@,7i) = 481
+
+:QUARRY_21378
+World.ClearArea(0, $quarryX, $quarryY, $quarryZ, 1000.0)
+Streaming.LoadScene($quarryX, $quarryY, $quarryZ)
+Char.SetCoordinates($scplayer, $quarryX, $quarryY, $quarryZ)
+Char.SetHeading($scplayer, 90.0)
+Camera.SetBehindPlayer
+wait 500
+set_lvar_int_to_var_int 50@ = $g_nQuarryMissionsPassed
+
+:QUARRY_21446
+if 
+  50@ >= 7
+goto_if_false @QUARRY_21478
+50@ -= 7
+goto @QUARRY_21446
+
+:QUARRY_21478
+set_lvar_int_to_lvar_int 198@ = 50@
+198@ += 1
+gosub @QUARRY_21635
+207@ = 0
+CarGenerator.Switch($gen_car1, 0)
+CarGenerator.Switch($gen_car2, 0)
+wait 1500
+Text.DrawOddjobTitleBeforeFade(True)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+
+:QUARRY_21545
+if 
+  Camera.GetFadingStatus
+goto_if_false @QUARRY_21569
+wait 0
+goto @QUARRY_21545
+
+:QUARRY_21569
+if 
+  $done_quarry_progress == 1
+goto_if_false @QUARRY_21598
+Text.PrintHelp('QUAR_H2')
+
+:QUARRY_21598
+Player.SetControl($player1, True)
+45@ = 0
+TIMERA = 0
+TIMERB = 0
+35@ = 0
+return 
+
+:QUARRY_21635
+switch_start 198@ total_jumps 7 default_jump 1 @QUARRY_21796 jumps 1 @QUARRY_21698 2 @QUARRY_21712 3 @QUARRY_21782 4 @QUARRY_21726 5 @QUARRY_21740 6 @QUARRY_21754 7 @QUARRY_21768
+
+:QUARRY_21698
+gosub @QUARRY_22158
+goto @QUARRY_21825
+
+:QUARRY_21712
+gosub @QUARRY_22482
+goto @QUARRY_21825
+
+:QUARRY_21726
+gosub @QUARRY_22957
+goto @QUARRY_21825
+
+:QUARRY_21740
+gosub @QUARRY_23543
+goto @QUARRY_21825
+
+:QUARRY_21754
+gosub @QUARRY_24497
+goto @QUARRY_21825
+
+:QUARRY_21768
+gosub @QUARRY_21827
+goto @QUARRY_21825
+
+:QUARRY_21782
+gosub @QUARRY_25306
+goto @QUARRY_21825
+
+:QUARRY_21796
+write_debug "UNKNOWN_QUARRY_MISSION_ID"
+
+:QUARRY_21825
+return 
+
+:QUARRY_21827
+34@ = 1
+Streaming.RequestModel(468)
+Streaming.RequestModel(486)
+Streaming.RequestModel(406)
+Streaming.RequestModel(#DEAD_TIED_COP)
+Streaming.RequestModel(523)
+Streaming.RequestModel(#CR_AMMOBOX)
+Streaming.LoadAllModelsNow
+
+:QUARRY_21866
+if or
+  not Streaming.HasModelLoaded(468)
+  not Streaming.HasModelLoaded(486)
+  not Streaming.HasModelLoaded(406)
+  not Streaming.HasModelLoaded(#DEAD_TIED_COP)
+  not Streaming.HasModelLoaded(523)
+  not Streaming.HasModelLoaded(#CR_AMMOBOX)
+goto_if_false @QUARRY_21918
+wait 0
+goto @QUARRY_21866
+
+:QUARRY_21918
+86@ = Car.Create(468, 819.7281, 858.3189, 11.0469)
+Car.SetHeading(86@, 291.4761)
+87@ = Car.Create(486, 653.1636, 879.9844, -42.5799)
+Car.SetHeading(87@, 119.7783)
+88@ = Car.Create(406, 717.0151, 938.3721, -19.7314)
+Car.SetHeading(88@, 38.1129)
+93@ = Object.Create(#CR_AMMOBOX, 720.5391, 922.5157, -19.8436)
+Object.SetCollision(93@, False)
+Object.SetVisible(93@, False)
+Object.AttachToCar(93@, 88@, 0.0, -1.7, 1.5, 0.0, 0.0, 0.0)
+92@ = Object.Create(#DEAD_TIED_COP, 606.9487, 933.0876, -38.5322)
+Object.SetDynamic(92@, True)
+89@ = Car.Create(523, 560.3003, 844.9364, -13.0258)
+Car.SetCanBeDamaged(89@, False)
+Game.SwitchEmergencyServices(False)
+return 
+
+:QUARRY_22158
+34@ = 5
+Streaming.RequestModel(486)
+Streaming.RequestModel(#DYN_QUARRYROCK03)
+Streaming.LoadAllModelsNow
+
+:QUARRY_22177
+if or
+  not Streaming.HasModelLoaded(486)
+  not Streaming.HasModelLoaded(#DYN_QUARRYROCK03)
+goto_if_false @QUARRY_22209
+wait 0
+goto @QUARRY_22177
+
+:QUARRY_22209
+87@ = Car.Create(486, 816.4832, 845.8509, 9.4934)
+Car.SetHeading(87@, 115.4882)
+50@ = 0
+94@(50@,7i) = Object.Create(#DYN_QUARRYROCK03, 771.6403, 836.2275, 4.8965)
+50@ += 1
+94@(50@,7i) = Object.Create(#DYN_QUARRYROCK03, 751.6732, 944.9977, 4.8593)
+50@ += 1
+94@(50@,7i) = Object.Create(#DYN_QUARRYROCK03, 538.9102, 985.6403, -8.5887)
+50@ += 1
+94@(50@,7i) = Object.Create(#DYN_QUARRYROCK03, 680.5322, 963.4501, -13.6607)
+50@ += 1
+94@(50@,7i) = Object.Create(#DYN_QUARRYROCK03, 516.8391, 928.7185, -27.6183)
+50@ += 1
+94@(50@,7i) = Object.Create(#DYN_QUARRYROCK03, 522.6153, 828.3048, -27.1838)
+50@ += 1
+94@(50@,7i) = Object.Create(#DYN_QUARRYROCK03, 646.7208, 752.2311, -12.1482)
+return 
+
+:QUARRY_22482
+34@ = 7
+Streaming.RequestModel(486)
+Streaming.RequestModel(#KB_BARREL)
+Streaming.LoadAllModelsNow
+
+:QUARRY_22501
+if or
+  not Streaming.HasModelLoaded(486)
+  not Streaming.HasModelLoaded(#KB_BARREL)
+goto_if_false @QUARRY_22533
+wait 0
+goto @QUARRY_22501
+
+:QUARRY_22533
+87@ = Car.Create(486, 816.4832, 845.8509, 9.4934)
+Car.SetHeading(87@, 115.4882)
+50@ = 0
+101@(50@,10i) = Object.Create(#KB_BARREL, 817.0658, 865.5903, 11.0469)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 714.5327, 920.0583, -19.6787)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 632.2825, 895.8612, -43.9534)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 675.7952, 841.8704, -43.9609)
+51@ = 2
+51@ -= 1
+set_lvar_int_to_var_int 50@ = $g_Quarry_recordsKM(51@,7i)
+50@ *= 100
+48@ = 0
+
+:QUARRY_22742
+switch_start 48@ total_jumps 4 default_jump 0 @QUARRY_22930 jumps 0 @QUARRY_22805 1 @QUARRY_22835 2 @QUARRY_22865 3 @QUARRY_22895 -1 @QUARRY_22930 -1 @QUARRY_22930 -1 @QUARRY_22930
+
+:QUARRY_22805
+set_lvar_int_to_lvar_int 174@(48@,4i) = 50@
+174@(48@,4i) *= 3
+goto @QUARRY_22930
+
+:QUARRY_22835
+set_lvar_int_to_lvar_int 174@(48@,4i) = 50@
+174@(48@,4i) *= 6
+goto @QUARRY_22930
+
+:QUARRY_22865
+set_lvar_int_to_lvar_int 174@(48@,4i) = 50@
+174@(48@,4i) *= 8
+goto @QUARRY_22930
+
+:QUARRY_22895
+set_lvar_int_to_var_int 174@(48@,4i) = $g_Quarry_recordsKM(51@,7i)
+174@(48@,4i) *= 1000
+goto @QUARRY_22930
+
+:QUARRY_22930
+48@ += 1
+  48@ >= 4
+goto_if_false @QUARRY_22742
+Game.SwitchEmergencyServices(False)
+return 
+
+:QUARRY_22957
+34@ = 9
+Streaming.RequestModel(406)
+Streaming.RequestModel(#DEAD_TIED_COP)
+Streaming.RequestModel(468)
+Streaming.RequestModel(#CM_BOX)
+Streaming.RequestModel(#BLACKBAG2)
+Streaming.RequestModel(#DYN_WOODPILE)
+Streaming.RequestModel(#DYN_WOODPILE2)
+Streaming.LoadAllModelsNow
+
+:QUARRY_23001
+if or
+  not Streaming.HasModelLoaded(406)
+  not Streaming.HasModelLoaded(#DEAD_TIED_COP)
+  not Streaming.HasModelLoaded(468)
+goto_if_false @QUARRY_23038
+wait 0
+goto @QUARRY_23001
+
+:QUARRY_23038
+if or
+  not Streaming.HasModelLoaded(#CM_BOX)
+  not Streaming.HasModelLoaded(#BLACKBAG2)
+  not Streaming.HasModelLoaded(#DYN_WOODPILE)
+  not Streaming.HasModelLoaded(#DYN_WOODPILE2)
+goto_if_false @QUARRY_23080
+wait 0
+goto @QUARRY_23038
+
+:QUARRY_23080
+88@ = Car.Create(406, 355.8632, 895.6545, 19.399)
+Car.SetHeading(88@, 342.1892)
+86@ = Car.Create(468, 819.7281, 858.3189, 11.0469)
+Car.SetHeading(86@, 291.4761)
+50@ = 0
+111@(50@,3i) = Object.Create(#DEAD_TIED_COP, 355.8632, 894.6545, 24.2254)
+75@ = Math.RandomFloatInRange(0.0, 180.0)
+75@ -= 90.0
+if 
+  0.0 > 75@
+goto_if_false @QUARRY_23236
+75@ += 360.0
+
+:QUARRY_23236
+Object.AttachToCar(111@(50@,3i), 88@, 0.5, -0.7, 0.7, 90.0, 75@, 75@)
+50@ += 1
+111@(50@,3i) = Object.Create(#DEAD_TIED_COP, 355.8632, 895.6545, 24.5629)
+75@ = Math.RandomFloatInRange(0.0, 180.0)
+75@ -= 90.0
+if 
+  0.0 > 75@
+goto_if_false @QUARRY_23364
+75@ += 360.0
+
+:QUARRY_23364
+Object.AttachToCar(111@(50@,3i), 88@, -0.5, -1.7, 0.73, 90.0, 75@, 75@)
+50@ += 1
+111@(50@,3i) = Object.Create(#DEAD_TIED_COP, 355.8632, 896.6545, 24.8877)
+75@ = Math.RandomFloatInRange(0.0, 180.0)
+75@ -= 90.0
+if 
+  0.0 > 75@
+goto_if_false @QUARRY_23492
+75@ += 360.0
+
+:QUARRY_23492
+Object.AttachToCar(111@(50@,3i), 88@, 0.5, -2.7, 0.76, 90.0, 75@, 75@)
+World.SetCarDensityMultiplier(3.0)
+Game.SwitchEmergencyServices(False)
+return 
+
+:QUARRY_23543
+34@ = 12
+Streaming.RequestModel(406)
+Streaming.RequestModel(#KB_BARREL)
+Streaming.LoadAllModelsNow
+
+:QUARRY_23562
+if or
+  not Streaming.HasModelLoaded(406)
+  not Streaming.HasModelLoaded(#KB_BARREL)
+goto_if_false @QUARRY_23594
+wait 0
+goto @QUARRY_23562
+
+:QUARRY_23594
+88@ = Car.Create(406, 816.4832, 845.8509, 9.4934)
+Car.SetHeading(88@, 295.4882)
+50@ = 0
+101@(50@,10i) = Object.Create(#KB_BARREL, 815.4841, 846.2587, 15.0409)
+Object.AttachToCar(101@(50@,10i), 88@, 0.5, -0.7, 0.9, 90.0, 0.0, 0.0)
+Object.SetProofs(101@(50@,10i), False, False, False, True, False)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 816.6973, 844.8737, 15.046)
+Object.AttachToCar(101@(50@,10i), 88@, -0.5, -0.7, 0.9, 90.0, 0.0, 0.0)
+Object.SetProofs(101@(50@,10i), False, False, False, True, False)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 814.2406, 845.8572, 14.9014)
+Object.AttachToCar(101@(50@,10i), 88@, 0.5, -1.7, 0.93, 90.0, 0.0, 0.0)
+Object.SetProofs(101@(50@,10i), False, False, False, True, False)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 815.048, 844.0368, 14.8892)
+Object.AttachToCar(101@(50@,10i), 88@, -0.5, -1.7, 0.93, 90.0, 0.0, 0.0)
+Object.SetProofs(101@(50@,10i), False, False, False, True, False)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 813.2042, 843.0317, 14.7114)
+Object.AttachToCar(101@(50@,10i), 88@, 0.5, -2.7, 0.96, 90.0, 0.0, 0.0)
+Object.SetProofs(101@(50@,10i), False, False, False, True, False)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 813.2919, 845.4581, 14.8038)
+Object.AttachToCar(101@(50@,10i), 88@, -0.5, -2.7, 0.96, 90.0, 0.0, 0.0)
+Object.SetProofs(101@(50@,10i), False, False, False, True, False)
+50@ = 0
+122@(50@,3i) = Object.Create(#CR_AMMOBOX, 815.4841, 846.2587, 15.0409)
+Object.SetCollision(122@(50@,3i), False)
+Object.SetVisible(122@(50@,3i), False)
+Object.AttachToCar(122@(50@,3i), 88@, -1.0, -5.0, 0.3, 0.0, 0.0, 0.0)
+50@ += 1
+122@(50@,3i) = Object.Create(#CR_AMMOBOX, 816.6973, 844.8737, 15.046)
+Object.SetCollision(122@(50@,3i), False)
+Object.SetVisible(122@(50@,3i), False)
+Object.AttachToCar(122@(50@,3i), 88@, 0.0, -5.0, 0.3, 0.0, 0.0, 0.0)
+50@ += 1
+122@(50@,3i) = Object.Create(#CR_AMMOBOX, 815.048, 844.0368, 14.8892)
+Object.SetCollision(122@(50@,3i), False)
+Object.SetVisible(122@(50@,3i), False)
+Object.AttachToCar(122@(50@,3i), 88@, 1.0, -5.0, 0.3, 0.0, 0.0, 0.0)
+Game.SwitchEmergencyServices(False)
+return 
+
+:QUARRY_24497
+34@ = 14
+Streaming.RequestModel(486)
+Streaming.RequestModel(#KB_BARREL)
+Streaming.RequestModel(538)
+Streaming.RequestModel(570)
+Streaming.LoadAllModelsNow
+
+:QUARRY_24526
+if or
+  not Streaming.HasModelLoaded(486)
+  not Streaming.HasModelLoaded(#KB_BARREL)
+  not Streaming.HasModelLoaded(538)
+  not Streaming.HasModelLoaded(570)
+goto_if_false @QUARRY_24568
+wait 0
+goto @QUARRY_24526
+
+:QUARRY_24568
+87@ = Car.Create(486, 816.4832, 845.8509, 9.4934)
+Car.SetHeading(87@, 295.4882)
+90@ = Train.Create(832.5291, 2669.716, 19.8594, 11, 0)
+Train.SetSpeed(90@, 0.0)
+Train.SetCruiseSpeed(90@, 0.0)
+121@ = Object.Create(#CR_AMMOBOX, 816.4832, 848.8509, 9.4934)
+Object.SetCollision(121@, False)
+Object.SetVisible(121@, False)
+Object.AttachToCar(121@, 90@, 0.0, 9.0, -1.8, 0.0, 0.0, 0.0)
+50@ = 0
+101@(50@,10i) = Object.Create(#KB_BARREL, 744.1446, 1583.6, 7.5408)
+Object.SetRotation(101@(48@,10i), 0.0, 0.0, 0.0)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 743.0427, 1602.768, 7.1368)
+Object.SetRotation(101@(48@,10i), 0.0, 78.0, 0.0)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 743.5758, 1616.749, 6.8536)
+Object.SetRotation(101@(48@,10i), 0.0, 64.0, 0.0)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 742.6569, 1653.42, 6.158)
+Object.SetRotation(101@(48@,10i), 0.0, 36.0, 0.0)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 743.8057, 1671.523, 5.8467)
+Object.SetRotation(101@(48@,10i), 0.0, 14.0, 0.0)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 742.5768, 1700.305, 5.4186)
+Object.SetRotation(101@(48@,10i), 0.0, 128.0, 0.0)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 743.4429, 1730.141, 5.0731)
+Object.SetRotation(101@(48@,10i), 0.0, 96.0, 0.0)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 742.0187, 1765.321, 4.6566)
+Object.SetRotation(101@(48@,10i), 0.0, 65.0, 0.0)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 742.176, 1812.375, 4.3281)
+Object.SetRotation(101@(48@,10i), 0.0, 170.0, 0.0)
+50@ += 1
+101@(50@,10i) = Object.Create(#KB_BARREL, 742.7178, 1869.991, 4.3281)
+Object.SetRotation(101@(48@,10i), 0.0, 143.0, 0.0)
+Game.SwitchRandomTrains(False)
+return 
+
+:QUARRY_25306
+34@ = 16
+Streaming.RequestModel(406)
+Streaming.RequestModel(18)
+Streaming.RequestModel(#CR_GUNCRATE)
+Streaming.LoadAllModelsNow
+
+:QUARRY_25329
+if or
+  not Streaming.HasModelLoaded(406)
+  not Streaming.HasModelLoaded(18)
+  not Streaming.HasModelLoaded(#CR_GUNCRATE)
+goto_if_false @QUARRY_25365
+wait 0
+goto @QUARRY_25329
+
+:QUARRY_25365
+88@ = Car.Create(406, 816.4832, 845.8509, 9.4934)
+Car.SetHeading(88@, 295.4882)
+91@ = Car.Create(406, 812.4955, 1144.567, 27.3445)
+Car.SetHeading(91@, 116.9096)
+Car.LockDoors(91@, CarLock.Locked)
+85@ = Char.CreateInsideCar(PedType.CivMale, 18, 91@)
+50@ = 0
+94@(50@,7i) = Object.Create(#CR_GUNCRATE, 815.4841, 846.2587, 15.0409)
+Object.AttachToCar(94@(50@,7i), 91@, 0.5, -0.7, 0.7, 90.0, 0.0, 0.0)
+50@ += 1
+94@(50@,7i) = Object.Create(#CR_GUNCRATE, 816.6973, 844.8737, 15.046)
+Object.AttachToCar(94@(50@,7i), 91@, -0.5, -0.7, 0.7, 90.0, 0.0, 0.0)
+50@ += 1
+94@(50@,7i) = Object.Create(#CR_GUNCRATE, 814.2406, 845.8572, 14.9014)
+Object.AttachToCar(94@(50@,7i), 91@, 0.5, -1.7, 0.73, 90.0, 0.0, 0.0)
+50@ += 1
+94@(50@,7i) = Object.Create(#CR_GUNCRATE, 815.048, 844.0368, 14.8892)
+Object.AttachToCar(94@(50@,7i), 91@, -0.5, -1.7, 0.73, 90.0, 0.0, 0.0)
+50@ += 1
+94@(50@,7i) = Object.Create(#CR_GUNCRATE, 813.2042, 843.0317, 14.7114)
+Object.AttachToCar(94@(50@,7i), 91@, 0.5, -2.7, 0.76, 90.0, 0.0, 0.0)
+50@ += 1
+94@(50@,7i) = Object.Create(#CR_GUNCRATE, 813.2919, 845.4581, 14.8038)
+Object.AttachToCar(94@(50@,7i), 91@, -0.5, -2.7, 0.76, 90.0, 0.0, 0.0)
+Game.SwitchEmergencyServices(False)
+return 
+
+:QUARRY_25912
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+Text.ClearSmallPrints
+switch_start 45@ total_jumps 14 default_jump 0 @QUARRY_26380 jumps 1 @QUARRY_26081 2 @QUARRY_26104 3 @QUARRY_26127 4 @QUARRY_26150 5 @QUARRY_26173 6 @QUARRY_26196 7 @QUARRY_26219
+switch_continued 8 @QUARRY_26242 9 @QUARRY_26265 10 @QUARRY_26058 11 @QUARRY_26288 12 @QUARRY_26311 13 @QUARRY_26334 14 @QUARRY_26357 -1 @QUARRY_26380 -1 @QUARRY_26380
+
+:QUARRY_26058
+Text.PrintNow('QUAR_F0', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26081
+Text.PrintNow('QUAR_F1', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26104
+Text.PrintNow('QUAR_F2', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26127
+Text.PrintNow('QUAR_F3', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26150
+Text.PrintNow('QUAR_F4', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26173
+Text.PrintNow('QUAR_F5', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26196
+Text.PrintNow('QUAR_F6', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26219
+Text.PrintNow('QUAR_F7', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26242
+Text.PrintNow('QUAR_F8', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26265
+Text.PrintNow('QUAR_F9', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26288
+Text.PrintNow('QUAR_FA', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26311
+Text.PrintNow('QUAR_FB', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26334
+Text.PrintNow('QUAR_FC', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26357
+Text.PrintNow('QUAR_FD', 5000, 1)
+goto @QUARRY_26380
+
+:QUARRY_26380
+return 
+
+:QUARRY_26382
+if 
+  207@ == 0
+goto_if_false @QUARRY_26423
+set_lvar_int_to_lvar_int 50@ = 46@
+sub_int_lvar_from_int_lvar 50@ -= 206@
+goto @QUARRY_26439
+
+:QUARRY_26423
+set_lvar_int_to_lvar_int 50@ = 207@
+sub_int_lvar_from_int_lvar 50@ -= 206@
+
+:QUARRY_26439
+set_lvar_int_to_lvar_int 51@ = 50@
+51@ /= 1000
+set_lvar_int_to_lvar_int 52@ = 51@
+52@ *= 1000
+sub_int_lvar_from_int_lvar 50@ -= 52@
+if 
+  50@ > 50
+goto_if_false @QUARRY_26504
+51@ += 1
+
+:QUARRY_26504
+293@ = 0
+294@ = 0
+if 
+  is_int_var_equal_to_int_lvar $g_Quarry_recordsKM($g_nQuarryMissionsPassed,7i) == 51@
+goto_if_false @QUARRY_26555
+293@ = 1
+goto @QUARRY_26585
+
+:QUARRY_26555
+if 
+  is_int_var_greater_than_int_lvar $g_Quarry_recordsKM($g_nQuarryMissionsPassed,7i) > 51@
+goto_if_false @QUARRY_26585
+294@ = 1
+
+:QUARRY_26585
+if 
+  294@ == 1
+goto_if_false @QUARRY_26615
+set_var_int_to_lvar_int $g_Quarry_recordsKM($g_nQuarryMissionsPassed,7i) = 51@
+
+:QUARRY_26615
+if and
+  $done_quarry_progress == 1
+  294@ == 1
+goto_if_false @QUARRY_26686
+set_lvar_int_to_lvar_int 208@ = 51@
+208@ /= 60
+set_lvar_int_to_lvar_int 50@ = 208@
+50@ *= 60
+set_lvar_int_to_lvar_int 209@ = 51@
+sub_int_lvar_from_int_lvar 209@ -= 50@
+
+:QUARRY_26686
+50@ = 0
+if 
+  $done_quarry_progress == 1
+goto_if_false @QUARRY_26751
+48@ = 0
+
+:QUARRY_26718
+add_int_var_to_int_lvar 50@ += $g_Quarry_recordsKM(48@,7i)
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_26718
+
+:QUARRY_26751
+Stat.SetInt(StatId.QuarryCompletionTime, 50@)
+if and
+  $done_quarry_progress == 1
+  294@ == 1
+goto_if_false @QUARRY_26830
+set_lvar_int_to_lvar_int 210@ = 50@
+210@ /= 60
+set_lvar_int_to_lvar_int 51@ = 210@
+51@ *= 60
+set_lvar_int_to_lvar_int 211@ = 50@
+sub_int_lvar_from_int_lvar 211@ -= 51@
+
+:QUARRY_26830
+$g_nQuarryMissionsPassed += 1
+if 
+  $done_quarry_progress == 0
+goto_if_false @QUARRY_27101
+switch_start $g_nQuarryMissionsPassed total_jumps 7 default_jump 0 @QUARRY_27023 jumps 1 @QUARRY_26918 2 @QUARRY_26933 3 @QUARRY_26948 4 @QUARRY_26963 5 @QUARRY_26978 6 @QUARRY_26993 7 @QUARRY_27008
+
+:QUARRY_26918
+50@ = 500
+goto @QUARRY_27023
+
+:QUARRY_26933
+50@ = 1000
+goto @QUARRY_27023
+
+:QUARRY_26948
+50@ = 2000
+goto @QUARRY_27023
+
+:QUARRY_26963
+50@ = 3000
+goto @QUARRY_27023
+
+:QUARRY_26978
+50@ = 5000
+goto @QUARRY_27023
+
+:QUARRY_26993
+50@ = 7500
+goto @QUARRY_27023
+
+:QUARRY_27008
+50@ = 10000
+goto @QUARRY_27023
+
+:QUARRY_27023
+if 
+  $g_nQuarryMissionsPassed == 7
+goto_if_false @QUARRY_27067
+Text.PrintWithNumberBig('M_PASS', 50@, 3000, TextStyle.Middle)
+goto @QUARRY_27086
+
+:QUARRY_27067
+Text.PrintWithNumberBig('M_PASS', 50@, 5000, TextStyle.Middle)
+
+:QUARRY_27086
+Player.AddScore($player1, 50@)
+goto @QUARRY_27206
+
+:QUARRY_27101
+Text.PrintWithNumberBig('M_PASSD', 0, 5000, TextStyle.Middle)
+if 
+  293@ == 1
+goto_if_false @QUARRY_27160
+Text.PrintNow('QUAR_P5', 5000, 1)
+goto @QUARRY_27206
+
+:QUARRY_27160
+if 
+  294@ == 1
+goto_if_false @QUARRY_27206
+Text.PrintWith4NumbersNow('QUAR_P6', 208@, 209@, 210@, 211@, 10000, TextStyle.Middle)
+
+:QUARRY_27206
+Player.ClearWantedLevel($player1)
+if 
+  $done_quarry_progress == 0
+goto_if_false @QUARRY_27487
+if 
+  $g_nQuarryMissionsPassed == 1
+goto_if_false @QUARRY_27270
+Text.PrintNow('QUAR_P1', 5000, 1)
+goto @QUARRY_27480
+
+:QUARRY_27270
+if 
+  $g_nQuarryMissionsPassed == 7
+goto_if_false @QUARRY_27461
+Stat.RegisterOddjobMissionPassed
+Stat.PlayerMadeProgress(1)
+Audio.PlayMissionPassedTune(2)
+$done_quarry_progress = 1
+$g_nQuarryMissionsPassed = 0
+Text.PrintBig('QUAR_P2', 4000, TextStyle.MiddleSmaller)
+50@ = 0
+if 
+  $done_quarry_progress == 1
+goto_if_false @QUARRY_27393
+48@ = 0
+
+:QUARRY_27360
+add_int_var_to_int_lvar 50@ += $g_Quarry_recordsKM(48@,7i)
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_27360
+
+:QUARRY_27393
+Stat.SetInt(StatId.QuarryCompletionTime, 50@)
+set_lvar_int_to_lvar_int 210@ = 50@
+210@ /= 60
+set_lvar_int_to_lvar_int 51@ = 210@
+51@ *= 60
+set_lvar_int_to_lvar_int 211@ = 50@
+sub_int_lvar_from_int_lvar 211@ -= 51@
+295@ = 1
+goto @QUARRY_27480
+
+:QUARRY_27461
+Text.PrintWithNumberNow('QUAR_P4', $g_nQuarryMissionsPassed, 5000, 1)
+
+:QUARRY_27480
+goto @QUARRY_27512
+
+:QUARRY_27487
+if 
+  $g_nQuarryMissionsPassed == 7
+goto_if_false @QUARRY_27512
+$g_nQuarryMissionsPassed = 0
+
+:QUARRY_27512
+if 
+  $done_quarry_progress == 1
+goto_if_false @QUARRY_27544
+CarGenerator.Switch($gen_car1, 101)
+CarGenerator.Switch($gen_car2, 101)
+
+:QUARRY_27544
+return 
+
+:QUARRY_27546
+Car.MarkAsNoLongerNeeded(86@)
+Car.MarkAsNoLongerNeeded(87@)
+Car.MarkAsNoLongerNeeded(88@)
+Car.MarkAsNoLongerNeeded(89@)
+Car.MarkAsNoLongerNeeded(91@)
+Char.MarkAsNoLongerNeeded(85@)
+Object.MarkAsNoLongerNeeded(92@)
+Object.MarkAsNoLongerNeeded(93@)
+Object.MarkAsNoLongerNeeded(121@)
+Train.MarkAsNoLongerNeeded(90@)
+48@ = 0
+
+:QUARRY_27603
+Object.MarkAsNoLongerNeeded(94@(48@,7i))
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_27603
+48@ = 0
+
+:QUARRY_27640
+Object.MarkAsNoLongerNeeded(101@(48@,10i))
+48@ += 1
+  48@ >= 10
+goto_if_false @QUARRY_27640
+48@ = 0
+
+:QUARRY_27677
+Object.MarkAsNoLongerNeeded(111@(48@,3i))
+48@ += 1
+  48@ >= 3
+goto_if_false @QUARRY_27677
+48@ = 0
+
+:QUARRY_27714
+Object.MarkAsNoLongerNeeded(114@(48@,7i))
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_27714
+48@ = 0
+
+:QUARRY_27751
+Object.MarkAsNoLongerNeeded(122@(48@,3i))
+48@ += 1
+  48@ >= 3
+goto_if_false @QUARRY_27751
+48@ = 0
+
+:QUARRY_27788
+Checkpoint.Delete(190@(48@,7i))
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_27788
+Checkpoint.Delete(197@)
+Blip.Remove(125@)
+Blip.Remove(126@)
+Blip.Remove(128@)
+Blip.Remove(130@)
+Blip.Remove(129@)
+Blip.Remove(131@)
+Blip.Remove(132@)
+Blip.Remove(140@)
+Blip.Remove(141@)
+Blip.Remove(152@)
+Blip.Remove(127@)
+48@ = 0
+
+:QUARRY_27885
+Blip.Remove(133@(48@,7i))
+48@ += 1
+  48@ >= 7
+goto_if_false @QUARRY_27885
+48@ = 0
+
+:QUARRY_27922
+Blip.Remove(142@(48@,10i))
+48@ += 1
+  48@ >= 10
+goto_if_false @QUARRY_27922
+Hud.ClearTimer($g_Quarry_timerKM)
+Hud.ClearCounter($g_Quarry_damageKM)
+World.ClearAllScriptFireFlags
+if 
+  262@ == 1
+goto_if_false @QUARRY_27984
+Text.ClearHelp
+
+:QUARRY_27984
+Streaming.MarkModelAsNoLongerNeeded(468)
+Streaming.MarkModelAsNoLongerNeeded(486)
+Streaming.MarkModelAsNoLongerNeeded(406)
+Streaming.MarkModelAsNoLongerNeeded(#DYN_QUARRYROCK02)
+Streaming.MarkModelAsNoLongerNeeded(#DEAD_TIED_COP)
+Streaming.MarkModelAsNoLongerNeeded(#DYN_QUARRYROCK03)
+Streaming.MarkModelAsNoLongerNeeded(523)
+Streaming.MarkModelAsNoLongerNeeded(#CR_AMMOBOX)
+Streaming.MarkModelAsNoLongerNeeded(#KB_BARREL)
+Streaming.MarkModelAsNoLongerNeeded(538)
+Streaming.MarkModelAsNoLongerNeeded(570)
+Streaming.MarkModelAsNoLongerNeeded(18)
+Streaming.MarkModelAsNoLongerNeeded(#CR_GUNCRATE)
+Streaming.MarkModelAsNoLongerNeeded(#CM_BOX)
+Streaming.MarkModelAsNoLongerNeeded(#BLACKBAG2)
+Streaming.MarkModelAsNoLongerNeeded(#DYN_WOODPILE)
+Streaming.MarkModelAsNoLongerNeeded(#DYN_WOODPILE2)
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+Game.SetWantedMultiplier(1.0)
+Game.SwitchEmergencyServices(True)
+Game.SwitchRandomTrains(True)
+if 
+  283@ == 1
+goto_if_false @QUARRY_28307
+Path.SwitchRoadsBackToOriginal(256.6312, 734.7498, 4.0053, 343.9576, 765.6713, 6.4852)
+Path.SwitchRoadsBackToOriginal(291.2253, 762.6765, 4.0625, 354.4869, 784.4223, 6.6101)
+Path.SwitchRoadsBackToOriginal(-149.9865, 460.067, 4.9719, -119.7325, 530.4155, 12.4813)
+Path.SwitchRoadsBackToOriginal(-100.9858, 1190.38, 16.1736, 97.0928, 1205.202, 19.9344)
+Path.SwitchRoadsBackToOriginal(-124.9028, 1209.581, 14.6519, -108.1954, 1243.821, 19.8554)
+Path.SwitchRoadsBackToOriginal(-113.2273, 1246.477, 11.3781, -84.1825, 1268.751, 17.5621)
+
+:QUARRY_28307
+$timer_mobile_start = Clock.GetGameTimer()
+Text.DrawOddjobTitleBeforeFade(True)
+$onmission = 0
+$flag_player_on_oddjob = 0
+Mission.Finish
+return 
+

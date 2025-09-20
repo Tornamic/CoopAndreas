@@ -1,0 +1,2038 @@
+:WARROBE
+$shop_progress_wardrobe = 0
+$shop_main_item_picked_wardrobe = 0
+$main_menu_drawn_wardrobe = 0
+$number_of_wardrobe_in_shop = 0
+$number_of_wardrobe_in_area = 0
+$price_counter = 0
+$item_no_shops = 0
+$temp_var_shops = 0
+$wardrobe_door_heading = 0.0
+$wardrobe_offX = 0.0
+$wardrobe_offY = 0.0
+$wardrobe_offZ = 0.0
+$wardrobe_door_heading = 0.0
+$wardrobe_locateX = 0.0
+$wardrobe_locateY = 0.0
+$wardrobe_locateZ = 0.0
+$wardrobe_heading = 0.0
+$wardrobe_camX = 0.0
+$wardrobe_camY = 0.0
+$wardrobe_camZ = 0.0
+$wardrobe_cam_pointX = 0.0
+$wardrobe_cam_pointY = 0.0
+$wardrobe_cam_pointZ = 0.0
+$wardrobe_hat_camX = 0.0
+$wardrobe_hat_camY = 0.0
+$wardrobe_hat_camZ = 0.0
+$wardrobe_hat_cam_pointX = 0.0
+$wardrobe_hat_cam_pointY = 0.0
+$wardrobe_hat_cam_pointZ = 0.0
+$number_of_items_wardrobe = 0
+$flag_player_in_changing_room_wardrobe = 0
+$wardrobe_heading = 0.0
+$wardrobe_cam_pointX = 0.0
+$wardrobe_cam_pointY = 0.0
+$wardrobe_cam_pointZ = 0.0
+$return_animation_time_wardrobe = 0.0
+$object_animation_time_wardrobe = 0.0
+$flag_wardrobe = 0
+$flag_player_use_changing_room_wardrobe = 0
+$player_in_view_mode_wardrobe = 0
+$main_menu_drawn_wardrobe = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_bought_item_already_shops = 0
+$flag_player_owned_item_shops = 0
+$area_to_look_at_shops = 0
+$number_of_torso_wardrobe = 0
+$number_of_legs_wardrobe = 0
+$number_of_feet_wardrobe = 0
+$number_of_chains_wardrobe = 0
+$number_of_watches_wardrobe = 0
+$number_of_glasses_wardrobe = 0
+$number_of_hats_wardrobe = 0
+$number_of_special_wardrobe = 0
+$second_menu_item_picked_wardrobe = 0
+$second_menu_drawn_wardrobe = 0
+$number_bought_items_in_area = 0
+$third_menu_drawn_wardrobe = 0
+$third_menu_item_picked_wardrobe = 0
+$flag_got_special_clothes_wardrobe = 0
+$flag_remove_menu_drawn_wardrobe = 0
+$draw_remove_option_wardrobe = 0
+$player_in_changeroom_wardrobe = 0
+$player_using_wardrobe = 0
+$flag_bought_something_wardrobe = 0
+$shop_door_model_wardrobe = -370
+Streaming.RequestModel($shop_door_model_wardrobe)
+Streaming.RequestAnimation("CLOTHES")
+Audio.LoadMissionAudio(20800, 4)
+Streaming.LoadAllModelsNow
+set_deatharrest_state 0
+script_name 'WARROBE'
+
+:WARROBE_584
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @WARROBE_6450
+$visible_area_wardrobe = Streaming.GetAreaVisible()
+if 
+  $visible_area_wardrobe == 14
+goto_if_false @WARROBE_6436
+if 
+  $flag_wardrobe > 0
+goto_if_false @WARROBE_737
+if 
+  Game.HasLanguageChanged
+goto_if_false @WARROBE_737
+Text.ClearHelp
+Menu.Delete($main_menu_wardrobe)
+Menu.Delete($second_menu_wardrobe)
+Menu.Delete($third_menu_wardrobe)
+Menu.Delete($remove_menu_wardrobe)
+Menu.Delete($cost_menu_shops)
+Menu.Delete($bought_menu_shops)
+$main_menu_drawn_wardrobe = 0
+$second_menu_drawn_wardrobe = 0
+$third_menu_drawn_wardrobe = 0
+$flag_remove_menu_drawn_wardrobe = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$current_Language = Game.GetCurrentLanguage()
+
+:WARROBE_737
+if 
+  $flag_wardrobe == 0
+goto_if_false @WARROBE_819
+$player_using_wardrobe = 1
+$wardrobe_offX = 43.529
+$wardrobe_offY = 0.694
+$wardrobe_offZ = 0.012
+$wardrobe_heading = 90.0
+$wardrobe_door_heading = 0.0
+$flag_wardrobe = 1
+
+:WARROBE_819
+if 
+  $flag_wardrobe == 1
+goto_if_false @WARROBE_1280
+if 
+  $shop_progress_wardrobe == 0
+goto_if_false @WARROBE_1226
+Text.UseCommands(True)
+Stat.ShowUpdateStats(False)
+$wardrobe_camX = 212.8715
+add_float_var_to_float_var $wardrobe_camX += $wardrobe_offX
+$wardrobe_camY = -42.8156
+add_float_var_to_float_var $wardrobe_camY += $wardrobe_offY
+$wardrobe_camZ = 1002.116
+add_float_var_to_float_var $wardrobe_camZ += $wardrobe_offZ
+$wardrobe_cam_pointX = 213.4791
+add_float_var_to_float_var $wardrobe_cam_pointX += $wardrobe_offX
+$wardrobe_cam_pointY = -42.0238
+add_float_var_to_float_var $wardrobe_cam_pointY += $wardrobe_offY
+$wardrobe_cam_pointZ = 1002.053
+add_float_var_to_float_var $wardrobe_cam_pointZ += $wardrobe_offZ
+$wardrobe_hat_camX = 214.5148
+add_float_var_to_float_var $wardrobe_hat_camX += $wardrobe_offX
+$wardrobe_hat_camY = -41.6106
+add_float_var_to_float_var $wardrobe_hat_camY += $wardrobe_offY
+$wardrobe_hat_camZ = 1002.494
+add_float_var_to_float_var $wardrobe_hat_camZ += $wardrobe_offZ
+$wardrobe_hat_cam_pointX = 214.5367
+add_float_var_to_float_var $wardrobe_hat_cam_pointX += $wardrobe_offX
+$wardrobe_hat_cam_pointY = -40.6175
+add_float_var_to_float_var $wardrobe_hat_cam_pointY += $wardrobe_offY
+$wardrobe_hat_cam_pointZ = 1002.609
+add_float_var_to_float_var $wardrobe_hat_cam_pointZ += $wardrobe_offZ
+$wardrobe_locateX = 214.622
+add_float_var_to_float_var $wardrobe_locateX += $wardrobe_offX
+$wardrobe_locateY = -40.652
+add_float_var_to_float_var $wardrobe_locateY += $wardrobe_offY
+$wardrobe_locateZ = 1001.033
+add_float_var_to_float_var $wardrobe_locateZ += $wardrobe_offZ
+$change_doorX = 213.874
+add_float_var_to_float_var $change_doorX += $wardrobe_offX
+$change_doorY = -39.811
+add_float_var_to_float_var $change_doorY += $wardrobe_offY
+$change_doorZ = 1002.2
+add_float_var_to_float_var $change_doorZ += $wardrobe_offZ
+$changing_room_door_wardrobe = Object.CreateNoOffset($shop_door_model_wardrobe, $change_doorX, $change_doorY, $change_doorZ)
+Object.SetHeading($changing_room_door_wardrobe, $wardrobe_door_heading)
+$blob_flag_shop = 1
+$shop_progress_wardrobe = 1
+
+:WARROBE_1226
+if 
+  $shop_progress_wardrobe == 1
+goto_if_false @WARROBE_1280
+if 
+  Streaming.HasAnimationLoaded("CLOTHES")
+goto_if_false @WARROBE_1280
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 2
+
+:WARROBE_1280
+if 
+  $flag_wardrobe == 2
+goto_if_false @WARROBE_1364
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, $wardrobe_locateX, $wardrobe_locateY, $wardrobe_locateZ, 1.0, 1.0, 4.0, $blob_flag_shop)
+goto_if_false @WARROBE_1364
+if 
+  Player.CanStartMission($player1)
+goto_if_false @WARROBE_1364
+$flag_wardrobe = 3
+
+:WARROBE_1364
+if 
+  $flag_wardrobe == 3
+goto_if_false @WARROBE_1499
+if 
+  Player.IsPlaying($player1)
+goto_if_false @WARROBE_1485
+Player.SetControl($player1, False)
+Game.SetMinigameInProgress(True)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+Char.ClearTasksImmediately($scplayer)
+World.ClearArea(1, $player_x, $player_y, $player_z, 1.0)
+Hud.DisplayRadar(False)
+TIMERA = 0
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 4
+goto @WARROBE_1499
+
+:WARROBE_1485
+gosub @WARROBE_6798
+goto @WARROBE_584
+
+:WARROBE_1499
+if 
+  $flag_wardrobe == 4
+goto_if_false @WARROBE_1880
+if 
+  $shop_progress_wardrobe == 0
+goto_if_false @WARROBE_1785
+if 
+  TIMERA >= 300
+goto_if_false @WARROBE_1785
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Char.SetCoordinatesDontWarpGang($scplayer, $wardrobe_locateX, $wardrobe_locateY, $wardrobe_locateZ)
+Char.SetHeading($scplayer, $wardrobe_heading)
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+Camera.SetFixedPosition($wardrobe_camX, $wardrobe_camY, $wardrobe_camZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($wardrobe_cam_pointX, $wardrobe_cam_pointY, $wardrobe_cam_pointZ, SwitchType.JumpCut)
+Task.PlayAnimNonInterruptable($scplayer, "CLO_IN", "CLOTHES", 4.0, False, False, False, True, -1)
+$return_animation_time_wardrobe = 0.0
+if 
+  Char.IsPlayingAnim($scplayer, "CLO_IN")
+goto_if_false @WARROBE_1723
+$return_animation_time_wardrobe = Char.GetAnimCurrentTime($scplayer, "CLO_IN")
+
+:WARROBE_1723
+if 
+  Object.DoesExist($changing_room_door_wardrobe)
+goto_if_false @WARROBE_1778
+Object.PlayAnim($changing_room_door_wardrobe, "CLO_POSE_OUT_O", "CLOTHES", 4.0, False, True)
+
+:WARROBE_1778
+$shop_progress_wardrobe = 1
+
+:WARROBE_1785
+if 
+  $shop_progress_wardrobe == 1
+goto_if_false @WARROBE_1880
+if 
+  Char.IsPlayingAnim($scplayer, "CLO_IN")
+goto_if_false @WARROBE_1843
+$return_animation_time_wardrobe = Char.GetAnimCurrentTime($scplayer, "CLO_IN")
+
+:WARROBE_1843
+if 
+  $return_animation_time_wardrobe == 1.0
+goto_if_false @WARROBE_1880
+Player.StoreClothesState
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 5
+
+:WARROBE_1880
+if 
+  $flag_wardrobe == 5
+goto_if_false @WARROBE_2617
+if 
+  $main_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_1941
+if 
+  1 > $shop_progress_wardrobe
+goto_if_false @WARROBE_1941
+gosub @WARROBE_9292
+
+:WARROBE_1941
+$blob_flag_shop = 0
+if 
+  $shop_progress_wardrobe == 0
+goto_if_false @WARROBE_2014
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @WARROBE_1990
+$shop_progress_wardrobe = 1
+
+:WARROBE_1990
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @WARROBE_2014
+$shop_progress_wardrobe = 2
+
+:WARROBE_2014
+if 
+  $shop_progress_wardrobe == 1
+goto_if_false @WARROBE_2249
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @WARROBE_2249
+$shop_main_item_picked_wardrobe = Menu.GetItemAccepted($main_menu_wardrobe)
+if 
+  0 > $shop_main_item_picked_wardrobe
+goto_if_false @WARROBE_2082
+$shop_main_item_picked_wardrobe = 0
+
+:WARROBE_2082
+if 
+  $main_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_2114
+Menu.Delete($main_menu_wardrobe)
+Text.ClearHelp
+$main_menu_drawn_wardrobe = 0
+
+:WARROBE_2114
+if or
+  is_var_text_label_equal_to_text_label $shop_section($shop_main_item_picked_wardrobe,12s) == 'REMOVE'
+  is_var_text_label_equal_to_text_label $shop_section($shop_main_item_picked_wardrobe,12s) == 'UNIFORM'
+goto_if_false @WARROBE_2203
+set_var_text_label16 v$current_name_of_anim_wardrobe = "CLO_POSE_TORSO"
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 7
+goto @WARROBE_2249
+
+:WARROBE_2203
+gosub @WARROBE_7198
+if 
+  $second_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_2235
+gosub @WARROBE_8122
+
+:WARROBE_2235
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 6
+
+:WARROBE_2249
+if 
+  $shop_progress_wardrobe == 2
+goto_if_false @WARROBE_2457
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @WARROBE_2457
+if 
+  $main_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_2316
+Menu.Delete($main_menu_wardrobe)
+Text.ClearHelp
+$main_menu_drawn_wardrobe = 0
+
+:WARROBE_2316
+if 
+  $second_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_2348
+Menu.Delete($second_menu_wardrobe)
+Text.ClearHelp
+$second_menu_drawn_wardrobe = 0
+
+:WARROBE_2348
+Task.PlayAnimNonInterruptable($scplayer, "CLO_OUT", "CLOTHES", 1000.0, False, False, False, False, -1)
+$return_animation_time_wardrobe = 0.0
+if 
+  Object.DoesExist($changing_room_door_wardrobe)
+goto_if_false @WARROBE_2450
+Object.PlayAnim($changing_room_door_wardrobe, "CLO_POSE_IN_O", "CLOTHES", 1000.0, False, True)
+
+:WARROBE_2450
+$shop_progress_wardrobe = 5
+
+:WARROBE_2457
+if 
+  $shop_progress_wardrobe == 5
+goto_if_false @WARROBE_2545
+if 
+  Char.IsPlayingAnim($scplayer, "CLO_OUT")
+goto_if_false @WARROBE_2517
+$return_animation_time_wardrobe = Char.GetAnimCurrentTime($scplayer, "CLO_OUT")
+
+:WARROBE_2517
+if 
+  $return_animation_time_wardrobe == 1.0
+goto_if_false @WARROBE_2545
+$shop_progress_wardrobe = 6
+
+:WARROBE_2545
+if 
+  $shop_progress_wardrobe == 6
+goto_if_false @WARROBE_2617
+Player.SetControl($player1, True)
+Game.SetMinigameInProgress(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Hud.DisplayRadar(True)
+$player_in_changeroom_wardrobe = 0
+$main_menu_drawn_wardrobe = 0
+$second_menu_drawn_wardrobe = 0
+$third_menu_drawn_wardrobe = 0
+$flag_wardrobe = 11
+
+:WARROBE_2617
+if 
+  $flag_wardrobe == 6
+goto_if_false @WARROBE_3004
+if 
+  $second_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_2667
+gosub @WARROBE_7198
+gosub @WARROBE_8122
+
+:WARROBE_2667
+$blob_flag_shop = 0
+if 
+  $shop_progress_wardrobe == 0
+goto_if_false @WARROBE_2792
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @WARROBE_2716
+$shop_progress_wardrobe = 1
+
+:WARROBE_2716
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @WARROBE_2792
+$second_menu_item_picked_wardrobe = Menu.GetItemSelected($second_menu_wardrobe)
+if 
+  0 > $second_menu_item_picked_wardrobe
+goto_if_false @WARROBE_2766
+$second_menu_item_picked_wardrobe = 0
+
+:WARROBE_2766
+set_var_text_label16 v$current_name_of_anim_wardrobe = $name_of_anim_wardrobe($second_menu_item_picked_wardrobe,12v)
+gosub @WARROBE_8524
+$shop_progress_wardrobe = 2
+
+:WARROBE_2792
+if 
+  $shop_progress_wardrobe == 1
+goto_if_false @WARROBE_2898
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @WARROBE_2898
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 5
+if 
+  $second_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_2873
+Text.ClearHelp
+Menu.Delete($second_menu_wardrobe)
+$second_menu_drawn_wardrobe = 0
+
+:WARROBE_2873
+if 
+  $main_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_2898
+gosub @WARROBE_9292
+
+:WARROBE_2898
+if 
+  $shop_progress_wardrobe == 2
+goto_if_false @WARROBE_3004
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @WARROBE_3004
+if 
+  $second_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_2965
+Text.ClearHelp
+Menu.Delete($second_menu_wardrobe)
+$second_menu_drawn_wardrobe = 0
+
+:WARROBE_2965
+if 
+  $third_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_2990
+gosub @WARROBE_8835
+
+:WARROBE_2990
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 7
+
+:WARROBE_3004
+if 
+  $flag_wardrobe == 7
+goto_if_false @WARROBE_3711
+if 
+  is_var_text_label_equal_to_text_label $shop_section($shop_main_item_picked_wardrobe,12s) == 'REMOVE'
+goto_if_false @WARROBE_3154
+if 
+  $flag_remove_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_3147
+gosub @WARROBE_11522
+if 
+  $row_number_wardrobe == 0
+goto_if_false @WARROBE_3147
+if 
+  $flag_remove_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_3126
+Menu.Delete($remove_menu_wardrobe)
+Text.ClearHelp
+$flag_remove_menu_drawn_wardrobe = 0
+
+:WARROBE_3126
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 5
+goto @WARROBE_584
+
+:WARROBE_3147
+goto @WARROBE_3254
+
+:WARROBE_3154
+if 
+  is_var_text_label_equal_to_text_label $shop_section($shop_main_item_picked_wardrobe,12s) == 'UNIFORM'
+goto_if_false @WARROBE_3222
+if 
+  $third_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_3215
+gosub @WARROBE_10908
+gosub @WARROBE_8835
+
+:WARROBE_3215
+goto @WARROBE_3254
+
+:WARROBE_3222
+if 
+  $third_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_3254
+gosub @WARROBE_8524
+gosub @WARROBE_8835
+
+:WARROBE_3254
+if 
+  $shop_progress_wardrobe == 0
+goto_if_false @WARROBE_3353
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @WARROBE_3296
+$shop_progress_wardrobe = 1
+
+:WARROBE_3296
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @WARROBE_3353
+$third_menu_item_picked_wardrobe = Menu.GetItemSelected($third_menu_wardrobe)
+if 
+  0 > $third_menu_item_picked_wardrobe
+goto_if_false @WARROBE_3346
+$third_menu_item_picked_wardrobe = 0
+
+:WARROBE_3346
+$shop_progress_wardrobe = 2
+
+:WARROBE_3353
+if 
+  $shop_progress_wardrobe == 1
+goto_if_false @WARROBE_3591
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @WARROBE_3591
+if 
+  $third_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_3420
+Menu.Delete($third_menu_wardrobe)
+Text.ClearHelp
+$third_menu_drawn_wardrobe = 0
+
+:WARROBE_3420
+if 
+  $flag_remove_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_3452
+Menu.Delete($remove_menu_wardrobe)
+Text.ClearHelp
+$flag_remove_menu_drawn_wardrobe = 0
+
+:WARROBE_3452
+if or
+  is_var_text_label_equal_to_text_label $shop_section($shop_main_item_picked_wardrobe,12s) == 'UNIFORM'
+  is_var_text_label_equal_to_text_label $shop_section($shop_main_item_picked_wardrobe,12s) == 'REMOVE'
+goto_if_false @WARROBE_3545
+if 
+  $main_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_3524
+gosub @WARROBE_9292
+
+:WARROBE_3524
+$flag_wardrobe = 5
+$shop_progress_wardrobe = 0
+goto @WARROBE_3591
+
+:WARROBE_3545
+if 
+  $second_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_3577
+gosub @WARROBE_7198
+gosub @WARROBE_8122
+
+:WARROBE_3577
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 6
+
+:WARROBE_3591
+if 
+  $shop_progress_wardrobe == 2
+goto_if_false @WARROBE_3711
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @WARROBE_3711
+if 
+  $third_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_3658
+Menu.Delete($third_menu_wardrobe)
+Text.ClearHelp
+$third_menu_drawn_wardrobe = 0
+
+:WARROBE_3658
+if 
+  $flag_remove_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_3690
+Menu.Delete($remove_menu_wardrobe)
+Text.ClearHelp
+$flag_remove_menu_drawn_wardrobe = 0
+
+:WARROBE_3690
+$player_in_changeroom_wardrobe = 0
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 8
+
+:WARROBE_3711
+if 
+  $flag_wardrobe == 8
+goto_if_false @WARROBE_4589
+if 
+  $shop_progress_wardrobe == 0
+goto_if_false @WARROBE_4203
+if 
+  is_var_text_label_equal_to_text_label $shop_section($shop_main_item_picked_wardrobe,12s) == 'REMOVE'
+goto_if_false @WARROBE_3835
+$model_index = 0
+$modelid_shops = 0
+set_var_int_to_var_int $component_shops = $item_component($third_menu_item_picked_wardrobe,12i)
+set_var_text_label s$wardrobe_name = $menu_item($third_menu_item_picked_wardrobe,12s)
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $component_shops)
+goto @WARROBE_3879
+
+:WARROBE_3835
+set_var_int_to_var_int $model_index = $item_model_index($third_menu_item_picked_wardrobe,12i)
+set_var_int_to_var_int $modelid_shops = $item_modelid($third_menu_item_picked_wardrobe,12i)
+set_var_int_to_var_int $component_shops = $area_to_look_at_shops
+set_var_text_label s$wardrobe_name = $menu_item($third_menu_item_picked_wardrobe,12s)
+
+:WARROBE_3879
+if or
+  is_int_var_equal_to_constant $component_shops == 13
+  is_int_var_equal_to_constant $component_shops == 14
+  is_int_var_equal_to_constant $component_shops == 15
+  is_int_var_equal_to_constant $component_shops == 16
+goto_if_false @WARROBE_3964
+Camera.SetFixedPosition($wardrobe_hat_camX, $wardrobe_hat_camY, $wardrobe_hat_camZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($wardrobe_hat_cam_pointX, $wardrobe_hat_cam_pointY, $wardrobe_hat_cam_pointZ, SwitchType.JumpCut)
+goto @WARROBE_4026
+
+:WARROBE_3964
+Camera.SetFixedPosition($wardrobe_camX, $wardrobe_camY, $wardrobe_camZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($wardrobe_cam_pointX, $wardrobe_cam_pointY, $wardrobe_cam_pointZ, SwitchType.JumpCut)
+if 
+  not is_int_var_equal_to_int_var $player_item_texture_shops == $model_index
+goto_if_false @WARROBE_4026
+Audio.PlayMissionAudio(MissionAudioSlot.Slot4)
+
+:WARROBE_4026
+if or
+  is_int_var_equal_to_constant $component_shops == 0
+  is_int_var_equal_to_constant $component_shops == 2
+  is_int_var_equal_to_constant $component_shops == 3
+goto_if_false @WARROBE_4071
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.StoreClothesState
+
+:WARROBE_4071
+Player.GiveClothes($player1, $model_index, $modelid_shops, $component_shops)
+Player.BuildModel($player1)
+Task.PlayAnimNonInterruptable($scplayer, "CLO_POSE_IN", "CLOTHES", 1000.0, False, False, False, True, -1)
+$return_animation_time_wardrobe = 0.0
+if 
+  Object.DoesExist($changing_room_door_wardrobe)
+goto_if_false @WARROBE_4196
+Object.PlayAnim($changing_room_door_wardrobe, "CLO_POSE_IN_O", "CLOTHES", 1000.0, False, True)
+
+:WARROBE_4196
+$shop_progress_wardrobe = 1
+
+:WARROBE_4203
+if 
+  $shop_progress_wardrobe == 1
+goto_if_false @WARROBE_4445
+if 
+  Char.IsPlayingAnim($scplayer, "CLO_POSE_IN")
+goto_if_false @WARROBE_4271
+$return_animation_time_wardrobe = Char.GetAnimCurrentTime($scplayer, "CLO_POSE_IN")
+
+:WARROBE_4271
+if 
+  $return_animation_time_wardrobe == 1.0
+goto_if_false @WARROBE_4445
+if 
+  not is_var_text_label_equal_to_text_label $shop_section($shop_main_item_picked_wardrobe,12s) == 'REMOVE'
+goto_if_false @WARROBE_4377
+Task.PlayAnimNonInterruptable($scplayer, v$current_name_of_anim_wardrobe, "CLOTHES", 1000.0, False, False, False, True, -1)
+$return_animation_time_wardrobe = 0.0
+$shop_progress_wardrobe = 2
+goto @WARROBE_4445
+
+:WARROBE_4377
+Task.PlayAnimNonInterruptable($scplayer, "CLO_POSE_LOOP", "CLOTHES", 1000.0, True, False, False, False, -1)
+$return_animation_time_wardrobe = 0.0
+$flag_wardrobe = 9
+$shop_progress_wardrobe = 0
+
+:WARROBE_4445
+if 
+  $shop_progress_wardrobe == 2
+goto_if_false @WARROBE_4589
+if 
+  Char.IsPlayingAnim($scplayer, v$current_name_of_anim_wardrobe)
+goto_if_false @WARROBE_4493
+$return_animation_time_wardrobe = Char.GetAnimCurrentTime($scplayer, v$current_name_of_anim_wardrobe)
+
+:WARROBE_4493
+if 
+  $return_animation_time_wardrobe == 1.0
+goto_if_false @WARROBE_4589
+gosub @WARROBE_10424
+Task.PlayAnimNonInterruptable($scplayer, "CLO_POSE_LOOP", "CLOTHES", 1000.0, True, False, False, False, -1)
+$return_animation_time_wardrobe = 0.0
+$flag_wardrobe = 9
+$shop_progress_wardrobe = 0
+
+:WARROBE_4589
+if 
+  $flag_wardrobe == 9
+goto_if_false @WARROBE_6277
+$blob_flag_shop = 0
+if 
+  $shop_progress_wardrobe == 0
+goto_if_false @WARROBE_4867
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @WARROBE_4699
+Text.ClearThisPrint('WARDNO')
+Text.ClearThisPrint('WARDNO2')
+$flag_bought_item_already_shops = 0
+$flag_player_owned_item_shops = 0
+$flag_bought_something_wardrobe = 0
+$shop_progress_wardrobe = 1
+
+:WARROBE_4699
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @WARROBE_4867
+Text.ClearThisPrint('WARDNO')
+Text.ClearThisPrint('WARDNO2')
+$flag_bought_item_already_shops = 0
+$flag_player_owned_item_shops = 0
+$flag_bought_something_wardrobe = 0
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @WARROBE_4791
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:WARROBE_4791
+if 
+  $player_in_changeroom_wardrobe == 0
+goto_if_false @WARROBE_4823
+$shop_progress_wardrobe = 3
+goto @WARROBE_4867
+
+:WARROBE_4823
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @WARROBE_4853
+Menu.Delete($bought_menu_shops)
+$bought_menu_drawn_shops = 0
+
+:WARROBE_4853
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 7
+
+:WARROBE_4867
+if 
+  2 > $shop_progress_wardrobe
+goto_if_false @WARROBE_4892
+gosub @WARROBE_10424
+
+:WARROBE_4892
+if 
+  $shop_progress_wardrobe == 1
+goto_if_false @WARROBE_5427
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @WARROBE_5427
+if 
+  is_var_text_label_equal_to_text_label $shop_section($shop_main_item_picked_wardrobe,12s) == 'REMOVE'
+goto_if_false @WARROBE_5186
+if 
+  $player_item_texture_shops <> 0
+goto_if_false @WARROBE_5117
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @WARROBE_5006
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:WARROBE_5006
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1054)
+gosub @WARROBE_10692
+$flag_bought_something_wardrobe = 1
+Player.StoreClothesState
+Player.BuildModel($player1)
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $component_shops)
+Task.PlayAnimNonInterruptable($scplayer, "CLO_BUY", "CLOTHES", 4.0, False, False, False, True, -1)
+$return_animation_time_wardrobe = 0.0
+$shop_progress_wardrobe = 2
+goto @WARROBE_5179
+
+:WARROBE_5117
+if 
+  $flag_bought_item_already_shops == 0
+goto_if_false @WARROBE_5179
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1055)
+Text.PrintNow('WARDNO2', 5000, 1)
+$shop_progress_wardrobe = 0
+$flag_bought_item_already_shops = 1
+
+:WARROBE_5179
+goto @WARROBE_5427
+
+:WARROBE_5186
+if 
+  not is_int_var_equal_to_int_var $player_item_texture_shops == $model_index
+goto_if_false @WARROBE_5365
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @WARROBE_5237
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:WARROBE_5237
+Shopping.AddPriceModifier($model_index, 0)
+Shopping.BuyItem($model_index)
+$flag_bought_something_wardrobe = 1
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1054)
+Shopping.RemovePriceModifier($model_index)
+gosub @WARROBE_10692
+Player.StoreClothesState
+Player.BuildModel($player1)
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $area_to_look_at_shops)
+Task.PlayAnimNonInterruptable($scplayer, "CLO_BUY", "CLOTHES", 4.0, False, False, False, True, -1)
+$return_animation_time_wardrobe = 0.0
+$shop_progress_wardrobe = 2
+goto @WARROBE_5427
+
+:WARROBE_5365
+if 
+  $flag_bought_item_already_shops == 0
+goto_if_false @WARROBE_5427
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1055)
+Text.PrintNow('WARDNO', 5000, 1)
+$shop_progress_wardrobe = 0
+$flag_bought_item_already_shops = 1
+
+:WARROBE_5427
+if 
+  $shop_progress_wardrobe == 2
+goto_if_false @WARROBE_5569
+if 
+  Char.IsPlayingAnim($scplayer, "CLO_BUY")
+goto_if_false @WARROBE_5487
+$return_animation_time_wardrobe = Char.GetAnimCurrentTime($scplayer, "CLO_BUY")
+
+:WARROBE_5487
+if 
+  $return_animation_time_wardrobe == 1.0
+goto_if_false @WARROBE_5569
+Task.PlayAnimNonInterruptable($scplayer, "CLO_POSE_LOOP", "CLOTHES", 1000.0, True, False, False, False, -1)
+$return_animation_time_wardrobe = 0.0
+$shop_progress_wardrobe = 3
+
+:WARROBE_5569
+if 
+  $shop_progress_wardrobe == 3
+goto_if_false @WARROBE_5702
+Task.PlayAnimNonInterruptable($scplayer, "CLO_POSE_OUT", "CLOTHES", 4.0, False, False, False, True, -1)
+$return_animation_time_wardrobe = 0.0
+if 
+  Object.DoesExist($changing_room_door_wardrobe)
+goto_if_false @WARROBE_5695
+Object.PlayAnim($changing_room_door_wardrobe, "CLO_POSE_OUT_O", "CLOTHES", 1000.0, False, True)
+
+:WARROBE_5695
+$shop_progress_wardrobe = 4
+
+:WARROBE_5702
+if 
+  $shop_progress_wardrobe == 4
+goto_if_false @WARROBE_6277
+if 
+  Char.IsPlayingAnim($scplayer, "CLO_POSE_OUT")
+goto_if_false @WARROBE_5772
+$return_animation_time_wardrobe = Char.GetAnimCurrentTime($scplayer, "CLO_POSE_OUT")
+
+:WARROBE_5772
+if 
+  $return_animation_time_wardrobe == 1.0
+goto_if_false @WARROBE_6277
+Player.RestoreClothesState
+Player.BuildModel($player1)
+Player.StoreClothesState
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @WARROBE_5834
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:WARROBE_5834
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @WARROBE_5864
+Menu.Delete($bought_menu_shops)
+$bought_menu_drawn_shops = 0
+
+:WARROBE_5864
+$player_in_changeroom_wardrobe = 1
+if 
+  $flag_bought_something_wardrobe == 1
+goto_if_false @WARROBE_5953
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 5
+if 
+  $main_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_5946
+if 
+  1 > $shop_progress_wardrobe
+goto_if_false @WARROBE_5946
+gosub @WARROBE_9292
+
+:WARROBE_5946
+goto @WARROBE_6277
+
+:WARROBE_5953
+if 
+  is_var_text_label_equal_to_text_label $shop_section($shop_main_item_picked_wardrobe,12s) == 'REMOVE'
+goto_if_false @WARROBE_6149
+if 
+  $flag_remove_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_6142
+gosub @WARROBE_11522
+if 
+  $row_number_wardrobe == 0
+goto_if_false @WARROBE_6128
+if 
+  $flag_remove_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_6057
+Menu.Delete($remove_menu_wardrobe)
+Text.ClearHelp
+$flag_remove_menu_drawn_wardrobe = 0
+
+:WARROBE_6057
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 5
+if 
+  $main_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_6114
+if 
+  1 > $shop_progress_wardrobe
+goto_if_false @WARROBE_6114
+gosub @WARROBE_9292
+
+:WARROBE_6114
+goto @WARROBE_584
+goto @WARROBE_6142
+
+:WARROBE_6128
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 7
+
+:WARROBE_6142
+goto @WARROBE_6277
+
+:WARROBE_6149
+if 
+  is_var_text_label_equal_to_text_label $shop_section($shop_main_item_picked_wardrobe,12s) == 'UNIFORM'
+goto_if_false @WARROBE_6231
+if 
+  $third_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_6210
+gosub @WARROBE_10908
+gosub @WARROBE_8835
+
+:WARROBE_6210
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 7
+goto @WARROBE_6277
+
+:WARROBE_6231
+if 
+  $third_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_6263
+gosub @WARROBE_8524
+gosub @WARROBE_8835
+
+:WARROBE_6263
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 7
+
+:WARROBE_6277
+if 
+  $flag_wardrobe == 11
+goto_if_false @WARROBE_6429
+if 
+  not Char.LocateOnFoot3D($scplayer, $blob_flag_shop, $wardrobe_locateX, $wardrobe_locateY, $wardrobe_locateZ, 1.0, 1.0, 4.0)
+goto_if_false @WARROBE_6429
+$main_menu_drawn_wardrobe = 0
+$second_menu_drawn_wardrobe = 0
+$third_menu_drawn_wardrobe = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_remove_menu_drawn_wardrobe = 0
+$shop_main_item_picked_wardrobe = 0
+$shop_sub_item_picked_shops = 0
+$flag_bought_something_wardrobe = 0
+$flag_wardrobe = 2
+$shop_progress_wardrobe = 0
+$flag_bought_item_already_shops = 0
+$blob_flag_shop = 1
+
+:WARROBE_6429
+goto @WARROBE_6443
+
+:WARROBE_6436
+gosub @WARROBE_6798
+
+:WARROBE_6443
+goto @WARROBE_6457
+
+:WARROBE_6450
+gosub @WARROBE_6798
+
+:WARROBE_6457
+goto @WARROBE_584
+if 
+  $flag_wardrobe >= 1
+goto_if_false @WARROBE_6484
+Text.ClearHelp
+
+:WARROBE_6484
+if 
+  $main_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_6516
+Menu.Delete($main_menu_wardrobe)
+Text.ClearHelp
+$main_menu_drawn_wardrobe = 0
+
+:WARROBE_6516
+if 
+  $second_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_6548
+Menu.Delete($second_menu_wardrobe)
+Text.ClearHelp
+$second_menu_drawn_wardrobe = 0
+
+:WARROBE_6548
+if 
+  $third_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_6580
+Menu.Delete($third_menu_wardrobe)
+Text.ClearHelp
+$third_menu_drawn_wardrobe = 0
+
+:WARROBE_6580
+if 
+  $flag_remove_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_6612
+Menu.Delete($remove_menu_wardrobe)
+Text.ClearHelp
+$flag_remove_menu_drawn_wardrobe = 0
+
+:WARROBE_6612
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @WARROBE_6644
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:WARROBE_6644
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @WARROBE_6676
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:WARROBE_6676
+Text.ClearThisPrint('WARDNO')
+Text.ClearThisPrint('WARDNO2')
+$main_menu_drawn_wardrobe = 0
+$second_menu_drawn_wardrobe = 0
+$third_menu_drawn_wardrobe = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_remove_menu_drawn_wardrobe = 0
+$shop_main_item_picked_wardrobe = 0
+$shop_sub_item_picked_shops = 0
+$flag_bought_item_already_shops = 0
+$flag_player_owned_item_shops = 0
+$flag_bought_something_wardrobe = 0
+$shop_progress_wardrobe = 0
+$player_in_changeroom_wardrobe = 0
+$flag_wardrobe = 2
+return 
+
+:WARROBE_6798
+if 
+  $main_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_6830
+Menu.Delete($main_menu_wardrobe)
+Text.ClearHelp
+$main_menu_drawn_wardrobe = 0
+
+:WARROBE_6830
+if 
+  $second_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_6862
+Menu.Delete($second_menu_wardrobe)
+Text.ClearHelp
+$second_menu_drawn_wardrobe = 0
+
+:WARROBE_6862
+if 
+  $third_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_6894
+Menu.Delete($third_menu_wardrobe)
+Text.ClearHelp
+$third_menu_drawn_wardrobe = 0
+
+:WARROBE_6894
+if 
+  $flag_remove_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_6926
+Menu.Delete($remove_menu_wardrobe)
+Text.ClearHelp
+$flag_remove_menu_drawn_wardrobe = 0
+
+:WARROBE_6926
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @WARROBE_6958
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:WARROBE_6958
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @WARROBE_6990
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:WARROBE_6990
+if 
+  $flag_wardrobe >= 1
+goto_if_false @WARROBE_7010
+Text.ClearHelp
+
+:WARROBE_7010
+Text.ClearThisPrint('WARDNO')
+Text.ClearThisPrint('WARDNO2')
+$main_menu_drawn_wardrobe = 0
+$second_menu_drawn_wardrobe = 0
+$third_menu_drawn_wardrobe = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_remove_menu_drawn_wardrobe = 0
+$shop_main_item_picked_wardrobe = 0
+$shop_sub_item_picked_shops = 0
+$flag_bought_something_wardrobe = 0
+$blob_flag_shop = 1
+$flag_player_use_changing_room_wardrobe = 0
+$flag_bought_item_already_shops = 0
+$flag_player_owned_item_shops = 0
+$shop_progress_wardrobe = 0
+$flag_wardrobe = 0
+$player_in_changeroom_wardrobe = 0
+Object.Delete($changing_room_door_wardrobe)
+Streaming.MarkModelAsNoLongerNeeded($shop_door_model_wardrobe)
+Streaming.RemoveAnimation("CLOTHES")
+Shopping.ClearLoaded
+Text.UseCommands(False)
+Hud.DisplayRadar(True)
+Stat.ShowUpdateStats(True)
+Game.SetMinigameInProgress(False)
+$player_using_wardrobe = 0
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+terminate_this_script 
+return 
+
+:WARROBE_7198
+$number_of_torso_wardrobe = 0
+$number_of_legs_wardrobe = 0
+$number_of_feet_wardrobe = 0
+$number_of_chains_wardrobe = 0
+$number_of_watches_wardrobe = 0
+$number_of_glasses_wardrobe = 0
+$number_of_hats_wardrobe = 0
+Shopping.Load($shop_section($shop_main_item_picked_wardrobe,12s))
+Shopping.LoadPrices("CLOTHES")
+$number_of_wardrobe_in_shop = Shopping.GetNumberOfItems()
+$temp_var_shops = 0
+$row_number_wardrobe = 0
+
+:WARROBE_7286
+if 
+  is_int_var_greater_than_int_var $number_of_wardrobe_in_shop > $temp_var_shops
+goto_if_false @WARROBE_8062
+$model_index = Shopping.GetItem($temp_var_shops)
+$component_shops = Shopping.GetExtraInfo($model_index, 1)
+if 
+  Shopping.HasPlayerBoughtItem($model_index)
+goto_if_false @WARROBE_8048
+switch_start $component_shops total_jumps 7 default_jump 0 @WARROBE_8048 jumps 0 @WARROBE_7402 2 @WARROBE_7495 3 @WARROBE_7587 13 @WARROBE_7680 14 @WARROBE_7773 15 @WARROBE_7866 16 @WARROBE_7957
+
+:WARROBE_7402
+if 
+  $number_of_torso_wardrobe == 0
+goto_if_false @WARROBE_7488
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'TORSO'
+set_var_int_to_constant $body_part_wardrobe($row_number_wardrobe,12i) = 0
+set_var_text_label16 $name_of_anim_wardrobe($row_number_wardrobe,12v) = "CLO_POSE_TORSO"
+$row_number_wardrobe += 1
+$number_of_torso_wardrobe = 1
+
+:WARROBE_7488
+goto @WARROBE_8048
+
+:WARROBE_7495
+if 
+  $number_of_legs_wardrobe == 0
+goto_if_false @WARROBE_7580
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'LEGS'
+set_var_int_to_constant $body_part_wardrobe($row_number_wardrobe,12i) = 2
+set_var_text_label16 $name_of_anim_wardrobe($row_number_wardrobe,12v) = "CLO_POSE_LEGS"
+$row_number_wardrobe += 1
+$number_of_legs_wardrobe = 1
+
+:WARROBE_7580
+goto @WARROBE_8048
+
+:WARROBE_7587
+if 
+  $number_of_feet_wardrobe == 0
+goto_if_false @WARROBE_7673
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'FEET'
+set_var_int_to_constant $body_part_wardrobe($row_number_wardrobe,12i) = 3
+set_var_text_label16 $name_of_anim_wardrobe($row_number_wardrobe,12v) = "CLO_POSE_SHOES"
+$row_number_wardrobe += 1
+$number_of_feet_wardrobe = 1
+
+:WARROBE_7673
+goto @WARROBE_8048
+
+:WARROBE_7680
+if 
+  $number_of_chains_wardrobe == 0
+goto_if_false @WARROBE_7766
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'CHAINS'
+set_var_int_to_constant $body_part_wardrobe($row_number_wardrobe,12i) = 13
+set_var_text_label16 $name_of_anim_wardrobe($row_number_wardrobe,12v) = "CLO_POSE_TORSO"
+$row_number_wardrobe += 1
+$number_of_chains_wardrobe = 1
+
+:WARROBE_7766
+goto @WARROBE_8048
+
+:WARROBE_7773
+if 
+  $number_of_watches_wardrobe == 0
+goto_if_false @WARROBE_7859
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'WATCHES'
+set_var_int_to_constant $body_part_wardrobe($row_number_wardrobe,12i) = 14
+set_var_text_label16 $name_of_anim_wardrobe($row_number_wardrobe,12v) = "CLO_POSE_WATCH"
+$row_number_wardrobe += 1
+$number_of_watches_wardrobe = 1
+
+:WARROBE_7859
+goto @WARROBE_8048
+
+:WARROBE_7866
+if 
+  $number_of_glasses_wardrobe == 0
+goto_if_false @WARROBE_7950
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'SHADES'
+set_var_int_to_constant $body_part_wardrobe($row_number_wardrobe,12i) = 15
+set_var_text_label16 $name_of_anim_wardrobe($row_number_wardrobe,12v) = "CLO_POSE_HAT"
+$row_number_wardrobe += 1
+$number_of_glasses_wardrobe = 1
+
+:WARROBE_7950
+goto @WARROBE_8048
+
+:WARROBE_7957
+if 
+  $number_of_hats_wardrobe == 0
+goto_if_false @WARROBE_8041
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'HATS'
+set_var_int_to_constant $body_part_wardrobe($row_number_wardrobe,12i) = 16
+set_var_text_label16 $name_of_anim_wardrobe($row_number_wardrobe,12v) = "CLO_POSE_HAT"
+$row_number_wardrobe += 1
+$number_of_hats_wardrobe = 1
+
+:WARROBE_8041
+goto @WARROBE_8048
+
+:WARROBE_8048
+$temp_var_shops += 1
+goto @WARROBE_7286
+
+:WARROBE_8062
+set_var_int_to_var_int $temp_var_shops = $row_number_wardrobe
+
+:WARROBE_8070
+if 
+  12 > $temp_var_shops
+goto_if_false @WARROBE_8120
+set_var_text_label $menu_item($temp_var_shops,12s) = 'DUMMY'
+$temp_var_shops += 1
+goto @WARROBE_8070
+
+:WARROBE_8120
+return 
+
+:WARROBE_8122
+if 
+  $second_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_8522
+Text.PrintHelpForever('WARDH2')
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @WARROBE_8213
+$second_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @WARROBE_8454
+
+:WARROBE_8213
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @WARROBE_8275
+$second_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @WARROBE_8454
+
+:WARROBE_8275
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @WARROBE_8337
+$second_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @WARROBE_8454
+
+:WARROBE_8337
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @WARROBE_8399
+$second_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @WARROBE_8454
+
+:WARROBE_8399
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @WARROBE_8454
+$second_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+
+:WARROBE_8454
+Menu.SetColumnOrientation($second_menu_wardrobe, 0, 1)
+Menu.SetColumn($second_menu_wardrobe, 0, 'DUMMY', s$menu_item[0], s$menu_item[1], s$menu_item[2], s$menu_item[3], s$menu_item[4], s$menu_item[5], s$menu_item[6], s$menu_item[7], s$menu_item[8], s$menu_item[9], s$menu_item[10], s$menu_item[11])
+$second_menu_drawn_wardrobe = 1
+
+:WARROBE_8522
+return 
+
+:WARROBE_8524
+$temp_var_shops = 0
+$row_number_wardrobe = 0
+$number_bought_items_in_area = 0
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, $body_part_wardrobe($second_menu_item_picked_wardrobe,12i))
+$number_of_wardrobe_in_shop = Shopping.GetNumberOfItems()
+
+:WARROBE_8568
+if 
+  is_int_var_greater_than_int_var $number_of_wardrobe_in_shop > $temp_var_shops
+goto_if_false @WARROBE_8775
+$model_index = Shopping.GetItem($temp_var_shops)
+$modelid_shops = Shopping.GetExtraInfo($model_index, 0)
+$component_shops = Shopping.GetExtraInfo($model_index, 1)
+if 
+  Shopping.HasPlayerBoughtItem($model_index)
+goto_if_false @WARROBE_8761
+if 
+  is_int_var_equal_to_int_var $component_shops == $body_part_wardrobe($second_menu_item_picked_wardrobe,12i)
+goto_if_false @WARROBE_8761
+set_var_int_to_var_int $item_model_index($number_bought_items_in_area,12i) = $model_index
+s$wardrobe_name = Shopping.GetNameOfItem($model_index)
+set_var_text_label $menu_item($number_bought_items_in_area,12s) = s$wardrobe_name
+set_var_int_to_var_int $item_modelid($number_bought_items_in_area,12i) = $modelid_shops
+set_var_int_to_var_int $area_to_look_at_shops = $component_shops
+if 
+  is_int_var_equal_to_int_var $player_item_texture_shops == $model_index
+goto_if_false @WARROBE_8743
+$item_hilight_shops($number_bought_items_in_area,12i) = 0
+goto @WARROBE_8754
+
+:WARROBE_8743
+$item_hilight_shops($number_bought_items_in_area,12i) = 1
+
+:WARROBE_8754
+$number_bought_items_in_area += 1
+
+:WARROBE_8761
+$temp_var_shops += 1
+goto @WARROBE_8568
+
+:WARROBE_8775
+set_var_int_to_var_int $temp_var_shops = $number_bought_items_in_area
+
+:WARROBE_8783
+if 
+  12 > $temp_var_shops
+goto_if_false @WARROBE_8833
+set_var_text_label $menu_item($temp_var_shops,12s) = 'DUMMY'
+$temp_var_shops += 1
+goto @WARROBE_8783
+
+:WARROBE_8833
+return 
+
+:WARROBE_8835
+if 
+  $third_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_9290
+Text.PrintHelpForever('WARDH3')
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @WARROBE_8926
+$third_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @WARROBE_9167
+
+:WARROBE_8926
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @WARROBE_8988
+$third_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @WARROBE_9167
+
+:WARROBE_8988
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @WARROBE_9050
+$third_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @WARROBE_9167
+
+:WARROBE_9050
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @WARROBE_9112
+$third_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @WARROBE_9167
+
+:WARROBE_9112
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @WARROBE_9167
+$third_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+
+:WARROBE_9167
+Menu.SetColumnOrientation($third_menu_wardrobe, 0, 1)
+Menu.SetColumn($third_menu_wardrobe, 0, 'DUMMY', s$menu_item[0], s$menu_item[1], s$menu_item[2], s$menu_item[3], s$menu_item[4], s$menu_item[5], s$menu_item[6], s$menu_item[7], s$menu_item[8], s$menu_item[9], s$menu_item[10], s$menu_item[11])
+$temp_var_shops = 0
+
+:WARROBE_9235
+if 
+  is_int_var_greater_than_int_var $number_bought_items_in_area > $temp_var_shops
+goto_if_false @WARROBE_9283
+Menu.ActivateItem($third_menu_wardrobe, $temp_var_shops, $item_hilight_shops($temp_var_shops,12i))
+$temp_var_shops += 1
+goto @WARROBE_9235
+
+:WARROBE_9283
+$third_menu_drawn_wardrobe = 1
+
+:WARROBE_9290
+return 
+
+:WARROBE_9292
+if 
+  $main_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_10422
+gosub @WARROBE_11522
+if 
+  $flag_remove_menu_drawn_wardrobe == 1
+goto_if_false @WARROBE_9349
+Menu.Delete($remove_menu_wardrobe)
+Text.ClearHelp
+$flag_remove_menu_drawn_wardrobe = 0
+
+:WARROBE_9349
+if 
+  $row_number_wardrobe == 0
+goto_if_false @WARROBE_9381
+$draw_remove_option_wardrobe = 0
+goto @WARROBE_9388
+
+:WARROBE_9381
+$draw_remove_option_wardrobe = 1
+
+:WARROBE_9388
+$row_number_wardrobe = 0
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @WARROBE_9457
+$main_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @WARROBE_9698
+
+:WARROBE_9457
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @WARROBE_9519
+$main_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @WARROBE_9698
+
+:WARROBE_9519
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @WARROBE_9581
+$main_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @WARROBE_9698
+
+:WARROBE_9581
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @WARROBE_9643
+$main_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @WARROBE_9698
+
+:WARROBE_9643
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @WARROBE_9698
+$main_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+
+:WARROBE_9698
+Menu.SetColumnOrientation($main_menu_wardrobe, 0, 1)
+if 
+  $flag_bought_from_binco == 1
+goto_if_false @WARROBE_9768
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'SHOP1'
+set_var_text_label $shop_section($row_number_wardrobe,12s) = 'CSCHP'
+$row_number_wardrobe += 1
+
+:WARROBE_9768
+if 
+  $flag_bought_from_prolapse == 1
+goto_if_false @WARROBE_9829
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'SHOP2'
+set_var_text_label $shop_section($row_number_wardrobe,12s) = 'CSSPRT'
+$row_number_wardrobe += 1
+
+:WARROBE_9829
+if 
+  $flag_bought_from_suburban == 1
+goto_if_false @WARROBE_9890
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'SHOP3'
+set_var_text_label $shop_section($row_number_wardrobe,12s) = 'LACS1'
+$row_number_wardrobe += 1
+
+:WARROBE_9890
+if 
+  $flag_bought_from_zip == 1
+goto_if_false @WARROBE_9951
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'SHOP4'
+set_var_text_label $shop_section($row_number_wardrobe,12s) = 'CLOTHGP'
+$row_number_wardrobe += 1
+
+:WARROBE_9951
+if 
+  $flag_bought_from_victim == 1
+goto_if_false @WARROBE_10012
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'SHOP5'
+set_var_text_label $shop_section($row_number_wardrobe,12s) = 'CSDESGN'
+$row_number_wardrobe += 1
+
+:WARROBE_10012
+if 
+  $flag_bought_from_didiessachs == 1
+goto_if_false @WARROBE_10073
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'SHOP6'
+set_var_text_label $shop_section($row_number_wardrobe,12s) = 'CSEXL'
+$row_number_wardrobe += 1
+
+:WARROBE_10073
+$flag_got_special_clothes_wardrobe = 0
+if or
+  $flag_player_got_gimp_suit == 1
+  $flag_player_got_valet_uniform == 1
+  $flag_player_got_casino_uniform == 1
+  $flag_got_mechanic_clothes == 1
+  $flag_player_got_police_uniform == 1
+  $flag_player_got_country_clothes == 1
+goto_if_false @WARROBE_10140
+$flag_got_special_clothes_wardrobe = 1
+
+:WARROBE_10140
+if or
+  $flag_got_medic_clothes == 1
+  $flag_got_pimp_clothes == 1
+goto_if_false @WARROBE_10172
+$flag_got_special_clothes_wardrobe = 1
+
+:WARROBE_10172
+if 
+  $flag_got_special_clothes_wardrobe == 1
+goto_if_false @WARROBE_10233
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'SHOP7'
+set_var_text_label $shop_section($row_number_wardrobe,12s) = 'UNIFORM'
+$row_number_wardrobe += 1
+
+:WARROBE_10233
+if 
+  $draw_remove_option_wardrobe == 1
+goto_if_false @WARROBE_10294
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'REMCLT'
+set_var_text_label $shop_section($row_number_wardrobe,12s) = 'REMOVE'
+$row_number_wardrobe += 1
+
+:WARROBE_10294
+set_var_int_to_var_int $temp_var_shops = $row_number_wardrobe
+
+:WARROBE_10302
+if 
+  12 > $temp_var_shops
+goto_if_false @WARROBE_10352
+set_var_text_label $menu_item($temp_var_shops,12s) = 'DUMMY'
+$temp_var_shops += 1
+goto @WARROBE_10302
+
+:WARROBE_10352
+Text.PrintHelpForever('WARDH1')
+Menu.SetColumn($main_menu_wardrobe, 0, 'DUMMY', s$menu_item[0], s$menu_item[1], s$menu_item[2], s$menu_item[3], s$menu_item[4], s$menu_item[5], s$menu_item[6], s$menu_item[7], s$menu_item[8], s$menu_item[9], s$menu_item[10], s$menu_item[11])
+$main_menu_drawn_wardrobe = 1
+
+:WARROBE_10422
+return 
+
+:WARROBE_10424
+if 
+  $cost_menu_drawn_shops == 0
+goto_if_false @WARROBE_10690
+if 
+  is_var_text_label_equal_to_text_label $shop_section($shop_main_item_picked_wardrobe,12s) == 'REMOVE'
+goto_if_false @WARROBE_10489
+Text.PrintHelpForever('REMOH2')
+goto @WARROBE_10500
+
+:WARROBE_10489
+Text.PrintHelpForever('WARDH4')
+
+:WARROBE_10500
+$cost_menu_shops = Menu.Create('CLOTCHO', 29.0, 95.0, 93.0, 2, False, 1, 1)
+Menu.SetColumnOrientation($cost_menu_shops, 0, 1)
+Menu.SetColumn($cost_menu_shops, 0, 'DUMMY', s$wardrobe_name, 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetColumnWidth($cost_menu_shops, 0, 140)
+Menu.SetColumnWidth($cost_menu_shops, 1, 46)
+$cost_menu_drawn_shops = 1
+
+:WARROBE_10690
+return 
+
+:WARROBE_10692
+if 
+  $bought_menu_drawn_shops == 0
+goto_if_false @WARROBE_10906
+$bought_menu_shops = Menu.Create('CLOTCHO', 29.0, 25.0, 93.0, 2, False, 1, 1)
+Menu.SetColumnOrientation($bought_menu_shops, 0, 1)
+Menu.SetColumn($bought_menu_shops, 0, 'DUMMY', 'CHANGED', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetColumnWidth($bought_menu_shops, 0, 140)
+Menu.SetColumnWidth($bought_menu_shops, 1, 46)
+$bought_menu_drawn_shops = 1
+
+:WARROBE_10906
+return 
+
+:WARROBE_10908
+Shopping.Load("UNIFORM")
+Shopping.LoadPrices("CLOTHES")
+$number_of_wardrobe_in_shop = Shopping.GetNumberOfItems()
+$temp_var_shops = 0
+$row_number_wardrobe = 0
+$number_bought_items_in_area = 0
+
+:WARROBE_10956
+if 
+  is_int_var_greater_than_int_var $number_of_wardrobe_in_shop > $temp_var_shops
+goto_if_false @WARROBE_11462
+$model_index = Shopping.GetItem($temp_var_shops)
+$modelid_shops = Shopping.GetExtraInfo($model_index, 0)
+$component_shops = Shopping.GetExtraInfo($model_index, 1)
+set_var_int_to_var_int $item_model_index($number_bought_items_in_area,12i) = $model_index
+s$wardrobe_name = Shopping.GetNameOfItem($model_index)
+set_var_text_label $menu_item($number_bought_items_in_area,12s) = s$wardrobe_name
+set_var_int_to_var_int $item_modelid($number_bought_items_in_area,12i) = $modelid_shops
+set_var_int_to_constant $area_to_look_at_shops = 17
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, BodyPart.SpecialCostume)
+if 
+  is_int_var_equal_to_int_var $player_item_texture_shops == $model_index
+goto_if_false @WARROBE_11104
+$item_hilight_shops($number_bought_items_in_area,12i) = 0
+goto @WARROBE_11115
+
+:WARROBE_11104
+$item_hilight_shops($number_bought_items_in_area,12i) = 1
+
+:WARROBE_11115
+if and
+  $flag_player_got_gimp_suit == 1
+  is_var_text_label_equal_to_text_label s$wardrobe_name == 'GIMP'
+goto_if_false @WARROBE_11154
+$number_bought_items_in_area += 1
+
+:WARROBE_11154
+if and
+  $flag_player_got_valet_uniform == 1
+  is_var_text_label_equal_to_text_label s$wardrobe_name == 'VALETU'
+goto_if_false @WARROBE_11193
+$number_bought_items_in_area += 1
+
+:WARROBE_11193
+if and
+  $flag_player_got_country_clothes == 1
+  is_var_text_label_equal_to_text_label s$wardrobe_name == 'COUNTRY'
+goto_if_false @WARROBE_11232
+$number_bought_items_in_area += 1
+
+:WARROBE_11232
+if and
+  $flag_player_got_casino_uniform == 1
+  is_var_text_label_equal_to_text_label s$wardrobe_name == 'CROUP'
+goto_if_false @WARROBE_11271
+$number_bought_items_in_area += 1
+
+:WARROBE_11271
+if and
+  $flag_player_got_police_uniform == 1
+  is_var_text_label_equal_to_text_label s$wardrobe_name == 'POLICE'
+goto_if_false @WARROBE_11310
+$number_bought_items_in_area += 1
+
+:WARROBE_11310
+if and
+  $flag_got_medic_clothes == 1
+  is_var_text_label_equal_to_text_label s$wardrobe_name == 'PAMEDIC'
+goto_if_false @WARROBE_11349
+$number_bought_items_in_area += 1
+
+:WARROBE_11349
+if and
+  $flag_got_pimp_clothes == 1
+  is_var_text_label_equal_to_text_label s$wardrobe_name == 'PIMPSUT'
+goto_if_false @WARROBE_11388
+$number_bought_items_in_area += 1
+
+:WARROBE_11388
+if and
+  $flag_got_mechanic_clothes == 1
+  is_var_text_label_equal_to_text_label s$wardrobe_name == 'RDRIVER'
+goto_if_false @WARROBE_11427
+$number_bought_items_in_area += 1
+
+:WARROBE_11427
+set_var_text_label16 v$current_name_of_anim_wardrobe = "CLO_POSE_TORSO"
+$temp_var_shops += 1
+goto @WARROBE_10956
+
+:WARROBE_11462
+set_var_int_to_var_int $temp_var_shops = $number_bought_items_in_area
+
+:WARROBE_11470
+if 
+  12 > $temp_var_shops
+goto_if_false @WARROBE_11520
+set_var_text_label $menu_item($temp_var_shops,12s) = 'DUMMY'
+$temp_var_shops += 1
+goto @WARROBE_11470
+
+:WARROBE_11520
+return 
+
+:WARROBE_11522
+$temp_var_shops = 0
+$row_number_wardrobe = 0
+if 
+  $flag_remove_menu_drawn_wardrobe == 0
+goto_if_false @WARROBE_12530
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @WARROBE_11616
+$remove_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @WARROBE_11857
+
+:WARROBE_11616
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @WARROBE_11678
+$remove_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @WARROBE_11857
+
+:WARROBE_11678
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @WARROBE_11740
+$remove_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 165.0, 186.0, True, True, 1, 1)
+goto @WARROBE_11857
+
+:WARROBE_11740
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @WARROBE_11802
+$remove_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+goto @WARROBE_11857
+
+:WARROBE_11802
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @WARROBE_11857
+$remove_menu_wardrobe = Menu.Create('CLOTCHO', 29.0, 145.0, 186.0, True, True, 1, 1)
+
+:WARROBE_11857
+Menu.SetColumnOrientation($remove_menu_wardrobe, 0, 1)
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, BodyPart.Torso)
+if 
+  $player_item_texture_shops <> 0
+goto_if_false @WARROBE_11933
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'TORSO'
+set_var_int_to_constant $item_component($row_number_wardrobe,12i) = 0
+$row_number_wardrobe += 1
+
+:WARROBE_11933
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, BodyPart.Legs)
+if 
+  $player_item_texture_shops <> 0
+goto_if_false @WARROBE_12000
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'LEGS'
+set_var_int_to_constant $item_component($row_number_wardrobe,12i) = 2
+$row_number_wardrobe += 1
+
+:WARROBE_12000
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, BodyPart.Shoes)
+if 
+  $player_item_texture_shops <> 0
+goto_if_false @WARROBE_12067
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'FEET'
+set_var_int_to_constant $item_component($row_number_wardrobe,12i) = 3
+$row_number_wardrobe += 1
+
+:WARROBE_12067
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, BodyPart.Necklace)
+if 
+  $player_item_texture_shops <> 0
+goto_if_false @WARROBE_12134
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'CHAINS'
+set_var_int_to_constant $item_component($row_number_wardrobe,12i) = 13
+$row_number_wardrobe += 1
+
+:WARROBE_12134
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, BodyPart.WatchOrBracelet)
+if 
+  $player_item_texture_shops <> 0
+goto_if_false @WARROBE_12201
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'WATCHES'
+set_var_int_to_constant $item_component($row_number_wardrobe,12i) = 14
+$row_number_wardrobe += 1
+
+:WARROBE_12201
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, BodyPart.Glasses)
+if 
+  $player_item_texture_shops <> 0
+goto_if_false @WARROBE_12268
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'SHADES'
+set_var_int_to_constant $item_component($row_number_wardrobe,12i) = 15
+$row_number_wardrobe += 1
+
+:WARROBE_12268
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, BodyPart.Hat)
+if 
+  $player_item_texture_shops <> 0
+goto_if_false @WARROBE_12335
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'HATS'
+set_var_int_to_constant $item_component($row_number_wardrobe,12i) = 16
+$row_number_wardrobe += 1
+
+:WARROBE_12335
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, BodyPart.SpecialCostume)
+if 
+  $player_item_texture_shops <> 0
+goto_if_false @WARROBE_12402
+set_var_text_label $menu_item($row_number_wardrobe,12s) = 'SHOP7'
+set_var_int_to_constant $item_component($row_number_wardrobe,12i) = 17
+$row_number_wardrobe += 1
+
+:WARROBE_12402
+set_var_int_to_var_int $temp_var_shops = $row_number_wardrobe
+
+:WARROBE_12410
+if 
+  12 > $temp_var_shops
+goto_if_false @WARROBE_12460
+set_var_text_label $menu_item($temp_var_shops,12s) = 'DUMMY'
+$temp_var_shops += 1
+goto @WARROBE_12410
+
+:WARROBE_12460
+Text.PrintHelpForever('REMOH1')
+Menu.SetColumn($remove_menu_wardrobe, 0, 'DUMMY', s$menu_item[0], s$menu_item[1], s$menu_item[2], s$menu_item[3], s$menu_item[4], s$menu_item[5], s$menu_item[6], s$menu_item[7], s$menu_item[8], s$menu_item[9], s$menu_item[10], s$menu_item[11])
+$flag_remove_menu_drawn_wardrobe = 1
+
+:WARROBE_12530
+return 
+terminate_this_script 
+
+//-------------External script 64 (CLOTHES)---------------
+
+:CLOTH
+$number_of_clothes_in_shop = 0
+$number_of_clothes_in_area = 0
+$area_looked_for_shops = 0
+$price_counter = 0
+$item_no_shops = 0
+$temp_var_shops = 0
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$shop_progress_clothes = 0
+$change_doorX = 0.0
+$change_doorY = 0.0
+$change_doorZ = 0.0
+$change_room_door_heading = 0.0
+$clothes_offX = 0.0
+$clothes_offY = 0.0
+$clothes_offZ = 0.0
+$change_room_door_heading = 0.0
+$clothes_locateX = 0.0
+$clothes_locateY = 0.0
+$clothes_locateZ = 0.0
+$clothes_heading = 0.0
+$clothes_camX = 0.0
+$clothes_camY = 0.0
+$clothes_camZ = 0.0
+$clothes_cam_pointX = 0.0
+$clothes_cam_pointY = 0.0
+$clothes_cam_pointZ = 0.0
+$clothes_hat_camX = 0.0
+$clothes_hat_camY = 0.0
+$clothes_hat_camZ = 0.0
+$clothes_hat_cam_pointX = 0.0
+$clothes_hat_cam_pointY = 0.0
+$clothes_hat_cam_pointZ = 0.0
+$shop_keep_clothX = 0.0
+$shop_keep_clothY = 0.0
+$shop_keep_clothZ = 0.0
+$shop_keep_heading_clothes = 0.0
+$number_of_items_clothes = 0
+$flag_player_in_changing_room = 0
+$clothes_heading = 0.0
+$clothes_cam_pointX = 0.0
+$clothes_cam_pointY = 0.0
+$clothes_cam_pointZ = 0.0
+$return_animation_time_clothes = 0.0
+$object_animation_time_clothes = 0.0
+$flag_clothes = 0
+$flag_player_use_changing_room = 0
+$player_in_view_mode = 0
+$shopkeeper_attacked_clothes = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$main_menu_drawn_shops = 0
+$sub_menu_drawn_shops = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$flag_player_owned_item_shops = 0
+$area_to_look_at_shops = 0
+$player_in_changeroom_clothes = 0
+$flag_bought_something_clothes = 0
+$hash_key_clothes = 0
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'LACS1'
+goto_if_false @CLOTH_577
+set_var_int_to_constant $shopkeeper_model_shops = 211
+$shop_door_model_clothes = -371
+
+:CLOTH_577
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CSCHP'
+goto_if_false @CLOTH_618
+set_var_int_to_constant $shopkeeper_model_shops = 211
+$shop_door_model_clothes = -370
+
+:CLOTH_618
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CSSPRT'
+goto_if_false @CLOTH_659
+set_var_int_to_constant $shopkeeper_model_shops = 217
+$shop_door_model_clothes = -372
+
+:CLOTH_659
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CLOTHGP'
+goto_if_false @CLOTH_700
+set_var_int_to_constant $shopkeeper_model_shops = 211
+$shop_door_model_clothes = -373
+
+:CLOTH_700
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CSDESGN'
+goto_if_false @CLOTH_741
+set_var_int_to_constant $shopkeeper_model_shops = 211
+$shop_door_model_clothes = -374
+
+:CLOTH_741
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'CSEXL'
+goto_if_false @CLOTH_782
+set_var_int_to_constant $shopkeeper_model_shops = 217
+$shop_door_model_clothes = -375
+

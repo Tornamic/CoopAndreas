@@ -1,0 +1,161 @@
+//-------------External script 42 (PCUSTOM)---------------
+
+:PCUSTOM
+script_name 'PCUSTOM'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @PCUSTOM_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:PCUSTOM_60
+Streaming.RequestAnimation("INT_SHOP")
+
+:PCUSTOM_72
+if 
+  not Streaming.HasAnimationLoaded("INT_SHOP")
+goto_if_false @PCUSTOM_106
+wait 0
+goto @PCUSTOM_72
+
+:PCUSTOM_106
+3@ = 1
+4@ = 0
+5@ = 0
+11@ = 0
+
+:PCUSTOM_134
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @PCUSTOM_237
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @PCUSTOM_223
+if 
+  $iSetPizzaPanic == 0
+goto_if_false @PCUSTOM_209
+gosub @PCUSTOM_251
+goto @PCUSTOM_216
+
+:PCUSTOM_209
+goto @PCUSTOM_804
+
+:PCUSTOM_216
+goto @PCUSTOM_230
+
+:PCUSTOM_223
+gosub @PCUSTOM_727
+
+:PCUSTOM_230
+goto @PCUSTOM_244
+
+:PCUSTOM_237
+gosub @PCUSTOM_727
+
+:PCUSTOM_244
+goto @PCUSTOM_134
+
+:PCUSTOM_251
+switch_start 3@ total_jumps 1 default_jump 0 @PCUSTOM_328 jumps 1 @PCUSTOM_314 -1 @PCUSTOM_328 -1 @PCUSTOM_328 -1 @PCUSTOM_328 -1 @PCUSTOM_328 -1 @PCUSTOM_328 -1 @PCUSTOM_328
+
+:PCUSTOM_314
+gosub @PCUSTOM_330
+goto @PCUSTOM_328
+
+:PCUSTOM_328
+return 
+
+:PCUSTOM_330
+switch_start 4@ total_jumps 4 default_jump 0 @PCUSTOM_725 jumps 0 @PCUSTOM_393 1 @PCUSTOM_451 2 @PCUSTOM_534 3 @PCUSTOM_711 -1 @PCUSTOM_725 -1 @PCUSTOM_725 -1 @PCUSTOM_725
+
+:PCUSTOM_393
+5@ = 1
+Task.PlayAnim(0@, "IDLE_CHAT", "PED", 4.0, True, False, False, False, 5000)
+4@ += 1
+goto @PCUSTOM_725
+
+:PCUSTOM_451
+10@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @PCUSTOM_527
+Task.PlayAnim(0@, "SHOP_PAY", "INT_SHOP", 1000.0, False, False, False, False, 0)
+4@ += 1
+
+:PCUSTOM_527
+goto @PCUSTOM_725
+
+:PCUSTOM_534
+10@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @PCUSTOM_704
+7@ = Char.GetOffsetInWorldCoords(8@, 9@, 0@, 0.0, 0.1, 1.0)
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'FDPIZA'
+goto_if_false @PCUSTOM_640
+12@ = Object.Create(#CJ_PIZZA_2, 7@, 8@, 9@)
+goto @PCUSTOM_656
+
+:PCUSTOM_640
+12@ = Object.Create(#CJ_BURG_2, 7@, 8@, 9@)
+
+:PCUSTOM_656
+Task.PickUpObject(0@, 12@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 0)
+4@ += 1
+
+:PCUSTOM_704
+goto @PCUSTOM_725
+
+:PCUSTOM_711
+gosub @PCUSTOM_727
+goto @PCUSTOM_725
+
+:PCUSTOM_725
+return 
+
+:PCUSTOM_727
+Streaming.RemoveAnimation("INT_SHOP")
+Object.MarkAsNoLongerNeeded(12@)
+if 
+  not Char.IsDead(0@)
+goto_if_false @PCUSTOM_800
+Char.ClearTasksImmediately(0@)
+Task.UseClosestMapAttractor(0@, 20.0, 0, 0.0, 0.0, 0.0, "PCHAIR")
+
+:PCUSTOM_800
+terminate_this_script 
+return 
+
+:PCUSTOM_804
+wait 0
+if and
+  not is_var_text_label_empty s$shop_name
+  $iTerminateAllAmbience == 0
+goto_if_false @PCUSTOM_890
+if 
+  not Char.IsDead(0@)
+goto_if_false @PCUSTOM_883
+11@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 11@ == 7
+goto_if_false @PCUSTOM_883
+Task.Duck(0@, -2)
+
+:PCUSTOM_883
+goto @PCUSTOM_897
+
+:PCUSTOM_890
+gosub @PCUSTOM_727
+
+:PCUSTOM_897
+goto @PCUSTOM_804
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

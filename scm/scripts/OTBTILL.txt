@@ -1,0 +1,141 @@
+//-------------External script 45 (OTBTILL)---------------
+
+:OTBTILL
+script_name 'OTBTILL'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @OTBTILL_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:OTBTILL_60
+Streaming.RequestAnimation("INT_SHOP")
+
+:OTBTILL_72
+if 
+  not Streaming.HasAnimationLoaded("INT_SHOP")
+goto_if_false @OTBTILL_106
+wait 0
+goto @OTBTILL_72
+
+:OTBTILL_106
+3@ = 1
+4@ = 0
+5@ = 0
+11@ = 0
+
+:OTBTILL_134
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @OTBTILL_245
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @OTBTILL_231
+if 
+  $iSetOTBPanic == 0
+goto_if_false @OTBTILL_209
+gosub @OTBTILL_259
+goto @OTBTILL_224
+
+:OTBTILL_209
+Char.SetDecisionMaker(0@, $iGlobalPedPanicDM)
+goto @OTBTILL_655
+
+:OTBTILL_224
+goto @OTBTILL_238
+
+:OTBTILL_231
+gosub @OTBTILL_587
+
+:OTBTILL_238
+goto @OTBTILL_252
+
+:OTBTILL_245
+gosub @OTBTILL_587
+
+:OTBTILL_252
+goto @OTBTILL_134
+
+:OTBTILL_259
+switch_start 3@ total_jumps 1 default_jump 0 @OTBTILL_336 jumps 1 @OTBTILL_322 -1 @OTBTILL_336 -1 @OTBTILL_336 -1 @OTBTILL_336 -1 @OTBTILL_336 -1 @OTBTILL_336 -1 @OTBTILL_336
+
+:OTBTILL_322
+gosub @OTBTILL_338
+goto @OTBTILL_336
+
+:OTBTILL_336
+return 
+
+:OTBTILL_338
+switch_start 4@ total_jumps 3 default_jump 0 @OTBTILL_585 jumps 0 @OTBTILL_401 1 @OTBTILL_459 2 @OTBTILL_542 -1 @OTBTILL_585 -1 @OTBTILL_585 -1 @OTBTILL_585 -1 @OTBTILL_585
+
+:OTBTILL_401
+5@ = 1
+Task.PlayAnim(0@, "IDLE_CHAT", "PED", 4.0, True, False, False, False, 5000)
+4@ += 1
+goto @OTBTILL_585
+
+:OTBTILL_459
+10@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @OTBTILL_535
+Task.PlayAnim(0@, "SHOP_PAY", "INT_SHOP", 1000.0, False, False, False, False, 0)
+4@ += 1
+
+:OTBTILL_535
+goto @OTBTILL_585
+
+:OTBTILL_542
+10@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 10@ == 7
+goto_if_false @OTBTILL_578
+gosub @OTBTILL_587
+
+:OTBTILL_578
+goto @OTBTILL_585
+
+:OTBTILL_585
+return 
+
+:OTBTILL_587
+Streaming.RemoveAnimation("INT_SHOP")
+if 
+  not Char.IsDead(0@)
+goto_if_false @OTBTILL_651
+Task.UseClosestMapAttractor(0@, 50.0, 0, 0.0, 0.0, 0.0, "OTBWTCH")
+
+:OTBTILL_651
+terminate_this_script 
+return 
+
+:OTBTILL_655
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @OTBTILL_725
+11@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 11@ == 7
+goto_if_false @OTBTILL_718
+Task.Duck(0@, -2)
+
+:OTBTILL_718
+goto @OTBTILL_732
+
+:OTBTILL_725
+gosub @OTBTILL_587
+
+:OTBTILL_732
+goto @OTBTILL_655
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

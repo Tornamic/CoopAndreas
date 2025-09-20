@@ -1,0 +1,1209 @@
+//-------------External script 3 (BCESAR3)---------------
+
+:COKEC
+script_name 'COKEC'
+15@ = 0
+0@ = 0
+1@ = 0
+12@ = 0
+13@ = 0
+14@ = 0
+16@ = 0
+$phone_conversation_choice = 0
+$phone_conversation_answer = 0
+
+:COKEC_74
+if or
+  $weekday == 1
+  $weekday == 3
+  $weekday == 5
+goto_if_false @COKEC_120
+goto @COKEC_5527
+16@ = 1
+
+:COKEC_120
+if 
+  $bce2_played == 0
+goto_if_false @COKEC_152
+goto @COKEC_5527
+16@ = 1
+
+:COKEC_152
+if 
+  $flag_synd_mission_counter >= 10
+goto_if_false @COKEC_184
+goto @COKEC_5527
+16@ = 1
+
+:COKEC_184
+$current_visible_area_cell = Streaming.GetAreaVisible()
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_333
+if 
+  $current_visible_area_cell == 0
+goto_if_false @COKEC_322
+if and
+  Char.IsOnFoot($scplayer)
+  not Char.IsInAir($scplayer)
+  $onmission == 0
+  $player_fall_state == 0
+goto_if_false @COKEC_304
+if and
+  not Char.IsInWater($scplayer)
+  not Char.IsShooting($scplayer)
+goto_if_false @COKEC_286
+goto @COKEC_297
+
+:COKEC_286
+wait 0
+goto @COKEC_74
+
+:COKEC_297
+goto @COKEC_315
+
+:COKEC_304
+wait 0
+goto @COKEC_74
+
+:COKEC_315
+goto @COKEC_333
+
+:COKEC_322
+wait 0
+goto @COKEC_74
+
+:COKEC_333
+ENTEXT_214()
+if 
+  $player_is_completely_safe_for_mobile == 0
+goto_if_false @COKEC_369
+wait 0
+goto @COKEC_74
+
+:COKEC_369
+if 
+  $bcesar3_passed_mission == 0
+goto_if_false @COKEC_389
+Stat.RegisterMissionGiven
+
+:COKEC_389
+14@ = 1
+$flag_on_courier_mission = 1
+
+:COKEC_403
+wait 0
+3@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 2@ = 3@
+sub_int_lvar_from_int_lvar 2@ -= 9@
+set_lvar_int_to_lvar_int 9@ = 3@
+27@ = Streaming.GetAreaVisible()
+if 
+  27@ == 0
+goto_if_false @COKEC_475
+add_int_lvar_to_int_lvar 10@ += 2@
+add_int_lvar_to_int_lvar 11@ += 2@
+
+:COKEC_475
+if 
+is_ps2_keyboard_key_just_pressed 98
+goto_if_false @COKEC_497
+goto @COKEC_5527
+
+:COKEC_497
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @COKEC_519
+goto @COKEC_5527
+
+:COKEC_519
+if 
+  $onmission == 1
+goto_if_false @COKEC_551
+16@ = 1
+goto @COKEC_5527
+
+:COKEC_551
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @COKEC_574
+goto @COKEC_5527
+
+:COKEC_574
+if 
+  has_deatharrest_been_executed 
+goto_if_false @COKEC_601
+16@ = 1
+goto @COKEC_5527
+
+:COKEC_601
+if 
+  0@ == 0
+goto_if_false @COKEC_675
+23@ = -1
+21@ = 0
+24@ = 0
+25@ = 0
+26@ = 0
+28@ = 0
+0@ += 1
+1@ = 0
+
+:COKEC_675
+if 
+  0@ == 1
+goto_if_false @COKEC_5520
+if 
+  1@ == 0
+goto_if_false @COKEC_806
+Streaming.RequestModel(23)
+Streaming.RequestModel(468)
+Streaming.RequestModel(346)
+Streaming.RequestModel(330)
+Streaming.RequestCarRecording(556)
+Audio.LoadMissionAudio(20804, 3)
+
+:COKEC_742
+if or
+  not Streaming.HasModelLoaded(23)
+  not Streaming.HasModelLoaded(468)
+  not Streaming.HasModelLoaded(346)
+  not Streaming.HasModelLoaded(330)
+  not Streaming.HasCarRecordingBeenLoaded(556)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @COKEC_792
+wait 0
+goto @COKEC_742
+
+:COKEC_792
+29@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+1@ += 1
+
+:COKEC_806
+if 
+  1@ == 1
+goto_if_false @COKEC_882
+ENTEXT_214()
+if 
+  $player_is_completely_safe_for_mobile == 1
+goto_if_false @COKEC_882
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+Task.UseMobilePhone($scplayer, True)
+TIMERA = -1500
+12@ = 0
+1@ += 1
+
+:COKEC_882
+if 
+  1@ >= 2
+goto_if_false @COKEC_1565
+if 
+  5 > 12@
+goto_if_false @COKEC_1565
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @COKEC_963
+12@ = 4
+$phone_conversation_choice = 3
+$phone_conversation_answer = 2
+16@ = 1
+
+:COKEC_963
+if and
+  $phone_conversation_choice == 1
+  $audio_line_is_active == 0
+  not Text.IsMessageBeingDisplayed
+goto_if_false @COKEC_1008
+Text.PrintHelpForever('TALK_1')
+$phone_conversation_choice += 1
+
+:COKEC_1008
+if 
+  $phone_conversation_choice == 2
+goto_if_false @COKEC_1099
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @COKEC_1066
+$phone_conversation_answer = 1
+$phone_conversation_choice += 1
+Text.ClearHelp
+goto @COKEC_1099
+
+:COKEC_1066
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @COKEC_1099
+$phone_conversation_answer = 2
+$phone_conversation_choice += 1
+Text.ClearHelp
+
+:COKEC_1099
+if or
+  $phone_conversation_choice == 0
+  $phone_conversation_choice == 3
+goto_if_false @COKEC_1565
+if and
+  $audio_line_is_active == 0
+  TIMERA > 1000
+goto_if_false @COKEC_1565
+switch_start 12@ total_jumps 5 default_jump 0 @COKEC_1551 jumps 0 @COKEC_1213 1 @COKEC_1264 2 @COKEC_1312 3 @COKEC_1366 4 @COKEC_1480 -1 @COKEC_1551 -1 @COKEC_1551
+
+:COKEC_1213
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+set_var_text_label s$audio_string = 'MCES08A'
+set_var_int_to_constant $audio_sound_file = 25285
+start_new_script @AUDIOL -1 0 1 1 0 
+goto @COKEC_1551
+
+:COKEC_1264
+set_var_text_label s$audio_string = 'MCES08B'
+set_var_int_to_constant $audio_sound_file = 25286
+start_new_script @AUDIOL $scplayer 0 1 1 0 
+goto @COKEC_1551
+
+:COKEC_1312
+set_var_text_label s$audio_string = 'MCES08C'
+set_var_int_to_constant $audio_sound_file = 25287
+start_new_script @AUDIOL -1 0 1 1 0 
+$phone_conversation_choice += 1
+goto @COKEC_1551
+
+:COKEC_1366
+if 
+  $phone_conversation_answer == 1
+goto_if_false @COKEC_1432
+set_var_text_label s$audio_string = 'MCES08D'
+set_var_int_to_constant $audio_sound_file = 25288
+start_new_script @AUDIOL $scplayer 0 1 1 0 
+goto @COKEC_1473
+
+:COKEC_1432
+set_var_text_label s$audio_string = 'VOFFE2N'
+set_var_int_to_constant $audio_sound_file = 21447
+start_new_script @AUDIOL $scplayer 0 1 1 0 
+
+:COKEC_1473
+goto @COKEC_1551
+
+:COKEC_1480
+start_new_script @CLEANAU 
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_1519
+Task.UseMobilePhone($scplayer, False)
+
+:COKEC_1519
+if 
+  $phone_conversation_answer <> 1
+goto_if_false @COKEC_1544
+goto @COKEC_5527
+
+:COKEC_1544
+goto @COKEC_1551
+
+:COKEC_1551
+12@ += 1
+TIMERA = 0
+
+:COKEC_1565
+if 
+  1@ == 2
+goto_if_false @COKEC_2214
+if 
+  15@ == 0
+goto_if_false @COKEC_1991
+26@ = Math.RandomIntInRange(0, 60)
+
+:COKEC_1610
+if 
+  2@ == 0
+goto_if_false @COKEC_1732
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_1725
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, $bce2_CHECKPOINTS_x(26@,85f), $bce2_CHECKPOINTS_y(26@,85f), $bce2_CHECKPOINTS_z(26@,85f), 150.0, 150.0, 150.0)
+goto_if_false @COKEC_1718
+26@ = Math.RandomIntInRange(0, 60)
+wait 0
+goto @COKEC_1725
+
+:COKEC_1718
+2@ = 1
+
+:COKEC_1725
+goto @COKEC_1610
+
+:COKEC_1732
+17@ = Car.Create(468, $bce2_CHECKPOINTS_x(26@,85f), $bce2_CHECKPOINTS_y(26@,85f), $bce2_CHECKPOINTS_z(26@,85f))
+18@ = Char.Create(4, 23, $bce2_CHECKPOINTS_x(26@,85f), $bce2_CHECKPOINTS_y(26@,85f), $bce2_CHECKPOINTS_z(26@,85f))
+22@ = Object.Create(#PARA_PACK, $bce2_CHECKPOINTS_x(26@,85f), $bce2_CHECKPOINTS_y(26@,85f), $bce2_CHECKPOINTS_z(26@,85f))
+Char.WarpIntoCar(18@, 17@)
+Task.PickUpObject(18@, 22@, -0.11, -0.05, 0.0, 1, 16, "NULL", "NULL", 0)
+Car.SetLoadCollisionFlag(17@, False)
+set_lvar_int_to_lvar_int 2@ = 26@
+2@ += 1
+set_var_float_to_var_float $x = $bce2_CHECKPOINTS_x(2@,85f)
+sub_float_var_from_float_var $x -= $bce2_CHECKPOINTS_x(26@,85f)
+set_var_float_to_var_float $y = $bce2_CHECKPOINTS_y(2@,85f)
+sub_float_var_from_float_var $y -= $bce2_CHECKPOINTS_y(26@,85f)
+5@ = Math.GetHeadingFromVector2D($x, $y)
+Car.SetHeading(17@, 5@)
+Car.GotoCoordinatesRacing(17@, $bce2_CHECKPOINTS_x(26@,85f), $bce2_CHECKPOINTS_y(26@,85f), $bce2_CHECKPOINTS_z(26@,85f))
+goto @COKEC_1991
+
+:COKEC_1991
+Char.SetOnlyDamagedByPlayer(18@, True)
+Char.SetAccuracy(18@, 95)
+Char.SetDecisionMaker(18@, 29@)
+Task.TogglePedThreatScanner(18@, False, False, True)
+Char.GiveWeapon(18@, WeaponType.Pistol, 99999)
+Char.SetMaxHealth(18@, 300)
+Char.SetHealth(18@, 300)
+Car.SetOnlyDamagedByPlayer(17@, True)
+Car.SetCruiseSpeed(17@, 25.0)
+Car.SetDrivingStyle(17@, DrivingMode.AvoidCars)
+StuckCarCheck.AddWithWarp(17@, 2.0, 2000, True, True, True, 2)
+Char.SetProofs(18@, True, True, True, True, True)
+Car.SetProofs(17@, True, True, True, True, True)
+Char.SetDrownsInWater(18@, False)
+Char.SetCanBeKnockedOffBike(18@, True)
+Streaming.MarkModelAsNoLongerNeeded(23)
+Streaming.MarkModelAsNoLongerNeeded(468)
+Streaming.MarkModelAsNoLongerNeeded(346)
+if 
+  not Char.IsDead(18@)
+goto_if_false @COKEC_2179
+19@ = Blip.AddForChar(18@)
+
+:COKEC_2179
+24@ = 0
+TIMERB = 0
+11@ = 0
+10@ = 0
+1@ += 1
+
+:COKEC_2214
+if 
+  1@ == 3
+goto_if_false @COKEC_3295
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_3295
+if 
+  25@ == 0
+goto_if_false @COKEC_2311
+if 
+is_ps2_keyboard_key_just_pressed 67
+goto_if_false @COKEC_2304
+if 
+  not Char.IsDead(18@)
+goto_if_false @COKEC_2304
+25@ = 1
+
+:COKEC_2304
+goto @COKEC_2337
+
+:COKEC_2311
+if 
+is_ps2_keyboard_key_just_pressed 67
+goto_if_false @COKEC_2337
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+25@ = 0
+
+:COKEC_2337
+if 
+  25@ == 1
+goto_if_false @COKEC_2497
+if 
+  not Char.IsDead(18@)
+goto_if_false @COKEC_2497
+$x, $y, $z = Char.GetCoordinates(18@)
+$x += -15.0
+$y += 12.0
+$z += 15.0
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x, $y, $z = Char.GetCoordinates(18@)
+$x = Char.GetOffsetInWorldCoords($y, $z, 18@, 0.0, 2.0, 0.0)
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+
+:COKEC_2497
+if 
+is_ps2_keyboard_key_just_pressed 70
+goto_if_false @COKEC_2571
+if 
+  not Char.IsDead(18@)
+goto_if_false @COKEC_2571
+if 
+  not Car.IsDead(17@)
+goto_if_false @COKEC_2571
+if 
+  Char.IsInCar(18@, 17@)
+goto_if_false @COKEC_2571
+Task.LeaveCarImmediately(18@, 17@)
+
+:COKEC_2571
+if 
+is_ps2_keyboard_key_just_pressed 74
+goto_if_false @COKEC_2671
+if 
+  not Char.IsDead(18@)
+goto_if_false @COKEC_2671
+$x = Char.GetOffsetInWorldCoords($y, $z, 18@, 0.0, -20.0, 0.0)
+$z += 10.0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_2671
+Char.SetCoordinates($scplayer, $x, $y, $z)
+
+:COKEC_2671
+if 
+  15@ == 0
+goto_if_false @COKEC_2891
+if 
+  24@ == 0
+goto_if_false @COKEC_2884
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_2884
+if 
+  not Char.IsDead(18@)
+goto_if_false @COKEC_2884
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 18@, 80.0, 80.0, 80.0, False)
+goto_if_false @COKEC_2856
+Char.SetCanBeKnockedOffBike(18@, False)
+Char.SetProofs(18@, False, False, False, False, False)
+if 
+  not Car.IsDead(17@)
+goto_if_false @COKEC_2828
+Car.SetProofs(17@, False, False, False, False, False)
+
+:COKEC_2828
+Char.SetDrownsInWater(18@, True)
+Char.SetCanBeKnockedOffBike(18@, False)
+24@ = 1
+goto @COKEC_2884
+
+:COKEC_2856
+if 
+  11@ > 600000
+goto_if_false @COKEC_2884
+goto @COKEC_5527
+
+:COKEC_2884
+goto @COKEC_2891
+
+:COKEC_2891
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_3042
+if 
+  24@ == 1
+goto_if_false @COKEC_3042
+if 
+  not Char.IsDead(18@)
+goto_if_false @COKEC_3042
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_3000
+if or
+  Char.LocateAnyMeansChar2D($scplayer, 18@, 100.0, 100.0, False)
+  Char.IsOnScreen(18@)
+goto_if_false @COKEC_3000
+10@ = 0
+
+:COKEC_3000
+if 
+  10@ > 20000
+goto_if_false @COKEC_3042
+Text.Print('BCR3_02', 4000, 1)
+goto @COKEC_5527
+
+:COKEC_3042
+if 
+  23@ == -1
+goto_if_false @COKEC_3221
+if 
+  not Char.IsDead(18@)
+goto_if_false @COKEC_3214
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_3214
+if 
+  Char.HasBeenDamagedByChar(18@, $scplayer)
+goto_if_false @COKEC_3214
+if 
+  Object.DoesExist(22@)
+goto_if_false @COKEC_3184
+20@ = Particle.CreateOnObjectWithDirection("COKE_TRAIL", 22@, 0.0, -0.2, -0.1, 0.0, 0.0, -1.0, 1)
+Particle.Play(20@)
+
+:COKEC_3184
+Text.Print('BCR3_04', 5000, 1)
+23@ = 1
+TIMERA = 0
+
+:COKEC_3214
+goto @COKEC_3272
+
+:COKEC_3221
+if 
+  TIMERA > 180000
+goto_if_false @COKEC_3272
+if 
+  23@ > 0
+goto_if_false @COKEC_3272
+Particle.Stop(20@)
+23@ = 0
+
+:COKEC_3272
+if 
+  Char.IsDead(18@)
+goto_if_false @COKEC_3295
+1@ += 1
+
+:COKEC_3295
+if 
+  1@ == 4
+goto_if_false @COKEC_3554
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_3554
+if 
+  Char.IsDead(18@)
+goto_if_false @COKEC_3554
+Particle.Stop(20@)
+cset_lvar_float_to_lvar_int 5@ = integer TIMERA
+if 
+  5@ > 180000.0
+goto_if_false @COKEC_3389
+5@ = 180000.0
+
+:COKEC_3389
+5@ /= 180000.0
+5@ -= 1.0
+5@ *= -1.0
+5@ *= 2000.0
+cset_lvar_int_to_lvar_float 23@ = float 5@
+Blip.Remove(19@)
+if 
+  Object.DoesExist(22@)
+goto_if_false @COKEC_3463
+Object.Delete(22@)
+
+:COKEC_3463
+$x, $y, $z = World.GetDeadCharPickupCoords(18@)
+21@ = Pickup.Create(#PARA_PACK, 3, $x, $y, $z)
+19@ = Blip.AddForCoord($x, $y, $z)
+Blip.ChangeColor(19@, BlipColor.Green)
+Text.PrintNow('BCR3_05', 4000, 1)
+$checked_coke_pickup_z = 0
+TIMERA = 0
+1@ += 1
+
+:COKEC_3554
+if 
+is_ps2_keyboard_key_just_pressed 85
+goto_if_false @COKEC_3590
+if 
+  not Char.IsDead(18@)
+goto_if_false @COKEC_3590
+Task.Die(18@)
+
+:COKEC_3590
+if 
+  $checked_coke_pickup_z == 0
+goto_if_false @COKEC_3777
+if 
+  not Pickup.HasBeenCollected(21@)
+goto_if_false @COKEC_3777
+$x, $y, $z = Pickup.GetCoordinates(21@)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_3777
+if 
+  Char.LocateAnyMeans2D($scplayer, 0, $x, $y, 50.0, 50.0)
+goto_if_false @COKEC_3777
+5@ = World.GetGroundZFor3DCoord($x, $y, $z)
+set_var_float_to_lvar_float $z = 5@
+$z += 1.0
+Pickup.Remove(21@)
+Blip.Remove(19@)
+21@ = Pickup.Create(#PARA_PACK, 3, $x, $y, $z)
+19@ = Blip.AddForCoord($x, $y, $z)
+Blip.ChangeColor(19@, BlipColor.Green)
+$checked_coke_pickup_z = 1
+
+:COKEC_3777
+if 
+  1@ == 5
+goto_if_false @COKEC_4019
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_4019
+$x, $y, $z = Pickup.GetCoordinates(21@)
+if 
+  Char.LocateAnyMeans2D($scplayer, 0, $x, $y, 300.0, 300.0)
+goto_if_false @COKEC_4010
+if 
+  180000 > TIMERA
+goto_if_false @COKEC_3994
+if 
+  21@ <> 0
+goto_if_false @COKEC_3978
+if 
+  Pickup.HasBeenCollected(21@)
+goto_if_false @COKEC_3971
+if 
+  23@ > 0
+goto_if_false @COKEC_3948
+Text.ClearPrints
+13@ = 1
+goto @COKEC_3964
+
+:COKEC_3948
+Text.PrintNow('BCR3_06', 7500, 1)
+
+:COKEC_3964
+goto @COKEC_5527
+
+:COKEC_3971
+goto @COKEC_3987
+
+:COKEC_3978
+Text.ClearPrints
+goto @COKEC_5527
+
+:COKEC_3987
+goto @COKEC_4003
+
+:COKEC_3994
+Text.ClearPrints
+goto @COKEC_5527
+
+:COKEC_4003
+goto @COKEC_4019
+
+:COKEC_4010
+Text.ClearPrints
+goto @COKEC_5527
+
+:COKEC_4019
+if 
+  24@ <> 0
+goto_if_false @COKEC_4226
+if 
+  15@ == 0
+goto_if_false @COKEC_4226
+if 
+  Car.DoesExist(17@)
+goto_if_false @COKEC_4219
+if 
+  not Car.IsDead(17@)
+goto_if_false @COKEC_4219
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_4219
+if 
+  Char.LocateAnyMeansCar3D($scplayer, 17@, 50.0, 50.0, 50.0, False)
+goto_if_false @COKEC_4209
+if 
+  Char.LocateAnyMeansCar3D($scplayer, 17@, 20.0, 20.0, 20.0, False)
+goto_if_false @COKEC_4192
+Car.SetCruiseSpeed(17@, 45.0)
+goto @COKEC_4202
+
+:COKEC_4192
+Car.SetCruiseSpeed(17@, 30.0)
+
+:COKEC_4202
+goto @COKEC_4219
+
+:COKEC_4209
+Car.SetCruiseSpeed(17@, 20.0)
+
+:COKEC_4219
+goto @COKEC_4226
+
+:COKEC_4226
+if 
+  15@ == 0
+goto_if_false @COKEC_4613
+if 
+  not Char.IsDead(18@)
+goto_if_false @COKEC_4613
+if 
+  26@ <> -1
+goto_if_false @COKEC_4613
+if 
+  not Car.IsDead(17@)
+goto_if_false @COKEC_4613
+if 
+  Char.IsInCar(18@, 17@)
+goto_if_false @COKEC_4613
+if 
+  Char.LocateInCar3D(18@, $bce2_CHECKPOINTS_x(26@,85f), $bce2_CHECKPOINTS_y(26@,85f), $bce2_CHECKPOINTS_z(26@,85f), 25.0, 25.0, 25.0, False)
+goto_if_false @COKEC_4468
+26@ += 1
+if 
+  85 > 26@
+goto_if_false @COKEC_4439
+Task.CarDriveToCoord(18@, 17@, $bce2_CHECKPOINTS_x(26@,85f), $bce2_CHECKPOINTS_y(26@,85f), $bce2_CHECKPOINTS_z(26@,85f), 25.0, DriveMode.Racing, 1, DrivingMode.AvoidCars)
+goto @COKEC_4461
+
+:COKEC_4439
+Task.CarDriveWander(18@, 17@, 25.0, DrivingMode.AvoidCars)
+26@ = -1
+
+:COKEC_4461
+goto @COKEC_4613
+
+:COKEC_4468
+if 
+  85 > 26@
+goto_if_false @COKEC_4562
+2@ = Char.GetScriptTaskStatus(18@, 1489)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @COKEC_4555
+Task.CarDriveToCoord(18@, 17@, $bce2_CHECKPOINTS_x(26@,85f), $bce2_CHECKPOINTS_y(26@,85f), $bce2_CHECKPOINTS_z(26@,85f), 25.0, DriveMode.Racing, 1, DrivingMode.AvoidCars)
+
+:COKEC_4555
+goto @COKEC_4613
+
+:COKEC_4562
+2@ = Char.GetScriptTaskStatus(18@, 1490)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @COKEC_4613
+Task.CarDriveWander(18@, 17@, 25.0, DrivingMode.AvoidCars)
+26@ = -1
+
+:COKEC_4613
+if 
+  not Char.IsDead(18@)
+goto_if_false @COKEC_4728
+if 
+  not Object.DoesExist(22@)
+goto_if_false @COKEC_4668
+22@ = Object.Create(#PARA_PACK, 0.0, 0.0, 0.0)
+
+:COKEC_4668
+if 
+  not Char.IsHoldingObject(18@, 22@)
+goto_if_false @COKEC_4728
+Task.PickUpObject(18@, 22@, -0.11, -0.05, 0.0, 1, 16, "NULL", "NULL", 0)
+
+:COKEC_4728
+if 
+  27@ <> 0
+goto_if_false @COKEC_4824
+if 
+  28@ == 0
+goto_if_false @COKEC_4817
+if 
+  Car.DoesExist(17@)
+goto_if_false @COKEC_4787
+Car.FreezePosition(17@, True)
+
+:COKEC_4787
+if 
+  Char.DoesExist(18@)
+goto_if_false @COKEC_4810
+Char.FreezePosition(18@, True)
+
+:COKEC_4810
+28@ = 1
+
+:COKEC_4817
+goto @COKEC_4895
+
+:COKEC_4824
+if 
+  28@ == 1
+goto_if_false @COKEC_4895
+if 
+  Car.DoesExist(17@)
+goto_if_false @COKEC_4865
+Car.FreezePosition(17@, False)
+
+:COKEC_4865
+if 
+  Char.DoesExist(18@)
+goto_if_false @COKEC_4888
+Char.FreezePosition(18@, False)
+
+:COKEC_4888
+28@ = 0
+
+:COKEC_4895
+if 
+  Car.DoesExist(17@)
+goto_if_false @COKEC_5520
+if 
+  not Char.IsDead(18@)
+goto_if_false @COKEC_5520
+if 
+  24@ == 1
+goto_if_false @COKEC_5477
+if 
+  not Car.IsDead(17@)
+goto_if_false @COKEC_5395
+if 
+  not Char.IsInCar(18@, 17@)
+goto_if_false @COKEC_5388
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_5388
+if 
+  not Char.LocateOnFootChar3D($scplayer, 18@, 20.0, 20.0, 10.0, False)
+goto_if_false @COKEC_5239
+2@ = Char.GetScriptTaskStatus(18@, 1560)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @COKEC_5121
+Char.ClearTasks(18@)
+8@ = Sequence.Open()
+Task.GotoCar(-1, 17@, 10000, 5.0)
+Task.EnterCarAsDriver(-1, 17@, 10000)
+Sequence.Close(8@)
+Char.PerformSequence(18@, 8@)
+Sequence.Clear(8@)
+goto @COKEC_5232
+
+:COKEC_5121
+2@ = Char.GetScriptTaskStatus(18@, 1506)
+if 
+  not is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @COKEC_5232
+2@ = Char.GetScriptTaskStatus(18@, 1560)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @COKEC_5232
+Char.ClearTasks(18@)
+8@ = Sequence.Open()
+Task.GotoCar(-1, 17@, 10000, 5.0)
+Task.EnterCarAsDriver(-1, 17@, 10000)
+Sequence.Close(8@)
+Char.PerformSequence(18@, 8@)
+Sequence.Clear(8@)
+
+:COKEC_5232
+goto @COKEC_5388
+
+:COKEC_5239
+if 
+  23@ == 1
+goto_if_false @COKEC_5306
+2@ = Char.GetScriptTaskStatus(18@, 1506)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @COKEC_5299
+Char.ClearTasks(18@)
+Task.KillCharOnFoot(18@, $scplayer)
+
+:COKEC_5299
+goto @COKEC_5388
+
+:COKEC_5306
+2@ = Char.GetScriptTaskStatus(18@, 1560)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @COKEC_5388
+Char.ClearTasks(18@)
+8@ = Sequence.Open()
+Task.GotoCar(-1, 17@, 10000, 5.0)
+Task.EnterCarAsDriver(-1, 17@, 10000)
+Sequence.Close(8@)
+Char.PerformSequence(18@, 8@)
+Sequence.Clear(8@)
+
+:COKEC_5388
+goto @COKEC_5470
+
+:COKEC_5395
+2@ = Char.GetScriptTaskStatus(18@, 1560)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @COKEC_5470
+8@ = Sequence.Open()
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_5452
+Task.KillCharOnFoot(-1, $scplayer)
+
+:COKEC_5452
+Sequence.Close(8@)
+Char.PerformSequence(18@, 8@)
+Sequence.Clear(8@)
+
+:COKEC_5470
+goto @COKEC_5520
+
+:COKEC_5477
+if 
+  not Car.IsDead(17@)
+goto_if_false @COKEC_5520
+if 
+  not Char.IsInCar(18@, 17@)
+goto_if_false @COKEC_5520
+Char.WarpIntoCar(18@, 17@)
+
+:COKEC_5520
+goto @COKEC_403
+
+:COKEC_5527
+if 
+  14@ == 1
+goto_if_false @COKEC_5844
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_5568
+Task.UseMobilePhone($scplayer, False)
+
+:COKEC_5568
+start_new_script @CLEANAU 
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+wait 1
+Text.ClearHelp
+if 
+  13@ == 0
+goto_if_false @COKEC_5615
+23@ = 0
+
+:COKEC_5615
+if 
+  16@ == 0
+goto_if_false @COKEC_5681
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @COKEC_5662
+Text.PrintNow('BCR3_08', 7500, 1)
+
+:COKEC_5662
+Text.PrintWithNumberBig('BCE2_04', 23@, 7500, TextStyle.MiddleSmallerHigher)
+
+:COKEC_5681
+if 
+  13@ == 1
+goto_if_false @COKEC_5759
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_5723
+Player.AddScore($player1, 23@)
+
+:COKEC_5723
+if 
+  $bcesar3_passed_mission == 0
+goto_if_false @COKEC_5750
+Stat.RegisterOddjobMissionPassed
+$bcesar3_passed_mission += 1
+
+:COKEC_5750
+Audio.PlayMissionPassedTune(1)
+Player.ClearWantedLevel($player1)
+
+:COKEC_5759
+Char.MarkAsNoLongerNeeded(18@)
+Car.MarkAsNoLongerNeeded(17@)
+Object.MarkAsNoLongerNeeded(22@)
+Blip.Remove(19@)
+Particle.Kill(20@)
+Pickup.Remove(21@)
+DecisionMaker.Remove(29@)
+Streaming.MarkModelAsNoLongerNeeded(23)
+Streaming.MarkModelAsNoLongerNeeded(468)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.RemoveCarRecording(556)
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+Streaming.MarkModelAsNoLongerNeeded(330)
+14@ = 0
+
+:COKEC_5844
+$flag_on_courier_mission = 0
+terminate_this_script 
+set_var_int_to_var_int $start_line_point = $bce_point_to_edit
+$start_line_point -= 2
+set_var_int_to_var_int $end_line_point = $bce_point_to_edit
+$end_line_point += 2
+if 
+  0 > $start_line_point
+goto_if_false @COKEC_5908
+$start_line_point = 0
+
+:COKEC_5908
+if 
+  $end_line_point > 84
+goto_if_false @COKEC_5933
+$end_line_point = 84
+
+:COKEC_5933
+set_lvar_int_to_var_int 2@ = $start_line_point
+
+:COKEC_5941
+if 
+  is_int_var_greater_than_int_lvar $end_line_point > 2@
+goto_if_false @COKEC_6051
+set_lvar_int_to_lvar_int 3@ = 2@
+3@ += 1
+if 
+  85 > 3@
+goto_if_false @COKEC_6037
+Debugger.Line($bce2_CHECKPOINTS_x(2@,85f), $bce2_CHECKPOINTS_y(2@,85f), $bce2_CHECKPOINTS_z(2@,85f), $bce2_CHECKPOINTS_x(3@,85f), $bce2_CHECKPOINTS_y(3@,85f), $bce2_CHECKPOINTS_z(3@,85f))
+
+:COKEC_6037
+2@ += 1
+goto @COKEC_5941
+
+:COKEC_6051
+if 
+is_ps2_keyboard_key_just_pressed 124
+goto_if_false @COKEC_6122
+$bce_point_to_edit += 1
+if 
+  $bce_point_to_edit > 84
+goto_if_false @COKEC_6098
+$bce_point_to_edit = 0
+
+:COKEC_6098
+write_debug_with_int "BCE_POINT_TO_EDIT" $bce_point_to_edit
+
+:COKEC_6122
+if 
+is_ps2_keyboard_key_just_pressed 127
+goto_if_false @COKEC_6193
+$bce_point_to_edit -= 1
+if 
+  0 > $bce_point_to_edit
+goto_if_false @COKEC_6169
+$bce_point_to_edit = 84
+
+:COKEC_6169
+write_debug_with_int "BCE_POINT_TO_EDIT" $bce_point_to_edit
+
+:COKEC_6193
+if 
+is_ps2_keyboard_key_just_pressed 131
+goto_if_false @COKEC_6223
+$bce2_CHECKPOINTS_y($bce_point_to_edit,85f) += 0.5
+
+:COKEC_6223
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @COKEC_6253
+$bce2_CHECKPOINTS_y($bce_point_to_edit,85f) += -0.5
+
+:COKEC_6253
+if 
+is_ps2_keyboard_key_just_pressed 128
+goto_if_false @COKEC_6283
+$bce2_CHECKPOINTS_x($bce_point_to_edit,85f) += 0.5
+
+:COKEC_6283
+if 
+is_ps2_keyboard_key_just_pressed 129
+goto_if_false @COKEC_6313
+$bce2_CHECKPOINTS_x($bce_point_to_edit,85f) += -0.5
+
+:COKEC_6313
+if 
+is_ps2_keyboard_key_just_pressed 145
+goto_if_false @COKEC_6343
+$bce2_CHECKPOINTS_z($bce_point_to_edit,85f) += 0.5
+
+:COKEC_6343
+if 
+is_ps2_keyboard_key_just_pressed 139
+goto_if_false @COKEC_6373
+$bce2_CHECKPOINTS_z($bce_point_to_edit,85f) += -0.5
+
+:COKEC_6373
+if 
+is_ps2_keyboard_key_just_pressed 87
+goto_if_false @COKEC_6402
+$bce2_CHECKPOINTS_y($bce_point_to_edit,85f) += 10.0
+
+:COKEC_6402
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @COKEC_6431
+$bce2_CHECKPOINTS_y($bce_point_to_edit,85f) += -10.0
+
+:COKEC_6431
+if 
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @COKEC_6460
+$bce2_CHECKPOINTS_x($bce_point_to_edit,85f) += 10.0
+
+:COKEC_6460
+if 
+is_ps2_keyboard_key_just_pressed 65
+goto_if_false @COKEC_6489
+$bce2_CHECKPOINTS_x($bce_point_to_edit,85f) += -10.0
+
+:COKEC_6489
+if 
+is_ps2_keyboard_key_just_pressed 137
+goto_if_false @COKEC_7511
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("COKE COURIER ROUTE - EDIT POINT -IONONOP=   DESTINATION) = ")
+save_int_to_debug_file $bce_point_to_edit
+save_newline_to_debug_file 
+2@ = 0
+
+:COKEC_6651
+if 
+  85 > 2@
+goto_if_false @COKEC_7511
+Debugger.SaveStringToDebugFile("BCE2_CHECKPOINTS_X[EXEDIT POINT -IONONOP=   DESTINATION) = ")
+save_int_to_debug_file 2@
+Debugger.SaveStringToDebugFile("] = _CHECKPOINTS_X[EXEDIT POINT -IONONOP=   DESTINATION) = ")
+save_float_to_debug_file $bce2_CHECKPOINTS_x(2@,85f)
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BCE2_CHECKPOINTS_Y[EXEDIT POINT -IONONOP=   DESTINATION) = ")
+save_int_to_debug_file 2@
+Debugger.SaveStringToDebugFile("] = _CHECKPOINTS_Y[EXEDIT POINT -IONONOP=   DESTINATION) = ")
+save_float_to_debug_file $bce2_CHECKPOINTS_y(2@,85f)
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BCE2_CHECKPOINTS_Z[EXEDIT POINT -IONONOP=   DESTINATION) = ")
+save_int_to_debug_file 2@
+Debugger.SaveStringToDebugFile("] = _CHECKPOINTS_Z[EXEDIT POINT -IONONOP=   DESTINATION) = ")
+save_float_to_debug_file $bce2_CHECKPOINTS_z(2@,85f)
+save_newline_to_debug_file 
+2@ += 1
+goto @COKEC_6651
+
+:COKEC_7511
+if 
+is_ps2_keyboard_key_just_pressed 97
+goto_if_false @COKEC_7614
+set_lvar_int_to_var_int 2@ = $bce_point_to_edit
+2@ -= 1
+if 
+  0 > 2@
+goto_if_false @COKEC_7566
+2@ = 0
+
+:COKEC_7566
+set_var_float_to_var_float $bce2_CHECKPOINTS_x($bce_point_to_edit,85f) = $bce2_CHECKPOINTS_x(2@,85f)
+set_var_float_to_var_float $bce2_CHECKPOINTS_y($bce_point_to_edit,85f) = $bce2_CHECKPOINTS_y(2@,85f)
+set_var_float_to_var_float $bce2_CHECKPOINTS_z($bce_point_to_edit,85f) = $bce2_CHECKPOINTS_z(2@,85f)
+
+:COKEC_7614
+if 
+  Player.IsPlaying($player1)
+goto_if_false @COKEC_7716
+  Char.LocateAnyMeans3D($scplayer, 0, $bce2_CHECKPOINTS_x($bce_point_to_edit,85f), $bce2_CHECKPOINTS_y($bce_point_to_edit,85f), $bce2_CHECKPOINTS_z($bce_point_to_edit,85f), 1.0, 1.0, 1.0)
+  Char.LocateAnyMeans3D($scplayer, 0, $bce2_CHECKPOINTS_x($bce_point_to_edit,85f), $bce2_CHECKPOINTS_y($bce_point_to_edit,85f), $bce2_CHECKPOINTS_z($bce_point_to_edit,85f), 0.5, 0.5, 0.5)
+
+:COKEC_7716
+return 
+terminate_this_script 
+

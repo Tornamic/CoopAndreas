@@ -1,0 +1,485 @@
+:STUNT_63
+script_name 'STUNT'
+wait 0
+Text.LoadMissionText('STUNT')
+
+:STUNT_89
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @STUNT_116
+wait 0
+goto @STUNT_89
+
+:STUNT_116
+34@ = Char.StoreCarIsIn($scplayer)
+Car.SetHealth(34@, 3000)
+gosub @STUNT_2129
+35@ = 1
+56@ = 0
+
+:STUNT_153
+if 
+  is_int_lvar_greater_than_int_lvar 187@ > 56@
+goto_if_false @STUNT_197
+36@(56@,20i) = 0
+56@ += 1
+goto @STUNT_153
+
+:STUNT_197
+if 
+  $onmission == 0
+goto_if_false @STUNT_229
+57@ = Blip.AddForCoord($x, $y, $z)
+
+:STUNT_229
+58@ = 0
+59@ = 0
+Player.SetControl($player1, False)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Hud.SwitchWidescreen(True)
+Game.SetAllCarsCanBeDamaged(False)
+Camera.SetFixedPosition(188@, 189@, 190@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(191@, 192@, 193@, SwitchType.JumpCut)
+$game_timer = Clock.GetGameTimer()
+set_var_int_to_var_int $stunt_timer = $game_timer
+$stunt_timer += 5000
+Text.PrintNow('STUNT_6', 5000, 1)
+80@ = 0
+
+:STUNT_355
+wait 0
+$game_timer = Clock.GetGameTimer()
+if 
+  58@ == 0
+goto_if_false @STUNT_510
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @STUNT_503
+if 
+  80@ == 1
+goto_if_false @STUNT_496
+Player.SetControl($player1, True)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Game.SetAllCarsCanBeDamaged(True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+$stunt_timer = 11000
+Hud.DisplayTimerWithString($stunt_timer, TimerDirection.Down, 'STUNT_2')
+set_lvar_int_to_var_int 81@ = $game_timer
+58@ = 1
+80@ = 0
+
+:STUNT_496
+goto @STUNT_510
+
+:STUNT_503
+80@ = 1
+
+:STUNT_510
+if 
+  58@ == 0
+goto_if_false @STUNT_619
+if 
+  is_int_var_greater_than_int_var $game_timer > $stunt_timer
+goto_if_false @STUNT_619
+Player.SetControl($player1, True)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Game.SetAllCarsCanBeDamaged(True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+$stunt_timer = 11000
+Hud.DisplayTimerWithString($stunt_timer, TimerDirection.Down, 'STUNT_2')
+set_lvar_int_to_var_int 81@ = $game_timer
+58@ = 1
+
+:STUNT_619
+if 
+  not Car.IsDead(34@)
+goto_if_false @STUNT_1505
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @STUNT_1180
+if 
+  35@ == 1
+goto_if_false @STUNT_856
+Text.ClearThisPrint('STUNT_1')
+Blip.Remove(57@)
+56@ = 0
+
+:STUNT_695
+if 
+  is_int_lvar_greater_than_int_lvar 187@ > 56@
+goto_if_false @STUNT_849
+if 
+  36@(56@,20i) == 0
+goto_if_false @STUNT_835
+82@(56@,20i) = Blip.AddForCoord(127@(56@,20f), 147@(56@,20f), 167@(56@,20f))
+Blip.ChangeColor(82@(56@,20i), BlipColor.Red)
+102@(56@,20i) = Checkpoint.Create(127@(56@,20f), 147@(56@,20f), 167@(56@,20f), 127@(56@,20f), 147@(56@,20f), 167@(56@,20f), 3, 0.8)
+
+:STUNT_835
+56@ += 1
+goto @STUNT_695
+
+:STUNT_849
+35@ = 0
+
+:STUNT_856
+56@ = 0
+
+:STUNT_863
+if 
+  is_int_lvar_greater_than_int_lvar 187@ > 56@
+goto_if_false @STUNT_1173
+if 
+  36@(56@,20i) == 0
+goto_if_false @STUNT_1159
+Checkpoint.SetHeading(102@(56@,20i), 60@(56@,20f))
+Fx.DrawShadow(ShadowTextureType.Ped, 0.0, 1.0, 150, 0, 0, 0, 127@(56@,20f), 147@(56@,20f), 167@(56@,20f))
+60@(56@,20f) += 10.0
+if 
+  60@(56@,20f) > 360.0
+goto_if_false @STUNT_1017
+60@(56@,20f) -= 360.0
+
+:STUNT_1017
+if 
+  Char.LocateInCar3D($scplayer, 127@(56@,20f), 147@(56@,20f), 167@(56@,20f), 2.5, 2.5, 2.5, False)
+goto_if_false @STUNT_1159
+Blip.Remove(82@(56@,20i))
+Checkpoint.Delete(102@(56@,20i))
+Audio.ReportMissionAudioEventAtPosition(127@(56@,20f), 147@(56@,20f), 167@(56@,20f), 1058)
+$stunt_timer += 10000
+Text.PrintWithNumberNow('STUNT_3', 10, 1500, 1)
+59@ += 1
+36@(56@,20i) += 1
+
+:STUNT_1159
+56@ += 1
+goto @STUNT_863
+
+:STUNT_1173
+goto @STUNT_1498
+
+:STUNT_1180
+if 
+  35@ == 0
+goto_if_false @STUNT_1336
+56@ = 0
+
+:STUNT_1205
+if 
+  is_int_lvar_greater_than_int_lvar 187@ > 56@
+goto_if_false @STUNT_1256
+Blip.Remove(82@(56@,20i))
+Checkpoint.Delete(102@(56@,20i))
+56@ += 1
+goto @STUNT_1205
+
+:STUNT_1256
+57@ = Blip.AddForCar(34@)
+Blip.SetAsFriendly(57@, True)
+if 
+  $stunt_timer > 25400
+goto_if_false @STUNT_1313
+set_lvar_int_to_var_int 122@ = $game_timer
+122@ += 25400
+goto @STUNT_1329
+
+:STUNT_1313
+set_lvar_int_to_var_int 122@ = $game_timer
+add_int_var_to_int_lvar 122@ += $stunt_timer
+
+:STUNT_1329
+35@ = 1
+
+:STUNT_1336
+set_lvar_int_to_lvar_int 123@ = 122@
+sub_int_var_from_int_lvar 123@ -= $game_timer
+123@ /= 1000
+if 
+  1 > 123@
+goto_if_false @STUNT_1385
+123@ = 0
+
+:STUNT_1385
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 122@
+goto_if_false @STUNT_1427
+Text.PrintNow('STUNT_4', 5000, 1)
+goto @STUNT_1602
+
+:STUNT_1427
+if 
+  123@ == 1
+goto_if_false @STUNT_1475
+Text.AddNextMessageToPreviousBriefs(False)
+Text.PrintWithNumberNow('STUNT_8', 123@, 200, 1)
+goto @STUNT_1498
+
+:STUNT_1475
+Text.AddNextMessageToPreviousBriefs(False)
+Text.PrintWithNumberNow('STUNT_1', 123@, 200, 1)
+
+:STUNT_1498
+goto @STUNT_1528
+
+:STUNT_1505
+Text.PrintNow('STUNT_5', 5000, 1)
+goto @STUNT_1602
+
+:STUNT_1528
+if 
+  is_int_lvar_equal_to_int_lvar 59@ == 187@
+goto_if_false @STUNT_1554
+goto @STUNT_1620
+
+:STUNT_1554
+if 
+  $stunt_timer == 0
+goto_if_false @STUNT_1595
+Text.PrintNow('STUNT_7', 5000, 1)
+goto @STUNT_1602
+
+:STUNT_1595
+goto @STUNT_355
+
+:STUNT_1602
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:STUNT_1620
+Player.AddScore($player1, 1000)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+set_lvar_int_to_var_int 124@ = $game_timer
+sub_int_lvar_from_int_lvar 124@ -= 81@
+124@ /= 1000
+if 
+  $stunt_course == 0
+goto_if_false @STUNT_1730
+if 
+  $done_bmx_stunt_progress == 0
+goto_if_false @STUNT_1723
+Stat.PlayerMadeProgress(1)
+Stat.RegisterMissionPassed('BMX')
+Audio.PlayMissionPassedTune(2)
+$done_bmx_stunt_progress = 1
+
+:STUNT_1723
+Stat.RegisterFastestTime(StatId.BestTimeBmx, 124@)
+
+:STUNT_1730
+if 
+  $stunt_course == 1
+goto_if_false @STUNT_1800
+if 
+  $done_nrg500_stunt_progress == 0
+goto_if_false @STUNT_1792
+Stat.PlayerMadeProgress(1)
+Stat.RegisterMissionPassed('NRG500')
+Audio.PlayMissionPassedTune(2)
+$done_nrg500_stunt_progress = 1
+
+:STUNT_1792
+Stat.RegisterFastestTime(StatId.BestTimeNrg, 124@)
+
+:STUNT_1800
+set_lvar_int_to_lvar_int 125@ = 124@
+125@ /= 60
+set_lvar_int_to_lvar_int 126@ = 125@
+126@ *= 60
+set_lvar_int_to_lvar_int 123@ = 124@
+sub_int_lvar_from_int_lvar 123@ -= 126@
+if 
+  is_int_var_greater_than_int_lvar $stunt_best_time($stunt_course,2i) > 124@
+goto_if_false @STUNT_1957
+if 
+  10 > 123@
+goto_if_false @STUNT_1916
+Text.PrintWith2NumbersBig('STUNTN0', 125@, 123@, 5000, TextStyle.Middle)
+goto @STUNT_1938
+
+:STUNT_1916
+Text.PrintWith2NumbersBig('STUNTPN', 125@, 123@, 5000, TextStyle.Middle)
+
+:STUNT_1938
+set_var_int_to_lvar_int $stunt_best_time($stunt_course,2i) = 124@
+goto @STUNT_2026
+
+:STUNT_1957
+if 
+  10 > 123@
+goto_if_false @STUNT_2004
+Text.PrintWith2NumbersBig('STUNTT0', 125@, 123@, 5000, TextStyle.Middle)
+goto @STUNT_2026
+
+:STUNT_2004
+Text.PrintWith2NumbersBig('STUNTPT', 125@, 123@, 5000, TextStyle.Middle)
+
+:STUNT_2026
+return 
+
+:STUNT_2028
+Text.ClearThisPrint('STUNT_1')
+Text.ClearThisPrint('STUNT_3')
+56@ = 0
+
+:STUNT_2057
+if 
+  is_int_lvar_greater_than_int_lvar 187@ > 56@
+goto_if_false @STUNT_2108
+Blip.Remove(82@(56@,20i))
+Checkpoint.Delete(102@(56@,20i))
+56@ += 1
+goto @STUNT_2057
+
+:STUNT_2108
+Blip.Remove(57@)
+Hud.ClearTimer($stunt_timer)
+$onmission = 0
+Mission.Finish
+return 
+
+:STUNT_2129
+switch_start $stunt_course total_jumps 2 default_jump 0 @STUNT_3450 jumps 0 @STUNT_2192 1 @STUNT_2836 -1 @STUNT_3450 -1 @STUNT_3450 -1 @STUNT_3450 -1 @STUNT_3450 -1 @STUNT_3450
+
+:STUNT_2192
+127@ = 1955.012
+147@ = -1367.72
+167@ = 24.7354
+128@ = 1954.609
+148@ = -1376.964
+168@ = 24.2187
+129@ = 1887.392
+149@ = -1362.954
+169@ = 19.4329
+130@ = 1914.137
+150@ = -1427.099
+170@ = 15.5805
+131@ = 1908.552
+151@ = -1388.389
+171@ = 10.3294
+132@ = 1882.362
+152@ = -1427.686
+172@ = 10.3294
+133@ = 1953.349
+153@ = -1426.586
+173@ = 10.3294
+134@ = 1878.189
+154@ = -1388.81
+174@ = 15.2464
+135@ = 1878.184
+155@ = -1388.839
+175@ = 18.1461
+136@ = 1872.327
+156@ = -1451.051
+176@ = 15.7645
+137@ = 1905.178
+157@ = -1413.675
+177@ = 13.5322
+138@ = 1949.503
+158@ = -1411.546
+178@ = 15.1837
+139@ = 1867.153
+159@ = -1410.007
+179@ = 13.5322
+140@ = 1909.341
+160@ = -1369.846
+180@ = 16.7966
+141@ = 1939.243
+161@ = -1388.132
+181@ = 19.2615
+142@ = 1904.888
+162@ = -1360.622
+182@ = 13.5322
+143@ = 1930.234
+163@ = -1398.62
+183@ = 16.8554
+144@ = 1888.765
+164@ = -1399.326
+184@ = 17.2408
+145@ = 1900.948
+165@ = -1397.83
+185@ = 15.6868
+187@ = 19
+188@ = 1964.753
+189@ = -1368.362
+190@ = 29.6217
+191@ = 1963.934
+192@ = -1368.818
+193@ = 29.2725
+goto @STUNT_3450
+
+:STUNT_2836
+127@ = -1632.058
+147@ = 143.152
+167@ = 3.4111
+128@ = -1632.021
+148@ = 83.0413
+168@ = 7.5331
+129@ = -1689.148
+149@ = 53.3936
+169@ = 11.7703
+130@ = -1606.423
+150@ = 133.4396
+170@ = -10.9911
+131@ = -1680.386
+151@ = 87.0915
+171@ = 8.2325
+132@ = -1666.295
+152@ = 102.0489
+172@ = -1.5025
+133@ = -1654.692
+153@ = 60.7782
+173@ = 7.6501
+134@ = -1684.867
+154@ = 74.6374
+174@ = -7.0328
+135@ = -1583.797
+155@ = 126.1577
+175@ = 4.157
+136@ = -1667.705
+156@ = 49.5191
+176@ = 6.5634
+137@ = -1611.585
+157@ = 106.3131
+177@ = -3.6465
+138@ = -1590.556
+158@ = 148.9676
+178@ = 4.113
+139@ = -1671.959
+159@ = 98.6
+179@ = 8.9263
+140@ = -1693.32
+160@ = 65.1187
+180@ = 8.7997
+141@ = -1660.951
+161@ = 107.6739
+181@ = -2.1545
+142@ = -1654.071
+162@ = 77.2629
+182@ = -10.2893
+143@ = -1645.494
+163@ = 107.2477
+183@ = -10.6617
+144@ = -1673.735
+164@ = 56.9287
+184@ = -10.674
+187@ = 18
+188@ = -1681.464
+189@ = 27.2091
+190@ = 9.6606
+191@ = -1681.252
+192@ = 28.183
+193@ = 9.5773
+goto @STUNT_3450
+
+:STUNT_3450
+return 
+

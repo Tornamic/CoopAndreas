@@ -1,0 +1,221 @@
+:APCHECK
+script_name 'APCHECK'
+set_deatharrest_state 0
+$iFlagOpenAirportGates = 0
+$iAPgateSF1 = Object.CreateNoOffset(#WS_APGATE, -1543.742, -432.703, 6.039)
+Object.SetHeading($iAPgateSF1, -45.0)
+Object.DontRemove($iAPgateSF1)
+$iAPgateSF2 = Object.CreateNoOffset(#WS_APGATE, -1547.625, -428.82, 6.039)
+Object.SetHeading($iAPgateSF2, -45.0)
+Object.DontRemove($iAPgateSF2)
+$iAPgateSF1b = Object.CreateNoOffset(#WS_APGATE, -1222.953, 53.826, 14.134)
+Object.SetHeading($iAPgateSF1b, -135.0)
+Object.DontRemove($iAPgateSF1b)
+$iAPgateSF2b = Object.CreateNoOffset(#WS_APGATE, -1218.206, 68.883, 14.134)
+Object.SetHeading($iAPgateSF2b, -135.0)
+Object.DontRemove($iAPgateSF2b)
+$iAPgateLA1 = Object.CreateNoOffset(#WS_APGATE, 1964.342, -2189.776, 13.533)
+Object.SetHeading($iAPgateLA1, 180.0)
+Object.DontRemove($iAPgateLA1)
+$iAPgateLA2 = Object.CreateNoOffset(#WS_APGATE, 1958.851, -2189.777, 13.553)
+Object.SetHeading($iAPgateLA2, 180.0)
+Object.DontRemove($iAPgateLA2)
+$iAPgateLV1 = Object.CreateNoOffset(#WS_APGATE, 1704.777, 1605.165, 10.058)
+Object.SetHeading($iAPgateLV1, 73.0)
+Object.DontRemove($iAPgateLV1)
+$iAPgateLV2 = Object.CreateNoOffset(#WS_APGATE, 1706.364, 1610.422, 10.058)
+Object.SetHeading($iAPgateLV2, 73.0)
+Object.DontRemove($iAPgateLV2)
+
+:APCHECK_318
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @APCHECK_895
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -1540.66, -435.786, 6.039, 65.0, 65.0, 10.0)
+goto_if_false @APCHECK_537
+if 
+  $flag_is_farlie3_running == 1
+goto_if_false @APCHECK_468
+$iFlagOpenAirportGates = 1
+start_new_script @APGUARD -1 
+Object.SetCoordinates($iAPgateSF1, -1540.66, -435.786, 6.039)
+Object.SetCoordinates($iAPgateSF2, -1550.709, -425.736, 6.039)
+goto @APCHECK_530
+
+:APCHECK_468
+start_new_script @APGUARD 1 
+start_new_script @APGATE $iAPgateSF1 -1540.66 -435.786 6.039 
+start_new_script @APGATE $iAPgateSF2 -1550.709 -425.736 6.039 
+
+:APCHECK_530
+goto @APCHECK_1087
+
+:APCHECK_537
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 1968.697, -2189.776, 13.553, 65.0, 65.0, 10.0)
+goto_if_false @APCHECK_654
+start_new_script @APGUARD 2 
+start_new_script @APGATE $iAPgateLA1 1968.697 -2189.776 13.553 
+start_new_script @APGATE $iAPgateLA2 1954.571 -2189.777 13.553 
+goto @APCHECK_1547
+
+:APCHECK_654
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 1703.4, 1600.518, 10.058, 65.0, 65.0, 10.0)
+goto_if_false @APCHECK_771
+start_new_script @APGUARD 3 
+start_new_script @APGATE $iAPgateLV1 1703.4 1600.518 10.058 
+start_new_script @APGATE $iAPgateLV2 1707.722 1614.937 10.058 
+goto @APCHECK_1777
+
+:APCHECK_771
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -1226.162, 65.3807, 13.0375, 65.0, 65.0, 10.0)
+goto_if_false @APCHECK_888
+start_new_script @APGUARD 4 
+start_new_script @APGATE $iAPgateSF1b -1226.59 50.189 14.134 
+start_new_script @APGATE $iAPgateSF2b -1214.392 72.697 14.134 
+goto @APCHECK_1317
+
+:APCHECK_888
+goto @APCHECK_1080
+
+:APCHECK_895
+terminate_all_scripts_with_this_name 'APGATE'
+Object.SetCoordinates($iAPgateSF1, -1543.742, -432.703, 6.039)
+Object.SetCoordinates($iAPgateSF2, -1547.625, -428.82, 6.039)
+Object.SetCoordinates($iAPgateSF1b, -1222.953, 53.826, 14.134)
+Object.SetCoordinates($iAPgateSF2b, -1218.206, 68.883, 14.134)
+Object.SetCoordinates($iAPgateLA1, 1964.342, -2189.776, 13.533)
+Object.SetCoordinates($iAPgateLA2, 1958.851, -2189.777, 13.553)
+Object.SetCoordinates($iAPgateLV1, 1704.777, 1605.165, 10.058)
+Object.SetCoordinates($iAPgateLV2, 1706.364, 1610.422, 10.058)
+$iFlagOpenAirportGates = 0
+goto @APCHECK_318
+
+:APCHECK_1080
+goto @APCHECK_318
+
+:APCHECK_1087
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @APCHECK_1245
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, -1540.66, -435.786, 6.039, 66.0, 66.0, 10.0)
+goto_if_false @APCHECK_1238
+if 
+  $onmission == 0
+goto_if_false @APCHECK_1238
+terminate_all_scripts_with_this_name 'APGATE'
+Object.SetCoordinates($iAPgateSF1, -1543.742, -432.703, 6.039)
+Object.SetCoordinates($iAPgateSF2, -1547.625, -428.82, 6.039)
+$iFlagOpenAirportGates = 0
+goto @APCHECK_318
+
+:APCHECK_1238
+goto @APCHECK_1310
+
+:APCHECK_1245
+terminate_all_scripts_with_this_name 'APGATE'
+Object.SetCoordinates($iAPgateSF1, -1543.742, -432.703, 6.039)
+Object.SetCoordinates($iAPgateSF2, -1547.625, -428.82, 6.039)
+$iFlagOpenAirportGates = 0
+goto @APCHECK_318
+
+:APCHECK_1310
+goto @APCHECK_1087
+
+:APCHECK_1317
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @APCHECK_1475
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, -1226.162, 65.3807, 13.0375, 66.0, 66.0, 10.0)
+goto_if_false @APCHECK_1468
+if 
+  $onmission == 0
+goto_if_false @APCHECK_1468
+terminate_all_scripts_with_this_name 'APGATE'
+Object.SetCoordinates($iAPgateSF1b, -1222.953, 53.826, 14.134)
+Object.SetCoordinates($iAPgateSF2b, -1218.206, 68.883, 14.134)
+$iFlagOpenAirportGates = 0
+goto @APCHECK_318
+
+:APCHECK_1468
+goto @APCHECK_1540
+
+:APCHECK_1475
+terminate_all_scripts_with_this_name 'APGATE'
+Object.SetCoordinates($iAPgateSF1b, -1222.953, 53.826, 14.134)
+Object.SetCoordinates($iAPgateSF2b, -1218.206, 68.883, 14.134)
+$iFlagOpenAirportGates = 0
+goto @APCHECK_318
+
+:APCHECK_1540
+goto @APCHECK_1317
+
+:APCHECK_1547
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @APCHECK_1705
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 1968.697, -2189.776, 13.553, 66.0, 66.0, 10.0)
+goto_if_false @APCHECK_1698
+if 
+  $onmission == 0
+goto_if_false @APCHECK_1698
+terminate_all_scripts_with_this_name 'APGATE'
+Object.SetCoordinates($iAPgateLA1, 1964.342, -2189.776, 13.533)
+Object.SetCoordinates($iAPgateLA2, 1958.851, -2189.777, 13.553)
+$iFlagOpenAirportGates = 0
+goto @APCHECK_318
+
+:APCHECK_1698
+goto @APCHECK_1770
+
+:APCHECK_1705
+terminate_all_scripts_with_this_name 'APGATE'
+Object.SetCoordinates($iAPgateLA1, 1964.342, -2189.776, 13.533)
+Object.SetCoordinates($iAPgateLA2, 1958.851, -2189.777, 13.553)
+$iFlagOpenAirportGates = 0
+goto @APCHECK_318
+
+:APCHECK_1770
+goto @APCHECK_1547
+
+:APCHECK_1777
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @APCHECK_1935
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 1703.4, 1600.518, 10.058, 66.0, 66.0, 10.0)
+goto_if_false @APCHECK_1928
+if 
+  $onmission == 0
+goto_if_false @APCHECK_1928
+terminate_all_scripts_with_this_name 'APGATE'
+Object.SetCoordinates($iAPgateLV1, 1704.777, 1605.165, 10.058)
+Object.SetCoordinates($iAPgateLV2, 1706.364, 1610.422, 10.058)
+$iFlagOpenAirportGates = 0
+goto @APCHECK_318
+
+:APCHECK_1928
+goto @APCHECK_2000
+
+:APCHECK_1935
+terminate_all_scripts_with_this_name 'APGATE'
+Object.SetCoordinates($iAPgateLV1, 1704.777, 1605.165, 10.058)
+Object.SetCoordinates($iAPgateLV2, 1706.364, 1610.422, 10.058)
+$iFlagOpenAirportGates = 0
+goto @APCHECK_318
+
+:APCHECK_2000
+goto @APCHECK_1777
+terminate_this_script 
+

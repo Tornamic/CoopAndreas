@@ -1,0 +1,2387 @@
+:FINALEB_36
+$onmission = 1
+script_name 'FINALEB'
+wait 0
+Text.LoadMissionText('RIOT4')
+97@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+98@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+Game.SetMaxWantedLevel(0)
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.SetFadingColor(0, 0, 0)
+Streaming.SetAreaVisible(2)
+Cutscene.Load('RIOT_4D')
+
+:FINALEB_121
+if 
+  not Cutscene.HasLoaded
+goto_if_false @FINALEB_145
+wait 0
+goto @FINALEB_121
+
+:FINALEB_145
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:FINALEB_154
+if 
+  not Cutscene.HasFinished
+goto_if_false @FINALEB_178
+wait 0
+goto @FINALEB_154
+
+:FINALEB_178
+Cutscene.Clear
+Camera.DoFade(0, Fade.Out)
+
+:FINALEB_186
+if 
+  Camera.GetFadingStatus
+goto_if_false @FINALEB_210
+wait 0
+goto @FINALEB_186
+
+:FINALEB_210
+Streaming.RequestModel(102)
+Streaming.RequestModel(104)
+Streaming.RequestModel(109)
+Streaming.RequestModel(368)
+Streaming.RequestModel(349)
+Streaming.RequestModel(352)
+Streaming.RequestModel(356)
+Streaming.RequestAnimation("SWAT")
+Streaming.RequestModel(366)
+Streaming.LoadSpecialCharacter('SMOKEV', 1)
+Streaming.LoadSpecialCharacter('TENPEN', 2)
+Audio.LoadMissionAudio(33304, 1)
+Streaming.LoadAllModelsNow
+
+:FINALEB_292
+if or
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasSpecialCharacterLoaded(2)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @FINALEB_326
+wait 0
+goto @FINALEB_292
+
+:FINALEB_326
+if or
+  not Streaming.HasModelLoaded(102)
+  not Streaming.HasModelLoaded(104)
+  not Streaming.HasModelLoaded(109)
+  not Streaming.HasModelLoaded(368)
+goto_if_false @FINALEB_365
+wait 0
+goto @FINALEB_326
+
+:FINALEB_365
+if or
+  not Streaming.HasModelLoaded(349)
+  not Streaming.HasModelLoaded(352)
+  not Streaming.HasModelLoaded(356)
+  not Streaming.HasAnimationLoaded("SWAT")
+  not Streaming.HasModelLoaded(366)
+goto_if_false @FINALEB_415
+wait 0
+goto @FINALEB_365
+
+:FINALEB_415
+132@ = 0
+133@ = 0
+134@ = 0
+135@ = 0
+136@ = 0
+137@ = 0
+138@ = 0
+139@ = 0
+140@ = 0
+141@ = 0
+142@ = 0
+143@ = 0
+144@ = 0
+145@ = 0
+146@ = 0
+147@ = 0
+148@ = 0
+149@ = 0
+150@ = 0
+151@ = 0
+152@ = 0
+153@ = 0
+154@ = 0
+155@ = 0
+$escapetimer_fb = 420000
+156@ = 0
+171@ = 0
+172@ = 0
+173@ = 0
+174@ = 0
+175@ = 0
+176@ = 0
+177@ = 0
+178@ = 0
+179@ = 0
+180@ = 0
+181@ = 0
+182@ = 0
+183@ = 0
+World.SetCarDensityMultiplier(0.0)
+World.SetPedDensityMultiplier(0.0)
+Game.SetMaxFireGenerations(0)
+Game.SetWantedMultiplier(0.0)
+Game.SwitchEmergencyServices(False)
+
+:FINALEB_720
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @FINALEB_746
+goto @FINALEB_18535
+
+:FINALEB_746
+if 
+  9 > 132@
+goto_if_false @FINALEB_999
+if 
+  154@ == 0
+goto_if_false @FINALEB_950
+if 
+  0 >= $escapetimer_fb
+goto_if_false @FINALEB_950
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+Fx.AddExplosion(0, $player_x, $player_y, $player_z)
+$player_x += 0.0
+$player_y -= 0.5
+$player_z += 0.7
+Fx.AddExplosion(2, $player_x, $player_y, $player_z)
+$player_x -= 1.0
+$player_y += 2.0
+Fx.AddExplosion(4, $player_x, $player_y, $player_z)
+$player_x += 1.5
+$player_y += 2.0
+Fx.AddExplosion(0, $player_x, $player_y, $player_z)
+TIMERB = 0
+154@ = 1
+
+:FINALEB_950
+if 
+  154@ == 1
+goto_if_false @FINALEB_999
+if 
+  TIMERB > 3000
+goto_if_false @FINALEB_999
+Task.Die($scplayer)
+154@ = 2
+
+:FINALEB_999
+if 
+  132@ == 0
+goto_if_false @FINALEB_1389
+if 
+  152@ == 0
+goto_if_false @FINALEB_1389
+$big_smoke = Char.Create(23, 290, 2553.2, -1284.857, 1060.024)
+Char.SetHeading($big_smoke, 90.0)
+Char.SetAreaVisible($big_smoke, 2)
+Task.Die($big_smoke)
+124@ = Pickup.Create(#BODYARMOUR, 3, 2552.31, -1286.274, 1061.024)
+131@ = Pickup.CreateWithAmmo(355, 3, 60, 2552.36, -1283.15, 1061.02)
+Char.SetCoordinates($scplayer, 2553.734, -1285.256, 1060.024)
+Char.SetHeading($scplayer, 79.954)
+Char.SetAreaVisible($scplayer, 2)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(2550.604, -1294.586, 1044.802, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2551.601, -1294.649, 1044.762, SwitchType.JumpCut)
+49@ = Char.Create(23, 291, 2556.988, -1297.499, 1043.13)
+Char.SetHeading(49@, 27.2743)
+Char.SetDecisionMaker(49@, 97@)
+Char.GiveWeapon(49@, WeaponType.Shotgun, 99999)
+Streaming.LoadScene(2552.29, -1294.24, 1044.84)
+World.ClearArea(0, 2552.38, -1294.06, 1044.84, 100.0)
+Streaming.LoadScene(2552.29, -1294.24, 1044.84)
+Clock.SetTimeOfDay(0, 0)
+Camera.DoFade(1, 500)
+
+:FINALEB_1358
+if 
+  Camera.GetFadingStatus
+goto_if_false @FINALEB_1382
+wait 0
+goto @FINALEB_1358
+
+:FINALEB_1382
+152@ = 1
+
+:FINALEB_1389
+if 
+  152@ == 1
+goto_if_false @FINALEB_2209
+if 
+  not Char.IsDead(49@)
+goto_if_false @FINALEB_2209
+Task.ShootAtCoord(49@, 2552.29, -1294.24, 1044.84, 1000)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @FINALEB_1481
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('ROT4_ZC', 3500, 1)
+
+:FINALEB_1481
+wait 500
+61@ = ScriptFire.Start(2552.38, -1294.06, 1044.84, 0, 1)
+skip_cutscene_start_internal @FINALEB_2227
+wait 200
+62@ = ScriptFire.Start(2553.33, -1293.89, 1044.87, 0, 2)
+wait 300
+if 
+  not Char.IsDead(49@)
+goto_if_false @FINALEB_1591
+Task.GoStraightToCoord(49@, 25566.84, -1297.272, 1043.17, MoveState.Walk, -1)
+
+:FINALEB_1591
+wait 2500
+Camera.SetFixedPosition(2565.816, -1296.732, 1044.403, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2564.824, -1296.613, 1044.444, SwitchType.JumpCut)
+Text.PrintNow('RM4_38', 10000, 1)
+wait 3250
+Fx.AddExplosionVariableShake(2553.19, -1293.58, 1044.29, 4, 0.4)
+wait 200
+Fx.AddExplosionVariableShake(2558.53, -1293.88, 1044.58, 0, 0.3)
+wait 500
+Fx.AddExplosionVariableShake(2552.78, -1293.24, 1045.32, 0, 0.4)
+Camera.SetDarknessEffect(False, 175)
+wait 100
+Fx.AddExplosionVariableShake(2557.6, -1294.57, 1043.49, 2, 0.5)
+wait 500
+Fx.AddExplosionVariableShake(2555.86, -1293.27, 1043.91, 2, 0.6)
+wait 50
+Fx.AddExplosionVariableShake(2558.73, -1293.4, 1044.36, 4, 0.6)
+wait 50
+Clock.SetTimeOfDay(0, 0)
+Weather.SetHeathazeEffect(True)
+Camera.SetDarknessEffect(True, 100)
+77@ = ScriptFire.Start(2567.77, -1294.03, 1045.5, 0, 3)
+68@ = ScriptFire.Start(2541.687, -1289.68, 1043.0, 1, 1)
+83@ = ScriptFire.Start(2559.45, -1303.65, 1044.0, 0, 2)
+85@ = ScriptFire.Start(2564.72, -1296.06, 1042.91, 0, 2)
+75@ = ScriptFire.Start(2570.115, -1301.434, 1043.8, 0, 2)
+wait 250
+Camera.SetDarknessEffect(False, 120)
+81@ = ScriptFire.Start(2559.37, -1284.76, 1044.1, 0, 2)
+wait 500
+Camera.SetDarknessEffect(True, 140)
+70@ = ScriptFire.Start(2538.751, -1291.7, 1044.17, 0, 2)
+73@ = ScriptFire.Start(2541.56, -1292.35, 1044.1, 0, 3)
+88@ = ScriptFire.Start(2551.47, -1297.2, 1044.17, 0, 2)
+89@ = ScriptFire.Start(2551.425, -1298.4, 1044.1, 0, 2)
+wait 400
+Camera.SetDarknessEffect(False, 150)
+wait 500
+94@ = ScriptFire.Start(2551.33, -1295.311, 1043.8, 0, 3)
+91@ = ScriptFire.Start(2541.36, -1300.36, 1044.1, 0, 2)
+Camera.SetDarknessEffect(True, 180)
+wait 3000
+152@ = 2
+
+:FINALEB_2209
+if 
+  152@ == 2
+goto_if_false @FINALEB_2587
+
+:FINALEB_2227
+skip_cutscene_end 
+Text.ClearThisPrint('ROT4_ZC')
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Char.Delete(49@)
+Weather.SetHeathazeEffect(False)
+Camera.SetDarknessEffect(True, 200)
+Clock.SetTimeOfDay(0, 0)
+Player.SetMood($player1, 7, 360000)
+World.RemoveAllScriptFires
+125@ = Pickup.Create(#HEALTH, 3, 2524.0, -1283.0, 1048.337)
+120@ = Pickup.Create(#BODYARMOUR, 3, 2527.783, -1288.816, 1031.43)
+121@ = Pickup.Create(#BODYARMOUR, 3, 2580.953, -1285.117, 1044.173)
+122@ = Pickup.Create(#BODYARMOUR, 3, 2520.4, -1281.287, 1054.681)
+126@ = Pickup.Create(#HEALTH, 3, 2552.298, -1306.06, 1054.681)
+127@ = Pickup.Create(#HEALTH, 3, 2570.839, -1285.818, 1037.821)
+123@ = Pickup.Create(#BODYARMOUR, 3, 2552.475, -1280.687, 1054.686)
+Char.GiveWeapon($scplayer, WeaponType.NightVision, 1)
+Char.SetCurrentWeapon($scplayer, WeaponType.NightVision)
+Streaming.MarkModelAsNoLongerNeeded(368)
+Text.PrintNow('RM4_33', 10000, 1)
+Hud.DisplayTimerWithString($escapetimer_fb, TimerDirection.Down, 'RM4_34')
+Hud.SetTimerBeepCountdownTime($escapetimer_fb, 32)
+118@ = Blip.AddForCoord(2577.82, -1284.6, 1053.99)
+Blip.SetEntryExit(118@, 2540.83, -1304.05, 1.0)
+TIMERA = 0
+132@ = 1
+152@ = 3
+
+:FINALEB_2587
+if 
+  3 > 132@
+goto_if_false @FINALEB_2662
+if 
+  155@ == 0
+goto_if_false @FINALEB_2662
+if 
+  TIMERA > 7000
+goto_if_false @FINALEB_2662
+Text.ClearPrints
+Text.PrintHelp('RM4_32')
+155@ = 1
+
+:FINALEB_2662
+if 
+  4 > 132@
+goto_if_false @FINALEB_2737
+if 
+  155@ == 2
+goto_if_false @FINALEB_2737
+if 
+  TIMERA > 8000
+goto_if_false @FINALEB_2737
+Text.ClearPrints
+Text.PrintHelp('RM4_40')
+155@ = 3
+
+:FINALEB_2737
+if 
+  132@ == 1
+goto_if_false @FINALEB_3721
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2578.21, -1284.87, 1053.95, 5.0, 5.0, 5.0)
+goto_if_false @FINALEB_3721
+Blip.Remove(118@)
+118@ = Blip.AddForCoord(2521.89, -1301.98, 1047.54)
+Blip.SetEntryExit(118@, 2540.83, -1304.05, 1.0)
+Text.ClearPrints
+34@ = Char.Create(24, 109, 2574.5, -1296.029, 1054.687)
+Char.SetHeading(34@, 4.7018)
+Char.SetDecisionMaker(34@, 97@)
+Char.GiveWeapon(34@, WeaponType.MicroUzi, 99999)
+Char.SetWeaponSkill(34@, 2)
+Char.SetAreaVisible(34@, 2)
+Char.SetAccuracy(34@, 20)
+Char.SetHealth(34@, 150)
+Char.SetMaxHealth(34@, 150)
+137@ = 1
+Task.KillCharOnFoot(34@, $scplayer)
+35@ = Char.Create(24, 104, 2553.764, -1294.536, 1053.647)
+Char.SetHeading(35@, 266.9614)
+Char.SetDecisionMaker(35@, 97@)
+Char.GiveWeapon(35@, WeaponType.Shotgun, 99999)
+Char.SetAreaVisible(35@, 2)
+138@ = 0
+if 
+  138@ == 0
+goto_if_false @FINALEB_3128
+if 
+  not Char.IsDead(35@)
+goto_if_false @FINALEB_3128
+set_lvar_int_to_lvar_int 104@ = 35@
+106@ = 2553.764
+107@ = -1294.536
+108@ = 1053.647
+112@ = 2700
+116@ = 270.0
+gosub @FINALEB_17933
+138@ = 1
+
+:FINALEB_3128
+36@ = Char.Create(24, 102, 2575.266, -1296.4, 1054.687)
+Char.SetHeading(36@, 89.298)
+Char.SetDecisionMaker(36@, 97@)
+Char.GiveWeapon(36@, WeaponType.MicroUzi, 99999)
+Char.SetWeaponSkill(36@, 2)
+Char.SetHealth(36@, 150)
+Char.SetMaxHealth(36@, 150)
+Char.SetAreaVisible(36@, 2)
+if 
+  139@ == 0
+goto_if_false @FINALEB_3298
+if 
+  not Char.IsDead(36@)
+goto_if_false @FINALEB_3298
+set_lvar_int_to_lvar_int 104@ = 36@
+106@ = 2556.31
+107@ = -1297.219
+108@ = 1053.641
+gosub @FINALEB_17641
+139@ = 1
+
+:FINALEB_3298
+37@ = Char.Create(24, 104, 2547.426, -1306.462, 1054.681)
+Char.SetHeading(37@, 359.0)
+Char.SetDecisionMaker(37@, 97@)
+Char.GiveWeapon(37@, WeaponType.MicroUzi, 99999)
+Char.SetWeaponSkill(37@, 2)
+Char.SetAreaVisible(37@, 2)
+140@ = 0
+if 
+  140@ == 0
+goto_if_false @FINALEB_3429
+if 
+  not Char.IsDead(37@)
+goto_if_false @FINALEB_3429
+set_lvar_int_to_lvar_int 104@ = 37@
+gosub @FINALEB_17696
+140@ = 1
+
+:FINALEB_3429
+38@ = Char.Create(24, 109, 2534.045, -1304.857, 1053.641)
+Char.SetHeading(38@, 273.9959)
+Char.SetDecisionMaker(38@, 97@)
+Char.GiveWeapon(38@, WeaponType.MicroUzi, 99999)
+Char.SetWeaponSkill(38@, 2)
+Char.SetAreaVisible(38@, 2)
+Char.SetHealth(38@, 150)
+Char.SetMaxHealth(38@, 150)
+141@ = 0
+if 
+  141@ == 0
+goto_if_false @FINALEB_3576
+if 
+  not Char.IsDead(38@)
+goto_if_false @FINALEB_3576
+set_lvar_int_to_lvar_int 104@ = 38@
+gosub @FINALEB_17696
+141@ = 1
+
+:FINALEB_3576
+39@ = Char.Create(24, 102, 2540.192, -1287.667, 1053.647)
+Char.SetHeading(39@, 165.9748)
+Char.SetDecisionMaker(39@, 97@)
+Char.GiveWeapon(39@, WeaponType.MicroUzi, 99999)
+Char.SetWeaponSkill(39@, 2)
+Char.SetAreaVisible(39@, 2)
+Char.SetAllowedToDuck(39@, False)
+142@ = 0
+if 
+  142@ == 0
+goto_if_false @FINALEB_3714
+if 
+  not Char.IsDead(39@)
+goto_if_false @FINALEB_3714
+set_lvar_int_to_lvar_int 104@ = 39@
+gosub @FINALEB_17740
+142@ = 1
+
+:FINALEB_3714
+132@ = 2
+
+:FINALEB_3721
+if 
+  132@ == 2
+goto_if_false @FINALEB_4586
+if 
+  137@ == 1
+goto_if_false @FINALEB_3785
+if 
+  Char.IsDead(34@)
+goto_if_false @FINALEB_3785
+Char.MarkAsNoLongerNeeded(34@)
+137@ = 2
+
+:FINALEB_3785
+if 
+  138@ == 1
+goto_if_false @FINALEB_3913
+if 
+  not Char.IsDead(35@)
+goto_if_false @FINALEB_3913
+if or
+  Char.HasBeenDamagedByChar(35@, $scplayer)
+  Char.LocateAnyMeansChar3D(35@, $scplayer, 5.0, 5.0, 3.0, False)
+goto_if_false @FINALEB_3913
+if 
+  not Char.IsDead(35@)
+goto_if_false @FINALEB_3901
+Task.KillCharOnFoot(35@, $scplayer)
+138@ = 2
+goto @FINALEB_3913
+
+:FINALEB_3901
+Char.MarkAsNoLongerNeeded(35@)
+138@ = 2
+
+:FINALEB_3913
+if or
+  138@ == 1
+  138@ == 2
+goto_if_false @FINALEB_3966
+if 
+  Char.IsDead(35@)
+goto_if_false @FINALEB_3966
+Char.MarkAsNoLongerNeeded(35@)
+138@ = 3
+
+:FINALEB_3966
+if 
+  139@ == 1
+goto_if_false @FINALEB_4012
+if 
+  Char.IsDead(36@)
+goto_if_false @FINALEB_4012
+Char.MarkAsNoLongerNeeded(36@)
+139@ = 2
+
+:FINALEB_4012
+if 
+  140@ == 1
+goto_if_false @FINALEB_4058
+if 
+  Char.IsDead(37@)
+goto_if_false @FINALEB_4058
+Char.MarkAsNoLongerNeeded(37@)
+140@ = 2
+
+:FINALEB_4058
+if 
+  141@ == 1
+goto_if_false @FINALEB_4104
+if 
+  Char.IsDead(38@)
+goto_if_false @FINALEB_4104
+Char.MarkAsNoLongerNeeded(38@)
+141@ = 2
+
+:FINALEB_4104
+if 
+  142@ == 1
+goto_if_false @FINALEB_4150
+if 
+  Char.IsDead(39@)
+goto_if_false @FINALEB_4150
+Char.MarkAsNoLongerNeeded(39@)
+142@ = 2
+
+:FINALEB_4150
+if 
+  143@ == 0
+goto_if_false @FINALEB_4299
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2543.46, -1304.9, 1054.68, 5.0, 5.0, 5.0)
+goto_if_false @FINALEB_4299
+40@ = Char.Create(24, 102, 2532.4, -1286.7, 1053.68)
+Char.SetHeading(40@, 230.835)
+Char.SetDecisionMaker(40@, 97@)
+Char.GiveWeapon(40@, WeaponType.MicroUzi, 99999)
+Char.SetWeaponSkill(40@, 2)
+Char.SetAreaVisible(40@, 2)
+Task.KillCharOnFoot(40@, $scplayer)
+143@ = 1
+
+:FINALEB_4299
+if 
+  143@ == 1
+goto_if_false @FINALEB_4345
+if 
+  Char.IsDead(40@)
+goto_if_false @FINALEB_4345
+Char.MarkAsNoLongerNeeded(40@)
+143@ = 2
+
+:FINALEB_4345
+if 
+  144@ == 0
+goto_if_false @FINALEB_4540
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2519.93, -1285.547, 1054.673, 5.0, 5.0, 5.0)
+goto_if_false @FINALEB_4540
+41@ = Char.Create(24, 102, 2519.93, -1285.54, 1054.673)
+Char.SetHeading(41@, 200.537)
+Char.SetDecisionMaker(41@, 97@)
+Char.GiveWeapon(41@, WeaponType.MicroUzi, 99999)
+Char.SetAreaVisible(41@, 2)
+Char.SetHealth(41@, 150)
+Char.SetMaxHealth(41@, 150)
+set_lvar_int_to_lvar_int 104@ = 41@
+106@ = 2520.05
+107@ = -1301.518
+108@ = 1048.33
+gosub @FINALEB_17641
+144@ = 1
+
+:FINALEB_4540
+if 
+  144@ == 1
+goto_if_false @FINALEB_4586
+if 
+  Char.IsDead(41@)
+goto_if_false @FINALEB_4586
+Char.MarkAsNoLongerNeeded(41@)
+144@ = 2
+
+:FINALEB_4586
+if 
+  132@ == 2
+goto_if_false @FINALEB_7337
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2521.9, -1301.86, 1047.5, 6.0, 6.0, 3.0)
+goto_if_false @FINALEB_7337
+Text.PrintNow('RM4_35', 7000, 1)
+TIMERA = 0
+155@ = 2
+Char.Delete(34@)
+Char.Delete(35@)
+Char.Delete(36@)
+Char.Delete(37@)
+Char.Delete(38@)
+Char.Delete(39@)
+Blip.Remove(118@)
+118@ = Blip.AddForCoord(2572.08, -1301.88, 1043.32)
+Blip.SetEntryExit(118@, 2540.83, -1304.05, 1.0)
+Weather.SetHeathazeEffect(True)
+Char.Delete($big_smoke)
+Streaming.UnloadSpecialCharacter(2)
+51@ = Particle.CreateOnChar("TEARGAS", $scplayer, 0.0, 0.0, 2.2, 1)
+52@ = Particle.CreateOnChar("TEARGAS", $scplayer, 0.0, 2.0, 2.0, 1)
+53@ = Particle.CreateOnChar("TEARGAS", $scplayer, 0.0, -2.0, 2.0, 1)
+54@ = Particle.CreateOnChar("TEARGAS", $scplayer, 1.0, 5.0, 1.7, 1)
+55@ = Particle.CreateOnChar("TEARGAS", $scplayer, -1.0, 8.0, 2.0, 1)
+56@ = Particle.CreateOnChar("TEARGAS", $scplayer, 2.0, 0.0, 1.7, 1)
+57@ = Particle.CreateOnChar("TEARGAS", $scplayer, -2.0, 0.0, 1.7, 1)
+58@ = Particle.CreateOnChar("TEARGAS", $scplayer, -2.0, 2.0, 1.7, 1)
+59@ = Particle.CreateOnChar("TEARGAS", $scplayer, 2.0, 2.0, 1.7, 1)
+60@ = 0
+
+:FINALEB_5083
+if 
+  9 > 60@
+goto_if_false @FINALEB_5124
+Particle.Play(51@(60@,9i))
+60@ += 1
+goto @FINALEB_5083
+
+:FINALEB_5124
+61@ = ScriptFire.Start(2529.62, -1306.62, 1048.0, 0, 2)
+62@ = ScriptFire.Start(2529.497, -1304.791, 1048.0, 0, 2)
+63@ = ScriptFire.Start(2530.12, -1296.96, 1047.8, 0, 3)
+64@ = ScriptFire.Start(2529.49, -1287.93, 1048.0, 0, 3)
+64@ = ScriptFire.Start(2543.98, -1305.709, 1047.445, 0, 3)
+65@ = ScriptFire.Start(2544.54, -1304.47, 1047.55, 0, 3)
+90@ = ScriptFire.Start(2543.94, -1306.83, 1047.62, 0, 3)
+66@ = ScriptFire.Start(2545.139, -1281.497, 1047.5, 0, 2)
+77@ = ScriptFire.Start(2567.77, -1294.03, 1047.5, 0, 3)
+78@ = ScriptFire.Start(2570.2, -1294.4, 1047.5, 0, 3)
+75@ = ScriptFire.Start(2568.72, -1294.32, 1047.5, 0, 2)
+67@ = ScriptFire.Start(2540.247, -1288.566, 1044.0, 0, 3)
+68@ = ScriptFire.Start(2541.687, -1289.68, 1044.0, 1, 1)
+69@ = ScriptFire.Start(2540.214, -1290.218, 1044.0, 0, 2)
+70@ = ScriptFire.Start(2538.751, -1291.7, 1044.17, 0, 2)
+71@ = ScriptFire.Start(2537.339, -1286.56, 1044.1, 1, 3)
+73@ = ScriptFire.Start(2541.56, -1292.35, 1044.1, 0, 3)
+80@ = ScriptFire.Start(2570.77, -1303.14, 1043.35, 0, 2)
+81@ = ScriptFire.Start(2559.37, -1284.76, 1044.1, 0, 2)
+82@ = ScriptFire.Start(2551.4, -1301.3, 1044.0, 0, 2)
+83@ = ScriptFire.Start(2570.52, -1301.42, 1043.47, 0, 2)
+84@ = ScriptFire.Start(2550.94, -1301.81, 1044.0, 0, 3)
+85@ = ScriptFire.Start(2537.69, -1301.34, 1044.0, 0, 2)
+86@ = ScriptFire.Start(2536.42, -1302.01, 1044.0, 0, 2)
+87@ = ScriptFire.Start(2536.82, -1290.5, 1044.0, 0, 2)
+88@ = ScriptFire.Start(2551.47, -1297.2, 1044.17, 0, 2)
+89@ = ScriptFire.Start(2570.54, -1301.22, 1043.36, 0, 3)
+94@ = ScriptFire.Start(2551.33, -1295.311, 1043.8, 0, 3)
+91@ = ScriptFire.Start(2541.36, -1300.36, 1044.1, 0, 2)
+92@ = ScriptFire.Start(2545.328, -1300.739, 1044.1, 0, 2)
+93@ = ScriptFire.Start(2548.77, -1300.375, 1044.04, 0, 3)
+76@ = ScriptFire.Start(2544.16, -1306.56, 1043.8, 0, 2)
+72@ = ScriptFire.Start(2570.43, -1302.43, 1043.4, 0, 1)
+74@ = ScriptFire.Start(2549.05, -1287.54, 1043.8, 0, 3)
+95@ = ScriptFire.Start(2570.482, -1302.438, 1043.8, 0, 2)
+96@ = ScriptFire.Start(2565.705, -1298.03, 1043.7, 0, 3)
+79@ = ScriptFire.Start(2565.528, -1289.17, 1043.7, 0, 3)
+129@ = Pickup.CreateWithAmmo(366, 3, 99999, 2529.829, -1303.027, 1048.337)
+119@ = Blip.AddForPickup(129@)
+Blip.SetEntryExit(119@, 2540.83, -1304.05, 1.0)
+130@ = Pickup.CreateWithAmmo(366, 3, 99999, 2567.948, -1292.879, 1044.173)
+42@ = Char.Create(24, 104, 2528.539, -1289.935, 1048.336)
+Char.SetHeading(42@, 359.0)
+Char.SetHealth(42@, 10)
+Char.SetDecisionMaker(42@, 98@)
+Char.GiveWeapon(42@, WeaponType.Extinguisher, 99999)
+Char.SetShootRate(42@, 20)
+Char.SetAreaVisible(42@, 2)
+Char.SetHealth(42@, 5)
+Char.SetMaxHealth(42@, 5)
+Char.SetAccuracy(42@, 20)
+145@ = 1
+Task.ShootAtCoord(42@, 2529.49, -1287.93, 1048.0, 650000)
+43@ = Char.Create(24, 109, 2538.274, -1293.322, 1043.133)
+Char.SetHeading(43@, 351.1779)
+Char.SetHealth(43@, 5)
+Char.SetDecisionMaker(43@, 98@)
+Char.GiveWeapon(43@, WeaponType.Extinguisher, 99999)
+Char.SetShootRate(43@, 20)
+Char.SetAreaVisible(43@, 2)
+Char.SetAccuracy(43@, 20)
+146@ = 1
+Task.ShootAtCoord(43@, 2538.569, -1291.48, 1043.604, 650000)
+44@ = Char.Create(24, 102, 2539.534, -1297.778, 1043.13)
+Char.SetHeading(44@, 43.6277)
+Char.SetDecisionMaker(44@, 97@)
+Char.GiveWeapon(44@, WeaponType.M4, 99999)
+Char.SetAreaVisible(44@, 2)
+Char.SetAccuracy(44@, 20)
+147@ = 0
+if 
+  147@ == 0
+goto_if_false @FINALEB_6473
+if 
+  not Char.IsDead(44@)
+goto_if_false @FINALEB_6473
+set_lvar_int_to_lvar_int 104@ = 44@
+gosub @FINALEB_17740
+147@ = 1
+
+:FINALEB_6473
+45@ = Char.Create(24, 102, 2548.245, -1294.142, 1043.13)
+Char.SetHeading(45@, 105.3104)
+Char.SetDecisionMaker(45@, 97@)
+Char.GiveWeapon(45@, WeaponType.M4, 99999)
+Char.SetAreaVisible(45@, 2)
+Char.SetHealth(45@, 150)
+Char.SetMaxHealth(45@, 150)
+148@ = 0
+if 
+  148@ == 0
+goto_if_false @FINALEB_6613
+if 
+  not Char.IsDead(45@)
+goto_if_false @FINALEB_6613
+set_lvar_int_to_lvar_int 104@ = 45@
+gosub @FINALEB_17696
+148@ = 1
+
+:FINALEB_6613
+46@ = Char.Create(24, 104, 2558.452, -1289.522, 1043.133)
+Char.SetHeading(46@, 91.8235)
+Char.SetDecisionMaker(46@, 97@)
+Char.GiveWeapon(46@, WeaponType.M4, 99999)
+Char.SetAreaVisible(46@, 2)
+Char.SetAccuracy(46@, 20)
+149@ = 0
+if 
+  149@ == 0
+goto_if_false @FINALEB_6744
+if 
+  not Char.IsDead(46@)
+goto_if_false @FINALEB_6744
+set_lvar_int_to_lvar_int 104@ = 46@
+gosub @FINALEB_17740
+149@ = 1
+
+:FINALEB_6744
+47@ = Char.Create(24, 102, 2565.722, -1293.133, 1044.07)
+Char.SetHeading(47@, 85.0916)
+Char.SetDecisionMaker(47@, 97@)
+Char.GiveWeapon(47@, WeaponType.M4, 99999)
+Char.SetAreaVisible(47@, 2)
+Char.SetHealth(47@, 150)
+Char.SetMaxHealth(47@, 150)
+150@ = 0
+if 
+  150@ == 0
+goto_if_false @FINALEB_6884
+if 
+  not Char.IsDead(47@)
+goto_if_false @FINALEB_6884
+set_lvar_int_to_lvar_int 104@ = 47@
+gosub @FINALEB_17696
+150@ = 1
+
+:FINALEB_6884
+48@ = Char.Create(24, 104, 2557.144, -1297.805, 1043.13)
+Char.SetHeading(48@, 65.8333)
+Char.SetDecisionMaker(48@, 97@)
+Char.GiveWeapon(48@, WeaponType.M4, 99999)
+Char.SetAreaVisible(48@, 2)
+151@ = 0
+if 
+  151@ == 0
+goto_if_false @FINALEB_7008
+if 
+  not Char.IsDead(48@)
+goto_if_false @FINALEB_7008
+set_lvar_int_to_lvar_int 104@ = 48@
+gosub @FINALEB_17740
+151@ = 1
+
+:FINALEB_7008
+if 
+  145@ == 1
+goto_if_false @FINALEB_7054
+if 
+  Char.IsDead(42@)
+goto_if_false @FINALEB_7054
+Char.MarkAsNoLongerNeeded(42@)
+145@ = 2
+
+:FINALEB_7054
+if 
+  146@ == 1
+goto_if_false @FINALEB_7100
+if 
+  Char.IsDead(43@)
+goto_if_false @FINALEB_7100
+Char.MarkAsNoLongerNeeded(43@)
+146@ = 2
+
+:FINALEB_7100
+if 
+  147@ == 1
+goto_if_false @FINALEB_7146
+if 
+  Char.IsDead(44@)
+goto_if_false @FINALEB_7146
+Char.MarkAsNoLongerNeeded(44@)
+147@ = 2
+
+:FINALEB_7146
+if 
+  148@ == 1
+goto_if_false @FINALEB_7192
+if 
+  Char.IsDead(45@)
+goto_if_false @FINALEB_7192
+Char.MarkAsNoLongerNeeded(45@)
+148@ = 2
+
+:FINALEB_7192
+if 
+  149@ == 1
+goto_if_false @FINALEB_7238
+if 
+  Char.IsDead(46@)
+goto_if_false @FINALEB_7238
+Char.MarkAsNoLongerNeeded(46@)
+149@ = 2
+
+:FINALEB_7238
+if 
+  150@ == 1
+goto_if_false @FINALEB_7284
+if 
+  Char.IsDead(47@)
+goto_if_false @FINALEB_7284
+Char.MarkAsNoLongerNeeded(47@)
+150@ = 2
+
+:FINALEB_7284
+if 
+  151@ == 1
+goto_if_false @FINALEB_7330
+if 
+  Char.IsDead(48@)
+goto_if_false @FINALEB_7330
+Char.MarkAsNoLongerNeeded(48@)
+151@ = 2
+
+:FINALEB_7330
+132@ = 3
+
+:FINALEB_7337
+if 
+  132@ == 3
+goto_if_false @FINALEB_8944
+if 
+  Char.IsInArea3D($scplayer, 0, 2571.39, -1308.59, 1041.4, 2584.08, -1272.85, 1047.02)
+goto_if_false @FINALEB_8944
+Streaming.MarkModelAsNoLongerNeeded(349)
+Blip.Remove(119@)
+Blip.Remove(118@)
+118@ = Blip.AddForCoord(2565.56, -1301.7, 1030.97)
+Blip.SetEntryExit(118@, 2540.83, -1304.05, 1.0)
+Blip.Remove(119@)
+World.RemoveAllScriptFires
+Char.Delete(40@)
+Char.Delete(41@)
+Streaming.MarkModelAsNoLongerNeeded(366)
+61@ = ScriptFire.Start(2575.774, -1283.055, 1042.133, 0, 3)
+62@ = ScriptFire.Start(2581.744, -1297.517, 1039.02, 0, 1)
+63@ = ScriptFire.Start(2570.414, -1300.047, 1036.781, 0, 3)
+64@ = ScriptFire.Start(2568.78, -1299.987, 1036.781, 0, 3)
+65@ = ScriptFire.Start(2577.247, -1294.814, 1034.048, 0, 1)
+66@ = ScriptFire.Start(2566.833, -1282.489, 1030.43, 0, 3)
+67@ = ScriptFire.Start(2567.984, -1284.974, 1030.43, 0, 2)
+68@ = ScriptFire.Start(2572.402, -1304.581, 1030.43, 0, 2)
+69@ = ScriptFire.Start(2570.79, -1305.299, 1030.43, 0, 1)
+70@ = ScriptFire.Start(2556.55, -1301.88, 1029.82, 0, 3)
+71@ = ScriptFire.Start(2556.83, -1303.91, 1029.42, 0, 2)
+72@ = ScriptFire.Start(2556.01, -1305.31, 1029.82, 0, 3)
+73@ = ScriptFire.Start(2553.16, -1297.94, 1029.42, 0, 2)
+74@ = ScriptFire.Start(2552.43, -1297.31, 1029.82, 0, 2)
+75@ = ScriptFire.Start(2552.15, -1294.97, 1029.42, 0, 3)
+76@ = ScriptFire.Start(2547.77, -1285.41, 1029.82, 0, 3)
+77@ = ScriptFire.Start(2547.4, -1284.33, 1029.42, 0, 1)
+78@ = ScriptFire.Start(2547.77, -1282.32, 1029.82, 0, 3)
+79@ = ScriptFire.Start(2545.93, -1292.47, 1029.42, 0, 3)
+80@ = ScriptFire.Start(2545.48, -1290.81, 1029.82, 0, 1)
+81@ = ScriptFire.Start(2544.11, -1292.71, 1029.42, 0, 2)
+82@ = ScriptFire.Start(2539.75, -1299.17, 1029.82, 0, 1)
+83@ = ScriptFire.Start(2539.25, -1297.76, 1029.42, 0, 2)
+84@ = ScriptFire.Start(2540.58, -1280.24, 1036.78, 0, 2)
+85@ = ScriptFire.Start(2540.4, -1281.22, 1036.78, 0, 1)
+86@ = ScriptFire.Start(2529.85, -1294.27, 1036.8, 0, 2)
+87@ = ScriptFire.Start(2545.85, -1307.04, 1036.78, 0, 2)
+88@ = ScriptFire.Start(2547.47, -1306.59, 1036.78, 0, 1)
+34@ = Char.Create(24, 102, 2579.905, -1291.163, 1043.125)
+Char.SetHeading(34@, 177.191)
+Char.SetDecisionMaker(34@, 97@)
+Char.GiveWeapon(34@, WeaponType.M4, 99999)
+Char.SetAreaVisible(34@, 2)
+137@ = 0
+35@ = Char.Create(24, 104, 2567.413, -1305.324, 1036.781)
+Char.SetHeading(35@, 268.0134)
+Char.SetDecisionMaker(35@, 97@)
+Char.GiveWeapon(35@, WeaponType.MicroUzi, 99999)
+Char.SetWeaponSkill(35@, 2)
+Char.SetAreaVisible(35@, 2)
+Char.SetHealth(35@, 150)
+Char.SetMaxHealth(35@, 150)
+138@ = 0
+36@ = Char.Create(24, 109, 2572.115, -1301.504, 1036.781)
+Char.SetHeading(36@, 61.2775)
+Char.SetDecisionMaker(36@, 97@)
+Char.GiveWeapon(36@, WeaponType.Extinguisher, 99999)
+Char.SetShootRate(36@, 20)
+Char.SetAreaVisible(36@, 2)
+Char.SetHealth(36@, 5)
+Task.ShootAtCoord(36@, 2570.207, -1300.238, 1037.059, 650000)
+139@ = 0
+37@ = Char.Create(24, 102, 2575.007, -1284.838, 1030.427)
+Char.SetHeading(37@, 170.5391)
+Char.SetDecisionMaker(37@, 97@)
+Char.GiveWeapon(37@, WeaponType.MicroUzi, 99999)
+Char.SetWeaponSkill(37@, 2)
+Char.SetAreaVisible(37@, 2)
+140@ = 0
+if 
+  140@ == 0
+goto_if_false @FINALEB_8549
+if 
+  not Char.IsDead(37@)
+goto_if_false @FINALEB_8549
+set_lvar_int_to_lvar_int 104@ = 37@
+gosub @FINALEB_17740
+140@ = 1
+
+:FINALEB_8549
+38@ = Char.Create(24, 104, 2568.075, -1293.628, 1030.43)
+Char.SetHeading(38@, 356.7112)
+Char.SetDecisionMaker(38@, 97@)
+Char.GiveWeapon(38@, WeaponType.M4, 99999)
+Char.SetAreaVisible(38@, 2)
+Char.SetHealth(38@, 150)
+Char.SetMaxHealth(38@, 150)
+141@ = 0
+if 
+  141@ == 0
+goto_if_false @FINALEB_8689
+if 
+  not Char.IsDead(38@)
+goto_if_false @FINALEB_8689
+set_lvar_int_to_lvar_int 104@ = 38@
+gosub @FINALEB_17696
+141@ = 1
+
+:FINALEB_8689
+39@ = Char.Create(24, 109, 2570.626, -1297.5, 1030.427)
+Char.SetHeading(39@, 3.5755)
+Char.SetDecisionMaker(39@, 97@)
+Char.GiveWeapon(39@, WeaponType.M4, 99999)
+Char.SetAreaVisible(39@, 2)
+142@ = 0
+if 
+  142@ == 0
+goto_if_false @FINALEB_8813
+if 
+  not Char.IsDead(39@)
+goto_if_false @FINALEB_8813
+set_lvar_int_to_lvar_int 104@ = 39@
+gosub @FINALEB_17696
+142@ = 1
+
+:FINALEB_8813
+40@ = Char.Create(24, 102, 2570.947, -1301.719, 1030.43)
+Char.SetHeading(40@, 359.8018)
+Char.SetDecisionMaker(40@, 97@)
+Char.GiveWeapon(40@, WeaponType.M4, 99999)
+Char.SetAreaVisible(40@, 2)
+143@ = 0
+if 
+  143@ == 0
+goto_if_false @FINALEB_8937
+if 
+  not Char.IsDead(40@)
+goto_if_false @FINALEB_8937
+set_lvar_int_to_lvar_int 104@ = 40@
+gosub @FINALEB_17696
+143@ = 1
+
+:FINALEB_8937
+132@ = 4
+
+:FINALEB_8944
+if 
+  132@ == 4
+goto_if_false @FINALEB_10784
+if 
+  137@ == 0
+goto_if_false @FINALEB_9104
+if 
+  not Char.IsDead(34@)
+goto_if_false @FINALEB_9104
+if or
+  Char.LocateAnyMeans3D($scplayer, 0, 2577.6, -1289.91, 1043.77, 5.0, 5.0, 3.0)
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+goto_if_false @FINALEB_9104
+set_lvar_int_to_lvar_int 104@ = 34@
+106@ = 2579.905
+107@ = -1304.985
+108@ = 1036.773
+gosub @FINALEB_17641
+137@ = 1
+
+:FINALEB_9104
+if 
+  138@ == 0
+goto_if_false @FINALEB_9209
+if 
+  not Char.IsDead(35@)
+goto_if_false @FINALEB_9209
+if or
+  Char.IsInArea3D($scplayer, 0, 2577.88, -1309.87, 1036.2, 2563.87, -1289.87, 1042.68)
+  Char.HasBeenDamagedByChar(35@, $scplayer)
+goto_if_false @FINALEB_9209
+Task.KillCharOnFoot(35@, $scplayer)
+138@ = 1
+
+:FINALEB_9209
+if 
+  143@ == 1
+goto_if_false @FINALEB_9381
+if 
+  not Char.IsDead(40@)
+goto_if_false @FINALEB_9381
+if or
+  Char.IsInArea3D($scplayer, 0, 2573.3, -1281.03, 1028.8, 2563.7, -1300.61, 1034.0)
+  Char.HasBeenDamagedByChar(40@, $scplayer)
+goto_if_false @FINALEB_9381
+set_lvar_int_to_lvar_int 104@ = 40@
+106@ = 2570.947
+107@ = -1301.719
+108@ = 1030.43
+113@ = 2558.722
+114@ = -1301.829
+115@ = 1030.43
+gosub @FINALEB_17778
+143@ = 2
+
+:FINALEB_9381
+if 
+  137@ == 1
+goto_if_false @FINALEB_9427
+if 
+  Char.IsDead(34@)
+goto_if_false @FINALEB_9427
+Char.MarkAsNoLongerNeeded(34@)
+137@ = 2
+
+:FINALEB_9427
+if 
+  138@ == 1
+goto_if_false @FINALEB_9473
+if 
+  Char.IsDead(35@)
+goto_if_false @FINALEB_9473
+Char.MarkAsNoLongerNeeded(35@)
+138@ = 2
+
+:FINALEB_9473
+if 
+  139@ == 1
+goto_if_false @FINALEB_9519
+if 
+  Char.IsDead(36@)
+goto_if_false @FINALEB_9519
+Char.MarkAsNoLongerNeeded(36@)
+139@ = 2
+
+:FINALEB_9519
+if 
+  140@ == 1
+goto_if_false @FINALEB_9565
+if 
+  Char.IsDead(37@)
+goto_if_false @FINALEB_9565
+Char.MarkAsNoLongerNeeded(37@)
+140@ = 2
+
+:FINALEB_9565
+if 
+  141@ == 1
+goto_if_false @FINALEB_9611
+if 
+  Char.IsDead(38@)
+goto_if_false @FINALEB_9611
+Char.MarkAsNoLongerNeeded(38@)
+141@ = 2
+
+:FINALEB_9611
+if 
+  142@ == 1
+goto_if_false @FINALEB_9657
+if 
+  Char.IsDead(39@)
+goto_if_false @FINALEB_9657
+Char.MarkAsNoLongerNeeded(39@)
+142@ = 2
+
+:FINALEB_9657
+if or
+  143@ == 1
+  143@ == 1
+goto_if_false @FINALEB_9710
+if 
+  Char.IsDead(40@)
+goto_if_false @FINALEB_9710
+Char.MarkAsNoLongerNeeded(40@)
+143@ = 2
+
+:FINALEB_9710
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2565.94, -1301.96, 1030.77, 8.0, 8.0, 3.0)
+goto_if_false @FINALEB_10784
+Blip.Remove(118@)
+118@ = Blip.AddForCoord(2528.78, -1293.94, 1030.86)
+Blip.SetEntryExit(118@, 2540.83, -1304.05, 1.0)
+Char.Delete(42@)
+Char.Delete(43@)
+Char.Delete(44@)
+Char.Delete(45@)
+Char.Delete(46@)
+Char.Delete(47@)
+Char.Delete(48@)
+43@ = Char.Create(24, 102, 2549.162, -1291.369, 1030.467)
+Char.SetHeading(43@, 275.0)
+Char.SetDecisionMaker(43@, 97@)
+Char.GiveWeapon(43@, WeaponType.M4, 99999)
+Char.SetAreaVisible(43@, 2)
+Char.SetHealth(43@, 150)
+Char.SetMaxHealth(43@, 150)
+146@ = 0
+if 
+  146@ == 0
+goto_if_false @FINALEB_9978
+if 
+  not Char.IsDead(43@)
+goto_if_false @FINALEB_9978
+set_lvar_int_to_lvar_int 104@ = 43@
+gosub @FINALEB_17696
+146@ = 1
+
+:FINALEB_9978
+44@ = Char.Create(24, 104, 2534.88, -1292.009, 1031.469)
+Char.SetHeading(44@, 275.0)
+Char.SetDecisionMaker(44@, 97@)
+Char.GiveWeapon(44@, WeaponType.MicroUzi, 99999)
+Char.SetWeaponSkill(44@, 2)
+Char.SetAreaVisible(44@, 2)
+147@ = 0
+if 
+  147@ == 0
+goto_if_false @FINALEB_10109
+if 
+  not Char.IsDead(44@)
+goto_if_false @FINALEB_10109
+set_lvar_int_to_lvar_int 104@ = 44@
+gosub @FINALEB_17740
+147@ = 1
+
+:FINALEB_10109
+45@ = Char.Create(24, 104, 2554.033, -1287.08, 1030.43)
+Char.SetHeading(45@, 270.0)
+Char.SetDecisionMaker(45@, 97@)
+Char.GiveWeapon(45@, WeaponType.M4, 99999)
+Char.SetAreaVisible(45@, 2)
+148@ = 0
+if 
+  148@ == 0
+goto_if_false @FINALEB_10281
+if 
+  not Char.IsDead(45@)
+goto_if_false @FINALEB_10281
+set_lvar_int_to_lvar_int 104@ = 45@
+106@ = 2554.033
+107@ = -1287.08
+108@ = 1030.43
+112@ = 1200
+116@ = 270.0
+gosub @FINALEB_18174
+148@ = 1
+
+:FINALEB_10281
+46@ = Char.Create(24, 104, 2546.007, -1287.15, 1030.427)
+Char.SetHeading(46@, 270.0)
+Char.SetDecisionMaker(46@, 97@)
+Char.GiveWeapon(46@, WeaponType.M4, 99999)
+Char.SetAreaVisible(46@, 2)
+149@ = 0
+if 
+  149@ == 0
+goto_if_false @FINALEB_10453
+if 
+  not Char.IsDead(46@)
+goto_if_false @FINALEB_10453
+set_lvar_int_to_lvar_int 104@ = 46@
+106@ = 2546.007
+107@ = -1287.15
+108@ = 1030.427
+112@ = 2000
+116@ = 270.0
+gosub @FINALEB_18174
+149@ = 1
+
+:FINALEB_10453
+47@ = Char.Create(24, 109, 2530.397, -1291.381, 1036.781)
+Char.SetHeading(47@, 278.2231)
+Char.SetDecisionMaker(47@, 97@)
+Char.GiveWeapon(47@, WeaponType.M4, 99999)
+Char.SetAreaVisible(47@, 2)
+150@ = 0
+if 
+  150@ == 0
+goto_if_false @FINALEB_10577
+if 
+  not Char.IsDead(47@)
+goto_if_false @FINALEB_10577
+set_lvar_int_to_lvar_int 104@ = 47@
+gosub @FINALEB_17740
+150@ = 1
+
+:FINALEB_10577
+48@ = Char.Create(24, 102, 2540.443, -1306.621, 1036.781)
+Char.SetHeading(48@, 328.6817)
+Char.SetDecisionMaker(48@, 97@)
+Char.GiveWeapon(48@, WeaponType.M4, 99999)
+Char.SetAreaVisible(48@, 2)
+151@ = 0
+if 
+  151@ == 0
+goto_if_false @FINALEB_10701
+if 
+  not Char.IsDead(48@)
+goto_if_false @FINALEB_10701
+set_lvar_int_to_lvar_int 104@ = 48@
+gosub @FINALEB_17740
+151@ = 1
+
+:FINALEB_10701
+42@ = Char.Create(24, 109, 2535.111, -1304.992, 1030.43)
+Char.SetHeading(42@, 328.6817)
+Char.SetDecisionMaker(42@, 97@)
+Char.GiveWeapon(42@, WeaponType.M4, 99999)
+Char.SetAreaVisible(42@, 2)
+Task.KillCharOnFoot(42@, $scplayer)
+145@ = 0
+132@ = 5
+
+:FINALEB_10784
+if 
+  132@ == 5
+goto_if_false @FINALEB_12432
+if 
+  146@ == 1
+goto_if_false @FINALEB_10915
+if 
+  not Char.IsDead(43@)
+goto_if_false @FINALEB_10915
+if or
+  Char.IsInArea3D($scplayer, 0, 2553.85, -1308.35, 1028.6, 2540.27, -1275.04, 1033.2)
+  Char.HasBeenDamagedByChar(43@, $scplayer)
+  Player.IsTargetingChar($player1, 43@)
+goto_if_false @FINALEB_10915
+Task.KillCharOnFoot(43@, $scplayer)
+146@ = 2
+
+:FINALEB_10915
+if 
+  147@ == 1
+goto_if_false @FINALEB_11028
+if 
+  not Char.IsDead(44@)
+goto_if_false @FINALEB_11028
+if or
+  Char.IsInArea3D($scplayer, 0, 2542.24, -1308.67, 1028.09, 2527.86, -1276.9, 1033.19)
+  Char.HasBeenDamagedByChar(44@, $scplayer)
+  Player.IsTargetingChar($player1, 44@)
+goto_if_false @FINALEB_11028
+Task.KillCharOnFoot(44@, $scplayer)
+147@ = 2
+
+:FINALEB_11028
+if or
+  146@ == 1
+  145@ == 2
+goto_if_false @FINALEB_11081
+if 
+  Char.IsDead(43@)
+goto_if_false @FINALEB_11081
+Char.MarkAsNoLongerNeeded(43@)
+146@ = 3
+
+:FINALEB_11081
+if or
+  147@ == 1
+  145@ == 2
+goto_if_false @FINALEB_11134
+if 
+  Char.IsDead(44@)
+goto_if_false @FINALEB_11134
+Char.MarkAsNoLongerNeeded(44@)
+147@ = 3
+
+:FINALEB_11134
+if 
+  148@ == 1
+goto_if_false @FINALEB_11262
+if 
+  not Char.IsDead(45@)
+goto_if_false @FINALEB_11262
+if or
+  Char.HasBeenDamagedByChar(45@, $scplayer)
+  Char.LocateAnyMeansChar3D(45@, $scplayer, 5.0, 5.0, 3.0, False)
+goto_if_false @FINALEB_11262
+if 
+  not Char.IsDead(45@)
+goto_if_false @FINALEB_11250
+Task.KillCharOnFoot(45@, $scplayer)
+148@ = 2
+goto @FINALEB_11262
+
+:FINALEB_11250
+Char.MarkAsNoLongerNeeded(45@)
+148@ = 2
+
+:FINALEB_11262
+if or
+  148@ == 1
+  148@ == 2
+goto_if_false @FINALEB_11315
+if 
+  Char.IsDead(45@)
+goto_if_false @FINALEB_11315
+Char.MarkAsNoLongerNeeded(45@)
+148@ = 3
+
+:FINALEB_11315
+if 
+  149@ == 1
+goto_if_false @FINALEB_11443
+if 
+  not Char.IsDead(46@)
+goto_if_false @FINALEB_11443
+if or
+  Char.HasBeenDamagedByChar(46@, $scplayer)
+  Char.LocateAnyMeansChar3D(46@, $scplayer, 5.0, 5.0, 3.0, False)
+goto_if_false @FINALEB_11443
+if 
+  not Char.IsDead(46@)
+goto_if_false @FINALEB_11431
+Task.KillCharOnFoot(46@, $scplayer)
+149@ = 2
+goto @FINALEB_11443
+
+:FINALEB_11431
+Char.MarkAsNoLongerNeeded(46@)
+149@ = 2
+
+:FINALEB_11443
+if or
+  149@ == 1
+  149@ == 2
+goto_if_false @FINALEB_11496
+if 
+  Char.IsDead(46@)
+goto_if_false @FINALEB_11496
+Char.MarkAsNoLongerNeeded(46@)
+149@ = 3
+
+:FINALEB_11496
+if 
+  150@ == 1
+goto_if_false @FINALEB_11542
+if 
+  Char.IsDead(47@)
+goto_if_false @FINALEB_11542
+Char.MarkAsNoLongerNeeded(47@)
+150@ = 2
+
+:FINALEB_11542
+if 
+  151@ == 1
+goto_if_false @FINALEB_11588
+if 
+  Char.IsDead(48@)
+goto_if_false @FINALEB_11588
+Char.MarkAsNoLongerNeeded(48@)
+151@ = 2
+
+:FINALEB_11588
+if 
+  145@ == 1
+goto_if_false @FINALEB_11634
+if 
+  Char.IsDead(42@)
+goto_if_false @FINALEB_11634
+Char.MarkAsNoLongerNeeded(42@)
+145@ = 2
+
+:FINALEB_11634
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2528.53, -1293.96, 1030.86, 8.0, 8.0, 4.0)
+goto_if_false @FINALEB_12432
+Char.Delete(34@)
+Char.Delete(35@)
+Char.Delete(36@)
+Char.Delete(37@)
+Char.Delete(38@)
+Char.Delete(39@)
+Char.Delete(40@)
+ScriptFire.Remove(61@)
+ScriptFire.Remove(62@)
+ScriptFire.Remove(63@)
+ScriptFire.Remove(64@)
+ScriptFire.Remove(65@)
+ScriptFire.Remove(66@)
+ScriptFire.Remove(67@)
+ScriptFire.Remove(68@)
+ScriptFire.Remove(69@)
+ScriptFire.Remove(70@)
+ScriptFire.Remove(71@)
+ScriptFire.Remove(72@)
+ScriptFire.Remove(73@)
+ScriptFire.Remove(74@)
+ScriptFire.Remove(76@)
+ScriptFire.Remove(78@)
+ScriptFire.Remove(82@)
+ScriptFire.Remove(84@)
+ScriptFire.Remove(85@)
+ScriptFire.Remove(86@)
+61@ = ScriptFire.Start(2523.92, -1299.21, 1030.78, 0, 3)
+62@ = ScriptFire.Start(2523.66, -1297.4, 1030.8, 0, 1)
+63@ = ScriptFire.Start(2528.97, -1304.32, 1030.77, 0, 2)
+64@ = ScriptFire.Start(2525.5, -1321.59, 1030.75, 0, 2)
+66@ = ScriptFire.Start(2541.0, -1311.02, 1028.09, 0, 2)
+Pickup.Remove(130@)
+130@ = Pickup.CreateWithAmmo(366, 3, 99999, 2534.036, -1321.212, 1031.469)
+67@ = ScriptFire.Start(2540.69, -1320.01, 1030.68, 0, 3)
+68@ = ScriptFire.Start(2540.2, -1316.76, 1030.64, 0, 3)
+69@ = ScriptFire.Start(2540.61, -1317.43, 1030.62, 0, 3)
+70@ = ScriptFire.Start(2540.35, -1318.39, 1030.59, 0, 3)
+71@ = ScriptFire.Start(2540.5, -1319.58, 1030.61, 0, 3)
+Blip.Remove(118@)
+118@ = Blip.AddForCoord(2540.92, -1304.14, 1024.39)
+Blip.SetEntryExit(118@, 2540.83, -1304.05, 1.0)
+34@ = Char.Create(24, 102, 2527.368, -1319.587, 1030.43)
+Char.SetHeading(34@, 1.4222)
+Char.SetDecisionMaker(34@, 97@)
+Char.GiveWeapon(34@, WeaponType.MicroUzi, 99999)
+Char.SetWeaponSkill(34@, 2)
+Char.SetAreaVisible(34@, 2)
+Char.SetAccuracy(34@, 30)
+137@ = 0
+35@ = Char.Create(24, 104, 2528.284, -1314.865, 1030.43)
+Char.SetHeading(35@, 3.4628)
+Char.SetDecisionMaker(35@, 97@)
+Char.GiveWeapon(35@, WeaponType.MicroUzi, 99999)
+Char.SetWeaponSkill(35@, 2)
+Char.SetAreaVisible(35@, 2)
+138@ = 0
+if 
+  138@ == 0
+goto_if_false @FINALEB_12350
+if 
+  not Char.IsDead(35@)
+goto_if_false @FINALEB_12350
+set_lvar_int_to_lvar_int 104@ = 35@
+gosub @FINALEB_17696
+138@ = 1
+
+:FINALEB_12350
+36@ = Char.Create(24, 109, 2524.055, -1309.533, 1030.43)
+Char.SetHeading(36@, 7.001)
+Char.SetDecisionMaker(36@, 97@)
+Char.GiveWeapon(36@, WeaponType.MicroUzi, 99999)
+Char.SetAreaVisible(36@, 2)
+Char.SetAccuracy(36@, 30)
+139@ = 0
+132@ = 6
+
+:FINALEB_12432
+if 
+  132@ == 6
+goto_if_false @FINALEB_12842
+if 
+  137@ == 0
+goto_if_false @FINALEB_12563
+if 
+  not Char.IsDead(34@)
+goto_if_false @FINALEB_12563
+if or
+  Char.LocateAnyMeans3D($scplayer, 0, 2527.07, -1293.72, 1029.5, 3.0, 3.0, 3.5)
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+  Player.IsTargetingChar($player1, 34@)
+goto_if_false @FINALEB_12563
+Task.KillCharOnFoot(34@, $scplayer)
+137@ = 1
+
+:FINALEB_12563
+if 
+  139@ == 0
+goto_if_false @FINALEB_12671
+if 
+  not Char.IsDead(36@)
+goto_if_false @FINALEB_12671
+if or
+  Char.LocateAnyMeansChar3D($scplayer, 36@, 7.0, 7.0, 3.5, False)
+  Char.HasBeenDamagedByChar(36@, $scplayer)
+  Player.IsTargetingChar($player1, 36@)
+goto_if_false @FINALEB_12671
+set_lvar_int_to_lvar_int 104@ = 36@
+gosub @FINALEB_17850
+139@ = 1
+
+:FINALEB_12671
+if 
+  137@ == 1
+goto_if_false @FINALEB_12717
+if 
+  Char.IsDead(34@)
+goto_if_false @FINALEB_12717
+Char.MarkAsNoLongerNeeded(34@)
+137@ = 2
+
+:FINALEB_12717
+if 
+  138@ == 1
+goto_if_false @FINALEB_12763
+if 
+  Char.IsDead(35@)
+goto_if_false @FINALEB_12763
+Char.MarkAsNoLongerNeeded(35@)
+138@ = 2
+
+:FINALEB_12763
+if 
+  139@ == 1
+goto_if_false @FINALEB_12809
+if 
+  Char.IsDead(36@)
+goto_if_false @FINALEB_12809
+Char.MarkAsNoLongerNeeded(36@)
+139@ = 2
+
+:FINALEB_12809
+50@ = Char.GetAreaVisible($scplayer)
+if 
+  50@ == 0
+goto_if_false @FINALEB_12842
+132@ = 7
+
+:FINALEB_12842
+if 
+  132@ == 7
+goto_if_false @FINALEB_14002
+World.SetPedDensityMultiplier(0.0)
+World.SetCarDensityMultiplier(0.0)
+World.ClearArea(0, 2506.218, -1293.093, 200.0, 200.0)
+Streaming.RequestAnimation("DAM_JUMP")
+Streaming.RequestAnimation("FINALE")
+Streaming.LoadAllModelsNow
+
+:FINALEB_12922
+if or
+  not Streaming.HasAnimationLoaded("DAM_JUMP")
+  not Streaming.HasAnimationLoaded("FINALE")
+goto_if_false @FINALEB_12966
+wait 0
+goto @FINALEB_12922
+
+:FINALEB_12966
+Blip.Remove(118@)
+118@ = Blip.AddForCoord(2522.82, -1272.52, 34.151)
+Char.SetCoordinates($scplayer, 2538.657, -1304.358, 34.0)
+Streaming.MarkModelAsNoLongerNeeded(104)
+Streaming.MarkModelAsNoLongerNeeded(349)
+Streaming.RemoveAnimation("SWAT")
+Streaming.MarkModelAsNoLongerNeeded(102)
+Streaming.MarkModelAsNoLongerNeeded(109)
+Streaming.MarkModelAsNoLongerNeeded(349)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(356)
+Streaming.MarkModelAsNoLongerNeeded(366)
+Char.Delete(37@)
+Char.Delete(38@)
+Char.Delete(39@)
+Char.Delete(40@)
+Char.Delete(41@)
+Char.Delete(42@)
+Char.Delete(43@)
+Char.Delete(44@)
+Char.Delete(45@)
+Char.Delete(46@)
+Char.Delete(47@)
+Char.Delete(48@)
+Pickup.Remove(129@)
+Pickup.Remove(130@)
+Pickup.Remove(125@)
+Pickup.Remove(120@)
+Pickup.Remove(121@)
+Pickup.Remove(122@)
+Pickup.Remove(126@)
+Pickup.Remove(123@)
+Char.MarkAsNoLongerNeeded(34@)
+Char.MarkAsNoLongerNeeded(35@)
+Char.MarkAsNoLongerNeeded(36@)
+34@ = Char.Create(24, 109, 2543.2, -1277.645, 33.9609)
+Char.SetHeading(34@, 7.001)
+Char.SetDecisionMaker(34@, 97@)
+Char.GiveWeapon(34@, WeaponType.MicroUzi, 99999)
+Char.SetWeaponSkill(34@, 2)
+Task.KillCharOnFoot(34@, $scplayer)
+Char.SetAccuracy(34@, 10)
+137@ = 1
+35@ = Char.Create(24, 102, 2536.917, -1283.446, 33.9609)
+Char.SetHeading(35@, 7.001)
+Char.SetDecisionMaker(35@, 97@)
+Char.GiveWeapon(35@, WeaponType.M4, 99999)
+Char.SetAccuracy(35@, 10)
+138@ = 0
+if 
+  138@ == 0
+goto_if_false @FINALEB_13378
+if 
+  not Char.IsDead(35@)
+goto_if_false @FINALEB_13378
+set_lvar_int_to_lvar_int 104@ = 35@
+gosub @FINALEB_17740
+138@ = 1
+
+:FINALEB_13378
+36@ = Char.Create(24, 102, 2531.656, -1287.27, 33.9602)
+Char.SetHeading(36@, 7.001)
+Char.SetDecisionMaker(36@, 97@)
+Char.GiveWeapon(36@, WeaponType.MicroUzi, 99999)
+Char.SetWeaponSkill(36@, 2)
+Char.SetAccuracy(36@, 10)
+139@ = 0
+if 
+  139@ == 0
+goto_if_false @FINALEB_13509
+if 
+  not Char.IsDead(36@)
+goto_if_false @FINALEB_13509
+set_lvar_int_to_lvar_int 104@ = 36@
+gosub @FINALEB_17696
+139@ = 1
+
+:FINALEB_13509
+37@ = Char.Create(24, 109, 2539.569, -1268.471, 33.9609)
+Char.SetHeading(37@, 2.21)
+Char.SetDecisionMaker(37@, 97@)
+Char.GiveWeapon(37@, WeaponType.M4, 99999)
+Task.KillCharOnFoot(37@, $scplayer)
+Char.SetAccuracy(37@, 20)
+140@ = 1
+World.RemoveAllScriptFires
+79@ = ScriptFire.Start(2538.45, -1281.4, 34.34, 0, 3)
+61@ = ScriptFire.Start(2527.64, -1312.0, 33.9, 0, 2)
+62@ = ScriptFire.Start(2527.58, -1303.3, 34.4, 0, 1)
+63@ = ScriptFire.Start(2532.52, -1306.39, 33.9, 0, 2)
+64@ = ScriptFire.Start(2528.08, -1284.9, 34.3, 0, 2)
+65@ = ScriptFire.Start(2544.03, -1269.3, 34.2, 0, 1)
+66@ = ScriptFire.Start(2536.26, -1302.49, 34.0, 0, 2)
+67@ = ScriptFire.Start(2532.58, -1291.07, 34.0, 0, 1)
+71@ = ScriptFire.Start(2528.64, -1269.64, 34.0, 0, 1)
+72@ = ScriptFire.Start(2534.57, -1284.5, 34.04, 0, 1)
+70@ = ScriptFire.Start(2531.99, -1268.71, 34.0, 0, 2)
+69@ = ScriptFire.Start(2530.987, -1269.858, 33.8, 0, 3)
+74@ = ScriptFire.Start(2532.39, -1270.4, 34.0, 0, 3)
+75@ = ScriptFire.Start(2531.165, -1271.961, 34.0, 0, 2)
+76@ = ScriptFire.Start(2532.529, -1272.169, 34.0, 0, 1)
+77@ = ScriptFire.Start(2532.395, -1273.24, 34.0, 0, 2)
+78@ = ScriptFire.Start(2531.94, -1274.46, 33.8, 0, 3)
+132@ = 8
+
+:FINALEB_14002
+if 
+  132@ == 8
+goto_if_false @FINALEB_14316
+if 
+  137@ == 1
+goto_if_false @FINALEB_14066
+if 
+  Char.IsDead(34@)
+goto_if_false @FINALEB_14066
+Char.MarkAsNoLongerNeeded(34@)
+137@ = 2
+
+:FINALEB_14066
+if 
+  138@ == 1
+goto_if_false @FINALEB_14112
+if 
+  Char.IsDead(35@)
+goto_if_false @FINALEB_14112
+Char.MarkAsNoLongerNeeded(35@)
+138@ = 2
+
+:FINALEB_14112
+if 
+  139@ == 1
+goto_if_false @FINALEB_14158
+if 
+  Char.IsDead(36@)
+goto_if_false @FINALEB_14158
+Char.MarkAsNoLongerNeeded(36@)
+139@ = 2
+
+:FINALEB_14158
+if 
+  140@ == 1
+goto_if_false @FINALEB_14204
+if 
+  Char.IsDead(37@)
+goto_if_false @FINALEB_14204
+Char.MarkAsNoLongerNeeded(37@)
+140@ = 2
+
+:FINALEB_14204
+if 
+  Char.IsInArea3D($scplayer, 0, 2545.59, -1278.26, 31.36, 2516.65, -1259.84, 37.0)
+goto_if_false @FINALEB_14316
+World.RemoveAllScriptFires
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+60@ = 0
+
+:FINALEB_14268
+if 
+  9 > 60@
+goto_if_false @FINALEB_14309
+Particle.Kill(51@(60@,9i))
+60@ += 1
+goto @FINALEB_14268
+
+:FINALEB_14309
+132@ = 9
+
+:FINALEB_14316
+if 
+  132@ == 9
+goto_if_false @FINALEB_14945
+Blip.Remove(118@)
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Camera.SetDarknessEffect(False, -1)
+Game.SetNightVision(False)
+Player.TakeOffGoggles($player1, False)
+61@ = ScriptFire.Start(2532.62, -1272.65, 34.31, 0, 1)
+62@ = ScriptFire.Start(2532.88, -1272.75, 34.12, 0, 2)
+64@ = ScriptFire.Start(2527.9, -1272.5, 34.8, 0, 2)
+65@ = ScriptFire.Start(2533.743, -1272.434, 34.0, 0, 3)
+66@ = ScriptFire.Start(2533.743, -1272.434, 34.0, 0, 2)
+70@ = ScriptFire.Start(2531.99, -1268.71, 34.0, 0, 2)
+69@ = ScriptFire.Start(2530.987, -1269.858, 33.8, 0, 3)
+74@ = ScriptFire.Start(2532.39, -1270.4, 34.0, 0, 1)
+75@ = ScriptFire.Start(2531.165, -1271.961, 34.0, 0, 2)
+76@ = ScriptFire.Start(2532.529, -1272.169, 34.0, 0, 1)
+77@ = ScriptFire.Start(2532.395, -1273.24, 34.0, 0, 3)
+73@ = ScriptFire.Start(2531.94, -1274.46, 33.8, 0, 1)
+63@ = ScriptFire.Start(2532.433, -1275.658, 34.0, 0, 3)
+Game.SetMaxFireGenerations(3)
+$camx_fb = 2526.989
+$camy_fb = -1272.577
+$camz_fb = 34.8419
+$lookcamx_fb = 2527.988
+$lookcamy_fb = -1272.557
+$lookcamz_fb = 34.8799
+Char.Delete(34@)
+Char.Delete(35@)
+Char.Delete(36@)
+Char.Delete(37@)
+Char.Delete(38@)
+Char.SetCoordinates($scplayer, 2538.45, -1281.4, 34.34)
+Char.SetHeading($scplayer, 270.0)
+Camera.SetFixedPosition($camx_fb, $camy_fb, $camz_fb, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($lookcamx_fb, $lookcamy_fb, $lookcamz_fb, SwitchType.JumpCut)
+wait 2000
+Char.SetCoordinates($scplayer, 2533.743, -1272.434, 34.0)
+Char.SetHeading($scplayer, 90.0)
+wait 500
+Task.PlayAnimNonInterruptable($scplayer, "JUMP_ROLL", "DAM_JUMP", 8.0, False, False, False, True, -1)
+Clock.SetTimeOfDay(17, 0)
+TIMERA = 0
+Clock.SetTimeScale(0.3)
+132@ = 10
+
+:FINALEB_14945
+if 
+  132@ == 10
+goto_if_false @FINALEB_16160
+Camera.SetFixedPosition($camx_fb, $camy_fb, $camz_fb, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($lookcamx_fb, $lookcamy_fb, $lookcamz_fb, SwitchType.JumpCut)
+if 
+  2512.28 >= $camx_fb
+goto_if_false @FINALEB_15044
+TIMERA = 0
+153@ = 12
+132@ = 11
+
+:FINALEB_15044
+if 
+  TIMERA > 500
+goto_if_false @FINALEB_15073
+sub_timed_val_from_float_var $camx_fb -= frame_delta_time * 0.18
+
+:FINALEB_15073
+if 
+  TIMERA > 0
+goto_if_false @FINALEB_15140
+if 
+  153@ == 0
+goto_if_false @FINALEB_15140
+Fx.AddExplosionVariableShake(2538.4, -1278.4, 34.04, 4, 0.2)
+153@ = 1
+
+:FINALEB_15140
+if 
+  TIMERA > 100
+goto_if_false @FINALEB_15183
+if 
+  153@ == 1
+goto_if_false @FINALEB_15183
+153@ = 2
+
+:FINALEB_15183
+if 
+  TIMERA > 250
+goto_if_false @FINALEB_15261
+if 
+  153@ == 2
+goto_if_false @FINALEB_15261
+Fx.AddExplosionVariableShake(2540.24, -1270.59, 34.07, 0, 0.2)
+ScriptFire.Remove(64@)
+ScriptFire.Remove(61@)
+153@ = 3
+
+:FINALEB_15261
+if 
+  TIMERA > 500
+goto_if_false @FINALEB_15329
+if 
+  153@ == 3
+goto_if_false @FINALEB_15329
+Fx.AddExplosionVariableShake(2535.66, -1276.3, 34.34, 2, 0.2)
+153@ = 4
+
+:FINALEB_15329
+if 
+  TIMERA > 850
+goto_if_false @FINALEB_15402
+if 
+  153@ == 4
+goto_if_false @FINALEB_15402
+Fx.AddExplosionVariableShake(2531.74, -1270.35, 34.39, 1, 0.2)
+ScriptFire.Remove(64@)
+153@ = 5
+
+:FINALEB_15402
+if 
+  TIMERA > 1100
+goto_if_false @FINALEB_15453
+if 
+  153@ == 5
+goto_if_false @FINALEB_15453
+Clock.SetTimeScale(0.35)
+153@ = 6
+
+:FINALEB_15453
+if 
+  TIMERA > 1298
+goto_if_false @FINALEB_15533
+if 
+  153@ == 6
+goto_if_false @FINALEB_15533
+Clock.SetTimeScale(0.39)
+Fx.AddExplosionVariableShake(2527.72, -1272.82, 34.26, 0, 0.2)
+ScriptFire.Remove(65@)
+153@ = 7
+
+:FINALEB_15533
+if 
+  TIMERA > 1400
+goto_if_false @FINALEB_15608
+if 
+  153@ == 7
+goto_if_false @FINALEB_15608
+Clock.SetTimeScale(0.42)
+Fx.AddExplosionVariableShake(2529.54, -1270.12, 34.31, 2, 0.22)
+153@ = 8
+
+:FINALEB_15608
+if 
+  TIMERA > 1500
+goto_if_false @FINALEB_15688
+if 
+  153@ == 8
+goto_if_false @FINALEB_15688
+Clock.SetTimeScale(0.44)
+Fx.AddExplosionVariableShake(2524.15, -1272.31, 34.42, 4, 0.25)
+ScriptFire.Remove(70@)
+153@ = 9
+
+:FINALEB_15688
+if 
+  TIMERA > 1600
+goto_if_false @FINALEB_15808
+if 
+  153@ == 9
+goto_if_false @FINALEB_15808
+Clock.SetTimeScale(0.5)
+Fx.AddExplosionVariableShake(2522.33, -1270.19, 34.19, 1, 0.3)
+ScriptFire.Remove(61@)
+ScriptFire.Remove(62@)
+ScriptFire.Remove(65@)
+ScriptFire.Remove(70@)
+ScriptFire.Remove(69@)
+ScriptFire.Remove(75@)
+ScriptFire.Remove(76@)
+ScriptFire.Remove(73@)
+ScriptFire.Remove(63@)
+153@ = 10
+
+:FINALEB_15808
+if 
+  TIMERA > 1700
+goto_if_false @FINALEB_16092
+if 
+  153@ == 10
+goto_if_false @FINALEB_16092
+Fx.AddExplosionVariableShake(2524.14, -1270.04, 34.19, 2, 0.25)
+61@ = ScriptFire.Start(2523.17, -1269.18, 34.04, 0, 3)
+62@ = ScriptFire.Start(2522.47, -1271.46, 34.15, 0, 2)
+65@ = ScriptFire.Start(2523.68, -1272.35, 34.19, 0, 3)
+70@ = ScriptFire.Start(2523.18, -1273.32, 34.06, 0, 2)
+69@ = ScriptFire.Start(2522.8, -1274.45, 34.05, 0, 3)
+75@ = ScriptFire.Start(2522.42, -1276.4, 34.05, 0, 2)
+76@ = ScriptFire.Start(2520.32, -1273.41, 34.0, 0, 1)
+73@ = ScriptFire.Start(2521.32, -1273.41, 34.0, 0, 1)
+63@ = ScriptFire.Start(2520.93, -1269.28, 34.0, 0, 2)
+153@ = 11
+
+:FINALEB_16092
+if 
+  TIMERA > 1916
+goto_if_false @FINALEB_16160
+if 
+  153@ == 11
+goto_if_false @FINALEB_16160
+Fx.AddExplosionVariableShake(2522.01, -1274.06, 34.2, 4, 0.2)
+153@ = 12
+
+:FINALEB_16160
+if 
+  132@ == 11
+goto_if_false @FINALEB_17634
+if 
+  61.0 > $camz_fb
+goto_if_false @FINALEB_16229
+add_timed_val_to_float_var $camz_fb += frame_delta_time * 0.1
+sub_timed_val_from_float_var $camx_fb -= frame_delta_time * 0.02
+add_timed_val_to_float_var $lookcamz_fb += frame_delta_time * 0.008
+
+:FINALEB_16229
+Camera.SetFixedPosition($camx_fb, $camy_fb, $camz_fb, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($lookcamx_fb, $lookcamy_fb, $lookcamz_fb, SwitchType.JumpCut)
+if 
+  153@ == 12
+goto_if_false @FINALEB_16336
+if 
+  TIMERA > 1400
+goto_if_false @FINALEB_16336
+Fx.AddExplosionVariableShake(2521.46, -1268.02, 39.8, 0, 0.2)
+153@ = 13
+
+:FINALEB_16336
+if 
+  153@ == 13
+goto_if_false @FINALEB_16404
+if 
+  TIMERA > 1670
+goto_if_false @FINALEB_16404
+Fx.AddExplosionVariableShake(2521.48, -1270.67, 40.32, 4, 0.25)
+153@ = 14
+
+:FINALEB_16404
+if 
+  153@ == 14
+goto_if_false @FINALEB_16564
+if 
+  TIMERA > 1800
+goto_if_false @FINALEB_16564
+Fx.AddExplosionVariableShake(2521.32, -1275.86, 40.47, 2, 0.2)
+ScriptFire.Remove(64@)
+ScriptFire.Remove(66@)
+ScriptFire.Remove(74@)
+ScriptFire.Remove(69@)
+64@ = ScriptFire.Start(2521.46, -1268.02, 39.8, 1, 2)
+66@ = ScriptFire.Start(22521.48, -1270.67, 40.32, 1, 2)
+74@ = ScriptFire.Start(2521.32, -1275.86, 40.47, 1, 1)
+153@ = 15
+
+:FINALEB_16564
+if 
+  153@ == 15
+goto_if_false @FINALEB_16656
+if 
+  TIMERA > 1950
+goto_if_false @FINALEB_16656
+Fx.AddExplosionVariableShake(2521.42, -1273.18, 39.83, 2, 0.2)
+Fx.AddExplosionVariableShake(2525.43, -1280.65, 40.28, 4, 0.2)
+153@ = 16
+
+:FINALEB_16656
+if 
+  153@ == 16
+goto_if_false @FINALEB_16773
+if 
+  TIMERA > 2200
+goto_if_false @FINALEB_16773
+Fx.AddExplosionVariableShake(2521.27, -1270.64, 43.25, 2, 0.2)
+ScriptFire.Remove(77@)
+ScriptFire.Remove(63@)
+ScriptFire.Remove(79@)
+ScriptFire.Remove(78@)
+ScriptFire.Remove(70@)
+69@ = ScriptFire.Start(2525.43, -1280.65, 40.28, 1, 2)
+153@ = 17
+
+:FINALEB_16773
+if 
+  153@ == 17
+goto_if_false @FINALEB_16889
+if 
+  TIMERA > 2568
+goto_if_false @FINALEB_16889
+Fx.AddExplosionVariableShake(2521.15, -1267.91, 43.37, 2, 0.2)
+Fx.AddExplosionVariableShake(2525.89, -1281.0, 43.79, 4, 0.2)
+70@ = ScriptFire.Start(2525.89, -1281.0, 43.79, 3, 3)
+153@ = 18
+
+:FINALEB_16889
+if 
+  153@ == 18
+goto_if_false @FINALEB_17029
+if 
+  TIMERA > 3241
+goto_if_false @FINALEB_17029
+Fx.AddExplosionVariableShake(2520.86, -1273.39, 43.2, 0, 0.2)
+77@ = ScriptFire.Start(2521.27, -1270.64, 43.25, 1, 3)
+63@ = ScriptFire.Start(2521.15, -1267.91, 43.37, 2, 2)
+79@ = ScriptFire.Start(2521.34, -1275.7, 43.26, 3, 1)
+153@ = 19
+
+:FINALEB_17029
+if 
+  153@ == 19
+goto_if_false @FINALEB_17097
+if 
+  TIMERA > 3485
+goto_if_false @FINALEB_17097
+Fx.AddExplosionVariableShake(2521.34, -1275.7, 43.26, 4, 0.2)
+153@ = 20
+
+:FINALEB_17097
+if 
+  153@ == 20
+goto_if_false @FINALEB_17165
+if 
+  TIMERA > 3708
+goto_if_false @FINALEB_17165
+Fx.AddExplosionVariableShake(2521.15, -1275.61, 47.83, 2, 0.2)
+153@ = 21
+
+:FINALEB_17165
+if 
+  153@ == 21
+goto_if_false @FINALEB_17262
+if 
+  TIMERA > 4246
+goto_if_false @FINALEB_17262
+Fx.AddExplosionVariableShake(2521.04, -1272.97, 47.91, 0, 0.2)
+ScriptFire.Remove(75@)
+62@ = ScriptFire.Start(2525.88, -1279.99, 48.43, 3, 2)
+153@ = 22
+
+:FINALEB_17262
+if 
+  153@ == 22
+goto_if_false @FINALEB_17364
+if 
+  TIMERA > 4708
+goto_if_false @FINALEB_17364
+Fx.AddExplosionVariableShake(2521.24, -1267.9, 48.15, 4, 0.2)
+ScriptFire.Remove(61@)
+ScriptFire.Remove(62@)
+Fx.AddExplosionVariableShake(2525.88, -1279.99, 48.43, 2, 0.2)
+153@ = 23
+
+:FINALEB_17364
+if 
+  153@ == 23
+goto_if_false @FINALEB_17504
+if 
+  TIMERA > 5000
+goto_if_false @FINALEB_17504
+Fx.AddExplosionVariableShake(2521.37, -1270.86, 48.35, 0, 0.2)
+78@ = ScriptFire.Start(2521.15, -1275.61, 47.83, 3, 1)
+61@ = ScriptFire.Start(2521.04, -1272.97, 47.91, 2, 2)
+62@ = ScriptFire.Start(2521.24, -1267.9, 48.15, 3, 2)
+153@ = 24
+
+:FINALEB_17504
+if 
+  153@ == 24
+goto_if_false @FINALEB_17634
+if 
+  TIMERA > 3000
+goto_if_false @FINALEB_17634
+Char.ClearTasksImmediately($scplayer)
+Hud.ClearTimer($escapetimer_fb)
+Streaming.RemoveAnimation("DAM_JUMP")
+Streaming.MarkModelAsNoLongerNeeded(349)
+Streaming.MarkModelAsNoLongerNeeded(356)
+Streaming.MarkModelAsNoLongerNeeded(366)
+Weather.SetHeathazeEffect(False)
+Camera.DoFade(0, 1000)
+
+:FINALEB_17589
+if 
+  Camera.GetFadingStatus
+goto_if_false @FINALEB_17613
+wait 0
+goto @FINALEB_17589
+
+:FINALEB_17613
+goto @FINALEB_18535
+132@ = 11
+153@ = 25
+
+:FINALEB_17634
+goto @FINALEB_720
+
+:FINALEB_17641
+99@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 106@, 107@, 108@, MoveState.Run, -1)
+Task.ToggleDuck(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(99@)
+Char.PerformSequence(104@, 99@)
+Sequence.Clear(99@)
+return 
+
+:FINALEB_17696
+100@ = Sequence.Open()
+Task.StayInSamePlace(-1, True)
+Task.ToggleDuck(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(100@)
+Char.PerformSequence(104@, 100@)
+Sequence.Clear(100@)
+return 
+
+:FINALEB_17740
+101@ = Sequence.Open()
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(101@)
+Char.PerformSequence(104@, 101@)
+Sequence.Clear(101@)
+return 
+
+:FINALEB_17778
+111@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 106@, 107@, 108@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 113@, 114@, 115@, MoveState.Run, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(111@)
+Char.PerformSequence(104@, 111@)
+Sequence.Clear(111@)
+return 
+
+:FINALEB_17850
+102@ = Sequence.Open()
+Task.PlayAnim(-1, "CROUCH_ROLL_R", "PED", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+Task.ToggleDuck(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(102@)
+Char.PerformSequence(104@, 102@)
+Sequence.Clear(102@)
+return 
+
+:FINALEB_17933
+103@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R", "SWAT", 8.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_IN_R", "SWAT", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFootTimed(-1, $scplayer, 112@)
+Task.StayInSamePlace(-1, False)
+Task.CharSlideToCoordAndPlayAnim(-1, 106@, 107@, 108@, 116@, -1.0, "SWT_WLLSHOOT_OUT_R", "SWAT", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R_BACK", "SWAT", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(103@, True)
+Sequence.Close(103@)
+Char.PerformSequence(104@, 103@)
+Sequence.Clear(103@)
+return 
+
+:FINALEB_18174
+105@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_L", "SWAT", 8.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_IN_L", "SWAT", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFootTimed(-1, $scplayer, 112@)
+Task.StayInSamePlace(-1, False)
+Task.CharSlideToCoordAndPlayAnim(-1, 106@, 107@, 108@, 116@, -1.0, "SWT_WLLSHOOT_OUT_R", "SWAT", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_L_BACK", "SWAT", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(105@, True)
+Sequence.Close(105@)
+Char.PerformSequence(104@, 105@)
+Sequence.Clear(105@)
+return 
+
+:FINALEB_18415
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+if 
+  182@ == 1
+goto_if_false @FINALEB_18465
+Text.PrintNow('RM4_46', 5000, 1)
+
+:FINALEB_18465
+if 
+  179@ == 7
+goto_if_false @FINALEB_18499
+Text.PrintNow('RM4_45', 7000, 1)
+
+:FINALEB_18499
+if 
+  183@ == 1
+goto_if_false @FINALEB_18533
+Text.PrintNow('RM4_50', 5000, 1)
+
+:FINALEB_18533
+return 
+
+:FINALEB_18535
+156@ = 1
+Player.ClearWantedLevel($player1)
+$flag_riot_mission_counter += 1
+return 
+
+:FINALEB_18556
+Weather.SetHeathazeEffect(False)
+Camera.SetDarknessEffect(False, -1)
+World.RemoveAllScriptFires
+Game.SetWantedMultiplier(1.0)
+Game.SetMaxWantedLevel(6)
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+Hud.ClearTimer($escapetimer_fb)
+Streaming.MarkModelAsNoLongerNeeded(102)
+Streaming.MarkModelAsNoLongerNeeded(104)
+Streaming.MarkModelAsNoLongerNeeded(109)
+Streaming.MarkModelAsNoLongerNeeded(368)
+Streaming.MarkModelAsNoLongerNeeded(349)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(356)
+Streaming.MarkModelAsNoLongerNeeded(366)
+Char.RemoveElegantly($big_smoke)
+Char.RemoveElegantly(49@)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.UnloadSpecialCharacter(2)
+Streaming.RemoveAnimation("SWAT")
+Streaming.RemoveAnimation("DAM_JUMP")
+Streaming.MarkModelAsNoLongerNeeded(544)
+Streaming.MarkModelAsNoLongerNeeded(280)
+Streaming.MarkModelAsNoLongerNeeded(492)
+Streaming.MarkModelAsNoLongerNeeded(533)
+Streaming.MarkModelAsNoLongerNeeded(109)
+Streaming.MarkModelAsNoLongerNeeded(102)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(344)
+Streaming.MarkModelAsNoLongerNeeded(#LA_FUCKCAR1)
+Streaming.MarkModelAsNoLongerNeeded(#LA_FUCKCAR2)
+Streaming.RemoveAnimation("FINALE")
+Streaming.RemoveAnimation("FINALE2")
+Blip.Remove(118@)
+Blip.Remove(119@)
+Pickup.Remove(120@)
+Pickup.Remove(121@)
+Pickup.Remove(122@)
+Pickup.Remove(123@)
+Pickup.Remove(124@)
+Pickup.Remove(125@)
+Pickup.Remove(126@)
+Pickup.Remove(127@)
+Pickup.Remove(129@)
+Pickup.Remove(130@)
+Pickup.Remove(131@)
+Game.SwitchEmergencyServices(True)
+Game.SetWantedMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+60@ = 0
+
+:FINALEB_18839
+if 
+  9 > 60@
+goto_if_false @FINALEB_18880
+Particle.Kill(51@(60@,9i))
+60@ += 1
+goto @FINALEB_18839
+
+:FINALEB_18880
+$onmission = 0
+Mission.Finish
+if 
+  156@ == 1
+goto_if_false @FINALEB_18913
+Camera.DoFade(0, Fade.Out)
+
+:FINALEB_18913
+return 
+
+//-------------Mission 112---------------
+// Originally: End Of The Line (3)
+
+:FINALEC
+gosub @FINALEC_36
+if 
+  has_deatharrest_been_executed 
+goto_if_false @FINALEC_27
+gosub @FINALEC_57329
+
+:FINALEC_27
+gosub @FINALEC_57525
+terminate_this_script 
+

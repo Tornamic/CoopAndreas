@@ -1,0 +1,178 @@
+:FLOW
+script_name 'FLOW'
+
+:FLOW_11
+wait 1000
+if 
+  Player.IsPlaying($player1)
+goto_if_false @FLOW_959
+if 
+  $onmission == 0
+goto_if_false @FLOW_959
+if 
+  $girlfried_help_flag == 0
+goto_if_false @FLOW_111
+if 
+  $flag_crash_mission_counter == 1
+goto_if_false @FLOW_111
+wait 5500
+Text.ClearHelp
+Text.PrintHelp('GF_H000')
+$girlfried_help_flag = 1
+
+:FLOW_111
+if 
+  $oddjob_help_flag == 0
+goto_if_false @FLOW_190
+if 
+  $flag_scrash_mission_counter == 1
+goto_if_false @FLOW_190
+wait 6000
+Text.ClearHelp
+Text.PrintHelp('VAL_HLP')
+wait 5000
+Text.ClearHelp
+Text.PrintHelp('VAL_GOT')
+$oddjob_help_flag = 1
+
+:FLOW_190
+if 
+  $trucking_help_flag == 0
+goto_if_false @FLOW_251
+if 
+  $flag_cat_mission3_passed == 1
+goto_if_false @FLOW_251
+wait 6000
+Text.ClearHelp
+Text.PrintHelp('TRUCK_H')
+$trucking_help_flag = 1
+
+:FLOW_251
+if 
+  $stealth_help_flag == 0
+goto_if_false @FLOW_312
+if 
+  $flag_strap_mission_counter > 1
+goto_if_false @FLOW_312
+wait 6000
+Text.ClearHelp
+Text.PrintHelp('STELF')
+$stealth_help_flag = 1
+
+:FLOW_312
+if 
+  $got_gimp_suit == 0
+goto_if_false @FLOW_373
+if 
+  $flag_heist_mission_counter == 2
+goto_if_false @FLOW_373
+wait 6000
+Text.ClearHelp
+Text.PrintHelp('GIMPGOT')
+$got_gimp_suit = 1
+
+:FLOW_373
+if 
+  $camera_secret_help == 0
+goto_if_false @FLOW_434
+if 
+  $flag_synd_mission_counter == 1
+goto_if_false @FLOW_434
+wait 6000
+Text.ClearHelp
+Text.PrintHelp('SECRET')
+$camera_secret_help = 1
+
+:FLOW_434
+if 
+  $croupier_help == 0
+goto_if_false @FLOW_495
+if 
+  $flag_heist_mission_counter == 6
+goto_if_false @FLOW_495
+wait 6000
+Text.ClearHelp
+Text.PrintHelp('CRO_GOT')
+$croupier_help = 1
+
+:FLOW_495
+if 
+  $trigger_final_LA1_missions == 0
+goto_if_false @FLOW_658
+if 
+  $flag_sweet_mission_counter == 9
+goto_if_false @FLOW_658
+if 
+  $flag_smoke_mission_counter == 4
+goto_if_false @FLOW_658
+if 
+  $flag_strap_mission_counter == 5
+goto_if_false @FLOW_658
+if 
+  $flag_ryder_mission_counter == 3
+goto_if_false @FLOW_658
+if 
+  $flag_crash_mission_counter == 2
+goto_if_false @FLOW_658
+if 
+  $flag_cesar_mission_counter == 1
+goto_if_false @FLOW_658
+start_new_script @LA1FIN 
+Blip.Remove($sweet_contact_blip)
+$sweet_contact_blip = Blip.AddSpriteForContactPoint($sweet_blip_icon, $sweetX, $sweetY, $sweetZ)
+$trigger_final_LA1_missions = 1
+
+:FLOW_658
+if 
+  $trigger_scrash2_mission == 0
+goto_if_false @FLOW_730
+if and
+  $flag_scrash_mission_counter == 1
+  $flag_synd_mission_counter == 6
+goto_if_false @FLOW_730
+Blip.Remove($garage_contact_blip)
+$garage_contact_blip = Blip.AddSpriteForContactPoint($crash_blip_icon, $garageX, $garageY, $garageZ)
+$trigger_scrash2_mission = 1
+
+:FLOW_730
+if 
+  $trigger_ice_cold_mission == 0
+goto_if_false @FLOW_800
+if 
+  $flag_synd_mission_counter == 5
+goto_if_false @FLOW_800
+Blip.Remove($synd_contact_blip)
+Blip.Remove($garage_contact_blip)
+$garage_contact_blip = Blip.AddSpriteForContactPoint($garage_blip_icon, $garageX, $garageY, $garageZ)
+$trigger_ice_cold_mission = 1
+
+:FLOW_800
+if 
+  $trigger_final_synd_mission == 0
+goto_if_false @FLOW_872
+if and
+  $flag_synd_mission_counter == 9
+  $flag_wuzi_mission_counter == 5
+goto_if_false @FLOW_872
+Blip.Remove($garage_contact_blip)
+$garage_contact_blip = Blip.AddSpriteForContactPoint($garage_blip_icon, $garageX, $garageY, $garageZ)
+$trigger_final_synd_mission = 1
+
+:FLOW_872
+if 
+  $trigger_final_LA2_missions == 0
+goto_if_false @FLOW_959
+if and
+  $flag_grove_mission_counter == 2
+  $flag_mansion_mission_counter == 4
+goto_if_false @FLOW_959
+start_new_script @RIOT 
+Blip.Remove($grove_contact_blip)
+Blip.Remove($mansion_contact_blip)
+$mansion_contact_blip = Blip.AddSpriteForContactPoint($mansion_blip_icon, $mansionX, $mansionY, $mansionZ)
+$trigger_final_LA2_missions = 1
+terminate_this_script 
+
+:FLOW_959
+goto @FLOW_11
+

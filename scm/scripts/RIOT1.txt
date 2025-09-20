@@ -1,0 +1,1017 @@
+//-------------Mission 108---------------
+// Originally: Riot
+
+:RIOT1
+script_name 'RIOT1'
+gosub @RIOT1_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @RIOT1_38
+gosub @RIOT1_2979
+
+:RIOT1_38
+gosub @RIOT1_3082
+terminate_this_script 
+
+:RIOT1_47
+Stat.RegisterMissionGiven
+$onmission = 1
+Text.LoadMissionText('RIOT1')
+Text.ClearPrints
+wait 0
+35@ = 0
+36@ = 0
+37@ = 0
+38@ = 0
+39@ = 0
+40@ = 0
+41@ = 0
+42@ = 0
+43@ = 0
+89@ = 0
+90@ = 0
+91@ = 0
+92@ = 0
+93@ = 0
+94@ = 0
+95@ = 0
+Player.MakeGangDisappear
+Streaming.SetAreaVisible(5)
+Cutscene.Load('RIOT_1A')
+
+:RIOT1_202
+if 
+  not Cutscene.HasLoaded
+goto_if_false @RIOT1_226
+wait 0
+goto @RIOT1_202
+
+:RIOT1_226
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:RIOT1_235
+if 
+  not Cutscene.HasFinished
+goto_if_false @RIOT1_259
+wait 0
+goto @RIOT1_235
+
+:RIOT1_259
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:RIOT1_272
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT1_296
+wait 0
+goto @RIOT1_272
+
+:RIOT1_296
+Cutscene.Clear
+if 
+  not Cutscene.WasSkipped
+goto_if_false @RIOT1_418
+Cutscene.Load('RIOT_1B')
+
+:RIOT1_322
+if 
+  not Cutscene.HasLoaded
+goto_if_false @RIOT1_346
+wait 0
+goto @RIOT1_322
+
+:RIOT1_346
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:RIOT1_355
+if 
+  not Cutscene.HasFinished
+goto_if_false @RIOT1_379
+wait 0
+goto @RIOT1_355
+
+:RIOT1_379
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:RIOT1_392
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT1_416
+wait 0
+goto @RIOT1_392
+
+:RIOT1_416
+Cutscene.Clear
+
+:RIOT1_418
+Streaming.SetAreaVisible(0)
+Player.MakeGangReappear
+Player.SetControl($player1, False)
+Camera.SetFadingColor(0, 0, 0)
+wait 0
+Game.SetLaRiots(True)
+Stat.SetInt(StatId.StartedRiot1, 1)
+Streaming.RequestModel(492)
+Streaming.RequestModel(567)
+Streaming.RequestModel(483)
+Streaming.LoadSpecialCharacter('SWEET', 1)
+Streaming.LoadAllModelsNow
+$r1_empty_decision_maker = DecisionMakerChar.Copy(65542)
+Streaming.LoadScene(1254.68, -789.39, 91.03)
+World.ClearArea(1, 1242.9, -805.4, 82.9, 20.0)
+Car.CustomPlateForNextCar(483, "OUTTHERE")
+$r1_mothership = Car.Create(483, 1242.9, -805.4, 82.9)
+Car.SetHeading($r1_mothership, 0.0)
+Car.ChangeColor($r1_mothership, 1, 1)
+Car.GivePaintjob($r1_mothership, 0)
+Car.SetCanRespray($r1_mothership, False)
+World.ClearArea(1, 1249.1, -804.9, 82.9, 5.0)
+Car.CustomPlateForNextCar(567, "_LVA4L__")
+$r1_cesars_car = Car.Create(567, 1249.1, -804.9, 82.9)
+Car.SetHeading($r1_cesars_car, 177.7)
+Car.ChangeColor($r1_cesars_car, 3, 3)
+World.ClearArea(1, 1254.3, -806.6, 82.9, 5.0)
+Car.CustomPlateForNextCar(492, "GROVE4L_")
+$r1_sweets_car = Car.Create(492, 1254.3, -806.6, 82.9)
+Car.ChangeColor($r1_sweets_car, 59, 34)
+Car.SetHeading($r1_sweets_car, 177.7)
+World.ClearArea(1, 1258.2, -814.4, 83.1, 60.0)
+Char.SetCoordinates($scplayer, 1258.2, -814.4, 83.1)
+Char.SetHeading($scplayer, 40.0)
+World.ClearArea(1, 1257.6, -816.6, 83.1, 5.0)
+$sweet = Char.Create(25, 290, 1257.6, -816.6, 83.1)
+Char.SetHeading($sweet, 39.9)
+Char.SetGetOutUpsideDownCar($sweet, False)
+Char.SetNeverTargeted($sweet, True)
+Char.SetCantBeDraggedOut($sweet, True)
+Char.SetDecisionMaker($sweet, $r1_empty_decision_maker)
+Char.SetOnlyDamagedByPlayer($sweet, True)
+$r1_seq = Sequence.Open()
+Task.GoStraightToCoord(-1, 1252.4, -810.3, 83.1, MoveState.Walk, -1)
+Char.SetNextDesiredMoveState(MoveState.Walk)
+Task.EnterCarAsPassenger(-1, $r1_sweets_car, 0, -1)
+Sequence.Close($r1_seq)
+Char.PerformSequence($sweet, $r1_seq)
+Sequence.Clear($r1_seq)
+Hud.SwitchWidescreen(True)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Camera.SetFixedPosition(1257.8, -815.0, 84.7, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1246.3, -802.5, 82.7, SwitchType.JumpCut)
+Game.ShutAllCharsUp(True)
+Game.EnableAmbientCrime(False)
+
+:RIOT1_1048
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @RIOT1_1074
+goto @RIOT1_2997
+
+:RIOT1_1074
+gosub @RIOT1_3160
+if 
+  38@ == 1
+goto_if_false @RIOT1_1106
+goto @RIOT1_2979
+
+:RIOT1_1106
+if 
+  35@ == 0
+goto_if_false @RIOT1_1744
+if 
+  36@ == 0
+goto_if_false @RIOT1_1339
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+40@ = 0
+Char.SetNextDesiredMoveState(MoveState.Walk)
+Task.EnterCarAsDriver($scplayer, $r1_sweets_car, -1)
+$r1_seq = Sequence.Open()
+Task.GoStraightToCoord(-1, 1252.4, -810.3, 83.1, MoveState.Walk, -1)
+Char.SetNextDesiredMoveState(MoveState.Walk)
+Task.EnterCarAsPassenger(-1, $r1_sweets_car, 0, -1)
+Sequence.Close($r1_seq)
+Char.PerformSequence($sweet, $r1_seq)
+Sequence.Clear($r1_seq)
+Camera.DoFade(1, 500)
+
+:RIOT1_1241
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT1_1265
+wait 0
+goto @RIOT1_1241
+
+:RIOT1_1265
+gosub @RIOT1_3160
+if 
+  38@ == 1
+goto_if_false @RIOT1_1297
+goto @RIOT1_2979
+
+:RIOT1_1297
+40@ = 1
+41@ = 0
+gosub @RIOT1_4358
+36@ = 1
+37@ = 1
+skip_cutscene_start_internal @RIOT1_1420
+
+:RIOT1_1339
+if 
+  36@ == 1
+goto_if_false @RIOT1_1744
+if 
+  40@ == 0
+goto_if_false @RIOT1_1744
+if 
+  Char.IsInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_1744
+if 
+  Char.IsInCar($sweet, $r1_sweets_car)
+goto_if_false @RIOT1_1744
+37@ = 0
+
+:RIOT1_1420
+skip_cutscene_end 
+gosub @RIOT1_3160
+if 
+  38@ == 1
+goto_if_false @RIOT1_1454
+goto @RIOT1_2979
+
+:RIOT1_1454
+if 
+  37@ == 1
+goto_if_false @RIOT1_1580
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+40@ = 0
+Camera.DoFade(0, 500)
+
+:RIOT1_1496
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT1_1520
+wait 0
+goto @RIOT1_1496
+
+:RIOT1_1520
+gosub @RIOT1_3160
+if 
+  38@ == 1
+goto_if_false @RIOT1_1552
+goto @RIOT1_2979
+
+:RIOT1_1552
+Char.ClearTasksImmediately($scplayer)
+Char.WarpIntoCar($scplayer, $r1_sweets_car)
+Char.ClearTasksImmediately($sweet)
+Char.WarpIntoCarAsPassenger($sweet, $r1_sweets_car, 0)
+
+:RIOT1_1580
+39@ = 1
+Game.ShutAllCharsUp(False)
+34@ = Blip.AddForCoord(2505.4, -1670.6, 12.1)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Text.PrintNow('R1_01', 7000, 1)
+TIMERB = 0
+if 
+  37@ == 1
+goto_if_false @RIOT1_1737
+Camera.DoFade(1, 500)
+
+:RIOT1_1681
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT1_1705
+wait 0
+goto @RIOT1_1681
+
+:RIOT1_1705
+gosub @RIOT1_3160
+if 
+  38@ == 1
+goto_if_false @RIOT1_1737
+goto @RIOT1_2979
+
+:RIOT1_1737
+35@ = 1
+
+:RIOT1_1744
+if 
+  35@ == 1
+goto_if_false @RIOT1_2600
+if 
+is_ps2_keyboard_key_pressed 81
+goto_if_false @RIOT1_1826
+if 
+  Char.IsInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_1826
+Car.SetCoordinates($r1_sweets_car, 2495.7, -1666.3, 12.1)
+Car.SetHeading($r1_sweets_car, 254.2)
+
+:RIOT1_1826
+if 
+  42@ == 0
+goto_if_false @RIOT1_1923
+if 
+  40@ == 0
+goto_if_false @RIOT1_1923
+if 
+  TIMERB > 10000
+goto_if_false @RIOT1_1923
+Char.ShutUpForScriptedSpeech($scplayer, True)
+Char.ShutUpForScriptedSpeech($sweet, True)
+40@ = 2
+41@ = 0
+gosub @RIOT1_4358
+42@ = 1
+
+:RIOT1_1923
+if 
+  42@ == 1
+goto_if_false @RIOT1_2006
+if 
+  40@ == 0
+goto_if_false @RIOT1_2006
+if 
+  TIMERB > 7000
+goto_if_false @RIOT1_2006
+40@ = 3
+41@ = 0
+gosub @RIOT1_4358
+42@ = 2
+
+:RIOT1_2006
+if 
+  42@ == 2
+goto_if_false @RIOT1_2156
+if 
+  Char.IsInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_2156
+if 
+  Char.IsInArea2D($scplayer, 0, 2955.5, -1240.1, 1192.2, -1855.3)
+goto_if_false @RIOT1_2156
+if 
+  40@ == 0
+goto_if_false @RIOT1_2156
+if 
+  TIMERB > 7000
+goto_if_false @RIOT1_2156
+Car.MarkAsNoLongerNeeded($r1_mothership)
+Car.MarkAsNoLongerNeeded($r1_cesars_car)
+40@ = 4
+41@ = 0
+gosub @RIOT1_4358
+42@ = 3
+
+:RIOT1_2156
+if 
+  42@ == 3
+goto_if_false @RIOT1_2296
+if 
+  Char.IsInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_2296
+if 
+  Char.IsInArea2D($scplayer, 0, 2955.5, -1240.1, 1192.2, -1855.3)
+goto_if_false @RIOT1_2296
+if 
+  40@ == 0
+goto_if_false @RIOT1_2296
+if 
+  TIMERB > 7000
+goto_if_false @RIOT1_2296
+40@ = 5
+41@ = 0
+gosub @RIOT1_4358
+42@ = 4
+
+:RIOT1_2296
+if 
+  42@ == 4
+goto_if_false @RIOT1_2436
+if 
+  Char.IsInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_2436
+if 
+  Char.IsInArea2D($scplayer, 0, 2955.5, -1240.1, 1192.2, -1855.3)
+goto_if_false @RIOT1_2436
+if 
+  40@ == 0
+goto_if_false @RIOT1_2436
+if 
+  TIMERB > 7000
+goto_if_false @RIOT1_2436
+40@ = 6
+41@ = 0
+gosub @RIOT1_4358
+42@ = 5
+
+:RIOT1_2436
+if 
+  42@ == 5
+goto_if_false @RIOT1_2493
+if 
+  40@ == 0
+goto_if_false @RIOT1_2493
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.ShutUpForScriptedSpeech($sweet, False)
+42@ = 6
+
+:RIOT1_2493
+if 
+  Char.IsInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_2600
+if 
+  Char.IsInCar($sweet, $r1_sweets_car)
+goto_if_false @RIOT1_2600
+if 
+  Char.LocateInCar3D($scplayer, 2505.4, -1670.6, 12.1, 4.0, 4.0, 4.0, True)
+goto_if_false @RIOT1_2600
+Player.SetControl($player1, False)
+36@ = 0
+35@ = 2
+
+:RIOT1_2600
+if 
+  35@ == 2
+goto_if_false @RIOT1_2940
+if 
+  36@ == 0
+goto_if_false @RIOT1_2703
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+40@ = 0
+Hud.SwitchWidescreen(True)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Game.ShutAllCharsUp(True)
+40@ = 7
+41@ = 0
+gosub @RIOT1_4358
+36@ = 1
+36@ = 1
+
+:RIOT1_2703
+if 
+  36@ == 1
+goto_if_false @RIOT1_2803
+if 
+  40@ == 0
+goto_if_false @RIOT1_2803
+$r1_seq = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.GoStraightToCoord(-1, 2518.9, -1678.2, 13.5, MoveState.Walk, -1)
+Sequence.Close($r1_seq)
+Char.PerformSequence($sweet, $r1_seq)
+Sequence.Clear($r1_seq)
+TIMERA = 0
+36@ = 2
+
+:RIOT1_2803
+if 
+  36@ == 2
+goto_if_false @RIOT1_2940
+if 
+  TIMERA > 4000
+goto_if_false @RIOT1_2940
+Camera.DoFade(0, 500)
+
+:RIOT1_2847
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT1_2871
+wait 0
+goto @RIOT1_2847
+
+:RIOT1_2871
+Char.Delete($sweet)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Game.ShutAllCharsUp(False)
+Camera.DoFade(1, 500)
+
+:RIOT1_2909
+if 
+  Camera.GetFadingStatus
+goto_if_false @RIOT1_2933
+wait 0
+goto @RIOT1_2909
+
+:RIOT1_2933
+goto @RIOT1_2997
+
+:RIOT1_2940
+if 
+  35@ > 0
+goto_if_false @RIOT1_2965
+gosub @RIOT1_3244
+
+:RIOT1_2965
+gosub @RIOT1_3390
+goto @RIOT1_1048
+
+:RIOT1_2979
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:RIOT1_2997
+$flag_riot_mission_counter += 1
+Stat.SetInt(StatId.PassedRiot1, 1)
+Stat.RegisterMissionPassed('RIOT_1')
+Text.PrintWithNumberBig('M_PASSD', 0, 5000, TextStyle.Middle)
+Audio.PlayMissionPassedTune(1)
+Player.ClearWantedLevel($player1)
+Blip.Remove($mansion_contact_blip)
+Blip.Remove($sweet_contact_blip)
+$sweet_contact_blip = Blip.AddSpriteForContactPoint($sweet_blip_icon, $sweetX, $sweetY, $sweetZ)
+Stat.PlayerMadeProgress(1)
+return 
+
+:RIOT1_3082
+if 
+  is_var_text_label_empty s$shop_name
+goto_if_false @RIOT1_3100
+Camera.RestoreJumpcut
+
+:RIOT1_3100
+Game.ShutAllCharsUp(False)
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Streaming.MarkModelAsNoLongerNeeded(492)
+Streaming.MarkModelAsNoLongerNeeded(567)
+Streaming.MarkModelAsNoLongerNeeded(483)
+Char.RemoveElegantly($sweet)
+Streaming.UnloadSpecialCharacter(1)
+Blip.Remove(34@)
+Game.EnableAmbientCrime(True)
+$timer_mobile_start = Clock.GetGameTimer()
+$onmission = 0
+Mission.Finish
+return 
+
+:RIOT1_3160
+if 
+  Char.IsDead($sweet)
+goto_if_false @RIOT1_3201
+Text.ClearPrints
+Text.PrintNow('R1_02', 7000, 1)
+38@ = 1
+
+:RIOT1_3201
+if 
+  Car.IsDead($r1_sweets_car)
+goto_if_false @RIOT1_3242
+Text.ClearPrints
+Text.PrintNow('R1_04', 7000, 1)
+38@ = 1
+
+:RIOT1_3242
+return 
+
+:RIOT1_3244
+if 
+  39@ == 0
+goto_if_false @RIOT1_3324
+if 
+  Char.IsInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_3324
+Text.ClearThisPrint('R1_03')
+Blip.Remove(34@)
+34@ = Blip.AddForCoord(2505.4, -1670.6, 12.1)
+39@ = 1
+
+:RIOT1_3324
+if 
+  39@ == 1
+goto_if_false @RIOT1_3388
+if 
+  not Char.IsInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_3388
+Blip.Remove(34@)
+34@ = Blip.AddForCar($r1_sweets_car)
+Blip.SetAsFriendly(34@, True)
+39@ = 0
+
+:RIOT1_3388
+return 
+
+:RIOT1_3390
+if 
+  35@ == 1
+goto_if_false @RIOT1_4277
+if 
+  Char.IsSittingInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_3588
+if or
+  40@ == 2
+  40@ == 3
+  40@ == 4
+  40@ == 5
+  40@ == 6
+goto_if_false @RIOT1_3588
+if 
+  is_int_lvar_greater_than_int_lvar 89@ > 41@
+goto_if_false @RIOT1_3574
+gosub @RIOT1_5574
+gosub @RIOT1_5681
+if 
+  not Char.IsDead($sweet)
+goto_if_false @RIOT1_3536
+gosub @RIOT1_5835
+goto @RIOT1_3567
+
+:RIOT1_3536
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(44@(41@,15s))
+90@ = 0
+91@ = 0
+
+:RIOT1_3567
+goto @RIOT1_3588
+
+:RIOT1_3574
+TIMERB = 0
+40@ = 0
+
+:RIOT1_3588
+if 
+  not Char.IsInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_3724
+if 
+  11 > 40@
+goto_if_false @RIOT1_3724
+if 
+  is_int_lvar_greater_than_int_lvar 89@ > 41@
+goto_if_false @RIOT1_3651
+41@ += 1
+
+:RIOT1_3651
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearPrints
+Text.ClearThisPrint(44@(41@,15s))
+set_lvar_int_to_lvar_int 94@ = 40@
+set_lvar_int_to_lvar_int 95@ = 41@
+40@ = 11
+41@ = Math.RandomIntInRange(0, 4)
+set_lvar_int_to_lvar_int 43@ = 41@
+43@ += 1
+gosub @RIOT1_4358
+
+:RIOT1_3724
+if 
+  40@ == 11
+goto_if_false @RIOT1_4049
+if 
+  not Char.IsInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_3997
+if 
+  is_int_lvar_greater_than_int_lvar 89@ > 41@
+goto_if_false @RIOT1_3974
+gosub @RIOT1_5574
+gosub @RIOT1_5681
+if 
+  36@ == 0
+goto_if_false @RIOT1_3878
+if or
+  not Char.IsDead($big_smoke)
+  not Char.IsDead($sweet)
+goto_if_false @RIOT1_3847
+gosub @RIOT1_5835
+goto @RIOT1_3878
+
+:RIOT1_3847
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(44@(41@,15s))
+90@ = 0
+91@ = 0
+
+:RIOT1_3878
+if 
+  36@ == 1
+goto_if_false @RIOT1_3967
+if or
+  not Char.IsDead($big_smoke)
+  not Char.IsDead($sweet)
+  not Char.IsDead($mc_strap)
+goto_if_false @RIOT1_3936
+gosub @RIOT1_5835
+goto @RIOT1_3967
+
+:RIOT1_3936
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(44@(41@,15s))
+90@ = 0
+91@ = 0
+
+:RIOT1_3967
+goto @RIOT1_3997
+
+:RIOT1_3974
+Text.PrintNow('R1_03', 11000, 1)
+40@ = 12
+
+:RIOT1_3997
+if 
+  Char.IsSittingInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_4049
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(44@(41@,15s))
+40@ = 13
+41@ = 0
+Text.ClearPrints
+
+:RIOT1_4049
+if 
+  40@ == 12
+goto_if_false @RIOT1_4102
+if 
+  Char.IsSittingInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_4102
+40@ = 13
+41@ = 0
+Text.ClearPrints
+
+:RIOT1_4102
+if 
+  40@ == 13
+goto_if_false @RIOT1_4277
+if 
+  Char.IsSittingInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_4203
+TIMERB = 0
+set_lvar_int_to_lvar_int 40@ = 94@
+set_lvar_int_to_lvar_int 41@ = 95@
+gosub @RIOT1_4358
+if 
+  94@ == 0
+goto_if_false @RIOT1_4203
+Text.PrintNow('R1_01', 7000, 1)
+
+:RIOT1_4203
+if 
+  not Char.IsInCar($scplayer, $r1_sweets_car)
+goto_if_false @RIOT1_4277
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(44@(41@,15s))
+40@ = 11
+41@ = Math.RandomIntInRange(0, 4)
+set_lvar_int_to_lvar_int 43@ = 41@
+43@ += 1
+gosub @RIOT1_4358
+
+:RIOT1_4277
+if or
+  40@ == 1
+  40@ == 7
+goto_if_false @RIOT1_4356
+if 
+  is_int_lvar_greater_than_int_lvar 89@ > 41@
+goto_if_false @RIOT1_4349
+gosub @RIOT1_5574
+gosub @RIOT1_5681
+gosub @RIOT1_5835
+goto @RIOT1_4356
+
+:RIOT1_4349
+40@ = 0
+
+:RIOT1_4356
+return 
+
+:RIOT1_4358
+if 
+  40@ == 1
+goto_if_false @RIOT1_4431
+set_lvar_text_label 44@s = 'ROT1_AA'
+set_lvar_text_label 46@s = 'ROT1_AB'
+set_lvar_int_to_constant 74@ = 32800
+set_lvar_int_to_constant 75@ = 32801
+89@ = 2
+
+:RIOT1_4431
+if 
+  40@ == 2
+goto_if_false @RIOT1_4576
+set_lvar_text_label 44@s = 'ROT1_BA'
+set_lvar_text_label 46@s = 'ROT1_BB'
+set_lvar_text_label 48@s = 'ROT1_BC'
+set_lvar_text_label 50@s = 'ROT1_BD'
+set_lvar_text_label 52@s = 'ROT1_BE'
+set_lvar_int_to_constant 74@ = 32802
+set_lvar_int_to_constant 75@ = 32803
+set_lvar_int_to_constant 76@ = 32804
+set_lvar_int_to_constant 77@ = 32805
+set_lvar_int_to_constant 78@ = 32806
+89@ = 5
+
+:RIOT1_4576
+if 
+  40@ == 3
+goto_if_false @RIOT1_4913
+set_lvar_text_label 44@s = 'ROT1_EA'
+set_lvar_text_label 46@s = 'ROT1_EB'
+set_lvar_text_label 48@s = 'ROT1_EC'
+set_lvar_text_label 50@s = 'ROT1_ED'
+set_lvar_text_label 52@s = 'ROT1_EE'
+set_lvar_text_label 54@s = 'ROT1_EF'
+set_lvar_text_label 56@s = 'ROT1_EG'
+set_lvar_text_label 58@s = 'ROT1_EH'
+set_lvar_text_label 60@s = 'ROT1_EJ'
+set_lvar_text_label 62@s = 'ROT1_EK'
+set_lvar_text_label 64@s = 'ROT1_EL'
+set_lvar_text_label 66@s = 'ROT1_EM'
+set_lvar_text_label 68@s = 'ROT1_EN'
+set_lvar_int_to_constant 74@ = 32810
+set_lvar_int_to_constant 75@ = 32811
+set_lvar_int_to_constant 76@ = 32812
+set_lvar_int_to_constant 77@ = 32813
+set_lvar_int_to_constant 78@ = 32814
+set_lvar_int_to_constant 79@ = 32815
+set_lvar_int_to_constant 80@ = 32816
+set_lvar_int_to_constant 81@ = 32817
+set_lvar_int_to_constant 82@ = 32818
+set_lvar_int_to_constant 83@ = 32819
+set_lvar_int_to_constant 84@ = 32820
+set_lvar_int_to_constant 85@ = 32821
+set_lvar_int_to_constant 86@ = 32822
+89@ = 13
+
+:RIOT1_4913
+if 
+  40@ == 4
+goto_if_false @RIOT1_5010
+set_lvar_text_label 44@s = 'ROT1_DA'
+set_lvar_text_label 46@s = 'ROT1_DB'
+set_lvar_text_label 48@s = 'ROT1_DC'
+set_lvar_int_to_constant 74@ = 32807
+set_lvar_int_to_constant 75@ = 32808
+set_lvar_int_to_constant 76@ = 32809
+89@ = 3
+
+:RIOT1_5010
+if 
+  40@ == 5
+goto_if_false @RIOT1_5203
+set_lvar_text_label 44@s = 'ROT1_FA'
+set_lvar_text_label 46@s = 'ROT1_FB'
+set_lvar_text_label 48@s = 'ROT1_FC'
+set_lvar_text_label 50@s = 'ROT1_FD'
+set_lvar_text_label 52@s = 'ROT1_FE'
+set_lvar_text_label 54@s = 'ROT1_FF'
+set_lvar_text_label 56@s = 'ROT1_FG'
+set_lvar_int_to_constant 74@ = 32823
+set_lvar_int_to_constant 75@ = 32824
+set_lvar_int_to_constant 76@ = 32825
+set_lvar_int_to_constant 77@ = 32826
+set_lvar_int_to_constant 78@ = 32827
+set_lvar_int_to_constant 79@ = 32828
+set_lvar_int_to_constant 80@ = 32829
+89@ = 7
+
+:RIOT1_5203
+if 
+  40@ == 6
+goto_if_false @RIOT1_5300
+set_lvar_text_label 44@s = 'ROT1_GL'
+set_lvar_text_label 46@s = 'ROT1_GA'
+set_lvar_text_label 48@s = 'ROT1_FH'
+set_lvar_int_to_constant 74@ = 32840
+set_lvar_int_to_constant 75@ = 32831
+set_lvar_int_to_constant 76@ = 32830
+89@ = 3
+
+:RIOT1_5300
+if 
+  40@ == 7
+goto_if_false @RIOT1_5421
+set_lvar_text_label 44@s = 'ROT1_HC'
+set_lvar_text_label 46@s = 'ROT1_HD'
+set_lvar_text_label 48@s = 'ROT1_HE'
+set_lvar_text_label 50@s = 'ROT1_HF'
+set_lvar_int_to_constant 74@ = 32844
+set_lvar_int_to_constant 75@ = 32845
+set_lvar_int_to_constant 76@ = 32846
+set_lvar_int_to_constant 77@ = 32847
+89@ = 4
+
+:RIOT1_5421
+if 
+  40@ == 11
+goto_if_false @RIOT1_5543
+set_lvar_text_label 44@s = 'SWE1_BG'
+set_lvar_text_label 46@s = 'SWE1_BK'
+set_lvar_text_label 48@s = 'SWE1_BL'
+set_lvar_text_label 50@s = 'SWE1_BM'
+set_lvar_int_to_constant 74@ = 37429
+set_lvar_int_to_constant 75@ = 37432
+set_lvar_int_to_constant 76@ = 37433
+set_lvar_int_to_constant 77@ = 37434
+set_lvar_int_to_lvar_int 89@ = 43@
+
+:RIOT1_5543
+set_lvar_int_to_lvar_int 92@ = 41@
+90@ = 0
+91@ = 0
+93@ = 1
+return 
+
+:RIOT1_5574
+if 
+  is_int_lvar_greater_than_int_lvar 89@ > 92@
+goto_if_false @RIOT1_5679
+if 
+  90@ == 0
+goto_if_false @RIOT1_5636
+Audio.LoadMissionAudio(74@(92@,15i), 1)
+92@ += 1
+90@ = 1
+
+:RIOT1_5636
+if 
+  91@ == 0
+goto_if_false @RIOT1_5679
+Audio.LoadMissionAudio(74@(92@,15i), 2)
+92@ += 1
+91@ = 1
+
+:RIOT1_5679
+return 
+
+:RIOT1_5681
+if 
+  93@ == 1
+goto_if_false @RIOT1_5757
+if 
+  90@ == 1
+goto_if_false @RIOT1_5757
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @RIOT1_5757
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(44@(41@,15s), 4500, 1)
+90@ = 2
+
+:RIOT1_5757
+if 
+  93@ == 2
+goto_if_false @RIOT1_5833
+if 
+  91@ == 1
+goto_if_false @RIOT1_5833
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @RIOT1_5833
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow(44@(41@,15s), 4500, 1)
+91@ = 2
+
+:RIOT1_5833
+return 
+
+:RIOT1_5835
+if 
+  90@ == 2
+goto_if_false @RIOT1_5898
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @RIOT1_5898
+Text.ClearThisPrint(44@(41@,15s))
+41@ += 1
+93@ = 2
+90@ = 0
+
+:RIOT1_5898
+if 
+  91@ == 2
+goto_if_false @RIOT1_5961
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @RIOT1_5961
+Text.ClearThisPrint(44@(41@,15s))
+41@ += 1
+93@ = 1
+91@ = 0
+
+:RIOT1_5961
+return 
+

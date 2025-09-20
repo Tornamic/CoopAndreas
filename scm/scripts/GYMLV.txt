@@ -1,0 +1,946 @@
+//-------------Mission 116---------------
+// Originally: Las Venturas Gym Fight School
+
+:GYMLV
+script_name 'GYMLV'
+gosub @GYMLV_57
+Camera.SetFadingColor(0, 0, 0)
+if 
+  has_deatharrest_been_executed 
+goto_if_false @GYMLV_46
+gosub @GYMLV_5200
+
+:GYMLV_46
+gosub @GYMLV_5240
+terminate_this_script 
+Stat.RegisterMissionGiven
+
+:GYMLV_57
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_80
+Char.ListenToPlayerGroupCommands($scplayer, False)
+
+:GYMLV_80
+$gym_is_running = 1
+$onmission = 1
+Stat.IncrementInt(StatId.TotalProgress, 198)
+Text.LoadMissionText('GYM')
+Streaming.RequestModel(80)
+Streaming.RequestModel(81)
+Streaming.RequestModel(19)
+Streaming.RequestAnimation("RIOT")
+Streaming.RequestAnimation("FIGHT_D")
+Streaming.RequestAnimation("GYMNASIUM")
+Streaming.RequestAnimation("INT_SHOP")
+Streaming.LoadAllModelsNow
+
+:GYMLV_170
+if or
+  not Streaming.HasAnimationLoaded("GYMNASIUM")
+  not Streaming.HasModelLoaded(80)
+  not Streaming.HasModelLoaded(81)
+goto_if_false @GYMLV_213
+wait 0
+goto @GYMLV_170
+
+:GYMLV_213
+if or
+  not Streaming.HasModelLoaded(19)
+  not Streaming.HasAnimationLoaded("RIOT")
+  not Streaming.HasAnimationLoaded("FIGHT_D")
+  not Streaming.HasAnimationLoaded("INT_SHOP")
+goto_if_false @GYMLV_270
+wait 0
+goto @GYMLV_213
+
+:GYMLV_270
+41@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+51@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Player1)
+63@ = Sequence.Open()
+Task.PlayAnim(-1, "RIOT_SHOUT", "RIOT", 4.0, False, False, False, False, -1)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.Pause(-1, 1000)
+Sequence.SetToRepeat(63@, True)
+Sequence.Close(63@)
+64@ = Sequence.Open()
+Task.Pause(-1, 500)
+Task.PlayAnim(-1, "RIOT_SHOUT", "RIOT", 4.0, False, False, False, False, -1)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.SetToRepeat(64@, True)
+Sequence.Close(64@)
+65@ = Sequence.Open()
+Task.Pause(-1, 750)
+Task.PlayAnim(-1, "RIOT_SHOUT", "RIOT", 4.0, False, False, False, False, -1)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.SetToRepeat(65@, True)
+Sequence.Close(65@)
+52@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 773.8429, -61.5409, 999.7184, 4, -1)
+Task.AchieveHeading(-1, 93.0279)
+Task.PlayAnim(-1, "GYMSHADOWBOX", "GYMNASIUM", 4.0, True, False, False, False, -1)
+Sequence.Close(52@)
+53@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 771.2518, -69.3033, 999.6562, 4, -1)
+Task.AchieveHeading(-1, 85.5162)
+Sequence.Close(53@)
+54@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 762.3508, -78.2144, 999.6562, 4, -1)
+Task.AchieveHeading(-1, 359.2498)
+Task.PlayAnim(-1, "SHOP_PAY", "INT_SHOP", 4.0, True, False, False, False, -1)
+Sequence.Close(54@)
+48@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 762.3508, -78.2144, 999.6562, 4, -1)
+Task.AchieveHeading(-1, 359.2498)
+Task.PlayAnim(-1, "SHOP_PAY", "INT_SHOP", 4.0, True, False, False, False, -1)
+Sequence.SetToRepeat(48@, True)
+Sequence.Close(48@)
+34@ = Char.Create(4, 81, 762.3508, -78.2144, 999.6562)
+Char.SetHeading(34@, 359.2498)
+Char.SetDecisionMaker(34@, 51@)
+Char.PerformSequence(34@, 48@)
+Char.GiveMeleeAttack(34@, FightStyle.KickBoxing, 6)
+36@ = Char.Create(4, 81, 766.2026, -69.2071, 1000.569)
+Char.SetHeading(36@, 330.7023)
+Char.SetDecisionMaker(36@, 41@)
+37@ = Char.Create(4, 80, 767.1087, -67.9132, 1000.569)
+Char.SetHeading(37@, 129.3961)
+Char.SetDecisionMaker(37@, 41@)
+42@ = Sequence.Open()
+Task.Pause(-1, 1000)
+Task.PlayAnim(-1, "GYMSHADOWBOX", "GYMNASIUM", 4.0, True, False, False, False, -1)
+Sequence.Close(42@)
+43@ = Sequence.Open()
+Task.PlayAnim(-1, "GYMSHADOWBOX", "GYMNASIUM", 4.0, True, False, False, False, -1)
+Sequence.Close(43@)
+Char.PerformSequence(36@, 42@)
+Char.PerformSequence(37@, 43@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Audio.LoadMissionAudio(1820, 4)
+
+:GYMLV_1078
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @GYMLV_1104
+wait 0
+goto @GYMLV_1078
+
+:GYMLV_1104
+62@ = 2
+if or
+  is_int_var_greater_than_int_var $gym_day > $gym_final_day
+  is_int_var_greater_than_int_var $gym_month > $gym_final_month
+goto_if_false @GYMLV_1148
+$gym_day_fitness = 0.0
+
+:GYMLV_1148
+wait 0
+gosub @GYMLV_5494
+if 
+  57@ == 0
+goto_if_false @GYMLV_1279
+if 
+  Char.IsDead(36@)
+goto_if_false @GYMLV_1228
+if 
+  not Char.IsDead(37@)
+goto_if_false @GYMLV_1228
+Char.ClearTasksImmediately(37@)
+Task.Duck(37@, -2)
+57@ = 1
+
+:GYMLV_1228
+if 
+  Char.IsDead(37@)
+goto_if_false @GYMLV_1279
+if 
+  not Char.IsDead(36@)
+goto_if_false @GYMLV_1279
+Char.ClearTasksImmediately(36@)
+Task.Duck(36@, -2)
+57@ = 1
+
+:GYMLV_1279
+$main_visible_area = Char.GetAreaVisible($scplayer)
+if 
+  $main_visible_area == 0
+goto_if_false @GYMLV_1312
+goto @GYMLV_5200
+
+:GYMLV_1312
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 763.3589, -76.7606, 999.6562, 2.5, 2.5, 4.0)
+goto_if_false @GYMLV_1367
+45@ = 0
+
+:GYMLV_1367
+if 
+  not Char.IsDead(34@)
+goto_if_false @GYMLV_5193
+if and
+  45@ == 0
+  Char.LocateAnyMeans3D(34@, 0, 762.3508, -78.2144, 999.6562, 1.0, 1.0, 1.2)
+goto_if_false @GYMLV_5193
+if 
+  Char.LocateStoppedAnyMeans3D($scplayer, 763.3589, -76.7606, 999.6562, 0.6, 0.6, 1.0, True)
+goto_if_false @GYMLV_1486
+
+:GYMLV_1486
+if and
+  Char.LocateStoppedAnyMeans3D($scplayer, 763.3589, -76.7606, 999.6562, 1.2, 1.2, 1.2, False)
+  not Char.IsDead(34@)
+goto_if_false @GYMLV_5193
+if and
+  not Char.IsDead(34@)
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_1593
+Player.SetControl($player1, False)
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasks(34@)
+Task.TurnCharToFaceChar(34@, $scplayer)
+Task.TurnCharToFaceChar($scplayer, 34@)
+
+:GYMLV_1593
+if 
+  $8157 == 0
+goto_if_false @GYMLV_1670
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(43400, 1)
+
+:GYMLV_1624
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLV_1650
+wait 0
+goto @GYMLV_1624
+
+:GYMLV_1650
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('WBOX_1', 3000, 1)
+
+:GYMLV_1670
+if 
+  $8157 == 1
+goto_if_false @GYMLV_1747
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(43403, 1)
+
+:GYMLV_1701
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLV_1727
+wait 0
+goto @GYMLV_1701
+
+:GYMLV_1727
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('WBOX_4', 3000, 1)
+
+:GYMLV_1747
+Text.PrintHelpForever('GYM1_73')
+
+:GYMLV_1758
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_2062
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @GYMLV_1949
+58@ = Stat.GetFloat(23)
+if 
+  58@ > 349.0
+goto_if_false @GYMLV_1846
+44@ = 1
+Text.ClearHelp
+goto @GYMLV_2064
+goto @GYMLV_1949
+
+:GYMLV_1846
+44@ = 0
+45@ = 1
+Text.ClearHelp
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(43402, 1)
+
+:GYMLV_1875
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLV_1901
+wait 0
+goto @GYMLV_1875
+
+:GYMLV_1901
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('WBOX_3', 3000, 1)
+Player.SetControl($player1, True)
+TIMERA = 0
+55@ = 1
+goto @GYMLV_1148
+
+:GYMLV_1949
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @GYMLV_2055
+44@ = 0
+45@ = 1
+Text.ClearHelp
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(43401, 1)
+
+:GYMLV_1995
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLV_2021
+wait 0
+goto @GYMLV_1995
+
+:GYMLV_2021
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('WBOX_2', 3000, 1)
+Player.SetControl($player1, True)
+goto @GYMLV_1148
+
+:GYMLV_2055
+goto @GYMLV_1758
+
+:GYMLV_2062
+Text.ClearHelp
+
+:GYMLV_2064
+Text.ClearHelp
+Text.ClearPrints
+Pad.SetPlayerCycleWeaponButton($player1, False)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+if 
+  44@ == 1
+goto_if_false @GYMLV_5193
+gosub @GYMLV_5385
+Char.Delete(36@)
+Char.Delete(37@)
+Char.Delete(34@)
+36@ = Char.Create(4, 80, 767.9493, -64.6707, 999.6562)
+Char.SetHeading(36@, 166.9465)
+Char.PerformSequence(36@, 63@)
+37@ = Char.Create(4, 81, 770.7913, -67.3238, 999.6562)
+Char.SetHeading(37@, 90.0184)
+Char.PerformSequence(37@, 64@)
+38@ = Char.Create(4, 80, 770.4339, -69.5049, 999.6562)
+Char.SetHeading(38@, 91.3393)
+Char.PerformSequence(38@, 65@)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_2392
+Char.ClearTasksImmediately($scplayer)
+34@ = Char.Create(24, 81, 768.2548, -67.2063, 1000.569)
+Char.SetHeading(34@, 145.0)
+Char.SetHealth(34@, 1000)
+Char.SetMaxHealth(34@, 1000)
+Char.SetCoordinatesDontWarpGang($scplayer, 764.8033, -70.2273, 1000.569)
+Char.SetHeading($scplayer, 310.0)
+Char.SetDecisionMaker(34@, 51@)
+Task.KillCharOnFoot(34@, $scplayer)
+Char.GiveMeleeAttack(34@, FightStyle.KickBoxing, 6)
+Char.SetShootRate(34@, 100)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+gosub @GYMLV_5441
+
+:GYMLV_2392
+Player.SetControl($player1, True)
+if 
+  $8157 == 0
+goto_if_false @GYMLV_2428
+Text.PrintHelpForever('GYM1101')
+
+:GYMLV_2428
+if 
+  $8157 == 1
+goto_if_false @GYMLV_2457
+Text.PrintHelpForever('GYM1_84')
+
+:GYMLV_2457
+gosub @GYMLV_5441
+$x, $y, $z = Char.GetCoordinates($scplayer)
+if and
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_2506
+Audio.ReportMissionAudioEventAtChar($scplayer, 1115)
+
+:GYMLV_2506
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_3164
+wait 0
+if 
+  $8157 == 1
+goto_if_false @GYMLV_2810
+if 
+  56@ == 0
+goto_if_false @GYMLV_2589
+TIMERA = 0
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_94')
+56@ = 1
+
+:GYMLV_2589
+if 
+  not Game.IsGerman
+goto_if_false @GYMLV_2715
+if and
+  TIMERA > 6000
+  56@ == 1
+goto_if_false @GYMLV_2655
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_95')
+TIMERA = 0
+56@ = 2
+
+:GYMLV_2655
+if and
+  TIMERA > 6000
+  56@ == 2
+goto_if_false @GYMLV_2708
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_96')
+TIMERA = 0
+56@ = 3
+
+:GYMLV_2708
+goto @GYMLV_2768
+
+:GYMLV_2715
+if and
+  TIMERA > 6000
+  56@ == 1
+goto_if_false @GYMLV_2768
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_96')
+TIMERA = 0
+56@ = 3
+
+:GYMLV_2768
+if and
+  TIMERA > 6000
+  56@ == 3
+goto_if_false @GYMLV_2810
+Text.ClearHelp
+TIMERA = 0
+56@ = 0
+
+:GYMLV_2810
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_2840
+$x, $y, $z = Char.GetCoordinates($scplayer)
+
+:GYMLV_2840
+if 
+  Char.IsDead(34@)
+goto_if_false @GYMLV_2863
+goto @GYMLV_3164
+
+:GYMLV_2863
+if 
+  1000.7 > $z
+goto_if_false @GYMLV_3157
+gosub @GYMLV_5385
+Char.Delete(34@)
+Char.Delete(36@)
+Char.Delete(37@)
+Char.Delete(38@)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_2962
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinatesDontWarpGang($scplayer, 762.854, -69.5929, 999.6562)
+Char.SetHeading($scplayer, 103.4243)
+
+:GYMLV_2962
+34@ = Char.Create(4, 81, 762.3508, -78.2144, 999.6562)
+Char.SetHeading(34@, 359.2498)
+Char.SetDecisionMaker(34@, 41@)
+Char.PerformSequence(34@, 48@)
+Char.GiveMeleeAttack(34@, FightStyle.KickBoxing, 6)
+36@ = Char.Create(4, 81, 766.2026, -69.2071, 1000.569)
+Char.SetHeading(36@, 330.7023)
+Char.PerformSequence(36@, 42@)
+37@ = Char.Create(4, 80, 767.1087, -67.9132, 1000.569)
+Char.SetHeading(37@, 129.3961)
+Char.PerformSequence(37@, 43@)
+Text.ClearPrints
+Text.ClearHelp
+gosub @GYMLV_5441
+if 
+  $8157 == 0
+goto_if_false @GYMLV_3150
+Text.PrintNow('GYM1_92', 5000, 1)
+
+:GYMLV_3150
+goto @GYMLV_1148
+
+:GYMLV_3157
+goto @GYMLV_2506
+
+:GYMLV_3164
+Text.ClearHelp
+if 
+  $8157 == 1
+goto_if_false @GYMLV_3191
+goto @GYMLV_4847
+
+:GYMLV_3191
+gosub @GYMLV_5385
+gosub @GYMLV_5341
+World.ClearArea(1, 768.2548, -67.2063, 1000.569, 10.0)
+Char.Delete(34@)
+Char.Delete(36@)
+Char.Delete(37@)
+Char.Delete(38@)
+34@ = Char.Create(4, 81, 768.2548, -67.2063, 1000.569)
+Char.SetDecisionMaker(34@, 41@)
+Char.GiveMeleeAttack(34@, FightStyle.KickBoxing, 6)
+if and
+  not Char.IsDead(34@)
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_3381
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasks(34@)
+Char.SetCoordinatesDontWarpGang($scplayer, 764.8033, -70.2273, 1000.569)
+Char.SetCoordinatesDontWarpGang(34@, 768.2548, -67.2063, 1000.569)
+Char.SetHeading($scplayer, 310.0)
+Char.SetHeading(34@, 145.0)
+
+:GYMLV_3381
+Camera.SetFixedPosition(765.1049, -74.2975, 1003.591, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(765.3495, -73.4547, 1003.112, SwitchType.JumpCut)
+gosub @GYMLV_5441
+Text.PrintNow('WBOX_5', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(43404, 1)
+
+:GYMLV_3468
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLV_3511
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_3504
+
+:GYMLV_3504
+goto @GYMLV_3468
+
+:GYMLV_3511
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+wait 1000
+TIMERA = 0
+
+:GYMLV_3527
+if 
+  2000 > TIMERA
+goto_if_false @GYMLV_3574
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_3567
+
+:GYMLV_3567
+goto @GYMLV_3527
+
+:GYMLV_3574
+Camera.SetFixedPosition(767.7358, -70.2958, 1001.493, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(767.9329, -69.3157, 1001.47, SwitchType.JumpCut)
+Text.PrintNow('GYM1_97', 2000, 1)
+TIMERA = 0
+
+:GYMLV_3648
+if 
+  2000 > TIMERA
+goto_if_false @GYMLV_3695
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_3688
+
+:GYMLV_3688
+goto @GYMLV_3648
+
+:GYMLV_3695
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(43405, 1)
+
+:GYMLV_3708
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLV_3751
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_3744
+
+:GYMLV_3744
+goto @GYMLV_3708
+
+:GYMLV_3751
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('GYM1_94', 4000, 1)
+TIMERA = 0
+
+:GYMLV_3778
+if 
+  4000 > TIMERA
+goto_if_false @GYMLV_3825
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_3818
+
+:GYMLV_3818
+goto @GYMLV_3778
+
+:GYMLV_3825
+if 
+  not Char.IsDead(34@)
+goto_if_false @GYMLV_3880
+Task.PlayAnim(34@, "FIGHTD_M", "FIGHT_D", 4.0, False, True, True, False, -1)
+
+:GYMLV_3880
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_3928
+Task.PlayAnim($scplayer, "FUCKU", "PED", 4.0, False, True, True, False, -1)
+
+:GYMLV_3928
+TIMERA = 0
+
+:GYMLV_3935
+if 
+  3000 > TIMERA
+goto_if_false @GYMLV_3982
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_3975
+
+:GYMLV_3975
+goto @GYMLV_3935
+
+:GYMLV_3982
+if 
+  not Game.IsGerman
+goto_if_false @GYMLV_4403
+Camera.SetFixedPosition(765.0073, -67.3258, 1001.465, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(766.0051, -67.2777, 1001.419, SwitchType.JumpCut)
+Text.PrintNow('GYM1_98', 2000, 1)
+TIMERA = 0
+
+:GYMLV_4069
+if 
+  2000 > TIMERA
+goto_if_false @GYMLV_4116
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_4109
+
+:GYMLV_4109
+goto @GYMLV_4069
+
+:GYMLV_4116
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(43406, 1)
+
+:GYMLV_4129
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLV_4172
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_4165
+
+:GYMLV_4165
+goto @GYMLV_4129
+
+:GYMLV_4172
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('GYM1_95', 4000, 1)
+TIMERA = 0
+
+:GYMLV_4199
+if 
+  4000 > TIMERA
+goto_if_false @GYMLV_4246
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_4239
+
+:GYMLV_4239
+goto @GYMLV_4199
+
+:GYMLV_4246
+if 
+  not Char.IsDead(34@)
+goto_if_false @GYMLV_4301
+Task.PlayAnim(34@, "FIGHTD_G", "FIGHT_D", 4.0, False, True, True, False, -1)
+
+:GYMLV_4301
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_4349
+Task.PlayAnim($scplayer, "FUCKU", "PED", 4.0, False, True, True, False, -1)
+
+:GYMLV_4349
+TIMERA = 0
+
+:GYMLV_4356
+if 
+  3000 > TIMERA
+goto_if_false @GYMLV_4403
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_4396
+
+:GYMLV_4396
+goto @GYMLV_4356
+
+:GYMLV_4403
+Camera.SetFixedPosition(770.4639, -65.7272, 1002.231, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(769.6946, -66.3243, 1002.003, SwitchType.JumpCut)
+Text.PrintNow('GYM1_99', 2000, 1)
+if and
+  not Char.IsDead(34@)
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_4499
+Task.TurnCharToFaceChar(34@, $scplayer)
+
+:GYMLV_4499
+TIMERA = 0
+
+:GYMLV_4506
+if 
+  2000 > TIMERA
+goto_if_false @GYMLV_4553
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_4546
+
+:GYMLV_4546
+goto @GYMLV_4506
+
+:GYMLV_4553
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(43407, 1)
+
+:GYMLV_4566
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLV_4609
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_4602
+
+:GYMLV_4602
+goto @GYMLV_4566
+
+:GYMLV_4609
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('GYM1_96', 4000, 1)
+TIMERA = 0
+
+:GYMLV_4636
+if 
+  4000 > TIMERA
+goto_if_false @GYMLV_4683
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_4676
+
+:GYMLV_4676
+goto @GYMLV_4636
+
+:GYMLV_4683
+if 
+  not Char.IsDead(34@)
+goto_if_false @GYMLV_4745
+Char.FreezePosition(34@, True)
+Task.PlayAnim(34@, "FIGHTD_3", "FIGHT_D", 4.0, False, True, True, False, -1)
+
+:GYMLV_4745
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_4793
+Task.PlayAnim($scplayer, "FUCKU", "PED", 4.0, False, False, False, True, -1)
+
+:GYMLV_4793
+TIMERA = 0
+
+:GYMLV_4800
+if 
+  2000 > TIMERA
+goto_if_false @GYMLV_4847
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_4840
+
+:GYMLV_4840
+goto @GYMLV_4800
+
+:GYMLV_4847
+gosub @GYMLV_5385
+if 
+  $gym_lv_defeated == 0
+goto_if_false @GYMLV_4883
+Stat.PlayerMadeProgress(1)
+$gym_lv_defeated = 1
+
+:GYMLV_4883
+Char.Delete(34@)
+Char.Delete(36@)
+Char.Delete(37@)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_4949
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinatesDontWarpGang($scplayer, 762.854, -69.5929, 999.6562)
+Char.SetHeading($scplayer, 103.4243)
+
+:GYMLV_4949
+34@ = Char.Create(4, 81, 762.3508, -78.2144, 999.6562)
+Char.SetHeading(34@, 359.2498)
+Char.SetDecisionMaker(34@, 51@)
+Char.PerformSequence(34@, 48@)
+Char.GiveMeleeAttack(34@, FightStyle.KickBoxing, 6)
+36@ = Char.Create(4, 81, 766.2026, -69.2071, 1000.569)
+Char.SetHeading(36@, 330.7023)
+Char.PerformSequence(36@, 42@)
+Char.SetDecisionMaker(36@, 41@)
+37@ = Char.Create(4, 80, 767.1087, -67.9132, 1000.569)
+Char.SetHeading(37@, 129.3961)
+Char.PerformSequence(37@, 43@)
+Char.SetDecisionMaker(37@, 41@)
+gosub @GYMLV_5361
+gosub @GYMLV_5441
+Char.GiveMeleeAttack($scplayer, FightStyle.KickBoxing, 6)
+if 
+  $8157 == 0
+goto_if_false @GYMLV_5165
+Text.PrintNow('GYM1_93', 3000, 1)
+
+:GYMLV_5165
+$player_been_taught_move = 0
+$8156 = 0
+$8157 = 1
+Pad.SetPlayerCycleWeaponButton($player1, True)
+
+:GYMLV_5193
+goto @GYMLV_1148
+
+:GYMLV_5200
+return 
+Text.PrintWithNumberBig('M_PASS', 30000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 30000)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+return 
+
+:GYMLV_5240
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLV_5263
+Char.ListenToPlayerGroupCommands($scplayer, True)
+
+:GYMLV_5263
+Streaming.MarkModelAsNoLongerNeeded(80)
+Streaming.MarkModelAsNoLongerNeeded(81)
+Streaming.MarkModelAsNoLongerNeeded(19)
+Streaming.RemoveAnimation("GYMNASIUM")
+Streaming.RemoveAnimation("RIOT")
+Streaming.RemoveAnimation("FIGHT_D")
+Streaming.RemoveAnimation("INT_SHOP")
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+$gym_is_running = 0
+$onmission = 0
+Mission.Finish
+return 
+
+:GYMLV_5341
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+return 
+
+:GYMLV_5361
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+Game.SetEveryoneIgnorePlayer($player1, False)
+return 
+
+:GYMLV_5385
+Camera.DoFade(0, 500)
+
+:GYMLV_5392
+if 
+  Camera.GetFadingStatus
+goto_if_false @GYMLV_5439
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLV_5432
+Camera.DoFade(0, Fade.In)
+
+:GYMLV_5432
+goto @GYMLV_5392
+
+:GYMLV_5439
+return 
+
+:GYMLV_5441
+Camera.DoFade(1, 500)
+
+:GYMLV_5448
+if 
+  Camera.GetFadingStatus
+goto_if_false @GYMLV_5472
+wait 0
+goto @GYMLV_5448
+
+:GYMLV_5472
+return 
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(61@, 1)
+62@ = 0
+return 
+
+:GYMLV_5494
+if and
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+  62@ == 0
+goto_if_false @GYMLV_5537
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(59@s, 10000, 1)
+62@ = 1
+
+:GYMLV_5537
+if and
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+  62@ == 1
+goto_if_false @GYMLV_5575
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearThisPrint(59@s)
+62@ = 2
+
+:GYMLV_5575
+return 
+

@@ -1,0 +1,7917 @@
+//-------------Mission 88---------------
+// Originally: Don Peyote
+
+:CASINO4
+script_name 'CASINO4'
+gosub @CASINO4_86
+if 
+  has_deatharrest_been_executed 
+goto_if_false @CASINO4_38
+gosub @CASINO4_45862
+
+:CASINO4_38
+gosub @CASINO4_45947
+terminate_this_script 
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 2000)
+
+:CASINO4_62
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_86
+wait 0
+goto @CASINO4_62
+
+:CASINO4_86
+Stat.RegisterMissionGiven
+$onmission = 1
+Weather.Force(WeatherType.SunnyVegas)
+Text.LoadMissionText('CASINO4')
+Cutscene.Load('CAS_4A')
+
+:CASINO4_121
+if 
+  not Cutscene.HasLoaded
+goto_if_false @CASINO4_145
+wait 0
+goto @CASINO4_121
+
+:CASINO4_145
+World.ClearArea(1, 2027.359, 1007.738, 9.8127, 10.0)
+Char.SetHeading($scplayer, 265.5486)
+294@ = Clock.GetGameTimer()
+295@ = 0
+if 
+  295@ == 99
+goto_if_false @CASINO4_316
+289@ = Car.Create(291@, 2044.621, 1110.198, 9.6719)
+290@ = Char.CreateRandomAsDriver(289@)
+73@ = Char.CreateRandomAsDriver(289@)
+75@ = Char.CreateRandomAsDriver(289@)
+74@ = Char.CreateRandomAsDriver(289@)
+76@ = Char.CreateRandomAsDriver(289@)
+136@ = Particle.Create("PUKE", 95@, 96@, 97@, 1)
+137@ = Particle.Create("PUKE", 95@, 96@, 97@, 1)
+
+:CASINO4_316
+Player.MakeGangDisappear
+Cutscene.Start
+Camera.DoFade(1, 1000)
+TIMERA = 0
+
+:CASINO4_334
+if 
+  not Cutscene.HasFinished
+goto_if_false @CASINO4_857
+293@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 296@ = 293@
+sub_int_lvar_from_int_lvar 296@ -= 294@
+if 
+  296@ > 15000
+goto_if_false @CASINO4_846
+if 
+  TIMERA > 2000
+goto_if_false @CASINO4_846
+switch_start 295@ total_jumps 4 default_jump 1 @CASINO4_832 jumps 0 @CASINO4_469 1 @CASINO4_574 2 @CASINO4_647 3 @CASINO4_752 -1 @CASINO4_839 -1 @CASINO4_839 -1 @CASINO4_839
+
+:CASINO4_469
+291@, 292@ = Streaming.GetRandomCarModelInMemory(True)
+if 
+  291@ <> -1
+goto_if_false @CASINO4_560
+289@ = Car.Create(291@, 2051.544, 1100.511, 9.6719)
+Car.SetToFadeIn(289@, 0)
+Car.SetHeading(289@, 183.2183)
+290@ = Char.CreateRandomAsDriver(289@)
+Car.WanderRandomly(289@)
+Char.MarkAsNoLongerNeeded(290@)
+Car.MarkAsNoLongerNeeded(289@)
+
+:CASINO4_560
+295@ += 1
+goto @CASINO4_839
+
+:CASINO4_574
+290@ = Char.CreateRandom(2034.814, 993.6725, 9.813)
+Char.SetHeading(290@, 357.2051)
+Task.FollowPathNodesToCoord(290@, 2033.856, 1051.804, 9.8203, 4, -2)
+Char.MarkAsNoLongerNeeded(290@)
+295@ += 1
+goto @CASINO4_839
+
+:CASINO4_647
+291@, 292@ = Streaming.GetRandomCarModelInMemory(True)
+if 
+  291@ <> -1
+goto_if_false @CASINO4_738
+289@ = Car.Create(291@, 2051.544, 1100.511, 9.6719)
+Car.SetToFadeIn(289@, 0)
+Car.SetHeading(289@, 183.2183)
+290@ = Char.CreateRandomAsDriver(289@)
+Car.WanderRandomly(289@)
+Char.MarkAsNoLongerNeeded(290@)
+Car.MarkAsNoLongerNeeded(289@)
+
+:CASINO4_738
+295@ += 1
+goto @CASINO4_839
+
+:CASINO4_752
+290@ = Char.CreateRandom(2033.856, 1041.804, 9.8203)
+Char.SetHeading(290@, 181.0345)
+Task.FollowPathNodesToCoord(290@, 2032.257, 986.0109, 9.813, 4, -2)
+Char.MarkAsNoLongerNeeded(290@)
+295@ = 0
+goto @CASINO4_839
+295@ = 0
+
+:CASINO4_832
+goto @CASINO4_839
+
+:CASINO4_839
+TIMERA = 0
+
+:CASINO4_846
+wait 0
+goto @CASINO4_334
+
+:CASINO4_857
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:CASINO4_870
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_894
+wait 0
+goto @CASINO4_870
+
+:CASINO4_894
+Cutscene.Clear
+Player.MakeGangReappear
+Weather.Release
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+39@ = DecisionMakerGroup.Load(0)
+Group.SetDecisionMaker($Players_Group, 39@)
+37@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+38@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+Player.SetControl($player1, False)
+Camera.DoFade(0, 1500)
+
+:CASINO4_957
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_981
+wait 0
+goto @CASINO4_957
+
+:CASINO4_981
+Char.MarkAsNoLongerNeeded(290@)
+Car.MarkAsNoLongerNeeded(289@)
+wait 0
+Streaming.LoadSpecialCharacter('MACCER', 1)
+Streaming.LoadSpecialCharacter('PAUL', 2)
+Streaming.LoadAllModelsNow
+
+:CASINO4_1023
+if or
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasSpecialCharacterLoaded(2)
+goto_if_false @CASINO4_1053
+wait 0
+goto @CASINO4_1023
+
+:CASINO4_1053
+Hud.SwitchWidescreen(False)
+44@ = 0
+45@ = 0
+46@ = 0
+47@ = 0
+48@ = 0
+49@ = 0
+50@ = 0
+51@ = 0
+52@ = 0
+53@ = 0
+55@ = 0
+54@ = 0
+56@ = 0
+57@ = 0
+58@ = 0
+59@ = 0
+60@ = 0
+61@ = 0
+62@ = 0
+98@ = 0
+63@ = 0
+64@ = 0
+65@ = 0
+91@ = 0.0
+92@ = 0.0
+93@ = 0.0
+95@ = 0.0
+96@ = 0.0
+97@ = 0.0
+99@ = 0
+100@ = 0
+
+:CASINO4_1292
+if 
+  4 > 99@
+goto_if_false @CASINO4_1335
+101@(99@,4i) = 0
+99@ += 1
+goto @CASINO4_1292
+
+:CASINO4_1335
+119@ = 0
+120@ = 0
+135@ = 0
+121@ = 0
+122@ = 0
+123@ = 0
+133@ = 0
+134@ = 0
+124@ = 0
+125@ = 0
+126@ = 0
+130@ = 0
+131@ = 0
+132@ = 99999
+94@ = 0.0
+262@ = 0
+263@ = 0
+264@ = 0
+265@ = 0
+266@ = 0
+267@ = 0
+268@ = 0
+269@ = 0
+270@ = 0
+271@ = 0
+272@ = 0
+273@ = 0
+274@ = 0
+275@ = 0
+276@ = 0
+277@ = 0
+282@ = 0
+278@ = 0
+279@ = 0
+280@ = 0
+281@ = 0
+127@ = 0
+128@ = 0
+set_var_text_label s$cas4_text[7] = 'CAS4_BA'
+set_var_text_label s$cas4_text[8] = 'CAS4_BB'
+set_var_text_label s$cas4_text[9] = 'CAS4_CA'
+set_var_text_label s$cas4_text[10] = 'CAS4_CB'
+set_var_text_label s$cas4_text[11] = 'CAS4_CC'
+set_var_text_label s$cas4_text[12] = 'CAS4_CD'
+set_var_text_label s$cas4_text[13] = 'CAS4_CE'
+set_var_text_label s$cas4_text[14] = 'CAS4_CF'
+set_var_text_label s$cas4_text[15] = 'CAS4_CG'
+set_var_text_label s$cas4_text[16] = 'CAS4_CH'
+set_var_text_label s$cas4_text[17] = 'CAS4_CJ'
+set_var_text_label s$cas4_text[18] = 'CAS4_CK'
+set_var_text_label s$cas4_text[19] = 'CAS4_CL'
+set_var_text_label s$cas4_text[20] = 'CAS4_DA'
+set_var_text_label s$cas4_text[21] = 'CAS4_DB'
+set_var_text_label s$cas4_text[22] = 'CAS4_DC'
+set_var_text_label s$cas4_text[23] = 'CAS4_DD'
+set_var_text_label s$cas4_text[24] = 'CAS4_DE'
+set_var_text_label s$cas4_text[25] = 'CAS4_EA'
+set_var_text_label s$cas4_text[26] = 'CAS4_EB'
+set_var_text_label s$cas4_text[27] = 'CAS4_EC'
+set_var_text_label s$cas4_text[28] = 'CAS4_ED'
+set_var_text_label s$cas4_text[29] = 'CAS4_EE'
+set_var_text_label s$cas4_text[30] = 'CAS4_EF'
+set_var_text_label s$cas4_text[31] = 'CAS4_EG'
+set_var_text_label s$cas4_text[32] = 'CAS4_EH'
+set_var_text_label s$cas4_text[33] = 'CAS4_FA'
+set_var_text_label s$cas4_text[34] = 'CAS4_FB'
+set_var_text_label s$cas4_text[35] = 'CAS4_FC'
+set_var_text_label s$cas4_text[36] = 'CAS4_GA'
+set_var_text_label s$cas4_text[37] = 'CAS4_GB'
+set_var_text_label s$cas4_text[38] = 'CAS4_HA'
+set_var_text_label s$cas4_text[39] = 'CAS4_HB'
+set_var_text_label s$cas4_text[40] = 'CAS4_HC'
+set_var_text_label s$cas4_text[41] = 'CAS4_HD'
+set_var_text_label s$cas4_text[42] = 'CAS4_JA'
+set_var_text_label s$cas4_text[43] = 'CAS4_JB'
+set_var_text_label s$cas4_text[44] = 'CAS4_JC'
+set_var_text_label s$cas4_text[45] = 'CAS4_JD'
+set_var_text_label s$cas4_text[46] = 'CAS4_KA'
+set_var_text_label s$cas4_text[47] = 'CAS4_KB'
+set_var_text_label s$cas4_text[48] = 'CAS4_KC'
+set_var_text_label s$cas4_text[49] = 'CAS4_KD'
+set_var_text_label s$cas4_text[50] = 'CAS4_KE'
+set_var_text_label s$cas4_text[51] = 'CAS4_KF'
+set_var_text_label s$cas4_text[52] = 'CAS4_KG'
+set_var_text_label s$cas4_text[53] = 'CAS4_KH'
+set_var_text_label s$cas4_text[54] = 'CAS4_KJ'
+set_var_text_label s$cas4_text[55] = 'CAS4_LA'
+set_var_text_label s$cas4_text[56] = 'CAS4_LB'
+set_var_text_label s$cas4_text[57] = 'CAS4_LC'
+set_var_text_label s$cas4_text[58] = 'CAS4_LD'
+set_var_text_label s$cas4_text[59] = 'CAS4_LE'
+set_var_text_label s$cas4_text[60] = 'CAS4_MA'
+set_var_text_label s$cas4_text[61] = 'CAS4_NA'
+set_var_text_label s$cas4_text[62] = 'CAS4_NB'
+set_var_text_label s$cas4_text[63] = 'CAS4_NC'
+set_var_text_label s$cas4_text[64] = 'CAS4_ND'
+set_var_text_label s$cas4_text[65] = 'CAS4_NE'
+set_var_text_label s$cas4_text[66] = 'CAS4_NF'
+set_var_text_label s$cas4_text[67] = 'CAS4_NG'
+set_var_text_label s$cas4_text[68] = 'CAS4_NH'
+set_var_text_label s$cas4_text[69] = 'CAS4_NJ'
+set_var_text_label s$cas4_text[70] = 'CAS4_OA'
+set_var_text_label s$cas4_text[71] = 'CAS4_OB'
+set_var_text_label s$cas4_text[72] = 'CAS4_OC'
+set_var_text_label s$cas4_text[73] = 'CAS4_OD'
+set_var_text_label s$cas4_text[74] = 'CAS4_OE'
+set_var_text_label s$cas4_text[75] = 'CAS4_OF'
+set_var_text_label s$cas4_text[76] = 'CAS4_OG'
+set_var_text_label s$cas4_text[77] = 'CAS4_OH'
+set_var_text_label s$cas4_text[78] = 'CAS4_OJ'
+set_var_text_label s$cas4_text[79] = 'CAS4_OK'
+set_var_text_label s$cas4_text[80] = 'CAS4_OL'
+set_var_text_label s$cas4_text[81] = 'CAS4_OM'
+set_var_text_label s$cas4_text[82] = 'CAS4_PA'
+set_var_text_label s$cas4_text[83] = 'CAS4_PB'
+set_var_text_label s$cas4_text[85] = 'CAS4_PD'
+set_var_text_label s$cas4_text[86] = 'CAS4_PE'
+set_var_text_label s$cas4_text[87] = 'CAS4_PF'
+set_var_text_label s$cas4_text[88] = 'CAS4_PG'
+set_var_text_label s$cas4_text[89] = 'CAS4_PH'
+set_var_text_label s$cas4_text[90] = 'CAS4_PJ'
+set_var_text_label s$cas4_text[91] = 'CAS4_PK'
+set_var_text_label s$cas4_text[92] = 'CAS4_QA'
+set_var_text_label s$cas4_text[93] = 'CAS4_QB'
+set_var_text_label s$cas4_text[94] = 'CAS4_RA'
+set_var_text_label s$cas4_text[95] = 'CAS4_RB'
+set_var_text_label s$cas4_text[97] = 'CAS4_RD'
+set_var_text_label s$cas4_text[98] = 'CAS4_RE'
+set_var_text_label s$cas4_text[99] = 'CAS4_SA'
+set_var_text_label s$cas4_text[100] = 'CAS4_TA'
+set_var_text_label s$cas4_text[101] = 'CAS4_TB'
+set_var_text_label s$cas4_text[102] = 'CAS4_TC'
+set_var_text_label s$cas4_text[103] = 'CAS4_FD'
+set_var_text_label s$cas4_text[104] = 'CAS4_FE'
+set_var_text_label s$cas4_text[105] = 'CAS4_FF'
+set_var_text_label s$cas4_text[106] = 'CAS4_FG'
+set_var_text_label s$cas4_text[107] = 'CAS4_FH'
+set_var_text_label s$cas4_text[108] = 'CAS4_FJ'
+set_var_text_label s$cas4_text[109] = 'CAS4_FK'
+set_var_text_label s$cas4_text[110] = 'CAS4_FL'
+set_var_text_label s$cas4_text[111] = 'MACX_AF'
+set_var_text_label s$cas4_text[112] = 'MACX_AG'
+set_var_text_label s$cas4_text[113] = 'MACX_AI'
+set_lvar_int_to_constant 145@ = 7800
+set_lvar_int_to_constant 146@ = 7801
+set_lvar_int_to_constant 147@ = 7802
+set_lvar_int_to_constant 148@ = 7803
+set_lvar_int_to_constant 149@ = 7804
+set_lvar_int_to_constant 150@ = 7805
+set_lvar_int_to_constant 151@ = 7806
+set_lvar_int_to_constant 152@ = 7807
+set_lvar_int_to_constant 153@ = 7808
+set_lvar_int_to_constant 154@ = 7809
+set_lvar_int_to_constant 155@ = 7810
+set_lvar_int_to_constant 156@ = 7811
+set_lvar_int_to_constant 157@ = 7812
+set_lvar_int_to_constant 158@ = 7813
+set_lvar_int_to_constant 159@ = 7814
+set_lvar_int_to_constant 160@ = 7815
+set_lvar_int_to_constant 161@ = 7816
+set_lvar_int_to_constant 162@ = 7817
+set_lvar_int_to_constant 163@ = 7818
+set_lvar_int_to_constant 164@ = 7819
+set_lvar_int_to_constant 165@ = 7820
+set_lvar_int_to_constant 166@ = 7821
+set_lvar_int_to_constant 167@ = 7822
+set_lvar_int_to_constant 168@ = 7823
+set_lvar_int_to_constant 169@ = 7824
+set_lvar_int_to_constant 170@ = 7825
+set_lvar_int_to_constant 171@ = 7826
+set_lvar_int_to_constant 172@ = 7827
+set_lvar_int_to_constant 173@ = 7828
+set_lvar_int_to_constant 174@ = 7837
+set_lvar_int_to_constant 175@ = 7838
+set_lvar_int_to_constant 176@ = 7839
+set_lvar_int_to_constant 177@ = 7840
+set_lvar_int_to_constant 178@ = 7841
+set_lvar_int_to_constant 179@ = 7842
+set_lvar_int_to_constant 180@ = 7843
+set_lvar_int_to_constant 181@ = 7844
+set_lvar_int_to_constant 182@ = 7845
+set_lvar_int_to_constant 183@ = 7846
+set_lvar_int_to_constant 184@ = 7847
+set_lvar_int_to_constant 185@ = 7848
+set_lvar_int_to_constant 186@ = 7849
+set_lvar_int_to_constant 187@ = 7850
+set_lvar_int_to_constant 188@ = 7851
+set_lvar_int_to_constant 189@ = 7852
+set_lvar_int_to_constant 190@ = 7853
+set_lvar_int_to_constant 191@ = 7854
+set_lvar_int_to_constant 192@ = 7855
+set_lvar_int_to_constant 193@ = 7856
+set_lvar_int_to_constant 194@ = 7857
+set_lvar_int_to_constant 195@ = 7858
+set_lvar_int_to_constant 196@ = 7859
+set_lvar_int_to_constant 197@ = 7860
+set_lvar_int_to_constant 198@ = 7861
+set_lvar_int_to_constant 199@ = 7862
+set_lvar_int_to_constant 200@ = 7863
+set_lvar_int_to_constant 201@ = 7864
+set_lvar_int_to_constant 202@ = 7865
+set_lvar_int_to_constant 203@ = 7866
+set_lvar_int_to_constant 204@ = 7867
+set_lvar_int_to_constant 205@ = 7868
+set_lvar_int_to_constant 206@ = 7869
+set_lvar_int_to_constant 207@ = 7870
+set_lvar_int_to_constant 208@ = 7871
+set_lvar_int_to_constant 209@ = 7872
+set_lvar_int_to_constant 210@ = 7873
+set_lvar_int_to_constant 211@ = 7874
+set_lvar_int_to_constant 212@ = 7875
+set_lvar_int_to_constant 213@ = 7876
+set_lvar_int_to_constant 214@ = 7877
+set_lvar_int_to_constant 215@ = 7878
+set_lvar_int_to_constant 216@ = 7879
+set_lvar_int_to_constant 217@ = 7880
+set_lvar_int_to_constant 218@ = 7881
+set_lvar_int_to_constant 219@ = 7882
+set_lvar_int_to_constant 220@ = 7883
+set_lvar_int_to_constant 221@ = 7884
+set_lvar_int_to_constant 223@ = 7885
+set_lvar_int_to_constant 224@ = 7886
+set_lvar_int_to_constant 225@ = 7887
+set_lvar_int_to_constant 226@ = 7888
+set_lvar_int_to_constant 227@ = 7889
+set_lvar_int_to_constant 228@ = 7890
+set_lvar_int_to_constant 229@ = 7891
+set_lvar_int_to_constant 230@ = 7892
+set_lvar_int_to_constant 231@ = 7893
+set_lvar_int_to_constant 232@ = 7894
+set_lvar_int_to_constant 233@ = 7895
+set_lvar_int_to_constant 235@ = 7896
+set_lvar_int_to_constant 236@ = 7897
+set_lvar_int_to_constant 237@ = 7898
+set_lvar_int_to_constant 238@ = 7900
+set_lvar_int_to_constant 239@ = 7901
+set_lvar_int_to_constant 240@ = 7902
+set_lvar_int_to_constant 241@ = 7829
+set_lvar_int_to_constant 242@ = 7830
+set_lvar_int_to_constant 243@ = 7831
+set_lvar_int_to_constant 244@ = 7832
+set_lvar_int_to_constant 245@ = 7833
+set_lvar_int_to_constant 246@ = 7834
+set_lvar_int_to_constant 247@ = 7835
+set_lvar_int_to_constant 248@ = 7836
+set_lvar_int_to_constant 249@ = 23205
+set_lvar_int_to_constant 250@ = 23206
+set_lvar_int_to_constant 251@ = 23208
+set_lvar_int_to_constant 286@ = 14200
+252@ = 0
+253@ = 1
+254@ = 2
+255@ = 0
+256@ = 0
+257@ = 0
+258@ = 0
+259@ = 0
+260@ = 0
+261@ = 0
+287@ = 0
+288@ = 0
+283@ = 0
+284@ = 0
+Player.SetGroupRecruitment($player1, False)
+Game.SetScriptLimitToGangSize(1)
+Game.MakeRoomInPlayerGangForMissionPeds(2)
+wait 1000
+
+:CASINO4_4043
+wait 0
+if 
+is_ps2_keyboard_key_pressed 49
+goto_if_false @CASINO4_4082
+Char.SetCoordinates($scplayer, -725.0, 2392.69, 128.0)
+
+:CASINO4_4082
+if 
+is_ps2_keyboard_key_pressed 50
+goto_if_false @CASINO4_4117
+Char.SetCoordinates($scplayer, -45.0, 2322.0, 23.0)
+
+:CASINO4_4117
+if 
+is_ps2_keyboard_key_pressed 51
+goto_if_false @CASINO4_4152
+Char.SetCoordinates($scplayer, 2062.0, 1362.0, 10.7)
+
+:CASINO4_4152
+if 
+is_ps2_keyboard_key_pressed 71
+goto_if_false @CASINO4_4175
+TIMERA = 27000
+
+:CASINO4_4175
+if 
+is_ps2_keyboard_key_pressed 99
+goto_if_false @CASINO4_4249
+122@ = 0
+123@ = 0
+134@ = 0
+133@ = 0
+124@ = 0
+125@ = 0
+126@ = 0
+94@ = 0.0
+
+:CASINO4_4249
+if 
+is_ps2_keyboard_key_pressed 32
+goto_if_false @CASINO4_4821
+252@ = 103
+253@ = 1
+254@ = 2
+255@ = 0
+256@ = 0
+257@ = 0
+if 
+  255@ == 0
+goto_if_false @CASINO4_4343
+252@ = 103
+257@ = 103
+260@ = Clock.GetGameTimer()
+
+:CASINO4_4343
+wait 0
+if 
+  256@ == 0
+goto_if_false @CASINO4_4821
+if 
+  252@ <> 0
+goto_if_false @CASINO4_4704
+if 
+  255@ == 0
+goto_if_false @CASINO4_4429
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_4422
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_4422
+255@ = 1
+
+:CASINO4_4429
+if 
+  255@ == 1
+goto_if_false @CASINO4_4466
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_4466
+if 
+  255@ == 2
+goto_if_false @CASINO4_4526
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_4526
+Audio.PlayMissionAudio(253@)
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+255@ = 3
+
+:CASINO4_4526
+if 
+  255@ == 3
+goto_if_false @CASINO4_4704
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_4643
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  253@ == 1
+goto_if_false @CASINO4_4608
+253@ = 2
+254@ = 1
+goto @CASINO4_4622
+
+:CASINO4_4608
+253@ = 1
+254@ = 2
+
+:CASINO4_4622
+252@ = 0
+255@ = 0
+goto @CASINO4_4704
+
+:CASINO4_4643
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_4704
+if 
+  102 > 252@
+goto_if_false @CASINO4_4704
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_4704
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_4814
+if 
+  255@ == 0
+goto_if_false @CASINO4_4814
+if 
+  110 > 257@
+goto_if_false @CASINO4_4807
+257@ += 1
+set_lvar_int_to_lvar_int 252@ = 257@
+260@ = Clock.GetGameTimer()
+goto @CASINO4_4814
+
+:CASINO4_4807
+256@ = 1
+
+:CASINO4_4814
+goto @CASINO4_4343
+
+:CASINO4_4821
+if 
+is_ps2_keyboard_key_pressed 48
+goto_if_false @CASINO4_4852
+TIMERA = 27000
+TIMERB = 27000
+
+:CASINO4_4852
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @CASINO4_4874
+goto @CASINO4_45880
+
+:CASINO4_4874
+if and
+  47@ == 0
+  48@ == 0
+goto_if_false @CASINO4_5063
+
+:CASINO4_4899
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_4923
+wait 0
+goto @CASINO4_4899
+
+:CASINO4_4923
+66@ = Blip.AddForCoord(-735.0, 2398.69, 126.0)
+Blip.SetCoordAppearance(66@, 1)
+Char.SetHeading($scplayer, 265.5486)
+Camera.SetBehindPlayer
+Text.Print('CAS4_01', 10000, 1)
+48@ = 1
+Camera.DoFade(1, 1500)
+
+:CASINO4_4992
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_5016
+wait 0
+goto @CASINO4_4992
+
+:CASINO4_5016
+Player.SetControl($player1, True)
+if 
+  $played_casino4_before == 1
+goto_if_false @CASINO4_5063
+Skip.SetUp(-698.0, 2398.0, 131.0, 60.0)
+
+:CASINO4_5063
+if and
+  47@ == 0
+  48@ == 1
+goto_if_false @CASINO4_5645
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_5112
+77@ = Char.StoreCarIsIn($scplayer)
+
+:CASINO4_5112
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, -735.0, 2398.69, 126.0, 4.0, 4.0, 2.0)
+goto_if_false @CASINO4_5179
+Blip.Remove(66@)
+47@ = 1
+goto @CASINO4_5645
+
+:CASINO4_5179
+if 
+  44@ == 0
+goto_if_false @CASINO4_5645
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -735.0, 2398.69, 126.0, 100.0, 100.0, 100.0)
+goto_if_false @CASINO4_5645
+if 
+  $played_casino4_before == 0
+goto_if_false @CASINO4_5270
+$played_casino4_before = 1
+
+:CASINO4_5270
+Streaming.RequestAnimation("SUNBATHE")
+
+:CASINO4_5282
+if 
+  not Streaming.HasAnimationLoaded("SUNBATHE")
+goto_if_false @CASINO4_5316
+wait 0
+goto @CASINO4_5282
+
+:CASINO4_5316
+71@ = Char.Create(23, 290, -751.1198, 2395.199, 128.2378)
+Char.SetHeading(71@, 246.0)
+Char.SetDecisionMaker(71@, 38@)
+Char.SetNeverTargeted(71@, True)
+Char.SetSuffersCriticalHits(71@, False)
+72@ = Char.Create(23, 291, -752.2823, 2391.054, 127.8083)
+Char.SetHeading(72@, 220.2451)
+Char.SetDecisionMaker(72@, 38@)
+Char.SetProofs(71@, False, False, False, False, True)
+Char.SetProofs(72@, False, False, False, False, True)
+Char.SetNeverTargeted(72@, True)
+Char.SetSuffersCriticalHits(72@, False)
+81@ = Sequence.Open()
+Task.LookAtChar(-1, $scplayer, -1)
+Task.PlayAnim(-1, "SBATHE_F_LIEB2SIT", "SUNBATHE", 60000.0, False, False, False, True, -1)
+Sequence.Close(81@)
+Char.PerformSequence(72@, 81@)
+Sequence.Clear(81@)
+80@ = Sequence.Open()
+Task.LookAtChar(-1, $scplayer, -1)
+Task.PlayAnim(-1, "SBATHE_F_LIEB2SIT", "SUNBATHE", 60000.0, False, False, False, True, -1)
+Sequence.Close(80@)
+Char.PerformSequence(71@, 80@)
+Sequence.Clear(80@)
+Char.SetRelationship(71@, RelationshipType.Respect, PedType.Player1)
+Char.SetRelationship(72@, RelationshipType.Respect, PedType.Player1)
+44@ = 1
+
+:CASINO4_5645
+if and
+  47@ == 1
+  49@ == 0
+goto_if_false @CASINO4_6625
+Player.SetControl($player1, False)
+Camera.DoFade(0, 1000)
+
+:CASINO4_5684
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_5708
+wait 0
+goto @CASINO4_5684
+
+:CASINO4_5708
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+Weather.Force(WeatherType.SunnyDesert)
+Char.Delete(71@)
+Char.Delete(72@)
+Char.MarkAsNoLongerNeeded(71@)
+Char.MarkAsNoLongerNeeded(72@)
+Streaming.RemoveAnimation("SUNBATHE")
+
+:CASINO4_5765
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_5789
+wait 0
+goto @CASINO4_5765
+
+:CASINO4_5789
+World.ClearArea(1, -738.0978, 2391.592, 127.9015, 100.0)
+if 
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_5897
+if 
+  Car.Locate3D(77@, 0, -738.0, 2391.0, 127.0, 10.0, 10.0, 5.0)
+goto_if_false @CASINO4_5897
+Car.SetCoordinates(77@, -735.0, 2398.69, 126.0)
+
+:CASINO4_5897
+Player.MakeSafeForCutscene($player1)
+Cutscene.Load('CAS_4B')
+
+:CASINO4_5913
+if 
+  not Cutscene.HasLoaded
+goto_if_false @CASINO4_5937
+wait 0
+goto @CASINO4_5913
+
+:CASINO4_5937
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:CASINO4_5946
+if 
+  not Cutscene.HasFinished
+goto_if_false @CASINO4_5970
+wait 0
+goto @CASINO4_5946
+
+:CASINO4_5970
+Cutscene.Clear
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:CASINO4_5985
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_6009
+wait 0
+goto @CASINO4_5985
+
+:CASINO4_6009
+Weather.Release
+DecisionMakerChar.AddEventResponse(38@, 79, 706, 100.0, 100.0, 100.0, 100.0, True, False)
+71@ = Char.Create(23, 290, -751.1198, 2395.199, 128.2378)
+Char.SetDecisionMaker(71@, 38@)
+Char.SetNeverTargeted(71@, True)
+Char.SetSuffersCriticalHits(71@, False)
+72@ = Char.Create(23, 291, -752.2823, 2391.054, 127.8083)
+Char.SetDecisionMaker(72@, 38@)
+Char.SetProofs(71@, False, False, False, False, True)
+Char.SetProofs(72@, False, False, False, False, True)
+Char.SetNeverTargeted(72@, True)
+Char.SetSuffersCriticalHits(72@, False)
+Char.SetRelationship(71@, RelationshipType.Respect, PedType.Player1)
+Char.SetRelationship(72@, RelationshipType.Respect, PedType.Player1)
+Char.SetMaxHealth(72@, 200)
+Char.SetHealth(72@, 200)
+Char.SetMaxHealth(71@, 200)
+Char.SetHealth(71@, 200)
+if and
+  not Char.IsDead(72@)
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_6300
+Char.SetCoordinates(72@, -738.0978, 2385.592, 124.9015)
+Char.SetHeading(72@, 0.0)
+Char.SetCoordinates(71@, -736.8244, 2385.102, 125.0871)
+Char.SetHeading(71@, 0.0)
+
+:CASINO4_6300
+Streaming.RequestModel(478)
+Streaming.RequestModel(32)
+Streaming.RequestModel(34)
+Streaming.RequestAnimation("SMOKING")
+Streaming.RequestModel(346)
+if and
+  not Char.IsDead(71@)
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_6395
+Char.ClearTasks($scplayer)
+Char.ClearTasks(72@)
+Char.ClearTasks(71@)
+68@ = Blip.AddForChar(71@)
+Blip.SetAsFriendly(68@, True)
+67@ = Blip.AddForChar(72@)
+Blip.SetAsFriendly(67@, True)
+
+:CASINO4_6395
+if or
+  not Streaming.HasModelLoaded(478)
+  not Streaming.HasModelLoaded(32)
+  not Streaming.HasModelLoaded(34)
+  not Streaming.HasAnimationLoaded("SMOKING")
+  not Streaming.HasAnimationLoaded("COLT45")
+goto_if_false @CASINO4_6451
+wait 0
+goto @CASINO4_6395
+
+:CASINO4_6451
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_6494
+Char.SetCoordinates($scplayer, -738.0603, 2388.346, 125.1527)
+goto @CASINO4_6514
+
+:CASINO4_6494
+Char.WarpFromCarToCoord($scplayer, -738.0603, 2388.346, 125.1527)
+
+:CASINO4_6514
+Char.SetHeading($scplayer, 176.0)
+Streaming.RequestAnimation("PAULNMAC")
+
+:CASINO4_6536
+if 
+  not Streaming.HasAnimationLoaded("PAULNMAC")
+goto_if_false @CASINO4_6570
+wait 0
+goto @CASINO4_6536
+
+:CASINO4_6570
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Camera.DoFade(1, 1500)
+
+:CASINO4_6585
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_6609
+wait 0
+goto @CASINO4_6585
+
+:CASINO4_6609
+Player.SetControl($player1, True)
+Text.ClearPrints
+49@ = 1
+
+:CASINO4_6625
+if 
+  44@ == 1
+goto_if_false @CASINO4_6772
+if or
+  Char.IsDead(72@)
+  Char.IsDead(71@)
+goto_if_false @CASINO4_6772
+Text.ClearPrints
+if and
+  Char.IsDead(71@)
+  Char.IsDead(72@)
+goto_if_false @CASINO4_6710
+Text.Print('CAS4_47', 3000, 1)
+goto @CASINO4_6765
+
+:CASINO4_6710
+if 
+  Char.IsDead(71@)
+goto_if_false @CASINO4_6749
+Text.Print('CAS4_05', 3000, 1)
+goto @CASINO4_6765
+
+:CASINO4_6749
+Text.Print('CAS4_04', 3000, 1)
+
+:CASINO4_6765
+goto @CASINO4_45862
+
+:CASINO4_6772
+if 
+  51@ == 0
+goto_if_false @CASINO4_22506
+if 
+  49@ == 1
+goto_if_false @CASINO4_22506
+if 
+  Char.IsSittingInAnyCar($scplayer)
+goto_if_false @CASINO4_6897
+77@ = Char.StoreCarIsIn($scplayer)
+135@ = Car.GetMaximumNumberOfPassengers(77@)
+if 
+  119@ == 1
+goto_if_false @CASINO4_6865
+135@ -= 1
+
+:CASINO4_6865
+if 
+  120@ == 1
+goto_if_false @CASINO4_6890
+135@ -= 1
+
+:CASINO4_6890
+goto @CASINO4_7234
+
+:CASINO4_6897
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_7063
+if 
+  Char.IsInAnyCar(72@)
+goto_if_false @CASINO4_7063
+if 
+  119@ == 1
+goto_if_false @CASINO4_7006
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_7006
+if 
+  Char.IsInAnyCar(72@)
+goto_if_false @CASINO4_6984
+Task.LeaveAnyCar(72@)
+
+:CASINO4_6984
+67@ = Blip.AddForChar(72@)
+Blip.SetAsFriendly(67@, True)
+119@ = 0
+
+:CASINO4_7006
+if 
+  Char.IsInAnyCar(72@)
+goto_if_false @CASINO4_7063
+90@ = Char.GetScriptTaskStatus(72@, 1587)
+if and
+  not is_int_lvar_equal_to_constant 90@ == 1
+  not is_int_lvar_equal_to_constant 90@ == 0
+goto_if_false @CASINO4_7063
+Task.LeaveAnyCar(72@)
+
+:CASINO4_7063
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_7213
+if 
+  120@ == 1
+goto_if_false @CASINO4_7156
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_7156
+if 
+  Char.IsInAnyCar(71@)
+goto_if_false @CASINO4_7134
+Task.LeaveAnyCar(71@)
+
+:CASINO4_7134
+68@ = Blip.AddForChar(71@)
+Blip.SetAsFriendly(68@, True)
+120@ = 0
+
+:CASINO4_7156
+if 
+  Char.IsInAnyCar(71@)
+goto_if_false @CASINO4_7213
+90@ = Char.GetScriptTaskStatus(71@, 1587)
+if and
+  not is_int_lvar_equal_to_constant 90@ == 1
+  not is_int_lvar_equal_to_constant 90@ == 0
+goto_if_false @CASINO4_7213
+Task.LeaveAnyCar(71@)
+
+:CASINO4_7213
+130@ = 0
+131@ = 0
+135@ = 0
+
+:CASINO4_7234
+if 
+  121@ > 0
+goto_if_false @CASINO4_7336
+if and
+  not Char.IsDead(72@)
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_7336
+if 
+  135@ > 1
+goto_if_false @CASINO4_7336
+Char.ClearTasks(72@)
+Char.ClearTasks(71@)
+274@ = 0
+275@ = 0
+276@ = 0
+277@ = 0
+121@ = 0
+
+:CASINO4_7336
+if 
+  121@ == 0
+goto_if_false @CASINO4_8643
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_8636
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_7994
+if 
+  119@ == 0
+goto_if_false @CASINO4_7908
+if 
+  Char.LocateInCarChar3D($scplayer, 72@, 8.0, 8.0, 5.0, False)
+goto_if_false @CASINO4_7860
+if 
+  135@ > 0
+goto_if_false @CASINO4_7616
+if 
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_7609
+if 
+  Char.IsSittingInCar(72@, 77@)
+goto_if_false @CASINO4_7519
+Blip.Remove(67@)
+135@ -= 1
+119@ = 1
+goto @CASINO4_7609
+
+:CASINO4_7519
+if 
+  130@ == 0
+goto_if_false @CASINO4_7563
+Task.EnterCarAsPassenger(72@, 77@, -1, -2)
+130@ = 1
+goto @CASINO4_7609
+
+:CASINO4_7563
+90@ = Char.GetScriptTaskStatus(72@, 1482)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_7609
+Char.ClearTasks(72@)
+Task.EnterCarAsPassenger(72@, 77@, -1, -2)
+
+:CASINO4_7609
+goto @CASINO4_7853
+
+:CASINO4_7616
+if 
+  Char.IsSittingInAnyCar($scplayer)
+goto_if_false @CASINO4_7853
+if 
+  120@ == 1
+goto_if_false @CASINO4_7853
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_7688
+68@ = Blip.AddForChar(71@)
+Blip.SetAsFriendly(68@, True)
+120@ = 0
+
+:CASINO4_7688
+if 
+  121@ == 0
+goto_if_false @CASINO4_7853
+89@ = Sequence.Open()
+Task.GotoChar(-1, 71@, -1, 2.0)
+Task.TurnCharToFaceChar(-1, 71@)
+Sequence.Close(89@)
+Char.PerformSequence(72@, 89@)
+Sequence.Clear(89@)
+89@ = Sequence.Open()
+if 
+  Char.IsInAnyCar(71@)
+goto_if_false @CASINO4_7775
+Task.LeaveAnyCar(-1)
+
+:CASINO4_7775
+Task.GotoChar(-1, 72@, -1, 2.0)
+Task.TurnCharToFaceChar(-1, 72@)
+Sequence.Close(89@)
+Char.PerformSequence(71@, 89@)
+Sequence.Clear(89@)
+Text.ClearPrints
+Text.Print('CAS4_44', 10000, 1)
+282@ = 1
+132@ = 6
+121@ = 1
+
+:CASINO4_7853
+goto @CASINO4_7901
+
+:CASINO4_7860
+90@ = Char.GetScriptTaskStatus(72@, 1482)
+if 
+  is_int_lvar_equal_to_constant 90@ == 1
+goto_if_false @CASINO4_7894
+Char.ClearTasks(72@)
+
+:CASINO4_7894
+130@ = 0
+
+:CASINO4_7901
+goto @CASINO4_7994
+
+:CASINO4_7908
+if 
+  not Char.LocateInCarChar3D($scplayer, 72@, 10.0, 10.0, 5.0, False)
+goto_if_false @CASINO4_7994
+if 
+  Char.IsInAnyCar(72@)
+goto_if_false @CASINO4_7965
+Task.LeaveAnyCar(72@)
+
+:CASINO4_7965
+67@ = Blip.AddForChar(72@)
+Blip.SetAsFriendly(67@, True)
+130@ = 0
+119@ = 0
+
+:CASINO4_7994
+if 
+  121@ == 0
+goto_if_false @CASINO4_8636
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_8636
+if 
+  120@ == 0
+goto_if_false @CASINO4_8550
+if 
+  Char.LocateInCarChar3D($scplayer, 71@, 8.0, 8.0, 5.0, False)
+goto_if_false @CASINO4_8502
+if 
+  135@ > 0
+goto_if_false @CASINO4_8258
+if 
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_8251
+if 
+  Char.IsSittingInCar(71@, 77@)
+goto_if_false @CASINO4_8161
+Blip.Remove(68@)
+135@ -= 1
+120@ = 1
+goto @CASINO4_8251
+
+:CASINO4_8161
+if 
+  131@ == 0
+goto_if_false @CASINO4_8205
+Task.EnterCarAsPassenger(71@, 77@, -1, -2)
+131@ = 1
+goto @CASINO4_8251
+
+:CASINO4_8205
+90@ = Char.GetScriptTaskStatus(71@, 1482)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_8251
+Char.ClearTasks(71@)
+Task.EnterCarAsPassenger(71@, 77@, -1, -2)
+
+:CASINO4_8251
+goto @CASINO4_8495
+
+:CASINO4_8258
+if 
+  Char.IsSittingInAnyCar($scplayer)
+goto_if_false @CASINO4_8495
+if 
+  119@ == 1
+goto_if_false @CASINO4_8495
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_8330
+67@ = Blip.AddForChar(72@)
+Blip.SetAsFriendly(67@, True)
+119@ = 0
+
+:CASINO4_8330
+if 
+  121@ == 0
+goto_if_false @CASINO4_8495
+89@ = Sequence.Open()
+if 
+  Char.IsInAnyCar(72@)
+goto_if_false @CASINO4_8373
+Task.LeaveAnyCar(-1)
+
+:CASINO4_8373
+Task.GotoChar(-1, 71@, -1, 2.0)
+Task.TurnCharToFaceChar(-1, 71@)
+Sequence.Close(89@)
+Char.PerformSequence(72@, 89@)
+Sequence.Clear(89@)
+89@ = Sequence.Open()
+Task.GotoChar(-1, 72@, -1, 2.0)
+Task.TurnCharToFaceChar(-1, 72@)
+Sequence.Close(89@)
+Char.PerformSequence(71@, 89@)
+Sequence.Clear(89@)
+Text.ClearPrints
+Text.Print('CAS4_44', 10000, 1)
+282@ = 2
+132@ = 6
+121@ = 1
+
+:CASINO4_8495
+goto @CASINO4_8543
+
+:CASINO4_8502
+90@ = Char.GetScriptTaskStatus(71@, 1482)
+if 
+  is_int_lvar_equal_to_constant 90@ == 1
+goto_if_false @CASINO4_8543
+Char.ClearTasks(71@)
+131@ = 0
+
+:CASINO4_8543
+goto @CASINO4_8636
+
+:CASINO4_8550
+if 
+  not Char.LocateInCarChar3D($scplayer, 71@, 10.0, 10.0, 5.0, False)
+goto_if_false @CASINO4_8636
+if 
+  Char.IsInAnyCar(71@)
+goto_if_false @CASINO4_8607
+Task.LeaveAnyCar(71@)
+
+:CASINO4_8607
+68@ = Blip.AddForChar(71@)
+Blip.SetAsFriendly(68@, True)
+131@ = 0
+120@ = 0
+
+:CASINO4_8636
+goto @CASINO4_10220
+
+:CASINO4_8643
+if 
+  121@ == 1
+goto_if_false @CASINO4_8812
+if and
+  not Char.IsDead(71@)
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_8805
+90@ = Char.GetScriptTaskStatus(71@, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_8805
+90@ = Char.GetScriptTaskStatus(72@, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_8805
+40@ = Char.GetOffsetInWorldCoords(41@, 42@, 71@, 0.0, 1.5, 0.0)
+Task.CharSlideToCoord(72@, 40@, 41@, 42@, 43@, 0.5)
+gosub @CASINO4_38638
+121@ = 2
+
+:CASINO4_8805
+goto @CASINO4_10220
+
+:CASINO4_8812
+if 
+  121@ == 2
+goto_if_false @CASINO4_10220
+if 
+  252@ <> 0
+goto_if_false @CASINO4_9169
+if 
+  255@ == 0
+goto_if_false @CASINO4_8894
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_8887
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_8887
+255@ = 1
+
+:CASINO4_8894
+if 
+  255@ == 1
+goto_if_false @CASINO4_8931
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_8931
+if 
+  255@ == 2
+goto_if_false @CASINO4_8991
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_8991
+Audio.PlayMissionAudio(253@)
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+255@ = 3
+
+:CASINO4_8991
+if 
+  255@ == 3
+goto_if_false @CASINO4_9169
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_9108
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  253@ == 1
+goto_if_false @CASINO4_9073
+253@ = 2
+254@ = 1
+goto @CASINO4_9087
+
+:CASINO4_9073
+253@ = 1
+254@ = 2
+
+:CASINO4_9087
+252@ = 0
+255@ = 0
+goto @CASINO4_9169
+
+:CASINO4_9108
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_9169
+if 
+  110 > 252@
+goto_if_false @CASINO4_9169
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_9169
+if 
+  282@ == 1
+goto_if_false @CASINO4_9740
+if 
+  275@ == 0
+goto_if_false @CASINO4_9733
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_9733
+switch_start 274@ total_jumps 5 default_jump 1 @CASINO4_9661 jumps 0 @CASINO4_9281 1 @CASINO4_9325 2 @CASINO4_9409 3 @CASINO4_9493 4 @CASINO4_9577 -1 @CASINO4_9733 -1 @CASINO4_9733
+
+:CASINO4_9281
+if 
+  255@ == 0
+goto_if_false @CASINO4_9318
+252@ = 9
+274@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_9318
+goto @CASINO4_9733
+
+:CASINO4_9325
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_9402
+if 
+  255@ == 0
+goto_if_false @CASINO4_9402
+252@ = 10
+274@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_9402
+goto @CASINO4_9733
+
+:CASINO4_9409
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_9486
+if 
+  255@ == 0
+goto_if_false @CASINO4_9486
+252@ = 11
+274@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_9486
+goto @CASINO4_9733
+
+:CASINO4_9493
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_9570
+if 
+  255@ == 0
+goto_if_false @CASINO4_9570
+252@ = 12
+274@ = 4
+260@ = Clock.GetGameTimer()
+
+:CASINO4_9570
+goto @CASINO4_9733
+
+:CASINO4_9577
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_9654
+if 
+  255@ == 0
+goto_if_false @CASINO4_9654
+252@ = 19
+274@ = 5
+260@ = Clock.GetGameTimer()
+
+:CASINO4_9654
+goto @CASINO4_9733
+
+:CASINO4_9661
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_9726
+if 
+  255@ == 0
+goto_if_false @CASINO4_9726
+275@ = 1
+
+:CASINO4_9726
+goto @CASINO4_9733
+
+:CASINO4_9733
+goto @CASINO4_10220
+
+:CASINO4_9740
+if 
+  282@ == 2
+goto_if_false @CASINO4_10220
+if 
+  277@ == 0
+goto_if_false @CASINO4_10220
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_10220
+switch_start 276@ total_jumps 4 default_jump 1 @CASINO4_10148 jumps 0 @CASINO4_9852 1 @CASINO4_9896 2 @CASINO4_9980 3 @CASINO4_10064 -1 @CASINO4_10220 -1 @CASINO4_10220 -1 @CASINO4_10220
+
+:CASINO4_9852
+if 
+  255@ == 0
+goto_if_false @CASINO4_9889
+252@ = 13
+276@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_9889
+goto @CASINO4_10220
+
+:CASINO4_9896
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_9973
+if 
+  255@ == 0
+goto_if_false @CASINO4_9973
+252@ = 14
+276@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_9973
+goto @CASINO4_10220
+
+:CASINO4_9980
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_10057
+if 
+  255@ == 0
+goto_if_false @CASINO4_10057
+252@ = 15
+276@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_10057
+goto @CASINO4_10220
+
+:CASINO4_10064
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_10141
+if 
+  255@ == 0
+goto_if_false @CASINO4_10141
+252@ = 16
+276@ = 4
+260@ = Clock.GetGameTimer()
+
+:CASINO4_10141
+goto @CASINO4_10220
+
+:CASINO4_10148
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_10213
+if 
+  255@ == 0
+goto_if_false @CASINO4_10213
+277@ = 1
+
+:CASINO4_10213
+goto @CASINO4_10220
+
+:CASINO4_10220
+if or
+  Char.IsDead(72@)
+  Char.IsDead(71@)
+goto_if_false @CASINO4_10349
+Text.ClearPrints
+if and
+  Char.IsDead(71@)
+  Char.IsDead(72@)
+goto_if_false @CASINO4_10287
+Text.Print('CAS4_47', 3000, 1)
+goto @CASINO4_10342
+
+:CASINO4_10287
+if 
+  Char.IsDead(71@)
+goto_if_false @CASINO4_10326
+Text.Print('CAS4_05', 3000, 1)
+goto @CASINO4_10342
+
+:CASINO4_10326
+Text.Print('CAS4_04', 3000, 1)
+
+:CASINO4_10342
+goto @CASINO4_45862
+
+:CASINO4_10349
+if 
+  121@ == 0
+goto_if_false @CASINO4_11039
+if and
+  119@ == 0
+  120@ == 0
+goto_if_false @CASINO4_10591
+if 
+  135@ > 1
+goto_if_false @CASINO4_10504
+if 
+  132@ <> 0
+goto_if_false @CASINO4_10497
+Text.ClearThisPrint('CAS4_19')
+Text.ClearThisPrint('CAS4_03')
+Text.ClearThisPrint('CAS4_02')
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_10497
+Text.Print('CAS4_37', 7000, 1)
+132@ = 0
+
+:CASINO4_10497
+goto @CASINO4_10591
+
+:CASINO4_10504
+if 
+  132@ <> 1
+goto_if_false @CASINO4_10591
+Text.ClearThisPrint('CAS4_37')
+Text.ClearThisPrint('CAS4_03')
+Text.ClearThisPrint('CAS4_02')
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_10591
+Text.Print('CAS4_19', 7000, 1)
+132@ = 1
+
+:CASINO4_10591
+if and
+  119@ == 1
+  120@ == 0
+goto_if_false @CASINO4_10815
+if 
+  135@ > 0
+goto_if_false @CASINO4_10728
+if 
+  132@ <> 2
+goto_if_false @CASINO4_10721
+Text.ClearThisPrint('CAS4_19')
+Text.ClearThisPrint('CAS4_37')
+Text.ClearThisPrint('CAS4_02')
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_10721
+Text.Print('CAS4_03', 7000, 1)
+132@ = 2
+
+:CASINO4_10721
+goto @CASINO4_10815
+
+:CASINO4_10728
+if 
+  132@ <> 3
+goto_if_false @CASINO4_10815
+Text.ClearThisPrint('CAS4_37')
+Text.ClearThisPrint('CAS4_03')
+Text.ClearThisPrint('CAS4_02')
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_10815
+Text.Print('CAS4_19', 7000, 1)
+132@ = 3
+
+:CASINO4_10815
+if and
+  119@ == 0
+  120@ == 1
+goto_if_false @CASINO4_11039
+if 
+  135@ > 0
+goto_if_false @CASINO4_10952
+if 
+  132@ <> 4
+goto_if_false @CASINO4_10945
+Text.ClearThisPrint('CAS4_19')
+Text.ClearThisPrint('CAS4_03')
+Text.ClearThisPrint('CAS4_37')
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_10945
+Text.Print('CAS4_02', 7000, 1)
+132@ = 4
+
+:CASINO4_10945
+goto @CASINO4_11039
+
+:CASINO4_10952
+if 
+  132@ <> 5
+goto_if_false @CASINO4_11039
+Text.ClearThisPrint('CAS4_37')
+Text.ClearThisPrint('CAS4_03')
+Text.ClearThisPrint('CAS4_02')
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_11039
+Text.Print('CAS4_19', 7000, 1)
+132@ = 5
+
+:CASINO4_11039
+if 
+  126@ == 0
+goto_if_false @CASINO4_18462
+if 
+  129@ == 1
+goto_if_false @CASINO4_18271
+if 
+  TIMERA > 30000
+goto_if_false @CASINO4_18264
+if 
+  252@ <> 0
+goto_if_false @CASINO4_11487
+if 
+  255@ == 0
+goto_if_false @CASINO4_11158
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_11151
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_11151
+255@ = 1
+
+:CASINO4_11158
+if 
+  255@ == 1
+goto_if_false @CASINO4_11195
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_11195
+if 
+  255@ == 2
+goto_if_false @CASINO4_11309
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_11309
+Audio.PlayMissionAudio(253@)
+if 
+  252@ <> 65
+goto_if_false @CASINO4_11302
+if 
+  252@ <> 67
+goto_if_false @CASINO4_11302
+if 
+  252@ <> 78
+goto_if_false @CASINO4_11302
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+
+:CASINO4_11302
+255@ = 3
+
+:CASINO4_11309
+if 
+  255@ == 3
+goto_if_false @CASINO4_11487
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_11426
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  253@ == 1
+goto_if_false @CASINO4_11391
+253@ = 2
+254@ = 1
+goto @CASINO4_11405
+
+:CASINO4_11391
+253@ = 1
+254@ = 2
+
+:CASINO4_11405
+252@ = 0
+255@ = 0
+goto @CASINO4_11487
+
+:CASINO4_11426
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_11487
+if 
+  110 > 252@
+goto_if_false @CASINO4_11487
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_11487
+if 
+  287@ <> 0
+goto_if_false @CASINO4_11721
+if 
+  288@ == 0
+goto_if_false @CASINO4_11549
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @CASINO4_11542
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+
+:CASINO4_11542
+288@ = 1
+
+:CASINO4_11549
+if 
+  288@ == 1
+goto_if_false @CASINO4_11585
+Audio.LoadMissionAudio(285@(287@,2i), 3)
+288@ = 2
+
+:CASINO4_11585
+if 
+  288@ == 2
+goto_if_false @CASINO4_11670
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @CASINO4_11670
+if 
+  287@ == 1
+goto_if_false @CASINO4_11659
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_11659
+Audio.AttachMissionAudioToChar(MissionAudioSlot.Slot3, 71@)
+
+:CASINO4_11659
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+288@ = 3
+
+:CASINO4_11670
+if 
+  288@ == 3
+goto_if_false @CASINO4_11721
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot3)
+goto_if_false @CASINO4_11721
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+287@ = 0
+288@ = 0
+
+:CASINO4_11721
+if 
+  5 > 122@
+goto_if_false @CASINO4_15662
+if and
+  not Char.IsDead(72@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_15655
+if 
+  122@ == 0
+goto_if_false @CASINO4_12691
+if 
+  263@ == 1
+goto_if_false @CASINO4_12684
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_12684
+switch_start 280@ total_jumps 8 default_jump 1 @CASINO4_12583 jumps 0 @CASINO4_11937 1 @CASINO4_11995 2 @CASINO4_12079 3 @CASINO4_12163 4 @CASINO4_12247 5 @CASINO4_12331 6 @CASINO4_12415
+switch_continued 7 @CASINO4_12499 -1 @CASINO4_12684 -1 @CASINO4_12684 -1 @CASINO4_12684 -1 @CASINO4_12684 -1 @CASINO4_12684 -1 @CASINO4_12684 -1 @CASINO4_12684 -1 @CASINO4_12684
+
+:CASINO4_11937
+Char.ShutUpForScriptedSpeech(72@, True)
+Char.ShutUpForScriptedSpeech(71@, True)
+if 
+  255@ == 0
+goto_if_false @CASINO4_11988
+252@ = 62
+280@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_11988
+goto @CASINO4_12684
+
+:CASINO4_11995
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_12072
+if 
+  255@ == 0
+goto_if_false @CASINO4_12072
+252@ = 63
+280@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_12072
+goto @CASINO4_12684
+
+:CASINO4_12079
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_12156
+if 
+  255@ == 0
+goto_if_false @CASINO4_12156
+252@ = 64
+280@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_12156
+goto @CASINO4_12684
+
+:CASINO4_12163
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_12240
+if 
+  255@ == 0
+goto_if_false @CASINO4_12240
+252@ = 65
+280@ = 4
+260@ = Clock.GetGameTimer()
+
+:CASINO4_12240
+goto @CASINO4_12684
+
+:CASINO4_12247
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_12324
+if 
+  255@ == 0
+goto_if_false @CASINO4_12324
+252@ = 66
+280@ = 5
+260@ = Clock.GetGameTimer()
+
+:CASINO4_12324
+goto @CASINO4_12684
+
+:CASINO4_12331
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_12408
+if 
+  255@ == 0
+goto_if_false @CASINO4_12408
+252@ = 67
+280@ = 6
+260@ = Clock.GetGameTimer()
+
+:CASINO4_12408
+goto @CASINO4_12684
+
+:CASINO4_12415
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_12492
+if 
+  255@ == 0
+goto_if_false @CASINO4_12492
+252@ = 68
+280@ = 7
+260@ = Clock.GetGameTimer()
+
+:CASINO4_12492
+goto @CASINO4_12684
+
+:CASINO4_12499
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_12576
+if 
+  255@ == 0
+goto_if_false @CASINO4_12576
+252@ = 69
+280@ = 8
+260@ = Clock.GetGameTimer()
+
+:CASINO4_12576
+goto @CASINO4_12684
+
+:CASINO4_12583
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_12677
+if 
+  255@ == 0
+goto_if_false @CASINO4_12677
+132@ = 99
+Streaming.RequestAnimation("FOOD")
+TIMERB = 0
+280@ = 0
+122@ = 1
+
+:CASINO4_12677
+goto @CASINO4_12684
+
+:CASINO4_12684
+goto @CASINO4_15655
+
+:CASINO4_12691
+if 
+  122@ == 1
+goto_if_false @CASINO4_14093
+if 
+  TIMERB > 5000
+goto_if_false @CASINO4_13925
+switch_start 280@ total_jumps 12 default_jump 1 @CASINO4_13824 jumps 0 @CASINO4_12856 1 @CASINO4_12900 2 @CASINO4_12984 3 @CASINO4_13068 4 @CASINO4_13152 5 @CASINO4_13236 6 @CASINO4_13320
+switch_continued 7 @CASINO4_13404 8 @CASINO4_13488 9 @CASINO4_13572 10 @CASINO4_13656 11 @CASINO4_13740 -1 @CASINO4_13918 -1 @CASINO4_13918 -1 @CASINO4_13918 -1 @CASINO4_13918
+
+:CASINO4_12856
+if 
+  255@ == 0
+goto_if_false @CASINO4_12893
+252@ = 70
+280@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_12893
+goto @CASINO4_13918
+
+:CASINO4_12900
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_12977
+if 
+  255@ == 0
+goto_if_false @CASINO4_12977
+252@ = 71
+280@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_12977
+goto @CASINO4_13918
+
+:CASINO4_12984
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_13061
+if 
+  255@ == 0
+goto_if_false @CASINO4_13061
+252@ = 72
+280@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_13061
+goto @CASINO4_13918
+
+:CASINO4_13068
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_13145
+if 
+  255@ == 0
+goto_if_false @CASINO4_13145
+252@ = 73
+280@ = 4
+260@ = Clock.GetGameTimer()
+
+:CASINO4_13145
+goto @CASINO4_13918
+
+:CASINO4_13152
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_13229
+if 
+  255@ == 0
+goto_if_false @CASINO4_13229
+252@ = 74
+280@ = 5
+260@ = Clock.GetGameTimer()
+
+:CASINO4_13229
+goto @CASINO4_13918
+
+:CASINO4_13236
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_13313
+if 
+  255@ == 0
+goto_if_false @CASINO4_13313
+252@ = 75
+280@ = 6
+260@ = Clock.GetGameTimer()
+
+:CASINO4_13313
+goto @CASINO4_13918
+
+:CASINO4_13320
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_13397
+if 
+  255@ == 0
+goto_if_false @CASINO4_13397
+252@ = 76
+280@ = 7
+260@ = Clock.GetGameTimer()
+
+:CASINO4_13397
+goto @CASINO4_13918
+
+:CASINO4_13404
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_13481
+if 
+  255@ == 0
+goto_if_false @CASINO4_13481
+252@ = 77
+280@ = 8
+260@ = Clock.GetGameTimer()
+
+:CASINO4_13481
+goto @CASINO4_13918
+
+:CASINO4_13488
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_13565
+if 
+  255@ == 0
+goto_if_false @CASINO4_13565
+252@ = 78
+280@ = 9
+260@ = Clock.GetGameTimer()
+
+:CASINO4_13565
+goto @CASINO4_13918
+
+:CASINO4_13572
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_13649
+if 
+  255@ == 0
+goto_if_false @CASINO4_13649
+252@ = 79
+280@ = 10
+260@ = Clock.GetGameTimer()
+
+:CASINO4_13649
+goto @CASINO4_13918
+
+:CASINO4_13656
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_13733
+if 
+  255@ == 0
+goto_if_false @CASINO4_13733
+252@ = 80
+280@ = 11
+260@ = Clock.GetGameTimer()
+
+:CASINO4_13733
+goto @CASINO4_13918
+
+:CASINO4_13740
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_13817
+if 
+  255@ == 0
+goto_if_false @CASINO4_13817
+252@ = 81
+280@ = 12
+260@ = Clock.GetGameTimer()
+
+:CASINO4_13817
+goto @CASINO4_13918
+
+:CASINO4_13824
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_13911
+if 
+  255@ == 0
+goto_if_false @CASINO4_13911
+TIMERA = 0
+124@ = 0
+128@ = 1
+122@ = 9999
+
+:CASINO4_13911
+goto @CASINO4_13918
+
+:CASINO4_13918
+goto @CASINO4_14086
+
+:CASINO4_13925
+if and
+  Streaming.HasAnimationLoaded("FOOD")
+  Car.IsStopped(77@)
+goto_if_false @CASINO4_14086
+95@ = Car.GetOffsetInWorldCoords(96@, 97@, 77@, 4.0, 2.0, 0.0)
+89@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.GoStraightToCoord(-1, 95@, 96@, 97@, MoveState.Sprint, 5000)
+Task.PlayAnim(-1, "EAT_VOMIT_P", "FOOD", 1004.0, False, False, False, False, -1)
+Task.EnterCarAsPassenger(-1, 77@, -1, -2)
+Sequence.Close(89@)
+Char.PerformSequence(72@, 89@)
+Sequence.Clear(89@)
+122@ = 2
+124@ = 1
+
+:CASINO4_14086
+goto @CASINO4_15655
+
+:CASINO4_14093
+if 
+  122@ <> 3
+goto_if_false @CASINO4_14961
+if 
+  3 > 122@
+goto_if_false @CASINO4_14961
+switch_start 280@ total_jumps 8 default_jump 1 @CASINO4_14889 jumps 0 @CASINO4_14257 1 @CASINO4_14301 2 @CASINO4_14385 3 @CASINO4_14469 4 @CASINO4_14553 5 @CASINO4_14637 6 @CASINO4_14721
+switch_continued 7 @CASINO4_14805 -1 @CASINO4_14961 -1 @CASINO4_14961 -1 @CASINO4_14961 -1 @CASINO4_14961 -1 @CASINO4_14961 -1 @CASINO4_14961 -1 @CASINO4_14961 -1 @CASINO4_14961
+
+:CASINO4_14257
+if 
+  255@ == 0
+goto_if_false @CASINO4_14294
+252@ = 70
+280@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_14294
+goto @CASINO4_14961
+
+:CASINO4_14301
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_14378
+if 
+  255@ == 0
+goto_if_false @CASINO4_14378
+252@ = 71
+280@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_14378
+goto @CASINO4_14961
+
+:CASINO4_14385
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_14462
+if 
+  255@ == 0
+goto_if_false @CASINO4_14462
+252@ = 72
+280@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_14462
+goto @CASINO4_14961
+
+:CASINO4_14469
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_14546
+if 
+  255@ == 0
+goto_if_false @CASINO4_14546
+252@ = 73
+280@ = 4
+260@ = Clock.GetGameTimer()
+
+:CASINO4_14546
+goto @CASINO4_14961
+
+:CASINO4_14553
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_14630
+if 
+  255@ == 0
+goto_if_false @CASINO4_14630
+252@ = 74
+280@ = 5
+260@ = Clock.GetGameTimer()
+
+:CASINO4_14630
+goto @CASINO4_14961
+
+:CASINO4_14637
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_14714
+if 
+  255@ == 0
+goto_if_false @CASINO4_14714
+252@ = 75
+280@ = 6
+260@ = Clock.GetGameTimer()
+
+:CASINO4_14714
+goto @CASINO4_14961
+
+:CASINO4_14721
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_14798
+if 
+  255@ == 0
+goto_if_false @CASINO4_14798
+252@ = 76
+280@ = 7
+260@ = Clock.GetGameTimer()
+
+:CASINO4_14798
+goto @CASINO4_14961
+
+:CASINO4_14805
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_14882
+if 
+  255@ == 0
+goto_if_false @CASINO4_14882
+252@ = 77
+280@ = 8
+260@ = Clock.GetGameTimer()
+
+:CASINO4_14882
+goto @CASINO4_14961
+
+:CASINO4_14889
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_14954
+if 
+  255@ == 0
+goto_if_false @CASINO4_14954
+281@ = 1
+
+:CASINO4_14954
+goto @CASINO4_14961
+
+:CASINO4_14961
+if 
+  122@ == 2
+goto_if_false @CASINO4_15183
+90@ = Char.GetScriptTaskStatus(72@, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_15051
+Streaming.RemoveAnimation("FOOD")
+122@ = 5
+128@ = 1
+124@ = 0
+TIMERA = 0
+goto @CASINO4_15176
+
+:CASINO4_15051
+if 
+  Char.IsPlayingAnim(72@, "EAT_VOMIT_P")
+goto_if_false @CASINO4_15176
+95@ = Char.GetOffsetInWorldCoords(96@, 97@, 72@, 0.355, -0.116, 0.048)
+94@ = Char.GetAnimCurrentTime(72@, "EAT_VOMIT_P")
+136@ = Particle.Create("PUKE", 95@, 96@, 97@, 1)
+134@ = 0
+94@ = 0.0
+122@ = 3
+
+:CASINO4_15176
+goto @CASINO4_15655
+
+:CASINO4_15183
+if 
+  122@ == 3
+goto_if_false @CASINO4_15555
+90@ = Char.GetScriptTaskStatus(72@, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_15301
+Streaming.RemoveAnimation("FOOD")
+122@ = 5
+128@ = 1
+124@ = 0
+if 
+  134@ == 1
+goto_if_false @CASINO4_15294
+Particle.Stop(136@)
+Particle.Kill(136@)
+134@ = 0
+
+:CASINO4_15294
+TIMERA = 0
+
+:CASINO4_15301
+if 
+  94@ <> 1.0
+goto_if_false @CASINO4_15510
+if 
+  134@ == 0
+goto_if_false @CASINO4_15403
+if 
+  94@ >= 0.42
+goto_if_false @CASINO4_15403
+Particle.Play(136@)
+if 
+  255@ == 0
+goto_if_false @CASINO4_15396
+252@ = 78
+260@ = Clock.GetGameTimer()
+
+:CASINO4_15396
+134@ = 1
+
+:CASINO4_15403
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_15493
+if 
+  Char.IsPlayingAnim(72@, "EAT_VOMIT_P")
+goto_if_false @CASINO4_15476
+94@ = Char.GetAnimCurrentTime(72@, "EAT_VOMIT_P")
+goto @CASINO4_15486
+
+:CASINO4_15476
+94@ = 1.0
+
+:CASINO4_15486
+goto @CASINO4_15503
+
+:CASINO4_15493
+94@ = 1.0
+
+:CASINO4_15503
+goto @CASINO4_15548
+
+:CASINO4_15510
+Particle.Stop(136@)
+Particle.Kill(136@)
+TIMERA = 0
+134@ = 0
+124@ = 0
+122@ = 4
+
+:CASINO4_15548
+goto @CASINO4_15655
+
+:CASINO4_15555
+90@ = Char.GetScriptTaskStatus(72@, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_15655
+Streaming.RemoveAnimation("FOOD")
+122@ = 5
+128@ = 1
+124@ = 0
+TIMERA = 0
+if 
+  134@ == 1
+goto_if_false @CASINO4_15655
+Particle.Stop(136@)
+Particle.Kill(136@)
+134@ = 0
+
+:CASINO4_15655
+goto @CASINO4_18264
+
+:CASINO4_15662
+if 
+  5 > 123@
+goto_if_false @CASINO4_18208
+if and
+  not Char.IsDead(71@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_18201
+if 
+  123@ == 0
+goto_if_false @CASINO4_16308
+if 
+  265@ == 1
+goto_if_false @CASINO4_16294
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_16294
+switch_start 278@ total_jumps 5 default_jump 1 @CASINO4_16193 jumps 0 @CASINO4_15813 1 @CASINO4_15857 2 @CASINO4_15941 3 @CASINO4_16025 4 @CASINO4_16109 -1 @CASINO4_16294 -1 @CASINO4_16294
+
+:CASINO4_15813
+if 
+  255@ == 0
+goto_if_false @CASINO4_15850
+252@ = 50
+278@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_15850
+goto @CASINO4_16294
+
+:CASINO4_15857
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_15934
+if 
+  255@ == 0
+goto_if_false @CASINO4_15934
+252@ = 51
+278@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_15934
+goto @CASINO4_16294
+
+:CASINO4_15941
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_16018
+if 
+  255@ == 0
+goto_if_false @CASINO4_16018
+252@ = 52
+278@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_16018
+goto @CASINO4_16294
+
+:CASINO4_16025
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_16102
+if 
+  255@ == 0
+goto_if_false @CASINO4_16102
+252@ = 53
+278@ = 5
+260@ = Clock.GetGameTimer()
+
+:CASINO4_16102
+goto @CASINO4_16294
+
+:CASINO4_16109
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_16186
+if 
+  255@ == 0
+goto_if_false @CASINO4_16186
+252@ = 54
+278@ = 5
+260@ = Clock.GetGameTimer()
+
+:CASINO4_16186
+goto @CASINO4_16294
+
+:CASINO4_16193
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_16287
+if 
+  255@ == 0
+goto_if_false @CASINO4_16287
+132@ = 99
+Streaming.RequestAnimation("FOOD")
+TIMERB = 0
+278@ = 0
+123@ = 1
+
+:CASINO4_16287
+goto @CASINO4_16294
+
+:CASINO4_16294
+279@ = 0
+goto @CASINO4_18201
+
+:CASINO4_16308
+if 
+  123@ == 1
+goto_if_false @CASINO4_17262
+if 
+  TIMERB > 5000
+goto_if_false @CASINO4_17011
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_17004
+switch_start 278@ total_jumps 6 default_jump 1 @CASINO4_16892 jumps 0 @CASINO4_16421 1 @CASINO4_16465 2 @CASINO4_16549 3 @CASINO4_16640 4 @CASINO4_16724 5 @CASINO4_16808 -1 @CASINO4_17004
+
+:CASINO4_16421
+if 
+  255@ == 0
+goto_if_false @CASINO4_16458
+252@ = 55
+278@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_16458
+goto @CASINO4_17004
+
+:CASINO4_16465
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_16542
+if 
+  255@ == 0
+goto_if_false @CASINO4_16542
+252@ = 56
+278@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_16542
+goto @CASINO4_17004
+
+:CASINO4_16549
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_16633
+if 
+  255@ == 0
+goto_if_false @CASINO4_16633
+252@ = 57
+278@ = 5
+287@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_16633
+goto @CASINO4_17004
+
+:CASINO4_16640
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_16717
+if 
+  255@ == 0
+goto_if_false @CASINO4_16717
+252@ = 58
+278@ = 5
+260@ = Clock.GetGameTimer()
+
+:CASINO4_16717
+goto @CASINO4_17004
+
+:CASINO4_16724
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_16801
+if 
+  255@ == 0
+goto_if_false @CASINO4_16801
+252@ = 58
+278@ = 5
+260@ = Clock.GetGameTimer()
+
+:CASINO4_16801
+goto @CASINO4_17004
+
+:CASINO4_16808
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_16885
+if 
+  255@ == 0
+goto_if_false @CASINO4_16885
+252@ = 59
+278@ = 6
+260@ = Clock.GetGameTimer()
+
+:CASINO4_16885
+goto @CASINO4_17004
+
+:CASINO4_16892
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_16997
+if 
+  255@ == 0
+goto_if_false @CASINO4_16997
+132@ = 99
+TIMERA = 0
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+287@ = 0
+288@ = 0
+125@ = 0
+123@ = 9999
+
+:CASINO4_16997
+goto @CASINO4_17004
+
+:CASINO4_17004
+goto @CASINO4_17255
+
+:CASINO4_17011
+if and
+  Streaming.HasAnimationLoaded("PAULNMAC")
+  Car.IsStopped(77@)
+goto_if_false @CASINO4_17255
+95@ = Car.GetOffsetInWorldCoords(96@, 97@, 77@, 4.0, 2.0, 0.0)
+89@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.GoStraightToCoord(-1, 95@, 96@, 97@, MoveState.Sprint, 5000)
+Task.PlayAnim(-1, "PISS_IN", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PISS_LOOP", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PISS_OUT", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.EnterCarAsPassenger(-1, 77@, -1, -2)
+Sequence.Close(89@)
+Char.PerformSequence(71@, 89@)
+Sequence.Clear(89@)
+123@ = 2
+125@ = 1
+
+:CASINO4_17255
+goto @CASINO4_18201
+
+:CASINO4_17262
+if 
+  123@ == 2
+goto_if_false @CASINO4_17570
+90@ = Char.GetScriptTaskStatus(71@, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_17330
+123@ = 5
+125@ = 0
+goto @CASINO4_17563
+
+:CASINO4_17330
+if 
+  is_int_lvar_equal_to_constant 90@ == 1
+goto_if_false @CASINO4_17413
+90@ = Char.GetSequenceProgress(71@)
+if 
+  90@ > 4
+goto_if_false @CASINO4_17413
+if 
+  133@ == 1
+goto_if_false @CASINO4_17413
+Particle.Stop(137@)
+Particle.Kill(137@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+133@ = 0
+
+:CASINO4_17413
+if 
+  Char.IsPlayingAnim(71@, "PISS_IN")
+goto_if_false @CASINO4_17563
+95@ = Char.GetOffsetInWorldCoords(96@, 97@, 71@, 0.0, 0.0, -0.2)
+94@ = Char.GetAnimCurrentTime(71@, "PISS_IN")
+137@ = Particle.CreateOnCharWithDirection("PETROLCAN", 71@, 0.0, 0.116, 0.048, 95@, 96@, 97@, 1)
+Particle.AttachToCharBone(137@, 71@, 1)
+94@ = 0.0
+123@ = 3
+133@ = 0
+
+:CASINO4_17563
+goto @CASINO4_18201
+
+:CASINO4_17570
+if 
+  123@ == 3
+goto_if_false @CASINO4_17925
+90@ = Char.GetScriptTaskStatus(71@, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_17677
+123@ = 5
+125@ = 0
+if 
+  133@ == 1
+goto_if_false @CASINO4_17670
+Particle.Stop(137@)
+Particle.Kill(137@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+133@ = 0
+
+:CASINO4_17670
+goto @CASINO4_17760
+
+:CASINO4_17677
+if 
+  is_int_lvar_equal_to_constant 90@ == 1
+goto_if_false @CASINO4_17760
+90@ = Char.GetSequenceProgress(71@)
+if 
+  90@ > 4
+goto_if_false @CASINO4_17760
+if 
+  133@ == 1
+goto_if_false @CASINO4_17760
+Particle.Stop(137@)
+Particle.Kill(137@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+133@ = 0
+
+:CASINO4_17760
+if 
+  Char.IsPlayingAnim(71@, "PISS_IN")
+goto_if_false @CASINO4_17918
+94@ = Char.GetAnimCurrentTime(71@, "PISS_IN")
+if 
+  94@ <> 1.0
+goto_if_false @CASINO4_17918
+if 
+  133@ == 0
+goto_if_false @CASINO4_17918
+if 
+  94@ >= 0.6
+goto_if_false @CASINO4_17918
+if 
+  255@ == 0
+goto_if_false @CASINO4_17892
+252@ = 60
+260@ = Clock.GetGameTimer()
+
+:CASINO4_17892
+Particle.Play(137@)
+287@ = 1
+133@ = 1
+123@ = 4
+
+:CASINO4_17918
+goto @CASINO4_18201
+
+:CASINO4_17925
+90@ = Char.GetScriptTaskStatus(71@, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_18014
+123@ = 5
+125@ = 0
+if 
+  133@ == 1
+goto_if_false @CASINO4_18007
+Particle.Stop(137@)
+Particle.Kill(137@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+133@ = 0
+
+:CASINO4_18007
+goto @CASINO4_18097
+
+:CASINO4_18014
+if 
+  is_int_lvar_equal_to_constant 90@ == 1
+goto_if_false @CASINO4_18097
+90@ = Char.GetSequenceProgress(71@)
+if 
+  90@ > 4
+goto_if_false @CASINO4_18097
+if 
+  133@ == 1
+goto_if_false @CASINO4_18097
+Particle.Stop(137@)
+Particle.Kill(137@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+133@ = 0
+
+:CASINO4_18097
+if 
+  Char.IsPlayingAnim(71@, "PISS_OUT")
+goto_if_false @CASINO4_18201
+94@ = Char.GetAnimCurrentTime(71@, "PISS_OUT")
+if 
+  133@ == 1
+goto_if_false @CASINO4_18201
+if 
+  94@ >= 0.42
+goto_if_false @CASINO4_18201
+Particle.Stop(137@)
+Particle.Kill(137@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+133@ = 0
+
+:CASINO4_18201
+goto @CASINO4_18264
+
+:CASINO4_18208
+125@ = 0
+126@ = 1
+if and
+  not Char.IsDead(71@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_18264
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.ShutUpForScriptedSpeech(72@, False)
+Char.ShutUpForScriptedSpeech(71@, False)
+
+:CASINO4_18264
+goto @CASINO4_18455
+
+:CASINO4_18271
+if 
+  125@ == 1
+goto_if_false @CASINO4_18359
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_18317
+Char.ClearTasks(71@)
+Char.ShutUpForScriptedSpeech(71@, False)
+
+:CASINO4_18317
+Particle.Stop(137@)
+Particle.Kill(137@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+123@ = 5
+125@ = 0
+133@ = 0
+126@ = 1
+
+:CASINO4_18359
+if 
+  124@ == 1
+goto_if_false @CASINO4_18455
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_18405
+Char.ClearTasks(72@)
+Char.ShutUpForScriptedSpeech(72@, False)
+
+:CASINO4_18405
+Particle.Stop(136@)
+Particle.Kill(136@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Streaming.RemoveAnimation("FOOD")
+122@ = 5
+128@ = 1
+124@ = 0
+134@ = 0
+
+:CASINO4_18455
+goto @CASINO4_18532
+
+:CASINO4_18462
+if 
+  133@ == 1
+goto_if_false @CASINO4_18497
+Particle.Stop(137@)
+Particle.Kill(137@)
+133@ = 0
+
+:CASINO4_18497
+if 
+  134@ == 1
+goto_if_false @CASINO4_18532
+Particle.Stop(136@)
+Particle.Kill(136@)
+134@ = 0
+
+:CASINO4_18532
+if and
+  120@ == 1
+  119@ == 1
+goto_if_false @CASINO4_18733
+129@ = 1
+if 
+  52@ == 0
+goto_if_false @CASINO4_18726
+if and
+  124@ == 0
+  125@ == 0
+goto_if_false @CASINO4_18726
+if and
+  not Char.IsDead(72@)
+  not Char.IsDead(71@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_18726
+if and
+  Char.IsSittingInCar(72@, 77@)
+  Char.IsSittingInCar(71@, 77@)
+goto_if_false @CASINO4_18726
+TIMERA = 0
+Text.ClearPrints
+Text.Print('CAS4_16', 8000, 1)
+70@ = Blip.AddForCoord(-24.0, 2331.0, 24.0)
+52@ = 1
+272@ = 0
+273@ = 0
+
+:CASINO4_18726
+goto @CASINO4_20438
+
+:CASINO4_18733
+129@ = 0
+if 
+  52@ == 1
+goto_if_false @CASINO4_18770
+Blip.Remove(70@)
+52@ = 0
+
+:CASINO4_18770
+if 
+  272@ == 0
+goto_if_false @CASINO4_19152
+if 
+  252@ <> 0
+goto_if_false @CASINO4_19152
+if 
+  255@ == 0
+goto_if_false @CASINO4_18852
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_18845
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_18845
+255@ = 1
+
+:CASINO4_18852
+if 
+  255@ == 1
+goto_if_false @CASINO4_18889
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_18889
+if 
+  255@ == 2
+goto_if_false @CASINO4_18974
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_18974
+Audio.PlayMissionAudio(253@)
+if or
+  252@ == 7
+  252@ == 8
+goto_if_false @CASINO4_18967
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+
+:CASINO4_18967
+255@ = 3
+
+:CASINO4_18974
+if 
+  255@ == 3
+goto_if_false @CASINO4_19152
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_19091
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  253@ == 1
+goto_if_false @CASINO4_19056
+253@ = 2
+254@ = 1
+goto @CASINO4_19070
+
+:CASINO4_19056
+253@ = 1
+254@ = 2
+
+:CASINO4_19070
+252@ = 0
+255@ = 0
+goto @CASINO4_19152
+
+:CASINO4_19091
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_19152
+if 
+  110 > 252@
+goto_if_false @CASINO4_19152
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_19152
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_20438
+if and
+  not Char.IsDead(72@)
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_20438
+if or
+  Char.LocateAnyMeansChar3D($scplayer, 72@, 10.0, 10.0, 5.0, False)
+  Char.LocateAnyMeansChar3D($scplayer, 71@, 10.0, 10.0, 5.0, False)
+goto_if_false @CASINO4_20410
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_20007
+284@ = 0
+283@ = 1
+if 
+  272@ == 0
+goto_if_false @CASINO4_20000
+if and
+  120@ == 1
+  119@ == 0
+goto_if_false @CASINO4_19542
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 72@, 10.0, 10.0, 5.0, False)
+goto_if_false @CASINO4_19542
+switch_start 273@ total_jumps 1 default_jump 1 @CASINO4_19463 jumps 0 @CASINO4_19419 -1 @CASINO4_19542 -1 @CASINO4_19542 -1 @CASINO4_19542 -1 @CASINO4_19542 -1 @CASINO4_19542 -1 @CASINO4_19542
+
+:CASINO4_19419
+if 
+  255@ == 0
+goto_if_false @CASINO4_19456
+252@ = 40
+273@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_19456
+goto @CASINO4_19542
+
+:CASINO4_19463
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_19535
+if 
+  255@ == 0
+goto_if_false @CASINO4_19535
+273@ = 0
+272@ = 1
+
+:CASINO4_19535
+goto @CASINO4_19542
+
+:CASINO4_19542
+if and
+  120@ == 0
+  119@ == 1
+goto_if_false @CASINO4_19789
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 71@, 10.0, 10.0, 5.0, False)
+goto_if_false @CASINO4_19789
+switch_start 273@ total_jumps 1 default_jump 1 @CASINO4_19710 jumps 0 @CASINO4_19666 -1 @CASINO4_19789 -1 @CASINO4_19789 -1 @CASINO4_19789 -1 @CASINO4_19789 -1 @CASINO4_19789 -1 @CASINO4_19789
+
+:CASINO4_19666
+if 
+  255@ == 0
+goto_if_false @CASINO4_19703
+252@ = 39
+273@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_19703
+goto @CASINO4_19789
+
+:CASINO4_19710
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_19782
+if 
+  255@ == 0
+goto_if_false @CASINO4_19782
+273@ = 0
+272@ = 1
+
+:CASINO4_19782
+goto @CASINO4_19789
+
+:CASINO4_19789
+if and
+  120@ == 0
+  119@ == 0
+goto_if_false @CASINO4_20000
+switch_start 273@ total_jumps 1 default_jump 1 @CASINO4_19921 jumps 0 @CASINO4_19877 -1 @CASINO4_20000 -1 @CASINO4_20000 -1 @CASINO4_20000 -1 @CASINO4_20000 -1 @CASINO4_20000 -1 @CASINO4_20000
+
+:CASINO4_19877
+if 
+  255@ == 0
+goto_if_false @CASINO4_19914
+252@ = 38
+273@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_19914
+goto @CASINO4_20000
+
+:CASINO4_19921
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_19993
+if 
+  255@ == 0
+goto_if_false @CASINO4_19993
+273@ = 0
+272@ = 1
+
+:CASINO4_19993
+goto @CASINO4_20000
+
+:CASINO4_20000
+goto @CASINO4_20403
+
+:CASINO4_20007
+272@ = 0
+273@ = 0
+if 
+  284@ == 0
+goto_if_false @CASINO4_20403
+switch_start 283@ total_jumps 2 default_jump 1 @CASINO4_20293 jumps 0 @CASINO4_20102 1 @CASINO4_20175 -1 @CASINO4_20403 -1 @CASINO4_20403 -1 @CASINO4_20403 -1 @CASINO4_20403 -1 @CASINO4_20403
+
+:CASINO4_20102
+if 
+  255@ == 0
+goto_if_false @CASINO4_20168
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_20149
+Char.StopFacialTalk(71@)
+Char.StartFacialTalk(71@, 3000)
+
+:CASINO4_20149
+252@ = 7
+283@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_20168
+goto @CASINO4_20403
+
+:CASINO4_20175
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_20286
+if 
+  255@ == 0
+goto_if_false @CASINO4_20286
+if and
+  not Char.IsDead(72@)
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_20267
+Char.StopFacialTalk(71@)
+Char.StartFacialTalk(72@, 3000)
+
+:CASINO4_20267
+252@ = 8
+283@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_20286
+goto @CASINO4_20403
+
+:CASINO4_20293
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_20396
+if 
+  255@ == 0
+goto_if_false @CASINO4_20396
+if and
+  not Char.IsDead(72@)
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_20382
+Char.StopFacialTalk(71@)
+Char.StopFacialTalk(72@)
+
+:CASINO4_20382
+283@ = 0
+284@ = 1
+
+:CASINO4_20396
+goto @CASINO4_20403
+
+:CASINO4_20403
+goto @CASINO4_20438
+
+:CASINO4_20410
+272@ = 0
+273@ = 0
+284@ = 0
+283@ = 1
+
+:CASINO4_20438
+if 
+  52@ == 1
+goto_if_false @CASINO4_22506
+if and
+  124@ == 0
+  125@ == 0
+goto_if_false @CASINO4_22476
+if 
+  265@ == 0
+goto_if_false @CASINO4_22469
+if 
+  252@ <> 0
+goto_if_false @CASINO4_20838
+if 
+  255@ == 0
+goto_if_false @CASINO4_20563
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_20556
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_20556
+255@ = 1
+
+:CASINO4_20563
+if 
+  255@ == 1
+goto_if_false @CASINO4_20600
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_20600
+if 
+  255@ == 2
+goto_if_false @CASINO4_20660
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_20660
+Audio.PlayMissionAudio(253@)
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+255@ = 3
+
+:CASINO4_20660
+if 
+  255@ == 3
+goto_if_false @CASINO4_20838
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_20777
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  253@ == 1
+goto_if_false @CASINO4_20742
+253@ = 2
+254@ = 1
+goto @CASINO4_20756
+
+:CASINO4_20742
+253@ = 1
+254@ = 2
+
+:CASINO4_20756
+252@ = 0
+255@ = 0
+goto @CASINO4_20838
+
+:CASINO4_20777
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_20838
+if 
+  110 > 252@
+goto_if_false @CASINO4_20838
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_20838
+if 
+  263@ == 0
+goto_if_false @CASINO4_21502
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_21495
+switch_start 262@ total_jumps 5 default_jump 1 @CASINO4_21354 jumps 0 @CASINO4_20932 1 @CASINO4_21018 2 @CASINO4_21102 3 @CASINO4_21186 4 @CASINO4_21270 -1 @CASINO4_21495 -1 @CASINO4_21495
+
+:CASINO4_20932
+if 
+  255@ == 0
+goto_if_false @CASINO4_21011
+if and
+  not Char.IsDead(71@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_20992
+Char.ShutUpForScriptedSpeech(72@, True)
+Char.ShutUpForScriptedSpeech(71@, True)
+Char.ShutUpForScriptedSpeech($scplayer, True)
+
+:CASINO4_20992
+252@ = 20
+262@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_21011
+goto @CASINO4_21495
+
+:CASINO4_21018
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_21095
+if 
+  255@ == 0
+goto_if_false @CASINO4_21095
+252@ = 21
+262@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_21095
+goto @CASINO4_21495
+
+:CASINO4_21102
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_21179
+if 
+  255@ == 0
+goto_if_false @CASINO4_21179
+252@ = 22
+262@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_21179
+goto @CASINO4_21495
+
+:CASINO4_21186
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_21263
+if 
+  255@ == 0
+goto_if_false @CASINO4_21263
+252@ = 23
+262@ = 4
+260@ = Clock.GetGameTimer()
+
+:CASINO4_21263
+goto @CASINO4_21495
+
+:CASINO4_21270
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_21347
+if 
+  255@ == 0
+goto_if_false @CASINO4_21347
+252@ = 24
+262@ = 5
+260@ = Clock.GetGameTimer()
+
+:CASINO4_21347
+goto @CASINO4_21495
+
+:CASINO4_21354
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_21488
+if 
+  255@ == 0
+goto_if_false @CASINO4_21488
+if and
+  not Char.IsDead(71@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_21454
+Char.ShutUpForScriptedSpeech(72@, False)
+Char.ShutUpForScriptedSpeech(71@, False)
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:CASINO4_21454
+263@ = 1
+if 
+  TIMERA > 25000
+goto_if_false @CASINO4_21488
+TIMERA = 25000
+
+:CASINO4_21488
+goto @CASINO4_21495
+
+:CASINO4_21495
+goto @CASINO4_22469
+
+:CASINO4_21502
+if and
+  265@ == 0
+  128@ == 1
+goto_if_false @CASINO4_22469
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_22469
+switch_start 264@ total_jumps 8 default_jump 1 @CASINO4_22335 jumps 0 @CASINO4_21668 1 @CASINO4_21747 2 @CASINO4_21831 3 @CASINO4_21915 4 @CASINO4_21999 5 @CASINO4_22083 6 @CASINO4_22167
+switch_continued 7 @CASINO4_22251 -1 @CASINO4_22469 -1 @CASINO4_22469 -1 @CASINO4_22469 -1 @CASINO4_22469 -1 @CASINO4_22469 -1 @CASINO4_22469 -1 @CASINO4_22469 -1 @CASINO4_22469
+
+:CASINO4_21668
+if 
+  255@ == 0
+goto_if_false @CASINO4_21740
+if and
+  not Char.IsDead(71@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_21721
+Char.ShutUpForScriptedSpeech(72@, True)
+Char.ShutUpForScriptedSpeech(71@, True)
+
+:CASINO4_21721
+252@ = 25
+264@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_21740
+goto @CASINO4_22469
+
+:CASINO4_21747
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_21824
+if 
+  255@ == 0
+goto_if_false @CASINO4_21824
+252@ = 26
+264@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_21824
+goto @CASINO4_22469
+
+:CASINO4_21831
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_21908
+if 
+  255@ == 0
+goto_if_false @CASINO4_21908
+252@ = 27
+264@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_21908
+goto @CASINO4_22469
+
+:CASINO4_21915
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_21992
+if 
+  255@ == 0
+goto_if_false @CASINO4_21992
+252@ = 28
+264@ = 4
+260@ = Clock.GetGameTimer()
+
+:CASINO4_21992
+goto @CASINO4_22469
+
+:CASINO4_21999
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_22076
+if 
+  255@ == 0
+goto_if_false @CASINO4_22076
+252@ = 29
+264@ = 5
+260@ = Clock.GetGameTimer()
+
+:CASINO4_22076
+goto @CASINO4_22469
+
+:CASINO4_22083
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_22160
+if 
+  255@ == 0
+goto_if_false @CASINO4_22160
+252@ = 30
+264@ = 6
+260@ = Clock.GetGameTimer()
+
+:CASINO4_22160
+goto @CASINO4_22469
+
+:CASINO4_22167
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_22244
+if 
+  255@ == 0
+goto_if_false @CASINO4_22244
+252@ = 31
+264@ = 7
+260@ = Clock.GetGameTimer()
+
+:CASINO4_22244
+goto @CASINO4_22469
+
+:CASINO4_22251
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_22328
+if 
+  255@ == 0
+goto_if_false @CASINO4_22328
+252@ = 32
+264@ = 8
+260@ = Clock.GetGameTimer()
+
+:CASINO4_22328
+goto @CASINO4_22469
+
+:CASINO4_22335
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_22462
+if 
+  255@ == 0
+goto_if_false @CASINO4_22462
+if and
+  not Char.IsDead(71@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_22428
+Char.ShutUpForScriptedSpeech(72@, False)
+Char.ShutUpForScriptedSpeech(71@, False)
+
+:CASINO4_22428
+265@ = 1
+if 
+  TIMERA > 25000
+goto_if_false @CASINO4_22462
+TIMERA = 25000
+
+:CASINO4_22462
+goto @CASINO4_22469
+
+:CASINO4_22469
+goto @CASINO4_22506
+
+:CASINO4_22476
+if 
+  52@ == 1
+goto_if_false @CASINO4_22506
+Blip.Remove(70@)
+52@ = 0
+
+:CASINO4_22506
+if and
+  49@ == 1
+  60@ == 0
+goto_if_false @CASINO4_22724
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -32.0, 2337.0, 24.0, 100.0, 100.0, 20.0)
+goto_if_false @CASINO4_22724
+Car.CustomPlateForNextCar(478, "__TIM___")
+78@ = Car.Create(478, -50.0, 2358.0, 24.0)
+Car.LockDoors(78@, CarLock.LockoutPlayerOnly)
+Car.SetCanBeDamaged(78@, False)
+Car.SetHeading(78@, 188.0)
+Car.FreezePosition(78@, True)
+Car.CustomPlateForNextCar(478, "_TAMMY__")
+79@ = Car.Create(478, -46.0, 2355.0, 24.0)
+Car.LockDoors(79@, CarLock.LockoutPlayerOnly)
+Car.SetHeading(79@, 188.0)
+Car.FreezePosition(79@, True)
+Car.SetCanBeDamaged(79@, False)
+60@ = 1
+
+:CASINO4_22724
+if and
+  52@ == 1
+  51@ == 0
+  49@ == 1
+goto_if_false @CASINO4_29660
+if and
+  not Char.IsDead(72@)
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_29660
+if and
+  Char.LocateAnyMeans3D($scplayer, 1, -24.0, 2331.0, 24.0, 4.0, 4.0, 2.0)
+  Char.LocateAnyMeans3D(72@, 0, -24.0, 2331.0, 24.0, 4.0, 4.0, 2.0)
+  Char.LocateAnyMeans3D(71@, 0, -24.0, 2331.0, 24.0, 4.0, 4.0, 2.0)
+goto_if_false @CASINO4_29660
+Blip.Remove(70@)
+Text.ClearPrints
+Camera.SetFixedPosition(-21.46, 2335.33, 23.52, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-49.14, 2356.75, 26.09, SwitchType.JumpCut)
+Player.MakeGangDisappear
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Game.SetPoliceIgnorePlayer($player1, True)
+World.ClearArea(1, -24.0, 2331.0, 24.0, 50.0)
+Streaming.RemoveAnimation("PAULNMAC")
+Streaming.RemoveAnimation("FOOD")
+Streaming.RequestAnimation("SMOKING")
+Streaming.RequestModel(346)
+
+:CASINO4_23037
+if or
+  not Streaming.HasAnimationLoaded("SMOKING")
+  not Streaming.HasModelLoaded(346)
+goto_if_false @CASINO4_23075
+wait 0
+goto @CASINO4_23037
+
+:CASINO4_23075
+73@ = Char.Create(25, 32, -32.3702, 2348.239, 23.1328)
+Char.SetHeading(73@, 180.1098)
+Char.SetIsTargetPriority(73@, True)
+Char.GiveWeapon(73@, WeaponType.Pistol, 3000)
+109@ = Sequence.Open()
+Task.PlayAnim(-1, "M_SMKSTND_LOOP", "SMOKING", 4.0, True, False, False, False, -1)
+Sequence.Close(109@)
+Char.PerformSequence(73@, 109@)
+Sequence.Clear(109@)
+74@ = Char.Create(25, 34, -34.288, 2350.204, 23.1328)
+Char.SetHeading(74@, 177.5823)
+Char.SetIsTargetPriority(74@, True)
+Char.GiveWeapon(74@, WeaponType.Pistol, 3000)
+109@ = Sequence.Open()
+Task.PlayAnim(-1, "M_SMKLEAN_LOOP", "SMOKING", 4.0, True, False, False, False, -1)
+Sequence.Close(109@)
+Char.PerformSequence(74@, 109@)
+Sequence.Clear(109@)
+Camera.SetFixedPosition(-21.46, 2335.33, 23.52, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-49.14, 2356.75, 26.09, SwitchType.JumpCut)
+if and
+  not Char.IsDead(72@)
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_23661
+World.ClearArea(1, -25.7433, 2334.629, 23.1328, 100.0)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_23485
+77@ = Char.StoreCarIsIn($scplayer)
+Car.SetMission(77@, CarMission.EmergencyVehicleStop)
+Char.WarpFromCarToCoord($scplayer, -25.7433, 2334.629, 23.1328)
+Car.SetCoordinates(77@, -24.0, 2331.0, 24.0)
+goto @CASINO4_23505
+
+:CASINO4_23485
+Char.SetCoordinates($scplayer, -25.7433, 2334.629, 23.1328)
+
+:CASINO4_23505
+Char.SetHeading($scplayer, 35.8419)
+if 
+  Char.IsInAnyCar(72@)
+goto_if_false @CASINO4_23558
+Char.WarpFromCarToCoord(72@, -23.6752, 2335.531, 23.1328)
+goto @CASINO4_23578
+
+:CASINO4_23558
+Char.SetCoordinates(72@, -23.6752, 2334.531, 23.1328)
+
+:CASINO4_23578
+Char.SetHeading(72@, 35.8419)
+if 
+  Char.IsInAnyCar(71@)
+goto_if_false @CASINO4_23631
+Char.WarpFromCarToCoord(71@, -27.9403, 2335.105, 23.1328)
+goto @CASINO4_23651
+
+:CASINO4_23631
+Char.SetCoordinates(71@, -27.9403, 2334.105, 23.1328)
+
+:CASINO4_23651
+Char.SetHeading(71@, 35.8419)
+
+:CASINO4_23661
+82@ = Sequence.Open()
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_23686
+Task.LeaveAnyCar(-1)
+
+:CASINO4_23686
+Task.GoStraightToCoord(-1, -31.7411, 2342.68, 23.125, MoveState.Walk, -1)
+Task.AchieveHeading(-1, 35.5196)
+Sequence.Close(82@)
+Char.PerformSequence($scplayer, 82@)
+Sequence.Clear(82@)
+DecisionMakerChar.ClearEventResponse(38@, 13)
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_23862
+Char.SetProofs(71@, True, True, True, True, True)
+Char.RemoveFromGroup(71@)
+80@ = Sequence.Open()
+if 
+  Char.IsInAnyCar(71@)
+goto_if_false @CASINO4_23804
+Task.LeaveAnyCar(-1)
+
+:CASINO4_23804
+Task.GoStraightToCoord(-1, -33.0398, 2342.354, 23.125, MoveState.Walk, -1)
+Task.AchieveHeading(-1, 37.553)
+Sequence.Close(80@)
+Char.PerformSequence(71@, 80@)
+Sequence.Clear(80@)
+Char.SetDecisionMaker(71@, 38@)
+
+:CASINO4_23862
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_23981
+Char.SetProofs(72@, True, True, True, True, True)
+Char.RemoveFromGroup(72@)
+81@ = Sequence.Open()
+if 
+  Char.IsInAnyCar(72@)
+goto_if_false @CASINO4_23923
+Task.LeaveAnyCar(-1)
+
+:CASINO4_23923
+Task.GoStraightToCoord(-1, -30.0669, 2344.002, 23.125, MoveState.Walk, -1)
+Task.AchieveHeading(-1, 19.556)
+Sequence.Close(81@)
+Char.PerformSequence(72@, 81@)
+Sequence.Clear(81@)
+Char.SetDecisionMaker(72@, 38@)
+
+:CASINO4_23981
+252@ = 0
+253@ = 1
+254@ = 2
+255@ = 0
+256@ = 0
+257@ = 0
+258@ = 0
+259@ = 0
+260@ = 0
+261@ = 0
+TIMERB = 0
+
+:CASINO4_24058
+wait 0
+if 
+  256@ == 0
+goto_if_false @CASINO4_24877
+if 
+  252@ <> 0
+goto_if_false @CASINO4_24419
+if 
+  255@ == 0
+goto_if_false @CASINO4_24144
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_24137
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_24137
+255@ = 1
+
+:CASINO4_24144
+if 
+  255@ == 1
+goto_if_false @CASINO4_24181
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_24181
+if 
+  255@ == 2
+goto_if_false @CASINO4_24241
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_24241
+Audio.PlayMissionAudio(253@)
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+255@ = 3
+
+:CASINO4_24241
+if 
+  255@ == 3
+goto_if_false @CASINO4_24419
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_24358
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  253@ == 1
+goto_if_false @CASINO4_24323
+253@ = 2
+254@ = 1
+goto @CASINO4_24337
+
+:CASINO4_24323
+253@ = 1
+254@ = 2
+
+:CASINO4_24337
+252@ = 0
+255@ = 0
+goto @CASINO4_24419
+
+:CASINO4_24358
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_24419
+if 
+  110 > 252@
+goto_if_false @CASINO4_24419
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_24419
+switch_start 257@ total_jumps 3 default_jump 1 @CASINO4_24777 jumps 0 @CASINO4_24482 1 @CASINO4_24539 2 @CASINO4_24659 -1 @CASINO4_24870 -1 @CASINO4_24870 -1 @CASINO4_24870 -1 @CASINO4_24870
+
+:CASINO4_24482
+if 
+  255@ == 0
+goto_if_false @CASINO4_24532
+Char.StopFacialTalk($scplayer)
+Char.StartFacialTalk($scplayer, 3000)
+252@ = 33
+257@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_24532
+goto @CASINO4_24870
+
+:CASINO4_24539
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_24652
+if 
+  255@ == 0
+goto_if_false @CASINO4_24652
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_24626
+Char.StopFacialTalk(71@)
+Char.StartFacialTalk(71@, 3000)
+
+:CASINO4_24626
+252@ = 34
+257@ = 2
+skip_cutscene_start_internal @CASINO4_27883
+260@ = Clock.GetGameTimer()
+
+:CASINO4_24652
+goto @CASINO4_24870
+
+:CASINO4_24659
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_24770
+if 
+  255@ == 0
+goto_if_false @CASINO4_24770
+if and
+  not Char.IsDead(72@)
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_24751
+Char.StopFacialTalk(71@)
+Char.StartFacialTalk(72@, 3000)
+
+:CASINO4_24751
+252@ = 35
+257@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_24770
+goto @CASINO4_24870
+
+:CASINO4_24777
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_24863
+if 
+  255@ == 0
+goto_if_false @CASINO4_24863
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_24856
+Char.StopFacialTalk(72@)
+
+:CASINO4_24856
+256@ = 1
+
+:CASINO4_24863
+goto @CASINO4_24870
+
+:CASINO4_24870
+goto @CASINO4_24058
+
+:CASINO4_24877
+53@ = 0
+
+:CASINO4_24884
+if 
+  53@ == 0
+goto_if_false @CASINO4_24976
+if or
+  Char.LocateAnyMeans3D($scplayer, 0, -31.7411, 2342.68, 23.125, 3.0, 3.0, 3.0)
+  TIMERB > 10000
+goto_if_false @CASINO4_24965
+53@ = 1
+
+:CASINO4_24965
+wait 0
+goto @CASINO4_24884
+
+:CASINO4_24976
+Char.SetCoordinates($scplayer, -31.7411, 2342.68, 23.125)
+Char.SetHeading($scplayer, 37.553)
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_25057
+Char.ClearTasks(72@)
+Char.SetCoordinates(72@, -30.0669, 2344.002, 23.125)
+Char.SetHeading(72@, 19.556)
+
+:CASINO4_25057
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_25108
+Char.ClearTasks(71@)
+Char.SetCoordinates(71@, -33.0398, 2342.354, 23.125)
+Char.SetHeading(71@, 37.553)
+
+:CASINO4_25108
+Camera.SetFixedPosition(-29.85, 2341.05, 23.81, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-48.53, 2366.47, 31.65, SwitchType.JumpCut)
+Streaming.RequestModel(31)
+Streaming.RequestModel(33)
+Streaming.RequestAnimation("MISC")
+if and
+  not Char.IsDead(73@)
+  not Char.IsDead(74@)
+goto_if_false @CASINO4_25239
+82@ = Sequence.Open()
+Task.LookAtChar(-1, 73@, 3000)
+Task.LookAtChar(-1, 74@, 3000)
+Sequence.Close(82@)
+Char.PerformSequence($scplayer, 82@)
+Sequence.Clear(82@)
+
+:CASINO4_25239
+252@ = 0
+253@ = 1
+254@ = 2
+255@ = 0
+256@ = 0
+257@ = 0
+258@ = 0
+259@ = 0
+260@ = 0
+261@ = 0
+
+:CASINO4_25309
+wait 0
+if 
+  256@ == 0
+goto_if_false @CASINO4_27883
+if 
+  252@ <> 0
+goto_if_false @CASINO4_25754
+if 
+  255@ == 0
+goto_if_false @CASINO4_25395
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_25388
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_25388
+255@ = 1
+
+:CASINO4_25395
+if 
+  255@ == 1
+goto_if_false @CASINO4_25432
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_25432
+if 
+  255@ == 2
+goto_if_false @CASINO4_25492
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_25492
+Audio.PlayMissionAudio(253@)
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+255@ = 3
+
+:CASINO4_25492
+if 
+  255@ == 3
+goto_if_false @CASINO4_25754
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_25693
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  253@ == 1
+goto_if_false @CASINO4_25574
+253@ = 2
+254@ = 1
+goto @CASINO4_25588
+
+:CASINO4_25574
+253@ = 1
+254@ = 2
+
+:CASINO4_25588
+if 
+  not Char.IsDead(75@)
+goto_if_false @CASINO4_25609
+Char.StopFacialTalk(75@)
+
+:CASINO4_25609
+if 
+  not Char.IsDead(73@)
+goto_if_false @CASINO4_25630
+Char.StopFacialTalk(73@)
+
+:CASINO4_25630
+if 
+  not Char.IsDead(76@)
+goto_if_false @CASINO4_25651
+Char.StopFacialTalk(76@)
+
+:CASINO4_25651
+if 
+  not Char.IsDead(74@)
+goto_if_false @CASINO4_25672
+Char.StopFacialTalk(74@)
+
+:CASINO4_25672
+252@ = 0
+255@ = 0
+goto @CASINO4_25754
+
+:CASINO4_25693
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_25754
+if 
+  110 > 252@
+goto_if_false @CASINO4_25754
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_25754
+switch_start 257@ total_jumps 8 default_jump 1 @CASINO4_27804 jumps 0 @CASINO4_25882 1 @CASINO4_25950 2 @CASINO4_26183 3 @CASINO4_26291 4 @CASINO4_26966 5 @CASINO4_27074 6 @CASINO4_27296
+switch_continued 7 @CASINO4_27570 -1 @CASINO4_27876 -1 @CASINO4_27876 -1 @CASINO4_27876 -1 @CASINO4_27876 -1 @CASINO4_27876 -1 @CASINO4_27876 -1 @CASINO4_27876 -1 @CASINO4_27876
+
+:CASINO4_25882
+if 
+  255@ == 0
+goto_if_false @CASINO4_25943
+if 
+  not Char.IsDead(73@)
+goto_if_false @CASINO4_25924
+Char.StartFacialTalk(73@, 10000)
+
+:CASINO4_25924
+252@ = 103
+257@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_25943
+goto @CASINO4_27876
+
+:CASINO4_25950
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_26176
+if 
+  255@ == 0
+goto_if_false @CASINO4_26176
+if 
+  Streaming.HasAnimationLoaded("MISC")
+goto_if_false @CASINO4_26168
+Char.ClearLookAt($scplayer)
+if and
+  not Char.IsDead(71@)
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_26118
+Task.LookAtChar($scplayer, 71@, 6000)
+Task.LookAtChar(72@, 71@, 6000)
+82@ = Sequence.Open()
+Task.LookAtChar(-1, 72@, 3000)
+Task.LookAtChar(-1, $scplayer, 3000)
+Sequence.Close(82@)
+Char.PerformSequence(71@, 82@)
+Sequence.Clear(82@)
+
+:CASINO4_26118
+if 
+  not Char.IsDead(74@)
+goto_if_false @CASINO4_26142
+Char.StartFacialTalk(74@, 10000)
+
+:CASINO4_26142
+252@ = 104
+257@ = 2
+260@ = Clock.GetGameTimer()
+goto @CASINO4_26176
+
+:CASINO4_26168
+Streaming.RequestAnimation("MISC")
+
+:CASINO4_26176
+goto @CASINO4_27876
+
+:CASINO4_26183
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_26284
+if 
+  255@ == 0
+goto_if_false @CASINO4_26284
+if 
+  not Char.IsDead(74@)
+goto_if_false @CASINO4_26265
+Char.StartFacialTalk(74@, 10000)
+
+:CASINO4_26265
+252@ = 105
+257@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_26284
+goto @CASINO4_27876
+
+:CASINO4_26291
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_26959
+if or
+  not Streaming.HasModelLoaded(31)
+  not Streaming.HasModelLoaded(33)
+goto_if_false @CASINO4_26365
+Streaming.RequestModel(31)
+Streaming.RequestModel(33)
+goto @CASINO4_26959
+
+:CASINO4_26365
+if 
+  255@ == 0
+goto_if_false @CASINO4_26959
+if and
+  not Char.IsDead(71@)
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_26419
+Char.ClearLookAt($scplayer)
+Char.ClearLookAt(72@)
+Char.ClearLookAt(71@)
+
+:CASINO4_26419
+if and
+  not Char.IsDead(71@)
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_26554
+82@ = Sequence.Open()
+Task.StandStill(-1, 2000)
+Task.PlayAnim(-1, "PLYR_SHKHEAD", "MISC", 4.0, False, False, False, False, -1)
+Sequence.Close(82@)
+Char.PerformSequence(71@, 82@)
+Sequence.Clear(82@)
+Task.LookAtChar($scplayer, 71@, 6000)
+82@ = Sequence.Open()
+Task.StandStill(-1, 3000)
+Task.ScratchHead(-1)
+Sequence.Close(82@)
+Char.PerformSequence(72@, 82@)
+Sequence.Clear(82@)
+
+:CASINO4_26554
+Char.ClearLookAt($scplayer)
+76@ = Char.Create(25, 31, -45.2021, 2350.32, 23.125)
+Char.SetHeading(76@, 176.976)
+Char.SetAnimGroup(76@, "SEXYWOMAN")
+Char.SetIsTargetPriority(76@, True)
+Char.SetDecisionMaker(76@, 38@)
+Path.FlushRoute
+Path.ExtendRoute(-44.052, 2348.615, 23.125)
+Path.ExtendRoute(-39.8254, 2346.733, 23.125)
+Path.ExtendRoute(-36.6941, 2346.5, 23.125)
+109@ = Sequence.Open()
+Task.FollowPointRoute(-1, 4, RouteMode.Once)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.Close(109@)
+Char.PerformSequence(76@, 109@)
+Sequence.Clear(109@)
+75@ = Char.Create(25, 33, -46.1256, 2351.387, 23.125)
+Char.SetHeading(75@, 176.976)
+Char.SetDecisionMaker(75@, 38@)
+Path.FlushRoute
+Path.ExtendRoute(-44.052, 2348.615, 23.125)
+Path.ExtendRoute(-39.8254, 2346.733, 23.125)
+Path.ExtendRoute(-38.286, 2346.675, 23.125)
+Path.ExtendRoute(-36.1799, 2348.412, 23.125)
+109@ = Sequence.Open()
+Task.FollowPointRoute(-1, 4, RouteMode.Once)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.Close(109@)
+Char.PerformSequence(75@, 109@)
+Sequence.Clear(109@)
+Camera.SetFixedPosition(-36.34, 2345.19, 24.52, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-50.23, 2366.32, 23.72, SwitchType.JumpCut)
+if 
+  not Char.IsDead(75@)
+goto_if_false @CASINO4_26940
+Char.StartFacialTalk(75@, 10000)
+
+:CASINO4_26940
+252@ = 106
+257@ = 4
+260@ = Clock.GetGameTimer()
+
+:CASINO4_26959
+goto @CASINO4_27876
+
+:CASINO4_26966
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_27067
+if 
+  255@ == 0
+goto_if_false @CASINO4_27067
+if 
+  not Char.IsDead(75@)
+goto_if_false @CASINO4_27048
+Char.StartFacialTalk(75@, 10000)
+
+:CASINO4_27048
+252@ = 107
+257@ = 5
+260@ = Clock.GetGameTimer()
+
+:CASINO4_27067
+goto @CASINO4_27876
+
+:CASINO4_27074
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_27289
+if 
+  255@ == 0
+goto_if_false @CASINO4_27289
+if 
+  not Char.IsDead(76@)
+goto_if_false @CASINO4_27270
+90@ = Char.GetScriptTaskStatus(76@, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_27263
+Task.PlayAnim(76@, "SCRATCHBALLS_01", "MISC", 4.0, True, False, False, False, -1)
+252@ = 108
+if 
+  not Char.IsDead(76@)
+goto_if_false @CASINO4_27251
+Char.StartFacialTalk(76@, 10000)
+
+:CASINO4_27251
+257@ = 6
+260@ = Clock.GetGameTimer()
+
+:CASINO4_27263
+goto @CASINO4_27289
+
+:CASINO4_27270
+252@ = 108
+257@ = 6
+260@ = Clock.GetGameTimer()
+
+:CASINO4_27289
+goto @CASINO4_27876
+
+:CASINO4_27296
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_27563
+if 
+  255@ == 0
+goto_if_false @CASINO4_27563
+Camera.SetFixedPosition(-30.33, 2342.29, 24.71, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-41.67, 2352.5, 23.55, SwitchType.JumpCut)
+if 
+  not Char.IsDead(75@)
+goto_if_false @CASINO4_27464
+Task.PlayAnim(75@, "SCRATCHBALLS_01", "MISC", 4.0, True, False, False, False, -1)
+
+:CASINO4_27464
+if 
+  not Char.IsDead(73@)
+goto_if_false @CASINO4_27520
+Task.PlayAnim(73@, "M_SMK_OUT", "SMOKING", 4.0, False, False, False, False, -1)
+
+:CASINO4_27520
+if 
+  not Char.IsDead(73@)
+goto_if_false @CASINO4_27544
+Char.StartFacialTalk(73@, 10000)
+
+:CASINO4_27544
+252@ = 109
+257@ = 7
+260@ = Clock.GetGameTimer()
+
+:CASINO4_27563
+goto @CASINO4_27876
+
+:CASINO4_27570
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_27797
+if 
+  255@ == 0
+goto_if_false @CASINO4_27797
+if 
+  not Char.IsDead(73@)
+goto_if_false @CASINO4_27754
+109@ = Sequence.Open()
+Task.PlayAnim(-1, "ROADCROSS", "PED", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "COLT45_RELOAD", "COLT45", 4.0, False, False, False, False, -1)
+Task.AimGunAtChar(-1, $scplayer, 6000)
+Sequence.Close(109@)
+Char.PerformSequence(73@, 109@)
+Sequence.Clear(109@)
+
+:CASINO4_27754
+if 
+  not Char.IsDead(73@)
+goto_if_false @CASINO4_27778
+Char.StartFacialTalk(73@, 10000)
+
+:CASINO4_27778
+252@ = 110
+257@ = 8
+260@ = Clock.GetGameTimer()
+
+:CASINO4_27797
+goto @CASINO4_27876
+
+:CASINO4_27804
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_27869
+if 
+  255@ == 0
+goto_if_false @CASINO4_27869
+256@ = 1
+
+:CASINO4_27869
+goto @CASINO4_27876
+
+:CASINO4_27876
+goto @CASINO4_25309
+
+:CASINO4_27883
+skip_cutscene_end 
+Player.MakeGangReappear
+Audio.ClearMissionAudio(253@)
+Audio.ClearMissionAudio(254@)
+DecisionMakerChar.AddEventResponse(38@, 13, 917, 100.0, 0.0, 0.0, 100.0, True, False)
+
+:CASINO4_27931
+if or
+  not Streaming.HasModelLoaded(32)
+  not Streaming.HasModelLoaded(34)
+  not Streaming.HasModelLoaded(31)
+  not Streaming.HasModelLoaded(33)
+  not Streaming.HasModelLoaded(346)
+goto_if_false @CASINO4_27991
+wait 0
+Streaming.RequestModel(34)
+Streaming.RequestModel(31)
+Streaming.RequestModel(33)
+Streaming.RequestModel(346)
+goto @CASINO4_27931
+
+:CASINO4_27991
+Char.Delete(73@)
+Char.MarkAsNoLongerNeeded(73@)
+73@ = Char.Create(25, 32, -32.3702, 2348.239, 23.125)
+Char.SetHeading(73@, 180.1098)
+Char.SetIsTargetPriority(73@, True)
+Char.GiveWeapon(73@, WeaponType.Pistol, 3000)
+Char.Delete(74@)
+Char.MarkAsNoLongerNeeded(74@)
+74@ = Char.Create(25, 34, -34.288, 2350.204, 23.125)
+Char.SetHeading(74@, 177.5823)
+Char.SetIsTargetPriority(74@, True)
+Char.GiveWeapon(74@, WeaponType.Pistol, 3000)
+Char.Delete(76@)
+Char.MarkAsNoLongerNeeded(76@)
+76@ = Char.Create(25, 31, -36.6941, 2346.5, 23.125)
+Char.SetHeading(76@, 259.6481)
+Char.SetAnimGroup(76@, "SEXYWOMAN")
+Char.SetIsTargetPriority(76@, True)
+Char.Delete(75@)
+Char.MarkAsNoLongerNeeded(75@)
+75@ = Char.Create(25, 33, -36.1799, 2348.412, 23.125)
+Char.SetHeading(75@, 265.8938)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_28267
+Char.WarpFromCarToCoord($scplayer, -31.7411, 2342.68, 23.125)
+goto @CASINO4_28287
+
+:CASINO4_28267
+Char.SetCoordinates($scplayer, -31.7411, 2342.68, 23.125)
+
+:CASINO4_28287
+Char.SetHeading($scplayer, 37.553)
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_28391
+Char.ClearTasks(72@)
+if 
+  Char.IsInAnyCar(72@)
+goto_if_false @CASINO4_28361
+Char.WarpFromCarToCoord(72@, -30.0669, 2344.002, 23.125)
+goto @CASINO4_28381
+
+:CASINO4_28361
+Char.SetCoordinates(72@, -30.0669, 2344.002, 23.125)
+
+:CASINO4_28381
+Char.SetHeading(72@, 19.556)
+
+:CASINO4_28391
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_28485
+Char.ClearTasks(71@)
+if 
+  Char.IsInAnyCar(71@)
+goto_if_false @CASINO4_28455
+Char.WarpFromCarToCoord(71@, -33.0398, 2342.354, 23.125)
+goto @CASINO4_28475
+
+:CASINO4_28455
+Char.SetCoordinates(71@, -33.0398, 2342.354, 23.125)
+
+:CASINO4_28475
+Char.SetHeading(71@, 37.553)
+
+:CASINO4_28485
+if and
+  not Char.IsDead(72@)
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_28520
+Task.ToggleDuck(71@, True)
+Task.ToggleDuck(72@, True)
+
+:CASINO4_28520
+34@, 35@, 36@ = Char.GetCoordinates($scplayer)
+if and
+  not Char.IsDead(73@)
+  not Car.IsDead(79@)
+goto_if_false @CASINO4_28679
+Car.FreezePosition(79@, False)
+83@ = Sequence.Open()
+Task.ShootAtCoord(-1, 34@, 35@, 36@, 5000)
+Task.GoStraightToCoord(-1, -46.3592, 2346.977, 23.1348, MoveState.Run, 10000)
+Task.EnterCarAsPassenger(-1, 79@, 0, 3000)
+Task.DriveBy(-1, $scplayer, -1, 0.0, 0.0, 0.0, 10.0, DriveByType.Ai, True, 50)
+Sequence.Close(83@)
+Char.PerformSequence(73@, 83@)
+Sequence.Clear(83@)
+goto @CASINO4_28724
+
+:CASINO4_28679
+if or
+  Car.IsDead(79@)
+  Char.IsDead(76@)
+goto_if_false @CASINO4_28724
+if 
+  not Char.IsDead(73@)
+goto_if_false @CASINO4_28724
+Task.KillCharOnFoot(73@, $scplayer)
+
+:CASINO4_28724
+if and
+  not Char.IsDead(74@)
+  not Car.IsDead(78@)
+goto_if_false @CASINO4_28869
+Car.FreezePosition(78@, False)
+84@ = Sequence.Open()
+Task.ShootAtCoord(-1, 34@, 35@, 36@, 5000)
+Task.GoStraightToCoord(-1, -44.9959, 2346.381, 23.1348, MoveState.Run, 10000)
+Task.EnterCarAsPassenger(-1, 78@, 0, 3000)
+Task.DriveBy(-1, $scplayer, -1, 0.0, 0.0, 0.0, 10.0, DriveByType.Ai, True, 50)
+Sequence.Close(84@)
+Char.PerformSequence(74@, 84@)
+Sequence.Clear(84@)
+goto @CASINO4_28914
+
+:CASINO4_28869
+if or
+  Car.IsDead(78@)
+  Char.IsDead(75@)
+goto_if_false @CASINO4_28914
+if 
+  not Char.IsDead(74@)
+goto_if_false @CASINO4_28914
+Task.KillCharOnFoot(74@, $scplayer)
+
+:CASINO4_28914
+if and
+  not Char.IsDead(75@)
+  not Car.IsDead(78@)
+goto_if_false @CASINO4_29022
+Car.FreezePosition(78@, False)
+86@ = Sequence.Open()
+Task.ShootAtCoord(-1, 34@, 35@, 36@, 5000)
+Task.GoStraightToCoord(-1, -44.9959, 2346.381, 23.1348, MoveState.Run, 10000)
+Task.EnterCarAsDriver(-1, 78@, 3000)
+Sequence.Close(86@)
+Char.PerformSequence(75@, 86@)
+Sequence.Clear(86@)
+goto @CASINO4_29051
+
+:CASINO4_29022
+if and
+  Car.IsDead(78@)
+  not Char.IsDead(75@)
+goto_if_false @CASINO4_29051
+Task.KillCharOnFoot(75@, $scplayer)
+
+:CASINO4_29051
+if and
+  not Char.IsDead(76@)
+  not Car.IsDead(79@)
+goto_if_false @CASINO4_29159
+Car.FreezePosition(79@, False)
+85@ = Sequence.Open()
+Task.ShootAtCoord(-1, 34@, 35@, 36@, 5000)
+Task.GoStraightToCoord(-1, -46.3592, 2346.977, 23.1348, MoveState.Run, 10000)
+Task.EnterCarAsDriver(-1, 79@, 3000)
+Sequence.Close(85@)
+Char.PerformSequence(76@, 85@)
+Sequence.Clear(85@)
+goto @CASINO4_29188
+
+:CASINO4_29159
+if and
+  Car.IsDead(79@)
+  not Char.IsDead(76@)
+goto_if_false @CASINO4_29188
+Task.KillCharOnFoot(76@, $scplayer)
+
+:CASINO4_29188
+Game.SetPoliceIgnorePlayer($player1, False)
+if 
+  not Car.IsDead(78@)
+goto_if_false @CASINO4_29225
+Car.SetCanBeDamaged(78@, True)
+Car.SetOnlyDamagedByPlayer(78@, True)
+
+:CASINO4_29225
+if 
+  not Car.IsDead(79@)
+goto_if_false @CASINO4_29255
+Car.SetCanBeDamaged(79@, True)
+Car.SetOnlyDamagedByPlayer(79@, True)
+
+:CASINO4_29255
+if and
+  not Char.IsDead(71@)
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_29306
+Char.ClearTasks($scplayer)
+Char.ClearTasks(72@)
+Char.ClearTasks(71@)
+Char.ClearLookAt($scplayer)
+Char.ClearLookAt(72@)
+Char.ClearLookAt(71@)
+
+:CASINO4_29306
+Streaming.RemoveAnimation("SMOKING")
+Streaming.RemoveAnimation("MISC")
+DecisionMakerChar.ClearEventResponse(38@, 49)
+DecisionMakerChar.ClearEventResponse(38@, 15)
+DecisionMakerChar.AddEventResponse(38@, 49, 311, 100.0, 100.0, 100.0, 100.0, True, True)
+DecisionMakerChar.AddEventResponse(38@, 15, 415, 100.0, 100.0, 100.0, 100.0, True, True)
+DecisionMakerGroup.ClearEventResponse(39@, 9)
+DecisionMakerGroup.AddEventResponse(39@, 15, 1510, 100.0, 100.0, 100.0, 100.0, True, True)
+if and
+  not Char.IsDead(72@)
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_29523
+if 
+  not Char.IsGroupMember(72@, $Players_Group)
+goto_if_false @CASINO4_29496
+Group.SetMember(72@, $Players_Group)
+
+:CASINO4_29496
+if 
+  not Char.IsGroupMember(71@, $Players_Group)
+goto_if_false @CASINO4_29523
+Group.SetMember(71@, $Players_Group)
+
+:CASINO4_29523
+set_lvar_int_to_lvar_int 113@ = 73@
+set_lvar_int_to_lvar_int 114@ = 76@
+set_lvar_int_to_lvar_int 115@ = 75@
+set_lvar_int_to_lvar_int 116@ = 74@
+272@ = 0
+273@ = 0
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+if 
+  46@ == 0
+goto_if_false @CASINO4_29643
+69@ = Blip.AddForCoord(2175.21, 1679.37, 9.85)
+Text.PrintNow('CAS4_06', 8000, 1)
+46@ = 1
+
+:CASINO4_29643
+51@ = 1
+132@ = 9999999
+
+:CASINO4_29660
+if 
+  51@ > 0
+goto_if_false @CASINO4_33651
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_29916
+if 
+  120@ == 1
+goto_if_false @CASINO4_29846
+if 
+  not Char.LocateAnyMeansChar2D($scplayer, 71@, 20.0, 20.0, False)
+goto_if_false @CASINO4_29839
+Char.RemoveFromGroup(71@)
+if 
+  not Char.IsInAnyCar(71@)
+goto_if_false @CASINO4_29781
+Task.Tired(71@, 60000)
+goto @CASINO4_29817
+
+:CASINO4_29781
+80@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.Tired(-1, 60000)
+Sequence.Close(80@)
+Char.PerformSequence(71@, 80@)
+Sequence.Clear(80@)
+
+:CASINO4_29817
+68@ = Blip.AddForChar(71@)
+Blip.SetAsFriendly(68@, True)
+120@ = 0
+
+:CASINO4_29839
+goto @CASINO4_29916
+
+:CASINO4_29846
+if 
+  Char.LocateAnyMeansChar2D($scplayer, 71@, 5.0, 5.0, False)
+goto_if_false @CASINO4_29916
+if 
+  not Char.IsGroupMember(71@, $Players_Group)
+goto_if_false @CASINO4_29904
+Group.SetMember(71@, $Players_Group)
+
+:CASINO4_29904
+Blip.Remove(68@)
+120@ = 1
+
+:CASINO4_29916
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_30154
+if 
+  119@ == 1
+goto_if_false @CASINO4_30084
+if 
+  not Char.LocateAnyMeansChar2D($scplayer, 72@, 20.0, 20.0, False)
+goto_if_false @CASINO4_30077
+Char.RemoveFromGroup(72@)
+if 
+  not Char.IsInAnyCar(72@)
+goto_if_false @CASINO4_30019
+Task.Tired(72@, 60000)
+goto @CASINO4_30055
+
+:CASINO4_30019
+80@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.Tired(-1, 60000)
+Sequence.Close(80@)
+Char.PerformSequence(72@, 80@)
+Sequence.Clear(80@)
+
+:CASINO4_30055
+67@ = Blip.AddForChar(72@)
+Blip.SetAsFriendly(67@, True)
+119@ = 0
+
+:CASINO4_30077
+goto @CASINO4_30154
+
+:CASINO4_30084
+if 
+  Char.LocateAnyMeansChar2D($scplayer, 72@, 5.0, 5.0, False)
+goto_if_false @CASINO4_30154
+if 
+  not Char.IsGroupMember(72@, $Players_Group)
+goto_if_false @CASINO4_30142
+Group.SetMember(72@, $Players_Group)
+
+:CASINO4_30142
+Blip.Remove(67@)
+119@ = 1
+
+:CASINO4_30154
+if and
+  119@ == 1
+  120@ == 1
+goto_if_false @CASINO4_32764
+if 
+  269@ == 0
+goto_if_false @CASINO4_32687
+if 
+  252@ <> 0
+goto_if_false @CASINO4_30536
+if 
+  255@ == 0
+goto_if_false @CASINO4_30261
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_30254
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_30254
+255@ = 1
+
+:CASINO4_30261
+if 
+  255@ == 1
+goto_if_false @CASINO4_30298
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_30298
+if 
+  255@ == 2
+goto_if_false @CASINO4_30358
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_30358
+Audio.PlayMissionAudio(253@)
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+255@ = 3
+
+:CASINO4_30358
+if 
+  255@ == 3
+goto_if_false @CASINO4_30536
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_30475
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  253@ == 1
+goto_if_false @CASINO4_30440
+253@ = 2
+254@ = 1
+goto @CASINO4_30454
+
+:CASINO4_30440
+253@ = 1
+254@ = 2
+
+:CASINO4_30454
+252@ = 0
+255@ = 0
+goto @CASINO4_30536
+
+:CASINO4_30475
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_30536
+if 
+  110 > 252@
+goto_if_false @CASINO4_30536
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_30536
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_32687
+if 
+  267@ == 0
+goto_if_false @CASINO4_31607
+if 
+  271@ == 0
+goto_if_false @CASINO4_30862
+switch_start 270@ total_jumps 2 default_jump 1 @CASINO4_30776 jumps 0 @CASINO4_30648 1 @CASINO4_30692 -1 @CASINO4_30855 -1 @CASINO4_30855 -1 @CASINO4_30855 -1 @CASINO4_30855 -1 @CASINO4_30855
+
+:CASINO4_30648
+if 
+  255@ == 0
+goto_if_false @CASINO4_30685
+252@ = 36
+270@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_30685
+goto @CASINO4_30855
+
+:CASINO4_30692
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_30769
+if 
+  255@ == 0
+goto_if_false @CASINO4_30769
+252@ = 37
+270@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_30769
+goto @CASINO4_30855
+
+:CASINO4_30776
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_30848
+if 
+  255@ == 0
+goto_if_false @CASINO4_30848
+271@ = 1
+TIMERB = 0
+
+:CASINO4_30848
+goto @CASINO4_30855
+
+:CASINO4_30855
+goto @CASINO4_31600
+
+:CASINO4_30862
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_31600
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_31600
+if 
+  TIMERB > 10000
+goto_if_false @CASINO4_31600
+switch_start 266@ total_jumps 6 default_jump 1 @CASINO4_31479 jumps 0 @CASINO4_30973 1 @CASINO4_31059 2 @CASINO4_31143 3 @CASINO4_31227 4 @CASINO4_31311 5 @CASINO4_31395 -1 @CASINO4_31600
+
+:CASINO4_30973
+if 
+  255@ == 0
+goto_if_false @CASINO4_31052
+if and
+  not Char.IsDead(71@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_31033
+Char.ShutUpForScriptedSpeech(72@, True)
+Char.ShutUpForScriptedSpeech(71@, True)
+Char.ShutUpForScriptedSpeech($scplayer, True)
+
+:CASINO4_31033
+252@ = 46
+266@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_31052
+goto @CASINO4_31600
+
+:CASINO4_31059
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_31136
+if 
+  255@ == 0
+goto_if_false @CASINO4_31136
+252@ = 47
+266@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_31136
+goto @CASINO4_31600
+
+:CASINO4_31143
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_31220
+if 
+  255@ == 0
+goto_if_false @CASINO4_31220
+252@ = 48
+266@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_31220
+goto @CASINO4_31600
+
+:CASINO4_31227
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_31304
+if 
+  255@ == 0
+goto_if_false @CASINO4_31304
+252@ = 49
+266@ = 4
+260@ = Clock.GetGameTimer()
+
+:CASINO4_31304
+goto @CASINO4_31600
+
+:CASINO4_31311
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_31388
+if 
+  255@ == 0
+goto_if_false @CASINO4_31388
+252@ = 92
+266@ = 5
+260@ = Clock.GetGameTimer()
+
+:CASINO4_31388
+goto @CASINO4_31600
+
+:CASINO4_31395
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_31472
+if 
+  255@ == 0
+goto_if_false @CASINO4_31472
+252@ = 93
+266@ = 6
+260@ = Clock.GetGameTimer()
+
+:CASINO4_31472
+goto @CASINO4_31600
+
+:CASINO4_31479
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_31593
+if 
+  255@ == 0
+goto_if_false @CASINO4_31593
+if and
+  not Char.IsDead(71@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_31579
+Char.ShutUpForScriptedSpeech(72@, False)
+Char.ShutUpForScriptedSpeech(71@, False)
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:CASINO4_31579
+267@ = 1
+TIMERB = 0
+
+:CASINO4_31593
+goto @CASINO4_31600
+
+:CASINO4_31600
+goto @CASINO4_32687
+
+:CASINO4_31607
+if 
+  269@ == 0
+goto_if_false @CASINO4_32687
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_32687
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_32687
+if 
+  TIMERB > 10000
+goto_if_false @CASINO4_32687
+switch_start 268@ total_jumps 10 default_jump 1 @CASINO4_32573 jumps 0 @CASINO4_31801 1 @CASINO4_31887 2 @CASINO4_31971 3 @CASINO4_31985 4 @CASINO4_32069 5 @CASINO4_32153 6 @CASINO4_32237
+switch_continued 7 @CASINO4_32321 8 @CASINO4_32405 9 @CASINO4_32489 -1 @CASINO4_32687 -1 @CASINO4_32687 -1 @CASINO4_32687 -1 @CASINO4_32687 -1 @CASINO4_32687 -1 @CASINO4_32687
+
+:CASINO4_31801
+if 
+  255@ == 0
+goto_if_false @CASINO4_31880
+if and
+  not Char.IsDead(71@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_31861
+Char.ShutUpForScriptedSpeech(72@, True)
+Char.ShutUpForScriptedSpeech(71@, True)
+Char.ShutUpForScriptedSpeech($scplayer, True)
+
+:CASINO4_31861
+252@ = 82
+268@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_31880
+goto @CASINO4_32687
+
+:CASINO4_31887
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_31964
+if 
+  255@ == 0
+goto_if_false @CASINO4_31964
+252@ = 83
+268@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_31964
+goto @CASINO4_32687
+
+:CASINO4_31971
+268@ = 3
+goto @CASINO4_32687
+
+:CASINO4_31985
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_32062
+if 
+  255@ == 0
+goto_if_false @CASINO4_32062
+252@ = 85
+268@ = 4
+260@ = Clock.GetGameTimer()
+
+:CASINO4_32062
+goto @CASINO4_32687
+
+:CASINO4_32069
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_32146
+if 
+  255@ == 0
+goto_if_false @CASINO4_32146
+252@ = 86
+268@ = 5
+260@ = Clock.GetGameTimer()
+
+:CASINO4_32146
+goto @CASINO4_32687
+
+:CASINO4_32153
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_32230
+if 
+  255@ == 0
+goto_if_false @CASINO4_32230
+252@ = 87
+268@ = 6
+260@ = Clock.GetGameTimer()
+
+:CASINO4_32230
+goto @CASINO4_32687
+
+:CASINO4_32237
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_32314
+if 
+  255@ == 0
+goto_if_false @CASINO4_32314
+252@ = 88
+268@ = 7
+260@ = Clock.GetGameTimer()
+
+:CASINO4_32314
+goto @CASINO4_32687
+
+:CASINO4_32321
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_32398
+if 
+  255@ == 0
+goto_if_false @CASINO4_32398
+252@ = 89
+268@ = 8
+260@ = Clock.GetGameTimer()
+
+:CASINO4_32398
+goto @CASINO4_32687
+
+:CASINO4_32405
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_32482
+if 
+  255@ == 0
+goto_if_false @CASINO4_32482
+252@ = 90
+268@ = 9
+260@ = Clock.GetGameTimer()
+
+:CASINO4_32482
+goto @CASINO4_32687
+
+:CASINO4_32489
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_32566
+if 
+  255@ == 0
+goto_if_false @CASINO4_32566
+252@ = 91
+268@ = 10
+260@ = Clock.GetGameTimer()
+
+:CASINO4_32566
+goto @CASINO4_32687
+
+:CASINO4_32573
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_32680
+if 
+  255@ == 0
+goto_if_false @CASINO4_32680
+if and
+  not Char.IsDead(71@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_32673
+Char.ShutUpForScriptedSpeech(72@, False)
+Char.ShutUpForScriptedSpeech(71@, False)
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:CASINO4_32673
+269@ = 1
+
+:CASINO4_32680
+goto @CASINO4_32687
+
+:CASINO4_32687
+if 
+  46@ == 0
+goto_if_false @CASINO4_32757
+272@ = 0
+69@ = Blip.AddForCoord(2175.21, 1679.37, 9.85)
+Text.ClearPrints
+Text.Print('CAS4_06', 8000, 1)
+46@ = 1
+
+:CASINO4_32757
+goto @CASINO4_33651
+
+:CASINO4_32764
+if 
+  46@ == 1
+goto_if_false @CASINO4_32794
+Blip.Remove(69@)
+46@ = 0
+
+:CASINO4_32794
+if and
+  119@ == 0
+  120@ == 0
+goto_if_false @CASINO4_32862
+if 
+  132@ <> 0
+goto_if_false @CASINO4_32862
+Text.ClearPrints
+Text.Print('CAS4_37', 7000, 1)
+132@ = 0
+
+:CASINO4_32862
+if and
+  119@ == 1
+  120@ == 0
+goto_if_false @CASINO4_32930
+if 
+  132@ <> 1
+goto_if_false @CASINO4_32930
+Text.ClearPrints
+Text.Print('CAS4_03', 7000, 1)
+132@ = 1
+
+:CASINO4_32930
+if and
+  119@ == 0
+  120@ == 1
+goto_if_false @CASINO4_32998
+if 
+  132@ <> 2
+goto_if_false @CASINO4_32998
+Text.ClearPrints
+Text.Print('CAS4_02', 7000, 1)
+132@ = 2
+
+:CASINO4_32998
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_33651
+if 
+  272@ == 0
+goto_if_false @CASINO4_33651
+if 
+  252@ <> 0
+goto_if_false @CASINO4_33368
+if 
+  255@ == 0
+goto_if_false @CASINO4_33093
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_33086
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_33086
+255@ = 1
+
+:CASINO4_33093
+if 
+  255@ == 1
+goto_if_false @CASINO4_33130
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_33130
+if 
+  255@ == 2
+goto_if_false @CASINO4_33190
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_33190
+Audio.PlayMissionAudio(253@)
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+255@ = 3
+
+:CASINO4_33190
+if 
+  255@ == 3
+goto_if_false @CASINO4_33368
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_33307
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  253@ == 1
+goto_if_false @CASINO4_33272
+253@ = 2
+254@ = 1
+goto @CASINO4_33286
+
+:CASINO4_33272
+253@ = 1
+254@ = 2
+
+:CASINO4_33286
+252@ = 0
+255@ = 0
+goto @CASINO4_33368
+
+:CASINO4_33307
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_33368
+if 
+  110 > 252@
+goto_if_false @CASINO4_33368
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_33368
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @CASINO4_33651
+switch_start 273@ total_jumps 2 default_jump 1 @CASINO4_33572 jumps 0 @CASINO4_33444 1 @CASINO4_33488 -1 @CASINO4_33651 -1 @CASINO4_33651 -1 @CASINO4_33651 -1 @CASINO4_33651 -1 @CASINO4_33651
+
+:CASINO4_33444
+if 
+  255@ == 0
+goto_if_false @CASINO4_33481
+252@ = 40
+273@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_33481
+goto @CASINO4_33651
+
+:CASINO4_33488
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_33565
+if 
+  255@ == 0
+goto_if_false @CASINO4_33565
+252@ = 41
+273@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_33565
+goto @CASINO4_33651
+
+:CASINO4_33572
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_33644
+if 
+  255@ == 0
+goto_if_false @CASINO4_33644
+273@ = 0
+272@ = 1
+
+:CASINO4_33644
+goto @CASINO4_33651
+
+:CASINO4_33651
+if 
+  51@ == 1
+goto_if_false @CASINO4_34178
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_33693
+77@ = Char.StoreCarIsIn($scplayer)
+
+:CASINO4_33693
+if and
+  not Char.IsDead(73@)
+  not Car.IsDead(79@)
+goto_if_false @CASINO4_33747
+if 
+  Char.IsInCar(73@, 79@)
+goto_if_false @CASINO4_33740
+55@ = 1
+
+:CASINO4_33740
+goto @CASINO4_33754
+
+:CASINO4_33747
+55@ = 1
+
+:CASINO4_33754
+if and
+  55@ == 1
+  64@ == 0
+goto_if_false @CASINO4_33887
+if and
+  not Char.IsDead(76@)
+  not Car.IsDead(79@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_33887
+87@ = Sequence.Open()
+Task.CarDriveToCoord(-1, 79@, -44.86, 2345.23, 23.16, 30.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+Task.CarMission(-1, 79@, 77@, CarMission.RamPlayerClose, 35.0, DrivingMode.AvoidCars)
+Sequence.Close(87@)
+Char.PerformSequence(76@, 87@)
+Sequence.Clear(87@)
+64@ = 1
+
+:CASINO4_33887
+if and
+  not Char.IsDead(74@)
+  not Car.IsDead(78@)
+goto_if_false @CASINO4_33941
+if 
+  Char.IsInCar(74@, 78@)
+goto_if_false @CASINO4_33934
+54@ = 1
+
+:CASINO4_33934
+goto @CASINO4_33948
+
+:CASINO4_33941
+54@ = 1
+
+:CASINO4_33948
+if and
+  54@ == 1
+  65@ == 0
+goto_if_false @CASINO4_34081
+if and
+  not Char.IsDead(75@)
+  not Car.IsDead(78@)
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_34081
+88@ = Sequence.Open()
+Task.CarDriveToCoord(-1, 78@, -50.86, 2349.23, 23.16, 30.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+Task.CarMission(-1, 78@, 77@, CarMission.RamPlayerClose, 35.0, DrivingMode.AvoidCars)
+Sequence.Close(88@)
+Char.PerformSequence(75@, 88@)
+Sequence.Clear(88@)
+65@ = 1
+
+:CASINO4_34081
+if and
+  54@ == 1
+  55@ == 1
+goto_if_false @CASINO4_34178
+if and
+  not Char.IsDead(71@)
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_34157
+Char.SetProofs(72@, False, False, False, False, True)
+Char.SetProofs(71@, False, False, False, False, True)
+
+:CASINO4_34157
+DecisionMakerChar.ClearEventResponse(38@, 49)
+DecisionMakerChar.ClearEventResponse(38@, 15)
+51@ = 2
+
+:CASINO4_34178
+if and
+  51@ == 2
+  98@ == 0
+goto_if_false @CASINO4_35557
+if 
+  Char.IsDead(76@)
+goto_if_false @CASINO4_34233
+61@ = 0
+goto @CASINO4_34289
+
+:CASINO4_34233
+if 
+  not Car.IsDead(79@)
+goto_if_false @CASINO4_34289
+if 
+  Char.IsInCar(76@, 79@)
+goto_if_false @CASINO4_34282
+61@ = 1
+goto @CASINO4_34289
+
+:CASINO4_34282
+61@ = 0
+
+:CASINO4_34289
+if 
+  Char.IsDead(75@)
+goto_if_false @CASINO4_34319
+62@ = 0
+goto @CASINO4_34389
+
+:CASINO4_34319
+if 
+  not Car.IsDead(78@)
+goto_if_false @CASINO4_34382
+if 
+  Char.IsInCar(75@, 78@)
+goto_if_false @CASINO4_34368
+62@ = 1
+goto @CASINO4_34375
+
+:CASINO4_34368
+62@ = 0
+
+:CASINO4_34375
+goto @CASINO4_34389
+
+:CASINO4_34382
+62@ = 0
+
+:CASINO4_34389
+if 
+  not Char.IsDead(73@)
+goto_if_false @CASINO4_34563
+if or
+  Car.IsDead(79@)
+  not Char.IsInAnyCar(73@)
+  61@ == 0
+goto_if_false @CASINO4_34563
+90@ = Char.GetScriptTaskStatus(73@, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_34563
+90@ = Char.GetScriptTaskStatus(73@, 1506)
+if and
+  not is_int_lvar_equal_to_constant 90@ == 0
+  not is_int_lvar_equal_to_constant 90@ == 1
+goto_if_false @CASINO4_34538
+if 
+  56@ == 0
+goto_if_false @CASINO4_34531
+Task.KillCharOnFoot(73@, $scplayer)
+56@ = 1
+
+:CASINO4_34531
+goto @CASINO4_34563
+
+:CASINO4_34538
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_34563
+56@ = 0
+
+:CASINO4_34563
+if 
+  not Char.IsDead(76@)
+goto_if_false @CASINO4_34732
+if or
+  Car.IsDead(79@)
+  61@ == 0
+goto_if_false @CASINO4_34732
+90@ = Char.GetScriptTaskStatus(76@, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_34732
+90@ = Char.GetScriptTaskStatus(76@, 1506)
+if and
+  not is_int_lvar_equal_to_constant 90@ == 0
+  not is_int_lvar_equal_to_constant 90@ == 1
+goto_if_false @CASINO4_34707
+if 
+  58@ == 0
+goto_if_false @CASINO4_34700
+Task.KillCharOnFoot(76@, $scplayer)
+58@ = 1
+
+:CASINO4_34700
+goto @CASINO4_34732
+
+:CASINO4_34707
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_34732
+58@ = 0
+
+:CASINO4_34732
+if 
+  not Char.IsDead(74@)
+goto_if_false @CASINO4_34906
+if or
+  Car.IsDead(78@)
+  not Char.IsInAnyCar(74@)
+  62@ == 0
+goto_if_false @CASINO4_34906
+90@ = Char.GetScriptTaskStatus(74@, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_34906
+90@ = Char.GetScriptTaskStatus(74@, 1506)
+if and
+  not is_int_lvar_equal_to_constant 90@ == 0
+  not is_int_lvar_equal_to_constant 90@ == 1
+goto_if_false @CASINO4_34881
+if 
+  59@ == 0
+goto_if_false @CASINO4_34874
+Task.KillCharOnFoot(74@, $scplayer)
+59@ = 1
+
+:CASINO4_34874
+goto @CASINO4_34906
+
+:CASINO4_34881
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_34906
+59@ = 0
+
+:CASINO4_34906
+if 
+  not Char.IsDead(75@)
+goto_if_false @CASINO4_35075
+if or
+  Car.IsDead(78@)
+  62@ == 0
+goto_if_false @CASINO4_35075
+90@ = Char.GetScriptTaskStatus(75@, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_35075
+90@ = Char.GetScriptTaskStatus(75@, 1506)
+if and
+  not is_int_lvar_equal_to_constant 90@ == 0
+  not is_int_lvar_equal_to_constant 90@ == 1
+goto_if_false @CASINO4_35050
+if 
+  57@ == 0
+goto_if_false @CASINO4_35043
+Task.KillCharOnFoot(75@, $scplayer)
+57@ = 1
+
+:CASINO4_35043
+goto @CASINO4_35075
+
+:CASINO4_35050
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_35075
+57@ = 0
+
+:CASINO4_35075
+if and
+  not Char.IsDead(76@)
+  not Car.IsDead(79@)
+goto_if_false @CASINO4_35316
+if 
+  Char.IsInCar(76@, 79@)
+goto_if_false @CASINO4_35316
+Car.SetCruiseSpeed(79@, 35.0)
+if and
+  not Char.LocateAnyMeansChar2D($scplayer, 76@, 100.0, 100.0, False)
+  not Car.IsOnScreen(79@)
+goto_if_false @CASINO4_35316
+if 
+  not Char.IsInFlyingVehicle($scplayer)
+goto_if_false @CASINO4_35316
+91@, 92@, 93@ = Char.GetCoordinates($scplayer)
+95@ = Char.GetOffsetInWorldCoords(96@, 97@, $scplayer, -10.0, -10.0, 0.0)
+if 
+  not World.IsPointObscuredByAMissionEntity(95@, 96@, 97@, 4.0, 4.0, 3.0)
+goto_if_false @CASINO4_35316
+if 
+  not Camera.IsPointOnScreen(95@, 96@, 97@, 4.0)
+goto_if_false @CASINO4_35316
+Car.SetCoordinates(79@, 95@, 96@, 97@)
+Car.TurnToFaceCoord(79@, 91@, 92@)
+Car.SetMission(79@, CarMission.RamPlayerClose)
+
+:CASINO4_35316
+if and
+  not Char.IsDead(75@)
+  not Car.IsDead(78@)
+goto_if_false @CASINO4_35557
+if 
+  Char.IsInCar(75@, 78@)
+goto_if_false @CASINO4_35557
+Car.SetCruiseSpeed(78@, 35.0)
+if and
+  not Char.LocateAnyMeansChar2D($scplayer, 75@, 100.0, 100.0, False)
+  not Car.IsOnScreen(78@)
+goto_if_false @CASINO4_35557
+if 
+  not Char.IsInFlyingVehicle($scplayer)
+goto_if_false @CASINO4_35557
+91@, 92@, 93@ = Char.GetCoordinates($scplayer)
+95@ = Char.GetOffsetInWorldCoords(96@, 97@, $scplayer, -13.0, -13.0, 0.0)
+if 
+  not World.IsPointObscuredByAMissionEntity(95@, 96@, 97@, 4.0, 4.0, 3.0)
+goto_if_false @CASINO4_35557
+if 
+  not Camera.IsPointOnScreen(95@, 96@, 97@, 4.0)
+goto_if_false @CASINO4_35557
+Car.SetCoordinates(78@, 95@, 96@, 97@)
+Car.TurnToFaceCoord(78@, 91@, 92@)
+Car.SetMission(78@, CarMission.RamPlayerClose)
+
+:CASINO4_35557
+99@ = 0
+100@ = 0
+
+:CASINO4_35571
+if 
+  4 > 99@
+goto_if_false @CASINO4_35659
+if 
+  Char.IsDead(113@(99@,4i))
+goto_if_false @CASINO4_35627
+101@(99@,4i) = 1
+goto @CASINO4_35645
+
+:CASINO4_35627
+101@(99@,4i) = 0
+100@ += 1
+
+:CASINO4_35645
+99@ += 1
+goto @CASINO4_35571
+
+:CASINO4_35659
+if or
+  46@ == 1
+  45@ == 1
+goto_if_false @CASINO4_38631
+if and
+  not Char.IsDead(72@)
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_38631
+if 
+  45@ == 0
+goto_if_false @CASINO4_35967
+if and
+  100@ > 0
+  98@ == 0
+goto_if_false @CASINO4_35824
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 2175.21, 1679.37, 9.85, 4.0, 4.0, 2.0)
+goto_if_false @CASINO4_35817
+gosub @CASINO4_39181
+98@ = 1
+45@ = 1
+
+:CASINO4_35817
+goto @CASINO4_35960
+
+:CASINO4_35824
+if and
+  Char.LocateAnyMeans3D($scplayer, 1, 2175.21, 1679.37, 9.85, 4.0, 4.0, 2.0)
+  Char.LocateAnyMeans3D(72@, 0, 2175.21, 1679.37, 9.85, 6.0, 6.0, 2.0)
+  Char.LocateAnyMeans3D(71@, 0, 2175.21, 1679.37, 9.85, 6.0, 6.0, 2.0)
+goto_if_false @CASINO4_35960
+Blip.Remove(69@)
+45@ = 1
+Text.ClearPrints
+
+:CASINO4_35960
+goto @CASINO4_38631
+
+:CASINO4_35967
+if and
+  not Char.IsDead(71@)
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_38631
+Text.ClearPrints
+Player.SetControl($player1, False)
+Camera.DoFade(0, 1500)
+
+:CASINO4_36004
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_36028
+wait 0
+goto @CASINO4_36004
+
+:CASINO4_36028
+Char.MarkAsNoLongerNeeded(75@)
+Char.MarkAsNoLongerNeeded(73@)
+Char.MarkAsNoLongerNeeded(76@)
+Char.MarkAsNoLongerNeeded(74@)
+Car.MarkAsNoLongerNeeded(79@)
+Car.MarkAsNoLongerNeeded(78@)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(2188.26, 1678.0, 11.19, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2153.54, 1692.94, 12.04, SwitchType.JumpCut)
+if and
+  not Char.IsDead(71@)
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_36470
+if 
+  Char.IsInAnyCar(71@)
+goto_if_false @CASINO4_36177
+Char.WarpFromCarToCoord(71@, 2179.708, 1680.568, 10.0469)
+goto @CASINO4_36197
+
+:CASINO4_36177
+Char.SetCoordinates(71@, 2179.708, 1680.568, 10.0469)
+
+:CASINO4_36197
+Char.SetHeading(71@, 266.3517)
+if 
+  Char.IsInAnyCar(72@)
+goto_if_false @CASINO4_36250
+Char.WarpFromCarToCoord(72@, 2179.708, 1677.568, 10.0469)
+goto @CASINO4_36270
+
+:CASINO4_36250
+Char.SetCoordinates(72@, 2179.708, 1677.568, 10.0469)
+
+:CASINO4_36270
+Char.SetHeading(72@, 266.3517)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_36323
+Char.WarpFromCarToCoord($scplayer, 2179.759, 1678.957, 10.0469)
+goto @CASINO4_36343
+
+:CASINO4_36323
+Char.SetCoordinates($scplayer, 2179.759, 1678.957, 10.0469)
+
+:CASINO4_36343
+Char.SetHeading($scplayer, 269.249)
+DecisionMaker.Remove(38@)
+38@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+DecisionMakerChar.ClearEventResponse(38@, 13)
+Char.SetDecisionMaker(71@, 38@)
+Char.SetDecisionMaker(72@, 38@)
+Task.GoStraightToCoord($scplayer, 2187.0, 1680.0, 11.4, MoveState.Walk, -1)
+Char.RemoveFromGroup(71@)
+Task.GoStraightToCoord(71@, 2187.0, 1680.0, 11.4, MoveState.Walk, -1)
+Char.RemoveFromGroup(72@)
+Task.GoStraightToCoord(72@, 2187.0, 1680.0, 11.4, MoveState.Walk, -1)
+
+:CASINO4_36470
+Camera.DoFade(1, 1000)
+
+:CASINO4_36477
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_36501
+wait 0
+goto @CASINO4_36477
+
+:CASINO4_36501
+TIMERA = 0
+252@ = 0
+253@ = 1
+254@ = 2
+255@ = 0
+256@ = 0
+257@ = 0
+258@ = 0
+259@ = 0
+260@ = 0
+261@ = 0
+
+:CASINO4_36578
+wait 0
+if 
+  256@ == 0
+goto_if_false @CASINO4_37175
+if 
+  252@ <> 0
+goto_if_false @CASINO4_36939
+if 
+  255@ == 0
+goto_if_false @CASINO4_36664
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_36657
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_36657
+255@ = 1
+
+:CASINO4_36664
+if 
+  255@ == 1
+goto_if_false @CASINO4_36701
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_36701
+if 
+  255@ == 2
+goto_if_false @CASINO4_36761
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_36761
+Audio.PlayMissionAudio(253@)
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+255@ = 3
+
+:CASINO4_36761
+if 
+  255@ == 3
+goto_if_false @CASINO4_36939
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_36878
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  253@ == 1
+goto_if_false @CASINO4_36843
+253@ = 2
+254@ = 1
+goto @CASINO4_36857
+
+:CASINO4_36843
+253@ = 1
+254@ = 2
+
+:CASINO4_36857
+252@ = 0
+255@ = 0
+goto @CASINO4_36939
+
+:CASINO4_36878
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_36939
+if 
+  110 > 252@
+goto_if_false @CASINO4_36939
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_36939
+switch_start 257@ total_jumps 1 default_jump 1 @CASINO4_37075 jumps 0 @CASINO4_37002 -1 @CASINO4_37168 -1 @CASINO4_37168 -1 @CASINO4_37168 -1 @CASINO4_37168 -1 @CASINO4_37168 -1 @CASINO4_37168
+
+:CASINO4_37002
+if 
+  255@ == 0
+goto_if_false @CASINO4_37068
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_37049
+Char.StopFacialTalk(72@)
+Char.StartFacialTalk(72@, 3000)
+
+:CASINO4_37049
+252@ = 99
+257@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_37068
+goto @CASINO4_37168
+
+:CASINO4_37075
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_37161
+if 
+  255@ == 0
+goto_if_false @CASINO4_37161
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_37154
+Char.StopFacialTalk(72@)
+
+:CASINO4_37154
+256@ = 1
+
+:CASINO4_37161
+goto @CASINO4_37168
+
+:CASINO4_37168
+goto @CASINO4_36578
+
+:CASINO4_37175
+if 
+  50@ == 0
+goto_if_false @CASINO4_37338
+wait 0
+if 
+  Char.LocateAnyMeans2D($scplayer, 0, 2187.0, 1680.0, 2.0, 2.0)
+goto_if_false @CASINO4_37242
+50@ = 1
+
+:CASINO4_37242
+if 
+  TIMERA > 15000
+goto_if_false @CASINO4_37331
+if 
+  not World.IsPointObscuredByAMissionEntity(2195.35, 1680.058, 11.4, 1.5, 1.5, 3.0)
+goto_if_false @CASINO4_37324
+Char.SetCoordinates($scplayer, 2187.0, 1680.0, 11.4)
+
+:CASINO4_37324
+50@ = 1
+
+:CASINO4_37331
+goto @CASINO4_37175
+
+:CASINO4_37338
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:CASINO4_37353
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_37377
+wait 0
+goto @CASINO4_37353
+
+:CASINO4_37377
+Weather.Force(WeatherType.SunnyVegas)
+Car.MarkAsNoLongerNeeded(77@)
+Car.MarkAsNoLongerNeeded(78@)
+Car.MarkAsNoLongerNeeded(79@)
+Car.MarkAsNoLongerNeeded(289@)
+Char.RemoveElegantly(72@)
+Char.RemoveElegantly(71@)
+Char.MarkAsNoLongerNeeded(73@)
+Char.MarkAsNoLongerNeeded(76@)
+Char.MarkAsNoLongerNeeded(74@)
+Char.MarkAsNoLongerNeeded(75@)
+Streaming.MarkModelAsNoLongerNeeded(478)
+Streaming.MarkModelAsNoLongerNeeded(31)
+Streaming.MarkModelAsNoLongerNeeded(32)
+Streaming.MarkModelAsNoLongerNeeded(33)
+Streaming.MarkModelAsNoLongerNeeded(34)
+Streaming.MarkModelAsNoLongerNeeded(34)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.UnloadSpecialCharacter(2)
+Player.MakeSafeForCutscene($player1)
+Streaming.SetAreaVisible(2)
+Cutscene.Load('CAS_4C')
+
+:CASINO4_37489
+if 
+  not Cutscene.HasLoaded
+goto_if_false @CASINO4_37513
+wait 0
+goto @CASINO4_37489
+
+:CASINO4_37513
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:CASINO4_37522
+if 
+  not Cutscene.HasFinished
+goto_if_false @CASINO4_37546
+wait 0
+goto @CASINO4_37522
+
+:CASINO4_37546
+Cutscene.Clear
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:CASINO4_37561
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_37585
+wait 0
+goto @CASINO4_37561
+
+:CASINO4_37585
+Streaming.SetAreaVisible(0)
+Weather.Release
+Camera.RestoreJumpcut
+Char.Delete(72@)
+Char.MarkAsNoLongerNeeded(72@)
+Char.Delete(71@)
+Char.MarkAsNoLongerNeeded(71@)
+Char.SetCoordinates($scplayer, 2187.0, 1680.0, 10.106)
+Char.SetHeading($scplayer, 90.0)
+Streaming.LoadScene(2187.0, 1680.0, 10.106)
+Streaming.RequestModel(330)
+
+:CASINO4_37665
+if 
+  not Streaming.HasModelLoaded(330)
+goto_if_false @CASINO4_37692
+wait 0
+goto @CASINO4_37665
+
+:CASINO4_37692
+Camera.SetFixedPosition(2186.524, 1679.363, 11.6094, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2186.983, 1680.246, 11.7063, SwitchType.JumpCut)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+Camera.DoFade(1, 1500)
+
+:CASINO4_37763
+if 
+  Camera.GetFadingStatus
+goto_if_false @CASINO4_37787
+wait 0
+goto @CASINO4_37763
+
+:CASINO4_37787
+Task.UseMobilePhone($scplayer, True)
+wait 2000
+252@ = 0
+253@ = 1
+254@ = 2
+255@ = 0
+256@ = 0
+257@ = 0
+258@ = 0
+259@ = 0
+260@ = 0
+261@ = 0
+skip_cutscene_start_internal @CASINO4_38542
+
+:CASINO4_37876
+wait 0
+if 
+  256@ == 0
+goto_if_false @CASINO4_38542
+if 
+  252@ <> 0
+goto_if_false @CASINO4_38237
+if 
+  255@ == 0
+goto_if_false @CASINO4_37962
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_37955
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_37955
+255@ = 1
+
+:CASINO4_37962
+if 
+  255@ == 1
+goto_if_false @CASINO4_37999
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_37999
+if 
+  255@ == 2
+goto_if_false @CASINO4_38059
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_38059
+Audio.PlayMissionAudio(253@)
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+255@ = 3
+
+:CASINO4_38059
+if 
+  255@ == 3
+goto_if_false @CASINO4_38237
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_38176
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  253@ == 1
+goto_if_false @CASINO4_38141
+253@ = 2
+254@ = 1
+goto @CASINO4_38155
+
+:CASINO4_38141
+253@ = 1
+254@ = 2
+
+:CASINO4_38155
+252@ = 0
+255@ = 0
+goto @CASINO4_38237
+
+:CASINO4_38176
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_38237
+if 
+  110 > 252@
+goto_if_false @CASINO4_38237
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_38237
+switch_start 257@ total_jumps 3 default_jump 1 @CASINO4_38458 jumps 0 @CASINO4_38300 1 @CASINO4_38357 2 @CASINO4_38414 -1 @CASINO4_38535 -1 @CASINO4_38535 -1 @CASINO4_38535 -1 @CASINO4_38535
+
+:CASINO4_38300
+if 
+  255@ == 0
+goto_if_false @CASINO4_38350
+Char.StopFacialTalk($scplayer)
+Char.StartFacialTalk($scplayer, 3000)
+252@ = 100
+257@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_38350
+goto @CASINO4_38535
+
+:CASINO4_38357
+if 
+  255@ == 0
+goto_if_false @CASINO4_38407
+252@ = 101
+Char.StopFacialTalk($scplayer)
+Char.StartFacialTalk($scplayer, 3000)
+257@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_38407
+goto @CASINO4_38535
+
+:CASINO4_38414
+if 
+  255@ == 0
+goto_if_false @CASINO4_38451
+252@ = 102
+257@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_38451
+goto @CASINO4_38535
+
+:CASINO4_38458
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_38528
+if 
+  255@ == 0
+goto_if_false @CASINO4_38528
+Char.StopFacialTalk($scplayer)
+256@ = 1
+
+:CASINO4_38528
+goto @CASINO4_38535
+
+:CASINO4_38535
+goto @CASINO4_37876
+
+:CASINO4_38542
+skip_cutscene_end 
+Player.MakeGangReappear
+Char.StopFacialTalk($scplayer)
+Audio.ClearMissionAudio(253@)
+Audio.ClearMissionAudio(254@)
+90@ = Char.GetScriptTaskStatus($scplayer, 1833)
+if 
+  not is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_38597
+Task.UseMobilePhone($scplayer, False)
+
+:CASINO4_38597
+Streaming.MarkModelAsNoLongerNeeded(330)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+goto @CASINO4_45880
+49@ = 1
+
+:CASINO4_38631
+goto @CASINO4_4043
+
+:CASINO4_38638
+if and
+  not Char.IsDead(71@)
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_39179
+89@ = Sequence.Open()
+Task.GotoChar(-1, 71@, -1, 1.2)
+Task.TurnCharToFaceChar(-1, 71@)
+Task.PlayAnim(-1, "PNM_LOOP_A", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PNM_ARGUE2_A", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PNM_LOOP_A", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PNM_ARGUE1_A", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PNM_LOOP_A", "PAULNMAC", 4.0, False, False, False, False, -1)
+Sequence.SetToRepeat(89@, True)
+Sequence.Close(89@)
+Char.PerformSequence(72@, 89@)
+Sequence.Clear(89@)
+89@ = Sequence.Open()
+Task.GotoChar(-1, 72@, -1, 1.2)
+Task.TurnCharToFaceChar(-1, 72@)
+Task.PlayAnim(-1, "PNM_LOOP_B", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PNM_ARGUE2_B", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PNM_LOOP_B", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PNM_ARGUE1_B", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PNM_LOOP_B", "PAULNMAC", 4.0, False, False, False, False, -1)
+Sequence.SetToRepeat(89@, True)
+Sequence.Close(89@)
+Char.PerformSequence(71@, 89@)
+Sequence.Clear(89@)
+
+:CASINO4_39179
+return 
+
+:CASINO4_39181
+Group.SetDecisionMaker($Players_Group, -1)
+Game.SetPoliceIgnorePlayer($player1, True)
+Game.SetWantedMultiplier(0.0)
+set_lvar_int_to_lvar_int 113@ = 73@
+set_lvar_int_to_lvar_int 114@ = 76@
+set_lvar_int_to_lvar_int 115@ = 75@
+set_lvar_int_to_lvar_int 116@ = 74@
+99@ = 0
+100@ = 0
+
+:CASINO4_39248
+if 
+  4 > 99@
+goto_if_false @CASINO4_39356
+if 
+  Char.IsDead(113@(99@,4i))
+goto_if_false @CASINO4_39304
+101@(99@,4i) = 1
+goto @CASINO4_39342
+
+:CASINO4_39304
+Char.ClearTasks(113@(99@,4i))
+Char.SetCurrentWeapon(113@(99@,4i), WeaponType.Unarmed)
+101@(99@,4i) = 0
+100@ += 1
+
+:CASINO4_39342
+99@ += 1
+goto @CASINO4_39248
+
+:CASINO4_39356
+if 
+  100@ > 0
+goto_if_false @CASINO4_45860
+Blip.Remove(69@)
+46@ = 0
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+World.ClearArea(1, 2165.612, 1680.619, 9.8047, 50.0)
+Text.ClearPrints
+Camera.SetFixedPosition(2171.91, 1669.08, 10.32, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2164.93, 1708.54, 16.85, SwitchType.JumpCut)
+Streaming.RequestAnimation("MISC")
+Streaming.RequestAnimation("GANGS")
+World.SetPedDensityMultiplier(0.0)
+World.SetCarDensityMultiplier(0.0)
+if 
+  not Car.IsDead(78@)
+goto_if_false @CASINO4_39620
+if 
+  not Char.IsDead(75@)
+goto_if_false @CASINO4_39620
+if 
+  Char.IsInCar(75@, 78@)
+goto_if_false @CASINO4_39620
+Car.SetCoordinates(78@, 2096.136, 1643.952, 9.7768)
+Car.SetHeading(78@, 270.9418)
+Task.CarDriveToCoord(75@, 78@, 2158.518, 1681.402, 9.8047, 30.0, DriveMode.Accurate, 0, DrivingMode.SlowDownForCars)
+
+:CASINO4_39620
+if 
+  not Car.IsDead(79@)
+goto_if_false @CASINO4_39735
+if 
+  not Char.IsDead(76@)
+goto_if_false @CASINO4_39735
+if 
+  Char.IsInCar(76@, 79@)
+goto_if_false @CASINO4_39735
+Car.SetCoordinates(79@, 2080.934, 1643.649, 9.6757)
+Car.SetHeading(79@, 271.0448)
+Task.CarDriveToCoord(76@, 79@, 2154.275, 1664.964, 9.8125, 30.0, DriveMode.Accurate, 0, DrivingMode.SlowDownForCars)
+
+:CASINO4_39735
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_40162
+77@ = Char.StoreCarIsIn($scplayer)
+if 
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_40155
+Car.SetMission(77@, CarMission.StopForever)
+53@ = 0
+TIMERB = 0
+
+:CASINO4_39796
+if 
+  53@ == 0
+goto_if_false @CASINO4_40155
+if 
+  63@ == 0
+goto_if_false @CASINO4_40118
+if 
+  not Car.IsDead(77@)
+goto_if_false @CASINO4_40118
+if 
+  Car.IsStopped(77@)
+goto_if_false @CASINO4_40118
+109@ = Sequence.Open()
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_39889
+Task.LeaveAnyCar(-1)
+
+:CASINO4_39889
+Task.GoStraightToCoord(-1, 2171.0, 1671.0, 11.0, MoveState.Walk, -1)
+Sequence.Close(109@)
+Char.PerformSequence($scplayer, 109@)
+Sequence.Clear(109@)
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_40017
+Char.RemoveFromGroup(71@)
+109@ = Sequence.Open()
+if 
+  Char.IsInAnyCar(71@)
+goto_if_false @CASINO4_39976
+Task.LeaveAnyCar(-1)
+
+:CASINO4_39976
+Task.GoStraightToCoord(-1, 2172.0, 1669.0, 10.8125, MoveState.Walk, -1)
+Sequence.Close(109@)
+Char.PerformSequence(71@, 109@)
+Sequence.Clear(109@)
+
+:CASINO4_40017
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_40104
+Char.RemoveFromGroup(72@)
+109@ = Sequence.Open()
+if 
+  Char.IsInAnyCar(72@)
+goto_if_false @CASINO4_40063
+Task.LeaveAnyCar(-1)
+
+:CASINO4_40063
+Task.GoStraightToCoord(-1, 2170.0, 1673.0, 10.8203, MoveState.Walk, -1)
+Sequence.Close(109@)
+Char.PerformSequence(72@, 109@)
+Sequence.Clear(109@)
+
+:CASINO4_40104
+53@ = 1
+63@ = 1
+
+:CASINO4_40118
+if 
+  TIMERB > 20000
+goto_if_false @CASINO4_40144
+53@ = 1
+
+:CASINO4_40144
+wait 0
+goto @CASINO4_39796
+
+:CASINO4_40155
+goto @CASINO4_40392
+
+:CASINO4_40162
+109@ = Sequence.Open()
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_40187
+Task.LeaveAnyCar(-1)
+
+:CASINO4_40187
+Task.GoStraightToCoord(-1, 2165.612, 1680.619, 9.8047, MoveState.Walk, -1)
+Sequence.Close(109@)
+Char.PerformSequence($scplayer, 109@)
+Sequence.Clear(109@)
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_40310
+109@ = Sequence.Open()
+if 
+  Char.IsInAnyCar(71@)
+goto_if_false @CASINO4_40269
+Task.LeaveAnyCar(-1)
+
+:CASINO4_40269
+Task.GoStraightToCoord(-1, 2166.443, 1678.606, 9.8125, MoveState.Walk, -1)
+Sequence.Close(109@)
+Char.PerformSequence(71@, 109@)
+Sequence.Clear(109@)
+
+:CASINO4_40310
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_40392
+109@ = Sequence.Open()
+if 
+  Char.IsInAnyCar(72@)
+goto_if_false @CASINO4_40351
+Task.LeaveAnyCar(-1)
+
+:CASINO4_40351
+Task.GoStraightToCoord(-1, 2166.706, 1683.291, 9.8203, MoveState.Walk, -1)
+Sequence.Close(109@)
+Char.PerformSequence(72@, 109@)
+Sequence.Clear(109@)
+
+:CASINO4_40392
+252@ = 0
+253@ = 1
+254@ = 2
+255@ = 0
+256@ = 0
+257@ = 0
+258@ = 0
+259@ = 0
+260@ = 0
+261@ = 0
+53@ = 0
+300@ = 0
+301@ = 0
+302@ = 0
+TIMERB = 0
+
+:CASINO4_40497
+wait 0
+if 
+  256@ == 0
+goto_if_false @CASINO4_41575
+if 
+  252@ <> 0
+goto_if_false @CASINO4_40863
+if 
+  255@ == 0
+goto_if_false @CASINO4_40583
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_40576
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_40576
+255@ = 1
+
+:CASINO4_40583
+if 
+  255@ == 1
+goto_if_false @CASINO4_40620
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_40620
+if 
+  255@ == 2
+goto_if_false @CASINO4_40680
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_40680
+Audio.PlayMissionAudio(253@)
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+255@ = 3
+
+:CASINO4_40680
+if 
+  255@ == 3
+goto_if_false @CASINO4_40863
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_40802
+Char.StopFacialTalk($scplayer)
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  253@ == 1
+goto_if_false @CASINO4_40767
+253@ = 2
+254@ = 1
+goto @CASINO4_40781
+
+:CASINO4_40767
+253@ = 1
+254@ = 2
+
+:CASINO4_40781
+252@ = 0
+255@ = 0
+goto @CASINO4_40863
+
+:CASINO4_40802
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_40863
+if 
+  110 > 252@
+goto_if_false @CASINO4_40863
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_40863
+switch_start 257@ total_jumps 2 default_jump 1 @CASINO4_41070 jumps 0 @CASINO4_40926 1 @CASINO4_40978 -1 @CASINO4_41196 -1 @CASINO4_41196 -1 @CASINO4_41196 -1 @CASINO4_41196 -1 @CASINO4_41196
+
+:CASINO4_40926
+if 
+  255@ == 0
+goto_if_false @CASINO4_40971
+Char.StartFacialTalk($scplayer, 3000)
+252@ = 94
+257@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_40971
+goto @CASINO4_41196
+
+:CASINO4_40978
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_41063
+if 
+  255@ == 0
+goto_if_false @CASINO4_41063
+Char.StartFacialTalk($scplayer, 3000)
+252@ = 95
+257@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_41063
+goto @CASINO4_41196
+
+:CASINO4_41070
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_41189
+if 
+  255@ == 0
+goto_if_false @CASINO4_41189
+if 
+  300@ == 1
+goto_if_false @CASINO4_41189
+if 
+  301@ == 1
+goto_if_false @CASINO4_41189
+if 
+  302@ == 1
+goto_if_false @CASINO4_41189
+256@ = 1
+
+:CASINO4_41189
+goto @CASINO4_41196
+
+:CASINO4_41196
+90@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_lvar_equal_to_constant 90@ == 7
+goto_if_false @CASINO4_41232
+300@ = 1
+
+:CASINO4_41232
+if 
+  301@ == 0
+goto_if_false @CASINO4_41387
+if 
+  not Car.IsDead(79@)
+goto_if_false @CASINO4_41380
+303@ = Car.GetDriver(79@)
+if 
+  303@ <> -1
+goto_if_false @CASINO4_41366
+if 
+  Car.Locate3D(79@, 0, 2154.275, 1664.964, 9.8125, 4.0, 4.0, 3.0)
+goto_if_false @CASINO4_41359
+Car.SetMission(79@, CarMission.StopForever)
+Car.TaskEveryoneLeave(79@)
+301@ = 1
+
+:CASINO4_41359
+goto @CASINO4_41373
+
+:CASINO4_41366
+301@ = 1
+
+:CASINO4_41373
+goto @CASINO4_41387
+
+:CASINO4_41380
+301@ = 1
+
+:CASINO4_41387
+if 
+  302@ == 0
+goto_if_false @CASINO4_41542
+if 
+  not Car.IsDead(78@)
+goto_if_false @CASINO4_41535
+303@ = Car.GetDriver(78@)
+if 
+  303@ <> -1
+goto_if_false @CASINO4_41521
+if 
+  Car.Locate3D(78@, 0, 2158.518, 1681.402, 9.8047, 4.0, 4.0, 3.0)
+goto_if_false @CASINO4_41514
+Car.SetMission(78@, CarMission.StopForever)
+Car.TaskEveryoneLeave(78@)
+302@ = 1
+
+:CASINO4_41514
+goto @CASINO4_41528
+
+:CASINO4_41521
+300@ = 1
+
+:CASINO4_41528
+goto @CASINO4_41542
+
+:CASINO4_41535
+302@ = 1
+
+:CASINO4_41542
+if 
+  TIMERB > 20000
+goto_if_false @CASINO4_41568
+256@ = 1
+
+:CASINO4_41568
+goto @CASINO4_40497
+
+:CASINO4_41575
+Car.MarkAsNoLongerNeeded(78@)
+Car.MarkAsNoLongerNeeded(79@)
+Streaming.MarkModelAsNoLongerNeeded(478)
+
+:CASINO4_41590
+if or
+  not Streaming.HasAnimationLoaded("GANGS")
+  not Streaming.HasAnimationLoaded("MISC")
+goto_if_false @CASINO4_41646
+Streaming.RequestAnimation("GANGS")
+Streaming.RequestAnimation("MISC")
+wait 0
+goto @CASINO4_41590
+
+:CASINO4_41646
+World.ClearArea(1, 2175.21, 1679.37, 9.85, 50.0)
+Char.ClearTasksImmediately($scplayer)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CASINO4_41718
+Char.WarpFromCarToCoord($scplayer, 2171.0, 1671.0, 9.8125)
+goto @CASINO4_41738
+
+:CASINO4_41718
+Char.SetCoordinates($scplayer, 2171.0, 1671.0, 9.8125)
+
+:CASINO4_41738
+Char.SetHeading($scplayer, 109.2628)
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_41857
+Char.SetDecisionMaker(72@, 37@)
+119@ = 0
+Char.ClearTasksImmediately(72@)
+if 
+  Char.IsInAnyCar(72@)
+goto_if_false @CASINO4_41827
+Char.WarpFromCarToCoord(72@, 2170.0, 1673.0, 9.8125)
+goto @CASINO4_41847
+
+:CASINO4_41827
+Char.SetCoordinates(72@, 2170.0, 1673.0, 9.8125)
+
+:CASINO4_41847
+Char.SetHeading(72@, 153.2628)
+
+:CASINO4_41857
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_41966
+Char.SetDecisionMaker(71@, 38@)
+120@ = 0
+Char.ClearTasksImmediately(71@)
+if 
+  Char.IsInAnyCar(71@)
+goto_if_false @CASINO4_41936
+Char.WarpFromCarToCoord(71@, 2172.0, 1669.0, 9.8125)
+goto @CASINO4_41956
+
+:CASINO4_41936
+Char.SetCoordinates(71@, 2172.0, 1669.0, 9.8125)
+
+:CASINO4_41956
+Char.SetHeading(71@, 133.2628)
+
+:CASINO4_41966
+91@, 92@, 93@ = Char.GetCoordinates($scplayer)
+if 
+  not Char.IsDead(113@)
+goto_if_false @CASINO4_42141
+if 
+  Char.IsInAnyCar(113@)
+goto_if_false @CASINO4_42039
+Char.WarpFromCarToCoord(113@, 2163.43, 1660.721, 9.8203)
+goto @CASINO4_42059
+
+:CASINO4_42039
+Char.SetCoordinates(113@, 2163.43, 1660.721, 9.8203)
+
+:CASINO4_42059
+Char.SetHeading(113@, 327.8448)
+109@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.PlayAnim(-1, "SCRATCHBALLS_01", "MISC", 4.0, True, False, False, False, -1)
+Sequence.Close(109@)
+Char.PerformSequence(113@, 109@)
+Sequence.Clear(109@)
+
+:CASINO4_42141
+if 
+  not Char.IsDead(114@)
+goto_if_false @CASINO4_42302
+if 
+  Char.IsInAnyCar(114@)
+goto_if_false @CASINO4_42200
+Char.WarpFromCarToCoord(114@, 2162.691, 1664.223, 9.8203)
+goto @CASINO4_42220
+
+:CASINO4_42200
+Char.SetCoordinates(114@, 2162.691, 1664.223, 9.8203)
+
+:CASINO4_42220
+Char.SetHeading(114@, 355.144)
+109@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.PlayAnim(-1, "SCRATCHBALLS_01", "MISC", 4.0, True, False, False, False, -1)
+Sequence.Close(109@)
+Char.PerformSequence(114@, 109@)
+Sequence.Clear(109@)
+
+:CASINO4_42302
+if 
+  not Char.IsDead(115@)
+goto_if_false @CASINO4_42463
+if 
+  Char.IsInAnyCar(115@)
+goto_if_false @CASINO4_42361
+Char.WarpFromCarToCoord(115@, 2166.566, 1661.498, 9.8203)
+goto @CASINO4_42381
+
+:CASINO4_42361
+Char.SetCoordinates(115@, 2166.566, 1661.498, 9.8203)
+
+:CASINO4_42381
+Char.SetHeading(115@, 343.0)
+109@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.PlayAnim(-1, "SCRATCHBALLS_01", "MISC", 4.0, True, False, False, False, -1)
+Sequence.Close(109@)
+Char.PerformSequence(115@, 109@)
+Sequence.Clear(109@)
+
+:CASINO4_42463
+if 
+  not Char.IsDead(116@)
+goto_if_false @CASINO4_42624
+if 
+  Char.IsInAnyCar(116@)
+goto_if_false @CASINO4_42522
+Char.WarpFromCarToCoord(116@, 2160.908, 1664.875, 9.8047)
+goto @CASINO4_42542
+
+:CASINO4_42522
+Char.SetCoordinates(116@, 2160.908, 1664.875, 9.8047)
+
+:CASINO4_42542
+Char.SetHeading(116@, 315.7)
+109@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.PlayAnim(-1, "SCRATCHBALLS_01", "MISC", 4.0, True, False, False, False, -1)
+Sequence.Close(109@)
+Char.PerformSequence(116@, 109@)
+Sequence.Clear(109@)
+
+:CASINO4_42624
+Camera.SetFixedPosition(2171.65, 1673.89, 11.12, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2158.4, 1649.68, 11.08, SwitchType.JumpCut)
+Player.MakeGangDisappear
+252@ = 0
+253@ = 1
+254@ = 2
+255@ = 0
+256@ = 0
+257@ = 0
+258@ = 0
+259@ = 0
+260@ = 0
+261@ = 0
+skip_cutscene_start_internal @CASINO4_43736
+
+:CASINO4_42754
+wait 0
+if 
+  256@ == 0
+goto_if_false @CASINO4_43736
+if 
+  252@ <> 0
+goto_if_false @CASINO4_43115
+if 
+  255@ == 0
+goto_if_false @CASINO4_42840
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_42833
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_42833
+255@ = 1
+
+:CASINO4_42840
+if 
+  255@ == 1
+goto_if_false @CASINO4_42877
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_42877
+if 
+  255@ == 2
+goto_if_false @CASINO4_42937
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_42937
+Audio.PlayMissionAudio(253@)
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+255@ = 3
+
+:CASINO4_42937
+if 
+  255@ == 3
+goto_if_false @CASINO4_43115
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_43054
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  253@ == 1
+goto_if_false @CASINO4_43019
+253@ = 2
+254@ = 1
+goto @CASINO4_43033
+
+:CASINO4_43019
+253@ = 1
+254@ = 2
+
+:CASINO4_43033
+252@ = 0
+255@ = 0
+goto @CASINO4_43115
+
+:CASINO4_43054
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_43115
+if 
+  110 > 252@
+goto_if_false @CASINO4_43115
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_43115
+switch_start 257@ total_jumps 3 default_jump 1 @CASINO4_43636 jumps 0 @CASINO4_43178 1 @CASINO4_43280 2 @CASINO4_43507 -1 @CASINO4_43729 -1 @CASINO4_43729 -1 @CASINO4_43729 -1 @CASINO4_43729
+
+:CASINO4_43178
+if 
+  255@ == 0
+goto_if_false @CASINO4_43273
+257@ = 1
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_43257
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_43246
+Task.LookAtChar(71@, 72@, 10000)
+
+:CASINO4_43246
+Task.LookAtChar($scplayer, 72@, 10000)
+
+:CASINO4_43257
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_43273
+
+:CASINO4_43273
+goto @CASINO4_43729
+
+:CASINO4_43280
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_43500
+if 
+  255@ == 0
+goto_if_false @CASINO4_43500
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_43362
+Char.StartFacialTalk(71@, 3000)
+
+:CASINO4_43362
+252@ = 97
+257@ = 2
+299@ = 0
+
+:CASINO4_43383
+if 
+  4 > 299@
+goto_if_false @CASINO4_43463
+if 
+  not Char.IsDead(113@(299@,4i))
+goto_if_false @CASINO4_43449
+Task.GoStraightToCoord(113@(299@,4i), 2167.999, 1666.121, 9.8203, MoveState.Walk, -1)
+
+:CASINO4_43449
+299@ += 1
+goto @CASINO4_43383
+
+:CASINO4_43463
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_43479
+
+:CASINO4_43479
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_43495
+
+:CASINO4_43495
+260@ = Clock.GetGameTimer()
+
+:CASINO4_43500
+goto @CASINO4_43729
+
+:CASINO4_43507
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_43629
+if 
+  255@ == 0
+goto_if_false @CASINO4_43629
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_43586
+Char.StopFacialTalk(71@)
+
+:CASINO4_43586
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_43610
+Char.StartFacialTalk(72@, 3000)
+
+:CASINO4_43610
+252@ = 98
+257@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_43629
+goto @CASINO4_43729
+
+:CASINO4_43636
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_43722
+if 
+  255@ == 0
+goto_if_false @CASINO4_43722
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_43715
+Char.StopFacialTalk(72@)
+
+:CASINO4_43715
+256@ = 1
+
+:CASINO4_43722
+goto @CASINO4_43729
+
+:CASINO4_43729
+goto @CASINO4_42754
+
+:CASINO4_43736
+skip_cutscene_end 
+Player.MakeGangReappear
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_43761
+Char.StopFacialTalk(71@)
+
+:CASINO4_43761
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_43782
+Char.StopFacialTalk(72@)
+
+:CASINO4_43782
+Audio.ClearMissionAudio(253@)
+Audio.ClearMissionAudio(254@)
+99@ = 3
+
+:CASINO4_43799
+if 
+  99@ > -1
+goto_if_false @CASINO4_43934
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_43920
+if 
+  not Char.IsDead(113@(99@,4i))
+goto_if_false @CASINO4_43920
+Char.ClearLookAt(71@)
+Task.KillCharOnFoot(71@, 113@(99@,4i))
+set_lvar_int_to_lvar_int 298@ = 113@(99@,4i)
+Char.SetRelationship(71@, RelationshipType.Hate, PedType.Mission2)
+117@ = Blip.AddForChar(71@)
+Blip.SetAsFriendly(117@, True)
+Blip.ChangeScale(117@, 2)
+99@ = -1
+
+:CASINO4_43920
+99@ -= 1
+goto @CASINO4_43799
+
+:CASINO4_43934
+99@ = 0
+
+:CASINO4_43941
+if 
+  4 > 99@
+goto_if_false @CASINO4_44076
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_44062
+if 
+  not Char.IsDead(113@(99@,4i))
+goto_if_false @CASINO4_44062
+Char.ClearLookAt(72@)
+Task.KillCharOnFoot(72@, 113@(99@,4i))
+set_lvar_int_to_lvar_int 297@ = 113@(99@,4i)
+Char.SetRelationship(72@, RelationshipType.Hate, PedType.Mission2)
+118@ = Blip.AddForChar(72@)
+Blip.SetAsFriendly(118@, True)
+Blip.ChangeScale(118@, 2)
+99@ = 4
+
+:CASINO4_44062
+99@ += 1
+goto @CASINO4_43941
+
+:CASINO4_44076
+99@ = 0
+
+:CASINO4_44083
+if 
+  4 > 99@
+goto_if_false @CASINO4_44280
+if 
+  not Char.IsDead(113@(99@,4i))
+goto_if_false @CASINO4_44266
+105@(99@,4i) = Blip.AddForChar(113@(99@,4i))
+Blip.ChangeDisplay(105@(99@,4i), BlipDisplay.BlipOnly)
+Blip.ChangeScale(105@(99@,4i), 2)
+Char.SetRelationship(113@(99@,4i), RelationshipType.Hate, PedType.Special)
+Char.SetRelationship(113@(99@,4i), RelationshipType.Hate, PedType.Player1)
+if 
+  2 > 99@
+goto_if_false @CASINO4_44238
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_44231
+Task.KillCharOnFoot(113@(99@,4i), 72@)
+
+:CASINO4_44231
+goto @CASINO4_44266
+
+:CASINO4_44238
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_44266
+Task.KillCharOnFoot(113@(99@,4i), 71@)
+
+:CASINO4_44266
+99@ += 1
+goto @CASINO4_44083
+
+:CASINO4_44280
+Camera.RestoreJumpcut
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+Char.ClearTasks($scplayer)
+Char.ClearLookAt($scplayer)
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Streaming.RemoveAnimation("MISC")
+Streaming.RemoveAnimation("GANGS")
+252@ = 0
+253@ = 1
+254@ = 2
+255@ = 0
+256@ = 0
+257@ = 0
+258@ = 0
+259@ = 0
+260@ = 0
+261@ = 0
+TIMERB = 0
+53@ = 0
+
+:CASINO4_44418
+if 
+  53@ == 0
+goto_if_false @CASINO4_45785
+if 
+  252@ <> 0
+goto_if_false @CASINO4_44831
+if 
+  255@ == 0
+goto_if_false @CASINO4_44500
+if 
+  Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_44493
+Audio.ClearMissionAudio(254@)
+
+:CASINO4_44493
+255@ = 1
+
+:CASINO4_44500
+if 
+  255@ == 1
+goto_if_false @CASINO4_44537
+Audio.LoadMissionAudio(138@(252@,114i), 253@)
+255@ = 2
+
+:CASINO4_44537
+if 
+  255@ == 2
+goto_if_false @CASINO4_44597
+if 
+  Audio.HasMissionAudioLoaded(253@)
+goto_if_false @CASINO4_44597
+Audio.PlayMissionAudio(253@)
+Text.PrintNow($cas4_text(252@,114s), 10000, 1)
+255@ = 3
+
+:CASINO4_44597
+if 
+  255@ == 3
+goto_if_false @CASINO4_44831
+if 
+  Audio.HasMissionAudioFinished(253@)
+goto_if_false @CASINO4_44770
+Text.ClearThisPrint($cas4_text(252@,114s))
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_44668
+Char.StopFacialTalk(71@)
+Char.ShutUpForScriptedSpeech(71@, False)
+
+:CASINO4_44668
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_44696
+Char.StopFacialTalk(72@)
+Char.ShutUpForScriptedSpeech(72@, False)
+
+:CASINO4_44696
+if 
+  253@ == 1
+goto_if_false @CASINO4_44735
+253@ = 2
+254@ = 1
+goto @CASINO4_44749
+
+:CASINO4_44735
+253@ = 1
+254@ = 2
+
+:CASINO4_44749
+252@ = 0
+255@ = 0
+goto @CASINO4_44831
+
+:CASINO4_44770
+if 
+  not Audio.HasMissionAudioLoaded(254@)
+goto_if_false @CASINO4_44831
+if 
+  110 > 252@
+goto_if_false @CASINO4_44831
+set_lvar_int_to_lvar_int 261@ = 252@
+261@ += 1
+Audio.LoadMissionAudio(138@(261@,114i), 254@)
+
+:CASINO4_44831
+switch_start 257@ total_jumps 3 default_jump 1 @CASINO4_45218 jumps 0 @CASINO4_44894 1 @CASINO4_44988 2 @CASINO4_45103 -1 @CASINO4_45290 -1 @CASINO4_45290 -1 @CASINO4_45290 -1 @CASINO4_45290
+
+:CASINO4_44894
+if 
+  TIMERB > 5000
+goto_if_false @CASINO4_44981
+if 
+  255@ == 0
+goto_if_false @CASINO4_44981
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_44962
+Char.ShutUpForScriptedSpeech(71@, True)
+Char.StartFacialTalk(71@, 3000)
+
+:CASINO4_44962
+252@ = 112
+257@ = 1
+260@ = Clock.GetGameTimer()
+
+:CASINO4_44981
+goto @CASINO4_45290
+
+:CASINO4_44988
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 7000
+goto_if_false @CASINO4_45096
+if 
+  255@ == 0
+goto_if_false @CASINO4_45096
+252@ = 17
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_45084
+Char.ShutUpForScriptedSpeech(72@, True)
+Char.StartFacialTalk(72@, 3000)
+
+:CASINO4_45084
+257@ = 2
+260@ = Clock.GetGameTimer()
+
+:CASINO4_45096
+goto @CASINO4_45290
+
+:CASINO4_45103
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 7000
+goto_if_false @CASINO4_45211
+if 
+  255@ == 0
+goto_if_false @CASINO4_45211
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_45192
+Char.ShutUpForScriptedSpeech(71@, True)
+Char.StartFacialTalk(71@, 3000)
+
+:CASINO4_45192
+252@ = 111
+257@ = 3
+260@ = Clock.GetGameTimer()
+
+:CASINO4_45211
+goto @CASINO4_45290
+
+:CASINO4_45218
+259@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 258@ = 259@
+sub_int_lvar_from_int_lvar 258@ -= 260@
+if 
+  258@ > 1000
+goto_if_false @CASINO4_45283
+if 
+  255@ == 0
+goto_if_false @CASINO4_45283
+256@ = 1
+
+:CASINO4_45283
+goto @CASINO4_45290
+
+:CASINO4_45290
+99@ = 0
+
+:CASINO4_45297
+if 
+  4 > 99@
+goto_if_false @CASINO4_45665
+if 
+  101@(99@,4i) == 0
+goto_if_false @CASINO4_45651
+if 
+  Char.IsDead(113@(99@,4i))
+goto_if_false @CASINO4_45651
+if 
+  is_int_lvar_equal_to_int_lvar 298@ == 113@(99@,4i)
+goto_if_false @CASINO4_45486
+299@ = 3
+
+:CASINO4_45387
+if 
+  299@ > -1
+goto_if_false @CASINO4_45486
+if 
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_45472
+if 
+  not Char.IsDead(113@(299@,4i))
+goto_if_false @CASINO4_45472
+Task.KillCharOnFoot(71@, 113@(299@,4i))
+set_lvar_int_to_lvar_int 298@ = 113@(299@,4i)
+299@ = -1
+
+:CASINO4_45472
+299@ -= 1
+goto @CASINO4_45387
+
+:CASINO4_45486
+if 
+  is_int_lvar_equal_to_int_lvar 297@ == 113@(99@,4i)
+goto_if_false @CASINO4_45615
+299@ = 0
+
+:CASINO4_45516
+if 
+  4 > 299@
+goto_if_false @CASINO4_45615
+if 
+  not Char.IsDead(72@)
+goto_if_false @CASINO4_45601
+if 
+  not Char.IsDead(113@(299@,4i))
+goto_if_false @CASINO4_45601
+Task.KillCharOnFoot(72@, 113@(299@,4i))
+set_lvar_int_to_lvar_int 297@ = 113@(299@,4i)
+299@ = 4
+
+:CASINO4_45601
+299@ += 1
+goto @CASINO4_45516
+
+:CASINO4_45615
+Blip.Remove(105@(99@,4i))
+Char.MarkAsNoLongerNeeded(113@(99@,4i))
+101@(99@,4i) = 1
+100@ -= 1
+
+:CASINO4_45651
+99@ += 1
+goto @CASINO4_45297
+
+:CASINO4_45665
+if 
+  1 > 100@
+goto_if_false @CASINO4_45744
+53@ = 1
+if 
+  46@ == 0
+goto_if_false @CASINO4_45744
+Car.MarkAsNoLongerNeeded(77@)
+World.ClearArea(1, 2175.21, 1679.37, 9.85, 10.0)
+46@ = 1
+
+:CASINO4_45744
+if or
+  Char.IsDead(72@)
+  Char.IsDead(71@)
+goto_if_false @CASINO4_45774
+Text.ClearPrints
+53@ = 1
+
+:CASINO4_45774
+wait 0
+goto @CASINO4_44418
+
+:CASINO4_45785
+Audio.ClearMissionAudio(254@)
+Audio.ClearMissionAudio(253@)
+Game.SetWantedMultiplier(1.0)
+Blip.Remove(118@)
+Blip.Remove(117@)
+if and
+  not Char.IsDead(72@)
+  not Char.IsDead(71@)
+goto_if_false @CASINO4_45860
+Char.StopFacialTalk(71@)
+Char.StopFacialTalk(72@)
+Char.ClearTasksImmediately(72@)
+Char.ClearTasksImmediately(71@)
+Group.SetDefaultTaskAllocator($Players_Group, DefaultTaskAllocator.FollowAnyMeans)
+
+:CASINO4_45860
+return 
+
+:CASINO4_45862
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:CASINO4_45880
+$flag_casino_mission_counter += 1
+Stat.SetInt(StatId.PassedCasino4, 1)
+Stat.RegisterMissionPassed('CASINO4')
+Text.PrintWithNumberBig('M_PASSR', 5, 5000, TextStyle.Middle)
+Audio.PlayMissionPassedTune(1)
+Stat.AwardPlayerMissionRespect(5)
+Player.ClearWantedLevel($player1)
+Stat.PlayerMadeProgress(1)
+Blip.Remove($casino_contact_blip)
+return 
+
+:CASINO4_45947
+$timer_mobile_start = Clock.GetGameTimer()
+Game.SetPoliceIgnorePlayer($player1, False)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CASINO4_45982
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:CASINO4_45982
+Particle.Kill(136@)
+Particle.Kill(137@)
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+Blip.Remove(69@)
+Blip.Remove(68@)
+Blip.Remove(67@)
+Blip.Remove(70@)
+Blip.Remove(66@)
+Blip.Remove(105@)
+Blip.Remove(106@)
+Blip.Remove(107@)
+Blip.Remove(108@)
+Blip.Remove(117@)
+Blip.Remove(118@)
+Car.MarkAsNoLongerNeeded(77@)
+Car.MarkAsNoLongerNeeded(78@)
+Car.MarkAsNoLongerNeeded(79@)
+Car.MarkAsNoLongerNeeded(289@)
+Char.RemoveElegantly(72@)
+Char.RemoveElegantly(71@)
+Char.MarkAsNoLongerNeeded(73@)
+Char.MarkAsNoLongerNeeded(76@)
+Char.MarkAsNoLongerNeeded(74@)
+Char.MarkAsNoLongerNeeded(75@)
+Char.MarkAsNoLongerNeeded(303@)
+Char.MarkAsNoLongerNeeded(113@)
+Char.MarkAsNoLongerNeeded(114@)
+Char.MarkAsNoLongerNeeded(115@)
+Char.MarkAsNoLongerNeeded(116@)
+Char.MarkAsNoLongerNeeded(290@)
+Streaming.MarkModelAsNoLongerNeeded(478)
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.MarkModelAsNoLongerNeeded(31)
+Streaming.MarkModelAsNoLongerNeeded(32)
+Streaming.MarkModelAsNoLongerNeeded(33)
+Streaming.MarkModelAsNoLongerNeeded(34)
+Streaming.MarkModelAsNoLongerNeeded(34)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.RemoveAnimation("SUNBATHE")
+Streaming.RemoveAnimation("PAULNMAC")
+Streaming.RemoveAnimation("FOOD")
+Streaming.RemoveAnimation("SMOKING")
+Streaming.RemoveAnimation("MISC")
+Streaming.RemoveAnimation("GANGS")
+DecisionMaker.Remove(37@)
+DecisionMaker.Remove(38@)
+DecisionMaker.Remove(39@)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.UnloadSpecialCharacter(2)
+$onmission = 0
+$timer_mobile_start = Clock.GetGameTimer()
+Mission.Finish
+return 
+

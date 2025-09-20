@@ -1,0 +1,2197 @@
+:IMPEXPM
+script_name 'IMPEXPM'
+if 
+  $impexp_has_been_initialised <> 99
+goto_if_false @IMPEXPM_484
+if 
+  $impexp_has_been_initialised == -1000
+goto_if_false @IMPEXPM_123
+27@ = Object.CreateNoOffset(#NF_BLACKBOARD, 0.0, 0.0, 0.0)
+$impexp_car_gen[0] = CarGenerator.CreateWithPlate(587, -1, -1, 0, 50, 0, False, 10000, "IMPEXP__", 0.0, 0.0, 0.0, 180.0)
+
+:IMPEXPM_123
+if 
+  not Object.DoesExist(27@)
+goto_if_false @IMPEXPM_190
+27@ = Object.CreateNoOffset(#NF_BLACKBOARD, -1573.881, 135.3845, 2.535)
+Object.SetHeading(27@, 180.0)
+Object.FreezePosition(27@, True)
+Object.SetDynamic(27@, False)
+Object.DontRemove(27@)
+
+:IMPEXPM_190
+$current_wanted_list = 0
+set_var_int_to_constant $unlocked_import_cars[0] = 589
+set_var_int_to_constant $unlocked_import_cars[1] = 404
+set_var_int_to_constant $unlocked_import_cars[2] = 559
+set_var_int_to_constant $unlocked_import_cars[3] = 589
+set_var_int_to_constant $unlocked_import_cars[4] = 404
+set_var_int_to_constant $unlocked_import_cars[5] = 559
+4@ = 6
+
+:IMPEXPM_252
+if 
+  42 > 4@
+goto_if_false @IMPEXPM_295
+$unlocked_import_cars(4@,42i) = -1
+4@ += 1
+goto @IMPEXPM_252
+
+:IMPEXPM_295
+set_var_text_label s$impexp_day[0] = 'IE16'
+set_var_text_label s$impexp_day[1] = 'IE10'
+set_var_text_label s$impexp_day[2] = 'IE11'
+set_var_text_label s$impexp_day[3] = 'IE12'
+set_var_text_label s$impexp_day[4] = 'IE13'
+set_var_text_label s$impexp_day[5] = 'IE14'
+set_var_text_label s$impexp_day[6] = 'IE15'
+$explain_import_help = 0
+$impexp_new_cars = 0
+$impexp_is_complete = 0
+$import_price_multiplier = 0.8
+$export_price_multiplier = 1.0
+$imported_cars[0] = -1
+$imported_cars[1] = -1
+$imported_cars[2] = -1
+$imported_cars[3] = -1
+$imported_cars[4] = -1
+start_new_script @IMPEXPC 
+$impexp_has_been_initialised = 99
+
+:IMPEXPM_484
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_563
+if and
+  Char.LocateAnyMeans2D($scplayer, 0, -1574.881, 135.3845, 150.0, 150.0)
+  $import_export_is_active == 1
+goto_if_false @IMPEXPM_563
+15@ = 0
+goto @IMPEXPM_577
+
+:IMPEXPM_563
+goto @IMPEXPM_484
+26@ = 0
+
+:IMPEXPM_577
+if 
+  $import_export_is_active == 1
+goto_if_false @IMPEXPM_627
+if 
+  $activate_mobile_phone == 1
+goto_if_false @IMPEXPM_627
+$activate_mobile_phone = 0
+$restore_mobile_for_filshie = 1
+
+:IMPEXPM_627
+IMPEXPM_11683()
+if 
+  16@ == -1
+goto_if_false @IMPEXPM_875
+17@ = Car.Create(413, 0.0, 0.0, 0.0)
+20@ = Car.Create(413, 0.0, 0.0, 0.0)
+22@ = Car.Create(413, 0.0, 0.0, 0.0)
+27@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+$cross_out[0] = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+$export_name[0] = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+$import_name[0] = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+24@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+$magno_arm = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+$wanted_list_object = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+
+:IMPEXPM_875
+16@ = 0
+20@ = -1
+23@ = 0
+$impexp_door_rotation = 0.0
+28@ = 0
+IMPEXPM_10064()
+IMPEXPM_10721()
+if 
+  $import_export_is_active == 1
+goto_if_false @IMPEXPM_1185
+if 
+  Object.DoesExist($wanted_list_object)
+goto_if_false @IMPEXPM_966
+Object.Delete($wanted_list_object)
+
+:IMPEXPM_966
+if 
+  $current_wanted_list == 0
+goto_if_false @IMPEXPM_1039
+$x = Object.GetOffsetInWorldCoords($y, $z, 27@, 0.0, 0.0, 0.0)
+$wanted_list_object = Object.CreateNoOffset(#NF_LIST_1, $x, $y, $z)
+Object.SetHeading($wanted_list_object, 180.0)
+
+:IMPEXPM_1039
+if 
+  $current_wanted_list == 1
+goto_if_false @IMPEXPM_1112
+$x = Object.GetOffsetInWorldCoords($y, $z, 27@, 0.0, 0.0, 0.0)
+$wanted_list_object = Object.CreateNoOffset(#NF_LIST_2, $x, $y, $z)
+Object.SetHeading($wanted_list_object, 180.0)
+
+:IMPEXPM_1112
+if 
+  $current_wanted_list == 2
+goto_if_false @IMPEXPM_1185
+$x = Object.GetOffsetInWorldCoords($y, $z, 27@, 0.0, 0.0, 0.0)
+$wanted_list_object = Object.CreateNoOffset(#NF_LIST_3, $x, $y, $z)
+Object.SetHeading($wanted_list_object, 180.0)
+
+:IMPEXPM_1185
+IMPEXPM_11683()
+if 
+  $import_export_is_active == 1
+goto_if_false @IMPEXPM_1559
+4@ = 0
+
+:IMPEXPM_1217
+if 
+  10 > 4@
+goto_if_false @IMPEXPM_1559
+if 
+  Object.DoesExist($cross_out(4@,10i))
+goto_if_false @IMPEXPM_1264
+Object.Delete($cross_out(4@,10i))
+
+:IMPEXPM_1264
+$cross_out(4@,10i) = -1
+if or
+  $onmission == 0
+  $steal4_flag == 1
+goto_if_false @IMPEXPM_1545
+if 
+  $current_wanted_car_status(4@,10i) == 1
+goto_if_false @IMPEXPM_1545
+if 
+  not Object.DoesExist($cross_out(4@,10i))
+goto_if_false @IMPEXPM_1545
+$x = Object.GetOffsetInWorldCoords($y, $z, 27@, 0.0, 0.0, 0.0)
+cset_lvar_float_to_lvar_int 12@ = integer 4@
+if 
+  12@ > 4.0
+goto_if_false @IMPEXPM_1410
+12@ += -5.0
+
+:IMPEXPM_1410
+set_lvar_float_to_lvar_float 13@ = 12@
+13@ *= -0.05
+12@ *= -0.2355
+add_float_lvar_to_float_lvar 12@ += 13@
+add_float_lvar_to_float_var $z += 12@
+if 
+  5 > 4@
+goto_if_false @IMPEXPM_1482
+$x += 1.741
+
+:IMPEXPM_1482
+12@ *= -0.1
+add_float_lvar_to_float_var $z += 12@
+$cross_out(4@,10i) = Object.CreateNoOffset(#WANTED_CROSS_OFF, $x, $y, $z)
+Object.FreezePosition($cross_out(4@,10i), True)
+Object.SetHeading($cross_out(4@,10i), 180.0)
+
+:IMPEXPM_1545
+4@ += 1
+goto @IMPEXPM_1217
+
+:IMPEXPM_1559
+wait 0
+if 
+  $import_export_is_active == 0
+goto_if_false @IMPEXPM_1588
+goto @IMPEXPM_1559
+
+:IMPEXPM_1588
+if 
+  26@ == 1
+goto_if_false @IMPEXPM_1730
+if 
+  Car.DoesExist(22@)
+goto_if_false @IMPEXPM_1730
+if 
+  not Car.IsDead(22@)
+goto_if_false @IMPEXPM_1680
+Car.FreezePosition(22@, True)
+if 
+  not Car.IsOnScreen(22@)
+goto_if_false @IMPEXPM_1673
+Car.Delete(22@)
+26@ = 0
+
+:IMPEXPM_1673
+goto @IMPEXPM_1692
+
+:IMPEXPM_1680
+Car.Delete(22@)
+26@ = 0
+
+:IMPEXPM_1692
+17@, 18@, 19@ = Object.GrabEntityOnRope($magno_arm)
+if 
+  is_int_lvar_equal_to_int_lvar 17@ == 22@
+goto_if_false @IMPEXPM_1730
+Object.ReleaseEntityFromRope($magno_arm)
+
+:IMPEXPM_1730
+if and
+  $impexp_new_cars <> 0
+  TIMERB > 5000
+goto_if_false @IMPEXPM_1836
+if and
+  not Text.IsMessageBeingDisplayed
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @IMPEXPM_1836
+if 
+  $impexp_new_cars == 1
+goto_if_false @IMPEXPM_1800
+Text.PrintHelp('IE25')
+
+:IMPEXPM_1800
+if 
+  $impexp_new_cars == 2
+goto_if_false @IMPEXPM_1829
+Text.PrintHelp('IE26')
+
+:IMPEXPM_1829
+$impexp_new_cars = 0
+
+:IMPEXPM_1836
+if 
+  $explain_import_help == 0
+goto_if_false @IMPEXPM_1941
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_1941
+if 
+  Char.LocateAnyMeans2D($scplayer, 0, -1574.881, 135.3845, 40.0, 40.0)
+goto_if_false @IMPEXPM_1941
+if and
+  not Text.IsMessageBeingDisplayed
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @IMPEXPM_1941
+Text.PrintHelp('IE27')
+$explain_import_help += 1
+
+:IMPEXPM_1941
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_7119
+if 
+  Char.LocateAnyMeans2D($scplayer, 0, -1574.881, 135.3845, 150.0, 150.0)
+goto_if_false @IMPEXPM_7105
+if 
+  15@ == 0
+goto_if_false @IMPEXPM_4301
+if 
+  $impexp_is_complete == 0
+goto_if_false @IMPEXPM_4027
+if 
+  16@ == 0
+goto_if_false @IMPEXPM_2826
+IMPEXPM_10644()
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_2120
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, -1577.942, 52.6333, 16.3281, 4.0, 4.0, 6.0)
+goto_if_false @IMPEXPM_2120
+
+:IMPEXPM_2120
+$car = World.GetRandomCarInSphereNoSave(-1577.942, 52.6333, 16.3281, 4.0, -1)
+if 
+  Car.DoesExist($car)
+goto_if_false @IMPEXPM_2533
+if 
+  not Car.IsDead($car)
+goto_if_false @IMPEXPM_2533
+if 
+  Car.IsStopped($car)
+goto_if_false @IMPEXPM_2533
+if 
+  not Car.IsInAirProper($car)
+goto_if_false @IMPEXPM_2533
+if 
+  not is_int_var_equal_to_int_lvar $car == 17@
+goto_if_false @IMPEXPM_2533
+6@ = Car.GetModel($car)
+4@ = 0
+5@ = 0
+
+:IMPEXPM_2252
+if 
+  10 > 4@
+goto_if_false @IMPEXPM_2343
+if 
+  is_int_var_equal_to_int_lvar $current_wanted_car_list(4@,10i) == 6@
+goto_if_false @IMPEXPM_2329
+if 
+  $current_wanted_car_status(4@,10i) == 0
+goto_if_false @IMPEXPM_2329
+5@ = 1
+4@ = 10
+
+:IMPEXPM_2329
+4@ += 1
+goto @IMPEXPM_2252
+
+:IMPEXPM_2343
+if 
+  5@ == 1
+goto_if_false @IMPEXPM_2504
+set_lvar_int_to_var_int 22@ = $car
+if 
+  Car.IsPassengerSeatFree($car, SeatIndex.TandemRear)
+goto_if_false @IMPEXPM_2431
+18@ = Char.CreateRandom(-1576.88, 55.26, 8.57)
+Char.WarpIntoCarAsPassenger(18@, $car, 0)
+Char.SetVisible(18@, False)
+goto @IMPEXPM_2483
+
+:IMPEXPM_2431
+18@ = Car.GetCharInPassengerSeat($car, 0)
+Char.Delete(18@)
+18@ = Char.CreateRandom(-1576.88, 55.26, 8.57)
+Char.WarpIntoCarAsPassenger(18@, $car, 0)
+Char.SetVisible(18@, False)
+
+:IMPEXPM_2483
+16@ += 1
+TIMERA = 0
+goto @IMPEXPM_2533
+
+:IMPEXPM_2504
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @IMPEXPM_2533
+Text.Print('IE23', 3000, 1)
+
+:IMPEXPM_2533
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_2826
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @IMPEXPM_2826
+if 
+  Char.LocateStoppedInCar3D($scplayer, -1577.942, 52.6333, 16.3281, 4.0, 4.0, 6.0, False)
+goto_if_false @IMPEXPM_2826
+$car = Char.StoreCarIsInNoSave($scplayer)
+6@ = Car.GetModel($car)
+4@ = 0
+5@ = 0
+
+:IMPEXPM_2643
+if 
+  10 > 4@
+goto_if_false @IMPEXPM_2734
+if 
+  is_int_var_equal_to_int_lvar $current_wanted_car_list(4@,10i) == 6@
+goto_if_false @IMPEXPM_2720
+if 
+  $current_wanted_car_status(4@,10i) == 0
+goto_if_false @IMPEXPM_2720
+5@ = 1
+4@ = 10
+
+:IMPEXPM_2720
+4@ += 1
+goto @IMPEXPM_2643
+
+:IMPEXPM_2734
+if 
+  5@ == 1
+goto_if_false @IMPEXPM_2797
+set_lvar_int_to_var_int 22@ = $car
+if 
+  not Car.IsDead(22@)
+goto_if_false @IMPEXPM_2776
+
+:IMPEXPM_2776
+16@ += 1
+TIMERA = 0
+goto @IMPEXPM_2826
+
+:IMPEXPM_2797
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @IMPEXPM_2826
+Text.Print('IE23', 3000, 1)
+
+:IMPEXPM_2826
+if 
+  16@ == 1
+goto_if_false @IMPEXPM_3536
+if 
+  Object.DoesExist($magno_arm)
+goto_if_false @IMPEXPM_2870
+Object.SetRopeHeight($magno_arm, 0.7)
+
+:IMPEXPM_2870
+$disable_crane = 1
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_2900
+Player.SetControl($player1, False)
+
+:IMPEXPM_2900
+Camera.DoFade(0, 250)
+
+:IMPEXPM_2907
+if 
+  Camera.GetFadingStatus
+goto_if_false @IMPEXPM_2931
+wait 0
+goto @IMPEXPM_2907
+
+:IMPEXPM_2931
+if 
+  Car.DoesExist(22@)
+goto_if_false @IMPEXPM_3046
+if 
+  not Car.IsDead(22@)
+goto_if_false @IMPEXPM_3046
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_2993
+$x, $y, $z = Char.GetCoordinates($scplayer)
+
+:IMPEXPM_2993
+Car.SetCoordinates(22@, -1577.942, 52.6333, 40.0)
+Car.FreezePosition(22@, True)
+4@ = Car.GetHealth(22@)
+cset_var_float_to_lvar_int $export_damage_multiplier = integer 4@
+$export_damage_multiplier /= 1000.0
+
+:IMPEXPM_3046
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-1573.419, 53.4591, 17.9655, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1574.344, 53.0835, 17.9027, SwitchType.JumpCut)
+World.ClearArea(1, -1577.942, 52.6333, 16.3281, 9.0)
+wait 0
+if 
+  not Car.IsDead(22@)
+goto_if_false @IMPEXPM_3325
+4@ = Car.GetModel(22@)
+$x, $y, $z, 7@, 8@, 9@ = Streaming.GetModelDimensions(4@)
+set_lvar_float_to_lvar_float 12@ = 8@
+sub_float_var_from_float_lvar 12@ -= $y
+12@ /= 2.0
+12@ *= -1.0
+14@ = Math.Sin(45.0)
+13@ = Math.Cos(45.0)
+mult_float_lvar_by_float_lvar 13@ *= 12@
+mult_float_lvar_by_float_lvar 14@ *= 12@
+$x = -1577.942
+add_float_lvar_to_float_var $x += 14@
+$y = 52.6333
+add_float_lvar_to_float_var $y += 13@
+$z = 16.3281
+Car.FreezePosition(22@, False)
+Car.SetCoordinates(22@, $x, $y, $z)
+Car.SetHeading(22@, 315.0)
+
+:IMPEXPM_3325
+Camera.DoFade(1, 250)
+
+:IMPEXPM_3332
+if 
+  Camera.GetFadingStatus
+goto_if_false @IMPEXPM_3356
+wait 0
+goto @IMPEXPM_3332
+
+:IMPEXPM_3356
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_3482
+if 
+  not Car.IsDead(22@)
+goto_if_false @IMPEXPM_3482
+if 
+  Char.IsInCar($scplayer, 22@)
+goto_if_false @IMPEXPM_3475
+31@ = 1
+30@ = Sequence.Open()
+Task.LeaveCar(-1, 22@)
+Task.GoStraightToCoord(-1, -1578.164, 63.7954, 16.3281, MoveState.Walk, 10000)
+Sequence.Close(30@)
+Char.PerformSequence($scplayer, 30@)
+Sequence.Clear(30@)
+goto @IMPEXPM_3482
+
+:IMPEXPM_3475
+31@ = 0
+
+:IMPEXPM_3482
+Text.PrintNow('IE24', 5000, 1)
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @IMPEXPM_3522
+1@ = 1
+
+:IMPEXPM_3522
+TIMERA = 0
+16@ += 1
+
+:IMPEXPM_3536
+if 
+  16@ == 2
+goto_if_false @IMPEXPM_3646
+if or
+  TIMERA > 5000
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @IMPEXPM_3604
+if 
+  1@ == 0
+goto_if_false @IMPEXPM_3604
+16@ += 1
+
+:IMPEXPM_3604
+if 
+  1@ == 1
+goto_if_false @IMPEXPM_3646
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @IMPEXPM_3646
+1@ = 0
+
+:IMPEXPM_3646
+if 
+  16@ == 3
+goto_if_false @IMPEXPM_4027
+Camera.DoFade(0, 500)
+
+:IMPEXPM_3671
+if 
+  Camera.GetFadingStatus
+goto_if_false @IMPEXPM_3695
+wait 0
+goto @IMPEXPM_3671
+
+:IMPEXPM_3695
+if 
+  31@ <> 0
+goto_if_false @IMPEXPM_3764
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_3764
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, -1578.164, 63.7954, 16.3281)
+Char.SetHeading($scplayer, 0.8)
+
+:IMPEXPM_3764
+IMPEXPM_9397()
+Car.Delete(22@)
+if 
+  Char.DoesExist(18@)
+goto_if_false @IMPEXPM_3797
+Char.Delete(18@)
+
+:IMPEXPM_3797
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+$disable_crane = 0
+if 
+  $player_is_in_crane == 2
+goto_if_false @IMPEXPM_3837
+$reset_crane_camera = 1
+
+:IMPEXPM_3837
+Camera.DoFade(1, 500)
+
+:IMPEXPM_3844
+if 
+  Camera.GetFadingStatus
+goto_if_false @IMPEXPM_3868
+wait 0
+goto @IMPEXPM_3844
+
+:IMPEXPM_3868
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_3891
+Player.SetControl($player1, True)
+
+:IMPEXPM_3891
+if 
+  $impexp_is_complete == 1
+goto_if_false @IMPEXPM_3950
+Text.PrintBig('IE29', 5000, TextStyle.Middle)
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1058)
+wait 5000
+
+:IMPEXPM_3950
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_3974
+Player.AddScore($player1, 29@)
+
+:IMPEXPM_3974
+Text.PrintWithNumberBig('IE30', 29@, 5000, TextStyle.Middle)
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1058)
+TIMERB = 0
+goto @IMPEXPM_577
+
+:IMPEXPM_4027
+if 
+  Object.DoesExist(27@)
+goto_if_false @IMPEXPM_4301
+$x = Object.GetOffsetInWorldCoords($y, $z, 27@, 0.0, 1.5, 0.0)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_4301
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $x, $y, $z, 2.0, 1.0, 2.0)
+goto_if_false @IMPEXPM_4267
+if 
+  23@ <> 1
+goto_if_false @IMPEXPM_4166
+Text.PrintHelp('IE18')
+23@ = 1
+
+:IMPEXPM_4166
+Pad.SetPlayerEnterCarButton($player1, False)
+if 
+  0@ == 0
+goto_if_false @IMPEXPM_4236
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @IMPEXPM_4229
+0@ = 1
+15@ = 1
+goto @IMPEXPM_577
+
+:IMPEXPM_4229
+goto @IMPEXPM_4260
+
+:IMPEXPM_4236
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @IMPEXPM_4260
+0@ = 0
+
+:IMPEXPM_4260
+goto @IMPEXPM_4301
+
+:IMPEXPM_4267
+if 
+  23@ == 1
+goto_if_false @IMPEXPM_4294
+Text.ClearHelp
+23@ = 0
+
+:IMPEXPM_4294
+Pad.SetPlayerEnterCarButton($player1, True)
+
+:IMPEXPM_4301
+if 
+  15@ == 1
+goto_if_false @IMPEXPM_7098
+
+:IMPEXPM_4319
+if 
+  16@ == 0
+goto_if_false @IMPEXPM_4596
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_4360
+Player.SetControl($player1, False)
+
+:IMPEXPM_4360
+Text.PrintHelpForever('IE20')
+Hud.DisplayRadar(False)
+$impexp_menu = Menu.Create('IE09', 29.0, 170.0, 180.0, True, True, 1, 0)
+Menu.SetColumn($impexp_menu, 0, 'DUMMY', 'IE16', 'IE10', 'IE11', 'IE12', 'IE13', 'IE14', 'IE15', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+if 
+  4@ == -69
+goto_if_false @IMPEXPM_4569
+Menu.SetActiveItem($impexp_menu, $impexp_selected_day)
+goto @IMPEXPM_4589
+
+:IMPEXPM_4569
+4@ = Clock.GetCurrentDayOfWeek()
+4@ += -1
+Menu.SetActiveItem($impexp_menu, 4@)
+
+:IMPEXPM_4589
+16@ += 1
+
+:IMPEXPM_4596
+if 
+  16@ == 1
+goto_if_false @IMPEXPM_4870
+if 
+  1@ == 0
+goto_if_false @IMPEXPM_4689
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @IMPEXPM_4682
+$impexp_selected_day = Menu.GetItemSelected($impexp_menu)
+16@ += 1
+1@ = 1
+Text.ClearThisPrint('IE28')
+
+:IMPEXPM_4682
+goto @IMPEXPM_4713
+
+:IMPEXPM_4689
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @IMPEXPM_4713
+1@ = 0
+
+:IMPEXPM_4713
+if 
+  0@ == 0
+goto_if_false @IMPEXPM_4812
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @IMPEXPM_4805
+IMPEXPM_9031()
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_4778
+Player.SetControl($player1, True)
+
+:IMPEXPM_4778
+Hud.DisplayRadar(True)
+Text.ClearHelp
+15@ = 0
+16@ = 0
+0@ = 1
+
+:IMPEXPM_4805
+goto @IMPEXPM_4836
+
+:IMPEXPM_4812
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @IMPEXPM_4836
+0@ = 0
+
+:IMPEXPM_4836
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+goto_if_false @IMPEXPM_4870
+Text.ClearThisPrint('IE28')
+
+:IMPEXPM_4870
+if 
+  16@ == 2
+goto_if_false @IMPEXPM_5558
+set_var_int_to_var_int $import_car_list_input = $impexp_selected_day
+IMPEXPM_10721()
+4@ = 0
+5@ = 0
+
+:IMPEXPM_4917
+if 
+  6 > 4@
+goto_if_false @IMPEXPM_4985
+if 
+  $current_import_car_list(4@,6i) <> -1
+goto_if_false @IMPEXPM_4971
+5@ = 1
+4@ = 6
+
+:IMPEXPM_4971
+4@ += 1
+goto @IMPEXPM_4917
+
+:IMPEXPM_4985
+if 
+  5@ == 0
+goto_if_false @IMPEXPM_5040
+Text.PrintNow('IE28', 5000, 1)
+16@ = 1
+goto @IMPEXPM_4319
+goto @IMPEXPM_5558
+
+:IMPEXPM_5040
+Text.PrintHelpForever('IE21')
+Menu.Delete($impexp_menu)
+$impexp_panel = Menu.Create('IE09', 29.0, 170.0, 180.0, 2, True, 1, 0)
+4@ = 0
+
+:IMPEXPM_5100
+if 
+  6 > 4@
+goto_if_false @IMPEXPM_5206
+set_lvar_int_to_var_int 6@ = $current_import_car_list(4@,6i)
+if 
+  6@ <> -1
+goto_if_false @IMPEXPM_5174
+IMPEXPM_11874()
+set_var_text_label $impexp_menu_text_label(4@,6s) = s$impexp_text_label
+goto @IMPEXPM_5192
+
+:IMPEXPM_5174
+set_var_text_label $impexp_menu_text_label(4@,6s) = 'DUMMY'
+
+:IMPEXPM_5192
+4@ += 1
+goto @IMPEXPM_5100
+
+:IMPEXPM_5206
+set_lvar_int_to_var_int 4@ = $impexp_selected_day
+Menu.SetColumn($impexp_panel, 0, $impexp_day(4@,7s), s$impexp_menu_text_label[0], s$impexp_menu_text_label[1], s$impexp_menu_text_label[2], s$impexp_menu_text_label[3], s$impexp_menu_text_label[4], s$impexp_menu_text_label[5], 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetColumn($impexp_panel, 1, 'COST', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+4@ = 0
+
+:IMPEXPM_5431
+if 
+  6 > 4@
+goto_if_false @IMPEXPM_5551
+set_lvar_int_to_var_int 6@ = $current_import_car_list(4@,6i)
+if 
+  6@ <> -1
+goto_if_false @IMPEXPM_5537
+$current_vehicle_cost = Car.GetModelValue($current_import_car_list(4@,6i))
+cset_lvar_float_to_var_int 12@ = integer $current_vehicle_cost
+mult_float_lvar_by_float_var 12@ *= $import_price_multiplier
+cset_var_int_to_lvar_float $current_vehicle_cost = float 12@
+Menu.SetItemWithNumber($impexp_panel, 1, 4@, 'DOLLAR', $current_vehicle_cost)
+
+:IMPEXPM_5537
+4@ += 1
+goto @IMPEXPM_5431
+
+:IMPEXPM_5551
+16@ += 1
+
+:IMPEXPM_5558
+if 
+  16@ == 3
+goto_if_false @IMPEXPM_5765
+if 
+  1@ == 0
+goto_if_false @IMPEXPM_5640
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @IMPEXPM_5633
+$impexp_selected_car = Menu.GetItemSelected($impexp_panel)
+16@ += 1
+1@ = 1
+
+:IMPEXPM_5633
+goto @IMPEXPM_5664
+
+:IMPEXPM_5640
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @IMPEXPM_5664
+1@ = 0
+
+:IMPEXPM_5664
+if 
+  0@ == 0
+goto_if_false @IMPEXPM_5741
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @IMPEXPM_5734
+IMPEXPM_9031()
+16@ = 0
+0@ = 1
+4@ = -69
+goto @IMPEXPM_4319
+
+:IMPEXPM_5734
+goto @IMPEXPM_5765
+
+:IMPEXPM_5741
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @IMPEXPM_5765
+0@ = 0
+
+:IMPEXPM_5765
+if 
+  16@ == 4
+goto_if_false @IMPEXPM_6075
+4@ = Clock.GetCurrentDayOfWeek()
+4@ += -1
+if 
+  not is_int_lvar_equal_to_int_var 4@ == $impexp_selected_day
+goto_if_false @IMPEXPM_5844
+Text.PrintNow('IE19', 5000, 1)
+IMPEXPM_9031()
+16@ = 0
+
+:IMPEXPM_5844
+$current_vehicle_cost = Car.GetModelValue($current_import_car_list(25@,6i))
+cset_lvar_float_to_var_int 12@ = integer $current_vehicle_cost
+mult_float_lvar_by_float_var 12@ *= $import_price_multiplier
+cset_var_int_to_lvar_float $current_vehicle_cost = float 12@
+4@ = Player.StoreScore($player1)
+if 
+  is_int_var_greater_than_int_lvar $current_vehicle_cost > 4@
+goto_if_false @IMPEXPM_5937
+Text.PrintNow('IE07', 5000, 1)
+IMPEXPM_9031()
+16@ = 0
+
+:IMPEXPM_5937
+if 
+  16@ <> 0
+goto_if_false @IMPEXPM_5991
+if 
+  $current_import_car_list($impexp_selected_car,6i) == -1
+goto_if_false @IMPEXPM_5991
+IMPEXPM_9031()
+16@ = 0
+
+:IMPEXPM_5991
+if 
+  16@ <> 0
+goto_if_false @IMPEXPM_6075
+$current_vehicle_cost = Car.GetModelValue($current_import_car_list(25@,6i))
+cset_lvar_float_to_var_int 12@ = integer $current_vehicle_cost
+mult_float_lvar_by_float_var 12@ *= $import_price_multiplier
+cset_var_int_to_lvar_float $current_vehicle_cost = float 12@
+set_lvar_int_to_var_int 4@ = $current_vehicle_cost
+4@ *= -1
+Player.AddScore($player1, 4@)
+16@ += 1
+
+:IMPEXPM_6075
+if 
+  16@ == 5
+goto_if_false @IMPEXPM_6548
+if 
+  not Streaming.HasModelLoaded($current_import_car_list($impexp_selected_car,6i))
+goto_if_false @IMPEXPM_6153
+Streaming.RequestModel($current_import_car_list($impexp_selected_car,6i))
+
+:IMPEXPM_6122
+if 
+  not Streaming.HasModelLoaded($current_import_car_list($impexp_selected_car,6i))
+goto_if_false @IMPEXPM_6153
+wait 0
+goto @IMPEXPM_6122
+
+:IMPEXPM_6153
+Text.ClearHelp
+IMPEXPM_9031()
+World.ClearArea(1, -1572.168, 63.2853, 16.3281, 20.0)
+IMPEXPM_13123()
+$imported_car = Car.Create($current_import_car_list($impexp_selected_car,6i), -1572.168, 63.2853, 16.3281)
+Car.SetDirtLevel($imported_car, 0.0)
+Car.SetHeading($imported_car, 315.0)
+Streaming.MarkModelAsNoLongerNeeded($current_import_car_list($impexp_selected_car,6i))
+if 
+  is_int_var_equal_to_constant $current_import_car_list($impexp_selected_car,6i) == 589
+goto_if_false @IMPEXPM_6281
+Car.ChangeColor($imported_car, 11, 0)
+
+:IMPEXPM_6281
+4@ = Car.GetModel($imported_car)
+$x, $y, $z, 7@, 8@, 9@ = Streaming.GetModelDimensions(4@)
+set_lvar_float_to_lvar_float 12@ = 8@
+sub_float_var_from_float_lvar 12@ -= $y
+12@ /= 2.0
+12@ *= -1.0
+13@ = Math.Cos(45.0)
+14@ = Math.Sin(45.0)
+mult_float_lvar_by_float_lvar 13@ *= 12@
+mult_float_lvar_by_float_lvar 14@ *= 12@
+$x = -1572.168
+add_float_lvar_to_float_var $x += 14@
+$y = 63.2853
+add_float_lvar_to_float_var $y += 13@
+$z = 16.3281
+Car.SetCoordinates($imported_car, $x, $y, $z)
+Car.SetHeading($imported_car, 315.0)
+Text.ClearPrints
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-1567.597, 63.2567, 17.7586, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1568.576, 63.0585, 17.7094, SwitchType.JumpCut)
+Text.PrintNow('IE08', 5000, 1)
+Stat.IncrementInt(StatId.TotalProgress, 214)
+TIMERA = 0
+16@ += 1
+
+:IMPEXPM_6548
+if 
+  16@ == 6
+goto_if_false @IMPEXPM_6672
+if 
+  TIMERA > 5000
+goto_if_false @IMPEXPM_6599
+16@ += 1
+goto @IMPEXPM_6672
+
+:IMPEXPM_6599
+if 
+  1@ == 0
+goto_if_false @IMPEXPM_6648
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @IMPEXPM_6641
+16@ += 1
+
+:IMPEXPM_6641
+goto @IMPEXPM_6672
+
+:IMPEXPM_6648
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @IMPEXPM_6672
+1@ = 0
+
+:IMPEXPM_6672
+if 
+  16@ == 7
+goto_if_false @IMPEXPM_6743
+Text.ClearPrints
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_6723
+Player.SetControl($player1, True)
+
+:IMPEXPM_6723
+Pad.SetPlayerEnterCarButton($player1, True)
+Hud.DisplayRadar(True)
+Text.ClearHelp
+16@ += 1
+
+:IMPEXPM_6743
+if 
+  16@ == 8
+goto_if_false @IMPEXPM_7098
+if 
+  not Car.IsDead($imported_car)
+goto_if_false @IMPEXPM_6880
+if and
+  not Car.Locate3D($imported_car, 0, -1572.168, 63.2853, 16.3281, 30.0, 30.0, 5.0)
+  not Camera.IsPointOnScreen(-1572.168, 63.2853, 16.3281, 5.0)
+goto_if_false @IMPEXPM_6873
+Car.MarkAsNoLongerNeeded($imported_car)
+15@ = 0
+16@ = 0
+goto @IMPEXPM_577
+
+:IMPEXPM_6873
+goto @IMPEXPM_6906
+
+:IMPEXPM_6880
+Car.MarkAsNoLongerNeeded($imported_car)
+15@ = 0
+16@ = 0
+goto @IMPEXPM_577
+
+:IMPEXPM_6906
+if 
+  Object.DoesExist(27@)
+goto_if_false @IMPEXPM_7098
+$x = Object.GetOffsetInWorldCoords($y, $z, 27@, 0.0, 1.5, 0.0)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_7098
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $x, $y, $z, 2.0, 1.0, 2.0)
+goto_if_false @IMPEXPM_7098
+if 
+  0@ == 0
+goto_if_false @IMPEXPM_7074
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @IMPEXPM_7067
+0@ = 1
+Text.PrintNow('IE08', 5000, 1)
+
+:IMPEXPM_7067
+goto @IMPEXPM_7098
+
+:IMPEXPM_7074
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @IMPEXPM_7098
+0@ = 0
+
+:IMPEXPM_7098
+goto @IMPEXPM_7112
+
+:IMPEXPM_7105
+goto @IMPEXPM_9043
+
+:IMPEXPM_7112
+goto @IMPEXPM_7126
+
+:IMPEXPM_7119
+goto @IMPEXPM_9043
+
+:IMPEXPM_7126
+if 
+is_ps2_keyboard_key_just_pressed 85
+goto_if_false @IMPEXPM_7235
+4@ = 0
+
+:IMPEXPM_7148
+if 
+  10 > 4@
+goto_if_false @IMPEXPM_7221
+if 
+  $current_wanted_car_status(4@,10i) == 0
+goto_if_false @IMPEXPM_7207
+set_lvar_int_to_var_int 6@ = $current_wanted_car_list(4@,10i)
+4@ = 10
+
+:IMPEXPM_7207
+4@ += 1
+goto @IMPEXPM_7148
+
+:IMPEXPM_7221
+IMPEXPM_9397()
+goto @IMPEXPM_577
+
+:IMPEXPM_7235
+if 
+is_ps2_keyboard_key_just_pressed 84
+goto_if_false @IMPEXPM_9024
+save_newline_to_debug_file 
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CURRENT_WANTED_LIST = GTIPLIERERVCSTITLE")
+save_int_to_debug_file $current_wanted_list
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("MODID, STATUS, PAYOUT, EXP NAME, CROSS OUT")
+save_newline_to_debug_file 
+4@ = 0
+
+:IMPEXPM_7530
+if 
+  10 > 4@
+goto_if_false @IMPEXPM_8120
+save_int_to_debug_file $current_wanted_car_list(4@,10i)
+Debugger.SaveStringToDebugFile(" MPEXPM_8120S, PAYOUT, EXP NAME, CROSS OUT")
+save_int_to_debug_file $current_wanted_car_status(4@,10i)
+Debugger.SaveStringToDebugFile(" MPEXPM_8120S, PAYOUT, EXP NAME, CROSS OUT")
+Debugger.SaveStringToDebugFile(" MPEXPM_8120S, PAYOUT, EXP NAME, CROSS OUT")
+save_int_to_debug_file $export_name(4@,10i)
+Debugger.SaveStringToDebugFile(" MPEXPM_8120S, PAYOUT, EXP NAME, CROSS OUT")
+save_int_to_debug_file $cross_out(4@,10i)
+save_newline_to_debug_file 
+4@ += 1
+goto @IMPEXPM_7530
+
+:IMPEXPM_8120
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("IMPORT DETAILS PAYOUT, EXP NAME, CROSS OUT")
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("MODID, IMP NAMEPAYOUT, EXP NAME, CROSS OUT")
+save_newline_to_debug_file 
+4@ = 0
+
+:IMPEXPM_8393
+if 
+  6 > 4@
+goto_if_false @IMPEXPM_8575
+save_int_to_debug_file $current_import_car_list(4@,6i)
+Debugger.SaveStringToDebugFile(" MPEXPM_8575AMEPAYOUT, EXP NAME, CROSS OUT")
+save_int_to_debug_file $import_name(4@,6i)
+save_newline_to_debug_file 
+4@ += 1
+goto @IMPEXPM_8393
+
+:IMPEXPM_8575
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("UNLOCKED_IMPORT_CARS ARRAY NAME, CROSS OUT")
+save_newline_to_debug_file 
+4@ = 0
+
+:IMPEXPM_8716
+if 
+  42 > 4@
+goto_if_false @IMPEXPM_9024
+Debugger.SaveStringToDebugFile("UNLOCKED_IMPORT_CARS[ARRAY NAME, CROSS OUT")
+save_int_to_debug_file 4@
+Debugger.SaveStringToDebugFile("] = CKED_IMPORT_CARS[ARRAY NAME, CROSS OUT")
+save_int_to_debug_file $unlocked_import_cars(4@,42i)
+save_newline_to_debug_file 
+4@ += 1
+goto @IMPEXPM_8716
+
+:IMPEXPM_9024
+goto @IMPEXPM_1559
+
+:IMPEXPM_9031
+Menu.Delete($impexp_menu)
+Menu.Delete($impexp_panel)
+return 
+
+:IMPEXPM_9043
+if 
+  Car.DoesExist(22@)
+goto_if_false @IMPEXPM_9113
+if 
+  Object.DoesExist($magno_arm)
+goto_if_false @IMPEXPM_9113
+17@, 18@, 19@ = Object.GrabEntityOnRope($magno_arm)
+if 
+  not is_int_lvar_equal_to_int_lvar 17@ == 22@
+goto_if_false @IMPEXPM_9113
+Car.MarkAsNoLongerNeeded(22@)
+
+:IMPEXPM_9113
+if 
+  Car.DoesExist($imported_car)
+goto_if_false @IMPEXPM_9183
+if 
+  Object.DoesExist($magno_arm)
+goto_if_false @IMPEXPM_9183
+17@, 18@, 19@ = Object.GrabEntityOnRope($magno_arm)
+if 
+  not is_int_lvar_equal_to_int_var 17@ == $imported_car
+goto_if_false @IMPEXPM_9183
+Car.MarkAsNoLongerNeeded($imported_car)
+
+:IMPEXPM_9183
+if 
+  Char.DoesExist(18@)
+goto_if_false @IMPEXPM_9204
+Char.Delete(18@)
+
+:IMPEXPM_9204
+if 
+  Object.DoesExist(24@)
+goto_if_false @IMPEXPM_9225
+Object.Delete(24@)
+
+:IMPEXPM_9225
+4@ = 0
+
+:IMPEXPM_9232
+if 
+  10 > 4@
+goto_if_false @IMPEXPM_9293
+if 
+  Object.DoesExist($cross_out(4@,10i))
+goto_if_false @IMPEXPM_9279
+Object.Delete($cross_out(4@,10i))
+
+:IMPEXPM_9279
+4@ += 1
+goto @IMPEXPM_9232
+
+:IMPEXPM_9293
+if 
+  Object.DoesExist($wanted_list_object)
+goto_if_false @IMPEXPM_9314
+Object.Delete($wanted_list_object)
+
+:IMPEXPM_9314
+if 
+  $restore_mobile_for_filshie == 1
+goto_if_false @IMPEXPM_9339
+$activate_mobile_phone = 1
+
+:IMPEXPM_9339
+goto @IMPEXPM_484
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_9376
+Player.SetControl($player1, True)
+Pad.SetPlayerEnterCarButton($player1, True)
+
+:IMPEXPM_9376
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Text.ClearPrints
+0@ = 1
+return 
+return 
+
+:IMPEXPM_9397
+Stat.IncrementInt(StatId.TotalProgress, 213)
+4@ = 0
+
+:IMPEXPM_9411
+if 
+  10 > 4@
+goto_if_false @IMPEXPM_9675
+if 
+  is_int_var_equal_to_int_lvar $current_wanted_car_list(4@,10i) == 6@
+goto_if_false @IMPEXPM_9661
+if 
+  $current_wanted_car_status(4@,10i) == 0
+goto_if_false @IMPEXPM_9661
+$current_wanted_car_status(4@,10i) = 1
+29@ = Car.GetModelValue(6@)
+cset_lvar_float_to_lvar_int 12@ = integer 29@
+mult_float_lvar_by_float_var 12@ *= $export_price_multiplier
+mult_float_lvar_by_float_var 12@ *= $export_damage_multiplier
+cset_lvar_int_to_lvar_float 29@ = float 12@
+4@ = Stat.GetInt(213)
+switch_start 4@ total_jumps 3 default_jump 0 @IMPEXPM_9654 jumps 10 @IMPEXPM_9596 20 @IMPEXPM_9613 30 @IMPEXPM_9630 -1 @IMPEXPM_9654 -1 @IMPEXPM_9654 -1 @IMPEXPM_9654 -1 @IMPEXPM_9654
+
+:IMPEXPM_9596
+29@ += 50000
+goto @IMPEXPM_9654
+
+:IMPEXPM_9613
+29@ += 100000
+goto @IMPEXPM_9654
+
+:IMPEXPM_9630
+29@ += 200000
+$impexp_is_complete = 1
+goto @IMPEXPM_9654
+
+:IMPEXPM_9654
+4@ = 10
+
+:IMPEXPM_9661
+4@ += 1
+goto @IMPEXPM_9411
+
+:IMPEXPM_9675
+IMPEXPM_11683()
+4@ = 0
+
+:IMPEXPM_9689
+if 
+  42 > 4@
+goto_if_false @IMPEXPM_9770
+if 
+  $unlocked_import_cars(4@,42i) == -1
+goto_if_false @IMPEXPM_9756
+set_var_int_to_lvar_int $unlocked_import_cars(4@,42i) = 6@
+set_lvar_int_to_lvar_int 5@ = 4@
+4@ = 42
+
+:IMPEXPM_9756
+4@ += 1
+goto @IMPEXPM_9689
+
+:IMPEXPM_9770
+$impexp_new_cars = 1
+switch_start 5@ total_jumps 6 default_jump 0 @IMPEXPM_10062 jumps 10 @IMPEXPM_9840 16 @IMPEXPM_9873 22 @IMPEXPM_9914 28 @IMPEXPM_9947 34 @IMPEXPM_9988 40 @IMPEXPM_10021 -1 @IMPEXPM_10062
+
+:IMPEXPM_9840
+5@ += 1
+set_var_int_to_constant $unlocked_import_cars(5@,42i) = 444
+$impexp_new_cars += 1
+goto @IMPEXPM_10062
+
+:IMPEXPM_9873
+5@ += 1
+set_var_int_to_constant $unlocked_import_cars(5@,42i) = 555
+Stat.PlayerMadeProgress(1)
+Audio.PlayMissionPassedTune(2)
+$impexp_new_cars += 1
+goto @IMPEXPM_10062
+
+:IMPEXPM_9914
+5@ += 1
+set_var_int_to_constant $unlocked_import_cars(5@,42i) = 568
+$impexp_new_cars += 1
+goto @IMPEXPM_10062
+
+:IMPEXPM_9947
+5@ += 1
+set_var_int_to_constant $unlocked_import_cars(5@,42i) = 451
+Stat.PlayerMadeProgress(1)
+Audio.PlayMissionPassedTune(2)
+$impexp_new_cars += 1
+goto @IMPEXPM_10062
+
+:IMPEXPM_9988
+5@ += 1
+set_var_int_to_constant $unlocked_import_cars(5@,42i) = 539
+$impexp_new_cars += 1
+goto @IMPEXPM_10062
+
+:IMPEXPM_10021
+5@ += 1
+set_var_int_to_constant $unlocked_import_cars(5@,42i) = 541
+Stat.PlayerMadeProgress(1)
+Audio.PlayMissionPassedTune(2)
+$impexp_new_cars += 1
+goto @IMPEXPM_10062
+
+:IMPEXPM_10062
+return 
+
+:IMPEXPM_10064
+if and
+  $onmission == 1
+  $steal4_flag <> 1
+goto_if_false @IMPEXPM_10166
+$current_wanted_car_list[0] = -1
+$current_wanted_car_list[1] = -1
+$current_wanted_car_list[2] = -1
+$current_wanted_car_list[3] = -1
+$current_wanted_car_list[4] = -1
+$current_wanted_car_list[5] = -1
+$current_wanted_car_list[6] = -1
+$current_wanted_car_list[7] = -1
+$current_wanted_car_list[8] = -1
+$current_wanted_car_list[9] = -1
+goto @IMPEXPM_10642
+
+:IMPEXPM_10166
+4@ = 0
+5@ = 0
+
+:IMPEXPM_10180
+if 
+  10 > 4@
+goto_if_false @IMPEXPM_10241
+if 
+  $current_wanted_car_status(4@,10i) == 1
+goto_if_false @IMPEXPM_10227
+5@ += 1
+
+:IMPEXPM_10227
+4@ += 1
+goto @IMPEXPM_10180
+
+:IMPEXPM_10241
+if 
+  5@ == 10
+goto_if_false @IMPEXPM_10348
+if 
+  2 > $current_wanted_list
+goto_if_false @IMPEXPM_10341
+$current_wanted_list += 1
+4@ = 0
+
+:IMPEXPM_10291
+if 
+  10 > 4@
+goto_if_false @IMPEXPM_10334
+$current_wanted_car_status(4@,10i) = 0
+4@ += 1
+goto @IMPEXPM_10291
+
+:IMPEXPM_10334
+goto @IMPEXPM_10348
+
+:IMPEXPM_10341
+$impexp_is_complete = 1
+
+:IMPEXPM_10348
+if 
+  $current_wanted_list == 0
+goto_if_false @IMPEXPM_10446
+set_var_int_to_constant $current_wanted_car_list[0] = 402
+set_var_int_to_constant $current_wanted_car_list[1] = 405
+set_var_int_to_constant $current_wanted_car_list[2] = 411
+set_var_int_to_constant $current_wanted_car_list[3] = 483
+set_var_int_to_constant $current_wanted_car_list[4] = 445
+set_var_int_to_constant $current_wanted_car_list[5] = 470
+set_var_int_to_constant $current_wanted_car_list[6] = 468
+set_var_int_to_constant $current_wanted_car_list[7] = 409
+set_var_int_to_constant $current_wanted_car_list[8] = 533
+set_var_int_to_constant $current_wanted_car_list[9] = 534
+
+:IMPEXPM_10446
+if 
+  $current_wanted_list == 1
+goto_if_false @IMPEXPM_10544
+set_var_int_to_constant $current_wanted_car_list[0] = 415
+set_var_int_to_constant $current_wanted_car_list[1] = 489
+set_var_int_to_constant $current_wanted_car_list[2] = 439
+set_var_int_to_constant $current_wanted_car_list[3] = 514
+set_var_int_to_constant $current_wanted_car_list[4] = 480
+set_var_int_to_constant $current_wanted_car_list[5] = 535
+set_var_int_to_constant $current_wanted_car_list[6] = 496
+set_var_int_to_constant $current_wanted_car_list[7] = 580
+set_var_int_to_constant $current_wanted_car_list[8] = 475
+set_var_int_to_constant $current_wanted_car_list[9] = 521
+
+:IMPEXPM_10544
+if 
+  $current_wanted_list == 2
+goto_if_false @IMPEXPM_10642
+set_var_int_to_constant $current_wanted_car_list[0] = 429
+set_var_int_to_constant $current_wanted_car_list[1] = 506
+set_var_int_to_constant $current_wanted_car_list[2] = 508
+set_var_int_to_constant $current_wanted_car_list[3] = 579
+set_var_int_to_constant $current_wanted_car_list[4] = 424
+set_var_int_to_constant $current_wanted_car_list[5] = 536
+set_var_int_to_constant $current_wanted_car_list[6] = 463
+set_var_int_to_constant $current_wanted_car_list[7] = 500
+set_var_int_to_constant $current_wanted_car_list[8] = 477
+set_var_int_to_constant $current_wanted_car_list[9] = 587
+
+:IMPEXPM_10642
+return 
+
+:IMPEXPM_10644
+if 
+  Object.DoesExist($magno_arm)
+goto_if_false @IMPEXPM_10719
+17@, 18@, 19@ = Object.GrabEntityOnRope($magno_arm)
+if 
+  17@ <> -1
+goto_if_false @IMPEXPM_10719
+if 
+  not is_int_lvar_equal_to_int_lvar 20@ == 17@
+goto_if_false @IMPEXPM_10719
+set_lvar_int_to_lvar_int 20@ = 17@
+
+:IMPEXPM_10719
+return 
+
+:IMPEXPM_10721
+4@ = 0
+
+:IMPEXPM_10728
+if 
+  6 > 4@
+goto_if_false @IMPEXPM_10771
+$current_import_car_list(4@,6i) = -1
+4@ += 1
+goto @IMPEXPM_10728
+
+:IMPEXPM_10771
+switch_start $import_car_list_input total_jumps 7 default_jump 0 @IMPEXPM_11219 jumps 0 @IMPEXPM_10834 1 @IMPEXPM_10889 2 @IMPEXPM_10944 3 @IMPEXPM_10999 4 @IMPEXPM_11054 5 @IMPEXPM_11109 6 @IMPEXPM_11164
+
+:IMPEXPM_10834
+set_var_int_to_var_int $current_import_car_list[0] = $unlocked_import_cars[0]
+set_var_int_to_var_int $current_import_car_list[1] = $unlocked_import_cars[7]
+set_var_int_to_var_int $current_import_car_list[2] = $unlocked_import_cars[14]
+set_var_int_to_var_int $current_import_car_list[3] = $unlocked_import_cars[21]
+set_var_int_to_var_int $current_import_car_list[4] = $unlocked_import_cars[28]
+set_var_int_to_var_int $current_import_car_list[5] = $unlocked_import_cars[35]
+goto @IMPEXPM_11219
+
+:IMPEXPM_10889
+set_var_int_to_var_int $current_import_car_list[0] = $unlocked_import_cars[1]
+set_var_int_to_var_int $current_import_car_list[1] = $unlocked_import_cars[8]
+set_var_int_to_var_int $current_import_car_list[2] = $unlocked_import_cars[15]
+set_var_int_to_var_int $current_import_car_list[3] = $unlocked_import_cars[22]
+set_var_int_to_var_int $current_import_car_list[4] = $unlocked_import_cars[29]
+set_var_int_to_var_int $current_import_car_list[5] = $unlocked_import_cars[36]
+goto @IMPEXPM_11219
+
+:IMPEXPM_10944
+set_var_int_to_var_int $current_import_car_list[0] = $unlocked_import_cars[2]
+set_var_int_to_var_int $current_import_car_list[1] = $unlocked_import_cars[9]
+set_var_int_to_var_int $current_import_car_list[2] = $unlocked_import_cars[16]
+set_var_int_to_var_int $current_import_car_list[3] = $unlocked_import_cars[23]
+set_var_int_to_var_int $current_import_car_list[4] = $unlocked_import_cars[30]
+set_var_int_to_var_int $current_import_car_list[5] = $unlocked_import_cars[37]
+goto @IMPEXPM_11219
+
+:IMPEXPM_10999
+set_var_int_to_var_int $current_import_car_list[0] = $unlocked_import_cars[3]
+set_var_int_to_var_int $current_import_car_list[1] = $unlocked_import_cars[10]
+set_var_int_to_var_int $current_import_car_list[2] = $unlocked_import_cars[17]
+set_var_int_to_var_int $current_import_car_list[3] = $unlocked_import_cars[24]
+set_var_int_to_var_int $current_import_car_list[4] = $unlocked_import_cars[31]
+set_var_int_to_var_int $current_import_car_list[5] = $unlocked_import_cars[38]
+goto @IMPEXPM_11219
+
+:IMPEXPM_11054
+set_var_int_to_var_int $current_import_car_list[0] = $unlocked_import_cars[4]
+set_var_int_to_var_int $current_import_car_list[1] = $unlocked_import_cars[11]
+set_var_int_to_var_int $current_import_car_list[2] = $unlocked_import_cars[18]
+set_var_int_to_var_int $current_import_car_list[3] = $unlocked_import_cars[25]
+set_var_int_to_var_int $current_import_car_list[4] = $unlocked_import_cars[32]
+set_var_int_to_var_int $current_import_car_list[5] = $unlocked_import_cars[39]
+goto @IMPEXPM_11219
+
+:IMPEXPM_11109
+set_var_int_to_var_int $current_import_car_list[0] = $unlocked_import_cars[5]
+set_var_int_to_var_int $current_import_car_list[1] = $unlocked_import_cars[12]
+set_var_int_to_var_int $current_import_car_list[2] = $unlocked_import_cars[19]
+set_var_int_to_var_int $current_import_car_list[3] = $unlocked_import_cars[26]
+set_var_int_to_var_int $current_import_car_list[4] = $unlocked_import_cars[33]
+set_var_int_to_var_int $current_import_car_list[5] = $unlocked_import_cars[40]
+goto @IMPEXPM_11219
+
+:IMPEXPM_11164
+set_var_int_to_var_int $current_import_car_list[0] = $unlocked_import_cars[6]
+set_var_int_to_var_int $current_import_car_list[1] = $unlocked_import_cars[13]
+set_var_int_to_var_int $current_import_car_list[2] = $unlocked_import_cars[20]
+set_var_int_to_var_int $current_import_car_list[3] = $unlocked_import_cars[27]
+set_var_int_to_var_int $current_import_car_list[4] = $unlocked_import_cars[34]
+set_var_int_to_var_int $current_import_car_list[5] = $unlocked_import_cars[41]
+goto @IMPEXPM_11219
+
+:IMPEXPM_11219
+return 
+
+:IMPEXPM_11221
+4@ = 0
+
+:IMPEXPM_11228
+if 
+  5 > 4@
+goto_if_false @IMPEXPM_11416
+if 
+  $imported_cars(4@,5i) == -1
+goto_if_false @IMPEXPM_11294
+set_var_int_to_var_int $imported_cars(4@,5i) = $imported_car
+4@ = 10
+goto @IMPEXPM_11409
+
+:IMPEXPM_11294
+if 
+  Car.DoesExist($imported_cars(4@,5i))
+goto_if_false @IMPEXPM_11382
+if 
+  Car.IsDead($imported_cars(4@,5i))
+goto_if_false @IMPEXPM_11368
+Car.MarkAsNoLongerNeeded($imported_cars(4@,5i))
+$imported_cars(4@,5i) = -1
+goto @IMPEXPM_11221
+goto @IMPEXPM_11375
+
+:IMPEXPM_11368
+4@ += 1
+
+:IMPEXPM_11375
+goto @IMPEXPM_11409
+
+:IMPEXPM_11382
+Car.MarkAsNoLongerNeeded($imported_cars(4@,5i))
+$imported_cars(4@,5i) = -1
+goto @IMPEXPM_11221
+
+:IMPEXPM_11409
+goto @IMPEXPM_11228
+
+:IMPEXPM_11416
+if 
+  4@ == 5
+goto_if_false @IMPEXPM_11453
+Car.MarkAsNoLongerNeeded($imported_cars[4])
+$imported_cars[4] = -1
+goto @IMPEXPM_11221
+
+:IMPEXPM_11453
+return 
+4@ = 0
+
+:IMPEXPM_11462
+if 
+  5 > 4@
+goto_if_false @IMPEXPM_11681
+if 
+  $imported_cars(4@,5i) <> -1
+goto_if_false @IMPEXPM_11667
+if 
+  Car.DoesExist($imported_cars(4@,5i))
+goto_if_false @IMPEXPM_11647
+if 
+  not Car.IsDead($imported_cars(4@,5i))
+goto_if_false @IMPEXPM_11620
+if 
+  Player.IsPlaying($player1)
+goto_if_false @IMPEXPM_11613
+if 
+  not Char.LocateAnyMeansCar2D($scplayer, $imported_cars(4@,5i), 500.0, 500.0, False)
+goto_if_false @IMPEXPM_11613
+Car.MarkAsNoLongerNeeded($imported_cars(4@,5i))
+$imported_cars(4@,5i) = -1
+
+:IMPEXPM_11613
+goto @IMPEXPM_11640
+
+:IMPEXPM_11620
+Car.MarkAsNoLongerNeeded($imported_cars(4@,5i))
+$imported_cars(4@,5i) = -1
+
+:IMPEXPM_11640
+goto @IMPEXPM_11667
+
+:IMPEXPM_11647
+Car.MarkAsNoLongerNeeded($imported_cars(4@,5i))
+$imported_cars(4@,5i) = -1
+
+:IMPEXPM_11667
+4@ += 1
+goto @IMPEXPM_11462
+
+:IMPEXPM_11681
+return 
+
+:IMPEXPM_11683
+4@ = 0
+
+:IMPEXPM_11690
+if 
+  10 > 4@
+goto_if_false @IMPEXPM_11872
+if 
+  $current_wanted_list == 0
+goto_if_false @IMPEXPM_11741
+set_lvar_int_to_lvar_int 5@ = 4@
+5@ += 0
+
+:IMPEXPM_11741
+if 
+  $current_wanted_list == 1
+goto_if_false @IMPEXPM_11774
+set_lvar_int_to_lvar_int 5@ = 4@
+5@ += 10
+
+:IMPEXPM_11774
+if 
+  $current_wanted_list == 2
+goto_if_false @IMPEXPM_11807
+set_lvar_int_to_lvar_int 5@ = 4@
+5@ += 20
+
+:IMPEXPM_11807
+if 
+  $current_wanted_car_status(4@,10i) == 0
+goto_if_false @IMPEXPM_11847
+CarGenerator.Switch($impexp_car_gen(5@,30i), 101)
+goto @IMPEXPM_11858
+
+:IMPEXPM_11847
+CarGenerator.Switch($impexp_car_gen(5@,30i), 0)
+
+:IMPEXPM_11858
+4@ += 1
+goto @IMPEXPM_11690
+
+:IMPEXPM_11872
+return 
+
+:IMPEXPM_11874
+switch_start 6@ total_jumps 42 default_jump 0 @IMPEXPM_13121 jumps 402 @IMPEXPM_12281 404 @IMPEXPM_13100 405 @IMPEXPM_12302 409 @IMPEXPM_12428 411 @IMPEXPM_12323 415 @IMPEXPM_12554 424 @IMPEXPM_12911
+switch_continued 429 @IMPEXPM_12827 434 @IMPEXPM_13016 439 @IMPEXPM_12596 444 @IMPEXPM_12491 445 @IMPEXPM_12365 451 @IMPEXPM_12848 463 @IMPEXPM_12953 468 @IMPEXPM_12407 470 @IMPEXPM_12386
+switch_continued 475 @IMPEXPM_12722 477 @IMPEXPM_12995 480 @IMPEXPM_12638 483 @IMPEXPM_12344 489 @IMPEXPM_12575 496 @IMPEXPM_12680 500 @IMPEXPM_12974 506 @IMPEXPM_12806 508 @IMPEXPM_12869
+switch_continued 514 @IMPEXPM_12617 521 @IMPEXPM_12743 522 @IMPEXPM_12512 533 @IMPEXPM_12449 534 @IMPEXPM_12470 535 @IMPEXPM_12659 536 @IMPEXPM_12932 539 @IMPEXPM_13058 541 @IMPEXPM_13079
+switch_continued 555 @IMPEXPM_12533 559 @IMPEXPM_12260 568 @IMPEXPM_12785 573 @IMPEXPM_13037 579 @IMPEXPM_12890 580 @IMPEXPM_12701 587 @IMPEXPM_12764 589 @IMPEXPM_12239 -1 @IMPEXPM_13121
+
+:IMPEXPM_12239
+set_var_text_label s$impexp_text_label = 'CLUB'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12260
+set_var_text_label s$impexp_text_label = 'JESTER'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12281
+set_var_text_label s$impexp_text_label = 'BUFFALO'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12302
+set_var_text_label s$impexp_text_label = 'SENTINL'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12323
+set_var_text_label s$impexp_text_label = 'INFERNU'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12344
+set_var_text_label s$impexp_text_label = 'CAMPER'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12365
+set_var_text_label s$impexp_text_label = 'ADMIRAL'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12386
+set_var_text_label s$impexp_text_label = 'PATRIOT'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12407
+set_var_text_label s$impexp_text_label = 'SANCHEZ'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12428
+set_var_text_label s$impexp_text_label = 'STRETCH'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12449
+set_var_text_label s$impexp_text_label = 'FELTZER'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12470
+set_var_text_label s$impexp_text_label = 'REMING'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12491
+set_var_text_label s$impexp_text_label = 'MONSTER'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12512
+set_var_text_label s$impexp_text_label = 'NRG500'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12533
+set_var_text_label s$impexp_text_label = 'WINDSOR'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12554
+set_var_text_label s$impexp_text_label = 'CHEETAH'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12575
+set_var_text_label s$impexp_text_label = 'RANCHER'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12596
+set_var_text_label s$impexp_text_label = 'STALION'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12617
+set_var_text_label s$impexp_text_label = 'PETROL'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12638
+set_var_text_label s$impexp_text_label = 'COMET'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12659
+set_var_text_label s$impexp_text_label = 'SLAMVAN'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12680
+set_var_text_label s$impexp_text_label = 'BLISTAC'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12701
+set_var_text_label s$impexp_text_label = 'STAFFRD'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12722
+set_var_text_label s$impexp_text_label = 'SABRE'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12743
+set_var_text_label s$impexp_text_label = 'FCR900'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12764
+set_var_text_label s$impexp_text_label = 'EUROS'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12785
+set_var_text_label s$impexp_text_label = 'BANDITO'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12806
+set_var_text_label s$impexp_text_label = 'SUPERGT'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12827
+set_var_text_label s$impexp_text_label = 'BANSHEE'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12848
+set_var_text_label s$impexp_text_label = 'TURISMO'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12869
+set_var_text_label s$impexp_text_label = 'JOURNEY'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12890
+set_var_text_label s$impexp_text_label = 'HUNTLEY'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12911
+set_var_text_label s$impexp_text_label = 'BFINJC'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12932
+set_var_text_label s$impexp_text_label = 'BLADE'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12953
+set_var_text_label s$impexp_text_label = 'FREEWAY'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12974
+set_var_text_label s$impexp_text_label = 'MESAA'
+goto @IMPEXPM_13121
+
+:IMPEXPM_12995
+set_var_text_label s$impexp_text_label = 'ZR350'
+goto @IMPEXPM_13121
+
+:IMPEXPM_13016
+set_var_text_label s$impexp_text_label = 'HOTKNIF'
+goto @IMPEXPM_13121
+
+:IMPEXPM_13037
+set_var_text_label s$impexp_text_label = 'DUNE'
+goto @IMPEXPM_13121
+
+:IMPEXPM_13058
+set_var_text_label s$impexp_text_label = 'VORTEX'
+goto @IMPEXPM_13121
+
+:IMPEXPM_13079
+set_var_text_label s$impexp_text_label = 'BULLET'
+goto @IMPEXPM_13121
+
+:IMPEXPM_13100
+set_var_text_label s$impexp_text_label = 'PEREN'
+goto @IMPEXPM_13121
+
+:IMPEXPM_13121
+return 
+
+:IMPEXPM_13123
+switch_start $current_import_car_list($impexp_selected_car,6i) total_jumps 19 default_jump 1 @IMPEXPM_14444 jumps 405 @IMPEXPM_13560 411 @IMPEXPM_13917 415 @IMPEXPM_13865 424 @IMPEXPM_14175 429 @IMPEXPM_14048 470 @IMPEXPM_14201 475 @IMPEXPM_13839
+switch_continued 480 @IMPEXPM_13891 483 @IMPEXPM_13687 489 @IMPEXPM_13943 496 @IMPEXPM_13969 506 @IMPEXPM_13391 533 @IMPEXPM_13712 536 @IMPEXPM_14365 541 @IMPEXPM_14391 555 @IMPEXPM_13417
+switch_continued 559 @IMPEXPM_13470 587 @IMPEXPM_13365 589 @IMPEXPM_13339 -1 @IMPEXPM_14458 -1 @IMPEXPM_14458 -1 @IMPEXPM_14458 -1 @IMPEXPM_14458 -1 @IMPEXPM_14458 -1 @IMPEXPM_14458
+
+:IMPEXPM_13339
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "N13_LLF_")
+goto @IMPEXPM_14458
+
+:IMPEXPM_13365
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "_DS3MP__")
+goto @IMPEXPM_14458
+
+:IMPEXPM_13391
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "_CMACD1_")
+goto @IMPEXPM_14458
+
+:IMPEXPM_13417
+4@ = Math.RandomIntInRange(0, 3)
+if 
+  4@ == 0
+goto_if_false @IMPEXPM_13463
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "__C0S___")
+
+:IMPEXPM_13463
+goto @IMPEXPM_14458
+
+:IMPEXPM_13470
+4@ = Math.RandomIntInRange(0, 3)
+if 
+  4@ == 1
+goto_if_false @IMPEXPM_13516
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "_X2_GAV_")
+
+:IMPEXPM_13516
+if 
+  4@ == 2
+goto_if_false @IMPEXPM_13553
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "__G3PO__")
+
+:IMPEXPM_13553
+goto @IMPEXPM_14458
+
+:IMPEXPM_13560
+4@ = Math.RandomIntInRange(0, 3)
+if 
+  4@ == 0
+goto_if_false @IMPEXPM_13606
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "D0N_D0N_")
+
+:IMPEXPM_13606
+if 
+  4@ == 1
+goto_if_false @IMPEXPM_13643
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "_D0_NNY_")
+
+:IMPEXPM_13643
+if 
+  4@ == 2
+goto_if_false @IMPEXPM_13680
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "TH3_D0N_")
+
+:IMPEXPM_13680
+goto @IMPEXPM_14458
+
+:IMPEXPM_13687
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "SJM1985")
+goto @IMPEXPM_14458
+
+:IMPEXPM_13712
+4@ = Math.RandomIntInRange(0, 5)
+if 
+  4@ == 1
+goto_if_false @IMPEXPM_13758
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "433_ADF_")
+
+:IMPEXPM_13758
+if 
+  4@ == 2
+goto_if_false @IMPEXPM_13795
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "DR_F_MBE")
+
+:IMPEXPM_13795
+if 
+  4@ == 3
+goto_if_false @IMPEXPM_13832
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "ANN_F3RG")
+
+:IMPEXPM_13832
+goto @IMPEXPM_14458
+
+:IMPEXPM_13839
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "__FR4Z__")
+goto @IMPEXPM_14458
+
+:IMPEXPM_13865
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "_IMY_AK_")
+goto @IMPEXPM_14458
+
+:IMPEXPM_13891
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "_L0LLY__")
+goto @IMPEXPM_14458
+
+:IMPEXPM_13917
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "_J_L33S_")
+goto @IMPEXPM_14458
+
+:IMPEXPM_13943
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "S4_LIJON")
+goto @IMPEXPM_14458
+
+:IMPEXPM_13969
+4@ = Math.RandomIntInRange(0, 2)
+if 
+  4@ == 0
+goto_if_false @IMPEXPM_14022
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "DI5CO5TU")
+goto @IMPEXPM_14041
+
+:IMPEXPM_14022
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "SM53_NUV")
+
+:IMPEXPM_14041
+goto @IMPEXPM_14458
+
+:IMPEXPM_14048
+4@ = Math.RandomIntInRange(0, 3)
+if 
+  4@ == 0
+goto_if_false @IMPEXPM_14094
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "J3NYTAL5")
+
+:IMPEXPM_14094
+if 
+  4@ == 1
+goto_if_false @IMPEXPM_14131
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "_J3_NCF_")
+
+:IMPEXPM_14131
+if 
+  4@ == 2
+goto_if_false @IMPEXPM_14168
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "DD0_N4LD")
+
+:IMPEXPM_14168
+goto @IMPEXPM_14458
+
+:IMPEXPM_14175
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "LA5H_L3Y")
+goto @IMPEXPM_14458
+
+:IMPEXPM_14201
+4@ = Math.RandomIntInRange(0, 4)
+if 
+  4@ == 0
+goto_if_false @IMPEXPM_14247
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "AL3X_RES")
+
+:IMPEXPM_14247
+if 
+  4@ == 1
+goto_if_false @IMPEXPM_14284
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "R_F3RG1E")
+
+:IMPEXPM_14284
+if 
+  4@ == 2
+goto_if_false @IMPEXPM_14321
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "H4_NNAHF")
+
+:IMPEXPM_14321
+if 
+  4@ == 3
+goto_if_false @IMPEXPM_14358
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "CL41_RES")
+
+:IMPEXPM_14358
+goto @IMPEXPM_14458
+
+:IMPEXPM_14365
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "R055_MCL")
+goto @IMPEXPM_14458
+
+:IMPEXPM_14391
+4@ = Math.RandomIntInRange(0, 4)
+if 
+  4@ == 0
+goto_if_false @IMPEXPM_14437
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "T00_FAST")
+
+:IMPEXPM_14437
+goto @IMPEXPM_14458
+
+:IMPEXPM_14444
+IMPEXPM_14460()
+goto @IMPEXPM_14458
+
+:IMPEXPM_14458
+return 
+
+:IMPEXPM_14460
+4@ = Math.RandomIntInRange(0, 100)
+switch_start 4@ total_jumps 12 default_jump 0 @IMPEXPM_14909 jumps 0 @IMPEXPM_14597 1 @IMPEXPM_14623 2 @IMPEXPM_14649 3 @IMPEXPM_14675 4 @IMPEXPM_14701 5 @IMPEXPM_14727 6 @IMPEXPM_14753
+switch_continued 7 @IMPEXPM_14779 8 @IMPEXPM_14805 9 @IMPEXPM_14831 10 @IMPEXPM_14857 11 @IMPEXPM_14883 -1 @IMPEXPM_14909 -1 @IMPEXPM_14909 -1 @IMPEXPM_14909 -1 @IMPEXPM_14909
+
+:IMPEXPM_14597
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "R4N_G3RS")
+goto @IMPEXPM_14909
+
+:IMPEXPM_14623
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "GL4S_G0W")
+goto @IMPEXPM_14909
+
+:IMPEXPM_14649
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "_ARRAN__")
+goto @IMPEXPM_14909
+
+:IMPEXPM_14675
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "AM0_RUS0")
+goto @IMPEXPM_14909
+
+:IMPEXPM_14701
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "_AMAT0__")
+goto @IMPEXPM_14909
+
+:IMPEXPM_14727
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "_GA_ZZA_")
+goto @IMPEXPM_14909
+
+:IMPEXPM_14753
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "ZID_ANE_")
+goto @IMPEXPM_14909
+
+:IMPEXPM_14779
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "MC_C01ST")
+goto @IMPEXPM_14909
+
+:IMPEXPM_14805
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "BAW_BAG_")
+goto @IMPEXPM_14909
+
+:IMPEXPM_14831
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "BR0_D1E_")
+goto @IMPEXPM_14909
+
+:IMPEXPM_14857
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "MR_J0BBY")
+goto @IMPEXPM_14909
+
+:IMPEXPM_14883
+Car.CustomPlateForNextCar($current_import_car_list($impexp_selected_car,6i), "BR0_DICK")
+goto @IMPEXPM_14909
+
+:IMPEXPM_14909
+return 
+

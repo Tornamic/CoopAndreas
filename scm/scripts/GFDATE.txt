@@ -1,0 +1,5677 @@
+//-------------External script 25 (GF_DATE)---------------
+
+:GFDATE
+script_name 'GFDATE'
+1@ = 0
+2@ = 0
+3@ = 0
+24@ = 0
+30@ = -1
+29@ = -1
+$iFun = 30
+$fFun = 30.0
+if 
+  3@ > 0
+goto_if_false @GFDATE_120
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+28@ = Char.StoreCarIsInNoSave(0@)
+
+:GFDATE_120
+gosub @GFDATE_24076
+set_local_var_bit_const 3@ bit 1
+
+:GFDATE_134
+wait 0
+if and
+  Player.IsPlaying($player1)
+  $onmission == 0
+goto_if_false @GFDATE_260
+if 
+  not Char.IsDead(0@)
+goto_if_false @GFDATE_244
+gosub @GFDATE_26752
+gosub @GFDATE_24246
+gosub @GFDATE_283
+gosub @GFDATE_3688
+if 
+  is_global_var_bit_set_const $iDateReport bit 22
+goto_if_false @GFDATE_230
+gosub @GFDATE_27210
+
+:GFDATE_230
+gosub @GFDATE_30455
+goto @GFDATE_253
+
+:GFDATE_244
+Text.ClearHelp
+gosub @GFDATE_32517
+
+:GFDATE_253
+goto @GFDATE_276
+
+:GFDATE_260
+Text.ClearHelp
+set_local_var_bit_const 3@ bit 9
+gosub @GFDATE_32517
+
+:GFDATE_276
+goto @GFDATE_134
+
+:GFDATE_283
+if 
+  not is_local_var_bit_set_const 3@ bit 1
+goto_if_false @GFDATE_3686
+if 
+  is_global_var_bit_set_const $iDateReport bit 26
+goto_if_false @GFDATE_342
+set_global_var_bit_const $iDateReport bit 2
+1@ = 3
+2@ = 0
+return 
+
+:GFDATE_342
+gosub @GFDATE_20055
+if 
+  24@ > -1
+goto_if_false @GFDATE_462
+if 
+  is_global_var_bit_set_const $iDateReport bit 11
+goto_if_false @GFDATE_414
+gosub @GFDATE_32407
+Camera.DoFade(0, Fade.Out)
+1@ = 2
+2@ = 0
+return 
+
+:GFDATE_414
+if 
+  is_global_var_bit_set_const $iDateReport bit 13
+goto_if_false @GFDATE_455
+gosub @GFDATE_32407
+1@ = 10
+2@ = 0
+return 
+
+:GFDATE_455
+goto @GFDATE_503
+
+:GFDATE_462
+if 
+  24@ == -2
+goto_if_false @GFDATE_503
+gosub @GFDATE_32407
+1@ = 3
+2@ = 0
+return 
+
+:GFDATE_503
+switch_start $iTransitionStages total_jumps 17 default_jump 0 @GFDATE_3686 jumps 0 @GFDATE_696 1 @GFDATE_887 2 @GFDATE_1089 3 @GFDATE_1375 4 @GFDATE_1479 5 @GFDATE_1585 6 @GFDATE_1698
+switch_continued 7 @GFDATE_1811 8 @GFDATE_1869 9 @GFDATE_1986 10 @GFDATE_2069 11 @GFDATE_2373 12 @GFDATE_2583 13 @GFDATE_2720 14 @GFDATE_3163 15 @GFDATE_3337
+switch_continued 16 @GFDATE_3544 -1 @GFDATE_3686 -1 @GFDATE_3686 -1 @GFDATE_3686 -1 @GFDATE_3686 -1 @GFDATE_3686 -1 @GFDATE_3686 -1 @GFDATE_3686 -1 @GFDATE_3686
+
+:GFDATE_696
+gosub @GFDATE_23696
+if 
+  25@ > 0
+goto_if_false @GFDATE_873
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.LeftShoulder1)
+goto_if_false @GFDATE_866
+if and
+  1@ == 1
+  not is_local_var_bit_set_const 3@ bit 7
+  not is_local_var_bit_set_const 3@ bit 26
+  not is_global_var_bit_set_const $iDateReport bit 22
+goto_if_false @GFDATE_859
+if 
+  not is_local_var_bit_set_const 3@ bit 3
+goto_if_false @GFDATE_859
+set_local_var_bit_const 3@ bit 3
+if 
+  25@ == 2
+goto_if_false @GFDATE_843
+1@ = 11
+2@ = 0
+return 
+goto @GFDATE_859
+
+:GFDATE_843
+1@ = 6
+2@ = 0
+return 
+
+:GFDATE_859
+goto @GFDATE_873
+
+:GFDATE_866
+clear_local_var_bit_const 3@ bit 3
+
+:GFDATE_873
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_887
+if 
+  not is_local_var_bit_set_const 3@ bit 2
+goto_if_false @GFDATE_1075
+if or
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 21
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 16
+goto_if_false @GFDATE_1075
+4@, 7@, 10@ = Char.GetCoordinates($scplayer)
+s$txtCurrZone = Zone.GetName(4@, 7@, 10@)
+if and
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 21
+  not is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_1075
+25@ = Char.GetAmmoInWeapon(0@, 28)
+if 
+  25@ == 0
+goto_if_false @GFDATE_1075
+Char.AddAmmo(0@, WeaponType.MicroUzi, 60)
+set_var_int_to_constant $iGFSayContext = 280
+set_global_var_bit_const $iDateReport bit 2
+gosub @GFDATE_32407
+gosub @GFDATE_19460
+set_local_var_bit_const 3@ bit 27
+set_local_var_bit_const 3@ bit 2
+
+:GFDATE_1075
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_1089
+if 
+  Char.IsInAnyCar(0@)
+goto_if_false @GFDATE_1327
+if and
+  is_global_var_bit_set_const $iDateReport bit 15
+  1@ <> 8
+goto_if_false @GFDATE_1146
+1@ = 8
+2@ = 0
+return 
+
+:GFDATE_1146
+if 
+  1@ <> 4
+goto_if_false @GFDATE_1187
+1@ = 4
+2@ = 0
+return 
+goto @GFDATE_1320
+
+:GFDATE_1187
+if 
+  not is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_1253
+if and
+  0 > 29@
+  not is_local_var_bit_set_const 3@ bit 7
+goto_if_false @GFDATE_1253
+set_local_var_bit_const 3@ bit 7
+1@ = 5
+2@ = 0
+return 
+
+:GFDATE_1253
+if and
+  is_local_var_bit_set_const 3@ bit 5
+  not is_local_var_bit_set_const 3@ bit 7
+  not is_local_var_bit_set_const 3@ bit 6
+  not Char.IsOnAnyBike($scplayer)
+  not is_local_var_bit_set_const 3@ bit 30
+  not is_global_var_bit_set_const $iDateReport bit 22
+goto_if_false @GFDATE_1320
+1@ = 7
+2@ = 0
+return 
+
+:GFDATE_1320
+goto @GFDATE_1361
+
+:GFDATE_1327
+if 
+  1@ <> 1
+goto_if_false @GFDATE_1361
+1@ = 1
+2@ = 0
+return 
+
+:GFDATE_1361
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_1375
+if and
+  TIMERA > 10000
+  not Char.IsGroupMember(0@, $Players_Group)
+  not is_global_var_bit_set_const $iDateReport bit 22
+goto_if_false @GFDATE_1465
+if or
+  1@ == 1
+  1@ == 4
+goto_if_false @GFDATE_1465
+set_local_var_bit_const 3@ bit 7
+Text.ClearPrints
+Text.ClearHelp
+Text.PrintHelp('GF_H017')
+gosub @GFDATE_32517
+return 
+
+:GFDATE_1465
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_1479
+if 
+  Char.HasBeenDamagedByChar(0@, $scplayer)
+goto_if_false @GFDATE_1571
+if 
+  not Char.IsHealthGreater(0@, 498)
+goto_if_false @GFDATE_1558
+set_local_var_bit_const 3@ bit 15
+Text.PrintHelp('GF_H018')
+1@ = 9
+2@ = 0
+return 
+goto @GFDATE_1571
+
+:GFDATE_1558
+set_var_int_to_constant $iGFSayContext = 313
+Char.ClearLastDamageEntity(0@)
+
+:GFDATE_1571
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_1585
+if and
+  TIMERA > 120000
+  not is_local_var_bit_set_const 3@ bit 26
+goto_if_false @GFDATE_1684
+if or
+  $iGFidx == 3
+  $iGFidx == 2
+goto_if_false @GFDATE_1675
+if 
+  TIMERA > 240000
+goto_if_false @GFDATE_1668
+gosub @GFDATE_23580
+return 
+
+:GFDATE_1668
+goto @GFDATE_1684
+
+:GFDATE_1675
+gosub @GFDATE_23580
+return 
+
+:GFDATE_1684
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_1698
+if and
+  TIMERA > 180000
+  not is_local_var_bit_set_const 3@ bit 7
+goto_if_false @GFDATE_1797
+if or
+  $iGFidx == 3
+  $iGFidx == 2
+goto_if_false @GFDATE_1788
+if 
+  TIMERA > 300000
+goto_if_false @GFDATE_1781
+gosub @GFDATE_23680
+return 
+
+:GFDATE_1781
+goto @GFDATE_1797
+
+:GFDATE_1788
+gosub @GFDATE_23680
+return 
+
+:GFDATE_1797
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_1811
+if and
+  TIMERA > 360000
+  is_local_var_bit_set_const 3@ bit 7
+goto_if_false @GFDATE_1855
+1@ = 9
+2@ = 0
+return 
+
+:GFDATE_1855
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_1869
+if 
+  not Char.IsHealthGreater(0@, 10)
+goto_if_false @GFDATE_1913
+$iGFLikesPlayer($iGFidx,6i) = -999
+Task.Dead(0@)
+gosub @GFDATE_32517
+return 
+
+:GFDATE_1913
+if and
+  Player.IsWantedLevelGreater($player1, 2)
+  not is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 21
+  not is_local_var_bit_set_const 3@ bit 7
+goto_if_false @GFDATE_1972
+set_local_var_bit_const 3@ bit 7
+1@ = 5
+2@ = 0
+return 
+
+:GFDATE_1972
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_1986
+if and
+  Char.IsInAnyCar(0@)
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_2055
+if 
+  not Car.IsStopped(28@)
+goto_if_false @GFDATE_2055
+if and
+  not is_local_var_bit_set_const 3@ bit 7
+  not is_local_var_bit_set_const 3@ bit 2
+goto_if_false @GFDATE_2055
+gosub @GFDATE_25145
+
+:GFDATE_2055
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_2069
+if and
+  is_local_var_bit_set_const 3@ bit 2
+  not is_local_var_bit_set_const 3@ bit 12
+  not is_local_var_bit_set_const 3@ bit 15
+  $iGF_TT_Status <> -1
+goto_if_false @GFDATE_2295
+25@ = Stat.GetInt(184)
+if 
+  25@ > 1
+goto_if_false @GFDATE_2288
+25@ = Streaming.GetAreaVisible()
+if 
+  25@ == 0
+goto_if_false @GFDATE_2281
+if or
+  1@ == 1
+  1@ == 4
+goto_if_false @GFDATE_2281
+if and
+  not is_global_var_bit_set_const $iDateReport bit 22
+  TIMERA > 7000
+goto_if_false @GFDATE_2281
+25@ = Math.RandomIntInRange(0, 100)
+if 
+  50 >= 25@
+goto_if_false @GFDATE_2256
+$iGF_TT_Status = 0
+set_global_var_bit_const $iDateReport bit 22
+goto @GFDATE_2281
+
+:GFDATE_2256
+if 
+  not is_global_var_bit_set_const $iDateReport bit 25
+goto_if_false @GFDATE_2281
+$iGF_TT_Status = -1
+
+:GFDATE_2281
+goto @GFDATE_2295
+
+:GFDATE_2288
+$iGF_TT_Status = -1
+
+:GFDATE_2295
+if and
+  is_global_var_bit_set_const $iDateReport bit 12
+  TIMERA >= 30000
+  not is_local_var_bit_set_const 3@ bit 2
+goto_if_false @GFDATE_2349
+$iTransitionStages += 1
+goto @GFDATE_3686
+goto @GFDATE_2359
+
+:GFDATE_2349
+$fFunTemp = 0.0
+
+:GFDATE_2359
+$iTransitionStages = 0
+goto @GFDATE_3686
+
+:GFDATE_2373
+if and
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 27
+  1@ == 6
+goto_if_false @GFDATE_2447
+if 
+  2@ == 0
+goto_if_false @GFDATE_2437
+$fFunTemp += 1.5
+goto @GFDATE_2447
+
+:GFDATE_2437
+$fFunTemp += 1E-05
+
+:GFDATE_2447
+if and
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 28
+  1@ == 7
+goto_if_false @GFDATE_2521
+if 
+  2@ == 0
+goto_if_false @GFDATE_2511
+$fFunTemp += 1.5
+goto @GFDATE_2521
+
+:GFDATE_2511
+$fFunTemp += 1E-05
+
+:GFDATE_2521
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 21
+goto_if_false @GFDATE_2569
+if 
+  Char.IsShooting(0@)
+goto_if_false @GFDATE_2569
+$fFunTemp += 4.0
+
+:GFDATE_2569
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_2583
+if 
+  Char.IsInAnyCar(0@)
+goto_if_false @GFDATE_2706
+25@ = Car.GetHealth(28@)
+if 
+  is_int_lvar_greater_than_int_lvar 29@ > 25@
+goto_if_false @GFDATE_2706
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 24
+goto_if_false @GFDATE_2688
+if 
+  Car.HasBeenDamagedByCar(28@, -1)
+goto_if_false @GFDATE_2681
+$fFunTemp += 1.5
+Car.ClearLastDamageEntity(28@)
+
+:GFDATE_2681
+goto @GFDATE_2698
+
+:GFDATE_2688
+$fFunTemp -= 1.0
+
+:GFDATE_2698
+set_lvar_int_to_lvar_int 29@ = 25@
+
+:GFDATE_2706
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_2720
+if and
+  Char.IsInAnyCar(0@)
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_3149
+if 
+  not Car.IsStopped(28@)
+goto_if_false @GFDATE_3149
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 11
+goto_if_false @GFDATE_2846
+if and
+  $passenger_said_jump == 1
+  not is_local_var_bit_set_const 3@ bit 17
+goto_if_false @GFDATE_2821
+$fFunTemp += 1.5
+set_local_var_bit_const 3@ bit 17
+
+:GFDATE_2821
+if 
+  $passenger_said_jump == 0
+goto_if_false @GFDATE_2846
+clear_local_var_bit_const 3@ bit 17
+
+:GFDATE_2846
+14@ = Car.GetSpeed(28@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 12
+goto_if_false @GFDATE_2963
+if 
+  14@ > 22.0
+goto_if_false @GFDATE_2921
+$fFunTemp += 1.5
+clear_local_var_bit_const 3@ bit 19
+goto @GFDATE_2963
+
+:GFDATE_2921
+if 
+  not is_local_var_bit_set_const 3@ bit 19
+goto_if_false @GFDATE_2953
+set_local_var_bit_const 3@ bit 19
+set_var_int_to_constant $iGFSayContext = 39
+
+:GFDATE_2953
+$fFunTemp -= 2.5
+
+:GFDATE_2963
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 13
+goto_if_false @GFDATE_3149
+if and
+  14@ > 8.0
+  20.0 > 14@
+goto_if_false @GFDATE_3047
+$fFunTemp += 0.5
+clear_local_var_bit_const 3@ bit 19
+clear_local_var_bit_const 3@ bit 18
+goto @GFDATE_3149
+
+:GFDATE_3047
+if 
+  8.0 >= 14@
+goto_if_false @GFDATE_3107
+if 
+  not is_local_var_bit_set_const 3@ bit 19
+goto_if_false @GFDATE_3100
+set_local_var_bit_const 3@ bit 19
+set_var_int_to_constant $iGFSayContext = 39
+
+:GFDATE_3100
+goto @GFDATE_3139
+
+:GFDATE_3107
+if 
+  not is_local_var_bit_set_const 3@ bit 18
+goto_if_false @GFDATE_3139
+set_local_var_bit_const 3@ bit 18
+set_var_int_to_constant $iGFSayContext = 32
+
+:GFDATE_3139
+$fFunTemp -= 2.5
+
+:GFDATE_3149
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_3163
+if and
+  Char.IsInAnyCar(0@)
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_3275
+if 
+  not Car.IsStopped(28@)
+goto_if_false @GFDATE_3275
+if 
+  not is_local_var_bit_set_const 3@ bit 7
+goto_if_false @GFDATE_3275
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 16
+goto_if_false @GFDATE_3275
+gosub @GFDATE_23458
+if 
+  25@ > 0
+goto_if_false @GFDATE_3275
+$fFunTemp += 0.5
+
+:GFDATE_3275
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 21
+goto_if_false @GFDATE_3323
+if 
+  Char.IsShooting(0@)
+goto_if_false @GFDATE_3323
+$fFunTemp += 4.0
+
+:GFDATE_3323
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_3337
+if and
+  Char.IsInAnyCar(0@)
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_3523
+if 
+  Car.IsStopped(28@)
+goto_if_false @GFDATE_3523
+26@ = Zone.GetCurrentPopulationZoneType()
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 14
+goto_if_false @GFDATE_3523
+if or
+  is_int_lvar_equal_to_constant 26@ == 10
+  is_int_lvar_equal_to_constant 26@ == 3
+goto_if_false @GFDATE_3523
+26@ = Clock.GetMinutesToTimeOfDay(6, 0)
+if or
+  30 >= 25@
+  25@ >= 1380
+goto_if_false @GFDATE_3478
+$fFunTemp += 4.0
+goto @GFDATE_3523
+
+:GFDATE_3478
+26@ = Clock.GetMinutesToTimeOfDay(20, 0)
+if or
+  30 >= 25@
+  25@ >= 1380
+goto_if_false @GFDATE_3523
+$fFunTemp += 4.0
+
+:GFDATE_3523
+gosub @GFDATE_25027
+$iTransitionStages += 1
+goto @GFDATE_3686
+
+:GFDATE_3544
+if and
+  $iFun >= 100
+  not is_local_var_bit_set_const 3@ bit 2
+goto_if_false @GFDATE_3607
+set_global_var_bit_const $iDateReport bit 2
+set_var_int_to_constant $iGFSayContext = 280
+set_local_var_bit_const 3@ bit 2
+gosub @GFDATE_32407
+return 
+goto @GFDATE_3662
+
+:GFDATE_3607
+if and
+  0 >= $iFun
+  not is_local_var_bit_set_const 3@ bit 7
+goto_if_false @GFDATE_3662
+clear_global_var_bit_const $iDateReport bit 2
+set_local_var_bit_const 3@ bit 7
+1@ = 5
+2@ = 0
+return 
+
+:GFDATE_3662
+$fFunTemp = 0.0
+$iTransitionStages = 0
+goto @GFDATE_3686
+
+:GFDATE_3686
+return 
+
+:GFDATE_3688
+switch_start 1@ total_jumps 12 default_jump 0 @GFDATE_3984 jumps 0 @GFDATE_3816 1 @GFDATE_3830 2 @GFDATE_3844 3 @GFDATE_3858 4 @GFDATE_3872 5 @GFDATE_3886 6 @GFDATE_3900
+switch_continued 7 @GFDATE_3914 8 @GFDATE_3928 9 @GFDATE_3942 10 @GFDATE_3956 11 @GFDATE_3970 -1 @GFDATE_3984 -1 @GFDATE_3984 -1 @GFDATE_3984 -1 @GFDATE_3984
+
+:GFDATE_3816
+gosub @GFDATE_3986
+goto @GFDATE_3984
+
+:GFDATE_3830
+gosub @GFDATE_4788
+goto @GFDATE_3984
+
+:GFDATE_3844
+gosub @GFDATE_5087
+goto @GFDATE_3984
+
+:GFDATE_3858
+gosub @GFDATE_5819
+goto @GFDATE_3984
+
+:GFDATE_3872
+gosub @GFDATE_6976
+goto @GFDATE_3984
+
+:GFDATE_3886
+gosub @GFDATE_7695
+goto @GFDATE_3984
+
+:GFDATE_3900
+gosub @GFDATE_7817
+goto @GFDATE_3984
+
+:GFDATE_3914
+gosub @GFDATE_11047
+goto @GFDATE_3984
+
+:GFDATE_3928
+gosub @GFDATE_12450
+goto @GFDATE_3984
+
+:GFDATE_3942
+gosub @GFDATE_14647
+goto @GFDATE_3984
+
+:GFDATE_3956
+gosub @GFDATE_14897
+goto @GFDATE_3984
+
+:GFDATE_3970
+gosub @GFDATE_15244
+goto @GFDATE_3984
+
+:GFDATE_3984
+return 
+
+:GFDATE_3986
+switch_start 2@ total_jumps 4 default_jump 0 @GFDATE_4786 jumps 0 @GFDATE_4049 1 @GFDATE_4328 2 @GFDATE_4584 3 @GFDATE_4664 -1 @GFDATE_4786 -1 @GFDATE_4786 -1 @GFDATE_4786
+
+:GFDATE_4049
+set_local_var_bit_const 3@ bit 1
+Player.SetControl($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+if 
+  is_global_var_bit_set_const $iDateReport bit 14
+goto_if_false @GFDATE_4130
+set_local_var_bit_const 3@ bit 9
+set_global_var_bit_const $iDateReport bit 2
+set_global_var_bit_const $iDateReport bit 3
+1@ = 3
+2@ = 0
+goto @GFDATE_4786
+
+:GFDATE_4130
+Hud.SwitchWidescreen(True)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Char.HideWeaponForScriptedCutscene(0@, True)
+Char.SetOnlyDamagedByPlayer(0@, True)
+gosub @GFDATE_22751
+World.ClearArea(1, 6@, 9@, 12@, 2.0)
+Camera.SetFixedPosition(4@, 7@, 10@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(5@, 8@, 11@, SwitchType.JumpCut)
+Object.LockDoor($iGFdoor($iGFidx,7i), False)
+gosub @GFDATE_16680
+if 
+  25@ == -1
+goto_if_false @GFDATE_4285
+set_local_var_bit_const 3@ bit 16
+Task.GotoChar(0@, $scplayer, 5000, 2.5)
+goto @GFDATE_4307
+
+:GFDATE_4285
+Group.SetMember(0@, $Players_Group)
+Char.ListenToPlayerGroupCommands(0@, False)
+Player.SetGroupToFollowAlways($player1, True)
+
+:GFDATE_4307
+TIMERB = 0
+2@ += 1
+goto @GFDATE_4786
+
+:GFDATE_4328
+4@, 7@, 10@ = Char.GetCoordinates($scplayer)
+5@, 8@, 11@ = Char.GetCoordinates(0@)
+13@ = Math.GetDistanceBetweenCoords3D(4@, 7@, 10@, 5@, 8@, 11@)
+if 
+  TIMERB >= 6000
+goto_if_false @GFDATE_4442
+5@ = Path.GetClosestCharNode(8@, 11@, 5@, 8@, 11@)
+Char.SetCoordinates(0@, 5@, 8@, 11@)
+13@ = 1.0
+
+:GFDATE_4442
+if 
+  3.0 >= 13@
+goto_if_false @GFDATE_4577
+Camera.PointAtPoint(4@, 7@, 10@, SwitchType.Interpolation)
+Object.LockDoor($iGFdoor($iGFidx,7i), True)
+if 
+  is_local_var_bit_set_const 3@ bit 16
+goto_if_false @GFDATE_4547
+Char.SetOnlyDamagedByPlayer(0@, False)
+set_local_var_bit_const 3@ bit 9
+1@ = 3
+2@ = 3
+goto @GFDATE_4786
+goto @GFDATE_4577
+
+:GFDATE_4547
+set_var_int_to_constant $iGFSayContext = 298
+set_var_int_to_constant $iCJSayContext = 240
+TIMERB = 0
+2@ += 1
+
+:GFDATE_4577
+goto @GFDATE_4786
+
+:GFDATE_4584
+if 
+  TIMERB >= 3000
+goto_if_false @GFDATE_4657
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Char.HideWeaponForScriptedCutscene(0@, False)
+Char.SetOnlyDamagedByPlayer(0@, False)
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Game.SetAllCarsCanBeDamaged(True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+2@ += 1
+
+:GFDATE_4657
+goto @GFDATE_4786
+
+:GFDATE_4664
+gosub @GFDATE_17450
+if 
+  is_global_var_bit_set_const $iDateReport bit 11
+goto_if_false @GFDATE_4700
+Text.PrintHelp('GF_0036')
+
+:GFDATE_4700
+if 
+  is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_4729
+Text.PrintHelp('GF_0037')
+
+:GFDATE_4729
+if 
+  is_global_var_bit_set_const $iDateReport bit 13
+goto_if_false @GFDATE_4758
+Text.PrintHelp('GF_0038')
+
+:GFDATE_4758
+clear_local_var_bit_const 3@ bit 1
+1@ = 1
+2@ = 0
+goto @GFDATE_4786
+
+:GFDATE_4786
+return 
+
+:GFDATE_4788
+switch_start 2@ total_jumps 3 default_jump 0 @GFDATE_5085 jumps 0 @GFDATE_4851 1 @GFDATE_4879 2 @GFDATE_4965 -1 @GFDATE_5085 -1 @GFDATE_5085 -1 @GFDATE_5085 -1 @GFDATE_5085
+
+:GFDATE_4851
+clear_local_var_bit_const 3@ bit 5
+clear_local_var_bit_const 3@ bit 6
+2@ += 1
+goto @GFDATE_5085
+
+:GFDATE_4879
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 21
+goto_if_false @GFDATE_4951
+if and
+  not is_local_var_bit_set_const 3@ bit 7
+  not Char.IsRespondingToEvent(0@, 36)
+goto_if_false @GFDATE_4951
+if 
+  Char.IsCurrentWeapon(0@, WeaponType.MicroUzi)
+goto_if_false @GFDATE_4951
+Char.SetCurrentWeapon(0@, WeaponType.Unarmed)
+
+:GFDATE_4951
+2@ += 1
+goto @GFDATE_5085
+
+:GFDATE_4965
+if 
+  not is_global_var_bit_set_const $iDateReport bit 22
+goto_if_false @GFDATE_5071
+if and
+  is_local_var_bit_set_const 3@ bit 29
+  not is_local_var_bit_set_const 3@ bit 7
+goto_if_false @GFDATE_5057
+if 
+  TIMERB > 25000
+goto_if_false @GFDATE_5050
+set_var_int_to_constant $iGFSayContext = 273
+set_var_int_to_constant $iCJSayContext = 242
+clear_local_var_bit_const 3@ bit 29
+
+:GFDATE_5050
+goto @GFDATE_5071
+
+:GFDATE_5057
+TIMERB = 0
+set_local_var_bit_const 3@ bit 29
+
+:GFDATE_5071
+2@ = 0
+goto @GFDATE_5085
+
+:GFDATE_5085
+return 
+
+:GFDATE_5087
+switch_start 2@ total_jumps 10 default_jump 0 @GFDATE_5817 jumps 0 @GFDATE_5215 1 @GFDATE_5253 2 @GFDATE_5320 3 @GFDATE_5347 4 @GFDATE_5385 5 @GFDATE_5399 6 @GFDATE_5435
+switch_continued 7 @GFDATE_5595 8 @GFDATE_5686 9 @GFDATE_5754 -1 @GFDATE_5817 -1 @GFDATE_5817 -1 @GFDATE_5817 -1 @GFDATE_5817 -1 @GFDATE_5817 -1 @GFDATE_5817
+
+:GFDATE_5215
+set_local_var_bit_const 3@ bit 1
+Camera.DoFade(0, Fade.Out)
+gosub @GFDATE_32407
+Text.ClearPrints
+Text.ClearHelp
+2@ += 1
+goto @GFDATE_5817
+
+:GFDATE_5253
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFDATE_5313
+Player.MakeSafeForCutscene($player1)
+Char.SetCurrentWeapon(0@, WeaponType.Unarmed)
+Char.SetCollision(0@, False)
+Char.SetCollision($scplayer, False)
+gosub @GFDATE_20351
+gosub @GFDATE_20578
+2@ += 1
+
+:GFDATE_5313
+goto @GFDATE_5817
+
+:GFDATE_5320
+if 
+  Cutscene.HasLoaded
+goto_if_false @GFDATE_5340
+2@ += 1
+
+:GFDATE_5340
+goto @GFDATE_5817
+
+:GFDATE_5347
+Cutscene.SetOffset(4@, 7@, 10@)
+Camera.DoFade(1, 1000)
+switch_rubbish 0
+Cutscene.Start
+2@ += 1
+goto @GFDATE_5817
+
+:GFDATE_5385
+2@ += 1
+goto @GFDATE_5817
+
+:GFDATE_5399
+if 
+  Cutscene.HasFinished
+goto_if_false @GFDATE_5428
+Camera.DoFade(0, 1000)
+Text.ClearPrints
+2@ += 1
+
+:GFDATE_5428
+goto @GFDATE_5817
+
+:GFDATE_5435
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFDATE_5588
+Cutscene.Clear
+World.ClearExtraColors(False)
+gosub @GFDATE_19460
+Streaming.SetAreaVisible(0)
+Char.SetAreaVisible(0@, 0)
+Char.SetAreaVisible($scplayer, 0)
+4@, 7@, 10@ = Char.GetCoordinates($scplayer)
+World.ClearArea(1, 4@, 7@, 10@, 2.0)
+Streaming.LoadScene(4@, 7@, 10@)
+Streaming.RequestCollision(4@, 7@)
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately(0@)
+if 
+  not Char.IsGroupMember(0@, $Players_Group)
+goto_if_false @GFDATE_5581
+Group.SetMember(0@, $Players_Group)
+Char.ListenToPlayerGroupCommands(0@, False)
+Player.SetGroupToFollowAlways($player1, True)
+
+:GFDATE_5581
+2@ += 1
+
+:GFDATE_5588
+goto @GFDATE_5817
+
+:GFDATE_5595
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Char.HideWeaponForScriptedCutscene(0@, False)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Hud.DisplayRadar(True)
+Char.SetCollision(0@, True)
+Char.SetCollision($scplayer, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+switch_rubbish 1
+Char.ClearTasks($scplayer)
+Task.Pause(0@, 0)
+Camera.DoFade(1, 500)
+2@ += 1
+goto @GFDATE_5817
+
+:GFDATE_5686
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFDATE_5747
+if 
+  is_global_var_bit_set_const $iDateReport bit 2
+goto_if_false @GFDATE_5732
+set_var_int_to_constant $iGFSayContext = 277
+goto @GFDATE_5740
+
+:GFDATE_5732
+set_var_int_to_constant $iGFSayContext = 278
+
+:GFDATE_5740
+2@ += 1
+
+:GFDATE_5747
+goto @GFDATE_5817
+
+:GFDATE_5754
+if and
+  $iGFSayContext == -1
+  not Text.IsMessageBeingDisplayed
+goto_if_false @GFDATE_5810
+set_var_int_to_constant $iGFSayContext = 280
+clear_local_var_bit_const 3@ bit 1
+set_local_var_bit_const 3@ bit 2
+1@ = 1
+2@ = 0
+
+:GFDATE_5810
+goto @GFDATE_5817
+
+:GFDATE_5817
+return 
+
+:GFDATE_5819
+switch_start 2@ total_jumps 8 default_jump 0 @GFDATE_6974 jumps 0 @GFDATE_5947 1 @GFDATE_5975 2 @GFDATE_6163 3 @GFDATE_6184 4 @GFDATE_6669 5 @GFDATE_6732 6 @GFDATE_6874
+switch_continued 7 @GFDATE_6921 -1 @GFDATE_6974 -1 @GFDATE_6974 -1 @GFDATE_6974 -1 @GFDATE_6974 -1 @GFDATE_6974 -1 @GFDATE_6974 -1 @GFDATE_6974 -1 @GFDATE_6974
+
+:GFDATE_5947
+set_local_var_bit_const 3@ bit 1
+Camera.DoFade(0, 500)
+2@ += 1
+goto @GFDATE_6974
+
+:GFDATE_5975
+set_local_var_bit_const 3@ bit 1
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFDATE_6156
+gosub @GFDATE_32407
+Player.SetControl($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+if 
+  Char.IsGroupMember(0@, $Players_Group)
+goto_if_false @GFDATE_6040
+Char.RemoveFromGroup(0@)
+
+:GFDATE_6040
+Hud.SwitchWidescreen(True)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Char.HideWeaponForScriptedCutscene(0@, True)
+gosub @GFDATE_22751
+World.ClearArea(1, 6@, 9@, 12@, 1.0)
+Camera.SetFixedPosition(4@, 7@, 10@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(5@, 8@, 11@, SwitchType.JumpCut)
+Char.ClearTasksImmediately(0@)
+Char.SetCoordinates(0@, 6@, 9@, 12@)
+Task.AchieveHeading(0@, 13@)
+2@ += 1
+
+:GFDATE_6156
+goto @GFDATE_6974
+
+:GFDATE_6163
+Camera.DoFade(1, 1000)
+2@ += 1
+goto @GFDATE_6974
+
+:GFDATE_6184
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFDATE_6662
+if 
+  is_local_var_bit_set_const 3@ bit 9
+goto_if_false @GFDATE_6414
+if 
+  is_global_var_bit_set_const $iDateReport bit 14
+goto_if_false @GFDATE_6270
+set_var_int_to_constant $iGFSayContext = 269
+TIMERB = 0
+25@ = 5000
+2@ = 6
+goto @GFDATE_6974
+
+:GFDATE_6270
+if 
+  $iGFLikesPlayer($iGFidx,6i) == -99
+goto_if_false @GFDATE_6326
+$iGFLikesPlayer($iGFidx,6i) = -100
+set_var_int_to_constant $iGFSayContext = 314
+clear_global_var_bit_var $iActiveGF bit $iGFidx
+goto @GFDATE_6385
+
+:GFDATE_6326
+if 
+  is_local_var_bit_set_const 3@ bit 16
+goto_if_false @GFDATE_6385
+if 
+  is_local_var_bit_set_const 3@ bit 23
+goto_if_false @GFDATE_6377
+set_var_int_to_constant $iGFSayContext = 317
+goto @GFDATE_6385
+
+:GFDATE_6377
+set_var_int_to_constant $iGFSayContext = 316
+
+:GFDATE_6385
+TIMERB = 0
+25@ = 5000
+2@ = 6
+goto @GFDATE_6662
+
+:GFDATE_6414
+if 
+  is_local_var_bit_set_const 3@ bit 7
+goto_if_false @GFDATE_6469
+set_var_int_to_constant $iGFSayContext = 296
+TIMERB = 0
+25@ = 5000
+2@ = 6
+goto @GFDATE_6662
+
+:GFDATE_6469
+if 
+  is_global_var_bit_set_const $iDateReport bit 2
+goto_if_false @GFDATE_6595
+if 
+  is_int_var_greater_or_equal_to_int_var $iGFLikesPlayer($iGFidx,6i) >= $iGFSelfRespect($iGFidx,6i)
+goto_if_false @GFDATE_6550
+set_var_int_to_constant $iGFSayContext = 282
+TIMERB = 0
+25@ = 0
+2@ += 1
+goto @GFDATE_6588
+
+:GFDATE_6550
+set_var_int_to_constant $iGFSayContext = 292
+set_var_int_to_constant $iCJSayContext = 241
+TIMERB = 0
+25@ = 5000
+2@ = 6
+
+:GFDATE_6588
+goto @GFDATE_6662
+
+:GFDATE_6595
+if 
+  -15 >= $iGFLikesPlayer($iGFidx,6i)
+goto_if_false @GFDATE_6632
+set_var_int_to_constant $iGFSayContext = 314
+goto @GFDATE_6640
+
+:GFDATE_6632
+set_var_int_to_constant $iGFSayContext = 296
+
+:GFDATE_6640
+TIMERB = 0
+25@ = 5000
+2@ = 6
+
+:GFDATE_6662
+goto @GFDATE_6974
+
+:GFDATE_6669
+if 
+  TIMERB >= 5000
+goto_if_false @GFDATE_6725
+Text.PrintHelpForever('TALK_1')
+if 
+  TIMERB > 5100
+goto_if_false @GFDATE_6725
+2@ += 1
+
+:GFDATE_6725
+goto @GFDATE_6974
+
+:GFDATE_6732
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @GFDATE_6803
+Text.ClearPrints
+Text.ClearHelp
+set_global_var_bit_const $iDateReport bit 3
+$iGFSayContext = -2
+set_var_int_to_constant $iCJSayContext = 46
+TIMERB = 0
+25@ = 3500
+2@ += 1
+goto @GFDATE_6867
+
+:GFDATE_6803
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @GFDATE_6867
+Text.ClearPrints
+Text.ClearHelp
+clear_global_var_bit_const $iDateReport bit 3
+$iGFSayContext = -2
+set_var_int_to_constant $iCJSayContext = 47
+TIMERB = 0
+25@ = 3500
+2@ += 1
+
+:GFDATE_6867
+goto @GFDATE_6974
+
+:GFDATE_6874
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar TIMERB >= 25@
+goto_if_false @GFDATE_6914
+set_global_var_bit_const $iDateReport bit 6
+Camera.DoFade(0, 1000)
+2@ += 1
+
+:GFDATE_6914
+goto @GFDATE_6974
+
+:GFDATE_6921
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFDATE_6967
+Hud.SwitchWidescreen(False)
+Hud.DisplayRadar(True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+gosub @GFDATE_32517
+
+:GFDATE_6967
+goto @GFDATE_6974
+
+:GFDATE_6974
+return 
+
+:GFDATE_6976
+switch_start 2@ total_jumps 5 default_jump 0 @GFDATE_7693 jumps 0 @GFDATE_7039 1 @GFDATE_7196 2 @GFDATE_7330 3 @GFDATE_7479 4 @GFDATE_7579 -1 @GFDATE_7693 -1 @GFDATE_7693
+
+:GFDATE_7039
+if and
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 21
+  not is_local_var_bit_set_const 3@ bit 2
+goto_if_false @GFDATE_7182
+if 
+  not is_local_var_bit_set_const 3@ bit 7
+goto_if_false @GFDATE_7182
+if 
+  not is_local_var_bit_set_const 3@ bit 27
+goto_if_false @GFDATE_7182
+gosub @GFDATE_23458
+if 
+  25@ > 0
+goto_if_false @GFDATE_7182
+if and
+  not Text.IsMessageBeingDisplayed
+  not Char.IsTalking($scplayer)
+  not Char.IsTalking(0@)
+goto_if_false @GFDATE_7182
+set_var_int_to_constant $iGFSayContext = 306
+set_var_int_to_constant $iCJSayContext = 244
+2@ = 4
+goto @GFDATE_7693
+
+:GFDATE_7182
+2@ += 1
+goto @GFDATE_7693
+
+:GFDATE_7196
+if 
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_7302
+if 
+  Car.IsStopped(28@)
+goto_if_false @GFDATE_7281
+if and
+  not is_local_var_bit_set_const 3@ bit 5
+  not is_global_var_bit_set_const $iDateReport bit 22
+goto_if_false @GFDATE_7274
+TIMERB = 0
+2@ = 3
+goto @GFDATE_7693
+
+:GFDATE_7274
+goto @GFDATE_7295
+
+:GFDATE_7281
+clear_local_var_bit_const 3@ bit 30
+clear_local_var_bit_const 3@ bit 5
+
+:GFDATE_7295
+goto @GFDATE_7316
+
+:GFDATE_7302
+clear_local_var_bit_const 3@ bit 30
+clear_local_var_bit_const 3@ bit 5
+
+:GFDATE_7316
+2@ += 1
+goto @GFDATE_7693
+
+:GFDATE_7330
+if 
+  is_local_var_bit_set_const 3@ bit 29
+goto_if_false @GFDATE_7433
+if 
+  not is_global_var_bit_set_const $iDateReport bit 22
+goto_if_false @GFDATE_7426
+if 
+  not is_local_var_bit_set_const 3@ bit 7
+goto_if_false @GFDATE_7426
+if 
+  TIMERB > 25000
+goto_if_false @GFDATE_7426
+set_var_int_to_constant $iGFSayContext = 273
+set_var_int_to_constant $iCJSayContext = 242
+clear_local_var_bit_const 3@ bit 29
+
+:GFDATE_7426
+goto @GFDATE_7465
+
+:GFDATE_7433
+if 
+  not is_global_var_bit_set_const $iDateReport bit 22
+goto_if_false @GFDATE_7465
+TIMERB = 0
+set_local_var_bit_const 3@ bit 29
+
+:GFDATE_7465
+2@ = 0
+goto @GFDATE_7693
+
+:GFDATE_7479
+if 
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_7565
+if 
+  not Car.IsStopped(28@)
+goto_if_false @GFDATE_7525
+2@ = 0
+goto @GFDATE_7558
+
+:GFDATE_7525
+if 
+  TIMERB > 10000
+goto_if_false @GFDATE_7558
+set_local_var_bit_const 3@ bit 5
+2@ = 0
+
+:GFDATE_7558
+goto @GFDATE_7572
+
+:GFDATE_7565
+2@ = 0
+
+:GFDATE_7572
+goto @GFDATE_7693
+
+:GFDATE_7579
+if and
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 21
+  not is_local_var_bit_set_const 3@ bit 2
+goto_if_false @GFDATE_7679
+if 
+  not Char.IsCurrentWeapon(0@, WeaponType.MicroUzi)
+goto_if_false @GFDATE_7633
+Char.SetCurrentWeapon(0@, WeaponType.MicroUzi)
+
+:GFDATE_7633
+gosub @GFDATE_23458
+if 
+  0 >= 25@
+goto_if_false @GFDATE_7672
+Char.SetCurrentWeapon(0@, WeaponType.Unarmed)
+2@ = 0
+
+:GFDATE_7672
+goto @GFDATE_7686
+
+:GFDATE_7679
+2@ = 0
+
+:GFDATE_7686
+goto @GFDATE_7693
+
+:GFDATE_7693
+return 
+
+:GFDATE_7695
+switch_start 2@ total_jumps 1 default_jump 0 @GFDATE_7815 jumps 0 @GFDATE_7758 -1 @GFDATE_7815 -1 @GFDATE_7815 -1 @GFDATE_7815 -1 @GFDATE_7815 -1 @GFDATE_7815 -1 @GFDATE_7815
+
+:GFDATE_7758
+clear_global_var_bit_const $iDateReport bit 2
+set_local_var_bit_const 3@ bit 2
+set_local_var_bit_const 3@ bit 7
+set_var_int_to_constant $iGFSayContext = 281
+gosub @GFDATE_32407
+gosub @GFDATE_19605
+$iSwitchOffDanceMiniGame = 1
+goto @GFDATE_7815
+
+:GFDATE_7815
+return 
+
+:GFDATE_7817
+switch_start 2@ total_jumps 7 default_jump 0 @GFDATE_11045 jumps 0 @GFDATE_7880 1 @GFDATE_8060 2 @GFDATE_8568 3 @GFDATE_9197 4 @GFDATE_9623 5 @GFDATE_9870 6 @GFDATE_10069
+
+:GFDATE_7880
+set_local_var_bit_const 3@ bit 1
+Text.ClearHelp
+Player.SetControl($player1, False)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Char.HideWeaponForScriptedCutscene(0@, True)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Hud.SwitchWidescreen(True)
+Game.SetAllCarsCanBeDamaged(False)
+4@ = Char.GetOffsetInWorldCoords(7@, 10@, $scplayer, 30.0, 30.0, 2.0)
+5@ = Char.GetOffsetInWorldCoords(8@, 11@, $scplayer, -30.0, -30.0, -1.0)
+Path.SwitchRoadsOff(4@, 7@, 10@, 5@, 8@, 11@)
+Path.SwitchPedRoadsOff(4@, 7@, 10@, 5@, 8@, 11@)
+Task.TurnCharToFaceChar($scplayer, 0@)
+Task.TurnCharToFaceChar(0@, $scplayer)
+TIMERB = 0
+2@ += 1
+goto @GFDATE_11045
+
+:GFDATE_8060
+25@ = Char.GetScriptTaskStatus($scplayer, 1593)
+26@ = Char.GetScriptTaskStatus(0@, 1593)
+if and
+  is_int_lvar_equal_to_constant 25@ == 7
+  is_int_lvar_equal_to_constant 26@ == 7
+goto_if_false @GFDATE_8398
+Char.SetCollision($scplayer, False)
+Char.SetCollision(0@, False)
+5@ = Char.GetOffsetInWorldCoords(8@, 11@, $scplayer, 0.0, 1.0, 0.0)
+11@ = World.GetGroundZFor3DCoord(5@, 8@, 11@)
+6@, 9@, 12@ = Char.GetCoordinates(0@)
+12@ = World.GetGroundZFor3DCoord(6@, 9@, 12@)
+Char.SetCoordinates(0@, 5@, 8@, 11@)
+13@ = Char.GetHeading($scplayer)
+13@ += 180.0
+Char.SetHeading(0@, 13@)
+4@ = Char.GetOffsetInWorldCoords(7@, 10@, $scplayer, 1.2, -1.0, 0.5)
+5@ = Char.GetOffsetInWorldCoords(8@, 11@, $scplayer, 0.0, 0.7, 0.5)
+if 
+  World.IsLineOfSightClear(4@, 7@, 10@, 5@, 8@, 11@, True, True, False, True, False)
+goto_if_false @GFDATE_8370
+Camera.SetFixedPosition(4@, 7@, 10@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(5@, 8@, 11@, SwitchType.JumpCut)
+
+:GFDATE_8370
+Task.StandStill($scplayer, -1)
+Task.StandStill(0@, -1)
+2@ += 1
+goto @GFDATE_8561
+
+:GFDATE_8398
+25@ = Char.GetScriptTaskStatus($scplayer, 1593)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_8463
+25@ = Char.GetScriptTaskStatus($scplayer, 1466)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_8463
+Task.StandStill($scplayer, -1)
+
+:GFDATE_8463
+25@ = Char.GetScriptTaskStatus(0@, 1593)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_8528
+25@ = Char.GetScriptTaskStatus(0@, 1466)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_8528
+Task.StandStill(0@, -1)
+
+:GFDATE_8528
+if 
+  TIMERB > 6000
+goto_if_false @GFDATE_8561
+2@ = 6
+goto @GFDATE_11045
+
+:GFDATE_8561
+goto @GFDATE_11045
+
+:GFDATE_8568
+Char.SetCollision($scplayer, True)
+Char.SetCollision(0@, True)
+cset_lvar_float_to_var_int 13@ = integer $iGFSelfRespect($iGFidx,6i)
+13@ /= 1.2
+cset_lvar_float_to_var_int 14@ = integer $iGFLikesPlayer($iGFidx,6i)
+if 
+  is_float_lvar_greater_or_equal_to_float_lvar 13@ >= 14@
+goto_if_false @GFDATE_8738
+Task.PlayAnim($scplayer, "PLAYA_KISS_01", "KISSING", 4.0, False, False, False, False, 0)
+Task.PlayAnim(0@, "GRLFRD_KISS_01", "KISSING", 4.0, False, False, False, False, 0)
+2@ = 6
+goto @GFDATE_9190
+
+:GFDATE_8738
+if 
+  is_int_var_greater_or_equal_to_int_var $iGFSelfRespect($iGFidx,6i) >= $iGFLikesPlayer($iGFidx,6i)
+goto_if_false @GFDATE_8868
+Task.PlayAnim($scplayer, "PLAYA_KISS_02", "KISSING", 4.0, False, False, False, False, 0)
+Task.PlayAnim(0@, "GRLFRD_KISS_02", "KISSING", 4.0, False, False, False, False, 0)
+2@ = 6
+goto @GFDATE_9190
+
+:GFDATE_8868
+Task.PlayAnim($scplayer, "PLAYA_KISS_03", "KISSING", 4.0, False, False, False, False, 0)
+Task.PlayAnim(0@, "GRLFRD_KISS_03", "KISSING", 4.0, False, False, False, False, 0)
+4@, 7@, 10@ = Char.GetCoordinates(0@)
+27@ = World.GetRandomCharInSphere(4@, 7@, 10@, 20.0, True, True, True)
+if 
+  27@ == -1
+goto_if_false @GFDATE_9067
+if 
+  $iCensoredVersion == 0
+goto_if_false @GFDATE_9046
+2@ += 1
+goto @GFDATE_9060
+
+:GFDATE_9046
+set_local_var_bit_const 3@ bit 25
+2@ = 6
+
+:GFDATE_9060
+goto @GFDATE_9190
+
+:GFDATE_9067
+Char.MarkAsNoLongerNeeded(27@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 27
+goto_if_false @GFDATE_9183
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 28
+goto_if_false @GFDATE_9169
+if 
+  $iCensoredVersion == 0
+goto_if_false @GFDATE_9148
+2@ += 1
+goto @GFDATE_9162
+
+:GFDATE_9148
+set_local_var_bit_const 3@ bit 25
+2@ = 6
+
+:GFDATE_9162
+goto @GFDATE_9176
+
+:GFDATE_9169
+2@ = 6
+
+:GFDATE_9176
+goto @GFDATE_9190
+
+:GFDATE_9183
+2@ = 6
+
+:GFDATE_9190
+goto @GFDATE_11045
+
+:GFDATE_9197
+if 
+  Pad.IsSkipCutsceneButtonPressed
+goto_if_false @GFDATE_9224
+2@ = 6
+goto @GFDATE_11045
+
+:GFDATE_9224
+if 
+  not is_local_var_bit_set_const 3@ bit 25
+goto_if_false @GFDATE_9609
+25@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_9602
+4@ = Char.GetOffsetInWorldCoords(7@, 10@, $scplayer, 2.5, -1.2, 0.5)
+5@ = Char.GetOffsetInWorldCoords(8@, 11@, $scplayer, 0.0, 0.7, 0.1)
+if 
+  World.IsLineOfSightClear(4@, 7@, 10@, 5@, 8@, 11@, True, True, False, True, False)
+goto_if_false @GFDATE_9409
+Camera.SetFixedPosition(4@, 7@, 10@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(5@, 8@, 11@, SwitchType.JumpCut)
+
+:GFDATE_9409
+5@ = Char.GetOffsetInWorldCoords(8@, 11@, $scplayer, 0.0, 1.0, 0.0)
+11@ = World.GetGroundZFor3DCoord(5@, 8@, 11@)
+Char.SetCoordinates(0@, 5@, 8@, 11@)
+13@ = Char.GetHeading($scplayer)
+13@ += 180.0
+Char.SetHeading(0@, 13@)
+Task.PlayAnim($scplayer, "BJ_STAND_START_P", "BLOWJOBZ", 4.0, False, False, False, True, 0)
+Task.PlayAnim(0@, "BJ_STAND_START_W", "BLOWJOBZ", 4.0, False, False, False, True, 0)
+set_local_var_bit_const 3@ bit 25
+2@ += 1
+
+:GFDATE_9602
+goto @GFDATE_9616
+
+:GFDATE_9609
+2@ = 6
+
+:GFDATE_9616
+goto @GFDATE_11045
+
+:GFDATE_9623
+if 
+  Pad.IsSkipCutsceneButtonPressed
+goto_if_false @GFDATE_9650
+2@ = 6
+goto @GFDATE_11045
+
+:GFDATE_9650
+if 
+  Char.IsPlayingAnim($scplayer, "BJ_STAND_START_P")
+goto_if_false @GFDATE_9856
+13@ = Char.GetAnimCurrentTime($scplayer, "BJ_STAND_START_P")
+if 
+  13@ == 1.0
+goto_if_false @GFDATE_9849
+Task.PlayAnim($scplayer, "BJ_STAND_LOOP_P", "BLOWJOBZ", 4.0, True, False, False, True, 6000)
+Task.PlayAnim(0@, "BJ_STAND_LOOP_W", "BLOWJOBZ", 4.0, True, False, False, True, 6000)
+set_var_int_to_constant $iGFSayContext = 285
+TIMERB = 0
+2@ += 1
+
+:GFDATE_9849
+goto @GFDATE_9863
+
+:GFDATE_9856
+2@ = 6
+
+:GFDATE_9863
+goto @GFDATE_11045
+
+:GFDATE_9870
+if 
+  Pad.IsSkipCutsceneButtonPressed
+goto_if_false @GFDATE_9897
+2@ = 6
+goto @GFDATE_11045
+
+:GFDATE_9897
+if 
+  Char.IsPlayingAnim($scplayer, "BJ_STAND_LOOP_P")
+goto_if_false @GFDATE_10055
+if 
+  TIMERB > 6000
+goto_if_false @GFDATE_10048
+Task.PlayAnim($scplayer, "BJ_STAND_END_P", "BLOWJOBZ", 4.0, False, False, False, False, 0)
+Task.PlayAnim(0@, "BJ_STAND_END_W", "BLOWJOBZ", 4.0, False, False, False, False, 0)
+2@ += 1
+
+:GFDATE_10048
+goto @GFDATE_10062
+
+:GFDATE_10055
+2@ = 6
+
+:GFDATE_10062
+goto @GFDATE_11045
+
+:GFDATE_10069
+if 
+  not is_local_var_bit_set_const 3@ bit 24
+goto_if_false @GFDATE_10334
+set_local_var_bit_const 3@ bit 24
+if and
+  is_int_var_greater_than_int_lvar $iGFLikesPlayer($iGFidx,6i) > 25@
+  is_int_var_greater_than_int_var $iGFSelfRespect($iGFidx,6i) > $iGFLikesPlayer($iGFidx,6i)
+goto_if_false @GFDATE_10201
+if and
+  Char.IsNearAnyChars(0@, 20.0)
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 27
+goto_if_false @GFDATE_10183
+$iGFLikesPlayer($iGFidx,6i) += 1
+goto @GFDATE_10194
+
+:GFDATE_10183
+$iGFLikesPlayer($iGFidx,6i) -= 1
+
+:GFDATE_10194
+goto @GFDATE_10334
+
+:GFDATE_10201
+if and
+  is_int_var_greater_than_int_lvar $iGFLikesPlayer($iGFidx,6i) > 25@
+  is_int_var_greater_or_equal_to_int_var $iGFLikesPlayer($iGFidx,6i) >= $iGFSelfRespect($iGFidx,6i)
+goto_if_false @GFDATE_10334
+if and
+  Char.IsNearAnyChars(0@, 20.0)
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 27
+goto_if_false @GFDATE_10323
+$iGFLikesPlayer($iGFidx,6i) += 1
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 28
+goto_if_false @GFDATE_10316
+$iGFLikesPlayer($iGFidx,6i) += 1
+
+:GFDATE_10316
+goto @GFDATE_10334
+
+:GFDATE_10323
+$iGFLikesPlayer($iGFidx,6i) -= 1
+
+:GFDATE_10334
+13@ = -1.0
+if 
+  Char.IsPlayingAnim($scplayer, "BJ_STAND_END_P")
+goto_if_false @GFDATE_10400
+13@ = Char.GetAnimCurrentTime($scplayer, "BJ_STAND_END_P")
+
+:GFDATE_10400
+if 
+  Char.IsPlayingAnim($scplayer, "PLAYA_KISS_01")
+goto_if_false @GFDATE_10454
+13@ = Char.GetAnimCurrentTime($scplayer, "PLAYA_KISS_01")
+
+:GFDATE_10454
+if 
+  Char.IsPlayingAnim($scplayer, "PLAYA_KISS_02")
+goto_if_false @GFDATE_10508
+13@ = Char.GetAnimCurrentTime($scplayer, "PLAYA_KISS_02")
+
+:GFDATE_10508
+if 
+  Char.IsPlayingAnim($scplayer, "PLAYA_KISS_03")
+goto_if_false @GFDATE_10562
+13@ = Char.GetAnimCurrentTime($scplayer, "PLAYA_KISS_03")
+
+:GFDATE_10562
+if 
+  13@ > -1.0
+goto_if_false @GFDATE_10798
+if 
+  13@ == 1.0
+goto_if_false @GFDATE_10791
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Char.HideWeaponForScriptedCutscene(0@, False)
+Char.SetCoordinates(0@, 6@, 9@, 12@)
+4@ = Char.GetOffsetInWorldCoords(7@, 10@, $scplayer, 30.0, 30.0, 1.0)
+5@ = Char.GetOffsetInWorldCoords(8@, 11@, $scplayer, -30.0, -30.0, -1.0)
+Path.SwitchRoadsBackToOriginal(4@, 7@, 10@, 5@, 8@, 11@)
+Path.SwitchPedRoadsBackToOriginal(4@, 7@, 10@, 5@, 8@, 11@)
+Char.SetCollision($scplayer, True)
+Char.SetCollision(0@, True)
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Game.SetAllCarsCanBeDamaged(True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+clear_local_var_bit_const 3@ bit 1
+1@ = 1
+2@ = 0
+
+:GFDATE_10791
+goto @GFDATE_11038
+
+:GFDATE_10798
+Char.ClearTasks($scplayer)
+Task.Pause(0@, 0)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Char.HideWeaponForScriptedCutscene(0@, False)
+Char.SetCoordinates(0@, 6@, 9@, 12@)
+4@ = Char.GetOffsetInWorldCoords(7@, 10@, $scplayer, 30.0, 30.0, 1.0)
+5@ = Char.GetOffsetInWorldCoords(8@, 11@, $scplayer, -30.0, -30.0, -1.0)
+Path.SwitchRoadsBackToOriginal(4@, 7@, 10@, 5@, 8@, 11@)
+Path.SwitchPedRoadsBackToOriginal(4@, 7@, 10@, 5@, 8@, 11@)
+Char.SetCollision($scplayer, True)
+Char.SetCollision(0@, True)
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Game.SetAllCarsCanBeDamaged(True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+if 
+  not Char.IsGroupMember(0@, $Players_Group)
+goto_if_false @GFDATE_11017
+Group.SetMember(0@, $Players_Group)
+Char.ListenToPlayerGroupCommands(0@, False)
+Player.SetGroupToFollowAlways($player1, True)
+
+:GFDATE_11017
+clear_local_var_bit_const 3@ bit 1
+1@ = 1
+2@ = 0
+
+:GFDATE_11038
+goto @GFDATE_11045
+
+:GFDATE_11045
+return 
+
+:GFDATE_11047
+switch_start 2@ total_jumps 6 default_jump 0 @GFDATE_12448 jumps 0 @GFDATE_11110 1 @GFDATE_11470 2 @GFDATE_11585 3 @GFDATE_11718 4 @GFDATE_11957 5 @GFDATE_12105 -1 @GFDATE_12448
+
+:GFDATE_11110
+if 
+  $iCensoredVersion == 1
+goto_if_false @GFDATE_11170
+set_local_var_bit_const 3@ bit 30
+clear_local_var_bit_const 3@ bit 1
+1@ = 4
+2@ = 0
+goto @GFDATE_12448
+goto @GFDATE_11463
+
+:GFDATE_11170
+set_local_var_bit_const 3@ bit 1
+if and
+  is_int_var_greater_or_equal_to_int_var $iGFLikesPlayer($iGFidx,6i) >= $iGFSelfRespect($iGFidx,6i)
+  not Car.IsDead(28@)
+  not Car.IsPassengerSeatFree(28@, SeatIndex.TandemRear)
+goto_if_false @GFDATE_11435
+27@ = Car.GetCharInPassengerSeat(28@, 0)
+if 
+  is_int_lvar_equal_to_int_lvar 27@ == 0@
+goto_if_false @GFDATE_11400
+4@, 7@, 10@ = Char.GetCoordinates(0@)
+27@ = World.GetRandomCharInSphere(4@, 7@, 10@, 20.0, True, True, True)
+if 
+  27@ == -1
+goto_if_false @GFDATE_11316
+2@ += 1
+goto @GFDATE_11393
+
+:GFDATE_11316
+Char.MarkAsNoLongerNeeded(27@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 28
+goto_if_false @GFDATE_11357
+2@ += 1
+goto @GFDATE_11393
+
+:GFDATE_11357
+set_var_int_to_constant $iGFSayContext = 302
+clear_local_var_bit_const 3@ bit 1
+set_local_var_bit_const 3@ bit 30
+1@ = 4
+2@ = 0
+
+:GFDATE_11393
+goto @GFDATE_11428
+
+:GFDATE_11400
+clear_local_var_bit_const 3@ bit 1
+set_local_var_bit_const 3@ bit 30
+1@ = 4
+2@ = 0
+
+:GFDATE_11428
+goto @GFDATE_11463
+
+:GFDATE_11435
+clear_local_var_bit_const 3@ bit 1
+set_local_var_bit_const 3@ bit 30
+1@ = 4
+2@ = 0
+
+:GFDATE_11463
+goto @GFDATE_12448
+
+:GFDATE_11470
+set_local_var_bit_const 3@ bit 6
+Player.SetControl($player1, False)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Char.HideWeaponForScriptedCutscene(0@, True)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Hud.SwitchWidescreen(True)
+Game.SetAllCarsCanBeDamaged(False)
+if 
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_11571
+Camera.AttachToVehicle(28@, 4.0, 4.0, 1.0, 0.0, 0.0, 0.0, 0.0, SwitchType.JumpCut)
+
+:GFDATE_11571
+2@ += 1
+goto @GFDATE_12448
+
+:GFDATE_11585
+if 
+  Pad.IsSkipCutsceneButtonPressed
+goto_if_false @GFDATE_11612
+2@ = 5
+goto @GFDATE_12448
+
+:GFDATE_11612
+Task.PlayAnimNonInterruptable($scplayer, "BJ_CAR_START_P", "BLOWJOBZ", 4.0, False, False, False, True, 0)
+Task.PlayAnimNonInterruptable(0@, "BJ_CAR_START_W", "BLOWJOBZ", 4.0, False, False, False, True, 0)
+2@ += 1
+goto @GFDATE_12448
+
+:GFDATE_11718
+if 
+  Pad.IsSkipCutsceneButtonPressed
+goto_if_false @GFDATE_11745
+2@ = 5
+goto @GFDATE_12448
+
+:GFDATE_11745
+if 
+  Char.IsPlayingAnim($scplayer, "BJ_CAR_START_P")
+goto_if_false @GFDATE_11943
+13@ = Char.GetAnimCurrentTime($scplayer, "BJ_CAR_START_P")
+if 
+  13@ == 1.0
+goto_if_false @GFDATE_11936
+Task.PlayAnimNonInterruptable($scplayer, "BJ_CAR_LOOP_P", "BLOWJOBZ", 4.0, True, False, False, True, 6000)
+Task.PlayAnimNonInterruptable(0@, "BJ_CAR_LOOP_W", "BLOWJOBZ", 4.0, True, False, False, True, 6000)
+set_var_int_to_constant $iGFSayContext = 285
+TIMERB = 0
+2@ += 1
+
+:GFDATE_11936
+goto @GFDATE_11950
+
+:GFDATE_11943
+2@ = 5
+
+:GFDATE_11950
+goto @GFDATE_12448
+
+:GFDATE_11957
+if 
+  Pad.IsSkipCutsceneButtonPressed
+goto_if_false @GFDATE_11984
+2@ = 5
+goto @GFDATE_12448
+
+:GFDATE_11984
+if 
+  TIMERB > 6000
+goto_if_false @GFDATE_12098
+Task.PlayAnimNonInterruptable($scplayer, "BJ_CAR_END_P", "BLOWJOBZ", 4.0, False, False, False, False, 0)
+Task.PlayAnimNonInterruptable(0@, "BJ_CAR_END_W", "BLOWJOBZ", 4.0, False, False, False, False, 0)
+2@ += 1
+
+:GFDATE_12098
+goto @GFDATE_12448
+
+:GFDATE_12105
+if 
+  is_int_var_greater_or_equal_to_int_var $iGFLikesPlayer($iGFidx,6i) >= $iGFSelfRespect($iGFidx,6i)
+goto_if_false @GFDATE_12186
+$iGFLikesPlayer($iGFidx,6i) += 1
+if and
+  Char.IsNearAnyChars(0@, 20.0)
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 28
+goto_if_false @GFDATE_12186
+$iGFLikesPlayer($iGFidx,6i) += 1
+
+:GFDATE_12186
+if 
+  Char.IsPlayingAnim($scplayer, "BJ_CAR_END_P")
+goto_if_false @GFDATE_12327
+13@ = Char.GetAnimCurrentTime($scplayer, "BJ_CAR_END_P")
+if 
+  13@ == 1.0
+goto_if_false @GFDATE_12320
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Char.HideWeaponForScriptedCutscene(0@, False)
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Game.SetAllCarsCanBeDamaged(True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+clear_local_var_bit_const 3@ bit 1
+1@ = 4
+2@ = 0
+
+:GFDATE_12320
+goto @GFDATE_12441
+
+:GFDATE_12327
+Char.ClearTasks($scplayer)
+Task.Pause(0@, 0)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Char.HideWeaponForScriptedCutscene(0@, False)
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Game.SetAllCarsCanBeDamaged(True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+if 
+  not Char.IsGroupMember(0@, $Players_Group)
+goto_if_false @GFDATE_12420
+Group.SetMember(0@, $Players_Group)
+Char.ListenToPlayerGroupCommands(0@, False)
+Player.SetGroupToFollowAlways($player1, True)
+
+:GFDATE_12420
+clear_local_var_bit_const 3@ bit 1
+1@ = 4
+2@ = 0
+
+:GFDATE_12441
+goto @GFDATE_12448
+
+:GFDATE_12448
+return 
+
+:GFDATE_12450
+switch_start 2@ total_jumps 12 default_jump 0 @GFDATE_14645 jumps 0 @GFDATE_12578 1 @GFDATE_12825 2 @GFDATE_12952 3 @GFDATE_13023 4 @GFDATE_13166 5 @GFDATE_13314 6 @GFDATE_13375
+switch_continued 7 @GFDATE_13683 9 @GFDATE_14114 10 @GFDATE_14241 11 @GFDATE_14363 12 @GFDATE_14460 -1 @GFDATE_14645 -1 @GFDATE_14645 -1 @GFDATE_14645 -1 @GFDATE_14645
+
+:GFDATE_12578
+if 
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_12780
+if and
+  not Char.IsOnAnyBike(0@)
+  not Char.IsInFlyingVehicle(0@)
+goto_if_false @GFDATE_12735
+25@ = Car.GetMaximumNumberOfPassengers(28@)
+if 
+  25@ > 0
+goto_if_false @GFDATE_12690
+if and
+  Char.IsSittingInAnyCar($scplayer)
+  Char.IsSittingInAnyCar(0@)
+goto_if_false @GFDATE_12683
+Game.SetEveryoneIgnorePlayer($player1, True)
+set_local_var_bit_const 3@ bit 1
+2@ += 1
+
+:GFDATE_12683
+goto @GFDATE_12728
+
+:GFDATE_12690
+if and
+  not Text.IsMessageBeingDisplayed
+  not is_local_var_bit_set_const 3@ bit 14
+goto_if_false @GFDATE_12728
+Text.PrintHelp('GF_0049')
+set_local_var_bit_const 3@ bit 14
+
+:GFDATE_12728
+goto @GFDATE_12773
+
+:GFDATE_12735
+if and
+  not Text.IsMessageBeingDisplayed
+  not is_local_var_bit_set_const 3@ bit 14
+goto_if_false @GFDATE_12773
+Text.PrintHelp('GF_0049')
+set_local_var_bit_const 3@ bit 14
+
+:GFDATE_12773
+goto @GFDATE_12818
+
+:GFDATE_12780
+if and
+  not Text.IsMessageBeingDisplayed
+  not is_local_var_bit_set_const 3@ bit 14
+goto_if_false @GFDATE_12818
+Text.PrintHelp('GF_0049')
+set_local_var_bit_const 3@ bit 14
+
+:GFDATE_12818
+goto @GFDATE_14645
+
+:GFDATE_12825
+Player.SetControl($player1, False)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Char.HideWeaponForScriptedCutscene(0@, True)
+if 
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_12914
+Car.SetCruiseSpeed(28@, 0.0)
+Camera.AttachToVehicle(28@, 4.0, 4.0, 1.0, 0.0, 0.0, 0.0, 0.0, SwitchType.JumpCut)
+
+:GFDATE_12914
+if 
+  Char.IsGroupMember(0@, $Players_Group)
+goto_if_false @GFDATE_12938
+Char.RemoveFromGroup(0@)
+
+:GFDATE_12938
+2@ += 1
+goto @GFDATE_14645
+
+:GFDATE_12952
+if 
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_13016
+if 
+  not Car.IsPassengerSeatFree(28@, SeatIndex.TandemRear)
+goto_if_false @GFDATE_13001
+Task.LeaveCar($scplayer, 28@)
+goto @GFDATE_13009
+
+:GFDATE_13001
+Task.LeaveCar(0@, 28@)
+
+:GFDATE_13009
+2@ += 1
+
+:GFDATE_13016
+goto @GFDATE_14645
+
+:GFDATE_13023
+25@ = Char.GetScriptTaskStatus($scplayer, 1485)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_13159
+25@ = Char.GetScriptTaskStatus(0@, 1485)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_13159
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @GFDATE_13124
+28@ = Char.StoreCarIsInNoSave($scplayer)
+Task.EnterCarAsPassenger(0@, 28@, 0, -1)
+goto @GFDATE_13152
+
+:GFDATE_13124
+28@ = Char.StoreCarIsInNoSave(0@)
+Task.ShuffleToNextCarSeat(0@, 28@)
+Task.EnterCarAsPassenger($scplayer, 28@, 0, -1)
+
+:GFDATE_13152
+2@ += 1
+
+:GFDATE_13159
+goto @GFDATE_14645
+
+:GFDATE_13166
+25@ = Char.GetScriptTaskStatus($scplayer, 1482)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_13307
+25@ = Char.GetScriptTaskStatus(0@, 1482)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_13307
+27@ = Car.GetDriver(28@)
+if 
+  is_int_lvar_equal_to_int_var 27@ == $scplayer
+goto_if_false @GFDATE_13272
+2@ = 2
+goto @GFDATE_14645
+goto @GFDATE_13307
+
+:GFDATE_13272
+Task.CarDriveWander(0@, 28@, 30.0, DrivingMode.AvoidCars)
+StuckCarCheck.Add(28@, 1.0, 1000)
+2@ += 1
+
+:GFDATE_13307
+goto @GFDATE_14645
+
+:GFDATE_13314
+if 
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_13368
+Camera.PointAtCar(28@, CameraMode.WheelCam, SwitchType.JumpCut)
+Camera.SetCinema(True)
+Text.PrintHelp('GF_RAD')
+set_local_var_bit_const 3@ bit 13
+2@ += 1
+
+:GFDATE_13368
+goto @GFDATE_14645
+
+:GFDATE_13375
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFDATE_13676
+if 
+  StuckCarCheck.IsCarStuck(28@)
+goto_if_false @GFDATE_13425
+Camera.DoFade(0, 500)
+2@ = 9
+goto @GFDATE_14645
+
+:GFDATE_13425
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+goto_if_false @GFDATE_13484
+25@ = Audio.GetRadioChannel()
+25@ += 1
+if 
+  25@ > 10
+goto_if_false @GFDATE_13479
+25@ = 0
+
+:GFDATE_13479
+Audio.SetRadioChannel(25@)
+
+:GFDATE_13484
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+goto_if_false @GFDATE_13543
+25@ = Audio.GetRadioChannel()
+25@ -= 1
+if 
+  0 > 25@
+goto_if_false @GFDATE_13538
+25@ = 10
+
+:GFDATE_13538
+Audio.SetRadioChannel(25@)
+
+:GFDATE_13543
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @GFDATE_13606
+if 
+  not is_local_var_bit_set_const 3@ bit 12
+goto_if_false @GFDATE_13599
+2@ = 10
+set_local_var_bit_const 3@ bit 12
+goto @GFDATE_14645
+
+:GFDATE_13599
+goto @GFDATE_13613
+
+:GFDATE_13606
+clear_local_var_bit_const 3@ bit 12
+
+:GFDATE_13613
+if 
+  TIMERA > 60000
+goto_if_false @GFDATE_13676
+gosub @GFDATE_19768
+Task.CarDriveToCoord(0@, 28@, 4@, 7@, 10@, 30.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+2@ += 1
+
+:GFDATE_13676
+goto @GFDATE_14645
+
+:GFDATE_13683
+if 
+  StuckCarCheck.IsCarStuck(28@)
+goto_if_false @GFDATE_13720
+Camera.DoFade(0, 500)
+2@ = 9
+goto @GFDATE_14645
+
+:GFDATE_13720
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+goto_if_false @GFDATE_13779
+25@ = Audio.GetRadioChannel()
+25@ += 1
+if 
+  25@ > 10
+goto_if_false @GFDATE_13774
+25@ = 0
+
+:GFDATE_13774
+Audio.SetRadioChannel(25@)
+
+:GFDATE_13779
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+goto_if_false @GFDATE_13838
+25@ = Audio.GetRadioChannel()
+25@ -= 1
+if 
+  0 > 25@
+goto_if_false @GFDATE_13833
+25@ = 10
+
+:GFDATE_13833
+Audio.SetRadioChannel(25@)
+
+:GFDATE_13838
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @GFDATE_13901
+if 
+  not is_local_var_bit_set_const 3@ bit 12
+goto_if_false @GFDATE_13894
+2@ = 10
+set_local_var_bit_const 3@ bit 12
+goto @GFDATE_14645
+
+:GFDATE_13894
+goto @GFDATE_13908
+
+:GFDATE_13901
+clear_local_var_bit_const 3@ bit 12
+
+:GFDATE_13908
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @GFDATE_13971
+if 
+  not is_local_var_bit_set_const 3@ bit 12
+goto_if_false @GFDATE_13964
+2@ = 10
+set_local_var_bit_const 3@ bit 12
+goto @GFDATE_14645
+
+:GFDATE_13964
+goto @GFDATE_13978
+
+:GFDATE_13971
+clear_local_var_bit_const 3@ bit 12
+
+:GFDATE_13978
+25@ = Char.GetScriptTaskStatus(0@, 1489)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_14107
+Text.ClearHelp
+Camera.SetCinema(False)
+if 
+  Car.DoesHaveStuckCarCheck(28@)
+goto_if_false @GFDATE_14034
+StuckCarCheck.Remove(28@)
+
+:GFDATE_14034
+set_global_var_bit_const $iDateReport bit 2
+if 
+  not Char.IsGroupMember(0@, $Players_Group)
+goto_if_false @GFDATE_14082
+Group.SetMember(0@, $Players_Group)
+Char.ListenToPlayerGroupCommands(0@, False)
+Player.SetGroupToFollowAlways($player1, True)
+
+:GFDATE_14082
+$iGFLikesPlayer($iGFidx,6i) += 5
+1@ = 3
+2@ = 0
+
+:GFDATE_14107
+goto @GFDATE_14645
+
+:GFDATE_14114
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFDATE_14234
+4@, 7@, 10@ = Car.GetCoordinates(28@)
+5@, 8@, 11@ = Path.GetNthClosestCarNode(4@, 7@, 10@, 2)
+Car.SetCoordinates(28@, 5@, 8@, 11@)
+Camera.DoFade(1, 2000)
+25@ = Char.GetScriptTaskStatus(0@, 1489)
+if 
+  is_int_lvar_equal_to_constant 25@ == 1
+goto_if_false @GFDATE_14227
+2@ = 7
+goto @GFDATE_14234
+
+:GFDATE_14227
+2@ = 6
+
+:GFDATE_14234
+goto @GFDATE_14645
+
+:GFDATE_14241
+Text.ClearHelp
+if 
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_14349
+Car.SetIdle(28@)
+Camera.SetCinema(False)
+if 
+  Car.DoesHaveStuckCarCheck(28@)
+goto_if_false @GFDATE_14289
+StuckCarCheck.Remove(28@)
+
+:GFDATE_14289
+Camera.AttachToVehicle(28@, 4.0, 4.0, 1.0, 0.0, 0.0, 0.0, 0.0, SwitchType.JumpCut)
+Hud.SwitchWidescreen(True)
+2@ += 1
+goto @GFDATE_14356
+
+:GFDATE_14349
+2@ += 1
+
+:GFDATE_14356
+goto @GFDATE_14645
+
+:GFDATE_14363
+if 
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_14446
+if 
+  Car.IsStopped(28@)
+goto_if_false @GFDATE_14439
+25@ = Char.GetScriptTaskStatus($scplayer, 1485)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_14439
+Task.LeaveCar($scplayer, 28@)
+2@ += 1
+
+:GFDATE_14439
+goto @GFDATE_14453
+
+:GFDATE_14446
+2@ += 1
+
+:GFDATE_14453
+goto @GFDATE_14645
+
+:GFDATE_14460
+25@ = Char.GetScriptTaskStatus($scplayer, 1485)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_14638
+28@ = Char.StoreCarIsInNoSave(0@)
+if 
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_14559
+Car.SetProofs(28@, False, False, False, False, False)
+Task.CarDriveWander(0@, 28@, 30.0, DrivingMode.AvoidCars)
+set_var_int_to_constant $iGFSayContext = 310
+set_var_int_to_constant $iCJSayContext = 246
+
+:GFDATE_14559
+Char.ClearTasks($scplayer)
+Text.ClearHelp
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Char.HideWeaponForScriptedCutscene(0@, False)
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+set_local_var_bit_const 3@ bit 7
+Char.SetProofs(0@, False, False, False, False, False)
+1@ = 9
+2@ = 1
+
+:GFDATE_14638
+goto @GFDATE_14645
+
+:GFDATE_14645
+return 
+
+:GFDATE_14647
+switch_start 2@ total_jumps 2 default_jump 0 @GFDATE_14895 jumps 0 @GFDATE_14710 1 @GFDATE_14799 -1 @GFDATE_14895 -1 @GFDATE_14895 -1 @GFDATE_14895 -1 @GFDATE_14895 -1 @GFDATE_14895
+
+:GFDATE_14710
+gosub @GFDATE_32407
+set_local_var_bit_const 3@ bit 1
+clear_global_var_bit_const $iDateReport bit 2
+Char.RemoveFromGroup(0@)
+Char.ClearTasksImmediately(0@)
+Task.FleeCharAnyMeans(0@, $scplayer, 100.0, 36000000, False, 0, 0, 30.0)
+Char.SetProofs(0@, False, False, False, False, False)
+2@ += 1
+goto @GFDATE_14895
+
+:GFDATE_14799
+if 
+  not Char.IsHealthGreater(0@, 5)
+goto_if_false @GFDATE_14843
+$iGFLikesPlayer($iGFidx,6i) = -999
+Task.Die(0@)
+gosub @GFDATE_32517
+return 
+
+:GFDATE_14843
+if 
+  not Char.LocateAnyMeansChar3D($scplayer, 0@, 70.0, 70.0, 8.0, False)
+goto_if_false @GFDATE_14888
+gosub @GFDATE_32517
+return 
+
+:GFDATE_14888
+goto @GFDATE_14895
+
+:GFDATE_14895
+return 
+
+:GFDATE_14897
+switch_start 2@ total_jumps 2 default_jump 0 @GFDATE_15242 jumps 0 @GFDATE_14960 1 @GFDATE_15010 -1 @GFDATE_15242 -1 @GFDATE_15242 -1 @GFDATE_15242 -1 @GFDATE_15242 -1 @GFDATE_15242
+
+:GFDATE_14960
+set_local_var_bit_const 3@ bit 1
+set_var_int_to_lvar_int $iDanceGirlfriend = 0@
+$iSetBarPanic = 0
+$iSwitchOffDanceMiniGame = 0
+set_global_var_bit_const $iDanceReport bit 31
+2@ += 1
+goto @GFDATE_15242
+
+:GFDATE_15010
+if 
+  not is_global_var_bit_set_const $iDanceReport bit 31
+goto_if_false @GFDATE_15167
+$iSwitchOffDanceMiniGame = 1
+if 
+  not Char.IsGroupMember(0@, $Players_Group)
+goto_if_false @GFDATE_15076
+Group.SetMember(0@, $Players_Group)
+Char.ListenToPlayerGroupCommands(0@, False)
+Player.SetGroupToFollowAlways($player1, True)
+
+:GFDATE_15076
+if 
+  $iDanceScore >= 3000
+goto_if_false @GFDATE_15117
+set_global_var_bit_const $iDateReport bit 2
+set_var_int_to_constant $iGFSayContext = 279
+goto @GFDATE_15132
+
+:GFDATE_15117
+clear_global_var_bit_const $iDateReport bit 2
+set_var_int_to_constant $iGFSayContext = 278
+
+:GFDATE_15132
+clear_local_var_bit_const 3@ bit 1
+set_local_var_bit_const 3@ bit 2
+1@ = 1
+2@ = 0
+goto @GFDATE_15235
+
+:GFDATE_15167
+24@ = Char.GetAreaVisible($scplayer)
+if 
+  24@ == 0
+goto_if_false @GFDATE_15228
+clear_local_var_bit_const 3@ bit 1
+clear_global_var_bit_const $iDanceReport bit 31
+1@ = 1
+2@ = 0
+goto @GFDATE_15235
+
+:GFDATE_15228
+set_local_var_bit_const 3@ bit 13
+
+:GFDATE_15235
+goto @GFDATE_15242
+
+:GFDATE_15242
+return 
+
+:GFDATE_15244
+switch_start 2@ total_jumps 5 default_jump 0 @GFDATE_16678 jumps 0 @GFDATE_15307 1 @GFDATE_15473 2 @GFDATE_15934 3 @GFDATE_16048 4 @GFDATE_16115 -1 @GFDATE_16678 -1 @GFDATE_16678
+
+:GFDATE_15307
+set_local_var_bit_const 3@ bit 1
+Text.ClearHelp
+Player.SetControl($player1, False)
+Pad.SetPlayerFireButton($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Hud.SwitchWidescreen(True)
+Game.SetAllCarsCanBeDamaged(False)
+4@ = Char.GetOffsetInWorldCoords(7@, 10@, $scplayer, 30.0, 30.0, 2.0)
+5@ = Char.GetOffsetInWorldCoords(8@, 11@, $scplayer, -30.0, -30.0, -1.0)
+Path.SwitchRoadsOff(4@, 7@, 10@, 5@, 8@, 11@)
+Path.SwitchPedRoadsOff(4@, 7@, 10@, 5@, 8@, 11@)
+Task.TurnCharToFaceChar($scplayer, 0@)
+Task.TurnCharToFaceChar(0@, $scplayer)
+2@ += 1
+goto @GFDATE_16678
+
+:GFDATE_15473
+25@ = Char.GetScriptTaskStatus($scplayer, 1593)
+26@ = Char.GetScriptTaskStatus(0@, 1593)
+if and
+  is_int_lvar_equal_to_constant 25@ == 7
+  is_int_lvar_equal_to_constant 26@ == 7
+goto_if_false @GFDATE_15797
+Char.SetCollision($scplayer, False)
+Char.SetCollision(0@, False)
+5@ = Char.GetOffsetInWorldCoords(8@, 11@, $scplayer, 0.0, 1.0, 0.0)
+11@ = World.GetGroundZFor3DCoord(5@, 8@, 11@)
+6@, 9@, 12@ = Char.GetCoordinates(0@)
+12@ = World.GetGroundZFor3DCoord(6@, 9@, 12@)
+Char.SetCoordinates(0@, 5@, 8@, 11@)
+13@ = Char.GetHeading($scplayer)
+13@ += 180.0
+Char.SetHeading(0@, 13@)
+4@ = Char.GetOffsetInWorldCoords(7@, 10@, $scplayer, 1.2, -1.0, 0.5)
+5@ = Char.GetOffsetInWorldCoords(8@, 11@, $scplayer, 0.0, 0.7, 0.5)
+if 
+  World.IsLineOfSightClear(4@, 7@, 10@, 5@, 8@, 11@, True, True, False, True, False)
+goto_if_false @GFDATE_15783
+Camera.SetFixedPosition(4@, 7@, 10@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(5@, 8@, 11@, SwitchType.JumpCut)
+
+:GFDATE_15783
+2@ += 1
+goto @GFDATE_15927
+
+:GFDATE_15797
+25@ = Char.GetScriptTaskStatus($scplayer, 1593)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_15862
+25@ = Char.GetScriptTaskStatus($scplayer, 1466)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_15862
+Task.StandStill($scplayer, -1)
+
+:GFDATE_15862
+25@ = Char.GetScriptTaskStatus(0@, 1593)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_15927
+25@ = Char.GetScriptTaskStatus(0@, 1466)
+if 
+  is_int_lvar_equal_to_constant 25@ == 7
+goto_if_false @GFDATE_15927
+Task.StandStill(0@, -1)
+
+:GFDATE_15927
+goto @GFDATE_16678
+
+:GFDATE_15934
+Char.SetCollision($scplayer, True)
+Char.SetCollision(0@, True)
+Task.PlayAnim($scplayer, "GIFT_GIVE", "KISSING", 4.0, False, False, False, False, 0)
+Task.PlayAnim(0@, "GIFT_GET", "KISSING", 4.0, False, False, False, False, 0)
+TIMERB = 0
+2@ += 1
+goto @GFDATE_16678
+
+:GFDATE_16048
+if 
+  TIMERB >= 3966
+goto_if_false @GFDATE_16108
+25@ = Char.GetCurrentWeapon($scplayer)
+Char.RemoveWeapon(25@, $scplayer)
+Char.GiveWeapon(0@, 25@, 0)
+set_var_int_to_constant $iGFSayContext = 303
+2@ = 4
+
+:GFDATE_16108
+goto @GFDATE_16678
+
+:GFDATE_16115
+13@ = -1.0
+if 
+  Char.IsPlayingAnim($scplayer, "GIFT_GIVE")
+goto_if_false @GFDATE_16171
+13@ = Char.GetAnimCurrentTime($scplayer, "GIFT_GIVE")
+
+:GFDATE_16171
+if 
+  13@ > -1.0
+goto_if_false @GFDATE_16427
+if 
+  13@ == 1.0
+goto_if_false @GFDATE_16420
+Char.SetCoordinates(0@, 6@, 9@, 12@)
+4@ = Char.GetOffsetInWorldCoords(7@, 10@, $scplayer, 30.0, 30.0, 1.0)
+5@ = Char.GetOffsetInWorldCoords(8@, 11@, $scplayer, -30.0, -30.0, -1.0)
+Path.SwitchRoadsBackToOriginal(4@, 7@, 10@, 5@, 8@, 11@)
+Path.SwitchPedRoadsBackToOriginal(4@, 7@, 10@, 5@, 8@, 11@)
+Char.SetCollision($scplayer, True)
+Char.SetCollision(0@, True)
+Player.SetControl($player1, True)
+Pad.SetPlayerFireButton($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Game.SetAllCarsCanBeDamaged(True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+25@ = Char.GetCurrentWeapon(0@)
+Char.RemoveWeapon(25@, 0@)
+$iGFLikesPlayer($iGFidx,6i) += 1
+clear_local_var_bit_const 3@ bit 1
+1@ = 1
+2@ = 0
+
+:GFDATE_16420
+goto @GFDATE_16671
+
+:GFDATE_16427
+Char.ClearTasks($scplayer)
+Task.Pause(0@, 0)
+$iGFLikesPlayer($iGFidx,6i) += 1
+Char.SetCoordinates(0@, 6@, 9@, 12@)
+4@ = Char.GetOffsetInWorldCoords(7@, 10@, $scplayer, 30.0, 30.0, 1.0)
+5@ = Char.GetOffsetInWorldCoords(8@, 11@, $scplayer, -30.0, -30.0, -1.0)
+Path.SwitchRoadsBackToOriginal(4@, 7@, 10@, 5@, 8@, 11@)
+Path.SwitchPedRoadsBackToOriginal(4@, 7@, 10@, 5@, 8@, 11@)
+Char.SetCollision($scplayer, True)
+Char.SetCollision(0@, True)
+Player.SetControl($player1, True)
+Pad.SetPlayerFireButton($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Game.SetAllCarsCanBeDamaged(True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+if 
+  not Char.IsGroupMember(0@, $Players_Group)
+goto_if_false @GFDATE_16650
+Group.SetMember(0@, $Players_Group)
+Char.ListenToPlayerGroupCommands(0@, False)
+Player.SetGroupToFollowAlways($player1, True)
+
+:GFDATE_16650
+clear_local_var_bit_const 3@ bit 1
+1@ = 1
+2@ = 0
+
+:GFDATE_16671
+goto @GFDATE_16678
+
+:GFDATE_16678
+return 
+
+:GFDATE_16680
+if 
+  -15 >= $iGFLikesPlayer($iGFidx,6i)
+goto_if_false @GFDATE_16713
+$iGFLikesPlayer($iGFidx,6i) = -99
+
+:GFDATE_16713
+if 
+  $iGFLikesPlayer($iGFidx,6i) == -99
+goto_if_false @GFDATE_16744
+25@ = -1
+return 
+
+:GFDATE_16744
+if 
+  is_global_var_bit_set_const $iDateReport bit 14
+goto_if_false @GFDATE_16771
+25@ = 1
+return 
+
+:GFDATE_16771
+25@ = Stat.GetInt(25)
+25@ /= 10
+switch_start $iGFidx total_jumps 2 default_jump 0 @GFDATE_16933 jumps 2 @GFDATE_16848 3 @GFDATE_16891 -1 @GFDATE_16933 -1 @GFDATE_16933 -1 @GFDATE_16933 -1 @GFDATE_16933 -1 @GFDATE_16933
+
+:GFDATE_16848
+if 
+  Player.IsWearing($player1, "COUNTRYTR", BodyPart.SpecialCostume)
+goto_if_false @GFDATE_16884
+25@ += 25
+
+:GFDATE_16884
+goto @GFDATE_16933
+
+:GFDATE_16891
+if 
+  Player.IsWearing($player1, "POLICETR", BodyPart.SpecialCostume)
+goto_if_false @GFDATE_16926
+25@ += 25
+
+:GFDATE_16926
+goto @GFDATE_16933
+
+:GFDATE_16933
+26@ = Stat.GetInt(21)
+26@ /= 10
+26@ /= 2
+if 
+  26@ >= 25
+goto_if_false @GFDATE_17038
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits($iGFidx,6i) bit 2
+goto_if_false @GFDATE_17009
+add_int_lvar_to_int_lvar 25@ += 26@
+goto @GFDATE_17031
+
+:GFDATE_17009
+sub_int_lvar_from_int_lvar 25@ -= 26@
+set_local_var_bit_const 3@ bit 23
+set_local_var_bit_const 3@ bit 21
+
+:GFDATE_17031
+goto @GFDATE_17144
+
+:GFDATE_17038
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits($iGFidx,6i) bit 2
+goto_if_false @GFDATE_17089
+sub_int_lvar_from_int_lvar 25@ -= 26@
+set_local_var_bit_const 3@ bit 23
+set_local_var_bit_const 3@ bit 20
+goto @GFDATE_17144
+
+:GFDATE_17089
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits($iGFidx,6i) bit 3
+goto_if_false @GFDATE_17144
+if 
+  26@ == 0
+goto_if_false @GFDATE_17136
+26@ = 5
+
+:GFDATE_17136
+add_int_lvar_to_int_lvar 25@ += 26@
+
+:GFDATE_17144
+26@ = Stat.GetInt(23)
+26@ /= 10
+26@ /= 2
+if 
+  26@ >= 20
+goto_if_false @GFDATE_17271
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits($iGFidx,6i) bit 1
+goto_if_false @GFDATE_17220
+add_int_lvar_to_int_lvar 25@ += 26@
+goto @GFDATE_17264
+
+:GFDATE_17220
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits($iGFidx,6i) bit 3
+goto_if_false @GFDATE_17264
+sub_int_lvar_from_int_lvar 25@ -= 26@
+set_local_var_bit_const 3@ bit 23
+set_local_var_bit_const 3@ bit 22
+
+:GFDATE_17264
+goto @GFDATE_17377
+
+:GFDATE_17271
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits($iGFidx,6i) bit 1
+goto_if_false @GFDATE_17322
+sub_int_lvar_from_int_lvar 25@ -= 26@
+set_local_var_bit_const 3@ bit 23
+set_local_var_bit_const 3@ bit 21
+goto @GFDATE_17377
+
+:GFDATE_17322
+if 
+  is_global_var_bit_set_const $iGFLikesPlayerTraits($iGFidx,6i) bit 3
+goto_if_false @GFDATE_17377
+if 
+  26@ == 0
+goto_if_false @GFDATE_17369
+26@ = 5
+
+:GFDATE_17369
+add_int_lvar_to_int_lvar 25@ += 26@
+
+:GFDATE_17377
+set_lvar_int_to_var_int 26@ = $iGFLikesPlayer($iGFidx,6i)
+26@ /= 2
+add_int_lvar_to_int_lvar 25@ += 26@
+if 
+  is_int_lvar_greater_or_equal_to_int_var 25@ >= $iGFDesiredSexAppeal($iGFidx,6i)
+goto_if_false @GFDATE_17441
+25@ = 1
+goto @GFDATE_17448
+
+:GFDATE_17441
+25@ = -1
+
+:GFDATE_17448
+return 
+
+:GFDATE_17450
+25@ = Math.RandomIntInRange(0, 100)
+if 
+  is_global_var_bit_set_const $iDateReport bit 11
+goto_if_false @GFDATE_17557
+if and
+  is_int_var_greater_than_int_var $iGFLikesPlayer($iGFidx,6i) > $iGFSelfRespect($iGFidx,6i)
+  25@ > 50
+goto_if_false @GFDATE_17526
+set_var_int_to_constant $iGFSayContext = 263
+goto @GFDATE_17534
+
+:GFDATE_17526
+set_var_int_to_constant $iGFSayContext = 264
+
+:GFDATE_17534
+set_var_int_to_constant $iCJSayContext = 10
+gosub @GFDATE_18725
+gosub @GFDATE_17816
+return 
+
+:GFDATE_17557
+if 
+  is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_17657
+if and
+  is_int_var_greater_than_int_var $iGFLikesPlayer($iGFidx,6i) > $iGFSelfRespect($iGFidx,6i)
+  25@ > 50
+goto_if_false @GFDATE_17624
+set_var_int_to_constant $iGFSayContext = 265
+goto @GFDATE_17632
+
+:GFDATE_17624
+set_var_int_to_constant $iGFSayContext = 266
+
+:GFDATE_17632
+set_var_int_to_constant $iCJSayContext = 10
+Hud.DisplayCounterWithString($iFun, CounterDisplay.Bar, 'GF_0029')
+return 
+
+:GFDATE_17657
+if 
+  is_global_var_bit_set_const $iDateReport bit 13
+goto_if_false @GFDATE_17755
+if and
+  is_int_var_greater_than_int_var $iGFLikesPlayer($iGFidx,6i) > $iGFSelfRespect($iGFidx,6i)
+  25@ > 50
+goto_if_false @GFDATE_17724
+set_var_int_to_constant $iGFSayContext = 267
+goto @GFDATE_17732
+
+:GFDATE_17724
+set_var_int_to_constant $iGFSayContext = 268
+
+:GFDATE_17732
+set_var_int_to_constant $iCJSayContext = 10
+gosub @GFDATE_18725
+gosub @GFDATE_17816
+return 
+
+:GFDATE_17755
+if 
+  is_global_var_bit_set_const $iDateReport bit 15
+goto_if_false @GFDATE_17814
+set_var_int_to_constant $iGFSayContext = 309
+set_var_int_to_constant $iCJSayContext = 245
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFDATE_17812
+Char.SetCantBeDraggedOut($scplayer, True)
+
+:GFDATE_17812
+return 
+
+:GFDATE_17814
+return 
+
+:GFDATE_17816
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFDATE_18723
+gosub @GFDATE_32407
+25@ = Player.GetCityIsIn($player1)
+if 
+  is_int_lvar_equal_to_constant 25@ == 1
+goto_if_false @GFDATE_18033
+if 
+  is_global_var_bit_set_const $iDateReport bit 11
+goto_if_false @GFDATE_17993
+15@ = Blip.AddShortRangeSpriteForCoord(17, 2862.0, -1439.0, 10.0)
+16@ = Blip.AddShortRangeSpriteForCoord(49, 2317.0, -1645.0, 13.0)
+17@ = Blip.AddShortRangeSpriteForCoord(49, 1837.0, -1682.0, 14.0)
+18@ = Blip.AddShortRangeSpriteForCoord(50, 415.3947, -1431.017, 31.5057)
+19@ = Blip.AddShortRangeSpriteForCoord(17, 384.6615, -1819.529, 6.8414)
+
+:GFDATE_17993
+if 
+  is_global_var_bit_set_const $iDateReport bit 13
+goto_if_false @GFDATE_18033
+15@ = Blip.AddShortRangeSpriteForCoord(48, 1837.0, -1682.0, 14.0)
+
+:GFDATE_18033
+if 
+  is_int_lvar_equal_to_constant 25@ == 2
+goto_if_false @GFDATE_18241
+if 
+  is_global_var_bit_set_const $iDateReport bit 11
+goto_if_false @GFDATE_18201
+15@ = Blip.AddShortRangeSpriteForCoord(50, -2463.0, 132.0, 34.0)
+16@ = Blip.AddShortRangeSpriteForCoord(50, -1885.0, 747.0, 44.0)
+17@ = Blip.AddShortRangeSpriteForCoord(17, -1699.0, 1380.0, 6.0)
+18@ = Blip.AddShortRangeSpriteForCoord(17, -2524.0, 1216.0, 37.0)
+19@ = Blip.AddShortRangeSpriteForCoord(49, -2241.0, -88.0, 35.0)
+20@ = Blip.AddShortRangeSpriteForCoord(49, -2551.115, 193.657, 5.2)
+
+:GFDATE_18201
+if 
+  is_global_var_bit_set_const $iDateReport bit 13
+goto_if_false @GFDATE_18241
+15@ = Blip.AddShortRangeSpriteForCoord(48, -2551.115, 193.657, 5.2)
+
+:GFDATE_18241
+if 
+  is_int_lvar_equal_to_constant 25@ == 3
+goto_if_false @GFDATE_18427
+if 
+  is_global_var_bit_set_const $iDateReport bit 11
+goto_if_false @GFDATE_18387
+15@ = Blip.AddShortRangeSpriteForCoord(49, 2441.145, 2065.145, 9.847)
+16@ = Blip.AddShortRangeSpriteForCoord(50, 1693.0, 2208.0, 9.8)
+17@ = Blip.AddShortRangeSpriteForCoord(50, 2490.666, 2065.145, 9.847)
+18@ = Blip.AddShortRangeSpriteForCoord(17, 1376.892, 2327.792, 9.822)
+19@ = Blip.AddShortRangeSpriteForCoord(17, 2368.058, 1983.185, 10.003)
+
+:GFDATE_18387
+if 
+  is_global_var_bit_set_const $iDateReport bit 13
+goto_if_false @GFDATE_18427
+15@ = Blip.AddShortRangeSpriteForCoord(48, 2507.44, 1242.31, 9.833)
+
+:GFDATE_18427
+if 
+  is_int_lvar_equal_to_constant 25@ == 0
+goto_if_false @GFDATE_18723
+if 
+  is_global_var_bit_set_const $iDateReport bit 11
+goto_if_false @GFDATE_18639
+15@ = Blip.AddShortRangeSpriteForCoord(49, 292.865, -195.47, 0.852)
+16@ = Blip.AddShortRangeSpriteForCoord(17, 681.544, -473.494, 15.592)
+17@ = Blip.AddShortRangeSpriteForCoord(17, -1941.516, 2379.672, 48.4922)
+18@ = Blip.AddShortRangeSpriteForCoord(50, -857.14, 1537.277, 21.587)
+19@ = Blip.AddShortRangeSpriteForCoord(49, -85.2583, 1378.991, 9.2812)
+20@ = Blip.AddShortRangeSpriteForCoord(17, -53.867, 1189.297, 18.414)
+21@ = Blip.AddShortRangeSpriteForCoord(49, 2317.0, -1645.0, 13.0)
+22@ = Blip.AddShortRangeSpriteForCoord(50, 415.3947, -1431.017, 31.5057)
+
+:GFDATE_18639
+if 
+  is_global_var_bit_set_const $iDateReport bit 13
+goto_if_false @GFDATE_18723
+15@ = Blip.AddShortRangeSpriteForCoord(48, 1837.0, -1682.0, 14.0)
+16@ = Blip.AddShortRangeSpriteForCoord(48, -2551.115, 193.657, 5.2)
+17@ = Blip.AddShortRangeSpriteForCoord(48, 2507.44, 1242.31, 9.833)
+
+:GFDATE_18723
+return 
+
+:GFDATE_18725
+if 
+  is_global_var_bit_set_const $iDateReport bit 11
+goto_if_false @GFDATE_19023
+World.SwitchEntryExit('FDREST1', True)
+World.SwitchEntryExit('REST2', True)
+World.SwitchEntryExit('DINER1', True)
+World.SwitchEntryExit('DINER2', True)
+World.SwitchEntryExit('TSDINER', True)
+Game.SetNamedEntryExitFlag('FDPIZA', EntryexitsFlag.NoWarp, True)
+Game.SetNamedEntryExitFlag('FDBURG', EntryexitsFlag.NoWarp, True)
+Game.SetNamedEntryExitFlag('FDCHICK', EntryexitsFlag.NoWarp, True)
+Game.SetNamedEntryExitFlag('UFOBAR', EntryexitsFlag.NoWarp, True)
+Game.SetNamedEntryExitFlag('REST2', EntryexitsFlag.NoWarp, True)
+Game.SetNamedEntryExitFlag('DINER1', EntryexitsFlag.NoWarp, True)
+Game.SetNamedEntryExitFlag('FDREST1', EntryexitsFlag.NoWarp, True)
+Game.SetNamedEntryExitFlag('REST2', EntryexitsFlag.NoWarp, True)
+Game.SetNamedEntryExitFlag('DINER1', EntryexitsFlag.NoWarp, True)
+Game.SetNamedEntryExitFlag('DINER2', EntryexitsFlag.NoWarp, True)
+Game.SetNamedEntryExitFlag('TSDINER', EntryexitsFlag.NoWarp, True)
+Game.SetNamedEntryExitFlag('BAR1', EntryexitsFlag.NoWarp, True)
+Game.SetNamedEntryExitFlag('BAR2', EntryexitsFlag.NoWarp, True)
+goto @GFDATE_19073
+
+:GFDATE_19023
+if 
+  is_global_var_bit_set_const $iDateReport bit 13
+goto_if_false @GFDATE_19073
+Game.SetNamedEntryExitFlag('BAR1', EntryexitsFlag.WarpGroup, True)
+Game.SetNamedEntryExitFlag('BAR2', EntryexitsFlag.WarpGroup, True)
+
+:GFDATE_19073
+return 
+
+:GFDATE_19075
+World.SwitchEntryExit('FDREST1', False)
+World.SwitchEntryExit('REST2', False)
+World.SwitchEntryExit('DINER1', False)
+World.SwitchEntryExit('DINER2', False)
+World.SwitchEntryExit('TSDINER', False)
+World.SwitchEntryExit('FDPIZA', True)
+World.SwitchEntryExit('FDBURG', True)
+World.SwitchEntryExit('FDCHICK', True)
+World.SwitchEntryExit('BAR1', True)
+World.SwitchEntryExit('BAR2', True)
+World.SwitchEntryExit('UFOBAR', True)
+Game.SetNamedEntryExitFlag('FDPIZA', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('FDBURG', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('FDCHICK', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('REST2', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('DINER1', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('FDREST1', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('REST2', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('DINER1', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('DINER2', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('TSDINER', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('BAR1', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('BAR2', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('UFOBAR', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('BAR1', EntryexitsFlag.WarpGroup, False)
+Game.SetNamedEntryExitFlag('BAR2', EntryexitsFlag.WarpGroup, False)
+return 
+
+:GFDATE_19460
+World.SwitchEntryExit('FDREST1', False)
+World.SwitchEntryExit('REST2', False)
+World.SwitchEntryExit('DINER1', False)
+World.SwitchEntryExit('DINER2', False)
+World.SwitchEntryExit('TSDINER', False)
+World.SwitchEntryExit('FDPIZA', False)
+World.SwitchEntryExit('FDBURG', False)
+World.SwitchEntryExit('FDCHICK', False)
+World.SwitchEntryExit('BAR1', False)
+World.SwitchEntryExit('BAR2', False)
+World.SwitchEntryExit('UFOBAR', False)
+return 
+
+:GFDATE_19605
+World.SwitchEntryExit('FDREST1', False)
+World.SwitchEntryExit('REST2', False)
+World.SwitchEntryExit('DINER1', False)
+World.SwitchEntryExit('DINER2', False)
+World.SwitchEntryExit('TSDINER', False)
+Game.SetNamedEntryExitFlag('FDPIZA', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('FDBURG', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('FDCHICK', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('BAR1', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('BAR2', EntryexitsFlag.NoWarp, False)
+Game.SetNamedEntryExitFlag('UFOBAR', EntryexitsFlag.NoWarp, False)
+return 
+
+:GFDATE_19768
+switch_start $iGFidx total_jumps 6 default_jump 0 @GFDATE_20053 jumps 0 @GFDATE_19831 1 @GFDATE_19942 2 @GFDATE_19905 3 @GFDATE_19868 4 @GFDATE_19979 5 @GFDATE_20016 -1 @GFDATE_20053
+
+:GFDATE_19831
+4@ = 2402.012
+7@ = -1719.648
+10@ = 12.6219
+goto @GFDATE_20053
+
+:GFDATE_19868
+4@ = -1398.101
+7@ = 2636.873
+10@ = 54.7031
+goto @GFDATE_20053
+
+:GFDATE_19905
+4@ = -377.3978
+7@ = -1438.692
+10@ = 24.7209
+goto @GFDATE_20053
+
+:GFDATE_19942
+4@ = -1796.952
+7@ = 1197.376
+10@ = 24.1094
+goto @GFDATE_20053
+
+:GFDATE_19979
+4@ = -2576.808
+7@ = 1144.744
+10@ = 54.8547
+goto @GFDATE_20053
+
+:GFDATE_20016
+4@ = 2035.362
+7@ = 2732.411
+10@ = 9.8203
+goto @GFDATE_20053
+
+:GFDATE_20053
+return 
+
+:GFDATE_20055
+if 
+  is_local_var_bit_set_const 3@ bit 2
+goto_if_false @GFDATE_20150
+gosub @GFDATE_19768
+if 
+  Char.LocateStoppedAnyMeans3D(0@, 4@, 7@, 10@, 3.0, 3.0, 3.0, True)
+goto_if_false @GFDATE_20136
+24@ = -2
+goto @GFDATE_20143
+
+:GFDATE_20136
+24@ = -1
+
+:GFDATE_20143
+goto @GFDATE_20349
+
+:GFDATE_20150
+24@ = Streaming.GetAreaVisible()
+if 
+  24@ <> 0
+goto_if_false @GFDATE_20342
+if 
+  is_global_var_bit_set_const $iDateReport bit 11
+goto_if_false @GFDATE_20247
+v$txtEntryExitName = Char.GetNameOfEntryExitUsed($scplayer)
+gosub @GFDATE_22371
+if 
+  25@ > -1
+goto_if_false @GFDATE_20233
+return 
+goto @GFDATE_20240
+
+:GFDATE_20233
+24@ = -1
+
+:GFDATE_20240
+goto @GFDATE_20335
+
+:GFDATE_20247
+if 
+  is_global_var_bit_set_const $iDateReport bit 13
+goto_if_false @GFDATE_20328
+v$txtEntryExitName = Char.GetNameOfEntryExitUsed($scplayer)
+gosub @GFDATE_22371
+if 
+  25@ == 8
+goto_if_false @GFDATE_20314
+set_local_var_bit_const 3@ bit 13
+return 
+goto @GFDATE_20321
+
+:GFDATE_20314
+24@ = -1
+
+:GFDATE_20321
+goto @GFDATE_20335
+
+:GFDATE_20328
+24@ = -1
+
+:GFDATE_20335
+goto @GFDATE_20349
+
+:GFDATE_20342
+24@ = -1
+
+:GFDATE_20349
+return 
+
+:GFDATE_20351
+switch_start $iGFidx total_jumps 6 default_jump 0 @GFDATE_20576 jumps 0 @GFDATE_20414 1 @GFDATE_20495 2 @GFDATE_20468 3 @GFDATE_20441 4 @GFDATE_20522 5 @GFDATE_20549 -1 @GFDATE_20576
+
+:GFDATE_20414
+Cutscene.AppendToNext('GANGRL3', 'GFRIEND')
+goto @GFDATE_20576
+
+:GFDATE_20441
+Cutscene.AppendToNext('COPGRL3', 'GFRIEND')
+goto @GFDATE_20576
+
+:GFDATE_20468
+Cutscene.AppendToNext('GUNGRL3', 'GFRIEND')
+goto @GFDATE_20576
+
+:GFDATE_20495
+Cutscene.AppendToNext('MECGRL3', 'GFRIEND')
+goto @GFDATE_20576
+
+:GFDATE_20522
+Cutscene.AppendToNext('NURGRL3', 'GFRIEND')
+goto @GFDATE_20576
+
+:GFDATE_20549
+Cutscene.AppendToNext('CROGRL3', 'GFRIEND')
+goto @GFDATE_20576
+
+:GFDATE_20576
+return 
+
+:GFDATE_20578
+gosub @GFDATE_22371
+switch_start 25@ total_jumps 11 default_jump 0 @GFDATE_22369 jumps 1 @GFDATE_21201 2 @GFDATE_21337 3 @GFDATE_20713 4 @GFDATE_20929 5 @GFDATE_21065 6 @GFDATE_21825 7 @GFDATE_22097
+switch_continued 8 @GFDATE_21553 9 @GFDATE_21689 10 @GFDATE_22233 11 @GFDATE_21961 -1 @GFDATE_22369 -1 @GFDATE_22369 -1 @GFDATE_22369 -1 @GFDATE_22369 -1 @GFDATE_22369
+
+:GFDATE_20713
+World.SetExtraColors(4, False)
+Stat.ShowUpdateStats(False)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 245)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 21)
+4@ = 370.0
+7@ = -125.0
+10@ = 1001.52
+Streaming.LoadScene(4@, 7@, 10@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 1
+goto_if_false @GFDATE_20864
+Cutscene.AppendToNext('GFPIZ1', 'GFPIZ1')
+Cutscene.AppendToNext('GFPIZ2', 'GFPIZ2')
+Cutscene.Load('DATE1A')
+set_global_var_bit_const $iDateReport bit 2
+goto @GFDATE_20922
+
+:GFDATE_20864
+Cutscene.AppendToNext('GFPIZ1', 'GFPIZ1')
+Cutscene.AppendToNext('GFPIZ2', 'GFPIZ2')
+Cutscene.Load('DATE1B')
+clear_global_var_bit_const $iDateReport bit 2
+
+:GFDATE_20922
+goto @GFDATE_22369
+
+:GFDATE_20929
+World.SetExtraColors(4, False)
+Stat.ShowUpdateStats(False)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 245)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 21)
+4@ = 445.381
+7@ = -14.147
+10@ = 1001.731
+Streaming.LoadScene(4@, 7@, 10@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 5
+goto_if_false @GFDATE_21040
+Cutscene.Load('DATE5A')
+set_global_var_bit_const $iDateReport bit 2
+goto @GFDATE_21058
+
+:GFDATE_21040
+Cutscene.Load('DATE5B')
+clear_global_var_bit_const $iDateReport bit 2
+
+:GFDATE_21058
+goto @GFDATE_22369
+
+:GFDATE_21065
+World.SetExtraColors(4, False)
+Stat.ShowUpdateStats(False)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 245)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 21)
+4@ = 441.871
+7@ = -60.839
+10@ = 1000.675
+Streaming.LoadScene(4@, 7@, 10@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 5
+goto_if_false @GFDATE_21176
+Cutscene.Load('DATE5A')
+set_global_var_bit_const $iDateReport bit 2
+goto @GFDATE_21194
+
+:GFDATE_21176
+Cutscene.Load('DATE5B')
+clear_global_var_bit_const $iDateReport bit 2
+
+:GFDATE_21194
+goto @GFDATE_22369
+
+:GFDATE_21201
+World.SetExtraColors(4, False)
+Stat.ShowUpdateStats(False)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 245)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 21)
+4@ = 374.478
+7@ = -8.415
+10@ = 1002.86
+Streaming.LoadScene(4@, 7@, 10@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 1
+goto_if_false @GFDATE_21312
+Cutscene.Load('DATE2A')
+set_global_var_bit_const $iDateReport bit 2
+goto @GFDATE_21330
+
+:GFDATE_21312
+Cutscene.Load('DATE2B')
+clear_global_var_bit_const $iDateReport bit 2
+
+:GFDATE_21330
+goto @GFDATE_22369
+
+:GFDATE_21337
+World.SetExtraColors(4, False)
+Stat.ShowUpdateStats(False)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 245)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 21)
+4@ = 367.891
+7@ = -67.591
+10@ = 1001.516
+Streaming.LoadScene(4@, 7@, 10@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 1
+goto_if_false @GFDATE_21488
+Cutscene.AppendToNext('BURG_PA', 'GFPIZ1')
+Cutscene.AppendToNext('BURG_GA', 'GFPIZ2')
+Cutscene.Load('DATE1A')
+set_global_var_bit_const $iDateReport bit 2
+goto @GFDATE_21546
+
+:GFDATE_21488
+Cutscene.AppendToNext('BURG_PA', 'GFPIZ1')
+Cutscene.AppendToNext('BURG_GA', 'GFPIZ2')
+Cutscene.Load('DATE1B')
+clear_global_var_bit_const $iDateReport bit 2
+
+:GFDATE_21546
+goto @GFDATE_22369
+
+:GFDATE_21553
+World.SetExtraColors(5, False)
+Stat.ShowUpdateStats(False)
+Stat.IncrementInt(StatId.FoodBudget, 245)
+Stat.IncrementInt(StatId.FoodBudget, 21)
+4@ = 498.536
+7@ = -18.2
+10@ = 1000.651
+Streaming.LoadScene(4@, 7@, 10@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 3
+goto_if_false @GFDATE_21664
+Cutscene.Load('DATE6A')
+set_global_var_bit_const $iDateReport bit 2
+goto @GFDATE_21682
+
+:GFDATE_21664
+Cutscene.Load('DATE6B')
+clear_global_var_bit_const $iDateReport bit 2
+
+:GFDATE_21682
+goto @GFDATE_22369
+
+:GFDATE_21689
+World.SetExtraColors(6, False)
+Stat.ShowUpdateStats(False)
+Stat.IncrementInt(StatId.FoodBudget, 245)
+Stat.IncrementInt(StatId.FoodBudget, 21)
+4@ = 490.718
+7@ = -79.168
+10@ = 998.76
+Streaming.LoadScene(4@, 7@, 10@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 3
+goto_if_false @GFDATE_21800
+Cutscene.Load('DATE6A')
+set_global_var_bit_const $iDateReport bit 2
+goto @GFDATE_21818
+
+:GFDATE_21800
+Cutscene.Load('DATE6B')
+clear_global_var_bit_const $iDateReport bit 2
+
+:GFDATE_21818
+goto @GFDATE_22369
+
+:GFDATE_21825
+World.SetExtraColors(4, False)
+Stat.ShowUpdateStats(False)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 245)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 21)
+4@ = 449.41
+7@ = -86.72
+10@ = 1000.53
+Streaming.LoadScene(4@, 7@, 10@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 2
+goto_if_false @GFDATE_21936
+Cutscene.Load('DATE3A')
+set_global_var_bit_const $iDateReport bit 2
+goto @GFDATE_21954
+
+:GFDATE_21936
+Cutscene.Load('DATE3B')
+clear_global_var_bit_const $iDateReport bit 2
+
+:GFDATE_21954
+goto @GFDATE_22369
+
+:GFDATE_21961
+World.SetExtraColors(4, False)
+Stat.ShowUpdateStats(False)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 245)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 21)
+4@ = 678.028
+7@ = -452.9
+10@ = -24.444
+Streaming.LoadScene(4@, 7@, 10@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 2
+goto_if_false @GFDATE_22072
+Cutscene.Load('DATE3A')
+set_global_var_bit_const $iDateReport bit 2
+goto @GFDATE_22090
+
+:GFDATE_22072
+Cutscene.Load('DATE3B')
+clear_global_var_bit_const $iDateReport bit 2
+
+:GFDATE_22090
+goto @GFDATE_22369
+
+:GFDATE_22097
+World.SetExtraColors(4, False)
+Stat.ShowUpdateStats(False)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 245)
+Stat.IncrementInt(StatId.LargestBurglarySwag, 21)
+4@ = 449.41
+7@ = -108.24
+10@ = 1000.528
+Streaming.LoadScene(4@, 7@, 10@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 2
+goto_if_false @GFDATE_22208
+Cutscene.Load('DATE4A')
+set_global_var_bit_const $iDateReport bit 2
+goto @GFDATE_22226
+
+:GFDATE_22208
+Cutscene.Load('DATE4B')
+clear_global_var_bit_const $iDateReport bit 2
+
+:GFDATE_22226
+goto @GFDATE_22369
+
+:GFDATE_22233
+World.SetExtraColors(4, False)
+Stat.ShowUpdateStats(False)
+Stat.IncrementInt(StatId.FoodBudget, 245)
+Stat.IncrementInt(StatId.FoodBudget, 21)
+4@ = -226.249
+7@ = 1405.448
+10@ = 27.7
+Streaming.LoadScene(4@, 7@, 10@)
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 3
+goto_if_false @GFDATE_22344
+Cutscene.Load('DATE6A')
+set_global_var_bit_const $iDateReport bit 2
+goto @GFDATE_22362
+
+:GFDATE_22344
+Cutscene.Load('DATE6B')
+clear_global_var_bit_const $iDateReport bit 2
+
+:GFDATE_22362
+goto @GFDATE_22369
+
+:GFDATE_22369
+return 
+
+:GFDATE_22371
+25@ = -1
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExitName == "FDCHICK"
+goto_if_false @GFDATE_22412
+25@ = 1
+return 
+
+:GFDATE_22412
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExitName == "FDBURG"
+goto_if_false @GFDATE_22445
+25@ = 2
+return 
+
+:GFDATE_22445
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExitName == "FDPIZA"
+goto_if_false @GFDATE_22478
+25@ = 3
+return 
+
+:GFDATE_22478
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExitName == "FDREST1"
+goto_if_false @GFDATE_22512
+25@ = 4
+return 
+
+:GFDATE_22512
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExitName == "REST2"
+goto_if_false @GFDATE_22544
+25@ = 5
+return 
+
+:GFDATE_22544
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExitName == "DINER1"
+goto_if_false @GFDATE_22577
+25@ = 6
+return 
+
+:GFDATE_22577
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExitName == "DINER2"
+goto_if_false @GFDATE_22610
+25@ = 7
+return 
+
+:GFDATE_22610
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExitName == "BAR1"
+goto_if_false @GFDATE_22641
+25@ = 8
+return 
+
+:GFDATE_22641
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExitName == "BAR2"
+goto_if_false @GFDATE_22672
+25@ = 9
+return 
+
+:GFDATE_22672
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExitName == "UFOBAR"
+goto_if_false @GFDATE_22705
+25@ = 10
+return 
+
+:GFDATE_22705
+if 
+  is_var_text_label16_equal_to_text_label v$txtEntryExitName == "TSDINER"
+goto_if_false @GFDATE_22739
+25@ = 11
+return 
+
+:GFDATE_22739
+set_var_text_label16 v$txtEntryExitName = "NIL"
+return 
+
+:GFDATE_22751
+switch_start $iGFidx total_jumps 6 default_jump 0 @GFDATE_23456 jumps 0 @GFDATE_22814 1 @GFDATE_23028 2 @GFDATE_23135 3 @GFDATE_22921 4 @GFDATE_23242 5 @GFDATE_23349 -1 @GFDATE_23456
+
+:GFDATE_22814
+4@ = 2394.408
+7@ = -1728.215
+10@ = 14.2715
+5@ = 2395.066
+8@ = -1727.465
+11@ = 14.2063
+6@ = 2401.91
+9@ = -1715.633
+12@ = 13.0848
+13@ = 180.0
+goto @GFDATE_23456
+
+:GFDATE_22921
+4@ = -1401.494
+7@ = 2640.099
+10@ = 59.3883
+5@ = -1400.704
+8@ = 2639.641
+11@ = 58.9806
+6@ = -1390.6
+9@ = 2638.349
+12@ = 54.9965
+13@ = 90.0
+goto @GFDATE_23456
+
+:GFDATE_23028
+4@ = -1799.737
+7@ = 1192.863
+10@ = 29.6868
+5@ = -1799.472
+8@ = 1193.683
+11@ = 29.1813
+6@ = -1799.81
+9@ = 1200.602
+12@ = 24.1194
+13@ = 197.0
+goto @GFDATE_23456
+
+:GFDATE_23135
+4@ = -383.3153
+7@ = -1435.266
+10@ = 26.695
+5@ = -382.5756
+8@ = -1435.887
+11@ = 26.4366
+6@ = -382.0961
+9@ = -1438.207
+12@ = 24.7209
+13@ = 269.3417
+goto @GFDATE_23456
+
+:GFDATE_23242
+4@ = -2582.293
+7@ = 1147.762
+10@ = 59.6235
+5@ = -2581.406
+8@ = 1147.768
+11@ = 59.1605
+6@ = -2574.045
+9@ = 1152.397
+12@ = 54.7422
+13@ = 151.7896
+goto @GFDATE_23456
+
+:GFDATE_23349
+4@ = 2032.235
+7@ = 2734.541
+10@ = 13.3226
+5@ = 2032.744
+8@ = 2733.714
+11@ = 13.0817
+6@ = 2037.401
+9@ = 2723.283
+12@ = 9.8352
+13@ = 8.0
+goto @GFDATE_23456
+
+:GFDATE_23456
+return 
+
+:GFDATE_23458
+25@ = Zone.GetGangStrength(s$txtCurrZone, GangType.Ballas)
+if 
+  25@ > 0
+goto_if_false @GFDATE_23488
+return 
+
+:GFDATE_23488
+25@ = Zone.GetGangStrength(s$txtCurrZone, GangType.Aztecas)
+if 
+  25@ > 0
+goto_if_false @GFDATE_23518
+return 
+
+:GFDATE_23518
+25@ = Zone.GetGangStrength(s$txtCurrZone, GangType.Vagos)
+if 
+  25@ > 0
+goto_if_false @GFDATE_23548
+return 
+
+:GFDATE_23548
+25@ = Zone.GetGangStrength(s$txtCurrZone, GangType.Rifa)
+if 
+  25@ > 0
+goto_if_false @GFDATE_23578
+return 
+
+:GFDATE_23578
+return 
+
+:GFDATE_23580
+if 
+  is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_23638
+if and
+  not is_local_var_bit_set_const 3@ bit 2
+  not is_local_var_bit_set_const 3@ bit 26
+goto_if_false @GFDATE_23631
+set_var_int_to_constant $iGFSayContext = 272
+
+:GFDATE_23631
+goto @GFDATE_23671
+
+:GFDATE_23638
+if and
+  not is_local_var_bit_set_const 3@ bit 2
+  not is_local_var_bit_set_const 3@ bit 26
+goto_if_false @GFDATE_23671
+set_var_int_to_constant $iGFSayContext = 271
+
+:GFDATE_23671
+set_local_var_bit_const 3@ bit 26
+return 
+
+:GFDATE_23680
+1@ = 5
+2@ = 0
+return 
+
+:GFDATE_23696
+25@ = 0
+if 
+  not is_local_var_bit_set_const 3@ bit 7
+goto_if_false @GFDATE_24074
+if and
+  not Char.IsInAnyCar(0@)
+  not Player.IsUsingJetpack($player1)
+  not Char.IsCurrentWeapon($scplayer, WeaponType.Camera)
+goto_if_false @GFDATE_24074
+if 
+  Char.IsStopped(0@)
+goto_if_false @GFDATE_24074
+4@ = Char.GetOffsetInWorldCoords(7@, 10@, 0@, 0.0, 0.5, 0.0)
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, 4@, 7@, 10@, 1.3, 1.3, 1.0, False)
+goto_if_false @GFDATE_24074
+4@, 7@, 10@ = Char.GetCoordinates($scplayer)
+5@, 8@, 11@ = Char.GetCoordinates(0@)
+set_lvar_float_to_lvar_float 13@ = 11@
+13@ -= 0.02
+set_lvar_float_to_lvar_float 14@ = 11@
+14@ += 0.02
+if and
+  is_float_lvar_greater_than_float_lvar 10@ > 13@
+  is_float_lvar_greater_than_float_lvar 14@ > 10@
+goto_if_false @GFDATE_24074
+if or
+  Char.IsCurrentWeapon($scplayer, WeaponType.Flowers)
+  Char.IsCurrentWeapon($scplayer, WeaponType.Dildo1)
+  Char.IsCurrentWeapon($scplayer, WeaponType.Dildo2)
+  Char.IsCurrentWeapon($scplayer, WeaponType.Vibe1)
+  Char.IsCurrentWeapon($scplayer, WeaponType.Vibe2)
+goto_if_false @GFDATE_24027
+if and
+  not is_local_var_bit_set_const 3@ bit 28
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @GFDATE_24011
+Text.PrintHelp('GF_H013')
+set_local_var_bit_const 3@ bit 28
+
+:GFDATE_24011
+25@ = 2
+return 
+goto @GFDATE_24074
+
+:GFDATE_24027
+if and
+  not is_local_var_bit_set_const 3@ bit 4
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @GFDATE_24065
+Text.PrintHelp('GF_0021')
+set_local_var_bit_const 3@ bit 4
+
+:GFDATE_24065
+25@ = 1
+return 
+
+:GFDATE_24074
+return 
+
+:GFDATE_24076
+if 
+  $iCensoredVersion == 0
+goto_if_false @GFDATE_24106
+Streaming.RequestAnimation("BLOWJOBZ")
+
+:GFDATE_24106
+Streaming.RequestAnimation("KISSING")
+
+:GFDATE_24117
+wait 0
+if 
+  Streaming.HasAnimationLoaded("KISSING")
+goto_if_false @GFDATE_24228
+if 
+  $iCensoredVersion == 0
+goto_if_false @GFDATE_24219
+if 
+  Streaming.HasAnimationLoaded("BLOWJOBZ")
+goto_if_false @GFDATE_24193
+return 
+goto @GFDATE_24212
+
+:GFDATE_24193
+Streaming.RequestAnimation("BLOWJOBZ")
+goto @GFDATE_24117
+
+:GFDATE_24212
+goto @GFDATE_24221
+
+:GFDATE_24219
+return 
+
+:GFDATE_24221
+goto @GFDATE_24246
+
+:GFDATE_24228
+Streaming.RequestAnimation("KISSING")
+goto @GFDATE_24117
+
+:GFDATE_24246
+if 
+  is_local_var_bit_set_const 3@ bit 13
+goto_if_false @GFDATE_24318
+if 
+  is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_24297
+TIMERA = 30000
+goto @GFDATE_24304
+
+:GFDATE_24297
+TIMERA = 0
+
+:GFDATE_24304
+clear_local_var_bit_const 3@ bit 13
+goto @GFDATE_25025
+
+:GFDATE_24318
+if 
+  is_local_var_bit_set_const 3@ bit 8
+goto_if_false @GFDATE_24416
+if 
+  is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_24369
+TIMERA = 30000
+goto @GFDATE_24402
+
+:GFDATE_24369
+if 
+  30@ == -1
+goto_if_false @GFDATE_24395
+set_lvar_int_to_lvar_int 30@ = TIMERA
+
+:GFDATE_24395
+TIMERA = 0
+
+:GFDATE_24402
+clear_local_var_bit_const 3@ bit 8
+goto @GFDATE_25025
+
+:GFDATE_24416
+switch_start 1@ total_jumps 9 default_jump 0 @GFDATE_25025 jumps 1 @GFDATE_24544 2 @GFDATE_24625 3 @GFDATE_24639 4 @GFDATE_24653 5 @GFDATE_24734 6 @GFDATE_24748 7 @GFDATE_24843
+switch_continued 10 @GFDATE_24938 11 @GFDATE_24952 -1 @GFDATE_25025 -1 @GFDATE_25025 -1 @GFDATE_25025 -1 @GFDATE_25025 -1 @GFDATE_25025 -1 @GFDATE_25025 -1 @GFDATE_25025
+
+:GFDATE_24544
+if and
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 21
+  Char.IsShooting(0@)
+  not is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_24585
+TIMERA = 0
+
+:GFDATE_24585
+if 
+  30@ > 0
+goto_if_false @GFDATE_24618
+set_lvar_int_to_lvar_int TIMERA = 30@
+30@ = -1
+
+:GFDATE_24618
+goto @GFDATE_25025
+
+:GFDATE_24625
+TIMERA = 0
+goto @GFDATE_25025
+
+:GFDATE_24639
+TIMERA = 0
+goto @GFDATE_25025
+
+:GFDATE_24653
+if and
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 21
+  Char.IsShooting(0@)
+  not is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_24694
+TIMERA = 0
+
+:GFDATE_24694
+if 
+  30@ > 0
+goto_if_false @GFDATE_24727
+set_lvar_int_to_lvar_int TIMERA = 30@
+30@ = -1
+
+:GFDATE_24727
+goto @GFDATE_25025
+
+:GFDATE_24734
+TIMERA = 0
+goto @GFDATE_25025
+
+:GFDATE_24748
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 27
+goto_if_false @GFDATE_24836
+if 
+  30@ == -1
+goto_if_false @GFDATE_24796
+set_lvar_int_to_lvar_int 30@ = TIMERA
+
+:GFDATE_24796
+if 
+  is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_24829
+TIMERA = 30000
+goto @GFDATE_24836
+
+:GFDATE_24829
+TIMERA = 0
+
+:GFDATE_24836
+goto @GFDATE_25025
+
+:GFDATE_24843
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 28
+goto_if_false @GFDATE_24931
+if 
+  30@ == -1
+goto_if_false @GFDATE_24891
+set_lvar_int_to_lvar_int 30@ = TIMERA
+
+:GFDATE_24891
+if 
+  is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_24924
+TIMERA = 30000
+goto @GFDATE_24931
+
+:GFDATE_24924
+TIMERA = 0
+
+:GFDATE_24931
+goto @GFDATE_25025
+
+:GFDATE_24938
+TIMERA = 0
+goto @GFDATE_25025
+
+:GFDATE_24952
+if 
+  30@ == -1
+goto_if_false @GFDATE_24978
+set_lvar_int_to_lvar_int 30@ = TIMERA
+
+:GFDATE_24978
+if 
+  is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_25011
+TIMERA = 30000
+goto @GFDATE_25018
+
+:GFDATE_25011
+TIMERA = 0
+
+:GFDATE_25018
+goto @GFDATE_25025
+
+:GFDATE_25025
+return 
+
+:GFDATE_25027
+if 
+  0.0 >= $fFunTemp
+goto_if_false @GFDATE_25058
+$fFunTemp -= 0.5
+
+:GFDATE_25058
+add_float_var_to_float_var $fFun += $fFunTemp
+if 
+  0.0 > $fFun
+goto_if_false @GFDATE_25097
+$fFun = 0.0
+
+:GFDATE_25097
+if 
+  $fFun > 100.0
+goto_if_false @GFDATE_25128
+$fFun = 100.0
+
+:GFDATE_25128
+cset_var_int_to_var_float $iFun = float $fFun
+set_local_var_bit_const 3@ bit 8
+return 
+
+:GFDATE_25145
+26@ = Zone.GetCurrentPopulationZoneType()
+switch_start 26@ total_jumps 20 default_jump 0 @GFDATE_26510 jumps 0 @GFDATE_25385 1 @GFDATE_25878 2 @GFDATE_26352 3 @GFDATE_25957 4 @GFDATE_25464 5 @GFDATE_25371 6 @GFDATE_25378
+switch_continued 7 @GFDATE_26431 8 @GFDATE_25720 9 @GFDATE_26115 10 @GFDATE_25622 11 @GFDATE_25343 12 @GFDATE_26273 13 @GFDATE_26194 14 @GFDATE_26036 15 @GFDATE_25543
+switch_continued 16 @GFDATE_25357 17 @GFDATE_25799 18 @GFDATE_25350 19 @GFDATE_25364 -1 @GFDATE_26510 -1 @GFDATE_26510 -1 @GFDATE_26510 -1 @GFDATE_26510 -1 @GFDATE_26510
+
+:GFDATE_25343
+goto @GFDATE_26510
+
+:GFDATE_25350
+goto @GFDATE_26510
+
+:GFDATE_25357
+goto @GFDATE_26510
+
+:GFDATE_25364
+goto @GFDATE_26510
+
+:GFDATE_25371
+goto @GFDATE_26510
+
+:GFDATE_25378
+goto @GFDATE_26510
+
+:GFDATE_25385
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 15
+goto_if_false @GFDATE_25450
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_25436
+$fFunTemp += 0.5
+
+:GFDATE_25436
+gosub @GFDATE_26512
+goto @GFDATE_25457
+
+:GFDATE_25450
+gosub @GFDATE_26632
+
+:GFDATE_25457
+goto @GFDATE_26510
+
+:GFDATE_25464
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 15
+goto_if_false @GFDATE_25529
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_25515
+$fFunTemp += 0.5
+
+:GFDATE_25515
+gosub @GFDATE_26512
+goto @GFDATE_25536
+
+:GFDATE_25529
+gosub @GFDATE_26632
+
+:GFDATE_25536
+goto @GFDATE_26510
+
+:GFDATE_25543
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 15
+goto_if_false @GFDATE_25608
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_25594
+$fFunTemp += 0.5
+
+:GFDATE_25594
+gosub @GFDATE_26512
+goto @GFDATE_25615
+
+:GFDATE_25608
+gosub @GFDATE_26632
+
+:GFDATE_25615
+goto @GFDATE_26510
+
+:GFDATE_25622
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 17
+goto_if_false @GFDATE_25706
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_25692
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_25692
+$fFunTemp += 0.5
+
+:GFDATE_25692
+gosub @GFDATE_26512
+goto @GFDATE_25713
+
+:GFDATE_25706
+gosub @GFDATE_26632
+
+:GFDATE_25713
+goto @GFDATE_26510
+
+:GFDATE_25720
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 17
+goto_if_false @GFDATE_25785
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_25771
+$fFunTemp += 0.5
+
+:GFDATE_25771
+gosub @GFDATE_26512
+goto @GFDATE_25792
+
+:GFDATE_25785
+gosub @GFDATE_26632
+
+:GFDATE_25792
+goto @GFDATE_26510
+
+:GFDATE_25799
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 17
+goto_if_false @GFDATE_25864
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_25850
+$fFunTemp += 0.5
+
+:GFDATE_25850
+gosub @GFDATE_26512
+goto @GFDATE_25871
+
+:GFDATE_25864
+gosub @GFDATE_26632
+
+:GFDATE_25871
+goto @GFDATE_26510
+
+:GFDATE_25878
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 18
+goto_if_false @GFDATE_25943
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_25929
+$fFunTemp += 0.5
+
+:GFDATE_25929
+gosub @GFDATE_26512
+goto @GFDATE_25950
+
+:GFDATE_25943
+gosub @GFDATE_26632
+
+:GFDATE_25950
+goto @GFDATE_26510
+
+:GFDATE_25957
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 18
+goto_if_false @GFDATE_26022
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_26008
+$fFunTemp += 0.5
+
+:GFDATE_26008
+gosub @GFDATE_26512
+goto @GFDATE_26029
+
+:GFDATE_26022
+gosub @GFDATE_26632
+
+:GFDATE_26029
+goto @GFDATE_26510
+
+:GFDATE_26036
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 19
+goto_if_false @GFDATE_26101
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_26087
+$fFunTemp += 0.5
+
+:GFDATE_26087
+gosub @GFDATE_26512
+goto @GFDATE_26108
+
+:GFDATE_26101
+gosub @GFDATE_26632
+
+:GFDATE_26108
+goto @GFDATE_26510
+
+:GFDATE_26115
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 19
+goto_if_false @GFDATE_26180
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_26166
+$fFunTemp += 0.5
+
+:GFDATE_26166
+gosub @GFDATE_26512
+goto @GFDATE_26187
+
+:GFDATE_26180
+gosub @GFDATE_26632
+
+:GFDATE_26187
+goto @GFDATE_26510
+
+:GFDATE_26194
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 19
+goto_if_false @GFDATE_26259
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_26245
+$fFunTemp += 0.5
+
+:GFDATE_26245
+gosub @GFDATE_26512
+goto @GFDATE_26266
+
+:GFDATE_26259
+gosub @GFDATE_26632
+
+:GFDATE_26266
+goto @GFDATE_26510
+
+:GFDATE_26273
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 20
+goto_if_false @GFDATE_26338
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_26324
+$fFunTemp += 0.5
+
+:GFDATE_26324
+gosub @GFDATE_26512
+goto @GFDATE_26345
+
+:GFDATE_26338
+gosub @GFDATE_26632
+
+:GFDATE_26345
+goto @GFDATE_26510
+
+:GFDATE_26352
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 20
+goto_if_false @GFDATE_26417
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_26403
+$fFunTemp += 0.5
+
+:GFDATE_26403
+gosub @GFDATE_26512
+goto @GFDATE_26424
+
+:GFDATE_26417
+gosub @GFDATE_26632
+
+:GFDATE_26424
+goto @GFDATE_26510
+
+:GFDATE_26431
+if 
+  is_global_var_bit_set_const $iGFLikesOnDate($iGFidx,6i) bit 16
+goto_if_false @GFDATE_26496
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_26482
+$fFunTemp += 0.5
+
+:GFDATE_26482
+gosub @GFDATE_26512
+goto @GFDATE_26503
+
+:GFDATE_26496
+gosub @GFDATE_26632
+
+:GFDATE_26503
+goto @GFDATE_26510
+
+:GFDATE_26510
+return 
+
+:GFDATE_26512
+26@ = Zone.GetCurrentPopulationZoneType()
+if 
+  not is_int_lvar_equal_to_int_lvar 26@ == 31@
+goto_if_false @GFDATE_26630
+if 
+  is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_26595
+if 
+  $iFun > 0
+goto_if_false @GFDATE_26588
+set_var_int_to_constant $iGFSayContext = 312
+set_lvar_int_to_lvar_int 31@ = 26@
+
+:GFDATE_26588
+goto @GFDATE_26630
+
+:GFDATE_26595
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_26630
+set_var_int_to_constant $iGFSayContext = 312
+set_lvar_int_to_lvar_int 31@ = 26@
+
+:GFDATE_26630
+return 
+
+:GFDATE_26632
+26@ = Zone.GetCurrentPopulationZoneType()
+if 
+  not is_int_lvar_equal_to_int_lvar 26@ == 31@
+goto_if_false @GFDATE_26750
+if 
+  is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_26715
+if 
+  $iFun > 0
+goto_if_false @GFDATE_26708
+set_var_int_to_constant $iGFSayContext = 311
+set_lvar_int_to_lvar_int 31@ = 26@
+
+:GFDATE_26708
+goto @GFDATE_26750
+
+:GFDATE_26715
+if 
+  TIMERA >= 30000
+goto_if_false @GFDATE_26750
+set_var_int_to_constant $iGFSayContext = 311
+set_lvar_int_to_lvar_int 31@ = 26@
+
+:GFDATE_26750
+return 
+
+:GFDATE_26752
+if 
+  Char.IsInAnyCar(0@)
+goto_if_false @GFDATE_26817
+28@ = Char.StoreCarIsInNoSave(0@)
+25@ = Car.GetHealth(28@)
+if 
+  29@ == -1
+goto_if_false @GFDATE_26810
+set_lvar_int_to_lvar_int 29@ = 25@
+
+:GFDATE_26810
+goto @GFDATE_26831
+
+:GFDATE_26817
+28@ = -1
+29@ = -1
+
+:GFDATE_26831
+return 
+switch_start $iGFidx total_jumps 6 default_jump 0 @GFDATE_27208 jumps 0 @GFDATE_26896 1 @GFDATE_26948 2 @GFDATE_27000 3 @GFDATE_27052 4 @GFDATE_27104 5 @GFDATE_27156 -1 @GFDATE_27208
+
+:GFDATE_26896
+if 
+  $iGFLikesPlayer($iGFidx,6i) > 100
+goto_if_false @GFDATE_26929
+$iGFLikesPlayer($iGFidx,6i) = 100
+
+:GFDATE_26929
+Stat.SetInt(StatId.GirlfriendDenise, $iGFLikesPlayer($iGFidx,6i))
+goto @GFDATE_27208
+
+:GFDATE_26948
+if 
+  $iGFLikesPlayer($iGFidx,6i) > 100
+goto_if_false @GFDATE_26981
+$iGFLikesPlayer($iGFidx,6i) = 100
+
+:GFDATE_26981
+Stat.SetInt(StatId.GirlfriendMichelle, $iGFLikesPlayer($iGFidx,6i))
+goto @GFDATE_27208
+
+:GFDATE_27000
+if 
+  $iGFLikesPlayer($iGFidx,6i) > 100
+goto_if_false @GFDATE_27033
+$iGFLikesPlayer($iGFidx,6i) = 100
+
+:GFDATE_27033
+Stat.SetInt(StatId.GirlfriendHelena, $iGFLikesPlayer($iGFidx,6i))
+goto @GFDATE_27208
+
+:GFDATE_27052
+if 
+  $iGFLikesPlayer($iGFidx,6i) > 100
+goto_if_false @GFDATE_27085
+$iGFLikesPlayer($iGFidx,6i) = 100
+
+:GFDATE_27085
+Stat.SetInt(StatId.GirlfriendBarbara, $iGFLikesPlayer($iGFidx,6i))
+goto @GFDATE_27208
+
+:GFDATE_27104
+if 
+  $iGFLikesPlayer($iGFidx,6i) > 100
+goto_if_false @GFDATE_27137
+$iGFLikesPlayer($iGFidx,6i) = 100
+
+:GFDATE_27137
+Stat.SetInt(StatId.GirlfriendKatie, $iGFLikesPlayer($iGFidx,6i))
+goto @GFDATE_27208
+
+:GFDATE_27156
+if 
+  $iGFLikesPlayer($iGFidx,6i) > 100
+goto_if_false @GFDATE_27189
+$iGFLikesPlayer($iGFidx,6i) = 100
+
+:GFDATE_27189
+Stat.SetInt(StatId.GirlfriendMillie, $iGFLikesPlayer($iGFidx,6i))
+goto @GFDATE_27208
+
+:GFDATE_27208
+return 
+
+:GFDATE_27210
+switch_start $iGF_TT_Status total_jumps 16 default_jump 0 @GFDATE_30453 jumps -1 @GFDATE_27338 0 @GFDATE_27352 1 @GFDATE_27613 2 @GFDATE_27665 3 @GFDATE_27924 4 @GFDATE_28078 5 @GFDATE_28238
+switch_continued 6 @GFDATE_28294 7 @GFDATE_28494 8 @GFDATE_28727 9 @GFDATE_28831 10 @GFDATE_29048 11 @GFDATE_29445 12 @GFDATE_29716 13 @GFDATE_29969 99 @GFDATE_30105
+
+:GFDATE_27338
+clear_global_var_bit_const $iDateReport bit 22
+goto @GFDATE_30453
+
+:GFDATE_27352
+$iGF_TT_PedModel = Math.RandomIntInRange(0, 6)
+if and
+  6 > $iGF_TT_PedModel
+  is_global_var_bit_set_var $iActiveGF bit $iGF_TT_PedModel
+  not is_int_var_equal_to_int_var $iGF_TT_PedModel == $iGFidx
+goto_if_false @GFDATE_27606
+if 
+  $iGF_TT_PedModel == 0
+goto_if_false @GFDATE_27429
+set_var_int_to_constant $iGF_TT_PedModel = 195
+set_var_int_to_constant $iGF_TT_CarModel = 545
+
+:GFDATE_27429
+if 
+  $iGF_TT_PedModel == 1
+goto_if_false @GFDATE_27463
+set_var_int_to_constant $iGF_TT_PedModel = 192
+set_var_int_to_constant $iGF_TT_CarModel = 557
+
+:GFDATE_27463
+if 
+  $iGF_TT_PedModel == 3
+goto_if_false @GFDATE_27497
+set_var_int_to_constant $iGF_TT_PedModel = 190
+set_var_int_to_constant $iGF_TT_CarModel = 599
+
+:GFDATE_27497
+if 
+  $iGF_TT_PedModel == 2
+goto_if_false @GFDATE_27531
+set_var_int_to_constant $iGF_TT_PedModel = 191
+set_var_int_to_constant $iGF_TT_CarModel = 568
+
+:GFDATE_27531
+if 
+  $iGF_TT_PedModel == 4
+goto_if_false @GFDATE_27565
+set_var_int_to_constant $iGF_TT_PedModel = 193
+set_var_int_to_constant $iGF_TT_CarModel = 442
+
+:GFDATE_27565
+if 
+  $iGF_TT_PedModel == 5
+goto_if_false @GFDATE_27599
+set_var_int_to_constant $iGF_TT_PedModel = 194
+set_var_int_to_constant $iGF_TT_CarModel = 533
+
+:GFDATE_27599
+$iGF_TT_Status = 1
+
+:GFDATE_27606
+goto @GFDATE_30453
+
+:GFDATE_27613
+if and
+  Streaming.HasModelLoaded($iGF_TT_CarModel)
+  Streaming.HasModelLoaded($iGF_TT_PedModel)
+goto_if_false @GFDATE_27648
+$iGF_TT_Status = 2
+goto @GFDATE_27658
+
+:GFDATE_27648
+Streaming.RequestModel($iGF_TT_CarModel)
+Streaming.RequestModel($iGF_TT_PedModel)
+
+:GFDATE_27658
+goto @GFDATE_30453
+
+:GFDATE_27665
+4@ = Char.GetOffsetInWorldCoords(7@, 10@, $scplayer, 0.0, 25.0, 0.0)
+if 
+5@, 8@, 11@, 13@ = Path.GetClosestCarNodeWithHeading(4@, 7@, 10@)
+goto_if_false @GFDATE_27910
+World.ClearArea(1, 5@, 8@, 11@, 5.0)
+$iGF_TT_Car = Car.Create($iGF_TT_CarModel, 5@, 8@, 11@)
+StuckCarCheck.AddWithWarp($iGF_TT_Car, 1.0, 1000, True, True, True, -1)
+if 
+  is_int_var_equal_to_constant $iGF_TT_CarModel == 545
+goto_if_false @GFDATE_27812
+Car.ChangeColor($iGF_TT_Car, 83, 1)
+
+:GFDATE_27812
+if 
+  is_int_var_equal_to_constant $iGF_TT_CarModel == 442
+goto_if_false @GFDATE_27840
+Car.ChangeColor($iGF_TT_Car, 1, 1)
+
+:GFDATE_27840
+if 
+  is_int_var_equal_to_constant $iGF_TT_CarModel == 533
+goto_if_false @GFDATE_27868
+Car.ChangeColor($iGF_TT_Car, 126, 1)
+
+:GFDATE_27868
+$iGF_TT_driver = Char.CreateInsideCar(PedType.CivFemale, $iGF_TT_PedModel, $iGF_TT_Car)
+Char.SetCantBeDraggedOut($iGF_TT_driver, True)
+Car.SetHeading($iGF_TT_Car, 13@)
+$iGF_TT_Status = 3
+goto @GFDATE_27917
+
+:GFDATE_27910
+$iGF_TT_Status = 99
+
+:GFDATE_27917
+goto @GFDATE_30453
+
+:GFDATE_27924
+Text.ClearPrints
+Text.ClearHelp
+Player.SetControl($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Hud.SwitchWidescreen(True)
+if and
+  not Car.IsDead($iGF_TT_Car)
+  not Char.IsDead($iGF_TT_driver)
+goto_if_false @GFDATE_28064
+Camera.AttachToVehicleLookAtChar($iGF_TT_Car, -1.5, 1.5, 1.5, $iGF_TT_driver, 6.0, SwitchType.JumpCut)
+Task.PlayAnimNonInterruptable($iGF_TT_driver, "GF_CARSPOT", "KISSING", 4.0, True, False, False, False, 5000)
+Text.PrintHelp('GF_H014')
+$iGF_TT_Status = 4
+goto @GFDATE_28071
+
+:GFDATE_28064
+$iGF_TT_Status = 99
+
+:GFDATE_28071
+goto @GFDATE_30453
+
+:GFDATE_28078
+if and
+  not Char.IsDead($iGF_TT_driver)
+  not Car.IsDead($iGF_TT_Car)
+goto_if_false @GFDATE_28224
+26@ = Char.GetScriptTaskStatus($iGF_TT_driver, 2066)
+if 
+  is_int_lvar_equal_to_constant 26@ == 7
+goto_if_false @GFDATE_28217
+if 
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_28180
+if and
+  Car.IsPassengerSeatFree(28@, SeatIndex.TandemRear)
+  Char.IsInCar($scplayer, 28@)
+goto_if_false @GFDATE_28180
+Task.WarpCharIntoCarAsPassenger(0@, 28@, 0)
+
+:GFDATE_28180
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+$iGF_TT_Blip = Blip.AddForCar($iGF_TT_Car)
+$iGF_TT_Status = 5
+
+:GFDATE_28217
+goto @GFDATE_28231
+
+:GFDATE_28224
+$iGF_TT_Status = 99
+
+:GFDATE_28231
+goto @GFDATE_30453
+
+:GFDATE_28238
+if and
+  not Char.IsDead($iGF_TT_driver)
+  not Car.IsDead($iGF_TT_Car)
+goto_if_false @GFDATE_28280
+Car.SetMission($iGF_TT_Car, CarMission.RamPlayerClose)
+$iGF_TT_Status = 6
+goto @GFDATE_28287
+
+:GFDATE_28280
+$iGF_TT_Status = 99
+
+:GFDATE_28287
+goto @GFDATE_30453
+
+:GFDATE_28294
+if and
+  not Char.IsDead($iGF_TT_driver)
+  not Car.IsDead($iGF_TT_Car)
+goto_if_false @GFDATE_28480
+4@, 7@, 10@ = Char.GetCoordinates($scplayer)
+5@, 8@, 11@ = Car.GetCoordinates($iGF_TT_Car)
+13@ = Math.GetDistanceBetweenCoords3D(4@, 7@, 10@, 5@, 8@, 11@)
+if 
+  6.0 >= 13@
+goto_if_false @GFDATE_28429
+Car.SetMission($iGF_TT_Car, CarMission.None)
+Car.FreezePosition($iGF_TT_Car, True)
+Player.SetControl($player1, False)
+Camera.DoFade(0, 500)
+$iGF_TT_Status = 8
+goto @GFDATE_28473
+
+:GFDATE_28429
+if 
+  13@ > 200.0
+goto_if_false @GFDATE_28473
+set_lvar_int_to_lvar_int 26@ = TIMERA
+26@ += 20000
+$iGF_TT_Status = 7
+
+:GFDATE_28473
+goto @GFDATE_28487
+
+:GFDATE_28480
+$iGF_TT_Status = 99
+
+:GFDATE_28487
+goto @GFDATE_30453
+
+:GFDATE_28494
+if and
+  not Char.IsDead($iGF_TT_driver)
+  not Car.IsDead($iGF_TT_Car)
+goto_if_false @GFDATE_28713
+4@, 7@, 10@ = Char.GetCoordinates($scplayer)
+5@, 8@, 11@ = Car.GetCoordinates($iGF_TT_Car)
+13@ = Math.GetDistanceBetweenCoords3D(4@, 7@, 10@, 5@, 8@, 11@)
+if 
+  13@ > 180.0
+goto_if_false @GFDATE_28699
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 26@
+goto_if_false @GFDATE_28692
+if 
+  Blip.DoesExist($iGF_TT_Blip)
+goto_if_false @GFDATE_28627
+Blip.Remove($iGF_TT_Blip)
+
+:GFDATE_28627
+Char.Delete($iGF_TT_driver)
+if 
+  not Car.IsDead($iGF_TT_Car)
+goto_if_false @GFDATE_28674
+if 
+  Car.DoesHaveStuckCarCheck($iGF_TT_Car)
+goto_if_false @GFDATE_28669
+StuckCarCheck.Remove($iGF_TT_Car)
+
+:GFDATE_28669
+Car.Delete($iGF_TT_Car)
+
+:GFDATE_28674
+Text.PrintHelp('GF_H016')
+$iGF_TT_Status = 12
+
+:GFDATE_28692
+goto @GFDATE_28706
+
+:GFDATE_28699
+$iGF_TT_Status = 6
+
+:GFDATE_28706
+goto @GFDATE_28720
+
+:GFDATE_28713
+$iGF_TT_Status = 99
+
+:GFDATE_28720
+goto @GFDATE_30453
+
+:GFDATE_28727
+if and
+  not Char.IsDead($iGF_TT_driver)
+  not Car.IsDead($iGF_TT_Car)
+goto_if_false @GFDATE_28817
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFDATE_28810
+Text.ClearPrints
+Text.ClearHelp
+Player.SetControl($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Hud.SwitchWidescreen(True)
+Game.SetAllCarsCanBeDamaged(False)
+Camera.SetInFrontOfPlayer
+Camera.DoFade(1, 500)
+TIMERB = 0
+$iGF_TT_Status = 9
+
+:GFDATE_28810
+goto @GFDATE_28824
+
+:GFDATE_28817
+$iGF_TT_Status = 99
+
+:GFDATE_28824
+goto @GFDATE_30453
+
+:GFDATE_28831
+if and
+  not Char.IsDead($iGF_TT_driver)
+  not Car.IsDead($iGF_TT_Car)
+goto_if_false @GFDATE_29034
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFDATE_29027
+4@, 7@, 10@ = Camera.GetActiveCoordinates()
+5@, 8@, 11@ = Char.GetCoordinates($iGF_TT_driver)
+Camera.SetFixedPosition(4@, 7@, 10@, 0.0, 0.0, 1.0)
+Camera.PointAtPoint(5@, 8@, 11@, SwitchType.Interpolation)
+Char.SetProofs($iGF_TT_driver, True, True, True, True, True)
+Car.SetProofs($iGF_TT_Car, True, True, True, True, True)
+Task.PlayAnimNonInterruptable($iGF_TT_driver, "GF_CARARGUE_01", "KISSING", 4.0, True, False, False, False, 5000)
+$iGFSpeechStatus = 7
+set_var_int_to_constant $iGFSayContext = 293
+$iGF_TT_Status = 10
+
+:GFDATE_29027
+goto @GFDATE_29041
+
+:GFDATE_29034
+$iGF_TT_Status = 99
+
+:GFDATE_29041
+goto @GFDATE_30453
+
+:GFDATE_29048
+if and
+  not Char.IsDead($iGF_TT_driver)
+  not Car.IsDead($iGF_TT_Car)
+goto_if_false @GFDATE_29431
+26@ = Char.GetScriptTaskStatus($iGF_TT_driver, 2066)
+if 
+  is_int_lvar_equal_to_constant 26@ == 7
+goto_if_false @GFDATE_29424
+if 
+  Char.IsInAnyCar(0@)
+goto_if_false @GFDATE_29224
+5@, 8@, 11@ = Char.GetCoordinates(0@)
+Camera.PointAtPoint(5@, 8@, 11@, SwitchType.Interpolation)
+Char.SetProofs(0@, True, True, True, True, True)
+Task.PlayAnimNonInterruptable(0@, "GF_CARARGUE_02", "KISSING", 4.0, True, False, False, False, 5000)
+set_var_int_to_constant $iGFSayContext = 294
+$iGF_TT_Status = 11
+goto @GFDATE_29424
+
+:GFDATE_29224
+4@, 7@, 10@ = Char.GetCoordinates(0@)
+5@, 8@, 11@ = Char.GetCoordinates($scplayer)
+13@ = Math.GetDistanceBetweenCoords3D(4@, 7@, 10@, 5@, 8@, 11@)
+if or
+  5.0 > 13@
+  TIMERB > 6000
+goto_if_false @GFDATE_29417
+5@, 8@, 11@ = Char.GetCoordinates(0@)
+Camera.PointAtPoint(5@, 8@, 11@, SwitchType.Interpolation)
+Char.SetProofs(0@, True, True, True, True, True)
+Task.PlayAnimNonInterruptable(0@, "GF_STREETARGUE_02", "KISSING", 4.0, True, False, False, False, 5000)
+set_var_int_to_constant $iGFSayContext = 294
+$iGF_TT_Status = 11
+goto @GFDATE_29424
+
+:GFDATE_29417
+goto @GFDATE_30453
+
+:GFDATE_29424
+goto @GFDATE_29438
+
+:GFDATE_29431
+$iGF_TT_Status = 99
+
+:GFDATE_29438
+goto @GFDATE_30453
+
+:GFDATE_29445
+if and
+  not Char.IsDead($iGF_TT_driver)
+  not Car.IsDead($iGF_TT_Car)
+goto_if_false @GFDATE_29702
+26@ = Char.GetScriptTaskStatus(0@, 2066)
+if 
+  is_int_lvar_equal_to_constant 26@ == 7
+goto_if_false @GFDATE_29695
+26@ = Char.GetScriptTaskStatus($iGF_TT_driver, 1490)
+if 
+  is_int_lvar_equal_to_constant 26@ == 7
+goto_if_false @GFDATE_29546
+Car.FreezePosition($iGF_TT_Car, False)
+Task.CarDriveWander($iGF_TT_driver, $iGF_TT_Car, 30.0, DrivingMode.PloughThrough)
+
+:GFDATE_29546
+if 
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_29681
+if 
+  Char.IsInCar(0@, 28@)
+goto_if_false @GFDATE_29625
+26@ = Char.GetScriptTaskStatus(0@, 1485)
+if 
+  is_int_lvar_equal_to_constant 26@ == 7
+goto_if_false @GFDATE_29618
+Task.LeaveCar(0@, 28@)
+
+:GFDATE_29618
+goto @GFDATE_29681
+
+:GFDATE_29625
+26@ = Char.GetScriptTaskStatus(0@, 1873)
+if 
+  is_int_lvar_equal_to_constant 26@ == 7
+goto_if_false @GFDATE_29681
+Task.FleeCharAnyMeans(0@, $scplayer, 100.0, 5000, False, 0, 0, 30.0)
+
+:GFDATE_29681
+TIMERB = 0
+$iGF_TT_Status = 12
+
+:GFDATE_29695
+goto @GFDATE_29709
+
+:GFDATE_29702
+$iGF_TT_Status = 99
+
+:GFDATE_29709
+goto @GFDATE_30453
+
+:GFDATE_29716
+if and
+  not Char.IsDead($iGF_TT_driver)
+  not Car.IsDead($iGF_TT_Car)
+goto_if_false @GFDATE_29955
+if 
+  TIMERB > 5000
+goto_if_false @GFDATE_29948
+Camera.DoFade(0, 1000)
+$iGFLikesPlayer($iGFidx,6i) -= 4
+if 
+  is_int_var_equal_to_constant $iGF_TT_PedModel == 195
+goto_if_false @GFDATE_29800
+26@ = 0
+
+:GFDATE_29800
+if 
+  is_int_var_equal_to_constant $iGF_TT_PedModel == 192
+goto_if_false @GFDATE_29826
+26@ = 1
+
+:GFDATE_29826
+if 
+  is_int_var_equal_to_constant $iGF_TT_PedModel == 190
+goto_if_false @GFDATE_29852
+26@ = 3
+
+:GFDATE_29852
+if 
+  is_int_var_equal_to_constant $iGF_TT_PedModel == 191
+goto_if_false @GFDATE_29878
+26@ = 2
+
+:GFDATE_29878
+if 
+  is_int_var_equal_to_constant $iGF_TT_PedModel == 193
+goto_if_false @GFDATE_29904
+26@ = 4
+
+:GFDATE_29904
+if 
+  is_int_var_equal_to_constant $iGF_TT_PedModel == 194
+goto_if_false @GFDATE_29930
+26@ = 5
+
+:GFDATE_29930
+$iGFLikesPlayer(26@,6i) -= 4
+$iGF_TT_Status = 13
+
+:GFDATE_29948
+goto @GFDATE_29962
+
+:GFDATE_29955
+$iGF_TT_Status = 99
+
+:GFDATE_29962
+goto @GFDATE_30453
+
+:GFDATE_29969
+if 
+  not Camera.GetFadingStatus
+goto_if_false @GFDATE_30098
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+set_local_var_bit_const 3@ bit 7
+Char.Delete($iGF_TT_driver)
+if 
+  not Car.IsDead($iGF_TT_Car)
+goto_if_false @GFDATE_30058
+if 
+  Car.DoesHaveStuckCarCheck($iGF_TT_Car)
+goto_if_false @GFDATE_30053
+StuckCarCheck.Remove($iGF_TT_Car)
+
+:GFDATE_30053
+Car.Delete($iGF_TT_Car)
+
+:GFDATE_30058
+Char.SetProofs(0@, False, False, False, False, False)
+Camera.DoFade(1, 1500)
+Text.PrintHelp('GF_H015')
+gosub @GFDATE_32517
+
+:GFDATE_30098
+goto @GFDATE_30453
+
+:GFDATE_30105
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+if 
+  not Char.IsDead(0@)
+goto_if_false @GFDATE_30151
+Char.SetProofs(0@, False, False, False, False, False)
+
+:GFDATE_30151
+if 
+  not Char.IsDead($iGF_TT_driver)
+goto_if_false @GFDATE_30182
+Char.SetProofs($iGF_TT_driver, False, False, False, False, False)
+
+:GFDATE_30182
+if 
+  not Car.IsDead($iGF_TT_Car)
+goto_if_false @GFDATE_30219
+if 
+  Car.DoesHaveStuckCarCheck($iGF_TT_Car)
+goto_if_false @GFDATE_30219
+StuckCarCheck.Remove($iGF_TT_Car)
+
+:GFDATE_30219
+if 
+  Blip.DoesExist($iGF_TT_Blip)
+goto_if_false @GFDATE_30240
+Blip.Remove($iGF_TT_Blip)
+
+:GFDATE_30240
+if and
+  Char.IsDead($iGF_TT_driver)
+  Char.HasBeenDamagedByChar($iGF_TT_driver, $scplayer)
+goto_if_false @GFDATE_30432
+if 
+  is_int_var_equal_to_constant $iGF_TT_PedModel == 195
+goto_if_false @GFDATE_30290
+26@ = 0
+
+:GFDATE_30290
+if 
+  is_int_var_equal_to_constant $iGF_TT_PedModel == 192
+goto_if_false @GFDATE_30316
+26@ = 1
+
+:GFDATE_30316
+if 
+  is_int_var_equal_to_constant $iGF_TT_PedModel == 190
+goto_if_false @GFDATE_30342
+26@ = 3
+
+:GFDATE_30342
+if 
+  is_int_var_equal_to_constant $iGF_TT_PedModel == 191
+goto_if_false @GFDATE_30368
+26@ = 2
+
+:GFDATE_30368
+if 
+  is_int_var_equal_to_constant $iGF_TT_PedModel == 193
+goto_if_false @GFDATE_30394
+26@ = 4
+
+:GFDATE_30394
+if 
+  is_int_var_equal_to_constant $iGF_TT_PedModel == 194
+goto_if_false @GFDATE_30420
+26@ = 5
+
+:GFDATE_30420
+$iGFLikesPlayer(26@,6i) = -999
+
+:GFDATE_30432
+clear_global_var_bit_const $iDateReport bit 22
+$iGF_TT_Status = -1
+goto @GFDATE_30453
+
+:GFDATE_30453
+return 
+
+:GFDATE_30455
+switch_start $iGFSpeechStatus total_jumps 8 default_jump 0 @GFDATE_31285 jumps 0 @GFDATE_30583 1 @GFDATE_30654 2 @GFDATE_30666 3 @GFDATE_30680 4 @GFDATE_30949 5 @GFDATE_31049 6 @GFDATE_30858
+switch_continued 7 @GFDATE_31091 -1 @GFDATE_31285 -1 @GFDATE_31285 -1 @GFDATE_31285 -1 @GFDATE_31285 -1 @GFDATE_31285 -1 @GFDATE_31285 -1 @GFDATE_31285 -1 @GFDATE_31285
+
+:GFDATE_30583
+if 
+  $iGFSayContext > 0
+goto_if_false @GFDATE_30615
+$iGFSpeechStatus = 3
+goto @GFDATE_30647
+
+:GFDATE_30615
+if and
+  $iGFSayContext == -2
+  $iCJSayContext > 0
+goto_if_false @GFDATE_30647
+$iGFSpeechStatus = 3
+
+:GFDATE_30647
+goto @GFDATE_31285
+
+:GFDATE_30654
+Char.EnableSpeech(0@)
+goto @GFDATE_31285
+
+:GFDATE_30666
+Char.DisableSpeech(0@, False)
+goto @GFDATE_31285
+
+:GFDATE_30680
+if 
+  not Char.IsTalking(0@)
+goto_if_false @GFDATE_30851
+if 
+  $iGFSayContext > 0
+goto_if_false @GFDATE_30791
+$iGFContextVariation = Char.SetSayContextImportant(0@, $iGFSayContext, False, True, False)
+gosub @GFDATE_31287
+$iGFSayContext = -1
+if 
+  $iCJSayContext > 0
+goto_if_false @GFDATE_30777
+$iGFSpeechStatus = 6
+goto @GFDATE_30784
+
+:GFDATE_30777
+$iGFSpeechStatus = 0
+
+:GFDATE_30784
+goto @GFDATE_30851
+
+:GFDATE_30791
+if 
+  $iGFSayContext == -2
+goto_if_false @GFDATE_30830
+$iGFSayContext = -1
+$iGFSpeechStatus = 6
+goto @GFDATE_30851
+
+:GFDATE_30830
+$iGFSayContext = -1
+$iCJSayContext = -1
+$iGFSpeechStatus = 0
+
+:GFDATE_30851
+goto @GFDATE_31285
+
+:GFDATE_30858
+if and
+  not Char.IsTalking($scplayer)
+  not Char.IsTalking(0@)
+goto_if_false @GFDATE_30942
+if 
+  $iCJSayContext > 0
+goto_if_false @GFDATE_30935
+$iGFContextVariation = Char.SetSayContextImportant($scplayer, $iCJSayContext, False, True, False)
+$iCJSayContext = -1
+$iGFSpeechStatus = 0
+goto @GFDATE_30942
+
+:GFDATE_30935
+$iGFSpeechStatus = 0
+
+:GFDATE_30942
+goto @GFDATE_31285
+
+:GFDATE_30949
+Char.DisableSpeech(0@, False)
+if 
+  not Char.IsTalking(0@)
+goto_if_false @GFDATE_31042
+if 
+  $iGFSayContext > 0
+goto_if_false @GFDATE_31035
+$iGFContextVariation = Char.SetSayContextImportant(0@, $iGFSayContext, False, True, False)
+gosub @GFDATE_31287
+$iGFSayContext = -1
+$iGFSpeechStatus = 5
+goto @GFDATE_31042
+
+:GFDATE_31035
+$iGFSpeechStatus = 0
+
+:GFDATE_31042
+goto @GFDATE_31285
+
+:GFDATE_31049
+if 
+  not Char.IsTalking(0@)
+goto_if_false @GFDATE_31084
+Char.EnableSpeech(0@)
+$iGFSayContext = -1
+$iGFSpeechStatus = 0
+
+:GFDATE_31084
+goto @GFDATE_31285
+
+:GFDATE_31091
+if 
+  not Char.IsDead($iGF_TT_driver)
+goto_if_false @GFDATE_31278
+if 
+  not Char.IsTalking($iGF_TT_driver)
+goto_if_false @GFDATE_31278
+if 
+  $iGFSayContext > 0
+goto_if_false @GFDATE_31218
+$iGFContextVariation = Char.SetSayContextImportant($iGF_TT_driver, $iGFSayContext, False, True, False)
+gosub @GFDATE_31287
+$iGFSayContext = -1
+if 
+  $iCJSayContext > 0
+goto_if_false @GFDATE_31204
+$iGFSpeechStatus = 6
+goto @GFDATE_31211
+
+:GFDATE_31204
+$iGFSpeechStatus = 0
+
+:GFDATE_31211
+goto @GFDATE_31278
+
+:GFDATE_31218
+if 
+  $iGFSayContext == -2
+goto_if_false @GFDATE_31257
+$iGFSayContext = -1
+$iGFSpeechStatus = 6
+goto @GFDATE_31278
+
+:GFDATE_31257
+$iGFSayContext = -1
+$iCJSayContext = -1
+$iGFSpeechStatus = 0
+
+:GFDATE_31278
+goto @GFDATE_31285
+
+:GFDATE_31285
+return 
+
+:GFDATE_31287
+switch_start $iGFSayContext total_jumps 29 default_jump 0 @GFDATE_32405 jumps 32 @GFDATE_32359 39 @GFDATE_32382 264 @GFDATE_31572 266 @GFDATE_31579 268 @GFDATE_31586 269 @GFDATE_31639 270 @GFDATE_31616
+switch_continued 271 @GFDATE_31685 272 @GFDATE_31831 277 @GFDATE_31877 278 @GFDATE_31900 279 @GFDATE_32244 280 @GFDATE_31662 281 @GFDATE_32198 282 @GFDATE_32122 292 @GFDATE_32145
+switch_continued 296 @GFDATE_32099 298 @GFDATE_31854 299 @GFDATE_32168 302 @GFDATE_32313 306 @GFDATE_32175 309 @GFDATE_31593 310 @GFDATE_32221 311 @GFDATE_32290 312 @GFDATE_32267
+switch_continued 313 @GFDATE_32336 314 @GFDATE_31923 316 @GFDATE_32076 317 @GFDATE_31946 -1 @GFDATE_32405 -1 @GFDATE_32405 -1 @GFDATE_32405 -1 @GFDATE_32405 -1 @GFDATE_32405
+
+:GFDATE_31572
+goto @GFDATE_32405
+
+:GFDATE_31579
+goto @GFDATE_32405
+
+:GFDATE_31586
+goto @GFDATE_32405
+
+:GFDATE_31593
+Text.PrintNow('GF_0045', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_31616
+Text.PrintNow('GF_0061', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_31639
+Text.PrintNow('GF_0044', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_31662
+Text.PrintNow('GF_0022', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_31685
+if 
+  is_global_var_bit_set_const $iDateReport bit 11
+goto_if_false @GFDATE_31726
+Text.PrintNow('GF_0077', 5000, 1)
+goto @GFDATE_31824
+
+:GFDATE_31726
+if 
+  is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_31767
+Text.PrintNow('GF_0078', 5000, 1)
+goto @GFDATE_31824
+
+:GFDATE_31767
+if 
+  is_global_var_bit_set_const $iDateReport bit 13
+goto_if_false @GFDATE_31808
+Text.PrintNow('GF_0079', 5000, 1)
+goto @GFDATE_31824
+
+:GFDATE_31808
+Text.PrintNow('GF_0031', 5000, 1)
+
+:GFDATE_31824
+goto @GFDATE_32405
+
+:GFDATE_31831
+Text.PrintNow('GF_0031', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_31854
+Text.PrintNow('GF_0004', 3000, 1)
+goto @GFDATE_32405
+
+:GFDATE_31877
+Text.PrintNow('GF_0007', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_31900
+Text.PrintNow('GF_0066', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_31923
+Text.PrintNow('GF_0011', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_31946
+if 
+  is_local_var_bit_set_const 3@ bit 20
+goto_if_false @GFDATE_31987
+Text.PrintNow('GF_0074', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_31987
+if 
+  is_local_var_bit_set_const 3@ bit 21
+goto_if_false @GFDATE_32028
+Text.PrintNow('GF_0053', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32028
+if 
+  is_local_var_bit_set_const 3@ bit 22
+goto_if_false @GFDATE_32069
+Text.PrintNow('GF_0075', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32069
+goto @GFDATE_32405
+
+:GFDATE_32076
+Text.PrintNow('GF_0052', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32099
+Text.PrintNow('GF_0034', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32122
+Text.PrintNow('GF_0014', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32145
+Text.PrintNow('GF_0033', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32168
+goto @GFDATE_32405
+
+:GFDATE_32175
+Text.PrintNow('GF_0024', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32198
+Text.PrintNow('GF_0032', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32221
+Text.PrintNow('GF_0047', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32244
+Text.PrintNow('GF_0054', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32267
+Text.PrintNow('GF_0050', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32290
+Text.PrintNow('GF_0051', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32313
+Text.PrintNow('GF_0070', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32336
+Text.PrintNow('GF_0072', 5000, 1)
+goto @GFDATE_32405
+
+:GFDATE_32359
+Text.PrintNow('GF_0073', 2500, 1)
+goto @GFDATE_32405
+
+:GFDATE_32382
+Text.PrintNow('GF_0076', 2500, 1)
+goto @GFDATE_32405
+
+:GFDATE_32405
+return 
+
+:GFDATE_32407
+26@ = 0
+
+:GFDATE_32414
+if 
+  Blip.DoesExist(15@(26@,9i))
+goto_if_false @GFDATE_32443
+Blip.Remove(15@(26@,9i))
+
+:GFDATE_32443
+26@ += 1
+  26@ >= 9
+goto_if_false @GFDATE_32414
+if 
+  Blip.DoesExist($iGF_TT_Blip)
+goto_if_false @GFDATE_32485
+Blip.Remove($iGF_TT_Blip)
+
+:GFDATE_32485
+if 
+  is_global_var_bit_set_const $iDateReport bit 12
+goto_if_false @GFDATE_32508
+Hud.ClearCounter($iFun)
+
+:GFDATE_32508
+clear_local_var_bit_const 3@ bit 11
+return 
+
+:GFDATE_32517
+gosub @GFDATE_32407
+gosub @GFDATE_19075
+Text.ClearPrints
+if 
+  not Char.IsDead(0@)
+goto_if_false @GFDATE_32573
+if 
+  Char.IsGroupMember(0@, $Players_Group)
+goto_if_false @GFDATE_32573
+Char.RemoveFromGroup(0@)
+
+:GFDATE_32573
+if 
+  not Car.IsDead(28@)
+goto_if_false @GFDATE_32610
+if 
+  Car.DoesHaveStuckCarCheck(28@)
+goto_if_false @GFDATE_32610
+StuckCarCheck.Remove(28@)
+
+:GFDATE_32610
+if 
+  $iGF_TT_Status > 0
+goto_if_false @GFDATE_32658
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFDATE_32658
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+
+:GFDATE_32658
+if 
+  not Car.IsDead($iGF_TT_Car)
+goto_if_false @GFDATE_32695
+if 
+  Car.DoesHaveStuckCarCheck($iGF_TT_Car)
+goto_if_false @GFDATE_32695
+StuckCarCheck.Remove($iGF_TT_Car)
+
+:GFDATE_32695
+Streaming.MarkModelAsNoLongerNeeded($iGF_TT_CarModel)
+Streaming.MarkModelAsNoLongerNeeded($iGF_TT_PedModel)
+Char.MarkAsNoLongerNeeded($iGF_TT_driver)
+Car.MarkAsNoLongerNeeded($iGF_TT_Car)
+Streaming.RemoveAnimation("KISSING")
+if 
+  $iCensoredVersion == 0
+goto_if_false @GFDATE_32756
+Streaming.RemoveAnimation("BLOWJOBZ")
+
+:GFDATE_32756
+if 
+  Char.IsDead(0@)
+goto_if_false @GFDATE_32816
+clear_global_var_bit_const $iDateReport bit 2
+if 
+  is_local_var_bit_set_const 3@ bit 15
+goto_if_false @GFDATE_32809
+$iGFLikesPlayer($iGFidx,6i) = -999
+
+:GFDATE_32809
+goto @GFDATE_32889
+
+:GFDATE_32816
+if 
+  is_local_var_bit_set_const 3@ bit 15
+goto_if_false @GFDATE_32889
+clear_global_var_bit_const $iDateReport bit 2
+if 
+  not Char.IsHealthGreater(0@, 10)
+goto_if_false @GFDATE_32878
+$iGFLikesPlayer($iGFidx,6i) = -999
+goto @GFDATE_32889
+
+:GFDATE_32878
+$iGFLikesPlayer($iGFidx,6i) -= 10
+
+:GFDATE_32889
+if 
+  is_local_var_bit_set_const 3@ bit 7
+goto_if_false @GFDATE_32914
+clear_global_var_bit_const $iDateReport bit 2
+
+:GFDATE_32914
+$iSwitchOffDanceMiniGame = 0
+$iDanceGirlfriend = -1
+if 
+  is_local_var_bit_set_const 3@ bit 9
+goto_if_false @GFDATE_32978
+if 
+  not is_global_var_bit_set_const $iDateReport bit 14
+goto_if_false @GFDATE_32971
+set_global_var_bit_const $iDateReport bit 8
+
+:GFDATE_32971
+goto @GFDATE_32985
+
+:GFDATE_32978
+set_global_var_bit_const $iDateReport bit 21
+
+:GFDATE_32985
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GFDATE_33033
+Char.SetCantBeDraggedOut($scplayer, False)
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Player.SetGroupToFollowAlways($player1, False)
+Player.SetGroupRecruitment($player1, True)
+
+:GFDATE_33033
+Stat.ShowUpdateStats(True)
+clear_global_var_bit_const $iDateReport bit 1
+set_global_var_bit_var $iGFAvailableFor2Player bit $iGFidx
+terminate_this_script 
+return 
+write_debug_with_int "IGF_TT_STATUS" $iGF_TT_Status
+write_debug_with_int v$txtEntryExitName 24@
+write_debug_with_int "ICURRENTCARHEALTH" 29@
+write_debug_with_float "FTEMP1_SPEED" 14@
+write_debug_with_float "FUN_TEMP" $fFunTemp
+write_debug_with_int "TIMERB" TIMERB
+write_debug_with_int "DATE_TIMER" TIMERA
+write_debug_with_int "SUBSTATESTATUS" 2@
+switch_start 1@ total_jumps 11 default_jump 1 @GFDATE_33651 jumps 0 @GFDATE_33321 1 @GFDATE_33349 2 @GFDATE_33380 3 @GFDATE_33411 4 @GFDATE_33442 5 @GFDATE_33472 6 @GFDATE_33502
+switch_continued 7 @GFDATE_33533 8 @GFDATE_33566 9 @GFDATE_33596 10 @GFDATE_33626 -1 @GFDATE_33683 -1 @GFDATE_33683 -1 @GFDATE_33683 -1 @GFDATE_33683 -1 @GFDATE_33683
+
+:GFDATE_33321
+write_debug "STATE0__DATE_INIT"
+goto @GFDATE_33683
+
+:GFDATE_33349
+write_debug "STATE1__IDLE_ON_FOOT"
+goto @GFDATE_33683
+
+:GFDATE_33380
+write_debug "STATE2__REACHED_DEST"
+goto @GFDATE_33683
+
+:GFDATE_33411
+write_debug "STATE3__REACHED_HOME"
+goto @GFDATE_33683
+
+:GFDATE_33442
+write_debug "STATE4__IDLE_IN_CAR"
+goto @GFDATE_33683
+
+:GFDATE_33472
+write_debug "STATE5__DUMP_PLAYER"
+goto @GFDATE_33683
+
+:GFDATE_33502
+write_debug "STATE6__KISS_ON_FOOT"
+goto @GFDATE_33683
+
+:GFDATE_33533
+write_debug "STATE7__BLOWJOB_IN_CAR"
+goto @GFDATE_33683
+
+:GFDATE_33566
+write_debug "STATE8__GIRL_DRIVES"
+goto @GFDATE_33683
+
+:GFDATE_33596
+write_debug "STATE9__FLEE_PLAYER"
+goto @GFDATE_33683
+
+:GFDATE_33626
+write_debug "STATE10__DANCE"
+goto @GFDATE_33683
+
+:GFDATE_33651
+write_debug_with_int "UNTRAPPED_STATE___" 1@
+goto @GFDATE_33683
+
+:GFDATE_33683
+write_debug "I__________________________I"
+return 
+terminate_this_script 
+

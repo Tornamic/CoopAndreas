@@ -1,0 +1,2547 @@
+:SHTR_94
+script_name 'SHTR'
+wait 0
+Game.ShutAllCharsUp(True)
+$x, $y, $z = Char.GetCoordinates($scplayer)
+World.ClearArea(0, $x, $y, $z, 50.0)
+Audio.SetMusicDoesFade(False)
+Text.LoadMissionText('SHTR')
+Audio.LoadMissionAudio(1806, 4)
+
+:SHTR_167
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @SHTR_193
+wait 0
+goto @SHTR_167
+
+:SHTR_193
+Char.FreezePosition($scplayer, True)
+Player.SetControl($player1, False)
+$x, $y, $z = Char.GetCoordinates($scplayer)
+World.ClearArea(1, $x, $y, $z, 25.0)
+Text.UseCommands(True)
+Txd.LoadDictionary('LD_SHTR')
+Txd.LoadSprite("SPLSH", 1)
+Txd.LoadSprite("BSTARS", 2)
+Txd.LoadSprite("FSTAR", 3)
+Txd.LoadSprite("HI_A", 4)
+Txd.LoadSprite("HI_B", 5)
+Txd.LoadSprite("HI_C", 6)
+Txd.LoadSprite("UN_A", 7)
+Txd.LoadSprite("UN_B", 8)
+Txd.LoadSprite("UN_C", 9)
+Txd.LoadSprite("SHIP", 10)
+Txd.LoadSprite("FIRE", 11)
+Txd.LoadSprite("UFO", 12)
+Txd.LoadSprite("KAMI", 13)
+Txd.LoadSprite("NMEF", 14)
+Txd.LoadSprite("EX1", 15)
+Txd.LoadSprite("EX2", 16)
+Txd.LoadSprite("EX3", 17)
+Txd.LoadSprite("EX4", 18)
+Txd.LoadSprite("CBARL", 19)
+Txd.LoadSprite("CBARM", 20)
+Txd.LoadSprite("CBARR", 21)
+Txd.LoadSprite("HBARL", 22)
+Txd.LoadSprite("HBARM", 23)
+Txd.LoadSprite("HBARR", 24)
+Txd.LoadSprite("TVCORN", 25)
+Txd.LoadSprite("TVL", 26)
+Txd.LoadSprite("TVR", 27)
+Txd.LoadSprite("PA", 28)
+Txd.LoadSprite("PM2", 29)
+Txd.LoadSprite("PM3", 30)
+Txd.LoadSprite("PS1", 31)
+Txd.LoadSprite("PS2", 32)
+Txd.LoadSprite("PS3", 33)
+
+:SHTR_582
+gosub @SHTR_17446
+gosub @SHTR_15794
+World.SetPedDensityMultiplier(0.0)
+World.SetCarDensityMultiplier(0.0)
+Hud.DrawSprite(25, 160.0, 112.0, 320.0, 224.0, 150, 150, 150, 255)
+Hud.DrawSprite(25, 480.0, 112.0, -320.0, 224.0, 150, 150, 150, 255)
+Hud.DrawSprite(25, 480.0, 336.0, -320.0, -224.0, 150, 150, 150, 255)
+Hud.DrawSprite(25, 160.0, 336.0, 320.0, -224.0, 150, 150, 150, 255)
+TIMERB = 0
+
+:SHTR_761
+wait 0
+set_var_float_to_var_float $shtr_origin = $shtr_background_pos
+$shtr_sprite = 2
+$shtr_layer_scroll_speed_top = 1.0
+gosub @SHTR_6986
+$shtr_layer_scroll_speed_bottom = 1.0
+gosub @SHTR_7229
+set_var_float_to_var_float $shtr_background_pos = $shtr_origin
+Camera.DoFade(1, Fade.Out)
+$shtr_lstickx, $shtr_lsticky, $shtr_rstickx, $shtr_rsticky = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+
+:SHTR_844
+if 
+  $shtr_button_pressed == 1
+goto_if_false @SHTR_899
+if and
+  not Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+  not Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+  $shtr_lsticky == 0
+goto_if_false @SHTR_899
+$shtr_button_pressed = 0
+
+:SHTR_899
+if 
+  $shtr_front_end == 1
+goto_if_false @SHTR_1135
+Hud.DrawSprite(1, 320.0, 164.0, 386.0, 192.0, 150, 150, 150, 255)
+Hud.DrawSprite(4, 320.0, 312.0, 64.0, 32.0, 150, 150, 150, 255)
+Hud.DrawSprite(8, 320.0, 344.0, 128.0, 32.0, 150, 150, 150, 255)
+Hud.DrawSprite(9, 320.0, 376.0, 64.0, 32.0, 150, 150, 150, 255)
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SHTR_1135
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1065)
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1062)
+$shtr_reload_start = Clock.GetGameTimer()
+$shtr_help_start = Clock.GetGameTimer()
+$shtr_front_end = 0
+
+:SHTR_1135
+if 
+  $shtr_front_end == 2
+goto_if_false @SHTR_1353
+Hud.DrawSprite(1, 320.0, 164.0, 386.0, 192.0, 150, 150, 150, 255)
+Hud.DrawSprite(7, 320.0, 312.0, 64.0, 32.0, 150, 150, 150, 255)
+Hud.DrawSprite(5, 320.0, 344.0, 128.0, 32.0, 150, 150, 150, 255)
+Hud.DrawSprite(9, 320.0, 376.0, 64.0, 32.0, 150, 150, 150, 255)
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SHTR_1353
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1065)
+$shtr_help_start = Clock.GetGameTimer()
+$shtr_on_table = 4
+$shtr_front_end = 4
+
+:SHTR_1353
+if 
+  $shtr_front_end == 3
+goto_if_false @SHTR_1565
+Hud.DrawSprite(1, 320.0, 164.0, 386.0, 192.0, 150, 150, 150, 255)
+Hud.DrawSprite(7, 320.0, 312.0, 64.0, 32.0, 150, 150, 150, 255)
+Hud.DrawSprite(8, 320.0, 344.0, 128.0, 32.0, 150, 150, 150, 255)
+Hud.DrawSprite(6, 320.0, 376.0, 64.0, 32.0, 150, 150, 150, 255)
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SHTR_1565
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1066)
+Camera.DoFade(0, Fade.Out)
+goto @SHTR_27
+
+:SHTR_1565
+if 
+  $shtr_button_pressed == 0
+goto_if_false @SHTR_2027
+if 
+  $shtr_front_end == 1
+goto_if_false @SHTR_1731
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+  -64 > $shtr_lsticky
+goto_if_false @SHTR_1666
+$shtr_front_end = 3
+$shtr_button_pressed = 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1064)
+goto @SHTR_844
+
+:SHTR_1666
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+  $shtr_lsticky > 64
+goto_if_false @SHTR_1731
+$shtr_front_end = 2
+$shtr_button_pressed = 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1064)
+goto @SHTR_844
+
+:SHTR_1731
+if 
+  $shtr_front_end == 2
+goto_if_false @SHTR_1879
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+  -64 > $shtr_lsticky
+goto_if_false @SHTR_1814
+$shtr_front_end = 1
+$shtr_button_pressed = 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1064)
+goto @SHTR_844
+
+:SHTR_1814
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+  $shtr_lsticky > 64
+goto_if_false @SHTR_1879
+$shtr_front_end = 3
+$shtr_button_pressed = 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1064)
+goto @SHTR_844
+
+:SHTR_1879
+if 
+  $shtr_front_end == 3
+goto_if_false @SHTR_2027
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+  -64 > $shtr_lsticky
+goto_if_false @SHTR_1962
+$shtr_front_end = 2
+$shtr_button_pressed = 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1064)
+goto @SHTR_844
+
+:SHTR_1962
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+  $shtr_lsticky > 64
+goto_if_false @SHTR_2027
+$shtr_front_end = 1
+$shtr_button_pressed = 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1064)
+goto @SHTR_844
+
+:SHTR_2027
+if 
+  $shtr_front_end == 0
+goto_if_false @SHTR_5956
+$shtr_lstickx, $shtr_lsticky, $shtr_rstickx, $shtr_rsticky = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+if 
+  $shtr_player_alive == 0
+goto_if_false @SHTR_2150
+$shtr_start_time = Clock.GetGameTimer()
+if 
+  $shtr_lives > 0
+goto_if_false @SHTR_2150
+$shtr_lives -= 1
+$shtr_range_start = 2.0
+$shtr_range_end = 4.0
+$shtr_heat_bar = 5
+$shtr_player_alive = 2
+$shtr_fire_alive = 0
+
+:SHTR_2150
+if 
+  $shtr_player_alive == 1
+goto_if_false @SHTR_2200
+Hud.DrawSprite(10, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 255)
+
+:SHTR_2200
+if or
+  $shtr_player_alive == 1
+  $shtr_player_alive == 3
+goto_if_false @SHTR_2287
+set_var_int_to_var_int $shtr_temp = $shtr_lstickx
+$shtr_temp /= 20
+cset_var_float_to_var_int $shtr_tempF = integer $shtr_temp
+add_timed_float_var_to_float_var $shtr_plyr_x += frame_delta_time * $shtr_tempF
+set_var_int_to_var_int $shtr_temp = $shtr_lsticky
+$shtr_temp /= 20
+cset_var_float_to_var_int $shtr_tempF = integer $shtr_temp
+add_timed_float_var_to_float_var $shtr_plyr_y += frame_delta_time * $shtr_tempF
+
+:SHTR_2287
+if or
+  $shtr_player_alive == 1
+  $shtr_player_alive == 3
+goto_if_false @SHTR_2420
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+goto_if_false @SHTR_2339
+sub_timed_val_from_float_var $shtr_plyr_y -= frame_delta_time * 6.0
+
+:SHTR_2339
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+goto_if_false @SHTR_2366
+add_timed_val_to_float_var $shtr_plyr_y += frame_delta_time * 6.0
+
+:SHTR_2366
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @SHTR_2393
+sub_timed_val_from_float_var $shtr_plyr_x -= frame_delta_time * 6.0
+
+:SHTR_2393
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @SHTR_2420
+add_timed_val_to_float_var $shtr_plyr_x += frame_delta_time * 6.0
+
+:SHTR_2420
+if 
+  80.0 > $shtr_plyr_x
+goto_if_false @SHTR_2451
+$shtr_plyr_x = 80.0
+
+:SHTR_2451
+if 
+  $shtr_plyr_x > 560.0
+goto_if_false @SHTR_2482
+$shtr_plyr_x = 560.0
+
+:SHTR_2482
+if 
+  80.0 > $shtr_plyr_y
+goto_if_false @SHTR_2513
+$shtr_plyr_y = 80.0
+
+:SHTR_2513
+if 
+  $shtr_plyr_y > 368.0
+goto_if_false @SHTR_2544
+$shtr_plyr_y = 368.0
+
+:SHTR_2544
+if 
+  $shtr_button1 == 1
+goto_if_false @SHTR_2683
+$shtr_reload_end = Clock.GetGameTimer()
+set_var_int_to_var_int $shtr_reload_diff = $shtr_reload_end
+sub_int_var_from_int_var $shtr_reload_diff -= $shtr_reload_start
+if 
+  $shtr_auto_pickup == 0
+goto_if_false @SHTR_2651
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SHTR_2644
+if 
+  is_int_var_greater_than_int_var $shtr_reload_diff > $shtr_speed_pickup
+goto_if_false @SHTR_2644
+$shtr_button1 = 0
+
+:SHTR_2644
+goto @SHTR_2683
+
+:SHTR_2651
+if or
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+  is_int_var_greater_than_int_var $shtr_reload_diff > $shtr_speed_pickup
+goto_if_false @SHTR_2683
+$shtr_button1 = 0
+
+:SHTR_2683
+if 
+  7 > $shtr_heat_bar
+goto_if_false @SHTR_2708
+$shtr_heat_bar = 7
+
+:SHTR_2708
+$shtr_heat_bar -= 7
+if or
+  $shtr_player_alive == 1
+  $shtr_player_alive == 3
+goto_if_false @SHTR_3210
+if 
+  1000 > $shtr_heat_bar
+goto_if_false @SHTR_3210
+if 
+  $shtr_button1 == 0
+goto_if_false @SHTR_3210
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SHTR_3210
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1059)
+$shtr_cos_shot_angle = Math.Cos($shtr_shot_angle)
+set_var_float_to_var_float $shtr_x_add = $shtr_fire_speed
+mult_float_var_by_float_var $shtr_x_add *= $shtr_cos_shot_angle
+$shtr_sin_shot_angle = Math.Sin($shtr_shot_angle)
+set_var_float_to_var_float $shtr_y_add = $shtr_fire_speed
+mult_float_var_by_float_var $shtr_y_add *= $shtr_sin_shot_angle
+if 
+  $shtr_projectile_alive($shtr_current_projectile_fired,16i) == 0
+goto_if_false @SHTR_2949
+set_var_float_to_var_float $shtr_projectile_origin($shtr_current_projectile_fired,16f) = $shtr_plyr_x
+set_var_float_to_var_float $shtr_projectile_y($shtr_current_projectile_fired,16f) = $shtr_plyr_y
+set_var_float_to_var_float $shtr_projectile_x($shtr_current_projectile_fired,16f) = $shtr_projectile_origin($shtr_current_projectile_fired,16f)
+$shtr_projectile_x($shtr_current_projectile_fired,16f) += 16.0
+$shtr_projectile_alive($shtr_current_projectile_fired,16i) = 1
+
+:SHTR_2949
+if or
+  $shtr_multi_pickup == 1
+  $shtr_multi_pickup == 2
+goto_if_false @SHTR_3061
+if 
+  $shtr_up_projectile_alive($shtr_current_projectile_fired,16i) == 0
+goto_if_false @SHTR_3061
+set_var_float_to_var_float $shtr_up_projectile_origin($shtr_current_projectile_fired,16f) = $shtr_plyr_x
+set_var_float_to_var_float $shtr_up_projectile_y($shtr_current_projectile_fired,16f) = $shtr_plyr_y
+set_var_float_to_var_float $shtr_up_projectile_x($shtr_current_projectile_fired,16f) = $shtr_up_projectile_origin($shtr_current_projectile_fired,16f)
+$shtr_up_projectile_x($shtr_current_projectile_fired,16f) += 16.0
+$shtr_up_projectile_alive($shtr_current_projectile_fired,16i) = 1
+
+:SHTR_3061
+if 
+  $shtr_multi_pickup == 2
+goto_if_false @SHTR_3166
+if 
+  $shtr_down_projectile_alive($shtr_current_projectile_fired,16i) == 0
+goto_if_false @SHTR_3166
+set_var_float_to_var_float $shtr_down_projectile_origin($shtr_current_projectile_fired,16f) = $shtr_plyr_x
+set_var_float_to_var_float $shtr_down_projectile_y($shtr_current_projectile_fired,16f) = $shtr_plyr_y
+set_var_float_to_var_float $shtr_down_projectile_x($shtr_current_projectile_fired,16f) = $shtr_down_projectile_origin($shtr_current_projectile_fired,16f)
+$shtr_down_projectile_x($shtr_current_projectile_fired,16f) += 16.0
+$shtr_down_projectile_alive($shtr_current_projectile_fired,16i) = 1
+
+:SHTR_3166
+$shtr_reload_start = Clock.GetGameTimer()
+$shtr_current_projectile_fired += 1
+$shtr_button1 = 1
+if 
+  $shtr_current_projectile_fired == 16
+goto_if_false @SHTR_3210
+$shtr_current_projectile_fired = 0
+
+:SHTR_3210
+gosub @SHTR_9211
+gosub @SHTR_10139
+if 
+  $shtr_pickup_collected == 0
+goto_if_false @SHTR_4076
+Hud.DrawSprite($shtr_pickup_current, $shtr_pickup_x, $shtr_pickup_y, 32.0, 32.0, 150, 150, 150, 255)
+if 
+  $shtr_pickup_move_switch == 0
+goto_if_false @SHTR_3360
+if and
+  368.0 > $shtr_pickup_y
+  $shtr_pickup_x > 80.0
+goto_if_false @SHTR_3351
+$shtr_pickup_x += -1.0
+$shtr_pickup_y += 1.0
+goto @SHTR_3360
+
+:SHTR_3351
+$shtr_pickup_move_switch = Math.RandomIntInRange(0, 4)
+
+:SHTR_3360
+if 
+  $shtr_pickup_move_switch == 1
+goto_if_false @SHTR_3445
+if and
+  $shtr_pickup_x > 80.0
+  $shtr_pickup_y > 80.0
+goto_if_false @SHTR_3436
+$shtr_pickup_x += -1.0
+$shtr_pickup_y += -1.0
+goto @SHTR_3445
+
+:SHTR_3436
+$shtr_pickup_move_switch = Math.RandomIntInRange(0, 4)
+
+:SHTR_3445
+if 
+  $shtr_pickup_move_switch == 2
+goto_if_false @SHTR_3530
+if and
+  $shtr_pickup_y > 80.0
+  560.0 > $shtr_pickup_x
+goto_if_false @SHTR_3521
+$shtr_pickup_x += 1.0
+$shtr_pickup_y += -1.0
+goto @SHTR_3530
+
+:SHTR_3521
+$shtr_pickup_move_switch = Math.RandomIntInRange(0, 4)
+
+:SHTR_3530
+if 
+  $shtr_pickup_move_switch == 3
+goto_if_false @SHTR_3615
+if and
+  560.0 > $shtr_pickup_x
+  368.0 > $shtr_pickup_y
+goto_if_false @SHTR_3606
+$shtr_pickup_x += 1.0
+$shtr_pickup_y += 1.0
+goto @SHTR_3615
+
+:SHTR_3606
+$shtr_pickup_move_switch = Math.RandomIntInRange(0, 4)
+
+:SHTR_3615
+if 
+  Math.Do2DRectanglesCollide($shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, $shtr_pickup_x, $shtr_pickup_y, 32.0, 32.0)
+goto_if_false @SHTR_4076
+if 
+  6.5 > $shtr_range_end
+goto_if_false @SHTR_3701
+$shtr_range_start += 0.5
+$shtr_range_end += 0.5
+
+:SHTR_3701
+$shtr_pickup_x = 0.0
+$shtr_pickup_y = 0.0
+$shtr_pickup_move_switch = 0
+if 
+  $shtr_pickup_current == 28
+goto_if_false @SHTR_3780
+$shtr_auto_pickup = 1
+$shtr_pickup_collected = 2
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1065)
+
+:SHTR_3780
+if 
+  $shtr_pickup_current == 33
+goto_if_false @SHTR_3839
+$shtr_speed_pickup = 50
+$shtr_pickup_current = 28
+$shtr_pickup_collected = 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1065)
+
+:SHTR_3839
+if 
+  $shtr_pickup_current == 30
+goto_if_false @SHTR_3898
+$shtr_multi_pickup = 2
+$shtr_pickup_current = 33
+$shtr_pickup_collected = 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1065)
+
+:SHTR_3898
+if 
+  $shtr_pickup_current == 32
+goto_if_false @SHTR_3957
+$shtr_speed_pickup = 100
+$shtr_pickup_current = 30
+$shtr_pickup_collected = 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1065)
+
+:SHTR_3957
+if 
+  $shtr_pickup_current == 29
+goto_if_false @SHTR_4016
+$shtr_multi_pickup = 1
+$shtr_pickup_current = 32
+$shtr_pickup_collected = 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1065)
+
+:SHTR_4016
+if 
+  $shtr_pickup_current == 31
+goto_if_false @SHTR_4076
+$shtr_speed_pickup = 150
+$shtr_pickup_current = 29
+$shtr_pickup_collected = 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1065)
+
+:SHTR_4076
+if 
+  $shtr_respawn == 0
+goto_if_false @SHTR_4190
+if 
+  TIMERB > 500
+goto_if_false @SHTR_4190
+if 
+  $shtr_enemy_alive[0] == 0
+goto_if_false @SHTR_4190
+$shtr_current_enemy = 0
+if 
+  60.0 > $shtr_amplitude
+goto_if_false @SHTR_4169
+$shtr_amplitude += 5.0
+
+:SHTR_4169
+gosub @SHTR_8027
+TIMERB = 0
+$shtr_respawn += 1
+
+:SHTR_4190
+if and
+  $shtr_respawn > 0
+  8 > $shtr_respawn
+goto_if_false @SHTR_4230
+set_var_int_to_var_int $shtr_current_enemy = $shtr_respawn
+gosub @SHTR_7472
+
+:SHTR_4230
+if 
+  $shtr_respawn == 8
+goto_if_false @SHTR_4347
+if and
+  $shtr_enemy_alive[0] == 0
+  $shtr_enemy_alive[1] == 0
+  $shtr_enemy_alive[2] == 0
+  $shtr_enemy_alive[3] == 0
+goto_if_false @SHTR_4347
+if and
+  $shtr_enemy_alive[4] == 0
+  $shtr_enemy_alive[5] == 0
+  $shtr_enemy_alive[6] == 0
+  $shtr_enemy_alive[7] == 0
+goto_if_false @SHTR_4347
+$shtr_pickup_counter = 0
+$shtr_random = 0
+$shtr_respawn = 0
+
+:SHTR_4347
+gosub @SHTR_8789
+gosub @SHTR_7564
+gosub @SHTR_9636
+if 
+  $shtr_player_alive == 2
+goto_if_false @SHTR_5128
+if 
+  $shtr_fire_alive == 2
+goto_if_false @SHTR_4773
+$shtr_end_time = Clock.GetGameTimer()
+set_var_int_to_var_int $shtr_time_diff = $shtr_end_time
+sub_int_var_from_int_var $shtr_time_diff -= $shtr_start_time
+if and
+  $shtr_time_diff >= 0
+  100 > $shtr_time_diff
+goto_if_false @SHTR_4482
+Hud.DrawSprite(15, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 255)
+
+:SHTR_4482
+if and
+  $shtr_time_diff >= 100
+  200 > $shtr_time_diff
+goto_if_false @SHTR_4540
+Hud.DrawSprite(16, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 255)
+
+:SHTR_4540
+if and
+  $shtr_time_diff >= 200
+  300 > $shtr_time_diff
+goto_if_false @SHTR_4599
+Hud.DrawSprite(17, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 255)
+
+:SHTR_4599
+if and
+  $shtr_time_diff >= 300
+  400 > $shtr_time_diff
+goto_if_false @SHTR_4658
+Hud.DrawSprite(18, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 255)
+
+:SHTR_4658
+if 
+  $shtr_time_diff > 499
+goto_if_false @SHTR_4766
+$shtr_plyr_x = 80.0
+$shtr_plyr_y = 224.0
+$shtr_player_alive = 3
+$shtr_fire_alive = 0
+$shtr_pickup_counter = 0
+$shtr_pickup_collected = 1
+$shtr_pickup_current = 31
+$shtr_speed_pickup = 250
+$shtr_auto_pickup = 0
+$shtr_multi_pickup = 0
+$shtr_pickup_move_switch = 0
+$shtr_start_time = Clock.GetGameTimer()
+
+:SHTR_4766
+goto @SHTR_5128
+
+:SHTR_4773
+$shtr_end_time = Clock.GetGameTimer()
+set_var_int_to_var_int $shtr_time_diff = $shtr_end_time
+sub_int_var_from_int_var $shtr_time_diff -= $shtr_start_time
+if and
+  $shtr_time_diff >= 0
+  100 > $shtr_time_diff
+goto_if_false @SHTR_4851
+Hud.DrawSprite(15, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 255)
+
+:SHTR_4851
+if and
+  $shtr_time_diff >= 100
+  200 > $shtr_time_diff
+goto_if_false @SHTR_4909
+Hud.DrawSprite(16, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 255)
+
+:SHTR_4909
+if and
+  $shtr_time_diff >= 200
+  300 > $shtr_time_diff
+goto_if_false @SHTR_4968
+Hud.DrawSprite(17, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 255)
+
+:SHTR_4968
+if and
+  $shtr_time_diff >= 300
+  400 > $shtr_time_diff
+goto_if_false @SHTR_5027
+Hud.DrawSprite(18, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 255)
+
+:SHTR_5027
+if 
+  $shtr_time_diff > 499
+goto_if_false @SHTR_5128
+$shtr_start_time = Clock.GetGameTimer()
+$shtr_plyr_x = 80.0
+$shtr_plyr_y = 224.0
+$shtr_pickup_counter = 0
+$shtr_pickup_collected = 1
+$shtr_pickup_current = 31
+$shtr_speed_pickup = 250
+$shtr_auto_pickup = 0
+$shtr_multi_pickup = 0
+$shtr_pickup_move_switch = 0
+$shtr_player_alive = 3
+
+:SHTR_5128
+if 
+  $shtr_player_alive == 3
+goto_if_false @SHTR_5781
+$shtr_end_time = Clock.GetGameTimer()
+set_var_int_to_var_int $shtr_time_diff = $shtr_end_time
+sub_int_var_from_int_var $shtr_time_diff -= $shtr_start_time
+if and
+  $shtr_time_diff >= 0
+  100 > $shtr_time_diff
+goto_if_false @SHTR_5224
+Hud.DrawSprite(10, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 150)
+
+:SHTR_5224
+if and
+  $shtr_time_diff >= 200
+  300 > $shtr_time_diff
+goto_if_false @SHTR_5283
+Hud.DrawSprite(10, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 150)
+
+:SHTR_5283
+if and
+  $shtr_time_diff >= 400
+  500 > $shtr_time_diff
+goto_if_false @SHTR_5342
+Hud.DrawSprite(10, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 150)
+
+:SHTR_5342
+if and
+  $shtr_time_diff >= 600
+  700 > $shtr_time_diff
+goto_if_false @SHTR_5401
+Hud.DrawSprite(10, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 150)
+
+:SHTR_5401
+if and
+  $shtr_time_diff >= 800
+  900 > $shtr_time_diff
+goto_if_false @SHTR_5460
+Hud.DrawSprite(10, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 150)
+
+:SHTR_5460
+if and
+  $shtr_time_diff >= 1000
+  1100 > $shtr_time_diff
+goto_if_false @SHTR_5519
+Hud.DrawSprite(10, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 150)
+
+:SHTR_5519
+if and
+  $shtr_time_diff >= 1200
+  1300 > $shtr_time_diff
+goto_if_false @SHTR_5578
+Hud.DrawSprite(10, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 150)
+
+:SHTR_5578
+if and
+  $shtr_time_diff >= 1400
+  1500 > $shtr_time_diff
+goto_if_false @SHTR_5637
+Hud.DrawSprite(10, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 150)
+
+:SHTR_5637
+if and
+  $shtr_time_diff >= 1600
+  1700 > $shtr_time_diff
+goto_if_false @SHTR_5696
+Hud.DrawSprite(10, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 150)
+
+:SHTR_5696
+if and
+  $shtr_time_diff >= 1800
+  1900 > $shtr_time_diff
+goto_if_false @SHTR_5755
+Hud.DrawSprite(10, $shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, 150, 150, 150, 150)
+
+:SHTR_5755
+if 
+  $shtr_time_diff >= 2000
+goto_if_false @SHTR_5781
+$shtr_player_alive = 1
+
+:SHTR_5781
+if 
+  is_int_var_greater_than_int_var $shtr_score > $shtr_hi_score
+goto_if_false @SHTR_5815
+set_var_int_to_var_int $shtr_hi_score = $shtr_score
+$unk_5566 = 1
+
+:SHTR_5815
+gosub @SHTR_6947
+Text.SetScale(0.6, 1.2)
+Text.SetRightJustify(True)
+Text.DisplayWithNumber(560.0, 48.0, 'SHTR_2B', $shtr_lives)
+gosub @SHTR_6947
+Text.SetCenter(False)
+Text.SetJustify(True)
+Text.SetScale(0.6, 1.2)
+Text.DisplayWithNumber(80.0, 48.0, 'SHTR_2D', $shtr_score)
+gosub @SHTR_6947
+Text.SetScale(0.6, 1.2)
+Text.DisplayWithNumber(320.0, 48.0, 'SHTR_2C', $shtr_hi_score)
+
+:SHTR_5956
+if 
+  $shtr_front_end == 0
+goto_if_false @SHTR_6064
+if 
+  $shtr_player_alive == 0
+goto_if_false @SHTR_6064
+if 
+  $shtr_lives == 0
+goto_if_false @SHTR_6064
+$shtr_front_end = 4
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1063)
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1067)
+$shtr_on_table = 0
+
+:SHTR_6064
+if 
+  $shtr_front_end == 4
+goto_if_false @SHTR_6372
+if 
+  $shtr_on_table == 0
+goto_if_false @SHTR_6152
+gosub @SHTR_6947
+Text.SetScale(2.0, 4.0)
+Text.Display(320.0, 196.0, 'SHTR_3B')
+$shtr_start_time = Clock.GetGameTimer()
+$shtr_on_table = 1
+
+:SHTR_6152
+if 
+  $shtr_on_table == 1
+goto_if_false @SHTR_6257
+gosub @SHTR_6947
+Text.SetScale(2.0, 4.0)
+Text.Display(320.0, 196.0, 'SHTR_3B')
+$shtr_end_time = Clock.GetGameTimer()
+set_var_int_to_var_int $shtr_time_diff = $shtr_end_time
+sub_int_var_from_int_var $shtr_time_diff -= $shtr_start_time
+if 
+  $shtr_time_diff > 5000
+goto_if_false @SHTR_6257
+$shtr_on_table = 2
+
+:SHTR_6257
+if 
+  $shtr_on_table == 2
+goto_if_false @SHTR_6315
+if 
+  is_int_var_greater_than_int_var $shtr_hi_s[9] > $shtr_score
+goto_if_false @SHTR_6308
+$shtr_on_table = 4
+goto @SHTR_6315
+
+:SHTR_6308
+gosub @SHTR_11097
+
+:SHTR_6315
+if 
+  $shtr_on_table == 3
+goto_if_false @SHTR_6347
+gosub @SHTR_11414
+gosub @SHTR_12477
+
+:SHTR_6347
+if 
+  $shtr_on_table == 4
+goto_if_false @SHTR_6372
+gosub @SHTR_12477
+
+:SHTR_6372
+if 
+  $shtr_front_end == 4
+goto_if_false @SHTR_6441
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+  $shtr_on_table <> 1
+goto_if_false @SHTR_6441
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1066)
+goto @SHTR_582
+
+:SHTR_6441
+Hud.DrawSprite(25, 160.0, 112.0, 320.0, 224.0, 150, 150, 150, 255)
+Hud.DrawSprite(25, 480.0, 112.0, -320.0, 224.0, 150, 150, 150, 255)
+Hud.DrawSprite(25, 480.0, 336.0, -320.0, -224.0, 150, 150, 150, 255)
+Hud.DrawSprite(25, 160.0, 336.0, 320.0, -224.0, 150, 150, 150, 255)
+if 
+  $shtr_front_end == 0
+goto_if_false @SHTR_6603
+
+:SHTR_6603
+if 
+  $shtr_front_end == 4
+goto_if_false @SHTR_6760
+if 
+  $shtr_on_table == 4
+goto_if_false @SHTR_6760
+$shtr_help_end = Clock.GetGameTimer()
+set_var_int_to_var_int $shtr_help_diff = $shtr_help_end
+sub_int_var_from_int_var $shtr_help_diff -= $shtr_help_start
+if 
+  10000 > $shtr_help_diff
+goto_if_false @SHTR_6760
+Hud.DrawWindow(35.0, 15.0, 200.0, 45.0, 'DUMMY', 0)
+Text.SetCenter(False)
+Text.SetWrapX(230.0)
+Text.SetFont(Font.Subtitles)
+Text.SetScale(0.5, 1.8)
+Text.Display(40.0, 20.0, 'SH_BCK')
+
+:SHTR_6760
+goto @SHTR_761
+
+:SHTR_6767
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+return 
+
+:SHTR_6787
+Text.ClearThisPrint('BUSY')
+Txd.Remove
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Game.ShutAllCharsUp(False)
+Audio.SetMusicDoesFade(True)
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1063)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @SHTR_6936
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $shooter1X, $shooter1Y, $shooter1Z, 2.0, 2.0, 2.0)
+goto_if_false @SHTR_6922
+set_var_float_to_var_float $y = $shooter1Y
+$y += 2.0
+Char.SetCoordinates($scplayer, $shooter1X, $y, $shooter1Z)
+
+:SHTR_6922
+Char.FreezePosition($scplayer, False)
+Player.SetControl($player1, True)
+
+:SHTR_6936
+$onmission = 0
+Mission.Finish
+return 
+
+:SHTR_6947
+Text.SetColor(255, 255, 255, 255)
+Text.SetScale(1.0, 2.0)
+Text.SetCenter(True)
+Text.SetWrapX(640.0)
+return 
+
+:SHTR_6986
+set_var_float_to_var_float $shtr_layer_x = $shtr_origin
+$shtr_layer_x -= 256.0
+Hud.DrawSprite($shtr_sprite, $shtr_layer_x, 336.0, 256.0, 256.0, 150, 150, 150, 255)
+set_var_float_to_var_float $shtr_layer_x = $shtr_origin
+Hud.DrawSprite($shtr_sprite, $shtr_layer_x, 336.0, 256.0, 256.0, 150, 150, 150, 255)
+set_var_float_to_var_float $shtr_layer_x = $shtr_origin
+$shtr_layer_x += 256.0
+Hud.DrawSprite($shtr_sprite, $shtr_layer_x, 336.0, 256.0, 256.0, 150, 150, 150, 255)
+set_var_float_to_var_float $shtr_layer_x = $shtr_origin
+$shtr_layer_x += 512.0
+Hud.DrawSprite($shtr_sprite, $shtr_layer_x, 336.0, 256.0, 256.0, 150, 150, 150, 255)
+sub_timed_float_var_from_float_var $shtr_origin -= frame_delta_time * $shtr_layer_scroll_speed_top
+if 
+  0.0 > $shtr_origin
+goto_if_false @SHTR_7227
+$shtr_origin += 256.0
+
+:SHTR_7227
+return 
+
+:SHTR_7229
+set_var_float_to_var_float $shtr_layer_x = $shtr_origin
+$shtr_layer_x -= 256.0
+Hud.DrawSprite($shtr_sprite, $shtr_layer_x, 112.0, 256.0, 256.0, 150, 150, 150, 255)
+set_var_float_to_var_float $shtr_layer_x = $shtr_origin
+Hud.DrawSprite($shtr_sprite, $shtr_layer_x, 112.0, 256.0, 256.0, 150, 150, 150, 255)
+set_var_float_to_var_float $shtr_layer_x = $shtr_origin
+$shtr_layer_x += 256.0
+Hud.DrawSprite($shtr_sprite, $shtr_layer_x, 112.0, 256.0, 256.0, 150, 150, 150, 255)
+set_var_float_to_var_float $shtr_layer_x = $shtr_origin
+$shtr_layer_x += 512.0
+Hud.DrawSprite($shtr_sprite, $shtr_layer_x, 112.0, 256.0, 256.0, 150, 150, 150, 255)
+sub_timed_float_var_from_float_var $shtr_origin -= frame_delta_time * $shtr_layer_scroll_speed_bottom
+if 
+  0.0 > $shtr_origin
+goto_if_false @SHTR_7470
+$shtr_origin += 256.0
+
+:SHTR_7470
+return 
+
+:SHTR_7472
+if 
+  is_int_lvar_greater_than_int_var TIMERB > $shtr_respawn_time
+goto_if_false @SHTR_7562
+if 
+  $shtr_enemy_alive($shtr_current_enemy,16i) == 0
+goto_if_false @SHTR_7562
+set_var_float_to_var_float $shtr_enemy_x($shtr_current_enemy,16f) = $shtr_enemy_origin
+set_var_float_to_var_float $shtr_enemy_speed($shtr_current_enemy,16f) = $shtr_enemy_speed[0]
+$shtr_enemy_alive($shtr_current_enemy,16i) = 1
+TIMERB = 0
+$shtr_respawn += 1
+
+:SHTR_7562
+return 
+
+:SHTR_7564
+$shtr_current_enemy = 0
+
+:SHTR_7571
+if 
+  8 > $shtr_current_enemy
+goto_if_false @SHTR_8025
+if 
+  $shtr_enemy_alive($shtr_current_enemy,16i) == 2
+goto_if_false @SHTR_8011
+$shtr_exp_end($shtr_current_enemy,16i) = Clock.GetGameTimer()
+set_var_int_to_var_int $shtr_exp_diff($shtr_current_enemy,16i) = $shtr_exp_end($shtr_current_enemy,16i)
+sub_int_var_from_int_var $shtr_exp_diff($shtr_current_enemy,16i) -= $shtr_exp_start($shtr_current_enemy,16i)
+if and
+  $shtr_exp_diff($shtr_current_enemy,16i) >= 0
+  100 > $shtr_exp_diff($shtr_current_enemy,16i)
+goto_if_false @SHTR_7725
+Hud.DrawSprite(15, $shtr_enemy_x($shtr_current_enemy,16f), $shtr_enemy_y($shtr_current_enemy,16f), 32.0, 32.0, 150, 150, 150, 255)
+
+:SHTR_7725
+if and
+  $shtr_exp_diff($shtr_current_enemy,16i) >= 100
+  200 > $shtr_exp_diff($shtr_current_enemy,16i)
+goto_if_false @SHTR_7799
+Hud.DrawSprite(16, $shtr_enemy_x($shtr_current_enemy,16f), $shtr_enemy_y($shtr_current_enemy,16f), 32.0, 32.0, 150, 150, 150, 255)
+
+:SHTR_7799
+if and
+  $shtr_exp_diff($shtr_current_enemy,16i) >= 200
+  300 > $shtr_exp_diff($shtr_current_enemy,16i)
+goto_if_false @SHTR_7874
+Hud.DrawSprite(17, $shtr_enemy_x($shtr_current_enemy,16f), $shtr_enemy_y($shtr_current_enemy,16f), 32.0, 32.0, 150, 150, 150, 255)
+
+:SHTR_7874
+if and
+  $shtr_exp_diff($shtr_current_enemy,16i) >= 300
+  400 > $shtr_exp_diff($shtr_current_enemy,16i)
+goto_if_false @SHTR_7949
+Hud.DrawSprite(18, $shtr_enemy_x($shtr_current_enemy,16f), $shtr_enemy_y($shtr_current_enemy,16f), 32.0, 32.0, 150, 150, 150, 255)
+
+:SHTR_7949
+if 
+  $shtr_exp_diff($shtr_current_enemy,16i) > 499
+goto_if_false @SHTR_8011
+$shtr_enemy_x($shtr_current_enemy,16f) = 0.0
+$shtr_enemy_y($shtr_current_enemy,16f) = 0.0
+$shtr_enemy_alive($shtr_current_enemy,16i) = 0
+
+:SHTR_8011
+$shtr_current_enemy += 1
+goto @SHTR_7571
+
+:SHTR_8025
+return 
+
+:SHTR_8027
+if 
+  $shtr_enemy_alive[0] == 0
+goto_if_false @SHTR_8787
+if 
+  $shtr_random == 0
+goto_if_false @SHTR_8787
+$shtr_enemy_origin = Math.RandomFloatInRange(640.0, 720.0)
+set_var_float_to_var_float $shtr_enemy_x[0] = $shtr_enemy_origin
+$shtr_sin_cycle_range = Math.RandomFloatInRange(240.0, 640.0)
+$shtr_gen_y = Math.RandomFloatInRange(80.0, 368.0)
+set_var_float_to_var_float $shtr_gen_lo_y = $shtr_gen_y
+sub_float_var_from_float_var $shtr_gen_lo_y -= $shtr_amplitude
+if 
+  80.0 > $shtr_gen_lo_y
+goto_if_false @SHTR_8161
+add_float_var_to_float_var $shtr_gen_y += $shtr_amplitude
+
+:SHTR_8161
+set_var_float_to_var_float $shtr_gen_hi_y = $shtr_gen_y
+add_float_var_to_float_var $shtr_gen_hi_y += $shtr_amplitude
+if 
+  80.0 > $shtr_gen_hi_y
+goto_if_false @SHTR_8206
+sub_float_var_from_float_var $shtr_gen_y -= $shtr_amplitude
+
+:SHTR_8206
+$shtr_enemy_speed[0] = Math.RandomFloatInRange($shtr_range_start, $shtr_range_end)
+if and
+  $shtr_enemy_speed[0] >= 1.0
+  1.5 > $shtr_enemy_speed[0]
+goto_if_false @SHTR_8256
+$shtr_respawn_time = 500
+
+:SHTR_8256
+if and
+  $shtr_enemy_speed[0] >= 1.5
+  2.0 > $shtr_enemy_speed[0]
+goto_if_false @SHTR_8295
+$shtr_respawn_time = 475
+
+:SHTR_8295
+if and
+  $shtr_enemy_speed[0] >= 2.0
+  2.5 > $shtr_enemy_speed[0]
+goto_if_false @SHTR_8334
+$shtr_respawn_time = 450
+
+:SHTR_8334
+if and
+  $shtr_enemy_speed[0] >= 2.5
+  3.0 > $shtr_enemy_speed[0]
+goto_if_false @SHTR_8373
+$shtr_respawn_time = 425
+
+:SHTR_8373
+if and
+  $shtr_enemy_speed[0] >= 3.0
+  3.5 > $shtr_enemy_speed[0]
+goto_if_false @SHTR_8412
+$shtr_respawn_time = 400
+
+:SHTR_8412
+if and
+  $shtr_enemy_speed[0] >= 3.5
+  4.0 > $shtr_enemy_speed[0]
+goto_if_false @SHTR_8451
+$shtr_respawn_time = 375
+
+:SHTR_8451
+if and
+  $shtr_enemy_speed[0] >= 4.0
+  4.5 > $shtr_enemy_speed[0]
+goto_if_false @SHTR_8490
+$shtr_respawn_time = 350
+
+:SHTR_8490
+if and
+  $shtr_enemy_speed[0] >= 4.5
+  5.0 > $shtr_enemy_speed[0]
+goto_if_false @SHTR_8529
+$shtr_respawn_time = 325
+
+:SHTR_8529
+if and
+  $shtr_enemy_speed[0] >= 5.0
+  5.5 > $shtr_enemy_speed[0]
+goto_if_false @SHTR_8568
+$shtr_respawn_time = 300
+
+:SHTR_8568
+if and
+  $shtr_enemy_speed[0] >= 5.5
+  6.0 > $shtr_enemy_speed[0]
+goto_if_false @SHTR_8607
+$shtr_respawn_time = 275
+
+:SHTR_8607
+if and
+  $shtr_enemy_speed[0] >= 6.0
+  6.5 > $shtr_enemy_speed[0]
+goto_if_false @SHTR_8646
+$shtr_respawn_time = 250
+
+:SHTR_8646
+if and
+  $shtr_enemy_speed[0] >= 6.5
+  7.0 > $shtr_enemy_speed[0]
+goto_if_false @SHTR_8685
+$shtr_respawn_time = 225
+
+:SHTR_8685
+if and
+  $shtr_enemy_speed[0] >= 7.0
+  7.5 > $shtr_enemy_speed[0]
+goto_if_false @SHTR_8724
+$shtr_respawn_time = 200
+
+:SHTR_8724
+if and
+  $shtr_enemy_speed[0] >= 7.5
+  8.0 >= $shtr_enemy_speed[0]
+goto_if_false @SHTR_8763
+$shtr_respawn_time = 175
+
+:SHTR_8763
+$unk_5957 = Math.RandomIntInRange(100, 1500)
+$shtr_enemy_alive[0] = 1
+$shtr_random = 1
+
+:SHTR_8787
+return 
+
+:SHTR_8789
+$shtr_current_enemy = 0
+
+:SHTR_8796
+if 
+  8 > $shtr_current_enemy
+goto_if_false @SHTR_9209
+if 
+  $shtr_enemy_alive($shtr_current_enemy,16i) == 1
+goto_if_false @SHTR_9195
+Hud.DrawSprite(12, $shtr_enemy_x($shtr_current_enemy,16f), $shtr_enemy_y($shtr_current_enemy,16f), 32.0, 32.0, 150, 150, 150, 255)
+sub_timed_float_var_from_float_var $shtr_enemy_x($shtr_current_enemy,16f) -= frame_delta_time * $shtr_enemy_speed($shtr_current_enemy,16f)
+set_var_float_to_var_float $shtr_sin_multiplier = $shtr_enemy_x($shtr_current_enemy,16f)
+div_float_var_by_float_var $shtr_sin_multiplier /= $shtr_sin_cycle_range
+set_var_float_to_var_float $shtr_sin_degree_input = $shtr_sin_multiplier
+$shtr_sin_degree_input *= 360.0
+$shtr_sin_degree_output = Math.Sin($shtr_sin_degree_input)
+set_var_float_to_var_float $shtr_initial_y = $shtr_sin_degree_output
+mult_float_var_by_float_var $shtr_initial_y *= $shtr_amplitude
+set_var_float_to_var_float $shtr_enemy_y($shtr_current_enemy,16f) = $shtr_initial_y
+add_float_var_to_float_var $shtr_enemy_y($shtr_current_enemy,16f) += $shtr_gen_y
+if 
+  0.0 > $shtr_enemy_x($shtr_current_enemy,16f)
+goto_if_false @SHTR_9195
+$shtr_enemy_x($shtr_current_enemy,16f) = 0.0
+$shtr_enemy_y($shtr_current_enemy,16f) = 0.0
+if 
+  $shtr_score > 24
+goto_if_false @SHTR_9184
+if 
+  is_int_var_equal_to_int_var $shtr_score == $shtr_hi_score
+goto_if_false @SHTR_9177
+if and
+  is_int_var_greater_than_int_var $shtr_score > $shtr_hi_s[0]
+  is_int_var_greater_than_int_var $shtr_score > $shtr_hi_s[1]
+  is_int_var_greater_than_int_var $shtr_score > $shtr_hi_s[2]
+  is_int_var_greater_than_int_var $shtr_score > $shtr_hi_s[3]
+  is_int_var_greater_than_int_var $shtr_score > $shtr_hi_s[4]
+goto_if_false @SHTR_9177
+if and
+  is_int_var_greater_than_int_var $shtr_score > $shtr_hi_s[5]
+  is_int_var_greater_than_int_var $shtr_score > $shtr_hi_s[6]
+  is_int_var_greater_than_int_var $shtr_score > $shtr_hi_s[7]
+  is_int_var_greater_than_int_var $shtr_score > $shtr_hi_s[8]
+  is_int_var_greater_than_int_var $shtr_score > $shtr_hi_s[9]
+goto_if_false @SHTR_9177
+$shtr_hi_score -= 25
+
+:SHTR_9177
+$shtr_score -= 25
+
+:SHTR_9184
+$shtr_enemy_alive($shtr_current_enemy,16i) = 0
+
+:SHTR_9195
+$shtr_current_enemy += 1
+goto @SHTR_8796
+
+:SHTR_9209
+return 
+
+:SHTR_9211
+$shtr_current_projectile = 1
+
+:SHTR_9218
+if 
+  16 > $shtr_current_projectile
+goto_if_false @SHTR_9634
+if 
+  $shtr_projectile_alive($shtr_current_projectile,16i) == 1
+goto_if_false @SHTR_9356
+Hud.DrawSprite(11, $shtr_projectile_x($shtr_current_projectile,16f), $shtr_projectile_y($shtr_current_projectile,16f), $shtr_projectile_size, $shtr_projectile_size, 150, 150, 150, 255)
+add_timed_float_var_to_float_var $shtr_projectile_x($shtr_current_projectile,16f) += frame_delta_time * $shtr_fire_speed
+if 
+  $shtr_projectile_x($shtr_current_projectile,16f) > 639.0
+goto_if_false @SHTR_9356
+$shtr_projectile_y($shtr_current_projectile,16f) = 0.0
+$shtr_projectile_alive($shtr_current_projectile,16i) = 0
+
+:SHTR_9356
+if 
+  $shtr_up_projectile_alive($shtr_current_projectile,16i) == 1
+goto_if_false @SHTR_9488
+Hud.DrawSprite(11, $shtr_up_projectile_x($shtr_current_projectile,16f), $shtr_up_projectile_y($shtr_current_projectile,16f), $shtr_projectile_size, $shtr_projectile_size, 150, 150, 150, 255)
+add_timed_float_var_to_float_var $shtr_up_projectile_x($shtr_current_projectile,16f) += frame_delta_time * $shtr_x_add
+sub_timed_float_var_from_float_var $shtr_up_projectile_y($shtr_current_projectile,16f) -= frame_delta_time * $shtr_y_add
+if 
+  $shtr_up_projectile_x($shtr_current_projectile,16f) > 639.0
+goto_if_false @SHTR_9488
+$shtr_up_projectile_y($shtr_current_projectile,16f) = 0.0
+$shtr_up_projectile_alive($shtr_current_projectile,16i) = 0
+
+:SHTR_9488
+if 
+  $shtr_down_projectile_alive($shtr_current_projectile,16i) == 1
+goto_if_false @SHTR_9620
+Hud.DrawSprite(11, $shtr_down_projectile_x($shtr_current_projectile,16f), $shtr_down_projectile_y($shtr_current_projectile,16f), $shtr_projectile_size, $shtr_projectile_size, 150, 150, 150, 255)
+add_timed_float_var_to_float_var $shtr_down_projectile_x($shtr_current_projectile,16f) += frame_delta_time * $shtr_x_add
+add_timed_float_var_to_float_var $shtr_down_projectile_y($shtr_current_projectile,16f) += frame_delta_time * $shtr_y_add
+if 
+  $shtr_down_projectile_x($shtr_current_projectile,16f) > 639.0
+goto_if_false @SHTR_9620
+$shtr_down_projectile_y($shtr_current_projectile,16f) = 0.0
+$shtr_down_projectile_alive($shtr_current_projectile,16i) = 0
+
+:SHTR_9620
+$shtr_current_projectile += 1
+goto @SHTR_9218
+
+:SHTR_9634
+return 
+
+:SHTR_9636
+$shtr_current_enemy = 0
+
+:SHTR_9643
+if 
+  8 > $shtr_current_enemy
+goto_if_false @SHTR_10137
+if 
+  $shtr_enemy_x($shtr_current_enemy,16f) > 320.0
+goto_if_false @SHTR_9840
+if 
+  $shtr_shot == 0
+goto_if_false @SHTR_9840
+if 
+  $shtr_enemy_alive($shtr_current_enemy,16i) == 1
+goto_if_false @SHTR_9840
+if 
+  $shtr_enemy_shot_alive($shtr_current_enemy,8i) == 0
+goto_if_false @SHTR_9840
+set_var_float_to_var_float $shtr_enemy_shot_x($shtr_current_enemy,8f) = $shtr_enemy_x($shtr_current_enemy,16f)
+set_var_float_to_var_float $shtr_enemy_shot_y($shtr_current_enemy,8f) = $shtr_enemy_y($shtr_current_enemy,16f)
+$shtr_enemy_shot_alive($shtr_current_enemy,8i) = 1
+$shtr_shot += 1
+set_var_float_to_var_float $shtr_enemy_shot_speed = $shtr_enemy_speed($shtr_current_enemy,16f)
+$shtr_enemy_shot_speed *= 1.5
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1060)
+
+:SHTR_9840
+if 
+  $shtr_shot == 1
+goto_if_false @SHTR_10123
+if 
+  $shtr_enemy_shot_alive($shtr_current_enemy,8i) == 1
+goto_if_false @SHTR_10123
+if 
+  $shtr_player_alive == 1
+goto_if_false @SHTR_10004
+if 
+  Math.Do2DRectanglesCollide($shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, $shtr_enemy_shot_x($shtr_current_enemy,8f), $shtr_enemy_shot_y($shtr_current_enemy,8f), 8.0, 8.0)
+goto_if_false @SHTR_10004
+$shtr_enemy_shot_alive($shtr_current_enemy,8i) = 0
+$shtr_enemy_shot_x($shtr_current_enemy,8f) = 0.0
+$shtr_enemy_shot_y($shtr_current_enemy,8f) = 0.0
+$shtr_shot = 0
+$shtr_player_alive = 0
+
+:SHTR_10004
+Hud.DrawSprite(14, $shtr_enemy_shot_x($shtr_current_enemy,8f), $shtr_enemy_shot_y($shtr_current_enemy,8f), $shtr_projectile_size, $shtr_projectile_size, 150, 150, 150, 255)
+sub_timed_float_var_from_float_var $shtr_enemy_shot_x($shtr_current_enemy,8f) -= frame_delta_time * $shtr_enemy_shot_speed
+if 
+  0.0 > $shtr_enemy_shot_x($shtr_current_enemy,8f)
+goto_if_false @SHTR_10123
+$shtr_enemy_shot_alive($shtr_current_enemy,8i) = 0
+$shtr_enemy_shot_x($shtr_current_enemy,8f) = 0.0
+$shtr_enemy_shot_y($shtr_current_enemy,8f) = 0.0
+$shtr_shot = 0
+
+:SHTR_10123
+$shtr_current_enemy += 1
+goto @SHTR_9643
+
+:SHTR_10137
+return 
+
+:SHTR_10139
+$shtr_current_enemy = 0
+
+:SHTR_10146
+if 
+  8 > $shtr_current_enemy
+goto_if_false @SHTR_11095
+if 
+  $shtr_enemy_alive($shtr_current_enemy,16i) == 1
+goto_if_false @SHTR_10945
+$shtr_current_projectile = 1
+
+:SHTR_10193
+if 
+  16 > $shtr_current_projectile
+goto_if_false @SHTR_10945
+if 
+  Math.Do2DRectanglesCollide($shtr_projectile_x($shtr_current_projectile,16f), $shtr_projectile_y($shtr_current_projectile,16f), $shtr_projectile_col_x, $shtr_projectile_col_y, $shtr_enemy_x($shtr_current_enemy,16f), $shtr_enemy_y($shtr_current_enemy,16f), $shtr_enemy_col_x, $shtr_enemy_col_y)
+goto_if_false @SHTR_10451
+$shtr_score += 100
+$shtr_enemy_alive($shtr_current_enemy,16i) = 2
+$shtr_projectile_alive($shtr_current_projectile,16i) = 0
+$shtr_projectile_x($shtr_current_projectile,16f) = 0.0
+$shtr_projectile_y($shtr_current_projectile,16f) = 0.0
+$shtr_exp_start($shtr_current_enemy,16i) = Clock.GetGameTimer()
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1061)
+$shtr_pickup_counter += 1
+if 
+  $shtr_pickup_collected == 1
+goto_if_false @SHTR_10451
+if 
+  $shtr_pickup_counter == 8
+goto_if_false @SHTR_10431
+set_var_float_to_var_float $shtr_pickup_x = $shtr_enemy_x($shtr_current_enemy,16f)
+set_var_float_to_var_float $shtr_pickup_y = $shtr_enemy_y($shtr_current_enemy,16f)
+$shtr_pickup_collected = 0
+goto @SHTR_10451
+
+:SHTR_10431
+$shtr_pickup_x = 0.0
+$shtr_pickup_y = 0.0
+
+:SHTR_10451
+if 
+  Math.Do2DRectanglesCollide($shtr_up_projectile_x($shtr_current_projectile,16f), $shtr_up_projectile_y($shtr_current_projectile,16f), $shtr_projectile_col_x, $shtr_projectile_col_y, $shtr_enemy_x($shtr_current_enemy,16f), $shtr_enemy_y($shtr_current_enemy,16f), $shtr_enemy_col_x, $shtr_enemy_col_y)
+goto_if_false @SHTR_10691
+$shtr_score += 100
+$shtr_enemy_alive($shtr_current_enemy,16i) = 2
+$shtr_up_projectile_alive($shtr_current_projectile,16i) = 0
+$shtr_up_projectile_x($shtr_current_projectile,16f) = 0.0
+$shtr_up_projectile_y($shtr_current_projectile,16f) = 0.0
+$shtr_exp_start($shtr_current_enemy,16i) = Clock.GetGameTimer()
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1061)
+$shtr_pickup_counter += 1
+if 
+  $shtr_pickup_collected == 1
+goto_if_false @SHTR_10691
+if 
+  $shtr_pickup_counter == 8
+goto_if_false @SHTR_10671
+set_var_float_to_var_float $shtr_pickup_x = $shtr_enemy_x($shtr_current_enemy,16f)
+set_var_float_to_var_float $shtr_pickup_y = $shtr_enemy_y($shtr_current_enemy,16f)
+$shtr_pickup_collected = 0
+goto @SHTR_10691
+
+:SHTR_10671
+$shtr_pickup_x = 0.0
+$shtr_pickup_y = 0.0
+
+:SHTR_10691
+if 
+  Math.Do2DRectanglesCollide($shtr_down_projectile_x($shtr_current_projectile,16f), $shtr_down_projectile_y($shtr_current_projectile,16f), $shtr_projectile_col_x, $shtr_projectile_col_y, $shtr_enemy_x($shtr_current_enemy,16f), $shtr_enemy_y($shtr_current_enemy,16f), $shtr_enemy_col_x, $shtr_enemy_col_y)
+goto_if_false @SHTR_10931
+$shtr_score += 100
+$shtr_enemy_alive($shtr_current_enemy,16i) = 2
+$shtr_down_projectile_alive($shtr_current_projectile,16i) = 0
+$shtr_down_projectile_x($shtr_current_projectile,16f) = 0.0
+$shtr_down_projectile_y($shtr_current_projectile,16f) = 0.0
+$shtr_exp_start($shtr_current_enemy,16i) = Clock.GetGameTimer()
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1061)
+$shtr_pickup_counter += 1
+if 
+  $shtr_pickup_collected == 1
+goto_if_false @SHTR_10931
+if 
+  $shtr_pickup_counter == 8
+goto_if_false @SHTR_10911
+set_var_float_to_var_float $shtr_pickup_x = $shtr_enemy_x($shtr_current_enemy,16f)
+set_var_float_to_var_float $shtr_pickup_y = $shtr_enemy_y($shtr_current_enemy,16f)
+$shtr_pickup_collected = 0
+goto @SHTR_10931
+
+:SHTR_10911
+$shtr_pickup_x = 0.0
+$shtr_pickup_y = 0.0
+
+:SHTR_10931
+$shtr_current_projectile += 1
+goto @SHTR_10193
+
+:SHTR_10945
+if 
+  $shtr_enemy_alive($shtr_current_enemy,16i) == 1
+goto_if_false @SHTR_11081
+if 
+  $shtr_player_alive == 1
+goto_if_false @SHTR_11081
+if 
+  Math.Do2DRectanglesCollide($shtr_plyr_x, $shtr_plyr_y, 32.0, 32.0, $shtr_enemy_x($shtr_current_enemy,16f), $shtr_enemy_y($shtr_current_enemy,16f), $shtr_enemy_col_x, $shtr_enemy_col_y)
+goto_if_false @SHTR_11081
+$shtr_enemy_alive($shtr_current_enemy,16i) = 2
+$shtr_exp_start($shtr_current_enemy,16i) = Clock.GetGameTimer()
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1061)
+$shtr_player_alive = 0
+
+:SHTR_11081
+$shtr_current_enemy += 1
+goto @SHTR_10146
+
+:SHTR_11095
+return 
+
+:SHTR_11097
+$shtr_ranking = 9
+$shtr_score_update = 0
+$shtr_score_check = 1
+
+:SHTR_11118
+if and
+  $shtr_ranking >= 0
+  $shtr_score_check == 1
+goto_if_false @SHTR_11215
+if 
+  is_int_var_greater_than_int_var $shtr_score > $shtr_hi_s($shtr_ranking,10i)
+goto_if_false @SHTR_11201
+$shtr_ranking -= 1
+$shtr_score_update = 1
+$shtr_on_table = 3
+$shtr_draw_highlight = 1
+goto @SHTR_11208
+
+:SHTR_11201
+$shtr_score_check = 0
+
+:SHTR_11208
+goto @SHTR_11118
+
+:SHTR_11215
+if 
+  $shtr_score_update == 1
+goto_if_false @SHTR_11412
+$shtr_ranking += 1
+$shtr_destination_slot = 9
+$shtr_source_slot = 8
+
+:SHTR_11254
+if 
+  is_int_var_greater_or_equal_to_int_var $shtr_source_slot >= $shtr_ranking
+goto_if_false @SHTR_11374
+set_var_text_label $shtr_hi_1($shtr_destination_slot,10s) = $shtr_hi_1($shtr_source_slot,10s)
+set_var_text_label $shtr_hi_2($shtr_destination_slot,10s) = $shtr_hi_2($shtr_source_slot,10s)
+set_var_text_label $shtr_hi_3($shtr_destination_slot,10s) = $shtr_hi_3($shtr_source_slot,10s)
+set_var_int_to_var_int $shtr_hi_l($shtr_destination_slot,10i) = $shtr_hi_l($shtr_source_slot,10i)
+set_var_int_to_var_int $shtr_hi_s($shtr_destination_slot,10i) = $shtr_hi_s($shtr_source_slot,10i)
+$shtr_destination_slot -= 1
+$shtr_source_slot -= 1
+goto @SHTR_11254
+
+:SHTR_11374
+set_var_int_to_var_int $shtr_hi_s($shtr_ranking,10i) = $shtr_score
+set_var_int_to_var_int $shtr_hi_l($shtr_ranking,10i) = $shtr_level
+$shtr_write = 0
+$shtr_chars = 10
+
+:SHTR_11412
+return 
+
+:SHTR_11414
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(PadId.Pad1)
+if and
+  not Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+  not Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+  not Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+  not Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SHTR_11503
+if and
+  $LStickY == 0
+  $LStickX == 0
+goto_if_false @SHTR_11503
+$shtr_press = 0
+
+:SHTR_11503
+if 
+  $shtr_write == 0
+goto_if_false @SHTR_11843
+set_var_text_label $shtr_hi_1($shtr_ranking,10s) = $shtr_char($shtr_chars,37s)
+set_var_text_label $shtr_hi_2($shtr_ranking,10s) = s$shtr_char[10]
+set_var_text_label $shtr_hi_3($shtr_ranking,10s) = s$shtr_char[10]
+if 
+  $shtr_press == 0
+goto_if_false @SHTR_11843
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+  $LStickX > 100
+  -100 > $LStickY
+goto_if_false @SHTR_11682
+if 
+  36 > $shtr_chars
+goto_if_false @SHTR_11648
+$shtr_chars += 1
+goto @SHTR_11655
+
+:SHTR_11648
+$shtr_chars = 0
+
+:SHTR_11655
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1064)
+$shtr_press = 1
+
+:SHTR_11682
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+  -100 > $LStickX
+  $LStickY > 100
+goto_if_false @SHTR_11785
+if 
+  $shtr_chars > 0
+goto_if_false @SHTR_11751
+$shtr_chars -= 1
+goto @SHTR_11758
+
+:SHTR_11751
+$shtr_chars = 36
+
+:SHTR_11758
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1064)
+$shtr_press = 1
+
+:SHTR_11785
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SHTR_11843
+$shtr_chars = 10
+$shtr_write = 1
+$shtr_press = 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1065)
+
+:SHTR_11843
+if 
+  $shtr_write == 1
+goto_if_false @SHTR_12159
+set_var_text_label $shtr_hi_2($shtr_ranking,10s) = $shtr_char($shtr_chars,37s)
+if 
+  $shtr_press == 0
+goto_if_false @SHTR_12159
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+  $LStickX > 100
+  -100 > $LStickY
+goto_if_false @SHTR_11998
+if 
+  36 > $shtr_chars
+goto_if_false @SHTR_11964
+$shtr_chars += 1
+goto @SHTR_11971
+
+:SHTR_11964
+$shtr_chars = 0
+
+:SHTR_11971
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1064)
+$shtr_press = 1
+
+:SHTR_11998
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+  -100 > $LStickX
+  $LStickY > 100
+goto_if_false @SHTR_12101
+if 
+  $shtr_chars > 0
+goto_if_false @SHTR_12067
+$shtr_chars -= 1
+goto @SHTR_12074
+
+:SHTR_12067
+$shtr_chars = 36
+
+:SHTR_12074
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1064)
+$shtr_press = 1
+
+:SHTR_12101
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SHTR_12159
+$shtr_chars = 10
+$shtr_write = 2
+$shtr_press = 1
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1065)
+
+:SHTR_12159
+if 
+  $shtr_write == 2
+goto_if_false @SHTR_12475
+set_var_text_label $shtr_hi_3($shtr_ranking,10s) = $shtr_char($shtr_chars,37s)
+if 
+  $shtr_press == 0
+goto_if_false @SHTR_12475
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadUp)
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+  $LStickX > 100
+  -100 > $LStickY
+goto_if_false @SHTR_12314
+if 
+  36 > $shtr_chars
+goto_if_false @SHTR_12280
+$shtr_chars += 1
+goto @SHTR_12287
+
+:SHTR_12280
+$shtr_chars = 0
+
+:SHTR_12287
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1064)
+$shtr_press = 1
+
+:SHTR_12314
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadDown)
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+  -100 > $LStickX
+  $LStickY > 100
+goto_if_false @SHTR_12417
+if 
+  $shtr_chars > 0
+goto_if_false @SHTR_12383
+$shtr_chars -= 1
+goto @SHTR_12390
+
+:SHTR_12383
+$shtr_chars = 36
+
+:SHTR_12390
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1064)
+$shtr_press = 1
+
+:SHTR_12417
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @SHTR_12475
+$shtr_write = 3
+$shtr_press = 1
+$shtr_on_table = 4
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1065)
+
+:SHTR_12475
+return 
+
+:SHTR_12477
+$shtr_hi_loop = 0
+
+:SHTR_12484
+if 
+  10 > $shtr_hi_loop
+goto_if_false @SHTR_12649
+gosub @SHTR_6947
+Text.Display($shtr_hi_1_x($shtr_hi_loop,10f), $shtr_hi_1_y($shtr_hi_loop,10f), $shtr_hi_1($shtr_hi_loop,10s))
+gosub @SHTR_6947
+Text.Display($shtr_hi_2_x($shtr_hi_loop,10f), $shtr_hi_2_y($shtr_hi_loop,10f), $shtr_hi_2($shtr_hi_loop,10s))
+gosub @SHTR_6947
+Text.Display($shtr_hi_3_x($shtr_hi_loop,10f), $shtr_hi_3_y($shtr_hi_loop,10f), $shtr_hi_3($shtr_hi_loop,10s))
+gosub @SHTR_6947
+Text.SetRightJustify(True)
+Text.DisplayWithNumber($shtr_hi_4_x($shtr_hi_loop,10f), $shtr_hi_4_y($shtr_hi_loop,10f), 'SHTR_LV', $shtr_hi_s($shtr_hi_loop,10i))
+$shtr_hi_loop += 1
+goto @SHTR_12484
+
+:SHTR_12649
+gosub @SHTR_6947
+Text.Display(320.0, 64.0, 'SHTR_2F')
+if and
+  $shtr_lives == 0
+  $shtr_draw_highlight == 1
+goto_if_false @SHTR_13084
+if 
+  $shtr_write == 0
+goto_if_false @SHTR_12769
+gosub @SHTR_6947
+Text.SetColor(0, 255, 0, 255)
+Text.Display($shtr_hi_1_x($shtr_ranking,10f), $shtr_hi_1_y($shtr_ranking,10f), $shtr_hi_1($shtr_ranking,10s))
+goto @SHTR_12811
+
+:SHTR_12769
+gosub @SHTR_6947
+Text.SetColor(255, 0, 0, 255)
+Text.Display($shtr_hi_1_x($shtr_ranking,10f), $shtr_hi_1_y($shtr_ranking,10f), $shtr_hi_1($shtr_ranking,10s))
+
+:SHTR_12811
+if 
+  $shtr_write == 1
+goto_if_false @SHTR_12878
+gosub @SHTR_6947
+Text.SetColor(0, 255, 0, 255)
+Text.Display($shtr_hi_2_x($shtr_ranking,10f), $shtr_hi_2_y($shtr_ranking,10f), $shtr_hi_2($shtr_ranking,10s))
+goto @SHTR_12920
+
+:SHTR_12878
+gosub @SHTR_6947
+Text.SetColor(255, 0, 0, 255)
+Text.Display($shtr_hi_2_x($shtr_ranking,10f), $shtr_hi_2_y($shtr_ranking,10f), $shtr_hi_2($shtr_ranking,10s))
+
+:SHTR_12920
+if 
+  $shtr_write == 2
+goto_if_false @SHTR_12987
+gosub @SHTR_6947
+Text.SetColor(0, 255, 0, 255)
+Text.Display($shtr_hi_3_x($shtr_ranking,10f), $shtr_hi_3_y($shtr_ranking,10f), $shtr_hi_3($shtr_ranking,10s))
+goto @SHTR_13029
+
+:SHTR_12987
+gosub @SHTR_6947
+Text.SetColor(255, 0, 0, 255)
+Text.Display($shtr_hi_3_x($shtr_ranking,10f), $shtr_hi_3_y($shtr_ranking,10f), $shtr_hi_3($shtr_ranking,10s))
+
+:SHTR_13029
+gosub @SHTR_6947
+Text.SetColor(255, 0, 0, 255)
+Text.SetRightJustify(True)
+Text.DisplayWithNumber($shtr_hi_4_x($shtr_ranking,10f), $shtr_hi_4_y($shtr_ranking,10f), 'SHTR_LV', $shtr_hi_s($shtr_ranking,10i))
+
+:SHTR_13084
+return 
+
+:SHTR_13086
+$shtr_num_gen = Math.RandomIntInRange(1, 30)
+if 
+  $shtr_num_gen == 1
+goto_if_false @SHTR_13188
+if 
+  $6163 == 0
+goto_if_false @SHTR_13181
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[23]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[15]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[36]
+$6163 = 1
+goto @SHTR_13188
+
+:SHTR_13181
+goto @SHTR_13086
+
+:SHTR_13188
+if 
+  $shtr_num_gen == 2
+goto_if_false @SHTR_13281
+if 
+  $6164 == 0
+goto_if_false @SHTR_13274
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[18]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[22]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[34]
+$6164 = 1
+goto @SHTR_13281
+
+:SHTR_13274
+goto @SHTR_13086
+
+:SHTR_13281
+if 
+  $shtr_num_gen == 3
+goto_if_false @SHTR_13374
+if 
+  $6165 == 0
+goto_if_false @SHTR_13367
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[32]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[18]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[21]
+$6165 = 1
+goto @SHTR_13374
+
+:SHTR_13367
+goto @SHTR_13086
+
+:SHTR_13374
+if 
+  $shtr_num_gen == 4
+goto_if_false @SHTR_13467
+if 
+  $6166 == 0
+goto_if_false @SHTR_13460
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[12]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[20]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[27]
+$6166 = 1
+goto @SHTR_13467
+
+:SHTR_13460
+goto @SHTR_13086
+
+:SHTR_13467
+if 
+  $shtr_num_gen == 5
+goto_if_false @SHTR_13560
+if 
+  $6167 == 0
+goto_if_false @SHTR_13553
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[13]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[11]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[25]
+$6167 = 1
+goto @SHTR_13560
+
+:SHTR_13553
+goto @SHTR_13086
+
+:SHTR_13560
+if 
+  $shtr_num_gen == 6
+goto_if_false @SHTR_13653
+if 
+  $6168 == 0
+goto_if_false @SHTR_13646
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[13]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[10]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[31]
+$6168 = 1
+goto @SHTR_13653
+
+:SHTR_13646
+goto @SHTR_13086
+
+:SHTR_13653
+if 
+  $shtr_num_gen == 7
+goto_if_false @SHTR_13746
+if 
+  $6169 == 0
+goto_if_false @SHTR_13739
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[13]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[24]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[13]
+$6169 = 1
+goto @SHTR_13746
+
+:SHTR_13739
+goto @SHTR_13086
+
+:SHTR_13746
+if 
+  $shtr_num_gen == 8
+goto_if_false @SHTR_13839
+if 
+  $6170 == 0
+goto_if_false @SHTR_13832
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[28]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[19]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[21]
+$6170 = 1
+goto @SHTR_13839
+
+:SHTR_13832
+goto @SHTR_13086
+
+:SHTR_13839
+if 
+  $shtr_num_gen == 9
+goto_if_false @SHTR_13932
+if 
+  $6171 == 0
+goto_if_false @SHTR_13925
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[28]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[29]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[14]
+$6171 = 1
+goto @SHTR_13932
+
+:SHTR_13925
+goto @SHTR_13086
+
+:SHTR_13932
+if 
+  $shtr_num_gen == 10
+goto_if_false @SHTR_14025
+if 
+  $6172 == 0
+goto_if_false @SHTR_14018
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[19]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[30]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[13]
+$6172 = 1
+goto @SHTR_14025
+
+:SHTR_14018
+goto @SHTR_13086
+
+:SHTR_14025
+if 
+  $shtr_num_gen == 11
+goto_if_false @SHTR_14118
+if 
+  $6173 == 0
+goto_if_false @SHTR_14111
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[20]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[22]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[11]
+$6173 = 1
+goto @SHTR_14118
+
+:SHTR_14111
+goto @SHTR_13086
+
+:SHTR_14118
+if 
+  $shtr_num_gen == 12
+goto_if_false @SHTR_14211
+if 
+  $6174 == 0
+goto_if_false @SHTR_14204
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[16]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[28]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[32]
+$6174 = 1
+goto @SHTR_14211
+
+:SHTR_14204
+goto @SHTR_13086
+
+:SHTR_14211
+if 
+  $shtr_num_gen == 13
+goto_if_false @SHTR_14304
+if 
+  $6175 == 0
+goto_if_false @SHTR_14297
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[13]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[28]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[32]
+$6175 = 1
+goto @SHTR_14304
+
+:SHTR_14297
+goto @SHTR_13086
+
+:SHTR_14304
+if 
+  $shtr_num_gen == 14
+goto_if_false @SHTR_14397
+if 
+  $6176 == 0
+goto_if_false @SHTR_14390
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[32]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[13]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[34]
+$6176 = 1
+goto @SHTR_14397
+
+:SHTR_14390
+goto @SHTR_13086
+
+:SHTR_14397
+if 
+  $shtr_num_gen == 15
+goto_if_false @SHTR_14490
+if 
+  $6177 == 0
+goto_if_false @SHTR_14483
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[16]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[10]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[35]
+$6177 = 1
+goto @SHTR_14490
+
+:SHTR_14483
+goto @SHTR_13086
+
+:SHTR_14490
+if 
+  $shtr_num_gen == 16
+goto_if_false @SHTR_14583
+if 
+  $6178 == 0
+goto_if_false @SHTR_14576
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[32]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[10]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[35]
+$6178 = 1
+goto @SHTR_14583
+
+:SHTR_14576
+goto @SHTR_13086
+
+:SHTR_14583
+if 
+  $shtr_num_gen == 17
+goto_if_false @SHTR_14676
+if 
+  $6179 == 0
+goto_if_false @SHTR_14669
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[20]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[18]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[23]
+$6179 = 1
+goto @SHTR_14676
+
+:SHTR_14669
+goto @SHTR_13086
+
+:SHTR_14676
+if 
+  $shtr_num_gen == 18
+goto_if_false @SHTR_14769
+if 
+  $6180 == 0
+goto_if_false @SHTR_14762
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[11]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[14]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[10]
+$6180 = 1
+goto @SHTR_14769
+
+:SHTR_14762
+goto @SHTR_13086
+
+:SHTR_14769
+if 
+  $shtr_num_gen == 19
+goto_if_false @SHTR_14862
+if 
+  $6181 == 0
+goto_if_false @SHTR_14855
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[11]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[10]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[33]
+$6181 = 1
+goto @SHTR_14862
+
+:SHTR_14855
+goto @SHTR_13086
+
+:SHTR_14862
+if 
+  $shtr_num_gen == 20
+goto_if_false @SHTR_14955
+if 
+  $6182 == 0
+goto_if_false @SHTR_14948
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[21]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[24]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[30]
+$6182 = 1
+goto @SHTR_14955
+
+:SHTR_14948
+goto @SHTR_13086
+
+:SHTR_14955
+if 
+  $shtr_num_gen == 21
+goto_if_false @SHTR_15048
+if 
+  $6183 == 0
+goto_if_false @SHTR_15041
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[19]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[23]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[24]
+$6183 = 1
+goto @SHTR_15048
+
+:SHTR_15041
+goto @SHTR_13086
+
+:SHTR_15048
+if 
+  $shtr_num_gen == 22
+goto_if_false @SHTR_15141
+if 
+  $6184 == 0
+goto_if_false @SHTR_15134
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[22]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[34]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[29]
+$6184 = 1
+goto @SHTR_15141
+
+:SHTR_15134
+goto @SHTR_13086
+
+:SHTR_15141
+if 
+  $shtr_num_gen == 23
+goto_if_false @SHTR_15234
+if 
+  $6185 == 0
+goto_if_false @SHTR_15227
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[13]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[14]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[15]
+$6185 = 1
+goto @SHTR_15234
+
+:SHTR_15227
+goto @SHTR_13086
+
+:SHTR_15234
+if 
+  $shtr_num_gen == 24
+goto_if_false @SHTR_15327
+if 
+  $6186 == 0
+goto_if_false @SHTR_15320
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[20]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[17]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[35]
+$6186 = 1
+goto @SHTR_15327
+
+:SHTR_15320
+goto @SHTR_13086
+
+:SHTR_15327
+if 
+  $shtr_num_gen == 25
+goto_if_false @SHTR_15420
+if 
+  $6187 == 0
+goto_if_false @SHTR_15413
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[22]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[14]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[24]
+$6187 = 1
+goto @SHTR_15420
+
+:SHTR_15413
+goto @SHTR_13086
+
+:SHTR_15420
+if 
+  $shtr_num_gen == 26
+goto_if_false @SHTR_15513
+if 
+  $6188 == 0
+goto_if_false @SHTR_15506
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[16]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[15]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[32]
+$6188 = 1
+goto @SHTR_15513
+
+:SHTR_15506
+goto @SHTR_13086
+
+:SHTR_15513
+if 
+  $shtr_num_gen == 27
+goto_if_false @SHTR_15606
+if 
+  $6189 == 0
+goto_if_false @SHTR_15599
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[32]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[27]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[22]
+$6189 = 1
+goto @SHTR_15606
+
+:SHTR_15599
+goto @SHTR_13086
+
+:SHTR_15606
+if 
+  $shtr_num_gen == 28
+goto_if_false @SHTR_15699
+if 
+  $6190 == 0
+goto_if_false @SHTR_15692
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[10]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[36]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[32]
+$6190 = 1
+goto @SHTR_15699
+
+:SHTR_15692
+goto @SHTR_13086
+
+:SHTR_15699
+if 
+  $shtr_num_gen == 29
+goto_if_false @SHTR_15792
+if 
+  $6191 == 0
+goto_if_false @SHTR_15785
+set_var_text_label $shtr_hi_1($shtr_current,10s) = s$shtr_char[27]
+set_var_text_label $shtr_hi_2($shtr_current,10s) = s$shtr_char[18]
+set_var_text_label $shtr_hi_3($shtr_current,10s) = s$shtr_char[12]
+$6191 = 1
+goto @SHTR_15792
+
+:SHTR_15785
+goto @SHTR_13086
+
+:SHTR_15792
+return 
+
+:SHTR_15794
+set_var_text_label s$shtr_char[0] = 'SHTR_0'
+set_var_text_label s$shtr_char[1] = 'SHTR_1'
+set_var_text_label s$shtr_char[2] = 'SHTR_2'
+set_var_text_label s$shtr_char[3] = 'SHTR_3'
+set_var_text_label s$shtr_char[4] = 'SHTR_4'
+set_var_text_label s$shtr_char[5] = 'SHTR_5'
+set_var_text_label s$shtr_char[6] = 'SHTR_6'
+set_var_text_label s$shtr_char[7] = 'SHTR_7'
+set_var_text_label s$shtr_char[8] = 'SHTR_8'
+set_var_text_label s$shtr_char[9] = 'SHTR_9'
+set_var_text_label s$shtr_char[10] = 'SHTR_A'
+set_var_text_label s$shtr_char[11] = 'SHTR_B'
+set_var_text_label s$shtr_char[12] = 'SHTR_C'
+set_var_text_label s$shtr_char[13] = 'SHTR_D'
+set_var_text_label s$shtr_char[14] = 'SHTR_E'
+set_var_text_label s$shtr_char[15] = 'SHTR_F'
+set_var_text_label s$shtr_char[16] = 'SHTR_G'
+set_var_text_label s$shtr_char[17] = 'SHTR_H'
+set_var_text_label s$shtr_char[18] = 'SHTR_I'
+set_var_text_label s$shtr_char[19] = 'SHTR_J'
+set_var_text_label s$shtr_char[20] = 'SHTR_K'
+set_var_text_label s$shtr_char[21] = 'SHTR_L'
+set_var_text_label s$shtr_char[22] = 'SHTR_M'
+set_var_text_label s$shtr_char[23] = 'SHTR_N'
+set_var_text_label s$shtr_char[24] = 'SHTR_O'
+set_var_text_label s$shtr_char[25] = 'SHTR_P'
+set_var_text_label s$shtr_char[26] = 'SHTR_Q'
+set_var_text_label s$shtr_char[27] = 'SHTR_R'
+set_var_text_label s$shtr_char[28] = 'SHTR_S'
+set_var_text_label s$shtr_char[29] = 'SHTR_T'
+set_var_text_label s$shtr_char[30] = 'SHTR_U'
+set_var_text_label s$shtr_char[31] = 'SHTR_V'
+set_var_text_label s$shtr_char[32] = 'SHTR_W'
+set_var_text_label s$shtr_char[33] = 'SHTR_X'
+set_var_text_label s$shtr_char[34] = 'SHTR_Y'
+set_var_text_label s$shtr_char[35] = 'SHTR_Z'
+set_var_text_label s$shtr_char[36] = 'SHTR_PE'
+$shtr_hi_1_x[0] = 176.0
+$shtr_hi_1_y[0] = 96.0
+$shtr_hi_2_x[0] = 224.0
+$shtr_hi_2_y[0] = 96.0
+$shtr_hi_3_x[0] = 272.0
+$shtr_hi_3_y[0] = 96.0
+$shtr_hi_4_x[0] = 464.0
+$shtr_hi_4_y[0] = 96.0
+$shtr_hi_1_x[1] = 176.0
+$shtr_hi_1_y[1] = 128.0
+$shtr_hi_2_x[1] = 224.0
+$shtr_hi_2_y[1] = 128.0
+$shtr_hi_3_x[1] = 272.0
+$shtr_hi_3_y[1] = 128.0
+$shtr_hi_4_x[1] = 464.0
+$shtr_hi_4_y[1] = 128.0
+$shtr_hi_1_x[2] = 176.0
+$shtr_hi_1_y[2] = 160.0
+$shtr_hi_2_x[2] = 224.0
+$shtr_hi_2_y[2] = 160.0
+$shtr_hi_3_x[2] = 272.0
+$shtr_hi_3_y[2] = 160.0
+$shtr_hi_4_x[2] = 464.0
+$shtr_hi_4_y[2] = 160.0
+$shtr_hi_1_x[3] = 176.0
+$shtr_hi_1_y[3] = 192.0
+$shtr_hi_2_x[3] = 224.0
+$shtr_hi_2_y[3] = 192.0
+$shtr_hi_3_x[3] = 272.0
+$shtr_hi_3_y[3] = 192.0
+$shtr_hi_4_x[3] = 464.0
+$shtr_hi_4_y[3] = 192.0
+$shtr_hi_1_x[4] = 176.0
+$shtr_hi_1_y[4] = 224.0
+$shtr_hi_2_x[4] = 224.0
+$shtr_hi_2_y[4] = 224.0
+$shtr_hi_3_x[4] = 272.0
+$shtr_hi_3_y[4] = 224.0
+$shtr_hi_4_x[4] = 464.0
+$shtr_hi_4_y[4] = 224.0
+$shtr_hi_1_x[5] = 176.0
+$shtr_hi_1_y[5] = 256.0
+$shtr_hi_2_x[5] = 224.0
+$shtr_hi_2_y[5] = 256.0
+$shtr_hi_3_x[5] = 272.0
+$shtr_hi_3_y[5] = 256.0
+$shtr_hi_4_x[5] = 464.0
+$shtr_hi_4_y[5] = 256.0
+$shtr_hi_1_x[6] = 176.0
+$shtr_hi_1_y[6] = 288.0
+$shtr_hi_2_x[6] = 224.0
+$shtr_hi_2_y[6] = 288.0
+$shtr_hi_3_x[6] = 272.0
+$shtr_hi_3_y[6] = 288.0
+$shtr_hi_4_x[6] = 464.0
+$shtr_hi_4_y[6] = 288.0
+$shtr_hi_1_x[7] = 176.0
+$shtr_hi_1_y[7] = 320.0
+$shtr_hi_2_x[7] = 224.0
+$shtr_hi_2_y[7] = 320.0
+$shtr_hi_3_x[7] = 272.0
+$shtr_hi_3_y[7] = 320.0
+$shtr_hi_4_x[7] = 464.0
+$shtr_hi_4_y[7] = 320.0
+$shtr_hi_1_x[8] = 176.0
+$shtr_hi_1_y[8] = 352.0
+$shtr_hi_2_x[8] = 224.0
+$shtr_hi_2_y[8] = 352.0
+$shtr_hi_3_x[8] = 272.0
+$shtr_hi_3_y[8] = 352.0
+$shtr_hi_4_x[8] = 464.0
+$shtr_hi_4_y[8] = 352.0
+$shtr_hi_1_x[9] = 176.0
+$shtr_hi_1_y[9] = 384.0
+$shtr_hi_2_x[9] = 224.0
+$shtr_hi_2_y[9] = 384.0
+$shtr_hi_3_x[9] = 272.0
+$shtr_hi_3_y[9] = 384.0
+$shtr_hi_4_x[9] = 464.0
+$shtr_hi_4_y[9] = 384.0
+if 
+  $shtr_played_before == 0
+goto_if_false @SHTR_17436
+set_var_text_label s$shtr_hi_1[0] = s$shtr_char[12]
+set_var_text_label s$shtr_hi_2[0] = s$shtr_char[36]
+set_var_text_label s$shtr_hi_3[0] = s$shtr_char[36]
+$shtr_hi_l[0] = 10
+$shtr_hi_s[0] = 1000
+$shtr_current = 1
+gosub @SHTR_13086
+$shtr_hi_l[1] = 9
+$shtr_hi_s[1] = 900
+$shtr_current = 2
+gosub @SHTR_13086
+$shtr_hi_l[2] = 8
+$shtr_hi_s[2] = 800
+$shtr_current = 3
+gosub @SHTR_13086
+$shtr_hi_l[3] = 7
+$shtr_hi_s[3] = 700
+$shtr_current = 4
+gosub @SHTR_13086
+$shtr_hi_l[4] = 6
+$shtr_hi_s[4] = 600
+$shtr_current = 5
+gosub @SHTR_13086
+$shtr_hi_l[5] = 5
+$shtr_hi_s[5] = 500
+$shtr_current = 6
+gosub @SHTR_13086
+$shtr_hi_l[6] = 4
+$shtr_hi_s[6] = 400
+$shtr_current = 7
+gosub @SHTR_13086
+$shtr_hi_l[7] = 3
+$shtr_hi_s[7] = 300
+$shtr_current = 8
+gosub @SHTR_13086
+$shtr_hi_l[8] = 2
+$shtr_hi_s[8] = 200
+$shtr_current = 9
+gosub @SHTR_13086
+$shtr_hi_l[9] = 1
+$shtr_hi_s[9] = 100
+$shtr_played_before = 1
+
+:SHTR_17436
+set_var_int_to_var_int $shtr_hi_score = $shtr_hi_s[0]
+return 
+
+:SHTR_17446
+$shtr_button1 = 1
+$shtr_player_alive = 1
+$shtr_front_end = 1
+$shtr_score = 0
+$shtr_lives = 2
+$shtr_button_pressed = 0
+$shtr_fire_speed = 15.0
+$shtr_plyr_x = 80.0
+$shtr_plyr_y = 224.0
+$shtr_projectile_size = 8.0
+$shtr_shot_angle = 10.0
+$shtr_range_start = 1.0
+$shtr_range_end = 3.0
+$shtr_fire_alive = 0
+$unk_5962 = 7.0
+$shtr_shot = 0
+$shtr_pickup_counter = 0
+$shtr_pickup_collected = 1
+$shtr_pickup_current = 31
+$shtr_speed_pickup = 250
+$shtr_auto_pickup = 0
+$shtr_multi_pickup = 0
+$shtr_pickup_move_switch = 0
+$shtr_write = 0
+$shtr_draw_highlight = 0
+$shtr_enemy_x[0] = 660.0
+$shtr_enemy_x[1] = 660.0
+$shtr_enemy_x[2] = 660.0
+$shtr_enemy_x[3] = 660.0
+$shtr_heat_bar = 0
+$shtr_start_time = 0
+$shtr_end_time = 0
+$shtr_time_diff = 0
+$shtr_start_time_hit = 0
+$shtr_end_time_hit = 0
+$shtr_time_diff_hit = 0
+$shtr_current_projectile = 1
+$shtr_projectile_alive[1] = 0
+$shtr_projectile_alive[2] = 0
+$shtr_projectile_alive[3] = 0
+$shtr_projectile_alive[4] = 0
+$shtr_projectile_alive[5] = 0
+$shtr_projectile_alive[6] = 0
+$shtr_projectile_alive[7] = 0
+$shtr_projectile_alive[8] = 0
+$shtr_up_projectile_alive[1] = 0
+$shtr_up_projectile_alive[2] = 0
+$shtr_up_projectile_alive[3] = 0
+$shtr_up_projectile_alive[4] = 0
+$shtr_up_projectile_alive[5] = 0
+$shtr_up_projectile_alive[6] = 0
+$shtr_up_projectile_alive[7] = 0
+$shtr_up_projectile_alive[8] = 0
+$shtr_down_projectile_alive[1] = 0
+$shtr_down_projectile_alive[2] = 0
+$shtr_down_projectile_alive[3] = 0
+$shtr_down_projectile_alive[4] = 0
+$shtr_down_projectile_alive[5] = 0
+$shtr_down_projectile_alive[6] = 0
+$shtr_down_projectile_alive[7] = 0
+$shtr_down_projectile_alive[8] = 0
+$shtr_enemy_alive[0] = 0
+$shtr_enemy_alive[1] = 0
+$shtr_enemy_alive[2] = 0
+$shtr_enemy_alive[3] = 0
+$shtr_enemy_alive[4] = 0
+$shtr_enemy_alive[5] = 0
+$shtr_enemy_alive[6] = 0
+$shtr_enemy_alive[7] = 0
+$shtr_enemy_shot_alive[0] = 0
+$shtr_enemy_shot_alive[1] = 0
+$shtr_enemy_shot_alive[2] = 0
+$shtr_enemy_shot_alive[3] = 0
+$shtr_enemy_shot_alive[4] = 0
+$shtr_enemy_shot_alive[5] = 0
+$shtr_enemy_shot_alive[6] = 0
+$shtr_enemy_shot_alive[7] = 0
+$shtr_respawn = 0
+$shtr_random = 0
+$shtr_enemy_col_x = 32.0
+$shtr_enemy_col_y = 32.0
+$shtr_projectile_col_x = 8.0
+$shtr_projectile_col_y = 8.0
+$shtr_plyr_col_x = 32.0
+$shtr_plyr_col_y = 32.0
+$shtr_amplitude = 0.0
+return 
+
+//-------------Mission 6---------------
+// Originally: Video Game: Let's Get Ready To Bumble
+
+:GRAV
+gosub @GRAV_36
+if 
+  has_deatharrest_been_executed 
+goto_if_false @GRAV_27
+gosub @GRAV_6531
+
+:GRAV_27
+gosub @GRAV_6551
+terminate_this_script 
+

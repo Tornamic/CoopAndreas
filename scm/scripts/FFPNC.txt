@@ -1,0 +1,77 @@
+//-------------External script 37 (CUSTOMER_PANIC)---------------
+
+:FFPNC
+script_name 'FFPNC'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @FFPNC_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:FFPNC_60
+if 
+  not Char.IsDead(0@)
+goto_if_false @FFPNC_84
+Char.SetDecisionMaker(0@, $iGlobalPedPanicDM)
+
+:FFPNC_84
+wait 0
+if and
+  Player.IsPlaying($player1)
+  $iTerminateAllAmbience == 0
+goto_if_false @FFPNC_308
+$iAreaCode = Char.GetAreaVisible($scplayer)
+if or
+  $iAreaCode == 0
+  $iTerminateAllAmbience == 1
+goto_if_false @FFPNC_151
+gosub @FFPNC_322
+
+:FFPNC_151
+if 
+  not Char.IsDead(0@)
+goto_if_false @FFPNC_294
+set_lvar_int_to_lvar_int 2@ = 1@
+2@ /= 2
+2@ *= 2
+if 
+  is_int_lvar_greater_than_int_lvar 1@ > 2@
+goto_if_false @FFPNC_251
+3@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @FFPNC_244
+Task.Duck(0@, -2)
+
+:FFPNC_244
+goto @FFPNC_287
+
+:FFPNC_251
+3@ = Char.GetScriptTaskStatus(0@, 1476)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @FFPNC_287
+Task.HandsUp(0@, -2)
+
+:FFPNC_287
+goto @FFPNC_301
+
+:FFPNC_294
+gosub @FFPNC_322
+
+:FFPNC_301
+goto @FFPNC_315
+
+:FFPNC_308
+gosub @FFPNC_322
+
+:FFPNC_315
+goto @FFPNC_84
+
+:FFPNC_322
+Char.MarkAsNoLongerNeeded(0@)
+StreamedScript.MarkAsNoLongerNeeded(37)
+terminate_this_script 
+return 
+terminate_this_script 
+

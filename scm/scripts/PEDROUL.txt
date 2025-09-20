@@ -1,0 +1,187 @@
+//-------------External script 49 (PEDROUL)---------------
+
+:PEDROUL
+script_name 'PEDROUL'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @PEDROUL_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:PEDROUL_60
+Streaming.RequestAnimation("CASINO")
+
+:PEDROUL_70
+if 
+  not Streaming.HasAnimationLoaded("CASINO")
+goto_if_false @PEDROUL_102
+wait 0
+goto @PEDROUL_70
+
+:PEDROUL_102
+3@ = 1
+4@ = 0
+
+:PEDROUL_116
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @PEDROUL_227
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @PEDROUL_213
+if 
+  $iSetCasinoPanic == 0
+goto_if_false @PEDROUL_191
+gosub @PEDROUL_241
+goto @PEDROUL_206
+
+:PEDROUL_191
+Char.SetDecisionMaker(0@, $iGlobalPedPanicDM)
+goto @PEDROUL_998
+
+:PEDROUL_206
+goto @PEDROUL_220
+
+:PEDROUL_213
+gosub @PEDROUL_984
+
+:PEDROUL_220
+goto @PEDROUL_234
+
+:PEDROUL_227
+gosub @PEDROUL_984
+
+:PEDROUL_234
+goto @PEDROUL_116
+
+:PEDROUL_241
+switch_start 3@ total_jumps 1 default_jump 0 @PEDROUL_318 jumps 1 @PEDROUL_304 -1 @PEDROUL_318 -1 @PEDROUL_318 -1 @PEDROUL_318 -1 @PEDROUL_318 -1 @PEDROUL_318 -1 @PEDROUL_318
+
+:PEDROUL_304
+gosub @PEDROUL_320
+goto @PEDROUL_318
+
+:PEDROUL_318
+return 
+
+:PEDROUL_320
+switch_start 4@ total_jumps 6 default_jump 0 @PEDROUL_982 jumps 0 @PEDROUL_383 1 @PEDROUL_438 2 @PEDROUL_533 3 @PEDROUL_631 4 @PEDROUL_813 5 @PEDROUL_939 -1 @PEDROUL_982
+
+:PEDROUL_383
+Task.PlayAnim(0@, "ROULETTE_IN", "CASINO", 4.0, False, False, False, False, -1)
+4@ += 1
+goto @PEDROUL_982
+
+:PEDROUL_438
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDROUL_526
+Task.PlayAnim(0@, "ROULETTE_BET", "CASINO", 4.0, False, False, False, False, -1)
+2@ = Char.SetSayContext(0@, 103)
+4@ += 1
+
+:PEDROUL_526
+goto @PEDROUL_982
+
+:PEDROUL_533
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDROUL_624
+2@ = Math.RandomIntInRange(8000, 15000)
+Task.PlayAnim(0@, "ROULETTE_LOOP", "CASINO", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:PEDROUL_624
+goto @PEDROUL_982
+
+:PEDROUL_631
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDROUL_806
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @PEDROUL_746
+Task.PlayAnim(0@, "ROULETTE_WIN", "CASINO", 4.0, False, False, False, False, -1)
+2@ = Char.SetSayContext(0@, 100)
+goto @PEDROUL_799
+
+:PEDROUL_746
+Task.PlayAnim(0@, "ROULETTE_LOSE", "CASINO", 4.0, False, False, False, False, -1)
+2@ = Char.SetSayContext(0@, 101)
+
+:PEDROUL_799
+4@ += 1
+
+:PEDROUL_806
+goto @PEDROUL_982
+
+:PEDROUL_813
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDROUL_932
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @PEDROUL_883
+4@ = 1
+goto @PEDROUL_932
+
+:PEDROUL_883
+Task.PlayAnim(0@, "ROULETTE_OUT", "CASINO", 4.0, False, False, False, False, -1)
+4@ += 1
+
+:PEDROUL_932
+goto @PEDROUL_982
+
+:PEDROUL_939
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDROUL_975
+gosub @PEDROUL_984
+
+:PEDROUL_975
+goto @PEDROUL_982
+
+:PEDROUL_982
+return 
+
+:PEDROUL_984
+Streaming.RemoveAnimation("CASINO")
+terminate_this_script 
+return 
+
+:PEDROUL_998
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @PEDROUL_1068
+5@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @PEDROUL_1061
+Task.Duck(0@, -2)
+
+:PEDROUL_1061
+goto @PEDROUL_1075
+
+:PEDROUL_1068
+gosub @PEDROUL_984
+
+:PEDROUL_1075
+goto @PEDROUL_998
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

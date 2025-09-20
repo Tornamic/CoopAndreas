@@ -1,0 +1,2610 @@
+//-------------External script 72 (VALET)---------------
+
+:VALET
+script_name 'VALET'
+8@ = 0
+5@ = 1
+$can_script_be_cleaned = 1
+$valet_scene_running = 0
+$valet_can_be_created[0] = 1
+$valet_can_be_created[1] = 1
+$valet_can_be_created[2] = 1
+4@ = 0
+if 
+  8@ == 99
+goto_if_false @VALET_400
+$valet(6@,3i) = Char.Create(4, 189, $valet_la_x(6@,3f), $valet_la_y(6@,3f), $valet_la_z(6@,3f))
+$a_thief = Char.Create(4, 189, $valet_la_x(6@,3f), $valet_la_y(6@,3f), $valet_la_z(6@,3f))
+$valet_pickup_car = Car.Create(415, 0.0, 0.0, 0.0)
+$valet_car[1] = Car.Create(415, 0.0, 0.0, 0.0)
+$drop_off_car = Car.Create(415, 0.0, 0.0, 0.0)
+$valet_mission_car = Car.Create(415, 0.0, 0.0, 0.0)
+$sc3_missioncar = Car.Create(415, 0.0, 0.0, 0.0)
+$mission_drop_off_car = Car.Create(415, 0.0, 0.0, 0.0)
+$a_pickup_car = Car.Create(415, 0.0, 0.0, 0.0)
+19@ = Blip.AddForCar($valet_pickup_car)
+20@ = Blip.AddForCoord(21@, 22@, 23@)
+7@ = DecisionMakerChar.Copy(65542)
+20@ = Blip.AddForCoord(21@, 22@, 23@)
+20@ = Blip.AddForCoord(21@, 22@, 23@)
+20@ = Blip.AddForCoord(21@, 22@, 23@)
+20@ = Blip.AddForCoord(21@, 22@, 23@)
+
+:VALET_400
+if 
+  not Char.IsDead($valet[0])
+goto_if_false @VALET_421
+Char.Delete($valet[0])
+
+:VALET_421
+set_var_int_to_constant $valet_task[0] = 1
+$valet_can_be_created[0] = 1
+if 
+  not Char.IsDead($valet[1])
+goto_if_false @VALET_456
+Char.Delete($valet[1])
+
+:VALET_456
+set_var_int_to_constant $valet_task[1] = 1
+$valet_can_be_created[1] = 1
+if 
+  not Char.IsDead($valet[2])
+goto_if_false @VALET_491
+Char.Delete($valet[2])
+
+:VALET_491
+set_var_int_to_constant $valet_task[2] = 1
+$valet_can_be_created[2] = 1
+$valet_la_x[0] = 330.4229
+$valet_la_x[1] = 328.9663
+$valet_la_x[2] = 326.4376
+$valet_la_y[0] = -1510.783
+$valet_la_y[1] = -1512.467
+$valet_la_y[2] = -1515.406
+$valet_la_z[0] = 35.0247
+$valet_la_z[1] = 35.0247
+$valet_la_z[2] = 35.0313
+$valet_la_h[0] = 222.0
+$valet_la_h[1] = 222.0
+$valet_la_h[2] = 222.0
+$valet_sf_x[0] = -1761.029
+$valet_sf_x[1] = -1759.914
+$valet_sf_x[2] = -1749.713
+$valet_sf_y[0] = 959.5504
+$valet_sf_y[1] = 960.2669
+$valet_sf_y[2] = 960.1956
+$valet_sf_z[0] = 23.8828
+$valet_sf_z[1] = 23.8828
+$valet_sf_z[2] = 23.8906
+$valet_sf_h[0] = 204.3268
+$valet_sf_h[1] = 199.167
+$valet_sf_h[2] = 142.3291
+$valet_vg_x[0] = 2029.758
+$valet_vg_x[1] = 2027.666
+$valet_vg_x[2] = 2026.394
+$valet_vg_y[0] = 1905.943
+$valet_drop_off_area_x1[1] = 336.9336
+$valet_drop_off_area_x2[1] = 323.919
+$valet_drop_off_area_y1[1] = -1531.027
+$valet_drop_off_area_y2[1] = -1504.174
+$valet_drop_off_area_x1[2] = -1768.295
+$valet_drop_off_area_x2[2] = -1729.094
+$valet_drop_off_area_y1[2] = 958.9591
+$valet_drop_off_area_y2[2] = 942.184
+$valet_drop_off_area_x1[3] = 2050.881
+$valet_drop_off_area_x2[3] = 2016.906
+$valet_drop_off_area_y1[3] = 1958.541
+$valet_drop_off_area_y2[3] = 1871.065
+$car_park_area_x1[1] = 336.0477
+$car_park_area_y1[1] = -1452.225
+$car_park_area_z1[1] = 31.9445
+$car_park_area_x2[1] = 271.6679
+$car_park_area_y2[1] = -1550.242
+$car_park_area_z2[1] = 23.1681
+$car_park_area_x1[2] = -1760.178
+$car_park_area_y1[2] = 972.2405
+$car_park_area_z1[2] = 16.1633
+$car_park_area_x2[2] = -1679.605
+$car_park_area_y2[2] = 1064.293
+$car_park_area_z2[2] = 24.8629
+$car_park_area_x1[3] = 1968.502
+$car_park_area_y1[3] = 1755.079
+$car_park_area_z1[3] = 11.4898
+$car_park_area_x2[3] = 1917.811
+$car_park_area_y2[3] = 1788.146
+$car_park_area_z2[3] = 17.3118
+$find_drop_off_car_x1[1] = 363.3463
+$find_drop_off_car_y1[1] = -1522.373
+$find_drop_off_car_x2[1] = 393.1729
+$find_drop_off_car_y2[1] = -1479.321
+$find_drop_off_car_h1[1] = 125.0
+$find_drop_off_car_x3[1] = 324.8593
+$find_drop_off_car_y3[1] = -1591.327
+$find_drop_off_car_x4[1] = 324.8593
+$find_drop_off_car_y4[1] = -1591.327
+$find_drop_off_car_h2[1] = 338.0
+$find_drop_off_car_x3[2] = -1743.524
+$find_drop_off_car_y3[2] = 930.9304
+$find_drop_off_car_x4[2] = -1780.081
+$find_drop_off_car_y4[2] = 908.4018
+$find_drop_off_car_h2[2] = 270.0
+$find_drop_off_car_x1[2] = -1737.715
+$find_drop_off_car_y1[2] = 943.7812
+$find_drop_off_car_x2[2] = -1704.216
+$find_drop_off_car_y2[2] = 911.4586
+$find_drop_off_car_h1[2] = 45.0
+$find_drop_off_car_x1[3] = 2067.529
+$find_drop_off_car_y1[3] = 1957.289
+$find_drop_off_car_x2[3] = 2097.263
+$find_drop_off_car_y2[3] = 1976.0
+$find_drop_off_car_h1[3] = 120.0
+$find_drop_off_car_x3[3] = 2051.536
+$find_drop_off_car_y3[3] = 1933.685
+$find_drop_off_car_x4[3] = 2062.818
+$find_drop_off_car_y4[3] = 1905.085
+$find_drop_off_car_h2[3] = 7.0
+$drop_off_point_x[1] = 332.8306
+$drop_off_point_y[1] = -1516.251
+$drop_off_point_z[1] = 34.8606
+$drop_off_point_x[2] = -1754.514
+$drop_off_point_y[2] = 953.5991
+$drop_off_point_z[2] = 23.75
+$drop_off_point_x[3] = 2035.729
+$drop_off_point_y[3] = 1912.09
+$drop_off_point_z[3] = 11.1751
+$valet_exit_x[0] = -1748.376
+$valet_exit_y[0] = 985.3066
+$valet_exit_z[0] = 17.9009
+$valet_exit_x[1] = 330.7534
+$valet_exit_y[1] = -1474.608
+$valet_exit_z[1] = 24.9126
+$valet_exit_x[2] = -1738.28
+$valet_exit_y[2] = 985.5498
+$valet_exit_z[2] = 16.6718
+$valet_exit_x[3] = 2061.337
+$valet_exit_y[3] = 1808.956
+$valet_exit_z[3] = 9.6719
+$valet_spawn_x[1] = 403.2297
+$valet_spawn_y[1] = -1475.298
+$valet_spawn_z[1] = 30.0032
+$valet_spawn_h[1] = 128.9467
+$valet_spawn_x2[1] = 341.1339
+$valet_spawn_y2[1] = -1556.116
+$valet_spawn_z2[1] = 31.9903
+$valet_spawn_h2[1] = 328.7578
+$valet_spawn_x[2] = -1717.204
+$valet_spawn_y[2] = 962.7901
+$valet_spawn_z[2] = 23.7474
+$valet_spawn_h[2] = 179.9692
+$valet_spawn_x2[2] = -1791.269
+$valet_spawn_y2[2] = 886.3627
+$valet_spawn_z2[2] = 23.75
+$valet_spawn_h2[2] = 359.2426
+$valet_spawn_x[3] = 2073.563
+$valet_spawn_y[3] = 1879.736
+$valet_spawn_z[3] = 10.4288
+$valet_spawn_h[3] = 45.5873
+$valet_spawn_x2[3] = 2084.156
+$valet_spawn_y2[3] = 1965.573
+$valet_spawn_z2[3] = 9.9974
+$valet_spawn_h2[3] = 117.4401
+DecisionMaker.Remove(7@)
+7@ = DecisionMakerChar.Copy(65542)
+DecisionMakerChar.AddEventResponse(7@, 9, 200, 0.0, 100.0, 100.0, 100.0, True, True)
+DecisionMakerChar.AddEventResponse(7@, 15, 415, 0.0, 20.0, 20.0, 20.0, False, True)
+DecisionMakerChar.AddEventResponse(7@, 15, 200, 0.0, 80.0, 80.0, 80.0, True, True)
+$valet_scene_running = 1
+
+:VALET_1959
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @VALET_2291
+if 
+  $force_valet_cleanup == 1
+goto_if_false @VALET_2004
+gosub @VALET_16854
+
+:VALET_2004
+if 
+  $pause_valet_script <> 1
+goto_if_false @VALET_2284
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @VALET_2284
+if 
+  5@ == 1
+goto_if_false @VALET_2095
+if 
+  Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+goto_if_false @VALET_2088
+5@ = 0
+
+:VALET_2088
+goto @VALET_2127
+
+:VALET_2095
+if 
+  not Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+goto_if_false @VALET_2127
+5@ = 1
+
+:VALET_2127
+gosub @VALET_2371
+if 
+  $valet_scene_running == 1
+goto_if_false @VALET_2284
+gosub @VALET_3854
+gosub @VALET_7842
+gosub @VALET_13021
+gosub @VALET_16071
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 8@
+goto_if_false @VALET_2215
+set_lvar_int_to_lvar_int 8@ = TIMERA
+8@ += 2300
+
+:VALET_2215
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 9@
+goto_if_false @VALET_2249
+set_lvar_int_to_lvar_int 9@ = TIMERA
+9@ += 100
+
+:VALET_2249
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 10@
+goto_if_false @VALET_2284
+set_lvar_int_to_lvar_int 10@ = TIMERA
+10@ += 900
+
+:VALET_2284
+goto @VALET_2364
+
+:VALET_2291
+if 
+  $valet_scene_running == 1
+goto_if_false @VALET_2364
+if 
+  $player_on_valet_mission == 1
+goto_if_false @VALET_2357
+$player_on_valet_mission = 0
+$onmission = 0
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+
+:VALET_2357
+gosub @VALET_16854
+
+:VALET_2364
+goto @VALET_1959
+
+:VALET_2371
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 16@
+goto_if_false @VALET_3353
+set_lvar_int_to_lvar_int 16@ = TIMERA
+16@ += 1000
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+$val_Area = 0
+if 
+  Char.IsInArea2D($scplayer, 0, -1893.419, 1119.227, -1617.915, 828.85)
+goto_if_false @VALET_2472
+$val_Area = 2
+
+:VALET_2472
+if 
+  $val_Area == 0
+goto_if_false @VALET_3118
+$area_visible = Streaming.GetAreaVisible()
+if 
+  $area_visible == 0
+goto_if_false @VALET_2894
+if 
+  $frozen_peds == 0
+goto_if_false @VALET_2887
+if 
+  $dont_clear_valets == 0
+goto_if_false @VALET_2670
+if 
+  $valet_scene_running == 1
+goto_if_false @VALET_2663
+if 
+  $force_valet_on_mission <> 1
+goto_if_false @VALET_2663
+if 
+  $player_on_valet_mission == 1
+goto_if_false @VALET_2649
+$player_on_valet_mission = 0
+$onmission = 0
+Text.Print('VAL_A9', 4000, 1)
+Text.PrintBig('VAL_A6', 4000, TextStyle.Middle)
+
+:VALET_2649
+gosub @VALET_16854
+$valet_scene_running = 0
+
+:VALET_2663
+goto @VALET_2887
+
+:VALET_2670
+$frozen_peds = 1
+if 
+  not Char.IsDead($valet[0])
+goto_if_false @VALET_2747
+Char.FreezePosition($valet[0], True)
+if 
+  Char.IsInAnyCar($valet[0])
+goto_if_false @VALET_2747
+$car = Char.GetCarIsUsing($valet[0])
+if 
+  not Car.IsDead($car)
+goto_if_false @VALET_2747
+Car.FreezePosition($car, True)
+
+:VALET_2747
+if 
+  not Char.IsDead($valet[1])
+goto_if_false @VALET_2817
+Char.FreezePosition($valet[1], True)
+if 
+  Char.IsInAnyCar($valet[1])
+goto_if_false @VALET_2817
+$car = Char.GetCarIsUsing($valet[1])
+if 
+  not Car.IsDead($car)
+goto_if_false @VALET_2817
+Car.FreezePosition($car, True)
+
+:VALET_2817
+if 
+  not Char.IsDead($valet[2])
+goto_if_false @VALET_2887
+Char.FreezePosition($valet[2], True)
+if 
+  Char.IsInAnyCar($valet[2])
+goto_if_false @VALET_2887
+$car = Char.GetCarIsUsing($valet[2])
+if 
+  not Car.IsDead($car)
+goto_if_false @VALET_2887
+Car.FreezePosition($car, True)
+
+:VALET_2887
+goto @VALET_3111
+
+:VALET_2894
+$frozen_peds = 1
+if 
+  not Char.IsDead($valet[0])
+goto_if_false @VALET_2971
+Char.FreezePosition($valet[0], True)
+if 
+  Char.IsInAnyCar($valet[0])
+goto_if_false @VALET_2971
+$car = Char.GetCarIsUsing($valet[0])
+if 
+  not Car.IsDead($car)
+goto_if_false @VALET_2971
+Car.FreezePosition($car, True)
+
+:VALET_2971
+if 
+  not Char.IsDead($valet[1])
+goto_if_false @VALET_3041
+Char.FreezePosition($valet[1], True)
+if 
+  Char.IsInAnyCar($valet[1])
+goto_if_false @VALET_3041
+$car = Char.GetCarIsUsing($valet[1])
+if 
+  not Car.IsDead($car)
+goto_if_false @VALET_3041
+Car.FreezePosition($car, True)
+
+:VALET_3041
+if 
+  not Char.IsDead($valet[2])
+goto_if_false @VALET_3111
+Char.FreezePosition($valet[2], True)
+if 
+  Char.IsInAnyCar($valet[2])
+goto_if_false @VALET_3111
+$car = Char.GetCarIsUsing($valet[2])
+if 
+  not Car.IsDead($car)
+goto_if_false @VALET_3111
+Car.FreezePosition($car, True)
+
+:VALET_3111
+goto @VALET_3353
+
+:VALET_3118
+if 
+  $frozen_peds == 1
+goto_if_false @VALET_3353
+$frozen_peds = 0
+if 
+  not Char.IsDead($valet[0])
+goto_if_false @VALET_3213
+Char.FreezePosition($valet[0], False)
+if 
+  Char.IsInAnyCar($valet[0])
+goto_if_false @VALET_3213
+$car = Char.GetCarIsUsing($valet[0])
+if 
+  not Car.IsDead($car)
+goto_if_false @VALET_3213
+Car.FreezePosition($car, False)
+
+:VALET_3213
+if 
+  not Char.IsDead($valet[1])
+goto_if_false @VALET_3283
+Char.FreezePosition($valet[1], False)
+if 
+  Char.IsInAnyCar($valet[1])
+goto_if_false @VALET_3283
+$car = Char.GetCarIsUsing($valet[1])
+if 
+  not Car.IsDead($car)
+goto_if_false @VALET_3283
+Car.FreezePosition($car, False)
+
+:VALET_3283
+if 
+  not Char.IsDead($valet[2])
+goto_if_false @VALET_3353
+Char.FreezePosition($valet[2], False)
+if 
+  Char.IsInAnyCar($valet[2])
+goto_if_false @VALET_3353
+$car = Char.GetCarIsUsing($valet[2])
+if 
+  not Car.IsDead($car)
+goto_if_false @VALET_3353
+Car.FreezePosition($car, False)
+
+:VALET_3353
+if 
+  $play_was_on_valet_oddjob == 1
+goto_if_false @VALET_3597
+if 
+  $val_Area == 1
+goto_if_false @VALET_3444
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 328.1585, -1512.888, 35.0247, 10.0, 10.0, 10.0)
+goto_if_false @VALET_3444
+$play_was_on_valet_oddjob = 0
+
+:VALET_3444
+if 
+  $val_Area == 2
+goto_if_false @VALET_3517
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, -1753.936, 961.8587, 23.8906, 10.0, 10.0, 10.0)
+goto_if_false @VALET_3517
+$play_was_on_valet_oddjob = 0
+
+:VALET_3517
+if 
+  $val_Area == 3
+goto_if_false @VALET_3590
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 2021.337, 1918.236, 11.3438, 10.0, 10.0, 10.0)
+goto_if_false @VALET_3590
+$play_was_on_valet_oddjob = 0
+
+:VALET_3590
+goto @VALET_3852
+
+:VALET_3597
+if 
+  $onmission <> 1
+goto_if_false @VALET_3852
+if 
+  $valet_oddjob_opened == 1
+goto_if_false @VALET_3852
+if 
+  $player_on_valet_mission == 0
+goto_if_false @VALET_3852
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @VALET_3852
+if 
+  $val_Area == 2
+goto_if_false @VALET_3852
+if 
+  Char.LocateOnFoot3D($scplayer, 1, -1753.936, 961.8587, 23.8906, 2.0, 2.0, 2.0)
+goto_if_false @VALET_3852
+if 
+  Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+goto_if_false @VALET_3836
+if 
+  not Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @VALET_3813
+Text.PrintNow('VAL_A7', 5000, 1)
+$player_on_valet_mission = 1
+$onmission = 1
+goto @VALET_3829
+
+:VALET_3813
+Text.PrintNow('VAL_C1', 1000, 1)
+
+:VALET_3829
+goto @VALET_3852
+
+:VALET_3836
+Text.PrintNow('VAL_90', 1000, 1)
+
+:VALET_3852
+return 
+
+:VALET_3854
+if 
+  $player_on_valet_mission == 1
+goto_if_false @VALET_7840
+if 
+  Player.IsWantedLevelGreater($player1, 1)
+goto_if_false @VALET_3894
+Game.SwitchEmergencyServices(True)
+
+:VALET_3894
+if 
+  not Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+goto_if_false @VALET_3958
+Text.PrintBig('VAL_A6', 4000, TextStyle.Middle)
+Text.Print('VAL_B1', 5000, 1)
+$valet_mission_flag = 8
+
+:VALET_3958
+if 
+  $valet_mission_car <> 0
+goto_if_false @VALET_4102
+if 
+  not Car.DoesExist($valet_mission_car)
+goto_if_false @VALET_4047
+if 
+  $valet_time_bonus > 0
+goto_if_false @VALET_4033
+Text.PrintBig('VAL_A6', 4000, TextStyle.Middle)
+$valet_mission_flag = 8
+
+:VALET_4033
+$valet_mission_car = 0
+goto @VALET_4102
+
+:VALET_4047
+if 
+  Car.IsDead($valet_mission_car)
+goto_if_false @VALET_4102
+Text.PrintBig('VAL_A6', 4000, TextStyle.Middle)
+Text.Print('VAL_B6', 5000, 1)
+$valet_mission_flag = 8
+
+:VALET_4102
+if 
+  $tell_player_to_kill_valet == 0
+goto_if_false @VALET_4152
+if 
+  not Car.IsDead($mission_drop_off_car)
+goto_if_false @VALET_4152
+$a_Car = Car.GetBlockingCar($mission_drop_off_car)
+set_var_int_to_var_int $steal_this_car = $a_Car
+
+:VALET_4152
+if 
+  $valet_mission_flag == 0
+goto_if_false @VALET_4575
+if 
+  Streaming.HasModelLoaded(189)
+goto_if_false @VALET_4570
+if 
+  Char.IsDead($valet[0])
+goto_if_false @VALET_4263
+$valet[0] = Char.Create(4, 189, -1783.804, 968.6431, 23.7343)
+Char.SetDecisionMaker($valet[0], 7@)
+Char.SetOnlyDamagedByPlayer($valet[0], True)
+Char.SetSuffersCriticalHits($valet[0], False)
+$valet_task[0] = 2
+0@ = 2
+
+:VALET_4263
+if 
+  Char.IsDead($valet[1])
+goto_if_false @VALET_4340
+$valet[1] = Char.Create(4, 189, -1782.65, 965.0251, 23.8906)
+Char.SetDecisionMaker($valet[1], 7@)
+Char.SetOnlyDamagedByPlayer($valet[1], True)
+Char.SetSuffersCriticalHits($valet[1], False)
+$valet_task[1] = 2
+1@ = 2
+
+:VALET_4340
+if 
+  Char.IsDead($valet[2])
+goto_if_false @VALET_4417
+$valet[2] = Char.Create(4, 189, -1783.731, 965.4009, 23.8961)
+Char.SetDecisionMaker($valet[2], 7@)
+Char.SetOnlyDamagedByPlayer($valet[2], True)
+Char.SetSuffersCriticalHits($valet[2], False)
+$valet_task[2] = 2
+2@ = 2
+
+:VALET_4417
+World.SetPedDensityMultiplier(0.3)
+Game.SwitchEmergencyServices(False)
+$valet_mission_car = 0
+Text.LoadMissionText('VALET1')
+Text.ClearPrints
+Text.PrintBig('VAL_A7', 3000, TextStyle.Middle)
+$total_cars_parked = 0
+set_lvar_int_to_lvar_int 17@ = TIMERA
+17@ += 4000
+$valet_mission_flag = 1
+if 
+  not Char.IsDead($valet[0])
+goto_if_false @VALET_4517
+Char.SetCantBeDraggedOut($valet[0], True)
+
+:VALET_4517
+if 
+  not Char.IsDead($valet[1])
+goto_if_false @VALET_4540
+Char.SetCantBeDraggedOut($valet[1], True)
+
+:VALET_4540
+if 
+  not Char.IsDead($valet[2])
+goto_if_false @VALET_4563
+Char.SetCantBeDraggedOut($valet[2], True)
+
+:VALET_4563
+goto @VALET_4575
+
+:VALET_4570
+Streaming.RequestModel(189)
+
+:VALET_4575
+if 
+  $valet_mission_flag == 1
+goto_if_false @VALET_4642
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 17@
+goto_if_false @VALET_4642
+$valet_cars_to_park = 3
+$valet_countdown = 2
+18@ = 1
+Text.ClearPrints
+$valet_mission_flag = 2
+
+:VALET_4642
+if 
+  $valet_mission_flag == 2
+goto_if_false @VALET_4947
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 17@
+goto_if_false @VALET_4947
+Text.ClearPrints
+Text.PrintWithNumberBig('VAL_60', 18@, 4000, TextStyle.Middle)
+Text.PrintWith2NumbersNow('VAL_76', $valet_cars_to_park, $valet_countdown, 4000, TextStyle.Middle)
+$valet_countdown *= 60000
+Hud.ClearCounter($valet_countdown)
+Hud.ClearCounter($valet_cars_to_park)
+Hud.DisplayTimerWithString($valet_countdown, TimerDirection.Down, 'VAL_A8')
+Hud.DisplayNthCounterWithString($valet_cars_to_park, CounterDisplay.Number, 1, 'VAL_A3')
+set_lvar_int_to_lvar_int 17@ = TIMERA
+17@ += 5000
+$valet_mission_flag = 4
+if 
+  $valet_task[0] == 6
+goto_if_false @VALET_4831
+$valet_task[0] = 1
+$valet_mission_dead = 0
+
+:VALET_4831
+if 
+  $valet_task[1] == 6
+goto_if_false @VALET_4863
+$valet_task[1] = 1
+$1898 = 0
+
+:VALET_4863
+if 
+  $valet_task[2] == 6
+goto_if_false @VALET_4895
+$valet_task[2] = 1
+$1899 = 0
+
+:VALET_4895
+if 
+  $drop_off_car <> 0
+goto_if_false @VALET_4921
+set_var_int_to_var_int $mission_drop_off_car = $drop_off_car
+
+:VALET_4921
+if 
+  $valet_pickup_car <> 0
+goto_if_false @VALET_4947
+set_var_int_to_var_int $mission_drop_off_car = $valet_pickup_car
+
+:VALET_4947
+if 
+  $valet_mission_flag == 3
+goto_if_false @VALET_4991
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 17@
+goto_if_false @VALET_4991
+$valet_mission_flag = 4
+
+:VALET_4991
+if and
+  Char.IsDead($valet[0])
+  $valet_mission_dead == 0
+  $valet_task[0] == 6
+goto_if_false @VALET_5077
+$valet_mission_dead = 1
+$valet_countdown -= 20000
+if 
+  0 > $valet_countdown
+goto_if_false @VALET_5061
+$valet_countdown = 0
+
+:VALET_5061
+Text.Print('VAL_A19', 4000, 1)
+
+:VALET_5077
+if and
+  Char.IsDead($valet[1])
+  $1898 == 0
+  $valet_task[1] == 6
+goto_if_false @VALET_5163
+$1898 = 1
+$valet_countdown -= 20000
+if 
+  0 > $valet_countdown
+goto_if_false @VALET_5147
+$valet_countdown = 0
+
+:VALET_5147
+Text.Print('VAL_A19', 4000, 1)
+
+:VALET_5163
+if and
+  Char.IsDead($valet[2])
+  $1899 == 0
+  $valet_task[2] == 6
+goto_if_false @VALET_5249
+$1899 = 1
+$valet_countdown -= 20000
+if 
+  0 > $valet_countdown
+goto_if_false @VALET_5233
+$valet_countdown = 0
+
+:VALET_5233
+Text.Print('VAL_A19', 4000, 1)
+
+:VALET_5249
+if 
+  $valet_mission_flag > 3
+goto_if_false @VALET_5326
+if 
+  $valet_countdown == 0
+goto_if_false @VALET_5326
+Text.ClearPrints
+Text.Print('VAL_47', 4000, 1)
+Text.PrintBig('VAL_A6', 4000, TextStyle.Middle)
+$valet_mission_flag = 8
+
+:VALET_5326
+if 
+  $valet_mission_flag == 4
+goto_if_false @VALET_5476
+if 
+  $valet_pickup_car <> 0
+goto_if_false @VALET_5476
+if 
+  not Car.IsDead($valet_pickup_car)
+goto_if_false @VALET_5476
+if 
+  is_int_var_equal_to_int_var $valet_pickup_car == $mission_drop_off_car
+goto_if_false @VALET_5476
+$a_ped = Car.GetDriver($valet_pickup_car)
+if 
+  $a_ped == -1
+goto_if_false @VALET_5476
+$valet_mission_flag = 20
+Text.Print('VAL_84', 4000, 1)
+19@ = Blip.AddForCar($valet_pickup_car)
+Blip.SetAsFriendly(19@, True)
+set_var_int_to_var_int $valet_mission_car = $valet_pickup_car
+$valet_mission_flag = 5
+
+:VALET_5476
+if 
+  $valet_mission_flag == 5
+goto_if_false @VALET_5875
+if 
+  not Car.IsDead($valet_mission_car)
+goto_if_false @VALET_5849
+$a_ped = Car.GetDriver($valet_mission_car)
+if 
+  $a_ped <> -1
+goto_if_false @VALET_5842
+if 
+  is_int_var_equal_to_int_var $a_ped == $scplayer
+goto_if_false @VALET_5765
+Text.ClearPrints
+Text.Print('VAL_25', 4000, 1)
+Blip.Remove(19@)
+$valet_time_bonus = 60
+Car.SetHealth($valet_mission_car, 1000)
+Hud.ClearCounter($valet_time_bonus)
+Hud.DisplayNthCounterWithString($valet_time_bonus, CounterDisplay.Number, 2, 'VAL_A17')
+21@, 22@, 23@ = World.GetParkingNodeInArea($car_park_area_x1($val_Area,4f), $car_park_area_y1($val_Area,4f), $car_park_area_z1($val_Area,4f), $car_park_area_x2($val_Area,4f), $car_park_area_y2($val_Area,4f), $car_park_area_z2($val_Area,4f))
+if 
+  21@ <> 0.0
+goto_if_false @VALET_5758
+World.ClearArea(0, 21@, 22@, 23@, 5.0)
+set_var_float_to_lvar_float $parking_x = 21@
+set_var_float_to_lvar_float $parking_y = 22@
+set_var_float_to_lvar_float $parking_z = 23@
+Blip.Remove(20@)
+20@ = Blip.AddForCoord(21@, 22@, 23@)
+$valet_mission_flag = 6
+
+:VALET_5758
+goto @VALET_5842
+
+:VALET_5765
+if or
+  is_int_var_equal_to_int_var $a_ped == $valet[0]
+  is_int_var_equal_to_int_var $a_ped == $valet[1]
+  is_int_var_equal_to_int_var $a_ped == $valet[2]
+goto_if_false @VALET_5842
+Blip.Remove(19@)
+Text.Print('VAL_79', 4000, 1)
+$valet_mission_flag = 4
+$valet_mission_car = 0
+$mission_drop_off_car = 0
+
+:VALET_5842
+goto @VALET_5875
+
+:VALET_5849
+Blip.Remove(19@)
+$valet_mission_flag = 4
+$valet_mission_car = 0
+$mission_drop_off_car = 0
+
+:VALET_5875
+if 
+  $valet_mission_flag == 6
+goto_if_false @VALET_7430
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @VALET_7430
+if 
+  not Car.IsDead($valet_mission_car)
+goto_if_false @VALET_7407
+$valet_time_bonus = Car.GetHealth($valet_mission_car)
+$a_int = 17
+sub_int_lvar_from_int_var $a_int -= 18@
+$a_int *= 20
+$valet_time_bonus += -1000
+abs_var_int $valet_time_bonus
+cset_lvar_float_to_var_int 13@ = integer $valet_time_bonus
+cset_lvar_float_to_var_int 27@ = integer $a_int
+set_lvar_float_to_lvar_float 28@ = 13@
+div_float_lvar_by_float_lvar 28@ /= 27@
+if 
+  28@ > 1.0
+goto_if_false @VALET_6031
+28@ = 1.0
+
+:VALET_6031
+28@ -= 1.0
+28@ = Math.Abs()
+28@ *= 45.0
+cset_var_int_to_lvar_float $valet_time_bonus = float 28@
+if 
+  $valet_time_bonus > 45
+goto_if_false @VALET_6089
+$valet_time_bonus = 45
+
+:VALET_6089
+if 
+  0 > $valet_time_bonus
+goto_if_false @VALET_6114
+$valet_time_bonus = 0
+
+:VALET_6114
+$a_ped = Car.GetDriver($valet_mission_car)
+if 
+  not is_int_var_equal_to_int_var $a_ped == $scplayer
+goto_if_false @VALET_6173
+Blip.Remove(20@)
+19@ = Blip.AddForCar($valet_mission_car)
+Blip.SetAsFriendly(19@, True)
+Hud.ClearCounter($valet_time_bonus)
+$valet_mission_flag = 7
+
+:VALET_6173
+if and
+  $a_ped <> -1
+  not is_int_var_equal_to_int_var $a_ped == $scplayer
+  not is_int_var_equal_to_int_var $a_ped == $valet[0]
+  not is_int_var_equal_to_int_var $a_ped == $valet[1]
+  not is_int_var_equal_to_int_var $a_ped == $valet[2]
+goto_if_false @VALET_6263
+$valet_mission_car = 0
+Blip.Remove(19@)
+Hud.ClearCounter($valet_time_bonus)
+$valet_mission_flag = 4
+Text.Print('VAL_A4', 4000, 1)
+
+:VALET_6263
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @VALET_6314
+if 
+  not Char.IsInCar($scplayer, $valet_mission_car)
+goto_if_false @VALET_6314
+Text.PrintNow('VAL_A18', 1000, 1)
+
+:VALET_6314
+if 
+  Car.LocateStopped3D($valet_mission_car, 1, 21@, 22@, 23@, 4.0, 4.0, 4.0)
+goto_if_false @VALET_7400
+Blip.Remove(20@)
+Car.SetEngineBroken($valet_mission_car, True)
+Car.MarkAsNoLongerNeeded($valet_mission_car)
+Hud.ClearCounter($valet_time_bonus)
+set_lvar_int_to_var_int 6@ = $valet_countdown
+$x, $y, $z, 24@ = Path.GetClosestCarNodeWithHeading(21@, 22@, 23@)
+$x, $y, $z = Car.GetCoordinates($valet_mission_car)
+26@ = Math.GetDistanceBetweenCoords2D($x, $y, 21@, 22@)
+25@ = Car.GetHeading($valet_mission_car)
+24@ = Math.Abs()
+if 
+  24@ > 180.0
+goto_if_false @VALET_6484
+24@ -= 180.0
+
+:VALET_6484
+25@ = Math.Abs()
+if 
+  25@ > 180.0
+goto_if_false @VALET_6520
+25@ -= 180.0
+
+:VALET_6520
+set_lvar_float_to_lvar_float 27@ = 24@
+sub_float_lvar_from_float_lvar 27@ -= 25@
+27@ = Math.Abs()
+cset_lvar_float_to_lvar_int 13@ = integer 18@
+13@ *= 2.0
+29@ = 45.0
+sub_float_lvar_from_float_lvar 29@ -= 13@
+set_lvar_float_to_lvar_float 28@ = 27@
+div_float_lvar_by_float_lvar 28@ /= 29@
+13@ = 1.0
+sub_float_lvar_from_float_lvar 13@ -= 28@
+if 
+  0.0 > 13@
+goto_if_false @VALET_6642
+13@ = 0.0
+
+:VALET_6642
+13@ *= 10.0
+cset_var_int_to_lvar_float $angle_bonus = float 13@
+cset_var_int_to_lvar_float $parking_bonus = float 13@
+cset_lvar_float_to_lvar_int 13@ = integer 18@
+13@ -= 20.0
+13@ = Math.Abs()
+13@ /= 6.0
+set_lvar_float_to_lvar_float 27@ = 26@
+div_float_lvar_by_float_lvar 27@ /= 13@
+28@ = 1.0
+sub_float_lvar_from_float_lvar 28@ -= 27@
+if 
+  0.0 > 28@
+goto_if_false @VALET_6766
+28@ = 0.0
+
+:VALET_6766
+28@ *= 5.0
+cset_var_int_to_lvar_float $a_int = float 28@
+set_var_int_to_var_int $distance_bonus = $a_int
+add_int_var_to_int_var $parking_bonus += $a_int
+if and
+  $parking_bonus <> 1
+  $valet_time_bonus <> 1
+goto_if_false @VALET_6847
+Text.PrintWith2NumbersNow('VAL_A10', $parking_bonus, $valet_time_bonus, 2500, TextStyle.Middle)
+
+:VALET_6847
+if and
+  $parking_bonus == 1
+  $valet_time_bonus <> 1
+goto_if_false @VALET_6894
+Text.PrintWith2NumbersNow('VAL_A12', $parking_bonus, $valet_time_bonus, 2500, TextStyle.Middle)
+
+:VALET_6894
+if and
+  $parking_bonus <> 1
+  $valet_time_bonus == 1
+goto_if_false @VALET_6941
+Text.PrintWith2NumbersNow('VAL_A11', $parking_bonus, $valet_time_bonus, 2500, TextStyle.Middle)
+
+:VALET_6941
+if and
+  $parking_bonus == 0
+  $valet_time_bonus == 0
+goto_if_false @VALET_6988
+Text.PrintWith2NumbersNow('VAL_A13', $parking_bonus, $valet_time_bonus, 2500, TextStyle.Middle)
+
+:VALET_6988
+set_var_int_to_var_int $a_int = $parking_bonus
+add_int_var_to_int_var $a_int += $valet_time_bonus
+if 
+  $a_int <> 1
+goto_if_false @VALET_7048
+Text.PrintWithNumber('VAL_A14', $a_int, 2500, 1)
+goto @VALET_7067
+
+:VALET_7048
+Text.PrintWithNumber('VAL_A15', $a_int, 2500, 1)
+
+:VALET_7067
+Text.Print('VAL_A16', 3000, 1)
+$valet_time_bonus *= 1000
+$parking_bonus *= 1000
+add_int_var_to_int_var $valet_countdown += $valet_time_bonus
+add_int_var_to_int_var $valet_countdown += $parking_bonus
+$valet_time_bonus = 0
+$valet_mission_car = 0
+$valet_cars_to_park -= 1
+$total_cars_parked += 1
+$a_int = Stat.GetInt(175)
+if 
+  is_int_var_greater_than_int_var $total_cars_parked > $a_int
+goto_if_false @VALET_7178
+Stat.SetInt(StatId.ValetCarsParked, $total_cars_parked)
+
+:VALET_7178
+if 
+  $valet_cars_to_park == 0
+goto_if_false @VALET_7393
+Text.ClearPrints
+Hud.ClearTimer($valet_countdown)
+Hud.ClearCounter($valet_cars_to_park)
+18@ += 1
+$valet_mission_flag = 2
+set_var_int_to_lvar_int $valet_cars_to_park = 18@
+$valet_cars_to_park += 2
+$valet_countdown = 2
+if 
+  6 > 18@
+goto_if_false @VALET_7361
+set_var_int_to_lvar_int $a_int = 18@
+$a_int -= 1
+Text.PrintWithNumberBig('VAL_62', $a_int, 3000, TextStyle.Middle)
+set_var_int_to_lvar_int $a_int = 18@
+$a_int *= 100
+$a_int -= 100
+Text.PrintWithNumber('VAL_65', $a_int, 4000, 1)
+Player.AddScore($player1, $a_int)
+set_lvar_int_to_lvar_int 17@ = TIMERA
+17@ += 5000
+
+:VALET_7361
+if 
+  18@ == 6
+goto_if_false @VALET_7386
+gosub @VALET_16442
+
+:VALET_7386
+goto @VALET_7400
+
+:VALET_7393
+$valet_mission_flag = 4
+
+:VALET_7400
+goto @VALET_7430
+
+:VALET_7407
+Text.PrintBig('VAL_A6', 4000, TextStyle.Middle)
+$valet_mission_flag = 8
+
+:VALET_7430
+if 
+  $valet_mission_flag == 7
+goto_if_false @VALET_7675
+if 
+  not Car.IsDead($valet_mission_car)
+goto_if_false @VALET_7649
+$a_ped = Car.GetDriver($valet_mission_car)
+if 
+  $a_ped <> -1
+goto_if_false @VALET_7642
+if 
+  is_int_var_equal_to_int_var $a_ped == $scplayer
+goto_if_false @VALET_7565
+Blip.Remove(19@)
+20@ = Blip.AddForCoord(21@, 22@, 23@)
+Hud.ClearCounter($valet_time_bonus)
+Hud.DisplayNthCounterWithString($valet_time_bonus, CounterDisplay.Number, 2, 'VAL_A17')
+$valet_mission_flag = 6
+goto @VALET_7642
+
+:VALET_7565
+if or
+  is_int_var_equal_to_int_var $a_ped == $valet[0]
+  is_int_var_equal_to_int_var $a_ped == $valet[1]
+  is_int_var_equal_to_int_var $a_ped == $valet[2]
+goto_if_false @VALET_7642
+Blip.Remove(19@)
+Text.Print('VAL_79', 4000, 1)
+$valet_mission_flag = 4
+$valet_mission_car = 0
+$mission_drop_off_car = 0
+
+:VALET_7642
+goto @VALET_7675
+
+:VALET_7649
+Blip.Remove(19@)
+$valet_mission_flag = 4
+$valet_mission_car = 0
+$mission_drop_off_car = 0
+
+:VALET_7675
+if 
+  $valet_mission_flag == 8
+goto_if_false @VALET_7840
+Blip.Remove(19@)
+Blip.Remove(20@)
+Hud.ClearCounter($valet_time_bonus)
+Hud.ClearTimer($valet_countdown)
+Hud.ClearCounter($valet_cars_to_park)
+World.SetPedDensityMultiplier(1.0)
+Game.SwitchEmergencyServices(True)
+$player_on_valet_mission = 0
+$onmission = 0
+$valet_mission_flag = 0
+$valet_mission_car = 0
+$play_was_on_valet_oddjob = 1
+Game.SetWantedMultiplier(1.0)
+if 
+  not Char.IsDead($valet[0])
+goto_if_false @VALET_7794
+Char.SetCantBeDraggedOut($valet[0], False)
+
+:VALET_7794
+if 
+  not Char.IsDead($valet[1])
+goto_if_false @VALET_7817
+Char.SetCantBeDraggedOut($valet[1], False)
+
+:VALET_7817
+if 
+  not Char.IsDead($valet[2])
+goto_if_false @VALET_7840
+Char.SetCantBeDraggedOut($valet[2], False)
+
+:VALET_7840
+return 
+
+:VALET_7842
+6@ = 0
+
+:VALET_7849
+if 
+  3 > 6@
+goto_if_false @VALET_13019
+if 
+  not Char.IsDead($valet(6@,3i))
+goto_if_false @VALET_7985
+if 
+  Char.IsStuckUnderCar($valet(6@,3i))
+goto_if_false @VALET_7985
+3@ = Char.GetScriptTaskStatus($valet(6@,3i), 2089)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @VALET_7985
+Char.ClearTasksImmediately($valet(6@,3i))
+Task.DieNamedAnim($valet(6@,3i), "KO_SKID_FRONT", "PED", 1000.0, 0)
+
+:VALET_7985
+if and
+  $valet_task(6@,3i) <> 4
+  $valet_task(6@,3i) <> 5
+goto_if_false @VALET_8395
+if and
+  not Char.IsDead($valet(6@,3i))
+  not Char.IsDead($scplayer)
+goto_if_false @VALET_8395
+if 
+  Char.IsRespondingToEvent($valet(6@,3i), 9)
+goto_if_false @VALET_8344
+if or
+  Char.LocateAnyMeansChar3D($scplayer, $valet(6@,3i), 5.0, 5.0, 5.0, False)
+  Char.HasBeenDamagedByChar($valet(6@,3i), $scplayer)
+goto_if_false @VALET_8328
+$valet_task(6@,3i) = 5
+$this_a += 1
+Char.ClearTasks($valet(6@,3i))
+if 
+  not Char.IsDead($valet[0])
+goto_if_false @VALET_8203
+if 
+  Char.LocateAnyMeansChar3D($scplayer, $valet[0], 15.0, 15.0, 15.0, False)
+goto_if_false @VALET_8203
+$valet_task[0] = 5
+
+:VALET_8203
+if 
+  not Char.IsDead($valet[1])
+goto_if_false @VALET_8262
+if 
+  Char.LocateAnyMeansChar3D($scplayer, $valet[1], 15.0, 15.0, 15.0, False)
+goto_if_false @VALET_8262
+$valet_task[1] = 5
+
+:VALET_8262
+if 
+  not Char.IsDead($valet[2])
+goto_if_false @VALET_8321
+if 
+  Char.LocateAnyMeansChar3D($scplayer, $valet[2], 15.0, 15.0, 15.0, False)
+goto_if_false @VALET_8321
+$valet_task[2] = 5
+
+:VALET_8321
+goto @VALET_8344
+
+:VALET_8328
+set_var_int_to_lvar_int $valet_task(6@,3i) = 0@(6@,3i)
+
+:VALET_8344
+if 
+  $valet_task(6@,3i) <> 9
+goto_if_false @VALET_8395
+if 
+  is_int_var_equal_to_constant $valet_event == 7
+goto_if_false @VALET_8395
+$valet_task(6@,3i) = 9
+
+:VALET_8395
+if 
+  $valet_task(6@,3i) <> 1
+goto_if_false @VALET_8704
+if 
+  Char.DoesExist($valet(6@,3i))
+goto_if_false @VALET_8704
+if 
+  Char.IsDead($valet(6@,3i))
+goto_if_false @VALET_8704
+$x, $y, $z = Char.GetCoordinatesOfDied($valet(6@,3i))
+if 
+  $valet_task(6@,3i) <> 6
+goto_if_false @VALET_8684
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @VALET_8576
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, $x, $y, $z, 15.0, 15.0, 15.0)
+goto_if_false @VALET_8576
+$valet_task[0] = 5
+$valet_task[1] = 5
+$valet_task[2] = 5
+
+:VALET_8576
+if 
+  $player_on_valet_mission == 1
+goto_if_false @VALET_8684
+if or
+  is_float_var_greater_than_float_var $car_park_area_x1($val_Area,4f) > $x
+  is_float_var_greater_than_float_var $car_park_area_y1($val_Area,4f) > $y
+  is_float_var_greater_than_float_var $car_park_area_z1($val_Area,4f) > $z
+  is_float_var_greater_than_float_var $x > $car_park_area_x2($val_Area,4f)
+  is_float_var_greater_than_float_var $y > $car_park_area_y2($val_Area,4f)
+  is_float_var_greater_than_float_var $z > $car_park_area_z2($val_Area,4f)
+goto_if_false @VALET_8684
+Player.AlterWantedLevelNoDrop($player1, 1)
+
+:VALET_8684
+$valet_task(6@,3i) = 6
+Char.MarkAsNoLongerNeeded($valet(6@,3i))
+
+:VALET_8704
+switch_start $valet_task(6@,3i) total_jumps 11 default_jump 0 @VALET_13005 jumps 1 @VALET_8836 2 @VALET_9149 3 @VALET_9763 4 @VALET_10506 5 @VALET_10614 6 @VALET_12998 7 @VALET_11111
+switch_continued 8 @VALET_12285 9 @VALET_12607 10 @VALET_10325 11 @VALET_12792 -1 @VALET_13005 -1 @VALET_13005 -1 @VALET_13005 -1 @VALET_13005 -1 @VALET_13005
+
+:VALET_8836
+if 
+  $valet_can_be_created(6@,3i) == 1
+goto_if_false @VALET_9142
+Streaming.RequestModel(189)
+if 
+  Streaming.HasModelLoaded(189)
+goto_if_false @VALET_9142
+if 
+  $val_Area == 1
+goto_if_false @VALET_8948
+$valet(6@,3i) = Char.Create(24, 189, $valet_la_x(6@,3f), $valet_la_y(6@,3f), $valet_la_z(6@,3f))
+Char.SetHeading($valet(6@,3i), $valet_la_h(6@,3f))
+
+:VALET_8948
+if 
+  $val_Area == 2
+goto_if_false @VALET_9017
+$valet(6@,3i) = Char.Create(24, 189, $valet_sf_x(6@,3f), $valet_sf_y(6@,3f), $valet_sf_z(6@,3f))
+Char.SetHeading($valet(6@,3i), $valet_sf_h(6@,3f))
+
+:VALET_9017
+if 
+  $val_Area == 3
+goto_if_false @VALET_9086
+$valet(6@,3i) = Char.Create(24, 189, $valet_vg_x(6@,3f), $valet_vg_y(6@,3f), $valet_vg_z(6@,3f))
+Char.SetHeading($valet(6@,3i), $valet_vg_h(6@,3f))
+
+:VALET_9086
+Char.SetDecisionMaker($valet(6@,3i), 7@)
+Char.SetOnlyDamagedByPlayer($valet(6@,3i), True)
+Char.SetSuffersCriticalHits($valet(6@,3i), False)
+$valet_task(6@,3i) = 2
+0@(6@,3i) = 2
+
+:VALET_9142
+goto @VALET_13005
+
+:VALET_9149
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 8@
+goto_if_false @VALET_9756
+if 
+  not Char.IsDead($valet(6@,3i))
+goto_if_false @VALET_9756
+if 
+  $val_Area == 1
+goto_if_false @VALET_9342
+if 
+  not Char.LocateAnyMeans3D($valet(6@,3i), 0, $valet_la_x(6@,3f), $valet_la_y(6@,3f), $valet_la_z(6@,3f), 2.0, 2.0, 2.0)
+goto_if_false @VALET_9342
+11@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, $valet_la_x(6@,3f), $valet_la_y(6@,3f), $valet_la_z(6@,3f), 6, -2)
+Task.AchieveHeading(-1, $valet_la_h(6@,3f))
+Sequence.Close(11@)
+Char.PerformSequence($valet(6@,3i), 11@)
+Sequence.Clear(11@)
+$valet_task(6@,3i) = 3
+
+:VALET_9342
+if 
+  $val_Area == 2
+goto_if_false @VALET_9602
+if 
+  not Char.LocateAnyMeans3D($valet(6@,3i), 0, $valet_sf_x(6@,3f), $valet_sf_y(6@,3f), $valet_sf_z(6@,3f), 2.0, 2.0, 2.0)
+goto_if_false @VALET_9503
+11@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, $valet_sf_x(6@,3f), $valet_sf_y(6@,3f), $valet_sf_z(6@,3f), 6, -2)
+Task.AchieveHeading(-1, $valet_sf_h(6@,3f))
+Sequence.Close(11@)
+Char.PerformSequence($valet(6@,3i), 11@)
+Sequence.Clear(11@)
+$valet_task(6@,3i) = 3
+goto @VALET_9602
+
+:VALET_9503
+3@ = Char.GetScriptTaskStatus($valet(6@,3i), 1492)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @VALET_9602
+$val_h = Char.GetHeading($valet(6@,3i))
+sub_float_var_from_float_var $val_h -= $valet_sf_h(6@,3f)
+abs_var_float $val_h
+if 
+  10.0 <= $val_h
+goto_if_false @VALET_9602
+Task.AchieveHeading($valet(6@,3i), $valet_sf_h(6@,3f))
+
+:VALET_9602
+if 
+  $val_Area == 3
+goto_if_false @VALET_9756
+if 
+  not Char.LocateAnyMeans3D($valet(6@,3i), 0, $valet_vg_x(6@,3f), $valet_vg_y(6@,3f), $valet_vg_z(6@,3f), 2.0, 2.0, 2.0)
+goto_if_false @VALET_9756
+11@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, $valet_vg_x(6@,3f), $valet_vg_y(6@,3f), $valet_vg_z(6@,3f), 6, -2)
+Task.AchieveHeading(-1, $valet_vg_h(6@,3f))
+Sequence.Close(11@)
+Char.PerformSequence($valet(6@,3i), 11@)
+Sequence.Clear(11@)
+$valet_task(6@,3i) = 3
+
+:VALET_9756
+goto @VALET_13005
+
+:VALET_9763
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 9@
+goto_if_false @VALET_10318
+if 
+  not Char.IsDead($valet(6@,3i))
+goto_if_false @VALET_10318
+3@ = Char.GetScriptTaskStatus($valet(6@,3i), 1560)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @VALET_10318
+if 
+  $val_Area == 1
+goto_if_false @VALET_9996
+if 
+  not Char.LocateAnyMeans3D($valet(6@,3i), 0, $valet_la_x(6@,3f), $valet_la_y(6@,3f), $valet_la_z(6@,3f), 3.0, 3.0, 3.0)
+goto_if_false @VALET_9985
+11@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, $valet_la_x(6@,3f), $valet_la_y(6@,3f), $valet_la_z(6@,3f), 6, -2)
+Task.AchieveHeading(-1, $valet_la_h(6@,3f))
+Sequence.Close(11@)
+Char.PerformSequence($valet(6@,3i), 11@)
+Sequence.Clear(11@)
+goto @VALET_9996
+
+:VALET_9985
+$valet_task(6@,3i) = 2
+
+:VALET_9996
+if 
+  $val_Area == 2
+goto_if_false @VALET_10157
+if 
+  not Char.LocateAnyMeans3D($valet(6@,3i), 0, $valet_sf_x(6@,3f), $valet_sf_y(6@,3f), $valet_sf_z(6@,3f), 3.0, 3.0, 3.0)
+goto_if_false @VALET_10146
+11@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, $valet_sf_x(6@,3f), $valet_sf_y(6@,3f), $valet_sf_z(6@,3f), 6, -2)
+Task.AchieveHeading(-1, $valet_sf_h(6@,3f))
+Sequence.Close(11@)
+Char.PerformSequence($valet(6@,3i), 11@)
+Sequence.Clear(11@)
+goto @VALET_10157
+
+:VALET_10146
+$valet_task(6@,3i) = 2
+
+:VALET_10157
+if 
+  $val_Area == 3
+goto_if_false @VALET_10318
+if 
+  not Char.LocateAnyMeans3D($valet(6@,3i), 0, $valet_vg_x(6@,3f), $valet_vg_y(6@,3f), $valet_vg_z(6@,3f), 3.0, 3.0, 3.0)
+goto_if_false @VALET_10307
+11@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, $valet_vg_x(6@,3f), $valet_vg_y(6@,3f), $valet_vg_z(6@,3f), 6, -2)
+Task.AchieveHeading(-1, $valet_vg_h(6@,3f))
+Sequence.Close(11@)
+Char.PerformSequence($valet(6@,3i), 11@)
+Sequence.Clear(11@)
+goto @VALET_10318
+
+:VALET_10307
+$valet_task(6@,3i) = 2
+
+:VALET_10318
+goto @VALET_13005
+
+:VALET_10325
+if 
+  not Char.IsDead($valet(6@,3i))
+goto_if_false @VALET_10499
+3@ = Char.GetScriptTaskStatus($valet(6@,3i), 1560)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @VALET_10499
+if 
+  not Char.LocateAnyMeans3D($valet(6@,3i), 0, $valet_exit_x($val_Area,4f), $valet_exit_y($val_Area,4f), $valet_exit_z($val_Area,4f), 3.0, 3.0, 3.0)
+goto_if_false @VALET_10477
+Task.FollowPathNodesToCoord($valet(6@,3i), $valet_exit_x($val_Area,4f), $valet_exit_y($val_Area,4f), $valet_exit_z($val_Area,4f), 6, -2)
+goto @VALET_10499
+
+:VALET_10477
+0@(6@,3i) = 3
+$valet_task(6@,3i) = 3
+
+:VALET_10499
+goto @VALET_13005
+
+:VALET_10506
+if 
+  not Char.IsDead($valet(6@,3i))
+goto_if_false @VALET_10607
+if 
+  not Char.IsRespondingToEvent($valet(6@,3i), 9)
+goto_if_false @VALET_10591
+Task.PlayAnimNonInterruptable($valet(6@,3i), "FUCKU", "PED", 4.0, False, False, False, False, -2)
+4@ += 1
+
+:VALET_10591
+set_var_int_to_lvar_int $valet_task(6@,3i) = 0@(6@,3i)
+
+:VALET_10607
+goto @VALET_13005
+
+:VALET_10614
+if 
+  not Char.IsDead($valet(6@,3i))
+goto_if_false @VALET_11104
+3@ = Char.GetScriptTaskStatus($valet(6@,3i), 1506)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @VALET_10679
+Task.KillCharOnFoot($valet(6@,3i), $scplayer)
+
+:VALET_10679
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 9@
+goto_if_false @VALET_11104
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @VALET_11104
+if 
+  $val_Area == 1
+goto_if_false @VALET_10844
+if or
+  not Char.LocateAnyMeansChar3D($valet(6@,3i), $scplayer, 15.0, 15.0, 15.0, False)
+  not Char.LocateAnyMeans3D($valet(6@,3i), 0, $valet_la_x(6@,3f), $valet_la_y(6@,3f), $valet_la_z(6@,3f), 10.0, 10.0, 10.0)
+goto_if_false @VALET_10844
+Char.ClearTasks($valet(6@,3i))
+set_var_int_to_lvar_int $valet_task(6@,3i) = 0@(6@,3i)
+
+:VALET_10844
+if 
+  $val_Area == 2
+goto_if_false @VALET_10974
+if or
+  not Char.LocateAnyMeansChar3D($valet(6@,3i), $scplayer, 15.0, 15.0, 15.0, False)
+  not Char.LocateAnyMeans3D($valet(6@,3i), 0, $valet_sf_x(6@,3f), $valet_sf_y(6@,3f), $valet_sf_z(6@,3f), 10.0, 10.0, 10.0)
+goto_if_false @VALET_10974
+Char.ClearTasks($valet(6@,3i))
+set_var_int_to_lvar_int $valet_task(6@,3i) = 0@(6@,3i)
+
+:VALET_10974
+if 
+  $val_Area == 3
+goto_if_false @VALET_11104
+if or
+  not Char.LocateAnyMeansChar3D($valet(6@,3i), $scplayer, 15.0, 15.0, 15.0, False)
+  not Char.LocateAnyMeans3D($valet(6@,3i), 0, $valet_vg_x(6@,3f), $valet_vg_y(6@,3f), $valet_vg_z(6@,3f), 10.0, 10.0, 10.0)
+goto_if_false @VALET_11104
+Char.ClearTasks($valet(6@,3i))
+set_var_int_to_lvar_int $valet_task(6@,3i) = 0@(6@,3i)
+
+:VALET_11104
+goto @VALET_13005
+
+:VALET_11111
+if 
+  not Char.IsDead($valet(6@,3i))
+goto_if_false @VALET_12278
+if 
+  $val_Area == 1
+goto_if_false @VALET_11240
+if 
+  not Char.LocateAnyMeans3D($valet(6@,3i), 0, $valet_la_x(6@,3f), $valet_la_y(6@,3f), $valet_la_z(6@,3f), 23.0, 23.0, 8.0)
+goto_if_false @VALET_11240
+$valet_task(6@,3i) = 2
+0@(6@,3i) = 2
+$valet_car(6@,3i) = 0
+
+:VALET_11240
+if 
+  $val_Area == 2
+goto_if_false @VALET_11349
+if 
+  not Char.LocateAnyMeans3D($valet(6@,3i), 0, $valet_sf_x(6@,3f), $valet_sf_y(6@,3f), $valet_sf_z(6@,3f), 23.0, 23.0, 8.0)
+goto_if_false @VALET_11349
+$valet_task(6@,3i) = 2
+0@(6@,3i) = 2
+$valet_car(6@,3i) = 0
+
+:VALET_11349
+if 
+  $val_Area == 3
+goto_if_false @VALET_11458
+if 
+  not Char.LocateAnyMeans3D($valet(6@,3i), 0, $valet_vg_x(6@,3f), $valet_vg_y(6@,3f), $valet_vg_z(6@,3f), 23.0, 23.0, 8.0)
+goto_if_false @VALET_11458
+$valet_task(6@,3i) = 2
+0@(6@,3i) = 2
+$valet_car(6@,3i) = 0
+
+:VALET_11458
+if 
+  $valet_task(6@,3i) <> 2
+goto_if_false @VALET_12278
+3@ = Char.GetScriptTaskStatus($valet(6@,3i), 1560)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @VALET_12033
+if 
+  not Car.IsDead($valet_car(6@,3i))
+goto_if_false @VALET_11993
+if 
+  Char.IsInCar($valet(6@,3i), $valet_car(6@,3i))
+goto_if_false @VALET_11828
+$x, $y, $z = World.GetParkingNodeInArea($car_park_area_x1($val_Area,4f), $car_park_area_y1($val_Area,4f), $car_park_area_z1($val_Area,4f), $car_park_area_x2($val_Area,4f), $car_park_area_y2($val_Area,4f), $car_park_area_z2($val_Area,4f))
+if 
+  $x <> 0.0
+goto_if_false @VALET_11821
+if 
+  is_int_var_equal_to_int_var $valet_car(6@,3i) == $valet_pickup_car
+goto_if_false @VALET_11664
+$valet_pickup_car = 0
+
+:VALET_11664
+set_var_float_to_var_float $parking_x = $x
+set_var_float_to_var_float $parking_y = $y
+set_var_float_to_var_float $parking_z = $z
+if 
+  Car.IsAttached($valet_car(6@,3i))
+goto_if_false @VALET_11734
+Car.Detach($valet_car(6@,3i), 0.0, 0.0, 0.0, False)
+
+:VALET_11734
+Task.CarDriveToCoord($valet(6@,3i), $valet_car(6@,3i), $x, $y, $z, 15.0, DriveMode.Accurate, 0, DrivingMode.StopForCars)
+if 
+  $player_on_valet_mission == 1
+goto_if_false @VALET_11799
+Char.SetCantBeDraggedOut($valet(6@,3i), True)
+
+:VALET_11799
+$valet_task(6@,3i) = 8
+0@(6@,3i) = 7
+
+:VALET_11821
+goto @VALET_11986
+
+:VALET_11828
+if 
+  not Car.IsDead($valet_car(6@,3i))
+goto_if_false @VALET_11953
+if 
+  Char.LocateAnyMeansCar3D($valet(6@,3i), $valet_car(6@,3i), 20.0, 20.0, 20.0, False)
+goto_if_false @VALET_11946
+11@ = Sequence.Open()
+Task.Pause(-1, 3000)
+Task.EnterCarAsDriver(-1, $valet_car(6@,3i), -2)
+Sequence.Close(11@)
+$this_b += 1
+Char.PerformSequence($valet(6@,3i), 11@)
+Sequence.Clear(11@)
+
+:VALET_11946
+goto @VALET_11986
+
+:VALET_11953
+$valet_task(6@,3i) = 2
+0@(6@,3i) = 2
+$valet_car(6@,3i) = 0
+
+:VALET_11986
+goto @VALET_12026
+
+:VALET_11993
+$valet_task(6@,3i) = 2
+0@(6@,3i) = 2
+$valet_car(6@,3i) = 0
+
+:VALET_12026
+goto @VALET_12278
+
+:VALET_12033
+if and
+  not Car.IsDead($valet_car(6@,3i))
+  not Char.IsDead($scplayer)
+goto_if_false @VALET_12278
+$a_Car = Char.GetCarIsUsing($scplayer)
+if 
+  is_int_var_equal_to_int_var $a_Car == $valet_car(6@,3i)
+goto_if_false @VALET_12174
+if 
+  Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+goto_if_false @VALET_12174
+if and
+  not Char.IsGettingInToACar($valet(6@,3i))
+  not Char.IsInAnyCar($valet(6@,3i))
+goto_if_false @VALET_12174
+Char.ClearTasks($valet(6@,3i))
+$valet_task(6@,3i) = 2
+$valet_car(6@,3i) = 0
+
+:VALET_12174
+if 
+  not Car.IsDead($valet_car(6@,3i))
+goto_if_false @VALET_12271
+if 
+  not Char.LocateAnyMeansCar3D($valet(6@,3i), $valet_car(6@,3i), 20.0, 20.0, 20.0, False)
+goto_if_false @VALET_12271
+$valet_task(6@,3i) = 2
+0@(6@,3i) = 2
+$valet_car(6@,3i) = 0
+
+:VALET_12271
+goto @VALET_12278
+
+:VALET_12278
+goto @VALET_13005
+
+:VALET_12285
+if 
+  not Char.IsDead($valet(6@,3i))
+goto_if_false @VALET_12600
+3@ = Char.GetScriptTaskStatus($valet(6@,3i), 1489)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @VALET_12460
+if 
+  Char.IsInArea3D($valet(6@,3i), 0, $car_park_area_x1($val_Area,4f), $car_park_area_y1($val_Area,4f), $car_park_area_z1($val_Area,4f), $car_park_area_x2($val_Area,4f), $car_park_area_y2($val_Area,4f), $car_park_area_z2($val_Area,4f))
+goto_if_false @VALET_12431
+$valet_task(6@,3i) = 3
+0@(6@,3i) = 3
+goto @VALET_12453
+
+:VALET_12431
+$valet_task(6@,3i) = 3
+0@(6@,3i) = 3
+
+:VALET_12453
+goto @VALET_12600
+
+:VALET_12460
+if or
+  $onmission == 0
+  $player_on_valet_mission == 1
+  $force_valet_on_mission > 0
+goto_if_false @VALET_12600
+if 
+  not Car.IsDead($valet_car(6@,3i))
+goto_if_false @VALET_12600
+$a_Car = Car.GetBlockingCar($valet_car(6@,3i))
+if 
+  not Car.IsDead($a_Car)
+goto_if_false @VALET_12600
+$a_ped = Car.GetDriver($a_Car)
+if or
+  is_int_var_equal_to_int_var $a_ped == $scplayer
+  $a_ped == -1
+goto_if_false @VALET_12600
+if 
+  $a_Car <> -1
+goto_if_false @VALET_12600
+set_var_int_to_var_int $steal_this_car = $a_Car
+
+:VALET_12600
+goto @VALET_13005
+
+:VALET_12607
+if and
+  not Char.IsDead($valet(6@,3i))
+  not Car.IsDead($valet_car(6@,3i))
+goto_if_false @VALET_12785
+if 
+  not Char.IsInCar($valet(6@,3i), $valet_car(6@,3i))
+goto_if_false @VALET_12785
+$a_char = Car.GetDriver($valet_car(6@,3i))
+if 
+  $a_char <> -1
+goto_if_false @VALET_12785
+$a_Car = Char.GetCarIsUsing($scplayer)
+if 
+  is_int_var_equal_to_int_var $a_Car == $valet_car(6@,3i)
+goto_if_false @VALET_12774
+if 
+  Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+goto_if_false @VALET_12756
+goto @VALET_12767
+
+:VALET_12756
+$valet_task(6@,3i) = 2
+
+:VALET_12767
+goto @VALET_12785
+
+:VALET_12774
+$valet_task(6@,3i) = 2
+
+:VALET_12785
+goto @VALET_13005
+
+:VALET_12792
+if 
+  not Char.IsDead($valet(6@,3i))
+goto_if_false @VALET_12991
+3@ = Char.GetScriptTaskStatus($valet(6@,3i), 1655)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @VALET_12991
+if 
+  6@ == 0
+goto_if_false @VALET_12991
+if 
+  not Char.IsDead($valet[1])
+goto_if_false @VALET_12991
+if 
+  not Char.IsDead($valet[0])
+goto_if_false @VALET_12991
+3@ = Char.GetScriptTaskStatus($valet[1], 1655)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @VALET_12991
+3@ = Char.GetScriptTaskStatus($valet[0], 1655)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @VALET_12991
+Task.ChatWithChar($valet[0], $valet[1], True, 1)
+Task.ChatWithChar($valet[1], $valet[0], False, 1)
+0@ = 11
+1@ = 11
+
+:VALET_12991
+goto @VALET_13005
+
+:VALET_12998
+goto @VALET_13005
+
+:VALET_13005
+6@ += 1
+goto @VALET_7849
+
+:VALET_13019
+return 
+
+:VALET_13021
+if or
+  $freeze_creating_drop_off_cars == 0
+  $force_a_one_off_car > 0
+goto_if_false @VALET_13235
+if 
+  $create_drop_off_car_now == 0
+goto_if_false @VALET_13235
+if 
+  $drop_off_car == 0
+goto_if_false @VALET_13235
+if 
+  not World.IsAreaOccupied($valet_drop_off_area_x1($val_Area,4f), $valet_drop_off_area_y1($val_Area,4f), 0.0, $valet_drop_off_area_x2($val_Area,4f), $valet_drop_off_area_y2($val_Area,4f), 80.0, False, True, False, False, False)
+goto_if_false @VALET_13164
+$force_a_one_off_car -= 1
+$create_drop_off_car_now = 1
+15@ = 0
+
+:VALET_13164
+if 
+  $create_drop_off_car_now == 0
+goto_if_false @VALET_13235
+if and
+  $valet_mission_car == 0
+  $valet_pickup_car == 0
+  $drop_off_car == 0
+goto_if_false @VALET_13235
+$force_a_one_off_car -= 1
+$create_drop_off_car_now = 1
+15@ = 0
+
+:VALET_13235
+if 
+  $drop_off_car <> 0
+goto_if_false @VALET_13392
+if 
+  Car.IsDead($drop_off_car)
+goto_if_false @VALET_13283
+$debug_this = 1
+$drop_off_car = 0
+
+:VALET_13283
+if 
+  not Car.IsDead($drop_off_car)
+goto_if_false @VALET_13392
+$a_ped = Car.GetDriver($drop_off_car)
+if 
+  not Char.IsDead($a_ped)
+goto_if_false @VALET_13347
+if 
+  not Char.IsSittingInCar($a_ped, $drop_off_car)
+goto_if_false @VALET_13347
+Car.MarkAsNoLongerNeeded($drop_off_car)
+
+:VALET_13347
+if or
+  $a_ped == -1
+  is_int_var_equal_to_int_var $a_ped == $scplayer
+goto_if_false @VALET_13392
+Car.MarkAsNoLongerNeeded($drop_off_car)
+$debug_this = 2
+$drop_off_car = 0
+
+:VALET_13392
+if 
+  $valet_pickup_car <> 0
+goto_if_false @VALET_13507
+if 
+  Car.IsDead($valet_pickup_car)
+goto_if_false @VALET_13433
+$valet_pickup_car = 0
+
+:VALET_13433
+if 
+  not Car.IsDead($valet_pickup_car)
+goto_if_false @VALET_13507
+$a_ped = Car.GetDriver($valet_pickup_car)
+if 
+  is_int_var_equal_to_int_var $a_ped == $scplayer
+goto_if_false @VALET_13507
+if 
+  not is_int_var_equal_to_int_var $valet_pickup_car == $sc3_missioncar
+goto_if_false @VALET_13500
+Car.MarkAsNoLongerNeeded($valet_pickup_car)
+
+:VALET_13500
+$valet_pickup_car = 0
+
+:VALET_13507
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 9@
+goto_if_false @VALET_14641
+if or
+  $valet_task[0] == 2
+  $valet_task[1] == 2
+  $valet_task[2] == 2
+  $player_on_valet_mission == 1
+  $onmission == 1
+goto_if_false @VALET_14641
+if and
+  $valet_task[0] <> 7
+  $valet_task[1] <> 7
+  $valet_task[2] <> 7
+goto_if_false @VALET_14641
+$a_pickup_car = World.GetRandomCarOfTypeInAreaNoSave(-1, $valet_drop_off_area_x1($val_Area,4f), $valet_drop_off_area_y1($val_Area,4f), $valet_drop_off_area_x2($val_Area,4f), $valet_drop_off_area_y2($val_Area,4f))
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @VALET_13709
+if 
+  Car.IsInArea2D($sc3_missioncar, 0, $valet_drop_off_area_x1($val_Area,4f), $valet_drop_off_area_y1($val_Area,4f), $valet_drop_off_area_x2($val_Area,4f), $valet_drop_off_area_y2($val_Area,4f))
+goto_if_false @VALET_13709
+set_var_int_to_var_int $a_pickup_car = $sc3_missioncar
+
+:VALET_13709
+if 
+  $a_pickup_car == -1
+goto_if_false @VALET_13797
+if 
+  not Car.IsDead($drop_off_car)
+goto_if_false @VALET_13797
+if 
+  Car.IsInArea2D($drop_off_car, 0, $valet_drop_off_area_x1($val_Area,4f), $valet_drop_off_area_y1($val_Area,4f), $valet_drop_off_area_x2($val_Area,4f), $valet_drop_off_area_y2($val_Area,4f))
+goto_if_false @VALET_13797
+set_var_int_to_var_int $a_pickup_car = $drop_off_car
+
+:VALET_13797
+if 
+  $a_pickup_car == -1
+goto_if_false @VALET_13885
+if 
+  not Car.IsDead($mission_drop_off_car)
+goto_if_false @VALET_13885
+if 
+  Car.IsInArea2D($mission_drop_off_car, 0, $valet_drop_off_area_x1($val_Area,4f), $valet_drop_off_area_y1($val_Area,4f), $valet_drop_off_area_x2($val_Area,4f), $valet_drop_off_area_y2($val_Area,4f))
+goto_if_false @VALET_13885
+set_var_int_to_var_int $a_pickup_car = $mission_drop_off_car
+
+:VALET_13885
+$blah = 0
+if 
+  $a_pickup_car <> -1
+goto_if_false @VALET_14022
+set_var_int_to_var_int $blahb = $a_pickup_car
+if 
+  not Car.IsDead($a_pickup_car)
+goto_if_false @VALET_14022
+$a_ped = Car.GetDriver($a_pickup_car)
+if 
+  $a_ped == -1
+goto_if_false @VALET_14022
+12@ = Car.GetClass($a_pickup_car)
+if and
+  not is_int_lvar_equal_to_constant 12@ == 0
+  not is_int_lvar_equal_to_constant 12@ == 1
+  not is_int_lvar_equal_to_constant 12@ == 2
+  not is_int_lvar_equal_to_constant 12@ == 3
+goto_if_false @VALET_14022
+set_var_int_to_var_int $steal_this_car = $a_pickup_car
+$a_pickup_car = -1
+
+:VALET_14022
+if 
+  $a_pickup_car <> -1
+goto_if_false @VALET_14087
+if 
+  not Car.IsDead($a_pickup_car)
+goto_if_false @VALET_14087
+if 
+  Car.IsEmergencyServices($a_pickup_car)
+goto_if_false @VALET_14087
+set_var_int_to_var_int $steal_this_car = $a_pickup_car
+$a_pickup_car = -1
+
+:VALET_14087
+if 
+  $a_pickup_car <> -1
+goto_if_false @VALET_14641
+if 
+  not Car.IsDead($a_pickup_car)
+goto_if_false @VALET_14267
+$a_ped = Car.GetDriver($a_pickup_car)
+if 
+  $a_ped <> -1
+goto_if_false @VALET_14267
+if 
+  not Char.IsDead($a_ped)
+goto_if_false @VALET_14267
+if 
+  not Char.IsSittingInCar($a_ped, $a_pickup_car)
+goto_if_false @VALET_14197
+set_var_int_to_var_int $valet_pickup_car = $a_pickup_car
+Car.SetStraightLineDistance($valet_pickup_car, 1)
+
+:VALET_14197
+3@ = Char.GetScriptTaskStatus($a_ped, 1560)
+if 
+  is_int_lvar_equal_to_constant 3@ == 1
+goto_if_false @VALET_14267
+3@ = Char.GetSequenceProgress($a_ped)
+if 
+  3@ == 1
+goto_if_false @VALET_14267
+set_var_int_to_var_int $valet_pickup_car = $a_pickup_car
+Car.SetStraightLineDistance($valet_pickup_car, 1)
+
+:VALET_14267
+if 
+  $a_ped == -1
+goto_if_false @VALET_14300
+set_var_int_to_var_int $valet_pickup_car = $a_pickup_car
+Car.SetStraightLineDistance($valet_pickup_car, 1)
+
+:VALET_14300
+$a_Car = Char.GetCarIsUsing($scplayer)
+if 
+  is_int_var_equal_to_int_var $a_Car == $valet_pickup_car
+goto_if_false @VALET_14334
+$valet_pickup_car = 0
+
+:VALET_14334
+if 
+  is_int_var_equal_to_int_var $valet_pickup_car == $a_pickup_car
+goto_if_false @VALET_14634
+if 
+  not Car.IsDead($a_pickup_car)
+goto_if_false @VALET_14521
+30@ = Car.GetMaximumNumberOfPassengers($a_pickup_car)
+6@ = 0
+
+:VALET_14384
+if 
+  is_int_lvar_greater_than_int_lvar 30@ > 6@
+goto_if_false @VALET_14521
+if 
+  not Car.IsPassengerSeatFree($a_pickup_car, 6@)
+goto_if_false @VALET_14507
+$a_char = Car.GetCharInPassengerSeat($a_pickup_car, 6@)
+if 
+  not Char.IsDead($a_char)
+goto_if_false @VALET_14507
+if 
+  Char.IsSittingInCar($a_char, $a_pickup_car)
+goto_if_false @VALET_14507
+3@ = Char.GetScriptTaskStatus($a_char, 1502)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @VALET_14507
+Char.MarkAsNoLongerNeeded($a_char)
+Task.WanderStandard($a_char)
+
+:VALET_14507
+6@ += 1
+goto @VALET_14384
+
+:VALET_14521
+if 
+  $valet_task[0] == 2
+goto_if_false @VALET_14561
+$valet_task[0] = 7
+set_var_int_to_var_int $valet_car[0] = $valet_pickup_car
+goto @VALET_14634
+
+:VALET_14561
+if 
+  $valet_task[1] == 2
+goto_if_false @VALET_14601
+$valet_task[1] = 7
+set_var_int_to_var_int $valet_car[1] = $valet_pickup_car
+goto @VALET_14634
+
+:VALET_14601
+if 
+  $valet_task[2] == 2
+goto_if_false @VALET_14634
+$valet_task[2] = 7
+set_var_int_to_var_int $valet_car[2] = $valet_pickup_car
+
+:VALET_14634
+$a_pickup_car = 0
+
+:VALET_14641
+if 
+  $create_drop_off_car_now == 1
+goto_if_false @VALET_16069
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 10@
+goto_if_false @VALET_16069
+$debug_this = 3
+$drop_off_car = 0
+$a_Car = World.GetRandomCarOfTypeInAreaNoSave(-1, $find_drop_off_car_x1($val_Area,4f), $find_drop_off_car_y1($val_Area,4f), $find_drop_off_car_x2($val_Area,4f), $find_drop_off_car_y2($val_Area,4f))
+if 
+  $a_Car <> -1
+goto_if_false @VALET_14983
+if 
+  not Car.IsDead($a_Car)
+goto_if_false @VALET_14983
+24@ = Car.GetHeading($a_Car)
+set_lvar_float_to_lvar_float 13@ = 24@
+sub_float_var_from_float_lvar 13@ -= $find_drop_off_car_h1($val_Area,4f)
+13@ = Math.Abs()
+if 
+  45.0 > 13@
+goto_if_false @VALET_14983
+12@ = Car.GetClass($a_Car)
+if or
+  is_int_lvar_equal_to_constant 12@ == 0
+  is_int_lvar_equal_to_constant 12@ == 1
+  is_int_lvar_equal_to_constant 12@ == 2
+  is_int_lvar_equal_to_constant 12@ == 3
+goto_if_false @VALET_14983
+12@ = Car.GetModel($a_Car)
+if or
+  not is_int_lvar_equal_to_constant 12@ == 596
+  not is_int_lvar_equal_to_constant 12@ == 420
+goto_if_false @VALET_14983
+$a_driver = Car.GetDriver($a_Car)
+if 
+  $a_driver <> -1
+goto_if_false @VALET_14983
+if 
+  not Char.IsDead($a_driver)
+goto_if_false @VALET_14983
+3@ = Char.GetScriptTaskStatus($a_driver, 1490)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @VALET_14983
+set_var_int_to_var_int $drop_off_car = $a_Car
+Car.SetCanGoAgainstTraffic($drop_off_car, False)
+
+:VALET_14983
+if 
+  $drop_off_car == 0
+goto_if_false @VALET_15292
+$a_Car = World.GetRandomCarOfTypeInAreaNoSave(-1, $find_drop_off_car_x3($val_Area,4f), $find_drop_off_car_y3($val_Area,4f), $find_drop_off_car_x4($val_Area,4f), $find_drop_off_car_y4($val_Area,4f))
+if 
+  $a_Car <> -1
+goto_if_false @VALET_15292
+if 
+  not Car.IsDead($a_Car)
+goto_if_false @VALET_15292
+24@ = Car.GetHeading($a_Car)
+set_lvar_float_to_lvar_float 13@ = 24@
+sub_float_var_from_float_lvar 13@ -= $find_drop_off_car_h2($val_Area,4f)
+13@ = Math.Abs()
+if 
+  45.0 > 13@
+goto_if_false @VALET_15292
+12@ = Car.GetClass($a_Car)
+if or
+  is_int_lvar_equal_to_constant 12@ == 0
+  is_int_lvar_equal_to_constant 12@ == 1
+  is_int_lvar_equal_to_constant 12@ == 2
+  is_int_lvar_equal_to_constant 12@ == 3
+goto_if_false @VALET_15292
+12@ = Car.GetModel($a_Car)
+if or
+  not is_int_lvar_equal_to_constant 12@ == 596
+  not is_int_lvar_equal_to_constant 12@ == 420
+goto_if_false @VALET_15292
+$a_driver = Car.GetDriver($a_Car)
+if 
+  $a_driver <> -1
+goto_if_false @VALET_15292
+if 
+  not Char.IsDead($a_driver)
+goto_if_false @VALET_15292
+3@ = Char.GetScriptTaskStatus($a_driver, 1490)
+if 
+  is_int_lvar_equal_to_constant 3@ == 7
+goto_if_false @VALET_15292
+set_var_int_to_var_int $drop_off_car = $a_Car
+Car.SetCanGoAgainstTraffic($drop_off_car, False)
+
+:VALET_15292
+if or
+  $player_on_valet_mission == 1
+  $force_valet_on_mission > 0
+goto_if_false @VALET_15771
+if 
+  $drop_off_car == 0
+goto_if_false @VALET_15771
+15@ += 1
+if 
+  15@ == 6
+goto_if_false @VALET_15462
+6@ = Math.RandomIntInRange(0, 3)
+if 
+  6@ == 0
+goto_if_false @VALET_15400
+Streaming.RequestModel(436)
+set_lvar_int_to_constant 14@ = 436
+
+:VALET_15400
+if 
+  6@ == 1
+goto_if_false @VALET_15431
+Streaming.RequestModel(533)
+set_lvar_int_to_constant 14@ = 533
+
+:VALET_15431
+if 
+  6@ == 2
+goto_if_false @VALET_15462
+Streaming.RequestModel(507)
+set_lvar_int_to_constant 14@ = 507
+
+:VALET_15462
+if 
+  15@ >= 6
+goto_if_false @VALET_15771
+if 
+  14@ <> 0
+goto_if_false @VALET_15771
+if 
+  Streaming.HasModelLoaded(14@)
+goto_if_false @VALET_15771
+if 
+  not Camera.IsPointOnScreen($valet_spawn_x($val_Area,4f), $valet_spawn_y($val_Area,4f), $valet_spawn_z($val_Area,4f), 5.0)
+goto_if_false @VALET_15646
+World.ClearArea(0, $valet_spawn_x($val_Area,4f), $valet_spawn_y($val_Area,4f), $valet_spawn_z($val_Area,4f), 5.0)
+$drop_off_car = Car.Create(14@, $valet_spawn_x($val_Area,4f), $valet_spawn_y($val_Area,4f), $valet_spawn_z($val_Area,4f))
+Car.SetHeading($drop_off_car, $valet_spawn_h($val_Area,4f))
+$a_driver = Char.CreateRandomAsDriver($drop_off_car)
+Car.SetCanGoAgainstTraffic($drop_off_car, False)
+goto @VALET_15771
+
+:VALET_15646
+if 
+  not Camera.IsPointOnScreen($valet_spawn_x2($val_Area,4f), $valet_spawn_y2($val_Area,4f), $valet_spawn_z2($val_Area,4f), 5.0)
+goto_if_false @VALET_15771
+World.ClearArea(0, $valet_spawn_x2($val_Area,4f), $valet_spawn_y2($val_Area,4f), $valet_spawn_z2($val_Area,4f), 5.0)
+$drop_off_car = Car.Create(14@, $valet_spawn_x2($val_Area,4f), $valet_spawn_y2($val_Area,4f), $valet_spawn_z2($val_Area,4f))
+Car.SetHeading($drop_off_car, $valet_spawn_h2($val_Area,4f))
+$a_driver = Char.CreateRandomAsDriver($drop_off_car)
+Car.SetCanGoAgainstTraffic($drop_off_car, False)
+
+:VALET_15771
+if 
+  $drop_off_car <> 0
+goto_if_false @VALET_16069
+$create_drop_off_car_now = 0
+if and
+  not Char.IsDead($a_driver)
+  not Car.IsDead($drop_off_car)
+goto_if_false @VALET_16039
+if 
+  $sc3_missioncar_alive == 1
+goto_if_false @VALET_15844
+Car.ChangeColor($drop_off_car, 3, 3)
+
+:VALET_15844
+Char.MarkAsNoLongerNeeded($a_driver)
+11@ = Sequence.Open()
+if 
+  $onmission == 0
+goto_if_false @VALET_15911
+Task.CarDriveToCoord(-1, $drop_off_car, $drop_off_point_x($val_Area,4f), $drop_off_point_y($val_Area,4f), $drop_off_point_z($val_Area,4f), 17.0, DriveMode.Normal, 0, DrivingMode.StopForCars)
+
+:VALET_15911
+if 
+  $onmission == 1
+goto_if_false @VALET_15968
+Task.CarDriveToCoord(-1, $drop_off_car, $drop_off_point_x($val_Area,4f), $drop_off_point_y($val_Area,4f), $drop_off_point_z($val_Area,4f), 17.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+
+:VALET_15968
+Task.WanderStandard(-1)
+Sequence.Close(11@)
+if 
+  not Char.IsDead($a_driver)
+goto_if_false @VALET_16000
+Char.SetCantBeDraggedOut($a_driver, True)
+
+:VALET_16000
+if 
+  $player_on_valet_mission == 1
+goto_if_false @VALET_16026
+set_var_int_to_var_int $mission_drop_off_car = $drop_off_car
+
+:VALET_16026
+Char.PerformSequence($a_driver, 11@)
+Sequence.Clear(11@)
+
+:VALET_16039
+if 
+  14@ <> 0
+goto_if_false @VALET_16069
+Streaming.MarkModelAsNoLongerNeeded(14@)
+14@ = 0
+
+:VALET_16069
+return 
+
+:VALET_16071
+if or
+  $player_on_valet_mission == 1
+  $playing_scrash1 == 1
+goto_if_false @VALET_16440
+if and
+  $steal_this_car <> -1
+  not is_int_var_equal_to_int_var $steal_this_car == $sc3_missioncar
+  not is_int_var_equal_to_int_var $steal_this_car == $valet_mission_car
+goto_if_false @VALET_16440
+if 
+  not is_int_var_equal_to_int_var $last_steal_Car == $steal_this_car
+goto_if_false @VALET_16440
+if 
+  not Car.IsDead($steal_this_car)
+goto_if_false @VALET_16440
+$x, $y, $z = Car.GetCoordinates($steal_this_car)
+if or
+  -1760.178 > $x
+  972.2405 > $y
+  16.1633 > $z
+  $x > -1679.605
+  $y > 1064.293
+  $z > 24.8629
+goto_if_false @VALET_16440
+if 
+  not Char.IsInCar($scplayer, $steal_this_car)
+goto_if_false @VALET_16440
+if 
+  not Car.IsOnScreen($steal_this_car)
+goto_if_false @VALET_16297
+Car.Delete($steal_this_car)
+goto @VALET_16440
+
+:VALET_16297
+$a_char = Car.GetDriver($steal_this_car)
+if 
+  $a_char == -1
+goto_if_false @VALET_16440
+if 
+  not Char.LocateAnyMeansCar3D($scplayer, $steal_this_car, 8.0, 8.0, 8.0, False)
+goto_if_false @VALET_16440
+$a_char = Char.CreateRandom(0.0, 0.0, 0.0)
+Char.MarkAsNoLongerNeeded($a_char)
+Car.MarkAsNoLongerNeeded($steal_this_car)
+if and
+  not Char.IsDead($a_char)
+  not Car.IsDead($steal_this_car)
+goto_if_false @VALET_16440
+Char.WarpIntoCar($a_char, $steal_this_car)
+Task.CarDriveWander($a_char, $steal_this_car, 20.0, DrivingMode.AvoidCars)
+$steal_this_car = 0
+
+:VALET_16440
+return 
+
+:VALET_16442
+if 
+  $valet_mission_completed == 0
+goto_if_false @VALET_16829
+Stat.PlayerMadeProgress(1)
+Audio.PlayMissionPassedTune(1)
+$valet_mission_completed = 1
+Camera.DoFade(0, 500)
+
+:VALET_16482
+if 
+  Camera.GetFadingStatus
+goto_if_false @VALET_16506
+wait 0
+goto @VALET_16482
+
+:VALET_16506
+Text.ClearPrints
+if 
+  Player.IsPlaying($player1)
+goto_if_false @VALET_16791
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+$valet_cash_pickup = Pickup.CreateProtection(-1757.668, 961.7819, 24.3828, 2000, 2000)
+Streaming.LoadScene(-1757.668, 961.7819, 24.3828)
+Camera.SetFixedPosition(-1761.832, 910.2675, 30.7224, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1761.689, 911.2571, 30.7291, SwitchType.JumpCut)
+Camera.DoFade(1, 500)
+
+:VALET_16636
+if 
+  Camera.GetFadingStatus
+goto_if_false @VALET_16660
+wait 0
+goto @VALET_16636
+
+:VALET_16660
+Audio.PlayMissionPassedTune(2)
+Text.PrintBig('ASS_ACQ', 5000, TextStyle.WhiteMiddleSmaller)
+wait 5000
+Camera.SetFixedPosition(-1748.38, 951.821, 27.5455, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1748.938, 952.5872, 27.2272, SwitchType.JumpCut)
+Text.PrintWithNumberNow('ASS_LUV', 2000, 6000, 1)
+wait 6000
+Camera.DoFade(0, 500)
+
+:VALET_16767
+if 
+  Camera.GetFadingStatus
+goto_if_false @VALET_16791
+wait 0
+goto @VALET_16767
+
+:VALET_16791
+if 
+  Player.IsPlaying($player1)
+goto_if_false @VALET_16829
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.DoFade(1, 500)
+
+:VALET_16829
+Text.PrintBig('VAL_A33', 5000, TextStyle.Middle)
+$valet_mission_flag = 8
+return 
+
+:VALET_16854
+Streaming.MarkModelAsNoLongerNeeded(189)
+Char.MarkAsNoLongerNeeded($valet[0])
+Char.MarkAsNoLongerNeeded($valet[1])
+Char.MarkAsNoLongerNeeded($valet[2])
+Hud.ClearCounter($valet_time_bonus)
+Hud.ClearTimer($valet_countdown)
+Hud.ClearCounter($valet_cars_to_park)
+DecisionMaker.Remove(7@)
+if 
+  not Char.IsDead($valet[0])
+goto_if_false @VALET_16915
+Char.Delete($valet[0])
+
+:VALET_16915
+if 
+  not Char.IsDead($valet[1])
+goto_if_false @VALET_16936
+Char.Delete($valet[1])
+
+:VALET_16936
+if 
+  not Char.IsDead($valet[2])
+goto_if_false @VALET_16957
+Char.Delete($valet[2])
+
+:VALET_16957
+if 
+  $player_on_valet_mission == 1
+goto_if_false @VALET_16986
+World.SetPedDensityMultiplier(1.0)
+Game.SwitchEmergencyServices(True)
+
+:VALET_16986
+$valet_task[0] = 1
+$valet_task[1] = 1
+$valet_task[2] = 1
+4@ = 0
+$dont_clear_valets = 0
+if 
+  not Car.IsDead($valet_mission_car)
+goto_if_false @VALET_17077
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @VALET_17077
+if 
+  not Char.IsInCar($scplayer, $valet_mission_car)
+goto_if_false @VALET_17077
+Car.Delete($valet_mission_car)
+
+:VALET_17077
+if 
+  not Car.IsDead($valet_car[0])
+goto_if_false @VALET_17133
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @VALET_17133
+if 
+  not Char.IsInCar($scplayer, $valet_car[0])
+goto_if_false @VALET_17133
+Car.Delete($valet_car[0])
+
+:VALET_17133
+if 
+  not Car.IsDead($valet_car[1])
+goto_if_false @VALET_17189
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @VALET_17189
+if 
+  not Char.IsInCar($scplayer, $valet_car[1])
+goto_if_false @VALET_17189
+Car.Delete($valet_car[1])
+
+:VALET_17189
+if 
+  not Car.IsDead($valet_car[2])
+goto_if_false @VALET_17245
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @VALET_17245
+if 
+  not Char.IsInCar($scplayer, $valet_car[2])
+goto_if_false @VALET_17245
+Car.Delete($valet_car[2])
+
+:VALET_17245
+if 
+  not Car.IsDead($valet_pickup_car)
+goto_if_false @VALET_17301
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @VALET_17301
+if 
+  not Char.IsInCar($scplayer, $valet_pickup_car)
+goto_if_false @VALET_17301
+Car.Delete($valet_pickup_car)
+
+:VALET_17301
+if 
+  not Car.IsDead($drop_off_car)
+goto_if_false @VALET_17357
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @VALET_17357
+if 
+  not Char.IsInCar($scplayer, $drop_off_car)
+goto_if_false @VALET_17357
+Car.Delete($drop_off_car)
+
+:VALET_17357
+$valet_mission_dead = 0
+$1898 = 0
+$1899 = 0
+$valet_mission_car = 0
+$valet_car[0] = 0
+$valet_car[1] = 0
+$valet_car[2] = 0
+$valet_pickup_car = 0
+$debug_this = 4
+$drop_off_car = 0
+$valet_mission_flag = 0
+$pause_valet_script = 0
+$force_valet_cleanup = 0
+$valet_scene_running = 0
+Blip.Remove(20@)
+Blip.Remove(19@)
+terminate_this_script 
+return 
+terminate_this_script 
+

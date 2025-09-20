@@ -1,0 +1,47 @@
+:TRU
+script_name 'TRU'
+
+:TRU_11
+wait $mission_trigger_wait_time
+if 
+  $flag_truth_mission_counter == 2
+goto_if_false @TRU_36
+terminate_this_script 
+
+:TRU_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @TRU_281
+if 
+  $onmission == 0
+goto_if_false @TRU_281
+if 
+  Player.CanStartMission($player1)
+goto_if_false @TRU_281
+if 
+  $flag_truth_mission_counter == 0
+goto_if_false @TRU_180
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $truth2X, $truth2Y, $truth2Z, 1.2, 1.2, 2.0)
+goto_if_false @TRU_180
+$onmission = 1
+Text.PrintBig('TRUTH_1', 1000, TextStyle.BottomRight)
+PSAVE1_2445()
+Mission.LoadAndLaunchInternal(46) // Body Harvest
+
+:TRU_180
+if and
+  $flag_truth_mission_counter == 1
+  $flag_bcesar_mission_counter > 9
+goto_if_false @TRU_281
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $truthX, $truthY, $truthZ, 1.2, 1.2, 2.0)
+goto_if_false @TRU_281
+$onmission = 1
+Text.PrintBig('TRUTH_2', 1000, TextStyle.BottomRight)
+PSAVE1_2605()
+Mission.LoadAndLaunchInternal(47) // Are you going to San Fierro?
+
+:TRU_281
+goto @TRU_11
+

@@ -1,0 +1,178 @@
+:APGATE
+script_name 'APGATE'
+5@ = 0
+6@ = 0
+4@ = 0
+if 
+  4@ > 0
+goto_if_false @APGATE_72
+0@ = Object.CreateNoOffset(#WS_APGATE, 0.0, 0.0, 0.0)
+
+:APGATE_72
+wait 0
+if and
+  Object.DoesExist(0@)
+  Player.IsPlaying($player1)
+goto_if_false @APGATE_104
+APGATE_111()
+
+:APGATE_104
+goto @APGATE_72
+
+:APGATE_111
+switch_start 5@ total_jumps 1 default_jump 0 @APGATE_188 jumps 0 @APGATE_174 -1 @APGATE_188 -1 @APGATE_188 -1 @APGATE_188 -1 @APGATE_188 -1 @APGATE_188 -1 @APGATE_188
+
+:APGATE_174
+APGATE_190()
+goto @APGATE_188
+
+:APGATE_188
+return 
+
+:APGATE_190
+switch_start 6@ total_jumps 4 default_jump 0 @APGATE_1046 jumps 0 @APGATE_253 1 @APGATE_692 2 @APGATE_828 3 @APGATE_910 -1 @APGATE_1046 -1 @APGATE_1046 -1 @APGATE_1046
+
+:APGATE_253
+10@ = Stat.GetInt(223)
+if 
+  is_int_lvar_greater_or_equal_to_constant 10@ >= 180
+goto_if_false @APGATE_362
+if 
+  Char.LocateAnyMeansObject2D($scplayer, 0@, 10.0, 10.0, False)
+goto_if_false @APGATE_355
+11@, 14@, 17@ = Object.GetCoordinates(0@)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @APGATE_348
+Audio.ReportMissionAudioEventAtObject(0@, 1100)
+
+:APGATE_348
+6@ += 1
+
+:APGATE_355
+goto @APGATE_685
+
+:APGATE_362
+if 
+  $iFlagOpenAirportGates > 0
+goto_if_false @APGATE_462
+if 
+  Char.LocateAnyMeansObject2D($scplayer, 0@, 10.0, 10.0, False)
+goto_if_false @APGATE_455
+11@, 14@, 17@ = Object.GetCoordinates(0@)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @APGATE_448
+Audio.ReportMissionAudioEventAtObject(0@, 1100)
+
+:APGATE_448
+6@ += 1
+
+:APGATE_455
+goto @APGATE_685
+
+:APGATE_462
+11@ = Object.GetOffsetInWorldCoords(14@, 17@, 0@, 0.0, 5.2, 0.0)
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 11@, 14@, 17@, 4.5, 4.5, 4.5)
+goto_if_false @APGATE_584
+11@, 14@, 17@ = Object.GetCoordinates(0@)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @APGATE_570
+Audio.ReportMissionAudioEventAtObject(0@, 1100)
+
+:APGATE_570
+6@ += 1
+goto @APGATE_685
+
+:APGATE_584
+11@ = Object.GetOffsetInWorldCoords(14@, 17@, 0@, 0.0, -3.0, 0.0)
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 11@, 14@, 17@, 3.0, 3.0, 3.0)
+  180 >= 10@
+  not Text.IsThisHelpMessageBeingDisplayed('AP_0003')
+goto_if_false @APGATE_685
+Text.PrintHelp('AP_0003')
+
+:APGATE_685
+goto @APGATE_1046
+
+:APGATE_692
+APGATE_1048()
+if 
+  Object.Slide(0@, 1@, 2@, 3@, 13@, 16@, 19@, True)
+goto_if_false @APGATE_821
+if 
+  Object.Locate3D(0@, 1@, 2@, 3@, 0.1, 0.1, 0.1, False)
+goto_if_false @APGATE_821
+Object.SetCoordinates(0@, 1@, 2@, 3@)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @APGATE_814
+Audio.ReportMissionAudioEventAtObject(0@, 1101)
+
+:APGATE_814
+6@ += 1
+
+:APGATE_821
+goto @APGATE_1046
+
+:APGATE_828
+if 
+  not Char.LocateAnyMeansObject2D($scplayer, 0@, 20.0, 20.0, False)
+goto_if_false @APGATE_903
+12@, 15@, 18@ = Object.GetCoordinates(0@)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @APGATE_896
+Audio.ReportMissionAudioEventAtObject(0@, 1100)
+
+:APGATE_896
+6@ += 1
+
+:APGATE_903
+goto @APGATE_1046
+
+:APGATE_910
+APGATE_1048()
+if 
+  Object.Slide(0@, 11@, 14@, 17@, 13@, 16@, 19@, True)
+goto_if_false @APGATE_1039
+if 
+  Object.Locate3D(0@, 11@, 14@, 17@, 0.1, 0.1, 0.1, False)
+goto_if_false @APGATE_1039
+Object.SetCoordinates(0@, 11@, 14@, 17@)
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @APGATE_1032
+Audio.ReportMissionAudioEventAtObject(0@, 1101)
+
+:APGATE_1032
+6@ = 0
+
+:APGATE_1039
+goto @APGATE_1046
+
+:APGATE_1046
+return 
+
+:APGATE_1048
+13@ = Object.GetHeading(0@)
+if and
+  13@ > 70.0
+  75.0 > 13@
+goto_if_false @APGATE_1124
+13@ = 0.03
+16@ = 0.1
+19@ = 0.1
+goto @APGATE_1154
+
+:APGATE_1124
+13@ = 0.1
+16@ = 0.1
+19@ = 0.1
+
+:APGATE_1154
+return 
+

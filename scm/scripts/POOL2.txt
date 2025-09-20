@@ -1,0 +1,8512 @@
+//-------------Mission 8---------------
+// Originally: Pool
+
+:POOL2
+script_name 'POOL2'
+gosub @POOL2_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @POOL2_38
+gosub @POOL2_60776
+
+:POOL2_38
+gosub @POOL2_60828
+terminate_this_script 
+
+:POOL2_47
+Stat.RegisterMissionGiven
+$onmission = 1
+181@ = Clock.GetGameTimer()
+34@ = 0
+35@ = 0
+37@ = 0
+38@ = 0
+178@ = 0
+208@ = -0.957
+210@ = -0.49
+209@ = 0.957
+211@ = 0.49
+203@ = 0.05
+204@ = 2.0
+127@ = 1
+
+:POOL2_163
+wait 0
+39@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 182@ = 39@
+sub_int_lvar_from_int_lvar 182@ -= 181@
+set_lvar_int_to_lvar_int 181@ = 39@
+add_int_lvar_to_int_lvar 183@ += 182@
+add_int_lvar_to_int_lvar 205@ += 182@
+add_int_lvar_to_int_lvar 206@ += 182@
+gosub @POOL2_2290
+
+:POOL2_227
+switch_start 34@ total_jumps 13 default_jump 0 @POOL2_537 jumps 0 @POOL2_355 1 @POOL2_369 2 @POOL2_383 3 @POOL2_397 4 @POOL2_411 5 @POOL2_425 6 @POOL2_439
+switch_continued 7 @POOL2_453 8 @POOL2_467 9 @POOL2_481 10 @POOL2_495 11 @POOL2_509 12 @POOL2_523 -1 @POOL2_537 -1 @POOL2_537 -1 @POOL2_537
+
+:POOL2_355
+gosub @POOL2_680
+goto @POOL2_537
+
+:POOL2_369
+gosub @POOL2_5410
+goto @POOL2_537
+
+:POOL2_383
+gosub @POOL2_8958
+goto @POOL2_537
+
+:POOL2_397
+gosub @POOL2_9675
+goto @POOL2_537
+
+:POOL2_411
+gosub @POOL2_10505
+goto @POOL2_537
+
+:POOL2_425
+gosub @POOL2_12137
+goto @POOL2_537
+
+:POOL2_439
+gosub @POOL2_15511
+goto @POOL2_537
+
+:POOL2_453
+gosub @POOL2_15513
+goto @POOL2_537
+
+:POOL2_467
+gosub @POOL2_20853
+goto @POOL2_537
+
+:POOL2_481
+gosub @POOL2_21376
+goto @POOL2_537
+
+:POOL2_495
+gosub @POOL2_22768
+goto @POOL2_537
+
+:POOL2_509
+gosub @POOL2_24866
+goto @POOL2_537
+
+:POOL2_523
+gosub @POOL2_26060
+goto @POOL2_537
+
+:POOL2_537
+if 
+  not is_int_lvar_equal_to_int_lvar 179@ == 34@
+goto_if_false @POOL2_571
+set_lvar_int_to_lvar_int 179@ = 34@
+goto @POOL2_227
+
+:POOL2_571
+gosub @POOL2_26186
+if 
+  108@ == 0
+goto_if_false @POOL2_678
+if 
+  38@ == 0
+goto_if_false @POOL2_662
+if 
+  37@ == 0
+goto_if_false @POOL2_646
+goto @POOL2_163
+goto @POOL2_655
+
+:POOL2_646
+gosub @POOL2_60794
+return 
+
+:POOL2_655
+goto @POOL2_671
+
+:POOL2_662
+gosub @POOL2_60776
+return 
+
+:POOL2_671
+goto @POOL2_680
+
+:POOL2_678
+return 
+
+:POOL2_680
+if 
+  35@ == -1
+goto_if_false @POOL2_972
+163@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+$active_pool_table = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+164@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+$active_pool_opponent = Char.Create(4, 7, 0.0, 0.0, 0.0)
+168@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+358@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+359@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+82@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+$active_initial_cue = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+347@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+213@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+214@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+
+:POOL2_972
+if 
+  35@ == 0
+goto_if_false @POOL2_1158
+if 
+  Object.DoesExist($active_pool_table)
+goto_if_false @POOL2_1158
+set_lvar_int_to_var_int 163@ = $active_pool_table
+set_lvar_int_to_var_int 164@ = $active_pool_opponent
+if 
+  not Char.IsDead(164@)
+goto_if_false @POOL2_1082
+Char.SetOnlyDamagedByPlayer(164@, True)
+Char.SetProofs(164@, True, True, True, True, True)
+Char.SetCollision(164@, False)
+207@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+Char.SetDecisionMaker(164@, 207@)
+
+:POOL2_1082
+$x, $y, $z = Object.GetCoordinates(163@)
+World.ClearArea(1, $x, $y, $z, 100.0)
+World.SetPedDensityMultiplier(0.0)
+Camera.SetNearClip(0.01)
+Player.MakeGangDisappear
+129@ = 0
+108@ = 0
+gosub @POOL2_57818
+35@ += 1
+
+:POOL2_1158
+if 
+  35@ == 1
+goto_if_false @POOL2_1336
+if 
+  Object.DoesExist(163@)
+goto_if_false @POOL2_1336
+102@, 103@, 104@ = Object.GetCoordinates(163@)
+105@ = Object.GetHeading(163@)
+104@ += -0.1
+Text.LoadMissionText('POOL')
+Audio.LoadMissionAudio(1802, 4)
+Streaming.RequestModel(#K_POOLQ)
+Streaming.RequestAnimation("POOL")
+
+:POOL2_1254
+if or
+  not Streaming.HasAnimationLoaded("POOL")
+  not Streaming.HasModelLoaded(#K_POOLQ)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @POOL2_1292
+wait 0
+goto @POOL2_1254
+
+:POOL2_1292
+Txd.LoadDictionary('LD_POOL')
+Txd.LoadSprite("BALL", 1)
+Txd.LoadSprite("NIB", 2)
+125@ = 0
+35@ += 1
+
+:POOL2_1336
+if 
+  35@ == 2
+goto_if_false @POOL2_1368
+34@ += 1
+35@ = 0
+
+:POOL2_1368
+return 
+Debugger.Line(98@, 100@, $z, 99@, 100@, $z)
+Debugger.Line(98@, 100@, $z, 98@, 101@, $z)
+Debugger.Line(99@, 101@, $z, 99@, 100@, $z)
+Debugger.Line(99@, 101@, $z, 98@, 101@, $z)
+if 
+is_ps2_keyboard_key_just_pressed 129
+goto_if_false @POOL2_1476
+208@ += -0.0001
+
+:POOL2_1476
+if 
+is_ps2_keyboard_key_just_pressed 128
+goto_if_false @POOL2_1502
+208@ += 0.0001
+
+:POOL2_1502
+if 
+is_ps2_keyboard_key_just_pressed 131
+goto_if_false @POOL2_1528
+210@ += -0.0001
+
+:POOL2_1528
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @POOL2_1554
+210@ += 0.0001
+
+:POOL2_1554
+if 
+is_ps2_keyboard_key_just_pressed 141
+goto_if_false @POOL2_1580
+209@ += -0.0001
+
+:POOL2_1580
+if 
+is_ps2_keyboard_key_just_pressed 143
+goto_if_false @POOL2_1606
+209@ += 0.0001
+
+:POOL2_1606
+if 
+is_ps2_keyboard_key_just_pressed 139
+goto_if_false @POOL2_1632
+211@ += -0.0001
+
+:POOL2_1632
+if 
+is_ps2_keyboard_key_just_pressed 145
+goto_if_false @POOL2_1658
+211@ += 0.0001
+
+:POOL2_1658
+if 
+is_ps2_keyboard_key_just_pressed 137
+goto_if_false @POOL2_2222
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("EDIT_X1 = 8AT_1_MS2INTSHOWNONSEDDEDOSS OUT")
+save_float_to_debug_file 208@
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("EDIT_Y1 = 8AT_1_MS2INTSHOWNONSEDDEDOSS OUT")
+save_float_to_debug_file 210@
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("EDIT_X2 = 8AT_1_MS2INTSHOWNONSEDDEDOSS OUT")
+save_float_to_debug_file 209@
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("EDIT_Y2 = 8AT_1_MS2INTSHOWNONSEDDEDOSS OUT")
+save_float_to_debug_file 211@
+
+:POOL2_2222
+if 
+  Object.DoesExist(163@)
+goto_if_false @POOL2_2288
+98@ = Object.GetOffsetInWorldCoords(100@, $z, 163@, 208@, 210@, 0.7)
+99@ = Object.GetOffsetInWorldCoords(101@, $z, 163@, 209@, 211@, 0.7)
+
+:POOL2_2288
+return 
+
+:POOL2_2290
+if 
+is_ps2_keyboard_key_just_pressed 32
+goto_if_false @POOL2_2339
+212@ += 1
+if 
+  212@ > 11
+goto_if_false @POOL2_2337
+212@ = 0
+
+:POOL2_2337
+clear_all_view_variables 
+
+:POOL2_2339
+if 
+  212@ == 1
+goto_if_false @POOL2_2556
+set_var_int_to_lvar_int $pool_view_debug = 34@
+set_var_int_to_lvar_int $6444 = 35@
+set_var_int_to_lvar_int $6445 = 36@
+set_var_int_to_lvar_int $6446 = 108@
+set_var_int_to_lvar_int $6447 = 125@
+set_var_int_to_lvar_int $6448 = 129@
+set_var_int_to_lvar_int $6449 = 217@
+set_var_int_to_lvar_int $6450 = 218@
+view_integer_variable $pool_view_debug "M_STAGE"
+view_integer_variable $6444 "M_GOALS"
+view_integer_variable $6445 "FLAG3"
+view_integer_variable $6446 "QUIT"
+view_integer_variable $6447 "PL_CIRCLE_PRESSED"
+view_integer_variable $6448 "OUTPUT_TEXT"
+view_integer_variable $6449 "PLAYER1_COLOUR"
+view_integer_variable $6450 "PLAYER2_COLOUR"
+
+:POOL2_2556
+if 
+  212@ == 2
+goto_if_false @POOL2_2806
+set_var_int_to_lvar_int $pool_view_debug = 66@
+set_var_int_to_lvar_int $6444 = 67@
+set_var_int_to_lvar_int $6445 = 68@
+set_var_int_to_lvar_int $6446 = 69@
+set_var_int_to_lvar_int $6447 = 70@
+set_var_int_to_lvar_int $6448 = 71@
+set_var_int_to_lvar_int $6449 = 72@
+set_var_int_to_lvar_int $6450 = 73@
+view_integer_variable $pool_view_debug "BALL_POTTED[0]"
+view_integer_variable $6444 "BALL_POTTED[1]"
+view_integer_variable $6445 "BALL_POTTED[2]"
+view_integer_variable $6446 "BALL_POTTED[3]"
+view_integer_variable $6447 "BALL_POTTED[4]"
+view_integer_variable $6448 "BALL_POTTED[5]"
+view_integer_variable $6449 "BALL_POTTED[6]"
+view_integer_variable $6450 "BALL_POTTED[7]"
+
+:POOL2_2806
+if 
+  212@ == 3
+goto_if_false @POOL2_3062
+set_var_int_to_lvar_int $pool_view_debug = 74@
+set_var_int_to_lvar_int $6444 = 75@
+set_var_int_to_lvar_int $6445 = 76@
+set_var_int_to_lvar_int $6446 = 77@
+set_var_int_to_lvar_int $6447 = 78@
+set_var_int_to_lvar_int $6448 = 79@
+set_var_int_to_lvar_int $6449 = 80@
+set_var_int_to_lvar_int $6450 = 81@
+view_integer_variable $pool_view_debug "BALL_POTTED[8]"
+view_integer_variable $6444 "BALL_POTTED[9]"
+view_integer_variable $6445 "BALL_POTTED[10]"
+view_integer_variable $6446 "BALL_POTTED[11]"
+view_integer_variable $6447 "BALL_POTTED[12]"
+view_integer_variable $6448 "BALL_POTTED[13]"
+view_integer_variable $6449 "BALL_POTTED[14]"
+view_integer_variable $6450 "BALL_POTTED[15]"
+
+:POOL2_3062
+if 
+  212@ == 4
+goto_if_false @POOL2_3319
+set_var_int_to_lvar_int $pool_view_debug = 219@
+set_var_int_to_lvar_int $6444 = 220@
+set_var_int_to_lvar_int $6445 = 229@
+set_var_int_to_lvar_int $6446 = 230@
+set_var_int_to_lvar_int $6447 = 231@
+set_var_int_to_lvar_int $6448 = 232@
+set_var_int_to_lvar_int $6449 = 251@
+set_var_int_to_lvar_int $6450 = 250@
+view_integer_variable $pool_view_debug "PLAYER1_IS_HUMAN"
+view_integer_variable $6444 "PLAYER2_IS_HUMAN"
+view_integer_variable $6445 "TURN_PLAYER"
+view_integer_variable $6446 "CURRENT_CHAR_IS_HUMAN"
+view_integer_variable $6447 "TURN_COLOUR"
+view_integer_variable $6448 "TURN_IS_SCRATCH"
+view_integer_variable $6449 "THIS_CHAR_GOT_TASK"
+view_integer_variable $6450 "SHOT_PLAYED"
+
+:POOL2_3319
+if 
+  212@ == 5
+goto_if_false @POOL2_3547
+set_var_int_to_lvar_int $6444 = 233@
+set_var_int_to_lvar_int $6445 = 271@
+set_var_int_to_lvar_int $6446 = 272@
+set_var_int_to_lvar_int $6447 = 273@
+set_var_int_to_lvar_int $6448 = 274@
+set_var_int_to_lvar_int $6449 = 278@
+set_var_int_to_lvar_int $6450 = 236@
+view_integer_variable $6444 "SKIP_CHALK_CUE"
+view_integer_variable $6445 "NO_OF_BALLS_POTTED_THIS_TURN"
+view_integer_variable $6446 "SPOTS_POTTED"
+view_integer_variable $6447 "STRIPES_POTTED"
+view_integer_variable $6448 "FOUL_TYPE"
+view_integer_variable $6449 "FIRST_MOVING_BALL"
+view_integer_variable $6450 "CAMERA_MODE"
+
+:POOL2_3547
+if 
+  212@ == 6
+goto_if_false @POOL2_3885
+set_var_int_to_lvar_int $pool_view_debug = 255@
+set_var_int_to_lvar_int $6444 = 256@
+set_var_int_to_lvar_int $6445 = 257@
+set_var_int_to_lvar_int $6446 = 258@
+set_var_int_to_lvar_int $6447 = 259@
+set_var_int_to_lvar_int $6448 = 260@
+set_var_int_to_lvar_int $6449 = 261@
+set_var_int_to_lvar_int $6450 = 262@
+view_integer_variable $pool_view_debug "BALLS_POTTED_THIS_TURN[0]"
+view_integer_variable $6444 "BALLS_POTTED_THIS_TURN[1]"
+view_integer_variable $6445 "BALLS_POTTED_THIS_TURN[2]"
+view_integer_variable $6446 "BALLS_POTTED_THIS_TURN[3]"
+view_integer_variable $6447 "BALLS_POTTED_THIS_TURN[4]"
+view_integer_variable $6448 "BALLS_POTTED_THIS_TURN[5]"
+view_integer_variable $6449 "BALLS_POTTED_THIS_TURN[6]"
+view_integer_variable $6450 "BALLS_POTTED_THIS_TURN[7]"
+
+:POOL2_3885
+if 
+  212@ == 7
+goto_if_false @POOL2_4229
+set_var_int_to_lvar_int $pool_view_debug = 263@
+set_var_int_to_lvar_int $6444 = 264@
+set_var_int_to_lvar_int $6445 = 265@
+set_var_int_to_lvar_int $6446 = 266@
+set_var_int_to_lvar_int $6447 = 267@
+set_var_int_to_lvar_int $6448 = 268@
+set_var_int_to_lvar_int $6449 = 269@
+set_var_int_to_lvar_int $6450 = 270@
+view_integer_variable $pool_view_debug "BALLS_POTTED_THIS_TURN[8]"
+view_integer_variable $6444 "BALLS_POTTED_THIS_TURN[9]"
+view_integer_variable $6445 "BALLS_POTTED_THIS_TURN[10]"
+view_integer_variable $6446 "BALLS_POTTED_THIS_TURN[11]"
+view_integer_variable $6447 "BALLS_POTTED_THIS_TURN[12]"
+view_integer_variable $6448 "BALLS_POTTED_THIS_TURN[13]"
+view_integer_variable $6449 "BALLS_POTTED_THIS_TURN[14]"
+view_integer_variable $6450 "BALLS_POTTED_THIS_TURN[15]"
+
+:POOL2_4229
+if 
+  212@ == 8
+goto_if_false @POOL2_4535
+set_var_int_to_lvar_int $pool_view_debug = 109@
+set_var_int_to_lvar_int $6444 = 110@
+set_var_int_to_lvar_int $6445 = 111@
+set_var_int_to_lvar_int $6446 = 112@
+set_var_int_to_lvar_int $6447 = 113@
+set_var_int_to_lvar_int $6448 = 114@
+set_var_int_to_lvar_int $6449 = 115@
+set_var_int_to_lvar_int $6450 = 116@
+view_integer_variable $pool_view_debug "BALL_IS_STATIONARY[0]"
+view_integer_variable $6444 "BALL_IS_STATIONARY[1]"
+view_integer_variable $6445 "BALL_IS_STATIONARY[2]"
+view_integer_variable $6446 "BALL_IS_STATIONARY[3]"
+view_integer_variable $6447 "BALL_IS_STATIONARY[4]"
+view_integer_variable $6448 "BALL_IS_STATIONARY[5]"
+view_integer_variable $6449 "BALL_IS_STATIONARY[6]"
+view_integer_variable $6450 "BALL_IS_STATIONARY[7]"
+
+:POOL2_4535
+if 
+  212@ == 9
+goto_if_false @POOL2_4847
+set_var_int_to_lvar_int $pool_view_debug = 117@
+set_var_int_to_lvar_int $6444 = 118@
+set_var_int_to_lvar_int $6445 = 119@
+set_var_int_to_lvar_int $6446 = 120@
+set_var_int_to_lvar_int $6447 = 121@
+set_var_int_to_lvar_int $6448 = 122@
+set_var_int_to_lvar_int $6449 = 123@
+set_var_int_to_lvar_int $6450 = 124@
+view_integer_variable $pool_view_debug "BALL_IS_STATIONARY[8]"
+view_integer_variable $6444 "BALL_IS_STATIONARY[9]"
+view_integer_variable $6445 "BALL_IS_STATIONARY[10]"
+view_integer_variable $6446 "BALL_IS_STATIONARY[11]"
+view_integer_variable $6447 "BALL_IS_STATIONARY[12]"
+view_integer_variable $6448 "BALL_IS_STATIONARY[13]"
+view_integer_variable $6449 "BALL_IS_STATIONARY[14]"
+view_integer_variable $6450 "BALL_IS_STATIONARY[15]"
+
+:POOL2_4847
+if 
+  212@ == 10
+goto_if_false @POOL2_5105
+set_var_float_to_lvar_float $pool_view_debug2 = 48@
+set_var_float_to_lvar_float $6452 = 49@
+set_var_float_to_lvar_float $6453 = 50@
+set_var_float_to_lvar_float $6454 = 51@
+set_var_float_to_lvar_float $6455 = 98@
+set_var_float_to_lvar_float $6456 = 99@
+set_var_float_to_lvar_float $6457 = 100@
+set_var_float_to_lvar_float $6458 = 101@
+view_float_variable $pool_view_debug2 "CUE_BALL_SPEED"
+view_float_variable $6452 "CUE_BALL_ROT_X"
+view_float_variable $6453 "CUE_BALL_ROT_Y"
+view_float_variable $6454 "CUE_BALL_ROT_Z"
+view_float_variable $6455 "POOL_TABLE_MIN_X"
+view_float_variable $6456 "POOL_TABLE_MAX_X"
+view_float_variable $6457 "POOL_TABLE_MIN_Y"
+view_float_variable $6458 "POOL_TABLE_MAX_Y"
+
+:POOL2_5105
+if 
+  212@ == 11
+goto_if_false @POOL2_5304
+set_var_int_to_lvar_int $pool_view_debug = TIMERA
+set_var_int_to_lvar_int $6444 = TIMERB
+set_var_float_to_lvar_float $6453 = 650@
+set_var_float_to_lvar_float $6454 = 203@
+set_var_float_to_lvar_float $6455 = 204@
+set_var_int_to_lvar_int $6448 = 277@
+view_integer_variable $pool_view_debug "TIMERA"
+view_integer_variable $6444 "TIMERB"
+view_float_variable $6453 "BALL_TURN_MASS"
+view_float_variable $6454 "POOL_STOP_VELOCITY"
+view_float_variable $6455 "POOL_STOP_ROTATION_VELOCITY"
+view_integer_variable $6448 "BALL_STRIKES_CUSHION"
+
+:POOL2_5304
+if 
+is_ps2_keyboard_key_just_pressed 65
+goto_if_false @POOL2_5408
+if 
+  219@ == 1
+goto_if_false @POOL2_5378
+219@ = 0
+write_debug "CHEAT_PLAYER1_NOT_HUMAN"
+goto @POOL2_5408
+
+:POOL2_5378
+219@ = 1
+write_debug "CHEAT_PLAYER1_HUMAN"
+
+:POOL2_5408
+return 
+
+:POOL2_5410
+if 
+  35@ == -1
+goto_if_false @POOL2_5450
+107@ = Object.Create(#K_POOLQ, 0.0, 0.0, 0.0)
+
+:POOL2_5450
+if 
+  35@ == 0
+goto_if_false @POOL2_7124
+Hud.Display(True)
+Hud.DisplayRadar(False)
+$bj_players_cash = Player.StoreScore($player1)
+if 
+  is_int_var_greater_than_int_var $pool_min_bet > $bj_players_cash
+goto_if_false @POOL2_5523
+108@ = 1
+Text.ClearPrints
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+goto @POOL2_7078
+
+:POOL2_5523
+World.ClearArea(1, 102@, 103@, 104@, 15.0)
+Object.SetCoordinates(163@, 102@, 103@, 104@)
+98@ = Object.GetOffsetInWorldCoords(100@, $z, 163@, -0.9098, -0.4589, 0.7)
+99@ = Object.GetOffsetInWorldCoords(101@, $z, 163@, 0.9242, 0.4809, 0.7)
+if 
+  is_float_lvar_greater_than_float_lvar 98@ > 99@
+goto_if_false @POOL2_5656
+set_var_float_to_lvar_float $x = 98@
+set_lvar_float_to_lvar_float 98@ = 99@
+set_lvar_float_to_var_float 99@ = $x
+
+:POOL2_5656
+if 
+  is_float_lvar_greater_than_float_lvar 100@ > 101@
+goto_if_false @POOL2_5699
+set_var_float_to_lvar_float $y = 100@
+set_lvar_float_to_lvar_float 100@ = 101@
+set_lvar_float_to_var_float 101@ = $y
+
+:POOL2_5699
+World.SetPoolTableCoords(98@, 100@, $z, 99@, 101@, $z)
+175@ = Object.GetOffsetInWorldCoords(176@, 177@, 163@, 0.0, 0.0, 1.5)
+42@ = Math.GetDistanceBetweenCoords2D(98@, 100@, 99@, 100@)
+43@ = Math.GetDistanceBetweenCoords2D(98@, 100@, 98@, 101@)
+if 
+  is_float_lvar_greater_than_float_lvar 42@ > 43@
+goto_if_false @POOL2_5866
+set_lvar_float_to_lvar_float 42@ = 98@
+add_float_lvar_to_float_lvar 42@ += 99@
+42@ /= 2.0
+set_lvar_float_to_lvar_float 55@ = 42@
+set_lvar_float_to_lvar_float 61@ = 100@
+set_lvar_float_to_lvar_float 58@ = 42@
+set_lvar_float_to_lvar_float 64@ = 101@
+goto @POOL2_5924
+
+:POOL2_5866
+set_lvar_float_to_lvar_float 42@ = 100@
+add_float_lvar_to_float_lvar 42@ += 101@
+42@ /= 2.0
+set_lvar_float_to_lvar_float 55@ = 98@
+set_lvar_float_to_lvar_float 61@ = 42@
+set_lvar_float_to_lvar_float 58@ = 99@
+set_lvar_float_to_lvar_float 64@ = 42@
+
+:POOL2_5924
+set_lvar_float_to_lvar_float 54@ = 98@
+set_lvar_float_to_lvar_float 60@ = 100@
+set_lvar_float_to_lvar_float 56@ = 98@
+set_lvar_float_to_lvar_float 62@ = 101@
+set_lvar_float_to_lvar_float 57@ = 99@
+set_lvar_float_to_lvar_float 63@ = 101@
+set_lvar_float_to_lvar_float 59@ = 99@
+set_lvar_float_to_lvar_float 65@ = 100@
+52@ = 0.037
+set_lvar_float_to_lvar_float 53@ = 52@
+53@ *= 2.0
+39@ = 0
+
+:POOL2_6023
+if 
+  16 > 39@
+goto_if_false @POOL2_6084
+if 
+  Object.DoesExist(82@(39@,16i))
+goto_if_false @POOL2_6070
+Object.Delete(82@(39@,16i))
+
+:POOL2_6070
+39@ += 1
+goto @POOL2_6023
+
+:POOL2_6084
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, -0.2734375, -0.0546875, 0.9296875)
+82@ = Object.CreateNoOffset(#K_POOLBALLCUE, $x, $y, $z)
+$heading = Object.GetHeading(163@)
+$heading += 270.0
+Object.SetHeading(82@, $heading)
+558@ = Object.GetOffsetInWorldCoords(559@, 560@, 163@, 0.3408, -0.0284, 0.9297)
+561@ = Object.GetHeading(163@)
+561@ += 90.0
+83@ = Object.CreateNoOffset(#K_POOLBALLSPT01, 558@, 559@, 560@)
+84@ = Object.CreateNoOffset(#K_POOLBALLSPT02, 0.0, 0.0, 0.0)
+85@ = Object.CreateNoOffset(#K_POOLBALLSPT03, 0.0, 0.0, 0.0)
+86@ = Object.CreateNoOffset(#K_POOLBALLSPT04, 0.0, 0.0, 0.0)
+87@ = Object.CreateNoOffset(#K_POOLBALLSPT05, 0.0, 0.0, 0.0)
+88@ = Object.CreateNoOffset(#K_POOLBALLSPT06, 0.0, 0.0, 0.0)
+89@ = Object.CreateNoOffset(#K_POOLBALLSPT07, 0.0, 0.0, 0.0)
+90@ = Object.CreateNoOffset(#K_POOLBALL8, 0.0, 0.0, 0.0)
+91@ = Object.CreateNoOffset(#K_POOLBALLSTP01, 0.0, 0.0, 0.0)
+92@ = Object.CreateNoOffset(#K_POOLBALLSTP02, 0.0, 0.0, 0.0)
+93@ = Object.CreateNoOffset(#K_POOLBALLSTP03, 0.0, 0.0, 0.0)
+94@ = Object.CreateNoOffset(#K_POOLBALLSTP04, 0.0, 0.0, 0.0)
+95@ = Object.CreateNoOffset(#K_POOLBALLSTP05, 0.0, 0.0, 0.0)
+96@ = Object.CreateNoOffset(#K_POOLBALLSTP06, 0.0, 0.0, 0.0)
+97@ = Object.CreateNoOffset(#K_POOLBALLSTP07, 0.0, 0.0, 0.0)
+gosub @POOL2_50546
+Hud.DisplayRadar(False)
+Player.SetControl($player1, False)
+Text.ClearHelp
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, -0.5261, -1.9684, 1.637)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, -0.0746, -1.0853, 1.5092)
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+if 
+  not Char.IsDead(164@)
+goto_if_false @POOL2_6892
+Char.ClearTasksImmediately(164@)
+Char.DropObject(164@, False)
+if 
+  Object.DoesExist($active_initial_cue)
+goto_if_false @POOL2_6692
+Object.Delete($active_initial_cue)
+
+:POOL2_6692
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, 0.0219, -1.1236, 0.0363)
+Char.SetCoordinates(164@, $x, $y, $z)
+set_lvar_float_to_lvar_float 42@ = 105@
+42@ += 130.0
+Char.SetHeading(164@, 42@)
+47@ = Sequence.Open()
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, -0.5261, -1.9684, 1.637)
+Task.LookAtCoord(-1, $x, $y, $z, 999999)
+if 
+  108@ == 0
+goto_if_false @POOL2_6874
+Task.PlayAnimNonInterruptable(-1, "POOL_IDLE_STANCE", "POOL", 1000.0, True, False, False, True, -1)
+
+:POOL2_6874
+Sequence.Close(47@)
+Char.PerformSequence(164@, 47@)
+Sequence.Clear(47@)
+
+:POOL2_6892
+if 
+  not Object.DoesExist(107@)
+goto_if_false @POOL2_6937
+107@ = Object.Create(#K_POOLQ, 0.0, 0.0, 0.0)
+Object.SetCollision(107@, False)
+
+:POOL2_6937
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL2_7051
+Char.ClearTasksImmediately($scplayer)
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, -1.9295, -2.2083, 0.0363)
+Char.SetCoordinates($scplayer, $x, $y, $z)
+set_lvar_float_to_var_float 221@ = $x
+set_lvar_float_to_var_float 222@ = $y
+set_lvar_float_to_var_float 223@ = $z
+set_lvar_float_to_lvar_float 42@ = 105@
+42@ += 390.0
+Char.SetHeading($scplayer, 42@)
+
+:POOL2_7051
+set_lvar_int_to_lvar_int 358@ = 164@
+set_lvar_int_to_lvar_int 359@ = 107@
+gosub @POOL2_30670
+Game.SetScriptCoopGame(False)
+
+:POOL2_7078
+start_new_script @CLEANAU 
+Camera.DoFade(1, 1000)
+
+:POOL2_7093
+if 
+  Camera.GetFadingStatus
+goto_if_false @POOL2_7117
+wait 0
+goto @POOL2_7093
+
+:POOL2_7117
+35@ += 1
+
+:POOL2_7124
+if 
+  35@ == 1
+goto_if_false @POOL2_7557
+if 
+  not Char.IsDead(164@)
+goto_if_false @POOL2_7539
+if 
+  Char.IsModel(164@, 66)
+goto_if_false @POOL2_7361
+39@ = Math.RandomIntInRange(0, 3)
+switch_start 39@ total_jumps 3 default_jump 0 @POOL2_7335 jumps 0 @POOL2_7248 1 @POOL2_7277 2 @POOL2_7306 -1 @POOL2_7335 -1 @POOL2_7335 -1 @POOL2_7335 -1 @POOL2_7335
+
+:POOL2_7248
+set_var_text_label s$audio_string = 'POOL_B1'
+set_var_int_to_constant $audio_sound_file = 31600
+goto @POOL2_7335
+
+:POOL2_7277
+set_var_text_label s$audio_string = 'POOL_B2'
+set_var_int_to_constant $audio_sound_file = 31601
+goto @POOL2_7335
+
+:POOL2_7306
+set_var_text_label s$audio_string = 'POOL_B3'
+set_var_int_to_constant $audio_sound_file = 31602
+goto @POOL2_7335
+
+:POOL2_7335
+start_new_script @AUDIOL 164@ 0 1 1 0 
+goto @POOL2_7539
+
+:POOL2_7361
+39@ = Math.RandomIntInRange(0, 3)
+switch_start 39@ total_jumps 3 default_jump 0 @POOL2_7520 jumps 0 @POOL2_7433 1 @POOL2_7462 2 @POOL2_7491 -1 @POOL2_7520 -1 @POOL2_7520 -1 @POOL2_7520 -1 @POOL2_7520
+
+:POOL2_7433
+set_var_text_label s$audio_string = 'POOL_B4'
+set_var_int_to_constant $audio_sound_file = 31603
+goto @POOL2_7520
+
+:POOL2_7462
+set_var_text_label s$audio_string = 'POOL_B5'
+set_var_int_to_constant $audio_sound_file = 31604
+goto @POOL2_7520
+
+:POOL2_7491
+set_var_text_label s$audio_string = 'POOL_B6'
+set_var_int_to_constant $audio_sound_file = 31605
+goto @POOL2_7520
+
+:POOL2_7520
+start_new_script @AUDIOL 164@ 0 1 1 0 
+
+:POOL2_7539
+Text.UseCommands(True)
+TIMERA = 0
+35@ += 1
+
+:POOL2_7557
+if 
+  35@ == 2
+goto_if_false @POOL2_7717
+if or
+  not Text.IsMessageBeingDisplayed
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @POOL2_7717
+Text.ClearPrints
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL2_7620
+159@ = Player.StoreScore($player1)
+
+:POOL2_7620
+Text.SetHelpMessageBoxSize(200)
+Text.PrintHelpForever('PL_H1')
+$pool_min_bet = 50
+$pool_max_bet = 1000
+set_lvar_int_to_var_int 161@ = $pool_min_bet
+set_lvar_int_to_var_int 162@ = $pool_min_bet
+set_lvar_int_to_var_int 155@ = $pool_min_bet
+set_lvar_int_to_var_int 39@ = $pool_min_bet
+39@ *= -1
+Player.AddScore($player1, 39@)
+Hud.SwitchWidescreen(False)
+start_new_script @CLEANAU 
+35@ += 1
+
+:POOL2_7717
+if 
+  35@ == 3
+goto_if_false @POOL2_8897
+gosub @POOL2_54522
+$bj_players_cash = Player.StoreScore($player1)
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @POOL2_8176
+if and
+  126@ <> 1
+  126@ <> -1
+goto_if_false @POOL2_8125
+if 
+  155@ >= 10000
+goto_if_false @POOL2_7826
+160@ = 1000
+goto @POOL2_7930
+
+:POOL2_7826
+if 
+  155@ >= 1000
+goto_if_false @POOL2_7859
+160@ = 100
+goto @POOL2_7930
+
+:POOL2_7859
+if 
+  155@ >= 100
+goto_if_false @POOL2_7891
+160@ = 10
+goto @POOL2_7930
+
+:POOL2_7891
+if 
+  155@ == 0
+goto_if_false @POOL2_7923
+160@ = 2
+goto @POOL2_7930
+
+:POOL2_7923
+160@ = 1
+
+:POOL2_7930
+if 
+  is_int_lvar_greater_than_int_var 160@ > $bj_players_cash
+goto_if_false @POOL2_7957
+set_lvar_int_to_var_int 160@ = $bj_players_cash
+
+:POOL2_7957
+set_lvar_int_to_lvar_int 39@ = 155@
+add_int_lvar_to_int_lvar 39@ += 160@
+if 
+  is_int_lvar_greater_than_int_var 39@ > $pool_max_bet
+goto_if_false @POOL2_8008
+set_lvar_int_to_var_int 160@ = $pool_max_bet
+sub_int_lvar_from_int_lvar 160@ -= 155@
+
+:POOL2_8008
+if 
+  0 > 160@
+goto_if_false @POOL2_8033
+160@ *= -1
+
+:POOL2_8033
+add_int_lvar_to_int_lvar 155@ += 160@
+add_int_lvar_to_int_lvar 161@ += 160@
+add_int_lvar_to_int_lvar 162@ += 160@
+160@ *= -1
+Player.AddScore($player1, 160@)
+126@ += 1
+if 
+  126@ > 1
+goto_if_false @POOL2_8111
+126@ = 2
+goto @POOL2_8118
+
+:POOL2_8111
+TIMERA = 0
+
+:POOL2_8118
+goto @POOL2_8169
+
+:POOL2_8125
+if 
+  126@ == 1
+goto_if_false @POOL2_8169
+if 
+  TIMERA > 500
+goto_if_false @POOL2_8169
+126@ = 2
+
+:POOL2_8169
+goto @POOL2_8550
+
+:POOL2_8176
+if 
+  126@ <> 0
+goto_if_false @POOL2_8201
+126@ = 0
+
+:POOL2_8201
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @POOL2_8525
+if 
+  128@ <> 1
+goto_if_false @POOL2_8492
+if 
+  155@ > 10000
+goto_if_false @POOL2_8270
+160@ = -1000
+goto @POOL2_8342
+
+:POOL2_8270
+if 
+  155@ > 1000
+goto_if_false @POOL2_8303
+160@ = -100
+goto @POOL2_8342
+
+:POOL2_8303
+if 
+  155@ > 100
+goto_if_false @POOL2_8335
+160@ = -10
+goto @POOL2_8342
+
+:POOL2_8335
+160@ = -1
+
+:POOL2_8342
+set_lvar_int_to_lvar_int 39@ = 155@
+add_int_lvar_to_int_lvar 39@ += 160@
+if 
+  is_int_var_greater_than_int_lvar $pool_min_bet > 39@
+goto_if_false @POOL2_8400
+set_lvar_int_to_lvar_int 160@ = 155@
+sub_int_var_from_int_lvar 160@ -= $pool_min_bet
+160@ *= -1
+
+:POOL2_8400
+add_int_lvar_to_int_lvar 155@ += 160@
+add_int_lvar_to_int_lvar 161@ += 160@
+add_int_lvar_to_int_lvar 162@ += 160@
+160@ *= -1
+Player.AddScore($player1, 160@)
+128@ += 1
+if 
+  128@ > 1
+goto_if_false @POOL2_8478
+128@ = 2
+goto @POOL2_8485
+
+:POOL2_8478
+TIMERA = 0
+
+:POOL2_8485
+goto @POOL2_8518
+
+:POOL2_8492
+if 
+  TIMERA > 500
+goto_if_false @POOL2_8518
+128@ = 2
+
+:POOL2_8518
+goto @POOL2_8550
+
+:POOL2_8525
+if 
+  128@ <> 0
+goto_if_false @POOL2_8550
+128@ = 0
+
+:POOL2_8550
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @POOL2_8619
+if 
+  not Char.IsDead(164@)
+goto_if_false @POOL2_8591
+Char.SetMoney(164@, 162@)
+
+:POOL2_8591
+161@ = 0
+178@ = 0
+35@ = 99
+goto @POOL2_8680
+
+:POOL2_8619
+if 
+  Pad.IsButtonPressed(PadId.Pad2, Button.Start)
+goto_if_false @POOL2_8680
+disable_2nd_pad_for_debug 1
+Game.SetScriptCoopGame(True)
+$disable_debug = 1
+Player.AddScore($player1, 161@)
+161@ = 0
+178@ = 1
+35@ = 99
+
+:POOL2_8680
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @POOL2_8872
+if 
+  127@ == 0
+goto_if_false @POOL2_8865
+if 
+  not Char.IsDead(213@)
+goto_if_false @POOL2_8782
+223@ += 1.1
+Char.ClearTasksImmediately(213@)
+223@ = World.GetGroundZFor3DCoord(221@, 222@, 223@)
+Char.SetCoordinates(213@, 221@, 222@, 223@)
+Char.SetHeading(213@, 224@)
+
+:POOL2_8782
+if 
+  not Char.IsDead(214@)
+goto_if_false @POOL2_8849
+227@ += 1.1
+Char.ClearTasksImmediately(214@)
+227@ = World.GetGroundZFor3DCoord(225@, 226@, 227@)
+Char.SetCoordinates(214@, 225@, 226@, 227@)
+Char.SetHeading(214@, 228@)
+
+:POOL2_8849
+Text.ClearHelp
+108@ = 1
+127@ = 1
+
+:POOL2_8865
+goto @POOL2_8897
+
+:POOL2_8872
+if 
+  127@ == 1
+goto_if_false @POOL2_8897
+127@ = 0
+
+:POOL2_8897
+if 
+  35@ == 99
+goto_if_false @POOL2_8956
+if 
+  not Char.IsDead(164@)
+goto_if_false @POOL2_8936
+Char.ClearLookAt(164@)
+
+:POOL2_8936
+Hud.Display(False)
+Text.ClearHelp
+35@ = 0
+34@ += 1
+
+:POOL2_8956
+return 
+
+:POOL2_8958
+if 
+  35@ == -1
+goto_if_false @POOL2_9114
+213@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+214@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+215@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+106@ = Object.Create(#K_POOLQ, 0.0, 0.0, 0.0)
+107@ = Object.Create(#K_POOLQ, 0.0, 0.0, 0.0)
+216@ = Object.Create(#K_POOLQ, 0.0, 0.0, 0.0)
+
+:POOL2_9114
+if 
+  35@ == 0
+goto_if_false @POOL2_9673
+if 
+  178@ == 0
+goto_if_false @POOL2_9185
+217@ = -1
+218@ = -1
+219@ = 1
+220@ = 0
+goto @POOL2_9213
+
+:POOL2_9185
+217@ = -1
+218@ = -1
+219@ = 1
+220@ = 1
+
+:POOL2_9213
+221@ = Object.GetOffsetInWorldCoords(222@, 223@, 163@, 0.0, 1.8, 0.0)
+set_lvar_float_to_lvar_float 224@ = 105@
+224@ += 180.0
+225@ = Object.GetOffsetInWorldCoords(226@, 227@, 163@, 0.0, -1.8, 0.0)
+set_lvar_float_to_lvar_float 228@ = 105@
+set_lvar_int_to_var_int 213@ = $scplayer
+set_lvar_int_to_lvar_int 214@ = 164@
+if 
+  not Object.DoesExist(106@)
+goto_if_false @POOL2_9358
+106@ = Object.Create(#K_POOLQ, 0.0, 0.0, 0.0)
+Object.SetCollision(106@, False)
+
+:POOL2_9358
+if 
+  not Object.DoesExist(107@)
+goto_if_false @POOL2_9403
+107@ = Object.Create(#K_POOLQ, 0.0, 0.0, 0.0)
+Object.SetCollision(107@, False)
+
+:POOL2_9403
+if 
+  not Char.IsDead(213@)
+goto_if_false @POOL2_9448
+Char.SetCoordinates(213@, 221@, 222@, 223@)
+Char.SetHeading(213@, 224@)
+Char.HideWeaponForScriptedCutscene(213@, True)
+
+:POOL2_9448
+if 
+  not Char.IsDead(214@)
+goto_if_false @POOL2_9493
+Char.SetCoordinates(214@, 225@, 226@, 227@)
+Char.SetHeading(214@, 228@)
+Char.HideWeaponForScriptedCutscene(214@, True)
+
+:POOL2_9493
+229@ = 1
+set_lvar_int_to_lvar_int 215@ = 213@
+set_lvar_int_to_lvar_int 216@ = 106@
+set_lvar_int_to_lvar_int 230@ = 219@
+set_lvar_int_to_lvar_int 231@ = 217@
+232@ = 1
+set_lvar_int_to_constant 180@ = 0
+278@ = -1
+279@ = 0
+236@ = 1
+if 
+  236@ == 0
+goto_if_false @POOL2_9622
+242@ = 10.0
+243@ = 0.02
+244@ = 0.0
+goto @POOL2_9652
+
+:POOL2_9622
+242@ = 22.5
+243@ = 0.02
+244@ = 0.0
+
+:POOL2_9652
+184@ = 1
+35@ = 0
+34@ += 1
+
+:POOL2_9673
+return 
+
+:POOL2_9675
+if 
+  233@ == 0
+goto_if_false @POOL2_10212
+if 
+  35@ == 0
+goto_if_false @POOL2_10060
+if 
+  not Char.IsDead(213@)
+goto_if_false @POOL2_9773
+223@ += 1.0
+223@ = World.GetGroundZFor3DCoord(221@, 222@, 223@)
+Char.SetCoordinates(213@, 221@, 222@, 223@)
+Char.SetHeading(213@, 224@)
+
+:POOL2_9773
+if 
+  not Char.IsDead(214@)
+goto_if_false @POOL2_9835
+227@ += 1.1
+227@ = World.GetGroundZFor3DCoord(225@, 226@, 227@)
+Char.SetCoordinates(214@, 225@, 226@, 227@)
+Char.SetHeading(214@, 228@)
+
+:POOL2_9835
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_10060
+Char.DropObject(215@, False)
+$x = Char.GetOffsetInWorldCoords($y, $z, 215@, 1.0, 3.0, 1.0)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+Camera.PointAtChar(215@, CameraMode.Fixed, SwitchType.JumpCut)
+47@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "POOL_CHALKCUE", "POOL", 1000.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "POOL_IDLE_STANCE", "POOL", 4.0, True, False, False, False, -1)
+Sequence.Close(47@)
+if 
+  108@ == 0
+goto_if_false @POOL2_10041
+Char.PerformSequence(215@, 47@)
+
+:POOL2_10041
+Sequence.Clear(47@)
+TIMERA = 0
+35@ += 1
+
+:POOL2_10060
+if 
+  35@ == 1
+goto_if_false @POOL2_10138
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_10138
+39@ = Char.GetScriptTaskStatus(215@, 1560)
+if or
+  is_int_lvar_equal_to_constant 39@ == 7
+  TIMERA > 3000
+goto_if_false @POOL2_10138
+35@ = 99
+
+:POOL2_10138
+if 
+  TIMERA > 500
+goto_if_false @POOL2_10205
+if 
+  Pad.IsButtonPressed(180@, Button.Cross)
+goto_if_false @POOL2_10205
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_10205
+126@ = 1
+35@ = 99
+
+:POOL2_10205
+goto @POOL2_10235
+
+:POOL2_10212
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_10235
+35@ = 99
+
+:POOL2_10235
+if 
+  35@ == 99
+goto_if_false @POOL2_10280
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Text.ClearHelp
+TIMERA = 0
+34@ += 1
+35@ = 0
+
+:POOL2_10280
+if 
+  Pad.IsButtonPressed(180@, Button.Triangle)
+goto_if_false @POOL2_10471
+if and
+  127@ == 0
+  183@ > 1000
+goto_if_false @POOL2_10464
+if 
+  not Char.IsDead(213@)
+goto_if_false @POOL2_10386
+223@ += 1.1
+223@ = World.GetGroundZFor3DCoord(221@, 222@, 223@)
+Char.SetCoordinates(213@, 221@, 222@, 223@)
+Char.SetHeading(213@, 224@)
+
+:POOL2_10386
+if 
+  not Char.IsDead(214@)
+goto_if_false @POOL2_10448
+227@ += 1.1
+227@ = World.GetGroundZFor3DCoord(225@, 226@, 227@)
+Char.SetCoordinates(214@, 225@, 226@, 227@)
+Char.SetHeading(214@, 228@)
+
+:POOL2_10448
+Text.ClearHelp
+108@ = 1
+127@ = 1
+
+:POOL2_10464
+goto @POOL2_10503
+
+:POOL2_10471
+if 
+  127@ == 1
+goto_if_false @POOL2_10496
+127@ = 0
+
+:POOL2_10496
+183@ = 0
+
+:POOL2_10503
+return 
+
+:POOL2_10505
+if and
+  232@ <> 0
+  230@ == 1
+goto_if_false @POOL2_10537
+gosub @POOL2_59389
+
+:POOL2_10537
+if 
+  232@ <> 0
+goto_if_false @POOL2_10821
+if 
+  66@ == 1
+goto_if_false @POOL2_10706
+if 
+  not Object.DoesExist(82@)
+goto_if_false @POOL2_10699
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, -0.35, 0.0, 0.9296875)
+set_lvar_float_to_var_float 627@ = $x
+set_lvar_float_to_var_float 628@ = $y
+gosub @POOL2_54002
+set_var_float_to_lvar_float $x = 627@
+set_var_float_to_lvar_float $y = 628@
+82@ = Object.CreateNoOffset(#K_POOLBALLCUE, $x, $y, $z)
+$heading = Object.GetHeading(163@)
+$heading += 270.0
+Object.SetHeading(82@, $heading)
+
+:POOL2_10699
+66@ = 0
+
+:POOL2_10706
+if 
+  Pad.IsButtonPressed(180@, Button.Square)
+goto_if_false @POOL2_10796
+if 
+  128@ == 0
+goto_if_false @POOL2_10789
+if 
+  198@ == 2
+goto_if_false @POOL2_10774
+198@ = 0
+goto @POOL2_10782
+
+:POOL2_10774
+205@ = 3001
+
+:POOL2_10782
+128@ = 1
+
+:POOL2_10789
+goto @POOL2_10821
+
+:POOL2_10796
+if 
+  128@ == 1
+goto_if_false @POOL2_10821
+128@ = 0
+
+:POOL2_10821
+if 
+  232@ == 1
+goto_if_false @POOL2_11055
+if 
+  35@ == 0
+goto_if_false @POOL2_11055
+if 
+  230@ == 1
+goto_if_false @POOL2_10972
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, -0.35, 0.0, 0.0)
+$heading = Object.GetHeading(163@)
+$heading += 270.0
+Object.SetCoordinates(82@, $x, $y, 560@)
+Object.SetHeading(82@, $heading)
+TIMERA = 0
+35@ = 99
+goto @POOL2_12101
+goto @POOL2_11055
+
+:POOL2_10972
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, -0.35, 0.0, 0.0)
+$heading = Object.GetHeading(163@)
+$heading += 270.0
+Object.SetCoordinates(82@, $x, $y, 560@)
+Object.SetHeading(82@, $heading)
+35@ = 99
+goto @POOL2_12101
+
+:POOL2_11055
+if 
+  232@ == 2
+goto_if_false @POOL2_11846
+if 
+  35@ == 0
+goto_if_false @POOL2_11471
+if 
+  230@ == 1
+goto_if_false @POOL2_11349
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, -0.35, 0.0, 0.0)
+$heading = Object.GetHeading(163@)
+$heading += 270.0
+set_lvar_float_to_var_float 627@ = $x
+set_lvar_float_to_var_float 628@ = $y
+gosub @POOL2_54002
+set_var_float_to_lvar_float $x = 627@
+set_var_float_to_lvar_float $y = 628@
+Object.SetCoordinates(82@, $x, $y, 560@)
+Object.SetHeading(82@, $heading)
+TIMERA = 0
+35@ += 1
+198@ = 0
+205@ = 0
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, 0.0, -0.001, 2.5)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, 0.0, 0.001, 0.0)
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+goto @POOL2_11471
+
+:POOL2_11349
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, -0.35, 0.0, 0.0)
+$heading = Object.GetHeading(163@)
+$heading += 270.0
+set_lvar_float_to_var_float 627@ = $x
+set_lvar_float_to_var_float 628@ = $y
+gosub @POOL2_54002
+set_var_float_to_lvar_float $x = 627@
+set_var_float_to_lvar_float $y = 628@
+Object.SetCoordinates(82@, $x, $y, 560@)
+Object.SetHeading(82@, $heading)
+35@ = 99
+goto @POOL2_12101
+
+:POOL2_11471
+if 
+  35@ == 1
+goto_if_false @POOL2_11846
+$x, $y, $z = Object.GetCoordinates(82@)
+39@ = 0
+if or
+  Pad.IsButtonPressed(180@, Button.LeftStickX)
+  Pad.IsButtonPressed(180@, Button.LeftStickY)
+goto_if_false @POOL2_11542
+39@ = 1
+
+:POOL2_11542
+if 
+  39@ == 1
+goto_if_false @POOL2_11757
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(180@)
+cset_lvar_float_to_var_int 235@ = integer $LStickX
+cset_lvar_float_to_var_int 234@ = integer $LStickY
+235@ /= 128.0
+234@ /= -128.0
+235@ *= 0.01
+234@ *= 0.01
+gosub @POOL2_54371
+mult_float_var_by_float_lvar $cam_nvec_x *= 234@
+mult_float_var_by_float_lvar $cam_nvec_y *= 234@
+add_float_var_to_float_var $x += $cam_nvec_x
+add_float_var_to_float_var $y += $cam_nvec_y
+mult_float_var_by_float_lvar $cam_rvec_x *= 235@
+mult_float_var_by_float_lvar $cam_rvec_y *= 235@
+add_float_var_to_float_var $x += $cam_rvec_x
+add_float_var_to_float_var $y += $cam_rvec_y
+set_lvar_float_to_var_float 627@ = $x
+set_lvar_float_to_var_float 628@ = $y
+gosub @POOL2_54002
+set_var_float_to_lvar_float $x = 627@
+set_var_float_to_lvar_float $y = 628@
+Object.SetCoordinates(82@, $x, $y, 560@)
+
+:POOL2_11757
+if 
+  Pad.IsButtonPressed(180@, Button.Cross)
+goto_if_false @POOL2_11821
+if 
+  126@ == 0
+goto_if_false @POOL2_11814
+35@ = 99
+126@ = 1
+goto @POOL2_12101
+
+:POOL2_11814
+goto @POOL2_11846
+
+:POOL2_11821
+if 
+  126@ == 1
+goto_if_false @POOL2_11846
+126@ = 0
+
+:POOL2_11846
+if 
+  232@ == 0
+goto_if_false @POOL2_11878
+35@ = 99
+goto @POOL2_12101
+
+:POOL2_11878
+if 
+  Pad.IsButtonPressed(180@, Button.Triangle)
+goto_if_false @POOL2_12069
+if and
+  127@ == 0
+  183@ > 1000
+goto_if_false @POOL2_12062
+if 
+  not Char.IsDead(213@)
+goto_if_false @POOL2_11984
+223@ += 1.1
+223@ = World.GetGroundZFor3DCoord(221@, 222@, 223@)
+Char.SetCoordinates(213@, 221@, 222@, 223@)
+Char.SetHeading(213@, 224@)
+
+:POOL2_11984
+if 
+  not Char.IsDead(214@)
+goto_if_false @POOL2_12046
+227@ += 1.1
+227@ = World.GetGroundZFor3DCoord(225@, 226@, 227@)
+Char.SetCoordinates(214@, 225@, 226@, 227@)
+Char.SetHeading(214@, 228@)
+
+:POOL2_12046
+Text.ClearHelp
+108@ = 1
+127@ = 1
+
+:POOL2_12062
+goto @POOL2_12101
+
+:POOL2_12069
+if 
+  127@ == 1
+goto_if_false @POOL2_12094
+127@ = 0
+
+:POOL2_12094
+183@ = 0
+
+:POOL2_12101
+if 
+  35@ == 99
+goto_if_false @POOL2_12135
+34@ += 1
+35@ = 0
+Text.ClearHelp
+
+:POOL2_12135
+return 
+
+:POOL2_12137
+if 
+  230@ == 1
+goto_if_false @POOL2_15142
+gosub @POOL2_57034
+if 
+  35@ == -1
+goto_if_false @POOL2_12202
+238@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+
+:POOL2_12202
+if 
+  35@ == 0
+goto_if_false @POOL2_13396
+if 
+  not Char.IsDead(213@)
+goto_if_false @POOL2_12282
+223@ += 1.1
+223@ = World.GetGroundZFor3DCoord(221@, 222@, 223@)
+Char.SetCoordinates(213@, 221@, 222@, 223@)
+Char.SetHeading(213@, 224@)
+
+:POOL2_12282
+if 
+  not Char.IsDead(214@)
+goto_if_false @POOL2_12344
+227@ += 1.1
+227@ = World.GetGroundZFor3DCoord(225@, 226@, 227@)
+Char.SetCoordinates(214@, 225@, 226@, 227@)
+Char.SetHeading(214@, 228@)
+
+:POOL2_12344
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_12405
+$x, $y, $z = Char.GetCoordinates(215@)
+$z += -10.0
+Char.SetCoordinates(215@, $x, $y, $z)
+Char.FreezePosition(215@, True)
+
+:POOL2_12405
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, 0.0, -0.001, 2.5)
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, 0.0, 0.001, 0.0)
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_12505
+$heading = Object.GetHeading(82@)
+Object.SetRotation(82@, 0.0, 0.0, $heading)
+
+:POOL2_12505
+if 
+  not Object.DoesExist(238@)
+goto_if_false @POOL2_12594
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, 0.0, 0.0, -10.0)
+238@ = Object.CreateNoOffset(#K_POOLQ2, $x, $y, $z)
+Object.SetDynamic(238@, False)
+Object.SetCollision(238@, False)
+Object.SetDrawLast(238@, True)
+goto @POOL2_12615
+
+:POOL2_12594
+Object.SetDynamic(238@, False)
+Object.SetCollision(238@, False)
+Object.SetDrawLast(238@, True)
+
+:POOL2_12615
+205@ = 0
+198@ = 0
+if 
+  245@ == 0
+goto_if_false @POOL2_13348
+239@ = -1
+42@ = 99999.9
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_13197
+$x, $y, $z = Object.GetCoordinates(82@)
+if 
+  231@ == -1
+goto_if_false @POOL2_12848
+39@ = 1
+
+:POOL2_12719
+if 
+  16 > 39@
+goto_if_false @POOL2_12841
+if 
+  Object.DoesExist(82@(39@,16i))
+goto_if_false @POOL2_12827
+165@, 166@, 167@ = Object.GetCoordinates(82@(39@,16i))
+43@ = Math.GetDistanceBetweenCoords2D($x, $y, 165@, 166@)
+if 
+  is_float_lvar_greater_than_float_lvar 42@ > 43@
+goto_if_false @POOL2_12827
+set_lvar_int_to_lvar_int 239@ = 39@
+set_lvar_float_to_lvar_float 42@ = 43@
+
+:POOL2_12827
+39@ += 1
+goto @POOL2_12719
+
+:POOL2_12841
+goto @POOL2_13197
+
+:POOL2_12848
+if 
+  231@ == 0
+goto_if_false @POOL2_13002
+39@ = 1
+
+:POOL2_12873
+if 
+  8 > 39@
+goto_if_false @POOL2_12995
+if 
+  Object.DoesExist(82@(39@,16i))
+goto_if_false @POOL2_12981
+165@, 166@, 167@ = Object.GetCoordinates(82@(39@,16i))
+43@ = Math.GetDistanceBetweenCoords2D($x, $y, 165@, 166@)
+if 
+  is_float_lvar_greater_than_float_lvar 42@ > 43@
+goto_if_false @POOL2_12981
+set_lvar_int_to_lvar_int 239@ = 39@
+set_lvar_float_to_lvar_float 42@ = 43@
+
+:POOL2_12981
+39@ += 1
+goto @POOL2_12873
+
+:POOL2_12995
+goto @POOL2_13197
+
+:POOL2_13002
+if 
+  231@ == 1
+goto_if_false @POOL2_13156
+39@ = 9
+
+:POOL2_13027
+if 
+  16 > 39@
+goto_if_false @POOL2_13149
+if 
+  Object.DoesExist(82@(39@,16i))
+goto_if_false @POOL2_13135
+165@, 166@, 167@ = Object.GetCoordinates(82@(39@,16i))
+43@ = Math.GetDistanceBetweenCoords2D($x, $y, 165@, 166@)
+if 
+  is_float_lvar_greater_than_float_lvar 42@ > 43@
+goto_if_false @POOL2_13135
+set_lvar_int_to_lvar_int 239@ = 39@
+set_lvar_float_to_lvar_float 42@ = 43@
+
+:POOL2_13135
+39@ += 1
+goto @POOL2_13027
+
+:POOL2_13149
+goto @POOL2_13197
+
+:POOL2_13156
+if 
+  231@ == 2
+goto_if_false @POOL2_13197
+if 
+  Object.DoesExist(90@)
+goto_if_false @POOL2_13197
+239@ = 8
+
+:POOL2_13197
+if and
+  239@ <> -1
+  16 > 239@
+goto_if_false @POOL2_13341
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_13341
+$x, $y, $z = Object.GetCoordinates(82@)
+if 
+  Object.DoesExist(82@(239@,16i))
+goto_if_false @POOL2_13290
+165@, 166@, 167@ = Object.GetCoordinates(82@(239@,16i))
+
+:POOL2_13290
+set_lvar_float_to_lvar_float 169@ = 165@
+sub_float_var_from_float_lvar 169@ -= $x
+set_lvar_float_to_lvar_float 170@ = 166@
+sub_float_var_from_float_lvar 170@ -= $y
+42@ = Math.GetHeadingFromVector2D(169@, 170@)
+Object.SetHeading(82@, 42@)
+
+:POOL2_13341
+goto @POOL2_13355
+
+:POOL2_13348
+245@ = 0
+
+:POOL2_13355
+240@ = 0
+gosub @POOL2_28396
+199@ = 0.0
+200@ = 0.0
+35@ += 1
+
+:POOL2_13396
+if 
+  35@ == 1
+goto_if_false @POOL2_13627
+if 
+  Pad.IsButtonPressed(180@, Button.Select)
+goto_if_false @POOL2_13602
+if 
+  237@ == 0
+goto_if_false @POOL2_13510
+if 
+  236@ == 0
+goto_if_false @POOL2_13489
+236@ = 1
+237@ = 1
+goto @POOL2_13503
+
+:POOL2_13489
+236@ = 0
+237@ = 1
+
+:POOL2_13503
+205@ = 0
+
+:POOL2_13510
+if 
+  236@ == 0
+goto_if_false @POOL2_13565
+242@ = 10.0
+243@ = 0.02
+244@ = 0.0
+goto @POOL2_13595
+
+:POOL2_13565
+242@ = 22.5
+243@ = 0.02
+244@ = 0.0
+
+:POOL2_13595
+goto @POOL2_13627
+
+:POOL2_13602
+if 
+  237@ == 1
+goto_if_false @POOL2_13627
+237@ = 0
+
+:POOL2_13627
+201@, 202@ = Mouse.GetMovement()
+if or
+  Pad.IsButtonPressed(180@, Button.LeftStickX)
+  201@ > 0.01
+  -0.01 > 201@
+goto_if_false @POOL2_13780
+$heading = Object.GetHeading(82@)
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(180@)
+cset_lvar_float_to_var_int 42@ = integer $LStickX
+42@ /= 128.0
+42@ *= 1.0
+add_float_lvar_to_float_var $heading += 42@
+201@ *= -0.4
+add_float_lvar_to_float_var $heading += 201@
+Object.SetRotation(82@, 0.0, 0.0, 0.0)
+Object.SetHeading(82@, $heading)
+
+:POOL2_13780
+if 
+  236@ == 0
+goto_if_false @POOL2_13895
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, 0.0, -0.001, 2.5)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, 0.0, 0.001, 0.0)
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+
+:POOL2_13895
+if 
+  236@ == 1
+goto_if_false @POOL2_14010
+$x = Object.GetOffsetInWorldCoords($y, $z, 82@, 0.0, -0.5, 0.3)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x = Object.GetOffsetInWorldCoords($y, $z, 82@, 0.0, 0.5, 0.0)
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+
+:POOL2_14010
+if 
+  236@ == 0
+goto_if_false @POOL2_14143
+if 
+  Pad.IsButtonPressed(180@, Button.Square)
+goto_if_false @POOL2_14118
+if 
+  128@ == 0
+goto_if_false @POOL2_14111
+if 
+  198@ == 2
+goto_if_false @POOL2_14096
+198@ = 0
+goto @POOL2_14104
+
+:POOL2_14096
+205@ = 3001
+
+:POOL2_14104
+128@ = 1
+
+:POOL2_14111
+goto @POOL2_14143
+
+:POOL2_14118
+if 
+  128@ == 1
+goto_if_false @POOL2_14143
+128@ = 0
+
+:POOL2_14143
+if 
+  Object.DoesExist(238@)
+goto_if_false @POOL2_14282
+if 
+  236@ == 0
+goto_if_false @POOL2_14209
+165@ = Object.GetOffsetInWorldCoords(166@, 167@, 82@, 244@, -0.05, 243@)
+goto @POOL2_14234
+
+:POOL2_14209
+165@ = Object.GetOffsetInWorldCoords(166@, 167@, 82@, 244@, -0.05, 243@)
+
+:POOL2_14234
+$heading = Object.GetHeading(82@)
+$heading += 180.0
+Object.SetCoordinates(238@, 165@, 166@, 167@)
+Object.SetRotation(238@, 242@, 0.0, $heading)
+
+:POOL2_14282
+if 
+  not Pad.IsButtonPressed(180@, Button.LeftStickX)
+goto_if_false @POOL2_14321
+240@ = 0
+gosub @POOL2_28396
+goto @POOL2_14421
+
+:POOL2_14321
+if 
+  240@ <> 0
+goto_if_false @POOL2_14407
+39@ = 0
+
+:POOL2_14346
+if 
+  10 > 39@
+goto_if_false @POOL2_14407
+if 
+  Object.DoesExist(347@(39@,10i))
+goto_if_false @POOL2_14393
+Object.Delete(347@(39@,10i))
+
+:POOL2_14393
+39@ += 1
+goto @POOL2_14346
+
+:POOL2_14407
+240@ = 0
+TIMERA = 0
+
+:POOL2_14421
+if 
+is_ps2_keyboard_key_just_pressed 131
+goto_if_false @POOL2_14447
+242@ += 0.5
+
+:POOL2_14447
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @POOL2_14473
+242@ += -0.5
+
+:POOL2_14473
+if 
+is_ps2_keyboard_key_just_pressed 87
+goto_if_false @POOL2_14498
+243@ += 0.001
+
+:POOL2_14498
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @POOL2_14523
+243@ += -0.001
+
+:POOL2_14523
+if 
+is_ps2_keyboard_key_just_pressed 128
+goto_if_false @POOL2_14549
+244@ += 0.0001
+
+:POOL2_14549
+if 
+is_ps2_keyboard_key_just_pressed 129
+goto_if_false @POOL2_14575
+244@ += -0.0001
+
+:POOL2_14575
+if 
+is_ps2_keyboard_key_just_pressed 137
+goto_if_false @POOL2_15002
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BUTT_ANGLE = _1V_FILERENCENONSEDDEDOSS OUT")
+save_float_to_debug_file 242@
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("RAISE_CUE =  _1V_FILERENCENONSEDDEDOSS OUT")
+save_float_to_debug_file 243@
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CUE_X_CORRECTION = LERENCENONSEDDEDOSS OUT")
+save_float_to_debug_file 244@
+
+:POOL2_15002
+if 
+  Pad.IsButtonPressed(180@, Button.Cross)
+goto_if_false @POOL2_15080
+if 
+  126@ == 0
+goto_if_false @POOL2_15073
+if 
+  Object.DoesExist(238@)
+goto_if_false @POOL2_15059
+Object.Delete(238@)
+
+:POOL2_15059
+35@ = 99
+126@ = 1
+
+:POOL2_15073
+goto @POOL2_15105
+
+:POOL2_15080
+if 
+  126@ == 1
+goto_if_false @POOL2_15105
+126@ = 0
+
+:POOL2_15105
+if 
+is_ps2_keyboard_key_pressed 72
+goto_if_false @POOL2_15135
+gosub @POOL2_33712
+Object.SetHeading(82@, 363@)
+
+:POOL2_15135
+goto @POOL2_15164
+
+:POOL2_15142
+gosub @POOL2_33712
+Object.SetHeading(82@, 363@)
+35@ = 99
+
+:POOL2_15164
+if 
+  Pad.IsButtonPressed(180@, Button.Triangle)
+goto_if_false @POOL2_15355
+if and
+  127@ == 0
+  183@ > 1000
+goto_if_false @POOL2_15348
+if 
+  not Char.IsDead(213@)
+goto_if_false @POOL2_15270
+223@ += 1.1
+223@ = World.GetGroundZFor3DCoord(221@, 222@, 223@)
+Char.SetCoordinates(213@, 221@, 222@, 223@)
+Char.SetHeading(213@, 224@)
+
+:POOL2_15270
+if 
+  not Char.IsDead(214@)
+goto_if_false @POOL2_15332
+227@ += 1.1
+227@ = World.GetGroundZFor3DCoord(225@, 226@, 227@)
+Char.SetCoordinates(214@, 225@, 226@, 227@)
+Char.SetHeading(214@, 228@)
+
+:POOL2_15332
+Text.ClearHelp
+108@ = 1
+127@ = 1
+
+:POOL2_15348
+goto @POOL2_15387
+
+:POOL2_15355
+if 
+  127@ == 1
+goto_if_false @POOL2_15380
+127@ = 0
+
+:POOL2_15380
+183@ = 0
+
+:POOL2_15387
+if 
+  35@ == 99
+goto_if_false @POOL2_15509
+39@ = 0
+
+:POOL2_15412
+if 
+  10 > 39@
+goto_if_false @POOL2_15473
+if 
+  Object.DoesExist(347@(39@,10i))
+goto_if_false @POOL2_15459
+Object.Delete(347@(39@,10i))
+
+:POOL2_15459
+39@ += 1
+goto @POOL2_15412
+
+:POOL2_15473
+199@ = 0.0
+200@ = 0.0
+34@ += 2
+35@ = 0
+Text.ClearHelp
+
+:POOL2_15509
+return 
+
+:POOL2_15511
+return 
+
+:POOL2_15513
+gosub @POOL2_57034
+if 
+  230@ == 1
+goto_if_false @POOL2_16275
+if 
+  Pad.IsButtonPressed(180@, Button.Triangle)
+goto_if_false @POOL2_15609
+if 
+  127@ == 0
+goto_if_false @POOL2_15602
+34@ = 5
+35@ = 0
+127@ = 1
+245@ = 1
+
+:POOL2_15602
+goto @POOL2_16268
+
+:POOL2_15609
+if 
+  127@ == 1
+goto_if_false @POOL2_15634
+127@ = 0
+
+:POOL2_15634
+if 
+  35@ == 0
+goto_if_false @POOL2_15666
+gosub @POOL2_18801
+35@ += 1
+
+:POOL2_15666
+if 
+  250@ == 0
+goto_if_false @POOL2_15691
+gosub @POOL2_53449
+
+:POOL2_15691
+if 
+  250@ == 0
+goto_if_false @POOL2_15993
+gosub @POOL2_16733
+if 
+  252@ == 1
+goto_if_false @POOL2_15983
+if 
+  Game.IsPcUsingJoypad
+goto_if_false @POOL2_15852
+if 
+  Pad.IsButtonPressed(180@, Button.RightStickY)
+goto_if_false @POOL2_15835
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(180@)
+cset_lvar_float_to_var_int 42@ = integer $RStickY
+42@ /= 128.0
+42@ *= -0.2
+246@ = 0.2
+add_float_lvar_to_float_lvar 246@ += 42@
+goto @POOL2_15845
+
+:POOL2_15835
+246@ = 0.2
+
+:POOL2_15845
+goto @POOL2_15976
+
+:POOL2_15852
+201@, 202@ = Mouse.GetMovement()
+add_float_lvar_to_float_lvar 200@ += 202@
+if 
+  200@ > 128.0
+goto_if_false @POOL2_15899
+200@ = 128.0
+
+:POOL2_15899
+if 
+  -128.0 > 200@
+goto_if_false @POOL2_15930
+200@ = -128.0
+
+:POOL2_15930
+set_lvar_float_to_lvar_float 42@ = 200@
+42@ /= 128.0
+42@ *= -0.2
+246@ = 0.2
+add_float_lvar_to_float_lvar 246@ += 42@
+
+:POOL2_15976
+goto @POOL2_15993
+
+:POOL2_15983
+246@ = 0.0
+
+:POOL2_15993
+if 
+  250@ == 0
+goto_if_false @POOL2_16053
+if 
+  246@ > 0.25
+goto_if_false @POOL2_16046
+gosub @POOL2_19798
+goto @POOL2_16053
+
+:POOL2_16046
+gosub @POOL2_18640
+
+:POOL2_16053
+if 
+  35@ == 1
+goto_if_false @POOL2_16101
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_16101
+gosub @POOL2_18983
+35@ += 1
+
+:POOL2_16101
+if 
+  35@ == 2
+goto_if_false @POOL2_16126
+gosub @POOL2_16987
+
+:POOL2_16126
+if 
+  35@ == 3
+goto_if_false @POOL2_16227
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_16227
+592@ += 1.1
+592@ = World.GetGroundZFor3DCoord(584@, 588@, 592@)
+Char.SetCoordinates(215@, 584@, 588@, 592@)
+Char.SetHeading(215@, 596@)
+Char.SetCollision(215@, True)
+TIMERA = 0
+35@ = 99
+
+:POOL2_16227
+if 
+  35@ == 99
+goto_if_false @POOL2_16268
+Text.ClearHelp
+TIMERA = 0
+34@ += 1
+35@ = 0
+
+:POOL2_16268
+goto @POOL2_16731
+
+:POOL2_16275
+if 
+  35@ == 0
+goto_if_false @POOL2_16307
+gosub @POOL2_18801
+35@ += 1
+
+:POOL2_16307
+if 
+  250@ == 0
+goto_if_false @POOL2_16456
+gosub @POOL2_16733
+if 
+  252@ == 1
+goto_if_false @POOL2_16439
+if 
+  2000 > TIMERA
+goto_if_false @POOL2_16386
+246@ = 0.2
+goto @POOL2_16432
+
+:POOL2_16386
+if 
+  3000 > TIMERA
+goto_if_false @POOL2_16422
+246@ = 0.0
+goto @POOL2_16432
+
+:POOL2_16422
+246@ = 1.0
+
+:POOL2_16432
+goto @POOL2_16456
+
+:POOL2_16439
+TIMERA = 0
+246@ = 0.0
+
+:POOL2_16456
+if 
+  250@ == 0
+goto_if_false @POOL2_16516
+if 
+  246@ > 0.25
+goto_if_false @POOL2_16509
+gosub @POOL2_19798
+goto @POOL2_16516
+
+:POOL2_16509
+gosub @POOL2_18640
+
+:POOL2_16516
+if 
+  35@ == 1
+goto_if_false @POOL2_16564
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_16564
+gosub @POOL2_18983
+35@ += 1
+
+:POOL2_16564
+if 
+  35@ == 2
+goto_if_false @POOL2_16589
+gosub @POOL2_16987
+
+:POOL2_16589
+if 
+  35@ == 3
+goto_if_false @POOL2_16690
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_16690
+592@ += 1.1
+592@ = World.GetGroundZFor3DCoord(584@, 588@, 592@)
+Char.SetCoordinates(215@, 584@, 588@, 592@)
+Char.SetHeading(215@, 596@)
+Char.SetCollision(215@, True)
+TIMERA = 0
+35@ = 99
+
+:POOL2_16690
+if 
+  35@ == 99
+goto_if_false @POOL2_16731
+Text.ClearHelp
+TIMERA = 0
+34@ += 1
+35@ = 0
+
+:POOL2_16731
+return 
+
+:POOL2_16733
+252@ = 0
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_16985
+if 
+  600@ == 1
+goto_if_false @POOL2_16814
+if 
+  Char.IsPlayingAnim(215@, "POOL_SHORT_SHOT")
+goto_if_false @POOL2_16814
+252@ = 1
+
+:POOL2_16814
+if 
+  600@ == 2
+goto_if_false @POOL2_16870
+if 
+  Char.IsPlayingAnim(215@, "POOL_MED_SHOT")
+goto_if_false @POOL2_16870
+252@ = 1
+
+:POOL2_16870
+if 
+  600@ == 3
+goto_if_false @POOL2_16927
+if 
+  Char.IsPlayingAnim(215@, "POOL_LONG_SHOT")
+goto_if_false @POOL2_16927
+252@ = 1
+
+:POOL2_16927
+if 
+  600@ == 4
+goto_if_false @POOL2_16985
+if 
+  Char.IsPlayingAnim(215@, "POOL_XLONG_SHOT")
+goto_if_false @POOL2_16985
+252@ = 1
+
+:POOL2_16985
+return 
+
+:POOL2_16987
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_17598
+if 
+  251@ == 0
+goto_if_false @POOL2_17598
+if 
+  600@ == 1
+goto_if_false @POOL2_17165
+47@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "POOL_SHORT_START", "POOL", 8.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "POOL_SHORT_SHOT", "POOL", 4.0, False, False, False, False, -1)
+Sequence.Close(47@)
+if 
+  108@ == 0
+goto_if_false @POOL2_17160
+Char.PerformSequence(215@, 47@)
+
+:POOL2_17160
+Sequence.Clear(47@)
+
+:POOL2_17165
+if 
+  600@ == 2
+goto_if_false @POOL2_17305
+47@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "POOL_MED_START", "POOL", 8.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "POOL_MED_SHOT", "POOL", 4.0, False, False, False, False, -1)
+Sequence.Close(47@)
+if 
+  108@ == 0
+goto_if_false @POOL2_17300
+Char.PerformSequence(215@, 47@)
+
+:POOL2_17300
+Sequence.Clear(47@)
+
+:POOL2_17305
+if 
+  600@ == 3
+goto_if_false @POOL2_17447
+47@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "POOL_LONG_START", "POOL", 8.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "POOL_LONG_SHOT", "POOL", 4.0, False, False, False, False, -1)
+Sequence.Close(47@)
+if 
+  108@ == 0
+goto_if_false @POOL2_17442
+Char.PerformSequence(215@, 47@)
+
+:POOL2_17442
+Sequence.Clear(47@)
+
+:POOL2_17447
+if 
+  600@ == 4
+goto_if_false @POOL2_17591
+47@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "POOL_XLONG_START", "POOL", 8.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable(-1, "POOL_XLONG_SHOT", "POOL", 4.0, False, False, False, False, -1)
+Sequence.Close(47@)
+if 
+  108@ == 0
+goto_if_false @POOL2_17586
+Char.PerformSequence(215@, 47@)
+
+:POOL2_17586
+Sequence.Clear(47@)
+
+:POOL2_17591
+251@ += 1
+
+:POOL2_17598
+if 
+  251@ == 1
+goto_if_false @POOL2_18116
+if 
+  250@ == 0
+goto_if_false @POOL2_18102
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_18095
+39@ = Char.GetScriptTaskStatus(215@, 1560)
+if 
+  not is_int_lvar_equal_to_constant 39@ == 7
+goto_if_false @POOL2_18081
+if 
+  600@ == 1
+goto_if_false @POOL2_17780
+if 
+  Char.IsPlayingAnim(215@, "POOL_SHORT_SHOT")
+goto_if_false @POOL2_17780
+Char.SetAnimCurrentTime(215@, "POOL_SHORT_SHOT", 247@)
+Char.SetAnimSpeed(215@, "POOL_SHORT_SHOT", 248@)
+
+:POOL2_17780
+if 
+  600@ == 2
+goto_if_false @POOL2_17875
+if 
+  Char.IsPlayingAnim(215@, "POOL_MED_SHOT")
+goto_if_false @POOL2_17875
+Char.SetAnimCurrentTime(215@, "POOL_MED_SHOT", 247@)
+Char.SetAnimSpeed(215@, "POOL_MED_SHOT", 248@)
+
+:POOL2_17875
+if 
+  600@ == 3
+goto_if_false @POOL2_17973
+if 
+  Char.IsPlayingAnim(215@, "POOL_LONG_SHOT")
+goto_if_false @POOL2_17973
+Char.SetAnimCurrentTime(215@, "POOL_LONG_SHOT", 247@)
+Char.SetAnimSpeed(215@, "POOL_LONG_SHOT", 248@)
+
+:POOL2_17973
+if 
+  600@ == 4
+goto_if_false @POOL2_18074
+if 
+  Char.IsPlayingAnim(215@, "POOL_XLONG_SHOT")
+goto_if_false @POOL2_18074
+Char.SetAnimCurrentTime(215@, "POOL_XLONG_SHOT", 247@)
+Char.SetAnimSpeed(215@, "POOL_XLONG_SHOT", 248@)
+
+:POOL2_18074
+goto @POOL2_18095
+
+:POOL2_18081
+TIMERA = 0
+251@ += 1
+
+:POOL2_18095
+goto @POOL2_18116
+
+:POOL2_18102
+TIMERA = 0
+251@ += 1
+
+:POOL2_18116
+if 
+  251@ == 2
+goto_if_false @POOL2_18535
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_18535
+39@ = Char.GetScriptTaskStatus(215@, 1560)
+if and
+  not is_int_lvar_equal_to_constant 39@ == 7
+  5000 > TIMERA
+goto_if_false @POOL2_18528
+42@ = 1.0
+sub_float_lvar_from_float_lvar 42@ -= 248@
+42@ /= 20.0
+add_float_lvar_to_float_lvar 248@ += 42@
+if 
+  0.8 > 248@
+goto_if_false @POOL2_18254
+248@ += 0.01
+
+:POOL2_18254
+if and
+  1.2 > 248@
+  248@ > 0.8
+goto_if_false @POOL2_18295
+248@ = 1.0
+
+:POOL2_18295
+if 
+  Char.IsPlayingAnim(215@, "POOL_SHORT_SHOT")
+goto_if_false @POOL2_18353
+Char.SetAnimSpeed(215@, "POOL_SHORT_SHOT", 248@)
+
+:POOL2_18353
+if 
+  Char.IsPlayingAnim(215@, "POOL_MED_SHOT")
+goto_if_false @POOL2_18407
+Char.SetAnimSpeed(215@, "POOL_MED_SHOT", 248@)
+
+:POOL2_18407
+if 
+  Char.IsPlayingAnim(215@, "POOL_LONG_SHOT")
+goto_if_false @POOL2_18463
+Char.SetAnimSpeed(215@, "POOL_LONG_SHOT", 248@)
+
+:POOL2_18463
+if 
+  Char.IsPlayingAnim(215@, "POOL_XLONG_SHOT")
+goto_if_false @POOL2_18521
+Char.SetAnimSpeed(215@, "POOL_XLONG_SHOT", 248@)
+
+:POOL2_18521
+goto @POOL2_18535
+
+:POOL2_18528
+251@ += 1
+
+:POOL2_18535
+if 
+  251@ == 3
+goto_if_false @POOL2_18638
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_18631
+if 
+  108@ == 0
+goto_if_false @POOL2_18631
+Task.PlayAnimNonInterruptable(215@, "POOL_IDLE_STANCE", "POOL", 4.0, True, False, False, False, -1)
+
+:POOL2_18631
+35@ += 1
+
+:POOL2_18638
+return 
+
+:POOL2_18640
+set_lvar_float_to_lvar_float 42@ = 246@
+sub_float_lvar_from_float_lvar 42@ -= 247@
+if or
+  42@ >= 0.05
+  -0.05 >= 42@
+goto_if_false @POOL2_18791
+42@ /= 3.0
+if and
+  0.01 > 42@
+  42@ > -0.01
+goto_if_false @POOL2_18776
+if 
+  42@ > 0.0
+goto_if_false @POOL2_18766
+42@ = 0.01
+goto @POOL2_18776
+
+:POOL2_18766
+42@ = -0.01
+
+:POOL2_18776
+add_float_lvar_to_float_lvar 247@ += 42@
+goto @POOL2_18799
+
+:POOL2_18791
+set_lvar_float_to_lvar_float 247@ = 246@
+
+:POOL2_18799
+return 
+
+:POOL2_18801
+250@ = 0
+251@ = 0
+618@ = 565.0
+619@ = 386.0
+set_lvar_float_to_lvar_float 622@ = 618@
+set_lvar_float_to_lvar_float 623@ = 619@
+621@ = 67.0
+620@ = 78.0
+624@ = 19.0
+625@ = 16.0
+248@ = 0.0
+247@ = 0.0
+248@ = 0.0
+246@ = 0.0
+TIMERA = 0
+TIMERB = 0
+if 
+  230@ <> 0
+goto_if_false @POOL2_18974
+Text.PrintHelpForever('PL_H4')
+
+:POOL2_18974
+gosub @POOL2_51426
+return 
+
+:POOL2_18983
+Char.SetCollision(215@, False)
+set_lvar_float_to_lvar_float 42@ = 104@
+42@ += 1.0
+594@ = World.GetGroundZFor3DCoord(102@, 103@, 42@)
+Char.SetCoordinates(215@, 586@, 590@, 594@)
+Char.SetHeading(215@, 598@)
+if 
+  is_int_lvar_equal_to_int_lvar 213@ == 215@
+goto_if_false @POOL2_19249
+if 
+  not Char.IsDead(213@)
+goto_if_false @POOL2_19242
+$x = Char.GetOffsetInWorldCoords($y, $z, 213@, 0.0, -1.5, 0.0)
+if 
+  not Char.IsDead(214@)
+goto_if_false @POOL2_19242
+Char.SetCoordinates(214@, 225@, 226@, 227@)
+if 
+  Char.LocateAnyMeans2D(214@, 0, $x, $y, 2.0, 2.0)
+goto_if_false @POOL2_19215
+$x = Char.GetOffsetInWorldCoords($y, $z, 214@, -2.0, 0.0, -1.0)
+Char.SetCoordinates(214@, $x, $y, $z)
+
+:POOL2_19215
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_19242
+Task.LookAtObject(214@, 82@, 10000)
+
+:POOL2_19242
+goto @POOL2_19428
+
+:POOL2_19249
+if 
+  not Char.IsDead(214@)
+goto_if_false @POOL2_19428
+$x = Char.GetOffsetInWorldCoords($y, $z, 214@, 0.0, -1.5, 0.0)
+if 
+  not Char.IsDead(213@)
+goto_if_false @POOL2_19428
+Char.SetCoordinates(213@, 221@, 222@, 223@)
+if 
+  Char.LocateAnyMeans2D(213@, 0, $x, $y, 2.0, 2.0)
+goto_if_false @POOL2_19428
+$x = Char.GetOffsetInWorldCoords($y, $z, 213@, -2.0, 0.0, -1.0)
+Char.SetCoordinates(213@, $x, $y, $z)
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_19428
+Task.LookAtObject(213@, 82@, 10000)
+
+:POOL2_19428
+if 
+  600@ == 1
+goto_if_false @POOL2_19543
+$x = Char.GetOffsetInWorldCoords($y, $z, 215@, 0.1532, -0.9733, 1.1819)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x = Char.GetOffsetInWorldCoords($y, $z, 215@, -0.0267, -0.3468, 0.4236)
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+
+:POOL2_19543
+if 
+  600@ == 2
+goto_if_false @POOL2_19591
+$x = 0.4
+$y = -1.0
+$z = 1.0
+
+:POOL2_19591
+if 
+  600@ == 3
+goto_if_false @POOL2_19639
+$x = 0.3
+$y = -0.5
+$z = 1.0
+
+:POOL2_19639
+if 
+  600@ == 4
+goto_if_false @POOL2_19687
+$x = 0.3
+$y = -0.5
+$z = 1.0
+
+:POOL2_19687
+if 
+  600@ <> 1
+goto_if_false @POOL2_19796
+$x = Char.GetOffsetInWorldCoords($y, $z, 215@, $x, $y, $z)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x = Object.GetOffsetInWorldCoords($y, $z, 82@, 0.0, 0.3, 0.0)
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+
+:POOL2_19796
+return 
+
+:POOL2_19798
+if 
+  230@ == 1
+goto_if_false @POOL2_19898
+set_lvar_float_to_lvar_float 249@ = 246@
+sub_float_lvar_from_float_lvar 249@ -= 247@
+249@ /= 0.1
+set_lvar_float_to_lvar_float 248@ = 249@
+248@ *= 2.0
+if 
+  0.6 > 248@
+goto_if_false @POOL2_19891
+248@ = 0.6
+
+:POOL2_19891
+goto @POOL2_19955
+
+:POOL2_19898
+set_lvar_float_to_lvar_float 248@ = 364@
+248@ *= 2.0
+if 
+  0.6 > 248@
+goto_if_false @POOL2_19947
+248@ = 0.6
+
+:POOL2_19947
+set_lvar_float_to_lvar_float 249@ = 364@
+
+:POOL2_19955
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_20844
+$heading = Object.GetHeading(82@)
+42@ = Math.Sin($heading)
+set_lvar_float_to_lvar_float 169@ = 42@
+169@ *= -1.0
+42@ = Math.Cos($heading)
+set_lvar_float_to_lvar_float 170@ = 42@
+171@ = 0.0
+$x, $y, $z = Object.GetCoordinates(82@)
+set_lvar_float_to_var_float 165@ = $x
+add_float_lvar_to_float_lvar 165@ += 169@
+set_lvar_float_to_var_float 166@ = $y
+add_float_lvar_to_float_lvar 166@ += 170@
+42@ = Math.GetDistanceBetweenCoords2D($x, $y, 165@, 166@)
+div_float_lvar_by_float_lvar 169@ /= 42@
+div_float_lvar_by_float_lvar 170@ /= 42@
+mult_float_lvar_by_float_lvar 169@ *= 249@
+mult_float_lvar_by_float_lvar 170@ *= 249@
+Object.FreezePosition(82@, False)
+Object.SetCollision(82@, False)
+Object.SetDynamic(82@, False)
+Object.SetVelocity(82@, 169@, 170@, 171@)
+278@ = -1
+279@ = 0
+277@ = 0
+206@ = 0
+39@ = 0
+
+:POOL2_20196
+if 
+  16 > 39@
+goto_if_false @POOL2_20239
+109@(39@,16i) = 0
+39@ += 1
+goto @POOL2_20196
+
+:POOL2_20239
+Audio.ReportMissionAudioEventAtObject(82@, 1014)
+253@ = 0.0
+254@ = 0.0
+set_var_float_to_lvar_float $x = 622@
+sub_float_lvar_from_float_var $x -= 618@
+set_var_float_to_lvar_float $y = 623@
+sub_float_lvar_from_float_var $y -= 619@
+div_float_var_by_float_lvar $x /= 620@
+div_float_var_by_float_lvar $y /= 621@
+if 
+  230@ == 0
+goto_if_false @POOL2_20363
+$x = Math.RandomFloatInRange(-0.2, 0.2)
+$y = Math.RandomFloatInRange(-0.2, 0.2)
+
+:POOL2_20363
+if or
+  $x > 0.2
+  -0.2 > $x
+  $y > 0.2
+  -0.2 > $y
+  230@ == 0
+goto_if_false @POOL2_20534
+mult_float_var_by_float_lvar $x *= 249@
+mult_float_var_by_float_lvar $y *= 249@
+set_lvar_float_to_var_float 253@ = $x
+253@ *= 0.5
+set_lvar_float_to_var_float 254@ = $y
+254@ *= -0.5
+$x *= 10.0
+$y *= 10.0
+if 
+  230@ == 1
+goto_if_false @POOL2_20527
+Object.SetRotationVelocity(82@, $y, 0.0, $x)
+
+:POOL2_20527
+goto @POOL2_20554
+
+:POOL2_20534
+253@ = 0.0
+254@ = 0.0
+
+:POOL2_20554
+622@ = 559.0
+623@ = 381.0
+if 
+  129@ == 1
+goto_if_false @POOL2_20744
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CUE BALL DATA =  = LERENCENONSEDDEDOSS OUT")
+save_float_to_debug_file 249@
+save_float_to_debug_file $x
+save_float_to_debug_file $y
+save_float_to_debug_file $z
+
+:POOL2_20744
+Object.SetCollision(82@, True)
+Object.SetDynamic(82@, True)
+if 
+  not Char.IsDead(213@)
+goto_if_false @POOL2_20801
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_20801
+Task.LookAtObject(213@, 82@, 10000)
+
+:POOL2_20801
+if 
+  not Char.IsDead(214@)
+goto_if_false @POOL2_20844
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_20844
+Task.LookAtObject(214@, 82@, 10000)
+
+:POOL2_20844
+250@ = 1
+return 
+
+:POOL2_20853
+if 
+  35@ == 0
+goto_if_false @POOL2_21171
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_21171
+$x, $y, $z = Object.GetCoordinates(163@)
+set_lvar_float_to_var_float 169@ = $x
+sub_float_lvar_from_float_lvar 169@ -= 584@
+set_lvar_float_to_var_float 170@ = $y
+sub_float_lvar_from_float_lvar 170@ -= 588@
+add_float_lvar_to_float_var $x += 169@
+add_float_lvar_to_float_var $y += 170@
+$z += 2.5
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+$x, $y, $z = Object.GetCoordinates(163@)
+$z += 0.5
+Camera.PointAtPoint($x, $y, $z, SwitchType.JumpCut)
+TIMERA = 0
+165@ = Char.GetOffsetInWorldCoords(166@, 167@, 215@, 0.0, -0.2, 0.0)
+167@ = World.GetGroundZFor3DCoord(165@, 166@, 167@)
+$heading = Char.GetHeading(215@)
+Char.SetCoordinates(215@, 610@, 611@, 612@)
+Char.SetHeading(215@, $heading)
+if 
+  108@ == 0
+goto_if_false @POOL2_21164
+Task.PlayAnimNonInterruptable(215@, "POOL_IDLE_STANCE", "POOL", 1000.0, True, True, True, False, -1)
+
+:POOL2_21164
+35@ += 1
+
+:POOL2_21171
+if 
+  35@ == 1
+goto_if_false @POOL2_21296
+39@ = 0
+40@ = 0
+
+:POOL2_21203
+if 
+  16 > 39@
+goto_if_false @POOL2_21264
+if 
+  109@(39@,16i) == 1
+goto_if_false @POOL2_21250
+40@ += 1
+
+:POOL2_21250
+39@ += 1
+goto @POOL2_21203
+
+:POOL2_21264
+if 
+  40@ == 16
+goto_if_false @POOL2_21296
+35@ += 1
+TIMERA = 0
+
+:POOL2_21296
+if 
+  35@ == 2
+goto_if_false @POOL2_21340
+if 
+  TIMERA > 700
+goto_if_false @POOL2_21340
+35@ = 99
+
+:POOL2_21340
+if 
+  35@ == 99
+goto_if_false @POOL2_21374
+Text.ClearHelp
+34@ += 1
+35@ = 0
+
+:POOL2_21374
+return 
+
+:POOL2_21376
+if 
+  35@ == 0
+goto_if_false @POOL2_21408
+274@ = 0
+35@ += 1
+
+:POOL2_21408
+if 
+  35@ == 1
+goto_if_false @POOL2_21458
+if 
+  278@ == -1
+goto_if_false @POOL2_21451
+274@ = 1
+
+:POOL2_21451
+35@ += 1
+
+:POOL2_21458
+if 
+  35@ == 2
+goto_if_false @POOL2_21694
+if 
+  278@ <> -1
+goto_if_false @POOL2_21687
+if 
+  231@ == -1
+goto_if_false @POOL2_21544
+if 
+  278@ == 8
+goto_if_false @POOL2_21537
+274@ = 2
+
+:POOL2_21537
+goto @POOL2_21687
+
+:POOL2_21544
+if 
+  231@ == 0
+goto_if_false @POOL2_21594
+if 
+  278@ >= 8
+goto_if_false @POOL2_21587
+274@ = 2
+
+:POOL2_21587
+goto @POOL2_21687
+
+:POOL2_21594
+if 
+  231@ == 1
+goto_if_false @POOL2_21644
+if 
+  8 >= 278@
+goto_if_false @POOL2_21637
+274@ = 2
+
+:POOL2_21637
+goto @POOL2_21687
+
+:POOL2_21644
+if 
+  231@ == 2
+goto_if_false @POOL2_21687
+if 
+  278@ <> 8
+goto_if_false @POOL2_21687
+274@ = 2
+
+:POOL2_21687
+35@ += 1
+
+:POOL2_21694
+if 
+  35@ == 3
+goto_if_false @POOL2_21744
+if 
+  255@ == 1
+goto_if_false @POOL2_21737
+274@ = 3
+
+:POOL2_21737
+35@ += 1
+
+:POOL2_21744
+if 
+  35@ == 4
+goto_if_false @POOL2_22338
+if 
+  271@ == 1
+goto_if_false @POOL2_22016
+if 
+  274@ <> 3
+goto_if_false @POOL2_22009
+if 
+  231@ == -1
+goto_if_false @POOL2_21859
+if 
+  263@ <> 1
+goto_if_false @POOL2_21852
+if 
+  184@ == 0
+goto_if_false @POOL2_21852
+
+:POOL2_21852
+goto @POOL2_22009
+
+:POOL2_21859
+if 
+  231@ == 0
+goto_if_false @POOL2_21909
+if 
+  273@ > 0
+goto_if_false @POOL2_21902
+274@ = 4
+
+:POOL2_21902
+goto @POOL2_22009
+
+:POOL2_21909
+if 
+  231@ == 1
+goto_if_false @POOL2_21959
+if 
+  272@ > 0
+goto_if_false @POOL2_21952
+274@ = 4
+
+:POOL2_21952
+goto @POOL2_22009
+
+:POOL2_21959
+if 
+  231@ == 2
+goto_if_false @POOL2_22009
+if or
+  272@ > 0
+  273@ > 0
+goto_if_false @POOL2_22009
+274@ = 4
+
+:POOL2_22009
+goto @POOL2_22331
+
+:POOL2_22016
+if 
+  271@ > 1
+goto_if_false @POOL2_22331
+if 
+  231@ == -1
+goto_if_false @POOL2_22181
+if and
+  272@ > 0
+  273@ == 0
+goto_if_false @POOL2_22113
+if 
+  263@ <> 1
+goto_if_false @POOL2_22113
+if 
+  184@ == 0
+goto_if_false @POOL2_22113
+
+:POOL2_22113
+if and
+  272@ == 0
+  273@ > 0
+goto_if_false @POOL2_22174
+if 
+  263@ <> 1
+goto_if_false @POOL2_22174
+if 
+  184@ == 0
+goto_if_false @POOL2_22174
+
+:POOL2_22174
+goto @POOL2_22331
+
+:POOL2_22181
+if 
+  231@ == 0
+goto_if_false @POOL2_22231
+if 
+  273@ > 0
+goto_if_false @POOL2_22224
+274@ = 4
+
+:POOL2_22224
+goto @POOL2_22331
+
+:POOL2_22231
+if 
+  231@ == 1
+goto_if_false @POOL2_22281
+if 
+  272@ > 0
+goto_if_false @POOL2_22274
+274@ = 4
+
+:POOL2_22274
+goto @POOL2_22331
+
+:POOL2_22281
+if 
+  231@ == 2
+goto_if_false @POOL2_22331
+if or
+  273@ > 0
+  272@ > 0
+goto_if_false @POOL2_22331
+274@ = 4
+
+:POOL2_22331
+35@ += 1
+
+:POOL2_22338
+if 
+  35@ == 5
+goto_if_false @POOL2_22456
+if 
+  231@ <> 2
+goto_if_false @POOL2_22406
+if 
+  263@ == 1
+goto_if_false @POOL2_22399
+274@ = 5
+
+:POOL2_22399
+goto @POOL2_22449
+
+:POOL2_22406
+if 
+  263@ == 1
+goto_if_false @POOL2_22449
+if 
+  274@ <> 0
+goto_if_false @POOL2_22449
+274@ = 5
+
+:POOL2_22449
+35@ += 1
+
+:POOL2_22456
+if 
+  35@ == 6
+goto_if_false @POOL2_22542
+if 
+  274@ == 0
+goto_if_false @POOL2_22535
+if 
+  271@ == 0
+goto_if_false @POOL2_22535
+if 
+  277@ == 0
+goto_if_false @POOL2_22535
+274@ = 6
+
+:POOL2_22535
+35@ = 99
+
+:POOL2_22542
+if 
+  35@ == 99
+goto_if_false @POOL2_22766
+if and
+  274@ == 0
+  184@ == 0
+  271@ > 0
+  231@ == -1
+goto_if_false @POOL2_22750
+if 
+  is_int_lvar_greater_than_int_lvar 272@ > 273@
+goto_if_false @POOL2_22678
+if 
+  229@ == 1
+goto_if_false @POOL2_22657
+217@ = 0
+218@ = 1
+goto @POOL2_22671
+
+:POOL2_22657
+217@ = 1
+218@ = 0
+
+:POOL2_22671
+goto @POOL2_22750
+
+:POOL2_22678
+if 
+  is_int_lvar_greater_than_int_lvar 273@ > 272@
+goto_if_false @POOL2_22750
+if 
+  229@ == 1
+goto_if_false @POOL2_22736
+217@ = 1
+218@ = 0
+goto @POOL2_22750
+
+:POOL2_22736
+217@ = 0
+218@ = 1
+
+:POOL2_22750
+Text.ClearHelp
+35@ = 0
+34@ += 1
+
+:POOL2_22766
+return 
+
+:POOL2_22768
+if 
+  35@ == 0
+goto_if_false @POOL2_24594
+TIMERA = 0
+if and
+  67@ == 1
+  68@ == 1
+  69@ == 1
+  70@ == 1
+  71@ == 1
+goto_if_false @POOL2_22914
+if and
+  72@ == 1
+  73@ == 1
+goto_if_false @POOL2_22914
+if 
+  217@ == 0
+goto_if_false @POOL2_22889
+217@ = 2
+
+:POOL2_22889
+if 
+  218@ == 0
+goto_if_false @POOL2_22914
+218@ = 2
+
+:POOL2_22914
+if and
+  75@ == 1
+  76@ == 1
+  77@ == 1
+  78@ == 1
+  79@ == 1
+goto_if_false @POOL2_23035
+if and
+  80@ == 1
+  81@ == 1
+goto_if_false @POOL2_23035
+if 
+  217@ == 1
+goto_if_false @POOL2_23010
+217@ = 2
+
+:POOL2_23010
+if 
+  218@ == 1
+goto_if_false @POOL2_23035
+218@ = 2
+
+:POOL2_23035
+switch_start 274@ total_jumps 7 default_jump 0 @POOL2_24479 jumps 0 @POOL2_23098 1 @POOL2_23429 2 @POOL2_23627 3 @POOL2_23825 4 @POOL2_24023 5 @POOL2_24221 6 @POOL2_24281
+
+:POOL2_23098
+if 
+  271@ > 0
+goto_if_false @POOL2_23231
+if 
+  74@ <> 1
+goto_if_false @POOL2_23203
+232@ = 0
+233@ = 1
+if 
+  229@ == 1
+goto_if_false @POOL2_23181
+set_lvar_int_to_lvar_int 231@ = 217@
+goto @POOL2_23189
+
+:POOL2_23181
+set_lvar_int_to_lvar_int 231@ = 218@
+
+:POOL2_23189
+35@ = 99
+goto @POOL2_23224
+
+:POOL2_23203
+276@ = 1
+275@ = 1
+35@ = 99
+
+:POOL2_23224
+goto @POOL2_23422
+
+:POOL2_23231
+if 
+  229@ == 1
+goto_if_false @POOL2_23355
+232@ = 0
+229@ = 2
+set_lvar_int_to_lvar_int 215@ = 214@
+set_lvar_int_to_lvar_int 216@ = 107@
+set_lvar_int_to_lvar_int 230@ = 220@
+233@ = 0
+set_lvar_int_to_lvar_int 231@ = 218@
+if 
+  220@ == 1
+goto_if_false @POOL2_23334
+set_lvar_int_to_constant 180@ = 1
+goto @POOL2_23341
+
+:POOL2_23334
+set_lvar_int_to_constant 180@ = 0
+
+:POOL2_23341
+35@ = 99
+goto @POOL2_23422
+
+:POOL2_23355
+232@ = 0
+229@ = 1
+set_lvar_int_to_lvar_int 215@ = 213@
+set_lvar_int_to_lvar_int 216@ = 106@
+set_lvar_int_to_lvar_int 230@ = 219@
+233@ = 0
+set_lvar_int_to_lvar_int 231@ = 217@
+set_lvar_int_to_constant 180@ = 0
+35@ = 99
+
+:POOL2_23422
+goto @POOL2_24479
+
+:POOL2_23429
+if 
+  229@ == 1
+goto_if_false @POOL2_23553
+229@ = 2
+set_lvar_int_to_lvar_int 215@ = 214@
+set_lvar_int_to_lvar_int 216@ = 107@
+set_lvar_int_to_lvar_int 230@ = 220@
+232@ = 2
+233@ = 0
+set_lvar_int_to_lvar_int 231@ = 218@
+if 
+  220@ == 1
+goto_if_false @POOL2_23532
+set_lvar_int_to_constant 180@ = 1
+goto @POOL2_23539
+
+:POOL2_23532
+set_lvar_int_to_constant 180@ = 0
+
+:POOL2_23539
+35@ = 99
+goto @POOL2_23620
+
+:POOL2_23553
+229@ = 1
+set_lvar_int_to_lvar_int 215@ = 213@
+set_lvar_int_to_lvar_int 216@ = 106@
+set_lvar_int_to_lvar_int 230@ = 219@
+232@ = 2
+233@ = 0
+set_lvar_int_to_lvar_int 231@ = 217@
+set_lvar_int_to_constant 180@ = 0
+35@ = 99
+
+:POOL2_23620
+goto @POOL2_24479
+
+:POOL2_23627
+if 
+  229@ == 1
+goto_if_false @POOL2_23751
+229@ = 2
+set_lvar_int_to_lvar_int 215@ = 214@
+set_lvar_int_to_lvar_int 216@ = 107@
+set_lvar_int_to_lvar_int 230@ = 220@
+232@ = 2
+233@ = 0
+set_lvar_int_to_lvar_int 231@ = 218@
+if 
+  220@ == 1
+goto_if_false @POOL2_23730
+set_lvar_int_to_constant 180@ = 1
+goto @POOL2_23737
+
+:POOL2_23730
+set_lvar_int_to_constant 180@ = 0
+
+:POOL2_23737
+35@ = 99
+goto @POOL2_23818
+
+:POOL2_23751
+229@ = 1
+set_lvar_int_to_lvar_int 215@ = 213@
+set_lvar_int_to_lvar_int 216@ = 106@
+set_lvar_int_to_lvar_int 230@ = 219@
+232@ = 2
+233@ = 0
+set_lvar_int_to_lvar_int 231@ = 217@
+set_lvar_int_to_constant 180@ = 0
+35@ = 99
+
+:POOL2_23818
+goto @POOL2_24479
+
+:POOL2_23825
+if 
+  229@ == 1
+goto_if_false @POOL2_23949
+229@ = 2
+set_lvar_int_to_lvar_int 215@ = 214@
+set_lvar_int_to_lvar_int 216@ = 107@
+set_lvar_int_to_lvar_int 230@ = 220@
+232@ = 2
+233@ = 0
+set_lvar_int_to_lvar_int 231@ = 218@
+if 
+  220@ == 1
+goto_if_false @POOL2_23928
+set_lvar_int_to_constant 180@ = 1
+goto @POOL2_23935
+
+:POOL2_23928
+set_lvar_int_to_constant 180@ = 0
+
+:POOL2_23935
+35@ = 99
+goto @POOL2_24016
+
+:POOL2_23949
+229@ = 1
+set_lvar_int_to_lvar_int 215@ = 213@
+set_lvar_int_to_lvar_int 216@ = 106@
+set_lvar_int_to_lvar_int 230@ = 219@
+232@ = 2
+233@ = 0
+set_lvar_int_to_lvar_int 231@ = 217@
+set_lvar_int_to_constant 180@ = 0
+35@ = 99
+
+:POOL2_24016
+goto @POOL2_24479
+
+:POOL2_24023
+if 
+  229@ == 1
+goto_if_false @POOL2_24147
+229@ = 2
+set_lvar_int_to_lvar_int 215@ = 214@
+set_lvar_int_to_lvar_int 216@ = 107@
+set_lvar_int_to_lvar_int 230@ = 220@
+232@ = 2
+233@ = 0
+set_lvar_int_to_lvar_int 231@ = 218@
+if 
+  220@ == 1
+goto_if_false @POOL2_24126
+set_lvar_int_to_constant 180@ = 1
+goto @POOL2_24133
+
+:POOL2_24126
+set_lvar_int_to_constant 180@ = 0
+
+:POOL2_24133
+35@ = 99
+goto @POOL2_24214
+
+:POOL2_24147
+229@ = 1
+set_lvar_int_to_lvar_int 215@ = 213@
+set_lvar_int_to_lvar_int 216@ = 106@
+set_lvar_int_to_lvar_int 230@ = 219@
+232@ = 2
+233@ = 0
+set_lvar_int_to_lvar_int 231@ = 217@
+set_lvar_int_to_constant 180@ = 0
+35@ = 99
+
+:POOL2_24214
+goto @POOL2_24479
+
+:POOL2_24221
+if 
+  184@ == 0
+goto_if_false @POOL2_24253
+275@ = 0
+goto @POOL2_24260
+
+:POOL2_24253
+275@ = 1
+
+:POOL2_24260
+276@ = 1
+35@ = 99
+goto @POOL2_24479
+
+:POOL2_24281
+if 
+  229@ == 1
+goto_if_false @POOL2_24405
+229@ = 2
+set_lvar_int_to_lvar_int 215@ = 214@
+set_lvar_int_to_lvar_int 216@ = 107@
+set_lvar_int_to_lvar_int 230@ = 220@
+232@ = 2
+233@ = 0
+set_lvar_int_to_lvar_int 231@ = 218@
+if 
+  220@ == 1
+goto_if_false @POOL2_24384
+set_lvar_int_to_constant 180@ = 1
+goto @POOL2_24391
+
+:POOL2_24384
+set_lvar_int_to_constant 180@ = 0
+
+:POOL2_24391
+35@ = 99
+goto @POOL2_24472
+
+:POOL2_24405
+229@ = 1
+set_lvar_int_to_lvar_int 215@ = 213@
+set_lvar_int_to_lvar_int 216@ = 106@
+set_lvar_int_to_lvar_int 230@ = 219@
+232@ = 2
+233@ = 0
+set_lvar_int_to_lvar_int 231@ = 217@
+set_lvar_int_to_constant 180@ = 0
+35@ = 99
+
+:POOL2_24472
+goto @POOL2_24479
+
+:POOL2_24479
+if 
+  178@ == 0
+goto_if_false @POOL2_24533
+if 
+  230@ == 1
+goto_if_false @POOL2_24526
+Text.PrintHelpForever('PL_H5')
+
+:POOL2_24526
+goto @POOL2_24580
+
+:POOL2_24533
+if 
+  is_int_lvar_equal_to_constant 180@ == 0
+goto_if_false @POOL2_24569
+Text.PrintHelpForever('PL_H8')
+goto @POOL2_24580
+
+:POOL2_24569
+Text.PrintHelpForever('PL_H9')
+
+:POOL2_24580
+TIMERA = 0
+TIMERB = 0
+
+:POOL2_24594
+if 
+  35@ == 99
+goto_if_false @POOL2_24702
+gosub @POOL2_54829
+if 
+  230@ == 1
+goto_if_false @POOL2_24669
+if 
+  Pad.IsButtonPressed(180@, Button.Cross)
+goto_if_false @POOL2_24662
+35@ += 1
+
+:POOL2_24662
+goto @POOL2_24702
+
+:POOL2_24669
+if or
+  TIMERB > 2000
+  Pad.IsButtonPressed(180@, Button.Cross)
+goto_if_false @POOL2_24702
+35@ += 1
+
+:POOL2_24702
+if 
+  35@ == 100
+goto_if_false @POOL2_24864
+Text.ClearHelp
+39@ = 0
+271@ = 0
+
+:POOL2_24736
+if 
+  16 > 39@
+goto_if_false @POOL2_24779
+255@(39@,16i) = 0
+39@ += 1
+goto @POOL2_24736
+
+:POOL2_24779
+272@ = 0
+273@ = 0
+if 
+  276@ == 1
+goto_if_false @POOL2_24839
+184@ = 1
+34@ += 1
+35@ = 0
+goto @POOL2_24860
+
+:POOL2_24839
+184@ = 0
+34@ = 3
+35@ = 0
+
+:POOL2_24860
+wait 0
+
+:POOL2_24864
+return 
+
+:POOL2_24866
+if 
+  35@ == 0
+goto_if_false @POOL2_25319
+if 
+  275@ == 0
+goto_if_false @POOL2_24966
+if 
+  229@ == 1
+goto_if_false @POOL2_24943
+set_lvar_int_to_lvar_int 215@ = 214@
+set_lvar_int_to_lvar_int 216@ = 107@
+goto @POOL2_24959
+
+:POOL2_24943
+set_lvar_int_to_lvar_int 215@ = 213@
+set_lvar_int_to_lvar_int 216@ = 106@
+
+:POOL2_24959
+goto @POOL2_25023
+
+:POOL2_24966
+if 
+  229@ == 1
+goto_if_false @POOL2_25007
+set_lvar_int_to_lvar_int 215@ = 213@
+set_lvar_int_to_lvar_int 216@ = 106@
+goto @POOL2_25023
+
+:POOL2_25007
+set_lvar_int_to_lvar_int 215@ = 214@
+set_lvar_int_to_lvar_int 216@ = 107@
+
+:POOL2_25023
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_25319
+$x = Char.GetOffsetInWorldCoords($y, $z, 215@, 1.0, 2.0, 0.0)
+Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
+Camera.PointAtChar(215@, CameraMode.Fixed, SwitchType.JumpCut)
+if 
+  178@ == 0
+goto_if_false @POOL2_25247
+if 
+  is_int_lvar_equal_to_int_lvar 215@ == 213@
+goto_if_false @POOL2_25209
+set_lvar_int_to_lvar_int 39@ = 162@
+39@ *= 2
+Player.AddScore($player1, 39@)
+start_new_script @CASHWIN 39@ 5000 80 
+if 
+  not Char.IsDead(164@)
+goto_if_false @POOL2_25202
+Char.SetMoney(164@, 0)
+
+:POOL2_25202
+goto @POOL2_25240
+
+:POOL2_25209
+set_lvar_int_to_lvar_int 39@ = 162@
+39@ *= -1
+start_new_script @CASHWIN 39@ 5000 80 
+
+:POOL2_25240
+goto @POOL2_25305
+
+:POOL2_25247
+if 
+  is_int_lvar_equal_to_int_lvar 215@ == 213@
+goto_if_false @POOL2_25289
+Text.PrintBig('PL_08', 5000, TextStyle.Middle)
+goto @POOL2_25305
+
+:POOL2_25289
+Text.PrintBig('PL_09', 5000, TextStyle.Middle)
+
+:POOL2_25305
+TIMERA = 0
+35@ += 1
+
+:POOL2_25319
+if 
+  35@ == 1
+goto_if_false @POOL2_25363
+if 
+  TIMERA > 5000
+goto_if_false @POOL2_25363
+35@ += 1
+
+:POOL2_25363
+if 
+  35@ == 2
+goto_if_false @POOL2_25936
+Camera.DoFade(0, 500)
+
+:POOL2_25388
+if 
+  Camera.GetFadingStatus
+goto_if_false @POOL2_25412
+wait 0
+goto @POOL2_25388
+
+:POOL2_25412
+39@ = 0
+
+:POOL2_25419
+if 
+  16 > 39@
+goto_if_false @POOL2_25480
+if 
+  Object.DoesExist(82@(39@,16i))
+goto_if_false @POOL2_25466
+Object.Delete(82@(39@,16i))
+
+:POOL2_25466
+39@ += 1
+goto @POOL2_25419
+
+:POOL2_25480
+$x = Object.GetOffsetInWorldCoords($y, $z, 163@, -0.2734375, -0.0546875, 0.9296875)
+82@ = Object.CreateNoOffset(#K_POOLBALLCUE, $x, $y, $z)
+$heading = Object.GetHeading(163@)
+$heading += 270.0
+Object.SetHeading(82@, $heading)
+558@ = Object.GetOffsetInWorldCoords(559@, 560@, 163@, 0.3408, -0.0284, 0.9297)
+561@ = Object.GetHeading(163@)
+561@ += 90.0
+83@ = Object.CreateNoOffset(#K_POOLBALLSPT01, 558@, 559@, 560@)
+84@ = Object.CreateNoOffset(#K_POOLBALLSPT02, 0.0, 0.0, 0.0)
+85@ = Object.CreateNoOffset(#K_POOLBALLSPT03, 0.0, 0.0, 0.0)
+86@ = Object.CreateNoOffset(#K_POOLBALLSPT04, 0.0, 0.0, 0.0)
+87@ = Object.CreateNoOffset(#K_POOLBALLSPT05, 0.0, 0.0, 0.0)
+88@ = Object.CreateNoOffset(#K_POOLBALLSPT06, 0.0, 0.0, 0.0)
+89@ = Object.CreateNoOffset(#K_POOLBALLSPT07, 0.0, 0.0, 0.0)
+90@ = Object.CreateNoOffset(#K_POOLBALL8, 0.0, 0.0, 0.0)
+91@ = Object.CreateNoOffset(#K_POOLBALLSTP01, 0.0, 0.0, 0.0)
+92@ = Object.CreateNoOffset(#K_POOLBALLSTP02, 0.0, 0.0, 0.0)
+93@ = Object.CreateNoOffset(#K_POOLBALLSTP03, 0.0, 0.0, 0.0)
+94@ = Object.CreateNoOffset(#K_POOLBALLSTP04, 0.0, 0.0, 0.0)
+95@ = Object.CreateNoOffset(#K_POOLBALLSTP05, 0.0, 0.0, 0.0)
+96@ = Object.CreateNoOffset(#K_POOLBALLSTP06, 0.0, 0.0, 0.0)
+97@ = Object.CreateNoOffset(#K_POOLBALLSTP07, 0.0, 0.0, 0.0)
+gosub @POOL2_50546
+35@ = 99
+
+:POOL2_25936
+if 
+  35@ == 99
+goto_if_false @POOL2_25970
+Text.ClearHelp
+34@ += 1
+35@ = 0
+
+:POOL2_25970
+return 
+Text.SetRightJustify(False)
+Text.SetJustify(False)
+Text.SetWrapX(640.0)
+Text.SetProportional(True)
+Text.SetBackground(False)
+Text.SetScale(1.3, 3.36)
+Text.SetCenter(True)
+Text.SetEdge(2, 0, 0, 0, 255)
+Text.SetFont(Font.Pricedown)
+$temp_integer_2, $temp_integer_3, $temp_integer_4, $an = Hud.GetColor(6)
+Text.SetColor($temp_integer_2, $temp_integer_3, $temp_integer_4, 255)
+return 
+
+:POOL2_26060
+275@ = 0
+271@ = 0
+272@ = 0
+273@ = 0
+274@ = 0
+39@ = 0
+
+:POOL2_26102
+if 
+  16 > 39@
+goto_if_false @POOL2_26156
+255@(39@,16i) = 0
+66@(39@,16i) = 0
+39@ += 1
+goto @POOL2_26102
+
+:POOL2_26156
+232@ = 0
+276@ = 0
+34@ = 1
+35@ = 0
+return 
+
+:POOL2_26186
+if 
+  Object.DoesExist(163@)
+goto_if_false @POOL2_26234
+$x, $y, $z = Object.GetCoordinates(163@)
+World.ClearArea(1, $x, $y, $z, 10.0)
+
+:POOL2_26234
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_26272
+48@ = Object.GetSpeed(82@)
+49@, 50@, 51@ = Object.GetRotationVelocity(82@)
+
+:POOL2_26272
+if 
+  206@ > 2000
+goto_if_false @POOL2_26762
+set_var_float_to_lvar_float $x = 204@
+$x *= -1.0
+39@ = 0
+
+:POOL2_26316
+if 
+  16 > 39@
+goto_if_false @POOL2_26762
+if 
+  Object.DoesExist(82@(39@,16i))
+goto_if_false @POOL2_26737
+42@ = Object.GetSpeed(82@(39@,16i))
+if 
+  is_float_lvar_greater_than_float_lvar 203@ > 42@
+goto_if_false @POOL2_26719
+if 
+  0.005 > 42@
+goto_if_false @POOL2_26635
+42@, 43@, 44@ = Object.GetRotationVelocity(82@(39@,16i))
+40@ = 0
+if or
+  is_float_lvar_greater_than_float_lvar 42@ > 204@
+  is_float_var_greater_than_float_lvar $x > 42@
+goto_if_false @POOL2_26465
+40@ = 1
+
+:POOL2_26465
+if or
+  is_float_lvar_greater_than_float_lvar 43@ > 204@
+  is_float_var_greater_than_float_lvar $x > 43@
+goto_if_false @POOL2_26499
+40@ = 1
+
+:POOL2_26499
+if or
+  is_float_lvar_greater_than_float_lvar 44@ > 204@
+  is_float_var_greater_than_float_lvar $x > 44@
+goto_if_false @POOL2_26533
+40@ = 1
+
+:POOL2_26533
+if 
+  40@ == 0
+goto_if_false @POOL2_26617
+Object.SetVelocity(82@(39@,16i), 0.0, 0.0, 0.0)
+Object.SetRotationVelocity(82@(39@,16i), 0.0, 0.0, 0.0)
+109@(39@,16i) = 1
+goto @POOL2_26628
+
+:POOL2_26617
+109@(39@,16i) = 0
+
+:POOL2_26628
+goto @POOL2_26712
+
+:POOL2_26635
+$x, $y, $z = Object.GetVelocity(82@(39@,16i))
+$x *= 0.9
+$y *= 0.9
+$z *= 0.9
+Object.SetVelocity(82@(39@,16i), $x, $y, $z)
+109@(39@,16i) = 0
+
+:POOL2_26712
+goto @POOL2_26730
+
+:POOL2_26719
+109@(39@,16i) = 0
+
+:POOL2_26730
+goto @POOL2_26748
+
+:POOL2_26737
+109@(39@,16i) = 1
+
+:POOL2_26748
+39@ += 1
+goto @POOL2_26316
+
+:POOL2_26762
+if 
+  108@ <> 1
+goto_if_false @POOL2_26826
+set_lvar_int_to_lvar_int 358@ = 213@
+set_lvar_int_to_lvar_int 359@ = 106@
+gosub @POOL2_30670
+set_lvar_int_to_lvar_int 358@ = 214@
+set_lvar_int_to_lvar_int 359@ = 107@
+gosub @POOL2_30670
+
+:POOL2_26826
+253@ *= 0.98
+254@ *= 0.98
+39@ = 0
+
+:POOL2_26853
+if 
+  16 > 39@
+goto_if_false @POOL2_27127
+if 
+  Object.DoesExist(82@(39@,16i))
+goto_if_false @POOL2_27113
+$x, $y, $z = Object.GetCoordinates(82@(39@,16i))
+set_lvar_float_to_lvar_float 43@ = 52@
+43@ *= 2.0
+set_lvar_float_to_lvar_float 42@ = 560@
+sub_float_lvar_from_float_lvar 42@ -= 43@
+if 
+  is_float_lvar_greater_than_float_var 42@ > $z
+goto_if_false @POOL2_27113
+if 
+  66@(39@,16i) == 0
+goto_if_false @POOL2_27113
+Audio.ReportMissionAudioEventAtPosition($x, $y, $z, 1017)
+if 
+  Object.DoesExist(82@(39@,16i))
+goto_if_false @POOL2_27027
+Object.Delete(82@(39@,16i))
+
+:POOL2_27027
+66@(39@,16i) = 1
+255@(39@,16i) = 1
+271@ += 1
+if and
+  39@ > 0
+  8 > 39@
+goto_if_false @POOL2_27088
+272@ += 1
+
+:POOL2_27088
+if 
+  39@ > 8
+goto_if_false @POOL2_27113
+273@ += 1
+
+:POOL2_27113
+39@ += 1
+goto @POOL2_26853
+
+:POOL2_27127
+39@ = 0
+
+:POOL2_27134
+if 
+  16 > 39@
+goto_if_false @POOL2_27513
+if 
+  Object.DoesExist(82@(39@,16i))
+goto_if_false @POOL2_27499
+if 
+  Object.HasBeenDamagedByWeapon(82@(39@,16i), WeaponType.Fall)
+goto_if_false @POOL2_27226
+277@ += 1
+if 
+  39@ == 0
+goto_if_false @POOL2_27226
+279@ = 1
+
+:POOL2_27226
+if 
+  278@ == -1
+goto_if_false @POOL2_27342
+if 
+  39@ > 0
+goto_if_false @POOL2_27342
+if 
+  Object.HasBeenDamagedByWeapon(82@(39@,16i), WeaponType.Drowning)
+goto_if_false @POOL2_27342
+set_lvar_int_to_lvar_int 278@ = 39@
+if 
+  279@ == 0
+goto_if_false @POOL2_27342
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_27342
+Object.AddVelocityRelative(82@, 253@, 254@, 0.0)
+
+:POOL2_27342
+if 
+  Object.HasBeenDamagedByWeapon(82@(39@,16i), WeaponType.Runoverbycar)
+goto_if_false @POOL2_27490
+277@ += 1
+if 
+  39@ == 0
+goto_if_false @POOL2_27396
+279@ = 1
+
+:POOL2_27396
+if 
+  278@ == -1
+goto_if_false @POOL2_27490
+if 
+  39@ > 0
+goto_if_false @POOL2_27490
+set_lvar_int_to_lvar_int 278@ = 39@
+if 
+  279@ == 0
+goto_if_false @POOL2_27490
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_27490
+Object.AddVelocityRelative(82@, 253@, 254@, 0.0)
+
+:POOL2_27490
+Object.ClearLastWeaponDamage(82@(39@,16i))
+
+:POOL2_27499
+39@ += 1
+goto @POOL2_27134
+
+:POOL2_27513
+if 
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @POOL2_27604
+if 
+  129@ == 1
+goto_if_false @POOL2_27579
+129@ = 0
+write_debug "OUTPUT_TEXT_OFF"
+goto @POOL2_27604
+
+:POOL2_27579
+129@ = 1
+write_debug "OUTPUT_TEXT_ON"
+
+:POOL2_27604
+if 
+  not Object.DoesExist(163@)
+goto_if_false @POOL2_27627
+34@ = 99
+
+:POOL2_27627
+if 
+  not Char.IsDead(164@)
+goto_if_false @POOL2_27651
+$debug_char_health = Char.GetHealth(164@)
+
+:POOL2_27651
+if 
+  Char.IsDead(164@)
+goto_if_false @POOL2_27674
+34@ = 99
+
+:POOL2_27674
+if 
+  108@ == 1
+goto_if_false @POOL2_28237
+Hud.Display(True)
+if 
+  161@ > 0
+goto_if_false @POOL2_27722
+Player.AddScore($player1, 161@)
+
+:POOL2_27722
+if 
+  not Char.IsDead(164@)
+goto_if_false @POOL2_27794
+Char.FreezePosition(164@, False)
+DecisionMaker.Remove(207@)
+207@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+Char.SetDecisionMaker(164@, 207@)
+Char.SetCollision(164@, True)
+Char.SetProofs(164@, False, False, False, False, False)
+Char.HideWeaponForScriptedCutscene(164@, True)
+
+:POOL2_27794
+World.SetPedDensityMultiplier(1.0)
+Text.UseCommands(False)
+Hud.DisplayRadar(True)
+39@ = 0
+
+:POOL2_27816
+if 
+  16 > 39@
+goto_if_false @POOL2_27857
+Object.MarkAsNoLongerNeeded(82@(39@,16i))
+39@ += 1
+goto @POOL2_27816
+
+:POOL2_27857
+Camera.RestoreJumpcut
+if 
+  Object.DoesExist(238@)
+goto_if_false @POOL2_27880
+Object.Delete(238@)
+
+:POOL2_27880
+104@ += 0.1
+Object.SetCoordinates(163@, 102@, 103@, 104@)
+98@ = Object.GetOffsetInWorldCoords(100@, $z, 163@, -0.96, -0.49, 0.7)
+99@ = Object.GetOffsetInWorldCoords(101@, $z, 163@, 0.96, 0.49, 0.7)
+if 
+  is_float_lvar_greater_than_float_lvar 98@ > 99@
+goto_if_false @POOL2_28005
+set_var_float_to_lvar_float $x = 98@
+set_lvar_float_to_lvar_float 98@ = 99@
+set_lvar_float_to_var_float 99@ = $x
+
+:POOL2_28005
+if 
+  is_float_lvar_greater_than_float_lvar 100@ > 101@
+goto_if_false @POOL2_28048
+set_var_float_to_lvar_float $y = 100@
+set_lvar_float_to_lvar_float 100@ = 101@
+set_lvar_float_to_var_float 101@ = $y
+
+:POOL2_28048
+World.SetPoolTableCoords(98@, 100@, $z, 99@, 101@, $z)
+39@ = 0
+
+:POOL2_28075
+if 
+  16 > 39@
+goto_if_false @POOL2_28173
+if 
+  Object.DoesExist(82@(39@,16i))
+goto_if_false @POOL2_28159
+$x, $y, $z = Object.GetCoordinates(82@(39@,16i))
+$z += 0.1
+Object.SetCoordinates(82@(39@,16i), $x, $y, $z)
+
+:POOL2_28159
+39@ += 1
+goto @POOL2_28075
+
+:POOL2_28173
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL2_28215
+Char.ClearTasksImmediately($scplayer)
+Char.FreezePosition($scplayer, False)
+Player.SetControl($player1, True)
+Char.SetCollision($scplayer, True)
+
+:POOL2_28215
+Object.Delete(106@)
+Object.Delete(107@)
+Streaming.MarkModelAsNoLongerNeeded(#K_POOLQ)
+Streaming.RemoveAnimation("POOL")
+
+:POOL2_28237
+if and
+  34@ == 99
+  108@ == 0
+goto_if_false @POOL2_28282
+Text.UseCommands(False)
+Hud.DisplayRadar(True)
+34@ = 0
+wait 500
+
+:POOL2_28282
+if 
+is_ps2_keyboard_key_just_pressed 73
+goto_if_false @POOL2_28394
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_28394
+Object.FreezePosition(82@, False)
+Object.SetCollision(82@, False)
+Object.SetDynamic(82@, False)
+$x = Math.RandomFloatInRange(-5.0, 5.0)
+$y = Math.RandomFloatInRange(-5.0, 5.0)
+Object.SetVelocity(82@, $x, $y, 0.0)
+Object.SetCollision(82@, True)
+Object.SetDynamic(82@, True)
+
+:POOL2_28394
+return 
+
+:POOL2_28396
+281@ = 0
+280@ = 1.7
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_28619
+$x, $y, $z = Object.GetCoordinates(82@)
+set_lvar_float_to_lvar_float 42@ = 98@
+42@ += 0.02
+if 
+  is_float_lvar_greater_than_float_var 42@ > $x
+goto_if_false @POOL2_28487
+281@ = 99
+
+:POOL2_28487
+set_lvar_float_to_lvar_float 42@ = 99@
+42@ -= 0.02
+if 
+  is_float_var_greater_than_float_lvar $x > 42@
+goto_if_false @POOL2_28531
+281@ = 99
+
+:POOL2_28531
+set_lvar_float_to_lvar_float 42@ = 100@
+42@ += 0.02
+if 
+  is_float_lvar_greater_than_float_var 42@ > $y
+goto_if_false @POOL2_28575
+281@ = 99
+
+:POOL2_28575
+set_lvar_float_to_lvar_float 42@ = 101@
+42@ -= 0.02
+if 
+  is_float_var_greater_than_float_lvar $y > 42@
+goto_if_false @POOL2_28619
+281@ = 99
+
+:POOL2_28619
+if 
+  281@ <> 99
+goto_if_false @POOL2_30668
+if 
+  240@ <> 0
+goto_if_false @POOL2_28662
+281@ = 2
+
+:POOL2_28662
+if 
+  281@ == 0
+goto_if_false @POOL2_29271
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_29271
+39@ = 0
+
+:POOL2_28703
+if 
+  3 > 39@
+goto_if_false @POOL2_28847
+304@(39@,3f) = -999999.9
+307@(39@,3f) = -999999.9
+310@(39@,3f) = -999999.9
+313@(39@,3f) = -999999.9
+316@(39@,3f) = -999999.9
+319@(39@,3f) = -999999.9
+322@(39@,3f) = -999999.9
+325@(39@,3f) = -999999.9
+39@ += 1
+goto @POOL2_28703
+
+:POOL2_28847
+set_lvar_float_to_lvar_float 301@ = 280@
+set_lvar_float_to_lvar_float 301@ = 280@
+set_lvar_float_to_lvar_float 300@ = 280@
+300@ /= 10.0
+$heading = Object.GetHeading(82@)
+Object.SetRotation(82@, 0.0, 0.0, $heading)
+$x, $y, $z = Object.GetCoordinates(82@)
+if 
+  is_float_lvar_greater_than_float_var 98@ > $x
+goto_if_false @POOL2_28958
+set_var_float_to_lvar_float $x = 98@
+$x += 0.01
+
+:POOL2_28958
+if 
+  is_float_var_greater_than_float_lvar $x > 99@
+goto_if_false @POOL2_28995
+set_var_float_to_lvar_float $x = 99@
+$x -= 0.01
+
+:POOL2_28995
+if 
+  is_float_lvar_greater_than_float_var 100@ > $y
+goto_if_false @POOL2_29032
+set_var_float_to_lvar_float $y = 100@
+$y += 0.01
+
+:POOL2_29032
+if 
+  is_float_var_greater_than_float_lvar $y > 101@
+goto_if_false @POOL2_29069
+set_var_float_to_lvar_float $y = 101@
+$y -= 0.01
+
+:POOL2_29069
+165@ = Object.GetOffsetInWorldCoords(166@, 167@, 82@, 0.0, 1.0, 0.0)
+set_lvar_float_to_lvar_float 282@ = 165@
+sub_float_var_from_float_lvar 282@ -= $x
+set_lvar_float_to_lvar_float 283@ = 166@
+sub_float_var_from_float_lvar 283@ -= $y
+42@ = Math.GetDistanceBetweenCoords2D($x, $y, 165@, 166@)
+div_float_lvar_by_float_lvar 282@ /= 42@
+div_float_lvar_by_float_lvar 283@ /= 42@
+mult_float_lvar_by_float_lvar 282@ *= 301@
+mult_float_lvar_by_float_lvar 283@ *= 301@
+set_lvar_float_to_var_float 487@ = $x
+set_lvar_float_to_var_float 488@ = $y
+set_lvar_float_to_var_float 304@ = $x
+set_lvar_float_to_var_float 307@ = $y
+set_lvar_float_to_var_float 483@ = $x
+add_float_lvar_to_float_lvar 483@ += 282@
+set_lvar_float_to_var_float 484@ = $y
+add_float_lvar_to_float_lvar 484@ += 283@
+284@ = 0
+328@ = 0
+515@ = 0
+281@ += 1
+
+:POOL2_29271
+if 
+  281@ == 1
+goto_if_false @POOL2_29690
+241@ = 0
+
+:POOL2_29296
+if and
+  301@ > 0.0
+  3 > 284@
+goto_if_false @POOL2_29676
+gosub @POOL2_48189
+set_lvar_float_to_lvar_float 310@(284@,3f) = 505@
+set_lvar_float_to_lvar_float 313@(284@,3f) = 506@
+set_lvar_int_to_lvar_int 39@ = 284@
+39@ += 1
+if 
+  3 > 39@
+goto_if_false @POOL2_29412
+set_lvar_float_to_lvar_float 304@(39@,3f) = 505@
+set_lvar_float_to_lvar_float 307@(39@,3f) = 506@
+
+:POOL2_29412
+42@ = Math.GetDistanceBetweenCoords2D(304@(284@,3f), 307@(284@,3f), 310@(284@,3f), 313@(284@,3f))
+sub_float_lvar_from_float_lvar 301@ -= 42@
+if 
+  485@ == 0
+goto_if_false @POOL2_29662
+if 
+  504@ <> -1
+goto_if_false @POOL2_29506
+301@ *= 0.5
+goto @POOL2_29516
+
+:POOL2_29506
+301@ *= 0.75
+
+:POOL2_29516
+if 
+  328@ == 0
+goto_if_false @POOL2_29584
+if 
+  504@ <> -1
+goto_if_false @POOL2_29584
+set_lvar_int_to_lvar_int 328@ = 504@
+set_lvar_float_to_lvar_float 329@ = 301@
+set_lvar_float_to_lvar_float 330@ = 509@
+set_lvar_float_to_lvar_float 331@ = 510@
+
+:POOL2_29584
+set_lvar_float_to_lvar_float 487@ = 505@
+set_lvar_float_to_lvar_float 488@ = 506@
+mult_float_lvar_by_float_lvar 507@ *= 301@
+mult_float_lvar_by_float_lvar 508@ *= 301@
+set_lvar_float_to_lvar_float 483@ = 487@
+add_float_lvar_to_float_lvar 483@ += 507@
+set_lvar_float_to_lvar_float 484@ = 488@
+add_float_lvar_to_float_lvar 484@ += 508@
+284@ += 1
+goto @POOL2_29669
+
+:POOL2_29662
+284@ = 3
+
+:POOL2_29669
+goto @POOL2_29296
+
+:POOL2_29676
+240@ += 1
+281@ += 1
+
+:POOL2_29690
+if 
+  281@ == 2
+goto_if_false @POOL2_30636
+39@ = 0
+
+:POOL2_29715
+if 
+  10 > 39@
+goto_if_false @POOL2_29827
+if 
+  Object.DoesExist(347@(39@,10i))
+goto_if_false @POOL2_29762
+Object.Delete(347@(39@,10i))
+
+:POOL2_29762
+347@(39@,10i) = Object.Create(#K_POOLBALLCUE, 0.0, 0.0, 0.0)
+Object.SetCollision(347@(39@,10i), False)
+Object.SetScale(347@(39@,10i), 0.3)
+39@ += 1
+goto @POOL2_29715
+
+:POOL2_29827
+357@ = 0
+343@ = 0.005
+add_timed_float_lvar_to_float_lvar 342@ += frame_delta_time * 343@
+if 
+  is_float_lvar_greater_than_float_lvar 342@ > 300@
+goto_if_false @POOL2_29879
+sub_float_lvar_from_float_lvar 342@ -= 300@
+
+:POOL2_29879
+346@ = 0.0
+39@ = 0
+
+:POOL2_29896
+if 
+  3 > 39@
+goto_if_false @POOL2_30629
+if and
+  304@(39@,3f) > -9999.9
+  307@(39@,3f) > -9999.9
+  310@(39@,3f) > -9999.9
+  313@(39@,3f) > -9999.9
+goto_if_false @POOL2_30615
+42@ = Math.GetDistanceBetweenCoords2D(304@(39@,3f), 307@(39@,3f), 310@(39@,3f), 313@(39@,3f))
+set_lvar_float_to_lvar_float 169@ = 310@(39@,3f)
+sub_float_lvar_from_float_lvar 169@ -= 304@(39@,3f)
+set_lvar_float_to_lvar_float 170@ = 313@(39@,3f)
+sub_float_lvar_from_float_lvar 170@ -= 307@(39@,3f)
+set_lvar_float_to_lvar_float 43@ = 42@
+div_float_lvar_by_float_lvar 43@ /= 300@
+cset_lvar_int_to_lvar_float 40@ = float 43@
+40@ += 1
+div_float_lvar_by_float_lvar 169@ /= 42@
+div_float_lvar_by_float_lvar 170@ /= 42@
+set_lvar_float_to_lvar_float 344@ = 169@
+set_lvar_float_to_lvar_float 345@ = 170@
+mult_float_lvar_by_float_lvar 344@ *= 342@
+mult_float_lvar_by_float_lvar 345@ *= 342@
+mult_float_lvar_by_float_lvar 169@ *= 300@
+mult_float_lvar_by_float_lvar 170@ *= 300@
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_30335
+$x, $y, $z = Object.GetCoordinates(82@)
+if 
+  is_float_lvar_greater_than_float_var 98@ > $x
+goto_if_false @POOL2_30224
+set_var_float_to_lvar_float $x = 98@
+$x += 0.01
+
+:POOL2_30224
+if 
+  is_float_var_greater_than_float_lvar $x > 99@
+goto_if_false @POOL2_30261
+set_var_float_to_lvar_float $x = 99@
+$x -= 0.01
+
+:POOL2_30261
+if 
+  is_float_lvar_greater_than_float_var 100@ > $y
+goto_if_false @POOL2_30298
+set_var_float_to_lvar_float $y = 100@
+$y += 0.01
+
+:POOL2_30298
+if 
+  is_float_var_greater_than_float_lvar $y > 101@
+goto_if_false @POOL2_30335
+set_var_float_to_lvar_float $y = 101@
+$y -= 0.01
+
+:POOL2_30335
+set_lvar_float_to_lvar_float 196@ = 304@(39@,3f)
+sub_float_lvar_from_float_lvar 196@ -= 169@
+set_lvar_float_to_lvar_float 197@ = 307@(39@,3f)
+sub_float_lvar_from_float_lvar 197@ -= 170@
+add_float_lvar_to_float_lvar 196@ += 344@
+add_float_lvar_to_float_lvar 197@ += 345@
+add_int_lvar_to_int_lvar 40@ += 357@
+
+:POOL2_30399
+if and
+  is_int_lvar_greater_than_int_lvar 40@ > 357@
+  10 > 357@
+goto_if_false @POOL2_30615
+set_var_float_to_lvar_float $x = 196@
+add_float_lvar_to_float_var $x += 169@
+set_var_float_to_lvar_float $y = 197@
+add_float_lvar_to_float_var $y += 170@
+set_lvar_float_to_var_float 196@ = $x
+set_lvar_float_to_var_float 197@ = $y
+if 
+  Object.DoesExist(347@(357@,10i))
+goto_if_false @POOL2_30601
+if or
+  is_float_var_greater_than_float_lvar $x > 99@
+  is_float_lvar_greater_than_float_var 98@ > $x
+  is_float_var_greater_than_float_lvar $y > 101@
+  is_float_lvar_greater_than_float_var 100@ > $y
+goto_if_false @POOL2_30572
+Object.SetVisible(347@(357@,10i), False)
+Object.SetCoordinates(347@(357@,10i), $x, $y, $z)
+goto @POOL2_30601
+
+:POOL2_30572
+Object.SetVisible(347@(357@,10i), True)
+Object.SetCoordinates(347@(357@,10i), $x, $y, $z)
+
+:POOL2_30601
+357@ += 1
+goto @POOL2_30399
+
+:POOL2_30615
+39@ += 1
+goto @POOL2_29896
+
+:POOL2_30629
+281@ += 1
+
+:POOL2_30636
+if 
+  281@ == 3
+goto_if_false @POOL2_30661
+281@ = 99
+
+:POOL2_30661
+goto @POOL2_28619
+
+:POOL2_30668
+return 
+
+:POOL2_30670
+if 
+  not Char.IsDead(358@)
+goto_if_false @POOL2_33710
+if 
+  is_int_lvar_equal_to_int_var 358@ == $scplayer
+goto_if_false @POOL2_30719
+360@ = 0
+goto @POOL2_30726
+
+:POOL2_30719
+360@ = 1
+
+:POOL2_30726
+if 
+  Char.IsPlayingAnim(358@, "POOL_XLONG_SHOT")
+goto_if_false @POOL2_30992
+if 
+  not Char.IsHoldingObject(358@, 359@)
+goto_if_false @POOL2_30819
+Task.PickUpObject(358@, 359@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+
+:POOL2_30819
+42@ = Char.GetAnimCurrentTime(358@, "POOL_XLONG_SHOT")
+if 
+  Object.IsPlayingAnim(359@, "POOL_XLONG_SHOT_O")
+goto_if_false @POOL2_30913
+Object.SetAnimCurrentTime(359@, "POOL_XLONG_SHOT_O", 42@)
+goto @POOL2_30992
+
+:POOL2_30913
+if 
+Object.PlayAnim(359@, "POOL_XLONG_SHOT_O", "POOL", 10000.0, False, True)
+goto_if_false @POOL2_30992
+Object.SetAnimSpeed(359@, "POOL_XLONG_SHOT_O", 0.0)
+
+:POOL2_30992
+if and
+  Char.IsPlayingAnim(358@, "POOL_XLONG_START")
+  not Char.IsPlayingAnim(358@, "POOL_XLONG_SHOT")
+goto_if_false @POOL2_31286
+if 
+  not Char.IsHoldingObject(358@, 359@)
+goto_if_false @POOL2_31108
+Task.PickUpObject(358@, 359@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+
+:POOL2_31108
+42@ = Char.GetAnimCurrentTime(358@, "POOL_XLONG_START")
+if 
+  Object.IsPlayingAnim(359@, "POOL_XLONG_START_O")
+goto_if_false @POOL2_31205
+Object.SetAnimCurrentTime(359@, "POOL_XLONG_START_O", 42@)
+goto @POOL2_31286
+
+:POOL2_31205
+if 
+Object.PlayAnim(359@, "POOL_XLONG_START_O", "POOL", 10000.0, False, True)
+goto_if_false @POOL2_31286
+Object.SetAnimSpeed(359@, "POOL_XLONG_START_O", 0.0)
+
+:POOL2_31286
+if 
+  Char.IsPlayingAnim(358@, "POOL_LONG_SHOT")
+goto_if_false @POOL2_31546
+if 
+  not Char.IsHoldingObject(358@, 359@)
+goto_if_false @POOL2_31378
+Task.PickUpObject(358@, 359@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+
+:POOL2_31378
+42@ = Char.GetAnimCurrentTime(358@, "POOL_LONG_SHOT")
+if 
+  Object.IsPlayingAnim(359@, "POOL_LONG_SHOT_O")
+goto_if_false @POOL2_31469
+Object.SetAnimCurrentTime(359@, "POOL_LONG_SHOT_O", 42@)
+goto @POOL2_31546
+
+:POOL2_31469
+if 
+Object.PlayAnim(359@, "POOL_LONG_SHOT_O", "POOL", 10000.0, False, True)
+goto_if_false @POOL2_31546
+Object.SetAnimSpeed(359@, "POOL_LONG_SHOT_O", 0.0)
+
+:POOL2_31546
+if and
+  Char.IsPlayingAnim(358@, "POOL_LONG_START")
+  not Char.IsPlayingAnim(358@, "POOL_LONG_SHOT")
+goto_if_false @POOL2_31833
+if 
+  not Char.IsHoldingObject(358@, 359@)
+goto_if_false @POOL2_31660
+Task.PickUpObject(358@, 359@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+
+:POOL2_31660
+42@ = Char.GetAnimCurrentTime(358@, "POOL_LONG_START")
+if 
+  Object.IsPlayingAnim(359@, "POOL_LONG_START_O")
+goto_if_false @POOL2_31754
+Object.SetAnimCurrentTime(359@, "POOL_LONG_START_O", 42@)
+goto @POOL2_31833
+
+:POOL2_31754
+if 
+Object.PlayAnim(359@, "POOL_LONG_START_O", "POOL", 10000.0, False, True)
+goto_if_false @POOL2_31833
+Object.SetAnimSpeed(359@, "POOL_LONG_START_O", 0.0)
+
+:POOL2_31833
+if 
+  Char.IsPlayingAnim(358@, "POOL_MED_SHOT")
+goto_if_false @POOL2_32087
+if 
+  not Char.IsHoldingObject(358@, 359@)
+goto_if_false @POOL2_31924
+Task.PickUpObject(358@, 359@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+
+:POOL2_31924
+42@ = Char.GetAnimCurrentTime(358@, "POOL_MED_SHOT")
+if 
+  Object.IsPlayingAnim(359@, "POOL_MED_SHOT_O")
+goto_if_false @POOL2_32012
+Object.SetAnimCurrentTime(359@, "POOL_MED_SHOT_O", 42@)
+goto @POOL2_32087
+
+:POOL2_32012
+if 
+Object.PlayAnim(359@, "POOL_MED_SHOT_O", "POOL", 10000.0, False, True)
+goto_if_false @POOL2_32087
+Object.SetAnimSpeed(359@, "POOL_MED_SHOT_O", 0.0)
+
+:POOL2_32087
+if and
+  Char.IsPlayingAnim(358@, "POOL_MED_START")
+  not Char.IsPlayingAnim(358@, "POOL_MED_SHOT")
+goto_if_false @POOL2_32367
+if 
+  not Char.IsHoldingObject(358@, 359@)
+goto_if_false @POOL2_32199
+Task.PickUpObject(358@, 359@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+
+:POOL2_32199
+42@ = Char.GetAnimCurrentTime(358@, "POOL_MED_START")
+if 
+  Object.IsPlayingAnim(359@, "POOL_MED_START_O")
+goto_if_false @POOL2_32290
+Object.SetAnimCurrentTime(359@, "POOL_MED_START_O", 42@)
+goto @POOL2_32367
+
+:POOL2_32290
+if 
+Object.PlayAnim(359@, "POOL_MED_START_O", "POOL", 10000.0, False, True)
+goto_if_false @POOL2_32367
+Object.SetAnimSpeed(359@, "POOL_MED_START_O", 0.0)
+
+:POOL2_32367
+if 
+  Char.IsPlayingAnim(358@, "POOL_SHORT_SHOT")
+goto_if_false @POOL2_32633
+if 
+  not Char.IsHoldingObject(358@, 359@)
+goto_if_false @POOL2_32460
+Task.PickUpObject(358@, 359@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+
+:POOL2_32460
+42@ = Char.GetAnimCurrentTime(358@, "POOL_SHORT_SHOT")
+if 
+  Object.IsPlayingAnim(359@, "POOL_SHORT_SHOT_O")
+goto_if_false @POOL2_32554
+Object.SetAnimCurrentTime(359@, "POOL_SHORT_SHOT_O", 42@)
+goto @POOL2_32633
+
+:POOL2_32554
+if 
+Object.PlayAnim(359@, "POOL_SHORT_SHOT_O", "POOL", 10000.0, False, True)
+goto_if_false @POOL2_32633
+Object.SetAnimSpeed(359@, "POOL_SHORT_SHOT_O", 0.0)
+
+:POOL2_32633
+if and
+  Char.IsPlayingAnim(358@, "POOL_SHORT_START")
+  not Char.IsPlayingAnim(358@, "POOL_SHORT_SHOT")
+goto_if_false @POOL2_32927
+if 
+  not Char.IsHoldingObject(358@, 359@)
+goto_if_false @POOL2_32749
+Task.PickUpObject(358@, 359@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+
+:POOL2_32749
+42@ = Char.GetAnimCurrentTime(358@, "POOL_SHORT_START")
+if 
+  Object.IsPlayingAnim(359@, "POOL_SHORT_START_O")
+goto_if_false @POOL2_32846
+Object.SetAnimCurrentTime(359@, "POOL_SHORT_START_O", 42@)
+goto @POOL2_32927
+
+:POOL2_32846
+if 
+Object.PlayAnim(359@, "POOL_SHORT_START_O", "POOL", 10000.0, False, True)
+goto_if_false @POOL2_32927
+Object.SetAnimSpeed(359@, "POOL_SHORT_START_O", 0.0)
+
+:POOL2_32927
+if 
+  Char.IsPlayingAnim(358@, "POOL_CHALKCUE")
+goto_if_false @POOL2_33130
+if 
+  not Char.IsHoldingObject(358@, 359@)
+goto_if_false @POOL2_33018
+Task.PickUpObject(358@, 359@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+
+:POOL2_33018
+42@ = Char.GetAnimCurrentTime(358@, "POOL_CHALKCUE")
+if 
+  42@ > 0.28
+goto_if_false @POOL2_33123
+if 
+  361@(360@,2i) <> 1
+goto_if_false @POOL2_33123
+$x, $y, $z = Object.GetCoordinates(359@)
+Audio.ReportMissionAudioEventAtPosition($x, $y, $z, 1018)
+361@(360@,2i) = 1
+
+:POOL2_33123
+goto @POOL2_33163
+
+:POOL2_33130
+if 
+  361@(360@,2i) <> 0
+goto_if_false @POOL2_33163
+361@(360@,2i) = 0
+
+:POOL2_33163
+if 
+  Char.IsPlayingAnim(358@, "POOL_IDLE_STANCE")
+goto_if_false @POOL2_33257
+if 
+  not Char.IsHoldingObject(358@, 359@)
+goto_if_false @POOL2_33257
+Task.PickUpObject(358@, 359@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+
+:POOL2_33257
+if 
+  Char.IsPlayingAnim(358@, "POOL_WALK")
+goto_if_false @POOL2_33344
+if 
+  not Char.IsHoldingObject(358@, 359@)
+goto_if_false @POOL2_33344
+Task.PickUpObject(358@, 359@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+
+:POOL2_33344
+if 
+  Char.IsPlayingAnim(358@, "POOL_WALK_START")
+goto_if_false @POOL2_33437
+if 
+  not Char.IsHoldingObject(358@, 359@)
+goto_if_false @POOL2_33437
+Task.PickUpObject(358@, 359@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+
+:POOL2_33437
+39@ = 0
+if and
+  Char.IsPlayingAnim(358@, "IDLE_STANCE")
+  not is_int_lvar_equal_to_int_lvar 215@ == 358@
+goto_if_false @POOL2_33488
+39@ = 1
+
+:POOL2_33488
+if and
+  Char.IsPlayingAnim(358@, "IDLE_STANCE")
+  35@ == 6
+goto_if_false @POOL2_33531
+39@ = 1
+
+:POOL2_33531
+if 
+  39@ == 1
+goto_if_false @POOL2_33710
+40@ = Char.GetScriptTaskStatus(358@, 1560)
+if 
+  is_int_lvar_equal_to_constant 40@ == 7
+goto_if_false @POOL2_33710
+Char.DropObject(358@, False)
+Task.PickUpObject(358@, 359@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 1)
+47@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "POOL_IDLE_STANCE", "POOL", 4.0, True, True, True, False, -1)
+Sequence.Close(47@)
+if 
+  108@ == 0
+goto_if_false @POOL2_33705
+Char.PerformSequence(358@, 47@)
+
+:POOL2_33705
+Sequence.Clear(47@)
+
+:POOL2_33710
+return 
+
+:POOL2_33712
+369@ = 99999.9
+370@ = 99999.9
+371@ = 99999.9
+363@ = 99999.9
+365@ = 0.0
+364@ = 99999.9
+366@ = 0
+
+:POOL2_33779
+if 
+  6 > 366@
+goto_if_false @POOL2_34021
+382@(366@,6f) = 0.0
+388@(366@,6f) = 0.0
+394@(366@,6f) = 0.0
+400@(366@,6f) = 0.0
+406@(366@,6f) = 0.0
+412@(366@,6f) = 0.0
+418@(366@,6f) = 0.0
+424@(366@,6f) = 0.0
+430@(366@,6f) = 0.0
+436@(366@,6f) = 0.0
+442@(366@,6f) = 0.0
+448@(366@,6f) = 0.0
+454@(366@,6f) = 0.0
+460@(366@,6f) = 0.0
+466@(366@,6f) = 0.0
+366@ += 1
+goto @POOL2_33779
+
+:POOL2_34021
+366@ = 1
+
+:POOL2_34028
+if 
+  16 > 366@
+goto_if_false @POOL2_38299
+wait 0
+381@ = 0
+if 
+  Object.DoesExist(82@(366@,16i))
+goto_if_false @POOL2_37232
+if 
+  66@(366@,16i) == 0
+goto_if_false @POOL2_37218
+if 
+  8 > 366@
+goto_if_false @POOL2_34131
+368@ = 0
+goto @POOL2_34170
+
+:POOL2_34131
+if 
+  366@ == 8
+goto_if_false @POOL2_34163
+368@ = 2
+goto @POOL2_34170
+
+:POOL2_34163
+368@ = 1
+
+:POOL2_34170
+if or
+  is_int_lvar_equal_to_int_lvar 368@ == 231@
+  231@ == -1
+goto_if_false @POOL2_37204
+if and
+  231@ == -1
+  368@ == 2
+goto_if_false @POOL2_34235
+381@ = 1
+goto @POOL2_37197
+
+:POOL2_34235
+if 
+  129@ == 1
+goto_if_false @POOL2_34392
+save_newline_to_debug_file 
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL _34392AT_1  = LERENCENONSEDDEDOSS OUT")
+save_int_to_debug_file 366@
+
+:POOL2_34392
+367@ = 0
+
+:POOL2_34399
+if 
+  6 > 367@
+goto_if_false @POOL2_37197
+if 
+  129@ == 1
+goto_if_false @POOL2_34572
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("POCKET 4572AT_1  = LERENCENONSEDDEDOSS OUT")
+save_int_to_debug_file 367@
+
+:POOL2_34572
+set_lvar_int_to_lvar_int 516@ = 82@(366@,16i)
+set_lvar_int_to_lvar_int 517@ = 367@
+gosub @POOL2_48775
+if 
+  129@ == 1
+goto_if_false @POOL2_34754
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" REQUIRED ANGLE =  LERENCENONSEDDEDOSS OUT")
+save_float_to_debug_file 519@
+
+:POOL2_34754
+if 
+  518@ == 1
+goto_if_false @POOL2_36740
+set_lvar_int_to_lvar_int 481@ = 82@(366@,16i)
+482@ = 0
+set_lvar_float_to_lvar_float 483@ = 54@(367@,6f)
+set_lvar_float_to_lvar_float 484@ = 60@(367@,6f)
+gosub @POOL2_46939
+if 
+  485@ == 1
+goto_if_false @POOL2_34857
+473@ = 1.0
+goto @POOL2_34903
+
+:POOL2_34857
+if 
+  is_int_lvar_equal_to_int_lvar 486@ == 368@
+goto_if_false @POOL2_34893
+473@ = 0.2
+goto @POOL2_34903
+
+:POOL2_34893
+473@ = 0.1
+
+:POOL2_34903
+if 
+  129@ == 1
+goto_if_false @POOL2_35058
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" POCKET_PATH_SCORE = RENCENONSEDDEDOSS OUT")
+save_float_to_debug_file 473@
+
+:POOL2_35058
+$x, $y, $z = Object.GetCoordinates(82@(366@,16i))
+42@ = Math.GetDistanceBetweenCoords2D($x, $y, 54@(367@,6f), 60@(367@,6f))
+475@ = 2.3
+sub_float_lvar_from_float_lvar 475@ -= 42@
+475@ /= 2.3
+if 
+  129@ == 1
+goto_if_false @POOL2_35284
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" POCKET_DIST_SCORE = RENCENONSEDDEDOSS OUT")
+save_float_to_debug_file 475@
+
+:POOL2_35284
+476@ = 90.0
+sub_float_lvar_from_float_lvar 476@ -= 519@
+476@ /= 90.0
+if 
+  129@ == 1
+goto_if_false @POOL2_35467
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" POCKET_ANGLE_SCORE = ENCENONSEDDEDOSS OUT")
+save_float_to_debug_file 476@
+
+:POOL2_35467
+set_lvar_int_to_lvar_int 481@ = 82@
+set_lvar_int_to_lvar_int 482@ = 82@(366@,16i)
+set_lvar_float_to_lvar_float 483@ = 526@
+set_lvar_float_to_lvar_float 484@ = 527@
+gosub @POOL2_46939
+if 
+  485@ == 1
+goto_if_false @POOL2_35545
+474@ = 1.0
+goto @POOL2_35776
+
+:POOL2_35545
+if 
+  129@ == 1
+goto_if_false @POOL2_35695
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" (PATH NOT CLEAR FROM CUE BALL TO THIS BALL) ")
+
+:POOL2_35695
+if 
+  231@ == -1
+goto_if_false @POOL2_35730
+474@ = 0.05
+goto @POOL2_35776
+
+:POOL2_35730
+if 
+  is_int_lvar_equal_to_int_lvar 486@ == 231@
+goto_if_false @POOL2_35766
+474@ = 0.05
+goto @POOL2_35776
+
+:POOL2_35766
+474@ = -1000.0
+
+:POOL2_35776
+if 
+  129@ == 1
+goto_if_false @POOL2_35931
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" CUE_PATH_SCORE = ROM CUE BALL TO THIS BALL) ")
+save_float_to_debug_file 474@
+
+:POOL2_35931
+$x, $y, $z = Object.GetCoordinates(82@)
+42@ = Math.GetDistanceBetweenCoords2D($x, $y, 526@, 527@)
+if 
+  0.3 > 42@
+goto_if_false @POOL2_36019
+43@ = 0.3
+sub_float_lvar_from_float_lvar 43@ -= 42@
+42@ = 0.3
+add_float_lvar_to_float_lvar 42@ += 43@
+
+:POOL2_36019
+42@ += -0.3
+43@ = 2.0
+sub_float_lvar_from_float_lvar 43@ -= 42@
+43@ /= 2.0
+set_lvar_float_to_lvar_float 472@ = 43@
+if 
+  129@ == 1
+goto_if_false @POOL2_36220
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" CUE_DIST_SCORE = ROM CUE BALL TO THIS BALL) ")
+save_float_to_debug_file 472@
+
+:POOL2_36220
+473@ *= 1.0
+474@ *= 1.0
+472@ *= 0.3
+475@ *= 0.4
+476@ *= 0.8
+set_lvar_float_to_lvar_float 477@ = 473@
+add_float_lvar_to_float_lvar 477@ += 474@
+add_float_lvar_to_float_lvar 477@ += 472@
+add_float_lvar_to_float_lvar 477@ += 475@
+add_float_lvar_to_float_lvar 477@ += 476@
+477@ /= 5.0
+switch_start 366@ total_jumps 15 default_jump 0 @POOL2_36733 jumps 1 @POOL2_36448 2 @POOL2_36467 3 @POOL2_36486 4 @POOL2_36505 5 @POOL2_36524 6 @POOL2_36543 7 @POOL2_36562
+switch_continued 8 @POOL2_36581 9 @POOL2_36600 10 @POOL2_36619 11 @POOL2_36638 12 @POOL2_36657 13 @POOL2_36676 14 @POOL2_36695 15 @POOL2_36714 -1 @POOL2_36733
+
+:POOL2_36448
+set_lvar_float_to_lvar_float 382@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36467
+set_lvar_float_to_lvar_float 388@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36486
+set_lvar_float_to_lvar_float 394@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36505
+set_lvar_float_to_lvar_float 400@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36524
+set_lvar_float_to_lvar_float 406@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36543
+set_lvar_float_to_lvar_float 412@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36562
+set_lvar_float_to_lvar_float 418@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36581
+set_lvar_float_to_lvar_float 424@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36600
+set_lvar_float_to_lvar_float 430@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36619
+set_lvar_float_to_lvar_float 436@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36638
+set_lvar_float_to_lvar_float 442@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36657
+set_lvar_float_to_lvar_float 448@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36676
+set_lvar_float_to_lvar_float 454@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36695
+set_lvar_float_to_lvar_float 460@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36714
+set_lvar_float_to_lvar_float 466@(367@,6f) = 477@
+goto @POOL2_36733
+
+:POOL2_36733
+goto @POOL2_37183
+
+:POOL2_36740
+switch_start 366@ total_jumps 15 default_jump 0 @POOL2_37183 jumps 1 @POOL2_36868 2 @POOL2_36889 3 @POOL2_36910 4 @POOL2_36931 5 @POOL2_36952 6 @POOL2_36973 7 @POOL2_36994
+switch_continued 8 @POOL2_37015 9 @POOL2_37036 10 @POOL2_37057 11 @POOL2_37078 12 @POOL2_37099 13 @POOL2_37120 14 @POOL2_37141 15 @POOL2_37162 -1 @POOL2_37183
+
+:POOL2_36868
+382@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_36889
+388@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_36910
+394@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_36931
+400@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_36952
+406@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_36973
+412@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_36994
+418@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_37015
+424@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_37036
+430@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_37057
+436@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_37078
+442@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_37099
+448@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_37120
+454@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_37141
+460@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_37162
+466@(367@,6f) = -1.0
+goto @POOL2_37183
+
+:POOL2_37183
+367@ += 1
+goto @POOL2_34399
+
+:POOL2_37197
+goto @POOL2_37211
+
+:POOL2_37204
+381@ = 1
+
+:POOL2_37211
+goto @POOL2_37225
+
+:POOL2_37218
+381@ = 1
+
+:POOL2_37225
+goto @POOL2_37239
+
+:POOL2_37232
+381@ = 1
+
+:POOL2_37239
+if 
+  381@ == 1
+goto_if_false @POOL2_38285
+switch_start 366@ total_jumps 15 default_jump 0 @POOL2_38285 jumps 1 @POOL2_37385 2 @POOL2_37445 3 @POOL2_37505 4 @POOL2_37565 5 @POOL2_37625 6 @POOL2_37685 7 @POOL2_37745
+switch_continued 8 @POOL2_37805 9 @POOL2_37865 10 @POOL2_37925 11 @POOL2_37985 12 @POOL2_38045 13 @POOL2_38105 14 @POOL2_38165 15 @POOL2_38225 -1 @POOL2_38285
+
+:POOL2_37385
+367@ = 0
+
+:POOL2_37392
+if 
+  6 > 367@
+goto_if_false @POOL2_37438
+382@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_37392
+
+:POOL2_37438
+goto @POOL2_38285
+
+:POOL2_37445
+367@ = 0
+
+:POOL2_37452
+if 
+  6 > 367@
+goto_if_false @POOL2_37498
+388@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_37452
+
+:POOL2_37498
+goto @POOL2_38285
+
+:POOL2_37505
+367@ = 0
+
+:POOL2_37512
+if 
+  6 > 367@
+goto_if_false @POOL2_37558
+394@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_37512
+
+:POOL2_37558
+goto @POOL2_38285
+
+:POOL2_37565
+367@ = 0
+
+:POOL2_37572
+if 
+  6 > 367@
+goto_if_false @POOL2_37618
+400@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_37572
+
+:POOL2_37618
+goto @POOL2_38285
+
+:POOL2_37625
+367@ = 0
+
+:POOL2_37632
+if 
+  6 > 367@
+goto_if_false @POOL2_37678
+406@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_37632
+
+:POOL2_37678
+goto @POOL2_38285
+
+:POOL2_37685
+367@ = 0
+
+:POOL2_37692
+if 
+  6 > 367@
+goto_if_false @POOL2_37738
+412@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_37692
+
+:POOL2_37738
+goto @POOL2_38285
+
+:POOL2_37745
+367@ = 0
+
+:POOL2_37752
+if 
+  6 > 367@
+goto_if_false @POOL2_37798
+418@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_37752
+
+:POOL2_37798
+goto @POOL2_38285
+
+:POOL2_37805
+367@ = 0
+
+:POOL2_37812
+if 
+  6 > 367@
+goto_if_false @POOL2_37858
+424@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_37812
+
+:POOL2_37858
+goto @POOL2_38285
+
+:POOL2_37865
+367@ = 0
+
+:POOL2_37872
+if 
+  6 > 367@
+goto_if_false @POOL2_37918
+430@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_37872
+
+:POOL2_37918
+goto @POOL2_38285
+
+:POOL2_37925
+367@ = 0
+
+:POOL2_37932
+if 
+  6 > 367@
+goto_if_false @POOL2_37978
+436@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_37932
+
+:POOL2_37978
+goto @POOL2_38285
+
+:POOL2_37985
+367@ = 0
+
+:POOL2_37992
+if 
+  6 > 367@
+goto_if_false @POOL2_38038
+442@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_37992
+
+:POOL2_38038
+goto @POOL2_38285
+
+:POOL2_38045
+367@ = 0
+
+:POOL2_38052
+if 
+  6 > 367@
+goto_if_false @POOL2_38098
+448@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_38052
+
+:POOL2_38098
+goto @POOL2_38285
+
+:POOL2_38105
+367@ = 0
+
+:POOL2_38112
+if 
+  6 > 367@
+goto_if_false @POOL2_38158
+454@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_38112
+
+:POOL2_38158
+goto @POOL2_38285
+
+:POOL2_38165
+367@ = 0
+
+:POOL2_38172
+if 
+  6 > 367@
+goto_if_false @POOL2_38218
+460@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_38172
+
+:POOL2_38218
+goto @POOL2_38285
+
+:POOL2_38225
+367@ = 0
+
+:POOL2_38232
+if 
+  6 > 367@
+goto_if_false @POOL2_38278
+466@(367@,6f) = -1.0
+367@ += 1
+goto @POOL2_38232
+
+:POOL2_38278
+goto @POOL2_38285
+
+:POOL2_38285
+366@ += 1
+goto @POOL2_34028
+
+:POOL2_38299
+478@ = -9999.9
+479@ = -1
+480@ = -1
+366@ = 0
+if 
+  129@ == 1
+goto_if_false @POOL2_38480
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("POOL AI POTENTIAL SHOT SCORESL TO THIS BALL) ")
+
+:POOL2_38480
+if 
+  6 > 366@
+goto_if_false @POOL2_41804
+if 
+  129@ == 1
+goto_if_false @POOL2_38794
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("POCKET38794ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_int_to_debug_file 366@
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 01 = 4ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 382@(366@,6f)
+
+:POOL2_38794
+if 
+  is_float_lvar_greater_than_float_lvar 382@(366@,6f) > 478@
+goto_if_false @POOL2_38844
+set_lvar_float_to_lvar_float 478@ = 382@(366@,6f)
+479@ = 1
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_38844
+if 
+  129@ == 1
+goto_if_false @POOL2_39003
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 02 = 3ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 388@(366@,6f)
+
+:POOL2_39003
+if 
+  is_float_lvar_greater_than_float_lvar 388@(366@,6f) > 478@
+goto_if_false @POOL2_39053
+set_lvar_float_to_lvar_float 478@ = 388@(366@,6f)
+479@ = 2
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_39053
+if 
+  129@ == 1
+goto_if_false @POOL2_39212
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 03 = 2ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 394@(366@,6f)
+
+:POOL2_39212
+if 
+  is_float_lvar_greater_than_float_lvar 394@(366@,6f) > 478@
+goto_if_false @POOL2_39262
+set_lvar_float_to_lvar_float 478@ = 394@(366@,6f)
+479@ = 3
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_39262
+if 
+  129@ == 1
+goto_if_false @POOL2_39421
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 04 = 1ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 400@(366@,6f)
+
+:POOL2_39421
+if 
+  is_float_lvar_greater_than_float_lvar 400@(366@,6f) > 478@
+goto_if_false @POOL2_39471
+set_lvar_float_to_lvar_float 478@ = 400@(366@,6f)
+479@ = 4
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_39471
+if 
+  129@ == 1
+goto_if_false @POOL2_39630
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 05 = 0ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 406@(366@,6f)
+
+:POOL2_39630
+if 
+  is_float_lvar_greater_than_float_lvar 406@(366@,6f) > 478@
+goto_if_false @POOL2_39680
+set_lvar_float_to_lvar_float 478@ = 406@(366@,6f)
+479@ = 5
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_39680
+if 
+  129@ == 1
+goto_if_false @POOL2_39839
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 06 = 9ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 412@(366@,6f)
+
+:POOL2_39839
+if 
+  is_float_lvar_greater_than_float_lvar 412@(366@,6f) > 478@
+goto_if_false @POOL2_39889
+set_lvar_float_to_lvar_float 478@ = 412@(366@,6f)
+479@ = 6
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_39889
+if 
+  129@ == 1
+goto_if_false @POOL2_40048
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 07 = 8ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 418@(366@,6f)
+
+:POOL2_40048
+if 
+  is_float_lvar_greater_than_float_lvar 418@(366@,6f) > 478@
+goto_if_false @POOL2_40098
+set_lvar_float_to_lvar_float 478@ = 418@(366@,6f)
+479@ = 7
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_40098
+if 
+  129@ == 1
+goto_if_false @POOL2_40257
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 08 = 7ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 424@(366@,6f)
+
+:POOL2_40257
+if 
+  is_float_lvar_greater_than_float_lvar 424@(366@,6f) > 478@
+goto_if_false @POOL2_40307
+set_lvar_float_to_lvar_float 478@ = 424@(366@,6f)
+479@ = 8
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_40307
+if 
+  129@ == 1
+goto_if_false @POOL2_40466
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 09 = 6ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 430@(366@,6f)
+
+:POOL2_40466
+if 
+  is_float_lvar_greater_than_float_lvar 430@(366@,6f) > 478@
+goto_if_false @POOL2_40516
+set_lvar_float_to_lvar_float 478@ = 430@(366@,6f)
+479@ = 9
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_40516
+if 
+  129@ == 1
+goto_if_false @POOL2_40675
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 10 = 5ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 436@(366@,6f)
+
+:POOL2_40675
+if 
+  is_float_lvar_greater_than_float_lvar 436@(366@,6f) > 478@
+goto_if_false @POOL2_40725
+set_lvar_float_to_lvar_float 478@ = 436@(366@,6f)
+479@ = 10
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_40725
+if 
+  129@ == 1
+goto_if_false @POOL2_40884
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 11 = 4ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 442@(366@,6f)
+
+:POOL2_40884
+if 
+  is_float_lvar_greater_than_float_lvar 442@(366@,6f) > 478@
+goto_if_false @POOL2_40934
+set_lvar_float_to_lvar_float 478@ = 442@(366@,6f)
+479@ = 11
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_40934
+if 
+  129@ == 1
+goto_if_false @POOL2_41093
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 12 = 3ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 448@(366@,6f)
+
+:POOL2_41093
+if 
+  is_float_lvar_greater_than_float_lvar 448@(366@,6f) > 478@
+goto_if_false @POOL2_41143
+set_lvar_float_to_lvar_float 478@ = 448@(366@,6f)
+479@ = 12
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_41143
+if 
+  129@ == 1
+goto_if_false @POOL2_41302
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 13 = 2ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 454@(366@,6f)
+
+:POOL2_41302
+if 
+  is_float_lvar_greater_than_float_lvar 454@(366@,6f) > 478@
+goto_if_false @POOL2_41352
+set_lvar_float_to_lvar_float 478@ = 454@(366@,6f)
+479@ = 13
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_41352
+if 
+  129@ == 1
+goto_if_false @POOL2_41511
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 14 = 1ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 460@(366@,6f)
+
+:POOL2_41511
+if 
+  is_float_lvar_greater_than_float_lvar 460@(366@,6f) > 478@
+goto_if_false @POOL2_41561
+set_lvar_float_to_lvar_float 478@ = 460@(366@,6f)
+479@ = 14
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_41561
+if 
+  129@ == 1
+goto_if_false @POOL2_41720
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL 15 = 0ENTIAL SHOT SCORESL TO THIS BALL) ")
+save_float_to_debug_file 466@(366@,6f)
+
+:POOL2_41720
+if 
+  is_float_lvar_greater_than_float_lvar 466@(366@,6f) > 478@
+goto_if_false @POOL2_41770
+set_lvar_float_to_lvar_float 478@ = 466@(366@,6f)
+479@ = 15
+set_lvar_int_to_lvar_int 480@ = 366@
+
+:POOL2_41770
+if 
+  129@ == 1
+goto_if_false @POOL2_41790
+save_newline_to_debug_file 
+
+:POOL2_41790
+366@ += 1
+goto @POOL2_38480
+
+:POOL2_41804
+if 
+  478@ > 0.0
+goto_if_false @POOL2_42225
+372@, 373@, 374@ = Object.GetCoordinates(82@(479@,16i))
+378@, 379@, 380@ = Object.GetCoordinates(82@)
+set_lvar_float_to_lvar_float 375@ = 54@(480@,6f)
+sub_float_lvar_from_float_lvar 375@ -= 372@
+set_lvar_float_to_lvar_float 376@ = 60@(480@,6f)
+sub_float_lvar_from_float_lvar 376@ -= 373@
+42@ = Math.GetDistanceBetweenCoords2D(372@, 373@, 54@(480@,6f), 60@(480@,6f))
+div_float_lvar_by_float_lvar 375@ /= 42@
+div_float_lvar_by_float_lvar 376@ /= 42@
+set_lvar_float_to_lvar_float 43@ = 52@
+43@ *= -2.0
+mult_float_lvar_by_float_lvar 375@ *= 43@
+mult_float_lvar_by_float_lvar 376@ *= 43@
+set_lvar_float_to_lvar_float 369@ = 372@
+add_float_lvar_to_float_lvar 369@ += 375@
+set_lvar_float_to_lvar_float 370@ = 373@
+add_float_lvar_to_float_lvar 370@ += 376@
+set_var_float_to_lvar_float $x = 372@
+sub_float_lvar_from_float_var $x -= 369@
+set_var_float_to_lvar_float $y = 373@
+sub_float_lvar_from_float_var $y -= 370@
+set_lvar_float_to_lvar_float 169@ = 369@
+sub_float_lvar_from_float_lvar 169@ -= 378@
+set_lvar_float_to_lvar_float 170@ = 370@
+sub_float_lvar_from_float_lvar 170@ -= 379@
+365@ = Math.GetAngleBetween2DVectors($x, $y, 169@, 170@)
+set_lvar_float_to_lvar_float 42@ = 365@
+42@ /= 90.0
+42@ *= 0.25
+mult_float_var_by_float_lvar $x *= 42@
+mult_float_var_by_float_lvar $y *= 42@
+add_float_var_to_float_lvar 369@ += $x
+add_float_var_to_float_lvar 370@ += $y
+42@ = Math.GetDistanceBetweenCoords2D(378@, 379@, 369@, 370@)
+43@ = Math.GetDistanceBetweenCoords2D(372@, 373@, 369@, 370@)
+set_lvar_float_to_lvar_float 371@ = 42@
+add_float_lvar_to_float_lvar 371@ += 43@
+42@ = Math.RandomFloatInRange(2.0, 6.0)
+mult_float_lvar_by_float_lvar 371@ *= 42@
+goto @POOL2_46712
+
+:POOL2_42225
+if 
+  129@ == 1
+goto_if_false @POOL2_42375
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("HIT AND HOPET_2AL SHOT SCORESL TO THIS BALL) ")
+
+:POOL2_42375
+366@ = 1
+
+:POOL2_42382
+if 
+  16 > 366@
+goto_if_false @POOL2_42981
+wait 0
+if 
+  Object.DoesExist(82@(366@,16i))
+goto_if_false @POOL2_42967
+if 
+  66@(366@,16i) == 0
+goto_if_false @POOL2_42967
+if 
+  366@ == 0
+goto_if_false @POOL2_42478
+368@ = 3
+goto @POOL2_42549
+
+:POOL2_42478
+if 
+  8 > 366@
+goto_if_false @POOL2_42510
+368@ = 0
+goto @POOL2_42549
+
+:POOL2_42510
+if 
+  366@ == 8
+goto_if_false @POOL2_42542
+368@ = 2
+goto @POOL2_42549
+
+:POOL2_42542
+368@ = 1
+
+:POOL2_42549
+if or
+  is_int_lvar_equal_to_int_lvar 368@ == 231@
+  231@ == -1
+goto_if_false @POOL2_42967
+if and
+  231@ == 0
+  368@ == 2
+goto_if_false @POOL2_42607
+goto @POOL2_42967
+
+:POOL2_42607
+set_lvar_int_to_lvar_int 528@ = 82@
+set_lvar_int_to_lvar_int 529@ = 82@(366@,16i)
+gosub @POOL2_49095
+if 
+  530@ <> 0
+goto_if_false @POOL2_42967
+if 
+  530@ == 1
+goto_if_false @POOL2_42693
+set_lvar_float_to_lvar_float 369@ = 539@
+set_lvar_float_to_lvar_float 370@ = 540@
+goto @POOL2_42898
+
+:POOL2_42693
+if 
+  530@ == 2
+goto_if_false @POOL2_42734
+set_lvar_float_to_lvar_float 369@ = 541@
+set_lvar_float_to_lvar_float 370@ = 542@
+goto @POOL2_42898
+
+:POOL2_42734
+set_var_float_to_lvar_float $x = 541@
+sub_float_lvar_from_float_var $x -= 539@
+set_var_float_to_lvar_float $y = 542@
+sub_float_lvar_from_float_var $y -= 540@
+42@ = Math.GetDistanceBetweenCoords2D(539@, 540@, 541@, 542@)
+div_float_var_by_float_lvar $x /= 42@
+div_float_var_by_float_lvar $y /= 42@
+set_lvar_float_to_lvar_float 42@ = 52@
+42@ *= 2.0
+42@ *= 0.8
+42@ *= 2.0
+43@ = Math.RandomFloatInRange(0.0, 42@)
+mult_float_var_by_float_lvar $x *= 43@
+mult_float_var_by_float_lvar $y *= 43@
+set_lvar_float_to_lvar_float 369@ = 539@
+add_float_var_to_float_lvar 369@ += $x
+set_lvar_float_to_lvar_float 370@ = 540@
+add_float_var_to_float_lvar 370@ += $y
+
+:POOL2_42898
+$x, $y, $z = Object.GetCoordinates(82@)
+42@ = Math.GetDistanceBetweenCoords2D($x, $y, 369@, 370@)
+43@ = Math.RandomFloatInRange(2.0, 5.0)
+set_lvar_float_to_lvar_float 371@ = 42@
+mult_float_lvar_by_float_lvar 371@ *= 43@
+366@ = 16
+
+:POOL2_42967
+366@ += 1
+goto @POOL2_42382
+
+:POOL2_42981
+if and
+  369@ == 99999.9
+  370@ == 99999.9
+goto_if_false @POOL2_45009
+if 
+  129@ == 1
+goto_if_false @POOL2_43162
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BOUNCE OFF CUSHIONSHOT SCORESL TO THIS BALL) ")
+
+:POOL2_43162
+366@ = 1
+
+:POOL2_43169
+if 
+  16 > 366@
+goto_if_false @POOL2_45009
+wait 0
+if 
+  Object.DoesExist(82@(366@,16i))
+goto_if_false @POOL2_44995
+if 
+  66@(366@,16i) == 0
+goto_if_false @POOL2_44995
+if 
+  366@ == 0
+goto_if_false @POOL2_43265
+368@ = 3
+goto @POOL2_43336
+
+:POOL2_43265
+if 
+  8 > 366@
+goto_if_false @POOL2_43297
+368@ = 0
+goto @POOL2_43336
+
+:POOL2_43297
+if 
+  366@ == 8
+goto_if_false @POOL2_43329
+368@ = 2
+goto @POOL2_43336
+
+:POOL2_43329
+368@ = 1
+
+:POOL2_43336
+if or
+  is_int_lvar_equal_to_int_lvar 368@ == 231@
+  231@ == -1
+goto_if_false @POOL2_44995
+if and
+  231@ == -1
+  368@ == 2
+goto_if_false @POOL2_43394
+goto @POOL2_44995
+
+:POOL2_43394
+372@, 373@, 374@ = Object.GetCoordinates(82@)
+375@, 376@, 377@ = Object.GetCoordinates(82@(366@,16i))
+if 
+  129@ == 1
+goto_if_false @POOL2_43576
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" CUSHION 1 DATA = SHOT SCORESL TO THIS BALL) ")
+
+:POOL2_43576
+set_lvar_float_to_lvar_float 378@ = 372@
+add_float_lvar_to_float_lvar 378@ += 375@
+378@ /= 2.0
+set_lvar_float_to_lvar_float 379@ = 100@
+set_lvar_float_to_lvar_float 543@ = 378@
+set_lvar_float_to_lvar_float 544@ = 379@
+gosub @POOL2_49698
+if 
+  545@ == 0
+goto_if_false @POOL2_43808
+set_lvar_int_to_lvar_int 549@ = 82@
+set_lvar_int_to_lvar_int 550@ = 82@(366@,16i)
+set_lvar_float_to_lvar_float 551@ = 378@
+set_lvar_float_to_lvar_float 552@ = 379@
+gosub @POOL2_49954
+if 
+  553@ == 1
+goto_if_false @POOL2_43808
+set_lvar_float_to_lvar_float 369@ = 378@
+set_lvar_float_to_lvar_float 370@ = 379@
+42@ = Math.GetDistanceBetweenCoords2D(372@, 373@, 378@, 379@)
+43@ = Math.GetDistanceBetweenCoords2D(375@, 376@, 378@, 379@)
+set_lvar_float_to_lvar_float 371@ = 42@
+add_float_lvar_to_float_lvar 371@ += 43@
+42@ = Math.RandomFloatInRange(3.0, 6.0)
+mult_float_lvar_by_float_lvar 371@ *= 42@
+366@ = 16
+
+:POOL2_43808
+if and
+  369@ == 99999.9
+  370@ == 99999.9
+goto_if_false @POOL2_44195
+if 
+  129@ == 1
+goto_if_false @POOL2_43989
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" CUSHION 2 DATA = SHOT SCORESL TO THIS BALL) ")
+
+:POOL2_43989
+set_lvar_float_to_lvar_float 379@ = 101@
+set_lvar_float_to_lvar_float 543@ = 378@
+set_lvar_float_to_lvar_float 544@ = 379@
+gosub @POOL2_49698
+if 
+  545@ == 0
+goto_if_false @POOL2_44195
+set_lvar_int_to_lvar_int 549@ = 82@
+set_lvar_int_to_lvar_int 550@ = 82@(366@,16i)
+set_lvar_float_to_lvar_float 551@ = 378@
+set_lvar_float_to_lvar_float 552@ = 379@
+gosub @POOL2_49954
+if 
+  553@ == 1
+goto_if_false @POOL2_44195
+set_lvar_float_to_lvar_float 369@ = 378@
+set_lvar_float_to_lvar_float 370@ = 379@
+42@ = Math.GetDistanceBetweenCoords2D(372@, 373@, 378@, 379@)
+43@ = Math.GetDistanceBetweenCoords2D(375@, 376@, 378@, 379@)
+set_lvar_float_to_lvar_float 371@ = 42@
+add_float_lvar_to_float_lvar 371@ += 43@
+42@ = Math.RandomFloatInRange(3.0, 6.0)
+mult_float_lvar_by_float_lvar 371@ *= 42@
+366@ = 16
+
+:POOL2_44195
+if and
+  369@ == 99999.9
+  370@ == 99999.9
+goto_if_false @POOL2_44608
+if 
+  129@ == 1
+goto_if_false @POOL2_44376
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" CUSHION 3 DATA = SHOT SCORESL TO THIS BALL) ")
+
+:POOL2_44376
+set_lvar_float_to_lvar_float 379@ = 373@
+add_float_lvar_to_float_lvar 379@ += 376@
+379@ /= 2.0
+set_lvar_float_to_lvar_float 378@ = 98@
+set_lvar_float_to_lvar_float 543@ = 378@
+set_lvar_float_to_lvar_float 544@ = 379@
+gosub @POOL2_49698
+if 
+  545@ == 0
+goto_if_false @POOL2_44608
+set_lvar_int_to_lvar_int 549@ = 82@
+set_lvar_int_to_lvar_int 550@ = 82@(366@,16i)
+set_lvar_float_to_lvar_float 551@ = 378@
+set_lvar_float_to_lvar_float 552@ = 379@
+gosub @POOL2_49954
+if 
+  553@ == 1
+goto_if_false @POOL2_44608
+set_lvar_float_to_lvar_float 369@ = 378@
+set_lvar_float_to_lvar_float 370@ = 379@
+42@ = Math.GetDistanceBetweenCoords2D(372@, 373@, 378@, 379@)
+43@ = Math.GetDistanceBetweenCoords2D(375@, 376@, 378@, 379@)
+set_lvar_float_to_lvar_float 371@ = 42@
+add_float_lvar_to_float_lvar 371@ += 43@
+42@ = Math.RandomFloatInRange(3.0, 6.0)
+mult_float_lvar_by_float_lvar 371@ *= 42@
+366@ = 16
+
+:POOL2_44608
+if and
+  369@ == 99999.9
+  370@ == 99999.9
+goto_if_false @POOL2_44995
+if 
+  129@ == 1
+goto_if_false @POOL2_44789
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" CUSHION 4 DATA = SHOT SCORESL TO THIS BALL) ")
+
+:POOL2_44789
+set_lvar_float_to_lvar_float 378@ = 99@
+set_lvar_float_to_lvar_float 543@ = 378@
+set_lvar_float_to_lvar_float 544@ = 379@
+gosub @POOL2_49698
+if 
+  545@ == 0
+goto_if_false @POOL2_44995
+set_lvar_int_to_lvar_int 549@ = 82@
+set_lvar_int_to_lvar_int 550@ = 82@(366@,16i)
+set_lvar_float_to_lvar_float 551@ = 378@
+set_lvar_float_to_lvar_float 552@ = 379@
+gosub @POOL2_49954
+if 
+  553@ == 1
+goto_if_false @POOL2_44995
+set_lvar_float_to_lvar_float 369@ = 378@
+set_lvar_float_to_lvar_float 370@ = 379@
+42@ = Math.GetDistanceBetweenCoords2D(372@, 373@, 378@, 379@)
+43@ = Math.GetDistanceBetweenCoords2D(375@, 376@, 378@, 379@)
+set_lvar_float_to_lvar_float 371@ = 42@
+add_float_lvar_to_float_lvar 371@ += 43@
+42@ = Math.RandomFloatInRange(3.0, 6.0)
+mult_float_lvar_by_float_lvar 371@ *= 42@
+366@ = 16
+
+:POOL2_44995
+366@ += 1
+goto @POOL2_43169
+
+:POOL2_45009
+if and
+  369@ == 99999.9
+  370@ == 99999.9
+goto_if_false @POOL2_46481
+if 
+  129@ == 1
+goto_if_false @POOL2_45190
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("SNOOKER - BOUNCE 2SHOT SCORESL TO THIS BALL) ")
+
+:POOL2_45190
+366@ = 1
+
+:POOL2_45197
+if 
+  16 > 366@
+goto_if_false @POOL2_46481
+wait 0
+if 
+  Object.DoesExist(82@(366@,16i))
+goto_if_false @POOL2_46467
+if 
+  66@(366@,16i) == 0
+goto_if_false @POOL2_46467
+if 
+  366@ == 0
+goto_if_false @POOL2_45293
+368@ = 3
+goto @POOL2_45364
+
+:POOL2_45293
+if 
+  8 > 366@
+goto_if_false @POOL2_45325
+368@ = 0
+goto @POOL2_45364
+
+:POOL2_45325
+if 
+  366@ == 8
+goto_if_false @POOL2_45357
+368@ = 2
+goto @POOL2_45364
+
+:POOL2_45357
+368@ = 1
+
+:POOL2_45364
+if or
+  is_int_lvar_equal_to_int_lvar 368@ == 231@
+  231@ == -1
+goto_if_false @POOL2_46467
+if and
+  231@ == -1
+  368@ == 2
+goto_if_false @POOL2_45422
+goto @POOL2_46467
+
+:POOL2_45422
+372@, 373@, 374@ = Object.GetCoordinates(82@)
+375@, 376@, 377@ = Object.GetCoordinates(82@(366@,16i))
+set_lvar_float_to_lvar_float 378@ = 372@
+add_float_lvar_to_float_lvar 378@ += 375@
+378@ /= 2.0
+set_lvar_float_to_lvar_float 379@ = 100@
+set_lvar_float_to_lvar_float 543@ = 378@
+set_lvar_float_to_lvar_float 544@ = 379@
+gosub @POOL2_49698
+if 
+  545@ == 0
+goto_if_false @POOL2_45697
+set_lvar_int_to_lvar_int 554@ = 82@
+set_lvar_float_to_lvar_float 555@ = 378@
+set_lvar_float_to_lvar_float 556@ = 379@
+gosub @POOL2_50474
+if 
+  557@ == 1
+goto_if_false @POOL2_45697
+set_lvar_float_to_lvar_float 369@ = 378@
+42@ = Math.RandomFloatInRange(-0.05, 0.05)
+add_float_lvar_to_float_lvar 369@ += 42@
+set_lvar_float_to_lvar_float 370@ = 379@
+42@ = Math.GetDistanceBetweenCoords2D(372@, 373@, 378@, 379@)
+43@ = Math.GetDistanceBetweenCoords2D(375@, 376@, 378@, 379@)
+set_lvar_float_to_lvar_float 371@ = 42@
+add_float_lvar_to_float_lvar 371@ += 43@
+42@ = Math.RandomFloatInRange(5.0, 8.0)
+mult_float_lvar_by_float_lvar 371@ *= 42@
+366@ = 16
+
+:POOL2_45697
+if and
+  369@ == 99999.9
+  370@ == 99999.9
+goto_if_false @POOL2_45945
+set_lvar_float_to_lvar_float 379@ = 101@
+set_lvar_float_to_lvar_float 543@ = 378@
+set_lvar_float_to_lvar_float 544@ = 379@
+gosub @POOL2_49698
+if 
+  545@ == 0
+goto_if_false @POOL2_45945
+set_lvar_int_to_lvar_int 554@ = 82@
+set_lvar_float_to_lvar_float 555@ = 378@
+set_lvar_float_to_lvar_float 556@ = 379@
+gosub @POOL2_50474
+if 
+  557@ == 1
+goto_if_false @POOL2_45945
+set_lvar_float_to_lvar_float 369@ = 378@
+42@ = Math.RandomFloatInRange(-0.05, 0.05)
+add_float_lvar_to_float_lvar 369@ += 42@
+set_lvar_float_to_lvar_float 370@ = 379@
+42@ = Math.GetDistanceBetweenCoords2D(372@, 373@, 378@, 379@)
+43@ = Math.GetDistanceBetweenCoords2D(375@, 376@, 378@, 379@)
+set_lvar_float_to_lvar_float 371@ = 42@
+add_float_lvar_to_float_lvar 371@ += 43@
+42@ = Math.RandomFloatInRange(5.0, 8.0)
+mult_float_lvar_by_float_lvar 371@ *= 42@
+366@ = 16
+
+:POOL2_45945
+if and
+  369@ == 99999.9
+  370@ == 99999.9
+goto_if_false @POOL2_46219
+set_lvar_float_to_lvar_float 379@ = 373@
+add_float_lvar_to_float_lvar 379@ += 376@
+379@ /= 2.0
+set_lvar_float_to_lvar_float 378@ = 98@
+set_lvar_float_to_lvar_float 543@ = 378@
+set_lvar_float_to_lvar_float 544@ = 379@
+gosub @POOL2_49698
+if 
+  545@ == 0
+goto_if_false @POOL2_46219
+set_lvar_int_to_lvar_int 554@ = 82@
+set_lvar_float_to_lvar_float 555@ = 378@
+set_lvar_float_to_lvar_float 556@ = 379@
+gosub @POOL2_50474
+if 
+  557@ == 1
+goto_if_false @POOL2_46219
+set_lvar_float_to_lvar_float 369@ = 378@
+set_lvar_float_to_lvar_float 370@ = 379@
+42@ = Math.RandomFloatInRange(-0.05, 0.05)
+add_float_lvar_to_float_lvar 370@ += 42@
+42@ = Math.GetDistanceBetweenCoords2D(372@, 373@, 378@, 379@)
+43@ = Math.GetDistanceBetweenCoords2D(375@, 376@, 378@, 379@)
+set_lvar_float_to_lvar_float 371@ = 42@
+add_float_lvar_to_float_lvar 371@ += 43@
+42@ = Math.RandomFloatInRange(5.0, 8.0)
+mult_float_lvar_by_float_lvar 371@ *= 42@
+366@ = 16
+
+:POOL2_46219
+if and
+  369@ == 99999.9
+  370@ == 99999.9
+goto_if_false @POOL2_46467
+set_lvar_float_to_lvar_float 378@ = 99@
+set_lvar_float_to_lvar_float 543@ = 378@
+set_lvar_float_to_lvar_float 544@ = 379@
+gosub @POOL2_49698
+if 
+  545@ == 0
+goto_if_false @POOL2_46467
+set_lvar_int_to_lvar_int 554@ = 82@
+set_lvar_float_to_lvar_float 555@ = 378@
+set_lvar_float_to_lvar_float 556@ = 379@
+gosub @POOL2_50474
+if 
+  557@ == 1
+goto_if_false @POOL2_46467
+set_lvar_float_to_lvar_float 369@ = 378@
+set_lvar_float_to_lvar_float 370@ = 379@
+42@ = Math.RandomFloatInRange(-0.05, 0.05)
+add_float_lvar_to_float_lvar 370@ += 42@
+42@ = Math.GetDistanceBetweenCoords2D(372@, 373@, 378@, 379@)
+43@ = Math.GetDistanceBetweenCoords2D(375@, 376@, 378@, 379@)
+set_lvar_float_to_lvar_float 371@ = 42@
+add_float_lvar_to_float_lvar 371@ += 43@
+42@ = Math.RandomFloatInRange(5.0, 8.0)
+mult_float_lvar_by_float_lvar 371@ *= 42@
+366@ = 16
+
+:POOL2_46467
+366@ += 1
+goto @POOL2_45197
+
+:POOL2_46481
+if and
+  369@ == 99999.9
+  370@ == 99999.9
+goto_if_false @POOL2_46712
+if 
+  129@ == 1
+goto_if_false @POOL2_46662
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("SNOOKER - LAST RESORTT SCORESL TO THIS BALL) ")
+
+:POOL2_46662
+363@ = Math.RandomFloatInRange(0.0, 360.0)
+364@ = Math.RandomFloatInRange(4.0, 8.0)
+369@ = 0.0
+370@ = 0.0
+
+:POOL2_46712
+if and
+  363@ == 99999.9
+  364@ == 99999.9
+goto_if_false @POOL2_46875
+372@, 373@, 374@ = Object.GetCoordinates(82@)
+set_lvar_float_to_lvar_float 375@ = 369@
+sub_float_lvar_from_float_lvar 375@ -= 372@
+set_lvar_float_to_lvar_float 376@ = 370@
+sub_float_lvar_from_float_lvar 376@ -= 373@
+363@ = Math.GetHeadingFromVector2D(375@, 376@)
+set_lvar_float_to_lvar_float 364@ = 371@
+364@ *= 1.0
+if 
+  90.0 > 365@
+goto_if_false @POOL2_46875
+set_lvar_float_to_lvar_float 42@ = 365@
+42@ /= 90.0
+42@ *= 2.0
+add_float_lvar_to_float_lvar 364@ += 42@
+
+:POOL2_46875
+if 
+  0.7 > 364@
+goto_if_false @POOL2_46906
+364@ = 0.7
+
+:POOL2_46906
+if 
+  364@ > 4.0
+goto_if_false @POOL2_46937
+364@ = 4.0
+
+:POOL2_46937
+return 
+
+:POOL2_46939
+goto @POOL2_46990
+481@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+482@ = Object.Create(#WOODENBOX, 0.0, 0.0, 0.0)
+
+:POOL2_46990
+485@ = 1
+504@ = -1
+if 
+  Object.DoesExist(481@)
+goto_if_false @POOL2_47083
+487@, 488@, $z = Object.GetCoordinates(481@)
+set_lvar_float_to_lvar_float 491@ = 483@
+sub_float_lvar_from_float_lvar 491@ -= 487@
+set_lvar_float_to_lvar_float 492@ = 484@
+sub_float_lvar_from_float_lvar 492@ -= 488@
+497@ = Math.GetDistanceBetweenCoords2D(487@, 488@, 483@, 484@)
+
+:POOL2_47083
+wait 0
+if or
+  231@ == -1
+  231@ == 2
+  231@ == 1
+goto_if_false @POOL2_47172
+501@ = 1
+
+:POOL2_47126
+if 
+  16 > 501@
+goto_if_false @POOL2_47165
+gosub @POOL2_47267
+501@ += 1
+goto @POOL2_47126
+
+:POOL2_47165
+goto @POOL2_47258
+
+:POOL2_47172
+503@ = 1
+
+:POOL2_47179
+if 
+  16 > 503@
+goto_if_false @POOL2_47258
+set_lvar_int_to_lvar_int 501@ = 503@
+501@ += 7
+if 
+  501@ > 15
+goto_if_false @POOL2_47237
+501@ += -15
+
+:POOL2_47237
+gosub @POOL2_47267
+503@ += 1
+goto @POOL2_47179
+
+:POOL2_47258
+482@ = 0
+return 
+
+:POOL2_47267
+if 
+  Object.DoesExist(82@(501@,16i))
+goto_if_false @POOL2_48187
+if 
+  66@(501@,16i) == 0
+goto_if_false @POOL2_48187
+if 
+  not is_int_lvar_equal_to_int_lvar 82@(501@,16i) == 481@
+goto_if_false @POOL2_48187
+502@ = 0
+if 
+  Object.DoesExist(482@)
+goto_if_false @POOL2_47385
+if 
+  is_int_lvar_equal_to_int_lvar 82@(501@,16i) == 482@
+goto_if_false @POOL2_47385
+502@ = 1
+
+:POOL2_47385
+if 
+  502@ == 0
+goto_if_false @POOL2_48187
+489@, 490@, $z = Object.GetCoordinates(82@(501@,16i))
+set_lvar_float_to_lvar_float 493@ = 489@
+sub_float_lvar_from_float_lvar 493@ -= 487@
+set_lvar_float_to_lvar_float 494@ = 490@
+sub_float_lvar_from_float_lvar 494@ -= 488@
+498@ = Math.GetDistanceBetweenCoords2D(487@, 488@, 489@, 490@)
+42@ = Math.GetAngleBetween2DVectors(491@, 492@, 493@, 494@)
+499@ = Math.GetDistanceBetweenCoords2D(489@, 490@, 483@, 484@)
+if 
+  is_float_lvar_greater_than_float_lvar 53@ > 499@
+goto_if_false @POOL2_47817
+if 
+  501@ == 0
+goto_if_false @POOL2_47555
+486@ = 3
+goto @POOL2_47626
+
+:POOL2_47555
+if 
+  8 > 501@
+goto_if_false @POOL2_47587
+486@ = 0
+goto @POOL2_47626
+
+:POOL2_47587
+if 
+  501@ == 8
+goto_if_false @POOL2_47619
+486@ = 2
+goto @POOL2_47626
+
+:POOL2_47619
+486@ = 1
+
+:POOL2_47626
+if 
+  129@ == 1
+goto_if_false @POOL2_47781
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" BALL OBSTRUCTING PATH (TOO CLOSE TO TARGET DESTINATION) = ")
+save_int_to_debug_file 501@
+
+:POOL2_47781
+set_lvar_int_to_lvar_int 504@ = 501@
+485@ = 0
+501@ = 16
+503@ = 16
+goto @POOL2_48187
+
+:POOL2_47817
+if 
+  90.0 >= 42@
+goto_if_false @POOL2_48187
+if 
+  is_float_lvar_greater_than_float_lvar 497@ > 498@
+goto_if_false @POOL2_48187
+500@ = Math.Sin(42@)
+set_lvar_float_to_lvar_float 42@ = 500@
+mult_float_lvar_by_float_lvar 42@ *= 498@
+if 
+  is_float_lvar_greater_than_float_lvar 53@ > 42@
+goto_if_false @POOL2_48187
+if 
+  501@ == 0
+goto_if_false @POOL2_47932
+486@ = 3
+goto @POOL2_48003
+
+:POOL2_47932
+if 
+  8 > 501@
+goto_if_false @POOL2_47964
+486@ = 0
+goto @POOL2_48003
+
+:POOL2_47964
+if 
+  501@ == 8
+goto_if_false @POOL2_47996
+486@ = 2
+goto @POOL2_48003
+
+:POOL2_47996
+486@ = 1
+
+:POOL2_48003
+if 
+  129@ == 1
+goto_if_false @POOL2_48158
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" BALL OBSTRUCTING PATH (OVERLAPPING PATH) = DESTINATION) = ")
+save_int_to_debug_file 501@
+
+:POOL2_48158
+set_lvar_int_to_lvar_int 504@ = 501@
+485@ = 0
+501@ = 16
+503@ = 16
+
+:POOL2_48187
+return 
+
+:POOL2_48189
+485@ = 1
+504@ = -1
+set_lvar_float_to_lvar_float 491@ = 483@
+sub_float_lvar_from_float_lvar 491@ -= 487@
+set_lvar_float_to_lvar_float 492@ = 484@
+sub_float_lvar_from_float_lvar 492@ -= 488@
+if or
+  is_float_lvar_greater_than_float_lvar 98@ > 483@
+  is_float_lvar_greater_than_float_lvar 483@ > 99@
+  is_float_lvar_greater_than_float_lvar 100@ > 484@
+  is_float_lvar_greater_than_float_lvar 484@ > 101@
+goto_if_false @POOL2_48750
+505@ = -99999.9
+506@ = -99999.9
+39@ = 0
+if and
+  505@, 506@ = Math.Get2DLinesIntersectPoint(487@, 488@, 483@, 484@, 98@, 100@, 98@, 101@)
+  515@ <> 1
+goto_if_false @POOL2_48369
+39@ = 1
+goto @POOL2_48554
+
+:POOL2_48369
+if and
+  505@, 506@ = Math.Get2DLinesIntersectPoint(487@, 488@, 483@, 484@, 99@, 100@, 99@, 101@)
+  515@ <> 2
+goto_if_false @POOL2_48433
+39@ = 2
+goto @POOL2_48554
+
+:POOL2_48433
+if and
+  505@, 506@ = Math.Get2DLinesIntersectPoint(487@, 488@, 483@, 484@, 98@, 100@, 99@, 100@)
+  515@ <> 3
+goto_if_false @POOL2_48497
+39@ = 3
+goto @POOL2_48554
+
+:POOL2_48497
+if and
+  505@, 506@ = Math.Get2DLinesIntersectPoint(487@, 488@, 483@, 484@, 98@, 101@, 99@, 101@)
+  515@ <> 4
+goto_if_false @POOL2_48554
+39@ = 4
+
+:POOL2_48554
+42@ = Math.GetDistanceBetweenCoords2D(483@, 484@, 487@, 488@)
+if 
+  42@ > 0.0
+goto_if_false @POOL2_48608
+div_float_lvar_by_float_lvar 491@ /= 42@
+div_float_lvar_by_float_lvar 492@ /= 42@
+
+:POOL2_48608
+if or
+  39@ == 1
+  39@ == 2
+goto_if_false @POOL2_48659
+set_lvar_float_to_lvar_float 507@ = 491@
+507@ *= -1.0
+set_lvar_float_to_lvar_float 508@ = 492@
+
+:POOL2_48659
+if or
+  39@ == 3
+  39@ == 4
+goto_if_false @POOL2_48710
+set_lvar_float_to_lvar_float 507@ = 491@
+set_lvar_float_to_lvar_float 508@ = 492@
+508@ *= -1.0
+
+:POOL2_48710
+if 
+  39@ <> 0
+goto_if_false @POOL2_48736
+set_lvar_int_to_lvar_int 515@ = 39@
+
+:POOL2_48736
+485@ = 0
+goto @POOL2_48773
+
+:POOL2_48750
+set_lvar_float_to_lvar_float 505@ = 483@
+set_lvar_float_to_lvar_float 506@ = 484@
+485@ = 1
+
+:POOL2_48773
+return 
+
+:POOL2_48775
+if 
+  Object.DoesExist(516@)
+goto_if_false @POOL2_48845
+526@, 527@, $z = Object.GetCoordinates(516@)
+set_lvar_float_to_lvar_float 520@ = 54@(517@,6f)
+sub_float_lvar_from_float_lvar 520@ -= 526@
+set_lvar_float_to_lvar_float 521@ = 60@(517@,6f)
+sub_float_lvar_from_float_lvar 521@ -= 527@
+
+:POOL2_48845
+42@ = Math.GetDistanceBetweenCoords2D($x, $y, 54@(517@,6f), 60@(517@,6f))
+set_lvar_float_to_lvar_float 522@ = 520@
+div_float_lvar_by_float_lvar 522@ /= 42@
+set_lvar_float_to_lvar_float 523@ = 521@
+div_float_lvar_by_float_lvar 523@ /= 42@
+522@ *= -1.0
+523@ *= -1.0
+set_lvar_float_to_lvar_float 42@ = 52@
+42@ *= 2.0
+mult_float_lvar_by_float_lvar 522@ *= 42@
+mult_float_lvar_by_float_lvar 523@ *= 42@
+add_float_lvar_to_float_lvar 526@ += 522@
+add_float_lvar_to_float_lvar 527@ += 523@
+if 
+  Object.DoesExist(82@)
+goto_if_false @POOL2_49034
+$x, $y, $z = Object.GetCoordinates(82@)
+set_lvar_float_to_lvar_float 524@ = 526@
+sub_float_var_from_float_lvar 524@ -= $x
+set_lvar_float_to_lvar_float 525@ = 527@
+sub_float_var_from_float_lvar 525@ -= $y
+
+:POOL2_49034
+519@ = Math.GetAngleBetween2DVectors(520@, 521@, 524@, 525@)
+if 
+  90.0 > 519@
+goto_if_false @POOL2_49086
+518@ = 1
+goto @POOL2_49093
+
+:POOL2_49086
+518@ = 0
+
+:POOL2_49093
+return 
+
+:POOL2_49095
+530@ = 0
+531@ = 0
+532@ = 0
+if and
+  Object.DoesExist(528@)
+  Object.DoesExist(529@)
+goto_if_false @POOL2_49696
+$x, $y, $z = Object.GetCoordinates(528@)
+537@, 538@, $z = Object.GetCoordinates(529@)
+set_lvar_float_to_lvar_float 533@ = 537@
+sub_float_var_from_float_lvar 533@ -= $x
+set_lvar_float_to_lvar_float 534@ = 538@
+sub_float_var_from_float_lvar 534@ -= $y
+42@ = Math.GetDistanceBetweenCoords2D($x, $y, 537@, 538@)
+div_float_lvar_by_float_lvar 533@ /= 42@
+div_float_lvar_by_float_lvar 534@ /= 42@
+set_lvar_float_to_lvar_float 535@ = 534@
+set_lvar_float_to_lvar_float 536@ = 533@
+536@ *= -1.0
+set_lvar_float_to_lvar_float 42@ = 52@
+42@ *= 2.0
+42@ *= 0.8
+set_lvar_float_to_lvar_float 43@ = 535@
+mult_float_lvar_by_float_lvar 43@ *= 42@
+set_lvar_float_to_lvar_float 539@ = 537@
+add_float_lvar_to_float_lvar 539@ += 43@
+set_lvar_float_to_lvar_float 43@ = 536@
+mult_float_lvar_by_float_lvar 43@ *= 42@
+set_lvar_float_to_lvar_float 540@ = 538@
+add_float_lvar_to_float_lvar 540@ += 43@
+set_lvar_int_to_lvar_int 481@ = 528@
+set_lvar_int_to_lvar_int 482@ = 529@
+set_lvar_float_to_lvar_float 483@ = 539@
+set_lvar_float_to_lvar_float 484@ = 540@
+gosub @POOL2_46939
+if 
+  485@ == 1
+goto_if_false @POOL2_49412
+531@ = 1
+
+:POOL2_49412
+set_lvar_float_to_lvar_float 42@ = 52@
+42@ *= 2.0
+42@ *= -0.8
+set_lvar_float_to_lvar_float 43@ = 535@
+mult_float_lvar_by_float_lvar 43@ *= 42@
+set_lvar_float_to_lvar_float 541@ = 537@
+add_float_lvar_to_float_lvar 541@ += 43@
+set_lvar_float_to_lvar_float 43@ = 536@
+mult_float_lvar_by_float_lvar 43@ *= 42@
+set_lvar_float_to_lvar_float 542@ = 538@
+add_float_lvar_to_float_lvar 542@ += 43@
+set_lvar_int_to_lvar_int 481@ = 528@
+set_lvar_int_to_lvar_int 482@ = 529@
+set_lvar_float_to_lvar_float 483@ = 541@
+set_lvar_float_to_lvar_float 484@ = 542@
+gosub @POOL2_46939
+if 
+  485@ == 1
+goto_if_false @POOL2_49568
+532@ = 1
+
+:POOL2_49568
+if and
+  531@ == 0
+  532@ == 0
+goto_if_false @POOL2_49600
+530@ = 0
+
+:POOL2_49600
+if and
+  531@ == 1
+  532@ == 0
+goto_if_false @POOL2_49632
+530@ = 1
+
+:POOL2_49632
+if and
+  531@ == 0
+  532@ == 1
+goto_if_false @POOL2_49664
+530@ = 2
+
+:POOL2_49664
+if and
+  531@ == 1
+  532@ == 1
+goto_if_false @POOL2_49696
+530@ = 3
+
+:POOL2_49696
+return 
+
+:POOL2_49698
+545@ = 0
+547@ = 2.5
+mult_float_lvar_by_float_lvar 547@ *= 52@
+548@ = 0
+
+:POOL2_49730
+if 
+  6 > 548@
+goto_if_false @POOL2_49952
+546@ = Math.GetDistanceBetweenCoords2D(543@, 544@, 54@(548@,6f), 60@(548@,6f))
+if 
+  is_float_lvar_greater_than_float_lvar 547@ > 546@
+goto_if_false @POOL2_49938
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" POINT LIES ON POCKETH (OVERLAPPING PATH) = DESTINATION) = ")
+545@ = 1
+548@ = 6
+
+:POOL2_49938
+548@ += 1
+goto @POOL2_49730
+
+:POOL2_49952
+return 
+
+:POOL2_49954
+553@ = 0
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile(" BOUNCE_SHOT_PATH_CLEAR DATA = PING PATH) = DESTINATION) = ")
+set_lvar_int_to_lvar_int 481@ = 549@
+482@ = 0
+set_lvar_float_to_lvar_float 483@ = 551@
+set_lvar_float_to_lvar_float 484@ = 552@
+gosub @POOL2_46939
+if 
+  485@ == 1
+goto_if_false @POOL2_50472
+Debugger.SaveStringToDebugFile("1ST PATH CLEAR TH_CLEAR DATA = PING PATH) = DESTINATION) = ")
+set_lvar_int_to_lvar_int 481@ = 550@
+482@ = 0
+set_lvar_float_to_lvar_float 483@ = 551@
+set_lvar_float_to_lvar_float 484@ = 552@
+gosub @POOL2_46939
+if 
+  485@ == 1
+goto_if_false @POOL2_50472
+Debugger.SaveStringToDebugFile("2ND PATH CLEAR TH_CLEAR DATA = PING PATH) = DESTINATION) = ")
+553@ = 1
+
+:POOL2_50472
+return 
+
+:POOL2_50474
+557@ = 0
+set_lvar_int_to_lvar_int 481@ = 549@
+482@ = 0
+set_lvar_float_to_lvar_float 483@ = 551@
+set_lvar_float_to_lvar_float 484@ = 552@
+gosub @POOL2_46939
+if 
+  485@ == 1
+goto_if_false @POOL2_50544
+557@ = 1
+
+:POOL2_50544
+return 
+
+:POOL2_50546
+set_lvar_float_to_lvar_float 565@ = 52@
+565@ *= 2.0
+set_lvar_float_to_lvar_float 562@ = 52@
+562@ *= -1.0
+set_lvar_float_to_lvar_float 566@ = 565@
+566@ *= -1.0
+set_lvar_float_to_lvar_float 42@ = 565@
+mult_float_lvar_by_float_lvar 42@ *= 565@
+set_lvar_float_to_lvar_float 43@ = 52@
+mult_float_lvar_by_float_lvar 43@ *= 52@
+set_lvar_float_to_lvar_float 563@ = 42@
+sub_float_lvar_from_float_lvar 563@ -= 43@
+563@ = Math.Sqrt(563@)
+set_lvar_float_to_lvar_float 564@ = 563@
+564@ *= -1.0
+567@ = 1
+
+:POOL2_50681
+if 
+  15 > 567@
+goto_if_false @POOL2_50724
+Object.FreezePosition(82@(567@,16i), False)
+567@ += 1
+goto @POOL2_50681
+
+:POOL2_50724
+Object.SetCoordinates(83@, 558@, 559@, 560@)
+Object.SetHeading(83@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 83@, 562@, 564@, 0.0)
+Object.SetCoordinates(91@, $x, $y, $z)
+Object.SetHeading(91@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 91@, 565@, 0.0, 0.0)
+Object.SetCoordinates(85@, $x, $y, $z)
+Object.SetHeading(85@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 91@, 562@, 564@, 0.0)
+Object.SetCoordinates(89@, $x, $y, $z)
+Object.SetHeading(89@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 89@, 565@, 0.0, 0.0)
+Object.SetCoordinates(90@, $x, $y, $z)
+Object.SetHeading(90@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 90@, 565@, 0.0, 0.0)
+Object.SetCoordinates(92@, $x, $y, $z)
+Object.SetHeading(92@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 89@, 562@, 564@, 0.0)
+Object.SetCoordinates(93@, $x, $y, $z)
+Object.SetHeading(93@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 93@, 565@, 0.0, 0.0)
+Object.SetCoordinates(84@, $x, $y, $z)
+Object.SetHeading(84@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 84@, 565@, 0.0, 0.0)
+Object.SetCoordinates(97@, $x, $y, $z)
+Object.SetHeading(97@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 97@, 565@, 0.0, 0.0)
+Object.SetCoordinates(87@, $x, $y, $z)
+Object.SetHeading(87@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 93@, 562@, 564@, 0.0)
+Object.SetCoordinates(88@, $x, $y, $z)
+Object.SetHeading(88@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 88@, 565@, 0.0, 0.0)
+Object.SetCoordinates(94@, $x, $y, $z)
+Object.SetHeading(94@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 94@, 565@, 0.0, 0.0)
+Object.SetCoordinates(95@, $x, $y, $z)
+Object.SetHeading(95@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 95@, 565@, 0.0, 0.0)
+Object.SetCoordinates(86@, $x, $y, $z)
+Object.SetHeading(86@, 561@)
+$x = Object.GetOffsetInWorldCoords($y, $z, 86@, 565@, 0.0, 0.0)
+Object.SetCoordinates(96@, $x, $y, $z)
+Object.SetHeading(96@, 561@)
+return 
+
+:POOL2_51426
+602@ = -0.96
+603@ = 0.49
+604@ = 0.97
+605@ = 0.49
+606@ = 0.97
+607@ = -0.49
+608@ = -0.96
+609@ = -0.49
+571@ = Object.GetOffsetInWorldCoords(572@, 573@, 82@, 0.0, -5.0, 0.0)
+574@, 575@, 576@ = Object.GetCoordinates(82@)
+$z = World.GetGroundZFor3DCoord(574@, 575@, 576@)
+577@ = Object.GetOffsetInWorldCoords(578@, 579@, 163@, 602@, 603@, 0.0)
+580@ = Object.GetOffsetInWorldCoords(581@, 582@, 163@, 604@, 605@, 0.0)
+if 
+  $x, $y = Math.Get2DLinesIntersectPoint(571@, 572@, 574@, 575@, 577@, 578@, 580@, 581@)
+goto_if_false @POOL2_51712
+set_lvar_float_to_var_float 585@ = $x
+set_lvar_float_to_var_float 589@ = $y
+set_lvar_float_to_var_float 593@ = $z
+set_lvar_float_to_lvar_float 616@ = 604@
+sub_float_lvar_from_float_lvar 616@ -= 602@
+set_lvar_float_to_lvar_float 617@ = 605@
+sub_float_lvar_from_float_lvar 617@ -= 603@
+
+:POOL2_51712
+577@ = Object.GetOffsetInWorldCoords(578@, 579@, 163@, 606@, 607@, 0.0)
+if 
+  $x, $y = Math.Get2DLinesIntersectPoint(571@, 572@, 574@, 575@, 577@, 578@, 580@, 581@)
+goto_if_false @POOL2_51836
+set_lvar_float_to_var_float 585@ = $x
+set_lvar_float_to_var_float 589@ = $y
+set_lvar_float_to_var_float 593@ = $z
+set_lvar_float_to_lvar_float 616@ = 606@
+sub_float_lvar_from_float_lvar 616@ -= 604@
+set_lvar_float_to_lvar_float 617@ = 607@
+sub_float_lvar_from_float_lvar 617@ -= 605@
+
+:POOL2_51836
+580@ = Object.GetOffsetInWorldCoords(581@, 582@, 163@, 608@, 609@, 0.0)
+if 
+  $x, $y = Math.Get2DLinesIntersectPoint(571@, 572@, 574@, 575@, 577@, 578@, 580@, 581@)
+goto_if_false @POOL2_51960
+set_lvar_float_to_var_float 585@ = $x
+set_lvar_float_to_var_float 589@ = $y
+set_lvar_float_to_var_float 593@ = $z
+set_lvar_float_to_lvar_float 616@ = 608@
+sub_float_lvar_from_float_lvar 616@ -= 606@
+set_lvar_float_to_lvar_float 617@ = 609@
+sub_float_lvar_from_float_lvar 617@ -= 607@
+
+:POOL2_51960
+577@ = Object.GetOffsetInWorldCoords(578@, 579@, 163@, 602@, 603@, 0.0)
+if 
+  $x, $y = Math.Get2DLinesIntersectPoint(571@, 572@, 574@, 575@, 577@, 578@, 580@, 581@)
+goto_if_false @POOL2_52084
+set_lvar_float_to_var_float 585@ = $x
+set_lvar_float_to_var_float 589@ = $y
+set_lvar_float_to_var_float 593@ = $z
+set_lvar_float_to_lvar_float 616@ = 602@
+sub_float_lvar_from_float_lvar 616@ -= 608@
+set_lvar_float_to_lvar_float 617@ = 603@
+sub_float_lvar_from_float_lvar 617@ -= 609@
+
+:POOL2_52084
+set_lvar_float_to_lvar_float 614@ = 574@
+sub_float_lvar_from_float_lvar 614@ -= 571@
+set_lvar_float_to_lvar_float 615@ = 575@
+sub_float_lvar_from_float_lvar 615@ -= 572@
+613@ = Math.GetAngleBetween2DVectors(614@, 615@, 616@, 617@)
+if 
+  613@ > 90.0
+goto_if_false @POOL2_52174
+613@ += -180.0
+613@ *= -1.0
+
+:POOL2_52174
+set_lvar_float_to_lvar_float 169@ = 574@
+sub_float_lvar_from_float_lvar 169@ -= 585@
+set_lvar_float_to_lvar_float 170@ = 575@
+sub_float_lvar_from_float_lvar 170@ -= 589@
+set_lvar_float_to_lvar_float 171@ = 576@
+sub_float_lvar_from_float_lvar 171@ -= 593@
+597@ = Math.GetHeadingFromVector2D(169@, 170@)
+set_lvar_float_to_lvar_float 595@ = 597@
+set_lvar_float_to_lvar_float 596@ = 597@
+set_lvar_float_to_lvar_float 598@ = 597@
+set_lvar_float_to_lvar_float 594@ = 593@
+set_lvar_float_to_lvar_float 591@ = 593@
+set_lvar_float_to_lvar_float 592@ = 593@
+599@ = Math.GetDistanceBetweenCoords2D(574@, 575@, 585@, 589@)
+div_float_lvar_by_float_lvar 169@ /= 599@
+div_float_lvar_by_float_lvar 170@ /= 599@
+set_var_float_to_lvar_float $x = 169@
+$x *= 3.0
+set_var_float_to_lvar_float $y = 170@
+$y *= 3.0
+set_lvar_float_to_lvar_float 583@ = 585@
+sub_float_var_from_float_lvar 583@ -= $x
+set_lvar_float_to_lvar_float 587@ = 589@
+sub_float_var_from_float_lvar 587@ -= $y
+set_var_float_to_lvar_float $x = 169@
+$x *= 1.0
+set_var_float_to_lvar_float $y = 170@
+$y *= 1.0
+set_lvar_float_to_lvar_float 610@ = 585@
+sub_float_var_from_float_lvar 610@ -= $x
+set_lvar_float_to_lvar_float 611@ = 589@
+sub_float_var_from_float_lvar 611@ -= $y
+set_lvar_float_to_lvar_float 612@ = 593@
+if 
+  0.25 > 599@
+goto_if_false @POOL2_52493
+600@ = 1
+goto @POOL2_52570
+
+:POOL2_52493
+if 
+  0.65 > 599@
+goto_if_false @POOL2_52528
+600@ = 2
+goto @POOL2_52570
+
+:POOL2_52528
+if 
+  1.1 > 599@
+goto_if_false @POOL2_52563
+600@ = 3
+goto @POOL2_52570
+
+:POOL2_52563
+600@ = 4
+
+:POOL2_52570
+if 
+  613@ > 70.0
+goto_if_false @POOL2_52623
+600@ += 1
+if 
+  600@ > 4
+goto_if_false @POOL2_52623
+600@ = 4
+
+:POOL2_52623
+if 
+  600@ == 1
+goto_if_false @POOL2_52709
+set_var_float_to_lvar_float $x = 169@
+$x *= 0.615
+set_var_float_to_lvar_float $y = 170@
+$y *= 0.615
+set_lvar_float_to_lvar_float 584@ = 574@
+sub_float_var_from_float_lvar 584@ -= $x
+set_lvar_float_to_lvar_float 588@ = 575@
+sub_float_var_from_float_lvar 588@ -= $y
+
+:POOL2_52709
+if 
+  600@ == 2
+goto_if_false @POOL2_52795
+set_var_float_to_lvar_float $x = 169@
+$x *= 1.0
+set_var_float_to_lvar_float $y = 170@
+$y *= 1.0
+set_lvar_float_to_lvar_float 584@ = 574@
+sub_float_var_from_float_lvar 584@ -= $x
+set_lvar_float_to_lvar_float 588@ = 575@
+sub_float_var_from_float_lvar 588@ -= $y
+
+:POOL2_52795
+if 
+  600@ == 3
+goto_if_false @POOL2_52881
+set_var_float_to_lvar_float $x = 169@
+$x *= 1.6
+set_var_float_to_lvar_float $y = 170@
+$y *= 1.6
+set_lvar_float_to_lvar_float 584@ = 574@
+sub_float_var_from_float_lvar 584@ -= $x
+set_lvar_float_to_lvar_float 588@ = 575@
+sub_float_var_from_float_lvar 588@ -= $y
+
+:POOL2_52881
+if 
+  600@ == 4
+goto_if_false @POOL2_52967
+set_var_float_to_lvar_float $x = 169@
+$x *= 2.1
+set_var_float_to_lvar_float $y = 170@
+$y *= 2.1
+set_lvar_float_to_lvar_float 584@ = 574@
+sub_float_var_from_float_lvar 584@ -= $x
+set_lvar_float_to_lvar_float 588@ = 575@
+sub_float_var_from_float_lvar 588@ -= $y
+
+:POOL2_52967
+$distance = Math.GetDistanceBetweenCoords2D(574@, 575@, 584@, 588@)
+set_lvar_float_to_lvar_float 42@ = 599@
+42@ += 0.3
+if 
+  is_float_lvar_greater_than_float_var 42@ > $distance
+goto_if_false @POOL2_53103
+set_lvar_float_to_lvar_float 42@ = 599@
+42@ += 0.3
+set_var_float_to_lvar_float $x = 169@
+mult_float_var_by_float_lvar $x *= 42@
+set_var_float_to_lvar_float $y = 170@
+mult_float_var_by_float_lvar $y *= 42@
+set_lvar_float_to_lvar_float 584@ = 574@
+sub_float_var_from_float_lvar 584@ -= $x
+set_lvar_float_to_lvar_float 588@ = 575@
+sub_float_var_from_float_lvar 588@ -= $y
+
+:POOL2_53103
+if 
+  600@ == 1
+goto_if_false @POOL2_53189
+set_var_float_to_lvar_float $x = 169@
+$x *= 0.655
+set_var_float_to_lvar_float $y = 170@
+$y *= 0.655
+set_lvar_float_to_lvar_float 586@ = 574@
+sub_float_var_from_float_lvar 586@ -= $x
+set_lvar_float_to_lvar_float 590@ = 575@
+sub_float_var_from_float_lvar 590@ -= $y
+
+:POOL2_53189
+if 
+  600@ == 2
+goto_if_false @POOL2_53275
+set_var_float_to_lvar_float $x = 169@
+$x *= 1.0
+set_var_float_to_lvar_float $y = 170@
+$y *= 1.0
+set_lvar_float_to_lvar_float 586@ = 574@
+sub_float_var_from_float_lvar 586@ -= $x
+set_lvar_float_to_lvar_float 590@ = 575@
+sub_float_var_from_float_lvar 590@ -= $y
+
+:POOL2_53275
+if 
+  600@ == 3
+goto_if_false @POOL2_53361
+set_var_float_to_lvar_float $x = 169@
+$x *= 1.6
+set_var_float_to_lvar_float $y = 170@
+$y *= 1.6
+set_lvar_float_to_lvar_float 586@ = 574@
+sub_float_var_from_float_lvar 586@ -= $x
+set_lvar_float_to_lvar_float 590@ = 575@
+sub_float_var_from_float_lvar 590@ -= $y
+
+:POOL2_53361
+if 
+  600@ == 4
+goto_if_false @POOL2_53447
+set_var_float_to_lvar_float $x = 169@
+$x *= 2.1
+set_var_float_to_lvar_float $y = 170@
+$y *= 2.1
+set_lvar_float_to_lvar_float 586@ = 574@
+sub_float_var_from_float_lvar 586@ -= $x
+set_lvar_float_to_lvar_float 590@ = 575@
+sub_float_var_from_float_lvar 590@ -= $y
+
+:POOL2_53447
+return 
+
+:POOL2_53449
+Hud.DrawSprite(1, 618@, 619@, 620@, 621@, 128, 128, 128, 255)
+Hud.DrawSprite(2, 622@, 623@, 624@, 625@, 128, 128, 128, 255)
+if or
+  Pad.IsButtonPressed(180@, Button.LeftStickY)
+  Pad.IsButtonPressed(180@, Button.LeftStickX)
+goto_if_false @POOL2_54000
+$LStickX, $LStickY, $RStickX, $RStickY = Pad.GetPositionOfAnalogueSticks(180@)
+cset_var_float_to_var_int $x = integer $LStickX
+cset_var_float_to_var_int $y = integer $LStickY
+$x /= 128.0
+$y /= 128.0
+$x *= 5.0
+$y *= 5.0
+set_lvar_float_to_lvar_float 42@ = 622@
+add_float_var_to_float_lvar 42@ += $x
+set_lvar_float_to_lvar_float 44@ = 620@
+44@ /= 2.0
+set_lvar_float_to_lvar_float 43@ = 618@
+add_float_lvar_to_float_lvar 43@ += 44@
+if 
+  is_float_lvar_greater_than_float_lvar 43@ > 42@
+goto_if_false @POOL2_53715
+set_lvar_float_to_lvar_float 43@ = 618@
+sub_float_lvar_from_float_lvar 43@ -= 44@
+if 
+  is_float_lvar_greater_than_float_lvar 42@ > 43@
+goto_if_false @POOL2_53715
+set_var_float_to_lvar_float $x = 42@
+
+:POOL2_53715
+set_lvar_float_to_lvar_float 42@ = 623@
+add_float_var_to_float_lvar 42@ += $y
+set_lvar_float_to_lvar_float 44@ = 621@
+44@ /= 2.0
+set_lvar_float_to_lvar_float 43@ = 619@
+add_float_lvar_to_float_lvar 43@ += 44@
+if 
+  is_float_lvar_greater_than_float_lvar 43@ > 42@
+goto_if_false @POOL2_53827
+set_lvar_float_to_lvar_float 43@ = 619@
+sub_float_lvar_from_float_lvar 43@ -= 44@
+if 
+  is_float_lvar_greater_than_float_lvar 42@ > 43@
+goto_if_false @POOL2_53827
+set_var_float_to_lvar_float $y = 42@
+
+:POOL2_53827
+42@ = Math.GetDistanceBetweenCoords2D($x, $y, 618@, 619@)
+set_lvar_float_to_lvar_float 43@ = 620@
+43@ /= 3.2
+if 
+  is_float_lvar_greater_than_float_lvar 42@ > 43@
+goto_if_false @POOL2_53984
+set_lvar_float_to_var_float 169@ = $x
+sub_float_lvar_from_float_lvar 169@ -= 618@
+set_lvar_float_to_var_float 170@ = $y
+sub_float_lvar_from_float_lvar 170@ -= 619@
+div_float_lvar_by_float_lvar 169@ /= 42@
+div_float_lvar_by_float_lvar 170@ /= 42@
+mult_float_lvar_by_float_lvar 169@ *= 43@
+mult_float_lvar_by_float_lvar 170@ *= 43@
+set_lvar_float_to_lvar_float 622@ = 618@
+add_float_lvar_to_float_lvar 622@ += 169@
+set_lvar_float_to_lvar_float 623@ = 619@
+add_float_lvar_to_float_lvar 623@ += 170@
+goto @POOL2_54000
+
+:POOL2_53984
+set_lvar_float_to_var_float 622@ = $x
+set_lvar_float_to_var_float 623@ = $y
+
+:POOL2_54000
+return 
+
+:POOL2_54002
+set_lvar_float_to_lvar_float 631@ = 52@
+631@ *= 2.0
+629@ = 1
+
+:POOL2_54027
+if 
+  16 > 629@
+goto_if_false @POOL2_54229
+if 
+  Object.DoesExist(82@(629@,16i))
+goto_if_false @POOL2_54215
+$x, $y, $z = Object.GetCoordinates(82@(629@,16i))
+630@ = Math.GetDistanceBetweenCoords2D($x, $y, 627@, 628@)
+if 
+  is_float_lvar_greater_than_float_lvar 631@ > 630@
+goto_if_false @POOL2_54215
+set_lvar_float_to_lvar_float 632@ = 627@
+sub_float_var_from_float_lvar 632@ -= $x
+set_lvar_float_to_lvar_float 633@ = 628@
+sub_float_var_from_float_lvar 633@ -= $y
+div_float_lvar_by_float_lvar 632@ /= 630@
+div_float_lvar_by_float_lvar 633@ /= 630@
+mult_float_lvar_by_float_lvar 632@ *= 631@
+mult_float_lvar_by_float_lvar 633@ *= 631@
+set_lvar_float_to_var_float 627@ = $x
+add_float_lvar_to_float_lvar 627@ += 632@
+set_lvar_float_to_var_float 628@ = $y
+add_float_lvar_to_float_lvar 628@ += 633@
+
+:POOL2_54215
+629@ += 1
+goto @POOL2_54027
+
+:POOL2_54229
+set_lvar_float_to_lvar_float 630@ = 98@
+if 
+  is_float_lvar_greater_than_float_lvar 630@ > 627@
+goto_if_false @POOL2_54264
+set_lvar_float_to_lvar_float 627@ = 630@
+
+:POOL2_54264
+set_lvar_float_to_lvar_float 630@ = 99@
+if 
+  is_float_lvar_greater_than_float_lvar 627@ > 630@
+goto_if_false @POOL2_54299
+set_lvar_float_to_lvar_float 627@ = 630@
+
+:POOL2_54299
+set_lvar_float_to_lvar_float 630@ = 100@
+if 
+  is_float_lvar_greater_than_float_lvar 630@ > 628@
+goto_if_false @POOL2_54334
+set_lvar_float_to_lvar_float 628@ = 630@
+
+:POOL2_54334
+set_lvar_float_to_lvar_float 630@ = 101@
+if 
+  is_float_lvar_greater_than_float_lvar 628@ > 630@
+goto_if_false @POOL2_54369
+set_lvar_float_to_lvar_float 628@ = 630@
+
+:POOL2_54369
+return 
+
+:POOL2_54371
+$cam_x1 = Object.GetOffsetInWorldCoords($cam_y1, $cam_z1, 163@, 0.0, 0.0, 0.0)
+$cam_x2 = Object.GetOffsetInWorldCoords($cam_y2, $cam_z2, 163@, 0.0, -1.0, 0.0)
+set_var_float_to_var_float $cam_nvec_x = $cam_x1
+sub_float_var_from_float_var $cam_nvec_x -= $cam_x2
+set_var_float_to_var_float $cam_nvec_y = $cam_y1
+sub_float_var_from_float_var $cam_nvec_y -= $cam_y2
+$cam_dist = Math.GetDistanceBetweenCoords2D($cam_x1, $cam_y1, $cam_x2, $cam_y2)
+div_float_var_by_float_var $cam_nvec_x /= $cam_dist
+div_float_var_by_float_var $cam_nvec_y /= $cam_dist
+set_var_float_to_var_float $cam_rvec_x = $cam_nvec_y
+set_var_float_to_var_float $cam_rvec_y = $cam_nvec_x
+$cam_rvec_y *= -1.0
+return 
+
+:POOL2_54522
+Hud.DrawWindow(29.0, 220.0, 641@, 647@, 'BJ_TITL', 2)
+gosub @POOL2_60436
+Text.SetColor(134, 155, 184, 255)
+Text.SetWrapX(640.0)
+Text.Display(36.0, 240.0, 'BJ_01')
+gosub @POOL2_60436
+Text.SetScale(0.6253, 2.7876)
+Text.DisplayWithNumber(36.0, 260.0, 'DOLLAR', 155@)
+gosub @POOL2_60436
+Text.SetColor(134, 155, 184, 255)
+Text.SetWrapX(640.0)
+Text.Display(36.0, 290.0, 'BJ_02')
+gosub @POOL2_60436
+Text.SetScale(0.6253, 2.7876)
+Text.DisplayWithNumber(36.0, 310.0, 'DOLLAR', $pool_min_bet)
+gosub @POOL2_60436
+Text.SetColor(134, 155, 184, 255)
+Text.SetWrapX(640.0)
+Text.Display(36.0, 340.0, 'BJ_03')
+gosub @POOL2_60436
+Text.SetScale(0.6253, 2.7876)
+Text.DisplayWithNumber(36.0, 360.0, 'DOLLAR', $pool_max_bet)
+return 
+
+:POOL2_54829
+if and
+  274@ == 0
+  271@ == 0
+goto_if_false @POOL2_54875
+635@ = 1
+gosub @POOL2_57034
+goto @POOL2_56226
+
+:POOL2_54875
+Hud.DrawWindow(29.0, 220.0, 637@, 643@, 'SCORE', 2)
+gosub @POOL2_60436
+Text.SetColor(134, 155, 184, 255)
+Text.Display(36.0, 240.0, 'PL_01')
+gosub @POOL2_60436
+Text.SetScale(636@, 642@)
+if 
+  217@ == 0
+goto_if_false @POOL2_55000
+Text.Display(36.0, 260.0, 'PL_12')
+
+:POOL2_55000
+if 
+  217@ == 1
+goto_if_false @POOL2_55039
+Text.Display(36.0, 260.0, 'PL_13')
+
+:POOL2_55039
+if 
+  217@ == -1
+goto_if_false @POOL2_55078
+Text.Display(36.0, 260.0, 'PL_15')
+
+:POOL2_55078
+if 
+  217@ == 2
+goto_if_false @POOL2_55117
+Text.Display(36.0, 260.0, 'PL_14')
+
+:POOL2_55117
+gosub @POOL2_60436
+Text.SetColor(134, 155, 184, 255)
+if 
+  178@ == 1
+goto_if_false @POOL2_55184
+Text.Display(36.0, 290.0, 'PL_02')
+goto @POOL2_55205
+
+:POOL2_55184
+Text.Display(36.0, 290.0, 'PL_03')
+
+:POOL2_55205
+gosub @POOL2_60436
+Text.SetScale(636@, 642@)
+if 
+  218@ == 0
+goto_if_false @POOL2_55259
+Text.Display(36.0, 310.0, 'PL_12')
+
+:POOL2_55259
+if 
+  218@ == 1
+goto_if_false @POOL2_55298
+Text.Display(36.0, 310.0, 'PL_13')
+
+:POOL2_55298
+if 
+  218@ == -1
+goto_if_false @POOL2_55337
+Text.Display(36.0, 310.0, 'PL_15')
+
+:POOL2_55337
+if 
+  218@ == 2
+goto_if_false @POOL2_55376
+Text.Display(36.0, 310.0, 'PL_14')
+
+:POOL2_55376
+if 
+  274@ > 0
+goto_if_false @POOL2_55696
+gosub @POOL2_60436
+Text.SetColor(134, 155, 184, 255)
+Text.Display(36.0, 340.0, 'PL_04')
+gosub @POOL2_60436
+Text.SetScale(636@, 642@)
+switch_start 274@ total_jumps 7 default_jump 0 @POOL2_55689 jumps 0 @POOL2_55514 1 @POOL2_55521 2 @POOL2_55549 3 @POOL2_55577 4 @POOL2_55605 5 @POOL2_55633 6 @POOL2_55661
+
+:POOL2_55514
+goto @POOL2_55689
+
+:POOL2_55521
+Text.Display(36.0, 360.0, 'FOUL1')
+goto @POOL2_55689
+
+:POOL2_55549
+Text.Display(36.0, 360.0, 'FOUL2')
+goto @POOL2_55689
+
+:POOL2_55577
+Text.Display(36.0, 360.0, 'FOUL3')
+goto @POOL2_55689
+
+:POOL2_55605
+Text.Display(36.0, 360.0, 'FOUL4')
+goto @POOL2_55689
+
+:POOL2_55633
+Text.Display(36.0, 360.0, 'FOUL5')
+goto @POOL2_55689
+
+:POOL2_55661
+Text.Display(36.0, 360.0, 'FOUL6')
+goto @POOL2_55689
+
+:POOL2_55689
+goto @POOL2_56226
+
+:POOL2_55696
+if 
+  271@ > 0
+goto_if_false @POOL2_56226
+if 
+  271@ == 1
+goto_if_false @POOL2_55888
+gosub @POOL2_60436
+Text.SetColor(134, 155, 184, 255)
+Text.Display(36.0, 340.0, 'PL_05')
+39@ = 1
+
+:POOL2_55781
+if 
+  16 > 39@
+goto_if_false @POOL2_55881
+if 
+  255@(39@,16i) <> 0
+goto_if_false @POOL2_55867
+gosub @POOL2_60436
+Text.SetScale(636@, 642@)
+Text.DisplayWithNumber(36.0, 360.0, 'NUM', 39@)
+39@ = 16
+
+:POOL2_55867
+39@ += 1
+goto @POOL2_55781
+
+:POOL2_55881
+goto @POOL2_56226
+
+:POOL2_55888
+gosub @POOL2_60436
+Text.SetColor(134, 155, 184, 255)
+Text.Display(36.0, 340.0, 'PL_06')
+39@ = 1
+set_lvar_int_to_lvar_int 40@ = 271@
+42@ = 36.0
+
+:POOL2_55955
+if 
+  40@ > 0
+goto_if_false @POOL2_56226
+
+:POOL2_55973
+if 
+  16 > 39@
+goto_if_false @POOL2_56219
+if 
+  255@(39@,16i) <> 0
+goto_if_false @POOL2_56180
+if 
+  40@ > 1
+goto_if_false @POOL2_56122
+gosub @POOL2_60436
+Text.SetScale(636@, 642@)
+41@ = Text.GetStringWidthWithNumber('COMMA', 39@)
+cset_lvar_float_to_lvar_int 43@ = integer 41@
+Text.DisplayWithNumber(42@, 360.0, 'COMMA', 39@)
+add_float_lvar_to_float_lvar 42@ += 43@
+39@ += 1
+40@ -= 1
+goto @POOL2_56173
+
+:POOL2_56122
+gosub @POOL2_60436
+Text.SetScale(636@, 642@)
+Text.DisplayWithNumber(42@, 360.0, 'NUM', 39@)
+40@ = -1
+39@ = 16
+
+:POOL2_56173
+goto @POOL2_56187
+
+:POOL2_56180
+39@ += 1
+
+:POOL2_56187
+if 
+  39@ >= 16
+goto_if_false @POOL2_56212
+40@ = -1
+
+:POOL2_56212
+goto @POOL2_55973
+
+:POOL2_56219
+goto @POOL2_55955
+
+:POOL2_56226
+return 
+if or
+is_ps2_keyboard_key_just_pressed 131
+is_ps2_keyboard_key_just_pressed 87
+goto_if_false @POOL2_56258
+621@ += 1.0
+
+:POOL2_56258
+if or
+is_ps2_keyboard_key_just_pressed 130
+is_ps2_keyboard_key_just_pressed 90
+goto_if_false @POOL2_56288
+621@ += -1.0
+
+:POOL2_56288
+if or
+is_ps2_keyboard_key_just_pressed 128
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @POOL2_56318
+620@ += 1.0
+
+:POOL2_56318
+if or
+is_ps2_keyboard_key_just_pressed 129
+is_ps2_keyboard_key_just_pressed 65
+goto_if_false @POOL2_56348
+620@ += -1.0
+
+:POOL2_56348
+if or
+is_ps2_keyboard_key_just_pressed 145
+is_ps2_keyboard_key_just_pressed 87
+goto_if_false @POOL2_56378
+624@ += 1.0
+
+:POOL2_56378
+if or
+is_ps2_keyboard_key_just_pressed 139
+is_ps2_keyboard_key_just_pressed 90
+goto_if_false @POOL2_56408
+624@ += -1.0
+
+:POOL2_56408
+if or
+is_ps2_keyboard_key_just_pressed 143
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @POOL2_56438
+625@ += 1.0
+
+:POOL2_56438
+if or
+is_ps2_keyboard_key_just_pressed 141
+is_ps2_keyboard_key_just_pressed 65
+goto_if_false @POOL2_56468
+625@ += -1.0
+
+:POOL2_56468
+if 
+is_ps2_keyboard_key_just_pressed 137
+goto_if_false @POOL2_57032
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL_SPRITE_HEIGHT = AR DATA = PING PATH) = DESTINATION) = ")
+save_float_to_debug_file 621@
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("BALL_SPRITE_WIDTH =  AR DATA = PING PATH) = DESTINATION) = ")
+save_float_to_debug_file 620@
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("NIB_SPRITE_HEIGHT =  AR DATA = PING PATH) = DESTINATION) = ")
+save_float_to_debug_file 624@
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("NIB_SPRITE_WIDTH =   AR DATA = PING PATH) = DESTINATION) = ")
+save_float_to_debug_file 625@
+
+:POOL2_57032
+return 
+
+:POOL2_57034
+if 
+  635@ == 0
+goto_if_false @POOL2_57283
+39@ = 0
+if 
+  3000 > 205@
+goto_if_false @POOL2_57085
+39@ = 1
+
+:POOL2_57085
+if 
+  236@ == 1
+goto_if_false @POOL2_57142
+205@ = 0
+39@ = 1
+if 
+  198@ > 1
+goto_if_false @POOL2_57142
+198@ = 0
+
+:POOL2_57142
+if 
+  198@ == 0
+goto_if_false @POOL2_57187
+Text.ClearHelp
+Text.PrintHelpForever('PL_H3')
+205@ = 0
+198@ += 1
+
+:POOL2_57187
+if 
+  34@ == 5
+goto_if_false @POOL2_57269
+if 
+  198@ == 1
+goto_if_false @POOL2_57262
+if 
+  205@ > 3000
+goto_if_false @POOL2_57262
+Text.ClearHelp
+Text.PrintHelpForever('PL_H7')
+198@ += 1
+
+:POOL2_57262
+goto @POOL2_57276
+
+:POOL2_57269
+39@ = 1
+
+:POOL2_57276
+goto @POOL2_57297
+
+:POOL2_57283
+39@ = 1
+635@ = 0
+
+:POOL2_57297
+if 
+  39@ == 1
+goto_if_false @POOL2_57816
+Hud.DrawWindow(29.0, 270.0, 638@, 644@, 'SCORE', 2)
+gosub @POOL2_60436
+Text.SetColor(134, 155, 184, 255)
+Text.Display(36.0, 290.0, 'PL_01')
+gosub @POOL2_60436
+Text.SetScale(636@, 642@)
+if 
+  217@ == 0
+goto_if_false @POOL2_57440
+Text.Display(36.0, 310.0, 'PL_12')
+
+:POOL2_57440
+if 
+  217@ == 1
+goto_if_false @POOL2_57479
+Text.Display(36.0, 310.0, 'PL_13')
+
+:POOL2_57479
+if 
+  217@ == -1
+goto_if_false @POOL2_57518
+Text.Display(36.0, 310.0, 'PL_15')
+
+:POOL2_57518
+if 
+  217@ == 2
+goto_if_false @POOL2_57557
+Text.Display(36.0, 310.0, 'PL_14')
+
+:POOL2_57557
+gosub @POOL2_60436
+Text.SetColor(134, 155, 184, 255)
+if 
+  178@ == 1
+goto_if_false @POOL2_57624
+Text.Display(36.0, 340.0, 'PL_02')
+goto @POOL2_57645
+
+:POOL2_57624
+Text.Display(36.0, 340.0, 'PL_03')
+
+:POOL2_57645
+gosub @POOL2_60436
+Text.SetScale(636@, 642@)
+if 
+  218@ == 0
+goto_if_false @POOL2_57699
+Text.Display(36.0, 360.0, 'PL_12')
+
+:POOL2_57699
+if 
+  218@ == 1
+goto_if_false @POOL2_57738
+Text.Display(36.0, 360.0, 'PL_13')
+
+:POOL2_57738
+if 
+  218@ == -1
+goto_if_false @POOL2_57777
+Text.Display(36.0, 360.0, 'PL_15')
+
+:POOL2_57777
+if 
+  218@ == 2
+goto_if_false @POOL2_57816
+Text.Display(36.0, 360.0, 'PL_14')
+
+:POOL2_57816
+return 
+
+:POOL2_57818
+636@ = 0.4753
+642@ = 2.3176
+switch_start $current_Language total_jumps 4 default_jump 1 @POOL2_58009 jumps 1 @POOL2_57901 2 @POOL2_57955 3 @POOL2_57982 4 @POOL2_57928 -1 @POOL2_58036 -1 @POOL2_58036 -1 @POOL2_58036
+
+:POOL2_57901
+637@ = 210.6556
+643@ = 426.4957
+goto @POOL2_58036
+
+:POOL2_57928
+637@ = 175.0805
+643@ = 426.4957
+goto @POOL2_58036
+
+:POOL2_57955
+637@ = 190.782
+643@ = 409.0
+goto @POOL2_58036
+
+:POOL2_57982
+637@ = 214.9799
+643@ = 409.0
+goto @POOL2_58036
+
+:POOL2_58009
+637@ = 174.4835
+643@ = 409.0
+goto @POOL2_58036
+
+:POOL2_58036
+switch_start $current_Language total_jumps 3 default_jump 1 @POOL2_58180 jumps 2 @POOL2_58126 3 @POOL2_58153 4 @POOL2_58099 -1 @POOL2_58207 -1 @POOL2_58207 -1 @POOL2_58207 -1 @POOL2_58207
+
+:POOL2_58099
+638@ = 179.098
+644@ = 396.8582
+goto @POOL2_58207
+
+:POOL2_58126
+638@ = 166.0992
+644@ = 396.8582
+goto @POOL2_58207
+
+:POOL2_58153
+638@ = 205.4915
+644@ = 396.8582
+goto @POOL2_58207
+
+:POOL2_58180
+638@ = 157.0
+644@ = 396.8582
+goto @POOL2_58207
+
+:POOL2_58207
+switch_start $current_Language total_jumps 1 default_jump 1 @POOL2_58295 jumps 3 @POOL2_58270 -1 @POOL2_58322 -1 @POOL2_58322 -1 @POOL2_58322 -1 @POOL2_58322 -1 @POOL2_58322 -1 @POOL2_58322
+
+:POOL2_58270
+set_lvar_float_to_lvar_float 639@ = 638@
+645@ = 394.4953
+goto @POOL2_58322
+
+:POOL2_58295
+639@ = 168.1938
+645@ = 394.4953
+goto @POOL2_58322
+
+:POOL2_58322
+640@ = 0.4914
+646@ = 2.3977
+switch_start $current_Language total_jumps 1 default_jump 1 @POOL2_58432 jumps 3 @POOL2_58405 -1 @POOL2_58459 -1 @POOL2_58459 -1 @POOL2_58459 -1 @POOL2_58459 -1 @POOL2_58459 -1 @POOL2_58459
+
+:POOL2_58405
+641@ = 178.0981
+647@ = 409.0
+goto @POOL2_58459
+
+:POOL2_58432
+641@ = 157.0
+647@ = 409.0
+goto @POOL2_58459
+
+:POOL2_58459
+return 
+if 
+is_ps2_keyboard_key_just_pressed 67
+goto_if_false @POOL2_58526
+648@ += 1
+if 
+  648@ > 5
+goto_if_false @POOL2_58508
+648@ = 0
+
+:POOL2_58508
+write_debug_with_int "SCREEN_EDIT" 648@
+
+:POOL2_58526
+if 
+is_ps2_keyboard_key_just_pressed 131
+goto_if_false @POOL2_58556
+642@(648@,6f) += -0.1
+
+:POOL2_58556
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @POOL2_58586
+642@(648@,6f) += 0.1
+
+:POOL2_58586
+if 
+is_ps2_keyboard_key_just_pressed 128
+goto_if_false @POOL2_58616
+636@(648@,6f) += 0.1
+
+:POOL2_58616
+if 
+is_ps2_keyboard_key_just_pressed 129
+goto_if_false @POOL2_58646
+636@(648@,6f) += -0.1
+
+:POOL2_58646
+if 
+is_ps2_keyboard_key_just_pressed 137
+goto_if_false @POOL2_59387
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("POOL - SCREEN_COORDS AR DATA = PING PATH) = DESTINATION) = ")
+save_newline_to_debug_file 
+39@ = 0
+
+:POOL2_58803
+if 
+  6 > 39@
+goto_if_false @POOL2_59387
+Debugger.SaveStringToDebugFile("SCREEN_COORD_X[OORDS AR DATA = PING PATH) = DESTINATION) = ")
+save_int_to_debug_file 39@
+Debugger.SaveStringToDebugFile("] = EN_COORD_X[OORDS AR DATA = PING PATH) = DESTINATION) = ")
+save_float_to_debug_file 636@(39@,6f)
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("SCREEN_COORD_Y[OORDS AR DATA = PING PATH) = DESTINATION) = ")
+save_int_to_debug_file 39@
+Debugger.SaveStringToDebugFile("] = EN_COORD_Y[OORDS AR DATA = PING PATH) = DESTINATION) = ")
+save_float_to_debug_file 642@(39@,6f)
+save_newline_to_debug_file 
+39@ += 1
+goto @POOL2_58803
+
+:POOL2_59387
+return 
+
+:POOL2_59389
+39@ = 0
+if 
+  3000 > 205@
+goto_if_false @POOL2_59422
+39@ = 1
+
+:POOL2_59422
+if 
+  198@ == 0
+goto_if_false @POOL2_59467
+Text.ClearHelp
+Text.PrintHelpForever('PL_H6')
+205@ = 0
+198@ += 1
+
+:POOL2_59467
+if 
+  34@ == 4
+goto_if_false @POOL2_59542
+if 
+  198@ == 1
+goto_if_false @POOL2_59542
+if 
+  205@ > 3000
+goto_if_false @POOL2_59542
+Text.ClearHelp
+Text.PrintHelpForever('PL_H7')
+198@ += 1
+
+:POOL2_59542
+if 
+  39@ == 1
+goto_if_false @POOL2_60139
+Hud.DrawWindow(29.0, 220.0, 639@, 645@, 'SCORE', 2)
+gosub @POOL2_60436
+Text.SetColor(134, 155, 184, 255)
+Text.Display(36.0, 240.0, 'PL_01')
+gosub @POOL2_60436
+Text.SetScale(636@, 642@)
+if 
+  217@ == 0
+goto_if_false @POOL2_59685
+Text.Display(36.0, 260.0, 'PL_12')
+
+:POOL2_59685
+if 
+  217@ == 1
+goto_if_false @POOL2_59724
+Text.Display(36.0, 260.0, 'PL_13')
+
+:POOL2_59724
+if 
+  217@ == -1
+goto_if_false @POOL2_59763
+Text.Display(36.0, 260.0, 'PL_15')
+
+:POOL2_59763
+if 
+  217@ == 2
+goto_if_false @POOL2_59802
+Text.Display(36.0, 260.0, 'PL_14')
+
+:POOL2_59802
+gosub @POOL2_60436
+Text.SetColor(134, 155, 184, 255)
+if 
+  178@ == 1
+goto_if_false @POOL2_59869
+Text.Display(36.0, 290.0, 'PL_02')
+goto @POOL2_59890
+
+:POOL2_59869
+Text.Display(36.0, 290.0, 'PL_03')
+
+:POOL2_59890
+gosub @POOL2_60436
+Text.SetScale(636@, 642@)
+if 
+  218@ == 0
+goto_if_false @POOL2_59944
+Text.Display(36.0, 310.0, 'PL_12')
+
+:POOL2_59944
+if 
+  218@ == 1
+goto_if_false @POOL2_59983
+Text.Display(36.0, 310.0, 'PL_13')
+
+:POOL2_59983
+if 
+  218@ == -1
+goto_if_false @POOL2_60022
+Text.Display(36.0, 310.0, 'PL_15')
+
+:POOL2_60022
+if 
+  218@ == 2
+goto_if_false @POOL2_60061
+Text.Display(36.0, 310.0, 'PL_14')
+
+:POOL2_60061
+gosub @POOL2_60436
+Text.SetColor(134, 155, 184, 255)
+Text.Display(36.0, 340.0, 'PL_16')
+gosub @POOL2_60436
+Text.SetScale(636@, 642@)
+Text.Display(36.0, 360.0, 'PL_17')
+
+:POOL2_60139
+return 
+Text.SetScale(0.4487, 1.5974)
+Text.SetColor(128, 148, 178, 255)
+Text.SetJustify(True)
+Text.SetWrapX(2000.0)
+Text.SetProportional(True)
+return 
+Text.SetScale(0.4487, 1.5974)
+Text.SetColor(128, 148, 178, 255)
+Text.SetRightJustify(True)
+Text.SetWrapX(2000.0)
+Text.SetProportional(True)
+return 
+Text.SetScale(0.9, 2.4)
+Text.SetColor(128, 148, 178, 255)
+Text.SetCenter(True)
+Text.SetWrapX(2000.0)
+Text.SetProportional(True)
+return 
+Text.SetScale(0.9, 2.4)
+Text.SetColor(81, 25, 29, 255)
+Text.SetCenter(True)
+Text.SetWrapX(2000.0)
+Text.SetProportional(True)
+return 
+Text.SetScale(0.54, 1.44)
+Text.SetColor(128, 148, 178, 255)
+Text.SetJustify(True)
+Text.SetWrapX(2000.0)
+Text.SetProportional(True)
+return 
+Text.SetScale(0.405, 1.08)
+Text.SetColor(128, 148, 178, 255)
+Text.SetJustify(True)
+Text.SetWrapX(2000.0)
+Text.SetProportional(True)
+return 
+Text.SetScale(0.54, 1.44)
+Text.SetColor(81, 25, 29, 255)
+Text.SetJustify(True)
+Text.SetWrapX(2000.0)
+Text.SetProportional(True)
+return 
+
+:POOL2_60436
+Text.SetColor(180, 180, 180, 255)
+Text.SetScale(640@, 646@)
+Text.SetRightJustify(False)
+Text.SetJustify(False)
+Text.SetCenter(False)
+set_lvar_float_to_lvar_float 649@ = 637@
+649@ -= 20.0
+Text.SetWrapX(649@)
+Text.SetProportional(True)
+Text.SetBackground(False)
+return 
+if 
+is_ps2_keyboard_key_just_pressed 130
+goto_if_false @POOL2_60600
+650@ += -0.0001
+39@ = 0
+
+:POOL2_60536
+if 
+  16 > 39@
+goto_if_false @POOL2_60600
+if 
+  Object.DoesExist(82@(39@,16i))
+goto_if_false @POOL2_60586
+Object.SetTurnMass(82@(39@,16i), 650@)
+
+:POOL2_60586
+39@ += 1
+goto @POOL2_60536
+
+:POOL2_60600
+if 
+is_ps2_keyboard_key_just_pressed 137
+goto_if_false @POOL2_60680
+
+:POOL2_60616
+if 
+  16 > 39@
+goto_if_false @POOL2_60680
+if 
+  Object.DoesExist(82@(39@,16i))
+goto_if_false @POOL2_60666
+Object.SetTurnMass(82@(39@,16i), 650@)
+
+:POOL2_60666
+39@ += 1
+goto @POOL2_60616
+
+:POOL2_60680
+if 
+is_ps2_keyboard_key_just_pressed 145
+goto_if_false @POOL2_60696
+
+:POOL2_60696
+if 
+is_ps2_keyboard_key_just_pressed 139
+goto_if_false @POOL2_60722
+203@ += -0.001
+
+:POOL2_60722
+if 
+is_ps2_keyboard_key_just_pressed 143
+goto_if_false @POOL2_60748
+204@ += 0.001
+
+:POOL2_60748
+if 
+is_ps2_keyboard_key_just_pressed 141
+goto_if_false @POOL2_60774
+204@ += -0.001
+
+:POOL2_60774
+return 
+
+:POOL2_60776
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:POOL2_60794
+Text.PrintWithNumberBig('M_PASS', 10000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 10000)
+Player.ClearWantedLevel($player1)
+return 
+
+:POOL2_60828
+Player.MakeGangReappear
+disable_2nd_pad_for_debug 0
+Game.SetScriptCoopGame(False)
+$disable_debug = 0
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+39@ = 0
+
+:POOL2_60856
+if 
+  10 > 39@
+goto_if_false @POOL2_60917
+if 
+  Object.DoesExist(347@(39@,10i))
+goto_if_false @POOL2_60903
+Object.Delete(347@(39@,10i))
+
+:POOL2_60903
+39@ += 1
+goto @POOL2_60856
+
+:POOL2_60917
+if 
+  not Char.IsDead($active_pool_opponent)
+goto_if_false @POOL2_60982
+Char.ClearLookAt($active_pool_opponent)
+$x, $y, $z = Char.GetCoordinates($active_pool_opponent)
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+set_lvar_float_to_var_float 223@ = $z
+set_lvar_float_to_var_float 227@ = $z
+
+:POOL2_60982
+if 
+  not Char.IsDead($active_pool_opponent)
+goto_if_false @POOL2_61026
+$x, $y, $z = Char.GetCoordinates($active_pool_opponent)
+Char.SetCoordinates($active_pool_opponent, $x, $y, 227@)
+
+:POOL2_61026
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL2_61151
+$x, $y, $z = Char.GetCoordinates($scplayer)
+Char.SetCoordinates($scplayer, 221@, 222@, 223@)
+if 
+  not Char.IsDead($active_pool_opponent)
+goto_if_false @POOL2_61100
+165@, 166@, 167@ = Char.GetCoordinates($active_pool_opponent)
+
+:POOL2_61100
+set_lvar_float_to_lvar_float 169@ = 165@
+sub_float_var_from_float_lvar 169@ -= $x
+set_lvar_float_to_lvar_float 170@ = 166@
+sub_float_var_from_float_lvar 170@ -= $y
+$heading = Math.GetHeadingFromVector2D(169@, 170@)
+Char.SetHeading($scplayer, $heading)
+
+:POOL2_61151
+Streaming.RequestModel(338)
+
+:POOL2_61156
+if 
+  not Streaming.HasModelLoaded(338)
+goto_if_false @POOL2_61183
+wait 0
+goto @POOL2_61156
+
+:POOL2_61183
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL2_61223
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Char.DropObject($scplayer, False)
+Char.GiveWeapon($scplayer, WeaponType.PoolCue, 9999)
+
+:POOL2_61223
+if 
+  Object.DoesExist(106@)
+goto_if_false @POOL2_61244
+Object.Delete(106@)
+
+:POOL2_61244
+if 
+  Object.DoesExist(107@)
+goto_if_false @POOL2_61265
+Object.Delete(107@)
+
+:POOL2_61265
+if 
+  Object.DoesExist(238@)
+goto_if_false @POOL2_61286
+Object.Delete(238@)
+
+:POOL2_61286
+if 
+  Object.DoesExist($active_initial_cue)
+goto_if_false @POOL2_61307
+Object.Delete($active_initial_cue)
+
+:POOL2_61307
+Streaming.MarkModelAsNoLongerNeeded(338)
+Streaming.MarkModelAsNoLongerNeeded(#K_POOLQ)
+Streaming.RemoveAnimation("POOL")
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL2_61352
+Char.ClearTasksImmediately($scplayer)
+Char.SetCollision($scplayer, True)
+
+:POOL2_61352
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+Text.ClearPrints
+Text.ClearHelp
+$onmission = 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @POOL2_61458
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately($scplayer)
+Char.ClearLookAt($scplayer)
+47@ = Sequence.Open()
+Task.StandStill(-1, 1)
+Task.Pause(-1, 1)
+Sequence.Close(47@)
+Char.PerformSequence($scplayer, 47@)
+Sequence.Clear(47@)
+
+:POOL2_61458
+Mission.Finish
+return 
+$x, $y, $z = Camera.GetDebugCoordinates()
+if 
+  Object.DoesExist(163@)
+goto_if_false @POOL2_61511
+165@, 166@, 167@ = Object.GetCoordinates(163@)
+$heading = Object.GetHeading(163@)
+
+:POOL2_61511
+$heading *= -1.0
+42@ = Math.Cos($heading)
+43@ = Math.Sin($heading)
+set_lvar_float_to_var_float 169@ = $x
+sub_float_lvar_from_float_lvar 169@ -= 165@
+set_lvar_float_to_var_float 170@ = $y
+sub_float_lvar_from_float_lvar 170@ -= 166@
+set_lvar_float_to_var_float 171@ = $z
+sub_float_lvar_from_float_lvar 171@ -= 167@
+set_lvar_float_to_lvar_float 172@ = 169@
+mult_float_lvar_by_float_lvar 172@ *= 42@
+set_lvar_float_to_lvar_float 44@ = 170@
+mult_float_lvar_by_float_lvar 44@ *= 43@
+sub_float_lvar_from_float_lvar 172@ -= 44@
+set_lvar_float_to_lvar_float 173@ = 169@
+mult_float_lvar_by_float_lvar 173@ *= 43@
+set_lvar_float_to_lvar_float 44@ = 170@
+mult_float_lvar_by_float_lvar 44@ *= 42@
+add_float_lvar_to_float_lvar 173@ += 44@
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("FIXED_CAMERA_POSITION - OFFSET FROM TABLE = DESTINATION) = ")
+save_float_to_debug_file 172@
+save_float_to_debug_file 173@
+save_float_to_debug_file 171@
+$x, $y, $z = Camera.GetDebugPointAt()
+set_lvar_float_to_var_float 169@ = $x
+sub_float_lvar_from_float_lvar 169@ -= 165@
+set_lvar_float_to_var_float 170@ = $y
+sub_float_lvar_from_float_lvar 170@ -= 166@
+set_lvar_float_to_var_float 171@ = $z
+sub_float_lvar_from_float_lvar 171@ -= 167@
+set_lvar_float_to_lvar_float 172@ = 169@
+mult_float_lvar_by_float_lvar 172@ *= 42@
+set_lvar_float_to_lvar_float 44@ = 170@
+mult_float_lvar_by_float_lvar 44@ *= 43@
+sub_float_lvar_from_float_lvar 172@ -= 44@
+set_lvar_float_to_lvar_float 173@ = 169@
+mult_float_lvar_by_float_lvar 173@ *= 43@
+set_lvar_float_to_lvar_float 44@ = 170@
+mult_float_lvar_by_float_lvar 44@ *= 42@
+add_float_lvar_to_float_lvar 173@ += 44@
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CAMERA_POINT_AT - OFFSET FROM TABLE = BLE = DESTINATION) = ")
+save_float_to_debug_file 172@
+save_float_to_debug_file 173@
+save_float_to_debug_file 171@
+return 
+$x, $y, $z = Camera.GetDebugCoordinates()
+if 
+  Char.DoesExist(215@)
+goto_if_false @POOL2_62165
+if 
+  not Char.IsDead(215@)
+goto_if_false @POOL2_62165
+165@, 166@, 167@ = Char.GetCoordinates(215@)
+$heading = Char.GetHeading(215@)
+
+:POOL2_62165
+$heading *= -1.0
+42@ = Math.Cos($heading)
+43@ = Math.Sin($heading)
+set_lvar_float_to_var_float 169@ = $x
+sub_float_lvar_from_float_lvar 169@ -= 165@
+set_lvar_float_to_var_float 170@ = $y
+sub_float_lvar_from_float_lvar 170@ -= 166@
+set_lvar_float_to_var_float 171@ = $z
+sub_float_lvar_from_float_lvar 171@ -= 167@
+set_lvar_float_to_lvar_float 172@ = 169@
+mult_float_lvar_by_float_lvar 172@ *= 42@
+set_lvar_float_to_lvar_float 44@ = 170@
+mult_float_lvar_by_float_lvar 44@ *= 43@
+sub_float_lvar_from_float_lvar 172@ -= 44@
+set_lvar_float_to_lvar_float 173@ = 169@
+mult_float_lvar_by_float_lvar 173@ *= 43@
+set_lvar_float_to_lvar_float 44@ = 170@
+mult_float_lvar_by_float_lvar 44@ *= 42@
+add_float_lvar_to_float_lvar 173@ += 44@
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("FIXED_CAMERA_POSITION - OFFSET FROM CHAR =  DESTINATION) = ")
+save_float_to_debug_file 172@
+save_float_to_debug_file 173@
+save_float_to_debug_file 171@
+$x, $y, $z = Camera.GetDebugPointAt()
+set_lvar_float_to_var_float 169@ = $x
+sub_float_lvar_from_float_lvar 169@ -= 165@
+set_lvar_float_to_var_float 170@ = $y
+sub_float_lvar_from_float_lvar 170@ -= 166@
+set_lvar_float_to_var_float 171@ = $z
+sub_float_lvar_from_float_lvar 171@ -= 167@
+set_lvar_float_to_lvar_float 172@ = 169@
+mult_float_lvar_by_float_lvar 172@ *= 42@
+set_lvar_float_to_lvar_float 44@ = 170@
+mult_float_lvar_by_float_lvar 44@ *= 43@
+sub_float_lvar_from_float_lvar 172@ -= 44@
+set_lvar_float_to_lvar_float 173@ = 169@
+mult_float_lvar_by_float_lvar 173@ *= 43@
+set_lvar_float_to_lvar_float 44@ = 170@
+mult_float_lvar_by_float_lvar 44@ *= 42@
+add_float_lvar_to_float_lvar 173@ += 44@
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("CAMERA_POINT_AT - OFFSET FROM CHAR = HAR =  DESTINATION) = ")
+save_float_to_debug_file 172@
+save_float_to_debug_file 173@
+save_float_to_debug_file 171@
+return 
+

@@ -1,0 +1,34 @@
+:BCRASH
+script_name 'BCRASH'
+
+:BCRASH_11
+wait $mission_trigger_wait_time
+if 
+  $flag_bcrash_mission_counter == 1
+goto_if_false @BCRASH_36
+terminate_this_script 
+
+:BCRASH_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BCRASH_180
+if 
+  $onmission == 0
+goto_if_false @BCRASH_180
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $bcrashX, $bcrashY, $bcrashZ, 1.2, 1.2, 2.0)
+goto_if_false @BCRASH_180
+if 
+  Player.CanStartMission($player1)
+goto_if_false @BCRASH_180
+if 
+  $flag_bcrash_mission_counter == 0
+goto_if_false @BCRASH_180
+$onmission = 1
+Text.PrintBig('BCRASH1', 1000, TextStyle.BottomRight)
+LITCAS_267()
+Mission.LoadAndLaunchInternal(39) // Badlands
+
+:BCRASH_180
+goto @BCRASH_11
+

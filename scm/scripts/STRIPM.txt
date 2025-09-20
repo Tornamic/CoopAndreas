@@ -1,0 +1,204 @@
+//-------------External script 54 (STRIPM)---------------
+
+:STRIPM
+script_name 'STRIPM'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @STRIPM_60
+0@ = Char.Create(4, 0, 0.0, 0.0, 0.0)
+
+:STRIPM_60
+Streaming.RequestAnimation("STRIP")
+
+:STRIPM_69
+if 
+  not Streaming.HasAnimationLoaded("STRIP")
+goto_if_false @STRIPM_100
+wait 0
+goto @STRIPM_69
+
+:STRIPM_100
+3@ = 1
+4@ = 0
+
+:STRIPM_114
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @STRIPM_298
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @STRIPM_284
+if 
+  $iSetSTRIPPanic == 0
+goto_if_false @STRIPM_262
+7@, 8@, 9@ = Char.GetCoordinates(0@)
+10@ = World.GetUserOfClosestMapAttractor(7@, 8@, 9@, 15.0, 0, "STRIPW")
+if 
+  not Char.IsDead(10@)
+goto_if_false @STRIPM_248
+gosub @STRIPM_312
+goto @STRIPM_255
+
+:STRIPM_248
+gosub @STRIPM_1075
+
+:STRIPM_255
+goto @STRIPM_277
+
+:STRIPM_262
+Char.SetDecisionMaker(0@, $iGlobalPedPanicDM)
+goto @STRIPM_1088
+
+:STRIPM_277
+goto @STRIPM_291
+
+:STRIPM_284
+gosub @STRIPM_1075
+
+:STRIPM_291
+goto @STRIPM_305
+
+:STRIPM_298
+gosub @STRIPM_1075
+
+:STRIPM_305
+goto @STRIPM_114
+
+:STRIPM_312
+switch_start 3@ total_jumps 1 default_jump 0 @STRIPM_389 jumps 1 @STRIPM_375 -1 @STRIPM_389 -1 @STRIPM_389 -1 @STRIPM_389 -1 @STRIPM_389 -1 @STRIPM_389 -1 @STRIPM_389
+
+:STRIPM_375
+gosub @STRIPM_391
+goto @STRIPM_389
+
+:STRIPM_389
+return 
+
+:STRIPM_391
+switch_start 4@ total_jumps 5 default_jump 0 @STRIPM_1073 jumps 0 @STRIPM_454 1 @STRIPM_597 2 @STRIPM_679 3 @STRIPM_771 4 @STRIPM_1030 -1 @STRIPM_1073 -1 @STRIPM_1073
+
+:STRIPM_454
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @STRIPM_590
+set_lvar_int_to_lvar_int 2@ = 0@
+if 
+  2@ > 10000
+goto_if_false @STRIPM_518
+2@ /= 10000
+
+:STRIPM_518
+if 
+  1000 > 2@
+goto_if_false @STRIPM_545
+2@ += 2000
+
+:STRIPM_545
+Task.PlayAnim(0@, "PUN_LOOP", "STRIP", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:STRIPM_590
+goto @STRIPM_1073
+
+:STRIPM_597
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @STRIPM_672
+Task.PlayAnim(0@, "PUN_HOLLER", "STRIP", 4.0, False, False, False, False, -1)
+4@ += 1
+
+:STRIPM_672
+goto @STRIPM_1073
+
+:STRIPM_679
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @STRIPM_764
+2@ = Math.RandomIntInRange(2000, 5000)
+Task.PlayAnim(0@, "PUN_LOOP", "STRIP", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:STRIPM_764
+goto @STRIPM_1073
+
+:STRIPM_771
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @STRIPM_1023
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ >= 50
+goto_if_false @STRIPM_977
+Task.PlayAnim(0@, "PUN_CASH", "STRIP", 4.0, False, False, False, False, -1)
+7@, 8@, 9@ = Char.GetCoordinates(0@)
+10@ = World.GetUserOfClosestMapAttractor(7@, 8@, 9@, 15.0, 0, "STRIPW")
+if 
+  not Char.IsDead(10@)
+goto_if_false @STRIPM_970
+7@ = Char.GetOffsetInWorldCoords(8@, 9@, 10@, 0.3, 0.5, -0.5)
+11@ = Pickup.CreateMoney(100, 7@, 8@, 9@, 0)
+
+:STRIPM_970
+goto @STRIPM_1016
+
+:STRIPM_977
+Task.PlayAnim(0@, "PUN_HOLLER", "STRIP", 4.0, False, False, False, False, -1)
+
+:STRIPM_1016
+4@ += 1
+
+:STRIPM_1023
+goto @STRIPM_1073
+
+:STRIPM_1030
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @STRIPM_1066
+4@ = 0
+
+:STRIPM_1066
+goto @STRIPM_1073
+
+:STRIPM_1073
+return 
+
+:STRIPM_1075
+Streaming.RemoveAnimation("STRIP")
+terminate_this_script 
+return 
+
+:STRIPM_1088
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @STRIPM_1158
+5@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @STRIPM_1151
+Task.Duck(0@, -2)
+
+:STRIPM_1151
+goto @STRIPM_1165
+
+:STRIPM_1158
+gosub @STRIPM_1075
+
+:STRIPM_1165
+goto @STRIPM_1088
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

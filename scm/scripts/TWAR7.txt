@@ -1,0 +1,4820 @@
+//-------------Mission 27---------------
+// Originally: OG Loc
+
+:TWAR7
+script_name 'TWAR7'
+gosub @TWAR7_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @TWAR7_38
+gosub @TWAR7_23165
+
+:TWAR7_38
+gosub @TWAR7_23270
+terminate_this_script 
+
+:TWAR7_47
+$onmission = 1
+Stat.RegisterMissionGiven
+Text.LoadMissionText('SMOKE1')
+if 
+  $onmission == 0
+goto_if_false @TWAR7_130
+$mc_strap = Char.Create(25, 292, 1543.2, -1687.0, 12.5)
+66@ = Blip.AddForCoord(2454.4, -1284.5, 22.7)
+
+:TWAR7_130
+Text.ClearPrints
+wait 0
+67@ = 0
+68@ = 0
+69@ = 0
+70@ = 0
+85@ = 0
+71@ = 0
+72@ = 0
+73@ = 0
+79@ = 0
+80@ = 0
+133@ = 0.0
+134@ = 0.0
+135@ = 0.0
+136@ = 0.0
+137@ = 0.0
+138@ = 0.0
+139@ = 0.0
+140@ = 0.0
+83@ = 0
+84@ = 0
+85@ = 0
+125@ = 0
+126@ = 0
+127@ = 0
+128@ = 0
+129@ = 0
+130@ = 0
+131@ = 0
+132@ = 0
+141@ = 0.0
+142@ = 0.0
+143@ = 0.0
+144@ = 0.0
+74@ = 0
+75@ = 0
+76@ = 0
+77@ = 0
+78@ = 0
+81@ = 0
+82@ = 0.0
+Player.MakeGangDisappear
+World.ClearArea(1, 2072.3, -1695.2, 12.5, 80.0)
+65@ = Object.Create(#LAE_SMOKECUTSCENE, 2055.0, -1695.0, 12.5)
+Cutscene.Load('SMOKE1A')
+
+:TWAR7_515
+if 
+  not Cutscene.HasLoaded
+goto_if_false @TWAR7_539
+wait 0
+goto @TWAR7_515
+
+:TWAR7_539
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:TWAR7_548
+if 
+  not Cutscene.HasFinished
+goto_if_false @TWAR7_572
+wait 0
+goto @TWAR7_548
+
+:TWAR7_572
+Camera.DoFade(0, Fade.Out)
+
+:TWAR7_578
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_602
+wait 0
+goto @TWAR7_578
+
+:TWAR7_602
+Cutscene.Clear
+Object.Delete(65@)
+Player.MakeGangReappear
+Player.SetControl($player1, False)
+Camera.SetFadingColor(0, 0, 0)
+wait 0
+Streaming.RequestModel(466)
+Streaming.LoadSpecialCharacter('SMOKE', 1)
+Streaming.LoadSpecialCharacter('SWEET', 2)
+Streaming.LoadAllModelsNow
+Group.Remove($Players_Group)
+Player.SetGroupRecruitment($player1, False)
+Player.SetGroupToFollowAlways($player1, True)
+Hud.SwitchWidescreen(True)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Player.MakeGangDisappear
+Camera.SetFixedPosition(2073.87, -1682.701, 14.1963, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2073.698, -1683.686, 14.1768, SwitchType.JumpCut)
+148@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+149@ = DecisionMakerChar.Copy(65542)
+146@ = DecisionMakerGroup.Load(0)
+DecisionMakerGroup.ClearEventResponse(146@, 54)
+DecisionMakerGroup.AddEventResponse(146@, 54, 1513, 100.0, 100.0, 100.0, 100.0, True, True)
+DecisionMakerGroup.ClearEventResponse(146@, 36)
+DecisionMakerGroup.AddEventResponse(146@, 36, 1510, 0.0, 100.0, 0.0, 0.0, True, False)
+DecisionMakerGroup.ClearEventResponse(146@, 71)
+DecisionMakerGroup.ClearEventResponse(146@, 9)
+Group.SetDecisionMaker($Players_Group, 146@)
+World.ClearArea(1, 2075.0, -1688.5, 12.29, 10.0)
+Car.CustomPlateForNextCar(466, "_A2TMFK_")
+37@ = Car.Create(466, 2075.0, -1688.5, 12.29)
+Car.SetHeading(37@, 359.74)
+Car.ChangeColor(37@, 98, 14)
+Car.SetCanRespray(37@, False)
+Audio.SetRadioChannel(RadioChannel.BounceFM)
+World.ClearArea(1, 2077.0, -1691.1, 12.5, 1.0)
+$big_smoke = Char.Create(25, 290, 2077.0, -1691.1, 12.5)
+Char.SetGetOutUpsideDownCar($big_smoke, False)
+Char.SetHeading($big_smoke, 255.7)
+Char.SetNeverTargeted($big_smoke, True)
+Char.SetCantBeDraggedOut($big_smoke, True)
+Char.SetAnimGroup($big_smoke, "FATMAN")
+Char.SetNextDesiredMoveState(MoveState.Walk)
+Task.EnterCarAsPassenger($big_smoke, 37@, 0, -2)
+Char.SetDecisionMaker($big_smoke, 149@)
+World.ClearArea(1, 2075.3, -1693.4, 12.5, 1.0)
+$sweet = Char.Create(25, 291, 2075.3, -1693.4, 12.5)
+Char.SetGetOutUpsideDownCar($sweet, False)
+Char.SetNeverTargeted($sweet, True)
+Char.SetCantBeDraggedOut($sweet, True)
+Char.SetAnimGroup($sweet, "GANG2")
+Char.SetNextDesiredMoveState(MoveState.Walk)
+Task.EnterCarAsPassenger($sweet, 37@, 2, -2)
+Char.SetDecisionMaker($sweet, 149@)
+Char.ClearTasksImmediately($scplayer)
+World.ClearArea(1, 2072.9, -1690.6, 12.5, 1.0)
+Char.SetCoordinates($scplayer, 2072.9, -1690.6, 12.5)
+Char.SetHeading($scplayer, 33.0)
+Char.SetNextDesiredMoveState(MoveState.Walk)
+Task.EnterCarAsDriver($scplayer, 37@, -2)
+Game.SwitchRandomTrains(False)
+World.DeleteAllTrains
+Game.EnableAmbientCrime(False)
+World.SwitchEntryExit('LAHS1A', False)
+Camera.DoFade(1, 500)
+69@ = 1
+skip_cutscene_start_internal @TWAR7_1756
+
+:TWAR7_1306
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @TWAR7_1332
+goto @TWAR7_23183
+
+:TWAR7_1332
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_1364
+goto @TWAR7_23165
+
+:TWAR7_1364
+if or
+  67@ == 0
+  67@ == 1
+goto_if_false @TWAR7_1674
+if 
+  81@ == 1
+goto_if_false @TWAR7_1674
+if 
+  Skip.IsWaitingForScriptToFadeIn
+goto_if_false @TWAR7_1674
+Player.SetControl($player1, False)
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.ShutUpForScriptedSpeech($sweet, False)
+Char.ShutUpForScriptedSpeech($big_smoke, False)
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+83@ = 0
+if 
+  Char.IsDead($mc_strap)
+goto_if_false @TWAR7_1598
+Streaming.RequestAnimation("CAR_CHAT")
+Streaming.LoadSpecialCharacter('OGLOC', 3)
+Streaming.LoadAllModelsNow
+$mc_strap = Char.Create(25, 292, 1543.2, -1687.0, 12.5)
+Char.SetGetOutUpsideDownCar($mc_strap, False)
+Char.SetHeading($mc_strap, 97.2)
+Char.SetNeverTargeted($mc_strap, True)
+Char.SetCantBeDraggedOut($mc_strap, True)
+Char.SetSuffersCriticalHits($mc_strap, False)
+Char.SetOnlyDamagedByPlayer($mc_strap, True)
+Char.WarpIntoCarAsPassenger($mc_strap, 37@, -1)
+Char.SetSenseRange($mc_strap, 80.0)
+
+:TWAR7_1598
+Blip.Remove(66@)
+66@ = Blip.AddForCoord(2454.4, -1284.5, 22.7)
+Text.PrintNow('SMK1_10', 7000, 1)
+Player.SetControl($player1, True)
+Camera.DoFade(1, 1000)
+85@ = 2
+68@ = 2
+67@ = 1
+
+:TWAR7_1674
+if 
+  67@ == 0
+goto_if_false @TWAR7_2248
+if 
+  Char.IsInCar($scplayer, 37@)
+goto_if_false @TWAR7_2248
+if 
+  Char.IsInCar($big_smoke, 37@)
+goto_if_false @TWAR7_2248
+if 
+  Char.IsInCar($sweet, 37@)
+goto_if_false @TWAR7_2248
+69@ = 0
+
+:TWAR7_1756
+skip_cutscene_end 
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_1790
+goto @TWAR7_23165
+
+:TWAR7_1790
+if 
+  69@ == 1
+goto_if_false @TWAR7_1914
+Camera.DoFade(0, 500)
+
+:TWAR7_1815
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_1839
+wait 0
+goto @TWAR7_1815
+
+:TWAR7_1839
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_1871
+goto @TWAR7_23165
+
+:TWAR7_1871
+Char.ClearTasksImmediately($scplayer)
+Char.WarpIntoCar($scplayer, 37@)
+Char.ClearTasksImmediately($big_smoke)
+Char.WarpIntoCarAsPassenger($big_smoke, 37@, 0)
+Char.ClearTasksImmediately($sweet)
+Char.WarpIntoCarAsPassenger($sweet, 37@, 2)
+
+:TWAR7_1914
+if 
+  $tw7_trip_skip_flag == 1
+goto_if_false @TWAR7_2009
+Skip.SetUpForSpecificVehicle(1526.9, -1654.5, 12.1, 180.0, 37@)
+if 
+  $2705 == 0
+goto_if_false @TWAR7_1993
+Text.PrintHelp('SKIP_1')
+$2705 = 1
+
+:TWAR7_1993
+Text.PrintNow('SMK1_02', 7000, 1)
+
+:TWAR7_2009
+if 
+  $tw7_trip_skip_flag == 2
+goto_if_false @TWAR7_2095
+Skip.SetUpForVehicleFinishedByScript(2453.8, -1305.0, 22.5, 0.0, 37@)
+if 
+  $2705 == 0
+goto_if_false @TWAR7_2088
+Text.PrintHelp('SKIP_1')
+$2705 = 1
+
+:TWAR7_2088
+81@ = 1
+
+:TWAR7_2095
+66@ = Blip.AddForCoord(1532.8, -1672.9, 12.4)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Player.MakeGangReappear
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+if 
+  69@ == 1
+goto_if_false @TWAR7_2220
+Camera.DoFade(1, 500)
+
+:TWAR7_2164
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_2188
+wait 0
+goto @TWAR7_2164
+
+:TWAR7_2188
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_2220
+goto @TWAR7_23165
+
+:TWAR7_2220
+TIMERB = 0
+68@ = 0
+71@ = 1
+67@ = 1
+
+:TWAR7_2248
+if 
+  67@ == 1
+goto_if_false @TWAR7_4048
+if 
+  68@ == 0
+goto_if_false @TWAR7_2624
+if 
+  83@ == 0
+goto_if_false @TWAR7_2388
+if 
+  85@ == 0
+goto_if_false @TWAR7_2388
+if 
+  TIMERB > 7000
+goto_if_false @TWAR7_2388
+Char.ShutUpForScriptedSpeech($scplayer, True)
+Char.ShutUpForScriptedSpeech($big_smoke, True)
+Char.ShutUpForScriptedSpeech($sweet, True)
+83@ = 1
+84@ = 0
+gosub @TWAR7_29790
+85@ = 1
+
+:TWAR7_2388
+if 
+  85@ == 1
+goto_if_false @TWAR7_2452
+if 
+  83@ == 0
+goto_if_false @TWAR7_2452
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.ShutUpForScriptedSpeech($big_smoke, False)
+Char.ShutUpForScriptedSpeech($sweet, False)
+85@ = 2
+
+:TWAR7_2452
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @TWAR7_2503
+if 
+is_ps2_keyboard_key_pressed 81
+goto_if_false @TWAR7_2503
+Char.SetCoordinates($scplayer, 1531.4, -1693.7, 12.4)
+
+:TWAR7_2503
+if 
+  Char.IsInCar($scplayer, 37@)
+goto_if_false @TWAR7_2624
+if 
+  Char.IsInCar($big_smoke, 37@)
+goto_if_false @TWAR7_2624
+if 
+  Char.IsInCar($sweet, 37@)
+goto_if_false @TWAR7_2624
+if 
+  Char.LocateInCar3D($scplayer, 1532.8, -1672.9, 12.4, 4.0, 4.0, 4.0, True)
+goto_if_false @TWAR7_2624
+Text.ClearHelp
+Player.SetControl($player1, False)
+68@ = 1
+
+:TWAR7_2624
+if 
+  68@ == 1
+goto_if_false @TWAR7_3598
+Player.SetControl($player1, False)
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.ShutUpForScriptedSpeech($big_smoke, False)
+Char.ShutUpForScriptedSpeech($sweet, False)
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+83@ = 0
+if 
+  $tw7_trip_skip_flag == 0
+goto_if_false @TWAR7_2712
+$tw7_trip_skip_flag = 1
+
+:TWAR7_2712
+Skip.Clear
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 2000)
+
+:TWAR7_2729
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_2753
+wait 0
+goto @TWAR7_2729
+
+:TWAR7_2753
+Player.MakeSafeForCutscene($player1)
+Streaming.Switch(False)
+World.ClearArea(1, 1532.8, -1672.9, 12.4, 300.0)
+World.SetCarDensityMultiplier(0.0)
+World.SetPedDensityMultiplier(0.0)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 1496.5, -1672.6, 13.2)
+Char.Delete($big_smoke)
+Char.Delete($sweet)
+Car.Delete(37@)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.UnloadSpecialCharacter(2)
+Streaming.MarkModelAsNoLongerNeeded(466)
+Txd.LoadDictionary('LD_BUM')
+Txd.LoadSprite("BUM2", 1)
+Txd.LoadSprite("BLKDOT", 2)
+Streaming.LoadAllModelsNow
+Text.UseCommands(True)
+Cutscene.Load('SMOKE1B')
+
+:TWAR7_2903
+if 
+  not Cutscene.HasLoaded
+goto_if_false @TWAR7_2927
+wait 0
+goto @TWAR7_2903
+
+:TWAR7_2927
+Cutscene.Start
+Camera.DoFade(1, 1000)
+TIMERA = 0
+
+:TWAR7_2943
+if 
+  not Cutscene.HasFinished
+goto_if_false @TWAR7_2967
+wait 0
+goto @TWAR7_2943
+
+:TWAR7_2967
+Cutscene.Clear
+Camera.DoFade(0, Fade.Out)
+
+:TWAR7_2975
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_2999
+wait 0
+goto @TWAR7_2975
+
+:TWAR7_2999
+Text.UseCommands(False)
+Txd.Remove
+Streaming.RequestModel(466)
+Streaming.RequestAnimation("CAR_CHAT")
+Streaming.LoadSpecialCharacter('SMOKE', 1)
+Streaming.LoadSpecialCharacter('SWEET', 2)
+Streaming.LoadSpecialCharacter('OGLOC', 3)
+Streaming.LoadAllModelsNow
+Car.CustomPlateForNextCar(466, "_A2TMFK_")
+37@ = Car.Create(466, 1532.8, -1672.9, 12.4)
+Car.SetHeading(37@, 184.0)
+Car.ChangeColor(37@, 98, 14)
+Car.SetCanRespray(37@, False)
+Char.WarpIntoCar($scplayer, 37@)
+Audio.SetRadioChannel(RadioChannel.BounceFM)
+$big_smoke = Char.Create(25, 290, 2072.3, -1697.2, 12.5)
+Char.SetGetOutUpsideDownCar($big_smoke, False)
+Char.SetHeading($big_smoke, 255.7)
+Char.SetNeverTargeted($big_smoke, True)
+Char.SetCantBeDraggedOut($big_smoke, True)
+Char.SetAnimGroup($big_smoke, "FATMAN")
+Task.EnterCarAsPassenger($big_smoke, 37@, 0, -2)
+Char.SetDecisionMaker($big_smoke, 149@)
+Char.WarpIntoCarAsPassenger($big_smoke, 37@, -1)
+$sweet = Char.Create(25, 291, 2072.3, -1696.2, 12.5)
+Char.SetGetOutUpsideDownCar($sweet, False)
+Char.SetNeverTargeted($sweet, True)
+Char.SetCantBeDraggedOut($sweet, True)
+Char.SetAnimGroup($sweet, "GANG2")
+Task.EnterCarAsPassenger($sweet, 37@, 2, -2)
+Char.SetDecisionMaker($sweet, 149@)
+Char.WarpIntoCarAsPassenger($sweet, 37@, -1)
+$mc_strap = Char.Create(25, 292, 1543.2, -1687.0, 12.5)
+Char.SetGetOutUpsideDownCar($mc_strap, False)
+Char.SetHeading($mc_strap, 97.2)
+Char.SetNeverTargeted($mc_strap, True)
+Char.SetCantBeDraggedOut($mc_strap, True)
+Char.SetSuffersCriticalHits($mc_strap, False)
+Char.SetOnlyDamagedByPlayer($mc_strap, True)
+Char.WarpIntoCarAsPassenger($mc_strap, 37@, -1)
+Char.SetSenseRange($mc_strap, 80.0)
+DecisionMakerChar.ClearEventResponse(148@, 79)
+DecisionMakerChar.ClearEventResponse(148@, 36)
+DecisionMakerChar.AddEventResponse(148@, 36, 1022, 0.0, 100.0, 0.0, 0.0, True, True)
+Char.SetDecisionMaker($mc_strap, 148@)
+Blip.Remove(66@)
+66@ = Blip.AddForCoord(2454.4, -1284.5, 22.7)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_3554
+goto @TWAR7_23165
+
+:TWAR7_3554
+Camera.DoFade(1, 1000)
+Text.PrintNow('SMK1_10', 7000, 1)
+TIMERB = 0
+85@ = 0
+68@ = 2
+
+:TWAR7_3598
+if 
+  68@ == 2
+goto_if_false @TWAR7_4048
+if 
+  83@ == 0
+goto_if_false @TWAR7_3727
+if 
+  85@ == 0
+goto_if_false @TWAR7_3727
+if 
+  TIMERB > 7000
+goto_if_false @TWAR7_3727
+Char.ShutUpForScriptedSpeech($scplayer, True)
+Char.ShutUpForScriptedSpeech($big_smoke, True)
+Char.ShutUpForScriptedSpeech($sweet, True)
+Char.ShutUpForScriptedSpeech($mc_strap, True)
+83@ = 2
+84@ = 0
+gosub @TWAR7_29790
+85@ = 1
+
+:TWAR7_3727
+if 
+  85@ == 1
+goto_if_false @TWAR7_3798
+if 
+  83@ == 0
+goto_if_false @TWAR7_3798
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.ShutUpForScriptedSpeech($big_smoke, False)
+Char.ShutUpForScriptedSpeech($sweet, False)
+Char.ShutUpForScriptedSpeech($mc_strap, False)
+85@ = 2
+
+:TWAR7_3798
+if 
+  Char.IsInAnyCar($mc_strap)
+goto_if_false @TWAR7_3897
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @TWAR7_3897
+if 
+  Char.IsInAnyCar($big_smoke)
+goto_if_false @TWAR7_3897
+if 
+  Char.IsInAnyCar($sweet)
+goto_if_false @TWAR7_3897
+if 
+is_ps2_keyboard_key_pressed 81
+goto_if_false @TWAR7_3897
+Char.SetCoordinates($scplayer, 2454.7, -1294.5, 22.7)
+
+:TWAR7_3897
+if 
+  Char.IsInCar($scplayer, 37@)
+goto_if_false @TWAR7_4048
+if 
+  Char.IsInCar($big_smoke, 37@)
+goto_if_false @TWAR7_4048
+if 
+  Char.IsInCar($sweet, 37@)
+goto_if_false @TWAR7_4048
+if 
+  Char.LocateInCar3D($scplayer, 2454.4, -1284.5, 22.7, 4.0, 4.0, 4.0, True)
+goto_if_false @TWAR7_4048
+if 
+  $tw7_trip_skip_flag == 1
+goto_if_false @TWAR7_4027
+$tw7_trip_skip_flag = 2
+
+:TWAR7_4027
+85@ = 0
+68@ = 0
+67@ = 2
+
+:TWAR7_4048
+if 
+  67@ == 2
+goto_if_false @TWAR7_5665
+if 
+  68@ == 0
+goto_if_false @TWAR7_4312
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+83@ = 0
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Game.ShutAllCharsUp(True)
+Player.MakeGangDisappear
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Camera.SetFixedPosition(2451.2, -1295.1, 24.8, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2459.7, -1284.6, 26.5, SwitchType.JumpCut)
+Char.ShutUpForScriptedSpeech($scplayer, False)
+Char.ShutUpForScriptedSpeech($big_smoke, False)
+Char.ShutUpForScriptedSpeech($sweet, False)
+Char.ShutUpForScriptedSpeech($mc_strap, False)
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+83@ = 0
+69@ = 1
+skip_cutscene_start_internal @TWAR7_4925
+Task.PlayAnim($mc_strap, "CAR_SC1_BR", "CAR_CHAT", 6.0, False, False, False, False, -1)
+83@ = 3
+84@ = 0
+gosub @TWAR7_29790
+TIMERA = 0
+68@ = 1
+
+:TWAR7_4312
+if 
+  68@ == 1
+goto_if_false @TWAR7_4439
+if 
+  84@ == 1
+goto_if_false @TWAR7_4439
+Task.PlayAnim($scplayer, "CAR_SC1_FL", "CAR_CHAT", 6.0, False, False, False, True, -1)
+Task.PlayAnim($sweet, "CAR_SC1_BL", "CAR_CHAT", 6.0, False, False, False, False, -1)
+68@ = 2
+
+:TWAR7_4439
+if 
+  68@ == 2
+goto_if_false @TWAR7_4524
+if 
+  84@ == 4
+goto_if_false @TWAR7_4524
+Task.PlayAnim($big_smoke, "CAR_SC1_FR", "CAR_CHAT", 6.0, False, False, False, False, -1)
+68@ = 3
+
+:TWAR7_4524
+if 
+  68@ == 3
+goto_if_false @TWAR7_4711
+Sphere.Draw(2468.8, -1278.2, 29.1, 1.2)
+if 
+  83@ == 0
+goto_if_false @TWAR7_4711
+if 
+  Car.IsStopped(37@)
+goto_if_false @TWAR7_4711
+145@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.GoStraightToCoord(-1, 2457.4, -1286.1, 23.0, MoveState.Run, 60000)
+Sequence.Close(145@)
+Char.PerformSequence($scplayer, 145@)
+Sequence.Clear(145@)
+145@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.GoStraightToCoord(-1, 2458.4, -1287.8, 23.0, MoveState.Run, 60000)
+Sequence.Close(145@)
+Char.PerformSequence($mc_strap, 145@)
+Sequence.Clear(145@)
+68@ = 4
+
+:TWAR7_4711
+if 
+  68@ == 4
+goto_if_false @TWAR7_4860
+Sphere.Draw(2468.8, -1278.2, 29.1, 1.2)
+$task_status = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @TWAR7_4860
+if 
+  Char.IsInAnyCar($big_smoke)
+goto_if_false @TWAR7_4816
+Char.WarpFromCarToCoord($big_smoke, 2472.8, -1277.9, 28.9)
+
+:TWAR7_4816
+Char.WarpIntoCar($big_smoke, 37@)
+Car.LockDoors(37@, CarLock.Locked)
+Task.CarDriveWander($big_smoke, 37@, 15.0, DrivingMode.AvoidCars)
+TIMERA = 0
+68@ = 5
+
+:TWAR7_4860
+if 
+  68@ == 5
+goto_if_false @TWAR7_5665
+Sphere.Draw(2468.8, -1278.2, 29.1, 1.2)
+if 
+  TIMERA > 0
+goto_if_false @TWAR7_5665
+69@ = 0
+
+:TWAR7_4925
+skip_cutscene_end 
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_4959
+goto @TWAR7_23165
+
+:TWAR7_4959
+if 
+  69@ == 1
+goto_if_false @TWAR7_5339
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+83@ = 0
+Camera.DoFade(0, 500)
+
+:TWAR7_5001
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_5069
+Sphere.Draw(2468.8, -1278.2, 29.1, 1.2)
+wait 0
+Sphere.Draw(2468.8, -1278.2, 29.1, 1.2)
+goto @TWAR7_5001
+
+:TWAR7_5069
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_5101
+goto @TWAR7_23165
+
+:TWAR7_5101
+World.ClearArea(1, 2457.4, -1286.1, 23.0, 1.0)
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 2457.4, -1286.1, 23.0)
+Char.SetHeading($scplayer, 230.2)
+World.ClearArea(1, 2458.4, -1287.8, 23.0, 1.0)
+Char.ClearTasksImmediately($mc_strap)
+Char.SetCoordinates($mc_strap, 2458.4, -1287.8, 23.0)
+Char.SetHeading($mc_strap, 230.2)
+World.ClearArea(1, 2452.4, -1267.6, 23.8, 5.0)
+Car.SetCoordinates(37@, 2452.4, -1267.6, 23.8)
+Car.SetHeading(37@, 0.0)
+if 
+  Char.IsInAnyCar($big_smoke)
+goto_if_false @TWAR7_5309
+Char.WarpFromCarToCoord($big_smoke, 2472.8, -1277.9, 28.9)
+
+:TWAR7_5309
+Char.WarpIntoCar($big_smoke, 37@)
+Car.LockDoors(37@, CarLock.Locked)
+Task.CarDriveWander($big_smoke, 37@, 15.0, DrivingMode.AvoidCars)
+
+:TWAR7_5339
+145@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2463.5, -1286.9, 25.2, MoveState.Run, -2)
+Task.GoStraightToCoord(-1, 2463.9, -1278.4, 29.0, MoveState.Run, -2)
+Task.GoStraightToCoord(-1, 2467.8, -1277.1, 28.9, MoveState.Run, -2)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.Close(145@)
+Char.PerformSequence($mc_strap, 145@)
+Sequence.Clear(145@)
+Streaming.RemoveAnimation("CAR_CHAT")
+Blip.Remove(66@)
+66@ = Blip.AddForCoord(2468.8, -1278.4, 28.9)
+Blip.SetAsFriendly(66@, False)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Player.MakeGangReappear
+Hud.SwitchWidescreen(False)
+Game.ShutAllCharsUp(False)
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Text.ClearPrints
+Text.PrintNow('SMK1_03', 7000, 1)
+if 
+  69@ == 1
+goto_if_false @TWAR7_5651
+Camera.DoFade(1, 500)
+
+:TWAR7_5551
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_5619
+Sphere.Draw(2468.8, -1278.2, 29.1, 1.2)
+wait 0
+Sphere.Draw(2468.8, -1278.2, 29.1, 1.2)
+goto @TWAR7_5551
+
+:TWAR7_5619
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_5651
+goto @TWAR7_23165
+
+:TWAR7_5651
+68@ = 0
+67@ = 3
+
+:TWAR7_5665
+if 
+  67@ == 3
+goto_if_false @TWAR7_8884
+if 
+  68@ == 0
+goto_if_false @TWAR7_5756
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, 2468.8, -1278.2, 29.1, 1.2, 1.2, 3.0, True)
+goto_if_false @TWAR7_5756
+68@ = 1
+
+:TWAR7_5756
+if 
+  68@ == 1
+goto_if_false @TWAR7_6760
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+83@ = 0
+Camera.DoFade(0, 500)
+
+:TWAR7_5802
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_5826
+wait 0
+goto @TWAR7_5802
+
+:TWAR7_5826
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_5858
+goto @TWAR7_23165
+
+:TWAR7_5858
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Game.ShutAllCharsUp(True)
+Player.MakeGangDisappear
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Streaming.RequestModel(461)
+Streaming.RequestModel(372)
+Streaming.RequestModel(109)
+Streaming.RequestModel(352)
+Streaming.RequestAnimation("CRIB")
+Streaming.RequestAnimation("MISC")
+Streaming.RequestAnimation("GANGS")
+Streaming.RequestAnimation("RAPPING")
+Txd.LoadDictionary('LD_BUM')
+Txd.LoadSprite("BUM1", 1)
+Txd.LoadSprite("BLKDOT", 2)
+Streaming.LoadAllModelsNow
+Text.UseCommands(True)
+Audio.LoadMissionAudio(1817, 3)
+
+:TWAR7_5983
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @TWAR7_6009
+wait 0
+goto @TWAR7_5983
+
+:TWAR7_6009
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_6041
+goto @TWAR7_23165
+
+:TWAR7_6041
+Streaming.LoadAllModelsNow
+World.ClearArea(1, 2471.0, -1285.1, 28.3, 30.0)
+36@ = Car.Create(461, 2471.0, -1285.1, 28.3)
+Car.SetHeading(36@, 272.5)
+Car.SetCanBurstTires(36@, False)
+World.ClearArea(1, 2488.2, -1279.9, 30.0, 30.0)
+35@ = Car.Create(461, 2488.2, -1279.9, 30.0)
+Car.SetOnlyDamagedByPlayer(35@, True)
+Car.SetHeading(35@, 286.4)
+Car.SetAlwaysCreateSkids(35@, True)
+Car.SetCanBurstTires(35@, False)
+Car.SetProofs(35@, True, True, True, True, True)
+World.ClearArea(1, 2483.9, -1280.2, 29.4, 30.0)
+34@ = Char.Create(24, 109, 2483.9, -1280.2, 29.4)
+Char.ShutUpForScriptedSpeech(34@, True)
+Char.SetMoney(34@, 500)
+Char.SetHeading(34@, 261.6)
+Char.GiveWeapon(34@, WeaponType.Tec9, 30000)
+Char.SetSuffersCriticalHits(34@, False)
+Char.SetOnlyDamagedByPlayer(34@, True)
+Char.SetCanBeKnockedOffBike(34@, True)
+Char.SetStayInSamePlace(34@, True)
+Char.SetProofs(34@, True, True, False, True, True)
+Char.SetShootRate(34@, 20)
+Char.SetDecisionMaker(34@, 149@)
+147@ = Sequence.Open()
+Task.DriveBy(-1, 34@, -1, 0.0, 0.0, 0.0, 300.0, DriveByType.Ai, False, 100)
+Sequence.Close(147@)
+Group.SetSequence($Players_Group, 147@)
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately($mc_strap)
+World.ClearArea(1, 2468.0, -1278.5, 29.1, 1.0)
+Char.SetCoordinates($scplayer, 2468.0, -1278.5, 29.1)
+Char.SetHeading($scplayer, 269.4)
+World.ClearArea(1, 2467.4, -1275.8, 28.8, 1.0)
+Char.SetCoordinates($mc_strap, 2467.4, -1275.8, 28.8)
+Char.SetHeading($mc_strap, 282.8)
+145@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2469.2, -1278.7, 29.3, MoveState.Walk, 60000)
+Task.AchieveHeading(-1, 262.0)
+Task.PlayAnim(-1, "CRIB_USE_SWITCH", "CRIB", 4.0, False, False, False, False, 800)
+Task.LookAtChar(-1, $mc_strap, 7000)
+Sequence.Close(145@)
+Char.PerformSequence($scplayer, 145@)
+Sequence.Clear(145@)
+69@ = 1
+skip_cutscene_start_internal @TWAR7_8172
+Text.ClearPrints
+Camera.SetFixedPosition(2461.7, -1273.7, 30.0, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2470.1, -1277.1, 30.7, SwitchType.JumpCut)
+Camera.DoFade(1, 500)
+
+:TWAR7_6697
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_6721
+wait 0
+goto @TWAR7_6697
+
+:TWAR7_6721
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_6753
+goto @TWAR7_23165
+
+:TWAR7_6753
+68@ = 2
+
+:TWAR7_6760
+if 
+  68@ == 2
+goto_if_false @TWAR7_6884
+if 
+  Char.IsPlayingAnim($scplayer, "CRIB_USE_SWITCH")
+goto_if_false @TWAR7_6884
+82@ = Char.GetAnimCurrentTime($scplayer, "CRIB_USE_SWITCH")
+if 
+  82@ > 0.65
+goto_if_false @TWAR7_6884
+Audio.ReportMissionAudioEventAtPosition(2469.2, -1278.7, 29.3, 1102)
+68@ = 3
+
+:TWAR7_6884
+if 
+  68@ == 3
+goto_if_false @TWAR7_7086
+$task_status = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @TWAR7_7086
+145@ = Sequence.Open()
+Task.PlayAnim(-1, "PRTIAL_GNGTLKE", "GANGS", 4.0, False, False, False, False, -1)
+Task.GoStraightToCoord(-1, 2467.8, -1274.4, 28.8, MoveState.Walk, -2)
+Task.GoStraightToCoord(-1, 2468.6, -1273.3, 28.8, MoveState.Walk, -2)
+Task.AchieveHeading(-1, 278.7)
+Sequence.Close(145@)
+Char.PerformSequence($mc_strap, 145@)
+Sequence.Clear(145@)
+83@ = 4
+84@ = 0
+130@ = 5
+gosub @TWAR7_29790
+68@ = 4
+
+:TWAR7_7086
+if 
+  68@ == 4
+goto_if_false @TWAR7_7198
+if 
+  84@ > 2
+goto_if_false @TWAR7_7198
+145@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, $mc_strap)
+Task.PlayAnim(-1, "PLYR_SHKHEAD", "MISC", 4.0, False, False, False, False, -1)
+Sequence.Close(145@)
+Char.PerformSequence($scplayer, 145@)
+Sequence.Clear(145@)
+68@ = 5
+
+:TWAR7_7198
+if 
+  68@ == 5
+goto_if_false @TWAR7_7402
+if 
+  83@ == 0
+goto_if_false @TWAR7_7402
+145@ = Sequence.Open()
+Task.PlayAnim(-1, "BNG_WNDW", "MISC", 4.0, False, False, False, False, -1)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.Close(145@)
+Char.PerformSequence($mc_strap, 145@)
+Sequence.Clear(145@)
+145@ = Sequence.Open()
+Task.PlayAnim(-1, "LAUGH_01", "RAPPING", 4.0, False, False, False, False, -1)
+Sequence.Close(145@)
+Char.PerformSequence($scplayer, 145@)
+Sequence.Clear(145@)
+83@ = 4
+84@ = 5
+130@ = 9
+gosub @TWAR7_29790
+TIMERA = 0
+68@ = 6
+
+:TWAR7_7402
+if 
+  68@ == 6
+goto_if_false @TWAR7_7512
+if 
+  Char.IsPlayingAnim($mc_strap, "BNG_WNDW")
+goto_if_false @TWAR7_7512
+82@ = Char.GetAnimCurrentTime($mc_strap, "BNG_WNDW")
+if 
+  82@ > 0.4
+goto_if_false @TWAR7_7512
+Audio.ReportMissionAudioEventAtPosition(2468.6, -1273.3, 28.8, 1103)
+68@ = 7
+
+:TWAR7_7512
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_8884
+if 
+  not Car.IsDead(35@)
+goto_if_false @TWAR7_8884
+if 
+  68@ == 7
+goto_if_false @TWAR7_7698
+if 
+  83@ == 0
+goto_if_false @TWAR7_7698
+145@ = Sequence.Open()
+Task.EnterCarAsDriver(-1, 35@, -1)
+Sequence.Close(145@)
+Char.PerformSequence(34@, 145@)
+Sequence.Clear(145@)
+83@ = 4
+84@ = 9
+130@ = 10
+gosub @TWAR7_29790
+Camera.SetFixedPosition(2495.4, -1282.3, 32.6, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2479.2, -1272.5, 30.5, SwitchType.JumpCut)
+68@ = 8
+
+:TWAR7_7698
+if 
+  68@ == 8
+goto_if_false @TWAR7_7756
+if 
+  Char.IsInCar(34@, 35@)
+goto_if_false @TWAR7_7756
+Car.StartPlayback(35@, 30)
+TIMERA = 0
+68@ = 9
+
+:TWAR7_7756
+if 
+  68@ == 9
+goto_if_false @TWAR7_8070
+if 
+  TIMERA > 2000
+goto_if_false @TWAR7_8070
+if 
+  not Car.IsDead(36@)
+goto_if_false @TWAR7_8070
+World.ClearArea(1, 2468.4, -1282.4, 28.8, 1.0)
+Char.SetCoordinates($mc_strap, 2468.4, -1282.4, 28.8)
+Char.SetHeading($mc_strap, 171.7)
+Char.SetNextDesiredMoveState(MoveState.Run)
+145@ = Sequence.Open()
+Task.EnterCarAsPassenger(-1, 36@, -1, -2)
+Sequence.Close(145@)
+Char.PerformSequence($mc_strap, 145@)
+Sequence.Clear(145@)
+World.ClearArea(1, 2467.4, -1281.2, 28.8, 1.0)
+Char.SetCoordinates($scplayer, 2467.4, -1281.2, 28.8)
+Char.SetHeading($scplayer, 171.7)
+Char.SetNextDesiredMoveState(MoveState.Run)
+145@ = Sequence.Open()
+Task.EnterCarAsDriver(-1, 36@, -2)
+Sequence.Close(145@)
+Char.PerformSequence($scplayer, 145@)
+Sequence.Clear(145@)
+Camera.SetFixedPosition(2460.9, -1283.7, 30.6, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2472.6, -1284.4, 31.1, SwitchType.JumpCut)
+83@ = 5
+84@ = 0
+gosub @TWAR7_29790
+68@ = 10
+
+:TWAR7_8070
+if 
+  68@ == 10
+goto_if_false @TWAR7_8884
+if 
+  83@ == 0
+goto_if_false @TWAR7_8884
+if 
+  not Char.IsDead($mc_strap)
+goto_if_false @TWAR7_8884
+if 
+  not Car.IsDead(36@)
+goto_if_false @TWAR7_8884
+if and
+  Char.IsInCar($scplayer, 36@)
+  Char.IsInCar($mc_strap, 36@)
+goto_if_false @TWAR7_8884
+69@ = 0
+
+:TWAR7_8172
+skip_cutscene_end 
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_8206
+goto @TWAR7_23165
+
+:TWAR7_8206
+if 
+  69@ == 1
+goto_if_false @TWAR7_8454
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+83@ = 0
+Camera.DoFade(0, 500)
+
+:TWAR7_8252
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_8276
+wait 0
+goto @TWAR7_8252
+
+:TWAR7_8276
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_8308
+goto @TWAR7_23165
+
+:TWAR7_8308
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_8372
+if 
+  not Car.IsDead(35@)
+goto_if_false @TWAR7_8372
+Char.ClearTasks(34@)
+if 
+  not Char.IsInCar(34@, 35@)
+goto_if_false @TWAR7_8372
+Char.WarpIntoCar(34@, 35@)
+
+:TWAR7_8372
+if 
+  not Car.IsDead(36@)
+goto_if_false @TWAR7_8454
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately($mc_strap)
+if 
+  not Char.IsInCar($scplayer, 36@)
+goto_if_false @TWAR7_8425
+Char.WarpIntoCar($scplayer, 36@)
+
+:TWAR7_8425
+if 
+  not Char.IsInCar($mc_strap, 36@)
+goto_if_false @TWAR7_8454
+Task.WarpCharIntoCarAsPassenger($mc_strap, 36@, -1)
+
+:TWAR7_8454
+Player.EnsureHasDriveByWeapon($player1, 78)
+Char.GiveWeapon($mc_strap, WeaponType.Tec9, 30000)
+Char.SetCurrentWeapon($mc_strap, WeaponType.Tec9)
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Group.SetMember($mc_strap, $Players_Group)
+72@ = 1
+71@ = 1
+Char.SetRelationship($mc_strap, RelationshipType.Hate, PedType.Mission1)
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_8596
+if 
+  not Car.IsDead(35@)
+goto_if_false @TWAR7_8596
+if 
+  Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_8566
+Car.StopPlayback(35@)
+
+:TWAR7_8566
+Car.SetCoordinates(35@, 2521.2, -1359.0, 27.3)
+Car.SetHeading(35@, 295.2)
+
+:TWAR7_8596
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Streaming.RemoveAnimation("CRIB")
+Streaming.RemoveAnimation("MISC")
+Streaming.RemoveAnimation("GANGS")
+Streaming.RemoveAnimation("RAPPING")
+Text.ClearHelp
+Text.PrintNow('SMK1_04', 7000, 1)
+Blip.Remove(66@)
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_8690
+66@ = Blip.AddForChar(34@)
+Blip.SetAsFriendly(66@, False)
+
+:TWAR7_8690
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+Game.ShutAllCharsUp(False)
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+if 
+  69@ == 1
+goto_if_false @TWAR7_8797
+Camera.DoFade(1, 500)
+
+:TWAR7_8741
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_8765
+wait 0
+goto @TWAR7_8741
+
+:TWAR7_8765
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_8797
+goto @TWAR7_23165
+
+:TWAR7_8797
+Text.UseCommands(False)
+Txd.Remove
+Char.Delete($big_smoke)
+Char.Delete($sweet)
+Car.Delete(37@)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.UnloadSpecialCharacter(2)
+Streaming.MarkModelAsNoLongerNeeded(466)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+if or
+  Car.IsDead(35@)
+  Car.IsDead(36@)
+goto_if_false @TWAR7_8863
+goto @TWAR7_23165
+
+:TWAR7_8863
+85@ = 0
+68@ = 0
+67@ = 4
+
+:TWAR7_8884
+if 
+  67@ > 3
+goto_if_false @TWAR7_18503
+if 
+  15 > 67@
+goto_if_false @TWAR7_18503
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_18369
+if 
+  not Car.IsDead(35@)
+goto_if_false @TWAR7_18228
+if 
+  67@ == 4
+goto_if_false @TWAR7_9847
+if 
+  85@ == 0
+goto_if_false @TWAR7_9084
+if 
+  83@ == 0
+goto_if_false @TWAR7_9084
+if or
+  Char.HasSpottedChar($mc_strap, 34@)
+  Char.HasSpottedChar(34@, $mc_strap)
+goto_if_false @TWAR7_9084
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_9077
+83@ = 6
+84@ = 0
+130@ = 1
+gosub @TWAR7_29790
+
+:TWAR7_9077
+85@ = 1
+
+:TWAR7_9084
+if 
+  73@ == 0
+goto_if_false @TWAR7_9300
+Path.SwitchRoadsOff(2563.7, -1435.0, 10.0, 2580.3, -1266.4, 100.6)
+Path.SwitchRoadsOff(2635.0, -1434.4, 10.0, 2652.0, -1263.6, 100.0)
+Path.SwitchRoadsOff(2714.9, -1501.6, 10.0, 2746.1, -1266.4, 100.0)
+40@ = Char.CreateRandom(2579.8, -1348.3, 35.5)
+Task.Die(40@)
+41@ = Char.CreateRandom(2578.8, -1348.3, 35.5)
+Char.SetHeading(41@, 260.0)
+Task.PlayAnim(41@, "WEAPON_CROUCH", "PED", 4.0, False, False, False, True, -1)
+73@ = 1
+
+:TWAR7_9300
+if 
+  73@ == 1
+goto_if_false @TWAR7_9395
+if 
+  Car.Locate2D(35@, 0, 2582.6, -1351.8, 5.0, 5.0)
+goto_if_false @TWAR7_9395
+Path.SwitchRoadsOn(2563.7, -1435.0, 10.0, 2580.3, -1266.4, 100.6)
+73@ = 2
+
+:TWAR7_9395
+if 
+  73@ == 2
+goto_if_false @TWAR7_9490
+if 
+  Car.Locate2D(35@, 0, 2653.0, -1329.8, 5.0, 5.0)
+goto_if_false @TWAR7_9490
+Path.SwitchRoadsOn(2635.0, -1434.4, 10.0, 2652.0, -1263.6, 100.0)
+73@ = 3
+
+:TWAR7_9490
+if 
+  73@ == 3
+goto_if_false @TWAR7_9585
+if 
+  Car.Locate2D(35@, 0, 2748.3, -1320.3, 5.0, 5.0)
+goto_if_false @TWAR7_9585
+Path.SwitchRoadsOn(2714.9, -1501.6, 10.0, 2746.1, -1266.4, 100.0)
+73@ = 4
+
+:TWAR7_9585
+if 
+  68@ == 0
+goto_if_false @TWAR7_9668
+if or
+  Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+  Car.HasBeenDamagedByChar(35@, $scplayer)
+goto_if_false @TWAR7_9668
+Car.StartPlayback(35@, 31)
+Streaming.RemoveCarRecording(30)
+68@ = 1
+
+:TWAR7_9668
+if 
+  68@ == 1
+goto_if_false @TWAR7_9833
+if 
+  not Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_9833
+Path.SwitchRoadsOn(2563.7, -1435.0, 10.0, 2580.3, -1266.4, 100.6)
+Path.SwitchRoadsOn(2635.0, -1434.4, 10.0, 2652.0, -1263.6, 100.0)
+Path.SwitchRoadsOn(2714.9, -1501.6, 10.0, 2746.1, -1266.4, 100.0)
+TIMERA = 0
+85@ = 0
+68@ = 0
+73@ = 0
+67@ = 5
+
+:TWAR7_9833
+gosub @TWAR7_25463
+gosub @TWAR7_25201
+
+:TWAR7_9847
+if 
+  67@ == 5
+goto_if_false @TWAR7_10859
+if 
+  85@ == 0
+goto_if_false @TWAR7_9986
+if or
+  Char.HasSpottedChar($mc_strap, 34@)
+  Char.HasSpottedChar(34@, $mc_strap)
+goto_if_false @TWAR7_9961
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_9954
+83@ = 6
+84@ = 1
+130@ = 2
+gosub @TWAR7_29790
+
+:TWAR7_9954
+85@ = 1
+
+:TWAR7_9961
+if 
+  68@ == 1
+goto_if_false @TWAR7_9986
+85@ = 1
+
+:TWAR7_9986
+if 
+  73@ == 0
+goto_if_false @TWAR7_10171
+Path.SwitchRoadsOff(2713.9, -1499.3, 10.0, 2746.6, -1266.3, 100.0)
+Path.SwitchRoadsOff(2714.6, -1249.9, 10.0, 2744.7, -1332.9, 100.0)
+Path.SwitchRoadsOff(2634.6, -1396.6, 10.0, 2651.0, -1264.2, 100.0)
+Path.SwitchRoadsOff(2635.1, -1248.0, 10.0, 2651.0, -1055.3, 100.0)
+Path.SwitchRoadsOff(2651.5, -1263.8, 10.0, 2579.5, -1248.7, 100.0)
+73@ = 1
+
+:TWAR7_10171
+if 
+  73@ == 1
+goto_if_false @TWAR7_10298
+if 
+  Car.Locate2D(35@, 0, 2712.7, -1265.7, 5.0, 5.0)
+goto_if_false @TWAR7_10298
+Path.SwitchRoadsOn(2713.9, -1499.3, 10.0, 2746.6, -1266.3, 100.0)
+Path.SwitchRoadsOn(2714.6, -1249.9, 10.0, 2744.7, -1332.9, 100.0)
+73@ = 2
+
+:TWAR7_10298
+if 
+  73@ == 2
+goto_if_false @TWAR7_10457
+if 
+  Car.Locate2D(35@, 0, 2630.5, -1248.3, 5.0, 5.0)
+goto_if_false @TWAR7_10457
+Path.SwitchRoadsOn(2634.6, -1396.6, 10.0, 2651.0, -1264.2, 100.0)
+Path.SwitchRoadsOn(2635.1, -1248.0, 10.0, 2651.0, -1055.3, 100.0)
+Path.SwitchRoadsOn(2651.5, -1263.8, 10.0, 2579.5, -1248.7, 100.0)
+73@ = 3
+
+:TWAR7_10457
+if 
+  68@ == 0
+goto_if_false @TWAR7_10606
+if or
+  Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+  Car.HasBeenDamagedByChar(35@, $scplayer)
+  TIMERA > 4000
+goto_if_false @TWAR7_10606
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_10561
+Char.SetProofs(34@, False, False, False, False, False)
+
+:TWAR7_10561
+if 
+  not Car.IsDead(35@)
+goto_if_false @TWAR7_10592
+Car.SetProofs(35@, False, False, False, False, False)
+
+:TWAR7_10592
+Car.StartPlayback(35@, 32)
+68@ = 1
+
+:TWAR7_10606
+if 
+  68@ == 1
+goto_if_false @TWAR7_10845
+if 
+  not Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_10845
+Char.MarkAsNoLongerNeeded(41@)
+Char.MarkAsNoLongerNeeded(40@)
+Path.SwitchRoadsOn(2713.9, -1499.3, 10.0, 2746.6, -1266.3, 100.0)
+Path.SwitchRoadsOn(2714.6, -1249.9, 10.0, 2744.7, -1332.9, 100.0)
+Path.SwitchRoadsOn(2634.6, -1396.6, 10.0, 2651.0, -1264.2, 100.0)
+Path.SwitchRoadsOn(2635.1, -1248.0, 10.0, 2651.0, -1055.3, 100.0)
+Path.SwitchRoadsOn(2651.5, -1263.8, 10.0, 2579.5, -1248.7, 100.0)
+TIMERA = 0
+85@ = 0
+73@ = 0
+68@ = 0
+67@ = 6
+
+:TWAR7_10845
+gosub @TWAR7_25463
+gosub @TWAR7_25201
+
+:TWAR7_10859
+if 
+  67@ == 6
+goto_if_false @TWAR7_11888
+if 
+  85@ == 0
+goto_if_false @TWAR7_11025
+if or
+  Char.HasSpottedChar($mc_strap, 34@)
+  Char.HasSpottedChar(34@, $mc_strap)
+  Char.LocateAnyMeansChar2D($scplayer, 34@, 35.0, 35.0, False)
+goto_if_false @TWAR7_11000
+TIMERB = 0
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_10993
+83@ = 6
+84@ = 2
+130@ = 3
+gosub @TWAR7_29790
+
+:TWAR7_10993
+85@ = 1
+
+:TWAR7_11000
+if 
+  68@ == 1
+goto_if_false @TWAR7_11025
+85@ = 1
+
+:TWAR7_11025
+if 
+  73@ == 0
+goto_if_false @TWAR7_11210
+Path.SwitchRoadsOff(2563.7, -1248.6, 10.0, 2578.9, -1192.2, 100.0)
+Path.SwitchRoadsOff(2443.7, -1249.2, 10.0, 2459.1, -1191.9, 100.0)
+Path.SwitchRoadsOff(2363.5, -1253.4, 10.0, 2378.7, -1145.5, 100.0)
+Path.SwitchRoadsOff(2311.2, -1144.7, 10.0, 2379.1, -1162.1, 100.0)
+Path.SwitchRoadsOff(2239.9, -1130.0, 10.0, 2017.6, -928.3, 100.0)
+73@ = 1
+
+:TWAR7_11210
+if 
+  73@ == 1
+goto_if_false @TWAR7_11305
+if 
+  Car.Locate2D(35@, 0, 2563.2, -1191.8, 5.0, 5.0)
+goto_if_false @TWAR7_11305
+Path.SwitchRoadsOn(2563.7, -1248.6, 10.0, 2578.9, -1192.2, 100.6)
+73@ = 2
+
+:TWAR7_11305
+if 
+  73@ == 2
+goto_if_false @TWAR7_11400
+if 
+  Car.Locate2D(35@, 0, 2442.4, -1191.4, 5.0, 5.0)
+goto_if_false @TWAR7_11400
+Path.SwitchRoadsOn(2443.7, -1249.2, 10.0, 2459.1, -1191.9, 100.0)
+73@ = 3
+
+:TWAR7_11400
+if 
+  73@ == 3
+goto_if_false @TWAR7_11495
+if 
+  Car.Locate2D(35@, 0, 2360.1, -1164.8, 5.0, 5.0)
+goto_if_false @TWAR7_11495
+Path.SwitchRoadsOn(2363.5, -1253.4, 10.0, 2378.7, -1145.5, 100.0)
+73@ = 4
+
+:TWAR7_11495
+if 
+  73@ == 4
+goto_if_false @TWAR7_11590
+if 
+  Car.Locate2D(35@, 0, 2315.0, -1145.9, 5.0, 5.0)
+goto_if_false @TWAR7_11590
+Path.SwitchRoadsOn(2311.2, -1144.7, 10.0, 2379.1, -1162.1, 100.0)
+73@ = 5
+
+:TWAR7_11590
+if 
+  68@ == 0
+goto_if_false @TWAR7_11677
+if or
+  Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+  Car.HasBeenDamagedByChar(35@, $scplayer)
+  TIMERA > 4000
+goto_if_false @TWAR7_11677
+Car.StartPlayback(35@, 33)
+68@ = 1
+
+:TWAR7_11677
+if 
+  68@ == 1
+goto_if_false @TWAR7_11874
+if 
+  not Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_11874
+Path.SwitchRoadsOn(2563.7, -1248.6, 10.0, 2578.9, -1192.2, 100.6)
+Path.SwitchRoadsOn(2443.7, -1249.2, 10.0, 2459.1, -1191.9, 100.0)
+Path.SwitchRoadsOn(2363.5, -1253.4, 10.0, 2378.7, -1145.5, 100.0)
+Path.SwitchRoadsOn(2311.2, -1144.7, 10.0, 2379.1, -1162.1, 100.0)
+TIMERA = 0
+85@ = 0
+73@ = 0
+68@ = 0
+67@ = 7
+
+:TWAR7_11874
+gosub @TWAR7_25463
+gosub @TWAR7_25201
+
+:TWAR7_11888
+if 
+  67@ == 7
+goto_if_false @TWAR7_12388
+if 
+  85@ == 0
+goto_if_false @TWAR7_12034
+if or
+  Char.HasSpottedChar($mc_strap, 34@)
+  Char.HasSpottedChar(34@, $mc_strap)
+goto_if_false @TWAR7_12009
+TIMERB = 0
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_12002
+83@ = 6
+84@ = 3
+130@ = 4
+gosub @TWAR7_29790
+
+:TWAR7_12002
+85@ = 1
+
+:TWAR7_12009
+if 
+  68@ == 1
+goto_if_false @TWAR7_12034
+85@ = 1
+
+:TWAR7_12034
+if 
+  73@ == 0
+goto_if_false @TWAR7_12091
+Path.SwitchRoadsOff(1930.6, -1031.9, 10.0, 1574.4, -879.9, 100.0)
+73@ = 1
+
+:TWAR7_12091
+if 
+  73@ == 1
+goto_if_false @TWAR7_12186
+if 
+  Car.Locate2D(35@, 0, 2149.8, -996.1, 5.0, 5.0)
+goto_if_false @TWAR7_12186
+Path.SwitchRoadsOn(2239.9, -1130.0, 10.0, 2017.6, -928.3, 100.0)
+73@ = 2
+
+:TWAR7_12186
+if 
+  68@ == 0
+goto_if_false @TWAR7_12273
+if or
+  Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+  Car.HasBeenDamagedByChar(35@, $scplayer)
+  TIMERA > 4000
+goto_if_false @TWAR7_12273
+Car.StartPlayback(35@, 34)
+68@ = 1
+
+:TWAR7_12273
+if 
+  68@ == 1
+goto_if_false @TWAR7_12374
+if 
+  not Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_12374
+Path.SwitchRoadsOn(2239.9, -1130.0, 10.0, 2017.6, -928.3, 100.0)
+TIMERA = 0
+85@ = 0
+73@ = 0
+68@ = 0
+67@ = 8
+
+:TWAR7_12374
+gosub @TWAR7_25463
+gosub @TWAR7_25201
+
+:TWAR7_12388
+if 
+  67@ == 8
+goto_if_false @TWAR7_13968
+if 
+  85@ == 0
+goto_if_false @TWAR7_12527
+if or
+  Char.HasSpottedChar($mc_strap, 34@)
+  Char.HasSpottedChar(34@, $mc_strap)
+goto_if_false @TWAR7_12502
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_12495
+83@ = 6
+84@ = 4
+130@ = 5
+gosub @TWAR7_29790
+
+:TWAR7_12495
+85@ = 1
+
+:TWAR7_12502
+if 
+  68@ == 1
+goto_if_false @TWAR7_12527
+85@ = 1
+
+:TWAR7_12527
+if 
+  73@ == 0
+goto_if_false @TWAR7_12584
+Path.SwitchRoadsOff(1879.6, -1024.3, 10.0, 1600.0, -1521.7, 100.0)
+73@ = 1
+
+:TWAR7_12584
+if 
+  73@ == 1
+goto_if_false @TWAR7_12679
+if 
+  Car.Locate2D(35@, 0, 1819.4, -1034.0, 5.0, 5.0)
+goto_if_false @TWAR7_12679
+Path.SwitchRoadsOn(1930.6, -1031.9, 10.0, 1574.4, -879.9, 100.0)
+73@ = 2
+
+:TWAR7_12679
+if 
+  73@ == 2
+goto_if_false @TWAR7_12774
+if 
+  Car.Locate2D(35@, 0, 1755.3, -1489.1, 5.0, 5.0)
+goto_if_false @TWAR7_12774
+Path.SwitchRoadsOn(1879.6, -1024.3, 10.0, 1552.0, -1521.7, 100.0)
+73@ = 3
+
+:TWAR7_12774
+if 
+  68@ == 0
+goto_if_false @TWAR7_13714
+if or
+  Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+  Car.HasBeenDamagedByChar(35@, $scplayer)
+  TIMERA > 4000
+goto_if_false @TWAR7_13714
+set_lvar_int_to_constant 78@ = 410
+gosub @TWAR7_26168
+42@ = Car.Create(410, 1688.5, -1111.7, 58.5)
+52@ = Char.CreateRandomAsDriver(42@)
+Car.SetLoadCollisionFlag(42@, True)
+Car.SetHeading(42@, 322.3)
+Car.StartPlayback(42@, 50)
+set_lvar_int_to_constant 78@ = 410
+gosub @TWAR7_26168
+43@ = Car.Create(410, 1679.7, -1131.6, 59.7)
+53@ = Char.CreateRandomAsDriver(43@)
+Car.SetLoadCollisionFlag(43@, True)
+Car.SetHeading(43@, 321.2)
+Car.StartPlayback(43@, 51)
+44@ = Car.Create(461, 1644.8, -1177.5, 54.3)
+54@ = Char.CreateRandomAsDriver(44@)
+Car.SetLoadCollisionFlag(44@, True)
+Car.SetHeading(44@, 320.8)
+Car.StartPlayback(44@, 52)
+set_lvar_int_to_constant 78@ = 410
+gosub @TWAR7_26168
+45@ = Car.Create(410, 1637.0, -1203.8, 51.5)
+55@ = Char.CreateRandomAsDriver(45@)
+Car.SetLoadCollisionFlag(45@, True)
+Car.SetHeading(45@, 350.3)
+Car.StartPlayback(45@, 53)
+74@, 75@ = Streaming.GetRandomCarModelInMemory(True)
+if 
+  74@ >= 0
+goto_if_false @TWAR7_13210
+set_lvar_int_to_lvar_int 78@ = 74@
+gosub @TWAR7_26168
+46@ = Car.Create(74@, 1618.2, -1306.4, 35.6)
+Car.SetHeading(46@, 343.7)
+Car.SetLoadCollisionFlag(46@, True)
+56@ = Char.CreateRandomAsDriver(46@)
+Car.StartPlayback(46@, 54)
+
+:TWAR7_13210
+74@, 75@ = Streaming.GetRandomCarModelInMemory(True)
+if 
+  74@ >= 0
+goto_if_false @TWAR7_13308
+set_lvar_int_to_lvar_int 78@ = 74@
+gosub @TWAR7_26168
+47@ = Car.Create(74@, 1621.8, -1317.9, 33.0)
+Car.SetHeading(47@, 348.7)
+Car.SetLoadCollisionFlag(47@, True)
+57@ = Char.CreateRandomAsDriver(47@)
+Car.StartPlayback(47@, 55)
+
+:TWAR7_13308
+74@, 75@ = Streaming.GetRandomCarModelInMemory(True)
+if 
+  74@ >= 0
+goto_if_false @TWAR7_13406
+set_lvar_int_to_lvar_int 78@ = 74@
+gosub @TWAR7_26168
+48@ = Car.Create(74@, 1615.6, -1327.7, 31.5)
+Car.SetHeading(48@, 352.1)
+Car.SetLoadCollisionFlag(48@, True)
+58@ = Char.CreateRandomAsDriver(48@)
+Car.StartPlayback(48@, 56)
+
+:TWAR7_13406
+74@, 75@ = Streaming.GetRandomCarModelInMemory(True)
+if 
+  74@ >= 0
+goto_if_false @TWAR7_13504
+set_lvar_int_to_lvar_int 78@ = 74@
+gosub @TWAR7_26168
+49@ = Car.Create(74@, 1612.3, -1394.0, 27.6)
+Car.SetHeading(49@, 353.6)
+Car.SetLoadCollisionFlag(49@, True)
+59@ = Char.CreateRandomAsDriver(49@)
+Car.StartPlayback(49@, 57)
+
+:TWAR7_13504
+74@, 75@ = Streaming.GetRandomCarModelInMemory(True)
+if 
+  74@ >= 0
+goto_if_false @TWAR7_13602
+set_lvar_int_to_lvar_int 78@ = 74@
+gosub @TWAR7_26168
+50@ = Car.Create(74@, 1612.3, -1462.2, 27.1)
+Car.SetHeading(50@, 357.2)
+Car.SetLoadCollisionFlag(50@, True)
+60@ = Char.CreateRandomAsDriver(50@)
+Car.StartPlayback(50@, 58)
+
+:TWAR7_13602
+74@, 75@ = Streaming.GetRandomCarModelInMemory(True)
+if 
+  74@ >= 0
+goto_if_false @TWAR7_13700
+set_lvar_int_to_lvar_int 78@ = 74@
+gosub @TWAR7_26168
+51@ = Car.Create(74@, 1663.4, -1457.0, 24.3)
+Car.SetHeading(51@, 51.9)
+Car.SetLoadCollisionFlag(51@, True)
+61@ = Char.CreateRandomAsDriver(51@)
+Car.StartPlayback(51@, 60)
+
+:TWAR7_13700
+Car.StartPlayback(35@, 35)
+68@ = 1
+
+:TWAR7_13714
+if 
+  68@ == 1
+goto_if_false @TWAR7_13821
+if 
+  not Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_13755
+68@ = 2
+
+:TWAR7_13755
+if 
+  not Car.IsDead(51@)
+goto_if_false @TWAR7_13821
+if 
+  Car.Locate2D(51@, 0, 1601.4, -1389.5, 5.0, 5.0)
+goto_if_false @TWAR7_13821
+Car.StopPlayback(51@)
+68@ = 2
+
+:TWAR7_13821
+if 
+  68@ == 2
+goto_if_false @TWAR7_13954
+if 
+  not Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_13954
+Path.SwitchRoadsOn(1930.6, -1031.9, 10.0, 1574.4, -879.9, 100.0)
+Path.SwitchRoadsOn(1879.6, -1024.3, 10.0, 1552.0, -1521.7, 100.0)
+TIMERA = 0
+73@ = 0
+85@ = 0
+68@ = 0
+67@ = 9
+
+:TWAR7_13954
+gosub @TWAR7_25463
+gosub @TWAR7_25201
+
+:TWAR7_13968
+if 
+  67@ == 9
+goto_if_false @TWAR7_14628
+if 
+  85@ == 0
+goto_if_false @TWAR7_14114
+if or
+  Char.HasSpottedChar($mc_strap, 34@)
+  Char.HasSpottedChar(34@, $mc_strap)
+goto_if_false @TWAR7_14089
+TIMERB = 0
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_14082
+83@ = 6
+84@ = 5
+130@ = 6
+gosub @TWAR7_29790
+
+:TWAR7_14082
+85@ = 1
+
+:TWAR7_14089
+if 
+  68@ == 1
+goto_if_false @TWAR7_14114
+85@ = 1
+
+:TWAR7_14114
+if 
+  73@ == 0
+goto_if_false @TWAR7_14171
+Path.SwitchRoadsOff(1725.8, -1433.3, 10.0, 1838.0, -1459.4, 100.0)
+73@ = 1
+
+:TWAR7_14171
+if 
+  73@ == 1
+goto_if_false @TWAR7_14266
+if 
+  Car.Locate2D(35@, 0, 1781.3, -1437.9, 5.0, 5.0)
+goto_if_false @TWAR7_14266
+Path.SwitchRoadsOn(1725.8, -1433.3, 10.0, 1838.0, -1459.4, 100.0)
+73@ = 2
+
+:TWAR7_14266
+if 
+  68@ == 0
+goto_if_false @TWAR7_14513
+if or
+  Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+  Car.HasBeenDamagedByChar(35@, $scplayer)
+  TIMERA > 4000
+goto_if_false @TWAR7_14513
+Car.MarkAsNoLongerNeeded(42@)
+Car.MarkAsNoLongerNeeded(43@)
+Car.MarkAsNoLongerNeeded(44@)
+Car.MarkAsNoLongerNeeded(45@)
+Car.MarkAsNoLongerNeeded(46@)
+Car.MarkAsNoLongerNeeded(47@)
+Car.MarkAsNoLongerNeeded(48@)
+Car.MarkAsNoLongerNeeded(49@)
+Car.MarkAsNoLongerNeeded(50@)
+Car.MarkAsNoLongerNeeded(51@)
+Char.MarkAsNoLongerNeeded(52@)
+Char.MarkAsNoLongerNeeded(53@)
+Char.MarkAsNoLongerNeeded(54@)
+Char.MarkAsNoLongerNeeded(55@)
+Char.MarkAsNoLongerNeeded(56@)
+Char.MarkAsNoLongerNeeded(57@)
+Char.MarkAsNoLongerNeeded(58@)
+Char.MarkAsNoLongerNeeded(59@)
+Char.MarkAsNoLongerNeeded(60@)
+Char.MarkAsNoLongerNeeded(61@)
+38@ = Char.CreateRandom(1778.4, -1343.1, 14.7)
+Char.SetHeading(38@, 180.0)
+39@ = Char.CreateRandom(1778.4, -1344.1, 14.7)
+Char.SetHeading(39@, 0.0)
+Car.StartPlayback(35@, 36)
+68@ = 1
+
+:TWAR7_14513
+if 
+  68@ == 1
+goto_if_false @TWAR7_14614
+if 
+  not Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_14614
+Path.SwitchRoadsOn(1725.8, -1433.3, 10.0, 1838.0, -1459.4, 100.0)
+TIMERA = 0
+73@ = 0
+85@ = 0
+68@ = 0
+67@ = 10
+
+:TWAR7_14614
+gosub @TWAR7_25463
+gosub @TWAR7_25201
+
+:TWAR7_14628
+if 
+  67@ == 10
+goto_if_false @TWAR7_15329
+if 
+  85@ == 0
+goto_if_false @TWAR7_14774
+if or
+  Char.HasSpottedChar($mc_strap, 34@)
+  Char.HasSpottedChar(34@, $mc_strap)
+goto_if_false @TWAR7_14749
+TIMERB = 0
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_14742
+83@ = 6
+84@ = 6
+130@ = 7
+gosub @TWAR7_29790
+
+:TWAR7_14742
+85@ = 1
+
+:TWAR7_14749
+if 
+  68@ == 1
+goto_if_false @TWAR7_14774
+85@ = 1
+
+:TWAR7_14774
+if 
+  73@ == 0
+goto_if_false @TWAR7_14895
+Path.SwitchRoadsOff(1838.4, -1453.6, 10.0, 1853.7, -1303.4, 100.0)
+Path.SwitchRoadsOff(1979.3, -1468.7, 10.0, 1853.5, -1452.5, 100.0)
+Path.SwitchRoadsOff(2334.0, -1556.1, 10.0, 2350.5, -1489.7, 100.0)
+73@ = 1
+
+:TWAR7_14895
+if 
+  73@ == 1
+goto_if_false @TWAR7_14990
+if 
+  Car.Locate2D(35@, 0, 1855.7, -1379.0, 5.0, 5.0)
+goto_if_false @TWAR7_14990
+Path.SwitchRoadsOn(1838.4, -1453.6, 10.0, 1853.7, -1303.4, 100.0)
+73@ = 2
+
+:TWAR7_14990
+if 
+  73@ == 2
+goto_if_false @TWAR7_15085
+if 
+  Car.Locate2D(35@, 0, 1971.5, -1474.6, 5.0, 5.0)
+goto_if_false @TWAR7_15085
+Path.SwitchRoadsOn(1979.3, -1468.7, 10.0, 1853.5, -1452.5, 100.0)
+73@ = 3
+
+:TWAR7_15085
+if 
+  68@ == 0
+goto_if_false @TWAR7_15172
+if or
+  Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+  Car.HasBeenDamagedByChar(35@, $scplayer)
+  TIMERA > 4000
+goto_if_false @TWAR7_15172
+Car.StartPlayback(35@, 37)
+68@ = 1
+
+:TWAR7_15172
+if 
+  68@ == 1
+goto_if_false @TWAR7_15315
+if 
+  not Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_15315
+Char.MarkAsNoLongerNeeded(38@)
+Char.MarkAsNoLongerNeeded(39@)
+Path.SwitchRoadsOn(1838.4, -1453.6, 10.0, 1853.7, -1303.4, 100.0)
+Path.SwitchRoadsOn(1979.3, -1468.7, 10.0, 1853.5, -1452.5, 100.0)
+TIMERA = 0
+73@ = 0
+85@ = 0
+68@ = 0
+67@ = 11
+
+:TWAR7_15315
+gosub @TWAR7_25463
+gosub @TWAR7_25201
+
+:TWAR7_15329
+if 
+  67@ == 11
+goto_if_false @TWAR7_15893
+if 
+  85@ == 0
+goto_if_false @TWAR7_15475
+if or
+  Char.HasSpottedChar($mc_strap, 34@)
+  Char.HasSpottedChar(34@, $mc_strap)
+goto_if_false @TWAR7_15450
+TIMERB = 0
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_15443
+83@ = 6
+84@ = 7
+130@ = 8
+gosub @TWAR7_29790
+
+:TWAR7_15443
+85@ = 1
+
+:TWAR7_15450
+if 
+  68@ == 1
+goto_if_false @TWAR7_15475
+85@ = 1
+
+:TWAR7_15475
+if 
+  73@ == 0
+goto_if_false @TWAR7_15532
+Path.SwitchRoadsOff(2350.1, -1516.0, 10.0, 2423.9, -1532.5, 100.0)
+73@ = 1
+
+:TWAR7_15532
+if 
+  73@ == 1
+goto_if_false @TWAR7_15659
+if 
+  Car.Locate2D(35@, 0, 2394.8, -1508.7, 5.0, 5.0)
+goto_if_false @TWAR7_15659
+Path.SwitchRoadsOn(2350.1, -1516.0, 10.0, 2423.9, -1532.5, 100.0)
+Path.SwitchRoadsOn(2334.0, -1556.1, 10.0, 2350.5, -1489.7, 100.0)
+73@ = 2
+
+:TWAR7_15659
+if 
+  68@ == 0
+goto_if_false @TWAR7_15746
+if or
+  Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+  Car.HasBeenDamagedByChar(35@, $scplayer)
+  TIMERA > 4000
+goto_if_false @TWAR7_15746
+Car.StartPlayback(35@, 38)
+68@ = 1
+
+:TWAR7_15746
+if 
+  68@ == 1
+goto_if_false @TWAR7_15879
+if 
+  not Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_15879
+Path.SwitchRoadsOn(2350.1, -1516.0, 10.0, 2423.9, -1532.5, 100.0)
+Path.SwitchRoadsOn(2334.0, -1556.1, 10.0, 2350.5, -1489.7, 100.0)
+TIMERA = 0
+73@ = 0
+85@ = 0
+68@ = 0
+67@ = 12
+
+:TWAR7_15879
+gosub @TWAR7_25463
+gosub @TWAR7_25201
+
+:TWAR7_15893
+if 
+  67@ == 12
+goto_if_false @TWAR7_16393
+if 
+  85@ == 0
+goto_if_false @TWAR7_16039
+if or
+  Char.HasSpottedChar($mc_strap, 34@)
+  Char.HasSpottedChar(34@, $mc_strap)
+goto_if_false @TWAR7_16014
+TIMERB = 0
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_16007
+83@ = 6
+84@ = 8
+130@ = 9
+gosub @TWAR7_29790
+
+:TWAR7_16007
+85@ = 1
+
+:TWAR7_16014
+if 
+  68@ == 1
+goto_if_false @TWAR7_16039
+85@ = 1
+
+:TWAR7_16039
+if 
+  73@ == 0
+goto_if_false @TWAR7_16096
+Path.SwitchRoadsOff(2379.8, -1373.3, 10.0, 2423.7, -1452.6, 100.0)
+73@ = 1
+
+:TWAR7_16096
+if 
+  73@ == 1
+goto_if_false @TWAR7_16191
+if 
+  Car.Locate2D(35@, 0, 2398.6, -1432.4, 5.0, 5.0)
+goto_if_false @TWAR7_16191
+Path.SwitchRoadsOn(2379.8, -1373.3, 10.0, 2423.7, -1452.6, 100.0)
+73@ = 2
+
+:TWAR7_16191
+if 
+  68@ == 0
+goto_if_false @TWAR7_16278
+if or
+  Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+  Car.HasBeenDamagedByChar(35@, $scplayer)
+  TIMERA > 4000
+goto_if_false @TWAR7_16278
+Car.StartPlayback(35@, 39)
+68@ = 1
+
+:TWAR7_16278
+if 
+  68@ == 1
+goto_if_false @TWAR7_16379
+if 
+  not Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_16379
+Path.SwitchRoadsOn(2379.8, -1373.3, 10.0, 2423.7, -1452.6, 100.0)
+TIMERA = 0
+73@ = 0
+85@ = 0
+68@ = 0
+67@ = 13
+
+:TWAR7_16379
+gosub @TWAR7_25463
+gosub @TWAR7_25201
+
+:TWAR7_16393
+if 
+  67@ == 13
+goto_if_false @TWAR7_17814
+gosub @TWAR7_25463
+gosub @TWAR7_25201
+if 
+  85@ == 0
+goto_if_false @TWAR7_16553
+if or
+  Char.HasSpottedChar($mc_strap, 34@)
+  Char.HasSpottedChar(34@, $mc_strap)
+goto_if_false @TWAR7_16528
+TIMERB = 0
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_16521
+83@ = 6
+84@ = 9
+130@ = 10
+gosub @TWAR7_29790
+
+:TWAR7_16521
+85@ = 1
+
+:TWAR7_16528
+if 
+  68@ == 1
+goto_if_false @TWAR7_16553
+85@ = 1
+
+:TWAR7_16553
+if 
+  73@ == 0
+goto_if_false @TWAR7_16706
+Path.SwitchRoadsOff(2363.5, -1291.7, 10.0, 2379.5, -1181.2, 100.0)
+Path.SwitchRoadsOff(2295.9, -1291.5, 10.0, 2311.5, -1162.3, 100.0)
+Path.SwitchRoadsOff(2333.9, -1392.1, 10.0, 2220.2, -1377.1, 100.0)
+Path.SwitchRoadsOff(2334.6, -1493.6, 10.0, 2219.8, -1475.2, 100.0)
+73@ = 1
+
+:TWAR7_16706
+if 
+  73@ == 1
+goto_if_false @TWAR7_16801
+if 
+  Car.Locate2D(35@, 0, 2362.8, -1259.3, 5.0, 5.0)
+goto_if_false @TWAR7_16801
+Path.SwitchRoadsOn(2363.5, -1291.7, 10.0, 2379.5, -1181.2, 100.0)
+73@ = 2
+
+:TWAR7_16801
+if 
+  73@ == 2
+goto_if_false @TWAR7_16896
+if 
+  Car.Locate2D(35@, 0, 2294.5, -1263.5, 5.0, 5.0)
+goto_if_false @TWAR7_16896
+Path.SwitchRoadsOn(2295.9, -1291.5, 10.0, 2311.5, -1162.3, 100.0)
+73@ = 3
+
+:TWAR7_16896
+if 
+  73@ == 3
+goto_if_false @TWAR7_16991
+if 
+  Car.Locate2D(35@, 0, 2284.2, -1393.8, 5.0, 5.0)
+goto_if_false @TWAR7_16991
+Path.SwitchRoadsOn(2333.9, -1392.1, 10.0, 2220.2, -1377.1, 100.0)
+73@ = 4
+
+:TWAR7_16991
+if 
+  73@ == 4
+goto_if_false @TWAR7_17086
+if 
+  Car.Locate2D(35@, 0, 2293.8, -1491.7, 5.0, 5.0)
+goto_if_false @TWAR7_17086
+Path.SwitchRoadsOn(2334.6, -1493.6, 10.0, 2219.8, -1475.2, 100.0)
+73@ = 5
+
+:TWAR7_17086
+if 
+  68@ == 0
+goto_if_false @TWAR7_17395
+if or
+  Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+  Car.HasBeenDamagedByChar(35@, $scplayer)
+  TIMERA > 4000
+goto_if_false @TWAR7_17395
+if 
+  Streaming.HasModelLoaded(110)
+goto_if_false @TWAR7_17233
+62@ = Char.Create(25, 110, 2301.9, -1504.1, 24.3)
+Char.SetHeading(62@, 358.5)
+Char.GiveWeapon(62@, WeaponType.Tec9, 30000)
+Char.SetKindaStayInSamePlace(62@, True)
+Char.SetDecisionMaker(62@, 149@)
+
+:TWAR7_17233
+if 
+  Streaming.HasModelLoaded(110)
+goto_if_false @TWAR7_17307
+63@ = Char.Create(25, 110, 2302.5, -1502.3, 24.3)
+Char.SetHeading(63@, 18.5)
+Char.GiveWeapon(63@, WeaponType.Tec9, 30000)
+Char.SetKindaStayInSamePlace(63@, True)
+Char.SetDecisionMaker(63@, 149@)
+
+:TWAR7_17307
+if 
+  Streaming.HasModelLoaded(110)
+goto_if_false @TWAR7_17381
+64@ = Char.Create(25, 110, 2300.6, -1503.9, 24.3)
+Char.SetHeading(64@, 5.9)
+Char.GiveWeapon(64@, WeaponType.Tec9, 30000)
+Char.SetKindaStayInSamePlace(64@, True)
+Char.SetDecisionMaker(64@, 149@)
+
+:TWAR7_17381
+Car.StartPlayback(35@, 40)
+68@ = 1
+
+:TWAR7_17395
+if 
+  68@ == 1
+goto_if_false @TWAR7_17646
+if 
+  not Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_17646
+Path.SwitchRoadsOn(2363.5, -1291.7, 10.0, 2379.5, -1181.2, 100.0)
+Path.SwitchRoadsOn(2295.9, -1291.5, 10.0, 2311.5, -1162.3, 100.0)
+Path.SwitchRoadsOn(2333.9, -1392.1, 10.0, 2220.2, -1377.1, 100.0)
+Path.SwitchRoadsOn(2334.6, -1493.6, 10.0, 2219.8, -1475.2, 100.0)
+145@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.GoStraightToCoord(-1, 2300.3, -1502.8, 24.3, MoveState.Run, -1)
+Task.AchieveHeading(-1, 205.1)
+Sequence.Close(145@)
+Char.PerformSequence(34@, 145@)
+Sequence.Clear(145@)
+if 
+  not Car.IsDead(35@)
+goto_if_false @TWAR7_17639
+Car.SetAlwaysCreateSkids(35@, False)
+
+:TWAR7_17639
+68@ = 2
+
+:TWAR7_17646
+if 
+  68@ == 2
+goto_if_false @TWAR7_17814
+if or
+  Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+  Car.HasBeenDamagedByChar(35@, $scplayer)
+goto_if_false @TWAR7_17814
+if 
+  Char.IsGroupMember($mc_strap, $Players_Group)
+goto_if_false @TWAR7_17735
+Char.RemoveFromGroup($mc_strap)
+
+:TWAR7_17735
+Char.IgnoreHeightDifferenceFollowingNodes($mc_strap, True)
+Char.SetFollowNodeThresholdDistance($mc_strap, 50.0)
+145@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.KillCharOnFoot(-1, 34@)
+Sequence.Close(145@)
+Char.PerformSequence($mc_strap, 145@)
+Sequence.Clear(145@)
+85@ = 0
+73@ = 0
+68@ = 0
+67@ = 14
+
+:TWAR7_17814
+if 
+  67@ == 14
+goto_if_false @TWAR7_18221
+if 
+  85@ == 0
+goto_if_false @TWAR7_17912
+if or
+  Char.HasSpottedChar($mc_strap, 34@)
+  Char.HasSpottedChar(34@, $mc_strap)
+goto_if_false @TWAR7_17912
+83@ = 7
+84@ = 0
+gosub @TWAR7_29790
+TIMERB = 0
+85@ = 1
+
+:TWAR7_17912
+if 
+  85@ == 1
+goto_if_false @TWAR7_17976
+if 
+  83@ == 0
+goto_if_false @TWAR7_17976
+83@ = 17
+84@ = 0
+gosub @TWAR7_29790
+85@ = 2
+
+:TWAR7_17976
+if 
+  68@ == 0
+goto_if_false @TWAR7_18221
+Blip.Remove(66@)
+66@ = Blip.AddForChar(34@)
+Char.SetOnlyDamagedByPlayer(34@, False)
+145@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.TurnCharToFaceChar(-1, $mc_strap)
+Task.KillCharOnFoot(-1, $mc_strap)
+Sequence.Close(145@)
+Char.PerformSequence(34@, 145@)
+Sequence.Clear(145@)
+if 
+  not Char.IsDead(62@)
+goto_if_false @TWAR7_18108
+$task_status = Char.GetScriptTaskStatus(62@, 1506)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @TWAR7_18108
+Task.KillCharOnFoot(62@, $scplayer)
+
+:TWAR7_18108
+if 
+  not Char.IsDead(63@)
+goto_if_false @TWAR7_18161
+$task_status = Char.GetScriptTaskStatus(63@, 1506)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @TWAR7_18161
+Task.KillCharOnFoot(63@, $scplayer)
+
+:TWAR7_18161
+if 
+  not Char.IsDead(64@)
+goto_if_false @TWAR7_18214
+$task_status = Char.GetScriptTaskStatus(64@, 1506)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @TWAR7_18214
+Task.KillCharOnFoot(64@, $scplayer)
+
+:TWAR7_18214
+68@ = 1
+
+:TWAR7_18221
+goto @TWAR7_18362
+
+:TWAR7_18228
+Blip.Remove(66@)
+if 
+  not Char.IsDead(62@)
+goto_if_false @TWAR7_18264
+Task.FleeChar(62@, $scplayer, 20.0, -2)
+
+:TWAR7_18264
+if 
+  not Char.IsDead(63@)
+goto_if_false @TWAR7_18295
+Task.FleeChar(63@, $scplayer, 20.0, -2)
+
+:TWAR7_18295
+if 
+  not Char.IsDead(64@)
+goto_if_false @TWAR7_18326
+Task.FleeChar(64@, $scplayer, 20.0, -2)
+
+:TWAR7_18326
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+TIMERA = 0
+68@ = 0
+85@ = 0
+67@ = 15
+
+:TWAR7_18362
+goto @TWAR7_18503
+
+:TWAR7_18369
+Blip.Remove(66@)
+if 
+  not Char.IsDead(62@)
+goto_if_false @TWAR7_18405
+Task.FleeChar(62@, $scplayer, 20.0, -2)
+
+:TWAR7_18405
+if 
+  not Char.IsDead(63@)
+goto_if_false @TWAR7_18436
+Task.FleeChar(63@, $scplayer, 20.0, -2)
+
+:TWAR7_18436
+if 
+  not Char.IsDead(64@)
+goto_if_false @TWAR7_18467
+Task.FleeChar(64@, $scplayer, 20.0, -2)
+
+:TWAR7_18467
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+TIMERA = 0
+68@ = 0
+85@ = 0
+67@ = 15
+
+:TWAR7_18503
+if 
+  67@ == 15
+goto_if_false @TWAR7_21068
+if 
+  68@ == 0
+goto_if_false @TWAR7_19984
+if 
+  TIMERA > 2000
+goto_if_false @TWAR7_19984
+ENTEXT_63()
+if 
+  $player_is_completely_safe == 1
+goto_if_false @TWAR7_19984
+Text.ClearPrints
+Camera.DoFade(0, 500)
+
+:TWAR7_18592
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_18616
+wait 0
+goto @TWAR7_18592
+
+:TWAR7_18616
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_18648
+goto @TWAR7_23165
+
+:TWAR7_18648
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+83@ = 0
+Char.Delete(62@)
+Char.Delete(63@)
+Char.Delete(64@)
+Path.SwitchRoadsBackToOriginal(2563.7, -1435.0, 10.0, 2580.3, -1266.4, 100.6)
+Path.SwitchRoadsBackToOriginal(2635.0, -1434.4, 10.0, 2652.0, -1263.6, 100.0)
+Path.SwitchRoadsBackToOriginal(2714.9, -1501.6, 10.0, 2746.1, -1266.4, 100.0)
+Path.SwitchRoadsBackToOriginal(2713.9, -1499.3, 10.0, 2746.6, -1266.3, 100.0)
+Path.SwitchRoadsBackToOriginal(2714.6, -1249.9, 10.0, 2744.7, -1332.9, 100.0)
+Path.SwitchRoadsBackToOriginal(2634.6, -1396.6, 10.0, 2651.0, -1264.2, 100.0)
+Path.SwitchRoadsBackToOriginal(2635.1, -1248.0, 10.0, 2651.0, -1055.3, 100.0)
+Path.SwitchRoadsBackToOriginal(2651.5, -1263.8, 10.0, 2579.5, -1248.7, 100.0)
+Path.SwitchRoadsBackToOriginal(2563.7, -1248.6, 10.0, 2578.9, -1192.2, 100.6)
+Path.SwitchRoadsBackToOriginal(2443.7, -1249.2, 10.0, 2459.1, -1191.9, 100.0)
+Path.SwitchRoadsBackToOriginal(2363.5, -1253.4, 10.0, 2378.7, -1145.5, 100.0)
+Path.SwitchRoadsBackToOriginal(2311.2, -1144.7, 10.0, 2379.1, -1162.1, 100.0)
+Path.SwitchRoadsBackToOriginal(2239.9, -1130.0, 10.0, 2017.6, -928.3, 100.0)
+Path.SwitchRoadsBackToOriginal(1930.6, -1031.9, 10.0, 1574.4, -879.9, 100.0)
+Path.SwitchRoadsBackToOriginal(1879.6, -1024.3, 10.0, 1552.0, -1521.7, 100.0)
+Path.SwitchRoadsBackToOriginal(1725.8, -1433.3, 10.0, 1838.0, -1459.4, 100.0)
+Path.SwitchRoadsBackToOriginal(1838.4, -1453.6, 10.0, 1853.7, -1303.4, 100.0)
+Path.SwitchRoadsBackToOriginal(1979.3, -1468.7, 10.0, 1853.5, -1452.5, 100.0)
+Path.SwitchRoadsBackToOriginal(2334.0, -1556.1, 10.0, 2350.5, -1489.7, 100.0)
+Path.SwitchRoadsBackToOriginal(2350.1, -1516.0, 10.0, 2423.9, -1532.5, 100.0)
+Path.SwitchRoadsBackToOriginal(2379.8, -1373.3, 10.0, 2423.7, -1452.6, 100.0)
+Path.SwitchRoadsBackToOriginal(2363.5, -1291.7, 10.0, 2379.5, -1181.2, 100.0)
+Path.SwitchRoadsBackToOriginal(2295.9, -1291.5, 10.0, 2311.5, -1162.3, 100.0)
+Path.SwitchRoadsBackToOriginal(2333.9, -1392.1, 10.0, 2220.2, -1377.1, 100.0)
+Path.SwitchRoadsBackToOriginal(2334.6, -1493.6, 10.0, 2219.8, -1475.2, 100.0)
+Car.MarkAsNoLongerNeeded(36@)
+Car.MarkAsNoLongerNeeded(35@)
+Streaming.MarkModelAsNoLongerNeeded(109)
+Streaming.MarkModelAsNoLongerNeeded(110)
+Streaming.MarkModelAsNoLongerNeeded(461)
+Streaming.RequestAnimation("MISC")
+Streaming.LoadAllModelsNow
+Streaming.RequestCollision(2293.4, -1490.2)
+Streaming.LoadSceneInDirection(2293.4, -1490.2, 22.2, 90.0)
+World.ClearArea(1, 2293.4, -1490.2, 22.2, 20.0)
+World.SetPedDensityMultiplier(0.0)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Game.ShutAllCharsUp(True)
+Player.MakeGangDisappear
+if 
+  not Car.IsDead(35@)
+goto_if_false @TWAR7_19616
+Car.SetAlwaysCreateSkids(35@, False)
+
+:TWAR7_19616
+Char.ClearTasksImmediately($scplayer)
+141@, 142@, 143@ = Char.GetCoordinates($scplayer)
+144@ = Char.GetHeading($scplayer)
+Char.RemoveFromGroup($mc_strap)
+Char.ClearTasksImmediately($mc_strap)
+World.ClearArea(1, 2290.4, -1490.2, 22.3, 1.0)
+Char.SetCoordinates($scplayer, 2290.4, -1490.2, 22.3)
+Char.SetHeading($scplayer, 265.8)
+Task.GoStraightToCoord($scplayer, 2295.6, -1490.5, 21.3, MoveState.Walk, -1)
+76@ = Char.GetCurrentWeapon($scplayer)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Char.ClearTasksImmediately($mc_strap)
+World.ClearArea(1, 2295.3, -1491.3, 22.3, 1.0)
+Char.SetCoordinates($mc_strap, 2295.3, -1491.3, 22.3)
+Char.SetHeading($mc_strap, 268.4)
+Task.AimGunAtCoord($mc_strap, 2299.3, -1490.6, 22.8, 10000)
+Camera.SetFixedPosition(2299.3, -1490.6, 22.8, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2255.6, -1493.3, 38.3, SwitchType.JumpCut)
+83@ = 8
+84@ = 0
+gosub @TWAR7_29790
+68@ = 1
+Camera.DoFade(1, 1500)
+
+:TWAR7_19914
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_19938
+wait 0
+goto @TWAR7_19914
+
+:TWAR7_19938
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_19970
+goto @TWAR7_23165
+
+:TWAR7_19970
+69@ = 1
+skip_cutscene_start_internal @TWAR7_20578
+
+:TWAR7_19984
+if 
+  68@ == 1
+goto_if_false @TWAR7_20115
+$task_status = Char.GetScriptTaskStatus($scplayer, 1491)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @TWAR7_20115
+Task.TurnCharToFaceChar($mc_strap, $scplayer)
+145@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, $mc_strap)
+Task.PlayAnim(-1, "IDLE_CHAT_02", "MISC", 4.0, True, False, False, False, -1)
+Sequence.Close(145@)
+Char.PerformSequence($scplayer, 145@)
+Sequence.Clear(145@)
+68@ = 2
+
+:TWAR7_20115
+if 
+  68@ == 2
+goto_if_false @TWAR7_20199
+if 
+  84@ > 2
+goto_if_false @TWAR7_20199
+Char.ClearTasks($scplayer)
+Task.PlayAnim($mc_strap, "IDLE_CHAT", "PED", 4.0, True, False, False, False, -1)
+68@ = 3
+
+:TWAR7_20199
+if 
+  68@ == 3
+goto_if_false @TWAR7_20283
+if 
+  84@ > 3
+goto_if_false @TWAR7_20283
+Char.ClearTasks($mc_strap)
+Task.PlayAnim($scplayer, "IDLE_CHAT", "PED", 4.0, True, False, False, False, -1)
+68@ = 4
+
+:TWAR7_20283
+if 
+  68@ == 4
+goto_if_false @TWAR7_20367
+if 
+  84@ > 4
+goto_if_false @TWAR7_20367
+Char.ClearTasks($scplayer)
+Task.PlayAnim($mc_strap, "IDLE_CHAT", "PED", 4.0, True, False, False, False, -1)
+68@ = 5
+
+:TWAR7_20367
+if 
+  68@ == 5
+goto_if_false @TWAR7_20451
+if 
+  84@ > 5
+goto_if_false @TWAR7_20451
+Char.ClearTasks($mc_strap)
+Task.PlayAnim($scplayer, "IDLE_CHAT", "PED", 4.0, True, False, False, False, -1)
+68@ = 6
+
+:TWAR7_20451
+if 
+  68@ == 6
+goto_if_false @TWAR7_20535
+if 
+  84@ > 6
+goto_if_false @TWAR7_20535
+Char.ClearTasks($scplayer)
+Task.PlayAnim($mc_strap, "IDLE_CHAT", "PED", 4.0, True, False, False, False, -1)
+68@ = 7
+
+:TWAR7_20535
+if 
+  68@ == 7
+goto_if_false @TWAR7_21068
+if 
+  83@ == 0
+goto_if_false @TWAR7_21068
+69@ = 0
+
+:TWAR7_20578
+skip_cutscene_end 
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_20612
+goto @TWAR7_23165
+
+:TWAR7_20612
+Char.ClearTasks($mc_strap)
+if 
+  69@ == 1
+goto_if_false @TWAR7_20652
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+83@ = 0
+
+:TWAR7_20652
+Camera.DoFade(0, 500)
+
+:TWAR7_20659
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_20683
+wait 0
+goto @TWAR7_20659
+
+:TWAR7_20683
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_20715
+goto @TWAR7_23165
+
+:TWAR7_20715
+Char.ClearTasksImmediately($scplayer)
+143@ -= 1.0
+World.ClearArea(1, 141@, 142@, 143@, 1.0)
+Streaming.RequestCollision(141@, 142@)
+Streaming.LoadAllModelsNow
+Char.SetCoordinates($scplayer, 141@, 142@, 143@)
+Char.SetHeading($scplayer, 144@)
+Char.SetCurrentWeapon($scplayer, 76@)
+Char.ClearTasksImmediately($mc_strap)
+137@ = Path.GetClosestCharNode(138@, 139@, 141@, 142@, 143@)
+Streaming.RequestCollision(137@, 138@)
+Streaming.LoadAllModelsNow
+139@ += 2.0
+143@ = World.GetGroundZFor3DCoord(137@, 138@, 139@)
+World.ClearArea(1, 137@, 138@, 143@, 1.0)
+Char.SetCoordinates($mc_strap, 137@, 138@, 143@)
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Group.SetMember($mc_strap, $Players_Group)
+72@ = 1
+Streaming.LoadScene(141@, 142@, 143@)
+Streaming.RemoveAnimation("MISC")
+World.SetPedDensityMultiplier(1.0)
+Blip.Remove(66@)
+66@ = Blip.AddForCoord(783.2, -1630.3, 12.2)
+Blip.SetAsFriendly(66@, True)
+Hud.SwitchWidescreen(False)
+Game.ShutAllCharsUp(False)
+Player.MakeGangReappear
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Camera.DoFade(1, 1500)
+
+:TWAR7_20984
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_21008
+wait 0
+goto @TWAR7_20984
+
+:TWAR7_21008
+gosub @TWAR7_24265
+if 
+  70@ == 1
+goto_if_false @TWAR7_21040
+goto @TWAR7_23165
+
+:TWAR7_21040
+68@ = 0
+85@ = 0
+67@ = 16
+TIMERB = 0
+
+:TWAR7_21068
+if 
+  67@ == 16
+goto_if_false @TWAR7_21370
+if 
+  83@ == 0
+goto_if_false @TWAR7_21150
+if 
+  85@ == 0
+goto_if_false @TWAR7_21150
+83@ = 9
+84@ = 0
+gosub @TWAR7_29790
+85@ = 1
+
+:TWAR7_21150
+if 
+  83@ == 0
+goto_if_false @TWAR7_21209
+if 
+  85@ == 1
+goto_if_false @TWAR7_21209
+Text.PrintNow('SMK1_13', 8500, 1)
+85@ = 2
+
+:TWAR7_21209
+if 
+  68@ == 0
+goto_if_false @TWAR7_21363
+if 
+  Char.IsGroupMember($mc_strap, $Players_Group)
+goto_if_false @TWAR7_21363
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 783.2, -1630.3, 12.2, 4.0, 4.0, 4.0)
+goto_if_false @TWAR7_21363
+if 
+  Char.LocateAnyMeans3D($mc_strap, 0, 783.2, -1630.3, 12.2, 4.0, 4.0, 4.0)
+goto_if_false @TWAR7_21363
+Player.SetControl($player1, False)
+68@ = 0
+67@ = 17
+
+:TWAR7_21363
+gosub @TWAR7_25201
+
+:TWAR7_21370
+if 
+  67@ == 17
+goto_if_false @TWAR7_21765
+if 
+  68@ == 0
+goto_if_false @TWAR7_21629
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+83@ = 0
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Game.ShutAllCharsUp(True)
+Player.MakeGangDisappear
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+Char.RemoveFromGroup($mc_strap)
+145@ = Sequence.Open()
+Task.Pause(-1, 1500)
+Task.LeaveAnyCar(-1)
+Task.TurnCharToFaceChar(-1, $mc_strap)
+Sequence.Close(145@)
+Char.PerformSequence($scplayer, 145@)
+Sequence.Clear(145@)
+145@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.GoStraightToCoord(-1, 792.1, -1626.0, 12.4, MoveState.Walk, -2)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.Close(145@)
+Char.PerformSequence($mc_strap, 145@)
+Sequence.Clear(145@)
+83@ = 10
+84@ = 0
+gosub @TWAR7_29790
+Camera.SetFixedPosition(776.7145, -1637.248, 14.084, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(777.5906, -1636.769, 14.1398, SwitchType.JumpCut)
+68@ = 1
+
+:TWAR7_21629
+if 
+  68@ == 1
+goto_if_false @TWAR7_21765
+if 
+  83@ == 0
+goto_if_false @TWAR7_21765
+Camera.DoFade(0, 500)
+
+:TWAR7_21672
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_21696
+wait 0
+goto @TWAR7_21672
+
+:TWAR7_21696
+Char.Delete($mc_strap)
+Blip.Remove(66@)
+Game.ShutAllCharsUp(False)
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Camera.DoFade(1, 500)
+
+:TWAR7_21734
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_21758
+wait 0
+goto @TWAR7_21734
+
+:TWAR7_21758
+goto @TWAR7_23183
+
+:TWAR7_21765
+if 
+  67@ > 3
+goto_if_false @TWAR7_21882
+if 
+  14 > 67@
+goto_if_false @TWAR7_21882
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_21882
+$task_status = Char.GetScriptTaskStatus(34@, 1811)
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @TWAR7_21882
+Task.DriveBy(34@, $scplayer, -1, 0.0, 0.0, 0.0, 300.0, DriveByType.Ai, False, 100)
+
+:TWAR7_21882
+if 
+  67@ > 3
+goto_if_false @TWAR7_21995
+if 
+  15 > 67@
+goto_if_false @TWAR7_21995
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_21995
+if 
+  not Char.LocateAnyMeansChar2D($scplayer, 34@, 250.0, 250.0, False)
+goto_if_false @TWAR7_21995
+if 
+  not Char.IsOnScreen(34@)
+goto_if_false @TWAR7_21995
+68@ = 0
+67@ = 20
+
+:TWAR7_21995
+if 
+  67@ == 20
+goto_if_false @TWAR7_22472
+if 
+  68@ == 0
+goto_if_false @TWAR7_22273
+if 
+  not Char.IsDead($mc_strap)
+goto_if_false @TWAR7_22201
+if 
+  not Car.IsDead(36@)
+goto_if_false @TWAR7_22201
+if 
+  Char.IsInCar($mc_strap, 36@)
+goto_if_false @TWAR7_22201
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+83@ = 0
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+Text.PrintNow('SMK1_12', 4000, 1)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @TWAR7_22151
+Player.ApplyBrakesToCar($player1, True)
+
+:TWAR7_22151
+Char.RemoveFromGroup($mc_strap)
+145@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.WanderStandard(-1)
+Sequence.Close(145@)
+Char.PerformSequence($mc_strap, 145@)
+Sequence.Clear(145@)
+TIMERA = 0
+68@ = 1
+
+:TWAR7_22201
+if 
+  Car.IsDead(36@)
+goto_if_false @TWAR7_22224
+68@ = 2
+
+:TWAR7_22224
+if 
+  Char.IsDead($mc_strap)
+goto_if_false @TWAR7_22247
+68@ = 2
+
+:TWAR7_22247
+if 
+  not Char.IsInCar($mc_strap, 36@)
+goto_if_false @TWAR7_22273
+68@ = 2
+
+:TWAR7_22273
+if 
+  68@ == 1
+goto_if_false @TWAR7_22429
+if 
+  TIMERA > 3000
+goto_if_false @TWAR7_22429
+Camera.DoFade(0, 500)
+
+:TWAR7_22317
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_22341
+wait 0
+goto @TWAR7_22317
+
+:TWAR7_22341
+Char.Delete($mc_strap)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @TWAR7_22369
+Player.ApplyBrakesToCar($player1, False)
+
+:TWAR7_22369
+Blip.Remove(66@)
+Hud.SwitchWidescreen(False)
+Player.MakeGangReappear
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Camera.DoFade(1, 500)
+
+:TWAR7_22398
+if 
+  Camera.GetFadingStatus
+goto_if_false @TWAR7_22422
+wait 0
+goto @TWAR7_22398
+
+:TWAR7_22422
+68@ = 2
+
+:TWAR7_22429
+if 
+  68@ == 2
+goto_if_false @TWAR7_22472
+Text.ClearPrints
+Text.PrintNow('SMK1_12', 4000, 1)
+goto @TWAR7_23165
+
+:TWAR7_22472
+if 
+  67@ == 3
+goto_if_false @TWAR7_22528
+if 
+  not Streaming.HasCarRecordingBeenLoaded(30)
+goto_if_false @TWAR7_22509
+Streaming.RequestCarRecording(30)
+
+:TWAR7_22509
+if 
+  not Streaming.HasCarRecordingBeenLoaded(31)
+goto_if_false @TWAR7_22528
+Streaming.RequestCarRecording(31)
+
+:TWAR7_22528
+if 
+  67@ == 4
+goto_if_false @TWAR7_22565
+if 
+  not Streaming.HasCarRecordingBeenLoaded(32)
+goto_if_false @TWAR7_22565
+Streaming.RequestCarRecording(32)
+
+:TWAR7_22565
+if 
+  67@ == 5
+goto_if_false @TWAR7_22602
+if 
+  not Streaming.HasCarRecordingBeenLoaded(33)
+goto_if_false @TWAR7_22602
+Streaming.RequestCarRecording(33)
+
+:TWAR7_22602
+if 
+  67@ == 6
+goto_if_false @TWAR7_22639
+if 
+  not Streaming.HasCarRecordingBeenLoaded(34)
+goto_if_false @TWAR7_22639
+Streaming.RequestCarRecording(34)
+
+:TWAR7_22639
+if 
+  67@ == 7
+goto_if_false @TWAR7_22871
+if 
+  not Streaming.HasCarRecordingBeenLoaded(35)
+goto_if_false @TWAR7_22676
+Streaming.RequestCarRecording(35)
+
+:TWAR7_22676
+if 
+  not Streaming.HasCarRecordingBeenLoaded(50)
+goto_if_false @TWAR7_22695
+Streaming.RequestCarRecording(50)
+
+:TWAR7_22695
+if 
+  not Streaming.HasCarRecordingBeenLoaded(51)
+goto_if_false @TWAR7_22714
+Streaming.RequestCarRecording(51)
+
+:TWAR7_22714
+if 
+  not Streaming.HasCarRecordingBeenLoaded(52)
+goto_if_false @TWAR7_22733
+Streaming.RequestCarRecording(52)
+
+:TWAR7_22733
+if 
+  not Streaming.HasCarRecordingBeenLoaded(53)
+goto_if_false @TWAR7_22752
+Streaming.RequestCarRecording(53)
+
+:TWAR7_22752
+if 
+  not Streaming.HasCarRecordingBeenLoaded(54)
+goto_if_false @TWAR7_22771
+Streaming.RequestCarRecording(54)
+
+:TWAR7_22771
+if 
+  not Streaming.HasCarRecordingBeenLoaded(55)
+goto_if_false @TWAR7_22790
+Streaming.RequestCarRecording(55)
+
+:TWAR7_22790
+if 
+  not Streaming.HasCarRecordingBeenLoaded(56)
+goto_if_false @TWAR7_22809
+Streaming.RequestCarRecording(56)
+
+:TWAR7_22809
+if 
+  not Streaming.HasCarRecordingBeenLoaded(57)
+goto_if_false @TWAR7_22828
+Streaming.RequestCarRecording(57)
+
+:TWAR7_22828
+if 
+  not Streaming.HasCarRecordingBeenLoaded(58)
+goto_if_false @TWAR7_22847
+Streaming.RequestCarRecording(58)
+
+:TWAR7_22847
+if 
+  not Streaming.HasCarRecordingBeenLoaded(35)
+goto_if_false @TWAR7_22866
+Streaming.RequestCarRecording(60)
+
+:TWAR7_22866
+Streaming.RequestModel(410)
+
+:TWAR7_22871
+if 
+  67@ == 8
+goto_if_false @TWAR7_22908
+if 
+  not Streaming.HasCarRecordingBeenLoaded(36)
+goto_if_false @TWAR7_22908
+Streaming.RequestCarRecording(36)
+
+:TWAR7_22908
+if 
+  67@ == 9
+goto_if_false @TWAR7_22950
+Streaming.MarkModelAsNoLongerNeeded(410)
+if 
+  not Streaming.HasCarRecordingBeenLoaded(37)
+goto_if_false @TWAR7_22950
+Streaming.RequestCarRecording(37)
+
+:TWAR7_22950
+if 
+  67@ == 10
+goto_if_false @TWAR7_22987
+if 
+  not Streaming.HasCarRecordingBeenLoaded(38)
+goto_if_false @TWAR7_22987
+Streaming.RequestCarRecording(38)
+
+:TWAR7_22987
+if 
+  67@ == 11
+goto_if_false @TWAR7_23024
+if 
+  not Streaming.HasCarRecordingBeenLoaded(39)
+goto_if_false @TWAR7_23024
+Streaming.RequestCarRecording(39)
+
+:TWAR7_23024
+if 
+  67@ == 12
+goto_if_false @TWAR7_23065
+if 
+  not Streaming.HasCarRecordingBeenLoaded(40)
+goto_if_false @TWAR7_23061
+Streaming.RequestCarRecording(40)
+
+:TWAR7_23061
+Streaming.RequestModel(110)
+
+:TWAR7_23065
+if 
+  67@ > 0
+goto_if_false @TWAR7_23108
+if 
+  3 > 67@
+goto_if_false @TWAR7_23108
+gosub @TWAR7_24682
+
+:TWAR7_23108
+if 
+  67@ > 3
+goto_if_false @TWAR7_23151
+if 
+  14 > 67@
+goto_if_false @TWAR7_23151
+gosub @TWAR7_24891
+
+:TWAR7_23151
+gosub @TWAR7_27399
+goto @TWAR7_1306
+
+:TWAR7_23165
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:TWAR7_23183
+Text.ClearPrints
+Text.PrintWithNumberBig('M_PASSR', 5, 5000, TextStyle.Middle)
+Stat.AwardPlayerMissionRespect(5)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+Stat.RegisterMissionPassed('SMOKE_1')
+Stat.PlayerMadeProgress(1)
+$flag_smoke_mission_counter += 1
+start_new_script @STRAP 
+Blip.Remove($strap_contact_blip)
+$strap_contact_blip = Blip.AddSpriteForContactPoint($strap_blip_icon, $strapX, $strapY, $strapZ)
+return 
+
+:TWAR7_23270
+if 
+  is_var_text_label_empty s$shop_name
+goto_if_false @TWAR7_23288
+Camera.RestoreJumpcut
+
+:TWAR7_23288
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @TWAR7_23311
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:TWAR7_23311
+Game.ShutAllCharsUp(False)
+Blip.Remove(66@)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Streaming.MarkModelAsNoLongerNeeded(410)
+Streaming.MarkModelAsNoLongerNeeded(461)
+Streaming.MarkModelAsNoLongerNeeded(372)
+Streaming.MarkModelAsNoLongerNeeded(109)
+Streaming.MarkModelAsNoLongerNeeded(110)
+Streaming.MarkModelAsNoLongerNeeded(466)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.RemoveAnimation("CAR_CHAT")
+Streaming.RemoveAnimation("CRIB")
+Streaming.RemoveAnimation("MISC")
+Streaming.RemoveAnimation("RAPPING")
+Path.SwitchRoadsBackToOriginal(2563.7, -1435.0, 10.0, 2580.3, -1266.4, 100.6)
+Path.SwitchRoadsBackToOriginal(2635.0, -1434.4, 10.0, 2652.0, -1263.6, 100.0)
+Path.SwitchRoadsBackToOriginal(2714.9, -1501.6, 10.0, 2746.1, -1266.4, 100.0)
+Path.SwitchRoadsBackToOriginal(2713.9, -1499.3, 10.0, 2746.6, -1266.3, 100.0)
+Path.SwitchRoadsBackToOriginal(2714.6, -1249.9, 10.0, 2744.7, -1332.9, 100.0)
+Path.SwitchRoadsBackToOriginal(2634.6, -1396.6, 10.0, 2651.0, -1264.2, 100.0)
+Path.SwitchRoadsBackToOriginal(2635.1, -1248.0, 10.0, 2651.0, -1055.3, 100.0)
+Path.SwitchRoadsBackToOriginal(2651.5, -1263.8, 10.0, 2579.5, -1248.7, 100.0)
+Path.SwitchRoadsBackToOriginal(2563.7, -1248.6, 10.0, 2578.9, -1192.2, 100.6)
+Path.SwitchRoadsBackToOriginal(2443.7, -1249.2, 10.0, 2459.1, -1191.9, 100.0)
+Path.SwitchRoadsBackToOriginal(2363.5, -1253.4, 10.0, 2378.7, -1145.5, 100.0)
+Path.SwitchRoadsBackToOriginal(2311.2, -1144.7, 10.0, 2379.1, -1162.1, 100.0)
+Path.SwitchRoadsBackToOriginal(2239.9, -1130.0, 10.0, 2017.6, -928.3, 100.0)
+Path.SwitchRoadsBackToOriginal(1930.6, -1031.9, 10.0, 1574.4, -879.9, 100.0)
+Path.SwitchRoadsBackToOriginal(1879.6, -1024.3, 10.0, 1552.0, -1521.7, 100.0)
+Path.SwitchRoadsBackToOriginal(1725.8, -1433.3, 10.0, 1838.0, -1459.4, 100.0)
+Path.SwitchRoadsBackToOriginal(1838.4, -1453.6, 10.0, 1853.7, -1303.4, 100.0)
+Path.SwitchRoadsBackToOriginal(1979.3, -1468.7, 10.0, 1853.5, -1452.5, 100.0)
+Path.SwitchRoadsBackToOriginal(2334.0, -1556.1, 10.0, 2350.5, -1489.7, 100.0)
+Path.SwitchRoadsBackToOriginal(2350.1, -1516.0, 10.0, 2423.9, -1532.5, 100.0)
+Path.SwitchRoadsBackToOriginal(2379.8, -1373.3, 10.0, 2423.7, -1452.6, 100.0)
+Path.SwitchRoadsBackToOriginal(2363.5, -1291.7, 10.0, 2379.5, -1181.2, 100.0)
+Path.SwitchRoadsBackToOriginal(2295.9, -1291.5, 10.0, 2311.5, -1162.3, 100.0)
+Path.SwitchRoadsBackToOriginal(2333.9, -1392.1, 10.0, 2220.2, -1377.1, 100.0)
+Path.SwitchRoadsBackToOriginal(2334.6, -1493.6, 10.0, 2219.8, -1475.2, 100.0)
+World.SwitchEntryExit('LAHS1A', True)
+Game.SwitchRandomTrains(True)
+Char.RemoveElegantly($big_smoke)
+Char.RemoveElegantly($sweet)
+Char.RemoveElegantly($mc_strap)
+Streaming.UnloadSpecialCharacter(1)
+Streaming.UnloadSpecialCharacter(2)
+Streaming.UnloadSpecialCharacter(3)
+Game.EnableAmbientCrime(True)
+Sequence.Clear(147@)
+$timer_mobile_start = Clock.GetGameTimer()
+$onmission = 0
+Mission.Finish
+return 
+
+:TWAR7_24265
+if 
+  4 > 67@
+goto_if_false @TWAR7_24406
+if 
+  Char.IsDead($big_smoke)
+goto_if_false @TWAR7_24324
+Text.ClearPrints
+Text.PrintNow('SMK1_06', 7000, 1)
+70@ = 1
+
+:TWAR7_24324
+if 
+  Char.IsDead($sweet)
+goto_if_false @TWAR7_24365
+Text.ClearPrints
+Text.PrintNow('SMK1_07', 7000, 1)
+70@ = 1
+
+:TWAR7_24365
+if 
+  Car.IsDead(37@)
+goto_if_false @TWAR7_24406
+Text.ClearPrints
+Text.PrintNow('SMK1_08', 7000, 1)
+70@ = 1
+
+:TWAR7_24406
+if 
+  67@ == 1
+goto_if_false @TWAR7_24467
+if 
+  68@ == 1
+goto_if_false @TWAR7_24467
+if 
+  70@ == 1
+goto_if_false @TWAR7_24467
+70@ = 0
+
+:TWAR7_24467
+if 
+  67@ == 1
+goto_if_false @TWAR7_24544
+if 
+  68@ == 2
+goto_if_false @TWAR7_24544
+if 
+  Char.IsDead($mc_strap)
+goto_if_false @TWAR7_24544
+Text.ClearPrints
+Text.PrintNow('SMK1_05', 7000, 1)
+70@ = 1
+
+:TWAR7_24544
+if 
+  67@ > 1
+goto_if_false @TWAR7_24603
+if 
+  Char.IsDead($mc_strap)
+goto_if_false @TWAR7_24603
+Text.ClearPrints
+Text.PrintNow('SMK1_05', 7000, 1)
+70@ = 1
+
+:TWAR7_24603
+if 
+  67@ > 3
+goto_if_false @TWAR7_24680
+if 
+  15 > 67@
+goto_if_false @TWAR7_24680
+if 
+  Car.IsDead(36@)
+goto_if_false @TWAR7_24680
+Text.ClearPrints
+Text.PrintNow('SMK1_14', 7000, 1)
+70@ = 1
+
+:TWAR7_24680
+return 
+
+:TWAR7_24682
+if 
+  71@ == 0
+goto_if_false @TWAR7_24825
+if 
+  Char.IsInCar($scplayer, 37@)
+goto_if_false @TWAR7_24825
+Text.ClearThisPrint('SMK1_01')
+Blip.Remove(66@)
+if 
+  67@ == 1
+goto_if_false @TWAR7_24818
+if 
+  68@ == 0
+goto_if_false @TWAR7_24798
+66@ = Blip.AddForCoord(1532.8, -1672.9, 12.4)
+goto @TWAR7_24818
+
+:TWAR7_24798
+66@ = Blip.AddForCoord(2454.4, -1284.5, 22.7)
+
+:TWAR7_24818
+71@ = 1
+
+:TWAR7_24825
+if 
+  71@ == 1
+goto_if_false @TWAR7_24889
+if 
+  not Char.IsInCar($scplayer, 37@)
+goto_if_false @TWAR7_24889
+Blip.Remove(66@)
+66@ = Blip.AddForCar(37@)
+Blip.SetAsFriendly(66@, True)
+71@ = 0
+
+:TWAR7_24889
+return 
+
+:TWAR7_24891
+if 
+  72@ == 1
+goto_if_false @TWAR7_25199
+if 
+  67@ > 3
+goto_if_false @TWAR7_25199
+if 
+  14 > 67@
+goto_if_false @TWAR7_25199
+if 
+  71@ == 0
+goto_if_false @TWAR7_25072
+if 
+  not Car.IsDead(36@)
+goto_if_false @TWAR7_25072
+if 
+  Char.IsInCar($scplayer, 36@)
+goto_if_false @TWAR7_25072
+Text.ClearThisPrint(86@(84@,13s))
+Text.ClearThisPrint('SMK1_11')
+Text.ClearThisPrint('SMK1_04')
+Text.PrintNow('SMK1_04', 7000, 1)
+Blip.Remove(66@)
+66@ = Blip.AddForChar(34@)
+Blip.SetAsFriendly(66@, False)
+71@ = 1
+
+:TWAR7_25072
+if 
+  71@ == 1
+goto_if_false @TWAR7_25199
+if 
+  not Car.IsDead(36@)
+goto_if_false @TWAR7_25199
+if 
+  not Char.IsInCar($scplayer, 36@)
+goto_if_false @TWAR7_25199
+Text.ClearThisPrint(86@(84@,13s))
+Text.ClearThisPrint('SMK1_11')
+Text.ClearThisPrint('SMK1_04')
+Text.PrintNow('SMK1_11', 7000, 1)
+Blip.Remove(66@)
+66@ = Blip.AddForCar(36@)
+Blip.SetAsFriendly(66@, True)
+71@ = 0
+
+:TWAR7_25199
+return 
+
+:TWAR7_25201
+if 
+  72@ == 1
+goto_if_false @TWAR7_25265
+if 
+  not Char.IsGroupMember($mc_strap, $Players_Group)
+goto_if_false @TWAR7_25265
+Blip.Remove(66@)
+66@ = Blip.AddForChar($mc_strap)
+Blip.SetAsFriendly(66@, True)
+72@ = 0
+
+:TWAR7_25265
+if 
+  72@ == 0
+goto_if_false @TWAR7_25461
+if 
+  Char.LocateAnyMeansChar3D($scplayer, $mc_strap, 8.0, 8.0, 8.0, False)
+goto_if_false @TWAR7_25461
+if 
+  not Char.IsGroupMember($mc_strap, $Players_Group)
+goto_if_false @TWAR7_25350
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Group.SetMember($mc_strap, $Players_Group)
+
+:TWAR7_25350
+if 
+  16 > 67@
+goto_if_false @TWAR7_25429
+Blip.Remove(66@)
+if 
+  Char.IsInCar($scplayer, 36@)
+goto_if_false @TWAR7_25407
+66@ = Blip.AddForChar(34@)
+goto @TWAR7_25422
+
+:TWAR7_25407
+66@ = Blip.AddForCar(36@)
+Blip.SetAsFriendly(66@, True)
+
+:TWAR7_25422
+goto @TWAR7_25454
+
+:TWAR7_25429
+Blip.Remove(66@)
+66@ = Blip.AddForCoord(783.2, -1630.3, 12.2)
+
+:TWAR7_25454
+72@ = 1
+
+:TWAR7_25461
+return 
+
+:TWAR7_25463
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_26129
+if 
+  not Car.IsDead(35@)
+goto_if_false @TWAR7_26122
+if 
+  Char.IsInCar(34@, 35@)
+goto_if_false @TWAR7_26085
+if 
+  80@ == 0
+goto_if_false @TWAR7_25574
+if or
+  Char.HasBeenDamagedByChar(34@, $scplayer)
+  Car.HasBeenDamagedByChar(35@, $scplayer)
+goto_if_false @TWAR7_25574
+Car.SetHealth(35@, 350)
+80@ = 1
+
+:TWAR7_25574
+133@, 134@, 137@ = Char.GetCoordinates($scplayer)
+135@, 136@, 137@ = Car.GetCoordinates(35@)
+137@ = Math.GetDistanceBetweenCoords2D(133@, 134@, 135@, 136@)
+if 
+  21.0 > 137@
+goto_if_false @TWAR7_25683
+137@ /= 20.0
+set_lvar_float_to_lvar_float 138@ = 137@
+137@ = 2.0
+sub_float_lvar_from_float_lvar 137@ -= 138@
+goto @TWAR7_25729
+
+:TWAR7_25683
+137@ -= 20.0
+137@ /= 90.0
+set_lvar_float_to_lvar_float 138@ = 137@
+137@ = 1.0
+sub_float_lvar_from_float_lvar 137@ -= 138@
+
+:TWAR7_25729
+set_lvar_float_to_lvar_float 140@ = 137@
+if 
+  140@ > 2.0
+goto_if_false @TWAR7_25768
+140@ = 2.0
+
+:TWAR7_25768
+if 
+  0.5 > 140@
+goto_if_false @TWAR7_25799
+140@ = 0.5
+
+:TWAR7_25799
+if 
+  Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_25823
+Car.SetPlaybackSpeed(35@, 140@)
+
+:TWAR7_25823
+if 
+  67@ == 8
+goto_if_false @TWAR7_26051
+if 
+  10 > 79@
+goto_if_false @TWAR7_26044
+if 
+  not Car.IsDead(42@(79@,10i))
+goto_if_false @TWAR7_26030
+if 
+  not Char.IsDead(52@(79@,10i))
+goto_if_false @TWAR7_26001
+if 
+  Char.IsInCar(52@(79@,10i), 42@(79@,10i))
+goto_if_false @TWAR7_25965
+if 
+  Car.IsPlaybackGoingOn(42@(79@,10i))
+goto_if_false @TWAR7_25958
+Car.SetPlaybackSpeed(42@(79@,10i), 140@)
+
+:TWAR7_25958
+goto @TWAR7_25994
+
+:TWAR7_25965
+if 
+  Car.IsPlaybackGoingOn(42@(79@,10i))
+goto_if_false @TWAR7_25994
+Car.StopPlayback(42@(79@,10i))
+
+:TWAR7_25994
+goto @TWAR7_26030
+
+:TWAR7_26001
+if 
+  Car.IsPlaybackGoingOn(42@(79@,10i))
+goto_if_false @TWAR7_26030
+Car.StopPlayback(42@(79@,10i))
+
+:TWAR7_26030
+79@ += 1
+goto @TWAR7_26051
+
+:TWAR7_26044
+79@ = 0
+
+:TWAR7_26051
+if 
+  not Char.IsInCar(34@, 35@)
+goto_if_false @TWAR7_26078
+Char.WarpIntoCar(34@, 35@)
+
+:TWAR7_26078
+goto @TWAR7_26122
+
+:TWAR7_26085
+if 
+  not Car.IsDead(35@)
+goto_if_false @TWAR7_26122
+if 
+  Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_26122
+Car.StopPlayback(35@)
+
+:TWAR7_26122
+goto @TWAR7_26166
+
+:TWAR7_26129
+if 
+  not Car.IsDead(35@)
+goto_if_false @TWAR7_26166
+if 
+  Car.IsPlaybackGoingOn(35@)
+goto_if_false @TWAR7_26166
+Car.StopPlayback(35@)
+
+:TWAR7_26166
+return 
+
+:TWAR7_26168
+77@ = Math.RandomIntInRange(1, 37)
+if 
+  77@ == 1
+goto_if_false @TWAR7_26210
+Car.CustomPlateForNextCar(78@, "GOT_M00_")
+
+:TWAR7_26210
+if 
+  77@ == 2
+goto_if_false @TWAR7_26243
+Car.CustomPlateForNextCar(78@, "M00TV_4U")
+
+:TWAR7_26243
+if 
+  77@ == 3
+goto_if_false @TWAR7_26276
+Car.CustomPlateForNextCar(78@, "MATHEW_2")
+
+:TWAR7_26276
+if 
+  77@ == 4
+goto_if_false @TWAR7_26309
+Car.CustomPlateForNextCar(78@, "D4_DEW0R")
+
+:TWAR7_26309
+if 
+  77@ == 5
+goto_if_false @TWAR7_26342
+Car.CustomPlateForNextCar(78@, "D0DE_777")
+
+:TWAR7_26342
+if 
+  77@ == 6
+goto_if_false @TWAR7_26375
+Car.CustomPlateForNextCar(78@, "DAM0_666")
+
+:TWAR7_26375
+if 
+  77@ == 7
+goto_if_false @TWAR7_26408
+Car.CustomPlateForNextCar(78@, "C0NEY_88")
+
+:TWAR7_26408
+if 
+  77@ == 8
+goto_if_false @TWAR7_26441
+Car.CustomPlateForNextCar(78@, "PRE4CHER")
+
+:TWAR7_26441
+if 
+  77@ == 9
+goto_if_false @TWAR7_26474
+Car.CustomPlateForNextCar(78@, "DBP_4NDY")
+
+:TWAR7_26474
+if 
+  77@ == 10
+goto_if_false @TWAR7_26507
+Car.CustomPlateForNextCar(78@, "EV1L_SLY")
+
+:TWAR7_26507
+if 
+  77@ == 11
+goto_if_false @TWAR7_26540
+Car.CustomPlateForNextCar(78@, "N1_R4V3N")
+
+:TWAR7_26540
+if 
+  77@ == 12
+goto_if_false @TWAR7_26573
+Car.CustomPlateForNextCar(78@, "D1VX_Z00")
+
+:TWAR7_26573
+if 
+  77@ == 13
+goto_if_false @TWAR7_26605
+Car.CustomPlateForNextCar(78@, "MR_B3NN")
+
+:TWAR7_26605
+if 
+  77@ == 14
+goto_if_false @TWAR7_26638
+Car.CustomPlateForNextCar(78@, "R3D_R4SP")
+
+:TWAR7_26638
+if 
+  77@ == 15
+goto_if_false @TWAR7_26671
+Car.CustomPlateForNextCar(78@, "LA_B0MBA")
+
+:TWAR7_26671
+if 
+  77@ == 16
+goto_if_false @TWAR7_26704
+Car.CustomPlateForNextCar(78@, "L3337_0G")
+
+:TWAR7_26704
+if 
+  77@ == 17
+goto_if_false @TWAR7_26737
+Car.CustomPlateForNextCar(78@, "BUDD4H_X")
+
+:TWAR7_26737
+if 
+  77@ == 18
+goto_if_false @TWAR7_26770
+Car.CustomPlateForNextCar(78@, "T3H_BUCK")
+
+:TWAR7_26770
+if 
+  77@ == 19
+goto_if_false @TWAR7_26803
+Car.CustomPlateForNextCar(78@, "CHUNKY_1")
+
+:TWAR7_26803
+if 
+  77@ == 20
+goto_if_false @TWAR7_26836
+Car.CustomPlateForNextCar(78@, "EV1L_BNZ")
+
+:TWAR7_26836
+if 
+  77@ == 21
+goto_if_false @TWAR7_26869
+Car.CustomPlateForNextCar(78@, "S4ND_M4N")
+
+:TWAR7_26869
+if 
+  77@ == 22
+goto_if_false @TWAR7_26902
+Car.CustomPlateForNextCar(78@, "RKK_DBP1")
+
+:TWAR7_26902
+if 
+  77@ == 23
+goto_if_false @TWAR7_26935
+Car.CustomPlateForNextCar(78@, "RE1_K0KU")
+
+:TWAR7_26935
+if 
+  77@ == 24
+goto_if_false @TWAR7_26968
+Car.CustomPlateForNextCar(78@, "S3XY_JUD")
+
+:TWAR7_26968
+if 
+  77@ == 25
+goto_if_false @TWAR7_27001
+Car.CustomPlateForNextCar(78@, "SUNRA_93")
+
+:TWAR7_27001
+if 
+  77@ == 26
+goto_if_false @TWAR7_27034
+Car.CustomPlateForNextCar(78@, "UG_FUX69")
+
+:TWAR7_27034
+if 
+  77@ == 27
+goto_if_false @TWAR7_27067
+Car.CustomPlateForNextCar(78@, "LI0N_CUM")
+
+:TWAR7_27067
+if 
+  77@ == 28
+goto_if_false @TWAR7_27100
+Car.CustomPlateForNextCar(78@, "RKK_PWND")
+
+:TWAR7_27100
+if 
+  77@ == 29
+goto_if_false @TWAR7_27133
+Car.CustomPlateForNextCar(78@, "HAZE_B0B")
+
+:TWAR7_27133
+if 
+  77@ == 30
+goto_if_false @TWAR7_27166
+Car.CustomPlateForNextCar(78@, "T3H_FLUF")
+
+:TWAR7_27166
+if 
+  77@ == 31
+goto_if_false @TWAR7_27199
+Car.CustomPlateForNextCar(78@, "BM_4NDY_")
+
+:TWAR7_27199
+if 
+  77@ == 32
+goto_if_false @TWAR7_27232
+Car.CustomPlateForNextCar(78@, "BM_D34N_")
+
+:TWAR7_27232
+if 
+  77@ == 33
+goto_if_false @TWAR7_27265
+Car.CustomPlateForNextCar(78@, "BM_L4C3Y")
+
+:TWAR7_27265
+if 
+  77@ == 34
+goto_if_false @TWAR7_27298
+Car.CustomPlateForNextCar(78@, "BM_D3V__")
+
+:TWAR7_27298
+if 
+  77@ == 35
+goto_if_false @TWAR7_27331
+Car.CustomPlateForNextCar(78@, "NU_SK00L")
+
+:TWAR7_27331
+if 
+  77@ == 36
+goto_if_false @TWAR7_27364
+Car.CustomPlateForNextCar(78@, "G4L_AVET")
+
+:TWAR7_27364
+if 
+  77@ == 37
+goto_if_false @TWAR7_27397
+Car.CustomPlateForNextCar(78@, "M0J0_J0J")
+
+:TWAR7_27397
+return 
+
+:TWAR7_27399
+if 
+  67@ == 1
+goto_if_false @TWAR7_28418
+if 
+  Char.IsSittingInCar($scplayer, 37@)
+goto_if_false @TWAR7_27688
+if or
+  83@ == 1
+  83@ == 2
+goto_if_false @TWAR7_27688
+if 
+  is_int_lvar_greater_than_int_lvar 125@ > 84@
+goto_if_false @TWAR7_27681
+gosub @TWAR7_32112
+gosub @TWAR7_32219
+if 
+  68@ == 0
+goto_if_false @TWAR7_27578
+if or
+  not Char.IsDead($big_smoke)
+  not Char.IsDead($sweet)
+goto_if_false @TWAR7_27547
+gosub @TWAR7_32373
+goto @TWAR7_27578
+
+:TWAR7_27547
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(86@(84@,13s))
+126@ = 0
+127@ = 0
+
+:TWAR7_27578
+if or
+  68@ == 1
+  68@ == 2
+goto_if_false @TWAR7_27674
+if or
+  not Char.IsDead($big_smoke)
+  not Char.IsDead($sweet)
+  not Char.IsDead($mc_strap)
+goto_if_false @TWAR7_27643
+gosub @TWAR7_32373
+goto @TWAR7_27674
+
+:TWAR7_27643
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(86@(84@,13s))
+126@ = 0
+127@ = 0
+
+:TWAR7_27674
+goto @TWAR7_27688
+
+:TWAR7_27681
+83@ = 0
+
+:TWAR7_27688
+if 
+  not Char.IsInCar($scplayer, 37@)
+goto_if_false @TWAR7_27824
+if 
+  11 > 83@
+goto_if_false @TWAR7_27824
+if 
+  is_int_lvar_greater_than_int_lvar 125@ > 84@
+goto_if_false @TWAR7_27751
+84@ += 1
+
+:TWAR7_27751
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearPrints
+Text.ClearThisPrint(86@(84@,13s))
+set_lvar_int_to_lvar_int 132@ = 83@
+set_lvar_int_to_lvar_int 131@ = 84@
+83@ = 11
+84@ = Math.RandomIntInRange(0, 5)
+set_lvar_int_to_lvar_int 130@ = 84@
+130@ += 1
+gosub @TWAR7_29790
+
+:TWAR7_27824
+if 
+  83@ == 11
+goto_if_false @TWAR7_28149
+if 
+  not Char.IsInCar($scplayer, 37@)
+goto_if_false @TWAR7_28097
+if 
+  is_int_lvar_greater_than_int_lvar 125@ > 84@
+goto_if_false @TWAR7_28074
+gosub @TWAR7_32112
+gosub @TWAR7_32219
+if 
+  68@ == 0
+goto_if_false @TWAR7_27978
+if or
+  not Char.IsDead($big_smoke)
+  not Char.IsDead($sweet)
+goto_if_false @TWAR7_27947
+gosub @TWAR7_32373
+goto @TWAR7_27978
+
+:TWAR7_27947
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(86@(84@,13s))
+126@ = 0
+127@ = 0
+
+:TWAR7_27978
+if 
+  68@ == 1
+goto_if_false @TWAR7_28067
+if or
+  not Char.IsDead($big_smoke)
+  not Char.IsDead($sweet)
+  not Char.IsDead($mc_strap)
+goto_if_false @TWAR7_28036
+gosub @TWAR7_32373
+goto @TWAR7_28067
+
+:TWAR7_28036
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(86@(84@,13s))
+126@ = 0
+127@ = 0
+
+:TWAR7_28067
+goto @TWAR7_28097
+
+:TWAR7_28074
+Text.PrintNow('SMK1_01', 11000, 1)
+83@ = 12
+
+:TWAR7_28097
+if 
+  Char.IsSittingInCar($scplayer, 37@)
+goto_if_false @TWAR7_28149
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(86@(84@,13s))
+83@ = 13
+84@ = 0
+Text.ClearPrints
+
+:TWAR7_28149
+if 
+  83@ == 12
+goto_if_false @TWAR7_28202
+if 
+  Char.IsSittingInCar($scplayer, 37@)
+goto_if_false @TWAR7_28202
+83@ = 13
+84@ = 0
+Text.ClearPrints
+
+:TWAR7_28202
+if 
+  83@ == 13
+goto_if_false @TWAR7_28418
+if 
+  Char.IsSittingInCar($scplayer, 37@)
+goto_if_false @TWAR7_28344
+TIMERB = 0
+set_lvar_int_to_lvar_int 83@ = 132@
+set_lvar_int_to_lvar_int 84@ = 131@
+gosub @TWAR7_29790
+if 
+  132@ == 0
+goto_if_false @TWAR7_28344
+if 
+  68@ == 0
+goto_if_false @TWAR7_28328
+Text.PrintNow('SMK1_02', 7000, 1)
+goto @TWAR7_28344
+
+:TWAR7_28328
+Text.PrintNow('SMK1_10', 7000, 1)
+
+:TWAR7_28344
+if 
+  not Char.IsInCar($scplayer, 37@)
+goto_if_false @TWAR7_28418
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(86@(84@,13s))
+83@ = 11
+84@ = Math.RandomIntInRange(0, 5)
+set_lvar_int_to_lvar_int 130@ = 84@
+130@ += 1
+gosub @TWAR7_29790
+
+:TWAR7_28418
+if or
+  83@ == 3
+  83@ == 4
+  83@ == 5
+  83@ == 8
+  83@ == 10
+goto_if_false @TWAR7_28518
+if 
+  is_int_lvar_greater_than_int_lvar 125@ > 84@
+goto_if_false @TWAR7_28511
+gosub @TWAR7_32112
+gosub @TWAR7_32219
+gosub @TWAR7_32373
+goto @TWAR7_28518
+
+:TWAR7_28511
+83@ = 0
+
+:TWAR7_28518
+if 
+  67@ > 3
+goto_if_false @TWAR7_29524
+if or
+  14 > 67@
+  67@ == 16
+goto_if_false @TWAR7_29524
+if 
+  Char.IsGroupMember($mc_strap, $Players_Group)
+goto_if_false @TWAR7_28917
+if 
+  Char.LocateAnyMeansChar3D($mc_strap, $scplayer, 10.0, 10.0, 8.0, False)
+goto_if_false @TWAR7_28910
+if and
+  Char.IsOnFoot($scplayer)
+  Char.IsOnFoot($mc_strap)
+goto_if_false @TWAR7_28763
+if 
+  83@ == 9
+goto_if_false @TWAR7_28763
+if 
+  is_int_lvar_greater_than_int_lvar 125@ > 84@
+goto_if_false @TWAR7_28756
+gosub @TWAR7_32112
+gosub @TWAR7_32219
+if 
+  not Char.IsDead($mc_strap)
+goto_if_false @TWAR7_28718
+gosub @TWAR7_32373
+goto @TWAR7_28749
+
+:TWAR7_28718
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(86@(84@,13s))
+126@ = 0
+127@ = 0
+
+:TWAR7_28749
+goto @TWAR7_28763
+
+:TWAR7_28756
+83@ = 0
+
+:TWAR7_28763
+if and
+  Char.IsInAnyCar($scplayer)
+  Char.IsInAnyCar($mc_strap)
+goto_if_false @TWAR7_28910
+if 
+  83@ == 9
+goto_if_false @TWAR7_28910
+if 
+  is_int_lvar_greater_than_int_lvar 125@ > 84@
+goto_if_false @TWAR7_28903
+gosub @TWAR7_32112
+gosub @TWAR7_32219
+if 
+  not Char.IsDead($mc_strap)
+goto_if_false @TWAR7_28865
+gosub @TWAR7_32373
+goto @TWAR7_28896
+
+:TWAR7_28865
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(86@(84@,13s))
+126@ = 0
+127@ = 0
+
+:TWAR7_28896
+goto @TWAR7_28910
+
+:TWAR7_28903
+83@ = 0
+
+:TWAR7_28910
+goto @TWAR7_29034
+
+:TWAR7_28917
+if 
+  14 > 83@
+goto_if_false @TWAR7_29034
+if 
+  is_int_lvar_greater_than_int_lvar 125@ > 84@
+goto_if_false @TWAR7_28961
+84@ += 1
+
+:TWAR7_28961
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(86@(84@,13s))
+Text.ClearPrints
+set_lvar_int_to_lvar_int 132@ = 83@
+set_lvar_int_to_lvar_int 131@ = 84@
+83@ = 14
+84@ = Math.RandomIntInRange(0, 3)
+set_lvar_int_to_lvar_int 130@ = 84@
+130@ += 1
+gosub @TWAR7_29790
+
+:TWAR7_29034
+if 
+  83@ == 14
+goto_if_false @TWAR7_29225
+if 
+  not Char.IsGroupMember($mc_strap, $Players_Group)
+goto_if_false @TWAR7_29202
+if 
+  is_int_lvar_greater_than_int_lvar 125@ > 84@
+goto_if_false @TWAR7_29172
+gosub @TWAR7_32112
+gosub @TWAR7_32219
+if 
+  not Char.IsDead($mc_strap)
+goto_if_false @TWAR7_29134
+gosub @TWAR7_32373
+goto @TWAR7_29165
+
+:TWAR7_29134
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(86@(84@,13s))
+126@ = 0
+127@ = 0
+
+:TWAR7_29165
+goto @TWAR7_29195
+
+:TWAR7_29172
+Text.PrintNow('SMK1_09', 7000, 1)
+83@ = 15
+
+:TWAR7_29195
+goto @TWAR7_29225
+
+:TWAR7_29202
+Text.PrintNow('SMK1_09', 7000, 1)
+83@ = 15
+
+:TWAR7_29225
+if 
+  83@ == 15
+goto_if_false @TWAR7_29278
+if 
+  Char.IsGroupMember($mc_strap, $Players_Group)
+goto_if_false @TWAR7_29278
+83@ = 16
+84@ = 0
+Text.ClearPrints
+
+:TWAR7_29278
+if 
+  83@ == 16
+goto_if_false @TWAR7_29524
+if 
+  Char.IsGroupMember($mc_strap, $Players_Group)
+goto_if_false @TWAR7_29469
+TIMERB = 0
+set_lvar_int_to_lvar_int 83@ = 132@
+set_lvar_int_to_lvar_int 84@ = 131@
+gosub @TWAR7_29790
+if 
+  132@ == 0
+goto_if_false @TWAR7_29462
+if 
+  14 > 67@
+goto_if_false @TWAR7_29446
+if 
+  Char.IsInCar($scplayer, 36@)
+goto_if_false @TWAR7_29423
+Text.PrintNow('SMK1_04', 7000, 1)
+goto @TWAR7_29439
+
+:TWAR7_29423
+Text.PrintNow('SMK1_11', 7000, 1)
+
+:TWAR7_29439
+goto @TWAR7_29462
+
+:TWAR7_29446
+Text.PrintNow('SMK1_13', 8500, 1)
+
+:TWAR7_29462
+goto @TWAR7_29524
+
+:TWAR7_29469
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(86@(84@,13s))
+83@ = 14
+84@ = Math.RandomIntInRange(0, 3)
+set_lvar_int_to_lvar_int 130@ = 84@
+130@ += 1
+gosub @TWAR7_29790
+
+:TWAR7_29524
+if or
+  83@ == 6
+  83@ == 7
+goto_if_false @TWAR7_29657
+if 
+  is_int_lvar_greater_than_int_lvar 125@ > 84@
+goto_if_false @TWAR7_29650
+gosub @TWAR7_32112
+gosub @TWAR7_32219
+if 
+  not Char.IsDead(34@)
+goto_if_false @TWAR7_29612
+gosub @TWAR7_32373
+goto @TWAR7_29643
+
+:TWAR7_29612
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(86@(84@,13s))
+126@ = 0
+127@ = 0
+
+:TWAR7_29643
+goto @TWAR7_29657
+
+:TWAR7_29650
+83@ = 0
+
+:TWAR7_29657
+if 
+  83@ == 17
+goto_if_false @TWAR7_29788
+if 
+  is_int_lvar_greater_than_int_lvar 125@ > 84@
+goto_if_false @TWAR7_29781
+gosub @TWAR7_32112
+gosub @TWAR7_32219
+if and
+  not Char.IsDead(34@)
+  not Char.IsDead($mc_strap)
+goto_if_false @TWAR7_29743
+gosub @TWAR7_32373
+goto @TWAR7_29774
+
+:TWAR7_29743
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearThisPrint(86@(84@,13s))
+126@ = 0
+127@ = 0
+
+:TWAR7_29774
+goto @TWAR7_29788
+
+:TWAR7_29781
+83@ = 0
+
+:TWAR7_29788
+return 
+
+:TWAR7_29790
+if 
+  83@ == 1
+goto_if_false @TWAR7_30007
+set_lvar_text_label 86@s = 'SMO1_AA'
+set_lvar_text_label 88@s = 'SMO1_AC'
+set_lvar_text_label 90@s = 'SMO1_AD'
+set_lvar_text_label 92@s = 'SMO1_AE'
+set_lvar_text_label 94@s = 'SMO1_AF'
+set_lvar_text_label 96@s = 'SMO1_AG'
+set_lvar_text_label 98@s = 'SMO1_AH'
+set_lvar_text_label 100@s = 'SMO1_AJ'
+set_lvar_int_to_constant 112@ = 35000
+set_lvar_int_to_constant 113@ = 35001
+set_lvar_int_to_constant 114@ = 35002
+set_lvar_int_to_constant 115@ = 35003
+set_lvar_int_to_constant 116@ = 35004
+set_lvar_int_to_constant 117@ = 35005
+set_lvar_int_to_constant 118@ = 35006
+set_lvar_int_to_constant 119@ = 35007
+125@ = 8
+
+:TWAR7_30007
+if 
+  83@ == 2
+goto_if_false @TWAR7_30200
+set_lvar_text_label 86@s = 'SMO1_BA'
+set_lvar_text_label 88@s = 'SMO1_BB'
+set_lvar_text_label 90@s = 'SMO1_BC'
+set_lvar_text_label 92@s = 'SMO1_BD'
+set_lvar_text_label 94@s = 'SMO1_BE'
+set_lvar_text_label 96@s = 'SMO1_BF'
+set_lvar_text_label 98@s = 'SMO1_BG'
+set_lvar_int_to_constant 112@ = 35008
+set_lvar_int_to_constant 113@ = 35009
+set_lvar_int_to_constant 114@ = 35010
+set_lvar_int_to_constant 115@ = 35011
+set_lvar_int_to_constant 116@ = 35012
+set_lvar_int_to_constant 117@ = 35013
+set_lvar_int_to_constant 118@ = 35014
+125@ = 7
+
+:TWAR7_30200
+if 
+  83@ == 3
+goto_if_false @TWAR7_30393
+set_lvar_text_label 86@s = 'SMO1_CA'
+set_lvar_text_label 88@s = 'SMO1_CB'
+set_lvar_text_label 90@s = 'SMO1_CC'
+set_lvar_text_label 92@s = 'SMO1_CD'
+set_lvar_text_label 94@s = 'SMO1_CE'
+set_lvar_text_label 96@s = 'SMO1_CF'
+set_lvar_text_label 98@s = 'SMO1_CG'
+set_lvar_int_to_constant 112@ = 35015
+set_lvar_int_to_constant 113@ = 35016
+set_lvar_int_to_constant 114@ = 35017
+set_lvar_int_to_constant 115@ = 35018
+set_lvar_int_to_constant 116@ = 35019
+set_lvar_int_to_constant 117@ = 35020
+set_lvar_int_to_constant 118@ = 35021
+125@ = 7
+
+:TWAR7_30393
+if 
+  83@ == 4
+goto_if_false @TWAR7_30659
+set_lvar_text_label 86@s = 'SMO1_CH'
+set_lvar_text_label 88@s = 'SMO1_DB'
+set_lvar_text_label 90@s = 'SMO1_CJ'
+set_lvar_text_label 92@s = 'SMO1_CK'
+set_lvar_text_label 94@s = 'SMO1_CL'
+set_lvar_text_label 96@s = 'SMO1_CM'
+set_lvar_text_label 98@s = 'SMO1_CN'
+set_lvar_text_label 100@s = 'SMO1_CO'
+set_lvar_text_label 102@s = 'SMO1_CP'
+set_lvar_text_label 104@s = 'SMO1_DA'
+set_lvar_int_to_constant 112@ = 35022
+set_lvar_int_to_constant 113@ = 35031
+set_lvar_int_to_constant 114@ = 35023
+set_lvar_int_to_constant 115@ = 35024
+set_lvar_int_to_constant 116@ = 35025
+set_lvar_int_to_constant 117@ = 35026
+set_lvar_int_to_constant 118@ = 35027
+set_lvar_int_to_constant 119@ = 35028
+set_lvar_int_to_constant 120@ = 35029
+set_lvar_int_to_constant 121@ = 35030
+set_lvar_int_to_lvar_int 125@ = 130@
+
+:TWAR7_30659
+if 
+  83@ == 5
+goto_if_false @TWAR7_30732
+set_lvar_text_label 86@s = 'SMO1_EA'
+set_lvar_text_label 88@s = 'SMO1_EB'
+set_lvar_int_to_constant 112@ = 35033
+set_lvar_int_to_constant 113@ = 35034
+125@ = 2
+
+:TWAR7_30732
+if 
+  83@ == 6
+goto_if_false @TWAR7_30998
+set_lvar_text_label 86@s = 'SMO1_FA'
+set_lvar_text_label 88@s = 'SMO1_FB'
+set_lvar_text_label 90@s = 'SMO1_FC'
+set_lvar_text_label 92@s = 'SMO1_FD'
+set_lvar_text_label 94@s = 'SMO1_FE'
+set_lvar_text_label 96@s = 'SMO1_FF'
+set_lvar_text_label 98@s = 'SMO1_FG'
+set_lvar_text_label 100@s = 'SMO1_FH'
+set_lvar_text_label 102@s = 'SMO1_FJ'
+set_lvar_text_label 104@s = 'SMO1_FK'
+set_lvar_int_to_constant 112@ = 35035
+set_lvar_int_to_constant 113@ = 35036
+set_lvar_int_to_constant 114@ = 35037
+set_lvar_int_to_constant 115@ = 35038
+set_lvar_int_to_constant 116@ = 35039
+set_lvar_int_to_constant 117@ = 35040
+set_lvar_int_to_constant 118@ = 35041
+set_lvar_int_to_constant 119@ = 35042
+set_lvar_int_to_constant 120@ = 35043
+set_lvar_int_to_constant 121@ = 35044
+set_lvar_int_to_lvar_int 125@ = 130@
+
+:TWAR7_30998
+if 
+  83@ == 7
+goto_if_false @TWAR7_31071
+set_lvar_text_label 86@s = 'SMO1_GA'
+set_lvar_text_label 88@s = 'SMO1_GB'
+set_lvar_int_to_constant 112@ = 35047
+set_lvar_int_to_constant 113@ = 35048
+125@ = 2
+
+:TWAR7_31071
+if 
+  83@ == 8
+goto_if_false @TWAR7_31288
+set_lvar_text_label 86@s = 'SMO1_HA'
+set_lvar_text_label 88@s = 'SMO1_HB'
+set_lvar_text_label 90@s = 'SMO1_HC'
+set_lvar_text_label 92@s = 'SMO1_HD'
+set_lvar_text_label 94@s = 'SMO1_HE'
+set_lvar_text_label 96@s = 'SMO1_HF'
+set_lvar_text_label 98@s = 'SMO1_HG'
+set_lvar_text_label 100@s = 'SMO1_HH'
+set_lvar_int_to_constant 112@ = 35053
+set_lvar_int_to_constant 113@ = 35054
+set_lvar_int_to_constant 114@ = 35055
+set_lvar_int_to_constant 115@ = 35056
+set_lvar_int_to_constant 116@ = 35057
+set_lvar_int_to_constant 117@ = 35058
+set_lvar_int_to_constant 118@ = 35059
+set_lvar_int_to_constant 119@ = 35060
+125@ = 8
+
+:TWAR7_31288
+if 
+  83@ == 9
+goto_if_false @TWAR7_31553
+set_lvar_text_label 86@s = 'SMO1_JA'
+set_lvar_text_label 88@s = 'SMO1_JB'
+set_lvar_text_label 90@s = 'SMO1_JC'
+set_lvar_text_label 92@s = 'SMO1_JD'
+set_lvar_text_label 94@s = 'SMO1_JG'
+set_lvar_text_label 96@s = 'SMO1_JM'
+set_lvar_text_label 98@s = 'SMO1_JH'
+set_lvar_text_label 100@s = 'SMO1_JJ'
+set_lvar_text_label 102@s = 'SMO1_JK'
+set_lvar_text_label 104@s = 'SMO1_JL'
+set_lvar_int_to_constant 112@ = 35061
+set_lvar_int_to_constant 113@ = 35062
+set_lvar_int_to_constant 114@ = 35063
+set_lvar_int_to_constant 115@ = 35064
+set_lvar_int_to_constant 116@ = 35065
+set_lvar_int_to_constant 117@ = 35070
+set_lvar_int_to_constant 118@ = 35066
+set_lvar_int_to_constant 119@ = 35067
+set_lvar_int_to_constant 120@ = 35068
+set_lvar_int_to_constant 121@ = 35069
+125@ = 10
+
+:TWAR7_31553
+if 
+  83@ == 10
+goto_if_false @TWAR7_31698
+set_lvar_text_label 86@s = 'SMO1_KA'
+set_lvar_text_label 88@s = 'SMO1_KB'
+set_lvar_text_label 90@s = 'SMO1_KC'
+set_lvar_text_label 92@s = 'SMO1_KD'
+set_lvar_text_label 94@s = 'SMO1_KE'
+set_lvar_int_to_constant 112@ = 35071
+set_lvar_int_to_constant 113@ = 35072
+set_lvar_int_to_constant 114@ = 35073
+set_lvar_int_to_constant 115@ = 35074
+set_lvar_int_to_constant 116@ = 35075
+125@ = 5
+
+:TWAR7_31698
+if 
+  83@ == 11
+goto_if_false @TWAR7_31868
+set_lvar_text_label 86@s = 'SMOX_AA'
+set_lvar_text_label 88@s = 'SMOX_AB'
+set_lvar_text_label 90@s = 'SMOX_AC'
+set_lvar_text_label 92@s = 'SMOX_AD'
+set_lvar_text_label 94@s = 'SMOX_AE'
+set_lvar_text_label 96@s = 'SMOX_AF'
+set_lvar_int_to_constant 112@ = 35800
+set_lvar_int_to_constant 113@ = 35801
+set_lvar_int_to_constant 114@ = 35802
+set_lvar_int_to_constant 115@ = 35803
+set_lvar_int_to_constant 116@ = 35804
+set_lvar_int_to_constant 117@ = 35805
+set_lvar_int_to_lvar_int 125@ = 130@
+
+:TWAR7_31868
+if 
+  83@ == 14
+goto_if_false @TWAR7_31960
+set_lvar_text_label 86@s = 'LOCX_AA'
+set_lvar_text_label 88@s = 'LOCX_AB'
+set_lvar_text_label 90@s = 'LOCX_AC'
+set_lvar_int_to_constant 112@ = 22400
+set_lvar_int_to_constant 113@ = 22401
+set_lvar_int_to_constant 114@ = 22402
+set_lvar_int_to_lvar_int 125@ = 130@
+
+:TWAR7_31960
+if 
+  83@ == 17
+goto_if_false @TWAR7_32081
+set_lvar_text_label 86@s = 'SMO1_GC'
+set_lvar_text_label 88@s = 'SMO1_GD'
+set_lvar_text_label 90@s = 'SMO1_GE'
+set_lvar_text_label 92@s = 'SMO1_GF'
+set_lvar_int_to_constant 112@ = 35049
+set_lvar_int_to_constant 113@ = 35050
+set_lvar_int_to_constant 114@ = 35051
+set_lvar_int_to_constant 115@ = 35052
+125@ = 4
+
+:TWAR7_32081
+set_lvar_int_to_lvar_int 128@ = 84@
+126@ = 0
+127@ = 0
+129@ = 1
+return 
+
+:TWAR7_32112
+if 
+  is_int_lvar_greater_than_int_lvar 125@ > 128@
+goto_if_false @TWAR7_32217
+if 
+  126@ == 0
+goto_if_false @TWAR7_32174
+Audio.LoadMissionAudio(112@(128@,13i), 1)
+128@ += 1
+126@ = 1
+
+:TWAR7_32174
+if 
+  127@ == 0
+goto_if_false @TWAR7_32217
+Audio.LoadMissionAudio(112@(128@,13i), 2)
+128@ += 1
+127@ = 1
+
+:TWAR7_32217
+return 
+
+:TWAR7_32219
+if 
+  129@ == 1
+goto_if_false @TWAR7_32295
+if 
+  126@ == 1
+goto_if_false @TWAR7_32295
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @TWAR7_32295
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(86@(84@,13s), 4500, 1)
+126@ = 2
+
+:TWAR7_32295
+if 
+  129@ == 2
+goto_if_false @TWAR7_32371
+if 
+  127@ == 1
+goto_if_false @TWAR7_32371
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @TWAR7_32371
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow(86@(84@,13s), 4500, 1)
+127@ = 2
+
+:TWAR7_32371
+return 
+
+:TWAR7_32373
+if 
+  126@ == 2
+goto_if_false @TWAR7_32436
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @TWAR7_32436
+Text.ClearThisPrint(86@(84@,13s))
+84@ += 1
+129@ = 2
+126@ = 0
+
+:TWAR7_32436
+if 
+  127@ == 2
+goto_if_false @TWAR7_32499
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @TWAR7_32499
+Text.ClearThisPrint(86@(84@,13s))
+84@ += 1
+129@ = 1
+127@ = 0
+
+:TWAR7_32499
+return 
+

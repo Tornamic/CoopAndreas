@@ -1,0 +1,3155 @@
+//-------------Mission 25---------------
+// Originally: Catalyst
+
+:RYDER3
+script_name 'RYDER3'
+gosub @RYDER3_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @RYDER3_38
+gosub @RYDER3_18057
+
+:RYDER3_38
+gosub @RYDER3_18237
+terminate_this_script 
+
+:RYDER3_47
+Stat.RegisterMissionGiven
+$onmission = 1
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+89@ = 0
+$r3_rnd = 0
+95@ = 2
+102@ = 0
+Text.LoadMissionText('RYDER3')
+72@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+105@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+World.SetCarDensityMultiplier(0.5)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:RYDER3_135
+if 
+  Camera.GetFadingStatus
+goto_if_false @RYDER3_159
+wait 0
+goto @RYDER3_135
+
+:RYDER3_159
+Streaming.SetAreaVisible(2)
+Cutscene.Load('RYDER3A')
+
+:RYDER3_174
+if 
+  not Cutscene.HasLoaded
+goto_if_false @RYDER3_198
+wait 0
+goto @RYDER3_174
+
+:RYDER3_198
+Cutscene.Start
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+
+:RYDER3_215
+if 
+  not Cutscene.HasFinished
+goto_if_false @RYDER3_239
+wait 0
+goto @RYDER3_215
+
+:RYDER3_239
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, Fade.Out)
+
+:RYDER3_253
+if 
+  Camera.GetFadingStatus
+goto_if_false @RYDER3_277
+wait 0
+goto @RYDER3_253
+
+:RYDER3_277
+Cutscene.Clear
+Text.ClearPrints
+Hud.SwitchWidescreen(False)
+Streaming.SetAreaVisible(0)
+CarGenerator.Switch($gen_car6, 0)
+Streaming.RequestModel(600)
+Streaming.RequestModel(352)
+Streaming.RequestModel(346)
+Streaming.RequestModel(#CR_GUNCRATE)
+Streaming.RequestModel(#CR_AMMOBOX)
+Streaming.RequestModel(105)
+Streaming.RequestAnimation("BOX")
+Streaming.RequestAnimation("RYDER")
+Streaming.RequestAnimation("SWAT")
+Streaming.RequestModel(108)
+Streaming.RequestModel(109)
+Streaming.RequestModel(110)
+Streaming.RequestModel(537)
+Streaming.RequestModel(569)
+Streaming.RequestModel(492)
+Streaming.RequestModel(105)
+Streaming.RequestModel(106)
+Streaming.LoadSpecialCharacter('RYDER2', 1)
+Streaming.LoadAllModelsNow
+
+:RYDER3_399
+if or
+  not Streaming.HasModelLoaded(600)
+  not Streaming.HasModelLoaded(352)
+  not Streaming.HasModelLoaded(346)
+  not Streaming.HasModelLoaded(#CR_GUNCRATE)
+  not Streaming.HasModelLoaded(#CR_AMMOBOX)
+goto_if_false @RYDER3_446
+wait 0
+goto @RYDER3_399
+
+:RYDER3_446
+if or
+  not Streaming.HasModelLoaded(105)
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasAnimationLoaded("BOX")
+  not Streaming.HasAnimationLoaded("RYDER")
+goto_if_false @RYDER3_492
+wait 0
+goto @RYDER3_446
+
+:RYDER3_492
+if or
+  not Streaming.HasModelLoaded(108)
+  not Streaming.HasModelLoaded(109)
+  not Streaming.HasModelLoaded(110)
+  not Streaming.HasModelLoaded(537)
+  not Streaming.HasModelLoaded(569)
+goto_if_false @RYDER3_536
+wait 0
+goto @RYDER3_492
+
+:RYDER3_536
+if or
+  not Streaming.HasModelLoaded(492)
+  not Streaming.HasModelLoaded(105)
+  not Streaming.HasModelLoaded(106)
+  not Streaming.HasAnimationLoaded("SWAT")
+goto_if_false @RYDER3_579
+wait 0
+goto @RYDER3_536
+
+:RYDER3_579
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_2059
+gosub @RYDER3_18930
+Player.SetControl($player1, False)
+51@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R", "SWAT", 8.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_IN_R", "SWAT", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFootTimed(-1, $scplayer, 2000)
+Task.StayInSamePlace(-1, False)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_OUT_R", "SWAT", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_R_BACK", "SWAT", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(51@, True)
+Sequence.Close(51@)
+52@ = Sequence.Open()
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_L", "SWAT", 8.0, False, False, False, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_IN_L", "SWAT", 8.0, False, True, True, False, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFootTimed(-1, $scplayer, 2000)
+Task.StayInSamePlace(-1, False)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLSHOOT_OUT_L", "SWAT", 8.0, False, True, True, False, -1)
+Task.PlayAnimNonInterruptable(-1, "SWT_WLLPK_L_BACK", "SWAT", 8.0, False, False, False, False, -1)
+Sequence.SetToRepeat(52@, True)
+Sequence.Close(52@)
+76@ = Sequence.Open()
+Task.PlayAnim(-1, "COWER", "PED", 4.0, False, False, False, True, -1)
+Task.Pause(-1, 2000)
+Sequence.Close(76@)
+75@ = Sequence.Open()
+Task.PlayAnim(-1, "RYD_BECKON_01", "RYDER", 1.0, False, False, False, False, -1)
+Task.Pause(-1, 20000)
+Sequence.SetToRepeat(75@, True)
+Sequence.Close(75@)
+40@ = Sequence.Open()
+Task.StayInSamePlace(-1, False)
+Task.GoToCoordAnyMeans(-1, 2290.584, -1142.411, 25.7144, 6, -1)
+Task.GoToCoordAnyMeans(-1, 2288.539, -1133.753, 25.7076, 6, -1)
+Task.AchieveHeading(-1, 253.83)
+Task.StayInSamePlace(-1, True)
+Sequence.Close(40@)
+66@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 2289.092, -1117.049, 25.9062, 6, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(66@)
+67@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 2285.11, -1117.117, 25.9062, 6, -1)
+Task.StayInSamePlace(-1, True)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(67@)
+World.ClearArea(1, 2477.135, -1683.116, 12.3782, 10.0)
+World.ClearArea(1, 2469.224, -1672.496, 12.484, 10.0)
+World.ClearArea(0, 2472.783, -1685.696, 12.5153, 0.5)
+Streaming.LoadScene(2472.783, -1685.696, 12.5153)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_1446
+Char.SetCoordinates($scplayer, 2472.783, -1685.696, 12.5153)
+Char.SetHeading($scplayer, 336.6331)
+Camera.SetBehindPlayer
+
+:RYDER3_1446
+Car.SetModelComponents(600, 4, 4)
+Car.CustomPlateForNextCar(600, "_SHERM__")
+108@ = Car.Create(600, 2476.035, -1678.379, 12.3457)
+Car.SetCanBurstTires(108@, False)
+Car.SetHeading(108@, 43.9007)
+Car.SetHealth(108@, 2000)
+99@ = Blip.AddForCar(108@)
+Blip.SetAsFriendly(99@, True)
+Car.SetOnlyDamagedByPlayer(108@, True)
+Car.ChangeColor(108@, 84, 84)
+Car.SetCruiseSpeed(108@, 5.0)
+Blip.ChangeDisplay(99@, BlipDisplay.Neither)
+Car.SetStraightLineDistance(108@, 250)
+$ryder = Char.CreateAsPassenger(PedType.Mission1, 290, 108@, 0)
+Char.SetGetOutUpsideDownCar($ryder, False)
+Streaming.UnloadSpecialCharacter(1)
+Char.SetHeading($ryder, 121.9883)
+Task.StayInSamePlace($ryder, True)
+Char.SetHealth($ryder, 800)
+Char.SetMaxHealth($ryder, 800)
+Char.SetSuffersCriticalHits($ryder, False)
+Char.SetNeverTargeted($ryder, True)
+Char.GiveWeapon($ryder, WeaponType.MicroUzi, 9999)
+Char.SetCantBeDraggedOut($ryder, True)
+Char.SetAnimGroup($ryder, "GANG1")
+Char.SetRelationship($ryder, RelationshipType.Like, PedType.Player1)
+Char.SetDecisionMaker($ryder, 72@)
+Game.SetRelationship(RelationshipType.Like, PedType.Mission1, PedType.Mission1)
+Game.SetRelationship(RelationshipType.Like, PedType.Mission1, PedType.Player1)
+Game.SetRelationship(RelationshipType.Like, PedType.Mission2, PedType.Mission2)
+109@ = 0
+
+:RYDER3_1724
+if 
+  10 > 109@
+goto_if_false @RYDER3_1767
+110@(109@,10i) = -1
+109@ += 1
+goto @RYDER3_1724
+
+:RYDER3_1767
+109@ = 0
+$collected_guns = 0
+$r3_total_guns = 10
+122@ = 0
+123@ = -1
+124@ = 5
+if 
+  $onmission == 0
+goto_if_false @RYDER3_1848
+110@(109@,10i) = Object.CreateNoOffset(#GUNBOX, $x, $y, $z)
+
+:RYDER3_1848
+89@ = 0
+Path.SwitchRoadsOff(2284.0, -1151.0, 10.0, 2288.0, -1147.0, 30.0)
+Path.SwitchRoadsOff(2287.321, -1132.571, 10.0, 2360.839, -1177.134, 40.0)
+Path.SwitchRoadsOff(2311.676, -1375.397, 10.0, 2292.365, -1303.102, 40.0)
+Path.SwitchRoadsOff(2268.695, -1138.541, 10.0, 2282.362, -1159.604, 40.0)
+Path.SwitchRoadsOff(2307.537, -1162.624, 10.0, 2266.351, -1136.99, 40.0)
+Game.SwitchRandomTrains(False)
+Game.SetCreateRandomGangMembers(False)
+125@ = 0
+126@ = 0
+127@ = -151
+TIMERA = 0
+Game.SetWantedMultiplier(0.0)
+
+:RYDER3_2059
+128@ = Object.CreateNoOffset(#TMP_BIN, 2295.391, -1129.812, 26.4)
+Object.SetHeading(128@, 187.2863)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_2119
+Task.EnterCarAsDriver($scplayer, 108@, 5000)
+
+:RYDER3_2119
+Camera.SetFixedPosition(2473.642, -1674.005, 13.6679, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2473.833, -1674.969, 13.4843, SwitchType.JumpCut)
+gosub @RYDER3_19023
+Text.PrintNow('RYD3_Z', 6000, 1)
+TIMERB = 0
+
+:RYDER3_2200
+if 
+  4000 > TIMERB
+goto_if_false @RYDER3_2247
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @RYDER3_2240
+
+:RYDER3_2240
+goto @RYDER3_2200
+
+:RYDER3_2247
+gosub @RYDER3_18958
+
+:RYDER3_2254
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_18050
+wait 0
+gosub @RYDER3_19056
+gosub @RYDER3_20126
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @RYDER3_2310
+goto @RYDER3_18136
+
+:RYDER3_2310
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2290.65, -1148.723, 25.7508, 275.0, 275.0, 200.0)
+goto_if_false @RYDER3_2372
+World.SetCarDensityMultiplier(0.0)
+goto @RYDER3_2397
+
+:RYDER3_2372
+if 
+  10 > 89@
+goto_if_false @RYDER3_2397
+World.SetCarDensityMultiplier(1.0)
+
+:RYDER3_2397
+if 
+  102@ == 0
+goto_if_false @RYDER3_3444
+if and
+  Streaming.HasModelLoaded(537)
+  Streaming.HasModelLoaded(569)
+goto_if_false @RYDER3_3444
+129@ = Train.Create(2278.177, -1144.882, 27.5107, 10, 1)
+Car.LockDoors(129@, CarLock.Locked)
+Train.SetSpeed(129@, 0.0)
+Train.SetCruiseSpeed(129@, 0.0)
+Car.FreezePosition(129@, True)
+163@ = Train.GetCaboose(129@)
+74@ = Object.Create(#AMMOTRN_OBJ, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(74@, 163@, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+91@ = Object.Create(#CR_GUNCRATE, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(91@, 163@, 0.5, -5.5, -0.8, 0.0, 0.0, 145.0)
+92@ = Object.Create(#CR_GUNCRATE, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(92@, 163@, 0.5, 6.0, -0.8, 0.0, 0.0, 60.0)
+93@ = Object.Create(#CR_GUNCRATE, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(93@, 163@, -0.5, 8.0, -0.8, 0.0, 0.0, 130.0)
+61@ = Object.Create(#CR_GUNCRATE, 2287.744, -1131.75, 25.7431)
+Object.SetHeading(61@, 85.7739)
+62@ = Object.Create(#CR_GUNCRATE, 2287.358, -1131.091, 25.7449)
+Object.SetHeading(62@, 209.4727)
+63@ = Object.Create(#CR_GUNCRATE, 2287.665, -1127.056, 25.8118)
+Object.SetHeading(63@, 97.4572)
+64@ = Object.Create(#CR_GUNCRATE, 2287.431, -1125.586, 25.8256)
+Object.SetHeading(64@, 176.9109)
+102@ = 1
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Mission2)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission2, PedType.Player1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission2, PedType.Mission1)
+142@ = Char.Create(4, 106, 2291.969, -1131.63, 25.7468)
+Char.SetHeading(142@, 188.6236)
+Task.PlayAnimNonInterruptable(142@, "KO_SHOT_FRONT", "PED", 2.0, False, False, False, True, -1)
+Char.SetCollision(142@, False)
+Char.SetNeverTargeted(142@, True)
+Char.SetDecisionMaker(142@, 105@)
+143@ = Char.Create(4, 108, 2290.66, -1146.023, 25.7507)
+Char.SetHeading(143@, 180.7254)
+Task.PlayAnimNonInterruptable(143@, "KO_SHOT_FRONT", "PED", 2.0, False, False, False, True, -1)
+Char.SetCollision(143@, False)
+Char.SetNeverTargeted(143@, True)
+Char.SetDecisionMaker(143@, 105@)
+130@ = Char.Create(25, 108, 2295.683, -1128.682, 25.8647)
+Char.SetHeading(130@, 175.3117)
+Task.StayInSamePlace(130@, True)
+Char.SetIsTargetPriority(130@, True)
+131@ = Char.Create(25, 109, 2289.14, -1131.133, 25.7539)
+Char.SetHeading(131@, 190.007)
+Task.StayInSamePlace(131@, True)
+Char.SetIsTargetPriority(131@, True)
+132@ = Char.Create(25, 109, 2293.741, -1130.343, 25.8004)
+Char.SetHeading(132@, 178.0093)
+Task.ToggleDuck(132@, True)
+Task.StayInSamePlace(132@, True)
+Char.SetIsTargetPriority(132@, True)
+133@ = Char.Create(25, 110, 2285.522, -1135.369, 28.0)
+Char.SetHeading(133@, 202.6963)
+Char.SetOnlyDamagedByPlayer(133@, True)
+Task.StayInSamePlace(133@, True)
+Char.SetIsTargetPriority(133@, True)
+144@ = Char.Create(24, 105, 2296.282, -1158.184, 25.6529)
+Char.SetHeading(144@, 9.002)
+Task.ToggleDuck(144@, True)
+Task.StayInSamePlace(144@, True)
+145@ = Char.Create(24, 106, 2287.524, -1150.041, 25.7574)
+Char.SetHeading(145@, 347.622)
+Task.StayInSamePlace(145@, True)
+Task.ToggleDuck(145@, True)
+146@ = Char.Create(24, 105, 2301.257, -1157.372, 25.597)
+Char.SetHeading(146@, 9.002)
+Task.StayInSamePlace(146@, True)
+
+:RYDER3_3444
+if and
+  not Car.IsDead(108@)
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_3561
+if and
+  Char.IsInCar($scplayer, 108@)
+  89@ == 0
+goto_if_false @RYDER3_3561
+TIMERB = 0
+Audio.SetRadioChannel(RadioChannel.RadioLosSantos)
+Game.SwitchRandomTrains(False)
+122@ = 4
+89@ += 1
+Blip.ChangeDisplay(99@, BlipDisplay.Neither)
+34@ = Blip.AddForCoord(2278.177, -1144.882, 27.5107)
+Blip.SetCoordAppearance(34@, 0)
+101@ = 1
+
+:RYDER3_3561
+if or
+  89@ == 1
+  89@ == 2
+goto_if_false @RYDER3_4014
+if and
+  not Car.IsDead(108@)
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_4014
+if 
+  Char.IsInCar($scplayer, 108@)
+goto_if_false @RYDER3_3688
+if 
+  101@ <> 1
+goto_if_false @RYDER3_3681
+Blip.ChangeDisplay(99@, BlipDisplay.Neither)
+Blip.ChangeDisplay(34@, BlipDisplay.Both)
+Text.PrintNow('RYD3_Z', 6000, 1)
+101@ = 1
+
+:RYDER3_3681
+goto @RYDER3_4014
+
+:RYDER3_3688
+if 
+  101@ == 1
+goto_if_false @RYDER3_3959
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_3729
+Char.ShutUpForScriptedSpeech($ryder, False)
+
+:RYDER3_3729
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_3752
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:RYDER3_3752
+Blip.ChangeDisplay(34@, BlipDisplay.Neither)
+Blip.ChangeDisplay(99@, BlipDisplay.Both)
+$r3_rnd = Math.RandomIntInRange(0, 3)
+switch_start $r3_rnd total_jumps 3 default_jump 0 @RYDER3_3952 jumps 0 @RYDER3_3838 1 @RYDER3_3876 2 @RYDER3_3914 -1 @RYDER3_3952 -1 @RYDER3_3952 -1 @RYDER3_3952 -1 @RYDER3_3952
+
+:RYDER3_3838
+set_lvar_text_label 106@s = 'RYD3_NA'
+set_lvar_int_to_constant 96@ = 34062
+gosub @RYDER3_20106
+goto @RYDER3_3952
+
+:RYDER3_3876
+set_lvar_text_label 106@s = 'RYD3_NB'
+set_lvar_int_to_constant 96@ = 34063
+gosub @RYDER3_20106
+goto @RYDER3_3952
+
+:RYDER3_3914
+set_lvar_text_label 106@s = 'RYD3_NC'
+set_lvar_int_to_constant 96@ = 34064
+gosub @RYDER3_20106
+goto @RYDER3_3952
+
+:RYDER3_3952
+101@ = 2
+
+:RYDER3_3959
+if and
+  95@ == 2
+  101@ == 2
+goto_if_false @RYDER3_4007
+Text.PrintNow('RYD3_Q', 4000, 1)
+101@ = 0
+
+:RYDER3_4007
+87@ = 1
+
+:RYDER3_4014
+if 
+  89@ == 1
+goto_if_false @RYDER3_5344
+if 
+  87@ == 0
+goto_if_false @RYDER3_4772
+if and
+  95@ == 2
+  85@ == 0
+goto_if_false @RYDER3_4159
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_4098
+Char.ShutUpForScriptedSpeech($ryder, True)
+
+:RYDER3_4098
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_4121
+Char.ShutUpForScriptedSpeech($scplayer, True)
+
+:RYDER3_4121
+set_lvar_text_label 106@s = 'RYD3_AD'
+set_lvar_int_to_constant 96@ = 34003
+gosub @RYDER3_20106
+85@ = 1
+
+:RYDER3_4159
+if and
+  95@ == 2
+  85@ == 1
+goto_if_false @RYDER3_4222
+set_lvar_text_label 106@s = 'RYD3_AE'
+set_lvar_int_to_constant 96@ = 34004
+gosub @RYDER3_20106
+85@ = 2
+
+:RYDER3_4222
+if and
+  95@ == 2
+  85@ == 2
+goto_if_false @RYDER3_4285
+set_lvar_text_label 106@s = 'RYD3_BA'
+set_lvar_int_to_constant 96@ = 34005
+gosub @RYDER3_20106
+85@ = 3
+
+:RYDER3_4285
+if and
+  95@ == 2
+  85@ == 3
+goto_if_false @RYDER3_4348
+set_lvar_text_label 106@s = 'RYD3_BB'
+set_lvar_int_to_constant 96@ = 34006
+gosub @RYDER3_20106
+85@ = 4
+
+:RYDER3_4348
+if and
+  95@ == 2
+  85@ == 4
+goto_if_false @RYDER3_4411
+set_lvar_text_label 106@s = 'RYD3_BC'
+set_lvar_int_to_constant 96@ = 34007
+gosub @RYDER3_20106
+85@ = 5
+
+:RYDER3_4411
+if and
+  95@ == 2
+  85@ == 5
+goto_if_false @RYDER3_4474
+set_lvar_text_label 106@s = 'RYD3_BD'
+set_lvar_int_to_constant 96@ = 34008
+gosub @RYDER3_20106
+85@ = 6
+
+:RYDER3_4474
+if and
+  95@ == 2
+  85@ == 6
+goto_if_false @RYDER3_4537
+set_lvar_text_label 106@s = 'RYD3_BE'
+set_lvar_int_to_constant 96@ = 34009
+gosub @RYDER3_20106
+85@ = 7
+
+:RYDER3_4537
+if and
+  95@ == 2
+  85@ == 7
+goto_if_false @RYDER3_4600
+set_lvar_text_label 106@s = 'RYD3_BG'
+set_lvar_int_to_constant 96@ = 34011
+gosub @RYDER3_20106
+85@ = 8
+
+:RYDER3_4600
+if and
+  95@ == 2
+  85@ == 8
+goto_if_false @RYDER3_4663
+set_lvar_text_label 106@s = 'RYD3_BH'
+set_lvar_int_to_constant 96@ = 34012
+gosub @RYDER3_20106
+85@ = 9
+
+:RYDER3_4663
+if and
+  95@ == 2
+  85@ == 9
+goto_if_false @RYDER3_4772
+set_lvar_text_label 106@s = 'RYD3_BJ'
+set_lvar_int_to_constant 96@ = 34013
+gosub @RYDER3_20106
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_4742
+Char.ShutUp($ryder, False)
+
+:RYDER3_4742
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_4765
+Char.ShutUp($scplayer, False)
+
+:RYDER3_4765
+85@ = 10
+
+:RYDER3_4772
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2290.65, -1148.723, 25.7508, 200.0, 200.0, 200.0)
+  102@ == 1
+goto_if_false @RYDER3_5275
+36@ = 0
+
+:RYDER3_4834
+if 
+  not Char.IsDead(130@(36@,6i))
+goto_if_false @RYDER3_4997
+Task.StayInSamePlace(130@(36@,6i), True)
+136@(36@,6i) = Blip.AddForChar(130@(36@,6i))
+if or
+  36@ == 3
+  36@ == 0
+goto_if_false @RYDER3_4938
+Char.SetWeaponSkill(130@(36@,6i), 2)
+Char.GiveWeapon(130@(36@,6i), WeaponType.Pistol, 9999)
+goto @RYDER3_4963
+
+:RYDER3_4938
+Char.GiveWeapon(130@(36@,6i), WeaponType.MicroUzi, 9999)
+Char.SetCurrentWeapon(130@(36@,6i), WeaponType.MicroUzi)
+
+:RYDER3_4963
+Char.SetShootRate(130@(36@,6i), 50)
+Char.SetAccuracy(130@(36@,6i), 50)
+Char.SetDecisionMaker(130@(36@,6i), 72@)
+
+:RYDER3_4997
+36@ += 1
+  36@ >= 4
+goto_if_false @RYDER3_4834
+36@ = 0
+
+:RYDER3_5025
+if 
+  not Char.IsDead(144@(36@,4i))
+goto_if_false @RYDER3_5247
+Char.SetNeverTargeted(144@(36@,4i), True)
+Task.StayInSamePlace(144@(36@,4i), True)
+if 
+  36@ == 1
+goto_if_false @RYDER3_5116
+Char.SetHealth(144@(36@,4i), 200)
+Char.SetMaxHealth(144@(36@,4i), 200)
+goto @RYDER3_5138
+
+:RYDER3_5116
+Char.SetHealth(144@(36@,4i), 50)
+Char.SetMaxHealth(144@(36@,4i), 50)
+
+:RYDER3_5138
+if 
+  36@ == 1
+goto_if_false @RYDER3_5188
+Char.SetWeaponSkill(144@(36@,4i), 2)
+Char.GiveWeapon(144@(36@,4i), WeaponType.Pistol, 9999)
+goto @RYDER3_5213
+
+:RYDER3_5188
+Char.GiveWeapon(144@(36@,4i), WeaponType.MicroUzi, 9999)
+Char.SetCurrentWeapon(144@(36@,4i), WeaponType.MicroUzi)
+
+:RYDER3_5213
+Char.SetShootRate(144@(36@,4i), 70)
+Char.SetAccuracy(144@(36@,4i), 70)
+Char.SetDecisionMaker(144@(36@,4i), 72@)
+
+:RYDER3_5247
+36@ += 1
+  36@ >= 3
+goto_if_false @RYDER3_5025
+102@ = 2
+
+:RYDER3_5275
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 2290.65, -1148.723, 25.7508, 100.0, 100.0, 200.0)
+goto_if_false @RYDER3_5344
+89@ += 1
+TIMERB = 0
+85@ = 0
+
+:RYDER3_5344
+if 
+  89@ == 2
+goto_if_false @RYDER3_6821
+36@ = 0
+
+:RYDER3_5369
+if and
+  Char.IsDead(130@(36@,6i))
+  130@(36@,6i) <> 0
+goto_if_false @RYDER3_5449
+if 
+  Blip.DoesExist(136@(36@,6i))
+goto_if_false @RYDER3_5449
+Blip.Remove(136@(36@,6i))
+136@(36@,6i) = 0
+Char.MarkAsNoLongerNeeded(130@(36@,6i))
+
+:RYDER3_5449
+36@ += 1
+  36@ >= 4
+goto_if_false @RYDER3_5369
+if and
+  not Car.IsDead(108@)
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_5524
+if 
+  Char.IsInCar($scplayer, 108@)
+goto_if_false @RYDER3_5517
+goto @RYDER3_5524
+
+:RYDER3_5517
+88@ = 1
+
+:RYDER3_5524
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 2290.65, -1148.723, 25.7508, 100.0, 100.0, 100.0)
+  86@ == 0
+goto_if_false @RYDER3_6120
+if 
+  not Char.IsDead(145@)
+goto_if_false @RYDER3_5756
+149@ = Sequence.Open()
+Task.StayInSamePlace(-1, False)
+Task.ToggleDuck(-1, True)
+Task.GoStraightToCoord(-1, 2291.724, -1138.648, 25.6745, MoveState.Run, -2)
+Task.StayInSamePlace(-1, True)
+if 
+  not Char.IsDead(130@)
+goto_if_false @RYDER3_5664
+Task.KillCharOnFoot(-1, 130@)
+
+:RYDER3_5664
+if 
+  not Char.IsDead(131@)
+goto_if_false @RYDER3_5687
+Task.KillCharOnFoot(-1, 131@)
+
+:RYDER3_5687
+if 
+  not Char.IsDead(132@)
+goto_if_false @RYDER3_5710
+Task.KillCharOnFoot(-1, 132@)
+
+:RYDER3_5710
+if 
+  not Char.IsDead(133@)
+goto_if_false @RYDER3_5733
+Task.KillCharOnFoot(-1, 133@)
+
+:RYDER3_5733
+Sequence.Close(149@)
+Char.ClearTasksImmediately(145@)
+Char.PerformSequence(145@, 149@)
+Sequence.Clear(149@)
+
+:RYDER3_5756
+if 
+  not Char.IsDead(144@)
+goto_if_false @RYDER3_5933
+149@ = Sequence.Open()
+Task.StayInSamePlace(-1, False)
+Task.ToggleDuck(-1, True)
+Task.GoStraightToCoord(-1, 2297.533, -1137.578, 25.8778, MoveState.Run, -2)
+Task.StayInSamePlace(-1, True)
+if 
+  not Char.IsDead(130@)
+goto_if_false @RYDER3_5841
+Task.KillCharOnFoot(-1, 130@)
+
+:RYDER3_5841
+if 
+  not Char.IsDead(131@)
+goto_if_false @RYDER3_5864
+Task.KillCharOnFoot(-1, 131@)
+
+:RYDER3_5864
+if 
+  not Char.IsDead(132@)
+goto_if_false @RYDER3_5887
+Task.KillCharOnFoot(-1, 132@)
+
+:RYDER3_5887
+if 
+  not Char.IsDead(133@)
+goto_if_false @RYDER3_5910
+Task.KillCharOnFoot(-1, 133@)
+
+:RYDER3_5910
+Sequence.Close(149@)
+Char.ClearTasksImmediately(144@)
+Char.PerformSequence(144@, 149@)
+Sequence.Clear(149@)
+
+:RYDER3_5933
+if 
+  not Char.IsDead(146@)
+goto_if_false @RYDER3_6106
+149@ = Sequence.Open()
+Task.StayInSamePlace(-1, False)
+Task.ToggleDuck(-1, True)
+Task.GoStraightToCoord(-1, 2290.118, -1141.78, 25.7024, MoveState.Run, -2)
+Path.FlushRoute
+if 
+  not Char.IsDead(130@)
+goto_if_false @RYDER3_6014
+Task.KillCharOnFoot(-1, 130@)
+
+:RYDER3_6014
+if 
+  not Char.IsDead(131@)
+goto_if_false @RYDER3_6037
+Task.KillCharOnFoot(-1, 131@)
+
+:RYDER3_6037
+if 
+  not Char.IsDead(132@)
+goto_if_false @RYDER3_6060
+Task.KillCharOnFoot(-1, 132@)
+
+:RYDER3_6060
+if 
+  not Char.IsDead(133@)
+goto_if_false @RYDER3_6083
+Task.KillCharOnFoot(-1, 133@)
+
+:RYDER3_6083
+Sequence.Close(149@)
+Char.ClearTasksImmediately(146@)
+Char.PerformSequence(146@, 149@)
+Sequence.Clear(149@)
+
+:RYDER3_6106
+86@ = 1
+TIMERB = 0
+
+:RYDER3_6120
+if and
+  88@ == 0
+  86@ == 1
+goto_if_false @RYDER3_6271
+if and
+  95@ == 2
+  85@ == 0
+goto_if_false @RYDER3_6208
+set_lvar_text_label 106@s = 'RYD3_CA'
+set_lvar_int_to_constant 96@ = 34014
+gosub @RYDER3_20106
+85@ = 1
+
+:RYDER3_6208
+if and
+  95@ == 2
+  85@ == 1
+goto_if_false @RYDER3_6271
+set_lvar_text_label 106@s = 'RYD3_CB'
+set_lvar_int_to_constant 96@ = 34015
+gosub @RYDER3_20106
+85@ = 2
+
+:RYDER3_6271
+if and
+  not Car.IsDead(108@)
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_6436
+if 
+  not Char.IsInCar($scplayer, 108@)
+goto_if_false @RYDER3_6379
+Text.PrintNow('RYD3_Q', 5000, 1)
+if 
+  39@ == 0
+goto_if_false @RYDER3_6372
+Blip.Remove(34@)
+34@ = Blip.AddForCar(108@)
+Blip.SetAsFriendly(34@, True)
+39@ = 1
+
+:RYDER3_6372
+goto @RYDER3_6436
+
+:RYDER3_6379
+if 
+  39@ == 1
+goto_if_false @RYDER3_6436
+Blip.Remove(34@)
+34@ = Blip.AddForCoord(2278.177, -1144.882, 27.5107)
+Blip.SetCoordAppearance(34@, 0)
+39@ = 0
+
+:RYDER3_6436
+if and
+  not Char.IsDead($scplayer)
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_6821
+if 
+  Car.LocateStopped3D(108@, 0, 2289.591, -1135.625, 25.6863, 40.0, 40.0, 40.0)
+goto_if_false @RYDER3_6821
+Blip.Remove(34@)
+if 
+  Blip.DoesExist(99@)
+goto_if_false @RYDER3_6533
+Blip.ChangeDisplay(99@, BlipDisplay.Neither)
+
+:RYDER3_6533
+if or
+  not Char.IsDead(130@)
+  not Char.IsDead(131@)
+  not Char.IsDead(132@)
+  not Char.IsDead(133@)
+goto_if_false @RYDER3_6595
+set_lvar_text_label 106@s = 'RYD3_CC'
+set_lvar_int_to_constant 96@ = 34016
+gosub @RYDER3_20106
+
+:RYDER3_6595
+TIMERA = 0
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_6814
+if 
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_6814
+if 
+  Char.IsInCar($ryder, 108@)
+goto_if_false @RYDER3_6814
+148@ = Sequence.Open()
+Task.LeaveCar(-1, 108@)
+Task.ToggleDuck(-1, True)
+Task.GoToCoordAnyMeans(-1, 2295.104, -1148.029, 25.7612, 6, -1)
+Task.TogglePedThreatScanner(-1, True, True, True)
+if 
+  not Char.IsDead(130@)
+goto_if_false @RYDER3_6727
+Task.KillCharOnFoot(-1, 130@)
+
+:RYDER3_6727
+if 
+  not Char.IsDead(131@)
+goto_if_false @RYDER3_6750
+Task.KillCharOnFoot(-1, 131@)
+
+:RYDER3_6750
+if 
+  not Char.IsDead(132@)
+goto_if_false @RYDER3_6773
+Task.KillCharOnFoot(-1, 132@)
+
+:RYDER3_6773
+if 
+  not Char.IsDead(133@)
+goto_if_false @RYDER3_6796
+Task.KillCharOnFoot(-1, 133@)
+
+:RYDER3_6796
+Sequence.Close(148@)
+Char.ClearTasks($ryder)
+Char.PerformSequence($ryder, 148@)
+
+:RYDER3_6814
+89@ += 1
+
+:RYDER3_6821
+if and
+  89@ == 3
+  TIMERA > 4000
+goto_if_false @RYDER3_6924
+if 
+  not Char.IsDead(131@)
+goto_if_false @RYDER3_6870
+Task.StayInSamePlace(131@, False)
+
+:RYDER3_6870
+if or
+  not Char.IsDead(130@)
+  not Char.IsDead(131@)
+  not Char.IsDead(132@)
+  not Char.IsDead(133@)
+goto_if_false @RYDER3_6917
+Text.PrintNow('RYD3_M', 5000, 1)
+
+:RYDER3_6917
+89@ += 1
+
+:RYDER3_6924
+if 
+  89@ == 4
+goto_if_false @RYDER3_7170
+36@ = 0
+
+:RYDER3_6949
+if and
+  Char.IsDead(130@(36@,6i))
+  130@(36@,6i) <> 0
+goto_if_false @RYDER3_7029
+if 
+  Blip.DoesExist(136@(36@,6i))
+goto_if_false @RYDER3_7029
+Blip.Remove(136@(36@,6i))
+136@(36@,6i) = 0
+Char.MarkAsNoLongerNeeded(130@(36@,6i))
+
+:RYDER3_7029
+36@ += 1
+  36@ >= 4
+goto_if_false @RYDER3_6949
+if and
+  Char.IsDead(130@)
+  Char.IsDead(131@)
+  Char.IsDead(132@)
+  Char.IsDead(133@)
+goto_if_false @RYDER3_7113
+if 
+  84@ == 0
+goto_if_false @RYDER3_7113
+TIMERA = 0
+84@ = 1
+
+:RYDER3_7113
+if and
+  84@ == 1
+  TIMERA > 2000
+goto_if_false @RYDER3_7170
+89@ += 1
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_7170
+Char.PerformSequence($ryder, 40@)
+
+:RYDER3_7170
+if 
+  89@ == 5
+goto_if_false @RYDER3_7202
+TIMERA = 0
+89@ += 1
+
+:RYDER3_7202
+if 
+  89@ == 6
+goto_if_false @RYDER3_8266
+gosub @RYDER3_18990
+Streaming.RequestModel(492)
+Streaming.RequestModel(352)
+Streaming.RequestModel(102)
+Streaming.RequestModel(104)
+Streaming.RequestModel(346)
+
+:RYDER3_7250
+if or
+  not Streaming.HasModelLoaded(492)
+  not Streaming.HasModelLoaded(352)
+  not Streaming.HasModelLoaded(102)
+  not Streaming.HasModelLoaded(104)
+  not Streaming.HasModelLoaded(346)
+goto_if_false @RYDER3_7295
+wait 0
+goto @RYDER3_7250
+
+:RYDER3_7295
+150@ = Car.Create(492, 2340.055, -1151.432, 25.9546)
+Car.SetHeading(150@, 92.6857)
+Car.GotoCoordinates(150@, 2313.414, -1150.093, 25.7997)
+Car.SetDrivingStyle(150@, DrivingMode.PloughThrough)
+Car.SetCruiseSpeed(150@, 25.0)
+151@ = Char.CreateInsideCar(PedType.Mission2, 102, 150@)
+Char.SetHeading(151@, 227.7265)
+152@ = Char.CreateAsPassenger(PedType.Mission2, 104, 150@, 0)
+Char.SetHeading(152@, 301.1901)
+153@ = Char.CreateAsPassenger(PedType.Mission2, 102, 150@, 1)
+Char.SetHeading(153@, 82.8733)
+Char.SetOnlyDamagedByPlayer(153@, True)
+154@ = Char.CreateAsPassenger(PedType.Mission2, 104, 150@, 2)
+Char.SetHeading(154@, 82.8733)
+Char.SetOnlyDamagedByPlayer(154@, True)
+36@ = 0
+
+:RYDER3_7480
+155@(36@,4i) = Blip.AddForChar(151@(36@,4i))
+if 
+  36@ == 3
+goto_if_false @RYDER3_7546
+Char.SetWeaponSkill(151@(36@,4i), 2)
+Char.GiveWeapon(151@(36@,4i), WeaponType.Pistol, 9999)
+goto @RYDER3_7571
+
+:RYDER3_7546
+Char.GiveWeapon(151@(36@,4i), WeaponType.MicroUzi, 9999)
+Char.SetCurrentWeapon(151@(36@,4i), WeaponType.MicroUzi)
+
+:RYDER3_7571
+Char.SetHealth(151@(36@,4i), 200)
+Char.SetMaxHealth(151@(36@,4i), 200)
+Char.SetShootRate(151@(36@,4i), 40)
+Char.SetAccuracy(151@(36@,4i), 40)
+Char.SetDecisionMaker(151@(36@,4i), 72@)
+Char.SetIsTargetPriority(151@(36@,4i), True)
+36@ += 1
+  36@ >= 4
+goto_if_false @RYDER3_7480
+gosub @RYDER3_18930
+Streaming.LoadSceneInDirection(2287.296, -1140.38, 25.6779, 252.6459)
+Camera.SetFixedPosition(2283.145, -1135.652, 28.6919, 0.0, 0.0, 0.0)
+if 
+  not Car.IsDead(150@)
+goto_if_false @RYDER3_7747
+Camera.PointAtCar(150@, CameraMode.Fixed, SwitchType.JumpCut)
+
+:RYDER3_7747
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_7799
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @RYDER3_7799
+Task.TurnCharToFaceCoord($scplayer, 2313.414, -1150.093, 25.7997)
+
+:RYDER3_7799
+36@ = 0
+
+:RYDER3_7806
+if 
+  not Char.IsDead(144@(36@,4i))
+goto_if_false @RYDER3_7881
+if 
+  not Char.IsInAnyCar(144@(36@,4i))
+goto_if_false @RYDER3_7881
+Task.TurnCharToFaceCoord(144@(36@,4i), 2313.414, -1150.093, 25.7997)
+Task.StayInSamePlace(144@(36@,4i), True)
+
+:RYDER3_7881
+36@ += 1
+  36@ >= 3
+goto_if_false @RYDER3_7806
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_8102
+159@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.GoStraightToCoord(-1, 2295.693, -1142.469, 25.8392, MoveState.Run, -2)
+Task.TurnCharToFaceCoord(-1, 2313.414, -1150.093, 25.7997)
+if 
+  not Char.IsDead(151@)
+goto_if_false @RYDER3_7994
+Task.KillCharOnFoot(-1, 151@)
+
+:RYDER3_7994
+if 
+  not Char.IsDead(152@)
+goto_if_false @RYDER3_8017
+Task.KillCharOnFoot(-1, 152@)
+
+:RYDER3_8017
+if 
+  not Char.IsDead(153@)
+goto_if_false @RYDER3_8040
+Task.KillCharOnFoot(-1, 153@)
+
+:RYDER3_8040
+if 
+  not Char.IsDead(154@)
+goto_if_false @RYDER3_8063
+Task.KillCharOnFoot(-1, 154@)
+
+:RYDER3_8063
+Sequence.Close(159@)
+if 
+  not Char.IsInAnyCar($ryder)
+goto_if_false @RYDER3_8097
+Char.ClearTasksImmediately($ryder)
+Char.PerformSequence($ryder, 159@)
+
+:RYDER3_8097
+Sequence.Clear(159@)
+
+:RYDER3_8102
+gosub @RYDER3_19023
+Text.PrintNow('RYD3_2', 3000, 1)
+wait 1000
+TIMERB = 0
+
+:RYDER3_8137
+if 
+  3000 > TIMERB
+goto_if_false @RYDER3_8191
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @RYDER3_8184
+goto @RYDER3_8191
+
+:RYDER3_8184
+goto @RYDER3_8137
+
+:RYDER3_8191
+gosub @RYDER3_18958
+Text.PrintNow('RYD3_DA', 3000, 1)
+set_lvar_text_label 106@s = 'RYD3_DA'
+set_lvar_int_to_constant 96@ = 34018
+gosub @RYDER3_20106
+85@ = 0
+TIMERB = 0
+89@ += 1
+
+:RYDER3_8266
+if 
+  89@ == 7
+goto_if_false @RYDER3_8350
+if 
+  not Car.IsDead(150@)
+goto_if_false @RYDER3_8350
+if 
+  Car.LocateStopped2D(150@, 0, 2304.182, -1142.619, 15.0, 15.0)
+goto_if_false @RYDER3_8350
+Car.TaskEveryoneLeave(150@)
+89@ += 1
+
+:RYDER3_8350
+if 
+  89@ == 8
+goto_if_false @RYDER3_9092
+36@ = 0
+
+:RYDER3_8375
+if and
+  Char.IsDead(151@(36@,4i))
+  151@(36@,4i) <> 0
+goto_if_false @RYDER3_8455
+if 
+  Blip.DoesExist(155@(36@,4i))
+goto_if_false @RYDER3_8455
+Blip.Remove(155@(36@,4i))
+155@(36@,4i) = 0
+Char.MarkAsNoLongerNeeded(151@(36@,4i))
+
+:RYDER3_8455
+36@ += 1
+  36@ >= 4
+goto_if_false @RYDER3_8375
+if and
+  TIMERB > 3000
+  85@ == 0
+goto_if_false @RYDER3_8700
+set_lvar_text_label 106@s = 'RYD3_DB'
+set_lvar_int_to_constant 96@ = 34019
+gosub @RYDER3_20106
+if 
+  not Char.IsDead(151@)
+goto_if_false @RYDER3_8573
+Task.GoToCoordAnyMeans(151@, 2299.284, -1133.929, 27.3281, 6, -1)
+
+:RYDER3_8573
+if 
+  not Char.IsDead(152@)
+goto_if_false @RYDER3_8613
+Task.GoToCoordAnyMeans(152@, 2291.226, -1140.169, 25.6912, 6, -1)
+
+:RYDER3_8613
+if 
+  not Char.IsDead(153@)
+goto_if_false @RYDER3_8653
+Task.GoToCoordAnyMeans(153@, 2298.09, -1144.036, 25.919, 6, -1)
+
+:RYDER3_8653
+if 
+  not Char.IsDead(154@)
+goto_if_false @RYDER3_8693
+Task.GoToCoordAnyMeans(154@, 2291.842, -1129.22, 25.7756, 6, -1)
+
+:RYDER3_8693
+85@ = 1
+
+:RYDER3_8700
+if and
+  95@ == 2
+  85@ == 1
+goto_if_false @RYDER3_8763
+set_lvar_text_label 106@s = 'RYD3_DC'
+set_lvar_int_to_constant 96@ = 34020
+gosub @RYDER3_20106
+85@ = 2
+
+:RYDER3_8763
+if and
+  Char.IsDead(151@)
+  Char.IsDead(152@)
+  Char.IsDead(153@)
+  Char.IsDead(154@)
+goto_if_false @RYDER3_9092
+89@ += 1
+68@ = Blip.AddForCoord(2287.147, -1121.702, 25.8903)
+Blip.SetCoordAppearance(68@, 0)
+set_lvar_text_label 106@s = 'RYD3_EA'
+set_lvar_int_to_constant 96@ = 34021
+gosub @RYDER3_20106
+85@ = 0
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_9085
+161@ = Sequence.Open()
+Task.AchieveHeading(-1, 77.6187)
+Task.PlayAnim(-1, "IDLE_ARMED", "PED", 1.0, False, False, False, False, -1)
+Task.Pause(-1, 2000)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.PlayAnim(-1, "RYD_BECKON_01", "RYDER", 1.0, False, False, False, False, -1)
+Sequence.SetToRepeat(161@, True)
+Sequence.Close(161@)
+160@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 2294.854, -1143.85, 25.814, MoveState.Run, -2)
+Task.GoStraightToCoord(-1, 2290.716, -1122.997, 25.8774, MoveState.Run, -2)
+Char.PerformSequence(-1, 161@)
+Sequence.Close(160@)
+Char.ClearTasksImmediately($ryder)
+Char.PerformSequence($ryder, 160@)
+Sequence.Clear(161@)
+Sequence.Clear(160@)
+
+:RYDER3_9085
+TIMERB = 0
+
+:RYDER3_9092
+if 
+  89@ == 9
+goto_if_false @RYDER3_10641
+if and
+  TIMERB > 4000
+  85@ == 0
+goto_if_false @RYDER3_9159
+Text.PrintNow('RYD3_1', 4000, 1)
+85@ = 1
+
+:RYDER3_9159
+if 
+  Char.LocateOnFoot3D($scplayer, 1, 2287.147, -1121.702, 25.8903, 1.2, 1.2, 3.0)
+goto_if_false @RYDER3_10641
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_9230
+Player.SetControl($player1, False)
+
+:RYDER3_9230
+if 
+  Blip.DoesExist(68@)
+goto_if_false @RYDER3_9251
+Blip.Remove(68@)
+
+:RYDER3_9251
+gosub @RYDER3_18930
+Char.Delete(133@)
+Pad.SetPlayerDisplayVitalStatsButton($player1, False)
+Camera.SetFixedPosition(2288.881, -1117.758, 28.0044, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2288.3, -1118.549, 27.8136, SwitchType.JumpCut)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_9396
+Char.SetCoordinates($scplayer, 2287.147, -1121.702, 25.8903)
+Char.SetHeading($scplayer, 91.8747)
+Task.Climb($scplayer, True)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Char.SetProofs($scplayer, True, True, True, True, True)
+
+:RYDER3_9396
+wait 1000
+gosub @RYDER3_18990
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_9502
+Char.ClearTasksImmediately($scplayer)
+if 
+  not Char.IsSittingInAnyCar($scplayer)
+goto_if_false @RYDER3_9472
+Char.SetCoordinates($scplayer, 2284.766, -1121.5, 27.386)
+goto @RYDER3_9492
+
+:RYDER3_9472
+Char.WarpFromCarToCoord($scplayer, 2284.766, -1121.5, 27.386)
+
+:RYDER3_9492
+Char.SetHeading($scplayer, 220.0)
+
+:RYDER3_9502
+Streaming.RequestCarRecording(486)
+Streaming.RequestCarRecording(490)
+
+:RYDER3_9512
+if or
+  not Streaming.HasCarRecordingBeenLoaded(486)
+  not Streaming.HasCarRecordingBeenLoaded(490)
+goto_if_false @RYDER3_9544
+wait 0
+goto @RYDER3_9512
+
+:RYDER3_9544
+World.ClearArea(1, 2284.732, -1121.916, 27.0, 50.0)
+if 
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_9711
+162@ = Char.Create(24, 105, 2294.554, -1156.382, 25.6646)
+Char.SetHeading(162@, 9.002)
+if 
+  not Char.IsDead(162@)
+goto_if_false @RYDER3_9661
+if 
+  not Char.IsInCar(162@, 108@)
+goto_if_false @RYDER3_9661
+Char.WarpIntoCar(162@, 108@)
+
+:RYDER3_9661
+if 
+  Char.IsDead(162@)
+goto_if_false @RYDER3_9706
+162@ = Char.CreateInsideCar(PedType.Mission1, 105, 108@)
+Char.SetNeverTargeted(162@, True)
+Char.GiveWeapon(162@, WeaponType.MicroUzi, 9999)
+
+:RYDER3_9706
+Car.CloseAllDoors(108@)
+
+:RYDER3_9711
+if and
+  not Car.IsDead(108@)
+  not Char.IsDead(162@)
+goto_if_false @RYDER3_9763
+70@ = Blip.AddForCar(108@)
+Blip.SetAsFriendly(70@, True)
+Car.SetHealth(108@, 5000)
+Char.SetHealth(162@, 500)
+
+:RYDER3_9763
+Char.Delete($ryder)
+if 
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_9798
+$x, $y, $z = Car.GetCoordinates(108@)
+
+:RYDER3_9798
+$ryder = Char.Create(24, 290, $x, $y, $z)
+Char.SetHealth($ryder, 500)
+Char.ClearAllRelationships($ryder, RelationshipType.Hate)
+if 
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_9880
+Char.AttachToCar($ryder, 108@, 0.0, -0.85, 0.65, 1, 360.0, WeaponType.MicroUzi)
+
+:RYDER3_9880
+Char.SetProofs($ryder, True, True, False, True, True)
+Task.TogglePedThreatScanner($ryder, False, False, False)
+if 
+  not Char.IsDead(162@)
+goto_if_false @RYDER3_9941
+Task.TogglePedThreatScanner(162@, False, False, False)
+Char.SetDecisionMaker(162@, 105@)
+
+:RYDER3_9941
+if 
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_9970
+Car.StartPlayback(108@, 486)
+Car.PausePlayback(108@)
+
+:RYDER3_9970
+wait 800
+if 
+  not Car.IsDead(129@)
+goto_if_false @RYDER3_10006
+Car.FreezePosition(129@, False)
+Car.StartPlayback(129@, 490)
+
+:RYDER3_10006
+Object.Delete(61@)
+Object.Delete(62@)
+Object.Delete(63@)
+Object.Delete(64@)
+36@ = 0
+
+:RYDER3_10033
+Char.Delete(144@(36@,4i))
+36@ += 1
+  36@ >= 3
+goto_if_false @RYDER3_10033
+World.SetCarDensityMultiplier(0.0)
+World.SetPedDensityMultiplier(0.0)
+Streaming.LoadSceneInDirection(2288.516, -1136.404, 28.5557, 149.2199)
+Camera.SetFixedPosition(2288.516, -1136.404, 28.5557, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2288.295, -1137.368, 28.41, SwitchType.JumpCut)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_10201
+Char.ClearTasksImmediately($scplayer)
+Char.SetCoordinates($scplayer, 2284.766, -1121.5, 27.386)
+Char.SetHeading($scplayer, 0.0)
+
+:RYDER3_10201
+wait 200
+if and
+  not Car.IsDead(108@)
+  Car.IsPlaybackGoingOn(108@)
+goto_if_false @RYDER3_10232
+Car.UnpausePlayback(108@)
+
+:RYDER3_10232
+gosub @RYDER3_19023
+World.SetPedDensityMultiplier(0.0)
+World.SetCarDensityMultiplier(0.0)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(34022, 1)
+
+:RYDER3_10266
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_10292
+wait 0
+goto @RYDER3_10266
+
+:RYDER3_10292
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('RYD3_FA', 2000, 1)
+wait 2000
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(34023, 1)
+
+:RYDER3_10330
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_10356
+wait 0
+goto @RYDER3_10330
+
+:RYDER3_10356
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('RYD3_FB', 4000, 1)
+wait 4000
+if 
+  not Car.IsDead(129@)
+goto_if_false @RYDER3_10474
+Player.SetHeadingForAttached($player1, 225.0, 225.0)
+163@ = Train.GetCaboose(129@)
+Char.AttachToCar($scplayer, 163@, 0.0, -8.0, 0.9, 0, 360.0, WeaponType.Unarmed)
+Char.SetProofs($scplayer, True, True, True, True, True)
+Char.SetCollision($scplayer, False)
+
+:RYDER3_10474
+gosub @RYDER3_18958
+World.SetCarDensityMultiplier(0.0)
+Hud.DrawCrosshair(True)
+set_lvar_text_label 106@s = 'RYD3_GA'
+set_lvar_int_to_constant 96@ = 34024
+gosub @RYDER3_20106
+TIMERB = 0
+85@ = 0
+$box_timer = 90000
+Hud.DisplayTimerWithString($box_timer, TimerDirection.Down, 'RYD3_3')
+$throw_power_bar = 0
+122@ = 0
+Hud.DisplayNthCounterWithString($throw_power_bar, CounterDisplay.Bar, 1, 'RYD3_E')
+Hud.DisplayNthCounterWithString($r3_total_guns, CounterDisplay.Number, 2, 'RYD3_F')
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_10634
+Char.ClearTasks($ryder)
+
+:RYDER3_10634
+89@ += 1
+
+:RYDER3_10641
+if 
+  89@ == 10
+goto_if_false @RYDER3_13809
+if and
+  TIMERB > 5000
+  85@ == 0
+goto_if_false @RYDER3_10703
+Text.PrintHelpForever('RYD3_D')
+85@ = 1
+
+:RYDER3_10703
+if 
+  TIMERA > 8000
+goto_if_false @RYDER3_10969
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_10962
+Char.ClearTasks($ryder)
+$r3_rnd = Math.RandomIntInRange(0, 3)
+switch_start $r3_rnd total_jumps 3 default_jump 0 @RYDER3_10962 jumps 0 @RYDER3_10815 1 @RYDER3_10864 2 @RYDER3_10913 -1 @RYDER3_10962 -1 @RYDER3_10962 -1 @RYDER3_10962 -1 @RYDER3_10962
+
+:RYDER3_10815
+Task.PlayAnim($ryder, "RYD_BECKON_01", "RYDER", 1.0, False, False, False, False, -1)
+goto @RYDER3_10962
+
+:RYDER3_10864
+Task.PlayAnim($ryder, "RYD_BECKON_02", "RYDER", 1.0, False, False, False, False, -1)
+goto @RYDER3_10962
+
+:RYDER3_10913
+Task.PlayAnim($ryder, "RYD_BECKON_03", "RYDER", 1.0, False, False, False, False, -1)
+goto @RYDER3_10962
+
+:RYDER3_10962
+TIMERA = 0
+
+:RYDER3_10969
+if 
+  not Car.IsDead(163@)
+goto_if_false @RYDER3_13746
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_11064
+$x, $y, $z = Char.GetCoordinates($scplayer)
+44@, 45@, 46@ = Char.GetCoordinates($ryder)
+sub_float_lvar_from_float_var $x -= 44@
+sub_float_lvar_from_float_var $y -= 45@
+$heading = Math.GetHeadingFromVector2D($x, $y)
+Char.SetHeading($ryder, $heading)
+
+:RYDER3_11064
+if 
+  $collected_guns <> 10
+goto_if_false @RYDER3_11529
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+  Pad.IsButtonPressed(PadId.Pad1, Button.LeftShoulder1)
+goto_if_false @RYDER3_11184
+add_int_lvar_to_int_var $throw_power_bar += 124@
+if 
+  $throw_power_bar > 100
+goto_if_false @RYDER3_11138
+$throw_power_bar = 100
+
+:RYDER3_11138
+if 
+  0 > $throw_power_bar
+goto_if_false @RYDER3_11170
+$throw_power_bar = 0
+124@ = 50
+
+:RYDER3_11170
+164@ += 1
+goto @RYDER3_11529
+
+:RYDER3_11184
+if 
+  164@ > 0
+goto_if_false @RYDER3_11529
+if 
+  $throw_power_bar > 20
+goto_if_false @RYDER3_11515
+cset_lvar_float_to_var_int 165@ = integer $throw_power_bar
+165@ /= 2.0
+$x, $y, $z = Camera.GetActiveCoordinates()
+44@, 45@, 46@ = Camera.GetActivePointAt()
+if 
+  Object.DoesExist(110@(109@,10i))
+goto_if_false @RYDER3_11289
+Object.Delete(110@(109@,10i))
+
+:RYDER3_11289
+110@(109@,10i) = Object.CreateNoOffset(127@, 44@, 45@, 46@)
+Object.SetRecordsCollisions(110@(109@,10i), True)
+set_lvar_int_to_lvar_int 166@(109@,10i) = 127@
+sub_float_var_from_float_lvar 44@ -= $x
+sub_float_var_from_float_lvar 45@ -= $y
+sub_float_var_from_float_lvar 46@ -= $z
+mult_float_lvar_by_float_lvar 44@ *= 165@
+mult_float_lvar_by_float_lvar 45@ *= 165@
+mult_float_lvar_by_float_lvar 46@ *= 165@
+Object.SetDynamic(110@(109@,10i), True)
+Object.SetCollision(110@(109@,10i), True)
+$x, $y, $z = Car.GetSpeedVector(163@)
+set_lvar_float_to_var_float 47@ = $x
+add_float_lvar_to_float_lvar 47@ += 44@
+set_lvar_float_to_var_float 48@ = $y
+add_float_lvar_to_float_lvar 48@ += 45@
+set_lvar_float_to_var_float 49@ = $z
+add_float_lvar_to_float_lvar 49@ += 46@
+Object.SetVelocity(110@(109@,10i), 47@, 48@, 49@)
+109@ += 1
+if 
+  109@ == 10
+goto_if_false @RYDER3_11515
+109@ = 0
+
+:RYDER3_11515
+164@ = 0
+$throw_power_bar = 0
+
+:RYDER3_11529
+176@ = 0
+
+:RYDER3_11536
+if 
+  10 > 176@
+goto_if_false @RYDER3_13746
+if and
+  Object.DoesExist(110@(176@,10i))
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_13732
+$x = Char.GetOffsetInWorldCoords($y, $z, $ryder, 0.0, 1.0, 0.5)
+if 
+  Object.Locate3D(110@(176@,10i), $x, $y, $z, 1.0, 1.0, 1.0, False)
+goto_if_false @RYDER3_12488
+if and
+  122@ == 0
+  not Char.IsDead($ryder)
+  $collected_guns <> 10
+goto_if_false @RYDER3_12481
+Object.SetCollision(110@(176@,10i), False)
+Task.PickUpObject($ryder, 110@(176@,10i), 0.0, 0.3, 0.0, 6, 16, "CATCH_BOX", "BOX", 0)
+TIMERA = 0
+$r3_rnd = Math.RandomIntInRange(0, 2)
+switch_start $collected_guns total_jumps 6 default_jump 0 @RYDER3_12331 jumps 1 @RYDER3_11823 3 @RYDER3_11917 5 @RYDER3_12011 7 @RYDER3_12105 8 @RYDER3_12199 9 @RYDER3_12293 -1 @RYDER3_12331
+
+:RYDER3_11823
+if 
+  $r3_rnd == 0
+goto_if_false @RYDER3_11879
+set_lvar_text_label 106@s = 'RYD3_HA'
+set_lvar_int_to_constant 96@ = 34027
+gosub @RYDER3_20106
+goto @RYDER3_11910
+
+:RYDER3_11879
+set_lvar_text_label 106@s = 'RYD3_HB'
+set_lvar_int_to_constant 96@ = 34028
+gosub @RYDER3_20106
+
+:RYDER3_11910
+goto @RYDER3_12331
+
+:RYDER3_11917
+if 
+  $r3_rnd == 0
+goto_if_false @RYDER3_11973
+set_lvar_text_label 106@s = 'RYD3_HC'
+set_lvar_int_to_constant 96@ = 34029
+gosub @RYDER3_20106
+goto @RYDER3_12004
+
+:RYDER3_11973
+set_lvar_text_label 106@s = 'RYD3_HD'
+set_lvar_int_to_constant 96@ = 34030
+gosub @RYDER3_20106
+
+:RYDER3_12004
+goto @RYDER3_12331
+
+:RYDER3_12011
+if 
+  $r3_rnd == 0
+goto_if_false @RYDER3_12067
+set_lvar_text_label 106@s = 'RYD3_HE'
+set_lvar_int_to_constant 96@ = 34031
+gosub @RYDER3_20106
+goto @RYDER3_12098
+
+:RYDER3_12067
+set_lvar_text_label 106@s = 'RYD3_HF'
+set_lvar_int_to_constant 96@ = 34032
+gosub @RYDER3_20106
+
+:RYDER3_12098
+goto @RYDER3_12331
+
+:RYDER3_12105
+if 
+  $r3_rnd == 0
+goto_if_false @RYDER3_12161
+set_lvar_text_label 106@s = 'RYD3_HG'
+set_lvar_int_to_constant 96@ = 34033
+gosub @RYDER3_20106
+goto @RYDER3_12192
+
+:RYDER3_12161
+set_lvar_text_label 106@s = 'RYD3_HH'
+set_lvar_int_to_constant 96@ = 34034
+gosub @RYDER3_20106
+
+:RYDER3_12192
+goto @RYDER3_12331
+
+:RYDER3_12199
+if 
+  $r3_rnd == 0
+goto_if_false @RYDER3_12255
+set_lvar_text_label 106@s = 'RYD3_HJ'
+set_lvar_int_to_constant 96@ = 34035
+gosub @RYDER3_20106
+goto @RYDER3_12286
+
+:RYDER3_12255
+set_lvar_text_label 106@s = 'RYD3_HK'
+set_lvar_int_to_constant 96@ = 34036
+gosub @RYDER3_20106
+
+:RYDER3_12286
+goto @RYDER3_12331
+
+:RYDER3_12293
+set_lvar_text_label 106@s = 'RYD3_HM'
+set_lvar_int_to_constant 96@ = 34038
+gosub @RYDER3_20106
+goto @RYDER3_12331
+
+:RYDER3_12331
+set_lvar_int_to_lvar_int 123@ = 176@
+$collected_guns += 1
+if 
+  $r3_total_guns > 0
+goto_if_false @RYDER3_12371
+$r3_total_guns -= 1
+
+:RYDER3_12371
+if 
+  $collected_guns == 5
+goto_if_false @RYDER3_12445
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_12413
+Char.SetHealth($ryder, 5000)
+
+:RYDER3_12413
+if 
+  not Char.IsDead(162@)
+goto_if_false @RYDER3_12437
+Char.SetHealth(162@, 5000)
+
+:RYDER3_12437
+127@ = -135
+
+:RYDER3_12445
+if 
+  $collected_guns == 10
+goto_if_false @RYDER3_12474
+Hud.DrawCrosshair(False)
+World.SetCarDensityMultiplier(1.0)
+
+:RYDER3_12474
+122@ += 1
+
+:RYDER3_12481
+goto @RYDER3_13064
+
+:RYDER3_12488
+if and
+  166@(176@,10i) == -135
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_13064
+if 
+  Char.HasBeenDamagedByWeapon($ryder, WeaponType.Explosion)
+goto_if_false @RYDER3_12839
+$r3_rnd = Math.RandomIntInRange(0, 6)
+switch_start $r3_rnd total_jumps 6 default_jump 0 @RYDER3_12834 jumps 0 @RYDER3_12606 1 @RYDER3_12644 2 @RYDER3_12682 3 @RYDER3_12720 4 @RYDER3_12758 5 @RYDER3_12796 -1 @RYDER3_12834
+
+:RYDER3_12606
+set_lvar_text_label 106@s = 'RYD3_JA'
+set_lvar_int_to_constant 96@ = 34040
+gosub @RYDER3_20106
+goto @RYDER3_12834
+
+:RYDER3_12644
+set_lvar_text_label 106@s = 'RYD3_JB'
+set_lvar_int_to_constant 96@ = 34041
+gosub @RYDER3_20106
+goto @RYDER3_12834
+
+:RYDER3_12682
+set_lvar_text_label 106@s = 'RYD3_JC'
+set_lvar_int_to_constant 96@ = 34042
+gosub @RYDER3_20106
+goto @RYDER3_12834
+
+:RYDER3_12720
+set_lvar_text_label 106@s = 'RYD3_JD'
+set_lvar_int_to_constant 96@ = 34043
+gosub @RYDER3_20106
+goto @RYDER3_12834
+
+:RYDER3_12758
+set_lvar_text_label 106@s = 'RYD3_JE'
+set_lvar_int_to_constant 96@ = 34044
+gosub @RYDER3_20106
+goto @RYDER3_12834
+
+:RYDER3_12796
+set_lvar_text_label 106@s = 'RYD3_JF'
+set_lvar_int_to_constant 96@ = 34045
+gosub @RYDER3_20106
+goto @RYDER3_12834
+
+:RYDER3_12834
+Char.ClearLastWeaponDamage($ryder)
+
+:RYDER3_12839
+if 
+  Object.HasCollidedWithAnything(110@(176@,10i))
+goto_if_false @RYDER3_13057
+126@ += 1
+if 
+  126@ > 4
+goto_if_false @RYDER3_13050
+if and
+  not Char.IsDead($ryder)
+  not Char.IsDead(162@)
+goto_if_false @RYDER3_13050
+if 
+  not Char.IsTouchingObject($ryder, 110@(176@,10i))
+goto_if_false @RYDER3_13050
+if 
+  not Char.IsTouchingObject(162@, 110@(176@,10i))
+goto_if_false @RYDER3_13050
+$x, $y, $z = Object.GetCoordinates(110@(176@,10i))
+Object.Break(110@(176@,10i), 1)
+Audio.ReportMissionAudioEventAtObject(110@(176@,10i), 1159)
+100@ = Particle.Create("EXPLOSION_SMALL", $x, $y, $z, 1)
+Particle.PlayAndKill(100@)
+Object.MarkAsNoLongerNeeded(110@(176@,10i))
+110@(176@,10i) = 0
+
+:RYDER3_13050
+goto @RYDER3_13064
+
+:RYDER3_13057
+126@ = 0
+
+:RYDER3_13064
+if 
+  Object.DoesExist(110@(176@,10i))
+goto_if_false @RYDER3_13139
+if 
+  not Char.LocateAnyMeansObject2D($scplayer, 110@(176@,10i), 100.0, 100.0, False)
+goto_if_false @RYDER3_13139
+Object.MarkAsNoLongerNeeded(110@(176@,10i))
+110@(176@,10i) = 0
+
+:RYDER3_13139
+if 
+  122@ == 1
+goto_if_false @RYDER3_13732
+if and
+  not Char.IsDead($ryder)
+  not Char.IsDead(162@)
+goto_if_false @RYDER3_13189
+$task_status = Char.GetScriptTaskStatus($ryder, 1802)
+
+:RYDER3_13189
+if 
+  is_int_var_equal_to_constant $task_status == 7
+goto_if_false @RYDER3_13732
+if 
+  123@ > -1
+goto_if_false @RYDER3_13725
+switch_start 82@ total_jumps 5 default_jump 0 @RYDER3_13642 jumps 0 @RYDER3_13288 2 @RYDER3_13363 4 @RYDER3_13438 6 @RYDER3_13506 8 @RYDER3_13574 -1 @RYDER3_13642 -1 @RYDER3_13642
+
+:RYDER3_13288
+79@ = Object.Create(#CR_GUNCRATE, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(79@, 108@, 0.4, -2.1, -0.1, 0.0, 0.0, 15.0)
+Object.SetCollision(79@, False)
+goto @RYDER3_13642
+
+:RYDER3_13363
+77@ = Object.Create(#CR_GUNCRATE, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(77@, 108@, -0.5, -2.1, -0.1, 0.0, 0.0, 30.0)
+Object.SetCollision(77@, False)
+goto @RYDER3_13642
+
+:RYDER3_13438
+78@ = Object.Create(#CR_GUNCRATE, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(78@, 108@, 0.4, -2.1, 0.3, 0.0, 30.0, 0.0)
+goto @RYDER3_13642
+
+:RYDER3_13506
+80@ = Object.Create(#CR_AMMOBOX, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(80@, 108@, -0.6, -2.1, 0.3, 0.0, 0.0, 15.0)
+goto @RYDER3_13642
+
+:RYDER3_13574
+81@ = Object.Create(#CR_AMMOBOX, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(81@, 108@, -0.1, -2.1, 0.3, 0.0, 0.0, 15.0)
+goto @RYDER3_13642
+
+:RYDER3_13642
+82@ += 1
+if 
+  82@ >= 10
+goto_if_false @RYDER3_13696
+Hud.ClearCounter($r3_total_guns)
+Hud.ClearCounter($throw_power_bar)
+Hud.ClearTimer($box_timer)
+89@ += 1
+goto @RYDER3_13725
+
+:RYDER3_13696
+if 
+  Object.DoesExist(110@(123@,10i))
+goto_if_false @RYDER3_13725
+Object.Delete(110@(123@,10i))
+
+:RYDER3_13725
+122@ = 0
+
+:RYDER3_13732
+176@ += 1
+goto @RYDER3_11536
+
+:RYDER3_13746
+if 
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_13809
+if 
+  10 > $box_timer
+goto_if_false @RYDER3_13809
+Hud.ClearCounter($r3_total_guns)
+Hud.ClearCounter($throw_power_bar)
+Hud.ClearTimer($box_timer)
+125@ = 1
+89@ += 1
+
+:RYDER3_13809
+if and
+  89@ == 11
+  95@ == 2
+goto_if_false @RYDER3_14621
+gosub @RYDER3_18990
+World.SetCarDensityMultiplier(1.0)
+Text.ClearHelp
+if 
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_13871
+Car.StopPlayback(108@)
+
+:RYDER3_13871
+if 
+  not Car.IsDead(163@)
+goto_if_false @RYDER3_14078
+$x, $y, $z = Car.GetCoordinates(163@)
+177@ = World.GetGroundZFor3DCoord($x, $y, $z)
+$x = Car.GetOffsetInWorldCoords($y, $z, 163@, -2.0, -1.0, -1.0)
+44@ = Car.GetOffsetInWorldCoords(45@, 46@, 163@, 0.0, -4.0, -1.0)
+47@ = Car.GetOffsetInWorldCoords(48@, 49@, 163@, 0.0, 10.0, -0.5)
+179@ = Car.GetOffsetInWorldCoords(180@, 181@, 163@, 0.0, -50.0, 0.0)
+$heading = Car.GetHeading(163@)
+178@ = Car.GetHeading(163@)
+$heading -= 50.0
+if 
+  not Car.IsDead(129@)
+goto_if_false @RYDER3_14078
+Car.StopPlayback(129@)
+
+:RYDER3_14078
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_14128
+Char.SetCollision($scplayer, True)
+Char.DetachFromCar($scplayer)
+Streaming.RemoveAnimation("BOX")
+Char.SetProofs($scplayer, False, False, False, False, False)
+
+:RYDER3_14128
+World.DeleteMissionTrains
+Object.Delete(74@)
+Object.Delete(91@)
+Object.Delete(92@)
+Object.Delete(93@)
+Pad.SetPlayerDisplayVitalStatsButton($player1, True)
+if and
+  not Car.IsDead(108@)
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_14235
+Car.FreezePosition(108@, False)
+Car.SetCoordinates(108@, $x, $y, 177@)
+Car.SetHeading(108@, $heading)
+Char.SetCoordinates($scplayer, 44@, 45@, 177@)
+Car.SetStatus(108@, EntityStatus.Player)
+Car.LockDoors(108@, CarLock.Unlocked)
+
+:RYDER3_14235
+gosub @RYDER3_18930
+Camera.SetFixedPosition(47@, 48@, 49@, 0.0, 0.0, 0.0)
+Streaming.LoadSceneInDirection(47@, 48@, 49@, 178@)
+if 
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_14356
+Camera.PointAtCar(108@, CameraMode.Fixed, SwitchType.JumpCut)
+Char.Delete(162@)
+162@ = Char.CreateAsPassenger(PedType.Mission1, 105, 108@, 0)
+Char.SetHealth(162@, 800)
+Char.SetMaxHealth(162@, 800)
+Char.SetSuffersCriticalHits(162@, False)
+Char.SetNeverTargeted(162@, True)
+
+:RYDER3_14356
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_14409
+Char.DetachFromCar($ryder)
+Char.AttachToCar($ryder, 108@, 0.0, -1.3, 0.8, 2, 15.0, WeaponType.MicroUzi)
+
+:RYDER3_14409
+if and
+  not Char.IsDead($scplayer)
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_14441
+Task.EnterCarAsDriver($scplayer, 108@, 4000)
+
+:RYDER3_14441
+gosub @RYDER3_19023
+if 
+  125@ == 1
+goto_if_false @RYDER3_14532
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(34046, 1)
+
+:RYDER3_14479
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_14505
+wait 0
+goto @RYDER3_14479
+
+:RYDER3_14505
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('RYD3_JG', 2000, 1)
+goto @RYDER3_14591
+
+:RYDER3_14532
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(34039, 1)
+
+:RYDER3_14545
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_14571
+wait 0
+goto @RYDER3_14545
+
+:RYDER3_14571
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('RYD3_HN', 2000, 1)
+
+:RYDER3_14591
+wait 4000
+gosub @RYDER3_18958
+Hud.DrawCrosshair(False)
+TIMERA = 0
+89@ = 35
+
+:RYDER3_14621
+if 
+  89@ == 12
+goto_if_false @RYDER3_14685
+if 
+  125@ == 1
+goto_if_false @RYDER3_14678
+89@ = 35
+69@ = 1
+goto @RYDER3_14685
+
+:RYDER3_14678
+89@ = 35
+
+:RYDER3_14685
+if 
+  89@ == 35
+goto_if_false @RYDER3_15113
+if 
+  Blip.DoesExist(70@)
+goto_if_false @RYDER3_14724
+Blip.Remove(70@)
+
+:RYDER3_14724
+if 
+  125@ == 1
+goto_if_false @RYDER3_14938
+gosub @RYDER3_18990
+if 
+  not Car.IsDead(129@)
+goto_if_false @RYDER3_14770
+Car.Delete(129@)
+
+:RYDER3_14770
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_14791
+Char.Delete($ryder)
+
+:RYDER3_14791
+if 
+  not Char.IsDead(162@)
+goto_if_false @RYDER3_14812
+Char.Delete(162@)
+
+:RYDER3_14812
+if and
+  not Car.IsDead(108@)
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_14860
+if 
+  not Char.IsInCar($scplayer, 108@)
+goto_if_false @RYDER3_14860
+Char.WarpIntoCar($scplayer, 108@)
+
+:RYDER3_14860
+176@ = 0
+
+:RYDER3_14867
+if 
+  10 > 176@
+goto_if_false @RYDER3_14908
+Object.Delete(110@(176@,10i))
+176@ += 1
+goto @RYDER3_14867
+
+:RYDER3_14908
+gosub @RYDER3_19023
+Text.PrintNow('RYD3_T', 4000, 1)
+goto @RYDER3_18057
+
+:RYDER3_14938
+if and
+  not Char.IsDead($ryder)
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_14994
+Char.SetRelationship($ryder, RelationshipType.Hate, PedType.Cop)
+Task.StayInSamePlace($ryder, True)
+Task.TogglePedThreatScanner($ryder, True, True, True)
+Char.SetDecisionMaker($ryder, 72@)
+
+:RYDER3_14994
+set_lvar_text_label 106@s = 'RYD3_KA'
+set_lvar_int_to_constant 96@ = 34047
+gosub @RYDER3_20106
+TIMERB = 0
+85@ = 0
+Blip.Remove(34@)
+34@ = Blip.AddForCoord(2067.463, -1831.67, 12.5527)
+Blip.SetCoordAppearance(34@, 0)
+Game.SetWantedMultiplier(1.0)
+Player.AlterWantedLevel($player1, 3)
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+89@ += 1
+TIMERA = 0
+
+:RYDER3_15113
+if and
+  89@ == 36
+  TIMERA > 4000
+goto_if_false @RYDER3_15192
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_15162
+Task.ToggleDuck($ryder, True)
+
+:RYDER3_15162
+Text.PrintNow('RYD3_13', 7000, 1)
+89@ += 1
+39@ = 0
+
+:RYDER3_15192
+if 
+  89@ == 37
+goto_if_false @RYDER3_17965
+if 
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_15466
+if 
+  not Char.IsInCar($scplayer, 108@)
+goto_if_false @RYDER3_15313
+Text.PrintNow('RYD3_Q', 5000, 1)
+if 
+  39@ == 0
+goto_if_false @RYDER3_15306
+Blip.Remove(34@)
+34@ = Blip.AddForCar(108@)
+Blip.SetAsFriendly(34@, True)
+39@ = 1
+
+:RYDER3_15306
+goto @RYDER3_15415
+
+:RYDER3_15313
+if 
+  39@ == 1
+goto_if_false @RYDER3_15415
+Blip.Remove(34@)
+if 
+  103@ == 1
+goto_if_false @RYDER3_15381
+34@ = Blip.AddForCoord(2446.887, -1661.962, 12.3047)
+goto @RYDER3_15401
+
+:RYDER3_15381
+34@ = Blip.AddForCoord(2067.463, -1831.67, 12.5527)
+
+:RYDER3_15401
+Blip.SetCoordAppearance(34@, 0)
+39@ = 0
+
+:RYDER3_15415
+if and
+  Car.IsUpsidedown(108@)
+  97@ == 0
+goto_if_false @RYDER3_15466
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_15459
+Task.Die($ryder)
+
+:RYDER3_15459
+97@ = 1
+
+:RYDER3_15466
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_15956
+if and
+  Char.IsShooting($ryder)
+  TIMERB > 10000
+  not Text.IsMessageBeingDisplayed
+goto_if_false @RYDER3_15956
+TIMERB = 0
+$r3_rnd = Math.RandomIntInRange(0, 8)
+switch_start $r3_rnd total_jumps 8 default_jump 0 @RYDER3_15956 jumps 0 @RYDER3_15652 1 @RYDER3_15690 2 @RYDER3_15728 3 @RYDER3_15766 4 @RYDER3_15804 5 @RYDER3_15842 6 @RYDER3_15880
+switch_continued 7 @RYDER3_15918 -1 @RYDER3_15956 -1 @RYDER3_15956 -1 @RYDER3_15956 -1 @RYDER3_15956 -1 @RYDER3_15956 -1 @RYDER3_15956 -1 @RYDER3_15956 -1 @RYDER3_15956
+
+:RYDER3_15652
+set_lvar_text_label 106@s = 'RYD3_LA'
+set_lvar_int_to_constant 96@ = 34049
+gosub @RYDER3_20106
+goto @RYDER3_15956
+
+:RYDER3_15690
+set_lvar_text_label 106@s = 'RYD3_LB'
+set_lvar_int_to_constant 96@ = 34050
+gosub @RYDER3_20106
+goto @RYDER3_15956
+
+:RYDER3_15728
+set_lvar_text_label 106@s = 'RYD3_LC'
+set_lvar_int_to_constant 96@ = 34051
+gosub @RYDER3_20106
+goto @RYDER3_15956
+
+:RYDER3_15766
+set_lvar_text_label 106@s = 'RYD3_LD'
+set_lvar_int_to_constant 96@ = 34052
+gosub @RYDER3_20106
+goto @RYDER3_15956
+
+:RYDER3_15804
+set_lvar_text_label 106@s = 'RYD3_LE'
+set_lvar_int_to_constant 96@ = 34053
+gosub @RYDER3_20106
+goto @RYDER3_15956
+
+:RYDER3_15842
+set_lvar_text_label 106@s = 'RYD3_LF'
+set_lvar_int_to_constant 96@ = 34054
+gosub @RYDER3_20106
+goto @RYDER3_15956
+
+:RYDER3_15880
+set_lvar_text_label 106@s = 'RYD3_LG'
+set_lvar_int_to_constant 96@ = 34055
+gosub @RYDER3_20106
+goto @RYDER3_15956
+
+:RYDER3_15918
+set_lvar_text_label 106@s = 'RYD3_LH'
+set_lvar_int_to_constant 96@ = 34056
+gosub @RYDER3_20106
+goto @RYDER3_15956
+
+:RYDER3_15956
+if and
+  not Car.IsDead(108@)
+  not Char.IsDead($scplayer)
+  39@ == 0
+goto_if_false @RYDER3_17965
+if and
+  not Char.IsDead($ryder)
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_16318
+if 
+  not Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @RYDER3_16184
+if and
+  103@ == 0
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_16177
+Char.ClearTasksImmediately($ryder)
+Char.ClearAllRelationships($ryder, RelationshipType.Hate)
+Char.SetDecisionMaker($ryder, 105@)
+Task.StayInSamePlace($ryder, True)
+Task.TogglePedThreatScanner($ryder, False, False, False)
+Task.ToggleDuck($ryder, True)
+if 
+  Blip.DoesExist(34@)
+goto_if_false @RYDER3_16112
+Blip.Remove(34@)
+
+:RYDER3_16112
+set_lvar_text_label 106@s = 'RYD3_KB'
+set_lvar_int_to_constant 96@ = 34048
+gosub @RYDER3_20106
+TIMERA = 0
+34@ = Blip.AddForCoord(2451.38, -1661.609, 12.3047)
+103@ = 1
+
+:RYDER3_16177
+goto @RYDER3_16318
+
+:RYDER3_16184
+if and
+  103@ == 1
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_16318
+if 
+  Blip.DoesExist(34@)
+goto_if_false @RYDER3_16228
+Blip.Remove(34@)
+
+:RYDER3_16228
+Char.ClearTasksImmediately($ryder)
+Char.SetRelationship($ryder, RelationshipType.Hate, PedType.Cop)
+Task.StayInSamePlace($ryder, True)
+Task.TogglePedThreatScanner($ryder, True, True, True)
+Char.SetDecisionMaker($ryder, 72@)
+Task.ToggleDuck($ryder, True)
+Text.PrintNow('RYD3_I', 7000, 1)
+34@ = Blip.AddForCoord(2067.463, -1831.67, 12.5527)
+103@ = 0
+
+:RYDER3_16318
+if and
+  not Player.IsWantedLevelGreater($player1, 0)
+  TIMERA > 4000
+  104@ == 0
+goto_if_false @RYDER3_16374
+Text.PrintNow('RYD3101', 7000, 1)
+104@ = 1
+
+:RYDER3_16374
+if 
+  not Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @RYDER3_17965
+if and
+  Char.LocateAnyMeans3D($scplayer, 1, 2446.887, -1661.962, 12.3047, 4.0, 4.0, 4.0)
+  Char.IsInCar($scplayer, 108@)
+goto_if_false @RYDER3_17965
+Player.ClearWantedLevel($player1)
+World.ClearArea(1, 2483.618, -1666.093, 12.3594, 50.0)
+gosub @RYDER3_18990
+if and
+  not Char.IsDead($ryder)
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_16542
+Char.DetachFromCar($ryder)
+Char.AttachToCar($ryder, 108@, 0.0, -1.3, 0.8, 0, 15.0, WeaponType.MicroUzi)
+
+:RYDER3_16542
+Blip.Remove(34@)
+Streaming.RequestCarRecording(104)
+Streaming.RequestAnimation("GANGS")
+
+:RYDER3_16560
+if or
+  not Streaming.HasCarRecordingBeenLoaded(104)
+  not Streaming.HasAnimationLoaded("GANGS")
+goto_if_false @RYDER3_16595
+wait 0
+goto @RYDER3_16560
+
+:RYDER3_16595
+if and
+  not Char.IsDead($scplayer)
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_16662
+if 
+  not Char.IsInCar($scplayer, 108@)
+goto_if_false @RYDER3_16645
+Char.WarpIntoCarAsPassenger($scplayer, 108@, 0)
+
+:RYDER3_16645
+Car.StartPlayback(108@, 104)
+Car.SkipInPlayback(108@, 1.0)
+
+:RYDER3_16662
+gosub @RYDER3_18930
+Camera.SetFixedPosition(2444.796, -1650.005, 24.6868, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2445.629, -1650.483, 24.4081, SwitchType.JumpCut)
+Char.Delete(162@)
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_16752
+Task.TogglePedThreatScanner($ryder, False, False, False)
+
+:RYDER3_16752
+gosub @RYDER3_19023
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(34057, 1)
+
+:RYDER3_16772
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_16798
+wait 0
+goto @RYDER3_16772
+
+:RYDER3_16798
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('RYD3_MA', 8000, 1)
+TIMERB = 0
+
+:RYDER3_16825
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_16851
+wait 0
+goto @RYDER3_16825
+
+:RYDER3_16851
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(34058, 1)
+
+:RYDER3_16866
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_16892
+wait 0
+goto @RYDER3_16866
+
+:RYDER3_16892
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('RYD3_MB', 8000, 1)
+TIMERB = 0
+
+:RYDER3_16919
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_16945
+wait 0
+goto @RYDER3_16919
+
+:RYDER3_16945
+Text.ClearPrints
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(34059, 1)
+
+:RYDER3_16960
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_16986
+wait 0
+goto @RYDER3_16960
+
+:RYDER3_16986
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('RYD3_MC', 8000, 1)
+TIMERB = 0
+
+:RYDER3_17013
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_17039
+wait 0
+goto @RYDER3_17013
+
+:RYDER3_17039
+Text.ClearPrints
+if 
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_17098
+Camera.SetFixedPosition(2472.576, -1675.462, 14.0837, 0.0, 0.0, 0.0)
+Camera.PointAtCar(108@, CameraMode.Fixed, SwitchType.JumpCut)
+
+:RYDER3_17098
+wait 5000
+if 
+  69@ == 0
+goto_if_false @RYDER3_17965
+if and
+  not Car.IsDead(108@)
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_17224
+Char.ClearTasks($ryder)
+Task.ToggleDuck($ryder, False)
+Car.StopPlayback(108@)
+$x = Car.GetOffsetInWorldCoords($y, $z, 108@, 0.0, 10.0, 0.0)
+Task.GoStraightToCoord($scplayer, $x, $y, $z, MoveState.Walk, -2)
+Task.GoStraightToCoord($ryder, $x, $y, $z, MoveState.Walk, -2)
+
+:RYDER3_17224
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(34060, 1)
+
+:RYDER3_17237
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_17263
+wait 0
+goto @RYDER3_17237
+
+:RYDER3_17263
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('RYD3_MD', 8000, 1)
+TIMERB = 0
+
+:RYDER3_17290
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_17316
+wait 0
+goto @RYDER3_17290
+
+:RYDER3_17316
+Text.ClearPrints
+wait 1500
+if 
+  Streaming.HasAnimationLoaded("GANGS")
+goto_if_false @RYDER3_17944
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_17466
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @RYDER3_17402
+Char.WarpFromCarToCoord($scplayer, 2471.343, -1684.306, 12.5159)
+goto @RYDER3_17422
+
+:RYDER3_17402
+Char.SetCoordinates($scplayer, 2471.343, -1684.306, 12.5159)
+
+:RYDER3_17422
+Char.ClearTasksImmediately($scplayer)
+Char.SetHeading($scplayer, 238.6571)
+$x = Char.GetOffsetInWorldCoords($y, $z, $scplayer, 0.0, 1.0, -1.0)
+
+:RYDER3_17466
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_17780
+if 
+  Char.IsInAnyCar($ryder)
+goto_if_false @RYDER3_17524
+Char.DetachFromCar($ryder)
+Char.WarpFromCarToCoord($ryder, $x, $y, $z)
+goto @RYDER3_17538
+
+:RYDER3_17524
+Char.SetCoordinates($ryder, $x, $y, $z)
+
+:RYDER3_17538
+50@ = 238.6571
+50@ -= 180.0
+Char.ClearTasksImmediately($ryder)
+Char.SetHeading($ryder, 50@)
+35@ = Sequence.Open()
+Task.CharSlideToCoordAndPlayAnim(-1, 2471.343, -1684.306, 12.5159, 238.6571, 0.4, "PRTIAL_HNDSHK_01", "GANGS", 4.0, False, False, False, False, -1)
+Task.LookAtChar(-1, $ryder, 3000)
+Sequence.Close(35@)
+Char.PerformSequence($scplayer, 35@)
+Sequence.Clear(35@)
+35@ = Sequence.Open()
+Task.CharSlideToCoordAndPlayAnim(-1, $x, $y, $z, 50@, 0.4, "PRTIAL_HNDSHK_01", "GANGS", 4.0, False, False, False, False, -1)
+Task.GoStraightToCoord(-1, 2465.728, -1687.025, 12.5184, MoveState.Walk, -2)
+Sequence.Close(35@)
+Char.PerformSequence($ryder, 35@)
+Sequence.Clear(35@)
+
+:RYDER3_17780
+Camera.SetFixedPosition(2472.521, -1683.47, 14.0526, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2472.001, -1684.324, 14.0313, SwitchType.JumpCut)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(34061, 1)
+
+:RYDER3_17844
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_17870
+wait 0
+goto @RYDER3_17844
+
+:RYDER3_17870
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('RYD3_ME', 8000, 1)
+TIMERB = 0
+
+:RYDER3_17897
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @RYDER3_17923
+wait 0
+goto @RYDER3_17897
+
+:RYDER3_17923
+Text.ClearPrints
+wait 1000
+gosub @RYDER3_18990
+goto @RYDER3_17953
+
+:RYDER3_17944
+Streaming.RequestAnimation("GANGS")
+
+:RYDER3_17953
+Char.Delete($ryder)
+goto @RYDER3_18136
+
+:RYDER3_17965
+if 
+  Car.IsDead(108@)
+goto_if_false @RYDER3_18004
+Text.PrintNow('RYD3_14', 5000, 1)
+goto @RYDER3_18057
+
+:RYDER3_18004
+if 
+  Char.IsDead($ryder)
+goto_if_false @RYDER3_18043
+Text.PrintNow('RYD3_B', 5000, 1)
+goto @RYDER3_18057
+
+:RYDER3_18043
+goto @RYDER3_2254
+
+:RYDER3_18050
+goto @RYDER3_18057
+
+:RYDER3_18057
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_18080
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:RYDER3_18080
+Game.SetWantedMultiplier(1.0)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_18118
+Char.SetProofs($scplayer, False, False, False, False, False)
+
+:RYDER3_18118
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:RYDER3_18136
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_18159
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:RYDER3_18159
+gosub @RYDER3_18958
+Game.SetWantedMultiplier(1.0)
+Camera.SetBehindPlayer
+gosub @RYDER3_19023
+Text.PrintWithNumberBig('M_PASSR', 7, 5000, TextStyle.Middle)
+Stat.AwardPlayerMissionRespect(7)
+Audio.PlayMissionPassedTune(1)
+Player.ClearWantedLevel($player1)
+$flag_ryder_mission_counter += 1
+Stat.PlayerMadeProgress(1)
+Stat.RegisterMissionPassed('RYDER_3')
+return 
+
+:RYDER3_18237
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_18260
+Char.ShutUpForScriptedSpeech($scplayer, False)
+
+:RYDER3_18260
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_18281
+Char.RemoveElegantly($ryder)
+
+:RYDER3_18281
+Hud.DrawCrosshair(False)
+Game.SetWantedMultiplier(1.0)
+Pad.SetPlayerDisplayVitalStatsButton($player1, True)
+Streaming.RemoveCarRecording(490)
+Streaming.RemoveCarRecording(486)
+Streaming.RemoveCarRecording(104)
+if 
+  not Char.IsDead(142@)
+goto_if_false @RYDER3_18334
+Char.Delete(142@)
+
+:RYDER3_18334
+if 
+  not Char.IsDead(143@)
+goto_if_false @RYDER3_18355
+Char.Delete(143@)
+
+:RYDER3_18355
+36@ = 0
+
+:RYDER3_18362
+if 
+  Blip.DoesExist(155@(36@,4i))
+goto_if_false @RYDER3_18391
+Blip.Remove(155@(36@,4i))
+
+:RYDER3_18391
+if 
+  Blip.DoesExist(136@(36@,6i))
+goto_if_false @RYDER3_18420
+Blip.Remove(136@(36@,6i))
+
+:RYDER3_18420
+36@ += 1
+  36@ >= 4
+goto_if_false @RYDER3_18362
+if 
+  Blip.DoesExist(70@)
+goto_if_false @RYDER3_18462
+Blip.Remove(70@)
+
+:RYDER3_18462
+if 
+  Blip.DoesExist(34@)
+goto_if_false @RYDER3_18483
+Blip.Remove(34@)
+
+:RYDER3_18483
+if 
+  Blip.DoesExist(68@)
+goto_if_false @RYDER3_18504
+Blip.Remove(68@)
+
+:RYDER3_18504
+if 
+  Blip.DoesExist(99@)
+goto_if_false @RYDER3_18525
+Blip.Remove(99@)
+
+:RYDER3_18525
+Object.Delete(61@)
+Object.Delete(62@)
+Object.Delete(63@)
+Object.Delete(64@)
+Object.Delete(91@)
+Object.Delete(92@)
+Object.Delete(93@)
+Object.Delete(81@)
+Object.Delete(77@)
+Object.Delete(78@)
+Object.Delete(79@)
+Object.Delete(80@)
+Game.SetCreateRandomGangMembers(True)
+Hud.ClearCounter($r3_total_guns)
+Hud.ClearCounter($throw_power_bar)
+Hud.ClearTimer($box_timer)
+Char.DetachFromCar($scplayer)
+Game.SwitchRandomTrains(True)
+Streaming.MarkModelAsNoLongerNeeded(600)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(#CR_GUNCRATE)
+Streaming.MarkModelAsNoLongerNeeded(#CR_AMMOBOX)
+Streaming.MarkModelAsNoLongerNeeded(105)
+Streaming.MarkModelAsNoLongerNeeded(106)
+Streaming.MarkModelAsNoLongerNeeded(108)
+Streaming.MarkModelAsNoLongerNeeded(109)
+Streaming.MarkModelAsNoLongerNeeded(110)
+Streaming.MarkModelAsNoLongerNeeded(537)
+Streaming.MarkModelAsNoLongerNeeded(569)
+Streaming.MarkModelAsNoLongerNeeded(492)
+Streaming.MarkModelAsNoLongerNeeded(102)
+Streaming.MarkModelAsNoLongerNeeded(104)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(468)
+Streaming.RemoveAnimation("BOX")
+Streaming.RemoveAnimation("GANGS")
+Streaming.RemoveAnimation("RYDER")
+Streaming.RemoveAnimation("SWAT")
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+Streaming.UnloadSpecialCharacter(1)
+Path.SwitchRoadsBackToOriginal(2284.0, -1151.0, 10.0, 2288.0, -1147.0, 30.0)
+Path.SwitchRoadsBackToOriginal(2287.321, -1132.571, 10.0, 2360.839, -1177.134, 40.0)
+Path.SwitchRoadsBackToOriginal(2311.676, -1375.397, 10.0, 2292.365, -1303.102, 40.0)
+Path.SwitchRoadsBackToOriginal(2268.695, -1138.541, 10.0, 2282.362, -1159.604, 40.0)
+Path.SwitchRoadsBackToOriginal(2307.537, -1162.624, 10.0, 2266.351, -1136.99, 40.0)
+$onmission = 0
+$timer_mobile_start = Clock.GetGameTimer()
+Player.ClearWantedLevel($player1)
+Game.SetWantedMultiplier(1.0)
+Mission.Finish
+return 
+
+:RYDER3_18930
+Player.SetControl($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Hud.SwitchWidescreen(True)
+Game.SetAllCarsCanBeDamaged(False)
+Text.ClearPrints
+Text.ClearHelp
+return 
+
+:RYDER3_18958
+Player.SetControl($player1, True)
+Game.SetEveryoneIgnorePlayer($player1, False)
+Hud.SwitchWidescreen(False)
+Game.SetAllCarsCanBeDamaged(True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Text.ClearHelp
+Text.ClearPrints
+return 
+
+:RYDER3_18990
+Camera.DoFade(0, 500)
+
+:RYDER3_18997
+if 
+  Camera.GetFadingStatus
+goto_if_false @RYDER3_19021
+wait 0
+goto @RYDER3_18997
+
+:RYDER3_19021
+return 
+
+:RYDER3_19023
+Camera.DoFade(1, 500)
+
+:RYDER3_19030
+if 
+  Camera.GetFadingStatus
+goto_if_false @RYDER3_19054
+wait 0
+goto @RYDER3_19030
+
+:RYDER3_19054
+return 
+
+:RYDER3_19056
+if 
+is_ps2_keyboard_key_just_pressed 65
+goto_if_false @RYDER3_19172
+Streaming.RequestModel(600)
+
+:RYDER3_19076
+if 
+  not Streaming.HasModelLoaded(600)
+goto_if_false @RYDER3_19103
+wait 0
+goto @RYDER3_19076
+
+:RYDER3_19103
+182@ = Car.Create(600, 2298.39, -1149.012, 25.7656)
+Car.SetHeading(182@, 45.766)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_19160
+Char.WarpIntoCar($scplayer, 182@)
+
+:RYDER3_19160
+Streaming.MarkModelAsNoLongerNeeded(600)
+89@ = 50
+
+:RYDER3_19172
+if 
+is_ps2_keyboard_key_just_pressed 66
+goto_if_false @RYDER3_19260
+Streaming.RequestCarRecording(486)
+Streaming.RequestCarRecording(490)
+
+:RYDER3_19197
+if or
+  not Streaming.HasCarRecordingBeenLoaded(486)
+  not Streaming.HasCarRecordingBeenLoaded(490)
+goto_if_false @RYDER3_19229
+wait 0
+goto @RYDER3_19197
+
+:RYDER3_19229
+if 
+  not Car.IsDead(129@)
+goto_if_false @RYDER3_19260
+Car.FreezePosition(129@, False)
+Car.StartPlayback(129@, 490)
+
+:RYDER3_19260
+if 
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @RYDER3_19425
+World.SetCarDensityMultiplier(0.0)
+World.SetPedDensityMultiplier(0.0)
+Streaming.RequestModel(537)
+Streaming.RequestModel(569)
+Streaming.RequestModel(492)
+Streaming.RequestCarRecording(106)
+
+:RYDER3_19308
+if 
+  not Streaming.HasCarRecordingBeenLoaded(106)
+goto_if_false @RYDER3_19334
+wait 0
+goto @RYDER3_19308
+
+:RYDER3_19334
+if or
+  not Streaming.HasModelLoaded(537)
+  not Streaming.HasModelLoaded(569)
+  not Streaming.HasModelLoaded(492)
+goto_if_false @RYDER3_19371
+wait 0
+goto @RYDER3_19334
+
+:RYDER3_19371
+183@ = Train.Create(2278.177, -1144.882, 27.5107, 10, 1)
+Streaming.MarkModelAsNoLongerNeeded(537)
+Streaming.MarkModelAsNoLongerNeeded(569)
+Train.SetSpeed(183@, 0.0)
+Train.SetCruiseSpeed(183@, 0.0)
+
+:RYDER3_19425
+if 
+is_ps2_keyboard_key_just_pressed 70
+goto_if_false @RYDER3_19498
+if 
+  not Char.IsDead($ryder)
+goto_if_false @RYDER3_19498
+Task.PlayAnim($ryder, "RYD_BECKON_01", "RYDER", 1.0, False, False, False, False, -1)
+
+:RYDER3_19498
+if 
+is_ps2_keyboard_key_just_pressed 75
+goto_if_false @RYDER3_19520
+$collected_guns = 9
+
+:RYDER3_19520
+if 
+is_ps2_keyboard_key_just_pressed 72
+goto_if_false @RYDER3_19683
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @RYDER3_19683
+Streaming.RequestAnimation("CARRY")
+
+:RYDER3_19560
+if 
+  not Streaming.HasAnimationLoaded("CARRY")
+goto_if_false @RYDER3_19591
+wait 0
+goto @RYDER3_19560
+
+:RYDER3_19591
+$x, $y, $z = Char.GetCoordinates($scplayer)
+110@ = Object.CreateNoOffset(127@, $x, $y, $z)
+Object.SetCollision(110@, False)
+Task.PickUpObject($scplayer, 110@, 0.0, 0.3, 0.0, 6, 16, "CATCH_BOX", "BOX", 0)
+Streaming.RemoveAnimation("CARRY")
+
+:RYDER3_19683
+if 
+is_ps2_keyboard_key_just_pressed 80
+goto_if_false @RYDER3_19754
+Streaming.RequestCarRecording(486)
+
+:RYDER3_19703
+if 
+  not Streaming.HasCarRecordingBeenLoaded(486)
+goto_if_false @RYDER3_19730
+wait 0
+goto @RYDER3_19703
+
+:RYDER3_19730
+if 
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_19754
+Car.StartPlayback(108@, 486)
+
+:RYDER3_19754
+if 
+is_ps2_keyboard_key_just_pressed 73
+goto_if_false @RYDER3_20104
+if 
+  not Car.IsDead(108@)
+goto_if_false @RYDER3_20104
+79@ = Object.Create(#CR_GUNCRATE, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(79@, 108@, 0.4, -2.1, -0.1, 0.0, 0.0, 15.0)
+Object.SetCollision(79@, False)
+77@ = Object.Create(#CR_GUNCRATE, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(77@, 108@, -0.5, -2.1, -0.1, 0.0, 0.0, 30.0)
+Object.SetCollision(77@, False)
+78@ = Object.Create(#CR_GUNCRATE, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(78@, 108@, 0.4, -2.1, 0.3, 0.0, 30.0, 0.0)
+80@ = Object.Create(#CR_AMMOBOX, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(80@, 108@, -0.6, -2.1, 0.3, 0.0, 0.0, 15.0)
+81@ = Object.Create(#CR_AMMOBOX, 2278.177, -1144.882, 27.5107)
+Object.AttachToCar(81@, 108@, -0.1, -2.1, 0.3, 0.0, 0.0, 15.0)
+
+:RYDER3_20104
+return 
+
+:RYDER3_20106
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(96@, 1)
+95@ = 0
+return 
+
+:RYDER3_20126
+if and
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+  95@ == 0
+goto_if_false @RYDER3_20169
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(106@s, 10000, 1)
+95@ = 1
+
+:RYDER3_20169
+if and
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+  95@ == 1
+goto_if_false @RYDER3_20207
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearThisPrint(106@s)
+95@ = 2
+
+:RYDER3_20207
+return 
+

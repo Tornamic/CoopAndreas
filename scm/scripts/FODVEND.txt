@@ -1,0 +1,189 @@
+//-------------External script 9 (FOOD_VENDOR)---------------
+
+:FODVEND
+script_name 'FODVEND'
+1@ = 0
+if 
+  1@ == 1
+goto_if_false @FODVEND_58
+0@ = Object.CreateNoOffset(#ICESCART_PROP, 0.0, 0.0, 0.0)
+
+:FODVEND_58
+wait 0
+$game_timer = Clock.GetGameTimer()
+if 
+  Object.DoesExist(0@)
+goto_if_false @FODVEND_1130
+if 
+  Object.IsWithinBrainActivationRange(0@)
+goto_if_false @FODVEND_1075
+if 
+  Player.IsPlaying($player1)
+goto_if_false @FODVEND_1022
+if 
+  not Object.HasBeenUprooted(0@)
+goto_if_false @FODVEND_924
+if 
+  1@ == 0
+goto_if_false @FODVEND_469
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, -1.0, 0.0, -1.0)
+set_var_float_to_var_float $x_temp = $x
+$x_temp -= 0.5
+set_var_float_to_var_float $y_temp = $y
+$y_temp -= 0.5
+set_var_float_to_var_float $z_temp = $z
+set_var_float_to_var_float $temp_float_1 = $x
+$temp_float_1 += 0.5
+set_var_float_to_var_float $temp_float_2 = $y
+$temp_float_2 += 0.5
+set_var_float_to_var_float $temp_float_3 = $z
+$temp_float_3 += 2.0
+if 
+  not World.IsAreaOccupied($x_temp, $y_temp, $z_temp, $temp_float_1, $temp_float_2, $temp_float_3, False, False, True, False, False)
+goto_if_false @FODVEND_462
+if 
+  not Camera.IsPointOnScreen($x, $y, $z, 1.0)
+goto_if_false @FODVEND_455
+Streaming.RequestModel(168)
+if 
+  Streaming.HasModelLoaded(168)
+goto_if_false @FODVEND_455
+2@ = Char.Create(4, 168, $x, $y, $z)
+$x_temp = Object.GetOffsetInWorldCoords($y_temp, $z_temp, 0@, 1.0, 0.0, 0.0)
+sub_float_var_from_float_var $x_temp -= $x
+sub_float_var_from_float_var $y_temp -= $y
+$heading = Math.GetHeadingFromVector2D($x_temp, $y_temp)
+Char.SetHeading(2@, $heading)
+1@ += 1
+
+:FODVEND_455
+goto @FODVEND_469
+
+:FODVEND_462
+Streaming.MarkModelAsNoLongerNeeded(168)
+terminate_this_script 
+
+:FODVEND_469
+if 
+  1@ == 1
+goto_if_false @FODVEND_742
+if 
+  Char.LocateOnFootObject2D($scplayer, 0@, 8.0, 8.0, False)
+goto_if_false @FODVEND_742
+Streaming.RequestAnimation("VENDING")
+if 
+  Streaming.HasAnimationLoaded("VENDING")
+goto_if_false @FODVEND_742
+if 
+  Player.IsScoreGreater($player1, 0)
+goto_if_false @FODVEND_742
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 1.0, 0.0, 0.0)
+if 
+  Char.LocateOnFoot3D($scplayer, 1, $x, $y, $z, 0.6, 0.6, 1.0)
+goto_if_false @FODVEND_742
+$temp_integer_1 = Char.GetHealth($scplayer)
+$temp_integer_1 += 50
+Char.SetHealth($scplayer, $temp_integer_1)
+Task.PlayAnimSecondary($scplayer, "VEND_EAT1_P", "VENDING", 4.0, False, False, False, False, -1)
+Stat.IncrementInt(StatId.LongestWheelieDist, 245)
+set_lvar_int_to_var_int 3@ = $game_timer
+3@ += 3000
+Player.AddScore($player1, -1)
+1@ += 1
+
+:FODVEND_742
+if 
+  1@ == 2
+goto_if_false @FODVEND_802
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 3@
+goto_if_false @FODVEND_802
+set_lvar_int_to_var_int 3@ = $game_timer
+3@ += 27000
+1@ += 1
+
+:FODVEND_802
+if 
+  1@ == 3
+goto_if_false @FODVEND_917
+if 
+  is_int_var_greater_than_int_lvar $game_timer > 3@
+goto_if_false @FODVEND_917
+$x = Object.GetOffsetInWorldCoords($y, $z, 0@, 1.0, 0.0, 0.0)
+if 
+  not Char.LocateOnFoot3D($scplayer, 0, $x, $y, $z, 0.6, 0.6, 1.0)
+goto_if_false @FODVEND_917
+1@ = 1
+
+:FODVEND_917
+goto @FODVEND_1015
+
+:FODVEND_924
+if 
+  1@ > 0
+goto_if_false @FODVEND_1008
+Char.MarkAsNoLongerNeeded(2@)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @FODVEND_990
+if 
+  not Char.IsDead(2@)
+goto_if_false @FODVEND_990
+Task.KillCharOnFootTimed(2@, $scplayer, 10000)
+
+:FODVEND_990
+Streaming.RemoveAnimation("VENDING")
+1@ = 0
+
+:FODVEND_1008
+Streaming.MarkModelAsNoLongerNeeded(168)
+terminate_this_script 
+
+:FODVEND_1015
+goto @FODVEND_1068
+
+:FODVEND_1022
+if 
+  1@ > 0
+goto_if_false @FODVEND_1063
+Char.MarkAsNoLongerNeeded(2@)
+Streaming.RemoveAnimation("VENDING")
+1@ = 0
+
+:FODVEND_1063
+Streaming.MarkModelAsNoLongerNeeded(168)
+
+:FODVEND_1068
+goto @FODVEND_1123
+
+:FODVEND_1075
+if 
+  1@ > 0
+goto_if_false @FODVEND_1116
+Char.MarkAsNoLongerNeeded(2@)
+Streaming.RemoveAnimation("VENDING")
+1@ = 0
+
+:FODVEND_1116
+Streaming.MarkModelAsNoLongerNeeded(168)
+terminate_this_script 
+
+:FODVEND_1123
+goto @FODVEND_1178
+
+:FODVEND_1130
+if 
+  1@ > 0
+goto_if_false @FODVEND_1171
+Char.MarkAsNoLongerNeeded(2@)
+Streaming.RemoveAnimation("VENDING")
+1@ = 0
+
+:FODVEND_1171
+Streaming.MarkModelAsNoLongerNeeded(168)
+terminate_this_script 
+
+:FODVEND_1178
+goto @FODVEND_58
+terminate_this_script 
+

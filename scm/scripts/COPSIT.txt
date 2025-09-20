@@ -1,0 +1,387 @@
+//-------------External script 56 (COPSIT)---------------
+
+:COPSIT
+script_name 'COPSIT'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @COPSIT_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:COPSIT_60
+Streaming.RequestAnimation("INT_OFFICE")
+
+:COPSIT_74
+if 
+  not Streaming.HasAnimationLoaded("INT_OFFICE")
+goto_if_false @COPSIT_110
+wait 0
+goto @COPSIT_74
+
+:COPSIT_110
+9@ = 0.0
+3@ = 0
+if 
+  1@ == 0
+goto_if_false @COPSIT_166
+5@ = 0
+4@ = 1
+goto @COPSIT_180
+
+:COPSIT_166
+5@ = -2
+4@ = 2
+
+:COPSIT_180
+7@ = 0
+if 
+  not Char.IsDead(0@)
+goto_if_false @COPSIT_236
+Char.SetSuffersCriticalHits(0@, False)
+$iCopDM = DecisionMakerChar.CopyShared(65537)
+Char.SetDecisionMaker(0@, $iCopDM)
+6@ = 15000
+
+:COPSIT_236
+wait 0
+if and
+  not Char.IsDead(0@)
+  Player.IsPlaying($player1)
+  $iTerminateAllAmbience == 0
+goto_if_false @COPSIT_345
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @COPSIT_331
+if 
+  Char.HasBeenDamagedByChar(0@, $scplayer)
+goto_if_false @COPSIT_317
+goto @COPSIT_2292
+goto @COPSIT_324
+
+:COPSIT_317
+gosub @COPSIT_359
+
+:COPSIT_324
+goto @COPSIT_338
+
+:COPSIT_331
+gosub @COPSIT_2239
+
+:COPSIT_338
+goto @COPSIT_352
+
+:COPSIT_345
+gosub @COPSIT_2239
+
+:COPSIT_352
+goto @COPSIT_236
+
+:COPSIT_359
+switch_start 4@ total_jumps 5 default_jump 0 @COPSIT_492 jumps 1 @COPSIT_422 2 @COPSIT_436 3 @COPSIT_450 4 @COPSIT_464 5 @COPSIT_478 -1 @COPSIT_492 -1 @COPSIT_492
+
+:COPSIT_422
+gosub @COPSIT_494
+goto @COPSIT_492
+
+:COPSIT_436
+gosub @COPSIT_724
+goto @COPSIT_492
+
+:COPSIT_450
+gosub @COPSIT_1843
+goto @COPSIT_492
+
+:COPSIT_464
+gosub @COPSIT_2239
+goto @COPSIT_492
+
+:COPSIT_478
+gosub @COPSIT_2146
+goto @COPSIT_492
+
+:COPSIT_492
+return 
+
+:COPSIT_494
+switch_start 5@ total_jumps 2 default_jump 0 @COPSIT_722 jumps 0 @COPSIT_557 1 @COPSIT_622 -1 @COPSIT_722 -1 @COPSIT_722 -1 @COPSIT_722 -1 @COPSIT_722 -1 @COPSIT_722
+
+:COPSIT_557
+Task.PlayAnimNonInterruptable(0@, "OFF_SIT_IN", "INT_OFFICE", 4.0, False, False, False, True, -1)
+3@ = 1
+5@ += 1
+goto @COPSIT_722
+
+:COPSIT_622
+9@ = 0.0
+if 
+  Char.IsPlayingAnim(0@, "OFF_SIT_IN")
+goto_if_false @COPSIT_680
+9@ = Char.GetAnimCurrentTime(0@, "OFF_SIT_IN")
+
+:COPSIT_680
+if 
+  9@ == 1.0
+goto_if_false @COPSIT_715
+5@ = 0
+4@ += 1
+
+:COPSIT_715
+goto @COPSIT_722
+
+:COPSIT_722
+return 
+
+:COPSIT_724
+switch_start 5@ total_jumps 5 default_jump 0 @COPSIT_1841 jumps -2 @COPSIT_787 0 @COPSIT_1023 1 @COPSIT_1259 2 @COPSIT_1520 3 @COPSIT_1598 -1 @COPSIT_1841 -1 @COPSIT_1841
+
+:COPSIT_787
+8@ = Math.RandomIntInRange(0, 100)
+if 
+  8@ > 66
+goto_if_false @COPSIT_955
+if 
+  8@ > 33
+goto_if_false @COPSIT_893
+Task.PlayAnimNonInterruptable(0@, "OFF_SIT_TYPE_LOOP", "INT_OFFICE", 1000.0, True, False, False, False, 50000000)
+goto @COPSIT_948
+
+:COPSIT_893
+Task.PlayAnimNonInterruptable(0@, "OFF_SIT_BORED_LOOP", "INT_OFFICE", 1000.0, True, False, False, False, 50000000)
+
+:COPSIT_948
+goto @COPSIT_1009
+
+:COPSIT_955
+Task.PlayAnimNonInterruptable(0@, "OFF_SIT_IDLE_LOOP", "INT_OFFICE", 1000.0, True, False, False, False, 50000000)
+
+:COPSIT_1009
+5@ = 1
+goto @COPSIT_1841
+
+:COPSIT_1023
+8@ = Math.RandomIntInRange(0, 100)
+if 
+  8@ > 66
+goto_if_false @COPSIT_1191
+if 
+  8@ > 33
+goto_if_false @COPSIT_1129
+Task.PlayAnimNonInterruptable(0@, "OFF_SIT_TYPE_LOOP", "INT_OFFICE", 1000.0, True, False, False, False, 50000000)
+goto @COPSIT_1184
+
+:COPSIT_1129
+Task.PlayAnimNonInterruptable(0@, "OFF_SIT_BORED_LOOP", "INT_OFFICE", 1000.0, True, False, False, False, 50000000)
+
+:COPSIT_1184
+goto @COPSIT_1245
+
+:COPSIT_1191
+Task.PlayAnimNonInterruptable(0@, "OFF_SIT_IDLE_LOOP", "INT_OFFICE", 1000.0, True, False, False, False, 50000000)
+
+:COPSIT_1245
+5@ += 1
+goto @COPSIT_1841
+
+:COPSIT_1259
+13@, 14@, 15@ = Char.GetCoordinates(0@)
+15@ -= 1.04
+16@ = Char.GetOffsetInWorldCoords(17@, 18@, 0@, 0.5, -0.5, 0.0)
+19@ = Char.GetOffsetInWorldCoords(20@, 21@, 0@, -0.5, -1.0, 0.0)
+10@ = Char.GetOffsetInWorldCoords(11@, 12@, 0@, 0.0, 1.0, -1.0)
+World.SetCharUsesCollisionClosestObjectOfType(13@, 14@, 15@, 1.5, -365, False, 0@)
+if or
+  Char.IsPlayingAnim(0@, "OFF_SIT_TYPE_LOOP")
+  Char.IsPlayingAnim(0@, "OFF_SIT_BORED_LOOP")
+  Char.IsPlayingAnim(0@, "OFF_SIT_IDLE_LOOP")
+goto_if_false @COPSIT_1513
+Char.SetCoordinates(0@, 10@, 11@, 12@)
+Char.FreezePosition(0@, True)
+TIMERB = 0
+5@ += 1
+
+:COPSIT_1513
+goto @COPSIT_1841
+
+:COPSIT_1520
+if 
+  Char.HasBeenDamagedByChar(0@, $scplayer)
+goto_if_false @COPSIT_1565
+Char.ClearLastDamageEntity(0@)
+4@ = 5
+5@ = 0
+goto @COPSIT_1841
+
+:COPSIT_1565
+if 
+  is_int_lvar_greater_than_int_lvar TIMERB > 6@
+goto_if_false @COPSIT_1591
+5@ += 1
+
+:COPSIT_1591
+goto @COPSIT_1841
+
+:COPSIT_1598
+8@ = Math.RandomIntInRange(0, 100)
+if 
+  8@ > 66
+goto_if_false @COPSIT_1766
+if 
+  8@ > 33
+goto_if_false @COPSIT_1704
+Task.PlayAnimNonInterruptable(0@, "OFF_SIT_TYPE_LOOP", "INT_OFFICE", 1000.0, True, False, False, False, 50000000)
+goto @COPSIT_1759
+
+:COPSIT_1704
+Task.PlayAnimNonInterruptable(0@, "OFF_SIT_BORED_LOOP", "INT_OFFICE", 1000.0, True, False, False, False, 50000000)
+
+:COPSIT_1759
+goto @COPSIT_1820
+
+:COPSIT_1766
+Task.PlayAnimNonInterruptable(0@, "OFF_SIT_IDLE_LOOP", "INT_OFFICE", 1000.0, True, False, False, False, 50000000)
+
+:COPSIT_1820
+TIMERB = 0
+5@ -= 1
+goto @COPSIT_1841
+
+:COPSIT_1841
+return 
+
+:COPSIT_1843
+switch_start 5@ total_jumps 3 default_jump 0 @COPSIT_2144 jumps 0 @COPSIT_1906 1 @COPSIT_1971 2 @COPSIT_2006 -1 @COPSIT_2144 -1 @COPSIT_2144 -1 @COPSIT_2144 -1 @COPSIT_2144
+
+:COPSIT_1906
+Task.PlayAnimNonInterruptable(0@, "OFF_SIT_2IDLE_180", "INT_OFFICE", 99.0, False, False, False, False, -1)
+5@ += 1
+goto @COPSIT_2144
+
+:COPSIT_1971
+Char.SetCoordinates(0@, 13@, 14@, 15@)
+Char.FreezePosition(0@, False)
+5@ += 1
+goto @COPSIT_2144
+
+:COPSIT_2006
+9@ = 0.0
+if 
+  Char.IsPlayingAnim(0@, "OFF_SIT_2IDLE_180")
+goto_if_false @COPSIT_2137
+9@ = Char.GetAnimCurrentTime(0@, "OFF_SIT_2IDLE_180")
+if 
+  9@ == 1.0
+goto_if_false @COPSIT_2137
+World.SetCharUsesCollisionClosestObjectOfType(13@, 14@, 15@, 1.5, -365, True, 0@)
+5@ = 0
+4@ += 1
+
+:COPSIT_2137
+goto @COPSIT_2144
+
+:COPSIT_2144
+return 
+
+:COPSIT_2146
+switch_start 5@ total_jumps 1 default_jump 0 @COPSIT_2237 jumps 0 @COPSIT_2209 -1 @COPSIT_2237 -1 @COPSIT_2237 -1 @COPSIT_2237 -1 @COPSIT_2237 -1 @COPSIT_2237 -1 @COPSIT_2237
+
+:COPSIT_2209
+4@ = 3
+5@ = 0
+gosub @COPSIT_2292
+goto @COPSIT_2237
+
+:COPSIT_2237
+return 
+
+:COPSIT_2239
+Streaming.RemoveAnimation("INT_OFFICE")
+DecisionMaker.Remove($iCopDM)
+if 
+  not Char.IsDead(0@)
+goto_if_false @COPSIT_2288
+Char.FreezePosition(0@, False)
+Char.SetSuffersCriticalHits(0@, True)
+
+:COPSIT_2288
+terminate_this_script 
+return 
+
+:COPSIT_2292
+wait 0
+if and
+  not is_var_text_label_empty s$shop_name
+  $iTerminateAllAmbience == 0
+goto_if_false @COPSIT_2635
+if and
+  not Char.IsDead(0@)
+  Player.IsPlaying($player1)
+goto_if_false @COPSIT_2628
+switch_start 4@ total_jumps 5 default_jump 1 @COPSIT_2614 jumps 1 @COPSIT_2403 2 @COPSIT_2486 3 @COPSIT_2535 4 @COPSIT_2549 5 @COPSIT_2600 -1 @COPSIT_2628 -1 @COPSIT_2628
+
+:COPSIT_2403
+if 
+  5@ > 1
+goto_if_false @COPSIT_2435
+gosub @COPSIT_359
+goto @COPSIT_2479
+
+:COPSIT_2435
+7@ = Char.GetScriptTaskStatus(0@, 1506)
+if 
+  is_int_lvar_equal_to_constant 7@ == 7
+goto_if_false @COPSIT_2479
+Task.KillCharOnFoot(0@, $scplayer)
+gosub @COPSIT_2239
+
+:COPSIT_2479
+goto @COPSIT_2628
+
+:COPSIT_2486
+if 
+  5@ == 2
+goto_if_false @COPSIT_2521
+6@ = Math.RandomIntInRange(0, 5)
+6@ *= 500
+
+:COPSIT_2521
+gosub @COPSIT_359
+goto @COPSIT_2628
+
+:COPSIT_2535
+gosub @COPSIT_359
+goto @COPSIT_2628
+
+:COPSIT_2549
+7@ = Char.GetScriptTaskStatus(0@, 1506)
+if 
+  is_int_lvar_equal_to_constant 7@ == 7
+goto_if_false @COPSIT_2593
+Task.KillCharOnFoot(0@, $scplayer)
+gosub @COPSIT_2239
+
+:COPSIT_2593
+goto @COPSIT_2628
+
+:COPSIT_2600
+gosub @COPSIT_359
+goto @COPSIT_2628
+
+:COPSIT_2614
+gosub @COPSIT_2239
+goto @COPSIT_2628
+
+:COPSIT_2628
+goto @COPSIT_2642
+
+:COPSIT_2635
+gosub @COPSIT_2239
+
+:COPSIT_2642
+goto @COPSIT_2292
+write_debug_with_int "PEDSTATE" 4@
+write_debug_with_int "SUBSTATESTATUS" 5@
+write_debug_with_int "TIMERB" TIMERB
+write_debug_with_int "TIMERA" TIMERA
+return 
+terminate_this_script 
+

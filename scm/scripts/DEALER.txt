@@ -1,0 +1,708 @@
+//-------------External script 19 (DEALER)---------------
+
+:DEALER
+script_name 'DEALER'
+13@ = 0
+if 
+  13@ == 1
+goto_if_false @DEALER_60
+0@ = Char.Create(17, 0, 0.0, 0.0, 0.0)
+
+:DEALER_60
+1@ = 0
+2@ = 0
+11@ = -1
+14@ = 0
+if and
+  not Char.IsDead(0@)
+  not Char.IsDead($scplayer)
+goto_if_false @DEALER_338
+3@, 4@, 5@ = Char.GetCoordinates(0@)
+s$txtGlobalDealerZoneName = Zone.GetName(3@, 4@, 5@)
+set_lvar_text_label 17@s = s$txtGlobalDealerZoneName
+$iMyDM = DecisionMakerChar.CopyShared(65539)
+Char.SetDecisionMaker(0@, $iMyDM)
+Char.SetMoney(0@, 2000)
+Conversation.StartSettingUp(0@)
+Conversation.SetUpNodeWithSpeech('DEAL1', 'DEAL2', 'DEAL3', 192, 77, 78)
+13@ = Stat.GetInt(64)
+if 
+  13@ >= 500
+goto_if_false @DEALER_271
+Conversation.SetUpEndNodeWithSpeech('DEAL2', 79)
+Conversation.SetUpEndNodeWithSpeech('DEAL3', 75)
+goto @DEALER_297
+
+:DEALER_271
+Conversation.SetUpEndNodeWithSpeech('DEAL2', 80)
+Conversation.SetUpEndNodeWithSpeech('DEAL3', 76)
+
+:DEALER_297
+13@ = Game.GetCurrentLanguage()
+if 
+  is_int_lvar_equal_to_constant 13@ == 0
+goto_if_false @DEALER_329
+Conversation.FinishSettingUpNoSubtitles
+goto @DEALER_331
+
+:DEALER_329
+Conversation.FinishSettingUp
+
+:DEALER_331
+goto @DEALER_345
+
+:DEALER_338
+gosub @DEALER_3913
+
+:DEALER_345
+wait 0
+if 
+  not Char.IsDead(0@)
+goto_if_false @DEALER_471
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @DEALER_457
+if or
+  Char.HasBeenDamagedByChar(0@, $scplayer)
+  Player.IsTargetingChar($player1, 0@)
+goto_if_false @DEALER_429
+gosub @DEALER_641
+gosub @DEALER_3368
+goto @DEALER_450
+
+:DEALER_429
+gosub @DEALER_846
+gosub @DEALER_485
+gosub @DEALER_931
+
+:DEALER_450
+goto @DEALER_464
+
+:DEALER_457
+gosub @DEALER_3913
+
+:DEALER_464
+goto @DEALER_478
+
+:DEALER_471
+gosub @DEALER_3913
+
+:DEALER_478
+goto @DEALER_345
+
+:DEALER_485
+if 
+  11@ == -1
+goto_if_false @DEALER_604
+if 
+  TIMERA > 15000
+goto_if_false @DEALER_597
+3@, 4@, 5@ = Char.GetCoordinates(0@)
+11@ = World.GetRandomCharInSphereOnlyDrugsBuyers(3@, 4@, 5@, 5.0)
+if 
+  11@ <> -1
+goto_if_false @DEALER_597
+if 
+  Char.IsInAnyCar(11@)
+goto_if_false @DEALER_597
+12@ = Char.StoreCarIsInNoSave(11@)
+
+:DEALER_597
+goto @DEALER_639
+
+:DEALER_604
+if or
+  Char.IsDead(11@)
+  not Char.DoesExist(11@)
+  Char.IsRespondingToEvent(0@, 36)
+goto_if_false @DEALER_639
+11@ = -1
+
+:DEALER_639
+return 
+
+:DEALER_641
+Char.MarkAsNoLongerNeeded(11@)
+if 
+  not Char.IsDead(11@)
+goto_if_false @DEALER_709
+if 
+  not Car.IsDead(12@)
+goto_if_false @DEALER_709
+if 
+  not Car.IsOnFire(12@)
+goto_if_false @DEALER_709
+Task.CarDriveWander(11@, 12@, 20.0, DrivingMode.AvoidCars)
+
+:DEALER_709
+TIMERA = 0
+11@ = -1
+return 
+
+:DEALER_725
+if 
+  not Char.IsDead(0@)
+goto_if_false @DEALER_844
+if 
+  not Char.IsDead(11@)
+goto_if_false @DEALER_844
+3@, 4@, 5@ = Char.GetCoordinates(0@)
+6@, 7@, 8@ = Char.GetCoordinates(11@)
+9@ = Math.GetDistanceBetweenCoords2D(3@, 4@, 6@, 7@)
+if 
+  9@ > 2.0
+goto_if_false @DEALER_837
+13@ = 1
+goto @DEALER_844
+
+:DEALER_837
+13@ = 0
+
+:DEALER_844
+return 
+
+:DEALER_846
+if 
+  Streaming.HasModelLoaded(346)
+goto_if_false @DEALER_929
+if 
+  not Char.HasGotWeapon(0@, WeaponType.Pistol)
+goto_if_false @DEALER_929
+Char.GiveWeapon(0@, WeaponType.Pistol, 1000)
+if 
+  15@ <> 1
+goto_if_false @DEALER_922
+Char.SetCurrentWeapon(0@, WeaponType.Unarmed)
+goto @DEALER_929
+
+:DEALER_922
+Char.SetCurrentWeapon(0@, WeaponType.Pistol)
+
+:DEALER_929
+return 
+
+:DEALER_931
+switch_start 1@ total_jumps 4 default_jump 1 @DEALER_1285 jumps 0 @DEALER_994 1 @DEALER_1151 2 @DEALER_1211 3 @DEALER_1271 -1 @DEALER_1299 -1 @DEALER_1299 -1 @DEALER_1299
+
+:DEALER_994
+if 
+  Conversation.IsPlayerInPosition(0@)
+goto_if_false @DEALER_1038
+2@ = 0
+1@ = 3
+gosub @DEALER_2884
+goto @DEALER_1144
+
+:DEALER_1038
+if 
+  11@ > -1
+goto_if_false @DEALER_1137
+gosub @DEALER_725
+if 
+  13@ == 0
+goto_if_false @DEALER_1109
+2@ = 0
+1@ = 2
+gosub @DEALER_2636
+goto @DEALER_1130
+
+:DEALER_1109
+2@ = 0
+1@ = 1
+gosub @DEALER_1793
+
+:DEALER_1130
+goto @DEALER_1144
+
+:DEALER_1137
+gosub @DEALER_1301
+
+:DEALER_1144
+goto @DEALER_1299
+
+:DEALER_1151
+if 
+  11@ > -1
+goto_if_false @DEALER_1183
+gosub @DEALER_1793
+goto @DEALER_1204
+
+:DEALER_1183
+1@ = 0
+2@ = 0
+gosub @DEALER_1301
+
+:DEALER_1204
+goto @DEALER_1299
+
+:DEALER_1211
+if 
+  11@ > -1
+goto_if_false @DEALER_1243
+gosub @DEALER_2636
+goto @DEALER_1264
+
+:DEALER_1243
+1@ = 0
+2@ = 0
+gosub @DEALER_1301
+
+:DEALER_1264
+goto @DEALER_1299
+
+:DEALER_1271
+gosub @DEALER_2884
+goto @DEALER_1299
+
+:DEALER_1285
+gosub @DEALER_3913
+goto @DEALER_1299
+
+:DEALER_1299
+return 
+
+:DEALER_1301
+switch_start 2@ total_jumps 3 default_jump 0 @DEALER_1791 jumps 0 @DEALER_1364 1 @DEALER_1488 2 @DEALER_1758 -1 @DEALER_1791 -1 @DEALER_1791 -1 @DEALER_1791 -1 @DEALER_1791
+
+:DEALER_1364
+if 
+  not Char.IsRespondingToEvent(0@, 36)
+goto_if_false @DEALER_1481
+Conversation.Enable(0@, True)
+13@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_1481
+Task.PlayAnim(0@, "DEALER_IDLE", "DEALER", 4.0, True, False, False, False, -1)
+TIMERB = 0
+14@ = 3000
+2@ += 1
+
+:DEALER_1481
+goto @DEALER_1791
+
+:DEALER_1488
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar TIMERB >= 14@
+goto_if_false @DEALER_1751
+Char.SetWantedByPolice(0@, False)
+13@ = Math.RandomIntInRange(1, 15)
+if 
+  13@ > 5
+goto_if_false @DEALER_1659
+if 
+  13@ > 10
+goto_if_false @DEALER_1610
+13@ = Char.GetScriptTaskStatus(0@, 1481)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_1603
+Task.LookAbout(0@, -1)
+14@ = 2000
+
+:DEALER_1603
+goto @DEALER_1652
+
+:DEALER_1610
+13@ = Char.GetScriptTaskStatus(0@, 1502)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_1652
+Task.WanderStandard(0@)
+14@ = 1500
+
+:DEALER_1652
+goto @DEALER_1737
+
+:DEALER_1659
+13@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_1737
+Task.PlayAnim(0@, "DEALER_IDLE", "DEALER", 4.0, True, False, False, False, -1)
+14@ = 3000
+
+:DEALER_1737
+TIMERB = 0
+2@ += 1
+
+:DEALER_1751
+goto @DEALER_1791
+
+:DEALER_1758
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar TIMERB >= 14@
+goto_if_false @DEALER_1784
+2@ = 1
+
+:DEALER_1784
+goto @DEALER_1791
+
+:DEALER_1791
+return 
+
+:DEALER_1793
+switch_start 2@ total_jumps 6 default_jump 0 @DEALER_2634 jumps 0 @DEALER_1856 1 @DEALER_1907 2 @DEALER_2044 3 @DEALER_2074 4 @DEALER_2295 5 @DEALER_2505 -1 @DEALER_2634
+
+:DEALER_1856
+Conversation.Enable(0@, False)
+Task.LookAbout(0@, -1)
+Task.GotoChar(11@, 0@, 20000, 1.0)
+TIMERB = 0
+2@ += 1
+goto @DEALER_2634
+
+:DEALER_1907
+3@, 4@, 5@ = Char.GetCoordinates(0@)
+6@, 7@, 8@ = Char.GetCoordinates(11@)
+9@ = Math.GetDistanceBetweenCoords2D(3@, 4@, 6@, 7@)
+Task.LookAtChar(0@, 11@, -1)
+if 
+  1.8 >= 9@
+goto_if_false @DEALER_1997
+2@ += 1
+goto @DEALER_2037
+
+:DEALER_1997
+if 
+  TIMERB > 20000
+goto_if_false @DEALER_2037
+gosub @DEALER_641
+2@ = 0
+1@ = 0
+
+:DEALER_2037
+goto @DEALER_2634
+
+:DEALER_2044
+Task.TurnCharToFaceChar(11@, 0@)
+Task.TurnCharToFaceChar(0@, 11@)
+2@ += 1
+goto @DEALER_2634
+
+:DEALER_2074
+13@ = Char.GetScriptTaskStatus(11@, 1593)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_2139
+13@ = Char.GetScriptTaskStatus(11@, 1466)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_2139
+Task.StandStill(11@, -1)
+
+:DEALER_2139
+13@ = Char.GetScriptTaskStatus(0@, 1593)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_2288
+13@ = Char.GetScriptTaskStatus(0@, 1466)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_2204
+Task.StandStill(0@, -1)
+
+:DEALER_2204
+13@ = Char.GetScriptTaskStatus(11@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_2288
+13@ = Char.SetSayContext(11@, 83)
+Task.PlayAnim(11@, "SHOP_PAY", "DEALER", 4.0, False, False, False, False, -1)
+2@ += 1
+
+:DEALER_2288
+goto @DEALER_2634
+
+:DEALER_2295
+13@ = Char.GetScriptTaskStatus(11@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_2498
+Char.ClearLookAt(0@)
+13@ = Char.GetScriptTaskStatus(11@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_2404
+Task.PlayAnim(11@, "DRUGS_BUY", "DEALER", 4.0, False, False, False, False, -1)
+Char.SetWantedByPolice(11@, True)
+
+:DEALER_2404
+13@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_2498
+13@ = Char.SetSayContext(0@, 84)
+Task.PlayAnim(0@, "DEALER_DEAL", "DEALER", 4.0, False, False, False, False, -1)
+Char.SetWantedByPolice(0@, True)
+2@ += 1
+
+:DEALER_2498
+goto @DEALER_2634
+
+:DEALER_2505
+13@ = Char.GetScriptTaskStatus(11@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_2570
+13@ = Char.GetScriptTaskStatus(11@, 1466)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_2570
+Task.StandStill(11@, -1)
+
+:DEALER_2570
+13@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_2627
+Char.SetDruggedUp(11@, True)
+gosub @DEALER_641
+2@ = 0
+1@ = 0
+
+:DEALER_2627
+goto @DEALER_2634
+
+:DEALER_2634
+return 
+
+:DEALER_2636
+switch_start 2@ total_jumps 3 default_jump 0 @DEALER_2882 jumps 0 @DEALER_2699 1 @DEALER_2769 2 @DEALER_2825 -1 @DEALER_2882 -1 @DEALER_2882 -1 @DEALER_2882 -1 @DEALER_2882
+
+:DEALER_2699
+Conversation.Enable(0@, False)
+3@, 4@, 5@ = Char.GetCoordinates(0@)
+Task.LookAtChar(0@, 11@, -1)
+Task.FollowFootsteps(0@, 11@)
+13@ = Char.SetSayContext(0@, 84)
+TIMERB = 0
+2@ += 1
+goto @DEALER_2882
+
+:DEALER_2769
+if 
+  TIMERB > 6000
+goto_if_false @DEALER_2818
+Char.ClearLookAt(0@)
+Task.FollowPathNodesToCoord(0@, 3@, 4@, 5@, 4, -2)
+2@ += 1
+
+:DEALER_2818
+goto @DEALER_2882
+
+:DEALER_2825
+13@ = Char.GetScriptTaskStatus(0@, 1525)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_2875
+gosub @DEALER_641
+2@ = 0
+1@ = 0
+
+:DEALER_2875
+goto @DEALER_2882
+
+:DEALER_2882
+return 
+
+:DEALER_2884
+switch_start 2@ total_jumps 4 default_jump 0 @DEALER_3366 jumps 0 @DEALER_2947 1 @DEALER_2976 2 @DEALER_3178 3 @DEALER_3312 -1 @DEALER_3366 -1 @DEALER_3366 -1 @DEALER_3366
+
+:DEALER_2947
+TIMERB = 0
+Task.TurnCharToFaceChar(0@, $scplayer)
+2@ += 1
+goto @DEALER_3366
+
+:DEALER_2976
+if 
+  not Text.IsHelpMessageBeingDisplayed
+goto_if_false @DEALER_3039
+if and
+  not Conversation.IsAtNode(0@, 'DEAL2')
+  not Conversation.IsAtNode(0@, 'DEAL3')
+goto_if_false @DEALER_3039
+Text.PrintHelp('TALK_1')
+
+:DEALER_3039
+13@ = Char.GetScriptTaskStatus(0@, 1593)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_3128
+Task.LookAtChar(0@, $scplayer, -1)
+13@ = Char.GetScriptTaskStatus(0@, 1466)
+if 
+  is_int_lvar_equal_to_constant 13@ == 7
+goto_if_false @DEALER_3114
+Task.StandStill(0@, -2)
+
+:DEALER_3114
+2@ += 1
+goto @DEALER_3171
+
+:DEALER_3128
+if or
+  not Conversation.IsPlayerInPosition(0@)
+  TIMERB > 15000
+goto_if_false @DEALER_3171
+Char.ClearLookAt(0@)
+2@ = 0
+1@ = 0
+
+:DEALER_3171
+goto @DEALER_3366
+
+:DEALER_3178
+if and
+  Conversation.IsAtNode(0@, 'DEAL3')
+  TIMERB > 9000
+goto_if_false @DEALER_3220
+Text.ClearHelp
+gosub @DEALER_3368
+
+:DEALER_3220
+if and
+  Conversation.IsAtNode(0@, 'DEAL2')
+  TIMERB > 9000
+goto_if_false @DEALER_3262
+Text.ClearHelp
+gosub @DEALER_3595
+
+:DEALER_3262
+if or
+  not Conversation.IsPlayerInPosition(0@)
+  TIMERB > 15000
+goto_if_false @DEALER_3305
+Char.ClearLookAt(0@)
+2@ = 0
+1@ = 0
+
+:DEALER_3305
+goto @DEALER_3366
+
+:DEALER_3312
+if 
+  TIMERB > 2000
+goto_if_false @DEALER_3359
+DecisionMakerChar.ClearEventResponse($iMyDM, 37)
+Char.SetCurrentWeapon(0@, WeaponType.Unarmed)
+2@ = 0
+1@ = 0
+
+:DEALER_3359
+goto @DEALER_3366
+
+:DEALER_3366
+return 
+
+:DEALER_3368
+Text.ClearHelp
+Char.ClearLookAt(0@)
+Conversation.Enable(0@, False)
+if 
+  Char.HasGotWeapon(0@, WeaponType.Pistol)
+goto_if_false @DEALER_3407
+Char.SetCurrentWeapon(0@, WeaponType.Pistol)
+
+:DEALER_3407
+if 
+  15@ <> 1
+goto_if_false @DEALER_3593
+15@ = 1
+13@ = Stat.GetInt(64)
+if 
+  13@ > 500
+goto_if_false @DEALER_3529
+Char.SetRelationship(0@, RelationshipType.Hate, PedType.Player1)
+DecisionMakerChar.ClearEventResponse($iMyDM, 36)
+DecisionMakerChar.AddEventResponse($iMyDM, 36, 927, 0.0, 100.0, 0.0, 0.0, True, True)
+2@ = 0
+1@ = 0
+goto @DEALER_3593
+
+:DEALER_3529
+Char.SetRelationship(0@, RelationshipType.Hate, PedType.Player1)
+DecisionMakerChar.ClearEventResponse($iMyDM, 36)
+DecisionMakerChar.AddEventResponse($iMyDM, 36, 1000, 0.0, 100.0, 0.0, 0.0, True, True)
+2@ = 0
+1@ = 0
+
+:DEALER_3593
+return 
+
+:DEALER_3595
+Text.ClearHelp
+Char.ClearLookAt(0@)
+Conversation.Enable(0@, False)
+13@ = Stat.GetInt(68)
+if 
+  15@ <> 2
+goto_if_false @DEALER_3868
+15@ = 2
+if 
+  13@ > 500
+goto_if_false @DEALER_3738
+Char.SetRelationship(0@, RelationshipType.Dislike, PedType.Player1)
+Char.SetCurrentWeapon(0@, WeaponType.Unarmed)
+DecisionMakerChar.ClearEventResponse($iMyDM, 37)
+DecisionMakerChar.AddEventResponse($iMyDM, 37, 927, 0.0, 100.0, 0.0, 0.0, True, True)
+2@ = 0
+1@ = 0
+goto @DEALER_3868
+
+:DEALER_3738
+Char.SetRelationship(0@, RelationshipType.Dislike, PedType.Player1)
+DecisionMakerChar.ClearEventResponse($iMyDM, 37)
+if 
+  Char.HasGotWeapon(0@, WeaponType.Pistol)
+goto_if_false @DEALER_3820
+Char.SetCurrentWeapon(0@, WeaponType.Pistol)
+DecisionMakerChar.AddEventResponse($iMyDM, 37, 1020, 0.0, 100.0, 0.0, 0.0, False, True)
+goto @DEALER_3854
+
+:DEALER_3820
+DecisionMakerChar.AddEventResponse($iMyDM, 37, 413, 0.0, 100.0, 0.0, 0.0, False, True)
+
+:DEALER_3854
+TIMERB = 0
+2@ += 1
+
+:DEALER_3868
+return 
+
+:DEALER_3870
+16@ = Zone.GetDealerStrength(17@s)
+if 
+  16@ > 0
+goto_if_false @DEALER_3903
+16@ -= 1
+
+:DEALER_3903
+Zone.SetDealerStrength(17@s, 16@)
+return 
+
+:DEALER_3913
+if 
+  15@ == 1
+goto_if_false @DEALER_3938
+gosub @DEALER_3870
+
+:DEALER_3938
+Conversation.ClearForChar(0@)
+if 
+  11@ > -1
+goto_if_false @DEALER_3966
+Char.MarkAsNoLongerNeeded(11@)
+
+:DEALER_3966
+DecisionMaker.Remove($iMyDM)
+terminate_this_script 
+return 
+write_debug_with_int "PEDSTATE" 1@
+write_debug_with_int "SUBSTATESTATUS" 2@
+write_debug_with_int "TIMER_B" TIMERB
+write_debug_with_int "TIMER_A" TIMERA
+return 
+terminate_this_script 
+

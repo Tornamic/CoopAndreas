@@ -1,0 +1,493 @@
+//-------------External script 46 (FBOOTHR)---------------
+
+:FBOOTHR
+script_name 'FBOOTHR'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @FBOOTHR_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:FBOOTHR_60
+Streaming.RequestAnimation("FOOD")
+
+:FBOOTHR_68
+if 
+  not Streaming.HasAnimationLoaded("FOOD")
+goto_if_false @FBOOTHR_98
+wait 0
+goto @FBOOTHR_68
+
+:FBOOTHR_98
+9@ = 0.0
+3@ = 0
+if 
+  1@ == 0
+goto_if_false @FBOOTHR_154
+5@ = 0
+4@ = 1
+goto @FBOOTHR_168
+
+:FBOOTHR_154
+5@ = -2
+4@ = 2
+
+:FBOOTHR_168
+7@ = 0
+if 
+  not Char.IsDead(0@)
+goto_if_false @FBOOTHR_215
+Char.SetSuffersCriticalHits(0@, False)
+6@ = 1800000
+goto @FBOOTHR_222
+
+:FBOOTHR_215
+6@ = 0
+
+:FBOOTHR_222
+wait 0
+if and
+  not Char.IsDead(0@)
+  Player.IsPlaying($player1)
+  $iTerminateAllAmbience == 0
+goto_if_false @FBOOTHR_356
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @FBOOTHR_342
+if 
+  $iSetPizzaPanic == 0
+goto_if_false @FBOOTHR_302
+gosub @FBOOTHR_370
+goto @FBOOTHR_335
+
+:FBOOTHR_302
+if 
+  Char.HasBeenDamagedByChar(0@, $scplayer)
+goto_if_false @FBOOTHR_328
+$iSetPizzaPanic = 1
+
+:FBOOTHR_328
+goto @FBOOTHR_2971
+
+:FBOOTHR_335
+goto @FBOOTHR_349
+
+:FBOOTHR_342
+gosub @FBOOTHR_2895
+
+:FBOOTHR_349
+goto @FBOOTHR_363
+
+:FBOOTHR_356
+gosub @FBOOTHR_2895
+
+:FBOOTHR_363
+goto @FBOOTHR_222
+
+:FBOOTHR_370
+switch_start 4@ total_jumps 5 default_jump 0 @FBOOTHR_503 jumps 1 @FBOOTHR_433 2 @FBOOTHR_447 3 @FBOOTHR_461 4 @FBOOTHR_475 5 @FBOOTHR_489 -1 @FBOOTHR_503 -1 @FBOOTHR_503
+
+:FBOOTHR_433
+gosub @FBOOTHR_505
+goto @FBOOTHR_503
+
+:FBOOTHR_447
+gosub @FBOOTHR_732
+goto @FBOOTHR_503
+
+:FBOOTHR_461
+gosub @FBOOTHR_2118
+goto @FBOOTHR_503
+
+:FBOOTHR_475
+gosub @FBOOTHR_2895
+goto @FBOOTHR_503
+
+:FBOOTHR_489
+gosub @FBOOTHR_2455
+goto @FBOOTHR_503
+
+:FBOOTHR_503
+return 
+
+:FBOOTHR_505
+switch_start 5@ total_jumps 2 default_jump 0 @FBOOTHR_730 jumps 0 @FBOOTHR_568 1 @FBOOTHR_628 -1 @FBOOTHR_730 -1 @FBOOTHR_730 -1 @FBOOTHR_730 -1 @FBOOTHR_730 -1 @FBOOTHR_730
+
+:FBOOTHR_568
+Task.PlayAnimNonInterruptable(0@, "FF_SIT_IN_R", "FOOD", 4.0, False, False, False, True, -1)
+3@ = 1
+5@ += 1
+goto @FBOOTHR_730
+
+:FBOOTHR_628
+9@ = 0.0
+if 
+  Char.IsPlayingAnim(0@, "FF_SIT_IN_R")
+goto_if_false @FBOOTHR_688
+9@ = Char.GetAnimCurrentTime(0@, "FF_SIT_IN_R")
+
+:FBOOTHR_688
+if 
+  9@ == 1.0
+goto_if_false @FBOOTHR_723
+5@ = 0
+4@ += 1
+
+:FBOOTHR_723
+goto @FBOOTHR_730
+
+:FBOOTHR_730
+return 
+
+:FBOOTHR_732
+switch_start 5@ total_jumps 5 default_jump 0 @FBOOTHR_2116 jumps -2 @FBOOTHR_795 0 @FBOOTHR_1120 1 @FBOOTHR_1577 2 @FBOOTHR_1819 3 @FBOOTHR_2022 -1 @FBOOTHR_2116 -1 @FBOOTHR_2116
+
+:FBOOTHR_795
+if 
+  Char.IsNearAnyChars(0@, 2.2)
+goto_if_false @FBOOTHR_865
+Task.PlayAnimNonInterruptable(0@, "FF_SIT_LOOK", "FOOD", 1000.0, True, False, False, False, 50000000)
+goto @FBOOTHR_1106
+
+:FBOOTHR_865
+10@ = Char.GetOffsetInWorldCoords(11@, 12@, 0@, 0.0, 0.0, 0.0)
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'FDPIZA'
+goto_if_false @FBOOTHR_942
+8@ = Object.Create(#CJ_PIZZA_2, 10@, 11@, 12@)
+goto @FBOOTHR_958
+
+:FBOOTHR_942
+8@ = Object.Create(#CJ_BURG_2, 10@, 11@, 12@)
+
+:FBOOTHR_958
+Task.PickUpObject(0@, 8@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 0)
+if 
+  Char.IsMale(0@)
+goto_if_false @FBOOTHR_1064
+Task.PlayAnimNonInterruptable(0@, "FF_SIT_EAT1", "FOOD", 1000.0, True, False, False, False, 50000000)
+goto @FBOOTHR_1106
+
+:FBOOTHR_1064
+Task.PlayAnimNonInterruptable(0@, "FF_SIT_EAT2", "FOOD", 1000.0, True, False, False, False, 50000000)
+
+:FBOOTHR_1106
+5@ = 1
+goto @FBOOTHR_2116
+
+:FBOOTHR_1120
+if 
+  Char.IsHoldingObject(0@, -1)
+goto_if_false @FBOOTHR_1252
+if 
+  Char.IsMale(0@)
+goto_if_false @FBOOTHR_1203
+Task.PlayAnimNonInterruptable(0@, "FF_SIT_EAT1", "FOOD", 1000.0, True, False, False, False, 50000000)
+goto @FBOOTHR_1245
+
+:FBOOTHR_1203
+Task.PlayAnimNonInterruptable(0@, "FF_SIT_EAT2", "FOOD", 1000.0, True, False, False, False, 50000000)
+
+:FBOOTHR_1245
+goto @FBOOTHR_1563
+
+:FBOOTHR_1252
+if 
+  Char.IsNearAnyChars(0@, 2.2)
+goto_if_false @FBOOTHR_1322
+Task.PlayAnimNonInterruptable(0@, "FF_SIT_LOOK", "FOOD", 1000.0, True, False, False, False, 50000000)
+goto @FBOOTHR_1563
+
+:FBOOTHR_1322
+10@ = Char.GetOffsetInWorldCoords(11@, 12@, 0@, 0.0, 0.0, 0.0)
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'FDPIZA'
+goto_if_false @FBOOTHR_1399
+8@ = Object.Create(#CJ_PIZZA_2, 10@, 11@, 12@)
+goto @FBOOTHR_1415
+
+:FBOOTHR_1399
+8@ = Object.Create(#CJ_BURG_2, 10@, 11@, 12@)
+
+:FBOOTHR_1415
+Task.PickUpObject(0@, 8@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 0)
+if 
+  Char.IsMale(0@)
+goto_if_false @FBOOTHR_1521
+Task.PlayAnimNonInterruptable(0@, "FF_SIT_EAT1", "FOOD", 1000.0, True, False, False, False, 50000000)
+goto @FBOOTHR_1563
+
+:FBOOTHR_1521
+Task.PlayAnimNonInterruptable(0@, "FF_SIT_EAT2", "FOOD", 1000.0, True, False, False, False, 50000000)
+
+:FBOOTHR_1563
+5@ += 1
+goto @FBOOTHR_2116
+
+:FBOOTHR_1577
+13@, 14@, 15@ = Char.GetCoordinates(0@)
+15@ -= 1.04
+16@ = Char.GetOffsetInWorldCoords(17@, 18@, 0@, 0.1, 0.5, 0.0)
+19@ = Char.GetOffsetInWorldCoords(20@, 21@, 0@, 1.0, -0.5, 0.0)
+10@ = Char.GetOffsetInWorldCoords(11@, 12@, 0@, -1.0, 0.0, -0.65)
+if or
+  Char.IsPlayingAnim(0@, "FF_SIT_LOOK")
+  Char.IsPlayingAnim(0@, "FF_SIT_EAT1")
+  Char.IsPlayingAnim(0@, "FF_SIT_EAT2")
+goto_if_false @FBOOTHR_1812
+World.SetCharUsesCollisionClosestObjectOfType(13@, 14@, 15@, 1.5, -366, False, 0@)
+Char.SetCoordinates(0@, 10@, 11@, 12@)
+Char.FreezePosition(0@, True)
+TIMERB = 0
+5@ += 1
+
+:FBOOTHR_1812
+goto @FBOOTHR_2116
+
+:FBOOTHR_1819
+if 
+  Char.HasBeenDamagedByChar(0@, $scplayer)
+goto_if_false @FBOOTHR_1871
+Char.ClearLastDamageEntity(0@)
+6@ = 0
+4@ = 5
+5@ = 0
+goto @FBOOTHR_2116
+
+:FBOOTHR_1871
+if 
+  is_int_lvar_greater_than_int_lvar TIMERB > 6@
+goto_if_false @FBOOTHR_2015
+if 
+  not World.IsAreaOccupied(16@, 17@, 18@, 19@, 20@, 21@, False, False, True, False, False)
+goto_if_false @FBOOTHR_1952
+5@ = 0
+4@ += 1
+goto @FBOOTHR_2015
+
+:FBOOTHR_1952
+if 
+  $iSetPizzaPanic == 1
+goto_if_false @FBOOTHR_2015
+Task.PlayAnimNonInterruptable(0@, "FF_DIE_FWD", "FOOD", 16.0, False, False, False, True, -1)
+5@ += 1
+
+:FBOOTHR_2015
+goto @FBOOTHR_2116
+
+:FBOOTHR_2022
+if 
+  Char.IsHealthGreater(0@, 0)
+goto_if_false @FBOOTHR_2102
+if 
+  not World.IsAreaOccupied(16@, 17@, 18@, 19@, 20@, 21@, False, False, True, False, False)
+goto_if_false @FBOOTHR_2095
+5@ = 0
+4@ += 1
+
+:FBOOTHR_2095
+goto @FBOOTHR_2109
+
+:FBOOTHR_2102
+Char.SetNeverTargeted(0@, True)
+
+:FBOOTHR_2109
+goto @FBOOTHR_2116
+
+:FBOOTHR_2116
+return 
+
+:FBOOTHR_2118
+switch_start 5@ total_jumps 3 default_jump 0 @FBOOTHR_2453 jumps 0 @FBOOTHR_2181 1 @FBOOTHR_2264 2 @FBOOTHR_2299 -1 @FBOOTHR_2453 -1 @FBOOTHR_2453 -1 @FBOOTHR_2453 -1 @FBOOTHR_2453
+
+:FBOOTHR_2181
+if 
+  Char.IsHoldingObject(0@, -1)
+goto_if_false @FBOOTHR_2206
+Char.DropObject(0@, True)
+
+:FBOOTHR_2206
+Task.PlayAnimNonInterruptable(0@, "FF_SIT_OUT_R_180", "FOOD", 99.0, False, False, False, False, -1)
+5@ += 1
+goto @FBOOTHR_2453
+
+:FBOOTHR_2264
+Char.SetCoordinates(0@, 13@, 14@, 15@)
+Char.FreezePosition(0@, False)
+5@ += 1
+goto @FBOOTHR_2453
+
+:FBOOTHR_2299
+9@ = 0.0
+if 
+  Char.IsPlayingAnim(0@, "FF_SIT_OUT_R_180")
+goto_if_false @FBOOTHR_2446
+9@ = Char.GetAnimCurrentTime(0@, "FF_SIT_OUT_R_180")
+if 
+  9@ == 1.0
+goto_if_false @FBOOTHR_2446
+World.SetUsesCollisionOfClosestObjectOfType(13@, 14@, 15@, 1.5, #CJ_PIZZA_CHAIR3, True)
+World.SetUsesCollisionOfClosestObjectOfType(13@, 14@, 15@, 1.5, #CJ_PIZZA_CHAIR2, False)
+5@ = 0
+4@ += 1
+
+:FBOOTHR_2446
+goto @FBOOTHR_2453
+
+:FBOOTHR_2453
+return 
+
+:FBOOTHR_2455
+switch_start 5@ total_jumps 3 default_jump 0 @FBOOTHR_2893 jumps 0 @FBOOTHR_2518 1 @FBOOTHR_2570 2 @FBOOTHR_2726 -1 @FBOOTHR_2893 -1 @FBOOTHR_2893 -1 @FBOOTHR_2893 -1 @FBOOTHR_2893
+
+:FBOOTHR_2518
+Task.PlayAnimNonInterruptable(0@, "FF_DAM_FWD", "FOOD", 16.0, False, False, False, True, 0)
+5@ += 1
+goto @FBOOTHR_2893
+
+:FBOOTHR_2570
+9@ = 0.0
+if 
+  Char.IsPlayingAnim(0@, "FF_DAM_FWD")
+goto_if_false @FBOOTHR_2656
+9@ = Char.GetAnimCurrentTime(0@, "FF_DAM_FWD")
+if 
+  9@ == 1.0
+goto_if_false @FBOOTHR_2656
+5@ += 1
+
+:FBOOTHR_2656
+if 
+  not Char.IsHealthGreater(0@, 0)
+goto_if_false @FBOOTHR_2719
+Task.PlayAnimNonInterruptable(0@, "FF_DIE_FWD", "FOOD", 16.0, False, False, False, True, 0)
+gosub @FBOOTHR_2895
+
+:FBOOTHR_2719
+goto @FBOOTHR_2893
+
+:FBOOTHR_2726
+if 
+  not Char.IsHealthGreater(0@, 0)
+goto_if_false @FBOOTHR_2796
+Task.PlayAnimNonInterruptable(0@, "FF_DIE_FWD", "FOOD", 16.0, False, False, False, True, 0)
+gosub @FBOOTHR_2895
+goto @FBOOTHR_2879
+
+:FBOOTHR_2796
+if 
+  not World.IsAreaOccupied(16@, 17@, 18@, 19@, 20@, 21@, False, False, True, False, False)
+goto_if_false @FBOOTHR_2865
+4@ = 3
+5@ = 0
+gosub @FBOOTHR_2971
+goto @FBOOTHR_2879
+
+:FBOOTHR_2865
+4@ = 2
+5@ = 2
+
+:FBOOTHR_2879
+$iSetPizzaPanic = 1
+goto @FBOOTHR_2893
+
+:FBOOTHR_2893
+return 
+
+:FBOOTHR_2895
+Object.MarkAsNoLongerNeeded(8@)
+Streaming.RemoveAnimation("FOOD")
+if 
+  not Char.IsDead(0@)
+goto_if_false @FBOOTHR_2967
+Char.SetSuffersCriticalHits(0@, True)
+Task.UseClosestMapAttractor(0@, 100.0, 0, 0.0, 0.0, 0.0, "PCUSTOM")
+
+:FBOOTHR_2967
+terminate_this_script 
+return 
+
+:FBOOTHR_2971
+wait 0
+if and
+  not is_var_text_label_empty s$shop_name
+  $iTerminateAllAmbience == 0
+goto_if_false @FBOOTHR_3312
+if and
+  not Char.IsDead(0@)
+  Player.IsPlaying($player1)
+goto_if_false @FBOOTHR_3305
+switch_start 4@ total_jumps 5 default_jump 1 @FBOOTHR_3291 jumps 1 @FBOOTHR_3082 2 @FBOOTHR_3164 3 @FBOOTHR_3213 4 @FBOOTHR_3227 5 @FBOOTHR_3277 -1 @FBOOTHR_3305 -1 @FBOOTHR_3305
+
+:FBOOTHR_3082
+if 
+  5@ > 1
+goto_if_false @FBOOTHR_3114
+gosub @FBOOTHR_370
+goto @FBOOTHR_3157
+
+:FBOOTHR_3114
+7@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 7@ == 7
+goto_if_false @FBOOTHR_3157
+Task.Duck(0@, -2)
+gosub @FBOOTHR_2895
+
+:FBOOTHR_3157
+goto @FBOOTHR_3305
+
+:FBOOTHR_3164
+if 
+  5@ == 2
+goto_if_false @FBOOTHR_3199
+6@ = Math.RandomIntInRange(0, 5)
+6@ *= 500
+
+:FBOOTHR_3199
+gosub @FBOOTHR_370
+goto @FBOOTHR_3305
+
+:FBOOTHR_3213
+gosub @FBOOTHR_370
+goto @FBOOTHR_3305
+
+:FBOOTHR_3227
+7@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 7@ == 7
+goto_if_false @FBOOTHR_3270
+Task.Duck(0@, -2)
+gosub @FBOOTHR_2895
+
+:FBOOTHR_3270
+goto @FBOOTHR_3305
+
+:FBOOTHR_3277
+gosub @FBOOTHR_370
+goto @FBOOTHR_3305
+
+:FBOOTHR_3291
+gosub @FBOOTHR_2895
+goto @FBOOTHR_3305
+
+:FBOOTHR_3305
+goto @FBOOTHR_3319
+
+:FBOOTHR_3312
+gosub @FBOOTHR_2895
+
+:FBOOTHR_3319
+goto @FBOOTHR_2971
+write_debug "I__________________________I"
+write_debug "H"
+write_debug "G"
+write_debug "F"
+write_debug "E"
+write_debug_with_int "PEDSTATE" 4@
+write_debug_with_int "SUBSTATESTATUS" 5@
+write_debug_with_int "TIMERB" TIMERB
+write_debug_with_int "TIMERA" TIMERA
+return 
+terminate_this_script 
+

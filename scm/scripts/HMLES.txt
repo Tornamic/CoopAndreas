@@ -1,0 +1,556 @@
+//-------------External script 20 (HOME_BRAINS)---------------
+
+:HMLES
+script_name 'HMLES'
+$homeless_brain_flag = 0
+$homeless_waiting_flag = 0
+$homeless_number = 0
+2@ = 0
+12@ = 0
+13@ = 0
+14@ = 0
+11@ = 0
+if 
+  $homeless_brain_flag == 1
+goto_if_false @HMLES_109
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:HMLES_109
+$homeless_number = Math.RandomIntInRange(0, 4)
+$homeless_number = 3
+if 
+  $fire_people_created <> 0
+goto_if_false @HMLES_159
+12@ = 1
+terminate_this_script 
+goto @HMLES_236
+
+:HMLES_159
+if 
+  Char.DoesExist(0@)
+goto_if_false @HMLES_229
+if 
+  not Char.IsDead(0@)
+goto_if_false @HMLES_229
+Char.ClearTasksImmediately(0@)
+if 
+  $homeless_number == 2
+goto_if_false @HMLES_229
+Char.SetAnimGroup(0@, "DRUNKMAN")
+
+:HMLES_229
+$fire_people_created = 1
+
+:HMLES_236
+wait 0
+if and
+  Char.DoesExist(0@)
+  12@ == 0
+goto_if_false @HMLES_3525
+if and
+  Player.IsPlaying($player1)
+  not Char.IsDead(0@)
+goto_if_false @HMLES_3518
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HMLES_322
+1@ = Char.StoreCarIsInNoSave($scplayer)
+2@ = 1
+goto @HMLES_329
+
+:HMLES_322
+2@ = 0
+
+:HMLES_329
+if 
+  $homeless_brain_flag == 0
+goto_if_false @HMLES_1945
+if 
+  $homeless_number == 0
+goto_if_false @HMLES_463
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 0@, 10.0, 10.0, 3.0, False)
+goto_if_false @HMLES_463
+if 
+  Char.HasSpottedChar(0@, $scplayer)
+goto_if_false @HMLES_463
+17@ = Char.SetSayContext(0@, 27)
+if 
+  2@ == 0
+goto_if_false @HMLES_456
+Task.WalkAlongsideChar(0@, $scplayer)
+
+:HMLES_456
+$homeless_brain_flag = 1
+
+:HMLES_463
+if 
+  $homeless_number == 1
+goto_if_false @HMLES_1012
+if 
+  $homeless_waiting_flag == 0
+goto_if_false @HMLES_518
+Streaming.RequestAnimation("SUNBATHE")
+$homeless_waiting_flag = 1
+
+:HMLES_518
+if 
+  $homeless_waiting_flag == 1
+goto_if_false @HMLES_573
+if 
+  Streaming.HasAnimationLoaded("SUNBATHE")
+goto_if_false @HMLES_573
+$homeless_waiting_flag = 2
+goto @HMLES_573
+
+:HMLES_573
+if 
+  $homeless_waiting_flag == 2
+goto_if_false @HMLES_1012
+if 
+  Streaming.HasAnimationLoaded("SUNBATHE")
+goto_if_false @HMLES_1000
+7@, 8@, 9@ = Char.GetCoordinates(0@)
+3@ = Sequence.Open()
+Task.PlayAnim(-1, "PARKSIT_M_IN", "SUNBATHE", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PARKSIT_M_IDLEB", "SUNBATHE", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PARKSIT_M_IDLEA", "SUNBATHE", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PARKSIT_M_IDLEC", "SUNBATHE", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PARKSIT_M_IDLEB", "SUNBATHE", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PARKSIT_M_IDLEC", "SUNBATHE", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PARKSIT_M_OUT", "SUNBATHE", 4.0, False, False, False, False, -1)
+Task.WanderStandard(-1)
+Sequence.Close(3@)
+Char.PerformSequence(0@, 3@)
+Sequence.Clear(3@)
+11@ = 0
+$homeless_brain_flag = 1
+$homeless_waiting_flag = 3
+goto @HMLES_1012
+
+:HMLES_1000
+Streaming.RequestAnimation("SUNBATHE")
+
+:HMLES_1012
+if 
+  $homeless_number == 2
+goto_if_false @HMLES_1610
+if 
+  $homeless_waiting_flag == 0
+goto_if_false @HMLES_1079
+Streaming.RequestAnimation("FOOD")
+Streaming.RequestAnimation("VENDING")
+Streaming.RequestModel(#CJ_JUICE_CAN)
+$homeless_waiting_flag = 1
+
+:HMLES_1079
+if 
+  $homeless_waiting_flag == 1
+goto_if_false @HMLES_1185
+if and
+  Streaming.HasAnimationLoaded("FOOD")
+  Streaming.HasAnimationLoaded("VENDING")
+  Streaming.HasModelLoaded(#CJ_JUICE_CAN)
+goto_if_false @HMLES_1185
+7@ = Char.GetOffsetInWorldCoords(8@, 9@, $scplayer, 0.0, 1.3, 0.0)
+19@ = Object.Create(#CJ_JUICE_CAN, 7@, 8@, 9@)
+$homeless_waiting_flag = 2
+
+:HMLES_1185
+if 
+  $homeless_waiting_flag == 2
+goto_if_false @HMLES_1610
+if 
+  Streaming.HasAnimationLoaded("VENDING")
+goto_if_false @HMLES_1599
+if 
+  Streaming.HasAnimationLoaded("FOOD")
+goto_if_false @HMLES_1584
+7@, 8@, 9@ = Char.GetCoordinates(0@)
+3@ = Sequence.Open()
+Task.PickUpObject(-1, 19@, 0.1, 0.1, 0.0, 5, 16, "NULL", "NULL", -1)
+Task.PlayAnim(-1, "VEND_DRINK2_P", "VENDING", 1004.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "WALK_DRUNK", "PED", 1004.0, False, True, True, False, -1)
+Task.PlayAnim(-1, "VEND_DRINK_P", "VENDING", 1004.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "WALK_DRUNK", "PED", 1004.0, False, True, True, False, -1)
+Task.PlayAnim(-1, "VEND_DRINK2_P", "VENDING", 1004.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "EAT_VOMIT_P", "FOOD", 1004.0, False, False, False, False, -1)
+Task.WanderStandard(-1)
+Sequence.Close(3@)
+Char.PerformSequence(0@, 3@)
+Sequence.Clear(3@)
+$homeless_brain_flag = 1
+$homeless_waiting_flag = 3
+goto @HMLES_1592
+
+:HMLES_1584
+Streaming.RequestAnimation("FOOD")
+
+:HMLES_1592
+goto @HMLES_1610
+
+:HMLES_1599
+Streaming.RequestAnimation("VENDING")
+
+:HMLES_1610
+if 
+  $homeless_number == 3
+goto_if_false @HMLES_1945
+if 
+  $homeless_waiting_flag == 0
+goto_if_false @HMLES_1665
+Streaming.RequestAnimation("PAULNMAC")
+$homeless_waiting_flag = 1
+
+:HMLES_1665
+if 
+  $homeless_waiting_flag == 1
+goto_if_false @HMLES_1713
+if 
+  Streaming.HasAnimationLoaded("PAULNMAC")
+goto_if_false @HMLES_1713
+$homeless_waiting_flag = 2
+
+:HMLES_1713
+if 
+  $homeless_waiting_flag == 2
+goto_if_false @HMLES_1945
+if 
+  Streaming.HasAnimationLoaded("PAULNMAC")
+goto_if_false @HMLES_1933
+7@, 8@, 9@ = Char.GetCoordinates(0@)
+3@ = Sequence.Open()
+Task.PlayAnim(-1, "PISS_IN", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PISS_LOOP", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.PlayAnim(-1, "PISS_OUT", "PAULNMAC", 4.0, False, False, False, False, -1)
+Task.WanderStandard(-1)
+Sequence.Close(3@)
+Char.PerformSequence(0@, 3@)
+Sequence.Clear(3@)
+$homeless_brain_flag = 1
+$homeless_waiting_flag = 3
+goto @HMLES_1945
+
+:HMLES_1933
+Streaming.RequestAnimation("PAULNMAC")
+
+:HMLES_1945
+if 
+  $homeless_brain_flag == 1
+goto_if_false @HMLES_2069
+if 
+  $homeless_number == 0
+goto_if_false @HMLES_1992
+17@ = Char.SetSayContext(0@, 192)
+
+:HMLES_1992
+if 
+  $homeless_number == 1
+goto_if_false @HMLES_2021
+17@ = Char.SetSayContext(0@, 192)
+
+:HMLES_2021
+if 
+  $homeless_number == 2
+goto_if_false @HMLES_2039
+
+:HMLES_2039
+if 
+  $homeless_number == 3
+goto_if_false @HMLES_2057
+
+:HMLES_2057
+4@ = Clock.GetGameTimer()
+$homeless_brain_flag = 2
+
+:HMLES_2069
+if 
+  $homeless_brain_flag == 2
+goto_if_false @HMLES_2717
+if 
+  $homeless_number == 0
+goto_if_false @HMLES_2217
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @HMLES_2217
+5@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 6@ = 5@
+sub_int_lvar_from_int_lvar 6@ -= 4@
+if and
+  6@ > 8000
+  10000 > 6@
+goto_if_false @HMLES_2206
+17@ = Char.SetSayContext(0@, 198)
+Task.KillCharOnFoot(0@, $scplayer)
+$fire_people_created = 0
+12@ = 1
+goto @HMLES_2217
+
+:HMLES_2206
+17@ = Char.SetSayContext(0@, 192)
+
+:HMLES_2217
+if 
+  $homeless_number == 1
+goto_if_false @HMLES_2381
+16@ = Char.GetScriptTaskStatus(0@, 1560)
+if 
+  is_int_lvar_equal_to_constant 16@ == 1
+goto_if_false @HMLES_2381
+16@ = Char.GetSequenceProgress(0@)
+if 
+  16@ > 6
+goto_if_false @HMLES_2381
+if 
+  11@ == 0
+goto_if_false @HMLES_2327
+11@ = 1
+4@ = Clock.GetGameTimer()
+goto @HMLES_2381
+
+:HMLES_2327
+5@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 6@ = 5@
+sub_int_lvar_from_int_lvar 6@ -= 4@
+if 
+  6@ > 15000
+goto_if_false @HMLES_2381
+$homeless_brain_flag = 0
+$homeless_waiting_flag = 0
+
+:HMLES_2381
+if 
+  $homeless_number == 2
+goto_if_false @HMLES_2553
+16@ = Char.GetScriptTaskStatus(0@, 1560)
+if 
+  is_int_lvar_equal_to_constant 16@ == 1
+goto_if_false @HMLES_2553
+if 
+  Char.IsPlayingAnim(0@, "EAT_VOMIT_P")
+goto_if_false @HMLES_2553
+7@ = Char.GetOffsetInWorldCoords(8@, 9@, 0@, 0.355, -0.116, 0.048)
+10@ = Char.GetAnimCurrentTime(0@, "EAT_VOMIT_P")
+15@ = Particle.Create("PUKE", 7@, 8@, 9@, 1)
+10@ = 0.0
+11@ = 0
+$homeless_brain_flag = 3
+
+:HMLES_2553
+if 
+  $homeless_number == 3
+goto_if_false @HMLES_2717
+16@ = Char.GetScriptTaskStatus(0@, 1560)
+if 
+  is_int_lvar_equal_to_constant 16@ == 1
+goto_if_false @HMLES_2717
+if 
+  Char.IsPlayingAnim(0@, "PISS_IN")
+goto_if_false @HMLES_2717
+10@ = Char.GetAnimCurrentTime(0@, "PISS_IN")
+15@ = Particle.CreateOnCharWithDirection("PETROLCAN", 0@, 0.0, 0.58, -0.08, 0.0, 0.01, 0.0, 1)
+10@ = 0.0
+11@ = 0
+$homeless_brain_flag = 3
+
+:HMLES_2717
+if 
+  $homeless_brain_flag == 3
+goto_if_false @HMLES_3468
+if 
+  $homeless_number == 0
+goto_if_false @HMLES_2753
+
+:HMLES_2753
+if 
+  $homeless_number == 1
+goto_if_false @HMLES_2771
+
+:HMLES_2771
+if 
+  $homeless_number == 2
+goto_if_false @HMLES_2993
+if 
+  10@ <> 1.0
+goto_if_false @HMLES_2969
+if 
+  not Char.IsDead(0@)
+goto_if_false @HMLES_2883
+if 
+  Char.IsPlayingAnim(0@, "EAT_VOMIT_P")
+goto_if_false @HMLES_2876
+10@ = Char.GetAnimCurrentTime(0@, "EAT_VOMIT_P")
+
+:HMLES_2876
+goto @HMLES_2893
+
+:HMLES_2883
+10@ = 1.0
+
+:HMLES_2893
+if 
+  11@ == 0
+goto_if_false @HMLES_2962
+if 
+  10@ >= 0.5
+goto_if_false @HMLES_2962
+if 
+  15@ <> -1
+goto_if_false @HMLES_2955
+Particle.Play(15@)
+
+:HMLES_2955
+11@ = 1
+
+:HMLES_2962
+goto @HMLES_2993
+
+:HMLES_2969
+Particle.Stop(15@)
+Particle.Kill(15@)
+$fire_people_created = 0
+12@ = 1
+
+:HMLES_2993
+if 
+  $homeless_number == 3
+goto_if_false @HMLES_3468
+if 
+  2 > 11@
+goto_if_false @HMLES_3199
+16@ = Char.GetScriptTaskStatus(0@, 1560)
+if 
+  is_int_lvar_equal_to_constant 16@ == 7
+goto_if_false @HMLES_3114
+if 
+  11@ == 1
+goto_if_false @HMLES_3093
+Particle.Stop(15@)
+Particle.Kill(15@)
+11@ = 2
+
+:HMLES_3093
+$fire_people_created = 0
+12@ = 1
+goto @HMLES_3199
+
+:HMLES_3114
+if 
+  is_int_lvar_equal_to_constant 16@ == 1
+goto_if_false @HMLES_3182
+16@ = Char.GetSequenceProgress(0@)
+if 
+  16@ > 2
+goto_if_false @HMLES_3175
+Particle.Stop(15@)
+Particle.Kill(15@)
+11@ = 2
+
+:HMLES_3175
+goto @HMLES_3199
+
+:HMLES_3182
+Particle.Stop(15@)
+Particle.Kill(15@)
+11@ = 2
+
+:HMLES_3199
+if 
+  11@ == 0
+goto_if_false @HMLES_3368
+if 
+  not Char.IsDead(0@)
+goto_if_false @HMLES_3282
+if 
+  Char.IsPlayingAnim(0@, "PISS_IN")
+goto_if_false @HMLES_3275
+10@ = Char.GetAnimCurrentTime(0@, "PISS_IN")
+
+:HMLES_3275
+goto @HMLES_3292
+
+:HMLES_3282
+10@ = 1.0
+
+:HMLES_3292
+if 
+  11@ == 0
+goto_if_false @HMLES_3361
+if 
+  10@ >= 0.6
+goto_if_false @HMLES_3361
+if 
+  15@ <> -1
+goto_if_false @HMLES_3354
+Particle.Play(15@)
+
+:HMLES_3354
+11@ = 1
+
+:HMLES_3361
+goto @HMLES_3468
+
+:HMLES_3368
+if 
+  11@ == 1
+goto_if_false @HMLES_3468
+if 
+  Char.IsPlayingAnim(0@, "PISS_OUT")
+goto_if_false @HMLES_3468
+10@ = Char.GetAnimCurrentTime(0@, "PISS_OUT")
+if 
+  10@ >= 0.42
+goto_if_false @HMLES_3468
+Particle.Stop(15@)
+Particle.Kill(15@)
+11@ = 2
+
+:HMLES_3468
+if 
+  not Char.LocateAnyMeansChar3D($scplayer, 0@, 30.0, 30.0, 20.0, False)
+goto_if_false @HMLES_3518
+$fire_people_created = 0
+12@ = 1
+
+:HMLES_3518
+goto @HMLES_3539
+
+:HMLES_3525
+$fire_people_created = 0
+12@ = 1
+
+:HMLES_3539
+if 
+  Char.IsDead(0@)
+goto_if_false @HMLES_3569
+12@ = 1
+$fire_people_created = 0
+
+:HMLES_3569
+if 
+  12@ == 1
+goto_if_false @HMLES_3694
+if 
+  Char.DoesExist(0@)
+goto_if_false @HMLES_3624
+if 
+  not Char.IsDead(0@)
+goto_if_false @HMLES_3624
+Task.WanderStandard(0@)
+
+:HMLES_3624
+Particle.Stop(15@)
+Particle.Kill(15@)
+Char.MarkAsNoLongerNeeded(0@)
+Streaming.MarkModelAsNoLongerNeeded(#CJ_JUICE_CAN)
+Object.MarkAsNoLongerNeeded(19@)
+Streaming.RemoveAnimation("FOOD")
+Streaming.RemoveAnimation("VENDING")
+Streaming.RemoveAnimation("SUNBATHE")
+Streaming.RemoveAnimation("PAULNMAC")
+terminate_this_script 
+
+:HMLES_3694
+goto @HMLES_236
+terminate_this_script 
+

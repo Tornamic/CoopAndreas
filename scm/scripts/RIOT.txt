@@ -1,0 +1,119 @@
+:RIOT
+script_name 'RIOT'
+
+:RIOT_11
+wait $mission_trigger_wait_time
+if 
+  $flag_riot_mission_counter == 5
+goto_if_false @RIOT_36
+terminate_this_script 
+
+:RIOT_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @RIOT_673
+if 
+  $onmission == 0
+goto_if_false @RIOT_673
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $mansionX, $mansionY, $mansionZ, 1.2, 1.2, 2.0)
+goto_if_false @RIOT_180
+if 
+  Player.CanStartMission($player1)
+goto_if_false @RIOT_180
+if 
+  $flag_riot_mission_counter == 0
+goto_if_false @RIOT_180
+$onmission = 1
+Text.PrintBig('RIOT_1', 1000, TextStyle.BottomRight)
+PSAVE1_4427()
+Mission.LoadAndLaunchInternal(108) // Riot
+
+:RIOT_180
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $sweetX, $sweetY, $sweetZ, 1.2, 1.2, 2.0)
+goto_if_false @RIOT_587
+if 
+  Player.CanStartMission($player1)
+goto_if_false @RIOT_587
+if 
+  $flag_riot_mission_counter == 1
+goto_if_false @RIOT_372
+$returned_respect = Game.FindMaxNumberOfGroupMembers()
+if 
+  $returned_respect > 1
+goto_if_false @RIOT_320
+$onmission = 1
+Text.PrintBig('RIOT_2', 1000, TextStyle.BottomRight)
+PSAVE1_1320()
+Mission.LoadAndLaunchInternal(109) // Los Desperados
+goto @RIOT_372
+
+:RIOT_320
+Text.PrintNow('MOREREP', 1000, 1)
+if 
+  $respect_help_played == 0
+goto_if_false @RIOT_372
+Text.PrintHelp('HELP101')
+$respect_help_played = 1
+
+:RIOT_372
+if 
+  $1355 == 1
+goto_if_false @RIOT_483
+if 
+  $1354 == 1
+goto_if_false @RIOT_467
+if 
+  $flag_riot_mission_counter == 2
+goto_if_false @RIOT_460
+$onmission = 1
+Text.PrintBig('RIOT_4', 1000, TextStyle.BottomRight)
+PSAVE1_1320()
+Mission.LoadAndLaunchInternal(110) // End Of The Line (1)
+
+:RIOT_460
+goto @RIOT_483
+
+:RIOT_467
+Text.PrintNow('MORTURF', 2000, 1)
+
+:RIOT_483
+if 
+  $flag_riot_mission_counter == 3
+goto_if_false @RIOT_535
+$onmission = 1
+Text.PrintBig('RIOT_4', 1000, TextStyle.BottomRight)
+PSAVE1_1320()
+Mission.LoadAndLaunchInternal(111) // End Of The Line (2)
+
+:RIOT_535
+if 
+  $flag_riot_mission_counter == 4
+goto_if_false @RIOT_587
+$onmission = 1
+Text.PrintBig('RIOT_4', 1000, TextStyle.BottomRight)
+PSAVE1_1320()
+Mission.LoadAndLaunchInternal(112) // End Of The Line (3)
+
+:RIOT_587
+if and
+  $flag_riot_mission_counter == 3
+  $finaleB_played_first_time_round == 0
+goto_if_false @RIOT_630
+$finaleB_played_first_time_round = 1
+$onmission = 1
+Mission.LoadAndLaunchInternal(111) // End Of The Line (2)
+
+:RIOT_630
+if and
+  $flag_riot_mission_counter == 4
+  $finaleB_played_first_time_round == 1
+goto_if_false @RIOT_673
+$finaleB_played_first_time_round = 2
+$onmission = 1
+Mission.LoadAndLaunchInternal(112) // End Of The Line (3)
+
+:RIOT_673
+goto @RIOT_11
+

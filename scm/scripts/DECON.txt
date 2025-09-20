@@ -1,0 +1,3348 @@
+//-------------Mission 50---------------
+// Originally: Deconstruction
+
+:DECON
+script_name 'DECON'
+gosub @DECON_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @DECON_38
+gosub @DECON_20868
+
+:DECON_38
+gosub @DECON_21143
+terminate_this_script 
+
+:DECON_47
+Stat.RegisterMissionGiven
+$onmission = 1
+34@ = 0
+35@ = 0
+36@ = 0
+37@ = 0
+38@ = 0
+63@ = 0
+64@ = 0
+65@ = 0
+66@ = 0
+TIMERA = 0
+TIMERB = 0
+
+:DECON_133
+wait 0
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @DECON_159
+36@ = 1
+
+:DECON_159
+if 
+is_ps2_keyboard_key_just_pressed 70
+goto_if_false @DECON_181
+37@ = 1
+
+:DECON_181
+39@ += 1
+if 
+  39@ > 9
+goto_if_false @DECON_213
+39@ = 0
+
+:DECON_213
+40@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 40@
+sub_int_lvar_from_int_lvar 42@ -= 41@
+set_lvar_int_to_lvar_int 41@ = 40@
+add_int_lvar_to_int_lvar 65@ += 42@
+add_int_lvar_to_int_lvar 66@ += 42@
+add_int_lvar_to_int_lvar 172@ += 42@
+add_int_lvar_to_int_lvar 173@ += 42@
+if 
+  69@ == 1
+goto_if_false @DECON_299
+goto @DECON_460
+
+:DECON_299
+gosub @DECON_562
+switch_start 34@ total_jumps 6 default_jump 0 @DECON_453 jumps 0 @DECON_369 1 @DECON_383 2 @DECON_397 3 @DECON_411 4 @DECON_425 5 @DECON_439 -1 @DECON_453
+
+:DECON_369
+gosub @DECON_1610
+goto @DECON_453
+
+:DECON_383
+gosub @DECON_2071
+goto @DECON_453
+
+:DECON_397
+gosub @DECON_5645
+goto @DECON_453
+
+:DECON_411
+gosub @DECON_6771
+goto @DECON_453
+
+:DECON_425
+gosub @DECON_9690
+goto @DECON_453
+
+:DECON_439
+gosub @DECON_12345
+goto @DECON_453
+
+:DECON_453
+gosub @DECON_13612
+
+:DECON_460
+if 
+  38@ == 0
+goto_if_false @DECON_560
+if 
+  37@ == 0
+goto_if_false @DECON_544
+if 
+  36@ == 0
+goto_if_false @DECON_528
+goto @DECON_133
+goto @DECON_537
+
+:DECON_528
+gosub @DECON_21008
+return 
+
+:DECON_537
+goto @DECON_553
+
+:DECON_544
+gosub @DECON_20868
+return 
+
+:DECON_553
+goto @DECON_562
+
+:DECON_560
+return 
+
+:DECON_562
+if 
+is_ps2_keyboard_key_just_pressed 88
+goto_if_false @DECON_653
+if 
+  67@ == 0
+goto_if_false @DECON_627
+67@ = 1
+write_debug "LEVEL_DEBUG_ON"
+goto @DECON_653
+
+:DECON_627
+67@ = 0
+write_debug "LEVEL_DEBUG_OFF"
+
+:DECON_653
+if 
+  67@ == 1
+goto_if_false @DECON_1608
+if 
+is_ps2_keyboard_key_just_pressed 32
+goto_if_false @DECON_720
+68@ += 1
+if 
+  68@ > 4
+goto_if_false @DECON_718
+68@ = 0
+
+:DECON_718
+clear_all_view_variables 
+
+:DECON_720
+if 
+  68@ == 1
+goto_if_false @DECON_939
+43@ = 0
+
+:DECON_745
+if 
+  6 > 43@
+goto_if_false @DECON_813
+if 
+  Object.DoesExist($init_portakabin(43@,6i))
+goto_if_false @DECON_799
+$DECON_view_debug(43@,8i) = Object.GetHealth($init_portakabin(43@,6i))
+
+:DECON_799
+43@ += 1
+goto @DECON_745
+
+:DECON_813
+view_integer_variable $DECON_view_debug[0] "CABIN_0_HEALTH"
+view_integer_variable $DECON_view_debug[1] "CABIN_1_HEALTH"
+view_integer_variable $DECON_view_debug[2] "CABIN_2_HEALTH"
+view_integer_variable $DECON_view_debug[3] "CABIN_3_HEALTH"
+view_integer_variable $DECON_view_debug[4] "CABIN_4_HEALTH"
+view_integer_variable $DECON_view_debug[5] "CABIN_5_HEALTH"
+
+:DECON_939
+if 
+  68@ == 2
+goto_if_false @DECON_1149
+set_var_int_to_lvar_int $DECON_view_debug[0] = 34@
+set_var_int_to_lvar_int $DECON_view_debug[1] = 35@
+set_var_int_to_lvar_int $DECON_view_debug[2] = 63@
+set_var_int_to_lvar_int $DECON_view_debug[3] = 65@
+set_var_int_to_lvar_int $DECON_view_debug[4] = 64@
+set_var_int_to_lvar_int $DECON_view_debug[5] = 66@
+set_var_int_to_lvar_int $DECON_view_debug[6] = TIMERA
+set_var_int_to_lvar_int $DECON_view_debug[7] = TIMERB
+view_integer_variable $DECON_view_debug[0] "M_STAGE"
+view_integer_variable $DECON_view_debug[1] "M_GOALS"
+view_integer_variable $DECON_view_debug[2] "DIALOGUE_FLAG"
+view_integer_variable $DECON_view_debug[3] "DIALOGUE_TIMER"
+view_integer_variable $DECON_view_debug[4] "HELP_FLAG"
+view_integer_variable $DECON_view_debug[5] "HELP_TIMER"
+view_integer_variable $DECON_view_debug[6] "TIMERA"
+view_integer_variable $DECON_view_debug[7] "TIMERB"
+
+:DECON_1149
+if 
+  68@ == 3
+goto_if_false @DECON_1447
+set_var_int_to_lvar_int $DECON_view_debug[0] = 159@
+set_var_int_to_lvar_int $DECON_view_debug[1] = 153@
+set_var_int_to_lvar_int $DECON_view_debug[2] = 160@
+set_var_int_to_lvar_int $DECON_view_debug[3] = 154@
+set_var_int_to_lvar_int $DECON_view_debug[4] = 161@
+set_var_int_to_lvar_int $DECON_view_debug[5] = 155@
+set_var_int_to_lvar_int $DECON_view_debug[6] = 162@
+set_var_int_to_lvar_int $DECON_view_debug[7] = 156@
+view_integer_variable $DECON_view_debug[0] "CABIN_THIS_HEALTH[0]"
+view_integer_variable $DECON_view_debug[1] "CABIN_LAST_HEALTH[0]"
+view_integer_variable $DECON_view_debug[2] "CABIN_THIS_HEALTH[1]"
+view_integer_variable $DECON_view_debug[3] "CABIN_LAST_HEALTH[1]"
+view_integer_variable $DECON_view_debug[4] "CABIN_THIS_HEALTH[2]"
+view_integer_variable $DECON_view_debug[5] "CABIN_LAST_HEALTH[2]"
+view_integer_variable $DECON_view_debug[6] "CABIN_THIS_HEALTH[3]"
+view_integer_variable $DECON_view_debug[7] "CABIN_LAST_HEALTH[3]"
+
+:DECON_1447
+if 
+  68@ == 4
+goto_if_false @DECON_1498
+set_var_int_to_var_int $DECON_view_debug[0] = $player_is_in_crane
+view_integer_variable $DECON_view_debug[0] "PLAYER_IS_IN_CRANE"
+
+:DECON_1498
+if 
+is_ps2_keyboard_key_just_pressed 98
+goto_if_false @DECON_1520
+38@ = 1
+
+:DECON_1520
+if 
+is_ps2_keyboard_key_just_pressed 80
+goto_if_false @DECON_1608
+if 
+  69@ == 0
+goto_if_false @DECON_1583
+69@ = 1
+write_debug "LEVEL_PAUSED"
+goto @DECON_1608
+
+:DECON_1583
+69@ = 0
+write_debug "LEVEL_UNPAUSED"
+
+:DECON_1608
+return 
+
+:DECON_1610
+if 
+  35@ == -1
+goto_if_false @DECON_1806
+91@ = Car.Create(413, 0.0, 0.0, 0.0)
+90@ = Car.Create(413, 0.0, 0.0, 0.0)
+104@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+185@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+116@ = Char.Create(4, 7, 0.0, 0.0, 0.0)
+126@ = Blip.AddForCoord(0.0, 0.0, 0.0)
+127@ = Blip.AddForCoord(0.0, 0.0, 0.0)
+124@ = Blip.AddForCoord(0.0, 0.0, 0.0)
+
+:DECON_1806
+Player.SetControl($player1, False)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+
+:DECON_1828
+if 
+  Camera.GetFadingStatus
+goto_if_false @DECON_1852
+wait 0
+goto @DECON_1828
+
+:DECON_1852
+128@ = 0
+129@ = 0
+130@ = 0
+131@ = 0
+132@ = 0
+133@ = 0
+140@ = 0
+141@ = 0
+142@ = 0
+143@ = 0
+144@ = 0
+145@ = 0
+146@ = 0
+147@ = 0
+148@ = 0
+149@ = 0
+150@ = 0
+151@ = 0
+152@ = 0
+134@ = 0
+135@ = 0
+136@ = 0
+137@ = 0
+138@ = 0
+139@ = 0
+165@ = 0
+166@ = 0
+167@ = 0
+168@ = 0
+169@ = 0
+gosub @DECON_20810
+return 
+
+:DECON_2071
+Text.ClearHelp
+if 
+  35@ == 0
+goto_if_false @DECON_2255
+Text.LoadMissionText('GARAGE2')
+Cutscene.Load('GARAG3A')
+
+:DECON_2113
+if 
+  not Cutscene.HasLoaded
+goto_if_false @DECON_2137
+wait 0
+goto @DECON_2113
+
+:DECON_2137
+Streaming.SetAreaVisible(1)
+Char.SetAreaVisible($scplayer, 1)
+Streaming.LoadScene(-2031.0, 149.0, 29.0)
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:DECON_2174
+if 
+  not Cutscene.HasFinished
+goto_if_false @DECON_2198
+wait 0
+goto @DECON_2174
+
+:DECON_2198
+Cutscene.Clear
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:DECON_2213
+if 
+  Camera.GetFadingStatus
+goto_if_false @DECON_2237
+wait 0
+goto @DECON_2213
+
+:DECON_2237
+Char.SetAreaVisible($scplayer, 0)
+Streaming.SetAreaVisible(0)
+35@ += 1
+
+:DECON_2255
+if 
+  35@ == 1
+goto_if_false @DECON_4356
+Streaming.RequestModel(#PORTALOO)
+Streaming.RequestModel(#PORTAKABIN)
+Streaming.RequestModel(#BARREL4)
+Streaming.RequestModel(486)
+Streaming.RequestModel(524)
+Streaming.RequestModel(406)
+Streaming.RequestModel(422)
+Streaming.RequestModel(27)
+Streaming.RequestModel(337)
+Streaming.RequestModel(346)
+Streaming.RequestModel(16)
+Streaming.LoadAllModelsNow
+
+:DECON_2327
+if or
+  not Streaming.HasModelLoaded(#PORTALOO)
+  not Streaming.HasModelLoaded(#PORTAKABIN)
+  not Streaming.HasModelLoaded(#BARREL4)
+  not Streaming.HasModelLoaded(486)
+  not Streaming.HasModelLoaded(524)
+  not Streaming.HasModelLoaded(16)
+goto_if_false @DECON_2377
+wait 0
+goto @DECON_2327
+
+:DECON_2377
+if or
+  not Streaming.HasModelLoaded(406)
+  not Streaming.HasModelLoaded(422)
+  not Streaming.HasModelLoaded(27)
+  not Streaming.HasModelLoaded(337)
+  not Streaming.HasModelLoaded(346)
+goto_if_false @DECON_2423
+wait 0
+goto @DECON_2377
+
+:DECON_2423
+World.SwapNearestBuildingModel(-2049.171, 250.3193, 34.477, 20.0, #HUBHOLE1_SFSE, #HUBHOLE2_SFSE)
+43@ = 0
+
+:DECON_2458
+if 
+  6 > 43@
+goto_if_false @DECON_2603
+if 
+  Object.DoesExist($init_portakabin(43@,6i))
+goto_if_false @DECON_2505
+Object.Delete($init_portakabin(43@,6i))
+
+:DECON_2505
+$init_portakabin(43@,6i) = Object.Create(#PORTAKABIN, $init_portakabin_x(43@,6f), $init_portakabin_y(43@,6f), $init_portakabin_z(43@,6f))
+Object.SetHeading($init_portakabin(43@,6i), $init_portakabin_h(43@,6f))
+Object.SetDynamic($init_portakabin(43@,6i), False)
+Object.DontRemove($init_portakabin(43@,6i))
+118@(43@,6i) = Blip.AddForObject($init_portakabin(43@,6i))
+43@ += 1
+goto @DECON_2458
+
+:DECON_2603
+70@ = Object.CreateNoOffset(#PORTALOO, -2087.861, 178.2922, 35.3947)
+Object.SetHeading(70@, 3.3302)
+71@ = Object.CreateNoOffset(#PORTALOO, -2114.903, 156.9329, 35.4667)
+Object.SetHeading(71@, 271.6719)
+72@ = Object.CreateNoOffset(#PORTALOO, -2116.425, 157.4618, 35.7225)
+Object.SetHeading(72@, 269.1095)
+73@ = Object.CreateNoOffset(#PORTALOO, -2054.474, 222.6438, 35.8767)
+Object.SetHeading(73@, 0.0)
+Object.FreezePosition(73@, True)
+74@ = Object.CreateNoOffset(#PORTALOO, -2069.262, 285.8519, 35.8543)
+Object.SetHeading(74@, 51.0305)
+75@ = Object.CreateNoOffset(#PORTALOO, -2134.873, 293.1065, 35.4117)
+Object.SetHeading(75@, 175.9489)
+76@ = Object.CreateNoOffset(#BARREL4, -2109.397, 157.8976, 34.4311)
+77@ = Object.CreateNoOffset(#BARREL4, -2108.493, 157.8779, 34.4523)
+78@ = Object.CreateNoOffset(#BARREL4, -2091.683, 172.1051, 34.443)
+79@ = Object.CreateNoOffset(#BARREL4, -2128.95, 303.401, 33.888)
+80@ = Object.CreateNoOffset(#BARREL4, -2129.923, 303.447, 33.8842)
+43@ = 0
+
+:DECON_2930
+if 
+  5 > 43@
+goto_if_false @DECON_2973
+Object.MakeTargetable(76@(43@,5i), True)
+43@ += 1
+goto @DECON_2930
+
+:DECON_2973
+if 
+  Object.DoesExist($sf_crane1_trolley)
+goto_if_false @DECON_2999
+Object.SetRopeHeight($sf_crane1_trolley, 0.3)
+
+:DECON_2999
+if 
+  Object.DoesExist($sf_crane1_arm)
+goto_if_false @DECON_3120
+Object.SetHeading($sf_crane1_arm, 78.0)
+if 
+  Object.DoesExist($sf_crane1_arm_LOD)
+goto_if_false @DECON_3051
+Object.SetHeading($sf_crane1_arm_LOD, 78.0)
+
+:DECON_3051
+if 
+  Object.DoesExist($sf_crane1_trolley)
+goto_if_false @DECON_3120
+$x = Object.GetOffsetInWorldCoords($y, $z, $sf_crane1_arm, 0.0, 15.0, 3.453)
+Object.SetCoordinatesAndVelocity($sf_crane1_trolley, $x, $y, $z)
+Object.SetHeading($sf_crane1_trolley, 78.0)
+
+:DECON_3120
+83@ = Car.Create(486, -2098.726, 278.5271, 34.8743)
+Car.SetHeading(83@, 15.4537)
+Car.SetHealth(83@, 5000)
+Car.SetCanBurstTires(83@, False)
+84@ = Car.Create(486, -2088.802, 188.5362, 34.0469)
+Car.SetHeading(84@, 182.8425)
+Car.SetHealth(84@, 5000)
+Car.SetCanBurstTires(84@, False)
+Streaming.RequestCarRecording(551)
+
+:DECON_3221
+if 
+  not Streaming.HasCarRecordingBeenLoaded(551)
+goto_if_false @DECON_3248
+wait 0
+goto @DECON_3221
+
+:DECON_3248
+if 
+  not Car.IsDead(83@)
+goto_if_false @DECON_3272
+Car.StartPlaybackLooped(83@, 551)
+
+:DECON_3272
+85@ = Car.Create(524, -2112.603, 193.7894, 33.6684)
+Car.SetHeading(85@, 276.2221)
+86@ = Car.Create(422, -2102.461, 160.2542, 34.8444)
+Car.SetHeading(86@, 66.4396)
+87@ = Car.Create(422, -2121.669, 302.741, 34.459)
+Car.SetHeading(87@, 160.6221)
+set_lvar_int_to_lvar_int 91@ = 83@
+set_lvar_int_to_lvar_int 92@ = 84@
+set_lvar_int_to_lvar_int 93@ = 85@
+set_lvar_int_to_lvar_int 95@ = 86@
+set_lvar_int_to_lvar_int 96@ = 87@
+43@ = 0
+
+:DECON_3418
+if 
+  6 > 43@
+goto_if_false @DECON_3481
+if 
+  not Car.IsDead(91@(43@,7i))
+goto_if_false @DECON_3467
+Car.SetStraightLineDistance(91@(43@,7i), 50)
+
+:DECON_3467
+43@ += 1
+goto @DECON_3418
+
+:DECON_3481
+174@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+98@ = Char.Create(24, 27, -2098.758, 168.5889, 34.0869)
+99@ = Char.Create(24, 27, -2099.974, 169.3999, 34.0947)
+100@ = Char.Create(24, 27, -2090.955, 265.4674, 34.6686)
+101@ = Char.Create(24, 27, -2089.761, 264.5739, 34.6557)
+102@ = Char.Create(24, 27, -2085.753, 269.4974, 34.5456)
+103@ = Char.Create(24, 27, -2125.748, 303.8916, 33.5532)
+Char.SetHeading(98@, 47.9799)
+Char.SetHeading(99@, 229.2811)
+Char.SetHeading(100@, 229.2811)
+Char.SetHeading(101@, 51.1609)
+Char.SetHeading(102@, 177.1601)
+Char.SetHeading(103@, 177.1601)
+Char.GiveWeapon(102@, WeaponType.Shovel, 9999)
+Char.GiveWeapon(103@, WeaponType.Shovel, 9999)
+43@ = 0
+
+:DECON_3719
+if 
+  6 > 43@
+goto_if_false @DECON_3801
+Char.SetDecisionMaker(98@(43@,6i), 174@)
+Char.SetOnlyDamagedByPlayer(98@(43@,6i), True)
+Char.SetHealth(98@(43@,6i), 50)
+set_lvar_int_to_lvar_int 104@(43@,10i) = 98@(43@,6i)
+43@ += 1
+goto @DECON_3719
+
+:DECON_3801
+Task.ChatWithChar(98@, 99@, True, 1)
+Task.ChatWithChar(99@, 98@, False, 1)
+Task.ChatWithChar(100@, 101@, True, 1)
+Task.ChatWithChar(101@, 100@, False, 1)
+if 
+  not Car.IsDead(83@)
+goto_if_false @DECON_3907
+115@ = Char.CreateInsideCar(PedType.Mission1, 27, 83@)
+Char.SetDecisionMaker(115@, 174@)
+Char.SetOnlyDamagedByPlayer(115@, True)
+Char.SetHealth(115@, 50)
+set_lvar_int_to_lvar_int 110@ = 115@
+
+:DECON_3907
+117@ = Char.Create(24, 16, -2089.709, 266.1128, 34.6455)
+Char.SetHeading(117@, 170.2217)
+Char.SetHealth(117@, 40)
+175@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+Char.SetDecisionMaker(117@, 175@)
+set_lvar_int_to_lvar_int 111@ = 117@
+World.ClearArea(1, -2036.18, 179.2597, 27.8359, 5.0)
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+Player.ClearWantedLevel($player1)
+start_new_script @CLEANAU 
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearPrints
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Camera.SetFixedPosition(-2010.461, 171.3564, 41.8495, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2011.302, 171.8702, 41.6786, SwitchType.JumpCut)
+Char.SetCoordinates($scplayer, -2030.987, 148.5787, 27.8359)
+Char.SetHeading($scplayer, 359.4339)
+50@ = -2011.302
+50@ += 2010.461
+51@ = 171.8702
+51@ -= 171.3564
+52@ = 41.6786
+52@ -= 41.8495
+50@ *= 10.0
+51@ *= 10.0
+52@ *= 10.0
+$x = -2010.461
+add_float_lvar_to_float_var $x += 50@
+$y = 171.3564
+add_float_lvar_to_float_var $y += 51@
+$z = 41.8495
+add_float_lvar_to_float_var $z += 52@
+$heading = Math.GetHeadingFromVector2D(50@, 51@)
+Streaming.LoadSceneInDirection($x, $y, $z, $heading)
+Streaming.LoadAllModelsNow
+Camera.DoFade(1, 1000)
+
+:DECON_4302
+if 
+  Camera.GetFadingStatus
+goto_if_false @DECON_4326
+wait 0
+goto @DECON_4302
+
+:DECON_4326
+Text.PrintNow('GAR2_01', 5000, 1)
+TIMERA = 0
+35@ += 1
+
+:DECON_4356
+if 
+  35@ == 2
+goto_if_false @DECON_4843
+if 
+  TIMERA > 5000
+goto_if_false @DECON_4843
+Camera.SetFixedPosition(-2076.394, 263.7876, 35.7185, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2077.287, 264.2365, 35.6941, SwitchType.JumpCut)
+50@ = -2077.287
+50@ += 2076.394
+51@ = 264.2365
+51@ -= 263.7876
+52@ = 35.6941
+52@ -= 35.7185
+50@ *= 10.0
+51@ *= 10.0
+52@ *= 10.0
+$x = -2076.394
+add_float_lvar_to_float_var $x += 50@
+$y = 263.7876
+add_float_lvar_to_float_var $y += 51@
+$z = 35.7185
+add_float_lvar_to_float_var $z += 52@
+$heading = Math.GetHeadingFromVector2D(50@, 51@)
+Streaming.LoadSceneInDirection($x, $y, $z, $heading)
+Streaming.LoadAllModelsNow
+if 
+  not Char.IsDead(102@)
+goto_if_false @DECON_4721
+49@ = Sequence.Open()
+Task.GoStraightToCoord(-1, -2099.162, 171.1465, 34.0869, MoveState.Walk, 60000)
+Task.ScratchHead(-1)
+Task.GoStraightToCoord(-1, -2090.801, 263.5923, 34.7131, MoveState.Walk, 60000)
+Task.ScratchHead(-1)
+Sequence.SetToRepeat(49@, True)
+Sequence.Close(49@)
+Char.PerformSequence(102@, 49@)
+Sequence.Clear(49@)
+
+:DECON_4721
+if 
+  not Char.IsDead(117@)
+goto_if_false @DECON_4813
+49@ = Sequence.Open()
+Task.ScratchHead(-1)
+Task.LookAbout(-1, 5000)
+Task.PlayAnim(-1, "IDLE_CHAT", "PED", 4.0, False, False, False, False, -1)
+Sequence.SetToRepeat(49@, True)
+Sequence.Close(49@)
+Char.PerformSequence(117@, 49@)
+Sequence.Clear(49@)
+
+:DECON_4813
+Text.PrintNow('GAR2_02', 5000, 1)
+TIMERA = 0
+35@ += 1
+
+:DECON_4843
+if 
+  35@ == 3
+goto_if_false @DECON_5240
+if 
+  TIMERA > 5500
+goto_if_false @DECON_5240
+Camera.DoFade(0, 150)
+
+:DECON_4887
+if 
+  Camera.GetFadingStatus
+goto_if_false @DECON_4911
+wait 0
+goto @DECON_4887
+
+:DECON_4911
+if 
+  not Char.IsDead(102@)
+goto_if_false @DECON_4957
+Char.SetCoordinates(102@, -2098.833, 191.043, 34.2113)
+Char.SetHeading(102@, 150.0)
+
+:DECON_4957
+Camera.SetFixedPosition(-2084.993, 195.2235, 39.2186, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2085.466, 194.3752, 38.9801, SwitchType.JumpCut)
+50@ = -2085.466
+50@ += 2084.993
+51@ = 194.3752
+51@ -= 195.2235
+52@ = 38.9801
+52@ -= 39.2186
+50@ *= 10.0
+51@ *= 10.0
+52@ *= 10.0
+$x = -2084.993
+add_float_lvar_to_float_var $x += 50@
+$y = 195.2235
+add_float_lvar_to_float_var $y += 51@
+$z = 39.2186
+add_float_lvar_to_float_var $z += 52@
+$heading = Math.GetHeadingFromVector2D(50@, 51@)
+Streaming.LoadSceneInDirection($x, $y, $z, $heading)
+Streaming.LoadAllModelsNow
+Camera.DoFade(1, 150)
+
+:DECON_5186
+if 
+  Camera.GetFadingStatus
+goto_if_false @DECON_5210
+wait 0
+goto @DECON_5186
+
+:DECON_5210
+Text.Print('GAR2_05', 5000, 1)
+35@ += 1
+TIMERA = 0
+
+:DECON_5240
+if 
+  35@ == 4
+goto_if_false @DECON_5284
+if 
+  TIMERA > 5000
+goto_if_false @DECON_5284
+35@ = 99
+
+:DECON_5284
+if 
+  35@ > 0
+goto_if_false @DECON_5326
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DECON_5326
+35@ = 99
+
+:DECON_5326
+if 
+  35@ == 99
+goto_if_false @DECON_5643
+if 
+  not Char.IsDead(102@)
+goto_if_false @DECON_5475
+Char.SetCoordinates(102@, -2092.252, 252.5526, 34.4575)
+Char.ClearTasks(102@)
+49@ = Sequence.Open()
+Task.GoStraightToCoord(-1, -2099.162, 171.1465, 34.0869, MoveState.Walk, 60000)
+Task.ScratchHead(-1)
+Task.GoStraightToCoord(-1, -2090.801, 263.5923, 34.7131, MoveState.Walk, 60000)
+Task.ScratchHead(-1)
+Sequence.SetToRepeat(49@, True)
+Sequence.Close(49@)
+Char.PerformSequence(102@, 49@)
+Sequence.Clear(49@)
+
+:DECON_5475
+if 
+  not Char.IsDead(117@)
+goto_if_false @DECON_5567
+49@ = Sequence.Open()
+Task.ScratchHead(-1)
+Task.LookAbout(-1, 5000)
+Task.PlayAnim(-1, "IDLE_CHAT", "PED", 4.0, False, False, False, False, -1)
+Sequence.SetToRepeat(49@, True)
+Sequence.Close(49@)
+Char.PerformSequence(117@, 49@)
+Sequence.Clear(49@)
+
+:DECON_5567
+if 
+  Object.DoesExist($init_portakabin[3])
+goto_if_false @DECON_5613
+Object.SetCoordinates($init_portakabin[3], -2077.04, 280.395, 35.817)
+Object.SetHeading($init_portakabin[3], 0.0)
+
+:DECON_5613
+Text.ClearPrints
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Camera.DoFade(1, Fade.Out)
+gosub @DECON_20810
+
+:DECON_5643
+return 
+
+:DECON_5645
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DECON_5720
+if 
+  Char.IsInArea2D($scplayer, 0, -2053.226, 139.1389, -2135.449, 309.5472)
+goto_if_false @DECON_5713
+Game.SetWantedMultiplier(0.0)
+goto @DECON_5720
+
+:DECON_5713
+Game.SetWantedMultiplier(1.0)
+
+:DECON_5720
+if 
+  35@ == 0
+goto_if_false @DECON_5843
+if 
+  TIMERA > 0
+goto_if_false @DECON_5843
+Text.PrintNow('GAR2_19', 10000, 1)
+35@ += 1
+TIMERB = 30000
+63@ = 0
+start_new_script @CLEANAU 
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.LoadMissionAudio(12601, 3)
+
+:DECON_5817
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @DECON_5843
+wait 0
+goto @DECON_5817
+
+:DECON_5843
+if 
+  35@ == 1
+goto_if_false @DECON_6161
+if 
+  TIMERB > 30000
+goto_if_false @DECON_6129
+if 
+  Object.DoesExist(73@)
+goto_if_false @DECON_6129
+if 
+  Char.IsTouchingObject($scplayer, 73@)
+goto_if_false @DECON_6129
+if 
+  $audio_line_is_active == 0
+goto_if_false @DECON_6129
+switch_start 63@ total_jumps 2 default_jump 0 @DECON_6090 jumps 0 @DECON_5996 1 @DECON_6043 -1 @DECON_6090 -1 @DECON_6090 -1 @DECON_6090 -1 @DECON_6090 -1 @DECON_6090
+
+:DECON_5996
+set_var_text_label s$audio_string = 'GAR2_AK'
+set_var_int_to_constant $audio_sound_file = 16609
+start_new_script @AUDIOL -1 0 0 1 0 
+goto @DECON_6090
+
+:DECON_6043
+set_var_text_label s$audio_string = 'GAR2_AF'
+set_var_int_to_constant $audio_sound_file = 16605
+start_new_script @AUDIOL -1 0 0 1 0 
+goto @DECON_6090
+
+:DECON_6090
+63@ += 1
+if 
+  63@ > 1
+goto_if_false @DECON_6122
+63@ = 0
+
+:DECON_6122
+TIMERB = 0
+
+:DECON_6129
+if 
+  140@ == 6
+goto_if_false @DECON_6161
+TIMERA = 0
+35@ += 1
+
+:DECON_6161
+if 
+  35@ == 2
+goto_if_false @DECON_6205
+if 
+  TIMERA > 1000
+goto_if_false @DECON_6205
+35@ = 99
+
+:DECON_6205
+if and
+  141@ == 1
+  0 >= $portacabin_timer
+  6 > 140@
+goto_if_false @DECON_6325
+if 
+  not Player.IsWantedLevelGreater($player1, 1)
+goto_if_false @DECON_6262
+Player.AlterWantedLevel($player1, 2)
+
+:DECON_6262
+World.CreateEmergencyServicesCar(597, -2039.255, 232.481, 33.9528)
+World.CreateEmergencyServicesCar(597, -2038.185, 254.2709, 34.0893)
+37@ = 1
+Text.PrintNow('GAR2_40', 5000, 1)
+
+:DECON_6325
+if 
+  35@ == 99
+goto_if_false @DECON_6359
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Hud.ClearTimer($portacabin_timer)
+gosub @DECON_20810
+
+:DECON_6359
+43@ = 0
+
+:DECON_6366
+if 
+  6 > 43@
+goto_if_false @DECON_6664
+if 
+  Object.DoesExist($init_portakabin(43@,6i))
+goto_if_false @DECON_6650
+if 
+  Object.HasBeenDamaged($init_portakabin(43@,6i))
+goto_if_false @DECON_6650
+if 
+  128@(43@,6i) == 0
+goto_if_false @DECON_6650
+Blip.Remove(118@(43@,6i))
+140@ += 1
+128@(43@,6i) = 1
+if 
+  140@ == 1
+goto_if_false @DECON_6507
+Text.PrintNow('GAR2_29', 7000, 1)
+
+:DECON_6507
+if 
+  140@ == 2
+goto_if_false @DECON_6541
+Text.PrintNow('GAR2_30', 7000, 1)
+
+:DECON_6541
+if 
+  140@ == 3
+goto_if_false @DECON_6575
+Text.PrintNow('GAR2_31', 7000, 1)
+
+:DECON_6575
+if 
+  140@ == 4
+goto_if_false @DECON_6609
+Text.PrintNow('GAR2_32', 7000, 1)
+
+:DECON_6609
+if 
+  140@ == 5
+goto_if_false @DECON_6643
+Text.PrintNow('GAR2_33', 7000, 1)
+
+:DECON_6643
+TIMERA = 0
+
+:DECON_6650
+43@ += 1
+goto @DECON_6366
+
+:DECON_6664
+if 
+is_ps2_keyboard_key_just_pressed 97
+goto_if_false @DECON_6769
+43@ = 0
+
+:DECON_6686
+if 
+  6 > 43@
+goto_if_false @DECON_6769
+if 
+  Object.DoesExist($init_portakabin(43@,6i))
+goto_if_false @DECON_6755
+if 
+  not Object.HasBeenDamaged($init_portakabin(43@,6i))
+goto_if_false @DECON_6755
+Object.Break($init_portakabin(43@,6i), 0)
+
+:DECON_6755
+43@ += 1
+goto @DECON_6686
+
+:DECON_6769
+return 
+
+:DECON_6771
+Text.ClearHelp
+if 
+  35@ == 0
+goto_if_false @DECON_8059
+Text.ClearPrints
+Player.SetControl($player1, False)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 500)
+
+:DECON_6815
+if 
+  Camera.GetFadingStatus
+goto_if_false @DECON_6839
+wait 0
+goto @DECON_6815
+
+:DECON_6839
+Hud.SwitchWidescreen(True)
+62@ = Streaming.GetAreaVisible()
+Streaming.SetAreaVisible(0)
+if 
+  $player_is_in_crane <> 1
+goto_if_false @DECON_6955
+if 
+  Char.IsInArea3D($scplayer, 0, -2066.839, 209.6444, 28.403, -2040.101, 262.7024, 34.9146)
+goto_if_false @DECON_6948
+Char.SetCoordinates($scplayer, -2090.044, 209.4996, 33.9509)
+Char.SetHeading($scplayer, 250.813)
+
+:DECON_6948
+goto @DECON_6962
+
+:DECON_6955
+$do_not_update_camera_crane1 = 1
+
+:DECON_6962
+Audio.LoadMissionAudio(12605, 3)
+
+:DECON_6969
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @DECON_6995
+wait 0
+goto @DECON_6969
+
+:DECON_6995
+World.ClearArea(1, -2054.474, 222.6438, 35.8767, 3.0)
+43@ = 0
+
+:DECON_7026
+if 
+  10 > 43@
+goto_if_false @DECON_7175
+if 
+  Char.DoesExist(104@(43@,10i))
+goto_if_false @DECON_7161
+if 
+  not Char.IsDead(104@(43@,10i))
+goto_if_false @DECON_7152
+if 
+  Char.LocateAnyMeans3D(104@(43@,10i), 0, -2054.474, 222.6438, 35.8767, 5.0, 5.0, 3.0)
+goto_if_false @DECON_7145
+Char.Delete(104@(43@,10i))
+
+:DECON_7145
+goto @DECON_7161
+
+:DECON_7152
+Char.Delete(104@(43@,10i))
+
+:DECON_7161
+43@ += 1
+goto @DECON_7026
+
+:DECON_7175
+43@ = 0
+
+:DECON_7182
+if 
+  7 > 43@
+goto_if_false @DECON_7336
+if 
+  Car.DoesExist(91@(43@,7i))
+goto_if_false @DECON_7322
+if 
+  not Car.IsDead(91@(43@,7i))
+goto_if_false @DECON_7313
+if 
+  Car.Locate3D(91@(43@,7i), 91@(43@,7i), -2054.474, 222.6438, 35.8767, 6.0, 6.0, 3.0)
+goto_if_false @DECON_7306
+Car.Delete(91@(43@,7i))
+
+:DECON_7306
+goto @DECON_7322
+
+:DECON_7313
+Car.Delete(91@(43@,7i))
+
+:DECON_7322
+43@ += 1
+goto @DECON_7182
+
+:DECON_7336
+43@ = 0
+
+:DECON_7343
+if 
+  6 > 43@
+goto_if_false @DECON_7461
+if 
+  Object.DoesExist(70@(43@,6i))
+goto_if_false @DECON_7447
+if 
+  Object.Locate3D(70@(43@,6i), -2054.474, 222.6438, 35.8767, 3.0, 3.0, 3.0, 70@(43@,6i))
+goto_if_false @DECON_7447
+Object.Delete(70@(43@,6i))
+
+:DECON_7447
+43@ += 1
+goto @DECON_7343
+
+:DECON_7461
+43@ = 0
+
+:DECON_7468
+if 
+  5 > 43@
+goto_if_false @DECON_7586
+if 
+  Object.DoesExist(76@(43@,5i))
+goto_if_false @DECON_7572
+if 
+  Object.Locate3D(76@(43@,5i), -2054.474, 222.6438, 35.8767, 3.0, 3.0, 3.0, 76@(43@,5i))
+goto_if_false @DECON_7572
+Object.Delete(76@(43@,5i))
+
+:DECON_7572
+43@ += 1
+goto @DECON_7468
+
+:DECON_7586
+if 
+  Object.DoesExist($sf_crane1_trolley)
+goto_if_false @DECON_7612
+Object.SetRopeHeight($sf_crane1_trolley, 0.5)
+
+:DECON_7612
+if 
+  Object.DoesExist(73@)
+goto_if_false @DECON_7633
+Object.Delete(73@)
+
+:DECON_7633
+73@ = Object.CreateNoOffset(#PORTALOO, -2054.474, 222.6438, 35.8767)
+Object.SetHeading(73@, 0.0)
+Object.SetCollision(73@, False)
+Camera.SetFixedPosition(-2058.05, 218.8743, 35.7489, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2057.423, 219.653, 35.7245, SwitchType.JumpCut)
+if 
+  Object.DoesExist($init_portakabin[2])
+goto_if_false @DECON_7745
+Object.Delete($init_portakabin[2])
+
+:DECON_7745
+$init_portakabin[2] = Object.Create(#PORTAKABIN, $init_portakabin_x[2], $init_portakabin_y[2], $init_portakabin_z[2])
+Object.SetHeading($init_portakabin[2], $init_portakabin_h[2])
+Object.SetDynamic($init_portakabin[2], False)
+Object.DontRemove($init_portakabin[2])
+114@ = Char.Create(4, 16, -2054.474, 222.6438, 34.8767)
+Char.SetHeading(114@, 90.0)
+89@ = Car.Create(524, -2037.176, 269.7917, 34.9191)
+Car.SetHeading(89@, 179.5245)
+set_lvar_int_to_lvar_int 97@ = 89@
+43@ = 0
+
+:DECON_7863
+if 
+  10 > 43@
+goto_if_false @DECON_8021
+if 
+  Char.DoesExist(104@(43@,10i))
+goto_if_false @DECON_8007
+if 
+  not Char.IsDead(104@(43@,10i))
+goto_if_false @DECON_8007
+if 
+  not Char.IsInAnyCar(104@(43@,10i))
+goto_if_false @DECON_7981
+Char.FreezePosition(104@(43@,10i), True)
+Char.SetCollision(104@(43@,10i), False)
+Char.SetVisible(104@(43@,10i), False)
+goto @DECON_8007
+
+:DECON_7981
+$car = Char.StoreCarIsInNoSave(104@(43@,10i))
+Car.FreezePosition($car, True)
+Car.SetVisible($car, False)
+
+:DECON_8007
+43@ += 1
+goto @DECON_7863
+
+:DECON_8021
+Camera.DoFade(1, 500)
+
+:DECON_8028
+if 
+  Camera.GetFadingStatus
+goto_if_false @DECON_8052
+wait 0
+goto @DECON_8028
+
+:DECON_8052
+35@ += 1
+
+:DECON_8059
+if 
+  35@ > 0
+goto_if_false @DECON_8101
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @DECON_8101
+35@ = 99
+
+:DECON_8101
+if 
+  35@ == 1
+goto_if_false @DECON_8160
+if 
+  Object.DoesExist(73@)
+goto_if_false @DECON_8146
+Audio.AttachMissionAudioToObject(MissionAudioSlot.Slot3, 73@)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:DECON_8146
+TIMERA = 0
+35@ += 1
+
+:DECON_8160
+if 
+  35@ == 2
+goto_if_false @DECON_8227
+if 
+  TIMERA > 3000
+goto_if_false @DECON_8227
+if 
+  Object.DoesExist($init_portakabin[2])
+goto_if_false @DECON_8227
+Object.Break($init_portakabin[2], 0)
+35@ += 1
+
+:DECON_8227
+if 
+  35@ == 3
+goto_if_false @DECON_8458
+if 
+  TIMERA > 4000
+goto_if_false @DECON_8458
+if 
+  not Char.IsDead(114@)
+goto_if_false @DECON_8458
+Camera.SetFixedPosition(-2051.721, 225.4406, 36.5865, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2052.561, 224.9327, 36.3922, SwitchType.JumpCut)
+49@ = Sequence.Open()
+Task.GoStraightToCoord(-1, -2057.137, 223.541, 34.582, MoveState.Walk, 5000)
+if 
+  Object.DoesExist($init_portakabin[2])
+goto_if_false @DECON_8385
+Task.LookAtObject(-1, $init_portakabin[2], 100)
+
+:DECON_8385
+Sequence.Close(49@)
+Char.PerformSequence(114@, 49@)
+Sequence.Clear(49@)
+set_var_text_label s$audio_string = 'GAR2_AA'
+set_var_int_to_constant $audio_sound_file = 16600
+start_new_script @AUDIOL 114@ 0 1 1 0 
+35@ += 1
+TIMERA = 0
+
+:DECON_8458
+if 
+  35@ == 4
+goto_if_false @DECON_8509
+if and
+  TIMERA > 3000
+  $audio_line_is_active == 0
+goto_if_false @DECON_8509
+35@ += 1
+
+:DECON_8509
+if 
+  35@ == 5
+goto_if_false @DECON_8690
+if 
+  not Char.IsDead(114@)
+goto_if_false @DECON_8690
+43@ = Char.GetScriptTaskStatus(114@, 1560)
+if 
+  is_int_lvar_equal_to_constant 43@ == 7
+goto_if_false @DECON_8690
+Char.SetCoordinates(114@, -2057.137, 223.541, 34.582)
+Char.SetHeading(114@, 97.4598)
+Camera.SetFixedPosition(-2056.056, 222.2135, 36.2036, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2056.939, 222.6817, 36.1606, SwitchType.JumpCut)
+Task.LookAtCoord(114@, -2069.0, 229.0, 36.0, 2000)
+TIMERA = 0
+35@ += 1
+
+:DECON_8690
+if 
+  35@ == 6
+goto_if_false @DECON_8792
+if 
+  TIMERA > 2000
+goto_if_false @DECON_8792
+TIMERA = 0
+Camera.SetFixedPosition(-2051.721, 225.4406, 36.5865, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2052.561, 224.9327, 36.3922, SwitchType.JumpCut)
+35@ += 1
+
+:DECON_8792
+if 
+  35@ == 7
+goto_if_false @DECON_8906
+if 
+  not Char.IsDead(114@)
+goto_if_false @DECON_8906
+set_var_text_label s$audio_string = 'GAR2_AB'
+set_var_int_to_constant $audio_sound_file = 16601
+start_new_script @AUDIOL 114@ 0 1 1 0 
+Task.GoStraightToCoord(114@, -2054.474, 222.6438, 35.8767, MoveState.Run, 5000)
+TIMERA = 0
+35@ += 1
+
+:DECON_8906
+if 
+  35@ == 8
+goto_if_false @DECON_8950
+if 
+  TIMERA > 1500
+goto_if_false @DECON_8950
+35@ += 1
+
+:DECON_8950
+if 
+  35@ == 9
+goto_if_false @DECON_9032
+if 
+  not Char.IsDead(114@)
+goto_if_false @DECON_9032
+43@ = Char.GetScriptTaskStatus(114@, 1491)
+if 
+  is_int_lvar_equal_to_constant 43@ == 7
+goto_if_false @DECON_9032
+Char.Delete(114@)
+TIMERA = 0
+35@ += 1
+
+:DECON_9032
+if 
+  35@ == 10
+goto_if_false @DECON_9145
+if 
+  TIMERA > 2000
+goto_if_false @DECON_9145
+Text.ClearPrints
+Camera.SetFixedPosition(-2037.439, 244.0506, 43.8289, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2038.147, 244.4092, 43.2209, SwitchType.JumpCut)
+Text.Print('GAR2_11', 5000, 1)
+35@ += 1
+
+:DECON_9145
+if 
+  35@ == 11
+goto_if_false @DECON_9189
+if 
+  TIMERA > 5000
+goto_if_false @DECON_9189
+35@ += 1
+
+:DECON_9189
+if 
+  35@ == 12
+goto_if_false @DECON_9290
+Text.ClearPrints
+Camera.SetFixedPosition(-2031.781, 262.1947, 36.3181, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2032.476, 262.9132, 36.3398, SwitchType.JumpCut)
+Text.Print('GAR2_12', 5000, 1)
+TIMERA = 0
+35@ += 1
+
+:DECON_9290
+if 
+  35@ == 13
+goto_if_false @DECON_9334
+if 
+  TIMERA > 5000
+goto_if_false @DECON_9334
+35@ = 99
+
+:DECON_9334
+if 
+  35@ == 99
+goto_if_false @DECON_9688
+start_new_script @CLEANAU 
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+if 
+  Object.DoesExist(73@)
+goto_if_false @DECON_9391
+Object.SetCollision(73@, True)
+
+:DECON_9391
+Text.ClearPrints
+if 
+  $player_is_in_crane == 0
+goto_if_false @DECON_9425
+Player.SetControl($player1, True)
+goto @DECON_9432
+
+:DECON_9425
+$do_not_update_camera_crane1 = 0
+
+:DECON_9432
+Streaming.SetAreaVisible(62@)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+if 
+  Object.DoesExist($init_portakabin[2])
+goto_if_false @DECON_9466
+Object.Delete($init_portakabin[2])
+
+:DECON_9466
+if 
+  Char.DoesExist(114@)
+goto_if_false @DECON_9487
+Char.Delete(114@)
+
+:DECON_9487
+43@ = 0
+
+:DECON_9494
+if 
+  10 > 43@
+goto_if_false @DECON_9652
+if 
+  Char.DoesExist(104@(43@,10i))
+goto_if_false @DECON_9638
+if 
+  not Char.IsDead(104@(43@,10i))
+goto_if_false @DECON_9638
+if 
+  not Char.IsInAnyCar(104@(43@,10i))
+goto_if_false @DECON_9612
+Char.FreezePosition(104@(43@,10i), False)
+Char.SetCollision(104@(43@,10i), True)
+Char.SetVisible(104@(43@,10i), True)
+goto @DECON_9638
+
+:DECON_9612
+$car = Char.StoreCarIsInNoSave(104@(43@,10i))
+Car.FreezePosition($car, False)
+Car.SetVisible($car, True)
+
+:DECON_9638
+43@ += 1
+goto @DECON_9494
+
+:DECON_9652
+if 
+  $player_is_in_crane == 1
+goto_if_false @DECON_9677
+$reset_crane_camera = 1
+
+:DECON_9677
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+gosub @DECON_20810
+
+:DECON_9688
+return 
+
+:DECON_9690
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DECON_9765
+if 
+  Char.IsInArea2D($scplayer, 0, -2053.226, 139.1389, -2135.449, 309.5472)
+goto_if_false @DECON_9758
+Game.SetWantedMultiplier(0.0)
+goto @DECON_9765
+
+:DECON_9758
+Game.SetWantedMultiplier(1.0)
+
+:DECON_9765
+if 
+  35@ == 0
+goto_if_false @DECON_9909
+start_new_script @CLEANAU 
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+if 
+  Object.DoesExist(73@)
+goto_if_false @DECON_9830
+125@ = Blip.AddForObject(73@)
+Blip.ChangeColor(125@, BlipColor.Red)
+
+:DECON_9830
+124@ = Blip.AddForCoord(-2048.644, 250.1341, 35.54)
+Text.Print('GAR2_10', 7000, 1)
+TIMERA = 0
+63@ = 0
+65@ = 4000
+173@ = 0
+168@ = -1
+35@ += 1
+
+:DECON_9909
+if 
+  35@ == 1
+goto_if_false @DECON_10840
+if 
+  65@ > 5000
+goto_if_false @DECON_10509
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @DECON_10509
+if 
+  Object.DoesExist(73@)
+goto_if_false @DECON_10509
+46@ = Object.GetSpeed(73@)
+if or
+  46@ > 2.0
+  Char.IsTouchingObject($scplayer, 73@)
+goto_if_false @DECON_10509
+if 
+  $audio_line_is_active == 0
+goto_if_false @DECON_10509
+switch_start 63@ total_jumps 10 default_jump 0 @DECON_10448 jumps 0 @DECON_10158 1 @DECON_10187 2 @DECON_10216 3 @DECON_10245 4 @DECON_10274 5 @DECON_10303 6 @DECON_10332
+switch_continued 7 @DECON_10361 8 @DECON_10390 9 @DECON_10419 -1 @DECON_10448 -1 @DECON_10448 -1 @DECON_10448 -1 @DECON_10448 -1 @DECON_10448 -1 @DECON_10448
+
+:DECON_10158
+set_var_text_label s$audio_string = 'GAR2_AC'
+set_var_int_to_constant $audio_sound_file = 16602
+goto @DECON_10448
+
+:DECON_10187
+set_var_text_label s$audio_string = 'GAR2_AD'
+set_var_int_to_constant $audio_sound_file = 16603
+goto @DECON_10448
+
+:DECON_10216
+set_var_text_label s$audio_string = 'GAR2_AE'
+set_var_int_to_constant $audio_sound_file = 16604
+goto @DECON_10448
+
+:DECON_10245
+set_var_text_label s$audio_string = 'GAR2_AF'
+set_var_int_to_constant $audio_sound_file = 16605
+goto @DECON_10448
+
+:DECON_10274
+set_var_text_label s$audio_string = 'GAR2_AG'
+set_var_int_to_constant $audio_sound_file = 16606
+goto @DECON_10448
+
+:DECON_10303
+set_var_text_label s$audio_string = 'GAR2_AH'
+set_var_int_to_constant $audio_sound_file = 16607
+goto @DECON_10448
+
+:DECON_10332
+set_var_text_label s$audio_string = 'GAR2_AJ'
+set_var_int_to_constant $audio_sound_file = 16608
+goto @DECON_10448
+
+:DECON_10361
+set_var_text_label s$audio_string = 'GAR2_AK'
+set_var_int_to_constant $audio_sound_file = 16609
+goto @DECON_10448
+
+:DECON_10390
+set_var_text_label s$audio_string = 'GAR2_AL'
+set_var_int_to_constant $audio_sound_file = 16610
+goto @DECON_10448
+
+:DECON_10419
+set_var_text_label s$audio_string = 'GAR2_AM'
+set_var_int_to_constant $audio_sound_file = 16611
+goto @DECON_10448
+
+:DECON_10448
+start_new_script @AUDIOL -1 0 0 1 0 
+63@ += 1
+if 
+  63@ > 7
+goto_if_false @DECON_10498
+63@ = 0
+
+:DECON_10498
+65@ = 0
+wait 1
+
+:DECON_10509
+if and
+  173@ > 150000
+  151000 > 173@
+goto_if_false @DECON_10575
+Text.ClearPrints
+Text.PrintNow('GAR2_34', 7000, 1)
+173@ = 151001
+65@ = 0
+
+:DECON_10575
+if 
+  173@ > 200000
+goto_if_false @DECON_10684
+if 
+  not Player.IsWantedLevelGreater($player1, 1)
+goto_if_false @DECON_10621
+Player.AlterWantedLevel($player1, 2)
+
+:DECON_10621
+World.CreateEmergencyServicesCar(597, -2039.255, 232.481, 33.9528)
+World.CreateEmergencyServicesCar(597, -2038.185, 254.2709, 34.0893)
+37@ = 1
+Text.PrintNow('GAR2_35', 5000, 1)
+
+:DECON_10684
+if 
+  Object.DoesExist(73@)
+goto_if_false @DECON_10833
+if 
+  Object.Locate3D(73@, -2048.886, 250.6607, 32.5177, 2.898, 5.05, 2.0, False)
+goto_if_false @DECON_10833
+if and
+  not Text.IsMessageBeingDisplayed
+  $audio_line_is_active == 0
+goto_if_false @DECON_10833
+start_new_script @CLEANAU 
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearPrints
+Text.PrintNow('GAR2_36', 7000, 1)
+Blip.Remove(124@)
+Blip.Remove(125@)
+35@ += 1
+TIMERA = 0
+TIMERB = 0
+
+:DECON_10833
+gosub @DECON_11793
+
+:DECON_10840
+if and
+  35@ > 1
+  4 > 35@
+goto_if_false @DECON_11117
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DECON_11078
+$car = Char.StoreCarIsInNoSave($scplayer)
+if 
+  Car.IsModel($car, 524)
+goto_if_false @DECON_11039
+if 
+  168@ <> 1
+goto_if_false @DECON_11032
+Text.PrintNow('GAR2_37', 7000, 1)
+if 
+  Blip.DoesExist(126@)
+goto_if_false @DECON_10963
+Blip.Remove(126@)
+
+:DECON_10963
+if 
+  Blip.DoesExist(127@)
+goto_if_false @DECON_10984
+Blip.Remove(127@)
+
+:DECON_10984
+if 
+  Blip.DoesExist(124@)
+goto_if_false @DECON_11005
+Blip.Remove(124@)
+
+:DECON_11005
+124@ = Blip.AddForCoord(-2049.707, 240.5694, 34.762)
+168@ = 1
+
+:DECON_11032
+goto @DECON_11071
+
+:DECON_11039
+if 
+  168@ <> 0
+goto_if_false @DECON_11071
+gosub @DECON_11644
+168@ = 0
+
+:DECON_11071
+goto @DECON_11110
+
+:DECON_11078
+if 
+  168@ <> 0
+goto_if_false @DECON_11110
+gosub @DECON_11644
+168@ = 0
+
+:DECON_11110
+gosub @DECON_11793
+
+:DECON_11117
+if 
+  35@ == 2
+goto_if_false @DECON_11263
+TIMERA = 0
+TIMERB = 0
+35@ += 1
+if 
+  165@ == 0
+goto_if_false @DECON_11263
+if 
+  Object.DoesExist(73@)
+goto_if_false @DECON_11263
+if 
+  not Object.IsOnScreen(73@)
+goto_if_false @DECON_11263
+Object.SetCoordinates(73@, -2048.957, 250.2059, 32.6542)
+Object.SetHeading(73@, 158.56)
+Object.SetRotation(73@, -170.1394, -88.8094, -21.44)
+165@ = 1
+
+:DECON_11263
+if 
+  35@ == 3
+goto_if_false @DECON_11617
+if 
+  165@ == 0
+goto_if_false @DECON_11388
+if 
+  Object.DoesExist(73@)
+goto_if_false @DECON_11388
+if 
+  not Object.IsOnScreen(73@)
+goto_if_false @DECON_11388
+Object.SetCoordinates(73@, -2048.957, 250.2059, 32.6542)
+Object.SetHeading(73@, 158.56)
+Object.SetRotation(73@, -170.1394, -88.8094, -21.44)
+165@ = 1
+
+:DECON_11388
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, -2049.707, 240.5694, 34.762, 3.0, 3.0, 3.0)
+goto_if_false @DECON_11617
+if 
+  Char.IsInModel($scplayer, 524)
+goto_if_false @DECON_11568
+if 
+  Car.IsStopped(90@)
+goto_if_false @DECON_11561
+if 
+  not Car.IsDead(90@)
+goto_if_false @DECON_11561
+$heading = Car.GetHeading(90@)
+if and
+  190.0 > $heading
+  $heading > 170.0
+goto_if_false @DECON_11545
+Blip.Remove(124@)
+35@ = 99
+goto @DECON_11561
+
+:DECON_11545
+Text.PrintNow('GAR2_14', 1000, 1)
+
+:DECON_11561
+goto @DECON_11610
+
+:DECON_11568
+if 
+  TIMERA > 30000
+goto_if_false @DECON_11610
+Text.PrintNow('GAR2_20', 7000, 1)
+TIMERA = 0
+
+:DECON_11610
+goto @DECON_11617
+
+:DECON_11617
+if 
+  35@ == 99
+goto_if_false @DECON_11642
+gosub @DECON_20810
+
+:DECON_11642
+return 
+
+:DECON_11644
+if 
+  Blip.DoesExist(124@)
+goto_if_false @DECON_11665
+Blip.Remove(124@)
+
+:DECON_11665
+if 
+  not Car.IsDead(85@)
+goto_if_false @DECON_11728
+if 
+  not Blip.DoesExist(126@)
+goto_if_false @DECON_11728
+126@ = Blip.AddForCar(85@)
+Blip.SetAsFriendly(126@, True)
+Text.PrintNow('GAR2_36', 7000, 1)
+
+:DECON_11728
+if 
+  not Car.IsDead(89@)
+goto_if_false @DECON_11791
+if 
+  not Blip.DoesExist(127@)
+goto_if_false @DECON_11791
+127@ = Blip.AddForCar(89@)
+Blip.SetAsFriendly(127@, True)
+Text.PrintNow('GAR2_36', 7000, 1)
+
+:DECON_11791
+return 
+
+:DECON_11793
+if 
+  Car.DoesExist(85@)
+goto_if_false @DECON_11923
+if 
+  not Car.IsDead(85@)
+goto_if_false @DECON_11906
+if 
+  Car.Locate3D(85@, 0, -2049.199, 250.3882, 32.9084, 2.454, 5.042, 2.3)
+goto_if_false @DECON_11899
+if 
+  not Car.IsOnScreen(85@)
+goto_if_false @DECON_11899
+Car.Delete(85@)
+Blip.Remove(126@)
+
+:DECON_11899
+goto @DECON_11916
+
+:DECON_11906
+Car.MarkAsNoLongerNeeded(85@)
+Blip.Remove(126@)
+
+:DECON_11916
+goto @DECON_12068
+
+:DECON_11923
+if 
+  not Camera.IsPointOnScreen(-2112.603, 193.7894, 33.6684, 5.0)
+goto_if_false @DECON_12068
+if 
+  not World.IsPointObscuredByAMissionEntity(-2112.603, 193.7894, 33.6684, 3.0, 3.0, 3.0)
+goto_if_false @DECON_12068
+85@ = Car.Create(524, -2112.603, 193.7894, 33.6684)
+Car.SetHeading(85@, 276.2221)
+if 
+  Blip.DoesExist(126@)
+goto_if_false @DECON_12053
+Blip.Remove(126@)
+
+:DECON_12053
+126@ = Blip.AddForCar(85@)
+Blip.SetAsFriendly(126@, True)
+
+:DECON_12068
+if 
+  Car.DoesExist(89@)
+goto_if_false @DECON_12198
+if 
+  not Car.IsDead(89@)
+goto_if_false @DECON_12181
+if 
+  Car.Locate3D(89@, 0, -2049.199, 250.3882, 32.9084, 2.454, 5.042, 2.3)
+goto_if_false @DECON_12174
+if 
+  not Car.IsOnScreen(89@)
+goto_if_false @DECON_12174
+Car.Delete(89@)
+Blip.Remove(127@)
+
+:DECON_12174
+goto @DECON_12191
+
+:DECON_12181
+Car.MarkAsNoLongerNeeded(89@)
+Blip.Remove(127@)
+
+:DECON_12191
+goto @DECON_12343
+
+:DECON_12198
+if 
+  not Camera.IsPointOnScreen(-2037.176, 269.7917, 34.9191, 5.0)
+goto_if_false @DECON_12343
+if 
+  not World.IsPointObscuredByAMissionEntity(-2037.176, 269.7917, 34.9191, 3.0, 3.0, 3.0)
+goto_if_false @DECON_12343
+89@ = Car.Create(524, -2037.176, 269.7917, 34.9191)
+Car.SetHeading(89@, 179.5245)
+if 
+  Blip.DoesExist(127@)
+goto_if_false @DECON_12328
+Blip.Remove(127@)
+
+:DECON_12328
+127@ = Blip.AddForCar(89@)
+Blip.SetAsFriendly(127@, True)
+
+:DECON_12343
+return 
+
+:DECON_12345
+if 
+  35@ == 0
+goto_if_false @DECON_13154
+Text.ClearPrints
+Player.SetControl($player1, False)
+Camera.DoFade(0, 250)
+
+:DECON_12379
+if 
+  Camera.GetFadingStatus
+goto_if_false @DECON_12403
+wait 0
+goto @DECON_12379
+
+:DECON_12403
+Audio.LoadMissionAudio(12600, 3)
+
+:DECON_12410
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @DECON_12436
+wait 0
+goto @DECON_12410
+
+:DECON_12436
+if 
+  Object.DoesExist(73@)
+goto_if_false @DECON_12518
+if 
+  not Object.IsOnScreen(73@)
+goto_if_false @DECON_12518
+Object.SetCoordinates(73@, -2048.957, 250.2059, 32.6542)
+Object.SetHeading(73@, 158.56)
+Object.SetRotation(73@, -170.1394, -88.8094, -21.44)
+
+:DECON_12518
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-2046.33, 255.5639, 35.1158, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2046.688, 254.6398, 34.9808, SwitchType.JumpCut)
+43@ = 0
+
+:DECON_12580
+if 
+  10 > 43@
+goto_if_false @DECON_12652
+if 
+  Char.DoesExist(104@(43@,10i))
+goto_if_false @DECON_12638
+Char.Delete(104@(43@,10i))
+104@(43@,10i) = 0
+
+:DECON_12638
+43@ += 1
+goto @DECON_12580
+
+:DECON_12652
+Char.SetCoordinates($scplayer, -2049.734, 241.7195, 70.7037)
+Char.SetHeading($scplayer, 176.835)
+43@ = 0
+
+:DECON_12689
+if 
+  7 > 43@
+goto_if_false @DECON_12802
+if 
+  not Car.IsDead(91@(43@,7i))
+goto_if_false @DECON_12788
+if 
+  Car.Locate3D(91@(43@,7i), 0, -2049.734, 241.7195, 34.7037, 7.0, 7.0, 5.0)
+goto_if_false @DECON_12788
+Car.Delete(91@(43@,7i))
+
+:DECON_12788
+43@ += 1
+goto @DECON_12689
+
+:DECON_12802
+43@ = 0
+
+:DECON_12809
+if 
+  7 > 43@
+goto_if_false @DECON_12938
+if 
+  not Car.IsDead(91@(43@,7i))
+goto_if_false @DECON_12915
+if 
+  Car.Locate3D(91@(43@,7i), 0, -2048.886, 250.6607, 32.5177, 2.898, 5.05, 2.0)
+goto_if_false @DECON_12908
+Car.Delete(91@(43@,7i))
+
+:DECON_12908
+goto @DECON_12924
+
+:DECON_12915
+Car.Delete(91@(43@,7i))
+
+:DECON_12924
+43@ += 1
+goto @DECON_12809
+
+:DECON_12938
+World.ClearArea(1, -2049.734, 241.7195, 34.7037, 10.0)
+Char.SetCoordinates($scplayer, -2049.734, 241.7195, 34.7037)
+Char.SetHeading($scplayer, 176.835)
+if 
+  not Car.IsDead(90@)
+goto_if_false @DECON_13104
+Car.SetQuaternion(90@, -0.0448, 0.0178, 1.003, -0.0611)
+81@ = Object.CreateNoOffset(#HUBHOLE3_SFSE, -2049.171, 250.3193, 30.8784)
+179@ = Particle.CreateOnCarWithDirection("CEMENT", 90@, 0.0, -4.4, 0.0, 0.0, -1.0, 0.0, 1)
+
+:DECON_13104
+wait 500
+Camera.DoFade(1, 250)
+
+:DECON_13116
+if 
+  Camera.GetFadingStatus
+goto_if_false @DECON_13140
+wait 0
+goto @DECON_13116
+
+:DECON_13140
+TIMERA = 0
+35@ += 1
+
+:DECON_13154
+if 
+  35@ == 1
+goto_if_false @DECON_13255
+46@ = 0.0
+
+:DECON_13182
+if 
+  1.0 > 46@
+goto_if_false @DECON_13248
+wait 0
+if 
+  not Car.IsDead(90@)
+goto_if_false @DECON_13231
+Car.ControlMovablePart(90@, 46@)
+
+:DECON_13231
+add_timed_val_to_float_lvar 46@ += frame_delta_time * 0.01
+goto @DECON_13182
+
+:DECON_13248
+35@ += 1
+
+:DECON_13255
+if 
+  35@ == 2
+goto_if_false @DECON_13373
+if 
+  TIMERA > 2000
+goto_if_false @DECON_13373
+Particle.Play(179@)
+if 
+  not Car.IsDead(90@)
+goto_if_false @DECON_13359
+$x = Car.GetOffsetInWorldCoords($y, $z, 90@, 0.0, -4.4, 0.0)
+Audio.SetMissionAudioPosition(MissionAudioSlot.Slot3, $x, $y, $z)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:DECON_13359
+TIMERA = 0
+35@ += 1
+
+:DECON_13373
+if 
+  35@ == 3
+goto_if_false @DECON_13417
+if 
+  TIMERA > 1000
+goto_if_false @DECON_13417
+35@ += 1
+
+:DECON_13417
+if 
+  35@ == 4
+goto_if_false @DECON_13506
+if 
+  Object.Slide(81@, -2049.171, 250.3193, 34.177, 0.01, 0.01, 0.009, False)
+goto_if_false @DECON_13506
+TIMERA = 0
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Particle.Stop(179@)
+35@ += 1
+
+:DECON_13506
+if 
+  35@ == 5
+goto_if_false @DECON_13550
+if 
+  TIMERA > 2000
+goto_if_false @DECON_13550
+35@ = 99
+
+:DECON_13550
+if 
+  35@ == 99
+goto_if_false @DECON_13610
+if 
+  not Car.IsDead(90@)
+goto_if_false @DECON_13584
+
+:DECON_13584
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+36@ = 1
+
+:DECON_13610
+return 
+
+:DECON_13612
+if and
+  39@ == 1
+  141@ == 0
+goto_if_false @DECON_14209
+43@ = 0
+
+:DECON_13644
+if 
+  6 > 43@
+goto_if_false @DECON_13735
+if 
+  Char.DoesExist(98@(43@,6i))
+goto_if_false @DECON_13721
+if or
+  Char.HasBeenDamagedByChar(98@(43@,6i), $scplayer)
+  Char.IsDead(98@(43@,6i))
+goto_if_false @DECON_13721
+141@ = 1
+
+:DECON_13721
+43@ += 1
+goto @DECON_13644
+
+:DECON_13735
+if 
+  Char.DoesExist(117@)
+goto_if_false @DECON_13782
+if or
+  Char.HasBeenDamagedByChar(117@, $scplayer)
+  Char.IsDead(117@)
+goto_if_false @DECON_13782
+141@ = 1
+
+:DECON_13782
+if 
+  Char.DoesExist(115@)
+goto_if_false @DECON_13829
+if or
+  Char.HasBeenDamagedByChar(115@, $scplayer)
+  Char.IsDead(115@)
+goto_if_false @DECON_13829
+141@ = 1
+
+:DECON_13829
+43@ = 0
+
+:DECON_13836
+if 
+  6 > 43@
+goto_if_false @DECON_13926
+if 
+  Object.DoesExist($init_portakabin(43@,6i))
+goto_if_false @DECON_13912
+44@ = Object.GetHealth($init_portakabin(43@,6i))
+if 
+  900 > 44@
+goto_if_false @DECON_13912
+141@ = 1
+
+:DECON_13912
+43@ += 1
+goto @DECON_13836
+
+:DECON_13926
+43@ = 0
+
+:DECON_13933
+if 
+  7 > 43@
+goto_if_false @DECON_14065
+if 
+  Car.DoesExist(91@(43@,7i))
+goto_if_false @DECON_14051
+if 
+  not Car.IsDead(91@(43@,7i))
+goto_if_false @DECON_14051
+if 
+  Char.IsInCar($scplayer, 91@(43@,7i))
+goto_if_false @DECON_14021
+141@ = 1
+
+:DECON_14021
+if 
+  Car.HasBeenDamagedByChar(91@(43@,7i), $scplayer)
+goto_if_false @DECON_14051
+141@ = 1
+
+:DECON_14051
+43@ += 1
+goto @DECON_13933
+
+:DECON_14065
+if 
+  141@ == 1
+goto_if_false @DECON_14151
+43@ = 0
+
+:DECON_14090
+if 
+  10 > 43@
+goto_if_false @DECON_14151
+if 
+  not Char.IsDead(104@(43@,10i))
+goto_if_false @DECON_14137
+Char.ClearTasks(104@(43@,10i))
+
+:DECON_14137
+43@ += 1
+goto @DECON_14090
+
+:DECON_14151
+if 
+  141@ == 1
+goto_if_false @DECON_14202
+$portacabin_timer = 180000
+Hud.DisplayTimer($portacabin_timer, TimerDirection.Down)
+Text.Print('GAR2_41', 7000, 1)
+
+:DECON_14202
+goto @DECON_14303
+
+:DECON_14209
+if 
+  169@ == 0
+goto_if_false @DECON_14303
+if and
+  not Text.IsHelpMessageBeingDisplayed
+  not Text.IsMessageBeingDisplayed
+goto_if_false @DECON_14303
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DECON_14303
+$car = Char.StoreCarIsInNoSave($scplayer)
+if 
+  Car.IsModel($car, 486)
+goto_if_false @DECON_14303
+Text.PrintHelp('GAR2_42')
+169@ += 1
+
+:DECON_14303
+if and
+  167@ == 0
+  2 >= 34@
+goto_if_false @DECON_14385
+if and
+  Car.IsDead(83@)
+  Car.IsDead(84@)
+goto_if_false @DECON_14385
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @DECON_14385
+Text.PrintNow('GAR2_39', 7000, 1)
+167@ += 1
+
+:DECON_14385
+if 
+  141@ == 1
+goto_if_false @DECON_16006
+if 
+  not Char.IsDead(117@)
+goto_if_false @DECON_14517
+43@ = Char.GetScriptTaskStatus(117@, 1560)
+if 
+  is_int_lvar_equal_to_constant 43@ == 7
+goto_if_false @DECON_14517
+49@ = Sequence.Open()
+Task.GotoChar(-1, $scplayer, 60000, 20.0)
+Task.SmartFleeChar(-1, $scplayer, 300.0, 60000)
+Sequence.Close(49@)
+Char.PerformSequence(117@, 49@)
+Sequence.Clear(49@)
+Char.MarkAsNoLongerNeeded(117@)
+111@ = 0
+
+:DECON_14517
+176@ = Sequence.Open()
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @DECON_14562
+Task.GotoChar(-1, $scplayer, 60000, 5.0)
+goto @DECON_14579
+
+:DECON_14562
+Task.GotoChar(-1, $scplayer, 60000, 15.0)
+
+:DECON_14579
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @DECON_14637
+Task.PlayAnim(-1, "FIGHTIDLE", "PED", 4.0, False, False, False, True, -1)
+goto @DECON_14637
+
+:DECON_14637
+Sequence.Close(176@)
+177@ = Sequence.Open()
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @DECON_14687
+Task.GotoChar(-1, $scplayer, 60000, 7.5)
+goto @DECON_14704
+
+:DECON_14687
+Task.GotoChar(-1, $scplayer, 60000, 10.0)
+
+:DECON_14704
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @DECON_14762
+Task.PlayAnim(-1, "FIGHTIDLE", "PED", 4.0, False, False, False, True, -1)
+goto @DECON_14762
+
+:DECON_14762
+Sequence.Close(177@)
+178@ = Sequence.Open()
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @DECON_14812
+Task.GotoChar(-1, $scplayer, 60000, 10.0)
+goto @DECON_14829
+
+:DECON_14812
+Task.GotoChar(-1, $scplayer, 60000, 20.0)
+
+:DECON_14829
+Task.FleeChar(-1, $scplayer, 20.0, 3000)
+Sequence.Close(178@)
+43@ = 0
+
+:DECON_14856
+if 
+  2 > 43@
+goto_if_false @DECON_14913
+180@(43@,2i) = -1
+182@(43@,2f) = 9999.0
+43@ += 1
+goto @DECON_14856
+
+:DECON_14913
+43@ = 0
+
+:DECON_14920
+if 
+  10 > 43@
+goto_if_false @DECON_15164
+if 
+  not Char.IsDead(104@(43@,10i))
+goto_if_false @DECON_15150
+$x, $y, $z = Char.GetCoordinates(104@(43@,10i))
+56@, 57@, 58@ = Char.GetCoordinates($scplayer)
+$distance = Math.GetDistanceBetweenCoords2D($x, $y, 56@, 57@)
+if 
+  is_float_lvar_greater_than_float_var 182@ > $distance
+goto_if_false @DECON_15065
+set_lvar_float_to_lvar_float 183@ = 182@
+set_lvar_float_to_var_float 182@ = $distance
+set_lvar_int_to_lvar_int 181@ = 180@
+set_lvar_int_to_lvar_int 180@ = 43@
+goto @DECON_15100
+
+:DECON_15065
+if 
+  is_float_lvar_greater_than_float_var 183@ > $distance
+goto_if_false @DECON_15100
+set_lvar_float_to_var_float 183@ = $distance
+set_lvar_int_to_lvar_int 181@ = 43@
+
+:DECON_15100
+if and
+  $distance > 500.0
+  not Char.IsOnScreen(104@(43@,10i))
+goto_if_false @DECON_15150
+Char.Delete(104@(43@,10i))
+104@(43@,10i) = 0
+
+:DECON_15150
+43@ += 1
+goto @DECON_14920
+
+:DECON_15164
+43@ = 0
+
+:DECON_15171
+if 
+  10 > 43@
+goto_if_false @DECON_15991
+if 
+  not Char.IsDead(104@(43@,10i))
+goto_if_false @DECON_15977
+if 
+  not Char.IsInAnyCar(104@(43@,10i))
+goto_if_false @DECON_15711
+if 
+  Char.IsCurrentWeapon(104@(43@,10i), WeaponType.Pistol)
+goto_if_false @DECON_15312
+44@ = Char.GetScriptTaskStatus(104@(43@,10i), 1506)
+if 
+  is_int_lvar_equal_to_constant 44@ == 7
+goto_if_false @DECON_15305
+Char.ClearTasks(104@(43@,10i))
+Task.KillCharOnFoot(104@(43@,10i), $scplayer)
+
+:DECON_15305
+goto @DECON_15704
+
+:DECON_15312
+if or
+  is_int_lvar_equal_to_int_lvar 43@ == 180@
+  is_int_lvar_equal_to_int_lvar 43@ == 181@
+goto_if_false @DECON_15400
+44@ = Char.GetScriptTaskStatus(104@(43@,10i), 1506)
+if 
+  is_int_lvar_equal_to_constant 44@ == 7
+goto_if_false @DECON_15393
+Char.ClearTasks(104@(43@,10i))
+Task.KillCharOnFoot(104@(43@,10i), $scplayer)
+
+:DECON_15393
+goto @DECON_15704
+
+:DECON_15400
+44@ = Char.GetScriptTaskStatus(104@(43@,10i), 1560)
+if 
+  is_int_lvar_equal_to_constant 44@ == 7
+goto_if_false @DECON_15562
+44@ = Math.RandomIntInRange(0, 9)
+if 
+  4 > 44@
+goto_if_false @DECON_15488
+Char.ClearTasks(104@(43@,10i))
+Char.PerformSequence(104@(43@,10i), 176@)
+goto @DECON_15555
+
+:DECON_15488
+if 
+  8 > 44@
+goto_if_false @DECON_15534
+Char.ClearTasks(104@(43@,10i))
+Char.PerformSequence(104@(43@,10i), 177@)
+goto @DECON_15555
+
+:DECON_15534
+Char.ClearTasks(104@(43@,10i))
+Char.PerformSequence(104@(43@,10i), 178@)
+
+:DECON_15555
+goto @DECON_15704
+
+:DECON_15562
+if or
+  Char.IsPlayingAnim(104@(43@,10i), "PANIC_POINT")
+  Char.IsPlayingAnim(104@(43@,10i), "PANIC_SHOUT")
+goto_if_false @DECON_15704
+$x, $y, $z = Char.GetCoordinates(104@(43@,10i))
+56@, 57@, 58@ = Char.GetCoordinates($scplayer)
+set_lvar_float_to_lvar_float 50@ = 56@
+sub_float_var_from_float_lvar 50@ -= $x
+set_lvar_float_to_lvar_float 51@ = 57@
+sub_float_var_from_float_lvar 51@ -= $y
+$heading = Math.GetHeadingFromVector2D(50@, 51@)
+Char.SetHeading(104@(43@,10i), $heading)
+
+:DECON_15704
+goto @DECON_15977
+
+:DECON_15711
+$car = Char.StoreCarIsInNoSave(104@(43@,10i))
+Car.SetStraightLineDistance($car, 255)
+if 
+  not Car.IsDead($car)
+goto_if_false @DECON_15768
+if 
+  Car.IsPlaybackGoingOn($car)
+goto_if_false @DECON_15768
+Car.StopPlayback($car)
+
+:DECON_15768
+44@ = Char.GetScriptTaskStatus(104@(43@,10i), 1560)
+if 
+  is_int_lvar_equal_to_constant 44@ == 7
+goto_if_false @DECON_15878
+49@ = Sequence.Open()
+Task.CarMission(-1, $car, -1, CarMission.RamPlayerClose, 40.0, DrivingMode.PloughThrough)
+Sequence.Close(49@)
+Char.PerformSequence(104@(43@,10i), 49@)
+Sequence.Clear(49@)
+if 
+  184@ <> 0
+goto_if_false @DECON_15871
+184@ = 0
+
+:DECON_15871
+goto @DECON_15977
+
+:DECON_15878
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @DECON_15977
+if 
+  Char.IsTouchingVehicle($scplayer, $car)
+goto_if_false @DECON_15977
+if 
+  184@ == 0
+goto_if_false @DECON_15977
+49@ = Sequence.Open()
+Task.CarTempAction(-1, $car, TempAction.Reverse, 2500)
+Sequence.Close(49@)
+Char.PerformSequence(104@(43@,10i), 49@)
+Sequence.Clear(49@)
+184@ = 1
+
+:DECON_15977
+43@ += 1
+goto @DECON_15171
+
+:DECON_15991
+Sequence.Clear(176@)
+Sequence.Clear(177@)
+Sequence.Clear(178@)
+
+:DECON_16006
+if 
+  141@ == 0
+goto_if_false @DECON_16750
+if 
+  not Char.IsDead(102@)
+goto_if_false @DECON_16750
+if 
+  146@ == 0
+goto_if_false @DECON_16169
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -2074.264, 222.39, 34.7395, 30.0, 30.0, 4.0)
+goto_if_false @DECON_16169
+Char.ClearTasks(102@)
+49@ = Sequence.Open()
+Task.GotoChar(-1, $scplayer, 50000, 3.0)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.ScratchHead(-1)
+Sequence.Close(49@)
+Char.PerformSequence(102@, 49@)
+Sequence.Clear(49@)
+146@ += 1
+
+:DECON_16169
+if 
+  146@ == 1
+goto_if_false @DECON_16606
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -2074.264, 222.39, 34.7395, 30.0, 30.0, 4.0)
+goto_if_false @DECON_16509
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @DECON_16502
+if 
+  $audio_line_is_active == 0
+goto_if_false @DECON_16502
+if 
+  Char.LocateOnFootChar3D(102@, $scplayer, 3.0, 3.0, 2.0, False)
+goto_if_false @DECON_16495
+43@ = Math.RandomIntInRange(0, 3)
+if 
+  43@ == 0
+goto_if_false @DECON_16370
+set_var_text_label s$audio_string = 'GAR2_BA'
+set_var_int_to_constant $audio_sound_file = 16612
+start_new_script @AUDIOL 102@ 1 0 1 0 
+
+:DECON_16370
+if 
+  43@ == 1
+goto_if_false @DECON_16429
+set_var_text_label s$audio_string = 'GAR2_BB'
+set_var_int_to_constant $audio_sound_file = 16613
+start_new_script @AUDIOL 102@ 1 0 1 0 
+
+:DECON_16429
+if 
+  43@ == 2
+goto_if_false @DECON_16488
+set_var_text_label s$audio_string = 'GAR2_BC'
+set_var_int_to_constant $audio_sound_file = 16614
+start_new_script @AUDIOL 102@ 1 0 1 0 
+
+:DECON_16488
+146@ += 1
+
+:DECON_16495
+TIMERB = 0
+
+:DECON_16502
+goto @DECON_16606
+
+:DECON_16509
+49@ = Sequence.Open()
+Task.GoStraightToCoord(-1, -2099.162, 171.1465, 34.0869, MoveState.Walk, 60000)
+Task.ScratchHead(-1)
+Task.GoStraightToCoord(-1, -2090.801, 263.5923, 34.7131, MoveState.Walk, 60000)
+Task.ScratchHead(-1)
+Sequence.SetToRepeat(49@, True)
+Sequence.Close(49@)
+Char.PerformSequence(102@, 49@)
+Sequence.Clear(49@)
+146@ = 0
+
+:DECON_16606
+if 
+  146@ == 2
+goto_if_false @DECON_16750
+43@ = Char.GetScriptTaskStatus(102@, 1560)
+if 
+  is_int_lvar_equal_to_constant 43@ == 7
+goto_if_false @DECON_16750
+49@ = Sequence.Open()
+Task.GoStraightToCoord(-1, -2099.162, 171.1465, 34.0869, MoveState.Walk, 60000)
+Task.ScratchHead(-1)
+Task.GoStraightToCoord(-1, -2090.801, 263.5923, 34.7131, MoveState.Walk, 60000)
+Task.ScratchHead(-1)
+Sequence.SetToRepeat(49@, True)
+Sequence.Close(49@)
+Char.PerformSequence(102@, 49@)
+Sequence.Clear(49@)
+146@ += 1
+
+:DECON_16750
+if 
+  not Char.IsDead(115@)
+goto_if_false @DECON_16829
+if 
+  not Car.IsDead(83@)
+goto_if_false @DECON_16822
+if 
+  Car.IsPlaybackGoingOn(83@)
+goto_if_false @DECON_16822
+if 
+  not Char.IsInCar(115@, 83@)
+goto_if_false @DECON_16822
+Car.StopPlayback(83@)
+
+:DECON_16822
+goto @DECON_16866
+
+:DECON_16829
+if 
+  not Car.IsDead(83@)
+goto_if_false @DECON_16866
+if 
+  Car.IsPlaybackGoingOn(83@)
+goto_if_false @DECON_16866
+Car.StopPlayback(83@)
+
+:DECON_16866
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @DECON_16954
+if 
+  not Car.IsDead(90@)
+goto_if_false @DECON_16939
+if 
+  not Char.IsInCar($scplayer, 90@)
+goto_if_false @DECON_16932
+90@ = 0
+90@ = Char.StoreCarIsIn($scplayer)
+
+:DECON_16932
+goto @DECON_16954
+
+:DECON_16939
+90@ = 0
+90@ = Char.StoreCarIsIn($scplayer)
+
+:DECON_16954
+43@ = 0
+
+:DECON_16961
+if 
+  6 > 43@
+goto_if_false @DECON_18417
+if 
+  67@ == 1
+goto_if_false @DECON_17147
+if 
+  Object.DoesExist($init_portakabin(43@,6i))
+goto_if_false @DECON_17147
+if or
+  Object.HasBeenDamagedByWeapon($init_portakabin(43@,6i), WeaponType.Explosion)
+  Object.HasBeenDamagedByWeapon($init_portakabin(43@,6i), WeaponType.RocketLauncher)
+  Object.HasBeenDamagedByWeapon($init_portakabin(43@,6i), WeaponType.Grenade)
+  Object.HasBeenDamagedByWeapon($init_portakabin(43@,6i), WeaponType.RocketHs)
+  Object.HasBeenDamagedByWeapon($init_portakabin(43@,6i), WeaponType.Satchel)
+goto_if_false @DECON_17107
+write_debug "DAMAGED_BY_EXPLOSION"
+
+:DECON_17107
+if 
+  Object.HasBeenDamagedByWeapon($init_portakabin(43@,6i), WeaponType.AnyWeapon)
+goto_if_false @DECON_17147
+write_debug "DAMAGED_BY_ANY"
+
+:DECON_17147
+if 
+  Object.DoesExist($init_portakabin(43@,6i))
+goto_if_false @DECON_17336
+if or
+  Object.HasBeenDamagedByWeapon($init_portakabin(43@,6i), WeaponType.Explosion)
+  Object.HasBeenDamagedByWeapon($init_portakabin(43@,6i), WeaponType.RocketLauncher)
+  Object.HasBeenDamagedByWeapon($init_portakabin(43@,6i), WeaponType.Grenade)
+  Object.HasBeenDamagedByWeapon($init_portakabin(43@,6i), WeaponType.RocketHs)
+  Object.HasBeenDamagedByWeapon($init_portakabin(43@,6i), WeaponType.Satchel)
+goto_if_false @DECON_17336
+Object.ClearLastWeaponDamage($init_portakabin(43@,6i))
+44@ = Object.GetHealth($init_portakabin(43@,6i))
+44@ += -500
+if 
+  1 > 44@
+goto_if_false @DECON_17324
+Object.SetHealth($init_portakabin(43@,6i), 0)
+Audio.AttachMissionAudioToObject(MissionAudioSlot.Slot3, $init_portakabin(43@,6i))
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+Object.Break($init_portakabin(43@,6i), 0)
+goto @DECON_17336
+
+:DECON_17324
+Object.SetHealth($init_portakabin(43@,6i), 44@)
+
+:DECON_17336
+if 
+  Object.DoesExist($init_portakabin(43@,6i))
+goto_if_false @DECON_17535
+if 
+  not Object.HasBeenDamaged($init_portakabin(43@,6i))
+goto_if_false @DECON_17535
+if 
+  not Car.IsDead(90@)
+goto_if_false @DECON_17535
+if 
+  Char.IsInCar($scplayer, 90@)
+goto_if_false @DECON_17535
+if 
+  Car.IsTouchingObject(90@, $init_portakabin(43@,6i))
+goto_if_false @DECON_17535
+if 
+  171@ > 65000.0
+goto_if_false @DECON_17535
+Object.SetHealth($init_portakabin(43@,6i), 0)
+Audio.AttachMissionAudioToObject(MissionAudioSlot.Slot3, $init_portakabin(43@,6i))
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+Object.Break($init_portakabin(43@,6i), 0)
+if 
+  not Car.IsDead(90@)
+goto_if_false @DECON_17535
+if 
+  Char.IsInCar($scplayer, 90@)
+goto_if_false @DECON_17535
+Car.SetForwardSpeed(90@, 170@)
+
+:DECON_17535
+if 
+  Object.DoesExist($init_portakabin(43@,6i))
+goto_if_false @DECON_18176
+if 
+  not Object.HasBeenDamaged($init_portakabin(43@,6i))
+goto_if_false @DECON_18176
+159@(43@,6i) = Object.GetHealth($init_portakabin(43@,6i))
+if 
+  is_int_lvar_greater_than_int_lvar 153@(43@,6i) > 159@(43@,6i)
+goto_if_false @DECON_18160
+if 
+  159@(43@,6i) > 0
+goto_if_false @DECON_18160
+if 
+  not Car.IsDead(90@)
+goto_if_false @DECON_18014
+if 
+  Char.IsInCar($scplayer, 90@)
+goto_if_false @DECON_18014
+if 
+  Car.IsTouchingObject(90@, $init_portakabin(43@,6i))
+goto_if_false @DECON_18014
+if 
+  170@ > 5.0
+goto_if_false @DECON_17998
+if 
+  not Car.IsModel(90@, 486)
+goto_if_false @DECON_17823
+set_lvar_int_to_lvar_int 44@ = 153@(43@,6i)
+sub_int_lvar_from_int_lvar 44@ -= 159@(43@,6i)
+cset_lvar_float_to_lvar_int 46@ = integer 44@
+46@ *= 0.5
+cset_lvar_int_to_lvar_float 44@ = float 46@
+add_int_lvar_to_int_lvar 159@(43@,6i) += 44@
+Object.SetHealth($init_portakabin(43@,6i), 159@(43@,6i))
+goto @DECON_17991
+
+:DECON_17823
+set_lvar_int_to_lvar_int 44@ = 153@(43@,6i)
+sub_int_lvar_from_int_lvar 44@ -= 159@(43@,6i)
+44@ *= -30
+add_int_lvar_to_int_lvar 159@(43@,6i) += 44@
+if 
+  0 > 159@(43@,6i)
+goto_if_false @DECON_17899
+159@(43@,6i) = 0
+
+:DECON_17899
+if 
+  166@ == 0
+goto_if_false @DECON_17975
+if 
+  159@(43@,6i) > 10
+goto_if_false @DECON_17975
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @DECON_17975
+Text.PrintNow('GAR2_38', 5000, 1)
+166@ = 1
+
+:DECON_17975
+Object.SetHealth($init_portakabin(43@,6i), 159@(43@,6i))
+
+:DECON_17991
+goto @DECON_18014
+
+:DECON_17998
+Object.SetHealth($init_portakabin(43@,6i), 153@(43@,6i))
+
+:DECON_18014
+if 
+  $player_is_in_crane == 1
+goto_if_false @DECON_18069
+Object.SetHealth($init_portakabin(43@,6i), 0)
+Audio.AttachMissionAudioToObject(MissionAudioSlot.Slot3, $init_portakabin(43@,6i))
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+Object.Break($init_portakabin(43@,6i), 0)
+
+:DECON_18069
+if 
+  159@(43@,6i) == 0
+goto_if_false @DECON_18160
+Audio.AttachMissionAudioToObject(MissionAudioSlot.Slot3, $init_portakabin(43@,6i))
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+Object.Break($init_portakabin(43@,6i), 0)
+if 
+  not Car.IsDead(90@)
+goto_if_false @DECON_18160
+if 
+  Char.IsInCar($scplayer, 90@)
+goto_if_false @DECON_18160
+Car.SetForwardSpeed(90@, 170@)
+
+:DECON_18160
+set_lvar_int_to_lvar_int 153@(43@,6i) = 159@(43@,6i)
+
+:DECON_18176
+if 
+  Object.DoesExist($init_portakabin(43@,6i))
+goto_if_false @DECON_18403
+if 
+  not Object.HasBeenDamaged($init_portakabin(43@,6i))
+goto_if_false @DECON_18403
+if 
+  not Car.IsDead(90@)
+goto_if_false @DECON_18403
+if 
+  Char.IsInCar($scplayer, 90@)
+goto_if_false @DECON_18403
+if 
+  Car.IsModel(90@, 486)
+goto_if_false @DECON_18403
+if 
+  Car.IsTouchingObject(90@, $init_portakabin(43@,6i))
+goto_if_false @DECON_18403
+44@ = Object.GetHealth($init_portakabin(43@,6i))
+if 
+  10 > 44@
+goto_if_false @DECON_18403
+Object.SetHealth($init_portakabin(43@,6i), 0)
+Audio.AttachMissionAudioToObject(MissionAudioSlot.Slot3, $init_portakabin(43@,6i))
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+Object.Break($init_portakabin(43@,6i), 0)
+if 
+  not Car.IsDead(90@)
+goto_if_false @DECON_18403
+if 
+  Char.IsInCar($scplayer, 90@)
+goto_if_false @DECON_18403
+Car.SetForwardSpeed(90@, 170@)
+
+:DECON_18403
+43@ += 1
+goto @DECON_16961
+
+:DECON_18417
+43@ = 0
+
+:DECON_18424
+if 
+  6 > 43@
+goto_if_false @DECON_19160
+if 
+  152@ > 0
+goto_if_false @DECON_18996
+if 
+  Object.DoesExist($init_portakabin(43@,6i))
+goto_if_false @DECON_18996
+44@ = Object.GetHealth($init_portakabin(43@,6i))
+if 
+  995 > 44@
+goto_if_false @DECON_18996
+if 
+  44@ > 500
+goto_if_false @DECON_18704
+if 
+  134@(43@,6i) == 0
+goto_if_false @DECON_18697
+$x = Object.GetOffsetInWorldCoords($y, $z, $init_portakabin(43@,6i), 3.252, -2.1084, 0.0)
+gosub @DECON_20689
+if 
+  190@ == 0
+goto_if_false @DECON_18697
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+$heading = Object.GetHeading($init_portakabin(43@,6i))
+$heading += 180.0
+116@ = Char.Create(24, 27, $x, $y, $z)
+Char.SetHeading(116@, $heading)
+Char.SetHealth(116@, 50)
+134@(43@,6i) += 1
+43@ = 6
+
+:DECON_18697
+goto @DECON_18996
+
+:DECON_18704
+if 
+  not Object.HasBeenDamaged($init_portakabin(43@,6i))
+goto_if_false @DECON_18731
+goto @DECON_18996
+
+:DECON_18731
+if 
+  134@(43@,6i) <> 99
+goto_if_false @DECON_18996
+$x = Object.GetOffsetInWorldCoords($y, $z, $init_portakabin(43@,6i), 0.0, 0.0, 0.0)
+$heading = Object.GetHeading($init_portakabin(43@,6i))
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+$heading += 180.0
+116@ = Char.Create(24, 27, $x, $y, $z)
+Char.SetHeading(116@, $heading)
+Char.SetHealth(116@, 50)
+134@(43@,6i) = 99
+43@ = 6
+56@, 57@, 58@ = Char.GetCoordinates($scplayer)
+set_lvar_float_to_var_float 50@ = $x
+sub_float_lvar_from_float_lvar 50@ -= 56@
+set_lvar_float_to_var_float 51@ = $y
+sub_float_lvar_from_float_lvar 51@ -= 57@
+44@ = Math.RandomIntInRange(0, 2)
+if 
+  44@ <> 0
+goto_if_false @DECON_18956
+51@ *= -1.0
+
+:DECON_18956
+set_lvar_float_to_lvar_float 53@ = 51@
+set_lvar_float_to_lvar_float 54@ = 50@
+54@ *= -1.0
+Task.DiveAndGetUp(116@, 53@, 54@, 1000)
+
+:DECON_18996
+if 
+  Char.DoesExist(116@)
+goto_if_false @DECON_19139
+if 
+  not Char.IsDead(116@)
+goto_if_false @DECON_19139
+if 
+  140@ > 0
+goto_if_false @DECON_19095
+if 
+  2 > 140@
+goto_if_false @DECON_19083
+Char.GiveWeapon(116@, WeaponType.Shovel, 99999)
+goto @DECON_19095
+
+:DECON_19083
+Char.GiveWeapon(116@, WeaponType.Pistol, 99999)
+
+:DECON_19095
+Char.SetShootRate(116@, 30)
+Char.SetAccuracy(116@, 30)
+Char.SetDecisionMaker(116@, 174@)
+set_lvar_int_to_lvar_int 185@ = 116@
+gosub @DECON_19924
+172@ = 0
+
+:DECON_19139
+116@ = 0
+43@ += 1
+goto @DECON_18424
+
+:DECON_19160
+if 
+  141@ == 1
+goto_if_false @DECON_19683
+if 
+  4 >= 152@
+goto_if_false @DECON_19203
+172@ = 0
+
+:DECON_19203
+if 
+  172@ > 20000
+goto_if_false @DECON_19683
+if 
+  152@ > 4
+goto_if_false @DECON_19683
+47@ = 200.0
+44@ = -1
+43@ = 0
+
+:DECON_19264
+if 
+  6 > 43@
+goto_if_false @DECON_19420
+if 
+  Object.DoesExist($init_portakabin(43@,6i))
+goto_if_false @DECON_19406
+if 
+  not Object.HasBeenDamaged($init_portakabin(43@,6i))
+goto_if_false @DECON_19406
+$x, $y, $z = Object.GetCoordinates($init_portakabin(43@,6i))
+56@, 57@, 58@ = Char.GetCoordinates($scplayer)
+46@ = Math.GetDistanceBetweenCoords2D($x, $y, 56@, 57@)
+if 
+  is_float_lvar_greater_than_float_lvar 47@ > 46@
+goto_if_false @DECON_19406
+set_lvar_float_to_lvar_float 47@ = 46@
+set_lvar_int_to_lvar_int 44@ = 43@
+
+:DECON_19406
+43@ += 1
+goto @DECON_19264
+
+:DECON_19420
+if 
+  44@ <> -1
+goto_if_false @DECON_19683
+$x = Object.GetOffsetInWorldCoords($y, $z, $init_portakabin(44@,6i), 3.252, -2.1084, 0.0)
+gosub @DECON_20689
+if 
+  190@ == 0
+goto_if_false @DECON_19683
+$z = World.GetGroundZFor3DCoord($x, $y, $z)
+$heading = Object.GetHeading($init_portakabin(44@,6i))
+$heading += 180.0
+116@ = Char.Create(24, 27, $x, $y, $z)
+Char.SetHeading(116@, $heading)
+Char.SetHealth(116@, 50)
+if 
+  140@ > 2
+goto_if_false @DECON_19632
+if 
+  5 > 140@
+goto_if_false @DECON_19620
+Char.GiveWeapon(116@, WeaponType.Shovel, 99999)
+goto @DECON_19632
+
+:DECON_19620
+Char.GiveWeapon(116@, WeaponType.Pistol, 99999)
+
+:DECON_19632
+Char.SetShootRate(116@, 30)
+Char.SetAccuracy(116@, 30)
+Char.SetDecisionMaker(116@, 174@)
+set_lvar_int_to_lvar_int 185@ = 116@
+116@ = 0
+172@ = 0
+gosub @DECON_19924
+
+:DECON_19683
+43@ = 0
+
+:DECON_19690
+if 
+  10 > 43@
+goto_if_false @DECON_19793
+if 
+  Char.DoesExist(104@(43@,10i))
+goto_if_false @DECON_19779
+if 
+  Char.IsDead(104@(43@,10i))
+goto_if_false @DECON_19779
+Char.MarkAsNoLongerNeeded(104@(43@,10i))
+104@(43@,10i) = 0
+142@(43@,10i) = 0
+
+:DECON_19779
+43@ += 1
+goto @DECON_19690
+
+:DECON_19793
+gosub @DECON_20024
+if 
+  not Car.IsDead(90@)
+goto_if_false @DECON_19848
+170@ = Car.GetSpeed(90@)
+46@ = Car.GetMass(90@)
+set_lvar_float_to_lvar_float 171@ = 170@
+mult_float_lvar_by_float_lvar 171@ *= 46@
+
+:DECON_19848
+if 
+  Blip.DoesExist(126@)
+goto_if_false @DECON_19885
+if 
+  Car.IsDead(85@)
+goto_if_false @DECON_19885
+Blip.Remove(126@)
+
+:DECON_19885
+if 
+  Blip.DoesExist(127@)
+goto_if_false @DECON_19922
+if 
+  Car.IsDead(89@)
+goto_if_false @DECON_19922
+Blip.Remove(127@)
+
+:DECON_19922
+return 
+
+:DECON_19924
+186@ = 0
+
+:DECON_19931
+if 
+  4 > 186@
+goto_if_false @DECON_20015
+if 
+  104@(186@,10i) == 0
+goto_if_false @DECON_20001
+set_lvar_int_to_lvar_int 104@(186@,10i) = 185@
+142@(186@,10i) = 0
+186@ = 6
+
+:DECON_20001
+186@ += 1
+goto @DECON_19931
+
+:DECON_20015
+gosub @DECON_20024
+return 
+
+:DECON_20024
+152@ = 4
+187@ = 0
+
+:DECON_20038
+if 
+  4 > 187@
+goto_if_false @DECON_20097
+if 
+  Char.DoesExist(104@(187@,10i))
+goto_if_false @DECON_20083
+152@ -= 1
+
+:DECON_20083
+187@ += 1
+goto @DECON_20038
+
+:DECON_20097
+return 
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("AVAILABLE PEDS1CRANEERENCENS_PLAYEDPION =   DESTINATION) = ")
+save_newline_to_debug_file 
+188@ = 0
+
+:DECON_20240
+if 
+  10 > 188@
+goto_if_false @DECON_20548
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("MISSION PED DS1CRANEERENCENS_PLAYEDPION =   DESTINATION) = ")
+save_int_to_debug_file 188@
+Debugger.SaveStringToDebugFile(" = SION PED DS1CRANEERENCENS_PLAYEDPION =   DESTINATION) = ")
+save_int_to_debug_file 104@(188@,10i)
+188@ += 1
+goto @DECON_20240
+
+:DECON_20548
+save_newline_to_debug_file 
+Debugger.SaveStringToDebugFile("AVAILABLE_MISSION_PEDS = ENS_PLAYEDPION =   DESTINATION) = ")
+save_int_to_debug_file 152@
+save_newline_to_debug_file 
+return 
+
+:DECON_20689
+190@ = 0
+189@ = 0
+
+:DECON_20703
+if 
+  10 > 189@
+goto_if_false @DECON_20808
+if 
+  not Char.IsDead(104@(189@,10i))
+goto_if_false @DECON_20794
+if 
+  Char.LocateOnFoot3D(104@(189@,10i), 0, $x, $y, $z, 1.5, 1.5, 3.0)
+goto_if_false @DECON_20794
+190@ = 1
+
+:DECON_20794
+189@ += 1
+goto @DECON_20703
+
+:DECON_20808
+return 
+
+:DECON_20810
+34@ += 1
+35@ = 0
+63@ = 0
+64@ = 0
+65@ = 0
+66@ = 0
+TIMERA = 0
+TIMERB = 0
+return 
+
+:DECON_20868
+if 
+  Player.IsPlaying($player1)
+goto_if_false @DECON_20962
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -2049.199, 250.3882, 32.9084, 2.454, 5.042, 2.3)
+goto_if_false @DECON_20962
+Char.SetCoordinates($scplayer, -2045.189, 241.7544, 34.9462)
+Char.SetHeading($scplayer, 186.3532)
+
+:DECON_20962
+World.SwapNearestBuildingModel(-2049.171, 250.3193, 34.477, 20.0, #HUBHOLE2_SFSE, #HUBHOLE1_SFSE)
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:DECON_21008
+if 
+  Object.DoesExist(81@)
+goto_if_false @DECON_21029
+Object.Delete(81@)
+
+:DECON_21029
+World.SwapNearestBuildingModel(-2049.171, 250.3193, 34.477, 20.0, #HUBHOLE2_SFSE, #HUBHOLE4_SFSE)
+Stat.RegisterMissionPassed('GAR_2')
+start_new_script @SYND 
+Blip.Remove($garage_contact_blip)
+$garage_contact_blip = Blip.AddSpriteForContactPoint($garage_blip_icon, $garageX, $garageY, $garageZ)
+Stat.PlayerMadeProgress(1)
+Stat.SetInt(StatId.PassedGarage2, 1)
+Text.PrintBig('M_PASSD', 5000, TextStyle.Middle)
+Audio.PlayMissionPassedTune(1)
+Player.ClearWantedLevel($player1)
+$flag_garage_mission_counter += 1
+return 
+
+:DECON_21143
+start_new_script @CLEANAU 
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+$do_not_update_camera_crane1 = 0
+Streaming.MarkModelAsNoLongerNeeded(#PORTALOO)
+Streaming.MarkModelAsNoLongerNeeded(#PORTAKABIN)
+Streaming.MarkModelAsNoLongerNeeded(#BARREL4)
+Streaming.MarkModelAsNoLongerNeeded(486)
+Streaming.MarkModelAsNoLongerNeeded(524)
+Streaming.MarkModelAsNoLongerNeeded(406)
+Streaming.MarkModelAsNoLongerNeeded(422)
+Streaming.MarkModelAsNoLongerNeeded(16)
+Streaming.MarkModelAsNoLongerNeeded(27)
+Streaming.MarkModelAsNoLongerNeeded(337)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Blip.Remove(118@)
+Blip.Remove(119@)
+Blip.Remove(120@)
+Blip.Remove(121@)
+Blip.Remove(122@)
+Blip.Remove(123@)
+Blip.Remove(124@)
+Blip.Remove(125@)
+Blip.Remove(126@)
+Blip.Remove(127@)
+Hud.ClearTimer($portacabin_timer)
+Game.SetWantedMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+$timer_mobile_start = Clock.GetGameTimer()
+$onmission = 0
+Mission.Finish
+return 
+

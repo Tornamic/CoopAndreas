@@ -1,0 +1,1295 @@
+:BARB_624
+Streaming.RequestModel($shopkeeper_model_shops)
+Audio.LoadMissionAudio(4400, 4)
+Streaming.LoadAllModelsNow
+set_deatharrest_state 0
+script_name 'BARB'
+
+:BARB_653
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BARB_7278
+if 
+  not is_var_text_label_empty s$shop_name
+goto_if_false @BARB_7264
+if 
+  $flag_barber > 0
+goto_if_false @BARB_751
+if 
+  Game.HasLanguageChanged
+goto_if_false @BARB_751
+Text.ClearHelp
+Menu.Delete($cost_menu_shops)
+Menu.Delete($main_menu_shops)
+$cost_menu_drawn_shops = 0
+$main_menu_drawn_shops = 0
+$current_Language = Game.GetCurrentLanguage()
+
+:BARB_751
+if 
+  $flag_barber == 0
+goto_if_false @BARB_1015
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'BARBERS'
+goto_if_false @BARB_851
+$barber_shop_offsetX = 0.0
+$barber_shop_offsetY = 0.0
+$barber_shop_offsetZ = 0.0
+set_var_text_label s$stored_barbers_shop = s$shop_name
+$num_of_hairstyles = Shopping.GetNumberOfItems()
+$control_flag_barbers = 0
+$flag_barber = 1
+
+:BARB_851
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'BARBER2'
+goto_if_false @BARB_933
+$barber_shop_offsetX = 6.987
+$barber_shop_offsetY = -61.401
+$barber_shop_offsetZ = 0.0
+set_var_text_label s$stored_barbers_shop = s$shop_name
+$num_of_hairstyles = Shopping.GetNumberOfItems()
+$control_flag_barbers = 0
+$flag_barber = 1
+
+:BARB_933
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'BARBER3'
+goto_if_false @BARB_1015
+$barber_shop_offsetX = 0.371
+$barber_shop_offsetY = -31.421
+$barber_shop_offsetZ = 0.0
+set_var_text_label s$stored_barbers_shop = s$shop_name
+$num_of_hairstyles = Shopping.GetNumberOfItems()
+$control_flag_barbers = 0
+$flag_barber = 1
+
+:BARB_1015
+if 
+  $flag_barber == 1
+goto_if_false @BARB_2030
+Text.UseCommands(True)
+Stat.ShowUpdateStats(False)
+Player.StoreClothesState
+$keep_offX = 414.3
+add_float_var_to_float_var $keep_offX += $barber_shop_offsetX
+$keep_offY = -19.9
+add_float_var_to_float_var $keep_offY += $barber_shop_offsetY
+$keep_offZ = 1000.806
+add_float_var_to_float_var $keep_offZ += $barber_shop_offsetZ
+$player_heading_barbers = 90.0
+$barberX = 414.3
+$barberX -= 0.027
+add_float_var_to_float_var $barberX += $barber_shop_offsetX
+$barberY = -19.9
+$barberY += 1.898
+add_float_var_to_float_var $barberY += $barber_shop_offsetY
+$barberZ = 1000.86
+$barber_heading = 180.0
+$getin_chaircam_offX = 412.0009
+add_float_var_to_float_var $getin_chaircam_offX += $barber_shop_offsetX
+$getin_chaircam_offY = -19.8018
+add_float_var_to_float_var $getin_chaircam_offY += $barber_shop_offsetY
+$getin_chaircam_offZ = 1001.765
+add_float_var_to_float_var $getin_chaircam_offZ += $barber_shop_offsetZ
+$getin_chaircam_lookat_offX = 412.8502
+add_float_var_to_float_var $getin_chaircam_lookat_offX += $barber_shop_offsetX
+$getin_chaircam_lookat_offY = -19.2749
+add_float_var_to_float_var $getin_chaircam_lookat_offY += $barber_shop_offsetY
+$getin_chaircam_lookat_offZ = 1001.797
+add_float_var_to_float_var $getin_chaircam_lookat_offZ += $barber_shop_offsetZ
+$chaircam_offX = 414.9329
+add_float_var_to_float_var $chaircam_offX += $barber_shop_offsetX
+$chaircam_offY = -18.4475
+add_float_var_to_float_var $chaircam_offY += $barber_shop_offsetY
+$chaircam_offZ = 1002.286
+add_float_var_to_float_var $chaircam_offZ += $barber_shop_offsetZ
+$chaircam_lookat_offX = 414.0564
+add_float_var_to_float_var $chaircam_lookat_offX += $barber_shop_offsetX
+$chaircam_lookat_offY = -18.7965
+add_float_var_to_float_var $chaircam_lookat_offY += $barber_shop_offsetY
+$chaircam_lookat_offZ = 1001.955
+add_float_var_to_float_var $chaircam_lookat_offZ += $barber_shop_offsetZ
+$hairstyle_cam_offX = 412.649
+add_float_var_to_float_var $hairstyle_cam_offX += $barber_shop_offsetX
+$hairstyle_cam_offY = -19.7078
+add_float_var_to_float_var $hairstyle_cam_offY += $barber_shop_offsetY
+$hairstyle_cam_offZ = 1001.992
+add_float_var_to_float_var $hairstyle_cam_offZ += $barber_shop_offsetZ
+$hairstyle_cam_lookat_offX = 413.3581
+add_float_var_to_float_var $hairstyle_cam_lookat_offX += $barber_shop_offsetX
+$hairstyle_cam_lookat_offY = -19.0046
+add_float_var_to_float_var $hairstyle_cam_lookat_offY += $barber_shop_offsetY
+$hairstyle_cam_lookat_offZ = 1002.043
+add_float_var_to_float_var $hairstyle_cam_lookat_offZ += $barber_shop_offsetZ
+$getout_chair_cam_offX = 414.5509
+add_float_var_to_float_var $getout_chair_cam_offX += $barber_shop_offsetX
+$getout_chair_cam_offY = -20.8773
+add_float_var_to_float_var $getout_chair_cam_offY += $barber_shop_offsetY
+$getout_chair_cam_offZ = 1001.405
+add_float_var_to_float_var $getout_chair_cam_offZ += $barber_shop_offsetZ
+$getout_chair_cam_lookat_offX = 414.0572
+add_float_var_to_float_var $getout_chair_cam_lookat_offX += $barber_shop_offsetX
+$getout_chair_cam_lookat_offY = -20.025
+add_float_var_to_float_var $getout_chair_cam_lookat_offY += $barber_shop_offsetY
+$getout_chair_cam_lookat_offZ = 1001.578
+add_float_var_to_float_var $getout_chair_cam_lookat_offZ += $barber_shop_offsetZ
+$leave_barb_cam_offX = 412.5159
+add_float_var_to_float_var $leave_barb_cam_offX += $barber_shop_offsetX
+$leave_barb_cam_offY = -21.7447
+add_float_var_to_float_var $leave_barb_cam_offY += $barber_shop_offsetY
+$leave_barb_cam_offZ = 1001.946
+add_float_var_to_float_var $leave_barb_cam_offZ += $barber_shop_offsetZ
+$leave_barb_cam_lookat_offX = 412.9438
+add_float_var_to_float_var $leave_barb_cam_lookat_offX += $barber_shop_offsetX
+$leave_barb_cam_lookat_offY = -20.8411
+add_float_var_to_float_var $leave_barb_cam_lookat_offY += $barber_shop_offsetY
+$leave_barb_cam_lookat_offZ = 1001.963
+add_float_var_to_float_var $leave_barb_cam_lookat_offZ += $barber_shop_offsetZ
+$walk_offX_barbers = 411.957
+add_float_var_to_float_var $walk_offX_barbers += $barber_shop_offsetX
+$walk_offY_barbers = -19.779
+add_float_var_to_float_var $walk_offY_barbers += $barber_shop_offsetY
+$walk_offZ_barbers = 1000.836
+add_float_var_to_float_var $walk_offZ_barbers += $barber_shop_offsetZ
+$walk2_offX_barbers = 411.795
+add_float_var_to_float_var $walk2_offX_barbers += $barber_shop_offsetX
+$walk2_offY_barbers = -23.3
+add_float_var_to_float_var $walk2_offY_barbers += $barber_shop_offsetY
+$walk2_offZ_barbers = 1000.836
+add_float_var_to_float_var $walk2_offZ_barbers += $barber_shop_offsetZ
+
+$shop_keep_barbers = Coop.GetPedInAreaWithModel($barberX, $barberY, $barberZ, 4.0, 4.0, 40.0, 156, 177, 176) // barber models
+
+if $shop_keep_barbers == -1
+then
+    $shop_keep_barbers = Char.Create(4, $shopkeeper_model_shops, $barberX, $barberY, $barberZ)
+else
+    Coop.ClaimPedOnRelease($shop_keep_barbers)
+end
+
+Char.SetHeading($shop_keep_barbers, $barber_heading)
+Char.SetDecisionMaker($shop_keep_barbers, 65542)
+Char.SetOnlyDamagedByPlayer($shop_keep_barbers, True)
+
+$barber_movein_barbers = Sequence.Open()
+    Task.PlayAnimNonInterruptable(-1, "BRB_IN", "HAIRCUTS", 4.0, False, False, False, False, -1)
+    Task.PlayAnimNonInterruptable(-1, "BRB_LOOP", "HAIRCUTS", 4.0, True, False, False, False, -1)
+Sequence.Close($barber_movein_barbers)
+
+$player_walk_barbers = Sequence.Open()
+    Task.GoStraightToCoord(-1, $walk_offX_barbers, $walk_offY_barbers, $walk_offZ_barbers, MoveState.Walk, 8000)
+    //Task.GoStraightToCoord(-1, $walk2_offX_barbers, $walk2_offY_barbers, $walk2_offZ_barbers, MoveState.Walk, 8000)
+    //Task.AchieveHeading(-1, 180.0)
+Sequence.Close($player_walk_barbers)
+
+$control_flag_barbers = 0
+$flag_barber = 2
+
+:BARB_2030
+if 
+  $flag_barber == 2
+goto_if_false @BARB_2439
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_barbers_shop
+goto_if_false @BARB_2079
+gosub @BARB_7498
+
+:BARB_2079
+if 
+  not Char.IsDead($shop_keep_barbers)
+goto_if_false @BARB_2394
+if 
+  $flag_attacked_barber == 0
+goto_if_false @BARB_2342
+if or
+  Char.IsShooting($scplayer)
+  Player.IsTargetingChar($player1, $shop_keep_barbers)
+  Char.HasBeenDamagedByWeapon($shop_keep_barbers, WeaponType.AnyWeapon)
+goto_if_false @BARB_2181
+Char.ClearLookAt($shop_keep_barbers)
+$sample_name_shops = Char.SetSayContext($shop_keep_barbers, 327)
+Task.HandsUp($shop_keep_barbers, -2)
+$flag_attacked_barber = 1
+goto @BARB_2335
+
+:BARB_2181
+if 
+  $barber_look_shops == 0
+goto_if_false @BARB_2250
+$visible_area_shops = Streaming.GetAreaVisible()
+if 
+  $visible_area_shops <> 0
+goto_if_false @BARB_2250
+Task.LookAtChar($shop_keep_barbers, $scplayer, -2)
+$sample_name_shops = Char.SetSayContext($shop_keep_barbers, 330)
+$barber_look_shops = 1
+
+:BARB_2250
+$blob_flag_shop = 1
+if 
+  Char.LocateStoppedOnFoot3D($scplayer, $keep_offX, $keep_offY, $keep_offZ, 1.0, 1.0, 4.0, $blob_flag_shop)
+goto_if_false @BARB_2335
+if 
+  Player.CanStartMission($player1)
+goto_if_false @BARB_2335
+Char.ClearLookAt($shop_keep_barbers)
+$control_flag_barbers = 0
+$flag_barber = 3
+
+:BARB_2335
+goto @BARB_2387
+
+:BARB_2342
+gosub @BARB_7292
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_barbers_shop
+goto_if_false @BARB_2380
+gosub @BARB_7498
+
+:BARB_2380
+goto @BARB_653
+
+:BARB_2387
+goto @BARB_2439
+
+:BARB_2394
+gosub @BARB_7292
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_barbers_shop
+goto_if_false @BARB_2432
+gosub @BARB_7498
+
+:BARB_2432
+goto @BARB_653
+
+:BARB_2439
+if 
+  $flag_barber == 3
+goto_if_false @BARB_2537
+Player.SetControl($player1, False)
+Game.SetMinigameInProgress(True)
+Hud.DisplayRadar(False)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+Char.ClearTasksImmediately($scplayer)
+World.ClearArea(1, $player_x, $player_y, $player_z, 1.0)
+TIMERA = 0
+$control_flag_barbers = 0
+$flag_barber = 4
+
+:BARB_2537
+if 
+  $flag_barber == 4
+goto_if_false @BARB_2925
+if 
+  Char.IsDead($shop_keep_barbers)
+goto_if_false @BARB_2616
+gosub @BARB_7292
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_barbers_shop
+goto_if_false @BARB_2609
+gosub @BARB_7498
+
+:BARB_2609
+goto @BARB_653
+
+:BARB_2616
+if 
+  TIMERA >= 300
+goto_if_false @BARB_2925
+$temp_shopX, $temp_shopY, $temp_shopZ = Char.GetCoordinates($shop_keep_barbers)
+if or
+  not is_float_var_equal_to_float_var $temp_shopX == $barberX
+  not is_float_var_equal_to_float_var $temp_shopY == $barberY
+  not is_float_var_equal_to_float_var $temp_shopZ == $barberZ
+goto_if_false @BARB_2706
+Char.SetCoordinates($shop_keep_barbers, $barberX, $barberY, $barberZ)
+Char.SetHeading($shop_keep_barbers, $barber_heading)
+
+:BARB_2706
+Char.SetCoordinatesDontWarpGang($scplayer, $keep_offX, $keep_offY, $keep_offZ)
+Char.SetHeading($scplayer, $player_heading_barbers)
+Player.StoreClothesState
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, BodyPart.Head)
+Camera.SetFixedPosition($getin_chaircam_offX, $getin_chaircam_offY, $getin_chaircam_offZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($getin_chaircam_lookat_offX, $getin_chaircam_lookat_offY, $getin_chaircam_lookat_offZ, SwitchType.JumpCut)
+$return_animation_time_barbers = 0.0
+Task.PlayAnimNonInterruptable($scplayer, "BRB_SIT_IN", "HAIRCUTS", 1000.0, False, False, False, True, -1)
+$players_money = Player.StoreScore($player1)
+if 
+  $flag_changed_hair_intro2 == 0
+goto_if_false @BARB_2903
+if 
+  $flag_player_on_menace_mission == 1
+goto_if_false @BARB_2903
+if 
+  50 > $players_money
+goto_if_false @BARB_2903
+Player.AddScore($player1, 52)
+
+:BARB_2903
+Char.PerformSequence($shop_keep_barbers, $barber_movein_barbers)
+$control_flag_barbers = 0
+$flag_barber = 5
+
+:BARB_2925
+if 
+  $flag_barber == 5
+goto_if_false @BARB_3194
+if 
+  Char.IsDead($shop_keep_barbers)
+goto_if_false @BARB_3004
+gosub @BARB_7292
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_barbers_shop
+goto_if_false @BARB_2997
+gosub @BARB_7498
+
+:BARB_2997
+goto @BARB_653
+
+:BARB_3004
+if 
+  Char.IsPlayingAnim($scplayer, "BRB_SIT_IN")
+goto_if_false @BARB_3052
+$return_animation_time_barbers = Char.GetAnimCurrentTime($scplayer, "BRB_SIT_IN")
+
+:BARB_3052
+if 
+  $return_animation_time_barbers == 1.0
+goto_if_false @BARB_3194
+Task.PlayAnimNonInterruptable($scplayer, "BRB_SIT_LOOP", "HAIRCUTS", 1000.0, True, False, False, True, -1)
+Camera.SetFixedPosition($chaircam_offX, $chaircam_offY, $chaircam_offZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($chaircam_lookat_offX, $chaircam_lookat_offY, $chaircam_lookat_offZ, SwitchType.JumpCut)
+$sample_name_shops = Char.SetSayContext($shop_keep_barbers, 333)
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, BodyPart.Head)
+$control_flag_barbers = 0
+$flag_barber = 6
+
+:BARB_3194
+if 
+  $flag_barber == 6
+goto_if_false @BARB_5429
+if 
+  Char.IsDead($shop_keep_barbers)
+goto_if_false @BARB_3273
+gosub @BARB_7292
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_barbers_shop
+goto_if_false @BARB_3266
+gosub @BARB_7498
+
+:BARB_3266
+goto @BARB_653
+
+:BARB_3273
+if 
+  1 > $control_flag_barbers
+goto_if_false @BARB_3323
+if 
+  $main_menu_drawn_shops == 0
+goto_if_false @BARB_3323
+gosub @BARB_8401
+gosub @BARB_8689
+
+:BARB_3323
+if 
+  $control_flag_barbers == 0
+goto_if_false @BARB_3389
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BARB_3365
+$control_flag_barbers = 10
+
+:BARB_3365
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BARB_3389
+$control_flag_barbers = 1
+
+:BARB_3389
+if 
+  $control_flag_barbers == 1
+goto_if_false @BARB_3559
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BARB_3559
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @BARB_3456
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:BARB_3456
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @BARB_3488
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:BARB_3488
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @BARB_3520
+Text.ClearHelp
+Menu.Delete($main_menu_shops)
+$main_menu_drawn_shops = 0
+
+:BARB_3520
+if 
+  $flag_viewed_hair == 1
+goto_if_false @BARB_3552
+$control_flag_barbers = 2
+goto @BARB_3559
+
+:BARB_3552
+$control_flag_barbers = 5
+
+:BARB_3559
+if 
+  $control_flag_barbers == 2
+goto_if_false @BARB_3640
+Task.PlayAnimNonInterruptable($shop_keep_barbers, "BRB_CUT_IN", "HAIRCUTS", 4.0, False, False, False, True, -1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot4)
+$return_animation_time_barbers = 0.0
+$control_flag_barbers = 3
+
+:BARB_3640
+if 
+  $control_flag_barbers == 3
+goto_if_false @BARB_3900
+if 
+  Char.IsPlayingAnim($shop_keep_barbers, "BRB_CUT_IN")
+goto_if_false @BARB_3706
+$return_animation_time_barbers = Char.GetAnimCurrentTime($shop_keep_barbers, "BRB_CUT_IN")
+
+:BARB_3706
+if 
+  $return_animation_time_barbers == 1.0
+goto_if_false @BARB_3800
+if 
+  $cut_hair_flag_barber == 0
+goto_if_false @BARB_3800
+Task.PlayAnimNonInterruptable($shop_keep_barbers, "BRB_CUT", "HAIRCUTS", 4.0, False, False, False, False, -1)
+Player.RestoreClothesState
+Player.BuildModel($player1)
+Player.StoreClothesState
+$cut_hair_flag_barber = 1
+
+:BARB_3800
+if 
+  $cut_hair_flag_barber == 1
+goto_if_false @BARB_3900
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot4)
+goto_if_false @BARB_3900
+Task.PlayAnimNonInterruptable($shop_keep_barbers, "BRB_CUT_OUT", "HAIRCUTS", 4.0, False, False, False, True, -1)
+$return_animation_time_barbers = 0.0
+$control_flag_barbers = 4
+$cut_hair_flag_barber = 0
+
+:BARB_3900
+if 
+  $control_flag_barbers == 4
+goto_if_false @BARB_3996
+if 
+  Char.IsPlayingAnim($shop_keep_barbers, "BRB_CUT_OUT")
+goto_if_false @BARB_3968
+$return_animation_time_barbers = Char.GetAnimCurrentTime($shop_keep_barbers, "BRB_CUT_OUT")
+
+:BARB_3968
+if 
+  $return_animation_time_barbers == 1.0
+goto_if_false @BARB_3996
+$control_flag_barbers = 5
+
+:BARB_3996
+if 
+  $control_flag_barbers == 5
+goto_if_false @BARB_4162
+Task.PlayAnimNonInterruptable($scplayer, "BRB_SIT_OUT", "HAIRCUTS", 1000.0, False, False, False, False, -1)
+$return_animation_time_barbers = 0.0
+Task.PlayAnimNonInterruptable($shop_keep_barbers, "BRB_OUT", "HAIRCUTS", 1000.0, False, False, False, True, -1)
+Task.LookAtChar($shop_keep_barbers, $scplayer, -2)
+Camera.SetFixedPosition($getout_chair_cam_offX, $getout_chair_cam_offY, $getout_chair_cam_offZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($getout_chair_cam_lookat_offX, $getout_chair_cam_lookat_offY, $getout_chair_cam_lookat_offZ, SwitchType.JumpCut)
+$control_flag_barbers = 6
+
+:BARB_4162
+if 
+  $control_flag_barbers == 6
+goto_if_false @BARB_4323
+if 
+  Char.IsPlayingAnim($scplayer, "BRB_SIT_OUT")
+goto_if_false @BARB_4230
+$return_animation_time_barbers = Char.GetAnimCurrentTime($scplayer, "BRB_SIT_OUT")
+
+:BARB_4230
+if 
+  $return_animation_time_barbers >= 0.8
+goto_if_false @BARB_4323
+Char.PerformSequence($scplayer, $player_walk_barbers)
+$sample_name_shops = Char.SetSayContext($shop_keep_barbers, 331)
+Camera.SetFixedPosition($leave_barb_cam_offX, $leave_barb_cam_offY, $leave_barb_cam_offZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($leave_barb_cam_lookat_offX, $leave_barb_cam_lookat_offY, $leave_barb_cam_lookat_offZ, SwitchType.JumpCut)
+TIMERA = 0
+$control_flag_barbers = 7
+
+:BARB_4323
+if 
+  $control_flag_barbers == 7
+goto_if_false @BARB_4463
+if 
+  $flag_restored_camera_barbers == 0
+goto_if_false @BARB_4389
+if 
+  TIMERA >= 1500
+goto_if_false @BARB_4389
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+$flag_restored_camera_barbers = 1
+
+:BARB_4389
+if 
+  $flag_barber > 2
+goto_if_false @BARB_4409
+Text.ClearHelp
+
+:BARB_4409
+$player_task_progress_barber = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  not is_int_var_equal_to_constant $player_task_progress_barber == 7
+goto_if_false @BARB_4456
+$player_task_progress_barber = Char.GetScriptTaskStatus($scplayer, 1560)
+goto @BARB_4463
+
+:BARB_4456
+$control_flag_barbers = 8
+
+:BARB_4463
+if 
+  $control_flag_barbers == 8
+goto_if_false @BARB_4529
+Char.ClearLookAt($shop_keep_barbers)
+Char.SetHeading($scplayer, 180.0)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Game.SetMinigameInProgress(False)
+Hud.DisplayRadar(True)
+$flag_restored_camera_barbers = 0
+$control_flag_barbers = 9
+
+:BARB_4529
+if 
+  $control_flag_barbers == 9
+goto_if_false @BARB_4719
+if 
+  not Char.LocateOnFoot3D($scplayer, 1, $keep_offX, $keep_offY, $keep_offZ, 1.0, 1.0, 4.0)
+goto_if_false @BARB_4645
+$unk9728 = 0
+$unk9747 = 0
+$flag_viewed_hair = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$flag_restored_camera_barbers = 0
+$control_flag_barbers = 0
+$flag_barber = 2
+
+:BARB_4645
+if 
+  $flag_attacked_barber == 0
+goto_if_false @BARB_4719
+if or
+  Char.IsShooting($scplayer)
+  Player.IsTargetingChar($player1, $shop_keep_barbers)
+  Char.HasBeenDamagedByWeapon($shop_keep_barbers, WeaponType.AnyWeapon)
+goto_if_false @BARB_4719
+$sample_name_shops = Char.SetSayContext($shop_keep_barbers, 327)
+Task.HandsUp($shop_keep_barbers, -2)
+$flag_attacked_barber = 1
+
+:BARB_4719
+if 
+  $control_flag_barbers == 10
+goto_if_false @BARB_5013
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BARB_5013
+$haircut_picked_barbers = Menu.GetItemAccepted($main_menu_shops)
+if 
+  0 > $haircut_picked_barbers
+goto_if_false @BARB_4787
+$haircut_picked_barbers = 0
+
+:BARB_4787
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @BARB_4819
+Text.ClearHelp
+Menu.Delete($main_menu_shops)
+$main_menu_drawn_shops = 0
+
+:BARB_4819
+$model_index_barbers = Shopping.GetItem($haircut_picked_barbers)
+s$hairstyle_name = Shopping.GetNameOfItem($model_index_barbers)
+$hair_price = Shopping.GetPriceOfItem($model_index_barbers)
+$modelid_barber = Shopping.GetExtraInfo($model_index_barbers, 0)
+$component_barber = Shopping.GetExtraInfo($model_index_barbers, 1)
+set_var_int_to_var_int $shop_item_price = $hair_price
+set_var_text_label s$shop_item_label = s$hairstyle_name
+Camera.SetFixedPosition($chaircam_offX, $chaircam_offY, $chaircam_offZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($chaircam_lookat_offX, $chaircam_lookat_offY, $chaircam_lookat_offZ, SwitchType.JumpCut)
+Task.PlayAnimNonInterruptable($shop_keep_barbers, "BRB_CUT_IN", "HAIRCUTS", 1000.0, False, False, False, True, -1)
+$player_item_texture_audio_shops, $player_item_model_audio_shops = Player.GetClothesItem($player1, BodyPart.Head)
+if 
+  not is_int_var_equal_to_int_var $player_item_texture_audio_shops == $model_index_barbers
+goto_if_false @BARB_4996
+Audio.PlayMissionAudio(MissionAudioSlot.Slot4)
+
+:BARB_4996
+$return_animation_time_barbers = 0.0
+$control_flag_barbers = 11
+
+:BARB_5013
+if 
+  $control_flag_barbers == 11
+goto_if_false @BARB_5183
+if 
+  Char.IsPlayingAnim($shop_keep_barbers, "BRB_CUT_IN")
+goto_if_false @BARB_5079
+$return_animation_time_barbers = Char.GetAnimCurrentTime($shop_keep_barbers, "BRB_CUT_IN")
+
+:BARB_5079
+if 
+  $return_animation_time_barbers == 1.0
+goto_if_false @BARB_5183
+Task.PlayAnimNonInterruptable($shop_keep_barbers, "BRB_CUT", "HAIRCUTS", 1000.0, False, False, False, True, -1)
+Player.GiveClothes($player1, 0, 0, BodyPart.Hat)
+Player.GiveClothes($player1, $model_index_barbers, $modelid_barber, $component_barber)
+Player.BuildModel($player1)
+$flag_viewed_hair = 1
+$control_flag_barbers = 12
+
+:BARB_5183
+if 
+  $control_flag_barbers == 12
+goto_if_false @BARB_5276
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot4)
+goto_if_false @BARB_5276
+Task.PlayAnimNonInterruptable($shop_keep_barbers, "BRB_CUT_OUT", "HAIRCUTS", 1000.0, False, False, False, True, -1)
+$return_animation_time_barbers = 0.0
+$control_flag_barbers = 13
+
+:BARB_5276
+if 
+  $control_flag_barbers == 13
+goto_if_false @BARB_5429
+if 
+  Char.IsPlayingAnim($shop_keep_barbers, "BRB_CUT_OUT")
+goto_if_false @BARB_5344
+$return_animation_time_barbers = Char.GetAnimCurrentTime($shop_keep_barbers, "BRB_CUT_OUT")
+
+:BARB_5344
+if 
+  $return_animation_time_barbers == 1.0
+goto_if_false @BARB_5429
+Task.PlayAnimNonInterruptable($shop_keep_barbers, "BRB_LOOP", "HAIRCUTS", 1000.0, True, False, False, False, -1)
+$return_animation_time_barbers = 0.0
+$control_flag_barbers = 0
+$flag_barber = 7
+
+:BARB_5429
+if 
+  $flag_barber == 7
+goto_if_false @BARB_7257
+if 
+  Char.IsDead($shop_keep_barbers)
+goto_if_false @BARB_5508
+gosub @BARB_7292
+s$shop_name = Shopping.GetLoaded()
+if 
+  not is_var_text_label_equal_to_text_label s$shop_name == s$stored_barbers_shop
+goto_if_false @BARB_5501
+gosub @BARB_7498
+
+:BARB_5501
+goto @BARB_653
+
+:BARB_5508
+if 
+  $cost_menu_drawn_shops == 0
+goto_if_false @BARB_5551
+if 
+  1 > $control_flag_barbers
+goto_if_false @BARB_5551
+gosub @BARB_7760
+
+:BARB_5551
+if 
+  $control_flag_barbers == 0
+goto_if_false @BARB_5675
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BARB_5629
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('BARBNO')
+$flag_no_money_shops = 0
+$flag_bought_item_already_shops = 0
+$control_flag_barbers = 2
+
+:BARB_5629
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BARB_5675
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('BARBNO')
+$control_flag_barbers = 1
+
+:BARB_5675
+if 
+  $control_flag_barbers == 1
+goto_if_false @BARB_5788
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BARB_5788
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @BARB_5742
+Text.ClearHelp
+Menu.Delete($cost_menu_shops)
+$cost_menu_drawn_shops = 0
+
+:BARB_5742
+if 
+  $main_menu_drawn_shops == 0
+goto_if_false @BARB_5774
+gosub @BARB_8401
+gosub @BARB_8689
+
+:BARB_5774
+$control_flag_barbers = 0
+$flag_barber = 6
+
+:BARB_5788
+if 
+  $control_flag_barbers == 2
+goto_if_false @BARB_6912
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @BARB_6912
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$players_money = Player.StoreScore($player1)
+if 
+  is_int_var_greater_or_equal_to_int_var $players_money >= $hair_price
+goto_if_false @BARB_6839
+if 
+  not is_int_var_equal_to_int_var $player_item_texture_shops == $model_index_barbers
+goto_if_false @BARB_6759
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @BARB_5915
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:BARB_5915
+$sample_name_shops = Char.SetSayContext($shop_keep_barbers, 323)
+Shopping.BuyItem($model_index_barbers)
+$unk9747 = 1
+$flag_viewed_hair = 0
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1054)
+Player.StoreClothesState
+$player_item_texture_shops, $player_item_model_shops = Player.GetClothesItem($player1, BodyPart.Head)
+Camera.SetFixedPosition($hairstyle_cam_offX, $hairstyle_cam_offY, $hairstyle_cam_offZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($hairstyle_cam_lookat_offX, $hairstyle_cam_lookat_offY, $hairstyle_cam_lookat_offZ, SwitchType.JumpCut)
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'BARBERS'
+goto_if_false @BARB_6284
+if or
+  is_var_text_label_equal_to_text_label s$hairstyle_name == 'TASH'
+  is_var_text_label_equal_to_text_label s$hairstyle_name == 'GOATEE'
+  is_var_text_label_equal_to_text_label s$hairstyle_name == 'BEARD'
+  is_var_text_label_equal_to_text_label s$hairstyle_name == 'AFROT'
+  is_var_text_label_equal_to_text_label s$hairstyle_name == 'AFROB'
+  is_var_text_label_equal_to_text_label s$hairstyle_name == 'AFROGOT'
+goto_if_false @BARB_6159
+set_var_text_label16 v$name_of_anim_barbers = "BRB_BEARD_01"
+goto @BARB_6284
+
+:BARB_6159
+if 
+  $random_number_barbers > 1
+goto_if_false @BARB_6184
+$random_number_barbers = 0
+
+:BARB_6184
+if 
+  0 > $random_number_barbers
+goto_if_false @BARB_6209
+$random_number_barbers = 0
+
+:BARB_6209
+if 
+  $random_number_barbers == 0
+goto_if_false @BARB_6259
+set_var_text_label16 v$name_of_anim_barbers = "BRB_HAIR_01"
+$random_number_barbers += 1
+goto @BARB_6284
+
+:BARB_6259
+set_var_text_label16 v$name_of_anim_barbers = "BRB_HAIR_02"
+$random_number_barbers -= 1
+
+:BARB_6284
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'BARBER2'
+goto_if_false @BARB_6434
+if 
+  $random_number_barbers > 1
+goto_if_false @BARB_6334
+$random_number_barbers = 0
+
+:BARB_6334
+if 
+  0 > $random_number_barbers
+goto_if_false @BARB_6359
+$random_number_barbers = 0
+
+:BARB_6359
+if 
+  $random_number_barbers == 0
+goto_if_false @BARB_6409
+set_var_text_label16 v$name_of_anim_barbers = "BRB_HAIR_01"
+$random_number_barbers += 1
+goto @BARB_6434
+
+:BARB_6409
+set_var_text_label16 v$name_of_anim_barbers = "BRB_HAIR_02"
+$random_number_barbers -= 1
+
+:BARB_6434
+if 
+  is_var_text_label_equal_to_text_label s$shop_name == 'BARBER3'
+goto_if_false @BARB_6663
+if or
+  is_var_text_label_equal_to_text_label s$hairstyle_name == 'BLADBEA'
+  is_var_text_label_equal_to_text_label s$hairstyle_name == 'BALDTSH'
+  is_var_text_label_equal_to_text_label s$hairstyle_name == 'BALDGOT'
+goto_if_false @BARB_6538
+set_var_text_label16 v$name_of_anim_barbers = "BRB_BEARD_01"
+goto @BARB_6663
+
+:BARB_6538
+if 
+  $random_number_barbers > 1
+goto_if_false @BARB_6563
+$random_number_barbers = 0
+
+:BARB_6563
+if 
+  0 > $random_number_barbers
+goto_if_false @BARB_6588
+$random_number_barbers = 0
+
+:BARB_6588
+if 
+  $random_number_barbers == 0
+goto_if_false @BARB_6638
+set_var_text_label16 v$name_of_anim_barbers = "BRB_HAIR_01"
+$random_number_barbers += 1
+goto @BARB_6663
+
+:BARB_6638
+set_var_text_label16 v$name_of_anim_barbers = "BRB_HAIR_02"
+$random_number_barbers -= 1
+
+:BARB_6663
+Task.PlayAnimNonInterruptable($shop_keep_barbers, "BRB_BUY", "HAIRCUTS", 1000.0, False, False, False, True, -1)
+Task.PlayAnimNonInterruptable($scplayer, v$name_of_anim_barbers, "HAIRCUTS", 1000.0, False, False, False, True, -1)
+$return_animation_time_barbers = 0.0
+$control_flag_barbers = 3
+goto @BARB_6832
+
+:BARB_6759
+if 
+  $flag_bought_item_already_shops == 0
+goto_if_false @BARB_6832
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1055)
+$sample_name_shops = Char.SetSayContext($shop_keep_barbers, 322)
+Text.PrintNow('BARBNO', 5000, 1)
+$control_flag_barbers = 0
+$flag_bought_item_already_shops = 1
+
+:BARB_6832
+goto @BARB_6912
+
+:BARB_6839
+if 
+  $flag_no_money_shops == 0
+goto_if_false @BARB_6912
+Audio.ReportMissionAudioEventAtPosition($player_x, $player_y, $player_z, 1055)
+$sample_name_shops = Char.SetSayContext($shop_keep_barbers, 324)
+Text.PrintNow('SHOPNO', 5000, 1)
+$control_flag_barbers = 0
+$flag_no_money_shops = 1
+
+:BARB_6912
+if 
+  $control_flag_barbers == 3
+goto_if_false @BARB_7257
+if 
+  Char.IsPlayingAnim($scplayer, v$name_of_anim_barbers)
+goto_if_false @BARB_6960
+$return_animation_time_barbers = Char.GetAnimCurrentTime($scplayer, v$name_of_anim_barbers)
+
+:BARB_6960
+if 
+  $return_animation_time_barbers == 1.0
+goto_if_false @BARB_7257
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @BARB_7013
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:BARB_7013
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @BARB_7045
+Text.ClearHelp
+Menu.Delete($cost_menu_shops)
+$cost_menu_drawn_shops = 0
+
+:BARB_7045
+Task.PlayAnimNonInterruptable($scplayer, "BRB_SIT_LOOP", "HAIRCUTS", 1000.0, True, False, False, True, -1)
+Task.PlayAnimNonInterruptable($shop_keep_barbers, "BRB_LOOP", "HAIRCUTS", 1000.0, True, False, False, False, -1)
+if 
+  $flag_changed_hair_intro2 == 0
+goto_if_false @BARB_7172
+if 
+  $onmission == 1
+goto_if_false @BARB_7172
+$flag_changed_hair_intro2 = 1
+
+:BARB_7172
+Camera.SetFixedPosition($chaircam_offX, $chaircam_offY, $chaircam_offZ, 0.0, 0.0, 0.0)
+Camera.PointAtPoint($chaircam_lookat_offX, $chaircam_lookat_offY, $chaircam_lookat_offZ, SwitchType.JumpCut)
+if 
+  $main_menu_drawn_shops == 0
+goto_if_false @BARB_7243
+gosub @BARB_8401
+gosub @BARB_8689
+
+:BARB_7243
+$control_flag_barbers = 0
+$flag_barber = 6
+
+:BARB_7257
+goto @BARB_7271
+
+:BARB_7264
+gosub @BARB_7498
+
+:BARB_7271
+goto @BARB_7285
+
+:BARB_7278
+gosub @BARB_7498
+
+:BARB_7285
+goto @BARB_653
+
+:BARB_7292
+if 
+  $flag_barber > 0
+goto_if_false @BARB_7312
+Text.ClearHelp
+
+:BARB_7312
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @BARB_7344
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:BARB_7344
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @BARB_7376
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:BARB_7376
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @BARB_7408
+Text.ClearHelp
+Menu.Delete($main_menu_shops)
+$main_menu_drawn_shops = 0
+
+:BARB_7408
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('BARBNO')
+$flag_barber = 2
+$flag_restored_camera_barbers = 0
+$unk9728 = 0
+$unk9747 = 0
+$return_animation_time_barbers = 0.0
+$flag_viewed_hair = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$cut_hair_flag_barber = 0
+return 
+
+:BARB_7498
+Text.ClearThisPrint('SHOPNO')
+Text.ClearThisPrint('BARBNO')
+if 
+  $flag_barber > 0
+goto_if_false @BARB_7540
+Text.ClearHelp
+
+:BARB_7540
+if 
+  $cost_menu_drawn_shops == 1
+goto_if_false @BARB_7572
+Menu.Delete($cost_menu_shops)
+Text.ClearHelp
+$cost_menu_drawn_shops = 0
+
+:BARB_7572
+if 
+  $bought_menu_drawn_shops == 1
+goto_if_false @BARB_7604
+Menu.Delete($bought_menu_shops)
+Text.ClearHelp
+$bought_menu_drawn_shops = 0
+
+:BARB_7604
+if 
+  $main_menu_drawn_shops == 1
+goto_if_false @BARB_7636
+Text.ClearHelp
+Menu.Delete($main_menu_shops)
+$main_menu_drawn_shops = 0
+
+:BARB_7636
+$barber_look_shops = 0
+$unk9728 = 0
+$flag_attacked_barber = 0
+$flag_barber = 0
+$unk9747 = 0
+$return_animation_time_barbers = 0.0
+$flag_viewed_hair = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$flag_restored_camera_barbers = 0
+Sequence.Clear($barber_movein_barbers)
+Sequence.Clear($player_walk_barbers)
+Streaming.MarkModelAsNoLongerNeeded($shopkeeper_model_shops)
+if 
+    Coop.IsSyncingThisPed($shop_keep_barbers)
+then
+    Char.Delete($shop_keep_barbers)
+else
+    Coop.CancelPedClaim($shop_keep_barbers)
+end
+Hud.DisplayRadar(True)
+Text.UseCommands(False)
+Stat.ShowUpdateStats(True)
+Game.SetMinigameInProgress(False)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+$cut_hair_flag_barber = 0
+terminate_this_script 
+return 
+
+:BARB_7760
+if 
+  $cost_menu_drawn_shops == 0
+goto_if_false @BARB_8399
+Text.PrintHelpForever('BARB_H2')
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @BARB_7851
+$cost_menu_shops = Menu.Create('HAIRCHO', 29.0, 95.0, 93.0, 2, False, 1, 1)
+goto @BARB_8092
+
+:BARB_7851
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @BARB_7913
+$cost_menu_shops = Menu.Create('HAIRCHO', 29.0, 95.0, 93.0, 2, False, 1, 1)
+goto @BARB_8092
+
+:BARB_7913
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @BARB_7975
+$cost_menu_shops = Menu.Create('HAIRCHO', 29.0, 95.0, 93.0, 2, False, 1, 1)
+goto @BARB_8092
+
+:BARB_7975
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @BARB_8037
+$cost_menu_shops = Menu.Create('HAIRCHO', 29.0, 95.0, 93.0, 2, False, 1, 1)
+goto @BARB_8092
+
+:BARB_8037
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @BARB_8092
+$cost_menu_shops = Menu.Create('HAIRCHO', 29.0, 95.0, 93.0, 2, False, 1, 1)
+
+:BARB_8092
+Menu.SetColumnOrientation($cost_menu_shops, 0, 1)
+Menu.SetColumn($cost_menu_shops, 0, 'HAIRSTY', s$hairstyle_name, 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetColumnOrientation($cost_menu_shops, 1, 2)
+Menu.SetColumn($cost_menu_shops, 1, 'COST', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+Menu.SetItemWithNumber($cost_menu_shops, 1, 0, 'DOLLAR', $hair_price)
+Menu.SetColumnWidth($cost_menu_shops, 0, 140)
+Menu.SetColumnWidth($cost_menu_shops, 1, 46)
+$cost_menu_drawn_shops = 1
+
+:BARB_8399
+return 
+
+:BARB_8401
+$item_no_hairstyles = 0
+$number_of_hairstyles_in_area = 0
+
+:BARB_8415
+if 
+  is_int_var_greater_than_int_var $num_of_hairstyles > $item_no_hairstyles
+goto_if_false @BARB_8607
+$model_index = Shopping.GetItem($item_no_hairstyles)
+$modelid_shops = Shopping.GetExtraInfo($model_index, 0)
+$component_shops = Shopping.GetExtraInfo($model_index, 1)
+set_var_int_to_var_int $item_model_index($number_of_hairstyles_in_area,12i) = $model_index
+s$hairstyle_name = Shopping.GetNameOfItem($model_index)
+$hair_price = Shopping.GetPriceOfItem($model_index)
+set_var_int_to_var_int $item_price($number_of_hairstyles_in_area,12i) = $hair_price
+set_var_text_label $item_text_label($number_of_hairstyles_in_area,12s) = s$hairstyle_name
+set_var_int_to_var_int $item_modelid($number_of_hairstyles_in_area,12i) = $modelid_shops
+set_var_int_to_var_int $item_component($number_of_hairstyles_in_area,12i) = $component_shops
+if 
+  is_int_var_equal_to_int_var $player_item_texture_shops == $model_index
+goto_if_false @BARB_8575
+$item_hilight_shops($number_of_hairstyles_in_area,12i) = 0
+goto @BARB_8586
+
+:BARB_8575
+$item_hilight_shops($number_of_hairstyles_in_area,12i) = 1
+
+:BARB_8586
+$number_of_hairstyles_in_area += 1
+$item_no_hairstyles += 1
+goto @BARB_8415
+
+:BARB_8607
+set_var_int_to_var_int $temp_var_shops = $number_of_hairstyles_in_area
+
+:BARB_8615
+if 
+  12 > $temp_var_shops
+goto_if_false @BARB_8687
+$item_model_index($temp_var_shops,12i) = -1
+$item_price($temp_var_shops,12i) = 0
+set_var_text_label $item_text_label($temp_var_shops,12s) = 'DUMMY'
+$temp_var_shops += 1
+goto @BARB_8615
+
+:BARB_8687
+return 
+
+:BARB_8689
+if 
+  $main_menu_drawn_shops == 0
+goto_if_false @BARB_9362
+Text.PrintHelpForever('BARB_H1')
+if 
+  is_int_var_equal_to_constant $current_Language == 0
+goto_if_false @BARB_8780
+$main_menu_shops = Menu.Create('HAIRCHO', 29.0, 145.0, 93.0, 2, True, 1, 1)
+goto @BARB_9021
+
+:BARB_8780
+if 
+  is_int_var_equal_to_constant $current_Language == 1
+goto_if_false @BARB_8842
+$main_menu_shops = Menu.Create('HAIRCHO', 29.0, 145.0, 93.0, 2, True, 1, 1)
+goto @BARB_9021
+
+:BARB_8842
+if 
+  is_int_var_equal_to_constant $current_Language == 2
+goto_if_false @BARB_8904
+$main_menu_shops = Menu.Create('HAIRCHO', 29.0, 165.0, 93.0, 2, True, 1, 1)
+goto @BARB_9021
+
+:BARB_8904
+if 
+  is_int_var_equal_to_constant $current_Language == 3
+goto_if_false @BARB_8966
+$main_menu_shops = Menu.Create('HAIRCHO', 29.0, 145.0, 93.0, 2, True, 1, 1)
+goto @BARB_9021
+
+:BARB_8966
+if 
+  is_int_var_equal_to_constant $current_Language == 4
+goto_if_false @BARB_9021
+$main_menu_shops = Menu.Create('HAIRCHO', 29.0, 165.0, 93.0, 2, True, 1, 1)
+
+:BARB_9021
+Menu.SetColumnOrientation($main_menu_shops, 0, 1)
+Menu.SetColumn($main_menu_shops, 0, 'HAIRSTY', s$item_text_label[0], s$item_text_label[1], s$item_text_label[2], s$item_text_label[3], s$item_text_label[4], s$item_text_label[5], s$item_text_label[6], s$item_text_label[7], s$item_text_label[8], s$item_text_label[9], s$item_text_label[10], s$item_text_label[11])
+Menu.SetColumnOrientation($main_menu_shops, 1, 2)
+Menu.SetColumn($main_menu_shops, 1, 'COST', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY', 'DUMMY')
+$temp_var_shops = 0
+
+:BARB_9222
+if 
+  is_int_var_greater_than_int_var $number_of_hairstyles_in_area > $temp_var_shops
+goto_if_false @BARB_9281
+Menu.SetItemWithNumber($main_menu_shops, 1, $temp_var_shops, 'DOLLAR', $item_price($temp_var_shops,12i))
+$temp_var_shops += 1
+goto @BARB_9222
+
+:BARB_9281
+$temp_var_shops = 0
+
+:BARB_9288
+if 
+  is_int_var_greater_than_int_var $number_of_hairstyles_in_area > $temp_var_shops
+goto_if_false @BARB_9336
+Menu.ActivateItem($main_menu_shops, $temp_var_shops, $item_hilight_shops($temp_var_shops,12i))
+$temp_var_shops += 1
+goto @BARB_9288
+
+:BARB_9336
+Menu.SetColumnWidth($main_menu_shops, 0, 140)
+Menu.SetColumnWidth($main_menu_shops, 1, 46)
+$main_menu_drawn_shops = 1
+
+:BARB_9362
+return 
+terminate_this_script 
+
+//-------------External script 63 (WARDROBE)---------------
+

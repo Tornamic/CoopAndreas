@@ -1,0 +1,1604 @@
+//-------------Mission 125---------------
+// Originally: Burglary Sub-Mission
+
+:BURGJB
+script_name 'BURGJB'
+gosub @BURGJB_65
+if 
+  has_deatharrest_been_executed 
+goto_if_false @BURGJB_38
+gosub @BURGJB_8332
+
+:BURGJB_38
+gosub @BURGJB_8444
+terminate_this_script 
+if 
+  $done_burglary_progress == 0
+goto_if_false @BURGJB_65
+
+:BURGJB_65
+$onmission = 1
+Stat.RegisterMissionGiven
+wait 0
+Camera.SetFadingColor(0, 0, 0)
+Text.LoadMissionText('BURGLAR')
+Game.EnableBurglaryHouses(True)
+92@ = 0
+93@ = 0
+94@ = 0
+95@ = 0
+96@ = 0
+97@ = 0
+101@ = 0
+98@ = 0
+99@ = 0
+100@ = 0
+103@ = 0
+102@ = 0
+107@ = 0
+108@ = 0
+109@ = 0
+110@ = 0
+112@ = 0
+47@ = 0
+$burglary_session_made = 0
+90@ = 0
+89@ = 0
+106@ = 0
+$burglary_time_to_get_out = 10
+$burglary_time_to_lockup = 300000
+91@ = 0
+105@ = 0
+41@ = 0.0
+$burglary_noise = 0.0
+42@ = 9999999.0
+43@ = 9999999.0
+54@ = 2741.0
+57@ = -2006.807
+60@ = 14.0
+set_var_text_label s$burglary_garage[0] = 'BURG_LK'
+76@ = 2741.241
+79@ = -2011.274
+82@ = 13.5869
+55@ = -2102.54
+58@ = -15.5931
+61@ = 34.3203
+set_var_text_label s$burglary_garage[1] = 'BRGSFSE'
+77@ = -2109.32
+80@ = -15.7967
+83@ = 34.3203
+56@ = 2609.248
+59@ = 1439.347
+62@ = 9.8203
+set_var_text_label s$burglary_garage[2] = 'VGELOCK'
+78@ = 2609.012
+81@ = 1445.936
+84@ = 9.8203
+34@ = 0
+48@ = 0
+$burglary_player_spotted = 0
+111@ = 0
+$burglary_player_stealth = 0
+$disable_mod_garage = 1
+38@ = Player.StoreScore($player1)
+39@ = Player.StoreScore($player1)
+if 
+  48@ == 99
+goto_if_false @BURGJB_687
+49@ = Object.Create(#BRIEFCASE, 0.0, 0.0, 0.0)
+51@ = Blip.AddForCoord(0.0, 0.0, 0.0)
+53@ = Blip.AddForCoord(0.0, 0.0, 0.0)
+
+:BURGJB_687
+if 
+  not Player.IsWearing($player1, "BALACLAVA", BodyPart.SpecialCostume)
+goto_if_false @BURGJB_820
+Text.DrawOddjobTitleBeforeFade(False)
+Camera.DoFade(0, 1000)
+
+:BURGJB_727
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_751
+wait 0
+goto @BURGJB_727
+
+:BURGJB_751
+Player.GiveClothesOutsideShop($player1, "BALACLAVA", "BALACLAVA", BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+Camera.DoFade(1, 1000)
+
+:BURGJB_792
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_816
+wait 0
+goto @BURGJB_792
+
+:BURGJB_816
+Text.DrawOddjobTitleBeforeFade(True)
+
+:BURGJB_820
+$hours, $minutes = Clock.GetTimeOfDay()
+if 
+  $hours >= 20
+goto_if_false @BURGJB_909
+set_lvar_int_to_var_int 88@ = $hours
+88@ *= 60
+add_int_var_to_int_lvar 88@ += $minutes
+36@ = 1440
+sub_int_lvar_from_int_lvar 36@ -= 88@
+36@ += 360
+36@ *= 1000
+set_var_int_to_lvar_int $burglary_time_to_daylight = 36@
+
+:BURGJB_909
+if 
+  6 > $hours
+goto_if_false @BURGJB_982
+set_lvar_int_to_var_int 88@ = $hours
+88@ *= 60
+add_int_var_to_int_lvar 88@ += $minutes
+36@ = 360
+sub_int_lvar_from_int_lvar 36@ -= 88@
+36@ *= 1000
+set_var_int_to_lvar_int $burglary_time_to_daylight = 36@
+
+:BURGJB_982
+Hud.DisplayTimerWithString($burglary_time_to_daylight, TimerDirection.Down, 'BURG52')
+Hud.DisplayNthCounterWithString($burglary_session_made, CounterDisplay.Number, 1, 'BURG51')
+wait 0
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @BURGJB_1044
+50@ = Char.StoreCarIsIn($scplayer)
+
+:BURGJB_1044
+wait 0
+if 
+is_ps2_keyboard_key_pressed 32
+goto_if_false @BURGJB_1073
+$burglary_time_to_daylight = 10000000
+
+:BURGJB_1073
+if 
+is_ps2_keyboard_key_pressed 49
+goto_if_false @BURGJB_1118
+Char.SetCoordinates($scplayer, 2741.928, -1993.231, 12.3669)
+Char.SetHeading($scplayer, 173.5173)
+
+:BURGJB_1118
+if 
+is_ps2_keyboard_key_pressed 50
+goto_if_false @BURGJB_1153
+Char.SetCoordinates($scplayer, 2639.0, 2039.911, 9.8052)
+
+:BURGJB_1153
+if 
+is_ps2_keyboard_key_pressed 99
+goto_if_false @BURGJB_1176
+$burglary_time_to_daylight = 5000
+
+:BURGJB_1176
+if 
+is_ps2_keyboard_key_pressed 48
+goto_if_false @BURGJB_1199
+$burglary_time_to_lockup = 5000
+
+:BURGJB_1199
+if 
+is_ps2_keyboard_key_pressed 53
+goto_if_false @BURGJB_1222
+$burglary_total_made = 11000
+
+:BURGJB_1222
+if 
+is_ps2_keyboard_key_pressed 54
+goto_if_false @BURGJB_1244
+48@ = 3
+
+:BURGJB_1244
+if 
+  110@ == 0
+goto_if_false @BURGJB_2153
+if 
+  $burglary_time_to_daylight == 0
+goto_if_false @BURGJB_1970
+Text.ClearPrints
+Game.EnableBurglaryHouses(False)
+if 
+  92@ == 1
+goto_if_false @BURGJB_1570
+Player.SetControl($player1, False)
+Camera.DoFade(0, 1000)
+
+:BURGJB_1318
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_1342
+wait 0
+goto @BURGJB_1318
+
+:BURGJB_1342
+Text.ClearHelp
+Streaming.SetAreaVisible(0)
+Streaming.RequestCollision(69@, 70@)
+Streaming.LoadScene(69@, 70@, 71@)
+Char.SetCoordinatesNoOffset($scplayer, 69@, 70@, 71@)
+Char.ShutUp($scplayer, False)
+72@ += 180.0
+Char.SetHeading($scplayer, 72@)
+Char.SetHasUsedEntryExit($scplayer, 73@, 74@, 5.0)
+Streaming.LoadScene(69@, 70@, 71@)
+if 
+  48@ == 0
+goto_if_false @BURGJB_1496
+if 
+  Player.IsWearing($player1, "BALACLAVA", BodyPart.SpecialCostume)
+goto_if_false @BURGJB_1496
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+
+:BURGJB_1496
+92@ = 0
+93@ = 0
+if 
+  not Game.IsMinigameInProgress
+goto_if_false @BURGJB_1525
+Camera.RestoreJumpcut
+
+:BURGJB_1525
+Camera.DoFade(1, 1000)
+
+:BURGJB_1532
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_1556
+wait 0
+goto @BURGJB_1532
+
+:BURGJB_1556
+Player.SetControl($player1, True)
+goto @BURGJB_1733
+
+:BURGJB_1570
+if 
+  48@ == 0
+goto_if_false @BURGJB_1733
+if 
+  Player.IsWearing($player1, "BALACLAVA", BodyPart.SpecialCostume)
+goto_if_false @BURGJB_1733
+if 
+  Player.IsControlOn($player1)
+goto_if_false @BURGJB_1640
+Player.SetControl($player1, False)
+
+:BURGJB_1640
+Camera.DoFade(0, 1000)
+
+:BURGJB_1647
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_1671
+wait 0
+goto @BURGJB_1647
+
+:BURGJB_1671
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+if 
+  not Game.IsMinigameInProgress
+goto_if_false @BURGJB_1702
+Camera.RestoreJumpcut
+
+:BURGJB_1702
+Camera.DoFade(1, 1000)
+
+:BURGJB_1709
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_1733
+wait 0
+goto @BURGJB_1709
+
+:BURGJB_1733
+Hud.ClearTimer($burglary_time_to_daylight)
+if 
+  48@ > 0
+goto_if_false @BURGJB_1916
+Hud.DisplayTimerWithString($burglary_time_to_lockup, TimerDirection.Down, 'BURG3')
+Text.ClearPrints
+Text.Print('BURG2', 5000, 1)
+if 
+  93@ == 1
+goto_if_false @BURGJB_1838
+Text.Print('BURG26', 5000, 1)
+102@ = 2
+goto @BURGJB_1909
+
+:BURGJB_1838
+if 
+  94@ == 1
+goto_if_false @BURGJB_1886
+Text.Print('BURG27', 5000, 1)
+102@ = 1
+goto @BURGJB_1909
+
+:BURGJB_1886
+Text.Print('BURG1', 5000, 1)
+102@ = 3
+
+:BURGJB_1909
+goto @BURGJB_1956
+
+:BURGJB_1916
+$burglary_time_to_lockup = 0
+Object.Delete(49@)
+Object.MarkAsNoLongerNeeded(49@)
+Text.Print('BURG53', 5000, 1)
+goto @BURGJB_8332
+
+:BURGJB_1956
+110@ = 1
+goto @BURGJB_2146
+
+:BURGJB_1970
+$hours, $minutes = Clock.GetTimeOfDay()
+if 
+  $hours >= 20
+goto_if_false @BURGJB_2066
+set_lvar_int_to_var_int 88@ = $hours
+88@ *= 60
+add_int_var_to_int_lvar 88@ += $minutes
+36@ = 1440
+sub_int_lvar_from_int_lvar 36@ -= 88@
+36@ += 360
+36@ += 1
+36@ *= 1000
+set_var_int_to_lvar_int $burglary_time_to_daylight = 36@
+
+:BURGJB_2066
+if 
+  6 > $hours
+goto_if_false @BURGJB_2146
+set_lvar_int_to_var_int 88@ = $hours
+88@ *= 60
+add_int_var_to_int_lvar 88@ += $minutes
+36@ = 360
+sub_int_lvar_from_int_lvar 36@ -= 88@
+36@ += 1
+36@ *= 1000
+set_var_int_to_lvar_int $burglary_time_to_daylight = 36@
+
+:BURGJB_2146
+goto @BURGJB_2351
+
+:BURGJB_2153
+if 
+  $burglary_time_to_lockup == 0
+goto_if_false @BURGJB_2351
+Text.ClearPrints
+if 
+  Player.IsControlOn($player1)
+goto_if_false @BURGJB_2196
+Player.SetControl($player1, False)
+
+:BURGJB_2196
+Camera.DoFade(0, 1000)
+
+:BURGJB_2203
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_2227
+wait 0
+goto @BURGJB_2203
+
+:BURGJB_2227
+if 
+  Player.IsWearing($player1, "BALACLAVA", BodyPart.SpecialCostume)
+goto_if_false @BURGJB_2272
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+
+:BURGJB_2272
+if 
+  not Game.IsMinigameInProgress
+goto_if_false @BURGJB_2287
+Camera.RestoreJumpcut
+
+:BURGJB_2287
+Camera.DoFade(1, 1000)
+
+:BURGJB_2294
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_2318
+wait 0
+goto @BURGJB_2294
+
+:BURGJB_2318
+Text.Print('BURG53', 5000, 1)
+Object.Delete(49@)
+Object.MarkAsNoLongerNeeded(49@)
+goto @BURGJB_8332
+
+:BURGJB_2351
+if 
+  95@ == 0
+goto_if_false @BURGJB_7832
+gosub @BURGJB_7953
+37@ = Streaming.GetAreaVisible()
+if 
+  37@ == 0
+goto_if_false @BURGJB_2451
+if 
+  not Player.IsWearing($player1, "BALACLAVA", BodyPart.SpecialCostume)
+goto_if_false @BURGJB_2451
+Text.Print('BURG62', 5000, 1)
+goto @BURGJB_8332
+
+:BURGJB_2451
+if 
+  93@ == 1
+goto_if_false @BURGJB_2694
+if and
+  Player.IsWantedLevelGreater($player1, 0)
+  48@ > 0
+goto_if_false @BURGJB_2544
+if 
+  102@ <> 5
+goto_if_false @BURGJB_2537
+Text.ClearPrints
+Text.Print('BURG50', 5000, 1)
+102@ = 5
+
+:BURGJB_2537
+goto @BURGJB_2687
+
+:BURGJB_2544
+if 
+  102@ <> 2
+goto_if_false @BURGJB_2687
+Text.ClearPrints
+if 
+  48@ > 0
+goto_if_false @BURGJB_2646
+if 
+  110@ == 0
+goto_if_false @BURGJB_2623
+Text.Print('BURG4', 5000, 1)
+goto @BURGJB_2639
+
+:BURGJB_2623
+Text.Print('BURG26', 5000, 1)
+
+:BURGJB_2639
+goto @BURGJB_2680
+
+:BURGJB_2646
+if 
+  110@ == 0
+goto_if_false @BURGJB_2680
+Text.Print('BURG29', 5000, 1)
+
+:BURGJB_2680
+102@ = 2
+
+:BURGJB_2687
+goto @BURGJB_3084
+
+:BURGJB_2694
+if 
+  110@ == 0
+goto_if_false @BURGJB_2957
+if 
+  94@ == 1
+goto_if_false @BURGJB_2798
+if 
+  102@ <> 1
+goto_if_false @BURGJB_2791
+if 
+  92@ == 0
+goto_if_false @BURGJB_2791
+Text.ClearPrints
+Text.Print('BURG27', 5000, 1)
+102@ = 1
+
+:BURGJB_2791
+goto @BURGJB_2950
+
+:BURGJB_2798
+if 
+  92@ == 1
+goto_if_false @BURGJB_2866
+if 
+  102@ <> 4
+goto_if_false @BURGJB_2859
+Text.ClearPrints
+Text.Print('BURG30', 5000, 1)
+102@ = 4
+
+:BURGJB_2859
+goto @BURGJB_2950
+
+:BURGJB_2866
+if 
+  102@ <> 3
+goto_if_false @BURGJB_2950
+Text.ClearPrints
+if 
+  48@ == 0
+goto_if_false @BURGJB_2927
+Text.Print('BURG29', 5000, 1)
+goto @BURGJB_2943
+
+:BURGJB_2927
+Text.Print('BURG31', 5000, 1)
+
+:BURGJB_2943
+102@ = 3
+
+:BURGJB_2950
+goto @BURGJB_3084
+
+:BURGJB_2957
+if 
+  94@ == 1
+goto_if_false @BURGJB_3043
+if 
+  102@ <> 1
+goto_if_false @BURGJB_3036
+if 
+  92@ == 0
+goto_if_false @BURGJB_3036
+Text.ClearPrints
+Text.Print('BURG27', 5000, 1)
+102@ = 1
+
+:BURGJB_3036
+goto @BURGJB_3084
+
+:BURGJB_3043
+if 
+  102@ <> 3
+goto_if_false @BURGJB_3084
+Text.Print('BURG1', 5000, 1)
+102@ = 3
+
+:BURGJB_3084
+if 
+  not Car.IsDead(50@)
+goto_if_false @BURGJB_7681
+if 
+  92@ == 0
+goto_if_false @BURGJB_3396
+if 
+  not Char.IsInCar($scplayer, 50@)
+goto_if_false @BURGJB_3228
+93@ = 0
+if 
+  99@ == 1
+goto_if_false @BURGJB_3174
+Blip.Remove(51@)
+99@ = 0
+
+:BURGJB_3174
+if 
+  97@ == 0
+goto_if_false @BURGJB_3221
+52@ = Blip.AddForCar(50@)
+Blip.ChangeDisplay(52@, BlipDisplay.BlipOnly)
+Blip.SetAsFriendly(52@, True)
+97@ = 1
+
+:BURGJB_3221
+goto @BURGJB_3396
+
+:BURGJB_3228
+93@ = 1
+if 
+  97@ == 1
+goto_if_false @BURGJB_3272
+108@ = 0
+Blip.Remove(52@)
+97@ = 0
+
+:BURGJB_3272
+if 
+  48@ > 0
+goto_if_false @BURGJB_3396
+if 
+  Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @BURGJB_3345
+if 
+  99@ == 1
+goto_if_false @BURGJB_3338
+Blip.Remove(51@)
+99@ = 0
+
+:BURGJB_3338
+goto @BURGJB_3396
+
+:BURGJB_3345
+if 
+  99@ == 0
+goto_if_false @BURGJB_3396
+51@ = Blip.AddForCoord(54@(35@,3f), 57@(35@,3f), 60@(35@,3f))
+99@ = 1
+
+:BURGJB_3396
+if 
+  108@ == 0
+goto_if_false @BURGJB_3848
+$Return_cities_passed = Stat.GetInt(181)
+if 
+  $Return_cities_passed == 0
+goto_if_false @BURGJB_3454
+35@ = 0
+goto @BURGJB_3830
+
+:BURGJB_3454
+if 
+  $Return_cities_passed == 1
+goto_if_false @BURGJB_3626
+63@, 64@, 65@ = Char.GetCoordinates($scplayer)
+35@ = World.GetCityFromCoords(63@, 64@, 65@)
+if 
+  35@ > 0
+goto_if_false @BURGJB_3532
+35@ -= 1
+goto @BURGJB_3619
+
+:BURGJB_3532
+42@ = Math.GetDistanceBetweenCoords3D(63@, 64@, 65@, 54@, 57@, 60@)
+35@ = 0
+set_lvar_float_to_lvar_float 43@ = 42@
+42@ = Math.GetDistanceBetweenCoords3D(63@, 64@, 65@, 55@, 58@, 61@)
+if 
+  is_float_lvar_greater_than_float_lvar 43@ > 42@
+goto_if_false @BURGJB_3619
+35@ = 1
+
+:BURGJB_3619
+goto @BURGJB_3830
+
+:BURGJB_3626
+63@, 64@, 65@ = Char.GetCoordinates($scplayer)
+35@ = World.GetCityFromCoords(63@, 64@, 65@)
+if 
+  35@ > 0
+goto_if_false @BURGJB_3686
+35@ -= 1
+goto @BURGJB_3830
+
+:BURGJB_3686
+42@ = Math.GetDistanceBetweenCoords3D(63@, 64@, 65@, 54@, 57@, 60@)
+35@ = 0
+set_lvar_float_to_lvar_float 43@ = 42@
+42@ = Math.GetDistanceBetweenCoords3D(63@, 64@, 65@, 55@, 58@, 61@)
+if 
+  is_float_lvar_greater_than_float_lvar 43@ > 42@
+goto_if_false @BURGJB_3781
+35@ = 1
+set_lvar_float_to_lvar_float 43@ = 42@
+
+:BURGJB_3781
+42@ = Math.GetDistanceBetweenCoords3D(63@, 64@, 65@, 56@, 59@, 62@)
+if 
+  is_float_lvar_greater_than_float_lvar 43@ > 42@
+goto_if_false @BURGJB_3830
+35@ = 2
+
+:BURGJB_3830
+Garage.ChangeType($burglary_garage(35@,3s), GarageType.ForScriptToOpenAndClose)
+108@ = 1
+
+:BURGJB_3848
+if 
+  not Car.IsDead(50@)
+goto_if_false @BURGJB_5295
+if or
+  Char.LocateAnyMeans3D($scplayer, 0, 54@(35@,3f), 57@(35@,3f), 60@(35@,3f), 20.0, 20.0, 4.0)
+  Car.Locate3D(50@, 0, 54@(35@,3f), 57@(35@,3f), 60@(35@,3f), 20.0, 20.0, 4.0)
+goto_if_false @BURGJB_5266
+if 
+  not Garage.IsOpen($burglary_garage(35@,3s))
+goto_if_false @BURGJB_3990
+Garage.Open($burglary_garage(35@,3s))
+
+:BURGJB_3990
+if 
+  108@ == 1
+goto_if_false @BURGJB_5259
+if 
+  93@ == 1
+goto_if_false @BURGJB_5259
+if 
+  48@ > 0
+goto_if_false @BURGJB_5259
+if 
+  Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @BURGJB_4117
+if 
+  99@ == 1
+goto_if_false @BURGJB_4110
+Text.ClearPrints
+Text.Print('BURG50', 5000, 1)
+Blip.Remove(51@)
+99@ = 0
+
+:BURGJB_4110
+goto @BURGJB_5259
+
+:BURGJB_4117
+if 
+  99@ == 0
+goto_if_false @BURGJB_4193
+Text.ClearPrints
+Text.Print('BURG26', 5000, 1)
+51@ = Blip.AddForCoord(54@(35@,3f), 57@(35@,3f), 60@(35@,3f))
+99@ = 1
+goto @BURGJB_5259
+
+:BURGJB_4193
+Text.Print('BURG40', 1000, 1)
+if 
+  Char.LocateInCar3D($scplayer, 76@(35@,3f), 79@(35@,3f), 82@(35@,3f), 2.9, 3.2, 5.0, True)
+goto_if_false @BURGJB_5259
+Player.SetControl($player1, False)
+Game.SetPoliceIgnorePlayer($player1, True)
+Text.ClearPrints
+World.ClearArea(1, 76@(35@,3f), 79@(35@,3f), 82@(35@,3f), 10.0)
+if 
+  110@ == 1
+goto_if_false @BURGJB_4342
+Hud.ClearTimer($burglary_time_to_lockup)
+$burglary_time_to_lockup = 999999
+
+:BURGJB_4342
+if 
+  not Garage.IsClosed($burglary_garage(35@,3s))
+goto_if_false @BURGJB_4371
+Garage.Close($burglary_garage(35@,3s))
+
+:BURGJB_4371
+104@ = 0
+
+:BURGJB_4378
+if 
+  104@ == 0
+goto_if_false @BURGJB_4434
+wait 0
+if 
+  Garage.IsClosed($burglary_garage(35@,3s))
+goto_if_false @BURGJB_4427
+104@ = 1
+
+:BURGJB_4427
+goto @BURGJB_4378
+
+:BURGJB_4434
+Blip.Remove(51@)
+set_lvar_int_to_lvar_int 34@ = 48@
+34@ *= 20
+mult_int_lvar_by_int_lvar 34@ *= 48@
+add_int_lvar_to_int_var $burglary_total_items += 48@
+add_int_lvar_to_int_var $burglary_total_made += 34@
+cset_lvar_float_to_var_int 45@ = integer $burglary_total_made
+cset_lvar_float_to_lvar_int 46@ = integer 34@
+add_int_lvar_to_int_lvar 47@ += 48@
+add_int_lvar_to_int_var $burglary_session_made += 34@
+Stat.RegisterFloat(46@, 40)
+Stat.IncrementFloat(46@, 41)
+Stat.IncrementInt(48@, 194)
+if 
+  110@ == 1
+goto_if_false @BURGJB_4700
+if 
+  Player.IsControlOn($player1)
+goto_if_false @BURGJB_4573
+Player.SetControl($player1, False)
+
+:BURGJB_4573
+Camera.DoFade(0, 1000)
+
+:BURGJB_4580
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_4604
+wait 0
+goto @BURGJB_4580
+
+:BURGJB_4604
+if 
+  Player.IsWearing($player1, "BALACLAVA", BodyPart.SpecialCostume)
+goto_if_false @BURGJB_4649
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+
+:BURGJB_4649
+if 
+  not Game.IsMinigameInProgress
+goto_if_false @BURGJB_4662
+
+:BURGJB_4662
+Camera.DoFade(1, 1000)
+
+:BURGJB_4669
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_4693
+wait 0
+goto @BURGJB_4669
+
+:BURGJB_4693
+goto @BURGJB_4869
+
+:BURGJB_4700
+if and
+  $burglary_total_made >= 10000
+  $done_burglary_progress == 0
+goto_if_false @BURGJB_4869
+if 
+  Player.IsControlOn($player1)
+goto_if_false @BURGJB_4749
+Player.SetControl($player1, False)
+
+:BURGJB_4749
+Camera.DoFade(0, 1000)
+
+:BURGJB_4756
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_4780
+wait 0
+goto @BURGJB_4756
+
+:BURGJB_4780
+if 
+  Player.IsWearing($player1, "BALACLAVA", BodyPart.SpecialCostume)
+goto_if_false @BURGJB_4825
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+
+:BURGJB_4825
+if 
+  not Game.IsMinigameInProgress
+goto_if_false @BURGJB_4838
+
+:BURGJB_4838
+Camera.DoFade(1, 1000)
+
+:BURGJB_4845
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_4869
+wait 0
+goto @BURGJB_4845
+
+:BURGJB_4869
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1058)
+if 
+  2 > 48@
+goto_if_false @BURGJB_4936
+Text.PrintWith2NumbersBig('BURG39', 48@, 34@, 5000, TextStyle.WhiteMiddleSmaller)
+goto @BURGJB_4958
+
+:BURGJB_4936
+Text.PrintWith2NumbersBig('BURG36', 48@, 34@, 5000, TextStyle.WhiteMiddleSmaller)
+
+:BURGJB_4958
+Player.AddScore($player1, 34@)
+TIMERA = 0
+
+:BURGJB_4973
+if or
+  Text.IsMessageBeingDisplayed
+  4000 > TIMERA
+goto_if_false @BURGJB_5005
+wait 0
+goto @BURGJB_4973
+
+:BURGJB_5005
+if 
+  not Garage.IsOpen($burglary_garage(35@,3s))
+goto_if_false @BURGJB_5034
+Garage.Open($burglary_garage(35@,3s))
+
+:BURGJB_5034
+104@ = 0
+
+:BURGJB_5041
+if 
+  104@ == 0
+goto_if_false @BURGJB_5097
+wait 0
+if 
+  Garage.IsOpen($burglary_garage(35@,3s))
+goto_if_false @BURGJB_5090
+104@ = 1
+
+:BURGJB_5090
+goto @BURGJB_5041
+
+:BURGJB_5097
+if and
+  $burglary_total_made >= 10000
+  $done_burglary_progress == 0
+goto_if_false @BURGJB_5151
+Player.SetControl($player1, True)
+Game.SetPoliceIgnorePlayer($player1, False)
+goto @BURGJB_8372
+goto @BURGJB_5213
+
+:BURGJB_5151
+if 
+  110@ == 0
+goto_if_false @BURGJB_5185
+Text.Print('BURG29', 5000, 1)
+
+:BURGJB_5185
+99@ = 0
+34@ = 0
+48@ = 0
+105@ = 0
+
+:BURGJB_5213
+Player.SetControl($player1, True)
+Game.SetPoliceIgnorePlayer($player1, False)
+if 
+  110@ == 1
+goto_if_false @BURGJB_5259
+goto @BURGJB_8332
+$burglary_time_to_lockup = 0
+
+:BURGJB_5259
+goto @BURGJB_5295
+
+:BURGJB_5266
+if 
+  not Garage.IsClosed($burglary_garage(35@,3s))
+goto_if_false @BURGJB_5295
+Garage.Close($burglary_garage(35@,3s))
+
+:BURGJB_5295
+if 
+  93@ == 0
+goto_if_false @BURGJB_5730
+if 
+  Game.IsProceduralInteriorActive(0)
+goto_if_false @BURGJB_5470
+if 
+  107@ == 0
+goto_if_false @BURGJB_5456
+69@, 70@, 71@, 72@ = Char.GetPositionOfEntryExitCharUsed($scplayer)
+73@, 74@, 75@ = Char.GetCoordinates($scplayer)
+if 
+  Object.DoesExist(49@)
+goto_if_false @BURGJB_5425
+if 
+  Char.IsHoldingObject($scplayer, 49@)
+goto_if_false @BURGJB_5425
+37@ = Streaming.GetAreaVisible()
+Object.SetAreaVisible(49@, 37@)
+
+:BURGJB_5425
+Blip.Remove(52@)
+Char.ShutUp($scplayer, True)
+Hud.SetRadarZoom(90)
+39@ = Player.StoreScore($player1)
+107@ = 1
+
+:BURGJB_5456
+92@ = 1
+goto @BURGJB_5730
+
+:BURGJB_5470
+if 
+  107@ == 1
+goto_if_false @BURGJB_5723
+Char.ShutUp($scplayer, False)
+if 
+  Object.DoesExist(49@)
+goto_if_false @BURGJB_5543
+if 
+  Char.IsHoldingObject($scplayer, 49@)
+goto_if_false @BURGJB_5543
+37@ = Streaming.GetAreaVisible()
+Object.SetAreaVisible(49@, 37@)
+
+:BURGJB_5543
+if 
+  not Car.IsDead(50@)
+goto_if_false @BURGJB_5574
+52@ = Blip.AddForCar(50@)
+Blip.SetAsFriendly(52@, True)
+
+:BURGJB_5574
+Hud.SetRadarZoom(0)
+107@ = 0
+if 
+  94@ == 1
+goto_if_false @BURGJB_5723
+112@ = 1
+if 
+  is_float_lvar_equal_to_float_lvar 85@ == 69@
+goto_if_false @BURGJB_5674
+if 
+  is_float_lvar_equal_to_float_lvar 86@ == 70@
+goto_if_false @BURGJB_5674
+if 
+  is_float_lvar_equal_to_float_lvar 87@ == 71@
+goto_if_false @BURGJB_5674
+112@ = 0
+
+:BURGJB_5674
+if 
+  112@ == 1
+goto_if_false @BURGJB_5723
+set_lvar_float_to_lvar_float 85@ = 69@
+set_lvar_float_to_lvar_float 86@ = 70@
+set_lvar_float_to_lvar_float 87@ = 71@
+Stat.IncrementInt(StatId.TotalProgress, 191)
+
+:BURGJB_5723
+92@ = 0
+
+:BURGJB_5730
+if 
+  93@ == 0
+goto_if_false @BURGJB_6506
+if 
+  92@ == 0
+goto_if_false @BURGJB_6506
+if 
+  94@ == 0
+goto_if_false @BURGJB_6008
+63@, 64@, 65@ = Char.GetCoordinates($scplayer)
+49@ = World.GetClosestStealableObject(63@, 64@, 65@, 5.0)
+if 
+  49@ <> -1
+goto_if_false @BURGJB_6001
+if 
+  Char.IsHoldingObject($scplayer, 49@)
+goto_if_false @BURGJB_5895
+if 
+  100@ == 1
+goto_if_false @BURGJB_5881
+Text.ClearHelp
+100@ = 0
+
+:BURGJB_5881
+94@ = 1
+goto @BURGJB_6001
+
+:BURGJB_5895
+if 
+  Char.LocateOnFootObject3D($scplayer, 49@, 1.7, 1.7, 2.0, False)
+goto_if_false @BURGJB_5974
+if 
+  100@ == 0
+goto_if_false @BURGJB_5967
+Text.PrintHelpForever('BURG23')
+100@ = 1
+
+:BURGJB_5967
+goto @BURGJB_6001
+
+:BURGJB_5974
+if 
+  100@ == 1
+goto_if_false @BURGJB_6001
+Text.ClearHelp
+100@ = 0
+
+:BURGJB_6001
+goto @BURGJB_6064
+
+:BURGJB_6008
+if 
+  Object.DoesExist(49@)
+goto_if_false @BURGJB_6057
+if 
+  not Char.IsHoldingObject($scplayer, 49@)
+goto_if_false @BURGJB_6050
+94@ = 0
+
+:BURGJB_6050
+goto @BURGJB_6064
+
+:BURGJB_6057
+94@ = 0
+
+:BURGJB_6064
+if or
+  $burglary_player_spotted == 1
+  98@ == 1
+goto_if_false @BURGJB_6122
+$burglary_player_spotted = 0
+98@ = 0
+Hud.ClearCounter($burglary_time_to_get_out)
+$burglary_time_to_get_out = 10
+109@ = 0
+
+:BURGJB_6122
+if 
+  101@ == 1
+goto_if_false @BURGJB_6179
+Hud.ClearCounter($burglary_player_stealth)
+$burglary_noise = 0.0
+41@ = 0.0
+$burglary_player_stealth = 0
+101@ = 0
+
+:BURGJB_6179
+if 
+  94@ == 1
+goto_if_false @BURGJB_6506
+66@ = Car.GetOffsetInWorldCoords(67@, 68@, 50@, 0.0, -6.0, 0.0)
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 66@, 67@, 68@, 3.5, 3.5, 2.0)
+goto_if_false @BURGJB_6479
+if 
+  100@ == 0
+goto_if_false @BURGJB_6304
+Text.PrintHelpForever('BURG24')
+100@ = 1
+
+:BURGJB_6304
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @BURGJB_6472
+Text.ClearHelp
+48@ += 1
+TIMERB = 0
+104@ = 0
+if 
+  Object.DoesExist(49@)
+goto_if_false @BURGJB_6465
+
+:BURGJB_6360
+if 
+  104@ == 0
+goto_if_false @BURGJB_6428
+if or
+  not Char.IsHoldingObject($scplayer, 49@)
+  Char.IsDead($scplayer)
+  TIMERB > 5000
+goto_if_false @BURGJB_6417
+104@ = 1
+
+:BURGJB_6417
+wait 0
+goto @BURGJB_6360
+
+:BURGJB_6428
+Object.Delete(49@)
+Object.MarkAsNoLongerNeeded(49@)
+Audio.ReportMissionAudioEventAtPosition(-1000.0, -1000.0, -1000.0, 1058)
+94@ = 0
+
+:BURGJB_6465
+100@ = 0
+
+:BURGJB_6472
+goto @BURGJB_6506
+
+:BURGJB_6479
+if 
+  100@ == 1
+goto_if_false @BURGJB_6506
+Text.ClearHelp
+100@ = 0
+
+:BURGJB_6506
+if 
+  92@ == 1
+goto_if_false @BURGJB_7674
+if and
+  98@ == 0
+  $burglary_player_spotted == 0
+goto_if_false @BURGJB_6979
+if 
+  101@ == 0
+goto_if_false @BURGJB_6631
+111@ = StreamedScript.GetNumberOfInstances(23)
+if 
+  111@ > 0
+goto_if_false @BURGJB_6624
+Hud.DisplayNthCounterWithString($burglary_player_stealth, CounterDisplay.Bar, 2, 'BURG25')
+Char.ShutUp($scplayer, True)
+101@ = 1
+
+:BURGJB_6624
+goto @BURGJB_6972
+
+:BURGJB_6631
+111@ = StreamedScript.GetNumberOfInstances(23)
+if 
+  111@ <> 0
+goto_if_false @BURGJB_6926
+63@, 64@, 65@ = Char.GetCoordinates($scplayer)
+$burglary_noise = World.GetSoundLevelAtCoords(-1, 63@, 64@, 65@)
+$burglary_noise *= 1.6
+if 
+  $burglary_noise > 20.0
+goto_if_false @BURGJB_6735
+$burglary_noise -= 20.0
+add_float_var_to_float_lvar 41@ += $burglary_noise
+
+:BURGJB_6735
+41@ *= 0.99
+cset_var_int_to_lvar_float $burglary_player_stealth = float 41@
+if 
+  $burglary_player_stealth >= 100
+goto_if_false @BURGJB_6815
+$burglary_player_stealth = 100
+if 
+  106@ == 0
+goto_if_false @BURGJB_6808
+89@ = Clock.GetGameTimer()
+106@ = 1
+
+:BURGJB_6808
+goto @BURGJB_6847
+
+:BURGJB_6815
+if 
+  0 > $burglary_player_stealth
+goto_if_false @BURGJB_6840
+$burglary_player_stealth = 0
+
+:BURGJB_6840
+106@ = 0
+
+:BURGJB_6847
+if 
+  106@ == 1
+goto_if_false @BURGJB_6919
+90@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 91@ = 90@
+sub_int_lvar_from_int_lvar 91@ -= 89@
+if 
+  91@ > 200
+goto_if_false @BURGJB_6919
+98@ = 1
+105@ += 1
+
+:BURGJB_6919
+goto @BURGJB_6972
+
+:BURGJB_6926
+Hud.ClearCounter($burglary_player_stealth)
+$burglary_noise = 0.0
+41@ = 0.0
+$burglary_player_stealth = 0
+101@ = 0
+Char.ShutUp($scplayer, False)
+
+:BURGJB_6972
+goto @BURGJB_7336
+
+:BURGJB_6979
+if 
+  101@ == 1
+goto_if_false @BURGJB_7091
+Hud.ClearCounter($burglary_player_stealth)
+$burglary_time_to_get_out = 10
+Text.ClearPrints
+Text.Print('BURG55', 5000, 1)
+Hud.DisplayNthCounterWithString($burglary_time_to_get_out, CounterDisplay.Number, 2, 'BURG61')
+89@ = Clock.GetGameTimer()
+$burglary_noise = 0.0
+41@ = 0.0
+$burglary_player_stealth = 0
+101@ = 0
+goto @BURGJB_7336
+
+:BURGJB_7091
+if 
+  109@ == 0
+goto_if_false @BURGJB_7336
+90@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 91@ = 90@
+sub_int_lvar_from_int_lvar 91@ -= 89@
+91@ /= 1000
+$burglary_time_to_get_out = 10
+sub_int_lvar_from_int_var $burglary_time_to_get_out -= 91@
+if or
+  0 > $burglary_time_to_get_out
+  $burglary_time_to_get_out == 0
+goto_if_false @BURGJB_7247
+$burglary_time_to_get_out = 0
+if 
+  not Player.IsWantedLevelGreater($player1, 4)
+goto_if_false @BURGJB_7210
+Player.AlterWantedLevelNoDrop($player1, 3)
+
+:BURGJB_7210
+109@ = 1
+Text.ClearPrints
+Text.Print('BURG60', 5000, 1)
+Hud.ClearCounter($burglary_time_to_get_out)
+goto @BURGJB_7336
+
+:BURGJB_7247
+Text.ClearThisPrint('BURG58')
+Text.ClearThisPrint('BURG59')
+Text.AddNextMessageToPreviousBriefs(False)
+if 
+  $burglary_time_to_get_out > 1
+goto_if_false @BURGJB_7317
+Text.PrintWithNumber('BURG58', $burglary_time_to_get_out, 1000, 1)
+goto @BURGJB_7336
+
+:BURGJB_7317
+Text.PrintWithNumber('BURG59', $burglary_time_to_get_out, 1000, 1)
+
+:BURGJB_7336
+if 
+  94@ == 0
+goto_if_false @BURGJB_7596
+63@, 64@, 65@ = Char.GetCoordinates($scplayer)
+49@ = World.GetClosestStealableObject(63@, 64@, 65@, 5.0)
+if 
+  49@ <> -1
+goto_if_false @BURGJB_7589
+if 
+  Char.IsHoldingObject($scplayer, 49@)
+goto_if_false @BURGJB_7483
+if 
+  100@ == 1
+goto_if_false @BURGJB_7469
+Text.ClearPrints
+Text.Print('BURG57', 5000, 1)
+Text.ClearHelp
+100@ = 0
+
+:BURGJB_7469
+94@ = 1
+goto @BURGJB_7589
+
+:BURGJB_7483
+if 
+  Char.LocateOnFootObject3D($scplayer, 49@, 1.7, 1.7, 2.0, False)
+goto_if_false @BURGJB_7562
+if 
+  100@ == 0
+goto_if_false @BURGJB_7555
+Text.PrintHelpForever('BURG23')
+100@ = 1
+
+:BURGJB_7555
+goto @BURGJB_7589
+
+:BURGJB_7562
+if 
+  100@ == 1
+goto_if_false @BURGJB_7589
+Text.ClearHelp
+100@ = 0
+
+:BURGJB_7589
+goto @BURGJB_7674
+
+:BURGJB_7596
+if 
+  Object.DoesExist(49@)
+goto_if_false @BURGJB_7674
+if 
+  not Char.IsHoldingObject($scplayer, 49@)
+goto_if_false @BURGJB_7674
+if 
+  94@ == 1
+goto_if_false @BURGJB_7667
+Text.ClearPrints
+Text.Print('BURG30', 5000, 1)
+
+:BURGJB_7667
+94@ = 0
+
+:BURGJB_7674
+goto @BURGJB_7825
+
+:BURGJB_7681
+if 
+  Player.IsWearing($player1, "BALACLAVA", BodyPart.SpecialCostume)
+goto_if_false @BURGJB_7811
+if 
+  Player.IsControlOn($player1)
+goto_if_false @BURGJB_7733
+Player.SetControl($player1, False)
+
+:BURGJB_7733
+Camera.DoFade(0, 1000)
+
+:BURGJB_7740
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_7764
+wait 0
+goto @BURGJB_7740
+
+:BURGJB_7764
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+Camera.DoFade(1, 1000)
+
+:BURGJB_7787
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_7811
+wait 0
+goto @BURGJB_7787
+
+:BURGJB_7811
+goto @BURGJB_8332
+95@ = 1
+
+:BURGJB_7825
+goto @BURGJB_7946
+
+:BURGJB_7832
+if 
+  Player.IsWearing($player1, "BALACLAVA", BodyPart.SpecialCostume)
+goto_if_false @BURGJB_7939
+Camera.DoFade(0, 1000)
+
+:BURGJB_7868
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_7892
+wait 0
+goto @BURGJB_7868
+
+:BURGJB_7892
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+Camera.DoFade(1, 1000)
+
+:BURGJB_7915
+if 
+  Camera.GetFadingStatus
+goto_if_false @BURGJB_7939
+wait 0
+goto @BURGJB_7915
+
+:BURGJB_7939
+goto @BURGJB_8332
+
+:BURGJB_7946
+goto @BURGJB_1044
+
+:BURGJB_7953
+$controlmode = Pad.GetControllerMode()
+if 
+  $controlmode <> 3
+goto_if_false @BURGJB_8042
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @BURGJB_8035
+if 
+  not Car.IsDead(50@)
+goto_if_false @BURGJB_8035
+if 
+  Char.IsInCar($scplayer, 50@)
+goto_if_false @BURGJB_8035
+96@ = 1
+
+:BURGJB_8035
+goto @BURGJB_8101
+
+:BURGJB_8042
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @BURGJB_8101
+if 
+  not Car.IsDead(50@)
+goto_if_false @BURGJB_8101
+if 
+  Char.IsInCar($scplayer, 50@)
+goto_if_false @BURGJB_8101
+96@ = 1
+
+:BURGJB_8101
+if 
+  96@ == 1
+goto_if_false @BURGJB_8330
+if 
+  $controlmode <> 3
+goto_if_false @BURGJB_8237
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Rightshock)
+goto_if_false @BURGJB_8230
+if 
+  not Car.IsDead(50@)
+goto_if_false @BURGJB_8230
+if 
+  Char.IsInCar($scplayer, 50@)
+goto_if_false @BURGJB_8221
+Text.ClearPrints
+Text.PrintNow('BURG41', 5000, 1)
+95@ = 1
+goto @BURGJB_8228
+
+:BURGJB_8221
+96@ = 0
+
+:BURGJB_8228
+return 
+
+:BURGJB_8230
+goto @BURGJB_8330
+
+:BURGJB_8237
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Square)
+goto_if_false @BURGJB_8330
+if 
+  not Car.IsDead(50@)
+goto_if_false @BURGJB_8330
+if 
+  Char.IsInCar($scplayer, 50@)
+goto_if_false @BURGJB_8321
+Text.ClearPrints
+Text.PrintNow('BURG41', 5000, 1)
+95@ = 1
+goto @BURGJB_8328
+
+:BURGJB_8321
+96@ = 0
+
+:BURGJB_8328
+return 
+
+:BURGJB_8330
+return 
+
+:BURGJB_8332
+Text.PrintBig('B_FAIL1', 5000, TextStyle.MiddleSmallerHigher)
+Text.PrintWith2NumbersBig('BURG37', 47@, $burglary_session_made, 5000, TextStyle.Middle)
+return 
+
+:BURGJB_8372
+if 
+  $done_burglary_progress == 0
+goto_if_false @BURGJB_8440
+Player.SetNeverGetsTired($player1, True)
+Text.PrintWithNumberBig('BURG54', 3000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 3000)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(2)
+$done_burglary_progress = 1
+
+:BURGJB_8440
+return 
+return 
+
+:BURGJB_8444
+$disable_mod_garage = 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @BURGJB_8474
+Char.ShutUp($scplayer, False)
+
+:BURGJB_8474
+Text.DrawOddjobTitleBeforeFade(True)
+Game.EnableBurglaryHouses(False)
+Garage.ChangeType(s$burglary_garage[0], GarageType.Burglary)
+Garage.ChangeType(s$burglary_garage[1], GarageType.Burglary)
+Garage.ChangeType(s$burglary_garage[2], GarageType.Burglary)
+Car.MarkAsNoLongerNeeded(50@)
+Blip.Remove(52@)
+Blip.Remove(51@)
+Hud.ClearCounter($burglary_player_stealth)
+Hud.ClearTimer($burglary_time_to_daylight)
+Hud.ClearTimer($burglary_time_to_lockup)
+Hud.ClearCounter($burglary_session_made)
+Hud.ClearCounter($burglary_time_to_get_out)
+$flag_player_on_burglary_mission = 0
+$onmission = 0
+$timer_mobile_start = Clock.GetGameTimer()
+Mission.Finish
+return 
+

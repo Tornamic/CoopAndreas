@@ -1,0 +1,2736 @@
+//-------------Mission 117---------------
+// Originally: Trucking
+
+:TRUCK
+script_name 'TRUCK'
+gosub @TRUCK_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @TRUCK_38
+gosub @TRUCK_16344
+
+:TRUCK_38
+gosub @TRUCK_16753
+terminate_this_script 
+
+:TRUCK_47
+if 
+  $done_truck_progress == 0
+goto_if_false @TRUCK_67
+Stat.RegisterMissionGiven
+
+:TRUCK_67
+$onmission = 1
+$flag_player_on_oddjob = 1
+34@ = 0
+35@ = 0
+36@ = 0
+37@ = 0
+38@ = 0
+39@ = 0
+40@ = 0
+41@ = 0
+42@ = 0
+47@ = 0
+48@ = 0
+TIMERA = 0
+TIMERB = 0
+105@ = 0
+106@ = 0
+114@ = 0
+if 
+  36@ == -99
+goto_if_false @TRUCK_324
+write_debug "SHOULD_NEVER_BE_IN_FAKE_ENTITY_CREATION"
+74@ = Car.Create(514, 0.0, 0.0, 0.0)
+75@ = Car.Create(584, 0.0, 0.0, 0.0)
+78@ = Blip.AddForCar(74@)
+77@ = Blip.AddForCar(74@)
+79@ = Blip.AddForCar(75@)
+
+:TRUCK_324
+Text.LoadMissionText('TRUCK')
+if 
+  $g_nTruckMissionsPassed >= 6
+goto_if_false @TRUCK_468
+$Return_cities_passed = Stat.GetInt(181)
+if 
+  2 > $Return_cities_passed
+goto_if_false @TRUCK_468
+Text.PrintNow('TRK_H17', 5000, 1)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @TRUCK_450
+Char.SetCoordinates($scplayer, -76.9664, -1134.639, 0.0781)
+Char.SetHeading($scplayer, 14.7291)
+Camera.SetBehindPlayer
+Player.SetControl($player1, True)
+
+:TRUCK_450
+Camera.DoFade(1, 500)
+wait 5000
+Text.DrawOddjobTitleBeforeFade(True)
+return 
+
+:TRUCK_468
+if 
+  $g_nTruckMissionsPassed >= 4
+goto_if_false @TRUCK_601
+$Return_cities_passed = Stat.GetInt(181)
+if 
+  1 > $Return_cities_passed
+goto_if_false @TRUCK_601
+Text.PrintNow('TRK_H18', 5000, 1)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @TRUCK_583
+Char.SetCoordinates($scplayer, -76.9664, -1134.639, 0.0781)
+Char.SetHeading($scplayer, 14.7291)
+Camera.SetBehindPlayer
+Player.SetControl($player1, True)
+
+:TRUCK_583
+Camera.DoFade(1, 500)
+wait 5000
+Text.DrawOddjobTitleBeforeFade(True)
+return 
+
+:TRUCK_601
+gosub @TRUCK_15391
+gosub @TRUCK_15393
+wait 100
+
+:TRUCK_619
+wait 0
+gosub @TRUCK_12403
+gosub @TRUCK_12776
+if or
+  40@ == 1
+  41@ == 1
+goto_if_false @TRUCK_669
+goto @TRUCK_896
+
+:TRUCK_669
+gosub @TRUCK_15288
+gosub @TRUCK_15322
+if 
+  Char.IsDead($scplayer)
+goto_if_false @TRUCK_713
+39@ = 1
+goto @TRUCK_896
+
+:TRUCK_713
+if 
+  36@ == 0
+goto_if_false @TRUCK_771
+write_debug "STAGE_SHOULD_NEVER_BE_0_IN_MAIN_LOOP"
+
+:TRUCK_771
+if 
+  36@ == 1
+goto_if_false @TRUCK_796
+gosub @TRUCK_1097
+
+:TRUCK_796
+if 
+  36@ == 2
+goto_if_false @TRUCK_821
+gosub @TRUCK_1312
+
+:TRUCK_821
+if 
+  36@ == 3
+goto_if_false @TRUCK_846
+38@ = 1
+
+:TRUCK_846
+if 
+  36@ == 50
+goto_if_false @TRUCK_871
+gosub @TRUCK_2470
+
+:TRUCK_871
+if 
+  36@ == 51
+goto_if_false @TRUCK_896
+40@ = 1
+
+:TRUCK_896
+if 
+  40@ == 0
+goto_if_false @TRUCK_1049
+if 
+  39@ == 0
+goto_if_false @TRUCK_1033
+if 
+  38@ == 0
+goto_if_false @TRUCK_964
+goto @TRUCK_619
+goto @TRUCK_1026
+
+:TRUCK_964
+gosub @TRUCK_16746
+if 
+  114@ == 1
+goto_if_false @TRUCK_1024
+38@ = 0
+36@ = 50
+37@ = 0
+114@ = 0
+goto @TRUCK_619
+
+:TRUCK_1024
+return 
+
+:TRUCK_1026
+goto @TRUCK_1042
+
+:TRUCK_1033
+gosub @TRUCK_16344
+return 
+
+:TRUCK_1042
+goto @TRUCK_1051
+
+:TRUCK_1049
+return 
+
+:TRUCK_1051
+write_debug "SHOULD_NEVER_BE_HERE_IN_END_OF_MAIN_LOOP"
+return 
+
+:TRUCK_1097
+if or
+  Car.IsDead(75@)
+  Car.IsDead(74@)
+goto_if_false @TRUCK_1134
+39@ = 1
+89@ = 3
+return 
+
+:TRUCK_1134
+if 
+  37@ == 0
+goto_if_false @TRUCK_1236
+Hud.DisplayNthCounterWithString($g_Truck_cashKM, CounterDisplay.Number, 1, 'TRK_CSH')
+set_var_int_to_lvar_int $g_Truck_cashKM = 91@
+set_lvar_int_to_lvar_int 83@ = 91@
+gosub @TRUCK_3418
+gosub @TRUCK_3636
+gosub @TRUCK_5170
+77@ = Blip.AddForCar(74@)
+Blip.SetAsFriendly(77@, True)
+113@ = 0
+37@ += 1
+
+:TRUCK_1236
+if 
+  37@ == 1
+goto_if_false @TRUCK_1285
+if 
+  Char.IsInCar($scplayer, 74@)
+goto_if_false @TRUCK_1285
+Blip.Remove(77@)
+37@ = 99
+
+:TRUCK_1285
+if 
+  37@ == 99
+goto_if_false @TRUCK_1310
+gosub @TRUCK_15361
+
+:TRUCK_1310
+return 
+
+:TRUCK_1312
+if or
+  Car.IsDead(74@)
+  Car.IsDead(75@)
+goto_if_false @TRUCK_1349
+39@ = 1
+89@ = 3
+return 
+
+:TRUCK_1349
+if 
+  113@ == 0
+goto_if_false @TRUCK_1394
+gosub @TRUCK_5187
+if 
+  39@ == 1
+goto_if_false @TRUCK_1394
+return 
+
+:TRUCK_1394
+if 
+  37@ == 0
+goto_if_false @TRUCK_1679
+76@ = Blip.AddForCoord(102@, 103@, 104@)
+Blip.ChangeScale(76@, 4)
+106@ = 0
+gosub @TRUCK_5875
+switch_start 88@ total_jumps 6 default_jump 1 @TRUCK_1648 jumps 1 @TRUCK_1510 2 @TRUCK_1533 3 @TRUCK_1556 4 @TRUCK_1579 5 @TRUCK_1602 6 @TRUCK_1625 -1 @TRUCK_1672
+
+:TRUCK_1510
+Text.PrintNow('TRK_H6', 15000, 1)
+goto @TRUCK_1672
+
+:TRUCK_1533
+Text.PrintNow('TRK_H7', 15000, 1)
+goto @TRUCK_1672
+
+:TRUCK_1556
+Text.PrintNow('TRK_H12', 15000, 1)
+goto @TRUCK_1672
+
+:TRUCK_1579
+Text.PrintNow('TRK_H9', 15000, 1)
+goto @TRUCK_1672
+
+:TRUCK_1602
+Text.PrintNow('TRK_H11', 15000, 1)
+goto @TRUCK_1672
+
+:TRUCK_1625
+Text.PrintNow('TRK_H10', 15000, 1)
+goto @TRUCK_1672
+
+:TRUCK_1648
+write_debug "UNKNOWN_MISSION_TYPE"
+
+:TRUCK_1672
+37@ += 1
+
+:TRUCK_1679
+if 
+  37@ == 1
+goto_if_false @TRUCK_1922
+set_lvar_float_to_lvar_float 63@ = 102@
+63@ -= 4.0
+set_lvar_float_to_lvar_float 64@ = 103@
+64@ -= 4.0
+set_lvar_float_to_lvar_float 65@ = 104@
+65@ -= 4.0
+set_lvar_float_to_lvar_float 66@ = 102@
+66@ += 4.0
+set_lvar_float_to_lvar_float 67@ = 103@
+67@ += 4.0
+set_lvar_float_to_lvar_float 68@ = 104@
+68@ += 4.0
+if or
+  Car.IsInArea3D(75@, 1, 63@, 64@, 65@, 66@, 67@, 68@)
+  Car.IsInArea3D(74@, 0, 63@, 64@, 65@, 66@, 67@, 68@)
+goto_if_false @TRUCK_1922
+if and
+  Char.IsInCar($scplayer, 74@)
+  Trailer.IsAttachedToCab(75@, 74@)
+goto_if_false @TRUCK_1922
+Player.SetControl($player1, False)
+113@ = 1
+81@ += 15000
+37@ += 1
+
+:TRUCK_1922
+if 
+  37@ == 2
+goto_if_false @TRUCK_1990
+if and
+  Car.IsStopped(75@)
+  Car.IsStopped(74@)
+goto_if_false @TRUCK_1990
+Car.FreezePosition(74@, True)
+Task.LeaveCar($scplayer, 74@)
+gosub @TRUCK_16540
+37@ += 1
+
+:TRUCK_1990
+if 
+  37@ == 3
+goto_if_false @TRUCK_2053
+if 
+  not Char.IsInCar($scplayer, 74@)
+goto_if_false @TRUCK_2053
+Car.CloseAllDoors(74@)
+Car.LockDoors(74@, CarLock.Locked)
+Player.SetControl($player1, True)
+37@ = 99
+
+:TRUCK_2053
+gosub @TRUCK_7116
+gosub @TRUCK_7271
+gosub @TRUCK_7500
+if 
+  106@ == 1
+goto_if_false @TRUCK_2099
+gosub @TRUCK_7694
+
+:TRUCK_2099
+if 
+  106@ == 0
+goto_if_false @TRUCK_2284
+59@ = -76.1692
+60@ = -1128.963
+61@ = 0.0781
+if and
+  Car.Locate3D(75@, 0, 59@, 60@, 61@, 40.0, 40.0, 40.0)
+  not Car.Locate3D(75@, 0, 59@, 60@, 61@, 20.0, 20.0, 20.0)
+goto_if_false @TRUCK_2284
+World.SetCarDensityMultiplier(1.0)
+if 
+  88@ == 4
+goto_if_false @TRUCK_2252
+Player.AlterWantedLevelNoDrop($player1, 3)
+
+:TRUCK_2252
+if 
+  88@ == 6
+goto_if_false @TRUCK_2277
+Player.AlterWantedLevelNoDrop($player1, 4)
+
+:TRUCK_2277
+106@ = 1
+
+:TRUCK_2284
+if 
+  105@ == 0
+goto_if_false @TRUCK_2384
+if 
+  110@ == 1
+goto_if_false @TRUCK_2343
+Text.PrintNow('TRK_H14', 6000, 1)
+110@ = 0
+
+:TRUCK_2343
+if 
+  111@ == 1
+goto_if_false @TRUCK_2384
+Text.PrintNow('TRK_H15', 6000, 1)
+111@ = 0
+
+:TRUCK_2384
+if 
+  105@ == 0
+goto_if_false @TRUCK_2443
+if 
+  112@ == 1
+goto_if_false @TRUCK_2443
+Text.PrintNow('TRK_H16', 7000, 1)
+112@ = 0
+
+:TRUCK_2443
+if 
+  37@ == 99
+goto_if_false @TRUCK_2468
+gosub @TRUCK_15361
+
+:TRUCK_2468
+return 
+
+:TRUCK_2470
+if 
+  37@ == 0
+goto_if_false @TRUCK_2545
+Player.SetControl($player1, False)
+set_lvar_int_to_lvar_int 82@ = 47@
+82@ += 5000
+59@, 60@, 61@ = Char.GetCoordinates($scplayer)
+62@ = Char.GetHeading($scplayer)
+Hud.ClearCounter($g_Truck_cashKM)
+37@ += 1
+
+:TRUCK_2545
+if 
+  37@ == 1
+goto_if_false @TRUCK_2612
+if 
+  is_int_lvar_greater_than_int_lvar 47@ > 82@
+goto_if_false @TRUCK_2612
+Camera.DoFade(0, 500)
+set_lvar_int_to_lvar_int 82@ = 47@
+82@ += 500
+37@ += 1
+
+:TRUCK_2612
+if 
+  37@ == 2
+goto_if_false @TRUCK_2861
+if and
+  is_int_lvar_greater_than_int_lvar 47@ > 82@
+  not Camera.GetFadingStatus
+goto_if_false @TRUCK_2861
+$g_Truck_CashPickupKM = Pickup.CreateProtection(-82.2693, -1135.526, 0.5847, $g_Truck_CashPickupValueKM, $g_Truck_CashPickupValueKM)
+Hud.SwitchWidescreen(True)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @TRUCK_2724
+Char.WarpFromCarToCoord($scplayer, -47.0873, -1122.146, 0.4453)
+goto @TRUCK_2744
+
+:TRUCK_2724
+Char.SetCoordinates($scplayer, -47.0873, -1122.146, 0.4453)
+
+:TRUCK_2744
+Car.MarkAsNoLongerNeeded(74@)
+Car.MarkAsNoLongerNeeded(75@)
+Game.SetEveryoneIgnorePlayer($player1, True)
+Game.SetAllCarsCanBeDamaged(False)
+Streaming.LoadSceneInDirection(-96.3779, -1125.262, 0.093, 261.7115)
+Camera.SetFixedPosition(-109.2539, -1122.353, 15.1451, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-108.3806, -1122.439, 14.6655, SwitchType.JumpCut)
+set_lvar_int_to_lvar_int 82@ = 47@
+82@ += 2000
+37@ += 1
+
+:TRUCK_2861
+if 
+  37@ == 3
+goto_if_false @TRUCK_2944
+if 
+  is_int_lvar_greater_than_int_lvar 47@ > 82@
+goto_if_false @TRUCK_2944
+Camera.DoFade(1, 500)
+Text.PrintBig('ASS_ACQ', 5000, TextStyle.WhiteMiddleSmaller)
+set_lvar_int_to_lvar_int 82@ = 47@
+82@ += 5000
+37@ += 1
+
+:TRUCK_2944
+if 
+  37@ == 4
+goto_if_false @TRUCK_3074
+if 
+  is_int_lvar_greater_than_int_lvar 47@ > 82@
+goto_if_false @TRUCK_3074
+Camera.SetFixedPosition(-83.7387, -1133.793, 0.9871, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-82.9525, -1134.41, 0.9592, SwitchType.JumpCut)
+Text.PrintWithNumberNow('ASS_LUV', $g_Truck_CashPickupValueKM, 6000, 1)
+set_lvar_int_to_lvar_int 82@ = 47@
+82@ += 6000
+37@ += 1
+
+:TRUCK_3074
+if 
+  37@ == 5
+goto_if_false @TRUCK_3141
+if 
+  is_int_lvar_greater_than_int_lvar 47@ > 82@
+goto_if_false @TRUCK_3141
+Camera.DoFade(0, 500)
+set_lvar_int_to_lvar_int 82@ = 47@
+82@ += 500
+37@ += 1
+
+:TRUCK_3141
+if 
+  37@ == 6
+goto_if_false @TRUCK_3244
+if and
+  is_int_lvar_greater_than_int_lvar 47@ > 82@
+  not Camera.GetFadingStatus
+goto_if_false @TRUCK_3244
+Char.SetCoordinates($scplayer, 59@, 60@, 61@)
+Char.SetHeading($scplayer, 62@)
+Streaming.LoadScene(59@, 60@, 61@)
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+set_lvar_int_to_lvar_int 82@ = 47@
+82@ += 2000
+37@ += 1
+
+:TRUCK_3244
+if 
+  37@ == 7
+goto_if_false @TRUCK_3327
+if 
+  is_int_lvar_greater_than_int_lvar 47@ > 82@
+goto_if_false @TRUCK_3327
+Text.PrintNow('TRK_P2', 10000, 1)
+Camera.DoFade(1, 500)
+set_lvar_int_to_lvar_int 82@ = 47@
+82@ += 500
+37@ += 1
+
+:TRUCK_3327
+if 
+  37@ == 8
+goto_if_false @TRUCK_3391
+if and
+  is_int_lvar_greater_than_int_lvar 47@ > 82@
+  not Camera.GetFadingStatus
+goto_if_false @TRUCK_3391
+Game.SetEveryoneIgnorePlayer($player1, False)
+Game.SetAllCarsCanBeDamaged(True)
+Player.SetControl($player1, True)
+37@ = 99
+
+:TRUCK_3391
+if 
+  37@ == 99
+goto_if_false @TRUCK_3416
+gosub @TRUCK_15361
+
+:TRUCK_3416
+return 
+
+:TRUCK_3418
+switch_start 88@ total_jumps 6 default_jump 1 @TRUCK_3607 jumps 1 @TRUCK_3481 2 @TRUCK_3502 3 @TRUCK_3523 4 @TRUCK_3544 5 @TRUCK_3565 6 @TRUCK_3586 -1 @TRUCK_3634
+
+:TRUCK_3481
+set_lvar_text_label 98@s = 'TRK_MND'
+goto @TRUCK_3634
+
+:TRUCK_3502
+set_lvar_text_label 98@s = 'TRK_MNT'
+goto @TRUCK_3634
+
+:TRUCK_3523
+set_lvar_text_label 98@s = 'TRK_MFD'
+goto @TRUCK_3634
+
+:TRUCK_3544
+set_lvar_text_label 98@s = 'TRK_MI'
+goto @TRUCK_3634
+
+:TRUCK_3565
+set_lvar_text_label 98@s = 'TRK_MTD'
+goto @TRUCK_3634
+
+:TRUCK_3586
+set_lvar_text_label 98@s = 'TRK_MHI'
+goto @TRUCK_3634
+
+:TRUCK_3607
+write_debug "UNKNOWN_MISSION_TYPE_ID"
+
+:TRUCK_3634
+return 
+
+:TRUCK_3636
+if 
+  86@ == 1
+goto_if_false @TRUCK_3801
+switch_start 87@ total_jumps 4 default_jump 0 @TRUCK_3801 jumps 0 @TRUCK_3717 1 @TRUCK_3738 2 @TRUCK_3759 3 @TRUCK_3780 -1 @TRUCK_3801 -1 @TRUCK_3801 -1 @TRUCK_3801
+
+:TRUCK_3717
+set_lvar_text_label 100@s = 'TRK_CE0'
+goto @TRUCK_3801
+
+:TRUCK_3738
+set_lvar_text_label 100@s = 'TRK_CE1'
+goto @TRUCK_3801
+
+:TRUCK_3759
+set_lvar_text_label 100@s = 'TRK_CE2'
+goto @TRUCK_3801
+
+:TRUCK_3780
+set_lvar_text_label 100@s = 'TRK_CE3'
+goto @TRUCK_3801
+
+:TRUCK_3801
+if 
+  86@ == 2
+goto_if_false @TRUCK_3924
+switch_start 87@ total_jumps 2 default_jump 0 @TRUCK_3924 jumps 0 @TRUCK_3882 1 @TRUCK_3903 -1 @TRUCK_3924 -1 @TRUCK_3924 -1 @TRUCK_3924 -1 @TRUCK_3924 -1 @TRUCK_3924
+
+:TRUCK_3882
+set_lvar_text_label 100@s = 'TRK_CE4'
+goto @TRUCK_3924
+
+:TRUCK_3903
+set_lvar_text_label 100@s = 'TRK_CE5'
+goto @TRUCK_3924
+
+:TRUCK_3924
+if 
+  86@ == 3
+goto_if_false @TRUCK_4089
+switch_start 87@ total_jumps 4 default_jump 0 @TRUCK_4089 jumps 0 @TRUCK_4005 1 @TRUCK_4026 2 @TRUCK_4047 3 @TRUCK_4068 -1 @TRUCK_4089 -1 @TRUCK_4089 -1 @TRUCK_4089
+
+:TRUCK_4005
+set_lvar_text_label 100@s = 'TRK_LS0'
+goto @TRUCK_4089
+
+:TRUCK_4026
+set_lvar_text_label 100@s = 'TRK_LS1'
+goto @TRUCK_4089
+
+:TRUCK_4047
+set_lvar_text_label 100@s = 'TRK_LS2'
+goto @TRUCK_4089
+
+:TRUCK_4068
+set_lvar_text_label 100@s = 'TRK_LS3'
+goto @TRUCK_4089
+
+:TRUCK_4089
+if 
+  86@ == 8
+goto_if_false @TRUCK_4529
+switch_start 87@ total_jumps 14 default_jump 0 @TRUCK_4529 jumps 0 @TRUCK_4235 1 @TRUCK_4256 2 @TRUCK_4277 3 @TRUCK_4298 4 @TRUCK_4319 5 @TRUCK_4340 6 @TRUCK_4361
+switch_continued 7 @TRUCK_4382 8 @TRUCK_4403 9 @TRUCK_4424 10 @TRUCK_4445 11 @TRUCK_4466 12 @TRUCK_4487 13 @TRUCK_4508 -1 @TRUCK_4529 -1 @TRUCK_4529
+
+:TRUCK_4235
+set_lvar_text_label 100@s = 'TRK_V0'
+goto @TRUCK_4529
+
+:TRUCK_4256
+set_lvar_text_label 100@s = 'TRK_V1'
+goto @TRUCK_4529
+
+:TRUCK_4277
+set_lvar_text_label 100@s = 'TRK_V2'
+goto @TRUCK_4529
+
+:TRUCK_4298
+set_lvar_text_label 100@s = 'TRK_V3'
+goto @TRUCK_4529
+
+:TRUCK_4319
+set_lvar_text_label 100@s = 'TRK_V4'
+goto @TRUCK_4529
+
+:TRUCK_4340
+set_lvar_text_label 100@s = 'TRK_V5'
+goto @TRUCK_4529
+
+:TRUCK_4361
+set_lvar_text_label 100@s = 'TRK_V6'
+goto @TRUCK_4529
+
+:TRUCK_4382
+set_lvar_text_label 100@s = 'TRK_V7'
+goto @TRUCK_4529
+
+:TRUCK_4403
+set_lvar_text_label 100@s = 'TRK_V8'
+goto @TRUCK_4529
+
+:TRUCK_4424
+set_lvar_text_label 100@s = 'TRK_V9'
+goto @TRUCK_4529
+
+:TRUCK_4445
+set_lvar_text_label 100@s = 'TRK_V10'
+goto @TRUCK_4529
+
+:TRUCK_4466
+set_lvar_text_label 100@s = 'TRK_V11'
+goto @TRUCK_4529
+
+:TRUCK_4487
+set_lvar_text_label 100@s = 'TRK_V12'
+goto @TRUCK_4529
+
+:TRUCK_4508
+set_lvar_text_label 100@s = 'TRK_V13'
+goto @TRUCK_4529
+
+:TRUCK_4529
+if 
+  86@ == 7
+goto_if_false @TRUCK_4715
+switch_start 87@ total_jumps 5 default_jump 0 @TRUCK_4715 jumps 0 @TRUCK_4610 1 @TRUCK_4631 2 @TRUCK_4652 3 @TRUCK_4673 4 @TRUCK_4694 -1 @TRUCK_4715 -1 @TRUCK_4715
+
+:TRUCK_4610
+set_lvar_text_label 100@s = 'TRK_NC0'
+goto @TRUCK_4715
+
+:TRUCK_4631
+set_lvar_text_label 100@s = 'TRK_NC1'
+goto @TRUCK_4715
+
+:TRUCK_4652
+set_lvar_text_label 100@s = 'TRK_NC2'
+goto @TRUCK_4715
+
+:TRUCK_4673
+set_lvar_text_label 100@s = 'TRK_NC3'
+goto @TRUCK_4715
+
+:TRUCK_4694
+set_lvar_text_label 100@s = 'TRK_NC4'
+goto @TRUCK_4715
+
+:TRUCK_4715
+if 
+  86@ == 4
+goto_if_false @TRUCK_4859
+switch_start 87@ total_jumps 3 default_jump 0 @TRUCK_4859 jumps 0 @TRUCK_4796 1 @TRUCK_4817 2 @TRUCK_4838 -1 @TRUCK_4859 -1 @TRUCK_4859 -1 @TRUCK_4859 -1 @TRUCK_4859
+
+:TRUCK_4796
+set_lvar_text_label 100@s = 'TRK_CS0'
+goto @TRUCK_4859
+
+:TRUCK_4817
+set_lvar_text_label 100@s = 'TRK_CS1'
+goto @TRUCK_4859
+
+:TRUCK_4838
+set_lvar_text_label 100@s = 'TRK_CS2'
+goto @TRUCK_4859
+
+:TRUCK_4859
+if 
+  86@ == 5
+goto_if_false @TRUCK_5024
+switch_start 87@ total_jumps 4 default_jump 0 @TRUCK_5024 jumps 0 @TRUCK_4940 1 @TRUCK_4961 2 @TRUCK_4982 3 @TRUCK_5003 -1 @TRUCK_5024 -1 @TRUCK_5024 -1 @TRUCK_5024
+
+:TRUCK_4940
+set_lvar_text_label 100@s = 'TRK_SF0'
+goto @TRUCK_5024
+
+:TRUCK_4961
+set_lvar_text_label 100@s = 'TRK_SF1'
+goto @TRUCK_5024
+
+:TRUCK_4982
+set_lvar_text_label 100@s = 'TRK_SF2'
+goto @TRUCK_5024
+
+:TRUCK_5003
+set_lvar_text_label 100@s = 'TRK_SF3'
+goto @TRUCK_5024
+
+:TRUCK_5024
+if 
+  86@ == 6
+goto_if_false @TRUCK_5168
+switch_start 87@ total_jumps 3 default_jump 0 @TRUCK_5168 jumps 0 @TRUCK_5105 1 @TRUCK_5126 2 @TRUCK_5147 -1 @TRUCK_5168 -1 @TRUCK_5168 -1 @TRUCK_5168 -1 @TRUCK_5168
+
+:TRUCK_5105
+set_lvar_text_label 100@s = 'TRK_CN0'
+goto @TRUCK_5168
+
+:TRUCK_5126
+set_lvar_text_label 100@s = 'TRK_CN1'
+goto @TRUCK_5168
+
+:TRUCK_5147
+set_lvar_text_label 100@s = 'TRK_CN2'
+goto @TRUCK_5168
+
+:TRUCK_5168
+return 
+
+:TRUCK_5170
+Text.ClearSmallPrints
+Text.PrintStringInStringNow(98@s, 100@s, 15000, TextStyle.Middle)
+return 
+
+:TRUCK_5187
+if 
+  105@ == 1
+goto_if_false @TRUCK_5743
+if and
+  Trailer.IsAttachedToCab(75@, 74@)
+  Char.IsInCar($scplayer, 74@)
+goto_if_false @TRUCK_5281
+84@ = 0
+105@ = 0
+Blip.Remove(78@)
+Blip.Remove(79@)
+76@ = Blip.AddForCoord(102@, 103@, 104@)
+Blip.ChangeScale(76@, 4)
+Text.ClearSmallPrints
+return 
+
+:TRUCK_5281
+50@ = Car.GetHealth(74@)
+if 
+  250 > 50@
+goto_if_false @TRUCK_5320
+Text.ClearSmallPrints
+Blip.Remove(78@)
+Blip.Remove(79@)
+
+:TRUCK_5320
+if 
+  is_int_lvar_greater_than_int_lvar 47@ > 80@
+goto_if_false @TRUCK_5362
+84@ -= 1
+set_lvar_int_to_lvar_int 80@ = 47@
+80@ += 1000
+
+:TRUCK_5362
+if 
+  0 > 84@
+goto_if_false @TRUCK_5474
+39@ = 1
+Text.ClearSmallPrints
+Blip.Remove(78@)
+Blip.Remove(79@)
+72@ = 0
+if 
+  not Char.IsInCar($scplayer, 74@)
+goto_if_false @TRUCK_5439
+72@ = 1
+89@ = 4
+
+:TRUCK_5439
+if and
+  not Trailer.IsAttachedToCab(75@, 74@)
+  72@ == 0
+goto_if_false @TRUCK_5472
+89@ = 5
+
+:TRUCK_5472
+return 
+
+:TRUCK_5474
+Text.ClearPrints
+Text.AddNextMessageToPreviousBriefs(False)
+if 
+  not Char.IsInCar($scplayer, 74@)
+goto_if_false @TRUCK_5621
+if 
+  84@ == 1
+goto_if_false @TRUCK_5543
+Text.PrintWithNumber('TRK_H5B', 84@, 1000, 1)
+goto @TRUCK_5562
+
+:TRUCK_5543
+Text.PrintWithNumber('TRK_H5', 84@, 1000, 1)
+
+:TRUCK_5562
+if 
+  Blip.DoesExist(79@)
+goto_if_false @TRUCK_5583
+Blip.Remove(79@)
+
+:TRUCK_5583
+if 
+  not Blip.DoesExist(78@)
+goto_if_false @TRUCK_5614
+78@ = Blip.AddForCar(74@)
+Blip.SetAsFriendly(78@, True)
+
+:TRUCK_5614
+goto @TRUCK_5736
+
+:TRUCK_5621
+if 
+  84@ == 1
+goto_if_false @TRUCK_5665
+Text.PrintWithNumber('TRK_H4B', 84@, 1000, 1)
+goto @TRUCK_5684
+
+:TRUCK_5665
+Text.PrintWithNumber('TRK_H4', 84@, 1000, 1)
+
+:TRUCK_5684
+if 
+  not Blip.DoesExist(79@)
+goto_if_false @TRUCK_5715
+79@ = Blip.AddForCar(75@)
+Blip.SetAsFriendly(79@, True)
+
+:TRUCK_5715
+if 
+  Blip.DoesExist(78@)
+goto_if_false @TRUCK_5736
+Blip.Remove(78@)
+
+:TRUCK_5736
+goto @TRUCK_5873
+
+:TRUCK_5743
+if or
+  not Trailer.IsAttachedToCab(75@, 74@)
+  not Char.IsInCar($scplayer, 74@)
+goto_if_false @TRUCK_5873
+84@ = 60
+set_lvar_int_to_lvar_int 80@ = 47@
+80@ += 1000
+105@ = 1
+Blip.Remove(76@)
+Text.AddNextMessageToPreviousBriefs(False)
+if 
+  not Char.IsInCar($scplayer, 74@)
+goto_if_false @TRUCK_5854
+Text.PrintWithNumberNow('TRK_H5', 84@, 1000, 1)
+goto @TRUCK_5873
+
+:TRUCK_5854
+Text.PrintWithNumberNow('TRK_H4', 84@, 1000, 1)
+
+:TRUCK_5873
+return 
+
+:TRUCK_5875
+90@ = 750
+if or
+  88@ == 1
+  88@ == 5
+goto_if_false @TRUCK_5916
+90@ = 500
+
+:TRUCK_5916
+if 
+  88@ == 3
+goto_if_false @TRUCK_5942
+90@ = 250
+
+:TRUCK_5942
+set_lvar_int_to_lvar_int 50@ = 90@
+50@ += 250
+Car.SetHealth(75@, 50@)
+Car.SetHealth(74@, 50@)
+92@ = 0
+gosub @TRUCK_6155
+if or
+  88@ == 1
+  88@ == 3
+goto_if_false @TRUCK_6031
+Hud.DisplayNthCounterWithString($g_Truck_damageKM, CounterDisplay.Bar, 2, 'TRK_DMG')
+
+:TRUCK_6031
+if 
+  88@ == 2
+goto_if_false @TRUCK_6076
+gosub @TRUCK_6559
+Hud.DisplayTimerWithString($g_Truck_timedKM, TimerDirection.Up, 'TRK_TIM')
+Hud.FreezeTimer(True)
+
+:TRUCK_6076
+if 
+  88@ == 5
+goto_if_false @TRUCK_6139
+gosub @TRUCK_6559
+Hud.DisplayTimerWithString($g_Truck_timedKM, TimerDirection.Up, 'TRK_TIM')
+Hud.DisplayNthCounterWithString($g_Truck_damageKM, CounterDisplay.Bar, 2, 'TRK_DMG')
+Hud.FreezeTimer(True)
+
+:TRUCK_6139
+110@ = 0
+111@ = 0
+return 
+
+:TRUCK_6155
+switch_start 92@ total_jumps 5 default_jump 0 @TRUCK_6365 jumps 0 @TRUCK_6218 1 @TRUCK_6256 2 @TRUCK_6293 3 @TRUCK_6330 4 @TRUCK_6351 -1 @TRUCK_6365 -1 @TRUCK_6365
+
+:TRUCK_6218
+set_lvar_int_to_lvar_int 81@ = 93@
+81@ *= 140
+add_int_lvar_to_int_lvar 81@ += 47@
+92@ = 1
+goto @TRUCK_6365
+
+:TRUCK_6256
+set_lvar_int_to_lvar_int 81@ = 93@
+81@ *= 84
+add_int_lvar_to_int_lvar 81@ += 47@
+92@ = 2
+goto @TRUCK_6365
+
+:TRUCK_6293
+set_lvar_int_to_lvar_int 81@ = 93@
+81@ *= 84
+add_int_lvar_to_int_lvar 81@ += 47@
+92@ = 3
+goto @TRUCK_6365
+
+:TRUCK_6330
+gosub @TRUCK_6367
+92@ = 4
+goto @TRUCK_6365
+
+:TRUCK_6351
+92@ = 5
+goto @TRUCK_6365
+
+:TRUCK_6365
+return 
+
+:TRUCK_6367
+50@ = 2
+50@ *= 60
+50@ += 0
+50@ *= 1000
+set_lvar_int_to_lvar_int 81@ = 47@
+add_int_lvar_to_int_lvar 81@ += 50@
+50@, 51@ = Clock.GetTimeOfDay()
+51@ += 0
+if 
+  51@ >= 60
+goto_if_false @TRUCK_6459
+51@ -= 60
+50@ += 1
+
+:TRUCK_6459
+50@ += 2
+if 
+  50@ >= 24
+goto_if_false @TRUCK_6491
+50@ -= 24
+
+:TRUCK_6491
+set_lvar_int_to_lvar_int 52@ = 50@
+52@ *= 60
+add_int_lvar_to_int_lvar 52@ += 51@
+52@ *= 1000
+set_var_int_to_lvar_int $g_Truck_timedKM = 52@
+Hud.DisplayTimerWithString($g_Truck_timedKM, TimerDirection.Up, 'TRK_DLN')
+Hud.FreezeTimer(True)
+112@ = 1
+return 
+
+:TRUCK_6559
+set_lvar_int_to_lvar_int 50@ = 93@
+50@ *= 140
+50@ /= 1000
+set_lvar_int_to_lvar_int 51@ = 50@
+51@ /= 60
+set_lvar_int_to_lvar_int 52@ = 51@
+52@ *= 60
+sub_int_lvar_from_int_lvar 50@ -= 52@
+94@, 95@ = Clock.GetTimeOfDay()
+add_int_lvar_to_int_lvar 95@ += 50@
+if 
+  95@ >= 60
+goto_if_false @TRUCK_6669
+94@ += 1
+95@ -= 60
+
+:TRUCK_6669
+add_int_lvar_to_int_lvar 94@ += 51@
+
+:TRUCK_6677
+if 
+  94@ >= 24
+goto_if_false @TRUCK_6709
+94@ -= 24
+goto @TRUCK_6677
+
+:TRUCK_6709
+72@ = 0
+if 
+  95@ > 45
+goto_if_false @TRUCK_6811
+50@ = 60
+sub_int_lvar_from_int_lvar 50@ -= 95@
+95@ = 0
+94@ += 1
+if 
+  94@ == 24
+goto_if_false @TRUCK_6788
+94@ = 0
+
+:TRUCK_6788
+50@ *= 1000
+add_int_lvar_to_int_lvar 81@ += 50@
+72@ = 1
+
+:TRUCK_6811
+if 
+  72@ == 0
+goto_if_false @TRUCK_6899
+if and
+  95@ > 30
+  45 > 95@
+goto_if_false @TRUCK_6899
+50@ = 45
+sub_int_lvar_from_int_lvar 50@ -= 95@
+95@ = 45
+50@ *= 1000
+add_int_lvar_to_int_lvar 81@ += 50@
+72@ = 1
+
+:TRUCK_6899
+if 
+  72@ == 0
+goto_if_false @TRUCK_6987
+if and
+  95@ > 15
+  30 > 95@
+goto_if_false @TRUCK_6987
+50@ = 30
+sub_int_lvar_from_int_lvar 50@ -= 95@
+95@ = 30
+50@ *= 1000
+add_int_lvar_to_int_lvar 81@ += 50@
+72@ = 1
+
+:TRUCK_6987
+if 
+  72@ == 0
+goto_if_false @TRUCK_7075
+if and
+  95@ > 0
+  15 > 95@
+goto_if_false @TRUCK_7075
+50@ = 15
+sub_int_lvar_from_int_lvar 50@ -= 95@
+95@ = 15
+50@ *= 1000
+add_int_lvar_to_int_lvar 81@ += 50@
+72@ = 1
+
+:TRUCK_7075
+set_lvar_int_to_lvar_int 50@ = 94@
+50@ *= 60
+add_int_lvar_to_int_lvar 50@ += 95@
+50@ *= 1000
+set_var_int_to_lvar_int $g_Truck_timedKM = 50@
+return 
+
+:TRUCK_7116
+50@ = Car.GetHealth(75@)
+51@ = Car.GetHealth(74@)
+if 
+  is_int_lvar_greater_than_int_lvar 50@ > 51@
+goto_if_false @TRUCK_7159
+set_lvar_int_to_lvar_int 50@ = 51@
+
+:TRUCK_7159
+if 
+  50@ > 1
+goto_if_false @TRUCK_7193
+Car.SetHealth(74@, 50@)
+Car.SetHealth(75@, 50@)
+
+:TRUCK_7193
+if 
+  108@ == 0
+goto_if_false @TRUCK_7213
+return 
+
+:TRUCK_7213
+50@ -= 250
+50@ *= 100
+div_int_lvar_by_int_lvar 50@ /= 90@
+if 
+  0 > 50@
+goto_if_false @TRUCK_7261
+50@ = 0
+
+:TRUCK_7261
+set_var_int_to_lvar_int $g_Truck_damageKM = 50@
+return 
+
+:TRUCK_7271
+if 
+  is_int_lvar_greater_than_int_lvar 47@ > 81@
+goto_if_false @TRUCK_7498
+gosub @TRUCK_6155
+if 
+  92@ == 5
+goto_if_false @TRUCK_7345
+39@ = 1
+81@ = 0
+83@ = 0
+89@ = 2
+return 
+
+:TRUCK_7345
+if 
+  107@ == 1
+goto_if_false @TRUCK_7498
+if or
+  92@ == 2
+  92@ == 3
+  92@ == 4
+goto_if_false @TRUCK_7498
+91@ /= 2
+Hud.ClearCounter($g_Truck_cashKM)
+Hud.DisplayNthCounterWithString($g_Truck_cashKM, CounterDisplay.Number, 1, 'TRK_CSH')
+if 
+  92@ == 2
+goto_if_false @TRUCK_7448
+Hud.ClearTimer($g_Truck_timedKM)
+
+:TRUCK_7448
+if 
+  92@ == 2
+goto_if_false @TRUCK_7473
+110@ = 1
+
+:TRUCK_7473
+if 
+  92@ == 3
+goto_if_false @TRUCK_7498
+111@ = 1
+
+:TRUCK_7498
+return 
+
+:TRUCK_7500
+set_lvar_int_to_lvar_int 83@ = 91@
+if 
+  108@ == 1
+goto_if_false @TRUCK_7643
+if 
+  Car.IsDead(74@)
+goto_if_false @TRUCK_7556
+83@ = 0
+goto @TRUCK_7643
+
+:TRUCK_7556
+50@ = Car.GetHealth(74@)
+if 
+  250 > 50@
+goto_if_false @TRUCK_7597
+83@ = 0
+goto @TRUCK_7643
+
+:TRUCK_7597
+50@ -= 250
+set_lvar_int_to_lvar_int 51@ = 50@
+51@ *= 100
+div_int_lvar_by_int_lvar 51@ /= 90@
+mult_int_lvar_by_int_lvar 83@ *= 51@
+83@ /= 100
+
+:TRUCK_7643
+if 
+  109@ == 1
+goto_if_false @TRUCK_7684
+if 
+  Car.IsDead(74@)
+goto_if_false @TRUCK_7684
+83@ = 0
+
+:TRUCK_7684
+set_var_int_to_lvar_int $g_Truck_cashKM = 83@
+return 
+
+:TRUCK_7694
+if 
+  109@ == 0
+goto_if_false @TRUCK_7714
+return 
+
+:TRUCK_7714
+if 
+  88@ == 4
+goto_if_false @TRUCK_7759
+if 
+  not Player.IsWantedLevelGreater($player1, 2)
+goto_if_false @TRUCK_7757
+Player.AlterWantedLevelNoDrop($player1, 3)
+
+:TRUCK_7757
+return 
+
+:TRUCK_7759
+if 
+  88@ == 6
+goto_if_false @TRUCK_7804
+if 
+  not Player.IsWantedLevelGreater($player1, 3)
+goto_if_false @TRUCK_7802
+Player.AlterWantedLevelNoDrop($player1, 4)
+
+:TRUCK_7802
+return 
+
+:TRUCK_7804
+return 
+
+:TRUCK_7806
+86@ = -1
+87@ = -1
+88@ = 0
+gosub @TRUCK_7871
+gosub @TRUCK_8323
+gosub @TRUCK_9841
+gosub @TRUCK_8986
+gosub @TRUCK_9326
+gosub @TRUCK_9431
+return 
+
+:TRUCK_7871
+59@ = -76.1692
+60@ = -1128.963
+61@ = 0.0781
+62@ = 69.9957
+World.ClearArea(0, 59@, 60@, 61@, 30.0)
+switch_start 97@ total_jumps 3 default_jump 1 @TRUCK_8064 jumps 1 @TRUCK_7992 2 @TRUCK_8016 3 @TRUCK_8040 -1 @TRUCK_8079 -1 @TRUCK_8079 -1 @TRUCK_8079 -1 @TRUCK_8079
+
+:TRUCK_7992
+74@ = Car.Create(514, 59@, 60@, 61@)
+goto @TRUCK_8079
+
+:TRUCK_8016
+74@ = Car.Create(403, 59@, 60@, 61@)
+goto @TRUCK_8079
+
+:TRUCK_8040
+74@ = Car.Create(515, 59@, 60@, 61@)
+goto @TRUCK_8079
+
+:TRUCK_8064
+write_debug "UNKNOWN_CAB"
+
+:TRUCK_8079
+Car.SetHeading(74@, 62@)
+59@ = -60.6033
+60@ = -1136.899
+61@ = 0.0781
+World.ClearArea(0, 59@, 60@, 61@, 50.0)
+switch_start 96@ total_jumps 4 default_jump 1 @TRUCK_8294 jumps 1 @TRUCK_8198 2 @TRUCK_8222 3 @TRUCK_8246 4 @TRUCK_8270 -1 @TRUCK_8313 -1 @TRUCK_8313 -1 @TRUCK_8313
+
+:TRUCK_8198
+75@ = Car.Create(584, 59@, 60@, 61@)
+goto @TRUCK_8313
+
+:TRUCK_8222
+75@ = Car.Create(435, 59@, 60@, 61@)
+goto @TRUCK_8313
+
+:TRUCK_8246
+75@ = Car.Create(450, 59@, 60@, 61@)
+goto @TRUCK_8313
+
+:TRUCK_8270
+75@ = Car.Create(591, 59@, 60@, 61@)
+goto @TRUCK_8313
+
+:TRUCK_8294
+write_debug "UNKNOWN_TRAILER"
+
+:TRUCK_8313
+Trailer.AttachToCab(75@, 74@)
+return 
+
+:TRUCK_8323
+switch_start $g_nTruckMissionsPassed total_jumps 8 default_jump 1 @TRUCK_8597 jumps 0 @TRUCK_8451 1 @TRUCK_8465 2 @TRUCK_8479 3 @TRUCK_8493 4 @TRUCK_8507 5 @TRUCK_8521 6 @TRUCK_8552
+switch_continued 7 @TRUCK_8583 -1 @TRUCK_8628 -1 @TRUCK_8628 -1 @TRUCK_8628 -1 @TRUCK_8628 -1 @TRUCK_8628 -1 @TRUCK_8628 -1 @TRUCK_8628 -1 @TRUCK_8628
+
+:TRUCK_8451
+86@ = 1
+goto @TRUCK_8628
+
+:TRUCK_8465
+86@ = 2
+goto @TRUCK_8628
+
+:TRUCK_8479
+86@ = 3
+goto @TRUCK_8628
+
+:TRUCK_8493
+86@ = 4
+goto @TRUCK_8628
+
+:TRUCK_8507
+86@ = 5
+goto @TRUCK_8628
+
+:TRUCK_8521
+51@ = 5
+51@ += 1
+86@ = Math.RandomIntInRange(4, 51@)
+goto @TRUCK_8628
+
+:TRUCK_8552
+51@ = 7
+51@ += 1
+86@ = Math.RandomIntInRange(6, 51@)
+goto @TRUCK_8628
+
+:TRUCK_8583
+86@ = 8
+goto @TRUCK_8628
+
+:TRUCK_8597
+51@ = 8
+51@ += 1
+86@ = Math.RandomIntInRange(2, 51@)
+goto @TRUCK_8628
+
+:TRUCK_8628
+switch_start 86@ total_jumps 8 default_jump 1 @TRUCK_8868 jumps 1 @TRUCK_8756 2 @TRUCK_8770 3 @TRUCK_8784 4 @TRUCK_8826 5 @TRUCK_8840 6 @TRUCK_8854 7 @TRUCK_8812
+switch_continued 8 @TRUCK_8798 -1 @TRUCK_8896 -1 @TRUCK_8896 -1 @TRUCK_8896 -1 @TRUCK_8896 -1 @TRUCK_8896 -1 @TRUCK_8896 -1 @TRUCK_8896 -1 @TRUCK_8896
+
+:TRUCK_8756
+gosub @TRUCK_8898
+goto @TRUCK_8896
+
+:TRUCK_8770
+gosub @TRUCK_8909
+goto @TRUCK_8896
+
+:TRUCK_8784
+gosub @TRUCK_8931
+goto @TRUCK_8896
+
+:TRUCK_8798
+gosub @TRUCK_8920
+goto @TRUCK_8896
+
+:TRUCK_8812
+gosub @TRUCK_8975
+goto @TRUCK_8896
+
+:TRUCK_8826
+gosub @TRUCK_8953
+goto @TRUCK_8896
+
+:TRUCK_8840
+gosub @TRUCK_8942
+goto @TRUCK_8896
+
+:TRUCK_8854
+gosub @TRUCK_8964
+goto @TRUCK_8896
+
+:TRUCK_8868
+write_debug "UNKNOWN_DESTINATION_AREA"
+
+:TRUCK_8896
+return 
+
+:TRUCK_8898
+87@ = Math.RandomIntInRange(0, 4)
+return 
+
+:TRUCK_8909
+87@ = Math.RandomIntInRange(0, 2)
+return 
+
+:TRUCK_8920
+87@ = Math.RandomIntInRange(0, 14)
+return 
+
+:TRUCK_8931
+87@ = Math.RandomIntInRange(0, 4)
+return 
+
+:TRUCK_8942
+87@ = Math.RandomIntInRange(0, 4)
+return 
+
+:TRUCK_8953
+87@ = Math.RandomIntInRange(0, 3)
+return 
+
+:TRUCK_8964
+87@ = Math.RandomIntInRange(0, 3)
+return 
+
+:TRUCK_8975
+87@ = Math.RandomIntInRange(0, 5)
+return 
+
+:TRUCK_8986
+switch_start $g_nTruckMissionsPassed total_jumps 8 default_jump 1 @TRUCK_9198 jumps 0 @TRUCK_9114 1 @TRUCK_9128 2 @TRUCK_9156 3 @TRUCK_9114 4 @TRUCK_9142 5 @TRUCK_9156 6 @TRUCK_9170
+switch_continued 7 @TRUCK_9184 -1 @TRUCK_9221 -1 @TRUCK_9221 -1 @TRUCK_9221 -1 @TRUCK_9221 -1 @TRUCK_9221 -1 @TRUCK_9221 -1 @TRUCK_9221 -1 @TRUCK_9221
+
+:TRUCK_9114
+88@ = 2
+goto @TRUCK_9221
+
+:TRUCK_9128
+88@ = 1
+goto @TRUCK_9221
+
+:TRUCK_9142
+88@ = 3
+goto @TRUCK_9221
+
+:TRUCK_9156
+88@ = 4
+goto @TRUCK_9221
+
+:TRUCK_9170
+88@ = 5
+goto @TRUCK_9221
+
+:TRUCK_9184
+88@ = 6
+goto @TRUCK_9221
+
+:TRUCK_9198
+88@ = Math.RandomIntInRange(0, 6)
+88@ += 1
+goto @TRUCK_9221
+
+:TRUCK_9221
+if or
+  88@ == 1
+  88@ == 3
+  88@ == 5
+goto_if_false @TRUCK_9260
+108@ = 1
+
+:TRUCK_9260
+if or
+  88@ == 2
+  88@ == 5
+goto_if_false @TRUCK_9292
+107@ = 1
+
+:TRUCK_9292
+if or
+  88@ == 4
+  88@ == 6
+goto_if_false @TRUCK_9324
+109@ = 1
+
+:TRUCK_9324
+return 
+
+:TRUCK_9326
+set_lvar_float_to_lvar_float 63@ = 102@
+sub_float_var_from_float_lvar 63@ -= $truckX
+set_lvar_float_to_lvar_float 64@ = 103@
+sub_float_var_from_float_lvar 64@ -= $truckY
+set_lvar_float_to_lvar_float 66@ = 63@
+mult_float_lvar_by_float_lvar 66@ *= 63@
+set_lvar_float_to_lvar_float 67@ = 64@
+mult_float_lvar_by_float_lvar 67@ *= 64@
+set_lvar_float_to_lvar_float 69@ = 66@
+add_float_lvar_to_float_lvar 69@ += 67@
+70@ = Math.Sqrt(69@)
+cset_lvar_int_to_lvar_float 93@ = float 70@
+49@ += 1
+return 
+
+:TRUCK_9431
+switch_start 86@ total_jumps 8 default_jump 1 @TRUCK_9604 jumps 1 @TRUCK_9559 2 @TRUCK_9559 3 @TRUCK_9559 4 @TRUCK_9574 5 @TRUCK_9574 6 @TRUCK_9589 7 @TRUCK_9589
+switch_continued 8 @TRUCK_9589 -1 @TRUCK_9643 -1 @TRUCK_9643 -1 @TRUCK_9643 -1 @TRUCK_9643 -1 @TRUCK_9643 -1 @TRUCK_9643 -1 @TRUCK_9643 -1 @TRUCK_9643
+
+:TRUCK_9559
+91@ = 1000
+goto @TRUCK_9643
+
+:TRUCK_9574
+91@ = 3000
+goto @TRUCK_9643
+
+:TRUCK_9589
+91@ = 4000
+goto @TRUCK_9643
+
+:TRUCK_9604
+write_debug "INITIALISE_CASH_UNKNOWN_DESTINATION"
+
+:TRUCK_9643
+switch_start 88@ total_jumps 6 default_jump 1 @TRUCK_9773 jumps 1 @TRUCK_9713 2 @TRUCK_9706 3 @TRUCK_9728 4 @TRUCK_9728 5 @TRUCK_9743 6 @TRUCK_9758 -1 @TRUCK_9813
+
+:TRUCK_9706
+goto @TRUCK_9813
+
+:TRUCK_9713
+91@ += 500
+goto @TRUCK_9813
+
+:TRUCK_9728
+91@ += 1000
+goto @TRUCK_9813
+
+:TRUCK_9743
+91@ += 3000
+goto @TRUCK_9813
+
+:TRUCK_9758
+91@ += 6000
+goto @TRUCK_9813
+
+:TRUCK_9773
+write_debug "INITIALISE_CASH_UNKNOWN_MISSION_TYPE"
+
+:TRUCK_9813
+if 
+  $g_nTruckMissionsPassed == 5
+goto_if_false @TRUCK_9839
+91@ += 1000
+
+:TRUCK_9839
+return 
+
+:TRUCK_9841
+switch_start 86@ total_jumps 8 default_jump 1 @TRUCK_10081 jumps 1 @TRUCK_9969 2 @TRUCK_9983 3 @TRUCK_9997 4 @TRUCK_10039 5 @TRUCK_10053 6 @TRUCK_10067 7 @TRUCK_10025
+switch_continued 8 @TRUCK_10011 -1 @TRUCK_10109 -1 @TRUCK_10109 -1 @TRUCK_10109 -1 @TRUCK_10109 -1 @TRUCK_10109 -1 @TRUCK_10109 -1 @TRUCK_10109 -1 @TRUCK_10109
+
+:TRUCK_9969
+gosub @TRUCK_10111
+goto @TRUCK_10109
+
+:TRUCK_9983
+gosub @TRUCK_10360
+goto @TRUCK_10109
+
+:TRUCK_9997
+gosub @TRUCK_11214
+goto @TRUCK_10109
+
+:TRUCK_10011
+gosub @TRUCK_10534
+goto @TRUCK_10109
+
+:TRUCK_10025
+gosub @TRUCK_11875
+goto @TRUCK_10109
+
+:TRUCK_10039
+gosub @TRUCK_11457
+goto @TRUCK_10109
+
+:TRUCK_10053
+gosub @TRUCK_12159
+goto @TRUCK_10109
+
+:TRUCK_10067
+gosub @TRUCK_11666
+goto @TRUCK_10109
+
+:TRUCK_10081
+write_debug "UNKNOWN_DESTINATION_AREA"
+
+:TRUCK_10109
+return 
+
+:TRUCK_10111
+switch_start 87@ total_jumps 4 default_jump 1 @TRUCK_10322 jumps 0 @TRUCK_10174 1 @TRUCK_10211 2 @TRUCK_10248 3 @TRUCK_10285 -1 @TRUCK_10358 -1 @TRUCK_10358 -1 @TRUCK_10358
+
+:TRUCK_10174
+102@ = -187.4041
+103@ = -277.0196
+104@ = 0.4219
+goto @TRUCK_10358
+
+:TRUCK_10211
+102@ = 58.0364
+103@ = -256.7285
+104@ = 0.5781
+goto @TRUCK_10358
+
+:TRUCK_10248
+102@ = 95.8675
+103@ = -154.3627
+104@ = 1.5751
+goto @TRUCK_10358
+
+:TRUCK_10285
+102@ = 809.7556
+103@ = -598.0007
+104@ = 15.1875
+goto @TRUCK_10358
+
+:TRUCK_10322
+write_debug "UNKNOWN_COUNTRYEASTNEAR_LOCATION"
+
+:TRUCK_10358
+return 
+
+:TRUCK_10360
+switch_start 87@ total_jumps 2 default_jump 1 @TRUCK_10497 jumps 0 @TRUCK_10423 1 @TRUCK_10460 -1 @TRUCK_10532 -1 @TRUCK_10532 -1 @TRUCK_10532 -1 @TRUCK_10532 -1 @TRUCK_10532
+
+:TRUCK_10423
+102@ = 1403.833
+103@ = 399.4294
+104@ = 18.75
+goto @TRUCK_10532
+
+:TRUCK_10460
+102@ = 1338.289
+103@ = 348.9004
+104@ = 18.4062
+goto @TRUCK_10532
+
+:TRUCK_10497
+write_debug "UNKNOWN_COUNTRYEASTFAR_LOCATION"
+
+:TRUCK_10532
+return 
+
+:TRUCK_10534
+switch_start 87@ total_jumps 14 default_jump 1 @TRUCK_11180 jumps 0 @TRUCK_10662 1 @TRUCK_10699 2 @TRUCK_10736 3 @TRUCK_10773 4 @TRUCK_10810 5 @TRUCK_10847 6 @TRUCK_10884
+switch_continued 7 @TRUCK_10921 8 @TRUCK_10958 9 @TRUCK_10995 10 @TRUCK_11032 11 @TRUCK_11069 12 @TRUCK_11106 13 @TRUCK_11143 -1 @TRUCK_11212 -1 @TRUCK_11212
+
+:TRUCK_10662
+102@ = 1449.715
+103@ = 2358.852
+104@ = 9.8203
+goto @TRUCK_11212
+
+:TRUCK_10699
+102@ = 1037.475
+103@ = 2131.344
+104@ = 9.8203
+goto @TRUCK_11212
+
+:TRUCK_10736
+102@ = 987.9741
+103@ = 2080.389
+104@ = 9.8203
+goto @TRUCK_11212
+
+:TRUCK_10773
+102@ = 1288.671
+103@ = 1195.232
+104@ = 9.8656
+goto @TRUCK_11212
+
+:TRUCK_10810
+102@ = 2467.902
+103@ = 1950.061
+104@ = 9.2381
+goto @TRUCK_11212
+
+:TRUCK_10847
+102@ = 2792.744
+103@ = 2578.336
+104@ = 9.8203
+goto @TRUCK_11212
+
+:TRUCK_10884
+102@ = 2271.477
+103@ = 2791.739
+104@ = 9.8203
+goto @TRUCK_11212
+
+:TRUCK_10921
+102@ = 2596.519
+103@ = 1738.582
+104@ = 9.8281
+goto @TRUCK_11212
+
+:TRUCK_10958
+102@ = 2818.84
+103@ = 912.5091
+104@ = 9.75
+goto @TRUCK_11212
+
+:TRUCK_10995
+102@ = 2706.505
+103@ = 827.3236
+104@ = 9.2145
+goto @TRUCK_11212
+
+:TRUCK_11032
+102@ = 1627.723
+103@ = 688.4043
+104@ = 9.8281
+goto @TRUCK_11212
+
+:TRUCK_11069
+102@ = 1504.492
+103@ = 981.141
+104@ = 9.7187
+goto @TRUCK_11212
+
+:TRUCK_11106
+102@ = 1724.012
+103@ = 1590.128
+104@ = 9.2578
+goto @TRUCK_11212
+
+:TRUCK_11143
+102@ = 1727.833
+103@ = 2338.017
+104@ = 9.813
+goto @TRUCK_11212
+
+:TRUCK_11180
+write_debug "UNKNOWN_LASVENTURAS_LOCATION"
+
+:TRUCK_11212
+return 
+
+:TRUCK_11214
+switch_start 87@ total_jumps 4 default_jump 1 @TRUCK_11425 jumps 0 @TRUCK_11277 1 @TRUCK_11314 2 @TRUCK_11351 3 @TRUCK_11388 -1 @TRUCK_11455 -1 @TRUCK_11455 -1 @TRUCK_11455
+
+:TRUCK_11277
+102@ = 2413.683
+103@ = -2113.674
+104@ = 12.3881
+goto @TRUCK_11455
+
+:TRUCK_11314
+102@ = 2784.973
+103@ = -2455.441
+104@ = 12.625
+goto @TRUCK_11455
+
+:TRUCK_11351
+102@ = 2112.662
+103@ = -2070.376
+104@ = 12.5547
+goto @TRUCK_11455
+
+:TRUCK_11388
+102@ = 1763.641
+103@ = -2070.371
+104@ = 12.6195
+goto @TRUCK_11455
+
+:TRUCK_11425
+write_debug "UNKNOWN_LOSSANTOS_LOCATION"
+
+:TRUCK_11455
+return 
+
+:TRUCK_11457
+switch_start 87@ total_jumps 3 default_jump 1 @TRUCK_11631 jumps 0 @TRUCK_11520 1 @TRUCK_11557 2 @TRUCK_11594 -1 @TRUCK_11664 -1 @TRUCK_11664 -1 @TRUCK_11664 -1 @TRUCK_11664
+
+:TRUCK_11520
+102@ = -1888.621
+103@ = -1711.836
+104@ = 20.7656
+goto @TRUCK_11664
+
+:TRUCK_11557
+102@ = -2117.227
+103@ = -2380.507
+104@ = 29.4688
+goto @TRUCK_11664
+
+:TRUCK_11594
+102@ = -1545.439
+103@ = -2747.032
+104@ = 47.5314
+goto @TRUCK_11664
+
+:TRUCK_11631
+write_debug "UNKNOWN_COUNTRYSOUTH_LOCATION"
+
+:TRUCK_11664
+return 
+
+:TRUCK_11666
+switch_start 87@ total_jumps 3 default_jump 1 @TRUCK_11840 jumps 0 @TRUCK_11729 1 @TRUCK_11766 2 @TRUCK_11803 -1 @TRUCK_11873 -1 @TRUCK_11873 -1 @TRUCK_11873 -1 @TRUCK_11873
+
+:TRUCK_11729
+102@ = -1407.375
+103@ = 2645.957
+104@ = 54.7031
+goto @TRUCK_11873
+
+:TRUCK_11766
+102@ = -2245.581
+103@ = 2371.693
+104@ = 3.9919
+goto @TRUCK_11873
+
+:TRUCK_11803
+102@ = -1360.633
+103@ = 2068.094
+104@ = 51.4589
+goto @TRUCK_11873
+
+:TRUCK_11840
+write_debug "UNKNOWN_COUNTRYNORTH_LOCATION"
+
+:TRUCK_11873
+return 
+
+:TRUCK_11875
+switch_start 87@ total_jumps 5 default_jump 1 @TRUCK_12123 jumps 0 @TRUCK_11938 1 @TRUCK_11975 2 @TRUCK_12012 3 @TRUCK_12049 4 @TRUCK_12086 -1 @TRUCK_12157 -1 @TRUCK_12157
+
+:TRUCK_11938
+102@ = 274.2705
+103@ = 1382.781
+104@ = 9.6016
+goto @TRUCK_12157
+
+:TRUCK_11975
+102@ = 628.8638
+103@ = 1714.891
+104@ = 5.9922
+goto @TRUCK_12157
+
+:TRUCK_12012
+102@ = 635.0028
+103@ = 1213.777
+104@ = 10.7188
+goto @TRUCK_12157
+
+:TRUCK_12049
+102@ = -914.953
+103@ = 2012.138
+104@ = 59.9283
+goto @TRUCK_12157
+
+:TRUCK_12086
+102@ = 385.8214
+103@ = 2595.55
+104@ = 15.4843
+goto @TRUCK_12157
+
+:TRUCK_12123
+write_debug "UNKNOWN_COUNTRYNORTH2_LOCATION"
+
+:TRUCK_12157
+return 
+
+:TRUCK_12159
+switch_start 87@ total_jumps 4 default_jump 1 @TRUCK_12370 jumps 0 @TRUCK_12222 1 @TRUCK_12259 2 @TRUCK_12296 3 @TRUCK_12333 -1 @TRUCK_12401 -1 @TRUCK_12401 -1 @TRUCK_12401
+
+:TRUCK_12222
+102@ = -1556.977
+103@ = -441.3493
+104@ = 5.0
+goto @TRUCK_12401
+
+:TRUCK_12259
+102@ = -2659.631
+103@ = 1380.642
+104@ = 6.1643
+goto @TRUCK_12401
+
+:TRUCK_12296
+102@ = -1650.928
+103@ = 437.5679
+104@ = 6.1797
+goto @TRUCK_12401
+
+:TRUCK_12333
+102@ = -1745.116
+103@ = 37.8752
+104@ = 2.5408
+goto @TRUCK_12401
+
+:TRUCK_12370
+write_debug "UNKNOWN_SAN_FIERRO_LOCATION"
+
+:TRUCK_12401
+return 
+
+:TRUCK_12403
+if 
+is_ps2_keyboard_key_just_pressed 32
+goto_if_false @TRUCK_12452
+48@ += 1
+if 
+  48@ > 2
+goto_if_false @TRUCK_12450
+48@ = 0
+
+:TRUCK_12450
+clear_all_view_variables 
+
+:TRUCK_12452
+if 
+  48@ == 1
+goto_if_false @TRUCK_12646
+set_var_int_to_lvar_int $Truck_view_debug = 36@
+set_var_int_to_lvar_int $8164 = 37@
+set_var_int_to_lvar_int $8165 = 47@
+set_var_int_to_lvar_int $8166 = 81@
+sub_int_lvar_from_int_var $8166 -= 47@
+set_var_int_to_lvar_int $8167 = 92@
+set_var_int_to_lvar_int $8168 = 93@
+$8169 = 0
+$8170 = 0
+view_integer_variable $Truck_view_debug "M_STAGE"
+view_integer_variable $8164 "M_GOALS"
+view_integer_variable $8165 "M_MISSION_TIMER"
+view_integer_variable $8166 "TIME_BOUNDARY_HIT"
+view_integer_variable $8167 "TIME_STAGE"
+view_integer_variable $8168 "DISTANCE"
+
+:TRUCK_12646
+if 
+  48@ == 2
+goto_if_false @TRUCK_12664
+
+:TRUCK_12664
+if 
+is_ps2_keyboard_key_just_pressed 98
+goto_if_false @TRUCK_12686
+40@ = 1
+
+:TRUCK_12686
+if 
+is_ps2_keyboard_key_just_pressed 80
+goto_if_false @TRUCK_12774
+if 
+  41@ == 0
+goto_if_false @TRUCK_12749
+41@ = 1
+write_debug "LEVEL_PAUSED"
+goto @TRUCK_12774
+
+:TRUCK_12749
+41@ = 0
+write_debug "LEVEL_UNPAUSED"
+
+:TRUCK_12774
+return 
+
+:TRUCK_12776
+if or
+  36@ == 50
+  36@ == 51
+goto_if_false @TRUCK_12803
+return 
+
+:TRUCK_12803
+if 
+is_ps2_keyboard_key_just_pressed 83
+goto_if_false @TRUCK_12834
+gosub @TRUCK_16540
+38@ = 1
+return 
+
+:TRUCK_12834
+if 
+is_ps2_keyboard_key_just_pressed 77
+goto_if_false @TRUCK_12880
+$g_nTruckMissionsPassed += 1
+write_debug_with_int "MISSIONS_PASSED" $g_nTruckMissionsPassed
+return 
+
+:TRUCK_12880
+72@ = 0
+if 
+is_ps2_keyboard_key_just_pressed 65
+goto_if_false @TRUCK_12909
+72@ = 1
+
+:TRUCK_12909
+73@ = 0
+if 
+is_ps2_keyboard_key_just_pressed 68
+goto_if_false @TRUCK_12938
+73@ = 1
+
+:TRUCK_12938
+50@ = 0
+if 
+is_ps2_keyboard_key_just_pressed 74
+goto_if_false @TRUCK_12967
+50@ = 1
+
+:TRUCK_12967
+if and
+  72@ <> 1
+  73@ <> 1
+  50@ <> 1
+goto_if_false @TRUCK_13001
+return 
+
+:TRUCK_13001
+if 
+  72@ == 1
+goto_if_false @TRUCK_13071
+34@ += 1
+if 
+  34@ == 6
+goto_if_false @TRUCK_13051
+34@ = 0
+
+:TRUCK_13051
+35@ = 0
+write_debug_with_int "AREA" 34@
+return 
+
+:TRUCK_13071
+if 
+  73@ == 1
+goto_if_false @TRUCK_13116
+35@ += 1
+write_debug_with_int "DESTINATION" 35@
+return 
+
+:TRUCK_13116
+if 
+  34@ == 0
+goto_if_false @TRUCK_13426
+switch_start 35@ total_jumps 6 default_jump 1 @TRUCK_13382 jumps 0 @TRUCK_13382 1 @TRUCK_13197 2 @TRUCK_13234 3 @TRUCK_13271 4 @TRUCK_13308 5 @TRUCK_13345 -1 @TRUCK_13426
+
+:TRUCK_13197
+102@ = 56.744
+103@ = -268.404
+104@ = 0.579
+goto @TRUCK_13426
+
+:TRUCK_13234
+102@ = 100.397
+103@ = -155.05
+104@ = 1.583
+goto @TRUCK_13426
+
+:TRUCK_13271
+102@ = 815.046
+103@ = -605.128
+104@ = 15.336
+goto @TRUCK_13426
+
+:TRUCK_13308
+102@ = 1401.109
+103@ = 398.763
+104@ = 18.756
+goto @TRUCK_13426
+
+:TRUCK_13345
+102@ = 1343.125
+103@ = 345.667
+104@ = 18.556
+goto @TRUCK_13426
+
+:TRUCK_13382
+102@ = -189.23
+103@ = -273.013
+104@ = 0.429
+35@ = 0
+goto @TRUCK_13426
+
+:TRUCK_13426
+if 
+  34@ == 2
+goto_if_false @TRUCK_14097
+switch_start 35@ total_jumps 14 default_jump 1 @TRUCK_14053 jumps 0 @TRUCK_14053 1 @TRUCK_13572 2 @TRUCK_13609 3 @TRUCK_13646 4 @TRUCK_13683 5 @TRUCK_13720 6 @TRUCK_13757
+switch_continued 7 @TRUCK_13794 8 @TRUCK_13831 9 @TRUCK_13868 10 @TRUCK_13905 11 @TRUCK_13942 12 @TRUCK_13979 13 @TRUCK_14016 -1 @TRUCK_14097 -1 @TRUCK_14097
+
+:TRUCK_13572
+102@ = 1042.15
+103@ = 2130.46
+104@ = 101.0
+goto @TRUCK_14097
+
+:TRUCK_13609
+102@ = 983.11
+103@ = 2076.38
+104@ = 101.0
+goto @TRUCK_14097
+
+:TRUCK_13646
+102@ = 1288.671
+103@ = 1195.232
+104@ = 9.8656
+goto @TRUCK_14097
+
+:TRUCK_13683
+102@ = 2469.57
+103@ = 1949.52
+104@ = 101.0
+goto @TRUCK_14097
+
+:TRUCK_13720
+102@ = 2807.83
+103@ = 2609.94
+104@ = 101.0
+goto @TRUCK_14097
+
+:TRUCK_13757
+102@ = 2248.71
+103@ = 2775.12
+104@ = 101.0
+goto @TRUCK_14097
+
+:TRUCK_13794
+102@ = 2603.22
+103@ = 1730.48
+104@ = 101.0
+goto @TRUCK_14097
+
+:TRUCK_13831
+102@ = 2818.84
+103@ = 912.19
+104@ = 101.0
+goto @TRUCK_14097
+
+:TRUCK_13868
+102@ = 2710.36
+103@ = 850.12
+104@ = 101.0
+goto @TRUCK_14097
+
+:TRUCK_13905
+102@ = 1588.9
+103@ = 715.31
+104@ = 101.0
+goto @TRUCK_14097
+
+:TRUCK_13942
+102@ = 1446.26
+103@ = 1000.51
+104@ = 101.0
+goto @TRUCK_14097
+
+:TRUCK_13979
+102@ = 1724.012
+103@ = 1590.128
+104@ = 9.2578
+goto @TRUCK_14097
+
+:TRUCK_14016
+102@ = 1713.79
+103@ = 2329.05
+104@ = 101.0
+goto @TRUCK_14097
+
+:TRUCK_14053
+102@ = 1450.8
+103@ = 2360.69
+104@ = 101.0
+35@ = 0
+goto @TRUCK_14097
+
+:TRUCK_14097
+if 
+  34@ == 1
+goto_if_false @TRUCK_14333
+switch_start 35@ total_jumps 4 default_jump 1 @TRUCK_14289 jumps 0 @TRUCK_14289 1 @TRUCK_14178 2 @TRUCK_14215 3 @TRUCK_14252 -1 @TRUCK_14333 -1 @TRUCK_14333 -1 @TRUCK_14333
+
+:TRUCK_14178
+102@ = 2759.0
+103@ = -2446.0
+104@ = 101.0
+goto @TRUCK_14333
+
+:TRUCK_14215
+102@ = 2104.0
+103@ = -2089.0
+104@ = 101.0
+goto @TRUCK_14333
+
+:TRUCK_14252
+102@ = 1751.0
+103@ = -2067.0
+104@ = 101.0
+goto @TRUCK_14333
+
+:TRUCK_14289
+102@ = 2412.0
+103@ = -2106.0
+104@ = 101.0
+35@ = 0
+goto @TRUCK_14333
+
+:TRUCK_14333
+if 
+  34@ == 4
+goto_if_false @TRUCK_14532
+switch_start 35@ total_jumps 3 default_jump 1 @TRUCK_14488 jumps 0 @TRUCK_14488 1 @TRUCK_14414 2 @TRUCK_14451 -1 @TRUCK_14532 -1 @TRUCK_14532 -1 @TRUCK_14532 -1 @TRUCK_14532
+
+:TRUCK_14414
+102@ = -2001.03
+103@ = -2388.08
+104@ = 101.0
+goto @TRUCK_14532
+
+:TRUCK_14451
+102@ = -1560.67
+103@ = -2728.39
+104@ = 101.0
+goto @TRUCK_14532
+
+:TRUCK_14488
+102@ = -1835.0
+103@ = -1647.68
+104@ = 101.0
+35@ = 0
+goto @TRUCK_14532
+
+:TRUCK_14532
+if 
+  34@ == 6
+goto_if_false @TRUCK_14731
+switch_start 35@ total_jumps 3 default_jump 1 @TRUCK_14687 jumps 0 @TRUCK_14687 1 @TRUCK_14613 2 @TRUCK_14650 -1 @TRUCK_14731 -1 @TRUCK_14731 -1 @TRUCK_14731 -1 @TRUCK_14731
+
+:TRUCK_14613
+102@ = -1945.89
+103@ = 2377.9
+104@ = 101.0
+goto @TRUCK_14731
+
+:TRUCK_14650
+102@ = -1471.49
+103@ = 1864.85
+104@ = 101.0
+goto @TRUCK_14731
+
+:TRUCK_14687
+102@ = -1286.73
+103@ = 2695.92
+104@ = 101.0
+35@ = 0
+goto @TRUCK_14731
+
+:TRUCK_14731
+if 
+  34@ == 3
+goto_if_false @TRUCK_15004
+switch_start 35@ total_jumps 5 default_jump 1 @TRUCK_14960 jumps 0 @TRUCK_14960 1 @TRUCK_14812 2 @TRUCK_14849 3 @TRUCK_14886 4 @TRUCK_14923 -1 @TRUCK_15004 -1 @TRUCK_15004
+
+:TRUCK_14812
+102@ = 613.75
+103@ = 1692.39
+104@ = 101.0
+goto @TRUCK_15004
+
+:TRUCK_14849
+102@ = 620.35
+103@ = 1249.328
+104@ = 101.0
+goto @TRUCK_15004
+
+:TRUCK_14886
+102@ = -533.24
+103@ = 1995.917
+104@ = 101.0
+goto @TRUCK_15004
+
+:TRUCK_14923
+102@ = 325.05
+103@ = 2543.29
+104@ = 101.0
+goto @TRUCK_15004
+
+:TRUCK_14960
+102@ = 246.56
+103@ = 1435.19
+104@ = 101.0
+35@ = 0
+goto @TRUCK_15004
+
+:TRUCK_15004
+if 
+  34@ == 5
+goto_if_false @TRUCK_15240
+switch_start 35@ total_jumps 4 default_jump 1 @TRUCK_15196 jumps 0 @TRUCK_15196 1 @TRUCK_15085 2 @TRUCK_15122 3 @TRUCK_15159 -1 @TRUCK_15240 -1 @TRUCK_15240 -1 @TRUCK_15240
+
+:TRUCK_15085
+102@ = -2629.091
+103@ = 1387.42
+104@ = 101.0
+goto @TRUCK_15240
+
+:TRUCK_15122
+102@ = -1530.776
+103@ = 487.201
+104@ = 101.0
+goto @TRUCK_15240
+
+:TRUCK_15159
+102@ = -1745.08
+103@ = 27.759
+104@ = 101.0
+goto @TRUCK_15240
+
+:TRUCK_15196
+102@ = -1549.859
+103@ = -434.86
+104@ = 101.0068
+35@ = 0
+goto @TRUCK_15240
+
+:TRUCK_15240
+World.ClearArea(0, 102@, 103@, 104@, 0.5)
+Char.SetHeading($scplayer, 0.0)
+Char.SetCoordinates($scplayer, 102@, 103@, -101.0)
+Camera.SetBehindPlayer
+return 
+
+:TRUCK_15288
+43@ += 1
+if 
+  43@ > 9
+goto_if_false @TRUCK_15320
+43@ = 0
+
+:TRUCK_15320
+return 
+
+:TRUCK_15322
+44@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 46@ = 44@
+sub_int_lvar_from_int_lvar 46@ -= 45@
+set_lvar_int_to_lvar_int 45@ = 44@
+add_int_lvar_to_int_lvar 47@ += 46@
+return 
+
+:TRUCK_15361
+36@ += 1
+37@ = 0
+TIMERA = 0
+TIMERB = 0
+return 
+
+:TRUCK_15391
+return 
+
+:TRUCK_15393
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @TRUCK_15420
+wait 0
+goto @TRUCK_15393
+
+:TRUCK_15420
+Player.SetControl($player1, False)
+wait 1000
+Camera.DoFade(0, 1000)
+
+:TRUCK_15439
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRUCK_15463
+wait 0
+goto @TRUCK_15439
+
+:TRUCK_15463
+gosub @TRUCK_15630
+gosub @TRUCK_15696
+gosub @TRUCK_16342
+World.ClearArea(1, $truckX, $truckY, $truckZ, 100.0)
+Streaming.LoadScene($truckX, $truckY, $truckZ)
+Char.SetCoordinates($scplayer, -76.9664, -1134.639, 0.0781)
+Char.SetHeading($scplayer, 14.7291)
+Camera.SetBehindPlayer
+World.SetCarDensityMultiplier(0.0)
+gosub @TRUCK_7806
+wait 2000
+Text.DrawOddjobTitleBeforeFade(True)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+
+:TRUCK_15583
+if 
+  Camera.GetFadingStatus
+goto_if_false @TRUCK_15607
+wait 0
+goto @TRUCK_15583
+
+:TRUCK_15607
+Player.SetControl($player1, True)
+89@ = 0
+gosub @TRUCK_15361
+return 
+
+:TRUCK_15630
+97@ = Math.RandomIntInRange(0, 3)
+97@ += 1
+if 
+  97@ == 1
+goto_if_false @TRUCK_15678
+96@ = 1
+goto @TRUCK_15694
+
+:TRUCK_15678
+96@ = Math.RandomIntInRange(1, 4)
+96@ += 1
+
+:TRUCK_15694
+return 
+
+:TRUCK_15696
+switch_start 97@ total_jumps 3 default_jump 1 @TRUCK_15795 jumps 1 @TRUCK_15759 2 @TRUCK_15771 3 @TRUCK_15783 -1 @TRUCK_15810 -1 @TRUCK_15810 -1 @TRUCK_15810 -1 @TRUCK_15810
+
+:TRUCK_15759
+Streaming.RequestModel(514)
+goto @TRUCK_15810
+
+:TRUCK_15771
+Streaming.RequestModel(403)
+goto @TRUCK_15810
+
+:TRUCK_15783
+Streaming.RequestModel(515)
+goto @TRUCK_15810
+
+:TRUCK_15795
+write_debug "UNKNOWN_CAB"
+
+:TRUCK_15810
+switch_start 96@ total_jumps 4 default_jump 1 @TRUCK_15921 jumps 1 @TRUCK_15873 2 @TRUCK_15885 3 @TRUCK_15897 4 @TRUCK_15909 -1 @TRUCK_15940 -1 @TRUCK_15940 -1 @TRUCK_15940
+
+:TRUCK_15873
+Streaming.RequestModel(584)
+goto @TRUCK_15940
+
+:TRUCK_15885
+Streaming.RequestModel(435)
+goto @TRUCK_15940
+
+:TRUCK_15897
+Streaming.RequestModel(450)
+goto @TRUCK_15940
+
+:TRUCK_15909
+Streaming.RequestModel(591)
+goto @TRUCK_15940
+
+:TRUCK_15921
+write_debug "UNKNOWN_TRAILER"
+
+:TRUCK_15940
+Streaming.LoadAllModelsNow
+switch_start 97@ total_jumps 3 default_jump 1 @TRUCK_16107 jumps 1 @TRUCK_16005 2 @TRUCK_16039 3 @TRUCK_16073 -1 @TRUCK_16122 -1 @TRUCK_16122 -1 @TRUCK_16122 -1 @TRUCK_16122
+
+:TRUCK_16005
+if 
+  not Streaming.HasModelLoaded(514)
+goto_if_false @TRUCK_16032
+wait 0
+goto @TRUCK_16005
+
+:TRUCK_16032
+goto @TRUCK_16122
+
+:TRUCK_16039
+if 
+  not Streaming.HasModelLoaded(403)
+goto_if_false @TRUCK_16066
+wait 0
+goto @TRUCK_16039
+
+:TRUCK_16066
+goto @TRUCK_16122
+
+:TRUCK_16073
+if 
+  not Streaming.HasModelLoaded(515)
+goto_if_false @TRUCK_16100
+wait 0
+goto @TRUCK_16073
+
+:TRUCK_16100
+goto @TRUCK_16122
+
+:TRUCK_16107
+write_debug "UNKNOWN_CAB"
+
+:TRUCK_16122
+switch_start 96@ total_jumps 4 default_jump 1 @TRUCK_16321 jumps 1 @TRUCK_16185 2 @TRUCK_16219 3 @TRUCK_16253 4 @TRUCK_16287 -1 @TRUCK_16340 -1 @TRUCK_16340 -1 @TRUCK_16340
+
+:TRUCK_16185
+if 
+  not Streaming.HasModelLoaded(584)
+goto_if_false @TRUCK_16212
+wait 0
+goto @TRUCK_16185
+
+:TRUCK_16212
+goto @TRUCK_16340
+
+:TRUCK_16219
+if 
+  not Streaming.HasModelLoaded(435)
+goto_if_false @TRUCK_16246
+wait 0
+goto @TRUCK_16219
+
+:TRUCK_16246
+goto @TRUCK_16340
+
+:TRUCK_16253
+if 
+  not Streaming.HasModelLoaded(450)
+goto_if_false @TRUCK_16280
+wait 0
+goto @TRUCK_16253
+
+:TRUCK_16280
+goto @TRUCK_16340
+
+:TRUCK_16287
+if 
+  not Streaming.HasModelLoaded(591)
+goto_if_false @TRUCK_16314
+wait 0
+goto @TRUCK_16287
+
+:TRUCK_16314
+goto @TRUCK_16340
+
+:TRUCK_16321
+write_debug "UNKNOWN_TRAILER"
+
+:TRUCK_16340
+return 
+
+:TRUCK_16342
+return 
+
+:TRUCK_16344
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+switch_start 89@ total_jumps 5 default_jump 0 @TRUCK_16538 jumps 1 @TRUCK_16423 2 @TRUCK_16446 3 @TRUCK_16469 4 @TRUCK_16492 5 @TRUCK_16515 -1 @TRUCK_16538 -1 @TRUCK_16538
+
+:TRUCK_16423
+Text.PrintNow('TRK_F1', 5000, 1)
+goto @TRUCK_16538
+
+:TRUCK_16446
+Text.PrintNow('TRK_F2', 5000, 1)
+goto @TRUCK_16538
+
+:TRUCK_16469
+Text.PrintNow('TRK_F3', 5000, 1)
+goto @TRUCK_16538
+
+:TRUCK_16492
+Text.PrintNow('TRK_F4', 5000, 1)
+goto @TRUCK_16538
+
+:TRUCK_16515
+Text.PrintNow('TRK_F5', 5000, 1)
+goto @TRUCK_16538
+
+:TRUCK_16538
+return 
+
+:TRUCK_16540
+gosub @TRUCK_7500
+Text.PrintWithNumberBig('M_PASS', 83@, 5000, TextStyle.Middle)
+Player.AddScore($player1, 83@)
+Hud.ClearCounter($g_Truck_cashKM)
+$g_nTruckMissionsPassed += 1
+if 
+  $g_nTruckMissionsPassed == 1
+goto_if_false @TRUCK_16627
+Text.PrintNow('TRK_P1', 5000, 1)
+goto @TRUCK_16729
+
+:TRUCK_16627
+if 
+  $g_nTruckMissionsPassed == 8
+goto_if_false @TRUCK_16710
+if 
+  $done_truck_progress == 0
+goto_if_false @TRUCK_16687
+Stat.RegisterOddjobMissionPassed
+Stat.PlayerMadeProgress(1)
+Audio.PlayMissionPassedTune(2)
+$done_truck_progress = 1
+114@ = 1
+
+:TRUCK_16687
+Text.PrintBig('TRK_P4', 5000, TextStyle.MiddleSmaller)
+goto @TRUCK_16729
+
+:TRUCK_16710
+Text.PrintWithNumberNow('TRK_P3', $g_nTruckMissionsPassed, 5000, 1)
+
+:TRUCK_16729
+Stat.IncrementIntNoMessage(StatId.TruckMissionsPassed, 1)
+Stat.IncrementIntNoMessage(StatId.TruckMoneyMade, 83@)
+return 
+
+:TRUCK_16746
+Player.ClearWantedLevel($player1)
+return 
+
+:TRUCK_16753
+Car.MarkAsNoLongerNeeded(74@)
+Car.MarkAsNoLongerNeeded(75@)
+Blip.Remove(77@)
+Blip.Remove(76@)
+Blip.Remove(78@)
+Blip.Remove(79@)
+Hud.ClearCounter($g_Truck_cashKM)
+Hud.ClearCounter($g_Truck_damageKM)
+Hud.ClearTimer($g_Truck_timedKM)
+Streaming.MarkModelAsNoLongerNeeded(514)
+Streaming.MarkModelAsNoLongerNeeded(403)
+Streaming.MarkModelAsNoLongerNeeded(515)
+Streaming.MarkModelAsNoLongerNeeded(584)
+Streaming.MarkModelAsNoLongerNeeded(435)
+Streaming.MarkModelAsNoLongerNeeded(450)
+Streaming.MarkModelAsNoLongerNeeded(591)
+World.SetPedDensityMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+Game.SwitchEmergencyServices(True)
+$timer_mobile_start = Clock.GetGameTimer()
+Text.DrawOddjobTitleBeforeFade(True)
+$flag_player_on_oddjob = 0
+$onmission = 0
+Mission.Finish
+return 
+

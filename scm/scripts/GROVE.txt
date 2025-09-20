@@ -1,0 +1,46 @@
+:GROVE
+script_name 'GROVE'
+
+:GROVE_11
+wait $mission_trigger_wait_time
+if 
+  $flag_grove_mission_counter == 2
+goto_if_false @GROVE_36
+terminate_this_script 
+
+:GROVE_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GROVE_274
+if 
+  $onmission == 0
+goto_if_false @GROVE_274
+if 
+  Player.CanStartMission($player1)
+goto_if_false @GROVE_274
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $introX, $introY, $introZ, 1.2, 1.2, 2.0)
+goto_if_false @GROVE_180
+if 
+  $flag_grove_mission_counter == 0
+goto_if_false @GROVE_180
+$onmission = 1
+Text.PrintBig('GROVE_1', 1000, TextStyle.BottomRight)
+PSAVE1_1140()
+Mission.LoadAndLaunchInternal(106) // Beat Down on B Dup
+
+:GROVE_180
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $sweetX, $sweetY, $sweetZ, 1.2, 1.2, 2.0)
+goto_if_false @GROVE_274
+if 
+  $flag_grove_mission_counter == 1
+goto_if_false @GROVE_274
+$onmission = 1
+Text.PrintBig('GROVE_2', 1000, TextStyle.BottomRight)
+PSAVE1_1320()
+Mission.LoadAndLaunchInternal(107) // Grove 4 Life
+
+:GROVE_274
+goto @GROVE_11
+

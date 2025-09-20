@@ -1,0 +1,1058 @@
+//-------------Mission 114---------------
+// Originally: Los Santos Gym Fight School
+
+:GYMLS
+script_name 'GYMLS'
+gosub @GYMLS_57
+Camera.SetFadingColor(0, 0, 0)
+if 
+  has_deatharrest_been_executed 
+goto_if_false @GYMLS_46
+gosub @GYMLS_5862
+
+:GYMLS_46
+gosub @GYMLS_5902
+terminate_this_script 
+Stat.RegisterMissionGiven
+
+:GYMLS_57
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLS_80
+Char.ListenToPlayerGroupCommands($scplayer, False)
+
+:GYMLS_80
+$onmission = 1
+$ls_has_the_knuckle_duster = 0
+Stat.IncrementInt(StatId.TotalProgress, 198)
+$gym_is_running = 1
+Text.LoadMissionText('GYM')
+Streaming.RequestModel(80)
+Streaming.RequestModel(81)
+Streaming.RequestModel(19)
+Streaming.RequestAnimation("RIOT")
+Streaming.RequestAnimation("FIGHT_B")
+Streaming.RequestAnimation("INT_SHOP")
+Streaming.RequestAnimation("GYMNASIUM")
+Streaming.LoadAllModelsNow
+
+:GYMLS_177
+if or
+  not Streaming.HasAnimationLoaded("GYMNASIUM")
+  not Streaming.HasModelLoaded(80)
+  not Streaming.HasModelLoaded(81)
+goto_if_false @GYMLS_220
+wait 0
+goto @GYMLS_177
+
+:GYMLS_220
+if or
+  not Streaming.HasModelLoaded(19)
+  not Streaming.HasAnimationLoaded("RIOT")
+  not Streaming.HasAnimationLoaded("FIGHT_B")
+  not Streaming.HasAnimationLoaded("INT_SHOP")
+goto_if_false @GYMLS_277
+wait 0
+goto @GYMLS_220
+
+:GYMLS_277
+43@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+58@ = DecisionMakerChar.Load(DecisionMakerType.Normal)
+57@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+Game.SetRelationship(RelationshipType.Dislike, PedType.Mission2, PedType.Player1)
+DecisionMakerChar.ClearEventResponse(58@, 31)
+DecisionMakerChar.ClearEventResponse(57@, 31)
+DecisionMakerChar.ClearEventResponse(58@, 9)
+DecisionMakerChar.ClearEventResponse(58@, 15)
+DecisionMakerChar.ClearEventResponse(58@, 37)
+DecisionMakerChar.ClearEventResponse(57@, 37)
+DecisionMakerChar.AddEventResponse(58@, 31, 413, 100.0, 100.0, 100.0, 100.0, True, True)
+DecisionMakerChar.AddEventResponse(58@, 9, 415, 100.0, 100.0, 100.0, 100.0, True, True)
+DecisionMakerChar.AddEventResponse(58@, 15, 300, 100.0, 100.0, 100.0, 100.0, True, True)
+DecisionMakerChar.AddEventResponse(57@, 31, 413, 100.0, 100.0, 100.0, 100.0, True, True)
+DecisionMakerChar.AddEventResponse(57@, 15, 300, 100.0, 100.0, 100.0, 100.0, True, True)
+DecisionMakerChar.AddEventResponse(58@, 37, 300, 0.0, 100.0, 0.0, 0.0, True, True)
+DecisionMakerChar.AddEventResponse(57@, 37, 300, 0.0, 100.0, 0.0, 0.0, True, True)
+40@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 762.8681, 7.4928, 999.7141, 4, -1)
+Task.AchieveHeading(-1, 13.3401)
+Task.PlayAnim(-1, "RIOT_PUNCHES", "RIOT", 4.0, False, False, False, False, -1)
+Sequence.SetToRepeat(40@, True)
+Sequence.Close(40@)
+54@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 765.2909, 16.0319, 999.698, 4, -1)
+Task.AchieveHeading(-1, 198.8789)
+Sequence.SetToRepeat(54@, True)
+Sequence.Close(54@)
+53@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 767.2571, 14.4044, 999.6998, 4, -1)
+Task.AchieveHeading(-1, 263.2938)
+Task.PlayAnim(-1, "GYMSHADOWBOX", "GYMNASIUM", 4.0, False, False, False, False, -1)
+Sequence.SetToRepeat(53@, True)
+Sequence.Close(53@)
+49@ = Sequence.Open()
+Task.PlayAnim(-1, "RIOT_SHOUT", "RIOT", 4.0, False, False, False, False, -1)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Task.Pause(-1, 1000)
+Sequence.SetToRepeat(49@, True)
+Sequence.Close(49@)
+50@ = Sequence.Open()
+Task.Pause(-1, 500)
+Task.PlayAnim(-1, "RIOT_SHOUT", "RIOT", 4.0, False, False, False, False, -1)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.SetToRepeat(50@, True)
+Sequence.Close(50@)
+51@ = Sequence.Open()
+Task.Pause(-1, 750)
+Task.PlayAnim(-1, "RIOT_SHOUT", "RIOT", 4.0, False, False, False, False, -1)
+Task.TurnCharToFaceChar(-1, $scplayer)
+Sequence.SetToRepeat(51@, True)
+Sequence.Close(51@)
+34@ = Char.Create(25, 81, 761.6263, 11.4876, 1000.164)
+Char.SetHeading(34@, 128.1297)
+Char.SetDecisionMaker(34@, 58@)
+Char.SetOnlyDamagedByPlayer(34@, True)
+Char.ShutUp(34@, True)
+35@ = Char.Create(25, 81, 760.343, 10.1973, 999.7099)
+Char.SetHeading(35@, 310.2206)
+Char.SetDecisionMaker(35@, 58@)
+Char.SetOnlyDamagedByPlayer(35@, True)
+Char.ShutUp(34@, True)
+52@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 761.6263, 11.4876, 1000.164, 4, -1)
+Task.AchieveHeading(-1, 128.1297)
+if 
+  not Char.IsDead(34@)
+goto_if_false @GYMLS_1192
+Task.KillCharOnFoot(-1, 35@)
+
+:GYMLS_1192
+Sequence.SetToRepeat(52@, True)
+Sequence.Close(52@)
+41@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 760.343, 10.1973, 999.7099, 4, -1)
+Task.AchieveHeading(-1, 310.2206)
+if 
+  not Char.IsDead(34@)
+goto_if_false @GYMLS_1264
+Task.KillCharOnFoot(-1, 34@)
+
+:GYMLS_1264
+Sequence.SetToRepeat(41@, True)
+Sequence.Close(41@)
+Char.PerformSequence(34@, 52@)
+Char.PerformSequence(35@, 41@)
+37@ = Char.Create(25, 19, 762.8681, 7.4928, 999.7141)
+Char.SetHeading(37@, 13.3401)
+Char.PerformSequence(37@, 40@)
+Char.SetDecisionMaker(37@, 57@)
+39@ = Char.Create(25, 80, 767.2571, 14.4044, 999.6998)
+Char.SetHeading(39@, 263.2938)
+Char.SetDecisionMaker(39@, 57@)
+Char.PerformSequence(39@, 53@)
+Char.GiveMeleeAttack(39@, FightStyle.Boxeo, 6)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Audio.LoadMissionAudio(1820, 4)
+
+:GYMLS_1412
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @GYMLS_1438
+wait 0
+goto @GYMLS_1412
+
+:GYMLS_1438
+TIMERA = 0
+64@ = 2
+if or
+  is_int_var_greater_than_int_var $gym_day > $gym_final_day
+  is_int_var_greater_than_int_var $gym_month > $gym_final_month
+goto_if_false @GYMLS_1489
+$gym_day_fitness = 0.0
+
+:GYMLS_1489
+wait 0
+gosub @GYMLS_6164
+if 
+  48@ == 0
+goto_if_false @GYMLS_1667
+if 
+  not Char.IsDead(34@)
+goto_if_false @GYMLS_1589
+if 
+  Char.IsPlayingAnim(34@, "GYM_SHADOWBOX")
+goto_if_false @GYMLS_1589
+Char.SetAnimCurrentTime(34@, "GYMSHADOWBOX", 0.0)
+
+:GYMLS_1589
+if 
+  not Char.IsDead(35@)
+goto_if_false @GYMLS_1660
+if 
+  Char.IsPlayingAnim(35@, "GYM_SHADOWBOX")
+goto_if_false @GYMLS_1660
+Char.SetAnimCurrentTime(35@, "GYMSHADOWBOX", 0.5)
+
+:GYMLS_1660
+48@ = 1
+
+:GYMLS_1667
+if and
+  Char.IsDead(34@)
+  TIMERA > 20000
+goto_if_false @GYMLS_1727
+if 
+  not Char.IsDead(35@)
+goto_if_false @GYMLS_1727
+Char.ClearTasks(35@)
+Task.Duck(35@, 20000)
+TIMERA = 0
+
+:GYMLS_1727
+if and
+  Char.IsDead(35@)
+  TIMERA > 20000
+goto_if_false @GYMLS_1787
+if 
+  not Char.IsDead(34@)
+goto_if_false @GYMLS_1787
+Char.ClearTasks(34@)
+Task.Duck(34@, 20000)
+TIMERA = 0
+
+:GYMLS_1787
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 760.8566, 11.063, 1000.164, 3.0, 3.0, 2.0)
+goto_if_false @GYMLS_1941
+if 
+  59@ == 0
+goto_if_false @GYMLS_1934
+if 
+  not Char.IsDead(34@)
+goto_if_false @GYMLS_1890
+Char.ClearTasksImmediately(34@)
+Char.SetDecisionMaker(34@, 57@)
+Task.KillCharOnFoot(34@, $scplayer)
+
+:GYMLS_1890
+if 
+  not Char.IsDead(35@)
+goto_if_false @GYMLS_1927
+Char.ClearTasksImmediately(35@)
+Char.SetDecisionMaker(35@, 57@)
+Task.KillCharOnFoot(35@, $scplayer)
+
+:GYMLS_1927
+59@ = 1
+
+:GYMLS_1934
+goto @GYMLS_2029
+
+:GYMLS_1941
+if 
+  59@ == 1
+goto_if_false @GYMLS_2029
+if and
+  not Char.IsDead(34@)
+  not Char.IsDead(35@)
+goto_if_false @GYMLS_2022
+Char.ClearTasksImmediately(34@)
+Char.SetDecisionMaker(34@, 58@)
+Char.PerformSequence(34@, 52@)
+Char.ClearTasksImmediately(35@)
+Char.SetDecisionMaker(35@, 58@)
+Char.PerformSequence(35@, 41@)
+
+:GYMLS_2022
+59@ = 0
+
+:GYMLS_2029
+$main_visible_area = Char.GetAreaVisible($scplayer)
+if 
+  $main_visible_area == 0
+goto_if_false @GYMLS_2062
+goto @GYMLS_5862
+
+:GYMLS_2062
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 767.1368, 12.511, 999.7036, 2.5, 2.5, 4.0)
+goto_if_false @GYMLS_2117
+46@ = 0
+
+:GYMLS_2117
+if 
+  not Char.IsDead(39@)
+goto_if_false @GYMLS_5855
+if and
+  46@ == 0
+  Char.LocateAnyMeans3D(39@, 0, 767.2571, 14.4044, 999.6998, 1.0, 1.0, 1.2)
+goto_if_false @GYMLS_5855
+if 
+  Char.LocateStoppedAnyMeans3D($scplayer, 767.1368, 12.511, 999.7036, 0.6, 0.6, 1.0, True)
+goto_if_false @GYMLS_2236
+
+:GYMLS_2236
+if and
+  Char.LocateStoppedAnyMeans3D($scplayer, 767.1368, 12.511, 999.7036, 1.2, 1.2, 1.2, False)
+  not Char.IsDead(39@)
+goto_if_false @GYMLS_5855
+if and
+  not Char.IsDead(39@)
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLS_2343
+Player.SetControl($player1, False)
+Char.ClearTasksImmediately($scplayer)
+Char.ClearTasksImmediately(39@)
+Task.TurnCharToFaceChar(39@, $scplayer)
+Task.TurnCharToFaceChar($scplayer, 39@)
+
+:GYMLS_2343
+if 
+  $8156 == 0
+goto_if_false @GYMLS_2418
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(4800, 1)
+
+:GYMLS_2372
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLS_2398
+wait 0
+goto @GYMLS_2372
+
+:GYMLS_2398
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('BBOX_1', 3000, 1)
+
+:GYMLS_2418
+if 
+  $8156 == 1
+goto_if_false @GYMLS_2493
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(4803, 1)
+
+:GYMLS_2447
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLS_2473
+wait 0
+goto @GYMLS_2447
+
+:GYMLS_2473
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('BBOX_4', 3000, 1)
+
+:GYMLS_2493
+Text.PrintHelpForever('TALK_1')
+
+:GYMLS_2504
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLS_2852
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadRight)
+goto_if_false @GYMLS_2717
+60@ = Stat.GetFloat(23)
+if 
+  60@ > 349.0
+goto_if_false @GYMLS_2592
+44@ = 1
+Text.ClearHelp
+goto @GYMLS_2852
+goto @GYMLS_2717
+
+:GYMLS_2592
+44@ = 0
+46@ = 1
+Text.ClearHelp
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(4802, 1)
+
+:GYMLS_2619
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLS_2645
+wait 0
+goto @GYMLS_2619
+
+:GYMLS_2645
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('BBOX_3', 3000, 1)
+Player.SetControl($player1, True)
+if 
+  not Char.IsDead(39@)
+goto_if_false @GYMLS_2696
+Char.PerformSequence(39@, 53@)
+
+:GYMLS_2696
+TIMERA = 0
+55@ = 1
+goto @GYMLS_1489
+
+:GYMLS_2717
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.DpadLeft)
+goto_if_false @GYMLS_2845
+44@ = 0
+46@ = 1
+Text.ClearHelp
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(4801, 1)
+
+:GYMLS_2761
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLS_2787
+wait 0
+goto @GYMLS_2761
+
+:GYMLS_2787
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('BBOX_2', 3000, 1)
+Player.SetControl($player1, True)
+if 
+  not Char.IsDead(39@)
+goto_if_false @GYMLS_2838
+Char.PerformSequence(39@, 53@)
+
+:GYMLS_2838
+goto @GYMLS_1489
+
+:GYMLS_2845
+goto @GYMLS_2504
+
+:GYMLS_2852
+Text.ClearHelp
+Text.ClearPrints
+Pad.SetPlayerCycleWeaponButton($player1, False)
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+gosub @GYMLS_6055
+Char.Delete(37@)
+Char.Delete(34@)
+Char.Delete(35@)
+34@ = Char.Create(25, 81, 761.6934, 4.2203, 999.7099)
+Char.SetHeading(34@, 171.4614)
+Char.PerformSequence(34@, 49@)
+35@ = Char.Create(25, 81, 764.7962, 0.7163, 999.715)
+Char.SetHeading(35@, 93.8066)
+Char.PerformSequence(35@, 50@)
+37@ = Char.Create(25, 19, 759.5085, 4.2343, 999.7051)
+Char.SetHeading(37@, 189.7654)
+Char.PerformSequence(37@, 51@)
+if 
+  not Char.IsDead(39@)
+goto_if_false @GYMLS_3080
+Char.SetCoordinatesDontWarpGang(39@, 762.616, 2.1235, 1000.594)
+Char.SetHeading(39@, 135.5749)
+Char.SetHealth(39@, 1000)
+Char.SetMaxHealth(39@, 1000)
+
+:GYMLS_3080
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLS_3126
+Char.SetCoordinatesDontWarpGang($scplayer, 759.0147, -1.7235, 1000.594)
+Char.SetHeading($scplayer, 312.9747)
+
+:GYMLS_3126
+if 
+  not Char.IsDead(39@)
+goto_if_false @GYMLS_3174
+Char.SetDecisionMaker(39@, 57@)
+Task.KillCharOnFoot(39@, $scplayer)
+Char.GiveMeleeAttack(39@, FightStyle.Boxeo, 6)
+Char.SetShootRate(39@, 100)
+
+:GYMLS_3174
+Camera.SetBehindPlayer
+Player.SetControl($player1, True)
+if 
+  $8156 == 0
+goto_if_false @GYMLS_3212
+Text.PrintHelpForever('GYM1101')
+
+:GYMLS_3212
+if 
+  $8156 == 1
+goto_if_false @GYMLS_3241
+Text.PrintHelpForever('GYM1_84')
+
+:GYMLS_3241
+gosub @GYMLS_6111
+TIMERA = 0
+TIMERB = 0
+if and
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLS_3290
+Audio.ReportMissionAudioEventAtChar($scplayer, 1115)
+
+:GYMLS_3290
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLS_3807
+wait 0
+if 
+  not Char.IsDead(35@)
+goto_if_false @GYMLS_3381
+if 
+  not Char.LocateAnyMeans3D(35@, 0, 761.0182, 0.6609, 1000.594, 6.0, 6.0, 6.0)
+goto_if_false @GYMLS_3381
+goto @GYMLS_3807
+
+:GYMLS_3381
+if 
+  not Char.IsDead(34@)
+goto_if_false @GYMLS_3437
+if and
+  TIMERB > 3000
+  65@ == 0
+goto_if_false @GYMLS_3430
+65@ = 1
+
+:GYMLS_3430
+TIMERB = 0
+
+:GYMLS_3437
+if 
+  not Char.IsDead(35@)
+goto_if_false @GYMLS_3493
+if and
+  TIMERB > 3000
+  65@ == 1
+goto_if_false @GYMLS_3486
+65@ = 0
+
+:GYMLS_3486
+TIMERB = 0
+
+:GYMLS_3493
+if 
+  $8156 == 1
+goto_if_false @GYMLS_3777
+if 
+  56@ == 0
+goto_if_false @GYMLS_3556
+TIMERA = 0
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_94')
+56@ = 1
+
+:GYMLS_3556
+if 
+  not Game.IsGerman
+goto_if_false @GYMLS_3682
+if and
+  TIMERA > 6000
+  56@ == 1
+goto_if_false @GYMLS_3622
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_95')
+TIMERA = 0
+56@ = 2
+
+:GYMLS_3622
+if and
+  TIMERA > 6000
+  56@ == 2
+goto_if_false @GYMLS_3675
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_96')
+TIMERA = 0
+56@ = 3
+
+:GYMLS_3675
+goto @GYMLS_3735
+
+:GYMLS_3682
+if and
+  TIMERA > 6000
+  56@ == 1
+goto_if_false @GYMLS_3735
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_96')
+TIMERA = 0
+56@ = 3
+
+:GYMLS_3735
+if and
+  TIMERA > 6000
+  56@ == 3
+goto_if_false @GYMLS_3777
+Text.ClearHelp
+TIMERA = 0
+56@ = 0
+
+:GYMLS_3777
+if 
+  Char.IsDead(39@)
+goto_if_false @GYMLS_3800
+goto @GYMLS_3807
+
+:GYMLS_3800
+goto @GYMLS_3290
+
+:GYMLS_3807
+Text.ClearHelp
+if 
+  $8156 == 1
+goto_if_false @GYMLS_3834
+goto @GYMLS_5431
+
+:GYMLS_3834
+gosub @GYMLS_6055
+Char.Delete(39@)
+World.ClearArea(1, 760.7445, 0.6538, 1000.594, 10.0)
+gosub @GYMLS_6003
+39@ = Char.Create(25, 80, 762.616, 2.1235, 1000.594)
+Char.SetHeading(39@, 135.5749)
+Char.SetDecisionMaker(39@, 43@)
+Char.ClearTasksImmediately(39@)
+Char.SetDecisionMaker(39@, 43@)
+Char.GiveMeleeAttack(39@, FightStyle.Boxeo, 6)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLS_3987
+Char.SetCoordinatesDontWarpGang($scplayer, 759.0147, -1.7235, 1000.594)
+Char.SetHeading($scplayer, 312.9747)
+
+:GYMLS_3987
+Char.Delete(34@)
+Char.Delete(35@)
+Char.Delete(37@)
+Camera.SetFixedPosition(764.0964, -4.8216, 1003.062, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(763.5206, -4.0516, 1002.787, SwitchType.JumpCut)
+gosub @GYMLS_6111
+Text.PrintNow('BBOX_5', 4000, 1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(4804, 1)
+
+:GYMLS_4087
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLS_4130
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_4123
+
+:GYMLS_4123
+goto @GYMLS_4087
+
+:GYMLS_4130
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+wait 1000
+TIMERA = 0
+
+:GYMLS_4146
+if 
+  2000 > TIMERA
+goto_if_false @GYMLS_4193
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_4186
+
+:GYMLS_4186
+goto @GYMLS_4146
+
+:GYMLS_4193
+Camera.SetFixedPosition(762.5212, -0.4172, 1001.843, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(762.5431, 0.5793, 1001.762, SwitchType.JumpCut)
+Text.PrintNow('GYM1_97', 2000, 1)
+TIMERA = 0
+
+:GYMLS_4267
+if 
+  2000 > TIMERA
+goto_if_false @GYMLS_4314
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_4307
+
+:GYMLS_4307
+goto @GYMLS_4267
+
+:GYMLS_4314
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(4805, 1)
+
+:GYMLS_4325
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLS_4368
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_4361
+
+:GYMLS_4361
+goto @GYMLS_4325
+
+:GYMLS_4368
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('GYM1_94', 4000, 1)
+TIMERA = 0
+
+:GYMLS_4395
+if 
+  4000 > TIMERA
+goto_if_false @GYMLS_4442
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_4435
+
+:GYMLS_4435
+goto @GYMLS_4395
+
+:GYMLS_4442
+if 
+  not Char.IsDead(39@)
+goto_if_false @GYMLS_4497
+Task.PlayAnim(39@, "FIGHTB_M", "FIGHT_B", 4.0, False, True, True, False, -1)
+
+:GYMLS_4497
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLS_4545
+Task.PlayAnim($scplayer, "FUCKU", "PED", 4.0, False, True, True, False, -1)
+
+:GYMLS_4545
+TIMERA = 0
+
+:GYMLS_4552
+if 
+  3000 > TIMERA
+goto_if_false @GYMLS_4599
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_4592
+
+:GYMLS_4592
+goto @GYMLS_4552
+
+:GYMLS_4599
+if 
+  not Game.IsGerman
+goto_if_false @GYMLS_5018
+Camera.SetFixedPosition(759.6699, 1.9955, 1001.068, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(760.6637, 2.0051, 1001.178, SwitchType.JumpCut)
+Text.PrintNow('GYM1_98', 2000, 1)
+TIMERA = 0
+
+:GYMLS_4686
+if 
+  2000 > TIMERA
+goto_if_false @GYMLS_4733
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_4726
+
+:GYMLS_4726
+goto @GYMLS_4686
+
+:GYMLS_4733
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(4806, 1)
+
+:GYMLS_4744
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLS_4787
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_4780
+
+:GYMLS_4780
+goto @GYMLS_4744
+
+:GYMLS_4787
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('GYM1_95', 4000, 1)
+TIMERA = 0
+
+:GYMLS_4814
+if 
+  4000 > TIMERA
+goto_if_false @GYMLS_4861
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_4854
+
+:GYMLS_4854
+goto @GYMLS_4814
+
+:GYMLS_4861
+if 
+  not Char.IsDead(39@)
+goto_if_false @GYMLS_4916
+Task.PlayAnim(39@, "FIGHTB_G", "FIGHT_B", 4.0, False, True, True, False, -1)
+
+:GYMLS_4916
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLS_4964
+Task.PlayAnim($scplayer, "FUCKU", "PED", 4.0, False, True, True, False, -1)
+
+:GYMLS_4964
+TIMERA = 0
+
+:GYMLS_4971
+if 
+  3000 > TIMERA
+goto_if_false @GYMLS_5018
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_5011
+
+:GYMLS_5011
+goto @GYMLS_4971
+
+:GYMLS_5018
+Camera.SetFixedPosition(764.5368, 3.1767, 1002.349, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(763.7495, 2.6046, 1002.12, SwitchType.JumpCut)
+Text.PrintNow('GYM1_99', 2000, 1)
+TIMERA = 0
+
+:GYMLS_5092
+if 
+  2000 > TIMERA
+goto_if_false @GYMLS_5139
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_5132
+
+:GYMLS_5132
+goto @GYMLS_5092
+
+:GYMLS_5139
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(4807, 1)
+
+:GYMLS_5150
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @GYMLS_5193
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_5186
+
+:GYMLS_5186
+goto @GYMLS_5150
+
+:GYMLS_5193
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow('GYM1_96', 4000, 1)
+TIMERA = 0
+
+:GYMLS_5220
+if 
+  4000 > TIMERA
+goto_if_false @GYMLS_5267
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_5260
+
+:GYMLS_5260
+goto @GYMLS_5220
+
+:GYMLS_5267
+if 
+  not Char.IsDead(39@)
+goto_if_false @GYMLS_5329
+Char.FreezePosition(39@, True)
+Task.PlayAnim(39@, "FIGHTB_3", "FIGHT_B", 4.0, False, True, True, False, -1)
+
+:GYMLS_5329
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLS_5377
+Task.PlayAnim($scplayer, "FUCKU", "PED", 4.0, False, False, False, True, -1)
+
+:GYMLS_5377
+TIMERA = 0
+
+:GYMLS_5384
+if 
+  2000 > TIMERA
+goto_if_false @GYMLS_5431
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_5424
+
+:GYMLS_5424
+goto @GYMLS_5384
+
+:GYMLS_5431
+Char.Delete(37@)
+Char.Delete(34@)
+Char.Delete(35@)
+gosub @GYMLS_6055
+34@ = Char.Create(25, 81, 761.6263, 11.4876, 1000.164)
+Char.SetHeading(34@, 128.1297)
+Char.SetDecisionMaker(34@, 58@)
+Char.SetOnlyDamagedByPlayer(34@, True)
+Char.ShutUp(34@, True)
+35@ = Char.Create(25, 81, 760.343, 10.1973, 999.7099)
+Char.SetHeading(35@, 310.2206)
+Char.SetDecisionMaker(35@, 58@)
+Char.SetOnlyDamagedByPlayer(35@, True)
+Char.ShutUp(34@, True)
+Char.PerformSequence(34@, 52@)
+Char.PerformSequence(35@, 41@)
+37@ = Char.Create(25, 19, 762.8681, 7.4928, 999.7141)
+Char.SetHeading(37@, 13.3401)
+Char.PerformSequence(37@, 40@)
+Char.SetDecisionMaker(37@, 57@)
+Char.Delete(39@)
+39@ = Char.Create(25, 80, 767.2571, 14.4044, 999.6998)
+Char.SetHeading(39@, 263.2938)
+Char.SetDecisionMaker(39@, 57@)
+Char.PerformSequence(39@, 53@)
+Char.GiveMeleeAttack(39@, FightStyle.Boxeo, 6)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLS_5741
+Char.SetCoordinatesDontWarpGang($scplayer, 765.6662, 2.7963, 999.718)
+Char.SetHeading($scplayer, 277.3348)
+
+:GYMLS_5741
+gosub @GYMLS_6027
+gosub @GYMLS_6111
+if 
+  $gym_ls_defeated == 0
+goto_if_false @GYMLS_5784
+Stat.PlayerMadeProgress(1)
+$gym_ls_defeated = 1
+
+:GYMLS_5784
+Char.GiveMeleeAttack($scplayer, FightStyle.Boxeo, 6)
+if 
+  $8156 == 0
+goto_if_false @GYMLS_5827
+Text.PrintNow('GYM1_93', 3000, 1)
+
+:GYMLS_5827
+$player_been_taught_move = 0
+$8156 = 1
+$8157 = 0
+Pad.SetPlayerCycleWeaponButton($player1, True)
+
+:GYMLS_5855
+goto @GYMLS_1489
+
+:GYMLS_5862
+return 
+Text.PrintWithNumberBig('M_PASS', 30000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 30000)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+return 
+
+:GYMLS_5902
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMLS_5925
+Char.ListenToPlayerGroupCommands($scplayer, True)
+
+:GYMLS_5925
+Streaming.MarkModelAsNoLongerNeeded(80)
+Streaming.MarkModelAsNoLongerNeeded(81)
+Streaming.MarkModelAsNoLongerNeeded(19)
+Streaming.RemoveAnimation("GYMNASIUM")
+Streaming.RemoveAnimation("RIOT")
+Streaming.RemoveAnimation("FIGHT_B")
+Streaming.RemoveAnimation("INT_SHOP")
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+$gym_is_running = 0
+$onmission = 0
+Mission.Finish
+return 
+
+:GYMLS_6003
+Text.ClearHelp
+Text.ClearPrints
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Game.SetEveryoneIgnorePlayer($player1, True)
+return 
+
+:GYMLS_6027
+Text.ClearHelp
+Text.ClearPrints
+Camera.SetBehindPlayer
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Camera.RestoreJumpcut
+Game.SetEveryoneIgnorePlayer($player1, False)
+return 
+
+:GYMLS_6055
+Camera.DoFade(0, 500)
+
+:GYMLS_6062
+if 
+  Camera.GetFadingStatus
+goto_if_false @GYMLS_6109
+wait 0
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMLS_6102
+Camera.DoFade(0, Fade.In)
+
+:GYMLS_6102
+goto @GYMLS_6062
+
+:GYMLS_6109
+return 
+
+:GYMLS_6111
+Camera.DoFade(1, 500)
+
+:GYMLS_6118
+if 
+  Camera.GetFadingStatus
+goto_if_false @GYMLS_6142
+wait 0
+goto @GYMLS_6118
+
+:GYMLS_6142
+return 
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(63@, 1)
+64@ = 0
+return 
+
+:GYMLS_6164
+if and
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+  64@ == 0
+goto_if_false @GYMLS_6207
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(61@s, 10000, 1)
+64@ = 1
+
+:GYMLS_6207
+if and
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+  64@ == 1
+goto_if_false @GYMLS_6245
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearThisPrint(61@s)
+64@ = 2
+
+:GYMLS_6245
+return 
+

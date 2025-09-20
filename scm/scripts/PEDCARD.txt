@@ -1,0 +1,224 @@
+//-------------External script 50 (PEDCARD)---------------
+
+:PEDCARD
+script_name 'PEDCARD'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @PEDCARD_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:PEDCARD_60
+Streaming.RequestAnimation("CASINO")
+
+:PEDCARD_70
+if 
+  not Streaming.HasAnimationLoaded("CASINO")
+goto_if_false @PEDCARD_102
+wait 0
+goto @PEDCARD_70
+
+:PEDCARD_102
+3@ = 1
+4@ = 0
+
+:PEDCARD_116
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @PEDCARD_227
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @PEDCARD_213
+if 
+  $iSetCasinoPanic == 0
+goto_if_false @PEDCARD_191
+gosub @PEDCARD_241
+goto @PEDCARD_206
+
+:PEDCARD_191
+Char.SetDecisionMaker(0@, $iGlobalPedPanicDM)
+goto @PEDCARD_1335
+
+:PEDCARD_206
+goto @PEDCARD_220
+
+:PEDCARD_213
+gosub @PEDCARD_1321
+
+:PEDCARD_220
+goto @PEDCARD_234
+
+:PEDCARD_227
+gosub @PEDCARD_1321
+
+:PEDCARD_234
+goto @PEDCARD_116
+
+:PEDCARD_241
+switch_start 3@ total_jumps 1 default_jump 0 @PEDCARD_318 jumps 1 @PEDCARD_304 -1 @PEDCARD_318 -1 @PEDCARD_318 -1 @PEDCARD_318 -1 @PEDCARD_318 -1 @PEDCARD_318 -1 @PEDCARD_318
+
+:PEDCARD_304
+gosub @PEDCARD_320
+goto @PEDCARD_318
+
+:PEDCARD_318
+return 
+
+:PEDCARD_320
+switch_start 4@ total_jumps 8 default_jump 0 @PEDCARD_1319 jumps 0 @PEDCARD_448 1 @PEDCARD_510 2 @PEDCARD_596 3 @PEDCARD_691 4 @PEDCARD_872 5 @PEDCARD_977 6 @PEDCARD_1153
+switch_continued 7 @PEDCARD_1276 -1 @PEDCARD_1319 -1 @PEDCARD_1319 -1 @PEDCARD_1319 -1 @PEDCARD_1319 -1 @PEDCARD_1319 -1 @PEDCARD_1319 -1 @PEDCARD_1319 -1 @PEDCARD_1319
+
+:PEDCARD_448
+Task.PlayAnim(0@, "CARDS_IN", "CASINO", 4.0, False, False, False, False, -1)
+2@ = Char.SetSayContext(0@, 93)
+4@ += 1
+goto @PEDCARD_1319
+
+:PEDCARD_510
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDCARD_589
+Task.PlayAnim(0@, "CARDS_PICK_01", "CASINO", 4.0, False, False, False, False, -1)
+4@ += 1
+
+:PEDCARD_589
+goto @PEDCARD_1319
+
+:PEDCARD_596
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDCARD_684
+2@ = Math.RandomIntInRange(8000, 15000)
+Task.PlayAnim(0@, "CARDS_LOOP", "CASINO", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:PEDCARD_684
+goto @PEDCARD_1319
+
+:PEDCARD_691
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDCARD_865
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @PEDCARD_805
+Task.PlayAnim(0@, "CARDS_RAISE", "CASINO", 4.0, False, False, False, False, -1)
+2@ = Char.SetSayContext(0@, 98)
+goto @PEDCARD_858
+
+:PEDCARD_805
+Task.PlayAnim(0@, "CARDS_PICK_02", "CASINO", 4.0, False, False, False, False, -1)
+2@ = Char.SetSayContext(0@, 93)
+
+:PEDCARD_858
+4@ += 1
+
+:PEDCARD_865
+goto @PEDCARD_1319
+
+:PEDCARD_872
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDCARD_970
+2@ = Math.RandomIntInRange(1500, 5000)
+Task.PlayAnim(0@, "CARDS_LOOP", "CASINO", 4.0, True, False, False, True, 2@)
+2@ = Char.SetSayContext(0@, 95)
+4@ += 1
+
+:PEDCARD_970
+goto @PEDCARD_1319
+
+:PEDCARD_977
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDCARD_1146
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @PEDCARD_1089
+Task.PlayAnim(0@, "CARDS_WIN", "CASINO", 4.0, False, False, False, False, -1)
+2@ = Char.SetSayContext(0@, 96)
+goto @PEDCARD_1139
+
+:PEDCARD_1089
+Task.PlayAnim(0@, "CARDS_LOSE", "CASINO", 4.0, False, False, False, False, -1)
+2@ = Char.SetSayContext(0@, 94)
+
+:PEDCARD_1139
+4@ += 1
+
+:PEDCARD_1146
+goto @PEDCARD_1319
+
+:PEDCARD_1153
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDCARD_1269
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @PEDCARD_1223
+4@ = 1
+goto @PEDCARD_1269
+
+:PEDCARD_1223
+Task.PlayAnim(0@, "CARDS_OUT", "CASINO", 4.0, False, False, False, False, -1)
+4@ += 1
+
+:PEDCARD_1269
+goto @PEDCARD_1319
+
+:PEDCARD_1276
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDCARD_1312
+gosub @PEDCARD_1321
+
+:PEDCARD_1312
+goto @PEDCARD_1319
+
+:PEDCARD_1319
+return 
+
+:PEDCARD_1321
+Streaming.RemoveAnimation("CASINO")
+terminate_this_script 
+return 
+
+:PEDCARD_1335
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @PEDCARD_1405
+5@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @PEDCARD_1398
+Task.Duck(0@, -2)
+
+:PEDCARD_1398
+goto @PEDCARD_1412
+
+:PEDCARD_1405
+gosub @PEDCARD_1321
+
+:PEDCARD_1412
+goto @PEDCARD_1335
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

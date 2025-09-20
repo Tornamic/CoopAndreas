@@ -1,0 +1,195 @@
+//-------------External script 51 (PEDSLOT)---------------
+
+:PEDSLOT
+script_name 'PEDSLOT'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @PEDSLOT_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:PEDSLOT_60
+Streaming.RequestAnimation("CASINO")
+
+:PEDSLOT_70
+if 
+  not Streaming.HasAnimationLoaded("CASINO")
+goto_if_false @PEDSLOT_102
+wait 0
+goto @PEDSLOT_70
+
+:PEDSLOT_102
+3@ = 1
+4@ = 0
+
+:PEDSLOT_116
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @PEDSLOT_227
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @PEDSLOT_213
+if 
+  $iSetCasinoPanic == 0
+goto_if_false @PEDSLOT_191
+gosub @PEDSLOT_241
+goto @PEDSLOT_206
+
+:PEDSLOT_191
+Char.SetDecisionMaker(0@, $iGlobalPedPanicDM)
+goto @PEDSLOT_1042
+
+:PEDSLOT_206
+goto @PEDSLOT_220
+
+:PEDSLOT_213
+gosub @PEDSLOT_1028
+
+:PEDSLOT_220
+goto @PEDSLOT_234
+
+:PEDSLOT_227
+gosub @PEDSLOT_1028
+
+:PEDSLOT_234
+goto @PEDSLOT_116
+
+:PEDSLOT_241
+switch_start 3@ total_jumps 1 default_jump 0 @PEDSLOT_318 jumps 1 @PEDSLOT_304 -1 @PEDSLOT_318 -1 @PEDSLOT_318 -1 @PEDSLOT_318 -1 @PEDSLOT_318 -1 @PEDSLOT_318 -1 @PEDSLOT_318
+
+:PEDSLOT_304
+gosub @PEDSLOT_320
+goto @PEDSLOT_318
+
+:PEDSLOT_318
+return 
+
+:PEDSLOT_320
+switch_start 4@ total_jumps 6 default_jump 0 @PEDSLOT_1026 jumps 0 @PEDSLOT_383 1 @PEDSLOT_434 2 @PEDSLOT_519 3 @PEDSLOT_613 4 @PEDSLOT_770 5 @PEDSLOT_942 -1 @PEDSLOT_1026
+
+:PEDSLOT_383
+Task.PlayAnim(0@, "SLOT_IN", "CASINO", 4.0, False, False, False, False, -1)
+4@ += 1
+goto @PEDSLOT_1026
+
+:PEDSLOT_434
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDSLOT_512
+Task.PlayAnim(0@, "SLOT_BET_01", "CASINO", 4.0, False, False, False, False, 2@)
+4@ += 1
+
+:PEDSLOT_512
+goto @PEDSLOT_1026
+
+:PEDSLOT_519
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDSLOT_606
+2@ = Math.RandomIntInRange(1500, 5000)
+Task.PlayAnim(0@, "SLOT_WAIT", "CASINO", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:PEDSLOT_606
+goto @PEDSLOT_1026
+
+:PEDSLOT_613
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDSLOT_763
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @PEDSLOT_717
+Task.PlayAnim(0@, "SLOT_BET_02", "CASINO", 4.0, False, False, False, False, -1)
+goto @PEDSLOT_756
+
+:PEDSLOT_717
+Task.PlayAnim(0@, "SLOT_WAIT", "CASINO", 4.0, False, False, False, False, -1)
+
+:PEDSLOT_756
+4@ += 1
+
+:PEDSLOT_763
+goto @PEDSLOT_1026
+
+:PEDSLOT_770
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDSLOT_935
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @PEDSLOT_885
+Task.PlayAnim(0@, "SLOT_WIN_OUT", "CASINO", 4.0, False, False, False, False, -1)
+2@ = Char.SetSayContext(0@, 104)
+goto @PEDSLOT_928
+
+:PEDSLOT_885
+Task.PlayAnim(0@, "SLOT_LOSE_OUT", "CASINO", 4.0, False, False, False, False, -1)
+
+:PEDSLOT_928
+4@ += 1
+
+:PEDSLOT_935
+goto @PEDSLOT_1026
+
+:PEDSLOT_942
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @PEDSLOT_1019
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @PEDSLOT_1012
+4@ = 0
+goto @PEDSLOT_1019
+
+:PEDSLOT_1012
+gosub @PEDSLOT_1028
+
+:PEDSLOT_1019
+goto @PEDSLOT_1026
+
+:PEDSLOT_1026
+return 
+
+:PEDSLOT_1028
+Streaming.RemoveAnimation("CASINO")
+terminate_this_script 
+return 
+
+:PEDSLOT_1042
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @PEDSLOT_1112
+5@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @PEDSLOT_1105
+Task.Duck(0@, -2)
+
+:PEDSLOT_1105
+goto @PEDSLOT_1119
+
+:PEDSLOT_1112
+gosub @PEDSLOT_1028
+
+:PEDSLOT_1119
+goto @PEDSLOT_1042
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

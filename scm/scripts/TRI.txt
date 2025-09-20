@@ -1,0 +1,107 @@
+:TRI
+script_name 'TRI'
+
+:TRI_11
+wait 0
+if 
+  $onmission == 0
+goto_if_false @TRI_619
+if 
+  Player.IsPlaying($player1)
+goto_if_false @TRI_619
+if or
+  $weekday == 1
+  $weekday == 7
+goto_if_false @TRI_619
+if or
+  Char.LocateOnFoot3D($scplayer, 1, 181.0, -1878.0, 2.0, 1.4, 1.8, 1.5)
+  Char.LocateOnFoot3D($scplayer, 1, 2135.432, -67.9555, 1.8, 1.4, 1.8, 1.5)
+goto_if_false @TRI_544
+$Return_cities_passed = Stat.GetInt(181)
+if 
+  $Return_cities_passed > 1
+goto_if_false @TRI_501
+$stat_read_skill_temp = Stat.GetInt(230)
+if 
+  $stat_read_skill_temp >= 500
+goto_if_false @TRI_458
+$stat_stamina_temp = Stat.GetInt(22)
+if 
+  $stat_stamina_temp >= 500
+goto_if_false @TRI_415
+if 
+  Player.CanStartMission($player1)
+goto_if_false @TRI_408
+Text.PrintBig('BOTTY', 1000, TextStyle.BottomRight)
+LITCAS_267()
+if 
+  Player.IsPlaying($player1)
+goto_if_false @TRI_403
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 181.0, -1878.0, 2.0, 20.4, 20.8, 20.5)
+goto_if_false @TRI_348
+$triathalon_selection = 1
+
+:TRI_348
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 2135.432, -67.9555, 20.8, 20.4, 20.8, 20.5)
+goto_if_false @TRI_403
+$triathalon_selection = 2
+
+:TRI_403
+Mission.LoadAndLaunchInternal(130) // Beat the Cock!
+
+:TRI_408
+goto @TRI_451
+
+:TRI_415
+if 
+  $flag_stamina_skill_help_tri == 0
+goto_if_false @TRI_451
+Text.PrintHelp('STASKIL')
+$flag_stamina_skill_help_tri = 1
+
+:TRI_451
+goto @TRI_494
+
+:TRI_458
+if 
+  $flag_cycling_skill_help_tri == 0
+goto_if_false @TRI_494
+Text.PrintHelp('MTBSKIL')
+$flag_cycling_skill_help_tri = 1
+
+:TRI_494
+goto @TRI_537
+
+:TRI_501
+if 
+  $map_opened_tri == 0
+goto_if_false @TRI_537
+Text.PrintHelp('NOCOCK')
+$map_opened_tri = 1
+
+:TRI_537
+goto @TRI_619
+
+:TRI_544
+if 
+  $flag_cycling_skill_help_tri == 1
+goto_if_false @TRI_569
+$flag_cycling_skill_help_tri = 0
+
+:TRI_569
+if 
+  $flag_stamina_skill_help_tri == 1
+goto_if_false @TRI_594
+$flag_stamina_skill_help_tri = 0
+
+:TRI_594
+if 
+  $map_opened_tri == 1
+goto_if_false @TRI_619
+$map_opened_tri = 0
+
+:TRI_619
+goto @TRI_11
+

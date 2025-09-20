@@ -1,0 +1,36 @@
+:HOTR
+script_name 'HOTR'
+
+:HOTR_11
+wait $mission_trigger_wait_time
+if 
+  $onmission == 0
+goto_if_false @HOTR_199
+if 
+  Player.IsPlaying($player1)
+goto_if_false @HOTR_199
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $hotringX, $hotringY, $hotringZ, 1.4, 1.8, 1.5)
+goto_if_false @HOTR_199
+$stat = Stat.GetInt(160)
+if 
+  $stat > 199
+goto_if_false @HOTR_183
+if 
+  Player.CanStartMission($player1)
+goto_if_false @HOTR_176
+Text.PrintBig('STAD_03', 1000, TextStyle.BottomRight)
+LITCAS_267()
+set_var_int_to_constant $race_selection = 25
+$show_race_selection = 0
+Mission.LoadAndLaunchInternal(35) // Race Tournament / 8-track / Dirt Track
+
+:HOTR_176
+goto @HOTR_199
+
+:HOTR_183
+Text.PrintNow('STATCAR', 500, 1)
+
+:HOTR_199
+goto @HOTR_11
+

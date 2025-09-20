@@ -1,0 +1,3465 @@
+//-------------Mission 44---------------
+// Originally: Against All Odds
+
+:CAT4
+script_name 'CAT4'
+gosub @CAT4_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @CAT4_38
+gosub @CAT4_18296
+
+:CAT4_38
+gosub @CAT4_18425
+terminate_this_script 
+
+:CAT4_47
+$onmission = 1
+World.SwitchEntryExit('GENOTB', False)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CAT4_90
+Player.SetControl($player1, False)
+
+:CAT4_90
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 1000)
+Hud.SwitchWidescreen(True)
+
+:CAT4_109
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT4_133
+wait 0
+goto @CAT4_109
+
+:CAT4_133
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CAT4_161
+Char.SetHeading($scplayer, 64.0)
+Camera.SetBehindPlayer
+
+:CAT4_161
+111@ = Game.FindMaxNumberOfGroupMembers()
+111@ -= 1
+if 
+  0 >= 111@
+goto_if_false @CAT4_202
+Game.SetScriptLimitToGangSize(1)
+goto @CAT4_207
+
+:CAT4_202
+Game.SetScriptLimitToGangSize(111@)
+
+:CAT4_207
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Streaming.RequestModel(348)
+Streaming.RequestModel(364)
+Streaming.RequestModel(363)
+Streaming.RequestModel(#RIDER1_DOOR)
+Streaming.RequestModel(#KEV_SAFE)
+Streaming.RequestModel(#MAN_SAFENEW)
+Streaming.RequestAnimation("MISC")
+
+:CAT4_249
+if or
+  not Streaming.HasModelLoaded(363)
+  not Streaming.HasModelLoaded(364)
+goto_if_false @CAT4_281
+wait 0
+goto @CAT4_249
+
+:CAT4_281
+Text.LoadMissionText('CAT')
+107@ = 1
+88@ = 1
+89@ = 0
+90@ = 0
+91@ = 0
+96@ = 0
+$flag_has_safe_been_robbed_cat4 = 0
+99@ = 0
+$flag_otb_robbing_peds_panic = 0
+92@ = 0
+98@ = 0
+100@ = 0
+275@ = 0
+104@ = 0
+109@ = 0
+107@ = 0
+102@ = 0
+108@ = 0
+106@ = 1
+94@ = 0
+95@ = 0
+103@ = 0
+38@ = 0
+97@ = 0
+93@ = 0
+101@ = 0
+117@ = 0
+$counter_robbery_cat4 = 0
+274@ = 0
+105@ = 0
+61@ = 1289.851
+62@ = 269.8778
+63@ = 19.5888
+64@ = 820.2197
+65@ = 4.2019
+66@ = 1004.661
+67@ = 719.17
+68@ = -457.68
+69@ = 16.92
+70@ = 822.4665
+76@ = 1.7837
+82@ = 1003.1
+71@ = 822.0091
+77@ = 6.0787
+83@ = 1003.17
+72@ = 832.8624
+78@ = 0.7513
+84@ = 1003.18
+73@ = 830.9443
+79@ = 0.3996
+85@ = 1003.17
+74@ = 827.839
+80@ = -0.2443
+86@ = 1003.1
+75@ = 829.2125
+81@ = 2.0354
+87@ = 1003.17
+if 
+  $cat_getaway_dialogue == 0
+goto_if_false @CAT4_1357
+if 
+  $cat_counter == 0
+goto_if_false @CAT4_1108
+set_lvar_text_label 118@s = 'CAT_DA'
+set_lvar_text_label 120@s = 'CAT_DE'
+set_lvar_text_label 122@s = 'CAT_DF'
+set_lvar_text_label 124@s = 'CAT_DG'
+set_lvar_text_label 126@s = 'CAT_DH'
+set_lvar_text_label 128@s = 'CAT_DI'
+set_lvar_text_label 130@s = 'CAT_DJ'
+set_lvar_text_label 132@s = 'CAT_DK'
+set_lvar_text_label 134@s = 'CAT_DL'
+set_lvar_text_label 136@s = 'CAT_DM'
+set_lvar_text_label 138@s = 'CAT_DN'
+set_lvar_text_label 140@s = 'CAT_DO'
+set_lvar_text_label 142@s = 'CAT_DP'
+set_lvar_int_to_constant 222@ = 8626
+set_lvar_int_to_constant 223@ = 8630
+set_lvar_int_to_constant 224@ = 8631
+set_lvar_int_to_constant 225@ = 8632
+set_lvar_int_to_constant 226@ = 8633
+set_lvar_int_to_constant 227@ = 8634
+set_lvar_int_to_constant 228@ = 8635
+set_lvar_int_to_constant 229@ = 8636
+set_lvar_int_to_constant 230@ = 8637
+set_lvar_int_to_constant 231@ = 8638
+set_lvar_int_to_constant 232@ = 8639
+set_lvar_int_to_constant 233@ = 8640
+set_lvar_int_to_constant 234@ = 8641
+110@ = 16
+goto @CAT4_1357
+
+:CAT4_1108
+set_lvar_text_label 118@s = 'CAT_DF'
+set_lvar_text_label 120@s = 'CAT_DG'
+set_lvar_text_label 122@s = 'CAT_DH'
+set_lvar_text_label 124@s = 'CAT_DI'
+set_lvar_text_label 126@s = 'CAT_DJ'
+set_lvar_text_label 128@s = 'CAT_DK'
+set_lvar_text_label 130@s = 'CAT_DL'
+set_lvar_text_label 132@s = 'CAT_DM'
+set_lvar_text_label 134@s = 'CAT_DN'
+set_lvar_text_label 136@s = 'CAT_DO'
+set_lvar_text_label 138@s = 'CAT_DP'
+set_lvar_int_to_constant 222@ = 8631
+set_lvar_int_to_constant 223@ = 8632
+set_lvar_int_to_constant 224@ = 8633
+set_lvar_int_to_constant 225@ = 8634
+set_lvar_int_to_constant 226@ = 8635
+set_lvar_int_to_constant 227@ = 8636
+set_lvar_int_to_constant 228@ = 8637
+set_lvar_int_to_constant 229@ = 8638
+set_lvar_int_to_constant 230@ = 8639
+set_lvar_int_to_constant 231@ = 8640
+set_lvar_int_to_constant 232@ = 8641
+110@ = 14
+
+:CAT4_1357
+if 
+  $cat_getaway_dialogue == 1
+goto_if_false @CAT4_1690
+set_lvar_text_label 118@s = 'CAT_GA'
+set_lvar_text_label 120@s = 'CAT_GB'
+set_lvar_text_label 122@s = 'CAT_GC'
+set_lvar_text_label 124@s = 'CAT_GD'
+set_lvar_text_label 126@s = 'CAT_GE'
+set_lvar_text_label 128@s = 'CAT_GF'
+set_lvar_text_label 130@s = 'CAT_GG'
+set_lvar_text_label 132@s = 'CAT_GH'
+set_lvar_text_label 134@s = 'CAT_GI'
+set_lvar_text_label 136@s = 'CAT_GJ'
+set_lvar_text_label 138@s = 'CAT_GK'
+set_lvar_text_label 140@s = 'CAT_GL'
+set_lvar_text_label 142@s = 'CAT_GM'
+set_lvar_text_label 144@s = 'CAT_GN'
+set_lvar_int_to_constant 222@ = 8672
+set_lvar_int_to_constant 223@ = 8673
+set_lvar_int_to_constant 224@ = 8674
+set_lvar_int_to_constant 225@ = 8675
+set_lvar_int_to_constant 226@ = 8676
+set_lvar_int_to_constant 227@ = 8677
+set_lvar_int_to_constant 228@ = 8678
+set_lvar_int_to_constant 229@ = 8679
+set_lvar_int_to_constant 230@ = 8680
+set_lvar_int_to_constant 231@ = 8681
+set_lvar_int_to_constant 232@ = 8682
+set_lvar_int_to_constant 233@ = 8683
+set_lvar_int_to_constant 234@ = 8684
+set_lvar_int_to_constant 235@ = 8685
+110@ = 17
+
+:CAT4_1690
+if 
+  $cat_getaway_dialogue == 2
+goto_if_false @CAT4_1891
+set_lvar_text_label 118@s = 'CAT_OA'
+set_lvar_text_label 120@s = 'CAT_OB'
+set_lvar_text_label 122@s = 'CAT_OC'
+set_lvar_text_label 124@s = 'CAT_OD'
+set_lvar_text_label 126@s = 'CAT_OE'
+set_lvar_text_label 128@s = 'CAT_OF'
+set_lvar_text_label 130@s = 'CAT_OG'
+set_lvar_text_label 132@s = 'CAT_OH'
+set_lvar_int_to_constant 222@ = 8725
+set_lvar_int_to_constant 223@ = 8726
+set_lvar_int_to_constant 224@ = 8727
+set_lvar_int_to_constant 225@ = 8728
+set_lvar_int_to_constant 226@ = 8729
+set_lvar_int_to_constant 227@ = 8730
+set_lvar_int_to_constant 228@ = 8731
+set_lvar_int_to_constant 229@ = 8732
+110@ = 11
+
+:CAT4_1891
+52@ = 0
+112@ = Blip.AddForCoord(61@, 62@, 63@)
+115@ = Blip.AddForCoord(277@, 278@, 279@)
+116@ = Blip.AddForCoord(277@, 278@, 279@)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_1969
+113@ = Blip.AddForChar($catalina)
+Blip.Remove(113@)
+
+:CAT4_1969
+Blip.Remove(112@)
+Blip.Remove(115@)
+Blip.Remove(116@)
+Blip.Remove(113@)
+Blip.Remove($spray_shop4)
+54@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
+Game.EnableEntryExitPlayerGroupWarping(833.0, 9.0, 10.0, False)
+Game.EnableEntryExitPlayerGroupWarping(1291.0, 271.0, 10.0, True)
+wait 0
+if 
+  88@ == 1
+goto_if_false @CAT4_2068
+gosub @CAT4_4355
+
+:CAT4_2068
+if 
+  89@ == 1
+goto_if_false @CAT4_2093
+gosub @CAT4_13682
+
+:CAT4_2093
+if 
+  90@ == 1
+goto_if_false @CAT4_2118
+goto @CAT4_18326
+
+:CAT4_2118
+if 
+  91@ == 1
+goto_if_false @CAT4_2143
+goto @CAT4_18296
+
+:CAT4_2143
+return 
+
+:CAT4_2145
+if 
+  89@ == 1
+goto_if_false @CAT4_3613
+if 
+  93@ == 0
+goto_if_false @CAT4_2849
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_2842
+if 
+  Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @CAT4_2842
+93@ = 1
+if 
+  101@ == 1
+goto_if_false @CAT4_2248
+94@ = 1000
+
+:CAT4_2248
+if 
+  not Blip.DoesExist(116@)
+goto_if_false @CAT4_2280
+116@ = Blip.AddSpriteForCoord(63, 67@, 68@, 69@)
+
+:CAT4_2280
+if 
+  106@ == 0
+goto_if_false @CAT4_2821
+if 
+  281@ == 1
+goto_if_false @CAT4_2686
+if 
+  102@ > 2
+goto_if_false @CAT4_2341
+102@ = 0
+
+:CAT4_2341
+if 
+  102@ == 2
+goto_if_false @CAT4_2456
+Audio.LoadMissionAudio(9889, 1)
+
+:CAT4_2366
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_2392
+wait 0
+goto @CAT4_2366
+
+:CAT4_2392
+Text.PrintNow('CATX_UA', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_2412
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_2438
+wait 0
+goto @CAT4_2412
+
+:CAT4_2438
+Text.ClearThisPrint('CATX_UA')
+102@ += 1
+
+:CAT4_2456
+if 
+  102@ == 1
+goto_if_false @CAT4_2571
+Audio.LoadMissionAudio(9890, 1)
+
+:CAT4_2481
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_2507
+wait 0
+goto @CAT4_2481
+
+:CAT4_2507
+Text.PrintNow('CATX_UB', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_2527
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_2553
+wait 0
+goto @CAT4_2527
+
+:CAT4_2553
+Text.ClearThisPrint('CATX_UB')
+102@ += 1
+
+:CAT4_2571
+if 
+  102@ == 0
+goto_if_false @CAT4_2686
+Audio.LoadMissionAudio(9894, 1)
+
+:CAT4_2596
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_2622
+wait 0
+goto @CAT4_2596
+
+:CAT4_2622
+Text.PrintNow('CATX_UF', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_2642
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_2668
+wait 0
+goto @CAT4_2642
+
+:CAT4_2668
+Text.ClearThisPrint('CATX_UF')
+102@ += 1
+
+:CAT4_2686
+if 
+  106@ == 0
+goto_if_false @CAT4_2805
+if 
+  99@ == 0
+goto_if_false @CAT4_2805
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_2805
+if 
+  not Char.LocateAnyMeans3D($catalina, 0, 67@, 68@, 69@, 30.0, 30.0, 30.0)
+goto_if_false @CAT4_2805
+Char.ClearRelationship($catalina, RelationshipType.Like, PedType.Cop)
+99@ = 1
+Char.SetRelationship($catalina, RelationshipType.Hate, PedType.Cop)
+
+:CAT4_2805
+Text.Print('CAT4_32', 5000, 1)
+
+:CAT4_2821
+if 
+  Blip.DoesExist(115@)
+goto_if_false @CAT4_2842
+Blip.Remove(115@)
+
+:CAT4_2842
+goto @CAT4_3613
+
+:CAT4_2849
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_3306
+if 
+  100@ == 0
+goto_if_false @CAT4_3094
+if 
+  Char.LocateAnyMeans3D($catalina, 1, 720.5, -466.73, 15.72, 4.0, 4.0, 4.0)
+goto_if_false @CAT4_3094
+if 
+  100@ == 0
+goto_if_false @CAT4_3094
+Text.PrintNow('CAT4_37', 5000, 1)
+if 
+  99@ == 1
+goto_if_false @CAT4_3087
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_3087
+Char.ClearRelationship($catalina, RelationshipType.Hate, PedType.Cop)
+if 
+  Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_3032
+Char.RemoveFromGroup($catalina)
+
+:CAT4_3032
+Char.ClearTasks($catalina)
+if 
+  not Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_3071
+Group.SetMember($catalina, $Players_Group)
+Group.SetFollowStatus($Players_Group, True)
+
+:CAT4_3071
+Char.SetRelationship($catalina, RelationshipType.Like, PedType.Cop)
+99@ = 0
+
+:CAT4_3087
+100@ = 1
+
+:CAT4_3094
+if 
+  100@ == 1
+goto_if_false @CAT4_3185
+if 
+  not Char.LocateAnyMeans3D($catalina, 0, 720.5, -460.73, 15.72, 15.0, 15.0, 15.0)
+goto_if_false @CAT4_3185
+if 
+  100@ == 1
+goto_if_false @CAT4_3185
+100@ = 0
+
+:CAT4_3185
+if 
+  106@ == 0
+goto_if_false @CAT4_3306
+if 
+  99@ == 0
+goto_if_false @CAT4_3306
+if 
+  Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @CAT4_3306
+if 
+  not Char.LocateAnyMeans3D($catalina, 0, 67@, 68@, 69@, 30.0, 30.0, 30.0)
+goto_if_false @CAT4_3306
+Char.ClearRelationship($catalina, RelationshipType.Like, PedType.Cop)
+Char.SetRelationship($catalina, RelationshipType.Hate, PedType.Cop)
+99@ = 1
+
+:CAT4_3306
+if 
+  not Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @CAT4_3613
+93@ = 0
+$game_timer2_cat4 = Clock.GetGameTimer()
+if 
+  not Blip.DoesExist(115@)
+goto_if_false @CAT4_3463
+115@ = Blip.AddForCoord(277@, 278@, 279@)
+Blip.ChangeColor(115@, BlipColor.Yellow)
+Audio.LoadMissionAudio(9824, 1)
+
+:CAT4_3380
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_3406
+wait 0
+goto @CAT4_3380
+
+:CAT4_3406
+Text.PrintNow('CATX_DE', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_3426
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_3452
+wait 0
+goto @CAT4_3426
+
+:CAT4_3452
+Text.ClearThisPrint('CATX_DE')
+
+:CAT4_3463
+if 
+  Blip.DoesExist(116@)
+goto_if_false @CAT4_3484
+Blip.Remove(116@)
+
+:CAT4_3484
+if 
+  99@ == 1
+goto_if_false @CAT4_3606
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_3606
+Char.ClearRelationship($catalina, RelationshipType.Hate, PedType.Cop)
+if 
+  Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_3551
+Char.RemoveFromGroup($catalina)
+
+:CAT4_3551
+Char.ClearTasks($catalina)
+if 
+  not Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_3590
+Group.SetMember($catalina, $Players_Group)
+Group.SetFollowStatus($Players_Group, True)
+
+:CAT4_3590
+Char.SetRelationship($catalina, RelationshipType.Like, PedType.Cop)
+99@ = 0
+
+:CAT4_3606
+TIMERA = 0
+
+:CAT4_3613
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CAT4_4353
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, 64@, 65@, 66@, 50.0, 50.0, 50.0)
+goto_if_false @CAT4_4168
+if 
+  38@ == 0
+goto_if_false @CAT4_4150
+Text.ClearThisPrint('CAT4_01')
+if 
+  103@ == 0
+goto_if_false @CAT4_3765
+39@ = Object.Create(#RIDER1_DOOR, 824.4123, 10.85, 1003.2)
+Object.SetHeading(39@, 175.0)
+Object.FreezePosition(39@, True)
+Object.SetCollisionDamageEffect(39@, False)
+
+:CAT4_3765
+if 
+  103@ == 1
+goto_if_false @CAT4_3783
+
+:CAT4_3783
+if 
+  $flag_has_safe_been_robbed_cat4 == 0
+goto_if_false @CAT4_3831
+40@ = Object.Create(#KEV_SAFE, 820.5, 9.7, 1003.216)
+goto @CAT4_3854
+
+:CAT4_3831
+40@ = Object.Create(#MAN_SAFENEW, 820.5, 9.7, 1003.216)
+
+:CAT4_3854
+Object.SetHeading(40@, 90.0)
+if 
+  89@ == 1
+goto_if_false @CAT4_3903
+if 
+  Blip.DoesExist(115@)
+goto_if_false @CAT4_3903
+Blip.Remove(115@)
+
+:CAT4_3903
+if 
+  96@ <> 0
+goto_if_false @CAT4_4150
+if 
+  88@ == 1
+goto_if_false @CAT4_4150
+if 
+  Blip.DoesExist(112@)
+goto_if_false @CAT4_3962
+Blip.Remove(112@)
+Text.ClearPrints
+
+:CAT4_3962
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_4150
+Char.ClearTasks($catalina)
+Char.SetCoordinates($catalina, 823.13, 2.2, 1003.18)
+Char.SetHeading($catalina, 107.0)
+Char.SetAreaVisible($catalina, 3)
+Task.AimGunAtCoord($catalina, 64@, 65@, 66@, 900000)
+Char.FreezePositionAndDontLoadCollision($catalina, False)
+Audio.ReportMissionAudioEventAtPosition(64@, 65@, 66@, 1155)
+Audio.LoadMissionAudio(9830, 1)
+
+:CAT4_4067
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_4093
+wait 0
+goto @CAT4_4067
+
+:CAT4_4093
+Text.PrintNow('CATX_JE', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_4113
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_4139
+wait 0
+goto @CAT4_4113
+
+:CAT4_4139
+Text.ClearThisPrint('CATX_JE')
+
+:CAT4_4150
+Hud.DisplayRadar(False)
+38@ = 1
+goto @CAT4_4353
+
+:CAT4_4168
+if 
+  38@ == 1
+goto_if_false @CAT4_4353
+if 
+  Object.DoesExist(39@)
+goto_if_false @CAT4_4207
+Object.Delete(39@)
+
+:CAT4_4207
+if 
+  Object.DoesExist(40@)
+goto_if_false @CAT4_4228
+Object.Delete(40@)
+
+:CAT4_4228
+World.ClearArea(1, 61@, 62@, 63@, 1000.0)
+if 
+  88@ == 1
+goto_if_false @CAT4_4342
+if 
+  not Blip.DoesExist(112@)
+goto_if_false @CAT4_4342
+112@ = Blip.AddForCoord(61@, 62@, 63@)
+Blip.SetCoordAppearance(112@, 1)
+Text.PrintNow('CAT4_16', 10000, 1)
+Text.ClearHelp
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_4342
+Char.FreezePositionAndDontLoadCollision($catalina, True)
+
+:CAT4_4342
+Hud.DisplayRadar(True)
+38@ = 0
+
+:CAT4_4353
+return 
+
+:CAT4_4355
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CAT4_4406
+41@ = Char.StoreCarIsIn($scplayer)
+Char.WarpFromCarToCoord($scplayer, 1291.575, 269.5648, 18.5469)
+goto @CAT4_4426
+
+:CAT4_4406
+Char.SetCoordinates($scplayer, 1291.575, 269.5648, 18.5469)
+
+:CAT4_4426
+Char.SetHeading($scplayer, 60.0)
+57@ = Object.Create(363, 1288.141, 267.9079, 18.5469)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_4480
+Char.Delete($catalina)
+
+:CAT4_4480
+Streaming.LoadSpecialCharacter('CAT', 5)
+
+:CAT4_4493
+if 
+  not Streaming.HasSpecialCharacterLoaded(5)
+goto_if_false @CAT4_4519
+wait 0
+goto @CAT4_4493
+
+:CAT4_4519
+$catalina = Char.Create(23, 294, 1288.277, 268.9509, 18.9469)
+Char.SetGetOutUpsideDownCar($catalina, False)
+Char.SetHeading($catalina, 321.0)
+Char.SetOnlyDamagedByPlayer($catalina, True)
+Char.SetNeverTargeted($catalina, True)
+Char.ShutUpForScriptedSpeech($catalina, True)
+if 
+  Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_4606
+Char.RemoveFromGroup($catalina)
+
+:CAT4_4606
+if 
+  not Car.IsDead(41@)
+goto_if_false @CAT4_4652
+Car.SetCoordinates(41@, 1297.0, 278.0, 18.0)
+Car.SetHeading(41@, 150.0)
+
+:CAT4_4652
+276@ = DecisionMakerGroup.Load(0)
+Group.SetDecisionMaker($Players_Group, 276@)
+DecisionMakerGroup.ClearEventResponse(276@, 9)
+DecisionMakerGroup.ClearEventResponse(276@, 41)
+55@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+Char.SetRelationship($catalina, RelationshipType.Hate, PedType.Mission1)
+Char.SetDecisionMaker($catalina, 55@)
+Task.TogglePedThreatScanner($catalina, True, True, True)
+DecisionMakerChar.ClearEventResponse(55@, 36)
+DecisionMakerChar.AddEventResponse(55@, 36, 1022, 0.0, 100.0, 0.0, 0.0, True, False)
+Char.SetShootRate($catalina, 100)
+if 
+  Object.DoesExist(57@)
+goto_if_false @CAT4_4821
+Task.PickUpObject($catalina, 57@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", 0)
+
+:CAT4_4821
+if 
+  not Streaming.HasAnimationLoaded("MISC")
+goto_if_false @CAT4_4851
+wait 0
+goto @CAT4_4821
+
+:CAT4_4851
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Camera.SetFixedPosition(1284.625, 257.5731, 23.8334, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1284.508, 258.5662, 23.824, SwitchType.JumpCut)
+Camera.ResetNewScriptables
+Camera.PersistTrack(True)
+Camera.PersistPos(True)
+Camera.SetVectorMove(1284.625, 257.5731, 23.8334, 1287.068, 258.5688, 22.872, 4500, True)
+Camera.SetVectorTrack(1284.508, 258.5662, 23.824, 1287.18, 259.5328, 22.6311, 4500, True)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_5039
+Char.SetCoordinates($catalina, 1288.277, 268.9509, 18.546)
+Char.SetHeading($catalina, 321.0)
+
+:CAT4_5039
+World.SetCarDensityMultiplier(0.0)
+World.SetPedDensityMultiplier(0.0)
+Streaming.LoadSceneInDirection(1284.625, 257.5731, 23.8334, 45.0)
+World.ClearArea(1, 1287.363, 257.5327, 23.0934, 1000.0)
+Camera.DoFade(1, 1000)
+
+:CAT4_5106
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT4_5130
+wait 0
+goto @CAT4_5106
+
+:CAT4_5130
+TIMERA = 0
+TIMERB = 0
+97@ = 0
+
+:CAT4_5151
+if 
+  97@ <> 10
+goto_if_false @CAT4_6251
+wait 0
+if 
+  97@ == 0
+goto_if_false @CAT4_5301
+Char.StartFacialTalk($scplayer, 10000)
+Audio.LoadMissionAudio(9001, 1)
+
+:CAT4_5206
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_5232
+wait 0
+goto @CAT4_5206
+
+:CAT4_5232
+Text.PrintNow('CAT2_AB', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_5252
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_5278
+wait 0
+goto @CAT4_5252
+
+:CAT4_5278
+Text.ClearThisPrint('CAT2_AB')
+Char.StopFacialTalk($scplayer)
+97@ = 1
+
+:CAT4_5301
+if 
+  97@ == 1
+goto_if_false @CAT4_5367
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_5360
+Task.GoStraightToCoord($catalina, 1290.93, 269.75, 18.5469, MoveState.Walk, 3000)
+
+:CAT4_5360
+97@ = 2
+
+:CAT4_5367
+if 
+  TIMERB > 3000
+goto_if_false @CAT4_5599
+if 
+  97@ == 2
+goto_if_false @CAT4_5599
+Camera.ResetNewScriptables
+Camera.SetFixedPosition(1292.445, 266.8836, 19.0157, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1291.756, 267.5977, 19.1396, SwitchType.JumpCut)
+Audio.LoadMissionAudio(9002, 1)
+
+:CAT4_5464
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_5490
+wait 0
+goto @CAT4_5464
+
+:CAT4_5490
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_5534
+Text.PrintNow('CAT2_AC', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Char.StartFacialTalk($scplayer, 10000)
+
+:CAT4_5534
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_5560
+wait 0
+goto @CAT4_5534
+
+:CAT4_5560
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_5581
+Char.StopFacialTalk($catalina)
+
+:CAT4_5581
+Text.ClearThisPrint('CAT2_AC')
+97@ = 3
+
+:CAT4_5599
+if 
+  97@ == 3
+goto_if_false @CAT4_5995
+Camera.SetFixedPosition(1300.118, 272.2002, 20.6733, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1299.156, 271.9637, 20.5352, SwitchType.JumpCut)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_5726
+Task.PlayAnim($catalina, "PASS_RIFLE_PED", "MISC", 4.0, False, False, False, False, -1)
+
+:CAT4_5726
+Audio.LoadMissionAudio(9859, 1)
+
+:CAT4_5733
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_5759
+wait 0
+goto @CAT4_5733
+
+:CAT4_5759
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_5780
+Char.ClearTasks($catalina)
+
+:CAT4_5780
+Task.PlayAnim($scplayer, "PASS_RIFLE_PLY", "MISC", 4.0, False, False, False, False, -1)
+if 
+  Object.DoesExist(57@)
+goto_if_false @CAT4_5879
+Task.PickUpObject($scplayer, 57@, 0.0, 0.0, 0.0, 5, 16, "NULL", "NULL", 0)
+
+:CAT4_5879
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_5903
+Char.StartFacialTalk($catalina, 10000)
+
+:CAT4_5903
+Text.PrintNow('CATX_RB', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_5923
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_5949
+wait 0
+goto @CAT4_5923
+
+:CAT4_5949
+Text.ClearThisPrint('CATX_RB')
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_5981
+Char.StopFacialTalk($catalina)
+
+:CAT4_5981
+97@ = 4
+TIMERA = 0
+
+:CAT4_5995
+if 
+  97@ == 4
+goto_if_false @CAT4_6150
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_6053
+Task.GoStraightToCoord($catalina, 1292.81, 269.01, 18.5469, MoveState.Walk, -1)
+
+:CAT4_6053
+97@ = 5
+Audio.LoadMissionAudio(9031, 1)
+
+:CAT4_6067
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_6093
+wait 0
+goto @CAT4_6067
+
+:CAT4_6093
+Text.PrintNow('CAT2_JA', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_6113
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_6139
+wait 0
+goto @CAT4_6113
+
+:CAT4_6139
+Text.ClearThisPrint('CAT2_JA')
+
+:CAT4_6150
+if 
+  97@ == 5
+goto_if_false @CAT4_6194
+if 
+  TIMERA > 1500
+goto_if_false @CAT4_6194
+97@ = 10
+
+:CAT4_6194
+if 
+  TIMERB > 10000
+goto_if_false @CAT4_6220
+97@ = 10
+
+:CAT4_6220
+if 
+  Pad.IsSkipCutsceneButtonPressed
+goto_if_false @CAT4_6244
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+97@ = 10
+
+:CAT4_6244
+goto @CAT4_5151
+
+:CAT4_6251
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+if 
+  Object.DoesExist(57@)
+goto_if_false @CAT4_6287
+Object.Delete(57@)
+
+:CAT4_6287
+Camera.ResetNewScriptables
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+World.SwitchEntryExit('GENOTB', True)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_6337
+Char.StopFacialTalk($catalina)
+
+:CAT4_6337
+Char.StopFacialTalk($scplayer)
+if 
+  not Car.IsDead(41@)
+goto_if_false @CAT4_6373
+Car.SetHealth(41@, 1000)
+Car.SetCanBurstTires(41@, False)
+
+:CAT4_6373
+Char.GiveWeapon($scplayer, WeaponType.Satchel, 10)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_6432
+if 
+  not Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_6432
+Group.SetMember($catalina, $Players_Group)
+Group.SetFollowStatus($Players_Group, False)
+
+:CAT4_6432
+112@ = Blip.AddSpriteForCoord(12, 61@, 62@, 63@)
+Text.PrintNow('CAT4_01', 10000, 1)
+
+:CAT4_6464
+if 
+  not Streaming.HasModelLoaded(#KEV_SAFE)
+goto_if_false @CAT4_6491
+wait 0
+goto @CAT4_6464
+
+:CAT4_6491
+if 
+  not Streaming.HasModelLoaded(#MAN_SAFENEW)
+goto_if_false @CAT4_6518
+wait 0
+goto @CAT4_6491
+
+:CAT4_6518
+if or
+  not Streaming.HasModelLoaded(348)
+  not Streaming.HasModelLoaded(#RIDER1_DOOR)
+goto_if_false @CAT4_6550
+wait 0
+goto @CAT4_6518
+
+:CAT4_6550
+if 
+  38@ <> 1
+goto_if_false @CAT4_6833
+wait 0
+gosub @CAT4_2145
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 64@, 65@, 66@, 50.0, 50.0, 50.0)
+goto_if_false @CAT4_6628
+gosub @CAT4_16165
+
+:CAT4_6628
+if 
+  91@ == 1
+goto_if_false @CAT4_6648
+return 
+
+:CAT4_6648
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @CAT4_6686
+88@ = 0
+89@ = 0
+90@ = 1
+return 
+
+:CAT4_6686
+58@ = Char.GetAmmoInWeapon($scplayer, 39)
+59@ = Char.GetAmmoInWeapon($scplayer, 40)
+if and
+  0 >= 58@
+  0 >= 59@
+goto_if_false @CAT4_6826
+if 
+  275@ <> 1
+goto_if_false @CAT4_6826
+if 
+  not World.IsExplosionInArea(ExplosionType.Grenade, 819.55, 8.09, 1003.4, 822.27, 10.98, 1005.72)
+goto_if_false @CAT4_6826
+88@ = 0
+91@ = 1
+Text.PrintNow('CAT4_2', 10000, 1)
+return 
+
+:CAT4_6826
+goto @CAT4_6550
+
+:CAT4_6833
+Blip.Remove(112@)
+if 
+  96@ == 0
+goto_if_false @CAT4_9015
+if 
+  38@ == 1
+goto_if_false @CAT4_9015
+Streaming.RemoveAnimation("MISC")
+Text.ClearSmallPrints
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Text.ClearPrints
+Camera.SetFixedPosition(833.5528, 9.9425, 1003.91, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(832.7419, 9.3669, 1004.01, SwitchType.JumpCut)
+Audio.LoadMissionAudio(1826, 3)
+53@ = 0
+
+:CAT4_6962
+if 
+  6 > 53@
+goto_if_false @CAT4_7024
+46@(53@,6i) = Char.CreateRandom(70@(53@,6f), 76@(53@,6f), 82@(53@,6f))
+53@ += 1
+goto @CAT4_6962
+
+:CAT4_7024
+Hud.DisplayRadar(False)
+96@ = 1
+TIMERA = 0
+TIMERB = 0
+97@ = 0
+
+:CAT4_7056
+if 
+  97@ <> 10
+goto_if_false @CAT4_8896
+wait 0
+if 
+  97@ >= 2
+goto_if_false @CAT4_7115
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot3)
+goto_if_false @CAT4_7115
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+
+:CAT4_7115
+if 
+  97@ == 0
+goto_if_false @CAT4_7434
+Char.SetCoordinates($scplayer, 832.4548, 7.0794, 1003.187)
+Task.GoStraightToCoord($scplayer, 828.2866, 8.2237, 1003.187, MoveState.Walk, 5000)
+World.ClearArea(1, 828.2866, 8.2237, 1003.187, 2.0)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_7427
+Char.SetProofs($catalina, False, False, True, False, False)
+Char.SetAccuracy($catalina, 90)
+Char.ClearTasks($catalina)
+Char.SetAreaVisible($catalina, 3)
+if 
+  Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_7276
+Char.RemoveFromGroup($catalina)
+
+:CAT4_7276
+if 
+  Char.IsInAnyCar($catalina)
+goto_if_false @CAT4_7319
+Char.WarpFromCarToCoord($catalina, 833.5104, 4.3569, 1003.587)
+goto @CAT4_7339
+
+:CAT4_7319
+Char.SetCoordinates($catalina, 833.5104, 4.3569, 1003.187)
+
+:CAT4_7339
+Char.SetHasUsedEntryExit($catalina, 1290.0, 270.0, 10.0)
+Char.SetHeading($catalina, 107.0)
+Char.GiveWeapon($catalina, WeaponType.DesertEagle, 10000)
+Task.GoStraightToCoord($catalina, 824.3764, 3.4945, 1003.18, MoveState.Run, -1)
+World.ClearArea(1, 824.3764, 3.4945, 1003.18, 2.0)
+
+:CAT4_7427
+97@ = 1
+
+:CAT4_7434
+if 
+  97@ == 1
+goto_if_false @CAT4_8114
+if 
+  TIMERA > 2000
+goto_if_false @CAT4_8114
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_8107
+Char.ClearTasks($catalina)
+56@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 824.3764, 3.4945, 1003.18, MoveState.Run, 3000)
+Task.AimGunAtCoord(-1, 64@, 65@, 66@, 5000)
+Sequence.Close(56@)
+Char.PerformSequence($catalina, 56@)
+Sequence.Clear(56@)
+$iSetOTBPanic = 1
+Audio.LoadMissionAudio(9010, 1)
+
+:CAT4_7569
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_7595
+wait 0
+goto @CAT4_7569
+
+:CAT4_7595
+Text.PrintNow('CAT2_DA', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_7639
+Char.StartFacialTalk($catalina, 10000)
+
+:CAT4_7639
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_7665
+wait 0
+goto @CAT4_7639
+
+:CAT4_7665
+Text.ClearThisPrint('CAT2_DA')
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_7697
+Char.StopFacialTalk($catalina)
+
+:CAT4_7697
+Camera.SetFixedPosition(829.9543, 8.6043, 1004.892, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(829.2075, 7.9448, 1004.806, SwitchType.JumpCut)
+Task.LookAtCoord($scplayer, 824.17, 3.95, 1007.0, 3000)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_7839
+Char.ClearTasks($catalina)
+Char.SetCoordinates($catalina, 824.3764, 3.4945, 1003.18)
+Char.SetHeading($catalina, 107.0)
+Task.AimGunAtCoord($catalina, 64@, 65@, 66@, 5000)
+
+:CAT4_7839
+53@ = 0
+
+:CAT4_7846
+if 
+  6 > 53@
+goto_if_false @CAT4_7965
+if 
+  not Char.IsDead(46@(53@,6i))
+goto_if_false @CAT4_7951
+if or
+  53@ == 0
+  53@ == 3
+  53@ == 5
+goto_if_false @CAT4_7937
+Task.HandsUp(46@(53@,6i), 900000)
+goto @CAT4_7951
+
+:CAT4_7937
+Task.Duck(46@(53@,6i), 900000)
+
+:CAT4_7951
+53@ += 1
+goto @CAT4_7846
+
+:CAT4_7965
+Audio.LoadMissionAudio(9011, 1)
+
+:CAT4_7972
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_7998
+wait 0
+goto @CAT4_7972
+
+:CAT4_7998
+Text.PrintNow('CAT2_DB', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_8042
+Char.StartFacialTalk($catalina, 10000)
+
+:CAT4_8042
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_8068
+wait 0
+goto @CAT4_8042
+
+:CAT4_8068
+Text.ClearThisPrint('CAT2_DB')
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_8100
+Char.StopFacialTalk($catalina)
+
+:CAT4_8100
+TIMERA = 0
+
+:CAT4_8107
+97@ = 2
+
+:CAT4_8114
+if 
+  97@ == 2
+goto_if_false @CAT4_8346
+if 
+  TIMERA > 500
+goto_if_false @CAT4_8346
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_8339
+Char.ClearTasks($catalina)
+Task.StandStill($catalina, 900000)
+Camera.SetFixedPosition(821.8057, 3.2657, 1005.09, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(822.7056, 3.6678, 1004.921, SwitchType.JumpCut)
+Task.LookAtCoord($scplayer, 824.17, 3.95, 1007.0, 3000)
+Task.LookAtCoord($catalina, 824.17, 3.95, 1007.0, 2000)
+Task.AimGunAtCoord($catalina, 819.55, 5.55, 1005.59, 5000)
+Audio.ReportMissionAudioEventAtPosition(64@, 65@, 66@, 1155)
+Text.PrintNow('CAT4_3', 5000, 1)
+TIMERA = 0
+
+:CAT4_8339
+97@ = 3
+
+:CAT4_8346
+if 
+  97@ == 3
+goto_if_false @CAT4_8609
+if 
+  TIMERA > 2000
+goto_if_false @CAT4_8609
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_8416
+Task.AimGunAtCoord($catalina, 64@, 65@, 66@, 5000)
+
+:CAT4_8416
+Text.ClearThisPrint('CAT4_3')
+Audio.LoadMissionAudio(9016, 1)
+
+:CAT4_8434
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_8460
+wait 0
+goto @CAT4_8434
+
+:CAT4_8460
+Text.PrintNow('CAT2_FA', 10000, 1)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_8500
+Char.StartFacialTalk($catalina, 10000)
+
+:CAT4_8500
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_8504
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_8530
+wait 0
+goto @CAT4_8504
+
+:CAT4_8530
+Text.ClearThisPrint('CAT2_FA')
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_8562
+Char.StopFacialTalk($catalina)
+
+:CAT4_8562
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CAT4_8588
+Task.AchieveHeading($scplayer, 112.0)
+
+:CAT4_8588
+$flag_otb_robbing_peds_panic = 1
+97@ = 4
+TIMERA = 0
+
+:CAT4_8609
+if 
+  97@ == 4
+goto_if_false @CAT4_8863
+if 
+  TIMERA > 1000
+goto_if_false @CAT4_8863
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_8856
+Char.ClearTasks($catalina)
+Camera.SetFixedPosition(829.9543, 8.6043, 1004.892, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(829.2075, 7.9448, 1004.806, SwitchType.JumpCut)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_8766
+if 
+  not Char.IsDead(46@(52@,6i))
+goto_if_false @CAT4_8766
+Task.KillCharOnFoot($catalina, 46@(52@,6i))
+
+:CAT4_8766
+Audio.LoadMissionAudio(9017, 1)
+
+:CAT4_8773
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_8799
+wait 0
+goto @CAT4_8773
+
+:CAT4_8799
+Text.Print('CAT2_FB', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_8819
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_8845
+wait 0
+goto @CAT4_8819
+
+:CAT4_8845
+Text.ClearThisPrint('CAT2_FB')
+
+:CAT4_8856
+97@ = 5
+
+:CAT4_8863
+if 
+  TIMERB > 17000
+goto_if_false @CAT4_8889
+97@ = 10
+
+:CAT4_8889
+goto @CAT4_7056
+
+:CAT4_8896
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CAT4_9015
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_8962
+Task.AimGunAtCoord($catalina, 64@, 65@, 66@, 900000)
+
+:CAT4_8962
+59@ = Char.GetAmmoInWeapon($scplayer, 39)
+60@ = Char.GetAmmoInWeapon($scplayer, 39)
+96@ = 1
+$flag_otb_robbing_peds_panic = 1
+TIMERA = 0
+TIMERB = 0
+$game_timer2_cat4 = Clock.GetGameTimer()
+
+:CAT4_9015
+TIMERB = 0
+
+:CAT4_9022
+if 
+  117@ <> 1
+goto_if_false @CAT4_13666
+wait 0
+58@ = Char.GetAmmoInWeapon($scplayer, 39)
+59@ = Char.GetAmmoInWeapon($scplayer, 40)
+if and
+  0 >= 58@
+  0 >= 59@
+goto_if_false @CAT4_9184
+if 
+  275@ <> 1
+goto_if_false @CAT4_9184
+if 
+  not World.IsExplosionInArea(ExplosionType.Grenade, 819.55, 8.09, 1003.4, 822.27, 10.98, 1005.72)
+goto_if_false @CAT4_9184
+88@ = 0
+91@ = 1
+Text.PrintNow('CAT4_2', 5000, 1)
+return 
+
+:CAT4_9184
+if 
+  Char.IsDead($catalina)
+goto_if_false @CAT4_9232
+88@ = 0
+91@ = 1
+Text.PrintNow('CAT4_15', 5000, 1)
+return 
+
+:CAT4_9232
+if 
+  108@ == 0
+goto_if_false @CAT4_9275
+Text.PrintHelp('CAT4_43')
+108@ = 1
+TIMERB = 0
+
+:CAT4_9275
+if 
+  108@ == 1
+goto_if_false @CAT4_9342
+if 
+  TIMERB > 6000
+goto_if_false @CAT4_9342
+Text.PrintNow('CAT4_42', 6000, 1)
+108@ = 2
+TIMERB = 0
+
+:CAT4_9342
+if 
+  2 >= 108@
+goto_if_false @CAT4_9413
+if 
+  Char.IsCurrentWeapon($scplayer, WeaponType.Satchel)
+goto_if_false @CAT4_9413
+if 
+  is_int_lvar_greater_than_int_lvar 60@ > 58@
+goto_if_false @CAT4_9413
+Text.ClearHelp
+108@ = 3
+TIMERB = 0
+
+:CAT4_9413
+if 
+  108@ == 3
+goto_if_false @CAT4_9491
+if 
+  TIMERB > 1500
+goto_if_false @CAT4_9491
+Text.PrintNow('CAT4_44', 6000, 1)
+Text.PrintHelp('CAT4_45')
+108@ = 4
+TIMERB = 0
+
+:CAT4_9491
+if 
+  4 >= 108@
+goto_if_false @CAT4_9598
+if 
+  Object.DoesExist(39@)
+goto_if_false @CAT4_9598
+if 
+  World.HasObjectOfTypeBeenSmashed(824.4123, 10.8, 1003.2, 10.0, #RIDER1_DOOR)
+goto_if_false @CAT4_9598
+if 
+  TIMERB > 500
+goto_if_false @CAT4_9598
+Text.ClearSmallPrints
+Text.ClearHelp
+108@ = 5
+TIMERB = 0
+
+:CAT4_9598
+if 
+  108@ == 5
+goto_if_false @CAT4_9783
+Text.ClearHelp
+Audio.LoadMissionAudio(9012, 1)
+
+:CAT4_9625
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_9651
+wait 0
+goto @CAT4_9625
+
+:CAT4_9651
+Text.Print('CAT2_DC', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_9695
+Char.StartFacialTalk($catalina, 10000)
+
+:CAT4_9695
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_9721
+wait 0
+goto @CAT4_9695
+
+:CAT4_9721
+Text.ClearThisPrint('CAT2_DC')
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_9753
+Char.StopFacialTalk($catalina)
+
+:CAT4_9753
+Text.PrintNow('CAT4_46', 10000, 1)
+108@ = 6
+TIMERB = 0
+
+:CAT4_9783
+if 
+  38@ == 1
+goto_if_false @CAT4_10826
+$game_timer1_cat4 = Clock.GetGameTimer()
+sub_int_var_from_int_var $game_timer1_cat4 -= $game_timer2_cat4
+if 
+  94@ == 0
+goto_if_false @CAT4_9844
+94@ = 1
+$game_timer2_cat4 = Clock.GetGameTimer()
+
+:CAT4_9844
+$game_timer1_cat4 = Clock.GetGameTimer()
+sub_int_var_from_int_var $game_timer1_cat4 -= $game_timer2_cat4
+if 
+  94@ == 1
+goto_if_false @CAT4_10003
+94@ = 2
+Audio.LoadMissionAudio(9018, 1)
+
+:CAT4_9889
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_9915
+wait 0
+goto @CAT4_9889
+
+:CAT4_9915
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_9919
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_9945
+wait 0
+goto @CAT4_9919
+
+:CAT4_9945
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_9998
+Char.ClearTasks($catalina)
+if 
+  not Char.IsDead(46@(52@,6i))
+goto_if_false @CAT4_9998
+Task.KillCharOnFoot($catalina, 46@(52@,6i))
+
+:CAT4_9998
+$game_timer2_cat4 = Clock.GetGameTimer()
+
+:CAT4_10003
+$game_timer1_cat4 = Clock.GetGameTimer()
+sub_int_var_from_int_var $game_timer1_cat4 -= $game_timer2_cat4
+if 
+  94@ == 2
+goto_if_false @CAT4_10109
+94@ = 3
+Audio.LoadMissionAudio(9877, 1)
+
+:CAT4_10048
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_10074
+wait 0
+goto @CAT4_10048
+
+:CAT4_10074
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_10078
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_10104
+wait 0
+goto @CAT4_10078
+
+:CAT4_10104
+$game_timer2_cat4 = Clock.GetGameTimer()
+
+:CAT4_10109
+$game_timer1_cat4 = Clock.GetGameTimer()
+sub_int_var_from_int_var $game_timer1_cat4 -= $game_timer2_cat4
+if 
+  94@ == 3
+goto_if_false @CAT4_10234
+if 
+  $game_timer1_cat4 > 5000
+goto_if_false @CAT4_10234
+94@ = 4
+Audio.LoadMissionAudio(9014, 1)
+
+:CAT4_10173
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_10199
+wait 0
+goto @CAT4_10173
+
+:CAT4_10199
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_10203
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_10229
+wait 0
+goto @CAT4_10203
+
+:CAT4_10229
+$game_timer2_cat4 = Clock.GetGameTimer()
+
+:CAT4_10234
+$game_timer1_cat4 = Clock.GetGameTimer()
+sub_int_var_from_int_var $game_timer1_cat4 -= $game_timer2_cat4
+if 
+  94@ == 4
+goto_if_false @CAT4_10359
+if 
+  $game_timer1_cat4 > 10000
+goto_if_false @CAT4_10359
+94@ = 5
+Audio.LoadMissionAudio(9013, 1)
+
+:CAT4_10298
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_10324
+wait 0
+goto @CAT4_10298
+
+:CAT4_10324
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_10328
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_10354
+wait 0
+goto @CAT4_10328
+
+:CAT4_10354
+$game_timer2_cat4 = Clock.GetGameTimer()
+
+:CAT4_10359
+$game_timer1_cat4 = Clock.GetGameTimer()
+sub_int_var_from_int_var $game_timer1_cat4 -= $game_timer2_cat4
+if 
+  94@ == 5
+goto_if_false @CAT4_10421
+if 
+  $game_timer1_cat4 > 10000
+goto_if_false @CAT4_10421
+94@ = 6
+$game_timer2_cat4 = Clock.GetGameTimer()
+
+:CAT4_10421
+$game_timer1_cat4 = Clock.GetGameTimer()
+sub_int_var_from_int_var $game_timer1_cat4 -= $game_timer2_cat4
+if 
+  94@ > 1
+goto_if_false @CAT4_10826
+if 
+  2 > 52@
+goto_if_false @CAT4_10826
+if 
+  Char.IsDead(46@(52@,6i))
+goto_if_false @CAT4_10826
+Char.MarkAsNoLongerNeeded(46@(52@,6i))
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_10826
+if 
+  not Char.IsShooting($catalina)
+goto_if_false @CAT4_10826
+52@ += 1
+if 
+  2 > 52@
+goto_if_false @CAT4_10802
+Char.ClearTasks($catalina)
+if 
+  not Char.IsDead(46@(52@,6i))
+goto_if_false @CAT4_10593
+Task.KillCharOnFoot($catalina, 46@(52@,6i))
+
+:CAT4_10593
+if 
+  52@ == 2
+goto_if_false @CAT4_10674
+Audio.LoadMissionAudio(9872, 1)
+
+:CAT4_10618
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_10644
+wait 0
+goto @CAT4_10618
+
+:CAT4_10644
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_10648
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_10674
+wait 0
+goto @CAT4_10648
+
+:CAT4_10674
+if 
+  52@ == 4
+goto_if_false @CAT4_10755
+Audio.LoadMissionAudio(9877, 1)
+
+:CAT4_10699
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_10725
+wait 0
+goto @CAT4_10699
+
+:CAT4_10725
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_10729
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_10755
+wait 0
+goto @CAT4_10729
+
+:CAT4_10755
+if 
+  52@ == 5
+goto_if_false @CAT4_10795
+Audio.LoadMissionAudio(9884, 1)
+Text.PrintNow('CATX_TQ', 100, 1)
+
+:CAT4_10795
+goto @CAT4_10826
+
+:CAT4_10802
+Char.ClearTasks($catalina)
+Task.AimGunAtCoord($catalina, 64@, 65@, 66@, 900000)
+
+:CAT4_10826
+gosub @CAT4_2145
+if 
+  World.IsExplosionInArea(ExplosionType.Grenade, 820.3084, -1.6925, 1003.278, 828.8, 4.7199, 1008.079)
+goto_if_false @CAT4_10901
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_10901
+Char.SetHealth($catalina, 0)
+
+:CAT4_10901
+if 
+  103@ == 0
+goto_if_false @CAT4_11151
+if 
+  World.IsExplosionInArea(ExplosionType.Grenade, 823.89, 8.99, 1000.4, 826.18, 11.98, 1009.72)
+goto_if_false @CAT4_11018
+Object.SetCollisionDamageEffect(39@, True)
+Object.FreezePosition(39@, False)
+Object.Break(39@, 1)
+Object.SetHealth(39@, 0)
+103@ = 1
+Fx.AddExplosion(0, 820.5, 9.7, 1003.216)
+
+:CAT4_11018
+if 
+  Object.DoesExist(39@)
+goto_if_false @CAT4_11151
+if 
+  Char.IsCurrentWeapon($scplayer, WeaponType.Satchel)
+goto_if_false @CAT4_11151
+if 
+  World.IsExplosionInArea(ExplosionType.Grenade, 823.89, 8.99, 1000.4, 826.18, 11.98, 1009.72)
+goto_if_false @CAT4_11151
+Object.SetCollisionDamageEffect(39@, True)
+Object.FreezePosition(39@, False)
+Object.Break(39@, 1)
+Object.SetHealth(39@, 0)
+103@ = 1
+Fx.AddExplosion(0, 820.5, 9.7, 1003.216)
+
+:CAT4_11151
+if 
+  103@ == 1
+goto_if_false @CAT4_11336
+if 
+  World.IsExplosionInArea(ExplosionType.Grenade, 819.55, 8.09, 1003.4, 822.27, 10.98, 1005.72)
+goto_if_false @CAT4_11336
+Text.ClearHelp
+Text.ClearPrints
+$flag_has_safe_been_robbed_cat4 = 1
+Streaming.MarkModelAsNoLongerNeeded(#RIDER1_DOOR)
+World.SwitchEntryExit('GENOTB', False)
+if 
+  275@ == 0
+goto_if_false @CAT4_11275
+275@ = 1
+TIMERA = 0
+
+:CAT4_11275
+Object.Delete(40@)
+40@ = Object.Create(#MAN_SAFENEW, 820.5, 9.7, 1003.216)
+Object.SetHeading(40@, 90.0)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_11336
+Char.FreezePositionAndDontLoadCollision($catalina, False)
+
+:CAT4_11336
+if 
+  275@ == 1
+goto_if_false @CAT4_13659
+if 
+  TIMERA > 500
+goto_if_false @CAT4_13659
+Fx.AddExplosion(0, 820.5, 9.7, 1003.216)
+53@ = 4
+
+:CAT4_11399
+if 
+  6 > 53@
+goto_if_false @CAT4_11440
+Char.MarkAsNoLongerNeeded(46@(53@,6i))
+53@ += 1
+goto @CAT4_11399
+
+:CAT4_11440
+if 
+  Object.DoesExist(39@)
+goto_if_false @CAT4_11461
+Object.Delete(39@)
+
+:CAT4_11461
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+World.SetPedDensityMultiplier(0.0)
+Camera.SetFixedPosition(823.9662, 11.5153, 1005.81, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(823.2487, 11.0891, 1005.26, SwitchType.JumpCut)
+Char.SetCoordinates($scplayer, 824.8268, 10.0672, 1003.187)
+Char.SetHeading($scplayer, 100.0)
+Char.SetAreaVisible($scplayer, 3)
+Streaming.SetAreaVisible(3)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_11643
+Char.ClearTasks($catalina)
+Char.SetCoordinates($catalina, 827.95, 9.21, 1003.13)
+Char.SetHeading($catalina, 93.0)
+Char.SetRelationship($catalina, RelationshipType.Like, PedType.Cop)
+Char.ClearRelationship($catalina, RelationshipType.Hate, PedType.Cop)
+99@ = 0
+
+:CAT4_11643
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Player.MakeGangDisappear
+World.ClearArea(1, 824.8268, 10.0672, 1003.187, 1000.0)
+Streaming.RequestAnimation("BOMBER")
+
+:CAT4_11690
+if 
+  not Streaming.HasAnimationLoaded("BOMBER")
+goto_if_false @CAT4_11722
+wait 0
+goto @CAT4_11690
+
+:CAT4_11722
+Task.Duck($scplayer, 3000)
+TIMERA = 0
+TIMERB = 0
+97@ = 0
+
+:CAT4_11751
+if 
+  97@ <> 10
+goto_if_false @CAT4_13153
+wait 0
+if 
+  97@ == 0
+goto_if_false @CAT4_11817
+if 
+  TIMERA > 2000
+goto_if_false @CAT4_11817
+97@ = 1
+
+:CAT4_11817
+if 
+  97@ == 1
+goto_if_false @CAT4_12236
+if 
+  TIMERA > 2000
+goto_if_false @CAT4_12236
+Char.SetCoordinates($scplayer, 824.8268, 10.0672, 1003.187)
+Char.SetHeading($scplayer, 100.0)
+Char.SetAreaVisible($scplayer, 3)
+Streaming.SetAreaVisible(3)
+97@ = 2
+Task.GoStraightToCoord($scplayer, 821.3832, 9.7296, 1003.195, MoveState.Walk, -1)
+if 
+  not Car.IsDead(41@)
+goto_if_false @CAT4_12009
+Car.FreezePosition(41@, True)
+Car.SetVisible(41@, True)
+Car.SetProofs(41@, False, False, False, False, False)
+Car.SetHealth(41@, 1500)
+Car.SetCoordinates(41@, 1297.0, 278.0, 18.0)
+Car.SetHeading(41@, 150.0)
+
+:CAT4_12009
+Streaming.RequestModel(599)
+Streaming.RequestModel(283)
+Streaming.RequestModel(346)
+
+:CAT4_12024
+if or
+  not Streaming.HasModelLoaded(599)
+  not Streaming.HasModelLoaded(283)
+  not Streaming.HasModelLoaded(346)
+goto_if_false @CAT4_12061
+wait 0
+goto @CAT4_12024
+
+:CAT4_12061
+34@ = Car.Create(599, 1296.038, 251.8959, 18.4002)
+35@ = Car.Create(599, 1301.326, 265.0127, 18.4007)
+36@ = Car.Create(599, 1308.398, 278.7967, 18.546)
+Car.SetHeading(34@, 11.7173)
+Car.SetHeading(35@, 70.3422)
+Car.SetHeading(36@, 119.5617)
+43@ = Char.CreateInsideCar(PedType.Cop, 283, 34@)
+Char.GiveWeapon(43@, WeaponType.Pistol, 1000)
+44@ = Char.CreateInsideCar(PedType.Cop, 283, 35@)
+Char.GiveWeapon(44@, WeaponType.Pistol, 1000)
+45@ = Char.CreateInsideCar(PedType.Cop, 283, 36@)
+Char.GiveWeapon(45@, WeaponType.Pistol, 1000)
+TIMERA = 0
+
+:CAT4_12236
+if 
+  97@ == 2
+goto_if_false @CAT4_12718
+if 
+  TIMERA > 2000
+goto_if_false @CAT4_12718
+Camera.SetFixedPosition(819.5102, 10.5367, 1004.439, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(820.4842, 10.324, 1004.362, SwitchType.JumpCut)
+56@ = Sequence.Open()
+Task.PlayAnim(-1, "BOM_PLANT_IN", "BOMBER", 4.0, False, False, False, False, 0)
+Task.PlayAnim(-1, "BOM_PLANT_LOOP", "BOMBER", 4.0, False, False, False, False, 5000)
+Sequence.Close(56@)
+Char.PerformSequence($scplayer, 56@)
+Sequence.Clear(56@)
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @CAT4_12458
+Char.StartFacialTalk($scplayer, 100000)
+
+:CAT4_12458
+Audio.LoadMissionAudio(9019, 1)
+
+:CAT4_12465
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_12491
+wait 0
+goto @CAT4_12465
+
+:CAT4_12491
+Text.PrintNow('CAT2_GA', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_12511
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_12537
+wait 0
+goto @CAT4_12511
+
+:CAT4_12537
+Text.ClearThisPrint('CAT2_GA')
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @CAT4_12569
+Char.StopFacialTalk($scplayer)
+
+:CAT4_12569
+Audio.LoadMissionAudio(9020, 1)
+
+:CAT4_12576
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_12602
+wait 0
+goto @CAT4_12576
+
+:CAT4_12602
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_12626
+Char.StartFacialTalk($catalina, 10000)
+
+:CAT4_12626
+Text.PrintNow('CAT2_GB', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_12646
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_12672
+wait 0
+goto @CAT4_12646
+
+:CAT4_12672
+Text.ClearThisPrint('CAT2_GB')
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_12704
+Char.StopFacialTalk($catalina)
+
+:CAT4_12704
+TIMERA = 0
+97@ = 3
+
+:CAT4_12718
+if 
+  97@ == 3
+goto_if_false @CAT4_13055
+if 
+  TIMERA > 1000
+goto_if_false @CAT4_13055
+Camera.SetFixedPosition(832.2155, 11.3956, 1003.388, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(831.3511, 10.9217, 1003.557, SwitchType.JumpCut)
+Audio.LoadMissionAudio(9021, 1)
+
+:CAT4_12813
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_12839
+wait 0
+goto @CAT4_12813
+
+:CAT4_12839
+56@ = Sequence.Open()
+Task.AchieveHeading(-1, 10.0)
+Task.GoStraightToCoord(-1, 833.0, 10.0, 1003.0, MoveState.Run, -1)
+Sequence.Close(56@)
+Char.PerformSequence($scplayer, 56@)
+Sequence.Clear(56@)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_12939
+Char.ClearTasks($catalina)
+Task.GoStraightToCoord($catalina, 834.0, 7.0, 1003.0, MoveState.Run, -1)
+
+:CAT4_12939
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @CAT4_12963
+Char.StartFacialTalk($scplayer, 10000)
+
+:CAT4_12963
+Text.PrintNow('CAT2_GC', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_12983
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_13009
+wait 0
+goto @CAT4_12983
+
+:CAT4_13009
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @CAT4_13030
+Char.StopFacialTalk($scplayer)
+
+:CAT4_13030
+Text.ClearThisPrint('CAT2_GC')
+TIMERA = 0
+97@ = 4
+
+:CAT4_13055
+if 
+  97@ == 4
+goto_if_false @CAT4_13120
+Camera.DoFade(0, 1000)
+
+:CAT4_13080
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT4_13104
+wait 0
+goto @CAT4_13080
+
+:CAT4_13104
+Player.MakeGangReappear
+TIMERA = 0
+97@ = 5
+
+:CAT4_13120
+if 
+  TIMERB > 14800
+goto_if_false @CAT4_13146
+97@ = 10
+
+:CAT4_13146
+goto @CAT4_11751
+
+:CAT4_13153
+Streaming.SetAreaVisible(0)
+Char.SetCoordinates($scplayer, 1292.721, 271.0581, 18.5469)
+Char.SetHasUsedEntryExit($scplayer, 833.0, 9.0, 10.0)
+Streaming.LoadScene(1292.721, 271.0581, 18.5469)
+Char.SetHeading($scplayer, 333.0)
+if 
+  Char.HasGotWeapon($scplayer, WeaponType.Detonator)
+goto_if_false @CAT4_13249
+Char.SetCurrentWeapon($scplayer, WeaponType.Detonator)
+
+:CAT4_13249
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_13351
+Char.SetCoordinates($catalina, 1292.66, 275.2182, 18.5547)
+Char.SetHeading($catalina, 340.1134)
+Char.SetCantBeDraggedOut($catalina, True)
+Char.SetStayInCarWhenJacked($catalina, True)
+Char.SetProofs($catalina, False, False, False, False, False)
+Char.SetHasUsedEntryExit($catalina, 833.0, 9.0, 10.0)
+Char.SetAreaVisible($catalina, 0)
+
+:CAT4_13351
+World.ClearArea(1, 1292.721, 271.0581, 18.5469, 1000.0)
+Camera.DoFade(1, 1000)
+if 
+  not Car.IsDead(41@)
+goto_if_false @CAT4_13532
+if 
+  Car.IsPassengerSeatFree(41@, SeatIndex.TandemRear)
+goto_if_false @CAT4_13484
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_13477
+Task.EnterCarAsPassenger($catalina, 41@, 0, -1)
+if 
+  Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_13470
+Group.SetFollowStatus($Players_Group, False)
+
+:CAT4_13470
+106@ = 1
+
+:CAT4_13477
+goto @CAT4_13525
+
+:CAT4_13484
+if 
+  not Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_13518
+Group.SetMember($catalina, $Players_Group)
+Group.SetFollowStatus($Players_Group, True)
+
+:CAT4_13518
+106@ = 0
+
+:CAT4_13525
+goto @CAT4_13566
+
+:CAT4_13532
+if 
+  not Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_13566
+Group.SetMember($catalina, $Players_Group)
+Group.SetFollowStatus($Players_Group, True)
+
+:CAT4_13566
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Streaming.RemoveAnimation("BOMBER")
+Hud.DisplayRadar(True)
+Object.Delete(39@)
+Object.Delete(40@)
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+Streaming.MarkModelAsNoLongerNeeded(#MAN_SAFENEW)
+Streaming.MarkModelAsNoLongerNeeded(#KEV_SAFE)
+Audio.SetRadioChannel(RadioChannel.KRose)
+117@ = 1
+Blip.Remove(112@)
+88@ = 0
+89@ = 1
+
+:CAT4_13659
+goto @CAT4_9022
+
+:CAT4_13666
+88@ = 0
+89@ = 1
+return 
+
+:CAT4_13682
+281@ = 0
+277@ = 872.9051
+278@ = -30.3161
+279@ = 62.1893
+World.SetCarDensityMultiplier(0.0)
+gosub @CAT4_2145
+
+:CAT4_13733
+if 
+  90@ <> 1
+goto_if_false @CAT4_16144
+wait 0
+gosub @CAT4_2145
+if 
+  98@ == 0
+goto_if_false @CAT4_14479
+if 
+  38@ == 0
+goto_if_false @CAT4_14479
+Player.AlterWantedLevel($player1, 4)
+94@ = 4
+Hud.DisplayRadar(True)
+Char.SetHeading($scplayer, 333.0)
+Camera.SetBehindPlayer
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_14211
+Char.SetAccuracy($catalina, 100)
+if 
+  not Car.IsDead(41@)
+goto_if_false @CAT4_14121
+42@ = Car.GetModel(41@)
+if and
+  Car.IsPassengerSeatFree(41@, SeatIndex.TandemRear)
+  Streaming.IsThisModelACar(42@)
+goto_if_false @CAT4_14024
+Char.SetCantBeDraggedOut($catalina, True)
+Char.SetStayInCarWhenJacked($catalina, True)
+114@ = Blip.AddForCar(41@)
+Blip.SetAsFriendly(114@, True)
+Audio.LoadMissionAudio(9813, 1)
+
+:CAT4_13934
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_13960
+wait 0
+goto @CAT4_13934
+
+:CAT4_13960
+Text.PrintNow('CATX_BF', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_13980
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_14006
+wait 0
+goto @CAT4_13980
+
+:CAT4_14006
+Text.ClearThisPrint('CATX_BF')
+goto @CAT4_14114
+
+:CAT4_14024
+Audio.LoadMissionAudio(9847, 1)
+
+:CAT4_14031
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_14057
+wait 0
+goto @CAT4_14031
+
+:CAT4_14057
+Text.PrintNow('CATX_NA', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_14077
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_14103
+wait 0
+goto @CAT4_14077
+
+:CAT4_14103
+Text.ClearThisPrint('CATX_NA')
+
+:CAT4_14114
+goto @CAT4_14211
+
+:CAT4_14121
+Audio.LoadMissionAudio(9847, 1)
+
+:CAT4_14128
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_14154
+wait 0
+goto @CAT4_14128
+
+:CAT4_14154
+Text.PrintNow('CATX_NA', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_14174
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_14200
+wait 0
+goto @CAT4_14174
+
+:CAT4_14200
+Text.ClearThisPrint('CATX_NA')
+
+:CAT4_14211
+if 
+  not Char.IsDead(43@)
+goto_if_false @CAT4_14298
+if 
+  not Car.IsDead(34@)
+goto_if_false @CAT4_14298
+56@ = Sequence.Open()
+Task.LeaveCar(-1, 34@)
+Task.AimGunAtChar(-1, $scplayer, 20000)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(56@)
+Char.PerformSequence(43@, 56@)
+Sequence.Clear(56@)
+Char.SetDecisionMaker(43@, 54@)
+
+:CAT4_14298
+if 
+  not Char.IsDead(44@)
+goto_if_false @CAT4_14385
+if 
+  not Car.IsDead(35@)
+goto_if_false @CAT4_14385
+56@ = Sequence.Open()
+Task.LeaveCar(-1, 35@)
+Task.AimGunAtChar(-1, $scplayer, 20000)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(56@)
+Char.PerformSequence(44@, 56@)
+Sequence.Clear(56@)
+Char.SetDecisionMaker(44@, 54@)
+
+:CAT4_14385
+if 
+  not Char.IsDead(45@)
+goto_if_false @CAT4_14472
+if 
+  not Car.IsDead(36@)
+goto_if_false @CAT4_14472
+56@ = Sequence.Open()
+Task.LeaveCar(-1, 36@)
+Task.AimGunAtChar(-1, $scplayer, 20000)
+Task.KillCharOnFoot(-1, $scplayer)
+Sequence.Close(56@)
+Char.PerformSequence(45@, 56@)
+Sequence.Clear(56@)
+Char.SetDecisionMaker(45@, 54@)
+
+:CAT4_14472
+98@ = 1
+
+:CAT4_14479
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_15083
+if 
+  98@ == 1
+goto_if_false @CAT4_14618
+Car.MarkAsNoLongerNeeded(34@)
+Car.MarkAsNoLongerNeeded(35@)
+Car.MarkAsNoLongerNeeded(36@)
+Char.MarkAsNoLongerNeeded(43@)
+Char.MarkAsNoLongerNeeded(44@)
+Char.MarkAsNoLongerNeeded(45@)
+Car.MarkAsNoLongerNeeded(41@)
+98@ = 2
+if 
+  Blip.DoesExist(115@)
+goto_if_false @CAT4_14576
+Blip.Remove(115@)
+
+:CAT4_14576
+if 
+  Blip.DoesExist(116@)
+goto_if_false @CAT4_14597
+Blip.Remove(116@)
+
+:CAT4_14597
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+98@ = 2
+
+:CAT4_14618
+if 
+  98@ == 2
+goto_if_false @CAT4_14915
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CAT4_14915
+98@ = 3
+281@ = 1
+if 
+  Blip.DoesExist(114@)
+goto_if_false @CAT4_14687
+Blip.Remove(114@)
+
+:CAT4_14687
+if 
+  not Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_14721
+Group.SetMember($catalina, $Players_Group)
+Group.SetFollowStatus($Players_Group, True)
+
+:CAT4_14721
+if 
+  not Car.IsDead(41@)
+goto_if_false @CAT4_14759
+Car.FreezePosition(41@, False)
+Car.SetProofs(41@, False, False, False, False, False)
+
+:CAT4_14759
+if 
+  93@ == 0
+goto_if_false @CAT4_14814
+if 
+  not Blip.DoesExist(115@)
+goto_if_false @CAT4_14814
+115@ = Blip.AddForCoord(277@, 278@, 279@)
+Blip.ChangeColor(115@, BlipColor.Yellow)
+
+:CAT4_14814
+if 
+  93@ == 1
+goto_if_false @CAT4_14915
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_14915
+if 
+  Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_14915
+if 
+  not Blip.DoesExist(116@)
+goto_if_false @CAT4_14915
+116@ = Blip.AddSpriteForCoord(63, 67@, 68@, 69@)
+Text.PrintNow('CAT4_32', 5000, 1)
+
+:CAT4_14915
+if 
+  98@ == 3
+goto_if_false @CAT4_15031
+gosub @CAT4_16165
+if 
+  91@ == 1
+goto_if_false @CAT4_14960
+return 
+
+:CAT4_14960
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_15031
+if 
+  Char.IsInAnyCar($catalina)
+goto_if_false @CAT4_15031
+Char.ClearRelationship($catalina, RelationshipType.Like, PedType.Cop)
+99@ = 1
+Char.SetRelationship($catalina, RelationshipType.Hate, PedType.Cop)
+106@ = 0
+98@ = 4
+
+:CAT4_15031
+if 
+  98@ == 4
+goto_if_false @CAT4_15076
+gosub @CAT4_16165
+if 
+  91@ == 1
+goto_if_false @CAT4_15076
+return 
+
+:CAT4_15076
+goto @CAT4_15115
+
+:CAT4_15083
+89@ = 0
+91@ = 1
+Text.PrintNow('CAT4_15', 5000, 1)
+return 
+
+:CAT4_15115
+if 
+  93@ == 0
+goto_if_false @CAT4_16137
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, 277@, 278@, 279@, 4.0, 4.0, 4.0)
+goto_if_false @CAT4_15175
+
+:CAT4_15175
+if 
+  Char.IsDead($catalina)
+goto_if_false @CAT4_15230
+89@ = 0
+91@ = 1
+90@ = 0
+Text.PrintNow('CAT4_15', 5000, 1)
+return 
+
+:CAT4_15230
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_15369
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CAT4_15369
+if 
+  Char.IsInAnyCar($catalina)
+goto_if_false @CAT4_15369
+if and
+  94@ >= 4
+  is_int_lvar_greater_or_equal_to_int_lvar 110@ >= 94@
+goto_if_false @CAT4_15369
+if 
+  94@ == 4
+goto_if_false @CAT4_15362
+shut_player_up $player1 1
+if 
+  TIMERA > 10000
+goto_if_false @CAT4_15355
+gosub @CAT4_16800
+
+:CAT4_15355
+goto @CAT4_15369
+
+:CAT4_15362
+gosub @CAT4_16800
+
+:CAT4_15369
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_16137
+if and
+  Char.LocateAnyMeans3D($scplayer, 0, 277@, 278@, 279@, 4.0, 4.0, 4.0)
+  Char.LocateAnyMeans3D($catalina, 0, 277@, 278@, 279@, 10.0, 10.0, 10.0)
+goto_if_false @CAT4_16137
+90@ = 1
+91@ = 0
+if 
+  Char.LocateInCar3D($scplayer, 277@, 278@, 279@, 10.0, 10.0, 10.0, True)
+goto_if_false @CAT4_15544
+Player.SetControl($player1, False)
+$car = Char.StoreCarIsInNoSave($scplayer)
+Task.CarTempAction($scplayer, $car, TempAction.HandbrakeStraight, 2000000)
+
+:CAT4_15544
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+TIMERA = 0
+TIMERB = 0
+97@ = 0
+
+:CAT4_15576
+if 
+  97@ <> 10
+goto_if_false @CAT4_16117
+wait 0
+World.ClearArea(1, 866.7373, -24.0333, 64.9955, 1000.0)
+if 
+  97@ == 0
+goto_if_false @CAT4_15792
+97@ = 1
+Camera.SetFixedPosition(866.3945, -23.1135, 65.1866, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(866.7373, -24.0333, 64.9955, SwitchType.JumpCut)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(9007, 1)
+
+:CAT4_15709
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_15735
+wait 0
+goto @CAT4_15709
+
+:CAT4_15735
+Text.PrintNow('CAT2_CA', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_15755
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_15781
+wait 0
+goto @CAT4_15755
+
+:CAT4_15781
+Text.ClearThisPrint('CAT2_CA')
+
+:CAT4_15792
+if 
+  97@ == 1
+goto_if_false @CAT4_15907
+97@ = 2
+Audio.LoadMissionAudio(9860, 1)
+
+:CAT4_15824
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_15850
+wait 0
+goto @CAT4_15824
+
+:CAT4_15850
+Text.PrintNow('CATX_RC', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_15870
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_15896
+wait 0
+goto @CAT4_15870
+
+:CAT4_15896
+Text.ClearThisPrint('CATX_RC')
+
+:CAT4_15907
+if 
+  97@ == 2
+goto_if_false @CAT4_16000
+97@ = 3
+TIMERA = 0
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_16000
+if 
+  Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_15979
+Char.RemoveFromGroup($catalina)
+
+:CAT4_15979
+if 
+  Char.IsInAnyCar($catalina)
+goto_if_false @CAT4_16000
+Task.LeaveAnyCar($catalina)
+
+:CAT4_16000
+if 
+  97@ == 3
+goto_if_false @CAT4_16084
+if 
+  1500 > TIMERA
+goto_if_false @CAT4_16084
+97@ = 4
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_16084
+Task.GoStraightToCoord($catalina, 869.84, -26.24, 63.1797, MoveState.Walk, -1)
+
+:CAT4_16084
+if 
+  TIMERB > 7000
+goto_if_false @CAT4_16110
+97@ = 10
+
+:CAT4_16110
+goto @CAT4_15576
+
+:CAT4_16117
+Char.Delete($catalina)
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+
+:CAT4_16137
+goto @CAT4_13733
+
+:CAT4_16144
+Blip.Remove(115@)
+90@ = 1
+89@ = 0
+return 
+
+:CAT4_16165
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_16754
+if 
+  93@ == 1
+goto_if_false @CAT4_16222
+if 
+  Char.IsShooting($catalina)
+goto_if_false @CAT4_16222
+gosub @CAT4_17009
+
+:CAT4_16222
+if 
+  not Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_16747
+Text.PrintNow('CAT4_16', 4000, 1)
+if 
+  89@ == 1
+goto_if_false @CAT4_16317
+if 
+  Blip.DoesExist(116@)
+goto_if_false @CAT4_16296
+Blip.Remove(116@)
+
+:CAT4_16296
+if 
+  Blip.DoesExist(115@)
+goto_if_false @CAT4_16317
+Blip.Remove(115@)
+
+:CAT4_16317
+if 
+  not Blip.DoesExist(113@)
+goto_if_false @CAT4_16364
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_16364
+113@ = Blip.AddForChar($catalina)
+Blip.SetAsFriendly(113@, True)
+
+:CAT4_16364
+if 
+  not Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT4_16747
+wait 0
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_16696
+if 
+  not Char.LocateAnyMeansChar3D($scplayer, $catalina, 200.0, 200.0, 200.0, False)
+goto_if_false @CAT4_16478
+88@ = 0
+89@ = 0
+91@ = 1
+Text.PrintNow('CAT4_14', 5000, 1)
+return 
+
+:CAT4_16478
+if 
+  Char.LocateAnyMeansChar3D($scplayer, $catalina, 8.0, 8.0, 8.0, False)
+goto_if_false @CAT4_16689
+Group.SetMember($catalina, $Players_Group)
+Group.SetFollowStatus($Players_Group, True)
+Blip.Remove(113@)
+if 
+  89@ == 1
+goto_if_false @CAT4_16689
+if 
+  93@ == 0
+goto_if_false @CAT4_16623
+if 
+  not Blip.DoesExist(115@)
+goto_if_false @CAT4_16623
+115@ = Blip.AddForCoord(277@, 278@, 279@)
+Blip.ChangeColor(115@, BlipColor.Yellow)
+Text.PrintNow('CAT4_13', 10000, 1)
+
+:CAT4_16623
+if 
+  93@ == 1
+goto_if_false @CAT4_16689
+if 
+  not Blip.DoesExist(116@)
+goto_if_false @CAT4_16689
+116@ = Blip.AddSpriteForCoord(63, 67@, 68@, 69@)
+Text.PrintNow('CAT4_32', 5000, 1)
+
+:CAT4_16689
+goto @CAT4_16740
+
+:CAT4_16696
+Blip.Remove(112@)
+88@ = 0
+89@ = 0
+91@ = 1
+Text.PrintNow('CAT4_15', 5000, 1)
+return 
+
+:CAT4_16740
+goto @CAT4_16364
+
+:CAT4_16747
+goto @CAT4_16798
+
+:CAT4_16754
+Blip.Remove(112@)
+88@ = 0
+89@ = 0
+91@ = 1
+Text.PrintNow('CAT4_15', 5000, 1)
+return 
+
+:CAT4_16798
+return 
+
+:CAT4_16800
+if 
+  107@ == 0
+goto_if_false @CAT4_16863
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_16841
+Char.ShutUpForScriptedSpeech($catalina, True)
+
+:CAT4_16841
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(222@(274@,52i), 1)
+107@ = 1
+
+:CAT4_16863
+if 
+  107@ == 1
+goto_if_false @CAT4_16921
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_16921
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(118@(274@,52s), 10000, 1)
+107@ = 2
+
+:CAT4_16921
+if 
+  107@ == 2
+goto_if_false @CAT4_17007
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17007
+107@ = 0
+Text.ClearThisPrint(118@(274@,52s))
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_16993
+Char.ShutUpForScriptedSpeech($catalina, False)
+
+:CAT4_16993
+274@ += 1
+94@ += 1
+
+:CAT4_17007
+return 
+
+:CAT4_17009
+if 
+  95@ == 0
+goto_if_false @CAT4_17126
+95@ = 1
+Audio.LoadMissionAudio(9861, 1)
+
+:CAT4_17041
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17067
+wait 0
+goto @CAT4_17041
+
+:CAT4_17067
+Text.PrintNow('CATX_SA', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_17087
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17113
+wait 0
+goto @CAT4_17087
+
+:CAT4_17113
+Text.ClearThisPrint('CATX_SA')
+return 
+
+:CAT4_17126
+if 
+  95@ == 1
+goto_if_false @CAT4_17243
+Audio.LoadMissionAudio(9862, 1)
+
+:CAT4_17151
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17177
+wait 0
+goto @CAT4_17151
+
+:CAT4_17177
+Text.PrintNow('CATX_SB', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_17197
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17223
+wait 0
+goto @CAT4_17197
+
+:CAT4_17223
+Text.ClearThisPrint('CATX_SB')
+95@ = 2
+return 
+
+:CAT4_17243
+if 
+  95@ == 2
+goto_if_false @CAT4_17360
+Audio.LoadMissionAudio(9863, 1)
+
+:CAT4_17268
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17294
+wait 0
+goto @CAT4_17268
+
+:CAT4_17294
+Text.PrintNow('CATX_SC', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_17314
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17340
+wait 0
+goto @CAT4_17314
+
+:CAT4_17340
+Text.ClearThisPrint('CATX_SC')
+95@ = 3
+return 
+
+:CAT4_17360
+if 
+  95@ == 3
+goto_if_false @CAT4_17477
+95@ = 4
+Audio.LoadMissionAudio(9864, 1)
+
+:CAT4_17392
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17418
+wait 0
+goto @CAT4_17392
+
+:CAT4_17418
+Text.PrintNow('CATX_SD', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_17438
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17464
+wait 0
+goto @CAT4_17438
+
+:CAT4_17464
+Text.ClearThisPrint('CATX_SD')
+return 
+
+:CAT4_17477
+if 
+  95@ == 4
+goto_if_false @CAT4_17594
+95@ = 5
+Audio.LoadMissionAudio(9865, 1)
+
+:CAT4_17509
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17535
+wait 0
+goto @CAT4_17509
+
+:CAT4_17535
+Text.PrintNow('CATX_SE', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_17555
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17581
+wait 0
+goto @CAT4_17555
+
+:CAT4_17581
+Text.ClearThisPrint('CATX_SE')
+return 
+
+:CAT4_17594
+if 
+  95@ == 5
+goto_if_false @CAT4_17711
+95@ = 6
+Audio.LoadMissionAudio(9866, 1)
+
+:CAT4_17626
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17652
+wait 0
+goto @CAT4_17626
+
+:CAT4_17652
+Text.PrintNow('CATX_SF', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_17672
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17698
+wait 0
+goto @CAT4_17672
+
+:CAT4_17698
+Text.ClearThisPrint('CATX_SF')
+return 
+
+:CAT4_17711
+if 
+  95@ == 6
+goto_if_false @CAT4_17828
+95@ = 7
+Audio.LoadMissionAudio(9867, 1)
+
+:CAT4_17743
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17769
+wait 0
+goto @CAT4_17743
+
+:CAT4_17769
+Text.PrintNow('CATX_SG', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_17789
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17815
+wait 0
+goto @CAT4_17789
+
+:CAT4_17815
+Text.ClearThisPrint('CATX_SG')
+return 
+
+:CAT4_17828
+if 
+  95@ == 7
+goto_if_false @CAT4_17945
+95@ = 8
+Audio.LoadMissionAudio(9868, 1)
+
+:CAT4_17860
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17886
+wait 0
+goto @CAT4_17860
+
+:CAT4_17886
+Text.PrintNow('CATX_SH', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_17906
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_17932
+wait 0
+goto @CAT4_17906
+
+:CAT4_17932
+Text.ClearThisPrint('CATX_SH')
+return 
+
+:CAT4_17945
+if 
+  95@ == 8
+goto_if_false @CAT4_18062
+95@ = 9
+Audio.LoadMissionAudio(9872, 1)
+
+:CAT4_17977
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_18003
+wait 0
+goto @CAT4_17977
+
+:CAT4_18003
+Text.PrintNow('CATX_TD', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_18023
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_18049
+wait 0
+goto @CAT4_18023
+
+:CAT4_18049
+Text.ClearThisPrint('CATX_TD')
+return 
+
+:CAT4_18062
+if 
+  95@ == 9
+goto_if_false @CAT4_18179
+95@ = 10
+Audio.LoadMissionAudio(9877, 1)
+
+:CAT4_18094
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_18120
+wait 0
+goto @CAT4_18094
+
+:CAT4_18120
+Text.PrintNow('CATX_TJ', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_18140
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_18166
+wait 0
+goto @CAT4_18140
+
+:CAT4_18166
+Text.ClearThisPrint('CATX_TJ')
+return 
+
+:CAT4_18179
+if 
+  95@ == 10
+goto_if_false @CAT4_18296
+95@ = 0
+Audio.LoadMissionAudio(9884, 1)
+
+:CAT4_18211
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_18237
+wait 0
+goto @CAT4_18211
+
+:CAT4_18237
+Text.PrintNow('CATX_TQ', 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+
+:CAT4_18257
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @CAT4_18283
+wait 0
+goto @CAT4_18257
+
+:CAT4_18283
+Text.ClearThisPrint('CATX_TQ')
+return 
+
+:CAT4_18296
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+Char.Delete($catalina)
+103@ = 0
+return 
+
+:CAT4_18326
+Text.PrintWithNumberBig('M_PASS', 2000, 5000, TextStyle.Middle)
+Player.AddScore($player1, 2000)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+$cat_counter += 1
+$cat_getaway_dialogue += 1
+Stat.RegisterMissionPassed('CAT_4')
+Stat.PlayerMadeProgress(1)
+if 
+  $cat_liquor_banter == 1
+goto_if_false @CAT4_18416
+$cat_liquor_banter = 2
+
+:CAT4_18416
+$flag_cat_mission4_passed = 1
+return 
+
+:CAT4_18425
+Text.ClearHelp
+$onmission = 0
+Hud.DisplayRadar(True)
+World.SwitchEntryExit('GENOTB', True)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CAT4_18474
+shut_player_up $player1 0
+
+:CAT4_18474
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_18505
+Char.SetProofs($catalina, False, False, False, False, False)
+
+:CAT4_18505
+if 
+  not Car.IsDead(41@)
+goto_if_false @CAT4_18550
+Car.FreezePosition(41@, False)
+Car.SetProofs(41@, False, False, False, False, False)
+Car.SetCanBurstTires(41@, True)
+
+:CAT4_18550
+Char.RemoveElegantly($catalina)
+53@ = 4
+
+:CAT4_18562
+if 
+  6 > 53@
+goto_if_false @CAT4_18603
+Char.MarkAsNoLongerNeeded(46@(53@,6i))
+53@ += 1
+goto @CAT4_18562
+
+:CAT4_18603
+Streaming.RemoveAnimation("MISC")
+Streaming.MarkModelAsNoLongerNeeded(283)
+Streaming.MarkModelAsNoLongerNeeded(407)
+Streaming.MarkModelAsNoLongerNeeded(596)
+Streaming.MarkModelAsNoLongerNeeded(416)
+Streaming.MarkModelAsNoLongerNeeded(277)
+Streaming.MarkModelAsNoLongerNeeded(#ROADWORKBARRIER1)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.MarkModelAsNoLongerNeeded(599)
+Streaming.MarkModelAsNoLongerNeeded(348)
+Streaming.MarkModelAsNoLongerNeeded(364)
+Streaming.MarkModelAsNoLongerNeeded(363)
+Car.MarkAsNoLongerNeeded(34@)
+Car.MarkAsNoLongerNeeded(35@)
+Car.MarkAsNoLongerNeeded(36@)
+Car.MarkAsNoLongerNeeded(41@)
+Char.MarkAsNoLongerNeeded(43@)
+Char.MarkAsNoLongerNeeded(44@)
+Char.MarkAsNoLongerNeeded(45@)
+Object.MarkAsNoLongerNeeded(39@)
+Object.MarkAsNoLongerNeeded(40@)
+Streaming.MarkModelAsNoLongerNeeded(#RIDER1_DOOR)
+Streaming.MarkModelAsNoLongerNeeded(#KEV_SAFE)
+Streaming.MarkModelAsNoLongerNeeded(#MAN_SAFENEW)
+Car.MarkAsNoLongerNeeded(41@)
+$iSetOTBPanic = 0
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT4_18777
+Char.ClearRelationship($catalina, RelationshipType.Hate, PedType.Cop)
+Char.ClearRelationship($catalina, RelationshipType.Like, PedType.Cop)
+
+:CAT4_18777
+Streaming.RemoveAnimation("BOMBER")
+$flag_otb_robbing_peds_panic = 0
+$timer_mobile_start = Clock.GetGameTimer()
+Blip.Remove(112@)
+Blip.Remove(113@)
+Blip.Remove(114@)
+Blip.Remove(115@)
+Blip.Remove(116@)
+$spray_shop4 = Blip.AddShortRangeSpriteForCoord(63, 720.016, -454.625, 15.328)
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+DecisionMaker.Remove(54@)
+DecisionMaker.Remove(55@)
+World.RemoveAllScriptFires
+Mission.Finish
+Game.SetEveryoneIgnorePlayer($player1, False)
+Group.SetSeparationRange($Players_Group, 30.0)
+88@ = 1
+89@ = 0
+90@ = 0
+91@ = 0
+96@ = 0
+$flag_has_safe_been_robbed_cat4 = 0
+99@ = 0
+$flag_otb_robbing_peds_panic = 0
+92@ = 0
+98@ = 0
+100@ = 0
+104@ = 0
+102@ = 0
+94@ = 0
+95@ = 0
+103@ = 0
+38@ = 0
+97@ = 0
+93@ = 0
+101@ = 0
+117@ = 0
+$counter_robbery_cat4 = 0
+return 
+

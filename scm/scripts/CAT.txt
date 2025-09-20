@@ -1,0 +1,172 @@
+:CAT
+$load_and_launch_catalina_mission = -1
+script_name 'CAT'
+
+:CAT_18
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CAT_634
+if 
+  $onmission == 0
+goto_if_false @CAT_419
+if 
+  Player.CanStartMission($player1)
+goto_if_false @CAT_412
+if 
+  $cat_counter == 0
+goto_if_false @CAT_164
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $511, $517, $523, 1.2, 1.2, 2.0)
+goto_if_false @CAT_157
+$onmission = 1
+CAT_641()
+CAT_779()
+Mission.LoadAndLaunchInternal(40) // First Date
+
+:CAT_157
+goto @CAT_249
+
+:CAT_164
+if 
+  $flag_trailor_cutscene == 1
+goto_if_false @CAT_249
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $catX, $catY, $catZ, 1.2, 1.2, 2.0)
+goto_if_false @CAT_249
+$onmission = 1
+CAT_641()
+CAT_922()
+Mission.LoadAndLaunchInternal(40) // First Date
+
+:CAT_249
+switch_start $load_and_launch_catalina_mission total_jumps 4 default_jump 0 @CAT_412 jumps 0 @CAT_312 1 @CAT_337 2 @CAT_362 3 @CAT_387 -1 @CAT_412 -1 @CAT_412 -1 @CAT_412
+
+:CAT_312
+$onmission = 1
+Mission.LoadAndLaunchInternal(41) // Local Liquor Store
+goto @CAT_18
+goto @CAT_412
+
+:CAT_337
+$onmission = 1
+Mission.LoadAndLaunchInternal(42) // Small Town Bank
+goto @CAT_18
+goto @CAT_412
+
+:CAT_362
+$onmission = 1
+Mission.LoadAndLaunchInternal(43) // Tanker Commander
+goto @CAT_18
+goto @CAT_412
+
+:CAT_387
+$onmission = 1
+Mission.LoadAndLaunchInternal(44) // Against All Odds
+goto @CAT_18
+goto @CAT_412
+
+:CAT_412
+goto @CAT_426
+
+:CAT_419
+$load_and_launch_catalina_mission = -1
+
+:CAT_426
+if 
+  $flag_trigger_trailor_cut == 0
+goto_if_false @CAT_474
+if 
+  $cat_counter == 1
+goto_if_false @CAT_474
+Blip.Remove($cat_contact_blip)
+$flag_trigger_trailor_cut = 1
+
+:CAT_474
+if 
+  $flag_trigger_trailor_cut == 1
+goto_if_false @CAT_609
+if 
+  $flag_truth_mission_counter == 1
+goto_if_false @CAT_609
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $bcrashX, $bcrashY, $bcrashZ, 1.2, 1.2, 2.0)
+goto_if_false @CAT_609
+if 
+  Player.CanStartMission($player1)
+goto_if_false @CAT_609
+$onmission = 1
+Text.PrintBig('TRAILER', 1000, TextStyle.BottomRight)
+LITCAS_267()
+Mission.LoadAndLaunchInternal(45) // King in Exile
+$flag_trigger_trailor_cut = 2
+
+:CAT_609
+if 
+  $cat_counter > 3
+goto_if_false @CAT_634
+Blip.Remove($cat_contact_blip)
+terminate_this_script 
+
+:CAT_634
+goto @CAT_18
+
+:CAT_641
+if 
+  $cat_counter == 0
+goto_if_false @CAT_675
+Text.PrintBig('CATCUT1', 1000, TextStyle.BottomRight)
+
+:CAT_675
+if 
+  $cat_counter == 1
+goto_if_false @CAT_709
+Text.PrintBig('CATCUT2', 1000, TextStyle.BottomRight)
+
+:CAT_709
+if 
+  $cat_counter == 2
+goto_if_false @CAT_743
+Text.PrintBig('CATCUT3', 1000, TextStyle.BottomRight)
+
+:CAT_743
+if 
+  $cat_counter == 3
+goto_if_false @CAT_777
+Text.PrintBig('CATCUT4', 1000, TextStyle.BottomRight)
+
+:CAT_777
+return 
+
+:CAT_779
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CAT_920
+$onmission = 1
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(664.9277, -479.6112, 16.1668, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(665.8948, -479.5685, 16.4175, SwitchType.JumpCut)
+World.ClearArea(1, 681.8004, -474.1063, 15.5363, 3.0)
+Task.GoStraightToCoord($scplayer, 681.8004, -474.1063, 15.5363, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:CAT_920
+return 
+
+:CAT_922
+if 
+  Player.IsPlaying($player1)
+goto_if_false @CAT_1063
+$onmission = 1
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(856.9968, -27.9584, 63.7393, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(857.9943, -28.0286, 63.7295, SwitchType.JumpCut)
+World.ClearArea(1, 870.1503, -25.3395, 62.9589, 3.0)
+Task.GoStraightToCoord($scplayer, 870.1503, -25.3395, 62.9589, MoveState.Walk, 3000)
+PSAVE1_1060()
+
+:CAT_1063
+return 
+

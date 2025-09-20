@@ -1,0 +1,1768 @@
+//-------------Mission 28---------------
+// Originally: Running Dog
+
+:SMOKE2
+script_name 'SMOKE2'
+gosub @SMOKE2_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @SMOKE2_38
+gosub @SMOKE2_11327
+
+:SMOKE2_38
+gosub @SMOKE2_11407
+terminate_this_script 
+
+:SMOKE2_47
+Stat.RegisterMissionGiven
+Text.LoadMissionText('SMOKE2')
+$onmission = 1
+wait 0
+36@ = 2068.42
+37@ = -1694.87
+38@ = 13.3
+39@ = 270.0
+$s2_meet_x = 2514.34
+$s2_meet_y = -1411.93
+$s2_meet_z = 27.41
+162@ = 0
+163@ = 0
+164@ = 0
+165@ = 0
+166@ = 0
+167@ = 0
+168@ = 0
+169@ = 0
+170@ = 0
+171@ = 0
+172@ = 0
+173@ = 0
+174@ = 0
+175@ = 0
+46@ = 22
+47@ = 2459.8
+69@ = -1402.19
+91@ = 24.06
+48@ = 2442.07
+70@ = -1370.23
+92@ = 24.06
+49@ = 2414.49
+71@ = -1369.36
+93@ = 24.76
+50@ = 2410.19
+72@ = -1364.03
+94@ = 24.75
+51@ = 2399.68
+73@ = -1358.24
+95@ = 24.93
+52@ = 2381.88
+74@ = -1354.88
+96@ = 24.08
+53@ = 2343.29
+75@ = -1351.41
+97@ = 24.06
+54@ = 2336.29
+76@ = -1310.99
+98@ = 24.29
+55@ = 2257.07
+77@ = -1291.85
+99@ = 24.01
+56@ = 2241.61
+78@ = -1281.61
+100@ = 24.42
+57@ = 2241.61
+79@ = -1264.68
+101@ = 24.37
+58@ = 2239.48
+80@ = -1260.91
+102@ = 23.98
+59@ = 2241.18
+81@ = -1257.88
+103@ = 23.99
+60@ = 2241.18
+82@ = -1254.46
+104@ = 24.46
+61@ = 2241.18
+83@ = -1238.3
+105@ = 25.21
+62@ = 2221.54
+84@ = -1235.75
+106@ = 24.62
+63@ = 2202.27
+85@ = -1236.72
+107@ = 24.0
+64@ = 2202.21
+86@ = -1257.05
+108@ = 23.91
+65@ = 2199.57
+87@ = -1263.15
+109@ = 23.92
+66@ = 2199.08
+88@ = -1279.44
+110@ = 24.57
+67@ = 2182.07
+89@ = -1280.2
+111@ = 24.68
+68@ = 2175.18
+90@ = -1282.82
+112@ = 24.02
+126@ = 2117.86
+127@ = -1071.42
+128@ = 24.64
+129@ = 0
+176@ = 0
+177@ = 0
+178@ = 0
+179@ = 0
+180@ = 0
+157@ = 0
+158@ = 0
+160@ = 0
+182@ = 0
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(0, 2000)
+
+:SMOKE2_1021
+if 
+  Camera.GetFadingStatus
+goto_if_false @SMOKE2_1045
+wait 0
+goto @SMOKE2_1021
+
+:SMOKE2_1045
+World.ClearArea(0, 2069.9, -1702.73, 12.59, 100.0)
+Streaming.RequestModel(#LAE_SMOKECUTSCENE)
+
+:SMOKE2_1074
+if 
+  not Streaming.HasModelLoaded(#LAE_SMOKECUTSCENE)
+goto_if_false @SMOKE2_1101
+wait 0
+goto @SMOKE2_1074
+
+:SMOKE2_1101
+187@ = Object.CreateNoOffset(#LAE_SMOKECUTSCENE, 2055.0, -1695.0, 15.0)
+Cutscene.Load('SMOKE2A')
+
+:SMOKE2_1135
+if 
+  not Cutscene.HasLoaded
+goto_if_false @SMOKE2_1159
+wait 0
+goto @SMOKE2_1135
+
+:SMOKE2_1159
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:SMOKE2_1168
+if 
+  not Cutscene.HasFinished
+goto_if_false @SMOKE2_1192
+wait 0
+goto @SMOKE2_1168
+
+:SMOKE2_1192
+Camera.DoFade(0, Fade.Out)
+
+:SMOKE2_1198
+if 
+  Camera.GetFadingStatus
+goto_if_false @SMOKE2_1222
+wait 0
+goto @SMOKE2_1198
+
+:SMOKE2_1222
+Cutscene.Clear
+Player.SetControl($player1, False)
+Streaming.MarkModelAsNoLongerNeeded(#LAE_SMOKECUTSCENE)
+Object.Delete(187@)
+Streaming.LoadSpecialCharacter('SMOKE', 1)
+Streaming.RequestModel(466)
+Streaming.RequestModel(346)
+Streaming.LoadAllModelsNow
+
+:SMOKE2_1266
+if or
+  not Streaming.HasSpecialCharacterLoaded(1)
+  not Streaming.HasModelLoaded(466)
+  not Streaming.HasModelLoaded(346)
+goto_if_false @SMOKE2_1302
+wait 0
+goto @SMOKE2_1266
+
+:SMOKE2_1302
+gosub @SMOKE2_5382
+Streaming.LoadScene(2069.9, -1702.73, 12.59)
+World.ClearArea(0, 2069.9, -1702.73, 12.59, 100.0)
+World.ClearArea(0, $s2_meet_x, $s2_meet_y, $s2_meet_z, 100.0)
+Path.SwitchRoadsOff(2488.0, -1431.93, 25.41, 2528.0, -1391.93, 29.41)
+Path.SwitchRoadsOff(2252.89, -1286.37, 22.25, 2258.89, -1280.37, 28.25)
+Audio.SetRadioChannel(RadioChannel.BounceFM)
+Char.SetCoordinates($scplayer, 2070.87, -1703.01, 12.55)
+Char.SetHeading($scplayer, 0.0)
+Camera.SetFadingColor(0, 0, 0)
+wait 500
+Camera.DoFade(1, 1500)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+if 
+  182@ == 1
+goto_if_false @SMOKE2_1678
+34@ = Car.Create(466, 0.0, 0.0, -100.0)
+183@ = Blip.AddForCar(34@)
+35@ = Char.Create(24, 290, 0.0, 0.0, -100.0)
+41@ = Char.Create(25, 108, 0.0, 0.0, -100.0)
+42@ = Car.Create(405, 0.0, 0.0, -100.0)
+43@ = Char.CreateInsideCar(PedType.Mission2, 109, 42@)
+44@ = Char.Create(25, 109, 0.0, 0.0, -100.0)
+45@ = Char.Create(25, 110, 0.0, 0.0, -100.0)
+
+:SMOKE2_1678
+Path.SwitchPedRoadsOff(2458.5, -1410.63, 24.06, 2504.27, -1395.83, 28.55)
+115@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 47@, 69@, 91@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 48@, 70@, 92@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 49@, 71@, 93@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 50@, 72@, 94@, MoveState.Run, -1)
+Task.Climb(-1, True)
+Task.GoStraightToCoord(-1, 51@, 73@, 95@, MoveState.Run, -1)
+Task.Climb(-1, True)
+Task.GoStraightToCoord(-1, 52@, 74@, 96@, MoveState.Run, -1)
+Sequence.Close(115@)
+116@ = Sequence.Open()
+Task.Climb(-1, True)
+Task.GoStraightToCoord(-1, 53@, 75@, 97@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 54@, 76@, 98@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 55@, 77@, 99@, MoveState.Sprint, -1)
+Task.GoStraightToCoord(-1, 2254.09, -1283.83, 25.18, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 56@, 78@, 100@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 57@, 79@, 101@, MoveState.Run, -1)
+Task.Climb(-1, True)
+Sequence.Close(116@)
+117@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 58@, 80@, 102@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 59@, 81@, 103@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 60@, 82@, 104@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 61@, 83@, 105@, MoveState.Run, -1)
+Task.AchieveHeading(-1, 90.0)
+Task.Climb(-1, True)
+Task.GoStraightToCoord(-1, 62@, 84@, 106@, MoveState.Run, -1)
+Task.Climb(-1, True)
+Sequence.Close(117@)
+118@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 63@, 85@, 107@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 64@, 86@, 108@, MoveState.Run, -1)
+Task.Climb(-1, True)
+Task.GoStraightToCoord(-1, 65@, 87@, 109@, MoveState.Run, -1)
+Task.Climb(-1, True)
+Task.GoStraightToCoord(-1, 66@, 88@, 110@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 67@, 89@, 111@, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 68@, 90@, 112@, MoveState.Run, -1)
+Sequence.Close(118@)
+114@ = Sequence.Open()
+Char.PerformSequence(-1, 115@)
+Char.PerformSequence(-1, 116@)
+Char.PerformSequence(-1, 117@)
+Char.PerformSequence(-1, 118@)
+Sequence.Close(114@)
+Text.PrintNow('SMK2_1', 10000, 0)
+
+:SMOKE2_2258
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @SMOKE2_2284
+goto @SMOKE2_11352
+
+:SMOKE2_2284
+if and
+  162@ <> 1
+  not Char.IsDead(35@)
+  not Car.IsDead(34@)
+goto_if_false @SMOKE2_2436
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @SMOKE2_2436
+Blip.Remove(183@)
+184@ = Blip.AddForCoord($s2_meet_x, $s2_meet_y, $s2_meet_z)
+162@ = 1
+163@ = 1
+Text.PrintNow('SMK2_2', 11000, 0)
+40@ = Pickup.CreateWithAmmo(346, 3, 100, 2444.895, -1981.524, 13.933)
+186@ = Blip.AddSpriteForCoord(18, 2444.895, -1981.524, 13.933)
+TIMERA = 0
+
+:SMOKE2_2436
+if and
+  162@ == 1
+  166@ <> 1
+  not Char.IsDead(35@)
+  not Car.IsDead(34@)
+goto_if_false @SMOKE2_3206
+if 
+  167@ <> 1
+goto_if_false @SMOKE2_2517
+if 
+  Pickup.HasBeenCollected(40@)
+goto_if_false @SMOKE2_2517
+Blip.Remove(186@)
+167@ = 1
+
+:SMOKE2_2517
+if and
+  163@ == 1
+  not Char.IsInCar($scplayer, 34@)
+goto_if_false @SMOKE2_2743
+Blip.Remove(184@)
+183@ = Blip.AddForCar(34@)
+Blip.SetAsFriendly(183@, True)
+gosub @SMOKE2_10751
+if 
+  Char.IsDead(35@)
+goto_if_false @SMOKE2_2613
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow('SMK2_7', 4000, 0)
+goto @SMOKE2_11327
+
+:SMOKE2_2613
+if 
+  Car.IsDead(34@)
+goto_if_false @SMOKE2_2652
+Text.PrintNow('SMK2_12', 5000, 0)
+goto @SMOKE2_11327
+
+:SMOKE2_2652
+if or
+  not Char.LocateAnyMeans2D($scplayer, 0, 2444.895, -1981.524, 20.0, 20.0)
+  167@ == 1
+goto_if_false @SMOKE2_2720
+Text.PrintNow('SMK2_3', 5000, 0)
+goto @SMOKE2_2736
+
+:SMOKE2_2720
+Text.PrintNow('SMK2_16', 5000, 0)
+
+:SMOKE2_2736
+163@ = 0
+
+:SMOKE2_2743
+if and
+  163@ == 0
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @SMOKE2_2829
+Blip.Remove(183@)
+184@ = Blip.AddForCoord($s2_meet_x, $s2_meet_y, $s2_meet_z)
+if 
+  165@ == 1
+goto_if_false @SMOKE2_2822
+Text.PrintNow('SMK2_15', 5000, 0)
+
+:SMOKE2_2822
+163@ = 1
+
+:SMOKE2_2829
+if 
+  163@ == 1
+goto_if_false @SMOKE2_3005
+if and
+  164@ <> 1
+  TIMERA > 10000
+goto_if_false @SMOKE2_2917
+161@ = 2
+gosub @SMOKE2_9893
+if 
+  not Char.IsDead(35@)
+goto_if_false @SMOKE2_2910
+Char.ShutUpForScriptedSpeech(35@, True)
+
+:SMOKE2_2910
+164@ = 1
+
+:SMOKE2_2917
+if and
+  164@ == 1
+  165@ <> 1
+goto_if_false @SMOKE2_3005
+if 
+  is_int_lvar_greater_than_int_lvar 159@ > 158@
+goto_if_false @SMOKE2_2975
+gosub @SMOKE2_10520
+goto @SMOKE2_3005
+
+:SMOKE2_2975
+if 
+  not Char.IsDead(35@)
+goto_if_false @SMOKE2_2998
+Char.ShutUpForScriptedSpeech(35@, False)
+
+:SMOKE2_2998
+165@ = 1
+
+:SMOKE2_3005
+if 
+  163@ == 1
+goto_if_false @SMOKE2_3206
+if 
+  Char.LocateInCar3D($scplayer, $s2_meet_x, $s2_meet_y, $s2_meet_z, 4.0, 4.0, 2.0, True)
+goto_if_false @SMOKE2_3206
+Player.SetControl($player1, False)
+166@ = 1
+Blip.Remove(184@)
+Blip.Remove(186@)
+Path.SwitchRoadsBackToOriginal(2488.0, -1431.93, 25.41, 2528.0, -1391.93, 29.41)
+if 
+  not Char.IsDead(35@)
+goto_if_false @SMOKE2_3144
+Char.ShutUpForScriptedSpeech(35@, False)
+
+:SMOKE2_3144
+gosub @SMOKE2_5582
+Path.SwitchRoadsOff(2164.51, -1287.88, 20.0, 2170.88, -1267.88, 30.0)
+Text.PrintNow('SMK2_17', 10000, 0)
+TIMERA = 0
+
+:SMOKE2_3206
+if 
+  166@ == 1
+goto_if_false @SMOKE2_5048
+if and
+  168@ <> 1
+  TIMERA > 10000
+goto_if_false @SMOKE2_3275
+Text.PrintHelpForever('SMK2_H1')
+168@ = 1
+TIMERA = 0
+
+:SMOKE2_3275
+if and
+  168@ == 1
+  169@ <> 1
+  TIMERA > 10000
+goto_if_false @SMOKE2_3333
+Text.PrintHelpForever('SMK2_H2')
+169@ = 1
+TIMERA = 0
+
+:SMOKE2_3333
+if and
+  169@ == 1
+  170@ <> 1
+  TIMERA > 10000
+goto_if_false @SMOKE2_3391
+Text.PrintHelpForever('SPRSTAM')
+170@ = 1
+TIMERA = 0
+
+:SMOKE2_3391
+if and
+  170@ == 1
+  171@ <> 1
+  TIMERA > 10000
+goto_if_false @SMOKE2_3433
+Text.ClearHelp
+171@ = 1
+
+:SMOKE2_3433
+if 
+  173@ <> 1
+goto_if_false @SMOKE2_3673
+if 
+  not Char.IsDead(35@)
+goto_if_false @SMOKE2_3549
+if and
+  Char.LocateAnyMeansChar2D($scplayer, 35@, 5.0, 5.0, False)
+  172@ <> 1
+goto_if_false @SMOKE2_3549
+161@ = 1
+gosub @SMOKE2_9893
+if 
+  not Char.IsDead(35@)
+goto_if_false @SMOKE2_3542
+Char.ShutUpForScriptedSpeech(35@, True)
+
+:SMOKE2_3542
+172@ = 1
+
+:SMOKE2_3549
+if and
+  172@ == 1
+  161@ == 1
+goto_if_false @SMOKE2_3673
+if 
+  is_int_lvar_greater_than_int_lvar 159@ > 158@
+goto_if_false @SMOKE2_3643
+if 
+  not Char.IsDead(35@)
+goto_if_false @SMOKE2_3623
+gosub @SMOKE2_10520
+goto @SMOKE2_3636
+
+:SMOKE2_3623
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearPrints
+173@ = 1
+
+:SMOKE2_3636
+goto @SMOKE2_3673
+
+:SMOKE2_3643
+if 
+  not Char.IsDead(35@)
+goto_if_false @SMOKE2_3666
+Char.ShutUpForScriptedSpeech(35@, False)
+
+:SMOKE2_3666
+173@ = 1
+
+:SMOKE2_3673
+if 
+  174@ <> 1
+goto_if_false @SMOKE2_3806
+if 
+  Char.LocateAnyMeans2D($scplayer, 0, 2354.11, -1355.54, 15.0, 15.0)
+goto_if_false @SMOKE2_3806
+113@ = 0
+
+:SMOKE2_3736
+if 
+  2 > 113@
+goto_if_false @SMOKE2_3799
+if 
+  not Char.IsDead(44@(113@,2i))
+goto_if_false @SMOKE2_3785
+Char.SetKindaStayInSamePlace(44@(113@,2i), False)
+
+:SMOKE2_3785
+113@ += 1
+goto @SMOKE2_3736
+
+:SMOKE2_3799
+174@ = 1
+
+:SMOKE2_3806
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_4137
+if 
+  175@ <> 1
+goto_if_false @SMOKE2_3912
+122@ = Char.GetScriptTaskStatus(41@, 1952)
+if 
+  is_int_lvar_equal_to_constant 122@ == 1
+goto_if_false @SMOKE2_3912
+119@, 120@ = Char.GetSequenceProgressRecursive(41@)
+if and
+  119@ == 1
+  120@ == 4
+goto_if_false @SMOKE2_3912
+175@ = 1
+
+:SMOKE2_3912
+if 
+  175@ <> 1
+goto_if_false @SMOKE2_4037
+if 
+  Char.IsPlayingAnim(41@, "RUN_GANG1")
+goto_if_false @SMOKE2_3978
+Char.SetAnimSpeed(41@, "RUN_GANG1", 1.5)
+
+:SMOKE2_3978
+if 
+  Char.IsPlayingAnim(41@, "SPRINT_CIVI")
+goto_if_false @SMOKE2_4030
+Char.SetAnimSpeed(41@, "SPRINT_CIVI", 1.5)
+
+:SMOKE2_4030
+goto @SMOKE2_4137
+
+:SMOKE2_4037
+if 
+  Char.IsPlayingAnim(41@, "RUN_GANG1")
+goto_if_false @SMOKE2_4085
+Char.SetAnimSpeed(41@, "RUN_GANG1", 1.2)
+
+:SMOKE2_4085
+if 
+  Char.IsPlayingAnim(41@, "SPRINT_CIVI")
+goto_if_false @SMOKE2_4137
+Char.SetAnimSpeed(41@, "SPRINT_CIVI", 1.2)
+
+:SMOKE2_4137
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_5041
+if 
+  176@ <> 1
+goto_if_false @SMOKE2_4314
+set_lvar_int_to_lvar_int 113@ = 46@
+113@ -= 1
+122@ = Char.GetScriptTaskStatus(41@, 1952)
+if and
+  is_int_lvar_equal_to_constant 122@ == 7
+  Char.LocateAnyMeans3D(41@, 0, 47@(113@,22f), 69@(113@,22f), 91@(113@,22f), 10.0, 10.0, 10.0)
+goto_if_false @SMOKE2_4314
+176@ = 1
+if and
+  not Car.IsDead(42@)
+  not Char.IsDead(43@)
+goto_if_false @SMOKE2_4314
+if 
+  not Car.IsOnFire(42@)
+goto_if_false @SMOKE2_4314
+Task.EnterCarAsPassenger(41@, 42@, 0, -2)
+
+:SMOKE2_4314
+if 
+  180@ <> 1
+goto_if_false @SMOKE2_4384
+if and
+  not Char.IsDead(43@)
+  not Car.IsDead(42@)
+goto_if_false @SMOKE2_4384
+if 
+  Car.IsOnFire(42@)
+goto_if_false @SMOKE2_4384
+Task.KillCharOnFoot(43@, $scplayer)
+180@ = 1
+
+:SMOKE2_4384
+if and
+  176@ == 1
+  177@ <> 1
+goto_if_false @SMOKE2_5034
+if 
+  178@ <> 1
+goto_if_false @SMOKE2_4743
+if and
+  not Car.IsDead(42@)
+  not Char.IsDead(43@)
+goto_if_false @SMOKE2_4631
+if 
+  Char.IsInCar(41@, 42@)
+goto_if_false @SMOKE2_4631
+178@ = 1
+Task.CarDriveWander(43@, 42@, 30.0, DrivingMode.AvoidCars)
+Char.GiveWeapon(41@, WeaponType.MicroUzi, 99999)
+Task.DriveBy(41@, $scplayer, -1, 0.0, 0.0, 0.0, 1000.0, DriveByType.Ai, False, 60)
+Path.SwitchRoadsBackToOriginal(2164.51, -1287.88, 20.0, 2170.88, -1267.88, 30.0)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @SMOKE2_4608
+Text.PrintNow('SMK2_9', 10000, 0)
+goto @SMOKE2_4624
+
+:SMOKE2_4608
+Text.PrintNow('SMK2_8', 10000, 0)
+
+:SMOKE2_4624
+TIMERA = 0
+
+:SMOKE2_4631
+if 
+  178@ <> 1
+goto_if_false @SMOKE2_4743
+if or
+  Car.IsDead(42@)
+  Char.IsDead(43@)
+goto_if_false @SMOKE2_4702
+Task.SmartFleeChar(41@, $scplayer, 1000.0, 9999999)
+177@ = 1
+goto @SMOKE2_4743
+
+:SMOKE2_4702
+if 
+  Car.IsOnFire(42@)
+goto_if_false @SMOKE2_4743
+Task.SmartFleeChar(41@, $scplayer, 1000.0, 9999999)
+177@ = 1
+
+:SMOKE2_4743
+if 
+  178@ == 1
+goto_if_false @SMOKE2_5034
+if 
+  177@ <> 1
+goto_if_false @SMOKE2_4889
+if 
+  not Car.IsDead(42@)
+goto_if_false @SMOKE2_4889
+125@ = Car.GetDriver(42@)
+if or
+  Car.IsOnFire(42@)
+  125@ == -1
+goto_if_false @SMOKE2_4889
+Task.SmartFleeChar(41@, $scplayer, 1000.0, 9999999)
+if and
+  not Char.IsDead(43@)
+  180@ <> 1
+goto_if_false @SMOKE2_4882
+Task.KillCharOnFoot(43@, $scplayer)
+180@ = 1
+
+:SMOKE2_4882
+177@ = 1
+
+:SMOKE2_4889
+if 
+  177@ <> 1
+goto_if_false @SMOKE2_5034
+if and
+  179@ <> 1
+  TIMERA > 180000
+goto_if_false @SMOKE2_5034
+if and
+  not Car.IsDead(42@)
+  not Char.IsDead(43@)
+goto_if_false @SMOKE2_5034
+if and
+  Char.IsInCar(43@, 42@)
+  Char.IsInCar(41@, 42@)
+goto_if_false @SMOKE2_5034
+Task.CarDriveToCoord(43@, 42@, 126@, 127@, 128@, 30.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
+179@ = 1
+Text.PrintNow('SMK2_10', 7000, 0)
+
+:SMOKE2_5034
+goto @SMOKE2_5048
+
+:SMOKE2_5041
+goto @SMOKE2_11352
+
+:SMOKE2_5048
+if 
+  Char.IsDead(35@)
+goto_if_false @SMOKE2_5087
+Text.PrintNow('SMK2_7', 4000, 0)
+goto @SMOKE2_11327
+
+:SMOKE2_5087
+if and
+  166@ <> 1
+  Car.IsDead(34@)
+goto_if_false @SMOKE2_5133
+Text.PrintNow('SMK2_12', 5000, 0)
+goto @SMOKE2_11327
+
+:SMOKE2_5133
+if and
+  176@ == 1
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_5210
+if 
+  not Char.LocateAnyMeansChar2D($scplayer, 41@, 300.0, 300.0, False)
+goto_if_false @SMOKE2_5210
+Text.PrintNow('SMK2_11', 4000, 0)
+goto @SMOKE2_11327
+
+:SMOKE2_5210
+if and
+  179@ == 1
+  177@ <> 1
+  not Char.IsDead(41@)
+  not Char.IsDead(43@)
+  not Car.IsDead(42@)
+goto_if_false @SMOKE2_5375
+if and
+  Char.IsInCar(41@, 42@)
+  Char.IsInCar(43@, 42@)
+  Car.Locate3D(42@, 0, 126@, 127@, 128@, 6.0, 6.0, 4.0)
+goto_if_false @SMOKE2_5375
+ENTEXT_63()
+if 
+  $player_is_completely_safe == 1
+goto_if_false @SMOKE2_5347
+gosub @SMOKE2_8283
+goto @SMOKE2_5352
+
+:SMOKE2_5347
+Char.RemoveElegantly(41@)
+
+:SMOKE2_5352
+Text.PrintNow('SMK2_11', 4000, 0)
+goto @SMOKE2_11327
+
+:SMOKE2_5375
+goto @SMOKE2_2258
+
+:SMOKE2_5382
+Car.CustomPlateForNextCar(466, "_A2TMFK_")
+34@ = Car.Create(466, 36@, 37@, 38@)
+Car.SetHeading(34@, 39@)
+Car.ChangeColor(34@, 98, 14)
+183@ = Blip.AddForCar(34@)
+Blip.SetAsFriendly(183@, True)
+35@ = Char.CreateAsPassenger(PedType.Mission1, 290, 34@, 0)
+Char.SetHealth(35@, 500)
+Char.SetMaxHealth(35@, 500)
+Char.GiveWeapon(35@, WeaponType.Pistol, 99999)
+Char.SetOnlyDamagedByPlayer(35@, True)
+Char.SetNeverTargeted(35@, True)
+Char.SetSuffersCriticalHits(35@, False)
+Char.SetAnimGroup(35@, "FATMAN")
+Char.SetCantBeDraggedOut(35@, True)
+Char.SetStayInCarWhenJacked(35@, True)
+Char.SetGetOutUpsideDownCar(35@, False)
+124@ = DecisionMakerChar.Copy(-1)
+DecisionMakerChar.ClearEventResponse(124@, 79)
+Char.SetDecisionMaker(35@, 124@)
+Char.ClearAllRelationships(35@, RelationshipType.Dislike)
+Char.ClearAllRelationships(35@, RelationshipType.Hate)
+return 
+
+:SMOKE2_5582
+Camera.DoFade(0, 1000)
+
+:SMOKE2_5589
+if 
+  Camera.GetFadingStatus
+goto_if_false @SMOKE2_5613
+wait 0
+goto @SMOKE2_5589
+
+:SMOKE2_5613
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearPrints
+World.ClearArea(1, $s2_meet_x, $s2_meet_y, $s2_meet_z, 150.0)
+Path.SwitchRoadsOff(2441.38, -1405.59, 15.0, 2460.42, -1368.34, 40.0)
+Path.SwitchPedRoadsOff(2441.38, -1405.59, 15.0, 2460.42, -1368.34, 40.0)
+World.SetCarDensityMultiplier(0.0)
+192@, 193@ = Streaming.GetRandomCarModelInMemory(True)
+if 
+  192@ <> -1
+goto_if_false @SMOKE2_5822
+188@ = Car.Create(192@, 2448.31, -1392.34, 23.68)
+190@ = Char.CreateRandomAsDriver(188@)
+Car.SetHeading(188@, 180.0)
+189@ = Car.Create(192@, 2453.7, -1408.14, 23.68)
+191@ = Char.CreateRandomAsDriver(189@)
+Car.SetHeading(189@, 0.0)
+
+:SMOKE2_5822
+if 
+  not Car.IsDead(34@)
+goto_if_false @SMOKE2_5932
+if 
+  Char.IsInCar($scplayer, 34@)
+goto_if_false @SMOKE2_5877
+Char.WarpFromCarToCoord($scplayer, 2473.6, -1420.86, 27.88)
+
+:SMOKE2_5877
+if 
+  not Char.IsDead(35@)
+goto_if_false @SMOKE2_5932
+if 
+  Char.IsInCar(35@, 34@)
+goto_if_false @SMOKE2_5932
+Char.WarpFromCarToCoord(35@, 2470.6, -1420.86, 27.88)
+
+:SMOKE2_5932
+Car.Delete(34@)
+Player.SetControl($player1, False)
+Player.MakeSafeForCutscene($player1)
+Cutscene.Load('SMOKE2B')
+
+:SMOKE2_5960
+if 
+  not Cutscene.HasLoaded
+goto_if_false @SMOKE2_5984
+wait 0
+goto @SMOKE2_5960
+
+:SMOKE2_5984
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:SMOKE2_5993
+if 
+  not Cutscene.HasFinished
+goto_if_false @SMOKE2_6017
+wait 0
+goto @SMOKE2_5993
+
+:SMOKE2_6017
+Camera.DoFade(0, Fade.Out)
+
+:SMOKE2_6023
+if 
+  Camera.GetFadingStatus
+goto_if_false @SMOKE2_6047
+wait 0
+goto @SMOKE2_6023
+
+:SMOKE2_6047
+Cutscene.Clear
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+World.SetCarDensityMultiplier(1.0)
+Streaming.RequestModel(108)
+Streaming.RequestModel(109)
+Streaming.RequestModel(110)
+Streaming.RequestModel(405)
+Streaming.RequestModel(352)
+Streaming.LoadAllModelsNow
+
+:SMOKE2_6091
+if or
+  not Streaming.HasModelLoaded(108)
+  not Streaming.HasModelLoaded(109)
+  not Streaming.HasModelLoaded(110)
+  not Streaming.HasModelLoaded(405)
+  not Streaming.HasModelLoaded(352)
+goto_if_false @SMOKE2_6135
+wait 0
+goto @SMOKE2_6091
+
+:SMOKE2_6135
+set_lvar_text_label 130@s = 'SMO2B11'
+set_lvar_int_to_constant 148@ = 35200
+$s2_random_int = Math.RandomIntInRange(0, 3)
+if 
+  $s2_random_int == 0
+goto_if_false @SMOKE2_6210
+set_lvar_text_label 132@s = 'SMO2_CA'
+set_lvar_int_to_constant 149@ = 35214
+
+:SMOKE2_6210
+if 
+  $s2_random_int == 1
+goto_if_false @SMOKE2_6252
+set_lvar_text_label 132@s = 'SMO2_CB'
+set_lvar_int_to_constant 149@ = 35215
+
+:SMOKE2_6252
+if 
+  $s2_random_int == 2
+goto_if_false @SMOKE2_6294
+set_lvar_text_label 132@s = 'SMO2_CC'
+set_lvar_int_to_constant 149@ = 35216
+
+:SMOKE2_6294
+Audio.LoadMissionAudio(148@, 1)
+Audio.LoadMissionAudio(149@, 2)
+
+:SMOKE2_6308
+if or
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @SMOKE2_6338
+wait 0
+goto @SMOKE2_6308
+
+:SMOKE2_6338
+Streaming.LoadScene(2471.99, -1402.32, 27.82)
+41@ = Char.Create(25, 108, 2471.99, -1402.32, 27.82)
+Char.SetHeading(41@, 90.0)
+Char.SetHealth(41@, 200)
+Char.SetMaxHealth(41@, 200)
+Char.SetMoney(41@, 500)
+Char.SetOnlyDamagedByPlayer(41@, True)
+Char.GiveWeapon(41@, WeaponType.Pistol, 99999)
+Char.SetAccuracy(41@, 5)
+Char.SetStayInSamePlace(41@, True)
+Char.ClearAllRelationships(41@, RelationshipType.Dislike)
+Char.ClearAllRelationships(41@, RelationshipType.Hate)
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_6484
+Char.PerformSequence(41@, 114@)
+
+:SMOKE2_6484
+Char.SetCoordinates($scplayer, 2473.99, -1402.32, 27.82)
+Char.SetHeading($scplayer, 90.0)
+if 
+  not Char.IsDead(35@)
+goto_if_false @SMOKE2_6560
+Char.SetCoordinates(35@, 2474.99, -1402.32, 27.82)
+Char.SetHeading(35@, 90.0)
+
+:SMOKE2_6560
+Camera.SetFixedPosition(2460.993, -1400.991, 24.5671, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2461.876, -1401.406, 24.7836, SwitchType.JumpCut)
+Camera.DoFade(1, 1000)
+
+:SMOKE2_6618
+if 
+  Camera.GetFadingStatus
+goto_if_false @SMOKE2_6642
+wait 0
+goto @SMOKE2_6618
+
+:SMOKE2_6642
+181@ = 1
+skip_cutscene_start_internal @SMOKE2_7459
+wait 2000
+Path.FlushRoute
+Path.ExtendRoute(47@, 69@, 91@)
+Path.ExtendRoute(48@, 70@, 92@)
+Task.FollowPointRoute($scplayer, 6, RouteMode.Once)
+if 
+  not Char.IsDead(35@)
+goto_if_false @SMOKE2_6786
+121@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 47@, 69@, 91@, MoveState.Run, -1)
+Task.PlayAnim(-1, "IDLE_TIRED", "PED", 4.0, True, False, False, False, -1)
+Sequence.Close(121@)
+Char.PerformSequence(35@, 121@)
+Sequence.Clear(121@)
+
+:SMOKE2_6786
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+Text.PrintNow(130@s, 10000, 1)
+wait 4000
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearPrints
+if 
+  192@ <> -1
+goto_if_false @SMOKE2_6884
+if and
+  not Char.IsDead(190@)
+  not Car.IsDead(188@)
+goto_if_false @SMOKE2_6884
+Task.CarDriveToCoord(190@, 188@, 2448.31, -1429.92, 23.68, 10.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+
+:SMOKE2_6884
+Camera.SetFixedPosition(2459.716, -1406.529, 23.4481, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2459.658, -1405.536, 23.553, SwitchType.JumpCut)
+if 
+  not Char.IsDead(35@)
+goto_if_false @SMOKE2_7070
+122@ = Char.GetScriptTaskStatus(35@, 1560)
+if 
+  is_int_lvar_equal_to_constant 122@ == 1
+goto_if_false @SMOKE2_7070
+119@ = Char.GetSequenceProgress(35@)
+
+:SMOKE2_6988
+if 
+  0 >= 119@
+goto_if_false @SMOKE2_7070
+wait 0
+if 
+  not Char.IsDead(35@)
+goto_if_false @SMOKE2_7063
+122@ = Char.GetScriptTaskStatus(35@, 1560)
+if 
+  is_int_lvar_equal_to_constant 122@ == 1
+goto_if_false @SMOKE2_7063
+119@ = Char.GetSequenceProgress(35@)
+
+:SMOKE2_7063
+goto @SMOKE2_6988
+
+:SMOKE2_7070
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+Text.PrintNow(132@s, 10000, 1)
+
+:SMOKE2_7084
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @SMOKE2_7110
+wait 0
+goto @SMOKE2_7084
+
+:SMOKE2_7110
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearPrints
+wait 1000
+World.ClearArea(0, 49@, 71@, 93@, 35.0)
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_7193
+Char.SetCoordinates(41@, 49@, 71@, 23.74)
+Char.SetHeading(41@, 45.0)
+Char.PerformSequenceFromProgress(41@, 114@, 0, 3)
+
+:SMOKE2_7193
+Camera.SetFixedPosition(2406.65, -1358.0, 25.33, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(50@, 72@, 94@, SwitchType.JumpCut)
+wait 1000
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_7391
+122@ = Char.GetScriptTaskStatus(41@, 1952)
+if 
+  is_int_lvar_equal_to_constant 122@ == 1
+goto_if_false @SMOKE2_7391
+119@, 120@ = Char.GetSequenceProgressRecursive(41@)
+
+:SMOKE2_7299
+if and
+  119@ == 0
+  3 >= 120@
+goto_if_false @SMOKE2_7391
+wait 0
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_7384
+122@ = Char.GetScriptTaskStatus(41@, 1952)
+if 
+  is_int_lvar_equal_to_constant 122@ == 1
+goto_if_false @SMOKE2_7384
+119@, 120@ = Char.GetSequenceProgressRecursive(41@)
+
+:SMOKE2_7384
+goto @SMOKE2_7299
+
+:SMOKE2_7391
+wait 2200
+Camera.SetFixedPosition(2404.81, -1354.37, 25.71, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2401.4, -1356.79, 25.31, SwitchType.JumpCut)
+wait 4500
+181@ = 0
+
+:SMOKE2_7459
+skip_cutscene_end 
+if 
+  181@ == 1
+goto_if_false @SMOKE2_7665
+if 
+  not Char.IsDead(35@)
+goto_if_false @SMOKE2_7597
+if 
+  Char.IsInAnyCar(35@)
+goto_if_false @SMOKE2_7534
+Char.WarpFromCarToCoord(35@, 47@, 69@, 23.06)
+goto @SMOKE2_7550
+
+:SMOKE2_7534
+Char.SetCoordinates(35@, 47@, 69@, 23.06)
+
+:SMOKE2_7550
+Char.SetHeading(35@, 90.0)
+Task.PlayAnim(35@, "IDLE_TIRED", "PED", 4.0, True, False, False, False, -1)
+
+:SMOKE2_7597
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_7655
+Char.SetCoordinates(41@, 2390.73, -1355.69, 23.74)
+Char.SetHeading(41@, 81.47)
+Char.PerformSequenceFromProgress(41@, 114@, 0, 7)
+
+:SMOKE2_7655
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+Text.ClearPrints
+
+:SMOKE2_7665
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_7767
+123@ = DecisionMakerChar.Copy(-1)
+DecisionMakerChar.ClearEventResponse(123@, 79)
+DecisionMakerChar.ClearEventResponse(123@, 9)
+DecisionMakerChar.ClearEventResponse(123@, 15)
+DecisionMakerChar.ClearEventResponse(123@, 31)
+DecisionMakerChar.ClearEventResponse(123@, 43)
+DecisionMakerChar.ClearEventResponse(123@, 36)
+DecisionMakerChar.ClearEventResponse(123@, 37)
+DecisionMakerChar.ClearEventResponse(123@, 11)
+DecisionMakerChar.ClearEventResponse(123@, 20)
+Char.SetDecisionMaker(41@, 123@)
+185@ = Blip.AddForChar(41@)
+
+:SMOKE2_7767
+World.ClearArea(0, 2170.68, -1282.01, 23.7, 100.0)
+42@ = Car.Create(405, 2170.68, -1282.01, 23.7)
+43@ = Char.CreateInsideCar(PedType.Mission2, 109, 42@)
+Car.SetHeading(42@, 357.03)
+Car.SetOnlyDamagedByPlayer(42@, True)
+Car.SetCanBurstTires(42@, False)
+Car.LockDoors(42@, CarLock.LockoutPlayerOnly)
+Char.SetOnlyDamagedByPlayer(43@, True)
+Char.GiveWeapon(43@, WeaponType.Pistol, 99999)
+World.ClearArea(0, 2353.86, -1356.92, 23.41, 5.0)
+44@ = Char.Create(25, 109, 2353.86, -1356.92, 23.41)
+45@ = Char.Create(25, 110, 2354.11, -1355.54, 23.41)
+Char.SetHeading(44@, 90.0)
+Char.SetHeading(45@, 270.0)
+113@ = 0
+
+:SMOKE2_7975
+if 
+  2 > 113@
+goto_if_false @SMOKE2_8090
+Char.SetOnlyDamagedByPlayer(44@(113@,2i), True)
+Char.GiveWeapon(44@(113@,2i), WeaponType.Pistol, 99999)
+Char.SetAccuracy(44@(113@,2i), 50)
+Char.ClearAllRelationships(44@(113@,2i), RelationshipType.Dislike)
+Char.ClearAllRelationships(44@(113@,2i), RelationshipType.Hate)
+Char.SetKindaStayInSamePlace(44@(113@,2i), True)
+Task.KillCharOnFoot(44@(113@,2i), $scplayer)
+113@ += 1
+goto @SMOKE2_7975
+
+:SMOKE2_8090
+Streaming.MarkModelAsNoLongerNeeded(110)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @SMOKE2_8133
+Char.WarpFromCarToCoord($scplayer, 48@, 70@, 23.05)
+goto @SMOKE2_8149
+
+:SMOKE2_8133
+Char.SetCoordinates($scplayer, 48@, 70@, 23.05)
+
+:SMOKE2_8149
+Char.SetHeading($scplayer, 90.0)
+Path.SwitchRoadsBackToOriginal(2441.38, -1405.59, 15.0, 2460.42, -1368.34, 40.0)
+Path.SwitchPedRoadsBackToOriginal(2441.38, -1405.59, 15.0, 2460.42, -1368.34, 40.0)
+if 
+  192@ <> -1
+goto_if_false @SMOKE2_8261
+Car.MarkAsNoLongerNeeded(188@)
+Char.MarkAsNoLongerNeeded(190@)
+Car.MarkAsNoLongerNeeded(189@)
+Char.MarkAsNoLongerNeeded(191@)
+
+:SMOKE2_8261
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Char.ClearTasks($scplayer)
+return 
+
+:SMOKE2_8283
+Player.SetControl($player1, False)
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_8321
+Char.SetProofs(41@, True, True, True, True, True)
+
+:SMOKE2_8321
+if 
+  not Char.IsDead(43@)
+goto_if_false @SMOKE2_8352
+Char.SetProofs(43@, True, True, True, True, True)
+
+:SMOKE2_8352
+if 
+  not Car.IsDead(42@)
+goto_if_false @SMOKE2_8383
+Car.SetProofs(42@, True, True, True, True, True)
+
+:SMOKE2_8383
+Camera.DoFade(0, 1000)
+
+:SMOKE2_8390
+if 
+  Camera.GetFadingStatus
+goto_if_false @SMOKE2_8414
+wait 0
+goto @SMOKE2_8390
+
+:SMOKE2_8414
+World.ClearArea(0, 126@, 127@, 128@, 100.0)
+Path.SwitchRoadsOff(2108.5, -1080.59, 4.73, 2128.5, -1060.59, 44.73)
+Path.SwitchPedRoadsOff(2108.5, -1080.59, 4.73, 2128.5, -1060.59, 44.73)
+195@, 196@, 197@ = Char.GetCoordinates($scplayer)
+198@ = Char.GetHeading($scplayer)
+200@ = World.GetWaterHeightAtCoords(195@, 196@, False)
+199@ = World.GetGroundZFor3DCoord(195@, 196@, 197@)
+if 
+  is_float_lvar_greater_than_float_lvar 200@ > 199@
+goto_if_false @SMOKE2_8572
+set_lvar_float_to_lvar_float 199@ = 200@
+
+:SMOKE2_8572
+Streaming.RequestCollision(126@, 127@)
+Streaming.LoadScene(126@, 127@, 128@)
+Path.SwitchRoadsOff(2082.91, -1107.01, 4.53, 2102.91, -1087.01, 44.53)
+Path.SwitchPedRoadsOff(2082.91, -1107.01, 4.53, 2102.91, -1087.01, 44.53)
+World.ClearArea(0, 2092.91, -1097.01, 24.53, 20.0)
+Char.SetCoordinates($scplayer, 2092.91, -1097.01, -100.0)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @SMOKE2_8733
+194@ = Char.StoreCarIsIn($scplayer)
+Car.SetHeading(194@, 242.86)
+
+:SMOKE2_8733
+if 
+  not Car.IsDead(42@)
+goto_if_false @SMOKE2_8907
+Car.SetCoordinates(42@, 126@, 127@, -100.0)
+Car.SetHeading(42@, 50.74)
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_8842
+Char.ClearTasksImmediately(41@)
+if 
+  Char.IsInAnyCar(41@)
+goto_if_false @SMOKE2_8832
+Char.WarpFromCarToCoord(41@, 2115.98, -1059.43, 24.75)
+
+:SMOKE2_8832
+Char.WarpIntoCarAsPassenger(41@, 42@, 0)
+
+:SMOKE2_8842
+if 
+  not Char.IsDead(43@)
+goto_if_false @SMOKE2_8907
+Char.ClearTasksImmediately(43@)
+if 
+  Char.IsInAnyCar(43@)
+goto_if_false @SMOKE2_8899
+Char.WarpFromCarToCoord(43@, 2117.04, -1061.53, 24.53)
+
+:SMOKE2_8899
+Char.WarpIntoCar(43@, 42@)
+
+:SMOKE2_8907
+wait 1000
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(2110.56, -1067.61, 25.27, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2114.84, -1067.77, 25.63, SwitchType.JumpCut)
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_9105
+Path.FlushRoute
+Path.ExtendRoute(2121.0, -1068.03, 23.82)
+Path.ExtendRoute(2127.23, -1061.17, 28.33)
+Path.ExtendRoute(2139.74, -1066.82, 34.06)
+Path.ExtendRoute(2143.63, -1066.27, 34.06)
+Path.ExtendRoute(2157.15, -1072.39, 39.48)
+201@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.FollowPointRoute(-1, 6, RouteMode.Once)
+Sequence.Close(201@)
+Char.PerformSequence(41@, 201@)
+Sequence.Clear(201@)
+
+:SMOKE2_9105
+Camera.DoFade(1, 500)
+
+:SMOKE2_9112
+if 
+  Camera.GetFadingStatus
+goto_if_false @SMOKE2_9200
+wait 0
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_9193
+if 
+  Char.IsPlayingAnim(41@, "RUN_GANG1")
+goto_if_false @SMOKE2_9193
+Char.SetAnimSpeed(41@, "RUN_GANG1", 1.0)
+
+:SMOKE2_9193
+goto @SMOKE2_9112
+
+:SMOKE2_9200
+202@ = 0
+203@ = 0
+181@ = 1
+skip_cutscene_start_internal @SMOKE2_9525
+
+:SMOKE2_9228
+if 
+  203@ <> 1
+goto_if_false @SMOKE2_9518
+wait 0
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_9511
+if 
+  Char.IsPlayingAnim(41@, "RUN_GANG1")
+goto_if_false @SMOKE2_9314
+Char.SetAnimSpeed(41@, "RUN_GANG1", 1.0)
+
+:SMOKE2_9314
+if 
+  202@ <> 1
+goto_if_false @SMOKE2_9438
+if 
+  Char.LocateOnFoot3D(41@, 0, 2143.63, -1066.27, 34.06, 4.0, 4.0, 4.0)
+goto_if_false @SMOKE2_9438
+Camera.SetFixedPosition(2131.97, -1067.61, 33.57, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2137.38, -1068.03, 34.43, SwitchType.JumpCut)
+202@ = 1
+
+:SMOKE2_9438
+if 
+  203@ <> 1
+goto_if_false @SMOKE2_9511
+if 
+  Char.LocateOnFoot3D(41@, 0, 2157.15, -1072.39, 39.48, 6.0, 6.0, 4.0)
+goto_if_false @SMOKE2_9511
+203@ = 1
+
+:SMOKE2_9511
+goto @SMOKE2_9228
+
+:SMOKE2_9518
+181@ = 0
+
+:SMOKE2_9525
+skip_cutscene_end 
+Camera.DoFade(0, 1000)
+
+:SMOKE2_9534
+if 
+  Camera.GetFadingStatus
+goto_if_false @SMOKE2_9622
+wait 0
+if 
+  not Char.IsDead(41@)
+goto_if_false @SMOKE2_9615
+if 
+  Char.IsPlayingAnim(41@, "RUN_GANG1")
+goto_if_false @SMOKE2_9615
+Char.SetAnimSpeed(41@, "RUN_GANG1", 1.0)
+
+:SMOKE2_9615
+goto @SMOKE2_9534
+
+:SMOKE2_9622
+Streaming.RequestCollision(195@, 196@)
+Streaming.LoadScene(195@, 196@, 199@)
+Char.SetCoordinates($scplayer, 195@, 196@, 199@)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @SMOKE2_9694
+194@ = Char.StoreCarIsIn($scplayer)
+Car.SetHeading(194@, 198@)
+goto @SMOKE2_9702
+
+:SMOKE2_9694
+Char.SetHeading($scplayer, 198@)
+
+:SMOKE2_9702
+Char.Delete(41@)
+Char.Delete(43@)
+Car.Delete(42@)
+Path.SwitchRoadsBackToOriginal(2108.5, -1080.59, 4.73, 2128.5, -1060.59, 44.73)
+Path.SwitchPedRoadsBackToOriginal(2108.5, -1080.59, 4.73, 2128.5, -1060.59, 44.73)
+Path.SwitchRoadsBackToOriginal(2082.91, -1107.01, 4.53, 2102.91, -1087.01, 44.53)
+Path.SwitchPedRoadsBackToOriginal(2082.91, -1107.01, 4.53, 2102.91, -1087.01, 44.53)
+Hud.SwitchWidescreen(False)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Camera.DoFade(1, 1000)
+
+:SMOKE2_9867
+if 
+  Camera.GetFadingStatus
+goto_if_false @SMOKE2_9891
+wait 0
+goto @SMOKE2_9867
+
+:SMOKE2_9891
+return 
+
+:SMOKE2_9893
+switch_start 161@ total_jumps 3 default_jump 1 @SMOKE2_10484 jumps 0 @SMOKE2_9956 1 @SMOKE2_10105 2 @SMOKE2_10254 -1 @SMOKE2_10491 -1 @SMOKE2_10491 -1 @SMOKE2_10491 -1 @SMOKE2_10491
+
+:SMOKE2_9956
+$s2_random_int = Math.RandomIntInRange(0, 3)
+if 
+  $s2_random_int == 0
+goto_if_false @SMOKE2_10007
+set_lvar_text_label 130@s = 'SMO2_CA'
+set_lvar_int_to_constant 148@ = 35214
+
+:SMOKE2_10007
+if 
+  $s2_random_int == 1
+goto_if_false @SMOKE2_10049
+set_lvar_text_label 130@s = 'SMO2_CB'
+set_lvar_int_to_constant 148@ = 35215
+
+:SMOKE2_10049
+if 
+  $s2_random_int == 2
+goto_if_false @SMOKE2_10091
+set_lvar_text_label 130@s = 'SMO2_CC'
+set_lvar_int_to_constant 148@ = 35216
+
+:SMOKE2_10091
+159@ = 1
+goto @SMOKE2_10491
+
+:SMOKE2_10105
+$s2_random_int = Math.RandomIntInRange(0, 3)
+if 
+  $s2_random_int == 0
+goto_if_false @SMOKE2_10156
+set_lvar_text_label 130@s = 'SMO2_DA'
+set_lvar_int_to_constant 148@ = 35217
+
+:SMOKE2_10156
+if 
+  $s2_random_int == 1
+goto_if_false @SMOKE2_10198
+set_lvar_text_label 130@s = 'SMO2_DB'
+set_lvar_int_to_constant 148@ = 35218
+
+:SMOKE2_10198
+if 
+  $s2_random_int == 2
+goto_if_false @SMOKE2_10240
+set_lvar_text_label 130@s = 'SMO2_DC'
+set_lvar_int_to_constant 148@ = 35219
+
+:SMOKE2_10240
+159@ = 1
+goto @SMOKE2_10491
+
+:SMOKE2_10254
+set_lvar_text_label 130@s = 'SMO2_BA'
+set_lvar_int_to_constant 148@ = 35203
+set_lvar_text_label 132@s = 'SMO2_BB'
+set_lvar_int_to_constant 149@ = 35204
+set_lvar_text_label 134@s = 'SMO2_BC'
+set_lvar_int_to_constant 150@ = 35205
+set_lvar_text_label 136@s = 'SMO2_BD'
+set_lvar_int_to_constant 151@ = 35206
+set_lvar_text_label 138@s = 'SMO2_BE'
+set_lvar_int_to_constant 152@ = 35207
+set_lvar_text_label 140@s = 'SMO2_BF'
+set_lvar_int_to_constant 153@ = 35208
+set_lvar_text_label 142@s = 'SMO2_BG'
+set_lvar_int_to_constant 154@ = 35209
+set_lvar_text_label 144@s = 'SMO2_BH'
+set_lvar_int_to_constant 155@ = 35210
+set_lvar_text_label 146@s = 'SMO2_BJ'
+set_lvar_int_to_constant 156@ = 35211
+159@ = 9
+goto @SMOKE2_10491
+
+:SMOKE2_10484
+goto @SMOKE2_10491
+
+:SMOKE2_10491
+157@ = 0
+158@ = 0
+160@ = 0
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Text.ClearPrints
+return 
+
+:SMOKE2_10520
+if or
+  157@ == 0
+  157@ == 1
+goto_if_false @SMOKE2_10590
+if 
+  is_int_lvar_greater_than_int_lvar 159@ > 158@
+goto_if_false @SMOKE2_10590
+if 
+  TIMERB > 200
+goto_if_false @SMOKE2_10590
+gosub @SMOKE2_10655
+
+:SMOKE2_10590
+if 
+  157@ == 2
+goto_if_false @SMOKE2_10653
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+goto_if_false @SMOKE2_10653
+157@ = 0
+158@ += 1
+160@ = 0
+Text.ClearPrints
+TIMERB = 0
+
+:SMOKE2_10653
+return 
+
+:SMOKE2_10655
+if 
+  157@ == 0
+goto_if_false @SMOKE2_10691
+Audio.LoadMissionAudio(148@(158@,9i), 1)
+157@ = 1
+
+:SMOKE2_10691
+if 
+  157@ == 1
+goto_if_false @SMOKE2_10749
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
+goto_if_false @SMOKE2_10749
+Text.PrintNow(130@(158@,9s), 10000, 1)
+Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
+157@ = 2
+
+:SMOKE2_10749
+return 
+
+:SMOKE2_10751
+Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
+switch_start 129@ total_jumps 5 default_jump 1 @SMOKE2_10898 jumps 0 @SMOKE2_10818 1 @SMOKE2_10834 2 @SMOKE2_10850 3 @SMOKE2_10866 4 @SMOKE2_10882 -1 @SMOKE2_10905 -1 @SMOKE2_10905
+
+:SMOKE2_10818
+Audio.LoadMissionAudio(35800, 2)
+goto @SMOKE2_10905
+
+:SMOKE2_10834
+Audio.LoadMissionAudio(35801, 2)
+goto @SMOKE2_10905
+
+:SMOKE2_10850
+Audio.LoadMissionAudio(35802, 2)
+goto @SMOKE2_10905
+
+:SMOKE2_10866
+Audio.LoadMissionAudio(35803, 2)
+goto @SMOKE2_10905
+
+:SMOKE2_10882
+Audio.LoadMissionAudio(35804, 2)
+goto @SMOKE2_10905
+
+:SMOKE2_10898
+goto @SMOKE2_10905
+
+:SMOKE2_10905
+Char.StopFacialTalk($scplayer)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+
+:SMOKE2_10914
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot2)
+goto_if_false @SMOKE2_11009
+wait 0
+if or
+  Char.IsDead(35@)
+  Car.IsDead(34@)
+goto_if_false @SMOKE2_10956
+return 
+
+:SMOKE2_10956
+if 
+  167@ <> 1
+goto_if_false @SMOKE2_11002
+if 
+  Pickup.HasBeenCollected(40@)
+goto_if_false @SMOKE2_11002
+Blip.Remove(186@)
+167@ = 1
+
+:SMOKE2_11002
+goto @SMOKE2_10914
+
+:SMOKE2_11009
+Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
+switch_start 129@ total_jumps 5 default_jump 1 @SMOKE2_11191 jumps 0 @SMOKE2_11076 1 @SMOKE2_11099 2 @SMOKE2_11122 3 @SMOKE2_11145 4 @SMOKE2_11168 -1 @SMOKE2_11198 -1 @SMOKE2_11198
+
+:SMOKE2_11076
+Text.PrintNow('SMOX_AA', 3000, 1)
+goto @SMOKE2_11198
+
+:SMOKE2_11099
+Text.PrintNow('SMOX_AB', 3000, 1)
+goto @SMOKE2_11198
+
+:SMOKE2_11122
+Text.PrintNow('SMOX_AC', 3000, 1)
+goto @SMOKE2_11198
+
+:SMOKE2_11145
+Text.PrintNow('SMOX_AD', 3000, 1)
+goto @SMOKE2_11198
+
+:SMOKE2_11168
+Text.PrintNow('SMOX_AE', 3000, 1)
+goto @SMOKE2_11198
+
+:SMOKE2_11191
+goto @SMOKE2_11198
+
+:SMOKE2_11198
+if 
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @SMOKE2_11293
+wait 0
+if or
+  Char.IsDead(35@)
+  Car.IsDead(34@)
+goto_if_false @SMOKE2_11240
+return 
+
+:SMOKE2_11240
+if 
+  167@ <> 1
+goto_if_false @SMOKE2_11286
+if 
+  Pickup.HasBeenCollected(40@)
+goto_if_false @SMOKE2_11286
+Blip.Remove(186@)
+167@ = 1
+
+:SMOKE2_11286
+goto @SMOKE2_11198
+
+:SMOKE2_11293
+129@ += 1
+if 
+  129@ > 4
+goto_if_false @SMOKE2_11325
+129@ = 0
+
+:SMOKE2_11325
+return 
+
+:SMOKE2_11327
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+$trigger_phonecall_failed = 1
+return 
+
+:SMOKE2_11352
+$flag_smoke_mission_counter += 1
+Stat.RegisterMissionPassed('SMOKE_2')
+Stat.PlayerMadeProgress(1)
+Text.PrintWithNumberBig('M_PASSR', 3, 5000, TextStyle.Middle)
+Stat.AwardPlayerMissionRespect(3)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+return 
+
+:SMOKE2_11407
+Streaming.MarkModelAsNoLongerNeeded(108)
+Streaming.MarkModelAsNoLongerNeeded(109)
+Streaming.MarkModelAsNoLongerNeeded(110)
+Streaming.MarkModelAsNoLongerNeeded(466)
+Streaming.MarkModelAsNoLongerNeeded(405)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.UnloadSpecialCharacter(1)
+Char.RemoveElegantly(35@)
+Pickup.Remove(40@)
+Blip.Remove(186@)
+Blip.Remove(183@)
+Blip.Remove(184@)
+Blip.Remove(185@)
+Sequence.Clear(114@)
+Sequence.Clear(115@)
+Sequence.Clear(116@)
+Sequence.Clear(117@)
+Sequence.Clear(118@)
+Sequence.Clear(121@)
+Sequence.Clear(201@)
+Text.ClearHelp
+DecisionMaker.Remove(123@)
+DecisionMaker.Remove(124@)
+Path.SwitchPedRoadsBackToOriginal(2458.5, -1410.63, 24.06, 2504.27, -1395.83, 28.55)
+Path.SwitchRoadsBackToOriginal(2488.0, -1431.93, 25.41, 2528.0, -1391.93, 29.41)
+Path.SwitchRoadsBackToOriginal(2252.89, -1286.37, 22.25, 2258.89, -1280.37, 28.25)
+Path.SwitchRoadsBackToOriginal(2164.51, -1287.88, 20.0, 2170.88, -1267.88, 30.0)
+Path.SwitchRoadsBackToOriginal(2108.5, -1080.59, 4.73, 2128.5, -1060.59, 44.73)
+Path.SwitchPedRoadsBackToOriginal(2108.5, -1080.59, 4.73, 2128.5, -1060.59, 44.73)
+Path.SwitchRoadsBackToOriginal(2082.91, -1107.01, 4.53, 2102.91, -1087.01, 44.53)
+Path.SwitchPedRoadsBackToOriginal(2082.91, -1107.01, 4.53, 2102.91, -1087.01, 44.53)
+Path.SwitchRoadsBackToOriginal(2441.38, -1405.59, 15.0, 2460.42, -1368.34, 40.0)
+Path.SwitchPedRoadsBackToOriginal(2441.38, -1405.59, 15.0, 2460.42, -1368.34, 40.0)
+World.SetCarDensityMultiplier(1.0)
+Path.FlushRoute
+$timer_mobile_start = Clock.GetGameTimer()
+$onmission = 0
+Mission.Finish
+return 
+

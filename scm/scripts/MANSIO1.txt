@@ -1,0 +1,6022 @@
+//-------------Mission 102---------------
+// Originally: A Home In The Hills
+
+:MANSIO1
+script_name 'MANSIO1'
+gosub @MANSIO1_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @MANSIO1_38
+gosub @MANSIO1_38488
+
+:MANSIO1_38
+gosub @MANSIO1_39063
+terminate_this_script 
+
+:MANSIO1_47
+Stat.RegisterMissionGiven
+$onmission = 1
+Char.SetCoordinates($scplayer, 2175.412, 1681.548, 9.8203)
+Char.SetHeading($scplayer, 90.0)
+Char.SetHasUsedEntryExit($scplayer, 2233.5, 1712.8, 10.0)
+Text.LoadMissionText('MAN_1')
+Player.SetGroupRecruitment($player1, False)
+Game.SetScriptLimitToGangSize(0)
+$iTerminateAllAmbience = 1
+Streaming.SetAreaVisible(11)
+Cutscene.Load('BHILL1')
+
+:MANSIO1_150
+if 
+  not Cutscene.HasLoaded
+goto_if_false @MANSIO1_174
+wait 0
+goto @MANSIO1_150
+
+:MANSIO1_174
+Cutscene.Start
+Camera.DoFade(1, 1000)
+
+:MANSIO1_183
+if 
+  not Cutscene.HasFinished
+goto_if_false @MANSIO1_207
+wait 0
+goto @MANSIO1_183
+
+:MANSIO1_207
+Cutscene.Clear
+Player.SetControl($player1, False)
+Camera.DoFade(0, Fade.Out)
+
+:MANSIO1_222
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_246
+wait 0
+goto @MANSIO1_222
+
+:MANSIO1_246
+Streaming.SetAreaVisible(0)
+Hud.DisplayZoneNames(False)
+Game.SetScriptLimitToGangSize(99)
+start_new_script @A_CONT 
+Streaming.LoadSceneInDirection(2171.137, 1269.357, 32.8078, 0.0)
+Streaming.RequestModel(592)
+
+:MANSIO1_293
+if 
+  not Streaming.HasModelLoaded(592)
+goto_if_false @MANSIO1_320
+wait 0
+goto @MANSIO1_293
+
+:MANSIO1_320
+Char.SetAreaVisible($scplayer, 0)
+96@ = Car.Create(592, 2144.0, 1600.0, 50.0)
+Car.SetHeading(96@, 180.0)
+Audio.SetRadioChannel(RadioChannel.UserTracks)
+Plane.SetUndercarriageUp(96@, True)
+Car.FreezePosition(96@, True)
+Car.SetAreaVisible(96@, 0)
+Char.WarpIntoCar($scplayer, 96@)
+49@ = 0
+Weather.ForceNow(WeatherType.ExtraSunnyDesert)
+Clock.SetTimeOfDay(6, 0)
+Camera.SetFixedPosition(2171.137, 1269.357, 32.8078, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(2170.998, 1270.331, 32.9838, SwitchType.JumpCut)
+Restart.SetRespawnPointForDurationOfMission(1581.374, 1768.996, 9.8203)
+Hud.SwitchWidescreen(True)
+Weather.SetHeathazeEffect(True)
+TIMERA = 0
+
+:MANSIO1_493
+if 
+  1000 > TIMERA
+goto_if_false @MANSIO1_523
+wait 0
+goto @MANSIO1_493
+
+:MANSIO1_523
+skip_cutscene_start_internal @MANSIO1_703
+97@ = 1600.0
+Camera.DoFade(1, 1000)
+
+:MANSIO1_547
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_615
+if 
+  not Car.IsDead(96@)
+goto_if_false @MANSIO1_604
+97@ -= 1.5
+Car.SetCoordinates(96@, 2144.0, 97@, 50.0)
+
+:MANSIO1_604
+wait 0
+goto @MANSIO1_547
+
+:MANSIO1_615
+TIMERA = 0
+
+:MANSIO1_622
+if 
+  9000 > TIMERA
+goto_if_false @MANSIO1_696
+if 
+  not Car.IsDead(96@)
+goto_if_false @MANSIO1_685
+97@ -= 1.5
+Car.SetCoordinates(96@, 2144.0, 97@, 50.0)
+
+:MANSIO1_685
+wait 0
+goto @MANSIO1_622
+
+:MANSIO1_696
+49@ = 1
+
+:MANSIO1_703
+skip_cutscene_end 
+Camera.DoFade(0, 1000)
+
+:MANSIO1_712
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_780
+if 
+  not Car.IsDead(96@)
+goto_if_false @MANSIO1_769
+97@ -= 1.5
+Car.SetCoordinates(96@, 2144.0, 97@, 50.0)
+
+:MANSIO1_769
+wait 0
+goto @MANSIO1_712
+
+:MANSIO1_780
+Weather.SetHeathazeEffect(False)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @MANSIO1_827
+Char.WarpFromCarToCoord($scplayer, 1598.951, -785.327, 350.1654)
+goto @MANSIO1_847
+
+:MANSIO1_827
+Char.SetCoordinates($scplayer, 1598.951, -785.327, 350.1654)
+
+:MANSIO1_847
+Char.FreezePosition($scplayer, True)
+Streaming.MarkModelAsNoLongerNeeded(592)
+Car.MarkAsNoLongerNeeded(96@)
+Streaming.RequestModel(117)
+Streaming.RequestModel(118)
+Streaming.RequestModel(108)
+Streaming.RequestModel(109)
+Streaming.RequestModel(356)
+Streaming.RequestModel(353)
+Streaming.RequestModel(#CARGO_REAR)
+Streaming.RequestModel(#D9_RAMP)
+Streaming.RequestModel(330)
+Streaming.RequestModel(#PARACHUTE)
+Streaming.RequestModel(#PARA_PACK)
+Streaming.RequestAnimation("PARACHUTE")
+StreamedScript.Stream(1)
+
+:MANSIO1_932
+if or
+  not Streaming.HasModelLoaded(117)
+  not Streaming.HasModelLoaded(118)
+  not Streaming.HasModelLoaded(108)
+  not Streaming.HasModelLoaded(109)
+  not Streaming.HasModelLoaded(356)
+  not Streaming.HasModelLoaded(353)
+goto_if_false @MANSIO1_980
+wait 0
+goto @MANSIO1_932
+
+:MANSIO1_980
+if or
+  not Streaming.HasModelLoaded(#CARGO_REAR)
+  not Streaming.HasModelLoaded(#D9_RAMP)
+  not Streaming.HasModelLoaded(330)
+  not Streaming.HasModelLoaded(#PARACHUTE)
+  not Streaming.HasModelLoaded(#PARA_PACK)
+  not Streaming.HasAnimationLoaded("PARACHUTE")
+goto_if_false @MANSIO1_1040
+wait 0
+goto @MANSIO1_980
+
+:MANSIO1_1040
+if 
+  not StreamedScript.HasLoaded(1)
+goto_if_false @MANSIO1_1066
+wait 0
+goto @MANSIO1_1040
+
+:MANSIO1_1066
+52@ = 0
+34@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+35@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+DecisionMakerChar.AddEventResponse(35@, 36, 1024, 0.0, 100.0, 0.0, 0.0, False, True)
+DecisionMakerChar.AddEventResponse(35@, 36, 1700, 0.0, 100.0, 0.0, 0.0, False, True)
+DecisionMakerChar.AddEventResponse(35@, 9, 1000, 0.0, 100.0, 0.0, 0.0, False, True)
+36@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+DecisionMakerChar.AddEventResponse(36@, 36, 1024, 0.0, 100.0, 0.0, 0.0, False, True)
+DecisionMakerChar.AddEventResponse(36@, 36, 1700, 0.0, 100.0, 0.0, 0.0, False, True)
+DecisionMakerChar.AddEventResponse(36@, 9, 1000, 0.0, 100.0, 0.0, 0.0, False, True)
+DecisionMakerChar.AddEventResponse(36@, 15, 300, 0.0, 100.0, 0.0, 0.0, False, True)
+DecisionMakerChar.AddEventResponse(36@, 65, 300, 10.0, 10.0, 10.0, 10.0, False, True)
+37@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+DecisionMakerChar.AddEventResponse(37@, 36, 927, 0.0, 100.0, 0.0, 0.0, False, True)
+DecisionMakerChar.AddEventResponse(37@, 37, 927, 0.0, 100.0, 0.0, 0.0, False, True)
+DecisionMakerChar.AddEventResponse(37@, 9, 911, 0.0, 100.0, 0.0, 0.0, False, True)
+39@ = DecisionMakerGroup.Load(0)
+DecisionMakerGroup.ClearEventResponse(39@, 9)
+DecisionMakerGroup.AddEventResponse(39@, 9, 1502, 0.0, 100.0, 0.0, 0.0, False, True)
+Game.SetRelationship(RelationshipType.Respect, PedType.Mission1, PedType.Mission1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Mission2)
+Game.SetRelationship(RelationshipType.Respect, PedType.Mission1, PedType.Player1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission2, PedType.Mission1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission2, PedType.Player1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission3, PedType.Player1)
+Game.SetRelationship(RelationshipType.Hate, PedType.Mission3, PedType.Mission1)
+Game.SetRelationship(RelationshipType.Dislike, PedType.Mission3, PedType.Mission2)
+44@ = Player.GetGroup($player1)
+Group.SetDefaultTaskAllocator(44@, DefaultTaskAllocator.FollowAnyMeans)
+Group.SetDecisionMaker(44@, 39@)
+98@ = 0
+if 
+  98@ == 1
+goto_if_false @MANSIO1_1842
+143@(431@,3i) = Char.Create(4, 117, 0.0, 0.0, 0.0)
+159@ = Char.Create(4, 117, 0.0, 0.0, 0.0)
+170@(43@,6i) = Char.Create(4, 117, 0.0, 0.0, 0.0)
+286@(43@,10i) = Char.Create(4, 117, 0.0, 0.0, 0.0)
+474@(43@,3i) = Char.Create(4, 117, 0.0, 0.0, 0.0)
+316@(43@,4i) = Char.Create(4, 117, 0.0, 0.0, 0.0)
+194@(43@,6i) = Object.Create(#CARDBOARDBOX2, 0.0, 0.0, 0.0)
+146@(43@,3i) = Blip.AddForChar(143@(43@,3i))
+
+:MANSIO1_1842
+Game.SwitchAmbientPlanes(False)
+Game.SetPoliceIgnorePlayer($player1, True)
+Weather.ForceNow(WeatherType.SunnyLa)
+Clock.SetTimeOfDay(3, 0)
+127@ = Object.CreateNoOffset(#CARGO_REAR, 1595.0, -785.0, 350.0)
+Object.SetHeading(127@, 90.0)
+Object.FreezePosition(127@, True)
+128@ = Object.CreateNoOffset(#D9_RAMP, 1595.03, -784.98, 348.758)
+Object.SetHeading(128@, 90.0)
+Object.FreezePosition(128@, True)
+Char.FreezePosition($scplayer, False)
+Char.SetCoordinates($scplayer, 1594.393, -784.7317, 349.0)
+Char.SetHeading($scplayer, 36.9506)
+131@ = Char.Create(24, 117, 1595.303, -783.4741, 349.0)
+Char.SetHeading(131@, 205.0)
+Char.SetAreaVisible(131@, 0)
+Char.GiveWeapon(131@, WeaponType.M4, 30000)
+Char.SetCurrentWeapon(131@, WeaponType.M4)
+Char.SetNeverTargeted(131@, True)
+Char.SetDecisionMaker(131@, 34@)
+Char.SetSignalAfterKill(131@, False)
+152@ = Object.Create(#PARA_PACK, 1595.303, -783.4741, 349.0)
+Task.PickUpObject(131@, 152@, -0.11, -0.05, 0.0, 1, 16, "NULL", "NULL", 0)
+Char.SetProofs(131@, True, False, False, False, False)
+139@ = 0
+135@ = 0
+132@ = Char.Create(24, 118, 1596.97, -786.8875, 349.0)
+Char.SetHeading(132@, 2.0)
+Char.SetAreaVisible(132@, 0)
+Char.GiveWeapon(132@, WeaponType.M4, 30000)
+Char.SetCurrentWeapon(132@, WeaponType.M4)
+Char.SetNeverTargeted(132@, True)
+Char.SetDecisionMaker(132@, 34@)
+Char.SetSignalAfterKill(132@, False)
+153@ = Object.Create(#PARA_PACK, 1596.97, -786.8875, 349.0)
+Task.PickUpObject(132@, 153@, -0.11, -0.05, 0.0, 1, 16, "NULL", "NULL", 0)
+Char.SetProofs(132@, True, False, False, False, False)
+140@ = 1500
+136@ = 0
+133@ = Char.Create(24, 118, 1598.448, -782.9297, 349.0)
+Char.SetHeading(133@, 175.0)
+Char.SetAreaVisible(133@, 0)
+Char.GiveWeapon(133@, WeaponType.M4, 30000)
+Char.SetCurrentWeapon(133@, WeaponType.M4)
+Char.SetNeverTargeted(133@, True)
+Char.SetDecisionMaker(133@, 34@)
+Char.SetSignalAfterKill(133@, False)
+154@ = Object.Create(#PARA_PACK, 1598.448, -782.9297, 349.0)
+Task.PickUpObject(133@, 154@, -0.11, -0.05, 0.0, 1, 16, "NULL", "NULL", 0)
+Char.SetProofs(133@, True, False, False, False, False)
+141@ = 3000
+137@ = 0
+134@ = Char.Create(24, 117, 1599.034, -786.9792, 349.0)
+Char.SetHeading(134@, 347.0)
+Char.SetAreaVisible(134@, 0)
+Char.GiveWeapon(134@, WeaponType.M4, 30000)
+Char.SetCurrentWeapon(134@, WeaponType.M4)
+Char.SetNeverTargeted(134@, True)
+Char.SetDecisionMaker(134@, 34@)
+Char.SetSignalAfterKill(134@, False)
+155@ = Object.Create(#PARA_PACK, 1599.034, -786.9792, 349.0)
+Task.PickUpObject(134@, 155@, -0.11, -0.05, 0.0, 1, 16, "NULL", "NULL", 0)
+Char.SetProofs(134@, True, False, False, False, False)
+142@ = 5000
+138@ = 0
+if 
+  49@ == 0
+goto_if_false @MANSIO1_2700
+goto @MANSIO1_5657
+
+:MANSIO1_2700
+49@ = 0
+Streaming.LoadScene(1597.615, -784.5765, 350.0)
+Camera.SetFixedPosition(1598.951, -785.327, 350.1654, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1598.351, -784.5302, 350.089, SwitchType.JumpCut)
+TIMERA = 0
+
+:MANSIO1_2782
+if 
+  500 > TIMERA
+goto_if_false @MANSIO1_2812
+wait 0
+goto @MANSIO1_2782
+
+:MANSIO1_2812
+Camera.SetShakeSimulationSimple(1, 50000.0, 3.0)
+109@ = Char.GetCurrentWeapon($scplayer)
+if 
+  Char.HasGotWeapon($scplayer, WeaponType.BrassKnuckles)
+goto_if_false @MANSIO1_2905
+Char.RemoveWeapon(1, $scplayer)
+110@ = 1
+Streaming.RequestModel(331)
+
+:MANSIO1_2871
+if 
+  not Streaming.HasModelLoaded(331)
+goto_if_false @MANSIO1_2898
+wait 0
+goto @MANSIO1_2871
+
+:MANSIO1_2898
+goto @MANSIO1_2912
+
+:MANSIO1_2905
+110@ = 0
+
+:MANSIO1_2912
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+Camera.DoFade(1, 500)
+
+:MANSIO1_2926
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_2950
+wait 0
+goto @MANSIO1_2926
+
+:MANSIO1_2950
+skip_cutscene_start_internal @MANSIO1_4063
+45@ = Sequence.Open()
+Task.StandStill(-1, 1500)
+Task.GoStraightToCoord(-1, 1598.05, -784.5205, 349.0, MoveState.Walk, -1)
+Task.AchieveHeading(-1, 257.9061)
+Task.StayInSamePlace(-1, True)
+Task.UseMobilePhone(-1, True)
+Sequence.Close(45@)
+Char.PerformSequence($scplayer, 45@)
+Sequence.Clear(45@)
+set_lvar_text_label 76@s = 'MKND02A'
+set_lvar_int_to_constant 55@ = 27009
+set_lvar_int_to_var_int 65@ = $scplayer
+set_lvar_text_label 78@s = 'MKND02B'
+set_lvar_int_to_constant 56@ = 27010
+66@ = -1
+set_lvar_text_label 80@s = 'MKND02C'
+set_lvar_int_to_constant 57@ = 27011
+set_lvar_int_to_var_int 67@ = $scplayer
+set_lvar_text_label 82@s = 'MKND02D'
+set_lvar_int_to_constant 58@ = 27012
+68@ = -1
+set_lvar_text_label 84@s = 'MKND02E'
+set_lvar_int_to_constant 59@ = 27013
+69@ = -1
+set_lvar_text_label 86@s = 'MKND02F'
+set_lvar_int_to_constant 60@ = 27014
+70@ = -1
+set_lvar_text_label 88@s = 'MKND02G'
+set_lvar_int_to_constant 61@ = 27015
+set_lvar_int_to_var_int 71@ = $scplayer
+set_lvar_text_label 90@s = 'MKND02H'
+set_lvar_int_to_constant 62@ = 27016
+72@ = -1
+set_lvar_text_label 92@s = 'MKND02J'
+set_lvar_int_to_constant 63@ = 27017
+73@ = -1
+set_lvar_text_label 94@s = 'MKND02K'
+set_lvar_int_to_constant 64@ = 27018
+set_lvar_int_to_var_int 74@ = $scplayer
+75@ = 0
+
+:MANSIO1_3332
+if 
+  46@ == 0
+goto_if_false @MANSIO1_3369
+wait 0
+46@ = Char.GetSequenceProgress($scplayer)
+goto @MANSIO1_3332
+
+:MANSIO1_3369
+set_var_int_to_constant $load_sample = 20804
+set_var_text_label s$load_text = 'MOBRING'
+start_new_script @A_ALAP 0 99 
+
+:MANSIO1_3403
+if 
+  $SLOT_status($preload_slot,2i) <> -3
+goto_if_false @MANSIO1_3436
+wait 0
+goto @MANSIO1_3403
+
+:MANSIO1_3436
+$SLOT_status($preload_slot,2i) = -4
+46@ = Char.GetSequenceProgress($scplayer)
+
+:MANSIO1_3455
+if 
+  46@ <> 4
+goto_if_false @MANSIO1_3492
+wait 0
+46@ = Char.GetSequenceProgress($scplayer)
+goto @MANSIO1_3455
+
+:MANSIO1_3492
+wait 2250
+
+:MANSIO1_3497
+if 
+  10 > 75@
+goto_if_false @MANSIO1_3657
+set_var_int_to_lvar_int $load_sample = 55@(75@,10i)
+set_var_text_label s$load_text = 76@(75@,10s)
+if 
+  65@(75@,10i) <> -1
+goto_if_false @MANSIO1_3587
+start_new_script @A_ALAP 2 100 65@(75@,10i) 
+goto @MANSIO1_3599
+
+:MANSIO1_3587
+start_new_script @A_ALAP 0 100 
+
+:MANSIO1_3599
+if 
+  $SLOT_status($preload_slot,2i) <> -3
+goto_if_false @MANSIO1_3632
+wait 0
+goto @MANSIO1_3599
+
+:MANSIO1_3632
+$SLOT_status($preload_slot,2i) = -4
+75@ += 1
+goto @MANSIO1_3497
+
+:MANSIO1_3657
+if or
+  $SLOT_status($current_slot,2i) <> -4
+  $SLOT_status($preload_slot,2i) <> -4
+goto_if_false @MANSIO1_3701
+wait 0
+goto @MANSIO1_3657
+
+:MANSIO1_3701
+Task.UseMobilePhone($scplayer, False)
+wait 2000
+if 
+  not Char.IsDead(133@)
+goto_if_false @MANSIO1_3745
+Task.TurnCharToFaceChar($scplayer, 133@)
+Task.TurnCharToFaceChar(133@, $scplayer)
+
+:MANSIO1_3745
+set_var_int_to_constant $load_sample = 23808
+set_var_text_label s$load_text = 'MAN1_CA'
+start_new_script @A_ALAP 1 100 $scplayer 
+
+:MANSIO1_3782
+if 
+  $SLOT_status($preload_slot,2i) <> -3
+goto_if_false @MANSIO1_3815
+wait 0
+goto @MANSIO1_3782
+
+:MANSIO1_3815
+$SLOT_status($preload_slot,2i) = -4
+set_var_int_to_constant $load_sample = 23809
+set_var_text_label s$load_text = 'MAN1_CB'
+start_new_script @A_ALAP 2 100 133@ 
+
+:MANSIO1_3863
+if 
+  $SLOT_status($preload_slot,2i) <> -3
+goto_if_false @MANSIO1_3896
+wait 0
+goto @MANSIO1_3863
+
+:MANSIO1_3896
+$SLOT_status($preload_slot,2i) = -4
+set_var_int_to_constant $load_sample = 23810
+set_var_text_label s$load_text = 'MAN1_CC'
+start_new_script @A_ALAP 1 100 $scplayer 
+
+:MANSIO1_3944
+if or
+  $SLOT_status($current_slot,2i) <> -4
+  $SLOT_status($preload_slot,2i) <> -4
+goto_if_false @MANSIO1_3988
+wait 0
+goto @MANSIO1_3944
+
+:MANSIO1_3988
+TIMERA = 0
+
+:MANSIO1_3995
+if 
+  1000 > TIMERA
+goto_if_false @MANSIO1_4025
+wait 0
+goto @MANSIO1_3995
+
+:MANSIO1_4025
+Camera.DoFade(0, 500)
+
+:MANSIO1_4032
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_4056
+wait 0
+goto @MANSIO1_4032
+
+:MANSIO1_4056
+49@ = 1
+
+:MANSIO1_4063
+skip_cutscene_end 
+Text.ClearPrints
+Camera.DoFade(0, Fade.Out)
+
+:MANSIO1_4073
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_4097
+wait 0
+goto @MANSIO1_4073
+
+:MANSIO1_4097
+if 
+  110@ == 1
+goto_if_false @MANSIO1_4129
+Char.GiveWeapon($scplayer, WeaponType.BrassKnuckles, 1)
+Streaming.MarkModelAsNoLongerNeeded(331)
+
+:MANSIO1_4129
+Char.SetCurrentWeapon($scplayer, 109@)
+Camera.ResetNewScriptables
+Char.ClearTasksImmediately($scplayer)
+Streaming.MarkModelAsNoLongerNeeded(330)
+if 
+  $SLOT_status[0] >= 0
+goto_if_false @MANSIO1_4174
+$SLOT_status[0] = -2
+
+:MANSIO1_4174
+if 
+  $SLOT_status[0] >= 0
+goto_if_false @MANSIO1_4199
+$SLOT_status[1] = -2
+
+:MANSIO1_4199
+Char.SetCoordinates($scplayer, 1096.562, -825.7372, 85.9453)
+if 
+  49@ == 0
+goto_if_false @MANSIO1_4244
+goto @MANSIO1_5657
+
+:MANSIO1_4244
+49@ = 0
+$ai_target_x = 1347.407
+$ai_target_y = -811.7421
+$ai_target_z = 96.9707
+Camera.SetFixedPosition(1385.568, -810.5753, 78.1164, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1385.498, -809.579, 78.0669, SwitchType.JumpCut)
+103@ = 0
+104@ = 0
+105@ = 0
+106@ = 0
+107@ = 0
+108@ = 0
+Streaming.LoadScene(1385.568, -810.5753, 78.1164)
+TIMERA = 0
+
+:MANSIO1_4398
+if 
+  800 > TIMERA
+goto_if_false @MANSIO1_4428
+wait 0
+goto @MANSIO1_4398
+
+:MANSIO1_4428
+Camera.DoFade(1, 500)
+99@ = Char.Create(24, 117, 1485.536, -818.0389, 130.0)
+Char.SetHeading(99@, 90.0)
+Char.SetAreaVisible(99@, 0)
+StreamedScript.StartNew(1, -1, -25.0, 10.0, -3.0, -1.0, 5.0, 6.5, 1, 99@)
+StreamedScript.Stream(1)
+skip_cutscene_start_internal @MANSIO1_4864
+TIMERA = 0
+
+:MANSIO1_4536
+if 
+  1000 > TIMERA
+goto_if_false @MANSIO1_4572
+wait 0
+Clock.SetTimeOfDay(3, 0)
+goto @MANSIO1_4536
+
+:MANSIO1_4572
+TIMERA = 0
+111@ = 0
+Camera.ResetNewScriptables
+Camera.PersistTrack(True)
+Camera.PersistPos(True)
+Camera.SetVectorMove(1385.568, -810.5753, 78.1164, 1368.495, -855.6013, 75.1238, 12000, True)
+Camera.SetVectorTrack(1385.498, -809.579, 78.0669, 1369.012, -854.7825, 75.3725, 12000, True)
+
+:MANSIO1_4670
+if 
+  14000 > TIMERA
+goto_if_false @MANSIO1_4826
+wait 0
+if and
+  111@ == 0
+  TIMERA > 3000
+goto_if_false @MANSIO1_4813
+100@ = Char.Create(24, 118, 1485.536, -818.0389, 130.0)
+Char.SetHeading(100@, 90.0)
+Char.SetAreaVisible(100@, 0)
+StreamedScript.StartNew(1, -1, -25.0, 10.0, -3.0, -1.0, 5.0, 6.5, 1, 100@)
+StreamedScript.Stream(1)
+111@ = 1
+
+:MANSIO1_4813
+Clock.SetTimeOfDay(3, 0)
+goto @MANSIO1_4670
+
+:MANSIO1_4826
+Camera.DoFade(0, 1000)
+
+:MANSIO1_4833
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_4857
+wait 0
+goto @MANSIO1_4833
+
+:MANSIO1_4857
+49@ = 1
+
+:MANSIO1_4864
+skip_cutscene_end 
+Camera.DoFade(0, Fade.Out)
+
+:MANSIO1_4872
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_4896
+wait 0
+goto @MANSIO1_4872
+
+:MANSIO1_4896
+Camera.ResetNewScriptables
+Camera.RestoreJumpcut
+if 
+  49@ == 0
+goto_if_false @MANSIO1_4925
+goto @MANSIO1_5657
+
+:MANSIO1_4925
+49@ = 0
+115@ = 35.0
+116@ = 20.0
+114@ = 100.2
+$ai_target_x = 1291.266
+$ai_target_y = -788.1172
+$ai_target_z = 96.7736
+117@ = 1291.153
+118@ = -788.1339
+119@ = 95.0
+Streaming.LoadSceneInDirection(1291.266, -788.1172, 96.7736, 122.0)
+Streaming.RequestModel(#OPMANS01_CUNTE)
+Streaming.RequestModel(#CEHOLLYHIL06)
+Streaming.RequestModel(#SUNSET22_LAWN)
+
+:MANSIO1_5059
+if or
+  not Streaming.HasModelLoaded(#OPMANS01_CUNTE)
+  not Streaming.HasModelLoaded(#CEHOLLYHIL06)
+  not Streaming.HasModelLoaded(#SUNSET22_LAWN)
+goto_if_false @MANSIO1_5096
+wait 0
+goto @MANSIO1_5059
+
+:MANSIO1_5096
+167@ = 2
+TIMERA = 0
+
+:MANSIO1_5110
+if 
+  500 > TIMERA
+goto_if_false @MANSIO1_5147
+wait 0
+gosub @MANSIO1_10537
+goto @MANSIO1_5110
+
+:MANSIO1_5147
+124@ = Particle.Create("SMOKE_FLARE", 1291.454, -775.3071, 95.5, 1)
+125@ = Particle.Create("SMOKE_FLARE", 1303.211, -788.2426, 95.5, 1)
+126@ = Particle.Create("SMOKE_FLARE", 1291.159, -800.4006, 95.5, 1)
+101@ = Char.Create(24, 118, 1323.17, -783.7548, 117.0)
+Char.SetHeading(101@, 90.0)
+Char.SetAreaVisible(101@, 0)
+Char.GiveWeapon(101@, WeaponType.M4, 30000)
+StreamedScript.StartNew(1, -1, -2.0, 1.0, -3.0, -1.0, 1.5, 3.2, 1, 101@)
+StreamedScript.Stream(1)
+Char.SetVelocity(101@, 0.0, 0.0, 2.0)
+Char.SetDecisionMaker(101@, 34@)
+102@ = Char.Create(24, 117, 1323.442, -798.6427, 120.0)
+Char.SetHeading(102@, 90.0)
+Char.SetAreaVisible(102@, 0)
+Char.GiveWeapon(102@, WeaponType.M4, 30000)
+StreamedScript.StartNew(1, -1, -2.0, 1.0, -3.0, -1.0, 1.0, 2.5, 1, 102@)
+StreamedScript.Stream(1)
+Char.SetVelocity(102@, 0.0, 0.0, 2.0)
+Char.SetDecisionMaker(102@, 34@)
+Camera.DoFade(1, 1000)
+
+:MANSIO1_5509
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_5547
+wait 0
+gosub @MANSIO1_10537
+gosub @MANSIO1_18623
+goto @MANSIO1_5509
+
+:MANSIO1_5547
+skip_cutscene_start_internal @MANSIO1_5655
+TIMERA = 0
+
+:MANSIO1_5561
+if 
+  8 > 107@
+goto_if_false @MANSIO1_5624
+wait 0
+gosub @MANSIO1_9333
+gosub @MANSIO1_10132
+Clock.SetTimeOfDay(3, 0)
+gosub @MANSIO1_10537
+gosub @MANSIO1_18623
+goto @MANSIO1_5561
+
+:MANSIO1_5624
+Camera.DoFade(0, 500)
+
+:MANSIO1_5631
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_5655
+wait 0
+goto @MANSIO1_5631
+
+:MANSIO1_5655
+skip_cutscene_end 
+
+:MANSIO1_5657
+Camera.DoFade(0, Fade.Out)
+
+:MANSIO1_5663
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_5687
+wait 0
+goto @MANSIO1_5663
+
+:MANSIO1_5687
+Streaming.MarkModelAsNoLongerNeeded(#OPMANS01_CUNTE)
+Streaming.MarkModelAsNoLongerNeeded(#CEHOLLYHIL06)
+Camera.ResetNewScriptables
+Camera.RestoreJumpcut
+Particle.Play(124@)
+Particle.Play(125@)
+Particle.Play(126@)
+$ai_target_x = 1291.266
+$ai_target_y = -788.1172
+$ai_target_z = 96.7736
+Streaming.RequestModel(371)
+Streaming.RequestModel(#CARDBOARDBOX2)
+Audio.LoadMissionAudio(1818, 3)
+
+:MANSIO1_5763
+if or
+  not Streaming.HasModelLoaded(371)
+  not Streaming.HasModelLoaded(#CARDBOARDBOX2)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @MANSIO1_5813
+wait 0
+167@ = 4
+gosub @MANSIO1_10537
+goto @MANSIO1_5763
+
+:MANSIO1_5813
+set_lvar_text_label 76@s = 'MAN1_DA'
+set_lvar_int_to_constant 55@ = 23811
+set_lvar_int_to_lvar_int 65@ = 131@
+set_lvar_text_label 78@s = 'MAN1_DB'
+set_lvar_int_to_constant 56@ = 23812
+set_lvar_int_to_lvar_int 66@ = 132@
+set_lvar_text_label 80@s = 'MAN1_DC'
+set_lvar_int_to_constant 57@ = 23813
+set_lvar_int_to_lvar_int 67@ = 131@
+set_lvar_text_label 82@s = 'MAN1_DD'
+set_lvar_int_to_constant 58@ = 23814
+set_lvar_int_to_lvar_int 68@ = 132@
+set_lvar_text_label 84@s = 'MAN1_DE'
+set_lvar_int_to_constant 59@ = 23815
+set_lvar_int_to_lvar_int 69@ = 131@
+set_lvar_text_label 86@s = 'MAN1_DF'
+set_lvar_int_to_constant 60@ = 23816
+set_lvar_int_to_lvar_int 70@ = 132@
+set_lvar_text_label 88@s = 'MAN1_DG'
+set_lvar_int_to_constant 61@ = 23817
+set_lvar_int_to_lvar_int 71@ = 132@
+set_lvar_text_label 90@s = 'MAN1_DH'
+set_lvar_int_to_constant 62@ = 23818
+set_lvar_int_to_lvar_int 72@ = 133@
+set_lvar_text_label 92@s = 'MAN1_DJ'
+set_lvar_int_to_constant 63@ = 23819
+set_lvar_int_to_lvar_int 73@ = 134@
+129@ = Object.CreateNoOffset(#CARDBOARDBOX2, 1601.759, -785.1198, 349.95)
+Object.SetHeading(129@, 90.0)
+Object.FreezePosition(129@, True)
+Object.SetVisible(129@, False)
+Object.SetCollision(129@, False)
+Camera.RestoreJumpcut
+Char.AttachToObject($scplayer, 129@, 0.0, 0.0, 0.0, 0, 40.0, WeaponType.Unarmed)
+157@ = 0
+Streaming.LoadScene(1601.759, -785.1198, 351.0)
+Char.MarkAsNoLongerNeeded(159@)
+Pad.SetPlayerDuckButton($player1, False)
+Pad.SetPlayerJumpButton($player1, False)
+Pad.SetPlayerFireButton($player1, False)
+Hud.SwitchWidescreen(False)
+Hud.DisplayRadar(False)
+Hud.Display(False)
+222@ = 2000
+221@ = 0
+220@ = 0.0
+TIMERA = 0
+
+:MANSIO1_6265
+if 
+  500 > TIMERA
+goto_if_false @MANSIO1_6302
+wait 0
+gosub @MANSIO1_10537
+goto @MANSIO1_6265
+
+:MANSIO1_6302
+Weather.ForceNow(WeatherType.ExtraSunnyLa)
+Player.SetControl($player1, True)
+Camera.DoFade(1, 500)
+
+:MANSIO1_6320
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_6351
+wait 0
+gosub @MANSIO1_10537
+goto @MANSIO1_6320
+
+:MANSIO1_6351
+TIMERA = 0
+156@ = 0
+75@ = 0
+
+:MANSIO1_6372
+if 
+  5 > 75@
+goto_if_false @MANSIO1_6627
+wait 0
+gosub @MANSIO1_10537
+if 
+  TIMERA > 1000
+goto_if_false @MANSIO1_6427
+gosub @MANSIO1_18875
+
+:MANSIO1_6427
+switch_start 156@ total_jumps 3 default_jump 0 @MANSIO1_6620 jumps 0 @MANSIO1_6490 1 @MANSIO1_6516 2 @MANSIO1_6566 -1 @MANSIO1_6620 -1 @MANSIO1_6620 -1 @MANSIO1_6620 -1 @MANSIO1_6620
+
+:MANSIO1_6490
+if 
+  TIMERA <= 800
+goto_if_false @MANSIO1_6516
+goto @MANSIO1_6620
+
+:MANSIO1_6516
+set_var_int_to_lvar_int $load_sample = 55@(75@,10i)
+set_var_text_label s$load_text = 76@(75@,10s)
+start_new_script @A_ALAP 2 100 65@(75@,10i) 
+156@ = 2
+
+:MANSIO1_6566
+if 
+  $SLOT_status($preload_slot,2i) <> -3
+goto_if_false @MANSIO1_6595
+goto @MANSIO1_6620
+
+:MANSIO1_6595
+$SLOT_status($preload_slot,2i) = -4
+75@ += 1
+156@ = 1
+
+:MANSIO1_6620
+goto @MANSIO1_6372
+
+:MANSIO1_6627
+TIMERA = 0
+41@ = Clock.GetGameTimer()
+
+:MANSIO1_6639
+wait 0
+40@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 40@
+sub_int_lvar_from_int_lvar 42@ -= 41@
+set_lvar_int_to_lvar_int 41@ = 40@
+add_int_lvar_to_int_lvar 158@ += 42@
+43@ = 0
+
+:MANSIO1_6687
+if 
+  4 > 43@
+goto_if_false @MANSIO1_6731
+add_int_lvar_to_int_lvar 160@(43@,4i) += 42@
+43@ += 1
+goto @MANSIO1_6687
+
+:MANSIO1_6731
+gosub @MANSIO1_7365
+gosub @MANSIO1_10822
+gosub @MANSIO1_10537
+if 
+  4 > 157@
+goto_if_false @MANSIO1_6783
+Clock.SetTimeOfDay(3, 0)
+goto @MANSIO1_6847
+
+:MANSIO1_6783
+157@ = 0
+World.SwitchEntryExit('MADDOGS', False)
+World.SwitchEntryExit('MDDOGS', False)
+51@ = Pickup.Create(#BODYARMOUR, 3, 1292.7, -769.0, 95.8)
+goto @MANSIO1_6854
+
+:MANSIO1_6847
+goto @MANSIO1_6639
+
+:MANSIO1_6854
+168@ = 4
+set_lvar_int_to_constant 182@ = 108
+set_lvar_int_to_constant 183@ = 109
+set_lvar_int_to_constant 184@ = 108
+set_lvar_int_to_constant 185@ = 109
+
+:MANSIO1_6889
+wait 0
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @MANSIO1_6915
+goto @MANSIO1_38560
+
+:MANSIO1_6915
+if 
+  52@ == 1
+goto_if_false @MANSIO1_6940
+goto @MANSIO1_38488
+
+:MANSIO1_6940
+40@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 40@
+sub_int_lvar_from_int_lvar 42@ -= 41@
+set_lvar_int_to_lvar_int 41@ = 40@
+add_int_lvar_to_int_lvar 158@ += 42@
+43@ = 0
+
+:MANSIO1_6984
+if 
+  3 > 43@
+goto_if_false @MANSIO1_7040
+add_int_lvar_to_int_lvar 160@(43@,4i) += 42@
+add_int_lvar_to_int_lvar 164@(43@,3i) += 42@
+43@ += 1
+goto @MANSIO1_6984
+
+:MANSIO1_7040
+add_int_lvar_to_int_lvar 163@ += 42@
+43@ = 0
+
+:MANSIO1_7055
+if 
+  6 > 43@
+goto_if_false @MANSIO1_7099
+add_int_lvar_to_int_lvar 188@(43@,6i) += 42@
+43@ += 1
+goto @MANSIO1_7055
+
+:MANSIO1_7099
+gosub @MANSIO1_7776
+gosub @MANSIO1_10822
+if 
+  157@ > 5
+goto_if_false @MANSIO1_7138
+gosub @MANSIO1_12648
+
+:MANSIO1_7138
+if 
+  2 > 206@
+goto_if_false @MANSIO1_7170
+gosub @MANSIO1_16769
+goto @MANSIO1_7177
+
+:MANSIO1_7170
+gosub @MANSIO1_14197
+
+:MANSIO1_7177
+211@ = 0
+48@ = Streaming.GetAreaVisible()
+if 
+  48@ <> 0
+goto_if_false @MANSIO1_7358
+if 
+  Char.LocateOnFoot2D($scplayer, 0, 1257.995, -785.4104, 5.0, 5.0)
+goto_if_false @MANSIO1_7358
+48@ = 0
+
+:MANSIO1_7252
+if 
+  48@ == 0
+goto_if_false @MANSIO1_7289
+48@ = Char.GetAreaVisible($scplayer)
+wait 0
+goto @MANSIO1_7252
+
+:MANSIO1_7289
+Camera.DoFade(0, Fade.Out)
+
+:MANSIO1_7295
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_7319
+wait 0
+goto @MANSIO1_7295
+
+:MANSIO1_7319
+World.ClearAreaOfChars(1288.0, -772.0, 1080.0, 1260.5, -787.5, 1100.0)
+goto @MANSIO1_19435
+
+:MANSIO1_7358
+goto @MANSIO1_6889
+
+:MANSIO1_7365
+switch_start 157@ total_jumps 4 default_jump 0 @MANSIO1_7774 jumps 0 @MANSIO1_7428 1 @MANSIO1_7538 2 @MANSIO1_7556 3 @MANSIO1_7633 -1 @MANSIO1_7774 -1 @MANSIO1_7774 -1 @MANSIO1_7774
+
+:MANSIO1_7428
+if 
+  TIMERA > 8300
+goto_if_false @MANSIO1_7531
+Char.DetachFromCar($scplayer)
+Player.SetControl($player1, False)
+Task.GoToCoordAnyMeans($scplayer, 1584.292, -784.9141, 347.0, 7, -1)
+if 
+  not Char.HasGotWeapon($scplayer, WeaponType.Parachute)
+goto_if_false @MANSIO1_7510
+Char.GiveWeapon($scplayer, WeaponType.Parachute, 1)
+
+:MANSIO1_7510
+Char.SetCurrentWeapon($scplayer, WeaponType.Parachute)
+221@ = 2
+157@ += 1
+
+:MANSIO1_7531
+goto @MANSIO1_7774
+
+:MANSIO1_7538
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+157@ += 1
+goto @MANSIO1_7774
+
+:MANSIO1_7556
+if 
+  Char.LocateOnFoot2D($scplayer, 0, 1584.292, -784.9141, 2.75, 2.75)
+goto_if_false @MANSIO1_7626
+Task.Jump($scplayer, True)
+158@ = 0
+221@ = 3
+Camera.Shake(0)
+157@ += 1
+
+:MANSIO1_7626
+goto @MANSIO1_7774
+
+:MANSIO1_7633
+if 
+  158@ > 700
+goto_if_false @MANSIO1_7767
+158@ = 0
+Hud.DisplayZoneNames(True)
+Object.Delete(127@)
+Object.Delete(128@)
+Object.Delete(129@)
+Streaming.MarkModelAsNoLongerNeeded(#CARGO_REAR)
+Streaming.MarkModelAsNoLongerNeeded(#D9_RAMP)
+Player.SetControl($player1, True)
+Pad.SetPlayerDuckButton($player1, True)
+Pad.SetPlayerJumpButton($player1, True)
+Pad.SetPlayerFireButton($player1, True)
+Hud.DisplayRadar(True)
+Hud.Display(True)
+Text.PrintNow('MAN1_03', 8000, 1)
+47@ = Blip.AddForCoord(1290.491, -788.3314, 95.4531)
+157@ += 1
+
+:MANSIO1_7767
+goto @MANSIO1_7774
+
+:MANSIO1_7774
+return 
+
+:MANSIO1_7776
+switch_start 157@ total_jumps 11 default_jump 0 @MANSIO1_9331 jumps 0 @MANSIO1_7904 1 @MANSIO1_7968 2 @MANSIO1_7998 3 @MANSIO1_8216 4 @MANSIO1_8262 5 @MANSIO1_8315 6 @MANSIO1_8964
+switch_continued 7 @MANSIO1_9081 8 @MANSIO1_9150 9 @MANSIO1_9211 10 @MANSIO1_9271 -1 @MANSIO1_9331 -1 @MANSIO1_9331 -1 @MANSIO1_9331 -1 @MANSIO1_9331 -1 @MANSIO1_9331
+
+:MANSIO1_7904
+if 
+  $player_landed == 2
+goto_if_false @MANSIO1_7936
+157@ = 2
+goto @MANSIO1_7961
+
+:MANSIO1_7936
+if 
+  $player_landed == 3
+goto_if_false @MANSIO1_7961
+157@ += 1
+
+:MANSIO1_7961
+goto @MANSIO1_9331
+
+:MANSIO1_7968
+if 
+  not Char.IsInAir($scplayer)
+goto_if_false @MANSIO1_7991
+157@ += 1
+
+:MANSIO1_7991
+goto @MANSIO1_9331
+
+:MANSIO1_7998
+208@ = 0
+gosub @MANSIO1_17063
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @MANSIO1_8131
+if 
+  210@ <> -1
+goto_if_false @MANSIO1_8108
+if 
+  6 > 210@
+goto_if_false @MANSIO1_8078
+157@ = 5
+goto @MANSIO1_8101
+
+:MANSIO1_8078
+Text.PrintNow('MAN1_04', 8000, 1)
+157@ = 4
+
+:MANSIO1_8101
+goto @MANSIO1_8131
+
+:MANSIO1_8108
+Text.PrintNow('MAN1_04', 8000, 1)
+157@ = 3
+
+:MANSIO1_8131
+43@ = 0
+
+:MANSIO1_8138
+if 
+  4 > 43@
+goto_if_false @MANSIO1_8209
+if 
+  not Char.IsDead(170@(43@,6i))
+goto_if_false @MANSIO1_8195
+Char.SetProofs(170@(43@,6i), False, False, False, False, False)
+
+:MANSIO1_8195
+43@ += 1
+goto @MANSIO1_8138
+
+:MANSIO1_8209
+goto @MANSIO1_9331
+
+:MANSIO1_8216
+208@ = 0
+gosub @MANSIO1_17063
+if 
+  210@ <> -1
+goto_if_false @MANSIO1_8255
+157@ += 1
+
+:MANSIO1_8255
+goto @MANSIO1_9331
+
+:MANSIO1_8262
+208@ = 0
+gosub @MANSIO1_17063
+if and
+  210@ <> -1
+  6 > 210@
+goto_if_false @MANSIO1_8308
+157@ += 1
+
+:MANSIO1_8308
+goto @MANSIO1_9331
+
+:MANSIO1_8315
+Blip.Remove(47@)
+if 
+  168@ == 0
+goto_if_false @MANSIO1_8361
+Text.PrintNow('MAN1_06', 8000, 1)
+goto @MANSIO1_8377
+
+:MANSIO1_8361
+Text.PrintNow('MAN1_05', 8000, 1)
+
+:MANSIO1_8377
+Player.ClearWantedLevel($player1)
+Game.SetMaxWantedLevel(0)
+143@ = Char.Create(24, 117, 1000.0, -785.0, 200.0)
+Char.SetHeading(143@, 270.0)
+Char.SetAreaVisible(143@, 0)
+146@ = Blip.AddForChar(143@)
+Blip.ChangeDisplay(146@, BlipDisplay.BlipOnly)
+Blip.SetAsFriendly(146@, True)
+Char.GiveWeapon(143@, WeaponType.M4, 30000)
+Char.SetCurrentWeapon(143@, WeaponType.M4)
+Char.SetNeverTargeted(143@, True)
+Char.SetDecisionMaker(143@, 34@)
+149@ = 0
+164@ = 0
+StreamedScript.StartNew(1, -1, -26.0, 14.0, -3.0, -1.0, 5.25, 6.75, 1, 143@)
+StreamedScript.Stream(1)
+144@ = Char.Create(24, 118, 1000.0, -770.0, 200.0)
+Char.SetHeading(144@, 270.0)
+Char.SetAreaVisible(144@, 0)
+147@ = Blip.AddForChar(144@)
+Blip.ChangeDisplay(147@, BlipDisplay.BlipOnly)
+Blip.SetAsFriendly(147@, True)
+Char.GiveWeapon(144@, WeaponType.M4, 30000)
+Char.SetCurrentWeapon(144@, WeaponType.M4)
+Char.SetNeverTargeted(144@, True)
+Char.SetDecisionMaker(144@, 34@)
+150@ = 0
+165@ = 0
+StreamedScript.StartNew(1, -1, -26.0, 14.0, -3.0, -1.0, 5.25, 6.75, 1, 144@)
+StreamedScript.Stream(1)
+145@ = Char.Create(24, 117, 1000.0, -800.0, 200.0)
+Char.SetHeading(145@, 270.0)
+Char.SetAreaVisible(145@, 0)
+148@ = Blip.AddForChar(145@)
+Blip.ChangeDisplay(148@, BlipDisplay.BlipOnly)
+Blip.SetAsFriendly(148@, True)
+Char.GiveWeapon(145@, WeaponType.M4, 30000)
+Char.SetCurrentWeapon(145@, WeaponType.M4)
+Char.SetNeverTargeted(145@, True)
+Char.SetDecisionMaker(145@, 34@)
+151@ = 0
+166@ = 0
+StreamedScript.StartNew(1, -1, -26.0, 14.0, -3.0, -1.0, 5.25, 6.75, 1, 145@)
+StreamedScript.Stream(1)
+169@ = 0
+if 
+  not Char.IsDead(131@)
+goto_if_false @MANSIO1_8881
+Char.SetHealth(131@, 20)
+
+:MANSIO1_8881
+if 
+  not Char.IsDead(132@)
+goto_if_false @MANSIO1_8904
+Char.SetHealth(132@, 40)
+
+:MANSIO1_8904
+if 
+  not Char.IsDead(133@)
+goto_if_false @MANSIO1_8927
+Char.SetHealth(133@, 30)
+
+:MANSIO1_8927
+if 
+  not Char.IsDead(134@)
+goto_if_false @MANSIO1_8950
+Char.SetHealth(134@, 25)
+
+:MANSIO1_8950
+157@ += 1
+goto @MANSIO1_9331
+
+:MANSIO1_8964
+if 
+  169@ == 3
+goto_if_false @MANSIO1_9074
+208@ = 0
+gosub @MANSIO1_17063
+if and
+  6 > 210@
+  210@ <> -1
+goto_if_false @MANSIO1_9051
+Text.PrintNow('MAN1_09', 8000, 1)
+157@ = 8
+goto @MANSIO1_9074
+
+:MANSIO1_9051
+Text.PrintNow('MAN1_10', 8000, 1)
+157@ = 7
+
+:MANSIO1_9074
+goto @MANSIO1_9331
+
+:MANSIO1_9081
+208@ = 0
+gosub @MANSIO1_17063
+if and
+  6 > 210@
+  210@ <> -1
+goto_if_false @MANSIO1_9143
+Text.PrintNow('MAN1_09', 8000, 1)
+157@ = 8
+
+:MANSIO1_9143
+goto @MANSIO1_9331
+
+:MANSIO1_9150
+gosub @MANSIO1_13336
+206@ = 3
+47@ = Blip.AddForCoord(1257.995, -785.4104, 91.0302)
+World.SwitchEntryExit('MADDOGS', True)
+157@ += 1
+goto @MANSIO1_9331
+
+:MANSIO1_9211
+208@ = 0
+gosub @MANSIO1_17063
+if or
+  210@ == -1
+  210@ > 10
+goto_if_false @MANSIO1_9264
+gosub @MANSIO1_13440
+157@ += 1
+
+:MANSIO1_9264
+goto @MANSIO1_9331
+
+:MANSIO1_9271
+208@ = 0
+gosub @MANSIO1_17063
+if and
+  210@ <> -1
+  10 >= 210@
+goto_if_false @MANSIO1_9324
+gosub @MANSIO1_13336
+157@ -= 1
+
+:MANSIO1_9324
+goto @MANSIO1_9331
+
+:MANSIO1_9331
+return 
+
+:MANSIO1_9333
+if 
+  not Char.IsDead(101@)
+goto_if_false @MANSIO1_10118
+switch_start 107@ total_jumps 8 default_jump 0 @MANSIO1_10111 jumps 0 @MANSIO1_9477 1 @MANSIO1_9574 2 @MANSIO1_9713 3 @MANSIO1_9765 4 @MANSIO1_9887 5 @MANSIO1_9929 6 @MANSIO1_10025
+switch_continued 7 @MANSIO1_10078 -1 @MANSIO1_10111 -1 @MANSIO1_10111 -1 @MANSIO1_10111 -1 @MANSIO1_10111 -1 @MANSIO1_10111 -1 @MANSIO1_10111 -1 @MANSIO1_10111 -1 @MANSIO1_10111
+
+:MANSIO1_9477
+if 
+  Char.IsPlayingAnim(101@, "PARA_LAND")
+goto_if_false @MANSIO1_9525
+105@ = 1
+107@ += 1
+goto @MANSIO1_9567
+
+:MANSIO1_9525
+$x, $y, $z = Char.GetCoordinates(101@)
+if 
+  99.0 > $z
+goto_if_false @MANSIO1_9567
+218@ = 1
+
+:MANSIO1_9567
+goto @MANSIO1_10111
+
+:MANSIO1_9574
+if 
+  not Char.IsPlayingAnim(101@, "PARA_LAND")
+goto_if_false @MANSIO1_9706
+45@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.GoStraightToCoord(-1, 1291.519, -776.0716, 95.4531, MoveState.Run, -1)
+Task.StandStill(-1, 400)
+Task.StandStill(-1, 400)
+Task.GoStraightToCoord(-1, 1280.995, -780.3347, 95.461, MoveState.Run, -1)
+Task.AchieveHeading(-1, 110.0)
+Sequence.Close(45@)
+Char.PerformSequence(101@, 45@)
+Sequence.Clear(45@)
+107@ += 1
+
+:MANSIO1_9706
+goto @MANSIO1_10111
+
+:MANSIO1_9713
+46@ = Char.GetSequenceProgress(101@)
+if 
+  46@ == 4
+goto_if_false @MANSIO1_9758
+Particle.Play(124@)
+TIMERA = 0
+107@ += 1
+
+:MANSIO1_9758
+goto @MANSIO1_10111
+
+:MANSIO1_9765
+if 
+  TIMERA > 1500
+goto_if_false @MANSIO1_9880
+107@ += 1
+159@ = Char.Create(25, 108, 1281.413, -785.8877, 91.0302)
+Char.SetHeading(159@, 90.0)
+Char.SetAreaVisible(159@, 0)
+Task.GoStraightToCoord(159@, 1268.337, -785.9549, 94.9688, MoveState.Walk, -1)
+Char.SetDecisionMaker(159@, 34@)
+Char.GiveWeapon(159@, WeaponType.Mp5, 1)
+Char.SetCurrentWeapon(159@, WeaponType.Mp5)
+
+:MANSIO1_9880
+goto @MANSIO1_10111
+
+:MANSIO1_9887
+if 
+  190.0 > 115@
+goto_if_false @MANSIO1_9915
+goto @MANSIO1_10111
+
+:MANSIO1_9915
+TIMERA = 0
+107@ += 1
+
+:MANSIO1_9929
+if 
+  TIMERA > 2000
+goto_if_false @MANSIO1_10018
+if 
+  not Char.IsDead(159@)
+goto_if_false @MANSIO1_9978
+$x, $y, $z = Char.GetCoordinates(159@)
+
+:MANSIO1_9978
+$z += 1.0
+Task.ShootAtCoord(101@, $x, $y, $z, 100)
+TIMERA = 0
+107@ += 1
+
+:MANSIO1_10018
+goto @MANSIO1_10111
+
+:MANSIO1_10025
+if 
+  TIMERA > 50
+goto_if_false @MANSIO1_10071
+if 
+  not Char.IsDead(159@)
+goto_if_false @MANSIO1_10064
+Char.ExplodeHead(159@)
+
+:MANSIO1_10064
+107@ += 1
+
+:MANSIO1_10071
+goto @MANSIO1_10111
+
+:MANSIO1_10078
+if 
+  TIMERA > 2000
+goto_if_false @MANSIO1_10104
+107@ += 1
+
+:MANSIO1_10104
+goto @MANSIO1_10111
+
+:MANSIO1_10111
+goto @MANSIO1_10130
+
+:MANSIO1_10118
+Char.MarkAsNoLongerNeeded(101@)
+107@ = -1
+
+:MANSIO1_10130
+return 
+
+:MANSIO1_10132
+if 
+  not Char.IsDead(102@)
+goto_if_false @MANSIO1_10523
+switch_start 108@ total_jumps 4 default_jump 0 @MANSIO1_10516 jumps 0 @MANSIO1_10211 1 @MANSIO1_10259 2 @MANSIO1_10426 3 @MANSIO1_10471 -1 @MANSIO1_10516 -1 @MANSIO1_10516 -1 @MANSIO1_10516
+
+:MANSIO1_10211
+if 
+  Char.IsPlayingAnim(102@, "PARA_LAND")
+goto_if_false @MANSIO1_10252
+106@ = 1
+108@ += 1
+
+:MANSIO1_10252
+goto @MANSIO1_10516
+
+:MANSIO1_10259
+if 
+  not Char.IsPlayingAnim(102@, "PARA_LAND")
+goto_if_false @MANSIO1_10419
+45@ = Sequence.Open()
+Task.ToggleDuck(-1, True)
+Task.GoStraightToCoord(-1, 1291.213, -799.4603, 95.4531, MoveState.Run, -1)
+Task.StandStill(-1, 400)
+Task.StandStill(-1, 400)
+Task.GoStraightToCoord(-1, 1302.196, -788.2992, 95.4531, MoveState.Run, -1)
+Task.StandStill(-1, 400)
+Task.StandStill(-1, 400)
+Task.GoStraightToCoord(-1, 1292.383, -787.4926, 95.4476, MoveState.Run, -1)
+Sequence.Close(45@)
+Char.PerformSequence(102@, 45@)
+Sequence.Clear(45@)
+108@ += 1
+
+:MANSIO1_10419
+goto @MANSIO1_10516
+
+:MANSIO1_10426
+46@ = Char.GetSequenceProgress(102@)
+if 
+  46@ == 3
+goto_if_false @MANSIO1_10464
+Particle.Play(126@)
+108@ += 1
+
+:MANSIO1_10464
+goto @MANSIO1_10516
+
+:MANSIO1_10471
+46@ = Char.GetSequenceProgress(102@)
+if 
+  46@ == 6
+goto_if_false @MANSIO1_10509
+Particle.Play(125@)
+108@ += 1
+
+:MANSIO1_10509
+goto @MANSIO1_10516
+
+:MANSIO1_10516
+goto @MANSIO1_10535
+
+:MANSIO1_10523
+Char.MarkAsNoLongerNeeded(102@)
+108@ = -1
+
+:MANSIO1_10535
+return 
+
+:MANSIO1_10537
+43@ = 0
+
+:MANSIO1_10544
+if 
+  is_int_lvar_greater_than_int_lvar 167@ > 43@
+goto_if_false @MANSIO1_10820
+if 
+  103@(43@,4i) <> -1
+goto_if_false @MANSIO1_10806
+if 
+  not Char.IsDead(99@(43@,4i))
+goto_if_false @MANSIO1_10786
+switch_start 103@(43@,4i) total_jumps 2 default_jump 0 @MANSIO1_10779 jumps 0 @MANSIO1_10672 1 @MANSIO1_10721 -1 @MANSIO1_10779 -1 @MANSIO1_10779 -1 @MANSIO1_10779 -1 @MANSIO1_10779 -1 @MANSIO1_10779
+
+:MANSIO1_10672
+if 
+  Char.IsPlayingAnim(99@(43@,4i), "PARA_LAND")
+goto_if_false @MANSIO1_10714
+103@(43@,4i) += 1
+
+:MANSIO1_10714
+goto @MANSIO1_10779
+
+:MANSIO1_10721
+if 
+  not Char.IsPlayingAnim(99@(43@,4i), "PARA_LAND")
+goto_if_false @MANSIO1_10772
+Task.Die(99@(43@,4i))
+103@(43@,4i) += 1
+
+:MANSIO1_10772
+goto @MANSIO1_10779
+
+:MANSIO1_10779
+goto @MANSIO1_10806
+
+:MANSIO1_10786
+Char.MarkAsNoLongerNeeded(99@(43@,4i))
+103@(43@,4i) = -1
+
+:MANSIO1_10806
+43@ += 1
+goto @MANSIO1_10544
+
+:MANSIO1_10820
+return 
+
+:MANSIO1_10822
+43@ = 0
+
+:MANSIO1_10829
+if 
+  4 > 43@
+goto_if_false @MANSIO1_11979
+if 
+  135@(43@,4i) <> -1
+goto_if_false @MANSIO1_11965
+if 
+  not Char.IsDead(131@(43@,4i))
+goto_if_false @MANSIO1_11938
+switch_start 135@(43@,4i) total_jumps 11 default_jump 0 @MANSIO1_11931 jumps 0 @MANSIO1_11021 1 @MANSIO1_11209 2 @MANSIO1_11223 3 @MANSIO1_11293 4 @MANSIO1_11320 5 @MANSIO1_11388 6 @MANSIO1_11437
+switch_continued 7 @MANSIO1_11549 8 @MANSIO1_11648 9 @MANSIO1_11740 10 @MANSIO1_11839 -1 @MANSIO1_11931 -1 @MANSIO1_11931 -1 @MANSIO1_11931 -1 @MANSIO1_11931 -1 @MANSIO1_11931
+
+:MANSIO1_11021
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 139@(43@,4i)
+goto_if_false @MANSIO1_11202
+if or
+  43@ == 0
+  43@ == 2
+goto_if_false @MANSIO1_11104
+Task.GoToCoordAnyMeans(131@(43@,4i), 1585.293, -786.5728, 347.0, 6, -1)
+goto @MANSIO1_11191
+
+:MANSIO1_11104
+if 
+  43@ == 1
+goto_if_false @MANSIO1_11163
+set_var_int_to_constant $load_sample = 23816
+set_var_text_label s$load_text = 'MAN1_DF'
+start_new_script @A_ALAP 2 100 65@(75@,10i) 
+
+:MANSIO1_11163
+Task.GoToCoordAnyMeans(131@(43@,4i), 1585.323, -783.2303, 347.0, 6, -1)
+
+:MANSIO1_11191
+135@(43@,4i) += 1
+
+:MANSIO1_11202
+goto @MANSIO1_11931
+
+:MANSIO1_11209
+gosub @MANSIO1_11981
+goto @MANSIO1_11931
+
+:MANSIO1_11223
+if 
+  160@(43@,4i) > 1200
+goto_if_false @MANSIO1_11286
+Char.DropObject(131@(43@,4i), False)
+160@(43@,4i) = 0
+gosub @MANSIO1_12371
+135@(43@,4i) += 1
+
+:MANSIO1_11286
+goto @MANSIO1_11931
+
+:MANSIO1_11293
+Object.Delete(152@(43@,4i))
+135@(43@,4i) += 1
+goto @MANSIO1_11931
+
+:MANSIO1_11320
+if 
+  160@(43@,4i) >= 40000
+goto_if_false @MANSIO1_11381
+if 
+  43@ == 0
+goto_if_false @MANSIO1_11370
+gosub @MANSIO1_13530
+
+:MANSIO1_11370
+135@(43@,4i) += 1
+
+:MANSIO1_11381
+goto @MANSIO1_11931
+
+:MANSIO1_11388
+if 
+  Char.IsPlayingAnim(131@(43@,4i), "PARA_LAND")
+goto_if_false @MANSIO1_11430
+135@(43@,4i) += 1
+
+:MANSIO1_11430
+goto @MANSIO1_11931
+
+:MANSIO1_11437
+if 
+  not Char.IsPlayingAnim(131@(43@,4i), "PARA_LAND")
+goto_if_false @MANSIO1_11542
+if 
+  2 > 206@
+goto_if_false @MANSIO1_11500
+206@ = 2
+gosub @MANSIO1_14039
+
+:MANSIO1_11500
+Char.SetProofs(131@(43@,4i), False, False, False, False, False)
+set_lvar_int_to_lvar_int 135@(43@,4i) = 43@
+135@(43@,4i) += 7
+
+:MANSIO1_11542
+goto @MANSIO1_11931
+
+:MANSIO1_11549
+Char.SetAllowedToDuck(131@, False)
+45@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 1289.698, -771.6924, 94.954, 6, -1)
+Task.AchieveHeading(-1, 100.0)
+Task.ToggleDuck(-1, False)
+Task.StayInSamePlace(-1, True)
+Task.SetCharDecisionMaker(-1, 36@)
+Sequence.Close(45@)
+Char.PerformSequence(131@, 45@)
+Sequence.Clear(45@)
+135@(43@,4i) = 11
+goto @MANSIO1_11931
+
+:MANSIO1_11648
+45@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 1285.824, -772.1167, 94.953, 6, -1)
+Task.AchieveHeading(-1, 115.0)
+Task.ToggleDuck(-1, True)
+Task.StayInSamePlace(-1, True)
+Task.SetCharDecisionMaker(-1, 36@)
+Sequence.Close(45@)
+Char.PerformSequence(132@, 45@)
+Sequence.Clear(45@)
+135@(43@,4i) = 11
+goto @MANSIO1_11931
+
+:MANSIO1_11740
+Char.SetAllowedToDuck(133@, False)
+45@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 1277.87, -789.9062, 95.4531, 6, -1)
+Task.AchieveHeading(-1, 90.0)
+Task.ToggleDuck(-1, False)
+Task.StayInSamePlace(-1, True)
+Task.SetCharDecisionMaker(-1, 36@)
+Sequence.Close(45@)
+Char.PerformSequence(133@, 45@)
+Sequence.Clear(45@)
+135@(43@,4i) = 11
+goto @MANSIO1_11931
+
+:MANSIO1_11839
+45@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 1278.609, -783.3164, 95.4531, 6, -1)
+Task.AchieveHeading(-1, 95.0)
+Task.ToggleDuck(-1, True)
+Task.StayInSamePlace(-1, True)
+Task.SetCharDecisionMaker(-1, 36@)
+Sequence.Close(45@)
+Char.PerformSequence(134@, 45@)
+Sequence.Clear(45@)
+135@(43@,4i) = 11
+goto @MANSIO1_11931
+
+:MANSIO1_11931
+goto @MANSIO1_11965
+
+:MANSIO1_11938
+Char.MarkAsNoLongerNeeded(131@(43@,4i))
+168@ -= 1
+135@(43@,4i) = -1
+
+:MANSIO1_11965
+43@ += 1
+goto @MANSIO1_10829
+
+:MANSIO1_11979
+return 
+
+:MANSIO1_11981
+switch_start 43@ total_jumps 4 default_jump 0 @MANSIO1_12369 jumps 0 @MANSIO1_12044 1 @MANSIO1_12192 2 @MANSIO1_12044 3 @MANSIO1_12192 -1 @MANSIO1_12369 -1 @MANSIO1_12369 -1 @MANSIO1_12369
+
+:MANSIO1_12044
+if 
+  not Char.LocateOnFoot2D(131@(43@,4i), 0, 1585.293, -786.5728, 1.2, 1.2)
+goto_if_false @MANSIO1_12093
+goto @MANSIO1_12369
+
+:MANSIO1_12093
+if 
+  43@ == 2
+goto_if_false @MANSIO1_12152
+set_var_int_to_constant $load_sample = 23818
+set_var_text_label s$load_text = 'MAN1_DH'
+start_new_script @A_ALAP 2 100 131@(43@,4i) 
+
+:MANSIO1_12152
+Task.Jump(131@(43@,4i), True)
+160@(43@,4i) = 0
+135@(43@,4i) += 1
+goto @MANSIO1_12369
+
+:MANSIO1_12192
+if 
+  not Char.LocateOnFoot2D(131@(43@,4i), 0, 1585.323, -783.2303, 1.2, 1.2)
+goto_if_false @MANSIO1_12241
+goto @MANSIO1_12369
+
+:MANSIO1_12241
+if 
+  43@ == 1
+goto_if_false @MANSIO1_12288
+set_var_int_to_constant $load_sample = 23817
+set_var_text_label s$load_text = 'MAN1_DG'
+goto @MANSIO1_12310
+
+:MANSIO1_12288
+set_var_int_to_constant $load_sample = 23819
+set_var_text_label s$load_text = 'MAN1_DJ'
+
+:MANSIO1_12310
+start_new_script @A_ALAP 2 100 131@(43@,4i) 
+Task.Jump(131@(43@,4i), True)
+160@(43@,4i) = 0
+135@(43@,4i) += 1
+goto @MANSIO1_12369
+
+:MANSIO1_12369
+return 
+
+:MANSIO1_12371
+switch_start 43@ total_jumps 4 default_jump 0 @MANSIO1_12646 jumps 0 @MANSIO1_12434 1 @MANSIO1_12487 2 @MANSIO1_12540 3 @MANSIO1_12593 -1 @MANSIO1_12646 -1 @MANSIO1_12646 -1 @MANSIO1_12646
+
+:MANSIO1_12434
+StreamedScript.StartNew(1, -1, -29.0, 14.0, -3.0, -1.0, 5.25, 6.75, 1, 131@)
+StreamedScript.Stream(1)
+goto @MANSIO1_12646
+
+:MANSIO1_12487
+StreamedScript.StartNew(1, -1, -28.0, 14.0, -3.0, -1.0, 5.25, 6.75, 1, 132@)
+StreamedScript.Stream(1)
+goto @MANSIO1_12646
+
+:MANSIO1_12540
+StreamedScript.StartNew(1, -1, -27.0, 14.0, -3.0, -1.0, 5.25, 6.75, 1, 133@)
+StreamedScript.Stream(1)
+goto @MANSIO1_12646
+
+:MANSIO1_12593
+StreamedScript.StartNew(1, -1, -26.0, 14.0, -3.0, -1.0, 5.25, 6.75, 1, 134@)
+StreamedScript.Stream(1)
+goto @MANSIO1_12646
+
+:MANSIO1_12646
+return 
+
+:MANSIO1_12648
+43@ = 0
+
+:MANSIO1_12655
+if 
+  3 > 43@
+goto_if_false @MANSIO1_13334
+if 
+  not Char.IsDead(143@(43@,3i))
+goto_if_false @MANSIO1_13299
+switch_start 149@(43@,3i) total_jumps 6 default_jump 0 @MANSIO1_13292 jumps 0 @MANSIO1_12760 1 @MANSIO1_12899 2 @MANSIO1_12948 3 @MANSIO1_13016 4 @MANSIO1_13108 5 @MANSIO1_13200 -1 @MANSIO1_13292
+
+:MANSIO1_12760
+if 
+  164@(43@,3i) >= 35000
+goto_if_false @MANSIO1_12892
+if 
+  43@ == 0
+goto_if_false @MANSIO1_12881
+208@ = 0
+gosub @MANSIO1_17063
+if and
+  6 > 210@
+  210@ <> -1
+goto_if_false @MANSIO1_12865
+Text.PrintNow('MAN1_07', 8000, 1)
+goto @MANSIO1_12881
+
+:MANSIO1_12865
+Text.PrintNow('MAN1_08', 8000, 1)
+
+:MANSIO1_12881
+149@(43@,3i) += 1
+
+:MANSIO1_12892
+goto @MANSIO1_13292
+
+:MANSIO1_12899
+if 
+  Char.IsPlayingAnim(143@(43@,3i), "PARA_LAND")
+goto_if_false @MANSIO1_12941
+149@(43@,3i) += 1
+
+:MANSIO1_12941
+goto @MANSIO1_13292
+
+:MANSIO1_12948
+if 
+  not Char.IsPlayingAnim(143@(43@,3i), "PARA_LAND")
+goto_if_false @MANSIO1_13009
+169@ += 1
+set_lvar_int_to_lvar_int 149@(43@,3i) = 43@
+149@(43@,3i) += 3
+
+:MANSIO1_13009
+goto @MANSIO1_13292
+
+:MANSIO1_13016
+45@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 1279.681, -786.5801, 95.4531, 6, -1)
+Task.AchieveHeading(-1, 86.7391)
+Task.ToggleDuck(-1, False)
+Task.StayInSamePlace(-1, True)
+Task.SetCharDecisionMaker(-1, 36@)
+Sequence.Close(45@)
+Char.PerformSequence(143@, 45@)
+Sequence.Clear(45@)
+149@(43@,3i) = 6
+goto @MANSIO1_13292
+
+:MANSIO1_13108
+45@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 1289.565, -775.1545, 95.4476, 6, -1)
+Task.AchieveHeading(-1, 76.697)
+Task.ToggleDuck(-1, False)
+Task.StayInSamePlace(-1, True)
+Task.SetCharDecisionMaker(-1, 36@)
+Sequence.Close(45@)
+Char.PerformSequence(144@, 45@)
+Sequence.Clear(45@)
+149@(43@,3i) = 6
+goto @MANSIO1_13292
+
+:MANSIO1_13200
+45@ = Sequence.Open()
+Task.GoToCoordAnyMeans(-1, 1281.683, -779.4835, 95.4531, 6, -1)
+Task.AchieveHeading(-1, 84.4451)
+Task.ToggleDuck(-1, False)
+Task.StayInSamePlace(-1, True)
+Task.SetCharDecisionMaker(-1, 36@)
+Sequence.Close(45@)
+Char.PerformSequence(145@, 45@)
+Sequence.Clear(45@)
+149@(43@,3i) = 6
+goto @MANSIO1_13292
+
+:MANSIO1_13292
+goto @MANSIO1_13320
+
+:MANSIO1_13299
+52@ = 1
+set_lvar_text_label 53@s = 'MAN1_11'
+
+:MANSIO1_13320
+43@ += 1
+goto @MANSIO1_12655
+
+:MANSIO1_13334
+return 
+
+:MANSIO1_13336
+43@ = 0
+
+:MANSIO1_13343
+if 
+  3 > 43@
+goto_if_false @MANSIO1_13438
+if 
+  not Char.IsDead(143@(43@,3i))
+goto_if_false @MANSIO1_13424
+Char.ClearTasksImmediately(143@(43@,3i))
+Task.StayInSamePlace(143@(43@,3i), False)
+Group.SetMember(143@(43@,3i), 44@)
+Char.SetNeverLeavesGroup(143@(43@,3i), True)
+
+:MANSIO1_13424
+43@ += 1
+goto @MANSIO1_13343
+
+:MANSIO1_13438
+return 
+
+:MANSIO1_13440
+43@ = 0
+
+:MANSIO1_13447
+if 
+  3 > 43@
+goto_if_false @MANSIO1_13528
+if 
+  not Char.IsDead(143@(43@,3i))
+goto_if_false @MANSIO1_13514
+Char.ClearTasks(143@(43@,3i))
+Task.StayInSamePlace(143@(43@,3i), False)
+Char.RemoveFromGroup(143@(43@,3i))
+
+:MANSIO1_13514
+43@ += 1
+goto @MANSIO1_13447
+
+:MANSIO1_13528
+return 
+
+:MANSIO1_13530
+170@ = Char.Create(25, 108, 1268.069, -783.494, 94.961)
+Char.SetHeading(170@, 275.8136)
+Char.SetHealth(170@, 200)
+Char.SetMaxHealth(170@, 200)
+Char.SetDecisionMaker(170@, 34@)
+Char.GiveWeapon(170@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(170@, WeaponType.Mp5)
+Char.SetProofs(170@, True, False, False, False, False)
+Char.SetIsTargetPriority(170@, True)
+Char.SetSignalAfterKill(170@, False)
+176@ = -2
+171@ = Char.Create(25, 109, 1271.156, -780.8453, 94.9663)
+Char.SetHeading(171@, 254.8986)
+Char.SetHealth(171@, 200)
+Char.SetMaxHealth(171@, 200)
+Char.SetDecisionMaker(171@, 34@)
+Char.GiveWeapon(171@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(171@, WeaponType.Mp5)
+Char.SetProofs(171@, True, False, False, False, False)
+Char.SetIsTargetPriority(171@, True)
+Char.SetSignalAfterKill(171@, False)
+177@ = -2
+172@ = Char.Create(25, 108, 1267.737, -777.1963, 94.9577)
+Char.SetHeading(172@, 302.1641)
+Char.SetHealth(172@, 200)
+Char.SetMaxHealth(172@, 200)
+Char.SetDecisionMaker(172@, 34@)
+Char.GiveWeapon(172@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(172@, WeaponType.Mp5)
+Char.SetIsTargetPriority(172@, True)
+Char.SetSignalAfterKill(172@, False)
+178@ = -2
+173@ = Char.Create(25, 109, 1272.534, -774.9141, 94.9466)
+Char.SetHeading(173@, 249.014)
+Char.SetHealth(173@, 200)
+Char.SetMaxHealth(173@, 200)
+Char.SetDecisionMaker(173@, 34@)
+Char.GiveWeapon(173@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(173@, WeaponType.Mp5)
+Char.SetIsTargetPriority(173@, True)
+Char.SetSignalAfterKill(173@, False)
+179@ = -2
+if 
+  2 > 157@
+goto_if_false @MANSIO1_14022
+Char.SetProofs(170@, True, False, False, False, False)
+Char.SetProofs(171@, True, False, False, False, False)
+Char.SetProofs(172@, True, False, False, False, False)
+Char.SetProofs(173@, True, False, False, False, False)
+
+:MANSIO1_14022
+TIMERB = 3000
+206@ = 1
+return 
+
+:MANSIO1_14039
+if 
+  not Char.IsDead(170@)
+goto_if_false @MANSIO1_14078
+Char.SetDecisionMaker(170@, 36@)
+Char.SetProofs(170@, False, False, False, False, False)
+
+:MANSIO1_14078
+if 
+  not Char.IsDead(171@)
+goto_if_false @MANSIO1_14117
+Char.SetDecisionMaker(171@, 36@)
+Char.SetProofs(171@, False, False, False, False, False)
+
+:MANSIO1_14117
+if 
+  not Char.IsDead(172@)
+goto_if_false @MANSIO1_14156
+Char.SetDecisionMaker(172@, 36@)
+Char.SetProofs(172@, False, False, False, False, False)
+
+:MANSIO1_14156
+if 
+  not Char.IsDead(173@)
+goto_if_false @MANSIO1_14195
+Char.SetDecisionMaker(173@, 36@)
+Char.SetProofs(173@, False, False, False, False, False)
+
+:MANSIO1_14195
+return 
+
+:MANSIO1_14197
+43@ = 0
+
+:MANSIO1_14204
+if 
+  4 > 43@
+goto_if_false @MANSIO1_15096
+if 
+  not Char.IsDead(170@(43@,6i))
+goto_if_false @MANSIO1_14449
+switch_start 176@(43@,6i) total_jumps 3 default_jump 0 @MANSIO1_14442 jumps 0 @MANSIO1_14309 1 @MANSIO1_14358 2 @MANSIO1_14406 -1 @MANSIO1_14442 -1 @MANSIO1_14442 -1 @MANSIO1_14442 -1 @MANSIO1_14442
+
+:MANSIO1_14309
+if 
+  188@(43@,6i) > 100
+goto_if_false @MANSIO1_14351
+Object.Delete(194@(43@,6i))
+176@(43@,6i) += 1
+
+:MANSIO1_14351
+goto @MANSIO1_14442
+
+:MANSIO1_14358
+46@ = Char.GetSequenceProgress(170@(43@,6i))
+if 
+  46@ >= 2
+goto_if_false @MANSIO1_14399
+176@(43@,6i) += 1
+
+:MANSIO1_14399
+goto @MANSIO1_14442
+
+:MANSIO1_14406
+$x, $y, $z = Char.GetCoordinates(170@(43@,6i))
+176@(43@,6i) += 1
+goto @MANSIO1_14442
+
+:MANSIO1_14442
+goto @MANSIO1_15082
+
+:MANSIO1_14449
+if 
+  176@(43@,6i) <> -1
+goto_if_false @MANSIO1_14500
+188@(43@,6i) = 0
+176@(43@,6i) = -1
+goto @MANSIO1_15082
+
+:MANSIO1_14500
+if 
+  188@(43@,6i) > 2000
+goto_if_false @MANSIO1_15082
+Char.RemoveElegantly(170@(43@,6i))
+if 
+  3 > 206@
+goto_if_false @MANSIO1_15082
+208@ = 0
+gosub @MANSIO1_17063
+if or
+  210@ <> -1
+  212@ <> 0
+goto_if_false @MANSIO1_15082
+set_lvar_int_to_lvar_int 205@ = 43@
+if 
+  210@ == -1
+goto_if_false @MANSIO1_14647
+if 
+  212@ <> 0
+goto_if_false @MANSIO1_14640
+gosub @MANSIO1_15445
+
+:MANSIO1_14640
+goto @MANSIO1_14654
+
+:MANSIO1_14647
+gosub @MANSIO1_15098
+
+:MANSIO1_14654
+194@(43@,6i) = Object.Create(#CARDBOARDBOX2, 200@, 201@, 93.0)
+Object.SetDynamic(194@(43@,6i), False)
+Object.SetVisible(194@(43@,6i), False)
+Object.FreezePosition(194@(43@,6i), True)
+170@(43@,6i) = Char.Create(25, 182@(43@,6i), 200@, 201@, 202@)
+Char.SetIsTargetPriority(170@(43@,6i), True)
+Char.SetHealth(170@(43@,6i), 200)
+Char.SetMaxHealth(170@(43@,6i), 200)
+Char.SetHeading(170@(43@,6i), 203@)
+Char.SetDecisionMaker(170@(43@,6i), 34@)
+Char.GiveWeapon(170@(43@,6i), WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(170@(43@,6i), WeaponType.Mp5)
+Char.SetAccuracy(170@(43@,6i), 70)
+Char.SetShootRate(170@(43@,6i), 55)
+Char.SetSignalAfterKill(170@(43@,6i), False)
+if 
+  4 > 43@
+goto_if_false @MANSIO1_15082
+if or
+  210@ <> -1
+  212@ > 0
+goto_if_false @MANSIO1_15030
+$x = Char.GetOffsetInWorldCoords($y, $z, 170@(43@,6i), 0.0, 3.5, 0.0)
+45@ = Sequence.Open()
+Task.Climb(-1, True)
+Task.ToggleDuck(-1, True)
+Task.GoToCoordAnyMeans(-1, $x, $y, 94.95, 6, -1)
+Task.StayInSamePlace(-1, False)
+Task.SetCharDecisionMaker(-1, 36@)
+Sequence.Close(45@)
+Char.PerformSequence(170@(43@,6i), 45@)
+Sequence.Clear(45@)
+188@(43@,6i) = 0
+176@(43@,6i) = 0
+goto @MANSIO1_15075
+
+:MANSIO1_15030
+Task.StayInSamePlace(170@(43@,6i), True)
+Task.SetCharDecisionMaker(170@(43@,6i), 36@)
+188@(43@,6i) = 0
+176@(43@,6i) = 3
+
+:MANSIO1_15075
+goto @MANSIO1_15082
+
+:MANSIO1_15082
+43@ += 1
+goto @MANSIO1_14204
+
+:MANSIO1_15096
+return 
+
+:MANSIO1_15098
+switch_start 210@ total_jumps 11 default_jump 1 @MANSIO1_15347 jumps 0 @MANSIO1_15226 1 @MANSIO1_15242 2 @MANSIO1_15258 3 @MANSIO1_15274 4 @MANSIO1_15290 5 @MANSIO1_15306 6 @MANSIO1_15274
+switch_continued 7 @MANSIO1_15290 8 @MANSIO1_15306 9 @MANSIO1_15258 10 @MANSIO1_15242 -1 @MANSIO1_15361 -1 @MANSIO1_15361 -1 @MANSIO1_15361 -1 @MANSIO1_15361 -1 @MANSIO1_15361
+
+:MANSIO1_15226
+204@ = Math.RandomIntInRange(0, 5)
+goto @MANSIO1_15361
+
+:MANSIO1_15242
+204@ = Math.RandomIntInRange(2, 5)
+goto @MANSIO1_15361
+
+:MANSIO1_15258
+204@ = Math.RandomIntInRange(3, 5)
+goto @MANSIO1_15361
+
+:MANSIO1_15274
+204@ = Math.RandomIntInRange(0, 3)
+goto @MANSIO1_15361
+
+:MANSIO1_15290
+204@ = Math.RandomIntInRange(0, 2)
+goto @MANSIO1_15361
+
+:MANSIO1_15306
+204@ = Math.RandomIntInRange(0, 4)
+if 
+  204@ > 1
+goto_if_false @MANSIO1_15340
+204@ += 1
+
+:MANSIO1_15340
+goto @MANSIO1_15361
+
+:MANSIO1_15347
+204@ = 5
+goto @MANSIO1_15361
+
+:MANSIO1_15361
+if 
+  5 > 204@
+goto_if_false @MANSIO1_15411
+205@ *= 5
+add_int_lvar_to_int_lvar 204@ += 205@
+202@ = 94.0
+goto @MANSIO1_15436
+
+:MANSIO1_15411
+204@ *= 4
+add_int_lvar_to_int_lvar 204@ += 205@
+202@ = 95.0
+
+:MANSIO1_15436
+gosub @MANSIO1_15686
+return 
+
+:MANSIO1_15445
+switch_start 212@ total_jumps 6 default_jump 0 @MANSIO1_15602 jumps -1 @MANSIO1_15588 1 @MANSIO1_15508 2 @MANSIO1_15524 3 @MANSIO1_15540 4 @MANSIO1_15556 5 @MANSIO1_15572 -1 @MANSIO1_15602
+
+:MANSIO1_15508
+204@ = Math.RandomIntInRange(0, 5)
+goto @MANSIO1_15602
+
+:MANSIO1_15524
+204@ = Math.RandomIntInRange(3, 5)
+goto @MANSIO1_15602
+
+:MANSIO1_15540
+204@ = Math.RandomIntInRange(2, 5)
+goto @MANSIO1_15602
+
+:MANSIO1_15556
+204@ = Math.RandomIntInRange(0, 2)
+goto @MANSIO1_15602
+
+:MANSIO1_15572
+204@ = Math.RandomIntInRange(0, 3)
+goto @MANSIO1_15602
+
+:MANSIO1_15588
+204@ = 5
+goto @MANSIO1_15602
+
+:MANSIO1_15602
+if 
+  5 > 204@
+goto_if_false @MANSIO1_15652
+205@ *= 5
+add_int_lvar_to_int_lvar 204@ += 205@
+202@ = 94.0
+goto @MANSIO1_15677
+
+:MANSIO1_15652
+204@ *= 4
+add_int_lvar_to_int_lvar 204@ += 205@
+202@ = 95.0
+
+:MANSIO1_15677
+gosub @MANSIO1_15686
+return 
+
+:MANSIO1_15686
+switch_start 204@ total_jumps 24 default_jump 0 @MANSIO1_16767 jumps 0 @MANSIO1_15879 1 @MANSIO1_15916 2 @MANSIO1_15953 3 @MANSIO1_15990 4 @MANSIO1_16027 5 @MANSIO1_16064 6 @MANSIO1_16101
+switch_continued 7 @MANSIO1_16138 8 @MANSIO1_16175 9 @MANSIO1_16212 10 @MANSIO1_16249 11 @MANSIO1_16286 12 @MANSIO1_16323 13 @MANSIO1_16360 14 @MANSIO1_16397 15 @MANSIO1_16434
+switch_continued 16 @MANSIO1_16471 17 @MANSIO1_16508 18 @MANSIO1_16545 19 @MANSIO1_16582 20 @MANSIO1_16619 21 @MANSIO1_16656 22 @MANSIO1_16693 23 @MANSIO1_16730 -1 @MANSIO1_16767
+
+:MANSIO1_15879
+200@ = 1262.0
+201@ = -770.5
+203@ = 180.0
+goto @MANSIO1_16767
+
+:MANSIO1_15916
+200@ = 1266.0
+201@ = -770.5
+203@ = 180.0
+goto @MANSIO1_16767
+
+:MANSIO1_15953
+200@ = 1257.0
+201@ = -784.0
+203@ = 270.0
+goto @MANSIO1_16767
+
+:MANSIO1_15990
+200@ = 1269.0
+201@ = -789.5
+203@ = 0.0
+goto @MANSIO1_16767
+
+:MANSIO1_16027
+200@ = 1265.0
+201@ = -789.5
+203@ = 0.0
+goto @MANSIO1_16767
+
+:MANSIO1_16064
+200@ = 1267.0
+201@ = -770.5
+203@ = 180.0
+goto @MANSIO1_16767
+
+:MANSIO1_16101
+200@ = 1263.0
+201@ = -770.5
+203@ = 180.0
+goto @MANSIO1_16767
+
+:MANSIO1_16138
+200@ = 1257.0
+201@ = -781.0
+203@ = 270.0
+goto @MANSIO1_16767
+
+:MANSIO1_16175
+200@ = 1264.0
+201@ = -789.5
+203@ = 0.0
+goto @MANSIO1_16767
+
+:MANSIO1_16212
+200@ = 1268.0
+201@ = -789.5
+203@ = 0.0
+goto @MANSIO1_16767
+
+:MANSIO1_16249
+200@ = 1264.0
+201@ = -770.5
+203@ = 180.0
+goto @MANSIO1_16767
+
+:MANSIO1_16286
+200@ = 1268.0
+201@ = -770.5
+203@ = 180.0
+goto @MANSIO1_16767
+
+:MANSIO1_16323
+200@ = 1257.0
+201@ = -778.0
+203@ = 270.0
+goto @MANSIO1_16767
+
+:MANSIO1_16360
+200@ = 1267.0
+201@ = -789.5
+203@ = 0.0
+goto @MANSIO1_16767
+
+:MANSIO1_16397
+200@ = 1263.0
+201@ = -789.5
+203@ = 0.0
+goto @MANSIO1_16767
+
+:MANSIO1_16434
+200@ = 1269.0
+201@ = -770.5
+203@ = 180.0
+goto @MANSIO1_16767
+
+:MANSIO1_16471
+200@ = 1265.0
+201@ = -770.5
+203@ = 180.0
+goto @MANSIO1_16767
+
+:MANSIO1_16508
+200@ = 1257.0
+201@ = -775.0
+203@ = 270.0
+goto @MANSIO1_16767
+
+:MANSIO1_16545
+200@ = 1262.0
+201@ = -789.5
+203@ = 0.0
+goto @MANSIO1_16767
+
+:MANSIO1_16582
+200@ = 1266.0
+201@ = -789.5
+203@ = 0.0
+goto @MANSIO1_16767
+
+:MANSIO1_16619
+200@ = 1268.069
+201@ = -783.494
+203@ = 270.0
+goto @MANSIO1_16767
+
+:MANSIO1_16656
+200@ = 1271.156
+201@ = -780.8453
+203@ = 270.0
+goto @MANSIO1_16767
+
+:MANSIO1_16693
+200@ = 1267.737
+201@ = -777.1963
+203@ = 270.0
+goto @MANSIO1_16767
+
+:MANSIO1_16730
+200@ = 1272.534
+201@ = -774.9141
+203@ = 270.0
+goto @MANSIO1_16767
+
+:MANSIO1_16767
+return 
+
+:MANSIO1_16769
+if 
+  TIMERB > 700
+goto_if_false @MANSIO1_17061
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+$distance = Math.GetDistanceBetweenCoords2D(1269.668, -778.8566, $player_x, $player_y)
+if and
+  $player_z > 105.0
+  $distance > 65.0
+  130.0 > $distance
+goto_if_false @MANSIO1_17043
+$x = Math.RandomFloatInRange(-6.0, 6.1)
+if 
+  $x > 0.0
+goto_if_false @MANSIO1_16917
+$x += 1.5
+goto @MANSIO1_16927
+
+:MANSIO1_16917
+$x -= 1.5
+
+:MANSIO1_16927
+$z = Math.RandomFloatInRange(-6.0, 6.1)
+if 
+  $z > 0.0
+goto_if_false @MANSIO1_16980
+$z += 1.5
+goto @MANSIO1_16990
+
+:MANSIO1_16980
+$z -= 1.5
+
+:MANSIO1_16990
+$player_x = Char.GetOffsetInWorldCoords($player_y, $player_z, $scplayer, $x, -10.0, $z)
+World.FireSingleBullet(1269.668, -778.8566, 94.9557, $player_x, $player_y, $player_z, 0)
+
+:MANSIO1_17043
+204@ = Math.RandomIntInRange(100, 401)
+set_lvar_int_to_lvar_int TIMERB = 204@
+
+:MANSIO1_17061
+return 
+
+:MANSIO1_17063
+if 
+  208@ == 0
+goto_if_false @MANSIO1_17143
+if 
+  211@ == 0
+goto_if_false @MANSIO1_17134
+210@ = -1
+212@ = 0
+215@, 216@, 217@ = Char.GetCoordinates($scplayer)
+goto @MANSIO1_17136
+
+:MANSIO1_17134
+return 
+
+:MANSIO1_17136
+goto @MANSIO1_17168
+
+:MANSIO1_17143
+213@ = -1
+215@, 216@, 217@ = Char.GetCoordinates(170@(214@,6i))
+
+:MANSIO1_17168
+if 
+  217@ > 94.5
+goto_if_false @MANSIO1_17203
+209@ = 0
+goto @MANSIO1_17280
+
+:MANSIO1_17203
+if 
+  217@ > 90.5
+goto_if_false @MANSIO1_17238
+209@ = 1
+goto @MANSIO1_17280
+
+:MANSIO1_17238
+if 
+  217@ > 86.0
+goto_if_false @MANSIO1_17273
+209@ = 2
+goto @MANSIO1_17280
+
+:MANSIO1_17273
+209@ = 3
+
+:MANSIO1_17280
+switch_start 209@ total_jumps 4 default_jump 0 @MANSIO1_18429 jumps 0 @MANSIO1_17343 1 @MANSIO1_17597 2 @MANSIO1_17816 3 @MANSIO1_18175 -1 @MANSIO1_18429 -1 @MANSIO1_18429 -1 @MANSIO1_18429
+
+:MANSIO1_17343
+if and
+  216@ > -802.2
+  -766.75 > 216@
+  215@ > 1257.9
+  1304.4 > 215@
+goto_if_false @MANSIO1_17583
+if 
+  216@ > -774.2
+goto_if_false @MANSIO1_17464
+if 
+  1262.7 > 215@
+goto_if_false @MANSIO1_17450
+207@ = 2
+goto @MANSIO1_17457
+
+:MANSIO1_17450
+207@ = 1
+
+:MANSIO1_17457
+goto @MANSIO1_17576
+
+:MANSIO1_17464
+if 
+  -785.85 > 216@
+goto_if_false @MANSIO1_17534
+if 
+  1262.7 > 215@
+goto_if_false @MANSIO1_17520
+207@ = 4
+goto @MANSIO1_17527
+
+:MANSIO1_17520
+207@ = 3
+
+:MANSIO1_17527
+goto @MANSIO1_17576
+
+:MANSIO1_17534
+if 
+  1262.7 > 215@
+goto_if_false @MANSIO1_17569
+207@ = 5
+goto @MANSIO1_17576
+
+:MANSIO1_17569
+207@ = 0
+
+:MANSIO1_17576
+goto @MANSIO1_17590
+
+:MANSIO1_17583
+207@ = -1
+
+:MANSIO1_17590
+goto @MANSIO1_18429
+
+:MANSIO1_17597
+if and
+  216@ > -793.0
+  -767.6 > 216@
+  215@ > 1251.4
+  1295.7 > 215@
+goto_if_false @MANSIO1_17802
+if 
+  216@ > -776.25
+goto_if_false @MANSIO1_17718
+if 
+  1265.9 > 215@
+goto_if_false @MANSIO1_17704
+207@ = 9
+goto @MANSIO1_17711
+
+:MANSIO1_17704
+207@ = 10
+
+:MANSIO1_17711
+goto @MANSIO1_17795
+
+:MANSIO1_17718
+if 
+  -783.5 > 216@
+goto_if_false @MANSIO1_17788
+if 
+  1265.9 > 215@
+goto_if_false @MANSIO1_17774
+207@ = 7
+goto @MANSIO1_17781
+
+:MANSIO1_17774
+207@ = 6
+
+:MANSIO1_17781
+goto @MANSIO1_17795
+
+:MANSIO1_17788
+207@ = 8
+
+:MANSIO1_17795
+goto @MANSIO1_17809
+
+:MANSIO1_17802
+207@ = -1
+
+:MANSIO1_17809
+goto @MANSIO1_18429
+
+:MANSIO1_17816
+if and
+  216@ > -814.0
+  -785.0 > 216@
+  215@ > 1251.8
+  1303.5 > 215@
+goto_if_false @MANSIO1_18161
+if 
+  216@ > -793.6
+goto_if_false @MANSIO1_17972
+if 
+  215@ > 1298.8
+goto_if_false @MANSIO1_17923
+207@ = 13
+goto @MANSIO1_17965
+
+:MANSIO1_17923
+if 
+  215@ > 1259.4
+goto_if_false @MANSIO1_17958
+207@ = 12
+goto @MANSIO1_17965
+
+:MANSIO1_17958
+207@ = 11
+
+:MANSIO1_17965
+goto @MANSIO1_18154
+
+:MANSIO1_17972
+if 
+  216@ > -807.1
+goto_if_false @MANSIO1_18077
+if 
+  215@ > 1298.8
+goto_if_false @MANSIO1_18028
+207@ = 16
+goto @MANSIO1_18070
+
+:MANSIO1_18028
+if 
+  215@ > 1259.4
+goto_if_false @MANSIO1_18063
+207@ = 15
+goto @MANSIO1_18070
+
+:MANSIO1_18063
+207@ = 14
+
+:MANSIO1_18070
+goto @MANSIO1_18154
+
+:MANSIO1_18077
+if 
+  215@ > 1298.8
+goto_if_false @MANSIO1_18112
+207@ = 19
+goto @MANSIO1_18154
+
+:MANSIO1_18112
+if 
+  215@ > 1259.4
+goto_if_false @MANSIO1_18147
+207@ = 18
+goto @MANSIO1_18154
+
+:MANSIO1_18147
+207@ = 17
+
+:MANSIO1_18154
+goto @MANSIO1_18168
+
+:MANSIO1_18161
+207@ = -1
+
+:MANSIO1_18168
+goto @MANSIO1_18429
+
+:MANSIO1_18175
+if and
+  216@ > -834.35
+  -787.3 > 216@
+  215@ > 1239.9
+  1308.4 > 215@
+goto_if_false @MANSIO1_18415
+if 
+  -804.2511 > 216@
+goto_if_false @MANSIO1_18331
+if 
+  1254.75 > 215@
+goto_if_false @MANSIO1_18282
+207@ = 23
+goto @MANSIO1_18324
+
+:MANSIO1_18282
+if 
+  1298.6 > 215@
+goto_if_false @MANSIO1_18317
+207@ = 24
+goto @MANSIO1_18324
+
+:MANSIO1_18317
+207@ = 25
+
+:MANSIO1_18324
+goto @MANSIO1_18408
+
+:MANSIO1_18331
+if 
+  1254.75 > 215@
+goto_if_false @MANSIO1_18366
+207@ = 20
+goto @MANSIO1_18408
+
+:MANSIO1_18366
+if 
+  1298.6 > 215@
+goto_if_false @MANSIO1_18401
+207@ = 21
+goto @MANSIO1_18408
+
+:MANSIO1_18401
+207@ = 22
+
+:MANSIO1_18408
+goto @MANSIO1_18422
+
+:MANSIO1_18415
+207@ = -1
+
+:MANSIO1_18422
+goto @MANSIO1_18429
+
+:MANSIO1_18429
+if 
+  207@ == -1
+goto_if_false @MANSIO1_18573
+if 
+  217@ > 91.5
+goto_if_false @MANSIO1_18566
+212@ = 0
+if 
+  215@ > 1279.351
+goto_if_false @MANSIO1_18503
+212@ += 1
+
+:MANSIO1_18503
+if 
+  216@ > -766.75
+goto_if_false @MANSIO1_18531
+212@ += 2
+
+:MANSIO1_18531
+if 
+  -802.2 > 216@
+goto_if_false @MANSIO1_18559
+212@ += 4
+
+:MANSIO1_18559
+goto @MANSIO1_18573
+
+:MANSIO1_18566
+212@ = -1
+
+:MANSIO1_18573
+if 
+  208@ == 0
+goto_if_false @MANSIO1_18613
+set_lvar_int_to_lvar_int 210@ = 207@
+211@ = 1
+goto @MANSIO1_18621
+
+:MANSIO1_18613
+set_lvar_int_to_lvar_int 213@ = 207@
+
+:MANSIO1_18621
+return 
+
+:MANSIO1_18623
+switch_start 218@ total_jumps 1 default_jump 0 @MANSIO1_18754 jumps 1 @MANSIO1_18686 -1 @MANSIO1_18754 -1 @MANSIO1_18754 -1 @MANSIO1_18754 -1 @MANSIO1_18754 -1 @MANSIO1_18754 -1 @MANSIO1_18754
+
+:MANSIO1_18686
+if 
+  190.0 > 115@
+goto_if_false @MANSIO1_18747
+115@ += 0.34
+114@ -= 0.006
+118@ += 0.01
+116@ += 0.01
+
+:MANSIO1_18747
+goto @MANSIO1_18754
+
+:MANSIO1_18754
+122@ = Math.Cos(115@)
+123@ = Math.Sin(115@)
+set_lvar_float_to_lvar_float 120@ = 116@
+mult_float_lvar_by_float_lvar 120@ *= 122@
+set_lvar_float_to_lvar_float 121@ = 116@
+mult_float_lvar_by_float_lvar 121@ *= 123@
+set_lvar_float_to_lvar_float 112@ = 117@
+add_float_lvar_to_float_lvar 112@ += 120@
+set_lvar_float_to_lvar_float 113@ = 118@
+add_float_lvar_to_float_lvar 113@ += 121@
+Camera.SetFixedPosition(112@, 113@, 114@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(117@, 118@, 119@, SwitchType.JumpCut)
+return 
+
+:MANSIO1_18875
+switch_start 219@ total_jumps 2 default_jump 0 @MANSIO1_19024 jumps 0 @MANSIO1_18938 1 @MANSIO1_18953 -1 @MANSIO1_19024 -1 @MANSIO1_19024 -1 @MANSIO1_19024 -1 @MANSIO1_19024 -1 @MANSIO1_19024
+
+:MANSIO1_18938
+Audio.ReportMissionAudioEventAtObject(128@, 1108)
+219@ += 1
+
+:MANSIO1_18953
+if 
+  220@ > -20.0
+goto_if_false @MANSIO1_19009
+220@ += -0.1
+Object.SetRotation(128@, 220@, 0.0, 90.0)
+goto @MANSIO1_19024
+
+:MANSIO1_19009
+Audio.ReportMissionAudioEventAtObject(128@, 1109)
+219@ += 1
+
+:MANSIO1_19024
+return 
+switch_start 221@ total_jumps 3 default_jump 0 @MANSIO1_19272 jumps 0 @MANSIO1_19089 1 @MANSIO1_19152 2 @MANSIO1_19261 -1 @MANSIO1_19272 -1 @MANSIO1_19272 -1 @MANSIO1_19272 -1 @MANSIO1_19272
+
+:MANSIO1_19089
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar TIMERB >= 222@
+goto_if_false @MANSIO1_19140
+223@ = Math.RandomIntInRange(4000, 6001)
+TIMERB = 0
+221@ += 1
+goto @MANSIO1_19145
+
+:MANSIO1_19140
+Camera.Shake(224@)
+
+:MANSIO1_19145
+goto @MANSIO1_19272
+
+:MANSIO1_19152
+if 
+  is_int_lvar_greater_or_equal_to_int_lvar TIMERB >= 223@
+goto_if_false @MANSIO1_19250
+224@ = Math.RandomIntInRange(40, 51)
+Camera.Shake(224@)
+222@ = Math.RandomIntInRange(2500, 5001)
+set_lvar_int_to_lvar_int 225@ = 224@
+225@ *= 2
+225@ += 150
+Pad.Shake(PadId.Pad1, 222@, 225@)
+TIMERB = 0
+221@ -= 1
+goto @MANSIO1_19254
+
+:MANSIO1_19250
+Camera.Shake(5)
+
+:MANSIO1_19254
+goto @MANSIO1_19272
+
+:MANSIO1_19261
+Camera.Shake(20)
+goto @MANSIO1_19272
+
+:MANSIO1_19272
+return 
+
+:MANSIO1_19274
+Particle.Kill(124@)
+Particle.Kill(125@)
+Particle.Kill(126@)
+Blip.Remove(47@)
+Blip.Remove(146@)
+Blip.Remove(147@)
+Blip.Remove(148@)
+Pickup.Remove(51@)
+43@ = 0
+
+:MANSIO1_19321
+if 
+  4 > 43@
+goto_if_false @MANSIO1_19380
+Char.MarkAsNoLongerNeeded(99@(43@,4i))
+Char.MarkAsNoLongerNeeded(131@(43@,4i))
+Char.MarkAsNoLongerNeeded(170@(43@,6i))
+43@ += 1
+goto @MANSIO1_19321
+
+:MANSIO1_19380
+Char.MarkAsNoLongerNeeded(159@)
+Streaming.MarkModelAsNoLongerNeeded(#PARACHUTE)
+Streaming.MarkModelAsNoLongerNeeded(#PARA_PACK)
+Streaming.MarkModelAsNoLongerNeeded(371)
+Streaming.RemoveAnimation("PARACHUTE")
+Streaming.MarkModelAsNoLongerNeeded(#CARGO_REAR)
+Streaming.MarkModelAsNoLongerNeeded(#D9_RAMP)
+Streaming.MarkModelAsNoLongerNeeded(#CARDBOARDBOX2)
+Streaming.MarkModelAsNoLongerNeeded(330)
+return 
+
+:MANSIO1_19435
+gosub @MANSIO1_13440
+gosub @MANSIO1_19274
+DecisionMaker.Remove(39@)
+World.DisableAllEntryExits(True)
+Streaming.LoadScene(1267.429, -781.5715, 1090.891)
+38@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
+DecisionMakerChar.AddEventResponse(38@, 9, 911, 0.0, 100.0, 100.0, 0.0, False, True)
+DecisionMakerChar.AddEventResponse(38@, 15, 415, 0.0, 100.0, 100.0, 0.0, False, True)
+DecisionMakerChar.AddEventResponse(38@, 31, 413, 0.0, 100.0, 0.0, 0.0, False, True)
+Streaming.RequestModel(110)
+Streaming.RequestModel(13)
+Streaming.RequestModel(195)
+
+:MANSIO1_19597
+if or
+  not Streaming.HasModelLoaded(110)
+  not Streaming.HasModelLoaded(13)
+  not Streaming.HasModelLoaded(195)
+goto_if_false @MANSIO1_19632
+wait 0
+goto @MANSIO1_19597
+
+:MANSIO1_19632
+51@ = Pickup.Create(#HEALTH, 3, 1278.88, -810.5082, 1086.0)
+Camera.SetFixedPosition(1266.807, -782.0668, 1092.602, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1267.786, -781.8895, 1092.5, SwitchType.JumpCut)
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Char.SetCoordinates($scplayer, 1267.785, -781.2607, 1090.898)
+Char.SetHeading($scplayer, 185.363)
+157@ = 0
+if 
+  not Char.IsDead(143@)
+goto_if_false @MANSIO1_19804
+Char.SetCoordinates(143@, 1263.087, -782.9864, 1090.898)
+Blip.Remove(146@)
+goto @MANSIO1_19852
+
+:MANSIO1_19804
+143@ = Char.Create(24, 117, 1263.087, -782.9864, 1090.898)
+Char.GiveWeapon(143@, WeaponType.M4, 30000)
+Char.SetCurrentWeapon(143@, WeaponType.M4)
+Char.SetNeverTargeted(143@, True)
+
+:MANSIO1_19852
+Char.SetHeading(143@, 269.9343)
+Char.SetHealth(143@, 300)
+Char.SetAreaVisible(143@, 5)
+Char.SetDecisionMaker(143@, 34@)
+Char.SetSignalAfterKill(143@, False)
+Char.SetAccuracy(143@, 75)
+Char.SetShootRate(143@, 60)
+set_lvar_int_to_constant 428@ = 117
+149@ = 0
+if 
+  not Char.IsDead(144@)
+goto_if_false @MANSIO1_19968
+Char.SetCoordinates(144@, 1261.967, -778.3527, 1090.898)
+Blip.Remove(147@)
+goto @MANSIO1_20016
+
+:MANSIO1_19968
+144@ = Char.Create(24, 118, 1261.967, -778.3527, 1090.898)
+Char.GiveWeapon(144@, WeaponType.M4, 30000)
+Char.SetCurrentWeapon(144@, WeaponType.M4)
+Char.SetNeverTargeted(144@, True)
+
+:MANSIO1_20016
+Char.SetHeading(144@, 258.1764)
+Char.SetHealth(144@, 300)
+Char.SetAreaVisible(144@, 5)
+Char.SetDecisionMaker(144@, 34@)
+Char.SetSignalAfterKill(144@, False)
+Char.SetAccuracy(144@, 75)
+Char.SetShootRate(144@, 60)
+150@ = 1
+set_lvar_int_to_constant 429@ = 118
+if 
+  not Char.IsDead(145@)
+goto_if_false @MANSIO1_20132
+Char.SetCoordinates(145@, 1267.936, -782.3963, 1090.938)
+Blip.Remove(148@)
+goto @MANSIO1_20180
+
+:MANSIO1_20132
+145@ = Char.Create(24, 118, 1267.936, -782.3963, 1090.938)
+Char.GiveWeapon(145@, WeaponType.M4, 30000)
+Char.SetCurrentWeapon(145@, WeaponType.M4)
+Char.SetNeverTargeted(145@, True)
+
+:MANSIO1_20180
+Char.SetHeading(145@, 7.0205)
+Char.SetHealth(145@, 300)
+Char.SetAreaVisible(145@, 5)
+Char.SetDecisionMaker(145@, 34@)
+43@ = 0
+
+:MANSIO1_20220
+if 
+  20 > 43@
+goto_if_false @MANSIO1_20263
+246@(43@,20i) = -2
+43@ += 1
+goto @MANSIO1_20220
+
+:MANSIO1_20263
+43@ = 0
+
+:MANSIO1_20270
+if 
+  10 > 43@
+goto_if_false @MANSIO1_20313
+296@(43@,10i) = -2
+43@ += 1
+goto @MANSIO1_20270
+
+:MANSIO1_20313
+320@ = -2
+321@ = -2
+322@ = -2
+323@ = -2
+346@ = 1282.481
+362@ = -783.0235
+378@ = 1088.93
+394@ = 178.1922
+347@ = 1283.504
+363@ = -782.3303
+379@ = 1088.93
+395@ = 179.0122
+344@ = 2
+348@ = 1280.705
+364@ = -789.9243
+380@ = 1088.93
+396@ = 86.8595
+349@ = 1283.79
+365@ = -798.3011
+381@ = 1088.93
+397@ = 282.0571
+350@ = 1280.78
+366@ = -801.7443
+382@ = 1088.93
+398@ = 94.8903
+351@ = 1283.531
+367@ = -810.207
+383@ = 1088.93
+399@ = 277.6203
+352@ = 1280.724
+368@ = -813.7949
+384@ = 1088.93
+400@ = 92.4805
+353@ = 1283.641
+369@ = -822.3738
+385@ = 1088.93
+401@ = 281.8632
+345@ = 8
+354@ = 1283.491
+370@ = -785.184
+386@ = 1088.93
+402@ = 178.5884
+355@ = 1281.049
+371@ = -792.4401
+387@ = 1088.93
+403@ = 182.731
+356@ = 1283.697
+372@ = -799.8134
+388@ = 1088.93
+404@ = 177.1231
+357@ = 1280.901
+373@ = -804.8507
+389@ = 1088.93
+405@ = 184.0353
+358@ = 1283.5
+374@ = -812.0164
+390@ = 1088.93
+406@ = 175.55
+359@ = 1280.848
+375@ = -816.8154
+391@ = 1088.93
+407@ = 188.1912
+360@ = 1283.654
+376@ = -831.0235
+392@ = 1088.93
+408@ = 71.1923
+361@ = 1282.427
+377@ = -834.7235
+393@ = 1088.93
+409@ = 92.1225
+452@ = Math.RandomIntInRange(0, 4)
+set_lvar_int_to_constant 444@ = 23824
+set_lvar_text_label 453@s = 'MAN1_FC'
+set_lvar_int_to_constant 445@ = 23825
+set_lvar_text_label 455@s = 'MAN1_FD'
+set_lvar_int_to_constant 446@ = 23826
+set_lvar_text_label 457@s = 'MAN1_FE'
+set_lvar_int_to_constant 447@ = 23827
+set_lvar_text_label 459@s = 'MAN1_FF'
+set_lvar_int_to_constant 448@ = 23831
+set_lvar_text_label 461@s = 'MAN1_FK'
+set_lvar_int_to_constant 449@ = 23832
+set_lvar_text_label 463@s = 'MAN1_FL'
+set_lvar_int_to_constant 450@ = 23833
+set_lvar_text_label 465@s = 'MAN1_FM'
+set_lvar_int_to_constant 451@ = 23834
+set_lvar_text_label 467@s = 'MAN1_FN'
+226@ = Char.Create(25, 108, 1275.64, -776.5879, 1089.711)
+Char.SetHeading(226@, 127.9642)
+Char.SetHealth(226@, 200)
+Char.SetMaxHealth(226@, 200)
+Char.SetAreaVisible(226@, 5)
+Char.GiveWeapon(226@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(226@, WeaponType.Mp5)
+Char.SetAccuracy(226@, 35)
+Char.SetShootRate(226@, 50)
+Task.ToggleDuck(226@, True)
+Char.SetDecisionMaker(226@, 34@)
+246@ = 0
+227@ = Char.Create(25, 110, 1281.108, -776.7111, 1089.704)
+Char.SetHeading(227@, 99.357)
+Char.SetHealth(227@, 200)
+Char.SetMaxHealth(227@, 200)
+Char.SetAreaVisible(227@, 5)
+Char.GiveWeapon(227@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(227@, WeaponType.Mp5)
+Char.SetAccuracy(227@, 35)
+Char.SetShootRate(227@, 60)
+Task.ToggleDuck(227@, True)
+Char.SetDecisionMaker(227@, 34@)
+247@ = 0
+228@ = Char.Create(25, 108, 1281.617, -784.6133, 1088.93)
+Char.SetHeading(228@, 90.0)
+Char.SetHealth(228@, 200)
+Char.SetMaxHealth(228@, 200)
+Char.SetAreaVisible(228@, 5)
+Char.GiveWeapon(228@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(228@, WeaponType.Mp5)
+Char.SetAccuracy(228@, 35)
+Char.SetShootRate(228@, 70)
+Char.SetDecisionMaker(228@, 34@)
+248@ = 0
+229@ = Char.Create(25, 110, 1283.19, -786.4687, 1088.93)
+Char.SetHeading(229@, 0.0)
+Char.SetHealth(229@, 200)
+Char.SetMaxHealth(229@, 200)
+Char.SetAreaVisible(229@, 5)
+Char.GiveWeapon(229@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(229@, WeaponType.Mp5)
+Char.SetAccuracy(229@, 35)
+Char.SetShootRate(229@, 50)
+Char.SetDecisionMaker(229@, 34@)
+249@ = 0
+487@ = -1
+490@ = 1275.382
+496@ = -782.1158
+502@ = 1088.93
+508@ = 270.0
+491@ = 1290.621
+497@ = -797.5714
+503@ = 1088.93
+509@ = 90.0
+492@ = 1276.333
+498@ = -813.5852
+504@ = 1088.93
+510@ = 270.0
+493@ = 1274.861
+499@ = -825.8968
+505@ = 1088.93
+511@ = 270.0
+494@ = 1226.309
+500@ = -832.0841
+506@ = 1083.008
+512@ = 180.0
+495@ = 1288.024
+501@ = -821.6524
+507@ = 1088.93
+513@ = 90.0
+set_lvar_int_to_constant 331@ = 23800
+set_lvar_text_label 336@s = 'MAN1_AA'
+set_lvar_int_to_constant 332@ = 23801
+set_lvar_text_label 338@s = 'MAN1_AB'
+set_lvar_int_to_constant 333@ = 23802
+set_lvar_text_label 340@s = 'MAN1_AC'
+set_lvar_int_to_constant 334@ = 23803
+set_lvar_text_label 342@s = 'MAN1_AD'
+335@ = 0
+330@ = 0
+Zone.SwitchAudio('MADDOGL', True)
+Char.StopFacialTalk($scplayer)
+Camera.DoFade(1, 1000)
+
+:MANSIO1_21980
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_22004
+wait 0
+goto @MANSIO1_21980
+
+:MANSIO1_22004
+TIMERA = 0
+49@ = 0
+set_var_int_to_constant $load_sample = 23820
+set_var_text_label s$load_text = 'MAN1_EA'
+start_new_script @A_ALAP 2 100 145@ 
+skip_cutscene_start_internal @MANSIO1_22313
+
+:MANSIO1_22062
+if 
+  4000 > TIMERA
+goto_if_false @MANSIO1_22092
+wait 0
+goto @MANSIO1_22062
+
+:MANSIO1_22092
+if 
+  not Char.IsDead(226@)
+goto_if_false @MANSIO1_22122
+Task.ToggleDuck(226@, False)
+49@ = 1
+
+:MANSIO1_22122
+if 
+  4400 > TIMERA
+goto_if_false @MANSIO1_22152
+wait 0
+goto @MANSIO1_22122
+
+:MANSIO1_22152
+if 
+  not Char.IsDead(226@)
+goto_if_false @MANSIO1_22198
+Task.ShootAtCoord(226@, 1267.728, -782.9617, 1092.689, 300)
+49@ = 2
+
+:MANSIO1_22198
+if 
+  4700 > TIMERA
+goto_if_false @MANSIO1_22228
+wait 0
+goto @MANSIO1_22198
+
+:MANSIO1_22228
+if and
+  not Char.IsDead(226@)
+  not Char.IsDead(145@)
+goto_if_false @MANSIO1_22273
+Char.ClearTasks(226@)
+Task.ToggleDuck(226@, True)
+Char.ExplodeHead(145@)
+49@ = 3
+
+:MANSIO1_22273
+Task.AchieveHeading($scplayer, 270.0)
+
+:MANSIO1_22283
+if 
+  5400 > TIMERA
+goto_if_false @MANSIO1_22313
+wait 0
+goto @MANSIO1_22283
+
+:MANSIO1_22313
+skip_cutscene_end 
+switch_start 49@ total_jumps 3 default_jump 0 @MANSIO1_22450 jumps 0 @MANSIO1_22422 1 @MANSIO1_22399 2 @MANSIO1_22378 -1 @MANSIO1_22450 -1 @MANSIO1_22450 -1 @MANSIO1_22450 -1 @MANSIO1_22450
+
+:MANSIO1_22378
+if 
+  not Char.IsDead(226@)
+goto_if_false @MANSIO1_22399
+Char.ClearTasks(226@)
+
+:MANSIO1_22399
+if 
+  not Char.IsDead(226@)
+goto_if_false @MANSIO1_22422
+Task.ToggleDuck(226@, True)
+
+:MANSIO1_22422
+if 
+  not Char.IsDead(145@)
+goto_if_false @MANSIO1_22443
+Char.ExplodeHead(145@)
+
+:MANSIO1_22443
+goto @MANSIO1_22450
+
+:MANSIO1_22450
+Char.SetHeading($scplayer, 270.0)
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+set_var_int_to_constant $load_sample = 23821
+set_var_text_label s$load_text = 'MAN1_EB'
+start_new_script @A_ALAP 2 101 143@ 
+TIMERB = 0
+415@ = 1
+411@ = 1
+416@ = -1
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+if 
+  not Char.IsDead(143@)
+goto_if_false @MANSIO1_22630
+45@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1266.858, -782.4518, 1090.898, MoveState.Run, -1)
+Task.AchieveHeading(-1, 270.5538)
+Task.ToggleDuck(-1, True)
+Task.StayInSamePlace(-1, True)
+Task.SetCharDecisionMaker(-1, 36@)
+Sequence.Close(45@)
+Char.PerformSequence(143@, 45@)
+Sequence.Clear(45@)
+
+:MANSIO1_22630
+if 
+  not Char.IsDead(144@)
+goto_if_false @MANSIO1_22720
+45@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1268.02, -779.9092, 1090.898, MoveState.Run, -1)
+Task.AchieveHeading(-1, 267.5782)
+Task.ToggleDuck(-1, True)
+Task.StayInSamePlace(-1, True)
+Task.SetCharDecisionMaker(-1, 36@)
+Sequence.Close(45@)
+Char.PerformSequence(144@, 45@)
+Sequence.Clear(45@)
+
+:MANSIO1_22720
+if 
+  not Char.IsDead(226@)
+goto_if_false @MANSIO1_22744
+Char.SetDecisionMaker(226@, 36@)
+
+:MANSIO1_22744
+if 
+  not Char.IsDead(227@)
+goto_if_false @MANSIO1_22768
+Char.SetDecisionMaker(227@, 36@)
+
+:MANSIO1_22768
+if 
+  not Char.IsDead(228@)
+goto_if_false @MANSIO1_22827
+45@ = Sequence.Open()
+Task.StandStill(-1, 1000)
+Task.WeaponRoll(-1, True)
+Task.SetCharDecisionMaker(-1, 36@)
+Sequence.Close(45@)
+Char.PerformSequence(228@, 45@)
+Sequence.Clear(45@)
+
+:MANSIO1_22827
+if 
+  not Char.IsDead(229@)
+goto_if_false @MANSIO1_22918
+45@ = Sequence.Open()
+Task.StandStill(-1, 500)
+Task.GoStraightToCoord(-1, 1283.221, -779.912, 1088.93, MoveState.Run, -1)
+Task.AchieveHeading(-1, 90.0)
+Task.ToggleDuck(-1, True)
+Task.SetCharDecisionMaker(-1, 36@)
+Sequence.Close(45@)
+Char.PerformSequence(229@, 45@)
+Sequence.Clear(45@)
+
+:MANSIO1_22918
+41@ = Clock.GetGameTimer()
+157@ = 0
+
+:MANSIO1_22930
+wait 0
+40@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 40@
+sub_int_lvar_from_int_lvar 42@ -= 41@
+set_lvar_int_to_lvar_int 41@ = 40@
+add_int_lvar_to_int_lvar 164@ += 42@
+add_int_lvar_to_int_lvar 165@ += 42@
+43@ = 0
+
+:MANSIO1_22986
+if 
+  20 > 43@
+goto_if_false @MANSIO1_23030
+add_int_lvar_to_int_lvar 266@(43@,20i) += 42@
+43@ += 1
+goto @MANSIO1_22986
+
+:MANSIO1_23030
+43@ = 0
+
+:MANSIO1_23037
+if 
+  10 > 43@
+goto_if_false @MANSIO1_23081
+add_int_lvar_to_int_lvar 306@(43@,10i) += 42@
+43@ += 1
+goto @MANSIO1_23037
+
+:MANSIO1_23081
+add_int_lvar_to_int_lvar 480@ += 42@
+add_int_lvar_to_int_lvar 481@ += 42@
+add_int_lvar_to_int_lvar 482@ += 42@
+add_int_lvar_to_int_lvar 324@ += 42@
+add_int_lvar_to_int_lvar 325@ += 42@
+add_int_lvar_to_int_lvar 326@ += 42@
+add_int_lvar_to_int_lvar 327@ += 42@
+gosub @MANSIO1_23279
+gosub @MANSIO1_29184
+gosub @MANSIO1_32862
+gosub @MANSIO1_28155
+if 
+  157@ > 0
+goto_if_false @MANSIO1_23190
+gosub @MANSIO1_34284
+
+:MANSIO1_23190
+if 
+  330@ == 1
+goto_if_false @MANSIO1_23215
+gosub @MANSIO1_35151
+
+:MANSIO1_23215
+if 
+  521@ <> 0
+goto_if_false @MANSIO1_23240
+gosub @MANSIO1_35745
+
+:MANSIO1_23240
+if 
+  514@ == 2
+goto_if_false @MANSIO1_23265
+goto @MANSIO1_36517
+
+:MANSIO1_23265
+471@ = 0
+goto @MANSIO1_22930
+
+:MANSIO1_23279
+switch_start 157@ total_jumps 12 default_jump 0 @MANSIO1_28153 jumps 0 @MANSIO1_23407 1 @MANSIO1_24472 2 @MANSIO1_24838 3 @MANSIO1_24986 4 @MANSIO1_25838 5 @MANSIO1_26532 6 @MANSIO1_26757
+switch_continued 7 @MANSIO1_26929 8 @MANSIO1_27158 9 @MANSIO1_27387 10 @MANSIO1_27654 11 @MANSIO1_27883 -1 @MANSIO1_28153 -1 @MANSIO1_28153 -1 @MANSIO1_28153 -1 @MANSIO1_28153
+
+:MANSIO1_23407
+if or
+  Char.IsInArea2D($scplayer, 0, 1285.937, -783.2331, 1279.36, -779.1484)
+  149@ == 6
+  150@ == 7
+goto_if_false @MANSIO1_24465
+286@ = Char.Create(25, 108, 1271.954, -786.6414, 1088.928)
+Char.SetHeading(286@, 248.455)
+Char.SetAreaVisible(286@, 5)
+Char.GiveWeapon(286@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(286@, WeaponType.Mp5)
+Char.SetAccuracy(286@, 45)
+Char.SetShootRate(286@, 35)
+Task.StayInSamePlace(286@, True)
+Char.SetDecisionMaker(286@, 36@)
+296@ = 0
+287@ = Char.Create(25, 110, 1272.165, -790.5964, 1088.928)
+Char.SetHeading(287@, 277.2843)
+Char.SetAreaVisible(287@, 5)
+Char.GiveWeapon(287@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(287@, WeaponType.Mp5)
+Char.SetAccuracy(287@, 45)
+Char.SetShootRate(287@, 35)
+Task.StayInSamePlace(287@, True)
+Char.SetDecisionMaker(287@, 36@)
+297@ = 0
+288@ = Char.Create(25, 110, 1287.489, -788.2037, 1088.93)
+Char.SetHeading(288@, 176.3381)
+Char.SetAreaVisible(288@, 5)
+Char.GiveWeapon(288@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(288@, WeaponType.Mp5)
+Char.SetAccuracy(288@, 50)
+Char.SetShootRate(288@, 35)
+Task.StayInSamePlace(288@, True)
+Char.SetDecisionMaker(288@, 36@)
+298@ = 0
+289@ = Char.Create(25, 108, 1292.456, -788.2022, 1088.93)
+Char.SetHeading(289@, 145.1614)
+Char.SetAreaVisible(289@, 5)
+Char.GiveWeapon(289@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(289@, WeaponType.Mp5)
+Char.SetAccuracy(289@, 50)
+Char.SetShootRate(289@, 35)
+Task.StayInSamePlace(289@, True)
+Char.SetDecisionMaker(289@, 36@)
+299@ = 0
+290@ = Char.Create(25, 108, 1271.389, -800.9039, 1088.927)
+Char.SetHeading(290@, 263.9924)
+Char.SetAreaVisible(290@, 5)
+Char.GiveWeapon(290@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(290@, WeaponType.Mp5)
+Char.SetAccuracy(290@, 50)
+Char.SetShootRate(290@, 35)
+Task.StayInSamePlace(290@, True)
+Char.SetDecisionMaker(290@, 36@)
+300@ = 0
+291@ = Char.Create(25, 108, 1291.748, -810.5742, 1088.93)
+Char.SetHeading(291@, 87.4676)
+Char.SetAreaVisible(291@, 5)
+Char.GiveWeapon(291@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(291@, WeaponType.Mp5)
+Char.SetAccuracy(291@, 50)
+Char.SetShootRate(291@, 35)
+Task.StayInSamePlace(291@, True)
+Char.SetDecisionMaker(291@, 36@)
+301@ = 0
+292@ = Char.Create(25, 110, 1289.562, -801.537, 1088.93)
+Char.SetHeading(292@, 155.5354)
+Char.SetAreaVisible(292@, 5)
+Char.GiveWeapon(292@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(292@, WeaponType.Mp5)
+Char.SetAccuracy(292@, 50)
+Char.SetShootRate(292@, 35)
+Task.StayInSamePlace(292@, True)
+Char.SetDecisionMaker(292@, 36@)
+302@ = 0
+293@ = Char.Create(25, 110, 1272.797, -812.8729, 1088.93)
+Char.SetHeading(293@, 263.3181)
+Char.SetAreaVisible(293@, 5)
+Char.GiveWeapon(293@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(293@, WeaponType.Mp5)
+Char.SetAccuracy(293@, 60)
+Char.SetShootRate(293@, 45)
+Task.StayInSamePlace(293@, True)
+Char.SetDecisionMaker(293@, 36@)
+303@ = 0
+294@ = Char.Create(25, 110, 1292.816, -821.3403, 1088.93)
+Char.SetHeading(294@, 96.7033)
+Char.SetAreaVisible(294@, 5)
+Char.GiveWeapon(294@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(294@, WeaponType.Mp5)
+Char.SetAccuracy(294@, 60)
+Char.SetShootRate(294@, 45)
+Task.StayInSamePlace(294@, True)
+Char.SetDecisionMaker(294@, 36@)
+304@ = 0
+295@ = Char.Create(25, 108, 1292.17, -814.6696, 1088.93)
+Char.SetHeading(295@, 136.5314)
+Char.SetAreaVisible(295@, 5)
+Char.GiveWeapon(295@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(295@, WeaponType.Mp5)
+Char.SetAccuracy(295@, 60)
+Char.SetShootRate(295@, 45)
+Task.StayInSamePlace(295@, True)
+Char.SetDecisionMaker(295@, 36@)
+305@ = 0
+477@ = -1
+478@ = -1
+479@ = -1
+480@ = 8000
+481@ = 4000
+482@ = 0
+472@ = 1
+488@ = 8000
+157@ += 1
+
+:MANSIO1_24465
+goto @MANSIO1_28153
+
+:MANSIO1_24472
+418@ = 1280.15
+419@ = -791.93
+420@ = 1284.45
+421@ = -795.42
+gosub @MANSIO1_29026
+if 
+  417@ == 0
+goto_if_false @MANSIO1_24544
+goto @MANSIO1_28153
+
+:MANSIO1_24544
+Char.MarkAsNoLongerNeeded(145@)
+410@ = Math.RandomIntInRange(0, 2)
+if 
+  410@ == 0
+goto_if_false @MANSIO1_24632
+230@ = Char.Create(25, 108, 1278.607, -801.3676, 1088.93)
+316@ = Char.Create(26, 195, 1286.281, -809.3582, 1088.93)
+goto @MANSIO1_24681
+
+:MANSIO1_24632
+230@ = Char.Create(25, 108, 1286.281, -809.3582, 1088.93)
+316@ = Char.Create(26, 195, 1278.607, -801.3676, 1088.93)
+
+:MANSIO1_24681
+Char.SetHeading(230@, 0.0)
+Char.SetHealth(230@, 200)
+Char.SetMaxHealth(230@, 200)
+Char.SetAreaVisible(230@, 5)
+Char.GiveWeapon(230@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(230@, WeaponType.Mp5)
+Char.SetAccuracy(230@, 70)
+Char.SetShootRate(230@, 60)
+Char.SetDecisionMaker(230@, 36@)
+if 
+  410@ == 0
+goto_if_false @MANSIO1_24785
+Task.WeaponRoll(230@, True)
+goto @MANSIO1_24792
+
+:MANSIO1_24785
+Task.WeaponRoll(230@, False)
+
+:MANSIO1_24792
+250@ = 0
+Char.SetHeading(316@, 0.0)
+Char.SetAreaVisible(316@, 5)
+Char.SetDecisionMaker(316@, 37@)
+320@ = 0
+157@ += 1
+
+:MANSIO1_24838
+418@ = 1284.939
+419@ = -799.527
+420@ = 1279.67
+421@ = -803.5135
+gosub @MANSIO1_29026
+if 
+  417@ == 0
+goto_if_false @MANSIO1_24910
+goto @MANSIO1_28153
+
+:MANSIO1_24910
+413@ = 1
+47@ = Blip.AddForCoord(1227.226, -834.4195, 1083.008)
+Blip.SetEntryExit(47@, 1258.338, -785.4264, 91.0313)
+Blip.SetCoordAppearance(47@, 2)
+472@ = 0
+488@ = 10000
+157@ += 1
+
+:MANSIO1_24986
+418@ = 1284.94
+419@ = -823.43
+420@ = 1280.15
+421@ = -818.35
+gosub @MANSIO1_29026
+if 
+  417@ == 0
+goto_if_false @MANSIO1_25058
+goto @MANSIO1_28153
+
+:MANSIO1_25058
+231@ = Char.Create(25, 110, 1267.936, -836.5694, 1084.633)
+Char.SetHeading(231@, 312.4274)
+Char.SetHealth(231@, 200)
+Char.SetMaxHealth(231@, 200)
+Char.SetAreaVisible(231@, 5)
+Char.GiveWeapon(231@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(231@, WeaponType.Mp5)
+Char.SetAccuracy(231@, 60)
+Char.SetShootRate(231@, 60)
+Task.ToggleDuck(231@, True)
+Char.SetDecisionMaker(231@, 36@)
+251@ = 0
+232@ = Char.Create(25, 108, 1272.94, -837.6696, 1084.633)
+Char.SetHeading(232@, 325.2802)
+Char.SetHealth(232@, 200)
+Char.SetMaxHealth(232@, 200)
+Char.SetAreaVisible(232@, 5)
+Char.GiveWeapon(232@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(232@, WeaponType.Mp5)
+Char.SetAccuracy(232@, 60)
+Char.SetShootRate(232@, 60)
+Task.ToggleDuck(232@, True)
+Char.SetDecisionMaker(232@, 36@)
+252@ = 0
+233@ = Char.Create(25, 110, 1278.936, -837.8117, 1084.633)
+Char.SetHeading(233@, 354.8666)
+Char.SetHealth(233@, 200)
+Char.SetMaxHealth(233@, 200)
+Char.SetAreaVisible(233@, 5)
+Char.GiveWeapon(233@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(233@, WeaponType.Mp5)
+Char.SetAccuracy(233@, 60)
+Char.SetShootRate(233@, 60)
+Task.ToggleDuck(233@, True)
+Char.SetDecisionMaker(233@, 36@)
+253@ = 0
+234@ = Char.Create(25, 108, 1293.434, -837.4308, 1084.633)
+Char.SetHeading(234@, 84.6034)
+Char.SetHealth(234@, 200)
+Char.SetMaxHealth(234@, 200)
+Char.SetAreaVisible(234@, 5)
+Char.GiveWeapon(234@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(234@, WeaponType.Mp5)
+Char.SetAccuracy(234@, 60)
+Char.SetShootRate(234@, 60)
+Task.ToggleDuck(234@, True)
+Char.SetDecisionMaker(234@, 36@)
+254@ = 0
+235@ = Char.Create(25, 110, 1288.788, -832.1437, 1084.633)
+Char.SetHeading(235@, 93.3971)
+Char.SetHealth(235@, 200)
+Char.SetMaxHealth(235@, 200)
+Char.SetAreaVisible(235@, 5)
+Char.GiveWeapon(235@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(235@, WeaponType.Mp5)
+Char.SetAccuracy(235@, 60)
+Char.SetShootRate(235@, 60)
+Task.ToggleDuck(235@, True)
+Char.SetDecisionMaker(235@, 36@)
+255@ = 0
+236@ = Char.Create(25, 108, 1279.452, -818.7137, 1084.633)
+Char.SetHeading(236@, 169.7489)
+Char.SetHealth(236@, 200)
+Char.SetMaxHealth(236@, 200)
+Char.SetAreaVisible(236@, 5)
+Char.GiveWeapon(236@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(236@, WeaponType.Mp5)
+Char.SetAccuracy(236@, 30)
+Char.SetShootRate(236@, 50)
+Task.ToggleDuck(236@, True)
+Char.SetDecisionMaker(236@, 36@)
+256@ = 0
+317@ = Char.Create(26, 13, 1292.736, -832.9896, 1084.633)
+Char.SetHeading(317@, 90.0)
+Char.SetAreaVisible(317@, 5)
+Char.SetDecisionMaker(317@, 37@)
+321@ = 0
+318@ = Char.Create(26, 195, 1277.984, -813.5414, 1084.64)
+Char.SetHeading(318@, 180.0)
+Char.SetAreaVisible(318@, 5)
+Char.SetDecisionMaker(318@, 37@)
+322@ = 0
+157@ += 1
+
+:MANSIO1_25838
+if 
+  Char.IsInArea2D($scplayer, 0, 1266.533, -831.5337, 1261.282, -838.8454)
+goto_if_false @MANSIO1_26532
+237@ = Char.Create(25, 110, 1253.758, -826.5505, 1083.008)
+Char.SetHeading(237@, 197.3586)
+Char.SetHealth(237@, 200)
+Char.SetMaxHealth(237@, 200)
+Char.SetAreaVisible(237@, 5)
+Char.GiveWeapon(237@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(237@, WeaponType.Mp5)
+Char.SetAccuracy(237@, 60)
+Char.SetShootRate(237@, 70)
+Task.ToggleDuck(237@, True)
+Char.SetDecisionMaker(237@, 36@)
+Task.GoStraightToCoord(237@, 1255.499, -831.5446, 1083.008, MoveState.Run, -1)
+257@ = 0
+238@ = Char.Create(25, 108, 1233.705, -827.7943, 1083.008)
+Char.SetHeading(238@, 180.0)
+Char.SetHealth(238@, 200)
+Char.SetMaxHealth(238@, 200)
+Char.SetAreaVisible(238@, 5)
+Char.GiveWeapon(238@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(238@, WeaponType.Mp5)
+Char.SetAccuracy(238@, 60)
+Char.SetShootRate(238@, 70)
+Char.SetDecisionMaker(238@, 34@)
+258@ = 0
+45@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1234.104, -832.2075, 1083.008, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 1238.847, -833.2389, 1083.008, MoveState.Run, -1)
+Task.ToggleDuck(-1, True)
+Task.StayInSamePlace(-1, True)
+Task.SetCharDecisionMaker(-1, 36@)
+Sequence.Close(45@)
+Char.PerformSequence(238@, 45@)
+Sequence.Clear(45@)
+328@ = Char.Create(25, 109, 1227.226, -834.4195, 1083.008)
+Char.SetHeading(328@, 270.0)
+Char.SetProofs(328@, True, True, True, True, True)
+Char.SetDecisionMaker(328@, 34@)
+Char.SetNeverTargeted(328@, True)
+Blip.Remove(47@)
+329@ = Blip.AddForChar(328@)
+Blip.SetEntryExit(329@, 1258.338, -785.4264, 91.0313)
+Blip.ChangeDisplay(329@, BlipDisplay.MarkerOnly)
+516@ = 1227.315
+517@ = -831.5784
+45@ = Sequence.Open()
+Task.WeaponRoll(-1, True)
+Task.StandStill(-1, 2000)
+Task.GoStraightToCoord(-1, 516@, 517@, 1083.008, MoveState.Run, -1)
+Sequence.Close(45@)
+Char.PerformSequence(328@, 45@)
+Sequence.Clear(45@)
+518@ = 1225.194
+519@ = -816.5573
+520@ = 270.0
+514@ = 0
+set_var_int_to_constant $load_sample = 23804
+set_var_text_label s$load_text = 'MAN1_BA'
+start_new_script @A_ALAP 2 200 328@ 
+330@ = 1
+415@ = -1
+319@ = Char.Create(26, 13, 1240.835, -826.6857, 1082.156)
+Char.SetHeading(319@, 143.0862)
+Char.SetAreaVisible(319@, 5)
+Char.SetDecisionMaker(319@, 37@)
+323@ = 0
+157@ += 1
+
+:MANSIO1_26532
+if 
+  Char.IsInArea3D($scplayer, 0, 1229.934, -835.5339, 1082.5, 1224.882, -838.8135, 1085.5)
+goto_if_false @MANSIO1_26750
+if 
+  515@ == 0
+goto_if_false @MANSIO1_26621
+Text.PrintNow('MAN1_21', 8000, 1)
+515@ = 1
+
+:MANSIO1_26621
+if 
+  not Char.IsDead(328@)
+goto_if_false @MANSIO1_26743
+Char.ClearTasksImmediately(328@)
+Char.SetCoordinates(328@, 518@, 519@, 1083.01)
+Char.SetHeading(328@, 520@)
+516@ = 1231.282
+517@ = -816.6354
+Task.GoStraightToCoord(328@, 516@, 517@, 1083.015, MoveState.Run, -1)
+518@ = 1256.583
+519@ = -812.8542
+520@ = 270.0
+514@ = 0
+
+:MANSIO1_26743
+157@ += 1
+
+:MANSIO1_26750
+goto @MANSIO1_28153
+
+:MANSIO1_26757
+if 
+  Char.IsInArea3D($scplayer, 0, 1228.68, -829.9222, 1082.5, 1224.883, -825.2996, 1085.5)
+goto_if_false @MANSIO1_26922
+239@ = Char.Create(25, 108, 1228.808, -812.9333, 1083.008)
+Char.SetHeading(239@, 180.0)
+Char.SetHealth(239@, 200)
+Char.SetMaxHealth(239@, 200)
+Char.SetAreaVisible(239@, 5)
+Char.GiveWeapon(239@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(239@, WeaponType.Mp5)
+Char.SetAccuracy(239@, 60)
+Char.SetShootRate(239@, 70)
+Char.SetDecisionMaker(239@, 36@)
+Task.WeaponRoll(239@, True)
+259@ = 0
+157@ += 1
+
+:MANSIO1_26922
+goto @MANSIO1_28153
+
+:MANSIO1_26929
+if 
+  Char.IsInArea3D($scplayer, 0, 1229.799, -810.6401, 1082.5, 1224.884, -819.0158, 1085.5)
+goto_if_false @MANSIO1_27151
+if 
+  not Char.IsDead(328@)
+goto_if_false @MANSIO1_27144
+Char.ClearTasksImmediately(328@)
+Char.SetCoordinates(328@, 518@, 519@, 1083.01)
+Char.SetHeading(328@, 520@)
+516@ = 1262.628
+517@ = -805.6454
+45@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1261.444, -812.2836, 1083.015, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 516@, 517@, 1083.015, MoveState.Run, -1)
+Sequence.Close(45@)
+Char.PerformSequence(328@, 45@)
+Sequence.Clear(45@)
+518@ = 1266.928
+519@ = -801.9423
+520@ = 270.0
+514@ = 0
+
+:MANSIO1_27144
+157@ += 1
+
+:MANSIO1_27151
+goto @MANSIO1_28153
+
+:MANSIO1_27158
+if 
+  Char.IsInArea3D($scplayer, 0, 1254.281, -810.6465, 1082.5, 1264.045, -813.9205, 1085.5)
+goto_if_false @MANSIO1_27380
+if 
+  not Char.IsDead(328@)
+goto_if_false @MANSIO1_27366
+Char.ClearTasksImmediately(328@)
+Char.SetCoordinates(328@, 518@, 519@, 1083.01)
+Char.SetHeading(328@, 520@)
+516@ = 1274.634
+517@ = -801.9045
+Task.GoStraightToCoord(328@, 516@, 517@, 1083.015, MoveState.Run, -1)
+518@ = 1257.388
+519@ = -789.8594
+520@ = 90.0
+514@ = 0
+set_var_int_to_constant $load_sample = 23805
+set_var_text_label s$load_text = 'MAN1_BB'
+start_new_script @A_ALAP 2 200 328@ 
+
+:MANSIO1_27366
+157@ += 1
+gosub @MANSIO1_35546
+
+:MANSIO1_27380
+goto @MANSIO1_28153
+
+:MANSIO1_27387
+if 
+  Char.IsInArea3D($scplayer, 0, 1278.469, -791.9025, 1082.5, 1285.187, -786.7327, 1085.5)
+goto_if_false @MANSIO1_27647
+if 
+  not Char.IsDead(328@)
+goto_if_false @MANSIO1_27640
+Char.ClearTasksImmediately(328@)
+Char.SetCoordinates(328@, 518@, 519@, 1083.01)
+Char.SetHeading(328@, 520@)
+516@ = 1249.665
+517@ = -782.4513
+45@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1250.071, -788.768, 1083.015, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 516@, 517@, 1083.015, MoveState.Run, -1)
+Sequence.Close(45@)
+Char.PerformSequence(328@, 45@)
+Sequence.Clear(45@)
+518@ = 1265.614
+519@ = -769.7585
+520@ = 270.0
+514@ = 0
+set_var_int_to_constant $load_sample = 23806
+set_var_text_label s$load_text = 'MAN1_BC'
+start_new_script @A_ALAP 2 200 328@ 
+
+:MANSIO1_27640
+157@ += 1
+
+:MANSIO1_27647
+goto @MANSIO1_28153
+
+:MANSIO1_27654
+if 
+  Char.IsInArea3D($scplayer, 0, 1251.285, -775.3042, 1082.5, 1247.005, -765.7498, 1085.5)
+goto_if_false @MANSIO1_27876
+if 
+  not Char.IsDead(328@)
+goto_if_false @MANSIO1_27869
+Char.ClearTasksImmediately(328@)
+Char.SetCoordinates(328@, 518@, 519@, 1083.01)
+Char.SetHeading(328@, 520@)
+516@ = 1269.674
+517@ = -774.7773
+45@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1269.4, -769.4953, 1083.015, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 516@, 517@, 1083.015, MoveState.Run, -1)
+Sequence.Close(45@)
+Char.PerformSequence(328@, 45@)
+Sequence.Clear(45@)
+518@ = 1280.115
+519@ = -781.6223
+520@ = 270.0
+514@ = 0
+
+:MANSIO1_27869
+157@ += 1
+
+:MANSIO1_27876
+goto @MANSIO1_28153
+
+:MANSIO1_27883
+if 
+  Char.IsInArea3D($scplayer, 0, 1260.289, -765.4207, 1082.5, 1267.524, -774.8633, 1085.5)
+goto_if_false @MANSIO1_28146
+if 
+  not Char.IsDead(328@)
+goto_if_false @MANSIO1_28139
+Char.ClearTasksImmediately(328@)
+Char.SetCoordinates(328@, 518@, 519@, 1083.01)
+Char.SetHeading(328@, 520@)
+516@ = 1301.081
+517@ = -786.3077
+45@ = Sequence.Open()
+Task.GoStraightToCoord(-1, 1288.806, -780.5795, 1083.015, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 1300.839, -781.0582, 1083.015, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 516@, 517@, 1083.015, MoveState.Run, -1)
+Sequence.Close(45@)
+Char.PerformSequence(328@, 45@)
+Sequence.Clear(45@)
+518@ = -1.0
+514@ = 0
+set_var_int_to_constant $load_sample = 23807
+set_var_text_label s$load_text = 'MAN1_BD'
+start_new_script @A_ALAP 2 200 328@ 
+
+:MANSIO1_28139
+157@ += 1
+
+:MANSIO1_28146
+goto @MANSIO1_28153
+
+:MANSIO1_28153
+return 
+
+:MANSIO1_28155
+if 
+  415@ == 0
+goto_if_false @MANSIO1_28951
+43@ = 0
+
+:MANSIO1_28180
+if 
+  4 > 43@
+goto_if_false @MANSIO1_28944
+if 
+  411@(43@,4i) == 1
+goto_if_false @MANSIO1_28930
+switch_start 43@ total_jumps 4 default_jump 0 @MANSIO1_28930 jumps 0 @MANSIO1_28283 1 @MANSIO1_28335 2 @MANSIO1_28610 3 @MANSIO1_28662 -1 @MANSIO1_28930 -1 @MANSIO1_28930 -1 @MANSIO1_28930
+
+:MANSIO1_28283
+Text.PrintNow('MAN1_13', 8000, 1)
+415@ = 1
+set_lvar_int_to_lvar_int 416@ = 43@
+TIMERB = 0
+43@ = 4
+goto @MANSIO1_28930
+
+:MANSIO1_28335
+if 
+  not Char.IsDead(143@)
+goto_if_false @MANSIO1_28483
+if 
+  Char.LocateOnFootChar3D($scplayer, 143@, 35.0, 35.0, 4.0, False)
+goto_if_false @MANSIO1_28469
+if 
+  not Char.IsDead(144@)
+goto_if_false @MANSIO1_28432
+set_var_int_to_constant $load_sample = 23822
+set_var_text_label s$load_text = 'MAN1_FA'
+goto @MANSIO1_28454
+
+:MANSIO1_28432
+set_var_int_to_constant $load_sample = 23823
+set_var_text_label s$load_text = 'MAN1_FB'
+
+:MANSIO1_28454
+start_new_script @A_ALAP 2 100 143@ 
+
+:MANSIO1_28469
+415@ = 1
+goto @MANSIO1_28563
+
+:MANSIO1_28483
+if 
+  Char.LocateOnFootChar3D($scplayer, 144@, 35.0, 35.0, 4.0, False)
+goto_if_false @MANSIO1_28556
+set_var_int_to_constant $load_sample = 23830
+set_var_text_label s$load_text = 'MAN1_FJ'
+start_new_script @A_ALAP 2 100 144@ 
+
+:MANSIO1_28556
+415@ = 1
+
+:MANSIO1_28563
+if 
+  415@ == 1
+goto_if_false @MANSIO1_28603
+set_lvar_int_to_lvar_int 416@ = 43@
+TIMERB = 0
+43@ = 4
+
+:MANSIO1_28603
+goto @MANSIO1_28930
+
+:MANSIO1_28610
+Text.PrintNow('MAN1_20', 8000, 1)
+415@ = 1
+set_lvar_int_to_lvar_int 416@ = 43@
+TIMERB = 0
+43@ = 4
+goto @MANSIO1_28930
+
+:MANSIO1_28662
+if 
+  not Char.IsDead(143@)
+goto_if_false @MANSIO1_28810
+if 
+  Char.LocateOnFootChar3D($scplayer, 143@, 35.0, 35.0, 4.0, False)
+goto_if_false @MANSIO1_28796
+if 
+  not Char.IsDead(144@)
+goto_if_false @MANSIO1_28759
+set_var_int_to_constant $load_sample = 23828
+set_var_text_label s$load_text = 'MAN1_FG'
+goto @MANSIO1_28781
+
+:MANSIO1_28759
+set_var_int_to_constant $load_sample = 23829
+set_var_text_label s$load_text = 'MAN1_FH'
+
+:MANSIO1_28781
+start_new_script @A_ALAP 2 100 143@ 
+
+:MANSIO1_28796
+415@ = 1
+goto @MANSIO1_28890
+
+:MANSIO1_28810
+if 
+  Char.LocateOnFootChar3D($scplayer, 144@, 35.0, 35.0, 4.0, False)
+goto_if_false @MANSIO1_28883
+set_var_int_to_constant $load_sample = 23835
+set_var_text_label s$load_text = 'MAN1_FO'
+start_new_script @A_ALAP 2 100 144@ 
+
+:MANSIO1_28883
+415@ = 1
+
+:MANSIO1_28890
+if 
+  415@ == 1
+goto_if_false @MANSIO1_28930
+set_lvar_int_to_lvar_int 416@ = 43@
+TIMERB = 0
+43@ = 4
+
+:MANSIO1_28930
+43@ += 1
+goto @MANSIO1_28180
+
+:MANSIO1_28944
+goto @MANSIO1_29024
+
+:MANSIO1_28951
+if 
+  415@ == 1
+goto_if_false @MANSIO1_29024
+if 
+  TIMERB > 8000
+goto_if_false @MANSIO1_29024
+if 
+  416@ <> -1
+goto_if_false @MANSIO1_29017
+411@(416@,4i) = -1
+
+:MANSIO1_29017
+415@ = 0
+
+:MANSIO1_29024
+return 
+
+:MANSIO1_29026
+417@ = 0
+if 
+  Char.IsInArea2D($scplayer, 0, 418@, 419@, 420@, 421@)
+goto_if_false @MANSIO1_29072
+417@ = 1
+return 
+
+:MANSIO1_29072
+if 
+  not Char.IsDead(143@)
+goto_if_false @MANSIO1_29127
+if 
+  Char.IsInArea2D(143@, 0, 418@, 419@, 420@, 421@)
+goto_if_false @MANSIO1_29127
+417@ = 1
+return 
+
+:MANSIO1_29127
+if 
+  not Char.IsDead(144@)
+goto_if_false @MANSIO1_29182
+if 
+  Char.IsInArea2D(144@, 0, 418@, 419@, 420@, 421@)
+goto_if_false @MANSIO1_29182
+417@ = 1
+return 
+
+:MANSIO1_29182
+return 
+
+:MANSIO1_29184
+430@ = 0
+431@ = 1
+
+:MANSIO1_29198
+if 
+  2 > 430@
+goto_if_false @MANSIO1_30961
+if 
+  not Char.IsDead(143@(430@,3i))
+goto_if_false @MANSIO1_30763
+switch_start 149@(430@,3i) total_jumps 18 default_jump 0 @MANSIO1_30756 jumps 0 @MANSIO1_29433 1 @MANSIO1_29433 2 @MANSIO1_29497 3 @MANSIO1_29497 4 @MANSIO1_29559 5 @MANSIO1_29559 6 @MANSIO1_29684
+switch_continued 7 @MANSIO1_29684 8 @MANSIO1_29752 9 @MANSIO1_29854 10 @MANSIO1_29907 11 @MANSIO1_29983 12 @MANSIO1_30089 13 @MANSIO1_30199 14 @MANSIO1_30266 15 @MANSIO1_30361
+switch_continued 16 @MANSIO1_30550 17 @MANSIO1_30618 -1 @MANSIO1_30756 -1 @MANSIO1_30756 -1 @MANSIO1_30756 -1 @MANSIO1_30756 -1 @MANSIO1_30756 -1 @MANSIO1_30756 -1 @MANSIO1_30756
+
+:MANSIO1_29433
+if or
+  246@ <> -1
+  247@ <> -1
+  248@ <> -1
+  249@ <> -1
+goto_if_false @MANSIO1_29479
+goto @MANSIO1_30756
+
+:MANSIO1_29479
+149@(430@,3i) += 2
+goto @MANSIO1_30756
+
+:MANSIO1_29497
+Char.ClearTasks(143@(430@,3i))
+Char.SetDecisionMaker(143@(430@,3i), 35@)
+422@(430@,2i) = -1
+set_lvar_int_to_lvar_int 424@(430@,2i) = 430@
+149@(430@,3i) += 2
+goto @MANSIO1_30756
+
+:MANSIO1_29559
+if 
+  422@(430@,2i) <> 3
+goto_if_false @MANSIO1_29595
+gosub @MANSIO1_30963
+goto @MANSIO1_29677
+
+:MANSIO1_29595
+Char.ClearTasks(143@(430@,3i))
+Char.SetDecisionMaker(143@(430@,3i), 36@)
+Task.ToggleDuck(143@(430@,3i), True)
+set_lvar_int_to_lvar_int 433@ = 424@(430@,2i)
+Task.AchieveHeading(143@(430@,3i), 394@(433@,16f))
+422@(430@,2i) = -1
+149@(430@,3i) += 2
+
+:MANSIO1_29677
+goto @MANSIO1_30756
+
+:MANSIO1_29684
+if 
+  157@ > 0
+goto_if_false @MANSIO1_29745
+149@(430@,3i) += 2
+if 
+  432@ == 0
+goto_if_false @MANSIO1_29745
+412@ = 1
+432@ = 1
+
+:MANSIO1_29745
+goto @MANSIO1_30756
+
+:MANSIO1_29752
+if 
+  not Char.IsDead(143@(431@,3i))
+goto_if_false @MANSIO1_29801
+if 
+  149@(431@,3i) <> 13
+goto_if_false @MANSIO1_29801
+goto @MANSIO1_30756
+
+:MANSIO1_29801
+Char.SetDecisionMaker(143@(430@,3i), 35@)
+422@(430@,2i) = -1
+set_lvar_int_to_lvar_int 424@(430@,2i) = 344@
+149@(430@,3i) += 2
+goto @MANSIO1_30756
+
+:MANSIO1_29854
+Char.SetDecisionMaker(143@(430@,3i), 35@)
+422@(430@,2i) = -1
+set_lvar_int_to_lvar_int 424@(430@,2i) = 345@
+149@(430@,3i) += 2
+goto @MANSIO1_30756
+
+:MANSIO1_29907
+if 
+  422@(430@,2i) <> 3
+goto_if_false @MANSIO1_29943
+gosub @MANSIO1_30963
+goto @MANSIO1_29976
+
+:MANSIO1_29943
+426@(430@,2i) = 1
+422@(430@,2i) = -1
+149@(430@,3i) += 2
+
+:MANSIO1_29976
+goto @MANSIO1_30756
+
+:MANSIO1_29983
+if 
+  422@(430@,2i) <> 3
+goto_if_false @MANSIO1_30019
+gosub @MANSIO1_30963
+goto @MANSIO1_30082
+
+:MANSIO1_30019
+Char.SetDecisionMaker(143@(430@,3i), 36@)
+Task.StayInSamePlace(143@(430@,3i), True)
+Task.ToggleDuck(143@(430@,3i), True)
+422@(430@,2i) = -1
+345@ += 1
+149@(430@,3i) += 2
+
+:MANSIO1_30082
+goto @MANSIO1_30756
+
+:MANSIO1_30089
+if 
+  422@(430@,2i) <> 3
+goto_if_false @MANSIO1_30125
+gosub @MANSIO1_30963
+goto @MANSIO1_30192
+
+:MANSIO1_30125
+Char.SetDecisionMaker(143@(430@,3i), 36@)
+Task.StayInSamePlace(143@(430@,3i), True)
+Task.ToggleDuck(143@(430@,3i), True)
+422@(430@,2i) = -1
+437@(430@,2i) = -1
+149@(430@,3i) += 2
+
+:MANSIO1_30192
+goto @MANSIO1_30756
+
+:MANSIO1_30199
+if 
+  not Char.IsDead(143@(431@,3i))
+goto_if_false @MANSIO1_30248
+if 
+  149@(431@,3i) <> 11
+goto_if_false @MANSIO1_30248
+goto @MANSIO1_30756
+
+:MANSIO1_30248
+149@(430@,3i) -= 5
+goto @MANSIO1_30756
+
+:MANSIO1_30266
+gosub @MANSIO1_31608
+if 
+  439@ == 1
+goto_if_false @MANSIO1_30354
+439@ = 0
+Char.SetDecisionMaker(143@(430@,3i), 35@)
+Task.ToggleDuck(143@(430@,3i), False)
+426@(430@,2i) = 0
+422@(430@,2i) = -1
+149@(430@,3i) += 1
+
+:MANSIO1_30354
+goto @MANSIO1_30756
+
+:MANSIO1_30361
+if 
+  422@(430@,2i) <> 3
+goto_if_false @MANSIO1_30397
+gosub @MANSIO1_30963
+goto @MANSIO1_30543
+
+:MANSIO1_30397
+if 
+  344@ == 8
+goto_if_false @MANSIO1_30471
+149@(430@,3i) = 16
+if 
+  not Char.IsDead(143@(431@,3i))
+goto_if_false @MANSIO1_30457
+149@(431@,3i) = 16
+
+:MANSIO1_30457
+414@ = 1
+goto @MANSIO1_30543
+
+:MANSIO1_30471
+422@(430@,2i) = -1
+if 
+  not Char.IsDead(143@(431@,3i))
+goto_if_false @MANSIO1_30532
+set_lvar_int_to_lvar_int 424@(430@,2i) = 345@
+149@(430@,3i) -= 4
+goto @MANSIO1_30543
+
+:MANSIO1_30532
+149@(430@,3i) -= 7
+
+:MANSIO1_30543
+goto @MANSIO1_30756
+
+:MANSIO1_30550
+Char.SetDecisionMaker(143@(430@,3i), 35@)
+422@(430@,2i) = -1
+433@ = 14
+add_int_lvar_to_int_lvar 433@ += 430@
+set_lvar_int_to_lvar_int 424@(430@,2i) = 433@
+149@(430@,3i) += 1
+goto @MANSIO1_30756
+
+:MANSIO1_30618
+if 
+  422@(430@,2i) <> 3
+goto_if_false @MANSIO1_30654
+gosub @MANSIO1_30963
+goto @MANSIO1_30749
+
+:MANSIO1_30654
+Char.SetDecisionMaker(143@(430@,3i), 36@)
+Task.StayInSamePlace(143@(430@,3i), True)
+if 
+  424@(430@,2i) == 14
+goto_if_false @MANSIO1_30710
+Task.ToggleDuck(143@(430@,3i), True)
+
+:MANSIO1_30710
+set_lvar_int_to_lvar_int 433@ = 424@(430@,2i)
+Task.AchieveHeading(143@(430@,3i), 394@(433@,16f))
+149@(430@,3i) += 1
+
+:MANSIO1_30749
+goto @MANSIO1_30756
+
+:MANSIO1_30756
+goto @MANSIO1_30940
+
+:MANSIO1_30763
+if 
+  149@(430@,3i) <> -2
+goto_if_false @MANSIO1_30940
+switch_start 149@(430@,3i) total_jumps 1 default_jump 1 @MANSIO1_30852 jumps -1 @MANSIO1_30881 -1 @MANSIO1_30940 -1 @MANSIO1_30940 -1 @MANSIO1_30940 -1 @MANSIO1_30940 -1 @MANSIO1_30940 -1 @MANSIO1_30940
+
+:MANSIO1_30852
+164@(430@,3i) = 0
+149@(430@,3i) = -1
+goto @MANSIO1_30940
+
+:MANSIO1_30881
+if 
+  10000 > 164@(430@,3i)
+goto_if_false @MANSIO1_30911
+goto @MANSIO1_30940
+
+:MANSIO1_30911
+Char.RemoveElegantly(143@(430@,3i))
+Streaming.MarkModelAsNoLongerNeeded(428@(430@,2i))
+149@(430@,3i) -= 1
+
+:MANSIO1_30940
+430@ += 1
+431@ -= 1
+goto @MANSIO1_29198
+
+:MANSIO1_30961
+return 
+
+:MANSIO1_30963
+set_lvar_int_to_lvar_int 433@ = 424@(430@,2i)
+set_lvar_float_to_lvar_float 434@ = 346@(433@,16f)
+set_lvar_float_to_lvar_float 435@ = 362@(433@,16f)
+set_lvar_float_to_lvar_float 436@ = 378@(433@,16f)
+if 
+  426@(430@,2i) == 1
+goto_if_false @MANSIO1_31130
+switch_start 344@ total_jumps 6 default_jump 0 @MANSIO1_31130 jumps 2 @MANSIO1_31096 3 @MANSIO1_31113 4 @MANSIO1_31096 5 @MANSIO1_31113 6 @MANSIO1_31096 7 @MANSIO1_31113 -1 @MANSIO1_31130
+
+:MANSIO1_31096
+434@ -= 3.5
+goto @MANSIO1_31130
+
+:MANSIO1_31113
+434@ += 3.5
+goto @MANSIO1_31130
+
+:MANSIO1_31130
+switch_start 422@(430@,2i) total_jumps 4 default_jump 0 @MANSIO1_31606 jumps -1 @MANSIO1_31197 0 @MANSIO1_31310 1 @MANSIO1_31361 2 @MANSIO1_31525 -1 @MANSIO1_31606 -1 @MANSIO1_31606 -1 @MANSIO1_31606
+
+:MANSIO1_31197
+if 
+  Char.IsRespondingToEvent(143@(430@,3i), -1)
+goto_if_false @MANSIO1_31248
+Task.StayInSamePlace(143@(430@,3i), True)
+422@(430@,2i) = 0
+goto @MANSIO1_31303
+
+:MANSIO1_31248
+Task.StayInSamePlace(143@(430@,3i), False)
+Task.ToggleDuck(143@(430@,3i), False)
+Task.GoStraightToCoord(143@(430@,3i), 434@, 435@, 436@, MoveState.Run, -2)
+422@(430@,2i) = 1
+
+:MANSIO1_31303
+goto @MANSIO1_31606
+
+:MANSIO1_31310
+if 
+  not Char.IsRespondingToEvent(143@(430@,3i), -1)
+goto_if_false @MANSIO1_31354
+164@(430@,3i) = 0
+422@(430@,2i) = 2
+
+:MANSIO1_31354
+goto @MANSIO1_31606
+
+:MANSIO1_31361
+if 
+  Char.IsRespondingToEvent(143@(430@,3i), -1)
+goto_if_false @MANSIO1_31401
+422@(430@,2i) = -1
+goto @MANSIO1_31518
+
+:MANSIO1_31401
+if 
+  Char.LocateOnFoot3D(143@(430@,3i), 0, 434@, 435@, 436@, 1.2, 1.2, 1.5)
+goto_if_false @MANSIO1_31465
+422@(430@,2i) = 3
+goto @MANSIO1_31518
+
+:MANSIO1_31465
+50@ = Char.GetScriptTaskStatus(143@(430@,3i), 1491)
+if 
+  is_int_lvar_equal_to_constant 50@ == 7
+goto_if_false @MANSIO1_31518
+Char.ClearTasks(143@(430@,3i))
+422@(430@,2i) = -1
+
+:MANSIO1_31518
+goto @MANSIO1_31606
+
+:MANSIO1_31525
+if 
+  Char.IsRespondingToEvent(143@(430@,3i), -1)
+goto_if_false @MANSIO1_31565
+422@(430@,2i) = 0
+goto @MANSIO1_31599
+
+:MANSIO1_31565
+if 
+  164@(430@,3i) > 500
+goto_if_false @MANSIO1_31599
+422@(430@,2i) = -1
+
+:MANSIO1_31599
+goto @MANSIO1_31606
+
+:MANSIO1_31606
+return 
+
+:MANSIO1_31608
+switch_start 437@(430@,2i) total_jumps 3 default_jump 0 @MANSIO1_31862 jumps -1 @MANSIO1_31675 0 @MANSIO1_31726 1 @MANSIO1_31807 -1 @MANSIO1_31862 -1 @MANSIO1_31862 -1 @MANSIO1_31862 -1 @MANSIO1_31862
+
+:MANSIO1_31675
+if 
+  not Char.IsRespondingToEvent(143@(430@,3i), -1)
+goto_if_false @MANSIO1_31719
+164@(430@,3i) = 0
+437@(430@,2i) += 1
+
+:MANSIO1_31719
+goto @MANSIO1_31862
+
+:MANSIO1_31726
+if 
+  Char.IsRespondingToEvent(143@(430@,3i), -1)
+goto_if_false @MANSIO1_31766
+437@(430@,2i) -= 1
+goto @MANSIO1_31800
+
+:MANSIO1_31766
+if 
+  164@(430@,3i) > 300
+goto_if_false @MANSIO1_31800
+437@(430@,2i) += 1
+
+:MANSIO1_31800
+goto @MANSIO1_31862
+
+:MANSIO1_31807
+gosub @MANSIO1_31864
+if 
+  439@ == 0
+goto_if_false @MANSIO1_31855
+164@(430@,3i) = 150
+437@(430@,2i) -= 1
+
+:MANSIO1_31855
+goto @MANSIO1_31862
+
+:MANSIO1_31862
+return 
+
+:MANSIO1_31864
+439@ = 0
+switch_start 344@ total_jumps 6 default_jump 0 @MANSIO1_32394 jumps 2 @MANSIO1_31934 3 @MANSIO1_32013 4 @MANSIO1_32092 5 @MANSIO1_32164 6 @MANSIO1_32243 7 @MANSIO1_32315 -1 @MANSIO1_32394
+
+:MANSIO1_31934
+if and
+  296@ == -1
+  297@ == -1
+goto_if_false @MANSIO1_32006
+439@ = 1
+440@ = 1271.341
+441@ = -785.5189
+442@ = 1278.642
+443@ = -798.1946
+
+:MANSIO1_32006
+goto @MANSIO1_32394
+
+:MANSIO1_32013
+if and
+  298@ == -1
+  299@ == -1
+goto_if_false @MANSIO1_32085
+439@ = 1
+440@ = 1285.97
+441@ = -785.5347
+442@ = 1293.101
+443@ = -799.4673
+
+:MANSIO1_32085
+goto @MANSIO1_32394
+
+:MANSIO1_32092
+if 
+  300@ == -1
+goto_if_false @MANSIO1_32157
+439@ = 1
+440@ = 1271.417
+441@ = -799.7592
+442@ = 1278.639
+443@ = -810.0243
+
+:MANSIO1_32157
+goto @MANSIO1_32394
+
+:MANSIO1_32164
+if and
+  301@ == -1
+  302@ == -1
+goto_if_false @MANSIO1_32236
+439@ = 1
+440@ = 1285.959
+441@ = -800.8917
+442@ = 1293.121
+443@ = -811.5349
+
+:MANSIO1_32236
+goto @MANSIO1_32394
+
+:MANSIO1_32243
+if 
+  303@ == -1
+goto_if_false @MANSIO1_32308
+439@ = 1
+440@ = 1271.434
+441@ = -811.7203
+442@ = 1278.597
+443@ = -822.8848
+
+:MANSIO1_32308
+goto @MANSIO1_32394
+
+:MANSIO1_32315
+if and
+  304@ == -1
+  305@ == -1
+goto_if_false @MANSIO1_32387
+439@ = 1
+440@ = 1285.944
+441@ = -812.8881
+442@ = 1293.238
+443@ = -823.5223
+
+:MANSIO1_32387
+goto @MANSIO1_32394
+
+:MANSIO1_32394
+if 
+  439@ == 1
+goto_if_false @MANSIO1_32519
+43@ = 0
+
+:MANSIO1_32419
+if 
+  20 > 43@
+goto_if_false @MANSIO1_32519
+if 
+  not Char.IsDead(226@(43@,20i))
+goto_if_false @MANSIO1_32505
+if 
+  Char.IsInArea2D(226@(43@,20i), 0, 440@, 441@, 442@, 443@)
+goto_if_false @MANSIO1_32505
+439@ = 0
+43@ = 20
+
+:MANSIO1_32505
+43@ += 1
+goto @MANSIO1_32419
+
+:MANSIO1_32519
+if 
+  439@ == 1
+goto_if_false @MANSIO1_32644
+43@ = 0
+
+:MANSIO1_32544
+if 
+  3 > 43@
+goto_if_false @MANSIO1_32644
+if 
+  not Char.IsDead(474@(43@,3i))
+goto_if_false @MANSIO1_32630
+if 
+  Char.IsInArea2D(474@(43@,3i), 0, 440@, 441@, 442@, 443@)
+goto_if_false @MANSIO1_32630
+439@ = 0
+43@ = 2
+
+:MANSIO1_32630
+43@ += 1
+goto @MANSIO1_32544
+
+:MANSIO1_32644
+if 
+  439@ == 1
+goto_if_false @MANSIO1_32860
+344@ += 1
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @MANSIO1_32860
+if 
+  Char.LocateOnFootChar3D($scplayer, 143@(430@,3i), 35.0, 35.0, 4.0, False)
+goto_if_false @MANSIO1_32860
+if 
+  430@ == 0
+goto_if_false @MANSIO1_32771
+set_var_int_to_lvar_int $load_sample = 444@(452@,8i)
+set_var_text_label s$load_text = 453@(452@,8s)
+goto @MANSIO1_32809
+
+:MANSIO1_32771
+452@ += 4
+set_var_int_to_lvar_int $load_sample = 444@(452@,8i)
+set_var_text_label s$load_text = 453@(452@,8s)
+452@ -= 4
+
+:MANSIO1_32809
+start_new_script @A_ALAP 2 100 143@(430@,3i) 
+452@ += 1
+if 
+  452@ == 4
+goto_if_false @MANSIO1_32860
+452@ = 0
+
+:MANSIO1_32860
+return 
+
+:MANSIO1_32862
+43@ = 0
+
+:MANSIO1_32869
+if 
+  20 > 43@
+goto_if_false @MANSIO1_33074
+switch_start 246@(43@,20i) total_jumps 2 default_jump 0 @MANSIO1_33060 jumps 0 @MANSIO1_32954 1 @MANSIO1_33010 -1 @MANSIO1_33060 -1 @MANSIO1_33060 -1 @MANSIO1_33060 -1 @MANSIO1_33060 -1 @MANSIO1_33060
+
+:MANSIO1_32954
+if 
+  not Char.IsDead(226@(43@,20i))
+goto_if_false @MANSIO1_32988
+goto @MANSIO1_33060
+goto @MANSIO1_33010
+
+:MANSIO1_32988
+266@(43@,20i) = 0
+246@(43@,20i) = 1
+
+:MANSIO1_33010
+if 
+  266@(43@,20i) > 2500
+goto_if_false @MANSIO1_33053
+Char.MarkAsNoLongerNeeded(226@(43@,20i))
+246@(43@,20i) = -1
+
+:MANSIO1_33053
+goto @MANSIO1_33060
+
+:MANSIO1_33060
+43@ += 1
+goto @MANSIO1_32869
+
+:MANSIO1_33074
+43@ = 0
+
+:MANSIO1_33081
+if 
+  10 > 43@
+goto_if_false @MANSIO1_33286
+switch_start 296@(43@,10i) total_jumps 2 default_jump 0 @MANSIO1_33272 jumps 0 @MANSIO1_33166 1 @MANSIO1_33222 -1 @MANSIO1_33272 -1 @MANSIO1_33272 -1 @MANSIO1_33272 -1 @MANSIO1_33272 -1 @MANSIO1_33272
+
+:MANSIO1_33166
+if 
+  not Char.IsDead(286@(43@,10i))
+goto_if_false @MANSIO1_33200
+goto @MANSIO1_33272
+goto @MANSIO1_33222
+
+:MANSIO1_33200
+306@(43@,10i) = 0
+296@(43@,10i) = 1
+
+:MANSIO1_33222
+if 
+  306@(43@,10i) > 1800
+goto_if_false @MANSIO1_33265
+Char.MarkAsNoLongerNeeded(286@(43@,10i))
+296@(43@,10i) = -1
+
+:MANSIO1_33265
+goto @MANSIO1_33272
+
+:MANSIO1_33272
+43@ += 1
+goto @MANSIO1_33081
+
+:MANSIO1_33286
+43@ = 0
+
+:MANSIO1_33293
+if 
+  4 > 43@
+goto_if_false @MANSIO1_33498
+switch_start 320@(43@,4i) total_jumps 2 default_jump 0 @MANSIO1_33484 jumps 0 @MANSIO1_33378 1 @MANSIO1_33434 -1 @MANSIO1_33484 -1 @MANSIO1_33484 -1 @MANSIO1_33484 -1 @MANSIO1_33484 -1 @MANSIO1_33484
+
+:MANSIO1_33378
+if 
+  not Char.IsDead(316@(43@,4i))
+goto_if_false @MANSIO1_33412
+goto @MANSIO1_33484
+goto @MANSIO1_33434
+
+:MANSIO1_33412
+324@(43@,4i) = 0
+320@(43@,4i) = 1
+
+:MANSIO1_33434
+if 
+  324@(43@,4i) > 1800
+goto_if_false @MANSIO1_33477
+Char.MarkAsNoLongerNeeded(316@(43@,4i))
+320@(43@,4i) = -1
+
+:MANSIO1_33477
+goto @MANSIO1_33484
+
+:MANSIO1_33484
+43@ += 1
+goto @MANSIO1_33293
+
+:MANSIO1_33498
+return 
+
+:MANSIO1_33500
+$x, $y, $z = Char.GetCoordinates($scplayer)
+if 
+  $z > 1089.0
+goto_if_false @MANSIO1_33909
+if 
+  $y > -784.0
+goto_if_false @MANSIO1_33570
+469@ = 0
+goto @MANSIO1_33902
+
+:MANSIO1_33570
+if or
+  1271.0 > $x
+  $x > 1294.0
+goto_if_false @MANSIO1_33615
+469@ = 0
+goto @MANSIO1_33902
+
+:MANSIO1_33615
+if 
+  $y > -824.0
+goto_if_false @MANSIO1_33895
+if 
+  1279.0 > $x
+goto_if_false @MANSIO1_33741
+if 
+  $y > -799.0
+goto_if_false @MANSIO1_33692
+469@ = 1
+goto @MANSIO1_33734
+
+:MANSIO1_33692
+if 
+  $y > -811.0
+goto_if_false @MANSIO1_33727
+469@ = 3
+goto @MANSIO1_33734
+
+:MANSIO1_33727
+469@ = 5
+
+:MANSIO1_33734
+goto @MANSIO1_33888
+
+:MANSIO1_33741
+if 
+  $x > 1285.0
+goto_if_false @MANSIO1_33846
+if 
+  $y > -800.0
+goto_if_false @MANSIO1_33797
+469@ = 2
+goto @MANSIO1_33839
+
+:MANSIO1_33797
+if 
+  $y > -812.0
+goto_if_false @MANSIO1_33832
+469@ = 4
+goto @MANSIO1_33839
+
+:MANSIO1_33832
+469@ = 6
+
+:MANSIO1_33839
+goto @MANSIO1_33888
+
+:MANSIO1_33846
+if 
+  $y > -806.0
+goto_if_false @MANSIO1_33881
+469@ = 7
+goto @MANSIO1_33888
+
+:MANSIO1_33881
+469@ = 8
+
+:MANSIO1_33888
+goto @MANSIO1_33902
+
+:MANSIO1_33895
+469@ = 9
+
+:MANSIO1_33902
+goto @MANSIO1_33923
+
+:MANSIO1_33909
+489@ = 1
+469@ = 10
+
+:MANSIO1_33923
+if 
+  472@ == 1
+goto_if_false @MANSIO1_33957
+473@ = Math.RandomIntInRange(0, 2)
+goto @MANSIO1_33964
+
+:MANSIO1_33957
+473@ = 0
+
+:MANSIO1_33964
+470@ = 0
+if 
+  489@ <> 1
+goto_if_false @MANSIO1_34275
+switch_start 469@ total_jumps 11 default_jump 0 @MANSIO1_34275 jumps 0 @MANSIO1_34117 1 @MANSIO1_34138 2 @MANSIO1_34138 3 @MANSIO1_34138 4 @MANSIO1_34191 5 @MANSIO1_34191 6 @MANSIO1_34212
+switch_continued 7 @MANSIO1_34138 8 @MANSIO1_34233 9 @MANSIO1_34233 10 @MANSIO1_34254 -1 @MANSIO1_34275 -1 @MANSIO1_34275 -1 @MANSIO1_34275 -1 @MANSIO1_34275 -1 @MANSIO1_34275
+
+:MANSIO1_34117
+set_local_var_bit_const 470@ bit 1
+set_local_var_bit_const 470@ bit 2
+goto @MANSIO1_34275
+
+:MANSIO1_34138
+if 
+  473@ == 0
+goto_if_false @MANSIO1_34170
+set_local_var_bit_const 470@ bit 2
+goto @MANSIO1_34177
+
+:MANSIO1_34170
+set_local_var_bit_const 470@ bit 5
+
+:MANSIO1_34177
+set_local_var_bit_const 470@ bit 3
+goto @MANSIO1_34275
+
+:MANSIO1_34191
+set_local_var_bit_const 470@ bit 1
+set_local_var_bit_const 470@ bit 3
+goto @MANSIO1_34275
+
+:MANSIO1_34212
+set_local_var_bit_const 470@ bit 1
+set_local_var_bit_const 470@ bit 0
+goto @MANSIO1_34275
+
+:MANSIO1_34233
+set_local_var_bit_const 470@ bit 0
+set_local_var_bit_const 470@ bit 4
+goto @MANSIO1_34275
+
+:MANSIO1_34254
+set_local_var_bit_const 470@ bit 2
+set_local_var_bit_const 470@ bit 4
+goto @MANSIO1_34275
+
+:MANSIO1_34275
+471@ = 1
+return 
+
+:MANSIO1_34284
+486@ = 0
+
+:MANSIO1_34291
+if 
+  3 > 486@
+goto_if_false @MANSIO1_35149
+if 
+  not Char.IsDead(474@(486@,3i))
+goto_if_false @MANSIO1_34537
+switch_start 477@(486@,3i) total_jumps 1 default_jump 0 @MANSIO1_34530 jumps 1 @MANSIO1_34396 -1 @MANSIO1_34530 -1 @MANSIO1_34530 -1 @MANSIO1_34530 -1 @MANSIO1_34530 -1 @MANSIO1_34530 -1 @MANSIO1_34530
+
+:MANSIO1_34396
+if 
+  4 > 335@
+goto_if_false @MANSIO1_34523
+if 
+  not Text.IsMessageBeingDisplayed
+goto_if_false @MANSIO1_34523
+if 
+  Char.LocateAnyMeansChar2D(474@(486@,3i), $scplayer, 15.0, 15.0, False)
+goto_if_false @MANSIO1_34523
+set_var_int_to_lvar_int $load_sample = 331@(335@,4i)
+set_var_text_label s$load_text = 336@(335@,4s)
+start_new_script @A_ALAP 2 50 474@(486@,3i) 
+477@(486@,3i) = 0
+335@ += 1
+
+:MANSIO1_34523
+goto @MANSIO1_34530
+
+:MANSIO1_34530
+goto @MANSIO1_35135
+
+:MANSIO1_34537
+switch_start 477@(486@,3i) total_jumps 2 default_jump 1 @MANSIO1_35113 jumps -2 @MANSIO1_34708 -1 @MANSIO1_34604 -1 @MANSIO1_35135 -1 @MANSIO1_35135 -1 @MANSIO1_35135 -1 @MANSIO1_35135 -1 @MANSIO1_35135
+
+:MANSIO1_34604
+if 
+  is_int_lvar_greater_than_int_lvar 488@ > 480@(486@,3i)
+goto_if_false @MANSIO1_34634
+goto @MANSIO1_35135
+
+:MANSIO1_34634
+Char.RemoveElegantly(474@(486@,3i))
+if 
+  486@ == 2
+goto_if_false @MANSIO1_34708
+if 
+  472@ == 0
+goto_if_false @MANSIO1_34697
+477@(486@,3i) += 1
+goto @MANSIO1_34708
+
+:MANSIO1_34697
+477@(486@,3i) -= 1
+
+:MANSIO1_34708
+if 
+  489@ <> 1
+goto_if_false @MANSIO1_35092
+if 
+  471@ == 0
+goto_if_false @MANSIO1_34751
+gosub @MANSIO1_33500
+
+:MANSIO1_34751
+43@ = 0
+
+:MANSIO1_34758
+if 
+  6 > 43@
+goto_if_false @MANSIO1_35106
+if 
+  is_local_var_bit_set_lvar 470@ bit 43@
+goto_if_false @MANSIO1_35092
+if 
+  not is_int_lvar_equal_to_int_lvar 43@ == 487@
+goto_if_false @MANSIO1_35092
+if 
+  not World.IsPointObscuredByAMissionEntity(490@(43@,6f), 496@(43@,6f), 502@(43@,6f), 1.5, 1.5, 0.0)
+goto_if_false @MANSIO1_35092
+474@(486@,3i) = Char.Create(25, 108, 490@(43@,6f), 496@(43@,6f), 502@(43@,6f))
+Char.SetHealth(474@(486@,3i), 200)
+Char.SetMaxHealth(474@(486@,3i), 200)
+Char.SetHeading(474@(486@,3i), 508@(43@,6f))
+Char.SetAreaVisible(474@(486@,3i), 5)
+Char.GiveWeapon(474@(486@,3i), WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(474@(486@,3i), WeaponType.Mp5)
+Char.SetDecisionMaker(474@(486@,3i), 36@)
+Char.SetDropsWeaponsWhenDead(474@(486@,3i), False)
+Task.KillCharOnFoot(474@(486@,3i), $scplayer)
+Char.SetAccuracy(474@(486@,3i), 50)
+Char.SetShootRate(474@(486@,3i), 60)
+if 
+  486@ == 0
+goto_if_false @MANSIO1_35066
+477@(486@,3i) = 1
+goto @MANSIO1_35077
+
+:MANSIO1_35066
+477@(486@,3i) = 0
+
+:MANSIO1_35077
+set_lvar_int_to_lvar_int 487@ = 43@
+43@ = 5
+
+:MANSIO1_35092
+43@ += 1
+goto @MANSIO1_34758
+
+:MANSIO1_35106
+goto @MANSIO1_35135
+
+:MANSIO1_35113
+480@(486@,3i) = 0
+477@(486@,3i) = -1
+
+:MANSIO1_35135
+486@ += 1
+goto @MANSIO1_34291
+
+:MANSIO1_35149
+return 
+
+:MANSIO1_35151
+if 
+  not Char.IsDead(328@)
+goto_if_false @MANSIO1_35544
+switch_start 514@ total_jumps 2 default_jump 0 @MANSIO1_35544 jumps 0 @MANSIO1_35230 1 @MANSIO1_35514 -1 @MANSIO1_35544 -1 @MANSIO1_35544 -1 @MANSIO1_35544 -1 @MANSIO1_35544 -1 @MANSIO1_35544
+
+:MANSIO1_35230
+if 
+  not Char.LocateOnFoot2D(328@, 0, 516@, 517@, 1.0, 1.0)
+goto_if_false @MANSIO1_35271
+goto @MANSIO1_35544
+
+:MANSIO1_35271
+if 
+  518@ <> -1.0
+goto_if_false @MANSIO1_35369
+if 
+  515@ == 0
+goto_if_false @MANSIO1_35333
+Text.PrintNow('MAN1_21', 8000, 1)
+515@ = 1
+
+:MANSIO1_35333
+Char.ClearTasksImmediately(328@)
+Char.SetCoordinates(328@, 518@, 519@, 1083.01)
+Char.SetHeading(328@, 520@)
+goto @MANSIO1_35500
+
+:MANSIO1_35369
+World.DisableAllEntryExits(False)
+World.SwitchEntryExit('MDDOGS', True)
+47@ = Blip.AddForCoord(1298.74, -795.9946, 1083.008)
+Blip.SetEntryExit(47@, 1258.338, -785.4264, 91.0313)
+Text.PrintNow('MAN1_22', 8000, 1)
+Char.SetCoordinates(328@, 1261.031, -815.666, 83.1484)
+Char.SetHeading(328@, 65.0097)
+Char.SetAreaVisible(328@, 0)
+Char.FreezePositionAndDontLoadCollision(328@, True)
+514@ = 1
+goto @MANSIO1_35544
+
+:MANSIO1_35500
+514@ = -1
+goto @MANSIO1_35544
+
+:MANSIO1_35514
+48@ = Streaming.GetAreaVisible()
+if 
+  48@ == 0
+goto_if_false @MANSIO1_35544
+514@ = 2
+
+:MANSIO1_35544
+return 
+
+:MANSIO1_35546
+Char.Delete(143@)
+Char.Delete(144@)
+Streaming.MarkModelAsNoLongerNeeded(117)
+Streaming.MarkModelAsNoLongerNeeded(118)
+Streaming.MarkModelAsNoLongerNeeded(356)
+43@ = 0
+
+:MANSIO1_35576
+if 
+  10 > 43@
+goto_if_false @MANSIO1_35617
+Char.Delete(286@(43@,10i))
+43@ += 1
+goto @MANSIO1_35576
+
+:MANSIO1_35617
+43@ = 0
+
+:MANSIO1_35624
+if 
+  13 > 43@
+goto_if_false @MANSIO1_35665
+Char.MarkAsNoLongerNeeded(226@(43@,20i))
+43@ += 1
+goto @MANSIO1_35624
+
+:MANSIO1_35665
+Char.MarkAsNoLongerNeeded(474@)
+Char.MarkAsNoLongerNeeded(475@)
+Char.MarkAsNoLongerNeeded(476@)
+Char.MarkAsNoLongerNeeded(316@)
+Char.MarkAsNoLongerNeeded(317@)
+Char.MarkAsNoLongerNeeded(318@)
+Char.MarkAsNoLongerNeeded(319@)
+Streaming.MarkModelAsNoLongerNeeded(13)
+Streaming.MarkModelAsNoLongerNeeded(195)
+DecisionMaker.Remove(37@)
+DecisionMaker.Remove(35@)
+Streaming.RequestModel(18)
+Streaming.RequestModel(19)
+Streaming.RequestModel(63)
+Streaming.RequestModel(139)
+521@ = 1
+return 
+
+:MANSIO1_35745
+switch_start 521@ total_jumps 2 default_jump 0 @MANSIO1_36515 jumps 1 @MANSIO1_35808 2 @MANSIO1_36227 -1 @MANSIO1_36515 -1 @MANSIO1_36515 -1 @MANSIO1_36515 -1 @MANSIO1_36515 -1 @MANSIO1_36515
+
+:MANSIO1_35808
+240@ = Char.Create(25, 110, 1260.064, -793.2798, 1083.241)
+Char.SetHeading(240@, 290.4863)
+Char.SetHealth(240@, 200)
+Char.SetMaxHealth(240@, 200)
+Char.SetAreaVisible(240@, 5)
+Char.GiveWeapon(240@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(240@, WeaponType.Mp5)
+Char.SetAccuracy(240@, 80)
+Char.SetShootRate(240@, 60)
+Char.SetDecisionMaker(240@, 36@)
+260@ = 0
+241@ = Char.Create(25, 110, 1257.702, -767.9689, 1083.008)
+Char.SetHeading(241@, 119.2357)
+Char.SetHealth(241@, 200)
+Char.SetMaxHealth(241@, 200)
+Char.SetAreaVisible(241@, 5)
+Char.GiveWeapon(241@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(241@, WeaponType.Mp5)
+Char.SetAccuracy(241@, 70)
+Char.SetShootRate(241@, 50)
+Char.SetDecisionMaker(241@, 36@)
+261@ = 0
+242@ = Char.Create(25, 110, 1289.814, -778.2963, 1083.008)
+Char.SetHeading(242@, 67.6874)
+Char.SetHealth(242@, 200)
+Char.SetMaxHealth(242@, 200)
+Char.SetAreaVisible(242@, 5)
+Char.GiveWeapon(242@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(242@, WeaponType.Mp5)
+Char.SetAccuracy(242@, 70)
+Char.SetShootRate(242@, 60)
+Char.SetDecisionMaker(242@, 36@)
+262@ = 0
+243@ = Char.Create(25, 110, 1282.886, -779.3019, 1083.015)
+Char.SetHeading(243@, 57.042)
+Char.SetHealth(243@, 200)
+Char.SetMaxHealth(243@, 200)
+Char.SetAreaVisible(243@, 5)
+Char.GiveWeapon(243@, WeaponType.Mp5, 30000)
+Char.SetCurrentWeapon(243@, WeaponType.Mp5)
+Char.SetAccuracy(243@, 70)
+Char.SetShootRate(243@, 60)
+Char.SetDecisionMaker(243@, 36@)
+263@ = 0
+521@ += 1
+
+:MANSIO1_36227
+if or
+  not Streaming.HasModelLoaded(18)
+  not Streaming.HasModelLoaded(19)
+  not Streaming.HasModelLoaded(63)
+  not Streaming.HasModelLoaded(139)
+goto_if_false @MANSIO1_36262
+goto @MANSIO1_36515
+
+:MANSIO1_36262
+522@ = Char.Create(26, 19, 1275.155, -788.5061, 1083.008)
+Char.SetHeading(522@, 152.55)
+Char.SetAreaVisible(522@, 5)
+Char.SetDecisionMaker(522@, 38@)
+523@ = Char.Create(26, 63, 1274.54, -790.0915, 1083.008)
+Char.SetHeading(523@, 349.0896)
+Char.SetAreaVisible(523@, 5)
+Char.SetDecisionMaker(523@, 38@)
+524@ = Char.Create(26, 18, 1273.279, -788.6833, 1083.008)
+Char.SetHeading(524@, 221.2157)
+Char.SetAreaVisible(524@, 5)
+Char.SetDecisionMaker(524@, 38@)
+525@ = Char.Create(26, 139, 1261.499, -788.9477, 1083.015)
+Char.SetHeading(525@, 154.0331)
+Char.SetAreaVisible(525@, 5)
+Char.SetDecisionMaker(525@, 38@)
+526@ = Char.Create(26, 18, 1260.887, -790.43, 1083.015)
+Char.SetHeading(526@, 332.9453)
+Char.SetAreaVisible(526@, 5)
+Char.SetDecisionMaker(526@, 38@)
+521@ = 0
+
+:MANSIO1_36515
+return 
+
+:MANSIO1_36517
+Text.ClearPrints
+48@ = 5
+
+:MANSIO1_36526
+if 
+  48@ == 5
+goto_if_false @MANSIO1_36563
+wait 0
+48@ = Char.GetAreaVisible($scplayer)
+goto @MANSIO1_36526
+
+:MANSIO1_36563
+Zone.SwitchAudio('MADDOGL', False)
+Camera.DoFade(0, Fade.Out)
+
+:MANSIO1_36582
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_36606
+wait 0
+goto @MANSIO1_36582
+
+:MANSIO1_36606
+World.SwitchEntryExit('MADDOGS', False)
+World.SwitchEntryExit('MDDOGS', False)
+World.ClearAreaOfCars(1239.904, -800.9069, 80.0, 1261.751, -817.216, 90.0)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+gosub @MANSIO1_38446
+World.SetCarDensityMultiplier(0.5)
+Streaming.RequestModel(603)
+Streaming.RequestModel(555)
+Streaming.RequestCarRecording(708)
+
+:MANSIO1_36704
+if or
+  not Streaming.HasModelLoaded(603)
+  not Streaming.HasModelLoaded(555)
+  not Streaming.HasCarRecordingBeenLoaded(708)
+goto_if_false @MANSIO1_36741
+wait 0
+goto @MANSIO1_36704
+
+:MANSIO1_36741
+Streaming.LoadScene(1265.009, -816.3813, 83.6305)
+527@ = Car.Create(603, 1250.519, -812.1237, 83.1484)
+Car.SetHeading(527@, 162.4757)
+Car.CustomPlateForNextCar(555, "J_LOMAX")
+Car.SetModelComponents(555, 1, 1)
+528@ = Car.Create(555, 1244.026, -808.5705, 83.1484)
+Car.SetHeading(528@, 177.4448)
+Car.ChangeColor(528@, 126, 0)
+Audio.SetRadioChannel(RadioChannel.BounceFM)
+if 
+  not Char.IsDead(328@)
+goto_if_false @MANSIO1_36938
+Char.ClearTasksImmediately(328@)
+Char.SetDecisionMaker(328@, 34@)
+Char.FreezePositionAndDontLoadCollision(328@, False)
+Char.SetAreaVisible(328@, 0)
+Char.SetCoordinates(328@, 1268.7, -813.0891, 83.1484)
+Char.SetHeading(328@, 90.0)
+Blip.Remove(329@)
+
+:MANSIO1_36938
+Char.SetCoordinates($scplayer, 1268.7, -813.0891, 83.1484)
+Char.SetHeading($scplayer, 90.0)
+Camera.ResetNewScriptables
+Camera.SetShakeSimulationSimple(1, 50000.0, 0.5)
+Camera.SetFixedPosition(1265.009, -816.3813, 83.6305, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1264.046, -816.1189, 83.6842, SwitchType.JumpCut)
+Camera.DoFade(1, 500)
+
+:MANSIO1_37042
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_37066
+wait 0
+goto @MANSIO1_37042
+
+:MANSIO1_37066
+if and
+  not Char.IsDead(328@)
+  not Car.IsDead(527@)
+goto_if_false @MANSIO1_37177
+45@ = Sequence.Open()
+Task.StandStill(-1, 1500)
+Task.EnterCarAsDriver(-1, 527@, 9999)
+Sequence.Close(45@)
+Char.PerformSequence(328@, 45@)
+Sequence.Clear(45@)
+45@ = Sequence.Open()
+Task.StandStill(-1, 7000)
+Task.GoStraightToCoord(-1, 1251.697, -812.287, 83.1484, MoveState.Run, -2)
+Task.LookAtChar(-1, 328@, 1500)
+Sequence.Close(45@)
+
+:MANSIO1_37177
+Char.PerformSequence($scplayer, 45@)
+Sequence.Clear(45@)
+TIMERA = 0
+
+:MANSIO1_37197
+if 
+  1500 > TIMERA
+goto_if_false @MANSIO1_37227
+wait 0
+goto @MANSIO1_37197
+
+:MANSIO1_37227
+Camera.PersistTrack(True)
+Camera.PersistPos(True)
+Camera.SetVectorMove(1265.009, -816.3813, 83.6305, 1253.448, -815.4342, 83.4116, 7500, True)
+Camera.SetVectorTrack(1264.046, -816.1189, 83.6842, 1252.86, -814.6353, 83.5422, 7500, True)
+49@ = 0
+
+:MANSIO1_37316
+if 
+  49@ == 0
+goto_if_false @MANSIO1_37384
+wait 0
+if 
+  not Char.IsDead(328@)
+goto_if_false @MANSIO1_37377
+if 
+  Char.IsInAnyCar(328@)
+goto_if_false @MANSIO1_37377
+49@ = 1
+
+:MANSIO1_37377
+goto @MANSIO1_37316
+
+:MANSIO1_37384
+if 
+  not Car.IsDead(527@)
+goto_if_false @MANSIO1_37456
+Car.StartPlayback(527@, 708)
+Car.SetForwardSpeed(527@, 40.0)
+Car.LockDoors(527@, CarLock.Locked)
+if 
+  not Char.IsDead(328@)
+goto_if_false @MANSIO1_37456
+Char.SetProofs(328@, False, False, False, False, False)
+
+:MANSIO1_37456
+TIMERA = 0
+
+:MANSIO1_37463
+if 
+  5000 > TIMERA
+goto_if_false @MANSIO1_37493
+wait 0
+goto @MANSIO1_37463
+
+:MANSIO1_37493
+if 
+  not Car.IsDead(527@)
+goto_if_false @MANSIO1_37517
+329@ = Blip.AddForCar(527@)
+
+:MANSIO1_37517
+Text.PrintNow('MAN1_23', 8000, 1)
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Camera.ResetNewScriptables
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Game.SetMaxWantedLevel(6)
+World.SetCarDensityMultiplier(0.5)
+
+:MANSIO1_37561
+wait 0
+if 
+  not Char.IsDead(328@)
+goto_if_false @MANSIO1_37678
+if 
+  not Char.LocateAnyMeansChar2D($scplayer, 328@, 250.0, 250.0, False)
+goto_if_false @MANSIO1_37640
+52@ = 1
+set_lvar_text_label 53@s = 'MAN1_24'
+goto @MANSIO1_38488
+
+:MANSIO1_37640
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @MANSIO1_37664
+530@ = Char.StoreCarIsInNoSave($scplayer)
+
+:MANSIO1_37664
+gosub @MANSIO1_38303
+goto @MANSIO1_38296
+
+:MANSIO1_37678
+Blip.Remove(329@)
+TIMERA = 0
+
+:MANSIO1_37690
+if 
+  2000 > TIMERA
+goto_if_false @MANSIO1_37720
+wait 0
+goto @MANSIO1_37690
+
+:MANSIO1_37720
+Camera.DoFade(0, Fade.Out)
+
+:MANSIO1_37726
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_37750
+wait 0
+goto @MANSIO1_37726
+
+:MANSIO1_37750
+529@ = Audio.GetRadioChannel()
+Audio.SetRadioChannel(RadioChannel.UserTracks)
+Player.SetControl($player1, False)
+Char.SetProofs($scplayer, True, True, True, True, True)
+Player.ClearWantedLevel($player1)
+Hud.SwitchWidescreen(True)
+if 
+  not Car.IsDead(530@)
+goto_if_false @MANSIO1_37851
+531@ = Car.GetHealth(530@)
+if 
+  500 > 531@
+goto_if_false @MANSIO1_37841
+Car.SetHealth(530@, 500)
+
+:MANSIO1_37841
+Car.SetForwardSpeed(530@, 0.0)
+
+:MANSIO1_37851
+Streaming.RequestModel(#DRG_NU_EXT)
+
+:MANSIO1_37856
+if 
+  not Streaming.HasModelLoaded(#DRG_NU_EXT)
+goto_if_false @MANSIO1_37883
+wait 0
+goto @MANSIO1_37856
+
+:MANSIO1_37883
+Camera.SetFixedPosition(1221.787, -856.6817, 99.5425, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(1222.33, -855.9062, 99.2196, SwitchType.JumpCut)
+Streaming.LoadSceneInDirection(1248.908, -804.626, 87.535, 297.0012)
+TIMERA = 0
+
+:MANSIO1_37963
+if 
+  500 > TIMERA
+goto_if_false @MANSIO1_37993
+wait 0
+goto @MANSIO1_37963
+
+:MANSIO1_37993
+Camera.DoFade(1, 500)
+
+:MANSIO1_38000
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_38024
+wait 0
+goto @MANSIO1_38000
+
+:MANSIO1_38024
+skip_cutscene_start_internal @MANSIO1_38115
+Text.PrintNow('MAN1_30', 7000, 1)
+TIMERA = 0
+
+:MANSIO1_38054
+if 
+  7000 > TIMERA
+goto_if_false @MANSIO1_38084
+wait 0
+goto @MANSIO1_38054
+
+:MANSIO1_38084
+Camera.DoFade(0, 500)
+
+:MANSIO1_38091
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_38115
+wait 0
+goto @MANSIO1_38091
+
+:MANSIO1_38115
+skip_cutscene_end 
+Camera.DoFade(0, Fade.Out)
+
+:MANSIO1_38123
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_38147
+wait 0
+goto @MANSIO1_38123
+
+:MANSIO1_38147
+Streaming.MarkModelAsNoLongerNeeded(#DRG_NU_EXT)
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+$player_x, $player_y, $player_z = Char.GetCoordinates($scplayer)
+$heading = Char.GetHeading($scplayer)
+Streaming.LoadSceneInDirection($player_x, $player_y, $player_z, $heading)
+TIMERA = 0
+
+:MANSIO1_38208
+if 
+  500 > TIMERA
+goto_if_false @MANSIO1_38238
+wait 0
+goto @MANSIO1_38208
+
+:MANSIO1_38238
+Audio.SetRadioChannel(529@)
+Camera.DoFade(1, 500)
+
+:MANSIO1_38250
+if 
+  Camera.GetFadingStatus
+goto_if_false @MANSIO1_38274
+wait 0
+goto @MANSIO1_38250
+
+:MANSIO1_38274
+Char.SetProofs($scplayer, False, False, False, False, False)
+goto @MANSIO1_38560
+
+:MANSIO1_38296
+goto @MANSIO1_37561
+
+:MANSIO1_38303
+if 
+  not Car.IsDead(527@)
+goto_if_false @MANSIO1_38444
+switch_start 532@ total_jumps 1 default_jump 0 @MANSIO1_38444 jumps 0 @MANSIO1_38382 -1 @MANSIO1_38444 -1 @MANSIO1_38444 -1 @MANSIO1_38444 -1 @MANSIO1_38444 -1 @MANSIO1_38444 -1 @MANSIO1_38444
+
+:MANSIO1_38382
+if 
+  Car.IsPlaybackGoingOn(527@)
+goto_if_false @MANSIO1_38405
+goto @MANSIO1_38444
+
+:MANSIO1_38405
+Car.SetCruiseSpeed(527@, 25.0)
+Task.CarDriveWander(328@, 527@, 25.0, DrivingMode.AvoidCars)
+532@ += 1
+goto @MANSIO1_38444
+
+:MANSIO1_38444
+return 
+
+:MANSIO1_38446
+Blip.Remove(47@)
+Streaming.MarkModelAsNoLongerNeeded(108)
+Streaming.MarkModelAsNoLongerNeeded(110)
+Streaming.MarkModelAsNoLongerNeeded(18)
+Streaming.MarkModelAsNoLongerNeeded(19)
+Streaming.MarkModelAsNoLongerNeeded(63)
+Streaming.MarkModelAsNoLongerNeeded(139)
+Streaming.MarkModelAsNoLongerNeeded(353)
+DecisionMaker.Remove(36@)
+return 
+
+:MANSIO1_38488
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+World.SwitchEntryExit('MADDOGS', False)
+World.SwitchEntryExit('MDDOGS', False)
+if 
+  52@ == 1
+goto_if_false @MANSIO1_38558
+Text.PrintNow(53@s, 8000, 1)
+
+:MANSIO1_38558
+return 
+
+:MANSIO1_38560
+43@ = 0
+
+:MANSIO1_38567
+if 
+  16 > 43@
+goto_if_false @MANSIO1_38700
+if 
+  not Char.IsDead(226@(43@,20i))
+goto_if_false @MANSIO1_38677
+Char.ClearTasks(226@(43@,20i))
+Char.SetAccuracy(226@(43@,20i), 20)
+Char.SetShootRate(226@(43@,20i), 25)
+Task.StayInSamePlace(226@(43@,20i), True)
+Task.KillCharOnFoot(226@(43@,20i), $scplayer)
+Char.SetKeepTask(226@(43@,20i), True)
+goto @MANSIO1_38686
+
+:MANSIO1_38677
+Char.MarkAsNoLongerNeeded(226@(43@,20i))
+
+:MANSIO1_38686
+43@ += 1
+goto @MANSIO1_38567
+
+:MANSIO1_38700
+43@ = 0
+
+:MANSIO1_38707
+if 
+  10 > 43@
+goto_if_false @MANSIO1_38840
+if 
+  not Char.IsDead(286@(43@,10i))
+goto_if_false @MANSIO1_38817
+Char.ClearTasks(286@(43@,10i))
+Char.SetAccuracy(226@(43@,20i), 20)
+Char.SetShootRate(226@(43@,20i), 25)
+Task.StayInSamePlace(286@(43@,10i), True)
+Task.KillCharOnFoot(286@(43@,10i), $scplayer)
+Char.SetKeepTask(286@(43@,10i), True)
+goto @MANSIO1_38826
+
+:MANSIO1_38817
+Char.MarkAsNoLongerNeeded(286@(43@,10i))
+
+:MANSIO1_38826
+43@ += 1
+goto @MANSIO1_38707
+
+:MANSIO1_38840
+43@ = 0
+
+:MANSIO1_38847
+if 
+  2 > 43@
+goto_if_false @MANSIO1_38947
+if 
+  not Char.IsDead(474@(43@,3i))
+goto_if_false @MANSIO1_38924
+Char.ClearTasks(474@(43@,3i))
+Task.KillCharOnFoot(474@(43@,3i), $scplayer)
+Char.SetKeepTask(474@(43@,3i), True)
+goto @MANSIO1_38933
+
+:MANSIO1_38924
+Char.MarkAsNoLongerNeeded(474@(43@,3i))
+
+:MANSIO1_38933
+43@ += 1
+goto @MANSIO1_38847
+
+:MANSIO1_38947
+World.SwitchEntryExit('MADDOGS', True)
+World.SwitchEntryExit('MDDOGS', True)
+$flag_mansion_mission_counter += 1
+Stat.RegisterMissionPassed('MAN_1')
+Stat.PlayerMadeProgress(1)
+CarGenerator.Switch($car_gen_sparrow, 101)
+Text.PrintWithNumberBig('M_PASSR', 4, 5000, TextStyle.Middle)
+Stat.AwardPlayerMissionRespect(40)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+Blip.Remove($casino_contact_blip)
+$1718 = Blip.AddShortRangeSpriteForContactPoint(35, $save_pickupX[1], $save_pickupY[1], $save_pickupZ[1])
+Blip.ChangeDisplay($1718, BlipDisplay.BlipOnly)
+return 
+
+:MANSIO1_39063
+Hud.DisplayZoneNames(True)
+Zone.SwitchAudio('MADDOGL', False)
+if 
+  Player.IsPlaying($player1)
+goto_if_false @MANSIO1_39107
+Player.SetGroupRecruitment($player1, True)
+Game.SetScriptLimitToGangSize(99)
+
+:MANSIO1_39107
+start_new_script @A_TERM 
+Blip.Remove(47@)
+Blip.Remove(329@)
+World.DisableAllEntryExits(False)
+Game.SwitchAmbientPlanes(True)
+Game.SetMaxWantedLevel(6)
+World.SetCarDensityMultiplier(1.0)
+$para_force_chute_open = 0
+Particle.Kill(124@)
+Particle.Kill(125@)
+Particle.Kill(126@)
+Blip.Remove(47@)
+43@ = 0
+
+:MANSIO1_39178
+if 
+  4 > 43@
+goto_if_false @MANSIO1_39237
+Char.MarkAsNoLongerNeeded(99@(43@,4i))
+Char.MarkAsNoLongerNeeded(131@(43@,4i))
+Char.MarkAsNoLongerNeeded(170@(43@,6i))
+43@ += 1
+goto @MANSIO1_39178
+
+:MANSIO1_39237
+43@ = 0
+
+:MANSIO1_39244
+if 
+  3 > 43@
+goto_if_false @MANSIO1_39294
+Char.MarkAsNoLongerNeeded(143@(43@,3i))
+Blip.Remove(146@(43@,3i))
+43@ += 1
+goto @MANSIO1_39244
+
+:MANSIO1_39294
+Char.MarkAsNoLongerNeeded(159@)
+Char.MarkAsNoLongerNeeded(328@)
+Car.MarkAsNoLongerNeeded(527@)
+Car.MarkAsNoLongerNeeded(528@)
+Streaming.MarkModelAsNoLongerNeeded(117)
+Streaming.MarkModelAsNoLongerNeeded(118)
+Streaming.MarkModelAsNoLongerNeeded(108)
+Streaming.MarkModelAsNoLongerNeeded(109)
+Streaming.MarkModelAsNoLongerNeeded(110)
+Streaming.MarkModelAsNoLongerNeeded(13)
+Streaming.MarkModelAsNoLongerNeeded(195)
+Streaming.MarkModelAsNoLongerNeeded(18)
+Streaming.MarkModelAsNoLongerNeeded(19)
+Streaming.MarkModelAsNoLongerNeeded(63)
+Streaming.MarkModelAsNoLongerNeeded(139)
+Streaming.MarkModelAsNoLongerNeeded(555)
+Streaming.MarkModelAsNoLongerNeeded(603)
+Streaming.MarkModelAsNoLongerNeeded(356)
+Streaming.MarkModelAsNoLongerNeeded(353)
+Streaming.MarkModelAsNoLongerNeeded(#PARACHUTE)
+Streaming.MarkModelAsNoLongerNeeded(#PARA_PACK)
+Streaming.MarkModelAsNoLongerNeeded(371)
+Streaming.MarkModelAsNoLongerNeeded(#CARGO_REAR)
+Streaming.MarkModelAsNoLongerNeeded(#D9_RAMP)
+Streaming.MarkModelAsNoLongerNeeded(#CARDBOARDBOX2)
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.MarkModelAsNoLongerNeeded(#DRG_NU_EXT)
+StreamedScript.MarkAsNoLongerNeeded(1)
+Streaming.RemoveAnimation("PARACHUTE")
+$timer_mobile_start = Clock.GetGameTimer()
+$onmission = 0
+Mission.Finish
+return 
+

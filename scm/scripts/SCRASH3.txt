@@ -1,0 +1,2895 @@
+//-------------Mission 51---------------
+// Originally: 555 WE TIP
+
+:SCRASH3
+script_name 'SCRASH3'
+gosub @SCRASH3_47
+if 
+  has_deatharrest_been_executed 
+goto_if_false @SCRASH3_38
+gosub @SCRASH3_18128
+
+:SCRASH3_38
+gosub @SCRASH3_18272
+terminate_this_script 
+
+:SCRASH3_47
+Text.ClearThisPrint('M_FAIL')
+$onmission = 1
+$playing_scrash1 = 1
+Stat.RegisterMissionGiven
+80@ = 1
+81@ = 0
+82@ = 0
+65@ = 0
+66@ = 0
+84@ = 0
+85@ = 0
+Game.SetScriptLimitToGangSize(0)
+Text.LoadMissionText('VALET1')
+Camera.SetFadingColor(0, 0, 0)
+terminate_all_scripts_with_this_name 'VALET'
+if 
+  Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+goto_if_false @SCRASH3_198
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+
+:SCRASH3_198
+Streaming.SetAreaVisible(1)
+Cutscene.Load('SCRASH1')
+
+:SCRASH3_213
+if 
+  not Cutscene.HasLoaded
+goto_if_false @SCRASH3_237
+wait 0
+goto @SCRASH3_213
+
+:SCRASH3_237
+Cutscene.Start
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 1000)
+
+:SCRASH3_254
+if 
+  not Cutscene.HasFinished
+goto_if_false @SCRASH3_278
+wait 0
+goto @SCRASH3_254
+
+:SCRASH3_278
+Camera.DoFade(0, Fade.Out)
+
+:SCRASH3_284
+if 
+  Camera.GetFadingStatus
+goto_if_false @SCRASH3_308
+wait 0
+goto @SCRASH3_284
+
+:SCRASH3_308
+Cutscene.Clear
+Streaming.SetAreaVisible(0)
+Char.SetHeading($scplayer, 270.0)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Streaming.RequestModel(415)
+Streaming.RequestModel(240)
+
+:SCRASH3_338
+if or
+  not Streaming.HasModelLoaded(415)
+  not Streaming.HasModelLoaded(240)
+goto_if_false @SCRASH3_370
+wait 0
+goto @SCRASH3_338
+
+:SCRASH3_370
+World.SetCarDensityMultiplier(1.0)
+65@ = 0
+if 
+  65@ == 20
+goto_if_false @SCRASH3_581
+57@ = Blip.AddForCoord(-1748.402, 909.7514, 23.8906)
+60@ = Blip.AddForCoord(-1748.402, 909.7514, 23.8906)
+59@ = Blip.AddForCoord(-1748.402, 909.7514, 23.8906)
+37@ = Char.Create(24, 189, 0.0, 0.0, 0.0)
+$valet[0] = Char.Create(4, 189, 0.0, 0.0, 0.0)
+$valet_pickup_car = Car.Create(415, 0.0, 0.0, 0.0)
+$drop_off_car = Car.Create(415, 0.0, 0.0, 0.0)
+$sc3_missioncar = Car.Create(415, 0.0, 0.0, 0.0)
+
+:SCRASH3_581
+57@ = Blip.AddForCoord(-1748.402, 909.7514, 23.8906)
+wait 500
+Camera.DoFade(1, 1000)
+281@ = 0
+Text.Print('VAL_5', 10000, 1)
+
+:SCRASH3_636
+wait 0
+if 
+  Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @SCRASH3_672
+94@ = 1
+goto @SCRASH3_679
+
+:SCRASH3_672
+94@ = 0
+
+:SCRASH3_679
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @SCRASH3_708
+gosub @SCRASH3_17374
+goto @SCRASH3_18160
+
+:SCRASH3_708
+if 
+is_ps2_keyboard_key_pressed 68
+goto_if_false @SCRASH3_743
+Char.SetCoordinates($scplayer, -1755.088, 910.0911, 23.8906)
+
+:SCRASH3_743
+if 
+is_ps2_keyboard_key_pressed 70
+goto_if_false @SCRASH3_821
+Char.SetCoordinates($scplayer, -1712.653, 985.0446, 16.5859)
+if 
+  not Char.IsDead($valet[2])
+goto_if_false @SCRASH3_821
+Char.SetCoordinates($valet[2], -1700.77, 984.3545, 16.5936)
+Char.SetSuffersCriticalHits($valet[2], False)
+
+:SCRASH3_821
+if 
+is_ps2_keyboard_key_pressed 71
+goto_if_false @SCRASH3_856
+Char.SetCoordinates($scplayer, -1753.841, 960.2274, 23.8828)
+
+:SCRASH3_856
+if 
+is_ps2_keyboard_key_pressed 72
+goto_if_false @SCRASH3_1047
+if 
+  Char.IsDead(37@)
+goto_if_false @SCRASH3_912
+37@ = Char.Create(4, 240, -1611.454, 714.3873, 12.4715)
+
+:SCRASH3_912
+if 
+  not Streaming.HasModelLoaded(551)
+goto_if_false @SCRASH3_939
+wait 0
+goto @SCRASH3_912
+
+:SCRASH3_939
+if 
+  Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_978
+$sc3_missioncar = Car.Create(551, -1753.961, 951.9568, 23.7422)
+
+:SCRASH3_978
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_1024
+Car.SetCoordinates($sc3_missioncar, -1753.961, 951.9568, 23.7422)
+Car.SetHeading($sc3_missioncar, 90.0)
+
+:SCRASH3_1024
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_1047
+106@ = 1
+
+:SCRASH3_1047
+if 
+is_ps2_keyboard_key_pressed 74
+goto_if_false @SCRASH3_1108
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_1108
+Car.SetCoordinates($sc3_missioncar, -2031.828, 179.5876, 27.8359)
+Car.SetHeading($sc3_missioncar, 90.0)
+
+:SCRASH3_1108
+if 
+is_ps2_keyboard_key_pressed 75
+goto_if_false @SCRASH3_1159
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_1159
+Car.SetCoordinates($sc3_missioncar, -1779.759, 971.5197, 23.7344)
+
+:SCRASH3_1159
+if 
+is_ps2_keyboard_key_pressed 82
+goto_if_false @SCRASH3_1188
+65@ = 10
+72@ = 90
+
+:SCRASH3_1188
+if 
+  73@ == 1
+goto_if_false @SCRASH3_1254
+if 
+  not Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+goto_if_false @SCRASH3_1254
+Text.Print('VAL_B1', 4000, 1)
+goto @SCRASH3_18128
+
+:SCRASH3_1254
+gosub @SCRASH3_15223
+89@ = 0
+if 
+  65@ > 1
+goto_if_false @SCRASH3_1486
+
+:SCRASH3_1286
+if 
+  2 > 89@
+goto_if_false @SCRASH3_1486
+if 
+  is_int_var_equal_to_constant $valet_task(89@,3i) == 6
+goto_if_false @SCRASH3_1472
+if 
+  Char.DoesExist($valet(89@,3i))
+goto_if_false @SCRASH3_1472
+$x, $y, $z = World.GetDeadCharPickupCoords($valet(89@,3i))
+if and
+  $x > -1760.178
+  $y > 972.2405
+  $z > 16.1633
+  -1679.605 > $x
+  1064.293 > $y
+  24.8629 > $z
+goto_if_false @SCRASH3_1442
+goto @SCRASH3_1472
+
+:SCRASH3_1442
+gosub @SCRASH3_17374
+Text.Print('VAL_9', 3000, 1)
+goto @SCRASH3_18128
+
+:SCRASH3_1472
+89@ += 1
+goto @SCRASH3_1286
+
+:SCRASH3_1486
+if 
+  $sc3_missioncar_alive == 1
+goto_if_false @SCRASH3_1638
+if 
+  68@ == 1
+goto_if_false @SCRASH3_1554
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_1554
+$a_Car = Car.GetBlockingCar($sc3_missioncar)
+set_var_int_to_var_int $steal_this_car = $a_Car
+
+:SCRASH3_1554
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_1638
+90@, 91@ = Car.GetColors($sc3_missioncar)
+if or
+  not is_int_lvar_equal_to_constant 90@ == 4
+  not is_int_lvar_equal_to_constant 91@ == 4
+goto_if_false @SCRASH3_1638
+Text.ClearPrints
+gosub @SCRASH3_17374
+Text.Print('VAL_A35', 4000, 1)
+goto @SCRASH3_18128
+
+:SCRASH3_1638
+if 
+  65@ == 0
+goto_if_false @SCRASH3_1682
+65@ = 1
+70@ = 0
+$force_valet_on_mission = 1
+CarGenerator.SuppressCarModel(551)
+
+:SCRASH3_1682
+if 
+  65@ == 1
+goto_if_false @SCRASH3_2989
+if 
+  70@ == 0
+goto_if_false @SCRASH3_1780
+if 
+  Char.LocateAnyMeans3D($scplayer, 1, -1748.402, 909.7514, 23.8906, 3.0, 3.0, 3.0)
+goto_if_false @SCRASH3_1780
+Player.SetControl($player1, False)
+70@ = 1
+
+:SCRASH3_1780
+if 
+  70@ == 1
+goto_if_false @SCRASH3_1817
+Camera.DoFade(0, 1000)
+Streaming.RequestModel(477)
+70@ = 2
+
+:SCRASH3_1817
+if 
+  70@ == 2
+goto_if_false @SCRASH3_2323
+if and
+  not Camera.GetFadingStatus
+  Streaming.HasModelLoaded(477)
+goto_if_false @SCRASH3_2323
+Char.Delete($valet[0])
+Char.Delete($valet[1])
+Char.Delete($valet[2])
+$valet_unlocked = 1
+StreamedScript.Stream(72)
+$number_of_instances_of_streamed_script = StreamedScript.GetNumberOfInstances(72)
+if 
+  $number_of_instances_of_streamed_script > 0
+goto_if_false @SCRASH3_1954
+$force_valet_cleanup = 1
+
+:SCRASH3_1911
+if 
+  $number_of_instances_of_streamed_script > 0
+goto_if_false @SCRASH3_1947
+wait 0
+$number_of_instances_of_streamed_script = StreamedScript.GetNumberOfInstances(72)
+goto @SCRASH3_1911
+
+:SCRASH3_1947
+$force_valet_cleanup = 0
+
+:SCRASH3_1954
+if 
+  not StreamedScript.HasLoaded(72)
+goto_if_false @SCRASH3_1980
+wait 0
+goto @SCRASH3_1954
+
+:SCRASH3_1980
+StreamedScript.StartNew(72)
+$force_valet_on_mission = 2
+$freeze_creating_drop_off_cars = 1
+Path.SwitchPedRoadsOff(-1729.549, 942.886, 40.3585, -1742.773, 937.7814, 10.1928)
+Path.SwitchPedRoadsOff(-1768.524, 938.887, 40.7496, -1780.765, 943.4574, 10.0929)
+World.ClearArea(0, -1722.675, 935.279, 23.75, 55.0)
+92@ = Car.Create(477, -1736.961, 946.0503, 23.7487)
+Car.SetCanGoAgainstTraffic(92@, False)
+Car.SetHeading(92@, 19.0)
+93@ = Char.CreateRandomAsDriver(92@)
+Char.MarkAsNoLongerNeeded(93@)
+Car.MarkAsNoLongerNeeded(92@)
+Streaming.MarkModelAsNoLongerNeeded(477)
+if 
+  not Car.IsDead(92@)
+goto_if_false @SCRASH3_2240
+86@ = Sequence.Open()
+Task.CarDriveToCoord(-1, 92@, -1753.968, 952.9821, 23.75, 15.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+Task.LeaveCar(-1, 92@)
+Task.Say(-1, 230)
+Task.WanderStandard(-1)
+Sequence.Close(86@)
+Char.PerformSequence(93@, 86@)
+Sequence.Clear(86@)
+
+:SCRASH3_2240
+Blip.Remove(57@)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-1763.482, 959.9526, 25.8866, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1762.601, 959.5414, 25.6518, SwitchType.JumpCut)
+70@ = 3
+set_lvar_int_to_lvar_int 71@ = TIMERA
+71@ += 3000
+
+:SCRASH3_2323
+if 
+  70@ == 3
+goto_if_false @SCRASH3_2466
+if and
+  is_int_var_equal_to_constant $valet_task[0] == 2
+  is_int_var_equal_to_constant $valet_task[1] == 2
+  is_int_var_equal_to_constant $valet_task[2] == 2
+goto_if_false @SCRASH3_2410
+set_var_int_to_constant $valet_task[0] = 11
+set_var_int_to_constant $valet_task[1] = 11
+set_lvar_int_to_lvar_int 71@ = TIMERA
+71@ += 700
+70@ = 4
+
+:SCRASH3_2410
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 71@
+goto_if_false @SCRASH3_2466
+set_var_int_to_constant $valet_task[0] = 11
+set_var_int_to_constant $valet_task[1] = 11
+set_lvar_int_to_lvar_int 71@ = TIMERA
+71@ += 700
+70@ = 4
+
+:SCRASH3_2466
+if 
+  70@ == 4
+goto_if_false @SCRASH3_2517
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 71@
+goto_if_false @SCRASH3_2517
+Camera.DoFade(1, 700)
+70@ = 5
+
+:SCRASH3_2517
+if 
+  70@ == 5
+goto_if_false @SCRASH3_2587
+if 
+  not Camera.GetFadingStatus
+goto_if_false @SCRASH3_2587
+Text.PrintNow('VAL_6', 6000, 1)
+set_lvar_int_to_lvar_int 71@ = TIMERA
+71@ += 6000
+70@ = 6
+
+:SCRASH3_2587
+if 
+  70@ == 6
+goto_if_false @SCRASH3_2651
+if 
+  Pad.IsSkipCutsceneButtonPressed
+goto_if_false @SCRASH3_2625
+70@ = 7
+
+:SCRASH3_2625
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 71@
+goto_if_false @SCRASH3_2651
+70@ = 7
+
+:SCRASH3_2651
+if 
+  70@ == 7
+goto_if_false @SCRASH3_2989
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @SCRASH3_2722
+Char.SetCoordinates($scplayer, -1747.198, 909.9226, 23.8906)
+Char.SetHeading($scplayer, 5.6727)
+goto @SCRASH3_2756
+
+:SCRASH3_2722
+$a_Car = Char.GetCarIsUsing($scplayer)
+if 
+  not Car.IsDead($a_Car)
+goto_if_false @SCRASH3_2756
+Car.SetHeading($a_Car, 0.0)
+
+:SCRASH3_2756
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Player.SetControl($player1, True)
+Text.PrintNow('VAL_A25', 6000, 1)
+65@ = 2
+$dont_clear_valets = 1
+if 
+  not Char.IsDead($valet[2])
+goto_if_false @SCRASH3_2989
+63@ = Blip.AddForChar($valet[2])
+if 
+  not Car.IsDead(92@)
+goto_if_false @SCRASH3_2989
+if 
+  not Char.IsInCar($valet[2], 92@)
+goto_if_false @SCRASH3_2989
+if 
+  not Char.IsDead(93@)
+goto_if_false @SCRASH3_2989
+Char.Delete(93@)
+Char.WarpIntoCar($valet[2], 92@)
+$x, $y, $z = World.GetParkingNodeInArea(-1760.178, 972.2405, 16.1633, -1679.605, 1064.293, 24.8629)
+set_var_float_to_var_float $parking_x = $x
+set_var_float_to_var_float $parking_y = $y
+set_var_float_to_var_float $parking_z = $z
+Task.CarDriveToCoord($valet[2], 92@, $x, $y, $z, 15.0, DriveMode.Accurate, 0, DrivingMode.StopForCars)
+set_var_int_to_constant $valet_task[2] = 8
+
+:SCRASH3_2989
+if 
+  65@ == 2
+goto_if_false @SCRASH3_3751
+if and
+  95@ == 0
+  94@ == 1
+goto_if_false @SCRASH3_3048
+Text.Print('VAL_B3', 5000, 1)
+
+:SCRASH3_3048
+if 
+  94@ == 1
+goto_if_false @SCRASH3_3176
+$x, $y, $z = Char.GetCoordinates($scplayer)
+if and
+  $x > -1760.178
+  $y > 972.2405
+  $z > 16.1633
+  -1679.605 > $x
+  1064.293 > $y
+  24.8629 > $z
+goto_if_false @SCRASH3_3176
+Text.ClearPrints
+Text.Print('VAL_B4', 5000, 1)
+goto @SCRASH3_18128
+
+:SCRASH3_3176
+set_lvar_int_to_lvar_int 95@ = 94@
+if 
+  Char.DoesExist($valet[2])
+goto_if_false @SCRASH3_3751
+if 
+  not Char.IsDead($valet[2])
+goto_if_false @SCRASH3_3534
+$x, $y, $z = Char.GetCoordinates($valet[2])
+if 
+  is_int_var_equal_to_constant $valet_task[2] == 2
+goto_if_false @SCRASH3_3273
+if 
+  $drop_off_car == 0
+goto_if_false @SCRASH3_3273
+$force_a_one_off_car = 1
+
+:SCRASH3_3273
+if 
+  $tell_player_to_kill_valet == 0
+goto_if_false @SCRASH3_3417
+if 
+  94@ == 0
+goto_if_false @SCRASH3_3410
+if and
+  $x > -1760.178
+  $y > 972.2405
+  $z > 16.1633
+  -1679.605 > $x
+  1064.293 > $y
+  24.8629 > $z
+goto_if_false @SCRASH3_3410
+Text.Print('VAL_A22', 5000, 1)
+$tell_player_to_kill_valet = 1
+Game.SetWantedMultiplier(-1.0)
+
+:SCRASH3_3410
+goto @SCRASH3_3534
+
+:SCRASH3_3417
+if or
+  -1760.178 > $x
+  972.2405 > $y
+  16.1633 > $z
+  $x > -1679.605
+  $y > 1064.293
+  $z > 24.8629
+goto_if_false @SCRASH3_3534
+Text.Print('VAL_A23', 4000, 1)
+Text.Print('VAL_A24', 5000, 1)
+$tell_player_to_kill_valet = 0
+Game.SetWantedMultiplier(1.0)
+
+:SCRASH3_3534
+if 
+  Char.IsDead($valet[2])
+goto_if_false @SCRASH3_3751
+Blip.Remove(63@)
+96@, 97@, 98@ = World.GetDeadCharPickupCoords($valet[2])
+Game.SetWantedMultiplier(1.0)
+if and
+  96@ > -1760.178
+  97@ > 972.2405
+  98@ > 16.1633
+  -1679.605 > 96@
+  1064.293 > 97@
+  24.8629 > 98@
+goto_if_false @SCRASH3_3704
+74@ = Pickup.Create(#CLOTHESP, 3, 96@, 97@, 98@)
+64@ = Blip.AddForPickup(74@)
+Text.PrintNow('VAL_8', 5000, 1)
+65@ = 3
+goto @SCRASH3_3751
+
+:SCRASH3_3704
+Blip.Remove(61@)
+Blip.Remove(62@)
+Blip.Remove(63@)
+Text.ClearPrints
+gosub @SCRASH3_17374
+Text.PrintNow('VAL_9', 5000, 1)
+goto @SCRASH3_18128
+
+:SCRASH3_3751
+if 
+  65@ == 3
+goto_if_false @SCRASH3_3848
+if 
+  Pickup.HasBeenCollected(74@)
+goto_if_false @SCRASH3_3848
+100@ = 1
+Audio.SetMusicDoesFade(False)
+Camera.DoFade(0, 1000)
+Pickup.Remove(74@)
+Blip.Remove(64@)
+Streaming.RequestModel(252)
+65@ = 41
+set_lvar_int_to_lvar_int 71@ = TIMERA
+71@ += 2000
+99@ = 0
+
+:SCRASH3_3848
+if 
+  65@ == 41
+goto_if_false @SCRASH3_4159
+if 
+  not Camera.GetFadingStatus
+goto_if_false @SCRASH3_4159
+if 
+  99@ == 0
+goto_if_false @SCRASH3_3928
+set_lvar_int_to_constant 151@ = 20802
+set_lvar_int_to_lvar_int 153@ = TIMERA
+153@ += 500
+99@ = 1
+
+:SCRASH3_3928
+if 
+  Streaming.HasModelLoaded(252)
+goto_if_false @SCRASH3_4159
+if 
+  Char.DoesExist($valet[2])
+goto_if_false @SCRASH3_4016
+96@, 97@, 98@ = Char.GetCoordinatesOfDied($valet[2])
+96@, 97@, 98@ = World.GetDeadCharPickupCoords($valet[2])
+if 
+  Char.IsHeadMissing($valet[2])
+goto_if_false @SCRASH3_4011
+100@ = 1
+
+:SCRASH3_4011
+Char.Delete($valet[2])
+
+:SCRASH3_4016
+101@ = Char.Create(4, 252, 96@, 97@, 98@)
+Char.SetCoordinates(101@, 96@, 97@, 98@)
+Char.MarkAsNoLongerNeeded(101@)
+Char.ShutUp(101@, True)
+if 
+  100@ == 1
+goto_if_false @SCRASH3_4084
+Char.ExplodeHead(101@)
+
+:SCRASH3_4084
+Task.Die(101@)
+Player.SetControl($player1, False)
+Player.GiveClothesOutsideShop($player1, "VALET", "VALET", BodyPart.SpecialCostume)
+73@ = 1
+Player.BuildModel($player1)
+Player.SetControl($player1, True)
+set_lvar_int_to_lvar_int 71@ = TIMERA
+71@ += 700
+65@ = 40
+
+:SCRASH3_4159
+if 
+  73@ == 1
+goto_if_false @SCRASH3_4227
+if 
+  94@ == 1
+goto_if_false @SCRASH3_4227
+Text.ClearPrints
+gosub @SCRASH3_17374
+Text.PrintNow('VAL_B5', 5000, 1)
+goto @SCRASH3_18128
+
+:SCRASH3_4227
+if 
+  65@ == 40
+goto_if_false @SCRASH3_4296
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 71@
+goto_if_false @SCRASH3_4296
+if 
+  151@ == 0
+goto_if_false @SCRASH3_4296
+Camera.DoFade(1, 600)
+65@ = 42
+
+:SCRASH3_4296
+if 
+  65@ == 42
+goto_if_false @SCRASH3_4381
+if 
+  not Camera.GetFadingStatus
+goto_if_false @SCRASH3_4381
+Audio.SetMusicDoesFade(True)
+Text.ClearPrints
+Text.PrintNow('VAL_A32', 5000, 1)
+Blip.Remove(57@)
+57@ = Blip.AddForCoord(-1759.026, 960.4122, 23.8905)
+65@ = 4
+
+:SCRASH3_4381
+if 
+  65@ == 4
+goto_if_false @SCRASH3_4541
+if 
+  102@ == 0
+goto_if_false @SCRASH3_4479
+if 
+  Char.LocateOnFoot3D($scplayer, 0, -1759.026, 960.4122, 23.8905, 10.0, 10.0, 10.0)
+goto_if_false @SCRASH3_4479
+102@ = 1
+281@ = 13
+
+:SCRASH3_4479
+if 
+  Char.LocateOnFoot3D($scplayer, 1, -1757.054, 960.1191, 23.8906, 2.0, 2.0, 2.0)
+goto_if_false @SCRASH3_4541
+65@ = 5
+72@ = 0
+
+:SCRASH3_4541
+if 
+  65@ == 5
+goto_if_false @SCRASH3_6061
+if 
+  72@ == 0
+goto_if_false @SCRASH3_4606
+Camera.DoFade(0, 1000)
+Streaming.RequestModel(551)
+Streaming.RequestModel(402)
+Streaming.RequestCarRecording(155)
+72@ = 1
+
+:SCRASH3_4606
+if 
+  72@ == 1
+goto_if_false @SCRASH3_4756
+if 
+  not Camera.GetFadingStatus
+goto_if_false @SCRASH3_4756
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-1584.371, 727.5854, 28.9622, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1585.114, 727.2239, 28.3981, SwitchType.JumpCut)
+Streaming.RequestCollision(-1585.114, 727.2239)
+Streaming.LoadSceneInDirection(-1584.371, 727.5854, 28.9622, 270.0)
+72@ = 2
+set_lvar_int_to_lvar_int 71@ = TIMERA
+71@ += 1000
+
+:SCRASH3_4756
+if 
+  72@ == 2
+goto_if_false @SCRASH3_4807
+if and
+  Streaming.HasModelLoaded(551)
+  Streaming.HasCarRecordingBeenLoaded(155)
+goto_if_false @SCRASH3_4807
+Blip.Remove(57@)
+72@ = 3
+
+:SCRASH3_4807
+if 
+  72@ == 3
+goto_if_false @SCRASH3_5282
+if and
+  is_int_lvar_greater_than_int_lvar TIMERA > 71@
+  Streaming.HasModelLoaded(402)
+  Streaming.HasModelLoaded(551)
+goto_if_false @SCRASH3_5272
+Camera.SetFixedPosition(-1621.481, 738.7783, 14.293, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1620.638, 738.2501, 14.3895, SwitchType.JumpCut)
+$sc3_missioncar = Car.Create(551, -1611.379, 725.24, 11.8774)
+Car.ChangeColor($sc3_missioncar, 4, 4)
+Car.StartPlayback($sc3_missioncar, 155)
+Car.SetCanGoAgainstTraffic($sc3_missioncar, False)
+37@ = Char.Create(4, 240, -1611.454, 714.3873, 12.4715)
+Char.SetHealth(37@, 200)
+Char.SetMaxHealth(37@, 200)
+Char.SetHeading(37@, 0.0)
+86@ = Sequence.Open()
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_5056
+Task.GoStraightToCoord(-1, -1611.596, 723.0802, 12.2361, MoveState.Walk, -2)
+Task.EnterCarAsDriver(-1, $sc3_missioncar, -2)
+
+:SCRASH3_5056
+Sequence.Close(86@)
+Char.PerformSequence(37@, 86@)
+Sequence.Clear(86@)
+World.ClearArea(0, -1779.804, 915.7557, 23.7487, 25.0)
+92@ = Car.Create(402, -1779.804, 915.7557, 23.7487)
+Car.SetCanGoAgainstTraffic(92@, False)
+Car.SetHeading(92@, 270.0)
+93@ = Char.CreateRandomAsDriver(92@)
+Char.MarkAsNoLongerNeeded(93@)
+Car.MarkAsNoLongerNeeded(92@)
+Streaming.MarkModelAsNoLongerNeeded(402)
+if 
+  not Car.IsDead(92@)
+goto_if_false @SCRASH3_5251
+86@ = Sequence.Open()
+Task.CarDriveToCoord(-1, 92@, -1753.968, 952.9821, 23.75, 15.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+Task.LeaveCar(-1, 92@)
+Task.Say(-1, 230)
+Task.WanderStandard(-1)
+Sequence.Close(86@)
+Char.PerformSequence(93@, 86@)
+Sequence.Clear(86@)
+
+:SCRASH3_5251
+Camera.DoFade(1, 1000)
+72@ = 4
+goto @SCRASH3_5282
+
+:SCRASH3_5272
+Streaming.RequestModel(402)
+Streaming.RequestModel(551)
+
+:SCRASH3_5282
+if 
+  72@ == 4
+goto_if_false @SCRASH3_5375
+if 
+  not Camera.GetFadingStatus
+goto_if_false @SCRASH3_5375
+skip_cutscene_start_internal @SCRASH3_5729
+Text.PrintNow('VAL_12', 4000, 1)
+Text.Print('VAL_13', 4000, 1)
+set_lvar_int_to_lvar_int 71@ = TIMERA
+71@ += 3500
+72@ = 5
+
+:SCRASH3_5375
+if 
+  72@ == 5
+goto_if_false @SCRASH3_5419
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 71@
+goto_if_false @SCRASH3_5419
+72@ = 6
+
+:SCRASH3_5419
+if 
+  72@ == 6
+goto_if_false @SCRASH3_5581
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_5581
+if 
+  Char.IsInAnyCar(37@)
+goto_if_false @SCRASH3_5581
+Car.StopPlayback($sc3_missioncar)
+if and
+  not Char.IsDead(37@)
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_5558
+86@ = Sequence.Open()
+Task.Pause(-1, 800)
+Task.CarDriveToCoord(-1, $sc3_missioncar, -1571.425, 725.7955, 6.0391, 7.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+Sequence.Close(86@)
+Char.PerformSequence(37@, 86@)
+Sequence.Clear(86@)
+
+:SCRASH3_5558
+72@ = 7
+set_lvar_int_to_lvar_int 71@ = TIMERA
+71@ += 2000
+
+:SCRASH3_5581
+if 
+  72@ == 7
+goto_if_false @SCRASH3_5692
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 71@
+goto_if_false @SCRASH3_5692
+Camera.SetFixedPosition(-1587.974, 725.1835, 7.7383, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1588.891, 725.1658, 8.1361, SwitchType.JumpCut)
+72@ = 8
+set_lvar_int_to_lvar_int 71@ = TIMERA
+71@ += 3000
+
+:SCRASH3_5692
+if 
+  72@ == 8
+goto_if_false @SCRASH3_5745
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 71@
+goto_if_false @SCRASH3_5745
+
+:SCRASH3_5729
+skip_cutscene_end 
+Camera.DoFade(0, 900)
+72@ = 9
+
+:SCRASH3_5745
+if 
+  72@ == 9
+goto_if_false @SCRASH3_5947
+if 
+  not Camera.GetFadingStatus
+goto_if_false @SCRASH3_5947
+Streaming.RemoveCarRecording(155)
+Path.SwitchRoadsOn(2793.814, -1987.935, 15.3045, 2754.324, -1900.369, 9.8752)
+if and
+  not Car.IsDead($sc3_missioncar)
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_5865
+if 
+  Car.IsPlaybackGoingOn($sc3_missioncar)
+goto_if_false @SCRASH3_5865
+Car.StopPlayback($sc3_missioncar)
+Car.Delete($sc3_missioncar)
+Char.Delete(37@)
+
+:SCRASH3_5865
+Char.SetCoordinates($scplayer, -1759.631, 960.4594, 23.8905)
+Char.SetHeading($scplayer, 194.1832)
+Streaming.RequestCollision(-1748.402, 909.7514)
+Streaming.LoadScene(-1748.402, 909.7514, 23.8906)
+set_lvar_int_to_lvar_int 71@ = TIMERA
+71@ += 1000
+72@ = 10
+
+:SCRASH3_5947
+if 
+  72@ == 10
+goto_if_false @SCRASH3_6061
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 71@
+goto_if_false @SCRASH3_6061
+Camera.DoFade(1, 900)
+Player.SetControl($player1, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Text.ClearPrints
+Text.Print('VAL_A27', 7000, 1)
+set_var_int_to_constant $valet_task[0] = 2
+set_var_int_to_constant $valet_task[1] = 2
+$force_a_one_off_car = Math.RandomIntInRange(1, 3)
+56@ = 1
+65@ = 6
+
+:SCRASH3_6061
+if 
+  $sc3_missioncar_alive == 1
+goto_if_false @SCRASH3_6127
+if 
+  Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_6127
+Text.ClearPrints
+gosub @SCRASH3_17374
+Text.Print('VAL_40', 4000, 1)
+goto @SCRASH3_18128
+
+:SCRASH3_6127
+if 
+  56@ == 1
+goto_if_false @SCRASH3_6994
+if 
+  107@ <> 2
+goto_if_false @SCRASH3_6994
+if and
+  not is_int_var_equal_to_constant $valet_task[0] == 2
+  not is_int_var_equal_to_constant $valet_task[1] == 2
+goto_if_false @SCRASH3_6195
+$force_a_one_off_car = 0
+
+:SCRASH3_6195
+if 
+  56@ == 1
+goto_if_false @SCRASH3_6994
+if 
+  $force_a_one_off_car == 0
+goto_if_false @SCRASH3_6756
+if 
+  $create_drop_off_car_now == 0
+goto_if_false @SCRASH3_6756
+if 
+  $drop_off_car == 0
+goto_if_false @SCRASH3_6756
+if 
+  107@ == 0
+goto_if_false @SCRASH3_6430
+if 
+  not Camera.IsPointOnScreen(-1709.886, 899.3372, 23.7422, 5.0)
+goto_if_false @SCRASH3_6430
+if 
+  not Char.IsInArea3D($scplayer, 0, -1709.886, 899.3372, 23.7422, 20.0, 20.0, 20.0)
+goto_if_false @SCRASH3_6430
+World.ClearArea(0, -1709.886, 899.3372, 23.7422, 5.0)
+$sc3_missioncar = Car.Create(551, -1611.379, 725.24, 11.8774)
+Car.SetHeading($sc3_missioncar, 0.0)
+107@ = 1
+
+:SCRASH3_6430
+if 
+  107@ == 0
+goto_if_false @SCRASH3_6593
+if 
+  not Camera.IsPointOnScreen(-1674.725, 933.5232, 23.7365, 5.0)
+goto_if_false @SCRASH3_6593
+if 
+  not Char.IsInArea3D($scplayer, 0, -1674.725, 933.5232, 23.7365, 20.0, 20.0, 20.0)
+goto_if_false @SCRASH3_6593
+World.ClearArea(0, -1674.725, 933.5232, 23.7365, 5.0)
+$sc3_missioncar = Car.Create(551, -1674.725, 933.5232, 23.7365)
+Car.SetHeading($sc3_missioncar, 90.0)
+107@ = 1
+
+:SCRASH3_6593
+if 
+  107@ == 0
+goto_if_false @SCRASH3_6756
+if 
+  not Camera.IsPointOnScreen(-1791.158, 877.27, 23.75, 5.0)
+goto_if_false @SCRASH3_6756
+if 
+  not Char.IsInArea3D($scplayer, 0, -1791.158, 877.27, 23.75, 20.0, 20.0, 20.0)
+goto_if_false @SCRASH3_6756
+World.ClearArea(0, -1791.158, 877.27, 23.75, 5.0)
+$sc3_missioncar = Car.Create(551, -1791.158, 877.27, 23.75)
+Car.SetHeading($sc3_missioncar, 0.0)
+107@ = 1
+
+:SCRASH3_6756
+if 
+  107@ == 1
+goto_if_false @SCRASH3_6994
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_6994
+Car.ChangeColor($sc3_missioncar, 4, 4)
+Car.SetCanGoAgainstTraffic($sc3_missioncar, False)
+37@ = Char.Create(4, 240, -1611.454, 714.3873, 12.4715)
+Char.SetHealth(37@, 200)
+Char.SetMaxHealth(37@, 200)
+if 
+  not Char.IsInAnyCar(37@)
+goto_if_false @SCRASH3_6876
+Char.ClearTasksImmediately(37@)
+Char.WarpIntoCar(37@, $sc3_missioncar)
+
+:SCRASH3_6876
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_6973
+86@ = Sequence.Open()
+Task.Pause(-1, 10000)
+Task.CarDriveToCoord(-1, $sc3_missioncar, -1758.877, 952.744, 23.7487, 15.0, DriveMode.Normal, 0, DrivingMode.StopForCars)
+Task.LeaveCar(-1, $sc3_missioncar)
+Task.Say(-1, 230)
+Task.WanderStandard(-1)
+Sequence.Close(86@)
+Char.PerformSequence(37@, 86@)
+Sequence.Clear(86@)
+
+:SCRASH3_6973
+68@ = 1
+$sc3_missioncar_alive = 1
+107@ = 2
+
+:SCRASH3_6994
+if 
+  68@ == 1
+goto_if_false @SCRASH3_7212
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_7164
+if 
+  Char.IsInCar(37@, $sc3_missioncar)
+goto_if_false @SCRASH3_7116
+105@ = Char.GetScriptTaskStatus(37@, 1560)
+if 
+  is_int_lvar_equal_to_constant 105@ == 1
+goto_if_false @SCRASH3_7109
+105@ = Char.GetSequenceProgress(37@)
+if 
+  105@ == 2
+goto_if_false @SCRASH3_7109
+106@ = 1
+
+:SCRASH3_7109
+goto @SCRASH3_7164
+
+:SCRASH3_7116
+if 
+  106@ <> 1
+goto_if_false @SCRASH3_7164
+gosub @SCRASH3_17374
+Text.Print('VAL_A1', 4000, 1)
+goto @SCRASH3_18128
+
+:SCRASH3_7164
+if 
+  Char.IsDead(37@)
+goto_if_false @SCRASH3_7212
+Text.ClearPrints
+gosub @SCRASH3_17374
+Text.Print('VAL_34', 4000, 1)
+goto @SCRASH3_18128
+
+:SCRASH3_7212
+if 
+  65@ > 6
+goto_if_false @SCRASH3_7289
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_7289
+if 
+  not Char.LocateAnyMeansChar2D($scplayer, 37@, 80.0, 80.0, False)
+goto_if_false @SCRASH3_7289
+Char.Delete(37@)
+68@ = 0
+
+:SCRASH3_7289
+if 
+  65@ > 5
+goto_if_false @SCRASH3_7462
+if and
+  108@ == 0
+  112@ == 0
+goto_if_false @SCRASH3_7462
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_7462
+79@ = Car.GetDriver($sc3_missioncar)
+if and
+  not is_int_lvar_equal_to_int_lvar 79@ == 37@
+  not is_int_lvar_equal_to_int_var 79@ == $scplayer
+  79@ <> -1
+goto_if_false @SCRASH3_7462
+Text.Print('VAL_A28', 4000, 1)
+Blip.Remove(60@)
+60@ = Blip.AddForCar($sc3_missioncar)
+Blip.Remove(57@)
+56@ = 0
+108@ = 1
+set_lvar_float_to_var_float 109@ = $parking_x
+set_lvar_float_to_var_float 110@ = $parking_y
+set_lvar_float_to_var_float 111@ = $parking_z
+
+:SCRASH3_7462
+if 
+  108@ == 1
+goto_if_false @SCRASH3_7599
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_7599
+if 
+  Car.Locate3D($sc3_missioncar, 0, 109@, 110@, 111@, 4.0, 4.0, 4.0)
+goto_if_false @SCRASH3_7568
+gosub @SCRASH3_17374
+Text.Print('VAL_A29', 4000, 1)
+goto @SCRASH3_18128
+
+:SCRASH3_7568
+if 
+  Char.IsInCar($scplayer, $sc3_missioncar)
+goto_if_false @SCRASH3_7599
+108@ = 2
+Blip.Remove(60@)
+
+:SCRASH3_7599
+if 
+  65@ == 6
+goto_if_false @SCRASH3_8396
+if 
+  56@ == 1
+goto_if_false @SCRASH3_7850
+if 
+  69@ == 0
+goto_if_false @SCRASH3_7772
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, -1759.026, 960.4122, 23.8905, 15.0, 15.0, 15.0)
+goto_if_false @SCRASH3_7772
+Text.ClearPrints
+if or
+  not Char.IsDead($valet[1])
+  not Char.IsDead($valet[0])
+goto_if_false @SCRASH3_7740
+Text.PrintNow('VAL_49', 5000, 1)
+
+:SCRASH3_7740
+Blip.Remove(57@)
+57@ = Blip.AddForCoord(-1759.026, 960.4122, 23.8905)
+69@ = 1
+
+:SCRASH3_7772
+if 
+  69@ == 1
+goto_if_false @SCRASH3_7850
+if 
+  Char.LocateOnFoot3D($scplayer, 1, -1759.026, 960.4122, 23.8905, 2.0, 2.0, 2.0)
+goto_if_false @SCRASH3_7850
+Blip.Remove(57@)
+69@ = 0
+
+:SCRASH3_7850
+if 
+  56@ == 1
+goto_if_false @SCRASH3_8162
+if 
+  Char.LocateAnyMeans3D($scplayer, 0, -1759.026, 960.4122, 23.8905, 15.0, 15.0, 15.0)
+goto_if_false @SCRASH3_8162
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_8162
+if 
+  Car.Locate3D($sc3_missioncar, 0, -1757.907, 952.8868, 25.9104, 20.0, 20.0, 15.0)
+goto_if_false @SCRASH3_8162
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_8162
+if 
+  Char.IsInCar(37@, $sc3_missioncar)
+goto_if_false @SCRASH3_8162
+if 
+  not Char.IsDead($valet[1])
+goto_if_false @SCRASH3_8086
+if 
+  Char.LocateAnyMeans3D($valet[1], 0, -1759.026, 960.4122, 23.8905, 10.0, 10.0, 10.0)
+goto_if_false @SCRASH3_8086
+56@ = 2
+
+:SCRASH3_8086
+if 
+  not Char.IsDead($valet[0])
+goto_if_false @SCRASH3_8157
+if 
+  Char.LocateAnyMeans3D($valet[0], 0, -1759.026, 960.4122, 23.8905, 10.0, 10.0, 10.0)
+goto_if_false @SCRASH3_8157
+56@ = 2
+
+:SCRASH3_8157
+Blip.Remove(57@)
+
+:SCRASH3_8162
+if 
+  56@ == 2
+goto_if_false @SCRASH3_8196
+56@ = 3
+Text.ClearPrints
+281@ = 14
+
+:SCRASH3_8196
+if 
+  106@ == 1
+goto_if_false @SCRASH3_8396
+77@ = Char.GetCarIsUsing($scplayer)
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_8396
+78@ = Char.GetCarIsUsing(37@)
+if 
+  not is_int_lvar_equal_to_int_lvar 77@ == 78@
+goto_if_false @SCRASH3_8396
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_8396
+if 
+  Char.IsInCar($scplayer, $sc3_missioncar)
+goto_if_false @SCRASH3_8396
+Text.ClearPrints
+Text.Print('VAL_15', 7000, 1)
+65@ = 7
+Blip.Remove(57@)
+Blip.Remove(59@)
+59@ = Blip.AddForCoord(-2045.252, 178.7994, 27.8359)
+Car.SetHealth($sc3_missioncar, 1000)
+$sc3_countdown = 150000
+Hud.DisplayTimerWithString($sc3_countdown, TimerDirection.Down, 'VAL_21')
+67@ = 1
+
+:SCRASH3_8396
+if 
+  65@ > 6
+goto_if_false @SCRASH3_8625
+if or
+  10 > 65@
+  65@ == 13
+  65@ == 20
+goto_if_false @SCRASH3_8625
+if 
+  112@ <> 1
+goto_if_false @SCRASH3_8625
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_8625
+if 
+  not Char.IsInCar($scplayer, $sc3_missioncar)
+goto_if_false @SCRASH3_8569
+if 
+  85@ == 1
+goto_if_false @SCRASH3_8569
+85@ = 0
+Blip.Remove(60@)
+60@ = Blip.AddForCar($sc3_missioncar)
+Blip.SetAsFriendly(60@, True)
+Blip.ChangeDisplay(59@, BlipDisplay.Neither)
+Text.ClearPrints
+Text.Print('VAL_29', 5000, 1)
+
+:SCRASH3_8569
+if 
+  Char.IsInCar($scplayer, $sc3_missioncar)
+goto_if_false @SCRASH3_8625
+if 
+  85@ == 0
+goto_if_false @SCRASH3_8625
+85@ = 1
+Blip.Remove(60@)
+Blip.ChangeDisplay(59@, BlipDisplay.BlipOnly)
+
+:SCRASH3_8625
+if 
+  65@ == 7
+goto_if_false @SCRASH3_8778
+if 
+  Char.LocateInCar3D($scplayer, -2033.626, 178.856, 27.8359, 3.0, 3.0, 3.0, True)
+goto_if_false @SCRASH3_8778
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_8778
+if 
+  Char.IsInCar($scplayer, $sc3_missioncar)
+goto_if_false @SCRASH3_8778
+Blip.Remove(59@)
+59@ = Blip.AddForCoord(-2045.947, 178.5964, 28.1397)
+Blip.ChangeDisplay(59@, BlipDisplay.BlipOnly)
+Text.ClearPrints
+Garage.Open('HBGDSFS')
+65@ = 80
+
+:SCRASH3_8778
+if 
+  65@ == 80
+goto_if_false @SCRASH3_8978
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_8978
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-2038.055, 186.7164, 31.0085, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-2037.704, 185.8301, 30.7068, SwitchType.JumpCut)
+Car.SetCoordinates($sc3_missioncar, -2033.626, 178.856, 27.8359)
+Car.SetHeading($sc3_missioncar, 90.0)
+114@ = Sequence.Open()
+Task.Pause(-1, 1000)
+Task.CarDriveToCoord(-1, $sc3_missioncar, -2047.517, 178.5924, 27.8359, 7.0, DriveMode.Normal, 0, DrivingMode.PloughThrough)
+Task.LeaveAnyCar(-1)
+Sequence.Close(114@)
+Char.PerformSequence($scplayer, 114@)
+Sequence.Clear(114@)
+65@ = 81
+
+:SCRASH3_8978
+if 
+  65@ == 81
+goto_if_false @SCRASH3_9039
+105@ = Char.GetScriptTaskStatus($scplayer, 1560)
+if 
+  is_int_lvar_equal_to_constant 105@ == 7
+goto_if_false @SCRASH3_9039
+Camera.DoFade(0, 700)
+65@ = 82
+
+:SCRASH3_9039
+if 
+  65@ == 82
+goto_if_false @SCRASH3_9104
+if 
+  not Camera.GetFadingStatus
+goto_if_false @SCRASH3_9104
+Garage.Close('HBGDSFS')
+set_lvar_int_to_lvar_int 71@ = TIMERA
+71@ += 1000
+65@ = 83
+
+:SCRASH3_9104
+if 
+  65@ == 83
+goto_if_false @SCRASH3_9417
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 71@
+goto_if_false @SCRASH3_9417
+if 
+  Garage.IsClosed('HBGDSFS')
+goto_if_false @SCRASH3_9417
+Char.ClearTasksImmediately($scplayer)
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_9222
+41@, 42@, 43@ = Car.GetCoordinates($sc3_missioncar)
+50@ = Car.GetHeading($sc3_missioncar)
+75@, 76@ = Car.GetColors($sc3_missioncar)
+Car.Delete($sc3_missioncar)
+
+:SCRASH3_9222
+Streaming.RequestModel(551)
+
+:SCRASH3_9227
+if 
+  not Streaming.HasModelLoaded(551)
+goto_if_false @SCRASH3_9254
+wait 0
+goto @SCRASH3_9227
+
+:SCRASH3_9254
+$sc3_missioncar = Car.Create(551, -2031.502, 178.6435, 27.8516)
+Car.ChangeColor($sc3_missioncar, 75@, 76@)
+Car.SetHeading($sc3_missioncar, 270.0)
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_9322
+Char.WarpIntoCar($scplayer, $sc3_missioncar)
+
+:SCRASH3_9322
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Camera.DoFade(1, 500)
+Blip.Remove(59@)
+59@ = Blip.AddForCoord(-1780.069, 970.9553, 23.75)
+Blip.ChangeDisplay(59@, BlipDisplay.BlipOnly)
+65@ = 8
+Text.ClearPrints
+Text.Print('VAL_20', 5000, 1)
+Text.Print('VAL_A31', 5000, 1)
+Player.SetControl($player1, True)
+
+:SCRASH3_9417
+if 
+  65@ == 20
+goto_if_false @SCRASH3_9997
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, -2037.239, 179.5294, 28.316, 10.0, 10.0, 10.0)
+goto_if_false @SCRASH3_9533
+65@ = 7
+Blip.Remove(59@)
+59@ = Blip.AddForCoord(-2033.626, 178.856, 27.8359)
+Text.ClearPrints
+Text.Print('VAL_51', 5000, 1)
+
+:SCRASH3_9533
+if 
+  Char.LocateInCar3D($scplayer, -2045.947, 178.5964, 28.1397, 4.0, 4.0, 4.0, True)
+goto_if_false @SCRASH3_9997
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_9997
+if 
+  Char.IsInCar($scplayer, $sc3_missioncar)
+goto_if_false @SCRASH3_9997
+Player.SetControl($player1, False)
+Task.CarTempAction($scplayer, $sc3_missioncar, TempAction.HandbrakeStraight, 2000000)
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_9997
+if 
+  Char.IsInCar($scplayer, $sc3_missioncar)
+goto_if_false @SCRASH3_9997
+Camera.DoFade(0, 1000)
+
+:SCRASH3_9680
+if 
+  Camera.GetFadingStatus
+goto_if_false @SCRASH3_9704
+wait 0
+goto @SCRASH3_9680
+
+:SCRASH3_9704
+Char.ClearTasksImmediately($scplayer)
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_9763
+41@, 42@, 43@ = Car.GetCoordinates($sc3_missioncar)
+50@ = Car.GetHeading($sc3_missioncar)
+75@, 76@ = Car.GetColors($sc3_missioncar)
+Car.Delete($sc3_missioncar)
+
+:SCRASH3_9763
+Streaming.RequestModel(551)
+
+:SCRASH3_9768
+if 
+  not Streaming.HasModelLoaded(551)
+goto_if_false @SCRASH3_9795
+wait 0
+goto @SCRASH3_9768
+
+:SCRASH3_9795
+$sc3_missioncar = Car.Create(551, -2031.502, 178.6435, 27.8516)
+Car.ChangeColor($sc3_missioncar, 75@, 76@)
+Car.SetHeading($sc3_missioncar, 270.0)
+Garage.SetTargetCarForMission('HBGDSFS', $sc3_missioncar)
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_9877
+Char.WarpIntoCar($scplayer, $sc3_missioncar)
+
+:SCRASH3_9877
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+wait 1000
+Camera.DoFade(1, 500)
+
+:SCRASH3_9893
+if 
+  Camera.GetFadingStatus
+goto_if_false @SCRASH3_9917
+wait 0
+goto @SCRASH3_9893
+
+:SCRASH3_9917
+Blip.Remove(59@)
+59@ = Blip.AddForCoord(-1780.069, 970.9553, 23.75)
+Blip.ChangeDisplay(59@, BlipDisplay.BlipOnly)
+65@ = 8
+Text.ClearPrints
+Text.Print('VAL_20', 5000, 1)
+Text.Print('VAL_A31', 5000, 1)
+Player.SetControl($player1, True)
+
+:SCRASH3_9997
+if 
+  65@ == 8
+goto_if_false @SCRASH3_10127
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_10127
+if 
+  Car.Locate3D($sc3_missioncar, 1, -1780.069, 970.9553, 23.75, 3.0, 3.0, 3.0)
+goto_if_false @SCRASH3_10127
+Text.Print('VAL_32', 5000, 1)
+Blip.Remove(59@)
+59@ = Blip.AddForCoord(-1688.214, 987.1218, 16.5855)
+65@ = 9
+
+:SCRASH3_10127
+if 
+  67@ == 1
+goto_if_false @SCRASH3_10195
+if 
+  $sc3_countdown == 0
+goto_if_false @SCRASH3_10195
+Text.ClearPrints
+gosub @SCRASH3_17374
+Text.Print('VAL_47', 5000, 1)
+goto @SCRASH3_18128
+
+:SCRASH3_10195
+if 
+  65@ == 9
+goto_if_false @SCRASH3_10631
+if 
+  85@ == 1
+goto_if_false @SCRASH3_10631
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_10631
+if 
+  Car.LocateStopped3D($sc3_missioncar, 1, -1688.214, 987.1218, 16.5855, 3.0, 3.0, 3.0)
+goto_if_false @SCRASH3_10631
+Player.SetControl($player1, False)
+Task.LeaveAnyCar($scplayer)
+Car.LockDoors($sc3_missioncar, CarLock.LockoutPlayerOnly)
+Blip.Remove(59@)
+Blip.Remove(60@)
+59@ = Blip.AddForCoord(-1742.3, 940.8106, 23.8972)
+Blip.ChangeDisplay(59@, BlipDisplay.BlipOnly)
+Hud.ClearTimer($sc3_countdown)
+67@ = 0
+Text.ClearPrints
+Text.Print('VAL_A30', 6000, 1)
+65@ = 30
+113@ = Char.Create(24, 189, -1772.809, 977.8892, 22.6614)
+Char.SetOnlyDamagedByPlayer(113@, True)
+114@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, -1710.667, 985.5689, 16.5936, 6, -2)
+Task.EnterCarAsDriver(-1, $sc3_missioncar, -2)
+Task.CarTempAction(-1, $sc3_missioncar, TempAction.ReverseRight, 1400)
+Task.CarDriveToCoord(-1, $sc3_missioncar, -1764.082, 982.5382, 21.1042, 15.0, DriveMode.Normal, 0, DrivingMode.StopForCars)
+Task.CarDriveToCoord(-1, $sc3_missioncar, -1754.889, 952.3113, 23.7422, 15.0, DriveMode.Normal, 0, DrivingMode.StopForCars)
+Task.LeaveAnyCar(-1)
+Task.GoStraightToCoord(-1, -1754.117, 959.0662, 23.8828, MoveState.Walk, -2)
+Task.AchieveHeading(-1, 147.0)
+Sequence.Close(114@)
+Car.SetCanGoAgainstTraffic($sc3_missioncar, False)
+37@ = Char.Create(24, 240, -1755.392, 946.9804, 23.8906)
+Char.SetHeading(37@, 0.0)
+Char.PerformSequence(113@, 114@)
+Sequence.Clear(114@)
+
+:SCRASH3_10631
+if 
+  65@ == 30
+goto_if_false @SCRASH3_11099
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_11099
+if 
+  not Char.IsInCar($scplayer, $sc3_missioncar)
+goto_if_false @SCRASH3_10731
+if 
+  112@ == 0
+goto_if_false @SCRASH3_10731
+Player.SetControl($player1, True)
+112@ = 1
+Car.SetProofs($sc3_missioncar, True, True, True, True, True)
+
+:SCRASH3_10731
+if 
+  Car.IsInArea3D($sc3_missioncar, 0, -1764.199, 946.595, 28.3546, -1744.086, 957.879, 22.6221)
+goto_if_false @SCRASH3_10870
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_10870
+105@ = Char.GetScriptTaskStatus(37@, 1560)
+if 
+  is_int_lvar_equal_to_constant 105@ == 7
+goto_if_false @SCRASH3_10870
+114@ = Sequence.Open()
+Task.EnterCarAsDriver(-1, $sc3_missioncar, -2)
+Task.CarDriveWander(-1, $sc3_missioncar, 15.0, DrivingMode.StopForCars)
+Sequence.Close(114@)
+Char.PerformSequence(37@, 114@)
+Sequence.Clear(114@)
+
+:SCRASH3_10870
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_10937
+if 
+  Char.IsInCar(37@, $sc3_missioncar)
+goto_if_false @SCRASH3_10937
+Text.ClearPrints
+gosub @SCRASH3_17374
+Text.Print('VAL_A34', 5000, 1)
+goto @SCRASH3_18128
+
+:SCRASH3_10937
+if 
+  Char.LocateOnFoot3D($scplayer, 1, -1742.3, 940.8106, 23.8972, 2.0, 2.0, 3.0)
+goto_if_false @SCRASH3_11018
+67@ = 0
+Player.SetControl($player1, False)
+Blip.Remove(59@)
+65@ = 10
+72@ = 90
+
+:SCRASH3_11018
+if 
+  Car.IsVisiblyDamaged($sc3_missioncar)
+goto_if_false @SCRASH3_11099
+if 
+  not Char.IsDead(113@)
+goto_if_false @SCRASH3_11099
+if 
+  not Char.IsInCar(113@, $sc3_missioncar)
+goto_if_false @SCRASH3_11099
+gosub @SCRASH3_17374
+Text.Print('VAL_B2', 4000, 1)
+goto @SCRASH3_18128
+
+:SCRASH3_11099
+if 
+  65@ > 7
+goto_if_false @SCRASH3_11215
+if 
+  10 > 65@
+goto_if_false @SCRASH3_11215
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_11215
+if 
+  Car.IsVisiblyDamaged($sc3_missioncar)
+goto_if_false @SCRASH3_11215
+65@ = 7
+Text.Print('VAL_31', 5000, 1)
+Blip.Remove(59@)
+59@ = Blip.AddForCoord(-2045.252, 178.7994, 27.8359)
+
+:SCRASH3_11215
+if 
+  65@ == 10
+goto_if_false @SCRASH3_14734
+World.SetUsesCollisionOfClosestObjectOfType(-1741.792, 939.731, 23.8906, 2.5, #LAMPPOST3, False)
+if 
+  72@ == 90
+goto_if_false @SCRASH3_11297
+Streaming.RequestModel(330)
+338@ = 1
+72@ = 91
+
+:SCRASH3_11297
+if 
+  72@ == 91
+goto_if_false @SCRASH3_11513
+if 
+  Streaming.HasModelLoaded(330)
+goto_if_false @SCRASH3_11513
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-1738.083, 938.6749, 25.0378, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1738.96, 939.1542, 25.0127, SwitchType.JumpCut)
+World.ClearArea(0, -1741.792, 939.731, 23.8906, 20.0)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @SCRASH3_11453
+Char.WarpFromCarToCoord($scplayer, -1741.792, 939.731, 23.8906)
+goto @SCRASH3_11473
+
+:SCRASH3_11453
+Char.SetCoordinates($scplayer, -1741.792, 939.731, 23.8906)
+
+:SCRASH3_11473
+Char.SetHeading($scplayer, 270.0)
+Task.UseMobilePhone($scplayer, True)
+set_lvar_int_to_lvar_int 123@ = TIMERA
+123@ += 2500
+72@ = 89
+
+:SCRASH3_11513
+if 
+  72@ == 89
+goto_if_false @SCRASH3_11571
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 123@
+goto_if_false @SCRASH3_11571
+281@ = 1
+282@ = 2
+72@ = 88
+
+:SCRASH3_11571
+if 
+  72@ == 88
+goto_if_false @SCRASH3_11642
+if and
+  281@ == 0
+  282@ == 0
+goto_if_false @SCRASH3_11642
+Task.UseMobilePhone($scplayer, False)
+Camera.DoFade(0, 1000)
+$sc3_missioncar_alive = 0
+72@ = 87
+
+:SCRASH3_11642
+if 
+  72@ == 87
+goto_if_false @SCRASH3_11774
+if 
+  not Camera.GetFadingStatus
+goto_if_false @SCRASH3_11774
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_11694
+Char.Delete(37@)
+
+:SCRASH3_11694
+72@ = 99
+$freeze_creating_drop_off_cars = 1
+if 
+  not Car.IsDead($drop_off_car)
+goto_if_false @SCRASH3_11729
+Car.Delete($drop_off_car)
+
+:SCRASH3_11729
+if 
+  not Car.IsDead($valet_pickup_car)
+goto_if_false @SCRASH3_11750
+Car.Delete($valet_pickup_car)
+
+:SCRASH3_11750
+World.ClearArea(0, -1741.792, 939.731, 23.0, 80.0)
+
+:SCRASH3_11774
+if 
+  72@ == 99
+goto_if_false @SCRASH3_12005
+World.SetPedDensityMultiplier(0.0)
+World.SetCarDensityMultiplier(0.0)
+$pause_valet_script = 1
+Streaming.RequestCollision(-1759.449, 954.4333)
+Streaming.LoadScene(-1759.449, 954.4333, 23.72)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @SCRASH3_11885
+Char.WarpFromCarToCoord($scplayer, -1741.792, 939.731, 23.8906)
+goto @SCRASH3_11905
+
+:SCRASH3_11885
+Char.SetCoordinates($scplayer, -1741.792, 939.731, 23.8906)
+
+:SCRASH3_11905
+Char.SetHeading($scplayer, 40.0)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Camera.SetFixedPosition(-1738.083, 938.6749, 25.0378, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1738.96, 939.1542, 25.0127, SwitchType.JumpCut)
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_11998
+Car.Delete($sc3_missioncar)
+
+:SCRASH3_11998
+72@ = 98
+
+:SCRASH3_12005
+if 
+  72@ == 98
+goto_if_false @SCRASH3_12182
+if and
+  Streaming.HasModelLoaded(551)
+  Streaming.HasModelLoaded(346)
+  Streaming.HasModelLoaded(240)
+  Streaming.HasAnimationLoaded("POLICE")
+  Streaming.HasAnimationLoaded("MISC")
+goto_if_false @SCRASH3_12149
+if and
+  Streaming.HasModelLoaded(281)
+  Streaming.HasCarRecordingBeenLoaded(165)
+  Streaming.HasCarRecordingBeenLoaded(166)
+  Streaming.HasModelLoaded(597)
+goto_if_false @SCRASH3_12122
+72@ = 0
+Streaming.MarkModelAsNoLongerNeeded(415)
+Streaming.MarkModelAsNoLongerNeeded(252)
+goto @SCRASH3_12142
+
+:SCRASH3_12122
+Streaming.RequestModel(597)
+Streaming.RequestCarRecording(166)
+Streaming.RequestCarRecording(165)
+Streaming.RequestModel(281)
+
+:SCRASH3_12142
+goto @SCRASH3_12182
+
+:SCRASH3_12149
+Streaming.RequestAnimation("MISC")
+Streaming.RequestAnimation("POLICE")
+Streaming.RequestModel(240)
+Streaming.RequestModel(346)
+Streaming.RequestModel(551)
+
+:SCRASH3_12182
+if 
+  72@ == 0
+goto_if_false @SCRASH3_12645
+Camera.DoFade(1, 800)
+Char.HideWeaponForScriptedCutscene($scplayer, True)
+World.ClearArea(0, -1759.449, 954.4333, 23.72, 50.0)
+World.SetCarDensityMultiplier(0.0)
+$sc3_missioncar = Car.Create(551, -1759.449, 954.4333, 23.72)
+Car.ChangeColor($sc3_missioncar, 4, 4)
+115@ = Car.Create(597, -1711.399, 903.0281, 24.1296)
+116@ = Car.Create(597, -1711.016, 893.7642, 24.0975)
+Car.SwitchSiren(115@, True)
+Car.SwitchSiren(116@, True)
+121@ = Char.CreateInsideCar(PedType.CivMale, 281, 115@)
+122@ = Char.CreateInsideCar(PedType.CivMale, 281, 116@)
+Char.GiveWeapon(121@, WeaponType.Pistol, 99999)
+Char.GiveWeapon(122@, WeaponType.Pistol, 99999)
+37@ = Char.Create(4, 240, -1763.276, 946.1676, 23.8905)
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_12436
+Char.WarpIntoCar(37@, $sc3_missioncar)
+
+:SCRASH3_12436
+117@ = Sequence.Open()
+Task.Pause(-1, 6500)
+Task.LeaveAnyCar(-1)
+Task.HandsUp(-1, 3000)
+Sequence.Close(117@)
+Char.PerformSequence(37@, 117@)
+Sequence.Clear(117@)
+Car.SetHeading($sc3_missioncar, 90.0)
+Char.ClearTasksImmediately($scplayer)
+Task.PlayAnimNonInterruptable($scplayer, "PLYRLEAN_LOOP", "MISC", 1.0, True, False, False, False, -2)
+$cunt_x, $cunt_y, $player_z = Char.GetCoordinates($scplayer)
+Camera.SetFixedPosition(-1740.345, 939.6078, 25.3651, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1741.223, 940.0797, 25.2814, SwitchType.JumpCut)
+set_lvar_int_to_lvar_int 325@ = 37@
+set_lvar_int_to_lvar_int 326@ = 121@
+set_lvar_int_to_lvar_int 327@ = 122@
+set_lvar_int_to_lvar_int 123@ = TIMERA
+123@ += 1000
+72@ = 1
+
+:SCRASH3_12645
+if 
+  72@ == 1
+goto_if_false @SCRASH3_12689
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 123@
+goto_if_false @SCRASH3_12689
+72@ = 2
+
+:SCRASH3_12689
+if 
+  72@ == 2
+goto_if_false @SCRASH3_12825
+if and
+  not Car.IsDead(115@)
+  not Car.IsDead(116@)
+goto_if_false @SCRASH3_12802
+if and
+  Streaming.HasCarRecordingBeenLoaded(165)
+  Streaming.HasCarRecordingBeenLoaded(166)
+goto_if_false @SCRASH3_12792
+Car.StartPlayback(115@, 165)
+Car.StartPlayback(116@, 166)
+Car.SetPlaybackSpeed(115@, 0.8)
+Car.SetPlaybackSpeed(116@, 0.8)
+goto @SCRASH3_12802
+
+:SCRASH3_12792
+Streaming.RequestCarRecording(165)
+Streaming.RequestCarRecording(166)
+
+:SCRASH3_12802
+set_lvar_int_to_lvar_int 123@ = TIMERA
+123@ += 3000
+72@ = 3
+
+:SCRASH3_12825
+if 
+  72@ == 3
+goto_if_false @SCRASH3_12869
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 123@
+goto_if_false @SCRASH3_12869
+72@ = 4
+
+:SCRASH3_12869
+if 
+  72@ == 4
+goto_if_false @SCRASH3_13087
+Text.ClearPrints
+281@ = 3
+282@ = 2
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_13064
+if 
+  not Char.IsDead(121@)
+goto_if_false @SCRASH3_12972
+117@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.AimGunAtChar(-1, 37@, 3000)
+Sequence.Close(117@)
+Char.PerformSequence(121@, 117@)
+Sequence.Clear(117@)
+
+:SCRASH3_12972
+if 
+  not Char.IsDead(122@)
+goto_if_false @SCRASH3_13064
+117@ = Sequence.Open()
+Task.LeaveAnyCar(-1)
+Task.GoToCoordWhileAiming(-1, -1762.369, 951.1278, 23.7487, 4, 1.0, 1.0, 37@, 0.0, 0.0, 0.0)
+Sequence.Close(117@)
+Char.PerformSequence(122@, 117@)
+Sequence.Clear(117@)
+
+:SCRASH3_13064
+set_lvar_int_to_lvar_int 123@ = TIMERA
+123@ += 6200
+72@ = 5
+
+:SCRASH3_13087
+if 
+  72@ == 5
+goto_if_false @SCRASH3_13149
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 123@
+goto_if_false @SCRASH3_13149
+if 
+  281@ == 0
+goto_if_false @SCRASH3_13149
+72@ = 6
+
+:SCRASH3_13149
+if 
+  72@ == 6
+goto_if_false @SCRASH3_13566
+281@ = 5
+282@ = 3
+set_lvar_int_to_lvar_int 120@ = TIMERA
+120@ += 17333
+set_lvar_int_to_lvar_int 119@ = TIMERA
+119@ += 17633
+set_lvar_int_to_lvar_int 118@ = TIMERA
+118@ += 4313
+if and
+  not Char.IsDead(121@)
+  not Char.IsDead(122@)
+goto_if_false @SCRASH3_13274
+Char.SetCurrentWeapon(121@, WeaponType.Unarmed)
+Char.SetCurrentWeapon(122@, WeaponType.Unarmed)
+Char.SetHeading(121@, 0.0)
+
+:SCRASH3_13274
+Camera.SetFixedPosition(-1768.048, 955.8058, 25.1327, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1767.238, 955.2321, 25.0132, SwitchType.JumpCut)
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_13346
+Car.PopBoot($sc3_missioncar)
+
+:SCRASH3_13346
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_13454
+Char.ClearTasksImmediately(37@)
+Char.SetCollision(37@, False)
+Char.SetCoordinates(37@, -1761.71, 952.9333, 23.79)
+Char.SetHeading(37@, 0.0)
+Char.FreezePosition(37@, True)
+Task.PlayAnimNonInterruptable(37@, "CRM_DRGBST_01", "POLICE", 1.0, False, False, False, True, -1)
+
+:SCRASH3_13454
+Char.SetCoordinates(121@, -1761.724, 952.4515, 23.72)
+Char.ClearTasksImmediately(122@)
+Char.SetCoordinates(122@, -1755.75, 953.9333, 23.72)
+Task.PlayAnimNonInterruptable(121@, "PLC_DRGBST_01", "POLICE", 1.0, True, False, False, False, 25000)
+set_lvar_int_to_lvar_int 123@ = TIMERA
+123@ += 7606
+72@ = 7
+
+:SCRASH3_13566
+if 
+  72@ == 7
+goto_if_false @SCRASH3_13680
+if 
+  118@ <> 0
+goto_if_false @SCRASH3_13636
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 118@
+goto_if_false @SCRASH3_13636
+Audio.ReportMissionAudioEventAtChar(37@, 1009)
+118@ = 0
+
+:SCRASH3_13636
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 123@
+goto_if_false @SCRASH3_13680
+if 
+  281@ == 0
+goto_if_false @SCRASH3_13680
+72@ = 8
+
+:SCRASH3_13680
+if 
+  72@ == 8
+goto_if_false @SCRASH3_13855
+281@ = 8
+282@ = 2
+Camera.SetFixedPosition(-1757.747, 952.7751, 24.8666, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1756.909, 953.301, 25.0154, SwitchType.JumpCut)
+if 
+  not Char.IsDead(122@)
+goto_if_false @SCRASH3_13832
+Char.SetHeading(122@, 90.0)
+Task.PlayAnimNonInterruptable(122@, "PLC_DRGBST_02", "POLICE", 1.0, False, False, False, False, -1)
+
+:SCRASH3_13832
+set_lvar_int_to_lvar_int 123@ = TIMERA
+123@ += 3267
+72@ = 9
+
+:SCRASH3_13855
+if 
+  72@ == 9
+goto_if_false @SCRASH3_13917
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 123@
+goto_if_false @SCRASH3_13917
+if 
+  281@ == 0
+goto_if_false @SCRASH3_13917
+72@ = 10
+
+:SCRASH3_13917
+if 
+  72@ == 10
+goto_if_false @SCRASH3_14023
+281@ = 10
+282@ = 2
+Camera.SetFixedPosition(-1768.048, 955.8058, 25.1327, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1767.238, 955.2321, 25.0132, SwitchType.JumpCut)
+set_lvar_int_to_lvar_int 123@ = TIMERA
+123@ += 750
+72@ = 80
+
+:SCRASH3_14023
+if 
+  72@ == 80
+goto_if_false @SCRASH3_14091
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 120@
+goto_if_false @SCRASH3_14091
+Audio.ReportMissionAudioEventAtChar(37@, 1130)
+set_lvar_int_to_lvar_int 123@ = TIMERA
+123@ += 500
+72@ = 81
+
+:SCRASH3_14091
+if 
+  72@ == 81
+goto_if_false @SCRASH3_14159
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 119@
+goto_if_false @SCRASH3_14159
+Audio.ReportMissionAudioEventAtChar(37@, 1009)
+set_lvar_int_to_lvar_int 123@ = TIMERA
+123@ += 1900
+72@ = 11
+
+:SCRASH3_14159
+if and
+  72@ == 11
+  281@ == 0
+goto_if_false @SCRASH3_14448
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 123@
+goto_if_false @SCRASH3_14448
+Camera.SetFixedPosition(-1738.083, 938.6749, 25.0378, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-1738.96, 939.1542, 25.0127, SwitchType.JumpCut)
+if and
+  not Char.IsDead(121@)
+  not Char.IsDead(122@)
+  not Car.IsDead(115@)
+  not Car.IsDead(116@)
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_14425
+Char.WarpIntoCar(121@, 115@)
+Char.WarpIntoCar(122@, 116@)
+Char.FreezePosition(37@, False)
+Char.WarpIntoCarAsPassenger(37@, 116@, 1)
+Task.CarDriveToCoord(122@, 116@, -1790.405, 905.0311, 25.0203, 20.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+117@ = Sequence.Open()
+Task.CarTempAction(-1, 115@, TempAction.ReverseRight, 800)
+Task.CarDriveToCoord(-1, 115@, -1790.405, 905.0311, 25.0203, 20.0, DriveMode.Straightline, 0, DrivingMode.PloughThrough)
+Sequence.Close(117@)
+Char.PerformSequence(121@, 117@)
+Sequence.Clear(117@)
+
+:SCRASH3_14425
+set_lvar_int_to_lvar_int 123@ = TIMERA
+123@ += 4000
+72@ = 12
+
+:SCRASH3_14448
+if 
+  72@ == 12
+goto_if_false @SCRASH3_14734
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 123@
+goto_if_false @SCRASH3_14734
+72@ = 13
+Camera.DoFade(0, 1000)
+
+:SCRASH3_14499
+if 
+  Camera.GetFadingStatus
+goto_if_false @SCRASH3_14523
+wait 0
+goto @SCRASH3_14499
+
+:SCRASH3_14523
+if 
+  Char.DoesExist(113@)
+goto_if_false @SCRASH3_14544
+Char.Delete(113@)
+
+:SCRASH3_14544
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_14565
+Car.MarkAsNoLongerNeeded($sc3_missioncar)
+
+:SCRASH3_14565
+if and
+  not Char.IsDead(121@)
+  not Char.IsDead(122@)
+  not Car.IsDead(115@)
+  not Car.IsDead(116@)
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_14626
+Char.Delete(121@)
+Char.Delete(122@)
+Car.Delete(115@)
+Car.Delete(116@)
+Char.Delete(37@)
+
+:SCRASH3_14626
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_14647
+Car.Delete($sc3_missioncar)
+
+:SCRASH3_14647
+if 
+  Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+goto_if_false @SCRASH3_14688
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+
+:SCRASH3_14688
+wait 1000
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Hud.SwitchWidescreen(False)
+Char.ClearTasksImmediately($scplayer)
+Player.SetControl($player1, True)
+Camera.DoFade(1, 1000)
+Char.HideWeaponForScriptedCutscene($scplayer, False)
+goto @SCRASH3_18160
+
+:SCRASH3_14734
+if 
+  65@ == 13
+goto_if_false @SCRASH3_15198
+if 
+  Char.LocateStoppedInCar3D($scplayer, -2045.252, 178.7994, 27.8359, 3.0, 3.0, 3.0, True)
+goto_if_false @SCRASH3_14800
+
+:SCRASH3_14800
+if 
+  Char.IsInAreaInCar3D($scplayer, 0, -2042.943, 167.5841, 26.759, -2055.202, 180.1328, 32.3919)
+goto_if_false @SCRASH3_15198
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_15198
+if 
+  Char.IsInCar($scplayer, $sc3_missioncar)
+goto_if_false @SCRASH3_15198
+Player.SetControl($player1, False)
+Camera.DoFade(0, 1000)
+
+:SCRASH3_14897
+if 
+  Camera.GetFadingStatus
+goto_if_false @SCRASH3_14921
+wait 0
+goto @SCRASH3_14897
+
+:SCRASH3_14921
+Char.ClearTasksImmediately($scplayer)
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_14980
+41@, 42@, 43@ = Car.GetCoordinates($sc3_missioncar)
+50@ = Car.GetHeading($sc3_missioncar)
+75@, 76@ = Car.GetColors($sc3_missioncar)
+Car.Delete($sc3_missioncar)
+
+:SCRASH3_14980
+Streaming.RequestModel(551)
+
+:SCRASH3_14985
+if 
+  not Streaming.HasModelLoaded(551)
+goto_if_false @SCRASH3_15012
+wait 0
+goto @SCRASH3_14985
+
+:SCRASH3_15012
+$sc3_missioncar = Car.Create(551, -2031.502, 178.6435, 27.8516)
+Car.ChangeColor($sc3_missioncar, 75@, 76@)
+Car.SetHeading($sc3_missioncar, 270.0)
+Garage.SetTargetCarForMission('HBGDSFS', $sc3_missioncar)
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_15094
+Char.WarpIntoCar($scplayer, $sc3_missioncar)
+
+:SCRASH3_15094
+wait 1000
+Player.SetControl($player1, True)
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Camera.DoFade(1, 500)
+
+:SCRASH3_15117
+if 
+  Camera.GetFadingStatus
+goto_if_false @SCRASH3_15141
+wait 0
+goto @SCRASH3_15117
+
+:SCRASH3_15141
+Blip.Remove(59@)
+59@ = Blip.AddForCoord(-1780.069, 970.9553, 23.75)
+Blip.ChangeDisplay(59@, BlipDisplay.BlipOnly)
+65@ = 8
+Text.ClearPrints
+Text.Print('VAL_33', 5000, 1)
+
+:SCRASH3_15198
+if 
+  65@ == 11
+goto_if_false @SCRASH3_15216
+
+:SCRASH3_15216
+goto @SCRASH3_636
+
+:SCRASH3_15223
+if 
+  151@ <> 0
+goto_if_false @SCRASH3_15414
+if 
+  150@ == 0
+goto_if_false @SCRASH3_15277
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Audio.LoadMissionAudio(151@, 3)
+150@ = 1
+
+:SCRASH3_15277
+if 
+  150@ == 1
+goto_if_false @SCRASH3_15340
+if 
+  Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+goto_if_false @SCRASH3_15340
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 153@
+goto_if_false @SCRASH3_15340
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+150@ = 2
+
+:SCRASH3_15340
+if 
+  150@ == 2
+goto_if_false @SCRASH3_15414
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot3)
+goto_if_false @SCRASH3_15414
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+set_lvar_int_to_lvar_int 151@ = 152@
+152@ = 0
+set_lvar_int_to_lvar_int 153@ = 154@
+154@ = 0
+150@ = 0
+
+:SCRASH3_15414
+if 
+  124@ <> 0
+goto_if_false @SCRASH3_15614
+if 
+  125@ == 0
+goto_if_false @SCRASH3_15492
+125@ = 1
+set_lvar_int_to_lvar_int 126@ = TIMERA
+127@ = 0
+set_lvar_int_to_lvar_int 334@ = 126@
+add_int_lvar_to_int_lvar 334@ += 128@(127@,10i)
+
+:SCRASH3_15492
+if 
+  125@ == 1
+goto_if_false @SCRASH3_15614
+if 
+  is_int_lvar_greater_than_int_lvar TIMERA > 334@
+goto_if_false @SCRASH3_15614
+set_lvar_int_to_lvar_int 281@ = 138@(127@,10i)
+127@ += 1
+148@ -= 1
+if 
+  148@ == 0
+goto_if_false @SCRASH3_15594
+124@ = 0
+125@ = 0
+goto @SCRASH3_15614
+
+:SCRASH3_15594
+set_lvar_int_to_lvar_int 334@ = 126@
+add_int_lvar_to_int_lvar 334@ += 128@(127@,10i)
+
+:SCRASH3_15614
+if 
+  149@ == 1
+goto_if_false @SCRASH3_15678
+if 
+  not Camera.GetFadingStatus
+goto_if_false @SCRASH3_15678
+if or
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+  not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @SCRASH3_15678
+149@ = 0
+280@ = 5
+
+:SCRASH3_15678
+switch_start 280@ total_jumps 6 default_jump 0 @SCRASH3_17372 jumps 0 @SCRASH3_15741 1 @SCRASH3_16293 2 @SCRASH3_17027 3 @SCRASH3_17119 4 @SCRASH3_17177 5 @SCRASH3_17291 -1 @SCRASH3_17372
+
+:SCRASH3_15741
+if 
+  280@ == 1
+goto_if_false @SCRASH3_15809
+332@ = Char.Create(8, 290, 2752.341, -1948.867, 16.3125)
+336@ = Char.Create(8, 290, 2752.341, -1948.867, 16.3125)
+
+:SCRASH3_15809
+set_lvar_text_label 157@s = 'SCR1_AA'
+set_lvar_text_label 159@s = 'SCR1_AB'
+set_lvar_text_label 161@s = 'SCR1_AC'
+set_lvar_text_label 163@s = 'SCR1_AD'
+set_lvar_text_label 165@s = 'SCR1_AE'
+set_lvar_text_label 167@s = 'SCR1_AF'
+set_lvar_text_label 169@s = 'SCR1_AG'
+set_lvar_text_label 171@s = 'SCR1_AH'
+set_lvar_text_label 173@s = 'SCR1_AJ'
+set_lvar_text_label 175@s = 'SCR1_AK'
+set_lvar_text_label 177@s = 'SCR1_AL'
+set_lvar_text_label 179@s = 'SCR1_AM'
+set_lvar_text_label 181@s = 'SCR1_BB'
+set_lvar_text_label 183@s = 'SCR1_BA'
+set_lvar_int_to_constant 236@ = 34400
+set_lvar_int_to_constant 237@ = 34401
+set_lvar_int_to_constant 238@ = 34402
+set_lvar_int_to_constant 239@ = 34403
+set_lvar_int_to_constant 240@ = 34404
+set_lvar_int_to_constant 241@ = 34405
+set_lvar_int_to_constant 242@ = 34406
+set_lvar_int_to_constant 243@ = 34407
+set_lvar_int_to_constant 244@ = 34408
+set_lvar_int_to_constant 245@ = 34409
+set_lvar_int_to_constant 246@ = 34410
+set_lvar_int_to_constant 247@ = 34411
+set_lvar_int_to_constant 248@ = 34413
+set_lvar_int_to_constant 249@ = 34412
+284@ = 1
+285@ = 1
+286@ = 3
+287@ = 3
+288@ = 2
+289@ = 2
+290@ = 3
+291@ = 4
+292@ = 4
+293@ = 2
+294@ = 3
+295@ = 3
+296@ = 0
+297@ = 0
+set_lvar_int_to_var_int 324@ = $scplayer
+280@ = 1
+Audio.LoadMissionAudio(236@, 1)
+Audio.LoadMissionAudio(237@, 2)
+276@ = 1
+277@ = 2
+goto @SCRASH3_17372
+
+:SCRASH3_16293
+if 
+  281@ <> 0
+goto_if_false @SCRASH3_17020
+if and
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
+goto_if_false @SCRASH3_17020
+if 
+  is_int_lvar_equal_to_int_lvar 276@ == 281@
+goto_if_false @SCRASH3_16363
+278@ = 1
+goto @SCRASH3_16426
+
+:SCRASH3_16363
+if 
+  is_int_lvar_equal_to_int_lvar 277@ == 281@
+goto_if_false @SCRASH3_16396
+278@ = 2
+goto @SCRASH3_16426
+
+:SCRASH3_16396
+278@ = 1
+set_lvar_int_to_lvar_int 276@ = 281@
+Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
+Audio.LoadMissionAudio(235@(281@,40i), 1)
+
+:SCRASH3_16426
+if 
+  Audio.HasMissionAudioLoaded(278@)
+goto_if_false @SCRASH3_17008
+set_lvar_int_to_lvar_int 331@ = 283@(281@,40i)
+set_lvar_int_to_lvar_int 332@ = 323@(331@,7i)
+if 
+  338@ <> 1
+goto_if_false @SCRASH3_16654
+335@ = 1
+337@ = 0
+
+:SCRASH3_16498
+if 
+  7 > 335@
+goto_if_false @SCRASH3_16654
+set_lvar_int_to_lvar_int 336@ = 323@(335@,7i)
+if 
+  336@ <> 0
+goto_if_false @SCRASH3_16640
+if 
+  not is_int_lvar_equal_to_int_lvar 336@ == 332@
+goto_if_false @SCRASH3_16640
+if 
+  not Char.IsDead(332@)
+goto_if_false @SCRASH3_16640
+if 
+  not Char.IsDead(336@)
+goto_if_false @SCRASH3_16640
+if 
+  Char.LocateAnyMeansChar3D(332@, 336@, 10.0, 10.0, 10.0, False)
+goto_if_false @SCRASH3_16640
+337@ += 1
+
+:SCRASH3_16640
+335@ += 1
+goto @SCRASH3_16498
+
+:SCRASH3_16654
+if or
+  338@ == 1
+  337@ > 0
+  283@(281@,40i) == 0
+goto_if_false @SCRASH3_17001
+if 
+  283@(281@,40i) <> 0
+goto_if_false @SCRASH3_16781
+if 
+  not Char.IsDead(332@)
+goto_if_false @SCRASH3_16781
+Audio.AttachMissionAudioToChar(278@, 332@)
+if 
+  not Char.IsTalking(332@)
+goto_if_false @SCRASH3_16774
+330@ = 1
+Char.StartFacialTalk(332@, 15000)
+goto @SCRASH3_16781
+
+:SCRASH3_16774
+Char.DisableSpeech(332@, False)
+
+:SCRASH3_16781
+if 
+  283@(281@,40i) == 0
+goto_if_false @SCRASH3_16810
+330@ = 1
+
+:SCRASH3_16810
+if 
+  330@ == 1
+goto_if_false @SCRASH3_17001
+Audio.PlayMissionAudio(278@)
+Text.ClearPrints
+Text.Print(155@(281@,40s), 10000, 1)
+280@ += 1
+330@ = 0
+281@ += 1
+set_lvar_int_to_lvar_int 279@ = 281@
+if 
+  235@(281@,40i) <> 0
+goto_if_false @SCRASH3_17001
+if 
+  278@ == 1
+goto_if_false @SCRASH3_16963
+if 
+  not is_int_lvar_equal_to_int_lvar 277@ == 281@
+goto_if_false @SCRASH3_16956
+Audio.LoadMissionAudio(235@(281@,40i), 2)
+set_lvar_int_to_lvar_int 277@ = 281@
+
+:SCRASH3_16956
+goto @SCRASH3_17001
+
+:SCRASH3_16963
+if 
+  not is_int_lvar_equal_to_int_lvar 276@ == 281@
+goto_if_false @SCRASH3_17001
+Audio.LoadMissionAudio(235@(281@,40i), 1)
+set_lvar_int_to_lvar_int 276@ = 281@
+
+:SCRASH3_17001
+goto @SCRASH3_17020
+
+:SCRASH3_17008
+Audio.LoadMissionAudio(235@(281@,40i), 278@)
+
+:SCRASH3_17020
+goto @SCRASH3_17372
+
+:SCRASH3_17027
+if 
+  Audio.HasMissionAudioFinished(278@)
+goto_if_false @SCRASH3_17057
+280@ += 1
+goto @SCRASH3_17112
+
+:SCRASH3_17057
+if 
+  Char.DoesExist(332@)
+goto_if_false @SCRASH3_17096
+if 
+  Char.IsDead(332@)
+goto_if_false @SCRASH3_17096
+280@ += 1
+
+:SCRASH3_17096
+if 
+  not Char.IsDead(332@)
+goto_if_false @SCRASH3_17112
+
+:SCRASH3_17112
+goto @SCRASH3_17372
+
+:SCRASH3_17119
+Audio.ClearMissionAudio(278@)
+275@(278@,3i) = 0
+Text.ClearPrints
+if 
+  not Char.IsDead(332@)
+goto_if_false @SCRASH3_17163
+Char.StopFacialTalk(332@)
+Char.EnableSpeech(332@)
+
+:SCRASH3_17163
+280@ += 1
+goto @SCRASH3_17372
+
+:SCRASH3_17177
+281@ += 1
+if 
+  235@(281@,40i) <> 0
+goto_if_false @SCRASH3_17230
+Audio.LoadMissionAudio(235@(281@,40i), 278@)
+set_lvar_int_to_lvar_int 275@(278@,3i) = 281@
+
+:SCRASH3_17230
+282@ -= 1
+if 
+  282@ <= 0
+goto_if_false @SCRASH3_17269
+281@ = 0
+goto @SCRASH3_17277
+
+:SCRASH3_17269
+set_lvar_int_to_lvar_int 281@ = 279@
+
+:SCRASH3_17277
+280@ = 1
+goto @SCRASH3_17372
+
+:SCRASH3_17291
+280@ = 1
+281@ = 0
+282@ = 0
+124@ = 0
+148@ = 0
+Audio.ClearMissionAudio(278@)
+275@(278@,3i) = 0
+Text.ClearPrints
+if 
+  not Char.IsDead(332@)
+goto_if_false @SCRASH3_17365
+Char.EnableSpeech(332@)
+
+:SCRASH3_17365
+goto @SCRASH3_17372
+
+:SCRASH3_17372
+return 
+
+:SCRASH3_17374
+Text.ClearPrints
+if 
+  not Game.IsMinigameInProgress
+goto_if_false @SCRASH3_17396
+Player.SetControl($player1, False)
+
+:SCRASH3_17396
+if 
+  Char.IsInArea3D($scplayer, 0, -2039.153, 182.7238, 20.8154, -2057.087, 150.6935, 34.1252)
+goto_if_false @SCRASH3_17792
+if 
+  Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+goto_if_false @SCRASH3_17785
+Camera.DoFade(0, 1000)
+
+:SCRASH3_17476
+if 
+  Camera.GetFadingStatus
+goto_if_false @SCRASH3_17500
+wait 0
+goto @SCRASH3_17476
+
+:SCRASH3_17500
+$car = 0
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @SCRASH3_17551
+$car = Char.GetCarIsUsing($scplayer)
+Char.WarpFromCarToCoord($scplayer, 0.0, 0.0, 0.0)
+
+:SCRASH3_17551
+World.ClearAreaOfCars(-2039.056, 182.7439, 32.4018, -2057.341, 150.5405, 27.7805)
+World.ClearAreaOfChars(-2039.056, 182.7439, 32.4018, -2057.341, 150.5405, 27.7805)
+Char.SetCoordinatesNoOffset($scplayer, -2037.886, 178.9478, 27.8359)
+Char.SetHeading($scplayer, 270.0)
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_17682
+if 
+  not Char.IsInAnyCar(37@)
+goto_if_false @SCRASH3_17682
+Char.Delete(37@)
+
+:SCRASH3_17682
+Player.SetControl($player1, False)
+Char.SetProofs($scplayer, True, True, True, True, True)
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+$valet_mission_terminate = 1
+Camera.SetBehindPlayer
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+Camera.DoFade(1, 1000)
+
+:SCRASH3_17761
+if 
+  Camera.GetFadingStatus
+goto_if_false @SCRASH3_17785
+wait 0
+goto @SCRASH3_17761
+
+:SCRASH3_17785
+goto @SCRASH3_18126
+
+:SCRASH3_17792
+if 
+  Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+goto_if_false @SCRASH3_18126
+Camera.DoFade(0, 1000)
+
+:SCRASH3_17824
+if 
+  Camera.GetFadingStatus
+goto_if_false @SCRASH3_17848
+wait 0
+goto @SCRASH3_17824
+
+:SCRASH3_17848
+$car = 0
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @SCRASH3_17899
+$car = Char.GetCarIsUsing($scplayer)
+Char.WarpFromCarToCoord($scplayer, 0.0, 0.0, 0.0)
+
+:SCRASH3_17899
+World.ClearAreaOfCars(-2039.056, 182.7439, 32.4018, -2057.341, 150.5405, 27.7805)
+World.ClearAreaOfChars(-2039.056, 182.7439, 32.4018, -2057.341, 150.5405, 27.7805)
+if 
+  not Car.IsDead($car)
+goto_if_false @SCRASH3_17994
+Char.WarpIntoCar($scplayer, $car)
+goto @SCRASH3_18042
+
+:SCRASH3_17994
+if 
+  $car <> 0
+goto_if_false @SCRASH3_18042
+Char.SetCoordinatesNoOffset($scplayer, -2037.886, 178.9478, 27.8359)
+Char.SetHeading($scplayer, 270.0)
+
+:SCRASH3_18042
+if 
+  not Char.IsDead(37@)
+goto_if_false @SCRASH3_18079
+if 
+  not Char.IsInAnyCar(37@)
+goto_if_false @SCRASH3_18079
+Char.Delete(37@)
+
+:SCRASH3_18079
+Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
+Player.BuildModel($player1)
+Camera.DoFade(1, 1000)
+
+:SCRASH3_18102
+if 
+  Camera.GetFadingStatus
+goto_if_false @SCRASH3_18126
+wait 0
+goto @SCRASH3_18102
+
+:SCRASH3_18126
+return 
+
+:SCRASH3_18128
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+$valet_mission_terminate = 1
+$valet_unlocked = 0
+return 
+
+:SCRASH3_18160
+Stat.SetInt(StatId.PassedZero1, 1)
+$valet_unlocked = 1
+$valet_oddjob_opened = 1
+Text.PrintWithNumberBig('M_PASSD', 0, 5000, TextStyle.Middle)
+Stat.SetInt(StatId.PassedScrash1, 1)
+Player.ClearWantedLevel($player1)
+Audio.PlayMissionPassedTune(1)
+Stat.PlayerMadeProgress(1)
+$flag_scrash_mission_counter += 1
+$flag_player_got_valet_uniform = 1
+Stat.RegisterMissionPassed('SCRA_1')
+Blip.Remove($garage_contact_blip)
+$garage_contact_blip = Blip.AddSpriteForContactPoint(15, $garageX, $garageY, $garageZ)
+Blip.Remove($scrash_contact_blip)
+return 
+
+:SCRASH3_18272
+Game.SetScriptLimitToGangSize(99)
+$playing_scrash1 = 0
+$freeze_creating_drop_off_cars = 0
+$force_valet_on_mission = 0
+Game.SetWantedMultiplier(1.0)
+World.SetCarDensityMultiplier(1.0)
+World.SetPedDensityMultiplier(1.0)
+Path.SwitchRoadsOn(2793.814, -1987.935, 15.3045, 2754.324, -1900.369, 9.8752)
+Hud.ClearTimer($sc3_countdown)
+Blip.Remove(59@)
+Blip.Remove(60@)
+Blip.Remove(57@)
+Blip.Remove(61@)
+Blip.Remove(62@)
+Blip.Remove(63@)
+Blip.Remove(64@)
+World.SetUsesCollisionOfClosestObjectOfType(-1741.792, 939.731, 23.8906, 2.5, #LAMPPOST3, True)
+CarGenerator.DontSuppressCarModel(551)
+Path.SwitchPedRoadsBackToOriginal(-1729.549, 942.886, 40.3585, -1742.773, 937.7814, 10.1928)
+Path.SwitchPedRoadsBackToOriginal(-1768.524, 938.887, 40.7496, -1780.765, 943.4574, 10.0929)
+Streaming.MarkModelAsNoLongerNeeded(510)
+Streaming.MarkModelAsNoLongerNeeded(429)
+Streaming.MarkModelAsNoLongerNeeded(415)
+Streaming.MarkModelAsNoLongerNeeded(551)
+Streaming.MarkModelAsNoLongerNeeded(240)
+Streaming.MarkModelAsNoLongerNeeded(252)
+Streaming.MarkModelAsNoLongerNeeded(330)
+Streaming.RemoveCarRecording(155)
+Streaming.MarkModelAsNoLongerNeeded(597)
+Streaming.MarkModelAsNoLongerNeeded(240)
+Streaming.MarkModelAsNoLongerNeeded(281)
+Streaming.MarkModelAsNoLongerNeeded(346)
+Streaming.RemoveAnimation("POLICE")
+Streaming.RemoveAnimation("MISC")
+Streaming.RemoveCarRecording(165)
+Streaming.RemoveCarRecording(166)
+if 
+  not Car.IsDead($sc3_missioncar)
+goto_if_false @SCRASH3_18605
+Car.SetProofs($sc3_missioncar, False, False, False, False, False)
+
+:SCRASH3_18605
+$timer_mobile_start = Clock.GetGameTimer()
+$pause_valet_script = 0
+$onmission = 0
+$freeze_creating_drop_off_cars = 0
+$sc3_missioncar_alive = 0
+$dont_clear_valets = 0
+$tell_player_to_kill_valet = 0
+Mission.Finish
+return 
+

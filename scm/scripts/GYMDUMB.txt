@@ -1,0 +1,1259 @@
+//-------------External script 14 (GYMDUMB)---------------
+
+:GYMDUMB
+script_name 'GYMDUMB'
+$weight_dumbell = 1
+$reps_dumbell = 0
+27@ = 0
+$dumb_has_KD = 0
+$temp_muscle_stat_dumb = 0.0
+TIMERA = 0
+TIMERB = 0
+23@ = 0
+if 
+  23@ == 1
+goto_if_false @GYMDUMB_111
+0@ = Object.CreateNoOffset(#BEACHTOWEL04, 0.0, 0.0, 0.0)
+
+:GYMDUMB_111
+if 
+  Object.DoesExist(0@)
+goto_if_false @GYMDUMB_149
+4@, 5@, 6@ = Object.GetCoordinates(0@)
+12@ = Object.GetHeading(0@)
+
+:GYMDUMB_149
+set_lvar_float_to_lvar_float 2@ = 4@
+set_lvar_float_to_lvar_float 3@ = 5@
+set_var_float_to_lvar_float $dumbellx1 = 4@
+set_var_float_to_lvar_float $dumbelly1 = 5@
+set_lvar_float_to_lvar_float 9@ = 6@
+9@ += 1.7
+set_lvar_float_to_lvar_float 13@ = 12@
+set_lvar_float_to_lvar_float 1@ = 12@
+1@ -= 90.0
+set_var_float_to_lvar_float $dumbell_player_heading = 12@
+$dumbell_player_heading -= 90.0
+set_var_float_to_lvar_float $dumbell_player_heading1 = 12@
+$dumbell_player_heading1 += 90.0
+10@ = Math.Sin(13@)
+11@ = Math.Cos(13@)
+10@ *= 0.95
+11@ *= 0.95
+sub_float_lvar_from_float_lvar 4@ -= 11@
+sub_float_lvar_from_float_lvar 5@ -= 10@
+10@ *= 3.5
+11@ *= 3.5
+set_lvar_float_to_lvar_float 7@ = 4@
+add_float_lvar_to_float_lvar 7@ += 11@
+set_lvar_float_to_lvar_float 8@ = 5@
+add_float_lvar_to_float_lvar 8@ += 10@
+10@ = Math.Sin(13@)
+11@ = Math.Cos(13@)
+10@ *= 0.95
+11@ *= 0.95
+add_float_lvar_to_float_var $dumbellx1 += 11@
+add_float_lvar_to_float_var $dumbelly1 += 10@
+10@ *= 3.5
+11@ *= 3.5
+set_var_float_to_var_float $dumbellcamx1 = $dumbellx1
+sub_float_lvar_from_float_var $dumbellcamx1 -= 11@
+set_var_float_to_var_float $dumbellcamy1 = $dumbelly1
+sub_float_lvar_from_float_var $dumbellcamy1 -= 10@
+12@ += 180.0
+set_lvar_float_to_lvar_float 13@ = 12@
+13@ += 90.0
+10@ = Math.Sin(13@)
+11@ = Math.Cos(13@)
+10@ *= 0.2
+11@ *= 0.2
+add_float_lvar_to_float_lvar 2@ += 11@
+add_float_lvar_to_float_lvar 3@ += 10@
+25@ = Object.Create(#KMB_DUMBBELL_R, 2@, 3@, 6@)
+Object.AttachToObject(25@, 0@, 0.05, 0.2, 0.3, 0.0, 90.0, 90.0)
+26@ = Object.Create(#KMB_DUMBBELL_L, 2@, 3@, 6@)
+Object.AttachToObject(26@, 0@, 0.05, -0.2, 0.3, 0.0, 90.0, 90.0)
+6@ += 0.1
+$levelbar_bike = 1
+$are_anims_loaded = 0
+
+:GYMDUMB_683
+wait 0
+if 
+  not Object.DoesExist(0@)
+goto_if_false @GYMDUMB_715
+Object.Delete(25@)
+Object.Delete(26@)
+terminate_this_script 
+
+:GYMDUMB_715
+if 
+  not Object.IsWithinBrainActivationRange(0@)
+goto_if_false @GYMDUMB_743
+Object.Delete(25@)
+Object.Delete(26@)
+terminate_this_script 
+
+:GYMDUMB_743
+if 
+  Player.IsPlaying($player1)
+goto_if_false @GYMDUMB_7917
+if 
+  $playerexercising_flag == 0
+goto_if_false @GYMDUMB_1253
+if and
+  17@ == 0
+  not Player.IsUsingJetpack($player1)
+goto_if_false @GYMDUMB_1253
+if 
+  21@ == 0
+goto_if_false @GYMDUMB_1189
+if or
+  Char.LocateOnFoot3D($scplayer, 0, 4@, 5@, 6@, 1.2, 1.2, 4.0)
+  Char.LocateOnFoot3D($scplayer, 0, $dumbellx1, $dumbelly1, 6@, 1.2, 1.2, 4.0)
+goto_if_false @GYMDUMB_1155
+if 
+  Char.LocateOnFoot3D($scplayer, 0, 4@, 5@, 6@, 1.2, 1.2, 4.0)
+goto_if_false @GYMDUMB_947
+$dumb_front_back = 0
+goto @GYMDUMB_954
+
+:GYMDUMB_947
+$dumb_front_back = 1
+
+:GYMDUMB_954
+if 
+  27@ == 0
+goto_if_false @GYMDUMB_990
+Text.PrintHelpForever('GYM1_85')
+27@ = 1
+
+:GYMDUMB_990
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+goto_if_false @GYMDUMB_1148
+if or
+  $onmission == 0
+  $gym_is_running == 1
+goto_if_false @GYMDUMB_1132
+$gym_day, $gym_month = Clock.GetCurrentDate()
+if or
+  is_int_var_greater_than_int_var $gym_day > $gym_final_day
+  is_int_var_greater_than_int_var $gym_month > $gym_final_month
+goto_if_false @GYMDUMB_1109
+17@ = 1
+$playerexercising_flag = 1
+Char.SetCollision($scplayer, False)
+Player.SetControl($player1, False)
+$gym_TIMERC = 0
+goto @GYMDUMB_1125
+
+:GYMDUMB_1109
+Text.PrintNow('GYM1_1A', 4000, 1)
+
+:GYMDUMB_1125
+goto @GYMDUMB_1148
+
+:GYMDUMB_1132
+Text.PrintNow('GYM1_90', 4000, 1)
+
+:GYMDUMB_1148
+goto @GYMDUMB_1182
+
+:GYMDUMB_1155
+if 
+  27@ == 1
+goto_if_false @GYMDUMB_1182
+Text.ClearHelp
+27@ = 0
+
+:GYMDUMB_1182
+goto @GYMDUMB_1253
+
+:GYMDUMB_1189
+if or
+  not Char.LocateOnFoot2D($scplayer, 0, 4@, 5@, 2.0, 2.0)
+  not Char.LocateOnFoot2D($scplayer, 0, $dumbellx1, $dumbelly1, 2.0, 2.0)
+goto_if_false @GYMDUMB_1253
+21@ = 0
+
+:GYMDUMB_1253
+if 
+  17@ == 1
+goto_if_false @GYMDUMB_7917
+if and
+  $playerexercising_flag == 1
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_1459
+Char.SetCollision($scplayer, False)
+if 
+  $dumb_front_back == 0
+goto_if_false @GYMDUMB_1381
+Player.SetControl($player1, False)
+Char.SetCoordinatesDontWarpGang($scplayer, 4@, 5@, 6@)
+Camera.SetFixedPosition(7@, 8@, 9@, 0.0, 0.0, 0.0)
+Char.SetHeading($scplayer, $dumbell_player_heading)
+goto @GYMDUMB_1436
+
+:GYMDUMB_1381
+Player.SetControl($player1, False)
+Char.SetCoordinatesDontWarpGang($scplayer, $dumbellx1, $dumbelly1, 6@)
+Camera.SetFixedPosition($dumbellcamx1, $dumbellcamy1, 9@, 0.0, 0.0, 0.0)
+Char.SetHeading($scplayer, $dumbell_player_heading1)
+
+:GYMDUMB_1436
+Camera.PointAtChar($scplayer, CameraMode.Fixed, SwitchType.JumpCut)
+$playerexercising_flag = 2
+Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
+
+:GYMDUMB_1459
+if 
+  $are_anims_loaded == 0
+goto_if_false @GYMDUMB_1584
+Streaming.RequestAnimation("FREEWEIGHTS")
+Text.LoadMissionText('GYM')
+
+:GYMDUMB_1503
+if 
+  not Streaming.HasAnimationLoaded("FREEWEIGHTS")
+goto_if_false @GYMDUMB_1540
+wait 0
+goto @GYMDUMB_1503
+
+:GYMDUMB_1540
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Audio.LoadMissionAudio(1820, 4)
+
+:GYMDUMB_1551
+if 
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot4)
+goto_if_false @GYMDUMB_1577
+wait 0
+goto @GYMDUMB_1551
+
+:GYMDUMB_1577
+$are_anims_loaded = 1
+
+:GYMDUMB_1584
+if and
+  $playerexercising_flag == 2
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_2111
+Text.PrintHelpForever('GYM1_71')
+if or
+  $current_Language == 4
+  $current_Language == 2
+goto_if_false @GYMDUMB_1811
+$main_menu_bell = Menu.Create('GYM1_G', 31.0, 180.0, 184.0, True, True, 1, 0)
+Menu.SetColumn($main_menu_bell, 0, 'GYM1_72', 'GYM1_26', 'GYM1_27', 'GYM1_28', 'GYM1_29', 'GYM1_30', 'GYM1_31', 'GYM1_32', 'GYM1_33', 'GYM1_34', 'GYM1_35', 'DUMMY', 'DUMMY')
+goto @GYMDUMB_1972
+
+:GYMDUMB_1811
+$main_menu_bell = Menu.Create('GYM1_G', 31.0, 150.0, 184.0, True, True, 1, 0)
+Menu.SetColumn($main_menu_bell, 0, 'GYM1_72', 'GYM1_26', 'GYM1_27', 'GYM1_28', 'GYM1_29', 'GYM1_30', 'GYM1_31', 'GYM1_32', 'GYM1_33', 'GYM1_34', 'GYM1_35', 'DUMMY', 'DUMMY')
+
+:GYMDUMB_1972
+Menu.SetActiveItem($main_menu_bell, 0)
+
+:GYMDUMB_1979
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_2090
+wait 0
+$gym_TIMERC += 1
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+  $gym_TIMERC > 20
+goto_if_false @GYMDUMB_2044
+Text.ClearHelp
+Menu.Delete($main_menu_bell)
+goto @GYMDUMB_7441
+
+:GYMDUMB_2044
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMDUMB_2083
+Text.ClearHelp
+$weight_dumbell = Menu.GetItemSelected($main_menu_bell)
+Menu.Delete($main_menu_bell)
+goto @GYMDUMB_2090
+
+:GYMDUMB_2083
+goto @GYMDUMB_1979
+
+:GYMDUMB_2090
+19@ = 1
+18@ = 1
+$playerexercising_flag = 3
+
+:GYMDUMB_2111
+if and
+  $playerexercising_flag == 3
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_2868
+if 
+  $weight_dumbell == 0
+goto_if_false @GYMDUMB_2172
+$weightdb = 1.0
+$incmusclestatdb = 5.0
+
+:GYMDUMB_2172
+if 
+  $weight_dumbell == 1
+goto_if_false @GYMDUMB_2210
+$weightdb = 2.0
+$incmusclestatdb = 5.2
+
+:GYMDUMB_2210
+if 
+  $weight_dumbell == 2
+goto_if_false @GYMDUMB_2248
+$weightdb = 3.0
+$incmusclestatdb = 5.3
+
+:GYMDUMB_2248
+if 
+  $weight_dumbell == 3
+goto_if_false @GYMDUMB_2286
+$weightdb = 4.0
+$incmusclestatdb = 5.5
+
+:GYMDUMB_2286
+if 
+  $weight_dumbell == 4
+goto_if_false @GYMDUMB_2324
+$weightdb = 5.0
+$incmusclestatdb = 6.0
+
+:GYMDUMB_2324
+if 
+  $weight_dumbell == 5
+goto_if_false @GYMDUMB_2362
+$weightdb = 6.0
+$incmusclestatdb = 6.5
+
+:GYMDUMB_2362
+if 
+  $weight_dumbell == 6
+goto_if_false @GYMDUMB_2400
+$weightdb = 7.0
+$incmusclestatdb = 7.0
+
+:GYMDUMB_2400
+if 
+  $weight_dumbell == 7
+goto_if_false @GYMDUMB_2438
+$weightdb = 8.0
+$incmusclestatdb = 7.5
+
+:GYMDUMB_2438
+if 
+  $weight_dumbell == 8
+goto_if_false @GYMDUMB_2476
+$weightdb = 9.0
+$incmusclestatdb = 8.0
+
+:GYMDUMB_2476
+if 
+  $weight_dumbell == 9
+goto_if_false @GYMDUMB_2514
+$weightdb = 10.0
+$incmusclestatdb = 8.5
+
+:GYMDUMB_2514
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_2580
+Task.PlayAnim($scplayer, "GYM_FREE_PICKUP", "FREEWEIGHTS", 4.0, False, False, False, True, -1)
+
+:GYMDUMB_2580
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_2868
+if and
+  Char.IsPlayingAnim($scplayer, "GYM_FREE_PICKUP")
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_2868
+$animframe_freepickup = Char.GetAnimCurrentTime($scplayer, "GYM_FREE_PICKUP")
+
+:GYMDUMB_2663
+if 
+  $animframe_freepickup <= 0.7789
+goto_if_false @GYMDUMB_2736
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_2729
+$animframe_freepickup = Char.GetAnimCurrentTime($scplayer, "GYM_FREE_PICKUP")
+
+:GYMDUMB_2729
+goto @GYMDUMB_2663
+
+:GYMDUMB_2736
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_2854
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_2854
+Task.PickUpObject($scplayer, 25@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", -1)
+Task.PickUpSecondObject($scplayer, 26@, 0.0, 0.0, 0.0, 5, 16, "NULL", "NULL", -1)
+
+:GYMDUMB_2854
+$playerexercising_flag = 4
+TIMERA = 0
+
+:GYMDUMB_2868
+if and
+  $playerexercising_flag == 4
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_3404
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_FREE_PICKUP")
+goto_if_false @GYMDUMB_3404
+$animframe = Char.GetAnimCurrentTime($scplayer, "GYM_FREE_PICKUP")
+if 
+  $animframe == 1.0
+goto_if_false @GYMDUMB_3404
+if 
+  $DUMBELL_TXT == 0
+goto_if_false @GYMDUMB_3006
+Text.PrintHelpForever('GYM1_36')
+$DUMBELL_TXT = 1
+
+:GYMDUMB_3006
+$upperbodymusclestat_gym = Stat.GetFloat(23)
+$upperbodymusclestat_gym /= 30.0
+if 
+  0.0 > $upperbodymusclestat_gym
+goto_if_false @GYMDUMB_3054
+$upperbodymusclestat_gym = 0.0
+
+:GYMDUMB_3054
+set_var_float_to_var_float $dumbell_resistance = $upperbodymusclestat_gym
+$dumbell_resistance += 30.0
+if 
+  $dumbell_resistance > 75.0
+goto_if_false @GYMDUMB_3103
+$dumbell_resistance = 75.0
+
+:GYMDUMB_3103
+cset_var_float_to_var_int $reps_dumbellfloat = integer $reps_dumbell
+set_var_float_to_var_float $animationtobeplayed = $dumbell_resistance
+sub_float_var_from_float_var $animationtobeplayed -= $weightdb
+if 
+  18.0 >= $animationtobeplayed
+goto_if_false @GYMDUMB_3193
+Task.PlayAnim($scplayer, "GYM_FREE_B", "FREEWEIGHTS", 8.0, False, False, False, True, -1)
+
+:GYMDUMB_3193
+if 
+  $animationtobeplayed > 18.0
+goto_if_false @GYMDUMB_3280
+if 
+  24.0 >= $animationtobeplayed
+goto_if_false @GYMDUMB_3280
+Task.PlayAnim($scplayer, "GYM_FREE_A", "FREEWEIGHTS", 8.0, False, False, False, True, -1)
+
+:GYMDUMB_3280
+if 
+  $animationtobeplayed > 24.0
+goto_if_false @GYMDUMB_3354
+Task.PlayAnim($scplayer, "GYM_FREE_UP_SMOOTH", "FREEWEIGHTS", 8.0, False, False, False, True, -1)
+
+:GYMDUMB_3354
+Hud.DisplayNthCounterWithString($powerbar, CounterDisplay.Bar, 1, 'GYM1_1')
+Hud.DisplayNthCounterWithString($reps_dumbell, CounterDisplay.Number, 2, 'GYM1_2')
+$animstate_flag = 1
+$playerexercising_flag = 5
+
+:GYMDUMB_3404
+if and
+  $playerexercising_flag == 5
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_7053
+if and
+  TIMERA > 4000
+  $DUMBELL_TXT == 1
+goto_if_false @GYMDUMB_3473
+Text.ClearHelp
+Text.PrintHelpForever('GYM1_25')
+$DUMBELL_TXT = 2
+
+:GYMDUMB_3473
+if and
+  TIMERA > 8000
+  $DUMBELL_TXT == 2
+goto_if_false @GYMDUMB_3508
+Text.ClearHelp
+$DUMBELL_TXT = 101
+
+:GYMDUMB_3508
+$upperbodymusclestat_gym = Stat.GetFloat(23)
+$upperbodymusclestat_gym /= 30.0
+if 
+  0.0 > $upperbodymusclestat_gym
+goto_if_false @GYMDUMB_3556
+$upperbodymusclestat_gym = 0.0
+
+:GYMDUMB_3556
+set_var_float_to_var_float $dumbell_resistance = $upperbodymusclestat_gym
+$dumbell_resistance += 20.0
+if 
+  $dumbell_resistance > 75.0
+goto_if_false @GYMDUMB_3605
+$dumbell_resistance = 75.0
+
+:GYMDUMB_3605
+if or
+  $animstate_flag == 1
+  $animstate_flag == 3
+goto_if_false @GYMDUMB_3658
+$weightdb /= 2.0
+sub_timed_float_var_from_float_var $powerdumbell -= frame_delta_time * $weightdb
+$weightdb *= 2.0
+
+:GYMDUMB_3658
+if 
+  $animstate_flag == 4
+goto_if_false @GYMDUMB_3686
+sub_timed_val_from_float_var $powerdumbell -= frame_delta_time * 2.0
+
+:GYMDUMB_3686
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @GYMDUMB_3728
+if 
+  20@ == 3
+goto_if_false @GYMDUMB_3728
+20@ = 0
+
+:GYMDUMB_3728
+if 
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMDUMB_3770
+if 
+  20@ == 1
+goto_if_false @GYMDUMB_3770
+20@ = 2
+
+:GYMDUMB_3770
+if or
+  $animstate_flag == 1
+  $animstate_flag == 3
+goto_if_false @GYMDUMB_3907
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+goto_if_false @GYMDUMB_3851
+if 
+  20@ == 0
+goto_if_false @GYMDUMB_3851
+add_float_var_to_float_var $powerdumbell += $dumbell_resistance
+20@ = 1
+
+:GYMDUMB_3851
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Circle)
+  not Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMDUMB_3907
+if 
+  20@ == 2
+goto_if_false @GYMDUMB_3907
+add_float_var_to_float_var $powerdumbell += $dumbell_resistance
+20@ = 3
+
+:GYMDUMB_3907
+if 
+  0.0 > $powerdumbell
+goto_if_false @GYMDUMB_3938
+$powerdumbell = 0.0
+
+:GYMDUMB_3938
+if 
+  $powerdumbell >= 100.0
+goto_if_false @GYMDUMB_3994
+$powerdumbell = 100.0
+if 
+  $animstate_flag == 1
+goto_if_false @GYMDUMB_3994
+$animstate_flag = 2
+
+:GYMDUMB_3994
+if 
+  $powerdumbell > 25.0
+goto_if_false @GYMDUMB_4026
+$dumb_sfx = Char.SetSayContext($scplayer, 354)
+
+:GYMDUMB_4026
+if 
+  $animstate_flag == 2
+goto_if_false @GYMDUMB_4086
+if 
+  $animvalue == 1.0
+goto_if_false @GYMDUMB_4086
+20@ = 0
+$animstate_flag = 3
+TIMERB = 0
+
+:GYMDUMB_4086
+if and
+  $animstate_flag == 3
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_6177
+if 
+  $reps_dumbell < 999999
+goto_if_false @GYMDUMB_4137
+$reps_dumbell += 1
+
+:GYMDUMB_4137
+switch_start $weight_dumbell total_jumps 10 default_jump 0 @GYMDUMB_4405 jumps 0 @GYMDUMB_4265 1 @GYMDUMB_4279 2 @GYMDUMB_4293 3 @GYMDUMB_4307 4 @GYMDUMB_4321 5 @GYMDUMB_4335 6 @GYMDUMB_4349
+switch_continued 7 @GYMDUMB_4363 8 @GYMDUMB_4377 9 @GYMDUMB_4391 -1 @GYMDUMB_4405 -1 @GYMDUMB_4405 -1 @GYMDUMB_4405 -1 @GYMDUMB_4405 -1 @GYMDUMB_4405 -1 @GYMDUMB_4405
+
+:GYMDUMB_4265
+$dumb_weight = 20
+goto @GYMDUMB_4405
+
+:GYMDUMB_4279
+$dumb_weight = 30
+goto @GYMDUMB_4405
+
+:GYMDUMB_4293
+$dumb_weight = 40
+goto @GYMDUMB_4405
+
+:GYMDUMB_4307
+$dumb_weight = 50
+goto @GYMDUMB_4405
+
+:GYMDUMB_4321
+$dumb_weight = 60
+goto @GYMDUMB_4405
+
+:GYMDUMB_4335
+$dumb_weight = 70
+goto @GYMDUMB_4405
+
+:GYMDUMB_4349
+$dumb_weight = 80
+goto @GYMDUMB_4405
+
+:GYMDUMB_4363
+$dumb_weight = 90
+goto @GYMDUMB_4405
+
+:GYMDUMB_4377
+$dumb_weight = 100
+goto @GYMDUMB_4405
+
+:GYMDUMB_4391
+$dumb_weight = 110
+goto @GYMDUMB_4405
+
+:GYMDUMB_4405
+$temp_dumb_weight = Stat.GetInt(47)
+if 
+  is_int_var_greater_than_int_var $dumb_weight > $temp_dumb_weight
+goto_if_false @GYMDUMB_4438
+Stat.SetInt(StatId.HeaviestWeightDumbells, $dumb_weight)
+
+:GYMDUMB_4438
+$temp_muscle_stat_dumb = Stat.GetFloat(23)
+if 
+  1000.0 > $temp_muscle_stat_dumb
+goto_if_false @GYMDUMB_4746
+if 
+  $weight_dumbell == 1
+goto_if_false @GYMDUMB_4494
+$incmusclestatdb = 1.0
+
+:GYMDUMB_4494
+if 
+  $weight_dumbell == 2
+goto_if_false @GYMDUMB_4522
+$incmusclestatdb = 1.2
+
+:GYMDUMB_4522
+if 
+  $weight_dumbell == 3
+goto_if_false @GYMDUMB_4550
+$incmusclestatdb = 1.3
+
+:GYMDUMB_4550
+if 
+  $weight_dumbell == 4
+goto_if_false @GYMDUMB_4578
+$incmusclestatdb = 1.5
+
+:GYMDUMB_4578
+if 
+  $weight_dumbell == 5
+goto_if_false @GYMDUMB_4606
+$incmusclestatdb = 2.0
+
+:GYMDUMB_4606
+if 
+  $weight_dumbell == 6
+goto_if_false @GYMDUMB_4634
+$incmusclestatdb = 2.5
+
+:GYMDUMB_4634
+if 
+  $weight_dumbell == 7
+goto_if_false @GYMDUMB_4662
+$incmusclestatdb = 3.0
+
+:GYMDUMB_4662
+if 
+  $weight_dumbell == 8
+goto_if_false @GYMDUMB_4690
+$incmusclestatdb = 4.0
+
+:GYMDUMB_4690
+if 
+  $weight_dumbell == 9
+goto_if_false @GYMDUMB_4718
+$incmusclestatdb = 5.0
+
+:GYMDUMB_4718
+if 
+  $weight_dumbell == 10
+goto_if_false @GYMDUMB_4746
+$incmusclestatdb = 6.0
+
+:GYMDUMB_4746
+if 
+  800.0 > $temp_muscle_stat_dumb
+goto_if_false @GYMDUMB_5047
+if 
+  $weight_dumbell == 1
+goto_if_false @GYMDUMB_4795
+$incmusclestatdb = 2.0
+
+:GYMDUMB_4795
+if 
+  $weight_dumbell == 2
+goto_if_false @GYMDUMB_4823
+$incmusclestatdb = 2.2
+
+:GYMDUMB_4823
+if 
+  $weight_dumbell == 3
+goto_if_false @GYMDUMB_4851
+$incmusclestatdb = 2.3
+
+:GYMDUMB_4851
+if 
+  $weight_dumbell == 4
+goto_if_false @GYMDUMB_4879
+$incmusclestatdb = 2.5
+
+:GYMDUMB_4879
+if 
+  $weight_dumbell == 5
+goto_if_false @GYMDUMB_4907
+$incmusclestatdb = 3.0
+
+:GYMDUMB_4907
+if 
+  $weight_dumbell == 6
+goto_if_false @GYMDUMB_4935
+$incmusclestatdb = 3.5
+
+:GYMDUMB_4935
+if 
+  $weight_dumbell == 7
+goto_if_false @GYMDUMB_4963
+$incmusclestatdb = 4.0
+
+:GYMDUMB_4963
+if 
+  $weight_dumbell == 8
+goto_if_false @GYMDUMB_4991
+$incmusclestatdb = 5.0
+
+:GYMDUMB_4991
+if 
+  $weight_dumbell == 9
+goto_if_false @GYMDUMB_5019
+$incmusclestatdb = 6.0
+
+:GYMDUMB_5019
+if 
+  $weight_dumbell == 10
+goto_if_false @GYMDUMB_5047
+$incmusclestatdb = 7.0
+
+:GYMDUMB_5047
+if 
+  600.0 > $temp_muscle_stat_dumb
+goto_if_false @GYMDUMB_5348
+if 
+  $weight_dumbell == 1
+goto_if_false @GYMDUMB_5096
+$incmusclestatdb = 3.0
+
+:GYMDUMB_5096
+if 
+  $weight_dumbell == 2
+goto_if_false @GYMDUMB_5124
+$incmusclestatdb = 3.2
+
+:GYMDUMB_5124
+if 
+  $weight_dumbell == 3
+goto_if_false @GYMDUMB_5152
+$incmusclestatdb = 3.3
+
+:GYMDUMB_5152
+if 
+  $weight_dumbell == 4
+goto_if_false @GYMDUMB_5180
+$incmusclestatdb = 3.5
+
+:GYMDUMB_5180
+if 
+  $weight_dumbell == 5
+goto_if_false @GYMDUMB_5208
+$incmusclestatdb = 4.0
+
+:GYMDUMB_5208
+if 
+  $weight_dumbell == 6
+goto_if_false @GYMDUMB_5236
+$incmusclestatdb = 4.5
+
+:GYMDUMB_5236
+if 
+  $weight_dumbell == 7
+goto_if_false @GYMDUMB_5264
+$incmusclestatdb = 5.0
+
+:GYMDUMB_5264
+if 
+  $weight_dumbell == 8
+goto_if_false @GYMDUMB_5292
+$incmusclestatdb = 6.0
+
+:GYMDUMB_5292
+if 
+  $weight_dumbell == 9
+goto_if_false @GYMDUMB_5320
+$incmusclestatdb = 7.0
+
+:GYMDUMB_5320
+if 
+  $weight_dumbell == 10
+goto_if_false @GYMDUMB_5348
+$incmusclestatdb = 8.0
+
+:GYMDUMB_5348
+if 
+  400.0 > $temp_muscle_stat_dumb
+goto_if_false @GYMDUMB_5649
+if 
+  $weight_dumbell == 1
+goto_if_false @GYMDUMB_5397
+$incmusclestatdb = 4.0
+
+:GYMDUMB_5397
+if 
+  $weight_dumbell == 2
+goto_if_false @GYMDUMB_5425
+$incmusclestatdb = 4.2
+
+:GYMDUMB_5425
+if 
+  $weight_dumbell == 3
+goto_if_false @GYMDUMB_5453
+$incmusclestatdb = 4.3
+
+:GYMDUMB_5453
+if 
+  $weight_dumbell == 4
+goto_if_false @GYMDUMB_5481
+$incmusclestatdb = 4.5
+
+:GYMDUMB_5481
+if 
+  $weight_dumbell == 5
+goto_if_false @GYMDUMB_5509
+$incmusclestatdb = 5.0
+
+:GYMDUMB_5509
+if 
+  $weight_dumbell == 6
+goto_if_false @GYMDUMB_5537
+$incmusclestatdb = 5.5
+
+:GYMDUMB_5537
+if 
+  $weight_dumbell == 7
+goto_if_false @GYMDUMB_5565
+$incmusclestatdb = 6.0
+
+:GYMDUMB_5565
+if 
+  $weight_dumbell == 8
+goto_if_false @GYMDUMB_5593
+$incmusclestatdb = 7.0
+
+:GYMDUMB_5593
+if 
+  $weight_dumbell == 9
+goto_if_false @GYMDUMB_5621
+$incmusclestatdb = 8.0
+
+:GYMDUMB_5621
+if 
+  $weight_dumbell == 10
+goto_if_false @GYMDUMB_5649
+$incmusclestatdb = 9.0
+
+:GYMDUMB_5649
+if 
+  200.0 > $temp_muscle_stat_dumb
+goto_if_false @GYMDUMB_5950
+if 
+  $weight_dumbell == 1
+goto_if_false @GYMDUMB_5698
+$incmusclestatdb = 5.0
+
+:GYMDUMB_5698
+if 
+  $weight_dumbell == 2
+goto_if_false @GYMDUMB_5726
+$incmusclestatdb = 5.2
+
+:GYMDUMB_5726
+if 
+  $weight_dumbell == 3
+goto_if_false @GYMDUMB_5754
+$incmusclestatdb = 5.3
+
+:GYMDUMB_5754
+if 
+  $weight_dumbell == 4
+goto_if_false @GYMDUMB_5782
+$incmusclestatdb = 5.5
+
+:GYMDUMB_5782
+if 
+  $weight_dumbell == 5
+goto_if_false @GYMDUMB_5810
+$incmusclestatdb = 6.0
+
+:GYMDUMB_5810
+if 
+  $weight_dumbell == 6
+goto_if_false @GYMDUMB_5838
+$incmusclestatdb = 6.5
+
+:GYMDUMB_5838
+if 
+  $weight_dumbell == 7
+goto_if_false @GYMDUMB_5866
+$incmusclestatdb = 7.0
+
+:GYMDUMB_5866
+if 
+  $weight_dumbell == 8
+goto_if_false @GYMDUMB_5894
+$incmusclestatdb = 7.5
+
+:GYMDUMB_5894
+if 
+  $weight_dumbell == 9
+goto_if_false @GYMDUMB_5922
+$incmusclestatdb = 8.0
+
+:GYMDUMB_5922
+if 
+  $weight_dumbell == 10
+goto_if_false @GYMDUMB_5950
+$incmusclestatdb = 8.5
+
+:GYMDUMB_5950
+if 
+  $dumb_show_stat == 8
+goto_if_false @GYMDUMB_5997
+$dumb_show_stat = 0
+Stat.IncrementFloat($incmusclestatdb, 23)
+add_float_var_to_float_var $gym_day_fitness += $incmusclestatdb
+goto @GYMDUMB_6019
+
+:GYMDUMB_5997
+Stat.IncrementFloatNoMessage(StatId.BodyMuscle, $incmusclestatdb)
+$dumb_show_stat += 1
+add_float_var_to_float_var $gym_day_fitness += $incmusclestatdb
+
+:GYMDUMB_6019
+if 
+  $gym_day_fitness > 200.0
+goto_if_false @GYMDUMB_6064
+$gym_final_day, $gym_final_month = Clock.GetCurrentDate()
+Text.PrintNow('GYM1_1B', 4000, 1)
+
+:GYMDUMB_6064
+$fatstat_gym = Stat.GetFloat(21)
+if 
+  $fatstat_gym >= 1.0
+goto_if_false @GYMDUMB_6101
+Stat.DecrementFloat(StatId.Fat, 1.0)
+
+:GYMDUMB_6101
+Pad.Shake(PadId.Pad1, 200, 200)
+$dumb_sfx = Char.SetSayContext($scplayer, 355)
+Task.PlayAnim($scplayer, "GYM_FREE_DOWN", "FREEWEIGHTS", 8.0, False, False, False, True, -1)
+$animstate_flag = 4
+
+:GYMDUMB_6177
+if and
+  $animstate_flag == 4
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_6500
+if 
+  $powerdumbell == 0.0
+goto_if_false @GYMDUMB_6500
+if 
+  $animvalue == 0.0
+goto_if_false @GYMDUMB_6500
+cset_var_float_to_var_int $reps_dumbellfloat = integer $reps_dumbell
+set_var_float_to_var_float $animationtobeplayed = $dumbell_resistance
+sub_float_var_from_float_var $animationtobeplayed -= $weightdb
+if 
+  18.0 >= $animationtobeplayed
+goto_if_false @GYMDUMB_6332
+Task.PlayAnim($scplayer, "GYM_FREE_B", "FREEWEIGHTS", 8.0, False, False, False, True, -1)
+
+:GYMDUMB_6332
+if 
+  $animationtobeplayed > 18.0
+goto_if_false @GYMDUMB_6419
+if 
+  24.0 >= $animationtobeplayed
+goto_if_false @GYMDUMB_6419
+Task.PlayAnim($scplayer, "GYM_FREE_A", "FREEWEIGHTS", 8.0, False, False, False, True, -1)
+
+:GYMDUMB_6419
+if 
+  $animationtobeplayed > 24.0
+goto_if_false @GYMDUMB_6493
+Task.PlayAnim($scplayer, "GYM_FREE_UP_SMOOTH", "FREEWEIGHTS", 8.0, False, False, False, True, -1)
+
+:GYMDUMB_6493
+$animstate_flag = 1
+
+:GYMDUMB_6500
+set_var_float_to_var_float $bar_animvalue = $powerdumbell
+$bar_animvalue /= 100.0
+if and
+  $animstate_flag > 0
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_6878
+set_var_float_to_var_float $diffgym = $bar_animvalue
+sub_float_var_from_float_var $diffgym -= $animvalue
+$diffgym /= 2.0
+if and
+  0.05 > $diffgym
+  $diffgym > -0.05
+goto_if_false @GYMDUMB_6613
+set_var_float_to_var_float $animvalue = $bar_animvalue
+goto @GYMDUMB_6621
+
+:GYMDUMB_6613
+add_float_var_to_float_var $animvalue += $diffgym
+
+:GYMDUMB_6621
+if 
+  $animstate_flag == 4
+goto_if_false @GYMDUMB_6718
+$tempfloat_gym = 1.0
+sub_float_var_from_float_var $tempfloat_gym -= $animvalue
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_FREE_DOWN")
+goto_if_false @GYMDUMB_6711
+Char.SetAnimCurrentTime($scplayer, "GYM_FREE_DOWN", $tempfloat_gym)
+
+:GYMDUMB_6711
+goto @GYMDUMB_6878
+
+:GYMDUMB_6718
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_FREE_A")
+goto_if_false @GYMDUMB_6766
+Char.SetAnimCurrentTime($scplayer, "GYM_FREE_A", $animvalue)
+
+:GYMDUMB_6766
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_FREE_B")
+goto_if_false @GYMDUMB_6814
+Char.SetAnimCurrentTime($scplayer, "GYM_FREE_B", $animvalue)
+
+:GYMDUMB_6814
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_FREE_UP_SMOOTH")
+goto_if_false @GYMDUMB_6878
+Char.SetAnimCurrentTime($scplayer, "GYM_FREE_UP_SMOOTH", $animvalue)
+
+:GYMDUMB_6878
+cset_var_int_to_var_float $powerbar = float $powerdumbell
+if or
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+  $gym_day_fitness > 200.0
+goto_if_false @GYMDUMB_7053
+$powerbar = 0
+
+:GYMDUMB_6920
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @GYMDUMB_6948
+wait 0
+goto @GYMDUMB_6920
+
+:GYMDUMB_6948
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_7015
+Task.PlayAnim($scplayer, "GYM_FREE_PUTDOWN", "FREEWEIGHTS", 100.0, False, False, False, False, -1)
+
+:GYMDUMB_7015
+if 
+  $gym_day_fitness > 200.0
+goto_if_false @GYMDUMB_7046
+$gym_day_fitness = 0.0
+
+:GYMDUMB_7046
+$playerexercising_flag = 6
+
+:GYMDUMB_7053
+if and
+  $playerexercising_flag == 6
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_7917
+if 
+  $reps_dumbell >= 0
+goto_if_false @GYMDUMB_7700
+if 
+  Char.IsPlayingAnim($scplayer, "GYM_FREE_PUTDOWN")
+goto_if_false @GYMDUMB_7693
+$animframe_freegetoff = Char.GetAnimCurrentTime($scplayer, "GYM_FREE_PUTDOWN")
+
+:GYMDUMB_7154
+if 
+  $animframe_freegetoff <= 0.3
+goto_if_false @GYMDUMB_7228
+wait 0
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_7221
+$animframe_freegetoff = Char.GetAnimCurrentTime($scplayer, "GYM_FREE_PUTDOWN")
+
+:GYMDUMB_7221
+goto @GYMDUMB_7154
+
+:GYMDUMB_7228
+Char.DropObject($scplayer, False)
+Char.DropSecondObject($scplayer, False)
+Object.AttachToObject(25@, 0@, 0.0, 0.2, 0.3, 0.0, 90.0, 90.0)
+Object.AttachToObject(26@, 0@, 0.0, -0.2, 0.3, 0.0, 90.0, 90.0)
+$animframe = Char.GetAnimCurrentTime($scplayer, "GYM_FREE_PUTDOWN")
+if and
+  $animframe == 1.0
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_7693
+if 
+  $reps_dumbell > 4
+goto_if_false @GYMDUMB_7441
+Task.PlayAnim($scplayer, "GYM_FREE_CELEBRATE", "FREEWEIGHTS", 8.0, False, False, False, False, -1)
+
+:GYMDUMB_7441
+17@ = 0
+$animstate_flag = 0
+21@ = 1
+$weight_dumbell = 1
+$reps_dumbell = 0
+$powerbar = 0
+$animationtobeplayed = 0.0
+$playerexercising_flag = 0
+$powerdumbell = 0.0
+$weight_dumbell = 1
+$reps_dumbell = 0
+$animframe = 0.0
+$animframe_freepickup = 0.0
+$upperbodymusclestat_gym = Stat.GetFloat(23)
+if 
+  $upperbodymusclestat_gym >= 1000.0
+goto_if_false @GYMDUMB_7581
+Stat.SetFloat(StatId.BodyMuscle, 1000.0)
+
+:GYMDUMB_7581
+$fatstat_gym = Stat.GetFloat(21)
+if 
+  0.0 >= $fatstat_gym
+goto_if_false @GYMDUMB_7618
+Stat.SetFloat(StatId.Fat, 0.0)
+
+:GYMDUMB_7618
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @GYMDUMB_7660
+Hud.ClearCounter($reps_dumbell)
+Hud.ClearCounter($powerbar)
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Char.SetCollision($scplayer, True)
+
+:GYMDUMB_7660
+Streaming.RemoveAnimation("FREEWEIGHTS")
+Audio.ClearMissionAudio(MissionAudioSlot.Slot4)
+Menu.Delete($main_menu_bell)
+Text.ClearHelp
+$are_anims_loaded = 0
+
+:GYMDUMB_7693
+goto @GYMDUMB_7917
+
+:GYMDUMB_7700
+17@ = 0
+$animstate_flag = 0
+21@ = 1
+$weight_dumbell = 1
+$reps_dumbell = 0
+$powerbar = 0
+$animationtobeplayed = 0.0
+$playerexercising_flag = 0
+$powerdumbell = 0.0
+$weight_dumbell = 1
+$reps_dumbell = 0
+$animframe = 0.0
+$animframe_freepickup = 0.0
+$upperbodymusclestat_gym = Stat.GetFloat(23)
+if 
+  $upperbodymusclestat_gym >= 1000.0
+goto_if_false @GYMDUMB_7840
+Stat.SetFloat(StatId.BodyMuscle, 1000.0)
+
+:GYMDUMB_7840
+$fatstat_gym = Stat.GetFloat(21)
+if 
+  0.0 >= $fatstat_gym
+goto_if_false @GYMDUMB_7877
+Stat.SetFloat(StatId.Fat, 0.0)
+
+:GYMDUMB_7877
+Hud.ClearCounter($reps_dumbell)
+Hud.ClearCounter($powerbar)
+Camera.RestoreJumpcut
+Player.SetControl($player1, True)
+Char.SetCollision($scplayer, True)
+Menu.Delete($main_menu_bell)
+Text.ClearHelp
+$are_anims_loaded = 0
+
+:GYMDUMB_7917
+goto @GYMDUMB_683
+terminate_this_script 
+

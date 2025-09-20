@@ -1,0 +1,392 @@
+:HJ
+set_deatharrest_state 0
+script_name 'HJ'
+
+:HJ_15
+wait 0
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @HJ_42
+goto @HJ_15
+
+:HJ_42
+if 
+  Game.AreAnyCarCheatsActivated
+goto_if_false @HJ_62
+goto @HJ_15
+
+:HJ_62
+if 
+  Char.IsInAnyTrain($scplayer)
+goto_if_false @HJ_85
+goto @HJ_15
+
+:HJ_85
+if 
+  Char.IsInFlyingVehicle($scplayer)
+goto_if_false @HJ_108
+goto @HJ_15
+
+:HJ_108
+if 
+  Char.IsInAnyBoat($scplayer)
+goto_if_false @HJ_131
+goto @HJ_15
+
+:HJ_131
+if 
+  Char.IsInModel($scplayer, 539)
+goto_if_false @HJ_157
+goto @HJ_15
+
+:HJ_157
+if 
+  not Player.IsControlOn($player1)
+goto_if_false @HJ_180
+goto @HJ_15
+
+:HJ_180
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @HJ_1668
+$car_player_is_in_hj = Char.StoreCarIsInNoSave($scplayer)
+$CarTwoWheelsTime, $CarTwoWheelsDistance, $BikeWheelieTime, $BikeWheelieDistance, $BikeStoppieTime, $BikeStoppieDistance = Player.GetWheelieStats($player1)
+if 
+  $CarTwoWheelsDistance > 0.0
+goto_if_false @HJ_426
+$CarTwoWheelsTime /= 1000
+cset_var_int_to_var_float $CarTwoWheelsDistanceMeterInt = float $CarTwoWheelsDistance
+cset_var_float_to_var_int $CarTwoWheelsDistanceMeter = integer $CarTwoWheelsDistanceMeterInt
+set_var_float_to_var_float $temp_float_hj = $CarTwoWheelsDistance
+sub_float_var_from_float_var $temp_float_hj -= $CarTwoWheelsDistanceMeter
+$temp_float_hj *= 100.0
+cset_var_int_to_var_float $CarTwoWheelsDistanceDecimalInt = float $temp_float_hj
+set_var_int_to_var_int $cash = $CarTwoWheelsTime
+add_int_var_to_int_var $cash += $CarTwoWheelsDistanceMeterInt
+$cash /= 2
+Player.AddScore($player1, $cash)
+if 
+  Game.AreMeasurementsInMeters
+goto_if_false @HJ_385
+Text.PrintWith4Numbers('WHEEL01', $cash, $CarTwoWheelsDistanceMeterInt, $CarTwoWheelsDistanceDecimalInt, $CarTwoWheelsTime, 3000, TextStyle.Middle)
+goto @HJ_426
+
+:HJ_385
+convert_metres_to_feet $CarTwoWheelsDistanceFeet = meters $CarTwoWheelsDistance
+cset_var_int_to_var_float $CarTwoWheelsDistanceFeetInt = float $CarTwoWheelsDistanceFeet
+Text.PrintWith3Numbers('WHEEL02', $cash, $CarTwoWheelsDistanceFeetInt, $CarTwoWheelsTime, 3000, TextStyle.Middle)
+
+:HJ_426
+if 
+  $BikeWheelieDistance > 0.0
+goto_if_false @HJ_631
+$BikeWheelieTime /= 1000
+cset_var_int_to_var_float $BikeWheelieDistanceMeterInt = float $BikeWheelieDistance
+cset_var_float_to_var_int $BikeWheelieDistanceMeter = integer $BikeWheelieDistanceMeterInt
+set_var_float_to_var_float $temp_float_hj = $BikeWheelieDistance
+sub_float_var_from_float_var $temp_float_hj -= $BikeWheelieDistanceMeter
+$temp_float_hj *= 100.0
+cset_var_int_to_var_float $BikeWheelieDistanceDecimalInt = float $temp_float_hj
+set_var_int_to_var_int $cash = $BikeWheelieDistanceMeterInt
+$cash *= 2
+$cash /= 5
+$cash /= 2
+Player.AddScore($player1, $cash)
+if 
+  Game.AreMeasurementsInMeters
+goto_if_false @HJ_590
+Text.PrintWith4Numbers('WHEEL06', $cash, $BikeWheelieDistanceMeterInt, $BikeWheelieDistanceDecimalInt, $BikeWheelieTime, 3000, TextStyle.Middle)
+goto @HJ_631
+
+:HJ_590
+convert_metres_to_feet $BikeWheelieDistanceFeet = meters $BikeWheelieDistance
+cset_var_int_to_var_float $BikeWheelieDistanceFeetInt = float $BikeWheelieDistanceFeet
+Text.PrintWith3Numbers('WHEEL07', $cash, $BikeWheelieDistanceFeetInt, $BikeWheelieTime, 3000, TextStyle.Middle)
+
+:HJ_631
+if 
+  $BikeStoppieDistance > 0.0
+goto_if_false @HJ_822
+$BikeStoppieTime /= 1000
+cset_var_int_to_var_float $BikeStoppieDistanceMeterInt = float $BikeStoppieDistance
+cset_var_float_to_var_int $BikeStoppieDistanceMeter = integer $BikeStoppieDistanceMeterInt
+set_var_float_to_var_float $temp_float_hj = $BikeStoppieDistance
+sub_float_var_from_float_var $temp_float_hj -= $BikeStoppieDistanceMeter
+$temp_float_hj *= 100.0
+cset_var_int_to_var_float $BikeStoppieDistanceDecimalInt = float $temp_float_hj
+set_var_int_to_var_int $cash = $BikeStoppieDistanceMeterInt
+$cash /= 2
+Player.AddScore($player1, $cash)
+if 
+  Game.AreMeasurementsInMeters
+goto_if_false @HJ_781
+Text.PrintWith4Numbers('WHEEL11', $cash, $BikeStoppieDistanceMeterInt, $BikeStoppieDistanceDecimalInt, $BikeStoppieTime, 3000, TextStyle.Middle)
+goto @HJ_822
+
+:HJ_781
+convert_metres_to_feet $BikeStoppieDistanceFeet = meters $BikeStoppieDistance
+cset_var_int_to_var_float $BikeStoppieDistanceFeetInt = float $BikeStoppieDistanceFeet
+Text.PrintWith3Numbers('WHEEL12', $cash, $BikeStoppieDistanceFeetInt, $BikeStoppieTime, 3000, TextStyle.Middle)
+
+:HJ_822
+if 
+  Car.IsInAirProper($car_player_is_in_hj)
+goto_if_false @HJ_1654
+$total_rotation_int = 0
+$heading_hj = 0.0
+$flag_wheels_hj = 0
+$counter_stunt_rolls_hj = 0
+$flag_car_upsidedown_hj = 0
+$stunt_flags_hj = 0
+$flag_takeoff_hj = 0
+$height_int_hj = 0
+$height_float_hj = -100.0
+$x_float_hj = 0.0
+$y_float_hj = 0.0
+$z_float_hj = 0.0
+$takeoff_x_float_hj = 0.0
+$takeoff_y_float_hj = 0.0
+$takeoff_z_float_hj = 0.0
+$jumpend_x_float_hj = 0.0
+$jumpend_y_float_hj = 0.0
+$jumpdistance_float_hj = 0.0
+$jumpdistance_int_hj = 0
+$distance_decimals_int_hj = 0
+$height_decimals_int_hj = 0
+$temp_float_hj = 0.0
+$heading_difference = 0.0
+$total_rotation = 0.0
+$heading_difference_temp = 0.0
+$old_heading_hj = 0.0
+$collision_counter = 0
+$passenger_said_jump = 0
+
+:HJ_1082
+if or
+  Car.IsInAirProper($car_player_is_in_hj)
+  10 > $collision_counter
+goto_if_false @HJ_1647
+$collision_counter += 1
+$x_float_hj, $y_float_hj, $z_float_hj = Car.GetCoordinates($car_player_is_in_hj)
+set_var_float_to_var_float $old_heading_hj = $heading_hj
+if 
+  $flag_takeoff_hj == 0
+goto_if_false @HJ_1191
+$old_heading_hj = Car.GetHeading($car_player_is_in_hj)
+set_var_float_to_var_float $takeoff_x_float_hj = $x_float_hj
+set_var_float_to_var_float $takeoff_y_float_hj = $y_float_hj
+set_var_float_to_var_float $takeoff_z_float_hj = $z_float_hj
+$flag_takeoff_hj = 1
+
+:HJ_1191
+wait 0
+if 
+  Car.IsDead($car_player_is_in_hj)
+goto_if_false @HJ_1218
+goto @HJ_15
+
+:HJ_1218
+if 
+  not Player.IsPlaying($player1)
+goto_if_false @HJ_1241
+goto @HJ_15
+
+:HJ_1241
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @HJ_1264
+goto @HJ_15
+
+:HJ_1264
+if and
+  not Car.IsUpright($car_player_is_in_hj)
+  $flag_car_upsidedown_hj == 0
+goto_if_false @HJ_1294
+$flag_car_upsidedown_hj = 1
+
+:HJ_1294
+if and
+  Car.IsUpright($car_player_is_in_hj)
+  $flag_car_upsidedown_hj == 1
+goto_if_false @HJ_1331
+$counter_stunt_rolls_hj += 1
+$flag_car_upsidedown_hj = 0
+
+:HJ_1331
+$heading_hj = Car.GetHeading($car_player_is_in_hj)
+set_var_float_to_var_float $heading_difference = $heading_hj
+sub_float_var_from_float_var $heading_difference -= $old_heading_hj
+if 
+  $heading_difference > 180.0
+goto_if_false @HJ_1409
+set_var_float_to_var_float $heading_difference_temp = $heading_difference
+$heading_difference = 360.0
+sub_float_var_from_float_var $heading_difference -= $heading_difference_temp
+goto @HJ_1456
+
+:HJ_1409
+if 
+  -180.0 > $heading_difference
+goto_if_false @HJ_1456
+set_var_float_to_var_float $heading_difference_temp = $heading_difference
+$heading_difference = 360.0
+add_float_var_to_float_var $heading_difference += $heading_difference_temp
+
+:HJ_1456
+if 
+  0.0 > $heading_difference
+goto_if_false @HJ_1503
+set_var_float_to_var_float $heading_difference_temp = $heading_difference
+$heading_difference = 0.0
+sub_float_var_from_float_var $heading_difference -= $heading_difference_temp
+
+:HJ_1503
+add_float_var_to_float_var $total_rotation += $heading_difference
+cset_var_int_to_var_float $total_rotation_int = float $total_rotation
+if 
+  is_float_var_greater_than_float_var $z_float_hj > $height_float_hj
+goto_if_false @HJ_1546
+set_var_float_to_var_float $height_float_hj = $z_float_hj
+
+:HJ_1546
+$z_float_hj = 0.0
+if 
+  $passenger_said_jump == 0
+goto_if_false @HJ_1640
+$jumpend_x_float_hj, $jumpend_y_float_hj, $temp_float_hj = Car.GetCoordinates($car_player_is_in_hj)
+$temp_float_hj = Math.GetDistanceBetweenCoords2D($takeoff_x_float_hj, $takeoff_y_float_hj, $jumpend_x_float_hj, $jumpend_y_float_hj)
+if 
+  $temp_float_hj > 20.0
+goto_if_false @HJ_1640
+Car.RandomPassengerSay($car_player_is_in_hj, 37)
+$passenger_said_jump = 1
+
+:HJ_1640
+goto @HJ_1082
+
+:HJ_1647
+goto @HJ_1661
+
+:HJ_1654
+goto @HJ_15
+
+:HJ_1661
+goto @HJ_1675
+
+:HJ_1668
+goto @HJ_15
+
+:HJ_1675
+if 
+  $flag_takeoff_hj == 1
+goto_if_false @HJ_1864
+$jumpend_x_float_hj, $jumpend_y_float_hj, $temp_float_hj = Car.GetCoordinates($car_player_is_in_hj)
+$jumpdistance_float_hj = Math.GetDistanceBetweenCoords2D($takeoff_x_float_hj, $takeoff_y_float_hj, $jumpend_x_float_hj, $jumpend_y_float_hj)
+Stat.RegisterFloat($jumpdistance_float_hj, 139)
+cset_var_int_to_var_float $jumpdistance_int_hj = float $jumpdistance_float_hj
+sub_float_var_from_float_var $height_float_hj -= $takeoff_z_float_hj
+Stat.RegisterFloat($height_float_hj, 140)
+cset_var_int_to_var_float $height_int_hj = float $height_float_hj
+cset_var_float_to_var_int $temp_float_hj = integer $jumpdistance_int_hj
+sub_float_var_from_float_var $jumpdistance_float_hj -= $temp_float_hj
+set_var_float_to_var_float $temp_float_hj = $jumpdistance_float_hj
+$temp_float_hj *= 100.0
+cset_var_int_to_var_float $distance_decimals_int_hj = float $temp_float_hj
+cset_var_float_to_var_int $temp_float_hj = integer $height_int_hj
+sub_float_var_from_float_var $height_float_hj -= $temp_float_hj
+set_var_float_to_var_float $temp_float_hj = $height_float_hj
+$temp_float_hj *= 100.0
+cset_var_int_to_var_float $height_decimals_int_hj = float $temp_float_hj
+Stat.RegisterInt(StatId.MaxJumpFlips, $counter_stunt_rolls_hj)
+Stat.RegisterInt(StatId.MaxJumpSpins, $total_rotation_int)
+
+:HJ_1864
+if 
+  $height_float_hj > 4.0
+goto_if_false @HJ_1892
+$stunt_flags_hj += 1
+
+:HJ_1892
+if 
+  $jumpdistance_int_hj > 40
+goto_if_false @HJ_1917
+$stunt_flags_hj += 1
+
+:HJ_1917
+if 
+  $counter_stunt_rolls_hj > 1
+goto_if_false @HJ_1942
+$stunt_flags_hj += 1
+
+:HJ_1942
+if 
+  $total_rotation_int > 360
+goto_if_false @HJ_1968
+$stunt_flags_hj += 1
+
+:HJ_1968
+if 
+  $stunt_flags_hj > 0
+goto_if_false @HJ_2385
+set_var_int_to_var_int $cash_reward = $counter_stunt_rolls_hj
+$cash_reward *= 180
+add_int_var_to_int_var $cash_reward += $total_rotation_int
+set_var_int_to_var_int $cash_reward_temp = $jumpdistance_int_hj
+$cash_reward_temp *= 6
+add_int_var_to_int_var $cash_reward += $cash_reward_temp
+set_var_int_to_var_int $cash_reward_temp = $height_int_hj
+$cash_reward_temp *= 45
+add_int_var_to_int_var $cash_reward += $cash_reward_temp
+if 
+  $flag_wheels_hj == 1
+goto_if_false @HJ_2081
+$cash_reward *= 2
+
+:HJ_2081
+mult_int_var_by_int_var $cash_reward *= $stunt_flags_hj
+$cash_reward /= 3
+$cash_reward /= 5
+Player.AddScore($player1, $cash_reward)
+if 
+  $stunt_flags_hj == 1
+goto_if_false @HJ_2155
+Text.PrintWithNumber('HJ_IS', $cash_reward, 2000, 1)
+Stat.RegisterInt(StatId.BestStunt, 1)
+
+:HJ_2155
+if 
+  $stunt_flags_hj == 2
+goto_if_false @HJ_2199
+Text.PrintWithNumber('HJ_DIS', $cash_reward, 2000, 1)
+Stat.RegisterInt(StatId.BestStunt, 3)
+
+:HJ_2199
+if 
+  $stunt_flags_hj == 3
+goto_if_false @HJ_2243
+Text.PrintWithNumber('HJ_TIS', $cash_reward, 2000, 1)
+Stat.RegisterInt(StatId.BestStunt, 5)
+
+:HJ_2243
+if 
+  $stunt_flags_hj == 4
+goto_if_false @HJ_2287
+Text.PrintWithNumber('HJ_QIS', $cash_reward, 2000, 1)
+Stat.RegisterInt(StatId.BestStunt, 7)
+
+:HJ_2287
+if 
+  Game.AreMeasurementsInMeters
+goto_if_false @HJ_2341
+Text.PrintWith6Numbers('HJSTAT', $jumpdistance_int_hj, $distance_decimals_int_hj, $height_int_hj, $height_decimals_int_hj, $counter_stunt_rolls_hj, $total_rotation_int, 5000, TextStyle.MiddleSmallerHigher)
+goto @HJ_2385
+
+:HJ_2341
+$jumpdistance_int_hj = Math.ConvertMetersToFeet($jumpdistance_int_hj)
+$height_int_hj = Math.ConvertMetersToFeet($height_int_hj)
+Text.PrintWith4Numbers('HJSTATF', $jumpdistance_int_hj, $height_int_hj, $counter_stunt_rolls_hj, $total_rotation_int, 5000, TextStyle.MiddleSmallerHigher)
+
+:HJ_2385
+goto @HJ_15
+terminate_this_script 
+

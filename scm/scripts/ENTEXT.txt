@@ -1,0 +1,93 @@
+:ENTEXT
+script_name 'ENTEXT'
+0@ = -1
+
+:ENTEXT_18
+if 
+  not is_int_lvar_equal_to_int_var 0@ == $entry_exit_area
+goto_if_false @ENTEXT_53
+wait 0
+0@ = Streaming.GetAreaVisible()
+goto @ENTEXT_18
+
+:ENTEXT_53
+World.SwitchEntryExit(s$entry_exit_name, $entry_exit_status)
+terminate_this_script 
+
+:ENTEXT_63
+$player_is_completely_safe = 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @ENTEXT_212
+if 
+  $main_visible_area == 0
+goto_if_false @ENTEXT_212
+if 
+  $flag_cell_nation == 0
+goto_if_false @ENTEXT_212
+if 
+  $player_fall_state == 0
+goto_if_false @ENTEXT_212
+if 
+  not is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @ENTEXT_212
+if 
+  not is_global_var_bit_set_const $iDateReport bit 20
+goto_if_false @ENTEXT_212
+if 
+  not Game.IsMinigameInProgress
+goto_if_false @ENTEXT_212
+if 
+  Player.CanStartMission($player1)
+goto_if_false @ENTEXT_212
+$player_is_completely_safe = 1
+
+:ENTEXT_212
+return 
+
+:ENTEXT_214
+$player_is_completely_safe_for_mobile = 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @ENTEXT_449
+if 
+  $onmission == 0
+goto_if_false @ENTEXT_449
+if 
+  $main_visible_area == 0
+goto_if_false @ENTEXT_449
+if 
+  $flag_cell_nation == 0
+goto_if_false @ENTEXT_449
+if 
+  $player_fall_state == 0
+goto_if_false @ENTEXT_449
+if 
+  not is_global_var_bit_set_const $iDateReport bit 1
+goto_if_false @ENTEXT_449
+if 
+  not is_global_var_bit_set_const $iDateReport bit 20
+goto_if_false @ENTEXT_449
+if 
+  not Game.IsMinigameInProgress
+goto_if_false @ENTEXT_449
+if 
+  Player.CanStartMission($player1)
+goto_if_false @ENTEXT_449
+if 
+  Char.IsOnFoot($scplayer)
+goto_if_false @ENTEXT_449
+if 
+  not Game.IsGangWarFightingGoingOn
+goto_if_false @ENTEXT_449
+if 
+  not Player.IsWantedLevelGreater($player1, 0)
+goto_if_false @ENTEXT_449
+$timer_mobile_now = Clock.GetGameTimer()
+set_var_int_to_var_int $timer_mobile_diff = $timer_mobile_now
+sub_int_var_from_int_var $timer_mobile_diff -= $timer_mobile_start
+$player_is_completely_safe_for_mobile = 1
+
+:ENTEXT_449
+return 
+

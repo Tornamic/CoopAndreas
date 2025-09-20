@@ -1,0 +1,146 @@
+//-------------External script 58 (TICKET)---------------
+
+:TICKET
+script_name 'TICKET'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @TICKET_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:TICKET_60
+Streaming.RequestAnimation("CASINO")
+
+:TICKET_70
+if 
+  not Streaming.HasAnimationLoaded("CASINO")
+goto_if_false @TICKET_102
+wait 0
+goto @TICKET_70
+
+:TICKET_102
+3@ = 1
+4@ = 0
+
+:TICKET_116
+wait 0
+if 
+  not Char.IsDead(0@)
+goto_if_false @TICKET_180
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @TICKET_166
+gosub @TICKET_194
+goto @TICKET_173
+
+:TICKET_166
+gosub @TICKET_875
+
+:TICKET_173
+goto @TICKET_187
+
+:TICKET_180
+gosub @TICKET_875
+
+:TICKET_187
+goto @TICKET_116
+
+:TICKET_194
+switch_start 3@ total_jumps 1 default_jump 0 @TICKET_271 jumps 1 @TICKET_257 -1 @TICKET_271 -1 @TICKET_271 -1 @TICKET_271 -1 @TICKET_271 -1 @TICKET_271 -1 @TICKET_271
+
+:TICKET_257
+gosub @TICKET_273
+goto @TICKET_271
+
+:TICKET_271
+return 
+
+:TICKET_273
+switch_start 4@ total_jumps 7 default_jump 0 @TICKET_873 jumps 0 @TICKET_336 1 @TICKET_387 2 @TICKET_472 3 @TICKET_566 4 @TICKET_650 5 @TICKET_736 6 @TICKET_830
+
+:TICKET_336
+Task.PlayAnim(0@, "SLOT_IN", "CASINO", 4.0, False, False, False, False, -1)
+4@ += 1
+goto @TICKET_873
+
+:TICKET_387
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @TICKET_465
+Task.PlayAnim(0@, "SLOT_BET_01", "CASINO", 4.0, False, False, False, False, 2@)
+4@ += 1
+
+:TICKET_465
+goto @TICKET_873
+
+:TICKET_472
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @TICKET_559
+2@ = Math.RandomIntInRange(5000, 10000)
+Task.PlayAnim(0@, "SLOT_WAIT", "CASINO", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:TICKET_559
+goto @TICKET_873
+
+:TICKET_566
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @TICKET_643
+Task.PlayAnim(0@, "SLOT_BET_02", "CASINO", 4.0, False, False, False, False, -1)
+4@ += 1
+
+:TICKET_643
+goto @TICKET_873
+
+:TICKET_650
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @TICKET_729
+Task.PlayAnim(0@, "SLOT_LOSE_OUT", "CASINO", 4.0, False, False, False, False, -1)
+4@ += 1
+
+:TICKET_729
+goto @TICKET_873
+
+:TICKET_736
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @TICKET_823
+2@ = Math.RandomIntInRange(4000, 8000)
+Task.PlayAnim(0@, "SLOT_WAIT", "CASINO", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:TICKET_823
+goto @TICKET_873
+
+:TICKET_830
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @TICKET_866
+gosub @TICKET_875
+
+:TICKET_866
+goto @TICKET_873
+
+:TICKET_873
+return 
+
+:TICKET_875
+Streaming.RemoveAnimation("CASINO")
+terminate_this_script 
+return 
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

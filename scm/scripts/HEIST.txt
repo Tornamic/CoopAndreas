@@ -1,0 +1,97 @@
+:HEIST
+script_name 'HEIST'
+
+:HEIST_11
+wait $mission_trigger_wait_time
+if 
+  $flag_heist_mission_counter == 6
+goto_if_false @HEIST_36
+terminate_this_script 
+
+:HEIST_36
+if 
+  Player.IsPlaying($player1)
+goto_if_false @HEIST_546
+if 
+  $onmission == 0
+goto_if_false @HEIST_546
+if 
+  Char.LocateOnFoot3D($scplayer, 0, $TheheistX, $TheheistY, $TheheistZ, 1.2, 1.2, 2.0)
+goto_if_false @HEIST_546
+if 
+  Player.CanStartMission($player1)
+goto_if_false @HEIST_546
+if 
+  $flag_heist_mission_counter == 0
+goto_if_false @HEIST_180
+$onmission = 1
+Text.PrintBig('HEIST_1', 1000, TextStyle.BottomRight)
+PSAVE1_3405()
+Mission.LoadAndLaunchInternal(96) // Architectural Espionage
+
+:HEIST_180
+if 
+  $flag_heist_mission_counter == 1
+goto_if_false @HEIST_232
+$onmission = 1
+Text.PrintBig('HEIST_3', 1000, TextStyle.BottomRight)
+PSAVE1_3405()
+Mission.LoadAndLaunchInternal(97) // Key To Her Heart
+
+:HEIST_232
+if 
+  $flag_heist_mission_counter == 2
+goto_if_false @HEIST_284
+$onmission = 1
+Text.PrintBig('HEIST_2', 1000, TextStyle.BottomRight)
+PSAVE1_3405()
+Mission.LoadAndLaunchInternal(98) // Dam And Blast
+
+:HEIST_284
+if 
+  $flag_heist_mission_counter == 3
+goto_if_false @HEIST_336
+$onmission = 1
+Text.PrintBig('HEIST_4', 1000, TextStyle.BottomRight)
+PSAVE1_3405()
+Mission.LoadAndLaunchInternal(99) // Cop Wheels
+
+:HEIST_336
+if 
+  $flag_heist_mission_counter == 4
+goto_if_false @HEIST_446
+$hours, $minutes = Clock.GetTimeOfDay()
+if or
+  $hours >= 20
+  6 > $hours
+goto_if_false @HEIST_430
+$onmission = 1
+Text.ClearPrints
+Text.PrintBig('HEIST_5', 1000, TextStyle.BottomRight)
+PSAVE1_3405()
+Mission.LoadAndLaunchInternal(100) // Up, Up and Away!
+goto @HEIST_446
+
+:HEIST_430
+Text.PrintNow('MTIME1', 1000, 1)
+
+:HEIST_446
+if and
+  $flag_heist_mission_counter == 5
+  $1384 == 1
+goto_if_false @HEIST_546
+if 
+  $keycard_aquired_from_millie == 1
+goto_if_false @HEIST_530
+$onmission = 1
+Text.PrintBig('HEIST_9', 1000, TextStyle.BottomRight)
+PSAVE1_3405()
+Mission.LoadAndLaunchInternal(101) // Breaking the Bank at Caligula's
+goto @HEIST_546
+
+:HEIST_530
+Text.PrintNow('NEEDKEY', 1000, 1)
+
+:HEIST_546
+goto @HEIST_11
+

@@ -1,0 +1,3075 @@
+//-------------Mission 43---------------
+// Originally: Tanker Commander
+
+:CAT3
+script_name 'CAT3'
+gosub @CAT3_1452
+if 
+  has_deatharrest_been_executed 
+goto_if_false @CAT3_38
+gosub @CAT3_17048
+
+:CAT3_38
+gosub @CAT3_17250
+terminate_this_script 
+
+:CAT3_47
+Streaming.RequestModel(67)
+Streaming.RequestModel(95)
+Streaming.RequestModel(514)
+Streaming.RequestModel(584)
+Streaming.RequestModel(475)
+Streaming.LoadAllModelsNow
+
+:CAT3_72
+if or
+  not Streaming.HasModelLoaded(67)
+  not Streaming.HasModelLoaded(95)
+  not Streaming.HasModelLoaded(514)
+  not Streaming.HasModelLoaded(584)
+  not Streaming.HasModelLoaded(475)
+goto_if_false @CAT3_117
+wait 0
+goto @CAT3_72
+
+:CAT3_117
+return 
+
+:CAT3_119
+Streaming.RequestAnimation("MISC")
+Streaming.RequestModel(352)
+Streaming.RequestModel(349)
+Audio.LoadMissionAudio(32600, 3)
+Streaming.LoadSpecialCharacter('CAT', 1)
+Streaming.LoadAllModelsNow
+
+:CAT3_159
+if or
+  not Streaming.HasAnimationLoaded("MISC")
+  not Streaming.HasModelLoaded(352)
+  not Streaming.HasModelLoaded(349)
+  not Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot3)
+  not Streaming.HasSpecialCharacterLoaded(1)
+goto_if_false @CAT3_207
+wait 0
+goto @CAT3_159
+
+:CAT3_207
+if 
+  not Char.DoesExist($catalina)
+goto_if_false @CAT3_249
+$catalina = Char.Create(5, 290, 53@, 54@, 55@)
+goto @CAT3_273
+
+:CAT3_249
+Char.Delete($catalina)
+$catalina = Char.Create(5, 290, 53@, 54@, 55@)
+
+:CAT3_273
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_299
+Char.GiveWeapon($catalina, WeaponType.Shotgun, 30000)
+
+:CAT3_299
+return 
+309@ = Blip.AddForChar($catalina)
+41@ = Blip.AddForCoord(50@, 51@, 52@)
+Streaming.MarkModelAsNoLongerNeeded(348)
+return 
+
+:CAT3_330
+313@ = 664.21
+315@ = -569.54
+317@ = 15.37
+319@ = 165.23
+World.ClearArea(1, 313@, 315@, 317@, 3.0)
+310@ = Char.Create(4, 67, 313@, 315@, 317@)
+Char.GiveWeapon(310@, WeaponType.MicroUzi, 30000)
+Char.SetHeading(310@, 319@)
+Char.SetHealth(310@, 2000)
+Char.SetCanBeShotInVehicle(310@, False)
+Char.SetProofs(310@, False, True, True, False, True)
+314@ = 664.9634
+316@ = -566.7849
+318@ = 15.3359
+320@ = 139.1057
+World.ClearArea(1, 314@, 316@, 318@, 3.0)
+311@ = Char.Create(4, 95, 314@, 316@, 318@)
+Char.SetHeading(311@, 320@)
+Char.SetHealth(311@, 2000)
+Char.SetCanBeShotInVehicle(311@, False)
+Char.SetProofs(311@, False, True, True, False, True)
+return 
+Streaming.MarkModelAsNoLongerNeeded(67)
+return 
+
+:CAT3_576
+Streaming.RequestModel(15)
+
+:CAT3_580
+if 
+  not Streaming.HasModelLoaded(15)
+goto_if_false @CAT3_606
+wait 0
+goto @CAT3_580
+
+:CAT3_606
+323@ = -78.4672
+324@ = -1134.739
+325@ = 0.0733
+326@ = 326.2953
+World.ClearArea(1, 323@, 324@, 325@, 3.0)
+322@ = Char.Create(4, 15, 323@, 324@, 325@)
+Char.SetHeading(322@, 326@)
+return 
+244@ = Char.Create(4, 15, 323@, 324@, 325@)
+
+:CAT3_710
+329@ = 657.49
+330@ = -585.13
+331@ = 16.36
+332@ = 170.66
+World.ClearArea(1, 329@, 330@, 331@, 15.0)
+327@ = Car.Create(514, 329@, 330@, 331@)
+Car.SetHeading(327@, 332@)
+Car.SetCanBurstTires(327@, False)
+CarGenerator.SuppressCarModel(514)
+CarGenerator.SuppressCarModel(403)
+Car.SetProofs(327@, True, False, False, False, False)
+Car.SetLoadCollisionFlag(327@, False)
+return 
+308@ = Car.Create(403, 329@, 330@, 331@)
+
+:CAT3_851
+336@ = 667.49
+337@ = -583.13
+338@ = 16.36
+339@ = 184.66
+World.ClearArea(1, 336@, 337@, 338@, 15.0)
+334@ = Car.Create(584, 336@, 337@, 338@)
+Car.SetHeading(334@, 339@)
+Car.SetHealth(334@, 1250)
+Car.SetProofs(334@, True, True, True, True, True)
+Car.SetCanBurstTires(334@, False)
+Car.SetLoadCollisionFlag(334@, False)
+return 
+335@ = Blip.AddForCar(334@)
+
+:CAT3_981
+342@ = 667.54
+343@ = -545.97
+344@ = 15.09
+345@ = 96.19
+World.ClearArea(1, 342@, 343@, 344@, 3.0)
+340@ = Car.Create(475, 342@, 343@, 344@)
+Car.SetHeading(340@, 345@)
+Car.SetCruiseSpeed(340@, 50.0)
+Car.SetProofs(340@, True, True, True, True, True)
+Car.LockDoors(340@, CarLock.Locked)
+Car.SetCanBurstTires(340@, False)
+Car.SetLoadCollisionFlag(340@, False)
+Car.FreezePosition(340@, True)
+return 
+
+:CAT3_1119
+Streaming.RequestModel(543)
+
+:CAT3_1124
+if 
+  not Streaming.HasModelLoaded(543)
+goto_if_false @CAT3_1151
+wait 0
+goto @CAT3_1124
+
+:CAT3_1151
+348@ = -87.9239
+349@ = -1160.597
+350@ = 1.1091
+351@ = 170.4884
+World.ClearArea(1, 348@, 349@, 350@, 3.0)
+346@ = Car.Create(543, 348@, 349@, 350@)
+Car.SetHeading(346@, 351@)
+Car.SetProofs(346@, True, True, True, True, True)
+return 
+
+:CAT3_1251
+Streaming.RequestModel(468)
+Streaming.RequestCarRecording(189)
+
+:CAT3_1261
+if or
+  not Streaming.HasModelLoaded(468)
+  not Streaming.HasCarRecordingBeenLoaded(189)
+goto_if_false @CAT3_1293
+wait 0
+goto @CAT3_1261
+
+:CAT3_1293
+353@ = -88.1347
+354@ = -1127.397
+355@ = 0.0847
+356@ = 348.4666
+World.ClearArea(1, 353@, 354@, 355@, 3.0)
+352@ = Car.Create(468, 353@, 354@, 355@)
+Car.SetHeading(352@, 356@)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_1450
+Char.WarpIntoCar($catalina, 352@)
+Task.LookAtChar($catalina, $scplayer, -1)
+Char.SetCoordinates($scplayer, -86.3344, -1127.316, 0.0781)
+Char.SetHeading($scplayer, 6.874)
+Task.LookAtChar($scplayer, $catalina, -1)
+
+:CAT3_1450
+return 
+
+:CAT3_1452
+$onmission = 1
+wait 0
+Text.LoadMissionText('CAT')
+34@ = 5000
+35@ = 0
+36@ = 1
+37@ = 0
+38@ = 0
+39@ = 0
+307@ = 1500
+40@ = 0
+301@ = 0
+305@ = 1
+303@ = 1
+304@ = 2
+302@ = 0
+set_lvar_text_label 134@s = 'CAT3_AA'
+set_lvar_text_label 136@s = 'CAT3_AB'
+set_lvar_text_label 138@s = 'CAT3_AC'
+set_lvar_text_label 140@s = 'CAT3_AD'
+set_lvar_text_label 142@s = 'CAT3_AE'
+set_lvar_text_label 144@s = 'CAT3_AF'
+set_lvar_text_label 146@s = 'CAT3_AG'
+set_lvar_text_label 148@s = 'CAT3_BA'
+set_lvar_text_label 150@s = 'CAT3_BB'
+set_lvar_text_label 152@s = 'CAT3_BC'
+set_lvar_text_label 154@s = 'CAT3_BD'
+set_lvar_text_label 156@s = 'CAT3_CA'
+set_lvar_text_label 158@s = 'CAT3_CB'
+set_lvar_text_label 160@s = 'CAT3_CC'
+set_lvar_text_label 162@s = 'CAT3_CD'
+set_lvar_text_label 164@s = 'CAT3_DA'
+set_lvar_text_label 166@s = 'CAT3_DB'
+set_lvar_text_label 168@s = 'CAT3_DC'
+set_lvar_text_label 170@s = 'CAT3_DD'
+set_lvar_text_label 172@s = 'CAT3_EA'
+set_lvar_text_label 174@s = 'CAT3_EB'
+set_lvar_text_label 176@s = 'CAT3_EC'
+set_lvar_text_label 178@s = 'CAT3_ED'
+set_lvar_text_label 180@s = 'CAT3_EE'
+set_lvar_text_label 182@s = 'CAT3_EF'
+set_lvar_text_label 184@s = 'CAT3_EG'
+set_lvar_text_label 186@s = 'CAT3_FA'
+set_lvar_text_label 188@s = 'CAT3_FB'
+set_lvar_text_label 190@s = 'CAT3_FC'
+set_lvar_text_label 192@s = 'CAT3_FD'
+set_lvar_text_label 194@s = 'CAT3_FE'
+set_lvar_text_label 196@s = 'CAT3_FF'
+set_lvar_text_label 198@s = 'CAT3_GA'
+set_lvar_text_label 200@s = 'CAT3_GB'
+set_lvar_text_label 202@s = 'CAT3_GC'
+set_lvar_text_label 204@s = 'CAT3_GD'
+set_lvar_text_label 206@s = 'CAT3_GE'
+set_lvar_text_label 208@s = 'CAT3_GF'
+set_lvar_text_label 210@s = 'CAT3_GG'
+set_lvar_text_label 212@s = 'CAT3_HA'
+set_lvar_text_label 214@s = 'CAT3_HB'
+set_lvar_text_label 216@s = 'CAT3_HC'
+set_lvar_text_label 218@s = 'CAT3_JA'
+set_lvar_text_label 220@s = 'CAT3_JB'
+set_lvar_text_label 222@s = 'CAT3_JC'
+set_lvar_text_label 224@s = 'CAT3_JD'
+set_lvar_text_label 226@s = 'CAT3_JE'
+set_lvar_text_label 228@s = 'CAT3_JF'
+set_lvar_text_label 230@s = 'CAT3_JG'
+set_lvar_text_label 232@s = 'CAT3_JH'
+set_lvar_text_label 234@s = 'CAT3_JJ'
+set_lvar_text_label 236@s = 'CAT3_JK'
+set_lvar_text_label 238@s = 'CATX_UJ'
+set_lvar_text_label 240@s = 'CATX_UK'
+set_lvar_text_label 242@s = 'CAT_PF'
+set_lvar_int_to_constant 246@ = 9400
+set_lvar_int_to_constant 247@ = 9401
+set_lvar_int_to_constant 248@ = 9402
+set_lvar_int_to_constant 249@ = 9403
+set_lvar_int_to_constant 250@ = 9404
+set_lvar_int_to_constant 251@ = 9405
+set_lvar_int_to_constant 252@ = 9406
+set_lvar_int_to_constant 253@ = 9407
+set_lvar_int_to_constant 254@ = 9408
+set_lvar_int_to_constant 255@ = 9409
+set_lvar_int_to_constant 256@ = 9410
+set_lvar_int_to_constant 257@ = 9411
+set_lvar_int_to_constant 258@ = 9412
+set_lvar_int_to_constant 259@ = 9413
+set_lvar_int_to_constant 260@ = 9414
+set_lvar_int_to_constant 261@ = 9415
+set_lvar_int_to_constant 262@ = 9416
+set_lvar_int_to_constant 263@ = 9417
+set_lvar_int_to_constant 264@ = 9418
+set_lvar_int_to_constant 265@ = 9419
+set_lvar_int_to_constant 266@ = 9420
+set_lvar_int_to_constant 267@ = 9421
+set_lvar_int_to_constant 268@ = 9422
+set_lvar_int_to_constant 269@ = 9423
+set_lvar_int_to_constant 270@ = 9424
+set_lvar_int_to_constant 271@ = 9425
+set_lvar_int_to_constant 272@ = 9426
+set_lvar_int_to_constant 273@ = 9427
+set_lvar_int_to_constant 274@ = 9428
+set_lvar_int_to_constant 275@ = 9429
+set_lvar_int_to_constant 276@ = 9430
+set_lvar_int_to_constant 277@ = 9431
+set_lvar_int_to_constant 278@ = 9432
+set_lvar_int_to_constant 279@ = 9433
+set_lvar_int_to_constant 280@ = 9434
+set_lvar_int_to_constant 281@ = 9435
+set_lvar_int_to_constant 282@ = 9436
+set_lvar_int_to_constant 283@ = 9437
+set_lvar_int_to_constant 284@ = 9438
+set_lvar_int_to_constant 285@ = 9439
+set_lvar_int_to_constant 286@ = 9440
+set_lvar_int_to_constant 287@ = 9441
+set_lvar_int_to_constant 288@ = 9442
+set_lvar_int_to_constant 289@ = 9443
+set_lvar_int_to_constant 290@ = 9444
+set_lvar_int_to_constant 291@ = 9445
+set_lvar_int_to_constant 292@ = 9446
+set_lvar_int_to_constant 293@ = 9447
+set_lvar_int_to_constant 294@ = 9448
+set_lvar_int_to_constant 295@ = 9449
+set_lvar_int_to_constant 296@ = 9450
+set_lvar_int_to_constant 297@ = 9451
+set_lvar_int_to_constant 298@ = 9897
+set_lvar_int_to_constant 299@ = 9898
+set_lvar_int_to_constant 300@ = 8738
+50@ = -43.7625
+51@ = -1141.805
+52@ = 0.0781
+53@ = 660.3846
+54@ = -571.9213
+55@ = 15.3465
+65@ = 659.5142
+75@ = -571.65
+85@ = 17.0104
+95@ = 660.4576
+105@ = -571.3304
+115@ = 16.9229
+66@ = 661.7569
+76@ = -570.6351
+86@ = 17.1184
+96@ = 662.4741
+106@ = -569.9394
+116@ = 17.0783
+67@ = 658.7903
+77@ = -568.8011
+87@ = 17.1657
+97@ = 659.5721
+107@ = -569.3959
+117@ = 16.9783
+68@ = 659.4771
+78@ = -568.5789
+88@ = 17.0879
+98@ = 660.1776
+108@ = -569.2756
+118@ = 16.9335
+69@ = 655.2368
+79@ = -601.8433
+89@ = 16.4703
+99@ = 654.2847
+109@ = -601.6681
+119@ = 16.2199
+70@ = -73.4246
+80@ = -1132.716
+90@ = 1.4933
+100@ = -74.3653
+110@ = -1133.049
+120@ = 1.5579
+71@ = -80.0272
+81@ = -1133.954
+91@ = 1.2517
+101@ = -79.0308
+111@ = -1133.956
+121@ = 1.3367
+72@ = -76.5131
+82@ = -1135.434
+92@ = 1.6855
+102@ = -75.8151
+112@ = -1134.719
+122@ = 1.711
+321@ = 35.0
+gosub @CAT3_119
+gosub @CAT3_47
+gosub @CAT3_330
+gosub @CAT3_710
+gosub @CAT3_851
+gosub @CAT3_981
+Player.SetGroupRecruitment($player1, False)
+Streaming.LoadSceneInDirection(53@, 54@, 55@, 295.0)
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CAT3_3446
+Char.WarpFromCarToCoord($scplayer, 659.6722, -569.272, 15.3465)
+goto @CAT3_3466
+
+:CAT3_3446
+Char.SetCoordinates($scplayer, 659.6722, -569.272, 15.3465)
+
+:CAT3_3466
+if and
+  not Char.IsDead($catalina)
+  not Char.IsDead(310@)
+goto_if_false @CAT3_3659
+if 
+  Char.IsInAnyCar($catalina)
+goto_if_false @CAT3_3524
+Char.WarpFromCarToCoord($catalina, 53@, 54@, 55@)
+goto @CAT3_3538
+
+:CAT3_3524
+Char.SetCoordinates($catalina, 53@, 54@, 55@)
+
+:CAT3_3538
+Task.TurnCharToFaceChar($scplayer, 310@)
+Task.TurnCharToFaceChar(310@, $catalina)
+Char.SetHeading($scplayer, 177.1965)
+Char.HideWeaponForScriptedCutscene(310@, True)
+Camera.SetFixedPosition(65@, 75@, 85@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(95@, 105@, 115@, SwitchType.JumpCut)
+44@ = Clock.GetGameTimer()
+Char.RemoveFromGroup($catalina)
+37@ = 1
+Task.AimGunAtChar($catalina, 310@, 20000)
+Task.StayInSamePlace($catalina, True)
+Task.StayInSamePlace(310@, True)
+301@ = 1
+
+:CAT3_3659
+Camera.SetFadingColor(0, 0, 0)
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 500)
+Camera.DoFade(1, 500)
+World.SetCarDensityMultiplier(0.5)
+
+:CAT3_3696
+wait 0
+if 
+  301@ <> 0
+goto_if_false @CAT3_4141
+if 
+  302@ == 0
+goto_if_false @CAT3_3764
+if 
+  Audio.HasMissionAudioLoaded(304@)
+goto_if_false @CAT3_3757
+Audio.ClearMissionAudio(304@)
+
+:CAT3_3757
+302@ = 1
+
+:CAT3_3764
+if 
+  302@ == 1
+goto_if_false @CAT3_3808
+Audio.LoadMissionAudio(245@(301@,56i), 303@)
+gosub @CAT3_17452
+302@ = 2
+
+:CAT3_3808
+if 
+  302@ == 2
+goto_if_false @CAT3_3917
+if 
+  Audio.HasMissionAudioLoaded(303@)
+goto_if_false @CAT3_3917
+if 
+  244@ <> 0
+goto_if_false @CAT3_3891
+if 
+  not Char.IsDead(244@)
+goto_if_false @CAT3_3891
+Char.StartFacialTalk(244@, 10000)
+Char.ShutUpForScriptedSpeech(244@, True)
+
+:CAT3_3891
+Audio.PlayMissionAudio(303@)
+Text.PrintNow(132@(301@,56s), 10000, 1)
+302@ = 3
+
+:CAT3_3917
+if 
+  302@ == 3
+goto_if_false @CAT3_4141
+if 
+  Audio.HasMissionAudioFinished(303@)
+goto_if_false @CAT3_4080
+Text.ClearThisPrint(132@(301@,56s))
+if 
+  244@ <> 0
+goto_if_false @CAT3_4006
+if 
+  not Char.IsDead(244@)
+goto_if_false @CAT3_4006
+Char.StopFacialTalk(244@)
+Char.ShutUpForScriptedSpeech(244@, False)
+
+:CAT3_4006
+if 
+  303@ == 1
+goto_if_false @CAT3_4045
+303@ = 2
+304@ = 1
+goto @CAT3_4059
+
+:CAT3_4045
+303@ = 1
+304@ = 2
+
+:CAT3_4059
+301@ = 0
+302@ = 0
+goto @CAT3_4141
+
+:CAT3_4080
+if 
+  not Audio.HasMissionAudioLoaded(304@)
+goto_if_false @CAT3_4141
+if 
+  60 > 301@
+goto_if_false @CAT3_4141
+set_lvar_int_to_lvar_int 305@ = 301@
+305@ += 1
+Audio.LoadMissionAudio(245@(305@,56i), 304@)
+
+:CAT3_4141
+if 
+is_ps2_keyboard_key_pressed 83
+goto_if_false @CAT3_4163
+goto @CAT3_17066
+
+:CAT3_4163
+if 
+  35@ == 0
+goto_if_false @CAT3_5699
+if 
+  6 > 37@
+goto_if_false @CAT3_4231
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @CAT3_4231
+44@ -= 10000
+37@ = 7
+
+:CAT3_4231
+if 
+  37@ == 1
+goto_if_false @CAT3_4405
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_4405
+if 
+  302@ == 0
+goto_if_false @CAT3_4405
+if and
+  not Char.IsDead($catalina)
+  not Char.IsDead(310@)
+goto_if_false @CAT3_4405
+45@ = Sequence.Open()
+Task.FollowPathNodesToCoord(-1, 662.828, -570.1751, 15.3359, 4, -2)
+Task.LookAtChar(-1, $catalina, 30000)
+Task.TurnCharToFaceChar(-1, $catalina)
+Sequence.Close(45@)
+Char.PerformSequence(310@, 45@)
+44@ = Clock.GetGameTimer()
+301@ = 2
+37@ = 2
+
+:CAT3_4405
+if 
+  37@ == 2
+goto_if_false @CAT3_4673
+if 
+  not Char.IsDead(310@)
+goto_if_false @CAT3_4536
+if 
+  not Char.IsPlayingAnim(310@, "BNG_WNDW_02")
+goto_if_false @CAT3_4536
+312@ = Char.GetScriptTaskStatus(310@, 1560)
+if 
+  is_int_lvar_equal_to_constant 312@ == 7
+goto_if_false @CAT3_4536
+Task.PlayAnim(310@, "BNG_WNDW_02", "MISC", 4.0, False, False, False, False, -1)
+
+:CAT3_4536
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_4673
+if 
+  302@ == 0
+goto_if_false @CAT3_4673
+if and
+  not Char.IsDead($catalina)
+  not Char.IsDead(310@)
+goto_if_false @CAT3_4673
+Camera.SetFixedPosition(66@, 76@, 86@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(96@, 106@, 116@, SwitchType.JumpCut)
+44@ = Clock.GetGameTimer()
+301@ = 3
+37@ = 3
+
+:CAT3_4673
+if 
+  37@ == 3
+goto_if_false @CAT3_4799
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_4799
+if 
+  302@ == 0
+goto_if_false @CAT3_4799
+if and
+  not Char.IsDead($catalina)
+  not Char.IsDead(310@)
+  not Char.IsDead(311@)
+goto_if_false @CAT3_4799
+Task.ShakeFist(311@)
+44@ = Clock.GetGameTimer()
+301@ = 4
+37@ = 4
+
+:CAT3_4799
+if 
+  37@ == 4
+goto_if_false @CAT3_4949
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_4949
+if 
+  302@ == 0
+goto_if_false @CAT3_4949
+if 
+  not Car.IsDead(327@)
+goto_if_false @CAT3_4949
+Camera.SetFixedPosition(67@, 77@, 87@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(97@, 107@, 117@, SwitchType.JumpCut)
+44@ = Clock.GetGameTimer()
+301@ = 5
+37@ = 5
+
+:CAT3_4949
+if 
+  37@ == 5
+goto_if_false @CAT3_5176
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_5176
+if 
+  302@ == 0
+goto_if_false @CAT3_5176
+if and
+  not Car.IsDead(327@)
+  not Char.IsDead($catalina)
+  not Char.IsDead($scplayer)
+goto_if_false @CAT3_5176
+Camera.PointAtCar(327@, CameraMode.Fixed, SwitchType.JumpCut)
+44@ = Clock.GetGameTimer()
+Task.LookAtChar($scplayer, $catalina, 8000)
+46@ = Sequence.Open()
+Task.LookAtChar(-1, $scplayer, 1000)
+Task.GoStraightToCoord(-1, 657.7125, -576.2346, 15.3359, MoveState.Run, -1)
+Task.GoStraightToCoord(-1, 654.6555, -585.0117, 15.3359, MoveState.Run, -1)
+Task.EnterCarAsPassenger(-1, 327@, 0, 30000)
+Sequence.Close(46@)
+Char.PerformSequence($catalina, 46@)
+301@ = 6
+37@ = 6
+
+:CAT3_5176
+if 
+  37@ == 6
+goto_if_false @CAT3_5355
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_5355
+if 
+  302@ == 0
+goto_if_false @CAT3_5355
+if and
+  not Char.IsDead($catalina)
+  not Char.IsDead(310@)
+goto_if_false @CAT3_5355
+Camera.SetFixedPosition(68@, 78@, 88@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(98@, 108@, 118@, SwitchType.JumpCut)
+Task.FollowPathNodesToCoord($scplayer, 659.8791, -573.4293, 15.3465, 4, -2)
+301@ = 7
+44@ = Clock.GetGameTimer()
+37@ = 7
+
+:CAT3_5355
+if 
+  37@ == 7
+goto_if_false @CAT3_5699
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2500
+goto_if_false @CAT3_5699
+if 
+  302@ == 0
+goto_if_false @CAT3_5699
+if and
+  not Char.IsDead($catalina)
+  not Char.IsDead(310@)
+  not Car.IsDead(327@)
+goto_if_false @CAT3_5699
+Camera.DoFade(0, 500)
+
+:CAT3_5464
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_5488
+wait 0
+goto @CAT3_5464
+
+:CAT3_5488
+if 
+  not Car.IsDead(327@)
+goto_if_false @CAT3_5590
+328@ = Blip.AddForCar(327@)
+Blip.SetAsFriendly(328@, True)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_5567
+if 
+  not Char.IsInCar($catalina, 327@)
+goto_if_false @CAT3_5567
+Task.EnterCarAsPassenger($catalina, 327@, 0, 30000)
+
+:CAT3_5567
+if 
+  not Car.IsDead(334@)
+goto_if_false @CAT3_5590
+Car.FreezePosition(334@, True)
+
+:CAT3_5590
+Streaming.RemoveAnimation("MISC")
+World.ClearArea(1, $509, $515, $521, 200.0)
+Char.SetHeading($scplayer, 332@)
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Camera.SetFadingColor(0, 0, 0)
+Camera.DoFade(1, 500)
+Camera.DoFade(1, 500)
+Camera.DoFade(1, 500)
+
+:CAT3_5668
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_5692
+wait 0
+goto @CAT3_5668
+
+:CAT3_5692
+35@ = 1
+
+:CAT3_5699
+if 
+  35@ == 1
+goto_if_false @CAT3_5847
+if and
+  not Car.IsDead(327@)
+  not Char.IsDead($scplayer)
+  not Car.IsDead(334@)
+goto_if_false @CAT3_5847
+Text.PrintNow('CAT3_02', 5000, 1)
+if 
+  Char.IsInCar($scplayer, 327@)
+goto_if_false @CAT3_5847
+Blip.Remove(328@)
+Text.PrintHelp('CAT3_03')
+Streaming.RequestAnimation("CAR_CHAT")
+
+:CAT3_5806
+if 
+  not Streaming.HasAnimationLoaded("CAR_CHAT")
+goto_if_false @CAT3_5840
+wait 0
+goto @CAT3_5806
+
+:CAT3_5840
+35@ = 2
+
+:CAT3_5847
+if 
+  35@ == 2
+goto_if_false @CAT3_6675
+if and
+  not Car.IsDead(327@)
+  not Car.IsDead(334@)
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_6675
+if 
+  Char.LocateInCarCar3D($scplayer, 334@, 15.0, 15.0, 15.0, False)
+goto_if_false @CAT3_5968
+if 
+  38@ == 0
+goto_if_false @CAT3_5968
+Text.PrintHelp('CAT3_12')
+44@ = Clock.GetGameTimer()
+38@ = 1
+
+:CAT3_5968
+if 
+  38@ == 1
+goto_if_false @CAT3_6044
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 8000
+goto_if_false @CAT3_6044
+Text.PrintHelp('CAT3_13')
+38@ = 2
+
+:CAT3_6044
+if 
+  39@ == 0
+goto_if_false @CAT3_6127
+if 
+  Trailer.IsAttachedToCab(334@, 327@)
+goto_if_false @CAT3_6127
+if 
+  not Car.IsDead(334@)
+goto_if_false @CAT3_6104
+Car.FreezePosition(334@, False)
+
+:CAT3_6104
+Audio.PlayMissionAudio(MissionAudioSlot.Slot3)
+44@ = Clock.GetGameTimer()
+Blip.Remove(335@)
+Text.ClearHelp
+39@ = 1
+
+:CAT3_6127
+if 
+  39@ == 1
+goto_if_false @CAT3_6675
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 1500
+goto_if_false @CAT3_6675
+Text.ClearPrints
+Car.LockDoors(327@, CarLock.LockedPlayerInside)
+Camera.DoFade(0, 150)
+
+:CAT3_6201
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_6225
+wait 0
+goto @CAT3_6201
+
+:CAT3_6225
+Hud.SwitchWidescreen(True)
+Player.SetControl($player1, False)
+Text.ClearPrints
+if 
+  Audio.HasMissionAudioFinished(MissionAudioSlot.Slot3)
+goto_if_false @CAT3_6257
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+
+:CAT3_6257
+if 
+  not Car.IsDead(327@)
+goto_if_false @CAT3_6280
+Car.LockDoors(327@, CarLock.Unlocked)
+
+:CAT3_6280
+if and
+  not Char.IsDead($catalina)
+  not Car.IsDead(327@)
+goto_if_false @CAT3_6427
+if 
+  not Char.IsInCar($catalina, 327@)
+goto_if_false @CAT3_6387
+Char.RemoveFromGroup($catalina)
+Blip.Remove(309@)
+Blip.Remove(41@)
+41@ = Blip.AddForCoord(50@, 51@, 52@)
+Hud.ClearCounter($c3_trailer_health_display)
+Hud.DisplayCounterWithString($c3_trailer_health_display, CounterDisplay.Bar, 'CAT3_11')
+Char.WarpIntoCarAsPassenger($catalina, 327@, 0)
+goto @CAT3_6427
+
+:CAT3_6387
+Blip.Remove(41@)
+41@ = Blip.AddForCoord(50@, 51@, 52@)
+Hud.ClearCounter($c3_trailer_health_display)
+Hud.DisplayCounterWithString($c3_trailer_health_display, CounterDisplay.Bar, 'CAT3_11')
+
+:CAT3_6427
+if 
+  not Car.IsDead(334@)
+goto_if_false @CAT3_6458
+Car.SetProofs(334@, False, False, False, False, False)
+
+:CAT3_6458
+Streaming.RequestCarRecording(188)
+
+:CAT3_6463
+if 
+  not Streaming.HasCarRecordingBeenLoaded(188)
+goto_if_false @CAT3_6490
+wait 0
+goto @CAT3_6463
+
+:CAT3_6490
+if and
+  not Car.IsDead(340@)
+  not Char.IsDead(310@)
+  not Char.IsDead(311@)
+  not Char.IsDead($catalina)
+  not Car.IsDead(327@)
+goto_if_false @CAT3_6675
+Car.FreezePosition(340@, False)
+World.ClearArea(1, 658.6589, -567.5756, 15.3465, 25.0)
+Car.SetCoordinates(340@, 658.6589, -567.5756, 15.3465)
+Car.SetHeading(340@, 180.0)
+Char.WarpIntoCar(311@, 340@)
+Char.WarpIntoCarAsPassenger(310@, 340@, 0)
+Camera.SetFixedPosition(651.9285, -575.1257, 16.2766, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(652.3163, -576.027, 16.4698, SwitchType.JumpCut)
+44@ = Clock.GetGameTimer()
+37@ = 1
+35@ = 3
+
+:CAT3_6675
+if 
+  35@ == 3
+goto_if_false @CAT3_7827
+if and
+  not Char.IsDead(310@)
+  not Char.IsDead(311@)
+  not Car.IsDead(340@)
+  not Car.IsDead(327@)
+goto_if_false @CAT3_7827
+if 
+  4 > 37@
+goto_if_false @CAT3_6814
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 1000
+goto_if_false @CAT3_6814
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @CAT3_6814
+44@ -= 5000
+37@ = 4
+
+:CAT3_6814
+if 
+  37@ == 1
+goto_if_false @CAT3_6940
+if 
+  not Car.IsDead(340@)
+goto_if_false @CAT3_6940
+Camera.DoFade(1, 150)
+
+:CAT3_6855
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_6879
+wait 0
+goto @CAT3_6855
+
+:CAT3_6879
+if 
+  not Car.IsDead(340@)
+goto_if_false @CAT3_6903
+Car.StartPlayback(340@, 188)
+
+:CAT3_6903
+if 
+  302@ == 0
+goto_if_false @CAT3_6928
+301@ = 13
+
+:CAT3_6928
+44@ = Clock.GetGameTimer()
+37@ = 2
+
+:CAT3_6940
+if 
+  37@ == 2
+goto_if_false @CAT3_7412
+if 
+  not Car.IsDead(340@)
+goto_if_false @CAT3_7173
+if 
+  Car.IsPlaybackGoingOn(340@)
+goto_if_false @CAT3_7173
+62@ = Car.GetOffsetInWorldCoords(63@, 64@, 340@, 0.0, 5.5, 0.0)
+set_lvar_float_to_lvar_float 56@ = 62@
+56@ -= 0.25
+set_lvar_float_to_lvar_float 57@ = 63@
+57@ -= 0.25
+set_lvar_float_to_lvar_float 58@ = 64@
+58@ -= 0.25
+set_lvar_float_to_lvar_float 59@ = 62@
+59@ += 0.25
+set_lvar_float_to_lvar_float 60@ = 63@
+60@ += 0.25
+set_lvar_float_to_lvar_float 61@ = 64@
+61@ += 0.25
+if 
+  World.IsAreaOccupied(56@, 57@, 58@, 59@, 60@, 61@, False, True, False, False, False)
+goto_if_false @CAT3_7173
+Car.StopPlayback(340@)
+
+:CAT3_7173
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_7412
+if 
+  302@ == 0
+goto_if_false @CAT3_7412
+if 
+  not Char.IsDead(310@)
+goto_if_false @CAT3_7289
+Task.PlayAnim(310@, "CAR_SC3_BR", "CAR_CHAT", 4.0, False, False, False, False, -1)
+
+:CAT3_7289
+69@ = Car.GetOffsetInWorldCoords(79@, 89@, 340@, 0.9, 1.0, 0.5)
+99@ = Car.GetOffsetInWorldCoords(109@, 119@, 340@, 0.15, 0.0, 0.3)
+Camera.SetFixedPosition(69@, 79@, 89@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(99@, 109@, 119@, SwitchType.JumpCut)
+Camera.SetNearClip(0.1)
+301@ = 14
+44@ = Clock.GetGameTimer()
+37@ = 3
+
+:CAT3_7412
+if 
+  37@ == 3
+goto_if_false @CAT3_7550
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_7550
+if 
+  302@ == 0
+goto_if_false @CAT3_7550
+301@ = 15
+Task.PlayAnim(311@, "CAR_SC4_BL", "CAR_CHAT", 2.0, True, False, False, False, 3500)
+44@ = Clock.GetGameTimer()
+37@ = 4
+
+:CAT3_7550
+if 
+  37@ == 4
+goto_if_false @CAT3_7827
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_7827
+Text.ClearPrints
+Camera.DoFade(1, 150)
+
+:CAT3_7623
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_7647
+wait 0
+goto @CAT3_7623
+
+:CAT3_7647
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Camera.RestoreJumpcut
+if and
+  not Car.IsDead(340@)
+  not Char.IsDead(310@)
+goto_if_false @CAT3_7827
+if 
+  Char.IsInCar(310@, 340@)
+goto_if_false @CAT3_7827
+if 
+  not Car.IsDead(334@)
+goto_if_false @CAT3_7723
+Car.FreezePosition(334@, False)
+
+:CAT3_7723
+Car.SetProofs(340@, False, False, False, False, False)
+Streaming.RemoveAnimation("CAR_CHAT")
+StuckCarCheck.AddWithWarp(340@, 1.0, 2000, True, True, True, 2)
+341@ = Blip.AddForCarOld(340@, BlipDisplay.Neither, 1)
+128@ = 4
+131@ = Clock.GetGameTimer()
+if 
+  302@ == 0
+goto_if_false @CAT3_7820
+301@ = 12
+
+:CAT3_7820
+35@ = 4
+
+:CAT3_7827
+if 
+  35@ == 4
+goto_if_false @CAT3_12172
+if and
+  not Car.IsDead(327@)
+  not Car.IsDead(334@)
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_12172
+if 
+  302@ == 0
+goto_if_false @CAT3_7948
+if 
+  301@ == 0
+goto_if_false @CAT3_7948
+if 
+  37@ == 4
+goto_if_false @CAT3_7948
+Text.Print('CAT3_05', 5000, 1)
+37@ = -4
+
+:CAT3_7948
+$c3_trailer_health_display = Car.GetHealth(334@)
+if 
+  $c3_trailer_health_display > 250
+goto_if_false @CAT3_8004
+$c3_trailer_health_display -= 250
+$c3_trailer_health_display /= 100
+$c3_trailer_health_display *= 10
+goto @CAT3_8009
+
+:CAT3_8004
+Hud.ClearCounter($c3_trailer_health_display)
+
+:CAT3_8009
+if 
+  36@ == 1
+goto_if_false @CAT3_10233
+if and
+  not Car.IsDead(340@)
+  not Char.IsDead(310@)
+  not Char.IsDead(311@)
+goto_if_false @CAT3_10226
+if 
+  128@ == 0
+goto_if_false @CAT3_8168
+125@ = Math.RandomIntInRange(0, 6)
+131@ = Clock.GetGameTimer()
+128@ = 1
+if 
+  is_int_lvar_equal_to_int_lvar 125@ == 126@
+goto_if_false @CAT3_8168
+if 
+  5 > 125@
+goto_if_false @CAT3_8143
+125@ += 1
+goto @CAT3_8168
+
+:CAT3_8143
+if 
+  125@ > 0
+goto_if_false @CAT3_8168
+125@ -= 1
+
+:CAT3_8168
+if 
+  128@ == 1
+goto_if_false @CAT3_9573
+if 
+  125@ == 0
+goto_if_false @CAT3_8418
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_8418
+301@ = 27
+if 
+  Char.IsInCar($scplayer, 327@)
+goto_if_false @CAT3_8355
+Char.SetAccuracy(310@, 20)
+Task.DriveBy(310@, $catalina, -1, 0.0, -5.0, 0.0, 30.0, DriveByType.Ai, True, 50)
+Char.SetCurrentWeapon(310@, WeaponType.MicroUzi)
+Task.DriveBy($catalina, 310@, -1, 0.0, 0.0, 0.0, 30.0, DriveByType.FixedRight, True, 90)
+Char.SetCurrentWeapon($catalina, WeaponType.Shotgun)
+goto @CAT3_8398
+
+:CAT3_8355
+Char.SetAccuracy(310@, 50)
+Task.DriveBy(310@, $scplayer, -1, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 15)
+
+:CAT3_8398
+set_lvar_int_to_lvar_int 126@ = 125@
+131@ = Clock.GetGameTimer()
+128@ = 2
+
+:CAT3_8418
+if 
+  125@ == 1
+goto_if_false @CAT3_8650
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_8650
+301@ = 28
+if 
+  Char.IsInCar($scplayer, 327@)
+goto_if_false @CAT3_8587
+Char.SetAccuracy(310@, 20)
+Task.DriveBy(310@, $catalina, -1, 0.0, -5.0, 0.0, 30.0, DriveByType.Ai, True, 50)
+Char.SetCurrentWeapon(310@, WeaponType.MicroUzi)
+Task.DriveBy($catalina, 310@, -1, 0.0, 0.0, 0.0, 30.0, DriveByType.FixedRight, True, 90)
+Char.SetCurrentWeapon($catalina, WeaponType.Shotgun)
+goto @CAT3_8630
+
+:CAT3_8587
+Char.SetAccuracy(310@, 50)
+Task.DriveBy(310@, $scplayer, -1, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 15)
+
+:CAT3_8630
+set_lvar_int_to_lvar_int 126@ = 125@
+131@ = Clock.GetGameTimer()
+128@ = 2
+
+:CAT3_8650
+if 
+  125@ == 2
+goto_if_false @CAT3_8882
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_8882
+301@ = 29
+if 
+  Char.IsInCar($scplayer, 327@)
+goto_if_false @CAT3_8819
+Char.SetAccuracy(310@, 20)
+Task.DriveBy(310@, $catalina, -1, 0.0, -5.0, 0.0, 30.0, DriveByType.Ai, True, 50)
+Char.SetCurrentWeapon(310@, WeaponType.MicroUzi)
+Task.DriveBy($catalina, 310@, -1, 0.0, 0.0, 0.0, 30.0, DriveByType.FixedRight, True, 90)
+Char.SetCurrentWeapon($catalina, WeaponType.Shotgun)
+goto @CAT3_8862
+
+:CAT3_8819
+Char.SetAccuracy(310@, 50)
+Task.DriveBy(310@, $scplayer, -1, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 15)
+
+:CAT3_8862
+set_lvar_int_to_lvar_int 126@ = 125@
+131@ = Clock.GetGameTimer()
+128@ = 2
+
+:CAT3_8882
+if 
+  125@ == 3
+goto_if_false @CAT3_9114
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_9114
+301@ = 30
+if 
+  Char.IsInCar($scplayer, 327@)
+goto_if_false @CAT3_9051
+Char.SetAccuracy(310@, 20)
+Task.DriveBy(310@, $catalina, -1, 0.0, -5.0, 0.0, 30.0, DriveByType.Ai, True, 50)
+Char.SetCurrentWeapon(310@, WeaponType.MicroUzi)
+Task.DriveBy($catalina, 310@, -1, 0.0, 0.0, 0.0, 30.0, DriveByType.FixedRight, True, 90)
+Char.SetCurrentWeapon($catalina, WeaponType.Shotgun)
+goto @CAT3_9094
+
+:CAT3_9051
+Char.SetAccuracy(310@, 50)
+Task.DriveBy(310@, $scplayer, -1, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 15)
+
+:CAT3_9094
+set_lvar_int_to_lvar_int 126@ = 125@
+131@ = Clock.GetGameTimer()
+128@ = 2
+
+:CAT3_9114
+if 
+  125@ == 4
+goto_if_false @CAT3_9341
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_9341
+301@ = 31
+if 
+  Char.IsInCar($scplayer, 327@)
+goto_if_false @CAT3_9283
+Char.SetAccuracy(310@, 20)
+Task.DriveBy(310@, $catalina, -1, 0.0, -5.0, 0.0, 30.0, DriveByType.Ai, True, 50)
+Char.SetCurrentWeapon(310@, WeaponType.MicroUzi)
+Task.DriveBy($catalina, 310@, -1, 0.0, 0.0, 0.0, 30.0, DriveByType.FixedRight, True, 90)
+Char.SetCurrentWeapon($catalina, WeaponType.Shotgun)
+goto @CAT3_9326
+
+:CAT3_9283
+Char.SetAccuracy(310@, 50)
+Task.DriveBy(310@, $scplayer, -1, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 15)
+
+:CAT3_9326
+set_lvar_int_to_lvar_int 126@ = 125@
+128@ = 2
+
+:CAT3_9341
+if 
+  125@ == 5
+goto_if_false @CAT3_9573
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_9573
+301@ = 32
+if 
+  Char.IsInCar($scplayer, 327@)
+goto_if_false @CAT3_9510
+Char.SetAccuracy(310@, 20)
+Task.DriveBy(310@, $catalina, -1, 0.0, -5.0, 0.0, 30.0, DriveByType.Ai, True, 50)
+Char.SetCurrentWeapon(310@, WeaponType.MicroUzi)
+Task.DriveBy($catalina, 310@, -1, 0.0, 0.0, 0.0, 30.0, DriveByType.FixedRight, True, 90)
+Char.SetCurrentWeapon($catalina, WeaponType.Shotgun)
+goto @CAT3_9553
+
+:CAT3_9510
+Char.SetAccuracy(310@, 50)
+Task.DriveBy(310@, $scplayer, -1, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 15)
+
+:CAT3_9553
+set_lvar_int_to_lvar_int 126@ = 125@
+131@ = Clock.GetGameTimer()
+128@ = 2
+
+:CAT3_9573
+if 
+  128@ == 2
+goto_if_false @CAT3_9688
+125@ = Math.RandomIntInRange(6, 13)
+131@ = Clock.GetGameTimer()
+128@ = 3
+if 
+  is_int_lvar_equal_to_int_lvar 125@ == 127@
+goto_if_false @CAT3_9688
+if 
+  12 > 125@
+goto_if_false @CAT3_9663
+125@ += 1
+goto @CAT3_9688
+
+:CAT3_9663
+if 
+  125@ > 6
+goto_if_false @CAT3_9688
+125@ -= 1
+
+:CAT3_9688
+if 
+  128@ == 3
+goto_if_false @CAT3_10161
+if 
+  125@ == 6
+goto_if_false @CAT3_9771
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_9771
+301@ = 33
+128@ = 4
+set_lvar_int_to_lvar_int 127@ = 125@
+
+:CAT3_9771
+if 
+  125@ == 7
+goto_if_false @CAT3_9836
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_9836
+301@ = 34
+128@ = 4
+set_lvar_int_to_lvar_int 127@ = 125@
+
+:CAT3_9836
+if 
+  125@ == 8
+goto_if_false @CAT3_9901
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_9901
+301@ = 35
+128@ = 4
+set_lvar_int_to_lvar_int 127@ = 125@
+
+:CAT3_9901
+if 
+  125@ == 9
+goto_if_false @CAT3_9966
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_9966
+301@ = 36
+128@ = 4
+set_lvar_int_to_lvar_int 127@ = 125@
+
+:CAT3_9966
+if 
+  125@ == 10
+goto_if_false @CAT3_10031
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_10031
+301@ = 37
+128@ = 4
+set_lvar_int_to_lvar_int 127@ = 125@
+
+:CAT3_10031
+if 
+  125@ == 11
+goto_if_false @CAT3_10096
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_10096
+301@ = 38
+128@ = 4
+set_lvar_int_to_lvar_int 127@ = 125@
+
+:CAT3_10096
+if 
+  125@ == 12
+goto_if_false @CAT3_10161
+if and
+  302@ == 0
+  301@ == 0
+goto_if_false @CAT3_10161
+301@ = 39
+128@ = 4
+set_lvar_int_to_lvar_int 127@ = 125@
+
+:CAT3_10161
+if 
+  128@ == 4
+goto_if_false @CAT3_10226
+130@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 129@ = 130@
+sub_int_lvar_from_int_lvar 129@ -= 131@
+if 
+  129@ > 12000
+goto_if_false @CAT3_10226
+128@ = 5
+
+:CAT3_10226
+goto @CAT3_10326
+
+:CAT3_10233
+if and
+  not Car.IsDead(340@)
+  not Char.IsDead(310@)
+goto_if_false @CAT3_10326
+312@ = Char.GetScriptTaskStatus(310@, 1811)
+if 
+  is_int_lvar_equal_to_constant 312@ == 7
+goto_if_false @CAT3_10326
+Char.SetAccuracy(310@, 50)
+Task.DriveBy(310@, $scplayer, -1, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 60)
+
+:CAT3_10326
+if 
+  Car.IsDead(340@)
+goto_if_false @CAT3_10421
+if 
+  not Char.IsDead(310@)
+goto_if_false @CAT3_10379
+if 
+  not Char.IsOnScreen(310@)
+goto_if_false @CAT3_10379
+Char.RemoveElegantly(310@)
+
+:CAT3_10379
+if 
+  not Char.IsDead(311@)
+goto_if_false @CAT3_10416
+if 
+  not Char.IsOnScreen(311@)
+goto_if_false @CAT3_10416
+Char.RemoveElegantly(311@)
+
+:CAT3_10416
+Blip.Remove(341@)
+
+:CAT3_10421
+if and
+  not Char.IsDead(310@)
+  not Car.IsDead(340@)
+goto_if_false @CAT3_10760
+if 
+  not Char.LocateAnyMeansChar3D($scplayer, 310@, 15.0, 15.0, 15.0, False)
+goto_if_false @CAT3_10516
+if 
+  60.0 > 321@
+goto_if_false @CAT3_10509
+321@ += 0.2
+
+:CAT3_10509
+goto @CAT3_10547
+
+:CAT3_10516
+if 
+  321@ > 40.0
+goto_if_false @CAT3_10547
+321@ -= 0.1
+
+:CAT3_10547
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 50@, 51@, 52@, 120.0, 120.0, 120.0)
+goto_if_false @CAT3_10760
+if 
+  not Char.LocateAnyMeansChar3D($scplayer, 310@, 100.0, 100.0, 100.0, False)
+goto_if_false @CAT3_10735
+62@ = Car.GetOffsetInWorldCoords(63@, 64@, 334@, 0.0, -40.0, 0.0)
+342@, 343@, 344@, 345@ = Path.GetNthClosestCarNodeWithHeading(62@, 63@, 64@, 1)
+if 
+  not Camera.IsPointOnScreen(342@, 343@, 344@, 15.0)
+goto_if_false @CAT3_10728
+Car.SetCoordinates(340@, 342@, 343@, 344@)
+Car.SetHeading(340@, 345@)
+
+:CAT3_10728
+goto @CAT3_10760
+
+:CAT3_10735
+if 
+  128@ == 5
+goto_if_false @CAT3_10760
+128@ = 0
+
+:CAT3_10760
+306@ = Car.GetHealth(334@)
+if 
+  40@ == 0
+goto_if_false @CAT3_11316
+if 
+  not Char.IsDead(310@)
+goto_if_false @CAT3_11316
+if 
+  not Char.LocateAnyMeans3D($scplayer, 0, 50@, 51@, 52@, 120.0, 120.0, 120.0)
+goto_if_false @CAT3_10946
+if 
+  not Char.IsDead(311@)
+goto_if_false @CAT3_10939
+if 
+  not Car.IsDead(334@)
+goto_if_false @CAT3_10939
+if 
+  not Car.IsDead(340@)
+goto_if_false @CAT3_10939
+47@ = Char.GetScriptTaskStatus(311@, 1761)
+if 
+  is_int_lvar_equal_to_constant 47@ == 7
+goto_if_false @CAT3_10939
+Task.CarMission(311@, 340@, 327@, CarMission.BlockCarFaraway, 321@, DrivingMode.AvoidCars)
+
+:CAT3_10939
+goto @CAT3_11024
+
+:CAT3_10946
+if 
+  not Car.IsDead(340@)
+goto_if_false @CAT3_11024
+if 
+  not Char.IsDead(311@)
+goto_if_false @CAT3_11024
+Task.CarTempAction(311@, 340@, TempAction.HandbrakeStraight, 2000)
+44@ = Clock.GetGameTimer()
+if 
+  Car.DoesHaveStuckCarCheck(340@)
+goto_if_false @CAT3_11017
+StuckCarCheck.Remove(340@)
+
+:CAT3_11017
+40@ = 1
+
+:CAT3_11024
+if 
+  Char.LocateAnyMeansChar3D($scplayer, 310@, 30.0, 30.0, 30.0, False)
+goto_if_false @CAT3_11316
+if 
+  not Char.IsDead(311@)
+goto_if_false @CAT3_11316
+if 
+  not Car.IsDead(334@)
+goto_if_false @CAT3_11316
+if 
+  not Car.IsDead(340@)
+goto_if_false @CAT3_11316
+$c3_rand_escort = Math.RandomIntInRange(0, 4)
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ == 5000
+goto_if_false @CAT3_11316
+if 
+  $c3_rand_escort == 0
+goto_if_false @CAT3_11193
+Task.CarMission(311@, 340@, 327@, CarMission.EscortLeft, 321@, DrivingMode.AvoidCars)
+44@ = Clock.GetGameTimer()
+
+:CAT3_11193
+if 
+  $c3_rand_escort == 1
+goto_if_false @CAT3_11234
+Task.CarMission(311@, 340@, 327@, CarMission.EscortRight, 321@, DrivingMode.AvoidCars)
+44@ = Clock.GetGameTimer()
+
+:CAT3_11234
+if 
+  $c3_rand_escort == 2
+goto_if_false @CAT3_11275
+Task.CarMission(311@, 340@, 327@, CarMission.EscortRear, 321@, DrivingMode.AvoidCars)
+44@ = Clock.GetGameTimer()
+
+:CAT3_11275
+if 
+  $c3_rand_escort == 3
+goto_if_false @CAT3_11316
+Task.CarMission(311@, 340@, 327@, CarMission.EscortFront, 321@, DrivingMode.AvoidCars)
+44@ = Clock.GetGameTimer()
+
+:CAT3_11316
+if and
+  not Car.IsDead(327@)
+  not Char.IsDead(310@)
+goto_if_false @CAT3_11445
+333@ = Car.GetSpeed(327@)
+if 
+  3.0 > 333@
+goto_if_false @CAT3_11445
+47@ = Char.GetScriptTaskStatus(310@, 1811)
+if 
+  is_int_lvar_equal_to_constant 47@ == 7
+goto_if_false @CAT3_11445
+Char.SetAccuracy(310@, 40)
+Task.DriveBy(310@, $catalina, -1, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 100)
+Char.SetCurrentWeapon(310@, WeaponType.MicroUzi)
+
+:CAT3_11445
+if 
+  not Trailer.IsAttachedToCab(334@, 327@)
+goto_if_false @CAT3_11788
+if 
+  Char.IsInCar($catalina, 327@)
+goto_if_false @CAT3_11765
+if 
+  not Car.IsUpsidedown(327@)
+goto_if_false @CAT3_11726
+Camera.DoFade(0, 50)
+
+:CAT3_11505
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_11529
+wait 0
+goto @CAT3_11505
+
+:CAT3_11529
+if 
+  not Car.IsDead(327@)
+goto_if_false @CAT3_11719
+Player.SetControl($player1, False)
+Hud.SwitchWidescreen(True)
+Car.SetTempAction(327@, TempAction.HandbrakeStraight, 2000)
+73@ = Car.GetOffsetInWorldCoords(83@, 93@, 327@, 2.5, 4.0, 0.0)
+103@ = Car.GetOffsetInWorldCoords(113@, 123@, 327@, 2.2, 3.0, 0.0)
+Camera.SetFixedPosition(73@, 83@, 93@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(103@, 113@, 123@, SwitchType.JumpCut)
+if 
+  not Car.IsDead(340@)
+goto_if_false @CAT3_11700
+if 
+  not Car.IsOnScreen(340@)
+goto_if_false @CAT3_11700
+Car.Delete(340@)
+
+:CAT3_11700
+44@ = Clock.GetGameTimer()
+37@ = 0
+goto @CAT3_15906
+
+:CAT3_11719
+goto @CAT3_11758
+
+:CAT3_11726
+Camera.DoFade(1, 300)
+Text.ClearPrints
+Text.PrintNow('CAT3_08', 5000, 1)
+goto @CAT3_17048
+
+:CAT3_11758
+goto @CAT3_11788
+
+:CAT3_11765
+Text.PrintNow('CAT3_08', 5000, 1)
+goto @CAT3_17048
+
+:CAT3_11788
+if and
+  Char.IsInCar($catalina, 327@)
+  Char.IsInCar($scplayer, 327@)
+goto_if_false @CAT3_12172
+if or
+  Car.Locate3D(327@, 1, 50@, 51@, 52@, 5.0, 5.0, 5.0)
+  Car.Locate3D(334@, 0, 50@, 51@, 52@, 5.0, 5.0, 5.0)
+goto_if_false @CAT3_12172
+Player.SetControl($player1, False)
+Camera.DoFade(0, 500)
+
+:CAT3_11902
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_11926
+wait 0
+goto @CAT3_11902
+
+:CAT3_11926
+gosub @CAT3_1119
+Streaming.LoadScene(-76.1314, -1131.417, 0.0782)
+Hud.SwitchWidescreen(True)
+Blip.Remove(41@)
+Text.ClearPrints
+Streaming.RequestCarRecording(199)
+
+:CAT3_11966
+if 
+  not Streaming.HasCarRecordingBeenLoaded(199)
+goto_if_false @CAT3_11993
+wait 0
+goto @CAT3_11966
+
+:CAT3_11993
+Camera.SetFixedPosition(-81.2678, -1141.735, 3.899, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-81.7168, -1140.842, 3.8854, SwitchType.JumpCut)
+if and
+  not Char.IsDead($catalina)
+  not Char.IsDead($scplayer)
+  not Car.IsDead(327@)
+goto_if_false @CAT3_12144
+Car.FreezePosition(327@, True)
+Car.LockDoors(327@, CarLock.LockoutPlayerOnly)
+Char.WarpFromCarToCoord($catalina, -71.5991, -1134.952, 0.0781)
+Char.SetHeading($catalina, 63.1513)
+Char.WarpFromCarToCoord($scplayer, -74.2582, -1130.526, 0.0781)
+Char.SetHeading($scplayer, 135.9294)
+
+:CAT3_12144
+gosub @CAT3_576
+Text.ClearPrints
+44@ = Clock.GetGameTimer()
+37@ = -4
+35@ = 5
+
+:CAT3_12172
+if 
+is_ps2_keyboard_key_pressed 32
+goto_if_false @CAT3_12473
+Player.SetControl($player1, False)
+Camera.DoFade(0, 500)
+
+:CAT3_12201
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_12225
+wait 0
+goto @CAT3_12201
+
+:CAT3_12225
+gosub @CAT3_1119
+Streaming.LoadScene(-76.1314, -1131.417, 0.0782)
+Hud.SwitchWidescreen(True)
+Blip.Remove(41@)
+Text.ClearPrints
+Streaming.RequestCarRecording(199)
+
+:CAT3_12265
+if 
+  not Streaming.HasCarRecordingBeenLoaded(199)
+goto_if_false @CAT3_12292
+wait 0
+goto @CAT3_12265
+
+:CAT3_12292
+Camera.SetFixedPosition(-81.2678, -1141.735, 3.899, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-81.7168, -1140.842, 3.8854, SwitchType.JumpCut)
+if and
+  not Char.IsDead($catalina)
+  not Char.IsDead($scplayer)
+  not Car.IsDead(327@)
+goto_if_false @CAT3_12443
+Car.SetCoordinates(327@, 50@, 51@, 52@)
+Char.WarpFromCarToCoord($catalina, -71.5991, -1134.952, 0.0781)
+Char.SetHeading($catalina, 63.1513)
+Char.WarpFromCarToCoord($scplayer, -74.2582, -1130.526, 0.0781)
+Char.SetHeading($scplayer, 135.9294)
+
+:CAT3_12443
+gosub @CAT3_576
+Text.ClearHelp
+Text.ClearPrints
+44@ = Clock.GetGameTimer()
+37@ = -4
+35@ = 5
+
+:CAT3_12473
+if 
+  35@ == 5
+goto_if_false @CAT3_15190
+if and
+  not Char.IsDead($catalina)
+  not Char.IsDead(322@)
+  not Car.IsDead(327@)
+goto_if_false @CAT3_15190
+if 
+  Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT3_12541
+Char.RemoveFromGroup($catalina)
+
+:CAT3_12541
+if 
+  37@ == -4
+goto_if_false @CAT3_12655
+if 
+  not Car.IsDead(340@)
+goto_if_false @CAT3_12648
+Car.SetProofs(340@, False, False, False, False, False)
+Car.StartPlayback(340@, 199)
+44@ = Clock.GetGameTimer()
+Camera.DoFade(1, 250)
+
+:CAT3_12610
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_12634
+wait 0
+goto @CAT3_12610
+
+:CAT3_12634
+37@ = -3
+goto @CAT3_12655
+
+:CAT3_12648
+37@ = -1
+
+:CAT3_12655
+if 
+  37@ == -3
+goto_if_false @CAT3_12794
+if 
+  not Car.IsDead(340@)
+goto_if_false @CAT3_12794
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_12794
+Camera.SetFixedPosition(-107.3115, -1128.808, 2.6543, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-106.788, -1129.652, 2.7731, SwitchType.JumpCut)
+Car.SetHealth(340@, 5)
+37@ = -21
+
+:CAT3_12794
+if 
+  37@ == -21
+goto_if_false @CAT3_12931
+if 
+  not Car.IsDead(340@)
+goto_if_false @CAT3_12931
+if 
+  not Car.IsPlaybackGoingOn(340@)
+goto_if_false @CAT3_12931
+Camera.SetFixedPosition(-108.8537, -1168.342, 3.0287, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-108.0611, -1167.736, 3.0908, SwitchType.JumpCut)
+Fx.AddExplosion(4, -92.24, -1161.46, 2.5)
+Car.ExplodeInCutscene(340@)
+44@ = Clock.GetGameTimer()
+37@ = -22
+
+:CAT3_12931
+if 
+  37@ == -22
+goto_if_false @CAT3_13011
+if 
+  42@ > 1000
+goto_if_false @CAT3_13011
+if 
+  not Car.IsDead(346@)
+goto_if_false @CAT3_13011
+Car.SetProofs(346@, False, False, False, False, False)
+Car.ExplodeInCutscene(346@)
+37@ = -2
+
+:CAT3_13011
+if 
+  37@ == -2
+goto_if_false @CAT3_13107
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 3000
+goto_if_false @CAT3_13107
+Camera.DoFade(0, 500)
+
+:CAT3_13076
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_13100
+wait 0
+goto @CAT3_13076
+
+:CAT3_13100
+37@ = -1
+
+:CAT3_13107
+if 
+  37@ == -1
+goto_if_false @CAT3_13266
+Camera.SetFixedPosition(70@, 80@, 90@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(100@, 110@, 120@, SwitchType.JumpCut)
+if and
+  not Char.IsDead(310@)
+  not Char.IsDead(311@)
+  not Car.IsDead(340@)
+goto_if_false @CAT3_13205
+Char.Delete(310@)
+Char.Delete(311@)
+Car.Delete(340@)
+
+:CAT3_13205
+Streaming.LoadSceneInDirection(70@, 80@, 90@, 100.0)
+Text.ClearPrints
+44@ = Clock.GetGameTimer()
+Camera.DoFade(1, 500)
+
+:CAT3_13235
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_13259
+wait 0
+goto @CAT3_13235
+
+:CAT3_13259
+37@ = 0
+
+:CAT3_13266
+if 
+  37@ == 0
+goto_if_false @CAT3_13439
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 300
+goto_if_false @CAT3_13439
+if 
+  302@ == 0
+goto_if_false @CAT3_13439
+if and
+  not Char.IsDead($catalina)
+  not Char.IsDead(322@)
+goto_if_false @CAT3_13439
+48@ = Sequence.Open()
+Task.TurnCharToFaceChar(-1, 322@)
+Task.GoStraightToCoord(-1, -74.8954, -1133.779, 0.0781, MoveState.Walk, -1)
+Task.LookAtChar(-1, 322@, -2)
+Sequence.Close(48@)
+Char.PerformSequence($catalina, 48@)
+301@ = 43
+44@ = Clock.GetGameTimer()
+37@ = 1
+
+:CAT3_13439
+if 
+  37@ == 1
+goto_if_false @CAT3_13685
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_13685
+if 
+  302@ == 0
+goto_if_false @CAT3_13685
+Camera.DoFade(0, 50)
+
+:CAT3_13521
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_13545
+wait 0
+goto @CAT3_13521
+
+:CAT3_13545
+if and
+  not Char.IsDead(322@)
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_13581
+Task.LookAtChar(322@, $catalina, -2)
+Task.ScratchHead(322@)
+
+:CAT3_13581
+301@ = 44
+44@ = Clock.GetGameTimer()
+Streaming.LoadSceneInDirection(71@, 81@, 91@, 270.0)
+Camera.SetFixedPosition(71@, 81@, 91@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(101@, 111@, 121@, SwitchType.JumpCut)
+Camera.DoFade(1, 50)
+
+:CAT3_13654
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_13678
+wait 0
+goto @CAT3_13654
+
+:CAT3_13678
+37@ = 2
+
+:CAT3_13685
+if 
+  37@ == 2
+goto_if_false @CAT3_13883
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_13883
+if 
+  302@ == 0
+goto_if_false @CAT3_13883
+if and
+  not Car.IsDead(327@)
+  not Char.IsDead(322@)
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_13883
+Char.ClearLookAt(322@)
+Task.TurnCharToFaceCoord($catalina, 50@, 51@, 52@)
+Task.TurnCharToFaceCoord(322@, 50@, 51@, 52@)
+Task.LookAtVehicle($catalina, 327@, -2)
+Task.LookAtVehicle(322@, 327@, -2)
+Task.GoStraightToCoord(322@, -75.1023, -1134.871, 0.0781, MoveState.Walk, -1)
+301@ = 45
+44@ = Clock.GetGameTimer()
+37@ = 3
+
+:CAT3_13883
+if 
+  37@ == 3
+goto_if_false @CAT3_14074
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_14074
+if 
+  302@ == 0
+goto_if_false @CAT3_14074
+if 
+  not Char.IsDead(322@)
+goto_if_false @CAT3_14055
+Camera.SetFixedPosition(72@, 82@, 92@, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(102@, 112@, 122@, SwitchType.JumpCut)
+Task.TurnCharToFaceChar(322@, $catalina)
+Task.LookAtChar(322@, $catalina, -2)
+Task.ScratchHead(322@)
+Task.TurnCharToFaceChar($catalina, 322@)
+Task.LookAtChar($catalina, 322@, -2)
+
+:CAT3_14055
+301@ = 46
+44@ = Clock.GetGameTimer()
+37@ = 4
+
+:CAT3_14074
+if 
+  37@ == 4
+goto_if_false @CAT3_14169
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_14169
+if 
+  302@ == 0
+goto_if_false @CAT3_14169
+301@ = 47
+44@ = Clock.GetGameTimer()
+37@ = 5
+
+:CAT3_14169
+if 
+  37@ == 5
+goto_if_false @CAT3_14309
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_14309
+if 
+  302@ == 0
+goto_if_false @CAT3_14309
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_14309
+Char.ClearLookAt($catalina)
+Task.GoStraightToCoord($catalina, -83.1314, -1129.417, 0.0782, MoveState.Walk, -1)
+301@ = 48
+44@ = Clock.GetGameTimer()
+37@ = 6
+
+:CAT3_14309
+if 
+  37@ == 6
+goto_if_false @CAT3_14461
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_14461
+if 
+  302@ == 0
+goto_if_false @CAT3_14461
+if 
+  not Char.IsDead(322@)
+goto_if_false @CAT3_14461
+Char.ClearLookAt(322@)
+Task.TurnCharToFaceChar(322@, $scplayer)
+wait 100
+Task.GoStraightToCoord($scplayer, -84.1314, -1128.417, 0.0782, MoveState.Walk, -1)
+301@ = 51
+44@ = Clock.GetGameTimer()
+37@ = 7
+
+:CAT3_14461
+if 
+  37@ == 7
+goto_if_false @CAT3_14556
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 2000
+goto_if_false @CAT3_14556
+if 
+  302@ == 0
+goto_if_false @CAT3_14556
+301@ = 52
+44@ = Clock.GetGameTimer()
+37@ = 8
+
+:CAT3_14556
+if 
+  37@ == 8
+goto_if_false @CAT3_14759
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 3000
+goto_if_false @CAT3_14759
+Camera.DoFade(0, 100)
+
+:CAT3_14620
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_14644
+wait 0
+goto @CAT3_14620
+
+:CAT3_14644
+44@ = Clock.GetGameTimer()
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_14689
+if 
+  Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT3_14689
+Char.RemoveFromGroup($catalina)
+
+:CAT3_14689
+gosub @CAT3_1251
+Char.ClearTasks($scplayer)
+Camera.SetFixedPosition(-86.1477, -1130.445, 0.9157, 0.0, 0.0, 0.0)
+Camera.PointAtPoint(-86.5058, -1129.52, 1.0417, SwitchType.JumpCut)
+37@ = 9
+
+:CAT3_14759
+if 
+  37@ == 9
+goto_if_false @CAT3_14839
+Camera.DoFade(1, 100)
+
+:CAT3_14783
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_14807
+wait 0
+goto @CAT3_14783
+
+:CAT3_14807
+if 
+  302@ == 0
+goto_if_false @CAT3_14839
+301@ = 55
+37@ = 10
+
+:CAT3_14839
+if 
+  37@ == 10
+goto_if_false @CAT3_14932
+if 
+  301@ == 0
+goto_if_false @CAT3_14932
+if and
+  not Car.IsDead(352@)
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_14932
+if 
+  not Car.IsPlaybackGoingOn(352@)
+goto_if_false @CAT3_14932
+Char.ClearLookAt($catalina)
+Car.StartPlayback(352@, 189)
+37@ = 11
+
+:CAT3_14932
+if 
+  37@ == 11
+goto_if_false @CAT3_15045
+if 
+  not Car.IsDead(352@)
+goto_if_false @CAT3_15045
+if 
+  not Car.IsPlaybackGoingOn(352@)
+goto_if_false @CAT3_15045
+Camera.DoFade(0, 500)
+
+:CAT3_14989
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_15013
+wait 0
+goto @CAT3_14989
+
+:CAT3_15013
+Char.ClearTasks($scplayer)
+Char.Delete($catalina)
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+goto @CAT3_17066
+
+:CAT3_15045
+if 
+  37@ > 0
+goto_if_false @CAT3_15190
+if 
+  Pad.IsButtonPressed(PadId.Pad1, Button.Cross)
+goto_if_false @CAT3_15190
+Camera.DoFade(0, 500)
+
+:CAT3_15087
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_15111
+wait 0
+goto @CAT3_15087
+
+:CAT3_15111
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_15158
+if 
+  not Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT3_15158
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Group.SetMember($catalina, $Players_Group)
+
+:CAT3_15158
+Char.ClearTasks($scplayer)
+Char.Delete($catalina)
+Player.SetControl($player1, True)
+Hud.SwitchWidescreen(False)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+goto @CAT3_17066
+
+:CAT3_15190
+if and
+  35@ > 0
+  5 > 35@
+goto_if_false @CAT3_15222
+gosub @CAT3_18188
+
+:CAT3_15222
+if and
+  35@ > 1
+  5 > 35@
+goto_if_false @CAT3_15735
+if and
+  not Char.IsDead($scplayer)
+  not Car.IsDead(327@)
+goto_if_false @CAT3_15735
+if 
+  36@ == 0
+goto_if_false @CAT3_15523
+if 
+  49@ == 1
+goto_if_false @CAT3_15523
+if and
+  35@ <> 1
+  35@ <> 3
+goto_if_false @CAT3_15344
+Text.PrintNow('CAT3_10', 100, 1)
+
+:CAT3_15344
+if 
+  Char.IsInCar($scplayer, 327@)
+goto_if_false @CAT3_15523
+if and
+  35@ <> 1
+  35@ <> 3
+goto_if_false @CAT3_15390
+Text.ClearPrints
+
+:CAT3_15390
+Blip.Remove(328@)
+if 
+  35@ == 2
+goto_if_false @CAT3_15444
+if 
+  not Car.IsDead(334@)
+goto_if_false @CAT3_15444
+335@ = Blip.AddForCar(334@)
+Blip.SetAsFriendly(335@, True)
+
+:CAT3_15444
+if or
+  35@ == 3
+  35@ == 4
+goto_if_false @CAT3_15516
+Blip.Remove(41@)
+41@ = Blip.AddForCoord(50@, 51@, 52@)
+Blip.SetAsFriendly(41@, True)
+Hud.ClearCounter($c3_trailer_health_display)
+Hud.DisplayCounterWithString($c3_trailer_health_display, CounterDisplay.Bar, 'CAT3_11')
+
+:CAT3_15516
+36@ = 1
+
+:CAT3_15523
+if 
+  36@ == 1
+goto_if_false @CAT3_15735
+if 
+  not Char.IsInCar($scplayer, 327@)
+goto_if_false @CAT3_15735
+if 
+  49@ == 1
+goto_if_false @CAT3_15593
+328@ = Blip.AddForCar(327@)
+Blip.SetAsFriendly(328@, True)
+
+:CAT3_15593
+if 
+  35@ == 2
+goto_if_false @CAT3_15616
+Blip.Remove(335@)
+
+:CAT3_15616
+if or
+  35@ == 3
+  35@ == 4
+goto_if_false @CAT3_15651
+Blip.Remove(41@)
+Hud.ClearCounter($c3_trailer_health_display)
+
+:CAT3_15651
+if 
+  35@ == 4
+goto_if_false @CAT3_15728
+if 
+  not Char.IsDead(310@)
+goto_if_false @CAT3_15728
+Char.SetAccuracy(310@, 50)
+Task.DriveBy(310@, $scplayer, -1, 0.0, 0.0, 0.0, 150.0, DriveByType.Ai, True, 60)
+
+:CAT3_15728
+36@ = 0
+
+:CAT3_15735
+if or
+  Char.IsDead($catalina)
+  Char.IsInWater($catalina)
+goto_if_false @CAT3_15781
+Text.ClearPrints
+Text.PrintNow('CAT3_06', 10000, 1)
+goto @CAT3_17048
+
+:CAT3_15781
+if 
+  5 > 35@
+goto_if_false @CAT3_15840
+if 
+  Car.IsDead(334@)
+goto_if_false @CAT3_15840
+Text.ClearPrints
+Text.PrintNow('CAT3_07', 5000, 1)
+goto @CAT3_17048
+
+:CAT3_15840
+if 
+  5 > 35@
+goto_if_false @CAT3_15899
+if 
+  Car.IsDead(327@)
+goto_if_false @CAT3_15899
+Text.ClearPrints
+Text.PrintNow('CAT3_09', 5000, 1)
+goto @CAT3_17048
+
+:CAT3_15899
+goto @CAT3_3696
+
+:CAT3_15906
+wait 0
+if 
+  301@ <> 0
+goto_if_false @CAT3_16337
+if 
+  302@ == 0
+goto_if_false @CAT3_15974
+if 
+  Audio.HasMissionAudioLoaded(304@)
+goto_if_false @CAT3_15967
+Audio.ClearMissionAudio(304@)
+
+:CAT3_15967
+302@ = 1
+
+:CAT3_15974
+if 
+  302@ == 1
+goto_if_false @CAT3_16018
+Audio.LoadMissionAudio(245@(301@,56i), 303@)
+gosub @CAT3_17452
+302@ = 2
+
+:CAT3_16018
+if 
+  302@ == 2
+goto_if_false @CAT3_16120
+if 
+  Audio.HasMissionAudioLoaded(303@)
+goto_if_false @CAT3_16120
+if 
+  244@ <> 0
+goto_if_false @CAT3_16094
+if 
+  not Char.IsDead(244@)
+goto_if_false @CAT3_16094
+Char.StartFacialTalk(244@, 10000)
+
+:CAT3_16094
+Audio.PlayMissionAudio(303@)
+Text.PrintNow(132@(301@,56s), 10000, 1)
+302@ = 3
+
+:CAT3_16120
+if 
+  302@ == 3
+goto_if_false @CAT3_16337
+if 
+  Audio.HasMissionAudioFinished(303@)
+goto_if_false @CAT3_16276
+Text.ClearThisPrint(132@(301@,56s))
+if 
+  244@ <> 0
+goto_if_false @CAT3_16202
+if 
+  not Char.IsDead(244@)
+goto_if_false @CAT3_16202
+Char.StopFacialTalk(244@)
+
+:CAT3_16202
+if 
+  303@ == 1
+goto_if_false @CAT3_16241
+303@ = 2
+304@ = 1
+goto @CAT3_16255
+
+:CAT3_16241
+303@ = 1
+304@ = 2
+
+:CAT3_16255
+301@ = 0
+302@ = 0
+goto @CAT3_16337
+
+:CAT3_16276
+if 
+  not Audio.HasMissionAudioLoaded(304@)
+goto_if_false @CAT3_16337
+if 
+  54 > 301@
+goto_if_false @CAT3_16337
+set_lvar_int_to_lvar_int 305@ = 301@
+305@ += 1
+Audio.LoadMissionAudio(245@(305@,56i), 304@)
+
+:CAT3_16337
+if 
+  37@ == 0
+goto_if_false @CAT3_16472
+Camera.DoFade(1, 50)
+
+:CAT3_16361
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_16385
+wait 0
+goto @CAT3_16361
+
+:CAT3_16385
+301@ = 53
+44@ = Clock.GetGameTimer()
+if and
+  not Car.IsDead(327@)
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_16472
+Camera.AttachToVehicle(327@, 1.0, 8.0, 1.5, 0.0, 0.0, 1.0, 0.0, SwitchType.JumpCut)
+Hud.ClearCounter($c3_trailer_health_display)
+37@ = 1
+
+:CAT3_16472
+if 
+  37@ == 1
+goto_if_false @CAT3_16667
+if and
+  not Car.IsDead(327@)
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_16667
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 1000
+goto_if_false @CAT3_16667
+if 
+  302@ == 0
+goto_if_false @CAT3_16667
+301@ = 54
+Camera.AttachToVehicle(327@, 1.0, 8.0, 1.5, 0.0, 0.0, 1.0, 0.0, SwitchType.JumpCut)
+73@ = Car.GetOffsetInWorldCoords(83@, 93@, 327@, 4.5, 10.0, 0.0)
+Task.LeaveCar($catalina, 327@)
+44@ = Clock.GetGameTimer()
+37@ = 2
+
+:CAT3_16667
+if 
+  37@ == 2
+goto_if_false @CAT3_16914
+if 
+  302@ == 0
+goto_if_false @CAT3_16914
+43@ = Clock.GetGameTimer()
+set_lvar_int_to_lvar_int 42@ = 43@
+sub_int_lvar_from_int_lvar 42@ -= 44@
+if 
+  42@ > 1000
+goto_if_false @CAT3_16914
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_16914
+if 
+  not Car.IsDead(327@)
+goto_if_false @CAT3_16914
+if 
+  not Char.IsInCar($catalina, 327@)
+goto_if_false @CAT3_16914
+Task.GoStraightToCoord($catalina, 73@, 83@, 93@, MoveState.Walk, -1)
+if 
+  302@ == 0
+goto_if_false @CAT3_16914
+Camera.DoFade(0, 50)
+
+:CAT3_16836
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_16860
+wait 0
+goto @CAT3_16836
+
+:CAT3_16860
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_16914
+if 
+  Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT3_16914
+Char.RemoveFromGroup($catalina)
+Char.Delete($catalina)
+Text.ClearPrints
+37@ = 3
+
+:CAT3_16914
+if 
+  3 > 37@
+goto_if_false @CAT3_16955
+if 
+  Car.IsInWater(327@)
+goto_if_false @CAT3_16955
+37@ = 3
+
+:CAT3_16955
+if 
+  37@ == 3
+goto_if_false @CAT3_17041
+Hud.SwitchWidescreen(False)
+Camera.RestoreJumpcut
+Camera.SetBehindPlayer
+Camera.DoFade(1, 50)
+
+:CAT3_16987
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_17011
+wait 0
+goto @CAT3_16987
+
+:CAT3_17011
+Text.PrintNow('CAT3_08', 5000, 1)
+Player.SetControl($player1, True)
+goto @CAT3_17048
+
+:CAT3_17041
+goto @CAT3_15906
+
+:CAT3_17048
+Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
+return 
+
+:CAT3_17066
+$cat_counter += 1
+if and
+  not Car.IsDead(327@)
+  not Car.IsDead(334@)
+goto_if_false @CAT3_17111
+Car.FreezePosition(327@, False)
+Car.Delete(327@)
+Car.Delete(334@)
+
+:CAT3_17111
+start_new_script @TRUCKS 
+if 
+  $cat_otb_banter == 1
+goto_if_false @CAT3_17144
+$cat_otb_banter = 2
+
+:CAT3_17144
+if 
+  $cat_liquor_banter == 1
+goto_if_false @CAT3_17169
+$cat_liquor_banter = 2
+
+:CAT3_17169
+Blip.Remove($tucking_contact_blip)
+$tucking_contact_blip = Blip.AddShortRangeSpriteForContactPoint(51, $truckX, $truckY, $truckZ)
+Audio.PlayMissionPassedTune(1)
+Stat.RegisterMissionPassed('CAT_3')
+Stat.PlayerMadeProgress(1)
+Text.PrintWithNumberBig('M_PASS', 34@, 5000, TextStyle.Middle)
+Player.AddScore($player1, 34@)
+Player.ClearWantedLevel($player1)
+$flag_cat_mission3_passed = 1
+return 
+
+:CAT3_17250
+Blip.Remove(328@)
+Blip.Remove(335@)
+Blip.Remove(341@)
+Blip.Remove(41@)
+Blip.Remove(309@)
+Hud.ClearCounter($c3_trailer_health_display)
+Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
+Char.Delete(322@)
+Car.Delete(352@)
+Streaming.MarkModelAsNoLongerNeeded(41)
+Streaming.MarkModelAsNoLongerNeeded(95)
+Streaming.MarkModelAsNoLongerNeeded(67)
+Streaming.MarkModelAsNoLongerNeeded(514)
+Streaming.MarkModelAsNoLongerNeeded(584)
+Streaming.MarkModelAsNoLongerNeeded(475)
+Streaming.MarkModelAsNoLongerNeeded(352)
+Streaming.MarkModelAsNoLongerNeeded(349)
+Streaming.MarkModelAsNoLongerNeeded(15)
+Streaming.MarkModelAsNoLongerNeeded(543)
+Streaming.MarkModelAsNoLongerNeeded(468)
+if 
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_17366
+Char.RemoveElegantly($catalina)
+
+:CAT3_17366
+Streaming.UnloadSpecialCharacter(1)
+Streaming.RemoveAnimation("CAR_CHAT")
+Streaming.RemoveAnimation("MISC")
+Streaming.RemoveCarRecording(188)
+Streaming.RemoveCarRecording(189)
+Streaming.RemoveCarRecording(199)
+$onmission = 0
+$timer_mobile_start = Clock.GetGameTimer()
+Camera.DoFade(1, 500)
+
+:CAT3_17424
+if 
+  Camera.GetFadingStatus
+goto_if_false @CAT3_17448
+wait 0
+goto @CAT3_17424
+
+:CAT3_17448
+Mission.Finish
+return 
+
+:CAT3_17452
+if or
+  301@ == 1
+  301@ == 5
+  301@ == 6
+  301@ == 8
+  301@ == 11
+  301@ == 12
+goto_if_false @CAT3_17513
+set_lvar_int_to_var_int 244@ = $catalina
+
+:CAT3_17513
+if or
+  301@ == 16
+  301@ == 20
+  301@ == 21
+  301@ == 22
+  301@ == 23
+  301@ == 24
+goto_if_false @CAT3_17574
+set_lvar_int_to_var_int 244@ = $catalina
+
+:CAT3_17574
+if or
+  301@ == 25
+  301@ == 26
+  301@ == 40
+  301@ == 41
+  301@ == 42
+  301@ == 43
+goto_if_false @CAT3_17635
+set_lvar_int_to_var_int 244@ = $catalina
+
+:CAT3_17635
+if or
+  301@ == 45
+  301@ == 47
+goto_if_false @CAT3_17668
+set_lvar_int_to_var_int 244@ = $catalina
+
+:CAT3_17668
+if or
+  301@ == 2
+  301@ == 3
+  301@ == 7
+  301@ == 10
+  301@ == 13
+  301@ == 14
+goto_if_false @CAT3_17729
+set_lvar_int_to_lvar_int 244@ = 310@
+
+:CAT3_17729
+if or
+  301@ == 17
+  301@ == 18
+goto_if_false @CAT3_17762
+set_lvar_int_to_lvar_int 244@ = 310@
+
+:CAT3_17762
+if or
+  301@ == 27
+  301@ == 28
+  301@ == 29
+  301@ == 30
+goto_if_false @CAT3_17808
+244@ = 0
+
+:CAT3_17808
+if or
+  301@ == 31
+  301@ == 32
+  301@ == 15
+goto_if_false @CAT3_17847
+244@ = 0
+
+:CAT3_17847
+if or
+  301@ == 4
+  301@ == 19
+goto_if_false @CAT3_17880
+set_lvar_int_to_lvar_int 244@ = 311@
+
+:CAT3_17880
+if or
+  301@ == 33
+  301@ == 34
+  301@ == 35
+goto_if_false @CAT3_17919
+244@ = 0
+
+:CAT3_17919
+if or
+  301@ == 36
+  301@ == 37
+  301@ == 38
+  301@ == 39
+goto_if_false @CAT3_17965
+244@ = 0
+
+:CAT3_17965
+if or
+  301@ == 44
+  301@ == 46
+  301@ == 48
+  301@ == 49
+  301@ == 50
+  301@ == 51
+goto_if_false @CAT3_18026
+set_lvar_int_to_lvar_int 244@ = 322@
+
+:CAT3_18026
+if 
+  301@ == 52
+goto_if_false @CAT3_18052
+set_lvar_int_to_lvar_int 244@ = 322@
+
+:CAT3_18052
+if 
+  301@ == 9
+goto_if_false @CAT3_18078
+set_lvar_int_to_var_int 244@ = $scplayer
+
+:CAT3_18078
+return 
+if 
+  not Char.IsDead($scplayer)
+goto_if_false @CAT3_18186
+if 
+  36@ == 0
+goto_if_false @CAT3_18145
+if 
+  Char.IsInAnyCar($scplayer)
+goto_if_false @CAT3_18145
+308@ = Char.StoreCarIsIn($scplayer)
+36@ = 1
+
+:CAT3_18145
+if 
+  36@ == 1
+goto_if_false @CAT3_18186
+if 
+  not Char.IsInAnyCar($scplayer)
+goto_if_false @CAT3_18186
+36@ = 0
+
+:CAT3_18186
+return 
+
+:CAT3_18188
+if and
+  not Char.IsDead($scplayer)
+  not Char.IsDead($catalina)
+goto_if_false @CAT3_18825
+if 
+  49@ == 0
+goto_if_false @CAT3_18628
+if and
+  35@ > 1
+  5 > 35@
+goto_if_false @CAT3_18628
+if 
+  not Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT3_18628
+if 
+  Char.LocateAnyMeansChar3D($scplayer, $catalina, 8.0, 8.0, 8.0, False)
+goto_if_false @CAT3_18628
+if 
+  35@ == 2
+goto_if_false @CAT3_18433
+if 
+  36@ == 1
+goto_if_false @CAT3_18379
+if 
+  not Car.IsDead(334@)
+goto_if_false @CAT3_18379
+Blip.Remove(335@)
+335@ = Blip.AddForCar(334@)
+Blip.SetAsFriendly(335@, True)
+
+:CAT3_18379
+if 
+  36@ == 0
+goto_if_false @CAT3_18433
+if 
+  not Car.IsDead(327@)
+goto_if_false @CAT3_18433
+Blip.Remove(328@)
+328@ = Blip.AddForCar(327@)
+Blip.SetAsFriendly(328@, True)
+
+:CAT3_18433
+if 
+  35@ == 4
+goto_if_false @CAT3_18577
+if 
+  36@ == 1
+goto_if_false @CAT3_18516
+128@ = 4
+Blip.Remove(41@)
+41@ = Blip.AddForCoord(50@, 51@, 52@)
+Hud.ClearCounter($c3_trailer_health_display)
+Hud.DisplayCounterWithString($c3_trailer_health_display, CounterDisplay.Bar, 'CAT3_11')
+
+:CAT3_18516
+if 
+  36@ == 0
+goto_if_false @CAT3_18577
+if 
+  not Car.IsDead(327@)
+goto_if_false @CAT3_18577
+128@ = 4
+Blip.Remove(328@)
+328@ = Blip.AddForCar(327@)
+Blip.SetAsFriendly(328@, True)
+
+:CAT3_18577
+Game.MakeRoomInPlayerGangForMissionPeds(1)
+Group.SetMember($catalina, $Players_Group)
+Blip.Remove(309@)
+if and
+  35@ <> 1
+  35@ <> 3
+goto_if_false @CAT3_18621
+Text.ClearPrints
+
+:CAT3_18621
+49@ = 1
+
+:CAT3_18628
+if 
+  49@ == 1
+goto_if_false @CAT3_18825
+if 
+  not Char.IsGroupMember($catalina, $Players_Group)
+goto_if_false @CAT3_18825
+if 
+  35@ == 2
+goto_if_false @CAT3_18711
+Blip.Remove(335@)
+if 
+  36@ == 0
+goto_if_false @CAT3_18711
+Blip.Remove(328@)
+
+:CAT3_18711
+if 
+  35@ == 4
+goto_if_false @CAT3_18769
+Hud.ClearCounter($c3_trailer_health_display)
+Blip.Remove(41@)
+128@ = 10
+if 
+  36@ == 0
+goto_if_false @CAT3_18769
+Blip.Remove(328@)
+
+:CAT3_18769
+309@ = Blip.AddForChar($catalina)
+Blip.SetAsFriendly(309@, True)
+if 
+  35@ <> 3
+goto_if_false @CAT3_18818
+Text.PrintNow('CAT3_01', 5000, 1)
+
+:CAT3_18818
+49@ = 0
+
+:CAT3_18825
+return 
+

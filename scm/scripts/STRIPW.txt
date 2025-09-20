@@ -1,0 +1,477 @@
+//-------------External script 53 (STRIPW)---------------
+
+:STRIPW
+script_name 'STRIPW'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @STRIPW_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:STRIPW_60
+Streaming.RequestAnimation("STRIP")
+
+:STRIPW_69
+if 
+  not Streaming.HasAnimationLoaded("STRIP")
+goto_if_false @STRIPW_109
+wait 0
+Streaming.RequestAnimation("STRIP")
+goto @STRIPW_69
+
+:STRIPW_109
+3@ = 1
+4@ = 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @STRIPW_198
+v$txtString = Char.GetNameOfEntryExitUsed($scplayer)
+if 
+  is_var_text_label16_equal_to_text_label v$txtString == "STRIP2"
+goto_if_false @STRIPW_188
+10@ = 3.0
+goto @STRIPW_198
+
+:STRIPW_188
+10@ = 4.0
+
+:STRIPW_198
+wait 0
+if and
+  not Char.IsDead(0@)
+  Player.IsPlaying($player1)
+  $iTerminateAllAmbience == 0
+goto_if_false @STRIPW_382
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @STRIPW_332
+if 
+  $iSetSTRIPPanic == 0
+goto_if_false @STRIPW_318
+if 
+  Char.HasBeenDamagedByChar(0@, $scplayer)
+goto_if_false @STRIPW_304
+$iSetSTRIPPanic = 1
+goto @STRIPW_3515
+goto @STRIPW_311
+
+:STRIPW_304
+gosub @STRIPW_396
+
+:STRIPW_311
+goto @STRIPW_325
+
+:STRIPW_318
+goto @STRIPW_3515
+
+:STRIPW_325
+goto @STRIPW_375
+
+:STRIPW_332
+$iBouncerAction = 1
+5@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @STRIPW_375
+Task.Duck(0@, -1)
+
+:STRIPW_375
+goto @STRIPW_389
+
+:STRIPW_382
+gosub @STRIPW_3497
+
+:STRIPW_389
+goto @STRIPW_198
+
+:STRIPW_396
+switch_start 3@ total_jumps 1 default_jump 0 @STRIPW_473 jumps 1 @STRIPW_459 -1 @STRIPW_473 -1 @STRIPW_473 -1 @STRIPW_473 -1 @STRIPW_473 -1 @STRIPW_473 -1 @STRIPW_473
+
+:STRIPW_459
+gosub @STRIPW_475
+goto @STRIPW_473
+
+:STRIPW_473
+return 
+
+:STRIPW_475
+switch_start 4@ total_jumps 9 default_jump 0 @STRIPW_3266 jumps 0 @STRIPW_603 1 @STRIPW_772 2 @STRIPW_1133 3 @STRIPW_1470 4 @STRIPW_1835 5 @STRIPW_2056 6 @STRIPW_2642
+switch_continued 7 @STRIPW_2850 8 @STRIPW_3058 -1 @STRIPW_3266 -1 @STRIPW_3266 -1 @STRIPW_3266 -1 @STRIPW_3266 -1 @STRIPW_3266 -1 @STRIPW_3266 -1 @STRIPW_3266
+
+:STRIPW_603
+if 
+  Char.IsPlayingAnim(0@, "STR_B2A")
+goto_if_false @STRIPW_719
+9@ = Char.GetAnimCurrentTime(0@, "STR_B2A")
+if 
+  9@ >= 1.0
+goto_if_false @STRIPW_712
+Task.PlayAnim(0@, "STR_LOOP_A", "STRIP", 1000.0, False, False, False, True, -1)
+4@ += 1
+
+:STRIPW_712
+goto @STRIPW_765
+
+:STRIPW_719
+Task.PlayAnim(0@, "STR_LOOP_A", "STRIP", 1000.0, False, False, False, True, -1)
+4@ += 1
+
+:STRIPW_765
+goto @STRIPW_3266
+
+:STRIPW_772
+gosub @STRIPW_3268
+if 
+  Char.IsPlayingAnim(0@, "STR_LOOP_A")
+goto_if_false @STRIPW_1087
+9@ = Char.GetAnimCurrentTime(0@, "STR_LOOP_A")
+if 
+  9@ >= 1.0
+goto_if_false @STRIPW_1080
+if and
+  Object.DoesExist($iPlayerMoney)
+  is_int_var_equal_to_int_lvar $iStripperPed == 0@
+goto_if_false @STRIPW_922
+Task.PlayAnim(0@, "STR_A2B", "STRIP", 1000.0, False, False, False, True, -1)
+4@ += 1
+goto @STRIPW_1080
+
+:STRIPW_922
+6@ = Char.GetOffsetInWorldCoords(7@, 8@, 0@, 0.3, 0.5, -0.5)
+if 
+  World.IsMoneyPickupAtCoords(6@, 7@, 8@)
+goto_if_false @STRIPW_1041
+World.ClearArea(0, 6@, 7@, 8@, 0.3)
+Task.PlayAnim(0@, "STR_A2B", "STRIP", 1000.0, False, False, False, True, -1)
+4@ += 1
+goto @STRIPW_1080
+
+:STRIPW_1041
+Task.PlayAnim(0@, "STR_LOOP_A", "STRIP", 1000.0, False, False, False, True, -1)
+
+:STRIPW_1080
+goto @STRIPW_1126
+
+:STRIPW_1087
+Task.PlayAnim(0@, "STR_LOOP_A", "STRIP", 1000.0, False, False, False, True, -1)
+
+:STRIPW_1126
+goto @STRIPW_3266
+
+:STRIPW_1133
+if 
+  Char.IsPlayingAnim(0@, "STR_A2B")
+goto_if_false @STRIPW_1301
+Object.Delete($iPlayerMoney)
+6@ = Char.GetOffsetInWorldCoords(7@, 8@, 0@, 0.3, 0.5, -0.5)
+World.ClearArea(0, 6@, 7@, 8@, 0.3)
+9@ = Char.GetAnimCurrentTime(0@, "STR_A2B")
+if 
+  9@ >= 1.0
+goto_if_false @STRIPW_1294
+Task.PlayAnim(0@, "STR_LOOP_B", "STRIP", 1000.0, False, False, False, True, -1)
+4@ += 1
+
+:STRIPW_1294
+goto @STRIPW_1463
+
+:STRIPW_1301
+if 
+  Char.IsPlayingAnim(0@, "STR_C2B")
+goto_if_false @STRIPW_1417
+9@ = Char.GetAnimCurrentTime(0@, "STR_C2B")
+if 
+  9@ >= 1.0
+goto_if_false @STRIPW_1410
+Task.PlayAnim(0@, "STR_LOOP_B", "STRIP", 1000.0, False, False, False, True, -1)
+4@ += 1
+
+:STRIPW_1410
+goto @STRIPW_1463
+
+:STRIPW_1417
+Task.PlayAnim(0@, "STR_LOOP_B", "STRIP", 1000.0, False, False, False, True, -1)
+4@ += 1
+
+:STRIPW_1463
+goto @STRIPW_3266
+
+:STRIPW_1470
+gosub @STRIPW_3268
+if 
+  Char.IsPlayingAnim(0@, "STR_LOOP_B")
+goto_if_false @STRIPW_1789
+9@ = Char.GetAnimCurrentTime(0@, "STR_LOOP_B")
+if 
+  9@ >= 1.0
+goto_if_false @STRIPW_1782
+if and
+  Object.DoesExist($iPlayerMoney)
+  is_int_var_equal_to_int_lvar $iStripperPed == 0@
+goto_if_false @STRIPW_1620
+Task.PlayAnim(0@, "STR_B2C", "STRIP", 1000.0, False, False, False, True, -1)
+4@ += 1
+goto @STRIPW_1782
+
+:STRIPW_1620
+6@ = Char.GetOffsetInWorldCoords(7@, 8@, 0@, 0.3, 0.5, -0.5)
+if 
+  World.IsMoneyPickupAtCoords(6@, 7@, 8@)
+goto_if_false @STRIPW_1739
+World.ClearArea(0, 6@, 7@, 8@, 0.3)
+Task.PlayAnim(0@, "STR_B2C", "STRIP", 1000.0, False, False, False, True, -1)
+4@ += 1
+goto @STRIPW_1782
+
+:STRIPW_1739
+Task.PlayAnim(0@, "STR_B2A", "STRIP", 1000.0, False, False, False, True, -1)
+4@ = 0
+
+:STRIPW_1782
+goto @STRIPW_1828
+
+:STRIPW_1789
+Task.PlayAnim(0@, "STR_LOOP_B", "STRIP", 1000.0, False, False, False, True, -1)
+
+:STRIPW_1828
+goto @STRIPW_3266
+
+:STRIPW_1835
+if 
+  Char.IsPlayingAnim(0@, "STR_B2C")
+goto_if_false @STRIPW_2003
+Object.Delete($iPlayerMoney)
+6@ = Char.GetOffsetInWorldCoords(7@, 8@, 0@, 0.3, 0.5, -0.5)
+World.ClearArea(0, 6@, 7@, 8@, 0.3)
+9@ = Char.GetAnimCurrentTime(0@, "STR_B2C")
+if 
+  9@ >= 1.0
+goto_if_false @STRIPW_1996
+Task.PlayAnim(0@, "STR_LOOP_C", "STRIP", 1000.0, False, False, False, True, -1)
+4@ += 1
+
+:STRIPW_1996
+goto @STRIPW_2049
+
+:STRIPW_2003
+Task.PlayAnim(0@, "STR_LOOP_C", "STRIP", 1000.0, False, False, False, True, -1)
+4@ += 1
+
+:STRIPW_2049
+goto @STRIPW_3266
+
+:STRIPW_2056
+gosub @STRIPW_3268
+if 
+  Char.IsPlayingAnim(0@, "STR_LOOP_C")
+goto_if_false @STRIPW_2596
+9@ = Char.GetAnimCurrentTime(0@, "STR_LOOP_C")
+if 
+  9@ >= 1.0
+goto_if_false @STRIPW_2589
+if and
+  Object.DoesExist($iPlayerMoney)
+  is_int_var_equal_to_int_lvar $iStripperPed == 0@
+goto_if_false @STRIPW_2431
+6@, 7@, 8@ = Char.GetCoordinates(0@)
+9@ = Char.GetHeading($scplayer)
+9@ += 180.0
+2@ = Math.RandomIntInRange(35, 100)
+if 
+  33 > 2@
+goto_if_false @STRIPW_2281
+Task.CharSlideToCoordAndPlayAnim(0@, 6@, 7@, 8@, 9@, -1.0, "STR_C3", "STRIP", 1000.0, False, False, False, True, -1)
+4@ = 6
+goto @STRIPW_2424
+
+:STRIPW_2281
+if 
+  2@ > 66
+goto_if_false @STRIPW_2365
+Task.CharSlideToCoordAndPlayAnim(0@, 6@, 7@, 8@, 9@, -1.0, "STR_C2", "STRIP", 1000.0, False, False, False, True, -1)
+4@ = 7
+goto @STRIPW_2424
+
+:STRIPW_2365
+Task.CharSlideToCoordAndPlayAnim(0@, 6@, 7@, 8@, 9@, -1.0, "STR_C1", "STRIP", 1000.0, False, False, False, True, -1)
+4@ = 8
+
+:STRIPW_2424
+goto @STRIPW_2589
+
+:STRIPW_2431
+6@ = Char.GetOffsetInWorldCoords(7@, 8@, 0@, 0.3, 0.5, -0.5)
+if 
+  World.IsMoneyPickupAtCoords(6@, 7@, 8@)
+goto_if_false @STRIPW_2546
+World.ClearArea(0, 6@, 7@, 8@, 0.3)
+Task.PlayAnim(0@, "STR_LOOP_C", "STRIP", 1000.0, False, False, False, True, -1)
+goto @STRIPW_2589
+
+:STRIPW_2546
+Task.PlayAnim(0@, "STR_C2B", "STRIP", 1000.0, False, False, False, True, -1)
+4@ = 2
+
+:STRIPW_2589
+goto @STRIPW_2635
+
+:STRIPW_2596
+Task.PlayAnim(0@, "STR_LOOP_C", "STRIP", 1000.0, False, False, False, True, -1)
+
+:STRIPW_2635
+goto @STRIPW_3266
+
+:STRIPW_2642
+if 
+  Char.IsPlayingAnim(0@, "STR_C3")
+goto_if_false @STRIPW_2808
+Object.Delete($iPlayerMoney)
+6@ = Char.GetOffsetInWorldCoords(7@, 8@, 0@, 0.3, 0.5, -0.5)
+World.ClearArea(0, 6@, 7@, 8@, 0.3)
+9@ = Char.GetAnimCurrentTime(0@, "STR_C3")
+if 
+  9@ >= 1.0
+goto_if_false @STRIPW_2801
+Task.PlayAnim(0@, "STR_LOOP_C", "STRIP", 1000.0, False, False, False, True, -1)
+4@ = 5
+
+:STRIPW_2801
+goto @STRIPW_2843
+
+:STRIPW_2808
+Task.PlayAnim(0@, "STR_C3", "STRIP", 1000.0, False, False, False, True, -1)
+
+:STRIPW_2843
+goto @STRIPW_3266
+
+:STRIPW_2850
+if 
+  Char.IsPlayingAnim(0@, "STR_C2")
+goto_if_false @STRIPW_3016
+Object.Delete($iPlayerMoney)
+6@ = Char.GetOffsetInWorldCoords(7@, 8@, 0@, 0.3, 0.5, -0.5)
+World.ClearArea(0, 6@, 7@, 8@, 0.3)
+9@ = Char.GetAnimCurrentTime(0@, "STR_C2")
+if 
+  9@ >= 1.0
+goto_if_false @STRIPW_3009
+Task.PlayAnim(0@, "STR_LOOP_C", "STRIP", 1000.0, False, False, False, True, -1)
+4@ = 5
+
+:STRIPW_3009
+goto @STRIPW_3051
+
+:STRIPW_3016
+Task.PlayAnim(0@, "STR_C2", "STRIP", 1000.0, False, False, False, True, -1)
+
+:STRIPW_3051
+goto @STRIPW_3266
+
+:STRIPW_3058
+if 
+  Char.IsPlayingAnim(0@, "STR_C1")
+goto_if_false @STRIPW_3224
+Object.Delete($iPlayerMoney)
+6@ = Char.GetOffsetInWorldCoords(7@, 8@, 0@, 0.3, 0.5, -0.5)
+World.ClearArea(0, 6@, 7@, 8@, 0.3)
+9@ = Char.GetAnimCurrentTime(0@, "STR_C1")
+if 
+  9@ >= 1.0
+goto_if_false @STRIPW_3217
+Task.PlayAnim(0@, "STR_LOOP_C", "STRIP", 1000.0, False, False, False, True, -1)
+4@ = 5
+
+:STRIPW_3217
+goto @STRIPW_3259
+
+:STRIPW_3224
+Task.PlayAnim(0@, "STR_C1", "STRIP", 1000.0, False, False, False, True, -1)
+
+:STRIPW_3259
+goto @STRIPW_3266
+
+:STRIPW_3266
+return 
+
+:STRIPW_3268
+if and
+  Char.IsStopped($scplayer)
+  Player.IsScoreGreater($player1, 19)
+goto_if_false @STRIPW_3463
+if 
+  not Object.DoesExist($iPlayerMoney)
+goto_if_false @STRIPW_3456
+if and
+  Char.LocateOnFootChar3D($scplayer, 0@, 10@, 10@, 1.0, False)
+  $iThrowMoneyState == 0
+goto_if_false @STRIPW_3424
+if 
+  11@ == 0
+goto_if_false @STRIPW_3378
+$iPrintStripperHelp += 1
+11@ = 1
+
+:STRIPW_3378
+if and
+  Pad.IsButtonPressed(PadId.Pad1, Button.Triangle)
+  $iThrowMoneyState == 0
+goto_if_false @STRIPW_3417
+set_var_int_to_lvar_int $iStripperPed = 0@
+$iThrowMoneyState = 1
+
+:STRIPW_3417
+goto @STRIPW_3456
+
+:STRIPW_3424
+if 
+  11@ == 1
+goto_if_false @STRIPW_3456
+$iPrintStripperHelp -= 1
+11@ = 0
+
+:STRIPW_3456
+goto @STRIPW_3495
+
+:STRIPW_3463
+if 
+  11@ == 1
+goto_if_false @STRIPW_3495
+$iPrintStripperHelp -= 1
+11@ = 0
+
+:STRIPW_3495
+return 
+
+:STRIPW_3497
+Streaming.RemoveAnimation("STRIP")
+Object.Delete($iPlayerMoney)
+terminate_this_script 
+return 
+
+:STRIPW_3515
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @STRIPW_3585
+5@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @STRIPW_3578
+Task.Duck(0@, -2)
+
+:STRIPW_3578
+goto @STRIPW_3592
+
+:STRIPW_3585
+gosub @STRIPW_3497
+
+:STRIPW_3592
+goto @STRIPW_3515
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+

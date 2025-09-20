@@ -1,0 +1,269 @@
+//-------------External script 59 (SHOPPER)---------------
+
+:SHOPPER
+script_name 'SHOPPER'
+2@ = 0
+if 
+  2@ == 1
+goto_if_false @SHOPPER_60
+0@ = Char.Create(5, 0, 0.0, 0.0, 0.0)
+
+:SHOPPER_60
+Streaming.RequestAnimation("INT_SHOP")
+
+:SHOPPER_72
+if 
+  not Streaming.HasAnimationLoaded("INT_SHOP")
+goto_if_false @SHOPPER_106
+wait 0
+goto @SHOPPER_72
+
+:SHOPPER_106
+3@ = 1
+4@ = 0
+
+:SHOPPER_120
+wait 0
+if and
+  not Char.IsDead(0@)
+  Player.IsPlaying($player1)
+  $iTerminateAllAmbience == 0
+goto_if_false @SHOPPER_289
+if 
+  Char.IsUsingMapAttractor(0@)
+goto_if_false @SHOPPER_275
+if or
+  Char.HasBeenDamagedByChar(0@, $scplayer)
+  Char.IsShooting($scplayer)
+goto_if_false @SHOPPER_221
+$iSetClothesPanic = 1
+Char.SetDecisionMaker(0@, $iGlobalPedPanicDM)
+goto @SHOPPER_1073
+goto @SHOPPER_268
+
+:SHOPPER_221
+if 
+  $iSetClothesPanic == 1
+goto_if_false @SHOPPER_261
+Char.SetDecisionMaker(0@, $iGlobalPedPanicDM)
+goto @SHOPPER_1073
+goto @SHOPPER_268
+
+:SHOPPER_261
+gosub @SHOPPER_303
+
+:SHOPPER_268
+goto @SHOPPER_282
+
+:SHOPPER_275
+gosub @SHOPPER_1057
+
+:SHOPPER_282
+goto @SHOPPER_296
+
+:SHOPPER_289
+gosub @SHOPPER_1057
+
+:SHOPPER_296
+goto @SHOPPER_120
+
+:SHOPPER_303
+switch_start 3@ total_jumps 1 default_jump 0 @SHOPPER_380 jumps 1 @SHOPPER_366 -1 @SHOPPER_380 -1 @SHOPPER_380 -1 @SHOPPER_380 -1 @SHOPPER_380 -1 @SHOPPER_380 -1 @SHOPPER_380
+
+:SHOPPER_366
+gosub @SHOPPER_382
+goto @SHOPPER_380
+
+:SHOPPER_380
+return 
+
+:SHOPPER_382
+switch_start 4@ total_jumps 5 default_jump 0 @SHOPPER_1055 jumps 0 @SHOPPER_445 1 @SHOPPER_527 2 @SHOPPER_674 3 @SHOPPER_835 4 @SHOPPER_1012 -1 @SHOPPER_1055 -1 @SHOPPER_1055
+
+:SHOPPER_445
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @SHOPPER_520
+Task.PlayAnim(0@, "SHOP_IN", "INT_SHOP", 4.0, False, False, False, False, -1)
+4@ += 1
+
+:SHOPPER_520
+goto @SHOPPER_1055
+
+:SHOPPER_527
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @SHOPPER_667
+set_lvar_int_to_lvar_int 2@ = 0@
+if 
+  2@ > 10000
+goto_if_false @SHOPPER_591
+2@ /= 10000
+
+:SHOPPER_591
+if 
+  1000 > 2@
+goto_if_false @SHOPPER_618
+2@ += 2000
+
+:SHOPPER_618
+Task.PlayAnim(0@, "SHOP_LOOP", "INT_SHOP", 4.0, True, False, False, True, 2@)
+4@ += 1
+
+:SHOPPER_667
+goto @SHOPPER_1055
+
+:SHOPPER_674
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @SHOPPER_828
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @SHOPPER_779
+Task.PlayAnim(0@, "SHOP_LOOKA", "INT_SHOP", 4.0, False, False, False, False, -1)
+goto @SHOPPER_821
+
+:SHOPPER_779
+Task.PlayAnim(0@, "SHOP_LOOKB", "INT_SHOP", 4.0, False, False, False, False, -1)
+
+:SHOPPER_821
+4@ += 1
+
+:SHOPPER_828
+goto @SHOPPER_1055
+
+:SHOPPER_835
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @SHOPPER_1005
+2@ = Math.RandomIntInRange(0, 100)
+if 
+  2@ > 50
+goto_if_false @SHOPPER_945
+Task.PlayAnim(0@, "SHOP_OUT", "INT_SHOP", 4.0, False, False, False, False, -1)
+4@ += 1
+goto @SHOPPER_1005
+
+:SHOPPER_945
+2@ = Math.RandomIntInRange(3000, 6000)
+Task.PlayAnim(0@, "SHOP_LOOP", "INT_SHOP", 4.0, True, False, False, True, 2@)
+4@ = 1
+
+:SHOPPER_1005
+goto @SHOPPER_1055
+
+:SHOPPER_1012
+2@ = Char.GetScriptTaskStatus(0@, 1541)
+if 
+  is_int_lvar_equal_to_constant 2@ == 7
+goto_if_false @SHOPPER_1048
+gosub @SHOPPER_1057
+
+:SHOPPER_1048
+goto @SHOPPER_1055
+
+:SHOPPER_1055
+return 
+
+:SHOPPER_1057
+Streaming.RemoveAnimation("INT_SHOP")
+terminate_this_script 
+return 
+
+:SHOPPER_1073
+wait 0
+if and
+  not Char.IsDead(0@)
+  $iTerminateAllAmbience == 0
+goto_if_false @SHOPPER_1143
+5@ = Char.GetScriptTaskStatus(0@, 1477)
+if 
+  is_int_lvar_equal_to_constant 5@ == 7
+goto_if_false @SHOPPER_1136
+Task.Duck(0@, -2)
+
+:SHOPPER_1136
+goto @SHOPPER_1150
+
+:SHOPPER_1143
+gosub @SHOPPER_1057
+
+:SHOPPER_1150
+goto @SHOPPER_1073
+write_debug_with_int "PEDSTATE" 3@
+write_debug_with_int "SUBSTATESTATUS" 4@
+write_debug_with_int "LOOP_TIMER" TIMERB
+write_debug_with_int "SCRIPT_TIMER" TIMERA
+return 
+terminate_this_script 
+
+//-------------External script 60 (AMMU)---------------
+
+:AMUNAT
+$weapon_on_counterX_shops = 0.0
+$weapon_on_counterY_shops = 0.0
+$weapon_on_counterZ_shops = 0.0
+$ammu_offX = 0.0
+$ammu_offY = 0.0
+$ammu_offZ = 0.0
+$cam_offx = 0.0
+$cam_offy = 0.0
+$cam_offz = 0.0
+$ammu_camera_pointX = 0.0
+$ammu_camera_pointY = 0.0
+$ammu_camera_pointZ = 0.0
+$return_animation_time_ammunation = 0.0
+$shop_keep_heading_ammunation = 0.0
+$cost_menu_drawn_shops = 0
+$ammuX = 0.0
+$ammuY = 0.0
+$ammuZ = 0.0
+$flag_attacked_ammu_keeper = 0
+$flag_ammu = 0
+$weapon_offX = 0.0
+$weapon_offY = 0.0
+$weapon_offZ = 0.0
+$player_weapontype = 0
+$player_ammo = 0
+$player_weapon_model = 0
+$cost_menu_drawn_shops = 0
+$bought_menu_drawn_shops = 0
+$flag_bought_item_already_shops = 0
+$flag_no_money_shops = 0
+$player_max_armour = 0
+$player_armour = 0
+$flag_buy_ammo_flag = 0
+$no_of_different_type_weapons = 0
+$weapon_count_ammu = 0
+$temp_var_shops = 0
+$no_of_pistols = 0
+$no_of_shotguns = 0
+$no_of_microSMG = 0
+$no_of_SMG = 0
+$no_of_assault = 0
+$no_of_thrown = 0
+$no_of_rifle = 0
+$no_of_armour = 0
+$no_of_heavy = 0
+$pistol_name_menu = 0
+$shotgun_name_menu = 0
+$microSMG_name_menu = 0
+$SMG_name_menu = 0
+$assault_name_menu = 0
+$rifle_name_menu = 0
+$thrown_name_menu = 0
+$armour_name_menu = 0
+$heavy_name_menu = 0
+$temp_var_ammu = 0
+$main_menu_selection_ammu = 0
+$sub_menu_selection_ammu = 0
+goto @AMUNAT_525
+add_continuous_sound $shop_alarm_ammu 65535 $ammuX $ammuY $ammuZ
+$shop_item_ammu = Object.Create($model_index_ammu, 1659.635, -1576.514, 15.585)
+$weapon_obj = Object.Create($model_index_ammu, $weapon_offX, $weapon_offY, $weapon_offZ)
+

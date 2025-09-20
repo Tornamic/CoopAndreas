@@ -1,0 +1,205 @@
+//-------------External script 29 (FOODBRAINS)---------------
+
+:PSHOP
+script_name 'PSHOP'
+$iSetPizzaPanic = 0
+switch_start 0@ total_jumps 3 default_jump 0 @PSHOP_552 jumps 0 @PSHOP_81 1 @PSHOP_238 2 @PSHOP_395 -1 @PSHOP_552 -1 @PSHOP_552 -1 @PSHOP_552 -1 @PSHOP_552
+
+:PSHOP_81
+3@ = 377.3
+4@ = -117.182
+5@ = 1000.637
+6@ = 180.0
+7@ = 360.0
+set_lvar_int_to_constant 11@ = 155
+Streaming.RequestModel(11@)
+Streaming.RequestModel(#PIZZAHIGH)
+Streaming.RequestModel(#CJ_PIZZA_2)
+
+:PSHOP_152
+if 
+  not Streaming.HasModelLoaded(11@)
+goto_if_false @PSHOP_179
+wait 0
+goto @PSHOP_152
+
+:PSHOP_179
+if 
+  not Streaming.HasModelLoaded(#PIZZAHIGH)
+goto_if_false @PSHOP_205
+wait 0
+goto @PSHOP_179
+
+:PSHOP_205
+if 
+  not Streaming.HasModelLoaded(#CJ_PIZZA_2)
+goto_if_false @PSHOP_231
+wait 0
+goto @PSHOP_205
+
+:PSHOP_231
+goto @PSHOP_552
+
+:PSHOP_238
+3@ = 371.5365
+4@ = -4.4935
+5@ = 1000.859
+6@ = 180.0
+7@ = 360.0
+set_lvar_int_to_constant 11@ = 167
+Streaming.RequestModel(11@)
+Streaming.RequestModel(#BURGERHIGH)
+Streaming.RequestModel(#CJ_BURG_2)
+
+:PSHOP_309
+if 
+  not Streaming.HasModelLoaded(11@)
+goto_if_false @PSHOP_336
+wait 0
+goto @PSHOP_309
+
+:PSHOP_336
+if 
+  not Streaming.HasModelLoaded(#BURGERHIGH)
+goto_if_false @PSHOP_362
+wait 0
+goto @PSHOP_336
+
+:PSHOP_362
+if 
+  not Streaming.HasModelLoaded(#CJ_BURG_2)
+goto_if_false @PSHOP_388
+wait 0
+goto @PSHOP_362
+
+:PSHOP_388
+goto @PSHOP_552
+
+:PSHOP_395
+3@ = 378.4146
+4@ = -65.8567
+5@ = 1000.508
+6@ = 180.0
+7@ = 360.0
+set_lvar_int_to_constant 11@ = 205
+Streaming.RequestModel(11@)
+Streaming.RequestModel(#BURGERHIGH)
+Streaming.RequestModel(#CJ_BURG_2)
+
+:PSHOP_466
+if 
+  not Streaming.HasModelLoaded(11@)
+goto_if_false @PSHOP_493
+wait 0
+goto @PSHOP_466
+
+:PSHOP_493
+if 
+  not Streaming.HasModelLoaded(#BURGERHIGH)
+goto_if_false @PSHOP_519
+wait 0
+goto @PSHOP_493
+
+:PSHOP_519
+if 
+  not Streaming.HasModelLoaded(#CJ_BURG_2)
+goto_if_false @PSHOP_545
+wait 0
+goto @PSHOP_519
+
+:PSHOP_545
+goto @PSHOP_552
+
+:PSHOP_552
+8@ = Sequence.Open()
+Task.StayInSamePlace(-1, True)
+Task.StandStill(-1, -2)
+Sequence.Close(8@)
+9@ = Attractor.Add(3@, 4@, 5@, 6@, 7@, 8@)
+
+// 3@, 4@, 5@ - xyz, 10@ - ped, 11@ - model
+10@ = Coop.GetPedInAreaWithModel(3@, 4@, 5@, 1.5, 1.5, 40.0, 11@, -1, -1)
+
+if 10@ == -1
+then
+    10@ = Char.CreateAtAttractor(PedType.CivMale, 11@, 9@, 1466) // the ped who serves NPCs (screenshot `https://files.catbox.moe/taxkjk.png`)
+else
+    Coop.ClaimPedOnRelease(10@)
+end
+
+StreamedScript.StartNew(36, 10@, 9@)
+StreamedScript.Stream(36)
+
+:PSHOP_628
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSHOP_873
+$iAreaCode = Char.GetAreaVisible($scplayer)
+if or
+  $iAreaCode == 0
+  $iTerminateAllAmbience == 1
+goto_if_false @PSHOP_684
+gosub @PSHOP_884
+
+:PSHOP_684
+if 
+  Char.IsShooting($scplayer)
+goto_if_false @PSHOP_707
+$iSetPizzaPanic = 1
+
+:PSHOP_707
+if 
+  not Char.IsDead(10@)
+goto_if_false @PSHOP_782
+if 
+  Player.IsTargetingChar($player1, 10@)
+goto_if_false @PSHOP_756
+$iSetPizzaPanic = 1
+goto @PSHOP_782
+
+:PSHOP_756
+if 
+  Char.HasBeenDamagedByChar(10@, $scplayer)
+goto_if_false @PSHOP_782
+$iSetPizzaPanic = 1
+
+:PSHOP_782
+if 
+  $iSetPizzaPanic == 1
+goto_if_false @PSHOP_873
+3@, 4@, 5@ = Char.GetCoordinates($scplayer)
+1@ = World.GetRandomCharInSphereNoBrain(3@, 4@, 5@, 20.0)
+if 
+  1@ > -1
+goto_if_false @PSHOP_873
+2@ += 1
+StreamedScript.StartNew(37, 1@, 2@)
+StreamedScript.Stream(37)
+
+:PSHOP_873
+wait 0
+goto @PSHOP_628
+
+:PSHOP_884
+$iSetPizzaPanic = 0
+Char.MarkAsNoLongerNeeded(10@)
+Streaming.MarkModelAsNoLongerNeeded(155)
+Streaming.MarkModelAsNoLongerNeeded(167)
+Streaming.MarkModelAsNoLongerNeeded(205)
+Streaming.MarkModelAsNoLongerNeeded(#PIZZAHIGH)
+Streaming.MarkModelAsNoLongerNeeded(#BURGERHIGH)
+Streaming.MarkModelAsNoLongerNeeded(#CJ_PIZZA_2)
+Streaming.MarkModelAsNoLongerNeeded(#CJ_BURG_2)
+
+if Coop.IsSyncingThisPed(10@)
+then
+    Char.Delete(10@)
+else
+    Coop.CancelPedClaim(10@)
+end
+
+Attractor.Clear(9@)
+Sequence.Clear(8@)
+terminate_this_script 
+terminate_this_script 
+

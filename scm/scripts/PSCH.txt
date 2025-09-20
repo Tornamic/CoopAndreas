@@ -1,0 +1,46 @@
+:PSCH
+script_name 'PSCH'
+
+:PSCH_11
+wait 0
+if 
+  Player.IsPlaying($player1)
+goto_if_false @PSCH_239
+if 
+  $onmission == 0
+goto_if_false @PSCH_239
+if 
+  Char.LocateOnFoot3D($scplayer, 1, $pilotx, $piloty, $pilotz, 1.0, 1.0, 1.0)
+goto_if_false @PSCH_239
+if 
+  Player.CanStartMission($player1)
+goto_if_false @PSCH_239
+if 
+  $flag_desert_mission_counter > 3
+goto_if_false @PSCH_239
+Camera.SetFadingColor(0, 0, 0)
+$onmission = 1
+if 
+  $played_scipted_airscript_cut == 0
+goto_if_false @PSCH_179
+PSAVE1_4045()
+$played_scipted_airscript_cut = 1
+goto @PSCH_235
+
+:PSCH_179
+Camera.SetFadingColor(0, 0, 0)
+if 
+  $pilot_test_passed == 0
+goto_if_false @PSCH_221
+Text.PrintBig('DESERT5', 1000, TextStyle.BottomRight)
+
+:PSCH_221
+Player.SetControl($player1, False)
+LITCAS_267()
+
+:PSCH_235
+Mission.LoadAndLaunchInternal(83) // Learning to Fly
+
+:PSCH_239
+goto @PSCH_11
+
