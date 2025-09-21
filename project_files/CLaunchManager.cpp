@@ -97,6 +97,7 @@ void CLaunchManager::CollectCommandLineArgs()
         strcpy(CLocalPlayer::m_Name, "Tornamic");
         strcpy(CNetwork::m_IpAddress, "127.0.0.1");
         CNetwork::m_nPort = 6767;
+        return;
     }
 
     printf("Player Nickname: %s\n", CLocalPlayer::m_Name);
