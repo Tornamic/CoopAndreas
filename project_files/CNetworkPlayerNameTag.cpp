@@ -22,12 +22,12 @@ uint8_t GetHudAlpha(float distance)
 void DrawNickName(float x, float y, float scale, unsigned char alpha, const char* name)
 {
 	CFont::SetOrientation(eFontAlignment::ALIGN_LEFT);
-	CFont::SetFontStyle(3);
+	CFont::SetFontStyle(1);
 	CFont::SetColor(CRGBA(255, 255, 0, alpha));
 	CFont::SetBackground(false, false);
 	CFont::SetDropColor(CRGBA(0, 0, 0, alpha));
 	CFont::SetDropShadowPosition(1);
-	CFont::SetScale(PROPORION_X(0.4f * scale), PROPORION_Y(0.7f * scale));
+	CFont::SetScale(PROPORION_X(0.6f * scale), PROPORION_Y(1.22f * scale));
 	CFont::PrintString(x, y, name);
 }
 
@@ -141,10 +141,7 @@ void CNetworkPlayerNameTag::Process()
 		float normalizedDistance = distance / MAX_DRAW_NICKNAME_DISTANCE;
 		CSprite::CalcScreenCoors(*(RwV3d*)&networkPlayerPos, &out, &width, &height, false, false);
 
-		float scaleNickName = std::clamp(1.5f - normalizedDistance, 0.65f, 1.0f);
-		float scaleWeaponIcon = std::clamp(1.2f - normalizedDistance, 0.5f, 1.0f);
-		float scaleHealthBar = std::clamp(1.2f - normalizedDistance, 0.7f, 1.0f);
-		float scaleArmourBar = std::clamp(1.2f - normalizedDistance, 0.7f, 1.0f);
+		float scale = std::clamp(1.2f - normalizedDistance, 0.7f, 1.0f);
 		
 		// draw health bar
 		if (player->m_lOnFoot->health >= 10.0f || GetTickCount() % 500 > 150) // blinking, fps fixed
@@ -152,9 +149,9 @@ void CNetworkPlayerNameTag::Process()
 			DrawBarChartScale(
 				out.x,
 				out.y,
-				(uint16_t)(PROPORION_X(100.0f * scaleHealthBar)),
-				(uint8_t)(PROPORION_Y(14.0f * scaleHealthBar)),
-				scaleHealthBar,
+				(uint16_t)(PROPORION_X(100.0f * scale)),
+				(uint8_t)(PROPORION_Y(14.0f * scale)),
+				scale,
 				player->m_lOnFoot->health,
 				CRGBA(180, 25, 29, alpha)
 			);
@@ -165,28 +162,28 @@ void CNetworkPlayerNameTag::Process()
 		{
 			DrawBarChartScale(
 				out.x,
-				out.y - PROPORION_X(12) * scaleHealthBar,
-				(uint16_t)(PROPORION_X(100) * scaleArmourBar),
-				(uint8_t)(PROPORION_Y(14) * scaleArmourBar),
-				scaleArmourBar,
+				out.y - PROPORION_X(12) * scale,
+				(uint16_t)(PROPORION_X(100) * scale),
+				(uint8_t)(PROPORION_Y(14) * scale),
+				scale,
 				player->m_lOnFoot->armour,
 				CRGBA(225, 225, 225, alpha)
 			);
 		}
 		
-		float nicknameOffsetY = (player->m_lOnFoot->armour > 0.0f ? 12.0f * scaleHealthBar + 12.0f * scaleArmourBar : 12.0f * scaleHealthBar);
+		float nicknameOffsetY = (player->m_lOnFoot->armour > 0.0f ? 12.0f * scale + 12.0f * scale : 12.0f * scale);
 		DrawNickName(
-			out.x + PROPORION_X(5.0f),
-			out.y - PROPORION_Y(nicknameOffsetY),
-			scaleNickName,
+			out.x + PROPORION_X(4.8f),
+			out.y - (PROPORION_Y(nicknameOffsetY) + PROPORION_Y(8.0f)),
+			scale,
 			alpha,
 			player->GetName()
 		);
 		DrawWeaponIcon(
 			player->m_pPed,
-			(int)out.x - PROPORION_X(70.0f) * scaleWeaponIcon,
-			(int)out.y - PROPORION_Y(44.0f) * scaleWeaponIcon,
-			scaleWeaponIcon,
+			(int)out.x - PROPORION_X(70.0f) * scale,
+			(int)out.y - PROPORION_Y(44.0f) * scale,
+			scale,
 			alpha
 		);
 	}
