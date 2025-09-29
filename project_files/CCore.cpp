@@ -3,6 +3,7 @@
 #include "Commands/CCustomCommandRegistrar.h"
 #include "CDiscordRPC.h"
 #include <COpCodeSync.h>
+#include <CCustomMenuManager.h>
 
 semver_t CCore::Version;
 
@@ -11,6 +12,7 @@ WNDPROC prevWndProc;
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	CChat::WndProc(hWnd, message, wParam, lParam);
+	CCustomMenuManager::WndProc(hWnd, message, wParam, lParam);
 	return CallWindowProcW(prevWndProc, hWnd, message, wParam, lParam);
 }
 
@@ -29,6 +31,12 @@ void InitWndProc()
 	}
 }
 
+void WinMain_AfterWindowInit()
+{
+	InitWndProc();
+	plugin::Call<0x538860>();
+}
+
 void CCore::Init()
 {
 	CCrashLog::ms_lpPreviousFilter = SetUnhandledExceptionFilter(CCrashLog::ExceptionHandler);
@@ -36,11 +44,12 @@ void CCore::Init()
 #ifdef _DEV
 	CCore::AllocateConsole();
 #endif
+	patch::RedirectCall(0x748995, WinMain_AfterWindowInit);
+	CCustomMenuManager::Init();
 	CPatch::ApplyPatches();
 	CHook::Init();
 	CCustomCommandRegistrar::Register();
 	CDXFont::Init();
-	CLaunchManager::CollectCommandLineArgs();
 	CDiscordRPC::Init();
 	COpCodeSync::Init();
 	Events::initGameEvent.after += []
@@ -48,7 +57,6 @@ void CCore::Init()
 		CPatch::TemporaryPatches();
 		// init CNetworking async
 		CreateThread(NULL, NULL, CNetwork::InitAsync, NULL, NULL, NULL);
-		InitWndProc();
 	};
 	Events::initRwEvent += []
 	{
