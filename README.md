@@ -188,7 +188,7 @@ Contact information is current as of August 2025
   - [X] speech sync
 - [ ] player voice commands
 - [ ] chat reactions (see LD_CHAT.txd)
-- [ ] gand wars sync
+- [ ] gang wars sync
 - [ ] parachute jump sync
 - [ ] stunt
   - [ ] collecting
