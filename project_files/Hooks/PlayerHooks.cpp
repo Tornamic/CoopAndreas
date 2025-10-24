@@ -341,6 +341,7 @@ void PlayerHooks::InjectHooks()
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
 
     patch::RedirectCall(0x73CD92, CWeapon__DoBulletImpact_Hook);
+    patch::RedirectCall(0x741185, CWeapon__DoBulletImpact_Hook);
     patch::RedirectCall(0x741199, CWeapon__DoBulletImpact_Hook);
     patch::RedirectCall(0x7411DF, CWeapon__DoBulletImpact_Hook);
     patch::RedirectCall(0x7412DF, CWeapon__DoBulletImpact_Hook);
