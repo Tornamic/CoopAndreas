@@ -22,7 +22,7 @@ void ConfigManager::CreateConfig()
 
 	if (!file)
 	{
-		printf("[ERROR]: Couldn't create a server config file!");
+		printf("[ERROR]: Couldn't create a server config file!\n");
 		return;
 	}
 
