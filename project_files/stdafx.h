@@ -1,6 +1,6 @@
 #pragma once
 #define COOPANDREAS_VERSION "0.2.2-alpha"
-#define MAX_SERVER_PLAYERS 4
+#define MAX_SERVER_PLAYERS 8
 #define MAX_SERVER_VEHICLES 200
 #define MAX_SERVER_PEDS 300
 #define MIN_SCREEN_WIDTH 640

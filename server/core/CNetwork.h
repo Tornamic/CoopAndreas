@@ -11,7 +11,8 @@
 
 #include "CPacketListener.h"
 
-#define MAX_SERVER_PLAYERS (4)
+#define DEFAULT_SERVER_PORT (6767)
+#define MAX_SERVER_PLAYERS (8)
 
 class CNetwork
 {

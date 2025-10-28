@@ -4,8 +4,10 @@
 #include <vector>
 #include <algorithm>
 #include <thread>
+#include <fstream>
 
 #include "thirdparty-libraries/enet/enet.h"
+#include "INIReader.h"
 
 #include "core/CControllerState.h"
 #include "core/NetworkEntityType.h"
@@ -20,15 +22,10 @@
 #include "core/CVehicleManager.h"
 #include "core/VehicleDoorState.h"
 
-//#include "core-external/ConfigDatabase.hpp"
-
-
+#include "ConfigManager.h"
 
 int main(int argc, char *argv[])
 {
-	//unsigned int configport;
-	//ConfigDatabase::Init(configport, "server-config.ini");
-	//printf("* variable = %d", configport);
 #if defined (_WIN32)
 	SetConsoleTitle(L"CoopAndreas Server");
 #endif
@@ -50,6 +47,9 @@ int main(int argc, char *argv[])
 #else
 	printf("[!] : Platform : GNU/Linux | BSD \n");
 #endif
-	CNetwork::Init(6767);
+
+	ConfigManager::Init();
+
+	CNetwork::Init(ConfigManager::GetConfigPort());
 	return 0;
 }
