@@ -15,12 +15,12 @@ add_library(CPlayer OBJECT "src/CPlayer.cpp")
 add_library(CPlayerManager OBJECT "src/CPlayerManager.cpp")
 add_library(CVehicle OBJECT "src/CVehicle.cpp")
 add_library(CVehicleManager OBJECT "src/CVehicleManager.cpp")
-add_library(ConfigDatabase OBJECT "core-external/ConfigDatabase.cpp")
 
 add_executable(${PROJECT_NAME} main.cpp)
 
 target_link_libraries(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/build/libenet.a")
 target_link_libraries(${PROJECT_NAME} "${CMAKE_SOURCE_DIR}/build/libinicpp.a")
+
 if(WIN32)
 	target_link_libraries(${PROJECT_NAME} ws2_32.a)
 	target_link_libraries(${PROJECT_NAME} winmm.a)
@@ -34,6 +34,3 @@ target_link_libraries(${PROJECT_NAME} CPlayer)
 target_link_libraries(${PROJECT_NAME} CPlayerManager)
 target_link_libraries(${PROJECT_NAME} CVehicle)
 target_link_libraries(${PROJECT_NAME} CVehicleManager)
-target_link_libraries(${PROJECT_NAME} ConfigDatabase)
-
-
