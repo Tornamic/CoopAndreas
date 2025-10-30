@@ -4,16 +4,16 @@
 #include <unordered_map>
 #include <fstream>
 
-#include "INIReader.h"
-#include "core/CNetwork.h"
+#include "../thirdparty-libraries/INIReader/cpp/INIReader.h"
+#include "../core/CNetwork.h"
 
-class ConfigManager
+class CConfigManager
 {
 public:
-	static INIReader reader;
-	inline static const std::string configPath = "server-config.ini";
+	static inline INIReader* ms_pReader = nullptr;
+	static inline std::string ms_sConfigPath = "server-config.ini";
 
-	inline static const std::unordered_map<std::string, uint16_t> defaultConfig = 
+	static inline const std::unordered_map<std::string, uint16_t> ms_umDefaultConfig =
 	{
 		{"port", DEFAULT_SERVER_PORT},
 		{"maxplayers", MAX_SERVER_PLAYERS}
