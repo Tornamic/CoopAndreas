@@ -68,6 +68,10 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
         if (entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
         {
             CVehicle* vehicle = (CVehicle*)entity;
+            if (CNetworkVehicleManager::GetVehicle(vehicle) != nullptr) // fixes a strange bug
+            {
+                return;
+            }
             CNetworkVehicle* networkVehicle = CNetworkVehicle::CreateHosted(vehicle);
         }
         else if (entity->m_nType == eEntityType::ENTITY_TYPE_PED)
