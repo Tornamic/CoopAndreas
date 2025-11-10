@@ -5,18 +5,23 @@
 #ifndef __ENET_ENET_H__
 #define __ENET_ENET_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdlib.h>
 
 #ifdef _WIN32
-#include "../enet/win32.h"
+#include "enet/win32.h"
 #else
-#include "../enet/unix.h"
+#include "enet/unix.h"
 #endif
 
-#include "../enet/types.h"
-#include "../enet/protocol.h"
-#include "../enet/list.h"
-#include "../enet/callbacks.h"
+#include "enet/types.h"
+#include "enet/protocol.h"
+#include "enet/list.h"
+#include "enet/callbacks.h"
 
 #define ENET_VERSION_MAJOR 1
 #define ENET_VERSION_MINOR 3
@@ -103,6 +108,7 @@ typedef enum _ENetPacketFlag
      * made until the packet is delivered */
    ENET_PACKET_FLAG_RELIABLE    = (1 << 0),
    /** packet will not be sequenced with other packets
+     * not supported for reliable packets
      */
    ENET_PACKET_FLAG_UNSEQUENCED = (1 << 1),
    /** packet will not allocate data, and user must supply it instead */
@@ -440,11 +446,6 @@ typedef struct _ENetEvent
    enet_uint32          data;      /**< data associated with the event, if appropriate */
    ENetPacket *         packet;    /**< packet associated with the event, if appropriate */
 } ENetEvent;
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
 /** @defgroup global ENet global functions
     @{ 

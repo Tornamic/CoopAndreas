@@ -5,7 +5,7 @@
 #ifndef __ENET_PROTOCOL_H__
 #define __ENET_PROTOCOL_H__
 
-#include "../enet/types.h"
+#include "enet/types.h"
 
 enum
 {

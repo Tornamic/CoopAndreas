@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -7,7 +6,12 @@
 #include <fstream>
 #include <filesystem>
 
-#include "thirdparty-libraries/enet/enet.h"
+#if defined(_WIN32)
+#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "winmm.lib")
+#endif
+
+#include "enet/enet.h"
 #include "thirdparty-libraries/INIReader/cpp/INIReader.h"
 
 #include "core/CControllerState.h"
