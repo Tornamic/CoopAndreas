@@ -275,6 +275,10 @@ void FixCrashes()
         patch::PutRetn0(0x7468E0);
         patch::Nop(0x74872D, 9); 
     }
+
+    // allow vertical camera movement during a camera fade
+    patch::SetUChar(0x524084, 0xFF);
+    patch::SetUChar(0x524089, 0xFF);
 }
 
 #define SCANCODE_BUFFER_SIZE (8 * 20000)

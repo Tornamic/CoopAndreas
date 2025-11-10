@@ -356,10 +356,6 @@ void PlayerHooks::InjectHooks()
     // called when the player respawns after being busted or wasted
     patch::RedirectCall(0x443082, CReferences__RemoveReferencesToPlayer_Hook);
 
-    // allow vertical camera movement during a camera fade
-    patch::SetUChar(0x524084, 0xFF, false);
-    patch::SetUChar(0x524089, 0xFF, false);
-
     patch::RedirectCall(0x74278B, CWeapon__TakePhotograph_Hook);
 
     patch::RedirectCall(0x5707AE, CTaskSimpleJetPack__DropJetPack_Hook);
