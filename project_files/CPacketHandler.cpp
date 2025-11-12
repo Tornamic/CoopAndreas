@@ -1217,7 +1217,7 @@ void CPacketHandler::PedPassengerSync__Handle(void* data, int size)
 void CPacketHandler::PlayerAimSync__Trigger()
 {
 	CPackets::PlayerAimSync packet = CPacketHandler::PlayerAimSync__Collect();
-	CNetwork::SendPacket(CPacketsID::PLAYER_AIM_SYNC, &packet, sizeof packet);
+	CNetwork::SendPacket(CPacketsID::PLAYER_AIM_SYNC, &packet, sizeof packet, (ENetPacketFlag)0);
 }
 
 CPackets::PlayerAimSync CPacketHandler::PlayerAimSync__Collect()

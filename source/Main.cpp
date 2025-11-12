@@ -148,7 +148,7 @@ public:
 						else
 						{
 							CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
-							CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet);
+							CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet,(ENetPacketFlag)0);
 							delete packet;
 							lastOnFootSyncTickRate = tickCount;
 						}

@@ -55,7 +55,7 @@ void CStatsSync::NotifyChanged()
         packet.stats[i] = CStats::GetStatValue(m_aeSyncedStats[i]);
     }
 
-    CNetwork::SendPacket(CPacketsID::PLAYER_STATS, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    CNetwork::SendPacket(CPacketsID::PLAYER_STATS, &packet, sizeof packet, (ENetPacketFlag)0);
 }
 
 int CStatsSync::GetSyncIdByInternal(eStats stat)

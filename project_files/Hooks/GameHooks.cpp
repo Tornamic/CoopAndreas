@@ -126,7 +126,7 @@ static void __cdecl CTheZones__Update_Hook()
     packet.newState.bDisablePlayerJump = pad->bDisablePlayerJump;
     packet.newState.bDisablePlayerDisplayVitalStats = pad->bDisablePlayerDisplayVitalStats;
 
-    CNetwork::SendPacket(CPacketsID::PLAYER_KEY_SYNC, &packet, sizeof packet);
+    CNetwork::SendPacket(CPacketsID::PLAYER_KEY_SYNC, &packet, sizeof packet, (ENetPacketFlag)0);
 }
 
 void CCutsceneMgr__StartCutscene_Hook()

@@ -62,7 +62,7 @@ bool __fastcall CWeapon__Fire_Hook(CWeapon* This, int, CPed* owner, CVector* vec
         else if(targetEntity)
             packet.target = targetEntity->GetPosition();
 
-        CNetwork::SendPacket(CPacketsID::PED_SHOT_SYNC, &packet, sizeof packet);
+        CNetwork::SendPacket(CPacketsID::PED_SHOT_SYNC, &packet, sizeof packet, (ENetPacketFlag)0);
 
         return This->Fire(owner, vecOrigin, vecEffectPosn, targetEntity, vecTarget, arg_14);
     }

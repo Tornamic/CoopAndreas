@@ -61,7 +61,7 @@ void CNetworkVehicleManager::UpdateDriver(CVehicle* vehicle)
 	if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle))
 	{
 		CPackets::VehicleDriverUpdate* packet = CPacketHandler::VehicleDriverUpdate__Collect(networkVehicle);
-		CNetwork::SendPacket(CPacketsID::VEHICLE_DRIVER_UPDATE, packet, sizeof *packet);
+		CNetwork::SendPacket(CPacketsID::VEHICLE_DRIVER_UPDATE, packet, sizeof *packet, (ENetPacketFlag)0);
 		delete packet;
 	}
 }
@@ -92,7 +92,7 @@ void CNetworkVehicleManager::UpdatePassenger(CVehicle* vehicle, CPlayerPed* loca
 {
 	CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
 	CPackets::VehiclePassengerUpdate* packet = CPacketHandler::VehiclePassengerUpdate__Collect(networkVehicle, localPlayer);
-	CNetwork::SendPacket(CPacketsID::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet);
+	CNetwork::SendPacket(CPacketsID::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet, (ENetPacketFlag)0);
 	delete packet;
 }
 
