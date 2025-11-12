@@ -136,6 +136,80 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::TELEPORT_PLAYER_SCRIPTED, CPlayerPackets::TeleportPlayerScripted::Handle);
 }
 
+uint8_t get_channelID(uint8_t packetType)
+{
+    uint8_t  channelID = 0;
+
+    switch (packetType)
+    {
+        // Channel 0
+    case PLAYER_CONNECTED:
+    case PLAYER_DISCONNECTED:
+    case PLAYER_HANDSHAKE:
+    case PLAYER_SET_HOST:
+    case RESPAWN_PLAYER:
+    case ASSIGN_VEHICLE:
+    case ASSIGN_PED:
+    case PED_TAKE_HOST:
+        channelID = 0;
+        break;
+
+        // Channel 1
+    case PLAYER_ONFOOT:
+    case PLAYER_BULLET_SHOT:
+    case PLAYER_KEY_SYNC:
+    case PLAYER_AIM_SYNC:
+    case VEHICLE_IDLE_UPDATE:
+    case VEHICLE_DRIVER_UPDATE:
+    case VEHICLE_PASSENGER_UPDATE:
+    case PED_ONFOOT:
+    case PED_DRIVER_UPDATE:
+    case PED_SHOT_SYNC:
+    case PED_PASSENGER_UPDATE:
+    case PLAYER_STATS:
+        channelID = 1;
+        break;
+
+        // Channel 2
+    case ADD_EXPLOSION:
+    case VEHICLE_SPAWN:
+    case VEHICLE_REMOVE:
+    case VEHICLE_DAMAGE:
+    case VEHICLE_COMPONENT_ADD:
+    case VEHICLE_COMPONENT_REMOVE:
+    case VEHICLE_ENTER:
+    case VEHICLE_EXIT:
+    case TAG_UPDATE:
+    case UPDATE_ALL_TAGS:
+        channelID = 2;
+        break;
+
+        // Channel 3
+    case START_CUTSCENE:
+    case SKIP_CUTSCENE:
+    case TELEPORT_PLAYER_SCRIPTED:
+    case SET_PLAYER_TASK:
+    case PED_SAY:
+    case UPDATE_ENTITY_BLIP:
+    case REMOVE_ENTITY_BLIP:
+    case CLEAR_ENTITY_BLIPS:
+    case CREATE_STATIC_BLIP:
+    case ADD_MESSAGE_GXT:
+    case REMOVE_MESSAGE_GXT:
+    case PLAY_MISSION_AUDIO:
+    case UPDATE_CHECKPOINT:
+    case REMOVE_CHECKPOINT:
+        channelID = 3;
+        break;
+
+    default:
+        channelID = 0; // fallback
+        break;
+    }
+
+    return channelID;
+}
+
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
 {
     // 2 == sizeof(unsigned short)
@@ -158,7 +232,7 @@ void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t 
     delete[] packetData;
 
     // send packet
-    enet_peer_send(peer, 0, packet);
+    enet_peer_send(peer, get_channelID(id), packet);
 }
 
 void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith)
@@ -175,7 +249,7 @@ void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, E
     {
         if (CPlayerManager::m_pPlayers[i]->m_pPeer != dontShareWith)
         {
-            enet_peer_send(CPlayerManager::m_pPlayers[i]->m_pPeer, 0, packet);
+            enet_peer_send(CPlayerManager::m_pPlayers[i]->m_pPeer, get_channelID(id), packet);
         }
     }
 }
@@ -243,7 +317,7 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
     };
 
     // send to all
-    CNetwork::SendPacketToAll(CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof (CPlayerPackets::PlayerDisconnected), (ENetPacketFlag)0, event.peer);
+    CNetwork::SendPacketToAll(CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof (CPlayerPackets::PlayerDisconnected), (ENetPacketFlag)ENET_PACKET_FLAG_RELIABLE, event.peer);
 
     printf("[Game] : %i Disconnected.\n", player->m_iPlayerId);
 
