@@ -35,7 +35,7 @@ class CNetwork
 
 	
 };
-uint8_t get_channelID(uint8_t packetType)
+uint8_t get_channelID(uint8_t packetType);
 
 
 #endif
