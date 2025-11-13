@@ -308,7 +308,7 @@ class CPedPackets
 					return;
 				}
 
-				CNetwork::SendPacketToAll(CPacketsID::PED_SHOT_SYNC, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+				CNetwork::SendPacketToAll(CPacketsID::PED_SHOT_SYNC, packet, sizeof * packet, (ENetPacketFlag)0, peer);
 			}
 		};
 
