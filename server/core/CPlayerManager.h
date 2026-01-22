@@ -264,7 +264,7 @@ public:
 			{
 				CPlayerPackets::PlayerStats* packet = (CPlayerPackets::PlayerStats*)data;
 				packet->playerid = player->m_iPlayerId;
-				CNetwork::SendPacketToAll(CPacketsID::PLAYER_STATS, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
+				CNetwork::SendPacketToAll(CPacketsID::PLAYER_STATS, packet, sizeof * packet, (ENetPacketFlag)0, peer);
 
 				memcpy(player->m_afStats, packet->stats, sizeof(packet->stats));
 				player->m_ucSyncFlags.bStatsModified = true;

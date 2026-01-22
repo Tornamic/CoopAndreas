@@ -33,3 +33,4 @@ public:
 	static void HandlePacketReceive(ENetEvent& event);
 	static void AddListener(unsigned short id, void(*callback)(void*, int));
 };
+uint8_t get_channelID(uint8_t packetType);
