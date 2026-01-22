@@ -58,8 +58,6 @@ PayPal `kirilltymoshchenko59@gmail.com`
 
 *If you need another way to donate, please dm me on discord: `@tornamic`*
 
-Contact information is current as of November 2025
-
 ## TODO list:
 ### Already Done ✓
 - [X] setup C/C++ project

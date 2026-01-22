@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+// LEGACY: use CTaskSimpleGangDriveBy
+
 void CDriveBy::Process(CPlayerPed* player)
 {
     bool isPassenger = player->m_nPedFlags.bInVehicle && player->m_pVehicle && player->m_pVehicle->m_pDriver != player;
