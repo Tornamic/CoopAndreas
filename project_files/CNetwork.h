@@ -32,4 +32,9 @@ public:
 	static void InitListeners();
 	static void HandlePacketReceive(ENetEvent& event);
 	static void AddListener(unsigned short id, void(*callback)(void*, int));
+	static bool IsValidIP(const char* ip)
+	{
+		ENetAddress temp;
+		return enet_address_set_host_ip(&temp, ip) >= 0;
+	}
 };
