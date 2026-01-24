@@ -4,8 +4,9 @@
 #include <unordered_map>
 #include <fstream>
 
-#include "INIReader/cpp/INIReader.h"
+#include "../INIReader/cpp/INIReader.h"
 #include "CNetwork.h"
+#include "../shared/config.h"
 
 class CConfigManager
 {
@@ -15,7 +16,7 @@ public:
 
 	static inline const std::unordered_map<std::string, uint16_t> ms_umDefaultConfig =
 	{
-		{"port", DEFAULT_SERVER_PORT},
+		{"port", Config::DEFAULT_PORT},
 		{"maxplayers", MAX_SERVER_PLAYERS}
 	};
 

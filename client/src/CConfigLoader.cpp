@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CConfigLoader.h"
+#include "CCustomMenuManager.h"
 
 void CConfigLoader::BuildPath()
 {
@@ -37,15 +38,18 @@ void CConfigLoader::EnsureCreated()
 	BuildDefaultConfig();
 }
 
+uintptr_t SetDirMyDocuments_Hook_ptr = 0x0;
 void CConfigLoader::SetDirMyDocuments_Hook()
 {
 	BuildPath();
 	Load();
-	plugin::Call<0x538860>();
+	CCustomMenuManager::UpdateFromConfig();
+	plugin::CallDyn(SetDirMyDocuments_Hook_ptr);
 }
 
 void CConfigLoader::Init()
 {
+	SetDirMyDocuments_Hook_ptr = injector::GetBranchDestination(0x748995).as_int();
 	patch::RedirectCall(0x748995, SetDirMyDocuments_Hook);
 }
 
@@ -65,7 +69,7 @@ void CConfigLoader::Load()
 void CConfigLoader::Save()
 {
 	EnsureCreated();
-
+	
 	WritePrivateProfileString(ms_sConfigSection, "nickname", CLocalPlayer::m_Name, ms_sDataPath.c_str());
 	WritePrivateProfileString(ms_sConfigSection, "ip", CNetwork::m_IpAddress, ms_sDataPath.c_str());
 	WritePrivateProfileString(ms_sConfigSection, "port", std::to_string(CNetwork::m_nPort).c_str(), ms_sDataPath.c_str());

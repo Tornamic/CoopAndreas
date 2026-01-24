@@ -16,7 +16,7 @@ static char* aRows[MAX_ROWS] = { "Nickname:", "IP:", "Port:", "Back", "Connect" 
 static const int MAX_INPUT_ROWS = 3;
 static int iLastHovered = ROW_NICKNAME;
 static int iActiveInputRow = ROW_UNSELECTED;
-static char aRowContent[MAX_INPUT_ROWS][32+1] = { "", "", ""};
+static char aRowContent[MAX_INPUT_ROWS][32+1] = { };
 
 static inline void SetFontColor(bool bActive)
 {
@@ -404,13 +404,16 @@ void __fastcall CMenuManager__UserInput_Hook(CMenuManager* This)
 	}
 }
 
-void CCustomMenuManager::Init()
+void CCustomMenuManager::UpdateFromConfig()
 {
-	CConfigLoader::Init();
-
 	strncpy_s(aRowContent[ROW_NICKNAME], 32, CLocalPlayer::m_Name, 32);
 	strncpy_s(aRowContent[ROW_IP], 15, CNetwork::m_IpAddress, 15);
 	_itoa_s(static_cast<int>(CNetwork::m_nPort), aRowContent[ROW_PORT], 10);
+}
+
+void CCustomMenuManager::Init()
+{
+	CConfigLoader::Init();
 
 	patch::RedirectCall(0x57BA58, CMenuManager__DrawStandardMenu_Hook);
 	//patch::SetUChar(0x57D6B8 + 1, SCR_NICKNAME_PORT_IP);
@@ -449,11 +452,12 @@ static const int MAX_LENGTH_PER_ROW[MAX_INPUT_ROWS] = { 24, 15, 5 }; // nickname
 
 void InsertCharToRow(char c)
 {
-	int length = strnlen_s(aRowContent[iActiveInputRow], 32);
+	int length = strnlen_s(aRowContent[iActiveInputRow], 32 + 1);
 	if (length >= MAX_LENGTH_PER_ROW[iActiveInputRow])
 	{
 		return;
 	}
+
 	switch (iActiveInputRow)
 	{
 	case ROW_NICKNAME:
@@ -461,6 +465,8 @@ void InsertCharToRow(char c)
 		if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_' || c == '[' || c == ']')
 		{
 			aRowContent[iActiveInputRow][length] = c;
+			aRowContent[iActiveInputRow][length + 1] = '\0';
+
 			strncpy_s(CLocalPlayer::m_Name, aRowContent[iActiveInputRow], MAX_LENGTH_PER_ROW[iActiveInputRow]);
 		}
 		break;
@@ -474,7 +480,6 @@ void InsertCharToRow(char c)
 
 		if ((c >= '0' && c <= '9') || c == '.')
 		{
-
 			if (c == '.')
 			{
 				int dots = 0;
@@ -490,7 +495,7 @@ void InsertCharToRow(char c)
 				}
 			}
 
-			if (c == '.' && aRowContent[iActiveInputRow][length - 1] == '.')
+			if (length > 0 && c == '.' && aRowContent[iActiveInputRow][length - 1] == '.')
 			{
 				return;
 			}
@@ -517,6 +522,7 @@ void InsertCharToRow(char c)
 			}
 
 			aRowContent[iActiveInputRow][length] = c;
+			aRowContent[iActiveInputRow][length + 1] = '\0';
 			strncpy_s(CNetwork::m_IpAddress, aRowContent[iActiveInputRow], MAX_LENGTH_PER_ROW[iActiveInputRow]);
 		}
 		break;
@@ -566,6 +572,19 @@ void CCustomMenuManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 			if (length > 0)
 			{
 				aRowContent[iActiveInputRow][length - 1] = '\0';
+
+				switch (iActiveInputRow)
+				{
+				case ROW_NICKNAME:
+					strncpy_s(CLocalPlayer::m_Name, aRowContent[iActiveInputRow], MAX_LENGTH_PER_ROW[iActiveInputRow]);
+					break;
+				case ROW_IP:
+					strncpy_s(CNetwork::m_IpAddress, aRowContent[iActiveInputRow], MAX_LENGTH_PER_ROW[iActiveInputRow]);
+					break;
+				case ROW_PORT:
+					CNetwork::m_nPort = std::stoi(aRowContent[iActiveInputRow]);
+					break;
+				}
 			}
 			return;
 		}
