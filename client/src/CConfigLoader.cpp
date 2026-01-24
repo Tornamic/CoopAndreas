@@ -4,7 +4,7 @@
 
 void CConfigLoader::BuildPath()
 {
-	ms_sDataPath = std::string((const char*)0xC92368) + "\\" + ms_sConfigName;
+	ms_sDataPath = std::string((const char*)0xC92368) + "\\" + CONFIG_FILE_NAME; // 0xC92368 - gta_user_dir_path var
 }
 
 void CConfigLoader::BuildDefaultConfig()
@@ -17,7 +17,7 @@ void CConfigLoader::BuildDefaultConfig()
 		return;
 	}
 
-    std::string config = "[" + std::string(ms_sConfigSection) + "]" + "\n";
+    std::string config = "[" + std::string(CONFIG_SECTION) + "]" + "\n";
 
 	for (const auto& [key, value] : ms_umDefaultConfig)
 	{
@@ -57,9 +57,9 @@ void CConfigLoader::Load()
 {
 	EnsureCreated();
 
-	GetPrivateProfileString(ms_sConfigSection, "nickname", "", CLocalPlayer::m_Name, sizeof(CLocalPlayer::m_Name), ms_sDataPath.c_str());
-	GetPrivateProfileString(ms_sConfigSection, "ip", "", CNetwork::m_IpAddress, 15, ms_sDataPath.c_str());
-	CNetwork::m_nPort = GetPrivateProfileInt(ms_sConfigSection, "port", Config::DEFAULT_PORT, ms_sDataPath.c_str());
+	GetPrivateProfileString(CONFIG_SECTION, "nickname", "", CLocalPlayer::m_Name, sizeof(CLocalPlayer::m_Name), ms_sDataPath.c_str());
+	GetPrivateProfileString(CONFIG_SECTION, "ip", "", CNetwork::m_IpAddress, 15, ms_sDataPath.c_str());
+	CNetwork::m_nPort = GetPrivateProfileInt(CONFIG_SECTION, "port", Config::DEFAULT_PORT, ms_sDataPath.c_str());
 
 #if DEBUG
 	printf("%s %s %d\n", CLocalPlayer::m_Name, CNetwork::m_IpAddress, CNetwork::m_nPort);
@@ -70,7 +70,7 @@ void CConfigLoader::Save()
 {
 	EnsureCreated();
 	
-	WritePrivateProfileString(ms_sConfigSection, "nickname", CLocalPlayer::m_Name, ms_sDataPath.c_str());
-	WritePrivateProfileString(ms_sConfigSection, "ip", CNetwork::m_IpAddress, ms_sDataPath.c_str());
-	WritePrivateProfileString(ms_sConfigSection, "port", std::to_string(CNetwork::m_nPort).c_str(), ms_sDataPath.c_str());
+	WritePrivateProfileString(CONFIG_SECTION, "nickname", CLocalPlayer::m_Name, ms_sDataPath.c_str());
+	WritePrivateProfileString(CONFIG_SECTION, "ip", CNetwork::m_IpAddress, ms_sDataPath.c_str());
+	WritePrivateProfileString(CONFIG_SECTION, "port", std::to_string(CNetwork::m_nPort).c_str(), ms_sDataPath.c_str());
 }

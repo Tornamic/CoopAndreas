@@ -19,8 +19,8 @@ private:
 	};;
 	
 public:
-	static inline const char* ms_sConfigSection = "config";
-	static inline const char* ms_sConfigName = "coopandreas.ini";
+	static inline const char* CONFIG_SECTION = "config";
+	static inline const char* CONFIG_FILE_NAME = "coopandreas.ini";
 
 	static void Init();
 	static void Save();
