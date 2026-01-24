@@ -109,7 +109,6 @@ using namespace plugin;
 #include "CLocalPlayer.h"
 #include "CNetworkPlayerMapPin.h"
 #include "CNetworkPlayerWaypoint.h"
-#include "CLaunchManager.h"
 #include "CNetworkPlayerNameTag.h"
 #include "CChat.h"
 #include "CNetworkVehicleManager.h"

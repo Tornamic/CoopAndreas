@@ -11,21 +11,61 @@ Videos, pictures, news, suggestions, and communication can be found here:
 This mod is an unofficial modification for **Grand Theft Auto: San Andreas** and requires a legitimate copy of the game to function. No original game files or assets from Rockstar Games are included in this repository, and all content provided is independently developed. The project is not affiliated with Rockstar Games or Take-Two Interactive. All rights to the original game, its assets, and intellectual property belong to Rockstar Games and Take-Two Interactive. This mod is created solely for educational and non-commercial purposes. Users must comply with the terms of service and license agreements of Rockstar Games.
 
 
-## Building
+## Building (Windows)
 
-### Client, Server, Launcher (Windows)
-1. Verify that you have the C++ and C# packages installed in Visual Studio 2022.
+### Client & Server
 
-2. Download [THIS version of the plugin-sdk](https://github.com/DK22Pac/plugin-sdk/tree/050d18b6e1770477deab81a40028a40277583d97) and install it using [THIS INSTRUCTION](https://github.com/DK22Pac/plugin-sdk/wiki/Set-up-plugin-sdk). Set up your GTA-SA and plugin-sdk folders.
+1. Make sure you have the **C++ package** installed in **Visual Studio 2022**.
 
-3. Open project_files/CoopAndreas.sln in Visual Studio 2022 and build every project (Ctrl+Shift+B).
+2. Download **[this version of plugin-sdk](https://github.com/DK22Pac/plugin-sdk/tree/050d18b6e1770477deab81a40028a40277583d97)** and install it following **[this instruction](https://github.com/DK22Pac/plugin-sdk/wiki/Set-up-plugin-sdk)**.  
+   Set up your GTA-SA and plugin-sdk folders.
+
+3. Open `project_files/CoopAndreas.sln` in **Visual Studio 2022** and build all projects (`Ctrl + Shift + B`).
+
+4. Copy `CoopAndreasSA.dll` to your **game directory**.
+
+---
+
+### Proxy (DLL Loader)
+
+The proxy is required to load (inject) the main DLL (`CoopAndreasSA.dll`) into the game executable.
+
+1. Go to your game directory and rename `eax.dll` to `eax_orig.dll`.
+
+2. Build the **Proxy** project from the solution and rename the output DLL to `eax.dll`.
+
+3. Copy the new `eax.dll` to your game directory.
+
+---
+
+### `main.scm`
+
+1. Download and install **[Sanny Builder 4](https://github.com/sannybuilder/dev/releases)**.
+
+2. Copy all files from the `sdk/Sanny Builder 4/` directory to the **Sanny Builder 4 installation folder**.  
+   This will add **CoopAndreas opcodes** to the compiler.
+
+3. Open `scm/main.txt` in **Sanny Builder 4**, compile it, and copy all generated files to  
+   `${GTA_SA_DIR}/CoopAndreas/`.
+
+---
+
+### Running
+
+1. Run `server.exe` it will start accepting client connections.
+2. Run `gta_sa.exe`, press **Start Game**, enter your nickname, then provide the server IP and port.
+   - If the server is running on the same machine, use `127.0.0.1`
+   - Default port: `6767`
 
 
-### Server (GNU/Linux)
+## Building (GNU/Linux)
+
+### Server
+
 #### Requirements 
 * GCC or LLVM Compilers 
 * GNU Make or Ninja  
-* Enet library (no need because coopandreas uses latest custom enet library in repo , check ``build`` and ``thirdparty-libraries`` folder 
+* Enet library (no need because coopandreas uses latest custom enet library in repo , check ``build`` and ``thirdparty-libraries`` folder)
 
 #### Building using CMake 
 copy and paste the commands below in your terminal :  
@@ -36,14 +76,6 @@ cmake -S .. -B .
 make # or ninja if you use -G "Ninja" parameter in cmake
 ./CoopAndreasServer
 ``` 
-
-### main.scm
-
-1. Download and install [Sanny Builder 4](https://github.com/sannybuilder/dev/releases/tag/v4.0.0)
-
-2. Move all files from the `sdk/Sanny Builder 4/` folder to the SB4 installation folder. This will add CoopAndreas's opcodes to the compiler
-
-3. Open `scm/main.txt` with **Sanny Builder 4**, compile it, and then move all output files to the `${GTA_SA_DIR}/CoopAndreas/`
 
 ## Donate
 https://send.monobank.ua/jar/8wPrs73MBa

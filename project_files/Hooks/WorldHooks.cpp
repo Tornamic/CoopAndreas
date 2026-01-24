@@ -189,6 +189,43 @@ void CTagManager__SetAlpha_Hook(CEntity* entity, uint8_t alpha)
     CTagManager::SetAlpha(entity, alpha);
 }
 
+// disable paynspray if you are a passenger
+static void __declspec(naked) CGarage__Update_Hook()
+{
+    static CPlayerPed* pPlayerPed;
+    static CVehicle* pVehicle;
+
+    __asm
+    {
+        push esi
+    }
+
+    pPlayerPed = FindPlayerPed(0);
+    pVehicle = pPlayerPed->m_pVehicle;
+    if (pPlayerPed == pVehicle->m_pDriver)
+    {
+        __asm
+        {
+            pop esi
+
+            mov al, [esi + 0x4E] // 0x44B2DE
+            test al, al          // 0x44B2E1
+
+            push 0x44B2E3
+            retn
+        }
+    }
+    else
+    {
+        __asm
+        {
+            pop esi
+            push 0x44B38D
+            retn
+        }
+    }
+}
+
 void WorldHooks::InjectHooks()
 {
     waypointPlaceEvent += PlaceWaypointHook;
@@ -257,4 +294,6 @@ void WorldHooks::InjectHooks()
     //patch::RedirectCall(0x5B812D, CEntryExitManager__AddOne_Hook);
 
     //patch::RedirectCall(0x440F89, CEntryExit__TransitionFinished_Hook);
+
+    patch::RedirectJump(0x44B2DE, CGarage__Update_Hook);
 }

@@ -8,10 +8,13 @@ bool CNetwork::m_bConnected = false;
 std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
 
 char CNetwork::m_IpAddress[128 + 1];
-unsigned short CNetwork::m_nPort;
+unsigned short CNetwork::m_nPort = 6767;
 
 DWORD WINAPI CNetwork::InitAsync(LPVOID)
 {
+	assert(strcmp(m_IpAddress, "") != 0 && "Wrong IP passed");
+	assert(m_nPort != 0 && "Wrong Port passed");
+
 	// init listeners
 	CNetwork::InitListeners();
 
