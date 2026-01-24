@@ -16,7 +16,7 @@ static char* aRows[MAX_ROWS] = { "Nickname:", "IP:", "Port:", "Back", "Connect" 
 static const int MAX_INPUT_ROWS = 3;
 static int iLastHovered = ROW_NICKNAME;
 static int iActiveInputRow = ROW_UNSELECTED;
-static char aRowContent[MAX_INPUT_ROWS][32+1] = { "", "", "6767"};
+static char aRowContent[MAX_INPUT_ROWS][32+1] = { "", "", ""};
 
 static inline void SetFontColor(bool bActive)
 {
@@ -406,7 +406,7 @@ void __fastcall CMenuManager__UserInput_Hook(CMenuManager* This)
 
 void CCustomMenuManager::Init()
 {
-	CConfigLoader::Load();
+	CConfigLoader::Init();
 
 	strncpy_s(aRowContent[ROW_NICKNAME], 32, CLocalPlayer::m_Name, 32);
 	strncpy_s(aRowContent[ROW_IP], 15, CNetwork::m_IpAddress, 15);

@@ -28,6 +28,10 @@
 #include <cwctype>
 #include "utf8.h"
 
+// config
+
+#include "../shared/config.h"
+
 // plugin-sdk ------------------------------------------------------------------------------
 
 #include "plugin.h"
