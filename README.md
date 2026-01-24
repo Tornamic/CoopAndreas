@@ -90,8 +90,6 @@ PayPal `kirilltymoshchenko59@gmail.com`
 
 *If you need another way to donate, please dm me on discord: `@tornamic`*
 
-Contact information is current as of August 2025
-
 ## TODO list:
 ### Already Done ✓
 - [X] setup C/C++ project
@@ -220,7 +218,7 @@ Contact information is current as of August 2025
   - [X] speech sync
 - [ ] player voice commands
 - [ ] chat reactions (see LD_CHAT.txd)
-- [ ] gand wars sync
+- [ ] gang wars sync
 - [ ] parachute jump sync
 - [ ] stunt
   - [ ] collecting

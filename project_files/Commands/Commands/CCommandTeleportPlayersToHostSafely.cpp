@@ -61,9 +61,16 @@ void CCommandTeleportPlayersToHostSafely::Process(CRunningScript* script)
 	if (playerCount == 0) return;
 
 	CVector positions[MAX_TELEPORT_SLOTS];
+	for (int i = 0; i < playerCount; i++)
+		positions[i] = CVector(0.0f, 0.0f, 0.0f);
+
 	CalculateSafePositions(FindPlayerCoors(0), FindPlayerPed(0)->m_fCurrentRotation, playerCount, positions);
 	for (int i = 0; i < playerCount; i++)
 	{
+		if (positions[i].x == 0.0f && positions[i].y == 0.0f && positions[i].z == 0.0f)
+		{
+			positions[i] = FindPlayerCoors(0);
+		}
 		CPackets::TeleportPlayerScripted packet{};
 		packet.playerid = networkPlayers[i]->m_iPlayerId;
 		packet.pos = positions[i];

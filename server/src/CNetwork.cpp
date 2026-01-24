@@ -13,7 +13,7 @@
 #include "../core/CVehicleManager.h"
 #include "../core/CPedManager.h"
 
-#include "../shared/semver.h"
+#include "../../shared/semver.h"
 #include "../core/PlayerDisconnectReason.h"
 
 std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
@@ -34,6 +34,7 @@ bool CNetwork::Init(unsigned short port)
     address.host = ENET_HOST_ANY; // bind server ip
     address.port = port; // bind server port
 
+    // TODO: `ConfigManager::GetConfigMaxPlayers`
     ENetHost* server = enet_host_create(&address, MAX_SERVER_PLAYERS, 2, 0, 0); // create enet host
 
     if (server == NULL)

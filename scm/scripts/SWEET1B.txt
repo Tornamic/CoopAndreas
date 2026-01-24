@@ -3,6 +3,8 @@
 
 :SWEET1B
 script_name 'SWEET1B'
+Coop.EnableSyncingThisScript()
+
 gosub @SWEET1B_1079
 if 
   has_deatharrest_been_executed 
@@ -122,6 +124,7 @@ return
 Stat.RegisterMissionGiven
 55@ = 0
 47@ = 0
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 $onmission = 1
 63@ = 0
 52@ = 0
@@ -202,7 +205,40 @@ Game.EnableAmbientCrime(False)
 World.ClearArea(1, 2516.392, -1676.517, 13.0041, 5.0)
 World.ClearArea(1, 2508.742, -1671.132, 12.3818, 5.0)
 World.ClearArea(1, 2516.95, -1675.23, 13.05, 2.0)
+World.ClearArea(1, $ryder_carX, $ryder_carY, $ryder_carZ, 6.0)
+World.ClearArea(1, 2508.16, -1666.47, 12.3983, 6.0)
+CarGenerator.Switch($gen_car7, 0)
+CarGenerator.Switch($gen_car6, 0)
+
+Car.CustomPlateForNextCar(600, "_SHERM__")
+$ryder_car = Car.Create(600, $ryder_carX, $ryder_carY, $ryder_carZ)
+
+Car.CustomPlateForNextCar(492, "GROVE4L_")
+$sweet_car = Car.Create(492, 2508.16, -1666.47, 12.3983)
+
 $ryder = Char.Create(24, 290, 2516.392, -1676.517, 13.0041)
+
+$temp_int = Coop.GetPedNetworkId($ryder)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId($ryder)
+end
+
+$temp_int = Coop.GetVehicleNetworkId($sweet_car)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId($sweet_car)
+end
+
+$temp_int = Coop.GetVehicleNetworkId($ryder_car)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId($ryder_car)
+end
+
+Car.ChangeColor($ryder_car, 84, 84)
+Car.SetHeading($ryder_car, 0.0)
+
 Char.SetHeading($ryder, 45.7)
 Game.SetRelationship(RelationshipType.Respect, PedType.Mission1, PedType.Player1)
 Game.SetRelationship(RelationshipType.Respect, PedType.Player1, PedType.Mission1)
@@ -220,6 +256,7 @@ Blip.SetAsFriendly(39@, True)
 Blip.Remove(39@)
 Char.SetCoordinates($scplayer, 2516.95, -1675.23, 13.05)
 Char.SetHeading($scplayer, 56.0)
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Streaming.LoadScene(2509.81, -1670.89, 12.39)
 $Players_Group = Player.GetGroup($player1)
 Group.SetMember($ryder, $Players_Group)
@@ -231,10 +268,14 @@ Game.EnableEntryExitPlayerGroupWarping(319.56, 1117.64, 10.0, True)
 Game.MakeRoomInPlayerGangForMissionPeds(1)
 Char.SetSignalAfterKill($ryder, False)
 Text.PrintNow('SW1B_A', 10000, 1)
-CarGenerator.Switch($gen_car7, 0)
-World.ClearArea(1, 2508.16, -1666.47, 12.3983, 6.0)
-Car.CustomPlateForNextCar(492, "GROVE4L_")
-$sweet_car = Car.Create(492, 2508.16, -1666.47, 12.3983)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SW1B_A', 10000, 1, $NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCheckpointForNetworkPlayer(2301.07, -1754.40, 12.54, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Car.ChangeColor($sweet_car, 59, 34)
 Car.SetHeading($sweet_car, 16.0)
 Audio.SetRadioChannel(RadioChannel.RadioLosSantos)
@@ -256,9 +297,25 @@ gosub @SWEET1B_47
 World.ClearArea(1, 2301.07, -1754.4, 12.54, 20.0)
 
 :SWEET1B_2099
+200@ = 0
+
+for $temp_int = 0 to 2
+	if
+		Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+	then
+		if or 
+			not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], False, 2301.07, -1754.4, 12.54, 4.0, 4.0, 4.0)
+  			not Char.LocateAnyMeansChar3D($ryder, $NETWORK_PLAYER[$temp_int], 30.0, 30.0, 8.0, False)
+		then
+			200@ = 1
+		end
+	end
+end
+
 if or
   not Char.LocateAnyMeans3D($scplayer, $blob_flag, 2301.07, -1754.4, 12.54, 4.0, 4.0, 4.0)
   not Char.LocateAnyMeansChar3D($ryder, $scplayer, 30.0, 30.0, 8.0, False)
+  200@ == 1
 goto_if_false @SWEET1B_2488
 wait 0
 if 
@@ -310,7 +367,7 @@ Text.PrintHelp('CALLRYD')
 104@ = 1
 
 :SWEET1B_2435
-gosub @SWEET1B_16372
+gosub @SWEET1B_ryders_group_break
 if 
   Char.IsDead($ryder)
 goto_if_false @SWEET1B_2481
@@ -326,6 +383,16 @@ Player.SetControl($player1, False)
 Text.ClearPrints
 Camera.SetFixedPosition(2301.918, -1746.505, 14.009, 0.0, 0.0, 0.0)
 Camera.PointAtPoint(2301.81, -1747.499, 14.0471, SwitchType.JumpCut)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Task.LeaveAnyCar($NETWORK_PLAYER[$temp_int])
+    end
+end
+
 if 
   not Char.IsDead($ryder)
 goto_if_false @SWEET1B_2621
@@ -781,7 +848,7 @@ Camera.RestoreJumpcut
 66@ = 1
 
 :SWEET1B_5282
-gosub @SWEET1B_16372
+gosub @SWEET1B_ryders_group_break
 if 
   Char.IsDead($ryder)
 goto_if_false @SWEET1B_5328
@@ -1208,7 +1275,7 @@ Text.PrintNow('SW1B_G', 10000, 1)
 goto @SWEET1B_15554
 
 :SWEET1B_7737
-gosub @SWEET1B_16372
+gosub @SWEET1B_ryders_group_break
 if 
   Char.IsDead($ryder)
 goto_if_false @SWEET1B_7783
@@ -1290,7 +1357,7 @@ goto_if_false @SWEET1B_8247
 gosub @SWEET1B_17075
 
 :SWEET1B_8247
-gosub @SWEET1B_16372
+gosub @SWEET1B_ryders_group_break
 if 
   105@ == 0
 goto_if_false @SWEET1B_8325
@@ -2048,7 +2115,7 @@ Char.DropObject(59@, True)
 70@ = 1
 
 :SWEET1B_13643
-gosub @SWEET1B_16372
+gosub @SWEET1B_ryders_group_break
 if 
   Char.IsDead($ryder)
 goto_if_false @SWEET1B_13689
@@ -2116,7 +2183,7 @@ goto @SWEET1B_15554
 if 
   107@ == 1
 goto_if_false @SWEET1B_14116
-gosub @SWEET1B_16372
+gosub @SWEET1B_ryders_group_break
 
 :SWEET1B_14116
 78@ = Streaming.GetAreaVisible()
@@ -2465,130 +2532,193 @@ Blip.Remove(45@)
 Blip.Remove(38@)
 Blip.Remove(39@)
 CarGenerator.Switch($gen_car7, 101)
+CarGenerator.Switch($gen_car6, 101)
 Char.RemoveElegantly($ryder)
 Streaming.UnloadSpecialCharacter(1)
 Game.EnableAmbientCrime(True)
 Mission.Finish
 return 
 
-:SWEET1B_16372
+:SWEET1B_ryders_group_break
+
+if not Char.IsDead($ryder)
+then
+	for $temp_int = 0 to 2
+		if
+			Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+		then
+			204@ = Char.GetAreaVisible($NETWORK_PLAYER[$temp_int])
+			if 204@ == 0
+			then
+				if not Char.LocateAnyMeansChar3D($ryder, $NETWORK_PLAYER[$temp_int], 30.0, 30.0, 8.0, False)
+				then
+					if 201@($temp_int, 3i) == 0
+					then
+						Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+						Coop.PrintNowForNetworkPlayer('SW1B_H', 6000, 1, $NETWORK_PLAYER[$temp_int])
+						Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder, true, BlipDisplay.Both, BlipColor.Blue, 3)
+						201@($temp_int, 3i) = 1
+					end
+				else
+					if Char.LocateAnyMeansChar3D($ryder, $NETWORK_PLAYER[$temp_int], 10.0, 10.0, 8.0, False)
+					then
+						if 201@($temp_int, 3i) == 1
+						then
+
+							if 102@ == 0
+							then
+                                Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
+								Coop.UpdateCheckpointForNetworkPlayer(2301.07, -1754.40, 12.54, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+								Coop.PrintNowForNetworkPlayer('SW1B_A', 7000, 1, $NETWORK_PLAYER[$temp_int]) // ~s~Go to ~y~B Dup crib~s~
+							end
+
+							if 102@ == 1
+							then
+                                Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
+								if not Char.IsDead(35@)
+								then
+									Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 35@, false, BlipDisplay.Both, BlipColor.Red, 3)
+								end
+								Coop.PrintNowForNetworkPlayer('SW1B_B', 7000, 1, $NETWORK_PLAYER[$temp_int]) // ~s~Go beat up the ~r~crack dealer~s~
+							end
+
+							if 102@ == 2
+							then
+                                Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
+								if 204@ == 0 // interior
+								then
+									Coop.UpdateCheckpointForNetworkPlayer(2171.781, -1676.78, 14.0859, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int]) //CRACK HOUSE
+								end
+								Coop.PrintNowForNetworkPlayer('SW1B_1', 7000, 1, $NETWORK_PLAYER[$temp_int]) // ~s~Go to ~r~crack dealer~s~
+							end
+
+							if 102@ == 3
+							then
+                                Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
+								World.SwitchEntryExit('LACRAK', True)
+								if 204@ == 0
+								then
+									Coop.UpdateCheckpointForNetworkPlayer(2169.72, -1673.14, 13.01, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int]) //CRACK HOUSE door
+								end
+								Coop.PrintNowForNetworkPlayer('SW1B_1', 7000, 1, $NETWORK_PLAYER[$temp_int]) // ~s~Go to ~r~crack dealer~s~
+							end
+
+							if 102@ == 4
+							then
+                                Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+								Coop.UpdateCheckpointForNetworkPlayer(2513.33, -1672.12, 12.52, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+								Coop.PrintNowForNetworkPlayer('SW1B_F', 7000, 1, $NETWORK_PLAYER[$temp_int]) // Go back to Ryders gaff.
+							end
+
+							201@($temp_int, 3i) = 0
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
 78@ = Streaming.GetAreaVisible()
-if 
-  78@ == 0
-goto_if_false @SWEET1B_17073
-if 
-  not Char.IsDead($ryder)
-goto_if_false @SWEET1B_17073
-if 
-  not Char.LocateAnyMeansChar3D($ryder, $scplayer, 30.0, 30.0, 8.0, False)
-goto_if_false @SWEET1B_16585
-if 
-  47@ == 0
-goto_if_false @SWEET1B_16578
-if 
-  43@ == 0
-goto_if_false @SWEET1B_16496
-World.SwitchEntryExit('LACRAK', False)
+if 78@ == 0
+then
+    if not Char.IsDead($ryder)
+    then
+        if not Char.LocateAnyMeansChar3D($ryder, $scplayer, 30.0, 30.0, 8.0, False)
+        then
+            if 47@ == 0
+            then
+                if 43@ == 0
+                then
+                    World.SwitchEntryExit('LACRAK', False)
+                end
 
-:SWEET1B_16496
-Blip.Remove(45@)
-Blip.Remove(44@)
-Blip.Remove(39@)
-Blip.Remove(38@)
-39@ = Blip.AddForChar($ryder)
-Blip.SetAsFriendly(39@, True)
-Char.RemoveFromGroup($ryder)
-Char.ClearTasks($ryder)
-gosub @SWEET1B_17920
-Text.PrintNow('SW1B_H', 6000, 1)
-$blob_flag = 0
-47@ = 1
+                Blip.Remove(45@)
+                Blip.Remove(44@)
+                Blip.Remove(39@)
+                Blip.Remove(38@)
+                39@ = Blip.AddForChar($ryder)
+                Blip.SetAsFriendly(39@, True)
+                Char.RemoveFromGroup($ryder)
+                Char.ClearTasks($ryder)
+                gosub @SWEET1B_17920
+                Text.PrintNow('SW1B_H', 6000, 1) // You're too far away from Ryder, go back and get him.
+                $blob_flag = 0
+                47@ = 1
+            end
+        else
+            if not Char.IsDead($ryder)
+            then
+                if Char.LocateAnyMeansChar3D($ryder, $scplayer, 10.0, 10.0, 8.0, False)
+                then
+                    if 47@ == 1
+                    then
+                        if not Char.IsDead($ryder)
+                        then
+                            Blip.Remove(39@)
+                            Char.RemoveFromGroup($ryder)
+                            $Players_Group = Player.GetGroup($player1)
+                            Group.SetMember($ryder, $Players_Group)
+                            Player.SetGroupRecruitment($player1, False)
+                            Char.ListenToPlayerGroupCommands($ryder, False)
+                        end
 
-:SWEET1B_16578
-goto @SWEET1B_17073
+                        if 102@ == 0
+                        then
+                            Blip.Remove(38@)
+                            38@ = Blip.AddForCoord(2301.07, -1754.4, 12.54)
+                            Text.PrintNow('SW1B_A', 7000, 1) // ~s~Go to ~y~B Dup crib~s~
+                        end
 
-:SWEET1B_16585
-if 
-  not Char.IsDead($ryder)
-goto_if_false @SWEET1B_17073
-if 
-  Char.LocateAnyMeansChar3D($ryder, $scplayer, 10.0, 10.0, 8.0, False)
-goto_if_false @SWEET1B_17073
-if 
-  47@ == 1
-goto_if_false @SWEET1B_17073
-if 
-  not Char.IsDead($ryder)
-goto_if_false @SWEET1B_16711
-Blip.Remove(39@)
-Char.RemoveFromGroup($ryder)
-$Players_Group = Player.GetGroup($player1)
-Group.SetMember($ryder, $Players_Group)
-Player.SetGroupRecruitment($player1, False)
-Char.ListenToPlayerGroupCommands($ryder, False)
+                        if 102@ == 1
+                        then
+                            if not Char.IsDead(35@)
+                            then
+                                Blip.Remove(44@)
+                                44@ = Blip.AddForChar(35@)
+                            end
+                            Text.PrintNow('SW1B_B', 7000, 1) // ~s~Go beat up the ~r~crack dealer~s~
+                        end
 
-:SWEET1B_16711
-if 
-  102@ == 0
-goto_if_false @SWEET1B_16770
-Blip.Remove(38@)
-38@ = Blip.AddForCoord(2301.07, -1754.4, 12.54)
-Text.PrintNow('SW1B_A', 7000, 1)
+                        if 102@ == 2
+                        then
+                            if 78@ == 0
+                            then
+                                Blip.Remove(38@)
+                                38@ = Blip.AddForCoord(2171.781, -1676.78, 14.0859) //CRACK HOUSE
+                            end
+                            Text.PrintNow('SW1B_1', 7000, 1) // ~s~Go to ~r~crack dealer~s~
+                        end
 
-:SWEET1B_16770
-if 
-  102@ == 1
-goto_if_false @SWEET1B_16833
-if 
-  not Char.IsDead(35@)
-goto_if_false @SWEET1B_16817
-Blip.Remove(44@)
-44@ = Blip.AddForChar(35@)
+                        if 102@ == 3
+                        then
+                            World.SwitchEntryExit('LACRAK', True)
+                            if 78@ == 0
+                            then
+                                Blip.Remove(38@)
+                                38@ = Blip.AddForCoord(2169.72, -1673.14, 13.01) //CRACK HOUSE door
+                            end
+                            Text.PrintNow('SW1B_1', 7000, 1) // ~s~Go to ~r~crack dealer~s~
+                        end
 
-:SWEET1B_16817
-Text.PrintNow('SW1B_B', 7000, 1)
+                        if 102@ == 4
+                        then
+                            Blip.Remove(38@)
+                            38@ = Blip.AddForCoord(2513.33, -1672.12, 12.52)
+                            Text.PrintNow('SW1B_F', 7000, 1) // Go back to Ryders gaff.
+                        end
 
-:SWEET1B_16833
-if 
-  102@ == 2
-goto_if_false @SWEET1B_16910
-if 
-  78@ == 0
-goto_if_false @SWEET1B_16894
-Blip.Remove(38@)
-38@ = Blip.AddForCoord(2171.781, -1676.78, 14.0859)
+                        $blob_flag = 1
+                        47@ = 0
+                    end
+                end
+            end
+        end
+    end
+end
 
-:SWEET1B_16894
-Text.PrintNow('SW1B_1', 7000, 1)
+return
 
-:SWEET1B_16910
-if 
-  102@ == 3
-goto_if_false @SWEET1B_17000
-World.SwitchEntryExit('LACRAK', True)
-if 
-  78@ == 0
-goto_if_false @SWEET1B_16984
-Blip.Remove(38@)
-38@ = Blip.AddForCoord(2169.72, -1673.14, 13.01)
-
-:SWEET1B_16984
-Text.PrintNow('SW1B_1', 7000, 1)
-
-:SWEET1B_17000
-if 
-  102@ == 4
-goto_if_false @SWEET1B_17059
-Blip.Remove(38@)
-38@ = Blip.AddForCoord(2513.33, -1672.12, 12.52)
-Text.PrintNow('SW1B_F', 7000, 1)
-
-:SWEET1B_17059
-$blob_flag = 1
-47@ = 0
-
-:SWEET1B_17073
-return 
 
 :SWEET1B_17075
 if or
@@ -2635,6 +2765,13 @@ if
   Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
 goto_if_false @SWEET1B_17318
 Text.PrintNow($sweet1b_chat(58@,8s), 4000, 1)
+for $temp_int = 0 to 2
+	if
+		Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+	then
+		Coop.PrintNowForNetworkPlayer($sweet1b_chat(58@,8s), 4000, 1, $NETWORK_PLAYER[$temp_int])
+	end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 gosub @SWEET1B_17320
 101@ = 2
