@@ -2,11 +2,10 @@
 
 #include <string>
 #include <unordered_map>
-#include <fstream>
 
-#include "../INIReader/cpp/INIReader.h"
+#include "INIReader/cpp/INIReader.h"
 #include "CNetwork.h"
-#include "../shared/config.h"
+#include <config.h>
 
 class CConfigManager
 {

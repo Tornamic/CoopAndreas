@@ -16,11 +16,11 @@ private:
 		{"nickname", ""},
 		{"ip", ""},
 		{"port", std::to_string(Config::DEFAULT_PORT)}
-	};;
+	};
 	
 public:
-	static inline const char* CONFIG_SECTION = "config";
-	static inline const char* CONFIG_FILE_NAME = "coopandreas.ini";
+	static inline const std::string CONFIG_SECTION = "config";
+	static inline const std::string CONFIG_FILE_NAME = "coopandreas.ini";
 
 	static void Init();
 	static void Save();

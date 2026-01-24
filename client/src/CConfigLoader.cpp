@@ -17,7 +17,7 @@ void CConfigLoader::BuildDefaultConfig()
 		return;
 	}
 
-    std::string config = "[" + std::string(CONFIG_SECTION) + "]" + "\n";
+    std::string config = "[" + CONFIG_SECTION + "]" + "\n";
 
 	for (const auto& [key, value] : ms_umDefaultConfig)
 	{
@@ -57,9 +57,9 @@ void CConfigLoader::Load()
 {
 	EnsureCreated();
 
-	GetPrivateProfileString(CONFIG_SECTION, "nickname", "", CLocalPlayer::m_Name, sizeof(CLocalPlayer::m_Name), ms_sDataPath.c_str());
-	GetPrivateProfileString(CONFIG_SECTION, "ip", "", CNetwork::m_IpAddress, 15, ms_sDataPath.c_str());
-	CNetwork::m_nPort = GetPrivateProfileInt(CONFIG_SECTION, "port", Config::DEFAULT_PORT, ms_sDataPath.c_str());
+	GetPrivateProfileStringA(CONFIG_SECTION.c_str(), "nickname", "", CLocalPlayer::m_Name, sizeof(CLocalPlayer::m_Name), ms_sDataPath.c_str());
+	GetPrivateProfileString(CONFIG_SECTION.c_str(), "ip", "", CNetwork::m_IpAddress, 15, ms_sDataPath.c_str());
+	CNetwork::m_nPort = GetPrivateProfileInt(CONFIG_SECTION.c_str(), "port", Config::DEFAULT_PORT, ms_sDataPath.c_str());
 
 #if DEBUG
 	printf("%s %s %d\n", CLocalPlayer::m_Name, CNetwork::m_IpAddress, CNetwork::m_nPort);
@@ -70,7 +70,7 @@ void CConfigLoader::Save()
 {
 	EnsureCreated();
 	
-	WritePrivateProfileString(CONFIG_SECTION, "nickname", CLocalPlayer::m_Name, ms_sDataPath.c_str());
-	WritePrivateProfileString(CONFIG_SECTION, "ip", CNetwork::m_IpAddress, ms_sDataPath.c_str());
-	WritePrivateProfileString(CONFIG_SECTION, "port", std::to_string(CNetwork::m_nPort).c_str(), ms_sDataPath.c_str());
+	WritePrivateProfileString(CONFIG_SECTION.c_str(), "nickname", CLocalPlayer::m_Name, ms_sDataPath.c_str());
+	WritePrivateProfileString(CONFIG_SECTION.c_str(), "ip", CNetwork::m_IpAddress, ms_sDataPath.c_str());
+	WritePrivateProfileString(CONFIG_SECTION.c_str(), "port", std::to_string(CNetwork::m_nPort).c_str(), ms_sDataPath.c_str());
 }
