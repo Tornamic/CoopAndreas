@@ -33,7 +33,9 @@ void CConfigLoader::Load()
 	GetPrivateProfileString("config", "ip", "", CNetwork::m_IpAddress, 15, path.c_str());
 	CNetwork::m_nPort = GetPrivateProfileInt("config", "port", 6767, path.c_str());
 
-	printf("%s %s %d", CLocalPlayer::m_Name, CNetwork::m_IpAddress, CNetwork::m_nPort);
+#if DEBUG
+	printf("%s %s %d\n", CLocalPlayer::m_Name, CNetwork::m_IpAddress, CNetwork::m_nPort);
+#endif
 }
 
 void CConfigLoader::Save()
