@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "../project_files/CDXFont.h"
+#include "CDXFont.h"
 #include <Hooks/WorldHooks.h>
 #include "CCutsceneMgr.h"
 #include <CDiscordRPCMgr.h>

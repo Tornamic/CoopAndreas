@@ -5,16 +5,16 @@
 #include <algorithm>
 #include <unordered_map>
 
-#include "../core/CPacketListener.h"
-#include "../core/CPacket.h"
-#include "../core/CNetwork.h"
+#include "CPacketListener.h"
+#include "CPacket.h"
+#include "CNetwork.h"
 
-#include "../core/CPlayerManager.h"
-#include "../core/CVehicleManager.h"
-#include "../core/CPedManager.h"
+#include "CPlayerManager.h"
+#include "CVehicleManager.h"
+#include "CPedManager.h"
 
-#include "../../shared/semver.h"
-#include "../core/PlayerDisconnectReason.h"
+#include "semver.h"
+#include "PlayerDisconnectReason.h"
 
 std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
 

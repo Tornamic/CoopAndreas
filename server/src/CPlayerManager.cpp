@@ -1,6 +1,6 @@
 
-#include "../core/CPlayer.h"
-#include "../core/CPlayerManager.h"
+#include "CPlayer.h"
+#include "CPlayerManager.h"
 
 std::vector<CPlayer*> CPlayerManager::m_pPlayers;
 

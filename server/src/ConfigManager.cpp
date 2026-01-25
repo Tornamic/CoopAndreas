@@ -1,4 +1,4 @@
-#include "../core/ConfigManager.h"
+#include "ConfigManager.h"
 
 void CConfigManager::Init()
 {

@@ -12,21 +12,21 @@
 #endif
 
 #include "enet/enet.h"
-#include "thirdparty-libraries/INIReader/cpp/INIReader.h"
+#include "INIReader/cpp/INIReader.h"
 
-#include "core/CControllerState.h"
-#include "core/NetworkEntityType.h"
-#include "core/CPacketListener.h"
-#include "core/CVector.h"
-#include "core/CNetwork.h"
-#include "core/CPed.h"
-#include "core/CPedManager.h"
-#include "core/CPlayer.h"
-#include "core/CPlayerManager.h"
-#include "core/CVehicle.h"
-#include "core/CVehicleManager.h"
-#include "core/VehicleDoorState.h"
-#include "core/ConfigManager.h"
+#include "CControllerState.h"
+#include "NetworkEntityType.h"
+#include "CPacketListener.h"
+#include "CVector.h"
+#include "CNetwork.h"
+#include "CPed.h"
+#include "CPedManager.h"
+#include "CPlayer.h"
+#include "CPlayerManager.h"
+#include "CVehicle.h"
+#include "CVehicleManager.h"
+#include "VehicleDoorState.h"
+#include "ConfigManager.h"
 
 #if defined(_WIN32)
 #include <windows.h>

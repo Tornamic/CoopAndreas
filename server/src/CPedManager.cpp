@@ -1,5 +1,5 @@
 
-#include "../core/CPedManager.h"
+#include "CPedManager.h"
 
 std::vector<CPed*> CPedManager::m_pPeds;
 

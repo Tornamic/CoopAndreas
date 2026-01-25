@@ -4,8 +4,8 @@
 #include <unordered_map>
 #include <fstream>
 
-#include "../thirdparty-libraries/INIReader/cpp/INIReader.h"
-#include "../core/CNetwork.h"
+#include "INIReader/cpp/INIReader.h"
+#include "CNetwork.h"
 
 class CConfigManager
 {
