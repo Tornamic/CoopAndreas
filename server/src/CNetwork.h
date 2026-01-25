@@ -7,7 +7,7 @@
 
 #include <cstddef>
 #include <unordered_map>
-#include "../thirdparty-libraries/enet/enet.h"
+#include "enet/enet.h"
 
 #include "CPacketListener.h"
 

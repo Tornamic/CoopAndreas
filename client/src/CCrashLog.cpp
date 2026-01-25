@@ -6,7 +6,7 @@
 #include <iomanip>
 #include <iostream>
 #include <chrono>
-#include <resources.h>
+#include "../resources.h"
 #include <Psapi.h>
 #pragma comment(lib, "Version.lib")
 #pragma comment(lib, "dbghelp.lib")

@@ -2,7 +2,7 @@
 
 #ifndef _CPED_H_
 	#define _CPED_H_
-#include "../thirdparty-libraries/enet/enet.h"
+#include "enet/enet.h"
 
 #include "CVector.h"
 #include "CNetwork.h"
