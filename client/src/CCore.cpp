@@ -4,6 +4,7 @@
 #include "CDiscordRPC.h"
 #include <COpCodeSync.h>
 #include <CCustomMenuManager.h>
+#include <winuser.h>
 
 semver_t CCore::Version;
 

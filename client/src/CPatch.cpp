@@ -146,16 +146,16 @@ void PatchPools()
 
     // ped pool (255)
     // push    8Ch -> push    FFh
-    patch::SetRaw(0x550FF1, "\x68\xFF\x00\x00\x00", 5); 
+    patch::SetRaw(0x550FF1, (void*)"\x68\xFF\x00\x00\x00", 5); 
 
     // intelligence pool (255), must be equal to the size of the ped pool
     // push    8Ch -> push    FFh
-    patch::SetRaw(0x551282, "\x68\xFF\x00\x00\x00", 5); 
+    patch::SetRaw(0x551282, (void*)"\x68\xFF\x00\x00\x00", 5); 
     
     // vehicle pool (400)
     // push    offset aVehicles -> push    0h
     // push    6Eh              -> push    190h
-    patch::SetRaw(0x551024, "\x6A\x00\x68\x90\x01\x00\x00", 7); 
+    patch::SetRaw(0x551024, (void*)"\x6A\x00\x68\x90\x01\x00\x00", 7); 
 
     // EntryInfoNode pool (1012)
     // push    1F4h -> push    3F4h
@@ -266,7 +266,7 @@ void FixCrashes()
     // patch isAlreadyRunning, so we can run more than one game instance
     if (GetModuleHandleA("SilentPatchSA.asi"))
     {
-        patch::SetRaw(0x74872D, "\xE8\xAE\xE1\xFF\xFF\x85\xC0\x75\x0F", 9);
+        patch::SetRaw(0x74872D, (void*)"\xE8\xAE\xE1\xFF\xFF\x85\xC0\x75\x0F", 9);
         patch::PutRetn0(0x7468E0);
     }
     else

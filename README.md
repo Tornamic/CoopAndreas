@@ -15,14 +15,21 @@ This mod is an unofficial modification for **Grand Theft Auto: San Andreas** and
 
 ### Client & Server
 
-1. Make sure you have the **C++ package** installed in **Visual Studio 2022**.
+1. Make sure you have the **C++ package** installed in **Visual Studio 2022** and **[xmake](https://xmake.io/)** (needed to build the project).
 
-2. Download **[this version of plugin-sdk](https://github.com/DK22Pac/plugin-sdk/tree/050d18b6e1770477deab81a40028a40277583d97)** and install it following **[this instruction](https://github.com/DK22Pac/plugin-sdk/wiki/Set-up-plugin-sdk)**.  
-   Set up your GTA-SA and plugin-sdk folders.
+2. Download **[this version of plugin-sdk](https://github.com/DK22Pac/plugin-sdk/tree/050d18b6e1770477deab81a40028a40277583d97)** and install it using **[this instruction](https://github.com/DK22Pac/plugin-sdk/wiki/Set-up-plugin-sdk)**.  
+   Set up your GTA-SA and plugin-sdk folders, and make sure `GTA_SA_DIR` and `PLUGIN_SDK_DIR` environment variables are set.
 
-3. Open `project_files/CoopAndreas.sln` in **Visual Studio 2022** and build all projects (`Ctrl + Shift + B`).
+3. Open a terminal in the repository root and build the projects:
 
-4. Copy `CoopAndreasSA.dll` to your **game directory**.
+```bash
+# Build client DLL
+xmake --build client -m debug    # or -m release
+
+# Build server binary
+xmake --build server -m debug    # or -m release
+```
+If `GTA_SA_DIR` is set, the client DLL (`CoopAndreasSA.dll`) will automatically be placed in your game directory.
 
 ---
 
@@ -32,9 +39,13 @@ The proxy is required to load (inject) the main DLL (`CoopAndreasSA.dll`) into t
 
 1. Go to your game directory and rename `eax.dll` to `eax_orig.dll`.
 
-2. Build the **Proxy** project from the solution and rename the output DLL to `eax.dll`.
+2. Build the **Proxy** project:
 
-3. Copy the new `eax.dll` to your game directory.
+```bash
+xmake --build proxy -m debug    # or -m release
+```
+
+3. Rename the output DLL to `eax.dll` and copy it to your game folder.
 
 ---
 
@@ -62,20 +73,7 @@ The proxy is required to load (inject) the main DLL (`CoopAndreasSA.dll`) into t
 
 ### Server
 
-#### Requirements 
-* GCC or LLVM Compilers 
-* GNU Make or Ninja  
-* Enet library (no need because coopandreas uses latest custom enet library in repo , check ``build`` and ``thirdparty-libraries`` folder)
-
-#### Building using CMake 
-copy and paste the commands below in your terminal :  
-```bash
-mkdir build
-cd build
-cmake -S .. -B .
-make # or ninja if you use -G "Ninja" parameter in cmake
-./CoopAndreasServer
-``` 
+TODO
 
 ## Donate
 https://send.monobank.ua/jar/8wPrs73MBa
