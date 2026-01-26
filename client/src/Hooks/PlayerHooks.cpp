@@ -10,7 +10,7 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     if (This == localPlayer)
     {
-        patch::SetRaw(0x6884C4, "\xD9\x96\x5C\x05\x00\x00", 6, false);
+        patch::SetRaw(0x6884C4, (void*)"\xD9\x96\x5C\x05\x00\x00", 6, false);
         plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
         patch::Nop(0x6884C4, 6, false);
         return;

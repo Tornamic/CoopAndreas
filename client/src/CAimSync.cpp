@@ -33,12 +33,12 @@ void CAimSync::ApplyNetworkPlayerContext(CNetworkPlayer* player)
 
 	// disable CCamera::SetNewPlayerWeaponMode
 	// ret    0xC
-	patch::SetRaw(0x50BFB0, "\xC2\x0C\x00", 3, false);
+	patch::SetRaw(0x50BFB0, (void*)"\xC2\x0C\x00", 3, false);
 
 	// disable CCamera::Using1stPersonWeaponMode
 	// mov    al,0x1
 	// ret
-	patch::SetRaw(0x50BFF0, "\xB0\x01\xC3", 3, false);
+	patch::SetRaw(0x50BFF0, (void*)"\xB0\x01\xC3", 3, false);
 
 	// disable CPlayerPed::ClearWeaponTarget
 	// ret
@@ -49,8 +49,8 @@ void CAimSync::ApplyLocalContext()
 {
 	// return original bytes
 	patch::SetUChar(0x50AB10, 0x33, false);				// CCamera::ClearPlayerWeaponMode
-	patch::SetRaw(0x50BFB0, "\x66\x8B\x44", 3, false);	// CCamera::SetNewPlayerWeaponMode
-	patch::SetRaw(0x50BFF0, "\x66\x8B\x81", 3, false);	// CCamera::Using1stPersonWeaponMode
+	patch::SetRaw(0x50BFB0, (void*)"\x66\x8B\x44", 3, false);	// CCamera::SetNewPlayerWeaponMode
+	patch::SetRaw(0x50BFF0, (void*)"\x66\x8B\x81", 3, false);	// CCamera::Using1stPersonWeaponMode
 	patch::SetUChar(0x609C80, 0x57, false);				// CPlayerPed::ClearWeaponTarget
 
 	ApplyPacketToGame(storedAimData);

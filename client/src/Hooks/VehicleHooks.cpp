@@ -422,8 +422,8 @@ void VehicleHooks::InjectHooks()
 
 
     // fix bmx on fire, now driver being set on fire instead of the local player, compatible with SilentPatch
-    patch::SetRaw(0x53A984, "\x90\x57", 2); // nop, push edi
-    patch::SetRaw(0x53A9A7, "\x90\x57", 2); // nop, push edi
+    patch::SetRaw(0x53A984, (void*)"\x90\x57", 2); // nop, push edi
+    patch::SetRaw(0x53A9A7, (void*)"\x90\x57", 2); // nop, push edi
     patch::RedirectCall(0x53A984 + 2, BmxFix_FindPlayerPed_Hook);
     patch::RedirectCall(0x53A9A7 + 2, BmxFix_FindPlayerPed_Hook);
     patch::RedirectCall(0x53A990, CPlayerPed__DoStuffToGoOnFire_Hook);
