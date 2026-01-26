@@ -258,7 +258,7 @@ void DrawCustomScreen_NicknamePortIp(CMenuManager* This)
 	//}
 }
 
-void __fastcall CMenuManager__DrawStandardMenu_Hook(CMenuManager* This, int, char a1)
+void __fastcall CMenuManager__DrawStandardMenu_Hook(CMenuManager* This, SKIP_EDX, char a1)
 {
 
 	This->DrawStandardMenu(a1);
@@ -344,7 +344,7 @@ void __fastcall CMenuManager__DrawStandardMenu_Hook(CMenuManager* This, int, cha
 	}
 }
 
-void __fastcall CMenuManager__SwitchToNewScreen_Hook(CMenuManager* This, int, char page)
+void __fastcall CMenuManager__SwitchToNewScreen_Hook(CMenuManager* This, SKIP_EDX, char page)
 {
 	CPad::NewMouseControllerState.lmb = false;
 	CPad::OldMouseControllerState.lmb = false;

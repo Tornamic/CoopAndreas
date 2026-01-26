@@ -14,7 +14,7 @@ void CHud__SetHelpMessageStatUpdate_Hook(char bIncrease, short statId, float sta
 }
 
 
-int8_t __fastcall CPed__GetWeaponSkill_Hook(CPed* This, int, eWeaponType weaponType)
+int8_t __fastcall CPed__GetWeaponSkill_Hook(CPed* This, SKIP_EDX, eWeaponType weaponType)
 {
 	eStats SkillStatIndex;
 	int reqStatLevel2;
@@ -60,7 +60,7 @@ void CStats__SetStatValue_Hook(eStats statID, float value)
 	CStats::SetStatValue(statID, value);
 }
 
-void __fastcall CPed__Dress_Hook(CPed* This, int)
+void __fastcall CPed__Dress_Hook(CPed* This, SKIP_EDX)
 {
 	This->Dress();
 

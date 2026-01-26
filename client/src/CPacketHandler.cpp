@@ -91,46 +91,42 @@ void CPacketHandler::PlayerDisconnected__Handle(void* data, int size)
 
 // PlayerOnFoot
 
-CPackets::PlayerOnFoot* CPacketHandler::PlayerOnFoot__Collect()
+CPackets::PlayerOnFoot CPacketHandler::PlayerOnFoot__Collect()
 {
 	// find local player
 	CPlayerPed* player = FindPlayerPed(-1);
-
-	// if player not created
-	if (player == nullptr)
-		return nullptr;
 	
 	// create PlayerOnFoot packet instance
-	CPackets::PlayerOnFoot* packet = new CPackets::PlayerOnFoot;
+	CPackets::PlayerOnFoot packet{};
 
 	// get player position
-	packet->position = player->m_matrix->pos;
+	packet.position = player->m_matrix->pos;
 
 	// get player move speed (velocity)
-	packet->velocity = player->m_vecMoveSpeed;
+	packet.velocity = player->m_vecMoveSpeed;
 
 	// get player facing angle
-	packet->currentRotation = player->m_fCurrentRotation;
-	packet->aimingRotation = player->m_fAimingRotation;
+	packet.currentRotation = player->m_fCurrentRotation;
+	packet.aimingRotation = player->m_fAimingRotation;
 	
 	// get player health, armour
-	packet->health = (unsigned char)player->m_fHealth;
-	packet->armour = (unsigned char)player->m_fArmour;
+	packet.health = (unsigned char)player->m_fHealth;
+	packet.armour = (unsigned char)player->m_fArmour;
 
 	// get player weapon in hands
-	packet->weapon = player->m_aWeapons[player->m_nActiveWeaponSlot].m_eWeaponType;
+	packet.weapon = player->m_aWeapons[player->m_nActiveWeaponSlot].m_eWeaponType;
 
-	packet->weaponState =  (uint8_t)player->m_aWeapons[player->m_nActiveWeaponSlot].m_nState;
+	packet.weaponState =  (uint8_t)player->m_aWeapons[player->m_nActiveWeaponSlot].m_nState;
 
 	// get ammo in clip count
-	packet->ammo = player->m_aWeapons[player->m_nActiveWeaponSlot].m_nAmmoInClip;
+	packet.ammo = player->m_aWeapons[player->m_nActiveWeaponSlot].m_nAmmoInClip;
 
 	// get crouch state
-	packet->ducking = CUtil::IsDucked(player);
+	packet.ducking = CUtil::IsDucked(player);
 
-	packet->hasJetpack = CUtil::IsPedHasJetpack(player);
+	packet.hasJetpack = CUtil::IsPedHasJetpack(player);
 
-	packet->fightingStyle = player->m_nFightingStyle;
+	packet.fightingStyle = player->m_nFightingStyle;
 
 	return packet;
 }
@@ -183,7 +179,7 @@ void CPacketHandler::PlayerOnFoot__Handle(void* data, int size)
 	networkPlayer->m_pPed->m_nAllowedAttackMoves |= 15u;
 
 	// save last onfoot sync
-	networkPlayer->m_lOnFoot = packet;
+	networkPlayer->m_playerOnFoot = *packet;
 }
 
 // PlayerBulletShot
@@ -492,8 +488,8 @@ void CPacketHandler::VehicleDriverUpdate__Handle(void* data, int size)
 	
 	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
 
-	player->m_lOnFoot->armour = packet->playerArmour;
-	player->m_lOnFoot->health = packet->playerHealth;
+	player->m_playerOnFoot.armour = packet->playerArmour;
+	player->m_playerOnFoot.health = packet->playerHealth;
 
 	vehicle->m_pVehicle->m_nPrimaryColor = packet->color1;
 	vehicle->m_pVehicle->m_nSecondaryColor = packet->color2;
@@ -755,8 +751,8 @@ void CPacketHandler::VehiclePassengerUpdate__Handle(void* data, int size)
 
 	CUtil::GiveWeaponByPacket(player, packet->weapon, packet->ammo);
 
-	player->m_pPed->m_fArmour = player->m_lOnFoot->armour = packet->playerArmour;
-	player->m_pPed->m_fHealth = player->m_lOnFoot->health = packet->playerHealth;
+	player->m_pPed->m_fArmour = player->m_playerOnFoot.armour = packet->playerArmour;
+	player->m_pPed->m_fHealth = player->m_playerOnFoot.health = packet->playerHealth;
 
 	if (packet->driveby && !CDriveBy::IsPedInDriveby(player->m_pPed))
 	{
@@ -778,7 +774,7 @@ void CPacketHandler::PlayerChatMessage__Handle(void* data, int size)
 
 	if (player)
 	{
-		CChat::SendPlayerMessage(player->GetName(), player->m_iPlayerId, packet->message);
+		CChat::SendPlayerMessage(player->GetName().c_str(), player->m_iPlayerId, packet->message);
 	}
 }
 
@@ -950,6 +946,7 @@ void CPacketHandler::GameWeatherTime__Trigger()
 
 	CPackets::GameWeatherTime* packet = CPacketHandler::GameWeatherTime__Collect();
 	CNetwork::SendPacket(CPacketsID::GAME_WEATHER_TIME, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE);
+	delete packet;
 }
 
 // PlayerKeySync

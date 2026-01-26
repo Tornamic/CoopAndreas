@@ -40,23 +40,23 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     //if (CPad::GetPad(0)->NewState.RightShoulder1) // is aiming
     //{
-    //    player->m_pPed->m_fCurrentRotation = player->m_lOnFoot->currentRotation;
+    //    player->m_pPed->m_fCurrentRotation = player->m_playerOnFoot.currentRotation;
     //}
-    //player->m_pPed->m_fAimingRotation = player->m_lOnFoot->aimingRotation;
+    //player->m_pPed->m_fAimingRotation = player->m_playerOnFoot.aimingRotation;
 
-    player->m_pPed->m_fHealth = player->m_lOnFoot->health;
-    player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
+    player->m_pPed->m_fHealth = player->m_playerOnFoot.health;
+    player->m_pPed->m_fArmour = player->m_playerOnFoot.armour;
 
     CTask* activeTask = player->m_pPed->m_pIntelligence->m_TaskMgr.GetActiveTask();
 
     if (activeTask && activeTask->GetId() != eTaskType::TASK_COMPLEX_JUMP)
     {
-        player->m_pPed->m_vecMoveSpeed = player->m_lOnFoot->velocity;
+        player->m_pPed->m_vecMoveSpeed = player->m_playerOnFoot.velocity;
     }
 
     plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
 
-    //player->m_pPed->m_fAimingRotation = player->m_lOnFoot->aimingRotation;
+    //player->m_pPed->m_fAimingRotation = player->m_playerOnFoot.aimingRotation;
 
     CWorld::PlayerInFocus = 0;
 
@@ -65,14 +65,14 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
     //CStatsSync::ApplyLocalContext();
 }
 
-static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding, CEntity* owner, CEntity* victim, CVector* startPoint, CVector* endPoint, CColPoint* colPoint, int incrementalHit)
+static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, SKIP_EDX, CEntity* owner, CEntity* victim, CVector* startPoint, CVector* endPoint, CColPoint* colPoint, int incrementalHit)
 {
     if (owner == FindPlayerPed(0) && victim)
     {
-        CPackets::PlayerBulletShot* packet = new CPackets::PlayerBulletShot;
-        packet->entityType = victim->m_nType + 1;
+        CPackets::PlayerBulletShot packet{};
+        packet.entityType = victim->m_nType + 1;
 
-        packet->targetid = -1;
+        packet.targetid = -1;
 
         if (victim != nullptr)
         {
@@ -82,30 +82,30 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
             {
                 if (auto playerTarget = CNetworkPlayerManager::GetPlayer(victim))
                 {
-                    packet->targetid = playerTarget->m_iPlayerId;
-                    packet->entityType = eNetworkEntityType::NETWORK_ENTITY_TYPE_PLAYER;
+                    packet.targetid = playerTarget->m_iPlayerId;
+                    packet.entityType = eNetworkEntityType::NETWORK_ENTITY_TYPE_PLAYER;
                 }
                 else if (auto pedTarget = CNetworkPedManager::GetPed(victim))
                 {
-                    packet->targetid = pedTarget->m_nPedId;
+                    packet.targetid = pedTarget->m_nPedId;
                 }
                 break;
             }
             case eEntityType::ENTITY_TYPE_VEHICLE:
             {
                 if (auto vehicleTarget = CNetworkVehicleManager::GetVehicle(victim))
-                    packet->targetid = vehicleTarget->m_nVehicleId;
+                    packet.targetid = vehicleTarget->m_nVehicleId;
                 break;
             }
             }
         }
 
-        packet->startPos = *startPoint;
-        packet->endPos = *endPoint;
-        packet->colPoint = *colPoint;
-        packet->incrementalHit = incrementalHit;
+        packet.startPos = *startPoint;
+        packet.endPos = *endPoint;
+        packet.colPoint = *colPoint;
+        packet.incrementalHit = incrementalHit;
 
-        CNetwork::SendPacket(CPacketsID::PLAYER_BULLET_SHOT, packet, sizeof * packet);
+        CNetwork::SendPacket(CPacketsID::PLAYER_BULLET_SHOT, &packet, sizeof(packet));
 
         weapon->DoBulletImpact(owner, victim, startPoint, endPoint, colPoint, incrementalHit);
 
@@ -122,7 +122,7 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, int padding
     }
 }
 
-static void __fastcall CPedIK__PointGunInDirection_Hook(CPedIK* This, int padding, float dirX, float dirY, char flag, float float1)
+static void __fastcall CPedIK__PointGunInDirection_Hook(CPedIK* This, SKIP_EDX, float dirX, float dirY, char flag, float float1)
 {
     //if (This->m_pPed == FindPlayerPed(0))
     //{
@@ -142,10 +142,10 @@ static void __fastcall CPedIK__PointGunInDirection_Hook(CPedIK* This, int paddin
     //    return;
     //}
 
-    //if (player->m_lOnFoot == nullptr)
+    //if (player->m_playerOnFoot == nullptr)
     //    return;
 
-    //player->m_pPed->m_fAimingRotation = player->m_lOnFoot->aimingRotation;
+    //player->m_pPed->m_fAimingRotation = player->m_playerOnFoot.aimingRotation;
     //
     //eWeaponType weapon = player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
 
@@ -155,7 +155,7 @@ static void __fastcall CPedIK__PointGunInDirection_Hook(CPedIK* This, int paddin
     This->PointGunInDirection(dirX, dirY, flag, float1);
 }
 
-static void __fastcall CPlayerPed__dctor_Hook(CPlayerPed* This, int)
+static void __fastcall CPlayerPed__dctor_Hook(CPlayerPed* This, SKIP_EDX)
 {
     This->m_pPlayerData->m_nMeleeWeaponAnimReferencedExtra = 0;
     plugin::CallMethod<0x6093B0, CPlayerPed*>(This);
@@ -172,7 +172,7 @@ void CReferences__RemoveReferencesToPlayer_Hook()
     }
 }
 
-bool __fastcall CWeapon__TakePhotograph_Hook(CWeapon* This, int, CEntity* entity, CVector* point)
+bool __fastcall CWeapon__TakePhotograph_Hook(CWeapon* This, SKIP_EDX, CEntity* entity, CVector* point)
 {
     if (entity == FindPlayerPed(0))
     {
@@ -182,7 +182,7 @@ bool __fastcall CWeapon__TakePhotograph_Hook(CWeapon* This, int, CEntity* entity
     return false;
 }
 
-void __fastcall CTaskSimpleJetPack__DropJetPack_Hook(CTaskSimpleJetPack* This, int, CPed* ped)
+void __fastcall CTaskSimpleJetPack__DropJetPack_Hook(CTaskSimpleJetPack* This, SKIP_EDX, CPed* ped)
 {
     if (ped != FindPlayerPed(0) && ped->IsPlayer())
     {
@@ -193,7 +193,7 @@ void __fastcall CTaskSimpleJetPack__DropJetPack_Hook(CTaskSimpleJetPack* This, i
     plugin::CallMethod<0x67B660, CTaskSimpleJetPack*>(This, ped); // CTaskSimpleJetPack::DropJetPack
 }
 
-void __fastcall CPedDamageResponseCalculator__ComputeWillKillPed_Hook(uintptr_t This, int, CPed* ped, CPedDamageResponseInfo* dmgResponse, bool speak)
+void __fastcall CPedDamageResponseCalculator__ComputeWillKillPed_Hook(uintptr_t This, SKIP_EDX, CPed* ped, CPedDamageResponseInfo* dmgResponse, bool speak)
 {
     plugin::CallMethod<0x4B3210, uintptr_t>(This, ped, dmgResponse, speak);
 
@@ -225,9 +225,9 @@ void __fastcall CPedDamageResponseCalculator__ComputeWillKillPed_Hook(uintptr_t 
     // players
     if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(ped))
     {
-        if (networkPlayer->m_lOnFoot->health >= 1.0f)
+        if (networkPlayer->m_playerOnFoot.health >= 1.0f)
         {
-            ped->m_fHealth = networkPlayer->m_lOnFoot->health;
+            ped->m_fHealth = networkPlayer->m_playerOnFoot.health;
             dmgResponse->m_bHealthZero = false;
             dmgResponse->m_bForceDeath = false;
             dmgResponse->m_fDamageHealth = 0.0f;
@@ -236,12 +236,12 @@ void __fastcall CPedDamageResponseCalculator__ComputeWillKillPed_Hook(uintptr_t 
     }
 }
 
-bool __fastcall CPlayerPed__CanPlayerStartMission_Hook(CPlayerPed* This, int)
+bool __fastcall CPlayerPed__CanPlayerStartMission_Hook(CPlayerPed* This, SKIP_EDX)
 {
     return This->CanPlayerStartMission()/* && CLocalPlayer::m_bIsHost*/;
 }
 
-void __fastcall CPlayerPed__ProcessWeaponSwitch_Hook(CPlayerPed* This, int, CPad* pad)
+void __fastcall CPlayerPed__ProcessWeaponSwitch_Hook(CPlayerPed* This, SKIP_EDX, CPad* pad)
 {
     if (CWorld::PlayerInFocus == 0)
     {
@@ -249,7 +249,7 @@ void __fastcall CPlayerPed__ProcessWeaponSwitch_Hook(CPlayerPed* This, int, CPad
     }
 }
 
-void __fastcall CTaskSimplePlayerOnFoot__PlayIdleAnimations_Hook(CTaskSimplePlayerOnFoot* This, int, CPlayerPed* playerPed)
+void __fastcall CTaskSimplePlayerOnFoot__PlayIdleAnimations_Hook(CTaskSimplePlayerOnFoot* This, SKIP_EDX, CPlayerPed* playerPed)
 {
     if (CWorld::PlayerInFocus == 0)
     {
@@ -267,7 +267,7 @@ bool __fastcall CPad__JumpJustDown_Hook(CPad* This)
     return false;
 }
 
-void __fastcall CTaskComplexJump_CTaskManager__SetTask_Hook(CTaskManager* This, int, CTask* task, int tasksId, bool a4)
+void __fastcall CTaskComplexJump_CTaskManager__SetTask_Hook(CTaskManager* This, SKIP_EDX, CTask* task, int tasksId, bool a4)
 {
     This->SetTask(task, tasksId, a4);
 
@@ -277,7 +277,7 @@ void __fastcall CTaskComplexJump_CTaskManager__SetTask_Hook(CTaskManager* This, 
     }
 }
 
-void __fastcall CRunningScript__DoDeatharrestCheck_Hook(CRunningScript* This, int)
+void __fastcall CRunningScript__DoDeatharrestCheck_Hook(CRunningScript* This, SKIP_EDX)
 {
     if (!This->m_bWastedBustedCheck) 
     {

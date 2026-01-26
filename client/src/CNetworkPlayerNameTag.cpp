@@ -130,7 +130,7 @@ void CNetworkPlayerNameTag::Process()
 		float distance = (localPlayerCamPos - networkPlayerPos).Magnitude();
 		uint8_t alpha = GetHudAlpha(distance);
 
-		if (alpha == 0 || !player->m_pPed->IsVisible() || player->m_lOnFoot == nullptr)
+		if (alpha == 0 || !player->m_pPed->IsVisible())
 			continue;
 
 		if (!CWorld::GetIsLineOfSightClear(localPlayerCamPos, networkPlayerPos, true, false, false, true, false, false, false))
@@ -144,7 +144,7 @@ void CNetworkPlayerNameTag::Process()
 		float scale = std::clamp(1.2f - normalizedDistance, 0.7f, 1.0f);
 		
 		// draw health bar
-		if (player->m_lOnFoot->health >= 10.0f || GetTickCount() % 500 > 150) // blinking, fps fixed
+		if (player->m_playerOnFoot.health >= 10.0f || GetTickCount() % 500 > 150) // blinking, fps fixed
 		{
 			DrawBarChartScale(
 				out.x,
@@ -152,13 +152,13 @@ void CNetworkPlayerNameTag::Process()
 				(uint16_t)(PROPORION_X(100.0f * scale)),
 				(uint8_t)(PROPORION_Y(14.0f * scale)),
 				scale,
-				player->m_lOnFoot->health,
+				player->m_playerOnFoot.health,
 				CRGBA(180, 25, 29, alpha)
 			);
 		}
 
 		// draw armour bar
-		if (player->m_lOnFoot->armour > 0.0f)
+		if (player->m_playerOnFoot.armour > 0.0f)
 		{
 			DrawBarChartScale(
 				out.x,
@@ -166,18 +166,18 @@ void CNetworkPlayerNameTag::Process()
 				(uint16_t)(PROPORION_X(100) * scale),
 				(uint8_t)(PROPORION_Y(14) * scale),
 				scale,
-				player->m_lOnFoot->armour,
+				player->m_playerOnFoot.armour,
 				CRGBA(225, 225, 225, alpha)
 			);
 		}
 		
-		float nicknameOffsetY = (player->m_lOnFoot->armour > 0.0f ? 12.0f * scale + 12.0f * scale : 12.0f * scale);
+		float nicknameOffsetY = (player->m_playerOnFoot.armour > 0.0f ? 12.0f * scale + 12.0f * scale : 12.0f * scale);
 		DrawNickName(
 			out.x + PROPORION_X(4.8f),
 			out.y - (PROPORION_Y(nicknameOffsetY) + PROPORION_Y(8.0f)),
 			scale,
 			alpha,
-			player->GetName()
+			player->GetName().c_str()
 		);
 		DrawWeaponIcon(
 			player->m_pPed,

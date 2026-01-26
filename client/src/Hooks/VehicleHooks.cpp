@@ -76,8 +76,8 @@ void __fastcall CVehicle__ProcessControl_Hook()
     CAimSync::ApplyNetworkPlayerContext(player);
     //CStatsSync::ApplyNetworkPlayerContext(player);
 
-    player->m_pPed->m_fHealth = player->m_lOnFoot->health;
-    player->m_pPed->m_fArmour = player->m_lOnFoot->armour;
+    player->m_pPed->m_fHealth = player->m_playerOnFoot.health;
+    player->m_pPed->m_fArmour = player->m_playerOnFoot.armour;
 
     player->m_pPed->m_nPedType = PED_TYPE_CIVMALE;
 
@@ -109,7 +109,7 @@ static void __fastcall CCarCtrl__RemoveDistantCars_Hook()
         CCarCtrl::RemoveDistantCars();
 }
 
-static void __fastcall CVehicle__AddVehicleUpgrade_Hook(CVehicle* This, int, int modelid)
+static void __fastcall CVehicle__AddVehicleUpgrade_Hook(CVehicle* This, SKIP_EDX, int modelid)
 {
     if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
     {
@@ -121,7 +121,7 @@ static void __fastcall CVehicle__AddVehicleUpgrade_Hook(CVehicle* This, int, int
     This->AddVehicleUpgrade(modelid);
 }
 
-static void __fastcall CVehicle__RemoveVehicleUpgrade_Hook(CVehicle* This, int, int modelid)
+static void __fastcall CVehicle__RemoveVehicleUpgrade_Hook(CVehicle* This, SKIP_EDX, int modelid)
 {
     if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
     {
@@ -133,7 +133,7 @@ static void __fastcall CVehicle__RemoveVehicleUpgrade_Hook(CVehicle* This, int, 
     This->RemoveVehicleUpgrade(modelid);
 }
 
-static bool __fastcall CDamageManager__ApplyDamage_Hook(CDamageManager* This, int, CAutomobile* dm_comp, tComponent compId, float intensity, float a5)
+static bool __fastcall CDamageManager__ApplyDamage_Hook(CDamageManager* This, SKIP_EDX, CAutomobile* dm_comp, tComponent compId, float intensity, float a5)
 {
     CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(dm_comp);
     if (vehicle != nullptr && vehicle->m_bSyncing)
@@ -146,7 +146,7 @@ static bool __fastcall CDamageManager__ApplyDamage_Hook(CDamageManager* This, in
     return plugin::CallMethodAndReturn<bool, 0x6C24B0, CDamageManager*, CAutomobile*, tComponent, float, float>(This, dm_comp, compId, intensity, a5);
 }
 
-static void __fastcall CVehicle__SetRemap_Hook(CVehicle* This, int, int paintJobId)
+static void __fastcall CVehicle__SetRemap_Hook(CVehicle* This, SKIP_EDX, int paintJobId)
 {
     if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
         vehicle->m_nPaintJob = paintJobId;
@@ -154,7 +154,7 @@ static void __fastcall CVehicle__SetRemap_Hook(CVehicle* This, int, int paintJob
     This->SetRemap(paintJobId);
 }
 
-static bool __fastcall CAutomobile__ProcessAI_Hook(CAutomobile* This, int, int a1)
+static bool __fastcall CAutomobile__ProcessAI_Hook(CAutomobile* This, SKIP_EDX, int a1)
 {
     DWORD vtbl = *(DWORD*)(This);
     DWORD call_addr = 0x6B4800;
@@ -189,7 +189,7 @@ static bool __fastcall CAutomobile__ProcessAI_Hook(CAutomobile* This, int, int a
 
 // disallow creating a parked vehicle if it is created by another player (does not work perfectly)
 // also disallow creating a parked vehicle if the player is dead, fixes vehicle pool overf*ck
-bool __fastcall CCarGenerator__CheckForBlockage_Hook(CCarGenerator* This, int, int modelId)
+bool __fastcall CCarGenerator__CheckForBlockage_Hook(CCarGenerator* This, SKIP_EDX, int modelId)
 {
     bool originalResult = This->CheckForBlockage(modelId);
 
@@ -287,7 +287,7 @@ void CCarCtrl__UpdateCarAI_Hook(CVehicle* vehicle)
     plugin::Call<0x41DA30>(vehicle);
 }
 
-void __fastcall CVehicle__SetVehicleCreatedBy_Hook(CVehicle* This, int, int createdBy)
+void __fastcall CVehicle__SetVehicleCreatedBy_Hook(CVehicle* This, SKIP_EDX, int createdBy)
 {
     This->SetVehicleCreatedBy(createdBy);
 
@@ -324,7 +324,7 @@ CPed* BmxFix_FindPlayerPed_Hook(CVehicle* vehicle)
     return vehicle->m_pDriver;
 }
 
-void __fastcall CPlayerPed__DoStuffToGoOnFire_Hook(CPlayerPed* This, int)
+void __fastcall CPlayerPed__DoStuffToGoOnFire_Hook(CPlayerPed* This, SKIP_EDX)
 {
     if (This != nullptr && This->IsPlayer())
     {
@@ -332,7 +332,7 @@ void __fastcall CPlayerPed__DoStuffToGoOnFire_Hook(CPlayerPed* This, int)
     }
 }
 
-void __fastcall CFireManager__StartFire_Hook(void* This, int, CPed* entity, CEntity* playerPed, float a4, int a5, int time, uint8_t numGenerations)
+void __fastcall CFireManager__StartFire_Hook(void* This, SKIP_EDX, CPed* entity, CEntity* playerPed, float a4, int a5, int time, uint8_t numGenerations)
 {
     if (entity != nullptr)
     {

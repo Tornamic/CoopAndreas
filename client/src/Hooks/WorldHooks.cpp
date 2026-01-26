@@ -34,7 +34,7 @@ static void PlaceWaypointHook(eBlipType type, CVector posn, eBlipColour color, e
 }
 
 // hide waypoint
-static void __fastcall CRadar__ClearBlip_Hook(int blipIndex, int padding)
+static void __fastcall CRadar__ClearBlip_Hook(int blipIndex, SKIP_EDX)
 {
     CPackets::PlayerPlaceWaypoint packet = { 0, false, CVector(0, 0, 0) };
     CNetwork::SendPacket(CPacketsID::PLAYER_PLACE_WAYPOINT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);

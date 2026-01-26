@@ -3,7 +3,7 @@
 
 static int aiLoadedAudioId[4];
 
-void __fastcall CAudioEngine__PreloadMissionAudio_Hook(CAudioEngine* This, int, uint8_t slot, int audioid)
+void __fastcall CAudioEngine__PreloadMissionAudio_Hook(CAudioEngine* This, SKIP_EDX, uint8_t slot, int audioid)
 {
 	plugin::CallMethod<0x507290>(This, slot, audioid);
 
@@ -13,7 +13,7 @@ void __fastcall CAudioEngine__PreloadMissionAudio_Hook(CAudioEngine* This, int, 
 	}
 }
 
-void __fastcall CAudioEngine__PlayLoadedMissionAudio_Hook(CAudioEngine* This, int, uint8_t slot)
+void __fastcall CAudioEngine__PlayLoadedMissionAudio_Hook(CAudioEngine* This, SKIP_EDX, uint8_t slot)
 {
 	plugin::CallMethod<0x5072B0>(This, slot);
 

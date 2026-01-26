@@ -19,7 +19,7 @@ void CNetworkPlayerWaypoint::Process()
 
 		if (FrontEndMenuManager.m_bDrawRadarOrMap) 
 		{
-			const char* name = player->GetName();
+			const char* name = player->GetName().c_str();
 			D3DCOLOR shadowColor = D3DCOLOR_RGBA(0, 0, 0, 255);
 
 			// 8.0f - size of the sprite, / 2 - half of the size sprite

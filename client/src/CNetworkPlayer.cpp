@@ -4,25 +4,8 @@
 #include <CTaskSimpleCarSetPedInAsPassenger.h>
 #include <CTaskComplexEnterCarAsPassenger.h>
 
-CPlayerPed* m_pPed = nullptr;
-int m_iPlayerId;
-
-// last sync data
-CPackets::PlayerOnFoot* m_lOnFoot = nullptr;
-CPackets::PlayerOnFoot* m_oOnFoot = nullptr;
-
-signed short m_oShockButtonL = 0;
-signed short m_lShockButtonL = 0;
-
-CVector* m_vecWaypointPos = nullptr;
-bool m_bWaypointPlaced = false;
-
-char m_Name[32 + 1] = { 0 };
-
 CNetworkPlayer::~CNetworkPlayer()
 {
-	delete m_lOnFoot;
-
 	if (m_pPed == nullptr) return;
 
 	this->DestroyPed();
@@ -38,9 +21,6 @@ CNetworkPlayer::CNetworkPlayer(int id, CVector position)
 	m_pPedClothesDesc.SetTextureAndModel("PLAYER_FACE", "HEAD", 1);
 
 	CreatePed(id, position);
-
-
-	m_lOnFoot = new CPackets::PlayerOnFoot();
 }
 
 void CNetworkPlayer::CreatePed(int id, CVector position)
@@ -93,14 +73,8 @@ void CNetworkPlayer::Respawn()
 		this->DestroyPed();
 	}
 
-	CVector pos{};
 
-	if (m_lOnFoot)
-	{
-		pos = m_lOnFoot->position;
-	}
-
-	this->CreatePed(m_iPlayerId, pos);
+	this->CreatePed(m_iPlayerId, m_playerOnFoot.position);
 }
 
 int CNetworkPlayer::GetInternalId() // most used for CWorld::PlayerInFocus
@@ -118,16 +92,16 @@ int CNetworkPlayer::GetInternalId() // most used for CWorld::PlayerInFocus
 	return -1;
 }
 
-char* CNetworkPlayer::GetName()
+std::string CNetworkPlayer::GetName()
 {
-	char* buffer = new char[32 + 1];
-
 	if (m_Name[0] == '\0')
+	{
+		char buffer[32 + 1];
 		sprintf(buffer, "player %d", m_iPlayerId);
-	else
-		strcpy(buffer, m_Name);
-
-	return buffer;
+		return buffer;
+	}
+	
+	return m_Name;
 }
 
 char CNetworkPlayer::GetWeaponSkill(eWeaponType weaponType)

@@ -3,7 +3,7 @@
 #include "CGenericGameStorage.h"
 
 
-char* __fastcall CSimpleVariablesSaveStructure__Construct_CText__Get_Hook(CText* This, int, char* key)
+char* __fastcall CSimpleVariablesSaveStructure__Construct_CText__Get_Hook(CText* This, SKIP_EDX, char* key)
 {
     const char* text = TheText.Get(key);
     std::string modifiedText = "(Coop) " + std::string(text);

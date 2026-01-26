@@ -24,7 +24,7 @@ CVector2D GetPlayerMarkerPosition()
 
 float CalculateMarkerAngle(CNetworkPlayer* player)
 {
-	float baseAngle = player->m_pPed->m_nPhysicalFlags.bOnSolidSurface ? player->m_pPed->GetHeading() : player->m_lOnFoot->currentRotation;
+	float baseAngle = player->m_pPed->m_nPhysicalFlags.bOnSolidSurface ? player->m_pPed->GetHeading() : player->m_playerOnFoot.currentRotation;
 
 	if (player->m_pPed->m_pVehicle && player->m_pPed->m_nPedFlags.bInVehicle)
 	{
@@ -45,9 +45,6 @@ void CNetworkPlayerMapPin::Process()
 {
 	for (auto player : CNetworkPlayerManager::m_pPlayers)
 	{
-		if (!player->m_lOnFoot)
-			continue;
-
 		CWorld::PlayerInFocus = player->GetInternalId();
 
 		if (CWorld::PlayerInFocus == -1)

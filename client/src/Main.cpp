@@ -147,9 +147,8 @@ public:
 						}
 						else
 						{
-							CPackets::PlayerOnFoot* packet = CPacketHandler::PlayerOnFoot__Collect();
-							CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, packet, sizeof * packet);
-							delete packet;
+							CPackets::PlayerOnFoot packet = CPacketHandler::PlayerOnFoot__Collect();
+							CNetwork::SendPacket(CPacketsID::PLAYER_ONFOOT, &packet, sizeof(packet));
 							lastOnFootSyncTickRate = tickCount;
 						}
 					}

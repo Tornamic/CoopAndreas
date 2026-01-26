@@ -2,7 +2,7 @@
 #include "ProjectileHooks.h"
 #include <CProjectileInfo.h>
 
-bool __fastcall CWeapon__FireProjectile_Hook(CWeapon* This, int, CEntity* firingEntity, CVector* origin, CEntity* targetEntity, CVector* targetPos, float proj_force_)
+bool __fastcall CWeapon__FireProjectile_Hook(CWeapon* This, SKIP_EDX, CEntity* firingEntity, CVector* origin, CEntity* targetEntity, CVector* targetPos, float proj_force_)
 {
 	if (firingEntity == FindPlayerPed(0))
 	{

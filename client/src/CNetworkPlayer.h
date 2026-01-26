@@ -5,7 +5,7 @@ public:
 	CPlayerPed* m_pPed = nullptr;
 	int m_iPlayerId;
 
-	CPackets::PlayerOnFoot* m_lOnFoot = nullptr;
+	CPackets::PlayerOnFoot m_playerOnFoot{};
 	
 	signed short m_oShockButtonL;
 	signed short m_lShockButtonL;
@@ -32,7 +32,7 @@ public:
 	void DestroyPed();
 	void Respawn();
 	int GetInternalId();
-	char* GetName();
+	std::string GetName();
 	char GetWeaponSkill(eWeaponType weaponType);
 	void WarpIntoVehicleDriver(CVehicle* vehicle);
 	void RemoveFromVehicle(CVehicle* vehicle);

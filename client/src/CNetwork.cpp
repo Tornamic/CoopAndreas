@@ -175,19 +175,15 @@ void CNetwork::InitListeners()
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)
 {
-	// get packet id
-	unsigned short id;
-	memcpy(&id, event.packet->data, 2);
+	uint16_t packetid;
+	memcpy(&packetid, event.packet->data, sizeof(uint16_t));
 
-	// get data
-	char* data = new char[event.packet->dataLength - 2];
-	memcpy(data, event.packet->data + 2, event.packet->dataLength - 2);
-
-	// call listener's callback by id
-	auto it = m_packetListeners.find(id);
+	auto it = m_packetListeners.find(packetid);
 	if (it != m_packetListeners.end())
 	{
-		it->second->m_callback(data, (int)event.packet->dataLength - 2);
+		uint8_t* pData = event.packet->data + sizeof(uint16_t);
+		int32_t nLength = event.packet->dataLength - sizeof(uint16_t);
+		it->second->m_callback(pData, nLength);
 	}
 }
 

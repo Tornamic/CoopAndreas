@@ -47,7 +47,7 @@ static void __declspec(naked) CPed__SetMoveState_Hook()
     }
 }
 
-bool __fastcall CWeapon__Fire_Hook(CWeapon* This, int, CPed* owner, CVector* vecOrigin, CVector* vecEffectPosn, CEntity* targetEntity, CVector* vecTarget, CVector* arg_14)
+bool __fastcall CWeapon__Fire_Hook(CWeapon* This, SKIP_EDX, CPed* owner, CVector* vecOrigin, CVector* vecEffectPosn, CEntity* targetEntity, CVector* vecTarget, CVector* arg_14)
 {
     CNetworkPed* ped = CNetworkPedManager::GetPed(owner);
 
@@ -100,7 +100,7 @@ void CStreaming__RequestSpecialModel_Hook(int modelid, const char* txdName, int 
     }
 }
 
-int16_t __fastcall CAEPedSpeechAudioEntity__AddSayEvent_Hook(CAEPedSpeechAudioEntity* This, int, eAudioEvents audioEvent, int16_t gCtx, uint32_t startTimeDelay, float probability, bool overideSilence, bool isForceAudible, bool isFrontEnd)
+int16_t __fastcall CAEPedSpeechAudioEntity__AddSayEvent_Hook(CAEPedSpeechAudioEntity* This, SKIP_EDX, eAudioEvents audioEvent, int16_t gCtx, uint32_t startTimeDelay, float probability, bool overideSilence, bool isForceAudible, bool isFrontEnd)
 {
     CPed* ped = (CPed*)((uintptr_t)This - 0x294);
 

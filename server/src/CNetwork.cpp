@@ -138,35 +138,23 @@ void CNetwork::InitListeners()
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
 {
-    // 2 == sizeof(unsigned short)
-
-    // packet size `id + data`
-    size_t packetSize = 2 + dataSize;
-
-    // create buffer
+    size_t packetSize = sizeof(uint16_t) + dataSize;
     char* packetData = new char[packetSize];
-
-    // copy id
-    memcpy(packetData, &id, 2);
-
-    // copy data
-    memcpy(packetData + 2, data, dataSize);
-
-    // create packet
+    memcpy(packetData, &id, sizeof(uint16_t));
+    memcpy(packetData + sizeof(uint16_t), data, dataSize);
     ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
 
     delete[] packetData;
 
-    // send packet
     enet_peer_send(peer, 0, packet);
 }
 
 void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith)
 {
-    size_t packetSize = 2 + dataSize;
+    size_t packetSize = sizeof(uint16_t) + dataSize;
     char* packetData = new char[packetSize];
-    memcpy(packetData, &id, 2);
-    memcpy(packetData + 2, data, dataSize);
+    memcpy(packetData, &id, sizeof(uint16_t));
+    memcpy(packetData + sizeof(uint16_t), data, dataSize);
     ENetPacket* packet = enet_packet_create(packetData, packetSize, flag);
 
     delete[] packetData;
@@ -252,27 +240,22 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)
 {
-    // get packet id
-    unsigned short id;
-    memcpy(&id, event.packet->data, 2);
+    uint16_t packetid;
+    memcpy(&packetid, event.packet->data, 2);
 
-    if (id == CPacketsID::MASS_PACKET_SEQUENCE)
+    if (packetid == CPacketsID::MASS_PACKET_SEQUENCE)
     {
         CNetwork::SendPacketRawToAll(event.packet->data, event.packet->dataLength, (ENetPacketFlag)event.packet->flags, event.peer);
     }
     else
     {
-        // get data
-        char* data = new char[event.packet->dataLength - 2];
-        memcpy(data, event.packet->data + 2, event.packet->dataLength - 2);
-        // call listener's callback by id
-        auto it = m_packetListeners.find(id);
+        auto it = m_packetListeners.find(packetid);
         if (it != m_packetListeners.end())
         {
-            it->second->m_callback(event.peer, data, (int)event.packet->dataLength - 2);
+            uint8_t* pData = event.packet->data + 2;
+            int32_t nLength = event.packet->dataLength - 2;
+            it->second->m_callback(event.peer, pData, nLength);
         }
-
-        delete[] data;
     }
 }
 

@@ -167,7 +167,7 @@ static CRunningScript* lastProcessedScript;
 static uint8_t currentStringIdx = 0;
 
 static uint16_t argCount = 0;
-void __fastcall CRunningScript__CollectParameters_Hook_SwitchParametersContext(CRunningScript* script, int, uint16_t count)
+void __fastcall CRunningScript__CollectParameters_Hook_SwitchParametersContext(CRunningScript* script, SKIP_EDX, uint16_t count)
 {
     for (uint8_t i = argCount; i < count + argCount; i++)
     {
@@ -177,7 +177,7 @@ void __fastcall CRunningScript__CollectParameters_Hook_SwitchParametersContext(C
     /*memcpy(ScriptParams, scriptParamsBuffer, sizeof scriptParamsBuffer);*/
 }
 
-void __fastcall CRunningScript__ReadTextLabelFromScript_Hook_SwitchParametersContext(CRunningScript* script, int, char* ptr, uint8_t len)
+void __fastcall CRunningScript__ReadTextLabelFromScript_Hook_SwitchParametersContext(CRunningScript* script, SKIP_EDX, char* ptr, uint8_t len)
 {
     memset(ptr, 0, len);
     strncpy(ptr, textParamBuffer[currentStringIdx], textLengthBuffer[currentStringIdx]);
@@ -849,7 +849,7 @@ static void FinishedProcessingScripts()
     }
 }
 
-void __fastcall CRunningScript__ShutdownThisScript_Hook(CRunningScript* This, int)
+void __fastcall CRunningScript__ShutdownThisScript_Hook(CRunningScript* This, SKIP_EDX)
 {
     auto it = std::find(COpCodeSync::ms_vSyncedScripts.begin(), COpCodeSync::ms_vSyncedScripts.end(), This);
     if (it != COpCodeSync::ms_vSyncedScripts.end())
