@@ -87,6 +87,8 @@ void CPacketHandler::PlayerDisconnected__Handle(void* data, int size)
 
 	// destroy player
 	delete player;
+
+	RecalculateSharedWantedLevel();
 }
 
 // PlayerOnFoot
@@ -1436,11 +1438,14 @@ void CPacketHandler::AssignPedSyncer__Handle(void* data, int size)
 void CPacketHandler::RespawnPlayer__Handle(void* data, int size)
 {
 	CPackets::RespawnPlayer* packet = (CPackets::RespawnPlayer*)data;
-	
+
 	if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(packet->playerid))
 	{
+		networkPlayer->m_nWantedLevel = 0;
 		networkPlayer->Respawn();
 	}
+
+	RecalculateSharedWantedLevel();
 }
 
 // MassPacketSequence
@@ -1933,6 +1938,78 @@ void CPacketHandler::UpdateAllTags__Trigger()
 	}
 
 	CNetwork::SendPacket(CPacketsID::UPDATE_ALL_TAGS, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+}
+
+// PlayerWantedLevel
+
+static unsigned char s_localOwnWantedLevel = 0;
+static unsigned char s_lastSentOwnLevel = 0;
+static unsigned char s_sharedMaxApplied = 0;
+
+void CPacketHandler::RecalculateSharedWantedLevel()
+{
+	unsigned char maxLevel = s_localOwnWantedLevel;
+	for (auto* player : CNetworkPlayerManager::m_pPlayers)
+	{
+		if (player && player->m_nWantedLevel > maxLevel)
+			maxLevel = player->m_nWantedLevel;
+	}
+
+	FindPlayerPed(0)->GetWanted()->m_nWantedLevel = maxLevel;
+
+	s_sharedMaxApplied = maxLevel;
+}
+
+void CPacketHandler::PlayerWantedLevel__ResetLocal()
+{
+	s_localOwnWantedLevel = 0;
+	s_lastSentOwnLevel = 0;
+
+	CPackets::PlayerWantedLevel packet{};
+	packet.wantedLevel = 0;
+	CNetwork::SendPacket(CPacketsID::PLAYER_WANTED_LEVEL, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+
+	RecalculateSharedWantedLevel();
+}
+
+void CPacketHandler::PlayerWantedLevel__Trigger()
+{
+	if (!CNetwork::m_bConnected)
+		return;
+
+	unsigned char currentGameLevel = (unsigned char)FindPlayerPed(0)->GetWantedLevel();
+
+	// If game level differs from what we last applied as shared max,
+	// the game changed it organically (crimes, decay, death)
+	if (currentGameLevel != s_sharedMaxApplied)
+	{
+		s_localOwnWantedLevel = currentGameLevel;
+	}
+
+	// Send only if own level actually changed
+	if (s_localOwnWantedLevel != s_lastSentOwnLevel)
+	{
+		s_lastSentOwnLevel = s_localOwnWantedLevel;
+
+		CPackets::PlayerWantedLevel packet{};
+		packet.wantedLevel = s_localOwnWantedLevel;
+		CNetwork::SendPacket(CPacketsID::PLAYER_WANTED_LEVEL, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+	}
+
+	// Re-apply shared max
+	RecalculateSharedWantedLevel();
+}
+
+void CPacketHandler::PlayerWantedLevel__Handle(void* data, int size)
+{
+	CPackets::PlayerWantedLevel* packet = (CPackets::PlayerWantedLevel*)data;
+
+	if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(packet->playerid))
+	{
+		networkPlayer->m_nWantedLevel = packet->wantedLevel;
+	}
+
+	RecalculateSharedWantedLevel();
 }
 
 // TeleportPlayerScripted

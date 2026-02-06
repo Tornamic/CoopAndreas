@@ -72,6 +72,7 @@ enum CPacketsID : unsigned short
 	TAG_UPDATE,
 	UPDATE_ALL_TAGS,
 	TELEPORT_PLAYER_SCRIPTED,
+	PLAYER_WANTED_LEVEL,
 	PACKET_ID_MAX
 };
 
@@ -134,6 +135,19 @@ public:
 			sizeof(RemoveCheckpoint), // REMOVE_CHECKPOINT,
 			0, // ENEX_SYNC,
 			sizeof(CreateStaticBlip), // CREATE_STATIC_BLIP,
+			0, // SET_VEHICLE_CREATED_BY,
+			0, // SET_PLAYER_TASK,
+			0, // PED_SAY,
+			0, // PED_CLAIM_ON_RELEASE,
+			0, // PED_CANCEL_CLAIM,
+			0, // PED_RESET_ALL_CLAIMS,
+			0, // PED_TAKE_HOST,
+			0, // PERFORM_TASK_SEQUENCE,
+			0, // ADD_PROJECTILE,
+			0, // TAG_UPDATE,
+			0, // UPDATE_ALL_TAGS,
+			0, // TELEPORT_PLAYER_SCRIPTED,
+			sizeof(PlayerWantedLevel), // PLAYER_WANTED_LEVEL,
 		};
 
 		return m_nPacketSize[id];
@@ -650,5 +664,11 @@ public:
 		int playerid;
 		CVector pos;
 		float heading;
+	};
+
+	struct PlayerWantedLevel
+	{
+		int playerid;
+		unsigned char wantedLevel;
 	};
 };

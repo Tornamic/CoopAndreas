@@ -719,5 +719,24 @@ public:
 			}
 		}
 	};
+
+	struct PlayerWantedLevel
+	{
+		int playerid;
+		unsigned char wantedLevel;
+
+		static void Handle(ENetPeer* peer, void* data, int size)
+		{
+			if (auto player = CPlayerManager::GetPlayer(peer))
+			{
+				PlayerWantedLevel* packet = (PlayerWantedLevel*)data;
+				packet->playerid = player->m_iPlayerId;
+				player->m_nWantedLevel = packet->wantedLevel;
+				player->m_ucSyncFlags.bWantedLevelModified = true;
+				CNetwork::SendPacketToAll(CPacketsID::PLAYER_WANTED_LEVEL, packet, sizeof(*packet),
+					ENET_PACKET_FLAG_RELIABLE, peer);
+			}
+		}
+	};
 };
 #endif

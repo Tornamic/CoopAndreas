@@ -79,4 +79,8 @@ public:
 	static void UpdateAllTags__Handle(void* data, int size);
 	static void UpdateAllTags__Trigger();
 	static void TeleportPlayerScripted__Handle(void* data, int size);
+	static void PlayerWantedLevel__Handle(void* data, int size);
+	static void PlayerWantedLevel__Trigger();
+	static void PlayerWantedLevel__ResetLocal();
+	static void RecalculateSharedWantedLevel();
 };

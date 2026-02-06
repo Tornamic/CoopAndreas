@@ -13,6 +13,11 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
         patch::SetRaw(0x6884C4, (void*)"\xD9\x96\x5C\x05\x00\x00", 6, false);
         plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
         patch::Nop(0x6884C4, 6, false);
+
+        if (CNetwork::m_bConnected)
+        {
+            CPacketHandler::PlayerWantedLevel__Trigger();
+        }
         return;
     }
 
@@ -164,9 +169,11 @@ static void __fastcall CPlayerPed__dctor_Hook(CPlayerPed* This, SKIP_EDX)
 void CReferences__RemoveReferencesToPlayer_Hook()
 {
     plugin::Call<0x571AD0>(); // CReferences::RemoveReferencesToPlayer();
-    
+
     if (CNetwork::m_bConnected)
     {
+        CPacketHandler::PlayerWantedLevel__ResetLocal();
+
         CPackets::RespawnPlayer packet{};
         CNetwork::SendPacket(CPacketsID::RESPAWN_PLAYER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
