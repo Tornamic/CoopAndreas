@@ -69,9 +69,13 @@ target("client")
         set_optimize("fastest")
     end
 
-    local plugin_sdk = os.getenv("PLUGIN_SDK_DIR")
-    if plugin_sdk then
-        add_includedirs(
+    on_load(function (target)
+        local plugin_sdk = os.getenv("PLUGIN_SDK_DIR")
+        if not plugin_sdk then
+            raise("PLUGIN_SDK_DIR environment variable is not set")
+        end
+
+        target:add("includedirs", 
             path.join(plugin_sdk, "shared"), 
             path.join(plugin_sdk, "shared/game"), 
             path.join(plugin_sdk, "shared/dxsdk"), 
@@ -79,22 +83,20 @@ target("client")
             path.join(plugin_sdk, "plugin_sa/game_sa")
         )
 
-        add_linkdirs(
+        target:add("linkdirs", 
             path.join(plugin_sdk, "output/lib"),
             path.join(plugin_sdk, "shared/bass"),
             path.join(plugin_sdk, "shared/dxsdk")
         )
 
         if is_mode("debug") then 
-            add_links("plugin_d")
+            target:add("links", "plugin_d")
         else 
-            add_links("plugin")
+            target:add("links", "plugin")
         end
 
-        add_links("d3dx9")
-    else 
-        raise("PLUGIN_SDK_DIR environment variable is not set")
-    end
+        target:add("links", "d3dx9")
+    end)
 
 target("server")
     set_kind("binary")
