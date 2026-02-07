@@ -72,7 +72,6 @@ target("client")
     on_load(function (target)
         local plugin_sdk = os.getenv("PLUGIN_SDK_DIR")
         if not plugin_sdk then
-            target:enabled(false)
             print("Skipping client target because PLUGIN_SDK_DIR is not set")
             return
         end
