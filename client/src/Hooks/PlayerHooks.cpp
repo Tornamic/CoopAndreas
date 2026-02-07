@@ -16,7 +16,7 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
         if (CNetwork::m_bConnected)
         {
-            CPacketHandler::PlayerWantedLevel__Trigger();
+            CWantedLevelSync::Trigger();
         }
         return;
     }
@@ -172,7 +172,7 @@ void CReferences__RemoveReferencesToPlayer_Hook()
 
     if (CNetwork::m_bConnected)
     {
-        CPacketHandler::PlayerWantedLevel__ResetLocal();
+        CWantedLevelSync::ResetLocal();
 
         CPackets::RespawnPlayer packet{};
         CNetwork::SendPacket(CPacketsID::RESPAWN_PLAYER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);

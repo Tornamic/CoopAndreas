@@ -723,7 +723,7 @@ public:
 	struct PlayerWantedLevel
 	{
 		int playerid;
-		unsigned char wantedLevel;
+		uint8_t wantedLevel;
 
 		static void Handle(ENetPeer* peer, void* data, int size)
 		{

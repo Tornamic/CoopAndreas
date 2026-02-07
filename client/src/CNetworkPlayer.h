@@ -24,7 +24,7 @@ public:
 	CNetworkPlayerStats m_stats{};
 	CPedClothesDesc m_pPedClothesDesc{};
 	bool m_bHasBeenConnectedBeforeMe = false;
-	unsigned char m_nWantedLevel = 0;
+	uint8_t m_nWantedLevel = 0;
 
 	CNetworkPlayer::~CNetworkPlayer();
 	CNetworkPlayer::CNetworkPlayer(int id, CVector position);

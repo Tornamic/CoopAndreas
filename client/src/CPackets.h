@@ -669,6 +669,6 @@ public:
 	struct PlayerWantedLevel
 	{
 		int playerid;
-		unsigned char wantedLevel;
+		uint8_t wantedLevel;
 	};
 };

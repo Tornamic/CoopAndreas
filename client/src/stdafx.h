@@ -120,5 +120,6 @@ using namespace plugin;
 #include "eNetworkEntityType.h"
 #include "ePlayerDisconnectReason.h"
 #include "CStatsSync.h"
+#include "CWantedLevelSync.h"
 #include "CMassPacketBuilder.h"
 // -----------------------------------------------------------------------------------------

@@ -29,7 +29,7 @@ class CPlayer
 		float m_fFatStat;
 		float m_fMuscleStat;
 		CVector m_vecWaypointPos{};
-		unsigned char m_nWantedLevel = 0;
+		uint8_t m_nWantedLevel = 0;
 		struct {
 			uint8_t bStatsModified : 1;
 			uint8_t bClothesModified : 1;
