@@ -12,13 +12,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - run: |
-          choco install xmake -y
-          $env:PATH += ";$env:ProgramData\chocolatey\bin"
+      - name: Install xmake
+        shell: pwsh
+        run: |
+          winget install xmake --silent --accept-source-agreements
           xmake --version
-        shell: pwsh
 
-      - run: |
-          $env:PATH += ";$env:ProgramData\chocolatey\bin"
-          xmake build server
+      - name: Build server
         shell: pwsh
+        run: xmake build server
