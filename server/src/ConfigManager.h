@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <fstream>
 #include <unordered_map>
 
 #include "INIReader/cpp/INIReader.h"
