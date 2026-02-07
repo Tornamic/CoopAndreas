@@ -17,7 +17,35 @@ jobs:
         with:
           xmake-version: latest
 
+
+      - name: Clone plugin-sdk
+        run: |
+          git clone https://github.com/DK22Pac/plugin-sdk.git plugin-sdk
+          cd plugin-sdk
+          git checkout 050d18b6e1770477deab81a40028a40277583d97
+        shell: powershell
+
+
+      - name: Set PLUGIN_SDK_DIR
+        run: echo "PLUGIN_SDK_DIR=${{ github.workspace }}\plugin-sdk" >> $GITHUB_ENV
+        shell: bash
+
+
+      - name: Build plugin-sdk
+        run: |
+          cd plugin-sdk/premake
+          ./premake5.exe vs2019
+          msbuild plugin.sln /p:Configuration=Release
+        shell: powershell
+
+
       - name: Build server
         run: xmake build server
+
       - name: Build proxy
         run: xmake build proxy
+        
+      - name: Build client
+        run: xmake build client
+        env:
+          PLUGIN_SDK_DIR: ${{ github.workspace }}\plugin-sdk
