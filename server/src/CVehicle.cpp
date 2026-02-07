@@ -9,7 +9,7 @@ CVehicle::CVehicle(int vehicleid, unsigned short model, CVector pos, float rot)
 	m_vecPosition = pos;
 	m_vecRotation = CVector( 0, 0, 0 );
 }
-
+test
 void CVehicle::ReassignSyncer(CPlayer* newSyncer)
 {
 	if (this->m_pSyncer != newSyncer)
