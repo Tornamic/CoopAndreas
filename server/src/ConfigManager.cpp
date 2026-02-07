@@ -26,7 +26,7 @@ void CConfigManager::CreateConfig()
 		return;
 	}
 
-	for (auto& [key, value] : ms_umDefaultConfig)
+	for (const auto& [key, value] : ms_umDefaultConfig)
 	{
 		file << key << " = " << value << "\n";
 	}

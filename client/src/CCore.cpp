@@ -32,10 +32,11 @@ void InitWndProc()
 	}
 }
 
+uintptr_t WinMain_AfterWindowInit_ptr = 0x0;
 void WinMain_AfterWindowInit()
 {
 	InitWndProc();
-	plugin::Call<0x538860>();
+	plugin::CallDyn(WinMain_AfterWindowInit_ptr);
 }
 
 void CCore::Init()
@@ -45,6 +46,7 @@ void CCore::Init()
 #ifdef _DEV
 	CCore::AllocateConsole();
 #endif
+	WinMain_AfterWindowInit_ptr = injector::GetBranchDestination(0x748995).as_int();
 	patch::RedirectCall(0x748995, WinMain_AfterWindowInit);
 	CCustomMenuManager::Init();
 	CPatch::ApplyPatches();

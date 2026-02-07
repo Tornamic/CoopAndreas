@@ -8,7 +8,7 @@ bool CNetwork::m_bConnected = false;
 std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
 
 char CNetwork::m_IpAddress[128 + 1];
-unsigned short CNetwork::m_nPort = 6767;
+unsigned short CNetwork::m_nPort = Config::DEFAULT_PORT;
 
 DWORD WINAPI CNetwork::InitAsync(LPVOID)
 {
