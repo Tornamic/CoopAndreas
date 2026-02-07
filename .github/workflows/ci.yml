@@ -12,6 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - run: choco install xmake -y
+      - run: |
+          choco install xmake -y
+          $env:PATH += ";$env:ProgramData\chocolatey\bin"
+          xmake --version
+        shell: pwsh
 
-      - run: xmake build server
+      - run: |
+          $env:PATH += ";$env:ProgramData\chocolatey\bin"
+          xmake build server
+        shell: pwsh
