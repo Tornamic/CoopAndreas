@@ -24,10 +24,10 @@ This mod is an unofficial modification for **Grand Theft Auto: San Andreas** and
 
 ```bash
 # Build client DLL
-xmake --build client -m debug    # or -m release
+xmake --build client -m debug
 
 # Build server binary
-xmake --build server -m debug    # or -m release
+xmake --build server
 ```
 If `GTA_SA_DIR` is set, the client DLL (`CoopAndreasSA.dll`) will automatically be placed in your game directory.
 
@@ -42,7 +42,7 @@ The proxy is required to load (inject) the main DLL (`CoopAndreasSA.dll`) into t
 2. Build the **Proxy** project:
 
 ```bash
-xmake --build proxy -m debug    # or -m release
+xmake --build proxy
 ```
 
 3. Rename the output DLL to `eax.dll` and copy it to your game folder.
