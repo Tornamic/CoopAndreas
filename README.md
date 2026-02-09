@@ -24,7 +24,7 @@ This mod is an unofficial modification for **Grand Theft Auto: San Andreas** and
 
 ```bash
 # Build client DLL
-xmake --build client -m debug
+xmake --build client
 
 # Build server binary
 xmake --build server
