@@ -3,30 +3,47 @@
 
 uint8_t CWantedLevelSync::m_nLocalOwnWantedLevel = 0;
 uint8_t CWantedLevelSync::m_nLastSentOwnLevel = 0;
-uint8_t CWantedLevelSync::m_nSharedMaxApplied = 0;
+uint8_t CWantedLevelSync::m_nLastAppliedLevel = 0;
 
 void CWantedLevelSync::Recalculate()
 {
+	CPlayerPed* localPed = FindPlayerPed(0);
+	if (!localPed)
+		return;
+
 	uint8_t maxLevel = m_nLocalOwnWantedLevel;
-	for (auto* player : CNetworkPlayerManager::m_pPlayers)
+
+	CVehicle* localVehicle = (localPed->m_nPedFlags.bInVehicle && localPed->m_pVehicle)
+		? localPed->m_pVehicle : nullptr;
+
+	if (localVehicle)
 	{
-		if (player && player->m_nWantedLevel > maxLevel)
-			maxLevel = player->m_nWantedLevel;
+		for (auto* player : CNetworkPlayerManager::m_pPlayers)
+		{
+			if (!player || !player->m_pPed || player->m_nWantedLevel <= maxLevel)
+				continue;
+
+			if (player->m_pPed->m_nPedFlags.bInVehicle
+				&& player->m_pPed->m_pVehicle == localVehicle)
+				maxLevel = player->m_nWantedLevel;
+		}
 	}
 
-	CWanted* wanted = FindPlayerPed(0)->GetWanted();
+	CWanted* wanted = localPed->GetWanted();
+	if (!wanted)
+		return;
 
 	if (maxLevel > 0 && maxLevel > wanted->m_nWantedLevel)
 	{
 		wanted->SetWantedLevel(maxLevel);
 		wanted->m_nLastTimeWantedDecreased = CTimer::m_snTimeInMilliseconds;
 	}
-	else if (maxLevel < m_nSharedMaxApplied)
+	else if (maxLevel > m_nLocalOwnWantedLevel && maxLevel == wanted->m_nWantedLevel)
 	{
-		wanted->SetWantedLevel(maxLevel);
+		wanted->m_nLastTimeWantedDecreased = CTimer::m_snTimeInMilliseconds;
 	}
 
-	m_nSharedMaxApplied = maxLevel;
+	m_nLastAppliedLevel = maxLevel;
 }
 
 void CWantedLevelSync::Trigger()
@@ -34,12 +51,34 @@ void CWantedLevelSync::Trigger()
 	if (!CNetwork::m_bConnected)
 		return;
 
-	CWanted* wanted = FindPlayerPed(0)->GetWanted();
+	CPlayerPed* localPed = FindPlayerPed(0);
+	if (!localPed)
+		return;
+
+	CWanted* wanted = localPed->GetWanted();
+	if (!wanted)
+		return;
+
 	uint8_t currentGameLevel = (uint8_t)wanted->m_nWantedLevel;
 
-	if (currentGameLevel != m_nSharedMaxApplied)
+	if (currentGameLevel != m_nLastAppliedLevel)
 	{
 		m_nLocalOwnWantedLevel = currentGameLevel;
+
+		if (currentGameLevel < m_nLastAppliedLevel
+			&& localPed->m_nPedFlags.bInVehicle && localPed->m_pVehicle)
+		{
+			for (auto* player : CNetworkPlayerManager::m_pPlayers)
+			{
+				if (player && player->m_pPed
+					&& player->m_pPed->m_nPedFlags.bInVehicle
+					&& player->m_pPed->m_pVehicle == localPed->m_pVehicle
+					&& player->m_nWantedLevel > currentGameLevel)
+				{
+					player->m_nWantedLevel = currentGameLevel;
+				}
+			}
+		}
 	}
 
 	if (m_nLocalOwnWantedLevel != m_nLastSentOwnLevel)

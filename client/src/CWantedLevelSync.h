@@ -13,5 +13,5 @@ public:
 private:
 	static uint8_t m_nLocalOwnWantedLevel;
 	static uint8_t m_nLastSentOwnLevel;
-	static uint8_t m_nSharedMaxApplied;
+	static uint8_t m_nLastAppliedLevel;
 };
