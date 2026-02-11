@@ -40,7 +40,7 @@ class CControllerState
         ~CControllerState();
 };
 
-//#pragma pack(1)
+#pragma pack(push, 1)
 struct CCompressedControllerState
 {
     int16_t LeftStickX; // move/steer left (-128?)/right (+128)
@@ -101,4 +101,5 @@ struct CCompressedControllerState
         uint16_t disableFlags;
     };
 };
+#pragma pack(pop)
 #endif
