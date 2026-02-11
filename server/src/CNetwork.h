@@ -8,6 +8,7 @@
 #include <cstddef>
 #include <unordered_map>
 #include "enet/enet.h"
+#include "yojimbo.h"
 
 #include "CPacketListener.h"
 

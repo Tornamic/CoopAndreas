@@ -33,6 +33,11 @@ target("client")
     set_arch("x86")
     set_plat("windows")
     
+    add_files("third_party/yojimbo/**.c")
+    add_files("third_party/yojimbo/**.cpp")
+    add_headerfiles("third_party/yojimbo/**.h")
+    add_includedirs("third_party/yojimbo/")
+    
     add_files("client/src/*.cpp")
     add_files("client/src/Commands/*.cpp")
     add_files("client/src/Commands/Commands/*.cpp")
@@ -107,6 +112,11 @@ target("server")
     
     add_files("third_party/enet/*.c")
     add_headerfiles("third_party/enet/*.h")
+
+    add_files("third_party/yojimbo/**.c")
+    add_files("third_party/yojimbo/**.cpp")
+    add_headerfiles("third_party/yojimbo/**.h")
+    add_includedirs("third_party/yojimbo/")
 
     add_files("third_party/INIReader/cpp/INIReader.cpp")
     add_files("third_party/INIReader/ini.c")

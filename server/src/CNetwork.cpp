@@ -1,79 +1,146 @@
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <unordered_map>
-
-#include "CPacketListener.h"
-#include "CPacket.h"
 #include "CNetwork.h"
 
+#include "CPacket.h"
+#include "CPacketListener.h"
+#include "CPedManager.h"
 #include "CPlayerManager.h"
 #include "CVehicleManager.h"
-#include "CPedManager.h"
-
-#include "semver.h"
 #include "PlayerDisconnectReason.h"
+#include "semver.h"
+#include "serialize.h"
+#include "yojimbo.h"
+#include "yojimbo_adapter.h"
+#include "yojimbo_allocator.h"
+#include "yojimbo_message.h"
+#include "yojimbo_platform.h"
+#include "yojimbo_server.h"
+
+#include <algorithm>
+#include <cstdio>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 std::unordered_map<unsigned short, CPacketListener*> CNetwork::m_packetListeners;
+
+struct TestPlayerOnFoot : public yojimbo::Message
+{
+    int id = 0;
+    CVector position = CVector();
+    CVector velocity = CVector();
+    float currentRotation = 0.0f;
+    float aimingRotation = 0.0f;
+    unsigned char health = 100;
+    unsigned char armour = 0;
+    unsigned char weapon = 0;
+    unsigned char weaponState = 0;
+    unsigned short ammo = 0;
+    bool ducking = false;
+    bool hasJetpack = false;
+    char fightingStyle = 4;
+
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_int(stream, id, 0, MAX_SERVER_PLAYERS);
+        serialize_float(stream, position.x);
+        serialize_float(stream, position.z);
+        serialize_float(stream, position.y);
+        printf("id %d pos {%f %f %f}\n", id, position.x, position.y, position.z);
+        return true;
+    }
+
+    bool SerializeInternal(class yojimbo ::ReadStream& stream) { return Serialize(stream); };
+    bool SerializeInternal(class yojimbo ::WriteStream& stream) { return Serialize(stream); };
+    bool SerializeInternal(class yojimbo ::MeasureStream& stream) { return Serialize(stream); };
+};
+
+YOJIMBO_MESSAGE_FACTORY_START(TestMessageFactory, CPacketsID::PACKET_ID_MAX);
+YOJIMBO_DECLARE_MESSAGE_TYPE(CPacketsID::PLAYER_ONFOOT, TestPlayerOnFoot);
+YOJIMBO_MESSAGE_FACTORY_FINISH();
+
+// case ENET_EVENT_TYPE_CONNECT:
+// {
+//     CNetwork::HandlePeerConnected(event);
+//     break;
+// }
+// case ENET_EVENT_TYPE_RECEIVE:
+// {
+//     CNetwork::HandlePacketReceive(event);
+//     enet_packet_destroy(event.packet);
+//     break;
+// }
+// case ENET_EVENT_TYPE_DISCONNECT:
+// {
+//     CNetwork::HandlePlayerDisconnected(event);
+//     break;
+// }
+
+class ServerAdapter : public yojimbo::Adapter
+{
+public:
+    void OnServerClientConnected(int clientIndex) override
+    {
+        printf("OnServerClientConnected %d", clientIndex);
+        //CNetwork::HandlePeerConnected
+        return;
+    }
+
+    yojimbo::MessageFactory* CreateMessageFactory(yojimbo::Allocator& allocator)
+    {
+        return YOJIMBO_NEW(allocator, TestMessageFactory, allocator);
+    }
+};
+
+static ServerAdapter adapter;
 
 bool CNetwork::Init(unsigned short port)
 {
     // init packet listeners
-    CNetwork::InitListeners();
+   // CNetwork::InitListeners();
 
-    if (enet_initialize() != 0) // try to init enet
+    ///////////////
+    if (!InitializeYojimbo())
     {
-        printf("[ERROR] : ENET_INIT FAILED TO INITIALIZE\n");
+        printf("[ERROR] : InitializeYojimbo FAILED TO INITIALIZE\n");
         return false;
     }
+    yojimbo_log_level(YOJIMBO_LOG_LEVEL_DEBUG);
 
-    ENetAddress address;
+    uint8_t privateKey[yojimbo::KeyBytes];
+    memset(privateKey, 0, yojimbo::KeyBytes);
 
-    address.host = ENET_HOST_ANY; // bind server ip
-    address.port = port; // bind server port
+    yojimbo::ClientServerConfig config;
+    double serverTime = 100.0;
+    yojimbo::Server yserver(
+        yojimbo::GetDefaultAllocator(), privateKey, yojimbo::Address("127.0.0.1", port), config, adapter, serverTime);
 
-    // TODO: `ConfigManager::GetConfigMaxPlayers`
-    ENetHost* server = enet_host_create(&address, MAX_SERVER_PLAYERS, 2, 0, 0); // create enet host
+    yserver.Start(MAX_SERVER_PLAYERS);
 
-    if (server == NULL)
+    ////////////////////
+
+    //printf("[!] : Server started on port %d\n", port);
+
+    while (true)  // waiting for event
     {
-        printf("[ERROR] : ENET_UDP_SERVER_SOCKET FAILED TO CREATE\n");
-        return false;
+        ////////////
+        yserver.SendPackets();
+
+        yserver.ReceivePackets();
+
+        serverTime += 0.01;
+
+        yserver.AdvanceTime(serverTime);
+
+        if (!yserver.IsRunning())
+            break;
+        yojimbo_sleep(0.01);
     }
 
-    printf("[!] : Server started on port %d\n", port);
-
-
-    ENetEvent event;
-    while (true) // waiting for event
-    {
-        enet_host_service(server, &event, 1);
-        switch (event.type)
-        {
-            case ENET_EVENT_TYPE_CONNECT:
-            {
-                CNetwork::HandlePeerConnected(event);
-                break;
-            }
-            case ENET_EVENT_TYPE_RECEIVE:
-            {
-                CNetwork::HandlePacketReceive(event);
-                enet_packet_destroy(event.packet);
-                break;
-            }
-            case ENET_EVENT_TYPE_DISCONNECT:
-            {
-                CNetwork::HandlePlayerDisconnected(event);
-                break;
-            }
-        }
-    }
-
-    enet_host_destroy(server);
-    enet_deinitialize();
-    printf("[!] : Server Shutdown (ENET_DEINITIALIZE)\n");
+    yserver.Stop();
+    ShutdownYojimbo();
     return 0;
 }
 
@@ -98,8 +165,8 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::PED_SPAWN, CPedPackets::PedSpawn::Handle);
     CNetwork::AddListener(CPacketsID::PED_REMOVE, CPedPackets::PedRemove::Handle);
     CNetwork::AddListener(CPacketsID::PED_ONFOOT, CPedPackets::PedOnFoot::Handle);
-    CNetwork::AddListener(CPacketsID::GAME_WEATHER_TIME, CPlayerPackets::GameWeatherTime::Handle); // CPlayerPacket
-    CNetwork::AddListener(CPacketsID::PLAYER_KEY_SYNC, CPlayerPackets::PlayerKeySync::Handle); 
+    CNetwork::AddListener(CPacketsID::GAME_WEATHER_TIME, CPlayerPackets::GameWeatherTime::Handle);  // CPlayerPacket
+    CNetwork::AddListener(CPacketsID::PLAYER_KEY_SYNC, CPlayerPackets::PlayerKeySync::Handle);
     CNetwork::AddListener(CPacketsID::PED_ADD_TASK, CPedPackets::PedAddTask::Handle);
     CNetwork::AddListener(CPacketsID::PED_DRIVER_UPDATE, CPedPackets::PedDriverUpdate::Handle);
     CNetwork::AddListener(CPacketsID::PED_SHOT_SYNC, CPedPackets::PedShotSync::Handle);
@@ -149,7 +216,8 @@ void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t 
     enet_peer_send(peer, 0, packet);
 }
 
-void CNetwork::SendPacketToAll(unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith)
+void CNetwork::SendPacketToAll(
+    unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag, ENetPeer* dontShareWith)
 {
     size_t packetSize = sizeof(uint16_t) + dataSize;
     char* packetData = new char[packetSize];
@@ -183,15 +251,12 @@ void CNetwork::SendPacketRawToAll(void* data, size_t dataSize, ENetPacketFlag fl
 
 void CNetwork::HandlePeerConnected(ENetEvent& event)
 {
-    printf("[Game] : A new client connected from %i.%i.%i.%i:%u.\n", 
-        event.peer->address.host & 0xFF, 
-        (event.peer->address.host >> 8) & 0xFF, 
-        (event.peer->address.host >> 16) & 0xFF, 
-        (event.peer->address.host >> 24) & 0xFF,
-        event.peer->address.port);
+    printf("[Game] : A new client connected from %i.%i.%i.%i:%u.\n", event.peer->address.host & 0xFF,
+        (event.peer->address.host >> 8) & 0xFF, (event.peer->address.host >> 16) & 0xFF,
+        (event.peer->address.host >> 24) & 0xFF, event.peer->address.port);
 
     // set player disconnection timeout
-    enet_peer_timeout(event.peer, 10000, 6000, 10000); //timeoutLimit, timeoutMinimum, timeoutMaximum
+    enet_peer_timeout(event.peer, 10000, 6000, 10000);  // timeoutLimit, timeoutMinimum, timeoutMaximum
 }
 
 void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
@@ -200,7 +265,7 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
 
     // find player instance by enetpeer
     CPlayer* player = CPlayerManager::GetPlayer(event.peer);
-    
+
     if (player == nullptr)
     {
         return;
@@ -212,7 +277,7 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
     {
         vehicle->m_pPlayers[player->m_nSeatId] = nullptr;
     }
-    
+
     if (CPlayerPackets::EnExSync::ms_pLastPlayerOwner == player)
     {
         CPlayerPackets::EnExSync::ms_pLastPlayerOwner = nullptr;
@@ -225,13 +290,13 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
     CPlayerManager::Remove(player);
 
     // create PlayerDisconnected packet struct
-    CPlayerPackets::PlayerDisconnected packet =
-    {
-        player->m_iPlayerId // id
+    CPlayerPackets::PlayerDisconnected packet = {
+        player->m_iPlayerId  // id
     };
 
     // send to all
-    CNetwork::SendPacketToAll(CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof (CPlayerPackets::PlayerDisconnected), (ENetPacketFlag)0, event.peer);
+    CNetwork::SendPacketToAll(CPacketsID::PLAYER_DISCONNECTED, &packet, sizeof(CPlayerPackets::PlayerDisconnected),
+        (ENetPacketFlag)0, event.peer);
 
     printf("[Game] : %i Disconnected.\n", player->m_iPlayerId);
 
@@ -245,7 +310,8 @@ void CNetwork::HandlePacketReceive(ENetEvent& event)
 
     if (packetid == CPacketsID::MASS_PACKET_SEQUENCE)
     {
-        CNetwork::SendPacketRawToAll(event.packet->data, event.packet->dataLength, (ENetPacketFlag)event.packet->flags, event.peer);
+        CNetwork::SendPacketRawToAll(
+            event.packet->data, event.packet->dataLength, (ENetPacketFlag)event.packet->flags, event.peer);
     }
     else
     {
@@ -259,10 +325,10 @@ void CNetwork::HandlePacketReceive(ENetEvent& event)
     }
 }
 
-void CNetwork::AddListener(unsigned short id, void(*callback)(ENetPeer*, void*, int))
+void CNetwork::AddListener(unsigned short id, void (*callback)(ENetPeer*, void*, int))
 {
     CPacketListener* listener = new CPacketListener(id, callback);
-    m_packetListeners.insert({ id, listener });
+    m_packetListeners.insert({id, listener});
 }
 
 void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
@@ -277,7 +343,8 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
             CPlayerPackets::PlayerDisconnected disconnectPacket{};
             disconnectPacket.id = -1;
             disconnectPacket.reason = PLAYER_DISCONNECT_REASON_NAME_TAKEN;
-            CNetwork::SendPacket(peer, CPacketsID::PLAYER_DISCONNECTED, &disconnectPacket, sizeof(disconnectPacket), ENET_PACKET_FLAG_RELIABLE);
+            CNetwork::SendPacket(peer, CPacketsID::PLAYER_DISCONNECTED, &disconnectPacket, sizeof(disconnectPacket),
+                ENET_PACKET_FLAG_RELIABLE);
             return;
         }
     }
@@ -301,14 +368,15 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
         disconnectPacket.id = -1;
         disconnectPacket.reason = PLAYER_DISCONNECT_REASON_VERSION_MISMATCH;
         disconnectPacket.version = packedVersion;
-        CNetwork::SendPacket(peer, CPacketsID::PLAYER_DISCONNECTED, &disconnectPacket, sizeof(disconnectPacket), ENET_PACKET_FLAG_RELIABLE);
+        CNetwork::SendPacket(peer, CPacketsID::PLAYER_DISCONNECTED, &disconnectPacket, sizeof(disconnectPacket),
+            ENET_PACKET_FLAG_RELIABLE);
 
         enet_peer_disconnect_later(peer, packedVersion);
         return;
     }
 
     printf("freeId %d name %s version %s\n", freeId, packet->name, buffer);
-    
+
     packet->id = freeId;
 
     CNetwork::SendPacketToAll(CPacketsID::PLAYER_CONNECTED, packet, sizeof(*packet), ENET_PACKET_FLAG_RELIABLE, peer);
@@ -323,14 +391,16 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
         newPlayerPacket.isAlreadyConnected = true;
         strcpy_s(newPlayerPacket.name, i->m_Name);
 
-        CNetwork::SendPacket(peer, CPacketsID::PLAYER_CONNECTED, &newPlayerPacket, sizeof(CPlayerPackets::PlayerConnected), ENET_PACKET_FLAG_RELIABLE);
+        CNetwork::SendPacket(peer, CPacketsID::PLAYER_CONNECTED, &newPlayerPacket,
+            sizeof(CPlayerPackets::PlayerConnected), ENET_PACKET_FLAG_RELIABLE);
 
         if (i->m_ucSyncFlags.bStatsModified)
         {
             CPlayerPackets::PlayerStats statsPacket{};
             statsPacket.playerid = i->m_iPlayerId;
             memcpy(statsPacket.stats, i->m_afStats, sizeof(i->m_afStats));
-            CNetwork::SendPacket(peer, CPacketsID::PLAYER_STATS, &statsPacket, sizeof(statsPacket), ENET_PACKET_FLAG_RELIABLE);
+            CNetwork::SendPacket(
+                peer, CPacketsID::PLAYER_STATS, &statsPacket, sizeof(statsPacket), ENET_PACKET_FLAG_RELIABLE);
         }
 
         if (i->m_ucSyncFlags.bClothesModified)
@@ -341,7 +411,8 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
             memcpy(rebuildPacket.m_anTextureKeys, i->m_anTextureKeys, sizeof(i->m_anTextureKeys));
             rebuildPacket.m_fFatStat = i->m_fFatStat;
             rebuildPacket.m_fMuscleStat = i->m_fMuscleStat;
-            CNetwork::SendPacket(peer, CPacketsID::REBUILD_PLAYER, &rebuildPacket, sizeof(rebuildPacket), ENET_PACKET_FLAG_RELIABLE);
+            CNetwork::SendPacket(
+                peer, CPacketsID::REBUILD_PLAYER, &rebuildPacket, sizeof(rebuildPacket), ENET_PACKET_FLAG_RELIABLE);
         }
 
         if (i->m_ucSyncFlags.bWaypointModified)
@@ -350,7 +421,8 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
             waypointPacket.playerid = i->m_iPlayerId;
             waypointPacket.position = i->m_vecWaypointPos;
             waypointPacket.place = true;
-            CNetwork::SendPacket(peer, CPacketsID::PLAYER_PLACE_WAYPOINT, &waypointPacket, sizeof(waypointPacket), ENET_PACKET_FLAG_RELIABLE);
+            CNetwork::SendPacket(peer, CPacketsID::PLAYER_PLACE_WAYPOINT, &waypointPacket, sizeof(waypointPacket),
+                ENET_PACKET_FLAG_RELIABLE);
         }
     }
 
@@ -360,11 +432,12 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
         vehicleSpawnPacket.vehicleid = i->m_nVehicleId;
         vehicleSpawnPacket.modelid = i->m_nModelId;
         vehicleSpawnPacket.pos = i->m_vecPosition;
-        vehicleSpawnPacket.rot = static_cast<float>(i->m_vecRotation.z * (3.141592 / 180)); // convert to radians
+        vehicleSpawnPacket.rot = static_cast<float>(i->m_vecRotation.z * (3.141592 / 180));  // convert to radians
         vehicleSpawnPacket.color1 = i->m_nPrimaryColor;
         vehicleSpawnPacket.color2 = i->m_nSecondaryColor;
 
-        CNetwork::SendPacket(peer, CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
+        CNetwork::SendPacket(
+            peer, CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
 
         bool modifiedDamageStatus = false;
 
@@ -382,7 +455,8 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
             CVehiclePackets::VehicleDamage vehicleDamagePacket{};
             vehicleDamagePacket.vehicleid = i->m_nVehicleId;
             memcpy(&vehicleDamagePacket.damageManager_padding, i->m_damageManager_padding, 23);
-            CNetwork::SendPacket(peer, CPacketsID::VEHICLE_DAMAGE, &vehicleDamagePacket, sizeof vehicleDamagePacket, ENET_PACKET_FLAG_RELIABLE);
+            CNetwork::SendPacket(peer, CPacketsID::VEHICLE_DAMAGE, &vehicleDamagePacket, sizeof vehicleDamagePacket,
+                ENET_PACKET_FLAG_RELIABLE);
         }
 
         for (int component : i->m_pComponents)
@@ -390,7 +464,8 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
             CVehiclePackets::VehicleComponentAdd vehicleComponentAddPacket{};
             vehicleComponentAddPacket.vehicleid = i->m_nVehicleId;
             vehicleComponentAddPacket.componentid = component;
-            CNetwork::SendPacket(peer, CPacketsID::VEHICLE_COMPONENT_ADD, &vehicleComponentAddPacket, sizeof vehicleComponentAddPacket, ENET_PACKET_FLAG_RELIABLE);
+            CNetwork::SendPacket(peer, CPacketsID::VEHICLE_COMPONENT_ADD, &vehicleComponentAddPacket,
+                sizeof vehicleComponentAddPacket, ENET_PACKET_FLAG_RELIABLE);
         }
     }
 
@@ -408,15 +483,17 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
 
     if (CPlayerPackets::EnExSync::ms_pLastPlayerOwner)
     {
-        if (std::find(CPlayerManager::m_pPlayers.begin(), CPlayerManager::m_pPlayers.end(), CPlayerPackets::EnExSync::ms_pLastPlayerOwner)
-            != CPlayerManager::m_pPlayers.end())
+        if (std::find(CPlayerManager::m_pPlayers.begin(), CPlayerManager::m_pPlayers.end(),
+                CPlayerPackets::EnExSync::ms_pLastPlayerOwner) != CPlayerManager::m_pPlayers.end())
         {
-            CNetwork::SendPacket(peer, CPacketsID::ENEX_SYNC, CPlayerPackets::EnExSync::ms_vLastData.data(), CPlayerPackets::EnExSync::ms_vLastData.size(), ENET_PACKET_FLAG_RELIABLE);
+            CNetwork::SendPacket(peer, CPacketsID::ENEX_SYNC, CPlayerPackets::EnExSync::ms_vLastData.data(),
+                CPlayerPackets::EnExSync::ms_vLastData.size(), ENET_PACKET_FLAG_RELIABLE);
         }
     }
 
-    CPlayerPackets::PlayerHandshake handshakePacket = { freeId };
-    CNetwork::SendPacket(peer, CPacketsID::PLAYER_HANDSHAKE, &handshakePacket, sizeof handshakePacket, ENET_PACKET_FLAG_RELIABLE);
+    CPlayerPackets::PlayerHandshake handshakePacket = {freeId};
+    CNetwork::SendPacket(
+        peer, CPacketsID::PLAYER_HANDSHAKE, &handshakePacket, sizeof handshakePacket, ENET_PACKET_FLAG_RELIABLE);
 
     CPlayerManager::AssignHostToFirstPlayer();
 }

@@ -1,4 +1,5 @@
 #pragma once
+#define WIN32_LEAN_AND_MEAN 
 #define COOPANDREAS_VERSION "0.2.2-alpha"
 #define MAX_SERVER_PLAYERS 8
 #define MAX_SERVER_VEHICLES 200
@@ -22,7 +23,9 @@
 // windows ---------------------------------------------------------------------------------
 
 #include <Windows.h>
+#undef SendMessage
 
+#include "yojimbo.h"
 // utf8 ------------------------------------------------------------------------------------
 
 #include <cwctype>
