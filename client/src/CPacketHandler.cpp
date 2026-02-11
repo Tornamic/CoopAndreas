@@ -87,6 +87,8 @@ void CPacketHandler::PlayerDisconnected__Handle(void* data, int size)
 
 	// destroy player
 	delete player;
+
+	CWantedLevelSync::OnPlayerDisconnected();
 }
 
 // PlayerOnFoot
@@ -1436,9 +1438,10 @@ void CPacketHandler::AssignPedSyncer__Handle(void* data, int size)
 void CPacketHandler::RespawnPlayer__Handle(void* data, int size)
 {
 	CPackets::RespawnPlayer* packet = (CPackets::RespawnPlayer*)data;
-	
+
 	if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(packet->playerid))
 	{
+		CWantedLevelSync::OnPlayerRespawned(networkPlayer);
 		networkPlayer->Respawn();
 	}
 }

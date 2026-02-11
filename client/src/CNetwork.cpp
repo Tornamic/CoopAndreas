@@ -171,6 +171,7 @@ void CNetwork::InitListeners()
 	CNetwork::AddListener(CPacketsID::TAG_UPDATE, CPacketHandler::TagUpdate__Handle);
 	CNetwork::AddListener(CPacketsID::UPDATE_ALL_TAGS, CPacketHandler::UpdateAllTags__Handle);
 	CNetwork::AddListener(CPacketsID::TELEPORT_PLAYER_SCRIPTED, CPacketHandler::TeleportPlayerScripted__Handle);
+	CNetwork::AddListener(CPacketsID::PLAYER_WANTED_LEVEL, CWantedLevelSync::HandlePacket);
 }
 
 void CNetwork::HandlePacketReceive(ENetEvent& event)

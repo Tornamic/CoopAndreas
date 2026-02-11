@@ -29,10 +29,12 @@ class CPlayer
 		float m_fFatStat;
 		float m_fMuscleStat;
 		CVector m_vecWaypointPos{};
+		uint8_t m_nWantedLevel = 0;
 		struct {
 			uint8_t bStatsModified : 1;
 			uint8_t bClothesModified : 1;
 			uint8_t bWaypointModified : 1;
+			uint8_t bWantedLevelModified : 1;
 		} m_ucSyncFlags;
 		std::vector<CPed*> m_vPedClaims;
 

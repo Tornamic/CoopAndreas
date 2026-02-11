@@ -134,6 +134,7 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::TAG_UPDATE, CPlayerPackets::TagUpdate::Handle);
     CNetwork::AddListener(CPacketsID::UPDATE_ALL_TAGS, CPlayerPackets::UpdateAllTags::Handle);
     CNetwork::AddListener(CPacketsID::TELEPORT_PLAYER_SCRIPTED, CPlayerPackets::TeleportPlayerScripted::Handle);
+    CNetwork::AddListener(CPacketsID::PLAYER_WANTED_LEVEL, CPlayerPackets::PlayerWantedLevel::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)
@@ -351,6 +352,14 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
             waypointPacket.position = i->m_vecWaypointPos;
             waypointPacket.place = true;
             CNetwork::SendPacket(peer, CPacketsID::PLAYER_PLACE_WAYPOINT, &waypointPacket, sizeof(waypointPacket), ENET_PACKET_FLAG_RELIABLE);
+        }
+
+        if (i->m_ucSyncFlags.bWantedLevelModified)
+        {
+            CPlayerPackets::PlayerWantedLevel wantedPacket{};
+            wantedPacket.playerid = i->m_iPlayerId;
+            wantedPacket.wantedLevel = i->m_nWantedLevel;
+            CNetwork::SendPacket(peer, CPacketsID::PLAYER_WANTED_LEVEL, &wantedPacket, sizeof(wantedPacket), ENET_PACKET_FLAG_RELIABLE);
         }
     }
 

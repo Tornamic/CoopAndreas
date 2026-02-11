@@ -43,20 +43,21 @@ static void __fastcall CRadar__ClearBlip_Hook(int blipIndex, SKIP_EDX)
 
 static void __cdecl CExplosion__AddExplosion(CEntity* newVictim, CPed* newCreator, eExplosionType type, CVector2D pos, float z, int time, char usesSound, float cameraShake, char isVisible)
 {
+    // Strip creator if it's a remote player's ped — prevents the game from
+    // attributing their crimes to the local player
+    if (CNetwork::m_bConnected && newCreator && (CEntity*)newCreator != (CEntity*)FindPlayerPed(0))
+    {
+        for (auto* player : CNetworkPlayerManager::m_pPlayers)
+        {
+            if (player && player->m_pPed == (CPed*)newCreator)
+            {
+                newCreator = nullptr;
+                break;
+            }
+        }
+    }
+
     plugin::Call<0x736A50, CEntity*, CPed*, int, CVector2D, float, int, char, float, char>(newVictim, newCreator, type, pos, z, time, usesSound, cameraShake, isVisible);
-    
-    // needs to be completely reworked
-   /* CPackets::AddExplosion addExplosionPacket{};
-
-    addExplosionPacket.type = (unsigned char)type;
-    addExplosionPacket.pos = CVector(pos.x, pos.y, z);
-    addExplosionPacket.time = time;
-    addExplosionPacket.usesSound = usesSound;
-    addExplosionPacket.cameraShake = cameraShake;
-    addExplosionPacket.isVisible = isVisible;
-    CNetwork::SendPacket(CPacketsID::ADD_EXPLOSION, &addExplosionPacket, sizeof addExplosionPacket, ENET_PACKET_FLAG_RELIABLE);*/
-
-    return;
 }
 
 static void __cdecl CWorld__Add_Hook(CEntity* entity)
