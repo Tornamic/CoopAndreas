@@ -949,6 +949,32 @@ void CPacketHandler::GameWeatherTime__Trigger()
 	delete packet;
 }
 
+CPackets::MoonSizeUpdated* CPacketHandler::MoonSizeUpdated__Collect()
+{
+    CPackets::MoonSizeUpdated* packet = new CPackets::MoonSizeUpdated;
+
+    uintptr_t moonSizeAddr = 0x8D4B60;
+    packet->size = *(byte*)moonSizeAddr;
+
+	return packet;
+}
+
+void CPacketHandler::MoonSizeUpdated__Handle(void* data, int size)
+{
+    CPackets::MoonSizeUpdated* packet = (CPackets::MoonSizeUpdated*)data;
+
+    uintptr_t moonSizeAddr = 0x8D4B60;
+    *(byte*)moonSizeAddr = packet->size;
+}
+
+void CPacketHandler::MoonSizeUpdated__Trigger()
+{
+	CPackets::MoonSizeUpdated* packet = CPacketHandler::MoonSizeUpdated__Collect();
+
+    CNetwork::SendPacket(CPacketsID::MOON_SIZE_UPDATE, packet, sizeof(CPackets::MoonSizeUpdated), ENET_PACKET_FLAG_RELIABLE);
+    delete packet;
+}
+
 // PlayerKeySync
 
 void CPacketHandler::PlayerKeySync__Handle(void* data, int size)

@@ -25,6 +25,28 @@ static void __cdecl CWeather__SetWeatherToAppropriateTypeNow_Hook()
     CPacketHandler::GameWeatherTime__Trigger();
 }
 
+static void __declspec(naked) CWeather__MoonSizeChanged_Hook()
+{
+    __asm
+    {
+        pushad
+        pushfd
+    }
+
+    CPacketHandler::MoonSizeUpdated__Trigger();
+
+    __asm
+    {
+        popfd
+        popad
+
+        add esp, 0xA8
+
+        mov eax, 0x73AEA5
+        jmp eax
+    }
+}
+
 // place waypoint
 static CdeclEvent	 <AddressList<0x5775D2, H_CALL>, PRIORITY_AFTER, ArgPick5N<eBlipType, 0, CVector, 1, eBlipColour, 2, eBlipDisplay, 3, char*, 4>, void(eBlipType, CVector, eBlipColour, eBlipDisplay, char*)> waypointPlaceEvent;
 static void PlaceWaypointHook(eBlipType type, CVector posn, eBlipColour color, eBlipDisplay blipDisplay, char* scriptName)
@@ -285,6 +307,7 @@ void WorldHooks::InjectHooks()
     patch::RedirectJump(0x47D43E, CWeather__ForceWeather_Hook);
     patch::RedirectJump(0x72A4F0, CWeather__ForceWeatherNow_Hook);
     patch::RedirectCall(0x47679F, CWeather__SetWeatherToAppropriateTypeNow_Hook);
+    patch::RedirectJump(0x73AE9F, CWeather__MoonSizeChanged_Hook);
 
     patch::RedirectCall(0x73A0FF, CWorld__SprayPaintWorld_Hook);
 

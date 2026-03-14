@@ -72,7 +72,8 @@ enum CPacketsID : unsigned short
 	TAG_UPDATE,
 	UPDATE_ALL_TAGS,
 	TELEPORT_PLAYER_SCRIPTED,
-	PACKET_ID_MAX
+    PACKET_ID_MAX,
+    MOON_SIZE_UPDATE
 };
 
 class CPackets
@@ -651,4 +652,9 @@ public:
 		CVector pos;
 		float heading;
 	};
+
+    struct MoonSizeUpdated
+    {
+        byte size;
+    };
 };

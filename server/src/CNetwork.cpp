@@ -134,6 +134,7 @@ void CNetwork::InitListeners()
     CNetwork::AddListener(CPacketsID::TAG_UPDATE, CPlayerPackets::TagUpdate::Handle);
     CNetwork::AddListener(CPacketsID::UPDATE_ALL_TAGS, CPlayerPackets::UpdateAllTags::Handle);
     CNetwork::AddListener(CPacketsID::TELEPORT_PLAYER_SCRIPTED, CPlayerPackets::TeleportPlayerScripted::Handle);
+    CNetwork::AddListener(CPacketsID::MOON_SIZE_UPDATE, CPlayerPackets::MoonSizeUpdated::Handle);
 }
 
 void CNetwork::SendPacket(ENetPeer* peer, unsigned short id, void* data, size_t dataSize, ENetPacketFlag flag)

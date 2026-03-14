@@ -719,5 +719,17 @@ public:
 			}
 		}
 	};
+
+	struct MoonSizeUpdated
+	{
+		byte size;
+		
+		static void Handle(ENetPeer* peer, void* data, int size)
+        {
+            MoonSizeUpdated* packet = (MoonSizeUpdated*)data;
+	        CNetwork::SendPacketToAll(
+                CPacketsID::MOON_SIZE_UPDATE, packet, sizeof *packet, ENET_PACKET_FLAG_RELIABLE, peer);
+        }
+	};
 };
 #endif
