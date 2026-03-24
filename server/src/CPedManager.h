@@ -8,6 +8,17 @@
 #include <vector>
 #include <algorithm>
 
+// Platform compatibility macros
+#if defined(_WIN32)
+	#define STR_CASE_CMP(s1, s2, n) _strnicmp(s1, s2, n)
+	#define STR_COPY_S(dest, src) strncpy_s(dest, sizeof(dest), src, _TRUNCATE)
+	#define STR_COPY_N_S(dest, src, count) strncpy_s(dest, sizeof(dest), src, count)
+#else
+	#define STR_CASE_CMP(s1, s2, n) strncasecmp(s1, s2, n)
+	#define STR_COPY_S(dest, src) strncpy(dest, src, sizeof(dest) - 1); (dest)[sizeof(dest) - 1] = '\0'
+	#define STR_COPY_N_S(dest, src, count) strncpy(dest, src, count)
+#endif
+
 #include "CPed.h"
 #include "CPlayerManager.h"
 #include "CVehicleManager.h"
@@ -68,7 +79,7 @@ class CPedPackets
 
 					for (int i = 0; i < 52; i++)
 					{
-						if (_strnicmp(packet->specialModelName, CPedManager::ms_aszAllowedSpecialActors[i], strlen(CPedManager::ms_aszAllowedSpecialActors[i])))
+						if (STR_CASE_CMP(packet->specialModelName, CPedManager::ms_aszAllowedSpecialActors[i], strlen(CPedManager::ms_aszAllowedSpecialActors[i])) == 0)
 						{
 							isSpecialModelValid = true;
 							break;
@@ -83,7 +94,7 @@ class CPedPackets
 				CNetwork::SendPacketToAll(CPacketsID::PED_SPAWN, packet, sizeof * packet, ENET_PACKET_FLAG_RELIABLE, peer);
 		
 				CPed* ped = new CPed(packet->pedid, player, packet->modelId, packet->pedType, packet->pos, packet->createdBy);
-				strncpy_s(ped->m_szSpecialModelName, packet->specialModelName, 7);
+				STR_COPY_N_S(ped->m_szSpecialModelName, packet->specialModelName, 7);
 				CPedManager::Add(ped);
 
 				// send it back to the syncer of the ped so that he knows the id
@@ -134,7 +145,7 @@ class CPedPackets
 						pedSpawnPacket.modelId = ped->m_nModelId;
 						pedSpawnPacket.pedType = ped->m_nPedType;
 						pedSpawnPacket.pos = ped->m_vecPos;
-						strncpy_s(pedSpawnPacket.specialModelName, sizeof(pedSpawnPacket.specialModelName), ped->m_szSpecialModelName, _TRUNCATE);
+						STR_COPY_N_S(pedSpawnPacket.specialModelName, ped->m_szSpecialModelName, strlen(ped->m_szSpecialModelName));
 						pedSpawnPacket.tempid = 0xFF;
 						pedSpawnPacket.createdBy = ped->m_nCreatedBy;
 						CNetwork::SendPacket(peer, CPacketsID::PED_SPAWN, &pedSpawnPacket, sizeof(pedSpawnPacket), ENET_PACKET_FLAG_RELIABLE);

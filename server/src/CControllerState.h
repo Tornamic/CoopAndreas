@@ -3,6 +3,8 @@
 #ifndef _CCONTROLLERSTATE_H_
     #define _CCONTROLLERSTATE_H_
 
+#include <cstdint>
+
 class CControllerState 
 {    
     public:

@@ -3,9 +3,14 @@ set_project("CoopAndreas")
 local force_msvc = true;
 
 set_languages("cxx17")
-set_arch("x86")
-set_plat("windows")
-set_toolchains("clang-cl") -- required to generate compile_commands.json properly
+
+if is_os("windows") then
+    set_arch("x86")
+    set_plat("windows")
+    set_toolchains("clang-cl") -- required to generate compile_commands.json properly
+elseif is_os("linux") then
+    set_plat("linux")
+end
 
 add_rules("plugin.compile_commands.autoupdate")
 add_rules("mode.debug", "mode.release")
@@ -20,7 +25,7 @@ end
 
 target("client")
     set_kind("shared")
-    if force_msvc == true then
+    if is_os("windows") and force_msvc == true then
         set_toolchains("msvc")
     end
     set_basename("CoopAndreasSA")
@@ -131,12 +136,13 @@ target("server")
         add_defines("_CRT_SECURE_NO_WARNINGS", "WIN32", "_CONSOLE")
 
     elseif is_os("linux") then
-        -- TODO
+        set_toolchains("gcc", "clang")
+        add_syslinks("pthread")
     end
 
 target("proxy")
     set_kind("shared")
-    if force_msvc == true then
+    if is_os("windows") and force_msvc == true then
         set_toolchains("msvc")
     end
     set_arch("x86")

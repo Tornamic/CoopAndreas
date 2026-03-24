@@ -4,6 +4,16 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
+#include <cstring>
+
+// Platform compatibility macros
+#if defined(_WIN32)
+	#define STR_COPY_S(dest, src) strcpy_s(dest, sizeof(dest), src)
+	#define STR_COPY_N_S(dest, src, count) strncpy_s(dest, sizeof(dest), src, count)
+#else
+	#define STR_COPY_S(dest, src) strncpy(dest, src, sizeof(dest) - 1); (dest)[sizeof(dest) - 1] = '\0'
+	#define STR_COPY_N_S(dest, src, count) strncpy(dest, src, count)
+#endif
 
 #include "CPacketListener.h"
 #include "CPacket.h"
@@ -285,7 +295,7 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
 
     int freeId = CPlayerManager::GetFreeID();
     CPlayer* player = new CPlayer(peer, freeId);
-    strcpy_s(player->m_Name, packet->name);
+    STR_COPY_S(player->m_Name, packet->name);
     CPlayerManager::Add(player);
 
     uint32_t packedVersion = semver_parse(COOPANDREAS_VERSION, nullptr);
@@ -321,7 +331,7 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
         CPlayerPackets::PlayerConnected newPlayerPacket{};
         newPlayerPacket.id = i->m_iPlayerId;
         newPlayerPacket.isAlreadyConnected = true;
-        strcpy_s(newPlayerPacket.name, i->m_Name);
+        STR_COPY_S(newPlayerPacket.name, i->m_Name);
 
         CNetwork::SendPacket(peer, CPacketsID::PLAYER_CONNECTED, &newPlayerPacket, sizeof(CPlayerPackets::PlayerConnected), ENET_PACKET_FLAG_RELIABLE);
 
@@ -402,7 +412,7 @@ void CNetwork::HandlePlayerConnected(ENetPeer* peer, void* data, int size)
         packet.pos = i->m_vecPos;
         packet.pedType = i->m_nPedType;
         packet.createdBy = i->m_nCreatedBy;
-        strncpy_s(packet.specialModelName, i->m_szSpecialModelName, strlen(i->m_szSpecialModelName));
+        STR_COPY_N_S(packet.specialModelName, i->m_szSpecialModelName, strlen(i->m_szSpecialModelName));
         CNetwork::SendPacket(peer, CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
     }
 
