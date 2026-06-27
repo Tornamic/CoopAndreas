@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "CDXFont.h"
 #include <Hooks/WorldHooks.h>
 #include "CCutsceneMgr.h"
@@ -26,7 +26,7 @@ unsigned int lastPedSyncTickRate = 0;
 unsigned int lastWeatherTimeSyncTickRate = 0;
 unsigned int lastPlayerAimSyncTickRate = 0;
 bool bBeenConnected;
-bool lastOnMissionFlag;
+char lastOnMissionFlag;
 uint32_t startTime;
 
 class CoopAndreas {
@@ -127,9 +127,9 @@ public:
 					int syncRate = 40;
 					CVector velocity{};
 
-					bool isDriver = localPlayer->m_nPedFlags.bInVehicle && localPlayer->m_pVehicle && localPlayer->m_pVehicle->m_pDriver == localPlayer;
+					bool isDriver = localPlayer->bInVehicle && localPlayer->m_pVehicle && localPlayer->m_pVehicle->m_pDriver == localPlayer;
 
-					bool isPassenger = localPlayer->m_nPedFlags.bInVehicle && localPlayer->m_pVehicle && localPlayer->m_pVehicle->m_pDriver != localPlayer;
+					bool isPassenger = localPlayer->bInVehicle && localPlayer->m_pVehicle && localPlayer->m_pVehicle->m_pDriver != localPlayer;
 
 					velocity = isDriver ? localPlayer->m_pVehicle->m_vecMoveSpeed : localPlayer->m_vecMoveSpeed;
 
