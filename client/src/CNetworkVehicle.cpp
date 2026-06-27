@@ -52,11 +52,11 @@ bool CNetworkVehicle::CreateVehicle(int vehicleid, int modelid, CVector pos, flo
 
     case VEHICLE_BIKE:
         m_pVehicle = new CBike(modelid, MISSION_VEHICLE);
-        ((CBike*)m_pVehicle)->m_nDamageFlags |= 0x10; break;
+        ((CBike*)m_pVehicle)->m_nBikeFlags |= 0x10; break;
 
     case VEHICLE_BMX:
         m_pVehicle = new CBmx(modelid, MISSION_VEHICLE);
-        ((CBmx*)m_pVehicle)->m_nDamageFlags |= 0x10; break;
+        ((CBmx*)m_pVehicle)->m_nBikeFlags |= 0x10; break;
 
     case VEHICLE_TRAILER:
         m_pVehicle = new CTrailer(modelid, MISSION_VEHICLE); break;
@@ -76,7 +76,7 @@ bool CNetworkVehicle::CreateVehicle(int vehicleid, int modelid, CVector pos, flo
 
     m_pVehicle->SetPosn(pos);
     m_pVehicle->SetOrientation(0.0f, 0.0f, rotation);
-    m_pVehicle->m_nStatus = 4;
+    m_pVehicle->m_nStatus = static_cast<eEntityStatus>(4);
     m_pVehicle->m_eDoorLock = DOORLOCK_UNLOCKED;
     m_pVehicle->m_nPrimaryColor = color1;
     m_pVehicle->m_nSecondaryColor = color2;
