@@ -106,7 +106,7 @@ std::string CNetworkPlayer::GetName()
 
 char CNetworkPlayer::GetWeaponSkill(eWeaponType weaponType)
 {
-	if (weaponType < WEAPON_PISTOL || weaponType > WEAPON_TEC9)
+	if (weaponType < WEAPONTYPE_PISTOL || weaponType > WEAPONTYPE_TEC9)
 		return 1;
 
 	eStats weaponStatId = plugin::CallAndReturn<eStats, 0x743CD0>(weaponType); // CWeaponInfo::GetSkillStatIndex
@@ -128,14 +128,14 @@ void CNetworkPlayer::WarpIntoVehicleDriver(CVehicle* vehicle)
 		return;
 	}
 
-	if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
+	if (m_pPed->bInVehicle && m_pPed->m_pVehicle)
 	{
 		RemoveFromVehicle(m_pPed->m_pVehicle);
 	}
 
 	m_pPed->m_pIntelligence->FlushImmediately(false);
 
-	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
+	m_pPed->CantBeKnockedOffBike = 1; // 1 - never
 
 	auto task = CTaskSimpleCarSetPedInAsDriver(vehicle, nullptr);
 	task.m_bWarpingInToCar = true;
@@ -151,14 +151,14 @@ void CNetworkPlayer::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 		return;
 	}
 
-	if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
+	if (m_pPed->bInVehicle && m_pPed->m_pVehicle)
 	{
 		RemoveFromVehicle(m_pPed->m_pVehicle);
 	}
 
 	m_pPed->m_pIntelligence->FlushImmediately(false);
 
-	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
+	m_pPed->CantBeKnockedOffBike = 1; // 1 - never
 	
 	int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle, seatid);
 	auto task = CTaskSimpleCarSetPedInAsPassenger(vehicle, doorId, nullptr);
@@ -175,14 +175,14 @@ void CNetworkPlayer::EnterVehiclePassenger(CVehicle* vehicle, int seatid)
 		return;
 	}
 
-	if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
+	if (m_pPed->bInVehicle && m_pPed->m_pVehicle)
 	{
 		RemoveFromVehicle(m_pPed->m_pVehicle);
 	}
 
 	m_pPed->m_pIntelligence->FlushImmediately(false);
 
-	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
+	m_pPed->CantBeKnockedOffBike = 1; // 1 - never
 
 	int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle, seatid);
 	auto task = new CTaskComplexEnterCarAsPassenger(vehicle, doorId, false);
@@ -200,7 +200,7 @@ void CNetworkPlayer::RemoveFromVehicle(CVehicle* vehicle)
 
 	m_pPed->m_pIntelligence->m_TaskMgr.SetTask(nullptr, TASK_PRIMARY_PRIMARY, false);
 
-	m_pPed->m_nPedFlags.CantBeKnockedOffBike = 2; // 2 - normal
+	m_pPed->CantBeKnockedOffBike = 2; // 2 - normal
 
 	auto task = CTaskSimpleCarSetPedOut(vehicle, 1, false);
 	task.m_bWarpingOutOfCar = true;
@@ -219,7 +219,7 @@ void CNetworkPlayer::HandleTask(CPackets::SetPlayerTask& packet)
 #endif
 
 	m_pPed->m_matrix->pos = packet.position;
-	m_pPed->m_fCurrentRotation = packet.rotation;
+	m_pPed->m_fHeadingCurrent = packet.rotation;
 
 	CTask* activeTask = m_pPed->m_pIntelligence->m_TaskMgr.GetActiveTask();
 	eTaskType activeTaskType = activeTask ? activeTask->GetId() : TASK_NONE;
