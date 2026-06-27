@@ -156,8 +156,8 @@ bool CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook()
 
 int __purecall_Hook()
 {
-    *(char**)0xDEAD  = "This hook is needed for a more detailed crash log when calling an unimplemented virtual function";
-    *(char**)0xDEAD2 = "we will get a full backtrace instead of a single msgbox";
+    *(const char**)0xDEAD  = "This hook is needed for a more detailed crash log when calling an unimplemented virtual function";
+    *(const char**)0xDEAD2 = "we will get a full backtrace instead of a single msgbox";
     __asm
     {
         mov eax, 0
