@@ -64,9 +64,9 @@ std::string GetNextState()
 	}
 	case 3:
 	{
-		eWeaponType weaponType = player->m_aWeapons[player->m_nActiveWeaponSlot].m_eWeaponType;
+		eWeaponType weaponType = player->m_aWeapons[player->m_nSelectedWepSlot].m_eWeaponType;
 
-		if(weaponType == eWeaponType::WEAPON_UNARMED)
+		if(weaponType == eWeaponType::WEAPONTYPE_UNARMED)
 			return GetNextState();
 
 		return "Current Weapon: " + CUtil::GetWeaponName(weaponType);
@@ -75,7 +75,7 @@ std::string GetNextState()
 	{
 		CVehicle* vehicle = player->m_pVehicle;
 
-		if(!vehicle || !player->m_nPedFlags.bInVehicle)
+		if(!vehicle || !player->bInVehicle)
 			return GetNextState();
 
 		std::string modelName = TheText.Get(reinterpret_cast<CVehicleModelInfo*>(CModelInfo::ms_modelInfoPtrs[vehicle->m_nModelIndex])->m_szGameName);
@@ -92,7 +92,7 @@ std::string GetNextState()
 			"Las Venturas"
 		};
 
-		return (player->m_nPedFlags.bInVehicle ? ("Driving through ") : ("Walking around ")) + levelName[CTheZones::m_CurrLevel];
+		return (player->bInVehicle ? ("Driving through ") : ("Walking around ")) + levelName[CTheZones::m_CurrLevel];
 	}
 	case 6:
 	{
@@ -260,7 +260,7 @@ std::string GetNextDetails()
 	}
 
 	InteriorPlacement2D currentPlacement{};
-	currentPlacement.m_vecPos = pos;
+	currentPlacement.m_vecPos = pos.To2D();
 	currentPlacement.m_nAreaId = CGame::currArea;
 
 	if (IsPlacementInRangeOfAnyAmmunation(currentPlacement))
@@ -278,7 +278,7 @@ std::string GetNextDetails()
 		return "Shopping for clothes";
 	}
 
-	if (player->m_nPedFlags.bInVehicle && player->m_pVehicle)
+	if (player->bInVehicle && player->m_pVehicle)
 	{
 		CVehicle* vehicle = player->m_pVehicle;
 		eVehicleType vehicleType = CUtil::GetVehicleType(vehicle);
