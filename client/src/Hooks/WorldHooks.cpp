@@ -259,7 +259,7 @@ void WorldHooks::InjectHooks()
     0x615868, 0x61B059, 0x61B09B, 0x61B117, 0x61B174, 0x61B20E, 0x61B264, 0x6A8BBE,
     0x6A9BE2, 0x6C685D, 0x6CD40E, 0x6CD71D, 0x6E44E0, 0x6EADF9,
     0x6F2503, 0x6F3C8C, 0x717E7F, 0x717F3E};
-    patch::RedirectCall(std::vector<int>(CWorld__Add_Addresses, CWorld__Add_Addresses + sizeof(CWorld__Add_Addresses) / 4), CWorld__Add_Hook);
+    patch::RedirectCall(std::vector<uintptr_t>(CWorld__Add_Addresses, CWorld__Add_Addresses + sizeof(CWorld__Add_Addresses) / 4), CWorld__Add_Hook);
     
     if (CCore::gvm.IsHoodlum())
     {
@@ -280,7 +280,7 @@ void WorldHooks::InjectHooks()
     0x6C7B9A, 0x6CCCB2, 0x6D22D7, 0x6E3E7D, 0x6E3FFD, 0x6E4120, 0x6E51B4,
     0x6F5DD7, 0x6F6A7B, 0x6F6B31, 0x6F7ACA, 0x717897, 0x738AFF, 0x73997A, 0x739A17,
     0x739AD0};
-    patch::RedirectCall(std::vector<int>(CWorld__Remove_Addresses, CWorld__Remove_Addresses + sizeof(CWorld__Remove_Addresses) / 4), CWorld__Remove_Hook);
+    patch::RedirectCall(std::vector<uintptr_t>(CWorld__Remove_Addresses, CWorld__Remove_Addresses + sizeof(CWorld__Remove_Addresses) / 4), CWorld__Remove_Hook);
     
     patch::RedirectJump(0x47D43E, CWeather__ForceWeather_Hook);
     patch::RedirectJump(0x72A4F0, CWeather__ForceWeatherNow_Hook);
