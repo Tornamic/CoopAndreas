@@ -25,8 +25,8 @@ public:
 	CPedClothesDesc m_pPedClothesDesc{};
 	bool m_bHasBeenConnectedBeforeMe = false;
 
-	CNetworkPlayer::~CNetworkPlayer();
-	CNetworkPlayer::CNetworkPlayer(int id, CVector position);
+	~CNetworkPlayer();
+	CNetworkPlayer(int id, CVector position);
 
 	void CreatePed(int id, CVector position);
 	void DestroyPed();
