@@ -38,9 +38,9 @@ void DrawWeaponIcon(CPed* ped, float x, float y, float scale, unsigned char alph
 	const float halfWidth = width / 2.0f;
 	const float halfHeight = height / 2.0f;
 
-	RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, RWRSTATE(rwFILTERLINEAR));
+	RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, (void*)rwFILTERLINEAR);
 
-	auto modelId = CUtil::GetWeaponModelById(ped->m_aWeapons[ped->m_nActiveWeaponSlot].m_eWeaponType);
+	auto modelId = CUtil::GetWeaponModelById(ped->m_aWeapons[ped->m_nSelectedWepSlot].m_eWeaponType);
 
 	if (modelId <= 0) {
 		CHud::Sprites[0].Draw({ x, y, width + x, height + y }, CRGBA(255, 255, 255, alpha));
@@ -56,8 +56,8 @@ void DrawWeaponIcon(CPed* ped, float x, float y, float scale, unsigned char alph
 	if (!texture)
 		return;
 
-	RwRenderStateSet(rwRENDERSTATEZTESTENABLE, RWRSTATE(NULL));
-	RwRenderStateSet(rwRENDERSTATETEXTURERASTER, RWRSTATE(RwTextureGetRaster(texture)));
+	RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void*)NULL);
+	RwRenderStateSet(rwRENDERSTATETEXTURERASTER, (void*)RwTextureGetRaster(texture));
 	CSprite::RenderOneXLUSprite(
 		x + halfWidth, y + halfHeight, 1.0f,
 		halfWidth, halfHeight,
@@ -66,19 +66,19 @@ void DrawWeaponIcon(CPed* ped, float x, float y, float scale, unsigned char alph
 		alpha,
 		0, 0
 	);
-	RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, RWRSTATE(FALSE));
+	RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)FALSE);
 }
 
 void DrawBarChartScale(float x, float y, uint16_t width, uint8_t height, float scale, float progress, CRGBA color)
 {
-	RwRenderStateSet(rwRENDERSTATETEXTURERASTER, RWRSTATE(NULL));
-	RwRenderStateSet(rwRENDERSTATESHADEMODE, RWRSTATE(rwSHADEMODEFLAT));
+	RwRenderStateSet(rwRENDERSTATETEXTURERASTER, (void*)NULL);
+	RwRenderStateSet(rwRENDERSTATESHADEMODE, (void*)rwSHADEMODEFLAT);
 
 	progress = std::clamp(progress, 0.0f, 100.0f);
 
 	const float endX = x + (float)width;
 	const float unclampedCurrX = x + (float)width * progress / 100.0f;
-	const float currX = min(unclampedCurrX, endX);
+	const float currX = std::min(unclampedCurrX, endX);
 	const auto fheight = (float)height;
 
 	// Progress rect
