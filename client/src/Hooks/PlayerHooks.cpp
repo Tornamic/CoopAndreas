@@ -40,9 +40,9 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     //if (CPad::GetPad(0)->NewState.RightShoulder1) // is aiming
     //{
-    //    player->m_pPed->m_fCurrentRotation = player->m_playerOnFoot.currentRotation;
+    //    player->m_pPed->m_fHeadingCurrent = player->m_playerOnFoot.currentRotation;
     //}
-    //player->m_pPed->m_fAimingRotation = player->m_playerOnFoot.aimingRotation;
+    //player->m_pPed->m_fHeadingGoal = player->m_playerOnFoot.aimingRotation;
 
     player->m_pPed->m_fHealth = player->m_playerOnFoot.health;
     player->m_pPed->m_fArmour = player->m_playerOnFoot.armour;
@@ -56,7 +56,7 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
 
     plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
 
-    //player->m_pPed->m_fAimingRotation = player->m_playerOnFoot.aimingRotation;
+    //player->m_pPed->m_fHeadingGoal = player->m_playerOnFoot.aimingRotation;
 
     CWorld::PlayerInFocus = 0;
 
@@ -145,9 +145,9 @@ static void __fastcall CPedIK__PointGunInDirection_Hook(CPedIK* This, SKIP_EDX, 
     //if (player->m_playerOnFoot == nullptr)
     //    return;
 
-    //player->m_pPed->m_fAimingRotation = player->m_playerOnFoot.aimingRotation;
+    //player->m_pPed->m_fHeadingGoal = player->m_playerOnFoot.aimingRotation;
     //
-    //eWeaponType weapon = player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot].m_eWeaponType;
+    //eWeaponType weapon = player->m_pPed->m_aWeapons[player->m_pPed->m_nSelectedWepSlot].m_eWeaponType;
 
     ///*if (weapon != WEAPON_SNIPERRIFLE)
     //    dirY = player->m_aimSyncData.aimY;*/
@@ -307,7 +307,7 @@ void __fastcall CRunningScript__DoDeatharrestCheck_Hook(CRunningScript* This, SK
             {
                 if (ped->m_ePedState == PEDSTATE_ARRESTED ||
                     ped->m_ePedState == PEDSTATE_DEAD ||
-                    (ped->m_ePedState == PEDSTATE_DIE && ped->m_nPedFlags.bIsDyingStuck))
+                    (ped->m_ePedState == PEDSTATE_DIE && ped->bIsDyingStuck))
                 {
                     wastedOrBusted = true;
                 }
