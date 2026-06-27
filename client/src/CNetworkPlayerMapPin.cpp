@@ -2,7 +2,9 @@
 
 CVector2D GetPlayerMarkerPosition()
 {
-	CVector2D vec = FindPlayerCoors(-1) - CRadar::vec2DRadarOrigin;
+	CVector playerCoors3D = FindPlayerCoors(-1);
+	CVector2D playerCoors2D = { playerCoors3D.x, playerCoors3D.y };
+	CVector2D vec = playerCoors2D - CRadar::vec2DRadarOrigin;
 	CVector2D playerDirection = 
 	{ 
 		vec.x / CRadar::m_radarRange, 
@@ -24,9 +26,9 @@ CVector2D GetPlayerMarkerPosition()
 
 float CalculateMarkerAngle(CNetworkPlayer* player)
 {
-	float baseAngle = player->m_pPed->m_nPhysicalFlags.bOnSolidSurface ? player->m_pPed->GetHeading() : player->m_playerOnFoot.currentRotation;
+	float baseAngle = player->m_pPed->bOnSolidSurface ? player->m_pPed->GetHeading() : player->m_playerOnFoot.currentRotation;
 
-	if (player->m_pPed->m_pVehicle && player->m_pPed->m_nPedFlags.bInVehicle)
+	if (player->m_pPed->m_pVehicle && player->m_pPed->bInVehicle)
 	{
 		baseAngle = player->m_pPed->m_pVehicle->GetHeading();
 	}
