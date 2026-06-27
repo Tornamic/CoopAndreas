@@ -53,7 +53,7 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
     }
 
     m_pPed->m_nCreatedBy = 2;
-    m_pPed->m_pIntelligence->SetPedDecisionMakerType(-1);
+    m_pPed->m_pIntelligence->SetPedDecisionMakerType(static_cast<eDecisionMakerType>(-1));
     m_pPed->m_pIntelligence->SetSeeingRange(30.0);
     m_pPed->m_pIntelligence->SetHearingRange(30.0);
     m_pPed->m_pIntelligence->m_fDmRadius = 0.0f;
@@ -88,7 +88,7 @@ CNetworkPed::~CNetworkPed()
                 //CChat::AddMessage("REMOVE THE FUCKING BLIP");
             }
 
-            if (m_pPed->m_nPedFlags.bInVehicle)
+            if (m_pPed->bInVehicle)
             {
                 plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
             }
@@ -103,7 +103,7 @@ CNetworkPed::~CNetworkPed()
 
 CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
 {
-    ped->field_54C += 5000; // m_nTimeTillWeNeedThisPed
+    ped->m_nTimeTillWeNeedThisPed += 5000;
 
     CNetworkPed* networkPed = new CNetworkPed();
 
@@ -141,7 +141,7 @@ void CNetworkPed::WarpIntoVehicleDriver(CVehicle* vehicle)
         return;
     }
 
-    if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
+    if (m_pPed->bInVehicle && m_pPed->m_pVehicle)
     {
         RemoveFromVehicle(m_pPed->m_pVehicle);
     }
@@ -150,7 +150,7 @@ void CNetworkPed::WarpIntoVehicleDriver(CVehicle* vehicle)
 
     if (!m_bSyncing)
     {
-        m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
+        m_pPed->CantBeKnockedOffBike = 1; // 1 - never
     }
 
     auto task = CTaskSimpleCarSetPedInAsDriver(vehicle, nullptr);
@@ -167,7 +167,7 @@ void CNetworkPed::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
         return;
     }
 
-    if (m_pPed->m_nPedFlags.bInVehicle && m_pPed->m_pVehicle)
+    if (m_pPed->bInVehicle && m_pPed->m_pVehicle)
     {
         RemoveFromVehicle(m_pPed->m_pVehicle);
     }
@@ -176,7 +176,7 @@ void CNetworkPed::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 
     if (!m_bSyncing)
     {
-        m_pPed->m_nPedFlags.CantBeKnockedOffBike = 1; // 1 - never
+        m_pPed->CantBeKnockedOffBike = 1; // 1 - never
     }
 
     int doorId = CCarEnterExit::ComputeTargetDoorToEnterAsPassenger(vehicle, seatid);
@@ -198,7 +198,7 @@ void CNetworkPed::RemoveFromVehicle(CVehicle* vehicle)
 
     if (!m_bSyncing)
     {
-        m_pPed->m_nPedFlags.CantBeKnockedOffBike = 2; // 2 - normal
+        m_pPed->CantBeKnockedOffBike = 2; // 2 - normal
     }
 
     auto task = CTaskSimpleCarSetPedOut(vehicle, 1, false);
