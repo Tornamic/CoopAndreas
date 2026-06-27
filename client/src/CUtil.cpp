@@ -89,7 +89,7 @@ bool CUtil::IsPositionUpdateNeeded(CVector pos, CVector update, int percent)
 
 int CUtil::GetWeaponModelById(unsigned char id)
 {
-    return CWeaponInfo::GetWeaponInfo((eWeaponType)id, 1)->m_nModelId1;
+    return CWeaponInfo::GetWeaponInfo((eWeaponType)id, 1)->m_nModelId;
 }
 
 bool CUtil::IsMeleeWeapon(unsigned char id)
@@ -100,7 +100,7 @@ bool CUtil::IsMeleeWeapon(unsigned char id)
 void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, unsigned short ammo, bool select)
 {
     // update weapon, ammo
-    auto& activeWeapon = player->m_pPed->m_aWeapons[player->m_pPed->m_nActiveWeaponSlot];
+    auto& activeWeapon = player->m_pPed->m_aWeapons[player->m_pPed->m_nSelectedWepSlot];
     bool isWeaponTypeDifferent = (activeWeapon.m_eWeaponType != weapon);
     bool isAmmoDifferent = (activeWeapon.m_nAmmoInClip != ammo);
 
@@ -110,8 +110,8 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
 
         if (weapon != 0)
         {
-            if (weapon == WEAPON_SATCHEL_CHARGE)
-                CUtil::GiveWeaponByPacket(player, WEAPON_DETONATOR, 1, false);
+            if (weapon == WEAPONTYPE_SATCHEL_CHARGE)
+                CUtil::GiveWeaponByPacket(player, WEAPONTYPE_DETONATOR, 1, false);
 
             int model = CUtil::GetWeaponModelById(weapon);
 
@@ -130,7 +130,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
             // give weapon
             bool isMeleeWeapon = CUtil::IsMeleeWeapon(weapon);
 
-            if (activeWeapon.m_nTotalAmmo <= 0 || isWeaponTypeDifferent)
+            if (activeWeapon.m_nAmmoTotal <= 0 || isWeaponTypeDifferent)
             {
                 player->m_pPed->GiveWeapon((eWeaponType)weapon, isMeleeWeapon ? 1 : 9999, false);
             }
@@ -150,7 +150,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, uns
 void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned short ammo, bool select)
 {
     // update weapon, ammo
-    auto& activeWeapon = ped->m_pPed->m_aWeapons[ped->m_pPed->m_nActiveWeaponSlot];
+    auto& activeWeapon = ped->m_pPed->m_aWeapons[ped->m_pPed->m_nSelectedWepSlot];
     bool isWeaponTypeDifferent = (activeWeapon.m_eWeaponType != weapon);
     bool isAmmoDifferent = (activeWeapon.m_nAmmoInClip != ammo);
 
@@ -163,8 +163,8 @@ void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned 
 
         if (weapon != 0)
         {
-            if (weapon == WEAPON_SATCHEL_CHARGE)
-                CUtil::GiveWeaponByPacket(ped, WEAPON_DETONATOR, 1, false);
+            if (weapon == WEAPONTYPE_SATCHEL_CHARGE)
+                CUtil::GiveWeaponByPacket(ped, WEAPONTYPE_DETONATOR, 1, false);
 
             int model = CUtil::GetWeaponModelById(weapon);
 
@@ -183,7 +183,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned 
             // give weapon
             bool isMeleeWeapon = CUtil::IsMeleeWeapon(weapon);
 
-            if (activeWeapon.m_nTotalAmmo <= 0)
+            if (activeWeapon.m_nAmmoTotal <= 0)
             {
                 ped->m_pPed->GiveWeapon((eWeaponType)weapon, isMeleeWeapon ? 1 : 99999, false);
             }
