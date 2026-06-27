@@ -12,7 +12,7 @@
 #define ROW_CONNECT (4)
 
 static const int MAX_ROWS = 5;
-static char* aRows[MAX_ROWS] = { "Nickname:", "IP:", "Port:", "Back", "Connect" };
+static const char* aRows[MAX_ROWS] = { "Nickname:", "IP:", "Port:", "Back", "Connect" };
 static const int MAX_INPUT_ROWS = 3;
 static int iLastHovered = ROW_NICKNAME;
 static int iActiveInputRow = ROW_UNSELECTED;
