@@ -26,7 +26,7 @@ void CPassengerEnter::Process()
     if (localPlayer == nullptr)
         return;
 
-    if (localPlayer->m_nPedFlags.bInVehicle)
+    if (localPlayer->bInVehicle)
         return;
 
     if (IsPlayerEnteringVehicle(localPlayer))
