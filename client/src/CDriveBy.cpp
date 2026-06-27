@@ -4,7 +4,7 @@
 
 void CDriveBy::Process(CPlayerPed* player)
 {
-    bool isPassenger = player->m_nPedFlags.bInVehicle && player->m_pVehicle && player->m_pVehicle->m_pDriver != player;
+    bool isPassenger = player->bInVehicle && player->m_pVehicle && player->m_pVehicle->m_pDriver != player;
 
     if (isPassenger && player->GetPadFromPlayer()->HornJustDown())
     {
