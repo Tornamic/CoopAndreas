@@ -24,7 +24,7 @@ static void CalculateSafePositions(CVector& targetPos, float targetHeading, int 
 
 				if (CPedPlacement::FindZCoorForPed(&teleportPos))
 				{
-					if (!CWorld::TestSphereAgainstWorld(teleportPos, 0.35f, false, true, true, true, true, true, false)
+					if (!CWorld::TestSphereAgainstWorld(teleportPos, 0.35f, nullptr, true, true, true, true, true, false)
 						&& CWorld::GetIsLineOfSightClear(targetPos, teleportPos, true, true, false, true, true, false, false))
 					{
 						out[pedIndex++] = teleportPos;
@@ -64,7 +64,8 @@ void CCommandTeleportPlayersToHostSafely::Process(CRunningScript* script)
 	for (int i = 0; i < playerCount; i++)
 		positions[i] = CVector(0.0f, 0.0f, 0.0f);
 
-	CalculateSafePositions(FindPlayerCoors(0), FindPlayerPed(0)->m_fCurrentRotation, playerCount, positions);
+	CVector hostPos = FindPlayerCoors(0);
+	CalculateSafePositions(hostPos, FindPlayerPed(0)->m_fHeadingCurrent, playerCount, positions);
 	for (int i = 0; i < playerCount; i++)
 	{
 		if (positions[i].x == 0.0f && positions[i].y == 0.0f && positions[i].z == 0.0f)
@@ -74,7 +75,7 @@ void CCommandTeleportPlayersToHostSafely::Process(CRunningScript* script)
 		CPackets::TeleportPlayerScripted packet{};
 		packet.playerid = networkPlayers[i]->m_iPlayerId;
 		packet.pos = positions[i];
-		packet.heading = FindPlayerPed(0)->m_fCurrentRotation;
+		packet.heading = FindPlayerPed(0)->m_fHeadingCurrent;
 		CNetwork::SendPacket(CPacketsID::TELEPORT_PLAYER_SCRIPTED, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
 	}
 }
