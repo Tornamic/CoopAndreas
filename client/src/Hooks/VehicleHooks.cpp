@@ -242,7 +242,7 @@ void CCarCtrl__GenerateOneRandomCar_Hook()
     // also dont generate vehicles when the player is a passenger 
     // and his vehicle is driven by another player
 
-    if (player->m_pVehicle && player->m_nPedFlags.bInVehicle) // if the local player in a vehicle
+    if (player->m_pVehicle && player->bInVehicle) // if the local player in a vehicle
     {
         // generate cars only if the player is a ...
         if (player->m_pVehicle->m_pDriver == player // driver
