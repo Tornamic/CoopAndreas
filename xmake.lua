@@ -2,7 +2,7 @@ set_project("CoopAndreas")
 
 local force_msvc = true;
 
-set_languages("cxx17")
+set_languages("cxx23")
 set_arch("x86")
 set_plat("windows")
 set_toolchains("clang-cl") -- required to generate compile_commands.json properly
@@ -47,10 +47,13 @@ target("client")
 
     add_includedirs("client/src")
 
-    add_files("third_party/enet/*.c")
-    add_files("third_party/DiscordRPC/SDK/src/*.cpp")
+    add_files("third_party/enet/*.c", {cflags = "/w"})
+    add_files("third_party/DiscordRPC/SDK/src/*.cpp", {cxxflags = "/w"})
 
     set_pcxxheader("client/src/stdafx.h")
+
+    -- New SDK (master) requires C++23 for injector.hpp and safetyhook.hpp
+    add_cxxflags("/std:c++latest", {tools = {"msvc", "clang-cl"}})
 
     add_includedirs("shared", "third_party")
     add_includedirs("third_party/DiscordRPC/SDK/include")
@@ -81,7 +84,9 @@ target("client")
             path.join(plugin_sdk, "shared/game"), 
             path.join(plugin_sdk, "shared/dxsdk"), 
             path.join(plugin_sdk, "plugin_sa"),
-            path.join(plugin_sdk, "plugin_sa/game_sa")
+            path.join(plugin_sdk, "plugin_sa/game_sa"),
+            path.join(plugin_sdk, "plugin_sa/game_sa/enums"),
+            path.join(plugin_sdk, "plugin_sa/game_sa/rw")
         )
 
         target:add("linkdirs", 
