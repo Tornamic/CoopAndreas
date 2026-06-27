@@ -70,6 +70,6 @@ public:
 
 	static void Init();
 	static void HandlePacket(const uint8_t* buffer, int bufferSize);
-	static std::vector<uint8_t> COpCodeSync::SerializeOpcode(int idx, int& outSize);
-	static bool COpCodeSync::IsOpcodeSyncable(int opcode, int* opcodeIdx = nullptr, bool ignoreOpCodeSync = false);
+	static std::vector<uint8_t> SerializeOpcode(int idx, int& outSize);
+	static bool IsOpcodeSyncable(int opcode, int* opcodeIdx = nullptr, bool ignoreOpCodeSync = false);
 };
