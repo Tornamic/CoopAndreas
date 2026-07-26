@@ -69,14 +69,21 @@ xmake --build proxy
 ## Building (GNU/Linux)
 
 ### Server
-
 1. Make sure to have **GNU GCC** or **LLVM Clang** toolchains installed on your linux system .
+  * You can download this way here below :
 
+  * Debian/Ubuntu Linux and their distros
+```bash
+sudo apt update
+sudo apt install build-essential gcc xmake git # add clang if you want to use it
+```
 2. Simply open your terminal and run those commands to build your server project :
 ```bash
-xmake --build server  # you can add --toolchains=[compiler_name] to use your favorite compiler
+xmake --build server  
 ```
-3 After that you can run the server 
+you can build only ``server`` on Linux other targets like Client and Proxy DLL loader are for Windows .
+
+3. After that you can run the server after you bring if from your build folder .
 ```bash
 ./server
 ```
