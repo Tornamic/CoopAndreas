@@ -4,8 +4,13 @@ local force_msvc = true;
 
 set_languages("cxx17")
 set_arch("x86")
-set_plat("windows")
-set_toolchains("clang-cl") -- required to generate compile_commands.json properly
+
+if is_os("windows") then
+    set_plat("windows")
+    set_toolchains("clang-cl") -- required to generate compile_commands.json properly
+else
+    set_plat("linux")
+end 
 
 add_rules("plugin.compile_commands.autoupdate")
 add_rules("mode.debug", "mode.release")
@@ -17,6 +22,8 @@ if is_os("windows") then
         set_runtimes("MT")
     end
 end
+
+if is_os("windows") then
 
 target("client", function()
     set_kind("shared")
@@ -100,6 +107,8 @@ target("client", function()
     add_links("d3dx9") -- TODO STATIC
 end)
 
+end
+
 target("server", function ()
     set_kind("binary")
 
@@ -157,6 +166,8 @@ target("server", function ()
     end
 end)
 
+if is_os("windows") then -- no need for linux
+
 target("proxy", function ()
     set_kind("shared")
 
@@ -189,6 +200,10 @@ target("proxy", function ()
     end
 end)
 
+end
+
+if is_os("windows") then -- no need for linux
+
 target("plugin_sa", function ()
     set_kind("static")
 
@@ -217,6 +232,7 @@ target("plugin_sa", function ()
 
     set_pcxxheader("third_party/plugin-sdk/plugin_sa/plugin_sa.h")
 end)
+end
 
 target("enet", function ()
     set_kind("static")
@@ -235,6 +251,8 @@ target("enet", function ()
     set_pcxxheader("third_party/enet/enet.h")
 end)
 
+if is_os("windows") then -- no need for linux
+
 target("discordrpc", function ()
     set_kind("static")
     
@@ -248,3 +266,5 @@ target("discordrpc", function ()
     add_files("third_party/DiscordRPC/SDK/src/*.cpp")
     add_headerfiles("third_party/DiscordRPC/SDK/src/*.h")
 end)
+
+end
