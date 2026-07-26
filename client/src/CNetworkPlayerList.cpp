@@ -200,7 +200,7 @@ void CNetworkPlayerList::Draw()
 
 	DrawBox(fBoxX, fBoxY);
 
-	for (uint8_t i = 0; i < vPlayerId.size() && i < 4; i++)
+	for (uint8_t i = 0; i < vPlayerId.size() && i < Config::MAX_SERVER_PLAYERS; i++)
 	{
 		CNetworkPlayer* pNetworkPlayer = nullptr;
 		CPlayerPed* pPlayerPed = nullptr;
