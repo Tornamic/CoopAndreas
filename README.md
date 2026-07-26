@@ -72,30 +72,13 @@ xmake --build proxy
 
 1. Make sure to have **GNU GCC** or **LLVM Clang** toolchains installed on your linux system .
 
-you can run those commands below to install all needed packages :
-
-* in Debian/Ubuntu and their distros
-```bash
-sudo apt update
-sudo apt install build-essential gcc xmake git # add clang if you want to use it
-```
-* in ArchLinux
-```bash
-sudo pacman -S base-devel gcc xmake git # add clang if you want to use it
-```
-* in Fedora
-```bash
-sudo dnf install gcc gcc-c++ xmake git # add clang if you want to use it
-```
-
-* in openSUSE
-```bash
-sudo zypper install gcc gcc-c++ xmake git # add clang if you want to use it
-```
-
 2. Simply open your terminal and run those commands to build your server project :
 ```bash
 xmake --build server  # you can add --toolchains=[compiler_name] to use your favorite compiler
+```
+3 After that you can run the server 
+```bash
+./server
 ```
 
 ## Donate
