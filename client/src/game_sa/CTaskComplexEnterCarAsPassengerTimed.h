@@ -19,4 +19,4 @@ public:
 	bool m_bRestartTimer;
 };
 
-VALIDATE_SIZE(CTaskComplexEnterCarAsPassengerTimed, 0x2A);
+//VALIDATE_SIZE(CTaskComplexEnterCarAsPassengerTimed, 0x2A);

@@ -8,5 +8,7 @@ public:
 	static inline bool m_bIsHost;
 
 	static void BuildTaskPacket(eTaskType type, bool toggle = true);
+
+	static bool GetIsHostingEntity(CEntity* pEntity);
 };
 

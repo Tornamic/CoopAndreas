@@ -32,7 +32,7 @@ public:
 		if (!inRange)
 		{
 			char message[128];
-			sprintf_s(message, sizeof message, "Invalid custom opcode [%X] script name '%s', base ip '%d', cur ip '%d'", opcode, script->m_szName, script->m_pBaseIP, script->m_pCurrentIP);
+			sprintf_s(message, sizeof message, "Invalid custom opcode [%X] script name '%s', base ip '%d', cur ip '%d'", opcode, script->m_szName, (uintptr_t)script->m_pBaseIP, (uintptr_t)script->m_pCurrentIP);
 
 			MessageBoxA(0, message, "Invalid opcode processing", MB_ICONERROR);
 		}

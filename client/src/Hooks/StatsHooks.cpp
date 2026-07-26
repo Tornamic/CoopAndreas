@@ -4,7 +4,7 @@
 
 void CHud__SetHelpMessageStatUpdate_Hook(char bIncrease, short statId, float statUpdate, float statMax)
 {
-	if (CNetwork::m_bConnected)
+	if (CNetwork::m_bAuthenticated)
 	{
 		if(CStatsSync::GetSyncIdByInternal((eStats)statId) != -1)
 			CStatsSync::NotifyChanged();
@@ -52,7 +52,7 @@ int8_t __fastcall CPed__GetWeaponSkill_Hook(CPed* This, SKIP_EDX, eWeaponType we
 
 void CStats__SetStatValue_Hook(eStats statID, float value)
 {
-	if (CNetwork::m_bConnected)
+	if (CNetwork::m_bAuthenticated)
 	{
 		if (CStatsSync::GetSyncIdByInternal(statID) != -1)
 			CStatsSync::NotifyChanged();
@@ -64,11 +64,13 @@ void __fastcall CPed__Dress_Hook(CPed* This, SKIP_EDX)
 {
 	This->Dress();
 
-	if (CNetwork::m_bConnected)
+	if (CNetwork::m_bAuthenticated)
 	{
 		if (This == FindPlayerPed(0))
 		{
-			CPacketHandler::RebuildPlayer__Trigger();
+			Packets::Players::RebuildPlayer packet{};
+			packet.clothesDesc = *FindPlayerPed(0)->m_pPlayerData->m_pPedClothesDesc;
+			GetPacketFactory().Send(packet);
 		}
 	}
 }

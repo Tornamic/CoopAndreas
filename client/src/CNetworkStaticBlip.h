@@ -4,10 +4,9 @@ class CNetworkStaticBlip
 {
 public:
 	//static inline std::vector<SMissionMarker> ms_vMissionMarkers;
-	static inline bool ms_bMassUpdateJustReceived = false;
 	static inline bool ms_bNeedToSendAfterThisFrame = true;
 
-	static void Create(CPackets::CreateStaticBlip& packet);
+	static void Create(const Packets::Blips::StaticBlipsSnapshot& packet);
 	static void Send();
 
 	static inline bool IsAllowedSyncingRadarSprite(eRadarSprite sprite)

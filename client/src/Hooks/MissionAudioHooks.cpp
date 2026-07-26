@@ -19,10 +19,10 @@ void __fastcall CAudioEngine__PlayLoadedMissionAudio_Hook(CAudioEngine* This, SK
 
 	if (CLocalPlayer::m_bIsHost)
 	{
-		CPackets::PlayMissionAudio packet{};
+		Packets::Scripts::PlayMissionAudio packet{};
 		packet.audioid = aiLoadedAudioId[slot];
 		packet.slotid = slot;
-		CNetwork::SendPacket(CPacketsID::PLAY_MISSION_AUDIO, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+		GetPacketFactory().Send(packet);
 	}
 }
 

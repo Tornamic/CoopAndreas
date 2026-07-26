@@ -13,7 +13,7 @@ public:
 	CVector m_vecVelocity{0.0f, 0.0f, 0.0f};
 	float m_fAimingRotation = 0.0f;
 	float m_fCurrentRotation = 0.0f;
-	int m_fLookDirection{};
+	float m_fLookDirection = 0.0f;
 	eMoveState m_nMoveState = eMoveState::PEDMOVE_NONE;
 	float m_fMoveBlendRatio = 0.0f;
 	CAutoPilot m_autoPilot;
@@ -30,6 +30,9 @@ public:
 	void RemoveFromVehicle(CVehicle* vehicle);
 	void ClaimOnRelease();
 	void CancelClaim();
+
+	void ApplyWeaponSnapshot(Packets::Players::SWeaponSnapshot& weaponSnapshot);
+
 	CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy, char specialModelName[]);
 	~CNetworkPed();
 };

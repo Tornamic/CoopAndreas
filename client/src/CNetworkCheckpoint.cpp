@@ -9,7 +9,7 @@ void CNetworkCheckpoint::Process()
 		float fToX = ms_vecRadius.x + ms_vecPosition.x;
 		float fFromY = ms_vecPosition.y - ms_vecRadius.y;
 		float fFromX = ms_vecPosition.x - ms_vecRadius.x;
-		CTheScripts::HighlightImportantArea(*(int*)&ms_vecRadius.x, fFromX, fFromY, fToX, fToY, ms_vecPosition.z);
+		CTheScripts::HighlightImportantArea(*(int*)&ms_vecRadius.x, fFromX, fFromY, fToX, fToY, ms_vecPosition.z); // TODO(v0.3.1-alpha): is this height calculation correct?
 	}
 }
 

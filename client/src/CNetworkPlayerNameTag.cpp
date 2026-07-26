@@ -78,7 +78,7 @@ void DrawBarChartScale(float x, float y, uint16_t width, uint8_t height, float s
 
 	const float endX = x + (float)width;
 	const float unclampedCurrX = x + (float)width * progress / 100.0f;
-	const float currX = min(unclampedCurrX, endX);
+	const float currX = std::min(unclampedCurrX, endX);
 	const auto fheight = (float)height;
 
 	// Progress rect
@@ -144,7 +144,7 @@ void CNetworkPlayerNameTag::Process()
 		float scale = std::clamp(1.2f - normalizedDistance, 0.7f, 1.0f);
 		
 		// draw health bar
-		if (player->m_playerOnFoot.health >= 10.0f || GetTickCount() % 500 > 150) // blinking, fps fixed
+		if (player->m_onFootSnapshotInterpolated.healthSnapshot.iHealth >= 10.0f || GetTickCount() % 500 > 150) // blinking, fps fixed
 		{
 			DrawBarChartScale(
 				out.x,
@@ -152,13 +152,13 @@ void CNetworkPlayerNameTag::Process()
 				(uint16_t)(PROPORION_X(100.0f * scale)),
 				(uint8_t)(PROPORION_Y(14.0f * scale)),
 				scale,
-				player->m_playerOnFoot.health,
+				player->m_onFootSnapshotInterpolated.healthSnapshot.iHealth,
 				CRGBA(180, 25, 29, alpha)
 			);
 		}
 
 		// draw armour bar
-		if (player->m_playerOnFoot.armour > 0.0f)
+		if (player->m_onFootSnapshotInterpolated.healthSnapshot.iArmour > 0.0f)
 		{
 			DrawBarChartScale(
 				out.x,
@@ -166,12 +166,12 @@ void CNetworkPlayerNameTag::Process()
 				(uint16_t)(PROPORION_X(100) * scale),
 				(uint8_t)(PROPORION_Y(14) * scale),
 				scale,
-				player->m_playerOnFoot.armour,
+				player->m_onFootSnapshotInterpolated.healthSnapshot.iArmour,
 				CRGBA(225, 225, 225, alpha)
 			);
 		}
 		
-		float nicknameOffsetY = (player->m_playerOnFoot.armour > 0.0f ? 12.0f * scale + 12.0f * scale : 12.0f * scale);
+		float nicknameOffsetY = (player->m_onFootSnapshotInterpolated.healthSnapshot.iArmour > 0.0f ? 12.0f * scale + 12.0f * scale : 12.0f * scale);
 		DrawNickName(
 			out.x + PROPORION_X(4.8f),
 			out.y - (PROPORION_Y(nicknameOffsetY) + PROPORION_Y(8.0f)),

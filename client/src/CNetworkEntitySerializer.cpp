@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "CNetworkEntitySerializer.h"
+#include "network/CNetworkEntitySerializer.h"
 
 CEntity* CNetworkEntitySerializer::GetEntity()
 {
@@ -25,6 +25,10 @@ CEntity* CNetworkEntitySerializer::GetEntity()
 	}
 	else if (entityType == NETWORK_ENTITY_TYPE_PLAYER)
 	{
+		if (CNetworkPlayerManager::m_nMyId == entityId)
+		{
+			return FindPlayerPed(0);
+		}
 		if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(entityId))
 		{
 			if (auto ped = networkPlayer->m_pPed)

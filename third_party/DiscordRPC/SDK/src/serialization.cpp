@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "serialization.h"
 #include "connection.h"
 #include "discord_rpc.h"

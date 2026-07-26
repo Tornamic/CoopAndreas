@@ -48,7 +48,7 @@ enet_peer_throttle_configure (ENetPeer * peer, enet_uint32 interval, enet_uint32
     peer -> packetThrottleAcceleration = acceleration;
     peer -> packetThrottleDeceleration = deceleration;
 
-    command.header.command = ENET_PROTOCOL_COMMAND_THROTTLE_CONFIGURE | ENET_PROTOCOL_COMMAND_FLAG_ACKNOWLEDGE;
+    command.header.command = (enet_uint8)ENET_PROTOCOL_COMMAND_THROTTLE_CONFIGURE | (enet_uint8)ENET_PROTOCOL_COMMAND_FLAG_ACKNOWLEDGE;
     command.header.channelID = 0xFF;
 
     command.throttleConfigure.packetThrottleInterval = ENET_HOST_TO_NET_32 (interval);
@@ -141,7 +141,7 @@ enet_peer_send (ENetPeer * peer, enet_uint8 channelID, ENetPacket * packet)
       }
       else
       {
-         commandNumber = ENET_PROTOCOL_COMMAND_SEND_FRAGMENT | ENET_PROTOCOL_COMMAND_FLAG_ACKNOWLEDGE;
+         commandNumber = (enet_uint8)ENET_PROTOCOL_COMMAND_SEND_FRAGMENT | (enet_uint8)ENET_PROTOCOL_COMMAND_FLAG_ACKNOWLEDGE;
          startSequenceNumber = ENET_HOST_TO_NET_16 (channel -> outgoingReliableSequenceNumber + 1);
       }
         
@@ -200,13 +200,13 @@ enet_peer_send (ENetPeer * peer, enet_uint8 channelID, ENetPacket * packet)
 
    if ((packet -> flags & (ENET_PACKET_FLAG_RELIABLE | ENET_PACKET_FLAG_UNSEQUENCED)) == ENET_PACKET_FLAG_UNSEQUENCED)
    {
-      command.header.command = ENET_PROTOCOL_COMMAND_SEND_UNSEQUENCED | ENET_PROTOCOL_COMMAND_FLAG_UNSEQUENCED;
+      command.header.command = (enet_uint8)ENET_PROTOCOL_COMMAND_SEND_UNSEQUENCED | (enet_uint8)ENET_PROTOCOL_COMMAND_FLAG_UNSEQUENCED;
       command.sendUnsequenced.dataLength = ENET_HOST_TO_NET_16 (packet -> dataLength);
    }
    else 
    if (packet -> flags & ENET_PACKET_FLAG_RELIABLE || channel -> outgoingUnreliableSequenceNumber >= 0xFFFF)
    {
-      command.header.command = ENET_PROTOCOL_COMMAND_SEND_RELIABLE | ENET_PROTOCOL_COMMAND_FLAG_ACKNOWLEDGE;
+      command.header.command = (enet_uint8)ENET_PROTOCOL_COMMAND_SEND_RELIABLE | (enet_uint8)ENET_PROTOCOL_COMMAND_FLAG_ACKNOWLEDGE;
       command.sendReliable.dataLength = ENET_HOST_TO_NET_16 (packet -> dataLength);
    }
    else
@@ -450,7 +450,7 @@ enet_peer_ping (ENetPeer * peer)
     if (peer -> state != ENET_PEER_STATE_CONNECTED)
       return;
 
-    command.header.command = ENET_PROTOCOL_COMMAND_PING | ENET_PROTOCOL_COMMAND_FLAG_ACKNOWLEDGE;
+    command.header.command = (enet_uint8)ENET_PROTOCOL_COMMAND_PING | (enet_uint8)ENET_PROTOCOL_COMMAND_FLAG_ACKNOWLEDGE;
     command.header.channelID = 0xFF;
    
     enet_peer_queue_outgoing_command (peer, & command, NULL, 0, 0);
@@ -516,7 +516,7 @@ enet_peer_disconnect_now (ENetPeer * peer, enet_uint32 data)
     {
         enet_peer_reset_queues (peer);
 
-        command.header.command = ENET_PROTOCOL_COMMAND_DISCONNECT | ENET_PROTOCOL_COMMAND_FLAG_UNSEQUENCED;
+        command.header.command = (enet_uint8)ENET_PROTOCOL_COMMAND_DISCONNECT | (enet_uint8)ENET_PROTOCOL_COMMAND_FLAG_UNSEQUENCED;
         command.header.channelID = 0xFF;
         command.disconnect.data = ENET_HOST_TO_NET_32 (data);
 

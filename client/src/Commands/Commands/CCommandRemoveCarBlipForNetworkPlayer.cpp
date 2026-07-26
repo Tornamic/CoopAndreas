@@ -17,9 +17,9 @@ void CCommandRemoveCarBlipForNetworkPlayer::Process(CRunningScript* script)
 	auto networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
 	assert(networkVehicle && "opcode 0xF05: invalid CNetworkVehicle*");
 
-	CPackets::RemoveEntityBlip packet{};
-	packet.playerid = networkPlayer->m_iPlayerId;
-	packet.entityType = eNetworkEntityType::NETWORK_ENTITY_TYPE_VEHICLE;
-	packet.entityId = networkVehicle->m_nVehicleId;
-	CNetwork::SendPacket(CPacketsID::REMOVE_ENTITY_BLIP, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+	Packets::Blips::RemoveEntityBlip packet{};
+	packet.forWhoPlayerId = networkPlayer->m_iPlayerId;
+	packet.entity.SetEntity(vehicle);
+
+	GetPacketFactory().Send(packet);
 }

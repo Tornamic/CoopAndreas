@@ -3,82 +3,83 @@
 #include "CEntryExit.h"
 #include <CEntryExitManager.h>
 
-void CNetworkStaticBlip::Create(CPackets::CreateStaticBlip& packet)
+void CNetworkStaticBlip::Create(const Packets::Blips::StaticBlipsSnapshot& packet)
 {
-	assert(IsAllowedSyncingRadarSprite(static_cast<eRadarSprite>(packet.sprite)));
+    for (int i = 0; i < MAX_RADAR_TRACES; i++)
+    {
+        auto& trace = CRadar::ms_RadarTrace[i];
 
-	/*if (!IsAllowedSyncingRadarSprite(sprite))
-		return;*/
+        if ((trace.m_nBlipType == BLIP_CONTACTPOINT || trace.m_nBlipType == BLIP_COORD) &&
+            IsAllowedSyncingRadarSprite(static_cast<eRadarSprite>(trace.m_nRadarSprite)))
+        {
+            CRadar::ClearActualBlip(i);
+        }
+    }
 
-	//CChat::AddMessage("CNetworkMissionMarker::Create({%.2f %.2f %.2f}, %d, %d)", position.x, position.y, position.z, sprite, display);
+    for (size_t i = 0; i < packet.countBlips; i++)
+    {
+        const Packets::Blips::_StaticBlipPayload& blipState = packet.blips[i];
 
-	if (ms_bMassUpdateJustReceived)
-	{
-		for (int i = 0; i < MAX_RADAR_TRACES; i++)
-		{
-			auto& trace = CRadar::ms_RadarTrace[i];
+        assert(IsAllowedSyncingRadarSprite(static_cast<eRadarSprite>(blipState.sprite)));
 
-			if ((trace.m_nBlipType == BLIP_CONTACTPOINT 
-				|| trace.m_nBlipType == BLIP_COORD)
-				&& IsAllowedSyncingRadarSprite(static_cast<eRadarSprite>(trace.m_nRadarSprite))
-				)
-			{
-				CRadar::ClearActualBlip(i);
-			}
-		}
-		ms_bMassUpdateJustReceived = false;
-	}
+        // CChat::AddMessage("CNetworkMissionMarker::Create({%.2f %.2f %.2f}, %d, %d)", position.x, position.y,
+        // position.z, sprite, display);
 
-	int blip = CRadar::SetCoordBlip(static_cast<eBlipType>(packet.type ? eBlipType::BLIP_COORD : eBlipType::BLIP_CONTACTPOINT), packet.position, 0, static_cast<eBlipDisplay>(packet.display), nullptr);
-	CRadar::SetBlipSprite(blip, packet.sprite);
-	CRadar::ChangeBlipDisplay(blip, static_cast<eBlipDisplay>(packet.display));
+        int blip = CRadar::SetCoordBlip(
+            static_cast<eBlipType>(blipState.type ? eBlipType::BLIP_COORD : eBlipType::BLIP_CONTACTPOINT),
+            blipState.position, 0, static_cast<eBlipDisplay>(blipState.display), nullptr);
+        CRadar::SetBlipSprite(blip, blipState.sprite);
+        CRadar::ChangeBlipDisplay(blip, static_cast<eBlipDisplay>(blipState.display));
 
-	if(const auto index = CRadar::GetActualBlipArrayIndex(blip); index != -1)
-	{
-		CRadar::ms_RadarTrace[index].m_bShortRange = packet.shortRange;
-		CRadar::ms_RadarTrace[index].m_bFriendly = packet.friendly;
-		CRadar::ms_RadarTrace[index].m_nCoordBlipAppearance = packet.coordBlipAppearance;
-		CRadar::ms_RadarTrace[index].m_nBlipSize = packet.size;
-		CRadar::ms_RadarTrace[index].m_nColour = packet.color;
-	}
+        if (const auto index = CRadar::GetActualBlipArrayIndex(blip); index != -1)
+        {
+            CRadar::ms_RadarTrace[index].m_bShortRange = blipState.shortRange;
+            CRadar::ms_RadarTrace[index].m_bFriendly = blipState.friendly;
+            CRadar::ms_RadarTrace[index].m_nCoordBlipAppearance = blipState.coordBlipAppearance;
+            CRadar::ms_RadarTrace[index].m_nBlipSize = blipState.size;
+            CRadar::ms_RadarTrace[index].m_nColour = blipState.color;
+        }
+    }
 }
 
 void CNetworkStaticBlip::Send()
 {
-	CMassPacketBuilder builder{};
-	CPackets::CreateStaticBlip packet{};
-	for (int i = 0; i < MAX_RADAR_TRACES; i++)
-	{
-		auto& trace = CRadar::ms_RadarTrace[i];
+    Packets::Blips::StaticBlipsSnapshot packet{};
+    packet.countBlips = 0;
+    for (int i = 0; i < MAX_RADAR_TRACES; i++)
+    {
+        auto& trace = CRadar::ms_RadarTrace[i];
 
-		if ((trace.m_nBlipType != eBlipType::BLIP_CONTACTPOINT
-			&& trace.m_nBlipType != eBlipType::BLIP_COORD)
-			|| !IsAllowedSyncingRadarSprite(static_cast<eRadarSprite>(trace.m_nRadarSprite))
-			)
-		{
-			continue;
-		}
-		
-		if (trace.m_pEntryExit)
-		{
-			auto& rect = trace.m_pEntryExit->m_recEntrance;
-			packet.position = CVector((rect.right + rect.left) * 0.5f, (rect.bottom + rect.top) * 0.5f, trace.m_pEntryExit->m_fEntranceZ);
-		}
-		else
-		{
-			packet.position = trace.m_vecPos;
-		}
+        if ((trace.m_nBlipType != eBlipType::BLIP_CONTACTPOINT && trace.m_nBlipType != eBlipType::BLIP_COORD) ||
+            !IsAllowedSyncingRadarSprite(static_cast<eRadarSprite>(trace.m_nRadarSprite)))
+        {
+            continue;
+        }
 
-		packet.display = trace.m_nBlipDisplay;
-		packet.sprite = trace.m_nRadarSprite;
-		packet.type = trace.m_nBlipType == eBlipType::BLIP_COORD;
-		packet.trackingBlip = trace.m_bInUse;
-		packet.shortRange = trace.m_bShortRange;
-		packet.friendly = trace.m_bFriendly;
-		packet.coordBlipAppearance = trace.m_nCoordBlipAppearance;
-		packet.size = trace.m_nBlipSize;
-		packet.color = trace.m_nColour;
-		builder.AddPacket(CPacketsID::CREATE_STATIC_BLIP, &packet, sizeof packet);
-	}
-	builder.Send(ENET_PACKET_FLAG_RELIABLE);
+        Packets::Blips::_StaticBlipPayload& blipState = packet.blips[packet.countBlips];
+
+        if (trace.m_pEntryExit)
+        {
+            auto& rect = trace.m_pEntryExit->m_recEntrance;
+            blipState.position = CVector(
+                (rect.right + rect.left) * 0.5f, (rect.bottom + rect.top) * 0.5f, trace.m_pEntryExit->m_fEntranceZ);
+        }
+        else
+        {
+            blipState.position = trace.m_vecPos;
+        }
+
+        blipState.display = trace.m_nBlipDisplay;
+        blipState.sprite = trace.m_nRadarSprite;
+        blipState.type = trace.m_nBlipType == eBlipType::BLIP_COORD;
+        blipState.trackingBlip = trace.m_bInUse;
+        blipState.shortRange = trace.m_bShortRange;
+        blipState.friendly = trace.m_bFriendly;
+        blipState.coordBlipAppearance = trace.m_nCoordBlipAppearance;
+        blipState.size = trace.m_nBlipSize;
+        blipState.color = trace.m_nColour;
+
+        ++packet.countBlips;
+    }
+    GetPacketFactory().Send(packet);
 }

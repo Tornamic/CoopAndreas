@@ -6,7 +6,6 @@ public:
 	static CNetworkPed* m_apTempPeds[255];
 
 	static CNetworkPed* GetPed(int pedid);
-	static CNetworkPed* GetPed(CPed* ped);
 	static CNetworkPed* GetPed(CEntity* entity);
 	static void Add(CNetworkPed* ped);
 	static void Remove(CNetworkPed* ped);

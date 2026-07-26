@@ -12,6 +12,8 @@ public:
 	unsigned char m_nTempId = 255;
 	unsigned char m_nCreatedBy;
 	int m_nBlipHandle = -1;
+	Packets::Vehicles::VehicleDriverUpdate m_playerDriverSnapshot{};
+	CDamageManager m_oldDamageState{};
 
 	~CNetworkVehicle();
 	CNetworkVehicle(int vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2, unsigned char createdBy);

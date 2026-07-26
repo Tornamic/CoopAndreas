@@ -5,7 +5,7 @@ CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float 
 {
     if (auto vehicle = CNetworkVehicleManager::GetVehicle(vehicleid))
     {
-        if (vehicle->m_pVehicle && CUtil::IsValidEntityPtr(vehicle->m_pVehicle))
+        if (vehicle->m_pVehicle && vehicle->m_pVehicle->IsVTableValid())
         {
             CWorld::Remove(vehicle->m_pVehicle);
             delete vehicle->m_pVehicle;
@@ -89,19 +89,21 @@ CNetworkVehicle::~CNetworkVehicle()
 {
     if (m_bSyncing)
     {
-        CPackets::VehicleRemove vehicleRemovePacket{};
+        Packets::Vehicles::VehicleRemove vehicleRemovePacket{};
         vehicleRemovePacket.vehicleid = m_nVehicleId;
-        CNetwork::SendPacket(CPacketsID::VEHICLE_REMOVE, &vehicleRemovePacket, sizeof vehicleRemovePacket, ENET_PACKET_FLAG_RELIABLE);
+        GetPacketFactory().Send(vehicleRemovePacket);
     }
     else
     {
-        if (m_pVehicle && CUtil::IsValidEntityPtr(m_pVehicle))
+        if (m_pVehicle && m_pVehicle->IsVTableValid())
         {
             if (m_nBlipHandle != -1)
             {
                 CRadar::ClearBlipForEntity(eBlipType::BLIP_CAR, CPools::GetVehicleRef(m_pVehicle));
             }
-            plugin::Command<Commands::DELETE_CAR>(CPools::GetVehicleRef(m_pVehicle));
+            CWorld::Remove(m_pVehicle);
+            CWorld::RemoveReferencesToDeletedObject(m_pVehicle); // ?
+            delete m_pVehicle;
         }
     }
 }
@@ -119,25 +121,24 @@ CNetworkVehicle* CNetworkVehicle::CreateHosted(CVehicle* vehicle)
     vehicle->m_nTimeTillWeNeedThisCar += 5000;
 
     CNetworkVehicle* networkVehicle = new CNetworkVehicle();
-
     networkVehicle->m_pVehicle = vehicle;
     networkVehicle->m_nVehicleId = -1;
     networkVehicle->m_bSyncing = true;
     networkVehicle->m_nModelId = vehicle->m_nModelIndex;
-    networkVehicle->m_nPaintJob = (char)vehicle->m_nRemapTxd;
+    networkVehicle->m_nPaintJob = (char)vehicle->GetRemapIndex();
     networkVehicle->m_nTempId = CNetworkVehicleManager::AddToTempList(networkVehicle);
     networkVehicle->m_nCreatedBy = vehicle->m_nCreatedBy;
 
-    CPackets::VehicleSpawn vehicleSpawnPacket{};
-    vehicleSpawnPacket.vehicleid = -1;
+    Packets::Vehicles::VehicleSpawn vehicleSpawnPacket{};
+    vehicleSpawnPacket.vehicleid = 0;
     vehicleSpawnPacket.tempid = networkVehicle->m_nTempId;
     vehicleSpawnPacket.modelid = vehicle->m_nModelIndex;
     vehicleSpawnPacket.pos = vehicle->m_matrix->pos;
     vehicleSpawnPacket.rot = vehicle->GetHeading();
     vehicleSpawnPacket.color1 = vehicle->m_nPrimaryColor;
     vehicleSpawnPacket.color2 = vehicle->m_nSecondaryColor;
-    vehicleSpawnPacket.createdBy = vehicle->m_nCreatedBy;
-    CNetwork::SendPacket(CPacketsID::VEHICLE_SPAWN, &vehicleSpawnPacket, sizeof vehicleSpawnPacket, ENET_PACKET_FLAG_RELIABLE);
+    vehicleSpawnPacket.createdBy = (eVehicleCreatedBy)vehicle->m_nCreatedBy;
+    GetPacketFactory().Send(vehicleSpawnPacket);
 
     return networkVehicle;
 }

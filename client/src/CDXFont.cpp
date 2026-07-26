@@ -10,7 +10,7 @@ void CDXFont::InitFont()
 
     const float normalizedWidth = std::clamp(((float)RsGlobal.maximumWidth - MIN_SCREEN_WIDTH) / (MAX_SCREEN_WIDTH - MIN_SCREEN_WIDTH), 0.0f, 1.0f);
     const float normalizedHeight = std::clamp(((float)RsGlobal.maximumHeight - MIN_SCREEN_HEIGHT) / (MAX_SCREEN_HEIGHT - MIN_SCREEN_HEIGHT), 0.0f, 1.0f);
-    const float normalizedScale = min(normalizedWidth, normalizedHeight);
+    const float normalizedScale = std::min(normalizedWidth, normalizedHeight);
 
     const float fontSize = MIN_RENDER_FONT_SIZE + normalizedScale * (MAX_RENDER_FONT_SIZE - MIN_RENDER_FONT_SIZE);
     CDXFont::m_fFontSize = (uint8_t)fontSize;

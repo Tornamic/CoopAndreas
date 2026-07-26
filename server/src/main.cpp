@@ -1,32 +1,9 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <thread>
-#include <fstream>
-#include <filesystem>
+#include "stdafx.h"
 
 #if defined(_WIN32)
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "winmm.lib")
 #endif
-
-#include "enet/enet.h"
-#include "INIReader/cpp/INIReader.h"
-
-#include "CControllerState.h"
-#include "NetworkEntityType.h"
-#include "CPacketListener.h"
-#include "CVector.h"
-#include "CNetwork.h"
-#include "CPed.h"
-#include "CPedManager.h"
-#include "CPlayer.h"
-#include "CPlayerManager.h"
-#include "CVehicle.h"
-#include "CVehicleManager.h"
-#include "VehicleDoorState.h"
-#include "ConfigManager.h"
 
 #if defined(_WIN32)
 #include <windows.h>
@@ -54,7 +31,7 @@ std::filesystem::path GetExecutableDir()
 
 int main(int argc, char* argv[])
 {
-#if defined (_WIN32)
+#if defined(_WIN32)
     SetConsoleTitleW(L"CoopAndreas Server");
 #endif
 
@@ -74,14 +51,16 @@ int main(int argc, char* argv[])
     char config[] = "Release";
 #endif
 
-    printf("[!] : Version : %s, %s %s %s %s\n", COOPANDREAS_VERSION, config, sizeof(void*) == 8 ? "x64" : "x86", __DATE__, __TIME__);
-#if defined (_WIN32)
+    printf("[!] : Version : %s, %s %s %s %s\n", COOPANDREAS_VERSION, config, sizeof(void*) == 8 ? "x64" : "x86",
+        __DATE__, __TIME__);
+#if defined(_WIN32)
     printf("[!] : Platform : Microsoft Windows \n");
 #else
     printf("[!] : Platform : GNU/Linux | BSD \n");
 #endif
 
     CConfigManager::Init();
+    CServerTime::Init();
 
     CNetwork::Init(CConfigManager::GetConfigPort());
     return 0;

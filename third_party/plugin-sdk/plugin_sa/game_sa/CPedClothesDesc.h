@@ -1,0 +1,60 @@
+/*
+    Plugin-SDK (Grand Theft Auto San Andreas) header file
+    Authors: GTA Community. See more here
+    https://github.com/DK22Pac/plugin-sdk
+    Do not delete this comment block. Respect others' work!
+*/
+#pragma once
+
+#include "PluginBase.h"
+#include "eClothesModelPart.h"
+#include "eClothesTexturePart.h"
+
+class PLUGIN_API CPedClothesDesc {
+public:
+    unsigned int m_anModelKeys[10];
+    unsigned int m_anTextureKeys[18];
+    float m_fFatStat;
+    float m_fMuscleStat;
+
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        for (size_t i = 0; i < ARRAY_SIZE(m_anModelKeys); i++)
+        {
+            serialize_uint32(stream, m_anModelKeys[i]);
+        }
+        for (size_t i = 0; i < ARRAY_SIZE(m_anTextureKeys); i++)
+        {
+            serialize_uint32(stream, m_anTextureKeys[i]);
+        }
+        serialize_float(stream, m_fFatStat);
+        serialize_float(stream, m_fMuscleStat);
+
+        return true;
+    }
+
+    void Initialise();
+    void SetModel(unsigned int modelid, int eClothesModelPart);
+    void SetModel(char const* model, int eClothesModelPart);
+    bool GetIsWearingBalaclava();
+    bool HasVisibleNewHairCut(int arg1);
+    bool HasVisibleTattoo();
+    CPedClothesDesc() 
+    {
+        for (size_t i = 0; i < 10; i++)
+        {
+            m_anModelKeys[i] = 0;
+        }
+        for (size_t i = 0; i < 18; i++)
+        {
+            m_anTextureKeys[i] = 0;
+        }
+        m_fFatStat = 0.0f;
+        m_fMuscleStat = 0.0f;
+    };
+    void SetTextureAndModel(unsigned int texture, unsigned int model, int eClothesTexturePart);
+    void SetTextureAndModel(char const* texturename, char const* modelname, int eClothesTexturePart);
+};
+
+VALIDATE_SIZE(CPedClothesDesc, 0x78);

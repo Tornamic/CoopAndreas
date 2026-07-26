@@ -3,9 +3,8 @@
 
 #include <CCarEnterExit.h>
 #include <CTaskComplexEnterCarAsPassenger.h>
-#include <game_sa/CTaskComplexEnterCarAsPassengerTimed.h>
 
-// LEGACY: use internal game's functions to find the nearest vehicle, look here 0x57073E
+// TODO(v0.3.1-alpha): use internal game's functions to find the nearest vehicle, look here 0x57073E
 
 bool IsPlayerEnteringVehicle(CPlayerPed* player)
 {
@@ -34,7 +33,8 @@ void CPassengerEnter::Process()
 
     CPad* pad = localPlayer->GetPadFromPlayer();
 
-    if (!pad->OldState.DPadUp && pad->NewState.DPadUp)  // G key
+    if (!pad->OldState.DPadUp && pad->NewState.DPadUp && !pad->bDisablePlayerEnterCar &&
+        pad->DisablePlayerControls == 0)  // G key
     {
         CNetworkVehicle* minNetworkVehicle = nullptr;
         float minDistance = 99999999.0f;
@@ -63,14 +63,12 @@ void CPassengerEnter::Process()
                 CTaskComplexEnterCarAsPassenger* task = new CTaskComplexEnterCarAsPassenger(minVehicle, doorId, false);
                 localPlayer->m_pIntelligence->m_TaskMgr.SetTask(task, 3, false);
 
-                CPackets::VehicleEnter packet{};
-
+                Packets::Vehicles::VehicleEnter packet{};
                 packet.vehicleid = minNetworkVehicle->m_nVehicleId;
                 packet.seatid = CCarEnterExit::ComputePassengerIndexFromCarDoor(minVehicle, doorId);
-                packet.force = false;
-                packet.passenger = true;
-
-                CNetwork::SendPacket(CPacketsID::VEHICLE_ENTER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+                packet.bForce = false;
+                packet.bPassenger = true;
+                GetPacketFactory().Send(packet);
             }
         }
     }

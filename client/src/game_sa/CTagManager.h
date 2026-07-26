@@ -19,3 +19,8 @@ public:
     static CVector* GetTagPos(int32_t i);
 };
 
+class CTagSync
+{
+public:
+    static void SyncCurrentState();
+};

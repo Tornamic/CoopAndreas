@@ -1,8 +1,4 @@
 #pragma once
-#define COOPANDREAS_VERSION "0.2.2-alpha"
-#define MAX_SERVER_PLAYERS 8
-#define MAX_SERVER_VEHICLES 200
-#define MAX_SERVER_PEDS 300
 #define MIN_SCREEN_WIDTH 640
 #define MIN_SCREEN_HEIGHT 480
 #define MAX_SCREEN_WIDTH 2560
@@ -10,7 +6,7 @@
 #define MIN_RENDER_FONT_SIZE 12
 #define MAX_RENDER_FONT_SIZE 23
 #define _DEV
-//#define PACKET_DEBUG_MESSAGES
+// #define PACKET_DEBUG_MESSAGES
 #define PURECALL (0x82263A)
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
@@ -18,10 +14,12 @@
 // networking ------------------------------------------------------------------------------
 
 #include "enet/enet.h"
+#include "serialize.h"
 
 // windows ---------------------------------------------------------------------------------
 
 #include <Windows.h>
+
 
 // utf8 ------------------------------------------------------------------------------------
 
@@ -34,7 +32,7 @@
 
 // plugin-sdk ------------------------------------------------------------------------------
 
-#include "plugin.h"
+#include "plugin_sa.h"
 #include "Patch.h"
 #include "CPlayerPed.h"
 #include "CStreaming.h"
@@ -88,21 +86,32 @@
 #include <CCutsceneMgr.h>
 #include <CGame.h>
 #include <CAudioEngine.h>
+#include <CWaterLevel.h>
 #include "game_sa/CTaskComplexCarDriveWander.h"
 
 // classes ---------------------------------------------------------------------------------
 
 using namespace plugin;
 
+#include "logger.h"
+
+#include "network/packet.h"
+#include "network/packets/players.h"
+#include "network/packets/vehicles.h"
+#include "network/packets/system.h"
+#include "network/packets/world.h"
+#include <network/packets/peds.h>
+#include <network/packets/scripts.h>
+#include <network/packets/blips.h>
+#include "network/packet_types.h"
 #include "CCore.h"
 #include "CUnicode.h"
 #include "CDXFont.h"
-#include "structs.h"
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
-#include "CPackets.h"
-#include "CPacketHandler.h"
+#include "network/packet_handler.h"
 #include "CNetwork.h"
+#include "CPacketFactory.h"
 #include "CNetworkPlayerStats.h"
 #include "CNetworkPlayer.h"
 #include "CNetworkPlayerManager.h"
@@ -121,8 +130,7 @@ using namespace plugin;
 #include "CDriveBy.h"
 #include "CNetworkPedManager.h"
 #include "CDebugPedTasks.h"
-#include "eNetworkEntityType.h"
-#include "ePlayerDisconnectReason.h"
+#include "network/eNetworkEntityType.h"
 #include "CStatsSync.h"
-#include "CMassPacketBuilder.h"
+
 // -----------------------------------------------------------------------------------------

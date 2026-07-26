@@ -13,12 +13,10 @@ public:
 	static bool IsMeleeWeapon(unsigned char id);
 	static void GiveWeaponByPacket(CNetworkPlayer* player, unsigned char weapon, unsigned short ammo, bool select = true);
 	static void GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned short ammo, bool select = true);
-	static bool IsVehicleHasTurret(CVehicle* vehicle);
 	static eVehicleType GetVehicleType(CVehicle* vehicle);
 	static CNetworkPed* GetNetworkPedByTask(CTask* targetTask);
 	static bool IsPedHasJetpack(CPed* ped);
 	static void SetPlayerJetpack(CNetworkPlayer* ped, bool set);
-	static bool IsValidEntityPtr(CEntity* ptr);
 	static std::string GetWeaponName(eWeaponType type);
 	static inline float SCREEN_STRETCH_X(float a) { return a * RsGlobal.maximumWidth / (float)640; }
 	static inline float SCREEN_STRETCH_Y(float a) { return a * RsGlobal.maximumHeight / (float)448; }

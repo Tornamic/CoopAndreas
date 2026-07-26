@@ -36,26 +36,37 @@ bool __fastcall CWeapon__FireProjectile_Hook(CWeapon* This, SKIP_EDX, CEntity* f
 // also used for CVehicle__FireHeatSeakingMissile
 bool __cdecl CWeapon__FireProjectile_AddProjectile_Hook(CEntity* creator, eWeaponType projectileType, CVector origin, float force, CVector* dir, CEntity* target)
 {
-	CPackets::AddProjectile packet{};
+	if (!CLocalPlayer::GetIsHostingEntity(creator))
+	{
+		return false;
+	}
+
+	Packets::Players::AddProjectile packet{};
 	packet.creator.SetEntity(creator);
 	packet.projectileType = projectileType;
 	packet.origin = origin;
 	packet.force = force;
-	packet.dir = CVector(0.0f, 0.0f, 0.0f);
 
 	if (dir)
 	{
-		//CChat::AddMessage("AddProjectile__Handle %p %d {%f %f %f} %f {%f %f %f} %p", creator, projectileType, origin.x, origin.y, origin.z, force, dir->x, dir->y, dir->z, target);
+		packet.bDir = true;
 		packet.dir = *dir;
 	}
 	else
 	{
-		//CChat::AddMessage("AddProjectile__Handle %p %d {%f %f %f} %f {from packet %f %f %f} %p", creator, projectileType, origin.x, origin.y, origin.z, force, packet.dir.x, packet.dir.y, packet.dir.z, target);
+		packet.bDir = false;
+		packet.dir = CVector(0.0f, 0.0f, 0.0f);
 	}
-	 
-	packet.target.SetEntity(target);
-
-	CNetwork::SendPacket(CPacketsID::ADD_PROJECTILE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+	if (target)
+	{
+		packet.bTarget = true;
+		packet.target.SetEntity(target);
+	}
+	else
+	{
+		packet.bTarget = false;
+	}
+	GetPacketFactory().Send(packet);
 
 	return CProjectileInfo::AddProjectile(creator, projectileType, origin, force, dir, target);
 }

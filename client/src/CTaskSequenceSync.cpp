@@ -129,24 +129,27 @@ void PerformSequence()
 
 	packetSize += sizeof(int) + sizeof(int) + sizeof(uint8_t); // playerid + pedid + taskCount
 
-	std::vector<uint8_t> packet;
-	packet.clear();
-	packet.reserve(packetSize);
+	std::vector<uint8_t> vBuffer;
+	vBuffer.clear();
+	vBuffer.reserve(packetSize);
 	
 	int playerid = -1; // let the server fill this variable
-	packet.insert(packet.end(), (uint8_t*)&playerid, (uint8_t*)&playerid + sizeof(int));
+	vBuffer.insert(vBuffer.end(), (uint8_t*)&playerid, (uint8_t*)&playerid + sizeof(int));
 
-	packet.insert(packet.end(), (uint8_t*)&pedid, (uint8_t*)&pedid + sizeof(int)); // if pedid == -1 then perfom the sequence on the player
+	vBuffer.insert(vBuffer.end(), (uint8_t*)&pedid, (uint8_t*)&pedid + sizeof(int)); // if pedid == -1 then perfom the sequence on the player
 
-	packet.push_back(taskCount);
+	vBuffer.push_back(taskCount);
 
 	for (int i = 0; i < taskCount; i++)
 	{
-		packet.push_back((uint8_t)m_serializedSequences[sequenceId][i].size());
-		packet.insert(packet.end(), m_serializedSequences[sequenceId][i].begin(), m_serializedSequences[sequenceId][i].end());
+		vBuffer.push_back((uint8_t)m_serializedSequences[sequenceId][i].size());
+		vBuffer.insert(vBuffer.end(), m_serializedSequences[sequenceId][i].begin(), m_serializedSequences[sequenceId][i].end());
 	}
 
-	CNetwork::SendPacket(CPacketsID::PERFORM_TASK_SEQUENCE, packet.data(), packetSize, ENET_PACKET_FLAG_RELIABLE);
+	static Packets::Scripts::PerformTaskSequence packet{};
+	packet.size = packetSize;
+	memcpy(packet.buffer, vBuffer.data(), packetSize);
+	GetPacketFactory().Send(packet);
 }
 
 void AddNewTask(eScriptCommands opcode)
@@ -155,7 +158,7 @@ void AddNewTask(eScriptCommands opcode)
 	int idx = -1;
 	COpCodeSync::IsOpcodeSyncable(opcode, &idx, true);
 
-	assert(idx != -1 && "an opcode exist in 'm_serializedSequences' but not found in 'syncedOpcodes'");
+	assert(idx != -1 && "an opcode exists in 'm_serializedSequences' but not found in 'syncedOpcodes'");
 
 	int dataSize = 0;
 	m_serializedSequences[sequenceId][m_sequenceTaskCount] = COpCodeSync::SerializeOpcode(idx, dataSize);
@@ -207,16 +210,16 @@ bool CTaskSequenceSync::OnOpCodeExecuted(eScriptCommands opcode)
 	return true;
 }
 
-void CTaskSequenceSync::HandlePacket(void* data, int size)
+void CTaskSequenceSync::HandlePacket(void* pData, int size)
 {
 	if (size < 9)
     {
         return;
     }
 
-	int playerid = *(int*)data;
-	int pedid = *(int*)((int)data + 4);
-	uint8_t count = *(uint8_t*)((int)data + 8);
+	int playerid = *(int*)pData;
+	int pedid = *(int*)((int)pData + 4);
+	uint8_t count = *(uint8_t*)((int)pData + 8);
 
 	if (count == 0) return;
 
@@ -260,17 +263,17 @@ void CTaskSequenceSync::HandlePacket(void* data, int size)
 	int ptr = 9;
 	for (int i = 0; i < count; i++)
 	{
-		uint8_t len = *(uint8_t*)((int)data + ptr);
+		uint8_t len = *(uint8_t*)((int)pData + ptr);
 		ptr++;
 
 		COpCodeSync::ms_bProcessingTaskSequence = true;
-		COpCodeSync::HandlePacket((uint8_t*)((int)data + ptr), len);
+		COpCodeSync::HandlePacket((uint8_t*)((int)pData + ptr), len);
 
 		if (CTaskSequenceSync::ms_bFailedToProcessSequence == true)
 		{
-			if (data && size > 0)
+			if (pData && size > 0)
 			{
-				ms_vTaskSequences.emplace_back((uint8_t*)data, (uint8_t*)data + size);
+				ms_vTaskSequences.emplace_back((uint8_t*)pData, (uint8_t*)pData + size);
 			}
 			Command<Commands::CLOSE_SEQUENCE_TASK>(sequenceId);
 			Command<Commands::CLEAR_SEQUENCE_TASK>(sequenceId);
