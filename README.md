@@ -70,7 +70,7 @@ xmake --build proxy
 
 ### Server
 
-1. Make sure to have **GNU GCC** or **LLVM Clang** toolchains installed on your linux system (**GNU GCC** will be the default compiler if your linux system installed it automaticly) and make sure to have **Xmake** build system installed .
+1. Make sure to have **GNU GCC** or **LLVM Clang** toolchains installed on your linux system .
 
 you can run those commands below to install all needed packages :
 
