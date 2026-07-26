@@ -17,10 +17,7 @@ This mod is an unofficial modification for **Grand Theft Auto: San Andreas** and
 
 1. Make sure you have the **C++ package** installed in **Visual Studio 2022** and **[xmake](https://xmake.io/)** (needed to build the project).
 
-2. Download **[this version of plugin-sdk](https://github.com/DK22Pac/plugin-sdk/tree/050d18b6e1770477deab81a40028a40277583d97)** and install it using **[this instruction](https://github.com/DK22Pac/plugin-sdk/wiki/Set-up-plugin-sdk)**.  
-   Set up your GTA-SA and plugin-sdk folders, and make sure `GTA_SA_DIR` and `PLUGIN_SDK_DIR` environment variables are set.
-
-3. Open a terminal in the repository root and build the projects:
+2. Open a terminal in the repository root and build the projects:
 
 ```bash
 # Build client DLL
