@@ -12,9 +12,12 @@
 #include "SaveLoadHooks.h"
 #include "RadarHooks.h"
 #include "ProjectileHooks.h"
+#include "DamageHooks.h"
+#include "ShadowHooks.h"
 
 void CHook::Init()
 {
+    CDriveBy::InitHooks();
     VehicleHooks::InjectHooks();
     PlayerHooks::InjectHooks();
     TaskHooks::InjectHooks();
@@ -28,4 +31,6 @@ void CHook::Init()
     SaveLoadHooks::InjectHooks();
     RadarHooks::InjectHooks();
     ProjectileHooks::InjectHooks();
+    DamageHooks::InjectHooks();
+    ShadowHooks::InjectHooks();
 }

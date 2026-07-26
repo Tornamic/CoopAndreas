@@ -2,6 +2,7 @@
 #include "GameHooks.h"
 #include "CKeySync.h"
 #include <CCutsceneMgr.h>
+#include <CWeatherSync.h>
 
 static void __cdecl CMenuManager__DrawFrontEnd_FixChat_Hook(float alpha)
 {
@@ -14,37 +15,37 @@ static void __cdecl CMenuManager__DrawFrontEnd_FixChat_Hook(float alpha)
 static void __cdecl CClock__RestoreClock_Hook()
 {
     CClock::RestoreClock();
-    CPacketHandler::GameWeatherTime__Trigger();
+    CWeatherSync::SyncCurrentState();
 }
 
 static void __cdecl CClock__SetGameClock_Hook(unsigned char h, unsigned char m, unsigned char d)
 {
     CClock::SetGameClock(h, m, d);
-    CPacketHandler::GameWeatherTime__Trigger();
+    CWeatherSync::SyncCurrentState();
 }
 
-DWORD ProcessCheat_Hook_Ret = 0x438589;
-static void __declspec(naked) ProcessCheat_Hook()
+static void __declspec(naked) ProcessCheat_Hook1()
 {
-    // finally figured out how to hook functions without masturbating RedirectCallRedirectCallRedirectCallRedirectCallRedirectCallRedirectCallRedirectCallRedirectCallRedirectCallRedirectCall
     __asm
     {
-        call eax; call orig code
-        pop edi
-        pop esi
         mov byte ptr ds : [0x969110] , bl
 
-        pushad; store registers
+        call CWeatherSync::SyncCurrentState
+
+        push 0x438589
+        retn
     }
-
-    // sync time and weather after processing cheat code
-    CPacketHandler::GameWeatherTime__Trigger();
-
+}
+static void __declspec(naked) ProcessCheat_Hook2()
+{
     __asm
     {
-        popad; restore registers
+        mov byte ptr ds : [0x969110] , bl
 
-        jmp ProcessCheat_Hook_Ret; jump to function continuation
+        call CWeatherSync::SyncCurrentState
+
+        push 0x4385A3
+        retn
     }
 }
 
@@ -86,47 +87,30 @@ static void __cdecl CTheZones__Update_Hook()
 {
     plugin::CallDyn(CTheZones__Update_Dest);
 
-    if (!CNetwork::m_bConnected)
+    if (!CNetwork::m_bAuthenticated)
     {
         return;
     }
 
-    // process network players keys
-    for (auto player : CNetworkPlayerManager::m_pPlayers)
+    CPad* pad = CPad::GetPad(0);
+    if (pad->DisablePlayerControls != 0)
     {
-        CKeySync::ProcessPlayer(player);
+        // if disabled, dont send the event-based keysync packet, let the OnFootUpdate packet take care of it
+        return;
     }
 
-    CPad* pad = CPad::GetPad(0);
     CControllerState newState = pad->NewState;
 
     if (CUtil::CompareControllerStates(oldControllerState, newState))
         return;
-    
+
     oldControllerState = newState;
 
-    // send local player keys
-    CPackets::PlayerKeySync packet{};
-
-    packet.newState = CCompressedControllerState(newState);
-    packet.newState.bCamera = pad->unk1;
-    packet.newState.unk2 = pad->unk2;
-    packet.newState.bPlayerAwaitsInGarage = pad->bPlayerAwaitsInGarage;
-    packet.newState.bPlayerOnInteriorTransition = pad->bPlayerOnInteriorTransition;
-    packet.newState.unk3 = pad->unk3;
-    packet.newState.bPlayerSafe = pad->bPlayerSafe;
-    packet.newState.bPlayerTalksOnPhone = pad->bPlayerTalksOnPhone;
-    packet.newState.bPlayerSafeForCutscene = pad->bPlayerSafeForCutscene;
-    packet.newState.bPlayerSkipsToDestination = pad->bPlayerSkipsToDestination;
-    packet.newState.bDisablePlayerEnterCar = pad->bDisablePlayerEnterCar;
-    packet.newState.bDisablePlayerDuck = pad->bDisablePlayerDuck;
-    packet.newState.bDisablePlayerFireWeapon = pad->bDisablePlayerFireWeapon;
-    packet.newState.bDisablePlayerFireWeaponWithL1 = pad->bDisablePlayerFireWeaponWithL1;
-    packet.newState.bDisablePlayerCycleWeapon = pad->bDisablePlayerCycleWeapon;
-    packet.newState.bDisablePlayerJump = pad->bDisablePlayerJump;
-    packet.newState.bDisablePlayerDisplayVitalStats = pad->bDisablePlayerDisplayVitalStats;
-
-    CNetwork::SendPacket(CPacketsID::PLAYER_KEY_SYNC, &packet, sizeof packet);
+    Packets::Players::KeyPressed keyPressed{};
+    CKeySync::CollectState(keyPressed.keySnapshot);
+    keyPressed.currentRotation = FindPlayerPed(0)->m_fCurrentRotation;
+    keyPressed.aimingRotation = FindPlayerPed(0)->m_fAimingRotation;
+    GetPacketFactory().Send(keyPressed);
 }
 
 void CCutsceneMgr__StartCutscene_Hook()
@@ -134,10 +118,10 @@ void CCutsceneMgr__StartCutscene_Hook()
     CCutsceneMgr::StartCutscene();
     if (CLocalPlayer::m_bIsHost)
     {
-        CPackets::StartCutscene packet{};
-        packet.currArea = CGame::currArea;
+        Packets::Scripts::StartCutscene packet{};
+        packet.currArea = static_cast<eVisibleArea>(CGame::currArea);
         strncpy_s(packet.name, CCutsceneMgr::ms_cutsceneName, 8);
-        CNetwork::SendPacket(CPacketsID::START_CUTSCENE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        GetPacketFactory().Send(packet);
     }
 }
 
@@ -147,8 +131,8 @@ bool CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook()
 
     if (result)
     {
-        CPackets::SkipCutscene packet{};
-        CNetwork::SendPacket(CPacketsID::SKIP_CUTSCENE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        Packets::Scripts::SkipCutscene packet{};
+        GetPacketFactory().Send(packet);
     }
 
     return result;
@@ -156,7 +140,8 @@ bool CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook()
 
 int __purecall_Hook()
 {
-    *(char**)0xDEAD  = "This hook is needed for a more detailed crash log when calling an unimplemented virtual function";
+    *(char**)0xDEAD =
+        "This hook is needed for a more detailed crash log when calling an unimplemented virtual function";
     *(char**)0xDEAD2 = "we will get a full backtrace instead of a single msgbox";
     __asm
     {
@@ -167,7 +152,6 @@ int __purecall_Hook()
 
     return 0;
 }
-
 
 #ifdef DEBUG
 bool __fastcall CPCKeyboard__GetKeyDown_Hook(int, int, uint16_t key_code, uint8_t use_mode, char* usage)
@@ -187,7 +171,8 @@ void GameHooks::InjectHooks()
 
     patch::RedirectCall(0x47F1C7, CClock__RestoreClock_Hook);
     patch::RedirectCall(0x441534, CClock__SetGameClock_Hook);
-    patch::RedirectJump(0x43857F, ProcessCheat_Hook);
+    patch::RedirectJump(0x438583, ProcessCheat_Hook1);
+    patch::RedirectJump(0x43859D, ProcessCheat_Hook2);
 
     // CRenderer::RenderEverythingBarRoads => CVisibilityPlugins::GetClumpAlpha crash fix
     patch::RedirectJump(0x5534B0, CRenderer__AddEntityToRenderList_Hook);
@@ -197,11 +182,11 @@ void GameHooks::InjectHooks()
     CTheZones__Update_Dest = injector::GetBranchDestination(0x53BF49).as_int();
     patch::RedirectCall(0x53BF49, CTheZones__Update_Hook);
 
-    //patch::RedirectCall(0x48072B, CCutsceneMgr__StartCutscene_Hook);
-    
-    //patch::RedirectCall(0x5B1947, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
-   // patch::RedirectCall(0x469F0E, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
-   // patch::RedirectCall(0x475459, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
+    // patch::RedirectCall(0x48072B, CCutsceneMgr__StartCutscene_Hook);
+
+    // patch::RedirectCall(0x5B1947, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
+    // patch::RedirectCall(0x469F0E, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
+    // patch::RedirectCall(0x475459, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
 
     patch::RedirectJump(PURECALL, __purecall_Hook);
 

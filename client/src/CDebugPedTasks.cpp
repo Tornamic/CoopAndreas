@@ -934,7 +934,7 @@ void CDebugPedTasks::Draw()
 				sprintf(level, "");
 				while (task)
 				{
-					sprintf(text, "%s%s%s\n", text, level, TaskNames[task->GetId()]);
+					sprintf(text, "%s%s%s\n", text, level, TaskNames[task->GetTaskType()]);
 					sprintf(level, "%s--", level);
 					task = task->GetSubTask();
 				}
@@ -949,7 +949,7 @@ void CDebugPedTasks::Draw()
 				sprintf(level, "");
 				while (task)
 				{
-					sprintf(text, "%s%s%s\n", text, level, TaskNames[task->GetId()]);
+					sprintf(text, "%s%s%s\n", text, level, TaskNames[task->GetTaskType()]);
 					sprintf(level, "%s--", level);
 					task = task->GetSubTask();
 				}

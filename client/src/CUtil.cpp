@@ -170,7 +170,7 @@ void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned 
 
             if (CStreaming::ms_aInfoForModel[model].m_nLoadState != LOADSTATE_LOADED)
             {
-                CStreaming::RequestModel(model, eStreamingFlags::GAME_REQUIRED | eStreamingFlags::PRIORITY_REQUEST);
+                CStreaming::RequestModel(model, eStreamingFlags::GAME_REQUIRED | eStreamingFlags::MISSION_REQUIRED | eStreamingFlags::KEEP_IN_MEMORY | eStreamingFlags::PRIORITY_REQUEST);
                 CStreaming::LoadAllRequestedModels(true);
 
                 int count = 0;
@@ -198,20 +198,6 @@ void CUtil::GiveWeaponByPacket(CNetworkPed* ped, unsigned char weapon, unsigned 
             ped->m_pPed->SetCurrentWeapon((eWeaponType)weapon);
         }
     }
-}
-
-bool CUtil::IsVehicleHasTurret(CVehicle* vehicle)
-{
-    switch (vehicle->m_nModelIndex)
-    {
-    case 432:
-    case 564:
-    case 407:
-    case 601:
-        return true;
-    default:
-        return false;
-    };
 }
 
 eVehicleType CUtil::GetVehicleType(CVehicle* vehicle)
@@ -279,17 +265,6 @@ void CUtil::SetPlayerJetpack(CNetworkPlayer* player, bool set)
             plugin::CallMethod<0x67B660, CTaskSimpleJetPack*>(task, player->m_pPed); // CTaskSimpleJetPack::DropJetPack
         }
     }
-}
-
-bool CUtil::IsValidEntityPtr(CEntity* ptr)
-{
-    if (!ptr) 
-        return false;
-
-    if (*(DWORD*)ptr == 0x863C40) // CPlaceable vtable ptr
-        return false;
-
-    return true;
 }
 
 std::string CUtil::GetWeaponName(eWeaponType type)

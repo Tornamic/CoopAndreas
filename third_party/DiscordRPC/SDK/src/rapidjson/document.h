@@ -25,6 +25,12 @@
 #include <new>      // placement new
 #include <limits>
 
+
+#pragma push_macro("max")
+#pragma push_macro("min")
+#undef max
+#undef min
+    
 RAPIDJSON_DIAG_PUSH
 #ifdef _MSC_VER
 RAPIDJSON_DIAG_OFF(4127) // conditional expression is constant
@@ -2571,5 +2577,8 @@ private:
 
 RAPIDJSON_NAMESPACE_END
 RAPIDJSON_DIAG_POP
+
+#pragma pop_macro("min")
+#pragma pop_macro("max")
 
 #endif // RAPIDJSON_DOCUMENT_H_

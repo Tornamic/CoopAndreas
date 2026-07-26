@@ -1,32 +1,33 @@
 #include "stdafx.h"
 #include "CNetworkEntityBlip.h"
 
-void CNetworkEntityBlip::UpdateEntityBlip(CPackets::UpdateEntityBlip* packet)
+void CNetworkEntityBlip::UpdateEntityBlip(Packets::Blips::UpdateEntityBlip* packet)
 {
 	int handle = -1;
-	switch (packet->entityType)
+
+	switch (packet->entity.entityType)
 	{
 	case eNetworkEntityType::NETWORK_ENTITY_TYPE_PED:
-		if (auto networkPed = CNetworkPedManager::GetPed(packet->entityId))
+		if (auto networkPed = CNetworkPedManager::GetPed(packet->entity.entityId))
 		{
 			if (auto ped = networkPed->m_pPed)
 			{
 				if (networkPed->m_nBlipHandle == -1)
 				{
-					networkPed->m_nBlipHandle = CRadar::SetEntityBlip(BLIP_CHAR, CPools::GetPedRef(ped), 0, (eBlipDisplay)packet->display);
+					networkPed->m_nBlipHandle = CRadar::SetEntityBlip(BLIP_CHAR, CPools::GetPedRef(ped), 0, packet->display);
 				}
 				handle = networkPed->m_nBlipHandle;
 			}
 		}
 		break;
 	case eNetworkEntityType::NETWORK_ENTITY_TYPE_VEHICLE:
-		if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(packet->entityId))
+		if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(packet->entity.entityId))
 		{
 			if (auto vehicle = networkVehicle->m_pVehicle)
 			{
 				if (networkVehicle->m_nBlipHandle == -1)
 				{
-					networkVehicle->m_nBlipHandle = CRadar::SetEntityBlip(BLIP_CAR, CPools::GetVehicleRef(vehicle), 0, (eBlipDisplay)packet->display);
+					networkVehicle->m_nBlipHandle = CRadar::SetEntityBlip(BLIP_CAR, CPools::GetVehicleRef(vehicle), 0, packet->display);
 				}
 				handle = networkVehicle->m_nBlipHandle;
 			}
@@ -38,18 +39,19 @@ void CNetworkEntityBlip::UpdateEntityBlip(CPackets::UpdateEntityBlip* packet)
 	{
 		//CChat::AddMessage("%d %d %d %d", packet->scale, packet->color, packet->display, packet->isFriendly);
 		CRadar::ChangeBlipScale(handle, packet->scale);
+		// TODO(Tornamic): why did i comment this
 		//CRadar::ChangeBlipColour(handle, packet->color);
 		CRadar::ChangeBlipDisplay(handle, (eBlipDisplay)packet->display);
 		CRadar::SetBlipFriendly(handle, packet->isFriendly);
 	}
 }
 
-void CNetworkEntityBlip::RemoveEntityBlip(CPackets::RemoveEntityBlip* packet)
+void CNetworkEntityBlip::RemoveEntityBlip(Packets::Blips::RemoveEntityBlip* packet)
 {
-	switch (packet->entityType)
+	switch (packet->entity.entityType)
 	{
 	case eNetworkEntityType::NETWORK_ENTITY_TYPE_PED:
-		if (auto networkPed = CNetworkPedManager::GetPed(packet->entityId))
+		if (auto networkPed = CNetworkPedManager::GetPed(packet->entity.entityId))
 		{
 			if (auto ped = networkPed->m_pPed)
 			{
@@ -62,7 +64,7 @@ void CNetworkEntityBlip::RemoveEntityBlip(CPackets::RemoveEntityBlip* packet)
 		}
 		break;
 	case eNetworkEntityType::NETWORK_ENTITY_TYPE_VEHICLE:
-		if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(packet->entityId))
+		if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(packet->entity.entityId))
 		{
 			if (auto vehicle = networkVehicle->m_pVehicle)
 			{

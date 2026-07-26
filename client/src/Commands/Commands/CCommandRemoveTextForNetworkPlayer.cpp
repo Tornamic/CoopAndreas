@@ -11,8 +11,8 @@ void CCommandRemoveTextForNetworkPlayer::Process(CRunningScript* script)
 
 	auto networkPlayer = CNetworkPlayerManager::GetPlayer(CPools::GetPed(ScriptParams[0]));
 	
-	CPackets::RemoveMessageGXT packet{};
+	Packets::Scripts::RemoveMessageGXT packet{};
 	strncpy(packet.gxt, gxt, 8);
-	packet.playerid = networkPlayer->m_iPlayerId;
-	CNetwork::SendPacket(CPacketsID::REMOVE_MESSAGE_GXT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+	packet.forWhoPlayerId = networkPlayer->m_iPlayerId;
+	GetPacketFactory().Send(packet);
 }

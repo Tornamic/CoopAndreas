@@ -19,7 +19,6 @@ public:
 	static inline constexpr size_t MAX_MESSAGE_AGE = 10000;
 	static inline constexpr size_t MESSAGE_DISAPPEAR_TIME = 1000;
 	static inline constexpr size_t MESSAGE_CHUNK_SIZE = 64;
-	static inline constexpr size_t MAX_MESSAGE_SIZE = 128;
 	static inline constexpr size_t CARET_BLINKING_INTERVAL = 500;
 
 	static std::vector<CChatMessage> m_aMessages;

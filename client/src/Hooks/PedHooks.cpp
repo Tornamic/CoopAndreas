@@ -4,7 +4,7 @@
 
 static void __cdecl CPopulation__Update_Hook(bool generate)
 {
-    if (CNetwork::m_bConnected)
+    if (CNetwork::m_bAuthenticated)
         CPopulation::Update(generate);
 }
 
@@ -21,7 +21,7 @@ static void __declspec(naked) CPed__SetMoveState_Hook()
         pushad
     }
  
-    if (CNetwork::m_bConnected && !pPed->IsPlayer())
+    if (CNetwork::m_bAuthenticated && !pPed->IsPlayer())
     {
         _pNetworkPed = CNetworkPedManager::GetPed(pPed);
         if (_pNetworkPed && !_pNetworkPed->m_bSyncing)
@@ -49,22 +49,26 @@ static void __declspec(naked) CPed__SetMoveState_Hook()
 
 bool __fastcall CWeapon__Fire_Hook(CWeapon* This, SKIP_EDX, CPed* owner, CVector* vecOrigin, CVector* vecEffectPosn, CEntity* targetEntity, CVector* vecTarget, CVector* arg_14)
 {
-    CNetworkPed* ped = CNetworkPedManager::GetPed(owner);
+    CNetworkPed* pNetworkPed = CNetworkPedManager::GetPed(owner);
 
-    if (ped)
+    if (pNetworkPed)
     {
-        CPackets::PedShotSync packet{};
-        packet.pedid = ped->m_nPedId;
-        packet.origin = *vecOrigin;
-        packet.effect = *vecEffectPosn;
-        if (vecTarget)
-            packet.target = *vecTarget;
-        else if(targetEntity)
-            packet.target = targetEntity->GetPosition();
+        if (pNetworkPed->m_bSyncing)
+        {
+            Packets::Peds::PedShotSync packet{};
+            packet.pedid = pNetworkPed->m_nPedId;
+            packet.weaponType = This->m_eWeaponType;
+            packet.origin = *vecOrigin;
+            packet.effect = *vecEffectPosn;
+            if (vecTarget)
+                packet.target = *vecTarget;
+            else if(targetEntity)
+                packet.target = targetEntity->GetPosition();
 
-        CNetwork::SendPacket(CPacketsID::PED_SHOT_SYNC, &packet, sizeof packet);
+            GetPacketFactory().Send(packet);
 
-        return This->Fire(owner, vecOrigin, vecEffectPosn, targetEntity, vecTarget, arg_14);
+            return This->Fire(owner, vecOrigin, vecEffectPosn, targetEntity, vecTarget, arg_14);
+        }
     }
     else
     {
@@ -102,13 +106,13 @@ void CStreaming__RequestSpecialModel_Hook(int modelid, const char* txdName, int 
 
 int16_t __fastcall CAEPedSpeechAudioEntity__AddSayEvent_Hook(CAEPedSpeechAudioEntity* This, SKIP_EDX, eAudioEvents audioEvent, int16_t gCtx, uint32_t startTimeDelay, float probability, bool overideSilence, bool isForceAudible, bool isFrontEnd)
 {
-    CPed* ped = (CPed*)((uintptr_t)This - 0x294);
+    CPed* pPed = (CPed*)((uintptr_t)This - offsetof(CPed, m_pedSpeech));
 
-    if (!ped->IsPlayer())
+    if (!pPed->IsPlayer())
     {
-        if (auto networkPed = CNetworkPedManager::GetPed(ped))
+        if (auto pNetworkPed = CNetworkPedManager::GetPed(pPed))
         {
-            if (!networkPed->m_bSyncing)
+            if (!pNetworkPed->m_bSyncing)
             {
                 return -1;
             }
@@ -122,39 +126,14 @@ int16_t __fastcall CAEPedSpeechAudioEntity__AddSayEvent_Hook(CAEPedSpeechAudioEn
         return result;
     }
 
-
-    CPackets::PedSay packet{};
-    packet.phraseId = gCtx;
+    Packets::Peds::PedSay packet{};
+    packet.phraseId = static_cast<eGlobalSpeechContexts>(gCtx);
     packet.startTimeDelay = startTimeDelay;
     packet.overrideSilence = overideSilence;
     packet.isForceAudible = isForceAudible;
     packet.isFrontEnd = isFrontEnd;
-
-    if (ped == FindPlayerPed(0))
-    {
-        packet.isPlayer = true;
-    }
-    else
-    {
-        if (auto networkPed = CNetworkPedManager::GetPed(ped))
-        {
-            if (networkPed->m_bSyncing)
-            {
-                packet.isPlayer = false;
-                packet.entityid = networkPed->m_nPedId;
-            }
-            else
-            {
-                return result;
-            }
-        }
-        else
-        {
-            return result;
-        }
-    }
-
-    CNetwork::SendPacket(CPacketsID::PED_SAY, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    packet.entity.SetEntity(pPed);
+    GetPacketFactory().Send(packet);
 
     return result;
 }

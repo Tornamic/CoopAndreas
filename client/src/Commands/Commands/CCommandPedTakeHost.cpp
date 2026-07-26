@@ -14,10 +14,10 @@ void CCommandPedTakeHost::Process(CRunningScript* script)
 		{
 			if (!networkPed->m_bSyncing)
 			{
-				CPackets::PedTakeHost packet{};
+				Packets::Peds::PedTakeHost packet{};
 				packet.pedid = networkPed->m_nPedId;
 				packet.allowReturnToPreviousHost = ScriptParams[1] != 0;
-				CNetwork::SendPacket(CPacketsID::PED_TAKE_HOST, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+				GetPacketFactory().Send(packet);
 			}
 		}
 	}

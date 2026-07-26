@@ -1,32 +1,39 @@
 #pragma once
+
 class CNetworkPlayer
 {
 public:
 	CPlayerPed* m_pPed = nullptr;
 	int m_iPlayerId;
 
-	CPackets::PlayerOnFoot m_playerOnFoot{};
+	Packets::Players::OnFootUpdate m_onFootSnapshotInterpolated{};
+	
+	uint32_t m_startedInterpolatingCameraAt = 0;
+	Packets::Players::PlayerCameraSync m_cameraSnapshotOld{};
+	Packets::Players::PlayerCameraSync m_cameraSnapshot{};
 	
 	signed short m_oShockButtonL;
 	signed short m_lShockButtonL;
 
-	CVector* m_vecWaypointPos = nullptr;
-	bool m_bWaypointPlaced = false;
+	Packets::Players::PlayerPlaceWaypoint m_waypointState{};
 
 	char m_Name[32 + 1] = { 0 };
 
 	CControllerState m_oldControllerState{};
 	CControllerState m_newControllerState{};
-	CCompressedControllerState m_compressedControllerState{};
-
-	CPackets::PlayerAimSync m_aimSyncData;
 
 	CNetworkPlayerStats m_stats{};
 	CPedClothesDesc m_pPedClothesDesc{};
 	bool m_bHasBeenConnectedBeforeMe = false;
 
-	CNetworkPlayer::~CNetworkPlayer();
-	CNetworkPlayer::CNetworkPlayer(int id, CVector position);
+	bool m_bExtrapolating = false;
+
+	bool m_bRequestedDuckTask = false;
+
+	bool m_bIsHost = false;
+
+	~CNetworkPlayer();
+	CNetworkPlayer(int id, CVector position);
 
 	void CreatePed(int id, CVector position);
 	void DestroyPed();
@@ -38,6 +45,7 @@ public:
 	void RemoveFromVehicle(CVehicle* vehicle);
 	void WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid);
 	void EnterVehiclePassenger(CVehicle* vehicle, int seatid);
-	void HandleTask(CPackets::SetPlayerTask& packet);
+	void HandleTask(Packets::Players::SetPlayerTask& packet);
+	void ApplyWeaponSnapshot(Packets::Players::SWeaponSnapshot& weaponSnapshot);
 };
 

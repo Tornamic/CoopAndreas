@@ -73,9 +73,9 @@ CNetworkPed::~CNetworkPed()
 {
     if (m_bSyncing)
     {
-        CPackets::PedRemove packet{};
+        Packets::Peds::PedRemove packet{};
         packet.pedid = m_nPedId;
-        CNetwork::SendPacket(CPacketsID::PED_REMOVE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        GetPacketFactory().Send(packet);
     }
     else
     {
@@ -108,26 +108,25 @@ CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
     CNetworkPed* networkPed = new CNetworkPed();
 
     networkPed->m_pPed = ped;
-    networkPed->m_nPedId = -1;
+    networkPed->m_nPedId = 0;
     networkPed->m_nCreatedBy = ped->m_nCreatedBy;
     networkPed->m_bSyncing = true;
     networkPed->m_nTempId = CNetworkPedManager::AddToTempList(networkPed);
 
-    CPackets::PedSpawn packet{};
+    Packets::Peds::PedSpawn packet{};
     packet.tempid = networkPed->m_nTempId;
     packet.pedid = networkPed->m_nPedId;
-    packet.modelId = ped->m_nModelIndex;
+    packet.modelId = static_cast<eModelID>(ped->m_nModelIndex);
     packet.pos = ped->m_matrix->pos;
-    packet.pedType = ped->m_nPedType;
-    packet.createdBy = ped->m_nCreatedBy;
+    packet.pedType = static_cast<ePedType>(ped->m_nPedType);
+    packet.createdBy = static_cast<eCharCreatedBy>(ped->m_nCreatedBy);
 
-    if (packet.modelId >= 290 && packet.modelId <= 299)
+    if (packet.modelId >= MODEL_SPECIAL01 && packet.modelId <= MODEL_SPECIAL10)
     {
-        strcpy_s(packet.specialModelName, PedHooks::ms_aszLoadedSpecialModels[packet.modelId - 290]);
+        strcpy_s(packet.specialModelName, PedHooks::ms_aszLoadedSpecialModels[packet.modelId - MODEL_SPECIAL01]);
         packet.specialModelName[7] = '\0';
     }
-
-    CNetwork::SendPacket(CPacketsID::PED_SPAWN, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    GetPacketFactory().Send(packet);
 
     return networkPed;
 }
@@ -136,7 +135,7 @@ void CNetworkPed::WarpIntoVehicleDriver(CVehicle* vehicle)
 {
     assert(m_pPed != nullptr);
 
-    if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
+    if (!vehicle->IsVTableValid() || !m_pPed->IsVTableValid())
     {
         return;
     }
@@ -162,7 +161,7 @@ void CNetworkPed::WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid)
 {
     assert(m_pPed != nullptr);
 
-    if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
+    if (!vehicle->IsVTableValid() || !m_pPed->IsVTableValid())
     {
         return;
     }
@@ -189,7 +188,7 @@ void CNetworkPed::RemoveFromVehicle(CVehicle* vehicle)
 {
     assert(m_pPed != nullptr);
 
-    if (!CUtil::IsValidEntityPtr(vehicle) || !CUtil::IsValidEntityPtr(m_pPed))
+    if (!vehicle->IsVTableValid() || !m_pPed->IsVTableValid())
     {
         return;
     }
@@ -213,9 +212,9 @@ void CNetworkPed::ClaimOnRelease()
     if (m_bClaimOnRelease || m_bSyncing)
         return;
 
-    CPackets::PedClaimOnRelease packet{};
+    Packets::Peds::PedClaimOnRelease packet{};
     packet.pedid = m_nPedId;
-    CNetwork::SendPacket(CPacketsID::PED_CLAIM_ON_RELEASE, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    GetPacketFactory().Send(packet);
 
     m_bClaimOnRelease = true;
 }
@@ -225,9 +224,21 @@ void CNetworkPed::CancelClaim()
     if (!m_bClaimOnRelease || m_bSyncing)
         return;
 
-    CPackets::PedCancelClaim packet{};
+    Packets::Peds::PedCancelClaim packet{};
     packet.pedid = m_nPedId;
-    CNetwork::SendPacket(CPacketsID::PED_CANCEL_CLAIM, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    GetPacketFactory().Send(packet);
 
     m_bClaimOnRelease = false;
+}
+
+void CNetworkPed::ApplyWeaponSnapshot(Packets::Players::SWeaponSnapshot& weaponSnapshot)
+{
+    if (m_pPed == nullptr)
+    {
+        return;
+    }
+
+    // TODO refactor CUtil
+    CUtil::GiveWeaponByPacket(this, weaponSnapshot.iWeaponType, weaponSnapshot.nAmmo);
+    m_pPed->m_aWeapons[m_pPed->m_nActiveWeaponSlot].m_nState = static_cast<eWeaponState>(weaponSnapshot.iWeaponState);
 }

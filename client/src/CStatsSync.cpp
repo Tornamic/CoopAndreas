@@ -48,14 +48,14 @@ void CStatsSync::ApplyLocalContext()
 
 void CStatsSync::NotifyChanged()
 {
-    CPackets::PlayerStats packet{};
+    Packets::Players::PlayerStats packet{};
     
     for (uint8_t i = 0; i < CStatsSync::SYNCED_STATS_COUNT; i++)
     {
         packet.stats[i] = CStats::GetStatValue(m_aeSyncedStats[i]);
     }
 
-    CNetwork::SendPacket(CPacketsID::PLAYER_STATS, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    GetPacketFactory().Send(packet);
 }
 
 int CStatsSync::GetSyncIdByInternal(eStats stat)

@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "CNetworkVehicle.h"
-
-std::vector<CNetworkVehicle*> CNetworkVehicleManager::m_pVehicles;
-CNetworkVehicle* CNetworkVehicleManager::m_apTempVehicles[255];
+#include <CKeySync.h>
+#include "CNetworkVehicleManager.h"
 
 CNetworkVehicle* CNetworkVehicleManager::GetVehicle(int vehicleid)
 {
@@ -15,20 +14,6 @@ CNetworkVehicle* CNetworkVehicleManager::GetVehicle(int vehicleid)
 	}
 	return nullptr;
 }
-
-CNetworkVehicle* CNetworkVehicleManager::GetVehicle(CVehicle* vehicle)
-{
-	for (int i = 0; i != m_pVehicles.size(); i++)
-	{
-		if (m_pVehicles[i]->m_pVehicle == vehicle)
-		{
-			return m_pVehicles[i];
-		}
-	}
-	
-	return nullptr;
-}
-
 CNetworkVehicle* CNetworkVehicleManager::GetVehicle(CEntity* vehicle)
 {
 	for (int i = 0; i != m_pVehicles.size(); i++)
@@ -56,13 +41,57 @@ void CNetworkVehicleManager::Remove(CNetworkVehicle* vehicle)
 	}
 }
 
-void CNetworkVehicleManager::UpdateDriver(CVehicle* vehicle)
+void CNetworkVehicleManager::UpdateDriver(CVehicle* pVehicle)
 {
-	if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle))
+	if (auto pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pVehicle))
 	{
-		CPackets::VehicleDriverUpdate* packet = CPacketHandler::VehicleDriverUpdate__Collect(networkVehicle);
-		CNetwork::SendPacket(CPacketsID::VEHICLE_DRIVER_UPDATE, packet, sizeof *packet);
-		delete packet;
+		Packets::Vehicles::VehicleDriverUpdate vehicleDriverUpdate{};
+		CPlayerPed* pPlayerPed = FindPlayerPed(0);
+
+		vehicleDriverUpdate.vehicleid = pNetworkVehicle->m_nVehicleId;
+		vehicleDriverUpdate.pos = pVehicle->m_matrix->pos;
+		vehicleDriverUpdate.roll = pVehicle->m_matrix->right;
+		vehicleDriverUpdate.rot = pVehicle->m_matrix->up;
+		vehicleDriverUpdate.velocity = pVehicle->m_vecMoveSpeed;
+		vehicleDriverUpdate.turnSpeed = pVehicle->m_vecTurnSpeed;
+
+		CWeapon& weapon = pPlayerPed->GetWeapon();
+		vehicleDriverUpdate.playerWeapon.iWeaponType = weapon.m_eWeaponType;
+		vehicleDriverUpdate.playerWeapon.iWeaponState = weapon.m_nState;
+		vehicleDriverUpdate.playerWeapon.nAmmo = weapon.m_nAmmoInClip;
+
+		vehicleDriverUpdate.playerHealth.iHealth = static_cast<uint8_t>(std::clamp(pPlayerPed->m_fHealth, 0.0f, 255.0f));
+		vehicleDriverUpdate.playerHealth.iArmour = static_cast<uint8_t>(std::clamp(pPlayerPed->m_fArmour, 0.0f, 255.0f));
+		CKeySync::CollectState(vehicleDriverUpdate.playerKeys);
+
+		vehicleDriverUpdate.color1 = pVehicle->m_nPrimaryColor;
+		vehicleDriverUpdate.color2 = pVehicle->m_nSecondaryColor;
+
+		vehicleDriverUpdate.health = pVehicle->m_fHealth;
+
+		vehicleDriverUpdate.paintjob = pVehicle->GetRemapIndex();
+
+		if (pVehicle->m_nVehicleType == VEHICLE_AUTOMOBILE)
+		{
+			CAutomobile* pAutomobile = (CAutomobile*)pVehicle;
+			vehicleDriverUpdate.miscComponentAngle = pAutomobile->m_wMiscComponentAngle;
+		}
+
+		if (pVehicle->m_nVehicleType == VEHICLE_BIKE)
+		{
+			CBike* pBike = (CBike*)pVehicle;
+			vehicleDriverUpdate.bikeLean = pBike->m_rideAnimData.m_fDesiredLeanAngle;
+		}
+
+		if (pVehicle->m_nVehicleSubType == VEHICLE_PLANE)
+		{
+			CPlane* pPlane = (CPlane*)pVehicle;
+			vehicleDriverUpdate.planeGearState = pPlane->m_fLandingGearStatus;
+		}
+
+		vehicleDriverUpdate.locked = pVehicle->m_eDoorLock;
+
+		GetPacketFactory().Send(vehicleDriverUpdate);
 	}
 }
 
@@ -70,35 +99,73 @@ void CNetworkVehicleManager::UpdateIdle()
 {
 	CNetworkVehicleManager::RemoveHostedUnused();
 
-	CMassPacketBuilder builder;
-
-	for (int i = 0; i != m_pVehicles.size(); i++)
+	for (auto pNetworkVehicle : m_pVehicles)
 	{
-		if (m_pVehicles[i]->m_pVehicle == nullptr)
+		CVehicle* pVehicle = pNetworkVehicle->m_pVehicle;
+		if (pVehicle == nullptr)
 			continue;
 
-		if (m_pVehicles[i]->m_bSyncing && !m_pVehicles[i]->HasDriver())
+		if (pNetworkVehicle->m_bSyncing && !pNetworkVehicle->HasDriver())
 		{
-			CPackets::VehicleIdleUpdate* packet = CPacketHandler::VehicleIdleUpdate__Collect(m_pVehicles[i]);
-			builder.AddPacket(CPacketsID::VEHICLE_IDLE_UPDATE, packet, sizeof *packet);
-			delete packet;
+			Packets::Vehicles::VehicleIdleUpdate packet{};
+			packet.vehicleid = pNetworkVehicle->m_nVehicleId;
+
+			packet.pos = pVehicle->m_matrix->pos;
+			packet.roll = pVehicle->m_matrix->right;
+			packet.rot = pVehicle->m_matrix->up;
+			packet.velocity = pVehicle->m_vecMoveSpeed;
+			packet.turnSpeed = pVehicle->m_vecTurnSpeed;
+			packet.color1 = pVehicle->m_nPrimaryColor;
+			packet.color2 = pVehicle->m_nSecondaryColor;
+			packet.health = pVehicle->m_fHealth;
+			packet.paintjob = pVehicle->GetRemapIndex();
+
+			if (CUtil::GetVehicleType(pVehicle) == eVehicleType::VEHICLE_PLANE)
+			{
+				CPlane* plane = (CPlane*)pVehicle;
+				packet.planeGearState = plane->m_fLandingGearStatus;
+			}
+
+			packet.locked = pVehicle->m_eDoorLock;
+			GetPacketFactory().Send(packet);
 		}
 	}
-
-	builder.Send();
 }
 
-void CNetworkVehicleManager::UpdatePassenger(CVehicle* vehicle, CPlayerPed* localPlayer)
+void CNetworkVehicleManager::UpdatePassenger(CVehicle* pVehicle, CPlayerPed* pPlayerPed)
 {
-	CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
-	CPackets::VehiclePassengerUpdate* packet = CPacketHandler::VehiclePassengerUpdate__Collect(networkVehicle, localPlayer);
-	CNetwork::SendPacket(CPacketsID::VEHICLE_PASSENGER_UPDATE, packet, sizeof * packet);
-	delete packet;
+	 CNetworkVehicle* pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pVehicle);
+	 if (pNetworkVehicle)
+	 {
+		 Packets::Vehicles::VehiclePassengerUpdate packet{};
+
+		 CWeapon& weapon = pPlayerPed->GetWeapon();
+		 packet.playerWeapon.iWeaponType = weapon.m_eWeaponType;
+		 packet.playerWeapon.iWeaponState = weapon.m_nState;
+		 packet.playerWeapon.nAmmo = weapon.m_nAmmoInClip;
+
+		 packet.playerHealth.iHealth = static_cast<uint8_t>(std::clamp(pPlayerPed->m_fHealth, 0.0f, 255.0f));
+		 packet.playerHealth.iArmour = static_cast<uint8_t>(std::clamp(pPlayerPed->m_fArmour, 0.0f, 255.0f));
+		 CKeySync::CollectState(packet.playerKeys);
+
+		 packet.vehicleid = pNetworkVehicle->m_nVehicleId;
+		 packet.driveby = CDriveBy::IsPedInDriveby(pPlayerPed);
+
+		 for (int i = 0; i < pVehicle->m_nMaxPassengers; i++)
+		 {
+			 if (pVehicle->m_apPassengers[i] == pPlayerPed)
+			 {
+				 packet.seatid = i;
+				 break;
+			 }
+		 }
+		 GetPacketFactory().Send(packet);
+	 }
 }
 
-unsigned char CNetworkVehicleManager::AddToTempList(CNetworkVehicle* networkVehicle)
+uint8_t CNetworkVehicleManager::AddToTempList(CNetworkVehicle* networkVehicle)
 {
-	for (unsigned char i = 0; i < 255; i++)
+	for (uint8_t i = 0; i < ARRAY_SIZE(m_apTempVehicles); i++)
 	{
 		if (m_apTempVehicles[i] == nullptr)
 		{
@@ -125,5 +192,28 @@ void CNetworkVehicleManager::RemoveHostedUnused()
 			}
 		}
 		++it;
+	}
+}
+
+void CNetworkVehicleManager::UpdateDamageSync()
+{
+	for (auto pNetworkVehicle : m_pVehicles)
+	{
+		if (pNetworkVehicle->m_bSyncing)
+		{
+			CVehicle* pVehicle = pNetworkVehicle->m_pVehicle;
+			if (pVehicle && pVehicle->m_nVehicleType == VEHICLE_AUTOMOBILE)
+			{
+				CAutomobile* pAutomobile = (CAutomobile*)pVehicle;
+				if (pNetworkVehicle->m_oldDamageState != pAutomobile->m_damageManager)
+				{
+					pNetworkVehicle->m_oldDamageState = pAutomobile->m_damageManager;
+					Packets::Vehicles::VehicleDamage packet{};
+					packet.vehicleid = pNetworkVehicle->m_nVehicleId;
+					packet.damageManager = pAutomobile->m_damageManager;
+					GetPacketFactory().Send(packet);
+				}
+			}
+		}
 	}
 }

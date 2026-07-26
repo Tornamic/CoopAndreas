@@ -2,12 +2,20 @@
 #include "CCommandEnableSyncingThisScript.h"
 #include "COpCodeSync.h"
 
-void CCommandEnableSyncingThisScript::Process(CRunningScript* script)
+void CCommandEnableSyncingThisScript::Process(CRunningScript* pScript)
 {
-	//CChat::AddMessage("CCommandEnableSyncingThisScript \"%s\"", script->m_szName);
+    assert(COpCodeSync::ms_iFreeSyncedScript < ARRAY_SIZE(COpCodeSync::ms_aszSyncedScripts));
 
-    if (std::find(COpCodeSync::ms_vSyncedScripts.begin(), COpCodeSync::ms_vSyncedScripts.end(), script) == COpCodeSync::ms_vSyncedScripts.end())
+    // CChat::AddMessage("CCommandEnableSyncingThisScript \"%s\"", pScript->m_szName);
+
+    for (size_t i = 0; i < COpCodeSync::ms_iFreeSyncedScript; i++)
     {
-        COpCodeSync::ms_vSyncedScripts.push_back(script);
+        if (strnicmp(COpCodeSync::ms_aszSyncedScripts[i], pScript->m_szName, 7) == 0) 
+        {
+            return;
+        }
     }
+
+    strncpy_s(COpCodeSync::ms_aszSyncedScripts[COpCodeSync::ms_iFreeSyncedScript], 8, pScript->m_szName, 7);
+    ++COpCodeSync::ms_iFreeSyncedScript;
 }

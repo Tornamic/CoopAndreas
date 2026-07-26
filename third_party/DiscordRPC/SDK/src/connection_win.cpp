@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "connection.h"
 
 #define WIN32_LEAN_AND_MEAN
@@ -90,7 +89,7 @@ bool BaseConnection::Write(const void* data, size_t length)
     }
     const DWORD bytesLength = (DWORD)length;
     DWORD bytesWritten = 0;
-    return ::WriteFile(self->pipe, data, bytesLength, &bytesWritten, nullptr) == TRUE &&
+    return ::WriteFile(self->pipe, data, bytesLength, &bytesWritten, nullptr) &&
       bytesWritten == bytesLength;
 }
 
@@ -113,7 +112,7 @@ bool BaseConnection::Read(void* data, size_t length)
         if (bytesAvailable >= length) {
             DWORD bytesToRead = (DWORD)length;
             DWORD bytesRead = 0;
-            if (::ReadFile(self->pipe, data, bytesToRead, &bytesRead, nullptr) == TRUE) {
+            if (::ReadFile(self->pipe, data, bytesToRead, &bytesRead, nullptr)) {
                 assert(bytesToRead == bytesRead);
                 return true;
             }

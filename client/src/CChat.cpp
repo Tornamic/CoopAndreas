@@ -1,3 +1,4 @@
+#include "config.h"
 #include "stdafx.h"
 #include "CUnicode.h"
 
@@ -137,7 +138,7 @@ void CChat::AddMessage(const std::string& str)
 
 void CChat::AddMessage(const char* format, ...)
 {
-    char buffer[MAX_MESSAGE_SIZE + 1];
+    char buffer[Config::MAX_CHAT_MESSAGE_LENGTH + 1];
     va_list args;
     va_start(args, format);
     std::vsnprintf(buffer, sizeof(buffer), format, args);
@@ -150,7 +151,7 @@ void CChat::AddMessage(const char* format, ...)
 
 void CChat::AddMessageFast(const char* format, ...)
 {
-    char buffer[MAX_MESSAGE_SIZE + 1];
+    char buffer[Config::MAX_CHAT_MESSAGE_LENGTH + 1];
     va_list args;
     va_start(args, format);
     std::vsnprintf(buffer, sizeof(buffer), format, args);
@@ -392,7 +393,7 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         std::wstring chr = CUnicode::ConvertWideCharToUtf16Char((wchar_t)wParam);
 
-        if (m_sInputText.size() + chr.size() <= MAX_MESSAGE_SIZE)
+        if (m_sInputText.size() + chr.size() <= Config::MAX_CHAT_MESSAGE_LENGTH)
         {
             m_sInputText.insert(m_nCaretPos, chr);
             m_nCaretPos += chr.size();
@@ -503,7 +504,7 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     clipboardText.end()
                 );
 
-                size_t remain = MAX_MESSAGE_SIZE - m_sInputText.size();
+                size_t remain = Config::MAX_CHAT_MESSAGE_LENGTH - m_sInputText.size();
                 if (clipboardText.size() > remain)
                 {
                     clipboardText.resize(remain);
@@ -526,7 +527,7 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         else if (wParam == VK_RETURN && m_bInputActive)
         {
-            if (!CNetwork::m_bConnected)
+            if (!CNetwork::m_bAuthenticated)
                 return;
 
             ToggleInput(false);
@@ -541,11 +542,11 @@ void CChat::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 return;
             }
 
-            CPackets::PlayerChatMessage packet{};
+            Packets::System::ChatMessage packet{};
             wcscpy_s(packet.message, m_sInputText.c_str());
             SendPlayerMessage(CLocalPlayer::m_Name, CNetworkPlayerManager::m_nMyId, packet.message);
             AddPreviousMessage(m_sInputText);
-            CNetwork::SendPacket(CPacketsID::PLAYER_CHAT_MESSAGE, &packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE);
+            GetPacketFactory().Send(packet);
 
             auto it = std::find(m_aPrevMessages.begin(), m_aPrevMessages.end(), m_sInputText);
             if (it != m_aPrevMessages.end())

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "CrashfixHooks.h"
 
+// TODO: find the cause of those crashes, cuz they dont appear in the vanilla game
+
 // i hope it will work
 void __declspec(naked) CVehicleAnimGroup__ComputeAnimDoorOffsets_Hook()
 {

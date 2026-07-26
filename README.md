@@ -76,7 +76,8 @@ xmake --build proxy
 TODO
 
 ## Donate
-https://send.monobank.ua/jar/8wPrs73MBa
+
+PayPal: https://www.paypal.com/donate/?hosted_button_id=PSL39QT3X22LA
 
 USDT TRC20: `TNdTwiy9JM2zUe8qgBoMJoAExKf4gs5vGA`
 
@@ -84,9 +85,8 @@ BTC: `bc1qwsl8jv2gyvry75j727qkktr5vgcmqm5e69qt2t`
 
 ETH: `0xE7aE0448A147844208C9D51b0Ac673Bafbe2a35c`
 
-PayPal `kirilltymoshchenko59@gmail.com`
+monobank: https://send.monobank.ua/jar/8wPrs73MBa
 
-*If you need another way to donate, please dm me on discord: `@tornamic`*
 
 ## TODO list:
 ### Already Done ✓
@@ -225,15 +225,6 @@ PayPal `kirilltymoshchenko59@gmail.com`
 ### Minor tasks and ideas
 - [ ] Sync laser sniper rifle red dot with all players
 - [ ] Sync moon sniper rifle shot changing size easter egg with all players
-## TODO Launcher:
-### Already Done ✓
-- [X] setup project and create forms
-- [X] inject all dll in the game (don't need ASI Loader anymore)
-- [X] send params (nickname, ip/port) to client dll
-- [X] implement translation
-- [X] save configs
-### Current Tasks
-- [ ] start/control server directly from launcher
 
 ## TODO Missions
 ### Already Done ✓

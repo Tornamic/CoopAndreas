@@ -2,8 +2,8 @@
 class CNetworkEntityBlip
 {
 public:
-	static void UpdateEntityBlip(CPackets::UpdateEntityBlip* packet);
-	static void RemoveEntityBlip(CPackets::RemoveEntityBlip* packet);
+	static void UpdateEntityBlip(Packets::Blips::UpdateEntityBlip* packet);
+	static void RemoveEntityBlip(Packets::Blips::RemoveEntityBlip* packet);
 	static void ClearEntityBlips();
 };
 

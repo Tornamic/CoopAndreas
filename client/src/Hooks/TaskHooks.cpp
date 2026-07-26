@@ -4,38 +4,40 @@
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
 #include "CAimSync.h"
+#include <CKeySync.h>
 
 // when local player enters any vehicle
-static void __fastcall CTaskComplexEnterCarAsDriver__Ctor_Hook(CTaskComplexEnterCarAsDriver* This, SKIP_EDX, CVehicle* vehicle)
+static void __fastcall CTaskComplexEnterCarAsDriver__Ctor_Hook(
+    CTaskComplexEnterCarAsDriver* This, SKIP_EDX, CVehicle* vehicle)
 {
     CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
 
     if (networkVehicle == nullptr)
     {
-        CChat::AddMessage("ERROR: this vehicle is not synced");
+        //CChat::AddMessage("ERROR: this vehicle is not synced");
         plugin::CallMethod<0x6402F0, CTaskComplexEnterCarAsDriver*, CVehicle*>(This, vehicle);
         return;
     }
 
-    CPackets::VehicleEnter packet{};
-
+    Packets::Vehicles::VehicleEnter packet{};
     packet.seatid = 0;
     packet.vehicleid = networkVehicle->m_nVehicleId;
-
-    CNetwork::SendPacket(CPacketsID::VEHICLE_ENTER, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+    GetPacketFactory().Send(packet);
 
     plugin::CallMethod<0x6402F0, CTaskComplexEnterCarAsDriver*, CVehicle*>(This, vehicle);
 }
 
-static void __fastcall CTaskComplexLeaveCar__Ctor_Hook(CTaskComplexLeaveCar* This, SKIP_EDX, CVehicle* vehicle, int targetDoor, int delayTime, bool sensibleLeaveCar, bool forceGetOut)
+static void __fastcall CTaskComplexLeaveCar__Ctor_Hook(CTaskComplexLeaveCar* This, SKIP_EDX, CVehicle* vehicle,
+    int targetDoor, int delayTime, bool sensibleLeaveCar, bool forceGetOut)
 {
-    if (CNetwork::m_bConnected)
+    if (CNetwork::m_bAuthenticated)
     {
-        CPackets::VehicleExit packet{};
-        CNetwork::SendPacket(CPacketsID::VEHICLE_EXIT, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+        Packets::Vehicles::VehicleExit packet{};
+        GetPacketFactory().Send(packet);
     }
 
-    plugin::CallMethod<0x63B8C0, CTaskComplexLeaveCar*, CVehicle*, int, int, bool, bool>(This, vehicle, targetDoor, delayTime, sensibleLeaveCar, forceGetOut);
+    plugin::CallMethod<0x63B8C0, CTaskComplexLeaveCar*, CVehicle*, int, int, bool, bool>(
+        This, vehicle, targetDoor, delayTime, sensibleLeaveCar, forceGetOut);
 }
 
 CTaskManager* pTaskMgr = nullptr;
@@ -56,15 +58,15 @@ static void __declspec(naked) CTaskManager__SetTask_Hook()
         mov ebx, [esp + 8]
         // -------------
 
-        mov pTaskMgr, ecx // get *this
+        mov pTaskMgr, ecx  // get *this
 
         pushad
 
-        // get pTask
+                // get pTask
         mov eax, [esp + 10h]
         mov pTask, eax
-        
-        // get task slot
+
+            // get task slot
         mov eax, [esp + 14h]
         mov nTaskSlot, eax
     }
@@ -76,13 +78,17 @@ static void __declspec(naked) CTaskManager__SetTask_Hook()
         if (pNetworkPed && pNetworkPed->m_bSyncing)
         {
 #ifdef TASK_LOG
-            CChat::AddMessage("SET PRIMARY %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
+            CChat::AddMessage("SET PRIMARY %s", CDebugPedTasks::TaskNames[pTask->GetTaskType()]);
 #endif
             nTaskPacketSize = 0;
             pSerializedTask = CTaskSync::SerializeTask(pTask, pNetworkPed, true, nTaskSlot, &nTaskPacketSize);
 
-            if(nTaskPacketSize > 0)
-                CNetwork::SendPacket(CPacketsID::PED_ADD_TASK, pSerializedTask, nTaskPacketSize, ENET_PACKET_FLAG_RELIABLE);
+            if (nTaskPacketSize > 0)
+            {
+                /*CNetwork::SendPacket(
+                    CPacketsID::PED_ADD_TASK, pSerializedTask, nTaskPacketSize, ENET_PACKET_FLAG_RELIABLE);*/
+
+            }
         }
     }
 
@@ -105,15 +111,15 @@ static void __declspec(naked) CTaskManager__SetTaskSecondary_Hook()
         mov ebx, [esp + 8]
         // -------------
 
-        mov pTaskMgr, ecx // get *this
+        mov pTaskMgr, ecx  // get *this
 
         pushad
 
-        // get pTask
+                // get pTask
         mov eax, [esp + 10h]
         mov pTask, eax
 
-        // get task slot
+            // get task slot
         mov eax, [esp + 14h]
         mov nTaskSlot, eax
     }
@@ -125,13 +131,16 @@ static void __declspec(naked) CTaskManager__SetTaskSecondary_Hook()
         if (pNetworkPed)
         {
 #ifdef TASK_LOG
-            CChat::AddMessage("SET SECONDARY %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
+            CChat::AddMessage("SET SECONDARY %s", CDebugPedTasks::TaskNames[pTask->GetTaskType()]);
 #endif
             nTaskPacketSize = 0;
             pSerializedTask = CTaskSync::SerializeTask(pTask, pNetworkPed, false, nTaskSlot, &nTaskPacketSize);
 
             if (nTaskPacketSize > 0)
-                CNetwork::SendPacket(CPacketsID::PED_ADD_TASK, pSerializedTask, nTaskPacketSize, ENET_PACKET_FLAG_RELIABLE);
+            {
+                /*CNetwork::SendPacket(
+                    CPacketsID::PED_ADD_TASK, pSerializedTask, nTaskPacketSize, ENET_PACKET_FLAG_RELIABLE*/
+            }
         }
     }
 
@@ -143,7 +152,6 @@ static void __declspec(naked) CTaskManager__SetTaskSecondary_Hook()
     }
 }
 
-
 DWORD CTaskComplex__SetSubTask_Hook_Ret = 0x61A44E;
 static void __declspec(naked) CTaskComplex__SetSubTask_Hook()
 {
@@ -152,7 +160,7 @@ static void __declspec(naked) CTaskComplex__SetSubTask_Hook()
         // original code
         test edi, edi
         mov[esi + 8], edi
-        // --------------
+            // --------------
 
         pushad
         pushfd
@@ -167,7 +175,7 @@ static void __declspec(naked) CTaskComplex__SetSubTask_Hook()
 #ifdef TASK_LOG
         if (pNetworkPed)
         {
-            CChat::AddMessage("SET SUB %s", CDebugPedTasks::TaskNames[pTask->GetId()]);
+            CChat::AddMessage("SET SUB %s", CDebugPedTasks::TaskNames[pTask->GetTaskType()]);
         }
 #endif
     }
@@ -194,14 +202,14 @@ static void __declspec(naked) CTaskSimple__dtor_Hook()
         pushad
         mov pTaskSimple, ecx
     }
-    
+
     if (pTaskSimple)
     {
-        vtable = *(void***)pTaskSimple; // get vtable 
+        vtable = *(void***)pTaskSimple;                    // get vtable
 
-        dwGetIdAddr = patch::GetUInt((DWORD)vtable + 16); // get `GetId`
+        dwGetIdAddr = patch::GetUInt((DWORD)vtable + 16);  // get `GetId`
 
-        if (dwGetIdAddr == 0x82263A) // if virtual function is not implemented (purecall)
+        if (dwGetIdAddr == 0x82263A)                       // if virtual function is not implemented (purecall)
         {
             goto skip;
         }
@@ -213,8 +221,7 @@ static void __declspec(naked) CTaskSimple__dtor_Hook()
             nTaskType = plugin::CallMethodAndReturnDyn<eTaskType>(dwGetIdAddr, pTaskSimple);
 #ifdef TASK_LOG
             CChat::AddMessage("DESTROY TASK %s", CDebugPedTasks::TaskNames[nTaskType]);
-#endif // TASK_LOG
-
+#endif  // TASK_LOG
         }
     }
 
@@ -239,11 +246,11 @@ static void __declspec(naked) CTaskComplex__dtor_Hook()
 
     if (pTaskComplex)
     {
-        vtable = *(void***)pTaskComplex; // get vtable 
+        vtable = *(void***)pTaskComplex;                   // get vtable
 
-        dwGetIdAddr = patch::GetUInt((DWORD)vtable + 16); // get `GetId`
+        dwGetIdAddr = patch::GetUInt((DWORD)vtable + 16);  // get `GetId`
 
-        if (dwGetIdAddr == 0x82263A) // if virtual function is not implemented (purecall)
+        if (dwGetIdAddr == 0x82263A)                       // if virtual function is not implemented (purecall)
         {
             goto skip;
         }
@@ -252,7 +259,7 @@ static void __declspec(naked) CTaskComplex__dtor_Hook()
 
         if (pNetworkPed && pNetworkPed->m_bSyncing)
         {
-            nTaskType = plugin::CallMethodAndReturnDyn<eTaskType>(dwGetIdAddr, pTaskComplex); 
+            nTaskType = plugin::CallMethodAndReturnDyn<eTaskType>(dwGetIdAddr, pTaskComplex);
 #ifdef TASK_LOG
             CChat::AddMessage("DESTROY TASK %s", CDebugPedTasks::TaskNames[nTaskType]);
 #endif
@@ -268,37 +275,37 @@ skip:
     }
 }
 
-//bool __fastcall CTaskSimpleUseGun__SetPedPosition_Hook(CTaskSimpleUseGun* This, int, CPed* ped)
-//{
-//    auto orig = [&]() -> bool {
-//        return plugin::CallMethodAndReturn<bool, 0x624ED0>(This, ped);
-//    };
-//
-//    if (ped->m_nPedType > 3 || ped == FindPlayerPed(0)) // not a network player
-//    {
-//        return orig();
-//    }
-//
-//    if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(ped))
-//    {
-//        int playerNum = networkPlayer->GetInternalId();
-//
-//        if (playerNum == -1)
-//            return orig();
-//
-//        CWorld::PlayerInFocus = playerNum;
-//
-//        CStatsSync::ApplyNetworkPlayerContext(networkPlayer);
-//        CAimSync::ApplyNetworkPlayerContext(networkPlayer);
-//        bool result = orig();
-//        CAimSync::ApplyLocalContext();
-//        CStatsSync::ApplyLocalContext();
-//        CWorld::PlayerInFocus = 0;
-//        return result;
-//    }
-//
-//    return orig();
-//}
+bool __fastcall CTaskSimpleUseGun__SetPedPosition_Hook(CTaskSimpleUseGun* This, SKIP_EDX, CPed* pPed)
+{
+    if (!pPed->IsPlayer() || pPed == FindPlayerPed(0))
+    {
+        return plugin::CallMethodAndReturn<bool, 0x624ED0>(This, pPed);
+    }
+
+    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pPed);
+    if (pNetworkPlayer == nullptr)
+    {
+        return plugin::CallMethodAndReturn<bool, 0x624ED0>(This, pPed);
+    }
+
+    int playerNum = pNetworkPlayer->GetInternalId();
+    if (playerNum == -1)
+    {
+        return plugin::CallMethodAndReturn<bool, 0x624ED0>(This, pPed);
+    }
+
+    CWorld::PlayerInFocus = playerNum;
+    CKeySync::ApplyNetworkPlayerContext(pNetworkPlayer);
+    CAimSync::ApplyNetworkPlayerContext(pNetworkPlayer);
+
+    bool result = plugin::CallMethodAndReturn<bool, 0x624ED0>(This, pPed);
+
+    CWorld::PlayerInFocus = 0;
+    CKeySync::ApplyLocalContext();
+    CAimSync::ApplyLocalContext();
+
+    return result;
+}
 
 void TaskHooks::InjectHooks()
 {
@@ -308,16 +315,16 @@ void TaskHooks::InjectHooks()
     patch::RedirectCall(0x57049C, CTaskComplexLeaveCar__Ctor_Hook);
     patch::RedirectCall(0x5703F7, CTaskComplexLeaveCar__Ctor_Hook);
 
-    //patch::RedirectCall(0x62D59B, CTaskSimpleGangDriveBy__SetupStaticAnimForPlayer_Hook);
+    // patch::RedirectCall(0x62D59B, CTaskSimpleGangDriveBy__SetupStaticAnimForPlayer_Hook);
 
-    //patch::RedirectCall(0x62D813, CTaskSimpleGangDriveBy__ProcessAiming_Hook);
+    // patch::RedirectCall(0x62D813, CTaskSimpleGangDriveBy__ProcessAiming_Hook);
 
     // ped tasks hooks (help me im going crazy) usused, maybe it will be useful in future?
-   /* patch::RedirectJump(0x681AF0, CTaskManager__SetTask_Hook);
-    patch::RedirectJump(0x681B60, CTaskManager__SetTaskSecondary_Hook);
-    patch::RedirectJump(0x61A449, CTaskComplex__SetSubTask_Hook);
-    patch::RedirectJump(0x61A3A0, CTaskSimple__dtor_Hook);
-    patch::RedirectJump(0x61A413, CTaskComplex__dtor_Hook);*/
+    /* patch::RedirectJump(0x681AF0, CTaskManager__SetTask_Hook);
+     patch::RedirectJump(0x681B60, CTaskManager__SetTaskSecondary_Hook);
+     patch::RedirectJump(0x61A449, CTaskComplex__SetSubTask_Hook);
+     patch::RedirectJump(0x61A3A0, CTaskSimple__dtor_Hook);
+     patch::RedirectJump(0x61A413, CTaskComplex__dtor_Hook);*/
 
-    //patch::SetPointer(0x86D744, CTaskSimpleUseGun__SetPedPosition_Hook);
+    patch::SetPointer(0x86D744, CTaskSimpleUseGun__SetPedPosition_Hook);
 }

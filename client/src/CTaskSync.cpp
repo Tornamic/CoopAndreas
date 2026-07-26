@@ -76,7 +76,7 @@ void* CTaskSync::SerializeTask(CTask* t, CNetworkPed* owner, bool bPrimary, unsi
     char* currentPtr = nullptr;
 
     int pedId = owner->m_nPedId;
-    int taskId = t->GetId();
+    int taskId = t->GetTaskType();
 
     bool b = false; // temp bool var for casting 1b bool values
 

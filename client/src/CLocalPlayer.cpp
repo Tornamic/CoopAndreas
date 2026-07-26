@@ -2,10 +2,52 @@
 
 void CLocalPlayer::BuildTaskPacket(eTaskType type, bool toggle)
 {
-	CPackets::SetPlayerTask packet{};
+	CPlayerPed* pPlayerPed = FindPlayerPed(0);
+	Packets::Players::SetPlayerTask packet{};
 	packet.taskType = type;
-	packet.position = FindPlayerCoors(0);
-	packet.rotation = FindPlayerPed(0)->m_fCurrentRotation;
+	packet.vecPos = pPlayerPed->GetPosition();
+	packet.currentRotation = pPlayerPed->m_fCurrentRotation;
+	packet.aimingRotation = pPlayerPed->m_fAimingRotation;
 	packet.toggle = toggle;
-	CNetwork::SendPacket(CPacketsID::SET_PLAYER_TASK, &packet, sizeof packet, ENET_PACKET_FLAG_RELIABLE);
+	GetPacketFactory().Send(packet);
+}
+
+bool CLocalPlayer::GetIsHostingEntity(CEntity* pEntity)
+{
+    if (pEntity->m_nType == ENTITY_TYPE_PED)
+    {
+        CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pEntity);
+        if (pNetworkPlayer)
+        {
+            return false;
+        }
+
+        CNetworkPed* pNetworkPed = CNetworkPedManager::GetPed(pEntity);
+        if (!pNetworkPed)
+        {
+            return true;
+        }
+        if (pNetworkPed->m_bSyncing)
+        {
+            return true;
+        }
+    }
+    else if (pEntity->m_nType == ENTITY_TYPE_VEHICLE)
+    {
+        CNetworkVehicle* pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pEntity);
+        if (!pNetworkVehicle)
+        {
+            return true;
+        }
+        if (pNetworkVehicle && pNetworkVehicle->m_bSyncing)
+        {
+            return true;
+        }
+    }
+    else
+    {
+        return true;
+    }
+
+    return false;
 }

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "discord_rpc.h"
 
 #include "backoff.h"

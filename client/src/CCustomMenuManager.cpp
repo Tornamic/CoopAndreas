@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CCustomMenuManager.h"
 #include "CConfigLoader.h"
+#include <CCompatibilityChecker.h>
 
 #define SCR_NICKNAME_PORT_IP (70)
 
@@ -260,83 +261,84 @@ void DrawCustomScreen_NicknamePortIp(CMenuManager* This)
 
 void __fastcall CMenuManager__DrawStandardMenu_Hook(CMenuManager* This, SKIP_EDX, char a1)
 {
+	CCompatibilityChecker::Process();
 
 	This->DrawStandardMenu(a1);
 	
-#if DEBUG
-	char* names[] = {
-		"SCR_STATS",
-		"SCR_GAME",
-		"SCR_BRIEF",
-		"SCR_AUDIO",
-		"SCR_DISPLAY",
-		"SCR_MAP",
-		"SCR_NEWGAME",
-		"SCR_MISSIONPACKLIST",
-		"SCR_LOADMISSION",
-		"SCR_LOADGAME",
-		"SCR_DELETEGAME",
-		"SCR_SURETOLOAD",
-		"SCR_SURETODELETE",
-		"SCR_LOAD_WARNING",
-		"SCR_DELETE_WARNING",
-		"SCR_DELETE_SUCCESS",
-		"SCR_SAVEGAMELIST",
-		"SCR_SAVEGAMEPROCEED",
-		"SCR_SAVE_WARNING_SCR",
-		"SCR_SAVE_SUCCESS",
-		"SCR_LOAD_INFO",
-		"SCR_SAVE_INFO",
-		"SCR_SAVE_AND_CHEAT_SCR",
-		"SCR_DEFAULT_DISPLAY",
-		"SCR_DEFAULT_AUDIO",
-		"SCR_DEFAULT_CONTROLS",
-		"SCR_AUDIO_MP3",
-		"SCR_DISPLAY_ADVANCED",
-		"SCR_LANGUAGE",
-		"SCR_ERRORDELETING",
-		"SCR_ERRORSAVE_PC",
-		"SCR_ERRORLOAD_PC",
-		"SCR_ERROR_LOAD_CORRUPT",
-		"SCR_OPTIONS",
-		"SCR_MAINMENU",
-		"SCR_QUIT",
-		"SCR_GAMEOPT",
-		"SCR_CONTROLLER_CONFIG_PC",
-		"SCR_REDEFINE_CHOICE",
-		"SCR_CONTROLLER_REDEFINE",
-		"SCR_CONTROLLER_MOUSESETTINGS",
-		"SCR_CONTROLLER_JOYPADSETTINGS",
-		"SCR_PAUSEMENU",
-		"SCR_MAIN",
-		"SCR_QUITTING_TO_OS",
-		"SCR_MARKETING",
-		"SCR_SHOP",
-		"SCR_CREDITS",
-		"SCR_RATEAPP",
-		"SCR_RETRYMISSION",
-		"SCR_LINK",
-		"NUM_MENU_PAGES"
-	};
-
-	CFont::SetOrientation(eFontAlignment::ALIGN_LEFT);
-	CFont::SetFontStyle(1);
-	CFont::SetColor(CRGBA(255, 255, 0, 255));
-	CFont::SetBackground(false, false);
-	CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-	CFont::SetDropShadowPosition(1);
-	CFont::SetScale(This->StretchX(0.7f), This->StretchY(0.7f));
-	if (This->m_nCurrentMenuPage == SCR_NICKNAME_PORT_IP)
-	{
-		sprintf(gString, "%s %d %d", "SCR_NICKNAME_PORT_IP", This->m_nCurrentMenuPage, iActiveInputRow);
-		CFont::PrintString(This->StretchX(10.0f), This->StretchY(10.0f), gString);
-	}
-	else
-	{
-		sprintf(gString, "%s %d", names[This->m_nCurrentMenuPage], This->m_nCurrentMenuPage);
-		CFont::PrintString(This->StretchX(10.0f), This->StretchY(10.0f), gString);
-	}
-#endif
+//#if DEBUG
+//	char* names[] = {
+//		"SCR_STATS",
+//		"SCR_GAME",
+//		"SCR_BRIEF",
+//		"SCR_AUDIO",
+//		"SCR_DISPLAY",
+//		"SCR_MAP",
+//		"SCR_NEWGAME",
+//		"SCR_MISSIONPACKLIST",
+//		"SCR_LOADMISSION",
+//		"SCR_LOADGAME",
+//		"SCR_DELETEGAME",
+//		"SCR_SURETOLOAD",
+//		"SCR_SURETODELETE",
+//		"SCR_LOAD_WARNING",
+//		"SCR_DELETE_WARNING",
+//		"SCR_DELETE_SUCCESS",
+//		"SCR_SAVEGAMELIST",
+//		"SCR_SAVEGAMEPROCEED",
+//		"SCR_SAVE_WARNING_SCR",
+//		"SCR_SAVE_SUCCESS",
+//		"SCR_LOAD_INFO",
+//		"SCR_SAVE_INFO",
+//		"SCR_SAVE_AND_CHEAT_SCR",
+//		"SCR_DEFAULT_DISPLAY",
+//		"SCR_DEFAULT_AUDIO",
+//		"SCR_DEFAULT_CONTROLS",
+//		"SCR_AUDIO_MP3",
+//		"SCR_DISPLAY_ADVANCED",
+//		"SCR_LANGUAGE",
+//		"SCR_ERRORDELETING",
+//		"SCR_ERRORSAVE_PC",
+//		"SCR_ERRORLOAD_PC",
+//		"SCR_ERROR_LOAD_CORRUPT",
+//		"SCR_OPTIONS",
+//		"SCR_MAINMENU",
+//		"SCR_QUIT",
+//		"SCR_GAMEOPT",
+//		"SCR_CONTROLLER_CONFIG_PC",
+//		"SCR_REDEFINE_CHOICE",
+//		"SCR_CONTROLLER_REDEFINE",
+//		"SCR_CONTROLLER_MOUSESETTINGS",
+//		"SCR_CONTROLLER_JOYPADSETTINGS",
+//		"SCR_PAUSEMENU",
+//		"SCR_MAIN",
+//		"SCR_QUITTING_TO_OS",
+//		"SCR_MARKETING",
+//		"SCR_SHOP",
+//		"SCR_CREDITS",
+//		"SCR_RATEAPP",
+//		"SCR_RETRYMISSION",
+//		"SCR_LINK",
+//		"NUM_MENU_PAGES"
+//	};
+//
+//	CFont::SetOrientation(eFontAlignment::ALIGN_LEFT);
+//	CFont::SetFontStyle(1);
+//	CFont::SetColor(CRGBA(255, 255, 0, 255));
+//	CFont::SetBackground(false, false);
+//	CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+//	CFont::SetDropShadowPosition(1);
+//	CFont::SetScale(This->StretchX(0.7f), This->StretchY(0.7f));
+//	if (This->m_nCurrentMenuPage == SCR_NICKNAME_PORT_IP)
+//	{
+//		sprintf(gString, "%s %d %d", "SCR_NICKNAME_PORT_IP", This->m_nCurrentMenuPage, iActiveInputRow);
+//		CFont::PrintString(This->StretchX(10.0f), This->StretchY(10.0f), gString);
+//	}
+//	else
+//	{
+//		sprintf(gString, "%s %d", names[This->m_nCurrentMenuPage], This->m_nCurrentMenuPage);
+//		CFont::PrintString(This->StretchX(10.0f), This->StretchY(10.0f), gString);
+//	}
+//#endif
 
 	if (This->m_nCurrentMenuPage == SCR_NICKNAME_PORT_IP)
 	{
