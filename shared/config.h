@@ -9,7 +9,7 @@ struct Config
     static constexpr uint16_t MAX_SERVER_PLAYERS = 8;
     static constexpr uint16_t MAX_SERVER_VEHICLES = 255;
     static constexpr uint16_t MAX_SERVER_PEDS = 255;
-    static constexpr uint16_t MAX_NICKNAME_LENGTH = 32;
+    static constexpr uint16_t MAX_NICKNAME_LENGTH = 24;
     static constexpr uint16_t MAX_CHAT_MESSAGE_LENGTH = 128;
     static constexpr uint32_t INTERP_BUFFER_DELAY_MS = 50;
 

@@ -450,7 +450,7 @@ void CCustomMenuManager::Init()
 	patch::SetUChar(0x58014E, 0x74);
 }
 
-static const int MAX_LENGTH_PER_ROW[MAX_INPUT_ROWS] = { 24, 15, 5 }; // nickname, ip, port
+static const int MAX_LENGTH_PER_ROW[MAX_INPUT_ROWS] = { Config::MAX_NICKNAME_LENGTH, 15, 5 }; // nickname, ip, port
 
 void InsertCharToRow(char c)
 {
