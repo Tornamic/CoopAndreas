@@ -5,6 +5,7 @@
 #include <COpCodeSync.h>
 #include <CCustomMenuManager.h>
 #include <winuser.h>
+#include <CLaunchManager.h>
 
 semver_t CCore::Version;
 
@@ -59,6 +60,7 @@ void CCore::Init()
 #ifdef _DEV
     CCore::AllocateConsole();
 #endif
+    CLaunchManager::CollectCommandLineArgs();
     WinMain_AfterWindowInit_ptr = injector::GetBranchDestination(0x748995).as_int();
     patch::RedirectCall(0x748995, WinMain_AfterWindowInit);
     CCustomMenuManager::Init();

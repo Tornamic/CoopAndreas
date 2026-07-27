@@ -46,6 +46,20 @@ xmake --build proxy
 
 ---
 
+### Launcher
+
+The launcher is required to start the game's executable and pass the needed cmd args.
+
+1. Build the **Launcher** project:
+
+```bash
+xmake --build launcher
+```
+
+2. Copy both `LaunchCoopAndreas.exe` and `LaunchCoopAndreas.exe.manifest` to your game folder.
+
+---
+
 ### `main.scm`
 
 1. Download and install **[Sanny Builder 4](https://github.com/sannybuilder/dev/releases)**.
@@ -58,17 +72,16 @@ xmake --build proxy
 
 ---
 
-### Running
+### Running CoopAndreas
 
 1. Run `server.exe` it will start accepting client connections.
-2. Run `gta_sa.exe`, press **Start Game**, enter your nickname, then provide the server IP and port.
+2. Run `LaunchCoopAndreas.exe`, and follow the serial key instructions, then click "Launch CoopAndreas".
+3. (in-game) press **Start Game**, enter your nickname, then provide the server IP and port.
    - If the server is running on the same machine, use `127.0.0.1`
    - Default port: `6767`
 
 
-## Building (GNU/Linux)
-
-### Server
+## Building Server on GNU/Linux
 
 TODO
 
