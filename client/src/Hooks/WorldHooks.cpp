@@ -54,8 +54,22 @@ static void __fastcall CRadar__ClearBlip_Hook_Waypoint(int blipIndex, SKIP_EDX)
 static void __cdecl CExplosion__AddExplosion(CEntity* newVictim, CPed* newCreator, eExplosionType type, CVector2D pos,
     float z, int time, char usesSound, float cameraShake, char isVisible)
 {
+    CWantedSync::RecordCrimeSource(newCreator, CVector(pos.x, pos.y, z));
+
+    int previousPlayerInFocus = CWorld::PlayerInFocus;
+    if (auto* networkPlayer = CNetworkPlayerManager::GetPlayer(newCreator))
+    {
+        int remotePlayerId = networkPlayer->GetInternalId();
+        if (remotePlayerId >= 0)
+        {
+            CWorld::PlayerInFocus = remotePlayerId;
+        }
+    }
+
     plugin::Call<0x736A50, CEntity*, CPed*, int, CVector2D, float, int, char, float, char>(
         newVictim, newCreator, type, pos, z, time, usesSound, cameraShake, isVisible);
+
+    CWorld::PlayerInFocus = previousPlayerInFocus;
 
     // needs to be completely reworked
     /* CPackets::AddExplosion addExplosionPacket{};
@@ -219,7 +233,7 @@ static void __declspec(naked) CGarage__Update_Hook()
 
     pPlayerPed = FindPlayerPed(0);
     pVehicle = pPlayerPed->m_pVehicle;
-    if (pPlayerPed == pVehicle->m_pDriver)
+    if (pVehicle && pPlayerPed == pVehicle->m_pDriver)
     {
         __asm
         {

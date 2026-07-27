@@ -181,8 +181,18 @@ PACKET_HANDLER(ePacketType::PLAYER_BULLET_SHOT, Packets::Players::PlayerBulletSh
         colPoint.m_nSurfaceTypeB = 0;
     }
 
+    int previousPlayerInFocus = CWorld::PlayerInFocus;
+    int remotePlayerId = pNetworkPlayer->GetInternalId();
+    if (remotePlayerId >= 0)
+    {
+        CWorld::PlayerInFocus = remotePlayerId;
+    }
+
+    CWantedSync::RecordCrimeSource(pNetworkPlayer->m_pPed, pPlayerBulletShot->endPos);
     pNetworkPlayer->m_pPed->GetWeapon().DoBulletImpact(
         owner, victim, &startPoint, &pPlayerBulletShot->endPos, &colPoint, incrementalHit);
+
+    CWorld::PlayerInFocus = previousPlayerInFocus;
 }
 
 PACKET_HANDLER(ePacketType::ADD_PROJECTILE, Packets::Players::AddProjectile* pAddProjectile)
@@ -194,12 +204,20 @@ PACKET_HANDLER(ePacketType::ADD_PROJECTILE, Packets::Players::AddProjectile* pAd
 
     CVector origin = pAddProjectile->origin;
     CVector dir = pAddProjectile->dir;
+    CNetworkPlayer* projectilePlayer = nullptr;
+    int previousPlayerInFocus = CWorld::PlayerInFocus;
 
     if (pAddProjectile->creator.entityType == NETWORK_ENTITY_TYPE_PLAYER)
     {
-        if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(pAddProjectile->creator.GetEntity()))
+        projectilePlayer = CNetworkPlayerManager::GetPlayer(pAddProjectile->creator.GetEntity());
+        if (projectilePlayer)
         {
-            CAimSync::ApplyNetworkPlayerContext(networkPlayer);
+            int remotePlayerId = projectilePlayer->GetInternalId();
+            if (remotePlayerId >= 0)
+            {
+                CWorld::PlayerInFocus = remotePlayerId;
+            }
+            CAimSync::ApplyNetworkPlayerContext(projectilePlayer);
         }
     }
 
@@ -217,10 +235,16 @@ PACKET_HANDLER(ePacketType::ADD_PROJECTILE, Packets::Players::AddProjectile* pAd
         CProjectileInfo::AddProjectile(pAddProjectile->creator.GetEntity(), pAddProjectile->projectileType, origin, pAddProjectile->force, &pAddProjectile->dir, pTarget);
     }
 
-    if (pAddProjectile->creator.entityType == NETWORK_ENTITY_TYPE_PLAYER && CNetworkPlayerManager::GetPlayer(pAddProjectile->creator.GetEntity()))
+    CWorld::PlayerInFocus = previousPlayerInFocus;
+    if (projectilePlayer)
     {
         CAimSync::ApplyLocalContext();
     }
+}
+
+PACKET_HANDLER(ePacketType::PLAYER_WANTED_LEVEL, Packets::Players::PlayerWantedLevel* pPlayerWantedLevel)
+{
+    CWantedSync::HandlePacket(pPlayerWantedLevel);
 }
 
 PACKET_HANDLER(ePacketType::PLAYER_STATS, Packets::Players::PlayerStats* pPlayerStats)

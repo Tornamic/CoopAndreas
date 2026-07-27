@@ -26,6 +26,10 @@ public:
     std::vector<int> m_pComponents;
     uint8_t m_nCreatedBy;
     bool m_bUsedByPed = false;
+    uint32_t m_nLastWantedBribeAt = 0;
+    uint32_t m_nWantedStateSetAt = 0;
+    uint8_t m_nSharedWantedLevel = 0;
+    bool m_bSharedPoliceEngaged = false;
 
     void ReassignSyncer(CNetworkPlayer* newSyncer);
     void SetOccupant(int8_t seatid, CNetworkPlayer* player);

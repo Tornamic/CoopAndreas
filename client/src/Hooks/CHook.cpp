@@ -32,5 +32,6 @@ void CHook::Init()
     RadarHooks::InjectHooks();
     ProjectileHooks::InjectHooks();
     DamageHooks::InjectHooks();
+    CWantedSync::InjectHooks();
     ShadowHooks::InjectHooks();
 }

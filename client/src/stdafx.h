@@ -132,5 +132,6 @@ using namespace plugin;
 #include "CDebugPedTasks.h"
 #include "network/eNetworkEntityType.h"
 #include "CStatsSync.h"
+#include "CWantedSync.h"
 
 // -----------------------------------------------------------------------------------------

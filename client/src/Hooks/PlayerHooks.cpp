@@ -116,6 +116,10 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, SKIP_EDX, C
 {
     if (owner == FindPlayerPed(0))
     {
+        if (endPoint)
+        {
+            CWantedSync::RecordCrimeSource(static_cast<CPed*>(owner), *endPoint);
+        }
         if ((!victim || (victim->m_nType != ENTITY_TYPE_PED && victim->m_nType != ENTITY_TYPE_VEHICLE)) && weapon->m_eWeaponType == WEAPON_MINIGUN)
         {
             weapon->DoBulletImpact(owner, victim, startPoint, endPoint, colPoint, incrementalHit);

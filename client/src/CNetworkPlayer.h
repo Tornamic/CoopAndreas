@@ -26,7 +26,13 @@ public:
 	CPedClothesDesc m_pPedClothesDesc{};
 	bool m_bHasBeenConnectedBeforeMe = false;
 
-	bool m_bExtrapolating = false;
+    uint8_t m_nWantedLevel = 0;
+    bool m_bPoliceEngaged = false;
+    bool m_bWantedWasInVehicle = false;
+    uint32_t m_nWantedExitedVehicleAt = 0;
+    uint32_t m_nWantedEngagementStartedAt = 0;
+
+    bool m_bExtrapolating = false;
 
 	bool m_bRequestedDuckTask = false;
 
