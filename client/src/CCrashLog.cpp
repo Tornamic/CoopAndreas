@@ -8,6 +8,7 @@
 #include <chrono>
 #include "../resources.h"
 #include <Psapi.h>
+#include <CCrashReporter.h>
 #pragma comment(lib, "Version.lib")
 #pragma comment(lib, "dbghelp.lib")
 
@@ -176,6 +177,8 @@ static INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARA
         ShowCursor(TRUE);
         SetDlgItemText(hDlg, IDC_CRASHLOG, CCrashLog::ms_szCrashMessage);
         
+        CCrashReporter::PostCrashLog(std::string(CCrashLog::ms_szCrashMessage));
+
         if (CCrashLog::ms_bSuccessSavedLog)
         {
             char filename[260+20] = "Crash log saved to ";
@@ -204,9 +207,7 @@ static INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARA
     {
         if (LOWORD(wParam) == IDC_EXIT) 
         {
-            EndDialog(hDlg, 0);
-            _exit(0);
-            return (INT_PTR)TRUE;
+            goto close_dialog;
         }
         else if (LOWORD(wParam) == IDC_SAVEDUMP)
         {
@@ -237,7 +238,15 @@ static INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARA
     }
     case WM_CLOSE:
     {
+    close_dialog:;
         EndDialog(hDlg, 0);
+        
+        // wait until the report is done or timed out
+        if (CCrashReporter::ms_bReportingEnabled && CCrashReporter::ms_bReady && CCrashReporter::ms_postThread.joinable())
+        {
+            CCrashReporter::ms_postThread.join();
+        }
+
         _exit(0);
         return (INT_PTR)TRUE;
     }

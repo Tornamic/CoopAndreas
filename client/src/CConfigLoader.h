@@ -15,7 +15,8 @@ private:
 	{
 		{"nickname", ""},
 		{"ip", ""},
-		{"port", std::to_string(Config::DEFAULT_PORT)}
+		{"port", std::to_string(Config::DEFAULT_PORT)},
+		{"report-crashlogs", "true"}
 	};
 	
 public:
