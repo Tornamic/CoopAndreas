@@ -194,6 +194,24 @@ static void __fastcall CVehicle__SetRemap_Hook(CVehicle* This, SKIP_EDX, int pai
 
 // disallow creating a parked vehicle if it is created by another player (does not work perfectly)
 // also disallow creating a parked vehicle if the player is dead, fixes vehicle pool overf*ck
+static bool PrepareCarGeneratorVehicleSlot()
+{
+    constexpr int maxCarGeneratorVehicleSlots = 1 << 8;
+    CPool<CVehicle, CHeli>* vehiclePool = CPools::ms_pVehiclePool;
+    int slotCount = std::min(vehiclePool->m_nSize, maxCarGeneratorVehicleSlots);
+
+    for (int i = 0; i < slotCount; i++)
+    {
+        if (vehiclePool->IsFreeSlotAtIndex(i))
+        {
+            vehiclePool->m_nFirstFree = i - 1;
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool __fastcall CCarGenerator__CheckForBlockage_Hook(CCarGenerator* This, SKIP_EDX, int modelId)
 {
     bool originalResult = This->CheckForBlockage(modelId);
@@ -214,7 +232,7 @@ bool __fastcall CCarGenerator__CheckForBlockage_Hook(CCarGenerator* This, SKIP_E
         }
     }
 
-    return false;
+    return !PrepareCarGeneratorVehicleSlot();
 }
 
 // the simplest method to allow other players
@@ -462,6 +480,7 @@ void VehicleHooks::InjectHooks()
 
     patch::RedirectCall(0x6F35D6, CCarGenerator__CheckForBlockage_Hook);
     patch::RedirectCall(0x6F35FF, CCarGenerator__CheckForBlockage_Hook);
+    patch::SetUChar(0x6F3ED7, 0xB7);  // movzx ecx, ax: car-generator vehicle handles use an unsigned slot index
 
     patch::RedirectCall(0x434263, CCarCtrl__GenerateOneRandomCar_Hook);
     patch::RedirectCall(0x434268, CCarCtrl__GenerateOneRandomCar_Hook);
