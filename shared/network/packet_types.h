@@ -69,6 +69,7 @@ enum class ePacketType : uint16_t
     UPDATE_ALL_TAGS,
     TELEPORT_PLAYER_SCRIPTED,
     SERVER_TIME_REQUEST,
+    ENEX_TRANSITION,
     PACKET_ID_MAX
 };
 

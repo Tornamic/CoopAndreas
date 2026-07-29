@@ -5,6 +5,7 @@
 #include "CNetworkPed.h"
 #include <CEntryExit.h>
 #include <CEntryExitMarkerSync.h>
+#include <CEntryExitTransitionSync.h>
 #include <CShotInfo.h>
 #include <game_sa/CTagManager.h>
 
@@ -133,17 +134,19 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
     }
 }
 
-// bool __fastcall CEntryExit__TransitionFinished_Hook(CEntryExit* This, int, CPed* ped)
-//{
-//     bool result = This->TransitionFinished(ped);
-//
-//     if (CLocalPlayer::m_bIsHost)
-//     {
-//         CEntryExitMarkerSync::ms_bNeedToUpdateAfterProcessingThisFrame = true;
-//     }
-//
-//     return result;
-// }
+static bool __fastcall CEntryExit__TransitionStarted_Hook(CEntryExit* This, SKIP_EDX, CPed* ped)
+{
+    bool result = This->TransitionStarted(ped);
+    CEntryExitTransitionSync::OnTransitionStarted(This, ped, result);
+    return result;
+}
+
+static bool __fastcall CEntryExit__TransitionFinished_Hook(CEntryExit* This, SKIP_EDX, CPed* ped)
+{
+    bool result = This->TransitionFinished(ped);
+    CEntryExitTransitionSync::OnTransitionFinished(This, ped, result);
+    return result;
+}
 
 static int calls = 0;
 static int SprayPaintWorld_LastCalled = 0;
@@ -304,7 +307,8 @@ void WorldHooks::InjectHooks()
     // patch::RedirectCall(0x533A8D, CEntryExitManager__AddOne_Hook);
     // patch::RedirectCall(0x5B812D, CEntryExitManager__AddOne_Hook);
 
-    // patch::RedirectCall(0x440F89, CEntryExit__TransitionFinished_Hook);
+    patch::RedirectCall(0x44104C, CEntryExit__TransitionStarted_Hook);
+    patch::RedirectCall(0x440F89, CEntryExit__TransitionFinished_Hook);
 
     patch::RedirectJump(0x44B2DE, CGarage__Update_Hook);
 

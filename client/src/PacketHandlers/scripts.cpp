@@ -4,6 +4,7 @@
 #include <CNetworkCheckpoint.h>
 #include <CNetworkEntityBlip.h>
 #include <CEntryExitMarkerSync.h>
+#include <CEntryExitTransitionSync.h>
 #include <COpCodeSync.h>
 #include <CTaskSequenceSync.h>
 
@@ -42,6 +43,11 @@ PACKET_HANDLER(ePacketType::ENEX_SYNC, Packets::Scripts::EnExSync* pEnExSync)
 		return;
 
 	CEntryExitMarkerSync::Receive(*pEnExSync);
+}
+
+PACKET_HANDLER(ePacketType::ENEX_TRANSITION, Packets::Scripts::EnExTransition* pEnExTransition)
+{
+    CEntryExitTransitionSync::Receive(*pEnExTransition);
 }
 
 PACKET_HANDLER(ePacketType::ADD_MESSAGE_GXT, Packets::Scripts::AddMessageGXT* pAddMessageGXT)

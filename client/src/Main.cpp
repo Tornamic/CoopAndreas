@@ -12,6 +12,7 @@
 #include <CDiscordRPCMgr.h>
 #include <CEntryExitManager.h>
 #include <CEntryExitMarkerSync.h>
+#include <CEntryExitTransitionSync.h>
 #include <CFireManager.h>
 #include <CGeneral.h>
 #include <CNetworkAnimQueue.h>
@@ -83,6 +84,7 @@ public:
         Events::gameProcessEvent += []
         {
             CNetworkAnimQueue::Process();
+            CEntryExitTransitionSync::Process();
             CDiscordRPCMgr::Update();
             CDebugVehicleSpawner::Process();
 
