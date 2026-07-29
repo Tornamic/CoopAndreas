@@ -151,10 +151,10 @@ void PatchPools()
     // push    8Ch -> push    FFh
     patch::SetRaw(0x551282, (void*)"\x68\xFF\x00\x00\x00", 5);
 
-    // vehicle pool (400)
+    // vehicle pool (256)
     // push    offset aVehicles -> push    0h
-    // push    6Eh              -> push    190h
-    patch::SetRaw(0x551024, (void*)"\x6A\x00\x68\x90\x01\x00\x00", 7);
+    // push    6Eh              -> push    100h
+    patch::SetRaw(0x551024, (void*)"\x6A\x00\x68\x00\x01\x00\x00", 7);
 
     // EntryInfoNode pool (1012)
     // push    1F4h -> push    3F4h

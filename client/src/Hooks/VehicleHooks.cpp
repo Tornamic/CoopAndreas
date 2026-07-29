@@ -194,24 +194,6 @@ static void __fastcall CVehicle__SetRemap_Hook(CVehicle* This, SKIP_EDX, int pai
 
 // disallow creating a parked vehicle if it is created by another player (does not work perfectly)
 // also disallow creating a parked vehicle if the player is dead, fixes vehicle pool overf*ck
-static bool PrepareCarGeneratorVehicleSlot()
-{
-    constexpr int maxCarGeneratorVehicleSlots = 1 << 8;
-    CPool<CVehicle, CHeli>* vehiclePool = CPools::ms_pVehiclePool;
-    int slotCount = std::min(vehiclePool->m_nSize, maxCarGeneratorVehicleSlots);
-
-    for (int i = 0; i < slotCount; i++)
-    {
-        if (vehiclePool->IsFreeSlotAtIndex(i))
-        {
-            vehiclePool->m_nFirstFree = i - 1;
-            return true;
-        }
-    }
-
-    return false;
-}
-
 bool __fastcall CCarGenerator__CheckForBlockage_Hook(CCarGenerator* This, SKIP_EDX, int modelId)
 {
     bool originalResult = This->CheckForBlockage(modelId);
@@ -232,7 +214,7 @@ bool __fastcall CCarGenerator__CheckForBlockage_Hook(CCarGenerator* This, SKIP_E
         }
     }
 
-    return !PrepareCarGeneratorVehicleSlot();
+    return false;
 }
 
 // the simplest method to allow other players
