@@ -28,7 +28,7 @@ void SetRemotePrimaryTask(CPlayerPed* ped, CTask* task)
     localPad->DisablePlayerControls = localDisablePlayerControls;
 }
 
-void ApplyRemoteSnapshot(CNetworkPlayer* networkPlayer, const Packets::Scripts::EnExTransition& packet)
+void ApplyRemoteSnapshot(CNetworkPlayer* networkPlayer, const Packets::Players::EnExTransition& packet)
 {
     CPlayerPed* ped = networkPlayer->m_pPed;
     if (packet.bFinished)
@@ -120,7 +120,7 @@ CEntryExit* FindEntryExit(int16_t rectLeft, int16_t rectBottom, uint8_t areaId)
     return nullptr;
 }
 
-void SendTransition(CPed* ped, Packets::Scripts::EnExTransition packet)
+void SendTransition(CPed* ped, Packets::Players::EnExTransition packet)
 {
     packet.position = ped->GetPosition();
     packet.currentRotation = ped->m_fCurrentRotation;
@@ -140,7 +140,7 @@ void CEntryExitTransitionSync::OnTransitionStarted(CEntryExit* entryExit, CPed* 
 
     ms_pLocalAnimatedTransition = entryExit;
 
-    Packets::Scripts::EnExTransition packet{};
+    Packets::Players::EnExTransition packet{};
     packet.enexAreaId = entryExit->m_nArea;
     packet.rectLeft = static_cast<int16_t>(std::floor(entryExit->m_recEntrance.left));
     packet.rectBottom = static_cast<int16_t>(std::floor(entryExit->m_recEntrance.bottom));
@@ -157,7 +157,7 @@ void CEntryExitTransitionSync::OnTransitionFinished(CEntryExit* entryExit, CPed*
 
     if (CNetwork::m_bAuthenticated && ped == FindPlayerPed(0))
     {
-        Packets::Scripts::EnExTransition packet{};
+        Packets::Players::EnExTransition packet{};
         packet.bFinished = true;
         SendTransition(ped, packet);
     }
@@ -165,7 +165,7 @@ void CEntryExitTransitionSync::OnTransitionFinished(CEntryExit* entryExit, CPed*
     ms_pLocalAnimatedTransition = nullptr;
 }
 
-void CEntryExitTransitionSync::Receive(const Packets::Scripts::EnExTransition& packet)
+void CEntryExitTransitionSync::Receive(const Packets::Players::EnExTransition& packet)
 {
     CNetworkPlayer* networkPlayer = CNetworkPlayerManager::GetPlayer(packet.playerid);
     if (!networkPlayer || !networkPlayer->m_pPed)

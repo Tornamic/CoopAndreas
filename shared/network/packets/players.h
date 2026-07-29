@@ -11,6 +11,7 @@
 #include "network/serializable_types.h"
 #include "serialize.h"
 #include "eTaskType.h"
+#include <CGame.h>
 #include <network/CNetworkEntitySerializer.h>
 #include <network/eNetworkEntityType.h>
 #include <ePedBones.h>
@@ -318,6 +319,43 @@ public:
         serialize_object(stream, currentRotation);
         serialize_object(stream, aimingRotation);
         serialize_bool(stream, toggle);
+        return true;
+    }
+};
+
+class EnExTransition : public Packet
+{
+    DEFINE_PACKET_TYPE(EnExTransition, ePacketType::ENEX_TRANSITION, ePacketChannel::EVENT);
+
+public:
+    SenderPlayerId playerid{};
+    WorldPositionCompressed position{};
+    RadianAngleCompressed currentRotation{};
+    RadianAngleCompressed aimingRotation{};
+    uint8_t playerAreaId = AREA_MAIN_MAP;
+    bool bFinished = false;
+    uint8_t enexAreaId = AREA_MAIN_MAP;
+    int16_t rectLeft = 0;
+    int16_t rectBottom = 0;
+    bool bUsesDoor = false;
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_object(stream, playerid);
+        serialize_object(stream, position);
+        serialize_object(stream, currentRotation);
+        serialize_object(stream, aimingRotation);
+        serialize_int(stream, playerAreaId, AREA_MAIN_MAP, MAX_VISIBLE_AREAS - 1);
+        serialize_bool(stream, bFinished);
+        if (!bFinished)
+        {
+            serialize_int(stream, enexAreaId, AREA_MAIN_MAP, MAX_VISIBLE_AREAS - 1);
+            serialize_int(stream, rectLeft, -3000, 3000);
+            serialize_int(stream, rectBottom, -3000, 3000);
+            serialize_bool(stream, bUsesDoor);
+        }
         return true;
     }
 };

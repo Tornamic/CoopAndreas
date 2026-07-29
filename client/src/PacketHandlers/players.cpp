@@ -1,8 +1,9 @@
 #include "network/packets/players.h"
 #include "network/packet_types.h"
 #include "stdafx.h"
-#include <CProjectileInfo.h>
 #include <CAimSync.h>
+#include <CEntryExitTransitionSync.h>
+#include <CProjectileInfo.h>
 
 PACKET_HANDLER(ePacketType::PLAYER_ONFOOT_UPDATE, Packets::Players::OnFootUpdate* pOnFootUpdate)
 {
@@ -107,6 +108,11 @@ PACKET_HANDLER(ePacketType::SET_PLAYER_TASK, Packets::Players::SetPlayerTask* pS
     }
 
     pNetworkPlayer->HandleTask(*pSetPlayerTask);
+}
+
+PACKET_HANDLER(ePacketType::ENEX_TRANSITION, Packets::Players::EnExTransition* pEnExTransition)
+{
+    CEntryExitTransitionSync::Receive(*pEnExTransition);
 }
 
 PACKET_HANDLER(ePacketType::PLAYER_PLACE_WAYPOINT, Packets::Players::PlayerPlaceWaypoint* pPlayerPlaceWaypoint)

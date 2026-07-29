@@ -24,13 +24,6 @@ PACKET_HANDLER(ePacketType::ENEX_SYNC, Packets::Scripts::EnExSync* pEnExSync, CN
     }
 }
 
-PACKET_HANDLER(ePacketType::ENEX_TRANSITION, Packets::Scripts::EnExTransition* pEnExTransition,
-    CNetworkPlayer* pNetworkPlayer)
-{
-    pEnExTransition->playerid = pNetworkPlayer->m_iPlayerId;
-    GetPacketFactory().SendToAll(*pEnExTransition, pNetworkPlayer);
-}
-
 PACKET_HANDLER(
     ePacketType::ADD_MESSAGE_GXT, Packets::Scripts::AddMessageGXT* pAddMessageGXT, CNetworkPlayer* pNetworkPlayer)
 {

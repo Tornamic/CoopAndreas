@@ -28,6 +28,13 @@ PACKET_HANDLER(ePacketType::SET_PLAYER_TASK, Packets::Players::SetPlayerTask* pS
     GetPacketFactory().SendToAll(*pSetPlayerTask, pNetworkPlayer);
 }
 
+PACKET_HANDLER(ePacketType::ENEX_TRANSITION, Packets::Players::EnExTransition* pEnExTransition,
+    CNetworkPlayer* pNetworkPlayer)
+{
+    pEnExTransition->playerid = pNetworkPlayer->m_iPlayerId;
+    GetPacketFactory().SendToAll(*pEnExTransition, pNetworkPlayer);
+}
+
 PACKET_HANDLER(ePacketType::PLAYER_PLACE_WAYPOINT, Packets::Players::PlayerPlaceWaypoint* pPlayerPlaceWaypoint, CNetworkPlayer* pNetworkPlayer)
 {
     pNetworkPlayer->m_waypointState = *pPlayerPlaceWaypoint;
