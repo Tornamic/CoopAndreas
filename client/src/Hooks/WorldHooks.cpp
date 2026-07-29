@@ -137,14 +137,20 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
 static bool __fastcall CEntryExit__TransitionStarted_Hook(CEntryExit* This, SKIP_EDX, CPed* ped)
 {
     bool result = This->TransitionStarted(ped);
-    CEntryExitTransitionSync::OnTransitionStarted(This, ped, result);
+    if (result)
+    {
+        CEntryExitTransitionSync::OnTransitionStarted(This, ped);
+    }
     return result;
 }
 
 static bool __fastcall CEntryExit__TransitionFinished_Hook(CEntryExit* This, SKIP_EDX, CPed* ped)
 {
     bool result = This->TransitionFinished(ped);
-    CEntryExitTransitionSync::OnTransitionFinished(This, ped, result);
+    if (result)
+    {
+        CEntryExitTransitionSync::OnTransitionFinished(This, ped);
+    }
     return result;
 }
 

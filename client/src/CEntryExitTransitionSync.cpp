@@ -8,8 +8,8 @@ namespace
 {
 struct RemoteTransition
 {
+    CPlayerPed* ped = nullptr;
     CTask* task = nullptr;
-    CTask* holdTask = nullptr;
 };
 
 std::unordered_map<int, RemoteTransition> g_remoteTransitions;
@@ -20,9 +20,18 @@ CVector GetEntrancePosition(CEntryExit* entryExit)
         (entryExit->m_recEntrance.bottom + entryExit->m_recEntrance.top) * 0.5f, entryExit->m_fEntranceZ);
 }
 
-void ApplyPedTransform(CPlayerPed* ped, const Packets::Scripts::EnExTransition& packet, bool teleport)
+void SetRemotePrimaryTask(CPlayerPed* ped, CTask* task)
 {
-    if (teleport)
+    CPad* localPad = CPad::GetPad(0);
+    uint16_t localDisablePlayerControls = localPad->DisablePlayerControls;
+    ped->m_pIntelligence->m_TaskMgr.SetTask(task, TASK_PRIMARY_PRIMARY, false);
+    localPad->DisablePlayerControls = localDisablePlayerControls;
+}
+
+void ApplyRemoteSnapshot(CNetworkPlayer* networkPlayer, const Packets::Scripts::EnExTransition& packet)
+{
+    CPlayerPed* ped = networkPlayer->m_pPed;
+    if (packet.bFinished)
     {
         ped->Teleport(packet.position, false);
     }
@@ -35,6 +44,13 @@ void ApplyPedTransform(CPlayerPed* ped, const Packets::Scripts::EnExTransition& 
     ped->SetHeading(packet.currentRotation.m_angle);
     ped->m_nAreaCode = packet.playerAreaId;
     ped->UpdateRwMatrix();
+    ped->m_pEnex = nullptr;
+    ped->m_vecMoveSpeed = CVector{};
+
+    networkPlayer->m_onFootSnapshotInterpolated.vecPos = packet.position;
+    networkPlayer->m_onFootSnapshotInterpolated.vecMoveSpeed = CVector{};
+    networkPlayer->m_onFootSnapshotInterpolated.currentRotation = packet.currentRotation;
+    networkPlayer->m_onFootSnapshotInterpolated.aimingRotation = packet.aimingRotation;
 }
 
 void ClearRemoteTransition(CNetworkPlayer* networkPlayer)
@@ -45,34 +61,20 @@ void ClearRemoteTransition(CNetworkPlayer* networkPlayer)
         return;
     }
 
-    CTaskManager& taskManager = networkPlayer->m_pPed->m_pIntelligence->m_TaskMgr;
-    CTask* primaryTask = taskManager.m_aPrimaryTasks[TASK_PRIMARY_PRIMARY];
-    bool ownsPrimaryTask = (it->second.task && primaryTask == it->second.task) ||
-        (it->second.holdTask && primaryTask == it->second.holdTask);
-    if (ownsPrimaryTask)
+    RemoteTransition& transition = it->second;
+    if (networkPlayer->m_pPed == transition.ped)
     {
-        CPad* pad = CPad::GetPad(0);
-        uint16_t localDisablePlayerControls = pad->DisablePlayerControls;
-        taskManager.SetTask(nullptr, TASK_PRIMARY_PRIMARY, false);
-        pad->DisablePlayerControls = localDisablePlayerControls;
+        CTaskManager& taskManager = transition.ped->m_pIntelligence->m_TaskMgr;
+        if (taskManager.m_aPrimaryTasks[TASK_PRIMARY_PRIMARY] == transition.task)
+        {
+            SetRemotePrimaryTask(transition.ped, nullptr);
+        }
     }
 
     g_remoteTransitions.erase(it);
 }
 
-void InstallRemoteHoldTask(CNetworkPlayer* networkPlayer, RemoteTransition& transition)
-{
-    CPlayerPed* ped = networkPlayer->m_pPed;
-    CPad* localPad = CPad::GetPad(0);
-    uint16_t localDisablePlayerControls = localPad->DisablePlayerControls;
-    auto* holdTask = new CTaskSimpleUninterruptable();
-    ped->m_pIntelligence->m_TaskMgr.SetTask(holdTask, TASK_PRIMARY_PRIMARY, false);
-    localPad->DisablePlayerControls = localDisablePlayerControls;
-    transition.holdTask = holdTask;
-}
-
-void StartRemoteTransition(
-    CNetworkPlayer* networkPlayer, CEntryExit* entryExit, bool usesDoor, RemoteTransition& transition)
+void StartRemoteTransition(CNetworkPlayer* networkPlayer, CEntryExit* entryExit, bool usesDoor)
 {
     CPlayerPed* ped = networkPlayer->m_pPed;
     CTask* task = nullptr;
@@ -99,15 +101,11 @@ void StartRemoteTransition(
         task = new CTaskComplexGotoDoorAndOpen(start, end);
     }
 
-    transition.task = task;
-    CPad* localPad = CPad::GetPad(0);
-    uint16_t localDisablePlayerControls = localPad->DisablePlayerControls;
-    ped->m_pIntelligence->m_TaskMgr.SetTask(task, TASK_PRIMARY_PRIMARY, false);
-    localPad->DisablePlayerControls = localDisablePlayerControls;
+    SetRemotePrimaryTask(ped, task);
+    g_remoteTransitions[networkPlayer->m_iPlayerId] = {ped, task};
 }
-}  // namespace
 
-CEntryExit* CEntryExitTransitionSync::FindEntryExit(int16_t rectLeft, int16_t rectBottom, uint8_t areaId)
+CEntryExit* FindEntryExit(int16_t rectLeft, int16_t rectBottom, uint8_t areaId)
 {
     for (auto entryExit : CEntryExitManager::mp_poolEntryExits)
     {
@@ -122,55 +120,46 @@ CEntryExit* CEntryExitTransitionSync::FindEntryExit(int16_t rectLeft, int16_t re
     return nullptr;
 }
 
-void CEntryExitTransitionSync::Send(CEntryExit* entryExit, CPed* ped, bool finished)
+void SendTransition(CPed* ped, Packets::Scripts::EnExTransition packet)
 {
-    Packets::Scripts::EnExTransition packet{};
     packet.position = ped->GetPosition();
     packet.currentRotation = ped->m_fCurrentRotation;
     packet.aimingRotation = ped->m_fAimingRotation;
     packet.playerAreaId = ped->m_nAreaCode;
-    packet.bFinished = finished;
-    if (finished)
-    {
-        packet.enexAreaId = ms_nLocalEnExAreaId;
-        packet.rectLeft = ms_nLocalRectLeft;
-        packet.rectBottom = ms_nLocalRectBottom;
-    }
-    else
-    {
-        packet.enexAreaId = entryExit->m_nArea;
-        packet.rectLeft = static_cast<int16_t>(std::floor(entryExit->m_recEntrance.left));
-        packet.rectBottom = static_cast<int16_t>(std::floor(entryExit->m_recEntrance.bottom));
-        packet.bUsesDoor = CEntryExit::ms_pDoor != nullptr;
-    }
     GetPacketFactory().Send(packet);
 }
+}  // namespace
 
-void CEntryExitTransitionSync::OnTransitionStarted(CEntryExit* entryExit, CPed* ped, bool started)
+void CEntryExitTransitionSync::OnTransitionStarted(CEntryExit* entryExit, CPed* ped)
 {
-    if (!started || !CNetwork::m_bAuthenticated || ped != FindPlayerPed(0) || ped->m_nPedFlags.bInVehicle ||
+    if (!CNetwork::m_bAuthenticated || ped != FindPlayerPed(0) || ped->m_nPedFlags.bInVehicle ||
         entryExit->m_nFlags.bUnknownPairing || entryExit->m_nFlags.bFoodDateFlag)
     {
         return;
     }
 
     ms_pLocalAnimatedTransition = entryExit;
-    ms_nLocalEnExAreaId = entryExit->m_nArea;
-    ms_nLocalRectLeft = static_cast<int16_t>(std::floor(entryExit->m_recEntrance.left));
-    ms_nLocalRectBottom = static_cast<int16_t>(std::floor(entryExit->m_recEntrance.bottom));
-    Send(entryExit, ped, false);
+
+    Packets::Scripts::EnExTransition packet{};
+    packet.enexAreaId = entryExit->m_nArea;
+    packet.rectLeft = static_cast<int16_t>(std::floor(entryExit->m_recEntrance.left));
+    packet.rectBottom = static_cast<int16_t>(std::floor(entryExit->m_recEntrance.bottom));
+    packet.bUsesDoor = CEntryExit::ms_pDoor != nullptr;
+    SendTransition(ped, packet);
 }
 
-void CEntryExitTransitionSync::OnTransitionFinished(CEntryExit* entryExit, CPed* ped, bool finished)
+void CEntryExitTransitionSync::OnTransitionFinished(CEntryExit* entryExit, CPed* ped)
 {
-    if (!finished || entryExit != ms_pLocalAnimatedTransition)
+    if (entryExit != ms_pLocalAnimatedTransition)
     {
         return;
     }
 
     if (CNetwork::m_bAuthenticated && ped == FindPlayerPed(0))
     {
-        Send(nullptr, ped, true);
+        Packets::Scripts::EnExTransition packet{};
+        packet.bFinished = true;
+        SendTransition(ped, packet);
     }
 
     ms_pLocalAnimatedTransition = nullptr;
@@ -185,36 +174,23 @@ void CEntryExitTransitionSync::Receive(const Packets::Scripts::EnExTransition& p
     }
 
     CPlayerPed* ped = networkPlayer->m_pPed;
-    if (packet.bFinished)
+    CEntryExit* entryExit = nullptr;
+    if (!packet.bFinished)
     {
-        ClearRemoteTransition(networkPlayer);
-        ApplyPedTransform(ped, packet, true);
-        ped->m_pEnex = nullptr;
-        ped->m_vecMoveSpeed = CVector{};
-        networkPlayer->m_onFootSnapshotInterpolated.vecPos = packet.position;
-        networkPlayer->m_onFootSnapshotInterpolated.vecMoveSpeed = CVector{};
-        networkPlayer->m_onFootSnapshotInterpolated.currentRotation = packet.currentRotation;
-        networkPlayer->m_onFootSnapshotInterpolated.aimingRotation = packet.aimingRotation;
-        return;
-    }
-
-    CEntryExit* entryExit = FindEntryExit(packet.rectLeft, packet.rectBottom, packet.enexAreaId);
-    if (!entryExit || ped->m_nPedFlags.bInVehicle)
-    {
-        return;
+        entryExit = FindEntryExit(packet.rectLeft, packet.rectBottom, packet.enexAreaId);
+        if (!entryExit || ped->m_nPedFlags.bInVehicle)
+        {
+            return;
+        }
     }
 
     ClearRemoteTransition(networkPlayer);
-    ApplyPedTransform(ped, packet, false);
-    ped->m_pEnex = nullptr;
-    ped->m_vecMoveSpeed = CVector{};
-    networkPlayer->m_onFootSnapshotInterpolated.vecPos = packet.position;
-    networkPlayer->m_onFootSnapshotInterpolated.vecMoveSpeed = CVector{};
-    networkPlayer->m_onFootSnapshotInterpolated.currentRotation = packet.currentRotation;
-    networkPlayer->m_onFootSnapshotInterpolated.aimingRotation = packet.aimingRotation;
+    ApplyRemoteSnapshot(networkPlayer, packet);
 
-    RemoteTransition& transition = g_remoteTransitions[networkPlayer->m_iPlayerId];
-    StartRemoteTransition(networkPlayer, entryExit, packet.bUsesDoor, transition);
+    if (!packet.bFinished)
+    {
+        StartRemoteTransition(networkPlayer, entryExit, packet.bUsesDoor);
+    }
 }
 
 void CEntryExitTransitionSync::Process()
@@ -223,7 +199,8 @@ void CEntryExitTransitionSync::Process()
     {
         auto current = it++;
         CNetworkPlayer* networkPlayer = CNetworkPlayerManager::GetPlayer(current->first);
-        if (!networkPlayer || !networkPlayer->m_pPed)
+        RemoteTransition& transition = current->second;
+        if (!networkPlayer || !networkPlayer->m_pPed || networkPlayer->m_pPed != transition.ped)
         {
             g_remoteTransitions.erase(current);
             continue;
@@ -235,12 +212,11 @@ void CEntryExitTransitionSync::Process()
             continue;
         }
 
-        RemoteTransition& transition = current->second;
-        CTask* primaryTask =
-            networkPlayer->m_pPed->m_pIntelligence->m_TaskMgr.m_aPrimaryTasks[TASK_PRIMARY_PRIMARY];
-        if (transition.task && !transition.holdTask && primaryTask != transition.task && !primaryTask)
+        CTask* primaryTask = transition.ped->m_pIntelligence->m_TaskMgr.m_aPrimaryTasks[TASK_PRIMARY_PRIMARY];
+        if (transition.task && primaryTask != transition.task && !primaryTask)
         {
-            InstallRemoteHoldTask(networkPlayer, transition);
+            transition.task = new CTaskSimpleUninterruptable();
+            SetRemotePrimaryTask(transition.ped, transition.task);
         }
     }
 }

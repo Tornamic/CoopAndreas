@@ -56,10 +56,7 @@ static void __fastcall CPlayerPed__ProcessControl_Hook(CPlayerPed* This)
         player->m_pPed->m_vecMoveSpeed = player->m_onFootSnapshotInterpolated.vecMoveSpeed;
     }*/
 
-    CPad* localPad = CPad::GetPad(0);
-    uint16_t localDisablePlayerControls = localPad->DisablePlayerControls;
     plugin::CallMethod<0x60EA90, CPlayerPed*>(This);
-    localPad->DisablePlayerControls = localDisablePlayerControls;
 
     // player->m_pPed->m_fAimingRotation = player->m_onFootSnapshotInterpolated.aimingRotation.m_angle;
 
