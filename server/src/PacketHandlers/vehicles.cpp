@@ -2,6 +2,12 @@
 #include "stdafx.h"
 #include "network/packet_handler.h"
 #include "network/packets/vehicles.h"
+#include "CWantedSync.h"
+
+namespace
+{
+constexpr uint32_t VEHICLE_EXIT_SYNC_GUARD = 2000;
+}  // namespace
 
 PACKET_HANDLER(
     ePacketType::VEHICLE_SPAWN, Packets::Vehicles::VehicleSpawn* pVehicleSpawn, CNetworkPlayer* pNetworkPlayer)
@@ -70,9 +76,19 @@ PACKET_HANDLER(ePacketType::VEHICLE_IDLE_UPDATE, Packets::Vehicles::VehicleIdleU
 PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDriverUpdate* pVehicleDriverUpdate,
     CNetworkPlayer* pNetworkPlayer)
 {
+    if (pNetworkPlayer->IsVehicleSyncGuardActive())
+    {
+        return;
+    }
+
     if (auto pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pVehicleDriverUpdate->vehicleid))
     {
+        bool occupantChanged = pNetworkVehicle->m_pPlayers[0] != pNetworkPlayer;
         pNetworkVehicle->SetOccupant(0, pNetworkPlayer);
+        if (occupantChanged)
+        {
+            CWantedSync::EscalateVehicle(pNetworkVehicle);
+        }
         pNetworkVehicle->m_vecPosition = pVehicleDriverUpdate->pos;
         pNetworkVehicle->m_vecRotation = pVehicleDriverUpdate->rot;
         pNetworkVehicle->m_bUsedByPed = false;
@@ -92,11 +108,12 @@ PACKET_HANDLER(
 {
     if (auto pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pVehicleEnter->vehicleid))
     {
+        pNetworkPlayer->ClearVehicleSyncGuard();
         if (pVehicleEnter->bPassenger)
             pNetworkVehicle->SetOccupant(pVehicleEnter->seatid + 1, pNetworkPlayer);
         else
             pNetworkVehicle->SetOccupant(0, pNetworkPlayer);
-
+        CWantedSync::EscalateVehicle(pNetworkVehicle);
         pVehicleEnter->playerid = pNetworkPlayer->m_iPlayerId;
         GetPacketFactory().SendToAll(*pVehicleEnter, pNetworkPlayer);
     }
@@ -110,14 +127,8 @@ PACKET_HANDLER(ePacketType::VEHICLE_EXIT, Packets::Vehicles::VehicleExit* pVehic
 {
     pVehicleExit->playerid = pNetworkPlayer->m_iPlayerId;
     GetPacketFactory().SendToAll(*pVehicleExit, pNetworkPlayer);
-
-    if (auto pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pNetworkPlayer->m_nVehicleId))
-    {
-        if (pNetworkPlayer->m_nSeatId >= 0)
-        {
-            pNetworkVehicle->SetOccupant(pNetworkPlayer->m_nSeatId, nullptr);
-        }
-    }
+    pNetworkPlayer->RemoveFromVehicle();
+    pNetworkPlayer->GuardVehicleSyncFor(VEHICLE_EXIT_SYNC_GUARD);
 }
 
 PACKET_HANDLER(
@@ -173,12 +184,28 @@ PACKET_HANDLER(ePacketType::VEHICLE_COMPONENT_REMOVE,
 PACKET_HANDLER(ePacketType::VEHICLE_PASSENGER_UPDATE,
     Packets::Vehicles::VehiclePassengerUpdate* pVehiclePassengerUpdate, CNetworkPlayer* pNetworkPlayer)
 {
+    if (pNetworkPlayer->IsVehicleSyncGuardActive())
+    {
+        return;
+    }
+
     if (auto pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pVehiclePassengerUpdate->vehicleid))
     {
+        int8_t seatId = pVehiclePassengerUpdate->seatid + 1;
+        if (seatId < 1 || seatId > 7)
+        {
+            return;
+        }
+
         pVehiclePassengerUpdate->playerid = pNetworkPlayer->m_iPlayerId;
         GetPacketFactory().SendToAll(*pVehiclePassengerUpdate, pNetworkPlayer);
 
-        pNetworkVehicle->SetOccupant(pVehiclePassengerUpdate->seatid + 1, pNetworkPlayer);
+        bool occupantChanged = pNetworkVehicle->m_pPlayers[seatId] != pNetworkPlayer;
+        pNetworkVehicle->SetOccupant(seatId, pNetworkPlayer);
+        if (occupantChanged)
+        {
+            CWantedSync::EscalateVehicle(pNetworkVehicle);
+        }
 
         if (pNetworkVehicle->m_nCreatedBy == MISSION_VEHICLE)
         {

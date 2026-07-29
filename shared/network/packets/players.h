@@ -430,6 +430,73 @@ private:
     }
 };
 
+enum class eWantedSyncReason : uint8_t
+{
+    PERSONAL,
+    VEHICLE_SHARE,
+    VEHICLE_CLEAR,
+    VEHICLE_BRIBE,
+    RESPAWN
+};
+
+class PlayerWantedLevel : public Packet
+{
+    DEFINE_PACKET_TYPE(PlayerWantedLevel, ePacketType::PLAYER_WANTED_LEVEL, ePacketChannel::EVENT);
+
+public:
+    SenderPlayerId playerid{};
+    uint8_t wantedLevel = 0;
+    bool bPoliceEngaged = false;
+    bool bCrimeCommitted = false;
+    eWantedSyncReason reason = eWantedSyncReason::PERSONAL;
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_object(stream, playerid);
+        serialize_uint8(stream, wantedLevel);
+        serialize_bool(stream, bPoliceEngaged);
+        serialize_bool(stream, bCrimeCommitted);
+        uint8_t reasonValue = static_cast<uint8_t>(reason);
+        serialize_uint8(stream, reasonValue);
+        if (reasonValue > static_cast<uint8_t>(eWantedSyncReason::RESPAWN))
+        {
+            return false;
+        }
+        reason = static_cast<eWantedSyncReason>(reasonValue);
+        return true;
+    }
+};
+
+enum class eVehicleWantedAction : uint8_t
+{
+    CLEAR,
+    BRIBE
+};
+
+class VehicleWantedAction : public Packet
+{
+    DEFINE_PACKET_TYPE(VehicleWantedAction, ePacketType::VEHICLE_WANTED_ACTION, ePacketChannel::EVENT);
+
+public:
+    eVehicleWantedAction action = eVehicleWantedAction::CLEAR;
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        uint8_t actionValue = static_cast<uint8_t>(action);
+        serialize_uint8(stream, actionValue);
+        if (actionValue > static_cast<uint8_t>(eVehicleWantedAction::BRIBE))
+        {
+            return false;
+        }
+        action = static_cast<eVehicleWantedAction>(actionValue);
+        return true;
+    }
+};
+
 class RebuildPlayer : public Packet
 {
     DEFINE_PACKET_TYPE(RebuildPlayer, ePacketType::REBUILD_PLAYER, ePacketChannel::EVENT);

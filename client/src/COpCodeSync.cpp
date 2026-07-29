@@ -79,6 +79,24 @@ const SSyncedOpCode syncedOpcodes[] =
     {0x02E7}, // start_cutscene
     {0x02EA}, // clear_cutscene
     
+    // Wanted level and police rules
+    {COMMAND_ALTER_WANTED_LEVEL, true, {eSyncedParamType::PLAYER}},
+    {COMMAND_ALTER_WANTED_LEVEL_NO_DROP, true, {eSyncedParamType::PLAYER}},
+    {COMMAND_IS_WANTED_LEVEL_GREATER, true, {eSyncedParamType::PLAYER}},
+    {COMMAND_CLEAR_WANTED_LEVEL, true, {eSyncedParamType::PLAYER}},
+    {COMMAND_SET_MAX_WANTED_LEVEL},
+    {COMMAND_SET_POLICE_IGNORE_PLAYER, true, {eSyncedParamType::PLAYER}},
+    {COMMAND_SET_CAN_RESPRAY_CAR, true, {eSyncedParamType::VEHICLE}},
+    {COMMAND_SET_FREE_RESPRAYS},
+    {COMMAND_SET_WANTED_MULTIPLIER},
+    {COMMAND_SWITCH_COPS_ON_BIKES},
+    {COMMAND_SET_GARAGE_RESPRAY_FREE},
+    {COMMAND_SWITCH_POLICE_HELIS},
+    {COMMAND_SET_CREATE_RANDOM_COPS},
+    {COMMAND_SET_ZONE_NO_COPS},
+    {COMMAND_CLEAR_WANTED_LEVEL_IN_GARAGE},
+    {COMMAND_SET_NO_RESPRAYS},
+
     // World
     {COMMAND_SET_TAG_STATUS_IN_AREA},
 
@@ -741,6 +759,22 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
     bProcessingNetworkOpcode = false;
 }
 
+static void __fastcall CRunningScript__UpdateCompareFlag_WantedTeamHook(
+    CRunningScript* script, SKIP_EDX, bool result)
+{
+    // TODO(wanted-sync): Add mission-specific wanted rules and "wait for the team" feedback
+    // when cooperative mission work resumes.
+    if (CLocalPlayer::m_bIsHost && script == lastProcessedScript &&
+        lastOpCodeProcessed == COMMAND_IS_WANTED_LEVEL_GREATER &&
+        COpCodeSync::IsOpcodeSyncable(lastOpCodeProcessed))
+    {
+        int wantedLevel = std::clamp(ScriptParams[1], 0, 6);
+        result = result || CWantedSync::AnyRemotePlayerWantedAbove(static_cast<uint8_t>(wantedLevel));
+    }
+
+    script->UpdateCompareFlag(result);
+}
+
 void __declspec(naked) FinishedOpcodeProcessing_Hook()
 {
     __asm
@@ -864,6 +898,7 @@ void COpCodeSync::Init()
     injector::UnprotectMemory(0x463D50, 6, temp);
 
     patch::RedirectJump(0x469FF3, FinishedOpcodeProcessing_Hook);
+    patch::RedirectCall(0x469A46, CRunningScript__UpdateCompareFlag_WantedTeamHook);
 
     std::vector<int> hookPositions = { 0x463D92, 0x463DBF, 0x463E1A, 0x463E6B, 0x463EAC, 0x463F2A, 0x463F7F, 0x463FA2, 0x463FDA, 0x463FFB, 0x464034 };
     patch::RedirectJump(hookPositions, CRunningScript__ReadTextLabelFromScript_Hook_GetSyncingParams);

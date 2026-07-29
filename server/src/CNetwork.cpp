@@ -1,5 +1,6 @@
 #include "CNetworkPlayerManager.h"
 #include "CPacketFactory.h"
+#include "CWantedSync.h"
 #include "logger.h"
 #include "network/packet.h"
 #include "network/packets/system.h"
@@ -100,12 +101,7 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
         return;
     }
 
-    CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(pNetworkPlayer->m_nVehicleId);
-
-    if (vehicle != nullptr)
-    {
-        vehicle->m_pPlayers[pNetworkPlayer->m_nSeatId] = nullptr;
-    }
+    pNetworkPlayer->RemoveFromVehicle();
 
     if (Packets::Scripts::g_pLastEnExPlayerOwner == pNetworkPlayer)
     {
@@ -197,6 +193,8 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
     {
         if (i->m_iPlayerId == freeId)
             continue;
+
+        CWantedSync::SendStateTo(i, pNewNetworkPlayer);
 
         if (i->m_ucSyncFlags.bStatsModified)
         {

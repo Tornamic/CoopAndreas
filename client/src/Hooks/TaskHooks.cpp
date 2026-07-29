@@ -19,6 +19,8 @@ static void __fastcall CTaskComplexEnterCarAsDriver__Ctor_Hook(
         return;
     }
 
+    CWantedSync::RecordVehicleEntrySource(FindPlayerPed(0), vehicle);
+
     Packets::Vehicles::VehicleEnter packet{};
     packet.seatid = 0;
     packet.vehicleid = networkVehicle->m_nVehicleId;

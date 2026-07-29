@@ -126,6 +126,8 @@ public:
 
                 CPlayerPed* localPlayer = FindPlayerPed(0);
 
+                CWantedSync::Process();
+
                 CDriveBy::Process(localPlayer);
 
                 int syncRate = 50;

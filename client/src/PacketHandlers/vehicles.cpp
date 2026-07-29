@@ -101,6 +101,9 @@ PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDri
     if (!pVehicle->IsVTableValid())
         return;
 
+    CVector driverPosition = pVehicleDriverUpdate->pos;
+    CWantedSync::RecordVehicleDriverSource(pNetworkPlayer->m_pPed, driverPosition);
+
     if (pNetworkPlayer->m_pPed->m_pVehicle != pVehicle || !pNetworkPlayer->m_pPed->m_nPedFlags.bInVehicle)
     {
         pNetworkPlayer->WarpIntoVehicleDriver(pVehicle);
@@ -169,6 +172,11 @@ PACKET_HANDLER(ePacketType::VEHICLE_ENTER, Packets::Vehicles::VehicleEnter* pVeh
 
     if (!pPlayerPed->IsVTableValid() || !pVehicle->IsVTableValid())
         return;
+
+    if (!pVehicleEnter->bPassenger)
+    {
+        CWantedSync::RecordVehicleEntrySource(pPlayerPed, pVehicle);
+    }
 
 #ifdef PACKET_DEBUG_MESSAGES
     CChat::AddMessage("player %d entered vehicleid %d %s", pVehicleEnter->playerid, pVehicleEnter->vehicleid,

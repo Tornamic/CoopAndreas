@@ -16,17 +16,44 @@ std::string CNetworkPlayer::GetName()
 
 void CNetworkPlayer::RemoveFromVehicle()
 {
-    if (this->m_nSeatId < 0 || this->m_nSeatId > 7)
-        return;
-
-    if (auto vehicle = CNetworkVehicleManager::GetVehicle(this->m_nVehicleId))
+    if (this->m_nSeatId >= 0 && this->m_nSeatId <= 7)
     {
-        if (vehicle->m_pPlayers[this->m_nSeatId] == this)
+        if (auto vehicle = CNetworkVehicleManager::GetVehicle(this->m_nVehicleId))
         {
-            vehicle->SetOccupant(this->m_nSeatId, nullptr);
+            if (vehicle->m_pPlayers[this->m_nSeatId] == this)
+            {
+                vehicle->SetOccupant(this->m_nSeatId, nullptr);
+            }
         }
     }
 
     this->m_nVehicleId = -1;
     this->m_nSeatId = -1;
+}
+
+void CNetworkPlayer::GuardVehicleSyncFor(uint32_t duration)
+{
+    m_nVehicleSyncGuardUntil = static_cast<uint32_t>(g_serverTime) + duration;
+}
+
+void CNetworkPlayer::ClearVehicleSyncGuard()
+{
+    m_nVehicleSyncGuardUntil = 0;
+}
+
+bool CNetworkPlayer::IsVehicleSyncGuardActive()
+{
+    if (m_nVehicleSyncGuardUntil == 0)
+    {
+        return false;
+    }
+
+    uint32_t now = static_cast<uint32_t>(g_serverTime);
+    if (static_cast<int32_t>(m_nVehicleSyncGuardUntil - now) > 0)
+    {
+        return true;
+    }
+
+    ClearVehicleSyncGuard();
+    return false;
 }

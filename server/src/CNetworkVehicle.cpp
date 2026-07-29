@@ -34,7 +34,12 @@ void CNetworkVehicle::SetOccupant(int8_t seatid, CNetworkPlayer* player)
     if (seatid < 0 || seatid > 7)
         return;
 
-    if (this->m_pPlayers[seatid])
+    if (player && (player->m_nVehicleId != m_nVehicleId || player->m_nSeatId != seatid))
+    {
+        player->RemoveFromVehicle();
+    }
+
+    if (this->m_pPlayers[seatid] && this->m_pPlayers[seatid] != player)
     {
         this->m_pPlayers[seatid]->m_nVehicleId = -1;
         this->m_pPlayers[seatid]->m_nSeatId = -1;
@@ -46,5 +51,24 @@ void CNetworkVehicle::SetOccupant(int8_t seatid, CNetworkPlayer* player)
     {
         player->m_nVehicleId = this->m_nVehicleId;
         player->m_nSeatId = seatid;
+    }
+    else
+    {
+        bool hasOccupants = false;
+        for (auto* occupant : m_pPlayers)
+        {
+            hasOccupants = hasOccupants || occupant != nullptr;
+        }
+
+        if (hasOccupants)
+        {
+            m_nWantedStateSetAt = static_cast<uint32_t>(g_serverTime);
+        }
+        else
+        {
+            m_nWantedStateSetAt = 0;
+            m_nSharedWantedLevel = 0;
+            m_bSharedPoliceEngaged = false;
+        }
     }
 }

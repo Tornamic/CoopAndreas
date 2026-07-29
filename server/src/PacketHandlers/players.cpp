@@ -2,10 +2,22 @@
 #include "network/packet_types.h"
 #include "stdafx.h"
 #include "network/packet_handler.h"
+#include "CWantedSync.h"
+
+namespace
+{
+constexpr uint32_t RESPAWN_VEHICLE_SYNC_GUARD = 5000;
+}  // namespace
 
 PACKET_HANDLER(
     ePacketType::PLAYER_ONFOOT_UPDATE, Packets::Players::OnFootUpdate* pOnFootUpdate, CNetworkPlayer* pNetworkPlayer)
 {
+    if (pNetworkPlayer->m_nVehicleId >= 0 || pNetworkPlayer->m_nSeatId >= 0)
+    {
+        pNetworkPlayer->RemoveFromVehicle();
+    }
+    pNetworkPlayer->ClearVehicleSyncGuard();
+
     pOnFootUpdate->playerid.value = pNetworkPlayer->m_iPlayerId;
     GetPacketFactory().SendToAll(*pOnFootUpdate, pNetworkPlayer);
 }
@@ -38,8 +50,11 @@ PACKET_HANDLER(ePacketType::PLAYER_PLACE_WAYPOINT, Packets::Players::PlayerPlace
 
 PACKET_HANDLER(ePacketType::RESPAWN_PLAYER, Packets::Players::RespawnPlayer* pRespawnPlayer, CNetworkPlayer* pNetworkPlayer)
 {
+    pNetworkPlayer->RemoveFromVehicle();
+    pNetworkPlayer->GuardVehicleSyncFor(RESPAWN_VEHICLE_SYNC_GUARD);
     pRespawnPlayer->playerid = pNetworkPlayer->m_iPlayerId;
     GetPacketFactory().SendToAll(*pRespawnPlayer, pNetworkPlayer);
+    CWantedSync::ClearPlayer(pNetworkPlayer);
 }
 
 PACKET_HANDLER(ePacketType::PLAYER_BULLET_SHOT, Packets::Players::PlayerBulletShot* pPlayerBulletShot, CNetworkPlayer* pNetworkPlayer)
@@ -51,6 +66,18 @@ PACKET_HANDLER(ePacketType::PLAYER_BULLET_SHOT, Packets::Players::PlayerBulletSh
 PACKET_HANDLER(ePacketType::ADD_PROJECTILE, Packets::Players::AddProjectile* pAddProjectile, CNetworkPlayer* pNetworkPlayer)
 {
     GetPacketFactory().SendToAll(*pAddProjectile, pNetworkPlayer);
+}
+
+PACKET_HANDLER(ePacketType::PLAYER_WANTED_LEVEL, Packets::Players::PlayerWantedLevel* pPlayerWantedLevel,
+    CNetworkPlayer* pNetworkPlayer)
+{
+    CWantedSync::HandlePlayerUpdate(pPlayerWantedLevel, pNetworkPlayer);
+}
+
+PACKET_HANDLER(ePacketType::VEHICLE_WANTED_ACTION, Packets::Players::VehicleWantedAction* pVehicleWantedAction,
+    CNetworkPlayer* pNetworkPlayer)
+{
+    CWantedSync::HandleVehicleAction(pVehicleWantedAction, pNetworkPlayer);
 }
 
 PACKET_HANDLER(ePacketType::PLAYER_STATS, Packets::Players::PlayerStats* pPlayerStats, CNetworkPlayer* pNetworkPlayer)
@@ -72,4 +99,3 @@ PACKET_HANDLER(ePacketType::REBUILD_PLAYER, Packets::Players::RebuildPlayer* pRe
     pRebuildPlayer->playerid = pNetworkPlayer->m_iPlayerId;
     GetPacketFactory().SendToAll(*pRebuildPlayer, pNetworkPlayer);
 }
-
