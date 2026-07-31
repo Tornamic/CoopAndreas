@@ -462,7 +462,6 @@ void VehicleHooks::InjectHooks()
 
     patch::RedirectCall(0x6F35D6, CCarGenerator__CheckForBlockage_Hook);
     patch::RedirectCall(0x6F35FF, CCarGenerator__CheckForBlockage_Hook);
-    patch::SetUChar(0x6F3ED7, 0xB7);  // movzx ecx, ax: car-generator vehicle handles use an unsigned slot index
 
     patch::RedirectCall(0x434263, CCarCtrl__GenerateOneRandomCar_Hook);
     patch::RedirectCall(0x434268, CCarCtrl__GenerateOneRandomCar_Hook);
