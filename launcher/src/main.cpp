@@ -18,6 +18,13 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
     {
         case WM_INITDIALOG:
         {
+            SetDlgItemText(hDlg, ID_LABELSERIALTUTORIAL,
+                "IMPORTANT: You are playing the alpha/beta version\r\n"
+                "of CoopAndreas, this version needs a beta test serial key."
+                "\r\nDon't worry, the mod as well as the serial key are completely free.\r\n"
+                "Go to our Discord server, and type in the command below into any"
+                "channel. Note: serial keys are unique for everyone.");
+
             HINSTANCE hInstance = GetModuleHandle(NULL);
 
             HICON hIconSmall = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON,
