@@ -1,6 +1,6 @@
 #pragma once
 
-class CPlayerPingManager
+class CRTTBroadcastManager
 {
 public:
     static void Update();

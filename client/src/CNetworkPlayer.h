@@ -18,7 +18,7 @@ public:
 	Packets::Players::PlayerPlaceWaypoint m_waypointState{};
 
 	char m_Name[Config::MAX_NICKNAME_LENGTH + 1] = { 0 };
-	uint16_t m_nPing = 0;
+	uint16_t m_nRTT = 0;
 
 	CControllerState m_oldControllerState{};
 	CControllerState m_newControllerState{};

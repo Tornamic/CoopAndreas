@@ -67,20 +67,20 @@ PACKET_HANDLER(ePacketType::PLAYER_HANDSHAKE, Packets::System::PlayerHandshake* 
     logger::info("Authenticated, playerid %d", pPlayerHandshake->yourid);
 }
 
-PACKET_HANDLER(ePacketType::PLAYER_PING, Packets::System::PlayerPing* pPlayerPing)
+PACKET_HANDLER(ePacketType::RTT_BROADCAST, Packets::System::RTTBroadcast* pRTTBroadcast)
 {
-    for (int nPingIndex = 0; nPingIndex < pPlayerPing->playerCount; nPingIndex++)
+    for (int nRTTIndex = 0; nRTTIndex < pRTTBroadcast->playerCount; nRTTIndex++)
     {
-        Packets::System::PlayerPing::SPlayerPing& ping = pPlayerPing->pings[nPingIndex];
-        if (ping.playerid == CNetworkPlayerManager::m_nMyId)
+        Packets::System::RTTBroadcast::SPlayerRTT& playerRTT = pRTTBroadcast->rtts[nRTTIndex];
+        if (playerRTT.playerid == CNetworkPlayerManager::m_nMyId)
         {
             continue;
         }
 
-        CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(ping.playerid);
+        CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(playerRTT.playerid);
         if (pNetworkPlayer != nullptr)
         {
-            pNetworkPlayer->m_nPing = ping.ping;
+            pNetworkPlayer->m_nRTT = playerRTT.rtt;
         }
     }
 }

@@ -195,19 +195,19 @@ private:
     }
 };
 
-class PlayerPing : public Packet
+class RTTBroadcast : public Packet
 {
-    DEFINE_PACKET_TYPE(PlayerPing, ePacketType::PLAYER_PING, ePacketChannel::SYSTEM);
+    DEFINE_PACKET_TYPE(RTTBroadcast, ePacketType::RTT_BROADCAST, ePacketChannel::SYSTEM);
 
 public:
-    struct SPlayerPing
+    struct SPlayerRTT
     {
         int playerid;
-        uint16_t ping;
+        uint16_t rtt;
     };
 
     int playerCount = 0;
-    SPlayerPing pings[Config::MAX_SERVER_PLAYERS]{};
+    SPlayerRTT rtts[Config::MAX_SERVER_PLAYERS]{};
 
 private:
     template <typename Stream>
@@ -216,8 +216,8 @@ private:
         serialize_int(stream, playerCount, 0, Config::MAX_SERVER_PLAYERS);
         for (int i = 0; i < playerCount; i++)
         {
-            serialize_int(stream, pings[i].playerid, 0, Config::MAX_SERVER_PLAYERS - 1);
-            serialize_uint16(stream, pings[i].ping);
+            serialize_int(stream, rtts[i].playerid, 0, Config::MAX_SERVER_PLAYERS - 1);
+            serialize_uint16(stream, rtts[i].rtt);
         }
         return true;
     }

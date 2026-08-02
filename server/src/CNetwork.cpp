@@ -1,5 +1,5 @@
 #include "CNetworkPlayerManager.h"
-#include "CPlayerPingManager.h"
+#include "CRTTBroadcastManager.h"
 #include "CPacketFactory.h"
 #include "logger.h"
 #include "network/packet.h"
@@ -39,7 +39,7 @@ bool CNetwork::Init(unsigned short port)
     while (true)  // waiting for event
     {
         CServerTime::Update();
-        CPlayerPingManager::Update();
+        CRTTBroadcastManager::Update();
 
         while (enet_host_service(pENetHost, &eNetEvent, 1) > 0)
         {

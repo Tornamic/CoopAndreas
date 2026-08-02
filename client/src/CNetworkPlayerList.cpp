@@ -23,7 +23,7 @@ void CNetworkPlayerList::DrawBox(float fX, float fY)
 
 void CNetworkPlayerList::DrawPing(CNetworkPlayer* pNetworkPlayer, float fX, float fY)
 {
-    uint32_t nPing = pNetworkPlayer == nullptr ? CNetwork::GetRTT() : pNetworkPlayer->m_nPing;
+    uint32_t nPing = pNetworkPlayer == nullptr ? CNetwork::GetRTT() : pNetworkPlayer->m_nRTT;
 
     CRGBA pingColor;
 
