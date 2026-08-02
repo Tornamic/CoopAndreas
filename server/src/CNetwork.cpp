@@ -1,4 +1,5 @@
 #include "CNetworkPlayerManager.h"
+#include "CPlayerPingManager.h"
 #include "CPacketFactory.h"
 #include "logger.h"
 #include "network/packet.h"
@@ -8,33 +9,6 @@
 #include <network/packets/vehicles.h>
 #include <network/packets/peds.h>
 #include <network/packets/scripts.h>
-
-static void UpdatePlayerPings()
-{
-    static server_time_t nLastUpdate = 0;
-    constexpr server_time_t PING_UPDATE_INTERVAL = 1000;
-
-    if (g_serverTime - nLastUpdate < PING_UPDATE_INTERVAL || CNetworkPlayerManager::m_pPlayers.empty())
-    {
-        return;
-    }
-
-    nLastUpdate = g_serverTime;
-
-    Packets::System::PlayerPing playerPing{};
-    for (int nPlayerId = 0; nPlayerId < Config::MAX_SERVER_PLAYERS; nPlayerId++)
-    {
-        CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(nPlayerId);
-        if (pNetworkPlayer == nullptr)
-        {
-            continue;
-        }
-
-        playerPing.ping[playerPing.playerCount++] = pNetworkPlayer->m_nPing;
-    }
-
-    GetPacketFactory().SendToAll(playerPing);
-}
 
 bool CNetwork::Init(unsigned short port)
 {
@@ -65,7 +39,7 @@ bool CNetwork::Init(unsigned short port)
     while (true)  // waiting for event
     {
         CServerTime::Update();
-        UpdatePlayerPings();
+        CPlayerPingManager::Update();
 
         while (enet_host_service(pENetHost, &eNetEvent, 1) > 0)
         {

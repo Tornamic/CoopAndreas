@@ -22,7 +22,6 @@ public:
     int8_t m_nSeatId = -1;
     int m_nVehicleId = -1;
     bool m_bCorrectVersion = false;
-    uint16_t m_nPing = 0;
     float m_afStats[14]{};
     Packets::Players::PlayerPlaceWaypoint m_waypointState{};
     CPedClothesDesc m_pPedClothesDesc{};

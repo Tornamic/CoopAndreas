@@ -200,8 +200,14 @@ class PlayerPing : public Packet
     DEFINE_PACKET_TYPE(PlayerPing, ePacketType::PLAYER_PING, ePacketChannel::SYSTEM);
 
 public:
+    struct SPlayerPing
+    {
+        int playerid;
+        uint16_t ping;
+    };
+
     int playerCount = 0;
-    uint16_t ping[Config::MAX_SERVER_PLAYERS]{};
+    SPlayerPing pings[Config::MAX_SERVER_PLAYERS]{};
 
 private:
     template <typename Stream>
@@ -210,7 +216,8 @@ private:
         serialize_int(stream, playerCount, 0, Config::MAX_SERVER_PLAYERS);
         for (int i = 0; i < playerCount; i++)
         {
-            serialize_uint16(stream, ping[i]);
+            serialize_int(stream, pings[i].playerid, 0, Config::MAX_SERVER_PLAYERS - 1);
+            serialize_uint16(stream, pings[i].ping);
         }
         return true;
     }
