@@ -21,17 +21,9 @@ void CNetworkPlayerList::DrawBox(float fX, float fY)
         fmin(rect.bottom, rect.top) - CUtil::SCREEN_STRETCH_Y(10.0f), "Players");
 }
 
-#if 0
 void CNetworkPlayerList::DrawPing(CNetworkPlayer* pNetworkPlayer, float fX, float fY)
 {
-    static uint16_t nPing = rand() % 256;
-    static DWORD lastUpdate = 0;
-
-    if (CTimer::m_snTimeInMilliseconds - lastUpdate >= 1000)
-    {
-        nPing = rand() % 256;
-        lastUpdate = CTimer::m_snTimeInMilliseconds;
-    }
+    uint32_t nPing = pNetworkPlayer == nullptr ? CNetwork::GetRTT() : pNetworkPlayer->m_nRTT;
 
     CRGBA pingColor;
 
@@ -70,7 +62,6 @@ void CNetworkPlayerList::DrawPing(CNetworkPlayer* pNetworkPlayer, float fX, floa
     CFont::PrintString(CUtil::SCREEN_STRETCH_X(fX + PING_OFFSET_X + PING_COUNT_OFFSET_X),
         rect.top + CUtil::SCREEN_STRETCH_Y(PING_COUNT_OFFSET_Y), std::to_string(nPing).c_str());
 }
-#endif
 
 void CNetworkPlayerList::DrawName(CNetworkPlayer* pNetworkPlayer, float fX, float fY)
 {
@@ -224,9 +215,7 @@ void CNetworkPlayerList::Draw()
 
         float fColumnY = fBoxY + i * COLUMN_HEIGHT;
 
-#if 0
         DrawPing(pNetworkPlayer, fBoxX, fColumnY);
-#endif
         DrawName(pNetworkPlayer, fBoxX, fColumnY);
         DrawBars(pPlayerPed, fBoxX, fColumnY);
         DrawWeaponIcon(pPlayerPed, fBoxX, fColumnY);

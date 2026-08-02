@@ -195,6 +195,34 @@ private:
     }
 };
 
+class RTTBroadcast : public Packet
+{
+    DEFINE_PACKET_TYPE(RTTBroadcast, ePacketType::RTT_BROADCAST, ePacketChannel::SYSTEM);
+
+public:
+    struct SPlayerRTT
+    {
+        int playerid;
+        uint16_t rtt;
+    };
+
+    int playerCount = 0;
+    SPlayerRTT rtts[Config::MAX_SERVER_PLAYERS]{};
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_int(stream, playerCount, 0, Config::MAX_SERVER_PLAYERS);
+        for (int i = 0; i < playerCount; i++)
+        {
+            serialize_int(stream, rtts[i].playerid, 0, Config::MAX_SERVER_PLAYERS - 1);
+            serialize_uint16(stream, rtts[i].rtt);
+        }
+        return true;
+    }
+};
+
 }  // namespace Packets::System
 
 // NOLINTEND(readability-isolate-declaration)

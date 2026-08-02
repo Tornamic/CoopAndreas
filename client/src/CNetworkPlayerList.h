@@ -6,7 +6,7 @@ public:
 	static constexpr float BOX_HEIGHT = 300.0f;
 	static constexpr float COLUMN_HEIGHT = 35.0f;
 
-	static constexpr float NAME_OFFSET_X = 7.0f; // 16.0f
+	static constexpr float NAME_OFFSET_X = 16.0f;
 	static constexpr float NAME_OFFSET_Y = 13.0f;
 
 	static constexpr float BAR_OFFSET_X = 14.0f;
