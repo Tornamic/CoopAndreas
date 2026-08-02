@@ -62,9 +62,37 @@ PACKET_HANDLER(ePacketType::PLAYER_DISCONNECTED, Packets::System::PlayerDisconne
 PACKET_HANDLER(ePacketType::PLAYER_HANDSHAKE, Packets::System::PlayerHandshake* pPlayerHandshake)
 {
     CNetworkPlayerManager::m_nMyId = pPlayerHandshake->yourid;
+    CLocalPlayer::m_nPing = 0;
     CNetwork::m_bAuthenticated = true;
     CPatch::RevertTemporaryPatches();
     logger::info("Authenticated, playerid %d", pPlayerHandshake->yourid);
+}
+
+PACKET_HANDLER(ePacketType::PLAYER_PING, Packets::System::PlayerPing* pPlayerPing)
+{
+    int nExpectedPlayerCount = static_cast<int>(CNetworkPlayerManager::m_pPlayers.size()) + 1;
+    if (pPlayerPing->playerCount != nExpectedPlayerCount)
+    {
+        logger::warn("Player ping count mismatch: expected %d, received %d", nExpectedPlayerCount,
+            pPlayerPing->playerCount);
+        return;
+    }
+
+    int nPingIndex = 0;
+    for (int nPlayerId = 0; nPlayerId < Config::MAX_SERVER_PLAYERS; nPlayerId++)
+    {
+        if (nPlayerId == CNetworkPlayerManager::m_nMyId)
+        {
+            CLocalPlayer::m_nPing = pPlayerPing->ping[nPingIndex++];
+            continue;
+        }
+
+        CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(nPlayerId);
+        if (pNetworkPlayer != nullptr)
+        {
+            pNetworkPlayer->m_nPing = pPlayerPing->ping[nPingIndex++];
+        }
+    }
 }
 
 PACKET_HANDLER(ePacketType::PLAYER_ASSIGN_HOST, Packets::System::PlayerAssignHost* pPlayerAssignHost)

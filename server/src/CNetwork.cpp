@@ -9,6 +9,34 @@
 #include <network/packets/peds.h>
 #include <network/packets/scripts.h>
 
+static void UpdatePlayerPings()
+{
+    static server_time_t nLastUpdate = 0;
+    constexpr server_time_t PING_UPDATE_INTERVAL = 1000;
+
+    if (g_serverTime - nLastUpdate < PING_UPDATE_INTERVAL || CNetworkPlayerManager::m_pPlayers.empty())
+    {
+        return;
+    }
+
+    nLastUpdate = g_serverTime;
+
+    Packets::System::PlayerPing playerPing{};
+    for (int nPlayerId = 0; nPlayerId < Config::MAX_SERVER_PLAYERS; nPlayerId++)
+    {
+        CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(nPlayerId);
+        if (pNetworkPlayer == nullptr)
+        {
+            continue;
+        }
+
+        enet_uint32 nPing = std::min<enet_uint32>(pNetworkPlayer->m_pPeer->roundTripTime, UINT16_MAX);
+        playerPing.ping[playerPing.playerCount++] = static_cast<uint16_t>(nPing);
+    }
+
+    GetPacketFactory().SendToAll(playerPing);
+}
+
 bool CNetwork::Init(unsigned short port)
 {
     if (enet_initialize() != 0)  // try to init enet
@@ -38,6 +66,7 @@ bool CNetwork::Init(unsigned short port)
     while (true)  // waiting for event
     {
         CServerTime::Update();
+        UpdatePlayerPings();
 
         while (enet_host_service(pENetHost, &eNetEvent, 1) > 0)
         {
