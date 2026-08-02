@@ -96,6 +96,27 @@ void CNetwork::ProcessReceive()
         }
     }
 #endif
+
+    ProcessSend();
+}
+
+void CNetwork::ProcessSend()
+{
+    static DWORD nLastPingUpdate = 0;
+    constexpr DWORD PING_UPDATE_INTERVAL = 1000;
+
+    DWORD nCurrentTime = GetTickCount();
+    if (!m_bAuthenticated || nCurrentTime - nLastPingUpdate < PING_UPDATE_INTERVAL)
+    {
+        return;
+    }
+
+    nLastPingUpdate = nCurrentTime;
+
+    Packets::System::PlayerPing playerPing{};
+    playerPing.playerCount = 1;
+    playerPing.ping[0] = static_cast<uint16_t>(std::min<uint32_t>(GetRTT(), UINT16_MAX));
+    GetPacketFactory().Send(playerPing);
 }
 
 void CNetwork::SendPacket(

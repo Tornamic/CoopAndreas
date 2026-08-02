@@ -30,8 +30,7 @@ static void UpdatePlayerPings()
             continue;
         }
 
-        enet_uint32 nPing = std::min<enet_uint32>(pNetworkPlayer->m_pPeer->roundTripTime, UINT16_MAX);
-        playerPing.ping[playerPing.playerCount++] = static_cast<uint16_t>(nPing);
+        playerPing.ping[playerPing.playerCount++] = pNetworkPlayer->m_nPing;
     }
 
     GetPacketFactory().SendToAll(playerPing);
