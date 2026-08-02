@@ -6,6 +6,7 @@
 #include <CCustomMenuManager.h>
 #include <winuser.h>
 #include <CLaunchManager.h>
+#include <Debug/CImGui.h>
 
 semver_t CCore::Version;
 
@@ -15,6 +16,10 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 {
     CChat::WndProc(hWnd, message, wParam, lParam);
     CCustomMenuManager::WndProc(hWnd, message, wParam, lParam);
+    if (CImGui::WndProc(hWnd, message, wParam, lParam))
+    {
+        return TRUE;
+    }
     return CallWindowProcW(prevWndProc, hWnd, message, wParam, lParam);
 }
 
@@ -60,6 +65,7 @@ void CCore::Init()
 #ifdef _DEV
     CCore::AllocateConsole();
 #endif
+    CImGui::Init();
     CLaunchManager::CollectCommandLineArgs();
     WinMain_AfterWindowInit_ptr = injector::GetBranchDestination(0x748995).as_int();
     patch::RedirectCall(0x748995, WinMain_AfterWindowInit);

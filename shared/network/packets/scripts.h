@@ -70,7 +70,7 @@ inline static EnExSync g_lastEnExData{};
 inline static CNetworkPlayer* g_pLastEnExPlayerOwner = nullptr;
 #endif
 
-class AddMessageGXT : public Packet 
+class AddMessageGXT : public Packet
 {
     DEFINE_PACKET_TYPE(AddMessageGXT, ePacketType::ADD_MESSAGE_GXT, ePacketChannel::SCRIPT);
 
@@ -83,7 +83,7 @@ public:
         sync_COMMAND_PRINT_HELP
     };
 
-    int forWhoPlayerId = 0; // TODO(v0.3.1-alpha): dont send s2c
+    int forWhoPlayerId = 0;  // TODO(v0.3.1-alpha): dont send s2c
     eGXTMsgType type = sync_COMMAND_PRINT;
     uint32_t time = 0;
     uint8_t flag = 0;
@@ -100,7 +100,7 @@ private:
             serialize_uint32(stream, time);
             serialize_uint8(stream, flag);
         }
-        
+
         serialize_string(stream, gxt, 8);
         gxt[ARRAY_SIZE(gxt) - 1] = '\0';
         return true;
@@ -182,7 +182,6 @@ private:
     }
 };
 
-
 class TeleportPlayerScripted : public Packet
 {
     DEFINE_PACKET_TYPE(TeleportPlayerScripted, ePacketType::TELEPORT_PLAYER_SCRIPTED, ePacketChannel::SCRIPT);
@@ -209,7 +208,8 @@ class OpCodeSync : public Packet
 
 public:
     // this number is the biggest possible serialized opcode in theory, the usual opcode size is ~4-50 bytes
-    // sizeof(OpcodeSyncHeader) + NUM_SYNCED_PARAMS * sizeof(int) + NUM_SYNCED_PARAMS * sizeof(uint8_t) + NUM_SYNCED_PARAMS * 256
+    // sizeof(OpcodeSyncHeader) + NUM_SYNCED_PARAMS * sizeof(int) + NUM_SYNCED_PARAMS * sizeof(uint8_t) +
+    // NUM_SYNCED_PARAMS * 256
     static constexpr int MAX_BUFFER_SIZE = 4 + 15 * sizeof(int) + 15 * sizeof(uint8_t) + 15 * 256;
 
     int size = 0;
@@ -223,8 +223,15 @@ private:
         serialize_bytes(stream, buffer, size);
         return true;
     }
-};
 
+public:
+    std::string ToString() const override
+    {
+        static char str[32];
+        snprintf(str, sizeof(str), "Opcode: 0x%x", *(uint16_t*)&buffer[0]);
+        return str;
+    }
+};
 
 class PerformTaskSequence : public Packet
 {

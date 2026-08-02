@@ -50,7 +50,12 @@ public:
     }                                                                \
     bool SerializeRead(serialize::ReadStream& stream) override       \
     {                                                                \
-        return Serialize(stream);                                    \
+        bool result = Serialize(stream);                             \
+        if (result)                                                  \
+        {                                                            \
+            m_bytesRead = stream.GetBytesProcessed();                \
+        }                                                            \
+        return result;                                               \
     }                                                                \
                                                                      \
     bool SerializeWrite(serialize::WriteStream& stream) override     \
@@ -70,6 +75,9 @@ public:
 
 class Packet
 {
+protected:
+    size_t m_bytesRead = 0;
+
 public:
     virtual ~Packet() = default;
 
@@ -79,6 +87,9 @@ public:
     virtual bool SerializeWrite(serialize::WriteStream& stream) = 0;
     virtual bool SerializeMeasure(serialize::MeasureStream& stream) = 0;
     virtual Packet* Clone() const = 0;
+    virtual std::string ToString() const { return ""; }
+
+    size_t GetBytesRead() { return m_bytesRead; }
 
     server_time_t serverTime = 0;
 };

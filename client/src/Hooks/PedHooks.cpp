@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PedHooks.h"
 #include "CNetworkPed.h"
+#include <CPedGroups.h>
 
 static void __cdecl CPopulation__Update_Hook(bool generate)
 {

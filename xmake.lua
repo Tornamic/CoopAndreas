@@ -1,13 +1,8 @@
 set_project("CoopAndreas")
 
-local force_msvc = true;
-
 set_languages("cxx17")
 set_arch("x86")
-set_plat("windows")
-set_toolchains("clang-cl") -- required to generate compile_commands.json properly
 
-add_rules("plugin.compile_commands.autoupdate")
 add_rules("mode.debug", "mode.release")
 
 if is_os("windows") then
@@ -20,11 +15,10 @@ end
 
 target("client", function()
     set_kind("shared")
-    
-    if force_msvc == true then
-        set_toolchains("msvc")
-    end
-    
+    set_plat("windows")
+
+    set_toolchains("msvc")
+
     set_basename("CoopAndreasSA")
     set_arch("x86")
     set_plat("windows")
@@ -42,6 +36,7 @@ target("client", function()
     add_files("client/src/game_sa/*.cpp")
     add_files("client/src/Hooks/*.cpp")
     add_files("client/src/PacketHandlers/*.cpp")
+    add_files("client/src/Debug/*.cpp")
     add_files("client/version.rc")
 
     add_headerfiles("client/src/*.h")
@@ -49,11 +44,16 @@ target("client", function()
     add_headerfiles("client/src/Commands/Commands/*.h")
     add_headerfiles("client/src/game_sa/*.h")
     add_headerfiles("client/src/Hooks/*.h")
+    add_headerfiles("client/src/Debug/*.h")
     add_headerfiles("shared/**.h")
 
     add_includedirs("client/src")
     add_includedirs("shared", "third_party")
     add_includedirs("third_party/DiscordRPC/SDK/include")
+
+    add_files("third_party/imgui/**.cpp")
+    add_headerfiles("third_party/imgui/**.h")
+    add_includedirs("third_party/imgui")
 
     add_includedirs(
         "third_party/plugin-sdk/shared",
@@ -146,12 +146,8 @@ target("server", function ()
     add_deps("enet")
 
     if is_os("windows") then
-        if force_msvc == true then
-            set_toolchains("msvc")
-        end
         add_files("server/version.rc")
         add_defines("_CRT_SECURE_NO_WARNINGS", "WIN32", "_CONSOLE")
-
     elseif is_os("linux") then
         -- TODO
     end
@@ -160,9 +156,7 @@ end)
 target("proxy", function ()
     set_kind("shared")
 
-    if force_msvc == true then
-        set_toolchains("msvc")
-    end
+    set_toolchains("msvc")
 
     set_arch("x86")
     set_plat("windows")
@@ -194,9 +188,7 @@ end)
 target("plugin_sa", function ()
     set_kind("static")
 
-    if force_msvc == true then
-        set_toolchains("msvc")
-    end
+    set_toolchains("msvc")
 
     set_arch("x86")
     set_plat("windows")
@@ -223,10 +215,6 @@ end)
 target("enet", function ()
     set_kind("static")
 
-    if force_msvc == true then
-        set_toolchains("msvc")
-    end
-
     add_files("third_party/enet/*.c")
     
     add_headerfiles("third_party/enet/*.h")
@@ -242,9 +230,7 @@ target("discordrpc", function ()
     
     set_languages("c++17")
 
-    if force_msvc == true then
-        set_toolchains("msvc")
-    end
+    set_toolchains("msvc")
     
     add_includedirs("third_party/DiscordRPC/SDK/include")
     add_files("third_party/DiscordRPC/SDK/src/*.cpp")
@@ -261,9 +247,7 @@ target("launcher", function ()
     set_plat("windows")
     set_basename("LaunchCoopAndreas") 
 
-    if force_msvc == true then
-        set_toolchains("msvc")
-    end
+    set_toolchains("msvc")
 
     add_files("launcher/src/*.cpp")
     add_headerfiles("launcher/src/*.h")

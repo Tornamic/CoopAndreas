@@ -45,8 +45,8 @@ signed int CPedGroups::GetGroupId(CPedGroup *pedgrp) {
 int addrof(CPedGroups::GetPedsGroup) = ADDRESS_BY_VERSION(0x5F7E80, 0, 0, 0, 0, 0);
 int gaddrof(CPedGroups::GetPedsGroup) = GLOBAL_ADDRESS_BY_VERSION(0x5F7E80, 0, 0, 0, 0, 0);
 
-char *CPedGroups::GetPedsGroup(CPed *ped) {
-    return plugin::CallAndReturnDynGlobal<char *, CPed *>(gaddrof(CPedGroups::GetPedsGroup), ped);
+CPedGroup* CPedGroups::GetPedsGroup(CPed *ped) {
+    return plugin::CallAndReturnDynGlobal<CPedGroup*, CPed *>(gaddrof(CPedGroups::GetPedsGroup), ped);
 }
 
 int addrof(CPedGroups::Init) = ADDRESS_BY_VERSION(0x5FB8C0, 0, 0, 0, 0, 0);

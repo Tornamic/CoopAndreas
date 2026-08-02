@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <Debug/CImGui.h>
 
 // temporary disable some game content
 
@@ -99,7 +100,7 @@ void PatchConsole()
 
 void __declspec(naked) RsMouseSetPos_Reimpl(RwV2d* pos)
 {
-    if (GetForegroundWindow() == RsGlobal.ps->window)
+    if (GetForegroundWindow() == RsGlobal.ps->window && !CImGui::ms_bActive)
     {
         __asm
         {

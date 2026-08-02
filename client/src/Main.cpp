@@ -31,6 +31,7 @@
 #include <CCompatibilityChecker.h>
 #include <CWeatherSync.h>
 #include <network/packets/scripts.h>
+#include <CNetworkEntityBlip.h>
 
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
@@ -211,6 +212,8 @@ public:
                 CAimSync::ProcessSyncing();
 
                 CNetworkPedManager::Process();
+
+                CNetworkEntityBlip::Update();
 
                 static uint32_t crashHotkeyPressedAt = 0;
 

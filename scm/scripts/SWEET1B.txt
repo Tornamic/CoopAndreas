@@ -550,6 +550,13 @@ goto @SWEET1B_3486
 :SWEET1B_3551
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 Text.PrintNow('SWE1_YH', 3000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SWE1_YH', 3000, 1, $NETWORK_PLAYER[$temp_int]) //Let’s just cruise through the hood and find us somebody selling.
+    end
+end
 
 :SWEET1B_3571
 if 
@@ -567,6 +574,18 @@ goto @SWEET1B_3571
 
 :SWEET1B_3636
 Text.PrintNow('SW1B_B', 10000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
+        if not Char.IsDead(35@)
+        then
+            Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 35@, false, BlipDisplay.Both, BlipColor.Red, 3)
+        end
+        Coop.PrintNowForNetworkPlayer('SW1B_B', 10000, 1, $NETWORK_PLAYER[$temp_int]) // ~s~Go beat up the ~r~crack dealer~s~
+    end
+end
 
 :SWEET1B_3652
 if or
@@ -1320,6 +1339,15 @@ goto @SWEET1B_15554
 :SWEET1B_7963
 Text.PrintNow('SW1B_1', 10000, 1)
 World.ClearArea(1, 2171.781, -1676.78, 14.0859, 8.0)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
+        Coop.UpdateCheckpointForNetworkPlayer(2171.781, -1676.78, 14.0859, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int]) //CRACK HOUSE
+        Coop.PrintNowForNetworkPlayer('SW1B_1', 7000, 1, $NETWORK_PLAYER[$temp_int]) // ~s~Go to ~r~crack dealer~s~    
+    end
+end
 
 :SWEET1B_8003
 if or
@@ -1419,6 +1447,15 @@ goto @SWEET1B_8567
 :SWEET1B_8603
 Blip.Remove(38@)
 38@ = Blip.AddForCoord(2169.72, -1673.14, 13.01)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        // Coop.UpdateCheckpointForNetworkPlayer(2169.72, -1673.14, 13.01, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int]) 
+    end
+end
+
 102@ = 3
 Camera.SetBehindPlayer
 Hud.SwitchWidescreen(False)
@@ -1463,6 +1500,21 @@ Hud.SwitchWidescreen(True)
 World.ClearArea(1, 319.15, 1120.89, 1082.87, 100.0)
 Blip.Remove(39@)
 Camera.DoFade(0, Fade.Out)
+
+/// teleport players into the interior
+
+Streaming.SetAreaVisible(5)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 5)
+    end
+end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
+
+///
+
 Streaming.RequestModel(102)
 Streaming.RequestModel(64)
 Streaming.RequestModel(63)
@@ -1501,31 +1553,52 @@ Task.GoStraightToCoord(-1, 315.81, 1122.3, 1082.8, MoveState.Run, 10000)
 Task.PlayAnim(-1, "BBALBAT_IDLE_01", "CRACK", 4.0, True, False, False, False, -1)
 Sequence.Close(68@)
 World.SwitchEntryExit('LACRAK', False)
+
+// TODO: move in proper order once getting rid of `tempid`
+
 61@ = Char.Create(5, 64, 309.77, 1123.5, 1082.87)
+36@ = Char.Create(25, 64, 317.5892, 1124.777, 1082.867)
+54@ = Char.Create(25, 102, 325.0, 1119.975, 1082.875)
+49@ = Char.Create(25, 102, 320.1898, 1123.292, 1082.875)
+62@ = Char.Create(25, 102, 333.63, 1124.51, 1082.88)
+64@ = Char.Create(25, 102, 325.0, 1129.213, 1082.883)
+65@ = Char.Create(5, 63, 324.0, 1129.2, 1082.883)
+59@ = Char.Create(25, 102, 333.4072, 1124.462, 1082.89)
+37@ = Char.Create(25, 28, 306.03, 1121.86, 1082.87)
+
+// wait for the first one and for the last one
+$temp_int = Coop.GetPedNetworkId(61@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(61@)
+end
+
+$temp_int = Coop.GetPedNetworkId(37@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(37@)
+end
+
 Char.SetAreaVisible(61@, 5)
 Char.SetHeading(61@, 107.12)
 Task.PlayAnimNonInterruptable(61@, "CRCKIDLE4", "CRACK", 4.0, True, False, False, False, -1)
 Char.SetDecisionMaker(61@, 75@)
-36@ = Char.Create(25, 64, 317.5892, 1124.777, 1082.867)
 Char.SetAreaVisible(36@, 5)
 Char.SetHeading(36@, 180.0)
 Task.PlayAnimNonInterruptable(36@, "CRCKIDLE2", "CRACK", 4.0, True, False, False, False, -1)
 Char.SetDecisionMaker(36@, 75@)
-54@ = Char.Create(25, 102, 325.0, 1119.975, 1082.875)
 Char.SetAreaVisible(54@, 5)
 Char.SetHeading(54@, 90.0)
 Task.PlayAnimNonInterruptable(54@, "CRCKIDLE1", "CRACK", 4.0, True, False, False, False, -1)
 Char.SetDecisionMaker(54@, 75@)
 80@ = Object.Create(#CIGAR, 2440.58, -1979.89, 1082.2)
 Task.PickUpObject(54@, 80@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", -1)
-49@ = Char.Create(25, 102, 320.1898, 1123.292, 1082.875)
 Char.SetAreaVisible(49@, 5)
 Char.SetHeading(49@, 177.9659)
 Task.PlayAnimNonInterruptable(49@, "CRCKIDLE3", "CRACK", 4.0, True, False, False, False, -1)
 Char.SetDecisionMaker(49@, 75@)
 81@ = Object.Create(#CIGAR, 2440.58, -1979.89, 1082.2)
 Task.PickUpObject(49@, 81@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", -1)
-62@ = Char.Create(25, 102, 333.63, 1124.51, 1082.88)
 Char.SetMaxHealth(62@, 70)
 Char.SetHealth(62@, 70)
 Char.SetAreaVisible(62@, 5)
@@ -1536,7 +1609,15 @@ Char.SetRelationship(62@, RelationshipType.Dislike, PedType.Player1)
 Task.PickUpObject(62@, 82@, 0.0, 0.0, 0.0, 5, 16, "NULL", "NULL", -1)
 88@ = Blip.AddForChar(62@)
 Blip.SetEntryExit(88@, 2167.835, -1672.923, 2.0)
-64@ = Char.Create(25, 102, 325.0, 1129.213, 1082.883)
+
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 62@, false, BlipDisplay.Both, BlipColor.Red, 3)
+    end
+end
+
 Char.SetAreaVisible(64@, 5)
 Char.SetHeading(64@, 90.0)
 Task.PlayAnim(64@, "BJ_COUCH_LOOP_P", "BLOWJOBZ", 4.0, True, False, False, False, -1)
@@ -1544,20 +1625,26 @@ Char.SetDecisionMaker(64@, 34@)
 Char.SetRelationship(64@, RelationshipType.Dislike, PedType.Player1)
 89@ = Blip.AddForChar(64@)
 Blip.SetEntryExit(89@, 2167.835, -1672.923, 2.0)
-65@ = Char.Create(5, 63, 324.0, 1129.2, 1082.883)
+
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 64@, false, BlipDisplay.Both, BlipColor.Red, 3)
+    end
+end
+
 Char.SetAreaVisible(65@, 5)
 Char.SetHeading(65@, 270.0)
 Task.PlayAnim(65@, "BJ_COUCH_LOOP_W", "BLOWJOBZ", 4.0, True, False, False, False, -1)
 Char.SetDecisionMaker(65@, 75@)
 Char.SetRelationship(65@, RelationshipType.Dislike, PedType.Player1)
-59@ = Char.Create(25, 102, 333.4072, 1124.462, 1082.89)
 Char.SetAreaVisible(59@, 5)
 Char.SetHeading(59@, 83.6676)
 Task.PlayAnimNonInterruptable(59@, "CRCKIDLE3", "CRACK", 4.0, True, False, False, False, -1)
 Char.SetDecisionMaker(59@, 75@)
 81@ = Object.Create(#CIGAR, 2440.58, -1979.89, 1082.2)
 Task.PickUpObject(59@, 81@, 0.0, 0.0, 0.0, 6, 16, "NULL", "NULL", -1)
-37@ = Char.Create(25, 28, 306.03, 1121.86, 1082.87)
 Char.SetAreaVisible(37@, 5)
 Char.SetShootRate(37@, 80)
 Char.SetMaxHealth(37@, 150)
@@ -1568,6 +1655,15 @@ Char.SetDecisionMaker(37@, 34@)
 Char.SetRelationship(37@, RelationshipType.Dislike, PedType.Player1)
 45@ = Blip.AddForChar(37@)
 Blip.SetEntryExit(45@, 2167.835, -1672.923, 2.0)
+
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 37@, false, BlipDisplay.Both, BlipColor.Red, 3)
+    end
+end
+
 TIMERA = 0
 Audio.LoadMissionAudio(37487, 1)
 Audio.LoadMissionAudio(37488, 2)
@@ -1622,6 +1718,14 @@ goto @SWEET1B_10563
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 Text.PrintNow('SWE1_YX', 10000, 1)
 
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SWE1_YX', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
+
 :SWEET1B_10661
 if 
   not Audio.HasMissionAudioFinished(MissionAudioSlot.Slot1)
@@ -1660,6 +1764,14 @@ goto @SWEET1B_10760
 :SWEET1B_10838
 Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
 Text.PrintNow('SWE1_YY', 10000, 1)
+
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SWE1_YY', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :SWEET1B_10858
 if 
@@ -1816,6 +1928,13 @@ goto @SWEET1B_11795
 :SWEET1B_11873
 Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
 Text.PrintNow('BALLA_2', 10000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('BALLA_2', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :SWEET1B_11893
 if 
@@ -1931,6 +2050,13 @@ if
 goto_if_false @SWEET1B_12601
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 Text.PrintNow('BALLA_1', 2000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('BALLA_1', 2000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :SWEET1B_12601
 TIMERA = 0
@@ -1949,6 +2075,14 @@ if
 goto_if_false @SWEET1B_12701
 Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
 Text.PrintNow('RYDX_BC', 2000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('RYDX_BC', 2000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
+
 103@ = 1
 
 :SWEET1B_12701
@@ -2167,6 +2301,8 @@ goto_if_false @SWEET1B_13920
 87@ = 3
 gosub @SWEET1B_47
 
+200@ = 0
+
 :SWEET1B_13962
 if or
   not Char.LocateAnyMeans3D($scplayer, $blob_flag, 2513.3, -1671.9, 12.52, 4.0, 4.0, 4.0)
@@ -2214,6 +2350,18 @@ Group.SetMember($ryder, $Players_Group)
 Player.SetGroupRecruitment($player1, False)
 Char.ListenToPlayerGroupCommands($ryder, False)
 
+/// teleport the players out of the interior
+Streaming.SetAreaVisible(0)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
+    end
+end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
+///
+
 :SWEET1B_14363
 107@ = 1
 
@@ -2233,7 +2381,15 @@ goto_if_false @SWEET1B_14559
 if 
   Char.LocateAnyMeansChar3D($ryder, $scplayer, 10.0, 10.0, 8.0, False)
 goto_if_false @SWEET1B_14559
-World.SwitchEntryExit('LACRAK', False)
+
+/// fuck this, they call this every frame, create a guard variable
+if 
+    200@ == 0 
+then
+    World.SwitchEntryExit('LACRAK', False)
+    200@ = 1
+end
+
 if and
   Char.IsOnFoot($scplayer)
   Char.IsOnFoot($ryder)
@@ -2554,6 +2710,10 @@ then
 				then
 					if 201@($temp_int, 3i) == 0
 					then
+                        if not Char.IsDead(35@)
+                        then
+                            Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 35@)
+                        end
 						Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
 						Coop.PrintNowForNetworkPlayer('SW1B_H', 6000, 1, $NETWORK_PLAYER[$temp_int])
 						Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder, true, BlipDisplay.Both, BlipColor.Blue, 3)
@@ -2585,9 +2745,10 @@ then
 							if 102@ == 2
 							then
                                 Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
-								if 204@ == 0 // interior
+								if 204@ == 0 // areaId
 								then
-									Coop.UpdateCheckpointForNetworkPlayer(2171.781, -1676.78, 14.0859, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int]) //CRACK HOUSE
+                                    //CRACK HOUSE
+									Coop.UpdateCheckpointForNetworkPlayer(2171.781, -1676.78, 14.0859, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int]) 
 								end
 								Coop.PrintNowForNetworkPlayer('SW1B_1', 7000, 1, $NETWORK_PLAYER[$temp_int]) // ~s~Go to ~r~crack dealer~s~
 							end
@@ -2595,10 +2756,11 @@ then
 							if 102@ == 3
 							then
                                 Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
-								World.SwitchEntryExit('LACRAK', True)
-								if 204@ == 0
+								//World.SwitchEntryExit('LACRAK', True)
+								if 204@ == 0 // areaId
 								then
-									Coop.UpdateCheckpointForNetworkPlayer(2169.72, -1673.14, 13.01, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int]) //CRACK HOUSE door
+                                    //CRACK HOUSE door
+									//Coop.UpdateCheckpointForNetworkPlayer(2169.72, -1673.14, 13.01, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int]) 
 								end
 								Coop.PrintNowForNetworkPlayer('SW1B_1', 7000, 1, $NETWORK_PLAYER[$temp_int]) // ~s~Go to ~r~crack dealer~s~
 							end

@@ -26,6 +26,15 @@ void CPacketFactory::Send(Packet& packet)
     }
     writeStream.Flush();
 
+    SPacketRecord packetRecord{};
+    packetRecord.m_nSize = writeStream.GetBytesProcessed();
+    packetRecord.m_serverTime = g_serverTime;
+    packetRecord.m_bInbound = false;
+    packetRecord.m_bOutbound = true;
+    packetRecord.m_packetType = static_cast<ePacketType>(packetType);
+    packetRecord.m_sContent = packet.ToString();
+    GetPacketFactory().AddPacketRecord(packetRecord, g_serverTime);
+
     ePacketChannel packetChannel = packet.GetChannel();
     ePacketReliability packetReliability = GetChannelReliability(packetChannel);
 

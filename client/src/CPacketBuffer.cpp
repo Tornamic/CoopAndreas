@@ -41,6 +41,16 @@ void CPacketBuffer::Process()
         it = m_packets.erase(it);
 
         GetPacketHandler().ProcessPacket(pPacket);
+
+        SPacketRecord packetRecord{};
+        packetRecord.m_nSize = pPacket->GetBytesRead();
+        packetRecord.m_bInbound = true;
+        packetRecord.m_bOutbound = false;
+        packetRecord.m_packetType = pPacket->GetType();
+        packetRecord.m_serverTime = pPacket->serverTime;
+        packetRecord.m_sContent = pPacket->ToString();
+        GetPacketFactory().AddPacketRecord(packetRecord, renderTime);
+
         delete pPacket;
     }
 }
