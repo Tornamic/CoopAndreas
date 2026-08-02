@@ -55,8 +55,6 @@ target("client", function()
     add_headerfiles("third_party/imgui/**.h")
     add_includedirs("third_party/imgui")
 
-    --remove_file("third_party/imgui/imgui_demo.cpp")
-
     add_includedirs(
         "third_party/plugin-sdk/shared",
         "third_party/plugin-sdk/shared/game",
