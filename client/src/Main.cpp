@@ -4,7 +4,7 @@
 #include "CServerTime.h"
 #include "stdafx.h"
 #include "CCutsceneMgr.h"
-#include "CDXFont.h"
+#include "UI/CDXFont.h"
 
 #include "network/packets/players.h"
 #include "network/packet.h"
@@ -17,7 +17,7 @@
 #include <CGeneral.h>
 #include <CNetworkAnimQueue.h>
 #include <CNetworkCheckpoint.h>
-#include <CNetworkPlayerList.h>
+#include <UI/CNetworkPlayerList.h>
 #include <CNetworkStaticBlip.h>
 #include <COpCodeSync.h>
 #include <CPedPlacement.h>

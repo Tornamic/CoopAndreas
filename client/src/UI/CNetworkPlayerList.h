@@ -16,16 +16,16 @@ public:
 
 	static constexpr uint8_t PING_STRIPES = 4;
 	static constexpr float PING_OFFSET_X = 4.0f;
-	static constexpr float PING_OFFSET_Y = 27.0f;
+	static constexpr float PING_OFFSET_Y = 25.0f;
 	static constexpr float PING_SCALE_X = 1.0f;
 	static constexpr float PING_SCALE_Y = 2.5f;
 	static constexpr float PING_SPACE_X = 2.5f;
 	static constexpr float PING_ADD_SCALE_Y = 2.0f;
 
-	static constexpr float PING_COUNT_SCALE_X = 0.5f;
-	static constexpr float PING_COUNT_SCALE_Y = 0.9f;
-	static constexpr float PING_COUNT_OFFSET_X = 4.0f;
-	static constexpr float PING_COUNT_OFFSET_Y = 13.0f;
+	static constexpr float PING_COUNT_SCALE_X = 0.2f;
+	static constexpr float PING_COUNT_SCALE_Y = 0.3f;
+	static constexpr float PING_COUNT_OFFSET_X = (PING_STRIPES / 2.0f) * PING_SPACE_X - PING_SPACE_X / 2.0f;
+	static constexpr float PING_COUNT_OFFSET_Y = 10.0f;
 
 	static constexpr float SEPARATOR_PADDING_X = 5.0f;
 	static constexpr float SEPARATOR_OFFSET_Y = 0.5f;

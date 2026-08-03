@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CKeySync.h"
-#include "CChat.h"
+#include "UI/CChat.h"
 
 CControllerState storedOldState{};
 CControllerState storedNewState{};

@@ -25,8 +25,8 @@ void CNetworkPlayerWaypoint::Process()
 			D3DCOLOR shadowColor = D3DCOLOR_RGBA(0, 0, 0, 255);
 
 			// 8.0f - size of the sprite, / 2 - half of the size sprite
-			screen.x = CUtil::SCREEN_STRETCH_X(screen.x);
-			screen.y = CUtil::SCREEN_STRETCH_Y(screen.y) - CUtil::SCREEN_STRETCH_X(8.0f) / 2.f * offsetY;
+			screen.x = CUtil::HUD_X(screen.x);
+			screen.y = CUtil::HUD_Y(screen.y) - CUtil::HUD_X(8.0f) / 2.f * offsetY;
 
 			CRadar::LimitToMap(&screen.x, &screen.y);
 			RECT rect{};

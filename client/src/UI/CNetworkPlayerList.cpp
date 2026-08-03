@@ -4,8 +4,7 @@
 
 void CNetworkPlayerList::DrawBox(float fX, float fY)
 {
-    CRect rect = CRect(CUtil::SCREEN_STRETCH_X(fX), CUtil::SCREEN_STRETCH_Y(fY),
-        CUtil::SCREEN_STRETCH_X(fX + BOX_WIDTH), CUtil::SCREEN_STRETCH_Y(fY + BOX_HEIGHT));
+    CRect rect = CRect(CUtil::HUD_X(fX), CUtil::HUD_Y(fY), CUtil::HUD_X(fX + BOX_WIDTH), CUtil::HUD_Y(fY + BOX_HEIGHT));
 
     CSprite2d::DrawRect(rect, CRGBA(0, 0, 0, 190));
 
@@ -15,42 +14,63 @@ void CNetworkPlayerList::DrawBox(float fX, float fY)
     CFont::SetOrientation(eFontAlignment::ALIGN_LEFT);
     CFont::SetFontStyle(0);
 
-    CFont::SetScaleForCurrentlanguage(CUtil::SCREEN_STRETCH_X(0.6f), CUtil::SCREEN_STRETCH_Y(0.9f));
+    CFont::SetScaleForCurrentlanguage(CUtil::HUD_X(0.6f), CUtil::HUD_Y(0.9f));
 
-    CFont::PrintString(rect.left + CUtil::SCREEN_STRETCH_X(8.0f),
-        fmin(rect.bottom, rect.top) - CUtil::SCREEN_STRETCH_Y(10.0f), "Players");
+    CFont::PrintString(rect.left + CUtil::HUD_X(8.0f), fmin(rect.bottom, rect.top) - CUtil::HUD_Y(10.0f), "Players");
 }
 
 void CNetworkPlayerList::DrawPing(CNetworkPlayer* pNetworkPlayer, float fX, float fY)
 {
-    uint32_t nPing = pNetworkPlayer == nullptr ? CNetwork::GetRTT() : pNetworkPlayer->m_nRTT;
+    uint32_t nRTT = pNetworkPlayer == nullptr ? CNetwork::GetRTT() : pNetworkPlayer->m_nRTT;
+    uint32_t nPingStripesNum = PING_STRIPES;
+
+    static const CRGBA colGreen = CRGBA(35, 176, 74, 255);
+    static const CRGBA colYellow = CRGBA(253, 197, 0, 255);
+    static const CRGBA colRed = CRGBA(255, 45, 45, 255);
 
     CRGBA pingColor;
 
-    if (nPing < 80)
+    if (nRTT <= 60)
     {
-        pingColor = CRGBA(35, 176, 74, 255);
+        nPingStripesNum = PING_STRIPES;
+        pingColor = colGreen;
     }
-    else if (nPing < 150)
+    else if (nRTT <= 100)
     {
-        pingColor = CRGBA(253, 197, 0, 255);
+        nPingStripesNum = PING_STRIPES - 1;
+        pingColor = colGreen;
+    }
+    else if (nRTT <= 150)
+    {
+        nPingStripesNum = PING_STRIPES - 2;
+        pingColor = colYellow;
     }
     else
     {
-        pingColor = CRGBA(255, 45, 45, 255);
+        nPingStripesNum = PING_STRIPES - 3;
+        pingColor = colRed;
     }
 
-    CRect rect = CRect(CUtil::SCREEN_STRETCH_X(fX + PING_OFFSET_X), CUtil::SCREEN_STRETCH_Y(fY + PING_OFFSET_Y),
-        CUtil::SCREEN_STRETCH_X(fX + PING_OFFSET_X + PING_SCALE_X),
-        CUtil::SCREEN_STRETCH_Y(fY + PING_OFFSET_Y + PING_SCALE_Y));
+    CRect rect = CRect(CUtil::HUD_X(fX + PING_OFFSET_X), CUtil::HUD_Y(fY + PING_OFFSET_Y),
+        CUtil::HUD_X(fX + PING_OFFSET_X + PING_SCALE_X), CUtil::HUD_Y(fY + PING_OFFSET_Y + PING_SCALE_Y));
 
-    for (uint8_t i = 0; i < PING_STRIPES; i++)
+    for (uint8_t i = 0; i < nPingStripesNum; i++)
     {
         CSprite2d::DrawRect(rect, pingColor);
 
-        rect.left += CUtil::SCREEN_STRETCH_X(PING_SPACE_X);
-        rect.right += CUtil::SCREEN_STRETCH_X(PING_SPACE_X);
-        rect.top -= CUtil::SCREEN_STRETCH_Y(PING_ADD_SCALE_Y);
+        rect.left += CUtil::HUD_X(PING_SPACE_X);
+        rect.right += CUtil::HUD_X(PING_SPACE_X);
+        rect.top -= CUtil::HUD_Y(PING_ADD_SCALE_Y);
+    }
+
+    for (; nPingStripesNum < PING_STRIPES; nPingStripesNum++)
+    {
+        pingColor.a = 100;
+        CSprite2d::DrawRect(rect, pingColor);
+
+        rect.left += CUtil::HUD_X(PING_SPACE_X);
+        rect.right += CUtil::HUD_X(PING_SPACE_X);
+        rect.top -= CUtil::HUD_Y(PING_ADD_SCALE_Y);
     }
 
     CFont::SetOrientation(eFontAlignment::ALIGN_CENTER);
@@ -58,9 +78,12 @@ void CNetworkPlayerList::DrawPing(CNetworkPlayer* pNetworkPlayer, float fX, floa
     CFont::SetFontStyle(1);
     CFont::SetEdge(0);
 
-    CFont::SetScale(PING_COUNT_SCALE_X, PING_COUNT_SCALE_Y);
-    CFont::PrintString(CUtil::SCREEN_STRETCH_X(fX + PING_OFFSET_X + PING_COUNT_OFFSET_X),
-        rect.top + CUtil::SCREEN_STRETCH_Y(PING_COUNT_OFFSET_Y), std::to_string(nPing).c_str());
+    char buffer[16];
+    _itoa_s(nRTT, buffer, sizeof(buffer), 10);
+
+    CFont::SetScale(CUtil::HUD_X(PING_COUNT_SCALE_X), CUtil::HUD_Y(PING_COUNT_SCALE_Y));
+    CFont::PrintString(CUtil::HUD_X(fX + PING_OFFSET_X + PING_COUNT_OFFSET_X),
+        CUtil::HUD_Y(fY + PING_OFFSET_Y + PING_COUNT_OFFSET_Y - PING_ADD_SCALE_Y * PING_STRIPES), buffer);
 }
 
 void CNetworkPlayerList::DrawName(CNetworkPlayer* pNetworkPlayer, float fX, float fY)
@@ -79,28 +102,25 @@ void CNetworkPlayerList::DrawName(CNetworkPlayer* pNetworkPlayer, float fX, floa
     float fNormalizedValue =
         static_cast<float>(strlen(szPlayerName) - 1) / static_cast<float>(sizeof(szPlayerName) / sizeof(char) - 1 - 1);
 
-    CFont::SetScale(
-        CUtil::SCREEN_STRETCH_X(MAX_NAME_SCALE_X - (MAX_NAME_SCALE_X - MIN_NAME_SCALE_X) * fNormalizedValue),
-        CUtil::SCREEN_STRETCH_Y(MAX_NAME_SCALE_Y - (MAX_NAME_SCALE_Y - MIN_NAME_SCALE_Y) * fNormalizedValue));
+    CFont::SetScale(CUtil::HUD_X(MAX_NAME_SCALE_X - (MAX_NAME_SCALE_X - MIN_NAME_SCALE_X) * fNormalizedValue),
+        CUtil::HUD_Y(MAX_NAME_SCALE_Y - (MAX_NAME_SCALE_Y - MIN_NAME_SCALE_Y) * fNormalizedValue));
 
     CFont::SetOrientation(eFontAlignment::ALIGN_LEFT);
     CFont::SetColor(CRGBA(255, 255, 255, 255));
     CFont::SetFontStyle(1);
     CFont::SetEdge(1);
 
-    CFont::PrintString(CUtil::SCREEN_STRETCH_X(fX + NAME_OFFSET_X),
-        CUtil::SCREEN_STRETCH_Y(fY + NAME_OFFSET_Y) +
-            CUtil::SCREEN_STRETCH_Y(4.0f + MAX_NAME_OFFSET_Y * fNormalizedValue),
-        szPlayerName);
+    CFont::PrintString(CUtil::HUD_X(fX + NAME_OFFSET_X),
+        CUtil::HUD_Y(fY + NAME_OFFSET_Y) + CUtil::HUD_Y(4.0f + MAX_NAME_OFFSET_Y * fNormalizedValue), szPlayerName);
 }
 
 void CNetworkPlayerList::DrawBars(CPlayerPed* pPlayerPed, float fX, float fY)
 {
-    float fBarOffsetX = CUtil::SCREEN_STRETCH_X(fX + BAR_OFFSET_X + BOX_WIDTH / 2.0f);
-    float fBarOffsetY = CUtil::SCREEN_STRETCH_Y(fY + BAR_OFFSET_Y);
+    float fBarOffsetX = CUtil::HUD_X(fX + BAR_OFFSET_X + BOX_WIDTH / 2.0f);
+    float fBarOffsetY = CUtil::HUD_Y(fY + BAR_OFFSET_Y);
 
-    uint16_t barWidth = static_cast<uint16_t>(CUtil::SCREEN_STRETCH_X(BAR_WIDTH));
-    uint8_t barHeight = static_cast<uint8_t>(CUtil::SCREEN_STRETCH_Y(BAR_HEIGHT));
+    uint16_t barWidth = static_cast<uint16_t>(CUtil::HUD_X(BAR_WIDTH));
+    uint8_t barHeight = static_cast<uint8_t>(CUtil::HUD_Y(BAR_HEIGHT));
 
     if (pPlayerPed->m_fArmour != 0.0f)
     {
@@ -118,13 +138,13 @@ void CNetworkPlayerList::DrawWeaponIcon(CPlayerPed* pPlayerPed, float fX, float 
 
     int nModelId = CUtil::GetWeaponModelById(pPlayerPed->GetWeapon().m_eWeaponType);
 
-    float fWidth = CUtil::SCREEN_STRETCH_X(47.0f / 2.0f);
-    float fHeight = CUtil::SCREEN_STRETCH_Y(58.0f / 2.0f);
+    float fWidth = CUtil::HUD_X(47.0f / 2.0f);
+    float fHeight = CUtil::HUD_Y(58.0f / 2.0f);
     float fHalfWidth = fWidth / 2.0f;
     float fHalfHeight = fHeight / 2.0f;
 
-    float fOffsetX = CUtil::SCREEN_STRETCH_X(fX + BOX_WIDTH) - fWidth - CUtil::SCREEN_SCALE_X(7.0f);
-    float fOffsetY = CUtil::SCREEN_STRETCH_Y(fY + NAME_OFFSET_Y) - fHalfHeight / 2.0f;
+    float fOffsetX = CUtil::HUD_X(fX + BOX_WIDTH) - fWidth - CUtil::SCREEN_SCALE_X(7.0f);
+    float fOffsetY = CUtil::HUD_Y(fY + NAME_OFFSET_Y) - fHalfHeight / 2.0f;
 
     if (nModelId <= 0)
     {
@@ -160,9 +180,9 @@ void CNetworkPlayerList::DrawSeparator(float fCenterBoxX, float fCenterBoxY, flo
     float fSeparatorX = fCenterBoxX + SEPARATOR_PADDING_X;
     float fSeparatorY = fColumnY + fCenterBoxY / 2.0f + SEPARATOR_OFFSET_Y;
 
-    CSprite2d::DrawRect(CRect(CUtil::SCREEN_STRETCH_X(fSeparatorX), CUtil::SCREEN_STRETCH_Y(fSeparatorY),
-                            CUtil::SCREEN_STRETCH_X(fSeparatorX + BOX_WIDTH + SEPARATOR_WIDTH),
-                            CUtil::SCREEN_STRETCH_Y(fSeparatorY + SEPARATOR_HEIGHT)),
+    CSprite2d::DrawRect(
+        CRect(CUtil::HUD_X(fSeparatorX), CUtil::HUD_Y(fSeparatorY),
+            CUtil::HUD_X(fSeparatorX + BOX_WIDTH + SEPARATOR_WIDTH), CUtil::HUD_Y(fSeparatorY + SEPARATOR_HEIGHT)),
         CRGBA(169, 169, 169, 130));
 }
 
