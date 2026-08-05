@@ -3,6 +3,8 @@
 #include <game_sa/CTaskSequences.h>
 #include <COpCodeSync.h>
 
+// TODO: SET_SEQUENCE_TO_REPEAT
+
 SSyncedOpCode m_syncedTasks[] = // TODO
 {
 	{COMMAND_TASK_PLAY_ANIM_NON_INTERRUPTABLE, true, eSyncedParamType::PED},
@@ -24,6 +26,8 @@ SSyncedOpCode m_syncedTasks[] = // TODO
 	{COMMAND_TASK_DIE_NAMED_ANIM, true, eSyncedParamType::PED},
 	{COMMAND_TASK_PLAY_ANIM_WITH_FLAGS, true, eSyncedParamType::PED},
 	{COMMAND_TASK_LEAVE_ANY_CAR, true, eSyncedParamType::PED},
+	{COMMAND_TASK_LOOK_ABOUT, true, eSyncedParamType::PED},
+	{COMMAND_TASK_WANDER_STANDARD, true, eSyncedParamType::PED},
 };
 
 std::vector<uint8_t> m_serializedSequences[CTaskSequences::NUM_SEQUENCES][CTaskSequences::NUM_TASKS];

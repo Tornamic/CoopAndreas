@@ -85,6 +85,7 @@ const SSyncedOpCode syncedOpcodes[] =
     // Interiors
     {0x04BB}, // set_area_visible {areaId} [Interior]
     //{0x07FB}, // switch_entry_exit {interiorName} [string] {state} [bool]
+    {COMMAND_ACTIVATE_INTERIOR_PEDS},
     
     // Weapons
     {0x06AB, true, {eSyncedParamType::PED}}, // hide_char_weapon_for_scripted_cutscene [Char] {state} [bool]
@@ -125,6 +126,8 @@ const SSyncedOpCode syncedOpcodes[] =
     {COMMAND_TASK_DIE_NAMED_ANIM, true, eSyncedParamType::PED},
     {COMMAND_TASK_PLAY_ANIM_WITH_FLAGS, true, eSyncedParamType::PED},
     {COMMAND_TASK_LEAVE_ANY_CAR, true, eSyncedParamType::PED},
+    {COMMAND_TASK_LOOK_ABOUT, true, eSyncedParamType::PED},
+    {COMMAND_TASK_WANDER_STANDARD, true, eSyncedParamType::PED},
 
     // Actors
     {0x00A1, true, {eSyncedParamType::PED}}, // set_char_coordinates [Char] {x} [float] {y} [float] {z} [float]
