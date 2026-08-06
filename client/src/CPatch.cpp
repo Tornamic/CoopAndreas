@@ -152,6 +152,10 @@ void PatchPools()
     // push 8Ch -> push FFh
     patch::SetRaw(0x551282, (void*)"\x68\xFF\x00\x00\x00", 5);
 
+    // task pool (1000)
+    // push 1F4h -> push 3E8h
+    patch::SetRaw(0x55113E, (void*)"\x68\xE8\x03\x00\x00", 5);
+
     // vehicle pool (255)
     // push 6Eh -> push FFh
     patch::SetRaw(0x551024, (void*)"\x6A\x00\x68\xFF\x00\x00\x00", 7);
