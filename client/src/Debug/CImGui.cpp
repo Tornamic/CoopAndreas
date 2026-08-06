@@ -4,7 +4,7 @@
 #include "backends/imgui_impl_win32.h"
 #include "backends/imgui_impl_dx9.h"
 #include "CPacketTimeline.h"
-#include <filesystem>
+
 ImFont* pFont;
 
 void InitFonts()
@@ -17,11 +17,11 @@ void InitFonts()
     pFont = nullptr;
 
     std::string segoePath = fontsDir + "segoeui.ttf";
-    if (std::filesystem::exists(segoePath))
+    if (FileExists(segoePath.c_str()))
     {
         pFont = io.Fonts->AddFontFromFileTTF(segoePath.c_str(), 16.0f);
     }
-    
+
     if (!pFont)
     {
         pFont = io.Fonts->AddFontDefault();
