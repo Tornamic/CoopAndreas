@@ -4,17 +4,28 @@
 #include "backends/imgui_impl_win32.h"
 #include "backends/imgui_impl_dx9.h"
 #include "CPacketTimeline.h"
-
+#include <filesystem>
 ImFont* pFont;
 
 void InitFonts()
 {
     char windowsDir[MAX_PATH];
     GetWindowsDirectoryA(windowsDir, MAX_PATH);
+    std::string fontsDir = std::string(windowsDir) + "\\Fonts\\";
 
-    std::string fontPath = std::string(windowsDir) + "\\Fonts\\segoeui.ttf";
+    ImGuiIO& io = ImGui::GetIO();
+    pFont = nullptr;
 
-    pFont = ImGui::GetIO().Fonts->AddFontFromFileTTF(fontPath.c_str(), 16.0f);
+    std::string segoePath = fontsDir + "segoeui.ttf";
+    if (std::filesystem::exists(segoePath))
+    {
+        pFont = io.Fonts->AddFontFromFileTTF(segoePath.c_str(), 16.0f);
+    }
+    
+    if (!pFont)
+    {
+        pFont = io.Fonts->AddFontDefault();
+    }
 }
 
 void InitStyles()
