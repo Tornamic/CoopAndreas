@@ -31,3 +31,8 @@ PACKET_HANDLER(ePacketType::UPDATE_ALL_TAGS, Packets::World::UpdateAllTags* pUpd
 		GetPacketFactory().SendToAll(*pUpdateAllTags, pNetworkPlayer);
 	}
 }
+
+PACKET_HANDLER(ePacketType::UPDATE_MOON_SIZE, Packets::World::UpdateMoonSize* pUpdateMoonSize, CNetworkPlayer* pNetworkPlayer)
+{
+	GetPacketFactory().SendToAll(*pUpdateMoonSize, pNetworkPlayer);
+}

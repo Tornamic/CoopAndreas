@@ -4,6 +4,7 @@
 #include "network/packets/system.h"
 #include "stdafx.h"
 #include <CWeatherSync.h>
+#include <CMoonSync.h>
 #include <game_sa/CTagManager.h>
 
 PACKET_HANDLER(ePacketType::PLAYER_CONNECTED, Packets::System::PlayerConnected* pPlayerConnected)
@@ -26,6 +27,7 @@ PACKET_HANDLER(ePacketType::PLAYER_CONNECTED, Packets::System::PlayerConnected* 
         CNetworkStaticBlip::ms_bNeedToSendAfterThisFrame = true;
         CEntryExitMarkerSync::ms_bUpdateAfterProcessingThisFrame = true;
         CTagSync::SyncCurrentState();
+        CMoonSync::SyncCurrentState();
     }
 }
 

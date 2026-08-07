@@ -3,6 +3,7 @@
 #include "CKeySync.h"
 #include <CCutsceneMgr.h>
 #include <CWeatherSync.h>
+#include <CCoronas.h>
 
 static void __cdecl CMenuManager__DrawFrontEnd_FixChat_Hook(float alpha)
 {
@@ -153,6 +154,30 @@ int __purecall_Hook()
     return 0;
 }
 
+static bool __fastcall CWeapon__FireSniper_Hook(CWeapon* This, SKIP_EDX, CPed* creator, CEntity* victim, CVector* target)
+{
+    if (creator != FindPlayerPed(0))
+    {
+        uint8_t moonSize = CCoronas::MoonSize;
+        bool result = This->FireSniper(creator, victim, target);
+
+        CCoronas::MoonSize = moonSize;
+        return result;
+    }
+
+    uint8_t oldMoonSize = CCoronas::MoonSize;
+    bool result = This->FireSniper(creator, victim, target);
+
+    if (oldMoonSize != CCoronas::MoonSize)
+    {
+        Packets::World::UpdateMoonSize packet{};
+        packet.moonSize = CCoronas::MoonSize;
+        GetPacketFactory().Send(packet);
+    }
+
+    return result;
+}
+
 #ifdef DEBUG
 bool __fastcall CPCKeyboard__GetKeyDown_Hook(int, int, uint16_t key_code, uint8_t use_mode, char* usage)
 {
@@ -189,6 +214,8 @@ void GameHooks::InjectHooks()
     // patch::RedirectCall(0x475459, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
 
     patch::RedirectJump(PURECALL, __purecall_Hook);
+
+    patch::RedirectCall(0x7424CB, CWeapon__FireSniper_Hook);
 
 #ifdef DEBUG
     /*patch::ReplaceFunction(0x571980, CPCKeyboard__GetKeyDown_Hook);

@@ -185,4 +185,21 @@ private:
         return true;
     }
 };
+
+class UpdateMoonSize : public Packet
+{
+    DEFINE_PACKET_TYPE(UpdateMoonSize, ePacketType::UPDATE_MOON_SIZE, ePacketChannel::EVENT);
+
+public:
+    uint8_t moonSize;
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_int(stream, moonSize, 0, 7);
+        return true;
+    }
+};
+
 }  // namespace Packets::World
