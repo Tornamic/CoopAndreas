@@ -13,6 +13,7 @@ unsigned char *CVehicleModelInfo::ms_currentCol = (unsigned char *)0xB4E3F0;
 CRGBA *CVehicleModelInfo::ms_vehicleColourTable = (CRGBA *)0xB4E480;
 char *CVehicleModelInfo::ms_compsUsed = (char *)0xB4E478;
 char *CVehicleModelInfo::ms_compsToUse = (char *)0x8A6458;
+CPool<CVehicleModelInfo>*& CVehicleModelInfo::CVehicleStructure::m_pInfoPool = *(CPool<CVehicleModelInfo>**)0xB4E680;
 
 void CVehicleModelInfo::ShutdownLightTexture()
 {

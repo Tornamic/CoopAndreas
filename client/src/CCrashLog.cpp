@@ -469,6 +469,12 @@ LONG __stdcall CCrashLog::ExceptionHandler(_EXCEPTION_POINTERS* exceptionInfo) {
             CPools::ms_pPtrNodeDoubleLinkPool->m_nSize);
     }
 
+    if (CVehicleModelInfo::CVehicleStructure::m_pInfoPool)
+    {
+        WriteDumpf("   VehicleStruct %d/%d\r\n", CVehicleModelInfo::CVehicleStructure::m_pInfoPool->GetNoOfUsedSpaces(),
+            CVehicleModelInfo::CVehicleStructure::m_pInfoPool->m_nSize);
+    }
+
 
     CreateDirectoryA("CoopAndreas_crashes", NULL);
 

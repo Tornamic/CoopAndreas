@@ -160,6 +160,12 @@ void PatchPools()
     // push 6Eh -> push FFh
     patch::SetRaw(0x551024, (void*)"\x6A\x00\x68\xFF\x00\x00\x00", 7);
     
+    // fixes the 0x4C9691 crash
+    // vehicle struct pool (127)
+    // push 32h -> push 7Fh
+    patch::SetUChar(0x5B8FE3+1, 0x7F);
+    patch::SetUChar(0x5B8E6E + 6, 0x7F); // CStreaming::desiredNumVehiclesLoaded from 22 to 127
+
     // CCarGenerator::Process 0x6F3EF5 CRASH FIX #95
     // orig: `movsx ecx, ax`
     // new:  `movzx ecx, ax`
