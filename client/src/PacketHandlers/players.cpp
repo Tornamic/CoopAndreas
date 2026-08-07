@@ -187,6 +187,11 @@ PACKET_HANDLER(ePacketType::PLAYER_BULLET_SHOT, Packets::Players::PlayerBulletSh
         colPoint.m_nSurfaceTypeB = 0;
     }
 
+    if (victim && !victim->IsVTableValid())
+    {
+        victim = nullptr;
+    }
+
     pNetworkPlayer->m_pPed->GetWeapon().DoBulletImpact(
         owner, victim, &startPoint, &pPlayerBulletShot->endPos, &colPoint, incrementalHit);
 }
