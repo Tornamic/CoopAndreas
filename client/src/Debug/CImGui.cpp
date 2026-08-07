@@ -11,10 +11,21 @@ void InitFonts()
 {
     char windowsDir[MAX_PATH];
     GetWindowsDirectoryA(windowsDir, MAX_PATH);
+    std::string fontsDir = std::string(windowsDir) + "\\Fonts\\";
 
-    std::string fontPath = std::string(windowsDir) + "\\Fonts\\segoeui.ttf";
+    ImGuiIO& io = ImGui::GetIO();
+    pFont = nullptr;
 
-    pFont = ImGui::GetIO().Fonts->AddFontFromFileTTF(fontPath.c_str(), 16.0f);
+    std::string segoePath = fontsDir + "segoeui.ttf";
+    if (FileExists(segoePath.c_str()))
+    {
+        pFont = io.Fonts->AddFontFromFileTTF(segoePath.c_str(), 16.0f);
+    }
+
+    if (!pFont)
+    {
+        pFont = io.Fonts->AddFontDefault();
+    }
 }
 
 void InitStyles()
