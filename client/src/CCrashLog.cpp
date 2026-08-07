@@ -409,6 +409,67 @@ LONG __stdcall CCrashLog::ExceptionHandler(_EXCEPTION_POINTERS* exceptionInfo) {
             script->m_bNotFlag);
     }
 
+    WriteDumpf("\r\n");
+    WriteDumpf("Pools:\r\n");
+
+    if (CPools::ms_pPedPool)
+    {
+        WriteDumpf("   Ped %d/%d\r\n", CPools::ms_pPedPool->GetNoOfUsedSpaces(), CPools::ms_pPedPool->m_nSize);
+    }
+
+    if (CPools::ms_pVehiclePool)
+    {
+        WriteDumpf(
+            "   Vehicle %d/%d\r\n", CPools::ms_pVehiclePool->GetNoOfUsedSpaces(), CPools::ms_pVehiclePool->m_nSize);
+    }
+
+    if (CPools::ms_pBuildingPool)
+    {
+        WriteDumpf("   Building %d/%d\r\n", CPools::ms_pBuildingPool->GetNoOfUsedSpaces(),
+            CPools::ms_pBuildingPool->m_nSize);
+    }
+
+    if (CPools::ms_pObjectPool)
+    {
+        WriteDumpf(
+            "   Object %d/%d\r\n", CPools::ms_pObjectPool->GetNoOfUsedSpaces(), CPools::ms_pObjectPool->m_nSize);
+    }
+
+    if (CPools::ms_pDummyPool)
+    {
+        WriteDumpf("   Dummy %d/%d\r\n", CPools::ms_pDummyPool->GetNoOfUsedSpaces(), CPools::ms_pDummyPool->m_nSize);
+    }
+
+    if (CPools::ms_pColModelPool)
+    {
+        WriteDumpf("   ColModel %d/%d\r\n", CPools::ms_pColModelPool->GetNoOfUsedSpaces(),
+            CPools::ms_pColModelPool->m_nSize);
+    }
+
+    if (CPools::ms_pTaskPool)
+    {
+        WriteDumpf("   Task %d/%d\r\n", CPools::ms_pTaskPool->GetNoOfUsedSpaces(), CPools::ms_pTaskPool->m_nSize);
+    }
+
+    if (CPools::ms_pPedIntelligencePool)
+    {
+        WriteDumpf("   PedIntelligence %d/%d\r\n", CPools::ms_pPedIntelligencePool->GetNoOfUsedSpaces(),
+            CPools::ms_pPedIntelligencePool->m_nSize);
+    }
+
+    if (CPools::ms_pPtrNodeSingleLinkPool)
+    {
+        WriteDumpf("   PtrNodeSingleLink %d/%d\r\n", CPools::ms_pPtrNodeSingleLinkPool->GetNoOfUsedSpaces(),
+            CPools::ms_pPtrNodeSingleLinkPool->m_nSize);
+    }
+
+    if (CPools::ms_pPtrNodeDoubleLinkPool)
+    {
+        WriteDumpf("   PtrNodeDoubleLink %d/%d\r\n", CPools::ms_pPtrNodeDoubleLinkPool->GetNoOfUsedSpaces(),
+            CPools::ms_pPtrNodeDoubleLinkPool->m_nSize);
+    }
+
+
     CreateDirectoryA("CoopAndreas_crashes", NULL);
 
     char filename[260];
