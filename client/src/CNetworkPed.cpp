@@ -67,6 +67,9 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
     m_nPedType = pedType;
     m_bSyncing = false;
     m_nCreatedBy = createdBy;
+
+    // THIS IS AN EXPERIMENTAL SOLUTION FOR THE 0x4D68BA CRASH
+    m_pPed->m_bStreamingDontDelete = true;
 }
 
 CNetworkPed::~CNetworkPed()
