@@ -392,6 +392,14 @@ bool __fastcall CPad__DuckJustDown_Hook(CPad* pPad, SKIP_EDX)
     return pPad->DuckJustDown();
 }
 
+void CamShakeNoPos_Hook(CCamera* pCamera, float a2)
+{
+    if (CWorld::PlayerInFocus == 0)
+    {
+        plugin::Call<0x50A970>(pCamera, a2);
+    }
+}
+
 void PlayerHooks::InjectHooks()
 {
     patch::SetPointer(0x86D190, CPlayerPed__ProcessControl_Hook);
@@ -445,4 +453,7 @@ void PlayerHooks::InjectHooks()
     patch::RedirectCall(0x687FFA, CPad__DuckJustDown_Hook);
     patch::RedirectCall(0x688689, CPad__DuckJustDown_Hook);
     //////////////////////////////////////////////////////////////////
+
+    // disable cam shake when a network player shoots the sniper rifle
+    patch::RedirectCall(0x73ACE2, CamShakeNoPos_Hook);
 }
