@@ -90,11 +90,11 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
         }
         else if (entity->m_nType == eEntityType::ENTITY_TYPE_PED)
         {
-            CPed* ped = (CPed*)entity;
+            CPed* pPed = static_cast<CPed*>(entity);
 
-            if (ped->m_nPedType > 1)
+            if (pPed->m_nPedType > 1 && !CNetworkPedManager::IsPedTracked(pPed))
             {
-                CNetworkPed* networkPed = CNetworkPed::CreateHosted(ped);
+                CNetworkPed::CreateHosted(pPed);
             }
         }
     }
@@ -114,24 +114,17 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
             delete networkVehicle;
         }
     }
-    else if (entity->m_nType == eEntityType::ENTITY_TYPE_PED)
-    {
-        CPed* ped = (CPed*)entity;
-        if (ped->m_nPedType > 3)
-        {
-            CNetworkPed* networkPed = CNetworkPedManager::GetPed(ped);
-            if (networkPed && networkPed->m_bSyncing)
-            {
-                CNetworkPedManager::Remove(networkPed);
-                delete networkPed;
-            }
-        }
-    }
-
     if (entity && (unsigned int)*(void***)entity != 0x863C40)
     {
         CWorld::Remove(entity);
     }
+}
+
+static void __cdecl CWorld__RemovePedDestructor_Hook(CPed* pPed)
+{
+    // CPed::~CPed still owns its pool slot here. Detach every wrapper before that slot can be reused.
+    CNetworkPedManager::HandlePedDestruction(pPed);
+    CWorld__Remove_Hook(pPed);
 }
 
 static bool __fastcall CEntryExit__TransitionStarted_Hook(CEntryExit* This, SKIP_EDX, CPed* ped)
@@ -295,12 +288,13 @@ void WorldHooks::InjectHooks()
         0x456E1E, 0x456EA0, 0x4571AD, 0x458E8A, 0x45BEFF, 0x45CCB5, 0x45D3C9, 0x45D3FE, 0x45ED11, 0x45ED69, 0x45FF78,
         0x45FFCB, 0x4610CC, 0x4698E4, 0x467B3C, 0x486D3E, 0x499D90, 0x49A45A, 0x53C98C, 0x5500C5, 0x5567CE, 0x5667B0,
         0x59163E, 0x593794, 0x5A1890, 0x5A18EA, 0x5A194E, 0x5A1A51, 0x5A32A2, 0x5A3FE2, 0x5AFE6E, 0x5D5112, 0x5E011C,
-        0x5E03DC, 0x5E86AF, 0x6094FC, 0x610F26, 0x612305, 0x612F1A, 0x615EA6, 0x615F2D, 0x616404, 0x61AEE3, 0x61AF07,
+        0x5E03DC, 0x6094FC, 0x610F26, 0x612305, 0x612F1A, 0x615EA6, 0x615F2D, 0x616404, 0x61AEE3, 0x61AF07,
         0x6C7B9A, 0x6CCCB2, 0x6D22D7, 0x6E3E7D, 0x6E3FFD, 0x6E4120, 0x6E51B4, 0x6F5DD7, 0x6F6A7B, 0x6F6B31, 0x6F7ACA,
         0x717897, 0x738AFF, 0x73997A, 0x739A17, 0x739AD0};
     patch::RedirectCall(
         std::vector<int>(CWorld__Remove_Addresses, CWorld__Remove_Addresses + sizeof(CWorld__Remove_Addresses) / 4),
         CWorld__Remove_Hook);
+    patch::RedirectCall(0x5E86AF, CWorld__RemovePedDestructor_Hook);
 
     // patch::RedirectJump(0x47D43E, CWeather__ForceWeather_Hook);
     // patch::RedirectJump(0x72A4F0, CWeather__ForceWeatherNow_Hook);
