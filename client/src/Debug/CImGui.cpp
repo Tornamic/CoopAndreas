@@ -4,6 +4,7 @@
 #include "backends/imgui_impl_win32.h"
 #include "backends/imgui_impl_dx9.h"
 #include "CPacketTimeline.h"
+#include "MissionRunner.h"
 
 ImFont* pFont;
 
@@ -36,6 +37,23 @@ void InitStyles()
     style.Colors[ImGuiCol_WindowBg] = ImColor(13, 19, 33, 255);
     style.Colors[ImGuiCol_ChildBg] = ImColor(24, 31, 47, 255);
     style.ChildRounding = 3.0f;
+}
+
+void CImGui::SetActive(bool bActive)
+{
+    ms_bActive = bActive;
+
+    if (ms_bActive)
+    {
+        CPad::GetPad(0)->DisablePlayerControls |= 0x200;
+    }
+    else
+    {
+        CPad::GetPad(0)->DisablePlayerControls &= ~0x200;
+    }
+
+    static_cast<IDirect3DDevice9*>(RwD3D9GetCurrentD3DDevice())->ShowCursor(ms_bActive);
+    ImGui::GetIO().MouseDrawCursor = ms_bActive;
 }
 
 void CImGui::Init()
@@ -93,6 +111,14 @@ void CImGui::Init()
                 CPacketTimeline::DrawUI();
             }
 
+            static bool bMissionRunner = false;
+            ImGui::Checkbox("Missions", &bMissionRunner);
+            if (bMissionRunner && MissionRunner::DrawUI())
+            {
+                bMissionRunner = false;
+                CImGui::SetActive(false);
+            }
+
             ImGui::End();
             ImGui::PopFont();
 
@@ -110,19 +136,7 @@ void CImGui::Init()
         if (strncmp(ACTIVATE_DEBUG_CHEAT, CCheat::m_CheatString, ARRAY_SIZE(ACTIVATE_DEBUG_CHEAT) - 1) == 0)
         {
             CCheat::m_CheatString[0] = '\0';
-            CImGui::ms_bActive = !CImGui::ms_bActive;
-
-            if (CImGui::ms_bActive)
-            {
-                CPad::GetPad(0)->DisablePlayerControls |= 0x200;
-            }
-            else
-            {
-                CPad::GetPad(0)->DisablePlayerControls &= ~0x200;
-            }
-
-            static_cast<IDirect3DDevice9*>(RwD3D9GetCurrentD3DDevice())->ShowCursor(CImGui::ms_bActive);
-            ImGui::GetIO().MouseDrawCursor = CImGui::ms_bActive;
+            CImGui::SetActive(!CImGui::ms_bActive);
         }
     };
 }
