@@ -56,6 +56,17 @@ void AnonymizeCrashLog(std::string& content)
 {
     char path[MAX_PATH];
 
+    // %GAME%
+    if (GetModuleFileNameA(NULL, path, MAX_PATH))
+    {
+        char* slash = strrchr(path, '\\');
+        if (slash)
+        {
+            *slash = '\0'; // remove "gta_sa.exe"
+            _ReplaceAllStr(content, path, "%GAME%");
+        }
+    }
+
     // %WINDIR%
     if (GetWindowsDirectoryA(path, MAX_PATH))
     {
@@ -66,17 +77,6 @@ void AnonymizeCrashLog(std::string& content)
     if (GetEnvironmentVariableA("USERPROFILE", path, MAX_PATH))
     {
         _ReplaceAllStr(content, path, "%USER%");
-    }
-
-    // %GAME%
-    if (GetModuleFileNameA(NULL, path, MAX_PATH))
-    {
-        char* slash = strrchr(path, '\\');
-        if (slash)
-        {
-            *slash = '\0'; // remove "gta_sa.exe"
-            _ReplaceAllStr(content, path, "%GAME%");
-        }
     }
 }
 
