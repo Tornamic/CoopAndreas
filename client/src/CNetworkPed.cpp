@@ -18,11 +18,8 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
     {
         switch (modelId) 
         {
-        case MODEL_LAPD1:
-        case MODEL_SFPD1:
-        case MODEL_LVPD1:
         case MODEL_LAPDM1:
-            modelId = COP_TYPE_CITYCOP;
+            modelId = COP_TYPE_LAPDM1;
             break;
         case MODEL_CSHER:
             modelId = COP_TYPE_CSHER;
