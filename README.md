@@ -241,7 +241,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [X] Big Smoke
 - [X] Ryder
 - [X] Tagging Up Turf
-- [ ] Cleaning The Hood
+- [X] Cleaning The Hood
 - [ ] Drive-Thru
 - [ ] Nines And AK's
 - [ ] Drive-By
