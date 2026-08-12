@@ -49,6 +49,10 @@ class CoopAndreas
 public:
     CoopAndreas()
     {
+        gameShutdownEvent.before += []
+        {
+            CEntryExitTransitionSync::Shutdown();
+        };
         Events::shutdownRwEvent += []
 			{
 				
