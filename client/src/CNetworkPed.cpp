@@ -49,6 +49,7 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
         m_pPed = new CCivilianPed(pedType, modelId);
     }
 
+    m_nPedPoolRef = CPools::GetPedRef(m_pPed);
     m_pPed->m_nCreatedBy = 2;
     m_pPed->m_pIntelligence->SetPedDecisionMakerType(-1);
     m_pPed->m_pIntelligence->SetSeeingRange(30.0);
@@ -64,62 +65,84 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
     m_nPedType = pedType;
     m_bSyncing = false;
     m_nCreatedBy = createdBy;
-
-    // THIS IS AN EXPERIMENTAL SOLUTION FOR THE 0x4D68BA CRASH
-    m_pPed->m_bStreamingDontDelete = true;
 }
 
 CNetworkPed::~CNetworkPed()
 {
+    CPed* pPed = HasValidPed() ? m_pPed : nullptr;
+    int nPedPoolRef = m_nPedPoolRef;
+    DetachPed();
+
     if (m_bSyncing)
     {
-        Packets::Peds::PedRemove packet{};
-        packet.pedid = m_nPedId;
-        GetPacketFactory().Send(packet);
+        if (m_nPedId >= 0)
+        {
+            Packets::Peds::PedRemove packet{};
+            packet.pedid = m_nPedId;
+            GetPacketFactory().Send(packet);
+        }
     }
     else
     {
-
-        if (m_pPed && m_pPed->m_matrix->m_pOwner)
+        if (pPed && pPed->m_matrix && pPed->m_matrix->m_pOwner)
         {
             if (m_nBlipHandle != -1)
             {
-                CRadar::ClearBlipForEntity(eBlipType::BLIP_CHAR, CPools::GetPedRef(m_pPed));
+                CRadar::ClearBlipForEntity(eBlipType::BLIP_CHAR, nPedPoolRef);
                 //CChat::AddMessage("REMOVE THE FUCKING BLIP");
             }
 
-            if (m_pPed->m_nPedFlags.bInVehicle)
+            if (pPed->m_nPedFlags.bInVehicle)
             {
-                plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
+                plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(nPedPoolRef, 0.f, 0.f, 0.f);
             }
 
-            CWorld::Remove(m_pPed);
-            //CWorld::RemoveReferencesToDeletedObject(m_pPed);
-            m_pPed->Remove();
-            delete m_pPed;
+            CWorld::Remove(pPed);
+            //CWorld::RemoveReferencesToDeletedObject(pPed);
+            pPed->Remove();
+            delete pPed;
         }
     }
 }
 
-CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
+bool CNetworkPed::HasValidPed() const
 {
-    ped->field_54C += 5000; // m_nTimeTillWeNeedThisPed
+    return m_pPed && m_nPedPoolRef >= 0 && CPools::ms_pPedPool && CPools::GetPed(m_nPedPoolRef) == m_pPed;
+}
 
-    CNetworkPed* networkPed = new CNetworkPed();
+void CNetworkPed::DetachPed()
+{
+    m_pPed = nullptr;
+    m_nPedPoolRef = -1;
+}
 
-    networkPed->m_pPed = ped;
-    networkPed->m_nPedId = 0;
-    networkPed->m_nCreatedBy = ped->m_nCreatedBy;
-    networkPed->m_bSyncing = true;
-    networkPed->m_nTempId = CNetworkPedManager::AddToTempList(networkPed);
+CNetworkPed* CNetworkPed::CreateHosted(CPed* pPed)
+{
+    CNetworkPed* pNetworkPed = new CNetworkPed();
+
+    pNetworkPed->m_pPed = pPed;
+    pNetworkPed->m_nPedPoolRef = CPools::GetPedRef(pPed);
+    pNetworkPed->m_nPedId = -1;
+    pNetworkPed->m_nCreatedBy = pPed->m_nCreatedBy;
+    pNetworkPed->m_bSyncing = true;
+    pNetworkPed->m_nTempId = CNetworkPedManager::AddToTempList(pNetworkPed);
+
+    if (pNetworkPed->m_nTempId == 255)
+    {
+        pNetworkPed->DetachPed();
+        delete pNetworkPed;
+        return nullptr;
+    }
+
+    pPed->field_54C += 5000; // m_nTimeTillWeNeedThisPed
 
     Packets::Peds::PedSpawn packet{};
-    packet.tempid = networkPed->m_nTempId;
-    packet.pedid = networkPed->m_nPedId;
-    packet.modelId = static_cast<eModelID>(ped->m_nModelIndex);
-    packet.pos = ped->m_matrix->pos;
-    packet.pedType = static_cast<ePedType>(ped->m_nPedType);
-    packet.createdBy = static_cast<eCharCreatedBy>(ped->m_nCreatedBy);
+    packet.tempid = pNetworkPed->m_nTempId;
+    packet.pedid = 0; // the server assigns the real id before forwarding the spawn
+    packet.modelId = static_cast<eModelID>(pPed->m_nModelIndex);
+    packet.pos = pPed->m_matrix->pos;
+    packet.pedType = static_cast<ePedType>(pPed->m_nPedType);
+    packet.createdBy = static_cast<eCharCreatedBy>(pPed->m_nCreatedBy);
 
     if (packet.modelId >= MODEL_SPECIAL01 && packet.modelId <= MODEL_SPECIAL10)
     {
@@ -128,7 +151,7 @@ CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
     }
     GetPacketFactory().Send(packet);
 
-    return networkPed;
+    return pNetworkPed;
 }
 
 void CNetworkPed::WarpIntoVehicleDriver(CVehicle* vehicle)

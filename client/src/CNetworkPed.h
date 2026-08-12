@@ -6,6 +6,7 @@ private:
 public:
 	int m_nPedId = -1;
 	CPed* m_pPed = nullptr;
+	int m_nPedPoolRef = -1;
 	bool m_bSyncing = false;
 	unsigned char m_nTempId = 255;
 	ePedType m_nPedType;
@@ -24,7 +25,9 @@ public:
 	int m_nBlipHandle = -1;
 	bool m_bClaimOnRelease = false;
 
-	static CNetworkPed* CreateHosted(CPed* ped);
+	static CNetworkPed* CreateHosted(CPed* pPed);
+	bool HasValidPed() const;
+	void DetachPed();
 	void WarpIntoVehicleDriver(CVehicle* vehicle);
 	void WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid);
 	void RemoveFromVehicle(CVehicle* vehicle);

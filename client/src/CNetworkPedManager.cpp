@@ -9,7 +9,7 @@ CNetworkPed* CNetworkPedManager::GetPed(int pedid)
 {
     for (int i = 0; i != m_pPeds.size(); i++)
     {
-        if (m_pPeds[i]->m_nPedId == pedid)
+        if (m_pPeds[i]->m_nPedId == pedid && m_pPeds[i]->HasValidPed())
         {
             return m_pPeds[i];
         }
@@ -24,13 +24,33 @@ CNetworkPed* CNetworkPedManager::GetPed(CEntity* entity)
 
     for (int i = 0; i != m_pPeds.size(); i++)
     {
-        if (m_pPeds[i]->m_pPed == entity)
+        if (m_pPeds[i]->m_pPed == entity && m_pPeds[i]->HasValidPed())
         {
             return m_pPeds[i];
         }
     }
 
     return nullptr;
+}
+
+bool CNetworkPedManager::IsPedTracked(CPed* pPed)
+{
+    if (!pPed)
+        return false;
+
+    for (CNetworkPed* pNetworkPed : m_pPeds)
+    {
+        if (pNetworkPed && pNetworkPed->m_pPed == pPed && pNetworkPed->HasValidPed())
+            return true;
+    }
+
+    for (CNetworkPed* pNetworkPed : m_apTempPeds)
+    {
+        if (pNetworkPed && pNetworkPed->m_pPed == pPed && pNetworkPed->HasValidPed())
+            return true;
+    }
+
+    return false;
 }
 
 void CNetworkPedManager::Add(CNetworkPed* ped)
@@ -47,9 +67,40 @@ void CNetworkPedManager::Remove(CNetworkPed* ped)
     }
 }
 
+void CNetworkPedManager::HandlePedDestruction(CPed* pPed)
+{
+    if (!pPed)
+        return;
+
+    // At the native destructor boundary, every wrapper retaining this address is stale,
+    // including wrappers from earlier pool generations.
+    for (auto it = m_pPeds.begin(); it != m_pPeds.end();)
+    {
+        CNetworkPed* pNetworkPed = *it;
+        if (!pNetworkPed || pNetworkPed->m_pPed != pPed)
+        {
+            ++it;
+            continue;
+        }
+
+        pNetworkPed->CancelClaim();
+        pNetworkPed->DetachPed();
+        it = m_pPeds.erase(it);
+        delete pNetworkPed;
+    }
+
+    for (CNetworkPed* pNetworkPed : m_apTempPeds)
+    {
+        if (!pNetworkPed || pNetworkPed->m_pPed != pPed)
+            continue;
+
+        pNetworkPed->DetachPed();
+    }
+}
+
 void CNetworkPedManager::Update()
 {
-    CNetworkPedManager::RemoveHostedUnused();
+    CNetworkPedManager::RemoveInvalidPeds();
 
     for (CNetworkPed* pNetworkPed : m_pPeds)
     {
@@ -193,6 +244,9 @@ void CNetworkPedManager::Process()
 {
     for (auto networkPed : m_pPeds)
     {
+        if (!networkPed->HasValidPed())
+            continue;
+
         if (networkPed->m_bSyncing)
             continue;
 
@@ -240,20 +294,27 @@ unsigned char CNetworkPedManager::AddToTempList(CNetworkPed* networkPed)
     return 255;
 }
 
-void CNetworkPedManager::RemoveHostedUnused()
+void CNetworkPedManager::RemoveInvalidPeds()
 {
     for (auto it = CNetworkPedManager::m_pPeds.begin(); it != CNetworkPedManager::m_pPeds.end();)
     {
-        if ((*it)->m_bSyncing)
+        CNetworkPed* pNetworkPed = *it;
+        if (!pNetworkPed->HasValidPed())
         {
-            CPed* ped = (*it)->m_pPed;
-            if (!IsPedPointerValid(ped))
-            {
-                delete *it;
-                it = m_pPeds.erase(it);
-                continue;
-            }
+            pNetworkPed->CancelClaim();
+            pNetworkPed->DetachPed();
+            it = m_pPeds.erase(it);
+            delete pNetworkPed;
+            continue;
         }
         ++it;
+    }
+
+    for (CNetworkPed* pNetworkPed : m_apTempPeds)
+    {
+        if (!pNetworkPed || !pNetworkPed->m_pPed || pNetworkPed->HasValidPed())
+            continue;
+
+        pNetworkPed->DetachPed();
     }
 }

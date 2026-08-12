@@ -29,8 +29,16 @@ PACKET_HANDLER(ePacketType::PED_CONFIRM, Packets::Peds::PedConfirm* pPedConfirm)
         if (pTempPed)
         {
             pTempPed->m_nPedId = pPedConfirm->pedid;
-            CNetworkPedManager::Add(pTempPed);
             CNetworkPedManager::m_apTempPeds[pPedConfirm->tempid] = nullptr;
+
+            if (!pTempPed->HasValidPed())
+            {
+                delete pTempPed;
+            }
+            else
+            {
+                CNetworkPedManager::Add(pTempPed);
+            }
         }
     }
 }
@@ -55,6 +63,11 @@ PACKET_HANDLER(ePacketType::ASSIGN_PED, Packets::Peds::AssignPedSyncer* pAssignP
 
     if (!pNetworkPed)
     {
+        // A claim cancellation can race the owner's removal. If the server already assigned
+        // the missing ped to us, this removal is accepted; otherwise the server ignores it.
+        Packets::Peds::PedRemove pedRemovePacket{};
+        pedRemovePacket.pedid = pAssignPedSyncer->pedid;
+        GetPacketFactory().Send(pedRemovePacket);
         return;
     }
 
