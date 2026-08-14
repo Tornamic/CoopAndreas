@@ -1,5 +1,5 @@
 #pragma once
-#include "packet_types.h"
+#include "network/packet_types.h"
 #include "serialize.h"
 
 typedef uint32_t server_time_t;
@@ -28,9 +28,7 @@ constexpr ePacketReliability aChannelReliability[static_cast<uint8_t>(ePacketCha
 };
 
 constexpr ePacketReliability GetChannelReliability(ePacketChannel channel)
-{
-    return aChannelReliability[static_cast<uint8_t>(channel)];
-}
+{ return aChannelReliability[static_cast<uint8_t>(channel)]; }
 
 template <typename PacketT>
 class PacketRegistrar
@@ -41,13 +39,9 @@ public:
 
 #define DEFINE_PACKET_TYPE(packet_class, type, channel)              \
     ePacketType GetType() override                                   \
-    {                                                                \
-        return type;                                                 \
-    }                                                                \
+    { return type; }                                                 \
     ePacketChannel GetChannel() override                             \
-    {                                                                \
-        return channel;                                              \
-    }                                                                \
+    { return channel; }                                              \
     bool SerializeRead(serialize::ReadStream& stream) override       \
     {                                                                \
         bool result = Serialize(stream);                             \
@@ -59,18 +53,12 @@ public:
     }                                                                \
                                                                      \
     bool SerializeWrite(serialize::WriteStream& stream) override     \
-    {                                                                \
-        return Serialize(stream);                                    \
-    }                                                                \
+    { return Serialize(stream); }                                    \
                                                                      \
     bool SerializeMeasure(serialize::MeasureStream& stream) override \
-    {                                                                \
-        return Serialize(stream);                                    \
-    }                                                                \
+    { return Serialize(stream); }                                    \
     Packet* Clone() const override                                   \
-    {                                                                \
-        return new packet_class(*this);                              \
-    }                                                                \
+    { return new packet_class(*this); }                              \
     inline static PacketRegistrar<packet_class> _registrar
 
 class Packet

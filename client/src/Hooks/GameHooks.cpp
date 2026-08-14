@@ -29,7 +29,7 @@ static void __declspec(naked) ProcessCheat_Hook1()
 {
     __asm
     {
-        mov byte ptr ds : [0x969110] , bl
+        mov byte ptr ds : [0x969110], bl
 
         call CWeatherSync::SyncCurrentState
 
@@ -37,11 +37,12 @@ static void __declspec(naked) ProcessCheat_Hook1()
         retn
     }
 }
+
 static void __declspec(naked) ProcessCheat_Hook2()
 {
     __asm
     {
-        mov byte ptr ds : [0x969110] , bl
+        mov byte ptr ds : [0x969110], bl
 
         call CWeatherSync::SyncCurrentState
 
@@ -54,6 +55,7 @@ CEntity* pEntity = nullptr;
 DWORD dwJmpAddress = 0x0;
 DWORD CRenderer__AddEntityToRenderList_Hook_Continue = 0x5534B5;
 DWORD CRenderer__AddEntityToRenderList_Hook_Return = 0x553533;
+
 static void __declspec(naked) CRenderer__AddEntityToRenderList_Hook()
 {
     __asm
@@ -61,6 +63,7 @@ static void __declspec(naked) CRenderer__AddEntityToRenderList_Hook()
         mov pEntity, ecx
         pushad
     }
+
     if ((RwObject*)((DWORD)pEntity + 0x18) == nullptr)
     {
         __asm
@@ -94,9 +97,9 @@ static void __cdecl CTheZones__Update_Hook()
     }
 
     CPad* pad = CPad::GetPad(0);
+
     if (pad->DisablePlayerControls != 0)
     {
-        // if disabled, dont send the event-based keysync packet, let the OnFootUpdate packet take care of it
         return;
     }
 
@@ -117,6 +120,7 @@ static void __cdecl CTheZones__Update_Hook()
 void CCutsceneMgr__StartCutscene_Hook()
 {
     CCutsceneMgr::StartCutscene();
+
     if (CLocalPlayer::m_bIsHost)
     {
         Packets::Scripts::StartCutscene packet{};
@@ -144,6 +148,7 @@ int __purecall_Hook()
     *(char**)0xDEAD =
         "This hook is needed for a more detailed crash log when calling an unimplemented virtual function";
     *(char**)0xDEAD2 = "we will get a full backtrace instead of a single msgbox";
+
     __asm
     {
         mov eax, 0
@@ -154,7 +159,8 @@ int __purecall_Hook()
     return 0;
 }
 
-static bool __fastcall CWeapon__FireSniper_Hook(CWeapon* This, SKIP_EDX, CPed* creator, CEntity* victim, CVector* target)
+static bool __fastcall CWeapon__FireSniper_Hook(
+    CWeapon* This, SKIP_EDX, CPed* creator, CEntity* victim, CVector* target)
 {
     if (creator != FindPlayerPed(0))
     {
@@ -180,14 +186,10 @@ static bool __fastcall CWeapon__FireSniper_Hook(CWeapon* This, SKIP_EDX, CPed* c
 
 #ifdef DEBUG
 bool __fastcall CPCKeyboard__GetKeyDown_Hook(int, int, uint16_t key_code, uint8_t use_mode, char* usage)
-{
-    return GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(key_code);
-}
+{ return GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(key_code); }
 
 bool __fastcall CPCKeyboard__GetJustKeyDown_Hook(int, int, uint16_t key_code, uint8_t use_mode, char* usage)
-{
-    return GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(key_code) & 0x1;
-}
+{ return GetAsyncKeyState(VK_SHIFT) && GetAsyncKeyState(key_code) & 0x1; }
 #endif
 
 void GameHooks::InjectHooks()
@@ -199,11 +201,8 @@ void GameHooks::InjectHooks()
     patch::RedirectJump(0x438583, ProcessCheat_Hook1);
     patch::RedirectJump(0x43859D, ProcessCheat_Hook2);
 
-    // CRenderer::RenderEverythingBarRoads => CVisibilityPlugins::GetClumpAlpha crash fix
     patch::RedirectJump(0x5534B0, CRenderer__AddEntityToRenderList_Hook);
 
-    // no, here we will not do anything with zones, here we will get and send player keys
-    // it is necessary for the menu to be processed correctly
     CTheZones__Update_Dest = injector::GetBranchDestination(0x53BF49).as_int();
     patch::RedirectCall(0x53BF49, CTheZones__Update_Hook);
 

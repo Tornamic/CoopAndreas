@@ -7,31 +7,51 @@
 #include <CEntryExitMarkerSync.h>
 #include <CEntryExitTransitionSync.h>
 #include <CShotInfo.h>
+#include <CWeatherSync.h>
 #include <game_sa/CTagManager.h>
 
-// static void __cdecl CWeather__ForceWeather_Hook(short id)
-// {
-//     CWeather::ForceWeather(id);
-//     // CPacketHandler::GameWeatherTime__Trigger();
-// }
+static void __cdecl CWeather__ForceWeather_Hook(short id)
+{
+    if (!CLocalPlayer::m_bIsHost)
+    {
+        CWeatherSync::ApplyNetStateToLocal();
+        return;
+    }
 
-// static void __cdecl CWeather__ForceWeatherNow_Hook(short id)
-// {
-//     plugin::Call<0x402157>(id);
-//     // CPacketHandler::GameWeatherTime__Trigger();
-// }
+    CWeather::ForceWeather(id);
+    CWeatherSync::SyncCurrentState();
+}
 
-// static void __cdecl CWeather__SetWeatherToAppropriateTypeNow_Hook()
-// {
-//     CWeather::SetWeatherToAppropriateTypeNow();
-//     // CPacketHandler::GameWeatherTime__Trigger();
-// }
+static void __cdecl CWeather__ForceWeatherNow_Hook(short id)
+{
+    if (!CLocalPlayer::m_bIsHost)
+    {
+        CWeatherSync::ApplyNetStateToLocal();
+        return;
+    }
+
+    plugin::Call<0x402157>(id);
+    CWeatherSync::SyncCurrentState();
+}
+
+static void __cdecl CWeather__SetWeatherToAppropriateTypeNow_Hook()
+{
+    if (!CLocalPlayer::m_bIsHost)
+    {
+        CWeatherSync::ApplyNetStateToLocal();
+        return;
+    }
+
+    CWeather::SetWeatherToAppropriateTypeNow();
+    CWeatherSync::SyncCurrentState();
+}
 
 // place waypoint
 static CdeclEvent<AddressList<0x5775D2, H_CALL>, PRIORITY_AFTER,
     ArgPick5N<eBlipType, 0, CVector, 1, eBlipColour, 2, eBlipDisplay, 3, char*, 4>,
     void(eBlipType, CVector, eBlipColour, eBlipDisplay, char*)>
     waypointPlaceEvent;
+
 static void PlaceWaypointHook(
     eBlipType type, CVector posn, eBlipColour color, eBlipDisplay blipDisplay, char* scriptName)
 {
@@ -82,10 +102,12 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
         if (entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
         {
             CVehicle* vehicle = (CVehicle*)entity;
-            if (CNetworkVehicleManager::GetVehicle(vehicle) != nullptr)  // fixes a strange bug
+
+            if (CNetworkVehicleManager::GetVehicle(vehicle) != nullptr)
             {
                 return;
             }
+
             CNetworkVehicle* networkVehicle = CNetworkVehicle::CreateHosted(vehicle);
         }
         else if (entity->m_nType == eEntityType::ENTITY_TYPE_PED)
@@ -102,12 +124,14 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
     if (entity->IsVTableValid())
         CWorld::Add(entity);
 }
+
 static void __cdecl CWorld__Remove_Hook(CEntity* entity)
 {
     if (entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
     {
         CVehicle* vehicle = (CVehicle*)entity;
         CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
+
         if (networkVehicle && networkVehicle->m_bSyncing)
         {
             CNetworkVehicleManager::Remove(networkVehicle);
@@ -117,9 +141,11 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
     else if (entity->m_nType == eEntityType::ENTITY_TYPE_PED)
     {
         CPed* ped = (CPed*)entity;
+
         if (ped->m_nPedType > 3)
         {
             CNetworkPed* networkPed = CNetworkPedManager::GetPed(ped);
+
             if (networkPed && networkPed->m_bSyncing)
             {
                 CNetworkPedManager::Remove(networkPed);
@@ -137,20 +163,24 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
 static bool __fastcall CEntryExit__TransitionStarted_Hook(CEntryExit* This, SKIP_EDX, CPed* ped)
 {
     bool result = This->TransitionStarted(ped);
+
     if (result)
     {
         CEntryExitTransitionSync::OnTransitionStarted(This, ped);
     }
+
     return result;
 }
 
 static bool __fastcall CEntryExit__TransitionFinished_Hook(CEntryExit* This, SKIP_EDX, CPed* ped)
 {
     bool result = This->TransitionFinished(ped);
+
     if (result)
     {
         CEntryExitTransitionSync::OnTransitionFinished(This, ped);
     }
+
     return result;
 }
 
@@ -158,14 +188,15 @@ static int calls = 0;
 static int SprayPaintWorld_LastCalled = 0;
 static uint8_t LastTagAlpha = 0;
 static CEntity* LastTagEntity = nullptr;
+
 int CWorld__SprayPaintWorld_Hook(CVector* posn, CVector* outDir, float radius, bool processTagAlphaState)
 {
     CShotInfo* shotInfo = (CShotInfo*)((uintptr_t)posn - 0x4);
 
     if (FindPlayerPed(0) != shotInfo->m_pCreator)
     {
-        auto networkPed = CNetworkPedManager::GetPed(
-            shotInfo->m_pCreator);  // peds can respray tags too, for example Sweet on the 3rd mission "Tagging Up Turf"
+        auto networkPed = CNetworkPedManager::GetPed(shotInfo->m_pCreator);
+
         if (!networkPed || !networkPed->m_bSyncing)
         {
             return 0;
@@ -173,15 +204,13 @@ int CWorld__SprayPaintWorld_Hook(CVector* posn, CVector* outDir, float radius, b
     }
 
     int result = CWorld::SprayPaintWorld(*posn, *outDir, radius, processTagAlphaState);
+
     if (result == 1 && LastTagAlpha != 255)
     {
-        /*CChat::AddMessage("CWorld__SprayPaintWorld_Hook posn {%f %f %f} outDir {%f %f %f} radius %f
-           processTagAlphaState %d", posn->x, posn->y, posn->y, outDir->x, outDir->y, outDir->y, radius,
-           processTagAlphaState);*/
         int tickCount = GetTickCount();
+
         if (tickCount > SprayPaintWorld_LastCalled + 150)
         {
-            // CChat::AddMessage("1 %d %d", ++calls, LastTagAlpha);
             SprayPaintWorld_LastCalled = tickCount;
 
             Packets::World::TagUpdate packet{};
@@ -190,21 +219,23 @@ int CWorld__SprayPaintWorld_Hook(CVector* posn, CVector* outDir, float radius, b
             packet.payload.pos_x = static_cast<int16_t>(floor(LastTagEntity->GetPosition().x));
             packet.payload.pos_y = static_cast<int16_t>(floor(LastTagEntity->GetPosition().y));
             packet.payload.pos_z = static_cast<int16_t>(floor(LastTagEntity->GetPosition().z));
+
             GetPacketFactory().Send(packet);
         }
     }
 
     if (result == 2)
     {
-        // CChat::AddMessage("2 %d %d", ++calls, LastTagAlpha);
         Packets::World::TagUpdate packet{};
         packet.payload.bFullySprayed = true;
         packet.payload.alpha = LastTagAlpha;
         packet.payload.pos_x = static_cast<int16_t>(floor(LastTagEntity->GetPosition().x));
         packet.payload.pos_y = static_cast<int16_t>(floor(LastTagEntity->GetPosition().y));
         packet.payload.pos_z = static_cast<int16_t>(floor(LastTagEntity->GetPosition().z));
+
         GetPacketFactory().Send(packet);
     }
+
     return result;
 }
 
@@ -228,14 +259,15 @@ static void __declspec(naked) CGarage__Update_Hook()
 
     pPlayerPed = FindPlayerPed(0);
     pVehicle = pPlayerPed->m_pVehicle;
+
     if (pPlayerPed == pVehicle->m_pDriver)
     {
         __asm
         {
             pop esi
 
-            mov al, [esi + 0x4E]  // 0x44B2DE
-            test al, al  // 0x44B2E1
+            mov al, [esi + 0x4E]
+            test al, al
 
             push 0x44B2E3
             retn
@@ -251,9 +283,11 @@ static void __declspec(naked) CGarage__Update_Hook()
         }
     }
 }
+
 void WorldHooks::InjectHooks()
 {
     waypointPlaceEvent += PlaceWaypointHook;
+
     patch::RedirectCall(0x577582, CRadar__ClearBlip_Hook_Waypoint);
 
     patch::RedirectCall(0x458475, CExplosion__AddExplosion);
@@ -280,6 +314,7 @@ void WorldHooks::InjectHooks()
         0x556169, 0x592FAE, 0x5936E6, 0x5A3775, 0x5B16AD, 0x5B5348, 0x5D2D10, 0x5D2E2E, 0x5D4B1D, 0x5D5125, 0x5E4471,
         0x612A10, 0x6136B7, 0x6138DF, 0x615868, 0x61B059, 0x61B09B, 0x61B117, 0x61B174, 0x61B20E, 0x61B264, 0x6A8BBE,
         0x6A9BE2, 0x6C685D, 0x6CD40E, 0x6CD71D, 0x6E44E0, 0x6EADF9, 0x6F2503, 0x6F3C8C, 0x717E7F, 0x717F3E};
+
     patch::RedirectCall(
         std::vector<int>(CWorld__Add_Addresses, CWorld__Add_Addresses + sizeof(CWorld__Add_Addresses) / 4),
         CWorld__Add_Hook);
@@ -294,14 +329,16 @@ void WorldHooks::InjectHooks()
         0x4413CA, 0x442319, 0x449729, 0x4499F3, 0x449B43, 0x449CE0, 0x449E2A, 0x454CFB, 0x455488, 0x4556F1, 0x456C29,
         0x456E1E, 0x456EA0, 0x4571AD, 0x458E8A, 0x45BEFF, 0x45CCB5, 0x45D3C9, 0x45D3FE, 0x45ED11, 0x45ED69, 0x45FF78,
         0x45FFCB, 0x4610CC, 0x4698E4, 0x467B3C, 0x486D3E, 0x499D90, 0x49A45A, 0x53C98C, 0x5500C5, 0x5567CE, 0x5667B0,
-        0x59163E, 0x593794, 0x5A1890, 0x5A18EA, 0x5A194E, 0x5A1A51, 0x5A32A2, 0x5A3FE2, 0x5AFE6E, 0x5D5112, 0x5E011C,
-        0x5E03DC, 0x5E86AF, 0x6094FC, 0x610F26, 0x612305, 0x612F1A, 0x615EA6, 0x615F2D, 0x616404, 0x61AEE3, 0x61AF07,
-        0x6C7B9A, 0x6CCCB2, 0x6D22D7, 0x6E3E7D, 0x6E3FFD, 0x6E4120, 0x6E51B4, 0x6F5DD7, 0x6F6A7B, 0x6F6B31, 0x6F7ACA,
-        0x717897, 0x738AFF, 0x73997A, 0x739A17, 0x739AD0};
+        0x59163E, 0x593794, 0x5A1890, 0x5A18EA, 0x5A194E, 0x5A1A51, 0x5AFE6E, 0x5D5112, 0x5E011C, 0x5E03DC, 0x5E86AF,
+        0x6094FC, 0x610F26, 0x612305, 0x612F1A, 0x615EA6, 0x615F2D, 0x616404, 0x61AEE3, 0x61AF07, 0x6C7B9A, 0x6CCCB2,
+        0x6D22D7, 0x6E3E7D, 0x6E3FFD, 0x6E4120, 0x6E51B4, 0x6F5DD7, 0x6F6A7B, 0x6F6B31, 0x6F7ACA, 0x717897, 0x738AFF,
+        0x73997A, 0x739AD0};
+
     patch::RedirectCall(
         std::vector<int>(CWorld__Remove_Addresses, CWorld__Remove_Addresses + sizeof(CWorld__Remove_Addresses) / 4),
         CWorld__Remove_Hook);
 
+    // Disabled while the weather sync is handled by CWeatherSync.
     // patch::RedirectJump(0x47D43E, CWeather__ForceWeather_Hook);
     // patch::RedirectJump(0x72A4F0, CWeather__ForceWeatherNow_Hook);
     // patch::RedirectCall(0x47679F, CWeather__SetWeatherToAppropriateTypeNow_Hook);
@@ -314,6 +351,7 @@ void WorldHooks::InjectHooks()
     // patch::RedirectCall(0x5B812D, CEntryExitManager__AddOne_Hook);
 
     patch::RedirectCall(0x44104C, CEntryExit__TransitionStarted_Hook);
+
     patch::RedirectCall(0x440F89, CEntryExit__TransitionFinished_Hook);
 
     patch::RedirectJump(0x44B2DE, CGarage__Update_Hook);
@@ -331,6 +369,5 @@ void WorldHooks::InjectHooks()
     // patch::RedirectCall(0x6A2A37, CPhysical__ApplyMoveSpeed_Hook);
     // patch::RedirectCall(0x6A2A69, CPhysical__ApplyMoveSpeed_Hook);
     // patch::RedirectCall(0x6B6697, CPhysical__ApplyMoveSpeed_Hook);
-    // patch::RedirectCall(0x6B66C9, CPhysical__ApplyMoveSpeed_Hook);
     // patch::RedirectCall(0x6F970D, CPhysical__ApplyMoveSpeed_Hook);
 }
