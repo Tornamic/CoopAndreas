@@ -463,7 +463,6 @@ public:
                     }
                 }
 
-
                 std::string buf;
                 for (int i = 0; i < 180; i++)
                 {

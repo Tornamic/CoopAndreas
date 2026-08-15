@@ -338,7 +338,6 @@ void WorldHooks::InjectHooks()
         std::vector<int>(CWorld__Remove_Addresses, CWorld__Remove_Addresses + sizeof(CWorld__Remove_Addresses) / 4),
         CWorld__Remove_Hook);
 
-    // Disabled while the weather sync is handled by CWeatherSync.
     // patch::RedirectJump(0x47D43E, CWeather__ForceWeather_Hook);
     // patch::RedirectJump(0x72A4F0, CWeather__ForceWeatherNow_Hook);
     // patch::RedirectCall(0x47679F, CWeather__SetWeatherToAppropriateTypeNow_Hook);

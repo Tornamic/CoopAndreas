@@ -416,7 +416,6 @@ void CWeatherSync::Process()
         return;
     }
 
-
     if (s_remoteLightning)
     {
         if (now >= s_remoteLightningUntil)
@@ -431,7 +430,6 @@ void CWeatherSync::Process()
         return;
     }
 
-    // Keep local lightning completely disabled.
     CWeather::LightningFlash = false;
     CWeather::LightningBurst = false;
     CWeather::LightningDuration = 0;
