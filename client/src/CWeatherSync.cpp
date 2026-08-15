@@ -138,38 +138,18 @@ void CWeatherSync::ApplyNetStateToLocal()
         return;
 
     CWeather::OldWeatherType = static_cast<short>(s_newWeather);
-
     CWeather::NewWeatherType = static_cast<short>(s_newWeather);
-
     CWeather::ForcedWeatherType = static_cast<short>(s_newWeather);
-
     CWeather::InterpolationValue = 0.0f;
 
     CWeather::Rain = s_rain;
-
     CWeather::WetRoads = s_wetRoads;
-
     CWeather::Wind = s_wind;
 
-    CWeather::LightningFlash = s_lightningFlash;
-
-    CWeather::LightningBurst = s_lightningBurst;
-
-    CWeather::LightningDuration = s_lightningDuration;
-
-    if (s_lightningSoundAt > 0)
-    {
-        CWeather::WhenToPlayLightningSound = s_lightningSoundAt;
-    }
-
     CClock::ms_nGameClockMonth = s_month;
-
     CClock::CurrentDay = s_day;
-
     CClock::ms_nGameClockHours = s_hour;
-
     CClock::ms_nGameClockMinutes = s_minute;
-
     CClock::ms_nGameClockSeconds = s_second;
 }
 
@@ -342,13 +322,11 @@ void CWeatherSync::HandlePacket(Packets::World::GameWeatherTime* p)
 
 void CWeatherSync::HandleLightningEvent(Packets::World::LightningEvent* p)
 {
-    if (!p)
+    if (!p || CLocalPlayer::m_bIsHost)
         return;
 
     CWeather::LightningFlash = p->flash;
-
     CWeather::LightningBurst = p->burst;
-
     CWeather::LightningDuration = p->duration;
 
     if (p->soundDelay >= 0)
@@ -359,16 +337,12 @@ void CWeatherSync::HandleLightningEvent(Packets::World::LightningEvent* p)
     uint32_t duration = p->duration;
 
     if (duration < 500)
-    {
         duration = 500;
-    }
 
     s_remoteLightning = true;
-
     s_remoteLightningUntil = GetTickCount() + duration + 500;
 
     s_lastLightningFlash = p->flash;
-
     s_lastLightningBurst = p->burst;
 }
 
@@ -386,82 +360,81 @@ void CWeatherSync::Process()
         if (down)
         {
             if (!s_wasDead)
-            {
                 CaptureAliveSnapshot();
-            }
 
             if (s_hasAliveSnapshot)
-            {
                 ApplyAliveSnapshot();
-            }
 
             s_lockUntilTick = now + DEATH_LOCK_MS;
-
             s_wasDead = true;
-
             return;
         }
 
         if (s_wasDead)
         {
             if (s_hasAliveSnapshot)
-            {
                 ApplyAliveSnapshot();
-            }
 
             s_lockUntilTick = now + DEATH_LOCK_MS;
-
             s_wasDead = false;
-
             return;
         }
 
         if (now >= s_lockUntilTick)
-        {
             CaptureAliveSnapshot();
+
+        const bool flash = CWeather::LightningFlash;
+        const bool burst = CWeather::LightningBurst;
+
+        const bool lightningStarted = (!s_lastLightningFlash && flash) || (!s_lastLightningBurst && burst);
+
+        if (lightningStarted && now - s_lastLightningSent >= LIGHTNING_COOLDOWN_MS)
+        {
+            Packets::World::LightningEvent packet{};
+
+            packet.flash = flash;
+            packet.burst = burst;
+            packet.duration = CWeather::LightningDuration;
+
+            if (CWeather::WhenToPlayLightningSound > (int)CTimer::m_snTimeInMilliseconds)
+            {
+                packet.soundDelay = CWeather::WhenToPlayLightningSound - (int)CTimer::m_snTimeInMilliseconds;
+            }
+            else
+            {
+                packet.soundDelay = -1;
+            }
+
+            GetPacketFactory().Send(packet);
+
+            s_lastLightningSent = now;
+        }
+
+        s_lastLightningFlash = flash;
+        s_lastLightningBurst = burst;
+
+        return;
+    }
+
+
+    if (s_remoteLightning)
+    {
+        if (now >= s_remoteLightningUntil)
+        {
+            s_remoteLightning = false;
+
+            CWeather::LightningFlash = false;
+            CWeather::LightningBurst = false;
+            CWeather::LightningDuration = 0;
         }
 
         return;
     }
 
-    if (s_remoteLightning && now >= s_remoteLightningUntil)
-    {
-        s_remoteLightning = false;
-    }
-
-    const bool flash = CWeather::LightningFlash;
-
-    const bool burst = CWeather::LightningBurst;
-
-    const bool lightningStarted = (!s_lastLightningFlash && flash) || (!s_lastLightningBurst && burst);
-
-    if (!s_remoteLightning && lightningStarted && now - s_lastLightningSent >= LIGHTNING_COOLDOWN_MS)
-    {
-        Packets::World::LightningEvent packet{};
-
-        packet.flash = flash;
-
-        packet.burst = burst;
-
-        packet.duration = CWeather::LightningDuration;
-
-        if (CWeather::WhenToPlayLightningSound > (int)CTimer::m_snTimeInMilliseconds)
-        {
-            packet.soundDelay = CWeather::WhenToPlayLightningSound - (int)CTimer::m_snTimeInMilliseconds;
-        }
-        else
-        {
-            packet.soundDelay = -1;
-        }
-
-        GetPacketFactory().Send(packet);
-
-        s_lastLightningSent = now;
-    }
-
-    s_lastLightningFlash = flash;
-
-    s_lastLightningBurst = burst;
+    // Keep local lightning completely disabled.
+    CWeather::LightningFlash = false;
+    CWeather::LightningBurst = false;
+    CWeather::LightningDuration = 0;
 }
 
 void CWeatherSync::ServerTimeRecalculated(server_time_t serverTime)
