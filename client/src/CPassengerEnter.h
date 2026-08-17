@@ -2,6 +2,10 @@
 class CPassengerEnter
 {
 public:
-	static void CPassengerEnter::Process();
+	static void Process();
+	static bool HasFoundNearbyVehiclePassengerDoor();
+	static void UpdatePassengerDoorHint();
+private:
+	inline static bool bDisplayNearPassegnerDoorMessage = false;
 };
 

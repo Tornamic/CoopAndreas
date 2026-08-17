@@ -1,3 +1,4 @@
+#include "CPassengerEnter.h"
 #include "stdafx.h"
 #include "CNetworkVehicle.h"
 
@@ -72,4 +73,59 @@ void CPassengerEnter::Process()
             }
         }
     }
+}
+
+void CPassengerEnter::UpdatePassengerDoorHint()
+{
+    if(bDisplayNearPassegnerDoorMessage)
+    {
+        return;
+    }
+
+    if (HasFoundNearbyVehiclePassengerDoor())
+    {
+        CHud::SetHelpMessage("Press G to enter in the vehicle as a passenger.", false, false, false);
+
+        bDisplayNearPassegnerDoorMessage = true;
+    }
+}
+
+bool CPassengerEnter::HasFoundNearbyVehiclePassengerDoor()
+{
+    float nearestVehDistance = FLT_MAX;
+    CVehicle* nearestVeh = nullptr;
+
+    CPlayerPed* pPlayerPed = FindPlayerPed(0);
+    CVector playerPosition = pPlayerPed->GetPosition();
+
+    for (auto* pVehicle : CPools::ms_pVehiclePool)
+    {
+        if (pVehicle == nullptr)
+        {
+            continue;
+        }
+
+        float fDistance = (playerPosition - pVehicle->GetPosition()).Magnitude();
+
+        if(fDistance > pVehicle->GetColModel()->m_boundSphere.m_fRadius)
+        {
+            continue;
+        }
+
+        if (fDistance < nearestVehDistance)
+        {
+            nearestVehDistance = fDistance;
+            nearestVeh = pVehicle;
+        }
+    }
+
+    if (nearestVeh == nullptr)
+    {
+        return false;
+    }
+
+    int doorId = 0;
+    CVector temp;
+
+    return CCarEnterExit::GetNearestCarPassengerDoor(pPlayerPed, nearestVeh, &temp, &doorId, true, true, true) && doorId != CAR_DOOR_RF;
 }
