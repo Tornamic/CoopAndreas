@@ -40,6 +40,7 @@ unsigned int lastPassengerSyncTickRate = 0;
 unsigned int lastPedSyncTickRate = 0;
 unsigned int lastWeatherTimeSyncTickRate = 0;
 unsigned int lastPlayerAimSyncTickRate = 0;
+unsigned int lastPlayerNearPassengerDoorTickRate = 0;
 bool bBeenConnected;
 bool lastOnMissionFlag;
 uint32_t startTime;
@@ -130,6 +131,13 @@ public:
                 CPlayerPed* localPlayer = FindPlayerPed(0);
 
                 CDriveBy::Process(localPlayer);
+
+                if (!localPlayer->m_nPedFlags.bInVehicle && tickCount > lastPlayerNearPassengerDoorTickRate + 1000)
+                {
+                    CPassengerEnter::UpdatePassengerDoorHint();
+
+                    lastPlayerNearPassengerDoorTickRate = tickCount;
+                }
 
                 int syncRate = 50;
                 CVector velocity{};

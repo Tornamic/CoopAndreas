@@ -233,7 +233,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [ ] chat gamepad support with on-screen keyboard
 ### Minor tasks and ideas
 - [ ] Sync laser sniper rifle red dot with all players
-- [ ] Sync moon sniper rifle shot changing size easter egg with all players
+- [X] Sync moon sniper rifle shot changing size easter egg with all players
 
 ## TODO Missions
 ### Already Done ✓
