@@ -202,4 +202,56 @@ private:
     }
 };
 
+class GameWantedSync : public Packet
+{
+    DEFINE_PACKET_TYPE(GameWantedSync, ePacketType::WANTED_SYNC, ePacketChannel::EVENT);
+
+public:
+    uint8_t wantedLevel = 0;
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_int(stream, wantedLevel, 0, 6);
+        return true;
+    }
+};
+
+class GameMoneySync : public Packet
+{
+    DEFINE_PACKET_TYPE(GameMoneySync, ePacketType::MONEY_SYNC, ePacketChannel::EVENT);
+
+public:
+    int32_t money = 0;
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_int(stream, money, -999999999, 999999999);
+        return true;
+    }
+};
+
+class GameCheatSync : public Packet
+{
+    DEFINE_PACKET_TYPE(GameCheatSync, ePacketType::CHEAT_SYNC, ePacketChannel::EVENT);
+
+public:
+    int playerid = -1;
+    uint8_t cheatId = 0;
+    bool active = true;
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_int(stream, playerid, -1, 255);
+        serialize_int(stream, cheatId, 0, 91);
+        serialize_bool(stream, active);
+        return true;
+    }
+};
+
 }  // namespace Packets::World
