@@ -92,7 +92,7 @@ void CPassengerEnter::UpdatePassengerDoorHint()
 
 bool CPassengerEnter::HasFoundNearbyVehiclePassengerDoor()
 {
-    float nearestVehDistance = FLT_MAX;
+    float nearestVehDistance = 99999999.0f;
     CVehicle* nearestVeh = nullptr;
 
     CPlayerPed* pPlayerPed = FindPlayerPed(0);
@@ -101,6 +101,11 @@ bool CPassengerEnter::HasFoundNearbyVehiclePassengerDoor()
     for (auto* pVehicle : CPools::ms_pVehiclePool)
     {
         if (pVehicle == nullptr)
+        {
+            continue;
+        }
+
+        if (pVehicle->m_nMaxPassengers == 0)
         {
             continue;
         }
@@ -127,5 +132,5 @@ bool CPassengerEnter::HasFoundNearbyVehiclePassengerDoor()
     int doorId = 0;
     CVector temp;
 
-    return CCarEnterExit::GetNearestCarPassengerDoor(pPlayerPed, nearestVeh, &temp, &doorId, true, true, true) && doorId != CAR_DOOR_RF;
+    return CCarEnterExit::GetNearestCarPassengerDoor(pPlayerPed, nearestVeh, &temp, &doorId, true, true, true);
 }
