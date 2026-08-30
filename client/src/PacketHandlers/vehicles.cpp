@@ -74,6 +74,7 @@ PACKET_HANDLER(ePacketType::VEHICLE_IDLE_UPDATE, Packets::Vehicles::VehicleIdleU
 
     pNetworkVehicle->m_pVehicle->m_nPrimaryColor = pVehicleIdleUpdate->color1;
     pNetworkVehicle->m_pVehicle->m_nSecondaryColor = pVehicleIdleUpdate->color2;
+    pNetworkVehicle->m_pVehicle->m_fDirtLevel = pVehicleIdleUpdate->dirtLevel;
     pNetworkVehicle->m_pVehicle->m_fHealth = pVehicleIdleUpdate->health;
 
     if (pNetworkVehicle->m_pVehicle->GetRemapIndex() != pVehicleIdleUpdate->paintjob)
@@ -121,6 +122,8 @@ PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDri
 
     pVehicle->m_nPrimaryColor = pVehicleDriverUpdate->color1;
     pVehicle->m_nSecondaryColor = pVehicleDriverUpdate->color2;
+
+    pVehicle->m_fDirtLevel = pVehicleDriverUpdate->dirtLevel;
 
     pVehicle->m_fHealth = pVehicleDriverUpdate->health;
 

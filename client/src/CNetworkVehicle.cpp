@@ -77,6 +77,7 @@ bool CNetworkVehicle::CreateVehicle(int vehicleid, int modelid, CVector pos, flo
     m_pVehicle->SetPosn(pos);
     m_pVehicle->SetOrientation(0.0f, 0.0f, rotation);
     m_pVehicle->m_nStatus = 4;
+    m_pVehicle->m_fDirtLevel = 0.0f;
     m_pVehicle->m_eDoorLock = DOORLOCK_UNLOCKED;
     m_pVehicle->m_nPrimaryColor = color1;
     m_pVehicle->m_nSecondaryColor = color2;

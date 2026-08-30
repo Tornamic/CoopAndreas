@@ -67,6 +67,8 @@ void CNetworkVehicleManager::UpdateDriver(CVehicle* pVehicle)
 		vehicleDriverUpdate.color1 = pVehicle->m_nPrimaryColor;
 		vehicleDriverUpdate.color2 = pVehicle->m_nSecondaryColor;
 
+		vehicleDriverUpdate.dirtLevel = pVehicle->m_fDirtLevel;
+
 		vehicleDriverUpdate.health = pVehicle->m_fHealth;
 
 		vehicleDriverUpdate.paintjob = pVehicle->GetRemapIndex();
@@ -117,6 +119,7 @@ void CNetworkVehicleManager::UpdateIdle()
 			packet.turnSpeed = pVehicle->m_vecTurnSpeed;
 			packet.color1 = pVehicle->m_nPrimaryColor;
 			packet.color2 = pVehicle->m_nSecondaryColor;
+			packet.dirtLevel = pVehicle->m_fDirtLevel;
 			packet.health = pVehicle->m_fHealth;
 			packet.paintjob = pVehicle->GetRemapIndex();
 
