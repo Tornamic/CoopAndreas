@@ -87,6 +87,12 @@ PACKET_HANDLER(ePacketType::VEHICLE_IDLE_UPDATE, Packets::Vehicles::VehicleIdleU
     }
 
     pNetworkVehicle->m_pVehicle->m_eDoorLock = pVehicleIdleUpdate->locked;
+
+    pNetworkVehicle->m_pVehicle->m_nVehicleFlags.bEngineOn = pVehicleIdleUpdate->engineState;
+    pNetworkVehicle->m_pVehicle->m_nVehicleFlags.bLightsOn = pVehicleIdleUpdate->lightState;
+    pNetworkVehicle->m_pVehicle->m_nVehicleFlags.bEngineBroken = pVehicleIdleUpdate->engineBroken;
+    pNetworkVehicle->m_pVehicle->m_nVehicleFlags.bSirenOrAlarm = pVehicleIdleUpdate->sirenOrAlarm;
+    pNetworkVehicle->m_pVehicle->m_nAlarmState = pVehicleIdleUpdate->alarmState;
 }
 
 PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDriverUpdate* pVehicleDriverUpdate)
@@ -147,6 +153,13 @@ PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDri
     }
 
     pNetworkVehicle->m_pVehicle->m_eDoorLock = pVehicleDriverUpdate->locked;
+
+    pVehicle->m_nVehicleFlags.bEngineOn = pVehicleDriverUpdate->engineState;
+    pVehicle->m_nVehicleFlags.bLightsOn = pVehicleDriverUpdate->lightState;
+    pVehicle->m_nVehicleFlags.bEngineBroken = pVehicleDriverUpdate->engineBroken;
+    pVehicle->m_nVehicleFlags.bSirenOrAlarm = pVehicleDriverUpdate->sirenOrAlarm;
+    pVehicle->m_nAlarmState = pVehicleDriverUpdate->alarmState;
+
     pNetworkVehicle->m_playerDriverSnapshot = *pVehicleDriverUpdate;
 }
 
