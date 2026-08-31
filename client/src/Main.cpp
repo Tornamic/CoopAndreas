@@ -32,6 +32,7 @@
 #include <CWeatherSync.h>
 #include <network/packets/scripts.h>
 #include <CNetworkEntityBlip.h>
+#include <CHeadMovement.h>
 
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
@@ -152,6 +153,8 @@ public:
                     if (isDriver)
                     {
                         CNetworkVehicleManager::UpdateDriver(localPlayer->m_pVehicle);
+						CHeadMovement::Process();
+
                         lastDriverSyncTickRate = tickCount;
                     }
                     else
@@ -180,6 +183,8 @@ public:
 
                         GetPacketFactory().Send(onFootUpdate);
 
+						CHeadMovement::Process();
+
                         lastOnFootSyncTickRate = tickCount;
                     }
                 }
@@ -187,6 +192,7 @@ public:
                  if (isPassenger && tickCount > lastPassengerSyncTickRate + 333)
                  {
                      CNetworkVehicleManager::UpdatePassenger(localPlayer->m_pVehicle, localPlayer);
+					 CHeadMovement::Process();
                      lastPassengerSyncTickRate = tickCount;
                  }
 

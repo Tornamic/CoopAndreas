@@ -487,6 +487,24 @@ private:
     }
 };
 
+class HeadMovement : public Packet
+{
+    DEFINE_PACKET_TYPE(HeadMovement, ePacketType::PLAYER_HEAD_MOVEMENT, ePacketChannel::SYNC);
+
+public:
+    SenderPlayerId playerid{};
+    NormalizedVector direction{};
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_object(stream, playerid);
+        serialize_object(stream, direction);
+        return true;
+    }
+};
+
 }  // namespace Packets::Players
 
 // NOLINTEND(readability-isolate-declaration)

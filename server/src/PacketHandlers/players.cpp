@@ -80,3 +80,8 @@ PACKET_HANDLER(ePacketType::REBUILD_PLAYER, Packets::Players::RebuildPlayer* pRe
     GetPacketFactory().SendToAll(*pRebuildPlayer, pNetworkPlayer);
 }
 
+PACKET_HANDLER(ePacketType::PLAYER_HEAD_MOVEMENT, Packets::Players::HeadMovement* pHeadMovement, CNetworkPlayer* pNetworkPlayer)
+{
+    pHeadMovement->playerid = pNetworkPlayer->m_iPlayerId;
+    GetPacketFactory().SendToAll(*pHeadMovement, pNetworkPlayer);
+}
