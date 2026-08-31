@@ -4,6 +4,7 @@
 #include <CAimSync.h>
 #include <CEntryExitTransitionSync.h>
 #include <CProjectileInfo.h>
+#include <CHeadMovement.h>
 
 PACKET_HANDLER(ePacketType::PLAYER_ONFOOT_UPDATE, Packets::Players::OnFootUpdate* pOnFootUpdate)
 {
@@ -267,5 +268,13 @@ PACKET_HANDLER(ePacketType::REBUILD_PLAYER, Packets::Players::RebuildPlayer* pRe
         }
 
         //CStatsSync::ApplyLocalContext();
+    }
+}
+
+PACKET_HANDLER(ePacketType::PLAYER_HEAD_MOVEMENT, Packets::Players::HeadMovement* pHeadMovement)
+{
+    if (auto pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pHeadMovement->playerid))
+    {
+		CHeadMovement::HandlePacket(pHeadMovement, pNetworkPlayer);
     }
 }
