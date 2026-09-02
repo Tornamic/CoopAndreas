@@ -243,6 +243,8 @@ PACKET_HANDLER(ePacketType::PLAYER_STATS, Packets::Players::PlayerStats* pPlayer
             eStats statId = CStatsSync::m_aeSyncedStats[i];
             pNetworkPlayer->m_stats[statId] = pPlayerStats->stats[i];
         }
+
+        CStatsSync::HandlePacket(*pPlayerStats);
     }
 }
 

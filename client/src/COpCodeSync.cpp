@@ -38,6 +38,7 @@
 #include "CEntryExitMarkerSync.h"
 #include <CTaskSequenceSync.h>
 #include <CNetworkAnimQueue.h>
+#include <CStatsSync.h>
 
 // Keep sorted!
 const SSyncedOpCode syncedOpcodes[] =
@@ -742,6 +743,11 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
     patch::SetRaw(0x464080, (void*)"\x66\x8B\x44\x24\x04", 5, false);
     patch::SetRaw(0x463D50, (void*)"\x8B\x41\x14\x83\xEC\x08", 6, false);
     bProcessingNetworkOpcode = false;
+
+    if (header.opcode == COMMAND_ADD_SCORE)
+    {
+        CStatsSync::NotifyChanged();
+    }
 }
 
 void __declspec(naked) FinishedOpcodeProcessing_Hook()

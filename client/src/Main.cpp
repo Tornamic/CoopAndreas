@@ -30,10 +30,13 @@
 #include <CKeySync.h>
 #include <CCompatibilityChecker.h>
 #include <CWeatherSync.h>
+#include <CStatsSync.h>
+#include <CPickupSync.h>
 #include <network/packets/scripts.h>
 #include <CNetworkEntityBlip.h>
 
 unsigned int lastOnFootSyncTickRate = 0;
+static bool s_localHadJetpack = false;
 unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
 unsigned int lastPassengerSyncTickRate = 0;
@@ -173,7 +176,13 @@ public:
                         onFootUpdate.weaponSnapshot.nAmmo = weapon.m_nAmmoInClip;
 
                         onFootUpdate.bDucking = CUtil::IsDucked(localPlayer);
-                        onFootUpdate.bHasJetpack = CUtil::IsPedHasJetpack(localPlayer);
+                        const bool hasJetpack = CUtil::IsPedHasJetpack(localPlayer);
+                        if (!s_localHadJetpack && hasJetpack)
+                        {
+                            CPickupSync::NotifyJetpackPickedUp(localPlayer->GetPosition());
+                        }
+                        s_localHadJetpack = hasJetpack;
+                        onFootUpdate.bHasJetpack = hasJetpack;
 
                         onFootUpdate.iFightingStyle = localPlayer->m_nFightingStyle;
                         CKeySync::CollectState(onFootUpdate.keySnapshot);
@@ -210,6 +219,7 @@ public:
                 CNetworkVehicleManager::UpdateDamageSync();
 
                 CAimSync::ProcessSyncing();
+                CStatsSync::Process();
 
                 CNetworkPedManager::Process();
 

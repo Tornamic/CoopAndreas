@@ -22,6 +22,8 @@
 
 namespace Packets::Players
 {
+static constexpr size_t SYNCED_STATS_COUNT = 18;
+
 struct SKeySnapshot
 {
 public:
@@ -452,7 +454,7 @@ class PlayerStats : public Packet
 
 public:
     SenderPlayerId playerid{};
-    float stats[14]{};
+    float stats[SYNCED_STATS_COUNT]{};
 
 private:
     template <typename Stream>

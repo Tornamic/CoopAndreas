@@ -14,6 +14,7 @@
 #include "ProjectileHooks.h"
 #include "DamageHooks.h"
 #include "ShadowHooks.h"
+#include "PickupHooks.h"
 
 void CHook::Init()
 {
@@ -33,4 +34,5 @@ void CHook::Init()
     ProjectileHooks::InjectHooks();
     DamageHooks::InjectHooks();
     ShadowHooks::InjectHooks();
+    PickupHooks::InjectHooks();
 }

@@ -56,7 +56,7 @@ void CPacketFactory::Receive(const uint8_t* data, int dataSize)
     Packet* pProtPacket = m_map[packetType];
     if (pProtPacket == nullptr)
     {
-        logger::warn("Couldn't find packet instance of #%d", packetType);
+        logger::warn("Couldn't find packet instance of #%d", tempPacketType);
         return;
     }
 

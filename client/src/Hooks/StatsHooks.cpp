@@ -6,7 +6,7 @@ void CHud__SetHelpMessageStatUpdate_Hook(char bIncrease, short statId, float sta
 {
 	if (CNetwork::m_bAuthenticated)
 	{
-		if(CStatsSync::GetSyncIdByInternal((eStats)statId) != -1)
+		if(CStatsSync::ShouldSyncStat((eStats)statId))
 			CStatsSync::NotifyChanged();
 	}
 
@@ -54,7 +54,7 @@ void CStats__SetStatValue_Hook(eStats statID, float value)
 {
 	if (CNetwork::m_bAuthenticated)
 	{
-		if (CStatsSync::GetSyncIdByInternal(statID) != -1)
+		if (CStatsSync::ShouldSyncStat(statID))
 			CStatsSync::NotifyChanged();
 	}
 	CStats::SetStatValue(statID, value);
