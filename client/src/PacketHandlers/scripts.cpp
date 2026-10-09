@@ -14,8 +14,9 @@ PACKET_HANDLER(ePacketType::ON_MISSION_FLAG_SYNC, Packets::Scripts::OnMissionFla
 
 	if (CTheScripts::OnAMissionFlag)
 	{
+        bool bWasOnMission = (bool)CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag];
 		CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag] = pOnMissionFlagSync->bOnMission;
-		if (pOnMissionFlagSync->bOnMission == false && (bool)CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag])
+        if (bWasOnMission && pOnMissionFlagSync->bOnMission == false)
 		{
 			// cleanup
 			CNetworkCheckpoint::Remove();
