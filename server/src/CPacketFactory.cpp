@@ -2,6 +2,12 @@
 #include "network/packet_handler.h"
 #include "network/packet_types.h"
 #include "network/packets/system.h"
+#include "network/packets/players.h"
+#include "network/packets/vehicles.h"
+#include "network/packets/peds.h"
+#include "network/packets/world.h"
+#include "network/packets/scripts.h"
+#include "network/packets/blips.h"
 #include "serialize.h"
 #include "stdafx.h"
 #include "CPacketFactory.h"
@@ -110,12 +116,12 @@ void CPacketFactory::Receive(const uint8_t* data, int dataSize, CNetworkPlayer* 
         logger::warn("SerializeBits couldn't read tempPacketType");
         return;
     }
-    ePacketType packetType = static_cast<ePacketType>(tempPacketType);
+    const ePacketType packetType = static_cast<ePacketType>(tempPacketType);
 
     Packet* pPacket = m_map[packetType];
     if (pPacket == nullptr)
     {
-        logger::warn("Couldn't find packet instance of #%d", packetType);
+        logger::warn("Couldn't find packet instance of #%d", tempPacketType);
         return;
     }
 

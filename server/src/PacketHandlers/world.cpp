@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "network/packet_handler.h"
 #include "network/packets/world.h"
+#include "CPickupSession.h"
 
 PACKET_HANDLER(
     ePacketType::GAME_WEATHER_TIME, Packets::World::GameWeatherTime* pGameWeatherTime, CNetworkPlayer* pNetworkPlayer)
@@ -35,4 +36,23 @@ PACKET_HANDLER(ePacketType::UPDATE_ALL_TAGS, Packets::World::UpdateAllTags* pUpd
 PACKET_HANDLER(ePacketType::UPDATE_MOON_SIZE, Packets::World::UpdateMoonSize* pUpdateMoonSize, CNetworkPlayer* pNetworkPlayer)
 {
 	GetPacketFactory().SendToAll(*pUpdateMoonSize, pNetworkPlayer);
+}
+
+PACKET_HANDLER(ePacketType::PICKUP_COLLECTED, Packets::World::PickupCollected* pPickupCollected, CNetworkPlayer* pNetworkPlayer)
+{
+	CPickupSession::AddCollected(*pPickupCollected);
+	GetPacketFactory().SendToAll(*pPickupCollected, pNetworkPlayer);
+}
+
+PACKET_HANDLER(ePacketType::PICKUP_SPAWN, Packets::World::PickupSpawn* pPickupSpawn, CNetworkPlayer* pNetworkPlayer)
+{
+	GetPacketFactory().SendToAll(*pPickupSpawn, pNetworkPlayer);
+}
+
+PACKET_HANDLER(ePacketType::UPDATE_ALL_PICKUPS, Packets::World::UpdateAllPickups* pUpdateAllPickups, CNetworkPlayer* pNetworkPlayer)
+{
+	if (pNetworkPlayer->m_bIsHost)
+	{
+		GetPacketFactory().SendToAll(*pUpdateAllPickups, pNetworkPlayer);
+	}
 }

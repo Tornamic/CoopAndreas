@@ -8,6 +8,7 @@ CNetworkPlayerStats::CNetworkPlayerStats()
 
     m_aStatsFloat[STAT_MAX_HEALTH] = 569.0f;
     m_aStatsFloat[STAT_STAMINA] = 100.0f;
+    m_aStatsInt[STAT_LUNG_CAPACITY - 120] = 0;
 }
 
 float CNetworkPlayerStats::GetFloatStat(size_t index) const

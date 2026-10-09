@@ -204,11 +204,10 @@ void __fastcall CTaskSimpleJetPack__DropJetPack_Hook(CTaskSimpleJetPack* This, S
 {
     if (ped != FindPlayerPed(0) && ped->IsPlayer())
     {
-        // dont create a pickup if the player is network
         This->m_bIsFinished = true;
     }
 
-    plugin::CallMethod<0x67B660, CTaskSimpleJetPack*>(This, ped);  // CTaskSimpleJetPack::DropJetPack
+    plugin::CallMethod<0x67B660, CTaskSimpleJetPack*>(This, ped);
 }
 
 void __fastcall CPedDamageResponseCalculator__ComputeWillKillPed_Hook(

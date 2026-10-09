@@ -1,8 +1,10 @@
 #include "network/packets/world.h"
 #include "network/packet_types.h"
 #include "stdafx.h"
+#include <CStatsSync.h>
 #include <CWeatherSync.h>
 #include <CMoonSync.h>
+#include <CPickupSync.h>
 #include <game_sa/CTagManager.h>
 
 PACKET_HANDLER(ePacketType::GAME_WEATHER_TIME, Packets::World::GameWeatherTime* pGameWeatherTime)
@@ -31,7 +33,19 @@ PACKET_HANDLER(ePacketType::TAG_UPDATE, Packets::World::TagUpdate* pTagUpdate)
 			static_cast<int16_t>(floor(pos.y)) == pTagUpdate->payload.pos_y &&
 			static_cast<int16_t>(floor(pos.z)) == pTagUpdate->payload.pos_z)
 		{
+			const bool wasFullySprayed = tagDesc.m_nAlpha >= 255;
 			CTagManager::SetAlpha(tagDesc.m_pEntity, pTagUpdate->payload.alpha);
+
+			if (pTagUpdate->payload.bFullySprayed && !wasFullySprayed && CNetwork::m_bAuthenticated)
+			{
+				CStats::IncrementStat(STAT_TAGS_SPRAYED, 1.0f);
+				CTagManager::ms_numTagged++;
+
+				if (CStatsSync::ShouldSyncStat(STAT_TAGS_SPRAYED))
+				{
+					CStatsSync::NotifyChanged();
+				}
+			}
 		}
 	}
 }
@@ -66,4 +80,19 @@ PACKET_HANDLER(ePacketType::UPDATE_ALL_TAGS, Packets::World::UpdateAllTags* pUpd
 PACKET_HANDLER(ePacketType::UPDATE_MOON_SIZE, Packets::World::UpdateMoonSize* pUpdateMoonSize)
 {
 	CMoonSync::HandlePacket(pUpdateMoonSize);
+}
+
+PACKET_HANDLER(ePacketType::PICKUP_COLLECTED, Packets::World::PickupCollected* pPickupCollected)
+{
+	CPickupSync::ApplyCollected(*pPickupCollected);
+}
+
+PACKET_HANDLER(ePacketType::PICKUP_SPAWN, Packets::World::PickupSpawn* pPickupSpawn)
+{
+	CPickupSync::ApplySpawned(*pPickupSpawn);
+}
+
+PACKET_HANDLER(ePacketType::UPDATE_ALL_PICKUPS, Packets::World::UpdateAllPickups* pUpdateAllPickups)
+{
+	CPickupSync::HandleUpdateAll(*pUpdateAllPickups);
 }

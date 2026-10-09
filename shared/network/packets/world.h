@@ -202,4 +202,88 @@ private:
     }
 };
 
+class PickupCollected : public Packet
+{
+    DEFINE_PACKET_TYPE(PickupCollected, ePacketType::PICKUP_COLLECTED, ePacketChannel::EVENT);
+
+public:
+    uint16_t pickupSlot = 0;
+    int16_t pos_x = 0;
+    int16_t pos_y = 0;
+    int16_t pos_z = 0;
+    uint16_t modelId = 0;
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_int(stream, pickupSlot, 0, 619);
+        serialize_int(stream, pos_x, -3000, 3000);
+        serialize_int(stream, pos_y, -3000, 3000);
+        serialize_int(stream, pos_z, -3000, 3000);
+        serialize_int(stream, modelId, 0, 20000);
+        return true;
+    }
+};
+
+class UpdateAllPickups : public Packet
+{
+    DEFINE_PACKET_TYPE(UpdateAllPickups, ePacketType::UPDATE_ALL_PICKUPS, ePacketChannel::EVENT);
+
+public:
+    static constexpr int MAX_PICKUPS = 128;
+
+    struct Entry
+    {
+        uint16_t pickupSlot = 0;
+        int16_t pos_x = 0;
+        int16_t pos_y = 0;
+        int16_t pos_z = 0;
+        uint16_t modelId = 0;
+    };
+
+    uint16_t count = 0;
+    Entry entries[MAX_PICKUPS]{};
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_int(stream, count, 0, MAX_PICKUPS);
+        for (uint16_t i = 0; i < count; ++i)
+        {
+            serialize_int(stream, entries[i].pickupSlot, 0, 619);
+            serialize_int(stream, entries[i].pos_x, -3000, 3000);
+            serialize_int(stream, entries[i].pos_y, -3000, 3000);
+            serialize_int(stream, entries[i].pos_z, -3000, 3000);
+            serialize_int(stream, entries[i].modelId, 0, 20000);
+        }
+        return true;
+    }
+};
+
+class PickupSpawn : public Packet
+{
+    DEFINE_PACKET_TYPE(PickupSpawn, ePacketType::PICKUP_SPAWN, ePacketChannel::EVENT);
+
+public:
+    WorldPositionCompressed pos;
+    uint16_t modelId = 0;
+    uint8_t pickupType = 0;
+    uint16_t ammo = 0;
+    bool isEmpty = false;
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_object(stream, pos);
+        serialize_int(stream, modelId, 0, 20000);
+        serialize_int(stream, pickupType, 0, 31);
+        serialize_int(stream, ammo, 0, 50000);
+        serialize_bool(stream, isEmpty);
+        return true;
+    }
+};
+
 }  // namespace Packets::World

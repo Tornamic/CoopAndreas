@@ -2,6 +2,7 @@
 #include "network/packet_types.h"
 #include "stdafx.h"
 #include "network/packet_handler.h"
+#include "CSharedSession.h"
 
 PACKET_HANDLER(
     ePacketType::PLAYER_ONFOOT_UPDATE, Packets::Players::OnFootUpdate* pOnFootUpdate, CNetworkPlayer* pNetworkPlayer)
@@ -62,10 +63,9 @@ PACKET_HANDLER(ePacketType::ADD_PROJECTILE, Packets::Players::AddProjectile* pAd
 
 PACKET_HANDLER(ePacketType::PLAYER_STATS, Packets::Players::PlayerStats* pPlayerStats, CNetworkPlayer* pNetworkPlayer)
 {
-    for (size_t i = 0; i < ARRAY_SIZE(pNetworkPlayer->m_afStats); i++)
-    {
-        pNetworkPlayer->m_afStats[i] = pPlayerStats->stats[i];
-    }
+    CSharedSession::ApplyFromPlayer(pNetworkPlayer, pPlayerStats);
+
+    std::memcpy(pNetworkPlayer->m_afStats, pPlayerStats->stats, sizeof(pNetworkPlayer->m_afStats));
 
     pNetworkPlayer->m_ucSyncFlags.bStatsModified = true;
     pPlayerStats->playerid = pNetworkPlayer->m_iPlayerId;

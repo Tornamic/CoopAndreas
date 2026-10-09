@@ -1,6 +1,8 @@
 #include "CNetworkPlayerManager.h"
 #include "CRTTBroadcastManager.h"
 #include "CPacketFactory.h"
+#include "CSharedSession.h"
+#include "CPickupSession.h"
 #include "logger.h"
 #include "network/packet.h"
 #include "network/packets/system.h"
@@ -225,6 +227,9 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
             GetPacketFactory().Send(i->m_waypointState, pNewNetworkPlayer);
         }
     }
+
+    CSharedSession::SendToPlayer(pNewNetworkPlayer);
+    CPickupSession::SendToPlayer(pNewNetworkPlayer);
 
     for (auto i : CNetworkVehicleManager::m_pVehicles)
     {
