@@ -55,7 +55,6 @@ public:
 			};
         Events::gameProcessEvent.before += []
         {
-            ENetEvent event;
             if (CNetwork::m_bConnected)
             {
                 bBeenConnected = true;
@@ -67,19 +66,15 @@ public:
                 uint32_t currentTime = GetTickCount();
                 if (currentTime - startTime >= 1000)
                 {
-                    CNetwork::ms_nBytesReceivedThisSecond = CNetwork::ms_nBytesReceivedThisSecondCounter;
-                    CNetwork::ms_nBytesSentThisSecond = CNetwork::ms_nBytesSentThisSecondCounter;
-                    CNetwork::ms_nBytesReceivedThisSecondCounter = 0;
-                    CNetwork::ms_nBytesSentThisSecondCounter = 0;
+                    CNetwork::ms_nBytesReceivedThisSecond = CNetwork::ms_nBytesReceivedThisSecondCounter.exchange(0);
+                    CNetwork::ms_nBytesSentThisSecond = CNetwork::ms_nBytesSentThisSecondCounter.exchange(0);
                     startTime = currentTime;
                 }
             }
             else if (bBeenConnected && !CNetwork::m_bConnected)
             {
                 bBeenConnected = false;
-                enet_host_destroy(CNetwork::m_pENetHost);
-                enet_deinitialize();
-                CChat::AddMessage("{cecedb}[Network] Disconnected from the server.");
+                CChat::AddMessage("{d6dce8}[Network] Disconnected from the server.");
             }
         };
         Events::gameProcessEvent += []
@@ -117,7 +112,7 @@ public:
                     static_cast<bool>(CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag]) != lastOnMissionFlag)
                 {
                     lastOnMissionFlag = CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag];
-                        
+
                     Packets::Scripts::OnMissionFlagSync packet{};
                     packet.bOnMission = CTheScripts::ScriptSpace[CTheScripts::OnAMissionFlag];
                     GetPacketFactory().Send(packet);
@@ -184,23 +179,23 @@ public:
                     }
                 }
 
-                 if (isPassenger && tickCount > lastPassengerSyncTickRate + 333)
-                 {
-                     CNetworkVehicleManager::UpdatePassenger(localPlayer->m_pVehicle, localPlayer);
-                     lastPassengerSyncTickRate = tickCount;
-                 }
+                if (isPassenger && tickCount > lastPassengerSyncTickRate + 333)
+                {
+                    CNetworkVehicleManager::UpdatePassenger(localPlayer->m_pVehicle, localPlayer);
+                    lastPassengerSyncTickRate = tickCount;
+                }
 
-                 if (tickCount > lastIdleVehicleSyncTickRate + 150)
-                 {
-                     CNetworkVehicleManager::UpdateIdle();
-                     lastIdleVehicleSyncTickRate = tickCount;
-                 }
+                if (tickCount > lastIdleVehicleSyncTickRate + 150)
+                {
+                    CNetworkVehicleManager::UpdateIdle();
+                    lastIdleVehicleSyncTickRate = tickCount;
+                }
 
-                 if (tickCount > lastPedSyncTickRate + 50)
-                 {
-                     CNetworkPedManager::Update();
-                     lastPedSyncTickRate = tickCount;
-                 }
+                if (tickCount > lastPedSyncTickRate + 50)
+                {
+                    CNetworkPedManager::Update();
+                    lastPedSyncTickRate = tickCount;
+                }
 
                 if (CLocalPlayer::m_bIsHost && tickCount > lastWeatherTimeSyncTickRate + 2000)
                 {
@@ -286,12 +281,13 @@ public:
             {
                 char buffer[270];
                 sprintf(buffer,
-                    "IsHost=%d | RTT %dms | Jitter %dms | Game/Network: Peds %d/%d | Cars %d/%d | Recv %d %.2f KB/S | Sent %d %.2f KB/S | EnEx %d",
-                    CLocalPlayer::m_bIsHost, CNetwork::m_pPeer->roundTripTime, CNetwork::m_pPeer->roundTripTimeVariance, CPools::ms_pPedPool->GetNoOfUsedSpaces(),
-                    CNetworkPedManager::m_pPeds.size(), CPools::ms_pVehiclePool->GetNoOfUsedSpaces(),
-                    CNetworkVehicleManager::m_pVehicles.size(), CNetwork::m_pENetHost->totalReceivedPackets,
-                    CNetwork::ms_nBytesReceivedThisSecond / 1024.0f, CNetwork::m_pENetHost->totalSentPackets,
-                    CNetwork::ms_nBytesSentThisSecond / 1024.0f,
+                    "IsHost=%d | RTT %dms | Jitter %dms | Game/Network: Peds %d/%d | Cars %d/%d | Recv %d %.2f KB/S | "
+                    "Sent %d %.2f KB/S | EnEx %d",
+                    CLocalPlayer::m_bIsHost, CNetwork::GetRTT(), CNetwork::GetRTTVariance(),
+                    CPools::ms_pPedPool->GetNoOfUsedSpaces(), CNetworkPedManager::m_pPeds.size(),
+                    CPools::ms_pVehiclePool->GetNoOfUsedSpaces(), CNetworkVehicleManager::m_pVehicles.size(),
+                    CNetwork::GetReceivedCount(), CNetwork::ms_nBytesReceivedThisSecond / 1024.0f,
+                    CNetwork::GetSentCount(), CNetwork::ms_nBytesSentThisSecond / 1024.0f,
                     CEntryExitManager::mp_poolEntryExits->GetNoOfUsedSpaces());
                 CDXFont::Draw(100, 10, buffer, D3DCOLOR_ARGB(255, 255, 255, 255));
                 /*for (auto enex : CEntryExitManager::mp_poolEntryExits)
@@ -429,12 +425,12 @@ public:
                                 std::to_string(networkVehicle->m_bSyncing) + "\n" +
                                 std::to_string(networkVehicle->m_pVehicle->m_fGasPedal) + " " +
                                 std::to_string(networkVehicle->m_pVehicle->m_fBreakPedal) + "\nC " +
-                                std::to_string(networkVehicle->m_pVehicle->m_nCreatedBy) + "\npaint " + std::to_string(networkVehicle->m_pVehicle->GetRemapIndex())
-                                
-                                )
+                                std::to_string(networkVehicle->m_pVehicle->m_nCreatedBy) + "\npaint " +
+                                std::to_string(networkVehicle->m_pVehicle->GetRemapIndex())
+
+                                    )
                                 .c_str(),
                             D3DCOLOR_ARGB(255, 255, 255, 255));
-                        
                     }
                 }
 
@@ -459,7 +455,6 @@ public:
                             D3DCOLOR_ARGB(255, 255, 255, 255));
                     }
                 }
-                
 
                 std::string buf;
                 for (int i = 0; i < 180; i++)
@@ -472,16 +467,19 @@ public:
                 }
 
                 CDXFont::Draw(10, 25, buf.c_str(), D3DCOLOR_ARGB(255, 255, 255, 255));
-                
+
                 CVector posn = FindPlayerPed(0)->m_matrix->pos;
                 RwV3d screenCoors;
                 float w, h;
-                //if (CSprite::CalcScreenCoors({posn.x, posn.y, posn.z + 1.0f}, &screenCoors, &w, &h, true, true))
+                // if (CSprite::CalcScreenCoors({posn.x, posn.y, posn.z + 1.0f}, &screenCoors, &w, &h, true, true))
                 {
-                    float orientsim = atan2f(TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront.x, TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront.y);
+                    float orientsim = atan2f(TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront.x,
+                        TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront.y);
                     char buf[512];
-                    sprintf(buf, "cam %f/%f\ncur %f des %f\n%s/%s\nfront %f %f %f\nsource %f %f %f\nup %f %f %f", TheCamera.m_fOrientation, orientsim,
-                        FindPlayerPed(0)->m_fCurrentRotation, FindPlayerPed(0)->m_fAimingRotation, CamModeToString(TheCamera.m_aCams[0].m_nMode), CamModeToString((eCamMode)TheCamera.m_PlayerWeaponMode.m_nMode),
+                    sprintf(buf, "cam %f/%f\ncur %f des %f\n%s/%s\nfront %f %f %f\nsource %f %f %f\nup %f %f %f",
+                        TheCamera.m_fOrientation, orientsim, FindPlayerPed(0)->m_fCurrentRotation,
+                        FindPlayerPed(0)->m_fAimingRotation, CamModeToString(TheCamera.m_aCams[0].m_nMode),
+                        CamModeToString((eCamMode)TheCamera.m_PlayerWeaponMode.m_nMode),
                         TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront.x,
                         TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront.y,
                         TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecFront.z,
@@ -490,10 +488,9 @@ public:
                         TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecSource.z,
                         TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecUp.x,
                         TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecUp.y,
-                        TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecUp.z
-                        );
+                        TheCamera.m_aCams[TheCamera.m_nActiveCam].m_vecUp.z);
                     CDXFont::Draw((int)100, (int)100, buf, D3DCOLOR_ARGB(255, 255, 255, 255));
-                    
+
                     /*CVehicle* pVehicle = FindPlayerPed(0)->m_pVehicle;
                     if (pVehicle)
                     {
@@ -501,13 +498,13 @@ public:
                         maxaaa = std::max(maxaaa, std::abs(pVehicle->m_vecTurnSpeed.x));
                         maxaaa = std::max(maxaaa, std::abs(pVehicle->m_vecTurnSpeed.y));
                         maxaaa = std::max(maxaaa, std::abs(pVehicle->m_vecTurnSpeed.z));
-                        sprintf(buf, 
+                        sprintf(buf,
                             "pos {%f, %f, %f}\n"
                             "right {%f, %f, %f}\n"
                             "up {%f, %f, %f}\n"
                             "moveSpeed {%f, %f, %f}\n"
                             "turnSpeed {%f, %f, %f} (%f)"
-                            , 
+                            ,
                             pVehicle->m_matrix->pos.x, pVehicle->m_matrix->pos.y, pVehicle->m_matrix->pos.z,
                             pVehicle->m_matrix->right.x, pVehicle->m_matrix->right.y, pVehicle->m_matrix->right.z,
                             pVehicle->m_matrix->up.x, pVehicle->m_matrix->up.y, pVehicle->m_matrix->up.z,

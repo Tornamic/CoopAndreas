@@ -19,7 +19,7 @@ PACKET_HANDLER(ePacketType::PLAYER_CONNECTED, Packets::System::PlayerConnected* 
 
     if (!pNetworkPlayer->m_bHasBeenConnectedBeforeMe)
     {
-        CChat::AddMessage("[Player] " + pNetworkPlayer->GetName() + " connected");
+        CChat::AddMessage("{c7a6ff}[Player] {d6dce8}" + pNetworkPlayer->GetName() + " connected");
     }
     // TODO REFACTOR
     if (CLocalPlayer::m_bIsHost)
@@ -35,18 +35,21 @@ PACKET_HANDLER(ePacketType::PLAYER_DISCONNECTED, Packets::System::PlayerDisconne
 {
     if (pPlayerDisconnected->payload.playerid == -1)
     {
-        if (pPlayerDisconnected->payload.reason == Packets::System::PlayerDisconnected::DISCONNECTION_REASON_VERSION_MISMATCH)
+        if (pPlayerDisconnected->payload.reason ==
+            Packets::System::PlayerDisconnected::DISCONNECTION_REASON_VERSION_MISMATCH)
         {
             char buffer[23];
             semver_t expected;
             semver_unpack(pPlayerDisconnected->payload.version, &expected);
             semver_to_string(&expected, buffer, sizeof buffer);
             buffer[22] = '\0';
-            CChat::AddMessage("{cecedb}[Network] Version mismatch, server: %s client: %s", buffer, COOPANDREAS_VERSION);
+            CChat::AddMessage(
+                "{63c7e8}[Network] {e8b86d}Version mismatch, server: %s client: %s", buffer, COOPANDREAS_VERSION);
         }
-        else if (pPlayerDisconnected->payload.reason == Packets::System::PlayerDisconnected::DISCONNECTION_REASON_NAME_TAKEN)
+        else if (pPlayerDisconnected->payload.reason ==
+                 Packets::System::PlayerDisconnected::DISCONNECTION_REASON_NAME_TAKEN)
         {
-            CChat::AddMessage("{cecedb}[Network] The nickname '%s' is already taken.", CLocalPlayer::m_Name);
+            CChat::AddMessage("{63c7e8}[Network] {e8b86d}Nickname '%s' is already taken.", CLocalPlayer::m_Name);
         }
         CNetwork::Disconnect();
         return;
@@ -55,7 +58,7 @@ PACKET_HANDLER(ePacketType::PLAYER_DISCONNECTED, Packets::System::PlayerDisconne
     CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(pPlayerDisconnected->payload.playerid);
     if (player != nullptr)
     {
-        CChat::AddMessage("[Player] " + std::string(player->GetName()) + " disconnected");
+        CChat::AddMessage("{c7a6ff}[Player] {d6dce8}" + std::string(player->GetName()) + " disconnected");
         CNetworkPlayerManager::Remove(player);
         delete player;
     }
@@ -93,20 +96,20 @@ PACKET_HANDLER(ePacketType::PLAYER_ASSIGN_HOST, Packets::System::PlayerAssignHos
     {
         CLocalPlayer::m_bIsHost = true;
 
-        CPatch::RevertTemporaryPatchesForHost(); // TODO is this needed?
+        CPatch::RevertTemporaryPatchesForHost();  // TODO is this needed?
 
         CNetworkPedManager::AssignHost();
         CWeatherSync::SyncCurrentState();
         CTagSync::SyncCurrentState();
-        CChat::AddMessage("[Player] You are the host now");
+        CChat::AddMessage("{c7a6ff}[Player] {d6dce8}You are the host now");
         return;
     }
-    
+
     for (auto pNetworkPlayer : CNetworkPlayerManager::m_pPlayers)
     {
         if (pNetworkPlayer->m_iPlayerId == pPlayerAssignHost->playerid)
         {
-            CChat::AddMessage("[Player] " + pNetworkPlayer->GetName() + " is the host now");
+            CChat::AddMessage("{c7a6ff}[Player] {d6dce8}" + pNetworkPlayer->GetName() + " is the host now");
             pNetworkPlayer->m_bIsHost = true;
         }
         else
@@ -124,6 +127,6 @@ PACKET_HANDLER(ePacketType::PLAYER_CHAT_MESSAGE, Packets::System::ChatMessage* p
 
     if (player)
     {
-        CChat::SendPlayerMessage(player->GetName().c_str(), player->m_iPlayerId, pChatMessage->message);
+        CChat::AddPlayerChatMessage(player->GetName().c_str(), pChatMessage->message);
     }
 }

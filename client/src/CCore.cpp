@@ -80,7 +80,7 @@ void CCore::Init()
     {
         CPatch::TemporaryPatches();
         // init CNetworking async
-        CreateThread(NULL, NULL, CNetwork::InitAsync, NULL, NULL, NULL);
+        CNetwork::Start();
     };
     Events::initRwEvent += [] { CPatch::PatchFramerate(); };
 

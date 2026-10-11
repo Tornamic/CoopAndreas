@@ -5,97 +5,149 @@
 #include <cassert>
 #include <windows.h>
 
+void CNetwork::Start()
+{
+    m_networkThread.ClearQueues();
+    m_networkThread.Start(InitAsync);
+}
+
 DWORD WINAPI CNetwork::InitAsync(LPVOID)
 {
     assert(strcmp(m_IpAddress, "") != 0 && "Wrong IP passed");
     assert(m_nPort != 0 && "Wrong Port passed");
 
     if (enet_initialize() != 0)
-    {  // try to init enet
-        CChat::AddMessage("{cecedb}[Network] {ff0000}Failed to enet_initialize.");
-        return false;
+    {
+        CChat::AddMessage("{63c7e8}[Network] {f07878}Failed to enet_initialize.");
+        return 0;
     }
     else
     {
         std::cout << "Success to enet_initialize" << std::endl;
     }
 
-    m_pENetHost = enet_host_create(NULL, 1, (int)ePacketChannel::COUNT, 0, 0);  // create enet client
-    if (m_pENetHost == NULL)                           // check client
-        return false;
-
-    ENetAddress address;                           // connection address
-
-    enet_address_set_host(&address, m_IpAddress);  // set address ip
-    address.port = m_nPort;                        // set address port
-
-    uint32_t packedVersion = semver_parse(COOPANDREAS_VERSION, nullptr); // v0.1.0-alpha compat
-    m_pPeer =
-        enet_host_connect(m_pENetHost, &address, (int)ePacketChannel::COUNT, packedVersion);  // connect to the server
-    if (m_pPeer == NULL)
-    {                                                                                         // if not connected
-        CChat::AddMessage("{cecedb}[Network] {ff0000}m_pPeer == NULL.");
-        // std::cout << "Not Connected" << std::endl;
-        return false;
+    m_pENetHost = enet_host_create(NULL, 1, (int)ePacketChannel::COUNT, 0, 0);
+    if (m_pENetHost == nullptr)
+    {
+        enet_deinitialize();
+        return 0;
     }
 
-    CChat::AddMessage("{cecedb}[Network] Connecting to the server...");
-    ENetEvent event;
-    while (!m_bConnected)
+    ENetAddress address;
+
+    enet_address_set_host(&address, m_IpAddress);
+    address.port = m_nPort;
+
+    uint32_t packedVersion = semver_parse(COOPANDREAS_VERSION, nullptr);  // v0.1.0-alpha compat
+    m_pPeer = enet_host_connect(m_pENetHost, &address, (int)ePacketChannel::COUNT, packedVersion);
+    if (m_pPeer == nullptr)
     {
-        if (enet_host_service(m_pENetHost, &event, 2000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
+        CChat::AddMessage("{63c7e8}[Network] {ff0000}m_pPeer == NULL.");
+        enet_host_destroy(m_pENetHost);
+        m_pENetHost = nullptr;
+        enet_deinitialize();
+        return 0;
+    }
+
+    CChat::AddMessage("{63c7e8}[Network] {d6dce8}Connecting to the server...");
+    ENetEvent event;
+    while (!m_bConnected && !m_networkThread.IsStopRequested())
+    {
+        if (enet_host_service(m_pENetHost, &event, 100) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
         {
             m_bConnected = true;
             m_bAuthenticated = false;
+            m_bHandshakePending = true;
 
-            CChat::AddMessage("{cecedb}[Network] {00ff00}Successfully {cecedb}connected to the server.");
-
-            Packets::System::PlayerConnected connectedPacket{};
-            connectedPacket.payload.isAlreadyConnected = false;
-            connectedPacket.payload.playerid = -1;
-            connectedPacket.payload.version = packedVersion;
-            strcpy_s(connectedPacket.payload.name, CLocalPlayer::m_Name);
-
-            GetPacketFactory().Send(connectedPacket);
+            CChat::AddMessage("{63c7e8}[Network] {78d99a}Successfully {cecedb}connected to the server.");
         }
-        else
+        else if (!m_networkThread.IsStopRequested())
         {
-            // enet_peer_reset(m_pPeer);
-            CChat::AddMessage("{cecedb}[Network] Failed to connect. Retrying...");
+            CChat::AddMessage("{63c7e8}[Network] {e8b86d}Failed to connect. Retrying...");
         }
     }
 
+    while (!m_networkThread.IsStopRequested())
+    {
+        std::deque<CNetworkThread::QueuedPacket> packetsToSend = m_networkThread.TakeOutgoing();
+
+        for (const CNetworkThread::QueuedPacket& queuedPacket : packetsToSend)
+        {
+            uint32_t flags = queuedPacket.reliability == ePacketReliability::RELIABLE ? ENET_PACKET_FLAG_RELIABLE : 0;
+            ENetPacket* packet = enet_packet_create(queuedPacket.data.data(), queuedPacket.data.size(), flags);
+            if (packet != nullptr)
+            {
+                enet_peer_send(m_pPeer, static_cast<uint8_t>(queuedPacket.channel), packet);
+                ms_nBytesSentThisSecondCounter += static_cast<uint32_t>(queuedPacket.data.size());
+                ++m_nSentPackets;
+            }
+        }
+
+        while (enet_host_service(m_pENetHost, &event, 1) > 0)
+        {
+            switch (event.type)
+            {
+                case ENET_EVENT_TYPE_RECEIVE:
+                {
+                    ms_nBytesReceivedThisSecondCounter += event.packet->dataLength;
+                    ++m_nReceivedPackets;
+                    std::vector<uint8_t> data(event.packet->data, event.packet->data + event.packet->dataLength);
+                    m_networkThread.EnqueueIncoming(std::move(data));
+                    enet_packet_destroy(event.packet);
+                    break;
+                }
+                case ENET_EVENT_TYPE_DISCONNECT:
+                    m_bConnected = false;
+                    m_bAuthenticated = false;
+                    m_networkThread.RequestStop();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (m_pPeer != nullptr)
+        {
+            m_nRTT = m_pPeer->roundTripTime;
+            m_nRTTVariance = m_pPeer->roundTripTimeVariance;
+            m_nDroppedPackets = m_pPeer->packetsLost;
+            m_nPacketLoss = m_pPeer->packetLoss;
+        }
+    }
+
+    if (m_pPeer != nullptr)
+    {
+        enet_peer_disconnect_now(m_pPeer, 0);
+    }
+    if (m_pENetHost != nullptr)
+    {
+        enet_host_destroy(m_pENetHost);
+    }
+    m_pPeer = nullptr;
+    m_pENetHost = nullptr;
+    enet_deinitialize();
+    m_bConnected = false;
+    m_bAuthenticated = false;
+    m_bHandshakePending = false;
     return true;
 }
 
 void CNetwork::ProcessReceive()
 {
-#if true  // ENET LAYER
-    ENetEvent eNetEvent{};
-    while (enet_host_service(m_pENetHost, &eNetEvent, 0) > 0)
+    if (m_bHandshakePending.exchange(false))
     {
-        switch (eNetEvent.type)
-        {
-            case ENET_EVENT_TYPE_RECEIVE:
-            {
-                ms_nBytesReceivedThisSecondCounter += eNetEvent.packet->dataLength;
-                
-                GetPacketFactory().Receive(eNetEvent.packet->data, eNetEvent.packet->dataLength);
-
-                enet_packet_destroy(eNetEvent.packet);
-                break;
-            }
-            case ENET_EVENT_TYPE_DISCONNECT:
-            {
-                //assert(false && "TODO");
-                CNetwork::Disconnect();
-            }
-            case ENET_EVENT_TYPE_NONE:
-            case ENET_EVENT_TYPE_CONNECT:
-                break;
-        }
+        Packets::System::PlayerConnected connectedPacket{};
+        connectedPacket.payload.isAlreadyConnected = false;
+        connectedPacket.payload.playerid = -1;
+        connectedPacket.payload.version = semver_parse(COOPANDREAS_VERSION, nullptr);
+        strcpy_s(connectedPacket.payload.name, CLocalPlayer::m_Name);
+        GetPacketFactory().Send(connectedPacket);
     }
-#endif
+
+    std::deque<std::vector<uint8_t>> packets = m_networkThread.TakeIncoming();
+
+    for (const std::vector<uint8_t>& packet : packets)
+        GetPacketFactory().Receive(packet.data(), static_cast<int>(packet.size()));
 }
 
 void CNetwork::SendPacket(
@@ -113,35 +165,19 @@ void CNetwork::SendPacket(
         return;
     }
 
-#if true  // ENET LAYER
-    uint32_t eNetPacketFlags = 0;
-    if (packetReliability == ePacketReliability::RELIABLE)
-    {
-        eNetPacketFlags |= ENET_PACKET_FLAG_RELIABLE;
-    }
-    else if (packetReliability == ePacketReliability::UNRELIABLE)
-    {
-        // ...
-    }
+    if (data == nullptr || dataSize <= 0)
+        return;
 
-    ENetPacket* pENetPacket = enet_packet_create(data, dataSize, eNetPacketFlags);
-    if (pENetPacket != nullptr)
-    {
-        enet_peer_send(m_pPeer, static_cast<uint8_t>(packetChannel), pENetPacket);
-        ms_nBytesSentThisSecondCounter += dataSize;
-    }
-#endif
+    CNetworkThread::QueuedPacket queuedPacket;
+    queuedPacket.data.assign(data, data + dataSize);
+    queuedPacket.channel = packetChannel;
+    queuedPacket.reliability = packetReliability;
+    m_networkThread.EnqueueOutgoing(std::move(queuedPacket));
 }
 
 void CNetwork::Disconnect()
 {
-    if (!m_bConnected)
-        return;
-
-    enet_peer_disconnect_now(CNetwork::m_pPeer, 0);
-    // enet_host_flush(CNetwork::m_pENetHost);
-    // enet_peer_reset(CNetwork::m_pPeer);
-
     m_bConnected = false;
     m_bAuthenticated = false;
+    m_networkThread.Stop();
 }
