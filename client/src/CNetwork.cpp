@@ -63,7 +63,12 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
         }
         else if (!m_networkThread.IsStopRequested())
         {
-            CChat::AddMessage("{63c7e8}[Network] {e8b86d}Failed to connect. Retrying...");
+            static uint32_t lastRetryingMsg = 0;
+            if (GetTickCount() - lastRetryingMsg >= 2000)
+            {
+                CChat::AddMessage("{63c7e8}[Network] {e8b86d}Failed to connect. Retrying...");
+                lastRetryingMsg = GetTickCount();
+            }
         }
     }
 
