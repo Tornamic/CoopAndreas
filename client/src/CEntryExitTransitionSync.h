@@ -15,6 +15,7 @@ public:
     static void OnTransitionFinished(CEntryExit* pEntryExit, CPed* pPed);
     static void Receive(const Packets::Players::EnExTransition& packet);
     static void Process();
+    static void Shutdown();
 
 private:
     static inline CEntryExit* ms_pLocalAnimatedTransition = nullptr;

@@ -1,18 +1,82 @@
 #include "stdafx.h"
 #include "CEntryExitTransitionSync.h"
 #include "CEntryExitManager.h"
+#include <CBuilding.h>
 #include <game_sa/CTaskComplexGotoDoorAndOpen.h>
 #include <game_sa/CTaskSimpleUninterruptable.h>
 
 namespace
 {
+constexpr DWORD DOOR_CLOSE_TIMEOUT_MS = 10000;
+constexpr float CLOSED_MATRIX_DIFFERENCE_SQ = 0.0004f;
+
+struct DoorGuard
+{
+    CEntity* m_pDoor = nullptr;
+    CBuilding* m_pBlocker = nullptr;
+    CMatrix m_matrixClosed{};
+    int m_nActiveTransitions = 0;
+    DWORD m_nNoLeaseSince = 0;
+};
+
+struct CollisionParticipant
+{
+    CEntity* m_pPed = nullptr;
+    CEntity* m_pPreviousIgnoredCollision = nullptr;
+    DoorGuard* m_pGuard = nullptr;
+};
+
 struct RemoteTransition
 {
+    CollisionParticipant m_participant{};
     CPlayerPed* m_pPed = nullptr;
     CTask* m_pTask = nullptr;
 };
 
-std::unordered_map<int, RemoteTransition> g_remoteTransitions;
+using DoorGuardMap = std::unordered_map<CEntity*, DoorGuard>;
+using RemoteTransitionMap = std::unordered_map<int, RemoteTransition>;
+
+DoorGuardMap g_doorGuards;
+RemoteTransitionMap g_remoteTransitions;
+CollisionParticipant g_localParticipant;
+
+float VectorDifferenceSq(const CVector& vecLeft, const CVector& vecRight)
+{
+    const float fX = vecLeft.x - vecRight.x;
+    const float fY = vecLeft.y - vecRight.y;
+    const float fZ = vecLeft.z - vecRight.z;
+    return fX * fX + fY * fY + fZ * fZ;
+}
+
+float GetDoorMatrixDifferenceSq(const DoorGuard& guard)
+{
+    if (!guard.m_pDoor)
+    {
+        return FLT_MAX;
+    }
+
+    CMatrixLink* pMatrix = guard.m_pDoor->GetMatrix();
+    if (!pMatrix)
+    {
+        return FLT_MAX;
+    }
+
+    return VectorDifferenceSq(pMatrix->right, guard.m_matrixClosed.right) +
+        VectorDifferenceSq(pMatrix->up, guard.m_matrixClosed.up) +
+        VectorDifferenceSq(pMatrix->at, guard.m_matrixClosed.at) +
+        VectorDifferenceSq(pMatrix->pos, guard.m_matrixClosed.pos);
+}
+
+bool IsRealDoorClosed(const DoorGuard& guard)
+{
+    if (!guard.m_pDoor || guard.m_pDoor->m_nType != ENTITY_TYPE_OBJECT)
+    {
+        return false;
+    }
+
+    CObject* pDoor = static_cast<CObject*>(guard.m_pDoor);
+    return pDoor->m_nPhysicalFlags.bCollidable && GetDoorMatrixDifferenceSq(guard) <= CLOSED_MATRIX_DIFFERENCE_SQ;
+}
 
 CVector GetEntrancePosition(CEntryExit* pEntryExit)
 {
@@ -26,6 +90,165 @@ void SetRemotePrimaryTask(CPlayerPed* pPlayerPed, CTask* pTask)
     uint16_t localDisablePlayerControls = pPad->DisablePlayerControls;
     pPlayerPed->m_pIntelligence->m_TaskMgr.SetTask(pTask, TASK_PRIMARY_PRIMARY, false);
     pPad->DisablePlayerControls = localDisablePlayerControls;
+}
+
+DoorGuardMap::iterator DestroyDoorGuard(DoorGuardMap::iterator it)
+{
+    DoorGuard& guard = it->second;
+
+    if (guard.m_pBlocker)
+    {
+        guard.m_pBlocker->m_bUsesCollision = false;
+        CWorld::Remove(guard.m_pBlocker);
+        CWorld::RemoveReferencesToDeletedObject(guard.m_pBlocker);
+        delete guard.m_pBlocker;
+        guard.m_pBlocker = nullptr;
+    }
+
+    if (guard.m_pDoor)
+    {
+        guard.m_pDoor->CleanUpOldReference(&guard.m_pDoor);
+    }
+
+    return g_doorGuards.erase(it);
+}
+
+DoorGuard* AcquireDoorGuard(CObject* pDoor)
+{
+    auto existing = g_doorGuards.find(pDoor);
+    if (existing != g_doorGuards.end())
+    {
+        DoorGuard& guard = existing->second;
+        guard.m_nNoLeaseSince = 0;
+        return &guard;
+    }
+
+    CBuilding* pBlocker = nullptr;
+    DoorGuardMap::iterator it;
+    bool bInserted = false;
+    try
+    {
+        pBlocker = new CBuilding();
+        auto result = g_doorGuards.try_emplace(pDoor);
+        it = result.first;
+        bInserted = result.second;
+    }
+    catch (...)
+    {
+        delete pBlocker;
+        return nullptr;
+    }
+
+    DoorGuard& guard = it->second;
+    if (!bInserted)
+    {
+        delete pBlocker;
+        guard.m_nNoLeaseSince = 0;
+        return &guard;
+    }
+
+    guard.m_pDoor = pDoor;
+    pDoor->RegisterReference(&guard.m_pDoor);
+    guard.m_pBlocker = pBlocker;
+    guard.m_matrixClosed = *pDoor->GetMatrix();
+
+    pBlocker->SetModelIndexNoCreate(pDoor->m_nModelIndex);
+    pBlocker->SetMatrix(guard.m_matrixClosed);
+    pBlocker->m_nAreaCode = pDoor->m_nAreaCode;
+    pBlocker->m_bUsesCollision = true;
+    pBlocker->m_bIsStatic = true;
+    pBlocker->m_bIsVisible = false;
+    pBlocker->m_bStreamingDontDelete = true;
+    pBlocker->m_bDontStream = true;
+    pBlocker->m_bDontCastShadowsOn = true;
+    pBlocker->m_bHasPreRenderEffects = false;
+    CWorld::Add(pBlocker);
+
+    return &guard;
+}
+
+void DetachParticipant(CollisionParticipant& participant)
+{
+    if (!participant.m_pGuard)
+    {
+        return;
+    }
+
+    DoorGuard* pGuard = participant.m_pGuard;
+
+    if (participant.m_pPed && participant.m_pPed->m_nType == ENTITY_TYPE_PED)
+    {
+        CPed* pPed = static_cast<CPed*>(participant.m_pPed);
+        if (pPed->m_pEntityIgnoredCollision == pGuard->m_pBlocker)
+        {
+            pPed->m_pEntityIgnoredCollision = participant.m_pPreviousIgnoredCollision;
+        }
+    }
+
+    if (participant.m_pPreviousIgnoredCollision)
+    {
+        participant.m_pPreviousIgnoredCollision->CleanUpOldReference(&participant.m_pPreviousIgnoredCollision);
+    }
+    if (participant.m_pPed)
+    {
+        participant.m_pPed->CleanUpOldReference(&participant.m_pPed);
+    }
+
+    if (pGuard->m_nActiveTransitions > 0)
+    {
+        --pGuard->m_nActiveTransitions;
+    }
+    if (pGuard->m_nActiveTransitions == 0)
+    {
+        pGuard->m_nNoLeaseSince = GetTickCount();
+    }
+
+    participant = {};
+}
+
+void AttachParticipant(CollisionParticipant& participant, DoorGuard* pGuard, CPed* pPed)
+{
+    if (participant.m_pGuard)
+    {
+        DetachParticipant(participant);
+    }
+
+    participant.m_pPed = pPed;
+    pPed->RegisterReference(&participant.m_pPed);
+    participant.m_pPreviousIgnoredCollision = pPed->m_pEntityIgnoredCollision;
+    if (participant.m_pPreviousIgnoredCollision == pGuard->m_pBlocker)
+    {
+        participant.m_pPreviousIgnoredCollision = nullptr;
+    }
+    else if (participant.m_pPreviousIgnoredCollision)
+    {
+        participant.m_pPreviousIgnoredCollision->RegisterReference(&participant.m_pPreviousIgnoredCollision);
+    }
+
+    participant.m_pGuard = pGuard;
+    ++pGuard->m_nActiveTransitions;
+    pGuard->m_nNoLeaseSince = 0;
+    pPed->m_pEntityIgnoredCollision = pGuard->m_pBlocker;
+}
+
+bool ProcessParticipant(CollisionParticipant& participant)
+{
+    if (!participant.m_pGuard)
+    {
+        return true;
+    }
+    if (!participant.m_pPed || participant.m_pPed->m_nType != ENTITY_TYPE_PED)
+    {
+        DetachParticipant(participant);
+        return false;
+    }
+
+    CPed* pPed = static_cast<CPed*>(participant.m_pPed);
+    if (pPed->m_pEntityIgnoredCollision != participant.m_pGuard->m_pBlocker)
+    {
+        pPed->m_pEntityIgnoredCollision = participant.m_pGuard->m_pBlocker;
+    }
+    return true;
 }
 
 void ApplyRemoteSnapshot(CNetworkPlayer* pNetworkPlayer, const Packets::Players::EnExTransition& packet)
@@ -54,29 +277,37 @@ void ApplyRemoteSnapshot(CNetworkPlayer* pNetworkPlayer, const Packets::Players:
     pNetworkPlayer->m_onFootSnapshotInterpolated.aimingRotation = packet.aimingRotation;
 }
 
-void ClearRemoteTransition(CNetworkPlayer* pNetworkPlayer)
+RemoteTransitionMap::iterator ClearRemoteTransition(
+    RemoteTransitionMap::iterator it, CNetworkPlayer* pNetworkPlayer)
 {
-    auto it = g_remoteTransitions.find(pNetworkPlayer->m_iPlayerId);
-    if (it == g_remoteTransitions.end())
-    {
-        return;
-    }
-
     RemoteTransition& transition = it->second;
-    if (pNetworkPlayer->m_pPed == transition.m_pPed)
+    CPlayerPed* pPlayerPed = transition.m_pPed;
+
+    if (pNetworkPlayer && pNetworkPlayer->m_pPed == pPlayerPed)
     {
-        CTaskManager& taskManager = transition.m_pPed->m_pIntelligence->m_TaskMgr;
+        CTaskManager& taskManager = pPlayerPed->m_pIntelligence->m_TaskMgr;
         if (taskManager.m_aPrimaryTasks[TASK_PRIMARY_PRIMARY] == transition.m_pTask)
         {
-            SetRemotePrimaryTask(transition.m_pPed, nullptr);
+            SetRemotePrimaryTask(pPlayerPed, nullptr);
         }
     }
 
-    g_remoteTransitions.erase(it);
+    DetachParticipant(transition.m_participant);
+    return g_remoteTransitions.erase(it);
+}
+
+void ClearRemoteTransition(CNetworkPlayer* pNetworkPlayer)
+{
+    auto it = g_remoteTransitions.find(pNetworkPlayer->m_iPlayerId);
+    if (it != g_remoteTransitions.end())
+    {
+        ClearRemoteTransition(it, pNetworkPlayer);
+    }
 }
 
 void StartRemoteTransition(CNetworkPlayer* pNetworkPlayer, CEntryExit* pEntryExit, bool bUsesDoor)
 {
+    RemoteTransition& transition = g_remoteTransitions.try_emplace(pNetworkPlayer->m_iPlayerId).first->second;
     CPlayerPed* pPlayerPed = pNetworkPlayer->m_pPed;
     CTask* pTask = nullptr;
 
@@ -85,7 +316,13 @@ void StartRemoteTransition(CNetworkPlayer* pNetworkPlayer, CEntryExit* pEntryExi
         CEntity* pEntity = CEntryExitManager::FindNearestDoor(*pEntryExit, 10.0f);
         if (pEntity && pEntity->m_nType == ENTITY_TYPE_OBJECT)
         {
-            pTask = new CTaskComplexGotoDoorAndOpen(static_cast<CObject*>(pEntity));
+            CObject* pDoor = static_cast<CObject*>(pEntity);
+            DoorGuard* pGuard = AcquireDoorGuard(pDoor);
+            if (pGuard)
+            {
+                AttachParticipant(transition.m_participant, pGuard, pPlayerPed);
+                pTask = new CTaskComplexGotoDoorAndOpen(pDoor);
+            }
         }
     }
 
@@ -94,7 +331,8 @@ void StartRemoteTransition(CNetworkPlayer* pNetworkPlayer, CEntryExit* pEntryExi
         CVector vecStart = GetEntrancePosition(pEntryExit);
         CEntryExit* pSpawnPoint = pEntryExit->m_pLink ? pEntryExit->m_pLink : pEntryExit;
         CVector vecDirection = pSpawnPoint->m_vecExitPos - vecStart;
-        if (vecDirection.x * vecDirection.x + vecDirection.y * vecDirection.y + vecDirection.z * vecDirection.z > 0.000001f)
+        if (vecDirection.x * vecDirection.x + vecDirection.y * vecDirection.y +
+            vecDirection.z * vecDirection.z > 0.000001f)
         {
             vecDirection.Normalise();
         }
@@ -103,7 +341,8 @@ void StartRemoteTransition(CNetworkPlayer* pNetworkPlayer, CEntryExit* pEntryExi
     }
 
     SetRemotePrimaryTask(pPlayerPed, pTask);
-    g_remoteTransitions[pNetworkPlayer->m_iPlayerId] = {pPlayerPed, pTask};
+    transition.m_pPed = pPlayerPed;
+    transition.m_pTask = pTask;
 }
 
 CEntryExit* FindEntryExit(int16_t rectLeft, int16_t rectBottom, uint8_t areaId)
@@ -129,6 +368,52 @@ void BuildAndSendTransition(CPed* pPed, Packets::Players::EnExTransition& packet
     packet.playerAreaId = pPed->m_nAreaCode;
     GetPacketFactory().Send(packet);
 }
+
+void ProcessDoorGuards()
+{
+    for (auto it = g_doorGuards.begin(); it != g_doorGuards.end();)
+    {
+        DoorGuard& guard = it->second;
+        if (guard.m_nActiveTransitions > 0)
+        {
+            ++it;
+            continue;
+        }
+        if (!guard.m_pDoor)
+        {
+            it = DestroyDoorGuard(it);
+            continue;
+        }
+        if (IsRealDoorClosed(guard))
+        {
+            it = DestroyDoorGuard(it);
+            continue;
+        }
+
+        if (guard.m_nNoLeaseSince != 0 && GetTickCount() - guard.m_nNoLeaseSince >= DOOR_CLOSE_TIMEOUT_MS)
+        {
+            it = DestroyDoorGuard(it);
+            continue;
+        }
+        ++it;
+    }
+}
+
+void ClearAllState()
+{
+    for (auto it = g_remoteTransitions.begin(); it != g_remoteTransitions.end();)
+    {
+        CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(it->first);
+        it = ClearRemoteTransition(it, pNetworkPlayer);
+    }
+
+    DetachParticipant(g_localParticipant);
+
+    for (auto it = g_doorGuards.begin(); it != g_doorGuards.end();)
+    {
+        it = DestroyDoorGuard(it);
+    }
+}
 }  // namespace
 
 void CEntryExitTransitionSync::OnTransitionStarted(CEntryExit* pEntryExit, CPed* pPed)
@@ -139,13 +424,25 @@ void CEntryExitTransitionSync::OnTransitionStarted(CEntryExit* pEntryExit, CPed*
         return;
     }
 
+    DetachParticipant(g_localParticipant);
     ms_pLocalAnimatedTransition = pEntryExit;
+
+    CObject* pDoor = CEntryExit::ms_pDoor;
+    if (pDoor)
+    {
+        DoorGuard* pGuard = AcquireDoorGuard(pDoor);
+        if (pGuard)
+        {
+            AttachParticipant(g_localParticipant, pGuard, pPed);
+        }
+    }
 
     Packets::Players::EnExTransition packet{};
     packet.enexAreaId = pEntryExit->m_nArea;
     packet.rectLeft = static_cast<int16_t>(std::floor(pEntryExit->m_recEntrance.left));
     packet.rectBottom = static_cast<int16_t>(std::floor(pEntryExit->m_recEntrance.bottom));
-    packet.bUsesDoor = CEntryExit::ms_pDoor != nullptr;
+    packet.bUsesDoor = pDoor != nullptr;
+
     BuildAndSendTransition(pPed, packet);
 }
 
@@ -163,6 +460,7 @@ void CEntryExitTransitionSync::OnTransitionFinished(CEntryExit* pEntryExit, CPed
         BuildAndSendTransition(pPed, packet);
     }
 
+    DetachParticipant(g_localParticipant);
     ms_pLocalAnimatedTransition = nullptr;
 }
 
@@ -196,28 +494,56 @@ void CEntryExitTransitionSync::Receive(const Packets::Players::EnExTransition& p
 
 void CEntryExitTransitionSync::Process()
 {
+    if (!CNetwork::m_bAuthenticated)
+    {
+        if (!g_remoteTransitions.empty() || g_localParticipant.m_pGuard || !g_doorGuards.empty())
+        {
+            ClearAllState();
+        }
+        ms_pLocalAnimatedTransition = nullptr;
+        return;
+    }
+
+    if (g_localParticipant.m_pGuard)
+    {
+        ProcessParticipant(g_localParticipant);
+    }
+
     for (auto it = g_remoteTransitions.begin(); it != g_remoteTransitions.end();)
     {
-        auto pCurrent = it++;
-        CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pCurrent->first);
-        RemoteTransition& transition = pCurrent->second;
-        if (!pNetworkPlayer || !pNetworkPlayer->m_pPed || pNetworkPlayer->m_pPed != transition.m_pPed)
+        CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(it->first);
+        RemoteTransition& transition = it->second;
+        CPlayerPed* pTransitionPed = transition.m_pPed;
+
+        if (!pNetworkPlayer || !pNetworkPlayer->m_pPed || pNetworkPlayer->m_pPed != pTransitionPed)
         {
-            g_remoteTransitions.erase(pCurrent);
+            it = ClearRemoteTransition(it, pNetworkPlayer);
             continue;
         }
-
         if (pNetworkPlayer->m_pPed->m_nPedFlags.bInVehicle)
         {
-            ClearRemoteTransition(pNetworkPlayer);
+            it = ClearRemoteTransition(it, pNetworkPlayer);
             continue;
         }
+        ProcessParticipant(transition.m_participant);
 
-        CTask* pPrimaryTask = transition.m_pPed->m_pIntelligence->m_TaskMgr.m_aPrimaryTasks[TASK_PRIMARY_PRIMARY];
+        CTask* pPrimaryTask = pTransitionPed->m_pIntelligence->m_TaskMgr.m_aPrimaryTasks[TASK_PRIMARY_PRIMARY];
         if (transition.m_pTask && pPrimaryTask != transition.m_pTask && !pPrimaryTask)
         {
             transition.m_pTask = new CTaskSimpleUninterruptable();
-            SetRemotePrimaryTask(transition.m_pPed, transition.m_pTask);
+            SetRemotePrimaryTask(pTransitionPed, transition.m_pTask);
         }
+        ++it;
     }
+
+    ProcessDoorGuards();
+}
+
+void CEntryExitTransitionSync::Shutdown()
+{
+    if (!g_remoteTransitions.empty() || g_localParticipant.m_pGuard || !g_doorGuards.empty())
+    {
+        ClearAllState();
+    }
+    ms_pLocalAnimatedTransition = nullptr;
 }
