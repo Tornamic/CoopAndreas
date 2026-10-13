@@ -102,7 +102,7 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
         return;
     }
 
-    CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(pNetworkPlayer->m_nVehicleId);
+    CNetworkVehicle* vehicle = CNetworkVehicleManager::GetVehicle(pNetworkPlayer->m_vehicleId);
 
     if (vehicle != nullptr)
     {
@@ -120,11 +120,11 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
     CNetworkPlayerManager::Remove(pNetworkPlayer);
 
     Packets::System::PlayerDisconnected playerDisconnected{};
-    playerDisconnected.payload.playerid = pNetworkPlayer->m_iPlayerId;
+    playerDisconnected.payload.SetPlayerId(pNetworkPlayer->m_playerId);
     playerDisconnected.payload.reason = Packets::System::PlayerDisconnected::DISCONNECTION_REASON_NOTHING;
     GetPacketFactory().SendToAll(playerDisconnected);
 
-    printf("[Game] : %i Disconnected.\n", pNetworkPlayer->m_iPlayerId);
+    printf("[Game] : %s Disconnected.\n", to_string(pNetworkPlayer->m_playerId).c_str());
 
     CNetworkPlayerManager::AssignHostToFirstPlayer();
 }
@@ -164,20 +164,20 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
         return;
     }
 
-    int freeId = CNetworkPlayerManager::GetFreeID();
-    CNetworkPlayer* pNewNetworkPlayer = new CNetworkPlayer(pENetPeer, freeId);
+    playerid_t newPlayerId = CNetworkPlayerManager::AllocatePlayerId();
+    CNetworkPlayer* pNewNetworkPlayer = new CNetworkPlayer(pENetPeer, newPlayerId);
     strcpy_s(pNewNetworkPlayer->m_Name, playerConnected.payload.name);
     CNetworkPlayerManager::Add(pNewNetworkPlayer);
 
-    logger::info("freeId %d name %s version %s", freeId, playerConnected.payload.name, buffer);
+    logger::info("playerid %s name %s version %s", to_string(newPlayerId).c_str(), playerConnected.payload.name, buffer);
 
     // Send the NEW player TO OLD players
-    playerConnected.payload.playerid = freeId;
+    playerConnected.payload.SetPlayerId(newPlayerId);
     GetPacketFactory().SendToAll(playerConnected, pNewNetworkPlayer);
 
     // Let the new player know his id
     Packets::System::PlayerHandshake playerHandshake{};
-    playerHandshake.yourid = freeId;
+    playerHandshake.yourid = newPlayerId;
     GetPacketFactory().Send(playerHandshake, pNewNetworkPlayer);
 
     // Send OLD players TO the NEW one
@@ -186,24 +186,24 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
 
     for (auto* pNetworkPlayer : CNetworkPlayerManager::m_pPlayers)
     {
-        if (pNetworkPlayer->m_iPlayerId == freeId)
+        if (pNetworkPlayer->m_playerId == newPlayerId)
         {
             continue;
         }
-        oldPlayerConnected.payload.playerid = pNetworkPlayer->m_iPlayerId;
+        oldPlayerConnected.payload.SetPlayerId(pNetworkPlayer->m_playerId);
         strcpy_s(oldPlayerConnected.payload.name, pNetworkPlayer->m_Name);
         GetPacketFactory().Send(oldPlayerConnected, pNewNetworkPlayer);
     }
 
     for (auto i : CNetworkPlayerManager::m_pPlayers)
     {
-        if (i->m_iPlayerId == freeId)
+        if (i->m_playerId == newPlayerId)
             continue;
 
         if (i->m_ucSyncFlags.bStatsModified)
         {
             Packets::Players::PlayerStats statsPacket{};
-            statsPacket.playerid = i->m_iPlayerId;
+            statsPacket.senderPlayerid = i->m_playerId;
             for (size_t j = 0; j < ARRAY_SIZE(statsPacket.stats); j++)
             {
                 statsPacket.stats[j] = i->m_afStats[j];
@@ -214,14 +214,14 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
         if (i->m_ucSyncFlags.bClothesModified)
         {
             Packets::Players::RebuildPlayer rebuildPacket{};
-            rebuildPacket.playerid = i->m_iPlayerId;
+            rebuildPacket.senderPlayerid = i->m_playerId;
             rebuildPacket.clothesDesc = i->m_pPedClothesDesc;
             GetPacketFactory().Send(rebuildPacket, pNewNetworkPlayer);
         }
 
         if (i->m_waypointState.place)
         {
-            i->m_waypointState.playerid = i->m_iPlayerId;
+            i->m_waypointState.senderPlayerid = i->m_playerId;
             GetPacketFactory().Send(i->m_waypointState, pNewNetworkPlayer);
         }
     }
@@ -229,7 +229,7 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
     for (auto i : CNetworkVehicleManager::m_pVehicles)
     {
         Packets::Vehicles::VehicleSpawn vehicleSpawnPacket{};
-        vehicleSpawnPacket.vehicleid = i->m_nVehicleId;
+        vehicleSpawnPacket.vehicleid = i->m_vehicleId;
         vehicleSpawnPacket.modelid = i->m_nModelId;
         vehicleSpawnPacket.pos = i->m_vecPosition;
         vehicleSpawnPacket.rot = static_cast<float>(
@@ -239,14 +239,14 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
         GetPacketFactory().Send(vehicleSpawnPacket, pNewNetworkPlayer);
 
         Packets::Vehicles::VehicleDamage vehicleDamagePacket{};
-        vehicleDamagePacket.vehicleid = i->m_nVehicleId;
+        vehicleDamagePacket.vehicleid = i->m_vehicleId;
         vehicleDamagePacket.damageManager = i->m_damageManager;
         GetPacketFactory().Send(vehicleDamagePacket, pNewNetworkPlayer);
 
         for (int component : i->m_pComponents)
         {
             Packets::Vehicles::VehicleComponentAdd vehicleComponentAdd{};
-            vehicleComponentAdd.vehicleid = i->m_nVehicleId;
+            vehicleComponentAdd.vehicleid = i->m_vehicleId;
             vehicleComponentAdd.componentid = component;
             GetPacketFactory().Send(vehicleComponentAdd, pNewNetworkPlayer);
         }
@@ -255,7 +255,7 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
     for (auto i : CNetworkPedManager::m_pPeds)
     {
         Packets::Peds::PedSpawn packet{};
-        packet.pedid = i->m_nPedId;
+        packet.pedid = i->m_pedId;
         packet.modelId = i->m_nModelId;
         packet.pos = i->m_vecPos;
         packet.pedType = i->m_nPedType;

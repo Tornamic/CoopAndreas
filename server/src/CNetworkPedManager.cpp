@@ -18,27 +18,19 @@ void CNetworkPedManager::Remove(CNetworkPed* ped)
     }
 }
 
-CNetworkPed* CNetworkPedManager::GetPed(int pedid)
+CNetworkPed* CNetworkPedManager::GetPed(pedid_t pedid)
 {
+    if (!pedid.valid())
+        return nullptr;
+
     for (int i = 0; i != m_pPeds.size(); i++)
     {
-        if (m_pPeds[i]->m_nPedId == pedid)
+        if (m_pPeds[i]->m_pedId == pedid)
         {
             return m_pPeds[i];
         }
     }
     return nullptr;
-}
-
-int CNetworkPedManager::GetFreeId()
-{
-    for (int i = 0; i < Config::MAX_SERVER_PEDS; i++)
-    {
-        if (CNetworkPedManager::GetPed(i) == nullptr)
-            return i;
-    }
-
-    return -1;
 }
 
 void CNetworkPedManager::RemoveAllHostedAndNotify(CNetworkPlayer* player)
@@ -49,7 +41,7 @@ void CNetworkPedManager::RemoveAllHostedAndNotify(CNetworkPlayer* player)
     {
         if ((*it)->m_pSyncer == player)
         {
-            packet.pedid = (*it)->m_nPedId;
+            packet.pedid = (*it)->m_pedId;
             GetPacketFactory().SendToAll(packet, player);
             delete *it;
             it = CNetworkPedManager::m_pPeds.erase(it);

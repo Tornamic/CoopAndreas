@@ -3,13 +3,15 @@
 #include "CNetworkPed.h"
 
 std::vector<CNetworkPed*> CNetworkPedManager::m_pPeds;
-CNetworkPed* CNetworkPedManager::m_apTempPeds[255];
 
-CNetworkPed* CNetworkPedManager::GetPed(int pedid)
+CNetworkPed* CNetworkPedManager::GetPed(pedid_t pedid)
 {
+    if (!pedid.valid())
+        return nullptr;
+
     for (int i = 0; i != m_pPeds.size(); i++)
     {
-        if (m_pPeds[i]->m_nPedId == pedid)
+        if (m_pPeds[i]->m_pedId == pedid)
         {
             return m_pPeds[i];
         }
@@ -73,8 +75,8 @@ void CNetworkPedManager::Update()
 
                 packet.vehicleSubType = static_cast<eVehicleType>(pVehicle->m_nVehicleSubType);
 
-                packet.pedid = pNetworkPed->m_nPedId;
-                packet.vehicleid = pNetworkVehicle->m_nVehicleId;
+                packet.pedid = pNetworkPed->m_pedId;
+                packet.vehicleid = pNetworkVehicle->m_vehicleId;
 
                 packet.pos = pVehicle->m_matrix->pos;
                 packet.roll = pVehicle->m_matrix->right;
@@ -127,8 +129,8 @@ void CNetworkPedManager::Update()
             else
             {
                 Packets::Peds::PedPassengerSync packet{};
-                packet.pedid = pNetworkPed->m_nPedId;
-                packet.vehicleid = pNetworkVehicle->m_nVehicleId;
+                packet.pedid = pNetworkPed->m_pedId;
+                packet.vehicleid = pNetworkVehicle->m_vehicleId;
 
                 packet.healthSnapshot.iHealth = static_cast<uint8_t>(std::clamp(pPed->m_fHealth, 0.0f, 255.0f));
                 packet.healthSnapshot.iArmour = static_cast<uint8_t>(std::clamp(pPed->m_fArmour, 0.0f, 255.0f));
@@ -153,7 +155,7 @@ void CNetworkPedManager::Update()
         {
             Packets::Peds::PedOnFoot packet{};
 
-            packet.pedid = pNetworkPed->m_nPedId;
+            packet.pedid = pNetworkPed->m_pedId;
             packet.pos = pPed->m_matrix->pos;
             packet.velocity = pPed->m_vecMoveSpeed;
 
@@ -226,18 +228,15 @@ void CNetworkPedManager::AssignHost()
     }*/
 }
 
-unsigned char CNetworkPedManager::AddToTempList(CNetworkPed* networkPed)
+pedid_t CNetworkPedManager::AllocatePedId()
 {
-    for (unsigned char i = 0; i < 255; i++)
-    {
-        if (m_apTempPeds[i] == nullptr)
-        {
-            m_apTempPeds[i] = networkPed;
-            return i;
-        }
-    }
+    assert(CNetworkPlayerManager::m_localPlayerId.valid());
+    return pedid_t(CNetworkPlayerManager::m_localPlayerId, ms_nNextPedId++);
+}
 
-    return 255;
+void CNetworkPedManager::ResetIdAllocator()
+{
+    ms_nNextPedId = 1;
 }
 
 void CNetworkPedManager::RemoveHostedUnused()

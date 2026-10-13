@@ -12,22 +12,24 @@ CNetworkPlayer::~CNetworkPlayer()
     this->DestroyPed();
 }
 
-CNetworkPlayer::CNetworkPlayer(int id, CVector position)
+CNetworkPlayer::CNetworkPlayer(playerid_t id, CVector position)
 {
-    m_iPlayerId = id;
+    m_playerId = id;
+    m_nSlot = CNetworkPlayerManager::GetFreeSlot();
+    assert(m_nSlot != -1);
 
     m_pPedClothesDesc.SetTextureAndModel("VEST", "VEST", 0);
     m_pPedClothesDesc.SetTextureAndModel("JEANSDENIM", "JEANS", 2);
     m_pPedClothesDesc.SetTextureAndModel("SNEAKERBINCBLK", "SNEAKER", 3);
     m_pPedClothesDesc.SetTextureAndModel("PLAYER_FACE", "HEAD", 1);
 
-    CreatePed(id, position);
+    CreatePed(position);
 }
 
-void CNetworkPlayer::CreatePed(int id, CVector position)
+void CNetworkPlayer::CreatePed(CVector position)
 {
     unsigned int actorId = 0;
-    int playerId = id + 2;
+    int playerId = m_nSlot + 2;
 
     plugin::Command<Commands::CREATE_PLAYER>(playerId, position.x, position.y, position.z, &actorId);
     plugin::Command<Commands::GET_PLAYER_CHAR>(playerId, &actorId);
@@ -77,7 +79,7 @@ void CNetworkPlayer::Respawn()
         this->DestroyPed();
     }
 
-    this->CreatePed(m_iPlayerId, m_onFootSnapshotInterpolated.vecPos);
+    this->CreatePed(m_onFootSnapshotInterpolated.vecPos);
 }
 
 int CNetworkPlayer::GetInternalId()  // most used for CWorld::PlayerInFocus
@@ -100,7 +102,7 @@ std::string CNetworkPlayer::GetName()
     if (m_Name[0] == '\0')
     {
         char buffer[32 + 1];
-        sprintf(buffer, "player %d", m_iPlayerId);
+        sprintf(buffer, "player %u", m_playerId.value());
         return buffer;
     }
 

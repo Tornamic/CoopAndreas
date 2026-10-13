@@ -11,9 +11,9 @@
 class CNetworkVehicle
 {
 public:
-    CNetworkVehicle(int vehicleid, unsigned short model, CVector pos, float rot);
+    CNetworkVehicle(vehicleid_t vehicleid, unsigned short model, CVector pos, float rot);
 
-    int m_nVehicleId;
+    vehicleid_t m_vehicleId;
     CNetworkPlayer* m_pSyncer = nullptr;
     unsigned short m_nModelId;
     CVector m_vecPosition;

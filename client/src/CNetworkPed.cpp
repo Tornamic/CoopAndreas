@@ -5,7 +5,7 @@
 #include <CTaskSimpleCarSetPedOut.h>
 #include <Hooks/PedHooks.h>
 
-CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy, char specialModelName[])
+CNetworkPed::CNetworkPed(pedid_t pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy, char specialModelName[])
 {
     if (modelId >= 290 && modelId <= 299)
         CStreaming::RequestSpecialModel(modelId, specialModelName, 0);
@@ -60,7 +60,7 @@ CNetworkPed::CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, 
     m_pPed->SetOrientation(0.f, 0.f, 0.f);
     CWorld::Add(m_pPed);
 
-    m_nPedId = pedid;
+    m_pedId = pedid;
     m_nPedType = pedType;
     m_bSyncing = false;
     m_nCreatedBy = createdBy;
@@ -74,7 +74,7 @@ CNetworkPed::~CNetworkPed()
     if (m_bSyncing)
     {
         Packets::Peds::PedRemove packet{};
-        packet.pedid = m_nPedId;
+        packet.pedid = m_pedId;
         GetPacketFactory().Send(packet);
     }
     else
@@ -108,14 +108,14 @@ CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
     CNetworkPed* networkPed = new CNetworkPed();
 
     networkPed->m_pPed = ped;
-    networkPed->m_nPedId = 0;
+    networkPed->m_pedId = CNetworkPedManager::AllocatePedId();
     networkPed->m_nCreatedBy = ped->m_nCreatedBy;
     networkPed->m_bSyncing = true;
-    networkPed->m_nTempId = CNetworkPedManager::AddToTempList(networkPed);
+
+    CNetworkPedManager::Add(networkPed);
 
     Packets::Peds::PedSpawn packet{};
-    packet.tempid = networkPed->m_nTempId;
-    packet.pedid = networkPed->m_nPedId;
+    packet.pedid = networkPed->m_pedId;
     packet.modelId = static_cast<eModelID>(ped->m_nModelIndex);
     packet.pos = ped->m_matrix->pos;
     packet.pedType = static_cast<ePedType>(ped->m_nPedType);
@@ -213,7 +213,7 @@ void CNetworkPed::ClaimOnRelease()
         return;
 
     Packets::Peds::PedClaimOnRelease packet{};
-    packet.pedid = m_nPedId;
+    packet.pedid = m_pedId;
     GetPacketFactory().Send(packet);
 
     m_bClaimOnRelease = true;
@@ -225,7 +225,7 @@ void CNetworkPed::CancelClaim()
         return;
 
     Packets::Peds::PedCancelClaim packet{};
-    packet.pedid = m_nPedId;
+    packet.pedid = m_pedId;
     GetPacketFactory().Send(packet);
 
     m_bClaimOnRelease = false;

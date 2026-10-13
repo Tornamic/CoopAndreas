@@ -13,7 +13,7 @@ void CCommandShowTextStyledForNetworkPlayer::Process(CRunningScript* script)
 
 	Packets::Scripts::AddMessageGXT packet{};
 	strncpy(packet.gxt, gxt, 8);
-	packet.forWhoPlayerId = networkPlayer->m_iPlayerId;
+	packet.forWhoPlayerId = networkPlayer->m_playerId;
 	packet.type = Packets::Scripts::AddMessageGXT::eGXTMsgType::sync_COMMAND_PRINT_BIG;
 	packet.time = ScriptParams[0];
 	packet.flag = ScriptParams[1];

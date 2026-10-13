@@ -197,16 +197,16 @@ void CNetworkPlayerList::Draw()
     float fBoxY = CUtil::SCREEN_BASE_HEIGHT / 2.0f - BOX_HEIGHT / 2.0f;
 
     uint8_t nPlayerCount = CNetworkPlayerManager::m_pPlayers.size();
-    std::vector<int> vPlayerId;
+    std::vector<playerid_t> vPlayerId;
 
     vPlayerId.reserve(nPlayerCount + 1);
 
     for (uint8_t i = 0; i < nPlayerCount; i++)
     {
-        vPlayerId.push_back(CNetworkPlayerManager::m_pPlayers[i]->m_iPlayerId);
+        vPlayerId.push_back(CNetworkPlayerManager::m_pPlayers[i]->m_playerId);
     }
 
-    vPlayerId.push_back(CNetworkPlayerManager::m_nMyId);
+    vPlayerId.push_back(CNetworkPlayerManager::m_localPlayerId);
     std::sort(vPlayerId.begin(), vPlayerId.end());
 
     DrawBox(fBoxX, fBoxY);
@@ -216,7 +216,7 @@ void CNetworkPlayerList::Draw()
         CNetworkPlayer* pNetworkPlayer = nullptr;
         CPlayerPed* pPlayerPed = nullptr;
 
-        if (vPlayerId[i] == CNetworkPlayerManager::m_nMyId)
+        if (vPlayerId[i] == CNetworkPlayerManager::m_localPlayerId)
         {
             pPlayerPed = FindPlayerPed(0);
         }
@@ -224,7 +224,7 @@ void CNetworkPlayerList::Draw()
         {
             for (CNetworkPlayer* pPlayer : CNetworkPlayerManager::m_pPlayers)
             {
-                if (pPlayer->m_iPlayerId == vPlayerId[i])
+                if (pPlayer->m_playerId == vPlayerId[i])
                 {
                     pNetworkPlayer = pPlayer;
                     pPlayerPed = pPlayer->m_pPed;

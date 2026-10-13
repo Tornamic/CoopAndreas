@@ -227,12 +227,217 @@ bool COpCodeSync::IsOpcodeSyncable(int opcode, int* opcodeIdx, bool ignoreOpCode
     return false;
 }
 
+// see `OpcodeParameter` for the format
+static bool IsEntityParam(int idx, int paramIdx)
+{
+    return syncedOpcodes[idx].m_bHasComplexParams && paramIdx < NUM_ENTITY_PARAMS &&
+           syncedOpcodes[idx].m_aParamTypes[paramIdx] != eSyncedParamType::NONE;
+}
+
+static int GetSerializedParamSize(const OpcodeParameter& param, bool isEntityParam)
+{
+    if (!isEntityParam)
+    {
+        return sizeof(int32_t);
+    }
+
+    switch (param.entityType)
+    {
+    case eSyncedParamType::PLAYER:
+        return sizeof(uint8_t) + ids::PLAYERID_SIZE;
+    case eSyncedParamType::PED:
+    case eSyncedParamType::VEHICLE:
+        return sizeof(uint8_t) + ids::ENTITYID_SIZE;
+    default:
+        return sizeof(uint8_t) + sizeof(int32_t);
+    }
+}
+
+static uint8_t* WriteParam(uint8_t* pCurrent, const OpcodeParameter& param, bool isEntityParam)
+{
+    if (!isEntityParam)
+    {
+        ids::WriteU32(pCurrent, static_cast<uint32_t>(param.value));
+        return pCurrent + sizeof(int32_t);
+    }
+
+    *pCurrent = static_cast<uint8_t>(param.entityType);
+    pCurrent += sizeof(uint8_t);
+
+    switch (param.entityType)
+    {
+    case eSyncedParamType::PLAYER:
+        ids::WritePlayerId(pCurrent, param.playerid);
+        return pCurrent + ids::PLAYERID_SIZE;
+    case eSyncedParamType::PED:
+        ids::WriteEntityId(pCurrent, param.pedid);
+        return pCurrent + ids::ENTITYID_SIZE;
+    case eSyncedParamType::VEHICLE:
+        ids::WriteEntityId(pCurrent, param.vehicleid);
+        return pCurrent + ids::ENTITYID_SIZE;
+    default:
+        ids::WriteU32(pCurrent, static_cast<uint32_t>(param.value));
+        return pCurrent + sizeof(int32_t);
+    }
+}
+
+// returns nullptr if the data is malformed
+static const uint8_t* ReadParam(const uint8_t* pCurrent, const uint8_t* pEnd, OpcodeParameter& param, bool isEntityParam)
+{
+    param = OpcodeParameter();
+
+    if (!isEntityParam)
+    {
+        if (pEnd - pCurrent < (int)sizeof(int32_t))
+            return nullptr;
+
+        param.value = static_cast<int>(ids::ReadU32(pCurrent));
+        return pCurrent + sizeof(int32_t);
+    }
+
+    if (pEnd - pCurrent < (int)sizeof(uint8_t))
+        return nullptr;
+
+    eSyncedParamType entityType = static_cast<eSyncedParamType>(*pCurrent);
+    pCurrent += sizeof(uint8_t);
+
+    param.value = -1;
+    param.entityType = entityType;
+
+    switch (entityType)
+    {
+    case eSyncedParamType::PLAYER:
+        if (pEnd - pCurrent < (int)ids::PLAYERID_SIZE)
+            return nullptr;
+
+        param.playerid = ids::ReadPlayerId(pCurrent);
+        return pCurrent + ids::PLAYERID_SIZE;
+    case eSyncedParamType::PED:
+        if (pEnd - pCurrent < (int)ids::ENTITYID_SIZE)
+            return nullptr;
+
+        param.pedid = ids::ReadEntityId<pedid_t>(pCurrent);
+        return pCurrent + ids::ENTITYID_SIZE;
+    case eSyncedParamType::VEHICLE:
+        if (pEnd - pCurrent < (int)ids::ENTITYID_SIZE)
+            return nullptr;
+
+        param.vehicleid = ids::ReadEntityId<vehicleid_t>(pCurrent);
+        return pCurrent + ids::ENTITYID_SIZE;
+    case eSyncedParamType::NONE:
+        if (pEnd - pCurrent < (int)sizeof(int32_t))
+            return nullptr;
+
+        param.value = static_cast<int>(ids::ReadU32(pCurrent));
+        return pCurrent + sizeof(int32_t);
+    default:
+        return nullptr;
+    }
+}
+
 std::vector<uint8_t> COpCodeSync::SerializeOpcode(int idx, int& outSize)
 {
-    int dataSize =
-        sizeof(OpcodeSyncHeader)
-        + scriptParamCount * sizeof(int)
-        + textParamCount * sizeof(uint8_t);
+    for (int i = 0; i < scriptParamCount; i++)
+    {
+        if (!IsEntityParam(idx, i))
+        {
+            continue;
+        }
+
+        OpcodeParameter& param = scriptParamsBuffer[i];
+
+        //CChat::AddMessage("Parsing complex opcode %04x parameter %d...", lastOpCodeProcessed, i);
+        switch (syncedOpcodes[idx].m_aParamTypes[i])
+        {
+        case eSyncedParamType::PED:
+        {
+            //CChat::AddMessage("Trying to parse a ped handle %d...", param.value);
+            if (auto ped = CPools::GetPed(param.value))
+            {
+                if (ped->m_nPedType > 3) // is a regular ped
+                {
+                    auto networkPed = CNetworkPedManager::GetPed(ped);
+                    if (networkPed && networkPed->m_bSyncing)
+                    {
+                        param.entityType = eSyncedParamType::PED;
+                        param.pedid = networkPed->m_pedId;
+                        //CChat::AddMessage("Parsed ped id %s...", to_string(networkPed->m_pedId).c_str());
+                    }
+                    else param.SetValue(-1);
+                }
+                else // is a player ped
+                {
+                    if (ped == FindPlayerPed(0))
+                    {
+                        param.entityType = eSyncedParamType::PLAYER;
+                        param.playerid = CNetworkPlayerManager::m_localPlayerId;
+                    }
+                    else if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(ped))
+                    {
+                        param.entityType = eSyncedParamType::PLAYER;
+                        param.playerid = networkPlayer->m_playerId;
+                    }
+                    else param.SetValue(-1);
+                }
+            }
+            else param.SetValue(-1);
+
+            break;
+        }
+        case eSyncedParamType::PLAYER:
+        {
+            //CChat::AddMessage("Trying to parse a player...");
+            if (!param.value)
+            {
+                param.entityType = eSyncedParamType::PLAYER;
+                param.playerid = CNetworkPlayerManager::m_localPlayerId;
+                //CChat::AddMessage("Parsed player id %s (me)...", to_string(param.playerid).c_str());
+                break;
+            }
+
+            CPlayerPed* player = nullptr;
+            if (param.value > 0 && param.value < Config::MAX_SERVER_PLAYERS + 2)
+            {
+                player = CWorld::Players[param.value].m_pPed;
+            }
+
+            auto networkPlayer = player ? CNetworkPlayerManager::GetPlayer(player) : nullptr;
+            if (networkPlayer)
+            {
+                param.entityType = eSyncedParamType::PLAYER;
+                param.playerid = networkPlayer->m_playerId;
+                //CChat::AddMessage("Parsed player id %s...", to_string(param.playerid).c_str());
+            }
+            else param.SetValue(-1);
+
+            break;
+        }
+        case eSyncedParamType::VEHICLE:
+        {
+            //CChat::AddMessage("Trying to parse a vehicle...");
+            if (auto vehicle = CPools::GetVehicle(param.value))
+            {
+                if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle))
+                {
+                    param.entityType = eSyncedParamType::VEHICLE;
+                    param.vehicleid = networkVehicle->m_vehicleId;
+                    //CChat::AddMessage("Parsed vehicle id %s...", to_string(param.vehicleid).c_str());
+                }
+                else param.SetValue(-1);
+            }
+            else param.SetValue(-1);
+
+            break;
+        }
+        }
+    }
+
+    int dataSize = sizeof(OpcodeSyncHeader) + textParamCount * sizeof(uint8_t);
+
+    for (int i = 0; i < scriptParamCount; i++)
+    {
+        dataSize += GetSerializedParamSize(scriptParamsBuffer[i], IsEntityParam(idx, i));
+    }
 
     for (int i = 0; i < textParamCount; i++)
     {
@@ -252,101 +457,7 @@ std::vector<uint8_t> COpCodeSync::SerializeOpcode(int idx, int& outSize)
 
     for (int i = 0; i < scriptParamCount; i++)
     {
-        if (syncedOpcodes[idx].m_bHasComplexParams && i < 4)
-        {
-            //CChat::AddMessage("Parsing complex opcode %04x parameter %d...", header.opcode, i);
-            switch (syncedOpcodes[idx].m_aParamTypes[i])
-            {
-            case eSyncedParamType::PED:
-            {
-                //CChat::AddMessage("Trying to parse a ped handle %d...", scriptParamsBuffer[i].value);
-                if (auto ped = CPools::GetPed(scriptParamsBuffer[i].value))
-                {
-                    if (ped->m_nPedType > 3) // is a regular ped
-                    {
-                        if (auto networkPed = CNetworkPedManager::GetPed(ped))
-                        {
-                            //CChat::AddMessage("Network id %d...", networkPed->m_nPedId);
-                            if (networkPed->m_bSyncing)
-                            {
-                                scriptParamsBuffer[i].entityId = networkPed->m_nPedId;
-                                scriptParamsBuffer[i].entityType = eSyncedParamType::PED;
-                                //CChat::AddMessage("Parsed ped id %d...", networkPed->m_nPedId);
-                            }
-                            else scriptParamsBuffer[i].value = -1;
-                        }
-                        else scriptParamsBuffer[i].value = -1;
-                    }
-                    else // is a player ped
-                    {
-                        scriptParamsBuffer[i].entityType = eSyncedParamType::PLAYER;
-                        if (ped == FindPlayerPed(0))
-                        {
-                            scriptParamsBuffer[i].entityId = CNetworkPlayerManager::m_nMyId;
-                        }
-                        else if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(ped))
-                        {
-                            scriptParamsBuffer[i].entityId = networkPlayer->m_iPlayerId;
-                        }
-                        else
-                        {
-                            scriptParamsBuffer[i].value = -1;
-                        }
-                    }
-
-                }
-                else scriptParamsBuffer[i].value = -1;
-
-                break;
-            }
-            case eSyncedParamType::PLAYER:
-            {
-                //CChat::AddMessage("Trying to parse a player...");
-                if (!scriptParamsBuffer[i].value)
-                {
-                    scriptParamsBuffer[i].entityType = eSyncedParamType::PLAYER;
-                    scriptParamsBuffer[i].entityId = CNetworkPlayerManager::m_nMyId;
-                    //CChat::AddMessage("Parsed player id %d (me)...", CNetworkPlayerManager::m_nMyId);
-                    break;
-                }
-                else scriptParamsBuffer[i].value = -1;
-
-                if (auto player = CWorld::Players[scriptParamsBuffer[i].value].m_pPed)
-                {
-                    if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(player))
-                    {
-                        scriptParamsBuffer[i].entityType = eSyncedParamType::PLAYER;
-                        scriptParamsBuffer[i].entityId = networkPlayer->m_iPlayerId;
-                        //CChat::AddMessage("Parsed player id %d...", networkPlayer->m_iPlayerId);
-                    }
-                    else scriptParamsBuffer[i].value = -1;
-                }
-                else scriptParamsBuffer[i].value = -1;
-
-                break;
-            }
-            case eSyncedParamType::VEHICLE:
-            {
-                //CChat::AddMessage("Trying to parse a vehicle...");
-                if (auto vehicle = CPools::GetVehicle(scriptParamsBuffer[i].value))
-                {
-                    if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle))
-                    {
-                        scriptParamsBuffer[i].entityId = networkVehicle->m_nVehicleId;
-                        scriptParamsBuffer[i].entityType = eSyncedParamType::VEHICLE;
-                        //CChat::AddMessage("Parsed vehicle id %d...", networkVehicle->m_nVehicleId);
-                    }
-                    else scriptParamsBuffer[i].value = -1;
-                }
-                else scriptParamsBuffer[i].value = -1;
-
-                break;
-            }
-            }
-        }
-
-        memcpy(pCurrent, &scriptParamsBuffer[i], sizeof(int));
-        pCurrent += sizeof(int);
+        pCurrent = WriteParam(pCurrent, scriptParamsBuffer[i], IsEntityParam(idx, i));
     }
 
     for (int i = 0; i < textParamCount; i++)
@@ -357,6 +468,8 @@ std::vector<uint8_t> COpCodeSync::SerializeOpcode(int idx, int& outSize)
         memcpy(pCurrent, textParamBuffer[i], textLengthBuffer[i]);
         pCurrent += textLengthBuffer[i];
     }
+
+    assert(dataSize <= Packets::Scripts::OpCodeSync::MAX_BUFFER_SIZE);
 
     outSize = dataSize;
     return buffer;
@@ -429,17 +542,15 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
     memcpy(&header, current, sizeof(header));
     current += sizeof(header);
 
-    if (bufferSize < sizeof(header) + header.intParamCount * sizeof(int))
-    {
-        return;
-    }
-
     if (CLocalPlayer::m_bIsHost && !CTaskSequenceSync::IsOpCodeTaskSynced((eScriptCommands)header.opcode))
     {
         return;
     }
 
-    memset(scriptParamsBuffer, 0, sizeof(scriptParamsBuffer));
+    for (int i = 0; i < NUM_SYNCED_PARAMS; i++)
+    {
+        scriptParamsBuffer[i] = OpcodeParameter();
+    }
     memset(textLengthBuffer, 0, sizeof(textLengthBuffer));
     memset(textParamBuffer, 0, sizeof(textParamBuffer));
     scriptParamCount = 0;
@@ -454,9 +565,6 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
 
     if (scriptParamCount)
     {
-        memcpy(scriptParamsBuffer, current, scriptParamCount * sizeof(int));
-        current += scriptParamCount * sizeof(int);
-
         int idx = 0;
         bool found = false;
         for (; idx < ARRAY_SIZE(syncedOpcodes); idx++)
@@ -471,30 +579,42 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
         if(!found)
             return;
 
+        for (int i = 0; i < scriptParamCount; i++)
+        {
+            current = ReadParam(current, buffer + bufferSize, scriptParamsBuffer[i], IsEntityParam(idx, i));
+            if (current == nullptr)
+            {
+                return;
+            }
+        }
+
         if (syncedOpcodes[idx].m_bHasComplexParams)
         {
             /*if (header.opcode == 0x0605)
                 CChat::AddMessage("Parsing complex opcode %04x...", header.opcode);*/
 
-            int max = VMIN(scriptParamCount, 4);
+            int max = VMIN(scriptParamCount, NUM_ENTITY_PARAMS);
             for (int i = 0; i < max; i++)
             {
+                OpcodeParameter& param = scriptParamsBuffer[i];
+
                 switch (syncedOpcodes[idx].m_aParamTypes[i])
                 {
                 case eSyncedParamType::PED:
                 {
-                    /*if (header.opcode == 0x0605)    
+                    /*if (header.opcode == 0x0605)
                         CChat::AddMessage("Parsing ped...");*/
-                    if (COpCodeSync::ms_bProcessingTaskSequence && scriptParamsBuffer[i].value == -1)
+                    if (COpCodeSync::ms_bProcessingTaskSequence && param.entityType == eSyncedParamType::NONE &&
+                        param.value == -1)
                     {
                         break;
                     }
 
-                    if (scriptParamsBuffer[i].entityType == eSyncedParamType::PED)
+                    if (param.entityType == eSyncedParamType::PED)
                     {
                         /*if (header.opcode == 0x0605)
                             CChat::AddMessage("Trying to parse as a regular ped...");*/
-                        if (auto networkPed = CNetworkPedManager::GetPed(scriptParamsBuffer[i].entityId))
+                        if (auto networkPed = CNetworkPedManager::GetPed(param.pedid))
                         {
                             /*if (header.opcode == 0x0605)
                                 CChat::AddMessage("Network instance found...");*/
@@ -503,36 +623,37 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
                                 if (!ped->IsVTableValid())
                                     return;
 
-                                scriptParamsBuffer[i].value = CPools::GetPedRef(ped);
+                                param.value = CPools::GetPedRef(ped);
                                 /*if (header.opcode == 0x0605)
-                                    CChat::AddMessage("Parsed ped id %d...", networkPed->m_nPedId);*/
+                                    CChat::AddMessage("Parsed ped id %s...", to_string(networkPed->m_pedId).c_str());*/
                             }
                             else if (!IsOpcodeRequiresStrictCheck(header.opcode))
                             {
-                                scriptParamsBuffer[i].value = -1;
+                                param.value = -1;
                             }
                             else return;
                         }
                         else if (!IsOpcodeRequiresStrictCheck(header.opcode))
                         {
-                            scriptParamsBuffer[i].value = -1;
+                            param.value = -1;
                         }
                         else return;
                     }
                     else
                     {
-                        if (scriptParamsBuffer[i].entityId == CNetworkPlayerManager::m_nMyId)
+                        if (param.entityType == eSyncedParamType::PLAYER &&
+                            param.playerid == CNetworkPlayerManager::m_localPlayerId)
                         {
                             if (auto playerPed = FindPlayerPed(0))
                             {
-                                scriptParamsBuffer[i].value = CPools::GetPedRef(playerPed);
+                                param.value = CPools::GetPedRef(playerPed);
                             }
                         }
                         else
                         {
                             /*if (header.opcode == 0x0605)
-                                CChat::AddMessage("Trying to parse as a player ped... %d", scriptParamsBuffer[i].entityId);*/
-                            if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(scriptParamsBuffer[i].entityId))
+                                CChat::AddMessage("Trying to parse as a player ped... %s", to_string(param.playerid).c_str());*/
+                            if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(param.playerid))
                             {
                                 /*if (header.opcode == 0x0605)
                                     CChat::AddMessage("Network instance found...");*/
@@ -541,19 +662,19 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
                                     if (!ped->IsVTableValid())
                                         return;
 
-                                    scriptParamsBuffer[i].value = CPools::GetPedRef(ped);
+                                    param.value = CPools::GetPedRef(ped);
                                     /*if (header.opcode == 0x0605)
-                                        CChat::AddMessage("Parsed player id as ped %d...", networkPlayer->m_iPlayerId);*/
+                                        CChat::AddMessage("Parsed player id as ped %s...", to_string(networkPlayer->m_playerId).c_str());*/
                                 }
                                 else if (!IsOpcodeRequiresStrictCheck(header.opcode))
                                 {
-                                    scriptParamsBuffer[i].value = -1;
+                                    param.value = -1;
                                 }
                                 else return;
                             }
                             else if (!IsOpcodeRequiresStrictCheck(header.opcode))
                             {
-                                scriptParamsBuffer[i].value = -1;
+                                param.value = -1;
                             }
                             else return;
                         }
@@ -563,40 +684,40 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
                 }
                 case eSyncedParamType::PLAYER:
                 {
-                    /*if (scriptParamsBuffer[i].entityId == CNetworkPlayerManager::m_nMyId)
+                    /*if (param.playerid == CNetworkPlayerManager::m_localPlayerId)
                     {*/
-                        scriptParamsBuffer[i].value = 0;
+                        param.value = 0;
                         /*if (header.opcode == 0x0605)
-                            CChat::AddMessage("Parsed player id %d (me)...", CNetworkPlayerManager::m_nMyId);*/
+                            CChat::AddMessage("Parsed player id %s (me)...", to_string(CNetworkPlayerManager::m_localPlayerId).c_str());*/
                     /*    break;
                     }*/
 
-                    //if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(scriptParamsBuffer[i].entityId))
+                    //if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(param.playerid))
                     //{
                     //    if (networkPlayer->m_pPed)
                     //    {
                     //        int playerNum = networkPlayer->GetInternalId();
                     //        if (playerNum)
                     //        {
-                    //            scriptParamsBuffer[i].value = playerNum;
+                    //            param.value = playerNum;
                     //            /*if (header.opcode == 0x0605)
-                    //                CChat::AddMessage("Parsed player id %d...", networkPlayer->m_iPlayerId);*/
+                    //                CChat::AddMessage("Parsed player id %s...", to_string(networkPlayer->m_playerId).c_str());*/
                     //        }
                     //        else if (!IsOpcodeRequiresStrictCheck(header.opcode))
                     //        {
-                    //            scriptParamsBuffer[i].value = -1;
+                    //            param.value = -1;
                     //        }
                     //        else return;
                     //    }
                     //    else if (!IsOpcodeRequiresStrictCheck(header.opcode))
                     //    {
-                    //        scriptParamsBuffer[i].value = -1;
+                    //        param.value = -1;
                     //    }
                     //    else return;
                     //}
                     //else if (!IsOpcodeRequiresStrictCheck(header.opcode))
                     //{
-                    //    scriptParamsBuffer[i].value = -1;
+                    //    param.value = -1;
                     //}
                     //else return;
 
@@ -604,26 +725,27 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
                 }
                 case eSyncedParamType::VEHICLE:
                 {
-                    if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(scriptParamsBuffer[i].entityId))
+                    // NONE (unresolved on the sender's side) has an invalid id, so it's never found
+                    if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(param.vehicleid))
                     {
                         if (auto vehicle = networkVehicle->m_pVehicle)
                         {
                             if (!vehicle->IsVTableValid())
                                 return;
 
-                            scriptParamsBuffer[i].value = CPools::GetVehicleRef(vehicle);
+                            param.value = CPools::GetVehicleRef(vehicle);
                             /*if (header.opcode == 0x0605)
-                                CChat::AddMessage("Parsed vehicle id %d...", networkVehicle->m_nVehicleId);*/
+                                CChat::AddMessage("Parsed vehicle id %s...", to_string(networkVehicle->m_vehicleId).c_str());*/
                         }
                         else if (!IsOpcodeRequiresStrictCheck(header.opcode))
                         {
-                            scriptParamsBuffer[i].value = -1;
+                            param.value = -1;
                         }
                         else return;
                     }
                     else if (!IsOpcodeRequiresStrictCheck(header.opcode))
                     {
-                        scriptParamsBuffer[i].value = -1;
+                        param.value = -1;
                     }
                     else return;
 
@@ -770,7 +892,7 @@ static void CollectParamsProperly()
 {
     for (uint8_t i = scriptParamCount; i < scriptParamCount + argParamCount; i++)
     {
-        COpCodeSync::scriptParamsBuffer[i].value = ScriptParams[i - scriptParamCount];
+        COpCodeSync::scriptParamsBuffer[i].SetValue(ScriptParams[i - scriptParamCount]);
     }
 
     scriptParamCount += argParamCount;

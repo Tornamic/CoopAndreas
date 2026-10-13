@@ -3,6 +3,7 @@
 #include "CPad.h"
 #include "CVector.h"
 #include "math_utils.h"
+#include "network/ids.h"
 #define serialize_vector(stream, vec)   \
     do                                  \
     {                                   \
@@ -245,12 +246,12 @@ struct RadianAngleCompressed
 struct SenderPlayerId
 {
 public:
-    int value = 0;
+    playerid_t value{};
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
         // do not send player's id C2S, the server knows our ID on its own
-        if (Stream::IsWriting && Config::IsClient) 
+        if (Stream::IsWriting && Config::IsClient)
         {
             return true;
         }
@@ -259,15 +260,16 @@ public:
             return true;
         }
 
-        serialize_int(stream, value, 0, Config::MAX_SERVER_PLAYERS - 1);
+        serialize_playerid(stream, value);
 
         return true;
     }
 
-    void operator=(int& right)
+    SenderPlayerId& operator=(const playerid_t& right)
     {
-        assert(right >= 0 && right < Config::MAX_SERVER_PLAYERS);
+        assert(right.valid());
         value = right;
+        return *this;
     }
 };
 

@@ -2,6 +2,9 @@
 
 #define NUM_SYNCED_PARAMS (15)
 
+// only the first parameters can hold an entity, see `SSyncedOpCode::m_aParamTypes`
+#define NUM_ENTITY_PARAMS (4)
+
 enum class eSyncedParamType
 {
     NONE,
@@ -34,7 +37,7 @@ struct SSyncedOpCode
     // yes, only the first 4 parameters contain entity handles, 
     // i checked and did not find any opcode where a handle is in 
     // the 5th or later parameters
-    eSyncedParamType m_aParamTypes[4] = { eSyncedParamType::NONE, eSyncedParamType::NONE, eSyncedParamType::NONE, eSyncedParamType::NONE };
+    eSyncedParamType m_aParamTypes[NUM_ENTITY_PARAMS] = { eSyncedParamType::NONE, eSyncedParamType::NONE, eSyncedParamType::NONE, eSyncedParamType::NONE };
 };
 
 struct OpcodeSyncHeader
@@ -44,17 +47,28 @@ struct OpcodeSyncHeader
     uint8_t stringParamCount : 4;
 };
 
+// Serialized as a plain `int`, unless it's an entity parameter (see `SSyncedOpCode::m_aParamTypes`),
+// those are serialized as `uint8_t entityType` followed by:
+//   PLAYER  - playerid_t (4 bytes)
+//   PED     - packed pedid_t (8 bytes)
+//   VEHICLE - packed vehicleid_t (8 bytes)
+//   NONE    - `value` (4 bytes), the entity couldn't be resolved, usually -1
 struct OpcodeParameter
 {
-    union
+    // the script parameter, on receiving entity parameters are replaced with the local handles
+    int value = 0;
+
+    // NONE unless `value` has been resolved to a network entity
+    eSyncedParamType entityType = eSyncedParamType::NONE;
+    playerid_t playerid{};
+    pedid_t pedid{};
+    vehicleid_t vehicleid{};
+
+    void SetValue(int newValue)
     {
-        struct
-        {
-            eSyncedParamType entityType : 4;
-            int entityId : 28;
-        };
-        int value;
-    };
+        *this = OpcodeParameter();
+        value = newValue;
+    }
 };
 
 class COpCodeSync

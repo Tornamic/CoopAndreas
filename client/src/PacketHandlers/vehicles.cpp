@@ -7,8 +7,9 @@
 PACKET_HANDLER(ePacketType::VEHICLE_SPAWN, Packets::Vehicles::VehicleSpawn* pVehicleSpawn)
 {
 #ifdef PACKET_DEBUG_MESSAGES
-    CChat::AddMessage("VEHICLE SPAWN %d %d %.1f %.1f %.1f %.1f", pVehicleSpawn->vehicleid, pVehicleSpawn->modelid,
-        pVehicleSpawn->pos.x, pVehicleSpawn->pos.y, pVehicleSpawn->pos.z, pVehicleSpawn->rot.m_angle);
+    CChat::AddMessage("VEHICLE SPAWN %s %d %.1f %.1f %.1f %.1f", to_string(pVehicleSpawn->vehicleid).c_str(),
+        pVehicleSpawn->modelid, pVehicleSpawn->pos.x, pVehicleSpawn->pos.y, pVehicleSpawn->pos.z,
+        pVehicleSpawn->rot.m_angle);
 #endif
 
     CNetworkVehicle* pNetworkVehicle =
@@ -20,31 +21,13 @@ PACKET_HANDLER(ePacketType::VEHICLE_SPAWN, Packets::Vehicles::VehicleSpawn* pVeh
 PACKET_HANDLER(ePacketType::VEHICLE_REMOVE, Packets::Vehicles::VehicleRemove* pVehicleRemove)
 {
 #ifdef PACKET_DEBUG_MESSAGES
-    CChat::AddMessage("VEHICLE REMOVE %d", pVehicleRemove->vehicleid);
+    CChat::AddMessage("VEHICLE REMOVE %s", to_string(pVehicleRemove->vehicleid).c_str());
 #endif
     CNetworkVehicle* pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pVehicleRemove->vehicleid);
     if (pNetworkVehicle)
     {
         CNetworkVehicleManager::Remove(pNetworkVehicle);
         delete pNetworkVehicle;
-    }
-}
-
-PACKET_HANDLER(ePacketType::VEHICLE_CONFIRM, Packets::Vehicles::VehicleConfirm* pVehicleConfirm)
-{
-#ifdef PACKET_DEBUG_MESSAGES
-    CChat::AddMessage("VEHICLE CONFIRM %d %d", pVehicleConfirm->vehicleid, pVehicleConfirm->tempid);
-#endif
-
-    if (pVehicleConfirm->tempid < ARRAY_SIZE(CNetworkVehicleManager::m_apTempVehicles))
-    {
-        CNetworkVehicle* pTempVehicle = CNetworkVehicleManager::m_apTempVehicles[pVehicleConfirm->tempid];
-        if (pTempVehicle)
-        {
-            pTempVehicle->m_nVehicleId = pVehicleConfirm->vehicleid;
-            CNetworkVehicleManager::Add(pTempVehicle);
-            CNetworkVehicleManager::m_apTempVehicles[pVehicleConfirm->tempid] = nullptr;
-        }
     }
 }
 
@@ -92,7 +75,7 @@ PACKET_HANDLER(ePacketType::VEHICLE_IDLE_UPDATE, Packets::Vehicles::VehicleIdleU
 PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDriverUpdate* pVehicleDriverUpdate)
 {
     CNetworkVehicle* pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pVehicleDriverUpdate->vehicleid);
-    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pVehicleDriverUpdate->playerid);
+    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pVehicleDriverUpdate->senderPlayerid);
 
     if (pNetworkVehicle == nullptr || pNetworkPlayer == nullptr)
         return;
@@ -152,7 +135,7 @@ PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDri
 
 PACKET_HANDLER(ePacketType::VEHICLE_ENTER, Packets::Vehicles::VehicleEnter* pVehicleEnter)
 {
-    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pVehicleEnter->playerid);
+    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pVehicleEnter->senderPlayerid);
     if (pNetworkPlayer == nullptr)
     {
         return;
@@ -171,8 +154,8 @@ PACKET_HANDLER(ePacketType::VEHICLE_ENTER, Packets::Vehicles::VehicleEnter* pVeh
         return;
 
 #ifdef PACKET_DEBUG_MESSAGES
-    CChat::AddMessage("player %d entered vehicleid %d %s", pVehicleEnter->playerid, pVehicleEnter->vehicleid,
-        pVehicleEnter->seatid != 0 ? "as passenger" : "");
+    CChat::AddMessage("player %s entered vehicleid %s %s", to_string(pVehicleEnter->senderPlayerid.value).c_str(),
+        to_string(pVehicleEnter->vehicleid).c_str(), pVehicleEnter->seatid != 0 ? "as passenger" : "");
 #endif
 
     // drop the jetpack if present
@@ -205,7 +188,7 @@ PACKET_HANDLER(ePacketType::VEHICLE_ENTER, Packets::Vehicles::VehicleEnter* pVeh
 
 PACKET_HANDLER(ePacketType::VEHICLE_EXIT, Packets::Vehicles::VehicleExit* pVehicleExit)
 {
-    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pVehicleExit->playerid);
+    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pVehicleExit->senderPlayerid);
 
     if (pNetworkPlayer == nullptr)
     {
@@ -224,7 +207,7 @@ PACKET_HANDLER(ePacketType::VEHICLE_EXIT, Packets::Vehicles::VehicleExit* pVehic
         return;
 
 #ifdef PACKET_DEBUG_MESSAGES
-    CChat::AddMessage("player %d exited from vehicle", pVehicleExit->playerid);
+    CChat::AddMessage("player %s exited from vehicle", to_string(pVehicleExit->senderPlayerid.value).c_str());
 #endif
 
     if (pVehicleExit->bForce)
@@ -320,7 +303,7 @@ PACKET_HANDLER(
     ePacketType::VEHICLE_PASSENGER_UPDATE, Packets::Vehicles::VehiclePassengerUpdate* pVehiclePassengerUpdate)
 {
     CNetworkVehicle* pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pVehiclePassengerUpdate->vehicleid);
-    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pVehiclePassengerUpdate->playerid);
+    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pVehiclePassengerUpdate->senderPlayerid);
 
     if (pNetworkVehicle == nullptr || pNetworkPlayer == nullptr)
     {
@@ -344,7 +327,7 @@ PACKET_HANDLER(
         pNetworkVehicle->m_pVehicle->m_apPassengers[pVehiclePassengerUpdate->seatid] != pNetworkPlayer->m_pPed)
     {
 #ifdef PACKET_DEBUG_MESSAGES
-        CChat::AddMessage("forcing enter passenger %d", player->m_iPlayerId);
+        CChat::AddMessage("forcing enter passenger %s", to_string(pNetworkPlayer->m_playerId).c_str());
 #endif
 
         pNetworkPlayer->WarpIntoVehiclePassenger(pNetworkVehicle->m_pVehicle, pVehiclePassengerUpdate->seatid);
@@ -379,7 +362,7 @@ PACKET_HANDLER(ePacketType::ASSIGN_VEHICLE, Packets::Vehicles::AssignVehicleSync
     if (pNetworkVehicle->m_bSyncing)
     {
 #ifdef PACKET_DEBUG_MESSAGES
-        CChat::AddMessage("NOT SYNCING VEHICLE %d ANYMORE", pAssignVehicleSyncer->vehicleid);
+        CChat::AddMessage("NOT SYNCING VEHICLE %s ANYMORE", to_string(pAssignVehicleSyncer->vehicleid).c_str());
 #endif
         pNetworkVehicle->m_bSyncing = false;
 
@@ -391,7 +374,7 @@ PACKET_HANDLER(ePacketType::ASSIGN_VEHICLE, Packets::Vehicles::AssignVehicleSync
     else
     {
 #ifdef PACKET_DEBUG_MESSAGES
-        CChat::AddMessage("SYNCING VEHICLE %d", pAssignVehicleSyncer->vehicleid);
+        CChat::AddMessage("SYNCING VEHICLE %s", to_string(pAssignVehicleSyncer->vehicleid).c_str());
 #endif
         pNetworkVehicle->m_bSyncing = true;
 

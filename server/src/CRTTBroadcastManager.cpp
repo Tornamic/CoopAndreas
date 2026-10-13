@@ -17,7 +17,7 @@ void CRTTBroadcastManager::Update()
     for (CNetworkPlayer* pNetworkPlayer : CNetworkPlayerManager::m_pPlayers)
     {
         Packets::System::RTTBroadcast::SPlayerRTT& playerRTT = rttBroadcast.rtts[rttBroadcast.playerCount++];
-        playerRTT.playerid = pNetworkPlayer->m_iPlayerId;
+        playerRTT.playerid = pNetworkPlayer->m_playerId;
         playerRTT.rtt = static_cast<uint16_t>(
             std::min<enet_uint32>(pNetworkPlayer->m_pPeer->roundTripTime, UINT16_MAX));
     }

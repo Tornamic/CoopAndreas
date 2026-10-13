@@ -7,8 +7,8 @@
 PACKET_HANDLER(ePacketType::PED_SPAWN, Packets::Peds::PedSpawn* pPedSpawn)
 {
 #ifdef PACKET_DEBUG_MESSAGES
-    CChat::AddMessage("PED SPAWN %d %d %.1f %.1f %.1f %d %d", packet->pedid, packet->modelId, packet->pos.x,
-        packet->pos.y, packet->pos.z, packet->pedType, packet->createdBy);
+    CChat::AddMessage("PED SPAWN %s %d %.1f %.1f %.1f %d %d", to_string(pPedSpawn->pedid).c_str(), pPedSpawn->modelId,
+        pPedSpawn->pos.x, pPedSpawn->pos.y, pPedSpawn->pos.z, pPedSpawn->pedType, pPedSpawn->createdBy);
 #endif
 
     CNetworkPed* pNetworkPed = new CNetworkPed(pPedSpawn->pedid, pPedSpawn->modelId, pPedSpawn->pedType, pPedSpawn->pos,
@@ -17,28 +17,10 @@ PACKET_HANDLER(ePacketType::PED_SPAWN, Packets::Peds::PedSpawn* pPedSpawn)
     CNetworkPedManager::Add(pNetworkPed);
 }
 
-PACKET_HANDLER(ePacketType::PED_CONFIRM, Packets::Peds::PedConfirm* pPedConfirm)
-{
-#ifdef PACKET_DEBUG_MESSAGES
-    CChat::AddMessage("PED CONFIRM %d %d", packet->pedid, packet->tempid);
-#endif
-
-    if (pPedConfirm->tempid < ARRAY_SIZE(CNetworkPedManager::m_apTempPeds))
-    {
-        CNetworkPed* pTempPed = CNetworkPedManager::m_apTempPeds[pPedConfirm->tempid];
-        if (pTempPed)
-        {
-            pTempPed->m_nPedId = pPedConfirm->pedid;
-            CNetworkPedManager::Add(pTempPed);
-            CNetworkPedManager::m_apTempPeds[pPedConfirm->tempid] = nullptr;
-        }
-    }
-}
-
 PACKET_HANDLER(ePacketType::PED_REMOVE, Packets::Peds::PedRemove* pPedRemove)
 {
 #ifdef PACKET_DEBUG_MESSAGES
-    CChat::AddMessage("PED REMOVE %d", pPedRemove->pedid);
+    CChat::AddMessage("PED REMOVE %s", to_string(pPedRemove->pedid).c_str());
 #endif
 
     CNetworkPed* pNetworkPed = CNetworkPedManager::GetPed(pPedRemove->pedid);
@@ -61,7 +43,7 @@ PACKET_HANDLER(ePacketType::ASSIGN_PED, Packets::Peds::AssignPedSyncer* pAssignP
     if (pNetworkPed->m_bSyncing)
     {
 #ifdef PACKET_DEBUG_MESSAGES
-        CChat::AddMessage("NOT SYNCING PED %d ANYMORE", pAssignPedSyncer->pedid);
+        CChat::AddMessage("NOT SYNCING PED %s ANYMORE", to_string(pAssignPedSyncer->pedid).c_str());
 #endif
         pNetworkPed->m_bSyncing = false;
 
@@ -73,7 +55,7 @@ PACKET_HANDLER(ePacketType::ASSIGN_PED, Packets::Peds::AssignPedSyncer* pAssignP
     else
     {
 #ifdef PACKET_DEBUG_MESSAGES
-        CChat::AddMessage("SYNCING VEHICLE %d", pAssignPedSyncer->pedid);
+        CChat::AddMessage("SYNCING PED %s", to_string(pAssignPedSyncer->pedid).c_str());
 #endif
         pNetworkPed->m_bSyncing = true;
         pNetworkPed->m_bClaimOnRelease = false;

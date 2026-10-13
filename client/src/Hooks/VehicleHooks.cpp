@@ -118,7 +118,7 @@ static void __fastcall CVehicle__AddVehicleUpgrade_Hook(CVehicle* This, SKIP_EDX
     if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
     {
         Packets::Vehicles::VehicleComponentAdd packet{};
-        packet.vehicleid = vehicle->m_nVehicleId;
+        packet.vehicleid = vehicle->m_vehicleId;
         packet.componentid = modelid;
         GetPacketFactory().Send(packet);
     }
@@ -130,7 +130,7 @@ static void __fastcall CVehicle__RemoveVehicleUpgrade_Hook(CVehicle* This, SKIP_
     if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
     {
         Packets::Vehicles::VehicleComponentRemove packet{};
-        packet.vehicleid = vehicle->m_nVehicleId;
+        packet.vehicleid = vehicle->m_vehicleId;
         packet.componentid = modelid;
         GetPacketFactory().Send(packet);
     }
@@ -302,7 +302,7 @@ void __fastcall CVehicle__SetVehicleCreatedBy_Hook(CVehicle* This, SKIP_EDX, int
     if (auto pNetworkVehicle = CNetworkVehicleManager::GetVehicle(This))
     {
         Packets::Vehicles::SetVehicleCreatedBy packet{};
-        packet.vehicleid = pNetworkVehicle->m_nVehicleId;
+        packet.vehicleid = pNetworkVehicle->m_vehicleId;
         packet.createdBy = (eVehicleCreatedBy)createdBy;
         GetPacketFactory().Send(packet);
     }
@@ -318,7 +318,7 @@ void CTheScripts__CleanUpThisVehicle_Hook(CVehicle* vehicle)
     if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle))
     {
         Packets::Vehicles::SetVehicleCreatedBy packet{};
-        packet.vehicleid = networkVehicle->m_nVehicleId;
+        packet.vehicleid = networkVehicle->m_vehicleId;
         int createdBy = vehicle->m_nCreatedBy;
         packet.createdBy = (eVehicleCreatedBy)createdBy;
         GetPacketFactory().Send(packet);

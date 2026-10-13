@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 std::vector<CNetworkPlayer*> CNetworkPlayerManager::m_pPlayers;
+uint32_t CNetworkPlayerManager::ms_nNextPlayerId = 1;
 
 void CNetworkPlayerManager::Add(CNetworkPlayer* player)
 {
@@ -17,11 +18,14 @@ void CNetworkPlayerManager::Remove(CNetworkPlayer* player)
 }
 
 // find player instance by id
-CNetworkPlayer* CNetworkPlayerManager::GetPlayer(int playerid)
+CNetworkPlayer* CNetworkPlayerManager::GetPlayer(playerid_t playerid)
 {
+    if (!playerid.valid())
+        return nullptr;
+
     for (int i = 0; i != m_pPlayers.size(); i++)
     {
-        if (m_pPlayers[i]->m_iPlayerId == playerid)
+        if (m_pPlayers[i]->m_playerId == playerid)
         {
             return m_pPlayers[i];
         }
@@ -42,14 +46,10 @@ CNetworkPlayer* CNetworkPlayerManager::GetPlayer(ENetPeer* peer)
     return nullptr;
 }
 
-int CNetworkPlayerManager::GetFreeID()
+// the amount of players is limited by the enet host, not by the id
+playerid_t CNetworkPlayerManager::AllocatePlayerId()
 {
-    for (int i = 0; i != Config::MAX_SERVER_PLAYERS; i++)
-    {
-        if (CNetworkPlayerManager::GetPlayer(i) == nullptr)
-            return i;
-    }
-    return -1;  // server is full
+    return playerid_t(ms_nNextPlayerId++);
 }
 
 CNetworkPlayer* CNetworkPlayerManager::GetHost()
@@ -81,6 +81,6 @@ void CNetworkPlayerManager::AssignHostToFirstPlayer()
     player->m_bIsHost = true;
 
     Packets::System::PlayerAssignHost playerAssignHost{};
-    playerAssignHost.playerid = player->m_iPlayerId;
+    playerAssignHost.playerid = player->m_playerId;
     GetPacketFactory().SendToAll(playerAssignHost);
 }

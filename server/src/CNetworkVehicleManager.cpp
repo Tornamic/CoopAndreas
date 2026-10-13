@@ -17,27 +17,19 @@ void CNetworkVehicleManager::Remove(CNetworkVehicle* vehicle)
     }
 }
 
-CNetworkVehicle* CNetworkVehicleManager::GetVehicle(int vehicleid)
+CNetworkVehicle* CNetworkVehicleManager::GetVehicle(vehicleid_t vehicleid)
 {
+    if (!vehicleid.valid())
+        return nullptr;
+
     for (int i = 0; i != m_pVehicles.size(); i++)
     {
-        if (m_pVehicles[i]->m_nVehicleId == vehicleid)
+        if (m_pVehicles[i]->m_vehicleId == vehicleid)
         {
             return m_pVehicles[i];
         }
     }
     return nullptr;
-}
-
-int CNetworkVehicleManager::GetFreeID()
-{
-    for (int i = 0; i < Config::MAX_SERVER_VEHICLES; i++)
-    {
-        if (CNetworkVehicleManager::GetVehicle(i) == nullptr)
-            return i;
-    }
-
-    return -1;
 }
 
 void CNetworkVehicleManager::RemoveAllHostedAndNotify(CNetworkPlayer* player)
@@ -47,7 +39,7 @@ void CNetworkVehicleManager::RemoveAllHostedAndNotify(CNetworkPlayer* player)
         if ((*it)->m_pSyncer == player)
         {
             Packets::Vehicles::VehicleRemove packet{};
-            packet.vehicleid = (*it)->m_nVehicleId;
+            packet.vehicleid = (*it)->m_vehicleId;
             GetPacketFactory().SendToAll(packet, player);
 
             delete *it;

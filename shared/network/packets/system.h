@@ -17,7 +17,7 @@ class PlayerConnected : public Packet
 public:
     DEFINE_PACKET_TYPE(PlayerConnected, ePacketType::PLAYER_CONNECTED, ePacketChannel::SYSTEM);
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // *NEVER* TOUCH THIS to keep compatibility with <=v0.2.2-alpha
+    // *NEVER* TOUCH THIS (unless you are Tornamic) to keep compatibility with <=v0.2.2-alpha
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     struct Payload
     {
@@ -25,6 +25,10 @@ public:
         bool isAlreadyConnected;
         char name[Config::MAX_NICKNAME_LENGTH + 1];
         uint32_t version;
+
+        // `playerid` keeps its legacy 4-byte layout, it holds the raw bits of a `playerid_t`
+        playerid_t GetPlayerId() const { return playerid_t(static_cast<uint32_t>(playerid)); }
+        void SetPlayerId(playerid_t id) { playerid = static_cast<int>(id.value()); }
     } payload;
 
 private:
@@ -40,7 +44,7 @@ private:
         {
 // since we serialize the data without checking them, we have to take care of its validity
 #ifdef COOP_CLIENT
-            if (payload.playerid < 0 || payload.playerid >= Config::MAX_SERVER_PLAYERS)
+            if (payload.playerid == 0)
             {
                 return false;
             }
@@ -72,12 +76,12 @@ class PlayerHandshake : public Packet
     DEFINE_PACKET_TYPE(PlayerHandshake, ePacketType::PLAYER_HANDSHAKE, ePacketChannel::SYSTEM);
 
 public:
-    int yourid;
+    playerid_t yourid{};
 
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, yourid, 0, Config::MAX_SERVER_PLAYERS - 1);
+        serialize_playerid(stream, yourid);
         return true;
     }
 };
@@ -86,7 +90,7 @@ class PlayerDisconnected : public Packet
     DEFINE_PACKET_TYPE(PlayerDisconnected, ePacketType::PLAYER_DISCONNECTED, ePacketChannel::SYSTEM);
 
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // *NEVER* TOUCH THIS to keep backwards compatibility with <=v0.2.2-alpha
+    // *NEVER* TOUCH THIS (unless you are Tornamic) to keep backwards compatibility with <=v0.2.2-alpha
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 public:
     enum
@@ -98,9 +102,13 @@ public:
 
     struct Payload
     {
-        int playerid;
+        int playerid; // -1 means the receiver itself is being disconnected (see `reason`)
         uint8_t reason;
         uint32_t version;
+
+        // `playerid` keeps its legacy 4-byte layout, it holds the raw bits of a `playerid_t`
+        playerid_t GetPlayerId() const { return playerid_t(static_cast<uint32_t>(playerid)); }
+        void SetPlayerId(playerid_t id) { playerid = static_cast<int>(id.value()); }
     } payload;
 
 private:
@@ -112,7 +120,7 @@ private:
         serialize_uint32(stream, payload.version);
 
 #ifdef COOP_CLIENT
-        if (payload.playerid < -1 || payload.playerid >= Config::MAX_SERVER_PLAYERS)
+        if (payload.playerid == 0)
         {
             return false;
         }
@@ -134,14 +142,14 @@ class ChatMessage : public Packet
     DEFINE_PACKET_TYPE(ChatMessage, ePacketType::PLAYER_CHAT_MESSAGE, ePacketChannel::SYSTEM);
 
 public:
-    SenderPlayerId playerid{};
+    SenderPlayerId senderPlayerid{};
     wchar_t message[Config::MAX_CHAT_MESSAGE_LENGTH + 1];
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
+        serialize_object(stream, senderPlayerid);
         serialize_wstring(stream, message, Config::MAX_CHAT_MESSAGE_LENGTH+1);
 
         return true;
@@ -184,13 +192,13 @@ class PlayerAssignHost : public Packet
 {
     DEFINE_PACKET_TYPE(PlayerAssignHost, ePacketType::PLAYER_ASSIGN_HOST, ePacketChannel::SYSTEM);
 public:
-    int playerid;
+    playerid_t playerid{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, playerid, 0, Config::MAX_SERVER_PLAYERS - 1);
+        serialize_playerid(stream, playerid);
         return true;
     }
 };
@@ -202,7 +210,7 @@ class RTTBroadcast : public Packet
 public:
     struct SPlayerRTT
     {
-        int playerid;
+        playerid_t playerid;
         uint16_t rtt;
     };
 
@@ -216,7 +224,7 @@ private:
         serialize_int(stream, playerCount, 0, Config::MAX_SERVER_PLAYERS);
         for (int i = 0; i < playerCount; i++)
         {
-            serialize_int(stream, rtts[i].playerid, 0, Config::MAX_SERVER_PLAYERS - 1);
+            serialize_playerid(stream, rtts[i].playerid);
             serialize_uint16(stream, rtts[i].rtt);
         }
         return true;

@@ -6,7 +6,7 @@ void CCommandUpdateActorBlipForNetworkPlayer::Process(CRunningScript* script)
 	script->CollectParameters(6);
 
 	Packets::Blips::UpdateEntityBlip packet{};
-	packet.forWhoPlayerId = CNetworkPlayerManager::GetPlayer(CPools::GetPed(ScriptParams[0]))->m_iPlayerId;
+	packet.forWhoPlayerId = CNetworkPlayerManager::GetPlayer(CPools::GetPed(ScriptParams[0]))->m_playerId;
 	packet.entity.SetEntity(CPools::GetPed(ScriptParams[1]));
 	packet.isFriendly = ScriptParams[2] != 0;
 	packet.display = static_cast<eBlipDisplay>(ScriptParams[3]);

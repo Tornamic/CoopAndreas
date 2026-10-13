@@ -12,7 +12,7 @@ struct RemoteTransition
     CTask* m_pTask = nullptr;
 };
 
-std::unordered_map<int, RemoteTransition> g_remoteTransitions;
+std::unordered_map<playerid_t, RemoteTransition> g_remoteTransitions;
 
 CVector GetEntrancePosition(CEntryExit* pEntryExit)
 {
@@ -56,7 +56,7 @@ void ApplyRemoteSnapshot(CNetworkPlayer* pNetworkPlayer, const Packets::Players:
 
 void ClearRemoteTransition(CNetworkPlayer* pNetworkPlayer)
 {
-    auto it = g_remoteTransitions.find(pNetworkPlayer->m_iPlayerId);
+    auto it = g_remoteTransitions.find(pNetworkPlayer->m_playerId);
     if (it == g_remoteTransitions.end())
     {
         return;
@@ -103,7 +103,7 @@ void StartRemoteTransition(CNetworkPlayer* pNetworkPlayer, CEntryExit* pEntryExi
     }
 
     SetRemotePrimaryTask(pPlayerPed, pTask);
-    g_remoteTransitions[pNetworkPlayer->m_iPlayerId] = {pPlayerPed, pTask};
+    g_remoteTransitions[pNetworkPlayer->m_playerId] = {pPlayerPed, pTask};
 }
 
 CEntryExit* FindEntryExit(int16_t rectLeft, int16_t rectBottom, uint8_t areaId)
@@ -168,7 +168,7 @@ void CEntryExitTransitionSync::OnTransitionFinished(CEntryExit* pEntryExit, CPed
 
 void CEntryExitTransitionSync::Receive(const Packets::Players::EnExTransition& packet)
 {
-    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(packet.playerid);
+    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(packet.senderPlayerid);
     if (!pNetworkPlayer || !pNetworkPlayer->m_pPed)
     {
         return;

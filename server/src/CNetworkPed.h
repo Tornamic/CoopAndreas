@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CVector.h"
+#include "network/ids.h"
 
 #include <eModelID.h>
 #include <ePedType.h>
@@ -11,9 +12,9 @@ class CNetworkPed
 {
 public:
     CNetworkPed(
-        int pedid, CNetworkPlayer* syncer, eModelID modelId, ePedType pedType, CVector pos, eCharCreatedBy createdBy);
+        pedid_t pedid, CNetworkPlayer* syncer, eModelID modelId, ePedType pedType, CVector pos, eCharCreatedBy createdBy);
 
-    int m_nPedId;
+    pedid_t m_pedId;
     CNetworkPlayer* m_pSyncer;
     eModelID m_nModelId;
     ePedType m_nPedType;

@@ -6,14 +6,22 @@
 PACKET_HANDLER(
     ePacketType::VEHICLE_SPAWN, Packets::Vehicles::VehicleSpawn* pVehicleSpawn, CNetworkPlayer* pNetworkPlayer)
 {
-    pVehicleSpawn->vehicleid = CNetworkVehicleManager::GetFreeID();
-    GetPacketFactory().SendToAll(*pVehicleSpawn, pNetworkPlayer);
+    // the id is allocated by its creator, a player can only create vehicles in its own id space
+    if (pVehicleSpawn->vehicleid.creator() != pNetworkPlayer->m_playerId)
+    {
+        logger::warn("%s tried to create a vehicle with someone else's id %s", pNetworkPlayer->GetName().c_str(),
+            to_string(pVehicleSpawn->vehicleid).c_str());
+        return;
+    }
 
-    // send it back to the syncer of the vehicle so that he knows the id
-    Packets::Vehicles::VehicleConfirm vehicleConfirmPacket{};
-    vehicleConfirmPacket.tempid = pVehicleSpawn->tempid;
-    vehicleConfirmPacket.vehicleid = pVehicleSpawn->vehicleid;
-    GetPacketFactory().Send(vehicleConfirmPacket, pNetworkPlayer);
+    if (CNetworkVehicleManager::GetVehicle(pVehicleSpawn->vehicleid) != nullptr)
+    {
+        logger::warn("%s tried to create a vehicle with an id that is already in use %s",
+            pNetworkPlayer->GetName().c_str(), to_string(pVehicleSpawn->vehicleid).c_str());
+        return;
+    }
+
+    GetPacketFactory().SendToAll(*pVehicleSpawn, pNetworkPlayer);
 
     CNetworkVehicle* vehicle = new CNetworkVehicle(
         pVehicleSpawn->vehicleid, pVehicleSpawn->modelid, pVehicleSpawn->pos, pVehicleSpawn->rot.m_angle);
@@ -78,7 +86,7 @@ PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDri
         pNetworkVehicle->m_bUsedByPed = false;
         pNetworkVehicle->ReassignSyncer(pNetworkPlayer);
 
-        pVehicleDriverUpdate->playerid = pNetworkPlayer->m_iPlayerId;
+        pVehicleDriverUpdate->senderPlayerid = pNetworkPlayer->m_playerId;
         GetPacketFactory().SendToAll(*pVehicleDriverUpdate, pNetworkPlayer);
     }
     else
@@ -97,7 +105,7 @@ PACKET_HANDLER(
         else
             pNetworkVehicle->SetOccupant(0, pNetworkPlayer);
 
-        pVehicleEnter->playerid = pNetworkPlayer->m_iPlayerId;
+        pVehicleEnter->senderPlayerid = pNetworkPlayer->m_playerId;
         GetPacketFactory().SendToAll(*pVehicleEnter, pNetworkPlayer);
     }
     else
@@ -108,10 +116,10 @@ PACKET_HANDLER(
 
 PACKET_HANDLER(ePacketType::VEHICLE_EXIT, Packets::Vehicles::VehicleExit* pVehicleExit, CNetworkPlayer* pNetworkPlayer)
 {
-    pVehicleExit->playerid = pNetworkPlayer->m_iPlayerId;
+    pVehicleExit->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pVehicleExit, pNetworkPlayer);
 
-    if (auto pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pNetworkPlayer->m_nVehicleId))
+    if (auto pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pNetworkPlayer->m_vehicleId))
     {
         if (pNetworkPlayer->m_nSeatId >= 0)
         {
@@ -175,7 +183,7 @@ PACKET_HANDLER(ePacketType::VEHICLE_PASSENGER_UPDATE,
 {
     if (auto pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pVehiclePassengerUpdate->vehicleid))
     {
-        pVehiclePassengerUpdate->playerid = pNetworkPlayer->m_iPlayerId;
+        pVehiclePassengerUpdate->senderPlayerid = pNetworkPlayer->m_playerId;
         GetPacketFactory().SendToAll(*pVehiclePassengerUpdate, pNetworkPlayer);
 
         pNetworkVehicle->SetOccupant(pVehiclePassengerUpdate->seatid + 1, pNetworkPlayer);

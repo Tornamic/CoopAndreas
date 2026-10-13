@@ -8,7 +8,7 @@ void CNetworkEntityBlip::UpdateEntityBlip(Packets::Blips::UpdateEntityBlip* pack
     switch (packet->entity.entityType)
     {
         case eNetworkEntityType::NETWORK_ENTITY_TYPE_PED:
-            if (auto networkPed = CNetworkPedManager::GetPed(packet->entity.entityId))
+            if (auto networkPed = CNetworkPedManager::GetPed(packet->entity.pedid))
             {
                 if (auto ped = networkPed->m_pPed)
                 {
@@ -22,7 +22,7 @@ void CNetworkEntityBlip::UpdateEntityBlip(Packets::Blips::UpdateEntityBlip* pack
             }
             break;
         case eNetworkEntityType::NETWORK_ENTITY_TYPE_VEHICLE:
-            if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(packet->entity.entityId))
+            if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(packet->entity.vehicleid))
             {
                 if (auto vehicle = networkVehicle->m_pVehicle)
                 {
@@ -53,7 +53,7 @@ void CNetworkEntityBlip::RemoveEntityBlip(Packets::Blips::RemoveEntityBlip* pack
     switch (packet->entity.entityType)
     {
         case eNetworkEntityType::NETWORK_ENTITY_TYPE_PED:
-            if (auto networkPed = CNetworkPedManager::GetPed(packet->entity.entityId))
+            if (auto networkPed = CNetworkPedManager::GetPed(packet->entity.pedid))
             {
                 if (auto ped = networkPed->m_pPed)
                 {
@@ -66,7 +66,7 @@ void CNetworkEntityBlip::RemoveEntityBlip(Packets::Blips::RemoveEntityBlip* pack
             }
             break;
         case eNetworkEntityType::NETWORK_ENTITY_TYPE_VEHICLE:
-            if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(packet->entity.entityId))
+            if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(packet->entity.vehicleid))
             {
                 if (auto vehicle = networkVehicle->m_pVehicle)
                 {

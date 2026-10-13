@@ -12,7 +12,7 @@ void CCommandPedResetAllClaims::Process(CRunningScript* script)
 			if (networkPed->m_bSyncing || CLocalPlayer::m_bIsHost)
 			{
 				Packets::Peds::PedResetAllClaims packet{};
-				packet.pedid = networkPed->m_nPedId;
+				packet.pedid = networkPed->m_pedId;
 				GetPacketFactory().Send(packet);
 			}
 		}

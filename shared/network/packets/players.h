@@ -107,7 +107,7 @@ class OnFootUpdate : public Packet
     DEFINE_PACKET_TYPE(OnFootUpdate, ePacketType::PLAYER_ONFOOT_UPDATE, ePacketChannel::SYNC);
 
 public:
-    SenderPlayerId playerid{};
+    SenderPlayerId senderPlayerid{};
     WorldPositionCompressed vecPos{};
     MoveSpeedCompressed vecMoveSpeed{};
     RadianAngleCompressed currentRotation{};
@@ -123,7 +123,7 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
+        serialize_object(stream, senderPlayerid);
 
         serialize_object(stream, vecPos);
         serialize_object(stream, vecMoveSpeed);
@@ -150,7 +150,7 @@ class KeyPressed : public Packet
     DEFINE_PACKET_TYPE(KeyPressed, ePacketType::PLAYER_KEY_SYNC, ePacketChannel::SYNC);
 
 public:
-    SenderPlayerId playerid{};
+    SenderPlayerId senderPlayerid{};
     SKeySnapshot keySnapshot;
 
     RadianAngleCompressed currentRotation{};
@@ -159,7 +159,7 @@ public:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
+        serialize_object(stream, senderPlayerid);
         serialize_object(stream, keySnapshot);
 
         serialize_object(stream, currentRotation);
@@ -174,7 +174,7 @@ class PlayerBulletShot : public Packet
     DEFINE_PACKET_TYPE(PlayerBulletShot, ePacketType::PLAYER_BULLET_SHOT, ePacketChannel::EVENT);
 
 public:
-    SenderPlayerId playerid{};
+    SenderPlayerId senderPlayerid{};
     eWeaponType iWeaponType;
     WorldPositionCompressed startPos{};
     WorldPositionCompressed endPos{};
@@ -188,7 +188,7 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
+        serialize_object(stream, senderPlayerid);
         serialize_int(stream, (int&)iWeaponType, WEAPON_UNARMED, WEAPON_FLARE);
         serialize_object(stream, startPos);
         serialize_object(stream, endPos);
@@ -226,7 +226,7 @@ class PlayerCameraSync : public Packet
     DEFINE_PACKET_TYPE(PlayerCameraSync, ePacketType::PLAYER_CAMERA_SYNC, ePacketChannel::SYNC);
 
 public:
-    SenderPlayerId playerid{};
+    SenderPlayerId senderPlayerid{};
     bool bFullUpdate = true;
     uint16_t cameraMode = MODE_NONE;
     float cameraFov = 0.0f;
@@ -239,7 +239,7 @@ public:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
+        serialize_object(stream, senderPlayerid);
 
         serialize_int(stream, cameraMode, MODE_NONE, MODE_AIMWEAPON_ATTACHED);
 
@@ -301,7 +301,7 @@ class SetPlayerTask : public Packet
     DEFINE_PACKET_TYPE(SetPlayerTask, ePacketType::SET_PLAYER_TASK, ePacketChannel::EVENT);
 
 public:
-    SenderPlayerId playerid{};
+    SenderPlayerId senderPlayerid{};
     int taskType = TASK_NONE;
     WorldPositionCompressed vecPos{};
     RadianAngleCompressed currentRotation{};
@@ -311,7 +311,7 @@ public:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
+        serialize_object(stream, senderPlayerid);
 
         serialize_int(stream, taskType, TASK_SIMPLE_PLAYER_ON_FOOT, MAX_NUM_TASK_TYPES - 1);
 
@@ -328,7 +328,7 @@ class EnExTransition : public Packet
     DEFINE_PACKET_TYPE(EnExTransition, ePacketType::ENEX_TRANSITION, ePacketChannel::EVENT);
 
 public:
-    SenderPlayerId playerid{};
+    SenderPlayerId senderPlayerid{};
     WorldPositionCompressed position{};
     RadianAngleCompressed currentRotation{};
     RadianAngleCompressed aimingRotation{};
@@ -343,7 +343,7 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
+        serialize_object(stream, senderPlayerid);
         serialize_object(stream, position);
         serialize_object(stream, currentRotation);
         serialize_object(stream, aimingRotation);
@@ -365,14 +365,14 @@ class PlayerPlaceWaypoint : public Packet
     DEFINE_PACKET_TYPE(PlayerPlaceWaypoint, ePacketType::PLAYER_PLACE_WAYPOINT, ePacketChannel::EVENT);
 
 public:
-    SenderPlayerId playerid{};
+    SenderPlayerId senderPlayerid{};
     bool place = false;
     CVector2D position = CVector2D(0.0f, 0.0f);
 
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
+        serialize_object(stream, senderPlayerid);
 
         serialize_bool(stream, place);
         if (place)
@@ -394,12 +394,12 @@ class RespawnPlayer : public Packet
     DEFINE_PACKET_TYPE(RespawnPlayer, ePacketType::RESPAWN_PLAYER, ePacketChannel::EVENT);
 
 public:
-    SenderPlayerId playerid{};
+    SenderPlayerId senderPlayerid{};
 
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
+        serialize_object(stream, senderPlayerid);
         return true;
     }
 };
@@ -451,14 +451,14 @@ class PlayerStats : public Packet
     DEFINE_PACKET_TYPE(PlayerStats, ePacketType::PLAYER_STATS, ePacketChannel::EVENT);
 
 public:
-    SenderPlayerId playerid{};
+    SenderPlayerId senderPlayerid{};
     float stats[14]{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
+        serialize_object(stream, senderPlayerid);
         for (size_t i = 0; i < ARRAY_SIZE(stats); i++)
         {
             serialize_float(stream, stats[i]);
@@ -473,14 +473,14 @@ class RebuildPlayer : public Packet
     DEFINE_PACKET_TYPE(RebuildPlayer, ePacketType::REBUILD_PLAYER, ePacketChannel::EVENT);
 
 public:
-    SenderPlayerId playerid{};
+    SenderPlayerId senderPlayerid{};
     CPedClothesDesc clothesDesc{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
+        serialize_object(stream, senderPlayerid);
         serialize_object(stream, clothesDesc);
 
         return true;

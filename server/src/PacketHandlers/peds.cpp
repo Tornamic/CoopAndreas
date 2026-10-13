@@ -28,7 +28,21 @@ PACKET_HANDLER(ePacketType::PED_SPAWN, Packets::Peds::PedSpawn* pPedSpawn, CNetw
             return;
     }
 
-    pPedSpawn->pedid = CNetworkPedManager::GetFreeId();
+    // the id is allocated by its creator, a player can only create peds in its own id space
+    if (pPedSpawn->pedid.creator() != pNetworkPlayer->m_playerId)
+    {
+        logger::warn("%s tried to create a ped with someone else's id %s", pNetworkPlayer->GetName().c_str(),
+            to_string(pPedSpawn->pedid).c_str());
+        return;
+    }
+
+    if (CNetworkPedManager::GetPed(pPedSpawn->pedid) != nullptr)
+    {
+        logger::warn("%s tried to create a ped with an id that is already in use %s",
+            pNetworkPlayer->GetName().c_str(), to_string(pPedSpawn->pedid).c_str());
+        return;
+    }
+
     GetPacketFactory().SendToAll(*pPedSpawn, pNetworkPlayer);
 
     CNetworkPed* pNetworkPed = new CNetworkPed(
@@ -37,12 +51,6 @@ PACKET_HANDLER(ePacketType::PED_SPAWN, Packets::Peds::PedSpawn* pPedSpawn, CNetw
         pPedSpawn->specialModelName);
 
     CNetworkPedManager::Add(pNetworkPed);
-
-    // send it back to the syncer of the ped so that he knows the id
-    Packets::Peds::PedConfirm pedConfirmPacket{};
-    pedConfirmPacket.tempid = pPedSpawn->tempid;
-    pedConfirmPacket.pedid = pPedSpawn->pedid;
-    GetPacketFactory().Send(pedConfirmPacket, pNetworkPlayer);
 }
 
 PACKET_HANDLER(ePacketType::PED_REMOVE, Packets::Peds::PedRemove* pPedRemove, CNetworkPlayer* pNetworkPlayer)
@@ -70,18 +78,17 @@ PACKET_HANDLER(ePacketType::PED_REMOVE, Packets::Peds::PedRemove* pPedRemove, CN
 
             // send ASSIGN_PED packet to the new host player to notify them they now own the ped
             Packets::Peds::AssignPedSyncer assignPedPacket{};
-            assignPedPacket.pedid = pNetworkPed->m_nPedId;
+            assignPedPacket.pedid = pNetworkPed->m_pedId;
             GetPacketFactory().Send(assignPedPacket, p);
 
             // send PED_SPAWN packet to the old syncer (peer) so it can respawn the ped locally
             Packets::Peds::PedSpawn pedSpawnPacket{};
-            pedSpawnPacket.pedid = pNetworkPed->m_nPedId;
+            pedSpawnPacket.pedid = pNetworkPed->m_pedId;
             pedSpawnPacket.modelId = pNetworkPed->m_nModelId;
             pedSpawnPacket.pedType = pNetworkPed->m_nPedType;
             pedSpawnPacket.pos = pNetworkPed->m_vecPos;
             snprintf(pedSpawnPacket.specialModelName, sizeof(pedSpawnPacket.specialModelName), "%s",
                 pNetworkPed->m_szSpecialModelName);
-            pedSpawnPacket.tempid = 0xFF;
             pedSpawnPacket.createdBy = pNetworkPed->m_nCreatedBy;
             GetPacketFactory().Send(pedSpawnPacket, pNetworkPlayer);
 
@@ -194,11 +201,11 @@ PACKET_HANDLER(ePacketType::PED_SAY, Packets::Peds::PedSay* pPedSay, CNetworkPla
 {
     if (pPedSay->entity.entityType == NETWORK_ENTITY_TYPE_PLAYER)
     {
-        pPedSay->entity.entityId = pNetworkPlayer->m_iPlayerId;
+        pPedSay->entity.playerid = pNetworkPlayer->m_playerId;
     }
     else if (pPedSay->entity.entityType == NETWORK_ENTITY_TYPE_PED)
     {
-        CNetworkPed* pNetworkPed = CNetworkPedManager::GetPed(pPedSay->entity.entityId);
+        CNetworkPed* pNetworkPed = CNetworkPedManager::GetPed(pPedSay->entity.pedid);
         if (pNetworkPed == nullptr)
         {
             return;

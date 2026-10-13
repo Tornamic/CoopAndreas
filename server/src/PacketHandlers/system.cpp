@@ -4,6 +4,6 @@
 
 PACKET_HANDLER(ePacketType::PLAYER_CHAT_MESSAGE, Packets::System::ChatMessage* pChatMessage, CNetworkPlayer* pNetworkPlayer)
 {
-	pChatMessage->playerid = pNetworkPlayer->m_iPlayerId;
+	pChatMessage->senderPlayerid = pNetworkPlayer->m_playerId;
 	GetPacketFactory().SendToAll(*pChatMessage, pNetworkPlayer);
 }

@@ -13,6 +13,6 @@ void CCommandRemoveTextForNetworkPlayer::Process(CRunningScript* script)
 	
 	Packets::Scripts::RemoveMessageGXT packet{};
 	strncpy(packet.gxt, gxt, 8);
-	packet.forWhoPlayerId = networkPlayer->m_iPlayerId;
+	packet.forWhoPlayerId = networkPlayer->m_playerId;
 	GetPacketFactory().Send(packet);
 }

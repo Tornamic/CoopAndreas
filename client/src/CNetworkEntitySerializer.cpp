@@ -5,7 +5,7 @@ CEntity* CNetworkEntitySerializer::GetEntity()
 {
 	if (entityType == NETWORK_ENTITY_TYPE_PED)
 	{
-		if (auto networkPed = CNetworkPedManager::GetPed(entityId))
+		if (auto networkPed = CNetworkPedManager::GetPed(pedid))
 		{
 			if (auto ped = networkPed->m_pPed)
 			{
@@ -15,7 +15,7 @@ CEntity* CNetworkEntitySerializer::GetEntity()
 	}
 	else if (entityType == NETWORK_ENTITY_TYPE_VEHICLE)
 	{
-		if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(entityId))
+		if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(vehicleid))
 		{
 			if (auto vehicle = networkVehicle->m_pVehicle)
 			{
@@ -25,11 +25,11 @@ CEntity* CNetworkEntitySerializer::GetEntity()
 	}
 	else if (entityType == NETWORK_ENTITY_TYPE_PLAYER)
 	{
-		if (CNetworkPlayerManager::m_nMyId == entityId)
+		if (CNetworkPlayerManager::m_localPlayerId == playerid)
 		{
 			return FindPlayerPed(0);
 		}
-		if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(entityId))
+		if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(playerid))
 		{
 			if (auto ped = networkPlayer->m_pPed)
 			{
@@ -44,6 +44,9 @@ CEntity* CNetworkEntitySerializer::GetEntity()
 void CNetworkEntitySerializer::SetEntity(CEntity* entity)
 {
 	entityType = NETWORK_ENTITY_TYPE_NOTHING;
+	playerid = playerid_t();
+	vehicleid = vehicleid_t();
+	pedid = pedid_t();
 
 	if (entity == nullptr)
 	{
@@ -57,12 +60,12 @@ void CNetworkEntitySerializer::SetEntity(CEntity* entity)
 			entityType = NETWORK_ENTITY_TYPE_PLAYER;
 			if (entity == FindPlayerPed(0))
 			{
-				entityId = CNetworkPlayerManager::m_nMyId;
+				playerid = CNetworkPlayerManager::m_localPlayerId;
 			}
 
 			if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(entity))
 			{
-				entityId = networkPlayer->m_iPlayerId;
+				playerid = networkPlayer->m_playerId;
 			}
 		}
 		else
@@ -70,7 +73,7 @@ void CNetworkEntitySerializer::SetEntity(CEntity* entity)
 			entityType = NETWORK_ENTITY_TYPE_PED;
 			if (auto networkPed = CNetworkPedManager::GetPed(entity))
 			{
-				entityId = networkPed->m_nPedId;
+				pedid = networkPed->m_pedId;
 			}
 		}
 	}
@@ -79,7 +82,7 @@ void CNetworkEntitySerializer::SetEntity(CEntity* entity)
 		entityType = NETWORK_ENTITY_TYPE_VEHICLE;
 		if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(entity))
 		{
-			entityId = networkVehicle->m_nVehicleId;
+			vehicleid = networkVehicle->m_vehicleId;
 		}
 	}
 }

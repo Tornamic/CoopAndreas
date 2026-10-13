@@ -91,25 +91,25 @@ void PerformSequence()
 	if (!ped)
 		return;
 
-	int pedid = -1;
+	pedid_t pedid{}; // invalid means the player
 
 	if (!ped->IsPlayer())
 	{
 		if (auto networkPed = CNetworkPedManager::GetPed(ped))
 		{
-			pedid = networkPed->m_nPedId;
+			pedid = networkPed->m_pedId;
 		}
 
-		if (pedid == -1) return;
+		if (!pedid.valid()) return;
 	}
 
 	int sequenceId = CTheScripts::GetActualScriptThingIndex(COpCodeSync::scriptParamsBuffer[1].value, SCRIPT_THING_SEQUENCE_TASK);
 
 	/*
 	packet structure:
-	// header:
-	int playerid
-	int pedid
+	// header (Packets::Scripts::PerformTaskSequence::HEADER_SIZE):
+	playerid_t playerid (4 bytes, filled by the server)
+	pedid_t pedid (8 bytes, packed, invalid if the sequence is performed on the player)
 	uint8_t taskCount
 	// for each task:
 	uint8_t size
@@ -131,24 +131,23 @@ void PerformSequence()
 	if (taskCount == 0)
 		return;
 
-	packetSize += sizeof(int) + sizeof(int) + sizeof(uint8_t); // playerid + pedid + taskCount
+	packetSize += Packets::Scripts::PerformTaskSequence::HEADER_SIZE; // playerid + pedid + taskCount
 
-	std::vector<uint8_t> vBuffer;
-	vBuffer.clear();
+	std::vector<uint8_t> vBuffer(Packets::Scripts::PerformTaskSequence::HEADER_SIZE);
 	vBuffer.reserve(packetSize);
-	
-	int playerid = -1; // let the server fill this variable
-	vBuffer.insert(vBuffer.end(), (uint8_t*)&playerid, (uint8_t*)&playerid + sizeof(int));
 
-	vBuffer.insert(vBuffer.end(), (uint8_t*)&pedid, (uint8_t*)&pedid + sizeof(int)); // if pedid == -1 then perfom the sequence on the player
-
-	vBuffer.push_back(taskCount);
+	ids::WritePlayerId(&vBuffer[0], playerid_t()); // let the server fill this variable
+	ids::WriteEntityId(&vBuffer[ids::PLAYERID_SIZE], pedid); // if pedid is invalid then perfom the sequence on the player
+	vBuffer[ids::PLAYERID_SIZE + ids::ENTITYID_SIZE] = taskCount;
 
 	for (int i = 0; i < taskCount; i++)
 	{
 		vBuffer.push_back((uint8_t)m_serializedSequences[sequenceId][i].size());
 		vBuffer.insert(vBuffer.end(), m_serializedSequences[sequenceId][i].begin(), m_serializedSequences[sequenceId][i].end());
 	}
+
+	if (packetSize > Packets::Scripts::PerformTaskSequence::MAX_BUFFER_SIZE)
+		return;
 
 	static Packets::Scripts::PerformTaskSequence packet{};
 	packet.size = packetSize;
@@ -216,14 +215,15 @@ bool CTaskSequenceSync::OnOpCodeExecuted(eScriptCommands opcode)
 
 void CTaskSequenceSync::HandlePacket(void* pData, int size)
 {
-	if (size < 9)
+	if (size < Packets::Scripts::PerformTaskSequence::HEADER_SIZE)
     {
         return;
     }
 
-	int playerid = *(int*)pData;
-	int pedid = *(int*)((int)pData + 4);
-	uint8_t count = *(uint8_t*)((int)pData + 8);
+	const uint8_t* pHeader = (const uint8_t*)pData;
+	playerid_t playerid = ids::ReadPlayerId(pHeader);
+	pedid_t pedid = ids::ReadEntityId<pedid_t>(pHeader + ids::PLAYERID_SIZE);
+	uint8_t count = pHeader[ids::PLAYERID_SIZE + ids::ENTITYID_SIZE];
 
 	if (count == 0) return;
 
@@ -238,7 +238,7 @@ void CTaskSequenceSync::HandlePacket(void* pData, int size)
 	
 	CPed* ped = nullptr;
 
-	if (pedid == -1)
+	if (!pedid.valid())
 	{
 		if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(playerid))
 		{
@@ -255,7 +255,7 @@ void CTaskSequenceSync::HandlePacket(void* pData, int size)
 
 	if (ped == nullptr)
 	{
-		if (playerid != CNetworkPlayerManager::m_nMyId)
+		if (playerid != CNetworkPlayerManager::m_localPlayerId)
 		{
 			return;
 		}
@@ -264,7 +264,7 @@ void CTaskSequenceSync::HandlePacket(void* pData, int size)
 
 	CTaskSequenceSync::ms_bFailedToProcessSequence = false;
 
-	int ptr = 9;
+	int ptr = Packets::Scripts::PerformTaskSequence::HEADER_SIZE;
 	for (int i = 0; i < count; i++)
 	{
 		uint8_t len = *(uint8_t*)((int)pData + ptr);

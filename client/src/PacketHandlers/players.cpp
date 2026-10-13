@@ -7,7 +7,7 @@
 
 PACKET_HANDLER(ePacketType::PLAYER_ONFOOT_UPDATE, Packets::Players::OnFootUpdate* pOnFootUpdate)
 {
-    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pOnFootUpdate->playerid);
+    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pOnFootUpdate->senderPlayerid);
     if (pNetworkPlayer == nullptr)
     {
         return;
@@ -17,7 +17,7 @@ PACKET_HANDLER(ePacketType::PLAYER_ONFOOT_UPDATE, Packets::Players::OnFootUpdate
 
     if (pPlayerPed == nullptr)
     {
-        pNetworkPlayer->CreatePed(pNetworkPlayer->m_iPlayerId, pOnFootUpdate->vecPos);
+        pNetworkPlayer->CreatePed(pOnFootUpdate->vecPos);
         pPlayerPed = pNetworkPlayer->m_pPed;
     }
 
@@ -60,7 +60,7 @@ PACKET_HANDLER(ePacketType::PLAYER_ONFOOT_UPDATE, Packets::Players::OnFootUpdate
 
 PACKET_HANDLER(ePacketType::PLAYER_KEY_SYNC, Packets::Players::KeyPressed* pKeyPressed)
 {
-    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pKeyPressed->playerid);
+    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pKeyPressed->senderPlayerid);
     if (pNetworkPlayer == nullptr)
     {
         return;
@@ -78,7 +78,7 @@ PACKET_HANDLER(ePacketType::PLAYER_KEY_SYNC, Packets::Players::KeyPressed* pKeyP
 
 PACKET_HANDLER(ePacketType::PLAYER_CAMERA_SYNC, Packets::Players::PlayerCameraSync* pPlayerCameraSync)
 {
-    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pPlayerCameraSync->playerid);
+    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pPlayerCameraSync->senderPlayerid);
     if (pNetworkPlayer == nullptr)
     {
         return;
@@ -101,7 +101,7 @@ PACKET_HANDLER(ePacketType::PLAYER_CAMERA_SYNC, Packets::Players::PlayerCameraSy
 
 PACKET_HANDLER(ePacketType::SET_PLAYER_TASK, Packets::Players::SetPlayerTask* pSetPlayerTask)
 {
-    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pSetPlayerTask->playerid);
+    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pSetPlayerTask->senderPlayerid);
     if (pNetworkPlayer == nullptr)
     {
         return;
@@ -117,7 +117,7 @@ PACKET_HANDLER(ePacketType::ENEX_TRANSITION, Packets::Players::EnExTransition* p
 
 PACKET_HANDLER(ePacketType::PLAYER_PLACE_WAYPOINT, Packets::Players::PlayerPlaceWaypoint* pPlayerPlaceWaypoint)
 {
-    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pPlayerPlaceWaypoint->playerid);
+    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pPlayerPlaceWaypoint->senderPlayerid);
     if (pNetworkPlayer == nullptr)
     {
         return;
@@ -132,7 +132,7 @@ PACKET_HANDLER(ePacketType::PLAYER_PLACE_WAYPOINT, Packets::Players::PlayerPlace
 
 PACKET_HANDLER(ePacketType::RESPAWN_PLAYER, Packets::Players::RespawnPlayer* pRespawnPlayer)
 {
-    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pRespawnPlayer->playerid);
+    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pRespawnPlayer->senderPlayerid);
     if (pNetworkPlayer == nullptr)
     {
         return;
@@ -143,7 +143,7 @@ PACKET_HANDLER(ePacketType::RESPAWN_PLAYER, Packets::Players::RespawnPlayer* pRe
 
 PACKET_HANDLER(ePacketType::PLAYER_BULLET_SHOT, Packets::Players::PlayerBulletShot* pPlayerBulletShot)
 {
-    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pPlayerBulletShot->playerid);
+    CNetworkPlayer* pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pPlayerBulletShot->senderPlayerid);
     if (pNetworkPlayer == nullptr)
     {
         return;
@@ -236,7 +236,7 @@ PACKET_HANDLER(ePacketType::ADD_PROJECTILE, Packets::Players::AddProjectile* pAd
 
 PACKET_HANDLER(ePacketType::PLAYER_STATS, Packets::Players::PlayerStats* pPlayerStats)
 {
-    if (auto pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pPlayerStats->playerid))
+    if (auto pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pPlayerStats->senderPlayerid))
     {
         for (size_t i = 0; i < CStatsSync::SYNCED_STATS_COUNT; i++)
         {
@@ -248,7 +248,7 @@ PACKET_HANDLER(ePacketType::PLAYER_STATS, Packets::Players::PlayerStats* pPlayer
 
 PACKET_HANDLER(ePacketType::REBUILD_PLAYER, Packets::Players::RebuildPlayer* pRebuildPlayer)
 {
-    if (auto pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pRebuildPlayer->playerid))
+    if (auto pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pRebuildPlayer->senderPlayerid))
     {
         pNetworkPlayer->m_stats[STAT_FAT] = pRebuildPlayer->clothesDesc.m_fFatStat;
         pNetworkPlayer->m_stats[STAT_MUSCLE] = pRebuildPlayer->clothesDesc.m_fMuscleStat;

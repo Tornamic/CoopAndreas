@@ -4,10 +4,9 @@ class CNetworkPed
 private:
 	CNetworkPed() {}
 public:
-	int m_nPedId = -1;
+	pedid_t m_pedId{};
 	CPed* m_pPed = nullptr;
 	bool m_bSyncing = false;
-	unsigned char m_nTempId = 255;
 	ePedType m_nPedType;
 	unsigned char m_nCreatedBy;
 	CVector m_vecVelocity{0.0f, 0.0f, 0.0f};
@@ -33,7 +32,7 @@ public:
 
 	void ApplyWeaponSnapshot(Packets::Players::SWeaponSnapshot& weaponSnapshot);
 
-	CNetworkPed(int pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy, char specialModelName[]);
+	CNetworkPed(pedid_t pedid, int modelId, ePedType pedType, CVector pos, unsigned char createdBy, char specialModelName[]);
 	~CNetworkPed();
 };
 

@@ -421,7 +421,7 @@ public:
                     if (CSprite::CalcScreenCoors({posn.x, posn.y, posn.z + 1.0f}, &screenCoors, &w, &h, true, true))
                     {
                         CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y,
-                            ("v " + std::to_string(networkVehicle->m_nVehicleId) + "\nS " +
+                            ("v " + to_string(networkVehicle->m_vehicleId) + "\nS " +
                                 std::to_string(networkVehicle->m_bSyncing) + "\n" +
                                 std::to_string(networkVehicle->m_pVehicle->m_fGasPedal) + " " +
                                 std::to_string(networkVehicle->m_pVehicle->m_fBreakPedal) + "\nC " +
@@ -449,7 +449,7 @@ public:
                     if (CSprite::CalcScreenCoors({posn.x, posn.y, posn.z + 1.0f}, &screenCoors, &w, &h, true, true))
                     {
                         CDXFont::Draw((int)screenCoors.x, (int)screenCoors.y,
-                            ("p " + std::to_string(networkPed->m_nPedId) + "\nS " +
+                            ("p " + to_string(networkPed->m_pedId) + "\nS " +
                                 std::to_string(networkPed->m_bSyncing) + "\n" + std::to_string(ped->m_nMoveState))
                                 .c_str(),
                             D3DCOLOR_ARGB(255, 255, 255, 255));

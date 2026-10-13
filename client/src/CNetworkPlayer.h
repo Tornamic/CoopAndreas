@@ -4,7 +4,10 @@ class CNetworkPlayer
 {
 public:
 	CPlayerPed* m_pPed = nullptr;
-	int m_iPlayerId;
+	playerid_t m_playerId;
+
+	// reusable [0; MAX_SERVER_PLAYERS) index for the game player arrays, unlike `m_playerId`
+	int m_nSlot = -1;
 
 	Packets::Players::OnFootUpdate m_onFootSnapshotInterpolated{};
 	
@@ -34,9 +37,9 @@ public:
 	bool m_bIsHost = false;
 
 	~CNetworkPlayer();
-	CNetworkPlayer(int id, CVector position);
+	CNetworkPlayer(playerid_t id, CVector position);
 
-	void CreatePed(int id, CVector position);
+	void CreatePed(CVector position);
 	void DestroyPed();
 	void Respawn();
 	int GetInternalId();

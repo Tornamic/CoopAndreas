@@ -1,12 +1,18 @@
 #pragma once
 
+#include "network/ids.h"
+
 enum eNetworkEntityType : uint8_t;
 
 class CNetworkEntitySerializer
 {
 public:
 	eNetworkEntityType entityType = (eNetworkEntityType)1;
-	int entityId = 0;
+
+	// only the one matching `entityType` is used, may be invalid if the entity has no network instance
+	playerid_t playerid{};
+	vehicleid_t vehicleid{};
+	pedid_t pedid{};
 
 #ifdef COOP_CLIENT
 	CEntity* GetEntity();
@@ -18,27 +24,19 @@ public:
 	{
 		serialize_int(stream, (int&)entityType, NETWORK_ENTITY_TYPE_PLAYER, NETWORK_ENTITY_TYPE_NOTINPOOLS);
 
-		int maxValue = 0;
 		switch (entityType)
 		{
 		case NETWORK_ENTITY_TYPE_PLAYER:
-			maxValue = Config::MAX_SERVER_PLAYERS;
+			serialize_playerid(stream, playerid);
 			break;
 		case NETWORK_ENTITY_TYPE_VEHICLE:
-			maxValue = Config::MAX_SERVER_VEHICLES;
+			serialize_vehicleid(stream, vehicleid);
 			break;
 		case NETWORK_ENTITY_TYPE_PED:
-			maxValue = Config::MAX_SERVER_PEDS;
+			serialize_pedid(stream, pedid);
 			break;
 		}
-		
-		if (maxValue == 0)
-		{
-			return true;
-		}
 
-		serialize_int(stream, entityId, 0, maxValue - 1);
 		return true;
 	}
 };
-

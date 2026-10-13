@@ -924,7 +924,7 @@ void CDebugPedTasks::Draw()
 			char text[1000];
 			char level[60];
 
-			//sprintf(text, "Ped: %d\nPRIMARY TASKS:\n", networkPed->m_nPedId);
+			//sprintf(text, "Ped: %s\nPRIMARY TASKS:\n", to_string(networkPed->m_pedId).c_str());
 			sprintf(text, "PRIMARY TASKS:\n");
 
 			for (int i = 0; i < 5; i++)

@@ -132,7 +132,7 @@ void CPassengerEnter::Process()
                 pPlayerPed->m_pIntelligence->m_TaskMgr.SetTask(pEnterCarTask, 3, false);
 
                 Packets::Vehicles::VehicleEnter packet{};
-                packet.vehicleid = pMinNetworkVehicle->m_nVehicleId;
+                packet.vehicleid = pMinNetworkVehicle->m_vehicleId;
                 packet.seatid = CCarEnterExit::ComputePassengerIndexFromCarDoor(pMinVehicle, doorId);
                 packet.bForce = false;
                 packet.bPassenger = true;

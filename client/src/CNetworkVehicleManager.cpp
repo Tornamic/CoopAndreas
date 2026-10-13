@@ -3,11 +3,14 @@
 #include <CKeySync.h>
 #include "CNetworkVehicleManager.h"
 
-CNetworkVehicle* CNetworkVehicleManager::GetVehicle(int vehicleid)
+CNetworkVehicle* CNetworkVehicleManager::GetVehicle(vehicleid_t vehicleid)
 {
+	if (!vehicleid.valid())
+		return nullptr;
+
 	for (int i = 0; i != m_pVehicles.size(); i++)
 	{
-		if (m_pVehicles[i]->m_nVehicleId == vehicleid)
+		if (m_pVehicles[i]->m_vehicleId == vehicleid)
 		{
 			return m_pVehicles[i];
 		}
@@ -48,7 +51,7 @@ void CNetworkVehicleManager::UpdateDriver(CVehicle* pVehicle)
 		Packets::Vehicles::VehicleDriverUpdate vehicleDriverUpdate{};
 		CPlayerPed* pPlayerPed = FindPlayerPed(0);
 
-		vehicleDriverUpdate.vehicleid = pNetworkVehicle->m_nVehicleId;
+		vehicleDriverUpdate.vehicleid = pNetworkVehicle->m_vehicleId;
 		vehicleDriverUpdate.pos = pVehicle->m_matrix->pos;
 		vehicleDriverUpdate.roll = pVehicle->m_matrix->right;
 		vehicleDriverUpdate.rot = pVehicle->m_matrix->up;
@@ -108,7 +111,7 @@ void CNetworkVehicleManager::UpdateIdle()
 		if (pNetworkVehicle->m_bSyncing && !pNetworkVehicle->HasDriver())
 		{
 			Packets::Vehicles::VehicleIdleUpdate packet{};
-			packet.vehicleid = pNetworkVehicle->m_nVehicleId;
+			packet.vehicleid = pNetworkVehicle->m_vehicleId;
 
 			packet.pos = pVehicle->m_matrix->pos;
 			packet.roll = pVehicle->m_matrix->right;
@@ -148,7 +151,7 @@ void CNetworkVehicleManager::UpdatePassenger(CVehicle* pVehicle, CPlayerPed* pPl
 		 packet.playerHealth.iArmour = static_cast<uint8_t>(std::clamp(pPlayerPed->m_fArmour, 0.0f, 255.0f));
 		 CKeySync::CollectState(packet.playerKeys);
 
-		 packet.vehicleid = pNetworkVehicle->m_nVehicleId;
+		 packet.vehicleid = pNetworkVehicle->m_vehicleId;
 		 packet.driveby = CDriveBy::IsPedInDriveby(pPlayerPed);
 
 		 for (int i = 0; i < pVehicle->m_nMaxPassengers; i++)
@@ -163,18 +166,15 @@ void CNetworkVehicleManager::UpdatePassenger(CVehicle* pVehicle, CPlayerPed* pPl
 	 }
 }
 
-uint8_t CNetworkVehicleManager::AddToTempList(CNetworkVehicle* networkVehicle)
+vehicleid_t CNetworkVehicleManager::AllocateVehicleId()
 {
-	for (uint8_t i = 0; i < ARRAY_SIZE(m_apTempVehicles); i++)
-	{
-		if (m_apTempVehicles[i] == nullptr)
-		{
-			m_apTempVehicles[i] = networkVehicle;
-			return i;
-		}
-	}
+	assert(CNetworkPlayerManager::m_localPlayerId.valid());
+	return vehicleid_t(CNetworkPlayerManager::m_localPlayerId, ms_nNextVehicleId++);
+}
 
-	return 255;
+void CNetworkVehicleManager::ResetIdAllocator()
+{
+	ms_nNextVehicleId = 1;
 }
 
 void CNetworkVehicleManager::RemoveHostedUnused()
@@ -209,7 +209,7 @@ void CNetworkVehicleManager::UpdateDamageSync()
 				{
 					pNetworkVehicle->m_oldDamageState = pAutomobile->m_damageManager;
 					Packets::Vehicles::VehicleDamage packet{};
-					packet.vehicleid = pNetworkVehicle->m_nVehicleId;
+					packet.vehicleid = pNetworkVehicle->m_vehicleId;
 					packet.damageManager = pAutomobile->m_damageManager;
 					GetPacketFactory().Send(packet);
 				}

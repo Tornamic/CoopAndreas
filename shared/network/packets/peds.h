@@ -12,8 +12,7 @@ class PedSpawn : public Packet
     DEFINE_PACKET_TYPE(PedSpawn, ePacketType::PED_SPAWN, ePacketChannel::EVENT);
 
 public:
-    int pedid = 0;
-    uint8_t tempid = 255;
+    pedid_t pedid{};
     eModelID modelId = MODEL_MALE01;
     ePedType pedType = PED_TYPE_CIVMALE;
     WorldPositionCompressed pos{};
@@ -24,8 +23,7 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, pedid, 0, Config::MAX_SERVER_PEDS - 1);
-        serialize_uint8(stream, tempid);
+        serialize_pedid(stream, pedid);
         serialize_int(stream, (int&)modelId, MODEL_NULL, MODEL_SPECIAL10);
         serialize_int(stream, (int&)pedType, PED_TYPE_PLAYER1, PED_TYPE_MISSION8);
         serialize_object(stream, pos);
@@ -36,36 +34,18 @@ private:
     }
 };
 
-class PedConfirm : public Packet
-{
-    DEFINE_PACKET_TYPE(PedConfirm, ePacketType::PED_CONFIRM, ePacketChannel::EVENT);
-
-public:
-    uint8_t tempid = 255;
-    int pedid = 0;
-
-private:
-    template <typename Stream>
-    bool Serialize(Stream& stream)
-    {
-        serialize_uint8(stream, tempid);
-        serialize_int(stream, pedid, 0, Config::MAX_SERVER_PEDS - 1);
-        return true;
-    }
-};
-
 class PedRemove : public Packet
 {
     DEFINE_PACKET_TYPE(PedRemove, ePacketType::PED_REMOVE, ePacketChannel::EVENT);
 
 public:
-    int pedid = 0;
+    pedid_t pedid{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, pedid, 0, Config::MAX_SERVER_PEDS - 1);
+        serialize_pedid(stream, pedid);
         return true;
     }
 };
@@ -75,13 +55,13 @@ class AssignPedSyncer : public Packet
     DEFINE_PACKET_TYPE(AssignPedSyncer, ePacketType::ASSIGN_PED, ePacketChannel::EVENT);
 
 public:
-    int pedid;
+    pedid_t pedid{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, pedid, 0, Config::MAX_SERVER_PEDS - 1);
+        serialize_pedid(stream, pedid);
         return true;
     }
 };
@@ -91,7 +71,7 @@ class PedOnFoot : public Packet
     DEFINE_PACKET_TYPE(PedOnFoot, ePacketType::PED_ONFOOT, ePacketChannel::SYNC);
 
 public:
-    int pedid = 0;
+    pedid_t pedid{};
     WorldPositionCompressed pos{};
     MoveSpeedCompressed velocity{};
     Packets::Players::SHealthSnapshot healthSnapshot{};
@@ -109,7 +89,7 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, pedid, 0, Config::MAX_SERVER_PEDS - 1);
+        serialize_pedid(stream, pedid);
         serialize_object(stream, pos);
         // serialize_object(stream, velocity); // not used for now
         serialize_object(stream, healthSnapshot);
@@ -134,8 +114,8 @@ class PedDriverUpdate : public Packet
     DEFINE_PACKET_TYPE(PedDriverUpdate, ePacketType::PED_DRIVER_UPDATE, ePacketChannel::SYNC);
 
 public:
-    int pedid = 0;
-    int vehicleid = 0;
+    pedid_t pedid{};
+    vehicleid_t vehicleid{};
     eVehicleType vehicleSubType = VEHICLE_AUTOMOBILE;
 
     WorldPositionCompressed pos{};
@@ -169,8 +149,8 @@ private:
     bool Serialize(Stream& stream)
     {
 #pragma region IDs
-        serialize_int(stream, pedid, 0, Config::MAX_SERVER_PEDS - 1);
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);
+        serialize_pedid(stream, pedid);
+        serialize_vehicleid(stream, vehicleid);
         serialize_int(stream, (int&)vehicleSubType, VEHICLE_AUTOMOBILE, VEHICLE_TRAILER);
 #pragma endregion
 #pragma region clamp stuff
@@ -290,8 +270,8 @@ class PedPassengerSync : public Packet
     DEFINE_PACKET_TYPE(PedPassengerSync, ePacketType::PED_PASSENGER_UPDATE, ePacketChannel::SYNC);
 
 public:
-    int pedid{};
-    int vehicleid{};
+    pedid_t pedid{};
+    vehicleid_t vehicleid{};
 
     Packets::Players::SHealthSnapshot healthSnapshot{};
     Packets::Players::SWeaponSnapshot weaponSnapshot{};
@@ -302,8 +282,8 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, pedid, 0, Config::MAX_SERVER_PEDS - 1);
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);
+        serialize_pedid(stream, pedid);
+        serialize_vehicleid(stream, vehicleid);
         serialize_object(stream, healthSnapshot);
         serialize_object(stream, weaponSnapshot);
         serialize_int(stream, seatid, -1, 7);  // TODO test properly TODO(v0.3.1-alpha): limits
@@ -316,7 +296,7 @@ class PedShotSync : public Packet
     DEFINE_PACKET_TYPE(PedShotSync, ePacketType::PED_SHOT_SYNC, ePacketChannel::EVENT);
 
 public:
-    int pedid{};
+    pedid_t pedid{};
     eWeaponType weaponType = WEAPON_UNARMED;
     WorldPositionCompressed origin{};
     WorldPositionCompressed effect{};
@@ -326,7 +306,7 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, pedid, 0, Config::MAX_SERVER_PEDS - 1);
+        serialize_pedid(stream, pedid);
         serialize_int(stream, (int&)weaponType, WEAPON_UNARMED, WEAPON_FLARE);
         serialize_object(stream, origin);
         serialize_object(stream, effect);
@@ -370,13 +350,13 @@ class PedClaimOnRelease : public Packet
     DEFINE_PACKET_TYPE(PedClaimOnRelease, ePacketType::PED_CLAIM_ON_RELEASE, ePacketChannel::EVENT);
 
 public:
-    int pedid = 0;
+    pedid_t pedid{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, pedid, 0, Config::MAX_SERVER_PEDS - 1);
+        serialize_pedid(stream, pedid);
         return true;
     }
 };
@@ -386,13 +366,13 @@ class PedCancelClaim : public Packet
     DEFINE_PACKET_TYPE(PedCancelClaim, ePacketType::PED_CANCEL_CLAIM, ePacketChannel::EVENT);
 
 public:
-    int pedid = 0;
+    pedid_t pedid{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, pedid, 0, Config::MAX_SERVER_PEDS - 1);
+        serialize_pedid(stream, pedid);
         return true;
     }
 };
@@ -402,13 +382,13 @@ class PedResetAllClaims : public Packet
     DEFINE_PACKET_TYPE(PedResetAllClaims, ePacketType::PED_RESET_ALL_CLAIMS, ePacketChannel::EVENT);
 
 public:
-    int pedid = 0;
+    pedid_t pedid{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, pedid, 0, Config::MAX_SERVER_PEDS - 1);
+        serialize_pedid(stream, pedid);
         return true;
     }
 };
@@ -418,14 +398,14 @@ class PedTakeHost : public Packet
     DEFINE_PACKET_TYPE(PedTakeHost, ePacketType::PED_TAKE_HOST, ePacketChannel::EVENT);
 
 public:
-    int pedid = 0;
+    pedid_t pedid{};
     bool allowReturnToPreviousHost = false;
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, pedid, 0, Config::MAX_SERVER_PEDS - 1);
+        serialize_pedid(stream, pedid);
         serialize_bool(stream, allowReturnToPreviousHost);
         return true;
     }

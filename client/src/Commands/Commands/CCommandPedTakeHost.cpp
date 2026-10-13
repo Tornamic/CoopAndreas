@@ -15,7 +15,7 @@ void CCommandPedTakeHost::Process(CRunningScript* script)
 			if (!networkPed->m_bSyncing)
 			{
 				Packets::Peds::PedTakeHost packet{};
-				packet.pedid = networkPed->m_nPedId;
+				packet.pedid = networkPed->m_pedId;
 				packet.allowReturnToPreviousHost = ScriptParams[1] != 0;
 				GetPacketFactory().Send(packet);
 			}

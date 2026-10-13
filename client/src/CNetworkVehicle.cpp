@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CNetworkVehicle.h"
 
-CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2, unsigned char createdBy)
+CNetworkVehicle::CNetworkVehicle(vehicleid_t vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2, unsigned char createdBy)
 {
     if (auto vehicle = CNetworkVehicleManager::GetVehicle(vehicleid))
     {
@@ -13,9 +13,8 @@ CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float 
         CNetworkVehicleManager::Remove(vehicle);
     }
 
-    m_nVehicleId = vehicleid;
+    m_vehicleId = vehicleid;
     m_bSyncing = false;
-    m_nTempId = 255;
     m_nModelId = modelid;
     m_nCreatedBy = createdBy;
 
@@ -24,7 +23,7 @@ CNetworkVehicle::CNetworkVehicle(int vehicleid, int modelid, CVector pos, float 
 
 }
 
-bool CNetworkVehicle::CreateVehicle(int vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2)
+bool CNetworkVehicle::CreateVehicle(vehicleid_t vehicleid, int modelid, CVector pos, float rotation, unsigned char color1, unsigned char color2)
 {
     unsigned char oldFlags = CStreaming::ms_aInfoForModel[modelid].m_nFlags;
     CStreaming::RequestModel(modelid, GAME_REQUIRED);
@@ -90,7 +89,7 @@ CNetworkVehicle::~CNetworkVehicle()
     if (m_bSyncing)
     {
         Packets::Vehicles::VehicleRemove vehicleRemovePacket{};
-        vehicleRemovePacket.vehicleid = m_nVehicleId;
+        vehicleRemovePacket.vehicleid = m_vehicleId;
         GetPacketFactory().Send(vehicleRemovePacket);
     }
     else
@@ -122,16 +121,16 @@ CNetworkVehicle* CNetworkVehicle::CreateHosted(CVehicle* vehicle)
 
     CNetworkVehicle* networkVehicle = new CNetworkVehicle();
     networkVehicle->m_pVehicle = vehicle;
-    networkVehicle->m_nVehicleId = -1;
+    networkVehicle->m_vehicleId = CNetworkVehicleManager::AllocateVehicleId();
     networkVehicle->m_bSyncing = true;
     networkVehicle->m_nModelId = vehicle->m_nModelIndex;
     networkVehicle->m_nPaintJob = (char)vehicle->GetRemapIndex();
-    networkVehicle->m_nTempId = CNetworkVehicleManager::AddToTempList(networkVehicle);
     networkVehicle->m_nCreatedBy = vehicle->m_nCreatedBy;
 
+    CNetworkVehicleManager::Add(networkVehicle);
+
     Packets::Vehicles::VehicleSpawn vehicleSpawnPacket{};
-    vehicleSpawnPacket.vehicleid = 0;
-    vehicleSpawnPacket.tempid = networkVehicle->m_nTempId;
+    vehicleSpawnPacket.vehicleid = networkVehicle->m_vehicleId;
     vehicleSpawnPacket.modelid = vehicle->m_nModelIndex;
     vehicleSpawnPacket.pos = vehicle->m_matrix->pos;
     vehicleSpawnPacket.rot = vehicle->GetHeading();

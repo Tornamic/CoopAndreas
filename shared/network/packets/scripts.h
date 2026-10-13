@@ -83,7 +83,7 @@ public:
         sync_COMMAND_PRINT_HELP
     };
 
-    int forWhoPlayerId = 0;  // TODO(v0.3.1-alpha): dont send s2c
+    playerid_t forWhoPlayerId{};  // TODO(v0.3.1-alpha): dont send s2c
     eGXTMsgType type = sync_COMMAND_PRINT;
     uint32_t time = 0;
     uint8_t flag = 0;
@@ -93,7 +93,7 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, forWhoPlayerId, 0, Config::MAX_SERVER_PLAYERS - 1);
+        serialize_playerid(stream, forWhoPlayerId);
         serialize_int(stream, (int&)type, sync_COMMAND_PRINT, sync_COMMAND_PRINT_HELP);
         if (type != sync_COMMAND_PRINT_HELP)
         {
@@ -112,14 +112,14 @@ class RemoveMessageGXT : public Packet
     DEFINE_PACKET_TYPE(RemoveMessageGXT, ePacketType::REMOVE_MESSAGE_GXT, ePacketChannel::SCRIPT);
 
 public:
-    int forWhoPlayerId = 0;
+    playerid_t forWhoPlayerId{};
     char gxt[8]{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, forWhoPlayerId, 0, Config::MAX_SERVER_PLAYERS - 1);
+        serialize_playerid(stream, forWhoPlayerId);
 
         serialize_string(stream, gxt, 8);
         gxt[ARRAY_SIZE(gxt) - 1] = '\0';
@@ -151,14 +151,14 @@ class SkipCutscene : public Packet
     DEFINE_PACKET_TYPE(SkipCutscene, ePacketType::SKIP_CUTSCENE, ePacketChannel::SCRIPT);
 
 public:
-    SenderPlayerId playerid{};
+    SenderPlayerId senderPlayerid{};
     int votes = 0;  // temporary unused
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
+        serialize_object(stream, senderPlayerid);
         serialize_int(stream, votes, 0, Config::MAX_SERVER_PLAYERS);
         return true;
     }
@@ -187,7 +187,7 @@ class TeleportPlayerScripted : public Packet
     DEFINE_PACKET_TYPE(TeleportPlayerScripted, ePacketType::TELEPORT_PLAYER_SCRIPTED, ePacketChannel::SCRIPT);
 
 public:
-    int playerid = 0;
+    playerid_t playerid{};
     WorldPositionCompressed pos{};
     RadianAngleCompressed heading{};
 
@@ -195,7 +195,7 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, playerid, 0, Config::MAX_SERVER_PLAYERS - 1);
+        serialize_playerid(stream, playerid);
         serialize_object(stream, pos);
         serialize_object(stream, heading);
         return true;
@@ -207,10 +207,14 @@ class OpCodeSync : public Packet
     DEFINE_PACKET_TYPE(OpCodeSync, ePacketType::OPCODE_SYNC, ePacketChannel::SCRIPT);
 
 public:
-    // this number is the biggest possible serialized opcode in theory, the usual opcode size is ~4-50 bytes
-    // sizeof(OpcodeSyncHeader) + NUM_SYNCED_PARAMS * sizeof(int) + NUM_SYNCED_PARAMS * sizeof(uint8_t) +
-    // NUM_SYNCED_PARAMS * 256
-    static constexpr int MAX_BUFFER_SIZE = 4 + 15 * sizeof(int) + 15 * sizeof(uint8_t) + 15 * 256;
+    // this number is the biggest possible serialized opcode in theory, the usual opcode size is ~4-80 bytes
+    // sizeof(OpcodeSyncHeader)
+    // + NUM_ENTITY_PARAMS * (entity type byte + packed 64-bit entity id)
+    // + (NUM_SYNCED_PARAMS - NUM_ENTITY_PARAMS) * sizeof(int)
+    // + NUM_SYNCED_PARAMS * sizeof(uint8_t) + NUM_SYNCED_PARAMS * 256
+    // (see COpCodeSync.h, only the first 4 parameters can hold an entity)
+    static constexpr int MAX_BUFFER_SIZE = 4 + 4 * (sizeof(uint8_t) + sizeof(uint64_t)) + (15 - 4) * sizeof(int) +
+                                           15 * sizeof(uint8_t) + 15 * 256;
 
     int size = 0;
     uint8_t buffer[MAX_BUFFER_SIZE]{};
@@ -238,7 +242,9 @@ class PerformTaskSequence : public Packet
     DEFINE_PACKET_TYPE(PerformTaskSequence, ePacketType::PERFORM_TASK_SEQUENCE, ePacketChannel::SCRIPT);
 
 public:
-    static constexpr int MAX_BUFFER_SIZE = 9 + 8 * 256;
+    // header: playerid_t (filled by the server) + packed pedid_t + uint8_t task count
+    static constexpr int HEADER_SIZE = ids::PLAYERID_SIZE + ids::ENTITYID_SIZE + sizeof(uint8_t);
+    static constexpr int MAX_BUFFER_SIZE = HEADER_SIZE + 8 * 256;
 
     int size = 0;
     uint8_t buffer[MAX_BUFFER_SIZE]{};
@@ -247,7 +253,7 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, size, 9, MAX_BUFFER_SIZE);
+        serialize_int(stream, size, HEADER_SIZE, MAX_BUFFER_SIZE);
         serialize_bytes(stream, buffer, size);
         return true;
     }

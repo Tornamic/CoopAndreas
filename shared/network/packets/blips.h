@@ -9,7 +9,7 @@ class UpdateEntityBlip : public Packet
     DEFINE_PACKET_TYPE(UpdateEntityBlip, ePacketType::UPDATE_ENTITY_BLIP, ePacketChannel::EVENT);
 
 public:
-    int forWhoPlayerId = 0; // TODO(v0.3.1-alpha): send C2S only
+    playerid_t forWhoPlayerId{}; // TODO(v0.3.1-alpha): send C2S only
     CNetworkEntitySerializer entity{};
     bool isFriendly = false;
     eBlipColour color = BLIP_COLOUR_RED;
@@ -20,7 +20,7 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, forWhoPlayerId, 0, Config::MAX_SERVER_PLAYERS - 1);
+        serialize_playerid(stream, forWhoPlayerId);
         serialize_object(stream, entity);
         serialize_bool(stream, isFriendly);
         serialize_int(stream, (int&)color, BLIP_COLOUR_RED, BLIP_COLOUR_DESTINATION);
@@ -35,14 +35,14 @@ class RemoveEntityBlip : public Packet
     DEFINE_PACKET_TYPE(RemoveEntityBlip, ePacketType::REMOVE_ENTITY_BLIP, ePacketChannel::EVENT);
 
 public:
-    int forWhoPlayerId = 0; // TODO(v0.3.1-alpha): send C2S only
+    playerid_t forWhoPlayerId{}; // TODO(v0.3.1-alpha): send C2S only
     CNetworkEntitySerializer entity{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, forWhoPlayerId, 0, Config::MAX_SERVER_PLAYERS - 1);
+        serialize_playerid(stream, forWhoPlayerId);
         serialize_object(stream, entity);
         return true;
     }
@@ -53,13 +53,13 @@ class ClearEntityBlips : public Packet
     DEFINE_PACKET_TYPE(ClearEntityBlips, ePacketType::CLEAR_ENTITY_BLIPS, ePacketChannel::EVENT);
 
 public:
-    int forWhoPlayerId = 0; // TODO(v0.3.1-alpha): send C2S only
+    playerid_t forWhoPlayerId{}; // TODO(v0.3.1-alpha): send C2S only
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, forWhoPlayerId, 0, Config::MAX_SERVER_PLAYERS - 1);
+        serialize_playerid(stream, forWhoPlayerId);
         return true;
     }
 };
@@ -69,7 +69,7 @@ class UpdateCheckpoint : public Packet
     DEFINE_PACKET_TYPE(UpdateCheckpoint, ePacketType::UPDATE_CHECKPOINT, ePacketChannel::EVENT);
 
 public:
-    int forWhoPlayerId = 0; // TODO(v0.3.1-alpha): send C2S only
+    playerid_t forWhoPlayerId{}; // TODO(v0.3.1-alpha): send C2S only
     WorldPositionCompressed position{};
     WorldPositionCompressed radius{};
 
@@ -77,7 +77,7 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, forWhoPlayerId, 0, Config::MAX_SERVER_PLAYERS - 1);
+        serialize_playerid(stream, forWhoPlayerId);
         serialize_object(stream, position);
         serialize_object(stream, radius);
         return true;
@@ -89,13 +89,13 @@ class RemoveCheckpoint : public Packet
     DEFINE_PACKET_TYPE(RemoveCheckpoint, ePacketType::REMOVE_CHECKPOINT, ePacketChannel::EVENT);
 
 public:
-    int forWhoPlayerId = 0; // TODO(v0.3.1-alpha): send C2S only
+    playerid_t forWhoPlayerId{}; // TODO(v0.3.1-alpha): send C2S only
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, forWhoPlayerId, 0, Config::MAX_SERVER_PLAYERS - 1);
+        serialize_playerid(stream, forWhoPlayerId);
         return true;
     }
 };

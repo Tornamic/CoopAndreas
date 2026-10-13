@@ -72,7 +72,7 @@ void CCommandTeleportPlayersToHostSafely::Process(CRunningScript* script)
 			positions[i] = FindPlayerCoors(0);
 		}
 		Packets::Scripts::TeleportPlayerScripted packet{};
-		packet.playerid = networkPlayers[i]->m_iPlayerId;
+		packet.playerid = networkPlayers[i]->m_playerId;
 		packet.pos = positions[i];
 		packet.heading = FindPlayerPed(0)->m_fCurrentRotation;
 		GetPacketFactory().Send(packet);

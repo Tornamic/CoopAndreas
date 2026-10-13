@@ -57,7 +57,7 @@ bool __fastcall CWeapon__Fire_Hook(CWeapon* This, SKIP_EDX, CPed* owner, CVector
         if (pNetworkPed->m_bSyncing)
         {
             Packets::Peds::PedShotSync packet{};
-            packet.pedid = pNetworkPed->m_nPedId;
+            packet.pedid = pNetworkPed->m_pedId;
             packet.weaponType = This->m_eWeaponType;
             packet.origin = *vecOrigin;
             packet.effect = *vecEffectPosn;

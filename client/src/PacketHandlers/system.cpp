@@ -10,7 +10,7 @@
 PACKET_HANDLER(ePacketType::PLAYER_CONNECTED, Packets::System::PlayerConnected* pPlayerConnected)
 {
     CNetworkPlayer* pNetworkPlayer =
-        new CNetworkPlayer(pPlayerConnected->payload.playerid, CVector(2246.506f, -1259.552f, 23.9531f));
+        new CNetworkPlayer(pPlayerConnected->payload.GetPlayerId(), CVector(2246.506f, -1259.552f, 23.9531f));
     CNetworkPlayerManager::Add(pNetworkPlayer);
 
     strcpy_s(pNetworkPlayer->m_Name, pPlayerConnected->payload.name);
@@ -55,7 +55,7 @@ PACKET_HANDLER(ePacketType::PLAYER_DISCONNECTED, Packets::System::PlayerDisconne
         return;
     }
 
-    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(pPlayerDisconnected->payload.playerid);
+    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(pPlayerDisconnected->payload.GetPlayerId());
     if (player != nullptr)
     {
         CChat::AddMessage("{c7a6ff}[Player] {d6dce8}" + std::string(player->GetName()) + " disconnected");
@@ -66,10 +66,17 @@ PACKET_HANDLER(ePacketType::PLAYER_DISCONNECTED, Packets::System::PlayerDisconne
 
 PACKET_HANDLER(ePacketType::PLAYER_HANDSHAKE, Packets::System::PlayerHandshake* pPlayerHandshake)
 {
-    CNetworkPlayerManager::m_nMyId = pPlayerHandshake->yourid;
+    if (!pPlayerHandshake->yourid.valid())
+        return;
+
+    CNetworkPlayerManager::m_localPlayerId = pPlayerHandshake->yourid;
+
+    CNetworkVehicleManager::ResetIdAllocator();
+    CNetworkPedManager::ResetIdAllocator();
+
     CNetwork::m_bAuthenticated = true;
     CPatch::RevertTemporaryPatches();
-    logger::info("Authenticated, playerid %d", pPlayerHandshake->yourid);
+    logger::info("Authenticated, playerid %s", to_string(pPlayerHandshake->yourid).c_str());
 }
 
 PACKET_HANDLER(ePacketType::RTT_BROADCAST, Packets::System::RTTBroadcast* pRTTBroadcast)
@@ -77,7 +84,7 @@ PACKET_HANDLER(ePacketType::RTT_BROADCAST, Packets::System::RTTBroadcast* pRTTBr
     for (int nRTTIndex = 0; nRTTIndex < pRTTBroadcast->playerCount; nRTTIndex++)
     {
         Packets::System::RTTBroadcast::SPlayerRTT& playerRTT = pRTTBroadcast->rtts[nRTTIndex];
-        if (playerRTT.playerid == CNetworkPlayerManager::m_nMyId)
+        if (playerRTT.playerid == CNetworkPlayerManager::m_localPlayerId)
         {
             continue;
         }
@@ -92,7 +99,7 @@ PACKET_HANDLER(ePacketType::RTT_BROADCAST, Packets::System::RTTBroadcast* pRTTBr
 
 PACKET_HANDLER(ePacketType::PLAYER_ASSIGN_HOST, Packets::System::PlayerAssignHost* pPlayerAssignHost)
 {
-    if (pPlayerAssignHost->playerid == CNetworkPlayerManager::m_nMyId)
+    if (pPlayerAssignHost->playerid == CNetworkPlayerManager::m_localPlayerId)
     {
         CLocalPlayer::m_bIsHost = true;
 
@@ -107,7 +114,7 @@ PACKET_HANDLER(ePacketType::PLAYER_ASSIGN_HOST, Packets::System::PlayerAssignHos
 
     for (auto pNetworkPlayer : CNetworkPlayerManager::m_pPlayers)
     {
-        if (pNetworkPlayer->m_iPlayerId == pPlayerAssignHost->playerid)
+        if (pNetworkPlayer->m_playerId == pPlayerAssignHost->playerid)
         {
             CChat::AddMessage("{c7a6ff}[Player] {d6dce8}" + pNetworkPlayer->GetName() + " is the host now");
             pNetworkPlayer->m_bIsHost = true;
@@ -123,7 +130,7 @@ PACKET_HANDLER(ePacketType::PLAYER_ASSIGN_HOST, Packets::System::PlayerAssignHos
 
 PACKET_HANDLER(ePacketType::PLAYER_CHAT_MESSAGE, Packets::System::ChatMessage* pChatMessage)
 {
-    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(pChatMessage->playerid);
+    CNetworkPlayer* player = CNetworkPlayerManager::GetPlayer(pChatMessage->senderPlayerid);
 
     if (player)
     {

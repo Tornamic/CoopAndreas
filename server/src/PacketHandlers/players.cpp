@@ -6,32 +6,32 @@
 PACKET_HANDLER(
     ePacketType::PLAYER_ONFOOT_UPDATE, Packets::Players::OnFootUpdate* pOnFootUpdate, CNetworkPlayer* pNetworkPlayer)
 {
-    pOnFootUpdate->playerid.value = pNetworkPlayer->m_iPlayerId;
+    pOnFootUpdate->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pOnFootUpdate, pNetworkPlayer);
 }
 
 PACKET_HANDLER(ePacketType::PLAYER_KEY_SYNC, Packets::Players::KeyPressed* pKeyPressed, CNetworkPlayer* pNetworkPlayer)
 {
-    pKeyPressed->playerid = pNetworkPlayer->m_iPlayerId;
+    pKeyPressed->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pKeyPressed, pNetworkPlayer);
 }
 
 PACKET_HANDLER(ePacketType::PLAYER_CAMERA_SYNC, Packets::Players::PlayerCameraSync* pPlayerCameraSync, CNetworkPlayer* pNetworkPlayer)
 {
-    pPlayerCameraSync->playerid = pNetworkPlayer->m_iPlayerId;
+    pPlayerCameraSync->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pPlayerCameraSync, pNetworkPlayer);
 }
 
 PACKET_HANDLER(ePacketType::SET_PLAYER_TASK, Packets::Players::SetPlayerTask* pSetPlayerTask, CNetworkPlayer* pNetworkPlayer)
 {
-    pSetPlayerTask->playerid = pNetworkPlayer->m_iPlayerId;
+    pSetPlayerTask->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pSetPlayerTask, pNetworkPlayer);
 }
 
 PACKET_HANDLER(ePacketType::ENEX_TRANSITION, Packets::Players::EnExTransition* pEnExTransition,
     CNetworkPlayer* pNetworkPlayer)
 {
-    pEnExTransition->playerid = pNetworkPlayer->m_iPlayerId;
+    pEnExTransition->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pEnExTransition, pNetworkPlayer);
 }
 
@@ -39,19 +39,19 @@ PACKET_HANDLER(ePacketType::PLAYER_PLACE_WAYPOINT, Packets::Players::PlayerPlace
 {
     pNetworkPlayer->m_waypointState = *pPlayerPlaceWaypoint;
 
-    pPlayerPlaceWaypoint->playerid = pNetworkPlayer->m_iPlayerId;
+    pPlayerPlaceWaypoint->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pPlayerPlaceWaypoint, pNetworkPlayer);
 }
 
 PACKET_HANDLER(ePacketType::RESPAWN_PLAYER, Packets::Players::RespawnPlayer* pRespawnPlayer, CNetworkPlayer* pNetworkPlayer)
 {
-    pRespawnPlayer->playerid = pNetworkPlayer->m_iPlayerId;
+    pRespawnPlayer->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pRespawnPlayer, pNetworkPlayer);
 }
 
 PACKET_HANDLER(ePacketType::PLAYER_BULLET_SHOT, Packets::Players::PlayerBulletShot* pPlayerBulletShot, CNetworkPlayer* pNetworkPlayer)
 {
-    pPlayerBulletShot->playerid = pNetworkPlayer->m_iPlayerId;
+    pPlayerBulletShot->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pPlayerBulletShot, pNetworkPlayer);
 }
 
@@ -68,7 +68,7 @@ PACKET_HANDLER(ePacketType::PLAYER_STATS, Packets::Players::PlayerStats* pPlayer
     }
 
     pNetworkPlayer->m_ucSyncFlags.bStatsModified = true;
-    pPlayerStats->playerid = pNetworkPlayer->m_iPlayerId;
+    pPlayerStats->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pPlayerStats, pNetworkPlayer);
 }
 
@@ -76,7 +76,7 @@ PACKET_HANDLER(ePacketType::REBUILD_PLAYER, Packets::Players::RebuildPlayer* pRe
 {
     pNetworkPlayer->m_pPedClothesDesc = pRebuildPlayer->clothesDesc;
     pNetworkPlayer->m_ucSyncFlags.bClothesModified = true;
-    pRebuildPlayer->playerid = pNetworkPlayer->m_iPlayerId;
+    pRebuildPlayer->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pRebuildPlayer, pNetworkPlayer);
 }
 

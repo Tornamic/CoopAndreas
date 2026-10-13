@@ -8,8 +8,7 @@ class VehicleSpawn : public Packet
     DEFINE_PACKET_TYPE(VehicleSpawn, ePacketType::VEHICLE_SPAWN, ePacketChannel::EVENT);
 
 public:
-    int vehicleid{};
-    uint8_t tempid{};
+    vehicleid_t vehicleid{};
     uint16_t modelid{};
     WorldPositionCompressed pos{};
     RadianAngleCompressed rot{};
@@ -21,8 +20,7 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);
-        serialize_uint8(stream, tempid);
+        serialize_vehicleid(stream, vehicleid);
         serialize_int(stream, modelid, MODEL_LANDSTAL, MODEL_UTILTR1);
         serialize_object(stream, pos);
         serialize_object(stream, rot);
@@ -37,13 +35,13 @@ class VehicleRemove : public Packet
     DEFINE_PACKET_TYPE(VehicleRemove, ePacketType::VEHICLE_REMOVE, ePacketChannel::EVENT);
 
 public:
-    int vehicleid{};
+    vehicleid_t vehicleid{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);
+        serialize_vehicleid(stream, vehicleid);
         return true;
     }
 };
@@ -53,7 +51,7 @@ class VehicleIdleUpdate : public Packet
     DEFINE_PACKET_TYPE(VehicleIdleUpdate, ePacketType::VEHICLE_IDLE_UPDATE, ePacketChannel::SYNC);
 
 public:
-    int vehicleid{};
+    vehicleid_t vehicleid{};
 
     WorldPositionCompressed pos{};
     NormalizedVector rot{};
@@ -73,7 +71,7 @@ public:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);   
+        serialize_vehicleid(stream, vehicleid);   
 
         serialize_object(stream, pos);
         serialize_object(stream, rot);
@@ -140,31 +138,13 @@ public:
     }
 };
 
-class VehicleConfirm : public Packet
-{
-    DEFINE_PACKET_TYPE(VehicleConfirm, ePacketType::VEHICLE_CONFIRM, ePacketChannel::EVENT);
-
-public:
-    uint8_t tempid = 0;
-    int vehicleid = 0;
-
-private:
-    template <typename Stream>
-    bool Serialize(Stream& stream)
-    {
-        serialize_uint8(stream, tempid);
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);
-        return true;
-    }
-};
-
 class VehicleDriverUpdate : public Packet
 {
     DEFINE_PACKET_TYPE(VehicleDriverUpdate, ePacketType::VEHICLE_DRIVER_UPDATE, ePacketChannel::SYNC);
 
 public:
-    SenderPlayerId playerid{};
-    int vehicleid{};
+    SenderPlayerId senderPlayerid{};
+    vehicleid_t vehicleid{};
     eVehicleType vehicleSubType = VEHICLE_AUTOMOBILE;
 
     WorldPositionCompressed pos{};
@@ -193,8 +173,8 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);
+        serialize_object(stream, senderPlayerid);
+        serialize_vehicleid(stream, vehicleid);
         serialize_object(stream, pos);
         serialize_object(stream, rot);
         serialize_object(stream, roll);
@@ -287,8 +267,8 @@ class VehicleEnter : public Packet
     DEFINE_PACKET_TYPE(VehicleEnter, ePacketType::VEHICLE_ENTER, ePacketChannel::EVENT);
 
 public:
-    SenderPlayerId playerid{};
-    int vehicleid{};
+    SenderPlayerId senderPlayerid{};
+    vehicleid_t vehicleid{};
     int8_t seatid = 0;  // 3bits
     bool bForce = false;
     bool bPassenger = false;
@@ -297,8 +277,8 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);
+        serialize_object(stream, senderPlayerid);
+        serialize_vehicleid(stream, vehicleid);
         serialize_int(stream, seatid, -1, 7);  // TODO test properly
         serialize_bool(stream, bForce);
         serialize_bool(stream, bPassenger);
@@ -312,14 +292,14 @@ class VehicleExit : public Packet
     DEFINE_PACKET_TYPE(VehicleExit, ePacketType::VEHICLE_EXIT, ePacketChannel::EVENT);
 
 public:
-    SenderPlayerId playerid{};
+    SenderPlayerId senderPlayerid{};
     bool bForce = false;
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
+        serialize_object(stream, senderPlayerid);
         serialize_bool(stream, bForce);
 
         return true;
@@ -331,14 +311,14 @@ class VehicleDamage : public Packet
     DEFINE_PACKET_TYPE(VehicleDamage, ePacketType::VEHICLE_DAMAGE, ePacketChannel::EVENT);
 
 public:
-    int vehicleid{};
+    vehicleid_t vehicleid{};
     CDamageManager damageManager{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);
+        serialize_vehicleid(stream, vehicleid);
         serialize_object(stream, damageManager);
         return true;
     }
@@ -349,14 +329,14 @@ class VehicleComponentAdd : public Packet
     DEFINE_PACKET_TYPE(VehicleComponentAdd, ePacketType::VEHICLE_COMPONENT_ADD, ePacketChannel::EVENT);
 
 public:
-    int vehicleid{};
+    vehicleid_t vehicleid{};
     int componentid{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);
+        serialize_vehicleid(stream, vehicleid);
         serialize_int(stream, componentid, 0, 19999);
 
         return true;
@@ -368,14 +348,14 @@ class VehicleComponentRemove : public Packet
     DEFINE_PACKET_TYPE(VehicleComponentRemove, ePacketType::VEHICLE_COMPONENT_REMOVE, ePacketChannel::EVENT);
 
 public:
-    int vehicleid{};
+    vehicleid_t vehicleid{};
     int componentid{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);
+        serialize_vehicleid(stream, vehicleid);
         serialize_int(stream, componentid, 0, 19999);
 
         return true;
@@ -387,8 +367,8 @@ class VehiclePassengerUpdate : public Packet
     DEFINE_PACKET_TYPE(VehiclePassengerUpdate, ePacketType::VEHICLE_PASSENGER_UPDATE, ePacketChannel::SYNC);
    
 public:
-    SenderPlayerId playerid{};
-    int vehicleid{};
+    SenderPlayerId senderPlayerid{};
+    vehicleid_t vehicleid{};
     Packets::Players::SHealthSnapshot playerHealth{};
     Packets::Players::SWeaponSnapshot playerWeapon{};
     Packets::Players::SKeySnapshot playerKeys{};
@@ -399,8 +379,8 @@ private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_object(stream, playerid);
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);
+        serialize_object(stream, senderPlayerid);
+        serialize_vehicleid(stream, vehicleid);
         serialize_object(stream, playerHealth);
         serialize_object(stream, playerWeapon);
         serialize_object(stream, playerKeys);
@@ -416,13 +396,13 @@ class AssignVehicleSyncer : public Packet
     DEFINE_PACKET_TYPE(AssignVehicleSyncer, ePacketType::ASSIGN_VEHICLE, ePacketChannel::EVENT);
 
 public:
-    int vehicleid{};
+    vehicleid_t vehicleid{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);
+        serialize_vehicleid(stream, vehicleid);
 
         return true;
     }
@@ -433,14 +413,14 @@ class SetVehicleCreatedBy : public Packet
     DEFINE_PACKET_TYPE(SetVehicleCreatedBy, ePacketType::SET_VEHICLE_CREATED_BY, ePacketChannel::EVENT);
 
 public:
-    int vehicleid{};
+    vehicleid_t vehicleid{};
     eVehicleCreatedBy createdBy{};
 
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_int(stream, vehicleid, 0, Config::MAX_SERVER_VEHICLES - 1);
+        serialize_vehicleid(stream, vehicleid);
         serialize_int(stream, (int&)createdBy, RANDOM_VEHICLE, PERMANENT_VEHICLE);
 
         return true;

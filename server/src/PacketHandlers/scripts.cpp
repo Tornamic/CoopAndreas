@@ -59,7 +59,7 @@ PACKET_HANDLER(ePacketType::START_CUTSCENE, Packets::Scripts::StartCutscene* pSt
 
 PACKET_HANDLER(ePacketType::SKIP_CUTSCENE, Packets::Scripts::SkipCutscene* pSkipCutscene, CNetworkPlayer* pNetworkPlayer)
 {
-    pSkipCutscene->playerid = pNetworkPlayer->m_iPlayerId;
+    pSkipCutscene->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pSkipCutscene, pNetworkPlayer);
 }
 #endif
@@ -92,6 +92,6 @@ PACKET_HANDLER(ePacketType::OPCODE_SYNC, Packets::Scripts::OpCodeSync* pOpCodeSy
 
 PACKET_HANDLER(ePacketType::PERFORM_TASK_SEQUENCE, Packets::Scripts::PerformTaskSequence* pPerformTaskSequence, CNetworkPlayer* pNetworkPlayer)
 {
-    *(int*)&pPerformTaskSequence->buffer[0] = pNetworkPlayer->m_iPlayerId;
+    ids::WritePlayerId(&pPerformTaskSequence->buffer[0], pNetworkPlayer->m_playerId);
     GetPacketFactory().SendToAll(*pPerformTaskSequence, pNetworkPlayer);
 }
