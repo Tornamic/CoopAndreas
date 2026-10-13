@@ -46,3 +46,9 @@ extern inline CPacketFactory& GetPacketFactory()
     static CPacketFactory factory;
     return factory;
 }
+
+template <typename PacketT>
+PacketRegistrar<PacketT>::PacketRegistrar()
+{
+    GetPacketFactory().RegisterPacket(new PacketT);
+}

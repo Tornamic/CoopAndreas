@@ -1,5 +1,9 @@
 #pragma once
 
+#include <cstdarg>
+#include <cstdio>
+#include <iostream>
+
 class logger
 {
 private:
