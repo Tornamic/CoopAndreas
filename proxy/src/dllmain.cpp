@@ -32,15 +32,30 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
             hCoopAndreas = LoadLibrary("CoopAndreasSA.dll");
             if (!hCoopAndreas)
             {
-                char msg[256];
-                sprintf(msg,
-                    "Failed to load CoopAndreasSA.dll.\n\n"
-                    "To uninstall CoopAndreas properly:\n"
-                    "1. Delete 'eax.dll'.\n"
-                    "2. Rename 'eax_orig.dll' back to 'eax.dll'.\n\n"
-                    "To play CoopAndreas again:\n"
-                    "Reinstall the mod.\n\nGetLastError() == %u",
-                    GetLastError());
+                DWORD dwError = GetLastError();
+                char msg[512];
+                switch (dwError)
+                {
+                    case ERROR_MOD_NOT_FOUND:
+                        sprintf(msg,
+                            "Failed to load CoopAndreasSA.dll.\n\n"
+                            "GetLastError() == %u\n\n"
+                            "Some of the dependencies are missing.\n\n"
+                            "Installing DirectX End-User Runtimes (June 2010) may fix this error.\n"
+                            "https://www.microsoft.com/en-us/download/details.aspx?id=8109",
+                            dwError);
+                        break;
+                    default:
+                        sprintf(msg,
+                            "Failed to load CoopAndreasSA.dll.\n\n"
+                            "To uninstall CoopAndreas properly:\n"
+                            "1. Delete 'eax.dll'.\n"
+                            "2. Rename 'eax_orig.dll' back to 'eax.dll'.\n\n"
+                            "To play CoopAndreas again:\n"
+                            "Reinstall the mod.\n\nGetLastError() == %u",
+                            dwError);
+                        break;
+                }
 
                 MessageBox(0, msg, "CoopAndreas Loader", MB_OK | MB_ICONERROR);
             }
