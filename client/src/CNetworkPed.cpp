@@ -49,6 +49,10 @@ CNetworkPed::CNetworkPed(pedid_t pedid, int modelId, ePedType pedType, CVector p
         m_pPed = new CCivilianPed(pedType, modelId);
     }
 
+    assert(m_pPed && "could not allocate a slot for a new network ped, ped pool limit reached");
+    
+    m_pPed->RegisterReference((CEntity**)&m_pPed);
+
     m_pPed->m_nCreatedBy = 2;
     m_pPed->m_pIntelligence->SetPedDecisionMakerType(-1);
     m_pPed->m_pIntelligence->SetSeeingRange(30.0);
@@ -71,6 +75,11 @@ CNetworkPed::CNetworkPed(pedid_t pedid, int modelId, ePedType pedType, CVector p
 
 CNetworkPed::~CNetworkPed()
 {
+    if (m_pPed)
+    {
+        m_pPed->CleanUpOldReference((CEntity**)&m_pPed);
+    }
+
     if (m_bSyncing)
     {
         Packets::Peds::PedRemove packet{};
@@ -99,6 +108,7 @@ CNetworkPed::~CNetworkPed()
             delete m_pPed;
         }
     }
+    m_pPed = nullptr;
 }
 
 CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
@@ -108,6 +118,8 @@ CNetworkPed* CNetworkPed::CreateHosted(CPed* ped)
     CNetworkPed* networkPed = new CNetworkPed();
 
     networkPed->m_pPed = ped;
+    ped->RegisterReference((CEntity**)&networkPed->m_pPed);
+
     networkPed->m_pedId = CNetworkPedManager::AllocatePedId();
     networkPed->m_nCreatedBy = ped->m_nCreatedBy;
     networkPed->m_bSyncing = true;

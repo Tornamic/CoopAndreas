@@ -6,10 +6,11 @@
 
 CNetworkPlayer::~CNetworkPlayer()
 {
-    if (m_pPed == nullptr)
-        return;
-
-    this->DestroyPed();
+    if (m_pPed)
+    {
+        m_pPed->CleanUpOldReference((CEntity**)&m_pPed);
+        DestroyPed();
+    }
 }
 
 CNetworkPlayer::CNetworkPlayer(playerid_t id, CVector position)
@@ -31,10 +32,12 @@ void CNetworkPlayer::CreatePed(CVector position)
     unsigned int actorId = 0;
     int playerId = m_nSlot + 2;
 
+    // TODO: get rid of the ugly scm command and call in-game funcs
     plugin::Command<Commands::CREATE_PLAYER>(playerId, position.x, position.y, position.z, &actorId);
     plugin::Command<Commands::GET_PLAYER_CHAR>(playerId, &actorId);
 
     m_pPed = (CPlayerPed*)CPools::GetPed(actorId);
+    m_pPed->RegisterReference((CEntity**)&m_pPed);
 
     m_pPed->SetOrientation(0.0f, 0.0f, 0.0f);
 
@@ -56,20 +59,14 @@ void CNetworkPlayer::DestroyPed()
         plugin::Command<Commands::WARP_CHAR_FROM_CAR_TO_COORD>(CPools::GetPedRef(m_pPed), 0.f, 0.f, 0.f);
     }
 
-    uintptr_t pedPtr = (uintptr_t)m_pPed;
+    m_pPed->CleanUpOldReference((CEntity**)&m_pPed);
+
     if (m_pPed->IsVTableValid())
     {
         CWorld::Remove(m_pPed);
-
-        // destroy the ped
-        __asm
-        {
-			mov ecx, pedPtr
-			mov ebx, [ecx]  // vtable addr
-			push 1  // unused arg
-			call[ebx]  // call destructor
-        }
+        delete m_pPed;
     }
+    m_pPed = nullptr;
 }
 
 void CNetworkPlayer::Respawn()
@@ -251,18 +248,19 @@ void CNetworkPlayer::HandleTask(Packets::Players::SetPlayerTask& packet)
         case eTaskType::TASK_SIMPLE_DUCK:
         {
             m_bRequestedDuckTask = true;
-            //if (packet.toggle)
+            // if (packet.toggle)
             //{
-            //    m_pPed->m_pIntelligence->SetTaskDuckSecondary(0);
+            //     m_pPed->m_pIntelligence->SetTaskDuckSecondary(0);
 
             //    CTaskSimpleFight* pFightingTask = m_pPed->m_pIntelligence->GetTaskFighting();
             //    if (pFightingTask)
             //    {
             //        // abort fighting task (0x6879C2)
-            //        plugin::CallMethodAndReturn<bool, 0x61C5E0, CTaskSimpleFight*, CEntity*, int8_t>(pFightingTask, nullptr, 18);
+            //        plugin::CallMethodAndReturn<bool, 0x61C5E0, CTaskSimpleFight*, CEntity*, int8_t>(pFightingTask,
+            //        nullptr, 18);
             //    }
             //}
-            //else
+            // else
             //{
             //    m_pPed->m_pIntelligence->ClearTaskDuckSecondary();
             //}

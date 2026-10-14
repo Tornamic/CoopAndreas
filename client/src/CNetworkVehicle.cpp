@@ -73,6 +73,8 @@ bool CNetworkVehicle::CreateVehicle(vehicleid_t vehicleid, int modelid, CVector 
     if (!m_pVehicle)
         return false;
 
+    m_pVehicle->RegisterReference((CEntity**)&m_pVehicle);
+
     m_pVehicle->SetPosn(pos);
     m_pVehicle->SetOrientation(0.0f, 0.0f, rotation);
     m_pVehicle->m_nStatus = 4;
@@ -86,6 +88,11 @@ bool CNetworkVehicle::CreateVehicle(vehicleid_t vehicleid, int modelid, CVector 
 
 CNetworkVehicle::~CNetworkVehicle()
 {
+    if (m_pVehicle)
+    {
+        m_pVehicle->CleanUpOldReference((CEntity**)&m_pVehicle);
+    }
+
     if (m_bSyncing)
     {
         Packets::Vehicles::VehicleRemove vehicleRemovePacket{};
@@ -101,10 +108,11 @@ CNetworkVehicle::~CNetworkVehicle()
                 CRadar::ClearBlipForEntity(eBlipType::BLIP_CAR, CPools::GetVehicleRef(m_pVehicle));
             }
             CWorld::Remove(m_pVehicle);
-            CWorld::RemoveReferencesToDeletedObject(m_pVehicle); // ?
+            //CWorld::RemoveReferencesToDeletedObject(m_pVehicle); // ?
             delete m_pVehicle;
         }
     }
+    m_pVehicle = nullptr;
 }
 
 bool CNetworkVehicle::HasDriver()
@@ -115,28 +123,31 @@ bool CNetworkVehicle::HasDriver()
     return m_pVehicle->m_pDriver != nullptr;
 }
 
-CNetworkVehicle* CNetworkVehicle::CreateHosted(CVehicle* vehicle)
+CNetworkVehicle* CNetworkVehicle::CreateHosted(CVehicle* pVehicle)
 {
-    vehicle->m_nTimeTillWeNeedThisCar += 5000;
+    pVehicle->m_nTimeTillWeNeedThisCar += 5000;
 
     CNetworkVehicle* networkVehicle = new CNetworkVehicle();
-    networkVehicle->m_pVehicle = vehicle;
+
+    networkVehicle->m_pVehicle = pVehicle;
+    pVehicle->RegisterReference((CEntity**)&networkVehicle->m_pVehicle);
+
     networkVehicle->m_vehicleId = CNetworkVehicleManager::AllocateVehicleId();
     networkVehicle->m_bSyncing = true;
-    networkVehicle->m_nModelId = vehicle->m_nModelIndex;
-    networkVehicle->m_nPaintJob = (char)vehicle->GetRemapIndex();
-    networkVehicle->m_nCreatedBy = vehicle->m_nCreatedBy;
+    networkVehicle->m_nModelId = pVehicle->m_nModelIndex;
+    networkVehicle->m_nPaintJob = (char)pVehicle->GetRemapIndex();
+    networkVehicle->m_nCreatedBy = pVehicle->m_nCreatedBy;
 
     CNetworkVehicleManager::Add(networkVehicle);
 
     Packets::Vehicles::VehicleSpawn vehicleSpawnPacket{};
     vehicleSpawnPacket.vehicleid = networkVehicle->m_vehicleId;
-    vehicleSpawnPacket.modelid = vehicle->m_nModelIndex;
-    vehicleSpawnPacket.pos = vehicle->m_matrix->pos;
-    vehicleSpawnPacket.rot = vehicle->GetHeading();
-    vehicleSpawnPacket.color1 = vehicle->m_nPrimaryColor;
-    vehicleSpawnPacket.color2 = vehicle->m_nSecondaryColor;
-    vehicleSpawnPacket.createdBy = (eVehicleCreatedBy)vehicle->m_nCreatedBy;
+    vehicleSpawnPacket.modelid = pVehicle->m_nModelIndex;
+    vehicleSpawnPacket.pos = pVehicle->m_matrix->pos;
+    vehicleSpawnPacket.rot = pVehicle->GetHeading();
+    vehicleSpawnPacket.color1 = pVehicle->m_nPrimaryColor;
+    vehicleSpawnPacket.color2 = pVehicle->m_nSecondaryColor;
+    vehicleSpawnPacket.createdBy = (eVehicleCreatedBy)pVehicle->m_nCreatedBy;
     GetPacketFactory().Send(vehicleSpawnPacket);
 
     return networkVehicle;
