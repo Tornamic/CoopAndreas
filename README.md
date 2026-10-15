@@ -151,6 +151,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [X] mission markers sync
   
 ### Current Tasks
+If you are looking for something to contribute, better check the Issues tab.
 - [ ] pickups
   - [ ] graffities, horseshoes, snapshots, oysters
   - [ ] static weapons, armours
