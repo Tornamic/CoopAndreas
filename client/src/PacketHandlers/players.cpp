@@ -86,17 +86,7 @@ PACKET_HANDLER(ePacketType::PLAYER_CAMERA_SYNC, Packets::Players::PlayerCameraSy
 
     pNetworkPlayer->m_startedInterpolatingCameraAt = GetTickCount();
     pNetworkPlayer->m_cameraSnapshotOld = pNetworkPlayer->m_cameraSnapshot;
-    if (pPlayerCameraSync->bFullUpdate)
-    {
-        pNetworkPlayer->m_cameraSnapshot = *pPlayerCameraSync;
-    }
-    else
-    {
-        pNetworkPlayer->m_cameraSnapshot.cameraMode = pPlayerCameraSync->cameraMode;
-        pNetworkPlayer->m_cameraSnapshot.orientation = pPlayerCameraSync->orientation;
-        pNetworkPlayer->m_cameraSnapshot.front.x = pPlayerCameraSync->front.x;
-        pNetworkPlayer->m_cameraSnapshot.front.y = pPlayerCameraSync->front.y;
-    }
+    pNetworkPlayer->m_cameraSnapshot = *pPlayerCameraSync;
 }
 
 PACKET_HANDLER(ePacketType::SET_PLAYER_TASK, Packets::Players::SetPlayerTask* pSetPlayerTask)

@@ -234,7 +234,7 @@ void CCarCtrl__GenerateOneRandomCar_Hook()
     }
 
     int savedNumRandomCars = patch::GetInt(0x969094, false);
-    int savedNumLawEnforcerCars = patch::GetInt(0x969098, false);  // TODO: calc cops too
+    int savedNumLawEnforcerCars = patch::GetInt(0x969098, false);  // TODO: calc cops and others too, sync CCarCtrl::Num...OnDuty and the vehicle flags IS_..._ON_DUTY
     int savedNumMissionCars = patch::GetInt(0x96909C, false);
     int savedNumAmbulancesOnDuty = patch::GetInt(0x9690A8, false);
     int savedNumFireTrucksOnDuty = patch::GetInt(0x9690AC, false);

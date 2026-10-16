@@ -227,7 +227,6 @@ class PlayerCameraSync : public Packet
 
 public:
     SenderPlayerId senderPlayerid{};
-    bool bFullUpdate = true;
     uint16_t cameraMode = MODE_NONE;
     float cameraFov = 0.0f;
     NormalizedVector front{};
@@ -243,45 +242,29 @@ public:
 
         serialize_int(stream, cameraMode, MODE_NONE, MODE_AIMWEAPON_ATTACHED);
 
-        serialize_bool(stream, bFullUpdate);
-        if (bFullUpdate)
+        if (Stream::IsWriting)
         {
-            if (Stream::IsWriting)
-            {
-                cameraFov = VCLAMP(cameraFov, 0.0f, 255.0f);
-            }
-            serialize_compressed_float(stream, cameraFov, 0.0f, 255.0f, 1.0f);
-
-            serialize_object(stream, front);
-            serialize_object(stream, source);
-            serialize_object(stream, up);
-
-            if (Stream::IsWriting)
-            {
-                lookPitch = NormalizeRadianAngle(lookPitch);
-            }
-            serialize_compressed_float(stream, lookPitch, -PI, PI, 0.1f);
+            cameraFov = VCLAMP(cameraFov, 0.0f, 255.0f);
         }
+        serialize_compressed_float(stream, cameraFov, 0.0f, 255.0f, 1.0f);
 
-        if (bFullUpdate)
+        serialize_object(stream, front);
+        serialize_object(stream, source);
+        serialize_object(stream, up);
+
+        if (Stream::IsWriting)
         {
-            if (Stream::IsWriting)
-            {
-                // dont do anything, orientation will be calculated based on the front vec on reading
-            }
-            if (Stream::IsReading)
-            {
-                orientation = atan2f(front.x, front.y);
-            }
+            lookPitch = NormalizeRadianAngle(lookPitch);
         }
-        else
+        serialize_compressed_float(stream, lookPitch, -PI, PI, 0.1f);
+
+        if (Stream::IsWriting)
         {
-            serialize_object(stream, orientation);
-            if (Stream::IsReading)
-            {
-                front.x = sinf(orientation.m_angle);
-                front.y = cosf(orientation.m_angle);
-            }
+            // dont do anything, orientation will be calculated based on the front vec on reading
+        }
+        if (Stream::IsReading)
+        {
+            orientation = atan2f(front.x, front.y);
         }
 
         return true;
@@ -424,7 +407,7 @@ public:
         serialize_object(stream, creator);
         serialize_int(stream, (int&)projectileType, WEAPON_UNARMED, WEAPON_FLARE);
         serialize_object(stream, origin);
-        
+
         if (Stream::IsWriting)
         {
             force = std::clamp(force, 0.0f, 1.0f);

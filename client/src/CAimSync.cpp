@@ -157,7 +157,7 @@ void ApplyPacketInterpolated(CNetworkPlayer* pNetworkPlayer, const Packets::Play
 void CAimSync::ApplyNetworkPlayerContext(CNetworkPlayer* player)
 {
     CollectState(&storedCameraState);
-    //ApplyPacketToGame(player->m_cameraSnapshot);
+    // ApplyPacketToGame(player->m_cameraSnapshot);
     ApplyPacketInterpolated(player, player->m_cameraSnapshotOld, player->m_cameraSnapshot);
     if (TheCamera.m_PlayerWeaponMode.m_nMode == MODE_FOLLOWPED/* || TheCamera.m_PlayerWeaponMode.m_nMode ==
      MODE_SNIPER*/)
@@ -251,20 +251,8 @@ void CAimSync::ProcessSyncing()
 
     if (tickCount - lastPlayerCameraSyncTick > nResyncRate)
     {
-        bool requireFullUpdate = false;
-        if (IsWeaponRelatedCamMode(TheCamera.m_aCams[TheCamera.m_nActiveCam].m_nMode))
-        {
-            requireFullUpdate = true;
-        }
-        else if (pPlayerPed->m_pVehicle && pPlayerPed->m_nPedFlags.bInVehicle &&
-                 pPlayerPed->m_pVehicle->m_pDriver == pPlayerPed && pPlayerPed->m_pVehicle->HasTurret())
-        {
-            requireFullUpdate = true;
-        }
-
         Packets::Players::PlayerCameraSync cameraState;
         CollectState(&cameraState);
-        cameraState.bFullUpdate = requireFullUpdate;
 
         if (cameraState != lastSentState)
         {
