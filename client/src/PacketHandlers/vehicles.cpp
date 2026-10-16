@@ -57,6 +57,7 @@ PACKET_HANDLER(ePacketType::VEHICLE_IDLE_UPDATE, Packets::Vehicles::VehicleIdleU
 
     pNetworkVehicle->m_pVehicle->m_nPrimaryColor = pVehicleIdleUpdate->color1;
     pNetworkVehicle->m_pVehicle->m_nSecondaryColor = pVehicleIdleUpdate->color2;
+    pNetworkVehicle->m_pVehicle->m_fDirtLevel = pVehicleIdleUpdate->dirtLevel;
     pNetworkVehicle->m_pVehicle->m_fHealth = pVehicleIdleUpdate->health;
 
     if (pNetworkVehicle->m_pVehicle->GetRemapIndex() != pVehicleIdleUpdate->paintjob)
@@ -70,6 +71,12 @@ PACKET_HANDLER(ePacketType::VEHICLE_IDLE_UPDATE, Packets::Vehicles::VehicleIdleU
     }
 
     pNetworkVehicle->m_pVehicle->m_eDoorLock = pVehicleIdleUpdate->locked;
+
+    pNetworkVehicle->m_pVehicle->m_nVehicleFlags.bEngineOn = pVehicleIdleUpdate->engineState;
+    pNetworkVehicle->m_pVehicle->m_nVehicleFlags.bLightsOn = pVehicleIdleUpdate->lightState;
+    pNetworkVehicle->m_pVehicle->m_nVehicleFlags.bEngineBroken = pVehicleIdleUpdate->engineBroken;
+    pNetworkVehicle->m_pVehicle->m_nVehicleFlags.bSirenOrAlarm = pVehicleIdleUpdate->sirenOrAlarm;
+    pNetworkVehicle->m_pVehicle->m_nAlarmState = pVehicleIdleUpdate->alarmState;
 }
 
 PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDriverUpdate* pVehicleDriverUpdate)
@@ -105,6 +112,8 @@ PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDri
     pVehicle->m_nPrimaryColor = pVehicleDriverUpdate->color1;
     pVehicle->m_nSecondaryColor = pVehicleDriverUpdate->color2;
 
+    pVehicle->m_fDirtLevel = pVehicleDriverUpdate->dirtLevel;
+
     pVehicle->m_fHealth = pVehicleDriverUpdate->health;
 
     if (pVehicle->GetRemapIndex() != pVehicleDriverUpdate->paintjob)
@@ -130,6 +139,13 @@ PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDri
     }
 
     pNetworkVehicle->m_pVehicle->m_eDoorLock = pVehicleDriverUpdate->locked;
+
+    pVehicle->m_nVehicleFlags.bEngineOn = pVehicleDriverUpdate->engineState;
+    pVehicle->m_nVehicleFlags.bLightsOn = pVehicleDriverUpdate->lightState;
+    pVehicle->m_nVehicleFlags.bEngineBroken = pVehicleDriverUpdate->engineBroken;
+    pVehicle->m_nVehicleFlags.bSirenOrAlarm = pVehicleDriverUpdate->sirenOrAlarm;
+    pVehicle->m_nAlarmState = pVehicleDriverUpdate->alarmState;
+
     pNetworkVehicle->m_playerDriverSnapshot = *pVehicleDriverUpdate;
 }
 

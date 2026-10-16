@@ -63,10 +63,18 @@ public:
     uint8_t color2{};
     int8_t paintjob{};
 
+    float dirtLevel{};
+
     float health{};
 
     float planeGearState{};
     eDoorLock locked{};
+
+	uint8_t engineState;
+	uint8_t lightState;
+	uint8_t engineBroken;
+	uint8_t sirenOrAlarm;
+	uint16_t alarmState;
 
     template <typename Stream>
     bool Serialize(Stream& stream)
@@ -106,6 +114,12 @@ public:
 
         if (Stream::IsWriting)
         {
+            dirtLevel = std::clamp(dirtLevel, 0.0f, 15.0f);
+        }
+        serialize_compressed_float(stream, dirtLevel, 0.0f, 15.0f, 1.0f);
+
+        if (Stream::IsWriting)
+        {
             health = std::clamp(health, 0.0f, 1000.0f);
         }
         serialize_compressed_float(stream, health, 0.0f, 1000.0f, 1.0f);
@@ -134,6 +148,12 @@ public:
 
         serialize_int(stream, (int&)locked, DOORLOCK_NOT_USED, DOORLOCK_SKIP_SHUT_DOORS);
 
+        serialize_uint8(stream, engineState);
+        serialize_uint8(stream, lightState);
+        serialize_uint8(stream, engineBroken);
+        serialize_uint8(stream, sirenOrAlarm);
+        serialize_uint16(stream, alarmState);
+
         return true;
     }
 };
@@ -161,6 +181,8 @@ public:
     Packets::Players::SWeaponSnapshot playerWeapon{};
     Packets::Players::SKeySnapshot playerKeys{};
 
+    float dirtLevel{};
+
     float health{};
 
     float bikeLean{};
@@ -168,6 +190,12 @@ public:
 
     float planeGearState{};
     eDoorLock locked{};
+
+	uint8_t engineState;
+	uint8_t lightState;
+	uint8_t engineBroken;
+	uint8_t sirenOrAlarm;
+	uint16_t alarmState;
 
 private:
     template <typename Stream>
@@ -206,6 +234,12 @@ private:
 
         serialize_uint8(stream, color1);
         serialize_uint8(stream, color2);
+
+        if (Stream::IsWriting)
+        {
+            dirtLevel = std::clamp(dirtLevel, 0.0f, 15.0f);
+        }
+        serialize_compressed_float(stream, dirtLevel, 0.0f, 15.0f, 1.0f);
 
         if (Stream::IsWriting)
         {
@@ -257,6 +291,12 @@ private:
         }
 
         serialize_int(stream, (int&)locked, DOORLOCK_NOT_USED, DOORLOCK_SKIP_SHUT_DOORS);
+
+        serialize_uint8(stream, engineState);
+        serialize_uint8(stream, lightState);
+        serialize_uint8(stream, engineBroken);
+        serialize_uint8(stream, sirenOrAlarm);
+        serialize_uint16(stream, alarmState);
 
         return true;
     }
