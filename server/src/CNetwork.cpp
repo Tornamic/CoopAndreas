@@ -23,9 +23,8 @@ bool CNetwork::Init(unsigned short port)
     address.host = ENET_HOST_ANY;  // bind server ip
     address.port = port;           // bind server port
 
-    // TODO: `ConfigManager::GetConfigMaxPlayers`
-    ENetHost* pENetHost =
-        enet_host_create(&address, Config::MAX_SERVER_PLAYERS, (int)ePacketChannel::COUNT, 0, 0);  // create enet host
+    ENetHost* pENetHost = enet_host_create(
+        &address, CConfigManager::GetConfigMaxPlayers(), (int)ePacketChannel::COUNT, 0, 0);  // create enet host
 
     if (pENetHost == nullptr)
     {

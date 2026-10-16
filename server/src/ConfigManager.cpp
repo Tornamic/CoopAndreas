@@ -39,5 +39,14 @@ uint16_t CConfigManager::GetConfigPort()
 
 uint16_t CConfigManager::GetConfigMaxPlayers()
 {
-	return (uint16_t)ms_pReader->GetUnsigned("", "maxplayers", ms_umDefaultConfig.at("maxplayers"));
+	unsigned long maxPlayers = ms_pReader->GetUnsigned("", "maxplayers", ms_umDefaultConfig.at("maxplayers"));
+
+	// packets size their player arrays by MAX_SERVER_PLAYERS, so the config can only lower the limit
+	if (maxPlayers < 1 || maxPlayers > Config::MAX_SERVER_PLAYERS)
+	{
+		printf("[WARNING]: maxplayers must be in range 1-%d, using %d\n", Config::MAX_SERVER_PLAYERS, Config::MAX_SERVER_PLAYERS);
+		return Config::MAX_SERVER_PLAYERS;
+	}
+
+	return (uint16_t)maxPlayers;
 }
