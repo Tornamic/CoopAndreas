@@ -3,6 +3,8 @@
 
 :TWAR7
 script_name 'TWAR7'
+Coop.EnableSyncingThisScript()
+
 gosub @TWAR7_47
 if 
   has_deatharrest_been_executed 
@@ -16,6 +18,7 @@ terminate_this_script
 :TWAR7_47
 $onmission = 1
 Stat.RegisterMissionGiven
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Text.LoadMissionText('SMOKE1')
 if 
   $onmission == 0
@@ -66,6 +69,12 @@ wait 0
 78@ = 0
 81@ = 0
 82@ = 0.0
+200@ = -1 // the Greenwood for the network players
+201@ = 0
+202@ = 0
+203@ = 0
+210@ = -1 // the extra bike #0 for the network players
+211@ = -1 // the extra bike #1 for the network players
 Player.MakeGangDisappear
 World.ClearArea(1, 2072.3, -1695.2, 12.5, 80.0)
 65@ = Object.Create(#LAE_SMOKECUTSCENE, 2055.0, -1695.0, 12.5)
@@ -107,6 +116,7 @@ Player.SetControl($player1, False)
 Camera.SetFadingColor(0, 0, 0)
 wait 0
 Streaming.RequestModel(466)
+Streaming.RequestModel(492)
 Streaming.LoadSpecialCharacter('SMOKE', 1)
 Streaming.LoadSpecialCharacter('SWEET', 2)
 Streaming.LoadAllModelsNow
@@ -134,6 +144,16 @@ Car.CustomPlateForNextCar(466, "_A2TMFK_")
 Car.SetHeading(37@, 359.74)
 Car.ChangeColor(37@, 98, 14)
 Car.SetCanRespray(37@, False)
+
+// a car for the network players, the Glendale is full
+World.ClearArea(1, 2075.0, -1698.5, 12.29, 3.0)
+Car.CustomPlateForNextCar(492, "GROVE4L_")
+200@ = Car.Create(492, 2075.0, -1698.5, 12.29)
+Car.SetHeading(200@, 359.74)
+Car.ChangeColor(200@, 59, 34)
+Car.SetHealth(200@, 1000)
+Streaming.MarkModelAsNoLongerNeeded(492)
+
 Audio.SetRadioChannel(RadioChannel.BounceFM)
 World.ClearArea(1, 2077.0, -1691.1, 12.5, 1.0)
 $big_smoke = Char.Create(25, 290, 2077.0, -1691.1, 12.5)
@@ -160,6 +180,37 @@ Char.SetCoordinates($scplayer, 2072.9, -1690.6, 12.5)
 Char.SetHeading($scplayer, 33.0)
 Char.SetNextDesiredMoveState(MoveState.Walk)
 Task.EnterCarAsDriver($scplayer, 37@, -2)
+
+// the network players get into their Greenwood, the first one drives
+209@ = -1 // the next seat, -1 is the driver
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        201@($temp_int,3i) = 0 // greenwood_blip_removed
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 200@, true, BlipDisplay.MarkerOnly, BlipColor.Blue, 3)
+        Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+        if
+            209@ == -1
+        then
+            Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 2072.9, -1697.6, 12.5)
+            Char.SetHeading($NETWORK_PLAYER[$temp_int], 33.0)
+            Task.EnterCarAsDriver($NETWORK_PLAYER[$temp_int], 200@, -2)
+        else
+            if
+                209@ == 0
+            then
+                Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 2077.1, -1697.6, 12.5)
+            else
+                Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 2072.9, -1700.6, 12.5)
+            end
+            Char.SetHeading($NETWORK_PLAYER[$temp_int], 0.0)
+            Task.EnterCarAsPassenger($NETWORK_PLAYER[$temp_int], 200@, 209@, -2)
+        end
+        209@ += 1
+    end
+end
+
 Game.SwitchRandomTrains(False)
 World.DeleteAllTrains
 Game.EnableAmbientCrime(False)
@@ -170,6 +221,23 @@ skip_cutscene_start_internal @TWAR7_1756
 
 :TWAR7_1306
 wait 0
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if // the Greenwood blip is not needed anymore when the player found a car
+            201@($temp_int,3i) == 0
+        then
+            if or
+                Car.IsDead(200@)
+                Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
+            then
+                201@($temp_int,3i) = 1
+                Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 200@)
+            end
+        end
+    end
+end
 if 
 is_ps2_keyboard_key_pressed 83
 goto_if_false @TWAR7_1332
@@ -221,6 +289,14 @@ Char.SetSenseRange($mc_strap, 80.0)
 Blip.Remove(66@)
 66@ = Blip.AddForCoord(2454.4, -1284.5, 22.7)
 Text.PrintNow('SMK1_10', 7000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2454.4, -1284.5, 22.7, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+        Coop.PrintNowForNetworkPlayer('SMK1_10', 7000, 1, $NETWORK_PLAYER[$temp_int]) // Drive to Freddy's house
+    end
+end
 Player.SetControl($player1, True)
 Camera.DoFade(1, 1000)
 85@ = 2
@@ -239,6 +315,21 @@ if
 goto_if_false @TWAR7_2248
 if 
   Char.IsInCar($sweet, 37@)
+goto_if_false @TWAR7_2248
+208@ = 1 // all the network players got into a car
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            not Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
+        then
+            208@ = 0
+        end
+    end
+end
+if 
+  208@ == 1
 goto_if_false @TWAR7_2248
 69@ = 0
 
@@ -278,6 +369,32 @@ Char.WarpIntoCarAsPassenger($big_smoke, 37@, 0)
 Char.ClearTasksImmediately($sweet)
 Char.WarpIntoCarAsPassenger($sweet, 37@, 2)
 
+// skipped, put the network players into their Greenwood, the same seats as above
+209@ = -1
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            not Car.IsDead(200@)
+        then
+            if
+                not Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
+            then
+                Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+                if
+                    209@ == -1
+                then
+                    Char.WarpIntoCar($NETWORK_PLAYER[$temp_int], 200@)
+                else
+                    Char.WarpIntoCarAsPassenger($NETWORK_PLAYER[$temp_int], 200@, 209@)
+                end
+            end
+        end
+        209@ += 1
+    end
+end
+
 :TWAR7_1914
 if 
   $tw7_trip_skip_flag == 1
@@ -291,6 +408,13 @@ $2705 = 1
 
 :TWAR7_1993
 Text.PrintNow('SMK1_02', 7000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK1_02', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :TWAR7_2009
 if 
@@ -308,6 +432,14 @@ $2705 = 1
 
 :TWAR7_2095
 66@ = Blip.AddForCoord(1532.8, -1672.9, 12.4)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(1532.8, -1672.9, 12.4, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+        Coop.PrintNowForNetworkPlayer('SMK1_02', 7000, 1, $NETWORK_PLAYER[$temp_int]) // Go and pick up OG Loc from the Police Station
+    end
+end
 Char.HideWeaponForScriptedCutscene($scplayer, False)
 Player.MakeGangReappear
 Hud.SwitchWidescreen(False)
@@ -397,6 +529,20 @@ goto_if_false @TWAR7_2624
 if 
   Char.LocateInCar3D($scplayer, 1532.8, -1672.9, 12.4, 4.0, 4.0, 4.0, True)
 goto_if_false @TWAR7_2624
+207@ = 1 // all the network players are at the Police Station
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 1532.8, -1672.9, 12.4, 12.0, 12.0, 4.0)
+        then
+            207@ = 0
+        end
+    end
+end
+if 
+  207@ == 1
+goto_if_false @TWAR7_2624
 Text.ClearHelp
 Player.SetControl($player1, False)
 68@ = 1
@@ -431,6 +577,38 @@ wait 0
 goto @TWAR7_2729
 
 :TWAR7_2753
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
+
+// the cutscene loading takes the players out of their cars, remember the car and the seat
+for $temp_int = 0 to 2
+    215@($temp_int,3i) = -1 // car
+    218@($temp_int,3i) = -1 // seat, -1 is the driver
+    if // separate checks, 'if and' evaluates every condition
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
+        then
+            215@($temp_int,3i) = Char.StoreCarIsInNoSave($NETWORK_PLAYER[$temp_int])
+            for 231@ = 0 to 2
+                230@ = Car.GetCharInPassengerSeat(215@($temp_int,3i), 231@)
+                if
+                    is_int_lvar_equal_to_int_var 230@ == $NETWORK_PLAYER[$temp_int]
+                then
+                    218@($temp_int,3i) = 231@
+                end
+            end
+        end
+    end
+end
+
 Player.MakeSafeForCutscene($player1)
 Streaming.Switch(False)
 World.ClearArea(1, 1532.8, -1672.9, 12.4, 300.0)
@@ -529,6 +707,34 @@ DecisionMakerChar.AddEventResponse(148@, 36, 1022, 0.0, 100.0, 0.0, 0.0, True, T
 Char.SetDecisionMaker($mc_strap, 148@)
 Blip.Remove(66@)
 66@ = Blip.AddForCoord(2454.4, -1284.5, 22.7)
+
+// put the network players back into their cars, parked behind Smoke's car
+232@ = -1665.9
+for $temp_int = 0 to 2
+    if // separate checks, 'if and' evaluates every condition
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            215@($temp_int,3i) <> -1
+        then
+            if
+                not Car.IsDead(215@($temp_int,3i))
+            then
+                Car.SetCoordinates(215@($temp_int,3i), 1532.8, 232@, 12.4)
+                Car.SetHeading(215@($temp_int,3i), 184.0)
+                232@ += 7.0
+                if
+                    218@($temp_int,3i) == -1
+                then
+                    Char.WarpIntoCar($NETWORK_PLAYER[$temp_int], 215@($temp_int,3i))
+                else
+                    Char.WarpIntoCarAsPassenger($NETWORK_PLAYER[$temp_int], 215@($temp_int,3i), 218@($temp_int,3i))
+                end
+            end
+        end
+    end
+end
+
 Camera.SetBehindPlayer
 Camera.RestoreJumpcut
 Player.SetControl($player1, True)
@@ -543,6 +749,14 @@ goto @TWAR7_23165
 :TWAR7_3554
 Camera.DoFade(1, 1000)
 Text.PrintNow('SMK1_10', 7000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2454.4, -1284.5, 22.7, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+        Coop.PrintNowForNetworkPlayer('SMK1_10', 7000, 1, $NETWORK_PLAYER[$temp_int]) // Drive to Freddy's house
+    end
+end
 TIMERB = 0
 85@ = 0
 68@ = 2
@@ -613,6 +827,20 @@ goto_if_false @TWAR7_4048
 if 
   Char.LocateInCar3D($scplayer, 2454.4, -1284.5, 22.7, 4.0, 4.0, 4.0, True)
 goto_if_false @TWAR7_4048
+207@ = 1 // all the network players are at Freddy's house
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2454.4, -1284.5, 22.7, 12.0, 12.0, 4.0)
+        then
+            207@ = 0
+        end
+    end
+end
+if 
+  207@ == 1
+goto_if_false @TWAR7_4048
 if 
   $tw7_trip_skip_flag == 1
 goto_if_false @TWAR7_4027
@@ -631,6 +859,13 @@ if
   68@ == 0
 goto_if_false @TWAR7_4312
 Text.ClearPrints
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
 Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
 83@ = 0
@@ -812,6 +1047,14 @@ Camera.RestoreJumpcut
 Player.SetControl($player1, True)
 Text.ClearPrints
 Text.PrintNow('SMK1_03', 7000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2468.8, -1278.2, 29.1, 1.2, 1.2, 1.2, $NETWORK_PLAYER[$temp_int])
+        Coop.PrintNowForNetworkPlayer('SMK1_03', 7000, 1, $NETWORK_PLAYER[$temp_int]) // Go and ring the doorbell
+    end
+end
 if 
   69@ == 1
 goto_if_false @TWAR7_5651
@@ -847,6 +1090,20 @@ goto_if_false @TWAR7_5756
 if 
   Char.LocateStoppedOnFoot3D($scplayer, 2468.8, -1278.2, 29.1, 1.2, 1.2, 3.0, True)
 goto_if_false @TWAR7_5756
+207@ = 1 // all the network players are near the door
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2468.8, -1278.2, 29.1, 5.0, 5.0, 2.0)
+        then
+            207@ = 0
+        end
+    end
+end
+if 
+  207@ == 1
+goto_if_false @TWAR7_5756
 68@ = 1
 
 :TWAR7_5756
@@ -854,6 +1111,13 @@ if
   68@ == 1
 goto_if_false @TWAR7_6760
 Text.ClearPrints
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
 Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
 Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
@@ -915,6 +1179,33 @@ World.ClearArea(1, 2471.0, -1285.1, 28.3, 30.0)
 36@ = Car.Create(461, 2471.0, -1285.1, 28.3)
 Car.SetHeading(36@, 272.5)
 Car.SetCanBurstTires(36@, False)
+
+// two more bikes for the network players, behind the host's one
+210@ = Car.Create(461, 2472.0, -1288.2, 28.6)
+Car.SetHeading(210@, 272.5)
+Car.ChangeColor(210@, 3, 1)
+Car.SetCanBurstTires(210@, False)
+
+211@ = Car.Create(461, 2477.0, -1285.3, 28.9)
+Car.SetHeading(211@, 272.5)
+Car.ChangeColor(211@, 79, 1)
+Car.SetCanBurstTires(211@, False)
+
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        // give an uzi for the drive-by if the player has no sub-machine gun
+        204@, 205@, 206@ = Char.GetWeaponInSlot($NETWORK_PLAYER[$temp_int], WeaponSlot.SMG)
+        if or
+            204@ == 0
+            205@ <= 0
+        then
+            Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.MicroUzi, 100)
+        end
+    end
+end
+
 World.ClearArea(1, 2488.2, -1279.9, 30.0, 30.0)
 35@ = Car.Create(461, 2488.2, -1279.9, 30.0)
 Car.SetOnlyDamagedByPlayer(35@, True)
@@ -926,6 +1217,15 @@ World.ClearArea(1, 2483.9, -1280.2, 29.4, 30.0)
 34@ = Char.Create(24, 109, 2483.9, -1280.2, 29.4)
 Char.ShutUpForScriptedSpeech(34@, True)
 Char.SetMoney(34@, 500)
+212@ = 100 // Freddy's health, +20% for every network player
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        212@ += 20
+    end
+end
+Char.SetHealth(34@, 212@)
 Char.SetHeading(34@, 261.6)
 Char.GiveWeapon(34@, WeaponType.Tec9, 30000)
 Char.SetSuffersCriticalHits(34@, False)
@@ -1087,6 +1387,28 @@ Task.EnterCarAsDriver(-1, 35@, -1)
 Sequence.Close(145@)
 Char.PerformSequence(34@, 145@)
 Sequence.Clear(145@)
+
+if
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[0])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[0], 2466.1511, -1281.683, 28.7207)
+    Char.SetHeading($NETWORK_PLAYER[0], 180.0)
+end
+
+if
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[1])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[1], 2465.8999, -1283.0609, 28.6119)
+    Char.SetHeading($NETWORK_PLAYER[1], 220.7)
+end
+
+if
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[2])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[2], 2465.5911, -1279.7487, 28.1709)
+    Char.SetHeading($NETWORK_PLAYER[2], 220.7)
+end
+
 83@ = 4
 84@ = 9
 130@ = 10
@@ -1134,6 +1456,42 @@ Task.EnterCarAsDriver(-1, 36@, -2)
 Sequence.Close(145@)
 Char.PerformSequence($scplayer, 145@)
 Sequence.Clear(145@)
+
+// the network players get on their bikes, #0 and #1 on the bike #0, #2 on the bike #1
+209@ = -1 // the next seat on the bike #0, -1 is the driver
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            $temp_int == 2
+        then
+            if
+                not Car.IsDead(211@)
+            then
+                Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+                Char.SetNextDesiredMoveState(MoveState.Run)
+                Task.EnterCarAsDriver($NETWORK_PLAYER[$temp_int], 211@, -2)
+            end
+        else
+            if
+                not Car.IsDead(210@)
+            then
+                Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+                Char.SetNextDesiredMoveState(MoveState.Run)
+                if
+                    209@ == -1
+                then
+                    Task.EnterCarAsDriver($NETWORK_PLAYER[$temp_int], 210@, -2)
+                else
+                    Task.EnterCarAsPassenger($NETWORK_PLAYER[$temp_int], 210@, -1, -2)
+                end
+                209@ += 1
+            end
+        end
+    end
+end
+
 Camera.SetFixedPosition(2460.9, -1283.7, 30.6, 0.0, 0.0, 0.0)
 Camera.PointAtPoint(2472.6, -1284.4, 31.1, SwitchType.JumpCut)
 83@ = 5
@@ -1194,6 +1552,47 @@ goto_if_false @TWAR7_8308
 goto @TWAR7_23165
 
 :TWAR7_8308
+// skipped, put the network players on their bikes, the same seats as above
+209@ = -1
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            not Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
+        then
+            if
+                $temp_int == 2
+            then
+                if
+                    not Car.IsDead(211@)
+                then
+                    Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+                    Char.WarpIntoCar($NETWORK_PLAYER[$temp_int], 211@)
+                end
+            else
+                if
+                    not Car.IsDead(210@)
+                then
+                    Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+                    if
+                        209@ == -1
+                    then
+                        Char.WarpIntoCar($NETWORK_PLAYER[$temp_int], 210@)
+                    else
+                        Char.WarpIntoCarAsPassenger($NETWORK_PLAYER[$temp_int], 210@, 0)
+                    end
+                end
+            end
+        end
+        if
+            $temp_int <> 2
+        then
+            209@ += 1
+        end
+    end
+end
+
 if 
   not Char.IsDead(34@)
 goto_if_false @TWAR7_8372
@@ -1267,6 +1666,18 @@ Blip.SetAsFriendly(66@, False)
 Char.HideWeaponForScriptedCutscene($scplayer, False)
 Game.ShutAllCharsUp(False)
 Hud.SwitchWidescreen(False)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            not Char.IsDead(34@)
+        then
+            Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, false, BlipDisplay.Both, BlipColor.Red, 3)
+        end
+        Coop.PrintNowForNetworkPlayer('SMK1_04', 7000, 1, $NETWORK_PLAYER[$temp_int]) // Catch and kill Freddy
+    end
+end
 Player.MakeGangReappear
 Camera.RestoreJumpcut
 Player.SetControl($player1, True)
@@ -1323,6 +1734,20 @@ goto_if_false @TWAR7_18369
 if 
   not Car.IsDead(35@)
 goto_if_false @TWAR7_18228
+213@ = 0 // a network player is close to Freddy or has hurt him
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if or
+            Char.LocateAnyMeansChar2D($NETWORK_PLAYER[$temp_int], 34@, 30.0, 30.0, False)
+            Char.HasBeenDamagedByChar(34@, $NETWORK_PLAYER[$temp_int])
+            Car.HasBeenDamagedByChar(35@, $NETWORK_PLAYER[$temp_int])
+        then
+            213@ = 1
+        end
+    end
+end
 if 
   67@ == 4
 goto_if_false @TWAR7_9847
@@ -1397,6 +1822,7 @@ if
 goto_if_false @TWAR7_9668
 if or
   Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  213@ == 1
   Char.HasBeenDamagedByChar(34@, $scplayer)
   Car.HasBeenDamagedByChar(35@, $scplayer)
 goto_if_false @TWAR7_9668
@@ -1492,6 +1918,7 @@ if
 goto_if_false @TWAR7_10606
 if or
   Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  213@ == 1
   Char.HasBeenDamagedByChar(34@, $scplayer)
   Car.HasBeenDamagedByChar(35@, $scplayer)
   TIMERA > 4000
@@ -1622,6 +2049,7 @@ if
 goto_if_false @TWAR7_11677
 if or
   Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  213@ == 1
   Char.HasBeenDamagedByChar(34@, $scplayer)
   Car.HasBeenDamagedByChar(35@, $scplayer)
   TIMERA > 4000
@@ -1702,6 +2130,7 @@ if
 goto_if_false @TWAR7_12273
 if or
   Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  213@ == 1
   Char.HasBeenDamagedByChar(34@, $scplayer)
   Car.HasBeenDamagedByChar(35@, $scplayer)
   TIMERA > 4000
@@ -1788,6 +2217,7 @@ if
 goto_if_false @TWAR7_13714
 if or
   Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  213@ == 1
   Char.HasBeenDamagedByChar(34@, $scplayer)
   Car.HasBeenDamagedByChar(35@, $scplayer)
   TIMERA > 4000
@@ -1989,6 +2419,7 @@ if
 goto_if_false @TWAR7_14513
 if or
   Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  213@ == 1
   Char.HasBeenDamagedByChar(34@, $scplayer)
   Car.HasBeenDamagedByChar(35@, $scplayer)
   TIMERA > 4000
@@ -2102,6 +2533,7 @@ if
 goto_if_false @TWAR7_15172
 if or
   Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  213@ == 1
   Char.HasBeenDamagedByChar(34@, $scplayer)
   Car.HasBeenDamagedByChar(35@, $scplayer)
   TIMERA > 4000
@@ -2183,6 +2615,7 @@ if
 goto_if_false @TWAR7_15746
 if or
   Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  213@ == 1
   Char.HasBeenDamagedByChar(34@, $scplayer)
   Car.HasBeenDamagedByChar(35@, $scplayer)
   TIMERA > 4000
@@ -2261,6 +2694,7 @@ if
 goto_if_false @TWAR7_16278
 if or
   Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  213@ == 1
   Char.HasBeenDamagedByChar(34@, $scplayer)
   Car.HasBeenDamagedByChar(35@, $scplayer)
   TIMERA > 4000
@@ -2373,6 +2807,7 @@ if
 goto_if_false @TWAR7_17395
 if or
   Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  213@ == 1
   Char.HasBeenDamagedByChar(34@, $scplayer)
   Car.HasBeenDamagedByChar(35@, $scplayer)
   TIMERA > 4000
@@ -2442,6 +2877,7 @@ if
 goto_if_false @TWAR7_17814
 if or
   Char.LocateAnyMeansChar2D($scplayer, 34@, 30.0, 30.0, False)
+  213@ == 1
   Char.HasBeenDamagedByChar(34@, $scplayer)
   Car.HasBeenDamagedByChar(35@, $scplayer)
 goto_if_false @TWAR7_17814
@@ -2562,6 +2998,13 @@ goto_if_false @TWAR7_18326
 Task.FleeChar(64@, $scplayer, 20.0, -2)
 
 :TWAR7_18326
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
 Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
 TIMERA = 0
@@ -2592,6 +3035,13 @@ goto_if_false @TWAR7_18467
 Task.FleeChar(64@, $scplayer, 20.0, -2)
 
 :TWAR7_18467
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
 Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
 TIMERA = 0
@@ -2691,6 +3141,20 @@ Char.ClearTasksImmediately($mc_strap)
 World.ClearArea(1, 2290.4, -1490.2, 22.3, 1.0)
 Char.SetCoordinates($scplayer, 2290.4, -1490.2, 22.3)
 Char.SetHeading($scplayer, 265.8)
+
+// the network players watch the scene behind the host
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], 265.8)
+    end
+end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
+
 Task.GoStraightToCoord($scplayer, 2295.6, -1490.5, 21.3, MoveState.Walk, -1)
 76@ = Char.GetCurrentWeapon($scplayer)
 Char.SetCurrentWeapon($scplayer, WeaponType.Unarmed)
@@ -2849,6 +3313,7 @@ Streaming.RequestCollision(141@, 142@)
 Streaming.LoadAllModelsNow
 Char.SetCoordinates($scplayer, 141@, 142@, 143@)
 Char.SetHeading($scplayer, 144@)
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Char.SetCurrentWeapon($scplayer, 76@)
 Char.ClearTasksImmediately($mc_strap)
 137@ = Path.GetClosestCharNode(138@, 139@, 141@, 142@, 143@)
@@ -2867,6 +3332,13 @@ World.SetPedDensityMultiplier(1.0)
 Blip.Remove(66@)
 66@ = Blip.AddForCoord(783.2, -1630.3, 12.2)
 Blip.SetAsFriendly(66@, True)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(783.2, -1630.3, 12.2, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Hud.SwitchWidescreen(False)
 Game.ShutAllCharsUp(False)
 Player.MakeGangReappear
@@ -2918,6 +3390,13 @@ if
   85@ == 1
 goto_if_false @TWAR7_21209
 Text.PrintNow('SMK1_13', 8500, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK1_13', 8500, 1, $NETWORK_PLAYER[$temp_int]) // Take OG Loc to the Burger Shot
+    end
+end
 85@ = 2
 
 :TWAR7_21209
@@ -2932,6 +3411,20 @@ if
 goto_if_false @TWAR7_21363
 if 
   Char.LocateAnyMeans3D($mc_strap, 0, 783.2, -1630.3, 12.2, 4.0, 4.0, 4.0)
+goto_if_false @TWAR7_21363
+207@ = 1 // all the network players are at the Burger Shot
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 783.2, -1630.3, 12.2, 12.0, 12.0, 4.0)
+        then
+            207@ = 0
+        end
+    end
+end
+if 
+  207@ == 1
 goto_if_false @TWAR7_21363
 Player.SetControl($player1, False)
 68@ = 0
@@ -2948,6 +3441,13 @@ if
   68@ == 0
 goto_if_false @TWAR7_21629
 Text.ClearPrints
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
 Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
 83@ = 0
@@ -3047,6 +3547,21 @@ goto_if_false @TWAR7_21995
 if 
   not Char.IsOnScreen(34@)
 goto_if_false @TWAR7_21995
+214@ = 0 // a network player is still chasing Freddy
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            Char.LocateAnyMeansChar2D($NETWORK_PLAYER[$temp_int], 34@, 250.0, 250.0, False)
+        then
+            214@ = 1
+        end
+    end
+end
+if 
+  214@ == 0
+goto_if_false @TWAR7_21995
 68@ = 0
 67@ = 20
 
@@ -3074,6 +3589,13 @@ Player.SetControl($player1, False)
 Hud.SwitchWidescreen(True)
 Player.MakeGangDisappear
 Text.PrintNow('SMK1_12', 4000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK1_12', 4000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 if 
   Char.IsInAnyCar($scplayer)
 goto_if_false @TWAR7_22151
@@ -3156,6 +3678,13 @@ if
 goto_if_false @TWAR7_22472
 Text.ClearPrints
 Text.PrintNow('SMK1_12', 4000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK1_12', 4000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @TWAR7_23165
 
 :TWAR7_22472
@@ -3376,6 +3905,29 @@ Char.ShutUpForScriptedSpeech($scplayer, False)
 :TWAR7_23311
 Game.ShutAllCharsUp(False)
 Blip.Remove(66@)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
+if
+    200@ <> -1
+then
+    Car.MarkAsNoLongerNeeded(200@)
+end
+if
+    210@ <> -1
+then
+    Car.MarkAsNoLongerNeeded(210@)
+end
+if
+    211@ <> -1
+then
+    Car.MarkAsNoLongerNeeded(211@)
+end
 Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
 Streaming.MarkModelAsNoLongerNeeded(410)
 Streaming.MarkModelAsNoLongerNeeded(461)
@@ -3383,6 +3935,7 @@ Streaming.MarkModelAsNoLongerNeeded(372)
 Streaming.MarkModelAsNoLongerNeeded(109)
 Streaming.MarkModelAsNoLongerNeeded(110)
 Streaming.MarkModelAsNoLongerNeeded(466)
+Streaming.MarkModelAsNoLongerNeeded(492)
 Streaming.MarkModelAsNoLongerNeeded(352)
 Streaming.RemoveAnimation("CAR_CHAT")
 Streaming.RemoveAnimation("CRIB")
@@ -3437,6 +3990,13 @@ if
 goto_if_false @TWAR7_24324
 Text.ClearPrints
 Text.PrintNow('SMK1_06', 7000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK1_06', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 70@ = 1
 
 :TWAR7_24324
@@ -3445,6 +4005,13 @@ if
 goto_if_false @TWAR7_24365
 Text.ClearPrints
 Text.PrintNow('SMK1_07', 7000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK1_07', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 70@ = 1
 
 :TWAR7_24365
@@ -3453,6 +4020,13 @@ if
 goto_if_false @TWAR7_24406
 Text.ClearPrints
 Text.PrintNow('SMK1_08', 7000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK1_08', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 70@ = 1
 
 :TWAR7_24406
@@ -3479,6 +4053,13 @@ if
 goto_if_false @TWAR7_24544
 Text.ClearPrints
 Text.PrintNow('SMK1_05', 7000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK1_05', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 70@ = 1
 
 :TWAR7_24544
@@ -3490,6 +4071,13 @@ if
 goto_if_false @TWAR7_24603
 Text.ClearPrints
 Text.PrintNow('SMK1_05', 7000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK1_05', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 70@ = 1
 
 :TWAR7_24603
@@ -3504,6 +4092,13 @@ if
 goto_if_false @TWAR7_24680
 Text.ClearPrints
 Text.PrintNow('SMK1_14', 7000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK1_14', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 70@ = 1
 
 :TWAR7_24680
@@ -3664,18 +4259,53 @@ goto_if_false @TWAR7_26085
 if 
   80@ == 0
 goto_if_false @TWAR7_25574
+214@ = 0 // a network player has hurt Freddy
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if or
+            Char.HasBeenDamagedByChar(34@, $NETWORK_PLAYER[$temp_int])
+            Car.HasBeenDamagedByChar(35@, $NETWORK_PLAYER[$temp_int])
+        then
+            214@ = 1
+        end
+    end
+end
 if or
   Char.HasBeenDamagedByChar(34@, $scplayer)
   Car.HasBeenDamagedByChar(35@, $scplayer)
+  214@ == 1
 goto_if_false @TWAR7_25574
-Car.SetHealth(35@, 350)
+212@ = 350 // Freddy's bike health, +20% for every network player
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        212@ += 70
+    end
+end
+Car.SetHealth(35@, 212@)
 80@ = 1
 
 :TWAR7_25574
 133@, 134@, 137@ = Char.GetCoordinates($scplayer)
 135@, 136@, 137@ = Car.GetCoordinates(35@)
 137@ = Math.GetDistanceBetweenCoords2D(133@, 134@, 135@, 136@)
-if 
+for $temp_int = 0 to 2 // Freddy's speed depends on the nearest player
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        133@, 134@, 138@ = Char.GetCoordinates($NETWORK_PLAYER[$temp_int])
+        138@ = Math.GetDistanceBetweenCoords2D(133@, 134@, 135@, 136@)
+        if
+            is_float_lvar_greater_than_float_lvar 137@ > 138@
+        then
+            set_lvar_float_to_lvar_float 137@ = 138@
+        end
+    end
+end
+if
   21.0 > 137@
 goto_if_false @TWAR7_25683
 137@ /= 20.0
@@ -4772,6 +5402,13 @@ if
 goto_if_false @TWAR7_32295
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 Text.PrintNow(86@(84@,13s), 4500, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer(86@(84@,13s), 4500, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 126@ = 2
 
 :TWAR7_32295
@@ -4786,6 +5423,13 @@ if
 goto_if_false @TWAR7_32371
 Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
 Text.PrintNow(86@(84@,13s), 4500, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer(86@(84@,13s), 4500, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 127@ = 2
 
 :TWAR7_32371
