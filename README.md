@@ -243,13 +243,13 @@ If you are looking for something to contribute, better check the Issues tab.
 - [X] Ryder
 - [X] Tagging Up Turf
 - [X] Cleaning The Hood
-- [ ] Drive-Thru
+- [X] Drive-Thru
 - [ ] Nines And AK's
 - [ ] Drive-By
 - [ ] Sweet's Girl
 - [ ] Cesar Vialpando
-- [ ] OG Loc
-- [ ] Running Dog
+- [X] OG Loc
+- [X] Running Dog
 - [ ] Wrong Side Of The Tracks
 - [ ] Just Business
 - [ ] Home Invasion
