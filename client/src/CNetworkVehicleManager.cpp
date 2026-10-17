@@ -94,6 +94,12 @@ void CNetworkVehicleManager::UpdateDriver(CVehicle* pVehicle)
 
 		vehicleDriverUpdate.locked = pVehicle->m_eDoorLock;
 
+		vehicleDriverUpdate.engineState = pVehicle->m_nVehicleFlags.bEngineOn;
+		vehicleDriverUpdate.lightState = pVehicle->m_nVehicleFlags.bLightsOn;
+		vehicleDriverUpdate.engineBroken = pVehicle->m_nVehicleFlags.bEngineBroken;
+		vehicleDriverUpdate.sirenOrAlarm = pVehicle->m_nVehicleFlags.bSirenOrAlarm;
+		vehicleDriverUpdate.alarmState = pVehicle->m_nAlarmState;
+
 		GetPacketFactory().Send(vehicleDriverUpdate);
 	}
 }
@@ -130,6 +136,13 @@ void CNetworkVehicleManager::UpdateIdle()
 			}
 
 			packet.locked = pVehicle->m_eDoorLock;
+
+			packet.engineState = pVehicle->m_nVehicleFlags.bEngineOn;
+			packet.lightState = pVehicle->m_nVehicleFlags.bLightsOn;
+			packet.engineBroken = pVehicle->m_nVehicleFlags.bEngineBroken;
+			packet.sirenOrAlarm = pVehicle->m_nVehicleFlags.bSirenOrAlarm;
+			packet.alarmState = pVehicle->m_nAlarmState;
+
 			GetPacketFactory().Send(packet);
 		}
 	}

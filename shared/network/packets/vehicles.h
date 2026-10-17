@@ -68,6 +68,12 @@ public:
     float planeGearState{};
     eDoorLock locked{};
 
+	uint8_t engineState;
+	uint8_t lightState;
+	uint8_t engineBroken;
+	uint8_t sirenOrAlarm;
+	uint16_t alarmState;
+
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
@@ -134,6 +140,12 @@ public:
 
         serialize_int(stream, (int&)locked, DOORLOCK_NOT_USED, DOORLOCK_SKIP_SHUT_DOORS);
 
+        serialize_uint8(stream, engineState);
+        serialize_uint8(stream, lightState);
+        serialize_uint8(stream, engineBroken);
+        serialize_uint8(stream, sirenOrAlarm);
+        serialize_uint16(stream, alarmState);
+
         return true;
     }
 };
@@ -168,6 +180,12 @@ public:
 
     float planeGearState{};
     eDoorLock locked{};
+
+	uint8_t engineState;
+	uint8_t lightState;
+	uint8_t engineBroken;
+	uint8_t sirenOrAlarm;
+	uint16_t alarmState;
 
 private:
     template <typename Stream>
@@ -257,6 +275,12 @@ private:
         }
 
         serialize_int(stream, (int&)locked, DOORLOCK_NOT_USED, DOORLOCK_SKIP_SHUT_DOORS);
+
+        serialize_uint8(stream, engineState);
+        serialize_uint8(stream, lightState);
+        serialize_uint8(stream, engineBroken);
+        serialize_uint8(stream, sirenOrAlarm);
+        serialize_uint16(stream, alarmState);
 
         return true;
     }
