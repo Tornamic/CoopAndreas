@@ -1,11 +1,10 @@
 //-------------Mission 28---------------
 // Originally: Running Dog
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} This mission is currently unsupported and not recommended to play!")
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} It may cause desyncs, crashes, or other unexpected behavior!")
-
 
 :SMOKE2
 script_name 'SMOKE2'
+Coop.EnableSyncingThisScript()
+
 gosub @SMOKE2_47
 if 
   has_deatharrest_been_executed 
@@ -18,6 +17,7 @@ terminate_this_script
 
 :SMOKE2_47
 Stat.RegisterMissionGiven
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Text.LoadMissionText('SMOKE2')
 $onmission = 1
 wait 0
@@ -122,6 +122,18 @@ $s2_meet_z = 27.41
 158@ = 0
 160@ = 0
 182@ = 0
+210@ = -1 // the Greenwood for the network players
+211@ = 0
+212@ = 0
+213@ = 0
+214@ = 0
+215@ = 0 // the network players got the objective to drive to the meet
+216@ = 0
+217@ = 0
+218@ = 0
+219@ = 0
+220@ = 0.0
+221@ = 0.0
 Camera.SetFadingColor(0, 0, 0)
 Camera.DoFade(0, 2000)
 
@@ -183,6 +195,7 @@ Object.Delete(187@)
 Streaming.LoadSpecialCharacter('SMOKE', 1)
 Streaming.RequestModel(466)
 Streaming.RequestModel(346)
+Streaming.RequestModel(492)
 Streaming.LoadAllModelsNow
 
 :SMOKE2_1266
@@ -190,6 +203,7 @@ if or
   not Streaming.HasSpecialCharacterLoaded(1)
   not Streaming.HasModelLoaded(466)
   not Streaming.HasModelLoaded(346)
+  not Streaming.HasModelLoaded(492)
 goto_if_false @SMOKE2_1302
 wait 0
 goto @SMOKE2_1266
@@ -198,12 +212,71 @@ goto @SMOKE2_1266
 gosub @SMOKE2_5382
 Streaming.LoadScene(2069.9, -1702.73, 12.59)
 World.ClearArea(0, 2069.9, -1702.73, 12.59, 100.0)
+
+// the Glendale has 2 free seats, a car for the network players if there are 3 of them
+214@ = 0
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        214@ += 1
+    end
+end
+if
+    214@ == 3
+then
+    World.ClearArea(1, 2075.0, -1698.5, 12.29, 3.0)
+    Car.CustomPlateForNextCar(492, "GROVE4L_")
+    210@ = Car.Create(492, 2075.0, -1698.5, 12.29)
+    Car.SetHeading(210@, 359.74)
+    Car.ChangeColor(210@, 59, 34)
+    Car.SetHealth(210@, 1000)
+end
+Streaming.MarkModelAsNoLongerNeeded(492)
+
+// point the network players to the cars
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        211@($temp_int,3i) = 0 // car_blips_removed
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, true, BlipDisplay.MarkerOnly, BlipColor.Blue, 3)
+        if
+            210@ <> -1
+        then
+            Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 210@, true, BlipDisplay.MarkerOnly, BlipColor.Blue, 3)
+        end
+    end
+end
+
 World.ClearArea(0, $s2_meet_x, $s2_meet_y, $s2_meet_z, 100.0)
 Path.SwitchRoadsOff(2488.0, -1431.93, 25.41, 2528.0, -1391.93, 29.41)
 Path.SwitchRoadsOff(2252.89, -1286.37, 22.25, 2258.89, -1280.37, 28.25)
 Audio.SetRadioChannel(RadioChannel.BounceFM)
 Char.SetCoordinates($scplayer, 2070.87, -1703.01, 12.55)
 Char.SetHeading($scplayer, 0.0)
+
+if
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[0])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[0], 2072.5933, -1702.9532, 12.5547)
+    Char.SetHeading($NETWORK_PLAYER[0], 0.0)
+end
+
+if
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[1])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[1], 2067.092, -1700.3694, 13.1484)
+    Char.SetHeading($NETWORK_PLAYER[1], 270.0)
+end
+
+if
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[2])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[2], 2067.9412, -1698.1743, 12.5469)
+    Char.SetHeading($NETWORK_PLAYER[2], 0.0)
+end
+
 Camera.SetFadingColor(0, 0, 0)
 wait 500
 Camera.DoFade(1, 1500)
@@ -271,9 +344,65 @@ Char.PerformSequence(-1, 117@)
 Char.PerformSequence(-1, 118@)
 Sequence.Close(114@)
 Text.PrintNow('SMK2_1', 10000, 0)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK2_1', 10000, 0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :SMOKE2_2258
 wait 0
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if // the car blips are not needed anymore when the player found a car
+            211@($temp_int,3i) == 0
+        then
+            if
+                Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
+            then
+                211@($temp_int,3i) = 1
+                Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+            end
+        end
+    end
+end
+if // everyone is in a car, the network players drive to the meet too
+    215@ == 0
+then
+    if
+        162@ == 1
+    then
+        216@ = 1 // all the network players are in a car
+        for $temp_int = 0 to 2
+            if
+                Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+            then
+                if
+                    not Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
+                then
+                    216@ = 0
+                end
+            end
+        end
+        if
+            216@ == 1
+        then
+            215@ = 1
+            for $temp_int = 0 to 2
+                if
+                    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+                then
+                    Coop.UpdateCheckpointForNetworkPlayer($s2_meet_x, $s2_meet_y, $s2_meet_z, 4.0, 4.0, 2.0, $NETWORK_PLAYER[$temp_int])
+                    Coop.PrintNowForNetworkPlayer('SMK2_2', 11000, 0, $NETWORK_PLAYER[$temp_int]) // Drive Big Smoke to the meet
+                end
+            end
+        end
+    end
+end
 if 
 is_ps2_keyboard_key_pressed 83
 goto_if_false @SMOKE2_2284
@@ -327,6 +456,13 @@ if
 goto_if_false @SMOKE2_2613
 Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
 Text.PrintNow('SMK2_7', 4000, 0)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK2_7', 4000, 0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @SMOKE2_11327
 
 :SMOKE2_2613
@@ -334,6 +470,13 @@ if
   Car.IsDead(34@)
 goto_if_false @SMOKE2_2652
 Text.PrintNow('SMK2_12', 5000, 0)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK2_12', 5000, 0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @SMOKE2_11327
 
 :SMOKE2_2652
@@ -404,16 +547,41 @@ Char.ShutUpForScriptedSpeech(35@, False)
 165@ = 1
 
 :SMOKE2_3005
+216@ = 1 // all the network players are at the meet
+if
+    215@ == 0
+then
+    216@ = 0
+end
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, $s2_meet_x, $s2_meet_y, $s2_meet_z, 12.0, 12.0, 4.0)
+        then
+            216@ = 0
+        end
+    end
+end
 if 
   163@ == 1
 goto_if_false @SMOKE2_3206
-if 
+if and
   Char.LocateInCar3D($scplayer, $s2_meet_x, $s2_meet_y, $s2_meet_z, 4.0, 4.0, 2.0, True)
+  216@ == 1
 goto_if_false @SMOKE2_3206
 Player.SetControl($player1, False)
 166@ = 1
 Blip.Remove(184@)
 Blip.Remove(186@)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Path.SwitchRoadsBackToOriginal(2488.0, -1431.93, 25.41, 2528.0, -1391.93, 29.41)
 if 
   not Char.IsDead(35@)
@@ -424,6 +592,18 @@ Char.ShutUpForScriptedSpeech(35@, False)
 gosub @SMOKE2_5582
 Path.SwitchRoadsOff(2164.51, -1287.88, 20.0, 2170.88, -1267.88, 30.0)
 Text.PrintNow('SMK2_17', 10000, 0)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            not Char.IsDead(41@)
+        then
+            Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 41@, false, BlipDisplay.Both, BlipColor.Red, 3)
+        end
+        Coop.PrintNowForNetworkPlayer('SMK2_17', 10000, 0, $NETWORK_PLAYER[$temp_int]) // Chase down the gang member
+    end
+end
 TIMERA = 0
 
 :SMOKE2_3206
@@ -660,6 +840,19 @@ goto @SMOKE2_4624
 Text.PrintNow('SMK2_8', 10000, 0)
 
 :SMOKE2_4624
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
+        then
+            Coop.PrintNowForNetworkPlayer('SMK2_9', 10000, 0, $NETWORK_PLAYER[$temp_int])
+        else
+            Coop.PrintNowForNetworkPlayer('SMK2_8', 10000, 0, $NETWORK_PLAYER[$temp_int])
+        end
+    end
+end
 TIMERA = 0
 
 :SMOKE2_4631
@@ -726,6 +919,13 @@ goto_if_false @SMOKE2_5034
 Task.CarDriveToCoord(43@, 42@, 126@, 127@, 128@, 30.0, DriveMode.Normal, 0, DrivingMode.AvoidCars)
 179@ = 1
 Text.PrintNow('SMK2_10', 7000, 0)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK2_10', 7000, 0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :SMOKE2_5034
 goto @SMOKE2_5048
@@ -738,6 +938,13 @@ if
   Char.IsDead(35@)
 goto_if_false @SMOKE2_5087
 Text.PrintNow('SMK2_7', 4000, 0)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK2_7', 4000, 0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @SMOKE2_11327
 
 :SMOKE2_5087
@@ -746,6 +953,13 @@ if and
   Car.IsDead(34@)
 goto_if_false @SMOKE2_5133
 Text.PrintNow('SMK2_12', 5000, 0)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK2_12', 5000, 0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @SMOKE2_11327
 
 :SMOKE2_5133
@@ -753,10 +967,30 @@ if and
   176@ == 1
   not Char.IsDead(41@)
 goto_if_false @SMOKE2_5210
-if 
+218@ = 0 // a network player is still chasing the gang member
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            Char.LocateAnyMeansChar2D($NETWORK_PLAYER[$temp_int], 41@, 300.0, 300.0, False)
+        then
+            218@ = 1
+        end
+    end
+end
+if and
   not Char.LocateAnyMeansChar2D($scplayer, 41@, 300.0, 300.0, False)
+  218@ == 0
 goto_if_false @SMOKE2_5210
 Text.PrintNow('SMK2_11', 4000, 0)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK2_11', 4000, 0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @SMOKE2_11327
 
 :SMOKE2_5210
@@ -784,6 +1018,13 @@ Char.RemoveElegantly(41@)
 
 :SMOKE2_5352
 Text.PrintNow('SMK2_11', 4000, 0)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMK2_11', 4000, 0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @SMOKE2_11327
 
 :SMOKE2_5375
@@ -853,6 +1094,18 @@ goto_if_false @SMOKE2_5877
 Char.WarpFromCarToCoord($scplayer, 2473.6, -1420.86, 27.88)
 
 :SMOKE2_5877
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            Char.IsInCar($NETWORK_PLAYER[$temp_int], 34@)
+        then
+            Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+        end
+    end
+end
+wait 250
 if 
   not Char.IsDead(35@)
 goto_if_false @SMOKE2_5932
@@ -958,8 +1211,16 @@ goto @SMOKE2_6308
 Streaming.LoadScene(2471.99, -1402.32, 27.82)
 41@ = Char.Create(25, 108, 2471.99, -1402.32, 27.82)
 Char.SetHeading(41@, 90.0)
-Char.SetHealth(41@, 200)
-Char.SetMaxHealth(41@, 200)
+217@ = 200 // the gang member's health, +20% for every network player
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        217@ += 40
+    end
+end
+Char.SetHealth(41@, 217@)
+Char.SetMaxHealth(41@, 217@)
 Char.SetMoney(41@, 500)
 Char.SetOnlyDamagedByPlayer(41@, True)
 Char.GiveWeapon(41@, WeaponType.Pistol, 99999)
@@ -975,6 +1236,27 @@ Char.PerformSequence(41@, 114@)
 :SMOKE2_6484
 Char.SetCoordinates($scplayer, 2473.99, -1402.32, 27.82)
 Char.SetHeading($scplayer, 90.0)
+
+if
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[0])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[0], 2473.99, -1401.32, 27.82)
+    Char.SetHeading($NETWORK_PLAYER[0], 90.0)
+end
+
+if
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[1])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[1], 2472.99, -1402.32, 27.82)
+    Char.SetHeading($NETWORK_PLAYER[1], 90.0)
+end
+
+if
+    Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[2])
+then
+    Char.SetCoordinates($NETWORK_PLAYER[2], 2471.99, -1402.32, 27.82)
+    Char.SetHeading($NETWORK_PLAYER[2], 90.0)
+end
 if 
   not Char.IsDead(35@)
 goto_if_false @SMOKE2_6560
@@ -1001,6 +1283,31 @@ Path.FlushRoute
 Path.ExtendRoute(47@, 69@, 91@)
 Path.ExtendRoute(48@, 70@, 92@)
 Task.FollowPointRoute($scplayer, 6, RouteMode.Once)
+// the network players run too, each one a bit later and on a slightly different path
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        219@ = Math.RandomIntInRange(100, 201)
+        wait 219@
+        if
+            Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        then
+            Path.FlushRoute
+            220@ = Math.RandomFloatInRange(-0.25, 0.25)
+            221@ = Math.RandomFloatInRange(-0.25, 0.25)
+            add_float_lvar_to_float_lvar 220@ += 47@
+            add_float_lvar_to_float_lvar 221@ += 69@
+            Path.ExtendRoute(220@, 221@, 91@)
+            220@ = Math.RandomFloatInRange(-0.5, 0.5)
+            221@ = Math.RandomFloatInRange(-0.5, 0.5)
+            add_float_lvar_to_float_lvar 220@ += 48@
+            add_float_lvar_to_float_lvar 221@ += 70@
+            Path.ExtendRoute(220@, 221@, 92@)
+            Task.FollowPointRoute($NETWORK_PLAYER[$temp_int], 6, RouteMode.Once)
+        end
+    end
+end
 if 
   not Char.IsDead(35@)
 goto_if_false @SMOKE2_6786
@@ -1014,6 +1321,13 @@ Sequence.Clear(121@)
 :SMOKE2_6786
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 Text.PrintNow(130@s, 10000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer(130@s, 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 wait 4000
 Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
 Text.ClearPrints
@@ -1058,6 +1372,13 @@ goto @SMOKE2_6988
 :SMOKE2_7070
 Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
 Text.PrintNow(132@s, 10000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer(132@s, 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :SMOKE2_7084
 if 
@@ -1210,6 +1531,7 @@ goto @SMOKE2_8149
 Char.SetCoordinates($scplayer, 48@, 70@, 23.05)
 
 :SMOKE2_8149
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Char.SetHeading($scplayer, 90.0)
 Path.SwitchRoadsBackToOriginal(2441.38, -1405.59, 15.0, 2460.42, -1368.34, 40.0)
 Path.SwitchPedRoadsBackToOriginal(2441.38, -1405.59, 15.0, 2460.42, -1368.34, 40.0)
@@ -1227,6 +1549,13 @@ Camera.SetBehindPlayer
 Camera.RestoreJumpcut
 Player.SetControl($player1, True)
 Char.ClearTasks($scplayer)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.ClearTasks($NETWORK_PLAYER[$temp_int])
+    end
+end
 return 
 
 :SMOKE2_8283
@@ -1590,6 +1919,13 @@ if
   Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
 goto_if_false @SMOKE2_10749
 Text.PrintNow(130@(158@,9s), 10000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer(130@(158@,9s), 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 157@ = 2
 
@@ -1657,22 +1993,57 @@ switch_start 129@ total_jumps 5 default_jump 1 @SMOKE2_11191 jumps 0 @SMOKE2_110
 
 :SMOKE2_11076
 Text.PrintNow('SMOX_AA', 3000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMOX_AA', 3000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @SMOKE2_11198
 
 :SMOKE2_11099
 Text.PrintNow('SMOX_AB', 3000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMOX_AB', 3000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @SMOKE2_11198
 
 :SMOKE2_11122
 Text.PrintNow('SMOX_AC', 3000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMOX_AC', 3000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @SMOKE2_11198
 
 :SMOKE2_11145
 Text.PrintNow('SMOX_AD', 3000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMOX_AD', 3000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @SMOKE2_11198
 
 :SMOKE2_11168
 Text.PrintNow('SMOX_AE', 3000, 1)
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('SMOX_AE', 3000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @SMOKE2_11198
 
 :SMOKE2_11191
@@ -1728,6 +2099,20 @@ Audio.PlayMissionPassedTune(1)
 return 
 
 :SMOKE2_11407
+for $temp_int = 0 to 2
+    if
+        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
+if
+    210@ <> -1
+then
+    Car.MarkAsNoLongerNeeded(210@)
+end
+Streaming.MarkModelAsNoLongerNeeded(492)
 Streaming.MarkModelAsNoLongerNeeded(108)
 Streaming.MarkModelAsNoLongerNeeded(109)
 Streaming.MarkModelAsNoLongerNeeded(110)

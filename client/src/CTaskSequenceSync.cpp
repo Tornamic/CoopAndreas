@@ -6,9 +6,11 @@
 // TODO: SET_SEQUENCE_TO_REPEAT
 
 SSyncedOpCode m_syncedTasks[] =  // TODO
-    {{COMMAND_TASK_PLAY_ANIM_NON_INTERRUPTABLE, true, eSyncedParamType::PED},
+    {
+        {COMMAND_TASK_PLAY_ANIM_NON_INTERRUPTABLE, true, eSyncedParamType::PED},
         {COMMAND_TASK_GO_STRAIGHT_TO_COORD, true, eSyncedParamType::PED},
-        {COMMAND_TASK_ACHIEVE_HEADING, true, eSyncedParamType::PED}, {COMMAND_TASK_JUMP, true, eSyncedParamType::PED},
+        {COMMAND_TASK_ACHIEVE_HEADING, true, eSyncedParamType::PED},
+        {COMMAND_TASK_JUMP, true, eSyncedParamType::PED},
         {COMMAND_TASK_TIRED, true, eSyncedParamType::PED},
         {COMMAND_TASK_PLAY_ANIM_SECONDARY, true, eSyncedParamType::PED},
         {COMMAND_TASK_CHAR_SLIDE_TO_COORD_AND_PLAY_ANIM, true, eSyncedParamType::PED},
@@ -16,7 +18,8 @@ SSyncedOpCode m_syncedTasks[] =  // TODO
         {COMMAND_TASK_TURN_CHAR_TO_FACE_CHAR, true, eSyncedParamType::PED, eSyncedParamType::PED},
         {COMMAND_TASK_SHOOT_AT_COORD, true, eSyncedParamType::PED},
         {COMMAND_TASK_LOOK_AT_CHAR, true, eSyncedParamType::PED, eSyncedParamType::PED},
-        {COMMAND_CLEAR_CHAR_TASKS, true, eSyncedParamType::PED}, {COMMAND_CLEAR_LOOK_AT, true, eSyncedParamType::PED},
+        {COMMAND_CLEAR_CHAR_TASKS, true, eSyncedParamType::PED},
+        {COMMAND_CLEAR_LOOK_AT, true, eSyncedParamType::PED},
         {COMMAND_TASK_STAND_STILL, true, eSyncedParamType::PED},
         {COMMAND_TASK_LOOK_AT_COORD, true, eSyncedParamType::PED},
         {COMMAND_TASK_LEAVE_CAR, true, eSyncedParamType::PED, eSyncedParamType::VEHICLE},
@@ -24,12 +27,15 @@ SSyncedOpCode m_syncedTasks[] =  // TODO
         {COMMAND_TASK_PLAY_ANIM_WITH_FLAGS, true, eSyncedParamType::PED},
         {COMMAND_TASK_LEAVE_ANY_CAR, true, eSyncedParamType::PED},
         {COMMAND_TASK_LOOK_ABOUT, true, eSyncedParamType::PED},
-        {COMMAND_TASK_WANDER_STANDARD, true, eSyncedParamType::PED}, {COMMAND_TASK_PAUSE, true, eSyncedParamType::PED},
+        {COMMAND_TASK_WANDER_STANDARD, true, eSyncedParamType::PED},
+        {COMMAND_TASK_PAUSE, true, eSyncedParamType::PED},
         {COMMAND_TASK_ENTER_CAR_AS_PASSENGER, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
         {COMMAND_TASK_ENTER_CAR_AS_DRIVER, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
         {COMMAND_TASK_KILL_CHAR_ON_FOOT, true, {eSyncedParamType::PED, eSyncedParamType::PED}},
-        {COMMAND_TASK_DRIVE_BY, true, {eSyncedParamType::PED, eSyncedParamType::PED, eSyncedParamType::VEHICLE}}
-	};
+        {COMMAND_TASK_DRIVE_BY, true, {eSyncedParamType::PED, eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
+        {COMMAND_TASK_CLIMB, true, {eSyncedParamType::PED}},
+        
+};
 
 std::vector<uint8_t> m_serializedSequences[CTaskSequences::NUM_SEQUENCES][CTaskSequences::NUM_TASKS];
 int m_sequenceTaskCount = 0;

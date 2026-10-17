@@ -31,7 +31,7 @@
 //                                                                       //
 ///////////////////////////////////////////////////////////////////////////
 
-
+#include "eScriptCommands.h"
 #include "stdafx.h"
 #include "COpCodeSync.h"
 #include <Commands/CCustomCommandMgr.h>
@@ -40,128 +40,146 @@
 #include <CNetworkAnimQueue.h>
 
 // Keep sorted!
-const SSyncedOpCode syncedOpcodes[] =
-{
-    // Messages 
-    {0x00BA}, // print_big {key} [gxt_key] {time} [int] {style} [TextStyle]
-    {0x00BE}, // clear_prints
-    {0x01E3}, // print_with_number_big {key} [gxt_key] {num} [int] {duration} [int] {style}[TextStyle]
-    {0x0318}, // register_mission_passed {key} [gxt_key]
-    {0x03E5}, // print_help {key} [gxt_key]
-    {0x054C}, // load_mission_text {tableName} [string]
-    {0x0998}, // award_player_mission_respect {value} [int]
-    
+const SSyncedOpCode syncedOpcodes[] = {
+    // Messages
+    {0x00BA},  // print_big {key} [gxt_key] {time} [int] {style} [TextStyle]
+    {0x00BE},  // clear_prints
+    {0x01E3},  // print_with_number_big {key} [gxt_key] {num} [int] {duration} [int] {style}[TextStyle]
+    {0x0318},  // register_mission_passed {key} [gxt_key]
+    {0x03E5},  // print_help {key} [gxt_key]
+    {0x054C},  // load_mission_text {tableName} [string]
+    {0x0998},  // award_player_mission_respect {value} [int]
+
     // Population management
-    {0x01EB}, // set_car_density_multiplier {multiplier} [float]
-    {0x0395}, // clear_area {x} [float] {y} [float] {z} [float] {radius} [float] {clearParticles} [bool]
-    {0x03DE}, // set_ped_density_multiplier {multiplier} [float]
-    {0x09D2}, // enable_ambient_crime {state} [bool]
-    {0x06D0}, // switch_emergency_services {state} [bool]
-    {0x014C}, // switch_car_generator[CarGenerator] {amount} [int]
+    {0x01EB},  // set_car_density_multiplier {multiplier} [float]
+    {0x0395},  // clear_area {x} [float] {y} [float] {z} [float] {radius} [float] {clearParticles} [bool]
+    {0x03DE},  // set_ped_density_multiplier {multiplier} [float]
+    {0x09D2},  // enable_ambient_crime {state} [bool]
+    {0x06D0},  // switch_emergency_services {state} [bool]
+    {0x014C},  // switch_car_generator[CarGenerator] {amount} [int]
 
     // Camera
-    {0x015F}, // set_fixed_camera_position {x} [float] {y} [float] {z} [float] {xRotation} [float] {yRotation} [float] {zRotation} [float]
-    {0x0160}, // point_camera_at_point {x} [float] {y} [float] {z} [float] {switchStyle} [SwitchType]
-    {0x02EB}, // restore_camera_jumpcut
-    {0x0373}, // set_camera_behind_player
-    {0x0920}, // camera_set_vector_track {fromX} [float] {fromY} [float] {fromZ} [float] {toX} [float] {toY} [float] {toZ} [float] {time} [int] {ease} [bool]
-    {0x0925}, // camera_reset_new_scriptables
-    {0x092F}, // camera_persist_track {state} [bool]
-    {0x0930}, // camera_persist_pos {state} [bool]
-    {0x0936}, // camera_set_vector_move {fromX} [float] {fromY} [float] {fromZ} [float] {toX} [float] {toY} [float] {toZ} [float] {time} [int] {ease} [bool]
-    {0x0A0B}, // load_scene_in_direction {x} [float] {y} [float] {z} [float] {heading} [float]
+    {0x015F},  // set_fixed_camera_position {x} [float] {y} [float] {z} [float] {xRotation} [float] {yRotation} [float]
+               // {zRotation} [float]
+    {0x0160},  // point_camera_at_point {x} [float] {y} [float] {z} [float] {switchStyle} [SwitchType]
+    {0x02EB},  // restore_camera_jumpcut
+    {0x0373},  // set_camera_behind_player
+    {0x0920},  // camera_set_vector_track {fromX} [float] {fromY} [float] {fromZ} [float] {toX} [float] {toY} [float]
+               // {toZ} [float] {time} [int] {ease} [bool]
+    {0x0925},  // camera_reset_new_scriptables
+    {0x092F},  // camera_persist_track {state} [bool]
+    {0x0930},  // camera_persist_pos {state} [bool]
+    {0x0936},  // camera_set_vector_move {fromX} [float] {fromY} [float] {fromZ} [float] {toX} [float] {toY} [float]
+               // {toZ} [float] {time} [int] {ease} [bool]
+    {0x0A0B},  // load_scene_in_direction {x} [float] {y} [float] {z} [float] {heading} [float]
     {COMMAND_SET_PLAYER_DRUNKENNESS, true, {eSyncedParamType::PLAYER}},
 
     // Scenes
-    {0x016A}, // do_fade {time} [int] {direction} [Fade]
-    {0x02A3}, // switch_widescreen {state} [bool]
-    {0x02E4}, // load_cutscene {name} [string]
-    {0x02E7}, // start_cutscene
-    {0x02EA}, // clear_cutscene
-    
+    {0x016A},  // do_fade {time} [int] {direction} [Fade]
+    {0x02A3},  // switch_widescreen {state} [bool]
+    {0x02E4},  // load_cutscene {name} [string]
+    {0x02E7},  // start_cutscene
+    {0x02EA},  // clear_cutscene
+
     // World
     {COMMAND_SET_TAG_STATUS_IN_AREA},
 
     // Interiors
-    {0x04BB}, // set_area_visible {areaId} [Interior]
-    //{0x07FB}, // switch_entry_exit {interiorName} [string] {state} [bool]
+    {0x04BB},  // set_area_visible {areaId} [Interior]
+               //{0x07FB}, // switch_entry_exit {interiorName} [string] {state} [bool]
     {COMMAND_ACTIVATE_INTERIOR_PEDS},
-    
+
     // Weapons
-    {0x06AB, true, {eSyncedParamType::PED}}, // hide_char_weapon_for_scripted_cutscene [Char] {state} [bool]
-    {0x07A7, true, {eSyncedParamType::PED}}, // task_jetpack {handle} [Char]
+    {0x06AB, true, {eSyncedParamType::PED}},  // hide_char_weapon_for_scripted_cutscene [Char] {state} [bool]
+    {0x07A7, true, {eSyncedParamType::PED}},  // task_jetpack {handle} [Char]
     {COMMAND_GIVE_WEAPON_TO_CHAR, true, {eSyncedParamType::PED}},
     {COMMAND_SET_CURRENT_CHAR_WEAPON, true, {eSyncedParamType::PED}},
     {COMMAND_REMOVE_WEAPON_FROM_CHAR, true, {eSyncedParamType::PED}},
-    
+
     // Tasks
-    {0x05BA, true, {eSyncedParamType::PED}}, // task_stand_still {handle} [Char] {time} [int]
-    {0x05BF, true, {eSyncedParamType::PED, eSyncedParamType::PED}}, // task_look_at_char {observer} [Char] {target} [Char] {time} [int]
-    {0x05C0, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}}, // task_look_at_vehicle {char} [Char] {vehicle} [Car] {time} [int]
-    {0x05CA, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}}, // task_enter_car_as_passenger {char} [Char] {vehicle} [Car] {time} [int] {seatId} [int]
-    {0x05CB, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}}, // task_enter_car_as_driver {char} [Char] {vehicle} [Car] {time} [int]
-    {0x0603, true, {eSyncedParamType::PED}}, // task_go_to_coord_any_means {char} [Char] {x} [float] {y} [float] {z} [float] {walkSpeed} [int] {vehicle} [Car] // OOPS, 6th parameter is an entity, but its not used anywhere 
-    {0x0634, true, {eSyncedParamType::PED, eSyncedParamType::PED}}, // task_kill_char_on_foot_while_ducking {char} [Char] {target} [Char] {flags} [int] {actionDelay} [int] {actionChance} [int]
-    {0x0673, true, {eSyncedParamType::PED}}, // task_dive_and_get_up {handle} [Char] {directionX} [float] {directionY} [float] {timeOnGround} [int]
-    {0x0713, true, {eSyncedParamType::PED, eSyncedParamType::PED, eSyncedParamType::VEHICLE}}, // task_drive_by {handle} [Char] {targetChar} [Char] {targetVehicle} [Car] {x} [float] {y} [float] {z} [float] {radius} [float] {type} [DriveByType] {rightHandCarSeat} [bool] {fireRate} [int]
-    {0x0792, true, {eSyncedParamType::PED}}, // clear_char_tasks_immediately [Char]
-    {0x0967, true, {eSyncedParamType::PED}}, // start_char_facial_talk [Char] {duration} [int]
-    {0x0968, true, {eSyncedParamType::PED}}, // stop_char_facial_talk [Char]
+    {0x05BA, true, {eSyncedParamType::PED}},  // task_stand_still {handle} [Char] {time} [int]
+    {0x05BF, true,
+        {eSyncedParamType::PED,
+            eSyncedParamType::PED}},  // task_look_at_char {observer} [Char] {target} [Char] {time} [int]
+    {0x05C0, true,
+        {eSyncedParamType::PED,
+            eSyncedParamType::VEHICLE}},  // task_look_at_vehicle {char} [Char] {vehicle} [Car] {time} [int]
+    {0x05CA, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},  // task_enter_car_as_passenger {char} [Char]
+                                                                         // {vehicle} [Car] {time} [int] {seatId} [int]
+    {0x05CB, true,
+        {eSyncedParamType::PED,
+            eSyncedParamType::VEHICLE}},      // task_enter_car_as_driver {char} [Char] {vehicle} [Car] {time} [int]
+    {0x0603, true, {eSyncedParamType::PED}},  // task_go_to_coord_any_means {char} [Char] {x} [float] {y} [float] {z}
+                                              // [float] {walkSpeed} [int] {vehicle} [Car] // OOPS, 6th parameter is an
+                                              // entity, but its not used anywhere
+    {0x0634, true,
+        {eSyncedParamType::PED,
+            eSyncedParamType::PED}},  // task_kill_char_on_foot_while_ducking {char} [Char] {target} [Char] {flags}
+                                      // [int] {actionDelay} [int] {actionChance} [int]
+    {0x0673, true, {eSyncedParamType::PED}},  // task_dive_and_get_up {handle} [Char] {directionX} [float] {directionY}
+                                              // [float] {timeOnGround} [int]
+    {0x0713, true,
+        {eSyncedParamType::PED, eSyncedParamType::PED,
+            eSyncedParamType::VEHICLE}},  // task_drive_by {handle} [Char] {targetChar} [Char] {targetVehicle} [Car] {x}
+                                          // [float] {y} [float] {z} [float] {radius} [float] {type} [DriveByType]
+                                          // {rightHandCarSeat} [bool] {fireRate} [int]
+    {0x0792, true, {eSyncedParamType::PED}},  // clear_char_tasks_immediately [Char]
+    {0x0967, true, {eSyncedParamType::PED}},  // start_char_facial_talk [Char] {duration} [int]
+    {0x0968, true, {eSyncedParamType::PED}},  // stop_char_facial_talk [Char]
     {COMMAND_TASK_PLAY_ANIM_NON_INTERRUPTABLE, true, eSyncedParamType::PED},
     {COMMAND_TASK_GO_STRAIGHT_TO_COORD, true, eSyncedParamType::PED},
-    {COMMAND_TASK_ACHIEVE_HEADING, true, eSyncedParamType::PED},
-    {COMMAND_TASK_JUMP, true, eSyncedParamType::PED},
-    {COMMAND_TASK_TIRED, true, eSyncedParamType::PED},
-    {COMMAND_TASK_PLAY_ANIM_SECONDARY, true, eSyncedParamType::PED},
+    {COMMAND_TASK_ACHIEVE_HEADING, true, eSyncedParamType::PED}, {COMMAND_TASK_JUMP, true, eSyncedParamType::PED},
+    {COMMAND_TASK_TIRED, true, eSyncedParamType::PED}, {COMMAND_TASK_PLAY_ANIM_SECONDARY, true, eSyncedParamType::PED},
     {COMMAND_TASK_CHAR_SLIDE_TO_COORD_AND_PLAY_ANIM, true, eSyncedParamType::PED},
     {COMMAND_TASK_PLAY_ANIM, true, eSyncedParamType::PED},
     {COMMAND_TASK_TURN_CHAR_TO_FACE_CHAR, true, eSyncedParamType::PED, eSyncedParamType::PED},
     {COMMAND_TASK_SHOOT_AT_COORD, true, eSyncedParamType::PED},
     {COMMAND_TASK_LOOK_AT_CHAR, true, eSyncedParamType::PED, eSyncedParamType::PED},
-    {COMMAND_CLEAR_CHAR_TASKS, true, eSyncedParamType::PED},
-    {COMMAND_CLEAR_LOOK_AT, true, eSyncedParamType::PED},
-    {COMMAND_TASK_STAND_STILL, true, eSyncedParamType::PED},
-    {COMMAND_TASK_LOOK_AT_COORD, true, eSyncedParamType::PED},
+    {COMMAND_CLEAR_CHAR_TASKS, true, eSyncedParamType::PED}, {COMMAND_CLEAR_LOOK_AT, true, eSyncedParamType::PED},
+    {COMMAND_TASK_STAND_STILL, true, eSyncedParamType::PED}, {COMMAND_TASK_LOOK_AT_COORD, true, eSyncedParamType::PED},
     {COMMAND_TASK_LEAVE_CAR, true, eSyncedParamType::PED, eSyncedParamType::VEHICLE},
     {COMMAND_TASK_DIE_NAMED_ANIM, true, eSyncedParamType::PED},
     {COMMAND_TASK_PLAY_ANIM_WITH_FLAGS, true, eSyncedParamType::PED},
-    {COMMAND_TASK_LEAVE_ANY_CAR, true, eSyncedParamType::PED},
-    {COMMAND_TASK_LOOK_ABOUT, true, eSyncedParamType::PED},
-    {COMMAND_TASK_WANDER_STANDARD, true, eSyncedParamType::PED},
+    {COMMAND_TASK_LEAVE_ANY_CAR, true, eSyncedParamType::PED}, {COMMAND_TASK_LOOK_ABOUT, true, eSyncedParamType::PED},
+    {COMMAND_TASK_WANDER_STANDARD, true, eSyncedParamType::PED}, 
+    {COMMAND_TASK_CLIMB, true, {eSyncedParamType::PED}},
+    {COMMAND_FLUSH_ROUTE}, 
+    {COMMAND_EXTEND_ROUTE},
+    {COMMAND_TASK_FOLLOW_POINT_ROUTE, true, {eSyncedParamType::PED}},
 
     // Actors
-    {0x00A1, true, {eSyncedParamType::PED}}, // set_char_coordinates [Char] {x} [float] {y} [float] {z} [float]
-    {0x0173, true, {eSyncedParamType::PED}}, // set_char_heading [Char] {heading} [float]
-    {0x0350, true, {eSyncedParamType::PED}}, // set_char_stay_in_same_place [Char] {state} [bool]
-    {0x07A1}, // set_next_desired_move_state {moveState} [MoveState]
-    {0x0245, true, {eSyncedParamType::PED}}, // set_anim_group_for_char[Char] {animGroup} [AnimGroup]
-    {0x0860, true, {eSyncedParamType::PED}}, // {0860:} set_char_area_visible [Char] {interiorId} [int]
+    {0x00A1, true, {eSyncedParamType::PED}},  // set_char_coordinates [Char] {x} [float] {y} [float] {z} [float]
+    {0x0173, true, {eSyncedParamType::PED}},  // set_char_heading [Char] {heading} [float]
+    {0x0350, true, {eSyncedParamType::PED}},  // set_char_stay_in_same_place [Char] {state} [bool]
+    {0x07A1},                                 // set_next_desired_move_state {moveState} [MoveState]
+    {0x0245, true, {eSyncedParamType::PED}},  // set_anim_group_for_char[Char] {animGroup} [AnimGroup]
+    {0x0860, true, {eSyncedParamType::PED}},  // {0860:} set_char_area_visible [Char] {interiorId} [int]
 
     // Vehicles
-    {0x00AB, true, {eSyncedParamType::VEHICLE}}, // set_car_coordinates [Car] {x} [float] {y} [float] {z} [float]
-    {0x0175, true, {eSyncedParamType::VEHICLE}}, // set_car_heading [Car] {heading} [float]
+    {0x00AB, true, {eSyncedParamType::VEHICLE}},  // set_car_coordinates [Car] {x} [float] {y} [float] {z} [float]
+    {0x0175, true, {eSyncedParamType::VEHICLE}},  // set_car_heading [Car] {heading} [float]
     {COMMAND_WARP_CHAR_FROM_CAR_TO_COORD, true, {eSyncedParamType::PED}},
     {COMMAND_WARP_CHAR_INTO_CAR, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
     {COMMAND_WARP_CHAR_INTO_CAR_AS_PASSENGER, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
-    
+
     // Explosions
-    {0x070C, true, {eSyncedParamType::VEHICLE}}, // explode_car_in_cutscene [Car]
-    
+    {0x070C, true, {eSyncedParamType::VEHICLE}},  // explode_car_in_cutscene [Car]
+
     // Audio
-    {0x097A}, // report_mission_audio_event_at_position {x} [float] {y} [float] {z} [float] {soundId} [int]
+    {0x097A},  // report_mission_audio_event_at_position {x} [float] {y} [float] {z} [float] {soundId} [int]
 
     // Animations
-    {0x04ED}, // request_animation {animationFile} [string]
-    {0x04EF}, // remove_animation {animationFile} [string]
-    {0x0605, true, {eSyncedParamType::PED}}, // task_play_anim {handle} [Char] {animationName} [string] {animationFile} [string] {frameDelta} [float] {loop} [bool] {lockX} [bool] {lockY} [bool] {lockF} [bool] {time} [int]
-    
+    {0x04ED},                                 // request_animation {animationFile} [string]
+    {0x04EF},                                 // remove_animation {animationFile} [string]
+    {0x0605, true, {eSyncedParamType::PED}},  // task_play_anim {handle} [Char] {animationName} [string] {animationFile}
+                                              // [string] {frameDelta} [float] {loop} [bool] {lockX} [bool] {lockY}
+                                              // [bool] {lockF} [bool] {time} [int]
+
     // Controls
-    {0x01B4, true, {eSyncedParamType::PLAYER}}, // set_player_control[Player] {state}[bool]
+    {0x01B4, true, {eSyncedParamType::PLAYER}},  // set_player_control[Player] {state}[bool]
     {COMMAND_ADD_SCORE, true, {eSyncedParamType::PLAYER}},
 
-    {COMMAND_REQUEST_MODEL}
-};
-
+    {COMMAND_REQUEST_MODEL}};
 
 static uint8_t textLengthBuffer[NUM_SYNCED_PARAMS];
 static char textParamBuffer[NUM_SYNCED_PARAMS][256];
@@ -175,17 +193,19 @@ static CRunningScript* lastProcessedScript;
 static uint8_t currentStringIdx = 0;
 
 static uint16_t argCount = 0;
-void __fastcall CRunningScript__CollectParameters_Hook_SwitchParametersContext(CRunningScript* script, SKIP_EDX, uint16_t count)
+void __fastcall CRunningScript__CollectParameters_Hook_SwitchParametersContext(
+    CRunningScript* script, SKIP_EDX, uint16_t count)
 {
     for (uint8_t i = argCount; i < count + argCount; i++)
     {
         ScriptParams[i - argCount] = COpCodeSync::scriptParamsBuffer[i].value;
     }
-	argCount += count;
+    argCount += count;
     /*memcpy(ScriptParams, scriptParamsBuffer, sizeof scriptParamsBuffer);*/
 }
 
-void __fastcall CRunningScript__ReadTextLabelFromScript_Hook_SwitchParametersContext(CRunningScript* script, SKIP_EDX, char* ptr, uint8_t len)
+void __fastcall CRunningScript__ReadTextLabelFromScript_Hook_SwitchParametersContext(
+    CRunningScript* script, SKIP_EDX, char* ptr, uint8_t len)
 {
     memset(ptr, 0, len);
     strncpy(ptr, textParamBuffer[currentStringIdx], textLengthBuffer[currentStringIdx]);
@@ -209,9 +229,8 @@ bool COpCodeSync::IsOpcodeSyncable(int opcode, int* opcodeIdx, bool ignoreOpCode
         }
     }
 
-    if (((CLocalPlayer::m_bIsHost && ms_bSyncingEnabled) && bScriptSynced)
-        || ignoreOpCodeSync
-        || CTaskSequenceSync::IsOpCodeTaskSynced((eScriptCommands)opcode))
+    if (((CLocalPlayer::m_bIsHost && ms_bSyncingEnabled) && bScriptSynced) || ignoreOpCodeSync ||
+        CTaskSequenceSync::IsOpCodeTaskSynced((eScriptCommands)opcode))
     {
         for (int i = 0; i < ARRAY_SIZE(syncedOpcodes); ++i)
         {
@@ -246,13 +265,13 @@ static int GetSerializedParamSize(const OpcodeParameter& param, bool isEntityPar
 
     switch (param.entityType)
     {
-    case eSyncedParamType::PLAYER:
-        return sizeof(uint8_t) + ids::PLAYERID_SIZE;
-    case eSyncedParamType::PED:
-    case eSyncedParamType::VEHICLE:
-        return sizeof(uint8_t) + ids::ENTITYID_SIZE;
-    default:
-        return sizeof(uint8_t) + sizeof(int32_t);
+        case eSyncedParamType::PLAYER:
+            return sizeof(uint8_t) + ids::PLAYERID_SIZE;
+        case eSyncedParamType::PED:
+        case eSyncedParamType::VEHICLE:
+            return sizeof(uint8_t) + ids::ENTITYID_SIZE;
+        default:
+            return sizeof(uint8_t) + sizeof(int32_t);
     }
 }
 
@@ -269,23 +288,24 @@ static uint8_t* WriteParam(uint8_t* pCurrent, const OpcodeParameter& param, bool
 
     switch (param.entityType)
     {
-    case eSyncedParamType::PLAYER:
-        ids::WritePlayerId(pCurrent, param.playerid);
-        return pCurrent + ids::PLAYERID_SIZE;
-    case eSyncedParamType::PED:
-        ids::WriteEntityId(pCurrent, param.pedid);
-        return pCurrent + ids::ENTITYID_SIZE;
-    case eSyncedParamType::VEHICLE:
-        ids::WriteEntityId(pCurrent, param.vehicleid);
-        return pCurrent + ids::ENTITYID_SIZE;
-    default:
-        ids::WriteU32(pCurrent, static_cast<uint32_t>(param.value));
-        return pCurrent + sizeof(int32_t);
+        case eSyncedParamType::PLAYER:
+            ids::WritePlayerId(pCurrent, param.playerid);
+            return pCurrent + ids::PLAYERID_SIZE;
+        case eSyncedParamType::PED:
+            ids::WriteEntityId(pCurrent, param.pedid);
+            return pCurrent + ids::ENTITYID_SIZE;
+        case eSyncedParamType::VEHICLE:
+            ids::WriteEntityId(pCurrent, param.vehicleid);
+            return pCurrent + ids::ENTITYID_SIZE;
+        default:
+            ids::WriteU32(pCurrent, static_cast<uint32_t>(param.value));
+            return pCurrent + sizeof(int32_t);
     }
 }
 
 // returns nullptr if the data is malformed
-static const uint8_t* ReadParam(const uint8_t* pCurrent, const uint8_t* pEnd, OpcodeParameter& param, bool isEntityParam)
+static const uint8_t* ReadParam(
+    const uint8_t* pCurrent, const uint8_t* pEnd, OpcodeParameter& param, bool isEntityParam)
 {
     param = OpcodeParameter();
 
@@ -309,32 +329,32 @@ static const uint8_t* ReadParam(const uint8_t* pCurrent, const uint8_t* pEnd, Op
 
     switch (entityType)
     {
-    case eSyncedParamType::PLAYER:
-        if (pEnd - pCurrent < (int)ids::PLAYERID_SIZE)
-            return nullptr;
+        case eSyncedParamType::PLAYER:
+            if (pEnd - pCurrent < (int)ids::PLAYERID_SIZE)
+                return nullptr;
 
-        param.playerid = ids::ReadPlayerId(pCurrent);
-        return pCurrent + ids::PLAYERID_SIZE;
-    case eSyncedParamType::PED:
-        if (pEnd - pCurrent < (int)ids::ENTITYID_SIZE)
-            return nullptr;
+            param.playerid = ids::ReadPlayerId(pCurrent);
+            return pCurrent + ids::PLAYERID_SIZE;
+        case eSyncedParamType::PED:
+            if (pEnd - pCurrent < (int)ids::ENTITYID_SIZE)
+                return nullptr;
 
-        param.pedid = ids::ReadEntityId<pedid_t>(pCurrent);
-        return pCurrent + ids::ENTITYID_SIZE;
-    case eSyncedParamType::VEHICLE:
-        if (pEnd - pCurrent < (int)ids::ENTITYID_SIZE)
-            return nullptr;
+            param.pedid = ids::ReadEntityId<pedid_t>(pCurrent);
+            return pCurrent + ids::ENTITYID_SIZE;
+        case eSyncedParamType::VEHICLE:
+            if (pEnd - pCurrent < (int)ids::ENTITYID_SIZE)
+                return nullptr;
 
-        param.vehicleid = ids::ReadEntityId<vehicleid_t>(pCurrent);
-        return pCurrent + ids::ENTITYID_SIZE;
-    case eSyncedParamType::NONE:
-        if (pEnd - pCurrent < (int)sizeof(int32_t))
-            return nullptr;
+            param.vehicleid = ids::ReadEntityId<vehicleid_t>(pCurrent);
+            return pCurrent + ids::ENTITYID_SIZE;
+        case eSyncedParamType::NONE:
+            if (pEnd - pCurrent < (int)sizeof(int32_t))
+                return nullptr;
 
-        param.value = static_cast<int>(ids::ReadU32(pCurrent));
-        return pCurrent + sizeof(int32_t);
-    default:
-        return nullptr;
+            param.value = static_cast<int>(ids::ReadU32(pCurrent));
+            return pCurrent + sizeof(int32_t);
+        default:
+            return nullptr;
     }
 }
 
@@ -349,89 +369,95 @@ std::vector<uint8_t> COpCodeSync::SerializeOpcode(int idx, int& outSize)
 
         OpcodeParameter& param = scriptParamsBuffer[i];
 
-        //CChat::AddMessage("Parsing complex opcode %04x parameter %d...", lastOpCodeProcessed, i);
+        // CChat::AddMessage("Parsing complex opcode %04x parameter %d...", lastOpCodeProcessed, i);
         switch (syncedOpcodes[idx].m_aParamTypes[i])
         {
-        case eSyncedParamType::PED:
-        {
-            //CChat::AddMessage("Trying to parse a ped handle %d...", param.value);
-            if (auto ped = CPools::GetPed(param.value))
+            case eSyncedParamType::PED:
             {
-                if (ped->m_nPedType > 3) // is a regular ped
+                // CChat::AddMessage("Trying to parse a ped handle %d...", param.value);
+                if (auto ped = CPools::GetPed(param.value))
                 {
-                    auto networkPed = CNetworkPedManager::GetPed(ped);
-                    if (networkPed && networkPed->m_bSyncing)
+                    if (ped->m_nPedType > 3)  // is a regular ped
                     {
-                        param.entityType = eSyncedParamType::PED;
-                        param.pedid = networkPed->m_pedId;
-                        //CChat::AddMessage("Parsed ped id %s...", to_string(networkPed->m_pedId).c_str());
+                        auto networkPed = CNetworkPedManager::GetPed(ped);
+                        if (networkPed && networkPed->m_bSyncing)
+                        {
+                            param.entityType = eSyncedParamType::PED;
+                            param.pedid = networkPed->m_pedId;
+                            // CChat::AddMessage("Parsed ped id %s...", to_string(networkPed->m_pedId).c_str());
+                        }
+                        else
+                            param.SetValue(-1);
                     }
-                    else param.SetValue(-1);
+                    else  // is a player ped
+                    {
+                        if (ped == FindPlayerPed(0))
+                        {
+                            param.entityType = eSyncedParamType::PLAYER;
+                            param.playerid = CNetworkPlayerManager::m_localPlayerId;
+                        }
+                        else if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(ped))
+                        {
+                            param.entityType = eSyncedParamType::PLAYER;
+                            param.playerid = networkPlayer->m_playerId;
+                        }
+                        else
+                            param.SetValue(-1);
+                    }
                 }
-                else // is a player ped
-                {
-                    if (ped == FindPlayerPed(0))
-                    {
-                        param.entityType = eSyncedParamType::PLAYER;
-                        param.playerid = CNetworkPlayerManager::m_localPlayerId;
-                    }
-                    else if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(ped))
-                    {
-                        param.entityType = eSyncedParamType::PLAYER;
-                        param.playerid = networkPlayer->m_playerId;
-                    }
-                    else param.SetValue(-1);
-                }
-            }
-            else param.SetValue(-1);
+                else
+                    param.SetValue(-1);
 
-            break;
-        }
-        case eSyncedParamType::PLAYER:
-        {
-            //CChat::AddMessage("Trying to parse a player...");
-            if (!param.value)
-            {
-                param.entityType = eSyncedParamType::PLAYER;
-                param.playerid = CNetworkPlayerManager::m_localPlayerId;
-                //CChat::AddMessage("Parsed player id %s (me)...", to_string(param.playerid).c_str());
                 break;
             }
-
-            CPlayerPed* player = nullptr;
-            if (param.value > 0 && param.value < Config::MAX_SERVER_PLAYERS + 2)
+            case eSyncedParamType::PLAYER:
             {
-                player = CWorld::Players[param.value].m_pPed;
-            }
-
-            auto networkPlayer = player ? CNetworkPlayerManager::GetPlayer(player) : nullptr;
-            if (networkPlayer)
-            {
-                param.entityType = eSyncedParamType::PLAYER;
-                param.playerid = networkPlayer->m_playerId;
-                //CChat::AddMessage("Parsed player id %s...", to_string(param.playerid).c_str());
-            }
-            else param.SetValue(-1);
-
-            break;
-        }
-        case eSyncedParamType::VEHICLE:
-        {
-            //CChat::AddMessage("Trying to parse a vehicle...");
-            if (auto vehicle = CPools::GetVehicle(param.value))
-            {
-                if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle))
+                // CChat::AddMessage("Trying to parse a player...");
+                if (!param.value)
                 {
-                    param.entityType = eSyncedParamType::VEHICLE;
-                    param.vehicleid = networkVehicle->m_vehicleId;
-                    //CChat::AddMessage("Parsed vehicle id %s...", to_string(param.vehicleid).c_str());
+                    param.entityType = eSyncedParamType::PLAYER;
+                    param.playerid = CNetworkPlayerManager::m_localPlayerId;
+                    // CChat::AddMessage("Parsed player id %s (me)...", to_string(param.playerid).c_str());
+                    break;
                 }
-                else param.SetValue(-1);
-            }
-            else param.SetValue(-1);
 
-            break;
-        }
+                CPlayerPed* player = nullptr;
+                if (param.value > 0 && param.value < Config::MAX_SERVER_PLAYERS + 2)
+                {
+                    player = CWorld::Players[param.value].m_pPed;
+                }
+
+                auto networkPlayer = player ? CNetworkPlayerManager::GetPlayer(player) : nullptr;
+                if (networkPlayer)
+                {
+                    param.entityType = eSyncedParamType::PLAYER;
+                    param.playerid = networkPlayer->m_playerId;
+                    // CChat::AddMessage("Parsed player id %s...", to_string(param.playerid).c_str());
+                }
+                else
+                    param.SetValue(-1);
+
+                break;
+            }
+            case eSyncedParamType::VEHICLE:
+            {
+                // CChat::AddMessage("Trying to parse a vehicle...");
+                if (auto vehicle = CPools::GetVehicle(param.value))
+                {
+                    if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle))
+                    {
+                        param.entityType = eSyncedParamType::VEHICLE;
+                        param.vehicleid = networkVehicle->m_vehicleId;
+                        // CChat::AddMessage("Parsed vehicle id %s...", to_string(param.vehicleid).c_str());
+                    }
+                    else
+                        param.SetValue(-1);
+                }
+                else
+                    param.SetValue(-1);
+
+                break;
+            }
         }
     }
 
@@ -478,7 +504,6 @@ std::vector<uint8_t> COpCodeSync::SerializeOpcode(int idx, int& outSize)
     return buffer;
 }
 
-
 void BuildAndSendOpcode()
 {
     if (!CTaskSequenceSync::OnOpCodeExecuted((eScriptCommands)lastOpCodeProcessed))
@@ -492,15 +517,15 @@ void BuildAndSendOpcode()
 
     switch (lastOpCodeProcessed)
     {
-    case 0xD8:
-    case 0x7FB:
-    case 0x864:
-    case 0x8E7:
-    case 0x98E:
-    case 0x9B4:
-    case 0x9E6:
-        CEntryExitMarkerSync::ms_bUpdateAfterProcessingScripts = true;
-        break;
+        case 0xD8:
+        case 0x7FB:
+        case 0x864:
+        case 0x8E7:
+        case 0x98E:
+        case 0x9B4:
+        case 0x9E6:
+            CEntryExitMarkerSync::ms_bUpdateAfterProcessingScripts = true;
+            break;
     }
 
     int idx = 0;
@@ -521,7 +546,6 @@ void BuildAndSendOpcode()
     scriptParamCount = 0;
     textParamCount = 0;
 }
-
 
 bool IsOpcodeRequiresStrictCheck(uint16_t opcode)
 {
@@ -561,10 +585,12 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
     currentStringIdx = 0;
 
     scriptParamCount = header.intParamCount;
-    if (scriptParamCount > NUM_SYNCED_PARAMS) scriptParamCount = NUM_SYNCED_PARAMS;
+    if (scriptParamCount > NUM_SYNCED_PARAMS)
+        scriptParamCount = NUM_SYNCED_PARAMS;
 
     textParamCount = header.stringParamCount;
-    if (textParamCount > NUM_SYNCED_PARAMS) textParamCount = NUM_SYNCED_PARAMS;
+    if (textParamCount > NUM_SYNCED_PARAMS)
+        textParamCount = NUM_SYNCED_PARAMS;
 
     if (scriptParamCount)
     {
@@ -579,7 +605,7 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
             }
         }
 
-        if(!found)
+        if (!found)
             return;
 
         for (int i = 0; i < scriptParamCount; i++)
@@ -603,159 +629,171 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
 
                 switch (syncedOpcodes[idx].m_aParamTypes[i])
                 {
-                case eSyncedParamType::PED:
-                {
-                    /*if (header.opcode == 0x0605)
-                        CChat::AddMessage("Parsing ped...");*/
-                    if (COpCodeSync::ms_bProcessingTaskSequence && param.entityType == eSyncedParamType::NONE &&
-                        param.value == -1)
-                    {
-                        break;
-                    }
-
-                    if (param.entityType == eSyncedParamType::PED)
+                    case eSyncedParamType::PED:
                     {
                         /*if (header.opcode == 0x0605)
-                            CChat::AddMessage("Trying to parse as a regular ped...");*/
-                        if (auto networkPed = CNetworkPedManager::GetPed(param.pedid))
+                            CChat::AddMessage("Parsing ped...");*/
+                        if (COpCodeSync::ms_bProcessingTaskSequence && param.entityType == eSyncedParamType::NONE &&
+                            param.value == -1)
                         {
-                            /*if (header.opcode == 0x0605)
-                                CChat::AddMessage("Network instance found...");*/
-                            if (auto ped = networkPed->m_pPed)
-                            {
-                                if (!ped->IsVTableValid())
-                                    return;
+                            break;
+                        }
 
-                                param.value = CPools::GetPedRef(ped);
-                                /*if (header.opcode == 0x0605)
-                                    CChat::AddMessage("Parsed ped id %s...", to_string(networkPed->m_pedId).c_str());*/
-                            }
-                            else if (!IsOpcodeRequiresStrictCheck(header.opcode))
-                            {
-                                param.value = -1;
-                            }
-                            else return;
-                        }
-                        else if (!IsOpcodeRequiresStrictCheck(header.opcode))
-                        {
-                            param.value = -1;
-                        }
-                        else return;
-                    }
-                    else
-                    {
-                        if (param.entityType == eSyncedParamType::PLAYER &&
-                            param.playerid == CNetworkPlayerManager::m_localPlayerId)
-                        {
-                            if (auto playerPed = FindPlayerPed(0))
-                            {
-                                param.value = CPools::GetPedRef(playerPed);
-                            }
-                        }
-                        else
+                        if (param.entityType == eSyncedParamType::PED)
                         {
                             /*if (header.opcode == 0x0605)
-                                CChat::AddMessage("Trying to parse as a player ped... %s", to_string(param.playerid).c_str());*/
-                            if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(param.playerid))
+                                CChat::AddMessage("Trying to parse as a regular ped...");*/
+                            if (auto networkPed = CNetworkPedManager::GetPed(param.pedid))
                             {
                                 /*if (header.opcode == 0x0605)
                                     CChat::AddMessage("Network instance found...");*/
-                                if (auto ped = networkPlayer->m_pPed)
+                                if (auto ped = networkPed->m_pPed)
                                 {
                                     if (!ped->IsVTableValid())
                                         return;
 
                                     param.value = CPools::GetPedRef(ped);
                                     /*if (header.opcode == 0x0605)
-                                        CChat::AddMessage("Parsed player id as ped %s...", to_string(networkPlayer->m_playerId).c_str());*/
+                                        CChat::AddMessage("Parsed ped id %s...",
+                                       to_string(networkPed->m_pedId).c_str());*/
                                 }
                                 else if (!IsOpcodeRequiresStrictCheck(header.opcode))
                                 {
                                     param.value = -1;
                                 }
-                                else return;
+                                else
+                                    return;
                             }
                             else if (!IsOpcodeRequiresStrictCheck(header.opcode))
                             {
                                 param.value = -1;
                             }
-                            else return;
+                            else
+                                return;
                         }
-                    }
+                        else
+                        {
+                            if (param.entityType == eSyncedParamType::PLAYER &&
+                                param.playerid == CNetworkPlayerManager::m_localPlayerId)
+                            {
+                                if (auto playerPed = FindPlayerPed(0))
+                                {
+                                    param.value = CPools::GetPedRef(playerPed);
+                                }
+                            }
+                            else
+                            {
+                                /*if (header.opcode == 0x0605)
+                                    CChat::AddMessage("Trying to parse as a player ped... %s",
+                                   to_string(param.playerid).c_str());*/
+                                if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(param.playerid))
+                                {
+                                    /*if (header.opcode == 0x0605)
+                                        CChat::AddMessage("Network instance found...");*/
+                                    if (auto ped = networkPlayer->m_pPed)
+                                    {
+                                        if (!ped->IsVTableValid())
+                                            return;
 
-                    break;
-                }
-                case eSyncedParamType::PLAYER:
-                {
-                    /*if (param.playerid == CNetworkPlayerManager::m_localPlayerId)
-                    {*/
+                                        param.value = CPools::GetPedRef(ped);
+                                        /*if (header.opcode == 0x0605)
+                                            CChat::AddMessage("Parsed player id as ped %s...",
+                                           to_string(networkPlayer->m_playerId).c_str());*/
+                                    }
+                                    else if (!IsOpcodeRequiresStrictCheck(header.opcode))
+                                    {
+                                        param.value = -1;
+                                    }
+                                    else
+                                        return;
+                                }
+                                else if (!IsOpcodeRequiresStrictCheck(header.opcode))
+                                {
+                                    param.value = -1;
+                                }
+                                else
+                                    return;
+                            }
+                        }
+
+                        break;
+                    }
+                    case eSyncedParamType::PLAYER:
+                    {
+                        /*if (param.playerid == CNetworkPlayerManager::m_localPlayerId)
+                        {*/
                         param.value = 0;
                         /*if (header.opcode == 0x0605)
-                            CChat::AddMessage("Parsed player id %s (me)...", to_string(CNetworkPlayerManager::m_localPlayerId).c_str());*/
-                    /*    break;
-                    }*/
+                            CChat::AddMessage("Parsed player id %s (me)...",
+                           to_string(CNetworkPlayerManager::m_localPlayerId).c_str());*/
+                        /*    break;
+                        }*/
 
-                    //if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(param.playerid))
-                    //{
-                    //    if (networkPlayer->m_pPed)
-                    //    {
-                    //        int playerNum = networkPlayer->GetInternalId();
-                    //        if (playerNum)
-                    //        {
-                    //            param.value = playerNum;
-                    //            /*if (header.opcode == 0x0605)
-                    //                CChat::AddMessage("Parsed player id %s...", to_string(networkPlayer->m_playerId).c_str());*/
-                    //        }
-                    //        else if (!IsOpcodeRequiresStrictCheck(header.opcode))
-                    //        {
-                    //            param.value = -1;
-                    //        }
-                    //        else return;
-                    //    }
-                    //    else if (!IsOpcodeRequiresStrictCheck(header.opcode))
-                    //    {
-                    //        param.value = -1;
-                    //    }
-                    //    else return;
-                    //}
-                    //else if (!IsOpcodeRequiresStrictCheck(header.opcode))
-                    //{
-                    //    param.value = -1;
-                    //}
-                    //else return;
+                        // if (auto networkPlayer = CNetworkPlayerManager::GetPlayer(param.playerid))
+                        //{
+                        //     if (networkPlayer->m_pPed)
+                        //     {
+                        //         int playerNum = networkPlayer->GetInternalId();
+                        //         if (playerNum)
+                        //         {
+                        //             param.value = playerNum;
+                        //             /*if (header.opcode == 0x0605)
+                        //                 CChat::AddMessage("Parsed player id %s...",
+                        //                 to_string(networkPlayer->m_playerId).c_str());*/
+                        //         }
+                        //         else if (!IsOpcodeRequiresStrictCheck(header.opcode))
+                        //         {
+                        //             param.value = -1;
+                        //         }
+                        //         else return;
+                        //     }
+                        //     else if (!IsOpcodeRequiresStrictCheck(header.opcode))
+                        //     {
+                        //         param.value = -1;
+                        //     }
+                        //     else return;
+                        // }
+                        // else if (!IsOpcodeRequiresStrictCheck(header.opcode))
+                        //{
+                        //     param.value = -1;
+                        // }
+                        // else return;
 
-                    break;
-                }
-                case eSyncedParamType::VEHICLE:
-                {
-                    // NONE (unresolved on the sender's side) has an invalid id, so it's never found
-                    if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(param.vehicleid))
+                        break;
+                    }
+                    case eSyncedParamType::VEHICLE:
                     {
-                        if (auto vehicle = networkVehicle->m_pVehicle)
+                        // NONE (unresolved on the sender's side) has an invalid id, so it's never found
+                        if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(param.vehicleid))
                         {
-                            if (!vehicle->IsVTableValid())
-                                return;
+                            if (auto vehicle = networkVehicle->m_pVehicle)
+                            {
+                                if (!vehicle->IsVTableValid())
+                                    return;
 
-                            param.value = CPools::GetVehicleRef(vehicle);
-                            /*if (header.opcode == 0x0605)
-                                CChat::AddMessage("Parsed vehicle id %s...", to_string(networkVehicle->m_vehicleId).c_str());*/
+                                param.value = CPools::GetVehicleRef(vehicle);
+                                /*if (header.opcode == 0x0605)
+                                    CChat::AddMessage("Parsed vehicle id %s...",
+                                   to_string(networkVehicle->m_vehicleId).c_str());*/
+                            }
+                            else if (!IsOpcodeRequiresStrictCheck(header.opcode))
+                            {
+                                param.value = -1;
+                            }
+                            else
+                                return;
                         }
                         else if (!IsOpcodeRequiresStrictCheck(header.opcode))
                         {
                             param.value = -1;
                         }
-                        else return;
-                    }
-                    else if (!IsOpcodeRequiresStrictCheck(header.opcode))
-                    {
-                        param.value = -1;
-                    }
-                    else return;
+                        else
+                            return;
 
-                    break;
-                }
-                default:
-                    break;
+                        break;
+                    }
+                    default:
+                        break;
                 }
             }
             /*if (header.opcode == 0x0605)
@@ -792,68 +830,66 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
     script.m_pBaseIP = script.m_pCurrentIP = (uint8_t*)&header.opcode;
 
     lastOpCodeProcessed = header.opcode;
-    
-    //if (header.opcode == 0x0605 || header.opcode == 0x04ed || header.opcode == 0x04ef)
+
+    // if (header.opcode == 0x0605 || header.opcode == 0x04ed || header.opcode == 0x04ef)
     //{
-    //    //CChat::AddMessage("0x%04x", header.opcode);
-    //}
-    
+    //     //CChat::AddMessage("0x%04x", header.opcode);
+    // }
+
     // TODO: refactor
-    if (lastOpCodeProcessed == 0x0701) // end_scene_skip
+    if (lastOpCodeProcessed == 0x0701)  // end_scene_skip
     {
         CHud::m_BigMessage[1][0] = 0;
     }
-    else if (lastOpCodeProcessed == 0x02E7) // start_cutscene
+    else if (lastOpCodeProcessed == 0x02E7)  // start_cutscene
     {
-        if(CCutsceneMgr::ms_cutsceneLoadStatus != 2)
+        if (CCutsceneMgr::ms_cutsceneLoadStatus != 2)
         {
             COpCodeSync::ms_bLoadingCutscene = true;
-            return; // dont process opcode
+            return;  // dont process opcode
         }
     }
-
-
 
     switch (header.opcode)
     {
-    case COMMAND_TASK_PLAY_ANIM:
-    case COMMAND_TASK_CHAR_SLIDE_TO_COORD_AND_PLAY_ANIM:
-    case COMMAND_TASK_PLAY_ANIM_NON_INTERRUPTABLE:
-    case COMMAND_TASK_DIE_NAMED_ANIM:
-    case COMMAND_TASK_PLAY_ANIM_WITH_FLAGS:
-    case COMMAND_TASK_PLAY_ANIM_SECONDARY:
-    {
-        char* animlib = textParamBuffer[1];
-        int id = CAnimManager::GetAnimationBlockIndex(animlib);
-        if (id != -1)
+        case COMMAND_TASK_PLAY_ANIM:
+        case COMMAND_TASK_CHAR_SLIDE_TO_COORD_AND_PLAY_ANIM:
+        case COMMAND_TASK_PLAY_ANIM_NON_INTERRUPTABLE:
+        case COMMAND_TASK_DIE_NAMED_ANIM:
+        case COMMAND_TASK_PLAY_ANIM_WITH_FLAGS:
+        case COMMAND_TASK_PLAY_ANIM_SECONDARY:
         {
-            if (!CAnimManager::ms_aAnimBlocks[id].bLoaded)
+            char* animlib = textParamBuffer[1];
+            int id = CAnimManager::GetAnimationBlockIndex(animlib);
+            if (id != -1)
             {
-                CStreaming::RequestModel(25575 + id, eStreamingFlags::MISSION_REQUIRED | eStreamingFlags::GAME_REQUIRED);
-                CStreaming::LoadAllRequestedModels(false);
-
-                if (COpCodeSync::ms_bProcessingTaskSequence)
+                if (!CAnimManager::ms_aAnimBlocks[id].bLoaded)
                 {
-                    CTaskSequenceSync::ms_bFailedToProcessSequence = true;
-                }
-                else
-                {
-                    CNetworkAnimQueue::AddOpCode(buffer, bufferSize);
-                }
+                    CStreaming::RequestModel(
+                        25575 + id, eStreamingFlags::MISSION_REQUIRED | eStreamingFlags::GAME_REQUIRED);
+                    CStreaming::LoadAllRequestedModels(false);
 
-                return;
+                    if (COpCodeSync::ms_bProcessingTaskSequence)
+                    {
+                        CTaskSequenceSync::ms_bFailedToProcessSequence = true;
+                    }
+                    else
+                    {
+                        CNetworkAnimQueue::AddOpCode(buffer, bufferSize);
+                    }
+
+                    return;
+                }
             }
+            break;
         }
-        break;
-    }
     }
 
-	argCount = 0;
+    argCount = 0;
 
     bProcessingNetworkOpcode = true;
     patch::RedirectJump(0x464080, CRunningScript__CollectParameters_Hook_SwitchParametersContext, false);
     patch::RedirectJump(0x463D50, CRunningScript__ReadTextLabelFromScript_Hook_SwitchParametersContext, false);
-
 
     if ((header.opcode & 0x7FFF) < CCustomCommandMgr::MIN_CUSTOM_COMMAND)
     {
@@ -915,8 +951,8 @@ void __declspec(naked) CRunningScript__CollectParameters_Hook_GetSyncingParams()
         pushad
     }
 
-    if (lastProcessedScript 
-        && (COpCodeSync::IsOpcodeSyncable(lastOpCodeProcessed) || CTaskSequenceSync::IsNeededToCollectParametes((eScriptCommands)lastOpCodeProcessed)))
+    if (lastProcessedScript && (COpCodeSync::IsOpcodeSyncable(lastOpCodeProcessed) ||
+                                   CTaskSequenceSync::IsNeededToCollectParametes((eScriptCommands)lastOpCodeProcessed)))
     {
         CollectParamsProperly();
 
@@ -942,9 +978,9 @@ static char* textPointer;
 static uint8_t textLength;
 void CollectTextParameters()
 {
-    if (textPointer
-        && lastProcessedScript
-        && (COpCodeSync::IsOpcodeSyncable(lastOpCodeProcessed) || CTaskSequenceSync::IsNeededToCollectParametes((eScriptCommands)lastOpCodeProcessed)))
+    if (textPointer && lastProcessedScript &&
+        (COpCodeSync::IsOpcodeSyncable(lastOpCodeProcessed) ||
+            CTaskSequenceSync::IsNeededToCollectParametes((eScriptCommands)lastOpCodeProcessed)))
     {
         textLengthBuffer[textParamCount] = VMIN(textLength, strlen(textPointer));
         strncpy_s(textParamBuffer[textParamCount], textPointer, textLengthBuffer[textParamCount]);
@@ -955,7 +991,7 @@ void CollectTextParameters()
 void __declspec(naked) CRunningScript__ReadTextLabelFromScript_Hook_GetSyncingParams()
 {
     __asm
-    {
+        {
         add esp, 8
 
         mov eax, [esp + 0x4]
@@ -967,14 +1003,14 @@ void __declspec(naked) CRunningScript__ReadTextLabelFromScript_Hook_GetSyncingPa
         call CollectTextParameters
 
         retn 8
-    }
+        }
 }
 
 static uintptr_t FinishedProcessingScripts_ptr = 0x0;
 static void FinishedProcessingScripts()
 {
     plugin::CallDyn(FinishedProcessingScripts_ptr);
-    
+
     if (CLocalPlayer::m_bIsHost)
     {
         if (CEntryExitMarkerSync::ms_bUpdateAfterProcessingScripts)
@@ -993,7 +1029,8 @@ void COpCodeSync::Init()
 
     patch::RedirectJump(0x469FF3, FinishedOpcodeProcessing_Hook);
 
-    std::vector<int> hookPositions = { 0x463D92, 0x463DBF, 0x463E1A, 0x463E6B, 0x463EAC, 0x463F2A, 0x463F7F, 0x463FA2, 0x463FDA, 0x463FFB, 0x464034 };
+    std::vector<int> hookPositions = {
+        0x463D92, 0x463DBF, 0x463E1A, 0x463E6B, 0x463EAC, 0x463F2A, 0x463F7F, 0x463FA2, 0x463FDA, 0x463FFB, 0x464034};
     patch::RedirectJump(hookPositions, CRunningScript__ReadTextLabelFromScript_Hook_GetSyncingParams);
     patch::RedirectJump(0x46421D, CRunningScript__CollectParameters_Hook_GetSyncingParams);
 
