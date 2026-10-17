@@ -159,7 +159,7 @@ private:
             turnSpeed.x = std::clamp(turnSpeed.x, -0.5f, 0.5f);
             turnSpeed.y = std::clamp(turnSpeed.y, -0.5f, 0.5f);
             turnSpeed.z = std::clamp(turnSpeed.z, -0.5f, 0.5f);
-            health = std::clamp(health, 0.0f, 1000.0f);
+            health = std::clamp(health, 0.0f, 4000.0f);
             gasPedal = std::clamp(gasPedal, -1.0f, 1.0f);
             breakPedal = std::clamp(breakPedal, -1.0f, 1.0f);
             steerAngle = std::clamp(steerAngle, -1.0f, 1.0f);
@@ -211,7 +211,7 @@ private:
         }
 #pragma endregion
 #pragma region health doors
-        serialize_compressed_float(stream, health, 0.0f, 1000.0f, 1.0f);
+        serialize_compressed_float(stream, health, 0.0f, 4000.0f, 1.0f);
 
         serialize_int(stream, (int&)locked, DOORLOCK_NOT_USED, DOORLOCK_SKIP_SHUT_DOORS);
 #pragma endregion

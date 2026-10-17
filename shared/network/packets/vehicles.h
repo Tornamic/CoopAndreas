@@ -106,9 +106,9 @@ public:
 
         if (Stream::IsWriting)
         {
-            health = std::clamp(health, 0.0f, 1000.0f);
+            health = std::clamp(health, 0.0f, 4000.0f);
         }
-        serialize_compressed_float(stream, health, 0.0f, 1000.0f, 1.0f);
+        serialize_compressed_float(stream, health, 0.0f, 4000.0f, 1.0f);
 
         if (Stream::IsWriting)
         {
@@ -209,9 +209,9 @@ private:
 
         if (Stream::IsWriting)
         {
-            health = std::clamp(health, 0.0f, 1000.0f);
+            health = std::clamp(health, 0.0f, 4000.0f);
         }
-        serialize_compressed_float(stream, health, 0.0f, 1000.0f, 1.0f);
+        serialize_compressed_float(stream, health, 0.0f, 4000.0f, 1.0f);
 
         serialize_object(stream, playerHealth);
         serialize_object(stream, playerWeapon);
