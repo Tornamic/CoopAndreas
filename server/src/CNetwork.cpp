@@ -9,6 +9,7 @@
 #include <network/packets/vehicles.h>
 #include <network/packets/peds.h>
 #include <network/packets/scripts.h>
+#include "CGangZones.h"
 
 bool CNetwork::Init(unsigned short port)
 {
@@ -116,6 +117,7 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
 
     CNetworkPedManager::RemoveAllHostedAndNotify(pNetworkPlayer);
     CNetworkVehicleManager::RemoveAllHostedAndNotify(pNetworkPlayer);
+    CGangZones::OnPlayerDisconnected(pNetworkPlayer);
 
     CNetworkPlayerManager::Remove(pNetworkPlayer);
 
@@ -179,6 +181,9 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
     Packets::System::PlayerHandshake playerHandshake{};
     playerHandshake.yourid = newPlayerId;
     GetPacketFactory().Send(playerHandshake, pNewNetworkPlayer);
+
+
+    CGangZones::SendState(pNewNetworkPlayer);
 
     // Send OLD players TO the NEW one
     Packets::System::PlayerConnected oldPlayerConnected{};

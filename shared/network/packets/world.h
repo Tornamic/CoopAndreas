@@ -202,4 +202,81 @@ private:
     }
 };
 
+// gang zones: how strong every gang is in every zone (CZoneInfo::GangStrength), the radar colours follow from it.
+// The host is the authority, see CGangZonesSync
+constexpr int MAX_GANG_ZONES = 380; // CTheZones::ZoneInfoArray
+constexpr int GANG_COUNT = 10;
+constexpr int MAX_GANG_WAR_SPECIFIC_ZONES = 6; // CGangWars::aSpecificZones
+
+class GangZonesUpdate : public Packet
+{
+    DEFINE_PACKET_TYPE(GangZonesUpdate, ePacketType::GANG_ZONES_UPDATE, ePacketChannel::EVENT);
+
+public:
+    struct Zone
+    {
+        uint16_t index{};
+        uint8_t strength[GANG_COUNT]{};
+    };
+
+    uint16_t count{};
+    Zone zones[MAX_GANG_ZONES]{};
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_int(stream, count, 0, MAX_GANG_ZONES);
+        for (int i = 0; i < count; i++)
+        {
+            serialize_int(stream, zones[i].index, 0, MAX_GANG_ZONES - 1);
+            for (int gang = 0; gang < GANG_COUNT; gang++)
+            {
+                serialize_uint8(stream, zones[i].strength[gang]);
+            }
+        }
+        return true;
+    }
+};
+
+// the script flags that decide where a gang war may start and which zones are coloured on the radar
+class GangWarsSettings : public Packet
+{
+    DEFINE_PACKET_TYPE(GangWarsSettings, ePacketType::GANG_WARS_SETTINGS, ePacketChannel::EVENT);
+
+public:
+    bool active{};
+    bool radarHidden{}; // the territories are not drawn on the radar
+    bool trainingMission{};
+    int16_t trainingZone{-1}; // CGangWars::ZoneInfoForTraining
+    bool canTriggerOnMission{};
+    uint8_t specificZoneCount{};
+    int16_t specificZones[MAX_GANG_WAR_SPECIFIC_ZONES]{};
+
+    bool operator==(const GangWarsSettings& other) const
+    {
+        return active == other.active && radarHidden == other.radarHidden && trainingMission == other.trainingMission &&
+               trainingZone == other.trainingZone && canTriggerOnMission == other.canTriggerOnMission &&
+               specificZoneCount == other.specificZoneCount &&
+               std::equal(specificZones, specificZones + specificZoneCount, other.specificZones);
+    }
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_bool(stream, active);
+        serialize_bool(stream, radarHidden);
+        serialize_bool(stream, trainingMission);
+        serialize_int(stream, trainingZone, -1, MAX_GANG_ZONES - 1);
+        serialize_bool(stream, canTriggerOnMission);
+        serialize_int(stream, specificZoneCount, 0, MAX_GANG_WAR_SPECIFIC_ZONES);
+        for (int i = 0; i < specificZoneCount; i++)
+        {
+            serialize_int(stream, specificZones[i], 0, MAX_GANG_ZONES - 1);
+        }
+        return true;
+    }
+};
+
 }  // namespace Packets::World
