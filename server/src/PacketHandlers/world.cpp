@@ -36,3 +36,15 @@ PACKET_HANDLER(ePacketType::UPDATE_MOON_SIZE, Packets::World::UpdateMoonSize* pU
 {
 	GetPacketFactory().SendToAll(*pUpdateMoonSize, pNetworkPlayer);
 }
+
+PACKET_HANDLER(ePacketType::ADD_MONEY, Packets::World::AddMoney* pAddMoney, CNetworkPlayer* pNetworkPlayer)
+{
+	int64_t money = static_cast<int64_t>(CNetwork::ms_nSharedMoney) + pAddMoney->delta;
+	CNetwork::ms_nSharedMoney = static_cast<int32_t>(
+		std::clamp<int64_t>(money, -Packets::World::MAX_MONEY, Packets::World::MAX_MONEY));
+
+	// back to everyone, the sender too: it may have spent or earned more meanwhile
+	Packets::World::SetMoney setMoney{};
+	setMoney.money = CNetwork::ms_nSharedMoney;
+	GetPacketFactory().SendToAll(setMoney);
+}

@@ -202,4 +202,39 @@ private:
     }
 };
 
+// money is shared by all players: clients send how much their money changed, the server keeps the total
+constexpr int32_t MAX_MONEY = 999999999;
+
+class AddMoney : public Packet
+{
+    DEFINE_PACKET_TYPE(AddMoney, ePacketType::ADD_MONEY, ePacketChannel::EVENT);
+
+public:
+    int32_t delta{};
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_int(stream, delta, -2 * MAX_MONEY, 2 * MAX_MONEY);
+        return true;
+    }
+};
+
+class SetMoney : public Packet
+{
+    DEFINE_PACKET_TYPE(SetMoney, ePacketType::SET_MONEY, ePacketChannel::EVENT);
+
+public:
+    int32_t money{};
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_int(stream, money, -MAX_MONEY, MAX_MONEY);
+        return true;
+    }
+};
+
 }  // namespace Packets::World

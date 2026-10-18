@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include <CWeatherSync.h>
 #include <CMoonSync.h>
+#include <CMoneySync.h>
 #include <game_sa/CTagManager.h>
 
 PACKET_HANDLER(ePacketType::GAME_WEATHER_TIME, Packets::World::GameWeatherTime* pGameWeatherTime)
@@ -66,4 +67,9 @@ PACKET_HANDLER(ePacketType::UPDATE_ALL_TAGS, Packets::World::UpdateAllTags* pUpd
 PACKET_HANDLER(ePacketType::UPDATE_MOON_SIZE, Packets::World::UpdateMoonSize* pUpdateMoonSize)
 {
 	CMoonSync::HandlePacket(pUpdateMoonSize);
+}
+
+PACKET_HANDLER(ePacketType::SET_MONEY, Packets::World::SetMoney* pSetMoney)
+{
+	CMoneySync::HandlePacket(pSetMoney);
 }

@@ -9,6 +9,7 @@
 #include <network/packets/vehicles.h>
 #include <network/packets/peds.h>
 #include <network/packets/scripts.h>
+#include <network/packets/world.h>
 
 bool CNetwork::Init(unsigned short port)
 {
@@ -179,6 +180,10 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
     Packets::System::PlayerHandshake playerHandshake{};
     playerHandshake.yourid = newPlayerId;
     GetPacketFactory().Send(playerHandshake, pNewNetworkPlayer);
+
+    Packets::World::SetMoney setMoney{};
+    setMoney.money = ms_nSharedMoney;
+    GetPacketFactory().Send(setMoney, pNewNetworkPlayer);
 
     // Send OLD players TO the NEW one
     Packets::System::PlayerConnected oldPlayerConnected{};

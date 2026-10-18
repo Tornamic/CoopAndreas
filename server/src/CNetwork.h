@@ -20,6 +20,9 @@ public:
     static void HandlePlayerConnected(ENetPeer* peer, Packets::System::PlayerConnected& playerConnected);
     ~CNetwork() {}
 
+    // money shared by all players, see Packets::World::AddMoney
+    static inline int32_t ms_nSharedMoney = 0;
+
 private:
     static void HandlePeerConnected(ENetEvent& event);
     static void HandlePlayerDisconnected(ENetEvent& event);
