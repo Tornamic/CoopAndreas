@@ -145,5 +145,10 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 LRESULT CImGui::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    if (!ms_bActive || FrontEndMenuManager.m_bMenuActive)
+    {
+        return 0;
+    }
+
     return ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam);
 }
