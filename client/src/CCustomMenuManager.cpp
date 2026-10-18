@@ -408,8 +408,8 @@ void __fastcall CMenuManager__UserInput_Hook(CMenuManager* This)
 
 void CCustomMenuManager::UpdateFromConfig()
 {
-	strncpy_s(aRowContent[ROW_NICKNAME], 32, CLocalPlayer::m_Name, 32);
-	strncpy_s(aRowContent[ROW_IP], 15, CNetwork::m_IpAddress, 15);
+	strncpy_s(aRowContent[ROW_NICKNAME], CLocalPlayer::m_Name, Config::MAX_NICKNAME_LENGTH);
+	strncpy_s(aRowContent[ROW_IP], CNetwork::m_IpAddress, 15);
 	_itoa_s(static_cast<int>(CNetwork::m_nPort), aRowContent[ROW_PORT], 10);
 }
 
