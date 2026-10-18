@@ -117,7 +117,7 @@ void CNetworkPedManager::Update()
                 if (pVehicle->m_nVehicleType == VEHICLE_AUTOMOBILE)
                 {
                     CAutomobile* pAutomobile = (CAutomobile*)pVehicle;
-                    packet.bikeLean = pAutomobile->m_wMiscComponentAngle;
+                    packet.miscComponentAngle = pAutomobile->m_wMiscComponentAngle;
                 }
                 packet.locked = pVehicle->m_eDoorLock;
                 packet.gasPedal = pVehicle->m_fGasPedal;
