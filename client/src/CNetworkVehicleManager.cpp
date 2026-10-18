@@ -93,6 +93,7 @@ void CNetworkVehicleManager::UpdateDriver(CVehicle* pVehicle)
 		}
 
 		vehicleDriverUpdate.locked = pVehicle->m_eDoorLock;
+		vehicleDriverUpdate.radioStation = AudioEngine.GetCurrentRadioStationID();
 
 		GetPacketFactory().Send(vehicleDriverUpdate);
 	}

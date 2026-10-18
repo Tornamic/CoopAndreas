@@ -168,6 +168,7 @@ public:
 
     float planeGearState{};
     eDoorLock locked{};
+    int8_t radioStation = -1;  // eRadioID the driver listens to, for the passengers
 
 private:
     template <typename Stream>
@@ -257,6 +258,8 @@ private:
         }
 
         serialize_int(stream, (int&)locked, DOORLOCK_NOT_USED, DOORLOCK_SKIP_SHUT_DOORS);
+
+        serialize_int(stream, radioStation, -1, 13);
 
         return true;
     }

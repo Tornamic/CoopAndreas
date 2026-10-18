@@ -130,6 +130,16 @@ PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDri
     }
 
     pNetworkVehicle->m_pVehicle->m_eDoorLock = pVehicleDriverUpdate->locked;
+
+    // a passenger hears the driver's station
+    CPlayerPed* pLocalPlayer = FindPlayerPed(0);
+    if (pLocalPlayer && pLocalPlayer->m_pVehicle == pNetworkVehicle->m_pVehicle && pLocalPlayer->m_nPedFlags.bInVehicle &&
+        pVehicleDriverUpdate->radioStation >= 0 && !AudioEngine.IsRadioRetuneInProgress() &&
+        AudioEngine.GetCurrentRadioStationID() != pVehicleDriverUpdate->radioStation)
+    {
+        AudioEngine.RetuneRadio(pVehicleDriverUpdate->radioStation);
+    }
+
     pNetworkVehicle->m_playerDriverSnapshot = *pVehicleDriverUpdate;
 }
 
