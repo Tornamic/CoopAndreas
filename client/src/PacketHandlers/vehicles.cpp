@@ -264,19 +264,16 @@ PACKET_HANDLER(ePacketType::VEHICLE_COMPONENT_ADD, Packets::Vehicles::VehicleCom
         return;
     }
 
+    // the streaming runs on this thread: waiting with Sleep never let the paired parts load, the upgrade was dropped
     CStreaming::RequestModel(pVehicleComponentAdd->componentid, eStreamingFlags::GAME_REQUIRED);
-    CStreaming::LoadAllRequestedModels(false);
     CStreaming::RequestVehicleUpgrade(pVehicleComponentAdd->componentid, eStreamingFlags::GAME_REQUIRED);
-
-    uint8_t count = 10;
-    while (!CStreaming::HasVehicleUpgradeLoaded(pVehicleComponentAdd->componentid) && count)
+    CStreaming::LoadAllRequestedModels(false);
+    if (!CStreaming::HasVehicleUpgradeLoaded(pVehicleComponentAdd->componentid))
     {
-        Sleep(5);
-        count--;
-    }
-
-    if (!count)
+        logger::warn("vehicle %s: upgrade %d not loaded", to_string(pVehicleComponentAdd->vehicleid).c_str(),
+            pVehicleComponentAdd->componentid);
         return;
+    }
 
     pVehicle->AddVehicleUpgrade(pVehicleComponentAdd->componentid);
 }
