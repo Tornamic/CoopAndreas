@@ -160,6 +160,11 @@ void PatchPools()
     // push 6Eh -> push FFh
     patch::SetRaw(0x551024, (void*)"\x6A\x00\x68\xFF\x00\x00\x00", 7);
     
+    // ColModel pool (15000): every loaded vehicle model has its own collision from this pool, about 10000 are taken by
+    // the map, and with up to 127 vehicle models loaded (desiredNumVehiclesLoaded below) the vanilla 10150 ran out
+    // push 27A6h -> push 3A98h
+    patch::SetUInt(0x551106 + 1, 15000);
+
     // fixes the 0x4C9691 crash
     // vehicle struct pool (127)
     // push 32h -> push 7Fh
