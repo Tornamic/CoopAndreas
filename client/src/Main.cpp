@@ -30,6 +30,7 @@
 #include <CKeySync.h>
 #include <CCompatibilityChecker.h>
 #include <CWeatherSync.h>
+#include <CWorldObjectSync.h>
 #include <network/packets/scripts.h>
 #include <CNetworkEntityBlip.h>
 
@@ -74,6 +75,7 @@ public:
             else if (bBeenConnected && !CNetwork::m_bConnected)
             {
                 bBeenConnected = false;
+                CWorldObjectSync::Reset();
                 CChat::AddMessage("{d6dce8}[Network] Disconnected from the server.");
             }
         };
@@ -86,6 +88,7 @@ public:
 
             if (/*CNetwork::m_bConnected*/ CNetwork::m_bAuthenticated)
             {
+                CWorldObjectSync::Process();
                 // TODO: refactor
                 if (COpCodeSync::ms_bLoadingCutscene && !CLocalPlayer::m_bIsHost && CCutsceneMgr::ms_cutsceneName[0] &&
                     CCutsceneMgr::ms_cutsceneLoadStatus == 2)

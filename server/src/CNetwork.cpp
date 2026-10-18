@@ -9,6 +9,7 @@
 #include <network/packets/vehicles.h>
 #include <network/packets/peds.h>
 #include <network/packets/scripts.h>
+#include "CWorldObjects.h"
 
 bool CNetwork::Init(unsigned short port)
 {
@@ -40,6 +41,7 @@ bool CNetwork::Init(unsigned short port)
     {
         CServerTime::Update();
         CRTTBroadcastManager::Update();
+        CWorldObjects::Update();
 
         while (enet_host_service(pENetHost, &eNetEvent, 1) > 0)
         {
@@ -116,6 +118,7 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
 
     CNetworkPedManager::RemoveAllHostedAndNotify(pNetworkPlayer);
     CNetworkVehicleManager::RemoveAllHostedAndNotify(pNetworkPlayer);
+    CWorldObjects::OnPlayerDisconnected(pNetworkPlayer);
 
     CNetworkPlayerManager::Remove(pNetworkPlayer);
 

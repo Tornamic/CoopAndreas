@@ -6,6 +6,9 @@
 PACKET_HANDLER(
     ePacketType::PLAYER_ONFOOT_UPDATE, Packets::Players::OnFootUpdate* pOnFootUpdate, CNetworkPlayer* pNetworkPlayer)
 {
+    pNetworkPlayer->m_vecPosition = pOnFootUpdate->vecPos;
+    pNetworkPlayer->m_bHasPosition = true;
+
     pOnFootUpdate->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pOnFootUpdate, pNetworkPlayer);
 }

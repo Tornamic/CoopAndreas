@@ -23,6 +23,8 @@ public:
     int8_t m_nSeatId = -1;
     vehicleid_t m_vehicleId{};
     bool m_bCorrectVersion = false;
+    CVector m_vecPosition{};  // last known, from the player's own updates
+    bool m_bHasPosition = false;
     float m_afStats[14]{};
     Packets::Players::PlayerPlaceWaypoint m_waypointState{};
     CPedClothesDesc m_pPedClothesDesc{};
