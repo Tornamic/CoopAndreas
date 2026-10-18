@@ -107,6 +107,7 @@ PACKET_HANDLER(ePacketType::PLAYER_ASSIGN_HOST, Packets::System::PlayerAssignHos
 
         CNetworkPedManager::AssignHost();
         CWeatherSync::SyncCurrentState();
+        CWeatherSync::OnBecameHost();
         CTagSync::SyncCurrentState();
         CChat::AddMessage("{c7a6ff}[Player] {d6dce8}You are the host now");
         return;

@@ -4,7 +4,8 @@
 
 namespace Packets::World
 {
-// TODO: proper weather sync
+// the host's weather and clock; the other players take them as they are and don't advance their own weather list,
+// see CWeatherSync
 class GameWeatherTime : public Packet
 {
     DEFINE_PACKET_TYPE(GameWeatherTime, ePacketType::GAME_WEATHER_TIME, ePacketChannel::EVENT);
@@ -12,11 +13,14 @@ class GameWeatherTime : public Packet
 public:
     eWeatherType newWeather;
     eWeatherType oldWeather;
-    // eWeatherType forcedWeather;
+    int16_t forcedWeather; // -1 when not forced
     uint8_t currentMonth;
-    uint8_t currentDay;
+    uint8_t currentMonthDay;
+    uint8_t currentDay; // day of the week
     uint8_t currentHour;
     uint8_t currentMinute;
+    uint32_t minuteElapsedMs; // how long the current minute has been running, CTimer ms
+    uint32_t msPerGameMinute;
 
 private:
     template <typename Stream>
@@ -26,20 +30,24 @@ private:
         {
             newWeather = VCLAMP(newWeather, WEATHER_EXTRASUNNY_LA, WEATHER_EXTRACOLOURS_2);
             oldWeather = VCLAMP(oldWeather, WEATHER_EXTRASUNNY_LA, WEATHER_EXTRACOLOURS_2);
-            // forcedWeather = VCLAMP(forcedWeather, WEATHER_EXTRASUNNY_LA, WEATHER_EXTRACOLOURS_2);
+            forcedWeather = VCLAMP(forcedWeather, -1, WEATHER_EXTRACOLOURS_2);
             currentMonth = VCLAMP(currentMonth, 1, 12);
-            currentDay = VCLAMP(currentDay, 1, 31);
+            currentMonthDay = VCLAMP(currentMonthDay, 1, 31);
+            currentDay = VCLAMP(currentDay, 1, 7);
             currentHour = VCLAMP(currentHour, 0, 23);
             currentMinute = VCLAMP(currentMinute, 0, 59);
         }
         serialize_int(stream, (int&)newWeather, WEATHER_EXTRASUNNY_LA, WEATHER_EXTRACOLOURS_2);
         serialize_int(stream, (int&)oldWeather, WEATHER_EXTRASUNNY_LA, WEATHER_EXTRACOLOURS_2);
-        // serialize_int(stream, (int&)forcedWeather, WEATHER_EXTRASUNNY_LA, WEATHER_EXTRACOLOURS_2);
+        serialize_int(stream, forcedWeather, -1, WEATHER_EXTRACOLOURS_2);
 
         serialize_int(stream, currentMonth, 1, 12);
-        serialize_int(stream, currentDay, 1, 31);
+        serialize_int(stream, currentMonthDay, 1, 31);
+        serialize_int(stream, currentDay, 1, 7);
         serialize_int(stream, currentHour, 0, 23);
         serialize_int(stream, currentMinute, 0, 59);
+        serialize_uint32(stream, minuteElapsedMs);
+        serialize_uint32(stream, msPerGameMinute);
 
         return true;
     }

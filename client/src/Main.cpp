@@ -38,7 +38,6 @@ unsigned int lastDriverSyncTickRate = 0;
 unsigned int lastIdleVehicleSyncTickRate = 0;
 unsigned int lastPassengerSyncTickRate = 0;
 unsigned int lastPedSyncTickRate = 0;
-unsigned int lastWeatherTimeSyncTickRate = 0;
 unsigned int lastPlayerAimSyncTickRate = 0;
 bool bBeenConnected;
 bool lastOnMissionFlag;
@@ -74,6 +73,7 @@ public:
             else if (bBeenConnected && !CNetwork::m_bConnected)
             {
                 bBeenConnected = false;
+                CWeatherSync::Reset();
                 CChat::AddMessage("{d6dce8}[Network] Disconnected from the server.");
             }
         };
@@ -86,6 +86,7 @@ public:
 
             if (/*CNetwork::m_bConnected*/ CNetwork::m_bAuthenticated)
             {
+                CWeatherSync::Process();
                 // TODO: refactor
                 if (COpCodeSync::ms_bLoadingCutscene && !CLocalPlayer::m_bIsHost && CCutsceneMgr::ms_cutsceneName[0] &&
                     CCutsceneMgr::ms_cutsceneLoadStatus == 2)
@@ -197,11 +198,6 @@ public:
                     lastPedSyncTickRate = tickCount;
                 }
 
-                if (CLocalPlayer::m_bIsHost && tickCount > lastWeatherTimeSyncTickRate + 2000)
-                {
-                    CWeatherSync::SyncCurrentState();
-                    lastWeatherTimeSyncTickRate = tickCount;
-                }
                 CNetworkVehicleManager::UpdateDamageSync();
 
                 CAimSync::ProcessSyncing();
