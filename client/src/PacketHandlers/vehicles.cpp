@@ -97,6 +97,7 @@ PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDri
 
     pNetworkPlayer->ApplyWeaponSnapshot(pVehicleDriverUpdate->playerWeapon);
     pNetworkPlayer->m_onFootSnapshotInterpolated.healthSnapshot = pVehicleDriverUpdate->playerHealth;
+    pNetworkPlayer->m_onFootSnapshotInterpolated.iBreath = 100;  // breath is only sent on foot
     pNetworkPlayer->m_pPed->m_fHealth = pVehicleDriverUpdate->playerHealth.iHealth;
     pNetworkPlayer->m_pPed->m_fArmour = pVehicleDriverUpdate->playerHealth.iArmour;
     pNetworkPlayer->m_oldControllerState = pVehicleDriverUpdate->playerKeys.oldControllerState;
@@ -335,6 +336,7 @@ PACKET_HANDLER(
 
     pNetworkPlayer->ApplyWeaponSnapshot(pVehiclePassengerUpdate->playerWeapon);
     pNetworkPlayer->m_onFootSnapshotInterpolated.healthSnapshot = pVehiclePassengerUpdate->playerHealth;
+    pNetworkPlayer->m_onFootSnapshotInterpolated.iBreath = 100;  // breath is only sent on foot
     pNetworkPlayer->m_pPed->m_fHealth = pVehiclePassengerUpdate->playerHealth.iHealth;
     pNetworkPlayer->m_pPed->m_fArmour = pVehiclePassengerUpdate->playerHealth.iArmour;
     pNetworkPlayer->m_newControllerState = pVehiclePassengerUpdate->playerKeys.newControllerState;

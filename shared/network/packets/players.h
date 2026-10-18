@@ -118,6 +118,7 @@ public:
     bool bHasJetpack = false;
     int8_t iFightingStyle{};
     SKeySnapshot keySnapshot{};
+    uint8_t iBreath = 100;  // percent of air left in the lungs, below 100 only under water
 
 private:
     template <typename Stream>
@@ -140,6 +141,17 @@ private:
         serialize_bits(stream, iFightingStyle, 8);  // TODO
 
         serialize_object(stream, keySnapshot);
+
+        bool hasBreath = Stream::IsWriting && iBreath < 100;
+        serialize_bool(stream, hasBreath);
+        if (hasBreath)
+        {
+            serialize_int(stream, iBreath, 0, 100);
+        }
+        else
+        {
+            iBreath = 100;
+        }
 
         return true;
     }

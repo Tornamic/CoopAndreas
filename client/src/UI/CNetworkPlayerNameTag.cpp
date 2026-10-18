@@ -157,12 +157,16 @@ void CNetworkPlayerNameTag::Process()
 			);
 		}
 
+		// bars above the health one, stacked upwards
+		int nBarsAbove = 0;
+
 		// draw armour bar
 		if (player->m_onFootSnapshotInterpolated.healthSnapshot.iArmour > 0.0f)
 		{
+			nBarsAbove++;
 			DrawBarChartScale(
 				out.x,
-				out.y - PROPORION_X(12) * scale,
+				out.y - PROPORION_X(12) * scale * nBarsAbove,
 				(uint16_t)(PROPORION_X(100) * scale),
 				(uint8_t)(PROPORION_Y(14) * scale),
 				scale,
@@ -170,8 +174,23 @@ void CNetworkPlayerNameTag::Process()
 				CRGBA(225, 225, 225, alpha)
 			);
 		}
-		
-		float nicknameOffsetY = (player->m_onFootSnapshotInterpolated.healthSnapshot.iArmour > 0.0f ? 12.0f * scale + 12.0f * scale : 12.0f * scale);
+
+		// draw breath bar, only while the player is running out of air
+		if (player->m_onFootSnapshotInterpolated.iBreath < 100)
+		{
+			nBarsAbove++;
+			DrawBarChartScale(
+				out.x,
+				out.y - PROPORION_X(12) * scale * nBarsAbove,
+				(uint16_t)(PROPORION_X(100) * scale),
+				(uint8_t)(PROPORION_Y(14) * scale),
+				scale,
+				player->m_onFootSnapshotInterpolated.iBreath,
+				CRGBA(172, 203, 241, alpha)
+			);
+		}
+
+		float nicknameOffsetY = 12.0f * scale * (nBarsAbove + 1);
 		DrawNickName(
 			out.x + PROPORION_X(4.8f),
 			out.y - (PROPORION_Y(nicknameOffsetY) + PROPORION_Y(8.0f)),
