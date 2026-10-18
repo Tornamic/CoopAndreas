@@ -80,3 +80,9 @@ PACKET_HANDLER(ePacketType::REBUILD_PLAYER, Packets::Players::RebuildPlayer* pRe
     GetPacketFactory().SendToAll(*pRebuildPlayer, pNetworkPlayer);
 }
 
+
+PACKET_HANDLER(ePacketType::PLAYER_CHEAT, Packets::Players::PlayerCheat* pPlayerCheat, CNetworkPlayer* pNetworkPlayer)
+{
+    pPlayerCheat->senderPlayerid = pNetworkPlayer->m_playerId;
+    GetPacketFactory().SendToAll(*pPlayerCheat, pNetworkPlayer);
+}

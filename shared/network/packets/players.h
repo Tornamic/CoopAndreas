@@ -451,6 +451,27 @@ private:
     }
 };
 
+// a cheat that changes the world (traffic, peds, time) typed by a player, the others apply it too
+class PlayerCheat : public Packet
+{
+    DEFINE_PACKET_TYPE(PlayerCheat, ePacketType::PLAYER_CHEAT, ePacketChannel::EVENT);
+
+public:
+    SenderPlayerId senderPlayerid{};
+    uint8_t cheatId{};
+    bool active = false;  // m_aCheatsActive after the sender applied it
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_object(stream, senderPlayerid);
+        serialize_uint8(stream, cheatId);
+        serialize_bool(stream, active);
+        return true;
+    }
+};
+
 class RebuildPlayer : public Packet
 {
     DEFINE_PACKET_TYPE(RebuildPlayer, ePacketType::REBUILD_PLAYER, ePacketChannel::EVENT);

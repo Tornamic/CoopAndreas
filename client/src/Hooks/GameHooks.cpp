@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <CCheatSync.h>
 #include "GameHooks.h"
 #include "CKeySync.h"
 #include <CCutsceneMgr.h>
@@ -25,11 +26,29 @@ static void __cdecl CClock__SetGameClock_Hook(unsigned char h, unsigned char m, 
     CWeatherSync::SyncCurrentState();
 }
 
+// CCheat::AddToCheatString picks the cheat function (0x43856A) with esi = the cheat id, which is popped before the
+// two ends hooked below; keep it for them
+static int nAppliedCheatId = -1;
+static void __declspec(naked) ProcessCheat_KeepCheatId_Hook()
+{
+    __asm
+    {
+        mov nAppliedCheatId, esi
+        mov eax, dword ptr [esi * 4 + 0x8A5B58]
+        push 0x438571
+        retn
+    }
+}
+
 static void __declspec(naked) ProcessCheat_Hook1()
 {
     __asm
     {
         mov byte ptr ds : [0x969110] , bl
+
+        push nAppliedCheatId
+        call CCheatSync::OnLocalCheat
+        add esp, 4
 
         call CWeatherSync::SyncCurrentState
 
@@ -42,6 +61,10 @@ static void __declspec(naked) ProcessCheat_Hook2()
     __asm
     {
         mov byte ptr ds : [0x969110] , bl
+
+        push nAppliedCheatId
+        call CCheatSync::OnLocalCheat
+        add esp, 4
 
         call CWeatherSync::SyncCurrentState
 
@@ -171,6 +194,7 @@ void GameHooks::InjectHooks()
 
     patch::RedirectCall(0x47F1C7, CClock__RestoreClock_Hook);
     patch::RedirectCall(0x441534, CClock__SetGameClock_Hook);
+    patch::RedirectJump(0x43856A, ProcessCheat_KeepCheatId_Hook);  // mov eax, [esi*4 + m_aCheatFunctions] (7 bytes)
     patch::RedirectJump(0x438583, ProcessCheat_Hook1);
     patch::RedirectJump(0x43859D, ProcessCheat_Hook2);
 

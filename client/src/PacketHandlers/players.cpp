@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include <CAimSync.h>
 #include <CEntryExitTransitionSync.h>
+#include <CCheatSync.h>
 #include <CProjectileInfo.h>
 
 PACKET_HANDLER(ePacketType::PLAYER_ONFOOT_UPDATE, Packets::Players::OnFootUpdate* pOnFootUpdate)
@@ -258,4 +259,9 @@ PACKET_HANDLER(ePacketType::REBUILD_PLAYER, Packets::Players::RebuildPlayer* pRe
 
         //CStatsSync::ApplyLocalContext();
     }
+}
+
+PACKET_HANDLER(ePacketType::PLAYER_CHEAT, Packets::Players::PlayerCheat* pPlayerCheat)
+{
+    CCheatSync::HandlePacket(pPlayerCheat);
 }
