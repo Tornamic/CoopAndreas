@@ -114,7 +114,7 @@ void CNetworkPlayerList::DrawName(CNetworkPlayer* pNetworkPlayer, float fX, floa
         CUtil::HUD_Y(fY + NAME_OFFSET_Y) + CUtil::HUD_Y(4.0f + MAX_NAME_OFFSET_Y * fNormalizedValue), szPlayerName);
 }
 
-void CNetworkPlayerList::DrawBars(CPlayerPed* pPlayerPed, float fX, float fY)
+void CNetworkPlayerList::DrawBars(CPlayerPed* pPlayerPed, float fMaxHealth, float fX, float fY)
 {
     float fBarOffsetX = CUtil::HUD_X(fX + BAR_OFFSET_X + BOX_WIDTH / 2.0f);
     float fBarOffsetY = CUtil::HUD_Y(fY + BAR_OFFSET_Y);
@@ -128,7 +128,8 @@ void CNetworkPlayerList::DrawBars(CPlayerPed* pPlayerPed, float fX, float fY)
             barHeight, pPlayerPed->m_fArmour, 0, 0, 1, HudColour.GetRGBA(HUD_COLOUR_WHITE), CRGBA(0, 0, 0, 0));
     }
 
-    CSprite2d::DrawBarChart(fBarOffsetX + barWidth, fBarOffsetY, barWidth, barHeight, pPlayerPed->m_fHealth, 0, 0, 1,
+    CSprite2d::DrawBarChart(fBarOffsetX + barWidth, fBarOffsetY, barWidth, barHeight,
+        pPlayerPed->m_fHealth * 100.0f / fMaxHealth, 0, 0, 1,
         HudColour.GetRGBA(HUD_COLOUR_RED), CRGBA(0, 0, 0, 0));
 }
 
@@ -237,7 +238,9 @@ void CNetworkPlayerList::Draw()
 
         DrawPing(pNetworkPlayer, fBoxX, fColumnY);
         DrawName(pNetworkPlayer, fBoxX, fColumnY);
-        DrawBars(pPlayerPed, fBoxX, fColumnY);
+        float fMaxHealth = pNetworkPlayer ? pNetworkPlayer->GetMaxHealth()
+                                          : CStats::GetFatAndMuscleModifier(STAT_MOD_MAX_HEALTH);
+        DrawBars(pPlayerPed, fMaxHealth, fBoxX, fColumnY);
         DrawWeaponIcon(pPlayerPed, fBoxX, fColumnY);
 
         if (i == nPlayerCount)

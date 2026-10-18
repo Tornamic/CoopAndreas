@@ -121,6 +121,12 @@ char CNetworkPlayer::GetWeaponSkill(eWeaponType weaponType)
     return CWeaponInfo::GetWeaponInfo(weaponType, 1)->m_nReqStatLevel <= weaponStat;
 }
 
+float CNetworkPlayer::GetMaxHealth()
+{
+    // same as CStats::GetFatAndMuscleModifier(STAT_MOD_MAX_HEALTH) (0x559E07), but with this player's stat
+    return m_stats[STAT_MAX_HEALTH] * 0.001f * 176.0f;
+}
+
 void CNetworkPlayer::WarpIntoVehicleDriver(CVehicle* vehicle)
 {
     assert(m_pPed != nullptr);

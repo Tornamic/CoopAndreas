@@ -45,6 +45,7 @@ public:
 	int GetInternalId();
 	std::string GetName();
 	char GetWeaponSkill(eWeaponType weaponType);
+	float GetMaxHealth();
 	void WarpIntoVehicleDriver(CVehicle* vehicle);
 	void RemoveFromVehicle(CVehicle* vehicle);
 	void WarpIntoVehiclePassenger(CVehicle* vehicle, int seatid);

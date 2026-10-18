@@ -152,7 +152,7 @@ void CNetworkPlayerNameTag::Process()
 				(uint16_t)(PROPORION_X(100.0f * scale)),
 				(uint8_t)(PROPORION_Y(14.0f * scale)),
 				scale,
-				player->m_onFootSnapshotInterpolated.healthSnapshot.iHealth,
+				player->m_onFootSnapshotInterpolated.healthSnapshot.iHealth * 100.0f / player->GetMaxHealth(),
 				CRGBA(180, 25, 29, alpha)
 			);
 		}

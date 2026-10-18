@@ -76,6 +76,9 @@ PACKET_HANDLER(ePacketType::PLAYER_HANDSHAKE, Packets::System::PlayerHandshake* 
 
     CNetwork::m_bAuthenticated = true;
     CPatch::RevertTemporaryPatches();
+
+    // stats are sent only when they change, so the server would not know the ones we already have
+    CStatsSync::NotifyChanged();
     logger::info("Authenticated, playerid %s", to_string(pPlayerHandshake->yourid).c_str());
 }
 

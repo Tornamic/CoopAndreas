@@ -44,7 +44,7 @@ public:
 	static void DrawBox(float fX, float fY);
 	static void DrawPing(CNetworkPlayer* pNetworkPlayer, float fX, float fY);
 	static void DrawName(CNetworkPlayer* pNetworkPlayer, float fX, float fY);
-	static void DrawBars(CPlayerPed* pPlayerPed, float fX, float fY);
+	static void DrawBars(CPlayerPed* pPlayerPed, float fMaxHealth, float fX, float fY);
 	static void DrawWeaponIcon(CPlayerPed* pPlayerPed, float fX, float fY);
 	static void DrawSeparator(float fCenterBoxX, float fCenterBoxY, float fColumnY);
 };
