@@ -143,7 +143,9 @@ const SSyncedOpCode syncedOpcodes[] = {
     {COMMAND_TASK_LEAVE_ANY_CAR, true, eSyncedParamType::PED}, {COMMAND_TASK_LOOK_ABOUT, true, eSyncedParamType::PED},
     {COMMAND_TASK_WANDER_STANDARD, true, eSyncedParamType::PED}, 
     {COMMAND_TASK_CLIMB, true, {eSyncedParamType::PED}},
-    {COMMAND_FLUSH_ROUTE}, 
+    {COMMAND_TASK_PAUSE, true, {eSyncedParamType::PED}},
+    {COMMAND_TASK_KILL_CHAR_ON_FOOT, true, {eSyncedParamType::PED, eSyncedParamType::PED}},
+    {COMMAND_FLUSH_ROUTE},
     {COMMAND_EXTEND_ROUTE},
     {COMMAND_TASK_FOLLOW_POINT_ROUTE, true, {eSyncedParamType::PED}},
 
