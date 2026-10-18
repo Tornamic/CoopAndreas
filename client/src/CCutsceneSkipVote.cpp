@@ -81,6 +81,13 @@ static bool CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook()
         }
 
         bSkipped = votes.size() == voters.size();
+        if(CCore::ms_bDebug)
+        {
+            if(votes.size() > 0)
+            {
+                bSkipped = true;
+            }
+        }
     }
 
     return bSkipped;

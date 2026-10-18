@@ -28,6 +28,8 @@
 #include "Commands/CCommandPedTakeHost.h"
 #include "Commands/CCommandGetNetworkPlayerInternalId.h"
 #include "Commands/CCommandTeleportPlayersToHostSafely.h"
+#include "Commands/CCommandIsCarOnAnyPlayersScreen.h"
+#include "Commands/CCommandIsPointOnAnyPlayersScreen.h"
 
 class CCustomCommandRegistrar
 {
@@ -61,5 +63,7 @@ public:
 		CCustomCommandMgr::RegisterCommand(0x1D1A, new CCommandPedTakeHost());
 		CCustomCommandMgr::RegisterCommand(0x1D1B, new CCommandGetNetworkPlayerInternalId());
 		CCustomCommandMgr::RegisterCommand(0x1D1C, new CCommandTeleportPlayersToHostSafely());
+		CCustomCommandMgr::RegisterCommand(0x1D1D, new CCommandIsCarOnAnyPlayersScreen());
+		CCustomCommandMgr::RegisterCommand(0x1D1E, new CCommandIsPointOnAnyPlayersScreen());
 	}
 };

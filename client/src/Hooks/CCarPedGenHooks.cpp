@@ -47,7 +47,7 @@ bool CCarPedGenHooks::IsSphereVisibleForNetworkPlayer(CVector* pOrigin, float fR
     return TheCamera.IsSphereVisible(*pOrigin, fRadius, (RwMatrixTag*)&invMat);
 }
 
-bool IsSphereVisibleForAnyNetworkPlayer(CVector* pOrigin, float fRadius)
+bool CCarPedGenHooks::IsSphereVisibleForAnyNetworkPlayer(CVector* pOrigin, float fRadius)
 {
     for (CNetworkPlayer* pNetworkPlayer : CNetworkPlayerManager::m_pPlayers)
     {
@@ -59,9 +59,9 @@ bool IsSphereVisibleForAnyNetworkPlayer(CVector* pOrigin, float fRadius)
     return false;
 }
 
-bool __fastcall CCamera__IsSphereVisible_Hook(CCamera* This, SKIP_EDX, CVector* pOrigin, float fRadius)
+bool CCarPedGenHooks::IsSphereVisibleForAnyPlayer(CVector* pOrigin, float fRadius)
 {
-    if (This->IsSphereVisible(*pOrigin, fRadius))
+    if (TheCamera.IsSphereVisible(*pOrigin, fRadius))
     {
         return true;
     }
@@ -69,18 +69,33 @@ bool __fastcall CCamera__IsSphereVisible_Hook(CCamera* This, SKIP_EDX, CVector* 
     return IsSphereVisibleForAnyNetworkPlayer(pOrigin, fRadius);
 }
 
-bool __fastcall CEntity__GetIsOnScreen_Hook(CEntity* This, SKIP_EDX)
+bool CCarPedGenHooks::IsEntityOnAnyPlayersScreen(CEntity* pEntity)
 {
-    if (This->GetIsOnScreen())
+    if (pEntity->GetIsOnScreen())
     {
         return true;
     }
     float fRadius;
     CVector origin;
-    This->TransformFromObjectSpace(
-        origin, CModelInfo::ms_modelInfoPtrs[This->m_nModelIndex]->m_pColModel->m_boundSphere.m_vecCenter);
-    fRadius = CModelInfo::ms_modelInfoPtrs[This->m_nModelIndex]->m_pColModel->m_boundSphere.m_fRadius;
+    pEntity->TransformFromObjectSpace(
+        origin, CModelInfo::ms_modelInfoPtrs[pEntity->m_nModelIndex]->m_pColModel->m_boundSphere.m_vecCenter);
+    fRadius = CModelInfo::ms_modelInfoPtrs[pEntity->m_nModelIndex]->m_pColModel->m_boundSphere.m_fRadius;
     return IsSphereVisibleForAnyNetworkPlayer(&origin, fRadius);
+}
+
+bool __fastcall CCamera__IsSphereVisible_Hook(CCamera* This, SKIP_EDX, CVector* pOrigin, float fRadius)
+{
+    if (This->IsSphereVisible(*pOrigin, fRadius))
+    {
+        return true;
+    }
+
+    return CCarPedGenHooks::IsSphereVisibleForAnyNetworkPlayer(pOrigin, fRadius);
+}
+
+bool __fastcall CEntity__GetIsOnScreen_Hook(CEntity* This, SKIP_EDX)
+{
+    return CCarPedGenHooks::IsEntityOnAnyPlayersScreen(This);
 }
 
 void CCarPedGenHooks::InjectHooks()
