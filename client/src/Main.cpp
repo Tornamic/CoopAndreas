@@ -31,6 +31,7 @@
 #include <CCompatibilityChecker.h>
 #include <CWeatherSync.h>
 #include <CGangZonesSync.h>
+#include <CGangWarSync.h>
 #include <network/packets/scripts.h>
 #include <CNetworkEntityBlip.h>
 
@@ -76,6 +77,7 @@ public:
             {
                 bBeenConnected = false;
                 CGangZonesSync::Reset();
+                CGangWarSync::Reset();
                 CChat::AddMessage("{d6dce8}[Network] Disconnected from the server.");
             }
         };
@@ -89,6 +91,8 @@ public:
             if (/*CNetwork::m_bConnected*/ CNetwork::m_bAuthenticated)
             {
                 CGangZonesSync::Process();
+                CGangWarSync::PreProcess();
+                CGangWarSync::Process();
                 // TODO: refactor
                 if (COpCodeSync::ms_bLoadingCutscene && !CLocalPlayer::m_bIsHost && CCutsceneMgr::ms_cutsceneName[0] &&
                     CCutsceneMgr::ms_cutsceneLoadStatus == 2)

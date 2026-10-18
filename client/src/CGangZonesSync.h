@@ -2,9 +2,10 @@
 
 #include "stdafx.h"
 #include <CZoneInfo.h>
+#include <CZone.h>
 
 // gang zones (who holds which territory, the radar colours) are the same for everyone: the host runs the missions that
-// change them and sends the zones that changed; the others apply them and undo their own changes (their own INITIAL
+// change them and sends the zones that changed (the owner of a gang war - the zone of its war, see CGangWarSync); the others apply them and undo their own changes (their own INITIAL
 // script, scripts that don't run for them in sync)
 class CGangZonesSync
 {
@@ -21,6 +22,9 @@ public:
 
     static CZoneInfo* GetZoneInfos();
     static int GetZoneInfoCount();
+    static CZone* GetNavigationZone(int index);
+    static int GetNavigationZoneIndex(const CZone* pZone); // -1 for nullptr
+    static CZoneInfo* GetZoneInfo(const CZone* pZone);
 
 private:
     static void __cdecl FillZonesWithGangColours_Hook(bool bDisableRadarGangColours);

@@ -4,6 +4,7 @@
 #include <CWeatherSync.h>
 #include <CMoonSync.h>
 #include <CGangZonesSync.h>
+#include <CGangWarSync.h>
 #include <game_sa/CTagManager.h>
 
 PACKET_HANDLER(ePacketType::GAME_WEATHER_TIME, Packets::World::GameWeatherTime* pGameWeatherTime)
@@ -77,4 +78,9 @@ PACKET_HANDLER(ePacketType::GANG_ZONES_UPDATE, Packets::World::GangZonesUpdate* 
 PACKET_HANDLER(ePacketType::GANG_WARS_SETTINGS, Packets::World::GangWarsSettings* pGangWarsSettings)
 {
 	CGangZonesSync::HandlePacket(pGangWarsSettings);
+}
+
+PACKET_HANDLER(ePacketType::GANG_WAR_STATE, Packets::World::GangWarState* pGangWarState)
+{
+	CGangWarSync::HandlePacket(pGangWarState);
 }

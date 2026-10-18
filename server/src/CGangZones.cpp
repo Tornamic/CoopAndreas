@@ -4,7 +4,8 @@
 
 void CGangZones::HandleUpdate(Packets::World::GangZonesUpdate* pUpdate, CNetworkPlayer* pSender)
 {
-    if (!pSender->m_bIsHost)
+    // the owner of a war changes the zone it is fought for
+    if (!pSender->m_bIsHost && pSender != ms_pWarOwner)
     {
         return;
     }
@@ -31,6 +32,20 @@ void CGangZones::HandleSettings(Packets::World::GangWarsSettings* pSettings, CNe
     GetPacketFactory().SendToAll(*pSettings, pSender);
 }
 
+void CGangZones::HandleWarState(Packets::World::GangWarState* pState, CNetworkPlayer* pSender)
+{
+    // a war that lost the race ends there and says so, nobody mirrors it
+    if ((ms_pWarOwner != nullptr && ms_pWarOwner != pSender) || (ms_pWarOwner == nullptr && !pState->active))
+    {
+        return;
+    }
+
+    pState->owner = pSender->m_playerId;
+    ms_pWarOwner = pState->active ? pSender : nullptr;
+    ms_warState = *pState;
+    GetPacketFactory().SendToAll(*pState, pSender);
+}
+
 void CGangZones::SendState(CNetworkPlayer* pTarget)
 {
     Packets::World::GangZonesUpdate update{};
@@ -53,10 +68,25 @@ void CGangZones::SendState(CNetworkPlayer* pTarget)
     {
         GetPacketFactory().Send(ms_settings, pTarget);
     }
+
+    if (ms_pWarOwner != nullptr)
+    {
+        GetPacketFactory().Send(ms_warState, pTarget);
+    }
 }
 
 void CGangZones::OnPlayerDisconnected(CNetworkPlayer* pNetworkPlayer)
 {
+    if (pNetworkPlayer == ms_pWarOwner)
+    {
+        // its attackers are removed with everything it synced
+        ms_warState.active = false;
+        ms_warState.pedCount = 0;
+        ms_warState.result = Packets::World::GangWarState::RESULT_ABORTED;
+        GetPacketFactory().SendToAll(ms_warState, pNetworkPlayer);
+        ms_pWarOwner = nullptr;
+    }
+
     // the last one left: the next session may be another game, its host brings its own table
     if (CNetworkPlayerManager::m_pPlayers.size() <= 1)
     {

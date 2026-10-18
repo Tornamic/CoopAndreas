@@ -1,4 +1,5 @@
 #pragma once
+#include "../ids.h"
 #include "CWeather.h"
 #include <CExplosion.h>
 
@@ -274,6 +275,68 @@ private:
         for (int i = 0; i < specificZoneCount; i++)
         {
             serialize_int(stream, specificZones[i], 0, MAX_GANG_ZONES - 1);
+        }
+        return true;
+    }
+};
+
+// a gang war runs on one player, its owner (CGangWars::Update there); the others mirror it, see CGangWarSync
+class GangWarState : public Packet
+{
+    DEFINE_PACKET_TYPE(GangWarState, ePacketType::GANG_WAR_STATE, ePacketChannel::EVENT);
+
+public:
+    static constexpr int MAX_WAVE_PEDS = 48;
+
+    // how the war ended, the owner's message for it
+    enum eResult : uint8_t
+    {
+        RESULT_NONE,
+        RESULT_VICTORY,  // GW_YRS, the zone was taken
+        RESULT_FLED,     // GW_FLEE
+        RESULT_DEFENDED, // GW_WON
+        RESULT_TOO_LATE, // GW_NOSH, nobody came to defend
+        RESULT_TOO_SLOW, // GW_SLOW, the attackers weren't beaten in time
+        RESULT_ABORTED,  // a mission started, the owner left
+        RESULT_MAX
+    };
+
+    playerid_t owner{}; // filled by the server
+    bool active{};
+    uint8_t state{};  // eGangWarState
+    uint8_t state2{}; // eGangAttackState
+    uint8_t gang{};
+    int16_t zone{-1}; // CTheZones::NavigationZoneArray index
+    CVector pointOfAttack{};
+    uint8_t result{RESULT_NONE};
+    uint8_t pedCount{};
+    pedid_t peds[MAX_WAVE_PEDS]{};
+
+    bool IsSameWar(const GangWarState& other) const
+    {
+        return active == other.active && state == other.state && state2 == other.state2 && gang == other.gang &&
+               zone == other.zone && result == other.result && pedCount == other.pedCount &&
+               std::equal(peds, peds + pedCount, other.peds);
+    }
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_playerid(stream, owner);
+        serialize_bool(stream, active);
+        serialize_int(stream, state, 0, 6);
+        serialize_int(stream, state2, 0, 2);
+        serialize_int(stream, gang, 0, GANG_COUNT - 1);
+        serialize_int(stream, zone, -1, MAX_GANG_ZONES - 1);
+        serialize_float(stream, pointOfAttack.x);
+        serialize_float(stream, pointOfAttack.y);
+        serialize_float(stream, pointOfAttack.z);
+        serialize_int(stream, result, 0, RESULT_MAX - 1);
+        serialize_int(stream, pedCount, 0, MAX_WAVE_PEDS);
+        for (int i = 0; i < pedCount; i++)
+        {
+            serialize_pedid(stream, peds[i]);
         }
         return true;
     }

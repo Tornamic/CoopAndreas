@@ -47,3 +47,8 @@ PACKET_HANDLER(ePacketType::GANG_WARS_SETTINGS, Packets::World::GangWarsSettings
 {
 	CGangZones::HandleSettings(pGangWarsSettings, pNetworkPlayer);
 }
+
+PACKET_HANDLER(ePacketType::GANG_WAR_STATE, Packets::World::GangWarState* pGangWarState, CNetworkPlayer* pNetworkPlayer)
+{
+	CGangZones::HandleWarState(pGangWarState, pNetworkPlayer);
+}

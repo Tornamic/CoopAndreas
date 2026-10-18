@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CGangZonesSync.h"
+#include "CGangWarSync.h"
 #include <CTheZones.h>
 #include <CGangWars.h>
 
@@ -14,6 +15,29 @@ CZoneInfo* CGangZonesSync::GetZoneInfos()
 int CGangZonesSync::GetZoneInfoCount()
 {
     return std::clamp<int>(*reinterpret_cast<int16_t*>(0xBA1DE8), 0, MAX_GANG_ZONES);
+}
+
+// CTheZones::NavigationZoneArray: a CZone is 0x20 bytes in the game, plugin-sdk's is 0x30 (a whole CZoneInfo in place of
+// the index), so no pointer arithmetic on CZone*
+static constexpr uintptr_t NAVIGATION_ZONES = 0xBA3798;
+static constexpr int ZONE_SIZE = 0x20;
+
+CZone* CGangZonesSync::GetNavigationZone(int index)
+{
+    int nCount = *reinterpret_cast<int16_t*>(0xBA3794);
+    return index >= 0 && index < nCount ? reinterpret_cast<CZone*>(NAVIGATION_ZONES + index * ZONE_SIZE) : nullptr;
+}
+
+int CGangZonesSync::GetNavigationZoneIndex(const CZone* pZone)
+{
+    return pZone != nullptr ? static_cast<int>((reinterpret_cast<uintptr_t>(pZone) - NAVIGATION_ZONES) / ZONE_SIZE) : -1;
+}
+
+CZoneInfo* CGangZonesSync::GetZoneInfo(const CZone* pZone)
+{
+    // CZone::m_ZoneInfoIndex, 0 is no info
+    int16_t nIndex = *reinterpret_cast<const int16_t*>(reinterpret_cast<const uint8_t*>(pZone) + 0x1C);
+    return nIndex > 0 && nIndex < GetZoneInfoCount() ? GetZoneInfos() + nIndex : nullptr;
 }
 
 void __cdecl CGangZonesSync::FillZonesWithGangColours_Hook(bool bDisableRadarGangColours)
@@ -49,7 +73,7 @@ void CGangZonesSync::OnBecameHost()
 
 bool CGangZonesSync::IsAuthorityFor(int zoneIndex)
 {
-    return CLocalPlayer::m_bIsHost;
+    return CLocalPlayer::m_bIsHost || zoneIndex == CGangWarSync::GetOwnedZoneInfo();
 }
 
 GangWarsSettings CGangZonesSync::CollectSettings()

@@ -138,6 +138,12 @@ static void __fastcall CWeapon__DoBulletImpact_Hook(CWeapon* weapon, SKIP_EDX, C
     }
 }
 
+void PlayerHooks::DoLocalPlayerBulletImpact(
+    CWeapon* weapon, CEntity* victim, CVector* startPoint, CVector* endPoint, CColPoint* colPoint)
+{
+    CWeapon__DoBulletImpact_Hook(weapon, 0, FindPlayerPed(0), victim, startPoint, endPoint, colPoint, 0);
+}
+
 static void __fastcall CPedIK__PointGunInDirection_Hook(
     CPedIK* This, SKIP_EDX, float dirX, float dirY, char flag, float float1)
 {
