@@ -114,6 +114,19 @@ void __declspec(naked) RsMouseSetPos_Reimpl(RwV2d* pos)
     }
 }
 
+// the game polls GetKeyState(VK_LSHIFT/VK_RSHIFT) every frame (0x747CD0 from CPad::UpdatePads), other keys come as
+// window messages only. With ForegroundApp forced to 1 a minimized or background window still sprinted on SHIFT.
+// Reporting it as released makes the game send the key up event itself, so nothing gets stuck
+SHORT WINAPI GetKeyState_OnlyWhenFocused(int nVirtKey)
+{
+    if (GetForegroundWindow() != RsGlobal.ps->window)
+    {
+        return 0;
+    }
+
+    return GetKeyState(nVirtKey);
+}
+
 void PatchStreaming()
 {
     // increase available streaming memory (memory512.cs full analog)
@@ -125,6 +138,11 @@ void PatchStreaming()
     patch::Nop(0x745BC9, 2);  // unlock resolutions
     // patch::SetUChar(0x747FB6, 1);
     patch::SetUChar(0x74805A, 1);  // ForegroundApp always 1
+
+    // mov edi, [GetKeyState] -> mov edi, GetKeyState_OnlyWhenFocused; nop
+    patch::SetUChar(0x747CE3, 0xBF);
+    patch::SetPointer(0x747CE4, (void*)GetKeyState_OnlyWhenFocused);
+    patch::Nop(0x747CE8, 1);
     patch::Nop(0x53EA88, 6);
 
     // do not hide the cursor on the control box of the game window
