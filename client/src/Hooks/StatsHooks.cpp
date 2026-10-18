@@ -52,12 +52,14 @@ int8_t __fastcall CPed__GetWeaponSkill_Hook(CPed* This, SKIP_EDX, eWeaponType we
 
 void CStats__SetStatValue_Hook(eStats statID, float value)
 {
+	// set first: NotifyChanged sends the current values, before the call it sent the old one
+	CStats::SetStatValue(statID, value);
+
 	if (CNetwork::m_bAuthenticated)
 	{
 		if (CStatsSync::GetSyncIdByInternal(statID) != -1)
 			CStatsSync::NotifyChanged();
 	}
-	CStats::SetStatValue(statID, value);
 }
 
 void __fastcall CPed__Dress_Hook(CPed* This, SKIP_EDX)
