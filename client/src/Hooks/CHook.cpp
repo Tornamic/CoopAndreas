@@ -15,6 +15,7 @@
 #include "DamageHooks.h"
 #include "ShadowHooks.h"
 #include "CCarPedGenHooks.h"
+#include "CCutsceneSkipVote.h"
 
 void CHook::Init()
 {
@@ -35,4 +36,5 @@ void CHook::Init()
     DamageHooks::InjectHooks();
     ShadowHooks::InjectHooks();
     CCarPedGenHooks::InjectHooks();
+    CCutsceneSkipVote::InjectHooks();
 }

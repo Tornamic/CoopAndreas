@@ -114,31 +114,6 @@ static void __cdecl CTheZones__Update_Hook()
     GetPacketFactory().Send(keyPressed);
 }
 
-void CCutsceneMgr__StartCutscene_Hook()
-{
-    CCutsceneMgr::StartCutscene();
-    if (CLocalPlayer::m_bIsHost)
-    {
-        Packets::Scripts::StartCutscene packet{};
-        packet.currArea = static_cast<eVisibleArea>(CGame::currArea);
-        strncpy_s(packet.name, CCutsceneMgr::ms_cutsceneName, 8);
-        GetPacketFactory().Send(packet);
-    }
-}
-
-bool CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook()
-{
-    bool result = plugin::CallAndReturn<bool, 0x4D5D10>();
-
-    if (result)
-    {
-        Packets::Scripts::SkipCutscene packet{};
-        GetPacketFactory().Send(packet);
-    }
-
-    return result;
-}
-
 int __purecall_Hook()
 {
     *(char**)0xDEAD =
@@ -206,12 +181,6 @@ void GameHooks::InjectHooks()
     // it is necessary for the menu to be processed correctly
     CTheZones__Update_Dest = injector::GetBranchDestination(0x53BF49).as_int();
     patch::RedirectCall(0x53BF49, CTheZones__Update_Hook);
-
-    // patch::RedirectCall(0x48072B, CCutsceneMgr__StartCutscene_Hook);
-
-    // patch::RedirectCall(0x5B1947, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
-    // patch::RedirectCall(0x469F0E, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
-    // patch::RedirectCall(0x475459, CCutsceneMgr__IsCutsceneSkipButtonBeingPressed_Hook);
 
     patch::RedirectJump(PURECALL, __purecall_Hook);
 

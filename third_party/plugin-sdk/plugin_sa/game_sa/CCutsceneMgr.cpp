@@ -130,8 +130,8 @@ void CCutsceneMgr::Initialise() {
 }
 
 // Converted from cdecl void CCutsceneMgr::IsCutsceneSkipButtonBeingPressed(void) 0x4D5D10
-void CCutsceneMgr::IsCutsceneSkipButtonBeingPressed() {
-    plugin::Call<0x4D5D10>();
+bool CCutsceneMgr::IsCutsceneSkipButtonBeingPressed() {
+    return plugin::CallAndReturn<bool, 0x4D5D10>();
 }
 
 // Converted from cdecl void CCutsceneMgr::LoadAnimationUncompressed(char const*animName) 0x4D5AB0

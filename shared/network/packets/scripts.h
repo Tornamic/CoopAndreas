@@ -259,4 +259,38 @@ private:
     }
 };
 
+class CutsceneSkipVote : public Packet
+{
+    DEFINE_PACKET_TYPE(CutsceneSkipVote, ePacketType::CUTSCENE_SKIP_VOTE, ePacketChannel::SCRIPT);
+
+public:
+    SenderPlayerId senderPlayerid{};
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_object(stream, senderPlayerid);
+        return true;
+    }
+};
+
+class CutsceneSkipVoteState : public Packet
+{
+    DEFINE_PACKET_TYPE(CutsceneSkipVoteState, ePacketType::CUTSCENE_SKIP_VOTE_STATE, ePacketChannel::SCRIPT);
+
+public:
+    int votes = 0;
+    int voters = 0;
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_int(stream, votes, 0, Config::MAX_SERVER_PLAYERS);
+        serialize_int(stream, voters, 0, Config::MAX_SERVER_PLAYERS);
+        return true;
+    }
+};
+
 }  // namespace Packets::Scripts

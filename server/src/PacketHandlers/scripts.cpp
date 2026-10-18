@@ -95,3 +95,24 @@ PACKET_HANDLER(ePacketType::PERFORM_TASK_SEQUENCE, Packets::Scripts::PerformTask
     ids::WritePlayerId(&pPerformTaskSequence->buffer[0], pNetworkPlayer->m_playerId);
     GetPacketFactory().SendToAll(*pPerformTaskSequence, pNetworkPlayer);
 }
+
+PACKET_HANDLER(ePacketType::CUTSCENE_SKIP_VOTE, Packets::Scripts::CutsceneSkipVote* pCutsceneSkipVote, CNetworkPlayer* pNetworkPlayer)
+{
+    if (auto pHost = CNetworkPlayerManager::GetHost())
+    {
+        pCutsceneSkipVote->senderPlayerid = pNetworkPlayer->m_playerId;
+        GetPacketFactory().Send(*pCutsceneSkipVote, pHost);
+    }
+    else
+    {
+        logger::warn("could not send a cutscene skip vote, no host on the server");
+    }
+}
+
+PACKET_HANDLER(ePacketType::CUTSCENE_SKIP_VOTE_STATE, Packets::Scripts::CutsceneSkipVoteState* pCutsceneSkipVoteState, CNetworkPlayer* pNetworkPlayer)
+{
+    if (pNetworkPlayer->m_bIsHost)
+    {
+        GetPacketFactory().SendToAll(*pCutsceneSkipVoteState, pNetworkPlayer);
+    }
+}
