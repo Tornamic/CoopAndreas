@@ -53,13 +53,17 @@ void CNetworkPlayerMapPin::Process()
 		CVector2D pos = GetPlayerMarkerPosition();
 		float angle = CalculateMarkerAngle(player);
 
+		// the arrow is square: like the local player's one (0x5886B9) its size depends on the screen width only,
+		// otherwise it gets stretched on non-16:9 resolutions
+		unsigned int size = 5 * RsGlobal.maximumWidth / 640;
+
 		CRadar::DrawRotatingRadarSprite(
 			&CRadar::RadarBlipSprites[RADAR_SPRITE_CENTRE],
 			pos.x,
 			pos.y,
 			angle,
-			5 * RsGlobal.maximumWidth / 640,
-			5 * RsGlobal.maximumHeight / 360,
+			size,
+			size,
 			player->m_pPed->IsHidden() ? CRGBA{ 50, 50, 50, 255 } : CRGBA{ 255, 255, 255, 255 }
 		);
 	}
