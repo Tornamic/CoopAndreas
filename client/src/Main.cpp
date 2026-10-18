@@ -32,6 +32,7 @@
 #include <CWeatherSync.h>
 #include <network/packets/scripts.h>
 #include <CNetworkEntityBlip.h>
+#include "CHorseshoeSync.h"
 
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
@@ -79,6 +80,7 @@ public:
         };
         Events::gameProcessEvent += []
         {
+            CHorseshoeSync::Process();
             CNetworkAnimQueue::Process();
             CEntryExitTransitionSync::Process();
             CDiscordRPCMgr::Update();

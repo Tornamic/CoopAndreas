@@ -6,6 +6,7 @@
 #include <CWeatherSync.h>
 #include <CMoonSync.h>
 #include <game_sa/CTagManager.h>
+#include "CHorseshoeSync.h"
 
 PACKET_HANDLER(ePacketType::PLAYER_CONNECTED, Packets::System::PlayerConnected* pPlayerConnected)
 {
@@ -28,6 +29,7 @@ PACKET_HANDLER(ePacketType::PLAYER_CONNECTED, Packets::System::PlayerConnected* 
         CEntryExitMarkerSync::ms_bUpdateAfterProcessingThisFrame = true;
         CTagSync::SyncCurrentState();
         CMoonSync::SyncCurrentState();
+        CHorseshoeSync::SyncCurrentState();
     }
 }
 
@@ -136,4 +138,9 @@ PACKET_HANDLER(ePacketType::PLAYER_CHAT_MESSAGE, Packets::System::ChatMessage* p
     {
         CChat::AddPlayerChatMessage(player->GetName().c_str(), pChatMessage->message);
     }
+}
+
+PACKET_HANDLER(ePacketType::HORSESHOE_STATE, Packets::System::HorseshoeState* pHorseshoeState)
+{
+    CHorseshoeSync::OnStateReceived(pHorseshoeState->maskLow, pHorseshoeState->maskHigh);
 }

@@ -230,6 +230,28 @@ private:
         return true;
     }
 };
+class HorseshoeState : public Packet
+{
+    DEFINE_PACKET_TYPE(HorseshoeState, ePacketType::HORSESHOE_STATE, ePacketChannel::SYSTEM);
+
+public:
+    static constexpr int HORSESHOE_COUNT = 50;
+    uint32_t maskLow = 0;
+    uint32_t maskHigh = 0;
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_uint32(stream, maskLow);
+        serialize_uint32(stream, maskHigh);
+        if (Stream::IsReading)
+        {
+            maskHigh &= (1u << (HORSESHOE_COUNT - 32)) - 1u;
+        }
+        return true;
+    }
+};
 
 }  // namespace Packets::System
 

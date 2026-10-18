@@ -7,3 +7,9 @@ PACKET_HANDLER(ePacketType::PLAYER_CHAT_MESSAGE, Packets::System::ChatMessage* p
 	pChatMessage->senderPlayerid = pNetworkPlayer->m_playerId;
 	GetPacketFactory().SendToAll(*pChatMessage, pNetworkPlayer);
 }
+
+PACKET_HANDLER(
+    ePacketType::HORSESHOE_STATE, Packets::System::HorseshoeState* pHorseshoeState, CNetworkPlayer* pNetworkPlayer)
+{
+    GetPacketFactory().SendToAll(*pHorseshoeState, pNetworkPlayer);
+}
