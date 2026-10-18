@@ -138,6 +138,9 @@ public:
     float breakPedal = 0.0f;
     float steerAngle = 0.0f;
 
+    bool siren = false;      // CVehicle::m_nVehicleFlags.bSirenOrAlarm
+    uint8_t hornCounter{};   // CVehicle::m_nHornCounter, frames left to honk
+
     // subType specific fields
     float bikeLean{};               // bike/bmx
     float controlPedaling{};        // bmx
@@ -221,6 +224,10 @@ private:
             serialize_compressed_float(stream, breakPedal, -1.0f, 1.0f, 0.01f);
             serialize_compressed_float(stream, steerAngle, -1.0f, 1.0f, 0.01f);
         }
+#pragma endregion
+#pragma region siren horn
+        serialize_bool(stream, siren);
+        serialize_uint8(stream, hornCounter);
 #pragma endregion
 #pragma region type specific
 

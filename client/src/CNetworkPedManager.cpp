@@ -123,6 +123,8 @@ void CNetworkPedManager::Update()
                 packet.gasPedal = pVehicle->m_fGasPedal;
                 packet.breakPedal = pVehicle->m_fBreakPedal;
                 packet.steerAngle = pVehicle->m_fSteerAngle;
+                packet.siren = pVehicle->m_nVehicleFlags.bSirenOrAlarm;
+                packet.hornCounter = static_cast<uint8_t>(std::min(pVehicle->m_nHornCounter, 255u));
 
                 GetPacketFactory().Send(packet);
             }
