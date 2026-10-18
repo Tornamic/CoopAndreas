@@ -3,6 +3,7 @@
 #include "CPacketBuffer.h"
 #include "CServerTime.h"
 #include "stdafx.h"
+#include "CSniperDot.h"
 #include "CCutsceneMgr.h"
 #include "UI/CDXFont.h"
 
@@ -207,6 +208,7 @@ public:
                 CAimSync::ProcessSyncing();
 
                 CNetworkPedManager::Process();
+                CSniperDot::Process();
 
                 CNetworkEntityBlip::Update();
 
