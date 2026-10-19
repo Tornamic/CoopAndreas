@@ -256,6 +256,7 @@ Char.SetStayInCarWhenJacked($ryder, True)
 Char.SetGetOutUpsideDownCar($ryder, False)
 37@ = Blip.AddForCar($ryder_car)
 Blip.SetAsFriendly(37@, True)
+Coop.SetBlipVisibleTo(37@, $scplayer)
 34@ = Blip.AddForCoord(2074.4, -1800.8, 12.5)
 Blip.Remove(34@)
 Audio.LoadMissionAudio(20200, 1)
@@ -292,7 +293,14 @@ for $temp_int = 0 to 2
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         201@($temp_int,3i) = 0
-        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 200@, true, BlipDisplay.MarkerOnly, BlipColor.Blue, 3)
+        if not Car.IsDead(200@)
+        then
+            Blip.Remove(207@($temp_int, 3i))
+            207@($temp_int, 3i) = Blip.AddForCar(200@)
+            Blip.SetAsFriendly(207@($temp_int, 3i), True)
+            Blip.ChangeDisplay(207@($temp_int, 3i), BlipDisplay.MarkerOnly)
+            Coop.SetBlipVisibleTo(207@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
+        end
     end
 end
 
@@ -438,7 +446,7 @@ for $temp_int = 0 to 2
                 not Char.LocateOnFootCar3D($NETWORK_PLAYER[$temp_int], 200@, 100.0, 100.0, 100.0, false)
             then
                 201@($temp_int,3i) = 1
-                Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 200@)
+                Blip.Remove(207@($temp_int, 3i))
             end
         end
         
@@ -511,6 +519,7 @@ Blip.Remove(34@)
 Blip.Remove(37@)
 37@ = Blip.AddForCar($ryder_car)
 Blip.SetAsFriendly(37@, True)
+Coop.SetBlipVisibleTo(37@, $scplayer)
 $blob_flag = 0
 
 FOR $temp_int = 0 to 2
@@ -2066,7 +2075,11 @@ then
             Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
         then
             201@($temp_int,3i) = 0
-            Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 200@, true, BlipDisplay.MarkerOnly, BlipColor.Blue, 3)
+            Blip.Remove(207@($temp_int, 3i))
+            207@($temp_int, 3i) = Blip.AddForCar(200@)
+            Blip.SetAsFriendly(207@($temp_int, 3i), True)
+            Blip.ChangeDisplay(207@($temp_int, 3i), BlipDisplay.MarkerOnly)
+            Coop.SetBlipVisibleTo(207@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
         end
     end
 end
@@ -2154,6 +2167,7 @@ goto_if_false @INTRO2_11502
 Blip.Remove(37@)
 37@ = Blip.AddForCar($ryder_car)
 Blip.SetAsFriendly(37@, True)
+Coop.SetBlipVisibleTo(37@, $scplayer)
 goto @INTRO2_11509
 
 :INTRO2_11502
@@ -2249,7 +2263,7 @@ for $temp_int = 0 to 2
                 not Char.LocateOnFootCar3D($NETWORK_PLAYER[$temp_int], 200@, 50.0, 50.0, 50.0, false)
             then
                 201@($temp_int,3i) = 1
-                Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 200@)
+                Blip.Remove(207@($temp_int, 3i))
             end
         end
         
@@ -2393,6 +2407,7 @@ Blip.Remove(34@)
 Blip.Remove(47@)
 47@ = Blip.AddForChar($ryder)
 Blip.SetAsFriendly(47@, True)
+Coop.SetBlipVisibleTo(47@, $scplayer)
 Text.PrintNow('INT2_5', 1000, 1)
 65@ = Char.GetScriptTaskStatus($ryder, 1482)
 if 
@@ -2414,6 +2429,7 @@ Blip.Remove(34@)
 Blip.Remove(37@)
 37@ = Blip.AddForCar($ryder_car)
 Blip.SetAsFriendly(37@, True)
+Coop.SetBlipVisibleTo(37@, $scplayer)
 $blob_flag = 0
 gosub @INTRO2_15117
 Text.PrintNow('INT2_6', 10000, 1)
@@ -2601,11 +2617,7 @@ Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
 $can_skip_smoking_cutscene = 1
 
 for $temp_int = 0 to 2
-    if 
-        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
-    then
-        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
-    end
+    Blip.Remove(207@($temp_int, 3i))
 end
 
 return 
@@ -2626,11 +2638,7 @@ Blip.Remove($sweet_contact_blip)
 $sweet_contact_blip = Blip.AddSpriteForContactPoint($sweet_blip_icon, $sweetX, $sweetY, $sweetZ)
 
 for $temp_int = 0 to 2
-    if 
-        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
-    then
-        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
-    end
+    Blip.Remove(207@($temp_int, 3i))
 end
 
 Player.ClearWantedLevel($player1)
@@ -2711,11 +2719,7 @@ Car.SetCanBurstTires($ryder_car, True)
 :INTRO2_14875
 
 for $temp_int = 0 to 2
-    if 
-        Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
-    then
-        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
-    end
+    Blip.Remove(207@($temp_int, 3i))
 end
 
 Streaming.MarkModelAsNoLongerNeeded(155)

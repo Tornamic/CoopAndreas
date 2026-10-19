@@ -188,7 +188,11 @@ for $temp_int = 0 to 2
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         201@($temp_int,3i) = 0 // greenwood_blip_removed
-        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 200@, true, BlipDisplay.MarkerOnly, BlipColor.Blue, 3)
+        Blip.Remove(233@($temp_int, 3i))
+        233@($temp_int, 3i) = Blip.AddForCar(200@)
+        Blip.SetAsFriendly(233@($temp_int, 3i), True)
+        Blip.ChangeDisplay(233@($temp_int, 3i), BlipDisplay.MarkerOnly)
+        Coop.SetBlipVisibleTo(233@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
         Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
         if
             209@ == -1
@@ -233,7 +237,7 @@ for $temp_int = 0 to 2
                 Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
             then
                 201@($temp_int,3i) = 1
-                Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 200@)
+                Blip.Remove(233@($temp_int, 3i))
             end
         end
     end
@@ -582,7 +586,8 @@ for $temp_int = 0 to 2
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
-        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Blip.Remove(233@($temp_int, 3i))
+        Blip.Remove(236@($temp_int, 3i))
     end
 end
 
@@ -1661,6 +1666,7 @@ if
 goto_if_false @TWAR7_8690
 66@ = Blip.AddForChar(34@)
 Blip.SetAsFriendly(66@, False)
+Coop.SetBlipVisibleTo(66@, $scplayer)
 
 :TWAR7_8690
 Char.HideWeaponForScriptedCutscene($scplayer, False)
@@ -1673,7 +1679,9 @@ for $temp_int = 0 to 2
         if
             not Char.IsDead(34@)
         then
-            Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, false, BlipDisplay.Both, BlipColor.Red, 3)
+            Blip.Remove(236@($temp_int, 3i))
+            236@($temp_int, 3i) = Blip.AddForChar(34@)
+            Coop.SetBlipVisibleTo(236@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
         end
         Coop.PrintNowForNetworkPlayer('SMK1_04', 7000, 1, $NETWORK_PLAYER[$temp_int]) // Catch and kill Freddy
     end
@@ -2935,6 +2943,7 @@ if
 goto_if_false @TWAR7_18221
 Blip.Remove(66@)
 66@ = Blip.AddForChar(34@)
+Coop.SetBlipVisibleTo(66@, $scplayer)
 Char.SetOnlyDamagedByPlayer(34@, False)
 145@ = Sequence.Open()
 Task.LeaveAnyCar(-1)
@@ -3002,7 +3011,8 @@ for $temp_int = 0 to 2
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
-        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Blip.Remove(233@($temp_int, 3i))
+        Blip.Remove(236@($temp_int, 3i))
     end
 end
 Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
@@ -3039,7 +3049,8 @@ for $temp_int = 0 to 2
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
-        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Blip.Remove(233@($temp_int, 3i))
+        Blip.Remove(236@($temp_int, 3i))
     end
 end
 Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
@@ -3148,7 +3159,8 @@ for $temp_int = 0 to 2
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
-        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Blip.Remove(233@($temp_int, 3i))
+        Blip.Remove(236@($temp_int, 3i))
         Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
         Char.SetHeading($NETWORK_PLAYER[$temp_int], 265.8)
     end
@@ -3906,11 +3918,12 @@ Char.ShutUpForScriptedSpeech($scplayer, False)
 Game.ShutAllCharsUp(False)
 Blip.Remove(66@)
 for $temp_int = 0 to 2
+    Blip.Remove(233@($temp_int, 3i))
+    Blip.Remove(236@($temp_int, 3i))
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
-        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
     end
 end
 if
@@ -4138,6 +4151,7 @@ goto_if_false @TWAR7_24889
 Blip.Remove(66@)
 66@ = Blip.AddForCar(37@)
 Blip.SetAsFriendly(66@, True)
+Coop.SetBlipVisibleTo(66@, $scplayer)
 71@ = 0
 
 :TWAR7_24889
@@ -4169,6 +4183,7 @@ Text.PrintNow('SMK1_04', 7000, 1)
 Blip.Remove(66@)
 66@ = Blip.AddForChar(34@)
 Blip.SetAsFriendly(66@, False)
+Coop.SetBlipVisibleTo(66@, $scplayer)
 71@ = 1
 
 :TWAR7_25072
@@ -4188,6 +4203,7 @@ Text.PrintNow('SMK1_11', 7000, 1)
 Blip.Remove(66@)
 66@ = Blip.AddForCar(36@)
 Blip.SetAsFriendly(66@, True)
+Coop.SetBlipVisibleTo(66@, $scplayer)
 71@ = 0
 
 :TWAR7_25199
@@ -4203,6 +4219,7 @@ goto_if_false @TWAR7_25265
 Blip.Remove(66@)
 66@ = Blip.AddForChar($mc_strap)
 Blip.SetAsFriendly(66@, True)
+Coop.SetBlipVisibleTo(66@, $scplayer)
 72@ = 0
 
 :TWAR7_25265
@@ -4227,11 +4244,13 @@ if
   Char.IsInCar($scplayer, 36@)
 goto_if_false @TWAR7_25407
 66@ = Blip.AddForChar(34@)
+Coop.SetBlipVisibleTo(66@, $scplayer)
 goto @TWAR7_25422
 
 :TWAR7_25407
 66@ = Blip.AddForCar(36@)
 Blip.SetAsFriendly(66@, True)
+Coop.SetBlipVisibleTo(66@, $scplayer)
 
 :TWAR7_25422
 goto @TWAR7_25454

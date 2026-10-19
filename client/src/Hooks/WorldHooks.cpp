@@ -8,6 +8,7 @@
 #include <CEntryExitTransitionSync.h>
 #include <CShotInfo.h>
 #include <game_sa/CTagManager.h>
+#include <CRadarSync.h>
 
 // static void __cdecl CWeather__ForceWeather_Hook(short id)
 // {
@@ -28,28 +29,27 @@
 // }
 
 // place waypoint
-static CdeclEvent<AddressList<0x5775D2, H_CALL>, PRIORITY_AFTER,
-    ArgPick5N<eBlipType, 0, CVector, 1, eBlipColour, 2, eBlipDisplay, 3, char*, 4>,
-    void(eBlipType, CVector, eBlipColour, eBlipDisplay, char*)>
-    waypointPlaceEvent;
-static void PlaceWaypointHook(
-    eBlipType type, CVector posn, eBlipColour color, eBlipDisplay blipDisplay, char* scriptName)
+static int __cdecl CRadar__SetCoordBlip_Hook_Waypoint(eBlipType type, CVector posn, unsigned int color, eBlipDisplay blipDisplay)
 {
+    int blipHandle = CRadarSync::SetLocalCoordBlip(type, posn, color, blipDisplay);
+
     Packets::Players::PlayerPlaceWaypoint playerPlaceWaypoint{};
     playerPlaceWaypoint.place = true;
     playerPlaceWaypoint.position.x = posn.x;
     playerPlaceWaypoint.position.y = posn.y;
     GetPacketFactory().Send(playerPlaceWaypoint);
+
+    return blipHandle;
 }
 
 // hide waypoint
-static void __fastcall CRadar__ClearBlip_Hook_Waypoint(int blipIndex, SKIP_EDX)
+static void __cdecl CRadar__ClearBlip_Hook_Waypoint(int blipIndex)
 {
     Packets::Players::PlayerPlaceWaypoint playerPlaceWaypoint{};
     playerPlaceWaypoint.place = false;
     GetPacketFactory().Send(playerPlaceWaypoint);
 
-    CRadar::ClearBlip(blipIndex);
+    CRadarSync::ClearLocalBlip(blipIndex);
 }
 
 static void __cdecl CExplosion__AddExplosion(CEntity* newVictim, CPed* newCreator, eExplosionType type, CVector2D pos,
@@ -253,7 +253,7 @@ static void __declspec(naked) CGarage__Update_Hook()
 }
 void WorldHooks::InjectHooks()
 {
-    waypointPlaceEvent += PlaceWaypointHook;
+    patch::RedirectCall(0x5775D2, CRadar__SetCoordBlip_Hook_Waypoint);
     patch::RedirectCall(0x577582, CRadar__ClearBlip_Hook_Waypoint);
 
     patch::RedirectCall(0x458475, CExplosion__AddExplosion);

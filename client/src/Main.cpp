@@ -18,7 +18,6 @@
 #include <CNetworkAnimQueue.h>
 #include <CNetworkCheckpoint.h>
 #include <UI/CNetworkPlayerList.h>
-#include <CNetworkStaticBlip.h>
 #include <COpCodeSync.h>
 #include <CPedPlacement.h>
 #include <CTaskSimpleCarSetPedInAsPassenger.h>
@@ -31,7 +30,6 @@
 #include <CCompatibilityChecker.h>
 #include <CWeatherSync.h>
 #include <network/packets/scripts.h>
-#include <CNetworkEntityBlip.h>
 
 unsigned int lastOnFootSyncTickRate = 0;
 unsigned int lastDriverSyncTickRate = 0;
@@ -208,8 +206,6 @@ public:
 
                 CNetworkPedManager::Process();
 
-                CNetworkEntityBlip::Update();
-
                 static uint32_t crashHotkeyPressedAt = 0;
 
                 if (GetAsyncKeyState(VK_F7) && GetAsyncKeyState(VK_F10) && GetAsyncKeyState(VK_NUMPAD1))
@@ -242,12 +238,6 @@ public:
                 CEntryExitMarkerSync::Send();
                 CEntryExitMarkerSync::ms_bUpdateAfterProcessingThisFrame = false;
                 CEntryExitMarkerSync::ms_nLastUpdate = GetTickCount();
-            }
-
-            if (CNetworkStaticBlip::ms_bNeedToSendAfterThisFrame && CLocalPlayer::m_bIsHost)
-            {
-                CNetworkStaticBlip::Send();
-                CNetworkStaticBlip::ms_bNeedToSendAfterThisFrame = false;
             }
 
             /*if (GetAsyncKeyState(VK_F11) && CLocalPlayer::m_bIsHost)

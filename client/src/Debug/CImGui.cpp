@@ -5,6 +5,7 @@
 #include "backends/imgui_impl_dx9.h"
 #include "CPacketTimeline.h"
 #include "MissionRunner.h"
+#include "CRadarTraceDebugger.h"
 
 ImFont* pFont;
 
@@ -117,6 +118,13 @@ void CImGui::Init()
             {
                 bMissionRunner = false;
                 CImGui::SetActive(false);
+            }
+
+            static bool bRadarTraceDebugger = false;
+            ImGui::Checkbox("Radar Traces", &bRadarTraceDebugger);
+            if (bRadarTraceDebugger)
+            {
+                CRadarTraceDebugger::DrawUI();
             }
 
             ImGui::End();

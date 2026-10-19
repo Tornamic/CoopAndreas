@@ -2,10 +2,10 @@
 #include "network/packet_types.h"
 #include "stdafx.h"
 #include <CNetworkCheckpoint.h>
-#include <CNetworkEntityBlip.h>
 #include <CEntryExitMarkerSync.h>
 #include <COpCodeSync.h>
 #include <CTaskSequenceSync.h>
+#include <CRadarSync.h>
 
 PACKET_HANDLER(ePacketType::ON_MISSION_FLAG_SYNC, Packets::Scripts::OnMissionFlagSync* pOnMissionFlagSync)
 {
@@ -20,7 +20,6 @@ PACKET_HANDLER(ePacketType::ON_MISSION_FLAG_SYNC, Packets::Scripts::OnMissionFla
 		{
 			// cleanup
 			CNetworkCheckpoint::Remove();
-			CNetworkEntityBlip::ClearEntityBlips();
 			TheCamera.SetWideScreenOff();
 			CPad::GetPad(0)->SetDrunkInputDelay(0);
 			CPad::GetPad(0)->DisablePlayerControls = 0;
@@ -141,4 +140,14 @@ PACKET_HANDLER(ePacketType::OPCODE_SYNC, Packets::Scripts::OpCodeSync* pOpCodeSy
 PACKET_HANDLER(ePacketType::PERFORM_TASK_SEQUENCE, Packets::Scripts::PerformTaskSequence* pPerformTaskSequence)
 {
 	CTaskSequenceSync::HandlePacket(pPerformTaskSequence->buffer, pPerformTaskSequence->size);
+}
+
+PACKET_HANDLER(ePacketType::RADAR_TRACE_UPDATE, Packets::Scripts::RadarTraceUpdate* pRadarTraceUpdate)
+{
+	CRadarSync::HandlePacket(*pRadarTraceUpdate);
+}
+
+PACKET_HANDLER(ePacketType::UPDATE_ALL_RADAR_TRACES, Packets::Scripts::UpdateAllRadarTraces* pUpdateAllRadarTraces)
+{
+	CRadarSync::HandlePacket(*pUpdateAllRadarTraces);
 }

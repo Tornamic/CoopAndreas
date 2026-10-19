@@ -240,11 +240,23 @@ for $temp_int = 0 to 2
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         211@($temp_int,3i) = 0 // car_blips_removed
-        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, true, BlipDisplay.MarkerOnly, BlipColor.Blue, 3)
+        if not Car.IsDead(34@)
+        then
+            222@($temp_int, 3i) = Blip.AddForCar(34@)
+            Blip.SetAsFriendly(222@($temp_int, 3i), True)
+            Blip.ChangeDisplay(222@($temp_int, 3i), BlipDisplay.MarkerOnly)
+            Coop.SetBlipVisibleTo(222@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
+        end
         if
             210@ <> -1
         then
-            Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 210@, true, BlipDisplay.MarkerOnly, BlipColor.Blue, 3)
+            if not Car.IsDead(210@)
+            then
+                225@($temp_int, 3i) = Blip.AddForCar(210@)
+                Blip.SetAsFriendly(225@($temp_int, 3i), True)
+                Blip.ChangeDisplay(225@($temp_int, 3i), BlipDisplay.MarkerOnly)
+                Coop.SetBlipVisibleTo(225@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
+            end
         end
     end
 end
@@ -365,7 +377,8 @@ for $temp_int = 0 to 2
                 Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
             then
                 211@($temp_int,3i) = 1
-                Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+                Blip.Remove(222@($temp_int, 3i))
+                Blip.Remove(225@($temp_int, 3i))
             end
         end
     end
@@ -450,6 +463,7 @@ goto_if_false @SMOKE2_2743
 Blip.Remove(184@)
 183@ = Blip.AddForCar(34@)
 Blip.SetAsFriendly(183@, True)
+Coop.SetBlipVisibleTo(183@, $scplayer)
 gosub @SMOKE2_10751
 if 
   Char.IsDead(35@)
@@ -575,11 +589,12 @@ Player.SetControl($player1, False)
 Blip.Remove(184@)
 Blip.Remove(186@)
 for $temp_int = 0 to 2
+    Blip.Remove(222@($temp_int, 3i))
+    Blip.Remove(225@($temp_int, 3i))
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
-        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
     end
 end
 Path.SwitchRoadsBackToOriginal(2488.0, -1431.93, 25.41, 2528.0, -1391.93, 29.41)
@@ -596,10 +611,11 @@ for $temp_int = 0 to 2
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
-        if
-            not Char.IsDead(41@)
+        if not Char.IsDead(41@)
         then
-            Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 41@, false, BlipDisplay.Both, BlipColor.Red, 3)
+            Blip.Remove(222@($temp_int, 3i))
+            222@($temp_int, 3i) = Blip.AddForChar(41@)
+            Coop.SetBlipVisibleTo(222@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
         end
         Coop.PrintNowForNetworkPlayer('SMK2_17', 10000, 0, $NETWORK_PLAYER[$temp_int]) // Chase down the gang member
     end
@@ -1037,6 +1053,7 @@ Car.SetHeading(34@, 39@)
 Car.ChangeColor(34@, 98, 14)
 183@ = Blip.AddForCar(34@)
 Blip.SetAsFriendly(183@, True)
+Coop.SetBlipVisibleTo(183@, $scplayer)
 35@ = Char.CreateAsPassenger(PedType.Mission1, 290, 34@, 0)
 Char.SetHealth(35@, 500)
 Char.SetMaxHealth(35@, 500)
@@ -1487,6 +1504,7 @@ DecisionMakerChar.ClearEventResponse(123@, 11)
 DecisionMakerChar.ClearEventResponse(123@, 20)
 Char.SetDecisionMaker(41@, 123@)
 185@ = Blip.AddForChar(41@)
+Coop.SetBlipVisibleTo(185@, $scplayer)
 
 :SMOKE2_7767
 World.ClearArea(0, 2170.68, -1282.01, 23.7, 100.0)
@@ -2100,11 +2118,12 @@ return
 
 :SMOKE2_11407
 for $temp_int = 0 to 2
+    Blip.Remove(222@($temp_int, 3i))
+    Blip.Remove(225@($temp_int, 3i))
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
-        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
     end
 end
 if

@@ -1,6 +1,8 @@
 #pragma once
 #include <CEntryExit.h>
 #include <CGame.h>
+#include <CRadar.h>
+#include <network/CNetworkEntitySerializer.h>
 
 namespace Packets::Scripts
 {
@@ -289,6 +291,110 @@ private:
     {
         serialize_int(stream, votes, 0, Config::MAX_SERVER_PLAYERS);
         serialize_int(stream, voters, 0, Config::MAX_SERVER_PLAYERS);
+        return true;
+    }
+};
+
+struct _RadarTracePayload
+{
+    uint16_t counter = 0;
+    bool bInUse = false;
+    uint32_t colour = 0;
+    uint8_t type = BLIP_NONE;
+    uint8_t display = BLIP_DISPLAY_NEITHER;
+    uint8_t sprite = RADAR_SPRITE_NONE;
+    uint8_t coordBlipAppearance = 0;
+    bool bBright = false;
+    bool bShortRange = false;
+    bool bFriendly = false;
+    bool bBlipRemain = false;
+    bool bBlipFade = false;
+    uint16_t size = 0;
+    float sphereRadius = 0.0f;
+    WorldPositionCompressed position{};  // the entity position for BLIP_OBJECT and BLIP_PICKUP
+    CNetworkEntitySerializer entity{};   // BLIP_CAR and BLIP_CHAR only
+    bool bHasEntryExit = false;
+    int16_t entryExitX = 0;
+    int16_t entryExitY = 0;
+    playerid_t forWho{};
+
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_uint16(stream, counter);
+        serialize_bool(stream, bInUse);
+        if (!bInUse)
+        {
+            return true;
+        }
+
+        serialize_uint32(stream, colour);
+        serialize_int(stream, type, BLIP_NONE, BLIP_AIRSTRIP);
+        serialize_int(stream, display, BLIP_DISPLAY_NEITHER, BLIP_DISPLAY_BOTH);
+        serialize_int(stream, sprite, RADAR_SPRITE_NONE, RADAR_SPRITE_COUNT - 1);
+        serialize_int(stream, coordBlipAppearance, 0, 3);
+        serialize_bool(stream, bBright);
+        serialize_bool(stream, bShortRange);
+        serialize_bool(stream, bFriendly);
+        serialize_bool(stream, bBlipRemain);
+        serialize_bool(stream, bBlipFade);
+        serialize_uint16(stream, size);
+        serialize_float(stream, sphereRadius);
+
+        if (type == BLIP_CAR || type == BLIP_CHAR)
+        {
+            serialize_object(stream, entity);
+        }
+        else
+        {
+            serialize_object(stream, position);
+        }
+
+        serialize_bool(stream, bHasEntryExit);
+        if (bHasEntryExit)
+        {
+            serialize_int(stream, entryExitX, -3000, 3000);
+            serialize_int(stream, entryExitY, -3000, 3000);
+        }
+
+        serialize_playerid(stream, forWho);
+        return true;
+    }
+};
+
+class RadarTraceUpdate : public Packet
+{
+    DEFINE_PACKET_TYPE(RadarTraceUpdate, ePacketType::RADAR_TRACE_UPDATE, ePacketChannel::SCRIPT);
+
+public:
+    uint8_t index = 0;
+    _RadarTracePayload trace{};
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_int(stream, index, 0, MAX_RADAR_TRACES - 1);
+        serialize_object(stream, trace);
+        return true;
+    }
+};
+
+class UpdateAllRadarTraces : public Packet
+{
+    DEFINE_PACKET_TYPE(UpdateAllRadarTraces, ePacketType::UPDATE_ALL_RADAR_TRACES, ePacketChannel::SCRIPT);
+
+public:
+    _RadarTracePayload traces[MAX_RADAR_TRACES]{};
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        for (int i = 0; i < MAX_RADAR_TRACES; i++)
+        {
+            serialize_object(stream, traces[i]);
+        }
         return true;
     }
 };

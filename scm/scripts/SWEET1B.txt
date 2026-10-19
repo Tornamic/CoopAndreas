@@ -370,7 +370,11 @@ for $temp_int = 0 to 2
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
-        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Blip.Remove(206@($temp_int, 3i))
+        Blip.Remove(209@($temp_int, 3i))
+        Blip.Remove(212@($temp_int, 3i))
+        Blip.Remove(215@($temp_int, 3i))
+        Blip.Remove(218@($temp_int, 3i))
         Task.LeaveAnyCar($NETWORK_PLAYER[$temp_int])
     end
 end
@@ -473,6 +477,7 @@ Char.SetMaxHealth(35@, 120)
 Char.SetHealth(35@, 120)
 Char.SetHeading(35@, 114.0)
 44@ = Blip.AddForChar(35@)
+Coop.SetBlipVisibleTo(44@, $scplayer)
 Char.SetDecisionMaker(35@, 75@)
 Char.SetShootRate(35@, 75)
 Char.ShutUpForScriptedSpeech(35@, True)
@@ -560,10 +565,12 @@ for $temp_int = 0 to 2
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
-        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
+        Blip.Remove(206@($temp_int, 3i))
         if not Char.IsDead(35@)
         then
-            Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 35@, false, BlipDisplay.Both, BlipColor.Red, 3)
+            Blip.Remove(209@($temp_int, 3i))
+            209@($temp_int, 3i) = Blip.AddForChar(35@)
+            Coop.SetBlipVisibleTo(209@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
         end
         Coop.PrintNowForNetworkPlayer('SW1B_B', 10000, 1, $NETWORK_PLAYER[$temp_int]) // ~s~Go beat up the ~r~crack dealer~s~
     end
@@ -1338,7 +1345,7 @@ for $temp_int = 0 to 2
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
-        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
+        Blip.Remove(206@($temp_int, 3i))
         Coop.UpdateCheckpointForNetworkPlayer(2171.781, -1676.78, 14.0859, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int]) //CRACK HOUSE
         Coop.PrintNowForNetworkPlayer('SW1B_1', 7000, 1, $NETWORK_PLAYER[$temp_int]) // ~s~Go to ~r~crack dealer~s~    
     end
@@ -1671,12 +1678,16 @@ Char.SetRelationship(62@, RelationshipType.Dislike, PedType.Player1)
 Task.PickUpObject(62@, 82@, 0.0, 0.0, 0.0, 5, 16, "NULL", "NULL", -1)
 88@ = Blip.AddForChar(62@)
 Blip.SetEntryExit(88@, 2167.835, -1672.923, 2.0)
+Coop.SetBlipVisibleTo(88@, $scplayer)
 
 for $temp_int = 0 to 2
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
-        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 62@, false, BlipDisplay.Both, BlipColor.Red, 3)
+        Blip.Remove(212@($temp_int, 3i))
+        212@($temp_int, 3i) = Blip.AddForChar(62@)
+        Blip.SetEntryExit(212@($temp_int, 3i), 2167.835, -1672.923, 2.0)
+        Coop.SetBlipVisibleTo(212@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
     end
 end
 
@@ -1687,12 +1698,16 @@ Char.SetDecisionMaker(64@, 34@)
 Char.SetRelationship(64@, RelationshipType.Dislike, PedType.Player1)
 89@ = Blip.AddForChar(64@)
 Blip.SetEntryExit(89@, 2167.835, -1672.923, 2.0)
+Coop.SetBlipVisibleTo(89@, $scplayer)
 
 for $temp_int = 0 to 2
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
-        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 64@, false, BlipDisplay.Both, BlipColor.Red, 3)
+        Blip.Remove(215@($temp_int, 3i))
+        215@($temp_int, 3i) = Blip.AddForChar(64@)
+        Blip.SetEntryExit(215@($temp_int, 3i), 2167.835, -1672.923, 2.0)
+        Coop.SetBlipVisibleTo(215@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
     end
 end
 
@@ -1717,12 +1732,16 @@ Char.SetDecisionMaker(37@, 34@)
 Char.SetRelationship(37@, RelationshipType.Dislike, PedType.Player1)
 45@ = Blip.AddForChar(37@)
 Blip.SetEntryExit(45@, 2167.835, -1672.923, 2.0)
+Coop.SetBlipVisibleTo(45@, $scplayer)
 
 for $temp_int = 0 to 2
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
-        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 37@, false, BlipDisplay.Both, BlipColor.Red, 3)
+        Blip.Remove(218@($temp_int, 3i))
+        218@($temp_int, 3i) = Blip.AddForChar(37@)
+        Blip.SetEntryExit(218@($temp_int, 3i), 2167.835, -1672.923, 2.0)
+        Coop.SetBlipVisibleTo(218@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
     end
 end
 
@@ -2590,7 +2609,11 @@ for $temp_int = 0 to 2
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
-        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Blip.Remove(206@($temp_int, 3i))
+        Blip.Remove(209@($temp_int, 3i))
+        Blip.Remove(212@($temp_int, 3i))
+        Blip.Remove(215@($temp_int, 3i))
+        Blip.Remove(218@($temp_int, 3i))
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
     end
 end
@@ -2783,6 +2806,13 @@ Player.SetDrunkenness($player1, 0)
 
 :SWEET1B_16123
 $onmission = 0
+for $temp_int = 0 to 2
+    Blip.Remove(206@($temp_int, 3i))
+    Blip.Remove(209@($temp_int, 3i))
+    Blip.Remove(212@($temp_int, 3i))
+    Blip.Remove(215@($temp_int, 3i))
+    Blip.Remove(218@($temp_int, 3i))
+end
 $timer_mobile_start = Clock.GetGameTimer()
 Path.SwitchRoadsOn(2272.922, -1649.556, 14.3311, 2266.101, -1633.219, 14.3505)
 Path.SwitchPedRoadsOn(324.1973, 1116.758, 1082.898, 313.1226, 1124.197, 1082.898)
@@ -2831,11 +2861,14 @@ then
 					then
                         if not Char.IsDead(35@)
                         then
-                            Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 35@)
+                            Blip.Remove(209@($temp_int, 3i))
                         end
 						Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
 						Coop.PrintNowForNetworkPlayer('SW1B_H', 6000, 1, $NETWORK_PLAYER[$temp_int])
-						Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder, true, BlipDisplay.Both, BlipColor.Blue, 3)
+						Blip.Remove(206@($temp_int, 3i))
+						206@($temp_int, 3i) = Blip.AddForChar($ryder)
+						Blip.SetAsFriendly(206@($temp_int, 3i), True)
+						Coop.SetBlipVisibleTo(206@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
 						201@($temp_int, 3i) = 1
 					end
 				else
@@ -2846,24 +2879,26 @@ then
 
 							if 102@ == 0
 							then
-                                Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
+                                Blip.Remove(206@($temp_int, 3i))
 								Coop.UpdateCheckpointForNetworkPlayer(2301.07, -1754.40, 12.54, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
 								Coop.PrintNowForNetworkPlayer('SW1B_A', 7000, 1, $NETWORK_PLAYER[$temp_int]) // ~s~Go to ~y~B Dup crib~s~
 							end
 
 							if 102@ == 1
 							then
-                                Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
+                                Blip.Remove(206@($temp_int, 3i))
 								if not Char.IsDead(35@)
 								then
-									Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 35@, false, BlipDisplay.Both, BlipColor.Red, 3)
+									Blip.Remove(209@($temp_int, 3i))
+									209@($temp_int, 3i) = Blip.AddForChar(35@)
+									Coop.SetBlipVisibleTo(209@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
 								end
 								Coop.PrintNowForNetworkPlayer('SW1B_B', 7000, 1, $NETWORK_PLAYER[$temp_int]) // ~s~Go beat up the ~r~crack dealer~s~
 							end
 
 							if 102@ == 2
 							then
-                                Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
+                                Blip.Remove(206@($temp_int, 3i))
 								if 204@ == 0 // areaId
 								then
                                     //CRACK HOUSE
@@ -2874,7 +2909,7 @@ then
 
 							if 102@ == 3
 							then
-                                Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder)
+                                Blip.Remove(206@($temp_int, 3i))
 								//World.SwitchEntryExit('LACRAK', True)
 								if 204@ == 0 // areaId
 								then
@@ -2886,7 +2921,11 @@ then
 
 							if 102@ == 4
 							then
-                                Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+                                Blip.Remove(206@($temp_int, 3i))
+                                Blip.Remove(209@($temp_int, 3i))
+                                Blip.Remove(212@($temp_int, 3i))
+                                Blip.Remove(215@($temp_int, 3i))
+                                Blip.Remove(218@($temp_int, 3i))
 								Coop.UpdateCheckpointForNetworkPlayer(2513.33, -1672.12, 12.52, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
 								Coop.PrintNowForNetworkPlayer('SW1B_F', 7000, 1, $NETWORK_PLAYER[$temp_int]) // Go back to Ryders gaff.
 							end
@@ -2920,6 +2959,7 @@ then
                 Blip.Remove(38@)
                 39@ = Blip.AddForChar($ryder)
                 Blip.SetAsFriendly(39@, True)
+                Coop.SetBlipVisibleTo(39@, $scplayer)
                 Char.RemoveFromGroup($ryder)
                 Char.ClearTasks($ryder)
                 gosub @SWEET1B_17920
@@ -2957,6 +2997,7 @@ then
                             then
                                 Blip.Remove(44@)
                                 44@ = Blip.AddForChar(35@)
+                                Coop.SetBlipVisibleTo(44@, $scplayer)
                             end
                             Text.PrintNow('SW1B_B', 7000, 1) // ~s~Go beat up the ~r~crack dealer~s~
                         end

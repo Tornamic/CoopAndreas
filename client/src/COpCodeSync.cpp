@@ -36,6 +36,7 @@
 #include "COpCodeSync.h"
 #include <Commands/CCustomCommandMgr.h>
 #include "CEntryExitMarkerSync.h"
+#include "CRadarSync.h"
 #include <CTaskSequenceSync.h>
 #include <CNetworkAnimQueue.h>
 
@@ -1020,6 +1021,8 @@ static void FinishedProcessingScripts()
             CEntryExitMarkerSync::ms_bUpdateAfterProcessingScripts = false;
             CEntryExitMarkerSync::Send();
         }
+
+        CRadarSync::SendChangedTraces();
     }
 }
 

@@ -253,6 +253,7 @@ Car.ChangeColor($sweet_car, 59, 34)
 Car.SetHeading($sweet_car, 16.0)
 56@ = Blip.AddForCar($sweet_car)
 Blip.SetAsFriendly(56@, True)
+Coop.SetBlipVisibleTo(56@, $scplayer)
 Audio.SetRadioChannel(RadioChannel.BounceFM)
 Char.SetAnimGroup($big_smoke, "FATMAN")
 Char.SetHeading($big_smoke, 173.99)
@@ -489,14 +490,21 @@ for $temp_int = 0 to 1 // include 2 network players only
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.PrintNowForNetworkPlayer('SWE1_A', 7000, 1, $NETWORK_PLAYER[$temp_int]) // Get in Sweets Car
-        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet_car, true, BlipDisplay.Both, BlipColor.Purple, 3)
+        Blip.Remove(207@($temp_int, 3i))
+        207@($temp_int, 3i) = Blip.AddForCar($sweet_car)
+        Blip.SetAsFriendly(207@($temp_int, 3i), True)
+        Coop.SetBlipVisibleTo(207@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
     end
 end
 
 if  // the 3rd network player
     Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[2])
 then
-    Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[2], $ryder_car, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    $temp_int = 2
+    Blip.Remove(207@($temp_int, 3i))
+    207@($temp_int, 3i) = Blip.AddForCar($ryder_car)
+    Blip.SetAsFriendly(207@($temp_int, 3i), True)
+    Coop.SetBlipVisibleTo(207@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
 end
 
 45@ = 0
@@ -600,6 +608,7 @@ else
             Blip.Remove(62@)
             56@ = Blip.AddForCar($sweet_car)
             Blip.SetAsFriendly(56@, True)
+            Coop.SetBlipVisibleTo(56@, $scplayer)
             gosub @SWEET1_15166 // get_back_in_the_car
             Text.PrintNow('SWE1_S', 5000, 1) //~s~Get back in ~b~Sweets car!
             $blob_flag = 0
@@ -635,7 +644,7 @@ else
                 then
                     if 203@ <> -1
                     then
-                        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 203@)
+                        Blip.Remove(207@($temp_int, 3i))
                     end
 
                     Coop.UpdateCheckpointForNetworkPlayer(2089.01, -1649.08, 12.8, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
@@ -648,7 +657,10 @@ else
                 then
                     if 203@ <> -1
                     then
-                        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 203@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+                        Blip.Remove(207@($temp_int, 3i))
+                        207@($temp_int, 3i) = Blip.AddForCar(203@)
+                        Blip.SetAsFriendly(207@($temp_int, 3i), True)
+                        Coop.SetBlipVisibleTo(207@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
                     end
 
                     Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
@@ -696,10 +708,10 @@ for $temp_int = 0 to 2
         then
             if not Car.IsDead($ryder_car)
             then
-                Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder_car)
+                Blip.Remove(207@($temp_int, 3i))
             end
         else
-            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet_car)
+            Blip.Remove(207@($temp_int, 3i))
         end
     end
 end
@@ -1314,6 +1326,7 @@ Blip.Remove(42@)
 Blip.Remove(43@)
 56@ = Blip.AddForCar($sweet_car)
 Blip.SetAsFriendly(56@, True)
+Coop.SetBlipVisibleTo(56@, $scplayer)
 Car.LockDoors($sweet_car, CarLock.Unlocked)
 
 :SWEET1_7011
@@ -1326,10 +1339,16 @@ for $temp_int = 0 to 2
         then
             if not Car.IsDead($ryder_car)
             then
-                Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder_car, true, BlipDisplay.Both, BlipColor.Purple, 3)
+                Blip.Remove(207@($temp_int, 3i))
+                207@($temp_int, 3i) = Blip.AddForCar($ryder_car)
+                Blip.SetAsFriendly(207@($temp_int, 3i), True)
+                Coop.SetBlipVisibleTo(207@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
             end
         else
-            Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet_car, true, BlipDisplay.Both, BlipColor.Purple, 3)
+            Blip.Remove(207@($temp_int, 3i))
+            207@($temp_int, 3i) = Blip.AddForCar($sweet_car)
+            Blip.SetAsFriendly(207@($temp_int, 3i), True)
+            Coop.SetBlipVisibleTo(207@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
         end
         Coop.PrintNowForNetworkPlayer('SWE1_S', 6000, 1, $NETWORK_PLAYER[$temp_int])
     end
@@ -1416,10 +1435,10 @@ for $temp_int = 0 to 2
         then
             if not Car.IsDead($ryder_car)
             then
-                Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $ryder_car)
+                Blip.Remove(207@($temp_int, 3i))
             end
         else
-            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet_car)
+            Blip.Remove(207@($temp_int, 3i))
         end
     end
 end
@@ -1583,6 +1602,7 @@ else
             Blip.Remove(41@)
             56@ = Blip.AddForCar($sweet_car)
             Blip.SetAsFriendly(56@, True)
+            Coop.SetBlipVisibleTo(56@, $scplayer)
             gosub @SWEET1_15166 // get_back_in_the_car
             Text.PrintNow('SWE1_S', 6000, 1) //~s~Get back in ~b~Sweets car!
             Char.ShutUpForScriptedSpeech($scplayer, False)
@@ -1635,7 +1655,7 @@ else
                 then
                     if 203@ <> -1
                     then
-                        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 203@)
+                        Blip.Remove(207@($temp_int, 3i))
                     end
                     
                     Coop.UpdateCheckpointForNetworkPlayer(2338.74, -1500.31, 22.83, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
@@ -1648,7 +1668,10 @@ else
                 then
                     if 203@ <> -1
                     then
-                        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 203@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+                        Blip.Remove(207@($temp_int, 3i))
+                        207@($temp_int, 3i) = Blip.AddForCar(203@)
+                        Blip.SetAsFriendly(207@($temp_int, 3i), True)
+                        Coop.SetBlipVisibleTo(207@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
                     end
                     
                     Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
@@ -2326,6 +2349,7 @@ goto_if_false @SWEET1_11695
 Blip.Remove(56@)
 56@ = Blip.AddForCar($sweet_car)
 Blip.SetAsFriendly(56@, True)
+Coop.SetBlipVisibleTo(56@, $scplayer)
 
 :SWEET1_11695
 for $temp_int = 0 to 2
@@ -2489,6 +2513,7 @@ if
 goto_if_false @SWEET1_12479
 56@ = Blip.AddForCar($sweet_car)
 Blip.SetAsFriendly(56@, True)
+Coop.SetBlipVisibleTo(56@, $scplayer)
 
 :SWEET1_12479
 Audio.LoadMissionAudio(38607, 1)
@@ -2565,6 +2590,7 @@ else
             Blip.Remove(41@)
             56@ = Blip.AddForCar($sweet_car)
             Blip.SetAsFriendly(56@, True)
+            Coop.SetBlipVisibleTo(56@, $scplayer)
             gosub @SWEET1_15166 // get_back_in_the_car
             Text.PrintNow('SWE1_S', 6000, 1) //~s~Get back in ~b~Sweets car!
             Char.ShutUpForScriptedSpeech($scplayer, False)
@@ -2616,7 +2642,7 @@ else
                     Coop.UpdateCheckpointForNetworkPlayer(2504.735, -1672.45, 12.3848, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
                     if 203@ <> -1
                     then
-                        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 203@)
+                        Blip.Remove(207@($temp_int, 3i))
                     end
                     Coop.PrintNowForNetworkPlayer('SWE1_B', 6000, 1, $NETWORK_PLAYER[$temp_int]) // Go back to Sweets gaff.
                     200@($temp_int, 3i) = 1
@@ -2628,7 +2654,10 @@ else
                     Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
                     if 203@ <> -1
                     then
-                        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 203@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+                        Blip.Remove(207@($temp_int, 3i))
+                        207@($temp_int, 3i) = Blip.AddForCar(203@)
+                        Blip.SetAsFriendly(207@($temp_int, 3i), True)
+                        Coop.SetBlipVisibleTo(207@($temp_int, 3i), $NETWORK_PLAYER[$temp_int])
                     end
                     gosub @SWEET1_15166 // get_back_in_the_car
                     Coop.PrintNowForNetworkPlayer('SWE1_S', 6000, 1, $NETWORK_PLAYER[$temp_int]) //~s~Get back in ~b~Sweets car!
@@ -3038,6 +3067,9 @@ Blip.Remove(43@)
 Blip.Remove(44@)
 Blip.Remove(56@)
 Blip.Remove(62@)
+for $temp_int = 0 to 2
+    Blip.Remove(207@($temp_int, 3i))
+end
 Streaming.RemoveAnimation("GRAFFITI")
 Streaming.RemoveAnimation("GANGS")
 Char.RemoveElegantly($sweet)

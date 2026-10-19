@@ -1,5 +1,5 @@
 #include "CEntryExitMarkerSync.h"
-#include "CNetworkStaticBlip.h"
+#include "CRadarSync.h"
 #include "network/packet_types.h"
 #include "network/packets/system.h"
 #include "stdafx.h"
@@ -24,7 +24,7 @@ PACKET_HANDLER(ePacketType::PLAYER_CONNECTED, Packets::System::PlayerConnected* 
     // TODO REFACTOR
     if (CLocalPlayer::m_bIsHost)
     {
-        CNetworkStaticBlip::ms_bNeedToSendAfterThisFrame = true;
+        CRadarSync::SendAllTraces();
         CEntryExitMarkerSync::ms_bUpdateAfterProcessingThisFrame = true;
         CTagSync::SyncCurrentState();
         CMoonSync::SyncCurrentState();
@@ -108,6 +108,7 @@ PACKET_HANDLER(ePacketType::PLAYER_ASSIGN_HOST, Packets::System::PlayerAssignHos
         CNetworkPedManager::AssignHost();
         CWeatherSync::SyncCurrentState();
         CTagSync::SyncCurrentState();
+        CRadarSync::SendAllTraces();
         CChat::AddMessage("{c7a6ff}[Player] {d6dce8}You are the host now");
         return;
     }

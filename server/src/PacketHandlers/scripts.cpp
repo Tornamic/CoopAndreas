@@ -116,3 +116,19 @@ PACKET_HANDLER(ePacketType::CUTSCENE_SKIP_VOTE_STATE, Packets::Scripts::Cutscene
         GetPacketFactory().SendToAll(*pCutsceneSkipVoteState, pNetworkPlayer);
     }
 }
+
+PACKET_HANDLER(ePacketType::RADAR_TRACE_UPDATE, Packets::Scripts::RadarTraceUpdate* pRadarTraceUpdate, CNetworkPlayer* pNetworkPlayer)
+{
+    if (pNetworkPlayer->m_bIsHost)
+    {
+        GetPacketFactory().SendToAll(*pRadarTraceUpdate, pNetworkPlayer);
+    }
+}
+
+PACKET_HANDLER(ePacketType::UPDATE_ALL_RADAR_TRACES, Packets::Scripts::UpdateAllRadarTraces* pUpdateAllRadarTraces, CNetworkPlayer* pNetworkPlayer)
+{
+    if (pNetworkPlayer->m_bIsHost)
+    {
+        GetPacketFactory().SendToAll(*pUpdateAllRadarTraces, pNetworkPlayer);
+    }
+}

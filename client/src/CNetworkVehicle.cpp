@@ -103,10 +103,6 @@ CNetworkVehicle::~CNetworkVehicle()
     {
         if (m_pVehicle && m_pVehicle->IsVTableValid())
         {
-            if (m_nBlipHandle != -1)
-            {
-                CRadar::ClearBlipForEntity(eBlipType::BLIP_CAR, CPools::GetVehicleRef(m_pVehicle));
-            }
             CWorld::Remove(m_pVehicle);
             //CWorld::RemoveReferencesToDeletedObject(m_pVehicle); // ?
             delete m_pVehicle;

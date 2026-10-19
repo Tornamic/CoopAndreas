@@ -10,7 +10,6 @@ public:
 	char m_nPaintJob = -1;
 	bool m_bSyncing = false;
 	unsigned char m_nCreatedBy;
-	int m_nBlipHandle = -1;
 	Packets::Vehicles::VehicleDriverUpdate m_playerDriverSnapshot{};
 	CDamageManager m_oldDamageState{};
 
