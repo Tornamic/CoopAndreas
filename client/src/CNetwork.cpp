@@ -186,3 +186,22 @@ void CNetwork::Disconnect()
     m_bAuthenticated = false;
     m_networkThread.Stop();
 }
+
+void CNetwork::DisconnectOnCrash()
+{
+    m_bConnected = false;
+    m_bAuthenticated = false;
+
+    // crashed on the network thread itself, it wont reach its cleanup, so disconnect from here
+    if (m_networkThread.IsCurrentThread())
+    {
+        if (m_pPeer != nullptr && m_pENetHost != nullptr)
+        {
+            enet_peer_disconnect_now(m_pPeer, 0);
+        }
+        return;
+    }
+
+    // the network thread sends the disconnect on exit, dont hang if its stuck
+    m_networkThread.Stop(1000);
+}

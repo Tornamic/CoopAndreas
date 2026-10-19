@@ -20,7 +20,8 @@ public:
     typedef DWORD(WINAPI* ThreadProc)(LPVOID);
 
     void Start(ThreadProc threadProc);
-    void Stop();
+    void Stop(DWORD timeoutMs = INFINITE);
+    bool IsCurrentThread() const { return m_hThread != nullptr && GetCurrentThreadId() == GetThreadId(m_hThread); }
     void RequestStop() { m_bStopRequested = true; }
     bool IsStopRequested() const { return m_bStopRequested; }
 

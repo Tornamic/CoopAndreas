@@ -22,6 +22,7 @@ public:
     static void Start();
     static DWORD WINAPI InitAsync(LPVOID);
     static void Disconnect();
+    static void DisconnectOnCrash();
     static void ProcessReceive();
     static void ProcessSend();
     static void SendPacket(

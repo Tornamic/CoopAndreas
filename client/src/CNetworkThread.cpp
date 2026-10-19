@@ -9,13 +9,16 @@ void CNetworkThread::Start(ThreadProc threadProc)
     m_hThread = CreateThread(nullptr, 0, threadProc, nullptr, 0, nullptr);
 }
 
-void CNetworkThread::Stop()
+void CNetworkThread::Stop(DWORD timeoutMs)
 {
     RequestStop();
 
     if (m_hThread != nullptr && GetCurrentThreadId() != GetThreadId(m_hThread))
     {
-        WaitForSingleObject(m_hThread, INFINITE);
+        if (WaitForSingleObject(m_hThread, timeoutMs) != WAIT_OBJECT_0)
+            return;
+
+
         CloseHandle(m_hThread);
         m_hThread = nullptr;
     }

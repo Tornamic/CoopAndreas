@@ -257,6 +257,8 @@ static INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARA
 LONG __stdcall CCrashLog::ExceptionHandler(_EXCEPTION_POINTERS* exceptionInfo) {
     ms_pExceptionPointers = exceptionInfo;
 
+    CNetwork::DisconnectOnCrash();
+
     time_t now = time(nullptr);
     localtime_s(&ms_exceptionTime, &now);
 
