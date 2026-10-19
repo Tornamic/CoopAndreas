@@ -4,6 +4,7 @@
 #include <COpCodeSync.h>
 
 // TODO: SET_SEQUENCE_TO_REPEAT
+// TODO: PERFORM_TASK_SEQUENCE in a sequence
 
 SSyncedOpCode m_syncedTasks[] =  // TODO
     {
