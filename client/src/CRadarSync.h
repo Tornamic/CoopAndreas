@@ -12,7 +12,7 @@ public:
 
     inline static bool ms_abDirty[MAX_RADAR_TRACES]{};
 
-    // the last known entity of BLIP_CAR and BLIP_CHAR, used to resolve the local entity handle
+    // the last known entity of BLIP_CAR, BLIP_CHAR and BLIP_OBJECT, used to resolve the local entity handle
     inline static CNetworkEntitySerializer ms_aEntity[MAX_RADAR_TRACES]{};
 
     // the last known entity position of BLIP_OBJECT and BLIP_PICKUP

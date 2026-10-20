@@ -42,4 +42,7 @@
 #include "network/packet_types.h"
 #include "network/packet_handler.h"
 
+#include "CNetworkObject.h"
+#include "CNetworkObjectManager.h"
+
 #include "CServerTime.h"

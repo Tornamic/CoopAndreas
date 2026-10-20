@@ -116,6 +116,7 @@ void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
 
     CNetworkPedManager::RemoveAllHostedAndNotify(pNetworkPlayer);
     CNetworkVehicleManager::RemoveAllHostedAndNotify(pNetworkPlayer);
+    CNetworkObjectManager::RemoveAllHostedAndNotify(pNetworkPlayer);
 
     CNetworkPlayerManager::Remove(pNetworkPlayer);
 
@@ -262,6 +263,25 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
         packet.createdBy = i->m_nCreatedBy;
         snprintf(packet.specialModelName, sizeof(packet.specialModelName), "%s", i->m_szSpecialModelName);
         GetPacketFactory().Send(packet, pNewNetworkPlayer);
+    }
+
+    // after the vehicles and peds, an attached object needs its parent
+    for (auto i : CNetworkObjectManager::m_pObjects)
+    {
+        Packets::Objects::ObjectSpawn packet{};
+        packet.objectid = i->m_objectId;
+        packet.modelid = i->m_nModelId;
+        packet.pos = i->m_vecPosition;
+        packet.right = i->m_vecRight;
+        packet.up = i->m_vecUp;
+        packet.areaCode = i->m_nAreaCode;
+        packet.damageState = i->m_damageState;
+        GetPacketFactory().Send(packet, pNewNetworkPlayer);
+
+        if (i->m_bHasUpdate)
+        {
+            GetPacketFactory().Send(i->m_lastUpdate, pNewNetworkPlayer);
+        }
     }
 
      if (Packets::Scripts::g_pLastEnExPlayerOwner)

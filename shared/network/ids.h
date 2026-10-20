@@ -9,7 +9,7 @@
 // `playerid_t` is assigned by the server, monotonically increasing during the session,
 // starting at 1. 0 (zero) is the invalid player id.
 //
-// `vehicleid_t` and `pedid_t` are allocated by the client that creates the entity:
+// `vehicleid_t`, `pedid_t` and `objectid_t` are allocated by the client that creates the entity:
 // the creator's `playerid_t` plus a per-player, per-entity-type counter starting at 1.
 // They are sent as `(uint64_t(creator) << 32) | id` through the network. 0 (zero) is the invalid id.
 
@@ -68,9 +68,13 @@ struct vehicleid_tag
 struct pedid_tag
 {
 };
+struct objectid_tag
+{
+};
 
 typedef entityid_t<vehicleid_tag> vehicleid_t;
 typedef entityid_t<pedid_tag> pedid_t;
+typedef entityid_t<objectid_tag> objectid_t;
 
 inline std::string to_string(const playerid_t& playerid)
 {
@@ -205,3 +209,4 @@ inline EntityId ReadEntityId(const uint8_t* src)
 
 #define serialize_vehicleid(stream, vehicleid) serialize_entityid_internal(stream, vehicleid, vehicleid_t)
 #define serialize_pedid(stream, pedid) serialize_entityid_internal(stream, pedid, pedid_t)
+#define serialize_objectid(stream, objectid) serialize_entityid_internal(stream, objectid, objectid_t)

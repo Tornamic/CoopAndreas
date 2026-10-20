@@ -103,12 +103,14 @@ using namespace plugin;
 #include <network/packets/peds.h>
 #include <network/packets/scripts.h>
 #include <network/packets/blips.h>
+#include <network/packets/objects.h>
 #include "network/packet_types.h"
 #include "CCore.h"
 #include "CUnicode.h"
 #include "UI/CDXFont.h"
 #include "CNetworkVehicle.h"
 #include "CNetworkPed.h"
+#include "CNetworkObject.h"
 #include "network/packet_handler.h"
 #include "CNetwork.h"
 #include "CPacketFactory.h"
@@ -129,6 +131,7 @@ using namespace plugin;
 #include "CPassengerEnter.h"
 #include "CDriveBy.h"
 #include "CNetworkPedManager.h"
+#include "CNetworkObjectManager.h"
 #include "CDebugPedTasks.h"
 #include "network/eNetworkEntityType.h"
 #include "CStatsSync.h"

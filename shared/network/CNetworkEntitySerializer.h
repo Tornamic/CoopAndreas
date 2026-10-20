@@ -13,6 +13,7 @@ public:
 	playerid_t playerid{};
 	vehicleid_t vehicleid{};
 	pedid_t pedid{};
+	objectid_t objectid{};
 
 #ifdef COOP_CLIENT
 	CEntity* GetEntity();
@@ -34,6 +35,9 @@ public:
 			break;
 		case NETWORK_ENTITY_TYPE_PED:
 			serialize_pedid(stream, pedid);
+			break;
+		case NETWORK_ENTITY_TYPE_OBJECT:
+			serialize_objectid(stream, objectid);
 			break;
 		}
 

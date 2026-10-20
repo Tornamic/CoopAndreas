@@ -20,7 +20,7 @@ enum class eSyncedParamType
     // any `CVehicle` (aka car)
     VEHICLE,
 
-    // not in use yet
+    // any `CObject` created by `CREATE_OBJECT` (a network object)
     OBJECT,
 
     MAX_PARAMS
@@ -52,6 +52,7 @@ struct OpcodeSyncHeader
 //   PLAYER  - playerid_t (4 bytes)
 //   PED     - packed pedid_t (8 bytes)
 //   VEHICLE - packed vehicleid_t (8 bytes)
+//   OBJECT  - packed objectid_t (8 bytes)
 //   NONE    - `value` (4 bytes), the entity couldn't be resolved, usually -1
 struct OpcodeParameter
 {
@@ -63,6 +64,7 @@ struct OpcodeParameter
     playerid_t playerid{};
     pedid_t pedid{};
     vehicleid_t vehicleid{};
+    objectid_t objectid{};
 
     void SetValue(int newValue)
     {
@@ -86,6 +88,8 @@ public:
     static inline bool bProcessingNetworkOpcode = false;
 
 	static void Init();
+	static CRunningScript* GetLastProcessedScript();
+	static bool IsScriptSynced(CRunningScript* script);
 	static void HandlePacket(const uint8_t* buffer, int bufferSize);
 	static std::vector<uint8_t> COpCodeSync::SerializeOpcode(int idx, int& outSize);
 	static bool COpCodeSync::IsOpcodeSyncable(int opcode, int* opcodeIdx = nullptr, bool ignoreOpCodeSync = false);

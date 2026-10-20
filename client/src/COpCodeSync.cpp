@@ -146,6 +146,7 @@ const SSyncedOpCode syncedOpcodes[] = {
     {COMMAND_TASK_CLIMB, true, {eSyncedParamType::PED}},
     {COMMAND_TASK_PAUSE, true, {eSyncedParamType::PED}},
     {COMMAND_TASK_KILL_CHAR_ON_FOOT, true, {eSyncedParamType::PED, eSyncedParamType::PED}},
+    {COMMAND_TASK_PICK_UP_OBJECT, true, {eSyncedParamType::PED, eSyncedParamType::OBJECT}},
     {COMMAND_FLUSH_ROUTE},
     {COMMAND_EXTEND_ROUTE},
     {COMMAND_TASK_FOLLOW_POINT_ROUTE, true, {eSyncedParamType::PED}},
@@ -164,6 +165,20 @@ const SSyncedOpCode syncedOpcodes[] = {
     {COMMAND_WARP_CHAR_FROM_CAR_TO_COORD, true, {eSyncedParamType::PED}},
     {COMMAND_WARP_CHAR_INTO_CAR, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
     {COMMAND_WARP_CHAR_INTO_CAR_AS_PASSENGER, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
+
+    // Objects, movement is synced by `ObjectUpdate`
+    {COMMAND_SET_OBJECT_VISIBLE, true, {eSyncedParamType::OBJECT}},
+    {COMMAND_SET_OBJECT_COLLISION, true, {eSyncedParamType::OBJECT}},
+    {COMMAND_SET_OBJECT_DYNAMIC, true, {eSyncedParamType::OBJECT}},
+    {COMMAND_FREEZE_OBJECT_POSITION, true, {eSyncedParamType::OBJECT}},
+    {COMMAND_SET_OBJECT_AREA_VISIBLE, true, {eSyncedParamType::OBJECT}},
+    {COMMAND_SET_OBJECT_PROOFS, true, {eSyncedParamType::OBJECT}},
+    {COMMAND_SET_OBJECT_HEALTH, true, {eSyncedParamType::OBJECT}},
+    {COMMAND_PLAY_OBJECT_ANIM, true, {eSyncedParamType::OBJECT}},
+    {COMMAND_BREAK_OBJECT, true, {eSyncedParamType::OBJECT}},
+    {COMMAND_SET_OBJECT_COLLISION_DAMAGE_EFFECT, true, {eSyncedParamType::OBJECT}},
+    {COMMAND_SET_OBJECT_ONLY_DAMAGED_BY_PLAYER, true, {eSyncedParamType::OBJECT}},
+    {COMMAND_MAKE_OBJECT_TARGETTABLE, true, {eSyncedParamType::OBJECT}},
 
     // Explosions
     {0x070C, true, {eSyncedParamType::VEHICLE}},  // explode_car_in_cutscene [Car]
@@ -215,22 +230,31 @@ void __fastcall CRunningScript__ReadTextLabelFromScript_Hook_SwitchParametersCon
     currentStringIdx++;
 }
 
+CRunningScript* COpCodeSync::GetLastProcessedScript()
+{
+    return lastProcessedScript;
+}
+
+bool COpCodeSync::IsScriptSynced(CRunningScript* script)
+{
+    if (script == nullptr)
+        return false;
+
+    for (size_t i = 0; i < ms_iFreeSyncedScript; ++i)
+    {
+        if (strnicmp(ms_aszSyncedScripts[i], script->m_szName, 7) == 0)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 /// <param name="opcodeIdx">syncedOpcodes index</param>
 bool COpCodeSync::IsOpcodeSyncable(int opcode, int* opcodeIdx, bool ignoreOpCodeSync)
 {
-    bool bScriptSynced = false;
-
-    if (lastProcessedScript)
-    {
-        for (size_t i = 0; i < ms_iFreeSyncedScript; ++i)
-        {
-            if (strnicmp(ms_aszSyncedScripts[i], lastProcessedScript->m_szName, 7) == 0)
-            {
-                bScriptSynced = true;
-                break;
-            }
-        }
-    }
+    bool bScriptSynced = IsScriptSynced(lastProcessedScript);
 
     if (((CLocalPlayer::m_bIsHost && ms_bSyncingEnabled) && bScriptSynced) || ignoreOpCodeSync ||
         CTaskSequenceSync::IsOpCodeTaskSynced((eScriptCommands)opcode))
@@ -272,6 +296,7 @@ static int GetSerializedParamSize(const OpcodeParameter& param, bool isEntityPar
             return sizeof(uint8_t) + ids::PLAYERID_SIZE;
         case eSyncedParamType::PED:
         case eSyncedParamType::VEHICLE:
+        case eSyncedParamType::OBJECT:
             return sizeof(uint8_t) + ids::ENTITYID_SIZE;
         default:
             return sizeof(uint8_t) + sizeof(int32_t);
@@ -299,6 +324,9 @@ static uint8_t* WriteParam(uint8_t* pCurrent, const OpcodeParameter& param, bool
             return pCurrent + ids::ENTITYID_SIZE;
         case eSyncedParamType::VEHICLE:
             ids::WriteEntityId(pCurrent, param.vehicleid);
+            return pCurrent + ids::ENTITYID_SIZE;
+        case eSyncedParamType::OBJECT:
+            ids::WriteEntityId(pCurrent, param.objectid);
             return pCurrent + ids::ENTITYID_SIZE;
         default:
             ids::WriteU32(pCurrent, static_cast<uint32_t>(param.value));
@@ -349,6 +377,12 @@ static const uint8_t* ReadParam(
                 return nullptr;
 
             param.vehicleid = ids::ReadEntityId<vehicleid_t>(pCurrent);
+            return pCurrent + ids::ENTITYID_SIZE;
+        case eSyncedParamType::OBJECT:
+            if (pEnd - pCurrent < (int)ids::ENTITYID_SIZE)
+                return nullptr;
+
+            param.objectid = ids::ReadEntityId<objectid_t>(pCurrent);
             return pCurrent + ids::ENTITYID_SIZE;
         case eSyncedParamType::NONE:
             if (pEnd - pCurrent < (int)sizeof(int32_t))
@@ -455,6 +489,25 @@ std::vector<uint8_t> COpCodeSync::SerializeOpcode(int idx, int& outSize)
                     }
                     else
                         param.SetValue(-1);
+                }
+                else
+                    param.SetValue(-1);
+
+                break;
+            }
+            case eSyncedParamType::OBJECT:
+            {
+                CObject* object = nullptr;
+                if (param.value != -1 && (param.value >> 8) >= 0 && (param.value >> 8) < CPools::ms_pObjectPool->m_nSize)
+                {
+                    object = CPools::GetObject(param.value);
+                }
+
+                auto networkObject = object ? CNetworkObjectManager::GetObject(object) : nullptr;
+                if (networkObject)
+                {
+                    param.entityType = eSyncedParamType::OBJECT;
+                    param.objectid = networkObject->m_objectId;
                 }
                 else
                     param.SetValue(-1);
@@ -795,6 +848,30 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
 
                         break;
                     }
+                    case eSyncedParamType::OBJECT:
+                    {
+                        if (auto networkObject = CNetworkObjectManager::GetObject(param.objectid))
+                        {
+                            if (auto object = networkObject->m_pObject)
+                            {
+                                param.value = CPools::GetObjectRef(object);
+                            }
+                            else if (!IsOpcodeRequiresStrictCheck(header.opcode))
+                            {
+                                param.value = -1;
+                            }
+                            else
+                                return;
+                        }
+                        else if (!IsOpcodeRequiresStrictCheck(header.opcode))
+                        {
+                            param.value = -1;
+                        }
+                        else
+                            return;
+
+                        break;
+                    }
                     default:
                         break;
                 }
@@ -861,6 +938,7 @@ void COpCodeSync::HandlePacket(const uint8_t* buffer, int bufferSize)
         case COMMAND_TASK_DIE_NAMED_ANIM:
         case COMMAND_TASK_PLAY_ANIM_WITH_FLAGS:
         case COMMAND_TASK_PLAY_ANIM_SECONDARY:
+        case COMMAND_PLAY_OBJECT_ANIM:
         {
             char* animlib = textParamBuffer[1];
             int id = CAnimManager::GetAnimationBlockIndex(animlib);

@@ -66,8 +66,20 @@ static void ResolveTraceEntity(int nIndex)
             }
             break;
         }
-        // TODO: replace with CNetworkEntitySerializer after syncing objects and pickups
         case BLIP_OBJECT:
+        {
+            CEntity* pEntity = CRadarSync::ms_aEntity[nIndex].GetEntity();
+            if (pEntity != nullptr && pEntity->m_nType == ENTITY_TYPE_OBJECT)
+            {
+                trace.m_nEntityHandle = CPools::GetObjectRef(static_cast<CObject*>(pEntity));
+                break;
+            }
+
+            if (CRadarSync::ms_aEntity[nIndex].objectid.valid())
+            {
+                break;
+            }
+
             for (int i = 0; i < CPools::ms_pObjectPool->m_nSize; i++)
             {
                 CObject* pObject = CPools::ms_pObjectPool->GetAt(i);
@@ -79,6 +91,8 @@ static void ResolveTraceEntity(int nIndex)
                 }
             }
             break;
+        }
+        // TODO: replace with CNetworkEntitySerializer after syncing pickups
         case BLIP_PICKUP:
             for (unsigned int i = 0; i < MAX_NUM_PICKUPS; i++)
             {
@@ -193,8 +207,10 @@ static void BuildPayload(int nIndex, Packets::Scripts::_RadarTracePayload& paylo
             CObject* pObject = bResolved ? CPools::GetObject(nHandle) : nullptr;
             if (pObject != nullptr)
             {
+                CRadarSync::ms_aEntity[nIndex].SetEntity(pObject);
                 CRadarSync::ms_avecEntityPosn[nIndex] = pObject->GetPosition();
             }
+            payload.entity = CRadarSync::ms_aEntity[nIndex];
             payload.position = CRadarSync::ms_avecEntityPosn[nIndex];
             break;
         }
@@ -271,8 +287,13 @@ static void ApplyPayload(int nIndex, const Packets::Scripts::_RadarTracePayload&
             ResolveTraceEntity(nIndex);
             break;
             
-        // TODO: replace with CNetworkEntitySerializer after syncing objects and pickups
         case BLIP_OBJECT:
+            CRadarSync::ms_aEntity[nIndex] = payload.entity;
+            CRadarSync::ms_avecEntityPosn[nIndex] = payload.position;
+            ResolveTraceEntity(nIndex);
+            break;
+
+        // TODO: replace with CNetworkEntitySerializer after syncing pickups
         case BLIP_PICKUP:
             CRadarSync::ms_avecEntityPosn[nIndex] = payload.position;
             ResolveTraceEntity(nIndex);

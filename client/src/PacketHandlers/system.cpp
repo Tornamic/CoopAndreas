@@ -73,6 +73,7 @@ PACKET_HANDLER(ePacketType::PLAYER_HANDSHAKE, Packets::System::PlayerHandshake* 
 
     CNetworkVehicleManager::ResetIdAllocator();
     CNetworkPedManager::ResetIdAllocator();
+    CNetworkObjectManager::ResetIdAllocator();
 
     CNetwork::m_bAuthenticated = true;
     CPatch::RevertTemporaryPatches();

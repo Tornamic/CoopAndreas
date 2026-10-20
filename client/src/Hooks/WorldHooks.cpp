@@ -9,6 +9,7 @@
 #include <CShotInfo.h>
 #include <game_sa/CTagManager.h>
 #include <CRadarSync.h>
+#include <COpCodeSync.h>
 
 // static void __cdecl CWeather__ForceWeather_Hook(short id)
 // {
@@ -29,7 +30,8 @@
 // }
 
 // place waypoint
-static int __cdecl CRadar__SetCoordBlip_Hook_Waypoint(eBlipType type, CVector posn, unsigned int color, eBlipDisplay blipDisplay)
+static int __cdecl CRadar__SetCoordBlip_Hook_Waypoint(
+    eBlipType type, CVector posn, unsigned int color, eBlipDisplay blipDisplay)
 {
     int blipHandle = CRadarSync::SetLocalCoordBlip(type, posn, color, blipDisplay);
 
@@ -101,6 +103,17 @@ static void __cdecl CWorld__Add_Hook(CEntity* entity)
 
     if (entity->IsVTableValid())
         CWorld::Add(entity);
+
+    if (CNetwork::m_bAuthenticated && entity->m_nType == eEntityType::ENTITY_TYPE_OBJECT)
+    {
+        CObject* object = (CObject*)entity;
+        CRunningScript* script = COpCodeSync::GetLastProcessedScript();
+        if (object->m_nObjectType == OBJECT_MISSION && script != nullptr && script->m_bIsMission &&
+            COpCodeSync::IsScriptSynced(script) && CNetworkObjectManager::GetObject(object) == nullptr)
+        {
+            CNetworkObject::CreateHosted(object);
+        }
+    }
 }
 static void __cdecl CWorld__Remove_Hook(CEntity* entity)
 {
@@ -125,6 +138,15 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
                 CNetworkPedManager::Remove(networkPed);
                 delete networkPed;
             }
+        }
+    }
+    else if (entity->m_nType == eEntityType::ENTITY_TYPE_OBJECT)
+    {
+        CNetworkObject* networkObject = CNetworkObjectManager::GetObject(entity);
+        if (networkObject != nullptr && networkObject->m_bSyncing)
+        {
+            CNetworkObjectManager::Remove(networkObject);
+            delete networkObject;
         }
     }
 

@@ -23,6 +23,16 @@ CEntity* CNetworkEntitySerializer::GetEntity()
 			}
 		}
 	}
+	else if (entityType == NETWORK_ENTITY_TYPE_OBJECT)
+	{
+		if (auto networkObject = CNetworkObjectManager::GetObject(objectid))
+		{
+			if (auto object = networkObject->m_pObject)
+			{
+				return object;
+			}
+		}
+	}
 	else if (entityType == NETWORK_ENTITY_TYPE_PLAYER)
 	{
 		if (CNetworkPlayerManager::m_localPlayerId == playerid)
@@ -47,6 +57,7 @@ void CNetworkEntitySerializer::SetEntity(CEntity* entity)
 	playerid = playerid_t();
 	vehicleid = vehicleid_t();
 	pedid = pedid_t();
+	objectid = objectid_t();
 
 	if (entity == nullptr)
 	{
@@ -83,6 +94,14 @@ void CNetworkEntitySerializer::SetEntity(CEntity* entity)
 		if (auto networkVehicle = CNetworkVehicleManager::GetVehicle(entity))
 		{
 			vehicleid = networkVehicle->m_vehicleId;
+		}
+	}
+	else if (entity->m_nType == ENTITY_TYPE_OBJECT)
+	{
+		entityType = NETWORK_ENTITY_TYPE_OBJECT;
+		if (auto networkObject = CNetworkObjectManager::GetObject(entity))
+		{
+			objectid = networkObject->m_objectId;
 		}
 	}
 }

@@ -312,7 +312,7 @@ struct _RadarTracePayload
     uint16_t size = 0;
     float sphereRadius = 0.0f;
     WorldPositionCompressed position{};  // the entity position for BLIP_OBJECT and BLIP_PICKUP
-    CNetworkEntitySerializer entity{};   // BLIP_CAR and BLIP_CHAR only
+    CNetworkEntitySerializer entity{};   // BLIP_CAR, BLIP_CHAR and BLIP_OBJECT only
     bool bHasEntryExit = false;
     int16_t entryExitX = 0;
     int16_t entryExitY = 0;
@@ -347,6 +347,11 @@ struct _RadarTracePayload
         }
         else
         {
+            // BLIP_OBJECT sends both, the position is the fallback for objects that are not network objects
+            if (type == BLIP_OBJECT)
+            {
+                serialize_object(stream, entity);
+            }
             serialize_object(stream, position);
         }
 
