@@ -192,7 +192,8 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
             continue;
         }
         oldPlayerConnected.payload.SetPlayerId(pNetworkPlayer->m_playerId);
-        snprintf(oldPlayerConnected.payload.name, sizeof(oldPlayerConnected.payload.name), "%s", pNetworkPlayer->m_Name);
+        snprintf(
+            oldPlayerConnected.payload.name, sizeof(oldPlayerConnected.payload.name), "%s", pNetworkPlayer->m_Name);
         GetPacketFactory().Send(oldPlayerConnected, pNewNetworkPlayer);
     }
 
