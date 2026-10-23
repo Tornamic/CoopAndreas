@@ -35,7 +35,9 @@ SSyncedOpCode m_syncedTasks[] =  // TODO
         {COMMAND_TASK_KILL_CHAR_ON_FOOT, true, {eSyncedParamType::PED, eSyncedParamType::PED}},
         {COMMAND_TASK_DRIVE_BY, true, {eSyncedParamType::PED, eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
         {COMMAND_TASK_CLIMB, true, {eSyncedParamType::PED}},
-        
+        {COMMAND_TASK_FOLLOW_POINT_ROUTE, true, {eSyncedParamType::PED}},
+        {COMMAND_TASK_TOGGLE_DUCK, true, {eSyncedParamType::PED}},
+
 };
 
 std::vector<uint8_t> m_serializedSequences[CTaskSequences::NUM_SEQUENCES][CTaskSequences::NUM_TASKS];

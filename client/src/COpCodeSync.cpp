@@ -150,6 +150,9 @@ const SSyncedOpCode syncedOpcodes[] = {
     {COMMAND_FLUSH_ROUTE},
     {COMMAND_EXTEND_ROUTE},
     {COMMAND_TASK_FOLLOW_POINT_ROUTE, true, {eSyncedParamType::PED}},
+    {COMMAND_TASK_TOGGLE_DUCK, true, {eSyncedParamType::PED}},
+    {COMMAND_TASK_LOOK_AT_OBJECT, true, {eSyncedParamType::PED, eSyncedParamType::OBJECT}},
+    {COMMAND_TASK_USE_MOBILE_PHONE, true, {eSyncedParamType::PED}},
 
     // Actors
     {0x00A1, true, {eSyncedParamType::PED}},  // set_char_coordinates [Char] {x} [float] {y} [float] {z} [float]
