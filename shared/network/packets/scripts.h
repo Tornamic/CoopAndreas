@@ -404,4 +404,92 @@ private:
     }
 };
 
+struct _OnscreenClockPayload
+{
+    bool bActive = false;
+    uint16_t varIndex = 0;
+    int32_t value = 0;
+    bool bCountDown = false;
+    uint32_t beepSecs = 0;
+    char textKey[8]{};
+
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_bool(stream, bActive);
+        if (!bActive)
+        {
+            return true;
+        }
+
+        serialize_uint16(stream, varIndex);
+        serialize_uint32(stream, value);
+        serialize_bool(stream, bCountDown);
+        serialize_uint32(stream, beepSecs);
+        serialize_string(stream, textKey, 8);
+        textKey[ARRAY_SIZE(textKey) - 1] = '\0';
+        return true;
+    }
+};
+
+struct _OnscreenCounterPayload
+{
+    bool bActive = false;
+    uint16_t varIndex = 0;
+    int32_t value = 0;
+    uint16_t varIndex2 = 0;
+    int32_t value2 = 0;
+    uint16_t type = 0;
+    bool bFlash = false;
+    uint8_t colour = 0;
+    char textKey[8]{};
+
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_bool(stream, bActive);
+        if (!bActive)
+        {
+            return true;
+        }
+
+        serialize_uint16(stream, varIndex);
+        serialize_uint32(stream, value);
+        serialize_int(stream, type, 0, 2);
+        if (type == 2)
+        {
+            serialize_uint16(stream, varIndex2);
+            serialize_uint32(stream, value2);
+        }
+        serialize_bool(stream, bFlash);
+        serialize_uint8(stream, colour);
+        serialize_string(stream, textKey, 8);
+        textKey[ARRAY_SIZE(textKey) - 1] = '\0';
+        return true;
+    }
+};
+
+class OnscreenTimerSync : public Packet
+{
+    DEFINE_PACKET_TYPE(OnscreenTimerSync, ePacketType::ONSCREEN_TIMER_SYNC, ePacketChannel::SCRIPT);
+
+public:
+    _OnscreenClockPayload clock{};
+    _OnscreenCounterPayload counters[4]{};
+    bool bPaused = false;
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_object(stream, clock);
+        for (int i = 0; i < 4; i++)
+        {
+            serialize_object(stream, counters[i]);
+        }
+        serialize_bool(stream, bPaused);
+        return true;
+    }
+};
+
 }  // namespace Packets::Scripts

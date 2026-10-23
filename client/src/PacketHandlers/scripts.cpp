@@ -6,6 +6,7 @@
 #include <COpCodeSync.h>
 #include <CTaskSequenceSync.h>
 #include <CRadarSync.h>
+#include <COnscreenTimerSync.h>
 
 PACKET_HANDLER(ePacketType::ON_MISSION_FLAG_SYNC, Packets::Scripts::OnMissionFlagSync* pOnMissionFlagSync)
 {
@@ -150,4 +151,9 @@ PACKET_HANDLER(ePacketType::RADAR_TRACE_UPDATE, Packets::Scripts::RadarTraceUpda
 PACKET_HANDLER(ePacketType::UPDATE_ALL_RADAR_TRACES, Packets::Scripts::UpdateAllRadarTraces* pUpdateAllRadarTraces)
 {
 	CRadarSync::HandlePacket(*pUpdateAllRadarTraces);
+}
+
+PACKET_HANDLER(ePacketType::ONSCREEN_TIMER_SYNC, Packets::Scripts::OnscreenTimerSync* pOnscreenTimerSync)
+{
+	COnscreenTimerSync::HandlePacket(*pOnscreenTimerSync);
 }

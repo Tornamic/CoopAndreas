@@ -37,6 +37,7 @@
 #include <Commands/CCustomCommandMgr.h>
 #include "CEntryExitMarkerSync.h"
 #include "CRadarSync.h"
+#include "COnscreenTimerSync.h"
 #include <CTaskSequenceSync.h>
 #include <CNetworkAnimQueue.h>
 
@@ -1104,6 +1105,7 @@ static void FinishedProcessingScripts()
         }
 
         CRadarSync::SendChangedTraces();
+        COnscreenTimerSync::Process();
     }
 }
 

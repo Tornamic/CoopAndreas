@@ -11,6 +11,7 @@
 #include "Commands/CommandHooks.h"
 #include "SaveLoadHooks.h"
 #include "CRadarSync.h"
+#include "COnscreenTimerSync.h"
 #include "ProjectileHooks.h"
 #include "DamageHooks.h"
 #include "ShadowHooks.h"
@@ -32,6 +33,7 @@ void CHook::Init()
     MissionAudioHooks::InjectHooks();
     SaveLoadHooks::InjectHooks();
     CRadarSync::InjectHooks();
+    COnscreenTimerSync::InjectHooks();
     ProjectileHooks::InjectHooks();
     DamageHooks::InjectHooks();
     ShadowHooks::InjectHooks();

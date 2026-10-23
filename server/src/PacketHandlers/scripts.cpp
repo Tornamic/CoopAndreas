@@ -132,3 +132,11 @@ PACKET_HANDLER(ePacketType::UPDATE_ALL_RADAR_TRACES, Packets::Scripts::UpdateAll
         GetPacketFactory().SendToAll(*pUpdateAllRadarTraces, pNetworkPlayer);
     }
 }
+
+PACKET_HANDLER(ePacketType::ONSCREEN_TIMER_SYNC, Packets::Scripts::OnscreenTimerSync* pOnscreenTimerSync, CNetworkPlayer* pNetworkPlayer)
+{
+    if (pNetworkPlayer->m_bIsHost)
+    {
+        GetPacketFactory().SendToAll(*pOnscreenTimerSync, pNetworkPlayer);
+    }
+}
