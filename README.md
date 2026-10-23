@@ -128,7 +128,7 @@ If you are looking for something to contribute, also check the Issues tab.
 - [X] Drive-Thru
 - [X] Nines And AK's
 - [X] Drive-By
-- [ ] Sweet's Girl
+- [X] Sweet's Girl
 - [ ] Cesar Vialpando
 - [X] OG Loc
 - [X] Running Dog
