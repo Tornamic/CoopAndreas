@@ -84,7 +84,13 @@ const SSyncedOpCode syncedOpcodes[] = {
     {0x02EA},  // clear_cutscene
 
     // World
+    {COMMAND_SET_CREATE_RANDOM_COPS},
+    {COMMAND_SET_FREE_RESPRAYS}, 
+    {COMMAND_SET_CREATE_RANDOM_GANG_MEMBERS},
+    {COMMAND_ALTER_WANTED_LEVEL},
+    {COMMAND_ALTER_WANTED_LEVEL_NO_DROP}, // TODO do smth with this when syncing wanted level
     {COMMAND_SET_TAG_STATUS_IN_AREA},
+    {COMMAND_SET_MAX_WANTED_LEVEL},  // not reset by the mission cleanup, the scripts restore it themselves
 
     // Interiors
     {0x04BB},  // set_area_visible {areaId} [Interior]
@@ -154,6 +160,13 @@ const SSyncedOpCode syncedOpcodes[] = {
     {COMMAND_TASK_TOGGLE_DUCK, true, {eSyncedParamType::PED}},
     {COMMAND_TASK_LOOK_AT_OBJECT, true, {eSyncedParamType::PED, eSyncedParamType::OBJECT}},
     {COMMAND_TASK_USE_MOBILE_PHONE, true, {eSyncedParamType::PED}},
+    {COMMAND_TASK_STAY_IN_SAME_PLACE, true, {eSyncedParamType::PED}},
+    {COMMAND_TASK_DESTROY_CAR, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
+    {COMMAND_TASK_WEAPON_ROLL, true, {eSyncedParamType::PED}},
+    {COMMAND_TASK_FLEE_CHAR, true, {eSyncedParamType::PED, eSyncedParamType::PED}},
+    {COMMAND_TASK_SHUFFLE_TO_NEXT_CAR_SEAT, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
+    {COMMAND_TASK_CAR_DRIVE_WANDER, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
+    {COMMAND_TASK_CAR_TEMP_ACTION, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
 
     // Actors
     {0x00A1, true, {eSyncedParamType::PED}},  // set_char_coordinates [Char] {x} [float] {y} [float] {z} [float]
@@ -169,6 +182,15 @@ const SSyncedOpCode syncedOpcodes[] = {
     {COMMAND_WARP_CHAR_FROM_CAR_TO_COORD, true, {eSyncedParamType::PED}},
     {COMMAND_WARP_CHAR_INTO_CAR, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
     {COMMAND_WARP_CHAR_INTO_CAR_AS_PASSENGER, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
+    {COMMAND_CUSTOM_PLATE_FOR_NEXT_CAR},
+    {COMMAND_LOCK_CAR_DOORS, true, {eSyncedParamType::VEHICLE}},
+    {COMMAND_OPEN_CAR_DOOR, true, {eSyncedParamType::VEHICLE}},
+    {COMMAND_CLOSE_ALL_CAR_DOORS, true, {eSyncedParamType::VEHICLE}},
+    {COMMAND_POP_CAR_BOOT, true, {eSyncedParamType::VEHICLE}},
+    {COMMAND_POP_CAR_PANEL, true, {eSyncedParamType::VEHICLE}},
+    {COMMAND_FIX_CAR_PANEL, true, {eSyncedParamType::VEHICLE}},
+    {COMMAND_SET_CAN_BURST_CAR_TYRES, true, {eSyncedParamType::VEHICLE}},
+    {COMMAND_SET_CAR_CAN_BE_VISIBLY_DAMAGED, true, {eSyncedParamType::VEHICLE}},
 
     // Objects, movement is synced by `ObjectUpdate`
     {COMMAND_SET_OBJECT_VISIBLE, true, {eSyncedParamType::OBJECT}},

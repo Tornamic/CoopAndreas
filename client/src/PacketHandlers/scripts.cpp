@@ -157,3 +157,14 @@ PACKET_HANDLER(ePacketType::ONSCREEN_TIMER_SYNC, Packets::Scripts::OnscreenTimer
 {
 	COnscreenTimerSync::HandlePacket(*pOnscreenTimerSync);
 }
+
+PACKET_HANDLER(ePacketType::PLAYER_BUSTED, Packets::Scripts::PlayerBusted* pPlayerBusted)
+{
+	if (!CLocalPlayer::m_bIsHost)
+		return;
+
+	if (auto pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pPlayerBusted->senderPlayerid))
+	{
+		pNetworkPlayer->m_bBusted = true;
+	}
+}

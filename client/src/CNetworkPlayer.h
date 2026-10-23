@@ -36,6 +36,9 @@ public:
 
 	bool m_bIsHost = false;
 
+	// set by the PLAYER_BUSTED packet, consumed by the host's death/arrest check
+	bool m_bBusted = false;
+
 	~CNetworkPlayer();
 	CNetworkPlayer(playerid_t id, CVector position);
 

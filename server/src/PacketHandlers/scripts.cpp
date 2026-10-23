@@ -109,6 +109,15 @@ PACKET_HANDLER(ePacketType::CUTSCENE_SKIP_VOTE, Packets::Scripts::CutsceneSkipVo
     }
 }
 
+PACKET_HANDLER(ePacketType::PLAYER_BUSTED, Packets::Scripts::PlayerBusted* pPlayerBusted, CNetworkPlayer* pNetworkPlayer)
+{
+    if (auto pHost = CNetworkPlayerManager::GetHost())
+    {
+        pPlayerBusted->senderPlayerid = pNetworkPlayer->m_playerId;
+        GetPacketFactory().Send(*pPlayerBusted, pHost);
+    }
+}
+
 PACKET_HANDLER(ePacketType::CUTSCENE_SKIP_VOTE_STATE, Packets::Scripts::CutsceneSkipVoteState* pCutsceneSkipVoteState, CNetworkPlayer* pNetworkPlayer)
 {
     if (pNetworkPlayer->m_bIsHost)

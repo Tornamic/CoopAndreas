@@ -37,6 +37,13 @@ SSyncedOpCode m_syncedTasks[] =  // TODO
         {COMMAND_TASK_CLIMB, true, {eSyncedParamType::PED}},
         {COMMAND_TASK_FOLLOW_POINT_ROUTE, true, {eSyncedParamType::PED}},
         {COMMAND_TASK_TOGGLE_DUCK, true, {eSyncedParamType::PED}},
+        {COMMAND_TASK_STAY_IN_SAME_PLACE, true, {eSyncedParamType::PED}},
+        {COMMAND_TASK_DESTROY_CAR, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
+        {COMMAND_TASK_DIVE_AND_GET_UP, true, {eSyncedParamType::PED}},
+        {COMMAND_TASK_WEAPON_ROLL, true, {eSyncedParamType::PED}},
+        {COMMAND_TASK_FLEE_CHAR, true, {eSyncedParamType::PED, eSyncedParamType::PED}},
+        {COMMAND_TASK_SHUFFLE_TO_NEXT_CAR_SEAT, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
+        {COMMAND_TASK_CAR_DRIVE_WANDER, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
 
 };
 

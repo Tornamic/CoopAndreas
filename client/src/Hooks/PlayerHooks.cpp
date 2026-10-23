@@ -320,6 +320,15 @@ void __fastcall CRunningScript__DoDeatharrestCheck_Hook(CRunningScript* This, SK
         wastedOrBusted = true;
     }
 
+    for (auto networkPlayer : CNetworkPlayerManager::m_pPlayers)
+    {
+        if (networkPlayer->m_bBusted)
+        {
+            networkPlayer->m_bBusted = false;
+            wastedOrBusted = true;
+        }
+    }
+
     if (!wastedOrBusted)
     {
         for (auto networkPlayer : CNetworkPlayerManager::m_pPlayers)
@@ -354,6 +363,18 @@ void __fastcall CRunningScript__DoDeatharrestCheck_Hook(CRunningScript* This, SK
         This->m_bWastedOrBusted = true;
         This->m_nWakeTime = 0;
     }
+}
+
+// called from CGameLogic::Update right before the "BUSTED" message is shown
+void __fastcall CPlayerInfo__ArrestPlayer_Hook(CPlayerInfo* This, SKIP_EDX)
+{
+    if (This->m_pPed == FindPlayerPed(0) && !CLocalPlayer::m_bIsHost && CTheScripts::IsPlayerOnAMission())
+    {
+        Packets::Scripts::PlayerBusted packet{};
+        GetPacketFactory().Send(packet);
+    }
+
+    plugin::CallMethod<0x56E5D0>(This);
 }
 
 void __fastcall CPedIntelligence__SetTaskDuckSecondary_HookTaskPlayer(
@@ -439,6 +460,8 @@ void PlayerHooks::InjectHooks()
     patch::RedirectCall(0x6887D8, CTaskComplexJump_CTaskManager__SetTask_Hook);
 
     patch::ReplaceFunction(0x485A50, CRunningScript__DoDeatharrestCheck_Hook);
+
+    patch::RedirectCall(0x442D2F, CPlayerInfo__ArrestPlayer_Hook);
 
     //////////////////// player ducking sync ////////////////////
     patch::RedirectCall(0x6879B1, CPedIntelligence__SetTaskDuckSecondary_HookTaskPlayer);

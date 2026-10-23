@@ -277,6 +277,22 @@ private:
     }
 };
 
+class PlayerBusted : public Packet
+{
+    DEFINE_PACKET_TYPE(PlayerBusted, ePacketType::PLAYER_BUSTED, ePacketChannel::EVENT);
+
+public:
+    SenderPlayerId senderPlayerid{};
+
+private:
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_object(stream, senderPlayerid);
+        return true;
+    }
+};
+
 class CutsceneSkipVoteState : public Packet
 {
     DEFINE_PACKET_TYPE(CutsceneSkipVoteState, ePacketType::CUTSCENE_SKIP_VOTE_STATE, ePacketChannel::SCRIPT);
