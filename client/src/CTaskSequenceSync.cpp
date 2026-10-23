@@ -44,6 +44,11 @@ SSyncedOpCode m_syncedTasks[] =  // TODO
         {COMMAND_TASK_FLEE_CHAR, true, {eSyncedParamType::PED, eSyncedParamType::PED}},
         {COMMAND_TASK_SHUFFLE_TO_NEXT_CAR_SEAT, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
         {COMMAND_TASK_CAR_DRIVE_WANDER, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
+        {COMMAND_TASK_USE_MOBILE_PHONE, true, {eSyncedParamType::PED}},
+        {COMMAND_TASK_SHOOT_AT_CHAR, true, {eSyncedParamType::PED, eSyncedParamType::PED}},
+        {COMMAND_TASK_CAR_TEMP_ACTION, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
+        {COMMAND_TASK_FOLLOW_PATH_NODES_TO_COORD, true, {eSyncedParamType::PED}},
+        {COMMAND_TASK_DIE, true, {eSyncedParamType::PED}},
 
 };
 

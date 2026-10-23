@@ -59,6 +59,7 @@ const SSyncedOpCode syncedOpcodes[] = {
     {0x09D2},  // enable_ambient_crime {state} [bool]
     {0x06D0},  // switch_emergency_services {state} [bool]
     {0x014C},  // switch_car_generator[CarGenerator] {amount} [int]
+    {COMMAND_CLEAR_AREA_OF_CARS}, {COMMAND_CLEAR_AREA_OF_CHARS},
 
     // Camera
     {0x015F},  // set_fixed_camera_position {x} [float] {y} [float] {z} [float] {xRotation} [float] {yRotation} [float]
@@ -82,15 +83,14 @@ const SSyncedOpCode syncedOpcodes[] = {
     {0x02E4},  // load_cutscene {name} [string]
     {0x02E7},  // start_cutscene
     {0x02EA},  // clear_cutscene
+    {COMMAND_REQUEST_COLLISION},
 
     // World
-    {COMMAND_SET_CREATE_RANDOM_COPS},
-    {COMMAND_SET_FREE_RESPRAYS}, 
-    {COMMAND_SET_CREATE_RANDOM_GANG_MEMBERS},
+    {COMMAND_SET_CREATE_RANDOM_COPS}, {COMMAND_SET_FREE_RESPRAYS}, {COMMAND_SET_CREATE_RANDOM_GANG_MEMBERS},
     {COMMAND_ALTER_WANTED_LEVEL},
-    {COMMAND_ALTER_WANTED_LEVEL_NO_DROP}, // TODO do smth with this when syncing wanted level
+    {COMMAND_ALTER_WANTED_LEVEL_NO_DROP},  // TODO do smth with this when syncing wanted level
     {COMMAND_SET_TAG_STATUS_IN_AREA},
-    {COMMAND_SET_MAX_WANTED_LEVEL},  // not reset by the mission cleanup, the scripts restore it themselves
+    {COMMAND_SET_MAX_WANTED_LEVEL},        // not reset by the mission cleanup, the scripts restore it themselves
 
     // Interiors
     {0x04BB},  // set_area_visible {areaId} [Interior]
@@ -149,14 +149,11 @@ const SSyncedOpCode syncedOpcodes[] = {
     {COMMAND_TASK_DIE_NAMED_ANIM, true, eSyncedParamType::PED},
     {COMMAND_TASK_PLAY_ANIM_WITH_FLAGS, true, eSyncedParamType::PED},
     {COMMAND_TASK_LEAVE_ANY_CAR, true, eSyncedParamType::PED}, {COMMAND_TASK_LOOK_ABOUT, true, eSyncedParamType::PED},
-    {COMMAND_TASK_WANDER_STANDARD, true, eSyncedParamType::PED}, 
-    {COMMAND_TASK_CLIMB, true, {eSyncedParamType::PED}},
+    {COMMAND_TASK_WANDER_STANDARD, true, eSyncedParamType::PED}, {COMMAND_TASK_CLIMB, true, {eSyncedParamType::PED}},
     {COMMAND_TASK_PAUSE, true, {eSyncedParamType::PED}},
     {COMMAND_TASK_KILL_CHAR_ON_FOOT, true, {eSyncedParamType::PED, eSyncedParamType::PED}},
-    {COMMAND_TASK_PICK_UP_OBJECT, true, {eSyncedParamType::PED, eSyncedParamType::OBJECT}},
-    {COMMAND_FLUSH_ROUTE},
-    {COMMAND_EXTEND_ROUTE},
-    {COMMAND_TASK_FOLLOW_POINT_ROUTE, true, {eSyncedParamType::PED}},
+    {COMMAND_TASK_PICK_UP_OBJECT, true, {eSyncedParamType::PED, eSyncedParamType::OBJECT}}, {COMMAND_FLUSH_ROUTE},
+    {COMMAND_EXTEND_ROUTE}, {COMMAND_TASK_FOLLOW_POINT_ROUTE, true, {eSyncedParamType::PED}},
     {COMMAND_TASK_TOGGLE_DUCK, true, {eSyncedParamType::PED}},
     {COMMAND_TASK_LOOK_AT_OBJECT, true, {eSyncedParamType::PED, eSyncedParamType::OBJECT}},
     {COMMAND_TASK_USE_MOBILE_PHONE, true, {eSyncedParamType::PED}},
@@ -167,6 +164,9 @@ const SSyncedOpCode syncedOpcodes[] = {
     {COMMAND_TASK_SHUFFLE_TO_NEXT_CAR_SEAT, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
     {COMMAND_TASK_CAR_DRIVE_WANDER, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
     {COMMAND_TASK_CAR_TEMP_ACTION, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
+    {COMMAND_TASK_DIE, true, {eSyncedParamType::PED}},
+    {COMMAND_TASK_SHOOT_AT_CHAR, true, {eSyncedParamType::PED, eSyncedParamType::PED}},
+    {COMMAND_TASK_FOLLOW_PATH_NODES_TO_COORD, true, {eSyncedParamType::PED}},
 
     // Actors
     {0x00A1, true, {eSyncedParamType::PED}},  // set_char_coordinates [Char] {x} [float] {y} [float] {z} [float]
@@ -182,8 +182,7 @@ const SSyncedOpCode syncedOpcodes[] = {
     {COMMAND_WARP_CHAR_FROM_CAR_TO_COORD, true, {eSyncedParamType::PED}},
     {COMMAND_WARP_CHAR_INTO_CAR, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
     {COMMAND_WARP_CHAR_INTO_CAR_AS_PASSENGER, true, {eSyncedParamType::PED, eSyncedParamType::VEHICLE}},
-    {COMMAND_CUSTOM_PLATE_FOR_NEXT_CAR},
-    {COMMAND_LOCK_CAR_DOORS, true, {eSyncedParamType::VEHICLE}},
+    {COMMAND_CUSTOM_PLATE_FOR_NEXT_CAR}, {COMMAND_LOCK_CAR_DOORS, true, {eSyncedParamType::VEHICLE}},
     {COMMAND_OPEN_CAR_DOOR, true, {eSyncedParamType::VEHICLE}},
     {COMMAND_CLOSE_ALL_CAR_DOORS, true, {eSyncedParamType::VEHICLE}},
     {COMMAND_POP_CAR_BOOT, true, {eSyncedParamType::VEHICLE}},
@@ -257,9 +256,7 @@ void __fastcall CRunningScript__ReadTextLabelFromScript_Hook_SwitchParametersCon
 }
 
 CRunningScript* COpCodeSync::GetLastProcessedScript()
-{
-    return lastProcessedScript;
-}
+{ return lastProcessedScript; }
 
 bool COpCodeSync::IsScriptSynced(CRunningScript* script)
 {
@@ -524,7 +521,8 @@ std::vector<uint8_t> COpCodeSync::SerializeOpcode(int idx, int& outSize)
             case eSyncedParamType::OBJECT:
             {
                 CObject* object = nullptr;
-                if (param.value != -1 && (param.value >> 8) >= 0 && (param.value >> 8) < CPools::ms_pObjectPool->m_nSize)
+                if (param.value != -1 && (param.value >> 8) >= 0 &&
+                    (param.value >> 8) < CPools::ms_pObjectPool->m_nSize)
                 {
                     object = CPools::GetObject(param.value);
                 }
