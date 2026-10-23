@@ -3,7 +3,7 @@
 
 Videos, pictures, news, suggestions, and communication can be found here:
 
-[![Discord](https://img.shields.io/badge/Discord%20Server%20(25,000+%20members)-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/Z3ugSgFJMU)
+[![Discord](https://img.shields.io/badge/Discord%20Server%20(27,000+%20members)-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/Z3ugSgFJMU)
 [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@CoopAndreas)
 
 ## Disclaimer
@@ -86,6 +86,8 @@ TODO
 
 ## Donate
 
+Ko-fi: https://ko-fi.com/tornamic
+
 PayPal: https://www.paypal.com/donate/?hosted_button_id=PSL39QT3X22LA
 
 USDT TRC20: `TNdTwiy9JM2zUe8qgBoMJoAExKf4gs5vGA`
@@ -98,154 +100,34 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 
 
 ## TODO list:
-### Already Done ✓
-- [X] setup C/C++ project
-- [X] client - server connection
-- [X] On foot sync
-  - [x] Walk/Run
-  - [x] Jump
-  - [x] Climb
-  - [x] Crouch - (Fix Crouch Desync)
-  - [x] Hit/Fight
-- [X] Weapon sync
-  - [X] Hold weapon
-  - [X] Aim sync
-  - [X] Lag shot sync - using keys, bad accuracy
-  - [X] Shot sync - every bullet will be synced
-- [X] Players info
-  - [X] Health bar
-  - [X] Armour bar
-  - [X] Nickname
-  - [X] weapon icon
-- [X] explosion sync
-- [X] vehicle sync
-  - [X] spawn/delete
-  - [X] enter/exit
-  - [X] color(1/2) sync
-  - [X] paintjob sync
-  - [X] tuning sync
-  - [X] hydra thrusters
-  - [X] plane wheels
-  - [X] turret aim/shot
-  - [X] horn
-  - [X] keys (provides steer angles, brake, etc.)
-  - [X] pos, speed, quat
-  - [X] health
-  - [X] damage status
-  - [X] doors 
-	- [X] locked state
-  - [X] engine state
-- [X] chat
-- [X] time
-- [X] weather
-- [X] proper key sync
-- [X] rendering
-  - [X] text rendering (dx)
-  - [X] sprite/txd rendering
-- [X] style
-  - [X] tatoo
-  - [X] clothes
-  - [X] haircut
-- [X] separate ped sync
-- [X] EnEx markers sync
-- [X] mission markers sync
-  
-### Current Tasks
-If you are looking for something to contribute, better check the Issues tab.
-- [ ] pickups
-  - [ ] graffities, horseshoes, snapshots, oysters
-  - [ ] static weapons, armours
-  - [ ] static bribes
-  - [ ] drop
-    - [ ] money
-    - [ ] weapons
-- [ ] jetpack sync
-  - [X] flight 
-  - [ ] pickup (related to task above) 
-- [ ] cutscenes
-  - [X] cutscenes
-  - [ ] vote to skip
-- [ ] Players map sync
-  - [ ] Areas aka GangZones
-  - [X] Mission icons
-  - [X] Player map pin
-    - [ ] fix proportion
-  - [X] Player mark (waypoint)
-- [ ] wanted level
+If you are looking for something to contribute, also check the Issues tab.
+
+- [ ] fix proportion of the player radar blips
 - [ ] stats sync
-  - [X] fat
-  - [X] muscle
-  - [X] weapon skills
-  - [X] fight styles
-  - [ ] sync money
   - [ ] breath level bar
-  - [X] stamina sync
   - [ ] max hp sync
-- [ ] fire sync
 - [ ] cheat code sync
-- [ ] anim sync
-  - [X] sprunk drinking
-  - [X] fast food eating
-  - [ ] idle anims
-  - [ ] funny TAB+NUM4 (or NUM6) anim sync (did you know about this?)
-- [ ] gang groups sync
-- [ ] stream in/out players, peds, vehicles, etc.
+- [ ] idle player anim sync
 - [ ] vehicle sync
-  - [ ] force hydraulics sync
+  - [ ] proper hydraulics sync
   - [ ] trailer sync
-- [ ] passenger sync
-  - [ ] gamepad support
-  - [X] proper seat sync
-  - [ ] radio sync
-  - [X] drive by shooting
-- [ ] fixes
-  - [X] mouse
-  - [ ] widescreen
-  - [X] fast load
-- [ ] Fix models loading (green polygon)  --- related to stream it/out
-- [ ] smooth interpolation
-  - [ ] move
-  - [ ] rotation
-  - [X] weapon aim interpolation
-- [ ] npc sync
-  - [X] pos, rot, speed
-  - [X] weapons
-  - [ ] in vehicle sync
-    - [ ] driver
-      - [X] position velocity rotation  
-      - [X] gas/break lights
-      - [X] wheel movement
-      - [ ] horn
-      - [ ] siren
-      - [X] current path, target entity, mission
-    - [X] passenger
-  - [ ] aim
-  - [ ] shots
-  - [ ] task sync (good luck, warrior!)
-  - [X] radar icon?
-  - [X] speech sync
-- [ ] player voice commands
-- [ ] chat reactions (see LD_CHAT.txd)
+- [ ] radio sync/fix
 - [ ] gang wars sync
-- [ ] parachute jump sync
-- [ ] stunt
-  - [ ] collecting
-  - [ ] for-player slow motion
+- [ ] proper parachute jump sync
+- [ ] stunt jumps collecting sync
 - [ ] chat gamepad support with on-screen keyboard
-### Minor tasks and ideas
-- [ ] Sync laser sniper rifle red dot with all players
-- [X] Sync moon sniper rifle shot changing size easter egg with all players
+- [ ] fire sync
+- [ ] pickup sync
+- [ ] wanted level sync
 
 ## TODO Missions
-### Already Done ✓
-### Current Tasks
 - [X] Big Smoke
 - [X] Ryder
 - [X] Tagging Up Turf
 - [X] Cleaning The Hood
 - [X] Drive-Thru
-- [ ] Nines And AK's
-- [ ] Drive-By
+- [X] Nines And AK's
+- [X] Drive-By
 - [ ] Sweet's Girl
 - [ ] Cesar Vialpando
 - [X] OG Loc
@@ -336,8 +218,6 @@ If you are looking for something to contribute, better check the Issues tab.
 - [ ] End Of The Line
 
 ## TODO Other Scripts
-### Already done ✓
-### Current Tasks
 - [ ] Property purchase sync
 - [ ] Submissions
   - [ ] Taxi driver
