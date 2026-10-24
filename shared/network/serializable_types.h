@@ -60,10 +60,7 @@ public:
         return *this;
     }
 
-    bool operator==(const WorldPositionCompressed& vec) const
-    {
-        return x == vec.x && y == vec.y && z == vec.z;
-    }
+    bool operator==(const WorldPositionCompressed& vec) const { return x == vec.x && y == vec.y && z == vec.z; }
 };
 
 struct MoveSpeedCompressed : public CVector
@@ -149,22 +146,22 @@ public:
 
 struct CControllerStateCompressed : public CControllerState
 {
-#define serialize_stick(stream, value)               \
-    do                                               \
-    {                                                \
+#define serialize_stick(stream, value)                \
+    do                                                \
+    {                                                 \
         int16_t temp = 0;                             \
-                                                     \
-        if (Stream::IsWriting)                       \
-        {                                            \
+                                                      \
+        if (Stream::IsWriting)                        \
+        {                                             \
             temp = std::clamp<int16_t>(value, -1, 1); \
-        }                                            \
-                                                     \
-        serialize_int(stream, temp, -1, 1);          \
-                                                     \
-        if (Stream::IsReading)                       \
-        {                                            \
-            value = temp * 128;                      \
-        }                                            \
+        }                                             \
+                                                      \
+        serialize_int(stream, temp, -1, 1);           \
+                                                      \
+        if (Stream::IsReading)                        \
+        {                                             \
+            value = temp * 128;                       \
+        }                                             \
     } while (false)
 
 #define serialize_bool_key(stream, key)   \
@@ -205,6 +202,9 @@ public:
         serialize_bool_key(stream, ShockButtonR);
         serialize_bool_key(stream, m_bPedWalk);
 
+        serialize_stick(stream, RightStickX);
+        serialize_stick(stream, RightStickY);
+
         return true;
     }
     CControllerStateCompressed& operator=(const CControllerState& state)
@@ -237,10 +237,7 @@ struct RadianAngleCompressed
         return *this;
     }
 
-    bool operator==(const RadianAngleCompressed& angle) const
-    {
-        return m_angle == angle.m_angle;
-    }
+    bool operator==(const RadianAngleCompressed& angle) const { return m_angle == angle.m_angle; }
 };
 
 struct SenderPlayerId
@@ -284,7 +281,7 @@ public:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        
+
         serialize_compressed_float(stream, x, -1.0f, 1.0f, PRECISION);
         serialize_compressed_float(stream, y, -1.0f, 1.0f, PRECISION);
         serialize_compressed_float(stream, z, -1.0f, 1.0f, PRECISION);
@@ -299,8 +296,5 @@ public:
         return *this;
     }
 
-    bool operator==(const NormalizedVector& vec) const
-    {
-        return x == vec.x && y == vec.y && z == vec.z;
-    }
+    bool operator==(const NormalizedVector& vec) const { return x == vec.x && y == vec.y && z == vec.z; }
 };

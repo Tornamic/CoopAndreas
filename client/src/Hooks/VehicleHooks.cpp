@@ -117,10 +117,13 @@ static void __fastcall CVehicle__AddVehicleUpgrade_Hook(CVehicle* This, SKIP_EDX
 {
     if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
     {
-        Packets::Vehicles::VehicleComponentAdd packet{};
-        packet.vehicleid = vehicle->m_vehicleId;
-        packet.componentid = modelid;
-        GetPacketFactory().Send(packet);
+        if (vehicle->m_bSyncing)
+        {
+            Packets::Vehicles::VehicleComponentAdd packet{};
+            packet.vehicleid = vehicle->m_vehicleId;
+            packet.componentid = modelid;
+            GetPacketFactory().Send(packet);
+        }
     }
     This->AddVehicleUpgrade(modelid);
 }
@@ -129,10 +132,13 @@ static void __fastcall CVehicle__RemoveVehicleUpgrade_Hook(CVehicle* This, SKIP_
 {
     if (auto vehicle = CNetworkVehicleManager::GetVehicle(This))
     {
-        Packets::Vehicles::VehicleComponentRemove packet{};
-        packet.vehicleid = vehicle->m_vehicleId;
-        packet.componentid = modelid;
-        GetPacketFactory().Send(packet);
+        if (vehicle->m_bSyncing)
+        {
+            Packets::Vehicles::VehicleComponentRemove packet{};
+            packet.vehicleid = vehicle->m_vehicleId;
+            packet.componentid = modelid;
+            GetPacketFactory().Send(packet);
+        }
     }
     This->RemoveVehicleUpgrade(modelid);
 }
@@ -234,7 +240,8 @@ void CCarCtrl__GenerateOneRandomCar_Hook()
     }
 
     int savedNumRandomCars = patch::GetInt(0x969094, false);
-    int savedNumLawEnforcerCars = patch::GetInt(0x969098, false);  // TODO: calc cops and others too, sync CCarCtrl::Num...OnDuty and the vehicle flags IS_..._ON_DUTY
+    int savedNumLawEnforcerCars = patch::GetInt(0x969098,
+        false);  // TODO: calc cops and others too, sync CCarCtrl::Num...OnDuty and the vehicle flags IS_..._ON_DUTY
     int savedNumMissionCars = patch::GetInt(0x96909C, false);
     int savedNumAmbulancesOnDuty = patch::GetInt(0x9690A8, false);
     int savedNumFireTrucksOnDuty = patch::GetInt(0x9690AC, false);
@@ -326,9 +333,7 @@ void CTheScripts__CleanUpThisVehicle_Hook(CVehicle* vehicle)
 }
 
 CPed* BmxFix_FindPlayerPed_Hook(CVehicle* vehicle)
-{
-    return vehicle->m_pDriver;
-}
+{ return vehicle->m_pDriver; }
 
 void __fastcall CPlayerPed__DoStuffToGoOnFire_Hook(CPlayerPed* This, SKIP_EDX)
 {
@@ -430,6 +435,7 @@ void VehicleHooks::InjectHooks()
 
     patch::RedirectCall(0x4732F2, CVehicle__RemoveVehicleUpgrade_Hook);
     patch::RedirectCall(0x498618, CVehicle__RemoveVehicleUpgrade_Hook);
+    patch::RedirectCall(0x49B3EF, CVehicle__RemoveVehicleUpgrade_Hook);
 
     patch::SetPointer(0x871148, CVehicle__ProcessControl_Hook);
     patch::SetPointer(0x8721C8, CVehicle__ProcessControl_Hook);
@@ -442,7 +448,7 @@ void VehicleHooks::InjectHooks()
     patch::SetPointer(0x872398, CVehicle__ProcessControl_Hook);
 
     // patch::SetPointer(0x871228, CAutomobile__ProcessAI_Hook); // CAutomobile
-    
+
     patch::RedirectCall(0x6B51CD, CCarAI__UpdateCarAI_Hook);
     patch::RedirectCall(0x6B52A2, CCarAI__UpdateCarAI_Hook);
     patch::RedirectCall(0x6BCC64, CCarAI__UpdateCarAI_Hook);

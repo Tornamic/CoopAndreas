@@ -21,6 +21,7 @@ public:
 	static bool IsPedHasJetpack(CPed* ped);
 	static void SetPlayerJetpack(CNetworkPlayer* ped, bool set);
 	static std::string GetWeaponName(eWeaponType type);
+	static void WarpNetworkPlayersOutOfVehicle(CVehicle* vehicle);
 	static float HUD_X(float a) { return a * RsGlobal.maximumWidth / SCREEN_BASE_WIDTH; }
 	static float HUD_Y(float a) { return a * RsGlobal.maximumHeight / SCREEN_BASE_HEIGHT; }
 	static float SCREEN_SCALE_AR(float a) { return a * DEFAULT_ASPECT_RATIO / CDraw::ms_fAspectRatio; };

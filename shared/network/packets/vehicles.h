@@ -68,6 +68,8 @@ public:
     float planeGearState{};
     eDoorLock locked{};
 
+    eEntityStatus entityStatus{};
+
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
@@ -134,6 +136,7 @@ public:
 
         serialize_int(stream, (int&)locked, DOORLOCK_NOT_USED, DOORLOCK_SKIP_SHUT_DOORS);
 
+        serialize_int(stream, (int&)entityStatus, STATUS_PLAYER, STATUS_SIMPLE_TRAILER);
         return true;
     }
 };

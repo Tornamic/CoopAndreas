@@ -70,6 +70,7 @@ PACKET_HANDLER(ePacketType::VEHICLE_IDLE_UPDATE, Packets::Vehicles::VehicleIdleU
     }
 
     pNetworkVehicle->m_pVehicle->m_eDoorLock = pVehicleIdleUpdate->locked;
+    pNetworkVehicle->m_pVehicle->m_nStatus = pVehicleIdleUpdate->entityStatus;
 }
 
 PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDriverUpdate* pVehicleDriverUpdate)

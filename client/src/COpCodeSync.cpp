@@ -190,6 +190,9 @@ const SSyncedOpCode syncedOpcodes[] = {
     {COMMAND_FIX_CAR_PANEL, true, {eSyncedParamType::VEHICLE}},
     {COMMAND_SET_CAN_BURST_CAR_TYRES, true, {eSyncedParamType::VEHICLE}},
     {COMMAND_SET_CAR_CAN_BE_VISIBLY_DAMAGED, true, {eSyncedParamType::VEHICLE}},
+    {COMMAND_CONTROL_CAR_HYDRAULICS, true, {eSyncedParamType::VEHICLE}},
+    {COMMAND_FREEZE_CAR_POSITION, true, {eSyncedParamType::VEHICLE}},
+    {COMMAND_SET_CAR_PROOFS, true, {eSyncedParamType::VEHICLE}},
 
     // Objects, movement is synced by `ObjectUpdate`
     {COMMAND_SET_OBJECT_VISIBLE, true, {eSyncedParamType::OBJECT}},

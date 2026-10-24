@@ -3,8 +3,7 @@
 
 :SWEET6
 script_name 'SWEET6'
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} This mission is currently unsupported and not recommended to play!")
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} It may cause desyncs, crashes, or other unexpected behavior!")
+Coop.EnableSyncingThisScript()
 
 gosub @SWEET6_47
 if 
@@ -18,6 +17,8 @@ terminate_this_script
 
 :SWEET6_47
 Stat.RegisterMissionGiven
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
+
 $onmission = 1
 34@ = 0
 35@ = 0
@@ -348,6 +349,7 @@ goto_if_false @SWEET6_2034
 Streaming.LoadScene(2519.575, -1677.88, 13.7661)
 Char.SetCoordinates($scplayer, 2519.575, -1677.88, 13.7661)
 Char.SetHeading($scplayer, 107.8934)
+//Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Hud.SwitchWidescreen(False)
 Player.SetControl($player1, True)
 Camera.RestoreJumpcut

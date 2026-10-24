@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CNetworkPed.h"
+#include <CTaskSimpleCarSetPedOut.h>
 
 bool CUtil::CompareControllerStates(const CControllerState & state1, const CControllerState & state2) {
     return state1.LeftStickX == state2.LeftStickX &&
@@ -321,4 +322,31 @@ std::string CUtil::GetWeaponName(eWeaponType type)
     };
 
     return names[type];
+}
+static void WarpNetworkPlayerOutOfVehicle(CVehicle* vehicle, CPed* ped)
+{
+    if (ped == nullptr || CNetworkPlayerManager::GetPlayer(ped) == nullptr)
+        return;
+
+    ped->m_pIntelligence->FlushImmediately(true);
+
+    if (ped->m_nPedFlags.bInVehicle && ped->m_pVehicle)
+    {
+        CTaskSimpleCarSetPedOut task(ped->m_pVehicle, 0, true);
+        task.m_bWarpingOutOfCar = true;
+        task.ProcessPed(ped);
+    }
+
+    ped->Teleport(vehicle->GetPosition(), false);
+}
+
+// ~CVehicle flags the driver and passengers to be destroyed, call this before deleting a vehicle
+void CUtil::WarpNetworkPlayersOutOfVehicle(CVehicle* vehicle)
+{
+    WarpNetworkPlayerOutOfVehicle(vehicle, vehicle->m_pDriver);
+
+    for (int i = 0; i < 8; i++)
+    {
+        WarpNetworkPlayerOutOfVehicle(vehicle, vehicle->m_apPassengers[i]);
+    }
 }

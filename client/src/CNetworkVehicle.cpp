@@ -103,6 +103,7 @@ CNetworkVehicle::~CNetworkVehicle()
     {
         if (m_pVehicle && m_pVehicle->IsVTableValid())
         {
+            CUtil::WarpNetworkPlayersOutOfVehicle(m_pVehicle);
             CWorld::Remove(m_pVehicle);
             //CWorld::RemoveReferencesToDeletedObject(m_pVehicle); // ?
             delete m_pVehicle;

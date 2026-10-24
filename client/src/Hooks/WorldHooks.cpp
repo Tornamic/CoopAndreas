@@ -120,6 +120,10 @@ static void __cdecl CWorld__Remove_Hook(CEntity* entity)
     if (entity->m_nType == eEntityType::ENTITY_TYPE_VEHICLE)
     {
         CVehicle* vehicle = (CVehicle*)entity;
+
+        // e.g. a script deleting a car before a cutscene
+        CUtil::WarpNetworkPlayersOutOfVehicle(vehicle);
+
         CNetworkVehicle* networkVehicle = CNetworkVehicleManager::GetVehicle(vehicle);
         if (networkVehicle && networkVehicle->m_bSyncing)
         {
