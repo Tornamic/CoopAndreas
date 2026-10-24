@@ -6,6 +6,9 @@
 PACKET_HANDLER(
     ePacketType::PLAYER_ONFOOT_UPDATE, Packets::Players::OnFootUpdate* pOnFootUpdate, CNetworkPlayer* pNetworkPlayer)
 {
+    // driver/passenger updates keep coming while the exit animation plays, so VEHICLE_EXIT isn't enough
+    pNetworkPlayer->RemoveFromVehicle();
+
     pOnFootUpdate->senderPlayerid = pNetworkPlayer->m_playerId;
     GetPacketFactory().SendToAll(*pOnFootUpdate, pNetworkPlayer);
 }

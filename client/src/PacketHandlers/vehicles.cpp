@@ -71,6 +71,8 @@ PACKET_HANDLER(ePacketType::VEHICLE_IDLE_UPDATE, Packets::Vehicles::VehicleIdleU
 
     pNetworkVehicle->m_pVehicle->m_eDoorLock = pVehicleIdleUpdate->locked;
     pNetworkVehicle->m_pVehicle->m_nStatus = pVehicleIdleUpdate->entityStatus;
+
+    CNetworkVehicleManager::ApplyTrailer(pNetworkVehicle->m_pVehicle, pVehicleIdleUpdate->trailerid);
 }
 
 PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDriverUpdate* pVehicleDriverUpdate)
@@ -131,6 +133,9 @@ PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDri
     }
 
     pNetworkVehicle->m_pVehicle->m_eDoorLock = pVehicleDriverUpdate->locked;
+
+    CNetworkVehicleManager::ApplyTrailer(pVehicle, pVehicleDriverUpdate->trailerid);
+
     pNetworkVehicle->m_playerDriverSnapshot = *pVehicleDriverUpdate;
 }
 

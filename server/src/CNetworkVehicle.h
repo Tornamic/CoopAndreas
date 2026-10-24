@@ -26,6 +26,7 @@ public:
     std::vector<int> m_pComponents;
     uint8_t m_nCreatedBy;
     bool m_bUsedByPed = false;
+    vehicleid_t m_trailerId{};
 
     void ReassignSyncer(CNetworkPlayer* newSyncer);
     void SetOccupant(int8_t seatid, CNetworkPlayer* player);

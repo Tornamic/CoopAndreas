@@ -95,6 +95,8 @@ void CNetworkVehicleManager::UpdateDriver(CVehicle* pVehicle)
 
 		vehicleDriverUpdate.locked = pVehicle->m_eDoorLock;
 
+		vehicleDriverUpdate.trailerid = CNetworkVehicleManager::GetTrailerId(pVehicle);
+
 		GetPacketFactory().Send(vehicleDriverUpdate);
 	}
 }
@@ -132,6 +134,7 @@ void CNetworkVehicleManager::UpdateIdle()
 
 			packet.locked = pVehicle->m_eDoorLock;
 			packet.entityStatus = static_cast<eEntityStatus>(pVehicle->m_nStatus);
+			packet.trailerid = CNetworkVehicleManager::GetTrailerId(pVehicle);
 			GetPacketFactory().Send(packet);
 		}
 	}
@@ -217,5 +220,34 @@ void CNetworkVehicleManager::UpdateDamageSync()
 				}
 			}
 		}
+	}
+}
+
+vehicleid_t CNetworkVehicleManager::GetTrailerId(CVehicle* pVehicle)
+{
+	if (pVehicle->m_pTrailer)
+	{
+		if (auto pNetworkTrailer = CNetworkVehicleManager::GetVehicle(pVehicle->m_pTrailer))
+			return pNetworkTrailer->m_vehicleId;
+	}
+	return vehicleid_t{};
+}
+
+void CNetworkVehicleManager::ApplyTrailer(CVehicle* pVehicle, vehicleid_t trailerid)
+{
+	CNetworkVehicle* pNetworkTrailer = CNetworkVehicleManager::GetVehicle(trailerid);
+	CVehicle* pTrailer = pNetworkTrailer ? pNetworkTrailer->m_pVehicle : nullptr;
+	if (pVehicle->m_pTrailer == pTrailer)
+		return;
+
+	if (pVehicle->m_pTrailer)
+		pVehicle->m_pTrailer->BreakTowLink();
+
+	if (pTrailer)
+	{
+		if (pTrailer->m_pTractor)
+			pTrailer->BreakTowLink();
+
+		pTrailer->SetTowLink(pVehicle, true);
 	}
 }

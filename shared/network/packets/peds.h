@@ -138,6 +138,8 @@ public:
     float breakPedal = 0.0f;
     float steerAngle = 0.0f;
 
+    vehicleid_t trailerid{};
+
     // subType specific fields
     float bikeLean{};               // bike/bmx
     float controlPedaling{};        // bmx
@@ -189,6 +191,10 @@ private:
             serialize_compressed_float(stream, turnSpeed.y, -0.5f, 0.5f, 0.0001f);
             serialize_compressed_float(stream, turnSpeed.z, -0.5f, 0.5f, 0.0001f);
         }
+        else if (Stream::IsReading)
+        {
+            turnSpeed = CVector{};
+        }
 
 #pragma endregion
 #pragma region painjob
@@ -220,6 +226,22 @@ private:
             serialize_compressed_float(stream, gasPedal, -1.0f, 1.0f, 0.01f);
             serialize_compressed_float(stream, breakPedal, -1.0f, 1.0f, 0.01f);
             serialize_compressed_float(stream, steerAngle, -1.0f, 1.0f, 0.01f);
+        }
+#pragma endregion
+#pragma region trailer
+        bool hasTrailer = false;
+        if (Stream::IsWriting)
+        {
+            hasTrailer = trailerid.valid();
+        }
+        serialize_bool(stream, hasTrailer);
+        if (hasTrailer)
+        {
+            serialize_vehicleid(stream, trailerid);
+        }
+        else if (Stream::IsReading)
+        {
+            trailerid = vehicleid_t{};
         }
 #pragma endregion
 #pragma region type specific
@@ -257,6 +279,10 @@ private:
             if (syncAngle)
             {
                 serialize_uint16(stream, miscComponentAngle);
+            }
+            else if (Stream::IsReading)
+            {
+                miscComponentAngle = 0;
             }
         }
 #pragma endregion

@@ -17,5 +17,7 @@ public:
     static void ResetIdAllocator();
     static void RemoveHostedUnused();
     static void UpdateDamageSync();
+    static vehicleid_t GetTrailerId(CVehicle* pVehicle);
+    static void ApplyTrailer(CVehicle* pVehicle, vehicleid_t trailerid);
 };
 

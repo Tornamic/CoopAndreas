@@ -123,6 +123,7 @@ void CNetworkPedManager::Update()
                 packet.gasPedal = pVehicle->m_fGasPedal;
                 packet.breakPedal = pVehicle->m_fBreakPedal;
                 packet.steerAngle = pVehicle->m_fSteerAngle;
+                packet.trailerid = CNetworkVehicleManager::GetTrailerId(pVehicle);
 
                 GetPacketFactory().Send(packet);
             }

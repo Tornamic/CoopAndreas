@@ -32,6 +32,21 @@ CNetworkVehicle* CNetworkVehicleManager::GetVehicle(vehicleid_t vehicleid)
     return nullptr;
 }
 
+CNetworkVehicle* CNetworkVehicleManager::GetTractor(vehicleid_t trailerid)
+{
+    if (!trailerid.valid())
+        return nullptr;
+
+    for (int i = 0; i != m_pVehicles.size(); i++)
+    {
+        if (m_pVehicles[i]->m_trailerId == trailerid)
+        {
+            return m_pVehicles[i];
+        }
+    }
+    return nullptr;
+}
+
 void CNetworkVehicleManager::RemoveAllHostedAndNotify(CNetworkPlayer* player)
 {
     for (auto it = CNetworkVehicleManager::m_pVehicles.begin(); it != CNetworkVehicleManager::m_pVehicles.end();)

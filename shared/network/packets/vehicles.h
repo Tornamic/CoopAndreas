@@ -70,6 +70,8 @@ public:
 
     eEntityStatus entityStatus{};
 
+    vehicleid_t trailerid{};
+
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
@@ -101,6 +103,10 @@ public:
             serialize_compressed_float(stream, turnSpeed.x, -0.5f, 0.5f, 0.0001f);
             serialize_compressed_float(stream, turnSpeed.y, -0.5f, 0.5f, 0.0001f);
             serialize_compressed_float(stream, turnSpeed.z, -0.5f, 0.5f, 0.0001f);
+        }
+        else if (Stream::IsReading)
+        {
+            turnSpeed = CVector();
         }
 
         serialize_uint8(stream, color1);
@@ -137,6 +143,21 @@ public:
         serialize_int(stream, (int&)locked, DOORLOCK_NOT_USED, DOORLOCK_SKIP_SHUT_DOORS);
 
         serialize_int(stream, (int&)entityStatus, STATUS_PLAYER, STATUS_SIMPLE_TRAILER);
+
+        bool hasTrailer = false;
+        if (Stream::IsWriting)
+        {
+            hasTrailer = trailerid.valid();
+        }
+        serialize_bool(stream, hasTrailer);
+        if (hasTrailer)
+        {
+            serialize_vehicleid(stream, trailerid);
+        }
+        else if (Stream::IsReading)
+        {
+            trailerid = vehicleid_t{};
+        }
         return true;
     }
 };
@@ -172,6 +193,8 @@ public:
     float planeGearState{};
     eDoorLock locked{};
 
+    vehicleid_t trailerid{};
+
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
@@ -205,6 +228,10 @@ private:
             serialize_compressed_float(stream, turnSpeed.x, -0.5f, 0.5f, 0.0001f);
             serialize_compressed_float(stream, turnSpeed.y, -0.5f, 0.5f, 0.0001f);
             serialize_compressed_float(stream, turnSpeed.z, -0.5f, 0.5f, 0.0001f);
+        }
+        else if (Stream::IsReading)
+        {
+            turnSpeed = CVector();
         }
 
         serialize_uint8(stream, color1);
@@ -246,6 +273,10 @@ private:
         {
             serialize_uint16(stream, miscComponentAngle);
         }
+        else if (Stream::IsReading)
+        {
+            miscComponentAngle = 0;
+        }
 
         if (Stream::IsWriting)
         {
@@ -260,6 +291,21 @@ private:
         }
 
         serialize_int(stream, (int&)locked, DOORLOCK_NOT_USED, DOORLOCK_SKIP_SHUT_DOORS);
+
+        bool hasTrailer = false;
+        if (Stream::IsWriting)
+        {
+            hasTrailer = trailerid.valid();
+        }
+        serialize_bool(stream, hasTrailer);
+        if (hasTrailer)
+        {
+            serialize_vehicleid(stream, trailerid);
+        }
+        else if (Stream::IsReading)
+        {
+            trailerid = vehicleid_t{};
+        }
 
         return true;
     }

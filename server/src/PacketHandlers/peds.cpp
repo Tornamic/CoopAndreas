@@ -158,6 +158,7 @@ PACKET_HANDLER(
     pNetworkVehicle->m_bUsedByPed = true;
     pNetworkVehicle->m_vecPosition = pPedDriverUpdate->pos;
     pNetworkVehicle->m_vecRotation = pPedDriverUpdate->rot;
+    pNetworkVehicle->m_trailerId = pPedDriverUpdate->trailerid;
 
     GetPacketFactory().SendToAll(*pPedDriverUpdate, pNetworkPlayer);
 }

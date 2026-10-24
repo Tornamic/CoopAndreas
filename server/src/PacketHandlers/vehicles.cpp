@@ -62,6 +62,7 @@ PACKET_HANDLER(ePacketType::VEHICLE_IDLE_UPDATE, Packets::Vehicles::VehicleIdleU
             vehicle->m_bUsedByPed = false;
             vehicle->m_vecPosition = pVehicleIdleUpdate->pos;
             vehicle->m_vecRotation = pVehicleIdleUpdate->rot;
+            vehicle->m_trailerId = pVehicleIdleUpdate->trailerid;
             GetPacketFactory().SendToAll(*pVehicleIdleUpdate, pNetworkPlayer);
         }
         else
@@ -83,8 +84,20 @@ PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDri
         pNetworkVehicle->SetOccupant(0, pNetworkPlayer);
         pNetworkVehicle->m_vecPosition = pVehicleDriverUpdate->pos;
         pNetworkVehicle->m_vecRotation = pVehicleDriverUpdate->rot;
+        pNetworkVehicle->m_trailerId = pVehicleDriverUpdate->trailerid;
         pNetworkVehicle->m_bUsedByPed = false;
         pNetworkVehicle->ReassignSyncer(pNetworkPlayer);
+
+        // the tractor driver syncs the trailer chain while the trailers have no driver
+        auto pNetworkTrailer = CNetworkVehicleManager::GetVehicle(pVehicleDriverUpdate->trailerid);
+        for (int i = 0; i < 16 && pNetworkTrailer && pNetworkTrailer != pNetworkVehicle; i++)
+        {
+            if (pNetworkTrailer->m_pPlayers[0] || pNetworkTrailer->m_bUsedByPed)
+                break;
+
+            pNetworkTrailer->ReassignSyncer(pNetworkPlayer);
+            pNetworkTrailer = CNetworkVehicleManager::GetVehicle(pNetworkTrailer->m_trailerId);
+        }
 
         pVehicleDriverUpdate->senderPlayerid = pNetworkPlayer->m_playerId;
         GetPacketFactory().SendToAll(*pVehicleDriverUpdate, pNetworkPlayer);
@@ -189,6 +202,17 @@ PACKET_HANDLER(ePacketType::VEHICLE_PASSENGER_UPDATE,
         pNetworkVehicle->SetOccupant(pVehiclePassengerUpdate->seatid + 1, pNetworkPlayer);
 
         if (pNetworkVehicle->m_nCreatedBy == MISSION_VEHICLE)
+        {
+            return;
+        }
+
+        // the tractor driver syncs the trailer chain
+        auto pTractor = CNetworkVehicleManager::GetTractor(pNetworkVehicle->m_vehicleId);
+        for (int i = 0; i < 16 && pTractor && !pTractor->m_pPlayers[0]; i++)
+        {
+            pTractor = CNetworkVehicleManager::GetTractor(pTractor->m_vehicleId);
+        }
+        if (pTractor && pTractor->m_pPlayers[0])
         {
             return;
         }
