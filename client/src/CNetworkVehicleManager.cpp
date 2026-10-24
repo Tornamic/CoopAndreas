@@ -1,4 +1,3 @@
-#include "eEntityStatus.h"
 #include "stdafx.h"
 #include "CNetworkVehicle.h"
 #include <CKeySync.h>
@@ -133,7 +132,6 @@ void CNetworkVehicleManager::UpdateIdle()
 			}
 
 			packet.locked = pVehicle->m_eDoorLock;
-			packet.entityStatus = static_cast<eEntityStatus>(pVehicle->m_nStatus);
 			packet.trailerid = CNetworkVehicleManager::GetTrailerId(pVehicle);
 			GetPacketFactory().Send(packet);
 		}

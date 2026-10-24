@@ -68,8 +68,6 @@ public:
     float planeGearState{};
     eDoorLock locked{};
 
-    eEntityStatus entityStatus{};
-
     vehicleid_t trailerid{};
 
     template <typename Stream>
