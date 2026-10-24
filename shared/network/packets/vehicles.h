@@ -140,8 +140,6 @@ public:
 
         serialize_int(stream, (int&)locked, DOORLOCK_NOT_USED, DOORLOCK_SKIP_SHUT_DOORS);
 
-        serialize_int(stream, (int&)entityStatus, STATUS_PLAYER, STATUS_SIMPLE_TRAILER);
-
         bool hasTrailer = false;
         if (Stream::IsWriting)
         {
