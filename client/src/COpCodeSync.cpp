@@ -59,8 +59,7 @@ const SSyncedOpCode syncedOpcodes[] = {
     {0x09D2},  // enable_ambient_crime {state} [bool]
     {0x06D0},  // switch_emergency_services {state} [bool]
     {0x014C},  // switch_car_generator[CarGenerator] {amount} [int]
-    {COMMAND_CLEAR_AREA_OF_CARS}, {COMMAND_CLEAR_AREA_OF_CHARS},
-
+    {COMMAND_CLEAR_AREA_OF_CARS}, {COMMAND_CLEAR_AREA_OF_CHARS}, {COMMAND_SET_SCRIPT_LIMIT_TO_GANG_SIZE},
     // Camera
     {0x015F},  // set_fixed_camera_position {x} [float] {y} [float] {z} [float] {xRotation} [float] {yRotation} [float]
                // {zRotation} [float]
@@ -84,10 +83,11 @@ const SSyncedOpCode syncedOpcodes[] = {
     {0x02E7},  // start_cutscene
     {0x02EA},  // clear_cutscene
     {COMMAND_REQUEST_COLLISION},
+    {COMMAND_MAKE_PLAYER_SAFE_FOR_CUTSCENE},
 
     // World
     {COMMAND_SET_CREATE_RANDOM_COPS}, {COMMAND_SET_FREE_RESPRAYS}, {COMMAND_SET_CREATE_RANDOM_GANG_MEMBERS},
-    {COMMAND_ALTER_WANTED_LEVEL},
+    {COMMAND_CLEAR_WANTED_LEVEL}, {COMMAND_ALTER_WANTED_LEVEL},
     {COMMAND_ALTER_WANTED_LEVEL_NO_DROP},  // TODO do smth with this when syncing wanted level
     {COMMAND_SET_TAG_STATUS_IN_AREA},
     {COMMAND_SET_MAX_WANTED_LEVEL},        // not reset by the mission cleanup, the scripts restore it themselves
@@ -175,6 +175,18 @@ const SSyncedOpCode syncedOpcodes[] = {
     {0x07A1},                                 // set_next_desired_move_state {moveState} [MoveState]
     {0x0245, true, {eSyncedParamType::PED}},  // set_anim_group_for_char[Char] {animGroup} [AnimGroup]
     {0x0860, true, {eSyncedParamType::PED}},  // {0860:} set_char_area_visible [Char] {interiorId} [int]
+    {COMMAND_SET_CHAR_NEVER_TARGETTED, true, {eSyncedParamType::PED}},
+    {COMMAND_SET_CHAR_SUFFERS_CRITICAL_HITS, true, {eSyncedParamType::PED}},
+    {COMMAND_SET_CHAR_WEAPON_SKILL, true, {eSyncedParamType::PED}},
+    {COMMAND_SET_CHAR_ACCURACY, true, {eSyncedParamType::PED}},
+    {COMMAND_SET_CHAR_SHOOT_RATE, true, {eSyncedParamType::PED}},
+    {COMMAND_SET_CHAR_ONLY_DAMAGED_BY_PLAYER, true, {eSyncedParamType::PED}},
+    {COMMAND_SET_CHAR_GET_OUT_UPSIDE_DOWN_CAR, true, {eSyncedParamType::PED}},
+    {COMMAND_SET_CHAR_CANT_BE_DRAGGED_OUT, true, {eSyncedParamType::PED}},
+    {COMMAND_SET_CHAR_STAY_IN_CAR_WHEN_JACKED, true, {eSyncedParamType::PED}},
+    {COMMAND_SHUT_CHAR_UP_FOR_SCRIPTED_SPEECH, true, {eSyncedParamType::PED}},
+    {COMMAND_STOP_CHAR_FACIAL_TALK, true, {eSyncedParamType::PED}},
+    {COMMAND_SET_CHAR_PROOFS, true, {eSyncedParamType::PED}},
 
     // Vehicles
     {0x00AB, true, {eSyncedParamType::VEHICLE}},  // set_car_coordinates [Car] {x} [float] {y} [float] {z} [float]
