@@ -110,7 +110,6 @@ If you are looking for something to contribute, also check the Issues tab.
 - [ ] idle player anim sync
 - [ ] vehicle sync
   - [ ] proper hydraulics sync
-  - [ ] trailer sync
 - [ ] radio sync/fix
 - [ ] gang wars sync
 - [ ] proper parachute jump sync
