@@ -32,11 +32,12 @@ constexpr ePacketReliability GetChannelReliability(ePacketChannel channel)
     return aChannelReliability[static_cast<uint8_t>(channel)];
 }
 
+// constructor is defined in CPacketFactory.h, after GetPacketFactory() is declared
 template <typename PacketT>
 class PacketRegistrar
 {
 public:
-    PacketRegistrar() { GetPacketFactory().RegisterPacket(new PacketT); }
+    PacketRegistrar();
 };
 
 #define DEFINE_PACKET_TYPE(packet_class, type, channel)              \

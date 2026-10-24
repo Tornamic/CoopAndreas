@@ -62,6 +62,5 @@ int main(int argc, char* argv[])
     CConfigManager::Init();
     CServerTime::Init();
 
-    CNetwork::Init(CConfigManager::GetConfigPort());
-    return 0;
+    return CNetwork::Init(CConfigManager::GetConfigPort()) ? 0 : 1;
 }
