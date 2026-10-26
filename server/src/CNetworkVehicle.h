@@ -7,6 +7,8 @@
 #include "CVector.h"
 #include "CNetworkPlayerManager.h"
 #include <CDamageManager.h>
+#include <network/packets/players.h>
+#include <network/packets/vehicles.h>
 
 class CNetworkVehicle
 {
@@ -27,6 +29,8 @@ public:
     uint8_t m_nCreatedBy;
     bool m_bUsedByPed = false;
     vehicleid_t m_trailerId{};
+    bool m_bIsTrain = false;
+    Packets::Vehicles::STrainSnapshot m_train{};
 
     void ReassignSyncer(CNetworkPlayer* newSyncer);
     void SetOccupant(int8_t seatid, CNetworkPlayer* player);

@@ -19,5 +19,9 @@ public:
     static void UpdateDamageSync();
     static vehicleid_t GetTrailerId(CVehicle* pVehicle);
     static void ApplyTrailer(CVehicle* pVehicle, vehicleid_t trailerid);
+    static void GetTrainSnapshot(CTrain* pTrain, Packets::Vehicles::STrainSnapshot& snapshot);
+    static void ApplyTrainSnapshot(CTrain* pTrain, const Packets::Vehicles::STrainSnapshot& snapshot);
+    static void DerailTrain(CTrain* pTrain);
+    static bool IsTrainOnRails(CVehicle* pVehicle);
 };
 

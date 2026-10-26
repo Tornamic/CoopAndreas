@@ -9,18 +9,10 @@
 #include <CServerTime.h>
 #include <CCarAI.h>
 
-void __fastcall CVehicle__ProcessControl_Hook()
+void __fastcall CVehicle__ProcessControl_Hook(CVehicle* vehicle)
 {
-    CVehicle* vehicle = nullptr;
-    DWORD vtbl = 0;
+    DWORD vtbl = *(DWORD*)vehicle;
     DWORD call_addr = 0;
-
-    __asm
-    {
-        mov vehicle, ecx
-        mov eax, [ecx]
-        mov vtbl, eax
-    }
 
     if (vtbl == 0x871120)       // CAutomobile
         call_addr = 0x6B1880;
@@ -105,6 +97,112 @@ void __fastcall CVehicle__ProcessControl_Hook()
 
     *(bool*)0xB6F1A4 = savedLookingLeft;
     *(bool*)0xB6F1A5 = savedLookingRight;
+}
+
+static void __fastcall CTrain__ProcessControl_Hook(CTrain* This)
+{
+    CNetworkVehicle* pNetworkVehicle = CNetworkVehicleManager::GetVehicle(This);
+    if (pNetworkVehicle == nullptr || pNetworkVehicle->m_bSyncing)
+    {
+        CVehicle__ProcessControl_Hook(This);
+        return;
+    }
+
+    // only the syncer adds and removes the random passengers at the stations,
+    // CTrain::ProcessControl skips them for mission trains
+    bool bMissionTrain = This->m_nTrainFlags.bMissionTrain;
+    This->m_nTrainFlags.bMissionTrain = true;
+    CVehicle__ProcessControl_Hook(This);
+    This->m_nTrainFlags.bMissionTrain = bMissionTrain;
+}
+
+// only the syncer can derail a train, the others get it from the vehicle updates
+static bool __cdecl CTrain__CanDerail(CTrain* pEngine)
+{
+    CNetworkVehicle* pNetworkVehicle = CNetworkVehicleManager::GetVehicle(pEngine);
+    return pNetworkVehicle == nullptr || pNetworkVehicle->m_bSyncing;
+}
+
+static void __declspec(naked) CTrain__ProcessControl_Derail_Hook()
+{
+    // edi - the current carriage, esi - the engine
+    static bool bCanDerail;
+
+    __asm
+    {
+        pushad
+        push esi
+        call CTrain__CanDerail
+        add esp, 4
+        mov bCanDerail, al
+        popad
+
+        cmp bCanDerail, 0
+        je skip_derail
+
+        mov al, [edi + 0x5B9]  // 0x6F8DF3
+        push 0x6F8DF9
+        retn
+
+    skip_derail:
+        push 0x6F8F89
+        retn
+    }
+}
+
+static bool IsTrainNearNetworkPlayer(CTrain* pTrain)
+{
+    for (; pTrain; pTrain = pTrain->m_pNextCarriage)
+    {
+        for (auto pNetworkPlayer : CNetworkPlayerManager::m_pPlayers)
+        {
+            if (pNetworkPlayer->m_pPed &&
+                (pNetworkPlayer->m_pPed->GetPosition() - pTrain->GetPosition()).Magnitude2D() < 220.0f)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// like in the single player, there is only one ambient train at a time, shared by all the players.
+// the game removes it when all its carriages are far from the local camera,
+// so keep the ones of the other players and ours near them, and don't create a new one while they exist
+static void CTrain__DoTrainGenerationAndRemoval_Hook()
+{
+    std::vector<CTrain*> keptTrains;
+
+    for (auto pNetworkVehicle : CNetworkVehicleManager::m_pVehicles)
+    {
+        CVehicle* pVehicle = pNetworkVehicle->m_pVehicle;
+        if (pVehicle == nullptr || pVehicle->m_nVehicleType != VEHICLE_TRAIN)
+            continue;
+
+        CTrain* pTrain = (CTrain*)pVehicle;
+        if (!pTrain->m_nTrainFlags.bIsFrontCarriage || pTrain->m_nTrainFlags.bMissionTrain)
+            continue;
+
+        if (pNetworkVehicle->m_bSyncing && !IsTrainNearNetworkPlayer(pTrain))
+            continue;
+
+        pTrain->m_nTrainFlags.bMissionTrain = true;
+        keptTrains.push_back(pTrain);
+    }
+
+    bool bDisableRandomTrains = CTrain::bDisableRandomTrains;
+    if (!keptTrains.empty())
+    {
+        CTrain::bDisableRandomTrains = true;
+    }
+
+    CTrain::DoTrainGenerationAndRemoval();
+
+    CTrain::bDisableRandomTrains = bDisableRandomTrains;
+    for (auto pTrain : keptTrains)
+    {
+        pTrain->m_nTrainFlags.bMissionTrain = false;
+    }
 }
 
 static void __fastcall CCarCtrl__RemoveDistantCars_Hook()
@@ -445,7 +543,10 @@ void VehicleHooks::InjectHooks()
     patch::SetPointer(0x871550, CVehicle__ProcessControl_Hook);
     patch::SetPointer(0x871800, CVehicle__ProcessControl_Hook);
     patch::SetPointer(0x871B10, CVehicle__ProcessControl_Hook);
-    patch::SetPointer(0x872398, CVehicle__ProcessControl_Hook);
+    patch::SetPointer(0x872398, CTrain__ProcessControl_Hook);
+
+    patch::RedirectJump(0x6F8DF3, CTrain__ProcessControl_Derail_Hook);
+    patch::RedirectCall(0x43426D, CTrain__DoTrainGenerationAndRemoval_Hook);
 
     // patch::SetPointer(0x871228, CAutomobile__ProcessAI_Hook); // CAutomobile
 

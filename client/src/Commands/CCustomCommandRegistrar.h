@@ -26,6 +26,7 @@
 #include "Commands/CCommandIsCarOnAnyPlayersScreen.h"
 #include "Commands/CCommandIsPointOnAnyPlayersScreen.h"
 #include "Commands/CCommandSetBlipVisibleTo.h"
+#include "Commands/CCommandCanScriptControlTrain.h"
 
 class CCustomCommandRegistrar
 {
@@ -57,5 +58,6 @@ public:
 		CCustomCommandMgr::RegisterCommand(0x1D1D, new CCommandIsCarOnAnyPlayersScreen());
 		CCustomCommandMgr::RegisterCommand(0x1D1E, new CCommandIsPointOnAnyPlayersScreen());
 		CCustomCommandMgr::RegisterCommand(0x1D1F, new CCommandSetBlipVisibleTo());
+		CCustomCommandMgr::RegisterCommand(0x1D20, new CCommandCanScriptControlTrain());
 	}
 };

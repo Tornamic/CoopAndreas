@@ -169,12 +169,17 @@ PACKET_HANDLER(ePacketType::PED_DRIVER_UPDATE, Packets::Peds::PedDriverUpdate* p
     {
         pNetworkPed->WarpIntoVehicleDriver(pVehicle);
     }
-    pVehicle->m_matrix->pos = pPedDriverUpdate->pos;
-    pVehicle->m_matrix->right = pPedDriverUpdate->roll;
-    pVehicle->m_matrix->up = pPedDriverUpdate->rot;
     pNetworkPed->m_vecVelocity = pPedDriverUpdate->velocity;
-    pVehicle->m_vecMoveSpeed = pPedDriverUpdate->velocity;
-    pVehicle->m_vecTurnSpeed = pPedDriverUpdate->turnSpeed;
+
+    // a train on rails is synced by VehicleIdleUpdate and moves along its track
+    if (!CNetworkVehicleManager::IsTrainOnRails(pVehicle))
+    {
+        pVehicle->m_matrix->pos = pPedDriverUpdate->pos;
+        pVehicle->m_matrix->right = pPedDriverUpdate->roll;
+        pVehicle->m_matrix->up = pPedDriverUpdate->rot;
+        pVehicle->m_vecMoveSpeed = pPedDriverUpdate->velocity;
+        pVehicle->m_vecTurnSpeed = pPedDriverUpdate->turnSpeed;
+    }
 
     pNetworkPed->ApplyWeaponSnapshot(pPedDriverUpdate->pedWeapon);
 

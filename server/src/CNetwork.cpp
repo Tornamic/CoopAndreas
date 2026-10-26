@@ -237,6 +237,8 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
             i->m_vecRotation.z * (3.141592f / 180.0f));  // convert to radians TODO(v0.3.1-alpha): is this wrong?
         vehicleSpawnPacket.color1 = i->m_nPrimaryColor;
         vehicleSpawnPacket.color2 = i->m_nSecondaryColor;
+        vehicleSpawnPacket.bIsTrain = i->m_bIsTrain;
+        vehicleSpawnPacket.train = i->m_train;
         GetPacketFactory().Send(vehicleSpawnPacket, pNewNetworkPlayer);
 
         Packets::Vehicles::VehicleDamage vehicleDamagePacket{};

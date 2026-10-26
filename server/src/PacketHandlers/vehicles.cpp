@@ -30,6 +30,8 @@ PACKET_HANDLER(
     vehicle->m_nPrimaryColor = pVehicleSpawn->color1;
     vehicle->m_nSecondaryColor = pVehicleSpawn->color2;
     vehicle->m_nCreatedBy = pVehicleSpawn->createdBy;
+    vehicle->m_bIsTrain = pVehicleSpawn->bIsTrain;
+    vehicle->m_train = pVehicleSpawn->train;
 
     CNetworkVehicleManager::Add(vehicle);
 }
@@ -59,10 +61,18 @@ PACKET_HANDLER(ePacketType::VEHICLE_IDLE_UPDATE, Packets::Vehicles::VehicleIdleU
     {
         if (vehicle->m_pSyncer == pNetworkPlayer)
         {
-            vehicle->m_bUsedByPed = false;
+            // a train engine sends idle updates while being driven by a ped
+            if (!vehicle->m_bIsTrain)
+            {
+                vehicle->m_bUsedByPed = false;
+            }
             vehicle->m_vecPosition = pVehicleIdleUpdate->pos;
             vehicle->m_vecRotation = pVehicleIdleUpdate->rot;
             vehicle->m_trailerId = pVehicleIdleUpdate->trailerid;
+            if (vehicle->m_bIsTrain && pVehicleIdleUpdate->vehicleSubType == VEHICLE_TRAIN)
+            {
+                vehicle->m_train = pVehicleIdleUpdate->train;
+            }
             GetPacketFactory().SendToAll(*pVehicleIdleUpdate, pNetworkPlayer);
         }
         else
@@ -97,6 +107,22 @@ PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDri
 
             pNetworkTrailer->ReassignSyncer(pNetworkPlayer);
             pNetworkTrailer = CNetworkVehicleManager::GetVehicle(pNetworkTrailer->m_trailerId);
+        }
+
+        // the engine driver syncs all the carriages of the train
+        if (pNetworkVehicle->m_bIsTrain && pVehicleDriverUpdate->vehicleSubType == VEHICLE_TRAIN)
+        {
+            pNetworkVehicle->m_train = pVehicleDriverUpdate->train;
+
+            auto pNetworkCarriage = CNetworkVehicleManager::GetVehicle(pNetworkVehicle->m_train.nextCarriageid);
+            for (int i = 0; i < 16 && pNetworkCarriage && pNetworkCarriage != pNetworkVehicle; i++)
+            {
+                if (pNetworkCarriage->m_pPlayers[0])
+                    break;
+
+                pNetworkCarriage->ReassignSyncer(pNetworkPlayer);
+                pNetworkCarriage = CNetworkVehicleManager::GetVehicle(pNetworkCarriage->m_train.nextCarriageid);
+            }
         }
 
         pVehicleDriverUpdate->senderPlayerid = pNetworkPlayer->m_playerId;

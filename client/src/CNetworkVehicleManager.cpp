@@ -52,6 +52,7 @@ void CNetworkVehicleManager::UpdateDriver(CVehicle* pVehicle)
 		CPlayerPed* pPlayerPed = FindPlayerPed(0);
 
 		vehicleDriverUpdate.vehicleid = pNetworkVehicle->m_vehicleId;
+		vehicleDriverUpdate.vehicleSubType = static_cast<eVehicleType>(pVehicle->m_nVehicleSubType);
 		vehicleDriverUpdate.pos = pVehicle->m_matrix->pos;
 		vehicleDriverUpdate.roll = pVehicle->m_matrix->right;
 		vehicleDriverUpdate.rot = pVehicle->m_matrix->up;
@@ -96,6 +97,11 @@ void CNetworkVehicleManager::UpdateDriver(CVehicle* pVehicle)
 
 		vehicleDriverUpdate.trailerid = CNetworkVehicleManager::GetTrailerId(pVehicle);
 
+		if (vehicleDriverUpdate.vehicleSubType == VEHICLE_TRAIN)
+		{
+			CNetworkVehicleManager::GetTrainSnapshot((CTrain*)pVehicle, vehicleDriverUpdate.train);
+		}
+
 		GetPacketFactory().Send(vehicleDriverUpdate);
 	}
 }
@@ -110,10 +116,15 @@ void CNetworkVehicleManager::UpdateIdle()
 		if (pVehicle == nullptr)
 			continue;
 
-		if (pNetworkVehicle->m_bSyncing && !pNetworkVehicle->HasDriver())
+		// a train engine driven by a ped needs the train state too, PedDriverUpdate does not have it
+		bool bTrain = pVehicle->m_nVehicleType == VEHICLE_TRAIN;
+		bool bPedDrivenTrain = bTrain && pNetworkVehicle->HasDriver() && !pVehicle->m_pDriver->IsPlayer();
+
+		if (pNetworkVehicle->m_bSyncing && (!pNetworkVehicle->HasDriver() || bPedDrivenTrain))
 		{
 			Packets::Vehicles::VehicleIdleUpdate packet{};
 			packet.vehicleid = pNetworkVehicle->m_vehicleId;
+			packet.vehicleSubType = static_cast<eVehicleType>(pVehicle->m_nVehicleSubType);
 
 			packet.pos = pVehicle->m_matrix->pos;
 			packet.roll = pVehicle->m_matrix->right;
@@ -133,6 +144,11 @@ void CNetworkVehicleManager::UpdateIdle()
 
 			packet.locked = pVehicle->m_eDoorLock;
 			packet.trailerid = CNetworkVehicleManager::GetTrailerId(pVehicle);
+
+			if (bTrain)
+			{
+				CNetworkVehicleManager::GetTrainSnapshot((CTrain*)pVehicle, packet.train);
+			}
 			GetPacketFactory().Send(packet);
 		}
 	}
@@ -248,4 +264,88 @@ void CNetworkVehicleManager::ApplyTrailer(CVehicle* pVehicle, vehicleid_t traile
 
 		pTrailer->SetTowLink(pVehicle, true);
 	}
+}
+
+void CNetworkVehicleManager::GetTrainSnapshot(CTrain* pTrain, Packets::Vehicles::STrainSnapshot& snapshot)
+{
+	if (pTrain->m_pNextCarriage)
+	{
+		if (auto pNetworkCarriage = CNetworkVehicleManager::GetVehicle(pTrain->m_pNextCarriage))
+			snapshot.nextCarriageid = pNetworkCarriage->m_vehicleId;
+	}
+
+	snapshot.trackId = pTrain->m_nTrackId;
+	snapshot.bIsFrontCarriage = pTrain->m_nTrainFlags.bIsFrontCarriage;
+	snapshot.bIsLastCarriage = pTrain->m_nTrainFlags.bIsLastCarriage;
+	snapshot.bMissionTrain = pTrain->m_nTrainFlags.bMissionTrain;
+	snapshot.bClockwiseDirection = pTrain->m_nTrainFlags.bClockwiseDirection;
+	snapshot.bStopsAtStations = pTrain->m_nTrainFlags.bStopsAtStations;
+	snapshot.bForceSlowDown = pTrain->m_nTrainFlags.bForceSlowDown;
+	snapshot.bDerailed = pTrain->m_nTrainFlags.bNotOnARailRoad;
+	snapshot.length = pTrain->m_fLength;
+	snapshot.speed = pTrain->m_fTrainSpeed;
+	snapshot.railDistance = pTrain->m_fCurrentRailDistance;
+	snapshot.nodeIndex = pTrain->m_nNodeIndex;
+	snapshot.cruiseSpeed = pTrain->m_autoPilot.m_nCruiseSpeed;
+	snapshot.timeSinceStoppedAtStation = (uint16_t)std::min<unsigned int>(
+		CTimer::m_snTimeInMilliseconds - pTrain->m_nTimeWhenStoppedAtStation, 40000);
+}
+
+void CNetworkVehicleManager::ApplyTrainSnapshot(CTrain* pTrain, const Packets::Vehicles::STrainSnapshot& snapshot)
+{
+	// link the carriage behind, the way CTrain::CreateMissionTrain does
+	if (pTrain->m_pNextCarriage == nullptr)
+	{
+		CNetworkVehicle* pNetworkCarriage = CNetworkVehicleManager::GetVehicle(snapshot.nextCarriageid);
+		CVehicle* pCarriage = pNetworkCarriage ? pNetworkCarriage->m_pVehicle : nullptr;
+		if (pCarriage && pCarriage != pTrain && pCarriage->m_nVehicleType == VEHICLE_TRAIN &&
+			((CTrain*)pCarriage)->m_pPrevCarriage == nullptr)
+		{
+			pTrain->m_pNextCarriage = (CTrain*)pCarriage;
+			pCarriage->RegisterReference((CEntity**)&pTrain->m_pNextCarriage);
+			((CTrain*)pCarriage)->m_pPrevCarriage = pTrain;
+			pTrain->RegisterReference((CEntity**)&((CTrain*)pCarriage)->m_pPrevCarriage);
+		}
+	}
+
+	pTrain->m_nTrackId = snapshot.trackId;
+	pTrain->m_nTrainFlags.bIsFrontCarriage = snapshot.bIsFrontCarriage;
+	pTrain->m_nTrainFlags.bIsLastCarriage = snapshot.bIsLastCarriage;
+	pTrain->m_nTrainFlags.bMissionTrain = snapshot.bMissionTrain;
+	pTrain->m_nTrainFlags.bClockwiseDirection = snapshot.bClockwiseDirection;
+	pTrain->m_nTrainFlags.bStopsAtStations = snapshot.bStopsAtStations;
+	pTrain->m_nTrainFlags.bForceSlowDown = snapshot.bForceSlowDown;
+	pTrain->m_fLength = snapshot.length;
+	pTrain->m_autoPilot.m_nCruiseSpeed = snapshot.cruiseSpeed;
+	pTrain->m_nTimeWhenStoppedAtStation = CTimer::m_snTimeInMilliseconds - snapshot.timeSinceStoppedAtStation;
+
+	// the carriages follow the one in front of them
+	if (pTrain->m_pPrevCarriage == nullptr)
+	{
+		pTrain->m_fTrainSpeed = snapshot.speed;
+		pTrain->m_fCurrentRailDistance = snapshot.railDistance;
+		pTrain->m_nNodeIndex = snapshot.nodeIndex < NumTrackNodes[snapshot.trackId] ? snapshot.nodeIndex : 0;
+	}
+
+	if (snapshot.bDerailed && !pTrain->m_nTrainFlags.bNotOnARailRoad)
+	{
+		CNetworkVehicleManager::DerailTrain(CTrain::FindEngine(pTrain));
+	}
+}
+
+// same as CTrain::ProcessControl does at 0x6F8DE5
+void CNetworkVehicleManager::DerailTrain(CTrain* pTrain)
+{
+	for (; pTrain; pTrain = pTrain->m_pNextCarriage)
+	{
+		pTrain->m_nTrainFlags.bNotOnARailRoad = true;
+		pTrain->m_nPhysicalFlags.bDisableCollisionForce = false;
+		pTrain->m_nPhysicalFlags.b18 = false;
+		pTrain->SetIsStatic(false);
+	}
+}
+
+bool CNetworkVehicleManager::IsTrainOnRails(CVehicle* pVehicle)
+{
+	return pVehicle->m_nVehicleType == VEHICLE_TRAIN && !((CTrain*)pVehicle)->m_nTrainFlags.bNotOnARailRoad;
 }

@@ -16,6 +16,12 @@ PACKET_HANDLER(ePacketType::VEHICLE_SPAWN, Packets::Vehicles::VehicleSpawn* pVeh
         new CNetworkVehicle(pVehicleSpawn->vehicleid, pVehicleSpawn->modelid, pVehicleSpawn->pos,
             pVehicleSpawn->rot.m_angle, pVehicleSpawn->color1, pVehicleSpawn->color2, pVehicleSpawn->createdBy);
     CNetworkVehicleManager::Add(pNetworkVehicle);
+
+    CVehicle* pVehicle = pNetworkVehicle->m_pVehicle;
+    if (pVehicleSpawn->bIsTrain && pVehicle && pVehicle->m_nVehicleType == VEHICLE_TRAIN)
+    {
+        CNetworkVehicleManager::ApplyTrainSnapshot((CTrain*)pVehicle, pVehicleSpawn->train);
+    }
 }
 
 PACKET_HANDLER(ePacketType::VEHICLE_REMOVE, Packets::Vehicles::VehicleRemove* pVehicleRemove)
@@ -44,16 +50,25 @@ PACKET_HANDLER(ePacketType::VEHICLE_IDLE_UPDATE, Packets::Vehicles::VehicleIdleU
     if (pNetworkVehicle->m_pVehicle->m_matrix == nullptr)
         return;
 
-    pNetworkVehicle->m_pVehicle->m_matrix->pos = pVehicleIdleUpdate->pos;
+    if (pVehicleIdleUpdate->vehicleSubType == VEHICLE_TRAIN &&pNetworkVehicle->m_pVehicle->m_nVehicleType == VEHICLE_TRAIN)
+    {
+        CNetworkVehicleManager::ApplyTrainSnapshot((CTrain*)pNetworkVehicle->m_pVehicle, pVehicleIdleUpdate->train);
+    }
 
-    // if (CUtil::IsPositionUpdateNeeded(pNetworkVehicle->m_pVehicle->m_matrix->right, pVehicleIdleUpdate->roll, 1))
-    pNetworkVehicle->m_pVehicle->m_matrix->right = pVehicleIdleUpdate->roll;
+    // a train on rails gets its matrix and speeds from its position on the track
+    if (!CNetworkVehicleManager::IsTrainOnRails(pNetworkVehicle->m_pVehicle))
+    {
+        pNetworkVehicle->m_pVehicle->m_matrix->pos = pVehicleIdleUpdate->pos;
 
-    // if (CUtil::IsPositionUpdateNeeded(pNetworkVehicle->m_pVehicle->m_matrix->up, pVehicleIdleUpdate->rot, 1))
-    pNetworkVehicle->m_pVehicle->m_matrix->up = pVehicleIdleUpdate->rot;
+        // if (CUtil::IsPositionUpdateNeeded(pNetworkVehicle->m_pVehicle->m_matrix->right, pVehicleIdleUpdate->roll, 1))
+        pNetworkVehicle->m_pVehicle->m_matrix->right = pVehicleIdleUpdate->roll;
 
-    pNetworkVehicle->m_pVehicle->m_vecMoveSpeed = pVehicleIdleUpdate->velocity;
-    pNetworkVehicle->m_pVehicle->m_vecTurnSpeed = pVehicleIdleUpdate->turnSpeed;
+        // if (CUtil::IsPositionUpdateNeeded(pNetworkVehicle->m_pVehicle->m_matrix->up, pVehicleIdleUpdate->rot, 1))
+        pNetworkVehicle->m_pVehicle->m_matrix->up = pVehicleIdleUpdate->rot;
+
+        pNetworkVehicle->m_pVehicle->m_vecMoveSpeed = pVehicleIdleUpdate->velocity;
+        pNetworkVehicle->m_pVehicle->m_vecTurnSpeed = pVehicleIdleUpdate->turnSpeed;
+    }
 
     pNetworkVehicle->m_pVehicle->m_nPrimaryColor = pVehicleIdleUpdate->color1;
     pNetworkVehicle->m_pVehicle->m_nSecondaryColor = pVehicleIdleUpdate->color2;
@@ -91,11 +106,20 @@ PACKET_HANDLER(ePacketType::VEHICLE_DRIVER_UPDATE, Packets::Vehicles::VehicleDri
         pNetworkPlayer->WarpIntoVehicleDriver(pVehicle);
     }
 
-    pVehicle->m_matrix->pos = pVehicleDriverUpdate->pos;
-    pVehicle->m_matrix->right = pVehicleDriverUpdate->roll;
-    pVehicle->m_matrix->up = pVehicleDriverUpdate->rot;
-    pVehicle->m_vecMoveSpeed = pVehicleDriverUpdate->velocity;
-    pVehicle->m_vecTurnSpeed = pVehicleDriverUpdate->turnSpeed;
+    if (pVehicleDriverUpdate->vehicleSubType == VEHICLE_TRAIN &&pVehicle->m_nVehicleType == VEHICLE_TRAIN)
+    {
+        CNetworkVehicleManager::ApplyTrainSnapshot((CTrain*)pVehicle, pVehicleDriverUpdate->train);
+    }
+
+    // a train on rails gets its matrix and speeds from its position on the track
+    if (!CNetworkVehicleManager::IsTrainOnRails(pVehicle))
+    {
+        pVehicle->m_matrix->pos = pVehicleDriverUpdate->pos;
+        pVehicle->m_matrix->right = pVehicleDriverUpdate->roll;
+        pVehicle->m_matrix->up = pVehicleDriverUpdate->rot;
+        pVehicle->m_vecMoveSpeed = pVehicleDriverUpdate->velocity;
+        pVehicle->m_vecTurnSpeed = pVehicleDriverUpdate->turnSpeed;
+    }
 
     pNetworkPlayer->ApplyWeaponSnapshot(pVehicleDriverUpdate->playerWeapon);
     pNetworkPlayer->m_onFootSnapshotInterpolated.healthSnapshot = pVehicleDriverUpdate->playerHealth;

@@ -205,6 +205,8 @@ const SSyncedOpCode syncedOpcodes[] = {
     {COMMAND_CONTROL_CAR_HYDRAULICS, true, {eSyncedParamType::VEHICLE}},
     {COMMAND_FREEZE_CAR_POSITION, true, {eSyncedParamType::VEHICLE}},
     {COMMAND_SET_CAR_PROOFS, true, {eSyncedParamType::VEHICLE}},
+    {COMMAND_SWITCH_RANDOM_TRAINS},
+    {COMMAND_DELETE_ALL_TRAINS},
 
     // Objects, movement is synced by `ObjectUpdate`
     {COMMAND_SET_OBJECT_VISIBLE, true, {eSyncedParamType::OBJECT}},

@@ -64,7 +64,8 @@ bool CNetworkVehicle::CreateVehicle(vehicleid_t vehicleid, int modelid, CVector 
         m_pVehicle = new CBoat(modelid, MISSION_VEHICLE); break;
 
     case VEHICLE_TRAIN:
-        return false;
+        m_pVehicle = new CTrain(modelid, MISSION_VEHICLE);
+        m_pVehicle->m_nVehicleFlags.bIsLocked = true; break;
 
     default:
         m_pVehicle = new CAutomobile(modelid, MISSION_VEHICLE, true); break;
@@ -145,6 +146,11 @@ CNetworkVehicle* CNetworkVehicle::CreateHosted(CVehicle* pVehicle)
     vehicleSpawnPacket.color1 = pVehicle->m_nPrimaryColor;
     vehicleSpawnPacket.color2 = pVehicle->m_nSecondaryColor;
     vehicleSpawnPacket.createdBy = (eVehicleCreatedBy)pVehicle->m_nCreatedBy;
+    if (pVehicle->m_nVehicleType == VEHICLE_TRAIN)
+    {
+        vehicleSpawnPacket.bIsTrain = true;
+        CNetworkVehicleManager::GetTrainSnapshot((CTrain*)pVehicle, vehicleSpawnPacket.train);
+    }
     GetPacketFactory().Send(vehicleSpawnPacket);
 
     return networkVehicle;

@@ -23,6 +23,13 @@ if
   Char.IsInModel($scplayer, 570)
 goto_if_false @TRAINS_726
 $train_car = Char.StoreCarIsInNoSave($scplayer)
+if // coop: no trip skipping while a player drives the train
+  not Coop.CanScriptControlTrain($train_car)
+then
+    $train_control_flag = 0
+    Text.ClearThisPrint('TRAINS')
+    goto @TRAINS_761
+end
 if 
   $train_control_flag == 0
 goto_if_false @TRAINS_181

@@ -3,6 +3,70 @@
 
 namespace Packets::Vehicles
 {
+// CTrain state, the carriages of a train are separate vehicles linked to each other
+struct STrainSnapshot
+{
+public:
+    vehicleid_t nextCarriageid{};  // the carriage behind, it is created before this one
+    uint8_t trackId = 0;
+    bool bIsFrontCarriage = false;
+    bool bIsLastCarriage = false;
+    bool bMissionTrain = false;
+    bool bClockwiseDirection = false;
+    bool bStopsAtStations = false;
+    bool bForceSlowDown = false;
+    bool bDerailed = false;
+    float length = 0.0f;  // offset from the carriage in front
+    float speed = 0.0f;
+    float railDistance = 0.0f;
+    uint16_t nodeIndex = 0;
+    uint8_t cruiseSpeed = 0;
+    uint16_t timeSinceStoppedAtStation = 0;
+
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        bool hasNextCarriage = false;
+        if (Stream::IsWriting)
+        {
+            hasNextCarriage = nextCarriageid.valid();
+        }
+        serialize_bool(stream, hasNextCarriage);
+        if (hasNextCarriage)
+        {
+            serialize_vehicleid(stream, nextCarriageid);
+        }
+        else if (Stream::IsReading)
+        {
+            nextCarriageid = vehicleid_t{};
+        }
+
+        if (Stream::IsWriting)
+        {
+            length = std::clamp(length, -50.0f, 50.0f);
+            speed = std::clamp(speed, -5.0f, 5.0f);
+            railDistance = std::clamp(railDistance, 0.0f, 22000.0f);  // CTrainNode stores it as u16 * 3
+            timeSinceStoppedAtStation = std::min<uint16_t>(timeSinceStoppedAtStation, 40000);
+        }
+
+        serialize_int(stream, trackId, 0, 3);
+        serialize_bool(stream, bIsFrontCarriage);
+        serialize_bool(stream, bIsLastCarriage);
+        serialize_bool(stream, bMissionTrain);
+        serialize_bool(stream, bClockwiseDirection);
+        serialize_bool(stream, bStopsAtStations);
+        serialize_bool(stream, bForceSlowDown);
+        serialize_bool(stream, bDerailed);
+        serialize_compressed_float(stream, length, -50.0f, 50.0f, 0.001f);
+        serialize_compressed_float(stream, speed, -5.0f, 5.0f, 0.0001f);
+        serialize_compressed_float(stream, railDistance, 0.0f, 22000.0f, 0.001f);
+        serialize_uint16(stream, nodeIndex);
+        serialize_uint8(stream, cruiseSpeed);
+        serialize_int(stream, timeSinceStoppedAtStation, 0, 40000);
+        return true;
+    }
+};
+
 class VehicleSpawn : public Packet
 {
     DEFINE_PACKET_TYPE(VehicleSpawn, ePacketType::VEHICLE_SPAWN, ePacketChannel::EVENT);
@@ -16,6 +80,9 @@ public:
     uint8_t color2 = 0;
     eVehicleCreatedBy createdBy = RANDOM_VEHICLE;
 
+    bool bIsTrain = false;
+    STrainSnapshot train{};
+
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
@@ -27,6 +94,12 @@ private:
         serialize_uint8(stream, color1);
         serialize_uint8(stream, color2);
         serialize_int(stream, (int&)createdBy, RANDOM_VEHICLE, PERMANENT_VEHICLE);
+
+        serialize_bool(stream, bIsTrain);
+        if (bIsTrain)
+        {
+            serialize_object(stream, train);
+        }
         return true;
     }
 };
@@ -52,6 +125,7 @@ class VehicleIdleUpdate : public Packet
 
 public:
     vehicleid_t vehicleid{};
+    eVehicleType vehicleSubType = VEHICLE_AUTOMOBILE;
 
     WorldPositionCompressed pos{};
     NormalizedVector rot{};
@@ -70,10 +144,13 @@ public:
 
     vehicleid_t trailerid{};
 
+    STrainSnapshot train{};  // train
+
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
-        serialize_vehicleid(stream, vehicleid);   
+        serialize_vehicleid(stream, vehicleid);
+        serialize_int(stream, (int&)vehicleSubType, VEHICLE_AUTOMOBILE, VEHICLE_TRAILER);
 
         serialize_object(stream, pos);
         serialize_object(stream, rot);
@@ -154,6 +231,11 @@ public:
         {
             trailerid = vehicleid_t{};
         }
+
+        if (vehicleSubType == VEHICLE_TRAIN)
+        {
+            serialize_object(stream, train);
+        }
         return true;
     }
 };
@@ -191,12 +273,15 @@ public:
 
     vehicleid_t trailerid{};
 
+    STrainSnapshot train{};  // train
+
 private:
     template <typename Stream>
     bool Serialize(Stream& stream)
     {
         serialize_object(stream, senderPlayerid);
         serialize_vehicleid(stream, vehicleid);
+        serialize_int(stream, (int&)vehicleSubType, VEHICLE_AUTOMOBILE, VEHICLE_TRAILER);
         serialize_object(stream, pos);
         serialize_object(stream, rot);
         serialize_object(stream, roll);
@@ -301,6 +386,11 @@ private:
         else if (Stream::IsReading)
         {
             trailerid = vehicleid_t{};
+        }
+
+        if (vehicleSubType == VEHICLE_TRAIN)
+        {
+            serialize_object(stream, train);
         }
 
         return true;
