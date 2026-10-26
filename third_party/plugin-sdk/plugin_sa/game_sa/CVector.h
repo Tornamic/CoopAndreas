@@ -36,6 +36,8 @@ public:
     // Returns length of 2d vector
     float Magnitude2D();
 
+    float MagnitudeSqr() const { return x * x + y * y + z * z; }
+
     float MagnitudeSqr2D() const { return x * x + y * y; }
 
     // Normalises a vector
@@ -88,24 +90,16 @@ public:
 };
 
 inline CVector operator-(const CVector& vecOne, const CVector& vecTwo)
-{
-    return CVector(vecOne.x - vecTwo.x, vecOne.y - vecTwo.y, vecOne.z - vecTwo.z);
-}
+{ return CVector(vecOne.x - vecTwo.x, vecOne.y - vecTwo.y, vecOne.z - vecTwo.z); }
 
 inline CVector operator+(const CVector& vecOne, const CVector& vecTwo)
-{
-    return CVector(vecOne.x + vecTwo.x, vecOne.y + vecTwo.y, vecOne.z + vecTwo.z);
-}
+{ return CVector(vecOne.x + vecTwo.x, vecOne.y + vecTwo.y, vecOne.z + vecTwo.z); }
 
 inline CVector operator*(const CVector& vec, float multiplier)
-{
-    return CVector(vec.x * multiplier, vec.y * multiplier, vec.z * multiplier);
-}
+{ return CVector(vec.x * multiplier, vec.y * multiplier, vec.z * multiplier); }
 
 inline CVector operator*(float multiplier, const CVector& vec)
-{
-    return CVector(vec.x * multiplier, vec.y * multiplier, vec.z * multiplier);
-}
+{ return CVector(vec.x * multiplier, vec.y * multiplier, vec.z * multiplier); }
 
 inline float DistanceBetweenPoints(const CVector& pointOne, const CVector& pointTwo)
 {
