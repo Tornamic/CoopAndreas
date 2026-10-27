@@ -1603,7 +1603,15 @@ namespace serialize
         }
 
         serialize_int( stream, length, 0, buffer_size - 1 );
-        serialize_bytes( stream, (uint8_t*)string, length * sizeof(wchar_t) );
+        // 16 bits per wchar_t whatever sizeof(wchar_t) is (2 on Windows, 4 on Linux),
+        // byte-identical to the old serialize_bytes of a 2-byte wchar_t string.
+        // On Linux a code point above U+FFFF gets truncated, relayed UTF-16 is fine
+        if ( !stream.SerializeAlign() )
+            return false;
+        for ( int i = 0; i < length; i++ )
+        {
+            serialize_bits( stream, string[i], 16 );
+        }
         if ( Stream::IsReading )
         {
             string[length] = L'\0';
@@ -2007,10 +2015,11 @@ namespace serialize
     #define write_wstring( stream, string, buffer_size )                                    \
         do                                                                                  \
         {                                                                                   \
-            int length = (int) wcslen( string );                                            \
-            serialize_assert( length < buffer_size );                                       \
-            write_int( stream, length, 0, buffer_size - 1 );                                \
-            write_bytes( stream, (uint8_t*)string, length * sizeof(wchar_t) );              \
+            wchar_t * string_ptr = (wchar_t*) string;                                       \
+            if ( !serialize_wstring_internal( stream, string_ptr, buffer_size ) )           \
+            {                                                                               \
+                return false;                                                               \
+            }                                                                               \
         } while (0)
 
     #define write_align( stream )                                                           \

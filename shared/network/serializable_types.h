@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include "CPad.h"
 #include "CVector.h"
 #include "math_utils.h"
@@ -79,7 +80,7 @@ public:
         bool isZero = false;
         if (Stream::IsWriting)
         {
-            if (abs(x) < PRECISION && abs(y) < PRECISION && abs(z) < PRECISION)
+            if (std::fabs(x) < PRECISION && std::fabs(y) < PRECISION && std::fabs(z) < PRECISION)
             {
                 isZero = true;
             }

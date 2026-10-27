@@ -167,7 +167,7 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
 
     playerid_t newPlayerId = CNetworkPlayerManager::AllocatePlayerId();
     CNetworkPlayer* pNewNetworkPlayer = new CNetworkPlayer(pENetPeer, newPlayerId);
-    strcpy_s(pNewNetworkPlayer->m_Name, playerConnected.payload.name);
+    snprintf(pNewNetworkPlayer->m_Name, sizeof(pNewNetworkPlayer->m_Name), "%s", playerConnected.payload.name);
     CNetworkPlayerManager::Add(pNewNetworkPlayer);
 
     logger::info("playerid %s name %s version %s", to_string(newPlayerId).c_str(), playerConnected.payload.name, buffer);
@@ -192,7 +192,8 @@ void CNetwork::HandlePlayerConnected(ENetPeer* pENetPeer, Packets::System::Playe
             continue;
         }
         oldPlayerConnected.payload.SetPlayerId(pNetworkPlayer->m_playerId);
-        strcpy_s(oldPlayerConnected.payload.name, pNetworkPlayer->m_Name);
+        snprintf(
+            oldPlayerConnected.payload.name, sizeof(oldPlayerConnected.payload.name), "%s", pNetworkPlayer->m_Name);
         GetPacketFactory().Send(oldPlayerConnected, pNewNetworkPlayer);
     }
 

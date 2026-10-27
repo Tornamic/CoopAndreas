@@ -1,11 +1,12 @@
 set_project("CoopAndreas")
 
 set_languages("cxx17")
-set_arch("x86")
 
 add_rules("mode.debug", "mode.release")
 
 if is_os("windows") then
+    set_arch("x86")
+
     if is_mode("debug") then
         set_runtimes("MTd")
     else 
@@ -17,7 +18,11 @@ target("client", function()
     set_kind("shared")
     set_plat("windows")
 
-    set_toolchains("msvc")
+    if is_os("windows") then
+        set_toolchains("msvc")
+    else
+        set_enabled(false)
+    end
 
     set_basename("CoopAndreasSA")
     set_arch("x86")
@@ -105,7 +110,6 @@ end)
 target("server", function ()
     set_kind("binary")
 
-    set_arch("x86")
     set_languages("c++17")
 
     add_files("server/src/**.cpp")
@@ -116,15 +120,15 @@ target("server", function ()
     add_headerfiles("shared/**.h")
     add_headerfiles("third_party/enet/*.h")
 
+    -- server/src/sdk stands in for the plugin-sdk headers that need windows.h and x86,
+    -- so it has to come before game_sa, which supplies the data-only ones
     add_includedirs(
         "server/src/",
-        "third_party/plugin-sdk/shared",
-        "third_party/plugin-sdk/shared/game",
-        "third_party/plugin-sdk/plugin_sa",
-        "third_party/plugin-sdk/plugin_sa/game_sa"
+        "server/src/sdk"
     )
 
     add_includedirs("shared", "third_party")
+    add_includedirs("third_party/plugin-sdk/plugin_sa/game_sa")
 
     set_pcxxheader("server/src/stdafx.h")
 
@@ -148,17 +152,20 @@ target("server", function ()
     add_deps("enet")
 
     if is_os("windows") then
+        set_arch("x86")
         add_files("server/version.rc")
         add_defines("_CRT_SECURE_NO_WARNINGS", "WIN32", "_CONSOLE")
-    elseif is_os("linux") then
-        -- TODO
     end
 end)
 
 target("proxy", function ()
     set_kind("shared")
 
-    set_toolchains("msvc")
+    if is_os("windows") then
+        set_toolchains("msvc")
+    else
+        set_enabled(false)
+    end
 
     set_arch("x86")
     set_plat("windows")
@@ -190,7 +197,11 @@ end)
 target("plugin_sa", function ()
     set_kind("static")
 
-    set_toolchains("msvc")
+    if is_os("windows") then
+        set_toolchains("msvc")
+    else
+        set_enabled(false)
+    end
 
     set_arch("x86")
     set_plat("windows")
@@ -221,7 +232,6 @@ target("enet", function ()
     
     add_headerfiles("third_party/enet/*.h")
 
-    add_includedirs("third_party/enet/")
     add_includedirs("third_party/")
 
     set_pcxxheader("third_party/enet/enet.h")
@@ -232,7 +242,11 @@ target("discordrpc", function ()
     
     set_languages("c++17")
 
-    set_toolchains("msvc")
+    if is_os("windows") then
+        set_toolchains("msvc")
+    else
+        set_enabled(false)
+    end
     
     add_includedirs("third_party/DiscordRPC/SDK/include")
     add_files("third_party/DiscordRPC/SDK/src/*.cpp")
@@ -249,7 +263,11 @@ target("launcher", function ()
     set_plat("windows")
     set_basename("LaunchCoopAndreas") 
 
-    set_toolchains("msvc")
+    if is_os("windows") then
+        set_toolchains("msvc")
+    else
+        set_enabled(false)
+    end
 
     add_files("launcher/src/*.cpp")
     add_headerfiles("launcher/src/*.h")
